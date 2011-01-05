@@ -575,19 +575,13 @@ NALUサイズ長を\fIn\fRバイトに強制設定します。このパラメー
 .PP
 \fB\-\-compression\fR \fITID:n\fR
 .RS 4
-Selects the compression method to be used for the track\&. Note that the player also has to support this method\&. Valid values are \*(Aqnone\*(Aq, \*(Aqzlib\*(Aq, \*(Aqlzo\*(Aq/\*(Aqlxo1x\*(Aq, \*(Aqbz2\*(Aq/\*(Aqbzlib\*(Aq and \*(Aqmpeg4_p2\*(Aq/\*(Aqmpeg4p2\*(Aq\&. The values \*(Aqlzo\*(Aq/\*(Aqlxo1x\*(Aq and \*(Aqbz2\*(Aq/\*(Aqbzlib\*(Aq are only available if
-\fBmkvmerge\fR(1)
-has been compiled with support for the
-liblzo(TM)
-and
-bzlib(TM)
-compression libraries, respectively\&.
+トラックの圧縮法を選択します。プレイヤーが選択した圧縮法をサポートしている必要があることに注意してください。指定できる圧縮法は、\*(Aqnone\*(Aq、\*(Aqzlib\*(Aq、\*(Aqlzo\*(Aq/\*(Aqlxo1x\*(Aq、\*(Aqbz2\*(Aq/\*(Aqbzlib\*(Aq及び\*(Aqmpeg4_p2\*(Aq/\*(Aqmpeg4p2\*(Aqです。\*(Aqlzo\*(Aq/\*(Aqlxo1x\*(Aqと\*(Aqbz2\*(Aq/\*(Aqbzlib\*(Aqは\fBmkvmerge\fR(1)がそれぞれ、liblzo(TM)及びbzlib(TM)圧縮ライブラリのサポート付きでコンパイルされたときのみ使用できます。
 .sp
-The compression method \*(Aqmpeg4_p2\*(Aq/\*(Aqmpeg4p2\*(Aq is a special compression method called \*(Aqheader removal\*(Aq that is only available for
+\*(Aqmpeg4_p2\*(Aq/\*(Aqmpeg4p2\*(Aq圧縮法は、
 MPEG4
-part 2 video tracks\&.
+part2 ビデオトラックにのみ適用できる、\*(Aqheader removal\*(Aqと呼ばれる特殊な圧縮法です。
 .sp
-The default for some subtitle tracks is \*(Aqzlib\*(Aq compression\&. This compression method is also the one that most if not all playback applications support\&. Support for other compression methods other than \*(Aqnone\*(Aq is not assured\&.
+いくつかの字幕トラックにおけるデフォルトは\*(Aqzlib\*(Aq圧縮法です。この圧縮法はほとんど全ての再生アプリケーションでサポートされています。\*(Aqnone\*(Aq以外の他の圧縮法については、サポートされているとは限りません。
 .RE
 .PP
 ビデオトラックにのみ適用されるオプション:
@@ -653,12 +647,9 @@ Matroska(TM)ファイルは再生時の画像スケールを決定するため�
 
 \fBmkvmerge\fR(1)に、単一のファイルを探査してその種類と、ファイルに含まれるトラック及びそのトラックIDを表示させます。このオプションを指定した場合、他に指定できるのはファイル名のみです。
 .sp
-This option causes
-\fBmkvmerge\fR(1)
-to output additional information about the container and each track within\&. The extra information is surronded by square brackets\&. It consists of space\-saparated key/value pairs where keys and values are separated by a colon\&.
+このオプションを指定すると、\fBmkvmerge\fR(1)はコンテナと中身の各トラックについての追加の情報を出力します。追加情報は、四角の括弧で囲まれます。それはスペースで区切られたキーと値のペアで構成され、キーと値はコロンで区切られます。
 .sp
-Each value is escaped according to the rules described in
-the section about escaping special characters in text\&.
+各値は、テキスト中の特殊文字のエスケープについてのセクションで説明されているルールに従ってエスケープされます。
 .RE
 .PP
 \fB\-l\fR, \fB\-\-list\-types\fR
@@ -700,11 +691,10 @@ the section about escaping special characters in text\&.
 .PP
 \fB@\fRoptions\-file
 .RS 4
-Reads additional command line arguments from the file
-\fIoptions\-file\fR\&. Lines whose first non\-whitespace character is a hash mark (\*(Aq#\*(Aq) are treated as comments and ignored\&. White spaces at the start and end of a line will be stripped\&. Each line must contain exactly one option\&.
+
+\fIoptions\-file\fRで指定されたファイルから追加のコマンドラインオプションを読み込みます。行で最初の空白文字でない文字がハッシュマーク(\*(Aq#\*(Aq)である行はコメントとして扱われ、無視されます。行頭、及び行末の空白文字は取り除かれます。各行には一つずつしかオプションを指定できません。
 .sp
-Several chars can be escaped, e\&.g\&. if you need to start a non\-comment line with \*(Aq#\*(Aq\&. The rules are described in
-the section about escaping text\&.
+エスケープすることのできる文字もあります。例えば、コメントではない行を\*(Aq#\*(Aqで始める必要のある場合です。そのルールは、エスケープ文字についてのセクションで説明されています。
 .sp
 \*(Aq\fBmkvmerge \-o "my file\&.mkv" \-A "a movie\&.avi" sound\&.ogg\fR\*(Aqというコマンドラインと同じことは、次のようなオプションファイルによって指定できます。
 .sp
@@ -779,18 +769,16 @@ Ogg(TM)、Matroska(TM)など)に格納されたFLACトラックの処理。
 .PP
 \fB\-\-check\-for\-updates\fR
 .RS 4
-Checks online for new releases by downloading the URL
-http://mkvtoolnix\-releases\&.bunkus\&.org/latest\-release\&.xml\&. Four lines will be output in
-key=value
-style: the URL from where the information was retrieved (key
-version_check_url), the currently running version (key
-running_version), the latest release\*(Aqs version (key
-available_version) and the download URL (key
-download_url)\&.
+
+http://mkvtoolnix\-releases\&.bunkus\&.org/latest\-release\&.xmlをダウンロードすることで、新しいリリースがないかオンラインでチェックします。key=valueという書式で、4行が出力されます：どこから情報を取得したか (key
+version_check_url)、現在実行中のバージョン (key
+running_version)、最新のリリースのバージョン (key
+available_version) 及びそのダウンロードURL (key
+download_url)。
 .sp
-Afterwards the program exists with an exit code of 0 if no newer release is available, with 1 if a newer release is available and with 2 if an error occured (e\&.g\&. if the update information could not be retrieved)\&.
+その後プログラムは、新しいリリースが入手可能ではなかった場合は終了コード0で、新しいリリースが入手可能であった場合は終了コード1で、エラーが発生した場合（例：アップデート情報を取得できなかった場合）は終了コード2で、それぞれ終了します。
 .sp
-This option is only available if the program was built with support for libcurl\&.
+このオプションは、プログラムがlibcurlのサポートつきでビルドされた場合のみ使用できます。
 .RE
 .SH "使用法"
 .PP
@@ -1044,7 +1032,7 @@ $ mkvmerge \-o with\-lang\-codes\&.mkv \-\-language 2:ger \-\-language 3:dut \-\
 .PP
 もし、指定したはずの言語やデフォルトフラグが\fBmkvinfo\fR(1)の出力に見当たらない場合は、デフォルト値のセクションを参照してください。
 .PP
-Turn off the compression for an input file\&.
+入力ファイルの圧縮をオフにします。
 .sp
 .if n \{\
 .RS 4
@@ -1074,9 +1062,9 @@ Track ID 2: audio (A_MPEG/L3)
 .RE
 .\}
 .PP
-Do not confuse the track IDs that are assigned to the tracks that are placed in the output MKV file with the track IDs of the input files\&. Only the input file track IDs are used for options needing these values\&.
+出力されるMKVファイルの中に配置されるトラックに割り当てられるトラックIDと、入力ファイルのトラックIDを混同しないでください。これらの値が必要なオプションに使われるのは、入力ファイルのトラックIDだけです。
 .PP
-Also note that each input file has its own set of track IDs\&. Therefore the track IDs for file \*(Aqfile1\&.ext\*(Aq as reported by \*(Aqmkvmerge \-\-identify\*(Aq do not change no matter how many other input files are there or in which position \*(Aqfile1\&.ext\*(Aq is used\&.
+また、各入力ファイルは、それ固有のトラックIDの組を持っていることにも注意してください。従って、\*(Aqmkvmerge \-\-identify\*(Aqで報告される\*(Aqfile1\&.ext\*(AqのトラックIDは、他にいくつ入力ファイルがあっても、また、\*(Aqfile1\&.ext\*(Aqがどの位置で使われようとも、変わることはありません。
 .PP
 トラックIDは次のように割り当てられます:
 .sp
@@ -1089,8 +1077,7 @@ Also note that each input file has its own set of track IDs\&. Therefore the tra
 .IP \(bu 2.3
 .\}
 
-AVI
-ファイル: ビデオトラックのIDは0になります。オーディオトラックのIDは1から昇順に割り当てられます。
+AVIファイル: ビデオトラックのIDは0になります。オーディオトラックのIDは1から昇順に割り当てられます。
 .RE
 .sp
 .RS 4
@@ -1102,8 +1089,7 @@ AVI
 .IP \(bu 2.3
 .\}
 
-MP4
-files: As output from x264, the video track has the ID 1\&.
+MP4ファイル: x264からの出力なので、ビデオトラックのIDは1です。
 .RE
 .sp
 .RS 4
@@ -1227,11 +1213,11 @@ Windowsでは、\fBcmd\&.exe\fRWindowsシェルプログラムの実装方式の
 
 \fB\-\-output\-charset\fRはコンソールに出力される文字列の文字コード及び、\fB\-\-redirect\-output\fRオプションによりファイルに出力がリダイレクトされている場合、そのファイルの文字列の文字コードを指定します。
 .RE
-.SH "ESCAPING SPECIAL CHARS IN TEXT"
+.SH "テキスト中の特殊文字をエスケープする"
 .PP
-There are a few places in which special characters in text must or should be escaped\&. The rules for escaping are simple: each character that needs escaping is replaced with a backslash followed by another character\&.
+特殊文字をエスケープしなければならない、あるいはすべき場所が少しだけあります。エスケープのルールは単純です：エスケープする必要のある各文字を、バックスラッシュ（日本語フォントでは\e記号）の後ろに違う文字が1つついたものと入れ替えます。
 .PP
-The rules are: \*(Aq \*(Aq becomes \*(Aq\es\*(Aq, \*(Aq"\*(Aq becomes \*(Aq\e2\*(Aq, \*(Aq:\*(Aq becomes \*(Aq\ec\*(Aq, \*(Aq#\*(Aq becomes \*(Aq\eh\*(Aq and \*(Aq\e\*(Aq itself becomes \*(Aq\e\e\*(Aq\&.
+ルール：\*(Aq \*(Aqは\*(Aq\es\*(Aqに、\*(Aq"\*(Aqは\*(Aq\e2\*(Aqに、\*(Aq:\*(Aqは\*(Aq\ec\*(Aqに、\*(Aq#\*(Aqは\*(Aq\eh\*(Aqに、そして\*(Aq\e\*(Aqそれ自体は\*(Aq\e\e\*(Aqになります。
 .SH "字幕"
 .PP
 

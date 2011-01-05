@@ -86,27 +86,24 @@ Matroska(TM)
 .PP
 \fB\-\-check\-for\-updates\fR
 .RS 4
-Checks online for new releases by downloading the URL
-http://mkvtoolnix\-releases\&.bunkus\&.org/latest\-release\&.xml\&. Four lines will be output in
-key=value
-style: the URL from where the information was retrieved (key
-version_check_url), the currently running version (key
-running_version), the latest release\*(Aqs version (key
-available_version) and the download URL (key
-download_url)\&.
+
+http://mkvtoolnix\-releases\&.bunkus\&.org/latest\-release\&.xmlをダウンロードすることで、新しいリリースがないかオンラインでチェックします。key=valueという書式で、4行が出力されます：どこから情報を取得したか (key
+version_check_url)、現在実行中のバージョン (key
+running_version)、最新のリリースのバージョン (key
+available_version) 及びそのダウンロードURL (key
+download_url)。
 .sp
-Afterwards the program exists with an exit code of 0 if no newer release is available, with 1 if a newer release is available and with 2 if an error occured (e\&.g\&. if the update information could not be retrieved)\&.
+その後プログラムは、新しいリリースが入手可能ではなかった場合は終了コード0で、新しいリリースが入手可能であった場合は終了コード1で、エラーが発生した場合（例：アップデート情報を取得できなかった場合）は終了コード2で、それぞれ終了します。
 .sp
-This option is only available if the program was built with support for libcurl\&.
+このオプションは、プログラムがlibcurlのサポートつきでビルドされた場合のみ使用できます。
 .RE
 .PP
 \fB@\fRoptions\-file
 .RS 4
-Reads additional command line arguments from the file
-\fIoptions\-file\fR\&. Lines whose first non\-whitespace character is a hash mark (\*(Aq#\*(Aq) are treated as comments and ignored\&. White spaces at the start and end of a line will be stripped\&. Each line must contain exactly one option\&.
+
+\fIoptions\-file\fRで指定されたファイルから追加のコマンドラインオプションを読み込みます。行で最初の空白文字でない文字がハッシュマーク(\*(Aq#\*(Aq)である行はコメントとして扱われ、無視されます。行頭、及び行末の空白文字は取り除かれます。各行には一つずつしかオプションを指定できません。
 .sp
-Several chars can be escaped, e\&.g\&. if you need to start a non\-comment line with \*(Aq#\*(Aq\&. The rules are described in
-the section about escaping text\&.
+エスケープすることができる文字もあります。例えば、コメントではない行を\*(Aq#\*(Aqで始める必要がある場合です。そのルールは、エスケープ文字についてのセクションで説明されています。
 .sp
 \*(Aq\fBmkvextract tracks source\&.mkv \-\-raw 1:destination\&.raw\fR\*(Aqというコマンドラインと同じことは、次のようなオプションファイルによって指定できます。
 .sp
@@ -230,7 +227,7 @@ toolsで使用される、シンプルフォーマット(CHAPTER01=\&.\&.\&., CH
 抽出されたCUEシートは、出力がリダイレクトされていなればコンソールに出力されます。(詳細については、出力リダイレクトについてのセクションを参照ください。)
 .SS "タイムコード抽出モード"
 .PP
-Syntax:
+書式:
 \fBmkvextract\fR
 \fBtimecodes_v2\fR
 \fIsource\-filename\fR
@@ -242,16 +239,9 @@ Syntax:
 .PP
 \fITID:outname\fR
 .RS 4
-Causes extraction of the timecodes for the track with the ID
-\fITID\fR
-into the file
-\fIoutname\fR
-if such a track exists in the source file\&. This option can be given multiple times\&. The track IDs are the same as the ones output by
-\fBmkvmerge\fR(1)\*(Aqs
-\fB\-\-identify\fR
-option\&.
+IDが\fITID\fRであるトラックがソースファイルに存在すれば、タイムコードを\fIoutname\fRに抽出します。このオプションは複数回指定できます。トラックIDは、\fBmkvmerge\fR(1)に\fB\-\-identify\fRを指定して実行した際の出力に表示されるものと同じです。
 .sp
-Example:
+例:
 .sp
 .if n \{\
 .RS 4
@@ -443,11 +433,11 @@ Kate(TM)ストリームはOgg(TM)コンテナに格納されます。
 \fB2\fR
 \-\- この返り値は、エラーが発生し、エラーメッセージを出力した後に\fBmkvextract\fR(1)が処理を中断したことを示します。エラーメッセージは不正なコマンドラインやファイルI/Oエラー、壊れたファイルなど様々です。
 .RE
-.SH "ESCAPING SPECIAL CHARS IN TEXT"
+.SH "テキスト中の特殊文字をエスケープする"
 .PP
-There are a few places in which special characters in text must or should be escaped\&. The rules for escaping are simple: each character that needs escaping is replaced with a backslash followed by another character\&.
+特殊文字をエスケープしなければならない、あるいはすべき場所が少しだけあります。エスケープのルールは単純です：エスケープする必要のある各文字を、バックスラッシュ（日本語フォントでは\e記号）の後ろに違う文字が1つついたものと入れ替えます。
 .PP
-The rules are: \*(Aq \*(Aq becomes \*(Aq\es\*(Aq, \*(Aq"\*(Aq becomes \*(Aq\e2\*(Aq, \*(Aq:\*(Aq becomes \*(Aq\ec\*(Aq, \*(Aq#\*(Aq becomes \*(Aq\eh\*(Aq and \*(Aq\e\*(Aq itself becomes \*(Aq\e\e\*(Aq\&.
+ルール：\*(Aq \*(Aqは\*(Aq\es\*(Aqに、\*(Aq"\*(Aqは\*(Aq\e2\*(Aqに、\*(Aq:\*(Aqは\*(Aq\ec\*(Aqに、\*(Aq#\*(Aqは\*(Aq\eh\*(Aqに、そして\*(Aq\e\*(Aqそれ自体は\*(Aq\e\e\*(Aqになります。
 .SH "関連項目"
 .PP
 
