@@ -3,13 +3,13 @@
 # This file is distributed under the same license as the mkvtoolnix package.
 #
 # Katsuhiko Nishimra <kat841@hotmail.com> 2009.
-# Hiroki Taniura <boiled.sugar@gmail.com> 2010.
+# Hiroki Taniura <boiled.sugar@gmail.com> 2010-2011.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: 2.9.9\n"
 "POT-Creation-Date: 2010-12-25 16:23+0100\n"
-"PO-Revision-Date: 2010-11-01 06:48+0900\n"
+"PO-Revision-Date: 2011-01-05 16:42+0900\n"
 "Last-Translator: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "Language-Team: none\n"
 "MIME-Version: 1.0\n"
@@ -287,28 +287,26 @@ msgstr "バージョン情報を出力して終了します。"
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:162 doc/man/mkvinfo.xml:192
 #: doc/man/mkvmerge.xml:1351 doc/man/mkvpropedit.xml:227
-#, fuzzy
-#| msgid "<option>--no-cues</option>"
 msgid "<option>--check-for-updates</option>"
-msgstr "<option>--no-cues</option>"
+msgstr "<option>--check-for-updates</option>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:165 doc/man/mkvinfo.xml:195
 #: doc/man/mkvmerge.xml:1354 doc/man/mkvpropedit.xml:230
 msgid "Checks online for new releases by downloading the URL <uri>http://mkvtoolnix-releases.bunkus.org/latest-release.xml</uri>. Four lines will be output in <literal>key=value</literal> style: the URL from where the information was retrieved (key <literal>version_check_url</literal>), the currently running version (key <literal>running_version</literal>), the latest release's version (key <literal>available_version</literal>) and the download URL (key <literal>download_url</literal>)."
-msgstr ""
+msgstr "<uri>http://mkvtoolnix-releases.bunkus.org/latest-release.xml</uri>をダウンロードすることで、新しいリリースがないかオンラインでチェックします。<literal>key=value</literal>という書式で、4行が出力されます：どこから情報を取得したか (key <literal>version_check_url</literal>)、現在実行中のバージョン (key <literal>running_version</literal>)、最新のリリースのバージョン (key <literal>available_version</literal>) 及びそのダウンロードURL (key <literal>download_url</literal>)。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:172 doc/man/mkvinfo.xml:202
 #: doc/man/mkvmerge.xml:1361 doc/man/mkvpropedit.xml:237
 msgid "Afterwards the program exists with an exit code of 0 if no newer release is available, with 1 if a newer release is available and with 2 if an error occured (e.g. if the update information could not be retrieved)."
-msgstr ""
+msgstr "その後プログラムは、新しいリリースが入手可能ではなかった場合は終了コード0で、新しいリリースが入手可能であった場合は終了コード1で、エラーが発生した場合（例：アップデート情報を取得できなかった場合）は終了コード2で、それぞれ終了します。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:177 doc/man/mkvinfo.xml:207
 #: doc/man/mkvmerge.xml:1366 doc/man/mkvpropedit.xml:242
 msgid "This option is only available if the program was built with support for libcurl."
-msgstr ""
+msgstr "このオプションは、プログラムがlibcurlのサポートつきでビルドされた場合のみ使用できます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:183 doc/man/mkvinfo.xml:213
@@ -319,15 +317,13 @@ msgstr "<option>@</option>options-file"
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:186 doc/man/mkvinfo.xml:216
 #: doc/man/mkvmerge.xml:1271 doc/man/mkvpropedit.xml:251
-#, fuzzy
-#| msgid "Reads additional command line arguments from the file <parameter>options-file</parameter>.  Lines whose first non-whitespace character is a hash mark ('<literal>#</literal>') are treated as comments and ignored. White spaces at the start and end of a line will be stripped. Each line must contain exactly one option.  There is no meta character escaping."
 msgid "Reads additional command line arguments from the file <parameter>options-file</parameter>.  Lines whose first non-whitespace character is a hash mark ('<literal>#</literal>') are treated as comments and ignored. White spaces at the start and end of a line will be stripped. Each line must contain exactly one option."
-msgstr "<parameter>options-file</parameter>で指定されたファイルから追加のコマンドラインオプションを読み込みます。行で最初の空白文字でない文字がハッシュマーク('<literal>#</literal>')である行はコメントとして扱われ、無視されます。行頭、及び行末の空白文字は取り除かれます。各行には一つずつしかオプションを指定できません。メタキャラクタのエスケープは必要ありません。"
+msgstr "<parameter>options-file</parameter>で指定されたファイルから追加のコマンドラインオプションを読み込みます。行で最初の空白文字でない文字がハッシュマーク('<literal>#</literal>')である行はコメントとして扱われ、無視されます。行頭、及び行末の空白文字は取り除かれます。各行には一つずつしかオプションを指定できません。"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:192
 msgid "Several chars can be escaped, e.g. if you need to start a non-comment line with '#'. The rules are described in <link linkend=\"mkvextract.escaping\">the section about escaping text</link>."
-msgstr ""
+msgstr "エスケープすることができる文字もあります。例えば、コメントではない行を'#'で始める必要がある場合です。そのルールは、<link linkend=\"mkvextract.escaping\">エスケープ文字についてのセクション</link>で説明されています。"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:197
@@ -526,10 +522,8 @@ msgstr "タイムコード抽出モード"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
 #: doc/man/mkvextract.xml:382
-#, fuzzy
-#| msgid "Syntax: <command>mkvextract</command> <option>tracks</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional> <parameter>TID1:dest-filename1</parameter> <optional><parameter>TID2:dest-filename2</parameter> ...</optional>"
 msgid "Syntax: <command>mkvextract</command> <option>timecodes_v2</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional> <parameter>TID1:dest-filename1</parameter> <optional><parameter>TID2:dest-filename2</parameter> ...</optional>"
-msgstr "書式: <command>mkvextract</command> <option>tracks</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional> <parameter>TID1:dest-filename1</parameter> <optional><parameter>TID2:dest-filename2</parameter> ...</optional>"
+msgstr "書式: <command>mkvextract</command> <option>timecodes_v2</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional> <parameter>TID1:dest-filename1</parameter> <optional><parameter>TID2:dest-filename2</parameter> ...</optional>"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
 #: doc/man/mkvextract.xml:386
@@ -538,29 +532,22 @@ msgstr "抽出されたタイムコードは、出力がリダイレクトされ
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:395
-#, fuzzy
-#| msgid "Causes extraction of the track with the ID <parameter>TID</parameter> into the file <parameter>outname</parameter> if such a track exists in the source file. This option can be given multiple times. The track IDs are the same as the ones output by &mkvmerge;'s <option>--identify</option> option."
 msgid "Causes extraction of the timecodes for the track with the ID <parameter>TID</parameter> into the file <parameter>outname</parameter> if such a track exists in the source file. This option can be given multiple times. The track IDs are the same as the ones output by &mkvmerge;'s <option>--identify</option> option."
-msgstr "IDが<parameter>TID</parameter>であるトラックがソースファイルに存在すれば、<parameter>outname</parameter>に抽出します。このオプションは複数回指定できます。トラックIDは、&mkvmerge;に<option>--identify</option>を指定して実行した際の出力に表示されるものと同じです。"
+msgstr "IDが<parameter>TID</parameter>であるトラックがソースファイルに存在すれば、タイムコードを<parameter>outname</parameter>に抽出します。このオプションは複数回指定できます。トラックIDは、&mkvmerge;に<option>--identify</option>を指定して実行した際の出力に表示されるものと同じです。"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:401
-#, fuzzy
-#| msgid "Example"
 msgid "Example:"
-msgstr "例"
+msgstr "例:"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><screen>
 #: doc/man/mkvextract.xml:405
-#, fuzzy, no-wrap
-#| msgid ""
-#| "$ mkvextract tracks input.mkv 1:output-two-tracks.rm 2:output-two-tracks.rm\n"
-#| "      "
+#, no-wrap
 msgid ""
 "$ mkvextract timecodes_v2 input.mkv 1:tc-track1.txt 2:tc-track2.txt\n"
 "      "
 msgstr ""
-"$ mkvextract tracks input.mkv 1:output-two-tracks.rm 2:output-two-tracks.rm\n"
+"$ mkvextract timecodes_v2 input.mkv 1:tc-track1.txt 2:tc-track2.txt\n"
 "      "
 
 #. type: Content of: <refentry><refsect1><title>
@@ -808,19 +795,19 @@ msgstr "<constant>2</constant> -- この返り値は、エラーが発生し、�
 #: doc/man/mkvextract.xml:643 doc/man/mkvinfo.xml:308
 #: doc/man/mkvmerge.xml:1691 doc/man/mkvpropedit.xml:421
 msgid "Escaping special chars in text"
-msgstr ""
+msgstr "テキスト中の特殊文字をエスケープする"
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvextract.xml:645 doc/man/mkvinfo.xml:310
 #: doc/man/mkvmerge.xml:1693 doc/man/mkvpropedit.xml:423
 msgid "There are a few places in which special characters in text must or should be escaped. The rules for escaping are simple: each character that needs escaping is replaced with a backslash followed by another character."
-msgstr ""
+msgstr "特殊文字をエスケープしなければならない、あるいはすべき場所が少しだけあります。エスケープのルールは単純です：エスケープする必要のある各文字を、バックスラッシュ（日本語フォントでは\記号）の後ろに違う文字が1つついたものと入れ替えます。"
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvextract.xml:650 doc/man/mkvinfo.xml:315
 #: doc/man/mkvmerge.xml:1698 doc/man/mkvpropedit.xml:428
 msgid "The rules are: ' ' becomes '\\s', '&quot;' becomes '\\2', ':' becomes '\\c', '#' becomes '\\h' and '\\' itself becomes '\\\\'."
-msgstr ""
+msgstr "ルール：' 'は'\\s'に、'&quot;'は'\\2'に、':'は'\\c'に、'#'は'\\h'に、そして'\\'それ自体は'\\\\'になります。"
 
 #. type: Content of: <refentry><refsect1><title>
 #: doc/man/mkvextract.xml:655 doc/man/mkvinfo.xml:320
@@ -943,7 +930,8 @@ msgstr "冗長モードになります。<link linkend=\"mkvinfo.verbosity_level
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvinfo.xml:222
 msgid "Several chars can be escaped, e.g. if you need to start a non-comment line with '#'. The rules are described in <link linkend=\"mkvinfo.escaping\">the section about escaping text</link>."
-msgstr ""
+msgstr "エスケープすることのできる文字もあります。例えば、コメントではない行を'#'で始める必要のある場合です。そのルールは、<link linkend=\"mkvinfo.escaping\">エスケープ文字についてのセクション</link>で説明されています。"
+
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvinfo.xml:227
@@ -1548,10 +1536,8 @@ msgstr ""
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvmerge.xml:569
-#, fuzzy
-#| msgid "<option>+</option>"
 msgid "<option>=</option>"
-msgstr "<option>+</option>"
+msgstr "<option>=</option>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvmerge.xml:572
@@ -1948,31 +1934,23 @@ msgstr "<abbrev>NALU</abbrev>サイズ長を<parameter>n</parameter>バイトに
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvmerge.xml:1018
-#, fuzzy
-#| msgid "<option>--compression</option> <parameter>TID:method</parameter>"
 msgid "<option>--compression</option> <parameter>TID:n</parameter>"
-msgstr "<option>--compression</option> <parameter>TID:method</parameter>"
+msgstr "<option>--compression</option> <parameter>TID:n</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvmerge.xml:1021
-#, fuzzy
-#| msgid "Selects the compression method to be used for the VobSub track. Note that the player also has to support this method. Valid values are '<literal>none</literal>', '<literal>zlib</literal>', '<literal>lzo</literal>'/'<literal>lxo1x</literal>', '<literal>bz2</literal>'/'<literal>bzlib</literal>' and '<literal>mpeg4_p2</literal>'/'<literal>mpeg4p2</literal>'.  The values '<literal>lzo</literal>'/'<literal>lxo1x</literal>' and '<literal>bz2</literal>'/'<literal>bzlib</literal>' are only available if &mkvmerge; has been compiled with support for the <productname>liblzo</productname> respectively <productname>bzlib</productname> compression libraries."
 msgid "Selects the compression method to be used for the track. Note that the player also has to support this method. Valid values are '<literal>none</literal>', '<literal>zlib</literal>', '<literal>lzo</literal>'/'<literal>lxo1x</literal>', '<literal>bz2</literal>'/'<literal>bzlib</literal>' and '<literal>mpeg4_p2</literal>'/'<literal>mpeg4p2</literal>'.  The values '<literal>lzo</literal>'/'<literal>lxo1x</literal>' and '<literal>bz2</literal>'/'<literal>bzlib</literal>' are only available if &mkvmerge; has been compiled with support for the <productname>liblzo</productname> and <productname>bzlib</productname> compression libraries, respectively."
-msgstr "VobSubトラックの圧縮法を選択します。プレイヤーが選択した圧縮法をサポートしている必要があることに注意してください。指定できる圧縮法は、'<literal>none</literal>'、'<literal>zlib</literal>'、'<literal>lzo</literal>'/'<literal>lxo1x</literal>'、'<literal>bz2</literal>'/'<literal>bzlib</literal>'及び'<literal>mpeg4_p2</literal>'/'<literal>mpeg4p2</literal>'です。'<literal>lzo</literal>'/'<literal>lxo1x</literal>'と'<literal>bz2</literal>'/'<literal>bzlib</literal>'は&mkvmerge;がそれぞれ、<productname>liblzo</productname>及び<productname>bzlib</productname>圧縮ライブラリのサポート付きでコンパイルされたときのみ使用できます。"
+msgstr "トラックの圧縮法を選択します。プレイヤーが選択した圧縮法をサポートしている必要があることに注意してください。指定できる圧縮法は、'<literal>none</literal>'、'<literal>zlib</literal>'、'<literal>lzo</literal>'/'<literal>lxo1x</literal>'、'<literal>bz2</literal>'/'<literal>bzlib</literal>'及び'<literal>mpeg4_p2</literal>'/'<literal>mpeg4p2</literal>'です。'<literal>lzo</literal>'/'<literal>lxo1x</literal>'と'<literal>bz2</literal>'/'<literal>bzlib</literal>'は&mkvmerge;がそれぞれ、<productname>liblzo</productname>及び<productname>bzlib</productname>圧縮ライブラリのサポート付きでコンパイルされたときのみ使用できます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvmerge.xml:1029
-#, fuzzy
-#| msgid "The compression method '<literal>mpeg4_p2</literal>'/'<literal>mpeg4p2</literal>' is a special compression method called '<foreignphrase>header removal</foreignphrase>' that is only available for MPEG4 part 2 video tracks. The other methods are general compression methods that can be used with any type of track."
 msgid "The compression method '<literal>mpeg4_p2</literal>'/'<literal>mpeg4p2</literal>' is a special compression method called '<foreignphrase>header removal</foreignphrase>' that is only available for <abbrev>MPEG4</abbrev> part 2 video tracks."
-msgstr "'<literal>mpeg4_p2</literal>'/'<literal>mpeg4p2</literal>'圧縮法は、'<foreignphrase>header removal</foreignphrase>'と呼ばれる特殊な圧縮法で、MPEG4 part2 ビデオトラックにのみ適用できます。それ以外の圧縮法は一般的な圧縮法で、どんな種類のトラックに適用できます。"
+msgstr "'<literal>mpeg4_p2</literal>'/'<literal>mpeg4p2</literal>'圧縮法は、 <abbrev>MPEG4</abbrev> part2 ビデオトラックにのみ適用できる、'<foreignphrase>header removal</foreignphrase>'と呼ばれる特殊な圧縮法です。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvmerge.xml:1033
-#, fuzzy
-#| msgid "The default is '<literal>zlib</literal>' compression. This compression method is also the one that most if not all playback applications support. Support for other compression methods other than '<literal>none</literal>' is not assured."
 msgid "The default for some subtitle tracks is '<literal>zlib</literal>' compression. This compression method is also the one that most if not all playback applications support. Support for other compression methods other than '<literal>none</literal>' is not assured."
-msgstr "デフォルトは'<literal>zlib</literal>'圧縮法です。この圧縮法はほとんど全ての再生アプリケーションでサポートされています。'<literal>none</literal>'以外の他の圧縮法については、サポートされているとは限りません。"
+msgstr "いくつかの字幕トラックにおけるデフォルトは'<literal>zlib</literal>'圧縮法です。この圧縮法はほとんど全ての再生アプリケーションでサポートされています。'<literal>none</literal>'以外の他の圧縮法については、サポートされているとは限りません。"
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvmerge.xml:1041
@@ -2086,20 +2064,18 @@ msgstr "&mkvmerge;に、単一のファイルを探査してその種類と、�
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvmerge.xml:1170
-#, fuzzy
-#| msgid "<option>-i</option>, <option>--identify</option> <parameter>file-name</parameter>"
 msgid "<option>-I</option>, <option>--identify-verbose</option> <parameter>file-name</parameter>"
-msgstr "<option>-i</option>, <option>--identify</option> <parameter>file-name</parameter>"
+msgstr "<option>-I</option>, <option>--identify-verbose</option> <parameter>file-name</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvmerge.xml:1178
 msgid "This option causes &mkvmerge; to output additional information about the container and each track within. The extra information is surronded by square brackets. It consists of space-saparated key/value pairs where keys and values are separated by a colon."
-msgstr ""
+msgstr "このオプションを指定すると、&mkvmerge;はコンテナと中身の各トラックについての追加の情報を出力します。追加情報は、四角の括弧で囲まれます。それはスペースで区切られたキーと値のペアで構成され、キーと値はコロンで区切られます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvmerge.xml:1183
 msgid "Each value is escaped according to the rules described in <link linkend=\"mkvmerge.escaping\">the section about escaping special characters in text</link>."
-msgstr ""
+msgstr "各値は、<link linkend=\"mkvmerge.escaping\">テキスト中の特殊文字のエスケープについてのセクション</link>で説明されているルールに従ってエスケープされます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvmerge.xml:1190
@@ -2149,7 +2125,7 @@ msgstr "指定した<parameter>code</parameter>を強制的に言語コード(�
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvmerge.xml:1277
 msgid "Several chars can be escaped, e.g. if you need to start a non-comment line with '#'. The rules are described in <link linkend=\"mkvmerge.escaping\">the section about escaping text</link>."
-msgstr ""
+msgstr "エスケープすることのできる文字もあります。例えば、コメントではない行を'#'で始める必要のある場合です。そのルールは、<link linkend=\"mkvmerge.escaping\">エスケープ文字についてのセクション</link>で説明されています。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvmerge.xml:1282
@@ -2438,7 +2414,7 @@ msgstr "もし、指定したはずの言語やデフォルトフラグが&mkvin
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvmerge.xml:1526
 msgid "Turn off the compression for an input file."
-msgstr ""
+msgstr "入力ファイルの圧縮をオフにします。"
 
 #. type: Content of: <refentry><refsect1><screen>
 #: doc/man/mkvmerge.xml:1529
@@ -2475,12 +2451,12 @@ msgstr ""
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvmerge.xml:1550
 msgid "Do not confuse the track IDs that are assigned to the tracks that are placed in the output MKV file with the track IDs of the input files. Only the input file track IDs are used for options needing these values."
-msgstr ""
+msgstr "出力されるMKVファイルの中に配置されるトラックに割り当てられるトラックIDと、入力ファイルのトラックIDを混同しないでください。これらの値が必要なオプションに使われるのは、入力ファイルのトラックIDだけです。"
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvmerge.xml:1555
 msgid "Also note that each input file has its own set of track IDs. Therefore the track IDs for file '<filename>file1.ext</filename>' as reported by '<literal>mkvmerge --identify</literal>' do not change no matter how many other input files are there or in which position '<filename>file1.ext</filename>' is used."
-msgstr ""
+msgstr "また、各入力ファイルは、それ固有のトラックIDの組を持っていることにも注意してください。従って、'<literal>mkvmerge --identify</literal>'で報告される'<filename>file1.ext</filename>'のトラックIDは、他にいくつ入力ファイルがあっても、また、'<filename>file1.ext</filename>'がどの位置で使われようとも、変わることはありません。"
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvmerge.xml:1561
@@ -2490,12 +2466,12 @@ msgstr "トラックIDは次のように割り当てられます:"
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
 #: doc/man/mkvmerge.xml:1567
 msgid "<abbrev>AVI</abbrev> files: The video track has the ID 0. The audio tracks get IDs in ascending order starting at 1."
-msgstr "<abbrev>AVI</abbrev> ファイル: ビデオトラックのIDは0になります。オーディオトラックのIDは1から昇順に割り当てられます。"
+msgstr "<abbrev>AVI</abbrev>ファイル: ビデオトラックのIDは0になります。オーディオトラックのIDは1から昇順に割り当てられます。"
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
 #: doc/man/mkvmerge.xml:1573
 msgid "<abbrev>MP4</abbrev> files: As output from x264, the video track has the ID 1."
-msgstr ""
+msgstr "<abbrev>MP4</abbrev>ファイル: x264からの出力なので、ビデオトラックのIDは1です。"
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
 #: doc/man/mkvmerge.xml:1579
@@ -3194,7 +3170,7 @@ msgstr "このオプション以降の<link linkend=\"mkvpropedit.description.ad
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvpropedit.xml:111 doc/man/mkvpropedit.xml:292
 msgid "By default &mkvpropedit; will edit the segment information section."
-msgstr ""
+msgstr "デフォルトでは、&mkvpropedit;はセグメント情報のセクションを編集します。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvpropedit.xml:115
@@ -3239,7 +3215,7 @@ msgstr "全てのメッセージをコンソールではなく<parameter>file-na
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvpropedit.xml:257
 msgid "Several chars can be escaped, e.g. if you need to start a non-comment line with '#'. The rules are described in <link linkend=\"mkvpropedit.escaping\">the section about escaping text</link>."
-msgstr ""
+msgstr "エスケープすることのできる文字もあります。例えば、コメントではない行を'#'で始める必要のある場合です。そのルールは、<link linkend=\"mkvpropedit.escaping\">エスケープ文字についてのセクション</link>で説明されています。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvpropedit.xml:262
