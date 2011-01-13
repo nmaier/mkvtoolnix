@@ -232,7 +232,7 @@ set_usage() {
       "                 Redirect all messages to this file.\n"
       "  -h, --help     Show this help.\n"
       "  -V, --version  Show version information.\n");
-  usage_text += std::string("  --check-for-updates ") + Y("Check online for the latest release") + ".\n";
+  usage_text += std::string("  --check-for-updates ") + Y("Check online for the latest release.") + "\n";
 
   version_info = get_version_info("mkvinfo", true);
 }
