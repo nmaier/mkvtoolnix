@@ -23,6 +23,7 @@
 
 #include "common/mm_io.h"
 #include "common/random.h"
+#include "common/stereo_mode.h"
 #include "common/strings/editing.h"
 #include "common/translation.h"
 #include "common/xml/element_mapping.h"
@@ -112,5 +113,7 @@ mtx_common_init() {
   init_cc_stdio();
 
   xml_element_map_init();
+
+  stereo_mode_c::init();
 }
 

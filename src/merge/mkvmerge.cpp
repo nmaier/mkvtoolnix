@@ -34,6 +34,7 @@
 #include <algorithm>
 #include <iostream>
 #include <list>
+#include <sstream>
 #include <typeinfo>
 
 #include <matroska/KaxChapters.h>
@@ -216,10 +217,10 @@ set_usage() {
                   "                           Explicitly set the display dimensions.\n");
   usage_text += Y("  --cropping <TID:left,top,right,bottom>\n"
                   "                           Sets the cropping parameters.\n");
-  usage_text += Y("  --stereo-mode <TID:n|none|left|right|both>\n"
+  usage_text += Y("  --stereo-mode <TID:n|keyword>\n"
                   "                           Sets the stereo mode parameter. It can\n"
-                  "                           either be a numer 0 - 3 or one of the\n"
-                  "                           keywords 'none', 'right', 'left' or 'both'.\n");
+                  "                           either be a number 0 - 11 or a keyword\n"
+                  "                           (see documentation for the full list).\n");
   usage_text +=   "\n";
   usage_text += Y(" Options that only apply to text subtitle tracks:\n");
   usage_text += Y("  --sub-charset <TID:charset>\n"
@@ -688,37 +689,47 @@ parse_arg_cropping(const std::string &s,
 
 /** \brief Parse the \c --stereo-mode argument
 
-   The argument must either be a number between 0 and 3 or
-   one of the keywords \c 'none', \c 'left', \c 'right' or \c 'both'.
+   The argument must either be a number starting at 0 or
+   one of these keywords:
+
+   0: mono
+   1: side by side (left eye is first)
+   2: top-bottom (right eye is first)
+   3: top-bottom (left eye is first)
+   4: checkboard (right is first)
+   5: checkboard (left is first)
+   6: row interleaved (right is first)
+   7: row interleaved (left is first)
+   8: column interleaved (right is first)
+   9: column interleaved (left is first)
+   10: anaglyph (cyan/red)
+   11: side by side (right eye is first)
 */
 static void
 parse_arg_stereo_mode(const std::string &s,
                       track_info_c &ti) {
-  static const char * const keywords[] = {
-    "none", "right", "left", "both", NULL
-  };
-  std::string errmsg = Y("Stereo mode parameter: not given in the form <TID>:<n|keyword> where n is a number between 0 and 3 "
-                         "or one of the keywords 'none', 'right', 'left', 'both' (argument was '%1%').\n");
+  std::string errmsg = Y("Stereo mode parameter: not given in the form <TID>:<n|keyword> where n is a number between 0 and %1% "
+                         "or one of these keywords: %2% (argument was '%3%').\n");
 
   std::vector<std::string> v = split(s, ":");
   if (v.size() != 2)
-    mxerror(boost::format(errmsg) % s);
+    mxerror(boost::format(errmsg) % stereo_mode_c::max_index() % stereo_mode_c::displayable_modes_list() % s);
 
   int64_t id = 0;
   if (!parse_int(v[0], id))
-    mxerror(boost::format(errmsg) % s);
+    mxerror(boost::format(errmsg) % stereo_mode_c::max_index() % stereo_mode_c::displayable_modes_list() % s);
 
-  int i;
-  for (i = 0; NULL != keywords[i]; ++i)
-    if (v[1] == keywords[i]) {
-      ti.m_stereo_mode_list[id] = (stereo_mode_e)i;
-      return;
-    }
+  stereo_mode_c::mode mode = stereo_mode_c::parse_mode(v[1]);
+  if (stereo_mode_c::invalid != mode) {
+    ti.m_stereo_mode_list[id] = mode;
+    return;
+  }
 
-  if (!parse_int(v[1], i) || (i < 0) || (STEREO_MODE_BOTH < i))
-    mxerror(boost::format(errmsg) % s);
+  int index;
+  if (!parse_int(v[1], index) || !stereo_mode_c::valid_index(index))
+    mxerror(boost::format(errmsg) % stereo_mode_c::max_index() % stereo_mode_c::displayable_modes_list() % s);
 
-  ti.m_stereo_mode_list[id] = (stereo_mode_e)i;
+  ti.m_stereo_mode_list[id] = static_cast<stereo_mode_c::mode>(index);
 }
 
 /** \brief Parse the duration formats to \c --split

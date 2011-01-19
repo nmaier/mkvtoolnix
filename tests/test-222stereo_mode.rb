@@ -7,10 +7,10 @@ class T_222stereo_mode < Test
 
   def run
     merge(tmp + "-1",
-           "-A --stereo-mode 0:none data/avi/v.avi " +
-           "-A --stereo-mode 0:right data/avi/v.avi " +
-           "-A --stereo-mode 0:left data/avi/v.avi " +
-           "-A --stereo-mode 0:both data/avi/v.avi ")
+           "-A --stereo-mode 0:mono data/avi/v.avi " +
+           "-A --stereo-mode 0:side_by_side_left_first data/avi/v.avi " +
+           "-A --stereo-mode 0:top_bottom_right_first data/avi/v.avi " +
+           "-A --stereo-mode 0:top_bottom_left_first data/avi/v.avi ")
     if (!FileTest.exist?(tmp + "-1"))
       error("First merge failed")
     end
@@ -18,8 +18,8 @@ class T_222stereo_mode < Test
     hash = hash_file(tmp + "-1")
 
     merge(tmp + "-2",
-           "--stereo-mode 4:none --stereo-mode 3:right " +
-           "--stereo-mode 2:left --stereo-mode 1:both #{tmp}-1")
+           "--stereo-mode 4:mono --stereo-mode 3:side_by_side_left_first " +
+           "--stereo-mode 2:top_bottom_right_first --stereo-mode 1:top_bottom_left_first #{tmp}-1")
     File.unlink(tmp + "-1")
     if (!FileTest.exist?(tmp + "-2"))
       error("Second merge failed")

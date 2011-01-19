@@ -567,7 +567,7 @@ generic_packetizer_c::set_video_pixel_cropping(const pixel_crop_t &cropping,
 }
 
 void
-generic_packetizer_c::set_video_stereo_mode(stereo_mode_e stereo_mode,
+generic_packetizer_c::set_video_stereo_mode(stereo_mode_c::mode stereo_mode,
                                             parameter_source_e source) {
   if (source <= m_ti.m_stereo_mode_source)
     return;
@@ -575,7 +575,7 @@ generic_packetizer_c::set_video_stereo_mode(stereo_mode_e stereo_mode,
   m_ti.m_stereo_mode        = stereo_mode;
   m_ti.m_stereo_mode_source = source;
 
-  if ((NULL != m_track_entry) && (STEREO_MODE_UNSPECIFIED != stereo_mode))
+  if ((NULL != m_track_entry) && (stereo_mode_c::unspecified != stereo_mode))
     GetChildAs<KaxVideoStereoMode, EbmlUInteger>(GetChild<KaxTrackVideo>(*m_track_entry)) = m_ti.m_stereo_mode;
 }
 
@@ -696,7 +696,7 @@ generic_packetizer_c::set_headers() {
         GetChildAs<KaxVideoPixelCropBottom, EbmlUInteger>(video) = m_ti.m_pixel_cropping.bottom;
       }
 
-      if ((PARAMETER_SOURCE_NONE != m_ti.m_stereo_mode_source) && (STEREO_MODE_UNSPECIFIED != m_ti.m_stereo_mode))
+      if ((PARAMETER_SOURCE_NONE != m_ti.m_stereo_mode_source) && (stereo_mode_c::unspecified != m_ti.m_stereo_mode))
         GetChildAs<KaxVideoStereoMode, EbmlUInteger>(video) = m_ti.m_stereo_mode;
     }
 
@@ -1530,7 +1530,7 @@ track_info_c::track_info_c()
   , m_tags(NULL)
   , m_compression(COMPRESSION_UNSPECIFIED)
   , m_pixel_cropping_source(PARAMETER_SOURCE_NONE)
-  , m_stereo_mode(STEREO_MODE_UNSPECIFIED)
+  , m_stereo_mode(stereo_mode_c::unspecified)
   , m_stereo_mode_source(PARAMETER_SOURCE_NONE)
   , m_nalu_size_length(0)
   , m_no_chapters(false)

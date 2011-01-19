@@ -32,6 +32,7 @@
 #include "common/memory.h"
 #include "common/mm_io.h"
 #include "common/smart_pointers.h"
+#include "common/stereo_mode.h"
 #include "common/strings/editing.h"
 #include "merge/packet.h"
 #include "merge/timecode_factory.h"
@@ -167,14 +168,6 @@ struct pixel_crop_t {
   }
 };
 
-enum stereo_mode_e {
-  STEREO_MODE_UNSPECIFIED = -1,
-  STEREO_MODE_NONE        =  0,
-  STEREO_MODE_RIGHT       =  1,
-  STEREO_MODE_LEFT        =  2,
-  STEREO_MODE_BOTH        =  3,
-};
-
 enum attach_mode_e {
   ATTACH_MODE_SKIP,
   ATTACH_MODE_TO_FIRST_FILE,
@@ -247,8 +240,8 @@ public:
   pixel_crop_t m_pixel_cropping;  // For this very track
   parameter_source_e m_pixel_cropping_source;
 
-  std::map<int64_t, stereo_mode_e> m_stereo_mode_list; // As given on the command line
-  stereo_mode_e m_stereo_mode;                    // For this very track
+  std::map<int64_t, stereo_mode_c::mode> m_stereo_mode_list; // As given on the command line
+  stereo_mode_c::mode m_stereo_mode;                    // For this very track
   parameter_source_e m_stereo_mode_source;
 
   std::map<int64_t, int64_t> m_default_durations; // As given on the command line
@@ -559,7 +552,7 @@ public:
   virtual void set_video_aspect_ratio(double aspect_ratio, bool is_factor, parameter_source_e source);
   virtual void set_video_pixel_cropping(int left, int top, int right, int bottom, parameter_source_e source);
   virtual void set_video_pixel_cropping(const pixel_crop_t &cropping, parameter_source_e source);
-  virtual void set_video_stereo_mode(stereo_mode_e stereo_mode, parameter_source_e source);
+  virtual void set_video_stereo_mode(stereo_mode_c::mode stereo_mode, parameter_source_e source);
 
   virtual void set_as_default_track(int type, int priority);
 

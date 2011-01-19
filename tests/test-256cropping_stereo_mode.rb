@@ -18,8 +18,8 @@ class T_256cropping_stereo_mode < Test
   def run
     result = ""
 
-    merge "--cropping 3:1,2,3,4 --stereo-mode 3:left -A data/mp4/rain_800.mp4"
-    [ "", "--cropping 1:5,6,7,8 --stereo-mode 1:right" ].each_with_index do |args, idx|
+    merge "--cropping 3:1,2,3,4 --stereo-mode 3:top_bottom_right_first -A data/mp4/rain_800.mp4"
+    [ "", "--cropping 1:5,6,7,8 --stereo-mode 1:side_by_side_left_first" ].each_with_index do |args, idx|
       merge "#{tmp}#{idx}", "#{args} #{tmp}"
       result += "#{idx}[" + get_info("#{tmp}#{idx}") + "]"
     end

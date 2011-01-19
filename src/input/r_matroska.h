@@ -53,7 +53,7 @@ struct kax_track_t {
   uint64_t v_width, v_height, v_dwidth, v_dheight;
   unsigned int v_display_unit;
   uint64_t v_pcleft, v_pctop, v_pcright, v_pcbottom;
-  stereo_mode_e v_stereo_mode;
+  stereo_mode_c::mode v_stereo_mode;
   float v_frate;
   char v_fourcc[5];
   bool v_bframes;
@@ -111,7 +111,7 @@ struct kax_track_t {
     , v_pctop(0)
     , v_pcright(0)
     , v_pcbottom(0)
-    , v_stereo_mode(STEREO_MODE_UNSPECIFIED)
+    , v_stereo_mode(stereo_mode_c::unspecified)
     , v_frate(0.0)
     , v_bframes(false)
     , a_channels(0)

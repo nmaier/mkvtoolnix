@@ -119,7 +119,7 @@ kax_track_t::handle_packetizer_pixel_cropping() {
 
 void
 kax_track_t::handle_packetizer_stereo_mode() {
-  if (STEREO_MODE_UNSPECIFIED != v_stereo_mode)
+  if (stereo_mode_c::unspecified != v_stereo_mode)
     ptzr_ptr->set_video_stereo_mode(v_stereo_mode, PARAMETER_SOURCE_CONTAINER);
 }
 
@@ -1023,8 +1023,8 @@ kax_reader_c::read_headers_track_video(kax_track_t *&track,
 
   KaxVideoStereoMode *kv_stereo_mode = FINDFIRST(ktvideo, KaxVideoStereoMode);
   if (NULL != kv_stereo_mode) {
-    track->v_stereo_mode = (stereo_mode_e)uint64(*kv_stereo_mode);
-    mxverb(2, boost::format("matroska_reader: |   + Stereo mode: %1%\n") % (int)track->v_stereo_mode);
+    track->v_stereo_mode = static_cast<stereo_mode_c::mode>(uint64(*kv_stereo_mode));
+    mxverb(2, boost::format("matroska_reader: |   + Stereo mode: %1%\n") % static_cast<int>(track->v_stereo_mode));
   }
 }
 
@@ -2286,8 +2286,8 @@ kax_reader_c::identify() {
     if ((0 != track->v_dwidth) && (0 != track->v_dheight))
       verbose_info.push_back((boost::format("display_dimensions:%1%x%2%") % track->v_dwidth % track->v_dheight).str());
 
-    if (STEREO_MODE_UNSPECIFIED != track->v_stereo_mode)
-      verbose_info.push_back((boost::format("stereo_mode:%1%") % (int)track->v_stereo_mode).str());
+    if (stereo_mode_c::unspecified != track->v_stereo_mode)
+      verbose_info.push_back((boost::format("stereo_mode:%1%") % static_cast<int>(track->v_stereo_mode)).str());
 
     if ((0 != track->v_pcleft) || (0 != track->v_pctop) || (0 != track->v_pcright) || (0 != track->v_pcbottom))
       verbose_info.push_back((boost::format("cropping:%1%,%2%,%3%,%4%") % track->v_pcleft % track->v_pctop % track->v_pcright % track->v_pcbottom).str());

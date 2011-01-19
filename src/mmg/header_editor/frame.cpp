@@ -489,8 +489,7 @@ header_editor_frame_c::handle_tracks(kax_analyzer_data_c *data) {
       child_page->set_sub_master_callbacks(KaxTrackVideo::ClassInfos);
       child_page->init();
 
-      child_page = new he_unsigned_integer_value_page_c(this, page, k_track_entry, KaxVideoStereoMode::ClassInfos,
-                                                        YT("Video stereo mode"), YT("Stereo-3D video mode (0: mono, 1: right eye,\n2: left eye, 3: both eyes)."));
+      child_page = new he_unsigned_integer_value_page_c(this, page, k_track_entry, KaxVideoStereoMode::ClassInfos, YT("Video stereo mode"), YT("Stereo-3D video mode (0 - 11, see documentation)."));
       child_page->set_sub_master_callbacks(KaxTrackVideo::ClassInfos);
       child_page->init();
 

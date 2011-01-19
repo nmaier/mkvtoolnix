@@ -1120,10 +1120,15 @@ $ mkvmerge -o full.mkv =file1.mkv
     <listitem>
      <para>
       Sets the stereo mode for the video track with the track ID <parameter>TID</parameter>.  The mode can either be a number
-      <parameter>n</parameter> between <constant>0</constant> and <constant>3</constant> or one of the keywords '<literal>none</literal>'
-      (same as <parameter>n</parameter>=<constant>0</constant>), '<literal>right</literal>' (same as
-      <parameter>n</parameter>=<constant>1</constant>), '<literal>left</literal>' (same as <parameter>n</parameter>=<constant>2</constant>)
-      or '<literal>both</literal>' (same as <parameter>n</parameter>=<constant>3</constant>).
+      <parameter>n</parameter> between <constant>0</constant> and <constant>11</constant> or one of these keywords:
+     </para>
+
+     <para>
+      '<literal>mono</literal>', '<literal>side_by_side_left_first</literal>', '<literal>top_bottom_right_first</literal>',
+      '<literal>top_bottom_left_first</literal>', '<literal>checkboard_right_first</literal>', '<literal>checkboard_left_first</literal>',
+      '<literal>row_interleaved_right_first</literal>', '<literal>row_interleaved_left_first</literal>',
+      '<literal>column_interleaved_right_first</literal>', '<literal>column_interleaved_left_first</literal>',
+      '<literal>anaglyph</literal>', '<literal>side_by_side_right_first</literal>'.
      </para>
     </listitem>
    </varlistentry>

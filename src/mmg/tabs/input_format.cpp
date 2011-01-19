@@ -26,6 +26,7 @@
 #include "common/common_pch.h"
 #include "common/extern_data.h"
 #include "common/iso639.h"
+#include "common/stereo_mode.h"
 #include "merge/mkvmerge.h"
 #include "mmg/mmg.h"
 #include "mmg/mmg_dialog.h"
@@ -165,15 +166,14 @@ tab_input_format::setup_control_contents() {
     for (i = 0; NULL != predefined_fourccs[i]; ++i)
       cob_fourcc->Append(predefined_fourccs[i]);
 
+  unsigned int num_stereo_modes = stereo_mode_c::max_index() + 1;
   if (0 == cob_stereo_mode->GetCount())
-    for (i = 0; 5 > i; ++i)
+    for (i = 0; num_stereo_modes >= i; ++i)
       cob_stereo_mode->Append(wxEmptyString);
 
   selection = cob_stereo_mode->GetSelection();
-  cob_stereo_mode->SetString(1, Z("None"));
-  cob_stereo_mode->SetString(2, Z("Left eye"));
-  cob_stereo_mode->SetString(3, Z("Right eye"));
-  cob_stereo_mode->SetString(4, Z("Both eyes"));
+  for (i = 1; num_stereo_modes >= i; ++i)
+    cob_stereo_mode->SetString(i, wxU(stereo_mode_c::translate(i - 1)));
   cob_stereo_mode->SetSelection(selection);
 
   if (0 == cob_fps->GetCount()) {

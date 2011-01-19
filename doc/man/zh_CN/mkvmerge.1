@@ -940,22 +940,16 @@ Matroska(TM)
 .PP
 \fB\-\-stereo\-mode\fR \fITID:n|关键词\fR
 .RS 4
-设置 ID 为
-\fITID\fR
-的视频轨的立体视法。 模式既可以是
+Sets the stereo mode for the video track with the track ID
+\fITID\fR\&. The mode can either be a number
+\fIn\fR
+between
 \fB0\fR
-到
-\fB3\fR
-之间的数字
-\fIn\fR，也可以是 \*(Aqnone（无立体视法）\*(Aq (与
-\fIn\fR=\fB0\fR
-相同), \*(Aqright（右眼视角）\*(Aq (与
-\fIn\fR=\fB1\fR
-相同), \*(Aqleft（左眼视角）\*(Aq (与
-\fIn\fR=\fB2\fR
-相同) or \*(Aqboth（双眼视角）\*(Aq (与
-\fIn\fR=\fB3\fR
-相同)。
+and
+\fB11\fR
+or one of these keywords:
+.sp
+\*(Aqmono\*(Aq, \*(Aqside_by_side_left_first\*(Aq, \*(Aqtop_bottom_right_first\*(Aq, \*(Aqtop_bottom_left_first\*(Aq, \*(Aqcheckboard_right_first\*(Aq, \*(Aqcheckboard_left_first\*(Aq, \*(Aqrow_interleaved_right_first\*(Aq, \*(Aqrow_interleaved_left_first\*(Aq, \*(Aqcolumn_interleaved_right_first\*(Aq, \*(Aqcolumn_interleaved_left_first\*(Aq, \*(Aqanaglyph\*(Aq, \*(Aqside_by_side_right_first\*(Aq\&.
 .RE
 .PP
 仅适用于文本字幕轨道的选项:

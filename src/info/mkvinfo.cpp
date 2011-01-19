@@ -73,6 +73,7 @@
 #include "common/endian.h"
 #include "common/matroska.h"
 #include "common/mm_io.h"
+#include "common/stereo_mode.h"
 #include "common/strings/editing.h"
 #include "common/strings/formatting.h"
 #include "common/translation.h"
@@ -780,13 +781,9 @@ def_handle2(video_track,
     } else if (is_id(l4, KaxVideoStereoMode)) {
       KaxVideoStereoMode &stereo = *static_cast<KaxVideoStereoMode *>(l4);
       show_element(l4, 4,
-                   boost::format(Y("Stereo mode: %1%%2%"))
+                   boost::format(Y("Stereo mode: %1% (%2%)"))
                    % uint64(stereo)
-                   % (  uint8(stereo) == 0 ? Y(" (mono)")
-                      : uint8(stereo) == 1 ? Y(" (right eye)")
-                      : uint8(stereo) == 2 ? Y(" (left eye)")
-                      : uint8(stereo) == 3 ? Y(" (both eyes)")
-                      :                      ""));
+                   % stereo_mode_c::translate(static_cast<stereo_mode_c::mode>(uint64(stereo))));
 
     } else if (is_id(l4, KaxVideoAspectRatio)) {
       KaxVideoAspectRatio &ar_type = *static_cast<KaxVideoAspectRatio *>(l4);
