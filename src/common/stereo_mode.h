@@ -40,6 +40,7 @@ public:
   };
 
   static void init();
+  static void init_translations();
   static const std::string translate(unsigned int mode);
   static const std::string displayable_modes_list();
   static mode parse_mode(const std::string &str);

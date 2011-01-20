@@ -35,6 +35,12 @@ stereo_mode_c::init() {
   s_modes.push_back("column_interleaved_left_first");
   s_modes.push_back("anaglyph");
   s_modes.push_back("side_by_side_right_first");
+}
+
+void
+stereo_mode_c::init_translations() {
+  if (!s_translations.empty())
+    return;
 
   s_translations.push_back(Y("mono"));
   s_translations.push_back(Y("side by side (left first)"));
@@ -52,6 +58,7 @@ stereo_mode_c::init() {
 
 const std::string
 stereo_mode_c::translate(unsigned int mode) {
+  init_translations();
   return mode < s_translations.size() ? s_translations[mode] : Y("unknown");
 }
 
