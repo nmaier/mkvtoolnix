@@ -400,7 +400,9 @@ tab_input_format::on_stereo_mode_changed(wxCommandEvent &evt) {
   if (input->dont_copy_values_now || (input->selected_track == -1))
     return;
 
-  tracks[input->selected_track]->stereo_mode = cob_stereo_mode->GetSelection();
+  mmg_track_t *track = tracks[input->selected_track];
+  track->stereo_mode = cob_stereo_mode->GetSelection();
+  mdlg->set_output_maybe(files[track->source]->file_name);
 }
 
 void

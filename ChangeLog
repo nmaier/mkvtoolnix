@@ -1,5 +1,10 @@
 2011-01-20  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: enhancement: The output file name extension is
+	automatically set to ".mk3d" if the stereo mode parameter for any
+	video track is changed to anything else than "mono" or the default
+	value.
+
 	* mmg: enhancement: Added ".mk3d" to the list of known file name
 	extensions for Matroska files.
 

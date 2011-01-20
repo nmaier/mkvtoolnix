@@ -1326,17 +1326,20 @@ mmg_dialog::set_output_maybe(const wxString &new_output) {
 
 wxString
 mmg_dialog::suggest_file_name_extension() {
-  bool has_video = false, has_audio = false;
+  bool has_video = false, has_audio = false, has_stereo_mode = false;
 
   foreach(mmg_track_t *t, tracks) {
     if (t->is_video()) {
       has_video = true;
-      break;
+      if (t->stereo_mode >= 2)
+        has_stereo_mode = true;
+
     } else if (t->is_audio())
       has_audio = true;
   }
 
   return global_page->cb_webm_mode->IsChecked() ? wxU("webm")
+       : has_stereo_mode                        ? wxU("mk3d")
        : has_video                              ? wxU("mkv")
        : has_audio                              ? wxU("mka")
        :                                          wxU("mks");
