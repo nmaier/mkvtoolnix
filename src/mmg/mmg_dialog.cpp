@@ -333,7 +333,7 @@ void
 mmg_dialog::on_browse_output(wxCommandEvent &evt) {
   wxFileDialog dlg(NULL, Z("Choose an output file"), last_open_dir,
                    tc_output->GetValue().AfterLast(PSEP),
-                   wxString::Format(Z("Matroska A/V files (*.mka;*.mkv)|*.mkv;*.mka|%s"), ALLFILES.c_str()),
+                   wxString::Format(Z("Matroska A/V files (*.mka;*.mkv;*.mk3d)|*.mkv;*.mka;*.mk3d|%s"), ALLFILES.c_str()),
                    wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
   if(dlg.ShowModal() != wxID_OK)
     return;

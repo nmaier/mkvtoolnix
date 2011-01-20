@@ -235,7 +235,7 @@ header_editor_frame_c::on_file_open(wxCommandEvent &evt) {
     return;
   }
 
-  wxFileDialog dlg(this, Z("Open a Matroska file"), last_open_dir, wxEmptyString, wxString::Format(Z("Matroska files (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|%s"), ALLFILES.c_str()), wxFD_OPEN);
+  wxFileDialog dlg(this, Z("Open a Matroska file"), last_open_dir, wxEmptyString, wxString::Format(Z("Matroska files (*.mkv;*.mka;*.mks;*.mk3d)|*.mkv;*.mka;*.mks;*.mk3d|%s"), ALLFILES.c_str()), wxFD_OPEN);
   if (dlg.ShowModal() != wxID_OK)
     return;
 

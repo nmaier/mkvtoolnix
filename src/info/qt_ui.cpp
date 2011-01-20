@@ -61,7 +61,7 @@ main_window_c::main_window_c():
 
 void
 main_window_c::open() {
-  QString file_name = QFileDialog::getOpenFileName(this, Q(Y("Open File")), "", Q(Y("Matroska files (*.mkv *.mka *.mks);;All files (*.*)")));
+  QString file_name = QFileDialog::getOpenFileName(this, Q(Y("Open File")), "", Q(Y("Matroska files (*.mkv *.mka *.mks *.mk3d);;All files (*.*)")));
   if (!file_name.isEmpty())
     parse_file(file_name);
 }

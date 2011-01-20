@@ -522,7 +522,7 @@ tab_chapters::fix_missing_languages(EbmlMaster &master) {
 void
 tab_chapters::on_load_chapters(wxCommandEvent &evt) {
   wxFileDialog dlg(NULL, Z("Choose a chapter file"), last_open_dir, wxEmptyString,
-                   wxString::Format(Z("Chapter files (*.xml;*.txt;*.mka;*.mkv;*.cue)|*.xml;*.txt;*.mka;*.mkv;*.cue|%s"), ALLFILES.c_str()), wxFD_OPEN);
+                   wxString::Format(Z("Chapter files (*.xml;*.txt;*.mka;*.mkv;*.mk3d;*.cue)|*.xml;*.txt;*.mka;*.mkv;*.mk3d;*.cue|%s"), ALLFILES.c_str()), wxFD_OPEN);
 
   if (dlg.ShowModal() == wxID_OK)
     if (load(dlg.GetPath()))
@@ -634,7 +634,7 @@ tab_chapters::on_save_chapters_to_kax_file(wxCommandEvent &evt) {
     return;
 
   wxFileDialog dlg(this, Z("Choose an output file"), last_open_dir, wxEmptyString,
-                   wxString::Format(Z("Matroska files (*.mkv;*.mka)|*.mkv;*.mka|%s"), ALLFILES.c_str()), wxFD_SAVE);
+                   wxString::Format(Z("Matroska files (*.mkv;*.mka;*.mk3d)|*.mkv;*.mka;*.mk3d|%s"), ALLFILES.c_str()), wxFD_SAVE);
   if (dlg.ShowModal() != wxID_OK)
     return;
 

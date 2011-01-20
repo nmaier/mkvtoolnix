@@ -275,8 +275,8 @@ mi_frame::save_elements(wxTreeItemId &root,
 void
 mi_frame::on_file_open(wxCommandEvent &WXUNUSED(event)) {
   wxFileDialog file_dialog(this, Z("Select Matroska file"), wxT(""), wxT(""),
-                           Z("All supported files|*.mkv;*.mka;*.mks;*.webm;*.webma;*.webmv|"
-                             "Matroska files (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|"
+                           Z("All supported files|*.mkv;*.mka;*.mks;*.mk3d;*.webm;*.webma;*.webmv|"
+                             "Matroska files (*.mkv;*.mka;*.mks;*.mk3d)|*.mkv;*.mka;*.mks;*.mk3d|"
                              "WebM files (*.webm;*.webma;*.webmv)|*.webm;*.webma;*.webmv|"
                              "All files|*.*"));
   file_dialog.SetDirectory(last_dir);
@@ -370,7 +370,7 @@ mi_dndfile::OnDropFiles(wxCoord x,
   for (i = 0; i < filenames.GetCount(); i++) {
     wxString extension = filenames[i].AfterLast(wxT('.')).Lower();
 
-    if (   (extension == wxT("mkv"))  || (extension == wxT("mka"))   || (extension == wxT("mks"))
+    if (   (extension == wxT("mkv"))  || (extension == wxT("mka"))   || (extension == wxT("mks")   || (extension == wxT("mk3d")))
         || (extension == wxT("webm")) || (extension == wxT("webmv")) || (extension == wxT("webma")))
       frame->open_file(filenames[i]);
 
