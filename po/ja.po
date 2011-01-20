@@ -2,13 +2,13 @@
 # Copyright (C) 2009 Moritz Bunkus
 # This file is distributed under the same license as the mkvtoolnix package.
 #
-# Hiroki Taniura <boiled.sugar@gmail.com> 2009, 2010.
+# Hiroki Taniura <boiled.sugar@gmail.com> 2009-2011.
 # Katsuhiko Nishimra <kat841@hotmail.com> 2010.
 msgid ""
 msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <boiled.sugar@gmail.com>\n"
-"PO-Revision-Date: 2011-01-20 15:28+0100\n"
+"PO-Revision-Date: 2011-01-21 01:13+0900\n"
 "Last-Translator: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "Language-Team: Japanese <boiled.sugar@gmail.com>\n"
 "Language: ja\n"
@@ -359,7 +359,6 @@ msgid "  --split-max-files <n>    Create at most n files.\n"
 msgstr "  --split-max-files <n>    ファイルの最大分割数を指定します。\n"
 
 #: src/merge/mkvmerge.cpp:220
-#, fuzzy
 msgid ""
 "  --stereo-mode <TID:n|keyword>\n"
 "                           Sets the stereo mode parameter. It can\n"
@@ -368,8 +367,8 @@ msgid ""
 msgstr ""
 "  --stereo-mode <TID:n|none|left|right|both>\n"
 "                           ステレオモードのパラメータを指定します。\n"
-"                           0～3の数字か、または'none'、'right'、\n"
-"                           'left'、'both'のいずれかを指定します。\n"
+"                           0～11の数字か、キーワード（全てのリストは\n"
+"                           ドキュメントを参照してください）で指定します。\n"
 
 #: src/merge/mkvmerge.cpp:226
 msgid ""
@@ -1961,7 +1960,7 @@ msgstr "CUEシートの抽出"
 
 #: src/info/info_cli_parser.cpp:46
 msgid "Calculate and display checksums and use verbosity level 4."
-msgstr ""
+msgstr "チェックサムを計算・表示し、冗長レベル4を使用します。"
 
 #: src/info/info_cli_parser.cpp:45
 msgid "Calculate and display checksums of frame contents."
@@ -5309,18 +5308,16 @@ msgid "Status:"
 msgstr "ステータス："
 
 #: src/merge/mkvmerge.cpp:711
-#, fuzzy
 msgid "Stereo mode parameter: not given in the form <TID>:<n|keyword> where n is a number between 0 and %1% or one of these keywords: %2% (argument was '%3%').\n"
-msgstr "ステレオモードパラメータ：\"<TID>:<n|keyword>\"のnが0～3の数字ではないか、keywordが'none'、'right'、'left'もしくは'both'ではありません（パラメータは'%1%'でした）。\n"
+msgstr "ステレオモードパラメータ：<TID>:<n|keyword>のnが0～%1%の数字ではないか、keywordが%2%のうちの1つではありません（パラメータは'%3%'でした）。\n"
 
 #: src/info/mkvinfo.cpp:713
-#, fuzzy
 msgid "Stereo mode: %1% (%2%)"
-msgstr "ステレオモード：%1%%2%"
+msgstr "ステレオモード：%1%（%2%）"
 
 #: src/mmg/header_editor/frame.cpp:492
 msgid "Stereo-3D video mode (0 - 11, see documentation)."
-msgstr ""
+msgstr "ステレオ3Dビデオモードです（0～11、ドキュメントを参照してください）。"
 
 #: src/common/property_element.cpp:149
 msgid ""
@@ -7322,7 +7319,7 @@ msgstr "追加"
 
 #: src/common/stereo_mode.cpp:55
 msgid "anaglyph"
-msgstr ""
+msgstr "アナグリフ方式"
 
 #: src/mmg/tabs/input.cpp:185
 msgid "append"
@@ -7382,19 +7379,19 @@ msgstr "チャンネル数：%1%"
 
 #: src/common/stereo_mode.cpp:50
 msgid "checkboard (left first)"
-msgstr ""
+msgstr "チェッカーボード方式（レフトファースト）"
 
 #: src/common/stereo_mode.cpp:49
 msgid "checkboard (right first)"
-msgstr ""
+msgstr "チェッカーボード方式（ライトファースト）"
 
 #: src/common/stereo_mode.cpp:54
 msgid "column interleaved (left first)"
-msgstr ""
+msgstr "垂直インターリーブ方式（レフトファースト）"
 
 #: src/common/stereo_mode.cpp:53
 msgid "column interleaved (right first)"
-msgstr ""
+msgstr "垂直インターリーブ方式（ライトファースト）"
 
 #: src/mmg/jobs.cpp:346
 msgid "completed OK"
@@ -8151,11 +8148,11 @@ msgstr "1でも2でもない：未知"
 
 #: src/common/stereo_mode.cpp:52
 msgid "row interleaved (left first)"
-msgstr ""
+msgstr "水平インターリーブ方式（レフトファースト）"
 
 #: src/common/stereo_mode.cpp:51
 msgid "row interleaved (right first)"
-msgstr ""
+msgstr "水平インターリーブ方式（ライトファースト）"
 
 #: src/info/mkvinfo.cpp:612
 msgid "sampling freq: %1%"
@@ -8163,11 +8160,11 @@ msgstr "サンプリング周波数：%1%"
 
 #: src/common/stereo_mode.cpp:46
 msgid "side by side (left first)"
-msgstr ""
+msgstr "サイドバイサイド方式（レフトファースト）"
 
 #: src/common/stereo_mode.cpp:56
 msgid "side by side (right first)"
-msgstr ""
+msgstr "サイドバイサイド方式（ライトファースト）"
 
 #: src/input/subtitles.cpp:589
 msgid "spu_extraction_duration: Encountered broken SPU packet (next_off < start_off) at timecode %1%. This packet might be displayed incorrectly or not at all.\n"
@@ -8215,11 +8212,11 @@ msgstr "タイムコード"
 
 #: src/common/stereo_mode.cpp:48
 msgid "top bottom (left first)"
-msgstr ""
+msgstr "トップアンドボトム方式（レフトファースト）"
 
 #: src/common/stereo_mode.cpp:47
 msgid "top bottom (right first)"
-msgstr ""
+msgstr "トップアンドボトム方式（ライトファースト）"
 
 #: src/merge/mkvmerge.cpp:2027
 msgid "track name"
