@@ -80,6 +80,7 @@
 #include "common/version.h"
 #include "common/xml/element_mapping.h"
 #include "info/mkvinfo.h"
+#include "info/info_cli_parser.h"
 
 using namespace libmatroska;
 
@@ -91,13 +92,8 @@ typedef struct {
 
 std::vector<kax_track_t *> s_tracks;
 std::map<unsigned int, kax_track_t *> s_tracks_by_number, s_tracks_by_uid;
-bool g_use_gui                = false;
-bool g_show_size              = false;
-static bool s_calc_checksums  = false;
-static bool s_show_summary    = false;
-static bool s_show_hexdump    = false;
-static int s_hexdump_max_size = 16;
-static uint64_t s_tc_scale    = TIMECODE_SCALE;
+options_c g_options;
+static uint64_t s_tc_scale = TIMECODE_SCALE;
 std::vector<boost::format> g_common_boost_formats;
 
 #define BF_DO(n)                             g_common_boost_formats[n]
@@ -185,7 +181,7 @@ create_element_text(const std::string &text,
   if ((1 < verbose) && (0 <= position))
     additional_text += (BF_AT % position).str();
 
-  if (g_show_size && (-1 != size)) {
+  if (g_options.m_show_size && (-1 != size)) {
     if (-2 != size)
       additional_text += (BF_SIZE % size).str();
     else
@@ -210,32 +206,6 @@ find_track(int tnum) {
 kax_track_t *
 find_track_by_uid(int tuid) {
   return s_tracks_by_uid[tuid];
-}
-
-void
-set_usage() {
-  usage_text =
-    Y("Usage: mkvinfo [options] inname\n\n"
-      " options:\n"
-      "  -g, --gui      Start the GUI (and open inname if it was given).\n"
-      "  inname         Use 'inname' as the source.\n"
-      "  -v, --verbose  Increase verbosity. See the man page for a detailed\n"
-      "                 description of what mkvinfo outputs.\n"
-      "  -c, --checksum Calculate and display checksums of frame contents.\n"
-      "  -s, --summary  Only show summaries of the contents, not each element.\n"
-      "  -x, --hexdump  Show the first 16 bytes of each frame as a hex dump.\n"
-      "  -X, --full-hexdump\n"
-      "                 Show all bytes of each frame as a hex dump.\n"
-      "  -z, --size     Show the size of each element including its header.\n"
-      "  --output-charset <charset>\n"
-      "                 Output messages in this charset\n"
-      "  -r, -o, --redirect-output file.ext\n"
-      "                 Redirect all messages to this file.\n"
-      "  -h, --help     Show this help.\n"
-      "  -V, --version  Show version information.\n");
-  usage_text += std::string("  --check-for-updates ") + Y("Check online for the latest release.") + "\n";
-
-  version_info = get_version_info("mkvinfo", true);
 }
 
 #define UTF2STR(s)                 UTFstring_to_cstrutf8(UTFstring(s))
@@ -268,7 +238,7 @@ _show_element(EbmlElement *l,
               bool skip,
               int level,
               const std::string &info) {
-  if (s_show_summary)
+  if (g_options.m_show_summary)
     return;
 
   ui_show_element(level, info,
@@ -307,7 +277,7 @@ create_hexdump(const unsigned char *buf,
   static boost::format s_bf_create_hexdump(" %|1$02x|");
 
   std::string hex(" hexdump");
-  int bmax = std::max(size, s_hexdump_max_size);
+  int bmax = std::max(size, g_options.m_hexdump_max_size);
   int b;
 
   for (b = 0; b < bmax; ++b)
@@ -367,47 +337,6 @@ create_codec_dependent_private_info(KaxCodecPrivate &c_priv,
   }
 
   return "";
-}
-
-void
-parse_args(std::vector<std::string> args,
-           std::string &file_name) {
-  size_t i;
-
-  verbose = 0;
-  file_name = "";
-
-  g_use_gui = false;
-
-  set_usage();
-  while (handle_common_cli_args(args, "-o"))
-    set_usage();
-
-  // Now parse the rest of the arguments.
-  for (i = 0; i < args.size(); i++)
-    if ((args[i] == "-g") || (args[i] == "--gui")) {
-      if (!ui_graphical_available())
-        mxerror("mkvinfo was compiled without GUI support.\n");
-      g_use_gui = true;
-    } else if ((args[i] == "-c") || (args[i] == "--checksum"))
-      s_calc_checksums = true;
-    else if ((args[i] == "-C") || (args[i] == "--check-mode")) {
-      s_calc_checksums = true;
-      verbose = 4;
-    } else if ((args[i] == "-s") || (args[i] == "--summary")) {
-      s_calc_checksums = true;
-      s_show_summary = true;
-    } else if ((args[i] == "-x") || (args[i] == "--hexdump"))
-      s_show_hexdump = true;
-    else if ((args[i] == "-X") || (args[i] == "--full-hexdump")) {
-      s_show_hexdump = true;
-      s_hexdump_max_size = INT_MAX;
-    } else if ((args[i] == "-z") || (args[i] == "--size"))
-      g_show_size = true;
-    else if (file_name != "")
-      mxerror(Y("Only one input file is allowed.\n"));
-    else
-      file_name = args[i];
 }
 
 #define in_parent(p) \
@@ -509,7 +438,7 @@ format_binary(EbmlBinary &bin,
   if (len < bin.GetSize())
     result += "...";
 
-  if (s_calc_checksums)
+  if (g_options.m_calc_checksums)
     result += (BF_FORMAT_BINARY_2 % calc_adler32(bin.GetBuffer(), bin.GetSize())).str();
 
   strip(result);
@@ -1051,10 +980,10 @@ def_handle(tracks) {
           KaxCodecPrivate &c_priv = *static_cast<KaxCodecPrivate *>(l3);
           fourcc_buffer = create_codec_dependent_private_info(c_priv, kax_track_type, kax_codec_id);
 
-          if (s_calc_checksums && !s_show_summary)
+          if (g_options.m_calc_checksums && !g_options.m_show_summary)
             fourcc_buffer += (boost::format(Y(" (adler: 0x%|1$08x|)")) % calc_adler32(c_priv.GetBuffer(), c_priv.GetSize())).str();
 
-          if (s_show_hexdump)
+          if (g_options.m_show_hexdump)
             fourcc_buffer += create_hexdump(c_priv.GetBuffer(), c_priv.GetSize());
 
           show_element(l3, 3, boost::format(Y("CodecPrivate, length %1%%2%")) % c_priv.GetSize() % fourcc_buffer);
@@ -1138,7 +1067,7 @@ def_handle(tracks) {
 
       }
 
-      if (s_show_summary)
+      if (g_options.m_show_summary)
         mxinfo(boost::format(Y("Track %1%: %2%, codec ID: %3%%4%%5%%6%\n"))
                % kax_track_number
                % (  'a' == kax_track_type ? Y("audio")
@@ -1160,7 +1089,7 @@ def_handle(tracks) {
 
 void
 def_handle(seek_head) {
-  if ((verbose < 2) && !g_use_gui) {
+  if ((verbose < 2) && !g_options.m_use_gui) {
     show_element(l1, 1, Y("Seek head (subentries will be skipped)"));
     return;
   }
@@ -1439,11 +1368,11 @@ def_handle2(block_group,
         uint32_t adler   = calc_adler32(data.Buffer(), data.Size());
 
         std::string adler_str;
-        if (s_calc_checksums)
+        if (g_options.m_calc_checksums)
           adler_str = (BF_BLOCK_GROUP_BLOCK_ADLER % adler).str();
 
         std::string hex;
-        if (s_show_hexdump)
+        if (g_options.m_show_hexdump)
           hex = create_hexdump(data.Buffer(), data.Size());
 
         show_element(NULL, 4, BF_BLOCK_GROUP_BLOCK_FRAME % data.Size() % adler_str % hex);
@@ -1575,7 +1504,7 @@ def_handle2(block_group,
 
   } // while (l3 != NULL)
 
-  if (s_show_summary) {
+  if (g_options.m_show_summary) {
     std::string position;
     size_t fidx;
 
@@ -1649,11 +1578,11 @@ def_handle2(simple_block,
     uint32_t adler   = calc_adler32(data.Buffer(), data.Size());
 
     std::string adler_str;
-    if (s_calc_checksums)
+    if (g_options.m_calc_checksums)
       adler_str = (BF_SIMPLE_BLOCK_ADLER % adler).str();
 
     std::string hex;
-    if (s_show_hexdump)
+    if (g_options.m_show_hexdump)
       hex = create_hexdump(data.Buffer(), data.Size());
 
     show_element(NULL, 3, BF_SIMPLE_BLOCK_FRAME % data.Size() % adler_str % hex);
@@ -1663,7 +1592,7 @@ def_handle2(simple_block,
     frame_pos -= data.Size();
   }
 
-  if (s_show_summary) {
+  if (g_options.m_show_summary) {
     std::string position;
     size_t fidx;
 
@@ -1697,7 +1626,7 @@ def_handle3(cluster,
             int64_t file_size) {
   cluster = (KaxCluster *)l1;
 
-  if (g_use_gui)
+  if (g_options.m_use_gui)
     ui_show_progress(100 * cluster->GetElementPosition() / file_size, Y("Parsing file"));
 
   upper_lvl_el               = 0;
@@ -1955,7 +1884,7 @@ process_file(const std::string &file_name) {
 
       else if (is_id(l1, KaxCluster)) {
         show_element(l1, 1, Y("Cluster"));
-        if ((verbose == 0) && !s_show_summary) {
+        if ((verbose == 0) && !g_options.m_show_summary) {
           delete l1;
           delete l0;
           delete es;
@@ -2031,38 +1960,24 @@ setup(const std::string &locale) {
 }
 
 int
-console_main(std::vector<std::string> args) {
-  std::string file_name;
-  bool ok;
-
+console_main() {
   set_process_priority(-1);
 
-  parse_args(args, file_name);
-  if (file_name == "") {
-    usage();
-    mxexit(0);
-  }
-  ok = process_file(file_name.c_str());
+  if (g_options.m_file_name.empty())
+    mxerror(Y("No file name given.\n"));
 
-  if (ok)
-    return 0;
-  else
-    return 1;
+  return process_file(g_options.m_file_name.c_str()) ? 0 : 1;
 }
 
 int
 main(int argc,
      char **argv) {
-  std::vector<std::string> args;
-  std::string initial_file;
-
   setup();
 
-  args = command_line_utf8(argc, argv);
-  parse_args(args, initial_file);
+  g_options = info_cli_parser_c(command_line_utf8(argc, argv)).run();
 
-  if (g_use_gui)
+  if (g_options.m_use_gui)
     return ui_run(argc, argv);
   else
-    return console_main(args);
+    return console_main();
 }

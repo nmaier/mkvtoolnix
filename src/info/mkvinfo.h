@@ -19,15 +19,16 @@
 #include <string>
 #include <vector>
 
+#include "info/options.h"
+
 #define NAME "MKVInfo"
 
-void parse_args(std::vector<std::string> args, std::string &file_name);
-int console_main(std::vector<std::string> args);
+extern options_c g_options;
+
+int console_main();
 bool process_file(const std::string &file_name);
 void setup(const std::string &locale = "");
 void cleanup();
-
-extern bool g_use_gui, g_show_size;
 
 std::string create_element_text(const std::string &text, int64_t position, int64_t size);
 void ui_show_error(const std::string &error);

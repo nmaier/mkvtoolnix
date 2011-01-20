@@ -68,24 +68,10 @@ mi_app::get_ui_locale() {
 
 bool
 mi_app::OnInit() {
-  std::string initial_file;
-  std::vector<std::string> args;
-
   wxConfigBase *cfg = new wxConfig(wxT("mkvmergeGUI"));
   wxConfigBase::Set(cfg);
 
   setup(get_ui_locale());
-
-  int i;
-  for (i = 1; i < argc; i++)
-    args.push_back(std::string(wxMB(wxString(argv[i]))));
-
-  parse_args(args, initial_file);
-
-  if (!g_use_gui) {
-    console_main(args);
-    return false;
-  }
 
   frame = new mi_frame(wxT("mkvinfo"), wxPoint(50, 50), wxSize(600, 400));
   frame->Show(true);
@@ -94,8 +80,8 @@ mi_app::OnInit() {
   while (Pending())
     Dispatch();
 
-  if (initial_file != "")
-    frame->open_file(wxU(initial_file.c_str()));
+  if (g_options.m_file_name != "")
+    frame->open_file(wxU(g_options.m_file_name));
 
   return true;
 }
@@ -129,7 +115,7 @@ mi_frame::mi_frame(const wxString &title,
   menu_options->AppendCheckItem(mi_options_expandimportant, Z("&Expand important elements\tCtrl-E"), Z("After loading a file expand the most important elements"));
 
   menu_options->Check(mi_options_showall,         show_all_elements);
-  menu_options->Check(mi_options_show_sizes,      g_show_size);
+  menu_options->Check(mi_options_show_sizes,      g_options.m_show_size);
   menu_options->Check(mi_options_expandimportant, expand_important_elements);
 
   menu_help->Append(mi_help_about, Z("&About\tF1"), Z("Show about dialog"));
@@ -327,8 +313,8 @@ mi_frame::on_options_showall(wxCommandEvent &WXUNUSED(event)) {
 
 void
 mi_frame::on_options_show_sizes(wxCommandEvent &WXUNUSED(event)) {
-  g_show_size = !g_show_size;
-  menu_options->Check(mi_options_show_sizes, g_show_size);
+  g_options.m_show_size = !g_options.m_show_size;
+  menu_options->Check(mi_options_show_sizes, g_options.m_show_size);
 
   if (file_open)
     open_file(current_file);
@@ -398,7 +384,7 @@ IMPLEMENT_APP_NO_MAIN(mi_app)
 
 void
 ui_show_error(const std::string &error) {
-  if (g_use_gui)
+  if (g_options.m_use_gui)
     frame->show_error(wxU(error.c_str()));
   else
     console_show_error(error);
@@ -409,7 +395,7 @@ ui_show_element(int level,
                 const std::string &text,
                 int64_t position,
                 int64_t size) {
-  if (!g_use_gui)
+  if (!g_options.m_use_gui)
     console_show_element(level, text, position, size);
 
   else if (0 <= position)

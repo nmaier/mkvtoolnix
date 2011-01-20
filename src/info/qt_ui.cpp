@@ -248,7 +248,7 @@ rightclick_tree_widget::mousePressEvent(QMouseEvent *event) {
 
 void
 ui_show_error(const std::string &error) {
-  if (g_use_gui)
+  if (g_options.m_use_gui)
     gui->show_error(Q(error.c_str()));
   else
     console_show_error(error);
@@ -259,7 +259,7 @@ ui_show_element(int level,
                 const std::string &text,
                 int64_t position,
                 int64_t size) {
-  if (!g_use_gui)
+  if (!g_options.m_use_gui)
     console_show_element(level, text, position, size);
 
   else if (0 <= position)
@@ -278,19 +278,13 @@ ui_show_progress(int percentage,
 int
 ui_run(int argc,
        char **argv) {
-  std::vector<std::string> args;
-  std::string initial_file;
-
   QApplication app(argc, argv);
   main_window_c main_window;
   gui = &main_window;
   main_window.show();
 
-  args = command_line_utf8(argc, argv);
-  parse_args(args, initial_file);
-
-  if (initial_file != "")
-    gui->parse_file(Q(initial_file.c_str()));
+  if (!g_options.m_file_name.empty())
+    gui->parse_file(Q(g_options.m_file_name.c_str()));
 
   return app.exec();
 }
