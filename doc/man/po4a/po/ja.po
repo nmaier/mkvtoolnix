@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.9.9\n"
 "POT-Creation-Date: 2011-01-19 09:42+0100\n"
-"PO-Revision-Date: 2011-01-19 09:49+0100\n"
+"PO-Revision-Date: 2011-01-21 07:20+0900\n"
 "Last-Translator: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "Language-Team: none\n"
 "MIME-Version: 1.0\n"
@@ -801,7 +801,7 @@ msgstr "テキスト中の特殊文字をエスケープする"
 #: doc/man/mkvextract.xml:645 doc/man/mkvinfo.xml:310
 #: doc/man/mkvmerge.xml:1698 doc/man/mkvpropedit.xml:423
 msgid "There are a few places in which special characters in text must or should be escaped. The rules for escaping are simple: each character that needs escaping is replaced with a backslash followed by another character."
-msgstr "特殊文字をエスケープしなければならない、あるいはすべき場所が少しだけあります。エスケープのルールは単純です：エスケープする必要のある各文字を、バックスラッシュ（日本語フォントでは記号）の後ろに違う文字が1つついたものと入れ替えます。"
+msgstr "特殊文字をエスケープしなければならない、あるいはすべき場所が少しだけあります。エスケープのルールは単純です：エスケープする必要のある各文字を、バックスラッシュ（日本語フォントでは\\記号）の後ろに違う文字が1つついたものと入れ替えます。"
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvextract.xml:650 doc/man/mkvinfo.xml:315
@@ -2029,7 +2029,7 @@ msgstr "<option>--stereo-mode</option> <parameter>TID:n|keyword</parameter>"
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvmerge.xml:1122
 msgid "Sets the stereo mode for the video track with the track ID <parameter>TID</parameter>.  The mode can either be a number <parameter>n</parameter> between <constant>0</constant> and <constant>11</constant> or one of these keywords:"
-msgstr ""
+msgstr "トラックIDが<parameter>TID</parameter>のビデオトラックのステレオモードを設定します。ステレオモードは、<constant>0</constant>～<constant>11</constant>の数字<parameter>n</parameter>、または以下のキーワードのうちの1つを指定することができます："
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvmerge.xml:1127
@@ -2530,7 +2530,7 @@ msgstr "BOMで始まるテキストファイルは、既にUTFエンコーディ
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvmerge.xml:1643
 msgid "On Unix-like systems &mkvmerge; uses the <citerefentry><refentrytitle>setlocale</refentrytitle><manvolnum>3</manvolnum></citerefentry> system call which in turn uses the environment variables <varname>LANG</varname>, <varname>LC_ALL</varname> and <varname>LC_CYPE</varname>. The resulting character set is often one of UTF-8 or the ISO-8859-* family and is used for all text file operations and for encoding strings on the command line and for output to the console."
-msgstr "UNIX系システム上では、&mkvmerge;は<citerefentry><refentrytitle>setlocale</refentrytitle><manvolnum>3</manvolnum></citerefentry>システムコールを使うので、<varname>LANG</varname>、<varname>LC_ALL</varname>及び<varname>LC_CYPE</varname>環境変数を使用する。大抵は、UTF-8かISO-8859-*ファミリのどれかが全てのテキストファイルとコマンドライン文字列の処理、及びコンソールへの出力の文字コードとして使用される。"
+msgstr "UNIX系システム上では、&mkvmerge;は<citerefentry><refentrytitle>setlocale</refentrytitle><manvolnum>3</manvolnum></citerefentry>システムコールを使うので、<varname>LANG</varname>、<varname>LC_ALL</varname>及び<varname>LC_CYPE</varname>環境変数を使用します。大抵は、UTF-8かISO-8859-*ファミリのどれかが全てのテキストファイルとコマンドライン文字列の処理、及びコンソールへの出力の文字コードとして使用されます。"
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvmerge.xml:1650
