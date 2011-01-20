@@ -173,7 +173,7 @@ tab_input_format::setup_control_contents() {
 
   selection = cob_stereo_mode->GetSelection();
   for (i = 1; num_stereo_modes >= i; ++i)
-    cob_stereo_mode->SetString(i, wxU(stereo_mode_c::translate(i - 1)));
+    cob_stereo_mode->SetString(i, wxString::Format(wxT("%s (%u; %s)"), wxU(stereo_mode_c::translate(i - 1)).c_str(), i - 1, wxU(stereo_mode_c::s_modes[i - 1]).c_str()));
   cob_stereo_mode->SetSelection(selection);
 
   if (0 == cob_fps->GetCount()) {
