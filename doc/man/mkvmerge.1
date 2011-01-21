@@ -38,6 +38,24 @@ This program takes the input from several media files and joins their streams (a
 Matroska(TM)
 file; see
 \m[blue]\fBthe Matroska(TM) website\fR\m[]\&\s-2\u[1]\d\s+2\&.
+.if n \{\
+.sp
+.\}
+.RS 4
+.it 1 an-trap
+.nr an-no-space-flag 1
+.nr an-break-flag 1
+.br
+.ps +1
+\fBImportant\fR
+.ps -1
+.br
+.PP
+The order of command line options is important\&. Please read the section
+"Option order"
+it if you\*(Aqre new to the program\&.
+.sp .5v
+.RE
 .PP
 Global options:
 .PP
@@ -1185,6 +1203,83 @@ should take\&. They are all put into the file specified with
 \fB\-o\fR\&. A list of known (and supported) source formats can be obtained with the
 \fB\-l\fR
 option\&.
+.if n \{\
+.sp
+.\}
+.RS 4
+.it 1 an-trap
+.nr an-no-space-flag 1
+.nr an-break-flag 1
+.br
+.ps +1
+\fBImportant\fR
+.ps -1
+.br
+.PP
+The order of command line options is important\&. Please read the section
+"Option order"
+it if you\*(Aqre new to the program\&.
+.sp .5v
+.RE
+.SH "OPTION ORDER"
+.PP
+The order in which options are entered is important for some options\&. Options fall into two categories:
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 1.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  1." 4.2
+.\}
+
+    Options that affect the whole program and are not tied to any input file\&. These include but are not limited to
+    \fB\-\-command\-line\-charset\fR, \fB\-\-output\fR or \fB\-\-title\fR\&. These can appear anywhere on the
+    command line\&.
+   .RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 2.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  2." 4.2
+.\}
+
+    Options that affect a single input file or a single track in an input file\&. These options all apply to the following input file on the
+    command line\&. All options applying to the same input (or to tracks from the same input file) file can be written in any order as long
+    as they all appear before that input file\*(Aqs name\&. Examples for options applying to an input file are \fB\-\-no\-chapters\fR or
+    \fB\-\-chapter\-charset\fR\&. Examples for options applying to a single track are \fB\-\-default\-duration\fR or
+    \fB\-\-language\fR\&.
+   .RE
+.PP
+The options are processed from left to right\&. If an option appears multiple times within the same scope then the last occurence will be used\&. Therefore the title will be set to "Something else" in the following example:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-o output\&.mkv \-\-title \*(AqThis and that\*(Aq input\&.avi \-\-title \*(AqSomething else\*(Aq
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+The following example shows that using the
+\fB\-\-language\fR
+option twice is OK because they\*(Aqre used in different scopes\&. Even though they apply to the same track ID they apply to different input files and therefore have different scopes:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-o output\&.mkv \-\-language 0:fre français\&.ogg \-\-language 0:deu deutsch\&.ogg
+.fi
+.if n \{\
+.RE
+.\}
 .SH "EXAMPLES"
 .PP
 Let\*(Aqs assume you have a file called MyMovie\&.avi and the audio track in a separate file, e\&.g\&. \*(AqMyMovie\&.wav\*(Aq\&. First you want to encode the audio to

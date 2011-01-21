@@ -68,6 +68,13 @@
    a &matroska; file; see <ulink url="http://www.matroska.org/">the &matroska; website</ulink>.
   </para>
 
+  <important>
+   <para>
+    The order of command line options is important. Please read the section <link linkend="mkvmerge.option_order">&quot;Option
+    order&quot;</link> it if you're new to the program.
+   </para>
+  </important>
+
   <para>
    Global options:
   </para>
@@ -1381,6 +1388,51 @@ sound.ogg
    For each file the user can select which tracks &mkvmerge; should take.  They are all put into the file specified with
    <option>-o</option>. A list of known (and supported) source formats can be obtained with the <option>-l</option> option.
   </para>
+
+  <important>
+   <para>
+    The order of command line options is important. Please read the section <link linkend="mkvmerge.option_order">&quot;Option
+    order&quot;</link> it if you're new to the program.
+   </para>
+  </important>
+ </refsect1>
+
+ <refsect1 id="mkvmerge.option_order">
+  <title>Option order</title>
+
+  <para>
+   The order in which options are entered is important for some options. Options fall into two categories:
+  </para>
+
+  <orderedlist>
+   <listitem>
+    Options that affect the whole program and are not tied to any input file. These include but are not limited to
+    <option>--command-line-charset</option>, <option>--output</option> or <option>--title</option>. These can appear anywhere on the
+    command line.
+   </listitem>
+
+   <listitem>
+    Options that affect a single input file or a single track in an input file. These options all apply to the following input file on the
+    command line. All options applying to the same input (or to tracks from the same input file) file can be written in any order as long
+    as they all appear before that input file's name. Examples for options applying to an input file are <option>--no-chapters</option> or
+    <option>--chapter-charset</option>. Examples for options applying to a single track are <option>--default-duration</option> or
+    <option>--language</option>.
+   </listitem>
+  </orderedlist>
+
+  <para>
+   The options are processed from left to right. If an option appears multiple times within the same scope then the last occurence will be
+   used. Therefore the title will be set to &quot;Something else&quot; in the following example:
+  </para>
+
+  <screen>$ mkvmerge -o output.mkv --title 'This and that' input.avi --title 'Something else'</screen>
+
+  <para>
+   The following example shows that using the <option>--language</option> option twice is OK because they're used in different scopes. Even
+   though they apply to the same track ID they apply to different input files and therefore have different scopes:
+  </para>
+
+  <screen>$ mkvmerge -o output.mkv --language 0:fre français.ogg --language 0:deu deutsch.ogg</screen>
  </refsect1>
 
  <refsect1 id="mkvmerge.examples">
@@ -2158,7 +2210,7 @@ gap, 10.050
   </refsect2>
  </refsect1>
 
- <refsect1>
+ <refsect1 id="mkvmerge.exit_codes">
   <title>Exit codes</title>
 
   <para>
