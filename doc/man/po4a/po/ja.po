@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.9.9\n"
 "POT-Creation-Date: 2011-01-21 14:26+0100\n"
-"PO-Revision-Date: 2011-01-21 20:51+0900\n"
+"PO-Revision-Date: 2011-01-22 01:09+0900\n"
 "Last-Translator: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "Language-Team: none\n"
 "Language: \n"
@@ -1055,7 +1055,7 @@ msgstr "このプログラムはいくつかのメディアファイルを入力
 #. type: Content of: <refentry><refsect1><important><para>
 #: doc/man/mkvmerge.xml:73 doc/man/mkvmerge.xml:1394
 msgid "The order of command line options is important. Please read the section <link linkend=\"mkvmerge.option_order\">&quot;Option order&quot;</link> it if you're new to the program."
-msgstr ""
+msgstr "コマンドラインオプションの順番は重要です。もしあなたが初心者なら、<link linkend=\"mkvmerge.option_order\">&quot;オプションの順番&quot;</link>セクションを読んで下さい。"
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvmerge.xml:79
@@ -2050,7 +2050,7 @@ msgstr "トラックIDが<parameter>TID</parameter>のビデオトラックの�
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvmerge.xml:1134
 msgid "'<literal>mono</literal>', '<literal>side_by_side_left_first</literal>', '<literal>top_bottom_right_first</literal>', '<literal>top_bottom_left_first</literal>', '<literal>checkboard_right_first</literal>', '<literal>checkboard_left_first</literal>', '<literal>row_interleaved_right_first</literal>', '<literal>row_interleaved_left_first</literal>', '<literal>column_interleaved_right_first</literal>', '<literal>column_interleaved_left_first</literal>', '<literal>anaglyph</literal>', '<literal>side_by_side_right_first</literal>'."
-msgstr ""
+msgstr "'<literal>mono</literal>', '<literal>side_by_side_left_first</literal>', '<literal>top_bottom_right_first</literal>', '<literal>top_bottom_left_first</literal>', '<literal>checkboard_right_first</literal>', '<literal>checkboard_left_first</literal>', '<literal>row_interleaved_right_first</literal>', '<literal>row_interleaved_left_first</literal>', '<literal>column_interleaved_right_first</literal>', '<literal>column_interleaved_left_first</literal>', '<literal>anaglyph</literal>', '<literal>side_by_side_right_first</literal>'."
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvmerge.xml:1145
@@ -2211,48 +2211,45 @@ msgstr "各ファイルについて、ユーザは&mkvmerge;が取り出すべ�
 
 #. type: Content of: <refentry><refsect1><title>
 #: doc/man/mkvmerge.xml:1401
-#, fuzzy
-#| msgid "Options:"
 msgid "Option order"
-msgstr "オプション:"
+msgstr "オプションの順番"
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvmerge.xml:1404
 msgid "The order in which options are entered is important for some options. Options fall into two categories:"
-msgstr ""
+msgstr "いくつかのオプションでは、入力する順番が重要になります。オプションは2つに分類されます："
 
 #. type: Content of: <refentry><refsect1><orderedlist><listitem><para>
 #: doc/man/mkvmerge.xml:1410
 msgid "Options that affect the whole program and are not tied to any input file. These include but are not limited to <option>--command-line-charset</option>, <option>--output</option> or <option>--title</option>. These can appear anywhere on the command line."
-msgstr ""
+msgstr "プログラム全体に影響し、どの入力ファイルにも関連付けられていないオプション。例えば、<option>--command-line-charset</option>、<option>--output</option>、<option>--title</option>"などです。これらのオプションは、コマンドラインのどこに書いても構いません。
 
 #. type: Content of: <refentry><refsect1><orderedlist><listitem><para>
 #: doc/man/mkvmerge.xml:1418
 msgid "Options that affect a single input file or a single track in an input file. These options all apply to the following input file on the command line. All options applying to the same input (or to tracks from the same input file) file can be written in any order as long as they all appear before that input file's name. Examples for options applying to an input file are <option>--no-chapters</option> or <option>--chapter-charset</option>. Examples for options applying to a single track are <option>--default-duration</option> or <option>--language</option>."
-msgstr ""
+msgstr "1つの入力ファイルのみ、もしくは入力ファイル中の1つのトラックのみに影響するオプション。これらのオプションは全て、コマンドラインでその後ろに続く入力ファイルに適用されます。同じ入力ファイル（または同じ入力ファイル中のトラック）に適用される全てのオプションは、その入力ファイルのファイル名の前に書きさえすれば、どんな順番でも構いません。1つの入力ファイルに適用されるオプションの例を挙げると、<option>--no-chapters</option>や<option>--chapter-charset</option>などがあります。1つのトラックのみに適用されるオプションには、例えば<option>--default-duration</option>や<option>--language</option>があります。"
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvmerge.xml:1428
 msgid "The options are processed from left to right. If an option appears multiple times within the same scope then the last occurence will be used. Therefore the title will be set to &quot;Something else&quot; in the following example:"
-msgstr ""
+msgstr "オプションは左から右へと処理されます。もし同じスコープ内に1つのオプションが2回以上出てきた場合には、最後のものが使われます。よって、次の例ではタイトルは&quot;Something else&quot;に設定されます。"
 
 #. type: Content of: <refentry><refsect1><screen>
 #: doc/man/mkvmerge.xml:1432
 #, no-wrap
 msgid "$ mkvmerge -o output.mkv --title 'This and that' input.avi --title 'Something else'"
-msgstr ""
+msgstr "$ mkvmerge -o output.mkv --title 'This and that' input.avi --title 'Something else'"
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvmerge.xml:1435
 msgid "The following example shows that using the <option>--language</option> option twice is OK because they're used in different scopes. Even though they apply to the same track ID they apply to different input files and therefore have different scopes:"
-msgstr ""
+msgstr "次の例は、違うスコープ内で使われているので<option>--language</option>オプションを2回使ってもよいということを示しています。それらは同じトラックIDに適用されますが、違う入力ファイルに適用されるので違うスコープを持っているのです。"
 
 #. type: Content of: <refentry><refsect1><screen>
 #: doc/man/mkvmerge.xml:1439
-#, fuzzy, no-wrap
-#| msgid "$ mkvmerge -o with-lang-codes.mkv --language 2:ger --language 3:dut without-lang-codes.mkv"
+#, no-wrap
 msgid "$ mkvmerge -o output.mkv --language 0:fre français.ogg --language 0:deu deutsch.ogg"
-msgstr "$ mkvmerge -o with-lang-codes.mkv --language 2:ger --language 3:dut without-lang-codes.mkv"
+msgstr "$ mkvmerge -o output.mkv --language 0:fre français.ogg --language 0:deu deutsch.ogg"
 
 #. type: Content of: <refentry><refsect1><title>
 #: doc/man/mkvmerge.xml:1443 doc/man/mkvpropedit.xml:366
@@ -2485,7 +2482,7 @@ msgstr "入力ファイルの圧縮をオフにします。"
 #: doc/man/mkvmerge.xml:1590
 #, no-wrap
 msgid "$ mkvmerge -o no-compression.mkv --compression -1:none MyMovie.avi --compression -1:none mymovie.srt"
-msgstr ""
+msgstr "$ mkvmerge -o no-compression.mkv --compression -1:none MyMovie.avi --compression -1:none mymovie.srt"
 
 #. type: Content of: <refentry><refsect1><title>
 #: doc/man/mkvmerge.xml:1595
