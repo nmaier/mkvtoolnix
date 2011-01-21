@@ -1,3 +1,10 @@
+2011-01-21  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvinfo: bug fix: The hexdump mode was accessing invalid memory
+	if the data to dump was shorter than 16 bytes. It was also
+	outputting the values as characters instead of hexadecimal
+	numbers. Patch by ykar@list.ru. Fix for bug 591.
+
 2011-01-20  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: enhancement: The output file name extension is

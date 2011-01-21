@@ -277,11 +277,11 @@ create_hexdump(const unsigned char *buf,
   static boost::format s_bf_create_hexdump(" %|1$02x|");
 
   std::string hex(" hexdump");
-  int bmax = std::max(size, g_options.m_hexdump_max_size);
+  int bmax = std::min(size, g_options.m_hexdump_max_size);
   int b;
 
   for (b = 0; b < bmax; ++b)
-    hex += (s_bf_create_hexdump % buf[b]).str();
+    hex += (s_bf_create_hexdump % static_cast<int>(buf[b])).str();
 
   return hex;
 }
