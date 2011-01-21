@@ -833,11 +833,12 @@ The order in which options are entered is important for some options\&. Options 
 .sp -1
 .IP "  1." 4.2
 .\}
-
-    Options that affect the whole program and are not tied to any input file\&. These include but are not limited to
-    \fB\-\-command\-line\-charset\fR, \fB\-\-output\fR or \fB\-\-title\fR\&. These can appear anywhere on the
-    command line\&.
-   .RE
+Options that affect the whole program and are not tied to any input file\&. These include but are not limited to
+\fB\-\-command\-line\-charset\fR,
+\fB\-\-output\fR
+or
+\fB\-\-title\fR\&. These can appear anywhere on the command line\&.
+.RE
 .sp
 .RS 4
 .ie n \{\
@@ -847,13 +848,14 @@ The order in which options are entered is important for some options\&. Options 
 .sp -1
 .IP "  2." 4.2
 .\}
-
-    Options that affect a single input file or a single track in an input file\&. These options all apply to the following input file on the
-    command line\&. All options applying to the same input (or to tracks from the same input file) file can be written in any order as long
-    as they all appear before that input file\*(Aqs name\&. Examples for options applying to an input file are \fB\-\-no\-chapters\fR or
-    \fB\-\-chapter\-charset\fR\&. Examples for options applying to a single track are \fB\-\-default\-duration\fR or
-    \fB\-\-language\fR\&.
-   .RE
+Options that affect a single input file or a single track in an input file\&. These options all apply to the following input file on the command line\&. All options applying to the same input (or to tracks from the same input file) file can be written in any order as long as they all appear before that input file\*(Aqs name\&. Examples for options applying to an input file are
+\fB\-\-no\-chapters\fR
+or
+\fB\-\-chapter\-charset\fR\&. Examples for options applying to a single track are
+\fB\-\-default\-duration\fR
+or
+\fB\-\-language\fR\&.
+.RE
 .PP
 The options are processed from left to right\&. If an option appears multiple times within the same scope then the last occurence will be used\&. Therefore the title will be set to "Something else" in the following example:
 .sp

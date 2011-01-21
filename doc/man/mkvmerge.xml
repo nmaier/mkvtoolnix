@@ -1406,17 +1406,21 @@ sound.ogg
 
   <orderedlist>
    <listitem>
-    Options that affect the whole program and are not tied to any input file. These include but are not limited to
-    <option>--command-line-charset</option>, <option>--output</option> or <option>--title</option>. These can appear anywhere on the
-    command line.
+    <para>
+     Options that affect the whole program and are not tied to any input file. These include but are not limited to
+     <option>--command-line-charset</option>, <option>--output</option> or <option>--title</option>. These can appear anywhere on the
+     command line.
+    </para>
    </listitem>
 
    <listitem>
-    Options that affect a single input file or a single track in an input file. These options all apply to the following input file on the
-    command line. All options applying to the same input (or to tracks from the same input file) file can be written in any order as long
-    as they all appear before that input file's name. Examples for options applying to an input file are <option>--no-chapters</option> or
-    <option>--chapter-charset</option>. Examples for options applying to a single track are <option>--default-duration</option> or
-    <option>--language</option>.
+    <para>
+     Options that affect a single input file or a single track in an input file. These options all apply to the following input file on the
+     command line. All options applying to the same input (or to tracks from the same input file) file can be written in any order as long
+     as they all appear before that input file's name. Examples for options applying to an input file are <option>--no-chapters</option> or
+     <option>--chapter-charset</option>. Examples for options applying to a single track are <option>--default-duration</option> or
+     <option>--language</option>.
+    </para>
    </listitem>
   </orderedlist>
 
