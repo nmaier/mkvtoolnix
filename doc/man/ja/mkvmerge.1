@@ -622,14 +622,7 @@ Matroska(TM)ファイルは再生時の画像スケールを決定するため�
 .PP
 \fB\-\-stereo\-mode\fR \fITID:n|keyword\fR
 .RS 4
-Sets the stereo mode for the video track with the track ID
-\fITID\fR\&. The mode can either be a number
-\fIn\fR
-between
-\fB0\fR
-and
-\fB11\fR
-or one of these keywords:
+トラックIDが\fITID\fRのビデオトラックのステレオモードを設定します。ステレオモードは、\fB0\fR～\fB11\fRの数字\fIn\fR、または以下のキーワードのうちの1つを指定することができます：
 .sp
 \*(Aqmono\*(Aq, \*(Aqside_by_side_left_first\*(Aq, \*(Aqtop_bottom_right_first\*(Aq, \*(Aqtop_bottom_left_first\*(Aq, \*(Aqcheckboard_right_first\*(Aq, \*(Aqcheckboard_left_first\*(Aq, \*(Aqrow_interleaved_right_first\*(Aq, \*(Aqrow_interleaved_left_first\*(Aq, \*(Aqcolumn_interleaved_right_first\*(Aq, \*(Aqcolumn_interleaved_left_first\*(Aq, \*(Aqanaglyph\*(Aq, \*(Aqside_by_side_right_first\*(Aq\&.
 .RE
@@ -1169,7 +1162,7 @@ Matroska(TM)ファイルに格納されているテキストの文字コード�
 BOMで始まるテキストファイルは、既にUTFエンコーディングの一種でエンコードされています。\fBmkvmerge\fR(1)はUTF\-8、UTF\-16リトルエンディアン及びビッグエンディアン、UTF\-32リトルエンディアン及びビッグエンディアンの五つのモードをサポートします。BOMで始まるテキストファイルは自動的にUTF\-8に変換されます。この場合、テキストファイルの文字コードを指定するパラメータ(例:
 \fB\-\-sub\-charset\fR)は全て黙殺されます。
 .PP
-UNIX系システム上では、\fBmkvmerge\fR(1)は\fBsetlocale\fR(3)システムコールを使うので、\fILANG\fR、\fILC_ALL\fR及び\fILC_CYPE\fR環境変数を使用する。大抵は、UTF\-8かISO\-8859\-*ファミリのどれかが全てのテキストファイルとコマンドライン文字列の処理、及びコンソールへの出力の文字コードとして使用される。
+UNIX系システム上では、\fBmkvmerge\fR(1)は\fBsetlocale\fR(3)システムコールを使うので、\fILANG\fR、\fILC_ALL\fR及び\fILC_CYPE\fR環境変数を使用します。大抵は、UTF\-8かISO\-8859\-*ファミリのどれかが全てのテキストファイルとコマンドライン文字列の処理、及びコンソールへの出力の文字コードとして使用されます。
 .PP
 Windowsでは、\fBcmd\&.exe\fRWindowsシェルプログラムの実装方式のために、\fBmkvmerge\fR(1)は二つの異なる文字コードを使用します。一つ目は\fBGetCP()\fRシステムコールによって決定される文字コードです。この文字コードはテキストファイル変換にデフォルトで使用され、MKVToolNixパッケージに含まれるGUIプログラムで表示される全ての文字列に適用されます。\fBcmd\&.exe\fRはもう一つの、\fBGetACP()\fRシステムコールにより決定される文字コードを使用します。これはコマンドライン文字列及びコンソールへの出力のデフォルト文字コードです。
 .PP
@@ -1224,7 +1217,7 @@ Windowsでは、\fBcmd\&.exe\fRWindowsシェルプログラムの実装方式の
 .RE
 .SH "テキスト中の特殊文字をエスケープする"
 .PP
-特殊文字をエスケープしなければならない、あるいはすべき場所が少しだけあります。エスケープのルールは単純です：エスケープする必要のある各文字を、バックスラッシュ（日本語フォントでは記号）の後ろに違う文字が1つついたものと入れ替えます。
+特殊文字をエスケープしなければならない、あるいはすべき場所が少しだけあります。エスケープのルールは単純です：エスケープする必要のある各文字を、バックスラッシュ（日本語フォントでは\e記号）の後ろに違う文字が1つついたものと入れ替えます。
 .PP
 ルール：\*(Aq \*(Aqは\*(Aq\es\*(Aqに、\*(Aq"\*(Aqは\*(Aq\e2\*(Aqに、\*(Aq:\*(Aqは\*(Aq\ec\*(Aqに、\*(Aq#\*(Aqは\*(Aq\eh\*(Aqに、そして\*(Aq\e\*(Aqそれ自体は\*(Aq\e\e\*(Aqになります。
 .SH "字幕"
