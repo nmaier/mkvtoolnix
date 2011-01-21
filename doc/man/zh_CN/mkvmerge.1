@@ -51,9 +51,9 @@ Matroska(TM)
 .ps -1
 .br
 .PP
-The order of command line options is important\&. Please read the section
-"Option order"
-it if you\*(Aqre new to the program\&.
+命令行选项的顺序很重要。若您对程序还不熟悉，请阅读
+"选项顺序"
+段落。
 .sp .5v
 .RE
 .PP
@@ -1199,14 +1199,14 @@ download_url）。
 .ps -1
 .br
 .PP
-The order of command line options is important\&. Please read the section
-"Option order"
-it if you\*(Aqre new to the program\&.
+命令行选项的顺序很重要。若您对程序还不熟悉，请阅读
+"选项顺序"
+段落。
 .sp .5v
 .RE
-.SH "OPTION ORDER"
+.SH "选项顺序"
 .PP
-The order in which options are entered is important for some options\&. Options fall into two categories:
+输入选项的顺序对一些选项很重要。选项可归为两类:
 .sp
 .RS 4
 .ie n \{\
@@ -1216,11 +1216,10 @@ The order in which options are entered is important for some options\&. Options 
 .sp -1
 .IP "  1." 4.2
 .\}
-Options that affect the whole program and are not tied to any input file\&. These include but are not limited to
-\fB\-\-command\-line\-charset\fR,
-\fB\-\-output\fR
-or
-\fB\-\-title\fR\&. These can appear anywhere on the command line\&.
+影响整个程序的选项不与任何输入文件有关。这些选项包括但不限于
+\fB\-\-command\-line\-charset\fR、\fB\-\-output\fR
+或
+\fB\-\-title\fR。这些选项可在命令行的任意位置出现。
 .RE
 .sp
 .RS 4
@@ -1231,36 +1230,36 @@ or
 .sp -1
 .IP "  2." 4.2
 .\}
-Options that affect a single input file or a single track in an input file\&. These options all apply to the following input file on the command line\&. All options applying to the same input (or to tracks from the same input file) file can be written in any order as long as they all appear before that input file\*(Aqs name\&. Examples for options applying to an input file are
+影响单个输入文件或输入文件中的单个轨道的选项。这些选项均应用到命令行中接着的输入文件。所有应用到同一输入文件（或其轨道）的选项可以以任意顺序书写，只要都出现在该输入文件名之前。应用到输入文件的选项如
 \fB\-\-no\-chapters\fR
-or
-\fB\-\-chapter\-charset\fR\&. Examples for options applying to a single track are
+或
+\fB\-\-chapter\-charset\fR。应用到单个轨道的选项如
 \fB\-\-default\-duration\fR
-or
-\fB\-\-language\fR\&.
+或
+\fB\-\-language\fR。
 .RE
 .PP
-The options are processed from left to right\&. If an option appears multiple times within the same scope then the last occurence will be used\&. Therefore the title will be set to "Something else" in the following example:
+选项从左向右处理。如果同一个选项在同一范围内出现多次，将使用最后一次给出的参数。因此在下面的例子中，标题将被设为 "其他东东":
 .sp
 .if n \{\
 .RS 4
 .\}
 .nf
-$ mkvmerge \-o output\&.mkv \-\-title \*(AqThis and that\*(Aq input\&.avi \-\-title \*(AqSomething else\*(Aq
+$ mkvmerge \-o 输出\&.mkv \-\-title \*(Aq这个内个\*(Aq input\&.avi \-\-title \*(Aq其他东东\*(Aq
 .fi
 .if n \{\
 .RE
 .\}
 .PP
-The following example shows that using the
+下面的例子中可以两次使用
 \fB\-\-language\fR
-option twice is OK because they\*(Aqre used in different scopes\&. Even though they apply to the same track ID they apply to different input files and therefore have different scopes:
+选项，因为在不同范围内使用。尽管应用到同一轨道 ID，但应用到的是不同的输入文件，因此属于不同范围:
 .sp
 .if n \{\
 .RS 4
 .\}
 .nf
-$ mkvmerge \-o output\&.mkv \-\-language 0:fre fran\(,cais\&.ogg \-\-language 0:deu deutsch\&.ogg
+$ mkvmerge \-o 输出\&.mkv \-\-language 0:fre 法语\&.ogg \-\-language 0:deu 德语\&.ogg
 .fi
 .if n \{\
 .RE
