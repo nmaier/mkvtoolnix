@@ -6,10 +6,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: mkvtoolnix-man\n"
-"POT-Creation-Date: 2011-01-19 09:42+0100\n"
+"POT-Creation-Date: 2011-01-21 12:12+0100\n"
 "PO-Revision-Date: 2011-01-21 00:56+0800\n"
 "Last-Translator: Dean Lee <xslidian@gmail.com>\n"
 "Language-Team: chinese simp <xslidian+mkvtoolnix@gmail.com>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -277,7 +278,7 @@ msgstr "设置解析模式为 '<literal>full（完整）</literal>'。默认的�
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:91
-#: doc/man/mkvinfo.xml:120
+#: doc/man/mkvinfo.xml:129
 #: doc/man/mkvmerge.xml:1227
 #: doc/man/mkvpropedit.xml:156
 msgid "<option>--command-line-charset</option> <parameter>character-set</parameter>"
@@ -285,14 +286,14 @@ msgstr "<option>--command-line-charset</option> <parameter>字符集</parameter>
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:94
-#: doc/man/mkvinfo.xml:123
+#: doc/man/mkvinfo.xml:132
 #: doc/man/mkvpropedit.xml:159
 msgid "Sets the character set to convert strings given on the command line from. It defaults to the character set given by system's current locale."
 msgstr "设定在命令行给出的字符串的字符集，用于转为其他字符集。默认为系统当前区域设置中所给定的字符集。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:101
-#: doc/man/mkvinfo.xml:130
+#: doc/man/mkvinfo.xml:139
 #: doc/man/mkvmerge.xml:1240
 #: doc/man/mkvpropedit.xml:166
 msgid "<option>--output-charset</option> <parameter>character-set</parameter>"
@@ -300,7 +301,7 @@ msgstr "<option>--output-charset</option> <parameter>字符集</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:104
-#: doc/man/mkvinfo.xml:133
+#: doc/man/mkvinfo.xml:142
 #: doc/man/mkvmerge.xml:1243
 #: doc/man/mkvpropedit.xml:169
 msgid "Sets the character set to which strings are converted that are to be output.  It defaults to the character set given by system's current locale."
@@ -308,7 +309,7 @@ msgstr "设置输出的字符串应被转换到何种字符集。默认为系统
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:111
-#: doc/man/mkvinfo.xml:140
+#: doc/man/mkvinfo.xml:149
 #: doc/man/mkvmerge.xml:1250
 #: doc/man/mkvpropedit.xml:176
 msgid "<option>-r</option>, <option>--redirect-output</option> <parameter>file-name</parameter>"
@@ -321,7 +322,7 @@ msgstr "将所有信息输出至文件 <parameter>文件名</parameter> 而不�
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:123
-#: doc/man/mkvinfo.xml:152
+#: doc/man/mkvinfo.xml:161
 #: doc/man/mkvmerge.xml:1261
 #: doc/man/mkvpropedit.xml:188
 msgid "<option>--ui-language</option> <parameter>code</parameter>"
@@ -335,7 +336,7 @@ msgstr "强制使用语言代码为 <parameter>语言代码</parameter> 的翻�
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:135
-#: doc/man/mkvinfo.xml:164
+#: doc/man/mkvinfo.xml:173
 #: doc/man/mkvmerge.xml:77
 #: doc/man/mkvpropedit.xml:200
 msgid "<option>-v</option>, <option>--verbose</option>"
@@ -349,7 +350,7 @@ msgstr "使输出信息更详尽，且每当读取到重要的 &matroska; 元素
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:144
-#: doc/man/mkvinfo.xml:174
+#: doc/man/mkvinfo.xml:183
 #: doc/man/mkvmerge.xml:1338
 #: doc/man/mkvpropedit.xml:209
 msgid "<option>-h</option>, <option>--help</option>"
@@ -357,7 +358,7 @@ msgstr "<option>-h</option>, <option>--help</option>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:147
-#: doc/man/mkvinfo.xml:177
+#: doc/man/mkvinfo.xml:186
 #: doc/man/mkvmerge.xml:1341
 #: doc/man/mkvpropedit.xml:212
 msgid "Show usage information and exit."
@@ -365,7 +366,7 @@ msgstr "显示用法信息并退出。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:153
-#: doc/man/mkvinfo.xml:183
+#: doc/man/mkvinfo.xml:192
 #: doc/man/mkvmerge.xml:1347
 #: doc/man/mkvpropedit.xml:218
 msgid "<option>-V</option>, <option>--version</option>"
@@ -373,7 +374,7 @@ msgstr "<option>-V</option>, <option>--version</option>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:156
-#: doc/man/mkvinfo.xml:186
+#: doc/man/mkvinfo.xml:195
 #: doc/man/mkvmerge.xml:1350
 #: doc/man/mkvpropedit.xml:221
 msgid "Show version information and exit."
@@ -381,7 +382,7 @@ msgstr "显示版本信息并退出。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:162
-#: doc/man/mkvinfo.xml:192
+#: doc/man/mkvinfo.xml:201
 #: doc/man/mkvmerge.xml:1356
 #: doc/man/mkvpropedit.xml:227
 msgid "<option>--check-for-updates</option>"
@@ -389,7 +390,7 @@ msgstr "<option>--check-for-updates</option>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:165
-#: doc/man/mkvinfo.xml:195
+#: doc/man/mkvinfo.xml:204
 #: doc/man/mkvmerge.xml:1359
 #: doc/man/mkvpropedit.xml:230
 msgid "Checks online for new releases by downloading the URL <uri>http://mkvtoolnix-releases.bunkus.org/latest-release.xml</uri>. Four lines will be output in <literal>key=value</literal> style: the URL from where the information was retrieved (key <literal>version_check_url</literal>), the currently running version (key <literal>running_version</literal>), the latest release's version (key <literal>available_version</literal>) and the download URL (key <literal>download_url</literal>)."
@@ -397,7 +398,7 @@ msgstr "联机下载 URL <uri>http://mkvtoolnix-releases.bunkus.org/latest-relea
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:172
-#: doc/man/mkvinfo.xml:202
+#: doc/man/mkvinfo.xml:211
 #: doc/man/mkvmerge.xml:1366
 #: doc/man/mkvpropedit.xml:237
 msgid "Afterwards the program exists with an exit code of 0 if no newer release is available, with 1 if a newer release is available and with 2 if an error occured (e.g. if the update information could not be retrieved)."
@@ -405,7 +406,7 @@ msgstr "若无更新版本可用，程序将以退出码 0 退出，若有更新
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:177
-#: doc/man/mkvinfo.xml:207
+#: doc/man/mkvinfo.xml:216
 #: doc/man/mkvmerge.xml:1371
 #: doc/man/mkvpropedit.xml:242
 msgid "This option is only available if the program was built with support for libcurl."
@@ -413,7 +414,7 @@ msgstr "此选项仅当程序附带 libcurl 支持编译时可用。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:183
-#: doc/man/mkvinfo.xml:213
+#: doc/man/mkvinfo.xml:222
 #: doc/man/mkvmerge.xml:1273
 #: doc/man/mkvpropedit.xml:248
 msgid "<option>@</option>options-file"
@@ -421,7 +422,7 @@ msgstr "<option>@</option>选项文件"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:186
-#: doc/man/mkvinfo.xml:216
+#: doc/man/mkvinfo.xml:225
 #: doc/man/mkvmerge.xml:1276
 #: doc/man/mkvpropedit.xml:251
 msgid "Reads additional command line arguments from the file <parameter>options-file</parameter>.  Lines whose first non-whitespace character is a hash mark ('<literal>#</literal>') are treated as comments and ignored. White spaces at the start and end of a line will be stripped. Each line must contain exactly one option."
@@ -878,7 +879,7 @@ msgstr "时间码会先被排序，然后以 timecode v2 格式文件输出，�
 
 #. type: Content of: <refentry><refsect1><title>
 #: doc/man/mkvextract.xml:612
-#: doc/man/mkvinfo.xml:278
+#: doc/man/mkvinfo.xml:287
 #: doc/man/mkvmerge.xml:2162
 #: doc/man/mkvpropedit.xml:390
 msgid "Exit codes"
@@ -906,7 +907,7 @@ msgstr "<constant>2</constant> -- 此退出代码用于错误发生之后。 &mk
 
 #. type: Content of: <refentry><refsect1><title>
 #: doc/man/mkvextract.xml:643
-#: doc/man/mkvinfo.xml:308
+#: doc/man/mkvinfo.xml:317
 #: doc/man/mkvmerge.xml:1696
 #: doc/man/mkvpropedit.xml:421
 msgid "Escaping special chars in text"
@@ -914,7 +915,7 @@ msgstr "文本中特殊字符的转义"
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvextract.xml:645
-#: doc/man/mkvinfo.xml:310
+#: doc/man/mkvinfo.xml:319
 #: doc/man/mkvmerge.xml:1698
 #: doc/man/mkvpropedit.xml:423
 msgid "There are a few places in which special characters in text must or should be escaped. The rules for escaping are simple: each character that needs escaping is replaced with a backslash followed by another character."
@@ -922,7 +923,7 @@ msgstr "有时文本中的特殊字符必须或应该转义。转义规则很简
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvextract.xml:650
-#: doc/man/mkvinfo.xml:315
+#: doc/man/mkvinfo.xml:324
 #: doc/man/mkvmerge.xml:1703
 #: doc/man/mkvpropedit.xml:428
 msgid "The rules are: ' ' becomes '\\s', '&quot;' becomes '\\2', ':' becomes '\\c', '#' becomes '\\h' and '\\' itself becomes '\\\\'."
@@ -930,7 +931,7 @@ msgstr "规则为: ' ' 变为 '\\s'，'&quot;' 变为 '\\2'，':' 变为 '\\c'�
 
 #. type: Content of: <refentry><refsect1><title>
 #: doc/man/mkvextract.xml:655
-#: doc/man/mkvinfo.xml:320
+#: doc/man/mkvinfo.xml:329
 #: doc/man/mkvmerge.xml:2193
 #: doc/man/mkvpropedit.xml:433
 #: doc/man/mmg.xml:90
@@ -944,7 +945,7 @@ msgstr "&mkvmerge;, &mkvinfo;, &mkvpropedit;, &mmg;"
 
 #. type: Content of: <refentry><refsect1><title>
 #: doc/man/mkvextract.xml:662
-#: doc/man/mkvinfo.xml:327
+#: doc/man/mkvinfo.xml:336
 #: doc/man/mkvmerge.xml:2200
 #: doc/man/mkvpropedit.xml:440
 #: doc/man/mmg.xml:97
@@ -953,7 +954,7 @@ msgstr "网络"
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvextract.xml:664
-#: doc/man/mkvinfo.xml:329
+#: doc/man/mkvinfo.xml:338
 #: doc/man/mkvmerge.xml:2202
 #: doc/man/mkvpropedit.xml:442
 #: doc/man/mmg.xml:99
@@ -1012,61 +1013,73 @@ msgstr "仅显示 &mkvinfo; 所获取信息的简要概述，而非各元素。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvinfo.xml:93
+#, fuzzy
+#| msgid "<option>-T</option>, <option>--no-track-tags</option>"
+msgid "<option>-t</option>, <option>--track-info</option>"
+msgstr "<option>-T</option>, <option>--no-track-tags</option>"
+
+#. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: doc/man/mkvinfo.xml:96
+msgid "Show statistics for each track in verbose mode. Also sets verbosity to 1 if it was at level 0 before."
+msgstr ""
+
+#. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
+#: doc/man/mkvinfo.xml:102
 msgid "<option>-x</option>, <option>--hexdump</option>"
 msgstr "<option>-x</option>, <option>--hexdump</option>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvinfo.xml:96
+#: doc/man/mkvinfo.xml:105
 msgid "Show the first 16 bytes of each frame as a hex dump."
 msgstr "以十六进制转储形式显示各帧的前 16 字节。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvinfo.xml:102
+#: doc/man/mkvinfo.xml:111
 msgid "<option>-X</option>, <option>--full-hexdump</option>"
 msgstr "<option>-X</option>, <option>--full-hexdump</option>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvinfo.xml:105
+#: doc/man/mkvinfo.xml:114
 msgid "Show all bytes of each frame as a hex dump."
 msgstr "以十六进制转储形式显示各帧的所有字节。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvinfo.xml:111
+#: doc/man/mkvinfo.xml:120
 msgid "<option>-z</option>, <option>--size</option>"
 msgstr "<option>-z</option>, <option>--size</option>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvinfo.xml:114
+#: doc/man/mkvinfo.xml:123
 msgid "Show the size of each element including its header."
 msgstr "显示各元素的尺寸，含头部所占用的尺寸。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvinfo.xml:143
+#: doc/man/mkvinfo.xml:152
 msgid "Writes all messages to the file <parameter>file-name</parameter> instead of to the console.  While this can be done easily with output redirection there are cases in which this option is needed: when the terminal reinterprets the output before writing it to a file.  The character set set with <link linkend=\"mkvinfo.description.output_charset\"><option>--output-charset</option></link> is honored."
 msgstr "将所有信息输出至文件 <parameter>文件名</parameter>，而不是在命令行显示。尽管该操作可以用输出重定向轻松实现，但在特定情况下还是缺不得它：当终端写入文件之前重新解释（覆盖输出）时。 <link linkend=\"mkvinfo.description.output_charset\"><option>--output-charset</option></link> 中所选定的字符集将被优先选用。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvinfo.xml:155
+#: doc/man/mkvinfo.xml:164
 msgid "Forces the translations for the language <parameter>code</parameter> to be used (e.g.  '<literal>de_DE</literal>' for the German translations). It is preferable to use the environment variables <varname>LANG</varname>, <varname>LC_MESSAGES</varname> and <varname>LC_ALL</varname> though. Entering '<literal>list</literal>' as the <parameter>code</parameter> will cause &mkvinfo; to output a list of available translations."
 msgstr "强制使用语言代码 <parameter>语言代码</parameter> 所对应的翻译（如  '<literal>de_DE</literal>' 对应德文翻译）。使用 <varname>LANG</varname>、<varname>LC_MESSAGES</varname> 及 <varname>LC_ALL</varname> 这些环境变量更好。如果在 <parameter>code</parameter> 处输入 '<literal>list</literal>'，&mkvinfo; 将输出可用翻译的列表。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvinfo.xml:167
+#: doc/man/mkvinfo.xml:176
 msgid "Be more verbose. See the section about <link linkend=\"mkvinfo.verbosity_levels\">verbosity levels</link> for a description which information will be output at which level."
 msgstr "使输出更详尽。请参阅关于 <link linkend=\"mkvinfo.verbosity_levels\">“详细”程度</link> 的段落获取在哪些层级将输出哪些信息的描述。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvinfo.xml:222
+#: doc/man/mkvinfo.xml:231
 msgid "Several chars can be escaped, e.g. if you need to start a non-comment line with '#'. The rules are described in <link linkend=\"mkvinfo.escaping\">the section about escaping text</link>."
 msgstr "有些字符可以转义，如当您需要使用 '#' 作为一个不是评论的行的开头。规则在<link linkend=\"mkvinfo.escaping\">关于转义文本的段落</link>有描述。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvinfo.xml:227
+#: doc/man/mkvinfo.xml:236
 msgid "The command line '<command>mkvinfo -v -v input.mkv --redirect-output info.txt</command>' could be converted into the following option file:"
 msgstr "命令行 '<command>mkvinfo -v -v 输入.mkv --redirect-output 信息.txt</command>' 可以转换为下面所示的选项文件:"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><programlisting>
-#: doc/man/mkvinfo.xml:232
+#: doc/man/mkvinfo.xml:241
 #, no-wrap
 msgid ""
 "# Be more verbose\n"
@@ -1090,57 +1103,57 @@ msgstr ""
 "     "
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvinfo.xml:247
+#: doc/man/mkvinfo.xml:256
 msgid "Verbosity levels"
 msgstr "“详细”程度"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvinfo.xml:250
+#: doc/man/mkvinfo.xml:259
 msgid "The <link linkend=\"mkvinfo.description.verbose\"><option>-v</option></link> option can be used to increase &mkvinfo;'s verbosity level and print more information about the current file."
 msgstr "<link linkend=\"mkvinfo.description.verbose\"><option>-v</option></link> 选项可以使 &mkvinfo; 增强其“详细”程度并输出关于当前文件的更多信息。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvinfo.xml:255
+#: doc/man/mkvinfo.xml:264
 msgid "At level 0 &mkvinfo; will print only the track headers it finds and their types. &mkvinfo; will exit as soon as the headers are parsed completely (more technical: as soon as the first cluster is encountered). In this level the seek head entries and the cues will not be displayed -- even if they're located in front of the track information."
 msgstr "在 level 0 &mkvinfo; 仅输出它发现的轨道头及其类型。头部解析完毕后（更专业地：遇到首个簇时），&mkvinfo; 将退出执行。在此层级，定位头项与 cue 索引不会显示出来——即使它们位于轨道信息之前。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvinfo.xml:261
+#: doc/man/mkvinfo.xml:270
 msgid "At level 1 &mkvinfo; will also print all &matroska; elements encountered for the complete file but the seek head entries and the cue entries. If the summary mode is enabled then &mkvinfo; will output the frame position as well."
 msgstr "在 level 1 &mkvinfo; 同样将输出在整个文件中遇到的所有 &matroska; 元素，此外还将输出定位头项与 cue 索引项。如果启用了简要模式，&mkvinfo; 还将输出各帧位置。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvinfo.xml:266
+#: doc/man/mkvinfo.xml:275
 msgid "At level 2 &mkvinfo; will also print the seek head entries, the cue entries and the file position at which each &matroska; element can be found at."
 msgstr "在 level 2 &mkvinfo; 同样将输出定位头项与 cue 索引项，以及文件中各 &matroska; 元素被发现的位置。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvinfo.xml:271
+#: doc/man/mkvinfo.xml:280
 msgid "At level 3 and above &mkvinfo; will print some information that is not directly connected to a &matroska; element. All other elements only print stuff about the elements that were just found. Level 3 adds meta information to ease debugging (read: it's intended for developers only). All lines written by level 3 are enclosed in square brackets to make filtering them out easy."
 msgstr "在 level 3 及更高层级 &mkvinfo; 将输出一些与 &matroska; 元素不直接相连的信息。对于其他元素，将只输出发现的基本信息。Level 3 增加了元信息以便调试（换句话说：它是为开发人员设计的）。Level 3 输出的所有行都以方括号嵌套以便过滤。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvinfo.xml:281
+#: doc/man/mkvinfo.xml:290
 msgid "&mkvinfo; exits with one of three exit codes:"
 msgstr "&mkvinfo; 退出时会返回以下三个退出代码中的一个："
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvinfo.xml:287
+#: doc/man/mkvinfo.xml:296
 msgid "<constant>0</constant> -- This exit codes means that the run has completed successfully."
 msgstr "<constant>0</constant> -- 此退出代码说明已成功完成运行。"
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvinfo.xml:293
+#: doc/man/mkvinfo.xml:302
 msgid "<constant>1</constant> -- In this case &mkvinfo; has output at least one warning, but the run did continue.  A warning is prefixed with the text '<literal>Warning:</literal>'."
 msgstr "<constant>1</constant> -- 这种情况下 &mkvinfo; 至少输出了一条警告信息，但运行并未因之中止。 警告信息以文字 '<literal>警告:</literal>' 为前缀。"
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvinfo.xml:300
+#: doc/man/mkvinfo.xml:309
 msgid "<constant>2</constant> -- This exit code is used after an error occurred.  &mkvinfo; aborts right after outputting the error message.  Error messages range from wrong command line arguments over read/write errors to broken files."
 msgstr "<constant>2</constant> -- 此退出代码用于错误发生之后。 &mkvinfo; 在输出错误信息后即中断运行。错误信息可能是错误的命令行参数，也可能是损坏文件的读取/写入错误。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvinfo.xml:322
+#: doc/man/mkvinfo.xml:331
 msgid "&mkvmerge;, &mkvextract;, &mkvpropedit;, &mmg;"
 msgstr "&mkvmerge;, &mkvextract;, &mkvpropedit;, &mmg;"
 
@@ -3565,25 +3578,19 @@ msgstr "&mkvmerge;, &mkvextract;, &mkvinfo;, &mkvpropedit;"
 
 #~ msgid "Sets the stereo mode for the video track with the track ID <parameter>TID</parameter>.  The mode can either be a number <parameter>n</parameter> between <constant>0</constant> and <constant>3</constant> or one of the keywords '<literal>none</literal>' (same as <parameter>n</parameter>=<constant>0</constant>), '<literal>right</literal>' (same as <parameter>n</parameter>=<constant>1</constant>), '<literal>left</literal>' (same as <parameter>n</parameter>=<constant>2</constant>)  or '<literal>both</literal>' (same as <parameter>n</parameter>=<constant>3</constant>)."
 #~ msgstr "设置 ID 为 <parameter>TID</parameter> 的视频轨的立体视法。 模式既可以是 <constant>0</constant> 到 <constant>3</constant> 之间的数字 <parameter>n</parameter>，也可以是 '<literal>none（无立体视法）</literal>' (与 <parameter>n</parameter>=<constant>0</constant> 相同), '<literal>right（右眼视角）</literal>' (与 <parameter>n</parameter>=<constant>1</constant> 相同), '<literal>left（左眼视角）</literal>' (与 <parameter>n</parameter>=<constant>2</constant> 相同)  or '<literal>both（双眼视角）</literal>' (与 <parameter>n</parameter>=<constant>3</constant> 相同)。"
-
 #~ msgid "Syntax: <command>mkvextract</command> <option>timecodes_v2</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional>"
 #~ msgstr "语法: <command>mkvextract</command> <option>timecodes_v2</option> <parameter>源文件名</parameter> <optional><parameter>选项</parameter></optional>"
-
 #~ msgid "Reads additional command line arguments from the file <parameter>options-file</parameter>.  Lines whose first non-whitespace character is a hash mark ('<literal>#</literal>') are treated as comments and ignored. White spaces at the start and end of a line will be stripped. Each line must contain exactly one option.  There is no meta character escaping."
 #~ msgstr "从文件 <parameter>选项文件</parameter> 中读取额外的命令行参数。首个非空白字符为井号 ('<literal>#</literal>') 的行将被当作注释对待，在处理过程中将被忽略。各行开头与结尾的空白将被除去。各行必须恰好含有一个选项。没有元字符转义。"
-
 #~ msgid "<option>--no-ogg</option>"
 #~ msgstr "<option>--no-ogg</option>"
-
 #~ msgid "Only valid for <abbrev>FLAC</abbrev> tracks. Normally <abbrev>FLAC</abbrev> tracks are embedded in an Ogg transport stream. With this switch they are extracted to raw <abbrev>FLAC</abbrev> files instead."
 #~ msgstr "仅对 <abbrev>FLAC</abbrev> 轨道有效。通常 <abbrev>FLAC</abbrev> 轨道是嵌套在 Ogg 传输流（TS）中的。通过本开关，它们可以被提取为原始 <abbrev>FLAC</abbrev> 文件。"
-
 #, fuzzy
 #~ msgid "<option>--webm</option>, <option>--web-media</option>"
 #~ msgstr "<option>-v</option>, <option>--verbose</option>"
-
 #~ msgid "January 2010"
 #~ msgstr "2010 年 1 月"
-
 #~ msgid "December 2009"
 #~ msgstr "2009 年 12 月"
+

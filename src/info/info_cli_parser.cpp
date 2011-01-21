@@ -45,6 +45,7 @@ info_cli_parser_c::init_parser() {
   OPT("c|checksum",     set_checksum,     YT("Calculate and display checksums of frame contents."));
   OPT("C|check-mode",   set_check_mode,   YT("Calculate and display checksums and use verbosity level 4."));
   OPT("s|summary",      set_summary,      YT("Only show summaries of the contents, not each element."));
+  OPT("t|track-info",   set_track_info,   YT("Show statistics for each track in verbose mode."));
   OPT("x|hexdump",      set_hexdump,      YT("Show the first 16 bytes of each frame as a hex dump."));
   OPT("X|full-hexdump", set_full_hexdump, YT("Show all bytes of each frame as a hex dump."));
   OPT("z|size",         set_size,         YT("Show the size of each element including its header."));
@@ -96,6 +97,13 @@ info_cli_parser_c::set_full_hexdump() {
 void
 info_cli_parser_c::set_size() {
   m_options.m_show_size = true;
+}
+
+void
+info_cli_parser_c::set_track_info() {
+  m_options.m_show_track_info = true;
+  if (0 == verbose)
+    verbose = 1;
 }
 
 void

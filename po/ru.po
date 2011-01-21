@@ -610,44 +610,44 @@ msgstr "  US: Строка Юникод\n"
 msgid "  X:  binary in hex\n"
 msgstr "  X:  двоичный, шестнадцатеричный\n"
 
-#: src/info/mkvinfo.cpp:309
+#: src/info/mkvinfo.cpp:349
 msgid " (FourCC: %1%%2%%3%%4%, 0x%|5$08x|)"
 msgstr " (FourCC: %1%%2%%3%%4%, 0x%|5$08x|)"
 
-#: src/info/mkvinfo.cpp:143
-#: src/info/mkvinfo.cpp:984
+#: src/info/mkvinfo.cpp:183
+#: src/info/mkvinfo.cpp:1026
 msgid " (adler: 0x%|1$08x|)"
 msgstr " (adler: 0x%|1$08x|)"
 
-#: src/info/mkvinfo.cpp:698
+#: src/info/mkvinfo.cpp:738
 msgid " (centimeters)"
 msgstr " (сантиметров)"
 
-#: src/info/mkvinfo.cpp:724
+#: src/info/mkvinfo.cpp:764
 msgid " (fixed)"
 msgstr " (фиксированный)"
 
-#: src/info/mkvinfo.cpp:314
+#: src/info/mkvinfo.cpp:354
 msgid " (format tag: 0x%|1$04x|)"
 msgstr " (Формат тега: 0x%|1$04x|)"
 
-#: src/info/mkvinfo.cpp:722
+#: src/info/mkvinfo.cpp:762
 msgid " (free resizing)"
 msgstr " (свободный размер)"
 
-#: src/info/mkvinfo.cpp:321
+#: src/info/mkvinfo.cpp:361
 msgid " (h.264 profile: %1% @L%2%.%3%)"
 msgstr " (h.264 профиль: %1% @L%2%.%3%)"
 
-#: src/info/mkvinfo.cpp:699
+#: src/info/mkvinfo.cpp:739
 msgid " (inches)"
 msgstr " (дюймы)"
 
-#: src/info/mkvinfo.cpp:723
+#: src/info/mkvinfo.cpp:763
 msgid " (keep aspect ratio)"
 msgstr " (сохранить пропорции)"
 
-#: src/info/mkvinfo.cpp:697
+#: src/info/mkvinfo.cpp:737
 msgid " (pixels)"
 msgstr " (пиксели)"
 
@@ -704,7 +704,7 @@ msgid " Segment info handling:\n"
 msgstr " Сегмент обработки информации:\n"
 
 #: src/extract/mkvextract.cpp:63
-#: src/info/mkvinfo.cpp:171
+#: src/info/mkvinfo.cpp:211
 msgid " at %1%"
 msgstr " в %1%"
 
@@ -715,11 +715,11 @@ msgstr " в %1%"
 msgid " done\n"
 msgstr " сделанный\n"
 
-#: src/info/mkvinfo.cpp:172
+#: src/info/mkvinfo.cpp:212
 msgid " size %1%"
 msgstr " размер %1%"
 
-#: src/info/mkvinfo.cpp:188
+#: src/info/mkvinfo.cpp:228
 msgid " size is unknown"
 msgstr " неизвестный размер"
 
@@ -735,15 +735,15 @@ msgstr "### Общее управление выхода ###"
 msgid "%1% built on %2% %3%"
 msgstr "%1% сборка от %2% %3%"
 
-#: src/info/mkvinfo.cpp:160
+#: src/info/mkvinfo.cpp:200
 msgid "%1% frame, track %2%, timecode %3% (%4%), duration %|5$.3f|, size %6%, adler 0x%|7$08x|%8%%9%\n"
 msgstr "%1% кадр, дорожка %2%, тайм-код %3% (%4%), продолжительность %|5$.3f|, размер %6%, adler 0x%|7$08x|%8%%9%\n"
 
-#: src/info/mkvinfo.cpp:165
+#: src/info/mkvinfo.cpp:205
 msgid "%1% frame, track %2%, timecode %3% (%4%), size %5%, adler 0x%|6$08x|%7%\n"
 msgstr "%1% кадр, дорожка %2%, тайм-код %3% (%4%), размер %5%, adler 0x%|6$08x|%7%\n"
 
-#: src/info/mkvinfo.cpp:161
+#: src/info/mkvinfo.cpp:201
 msgid "%1% frame, track %2%, timecode %3% (%4%), size %5%, adler 0x%|6$08x|%7%%8%\n"
 msgstr "%1% кадр, дорожка %2%, тайм-код %3% (%4%), размер %5%, adler 0x%|6$08x|%7%%8%\n"
 
@@ -789,8 +789,8 @@ msgstr ""
 "Исходники и последние файлы всегда доступны на\n"
 "http://www.bunkus.org/videotools/mkvtoolnix/"
 
-#: src/mmg/jobs.cpp:296
-#: src/mmg/jobs.cpp:306
+#: src/mmg/jobs.cpp:297
+#: src/mmg/jobs.cpp:307
 #: src/mmg/mux_dialog.cpp:249
 #, c-format
 msgid "%d minute(s) %d second(s)"
@@ -825,7 +825,7 @@ msgstr ""
 "Исходники и последние файлы всегда доступны на\n"
 "http://www.bunkus.org/videotools/mkvtoolnix/"
 
-#: src/mmg/jobs.cpp:102
+#: src/mmg/jobs.cpp:103
 msgid "&Abort"
 msgstr "&Прервать"
 
@@ -878,11 +878,11 @@ msgstr "&Копировать командную строку в буфер об
 msgid "&Copy to clipboard"
 msgstr "&Скопировать в буфер обмена"
 
-#: src/mmg/jobs.cpp:478
+#: src/mmg/jobs.cpp:479
 msgid "&Disable"
 msgstr "&Выключить"
 
-#: src/mmg/jobs.cpp:470
+#: src/mmg/jobs.cpp:471
 msgid "&Down"
 msgstr "&Вниз"
 
@@ -947,9 +947,9 @@ msgstr "&Новый\tCtrl-N"
 msgid "&New chapters"
 msgstr "&Новая глава"
 
-#: src/mmg/jobs.cpp:100
-#: src/mmg/jobs.cpp:393
-#: src/mmg/jobs.cpp:497
+#: src/mmg/jobs.cpp:101
+#: src/mmg/jobs.cpp:394
+#: src/mmg/jobs.cpp:498
 msgid "&Ok"
 msgstr "&OK"
 
@@ -967,7 +967,7 @@ msgstr "&Опции"
 msgid "&Quit\tCtrl-Q"
 msgstr "&Выход\tCtrl-Q"
 
-#: src/mmg/jobs.cpp:475
+#: src/mmg/jobs.cpp:476
 msgid "&Re-enable"
 msgstr "&Повторное включение"
 
@@ -979,7 +979,7 @@ msgstr "&Перезагрузить\tCtrl-R"
 msgid "&Reset"
 msgstr "&Сбросить"
 
-#: src/mmg/jobs.cpp:398
+#: src/mmg/jobs.cpp:399
 #: src/mmg/mmg_dialog.cpp:285
 msgid "&Save"
 msgstr "&Сохранить"
@@ -996,11 +996,11 @@ msgstr "&Сохранить информацию как текст\tCtrl-S"
 msgid "&Save settings\tCtrl-S"
 msgstr "&Сохранить настройки\tCtrl-S"
 
-#: src/mmg/jobs.cpp:502
+#: src/mmg/jobs.cpp:503
 msgid "&Start"
 msgstr "&Запустить"
 
-#: src/mmg/jobs.cpp:467
+#: src/mmg/jobs.cpp:468
 msgid "&Up"
 msgstr "&Вверх"
 
@@ -1012,7 +1012,7 @@ msgstr "&Проверить правильность\tCtrl-T"
 msgid "&Verify"
 msgstr "&Проверить"
 
-#: src/mmg/jobs.cpp:488
+#: src/mmg/jobs.cpp:489
 msgid "&View log"
 msgstr "&Просмотр журнала"
 
@@ -1409,7 +1409,7 @@ msgstr "'Принудительный дисплей' флаг"
 msgid "'Track enabled' flag"
 msgstr "'Дорожка включена' флаг"
 
-#: src/info/mkvinfo.cpp:140
+#: src/info/mkvinfo.cpp:180
 msgid "(Unknown element: %1%; ID: 0x%2% size: %3%)"
 msgstr "(Неизвестный элемент: %1%; ID: 0x%2% размер: %3%)"
 
@@ -1453,31 +1453,31 @@ msgstr ", описание '%1%'"
 msgid ", file name '%1%'"
 msgstr ", имя файла '%1%'"
 
-#: src/mmg/jobs.cpp:742
+#: src/mmg/jobs.cpp:743
 #, c-format
 msgid ", finished on %s"
 msgstr ", завершено %s"
 
-#: src/info/mkvinfo.cpp:159
+#: src/info/mkvinfo.cpp:199
 msgid ", position %1%"
 msgstr ", позиция %1%"
 
-#: src/mmg/jobs.cpp:732
+#: src/mmg/jobs.cpp:733
 #, c-format
 msgid ", started on %s"
 msgstr ", начался %s"
 
-#: src/mmg/jobs.cpp:730
+#: src/mmg/jobs.cpp:731
 #, c-format
 msgid "--- BEGIN job %d (%s, added on %s)"
 msgstr "--- Начало работы %d (%s, добавлено %s)"
 
-#: src/mmg/jobs.cpp:740
+#: src/mmg/jobs.cpp:741
 #, c-format
 msgid "--- END job %d"
 msgstr "--- Конец работы %d"
 
-#: src/mmg/jobs.cpp:735
+#: src/mmg/jobs.cpp:736
 msgid "--- No job output found.\n"
 msgstr "--- Нет работы найденной на выходе.\n"
 
@@ -1510,7 +1510,7 @@ msgstr "...после этого размера:"
 msgid "...after timecodes:"
 msgstr "...после тайм-кодов:"
 
-#: src/info/mkvinfo.cpp:767
+#: src/info/mkvinfo.cpp:807
 msgid "1: all frames"
 msgstr "1: все кадры"
 
@@ -1518,7 +1518,7 @@ msgstr "1: все кадры"
 msgid "2 bytes"
 msgstr "2 байта"
 
-#: src/info/mkvinfo.cpp:769
+#: src/info/mkvinfo.cpp:809
 msgid "2: codec private data"
 msgstr "2: личные данные кодека"
 
@@ -1581,7 +1581,7 @@ msgstr ""
 "Случайный уникальный ID для определения текущего\n"
 "сегмента между многими другими (128 bits)."
 
-#: src/info/mkvinfo.cpp:897
+#: src/info/mkvinfo.cpp:937
 msgid "A track"
 msgstr "Дорожка"
 
@@ -1654,19 +1654,19 @@ msgstr "AVI (Audio/Video Interleaved)"
 msgid "Abort"
 msgstr "Прервать"
 
-#: src/mmg/jobs.cpp:96
+#: src/mmg/jobs.cpp:97
 msgid "Abort after current job"
 msgstr "Прервать после текущего задания"
 
-#: src/mmg/jobs.cpp:97
+#: src/mmg/jobs.cpp:98
 msgid "Abort processing after the current job"
 msgstr "Прервать после обработки текущего задания"
 
-#: src/mmg/jobs.cpp:103
+#: src/mmg/jobs.cpp:104
 msgid "Abort the muxing process right now"
 msgstr "Прервать процесс обработки прямо сейчас"
 
-#: src/mmg/jobs.cpp:139
+#: src/mmg/jobs.cpp:140
 #, c-format
 msgid "Aborted processing on %s"
 msgstr "Прервана обработка на %s"
@@ -1708,15 +1708,15 @@ msgstr "Добавить имя"
 msgid "Add subchapter"
 msgstr "Добавить подраздел"
 
-#: src/mmg/jobs.cpp:440
+#: src/mmg/jobs.cpp:441
 msgid "Added on"
 msgstr "Добавлено"
 
-#: src/info/mkvinfo.cpp:152
+#: src/info/mkvinfo.cpp:192
 msgid "AdditionalID: %1%"
 msgstr "Дополнительный ID: %1%"
 
-#: src/info/mkvinfo.cpp:1423
+#: src/info/mkvinfo.cpp:1466
 msgid "Additions"
 msgstr "Дополнения"
 
@@ -1740,7 +1740,7 @@ msgstr "Отрегулировать тайм-коды"
 msgid "After loading a file expand the most important elements"
 msgstr "После загрузки файл расширяет самые важные элементы"
 
-#: src/info/mkvinfo.cpp:796
+#: src/info/mkvinfo.cpp:836
 msgid "Algorithm: %1% (%2%)"
 msgstr "Алгоритм: %1% (%2%)"
 
@@ -1863,7 +1863,7 @@ msgstr "Формат изображения"
 msgid "Aspect ratio factor"
 msgstr "Фактор формата изображения"
 
-#: src/info/mkvinfo.cpp:720
+#: src/info/mkvinfo.cpp:760
 msgid "Aspect ratio type: %1%%2%"
 msgstr "Тип формата изображения: %1%%2%"
 
@@ -1883,7 +1883,7 @@ msgstr "По крайней мере, один <EditionEntry> элемент т�
 msgid "Atatchment extraction"
 msgstr "Извлечение приложения"
 
-#: src/info/mkvinfo.cpp:1267
+#: src/info/mkvinfo.cpp:1310
 msgid "Attached"
 msgstr "Прикрепленный"
 
@@ -1901,7 +1901,7 @@ msgstr "Стиль прикрепления:"
 
 #: src/mmg/mmg_dialog.cpp:306
 #: src/mmg/tabs/attachments.cpp:155
-#: src/info/mkvinfo.cpp:1255
+#: src/info/mkvinfo.cpp:1298
 msgid "Attachments"
 msgstr "Вложения"
 
@@ -1963,7 +1963,7 @@ msgstr "BZ2_bzCompressInit() не удалось. Результат: %1%\n"
 msgid "Binary (displayed as hex numbers)"
 msgstr "Binary (отображается в виде шестнадцатеричных чисел)"
 
-#: src/info/mkvinfo.cpp:632
+#: src/info/mkvinfo.cpp:672
 msgid "Bit depth: %1%"
 msgstr "Разрядность: %1%"
 
@@ -1972,29 +1972,29 @@ msgstr "Разрядность: %1%"
 msgid "Bits per sample, mostly used for PCM."
 msgstr "Биты в выборке, в основном используется для PCM."
 
-#: src/info/mkvinfo.cpp:144
+#: src/info/mkvinfo.cpp:184
 msgid "Block (track number %1%, %2% frame(s), timecode %|3$.3f|s = %4%)"
 msgstr "Block (номер трека %1%, %2% кадр(ы), тайм-код %|3$.3f|s = %4%)"
 
-#: src/info/mkvinfo.cpp:158
+#: src/info/mkvinfo.cpp:198
 msgid "Block additional ID: %1%"
 msgstr "Дополнительный блок ID: %1%"
 
-#: src/info/mkvinfo.cpp:153
+#: src/info/mkvinfo.cpp:193
 msgid "Block additional: %1%"
 msgstr "Дополнительный блок: %1%"
 
-#: src/info/mkvinfo.cpp:146
+#: src/info/mkvinfo.cpp:186
 msgid "Block duration: %1%.%|2$06d|ms"
 msgstr "Блок продолжительности: %1%.%|2$06d|ms"
 
 #: src/extract/tracks.cpp:414
 #: src/extract/timecodes_v2.cpp:283
-#: src/info/mkvinfo.cpp:1329
+#: src/info/mkvinfo.cpp:1372
 msgid "Block group"
 msgstr "Блок группы"
 
-#: src/info/mkvinfo.cpp:150
+#: src/info/mkvinfo.cpp:190
 msgid "Block virtual: %1%"
 msgstr "Виртуальный блок: %1%"
 
@@ -2070,7 +2070,7 @@ msgstr "Категория не завершенную нулем"
 
 #: src/extract/tracks.cpp:464
 #: src/extract/timecodes_v2.cpp:362
-#: src/info/mkvinfo.cpp:1946
+#: src/info/mkvinfo.cpp:2052
 msgid "Caught exception"
 msgstr "Пойманное исключение"
 
@@ -2102,11 +2102,11 @@ msgstr "Изменение mmg предпочтения и параметры"
 msgid "Changes to this list do not take effect until mmg is restarted."
 msgstr "Изменения в этот список не вступят в силу до mmg будет перезапущен."
 
-#: src/info/mkvinfo.cpp:627
+#: src/info/mkvinfo.cpp:667
 msgid "Channel positions: %1%"
 msgstr "Положения канала: %1%"
 
-#: src/info/mkvinfo.cpp:621
+#: src/info/mkvinfo.cpp:661
 msgid "Channels: %1%"
 msgstr "Каналы: %1%"
 
@@ -2114,19 +2114,19 @@ msgstr "Каналы: %1%"
 msgid "Chapter Editor"
 msgstr "Редактор глав"
 
-#: src/info/mkvinfo.cpp:488
+#: src/info/mkvinfo.cpp:528
 msgid "Chapter Translate"
 msgstr "Переводчик глав"
 
-#: src/info/mkvinfo.cpp:501
+#: src/info/mkvinfo.cpp:541
 msgid "Chapter Translate Codec: %1%"
 msgstr "Кодек переводчика глав: %1%"
 
-#: src/info/mkvinfo.cpp:497
+#: src/info/mkvinfo.cpp:537
 msgid "Chapter Translate Edition UID: %1%"
 msgstr "Выпуск UID переводчика глав: %1%"
 
-#: src/info/mkvinfo.cpp:505
+#: src/info/mkvinfo.cpp:545
 msgid "Chapter Translate ID: %1%"
 msgstr "ID Переводчика глав: %1%"
 
@@ -2188,7 +2188,7 @@ msgstr "Проверка главы удалась"
 
 #: src/mmg/options/chapters.cpp:130
 #: src/mmg/tabs/global.cpp:273
-#: src/info/mkvinfo.cpp:1736
+#: src/info/mkvinfo.cpp:1812
 msgid "Chapters"
 msgstr "Главы"
 
@@ -2273,7 +2273,7 @@ msgstr "Выберите входной файл чтобы добавить"
 msgid "Choose an input file to append"
 msgstr "Выберите входной файл чтобы приложить"
 
-#: src/mmg/jobs.cpp:409
+#: src/mmg/jobs.cpp:410
 #: src/mmg/mmg_dialog.cpp:334
 #: src/mmg/mmg_dialog.cpp:430
 #: src/mmg/mmg_dialog.cpp:738
@@ -2322,7 +2322,7 @@ msgstr "Закрыть текущий файл без сохранения"
 
 #: src/extract/tracks.cpp:396
 #: src/extract/timecodes_v2.cpp:264
-#: src/info/mkvinfo.cpp:1886
+#: src/info/mkvinfo.cpp:1989
 msgid "Cluster"
 msgstr "Кластер"
 
@@ -2334,17 +2334,17 @@ msgstr "Длина кластера '%1%' вне досягаемости (0..65
 msgid "Cluster length '%1%' out of range (100..32000).\n"
 msgstr "Длина кластера '%1%' вне досягаемости (100..32000).\n"
 
-#: src/info/mkvinfo.cpp:168
+#: src/info/mkvinfo.cpp:208
 msgid "Cluster position: %1%"
 msgstr "Кластер позиции: %1%"
 
-#: src/info/mkvinfo.cpp:169
+#: src/info/mkvinfo.cpp:209
 msgid "Cluster previous size: %1%"
 msgstr "Кластер прежнего размера: %1%"
 
 #: src/extract/tracks.cpp:405
 #: src/extract/timecodes_v2.cpp:279
-#: src/info/mkvinfo.cpp:167
+#: src/info/mkvinfo.cpp:207
 msgid "Cluster timecode: %|1$.3f|s"
 msgstr "Кластер тайм-кода: %|1$.3f|s"
 
@@ -2353,19 +2353,19 @@ msgstr "Кластер тайм-кода: %|1$.3f|s"
 msgid "Codec ID"
 msgstr "Кодек ID"
 
-#: src/info/mkvinfo.cpp:974
+#: src/info/mkvinfo.cpp:1016
 msgid "Codec ID: %1%"
 msgstr "Кодек ID: %1%"
 
-#: src/info/mkvinfo.cpp:1011
+#: src/info/mkvinfo.cpp:1053
 msgid "Codec decode all: %1%"
 msgstr "Кодек декодировать все: %1%"
 
-#: src/info/mkvinfo.cpp:1006
+#: src/info/mkvinfo.cpp:1048
 msgid "Codec download URL: %1%"
 msgstr "Кодек скачать URL: %1%"
 
-#: src/info/mkvinfo.cpp:1002
+#: src/info/mkvinfo.cpp:1044
 msgid "Codec info URL: %1%"
 msgstr "Кодек информация URL: %1%"
 
@@ -2374,19 +2374,19 @@ msgstr "Кодек информация URL: %1%"
 msgid "Codec name"
 msgstr "Название кодека"
 
-#: src/info/mkvinfo.cpp:993
+#: src/info/mkvinfo.cpp:1035
 msgid "Codec name: %1%"
 msgstr "Название кодека: %1%"
 
-#: src/info/mkvinfo.cpp:998
+#: src/info/mkvinfo.cpp:1040
 msgid "Codec settings: %1%"
 msgstr "Настройки кодека: %1%"
 
-#: src/info/mkvinfo.cpp:170
+#: src/info/mkvinfo.cpp:210
 msgid "Codec state: %1%"
 msgstr "Состояние кодека: %1%"
 
-#: src/info/mkvinfo.cpp:989
+#: src/info/mkvinfo.cpp:1031
 msgid "CodecPrivate, length %1%%2%"
 msgstr "CodecPrivate, длина %1%%2%"
 
@@ -2394,7 +2394,7 @@ msgstr "CodecPrivate, длина %1%%2%"
 msgid "Collapse all entries so that none of their sub-entries will be shown"
 msgstr "Свернуть все записи так, что никто их не соответствующие записи будут показаны"
 
-#: src/info/mkvinfo.cpp:729
+#: src/info/mkvinfo.cpp:769
 msgid "Colour space: %1%"
 msgstr "Цветовое пространство: %1%"
 
@@ -2439,19 +2439,19 @@ msgstr "Конфигурация загружена."
 msgid "Configuration saved."
 msgstr "Настройки сохранены."
 
-#: src/info/mkvinfo.cpp:786
+#: src/info/mkvinfo.cpp:826
 msgid "Content compression"
 msgstr "Сжатие содержания"
 
-#: src/info/mkvinfo.cpp:751
+#: src/info/mkvinfo.cpp:791
 msgid "Content encoding"
 msgstr "Кодировка содержания"
 
-#: src/info/mkvinfo.cpp:743
+#: src/info/mkvinfo.cpp:783
 msgid "Content encodings"
 msgstr "Кодирование содержания"
 
-#: src/info/mkvinfo.cpp:813
+#: src/info/mkvinfo.cpp:853
 msgid "Content encryption"
 msgstr "Шифрование содержания"
 
@@ -2471,7 +2471,7 @@ msgstr "CorePicture кадр %1% недействительный размер �
 msgid "CorePicture frame %1% not supported.\n"
 msgstr "CorePicture кадр %1% не поддерживается.\n"
 
-#: src/mmg/jobs.cpp:183
+#: src/mmg/jobs.cpp:184
 #: src/mmg/mux_dialog.cpp:130
 #: src/mmg/tabs/input.cpp:311
 #, c-format
@@ -2608,15 +2608,15 @@ msgstr "Обрезка параметров: не дан в форме <TID>:<le
 msgid "Cropping:"
 msgstr "Обрезка:"
 
-#: src/info/mkvinfo.cpp:1198
+#: src/info/mkvinfo.cpp:1241
 msgid "Cue block number: %1%"
 msgstr "Номер блока Cue: %1%"
 
-#: src/info/mkvinfo.cpp:1194
+#: src/info/mkvinfo.cpp:1237
 msgid "Cue cluster position: %1%"
 msgstr "Положение кластера Cue: %1%"
 
-#: src/info/mkvinfo.cpp:1203
+#: src/info/mkvinfo.cpp:1246
 msgid "Cue codec state: %1%"
 msgstr "Cue состояние кодека: %1%"
 
@@ -2624,27 +2624,27 @@ msgstr "Cue состояние кодека: %1%"
 msgid "Cue name format:"
 msgstr "Cue формат имени:"
 
-#: src/info/mkvinfo.cpp:1169
+#: src/info/mkvinfo.cpp:1212
 msgid "Cue point"
 msgstr "Cue точка"
 
-#: src/info/mkvinfo.cpp:1219
+#: src/info/mkvinfo.cpp:1262
 msgid "Cue ref cluster: %1%"
 msgstr "Cue реф кластер: %1%"
 
-#: src/info/mkvinfo.cpp:1227
+#: src/info/mkvinfo.cpp:1270
 msgid "Cue ref codec state: %1%"
 msgstr "Cue реф кодек состояние: %1%"
 
-#: src/info/mkvinfo.cpp:1223
+#: src/info/mkvinfo.cpp:1266
 msgid "Cue ref number: %1%"
 msgstr "Cue реф номер: %1%"
 
-#: src/info/mkvinfo.cpp:1215
+#: src/info/mkvinfo.cpp:1258
 msgid "Cue ref time: %|1$.3f|s"
 msgstr "Cue реф время: %|1$.3f|s"
 
-#: src/info/mkvinfo.cpp:1206
+#: src/info/mkvinfo.cpp:1249
 msgid "Cue reference"
 msgstr "Cue ссылки"
 
@@ -2660,19 +2660,19 @@ msgstr "Cue лист анализатор: Неверный код (получи
 msgid "Cue sheet parser: No INDEX entry found for the previous TRACK entry (current line: %1%)\n"
 msgstr "Cue лист анализатор: нет нашли указателя на предыдущей записи трека (текущей строки: %1%)\n"
 
-#: src/info/mkvinfo.cpp:1178
+#: src/info/mkvinfo.cpp:1221
 msgid "Cue time: %|1$.3f|s"
 msgstr "Cue время: %|1$.3f|s"
 
-#: src/info/mkvinfo.cpp:1181
+#: src/info/mkvinfo.cpp:1224
 msgid "Cue track positions"
 msgstr "Позиция Cue трека"
 
-#: src/info/mkvinfo.cpp:1190
+#: src/info/mkvinfo.cpp:1233
 msgid "Cue track: %1%"
 msgstr "Cue трек: %1%"
 
-#: src/info/mkvinfo.cpp:1153
+#: src/info/mkvinfo.cpp:1196
 msgid "Cues (subentries will be skipped)"
 msgstr "Cues (подстатьи будут пропущены)"
 
@@ -2681,7 +2681,7 @@ msgstr "Cues (подстатьи будут пропущены)"
 msgid "Cues:"
 msgstr "Cues:"
 
-#: src/mmg/jobs.cpp:428
+#: src/mmg/jobs.cpp:429
 msgid "Current and past jobs:"
 msgstr "Текущие и прошлые задания:"
 
@@ -2689,12 +2689,12 @@ msgstr "Текущие и прошлые задания:"
 msgid "Current command line"
 msgstr "Текущая командная строка"
 
-#: src/mmg/jobs.cpp:173
+#: src/mmg/jobs.cpp:174
 #, c-format
 msgid "Current job ID %d:"
 msgstr "ID текущий работы %d:"
 
-#: src/mmg/jobs.cpp:79
+#: src/mmg/jobs.cpp:80
 msgid "Current job ID 1000:"
 msgstr "ID текущий работы 1000:"
 
@@ -2706,7 +2706,7 @@ msgstr "Текущее значение:"
 msgid "Current version:"
 msgstr "Текущая версия:"
 
-#: src/mmg/jobs.cpp:483
+#: src/mmg/jobs.cpp:484
 msgid "D&elete"
 msgstr "&Удалить"
 
@@ -2746,11 +2746,11 @@ msgstr "DTS_Header проблема: не достаточно данных, ч�
 msgid "Data is not allowed inside <%1%>."
 msgstr "Данные не пустили <%1%>."
 
-#: src/info/mkvinfo.cpp:555
+#: src/info/mkvinfo.cpp:595
 msgid "Date (invalid, value: %1%)"
 msgstr "Дата (недопустимый, значение: %1%)"
 
-#: src/info/mkvinfo.cpp:553
+#: src/info/mkvinfo.cpp:593
 msgid "Date: %1% UTC"
 msgstr "Дата: %1% UTC"
 
@@ -2768,11 +2768,11 @@ msgstr "По умолчанию"
 msgid "Default duration"
 msgstr "По умолчанию продолжительность"
 
-#: src/info/mkvinfo.cpp:1029
+#: src/info/mkvinfo.cpp:1071
 msgid "Default duration: %|1$.3f|ms (%|2$.3f| fps for a video track)"
 msgstr "По умолчанию продолжительность: %|1$.3f|ms (%|2$.3f| fps для видео дорожки)"
 
-#: src/info/mkvinfo.cpp:1043
+#: src/info/mkvinfo.cpp:1086
 msgid "Default flag: %1%"
 msgstr "По умолчанию флаг: %1%"
 
@@ -2788,7 +2788,7 @@ msgstr "Задержка (в ms):"
 msgid "Delay this track's timecodes by a couple of ms. Can be negative. Works with all track types, but negative delays should not be used with video tracks."
 msgstr "Задержка тайм-кодов этой дорожки на несколько ms. Может быть негативно. Работы со всеми типами дорожки, но отрицательные задержки не должны использоваться с видеодорожками."
 
-#: src/info/mkvinfo.cpp:156
+#: src/info/mkvinfo.cpp:196
 msgid "Delay: %|1$.3f|ms"
 msgstr "Задержка: %|1$.3f|ms"
 
@@ -2796,11 +2796,11 @@ msgstr "Задержка: %|1$.3f|ms"
 msgid "Delete all occurences of a property"
 msgstr "Удалить все вхождения свойства"
 
-#: src/mmg/jobs.cpp:484
+#: src/mmg/jobs.cpp:485
 msgid "Delete the selected job(s) from the job queue"
 msgstr "Удалить выбранное задание(я) из очереди"
 
-#: src/mmg/jobs.cpp:438
+#: src/mmg/jobs.cpp:439
 msgid "Description"
 msgstr "Описание"
 
@@ -2822,7 +2822,7 @@ msgstr "Dirac"
 msgid "Disable header removal compression for audio and video tracks by default"
 msgstr "Отключить удаление заголовка сжатия для аудио и видео треков по умолчанию"
 
-#: src/mmg/jobs.cpp:479
+#: src/mmg/jobs.cpp:480
 msgid "Disable the selected job(s) and sets their status to 'done'"
 msgstr "Отключить выбранный работу(ы) и устанавливает статус на 'Готово'"
 
@@ -2839,11 +2839,11 @@ msgstr "Отключение сшивание на всех направлени
 msgid "Display dimensions: not given in the form <TID>:<width>x<height>, e.g. 1:640x480 (argument was '%1%').\n"
 msgstr "Размеры дисплея: не заданы в виде <TID>:<width>x<height>, например 1:640x480 (параметр был '%1%').\n"
 
-#: src/info/mkvinfo.cpp:668
+#: src/info/mkvinfo.cpp:708
 msgid "Display height: %1%"
 msgstr "Высота дисплея: %1%"
 
-#: src/info/mkvinfo.cpp:695
+#: src/info/mkvinfo.cpp:735
 msgid "Display unit: %1%%2%"
 msgstr "Дисплейный блок: %1%%2%"
 
@@ -2855,7 +2855,7 @@ msgstr "Информация использования дисплея"
 msgid "Display width/height:"
 msgstr "Ширина/высота дисплея:"
 
-#: src/info/mkvinfo.cpp:663
+#: src/info/mkvinfo.cpp:703
 msgid "Display width: %1%"
 msgstr "Ширина дисплея: %1%"
 
@@ -2867,15 +2867,15 @@ msgstr "Не добавить запись по главам в мета-пои�
 msgid "Do not write meta seek elements at all."
 msgstr "Не писать мета искать элементы на всех."
 
-#: src/info/mkvinfo.cpp:1800
+#: src/info/mkvinfo.cpp:1876
 msgid "Doc type read version: %1%"
 msgstr "Тип документа читал версию: %1%"
 
-#: src/info/mkvinfo.cpp:1797
+#: src/info/mkvinfo.cpp:1873
 msgid "Doc type version: %1%"
 msgstr "Версия типа документа: %1%"
 
-#: src/info/mkvinfo.cpp:1794
+#: src/info/mkvinfo.cpp:1870
 msgid "Doc type: %1%"
 msgstr "Тип документа: %1%"
 
@@ -2895,11 +2895,11 @@ msgstr "Сделан.\n"
 msgid "Download URL:"
 msgstr "Скачать URL: "
 
-#: src/info/mkvinfo.cpp:157
+#: src/info/mkvinfo.cpp:197
 msgid "Duration: %|1$.3f|ms"
 msgstr "Продолжительность: %|1$.3f|ms"
 
-#: src/info/mkvinfo.cpp:532
+#: src/info/mkvinfo.cpp:572
 msgid "Duration: %|1$.3f|s (%2%)"
 msgstr "Продолжительность: %|1$.3f|s (%2%)"
 
@@ -2907,23 +2907,23 @@ msgstr "Продолжительность: %|1$.3f|s (%2%)"
 msgid "E&xit\tCtrl-Q"
 msgstr "&Выход\tCtrl-Q"
 
-#: src/info/mkvinfo.cpp:1770
+#: src/info/mkvinfo.cpp:1846
 msgid "EBML head"
 msgstr "EBML глава"
 
-#: src/info/mkvinfo.cpp:1788
+#: src/info/mkvinfo.cpp:1864
 msgid "EBML maximum ID length: %1%"
 msgstr "EBML максимальная длина ID: %1%"
 
-#: src/info/mkvinfo.cpp:1791
+#: src/info/mkvinfo.cpp:1867
 msgid "EBML maximum size length: %1%"
 msgstr "EBML максимальная длина размера: %1%"
 
-#: src/info/mkvinfo.cpp:1785
+#: src/info/mkvinfo.cpp:1861
 msgid "EBML read version: %1%"
 msgstr "EBML читать версию: %1%"
 
-#: src/info/mkvinfo.cpp:1782
+#: src/info/mkvinfo.cpp:1858
 msgid "EBML version: %1%"
 msgstr "EBML версия: %1%"
 
@@ -2939,7 +2939,7 @@ msgstr "В каждой главе, и каждое издание имеет у
 msgid "Each edition must contain at least one chapter."
 msgstr "Каждый выпуск должен содержать как минимум одну главу."
 
-#: src/info/mkvinfo.cpp:141
+#: src/info/mkvinfo.cpp:181
 msgid "EbmlVoid (size: %1%)"
 msgstr "EbmlVoid (размер: %1%)"
 
@@ -2978,7 +2978,7 @@ msgstr "Элементы в категории '%1%' ('--edit %2%'):\n"
 msgid "Enable splitting..."
 msgstr "Включить разбиение..."
 
-#: src/info/mkvinfo.cpp:963
+#: src/info/mkvinfo.cpp:1005
 msgid "Enabled: %1%"
 msgstr "Включено: %1%"
 
@@ -2986,11 +2986,11 @@ msgstr "Включено: %1%"
 msgid "Enables splitting of the output into more than one file. You can split after a given size, after a given amount of time has passed in each file or after a list of timecodes."
 msgstr "Позволяет расщепления выход на более чем один файл. Вы можете разделить по истечении определенного размера, после определенного количества времени прошло в каждом файле или после список тайм-кодов."
 
-#: src/info/mkvinfo.cpp:823
+#: src/info/mkvinfo.cpp:863
 msgid "Encryption algorithm: %1% (%2%)"
 msgstr "Криптоалгоритм: %1% (%2%)"
 
-#: src/info/mkvinfo.cpp:835
+#: src/info/mkvinfo.cpp:875
 msgid "Encryption key ID: %1%"
 msgstr "Ключ шифрования ID: %1%"
 
@@ -3069,7 +3069,7 @@ msgstr "Ошибка: "
 msgid "Error: %1% parser failed for '%2%', line %3%, column %4%: %5%\n"
 msgstr "Ошибка: %1% сбой анализатора '%2%', строка %3%, столбец %4%: %5%\n"
 
-#: src/info/mkvinfo.cpp:1825
+#: src/info/mkvinfo.cpp:1928
 msgid "Error: Couldn't open input file %1% (%2%).\n"
 msgstr "Ошибка: не удалось открыть входной файл %1% (%2%).\n"
 
@@ -3195,7 +3195,7 @@ msgstr "Не удалось разобрать USF кодек личные да�
 msgid "Failed to parse the USF end tag for track %1%: %2%\n"
 msgstr "Не удалось разобрать теги USF конца в треке %1%: %2%\n"
 
-#: src/info/mkvinfo.cpp:563
+#: src/info/mkvinfo.cpp:603
 msgid "Family UID:%1%"
 msgstr "Род UID:%1%"
 
@@ -3211,7 +3211,7 @@ msgstr "Файл '%1%': контейнер: %2%"
 msgid "File '%1%': unsupported container: %2%\n"
 msgstr "Файл '%1%': неподдерживаемое контейнера: %2%\n"
 
-#: src/info/mkvinfo.cpp:1292
+#: src/info/mkvinfo.cpp:1335
 msgid "File UID: %1%"
 msgstr "Файл UID: %1%"
 
@@ -3226,11 +3226,11 @@ msgstr "Файл содержит меньшее количество кадро
 msgid "File creation failed"
 msgstr "Ошибка создания файла"
 
-#: src/info/mkvinfo.cpp:1288
+#: src/info/mkvinfo.cpp:1331
 msgid "File data, size: %1%"
 msgstr "Файл данных, размер: %1%"
 
-#: src/info/mkvinfo.cpp:1276
+#: src/info/mkvinfo.cpp:1319
 msgid "File description: %1%"
 msgstr "Описание файла: %1%"
 
@@ -3257,7 +3257,7 @@ msgstr "Файл уже обработан"
 msgid "File modified"
 msgstr "Файл изменен"
 
-#: src/info/mkvinfo.cpp:1280
+#: src/info/mkvinfo.cpp:1323
 msgid "File name: %1%"
 msgstr "Имя файла: %1%"
 
@@ -3287,16 +3287,16 @@ msgstr "Файл/сегмент название:"
 msgid "Files cannot be appended to themselves. The argument for '--append-to' was invalid.\n"
 msgstr "Файлы не могут быть приложены к себе. Аргументом в пользу '--append-to' является недействительным.\n"
 
-#: src/mmg/jobs.cpp:357
+#: src/mmg/jobs.cpp:358
 #, c-format
 msgid "Finished job ID %d on %s: status '%s'"
 msgstr "Законченное задание ID %d на %s: статус '%s'"
 
-#: src/mmg/jobs.cpp:444
+#: src/mmg/jobs.cpp:445
 msgid "Finished on"
 msgstr "Законченный на"
 
-#: src/mmg/jobs.cpp:141
+#: src/mmg/jobs.cpp:142
 #, c-format
 msgid "Finished processing on %s"
 msgstr "Готовые обработки на %s"
@@ -3322,7 +3322,7 @@ msgstr "Заставлять Xiph стиль сшивания."
 msgid "Force the translations for 'code' to be used."
 msgstr "Заставлять переводы для 'код' использоваться."
 
-#: src/info/mkvinfo.cpp:1047
+#: src/info/mkvinfo.cpp:1090
 msgid "Forced flag: %1%"
 msgstr "Принудительный флаг: %1%"
 
@@ -3378,16 +3378,16 @@ msgstr "FourCC: Неверный трак ID в '%1% %2%'.\n"
 msgid "FourCC: Missing track ID in '%1% %2%'.\n"
 msgstr "FourCC: Отсутствующий трак ID в '%1% %2%'.\n"
 
-#: src/info/mkvinfo.cpp:155
+#: src/info/mkvinfo.cpp:195
 msgid "Frame number: %1%"
 msgstr "Число кадров: %1%"
 
-#: src/info/mkvinfo.cpp:733
+#: src/info/mkvinfo.cpp:773
 msgid "Frame rate: %1%"
 msgstr "Частота кадров: %1%"
 
-#: src/info/mkvinfo.cpp:145
-#: src/info/mkvinfo.cpp:164
+#: src/info/mkvinfo.cpp:185
+#: src/info/mkvinfo.cpp:204
 msgid "Frame with size %1%%2%%3%"
 msgstr "Кадр с размером %1%%2%%3%"
 
@@ -3395,7 +3395,7 @@ msgstr "Кадр с размером %1%%2%%3%"
 msgid "Free-form edit field for user defined options for this track. What you input here is added after all the other options mmg adds so that you could overwrite any of mmg's options for this track. All occurences of the string \"<TID>\" will be replaced by the track's track ID."
 msgstr "Свободной форме текстовое поле для пользовательских опций для этого трека. То, что вы здесь ввода добавляется после всех других вариантов mmg добавляет, так что вы могли бы переписать любой mmg's в специальных опций для этого трека. Все вхождения строки \"<TID>\" будет заменен на трек трек ID."
 
-#: src/info/mkvinfo.cpp:704
+#: src/info/mkvinfo.cpp:744
 msgid "Gamma: %1%"
 msgstr "Гамма: %1%"
 
@@ -3511,7 +3511,7 @@ msgstr ""
 msgid "Here you can set the values for the language and the country that you want to apply to all the chapters below and including the currently selected entry."
 msgstr "Здесь вы можете задать значения для языка и страны, которые вы хотите применить ко всем главам ниже, и в том числе выбранный элемент."
 
-#: src/mmg/jobs.cpp:433
+#: src/mmg/jobs.cpp:434
 msgid "ID"
 msgstr "ID"
 
@@ -3616,7 +3616,7 @@ msgstr "Ввод слишком долгий: %1% > %2%"
 msgid "Interface language:"
 msgstr "Язык интерфейса:"
 
-#: src/info/mkvinfo.cpp:708
+#: src/info/mkvinfo.cpp:748
 msgid "Interlaced: %1%"
 msgstr "Чересстрочная: %1%"
 
@@ -3907,11 +3907,11 @@ msgstr "Задание, добавленное к очереди задания"
 msgid "Job description"
 msgstr "Описание задания"
 
-#: src/mmg/jobs.cpp:384
+#: src/mmg/jobs.cpp:385
 msgid "Job output"
 msgstr "Задание выведено"
 
-#: src/mmg/jobs.cpp:425
+#: src/mmg/jobs.cpp:426
 msgid "Job queue management"
 msgstr "Управление очереди задания"
 
@@ -3927,11 +3927,11 @@ msgstr "Сохраните только BlockAdditions до этого уров�
 msgid "LZO compression failed. Result: %1%\n"
 msgstr "Сжатие LZO потерпело неудачу. Результат: %1%\n"
 
-#: src/info/mkvinfo.cpp:154
+#: src/info/mkvinfo.cpp:194
 msgid "Lace number: %1%"
 msgstr "Число шнурка: %1%"
 
-#: src/info/mkvinfo.cpp:1039
+#: src/info/mkvinfo.cpp:1082
 msgid "Lacing flag: %1%"
 msgstr "Флажок сшивания: %1%"
 
@@ -3955,7 +3955,7 @@ msgstr "Язык не должен завершаться нулем"
 msgid "Language:"
 msgstr "Язык:"
 
-#: src/info/mkvinfo.cpp:1051
+#: src/info/mkvinfo.cpp:1094
 msgid "Language: %1%"
 msgstr "Язык: %1%"
 
@@ -4022,11 +4022,11 @@ msgstr "Загрузить мультиплексированые настрой
 msgid "Log files (*.txt)|*.txt|%s"
 msgstr "Log файлы (*.txt)|*.txt|%s"
 
-#: src/mmg/jobs.cpp:90
+#: src/mmg/jobs.cpp:91
 msgid "Log output:"
 msgstr "Log вывод:"
 
-#: src/info/mkvinfo.cpp:853
+#: src/info/mkvinfo.cpp:893
 msgid "MD5"
 msgstr "MD5"
 
@@ -4104,11 +4104,11 @@ msgstr "Matroska файлы (*.mkv;*.mka;*.mks;*.mk3d)|*.mkv;*.mka;*.mks;*.mk3d|
 msgid "Matroska files (*.mkv;*.mka;*.mks;*.mk3d)|*.mkv;*.mka;*.mks;*.mk3d|%s"
 msgstr "Matroska файлы (*.mkv;*.mka;*.mks;*.mk3d)|*.mkv;*.mka;*.mks;*.mk3d|%s"
 
-#: src/info/mkvinfo.cpp:1060
+#: src/info/mkvinfo.cpp:1103
 msgid "Max BlockAddition ID: %1%"
 msgstr "Максимальное блочное суммирование ID: %1%"
 
-#: src/info/mkvinfo.cpp:1024
+#: src/info/mkvinfo.cpp:1066
 msgid "MaxCache: %1%"
 msgstr "Максимальный кэш: %1%"
 
@@ -4125,11 +4125,11 @@ msgstr "Ошибка распределения памяти: %1% (%2%).\n"
 msgid "Memory for a RealAudio/RealVideo frame could not be allocated.\n"
 msgstr "Память для кадра RealAudio/RealVideo не могла быть распределена.\n"
 
-#: src/info/mkvinfo.cpp:1284
+#: src/info/mkvinfo.cpp:1327
 msgid "Mime type: %1%"
 msgstr "MIME тип: %1%"
 
-#: src/info/mkvinfo.cpp:1020
+#: src/info/mkvinfo.cpp:1062
 msgid "MinCache: %1%"
 msgstr "Минимальный кэш: %1%"
 
@@ -4178,7 +4178,7 @@ msgstr "Отсутствует имя выходного файла в пара�
 msgid "Modification of properties in the section '%1%' was requested, but no corresponding level 1 element was found in the file. %2%\n"
 msgstr "Модификацию свойств в разделе '%1%' требовали, но никакой соответствующий элемент уровня 1 не был найден в файле. %2%\n"
 
-#: src/info/mkvinfo.cpp:1431
+#: src/info/mkvinfo.cpp:1474
 msgid "More"
 msgstr "Больше"
 
@@ -4210,15 +4210,15 @@ msgstr "Больше чем одна дорожка должна быть при
 msgid "More than one track with the track number %1% found.\n"
 msgstr "Больше чем одна дорожка с номером дорожки %1% найдена.\n"
 
-#: src/mmg/jobs.cpp:471
+#: src/mmg/jobs.cpp:472
 msgid "Move the selected job(s) down"
 msgstr "Переместите выбранное задание(я) вниз"
 
-#: src/mmg/jobs.cpp:468
+#: src/mmg/jobs.cpp:469
 msgid "Move the selected job(s) up"
 msgstr "Переместите выбранное задание(я) вверх"
 
-#: src/info/mkvinfo.cpp:538
+#: src/info/mkvinfo.cpp:578
 msgid "Muxing application: %1%"
 msgstr "Обработка применение: %1%"
 
@@ -4252,7 +4252,7 @@ msgstr "Название для этой дорожки, например, \"к�
 msgid "Name:"
 msgstr "Имя:"
 
-#: src/info/mkvinfo.cpp:968
+#: src/info/mkvinfo.cpp:1010
 msgid "Name: %1%"
 msgstr "Имя: %1%"
 
@@ -4269,11 +4269,11 @@ msgstr "Новое значение:"
 msgid "Next filename"
 msgstr "Следующее имя файла"
 
-#: src/info/mkvinfo.cpp:582
+#: src/info/mkvinfo.cpp:622
 msgid "Next filename: %1%"
 msgstr "Следующее имя файла: %1%"
 
-#: src/info/mkvinfo.cpp:1865
+#: src/info/mkvinfo.cpp:1968
 msgid "Next level 0 element is not a segment but %1%"
 msgstr "Следующий элемент уровня 0 не сегмент, но %1%"
 
@@ -4281,7 +4281,7 @@ msgstr "Следующий элемент уровня 0 не сегмент, н
 msgid "Next segment UID:"
 msgstr "Следующий сегмент UID:"
 
-#: src/info/mkvinfo.cpp:578
+#: src/info/mkvinfo.cpp:618
 msgid "Next segment UID:%1%"
 msgstr "Следующий сегмент UID: %1%"
 
@@ -4298,7 +4298,7 @@ msgstr "Нет %1%, определенных в '--%2% %3%'.\n"
 msgid "No AC3 header found in first frame; track will be skipped.\n"
 msgstr "Не найден AC3 заголовок в первом кадре; дорожка будет пропущена.\n"
 
-#: src/info/mkvinfo.cpp:1839
+#: src/info/mkvinfo.cpp:1942
 msgid "No EBML head found."
 msgstr "Заголовок EBML не найден."
 
@@ -4348,7 +4348,7 @@ msgid "No file loaded"
 msgstr "Нет загруженного файла"
 
 #: src/propedit/options.cpp:27
-#: src/info/mkvinfo.cpp:1967
+#: src/info/mkvinfo.cpp:2073
 msgid "No file name given.\n"
 msgstr "Не дано имя файла.\n"
 
@@ -4374,7 +4374,7 @@ msgstr "Не указано имя результирующего файла, б
 
 #: src/extract/tracks.cpp:354
 #: src/extract/timecodes_v2.cpp:198
-#: src/info/mkvinfo.cpp:1853
+#: src/info/mkvinfo.cpp:1956
 msgid "No segment/level 0 element found."
 msgstr "Сегмент/уровень 0 элемент не найден."
 
@@ -4464,7 +4464,7 @@ msgstr "Проверять наличие обновлений"
 msgid "Only one chapter file allowed in '%1% %2%'.\n"
 msgstr "Только один файл в главе позволено '%1% %2%'.\n"
 
-#: src/info/info_cli_parser.cpp:104
+#: src/info/info_cli_parser.cpp:112
 msgid "Only one input file is allowed.\n"
 msgstr "Только один входной файл позволен.\n"
 
@@ -4535,7 +4535,7 @@ msgstr "Опции"
 msgid "Options meant ONLY for developpers. Do not use them. If something is considered to be an officially supported option then it's NOT in this list!"
 msgstr "Опции, предназначенные только для разработчиков. Не используйте их. Если кое-что, как полагают, является официально поддержанной опцией тогда, это не находится в этом списке!"
 
-#: src/info/mkvinfo.cpp:760
+#: src/info/mkvinfo.cpp:800
 msgid "Order: %1%"
 msgstr "Порядок: %1%"
 
@@ -4559,11 +4559,11 @@ msgstr "Выходное имя файла"
 msgid "Output messages in this charset"
 msgstr "Выходные сообщения в этой кодировке"
 
-#: src/mmg/jobs.cpp:388
+#: src/mmg/jobs.cpp:389
 msgid "Output of the selected jobs:"
 msgstr "Вывод выбранных заданий:"
 
-#: src/info/mkvinfo.cpp:616
+#: src/info/mkvinfo.cpp:656
 msgid "Output sampling frequency: %1%"
 msgstr "Выходная частота дискретизации: %1%"
 
@@ -4604,31 +4604,31 @@ msgstr "Анализировать файл полностью и показыв
 msgid "Parse the whole file instead of relying on the index."
 msgstr "Анализировать целый файл вместо того, чтобы положиться на индекс."
 
-#: src/info/mkvinfo.cpp:1630
+#: src/info/mkvinfo.cpp:1706
 msgid "Parsing file"
 msgstr "Синтаксический анализ файла"
 
-#: src/info/mkvinfo.cpp:688
+#: src/info/mkvinfo.cpp:728
 msgid "Pixel crop bottom: %1%"
 msgstr "Обрезать нижний пиксель: %1%"
 
-#: src/info/mkvinfo.cpp:673
+#: src/info/mkvinfo.cpp:713
 msgid "Pixel crop left: %1%"
 msgstr "Обрезать левый пиксель: %1%"
 
-#: src/info/mkvinfo.cpp:683
+#: src/info/mkvinfo.cpp:723
 msgid "Pixel crop right: %1%"
 msgstr "Обрезать правый пиксель: %1%"
 
-#: src/info/mkvinfo.cpp:678
+#: src/info/mkvinfo.cpp:718
 msgid "Pixel crop top: %1%"
 msgstr "Обрезать верхний пиксель: %1%"
 
-#: src/info/mkvinfo.cpp:658
+#: src/info/mkvinfo.cpp:698
 msgid "Pixel height: %1%"
 msgstr "Высота пикселя: %1%"
 
-#: src/info/mkvinfo.cpp:653
+#: src/info/mkvinfo.cpp:693
 msgid "Pixel width: %1%"
 msgstr "Ширина пикселя: %1%"
 
@@ -4665,7 +4665,7 @@ msgstr ""
 msgid "Previous filename"
 msgstr "Предыдущий файл"
 
-#: src/info/mkvinfo.cpp:574
+#: src/info/mkvinfo.cpp:614
 msgid "Previous filename: %1%"
 msgstr "Предыдущий файл: %1%"
 
@@ -4673,7 +4673,7 @@ msgstr "Предыдущий файл: %1%"
 msgid "Previous segment UID:"
 msgstr "Предыдущий UID сегмент:"
 
-#: src/info/mkvinfo.cpp:570
+#: src/info/mkvinfo.cpp:610
 msgid "Previous segment UID:%1%"
 msgstr "Предыдущий UID сегмент: %1%"
 
@@ -4686,16 +4686,16 @@ msgstr "Уникальный ID предыдущего сегмента"
 msgid "Process priority:"
 msgstr "Приоритет процесса:"
 
-#: src/mmg/jobs.cpp:66
+#: src/mmg/jobs.cpp:67
 msgid "Processing 1000/1000"
 msgstr "Обработка 1000/1000"
 
-#: src/mmg/jobs.cpp:172
+#: src/mmg/jobs.cpp:173
 #, c-format
 msgid "Processing job %d/%d"
 msgstr "Обработка задания %d/%d"
 
-#: src/mmg/jobs.cpp:248
+#: src/mmg/jobs.cpp:249
 #: src/mmg/mux_dialog.cpp:191
 msgid "Progress"
 msgstr "Процесс"
@@ -4854,11 +4854,11 @@ msgstr "Закрыть редактор заголовков"
 msgid "Quits mkvinfo"
 msgstr "Закрыть mkvinfo"
 
-#: src/info/mkvinfo.cpp:843
+#: src/info/mkvinfo.cpp:883
 msgid "RSA"
 msgstr "RSA"
 
-#: src/mmg/jobs.cpp:476
+#: src/mmg/jobs.cpp:477
 msgid "Re-enable the selected job(s)"
 msgstr "Вновь дать возможность выбранному заданию(ям)"
 
@@ -4891,19 +4891,19 @@ msgstr "RealMedia файлы могут содержать HE-AAC / AAC+ / SBR A
 msgid "Redirects all messages into this file."
 msgstr "Перенаправлять все сообщения в этот файл."
 
-#: src/info/mkvinfo.cpp:148
+#: src/info/mkvinfo.cpp:188
 msgid "Reference block: %1%.%|2$06d|ms"
 msgstr "Отношение блока: %1%.%|2$06d|ms"
 
-#: src/info/mkvinfo.cpp:147
+#: src/info/mkvinfo.cpp:187
 msgid "Reference block: -%1%.%|2$06d|ms"
 msgstr "Отношение блока: -%1%.%|2$06d|ms"
 
-#: src/info/mkvinfo.cpp:149
+#: src/info/mkvinfo.cpp:189
 msgid "Reference priority: %1%"
 msgstr "Отношение приоритета: %1%"
 
-#: src/info/mkvinfo.cpp:151
+#: src/info/mkvinfo.cpp:191
 msgid "Reference virtual: %1%"
 msgstr "Отношение виртуальное: %1%"
 
@@ -4911,8 +4911,8 @@ msgstr "Отношение виртуальное: %1%"
 msgid "Reload the current file without saving"
 msgstr "Перезагрузить текущий файл без сохранения"
 
-#: src/mmg/jobs.cpp:71
-#: src/mmg/jobs.cpp:73
+#: src/mmg/jobs.cpp:72
+#: src/mmg/jobs.cpp:74
 #: src/mmg/mux_dialog.cpp:76
 msgid "Remaining time:"
 msgstr "Оставшееся время:"
@@ -4953,11 +4953,11 @@ msgstr "Выполнить в поле заголовка редактора"
 msgid "S&how the command line"
 msgstr "&Показать в командной строке"
 
-#: src/mmg/jobs.cpp:506
+#: src/mmg/jobs.cpp:507
 msgid "S&tart selected"
 msgstr "&Начало выбранного"
 
-#: src/info/mkvinfo.cpp:852
+#: src/info/mkvinfo.cpp:892
 msgid "SHA1-160"
 msgstr "SHA1-160"
 
@@ -4982,7 +4982,7 @@ msgstr "Тот же самый каталог как первый входной
 msgid "Sampling frequency in Hz."
 msgstr "Частота дискретизации в Hz."
 
-#: src/info/mkvinfo.cpp:611
+#: src/info/mkvinfo.cpp:651
 msgid "Sampling frequency: %1%"
 msgstr "Частота дискретизации: %1%"
 
@@ -5034,27 +5034,27 @@ msgstr "&Сохранить в файл Matroska"
 msgid "Saves the information from the current file to a text file"
 msgstr "Сохраняет информацию из текущего файла в текстовый файл"
 
-#: src/info/mkvinfo.cpp:774
+#: src/info/mkvinfo.cpp:814
 msgid "Scope: %1% (%2%)"
 msgstr "Область: %1% (%2%)"
 
-#: src/info/mkvinfo.cpp:1121
+#: src/info/mkvinfo.cpp:1164
 msgid "Seek ID:%1% (%2%)"
 msgstr "Искать ID:%1% (%2%)"
 
-#: src/info/mkvinfo.cpp:1109
+#: src/info/mkvinfo.cpp:1152
 msgid "Seek entry"
 msgstr "Искать статью"
 
-#: src/info/mkvinfo.cpp:1097
+#: src/info/mkvinfo.cpp:1140
 msgid "Seek head"
 msgstr "Искать заголовок"
 
-#: src/info/mkvinfo.cpp:1093
+#: src/info/mkvinfo.cpp:1136
 msgid "Seek head (subentries will be skipped)"
 msgstr "Искать заголовок (подстатьи будут пропущены)"
 
-#: src/info/mkvinfo.cpp:1135
+#: src/info/mkvinfo.cpp:1178
 msgid "Seek position: %1%"
 msgstr "Искать позицию: %1%"
 
@@ -5065,7 +5065,7 @@ msgstr "Искать позицию: %1%"
 msgid "Segment"
 msgstr "Сегмент"
 
-#: src/info/mkvinfo.cpp:559
+#: src/info/mkvinfo.cpp:599
 msgid "Segment UID:%1%"
 msgstr "Сегмент UID:%1%"
 
@@ -5078,7 +5078,7 @@ msgstr "Сегмент UIDs:"
 msgid "Segment filename"
 msgstr "Имя файла сегмента"
 
-#: src/info/mkvinfo.cpp:587
+#: src/info/mkvinfo.cpp:627
 msgid "Segment filename: %1%"
 msgstr "Имя файла сегмента: %1%"
 
@@ -5097,7 +5097,7 @@ msgstr "Файлы информации сегмента (*.xml)|*.xml|%s"
 #: src/propedit/propedit_cli_parser.cpp:87
 #: src/propedit/propedit_cli_parser.cpp:160
 #: src/propedit/options.cpp:152
-#: src/info/mkvinfo.cpp:513
+#: src/info/mkvinfo.cpp:553
 #: src/info/qt_ui.cpp:178
 #: src/info/wxwidgets_ui.cpp:208
 msgid "Segment information"
@@ -5105,7 +5105,7 @@ msgstr "Информация сегмента"
 
 #: src/extract/tracks.cpp:389
 #: src/extract/timecodes_v2.cpp:256
-#: src/info/mkvinfo.cpp:884
+#: src/info/mkvinfo.cpp:924
 #: src/info/qt_ui.cpp:179
 #: src/info/wxwidgets_ui.cpp:208
 msgid "Segment tracks"
@@ -5116,11 +5116,11 @@ msgstr "Дорожки сегмента"
 msgid "Segment unique ID"
 msgstr "Уникальный ID сегмента"
 
-#: src/info/mkvinfo.cpp:1861
+#: src/info/mkvinfo.cpp:1964
 msgid "Segment, size %1%"
 msgstr "Сегмент, размер %1%"
 
-#: src/info/mkvinfo.cpp:1859
+#: src/info/mkvinfo.cpp:1962
 msgid "Segment, size unknown"
 msgstr "Сегмент, неизвестного размера"
 
@@ -5265,7 +5265,7 @@ msgstr ""
 msgid "Sets the stereo mode of the video track to this value. If left empty then the track's original stereo mode will be kept or, if it didn't have one, none will be set at all."
 msgstr "Устанавливает стерео режим отслеживать видео к этому значению. Если оставить пустым, то исходный режим стерео дорожки будут сохранены или, если она не одна, никто не будет установлено на всех."
 
-#: src/info/mkvinfo.cpp:806
+#: src/info/mkvinfo.cpp:846
 msgid "Settings: %1%"
 msgstr "Настройки: %1%"
 
@@ -5293,7 +5293,7 @@ msgstr "&Показать все элементы\tCtrl-A"
 msgid "Show about dialog"
 msgstr "Показать диалог о mmg"
 
-#: src/info/info_cli_parser.cpp:49
+#: src/info/info_cli_parser.cpp:50
 msgid "Show all bytes of each frame as a hex dump."
 msgstr "Показать всем байтам каждого кадра как шестнадцатеричный дамп."
 
@@ -5309,11 +5309,15 @@ msgstr "Показать отладку mmg в окне"
 msgid "Show program information"
 msgstr "Показать информацию о программе"
 
+#: src/info/info_cli_parser.cpp:48
+msgid "Show statistics for each track in verbose mode."
+msgstr ""
+
 #: src/mmg/mmg_dialog.cpp:276
 msgid "Show the command line mmg creates for mkvmerge"
 msgstr "Показать mmg командной строки, создает для mkvmerge"
 
-#: src/info/info_cli_parser.cpp:48
+#: src/info/info_cli_parser.cpp:49
 msgid "Show the first 16 bytes of each frame as a hex dump."
 msgstr "Показ первые 16 байтов каждого кадра как шестнадцатеричный дамп."
 
@@ -5325,7 +5329,7 @@ msgstr "Показать руководство mkvmerge GUI"
 msgid "Show the size of each element including its header"
 msgstr "Показать размер каждого элемента в том числе его заголовок"
 
-#: src/info/info_cli_parser.cpp:50
+#: src/info/info_cli_parser.cpp:51
 msgid "Show the size of each element including its header."
 msgstr "Показать размер каждого элемента в том числе его заголовок."
 
@@ -5341,19 +5345,19 @@ msgstr "Показать информацию о версии."
 msgid "Shows mmg's debug window in which debug messages will appear. This is only useful if you're helping the author debug a problem in mmg."
 msgstr "Показывает окно отладки mmg, в котором отладочные сообщения будут появляться. Это только полезно, если вы помогаете автору отладки проблемы в mmg."
 
-#: src/info/mkvinfo.cpp:840
+#: src/info/mkvinfo.cpp:880
 msgid "Signature algorithm: %1% (%2%)"
 msgstr "Алгоритм сигнатуры: %1% (%2%)"
 
-#: src/info/mkvinfo.cpp:849
+#: src/info/mkvinfo.cpp:889
 msgid "Signature hash algorithm: %1% (%2%)"
 msgstr "Сигнатура хэш-алгоритма: %1% (%2%)"
 
-#: src/info/mkvinfo.cpp:858
+#: src/info/mkvinfo.cpp:898
 msgid "Signature key ID: %1%"
 msgstr "Сигнатура ID ключа: %1%"
 
-#: src/info/mkvinfo.cpp:862
+#: src/info/mkvinfo.cpp:902
 msgid "Signature: %1%"
 msgstr "Сигнатура: %1%"
 
@@ -5361,7 +5365,7 @@ msgstr "Сигнатура: %1%"
 msgid "Signed integer"
 msgstr "Целое число"
 
-#: src/info/mkvinfo.cpp:1319
+#: src/info/mkvinfo.cpp:1362
 msgid "Silent Track Number: %1%"
 msgstr "Скрытый номер дорожки: %1%"
 
@@ -5377,7 +5381,7 @@ msgstr "Простой парсер главы: %1%\n"
 msgid "SimpleBlock"
 msgstr "Простой блок"
 
-#: src/info/mkvinfo.cpp:163
+#: src/info/mkvinfo.cpp:203
 msgid "SimpleBlock (%1%track number %2%, %3% frame(s), timecode %|4$.3f|s = %5%)"
 msgstr "Простой блок (%1% номер дорожки %2%, %3% кадр(ы), тайм-код %|4$.3f|s = %5%)"
 
@@ -5397,7 +5401,7 @@ msgstr "Пропуск %1% байт (не действительный заго�
 msgid "Skipping %1% bytes at the beginning (no valid MP3 header found).\n"
 msgstr "Пропуск %1% байт в начале (не действительный MP3 заголовок).\n"
 
-#: src/info/mkvinfo.cpp:1457
+#: src/info/mkvinfo.cpp:1500
 msgid "Slices"
 msgstr "Секторы"
 
@@ -5464,11 +5468,11 @@ msgstr "&Начать обработку (запустить mkvmerge)\tCtrl-R"
 msgid "Start the GUI (and open inname if it was given)."
 msgstr "Запустите графический интерфейс пользователя (и откройте inname, если это было дано)."
 
-#: src/mmg/jobs.cpp:503
+#: src/mmg/jobs.cpp:504
 msgid "Start the jobs whose status is 'pending'"
 msgstr "Начало работы со статусом 'ожидание'"
 
-#: src/mmg/jobs.cpp:507
+#: src/mmg/jobs.cpp:508
 msgid "Start the selected job(s) regardless of their status"
 msgstr "Начало выбранного задания(ий) независимо от их статуса"
 
@@ -5480,20 +5484,24 @@ msgstr "Начать с пустой настройки"
 msgid "Start:"
 msgstr "Начало:"
 
-#: src/mmg/jobs.cpp:442
+#: src/mmg/jobs.cpp:443
 msgid "Started on"
 msgstr "Процесс начался"
 
-#: src/mmg/jobs.cpp:227
+#: src/mmg/jobs.cpp:228
 #, c-format
 msgid "Starting job ID %d (%s) on %s"
 msgstr "Начало работы ID %d (%s) в %s"
 
-#: src/mmg/jobs.cpp:436
+#: src/info/mkvinfo.cpp:1904
+msgid "Statistics for track number %1%: number of blocks: %2%; size in bytes: %3%; duration in seconds: %4%; approximate bitrate in bits/second: %5%\n"
+msgstr ""
+
+#: src/mmg/jobs.cpp:437
 msgid "Status"
 msgstr "Статус"
 
-#: src/mmg/jobs.cpp:62
+#: src/mmg/jobs.cpp:63
 #: src/mmg/mux_dialog.cpp:74
 msgid "Status and progress"
 msgstr "Статус и процесс"
@@ -5508,7 +5516,7 @@ msgstr "Статус:"
 msgid "Stereo mode parameter: not given in the form <TID>:<n|keyword> where n is a number between 0 and %1% or one of these keywords: %2% (argument was '%3%').\n"
 msgstr "Stereo режим параметр не задается в виде <TID>:<n|keyword> где n число от 0 до 3 или один из ключевых слов 'нет', 'право', 'левый', 'и' (аргумент '%1%').\n"
 
-#: src/info/mkvinfo.cpp:713
+#: src/info/mkvinfo.cpp:753
 msgid "Stereo mode: %1% (%2%)"
 msgstr "Стерео режим: %1% (%2%)"
 
@@ -5579,7 +5587,7 @@ msgstr "Тег файлы (*.xml)|*.xml|%s"
 msgid "Tag files (*.xml;*.txt)|*.xml;*.txt|%s"
 msgstr "Тег файлы (*.xml;*.txt)|*.xml;*.txt|%s"
 
-#: src/info/mkvinfo.cpp:1752
+#: src/info/mkvinfo.cpp:1828
 msgid "Tags"
 msgstr "Теги"
 
@@ -5612,7 +5620,7 @@ msgstr "Сообщает mkvmerge создать мета поиск элеме�
 msgid "Text files (*.txt);;All files (*.*)"
 msgstr "Текстовые файлы (*.txt);;Все файлы (*.*)"
 
-#: src/mmg/jobs.cpp:409
+#: src/mmg/jobs.cpp:410
 #, c-format
 msgid "Text files (*.txt)|*.txt|%s"
 msgstr "Текстовые файлы (*.txt)|*.txt|%s"
@@ -6649,7 +6657,7 @@ msgstr "Эта дорожка содержит SBR AAC/HE-AAC/AAC + данные
 msgid "This track is not compatible with the WebM mode and cannot be enabled."
 msgstr "Этот трек не совместим с режимом WebM и не может быть включен."
 
-#: src/info/mkvinfo.cpp:1465
+#: src/info/mkvinfo.cpp:1508
 msgid "Time slice"
 msgstr "Интервал времени"
 
@@ -6664,8 +6672,8 @@ msgstr "Тайм-код файлы (*.tmc;*.txt)|*.tmc;*.txt|%s"
 
 #: src/extract/tracks.cpp:382
 #: src/extract/timecodes_v2.cpp:231
-#: src/info/mkvinfo.cpp:527
-#: src/info/mkvinfo.cpp:1056
+#: src/info/mkvinfo.cpp:567
+#: src/info/mkvinfo.cpp:1099
 msgid "Timecode scale: %1%"
 msgstr "Масштаб тайм-кода: %1%"
 
@@ -6683,7 +6691,7 @@ msgstr "Тайм-коды:"
 msgid "Title"
 msgstr "Название"
 
-#: src/info/mkvinfo.cpp:591
+#: src/info/mkvinfo.cpp:631
 msgid "Title: %1%"
 msgstr "Название: %1%"
 
@@ -6747,7 +6755,7 @@ msgstr "Дорожка %1% с CodecID '%2%' отсутствует \"codec priva
 msgid "Track %1% with the CodecID '%2%' is missing the \"default duration\" element and cannot be extracted.\n"
 msgstr "Дорожка %1% с CodecID '%2%' отсутствует \"заданная по умолчанию продолжительность\" элемент и не может быть извлечен.\n"
 
-#: src/info/mkvinfo.cpp:1071
+#: src/info/mkvinfo.cpp:1114
 msgid "Track %1%: %2%, codec ID: %3%%4%%5%%6%\n"
 msgstr "Дорожка %1%: %2%, Codec ID: %3%%4%%5%%6%\n"
 
@@ -6781,7 +6789,7 @@ msgstr "Дорожка ID %1%: %2% (%3%)"
 msgid "Track UID"
 msgstr "Дорожка UID"
 
-#: src/info/mkvinfo.cpp:928
+#: src/info/mkvinfo.cpp:970
 msgid "Track UID: %1%"
 msgstr "Дорожка UID: %1%"
 
@@ -6808,15 +6816,15 @@ msgstr "Номер дорожки"
 msgid "Track number %1% has been encrypted and decryption has not yet been implemented.\n"
 msgstr "Номер дорожки %1% был зашифрован и расшифровка еще не была осуществлена.\n"
 
-#: src/info/mkvinfo.cpp:922
+#: src/info/mkvinfo.cpp:961
 msgid "Track number: %1%"
 msgstr "Номер дорожки: %1%"
 
-#: src/info/mkvinfo.cpp:1015
+#: src/info/mkvinfo.cpp:1057
 msgid "Track overlay: %1%"
 msgstr "Оверлей дорожки: %1%"
 
-#: src/info/mkvinfo.cpp:953
+#: src/info/mkvinfo.cpp:995
 msgid "Track type: %1%"
 msgstr "Тип дорожки: %1%"
 
@@ -6849,7 +6857,7 @@ msgstr ""
 msgid "Type:"
 msgstr "Тип:"
 
-#: src/info/mkvinfo.cpp:779
+#: src/info/mkvinfo.cpp:819
 msgid "Type: %1% (%2%)"
 msgstr "Тип: %1% (%2%)"
 
@@ -6869,7 +6877,7 @@ msgstr "UTFstring_to_cstrutf8: Неверный символ. Пожалуйст
 msgid "Unexpected picture frame after single field frame. Fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr "Неожиданная рамка кадра после единственной полевой структуры. Установите видео поток MPEG2 прежде чем попытаться мультиплексировать.\n"
 
-#: src/info/mkvinfo.cpp:335
+#: src/info/mkvinfo.cpp:375
 msgid "Unknown"
 msgstr "Неизвестный"
 
@@ -7390,7 +7398,7 @@ msgstr "Видео ширина пикселя"
 msgid "Video stereo mode"
 msgstr "Видео режим стерео"
 
-#: src/info/mkvinfo.cpp:644
+#: src/info/mkvinfo.cpp:684
 msgid "Video track"
 msgstr "Видео дорожка"
 
@@ -7399,7 +7407,7 @@ msgstr "Видео дорожка"
 msgid "Video track %u"
 msgstr "Видео дорожка %u"
 
-#: src/mmg/jobs.cpp:489
+#: src/mmg/jobs.cpp:490
 msgid "View the output that mkvmerge generated during the muxing process for the selected job(s)"
 msgstr "Рассмотрите вывод, который mkvmerge сгенерировал во время мультиплексирования обрабатывает для выбранного задания(й)"
 
@@ -7435,11 +7443,11 @@ msgstr "Предупреждение:"
 msgid "Warning: "
 msgstr "Предупреждение: "
 
-#: src/info/mkvinfo.cpp:930
+#: src/info/mkvinfo.cpp:972
 msgid "Warning: There's more than one track with the UID %1%."
 msgstr "Предупреждение: Там больше, чем одна дорожка с UID %1%."
 
-#: src/info/mkvinfo.cpp:924
+#: src/info/mkvinfo.cpp:963
 msgid "Warning: There's more than one track with the number %1%."
 msgstr "Предупреждение: Там больше, чем одна дорожка с номером %1%."
 
@@ -7477,7 +7485,7 @@ msgstr "Записать вложение с ID 'AID' в 'outname'."
 msgid "Write track with the ID TID to the file 'out'."
 msgstr "Записать дорожку с ID TID в файл 'out'."
 
-#: src/info/mkvinfo.cpp:542
+#: src/info/mkvinfo.cpp:582
 msgid "Writing application: %1%"
 msgstr "Написать приложение: %1%"
 
@@ -7590,8 +7598,8 @@ msgstr ""
 msgid "Zlib decompression failed. Result: %1%\n"
 msgstr "Zlib декомпрессия не удалась. Результат: %1%\n"
 
-#: src/info/mkvinfo.cpp:162
-#: src/info/mkvinfo.cpp:166
+#: src/info/mkvinfo.cpp:202
+#: src/info/mkvinfo.cpp:206
 msgid "[%1% frame for track %2%, timecode %3%]"
 msgstr "[%1% кадр для дорожки %2%, тайм-код %3%]"
 
@@ -7611,9 +7619,9 @@ msgstr "aac_reader: Не удалось прочитать %1% байт."
 msgid "aac_reader: No valid AAC packet found in the first %1% bytes.\n"
 msgstr "aac_reader: Не найден пакет AAC в первых %1% байтах.\n"
 
-#: src/mmg/jobs.cpp:343
-#: src/mmg/jobs.cpp:452
-#: src/mmg/jobs.cpp:530
+#: src/mmg/jobs.cpp:344
+#: src/mmg/jobs.cpp:453
+#: src/mmg/jobs.cpp:531
 msgid "aborted"
 msgstr "Прерванный"
 
@@ -7648,7 +7656,7 @@ msgstr "Присоединить"
 
 #: src/input/r_matroska.cpp:90
 #: src/mmg/mmg.cpp:62
-#: src/info/mkvinfo.cpp:1073
+#: src/info/mkvinfo.cpp:1116
 msgid "audio"
 msgstr "Аудио"
 
@@ -7672,12 +7680,12 @@ msgstr "avi_reader: Не удалось прочитать исходный фа
 msgid "avi_reader: Source is not a valid AVI file."
 msgstr "avi_reader: Источник не является допустимым AVI файлом."
 
-#: src/info/mkvinfo.cpp:633
+#: src/info/mkvinfo.cpp:673
 msgid "bits per sample: %1%"
 msgstr "Разрядность: %1%"
 
 #: src/input/r_matroska.cpp:91
-#: src/info/mkvinfo.cpp:1076
+#: src/info/mkvinfo.cpp:1119
 msgid "buttons"
 msgstr "Кнопки"
 
@@ -7698,7 +7706,7 @@ msgstr "bzlib_compressor_c::decompress() не выполняется\n"
 msgid "cet_index: '%1%' not found\n"
 msgstr "cet_index: '%1%' не найден\n"
 
-#: src/info/mkvinfo.cpp:622
+#: src/info/mkvinfo.cpp:662
 msgid "channels: %1%"
 msgstr "Каналы: %1%"
 
@@ -7718,15 +7726,15 @@ msgstr ""
 msgid "column interleaved (right first)"
 msgstr ""
 
-#: src/mmg/jobs.cpp:346
+#: src/mmg/jobs.cpp:347
 msgid "completed OK"
 msgstr "Завершено OK"
 
-#: src/mmg/jobs.cpp:349
+#: src/mmg/jobs.cpp:350
 msgid "completed with warnings"
 msgstr "Завершено с предупреждениями"
 
-#: src/info/mkvinfo.cpp:781
+#: src/info/mkvinfo.cpp:821
 msgid "compression"
 msgstr "Сжатие"
 
@@ -7748,7 +7756,7 @@ msgstr "create_track_number: file_num не найден. %1%\n"
 msgid "default"
 msgstr "По умолчанию"
 
-#: src/info/mkvinfo.cpp:1032
+#: src/info/mkvinfo.cpp:1074
 msgid "default duration: %|1$.3f|ms (%|2$.3f| fps for a video track)"
 msgstr "продолжительность по умолчанию: %|1$.3f|ms (%|2$.3f| кадров в секунду для видео дорожки)"
 
@@ -7764,24 +7772,24 @@ msgstr "dirac_es_reader: Не удалось открыть исходный ф�
 msgid "disable all"
 msgstr "Отключить все"
 
-#: src/info/mkvinfo.cpp:1565
+#: src/info/mkvinfo.cpp:1629
 msgid "discardable, "
 msgstr "незащищенный, "
 
-#: src/info/mkvinfo.cpp:669
+#: src/info/mkvinfo.cpp:709
 msgid "display height: %1%"
 msgstr "высота дисплея: %1%"
 
-#: src/info/mkvinfo.cpp:664
+#: src/info/mkvinfo.cpp:704
 msgid "display width: %1%"
 msgstr "ширина дисплея: %1%"
 
-#: src/mmg/jobs.cpp:528
-#: src/mmg/jobs.cpp:716
+#: src/mmg/jobs.cpp:529
+#: src/mmg/jobs.cpp:717
 msgid "done"
 msgstr "Сделанный"
 
-#: src/mmg/jobs.cpp:529
+#: src/mmg/jobs.cpp:530
 msgid "done/warnings"
 msgstr "сделать/предупреждения"
 
@@ -7809,7 +7817,7 @@ msgstr "Включить все"
 msgid "enabled"
 msgstr "Включен"
 
-#: src/info/mkvinfo.cpp:782
+#: src/info/mkvinfo.cpp:822
 msgid "encryption"
 msgstr "Шифрование"
 
@@ -7835,8 +7843,8 @@ msgstr "Шифрование"
 msgid "end-of-file"
 msgstr "Конец файла"
 
-#: src/mmg/jobs.cpp:352
-#: src/mmg/jobs.cpp:531
+#: src/mmg/jobs.cpp:353
+#: src/mmg/jobs.cpp:532
 msgid "failed"
 msgstr "Не удалось"
 
@@ -7905,7 +7913,7 @@ msgstr "для всех кадров"
 msgid "have an xcptn\n"
 msgstr "есть xcptn\n"
 
-#: src/info/mkvinfo.cpp:801
+#: src/info/mkvinfo.cpp:841
 msgid "header removal"
 msgstr "Удаление заголовка"
 
@@ -7925,9 +7933,9 @@ msgstr "наивысший"
 msgid "inflateInit() failed. Result: %1%\n"
 msgstr "inflateInit() не удалось. Результат: %1%\n"
 
-#: src/mmg/jobs.cpp:72
-#: src/mmg/jobs.cpp:74
-#: src/mmg/jobs.cpp:162
+#: src/mmg/jobs.cpp:73
+#: src/mmg/jobs.cpp:75
+#: src/mmg/jobs.cpp:163
 #: src/mmg/mux_dialog.cpp:77
 msgid "is being estimated"
 msgstr "в настоящее время оценка"
@@ -7936,15 +7944,15 @@ msgstr "в настоящее время оценка"
 msgid "ivf_reader: Could not open the file."
 msgstr "ivf_reader: Не могу открыть файл."
 
-#: src/info/mkvinfo.cpp:1563
+#: src/info/mkvinfo.cpp:1627
 msgid "key, "
 msgstr "ключ, "
 
-#: src/info/mkvinfo.cpp:1052
+#: src/info/mkvinfo.cpp:1095
 msgid "language: %1%"
 msgstr "язык: %1%"
 
-#: src/info/mkvinfo.cpp:142
+#: src/info/mkvinfo.cpp:182
 msgid "length %1%, data: %2%"
 msgstr "длина %1%, данные: %2%"
 
@@ -8264,7 +8272,7 @@ msgstr "mkvmerge исполняемый"
 msgid "mkvmerge finished with a return code of %d. %s"
 msgstr "mkvmerge завершен с кодом возврата %d. %s"
 
-#: src/mmg/jobs.cpp:147
+#: src/mmg/jobs.cpp:148
 #: src/mmg/mux_dialog.cpp:305
 msgid "mkvmerge has finished"
 msgstr "mkvmerge завершен"
@@ -8273,7 +8281,7 @@ msgstr "mkvmerge завершен"
 msgid "mkvmerge has not been compiled with FLAC support but handling of this stream has been requested.\n"
 msgstr "mkvmerge не был скомпилирован с поддержкой FLAC, но обработка этого потока была предложена.\n"
 
-#: src/mmg/jobs.cpp:49
+#: src/mmg/jobs.cpp:50
 #: src/mmg/mux_dialog.cpp:45
 msgid "mkvmerge is running"
 msgstr "mkvmerge работает"
@@ -8366,7 +8374,7 @@ msgstr "mpeg_ps_reader: Не должен был случиться #2. %1%"
 msgid "no"
 msgstr "Нет"
 
-#: src/info/mkvinfo.cpp:825
+#: src/info/mkvinfo.cpp:865
 msgid "no encryption"
 msgstr "без шифрования"
 
@@ -8378,11 +8386,11 @@ msgstr "нет ошибки"
 msgid "no file loaded"
 msgstr "файл не загружается"
 
-#: src/info/mkvinfo.cpp:842
+#: src/info/mkvinfo.cpp:882
 msgid "no signature algorithm"
 msgstr "нет сигнатуры алгоритма"
 
-#: src/info/mkvinfo.cpp:851
+#: src/info/mkvinfo.cpp:891
 msgid "no signature hash algorithm"
 msgstr "нет сигнатуры хеш алгоритма"
 
@@ -8425,12 +8433,12 @@ msgstr "on_entry_selected: display == NULL. Не должен был случи�
 msgid "only for I frames"
 msgstr "только для I кадров"
 
-#: src/info/mkvinfo.cpp:617
+#: src/info/mkvinfo.cpp:657
 msgid "output sampling freq: %1%"
 msgstr "частота дискретизации на выходе: %1%"
 
-#: src/mmg/jobs.cpp:527
-#: src/mmg/jobs.cpp:701
+#: src/mmg/jobs.cpp:528
+#: src/mmg/jobs.cpp:702
 msgid "pending"
 msgstr "ожидание"
 
@@ -8438,27 +8446,27 @@ msgstr "ожидание"
 msgid "pgssup_reader: Could not open the file."
 msgstr "pgssup_reader: Не удалось открыть файл."
 
-#: src/info/mkvinfo.cpp:689
+#: src/info/mkvinfo.cpp:729
 msgid "pixel crop bottom: %1%"
 msgstr "пиксель обрезать снизу: %1%"
 
-#: src/info/mkvinfo.cpp:674
+#: src/info/mkvinfo.cpp:714
 msgid "pixel crop left: %1%"
 msgstr "пиксель обрезать слева: %1%"
 
-#: src/info/mkvinfo.cpp:684
+#: src/info/mkvinfo.cpp:724
 msgid "pixel crop right: %1%"
 msgstr "пиксель обрезать справа: %1%"
 
-#: src/info/mkvinfo.cpp:679
+#: src/info/mkvinfo.cpp:719
 msgid "pixel crop top: %1%"
 msgstr "пиксель обрезать сверху: %1%"
 
-#: src/info/mkvinfo.cpp:659
+#: src/info/mkvinfo.cpp:699
 msgid "pixel height: %1%"
 msgstr "высота пикселя: %1%"
 
-#: src/info/mkvinfo.cpp:654
+#: src/info/mkvinfo.cpp:694
 msgid "pixel width: %1%"
 msgstr "ширина пикселя: %1%"
 
@@ -8504,7 +8512,7 @@ msgstr "Удалить"
 msgid "remove all"
 msgstr "Удалить все"
 
-#: src/info/mkvinfo.cpp:771
+#: src/info/mkvinfo.cpp:811
 msgid "rest: unknown"
 msgstr "остаток: неизвестен"
 
@@ -8516,7 +8524,7 @@ msgstr ""
 msgid "row interleaved (right first)"
 msgstr ""
 
-#: src/info/mkvinfo.cpp:612
+#: src/info/mkvinfo.cpp:652
 msgid "sampling freq: %1%"
 msgstr "частота дискретизации: %1%"
 
@@ -8561,7 +8569,7 @@ msgid "subtitle"
 msgstr "подзаголовок"
 
 #: src/mmg/mmg.cpp:64
-#: src/info/mkvinfo.cpp:1075
+#: src/info/mkvinfo.cpp:1118
 msgid "subtitles"
 msgstr "субтитры"
 
@@ -8614,13 +8622,13 @@ msgstr "und (Неопределенный)"
 #: src/mmg/mmg.cpp:65
 #: src/mmg/header_editor/value_page.cpp:150
 #: src/mmg/tabs/input.cpp:339
-#: src/info/mkvinfo.cpp:773
-#: src/info/mkvinfo.cpp:783
-#: src/info/mkvinfo.cpp:802
-#: src/info/mkvinfo.cpp:831
-#: src/info/mkvinfo.cpp:844
-#: src/info/mkvinfo.cpp:854
-#: src/info/mkvinfo.cpp:1077
+#: src/info/mkvinfo.cpp:813
+#: src/info/mkvinfo.cpp:823
+#: src/info/mkvinfo.cpp:842
+#: src/info/mkvinfo.cpp:871
+#: src/info/mkvinfo.cpp:884
+#: src/info/mkvinfo.cpp:894
+#: src/info/mkvinfo.cpp:1120
 msgid "unknown"
 msgstr "неизвестный"
 
@@ -8650,7 +8658,7 @@ msgstr "verify failed: chapters->CheckMandatory() ist false. Это не дол�
 
 #: src/input/r_matroska.cpp:92
 #: src/mmg/mmg.cpp:63
-#: src/info/mkvinfo.cpp:1074
+#: src/info/mkvinfo.cpp:1117
 msgid "video"
 msgstr "Видео"
 

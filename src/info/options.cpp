@@ -19,6 +19,7 @@ options_c::options_c()
   , m_show_summary(false)
   , m_show_hexdump(false)
   , m_show_size(false)
+  , m_show_track_info(false)
   , m_hexdump_max_size(16)
 {
 }

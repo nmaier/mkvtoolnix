@@ -40,6 +40,7 @@ protected:
   void set_full_hexdump();
   void set_size();
   void set_file_name();
+  void set_track_info();
 };
 
 #endif // __INFO_INFO_CLI_PARSER_H

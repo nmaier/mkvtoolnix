@@ -1,5 +1,10 @@
 2011-01-21  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvinfo: new feature: Added an option "--track-info" (short:
+	"-t") that displays one-line statistics about each track at the
+	end of the output. The statistics include the track's total size,
+	duration, approximate bitrate and number of packets/frames.
+
 	* mkvinfo: bug fix: The hexdump mode was accessing invalid memory
 	if the data to dump was shorter than 16 bytes. It was also
 	outputting the values as characters instead of hexadecimal

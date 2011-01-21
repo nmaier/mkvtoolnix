@@ -84,14 +84,54 @@
 
 using namespace libmatroska;
 
-typedef struct {
+struct kax_track_t {
   unsigned int tnum, tuid;
   char type;
-  int64_t size;
-} kax_track_t;
+  int64_t default_duration;
 
-std::vector<kax_track_t *> s_tracks;
-std::map<unsigned int, kax_track_t *> s_tracks_by_number, s_tracks_by_uid;
+  kax_track_t();
+};
+
+struct track_info_t {
+  int64_t m_size, m_min_timecode, m_max_timecode, m_blocks, m_blocks_by_ref_num[3], m_add_duration_for_n_packets;
+
+  track_info_t();
+  bool min_timecode_unset();
+  bool max_timecode_unset();
+};
+
+kax_track_t::kax_track_t()
+  : tnum(0)
+  , tuid(0)
+  , type(' ')
+  , default_duration(0)
+{
+}
+typedef counted_ptr<kax_track_t> kax_track_cptr;
+
+track_info_t::track_info_t()
+  : m_size(0)
+  , m_min_timecode(LLONG_MAX)
+  , m_max_timecode(LLONG_MIN)
+  , m_blocks(0)
+  , m_add_duration_for_n_packets(0)
+{
+  memset(m_blocks_by_ref_num, 0, sizeof(int64_t) * 3);
+}
+
+bool
+track_info_t::min_timecode_unset() {
+  return LLONG_MAX == m_min_timecode;
+}
+
+bool
+track_info_t::max_timecode_unset() {
+  return LLONG_MIN == m_max_timecode;
+}
+
+std::vector<kax_track_cptr> s_tracks;
+std::map<unsigned int, kax_track_cptr> s_tracks_by_number, s_tracks_by_uid;
+std::map<unsigned int, track_info_t> s_track_info;
 options_c g_options;
 static uint64_t s_tc_scale = TIMECODE_SCALE;
 std::vector<boost::format> g_common_boost_formats;
@@ -192,7 +232,7 @@ create_element_text(const std::string &text,
 }
 
 void
-add_track(kax_track_t *t) {
+add_track(kax_track_cptr t) {
   s_tracks.push_back(t);
   s_tracks_by_number[t->tnum] = t;
   s_tracks_by_uid[t->tuid]    = t;
@@ -200,12 +240,12 @@ add_track(kax_track_t *t) {
 
 kax_track_t *
 find_track(int tnum) {
-  return s_tracks_by_number[tnum];
+  return s_tracks_by_number[tnum].get_object();
 }
 
 kax_track_t *
 find_track_by_uid(int tuid) {
-  return s_tracks_by_uid[tuid];
+  return s_tracks_by_uid[tuid].get_object();
 }
 
 #define UTF2STR(s)                 UTFstring_to_cstrutf8(UTFstring(s))
@@ -897,13 +937,12 @@ def_handle(tracks) {
       show_element(l2, 2, Y("A track"));
 
       std::vector<std::string> summary;
-      char kax_track_type      = '?';
-      int64_t kax_track_number = -1;
-      bool ms_compat           = false;
-      EbmlMaster *m2           = static_cast<EbmlMaster *>(l2);
+      bool ms_compat = false;
+      EbmlMaster *m2 = static_cast<EbmlMaster *>(l2);
       std::string kax_codec_id;
       std::string fourcc_buffer;
       size_t i2;
+      kax_track_cptr track(new kax_track_t);
 
       for (i2 = 0; i2 < m2->ListSize(); i2++) {
         l3 = (*m2)[i2];
@@ -917,45 +956,48 @@ def_handle(tracks) {
 
         else if (is_id(l3, KaxTrackNumber)) {
           KaxTrackNumber &tnum = *static_cast<KaxTrackNumber *>(l3);
-          kax_track_number     = uint64(tnum);
+          track->tnum          = uint64(tnum);
 
-          show_element(l3, 3, boost::format(Y("Track number: %1%")) % uint64(tnum));
-          if (find_track(uint64(tnum)) != NULL)
-            show_warning(3, boost::format(Y("Warning: There's more than one track with the number %1%.")) % uint64(tnum));
+          show_element(l3, 3, boost::format(Y("Track number: %1%")) % track->tnum);
+          if (find_track(track->tnum) != NULL)
+            show_warning(3, boost::format(Y("Warning: There's more than one track with the number %1%.")) % track->tnum);
+          else
+            add_track(track);
 
         } else if (is_id(l3, KaxTrackUID)) {
           KaxTrackUID &tuid = *static_cast<KaxTrackUID *>(l3);
-          show_element(l3, 3, boost::format(Y("Track UID: %1%")) % uint64(tuid));
-          if (find_track_by_uid(uint64(tuid)) != NULL)
-            show_warning(3, boost::format(Y("Warning: There's more than one track with the UID %1%.")) % uint64(tuid));
+          track->tuid       = uint64(tuid);
+          show_element(l3, 3, boost::format(Y("Track UID: %1%")) % track->tuid);
+          if (find_track_by_uid(track->tuid) != NULL)
+            show_warning(3, boost::format(Y("Warning: There's more than one track with the UID %1%.")) % track->tuid);
 
         } else if (is_id(l3, KaxTrackType)) {
           KaxTrackType &ttype = *static_cast<KaxTrackType *>(l3);
 
           switch (uint8(ttype)) {
             case track_audio:
-              kax_track_type = 'a';
+              track->type = 'a';
               break;
             case track_video:
-              kax_track_type = 'v';
+              track->type = 'v';
               break;
             case track_subtitle:
-              kax_track_type = 's';
+              track->type = 's';
               break;
             case track_buttons:
-              kax_track_type = 'b';
+              track->type = 'b';
               break;
             default:
-              kax_track_type = '?';
+              track->type = '?';
               break;
           }
           show_element(l3, 3,
                        boost::format(Y("Track type: %1%"))
-                       % (  'a' == kax_track_type ? "audio"
-                          : 'v' == kax_track_type ? "video"
-                          : 's' == kax_track_type ? "subtitles"
-                          : 'b' == kax_track_type ? "buttons"
-                          :                         "unknown"));
+                       % (  'a' == track->type ? "audio"
+                          : 'v' == track->type ? "video"
+                          : 's' == track->type ? "subtitles"
+                          : 'b' == track->type ? "buttons"
+                          :                      "unknown"));
 
 #if MATROSKA_VERSION >= 2
         } else if (is_id(l3, KaxTrackFlagEnabled)) {
@@ -972,13 +1014,13 @@ def_handle(tracks) {
           kax_codec_id         = std::string(codec_id);
 
           show_element(l3, 3, boost::format(Y("Codec ID: %1%")) % kax_codec_id);
-          if (   ((kax_codec_id == MKV_V_MSCOMP) && ('v' == kax_track_type))
-              || ((kax_codec_id == MKV_A_ACM)    && ('a' == kax_track_type)))
+          if (   ((kax_codec_id == MKV_V_MSCOMP) && ('v' == track->type))
+              || ((kax_codec_id == MKV_A_ACM)    && ('a' == track->type)))
             ms_compat = true;
 
         } else if (is_id(l3, KaxCodecPrivate)) {
           KaxCodecPrivate &c_priv = *static_cast<KaxCodecPrivate *>(l3);
-          fourcc_buffer = create_codec_dependent_private_info(c_priv, kax_track_type, kax_codec_id);
+          fourcc_buffer = create_codec_dependent_private_info(c_priv, track->type, kax_codec_id);
 
           if (g_options.m_calc_checksums && !g_options.m_show_summary)
             fourcc_buffer += (boost::format(Y(" (adler: 0x%|1$08x|)")) % calc_adler32(c_priv.GetBuffer(), c_priv.GetSize())).str();
@@ -1033,6 +1075,7 @@ def_handle(tracks) {
                              % ((float)uint64(def_duration) / 1000000.0)
                              % (1000000000.0 / (float)uint64(def_duration))
                              ).str());
+          track->default_duration = uint64(def_duration);
 
         } else if (is_id(l3, KaxTrackFlagLacing)) {
           KaxTrackFlagLacing &f_lacing = *static_cast<KaxTrackFlagLacing *>(l3);
@@ -1069,12 +1112,12 @@ def_handle(tracks) {
 
       if (g_options.m_show_summary)
         mxinfo(boost::format(Y("Track %1%: %2%, codec ID: %3%%4%%5%%6%\n"))
-               % kax_track_number
-               % (  'a' == kax_track_type ? Y("audio")
-                  : 'v' == kax_track_type ? Y("video")
-                  : 's' == kax_track_type ? Y("subtitles")
-                  : 'b' == kax_track_type ? Y("buttons")
-                  :                         Y("unknown"))
+               % track->tnum
+               % (  'a' == track->type ? Y("audio")
+                  : 'v' == track->type ? Y("video")
+                  : 's' == track->type ? Y("subtitles")
+                  : 'b' == track->type ? Y("buttons")
+                  :                      Y("unknown"))
                % kax_codec_id
                % fourcc_buffer
                % (summary.empty() ? "" : ", ")
@@ -1357,7 +1400,7 @@ def_handle2(block_group,
                    % ((float)block.GlobalTimecode() / 1000000000.0)
                    % format_timecode(block.GlobalTimecode(), 3));
 
-      lf_timecode = block.GlobalTimecode() / 1000000;
+      lf_timecode = block.GlobalTimecode();
       lf_tnum     = block.TrackNum();
       bduration   = -1.0;
       frame_pos   = block.GetElementPosition() + block.ElementSize();
@@ -1518,8 +1561,8 @@ def_handle2(block_group,
         mxinfo(BF_BLOCK_GROUP_SUMMARY_WITH_DURATION
                % (bref_found && fref_found ? 'B' : bref_found ? 'P' : !fref_found ? 'I' : 'P')
                % lf_tnum
-               % lf_timecode
-               % format_timecode(lf_timecode * 1000000, 3)
+               % (lf_timecode / 1000000)
+               % format_timecode(lf_timecode, 3)
                % bduration
                % frame_sizes[fidx]
                % frame_adlers[fidx]
@@ -1529,8 +1572,8 @@ def_handle2(block_group,
         mxinfo(BF_BLOCK_GROUP_SUMMARY_NO_DURATION
                % (bref_found && fref_found ? 'B' : bref_found ? 'P' : !fref_found ? 'I' : 'P')
                % lf_tnum
-               % lf_timecode
-               % format_timecode(lf_timecode * 1000000, 3)
+               % (lf_timecode / 1000000)
+               % format_timecode(lf_timecode, 3)
                % frame_sizes[fidx]
                % frame_adlers[fidx]
                % frame_hexdumps[fidx]
@@ -1542,7 +1585,28 @@ def_handle2(block_group,
                  BF_BLOCK_GROUP_SUMMARY_V2
                  % (bref_found && fref_found ? 'B' : bref_found ? 'P' : !fref_found ? 'I' : 'P')
                  % lf_tnum
-                 % lf_timecode);
+                 % (lf_timecode / 1000000));
+
+  track_info_t &tinfo = s_track_info[lf_tnum];
+
+  tinfo.m_blocks                                                                                 += frame_sizes.size();
+  tinfo.m_blocks_by_ref_num[bref_found && fref_found ? 2 : bref_found ? 1 : !fref_found ? 0 : 1] += frame_sizes.size();
+  tinfo.m_min_timecode                                                                             = std::min(tinfo.m_min_timecode, lf_timecode);
+
+  if (tinfo.max_timecode_unset() || (tinfo.m_max_timecode < lf_timecode)) {
+    tinfo.m_max_timecode = lf_timecode;
+
+    if (-1 == bduration)
+      tinfo.m_add_duration_for_n_packets  = frame_sizes.size();
+    else {
+      tinfo.m_max_timecode               += bduration * 1000000.0;
+      tinfo.m_add_duration_for_n_packets  = 0;
+    }
+  }
+
+  size_t fidx;
+  for (fidx = 0; fidx < frame_sizes.size(); fidx++)
+    tinfo.m_size += frame_sizes[fidx];
 }
 
 void
@@ -1554,9 +1618,9 @@ def_handle2(simple_block,
   KaxSimpleBlock &block = *static_cast<KaxSimpleBlock *>(l2);
   block.SetParent(*cluster);
 
-  int64_t frame_pos = block.GetElementPosition() + block.ElementSize();
-
-  uint64_t timecode = block.GlobalTimecode() / 1000000;
+  int64_t frame_pos   = block.GetElementPosition() + block.ElementSize();
+  uint64_t timecode   = block.GlobalTimecode() / 1000000;
+  track_info_t &tinfo = s_track_info[block.TrackNum()];
 
   std::string info;
   if (block.IsKeyframe())
@@ -1576,6 +1640,8 @@ def_handle2(simple_block,
   for (i = 0; i < (int)block.NumberFrames(); i++) {
     DataBuffer &data = block.GetBuffer(i);
     uint32_t adler   = calc_adler32(data.Buffer(), data.Size());
+
+    tinfo.m_size += data.Size();
 
     std::string adler_str;
     if (g_options.m_calc_checksums)
@@ -1618,6 +1684,16 @@ def_handle2(simple_block,
                  % (block.IsKeyframe() ? 'I' : block.IsDiscardable() ? 'B' : 'P')
                  % block.TrackNum()
                  % timecode);
+
+  tinfo.m_blocks                                                                    += block.NumberFrames();
+  tinfo.m_blocks_by_ref_num[block.IsKeyframe() ? 0 : block.IsDiscardable() ? 2 : 1] += block.NumberFrames();
+  tinfo.m_min_timecode                                                                = std::min(tinfo.m_min_timecode, static_cast<int64_t>(block.GlobalTimecode()));
+  tinfo.m_max_timecode                                                                = std::max(tinfo.m_min_timecode, static_cast<int64_t>(block.GlobalTimecode()));
+  tinfo.m_add_duration_for_n_packets                                                  = block.NumberFrames();
+
+  size_t fidx;
+  for (fidx = 0; fidx < frame_sizes.size(); fidx++)
+    tinfo.m_size += frame_sizes[fidx];
 }
 
 void
@@ -1807,6 +1883,33 @@ handle_ebml_head(EbmlElement *l0,
   }
 }
 
+void
+display_track_info() {
+  if (!g_options.m_show_track_info)
+    return;
+
+  size_t idx;
+  for (idx = 0; s_tracks.size() > idx; ++idx) {
+    kax_track_cptr track = s_tracks[idx];
+    track_info_t &tinfo  = s_track_info[track->tnum];
+
+    if (tinfo.min_timecode_unset())
+      tinfo.m_min_timecode = 0;
+    if (tinfo.max_timecode_unset())
+      tinfo.m_max_timecode = tinfo.m_min_timecode;
+
+    int64_t duration  = tinfo.m_max_timecode - tinfo.m_min_timecode;
+    duration         += tinfo.m_add_duration_for_n_packets * track->default_duration;
+
+    mxinfo(boost::format(Y("Statistics for track number %1%: number of blocks: %2%; size in bytes: %3%; duration in seconds: %4%; approximate bitrate in bits/second: %5%\n"))
+           % track->tnum
+           % tinfo.m_blocks
+           % tinfo.m_size
+           % (duration / 1000000000.0)
+           % static_cast<uint64_t>(duration == 0 ? 0 : tinfo.m_size * 8000000000.0 / duration));
+  }
+}
+
 bool
 process_file(const std::string &file_name) {
   int upper_lvl_el;
@@ -1940,6 +2043,9 @@ process_file(const std::string &file_name) {
     delete l0;
     delete es;
     delete in;
+
+    if (!g_options.m_use_gui && g_options.m_show_track_info)
+      display_track_info();
 
     return true;
   } catch (...) {

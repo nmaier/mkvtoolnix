@@ -90,6 +90,15 @@
    </varlistentry>
 
    <varlistentry>
+    <term><option>-t</option>, <option>--track-info</option></term>
+    <listitem>
+     <para>
+      Show statistics for each track in verbose mode. Also sets verbosity to 1 if it was at level 0 before.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
     <term><option>-x</option>, <option>--hexdump</option></term>
     <listitem>
      <para>

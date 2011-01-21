@@ -6,10 +6,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Nederlands 4.0.0.\n"
-"POT-Creation-Date: 2011-01-19 09:42+0100\n"
+"POT-Creation-Date: 2011-01-21 12:12+0100\n"
 "PO-Revision-Date: 2010-09-24 08:50+0200\n"
 "Last-Translator: René Maassen <bmom43@hotmail.com>\n"
 "Language-Team: Nederlands rc1 <bmom43@hotmail.com>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -281,7 +282,7 @@ msgstr "Stelt de ontleedt mode in op 'volledig'. De standaard waarde ontleedt ni
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:91
-#: doc/man/mkvinfo.xml:120
+#: doc/man/mkvinfo.xml:129
 #: doc/man/mkvmerge.xml:1227
 #: doc/man/mkvpropedit.xml:156
 msgid "<option>--command-line-charset</option> <parameter>character-set</parameter>"
@@ -289,14 +290,14 @@ msgstr "<option>--command-line-charset</option> <parameter>(karakter-set)</param
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:94
-#: doc/man/mkvinfo.xml:123
+#: doc/man/mkvinfo.xml:132
 #: doc/man/mkvpropedit.xml:159
 msgid "Sets the character set to convert strings given on the command line from. It defaults to the character set given by system's current locale."
 msgstr "Plaatst het karakter set om de reeksen om te zetten die vanaf de comando regel worden opgegeven. Standaard wordt gebruikt de karakter set die afhankelijk is van wat er in uw besturingssysteem staat aangegeven (lokatie)."
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:101
-#: doc/man/mkvinfo.xml:130
+#: doc/man/mkvinfo.xml:139
 #: doc/man/mkvmerge.xml:1240
 #: doc/man/mkvpropedit.xml:166
 msgid "<option>--output-charset</option> <parameter>character-set</parameter>"
@@ -304,7 +305,7 @@ msgstr "<option>--output-charset</option> <parameter>(karakter-set)</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:104
-#: doc/man/mkvinfo.xml:133
+#: doc/man/mkvinfo.xml:142
 #: doc/man/mkvmerge.xml:1243
 #: doc/man/mkvpropedit.xml:169
 msgid "Sets the character set to which strings are converted that are to be output.  It defaults to the character set given by system's current locale."
@@ -312,7 +313,7 @@ msgstr "Stelt de karakter set in waarnaar de reeksen dienen te worden geconverte
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:111
-#: doc/man/mkvinfo.xml:140
+#: doc/man/mkvinfo.xml:149
 #: doc/man/mkvmerge.xml:1250
 #: doc/man/mkvpropedit.xml:176
 msgid "<option>-r</option>, <option>--redirect-output</option> <parameter>file-name</parameter>"
@@ -325,7 +326,7 @@ msgstr "Schrijft alle berichten naar een bestand <parameter>file-name</parameter
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:123
-#: doc/man/mkvinfo.xml:152
+#: doc/man/mkvinfo.xml:161
 #: doc/man/mkvmerge.xml:1261
 #: doc/man/mkvpropedit.xml:188
 msgid "<option>--ui-language</option> <parameter>code</parameter>"
@@ -339,7 +340,7 @@ msgstr "Forceert de vertaling voor de te gebruiken taal <parameter>code</paramet
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:135
-#: doc/man/mkvinfo.xml:164
+#: doc/man/mkvinfo.xml:173
 #: doc/man/mkvmerge.xml:77
 #: doc/man/mkvpropedit.xml:200
 msgid "<option>-v</option>, <option>--verbose</option>"
@@ -353,7 +354,7 @@ msgstr "Wees uitgebreid en toon alle belangrijke &matroska; elementen zoals ze z
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:144
-#: doc/man/mkvinfo.xml:174
+#: doc/man/mkvinfo.xml:183
 #: doc/man/mkvmerge.xml:1338
 #: doc/man/mkvpropedit.xml:209
 msgid "<option>-h</option>, <option>--help</option>"
@@ -361,7 +362,7 @@ msgstr "<option>-h</option>, <option>--help</option>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:147
-#: doc/man/mkvinfo.xml:177
+#: doc/man/mkvinfo.xml:186
 #: doc/man/mkvmerge.xml:1341
 #: doc/man/mkvpropedit.xml:212
 msgid "Show usage information and exit."
@@ -369,7 +370,7 @@ msgstr "Toon gebruik informatie en sluit af."
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:153
-#: doc/man/mkvinfo.xml:183
+#: doc/man/mkvinfo.xml:192
 #: doc/man/mkvmerge.xml:1347
 #: doc/man/mkvpropedit.xml:218
 msgid "<option>-V</option>, <option>--version</option>"
@@ -377,7 +378,7 @@ msgstr "<option>-V</option>, <option>--version</option>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:156
-#: doc/man/mkvinfo.xml:186
+#: doc/man/mkvinfo.xml:195
 #: doc/man/mkvmerge.xml:1350
 #: doc/man/mkvpropedit.xml:221
 msgid "Show version information and exit."
@@ -385,7 +386,7 @@ msgstr "Toon versie informatie en sluit af."
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:162
-#: doc/man/mkvinfo.xml:192
+#: doc/man/mkvinfo.xml:201
 #: doc/man/mkvmerge.xml:1356
 #: doc/man/mkvpropedit.xml:227
 #, fuzzy
@@ -395,7 +396,7 @@ msgstr "<option>--no-cues</option>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:165
-#: doc/man/mkvinfo.xml:195
+#: doc/man/mkvinfo.xml:204
 #: doc/man/mkvmerge.xml:1359
 #: doc/man/mkvpropedit.xml:230
 msgid "Checks online for new releases by downloading the URL <uri>http://mkvtoolnix-releases.bunkus.org/latest-release.xml</uri>. Four lines will be output in <literal>key=value</literal> style: the URL from where the information was retrieved (key <literal>version_check_url</literal>), the currently running version (key <literal>running_version</literal>), the latest release's version (key <literal>available_version</literal>) and the download URL (key <literal>download_url</literal>)."
@@ -403,7 +404,7 @@ msgstr ""
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:172
-#: doc/man/mkvinfo.xml:202
+#: doc/man/mkvinfo.xml:211
 #: doc/man/mkvmerge.xml:1366
 #: doc/man/mkvpropedit.xml:237
 msgid "Afterwards the program exists with an exit code of 0 if no newer release is available, with 1 if a newer release is available and with 2 if an error occured (e.g. if the update information could not be retrieved)."
@@ -411,7 +412,7 @@ msgstr ""
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:177
-#: doc/man/mkvinfo.xml:207
+#: doc/man/mkvinfo.xml:216
 #: doc/man/mkvmerge.xml:1371
 #: doc/man/mkvpropedit.xml:242
 msgid "This option is only available if the program was built with support for libcurl."
@@ -419,7 +420,7 @@ msgstr ""
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:183
-#: doc/man/mkvinfo.xml:213
+#: doc/man/mkvinfo.xml:222
 #: doc/man/mkvmerge.xml:1273
 #: doc/man/mkvpropedit.xml:248
 msgid "<option>@</option>options-file"
@@ -427,7 +428,7 @@ msgstr "<option>@</option>optie's-bestand"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:186
-#: doc/man/mkvinfo.xml:216
+#: doc/man/mkvinfo.xml:225
 #: doc/man/mkvmerge.xml:1276
 #: doc/man/mkvpropedit.xml:251
 #, fuzzy
@@ -895,7 +896,7 @@ msgstr "Tijd codes worden het eerst gesorteerd en daarna gechreven als en tijd c
 
 #. type: Content of: <refentry><refsect1><title>
 #: doc/man/mkvextract.xml:612
-#: doc/man/mkvinfo.xml:278
+#: doc/man/mkvinfo.xml:287
 #: doc/man/mkvmerge.xml:2162
 #: doc/man/mkvpropedit.xml:390
 msgid "Exit codes"
@@ -923,7 +924,7 @@ msgstr "<constant>2</constant> -- Deze verlaat code wordt gebruikt nadat een fou
 
 #. type: Content of: <refentry><refsect1><title>
 #: doc/man/mkvextract.xml:643
-#: doc/man/mkvinfo.xml:308
+#: doc/man/mkvinfo.xml:317
 #: doc/man/mkvmerge.xml:1696
 #: doc/man/mkvpropedit.xml:421
 msgid "Escaping special chars in text"
@@ -931,7 +932,7 @@ msgstr ""
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvextract.xml:645
-#: doc/man/mkvinfo.xml:310
+#: doc/man/mkvinfo.xml:319
 #: doc/man/mkvmerge.xml:1698
 #: doc/man/mkvpropedit.xml:423
 msgid "There are a few places in which special characters in text must or should be escaped. The rules for escaping are simple: each character that needs escaping is replaced with a backslash followed by another character."
@@ -939,7 +940,7 @@ msgstr ""
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvextract.xml:650
-#: doc/man/mkvinfo.xml:315
+#: doc/man/mkvinfo.xml:324
 #: doc/man/mkvmerge.xml:1703
 #: doc/man/mkvpropedit.xml:428
 msgid "The rules are: ' ' becomes '\\s', '&quot;' becomes '\\2', ':' becomes '\\c', '#' becomes '\\h' and '\\' itself becomes '\\\\'."
@@ -947,7 +948,7 @@ msgstr ""
 
 #. type: Content of: <refentry><refsect1><title>
 #: doc/man/mkvextract.xml:655
-#: doc/man/mkvinfo.xml:320
+#: doc/man/mkvinfo.xml:329
 #: doc/man/mkvmerge.xml:2193
 #: doc/man/mkvpropedit.xml:433
 #: doc/man/mmg.xml:90
@@ -961,7 +962,7 @@ msgstr "&mkvmerge;, &mkvinfo;, &mkvpropedit;, &mmg;"
 
 #. type: Content of: <refentry><refsect1><title>
 #: doc/man/mkvextract.xml:662
-#: doc/man/mkvinfo.xml:327
+#: doc/man/mkvinfo.xml:336
 #: doc/man/mkvmerge.xml:2200
 #: doc/man/mkvpropedit.xml:440
 #: doc/man/mmg.xml:97
@@ -970,7 +971,7 @@ msgstr "WWW"
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvextract.xml:664
-#: doc/man/mkvinfo.xml:329
+#: doc/man/mkvinfo.xml:338
 #: doc/man/mkvmerge.xml:2202
 #: doc/man/mkvpropedit.xml:442
 #: doc/man/mmg.xml:99
@@ -1029,61 +1030,73 @@ msgstr "Toon slechts een grove samenvatting van wat &mkvinfo; vindt en niet elk 
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvinfo.xml:93
+#, fuzzy
+#| msgid "<option>-T</option>, <option>--no-track-tags</option>"
+msgid "<option>-t</option>, <option>--track-info</option>"
+msgstr "<option>-T</option>, <option>--no-track-tags</option>"
+
+#. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: doc/man/mkvinfo.xml:96
+msgid "Show statistics for each track in verbose mode. Also sets verbosity to 1 if it was at level 0 before."
+msgstr ""
+
+#. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
+#: doc/man/mkvinfo.xml:102
 msgid "<option>-x</option>, <option>--hexdump</option>"
 msgstr "<option>-x</option>, <option>--hexdump</option>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvinfo.xml:96
+#: doc/man/mkvinfo.xml:105
 msgid "Show the first 16 bytes of each frame as a hex dump."
 msgstr "Toont de eerste 16 bytes van elk beeld als een hex dump."
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvinfo.xml:102
+#: doc/man/mkvinfo.xml:111
 msgid "<option>-X</option>, <option>--full-hexdump</option>"
 msgstr "<option>-X</option>, <option>--full-hexdump</option>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvinfo.xml:105
+#: doc/man/mkvinfo.xml:114
 msgid "Show all bytes of each frame as a hex dump."
 msgstr "Toont alle bytes van elk beeld als een hex dump."
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvinfo.xml:111
+#: doc/man/mkvinfo.xml:120
 msgid "<option>-z</option>, <option>--size</option>"
 msgstr "<option>-z</option>, <option>--size</option>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvinfo.xml:114
+#: doc/man/mkvinfo.xml:123
 msgid "Show the size of each element including its header."
 msgstr "Toon de grootte van elk element inclusief kophoofd"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvinfo.xml:143
+#: doc/man/mkvinfo.xml:152
 msgid "Writes all messages to the file <parameter>file-name</parameter> instead of to the console.  While this can be done easily with output redirection there are cases in which this option is needed: when the terminal reinterprets the output before writing it to a file.  The character set set with <link linkend=\"mkvinfo.description.output_charset\"><option>--output-charset</option></link> is honored."
 msgstr "Schrijft alle berichten naar een bestand <parameter>file-name</parameter> i.p.v naar het 'apparaat/houder'. Terwijl dit gemakkelijk met uitvoer omleiden kan worden gedaan er zijn gevallen waarin deze optie nodig is: wanneer de verwerker e.e.a her-interpreteert voordat het geschreven wordt naar het uitvoer bestand. De karakter set met <link linkend=\"mkvinfo.description.output_charset\"><option>--output-charset</option></link> is toegewezen."
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvinfo.xml:155
+#: doc/man/mkvinfo.xml:164
 msgid "Forces the translations for the language <parameter>code</parameter> to be used (e.g.  '<literal>de_DE</literal>' for the German translations). It is preferable to use the environment variables <varname>LANG</varname>, <varname>LC_MESSAGES</varname> and <varname>LC_ALL</varname> though. Entering '<literal>list</literal>' as the <parameter>code</parameter> will cause &mkvinfo; to output a list of available translations."
 msgstr "Forceert de vertaling voor de te gebruiken taal <parameter>code</parameter> (b.v. '<literal>de_DE</literal>' voor de Duitse taal). Hoewel het de voorkeur heeft de 'omgevings variabelen' te gebruiken <varname>LANG</varname>, <varname>LC_MESSAGES</varname> en <varname>LC_ALL</varname>. Opvragen van een '<literal>list</literal>' als een <parameter>code</parameter> zal er voor zorgen dat &mkvextract; een lijst zal uitvoeren van alle beschikbaren vertalingen."
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvinfo.xml:167
+#: doc/man/mkvinfo.xml:176
 msgid "Be more verbose. See the section about <link linkend=\"mkvinfo.verbosity_levels\">verbosity levels</link> for a description which information will be output at which level."
 msgstr "Wees uitgebreider. Zie sectie over <link linkend=\"mkvinfo.verbosity_levels\">uitgebreide niveaus</link> voor een beschrijving welke informatie wordt uitgevoerd op welk niveau."
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvinfo.xml:222
+#: doc/man/mkvinfo.xml:231
 msgid "Several chars can be escaped, e.g. if you need to start a non-comment line with '#'. The rules are described in <link linkend=\"mkvinfo.escaping\">the section about escaping text</link>."
 msgstr ""
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvinfo.xml:227
+#: doc/man/mkvinfo.xml:236
 msgid "The command line '<command>mkvinfo -v -v input.mkv --redirect-output info.txt</command>' could be converted into the following option file:"
 msgstr "De commando regel '<command>mkvinfo -v -v input.mkv --redirect-output info.txt</command>' kon worden geconverteert naar het volgende optie bestand:"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><programlisting>
-#: doc/man/mkvinfo.xml:232
+#: doc/man/mkvinfo.xml:241
 #, no-wrap
 msgid ""
 "# Be more verbose\n"
@@ -1107,57 +1120,57 @@ msgstr ""
 " "
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvinfo.xml:247
+#: doc/man/mkvinfo.xml:256
 msgid "Verbosity levels"
 msgstr "Uitgebreide niveau's"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvinfo.xml:250
+#: doc/man/mkvinfo.xml:259
 msgid "The <link linkend=\"mkvinfo.description.verbose\"><option>-v</option></link> option can be used to increase &mkvinfo;'s verbosity level and print more information about the current file."
 msgstr "De optie <link linkend=\"mkvinfo.description.verbose\"><option>-v</option></link> kan worden gebruikt om &mkvinfo;'s uitgebreide niveau te verhogen en meer informatie te printen over het huidige bestand."
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvinfo.xml:255
+#: doc/man/mkvinfo.xml:264
 msgid "At level 0 &mkvinfo; will print only the track headers it finds and their types. &mkvinfo; will exit as soon as the headers are parsed completely (more technical: as soon as the first cluster is encountered). In this level the seek head entries and the cues will not be displayed -- even if they're located in front of the track information."
 msgstr "Op niveau 0 print &mkvinfo; de spoor koppen die het vindt en hun typen. &mkvinfo; verlaat zo snel mogelijk wanneer de koppen volledig zijn ontleed (meer technisch: zo snel mogelijk wanneer de eerste cluster wordt tegengekomen). Op dit niveau worden de zoek kop ingangen en volg document(en) (cue) niet getoond -- zelfs niet wanneer die aan het begin bevinden van de spoor informatie."
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvinfo.xml:261
+#: doc/man/mkvinfo.xml:270
 msgid "At level 1 &mkvinfo; will also print all &matroska; elements encountered for the complete file but the seek head entries and the cue entries. If the summary mode is enabled then &mkvinfo; will output the frame position as well."
 msgstr "Op niveau 1 print &mkvinfo; ook alle &matroska; tegengekomen elementen van het complete bestand elementen behalve de zoek koppen en de volg document(en) (cue) ingangen. Als de samenvattingsmode aan is dan zal &mkvinfo; het beeld positie eveneens uitvoeren."
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvinfo.xml:266
+#: doc/man/mkvinfo.xml:275
 msgid "At level 2 &mkvinfo; will also print the seek head entries, the cue entries and the file position at which each &matroska; element can be found at."
 msgstr "Op niveau 2 print &mkvinfo; tevens de zoek kop ingangen, de volg document(en) (cue)l ingangen en de bestandspositie waarbij elk &matroska; element kan worden gevonden."
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvinfo.xml:271
+#: doc/man/mkvinfo.xml:280
 msgid "At level 3 and above &mkvinfo; will print some information that is not directly connected to a &matroska; element. All other elements only print stuff about the elements that were just found. Level 3 adds meta information to ease debugging (read: it's intended for developers only). All lines written by level 3 are enclosed in square brackets to make filtering them out easy."
 msgstr "Op niveau 3 en hoger zal &mkvinfo; enige informatie printen welke niet direct aan een &matroska; element is gekoppeld. Alle overige elementen printen alleen info over de elementen die zojuist werden gevonden. Niveau 3 voegt meta informatie toe voor een makkelijkere fout opsporing (lees als: bedoelt voor ontwikkelaars). Alle niveau 3 geschreven regels bevatten zich tussen [ ] om ze makkelijker te herkennen.."
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvinfo.xml:281
+#: doc/man/mkvinfo.xml:290
 msgid "&mkvinfo; exits with one of three exit codes:"
 msgstr "&mkvinfo; verlaat met één van de drie afsluit codes:"
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvinfo.xml:287
+#: doc/man/mkvinfo.xml:296
 msgid "<constant>0</constant> -- This exit codes means that the run has completed successfully."
 msgstr "<constant>0</constant> -- Deze verlaat code betekent dat alles succesvol voltooid is."
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvinfo.xml:293
+#: doc/man/mkvinfo.xml:302
 msgid "<constant>1</constant> -- In this case &mkvinfo; has output at least one warning, but the run did continue.  A warning is prefixed with the text '<literal>Warning:</literal>'."
 msgstr "<constant>1</constant> -- In dit geval heeft &mkvinfo; minimaal één waarschuwing doen uitgaan, maar ging door. Een waarschuing wordt voorafgegaan met de tekst '<literal>Warning:</literal>'."
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvinfo.xml:300
+#: doc/man/mkvinfo.xml:309
 msgid "<constant>2</constant> -- This exit code is used after an error occurred.  &mkvinfo; aborts right after outputting the error message.  Error messages range from wrong command line arguments over read/write errors to broken files."
 msgstr "<constant>2</constant> -- Deze fout code wordt gegeven nadat er een fout optrad. &mkvinfo; breekt direct af na het geven van dit waarschuw bericht. Fout! bereik in berichten, van een verkeerd commando regel argument over lees/schrijf fouten naar een 'gebroken' bestanden."
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvinfo.xml:322
+#: doc/man/mkvinfo.xml:331
 msgid "&mkvmerge;, &mkvextract;, &mkvpropedit;, &mmg;"
 msgstr "&mkvmerge;, &mkvextract;, &mkvpropedit;, &mmg;"
 
