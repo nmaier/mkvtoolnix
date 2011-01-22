@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: Israel Lucas Torrijos <lukillas.ole@gmail.com>\n"
 "POT-Creation-Date: 2010-06-08 10:00+0200\n"
-"PO-Revision-Date: 2011-01-20 15:26+0100\n"
-"Last-Translator: Sergi Medina\n"
+"PO-Revision-Date: 2011-01-22 16:23+0100\n"
+"Last-Translator: Israel Lucas <lukillas.ole@gmail.com>\n"
 "Language-Team: Spanish <moritz@bunkus.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -143,7 +143,7 @@ msgstr "  --chapter-charset <cset> Codificación de caracteres para un archivo d
 
 #: src/merge/mkvmerge.cpp:85
 msgid "  --chapter-language <lng> Set the 'language' element in chapter entries.\n"
-msgstr "  --chapter-language <lng> Establece la opción de lengua en los registros del capítulo.\n"
+msgstr "  --chapter-language <lng> Establece la opción del idioma en los registros del capítulo.\n"
 
 #: src/merge/mkvmerge.cpp:84
 msgid "  --chapters <file>        Read chapter information from the file.\n"
@@ -226,7 +226,7 @@ msgid ""
 "  --default-language <lng> Use this language for all tracks unless\n"
 "                           overridden with the --language option.\n"
 msgstr ""
-"  --default-language <lng> Usa esta lengua para todas las pistas a menos\n"
+"  --default-language <lng> Use este idioma para todas las pistas a menos\n"
 "                           que se reemplace con la opción de --language.\n"
 
 #: src/merge/mkvmerge.cpp:181
@@ -274,7 +274,7 @@ msgid ""
 "  --language <TID:lang>    Sets the language for the track (ISO639-2\n"
 "                           code, see --list-languages).\n"
 msgstr ""
-"  --language <TID:lang>    Establece la lengua para la pista (ISO639-2\n"
+"  --language <TID:lang>    Establece el idioma para la pista (ISO639-2\n"
 "                           código, ver --list-languages).\n"
 
 #: src/merge/mkvmerge.cpp:129
@@ -294,7 +294,7 @@ msgid ""
 "  --list-languages         Lists all ISO639 languages and their\n"
 "                           ISO639-2 codes.\n"
 msgstr ""
-"  --list-languages         Listas de todas las lenguas ISO639 y sus\n"
+"  --list-languages         Listado de todos los idiomas ISO639 y sus\n"
 "                           códigos ISO639-2.\n"
 
 #: src/merge/mkvmerge.cpp:201
@@ -364,17 +364,16 @@ msgid "  --split-max-files <n>    Create at most n files.\n"
 msgstr "  --split-max-files <n>    Crea como máximo n archivos.\n"
 
 #: src/merge/mkvmerge.cpp:220
-#, fuzzy
 msgid ""
 "  --stereo-mode <TID:n|keyword>\n"
 "                           Sets the stereo mode parameter. It can\n"
 "                           either be a number 0 - 11 or a keyword\n"
 "                           (see documentation for the full list).\n"
 msgstr ""
-"  --stereo-mode <TID:n|none|left|right|both>\n"
-"                           Establece el parámetro a modo estéreo. Este puede\n"
-"                           ser un número 0 - 3 o una de las\n"
-"                           palabras clave ninguno, derecha, izquierda o ambos.\n"
+"  --stereo-mode <TID:n|keyword>\n"
+"                           Establece el parámetro de modo estéreo. Este puede\n"
+"                           ser un número 0 - 11 o una keyword (palabra clave)\n"
+"                          (ver documentacion para una lista completa).\n"
 
 #: src/merge/mkvmerge.cpp:226
 msgid ""
@@ -854,7 +853,7 @@ msgstr "&Editor de capítulos\tAlt-4"
 
 #: src/mmg/mmg_dialog.cpp:296
 msgid "&Check for updates"
-msgstr ""
+msgstr "&Comprobar actualizaciones"
 
 #: src/mmg/update_checker.cpp:69
 msgid "&Close"
@@ -1040,15 +1039,15 @@ msgstr "'%1%' el nombre de archivo está ausente.\n"
 
 #: src/merge/mkvmerge.cpp:1421
 msgid "'%1%' is neither a valid ISO639-2 nor a valid ISO639-1 code in '--chapter-language %1%'. See 'mkvmerge --list-languages' for a list of all languages and their respective ISO639-2 codes.\n"
-msgstr "'%1%' no es un código válido ISO639-2 ni ISO639-1 en '--chapter-language %1%'. Ver 'mkvmerge --list-languages' para una lista de todas las lenguas y sus respectivos códigos ISO639-2.\n"
+msgstr "'%1%' no es un código válido ISO639-2 ni ISO639-1 en '--chapter-language %1%'. Ver 'mkvmerge --list-languages' para una lista de todos los idiomas y sus respectivos códigos ISO639-2.\n"
 
 #: src/merge/mkvmerge.cpp:1489
 msgid "'%1%' is neither a valid ISO639-2 nor a valid ISO639-1 code in '--default-language %1%'. See 'mkvmerge --list-languages' for a list of all languages and their respective ISO639-2 codes.\n"
-msgstr "'%1%' no es un código válido ISO639-2 ni ISO639-1 en '--default-language %1%'. Ver 'mkvmerge --list-languages' para una lista de todas las lenguas y sus respectivos códigos ISO639-2.\n"
+msgstr "'%1%' no es un código válido ISO639-2 ni ISO639-1 en '--default-language %1%'. Ver 'mkvmerge --list-languages' para una lista de todos los idiomas y sus respectivos códigos ISO639-2.\n"
 
 #: src/merge/mkvmerge.cpp:1044
 msgid "'%1%' is neither a valid ISO639-2 nor a valid ISO639-1 code. See 'mkvmerge --list-languages' for a list of all languages and their respective ISO639-2 codes.\n"
-msgstr "'%1%' no es un código válido ISO639-2 ni ISO639-1 . Ver 'mkvmerge --list-languages' para una lista de todas las lenguas y sus respectivos códigos ISO639-2.\n"
+msgstr "'%1%' no es un código válido ISO639-2 ni ISO639-1 . Ver 'mkvmerge --list-languages' para una lista de todos los idiomas y sus respectivos códigos ISO639-2.\n"
 
 #: src/common/chapters/chapters.cpp:184
 #: src/common/chapters/chapters.cpp:201
@@ -1065,7 +1064,7 @@ msgstr "'%1%' no es un válido %2% en '%3% %4%'.\n"
 
 #: src/common/chapters/xml_parser.cpp:122
 msgid "'%1%' is not a valid ISO639-2 language code."
-msgstr "'%1%' no es un código de lengua válido ISO639-2."
+msgstr "'%1%' no es un código de idioma ISO639-2."
 
 #: src/merge/mkvmerge.cpp:1207
 msgid "'%1%' is not a valid append mode in '--append-mode %1%'.\n"
@@ -1230,7 +1229,7 @@ msgstr "'--chapter-charset' debe ser asignado antes de '--chapters' en '--chapte
 
 #: src/merge/mkvmerge.cpp:1785
 msgid "'--chapter-language' lacks the language.\n"
-msgstr "'--chapter-language' carece de la lengua.\n"
+msgstr "'--chapter-language' carece de idioma.\n"
 
 #: src/merge/mkvmerge.cpp:1414
 msgid "'--chapter-language' may only be given once in '--chapter-language %1%'.\n"
@@ -1949,9 +1948,8 @@ msgid "Available translations:\n"
 msgstr "Traducciones disponibles:\n"
 
 #: src/mmg/update_checker.cpp:63
-#, fuzzy
 msgid "Available version:"
-msgstr "Opciones disponibles:"
+msgstr "Version disponible:"
 
 #: src/common/compression.cpp:213
 #: src/common/compression.cpp:231
@@ -2034,7 +2032,7 @@ msgstr "Extracción de hojas de distribución de pistas (CUE Sheet)"
 
 #: src/info/info_cli_parser.cpp:46
 msgid "Calculate and display checksums and use verbosity level 4."
-msgstr ""
+msgstr "Calcular y mostrar checksums, y usar verbosity en nivel 4."
 
 #: src/info/info_cli_parser.cpp:45
 msgid "Calculate and display checksums of frame contents."
@@ -2158,7 +2156,7 @@ msgstr "Archivos del capítulo (*.xml;*.txt;*.mka;*.mkv;*.mk3d;*.cue)|*.xml;*.tx
 
 #: src/mmg/tabs/chapters.cpp:345
 msgid "Chapter names and languages"
-msgstr "Nombre y lengua del capítulo"
+msgstr "Nombre e idioma del capítulo"
 
 #: src/mmg/options/chapters.cpp:70
 msgid "Chapter options"
@@ -2229,20 +2227,20 @@ msgstr "Código de caracteres:"
 #: src/mmg/mmg_dialog.cpp:296
 #: src/mmg/options/mmg.cpp:105
 msgid "Check online for the latest release"
-msgstr ""
+msgstr "Comprobar online la ultima versión"
 
 #: src/common/cli_parser.cpp:184
 #: src/merge/mkvmerge.cpp:251
 msgid "Check online for the latest release."
-msgstr ""
+msgstr "Comprobar online la ultima versión."
 
 #: src/mmg/options/mmg.cpp:106
 msgid "Check online whether or not a new release of MKVToolNix is available on the home page. Will only check when mmg starts and at most once a day. No information is transmitted to the server."
-msgstr ""
+msgstr "Comprobar online, si hay disponible o no en su pagina de inicio, una nueva version de MKVToolNix. Unicamente se comprobará cuando mmg se inicie y como máximo una vez al dia. Ninguna informacion es enviada al servidor."
 
 #: src/mmg/mmg_dialog.cpp:1728
 msgid "Checking for updates online; please wait"
-msgstr ""
+msgstr "Comprobando actualizaciones, por favor espere"
 
 #: src/mmg/tabs/chapters.cpp:524
 msgid "Choose a chapter file"
@@ -2415,7 +2413,7 @@ msgstr "Línea de comandos usada:"
 
 #: src/mmg/options/languages.cpp:79
 msgid "Common languages"
-msgstr "Lenguas comunes"
+msgstr "Idiomas comunes"
 
 #: src/merge/pr_generic.cpp:782
 msgid "Compression failed: %1%\n"
@@ -2474,7 +2472,7 @@ msgstr "El núcleo de la imagen (CorePicture) del fotograma (frame) %1% tiene un
 # CorePicture traducido como núcleo de la imagen
 #: src/extract/xtr_cpic.cpp:47
 msgid "CorePicture frame %1% not supported.\n"
-msgstr "CorePicture frame %1% no es soportada.\n"
+msgstr "El núcleo de la imagen (CorePicture) del fotograma %1% no está soportado.\n"
 
 #: src/mmg/jobs.cpp:184
 #: src/mmg/mux_dialog.cpp:130
@@ -2708,9 +2706,8 @@ msgid "Current value:"
 msgstr "Valor actual:"
 
 #: src/mmg/update_checker.cpp:60
-#, fuzzy
 msgid "Current version:"
-msgstr "Valor actual:"
+msgstr "Versión actual:"
 
 #: src/mmg/jobs.cpp:484
 msgid "D&elete"
@@ -2723,7 +2720,7 @@ msgstr "¡La información de encabezado DTS ha cambiado! - Nuevo formato:\n"
 # (Digital Theater System)
 #: src/common/file_types.cpp:31
 msgid "DTS/DTS-HD (Digital Theater System)"
-msgstr "DTS/DTS-HD (Digital Theater System)"
+msgstr "DTS/DTS-HD (Sistema Digital Theater)"
 
 #: src/common/dts.cpp:194
 msgid "DTS_Header problem: encoded with an incompatible new encoder version\n"
@@ -3010,7 +3007,7 @@ msgstr "Fin:"
 
 #: src/common/iso639.cpp:527
 msgid "English language name"
-msgstr "Nombre de la lengua inglesa"
+msgstr "Nombre del idioma inglés"
 
 #: src/info/qt_ui.cpp:130
 #: src/info/wxwidgets_ui.cpp:229
@@ -3498,6 +3495,8 @@ msgid ""
 "Help is available in form of tool tips, from the\n"
 "'Help' menu or by pressing the 'F1' key."
 msgstr ""
+"La ayuda está disponible en forma de herramienta de información\n"
+"desde el menú 'Ayuda' o pulsando la tecla 'F1'."
 
 #: src/mmg/cli_options_dlg.cpp:31
 msgid ""
@@ -3529,7 +3528,7 @@ msgstr ""
 
 #: src/mmg/tabs/chapters.cpp:331
 msgid "Here you can set the values for the language and the country that you want to apply to all the chapters below and including the currently selected entry."
-msgstr "Aquí puedes establecer los valores para la lengua y el país que necesitas para aplicar a todos los capítulos e incluso a los registros actualmente seleccionados."
+msgstr "Aquí puedes establecer los valores para el idioma y país, que necesitas para aplicar a todos los capítulos, e incluso a los registros actualmente seleccionados."
 
 #: src/mmg/jobs.cpp:434
 msgid "ID"
@@ -3634,7 +3633,7 @@ msgstr "Entrada demasiado larga: %1% > %2%"
 
 #: src/mmg/options/mmg.cpp:116
 msgid "Interface language:"
-msgstr "Lengua de la interfaz:"
+msgstr "Idioma del interfaz:"
 
 #: src/info/mkvinfo.cpp:748
 msgid "Interlaced: %1%"
@@ -3959,30 +3958,30 @@ msgstr "Flag de atadura: %1%"
 #: src/common/property_element.cpp:131
 #: src/mmg/header_editor/frame.cpp:431
 msgid "Language"
-msgstr "Lengua"
+msgstr "Idioma"
 
 #: src/mmg/tabs/input_general.cpp:182
 msgid "Language for this track. Select one of the ISO639-2 language codes."
-msgstr "Lengua para esta pista. Selecciona uno de los códigos de lengua ISO639-2."
+msgstr "Idioma para esta pista. Selecciona uno de los códigos de idiomas ISO639-2."
 
 #: src/common/kate.cpp:78
 msgid "Language is not NUL terminated"
-msgstr "La lengua no terminó en NULO"
+msgstr "El idioma no terminó en NULO"
 
 #: src/mmg/options/chapters.cpp:86
 #: src/mmg/tabs/input_general.cpp:181
 #: src/mmg/tabs/chapters.cpp:349
 #: src/mmg/tabs/global.cpp:278
 msgid "Language:"
-msgstr "Lengua:"
+msgstr "Idioma:"
 
 #: src/info/mkvinfo.cpp:1094
 msgid "Language: %1%"
-msgstr "Lengua: %1%"
+msgstr "Idioma: %1%"
 
 #: src/mmg/options/languages.cpp:116
 msgid "Languages"
-msgstr "Lenguas"
+msgstr "Idiomas"
 
 #: src/mmg/cli_options_dlg.cpp:114
 msgid "Leave additional space (EbmlVoid) in the output file after the chapters."
@@ -4061,7 +4060,7 @@ msgstr "Tipo MIME:"
 
 #: src/mmg/mmg_dialog.cpp:718
 msgid "MKVToolNix is licensed under the GNU GPL v2"
-msgstr ""
+msgstr "MKVToolNix está licenciado bajo el GNU GPL v2"
 
 #: src/common/file_types.cpp:36
 msgid "MP4 audio/video files"
@@ -4412,9 +4411,8 @@ msgid "No track corresponding to the edit specification '%1%' was found. %2%\n"
 msgstr "No se encontró ningúna pista que corresponda a la edición especificada '%1%'. %2%\n"
 
 #: src/extract/tracks.cpp:311
-#, fuzzy
 msgid "No track with the ID %1% was found in the source file.\n"
-msgstr "Un archivo adjunto con la ID %1% no fue encontrado.\n"
+msgstr "Ninguna pista con ID %1% fue encontrada en el archivo origen.\n"
 
 #: src/mmg/tabs/input.cpp:615
 msgid "No tracks found"
@@ -4480,7 +4478,7 @@ msgstr "Uno de los capítulos no tiene nombre."
 
 #: src/mmg/update_checker.cpp:55
 msgid "Online check for updates"
-msgstr ""
+msgstr "Comprobación online de actualizaciones"
 
 #: src/merge/mkvmerge.cpp:1445
 msgid "Only one chapter file allowed in '%1% %2%'.\n"
@@ -4668,7 +4666,7 @@ msgid ""
 "country that you want to apply to all the chapters\n"
 "below and including the currently selected entry."
 msgstr ""
-"Por favor, introduce los valores para la lengua y el\n"
+"Por favor, introduce los valores para el idioma y el\n"
 "país que necesitas para aplicar a todos los capítulos\n"
 "y subcapítulos incluyendo el registro seleccionado actualmente."
 
@@ -5163,8 +5161,8 @@ msgid ""
 "Select the languages you want to be shown at the top\n"
 "of language drop down boxes."
 msgstr ""
-"Selecciona las lenguas que deseas que se muestren en la parte superior\n"
-"de la lista desplegable de la lengua"
+"Selecciona los idiomas que deseas que se muestren en la parte superior\n"
+"de la lista desplegable del idioma"
 
 #: src/mmg/tabs/chapters.cpp:100
 msgid "Select values to be applied"
@@ -5174,7 +5172,7 @@ msgstr "Selecciona los valores que se aplicarán"
 # ¿Dejarlo en idioma original?
 #: src/mmg/tabs/input_extra.cpp:125
 msgid "Selects for which blocks mkvmerge will produce index entries ( = cue entries). \"default\" is a good choice for almost all situations."
-msgstr "Selecciona para qué bloques mkvmerge creará los registros en el índice. \"predefinido\" es una buena elección para casi todas las situaciones."
+msgstr "Selecciona para qué bloques mkvmerge creará los registros en el índice ( = cue entries). \"predefinido\" es una buena elección para casi todas las situaciones."
 
 #: src/mmg/tabs/input_format.cpp:250
 msgid "Selects the character set a subtitle file or chapter information was written with. Only needed for non-UTF encoded subtitle files or for files with chapter information (e.g. OGM, MP4) for which mkvmerge does not detect the encoding correctly."
@@ -5196,7 +5194,7 @@ msgid ""
 "user preference."
 msgstr ""
 "Establecer si esta pista (audio, vídeo o subtítulos) DEBE\n"
-"ser usada si no coincide con la lengua encontrada\n"
+"ser usada si no coincide con el idioma encontrado\n"
 "en las preferencias establecidas por el usuario."
 
 #: src/common/property_element.cpp:119
@@ -5210,8 +5208,8 @@ msgid ""
 msgstr ""
 "Establecer si esta pista DEBE ser usada durante la reproducción.\n"
 "Puede haber pistas forzadas de alguna clase (audio, vídeo\n"
-"o subtítulos). El reproductor debería seleccionar la primera\n"
-"lengua que coincida con las preferencias del usuario o la\n"
+"o subtítulos). El reproductor debería seleccionar el primer\n"
+"idioma que coincida con las preferencias del usuario o la\n"
 "pista como predefinida junto con la obligatoria."
 
 #: src/common/property_element.cpp:118
@@ -5225,7 +5223,7 @@ msgstr "Establecer si el vídeo es entrelazado."
 
 #: src/mmg/tabs/chapters.cpp:110
 msgid "Set language to:"
-msgstr "Establecer la lengua a:"
+msgstr "Establecer el idioma a:"
 
 #: src/mmg/options/mmg.cpp:82
 msgid "Set the delay input field from the file name"
@@ -5335,7 +5333,7 @@ msgstr "Muestra la información del programa"
 
 #: src/info/info_cli_parser.cpp:48
 msgid "Show statistics for each track in verbose mode."
-msgstr ""
+msgstr "Mostrar estadisticas para cada pista en modo verbose."
 
 #: src/mmg/mmg_dialog.cpp:276
 msgid "Show the command line mmg creates for mkvmerge"
@@ -5452,8 +5450,8 @@ msgid ""
 "Specifies the language of the track in the\n"
 "Matroska languages form."
 msgstr ""
-"Especifica la lengua de la pista en la\n"
-"lista de lenguas de Matroska"
+"Especifica el idioma de la pista en el\n"
+"formaulario de idiomas de Matroska."
 
 #: src/common/property_element.cpp:147
 #: src/mmg/header_editor/frame.cpp:488
@@ -5520,7 +5518,7 @@ msgstr "Iniciando trabajo con ID %d (%s) en %s"
 
 #: src/info/mkvinfo.cpp:1904
 msgid "Statistics for track number %1%: number of blocks: %2%; size in bytes: %3%; duration in seconds: %4%; approximate bitrate in bits/second: %5%\n"
-msgstr ""
+msgstr "Estadísticas para la pista número %1%: número de bloques: %2%; tamaño en bytes: %3%; duración en segundos: %4%; bitrate aproximado en bits/segundo: %5%\n"
 
 #: src/mmg/jobs.cpp:437
 msgid "Status"
@@ -5537,9 +5535,8 @@ msgid "Status:"
 msgstr "Estado:"
 
 #: src/merge/mkvmerge.cpp:711
-#, fuzzy
 msgid "Stereo mode parameter: not given in the form <TID>:<n|keyword> where n is a number between 0 and %1% or one of these keywords: %2% (argument was '%3%').\n"
-msgstr "Parámetro del modo estéreo: no asignado en la forma <TID>:<n|keyword> donde n es un número entre 0 y 3 o una de las palabras clave: ninguno, derecha, izquierda, ambos (el argumento fue '%1%').\n"
+msgstr "Parámetro de modo estéreo: no asignado en la forma <TID>:<n|keyword> donde n es un número entre 0 y %1% o una de estas palabras clave: %2% (el argumento fue '%3%').\n"
 
 #: src/info/mkvinfo.cpp:753
 msgid "Stereo mode: %1% (%2%)"
@@ -5547,7 +5544,7 @@ msgstr "Modo estéreo: %1% (%2%)"
 
 #: src/mmg/header_editor/frame.cpp:492
 msgid "Stereo-3D video mode (0 - 11, see documentation)."
-msgstr ""
+msgstr "Modo de video Stereo-3D (0 - 11, ver documentación)."
 
 #: src/common/property_element.cpp:149
 msgid ""
@@ -5656,7 +5653,7 @@ msgstr "Archivos de texto (*.txt)|*.txt|Todos los archivos|*.*"
 
 #: src/input/r_vobsub.cpp:227
 msgid "The .idx file does not contain an 'id: ...' line to indicate the language.\n"
-msgstr "El archivo .idx no contiene una línea 'id: ...' para indicar la lengua.\n"
+msgstr "El archivo .idx no contiene una línea 'id: ...' para indicar el idioma.\n"
 
 #: src/output/p_aac.cpp:207
 msgid "The AAC profiles are different: %1% and %2%"
@@ -5789,7 +5786,7 @@ msgstr "Los cambios son escritos al archivo.\n"
 #: src/mmg/tabs/chapters.cpp:778
 #, c-format
 msgid "The chapter '%s' is missing its language."
-msgstr "En el capítulo '%s' está ausente la lengua."
+msgstr "En el capítulo '%s' está ausente el idioma."
 
 #: src/mmg/tabs/chapters.cpp:772
 #, c-format
@@ -5854,7 +5851,7 @@ msgstr "El código de tiempo del paquete actual es mas pequeño que el del anter
 
 #: src/input/r_usf.cpp:129
 msgid "The default language code '%1%' is not a valid ISO639-2 language code and will be ignored.\n"
-msgstr "El código de la lengua predefinida '%1%' no es un código de lengua ISO639-2 válido y será ignorado.\n"
+msgstr "El código del idioma predefinido '%1%' no es un código de idioma ISO639-2 válido y será ignorado.\n"
 
 #: src/mmg/tabs/input.cpp:1299
 #, c-format
@@ -6157,11 +6154,11 @@ msgstr ""
 #: src/mmg/tabs/chapters.cpp:1307
 #, c-format
 msgid "The language '%s' is not a valid language and cannot be selected."
-msgstr "La lengua '%s' no es una lengua válida y no puede ser seleccionada."
+msgstr "El idioma '%s' no es válido y no puede ser seleccionado."
 
 #: src/input/r_usf.cpp:161
 msgid "The language code '%1%' is not a valid ISO639-2 language code and will be ignored.\n"
-msgstr "El código de la lengua '%1%' no es un código de lengua ISO639-2 válido y será ignorado.\n"
+msgstr "El código del idioma '%1%' no es un código de idioma ISO639-2 válido y será ignorado.\n"
 
 #: src/merge/timecode_factory.cpp:214
 msgid "The line %1% of the timecode file '%2%' does not contain a valid floating point number.\n"
@@ -6375,7 +6372,7 @@ msgstr "La tabla de búsqueda en este archivo TTA parece que está corrupta.\n"
 #: src/mmg/tabs/chapters.cpp:783
 #, c-format
 msgid "The selected language '%s' for the chapter '%s' is not a valid language code. Please select one of the predefined ones."
-msgstr "La lengua seleccionada '%s' para el capítulo '%s' no es un código de lengua válido. Por favor, selecciona una de los predefinidos."
+msgstr "El idioma seleccionado '%s' para el capítulo '%s' no es un código de idioma válido. Por favor, selecciona uno de los predefinidos."
 
 #: src/extract/extract_cli_parser.cpp:119
 msgid "The sixth mode finds the timecodes of all blocks for a track and outputs a timecode v2 file with these timecodes."
@@ -6512,18 +6509,16 @@ msgid "The track parameters do not match."
 msgstr "Los parámetros de la pista no coinciden."
 
 #: src/common/command_line.cpp:270
-#, fuzzy
 msgid "The update information could not be retrieved from %1%.\n"
-msgstr "El encabezado de identificación KATE no puede ser analizado (%1%).\n"
+msgstr "La información de la actualización no se pudo recuperar desde %1%.\n"
 
 #: src/merge/pr_generic.h:379
 msgid "The width of the two tracks is different: %1% and %2%"
 msgstr "El ancho de las dos pistas es diferente: %1% y %2%"
 
 #: src/mmg/mmg_dialog.cpp:1761
-#, fuzzy
 msgid "There is a new version available online."
-msgstr "No hay traducción disponible para."
+msgstr "Hay una nueva versión disponible."
 
 #: src/merge/output_control.cpp:829
 #: src/merge/output_control.cpp:839
@@ -6536,7 +6531,7 @@ msgstr "No hay traducción disponible para '%1%'.\n"
 
 #: src/mmg/mmg_dialog.cpp:1762
 msgid "There was an error querying the update status."
-msgstr ""
+msgstr "Hubo un error al consultar el estado de la actualización."
 
 #: src/mmg/mux_dialog.cpp:362
 msgid "There were ERRORs."
@@ -7572,7 +7567,7 @@ msgstr "Error de análisis XML en la línea %1%: %2%."
 
 #: src/mmg/mmg_dialog.cpp:1760
 msgid "You are already running the latest version."
-msgstr ""
+msgstr "Ya está ejecutando la última versión."
 
 #: src/mmg/tabs/chapters.cpp:1351
 msgid ""
@@ -7678,7 +7673,7 @@ msgstr "añadir"
 
 #: src/common/stereo_mode.cpp:55
 msgid "anaglyph"
-msgstr ""
+msgstr "anáglifo"
 
 #: src/mmg/tabs/input.cpp:185
 msgid "append"
@@ -7742,19 +7737,19 @@ msgstr "canales: %1%"
 
 #: src/common/stereo_mode.cpp:50
 msgid "checkboard (left first)"
-msgstr ""
+msgstr "damero (izquierda primero)"
 
 #: src/common/stereo_mode.cpp:49
 msgid "checkboard (right first)"
-msgstr ""
+msgstr "damero (derecha primero)"
 
 #: src/common/stereo_mode.cpp:54
 msgid "column interleaved (left first)"
-msgstr ""
+msgstr "columna intercalada (izquierda primero)"
 
 #: src/common/stereo_mode.cpp:53
 msgid "column interleaved (right first)"
-msgstr ""
+msgstr "columna intercalada (derecha primero)"
 
 #: src/mmg/jobs.cpp:347
 msgid "completed OK"
@@ -7980,7 +7975,7 @@ msgstr "clave,"
 
 #: src/info/mkvinfo.cpp:1095
 msgid "language: %1%"
-msgstr "lengua: %1%"
+msgstr "idioma: %1%"
 
 #: src/info/mkvinfo.cpp:182
 msgid "length %1%, data: %2%"
@@ -8335,7 +8330,7 @@ msgstr "mkvmerge admite dos formatos de capítulos: el OGM como formato de texto
 
 #: src/mmg/tabs/global.cpp:279
 msgid "mkvmerge supports two chapter formats: The OGM like text format and the full featured XML format. This option specifies the language to be associated with chapters if the OGM chapter format is used. It is ignored for XML chapter files."
-msgstr "mkvmerge admite dos formatos de capítulos: El OGM como formato de texto y el formato XML con todas sus funciones. Esta opción especifica la lengua que se asocia con los capítulos si el formato del capítulo utilizado es OGM. Esto es ignorado para los archivos de capítulos XML."
+msgstr "mkvmerge admite dos formatos de capítulos: El OGM como formato de texto y el formato XML con todas sus funciones. Esta opción especifica el idioma que se asocia con los capítulos si el formato del capítulo utilizado es OGM. Esto es ignorado para los archivos de capítulos XML."
 
 #: src/merge/output_control.cpp:249
 #: src/merge/output_control.cpp:289
@@ -8548,11 +8543,11 @@ msgstr "interrupción desconocida"
 
 #: src/common/stereo_mode.cpp:52
 msgid "row interleaved (left first)"
-msgstr ""
+msgstr "fila intercalada (izquierda primero)"
 
 #: src/common/stereo_mode.cpp:51
 msgid "row interleaved (right first)"
-msgstr ""
+msgstr "fila intercalada (derecha primero)"
 
 #: src/info/mkvinfo.cpp:652
 msgid "sampling freq: %1%"
@@ -8560,11 +8555,11 @@ msgstr "frecuencia de muestreo: %1%"
 
 #: src/common/stereo_mode.cpp:46
 msgid "side by side (left first)"
-msgstr ""
+msgstr "lado por lado (izquierda primero)"
 
 #: src/common/stereo_mode.cpp:56
 msgid "side by side (right first)"
-msgstr ""
+msgstr "lado por lado (derecha primero)"
 
 #: src/input/subtitles.cpp:589
 msgid "spu_extraction_duration: Encountered broken SPU packet (next_off < start_off) at timecode %1%. This packet might be displayed incorrectly or not at all.\n"
@@ -8613,11 +8608,11 @@ msgstr "códigos de tiempo"
 
 #: src/common/stereo_mode.cpp:48
 msgid "top bottom (left first)"
-msgstr ""
+msgstr "Arriba abajo (izquierda primero)"
 
 #: src/common/stereo_mode.cpp:47
 msgid "top bottom (right first)"
-msgstr ""
+msgstr "Arriba abajo (derecha primero)"
 
 #: src/merge/mkvmerge.cpp:2027
 msgid "track name"
@@ -8641,7 +8636,7 @@ msgstr "tta_reader: tamaño_etiqueta < 0 en el c'tor. %1%\n"
 
 #: src/mmg/tabs/input_general.cpp:143
 msgid "und (Undetermined)"
-msgstr "und (sin determinar)"
+msgstr "und (Indeterminado)"
 
 #: src/input/r_mpeg_ps.cpp:1388
 #: src/input/r_matroska.cpp:89
@@ -8765,10 +8760,13 @@ msgstr "sí"
 
 #~ msgid " (both eyes)"
 #~ msgstr " (ambos ojos)"
+
 #~ msgid " (left eye)"
 #~ msgstr " (ojo izquierdo)"
+
 #~ msgid " (right eye)"
 #~ msgstr " (ojo derecho)"
+
 #~ msgid ""
 #~ "%s\n"
 #~ "\n"
@@ -8789,20 +8787,28 @@ msgstr "sí"
 #~ "\n"
 #~ "La ayuda está disponible como herramienta de información desde el\n"
 #~ "menú Ayuda o presionando la tecla F1."
+
 #~ msgid "About mkvmerge's GUI"
 #~ msgstr "Acerca de mkvmerge GUI (interfaz gráfica de usuario)"
+
 #~ msgid "Both eyes"
 #~ msgstr "Ambos ojos"
+
 #~ msgid "Left eye"
 #~ msgstr "Ojo izquierdo"
+
 #~ msgid "Matroska A/V files (*.mka;*.mkv)|*.mkv;*.mka|%s"
 #~ msgstr "Archivos Matroska de A/V (*.mka;*.mkv)|*.mkv;*.mka|%s"
+
 #~ msgid "Matroska files (*.mkv;*.mka)|*.mkv;*.mka|%s"
 #~ msgstr "Archivos Matroska (*.mkv;*.mka)|*.mkv;*.mka|%s"
+
 #~ msgid "None"
 #~ msgstr "Ninguno"
+
 #~ msgid "Right eye"
 #~ msgstr "Ojo derecho"
+
 #~ msgid ""
 #~ "Usage: mkvinfo [options] inname\n"
 #~ "\n"
@@ -8843,11 +8849,13 @@ msgstr "sí"
 #~ "                                         Redirige todos los mensajes a este archivo.\n"
 #~ "  -h, --help                        Muestra la ayuda.\n"
 #~ "  -V, --version                   Muestra información de la versión.\n"
+
 #, fuzzy
 #~ msgid "Using the Vp8 video output module.\n"
 #~ msgstr "Usando el módulo de salida VP8.\n"
+
 #~ msgid "cstrutf8_to_UTFstring: Invalid UTF-8 sequence encountered. Please contact moritz@bunkus.org and request that he implements a better UTF-8 parser."
 #~ msgstr "cstrutf8_to_UTFstring: Se ha encontrado una secuencia UTF-8 no válida. Por favor, contacta con moritz@bunkus.org y solicita que se mejore el analizador de UTF-8."
+
 #~ msgid "mkvextract: Unknown mode!?\n"
 #~ msgstr "mkvextract: ¿¡Modo desconocido!?\n"
-
