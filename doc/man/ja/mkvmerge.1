@@ -50,7 +50,7 @@ mkvmerge \- マルチメディアストリームをMatroska(TM)ファイルに�
 .PP
 The order of command line options is important\&. Please read the section
 "Option order"
-it if you\*(Aqre new to the program\&.
+if you\*(Aqre new to the program\&.
 .sp .5v
 .RE
 .PP
@@ -818,12 +818,12 @@ download_url)。
 .PP
 The order of command line options is important\&. Please read the section
 "Option order"
-it if you\*(Aqre new to the program\&.
+if you\*(Aqre new to the program\&.
 .sp .5v
 .RE
-.SH "OPTION ORDER"
+.SH "オプションの順番"
 .PP
-The order in which options are entered is important for some options\&. Options fall into two categories:
+いくつかのオプションでは、入力する順番が重要になります。オプションは2つに分類されます：
 .sp
 .RS 4
 .ie n \{\
@@ -833,11 +833,7 @@ The order in which options are entered is important for some options\&. Options 
 .sp -1
 .IP "  1." 4.2
 .\}
-Options that affect the whole program and are not tied to any input file\&. These include but are not limited to
-\fB\-\-command\-line\-charset\fR,
-\fB\-\-output\fR
-or
-\fB\-\-title\fR\&. These can appear anywhere on the command line\&.
+プログラム全体に影響し、どの入力ファイルにも関連付けられていないオプション。例えば、\fB\-\-command\-line\-charset\fR、\fB\-\-output\fR、\fB\-\-title\fR"などです。これらのオプションは、コマンドラインのどこに書いても構いません。
 .RE
 .sp
 .RS 4
@@ -848,16 +844,10 @@ or
 .sp -1
 .IP "  2." 4.2
 .\}
-Options that affect a single input file or a single track in an input file\&. These options all apply to the following input file on the command line\&. All options applying to the same input (or to tracks from the same input file) file can be written in any order as long as they all appear before that input file\*(Aqs name\&. Examples for options applying to an input file are
-\fB\-\-no\-chapters\fR
-or
-\fB\-\-chapter\-charset\fR\&. Examples for options applying to a single track are
-\fB\-\-default\-duration\fR
-or
-\fB\-\-language\fR\&.
+1つの入力ファイルのみ、もしくは入力ファイル中の1つのトラックのみに影響するオプション。これらのオプションは全て、コマンドラインでその後ろに続く入力ファイルに適用されます。同じ入力ファイル（または同じ入力ファイル中のトラック）に適用される全てのオプションは、その入力ファイルのファイル名の前に書きさえすれば、どんな順番でも構いません。1つの入力ファイルに適用されるオプションの例を挙げると、\fB\-\-no\-chapters\fRや\fB\-\-chapter\-charset\fRなどがあります。1つのトラックのみに適用されるオプションには、例えば\fB\-\-default\-duration\fRや\fB\-\-language\fRがあります。
 .RE
 .PP
-The options are processed from left to right\&. If an option appears multiple times within the same scope then the last occurence will be used\&. Therefore the title will be set to "Something else" in the following example:
+オプションは左から右へと処理されます。もし同じスコープ内に1つのオプションが2回以上出てきた場合には、最後のものが使われます。よって、次の例ではタイトルは"Something else"に設定されます。
 .sp
 .if n \{\
 .RS 4
@@ -869,9 +859,7 @@ $ mkvmerge \-o output\&.mkv \-\-title \*(AqThis and that\*(Aq input\&.avi \-\-ti
 .RE
 .\}
 .PP
-The following example shows that using the
-\fB\-\-language\fR
-option twice is OK because they\*(Aqre used in different scopes\&. Even though they apply to the same track ID they apply to different input files and therefore have different scopes:
+次の例は、違うスコープ内で使われているので\fB\-\-language\fRオプションを2回使ってもよいということを示しています。それらは同じトラックIDに適用されますが、違う入力ファイルに適用されるので違うスコープを持っているのです。
 .sp
 .if n \{\
 .RS 4
