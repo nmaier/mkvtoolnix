@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: nl\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-05-25 23:42+0200\n"
-"PO-Revision-Date: 2011-01-20 15:17+0100\n"
+"PO-Revision-Date: 2011-01-21 21:38+0100\n"
 "Last-Translator: René Maassen <bmom43@hotmail.com>\n"
 "Language-Team: Dutch <bmom43@hotmail.com>\n"
 "Language: nl\n"
@@ -363,17 +363,16 @@ msgid "  --split-max-files <n>    Create at most n files.\n"
 msgstr "  --split-max-files <n>               Creëert op zijn meest  n bestanden.\n"
 
 #: src/merge/mkvmerge.cpp:220
-#, fuzzy
 msgid ""
 "  --stereo-mode <TID:n|keyword>\n"
 "                           Sets the stereo mode parameter. It can\n"
 "                           either be a number 0 - 11 or a keyword\n"
 "                           (see documentation for the full list).\n"
 msgstr ""
-"  --stereo-mode <TID:n|geen|links|rechts|beide>\n"
-"                           Stelt stereo mode in. Het kan zijn\n"
-"                           een nummer 0 - 3 OF één van de woorden\n"
-"                           'geen', rechts', 'links' of 'beide'.\n"
+"  --stereo-mode <TID:n|keyword>\n"
+"                           Stelt stereo mode parameter in. Het kan zijn\n"
+"                           een nummer 0 t/m 11 of een sleutelwoord\n"
+"                           (zie documentatie voor volledige lijst).\n"
 
 #: src/merge/mkvmerge.cpp:226
 msgid ""
@@ -634,7 +633,7 @@ msgstr " (vrij vergroten  ofverkleinen)"
 
 #: src/info/mkvinfo.cpp:361
 msgid " (h.264 profile: %1% @L%2%.%3%)"
-msgstr ""
+msgstr " (h.264 profiel: %1% @L%2%.%3%)"
 
 #: src/info/mkvinfo.cpp:739
 msgid " (inches)"
@@ -722,7 +721,7 @@ msgstr "grootte is onbekend"
 
 #: src/mmg/cli_options_dlg.cpp:110
 msgid "### Development hacks ###"
-msgstr ""
+msgstr "### Development hacks ###"
 
 #: src/mmg/cli_options_dlg.cpp:85
 msgid "### Global output control ###"
@@ -746,7 +745,7 @@ msgstr "%1% beeld, spoor %2%, tijd code %3% (%4%), grootte %5%, adler 0x%|6$08x|
 
 #: src/common/kax_file.cpp:165
 msgid "%1%: Error in the Matroska file structure at position %2%. Resyncing to the next level 1 element.\n"
-msgstr ""
+msgstr "%1%: Fout in de Matroska bestand structuur op positie %2%. Her-syncen naar volgende niveau 1 element.\n"
 
 #: src/merge/mkvmerge.cpp:627
 msgid "%1%: divisor is 0 in '%2% %3%'.\n"
@@ -853,7 +852,7 @@ msgstr "&Hoofdstuk bewerken\tAlt-4"
 
 #: src/mmg/mmg_dialog.cpp:296
 msgid "&Check for updates"
-msgstr ""
+msgstr "&Controleer op nieuwere versie"
 
 #: src/mmg/update_checker.cpp:69
 msgid "&Close"
@@ -1948,9 +1947,8 @@ msgid "Available translations:\n"
 msgstr "Beschikbare vertalingen:\n"
 
 #: src/mmg/update_checker.cpp:63
-#, fuzzy
 msgid "Available version:"
-msgstr "Beschikbare opties:"
+msgstr "Beschikbare versie:"
 
 #: src/common/compression.cpp:213
 #: src/common/compression.cpp:231
@@ -2033,7 +2031,7 @@ msgstr "Volg document(en) (cue) extractie"
 
 #: src/info/info_cli_parser.cpp:46
 msgid "Calculate and display checksums and use verbosity level 4."
-msgstr ""
+msgstr "Bereken en controleer de controlesom gebruik meldt niveaul 4."
 
 #: src/info/info_cli_parser.cpp:45
 msgid "Calculate and display checksums of frame contents."
@@ -2228,20 +2226,20 @@ msgstr "Karakter set:"
 #: src/mmg/mmg_dialog.cpp:296
 #: src/mmg/options/mmg.cpp:105
 msgid "Check online for the latest release"
-msgstr ""
+msgstr "Controleer online voor de laatste versie"
 
 #: src/common/cli_parser.cpp:184
 #: src/merge/mkvmerge.cpp:251
 msgid "Check online for the latest release."
-msgstr ""
+msgstr "Controleer online voor de laatste versie."
 
 #: src/mmg/options/mmg.cpp:106
 msgid "Check online whether or not a new release of MKVToolNix is available on the home page. Will only check when mmg starts and at most once a day. No information is transmitted to the server."
-msgstr ""
+msgstr "Controleer online of er al dan niet een nieuwer versie van MKVToolNix op de thuispagina beschikbaar is. Wortdt leen gecontroleerd als  mmg start en maximaal één keer per dag. Er wordt géén informatie naar de server verzonden!"
 
 #: src/mmg/mmg_dialog.cpp:1728
 msgid "Checking for updates online; please wait"
-msgstr ""
+msgstr "Controleren op opwaarderingen,moment a.u.b."
 
 #: src/mmg/tabs/chapters.cpp:524
 msgid "Choose a chapter file"
@@ -2701,9 +2699,8 @@ msgid "Current value:"
 msgstr "Huidige waarde:"
 
 #: src/mmg/update_checker.cpp:60
-#, fuzzy
 msgid "Current version:"
-msgstr "Huidige waarde:"
+msgstr "Huidige versie:"
 
 #: src/mmg/jobs.cpp:484
 msgid "D&elete"
@@ -2819,7 +2816,7 @@ msgstr "Dirac"
 
 #: src/mmg/options/mmg.cpp:100
 msgid "Disable header removal compression for audio and video tracks by default"
-msgstr ""
+msgstr "Zet verwijder kop compressie uit voor audio en video sporen (standaard)"
 
 #: src/mmg/jobs.cpp:480
 msgid "Disable the selected job(s) and sets their status to 'done'"
@@ -3477,6 +3474,8 @@ msgid ""
 "Help is available in form of tool tips, from the\n"
 "'Help' menu or by pressing the 'F1' key."
 msgstr ""
+"Help is beschikbaar in de vorm van tips, via het\n"
+"'Help' menu of via de 'F1' toets."
 
 #: src/mmg/cli_options_dlg.cpp:31
 msgid ""
@@ -3542,7 +3541,7 @@ msgstr "Indien aangevinkt, zal mmg automatisch de uitvoer bestandsnaam instellen
 
 #: src/mmg/options/mmg.cpp:101
 msgid "If checked mmg will set the 'compression' drop down box to 'none' for all audio and video tracks by default. The user can still change the compression setting afterwards."
-msgstr ""
+msgstr "Indien aangevinkt zet mmg de 'compressie' uitklapmenu naar 'geen' voor alle audio en video sporen (standaard). Achteraf is de compressie nog in te stellen."
 
 #: src/mmg/options/mmg.cpp:95
 msgid "If checked mmg will warn if it thinks that you're using it incorrectly. Such warnings are shown at least once even if you turn this feature off."
@@ -4037,7 +4036,7 @@ msgstr "MIME type:"
 
 #: src/mmg/mmg_dialog.cpp:718
 msgid "MKVToolNix is licensed under the GNU GPL v2"
-msgstr ""
+msgstr "MKVToolNix is licenceerd onder de GNU GPL v2"
 
 #: src/common/file_types.cpp:36
 msgid "MP4 audio/video files"
@@ -4388,9 +4387,8 @@ msgid "No track corresponding to the edit specification '%1%' was found. %2%\n"
 msgstr "Geen spoor dat beantwoordt aan te bewerken specificaties '%1%' is gevonden. %2%\n"
 
 #: src/extract/tracks.cpp:311
-#, fuzzy
 msgid "No track with the ID %1% was found in the source file.\n"
-msgstr "Een bijlage met het ID %1% is niet gevonden.\n"
+msgstr "Geen spoor met het ID %1% is  gevonden in het bron bestand.\n"
 
 #: src/mmg/tabs/input.cpp:615
 msgid "No tracks found"
@@ -4456,7 +4454,7 @@ msgstr "Eén van de hoofdstukken heeft geen naam."
 
 #: src/mmg/update_checker.cpp:55
 msgid "Online check for updates"
-msgstr ""
+msgstr "Online controleren op opwaarderingen"
 
 #: src/merge/mkvmerge.cpp:1445
 msgid "Only one chapter file allowed in '%1% %2%'.\n"
@@ -4579,9 +4577,8 @@ msgid "Overwrite existing file?"
 msgstr "Bestand bestand overschrijven?"
 
 #: src/common/file_types.cpp:41
-#, fuzzy
 msgid "PGS/SUP subtitles"
-msgstr "ondertitels"
+msgstr "PGS/SUPondertitels"
 
 #: src/input/r_vobsub.cpp:523
 msgid "PTS error: 0x%|1$02x| %|2$02x|%|3$02x| %|4$02x|%|5$02x|\n"
@@ -4933,13 +4930,12 @@ msgid "Remove name"
 msgstr "Verwijder naam"
 
 #: src/common/kax_file.cpp:235
-#, fuzzy
 msgid "Resync failed: no valid Matroska level 1 element found.\n"
-msgstr " (geen segment/niveaul 0 element gevonden)"
+msgstr "Her-syns gefaald: géén geldig Matroska  niveaul 1 element gevonden)\n"
 
 #: src/common/kax_file.cpp:227
 msgid "Resyncing successful at position %1%.\n"
-msgstr ""
+msgstr "Her-syncen succesvol op positie %1%.\n"
 
 #: src/mmg/mmg_dialog.cpp:275
 msgid "Run mkvmerge and start the muxing process"
@@ -5223,7 +5219,7 @@ msgstr "Zet de Matroska ontleed mode op 'snel' (standaard) of 'volledigl'"
 
 #: src/mmg/tabs/input_extra.cpp:127
 msgid "Sets the compression algorithm to be used for this track. If no option is selected mkvmerge will decide whether or not to compress and which algorithm to use based on the track type. Most track types are not compressed at all. "
-msgstr ""
+msgstr "Stelt de compressie algoritme in voor dit spoor. Indien neits geselecteerd dan zal mkvmerge zelf beslissen wat te selecteren op basis van het spoor type. Meeste sporen zijn niet eens gecomprimeerd. "
 
 #: src/mmg/tabs/input_format.cpp:253
 msgid "Sets the cropping parameters. Must be comma-separated list of four numbers for the cropping to be used at the left, top, right and bottom."
@@ -5309,7 +5305,7 @@ msgstr "Toon programma informatie"
 
 #: src/info/info_cli_parser.cpp:48
 msgid "Show statistics for each track in verbose mode."
-msgstr ""
+msgstr "Toon statistieken voor elk spoor in 'stille' mode."
 
 #: src/mmg/mmg_dialog.cpp:276
 msgid "Show the command line mmg creates for mkvmerge"
@@ -5493,7 +5489,7 @@ msgstr "Start taak ID %d (%s) op %s"
 
 #: src/info/mkvinfo.cpp:1904
 msgid "Statistics for track number %1%: number of blocks: %2%; size in bytes: %3%; duration in seconds: %4%; approximate bitrate in bits/second: %5%\n"
-msgstr ""
+msgstr "Statistieken voor spoornummer %1%: aantal blokken: %2%; grootte in bytes: %3%; tijdsinconden%4%; verwachtte bitratte in bits/seconde: %5%\n"
 
 #: src/mmg/jobs.cpp:437
 msgid "Status"
@@ -5510,9 +5506,8 @@ msgid "Status:"
 msgstr "Status:"
 
 #: src/merge/mkvmerge.cpp:711
-#, fuzzy
 msgid "Stereo mode parameter: not given in the form <TID>:<n|keyword> where n is a number between 0 and %1% or one of these keywords: %2% (argument was '%3%').\n"
-msgstr "Stereo mode parameter: niet ingegeven in formulier <TID>:<n|sleutelwoord> waar n een nummer is tussen 0 en 3 of één van de sleutelwoorden 'geen', 'rechts', 'links', 'beide' (argument is '%1%').\n"
+msgstr "Stereo mode parameter: niet ingegeven in formulier <TID>:<n|keyword> waar n een nummer is tussen 0 en 3 of één van deze ingave's  'geen', 'rechts', 'links', 'beide'  %2% (argument was '%3%').\n"
 
 #: src/info/mkvinfo.cpp:753
 msgid "Stereo mode: %1% (%2%)"
@@ -5520,7 +5515,7 @@ msgstr "Stereo mode: %1% (%2%)"
 
 #: src/mmg/header_editor/frame.cpp:492
 msgid "Stereo-3D video mode (0 - 11, see documentation)."
-msgstr ""
+msgstr "Stereo-3D video mode (0 - 11, zie documentatie)."
 
 #: src/common/property_element.cpp:149
 msgid ""
@@ -5556,9 +5551,8 @@ msgid "Subtitle track %u"
 msgstr "Ondertitel spoor %u"
 
 #: src/merge/mkvmerge.cpp:359
-#, fuzzy
 msgid "Supported file types:\n"
-msgstr "Element typen:\n"
+msgstr "Ondersteunde bestandstypen:\n"
 
 #: src/common/cli_parser.cpp:176
 msgid "Suppress status output."
@@ -5920,7 +5914,7 @@ msgstr "Het bestand '%1%' kon voor schrijven niet geopend worden (%2%, %3%).\n"
 
 #: src/merge/output_control.cpp:1366
 msgid "The file '%1%' has been opened for writing.\n"
-msgstr "Het bestande '%1%' is geopend voor schrijven.\n"
+msgstr "Het bestand '%1%' is geopend voor schrijven.\n"
 
 #: src/merge/mkvmerge.cpp:2127
 msgid "The file '%1%' has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n"
@@ -5961,9 +5955,8 @@ msgid "The file has been changed by another program since it was read by the hea
 msgstr "Het bestand is veranderd door een ander programma sinds het is gelezen door het kopstuk bewerker. Daarom moet je het opnieuw inladen. Ongelukkigerwijs betekent dit dat de veranderingen verloren zijn gegaan."
 
 #: src/propedit/propedit.h:18
-#, fuzzy
 msgid "The file has not been modified."
-msgstr "Het bestand bestaat niet."
+msgstr "Het bestand ie niet veranderd."
 
 #: src/input/r_tta.cpp:64
 msgid "The file header is too short.\n"
@@ -6484,18 +6477,16 @@ msgid "The track parameters do not match."
 msgstr "De spoor parameters komen niet overeen."
 
 #: src/common/command_line.cpp:270
-#, fuzzy
 msgid "The update information could not be retrieved from %1%.\n"
-msgstr "Het Kate identifactie kop kon niet ontleed worden (%1%).\n"
+msgstr "Het opwaardeer bestand kon niet verkregen worden van (%1%).\n"
 
 #: src/merge/pr_generic.h:379
 msgid "The width of the two tracks is different: %1% and %2%"
 msgstr "De breedte van de twee sporen zijn verschillend: %1% en %2%"
 
 #: src/mmg/mmg_dialog.cpp:1761
-#, fuzzy
 msgid "There is a new version available online."
-msgstr "Geen vertaling beschikbaar voor."
+msgstr "Er is online een nieuwere versie beschikbaar."
 
 #: src/merge/output_control.cpp:829
 #: src/merge/output_control.cpp:839
@@ -6508,7 +6499,7 @@ msgstr "Geen vertaling beschikbaar voor '%1%'.\n"
 
 #: src/mmg/mmg_dialog.cpp:1762
 msgid "There was an error querying the update status."
-msgstr ""
+msgstr "Er was een fout bij opvragen van de opwaardeer status."
 
 #: src/mmg/mux_dialog.cpp:362
 msgid "There were ERRORs."
@@ -6880,9 +6871,8 @@ msgid "Unexpected picture frame after single field frame. Fix the MPEG2 video st
 msgstr "Onverwacht beeld plaatje na een enkel beeld veld. Herstel het MPEG2 video spoor voorje een poging doet het te vermenigvuldigen.\n"
 
 #: src/info/mkvinfo.cpp:375
-#, fuzzy
 msgid "Unknown"
-msgstr "onbekend"
+msgstr "Onbekend"
 
 #: src/output/p_aac.cpp:130
 msgid "Unknown AAC MPEG-2 profile %1%."
@@ -7167,14 +7157,12 @@ msgstr "Gebruikmakend van de PCM uitvoer module.\n"
 
 #: src/input/r_matroska.cpp:1719
 #: src/input/r_pgssup.cpp:72
-#, fuzzy
 msgid "Using the PGS output module.\n"
-msgstr "Gebruik de DTS uitvoer module.\n"
+msgstr "Gebruik de  PGS uitvoer module.\n"
 
 #: src/input/r_pgssup.cpp:59
-#, fuzzy
 msgid "Using the PGSSUP demultiplexer.\n"
-msgstr "Gebruik de MPEG ES splitser.\n"
+msgstr "Gebruik de PGSSUP splitser.\n"
 
 #: src/input/r_qtmp4.cpp:124
 msgid "Using the Quicktime/MP4 demultiplexer.\n"
@@ -7547,7 +7535,7 @@ msgstr "XML ontleed fout op regel %1%: %2%."
 
 #: src/mmg/mmg_dialog.cpp:1760
 msgid "You are already running the latest version."
-msgstr ""
+msgstr "Je hebt reeds de laatste versie."
 
 #: src/mmg/tabs/chapters.cpp:1351
 msgid ""
@@ -7652,7 +7640,7 @@ msgstr "toevoegen"
 
 #: src/common/stereo_mode.cpp:55
 msgid "anaglyph"
-msgstr ""
+msgstr "anaglyph"
 
 #: src/mmg/tabs/input.cpp:185
 msgid "append"
@@ -7716,19 +7704,19 @@ msgstr "kanalen: %1%"
 
 #: src/common/stereo_mode.cpp:50
 msgid "checkboard (left first)"
-msgstr ""
+msgstr "controlebord (links eerst)"
 
 #: src/common/stereo_mode.cpp:49
 msgid "checkboard (right first)"
-msgstr ""
+msgstr "checkboard (rechts eerst)"
 
 #: src/common/stereo_mode.cpp:54
 msgid "column interleaved (left first)"
-msgstr ""
+msgstr "kolom volgorde (links eerst)"
 
 #: src/common/stereo_mode.cpp:53
 msgid "column interleaved (right first)"
-msgstr ""
+msgstr "kolom volgorde (rechts eerst)"
 
 #: src/mmg/jobs.cpp:347
 msgid "completed OK"
@@ -8447,9 +8435,8 @@ msgid "pending"
 msgstr "wachtend"
 
 #: src/input/r_pgssup.cpp:55
-#, fuzzy
 msgid "pgssup_reader: Could not open the file."
-msgstr "mpeg_es_lezer: Kon bestand niet openen."
+msgstr "pgssup_reader:: Kon bestand niet openen."
 
 #: src/info/mkvinfo.cpp:729
 msgid "pixel crop bottom: %1%"
@@ -8523,11 +8510,11 @@ msgstr "rest: onbekend"
 
 #: src/common/stereo_mode.cpp:52
 msgid "row interleaved (left first)"
-msgstr ""
+msgstr "rij volgorde (links eerst)"
 
 #: src/common/stereo_mode.cpp:51
 msgid "row interleaved (right first)"
-msgstr ""
+msgstr "rij volgorde (rechts eerst)"
 
 #: src/info/mkvinfo.cpp:652
 msgid "sampling freq: %1%"
@@ -8535,11 +8522,11 @@ msgstr "voorbeeld frequentie: %1%"
 
 #: src/common/stereo_mode.cpp:46
 msgid "side by side (left first)"
-msgstr ""
+msgstr "naast elkaar (links eerst)"
 
 #: src/common/stereo_mode.cpp:56
 msgid "side by side (right first)"
-msgstr ""
+msgstr "naast elkaar (rechts eerst)"
 
 #: src/input/subtitles.cpp:589
 msgid "spu_extraction_duration: Encountered broken SPU packet (next_off < start_off) at timecode %1%. This packet might be displayed incorrectly or not at all.\n"
@@ -8588,11 +8575,11 @@ msgstr "tijd code's"
 
 #: src/common/stereo_mode.cpp:48
 msgid "top bottom (left first)"
-msgstr ""
+msgstr "bovenste beneden (links eerst)"
 
 #: src/common/stereo_mode.cpp:47
 msgid "top bottom (right first)"
-msgstr ""
+msgstr "bovenste beneden (rechts eerst)"
 
 #: src/merge/mkvmerge.cpp:2027
 msgid "track name"
@@ -8740,10 +8727,13 @@ msgstr "ja"
 
 #~ msgid " (both eyes)"
 #~ msgstr " (beide ogen)"
+
 #~ msgid " (left eye)"
 #~ msgstr " (linker oog)"
+
 #~ msgid " (right eye)"
 #~ msgstr " (rechter oog)"
+
 #~ msgid ""
 #~ "%s\n"
 #~ "\n"
@@ -8764,18 +8754,25 @@ msgstr "ja"
 #~ "\n"
 #~ "Help is beschikbaar via, het 'Help'\n"
 #~ "menu of door op F1 te drukken."
+
 #~ msgid "About mkvmerge's GUI"
 #~ msgstr "Over mkvmerge's GUI"
+
 #~ msgid "Both eyes"
 #~ msgstr "Beide ogen"
+
 #~ msgid "DTS (Digital Theater System)"
 #~ msgstr "DTS (Digital Theater System)"
+
 #~ msgid "Dirac elementary stream"
 #~ msgstr "Dirac basis stroom"
+
 #~ msgid "FLAC lossless audio"
 #~ msgstr "FLAC verlies vrije audio"
+
 #~ msgid "IVF with VP8"
 #~ msgstr "IVF met VP8"
+
 #~ msgid ""
 #~ "Known file types:\n"
 #~ "  ext   description\n"
@@ -8784,36 +8781,52 @@ msgstr "ja"
 #~ "Bekende bestandstypen:\n"
 #~ "  ext   beschrijving\n"
 #~ "  ----  --------------------------\n"
+
 #~ msgid "Left eye"
 #~ msgstr "Linker oog"
+
 #~ msgid "MPEG program stream"
 #~ msgstr "MPEG programma stroom"
+
 #~ msgid "MPEG-1 layer II audio (CBR and VBR/ABR)"
 #~ msgstr "MPEG-1 layer II audio (CBR en VBR/ABR)"
+
 #~ msgid "MPEG-1 layer III audio (CBR and VBR/ABR)"
 #~ msgstr "MPEG-1 layer III audio (CBR en VBR/ABR)"
+
 #~ msgid "MPEG-1 video elementary stream"
 #~ msgstr "MPEG-1 video basis stroom"
+
 #~ msgid "MPEG-2 video elementary stream"
 #~ msgstr "MPEG-2 video basis stroom"
+
 #~ msgid "Matroska A/V files (*.mka;*.mkv)|*.mkv;*.mka|%s"
 #~ msgstr "Matroska A/V bestanden (*.mka;*.mkv)|*.mkv;*.mka|%s"
+
 #~ msgid "Matroska files (*.mkv;*.mka)|*.mkv;*.mka|%s"
 #~ msgstr "Matroska bestanden (*.mkv;*.mka)|*.mkv;*.mka|%s"
+
 #~ msgid "None"
 #~ msgstr "Geen"
+
 #~ msgid "Quicktime/MP4 audio and video"
 #~ msgstr "Quicktime/MP4 audio en video"
+
 #~ msgid "RealMedia audio and video"
 #~ msgstr "RealMedia audio en video"
+
 #~ msgid "Right eye"
 #~ msgstr "Rechter oog"
+
 #~ msgid "Sets the compression used for VobSub subtitles. If nothing is chosen then the VobSubs will be automatically compressed with zlib. 'none' results is files that are a lot larger."
 #~ msgstr "Stelt de gebruikte compressie in voor VobSub ondertitels. Als er niets is geselecteerd, dan zal de VobSubs automatisch worden gecomprimeerd met zlib. 'geen' zal resuleeren in bestanden die aanmerkelijk groter zijn."
+
 #~ msgid "TTA lossless audio"
 #~ msgstr "TTA verlies vrije audio"
+
 #~ msgid "The MPEG-4 part 2 compression only works with native MPEG-4. However, native MPEG-4 mode has not been selected with '--engage native_mpeg4'.\n"
 #~ msgstr "Het MPEG-4 part 2 compressie werkt alleen met basis MPEG-4. Hoewel, basis MPEG-4 mode is niet geselecteerd met selected with '--aangaan basis_mpeg4'.\n"
+
 #~ msgid ""
 #~ "Usage: mkvinfo [options] inname\n"
 #~ "\n"
@@ -8854,49 +8867,70 @@ msgstr "ja"
 #~ "                 Stuur alle berichten door naar dit bestand.\n"
 #~ "  -h, --help     toont deze help.\n"
 #~ "  -V, --version Toont deze versie informatie.\n"
+
 #, fuzzy
 #~ msgid "Using the Vp8 video output module.\n"
 #~ msgstr "Gebruikmakend van de VP8 video uitvoer module.\n"
+
 #~ msgid "VC1 video elementary stream"
 #~ msgstr "VC1 video basis stroom"
+
 #~ msgid "VobBtn buttons"
 #~ msgstr "VobBtn knoppen"
+
 #~ msgid "WAVE (uncompressed PCM)"
 #~ msgstr "WAVE (ongecompromeerd PCM)"
+
 #~ msgid "WAVPACK lossless audio"
 #~ msgstr "WAVPACK verliesvrije audio"
+
 #~ msgid "Write raw FLAC files (default: write OggFLAC files)."
 #~ msgstr "Schrijf raw FLAC bestanden (standaard: schrijf OggFLAC bestanden)."
+
 #~ msgid "audio/video/text subtitles embedded in OGG"
 #~ msgstr "audio/video/tekst ondertiteling ingebed in OGG"
+
 #~ msgid "cstrutf8_to_UTFstring: Invalid UTF-8 sequence encountered. Please contact moritz@bunkus.org and request that he implements a better UTF-8 parser."
 #~ msgstr "cstrutf8_to_UTFstring: Ongeldig UTF-8 reeks tegengekomen. Neem a.u.b. kontakt op met moritz@bunkus.org en verzoek om een betere UTF-8 ontleder."
+
 #~ msgid "flac_header_extraction: Could not set the error callback.\n"
 #~ msgstr "flac_header_extraction: Kon niet instellen de fout terugkoppeling.\n"
+
 #~ msgid "flac_header_extraction: Could not set the metadata callback.\n"
 #~ msgstr "flac_header_extraction: Kon niet instellen de metadata terugkoppeling\n"
+
 #~ msgid "flac_header_extraction: Could not set the read callback.\n"
 #~ msgstr "flac_header_extraction: Kon niet instellen de lees terugkoppeling.\n"
+
 #~ msgid "flac_header_extraction: Could not set the write callback.\n"
 #~ msgstr "flac_header_extraction: Kon niet instellen de schrijf terugkoppeling.\n"
+
 #~ msgid "flac_reader: Could not set the eof callback.\n"
 #~ msgstr "flac_lezer: Kon niet instellen de eof terugkoppeling.\n"
+
 #~ msgid "flac_reader: Could not set the error callback.\n"
 #~ msgstr "flac_lezer: Kon niet instellen de fout terugkoppeling.\n"
+
 #~ msgid "flac_reader: Could not set the length callback.\n"
 #~ msgstr "flac_lezer: Kon niet instellen de lengte terugkoppeling.\n"
+
 #~ msgid "flac_reader: Could not set the metadata callback.\n"
 #~ msgstr "flac_lezer: Kon niet instellen de metadata terugkoppeling.\n"
+
 #~ msgid "flac_reader: Could not set the read callback.\n"
 #~ msgstr "flac_lezer: Kon niet instellen de lees terugkoppeling.\n"
+
 #~ msgid "flac_reader: Could not set the seek callback.\n"
 #~ msgstr "flac_lezer: Kon niet instellen de zoek terugkoppeling.\n"
+
 #~ msgid "flac_reader: Could not set the tell callback.\n"
 #~ msgstr "flac_lezer: Kon niet instellen de vertel terugkoppeling.\n"
+
 #~ msgid "flac_reader: Could not set the write callback.\n"
 #~ msgstr "flac_lezer: Kon niet instellen de schrijf terugkoppeling.\n"
+
 #~ msgid "general Matroska files"
 #~ msgstr "algemeen Matroska bestand"
+
 #~ msgid "mkvextract: Unknown mode!?\n"
 #~ msgstr "mkvextract: Onbekende mode!?\n"
-

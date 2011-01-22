@@ -52,9 +52,9 @@ website\&.
 .ps -1
 .br
 .PP
-The order of command line options is important\&. Please read the section
-"Option order"
-it if you\*(Aqre new to the program\&.
+De volgorde van de commandregel optie\*(Aqs is belangrijk\&. Lees a\&.u\&.b de sectie over
+"Optie volgorde"
+als je nog onbekend bent met het programma\&.
 .sp .5v
 .RE
 .PP
@@ -508,9 +508,9 @@ $ mkvmerge \-o full\&.mkv file1\&.mkv +file2\&.mkv
 .PP
 \fB=\fR
 .RS 4
-Normally mkvmerge looks for files in the same directory as an input file that have the same base name and only differ in their running number (e\&.g\&. \*(AqVTS_01_1\&.VOB\*(Aq, \*(AqVTS_01_2\&.VOB\*(Aq, \*(AqVTS_01_3\&.VOB\*(Aq etc)\&. This option, a single \*(Aq=\*(Aq, causes mkvmerge not to look for those additional files\&.
+Normaal kijkt mkvmerge naar bestanden in dezelfde map welke dezelfde basis naam bevatten maar alleen verschillen van volgordenummer (b\&.v\&. \*(AqVTS_01_1\&.VOB\*(Aq, \*(AqVTS_01_2\&.VOB\*(Aq, \*(AqVTS_01_3\&.VOB\*(Aq etc)\&. Deze optie, een enkele \*(Aq=\*(Aq maakt dat mkvmerge niet kijkt naar die extra bestanden\&.
 .sp
-The \*(Aq=\*(Aq can also be put in front of the next file name\&. Therefore the following two commands are equivalent:
+De \*(Aq=\*(Aq kan ook worden ingegeven voor elk volgende bestandsnaam\&. Daarom zijn de volgende twee commando\*(Aqs gelijkwaardig:
 .sp
 .if n \{\
 .RS 4
@@ -518,7 +518,7 @@ The \*(Aq=\*(Aq can also be put in front of the next file name\&. Therefore the 
 .nf
 $ mkvmerge \-o full\&.mkv = file1\&.mkv
 $ mkvmerge \-o full\&.mkv =file1\&.mkv
-     
+    
 .fi
 .if n \{\
 .RE
@@ -902,19 +902,18 @@ elementaire stroom inpakker is gebruikt\&. Indien weggelaten is de standaard waa
 .PP
 \fB\-\-compression\fR \fITID:n\fR
 .RS 4
-Selects the compression method to be used for the track\&. Note that the player also has to support this method\&. Valid values are \*(Aqnone\*(Aq, \*(Aqzlib\*(Aq, \*(Aqlzo\*(Aq/\*(Aqlxo1x\*(Aq, \*(Aqbz2\*(Aq/\*(Aqbzlib\*(Aq and \*(Aqmpeg4_p2\*(Aq/\*(Aqmpeg4p2\*(Aq\&. The values \*(Aqlzo\*(Aq/\*(Aqlxo1x\*(Aq and \*(Aqbz2\*(Aq/\*(Aqbzlib\*(Aq are only available if
+Selecteert de te gebruiken compressie methode in voor hetb spoor\&. Opmerking: de afspeler dient deze methode ook te ondersteunen\&. Geldige waarden zijn \*(Aqnone\*(Aq, \*(Aqzlib\*(Aq, \*(Aqlzo\*(Aq/\*(Aqlxo1x\*(Aq, \*(Aqbz2\*(Aq/\*(Aqbzlib\*(Aq en \*(Aqmpeg4_p2\*(Aq/\*(Aqmpeg4p2\*(Aq\&. De waarden \*(Aqlzo\*(Aq/\*(Aqlxo1x\*(Aq en \*(Aqbz2\*(Aq/\*(Aqbzlib\*(Aq zijn all\('e\('en beschikbaar als
 \fBmkvmerge\fR(1)
-has been compiled with support for the
+is gecompileerd met de ondersteuning voor de
 liblzo(TM)
-and
+respectievelijk
 bzlib(TM)
-compression libraries, respectively\&.
+compressie bibliotheken\&.
 .sp
-The compression method \*(Aqmpeg4_p2\*(Aq/\*(Aqmpeg4p2\*(Aq is a special compression method called \*(Aqheader removal\*(Aq that is only available for
-MPEG4
-part 2 video tracks\&.
+De compressie methode \*(Aqmpeg4_p2\*(Aq/\*(Aqmpeg4p2\*(Aq is een speciale compressie methode genoemd \*(Aqheader removal\*(Aq die is all\('e\('en beschikbaar voorMPEG4
+deel 2 video sporen\&.
 .sp
-The default for some subtitle tracks is \*(Aqzlib\*(Aq compression\&. This compression method is also the one that most if not all playback applications support\&. Support for other compression methods other than \*(Aqnone\*(Aq is not assured\&.
+Standaard voor siommige ondertitels zijn \*(Aqzlib\*(Aq compressie\&. Deze compressie wordt door bijna alle afspelers ondersteund zoniet allen\&. Ondersteuning voor andere compressie methoden anders dan \*(Aqnone\*(Aq is niet verzekerd\&.
 .RE
 .PP
 Opties die alleen op video sporen van toepassing zijn:
@@ -977,14 +976,14 @@ Stelt de video spoor uitsnij paramters in naar een gegeven waarden\&.
 .PP
 \fB\-\-stereo\-mode\fR \fITID:n|keyword\fR
 .RS 4
-Sets the stereo mode for the video track with the track ID
-\fITID\fR\&. The mode can either be a number
+Stelt de video mode in voor het video spoor met het spoor ID
+\fITID\fR\&. Deze mode kan zijn een nummer
 \fIn\fR
-between
+tussen
 \fB0\fR
-and
+en
 \fB11\fR
-or one of these keywords:
+of \('e\('en van de volgende:
 .sp
 \*(Aqmono\*(Aq, \*(Aqside_by_side_left_first\*(Aq, \*(Aqtop_bottom_right_first\*(Aq, \*(Aqtop_bottom_left_first\*(Aq, \*(Aqcheckboard_right_first\*(Aq, \*(Aqcheckboard_left_first\*(Aq, \*(Aqrow_interleaved_right_first\*(Aq, \*(Aqrow_interleaved_left_first\*(Aq, \*(Aqcolumn_interleaved_right_first\*(Aq, \*(Aqcolumn_interleaved_left_first\*(Aq, \*(Aqanaglyph\*(Aq, \*(Aqside_by_side_right_first\*(Aq\&.
 .RE
@@ -1019,12 +1018,12 @@ Zal
 \fBmkvmerge\fR(1)
 (met een sonde) een enkel bestand aftasten en het type rapporteren, de sporen in het bestand en hun spoor ID\*(Aqs\&. Als deze optie wordt gebruikt dan is de enige andere toegestane optie de bestandsnaam\&.
 .sp
-This option causes
+Deze optie maakt dat
 \fBmkvmerge\fR(1)
-to output additional information about the container and each track within\&. The extra information is surronded by square brackets\&. It consists of space\-saparated key/value pairs where keys and values are separated by a colon\&.
+extra informatie uitvoert over de inhoud en elk spoor\&. De extra informatie staat tussen haken ( [] )\&. Het bevat een spatie gescheiden sleutel/waarde paar, waar de sleutel en waarde\*(Aqs zijn gescheiden door een dubbel punt (:)\&.
 .sp
-Each value is escaped according to the rules described in
-the section about escaping special characters in text\&.
+Elke waarde wordt overgeslagen conform de regels beschreven in
+de sectie over overslaan van speciale karakters in een tekst\&.
 .RE
 .PP
 \fB\-l\fR, \fB\-\-list\-types\fR
@@ -1091,11 +1090,11 @@ een lijst zal uitvoeren van alle beschikbaren vertalingen\&.
 .PP
 \fB@\fRoptie\*(Aqs\-bestand
 .RS 4
-Reads additional command line arguments from the file
-\fIoptions\-file\fR\&. Lines whose first non\-whitespace character is a hash mark (\*(Aq#\*(Aq) are treated as comments and ignored\&. White spaces at the start and end of a line will be stripped\&. Each line must contain exactly one option\&.
+Leest extra commando regel argumenten in van een bestand
+\fIoptions\-file\fR\&. Regels met een spatie (lege ruimte) als eerste karakter, zijn gemarkeerd als een hash (waarde) (\*(Aq#\*(Aq) worden behandeld als commentaar en genegeerd\&. Een spatie aan het begin en einde van een regel worden verwijderd\&. Elke regel mag excact \('e\('en weaarde bevatten
 .sp
-Several chars can be escaped, e\&.g\&. if you need to start a non\-comment line with \*(Aq#\*(Aq\&. The rules are described in
-the section about escaping text\&.
+Verschillende karakters kunnen worden overgeslagen, b\&.v\&. als het nodig is een niet commentaar regel te starten met \*(Aq#\*(Aq\&. Deze regels worden beschreven in
+de sectie over overslaan van tekst\&.
 .sp
 De commando regel \*(Aq\fBmkvmerge \-o "mijn bestand\&.mkv" \-A "een film\&.avi" geluid\&.ogg\fR\*(Aq kan geconverteerd worden naar het volgende optie bestand:
 .sp
@@ -1182,18 +1181,19 @@ Toon versie informatie en sluit af\&.
 .PP
 \fB\-\-check\-for\-updates\fR
 .RS 4
-Checks online for new releases by downloading the URL
-http://mkvtoolnix\-releases\&.bunkus\&.org/latest\-release\&.xml\&. Four lines will be output in
+Controleert online op nieuwere versie\*(Aqs via ophalen op adres
+http://mkvtoolnix\-releases\&.bunkus\&.org/latest\-release\&.xml\&. Vier regels worden uitgevoerd in
 key=value
-style: the URL from where the information was retrieved (key
-version_check_url), the currently running version (key
-running_version), the latest release\*(Aqs version (key
-available_version) and the download URL (key
+stijl: het adres van waar de informatie wordt verkregen (key
+version_check_url), de huidig uitgevoerde versie (key
+running_version), laatst uitgebrachte versie (key
+available_version
+en het ophaal adres (key
 download_url)\&.
 .sp
-Afterwards the program exists with an exit code of 0 if no newer release is available, with 1 if a newer release is available and with 2 if an error occured (e\&.g\&. if the update information could not be retrieved)\&.
+Nadien sluit het programma af met een afsluitwaarde van 0 als er geen nieuwere beschikbaar is, met een 1 als er een nieuwere beschikbaar is en 2 indien er een fout ontstond (b\&.v\&. als de opwaardeer info niet verkregen kon worden)\&.
 .sp
-This option is only available if the program was built with support for libcurl\&.
+Deze optie nis alleeen beschikbaar indien het gebouwd is met ondersteuning voor libcurl\&.
 .RE
 .SH "GEBRUIK"
 .PP
@@ -1216,14 +1216,14 @@ optie\&.
 .ps -1
 .br
 .PP
-The order of command line options is important\&. Please read the section
-"Option order"
-it if you\*(Aqre new to the program\&.
+De volgorde van de commandregel optie\*(Aqs is belangrijk\&. Lees a\&.u\&.b de sectie over
+"Optie volgorde"
+als je nog onbekend bent met het programma\&.
 .sp .5v
 .RE
-.SH "OPTION ORDER"
+.SH "OPTIE VOLGORDE"
 .PP
-The order in which options are entered is important for some options\&. Options fall into two categories:
+Voor sommige optie\*(Aqs is de volgorde waarin zij zijn opgegeven belangrijk\&. Optie\*(Aqs mislukken in twee categorie\(:en:
 .sp
 .RS 4
 .ie n \{\
@@ -1233,11 +1233,11 @@ The order in which options are entered is important for some options\&. Options 
 .sp -1
 .IP "  1." 4.2
 .\}
-Options that affect the whole program and are not tied to any input file\&. These include but are not limited to
+Opties die het programma beinvloeden en niet verbonden zijn aan enig invoerbestand\&. Dez omvatten maar zijn niet beperkt tot
 \fB\-\-command\-line\-charset\fR,
 \fB\-\-output\fR
-or
-\fB\-\-title\fR\&. These can appear anywhere on the command line\&.
+of
+\fB\-\-title\fR\&. Deze mogen waar dan ook op de commandoregel staan\&.
 .RE
 .sp
 .RS 4
@@ -1248,30 +1248,30 @@ or
 .sp -1
 .IP "  2." 4.2
 .\}
-Options that affect a single input file or a single track in an input file\&. These options all apply to the following input file on the command line\&. All options applying to the same input (or to tracks from the same input file) file can be written in any order as long as they all appear before that input file\*(Aqs name\&. Examples for options applying to an input file are
+Opties die een enkel invoerbstand be\(:invloeden of spoor in invoerbestand\&. Deze optie\*(Aqs zijn allen van toepassing op het invoerbestand op de commandoregel\&. Alle optie\*(Aqs naar hetzelfde invoerbestand (of naar sporen in hetzelfde invoerbestand) mogen in elke volgorde geschreven worden zolang deze voor het invoerbestandsnaam staan\&. Voorbeelden die een invoerbestand beinvloeden zijn
 \fB\-\-no\-chapters\fR
-or
-\fB\-\-chapter\-charset\fR\&. Examples for options applying to a single track are
+of
+\fB\-\-chapter\-charset\fR\&. Voorbeelden voor een enkel spoor
 \fB\-\-default\-duration\fR
-or
+of
 \fB\-\-language\fR\&.
 .RE
 .PP
-The options are processed from left to right\&. If an option appears multiple times within the same scope then the last occurence will be used\&. Therefore the title will be set to "Something else" in the following example:
+De optie\*(Aqs worden uitgevoerd van links naar rechts\&. Indien er een optie meerdere keren is, binnen hetzelfde gebied dan wordt de laatste gebruikt\&. Daarom zat de title gezet worden naar "Iets anders" in het volgende voorbeeld:
 .sp
 .if n \{\
 .RS 4
 .\}
 .nf
-$ mkvmerge \-o output\&.mkv \-\-title \*(AqThis and that\*(Aq input\&.avi \-\-title \*(AqSomething else\*(Aq
+$ mkvmerge \-o output\&.mkv \-\-title \*(AqDit \('en Dat\*(Aq input\&.avi \-\-title \*(AqIets anders\*(Aq
 .fi
 .if n \{\
 .RE
 .\}
 .PP
-The following example shows that using the
+Het volgende voorbeeld toont dat het gebruiken van de optie
 \fB\-\-language\fR
-option twice is OK because they\*(Aqre used in different scopes\&. Even though they apply to the same track ID they apply to different input files and therefore have different scopes:
+tweemaal OK is, omdat zij andere gebieden gebruiken\&. Alhoewel zij tot hetzelfde spoor ID behoren maar van verschillende invoer bestanden en daarom verschillende gebieden hebben:
 .sp
 .if n \{\
 .RS 4
@@ -1562,7 +1562,7 @@ Als je de taal of de standaard spoor markering niet ziet, welke je had opgegeven
 \fBmkvinfo\fR(1)\*(Aqs uitvoer lees dan a\&.u\&.b\&. de sectie over
 standaard waarden\&.
 .PP
-Turn off the compression for an input file\&.
+Zet de compressie uit voor een invoer bestand
 .sp
 .if n \{\
 .RS 4
@@ -1597,9 +1597,10 @@ Track ID 2: audio (A_MPEG/L3)
 .RE
 .\}
 .PP
-Do not confuse the track IDs that are assigned to the tracks that are placed in the output MKV file with the track IDs of the input files\&. Only the input file track IDs are used for options needing these values\&.
+Verwar de spoor ID\*(Aqs niet met welke zijn toegewezen aan spo(o)r(en) in het uitvoer MKV bestand met het spoor ID van het invoerbestand\&. Alleen het invoerbestand spoor ID\*(Aqs worden gebruikt voor optie\*(Aqs die deze waarde nodig hebben\&.
 .PP
-Also note that each input file has its own set of track IDs\&. Therefore the track IDs for file \*(Aqfile1\&.ext\*(Aq as reported by \*(Aqmkvmerge \-\-identify\*(Aq do not change no matter how many other input files are there or in which position \*(Aqfile1\&.ext\*(Aq is used\&.
+Opmerking: Dat elk invoerbestand zijn eigen spoor ID\*(Aqs heeft\&. Daarom het spoor ID voor bestand \*(Aqfile1\&.ext
+gerapporteerd wordt door \*(Aqmkvmerge \-\-identify\*(Aq verander niet, ongeacht hoeveel invoerbestanden in welke positie dan ook \*(Aqfile1\&.ext\*(Aq wordt gebruikt\&.
 .PP
 Spoor ID\*(Aqs worden toegewezen zoals dit:
 .sp
@@ -1626,7 +1627,7 @@ bestanden: Het video spoor heeft het ID 0\&. De audio sporen krijgen de ID\*(Aqs
 .\}
 
 MP4
-files: As output from x264, the video track has the ID 1\&.
+bestanden: Als uitvoer van x264, het video spoor het ID 1 heeft\&.
 .RE
 .sp
 .RS 4
@@ -1807,11 +1808,11 @@ voor alle reeksen geschreven naar het apparaat/houder of naar een bestand wannee
 \fB\-\-redirect\-output\fR
 optie\&.
 .RE
-.SH "ESCAPING SPECIAL CHARS IN TEXT"
+.SH "OVERSLAAN VAN SPECIALE KARAKTER(S) IN TEKST"
 .PP
-There are a few places in which special characters in text must or should be escaped\&. The rules for escaping are simple: each character that needs escaping is replaced with a backslash followed by another character\&.
+Er zijn een paar plaatsen waar speciale karakters zouden of moeten worden overgeslagen\&. De regels voor het overslaan zijn simpel: elk karakter dat overgeslagen dient te wordenwordt vervangen door een backslash "\e" gevolgd door een ander karakter\&.
 .PP
-The rules are: \*(Aq \*(Aq becomes \*(Aq\es\*(Aq, \*(Aq"\*(Aq becomes \*(Aq\e2\*(Aq, \*(Aq:\*(Aq becomes \*(Aq\ec\*(Aq, \*(Aq#\*(Aq becomes \*(Aq\eh\*(Aq and \*(Aq\e\*(Aq itself becomes \*(Aq\e\e\*(Aq\&.
+De regels zijn: \*(Aq \*(Aq wordt \*(Aq\es\*(Aq, \*(Aq"\*(Aq wordt \*(Aq\e2\*(Aq, \*(Aq:\*(Aq wordt \*(Aq\ec\*(Aq, \*(Aq#\*(Aq wordt \*(Aq\eh\*(Aq en \*(Aq\e\*(Aq zelf wordt \*(Aq\e\e\*(Aq\&.
 .SH "ONDERTITELINGEN"
 .PP
 Er zijn verschillende tekst ondertitel formaten welke kunnen worden \*(Aqingebakken\*(Aq in
