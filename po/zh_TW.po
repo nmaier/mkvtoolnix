@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: zh-TW\n"
 "Report-Msgid-Bugs-To: Dean Lee <xslidian@gmail.com>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2011-01-20 15:25+0100\n"
-"Last-Translator: Dong-Jun Wu <ziyawu@gmail.com>\n"
+"PO-Revision-Date: 2011-01-23 01:52+0800\n"
+"Last-Translator: Dongjun <ziyawu@gmail.com>\n"
 "Language-Team: Chinese Traditional <zh-l10n@linux.org.tw>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -24,7 +24,7 @@ msgid ""
 "The temporary TTA file for track ID %1% is being copied into the final TTA file. This may take some time.\n"
 msgstr ""
 "\n"
-"第 %1% 軌的臨時 TTA 檔正被複製到最終 TTA 檔中。這可能需要些時間。\n"
+"第 %1% 軌的暫存 TTA 檔正被複製到最終 TTA 檔中。這可能需要些時間。\n"
 
 #: src/merge/output_control.cpp:251
 msgid ""
@@ -353,18 +353,16 @@ msgid "  --split-max-files <n>    Create at most n files.\n"
 msgstr "  --split-max-files <n>    最多建立 n 個檔案。\n"
 
 #: src/merge/mkvmerge.cpp:220
-#, fuzzy
 msgid ""
 "  --stereo-mode <TID:n|keyword>\n"
 "                           Sets the stereo mode parameter. It can\n"
 "                           either be a number 0 - 11 or a keyword\n"
 "                           (see documentation for the full list).\n"
 msgstr ""
-"  --stereo-mode <TID:n|none|left|right|both>\n"
-"                           設定立體視覺模式參數。\n"
-"                           既可以是 0 - 3 中的一個數，\n"
-"                           也可以是「none」、「right」、「left」\n"
-"                           或「both」中的一個關鍵字。\n"
+"  --stereo-mode <TID:n|keyword>\n"
+"                           設定立體視覺模式參數。參數可以是\n"
+"                           0 - 11 中的一個數字或者一個關鍵字\n"
+"                           (請見文件裡的完整清單)。\n"
 
 #: src/merge/mkvmerge.cpp:226
 msgid ""
@@ -710,7 +708,7 @@ msgstr "大小不明"
 
 #: src/mmg/cli_options_dlg.cpp:110
 msgid "### Development hacks ###"
-msgstr ""
+msgstr "### 程式碼開發 ###"
 
 #: src/mmg/cli_options_dlg.cpp:85
 msgid "### Global output control ###"
@@ -841,7 +839,7 @@ msgstr "章節編輯器(&C)\tAlt-4"
 
 #: src/mmg/mmg_dialog.cpp:296
 msgid "&Check for updates"
-msgstr ""
+msgstr "檢查更新(&C)"
 
 #: src/mmg/update_checker.cpp:69
 msgid "&Close"
@@ -1926,9 +1924,8 @@ msgid "Available translations:\n"
 msgstr "可用的翻譯:\n"
 
 #: src/mmg/update_checker.cpp:63
-#, fuzzy
 msgid "Available version:"
-msgstr "可用的選項:"
+msgstr "可用版本:"
 
 #: src/common/compression.cpp:213
 #: src/common/compression.cpp:231
@@ -2011,7 +2008,7 @@ msgstr "提取 CUE 表單"
 
 #: src/info/info_cli_parser.cpp:46
 msgid "Calculate and display checksums and use verbosity level 4."
-msgstr ""
+msgstr "計算並顯示檢查碼且使用贅言等級 4。"
 
 #: src/info/info_cli_parser.cpp:45
 msgid "Calculate and display checksums of frame contents."
@@ -2206,20 +2203,20 @@ msgstr "字元集:"
 #: src/mmg/mmg_dialog.cpp:296
 #: src/mmg/options/mmg.cpp:105
 msgid "Check online for the latest release"
-msgstr ""
+msgstr "線上檢查最新版本"
 
 #: src/common/cli_parser.cpp:184
 #: src/merge/mkvmerge.cpp:251
 msgid "Check online for the latest release."
-msgstr ""
+msgstr "線上檢查最新發佈的版本。"
 
 #: src/mmg/options/mmg.cpp:106
 msgid "Check online whether or not a new release of MKVToolNix is available on the home page. Will only check when mmg starts and at most once a day. No information is transmitted to the server."
-msgstr ""
+msgstr "線上檢查 MKVToolNix 首頁上是否有可更新的新版本。只有 mmg 啟動時會檢查且一天最多檢查一次。不會傳送任何資訊到伺服器。"
 
 #: src/mmg/mmg_dialog.cpp:1728
 msgid "Checking for updates online; please wait"
-msgstr ""
+msgstr "正在線上檢查更新; 請稍候"
 
 #: src/mmg/tabs/chapters.cpp:524
 msgid "Choose a chapter file"
@@ -2679,9 +2676,8 @@ msgid "Current value:"
 msgstr "目前值:"
 
 #: src/mmg/update_checker.cpp:60
-#, fuzzy
 msgid "Current version:"
-msgstr "目前值:"
+msgstr "目前版本:"
 
 #: src/mmg/jobs.cpp:484
 msgid "D&elete"
@@ -2797,7 +2793,7 @@ msgstr "Dirac"
 
 #: src/mmg/options/mmg.cpp:100
 msgid "Disable header removal compression for audio and video tracks by default"
-msgstr ""
+msgstr "預設情況下停用音軌和視訊軌的除頭壓縮"
 
 #: src/mmg/jobs.cpp:480
 msgid "Disable the selected job(s) and sets their status to 'done'"
@@ -2869,9 +2865,8 @@ msgid "Done.\n"
 msgstr "完成。\n"
 
 #: src/mmg/update_checker.cpp:66
-#, fuzzy
 msgid "Download URL:"
-msgstr "編解碼器下載 URL:"
+msgstr "下載網址:"
 
 #: src/info/mkvinfo.cpp:197
 msgid "Duration: %|1$.3f|ms"
@@ -3456,6 +3451,8 @@ msgid ""
 "Help is available in form of tool tips, from the\n"
 "'Help' menu or by pressing the 'F1' key."
 msgstr ""
+"從「說明」選單或按「F1」鍵，說明會以\n"
+"工具提示的形式出現。"
 
 #: src/mmg/cli_options_dlg.cpp:31
 msgid ""
@@ -3520,7 +3517,7 @@ msgstr "如果選中該項，且輸出檔案名尚未設定，mmg 將會自動�
 
 #: src/mmg/options/mmg.cpp:101
 msgid "If checked mmg will set the 'compression' drop down box to 'none' for all audio and video tracks by default. The user can still change the compression setting afterwards."
-msgstr ""
+msgstr "如果勾選 mmg 會將預設情況下所有音軌和視訊軌的「壓縮」下拉式選單設定為「無」。使用者以後仍然可以變更壓縮設定值。"
 
 #: src/mmg/options/mmg.cpp:95
 msgid "If checked mmg will warn if it thinks that you're using it incorrectly. Such warnings are shown at least once even if you turn this feature off."
@@ -3535,7 +3532,6 @@ msgid "If splitting is a file can be attached either to all files created or onl
 msgstr "如果啟用了檔分割，一個檔可以附加至建立的所有檔，或僅附加至建立的第一個檔。如果未使用分割功能則無影響。"
 
 #: src/output/p_textsubs.cpp:70
-#, fuzzy
 msgid "Ignoring an entry which starts after it ends (%1%).\n"
 msgstr "忽略起始時間在結束時間之後的項目。(%1%)\n"
 
@@ -4016,7 +4012,7 @@ msgstr "MIME 類型:"
 
 #: src/mmg/mmg_dialog.cpp:718
 msgid "MKVToolNix is licensed under the GNU GPL v2"
-msgstr ""
+msgstr "MKVToolNix 授權為 GNU GPL 第二版"
 
 #: src/common/file_types.cpp:36
 msgid "MP4 audio/video files"
@@ -4367,9 +4363,8 @@ msgid "No track corresponding to the edit specification '%1%' was found. %2%\n"
 msgstr "沒有發現符合編輯規格「%1%」的軌道。%2%\n"
 
 #: src/extract/tracks.cpp:311
-#, fuzzy
 msgid "No track with the ID %1% was found in the source file.\n"
-msgstr "找不到 ID 為 %1% 的附件。\n"
+msgstr "在來源檔案裡找不到 ID 為 %1% 的軌道。\n"
 
 #: src/mmg/tabs/input.cpp:615
 msgid "No tracks found"
@@ -4435,7 +4430,7 @@ msgstr "有一個章節沒有名稱。"
 
 #: src/mmg/update_checker.cpp:55
 msgid "Online check for updates"
-msgstr ""
+msgstr "線上檢查更新"
 
 #: src/merge/mkvmerge.cpp:1445
 msgid "Only one chapter file allowed in '%1% %2%'.\n"
@@ -5268,7 +5263,7 @@ msgstr "顯示“關於”對話窗"
 
 #: src/info/info_cli_parser.cpp:50
 msgid "Show all bytes of each frame as a hex dump."
-msgstr ""
+msgstr "以十六進位轉儲形式顯示每畫格的全部位元組。"
 
 #: src/info/wxwidgets_ui.cpp:114
 msgid "Show element si&zes\tCtrl-Z"
@@ -5284,7 +5279,7 @@ msgstr "顯示程式資訊"
 
 #: src/info/info_cli_parser.cpp:48
 msgid "Show statistics for each track in verbose mode."
-msgstr ""
+msgstr "在詳細資訊模式裡顯示每個資料軌的統計資料。"
 
 #: src/mmg/mmg_dialog.cpp:276
 msgid "Show the command line mmg creates for mkvmerge"
@@ -5466,7 +5461,7 @@ msgstr "正在啟動任務 ID %d (%s) 於 %s"
 
 #: src/info/mkvinfo.cpp:1904
 msgid "Statistics for track number %1%: number of blocks: %2%; size in bytes: %3%; duration in seconds: %4%; approximate bitrate in bits/second: %5%\n"
-msgstr ""
+msgstr "資料軌編號 %1% : 區塊編號: %2%的統計資料；大小: %3% 位元組；時間長度: %4% 秒；近似位元率: %5% 位元/秒\n"
 
 #: src/mmg/jobs.cpp:437
 msgid "Status"
@@ -5483,9 +5478,8 @@ msgid "Status:"
 msgstr "狀態:"
 
 #: src/merge/mkvmerge.cpp:711
-#, fuzzy
 msgid "Stereo mode parameter: not given in the form <TID>:<n|keyword> where n is a number between 0 and %1% or one of these keywords: %2% (argument was '%3%').\n"
-msgstr "立體視法參數: 未以 <TID>:<n|keyword> 形式給出，其中可以使用 0 至 3 中的一個數字或者「none」, 「right」, 「left」, 「both」中的一個關鍵字 (使用的參數為「%1%」)。\n"
+msgstr "立體視覺模式參數: 未以 <TID>:<n|keyword> 形式給定參數，其中可以是 0 到 %1% 中的數字或這些關鍵字其中一個: %2% (參數為「%3%」)。\n"
 
 #: src/info/mkvinfo.cpp:753
 msgid "Stereo mode: %1% (%2%)"
@@ -5493,7 +5487,7 @@ msgstr "立體視法: %1% (%2%)"
 
 #: src/mmg/header_editor/frame.cpp:492
 msgid "Stereo-3D video mode (0 - 11, see documentation)."
-msgstr ""
+msgstr "立體 3D 影片模式 (0 - 11，請見文件)。"
 
 #: src/common/property_element.cpp:149
 msgid ""
@@ -6442,18 +6436,16 @@ msgid "The track parameters do not match."
 msgstr "軌道參數不符。"
 
 #: src/common/command_line.cpp:270
-#, fuzzy
 msgid "The update information could not be retrieved from %1%.\n"
-msgstr "無法解析 Kate 識別表頭 (%1%)。\n"
+msgstr "無法從 %1% 取得更新資訊。\n"
 
 #: src/merge/pr_generic.h:379
 msgid "The width of the two tracks is different: %1% and %2%"
 msgstr "兩軌寬度不同: %1% 與 %2%"
 
 #: src/mmg/mmg_dialog.cpp:1761
-#, fuzzy
 msgid "There is a new version available online."
-msgstr "尚無的翻譯。\n"
+msgstr "線上有新版本可更新。"
 
 #: src/merge/output_control.cpp:829
 #: src/merge/output_control.cpp:839
@@ -6466,7 +6458,7 @@ msgstr "尚無「%1%」的翻譯。\n"
 
 #: src/mmg/mmg_dialog.cpp:1762
 msgid "There was an error querying the update status."
-msgstr ""
+msgstr "查詢更新狀態時發生錯誤。"
 
 #: src/mmg/mux_dialog.cpp:362
 msgid "There were ERRORs."
@@ -7499,7 +7491,7 @@ msgstr "XML 解析器發生錯誤，於第 %1% 行: %2%。"
 
 #: src/mmg/mmg_dialog.cpp:1760
 msgid "You are already running the latest version."
-msgstr ""
+msgstr "已是最新版本。"
 
 #: src/mmg/tabs/chapters.cpp:1351
 msgid ""
@@ -7603,7 +7595,7 @@ msgstr "加入"
 
 #: src/common/stereo_mode.cpp:55
 msgid "anaglyph"
-msgstr ""
+msgstr "立體影片"
 
 #: src/mmg/tabs/input.cpp:185
 msgid "append"
@@ -7667,19 +7659,19 @@ msgstr "聲道數: %1%"
 
 #: src/common/stereo_mode.cpp:50
 msgid "checkboard (left first)"
-msgstr ""
+msgstr "棋盤 (從左邊開始)"
 
 #: src/common/stereo_mode.cpp:49
 msgid "checkboard (right first)"
-msgstr ""
+msgstr "棋盤 (從右邊開始)"
 
 #: src/common/stereo_mode.cpp:54
 msgid "column interleaved (left first)"
-msgstr ""
+msgstr "直欄交錯 (從左邊開始)"
 
 #: src/common/stereo_mode.cpp:53
 msgid "column interleaved (right first)"
-msgstr ""
+msgstr "直欄交錯 (從右邊開始)"
 
 #: src/mmg/jobs.cpp:347
 msgid "completed OK"
@@ -8473,11 +8465,11 @@ msgstr "其他: 未知"
 
 #: src/common/stereo_mode.cpp:52
 msgid "row interleaved (left first)"
-msgstr ""
+msgstr "橫列交錯 (從左邊開始)"
 
 #: src/common/stereo_mode.cpp:51
 msgid "row interleaved (right first)"
-msgstr ""
+msgstr "橫列交錯 (從右邊開始)"
 
 #: src/info/mkvinfo.cpp:652
 msgid "sampling freq: %1%"
@@ -8485,11 +8477,11 @@ msgstr "取樣頻率: %1%"
 
 #: src/common/stereo_mode.cpp:46
 msgid "side by side (left first)"
-msgstr ""
+msgstr "左右並排 (從左邊開始)"
 
 #: src/common/stereo_mode.cpp:56
 msgid "side by side (right first)"
-msgstr ""
+msgstr "左右並排 (從右邊開始)"
 
 #: src/input/subtitles.cpp:589
 msgid "spu_extraction_duration: Encountered broken SPU packet (next_off < start_off) at timecode %1%. This packet might be displayed incorrectly or not at all.\n"
@@ -8538,11 +8530,11 @@ msgstr "時間碼"
 
 #: src/common/stereo_mode.cpp:48
 msgid "top bottom (left first)"
-msgstr ""
+msgstr "上下並排 (從左邊開始)"
 
 #: src/common/stereo_mode.cpp:47
 msgid "top bottom (right first)"
-msgstr ""
+msgstr "上下並排 (從右邊開始)"
 
 #: src/merge/mkvmerge.cpp:2027
 msgid "track name"
@@ -8694,16 +8686,22 @@ msgstr "是"
 #~ msgstr ""
 #~ "                                        英文語言名稱 | ISO639-2 碼 | ISO639-1 碼\n"
 #~ "---------------------------------------------------+---------------+--------------\n"
+
 #~ msgid " (both eyes)"
 #~ msgstr " (雙視角)"
+
 #~ msgid " (left eye)"
 #~ msgstr " (左視角)"
+
 #~ msgid " (right eye)"
 #~ msgstr " (右視角)"
+
 #~ msgid "%1% at %2%"
 #~ msgstr "%1% 於 %2%"
+
 #~ msgid "%1% frame, track %2%, timecode %3% (%4%), size %5%, adler 0x%|6$08x|\n"
 #~ msgstr "%1% 畫格, 軌道 %2%, 時間碼 %3% (%4%), 大小 %5%, adler 0x%|6$08x|\n"
+
 #~ msgid ""
 #~ "%s\n"
 #~ "\n"
@@ -8723,62 +8721,91 @@ msgstr "是"
 #~ "http://www.bunkus.org/videotools/mkvtoolnix/\n"
 #~ "\n"
 #~ "可透過工具提示、“説明”功能表或按“F1”鍵取得說明。"
+
 #~ msgid "'%1%' is only allowed for chapter extraction.\n"
 #~ msgstr "'%1%' 僅限提取章節時使用。\n"
+
 #~ msgid "'--blockadd' is only allowed when extracting tracks.\n"
 #~ msgstr "'--blockadd' 僅允許在提取軌道時使用。\n"
+
 #~ msgid "'--blockadd' lacks a level.\n"
 #~ msgstr "'--blockadd' 缺少層級。\n"
+
 #~ msgid "'--cuesheet' is only allowed when extracting tracks.\n"
 #~ msgstr "'--cuesheet' 只能在提取軌道時使用。\n"
+
 #~ msgid "'--fullraw' is only allowed when extracting tracks.\n"
 #~ msgstr "'--fullraw' 只能在提取軌道時使用。\n"
+
 #~ msgid "'--no-ogg' is only allowed when extracting tracks.\n"
 #~ msgstr "'--no-ogg' 只能在提取軌道時使用。\n"
+
 #~ msgid "'--raw' is only allowed when extracting tracks.\n"
 #~ msgstr "'--raw' 只能在提取軌道時使用。\n"
+
 #~ msgid "'-c' lacks a charset.\n"
 #~ msgstr "'-c' 缺少字元集。\n"
+
 #~ msgid "(Unknown element: %1%)"
 #~ msgstr "(未知元件: %1%)"
+
 #~ msgid "A single '+' is not a valid command line option. If you want to append a file use '+' directly followed by the file name, e.g. '+movie_part_2.avi'."
 #~ msgstr "單獨的 '+' 不是有效的命令列選項。如果您希望用 '+' 直接添加檔，請確保檔案名緊跟著它，例如 '+movie_part_2.avi'。"
+
 #~ msgid "About mkvmerge's GUI"
 #~ msgstr "關於 mkvmerge 的 GUI"
+
 #~ msgid "Always adds '--engage use_simpleblock' to the command line. That way Matroska's new 'simple blocks' will be used which save a bit of overhead at the cost of not being backwards compatible."
 #~ msgstr "總在命令列中添加 '--engage use_simpleblock'。這樣將使用 Matroska 的新 '簡單區塊'，可以省下一些額外開銷，代價是將無法向下相容。"
+
 #~ msgid "Always use simple blocks"
 #~ msgstr "總使用簡單區塊"
+
 #~ msgid "Both eyes"
 #~ msgstr "雙眼視角"
+
 #~ msgid "Change the default values"
 #~ msgstr "修改預設值"
+
 #~ msgid "Changing the interface language requires a restart to take effect."
 #~ msgstr "變更介面語言需要重新啟動才會生效。"
+
 #~ msgid "Could not open the file '%1%'."
 #~ msgstr "無法開啟檔案 '%1%'。"
+
 #~ msgid "DTS (Digital Theater System)"
 #~ msgstr "DTS (數位電影院系統)"
+
 #~ msgid "Dirac elementary stream"
 #~ msgstr "Dirac 基本流"
+
 #~ msgid "Do not copy chapters from this file. Only applies to a couple of formats (e.g. Matroska files)."
 #~ msgstr "不要從此檔中複製章節。僅適用於部分格式（如 Matroska 檔）。"
+
 #~ msgid "Do not copy tags from this file. Only applies to a couple of formats (e.g. Matroska files)."
 #~ msgstr "不要從此檔中複製標籤。僅適用於部分格式（如 Matroska 檔）。"
+
 #~ msgid "Do not write those header elements whose values are the same as their default values according to the Matroska specs."
 #~ msgstr "不要寫入值與 Matroska 規範中的預設值相同的表頭元件。"
+
 #~ msgid "During MPEG-4 part 2 B frame handling: The frame queue contains more frames than timecodes are available that can be assigned to them (reason: %1%). Therefore %2% frame(s) had to be dropped. The video might be broken around timecode %3%.\n"
 #~ msgstr "MPEG-4 part 2 B 畫格處理過程中: 畫格列包含了超過可分配時間碼的畫格 (原因: %1%)。因此 %2% 畫格將被丟棄。視訊在時間碼 %3% 附近可能已損壞。\n"
+
 #~ msgid "FLAC lossless audio"
 #~ msgstr "FLAC 無損音訊"
+
 #~ msgid "File options:"
 #~ msgstr "檔案選項:"
+
 #~ msgid "File/segment title"
 #~ msgstr "檔案/剪輯標題"
+
 #~ msgid "Global tags"
 #~ msgstr "整體標籤"
+
 #~ msgid "IVF with VP8"
 #~ msgstr "含 VP8 的 IVF"
+
 #~ msgid ""
 #~ "Known file types:\n"
 #~ "  ext   description\n"
@@ -8787,68 +8814,98 @@ msgstr "是"
 #~ "已知的檔案類型:\n"
 #~ " 副檔名 描述\n"
 #~ "  ----  --------------------------\n"
+
 #~ msgid "Left eye"
 #~ msgstr "左眼視角"
+
 #~ msgid "MPEG program stream"
 #~ msgstr "MPEG PS 節目流"
+
 #~ msgid "MPEG-1 layer II audio (CBR and VBR/ABR)"
 #~ msgstr "MPEG-1 第 II 層音訊 (CBR 或 VBR/ABR)"
+
 #~ msgid "MPEG-1 layer III audio (CBR and VBR/ABR)"
 #~ msgstr "MPEG-1 第 III 層音訊 (CBR 或 VBR/ABR)"
+
 #~ msgid "MPEG-1 video elementary stream"
 #~ msgstr "MPEG-1 視訊基本流"
+
 #~ msgid "MPEG-2 video elementary stream"
 #~ msgstr "MPEG-2 視訊基本流"
+
 #~ msgid "Matroska A/V files (*.mka;*.mkv)|*.mkv;*.mka|%s"
 #~ msgstr "Matroska 音訊/視訊檔 (*.mka;*.mkv)|*.mkv;*.mka|%s"
+
 #~ msgid "Matroska files (*.mkv;*.mka)|*.mkv;*.mka|%s"
 #~ msgstr "Matroska 檔案 (*.mkv;*.mka)|*.mkv;*.mka|%s"
+
 #~ msgid "Matroska files (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|All files|*.*"
 #~ msgstr "Matroska 檔案 (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|所有檔案|*.*"
+
 #~ msgid "No chapters"
 #~ msgstr "不讀取章節"
+
 #~ msgid "No further options allowed when extracting %1%.\n"
 #~ msgstr "提取 %1% 時不允許其他額外選項。\n"
+
 #~ msgid "No further options allowed when regenerating the CUE sheet.\n"
 #~ msgstr "重新生成 CUE 表單時不允許其他額外選項。\n"
+
 #~ msgid "No tags"
 #~ msgstr "不讀取標籤"
+
 #~ msgid "No tracks will be copied from this file. This usually indicates a mistake in the command line.\n"
 #~ msgstr "此檔中沒有待複製的軌道。這通常是因為命令列中的差錯。\n"
+
 #~ msgid "None"
 #~ msgstr "單視角"
+
 #~ msgid ""
 #~ "Nothing to do.\n"
 #~ "\n"
 #~ msgstr ""
 #~ "沒有事情可做。\n"
 #~ "\n"
+
 #~ msgid "Other global options"
 #~ msgstr "其他整體選項"
+
 #~ msgid "Quicktime/MP4 audio and video"
 #~ msgstr "Quicktime/MP4 音訊和視訊"
+
 #~ msgid "RealMedia audio and video"
 #~ msgstr "RealMedia 音視訊"
+
 #~ msgid "Restart required"
 #~ msgstr "需要重新啟動"
+
 #~ msgid "Right eye"
 #~ msgstr "右眼視角"
+
 #~ msgid "Set &default values"
 #~ msgstr "設定預設值(&D)"
+
 #~ msgid "Sets the compression used for VobSub subtitles. If nothing is chosen then the VobSubs will be automatically compressed with zlib. 'none' results is files that are a lot larger."
 #~ msgstr "選擇 VobSub 字幕使用的壓縮方式。如果沒有選中任何方式，VobSub 字幕將自動使用 zlib 壓縮。選“無”將導致檔案變得很大。"
+
 #~ msgid "Subtitle charset:"
 #~ msgstr "字幕字元集:"
+
 #~ msgid "TTA lossless audio"
 #~ msgstr "TTA 無損音訊"
+
 #~ msgid "The MPEG-4 part 2 compression only works with native MPEG-4. However, native MPEG-4 mode has not been selected with '--engage native_mpeg4'.\n"
 #~ msgstr "MPEG-4 part 2 壓縮僅適用於原生 MPEG-4。然而，您未使用「--engage native_mpeg4」選擇原生 MPEG-4 模式。\n"
+
 #~ msgid "This track uses a Matroska feature called 'Codec state elements'. mkvmerge supports these but this feature has not been turned on with the option '--engage use_codec_state'.\n"
 #~ msgstr "此軌道使用了叫做「編解碼態元件」的 Matroska 特性。mkvmerge 支援該特性，但您尚未透過「--engage use_codec_state」來啟用該特性。\n"
+
 #~ msgid "Tracks:"
 #~ msgstr "軌道列表:"
+
 #~ msgid "Unrecognized command line option '%1%'. Maybe you put a mode specific option before the input file name?\n"
 #~ msgstr "無法識別命令列選項 '%1%'。您是否將模式細節選項放在了輸入檔名的前面？\n"
+
 #~ msgid ""
 #~ "Usage: mkvextract tracks <inname> [options] [TID1:out1 [TID2:out2 ...]]\n"
 #~ "   or  mkvextract tags <inname> [options]\n"
@@ -8981,6 +9038,7 @@ msgstr "是"
 #~ "  -v, --verbose  提高“詳細”程度。\n"
 #~ "  -h, --help     顯示這個説明。\n"
 #~ "  -V, --version  顯示版本資訊。\n"
+
 #~ msgid ""
 #~ "Usage: mkvinfo [options] inname\n"
 #~ "\n"
@@ -9020,68 +9078,98 @@ msgstr "是"
 #~ "                 重定向（轉儲）所有訊息至此檔案。\n"
 #~ "  -h, --help     顯示這個説明。\n"
 #~ "  -V, --version  顯示版本資訊。\n"
+
 #, fuzzy
 #~ msgid "Using the IVF output module.\n"
 #~ msgstr "使用 FLAC 輸出模組。\n"
+
 #, fuzzy
 #~ msgid "Using the Vp8 video output module.\n"
 #~ msgstr "使用 VP8 視訊輸出模組。\n"
+
 #~ msgid "VC1 video elementary stream"
 #~ msgstr "VC1 視訊基本流"
+
 #~ msgid "VobBtn buttons"
 #~ msgstr "VobBtn 按鈕"
+
 #~ msgid "WAVE (uncompressed PCM)"
 #~ msgstr "WAVE (未壓縮的 PCM)"
+
 #~ msgid "WAVPACK lossless audio"
 #~ msgstr "WAVPACK 無損音訊"
+
 #~ msgid "Write raw FLAC files (default: write OggFLAC files)."
 #~ msgstr "寫入 raw FLAC 檔案 (預設：寫入 OggFLAC 檔案)。"
+
 #~ msgid "You have not yet selected an output file."
 #~ msgstr "您尚未選擇任何輸入檔。"
+
 #~ msgid "You have not yet selected any input file and/or no tracks."
 #~ msgstr "您尚未選擇任何輸入檔和/或未發現軌道。"
+
 #~ msgid "audio/video/text subtitles embedded in OGG"
 #~ msgstr "嵌入在 OGG 中的音訊/視訊/文字字幕"
+
 #~ msgid "cstrutf8_to_UTFstring: Invalid UTF-8 sequence encountered. Please contact moritz@bunkus.org and request that he implements a better UTF-8 parser."
 #~ msgstr "cstrutf8_to_UTFstring: 遇到了無效的 UTF-8 序列。請聯繫 moritz@bunkus.org 並要求他實現一套更好的 UTF-8 解析器。"
+
 #~ msgid "flac_header_extraction: Could not set the error callback.\n"
 #~ msgstr "flac_header_extraction: 無法設定錯誤回呼。\n"
+
 #~ msgid "flac_header_extraction: Could not set the metadata callback.\n"
 #~ msgstr "flac_header_extraction: 無法設定中繼資料回呼。\n"
+
 #~ msgid "flac_header_extraction: Could not set the read callback.\n"
 #~ msgstr "flac_header_extraction: 無法設定讀取回呼。\n"
+
 #~ msgid "flac_header_extraction: Could not set the write callback.\n"
 #~ msgstr "flac_header_extraction: 無法設定寫入回呼。\n"
+
 #~ msgid "flac_reader: Could not set the eof callback.\n"
 #~ msgstr "flac_reader: 無法設定檔尾回呼。\n"
+
 #~ msgid "flac_reader: Could not set the error callback.\n"
 #~ msgstr "flac_reader: 無法設定錯誤回呼。\n"
+
 #~ msgid "flac_reader: Could not set the length callback.\n"
 #~ msgstr "flac_reader: 無法設定長度回呼。\n"
+
 #~ msgid "flac_reader: Could not set the metadata callback.\n"
 #~ msgstr "flac_reader: 無法設定中繼資料回呼。\n"
+
 #~ msgid "flac_reader: Could not set the read callback.\n"
 #~ msgstr "flac_reader: 無法設定讀取回呼。\n"
+
 #~ msgid "flac_reader: Could not set the seek callback.\n"
 #~ msgstr "flac_reader: 無法設定定位回呼。\n"
+
 #~ msgid "flac_reader: Could not set the tell callback.\n"
 #~ msgstr "flac_reader: 無法設定通告回呼。\n"
+
 #~ msgid "flac_reader: Could not set the write callback.\n"
 #~ msgstr "flac_reader: 無法設定寫入回呼。\n"
+
 #~ msgid "found_what == 0. Should not have happened. Please file a bug report.\n"
 #~ msgstr "found_what == 0。這不該發生。請提交錯誤報告。\n"
+
 #~ msgid "general Matroska files"
 #~ msgstr "一般 Matroska 檔"
+
 #~ msgid "locale.cpp/from_utf8(): Invalid conversion handle %1% (num: %2%).\n"
 #~ msgstr "locale.cpp/from_utf8(): 無效的轉換名號 %1% (數位: %2%)。\n"
+
 #~ msgid "locale.cpp/to_utf8(): Invalid conversion handle %1% (num: %2%).\n"
 #~ msgstr "locale.cpp/to_utf8(): 無效的轉換名號 %1% (數位: %2%)。\n"
+
 #~ msgid "mkvextract: Unknown mode!?\n"
 #~ msgstr "mkvextract: 未知模式!?\n"
+
 #~ msgid "mkvmerge GUI v%s ('%s')"
 #~ msgstr "mkvmerge GUI v%s ('%s')"
+
 #~ msgid "r_matroska: Cluster does not contain a cluster timecode. File is broken. Aborting.\n"
 #~ msgstr "r_matroska: 叢集不含叢集時間碼。檔案已損壞。正在中止操作。\n"
+
 #~ msgid "start_element: pdata->bin != NULL"
 #~ msgstr "start_element: pdata->bin != NULL"
-
