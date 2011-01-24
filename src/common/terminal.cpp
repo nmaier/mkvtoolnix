@@ -15,9 +15,9 @@
 
 #if defined(HAVE_TIOCGWINSZ)
 # include <termios.h>
-# if defined(GWINSZ_IN_SYS_IOCTL)
+# if defined(HAVE_SYS_IOCTL_H) || defined(GWINSZ_IN_SYS_IOCTL)
 #  include <sys/ioctl.h>
-# endif // GWINSZ_IN_SYS_IOCTL
+# endif // HAVE_SYS_IOCTL_H || GWINSZ_IN_SYS_IOCTL
 #endif  // HAVE_TIOCGWINSZ
 
 #include "common/terminal.h"
