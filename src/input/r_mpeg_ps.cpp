@@ -89,8 +89,6 @@ mpeg_ps_reader_c::init_reader() {
 
     bytes_processed = 0;
 
-    memset(es_map, 0, sizeof(uint32_t) * NUM_ES_MAP_ENTRIES);
-
     header  = io->read_uint32_be();
     done    = io->eof();
     version = -1;
@@ -140,6 +138,7 @@ mpeg_ps_reader_c::init_reader() {
 
         case MPEGVIDEO_PROGRAM_STREAM_MAP_START_CODE:
           parse_program_stream_map();
+          done = !resync_stream(header);
           break;
 
         default:
@@ -272,10 +271,7 @@ mpeg_ps_reader_c::parse_program_stream_map() {
     if (!len || (1018 < len))
       throw false;
 
-    if (0x00 == (io->read_uint8() & 0x80))
-      throw false;
-
-    io->skip(1);
+    io->skip(2);
 
     int prog_len = io->read_uint16_be();
     io->skip(prog_len);
@@ -283,39 +279,10 @@ mpeg_ps_reader_c::parse_program_stream_map() {
     int es_map_len = io->read_uint16_be();
     es_map_len     = std::min(es_map_len, len - prog_len - 8);
 
-    while (0 < es_map_len) {
-      int type = io->read_uint8();
-      int id   = io->read_uint8();
-
-      if ((0xb0 <= id) && (0xef >= id)) {
-        int id_offset = id - 0xb0;
-
-        switch (type) {
-          case 0x01:
-            es_map[id_offset] = FOURCC('M', 'P', 'G', '1');
-            break;
-          case 0x02:
-            es_map[id_offset] = FOURCC('M', 'P', 'G', '2');
-            break;
-          case 0x03:
-          case 0x04:
-            es_map[id_offset] = FOURCC('M', 'P', '2', ' ');
-            break;
-          case 0x0f:
-          case 0x11:
-            es_map[id_offset] = FOURCC('A', 'A', 'C', ' ');
-            break;
-          case 0x10:
-            es_map[id_offset] = FOURCC('M', 'P', 'G', '4');
-            break;
-          case 0x1b:
-            es_map[id_offset] = FOURCC('A', 'V', 'C', '1');
-            break;
-          case 0x81:
-            es_map[id_offset] = FOURCC('A', 'C', '3', ' ');
-            break;
-        }
-      }
+    while (4 <= es_map_len) {
+      int type   = io->read_uint8();
+      int id     = io->read_uint8();
+      es_map[id] = type;
 
       int plen = io->read_uint16_be();
       plen     = std::min(plen, es_map_len);
@@ -965,7 +932,42 @@ mpeg_ps_reader_c::found_new_stream(mpeg_ps_id_t id) {
     track->timecode_offset = timecode;
     track->type            = '?';
 
-    if (0xbd == id.id) {
+    int es_type = es_map[id.id];
+    if (0 != es_type) {
+      switch (es_type) {
+        case 0x01:
+          track->type   = 'v';
+          track->fourcc = FOURCC('M', 'P', 'G', '1');
+          break;
+        case 0x02:
+          track->type   = 'v';
+          track->fourcc = FOURCC('M', 'P', 'G', '2');
+          break;
+        case 0x03:
+        case 0x04:
+          track->type   = 'a';
+          track->fourcc = FOURCC('M', 'P', '2', ' ');
+          break;
+        case 0x0f:
+        case 0x11:
+          track->type   = 'a';
+          track->fourcc = FOURCC('A', 'A', 'C', ' ');
+          break;
+        case 0x10:
+          track->type   = 'v';
+          track->fourcc = FOURCC('M', 'P', 'G', '4');
+          break;
+        case 0x1b:
+          track->type   = 'v';
+          track->fourcc = FOURCC('A', 'V', 'C', '1');
+          break;
+        case 0x81:
+          track->type   = 'a';
+          track->fourcc = FOURCC('A', 'C', '3', ' ');
+          break;
+      }
+
+    } else if (0xbd == id.id) {
       track->type = 'a';
 
       if ((0x20 <= id.sub_id) && (0x3f >= id.sub_id)) {
@@ -1095,6 +1097,8 @@ mpeg_ps_reader_c::find_next_packet(mpeg_ps_id_t &id,
 
         case MPEGVIDEO_PROGRAM_STREAM_MAP_START_CODE:
           parse_program_stream_map();
+          if (!resync_stream(header))
+            return false;
           break;
 
         default:

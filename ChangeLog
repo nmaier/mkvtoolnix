@@ -1,3 +1,8 @@
+2011-01-25  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Fixed an infinite loop when reading program
+	stream maps in MPEG program streams. Part of a fix for bug 589.
+
 2011-01-21  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvinfo: new feature: Added an option "--track-info" (short:

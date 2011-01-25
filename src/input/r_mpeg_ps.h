@@ -118,8 +118,6 @@ struct mpeg_ps_track_t {
 
 typedef counted_ptr<mpeg_ps_track_t> mpeg_ps_track_ptr;
 
-#define NUM_ES_MAP_ENTRIES 0x40
-
 class mpeg_ps_reader_c: public generic_reader_c {
 private:
   mm_multi_file_io_cptr io;
@@ -128,7 +126,7 @@ private:
   std::map<int, int> id2idx;
   std::map<int, bool> blacklisted_ids;
 
-  uint32_t es_map[NUM_ES_MAP_ENTRIES];
+  std::map<int, int> es_map;
   int version;
   bool file_done;
 
