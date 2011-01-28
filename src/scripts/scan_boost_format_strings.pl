@@ -108,14 +108,14 @@ sub scan_file {
 
           $fishy        = 0 if (   $rest =~ m/^\%/
                                 || $rest =~ m/^\d+\%/
-                                || $rest =~ m/^\|\d+\$\d+[duxX]\|/
+                                || $rest =~ m/^\|\d+\$\d*[duxX]\|/
                                 || $rest =~ m/^\|\d+\$[\+\-]?\d+[fs]\|/
                                 || $rest =~ m/^\|\d+\$[\+\-]?\d*\.\d+[fs]\|/);
 
           my $format   = $&;
           my $checksum = sha1_base64($file_name . $format_cont);
           if ($fishy) {
-            push @errors, "Fishy format at ${file_name}:${line_number}:" . ($pos - 1) . " $checksum\n";
+            push @errors, "Fishy format at ${file_name}:${line_number} (" . ($pos - 1) . ") $checksum\n";
             $pos++;
             $num_fishs++;
 
@@ -123,7 +123,7 @@ sub scan_file {
             $nth_arg++ if ($format ne '%');
             if (($format =~ m/^(\d+)\%$/) || ($format =~ m/^\|(\d+)\$/)) {
               if (($nth_arg != ($1 * 1)) && !$ignore{$checksum}) {
-                push @errors, "Bad arg at ${file_name}:${line_number}:" . ($pos - 1) . " (expected $nth_arg, got $1) $checksum\n";
+                push @errors, "Bad arg at ${file_name}:${line_number} (" . ($pos - 1) . ") (expected $nth_arg, got $1) $checksum\n";
               }
               $format =~ s/^\|\d+\$/|1\$/;
             }
