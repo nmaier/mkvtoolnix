@@ -2063,6 +2063,8 @@ setup(const std::string &locale) {
   init_locales(locale);
 
   init_common_boost_formats();
+
+  version_info = get_version_info("mkvinfo", true);
 }
 
 int
