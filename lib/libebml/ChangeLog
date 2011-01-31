@@ -1,0 +1,1580 @@
+2011-01-30 robux4/mosu
+New 1.2.0 version:
+    - no need to put the internal code of EbmlCrc32 in the public header
+    - more safety on the Binary buffer handling in case we run out of memory
+    - fix CRC32 detection in master elements
+    - fix compilation under gcc 4.5
+    - Fixed handling of UTF-8 strings with characters encoded in more than three bytes.
+    - Increased library .so name to .3 due to binary incompatible changes.
+
+2010-07-xx robux4
+New 1.1.0 version:
+    - EbmlElement::VoidMe() now returns a uint64
+    - move some operator code in the .cpp files (MSVC has issues in DLLs)
+
+2010-06-04 robux4/mosu
+New 1.0.0 version:
+    - rename the library .so name as it's backward incompatible
+    - fixes when reading Master elements with unknown/infinite size
+    - fix the infinite/unknown size reading in EbmlElement::FindNextElement()
+    - fix the EBMLDummy ID reading and displaying
+
+2010-04-30 robux4/mosu
+New 0.8.0 version:
+    - new macros to simplify and unify the way to declare and define EBML elements
+    - new macros to access variables of a Class/Object so that switching to libebml v2 is transparent
+    - add an EBML_STRICT_API compilation flag (off by default) to avoid direct access to internal class variables
+    - fix some building issues on Linux and MinGW
+    - add accessor calls to the base classes to avoid direct access to internal class variables
+    - add iterators to navigate throught the EbmlMaster children
+    - use a new filepos_t type for everything that relates to an element position/data size with INVALID_FILEPOS_T in case of errors
+    - remove the const on integer values
+
+
+2008-02-21 22:14  mosu
+
+	* trunk/libebml/ebml/EbmlBinary.h, trunk/libebml/ebml/EbmlEndian.h,
+	  trunk/libebml/ebml/MemIOCallback.h,
+	  trunk/libebml/ebml/c/libebml_t.h,
+	  trunk/libebml/src/StdIOCallback.cpp: Fixes for the compilation
+	  with gcc 4.3
+
+2007-02-17 10:55  robux4
+
+	* trunk/ARCorrect/ARCorrect.h, trunk/ARCorrect/ARCorrectFilter.h,
+	  trunk/ARCorrect/ARCorrectPage.h, trunk/ARCorrect/ARCorrect_GUID.h,
+	  trunk/ARCorrect/DShowUtils.h, trunk/ARCorrect/ITrackInfo.h,
+	  trunk/ARCorrect/PersistPropertyBag.h, trunk/ARCorrect/resource.h,
+	  trunk/DvdMenuXtractor/DvdMenuXtractor.proj,
+	  trunk/DvdMenuXtractor/chaptermanager.h,
+	  trunk/DvdMenuXtractor/config.h, trunk/DvdMenuXtractor/dmx.h,
+	  trunk/DvdMenuXtractor/dmxconsole.h,
+	  trunk/DvdMenuXtractor/dmxlogwidget.h,
+	  trunk/DvdMenuXtractor/dmxselectionitem.h,
+	  trunk/DvdMenuXtractor/dmxselectiontree.h,
+	  trunk/DvdMenuXtractor/dmxwizard.h,
+	  trunk/DvdMenuXtractor/libdvdread/dvdread/bswap.h,
+	  trunk/DvdMenuXtractor/libdvdread/dvdread/cmd_print.h,
+	  trunk/DvdMenuXtractor/libdvdread/dvdread/dvd_input.h,
+	  trunk/DvdMenuXtractor/libdvdread/dvdread/dvd_reader.h,
+	  trunk/DvdMenuXtractor/libdvdread/dvdread/dvd_udf.h,
+	  trunk/DvdMenuXtractor/libdvdread/dvdread/dvdread.proj,
+	  trunk/DvdMenuXtractor/libdvdread/dvdread/dvdread_internal.h,
+	  trunk/DvdMenuXtractor/libdvdread/dvdread/ifo_print.h,
+	  trunk/DvdMenuXtractor/libdvdread/dvdread/ifo_read.h,
+	  trunk/DvdMenuXtractor/libdvdread/dvdread/ifo_types.h,
+	  trunk/DvdMenuXtractor/libdvdread/dvdread/md5.h,
+	  trunk/DvdMenuXtractor/libdvdread/dvdread/nav_print.h,
+	  trunk/DvdMenuXtractor/libdvdread/dvdread/nav_read.h,
+	  trunk/DvdMenuXtractor/libdvdread/dvdread/nav_types.h,
+	  trunk/DvdMenuXtractor/libdvdread/libdvdread.proj,
+	  trunk/DvdMenuXtractor/libdvdread/src/src.proj,
+	  trunk/DvdMenuXtractor/libdvdread/win32/config.h,
+	  trunk/DvdMenuXtractor/libdvdread/win32/dirent.h,
+	  trunk/DvdMenuXtractor/libdvdread/win32/gtchar.h,
+	  trunk/DvdMenuXtractor/libdvdread/win32/inttypes.h,
+	  trunk/DvdMenuXtractor/libdvdread/win32/posix.h,
+	  trunk/DvdMenuXtractor/libdvdread/win32/stdint.h,
+	  trunk/DvdMenuXtractor/libdvdread/win32/win32.proj,
+	  trunk/DvdMenuXtractor/logtextedit.h,
+	  trunk/DvdMenuXtractor/mpegparser/CircBuffer.h,
+	  trunk/DvdMenuXtractor/mpegparser/M2VParser.h,
+	  trunk/DvdMenuXtractor/mpegparser/MPEGVideoBuffer.h,
+	  trunk/DvdMenuXtractor/mpegparser/Types.h,
+	  trunk/DvdMenuXtractor/mpegparser/mpegparser.proj,
+	  trunk/DvdMenuXtractor/outputreader.h,
+	  trunk/DvdMenuXtractor/selectiontreeitem.h,
+	  trunk/DvdMenuXtractor/selectiontreesubitem.h,
+	  trunk/DvdMenuXtractor/utilities.h,
+	  trunk/DvdMenuXtractor/vobparser/IFOContent.h,
+	  trunk/DvdMenuXtractor/vobparser/IFOFile.h,
+	  trunk/DvdMenuXtractor/vobparser/VobParser.h,
+	  trunk/DvdMenuXtractor/vobparser/iso/iso_lang.h,
+	  trunk/DvdMenuXtractor/vobparser/vobparser.proj,
+	  trunk/LemAPI/ac3_input/ac3file.h,
+	  trunk/LemAPI/ac3_input/ac3frame.h,
+	  trunk/LemAPI/ac3_input/ac3iframe.h,
+	  trunk/LemAPI/ac3_input/c_types.h, trunk/LemAPI/avi_input/avilib.h,
+	  trunk/LemAPI/matroska_writer/matroska_writer.h,
+	  trunk/LemAPI/matroska_writer/matroska_writer_gui.h,
+	  trunk/LemAPI/mpa_input/c_types.h,
+	  trunk/LemAPI/mpa_input/mpafile.h,
+	  trunk/LemAPI/mpa_input/mpaframe.h,
+	  trunk/LemAPI/mpa_input/mpiframe.h, trunk/LemAPI/tinyXML/tinystr.h,
+	  trunk/LemAPI/tinyXML/tinyxml.h, trunk/LemAPI/wav_input/Config.h,
+	  trunk/LemAPI/wav_input/Endian.h, trunk/LemAPI/wav_input/FourCC.h,
+	  trunk/LemAPI/wav_input/Types.h, trunk/LemAPI/wav_input/c_types.h,
+	  trunk/LemAPI/wav_input/chunk.h, trunk/LemAPI/wav_input/fact.h,
+	  trunk/LemAPI/wav_input/fio.h, trunk/LemAPI/wav_input/format.h,
+	  trunk/LemAPI/wav_input/riff.h, trunk/LemAPI/wav_input/wav.h,
+	  trunk/LemAPI/wav_input/wav2mka.h,
+	  trunk/MatroskaUtils/AviTagReader.h,
+	  trunk/MatroskaUtils/CFireRoutine.h, trunk/MatroskaUtils/DbgOut.h,
+	  trunk/MatroskaUtils/GDC/GDCMatroska/GDCMatroska_h.h,
+	  trunk/MatroskaUtils/GDC/GDCMatroska/IndexMatroska.h,
+	  trunk/MatroskaUtils/GDC/GDCMatroska/MatroskaParser.h,
+	  trunk/MatroskaUtils/GDC/GDCMatroska/Win32Stream.h,
+	  trunk/MatroskaUtils/GDC/GDCMatroska/resource.h,
+	  trunk/MatroskaUtils/GDC/GDCMatroska/stdafx.h,
+	  trunk/MatroskaUtils/GDC/common/GoogleDesktopComponentRegistration.h,
+	  trunk/MatroskaUtils/GDC/common/GoogleDesktopSearchAPI.h,
+	  trunk/MatroskaUtils/GDC/common/stdafx.h,
+	  trunk/MatroskaUtils/JCThread.h, trunk/MatroskaUtils/JList.h,
+	  trunk/MatroskaUtils/JString.h, trunk/MatroskaUtils/MP3TagReader.h,
+	  trunk/MatroskaUtils/MatroskaCDL/CDLApi.h,
+	  trunk/MatroskaUtils/MatroskaCDL/MatroskaCDL.h,
+	  trunk/MatroskaUtils/MatroskaChapterData.h,
+	  trunk/MatroskaUtils/MatroskaPages.h,
+	  trunk/MatroskaUtils/MatroskaReg.h,
+	  trunk/MatroskaUtils/MatroskaTagData.h,
+	  trunk/MatroskaUtils/MatroskaTrackData.h,
+	  trunk/MatroskaUtils/MatroskaUtils.h,
+	  trunk/MatroskaUtils/MatroskaUtilsBitrate.h,
+	  trunk/MatroskaUtils/MatroskaUtilsDebug.h,
+	  trunk/MatroskaUtils/MatroskaUtilsReader.h,
+	  trunk/MatroskaUtils/ShellExtension/CheckUsage/CheckUsage.h,
+	  trunk/MatroskaUtils/ShellExtension/CheckUsage/resource.h,
+	  trunk/MatroskaUtils/ShellExtension/DShowTools/DShowTools.h,
+	  trunk/MatroskaUtils/ShellExtension/DShowTools/convert.h,
+	  trunk/MatroskaUtils/ShellExtension/Http.h,
+	  trunk/MatroskaUtils/ShellExtension/MatroskaInfoParserCache.h,
+	  trunk/MatroskaUtils/ShellExtension/MatroskaProp.h,
+	  trunk/MatroskaUtils/ShellExtension/MatroskaPropShellExtension.h,
+	  trunk/MatroskaUtils/TagReader.h, trunk/MatroskaUtils/ZipArchive.h,
+	  trunk/MatroskaUtils/mdump.h, trunk/MatroskaUtils/resource.h,
+	  trunk/MatroskaUtils/tinyxml/tinystr.h, trunk/config.h,
+	  trunk/foo_input_matroska/DbgOut.h,
+	  trunk/foo_input_matroska/Foobar2000ReaderIOCallback.h,
+	  trunk/foo_input_matroska/container_matroska.h,
+	  trunk/foo_input_matroska/container_matroska_impl.h,
+	  trunk/foo_input_matroska/filesystem_matroska.h,
+	  trunk/foo_input_matroska/matroska_parser.h,
+	  trunk/foo_input_matroska/resource.h, trunk/libebml/libebml.proj,
+	  trunk/libmatroska/libmatroska.proj,
+	  trunk/libmatroska/matroska/KaxTag.h,
+	  trunk/libmatroska/test/ebml/ebml.proj,
+	  trunk/libmatroska/test/mux/mux.proj,
+	  trunk/libmatroska/test/tags/tags.proj,
+	  trunk/libmatroska/test/test.proj,
+	  trunk/libmatroska/test/utf8/utf8.proj,
+	  trunk/mkaencoder/src/mkaenc.h,
+	  trunk/mkvwriter/IOCallbackWrapper.h,
+	  trunk/mkvwriter/MatroskaMuxer.h,
+	  trunk/mkvwriter/MatroskaSimpleTags.h, trunk/mkvwriter/mkvwriter.h,
+	  trunk/mkvwriter/pub/hxtmkvwriter.h, trunk/mkxds/CoreVorbisGUID.h,
+	  trunk/mkxds/MatroskaReader.h, trunk/mkxds/OggDS.h,
+	  trunk/mkxds/Subtitles.h, trunk/mkxds/asyncio.h,
+	  trunk/mkxds/codecs.h, trunk/mkxds/global.h,
+	  trunk/mkxds/mkxPrioFrame.h, trunk/mkxds/mkx_opin.h,
+	  trunk/mkxds/mkxds.h, trunk/mkxds/mkxdsProperty.h,
+	  trunk/mkxds/mkxread.h, trunk/mkxds/resource.h,
+	  trunk/mkxuncat/mkxuncat.proj, trunk/root.proj: fix EOL style
+
+2007-01-22 11:21  robux4
+
+	* trunk/libebml/libebml.proj: don't use the debug(trace) class by
+	  default
+
+2007-01-19 10:15  robux4
+
+	* trunk/libebml/src/Debug.cpp: build even in a Unicode environment
+
+2007-01-19 09:58  robux4
+
+	* trunk/libebml/libebml.proj, trunk/libmatroska/libmatroska.proj,
+	  trunk/libmatroska/test/ebml/ebml.proj,
+	  trunk/libmatroska/test/mux/mux.proj,
+	  trunk/libmatroska/test/tags/tags.proj,
+	  trunk/libmatroska/test/test.proj,
+	  trunk/libmatroska/test/utf8/utf8.proj: add support for coremake
+	  building for the moment the config.h and coremake are referenced
+	  by a parent project
+
+2006-06-02 14:32  mosu
+
+	* trunk/libebml/make/linux/Makefile: Overwrite existing symlinks
+	  during install.
+
+2006-03-31 12:33  mosu
+
+	* trunk/libebml/ChangeLog, trunk/libebml/debian/changelog,
+	  trunk/libebml/ebml/EbmlVersion.h: Bumped version to 0.7.7.
+	  Automatic ChangeLog update.
+
+2006-03-30 19:33  mosu
+
+	* trunk/libebml/src/EbmlFloat.cpp: Avoid pointer aliasing issues.
+
+2006-03-30 19:05  mosu
+
+	* trunk/libebml/make/linux/Makefile: Small improvements like
+	  creating the directory first and avoid failing if the symlink
+	  exists already.
+
+2006-01-25 00:59  robux4
+
+	* trunk/libebml/ebml/EbmlConfig.h: add support for Borland C++
+	  Builder 2006 preview
+
+2005-10-18 17:59  mosu
+
+	* trunk/libebml/ChangeLog, trunk/libebml/debian/changelog: Changed
+	  the version in the Debian control file & automatic ChangeLog
+	  update.
+
+2005-10-15 16:00  robux4
+
+	* trunk/libebml/ebml/EbmlVersion.h: libebml: the next version will
+	  be 0.7.6
+
+2005-10-15 15:56  robux4
+
+	* trunk/libebml/ebml/EbmlElement.h, trunk/libebml/ebml/EbmlMaster.h,
+	  trunk/libebml/src/EbmlElement.cpp, trunk/libebml/src/EbmlVoid.cpp,
+	  trunk/libmatroska/src/KaxBlock.cpp: libebml/libmatroska: fix a
+	  major bug when "unknown size" was used (Haali does)
+
+2005-08-31 13:28  mosu
+
+	* trunk/libebml/make/linux/suse-libebml-makefile.diff,
+	  trunk/libebml/make/linux/suse.spec: Added the necessary patch for
+	  packaging libebml on SuSE.
+
+2005-08-31 13:19  mosu
+
+	* trunk/libebml/make/linux/fedora-core.spec,
+	  trunk/libebml/make/linux/suse.spec: Added the spec files that I
+	  use for building libebml on SuSE and Fedora Core.
+
+2005-08-26 08:18  mosu
+
+	* trunk/libebml/src/Debug.cpp: Make the compiler happy: tv.tv_usec's
+	  type does not have to be a long int.
+
+2005-05-22 07:26  mosu
+
+	* trunk/libebml/ChangeLog: Automatic ChangeLog update.
+
+2005-05-22 07:26  mosu
+
+	* trunk/libebml, trunk/libebml/debian: Ignore some files and
+	  directories created during the Debian build process.
+
+2005-05-22 07:24  mosu
+
+	* trunk/libebml/debian/changelog, trunk/libebml/ebml/EbmlVersion.h:
+	  Bumped the version number to 0.7.5 in the places that robux4
+	  forgot.
+
+2005-05-19 19:16  robux4
+
+	* trunk/libebml/ebml/EbmlVersion.h,
+	  trunk/libmatroska/matroska/KaxVersion.h: update version numbers
+	  for the upcoming release
+
+2005-05-19 16:37  robux4
+
+	* trunk/libebml/src/EbmlElement.cpp: libebml: better check on the
+	  max reading size specified and levels
+
+2005-05-19 15:47  robux4
+
+	* trunk/libebml/ebml/EbmlElement.h,
+	  trunk/libebml/src/EbmlMaster.cpp: libebml: better evaluation of
+	  the data left to read
+
+2005-05-06 11:43  robux4
+
+	* trunk/libebml/ebml/EbmlConfig.h, trunk/libebml/ebml/EbmlCrc32.h,
+	  trunk/libebml/ebml/EbmlEndian.h, trunk/libebml/src/EbmlCrc32.cpp:
+	  libebml: handle the WORS_BIGENDIAN flag the same way as other UNIX
+	  libs (defined or not)
+
+2005-04-19 06:56  mosu
+
+	* trunk/libebml/make/linux/Makefile: Do not compile shared libs on
+	  Mac OS X due to how they should be handled there. If need arises
+	  we can always implement it properly. Patch by Shawn Holwegner
+	  <shawn () holwegner ! com>
+
+2005-04-16 11:18  mosu
+
+	* trunk/libebml/ChangeLog: Automatic ChangeLog update.
+
+2005-04-16 11:17  mosu
+
+	* trunk/libebml/debian/rules, trunk/libebml/make/linux/Makefile:
+	  Updated the Linux build system and added targets for installing
+	  only the static lib + headers. Updated the Debian package build
+	  script for that, too.
+
+2005-04-16 11:09  mosu
+
+	* trunk/libebml/debian/changelog: Updated the Debian packet's
+	  version number.
+
+2005-04-16 11:09  mosu
+
+	* trunk/libebml/ChangeLog: Automatic ChangeLog update.
+
+2005-04-14 15:19  mosu
+
+	* trunk/libebml/ebml/EbmlConfig.h, trunk/libebml/ebml/EbmlCrc32.h:
+	  Fixes for compilation with gcc 4 on 64 bit platforms (AMD64).
+	  Patch by Stefan Seyfried <seife () gmane0305 ! slipkontur ! de>
+
+2005-03-28 09:55  mosu
+
+	* trunk/libebml/ebml/EbmlBinary.h, trunk/libebml/src/EbmlBinary.cpp:
+	  Removed the unnecessary non-const comparison operator.
+
+2005-03-27 13:55  robux4
+
+	* trunk/libebml/ebml/EbmlBinary.h, trunk/libebml/src/EbmlBinary.cpp:
+	  libebml: allow comparison of const elements too
+
+2005-03-19 10:33  mosu
+
+	* trunk/libebml/make/linux: Ignore the shared lib and its links.
+
+2005-03-19 10:31  mosu
+
+	* trunk/libebml/make/linux/Makefile: Say something about 'lib' not
+	  being a valid target anymore. 'clean' should remove the .lo, too.
+
+2005-03-19 10:24  mosu
+
+	* trunk/libebml/make/linux/Makefile: Provide separate make targets
+	  for the static and the shared library.
+
+2005-03-19 10:15  mosu
+
+	* trunk/libebml/src/EbmlFloat.cpp: Ups...
+
+2005-03-19 10:13  mosu
+
+	* trunk/libebml/src/EbmlFloat.cpp: Compilation fix for newer gcc
+	  versions.
+
+2005-03-17 10:13  robux4
+
+	* trunk/libebml/make/vc7/lib/libebml.v71.vcproj: WinIOCallback is
+	  built by default on Windows
+
+2005-03-17 09:36  robux4
+
+	* trunk/libebml/src/EbmlCrc32.cpp,
+	  trunk/libmatroska/src/KaxTrackEntryData.cpp: some strings to
+	  watermark the code
+
+2005-03-17 09:14  robux4
+
+	* trunk/libebml/src/EbmlHead.cpp,
+	  trunk/libmatroska/src/KaxSegment.cpp: some strings to watermark
+	  the code
+
+2005-03-16 18:32  robux4
+
+	* trunk/libebml/make/vc7/lib/libebml.vcproj: libebml: WinIOCallback
+	  is compiled by default on Win32
+
+2005-03-16 18:30  robux4
+
+	* trunk/libebml/src/StdIOCallback.cpp,
+	  trunk/libmatroska/matroska/KaxContexts.h,
+	  trunk/mkxuncat/mkxuncat.cpp, trunk/mkxuncat/mkxuncat.vcproj: misc
+	  compilation fixes
+
+2005-03-16 13:01  robux4
+
+	* trunk/libebml/src/StdIOCallback.cpp,
+	  trunk/libebml/src/platform/win32/WinIOCallback.cpp: libebml: safer
+	  when seeking fails
+
+2005-03-16 12:48  robux4
+
+	* trunk/libebml/ebml/EbmlVersion.h: libebml: push the version number
+
+2005-03-16 12:47  robux4
+
+	* trunk/libebml/ebml/StdIOCallback.h,
+	  trunk/libebml/src/StdIOCallback.cpp,
+	  trunk/libebml/src/platform/win32/WinIOCallback.cpp,
+	  trunk/libebml/src/platform/win32/WinIOCallback.h: libebml: cache
+	  the stream position for StdIOCallback and WinIOCallback (not
+	  tested)
+
+2005-03-16 12:28  robux4
+
+	* trunk/libebml/ebml/EbmlMaster.h: libebml: allow retrieving the
+	  starting point of the actual data in a Master element
+
+2005-03-13 10:49  robux4
+
+	* trunk/libebml/make/linux/Makefile,
+	  trunk/libmatroska/make/linux/Makefile: libebml/libmatroska: allow
+	  to build as shared libraries for Gentoo
+
+2005-03-04 20:11  robux4
+
+	* trunk/libebml/ebml/EbmlMaster.h: avoid a warning in MSVC7
+
+2005-03-03 13:18  robux4
+
+	* trunk/libebml/ebml/EbmlBinary.h, trunk/libebml/ebml/EbmlCrc32.h,
+	  trunk/libebml/ebml/EbmlDate.h, trunk/libebml/ebml/EbmlElement.h,
+	  trunk/libebml/ebml/EbmlFloat.h, trunk/libebml/ebml/EbmlMaster.h,
+	  trunk/libebml/ebml/EbmlSInteger.h,
+	  trunk/libebml/ebml/EbmlString.h,
+	  trunk/libebml/ebml/EbmlUInteger.h,
+	  trunk/libebml/ebml/EbmlUnicodeString.h,
+	  trunk/libebml/ebml/EbmlVoid.h, trunk/libebml/src/EbmlBinary.cpp,
+	  trunk/libebml/src/EbmlCrc32.cpp, trunk/libebml/src/EbmlDate.cpp,
+	  trunk/libebml/src/EbmlElement.cpp,
+	  trunk/libebml/src/EbmlFloat.cpp, trunk/libebml/src/EbmlMaster.cpp,
+	  trunk/libebml/src/EbmlSInteger.cpp,
+	  trunk/libebml/src/EbmlString.cpp,
+	  trunk/libebml/src/EbmlUInteger.cpp,
+	  trunk/libebml/src/EbmlUnicodeString.cpp,
+	  trunk/libebml/src/EbmlVoid.cpp: update the copyright dates
+
+2005-02-06 19:48  mosu
+
+	* trunk/libebml/ChangeLog: Automatic ChangeLog update (with a new
+	  program -- that's why the diff is so huge)
+
+2005-02-06 18:11  mosu
+
+	* trunk/libebml/make/linux/Makefile: Output an error if a mingw
+	  compiler is used with the Linux Makefile (I simply do that too
+	  often).
+
+2005-02-06 16:17  robux4
+
+	* trunk/libebml/src/EbmlBinary.cpp: libebml: remove wrong comment
+
+2005-02-05 21:34  robux4
+
+	* trunk/libebml/src/EbmlBinary.cpp: libebml: the previous commit had
+	  was b0rked
+
+2005-02-05 21:30  robux4
+
+	* trunk/libebml/ebml/EbmlBinary.h, trunk/libebml/src/EbmlBinary.cpp:
+	  libebml: allow binary element comparison (useful to compare UIDs)
+
+2005-01-10 22:49  robux4
+
+	* trunk/libebml/ebml/EbmlBinary.h, trunk/libebml/ebml/EbmlCrc32.h,
+	  trunk/libebml/ebml/EbmlDate.h, trunk/libebml/ebml/EbmlElement.h,
+	  trunk/libebml/ebml/EbmlFloat.h, trunk/libebml/ebml/EbmlMaster.h,
+	  trunk/libebml/ebml/EbmlSInteger.h,
+	  trunk/libebml/ebml/EbmlString.h,
+	  trunk/libebml/ebml/EbmlUInteger.h,
+	  trunk/libebml/ebml/EbmlUnicodeString.h,
+	  trunk/libebml/ebml/EbmlVoid.h, trunk/libebml/src/EbmlBinary.cpp,
+	  trunk/libebml/src/EbmlCrc32.cpp, trunk/libebml/src/EbmlDate.cpp,
+	  trunk/libebml/src/EbmlElement.cpp,
+	  trunk/libebml/src/EbmlFloat.cpp, trunk/libebml/src/EbmlMaster.cpp,
+	  trunk/libebml/src/EbmlSInteger.cpp,
+	  trunk/libebml/src/EbmlString.cpp,
+	  trunk/libebml/src/EbmlUInteger.cpp,
+	  trunk/libebml/src/EbmlUnicodeString.cpp,
+	  trunk/libebml/src/EbmlVoid.cpp: libebml: rename bSaveDefault in
+	  bKeepIntact
+
+2005-01-10 22:34  robux4
+
+	* trunk/libebml/ebml/EbmlElement.h: libebml: more comments on what
+	  size functions return and when they should be used
+
+2005-01-10 20:05  robux4
+
+	* trunk/libebml/ebml/EbmlMaster.h: libebml: don't save empty
+	  EbmlMasters by default
+
+2005-01-05 16:15  robux4
+
+	* trunk/libebml/ebml/c/libebml_t.h: patches from the VLC repository
+
+2004-11-30 15:41  mosu
+
+	* trunk/libebml/ebml/EbmlBinary.h, trunk/libebml/src/EbmlBinary.cpp:
+	  Use malloc() and free() instead of new[] and delete[] where the
+	  lib might deal with pointers that have been allocated by the app,
+	  or where the app has allocated the memory. Reason: new[]ed memory
+	  cannot be realloc()ed.
+
+2004-11-19 12:17  mosu
+
+	* trunk/libebml/make/mingw32/Makefile: Compile libebml as a DLL by
+	  default (is anyone except me using this mingw Makefile anyway?).
+	  Do not remove the dependency file on "make clean".
+
+2004-11-17 08:45  mosu
+
+	* trunk/libebml/make/linux/Makefile: Do not remove the .depend file
+	  on "make clean".
+
+2004-11-14 10:39  mosu
+
+	* trunk/libebml/ebml/EbmlVersion.h: Numbers starting with '0' are
+	  octal numbers. Therefore a version number '0.8.3' can definitely
+	  not be expressed as '000803'. A very stupid mistake...
+
+2004-11-13 21:11  mosu
+
+	* trunk/libebml/make/mingw32: Also ignore the static lib.
+
+2004-11-13 21:09  mosu
+
+	* trunk/libebml/make/linux/Makefile, trunk/libebml/make/mingw32,
+	  trunk/libebml/make/mingw32/Makefile: Fixed "make depend" on mingw
+	  and some cleanup for the Linux Makefile.
+
+2004-11-13 11:30  mosu
+
+	* trunk/libebml/make/linux: Ignore the .depend file created by "make
+	  depend".
+
+2004-11-13 11:27  mosu
+
+	* trunk/libebml/make/linux/Makefile: Cleanup
+
+2004-11-13 11:25  mosu
+
+	* trunk/libebml/make/linux/Makefile: Improved the dependency
+	  calculation to be more portable (makedepend doesn't exist
+	  everywhere, and it doesn't necessarily use the compiler we want).
+
+2004-11-13 11:17  mosu
+
+	* trunk/libebml/ebml/EbmlMaster.h: Added a "RemoveAll" function.
+
+2004-11-10 20:48  mosu
+
+	* trunk/libebml/ChangeLog: Automatic ChangeLog update
+
+2004-11-10 20:47  mosu
+
+	* trunk/libebml/debian/changelog, trunk/libebml/ebml/EbmlVersion.h:
+	  Bumped the version number to 0.7.3.
+
+2004-11-10 20:46  mosu
+
+	* trunk/libebml/ebml/EbmlId.h,
+	  trunk/libebml/ebml/EbmlUnicodeString.h: Added some operator!= to
+	  avoid confusion and mistakes with comparison and automatic
+	  casting.
+
+2004-10-18 19:28  robux4
+
+	* trunk/DvdMenuXtractor/DvdMenuXtractor.cpp,
+	  trunk/DvdMenuXtractor/IFOFile.cpp,
+	  trunk/DvdMenuXtractor/IFOFile.h,
+	  trunk/libebml/src/EbmlElement.cpp,
+	  trunk/libebml/src/EbmlMaster.cpp: better code to handle all VTS
+	  VOBs (not yet there)
+
+2004-10-14 07:48  mosu
+
+	* trunk/libebml/src/EbmlUnicodeString.cpp: wchar.h doesn't exist on
+	  OpenBSD. Patch by Diego Pettenò <dgp85 (a) users ! sourceforge !
+	  net>.
+
+2004-09-26 10:03  mosu
+
+	* trunk/libebml/ChangeLog: Automatic ChangeLog update
+
+2004-09-26 10:03  mosu
+
+	* trunk/libebml/debian/changelog, trunk/libebml/ebml/EbmlVersion.h:
+	  Bumped the version number to 0.7.2.
+
+2004-09-23 22:54  mosu
+
+	* trunk/libebml/ebml/c/libebml_t.h: Fix for the compilation on
+	  Solaris. I also redid the #if... hierarchy to be a bit less
+	  confusing.
+
+2004-08-28 14:18  robux4
+
+	* trunk/libebml/ebml/EbmlFloat.h: remove the unsupported float80
+	  support
+
+2004-08-28 14:05  robux4
+
+	* trunk/libebml/ebml/EbmlContexts.h,
+	  trunk/libebml/ebml/EbmlEndian.h, trunk/libebml/ebml/EbmlFloat.h,
+	  trunk/libebml/make/vc7/dll,
+	  trunk/libebml/make/vc7/dll/libebmldll.v71.vcproj: allow building a
+	  DLL with MSVC7 (not compatible with the MinGW one)
+
+2004-08-10 12:27  robux4
+
+	* trunk/libebml/ebml/EbmlConfig.h, trunk/libebml/ebml/EbmlFloat.h,
+	  trunk/libebml/src/EbmlFloat.cpp: remove fake 80 bits float support
+
+2004-07-31 08:56  robux4
+
+	* trunk/libebml/src/MemIOCallback.cpp: Apparently it's better this
+	  way on some compilers
+
+2004-07-26 17:49  mosu
+
+	* trunk/libebml/make/mingw32/Makefile: Proper description for the
+	  SHARED option.
+
+2004-07-25 10:11  mosu
+
+	* trunk/libebml/ChangeLog, trunk/libebml/debian/changelog,
+	  trunk/libebml/ebml/EbmlVersion.h: Bumped the version number to
+	  0.7.1.
+
+2004-07-21 18:12  mosu
+
+	* trunk/libebml/src/EbmlUnicodeString.cpp: I still hate tabs.
+
+2004-07-21 18:09  mosu
+
+	* trunk/libebml/ebml/EbmlUnicodeString.h,
+	  trunk/libebml/src/EbmlUnicodeString.cpp: Do not use the same name
+	  as a standard C library function. Especially not if the return
+	  values are reversed!
+
+2004-07-19 16:39  mosu
+
+	* trunk/libebml/make/linux/Makefile: Let the user specify his own
+	  CXXFLAGS and CPPFLAGS.
+
+2004-07-09 21:18  mosu
+
+	* trunk/libebml/ChangeLog, trunk/libebml/debian/rules: debian/rules
+	  should be executable, ChangeLog should not.
+
+2004-07-09 21:11  mosu
+
+	* trunk/libebml/make/linux: Ignore the created library.
+
+2004-07-09 20:59  mosu
+
+	* trunk/libebml/ChangeLog, trunk/libebml/LICENSE.LGPL,
+	  trunk/libebml/debian/changelog, trunk/libebml/debian/control,
+	  trunk/libebml/debian/copyright, trunk/libebml/debian/dirs,
+	  trunk/libebml/debian/docs, trunk/libebml/debian/libebml-dev.dirs,
+	  trunk/libebml/debian/libebml-dev.files,
+	  trunk/libebml/debian/rules, trunk/libebml/ebml/Debug.h,
+	  trunk/libebml/ebml/EbmlBinary.h, trunk/libebml/ebml/EbmlConfig.h,
+	  trunk/libebml/ebml/EbmlContexts.h, trunk/libebml/ebml/EbmlCrc32.h,
+	  trunk/libebml/ebml/EbmlDate.h, trunk/libebml/ebml/EbmlDummy.h,
+	  trunk/libebml/ebml/EbmlElement.h, trunk/libebml/ebml/EbmlEndian.h,
+	  trunk/libebml/ebml/EbmlFloat.h, trunk/libebml/ebml/EbmlHead.h,
+	  trunk/libebml/ebml/EbmlId.h, trunk/libebml/ebml/EbmlMaster.h,
+	  trunk/libebml/ebml/EbmlSInteger.h,
+	  trunk/libebml/ebml/EbmlStream.h, trunk/libebml/ebml/EbmlString.h,
+	  trunk/libebml/ebml/EbmlSubHead.h, trunk/libebml/ebml/EbmlTypes.h,
+	  trunk/libebml/ebml/EbmlUInteger.h,
+	  trunk/libebml/ebml/EbmlUnicodeString.h,
+	  trunk/libebml/ebml/EbmlVersion.h, trunk/libebml/ebml/EbmlVoid.h,
+	  trunk/libebml/ebml/IOCallback.h,
+	  trunk/libebml/ebml/MemIOCallback.h,
+	  trunk/libebml/ebml/StdIOCallback.h,
+	  trunk/libebml/ebml/c/libebml_t.h,
+	  trunk/libebml/make/linux/Makefile,
+	  trunk/libebml/make/mingw32/Makefile,
+	  trunk/libebml/make/mingw32/libebml.dev,
+	  trunk/libebml/src/Debug.cpp, trunk/libebml/src/EbmlBinary.cpp,
+	  trunk/libebml/src/EbmlContexts.cpp,
+	  trunk/libebml/src/EbmlCrc32.cpp, trunk/libebml/src/EbmlDate.cpp,
+	  trunk/libebml/src/EbmlDummy.cpp,
+	  trunk/libebml/src/EbmlElement.cpp,
+	  trunk/libebml/src/EbmlFloat.cpp, trunk/libebml/src/EbmlHead.cpp,
+	  trunk/libebml/src/EbmlMaster.cpp,
+	  trunk/libebml/src/EbmlSInteger.cpp,
+	  trunk/libebml/src/EbmlStream.cpp,
+	  trunk/libebml/src/EbmlString.cpp,
+	  trunk/libebml/src/EbmlSubHead.cpp,
+	  trunk/libebml/src/EbmlUInteger.cpp,
+	  trunk/libebml/src/EbmlUnicodeString.cpp,
+	  trunk/libebml/src/EbmlVersion.cpp, trunk/libebml/src/EbmlVoid.cpp,
+	  trunk/libebml/src/IOCallback.cpp,
+	  trunk/libebml/src/MemIOCallback.cpp,
+	  trunk/libebml/src/StdIOCallback.cpp,
+	  trunk/libebml/src/platform/win32/WinIOCallback.cpp,
+	  trunk/libebml/src/platform/win32/WinIOCallback.h: Set eol-style
+	  and keywords properties.
+
+2004-05-11 20:27  mosu
+
+	* trunk/libebml/ebml/MemIOCallback.h,
+	  trunk/libebml/ebml/c/libebml_t.h,
+	  trunk/libebml/make/linux/Makefile: Compilation on BeOS. Patch by
+	  Vegard W&#65533;rp <devel@vegardw.com>
+
+2004-04-26 19:35  robux4
+
+	* trunk/libebml/make/vc7/Makefile,
+	  trunk/libmatroska/make/vc7/Makefile: Makefile to use the free
+	  VS.Net 2003 command-line compiler
+
+2004-04-24 09:09  mosu
+
+	* trunk/libebml/make/linux/Makefile,
+	  trunk/libmatroska/make/linux/Makefile: Set LD to CXX by default.
+
+2004-04-23 16:40  mosu
+
+	* trunk/libebml/ChangeLog: Updates
+
+2004-04-23 16:39  mosu
+
+	* trunk/libebml/debian/changelog, trunk/libebml/ebml/EbmlVersion.h:
+	  Bumped version number to 0.7.0.
+
+2004-04-21 19:55  mosu
+
+	* trunk/libebml/ChangeLog, trunk/libmatroska/ChangeLog: Updates
+
+2004-04-14 23:17  robux4
+
+	* trunk/libebml/ebml/Debug.h, trunk/libebml/ebml/EbmlBinary.h,
+	  trunk/libebml/ebml/EbmlConfig.h,
+	  trunk/libebml/ebml/EbmlContexts.h, trunk/libebml/ebml/EbmlCrc32.h,
+	  trunk/libebml/ebml/EbmlDate.h, trunk/libebml/ebml/EbmlDummy.h,
+	  trunk/libebml/ebml/EbmlElement.h, trunk/libebml/ebml/EbmlEndian.h,
+	  trunk/libebml/ebml/EbmlFloat.h, trunk/libebml/ebml/EbmlHead.h,
+	  trunk/libebml/ebml/EbmlId.h, trunk/libebml/ebml/EbmlMaster.h,
+	  trunk/libebml/ebml/EbmlSInteger.h,
+	  trunk/libebml/ebml/EbmlStream.h, trunk/libebml/ebml/EbmlString.h,
+	  trunk/libebml/ebml/EbmlSubHead.h, trunk/libebml/ebml/EbmlTypes.h,
+	  trunk/libebml/ebml/EbmlUInteger.h,
+	  trunk/libebml/ebml/EbmlUnicodeString.h,
+	  trunk/libebml/ebml/EbmlVersion.h, trunk/libebml/ebml/EbmlVoid.h,
+	  trunk/libebml/ebml/IOCallback.h,
+	  trunk/libebml/ebml/MemIOCallback.h,
+	  trunk/libebml/ebml/StdIOCallback.h,
+	  trunk/libebml/ebml/c/libebml_t.h, trunk/libebml/src/Debug.cpp,
+	  trunk/libebml/src/EbmlBinary.cpp,
+	  trunk/libebml/src/EbmlContexts.cpp,
+	  trunk/libebml/src/EbmlCrc32.cpp, trunk/libebml/src/EbmlDate.cpp,
+	  trunk/libebml/src/EbmlDummy.cpp,
+	  trunk/libebml/src/EbmlElement.cpp,
+	  trunk/libebml/src/EbmlFloat.cpp, trunk/libebml/src/EbmlHead.cpp,
+	  trunk/libebml/src/EbmlMaster.cpp,
+	  trunk/libebml/src/EbmlSInteger.cpp,
+	  trunk/libebml/src/EbmlStream.cpp,
+	  trunk/libebml/src/EbmlString.cpp,
+	  trunk/libebml/src/EbmlSubHead.cpp,
+	  trunk/libebml/src/EbmlUInteger.cpp,
+	  trunk/libebml/src/EbmlUnicodeString.cpp,
+	  trunk/libebml/src/EbmlVersion.cpp, trunk/libebml/src/EbmlVoid.cpp,
+	  trunk/libebml/src/IOCallback.cpp,
+	  trunk/libebml/src/MemIOCallback.cpp,
+	  trunk/libebml/src/StdIOCallback.cpp,
+	  trunk/libebml/src/platform/win32/WinIOCallback.cpp,
+	  trunk/libebml/src/platform/win32/WinIOCallback.h: Switch to LGPL
+	  license
+
+2004-04-14 23:04  robux4
+
+	* trunk/libebml/LICENSE.GPL, trunk/libebml/LICENSE.LGPL,
+	  trunk/libebml/LICENSE.QPL, trunk/libmatroska/LICENSE.GPL,
+	  trunk/libmatroska/LICENSE.LGPL, trunk/libmatroska/LICENSE.QPL:
+	  Switch to LGPL license
+
+2004-03-09 20:33  mosu
+
+	* trunk/libebml/debian/changelog, trunk/libebml/ebml/EbmlVersion.h:
+	  Updated the version number to 0.6.5.
+
+2004-03-09 20:27  mosu
+
+	* trunk/libebml/ChangeLog: Updates
+
+2004-03-09 20:05  mosu
+
+	* trunk/libebml/src/EbmlUnicodeString.cpp: Allow the cloning of
+	  empty strings.
+
+2004-03-06 07:45  jcsston
+
+	* trunk/libebml/src/EbmlElement.cpp: Fix for ebml coded sizes larger
+	  than 8 bytes, was overflowing the size buffer
+
+2004-02-18 07:19  jcsston
+
+	* trunk/libebml/src/platform/win32/WinIOCallback.cpp,
+	  trunk/libebml/src/platform/win32/WinIOCallback.h: Added SetEOF()
+	  function, changed class private area to protected, added a
+	  static_cast to remove a warning
+
+2004-01-31 13:43  robux4
+
+	* trunk/libebml/ebml/EbmlConfig.h, trunk/libebml/ebml/EbmlTypes.h,
+	  trunk/libebml/ebml/c/libebml_t.h,
+	  trunk/libmatroska/matroska/KaxConfig.h,
+	  trunk/libmatroska/matroska/c/libmatroska_t.h: Simplify and change
+	  the copyright holder (nothing left from Ingo)
+
+2004-01-24 16:57  mosu
+
+	* trunk/libebml/src/EbmlMaster.cpp: Allow elements to be added to
+	  the end of the master even with Insert.
+
+2004-01-19 10:33  mosu
+
+	* trunk/libebml/ChangeLog, trunk/libmatroska/ChangeLog: Updated the
+	  ChangeLog.
+
+2004-01-19 10:28  mosu
+
+	* trunk/libebml/debian/changelog, trunk/libebml/ebml/EbmlVersion.h:
+	  Bumped the version number.
+
+2004-01-17 21:41  mosu
+
+	* trunk/libebml/ebml/EbmlConfig.h: Removed some old and unused
+	  definition for DLL stuff in order to avoid confusion.
+
+2004-01-17 16:32  robux4
+
+	* trunk/libebml/src/EbmlMaster.cpp: Possibly fixed a problem with
+	  context handling in cases when we end a level with an unknown
+	  element
+
+2004-01-15 15:02  mosu
+
+	* trunk/libebml/ChangeLog: Updated the ChangeLog.
+
+2004-01-10 15:31  robux4
+
+	* trunk/libebml/ebml/Debug.h, trunk/libebml/ebml/EbmlBinary.h,
+	  trunk/libebml/ebml/EbmlConfig.h,
+	  trunk/libebml/ebml/EbmlContexts.h, trunk/libebml/ebml/EbmlCrc32.h,
+	  trunk/libebml/ebml/EbmlDate.h, trunk/libebml/ebml/EbmlDummy.h,
+	  trunk/libebml/ebml/EbmlElement.h, trunk/libebml/ebml/EbmlEndian.h,
+	  trunk/libebml/ebml/EbmlFloat.h, trunk/libebml/ebml/EbmlHead.h,
+	  trunk/libebml/ebml/EbmlId.h, trunk/libebml/ebml/EbmlMaster.h,
+	  trunk/libebml/ebml/EbmlSInteger.h,
+	  trunk/libebml/ebml/EbmlStream.h, trunk/libebml/ebml/EbmlString.h,
+	  trunk/libebml/ebml/EbmlSubHead.h, trunk/libebml/ebml/EbmlTypes.h,
+	  trunk/libebml/ebml/EbmlUInteger.h,
+	  trunk/libebml/ebml/EbmlUnicodeString.h,
+	  trunk/libebml/ebml/EbmlVersion.h, trunk/libebml/ebml/EbmlVoid.h,
+	  trunk/libebml/ebml/IOCallback.h,
+	  trunk/libebml/ebml/MemIOCallback.h,
+	  trunk/libebml/ebml/StdIOCallback.h, trunk/libebml/src/Debug.cpp,
+	  trunk/libebml/src/EbmlBinary.cpp,
+	  trunk/libebml/src/EbmlContexts.cpp,
+	  trunk/libebml/src/EbmlCrc32.cpp, trunk/libebml/src/EbmlDate.cpp,
+	  trunk/libebml/src/EbmlDummy.cpp,
+	  trunk/libebml/src/EbmlElement.cpp,
+	  trunk/libebml/src/EbmlFloat.cpp, trunk/libebml/src/EbmlHead.cpp,
+	  trunk/libebml/src/EbmlMaster.cpp,
+	  trunk/libebml/src/EbmlSInteger.cpp,
+	  trunk/libebml/src/EbmlStream.cpp,
+	  trunk/libebml/src/EbmlString.cpp,
+	  trunk/libebml/src/EbmlSubHead.cpp,
+	  trunk/libebml/src/EbmlUInteger.cpp,
+	  trunk/libebml/src/EbmlUnicodeString.cpp,
+	  trunk/libebml/src/EbmlVersion.cpp, trunk/libebml/src/EbmlVoid.cpp,
+	  trunk/libebml/src/IOCallback.cpp,
+	  trunk/libebml/src/StdIOCallback.cpp,
+	  trunk/libmatroska/matroska/FileKax.h,
+	  trunk/libmatroska/matroska/KaxAttached.h,
+	  trunk/libmatroska/matroska/KaxAttachments.h,
+	  trunk/libmatroska/matroska/KaxBlock.h,
+	  trunk/libmatroska/matroska/KaxBlockData.h,
+	  trunk/libmatroska/matroska/KaxChapters.h,
+	  trunk/libmatroska/matroska/KaxCluster.h,
+	  trunk/libmatroska/matroska/KaxClusterData.h,
+	  trunk/libmatroska/matroska/KaxConfig.h,
+	  trunk/libmatroska/matroska/KaxContentEncoding.h,
+	  trunk/libmatroska/matroska/KaxContexts.h,
+	  trunk/libmatroska/matroska/KaxCues.h,
+	  trunk/libmatroska/matroska/KaxCuesData.h,
+	  trunk/libmatroska/matroska/KaxInfo.h,
+	  trunk/libmatroska/matroska/KaxInfoData.h,
+	  trunk/libmatroska/matroska/KaxSeekHead.h,
+	  trunk/libmatroska/matroska/KaxSegment.h,
+	  trunk/libmatroska/matroska/KaxTag.h,
+	  trunk/libmatroska/matroska/KaxTagMulti.h,
+	  trunk/libmatroska/matroska/KaxTags.h,
+	  trunk/libmatroska/matroska/KaxTrackAudio.h,
+	  trunk/libmatroska/matroska/KaxTrackEntryData.h,
+	  trunk/libmatroska/matroska/KaxTrackVideo.h,
+	  trunk/libmatroska/matroska/KaxTracks.h,
+	  trunk/libmatroska/matroska/KaxVersion.h,
+	  trunk/libmatroska/src/KaxAttached.cpp,
+	  trunk/libmatroska/src/KaxAttachments.cpp,
+	  trunk/libmatroska/src/KaxBlock.cpp,
+	  trunk/libmatroska/src/KaxBlockData.cpp,
+	  trunk/libmatroska/src/KaxChapters.cpp,
+	  trunk/libmatroska/src/KaxCluster.cpp,
+	  trunk/libmatroska/src/KaxClusterData.cpp,
+	  trunk/libmatroska/src/KaxContentEncoding.cpp,
+	  trunk/libmatroska/src/KaxContexts.cpp,
+	  trunk/libmatroska/src/KaxCues.cpp,
+	  trunk/libmatroska/src/KaxCuesData.cpp,
+	  trunk/libmatroska/src/KaxInfo.cpp,
+	  trunk/libmatroska/src/KaxInfoData.cpp,
+	  trunk/libmatroska/src/KaxSeekHead.cpp,
+	  trunk/libmatroska/src/KaxSegment.cpp,
+	  trunk/libmatroska/src/KaxTag.cpp,
+	  trunk/libmatroska/src/KaxTagMulti.cpp,
+	  trunk/libmatroska/src/KaxTags.cpp,
+	  trunk/libmatroska/src/KaxTrackAudio.cpp,
+	  trunk/libmatroska/src/KaxTrackEntryData.cpp,
+	  trunk/libmatroska/src/KaxTrackVideo.cpp,
+	  trunk/libmatroska/src/KaxTracks.cpp,
+	  trunk/libmatroska/src/KaxVersion.cpp,
+	  trunk/libmatroska/test/mux/test8.cpp,
+	  trunk/libmatroska/test/tags/test9.cpp: Update the copyright years
+
+2004-01-10 15:23  robux4
+
+	* trunk/libebml/src/EbmlElement.cpp: Fix a problem on the position
+	  esitmation (thx to Cyrius)
+
+2004-01-10 14:19  mosu
+
+	* trunk/libebml/make/mingw32/Makefile,
+	  trunk/libmatroska/make/mingw32/Makefile: Updated the MinGW build
+	  system.
+
+2004-01-10 14:18  mosu
+
+	* trunk/libebml/ebml/Debug.h, trunk/libebml/ebml/EbmlBinary.h,
+	  trunk/libebml/ebml/EbmlConfig.h,
+	  trunk/libebml/ebml/EbmlContexts.h, trunk/libebml/ebml/EbmlCrc32.h,
+	  trunk/libebml/ebml/EbmlDate.h, trunk/libebml/ebml/EbmlDummy.h,
+	  trunk/libebml/ebml/EbmlElement.h, trunk/libebml/ebml/EbmlEndian.h,
+	  trunk/libebml/ebml/EbmlFloat.h, trunk/libebml/ebml/EbmlHead.h,
+	  trunk/libebml/ebml/EbmlId.h, trunk/libebml/ebml/EbmlMaster.h,
+	  trunk/libebml/ebml/EbmlSInteger.h,
+	  trunk/libebml/ebml/EbmlStream.h, trunk/libebml/ebml/EbmlString.h,
+	  trunk/libebml/ebml/EbmlSubHead.h, trunk/libebml/ebml/EbmlTypes.h,
+	  trunk/libebml/ebml/EbmlUInteger.h,
+	  trunk/libebml/ebml/EbmlUnicodeString.h,
+	  trunk/libebml/ebml/EbmlVoid.h, trunk/libebml/ebml/IOCallback.h,
+	  trunk/libebml/ebml/MemIOCallback.h,
+	  trunk/libebml/ebml/StdIOCallback.h: Added definitions that allow
+	  building libebml as a DLL on Windows.
+
+2004-01-06 22:15  robux4
+
+	* trunk/libebml/make/vc6/lib/static/libebml.dsp,
+	  trunk/libmatroska/make/vc6/lib/static/libmatroska.dsp:
+	  StdInclude.h doesn't exist anymore
+
+2004-01-06 22:12  robux4
+
+	* trunk/libebml/ebml/EbmlBinary.h, trunk/libebml/ebml/EbmlCrc32.h,
+	  trunk/libebml/ebml/EbmlDate.h, trunk/libebml/ebml/EbmlElement.h,
+	  trunk/libebml/ebml/EbmlFloat.h, trunk/libebml/ebml/EbmlHead.h,
+	  trunk/libebml/ebml/EbmlId.h, trunk/libebml/ebml/EbmlSInteger.h,
+	  trunk/libebml/ebml/EbmlStream.h, trunk/libebml/ebml/EbmlString.h,
+	  trunk/libebml/ebml/EbmlTypes.h, trunk/libebml/ebml/EbmlUInteger.h,
+	  trunk/libebml/ebml/EbmlUnicodeString.h,
+	  trunk/libebml/ebml/EbmlVoid.h, trunk/libebml/ebml/IOCallback.h,
+	  trunk/libebml/src/Debug.cpp: Fixes for the FreeBSD include order
+	  pb
+
+2004-01-06 21:23  robux4
+
+	* trunk/libebml/src/Debug.cpp, trunk/libebml/src/EbmlBinary.cpp,
+	  trunk/libebml/src/EbmlContexts.cpp,
+	  trunk/libebml/src/EbmlCrc32.cpp, trunk/libebml/src/EbmlDate.cpp,
+	  trunk/libebml/src/EbmlDummy.cpp,
+	  trunk/libebml/src/EbmlElement.cpp,
+	  trunk/libebml/src/EbmlFloat.cpp, trunk/libebml/src/EbmlHead.cpp,
+	  trunk/libebml/src/EbmlMaster.cpp,
+	  trunk/libebml/src/EbmlSInteger.cpp,
+	  trunk/libebml/src/EbmlStream.cpp,
+	  trunk/libebml/src/EbmlString.cpp,
+	  trunk/libebml/src/EbmlSubHead.cpp,
+	  trunk/libebml/src/EbmlUInteger.cpp,
+	  trunk/libebml/src/EbmlUnicodeString.cpp,
+	  trunk/libebml/src/EbmlVersion.cpp, trunk/libebml/src/EbmlVoid.cpp,
+	  trunk/libebml/src/IOCallback.cpp,
+	  trunk/libebml/src/MemIOCallback.cpp,
+	  trunk/libebml/src/StdIOCallback.cpp,
+	  trunk/libebml/src/StdInclude.h: No more StdInclude use, should fix
+	  a FreeBSD warning
+
+2004-01-05 21:09  robux4
+
+	* trunk/libebml/ebml/EbmlBinary.h, trunk/libebml/ebml/EbmlElement.h,
+	  trunk/libebml/src/MemIOCallback.cpp: Make default scope reading
+	  where it was missing
+
+2004-01-05 11:24  mosu
+
+	* trunk/libebml/ebml/EbmlSInteger.h,
+	  trunk/libebml/ebml/EbmlUInteger.h,
+	  trunk/libebml/make/linux/Makefile, trunk/libebml/src/Debug.cpp,
+	  trunk/libebml/src/EbmlElement.cpp,
+	  trunk/libebml/src/EbmlMaster.cpp,
+	  trunk/libebml/src/StdIOCallback.cpp: Fixed a number of warnings
+	  (shadowed and uinitialized variables).
+
+2004-01-01 13:28  mosu
+
+	* trunk/libebml/debian/rules, trunk/libmatroska/debian/rules: Also
+	  install the ChangeLog.
+
+2004-01-01 13:20  mosu
+
+	* trunk/libebml/ChangeLog, trunk/libmatroska/ChangeLog,
+	  trunk/libmatroska/ChangeLog.txt: Added a ChangeLog.
+
+2003-12-28 19:31  mosu
+
+	* trunk/libebml/ebml/MemIOCallback.h: Fix for some gcc versions
+	  which hickup on min being defined in their C++ stream headers.
+
+2003-12-28 01:04  jcsston
+
+	* trunk/libebml/ebml/EbmlDate.h, trunk/libebml/ebml/MemIOCallback.h,
+	  trunk/libebml/src/MemIOCallback.cpp: Some updates/fixes
+
+2003-12-25 12:28  mosu
+
+	* trunk/libebml/debian/changelog: Updated version information.
+
+2003-11-12 16:38  mosu
+
+	* trunk/libebml/ebml/EbmlVersion.h: Updated the version number due
+	  to the interface change in EbmlBinary.Read().
+
+2003-11-12 15:24  mosu
+
+	* trunk/libebml/ebml/EbmlEndian.h: Fixes for big endian/RISC
+	  processors that do not allow non-aligned reads/writes for word or
+	  bigger sized objects.
+
+2003-11-03 22:17  robux4
+
+	* trunk/libebml/ebml/EbmlBinary.h, trunk/libebml/ebml/EbmlCrc32.h,
+	  trunk/libebml/ebml/EbmlDate.h, trunk/libebml/ebml/EbmlElement.h,
+	  trunk/libebml/ebml/EbmlFloat.h, trunk/libebml/ebml/EbmlMaster.h,
+	  trunk/libebml/ebml/EbmlSInteger.h,
+	  trunk/libebml/ebml/EbmlString.h,
+	  trunk/libebml/ebml/EbmlUInteger.h,
+	  trunk/libebml/ebml/EbmlUnicodeString.h,
+	  trunk/libebml/src/EbmlBinary.cpp, trunk/libebml/src/EbmlCrc32.cpp,
+	  trunk/libebml/src/EbmlDate.cpp, trunk/libebml/src/EbmlElement.cpp,
+	  trunk/libebml/src/EbmlFloat.cpp, trunk/libebml/src/EbmlMaster.cpp,
+	  trunk/libebml/src/EbmlSInteger.cpp,
+	  trunk/libebml/src/EbmlString.cpp,
+	  trunk/libebml/src/EbmlUInteger.cpp,
+	  trunk/libebml/src/EbmlUnicodeString.cpp,
+	  trunk/libmatroska/matroska/KaxBlock.h,
+	  trunk/libmatroska/src/KaxBlock.cpp,
+	  trunk/libmatroska/test/mux/test8.cpp: Better handling of scope
+	  reading
+
+2003-11-03 22:13  robux4
+
+	* trunk/libebml/ebml/EbmlTypes.h: Some Cleanup
+
+2003-10-31 12:29  mosu
+
+	* trunk/libebml/ebml/EbmlBinary.h, trunk/libebml/ebml/EbmlMaster.h:
+	  Added forgotten default values for ReadData.
+
+2003-10-31 08:52  mosu
+
+	* trunk/libebml/ebml/EbmlHead.h, trunk/libebml/ebml/EbmlSubHead.h:
+	  Fixed the new line/carriage return mess.
+
+2003-10-31 08:34  mosu
+
+	* trunk/libebml/debian/changelog: New version number.
+
+2003-10-30 23:09  robux4
+
+	* trunk/libebml/ebml/EbmlVersion.h: new version for the addition
+
+2003-10-30 23:06  robux4
+
+	* trunk/libebml/ebml/EbmlBinary.h, trunk/libebml/ebml/EbmlCrc32.h,
+	  trunk/libebml/ebml/EbmlDate.h, trunk/libebml/ebml/EbmlElement.h,
+	  trunk/libebml/ebml/EbmlFloat.h, trunk/libebml/ebml/EbmlMaster.h,
+	  trunk/libebml/ebml/EbmlSInteger.h,
+	  trunk/libebml/ebml/EbmlString.h,
+	  trunk/libebml/ebml/EbmlUInteger.h,
+	  trunk/libebml/ebml/EbmlUnicodeString.h,
+	  trunk/libebml/src/EbmlBinary.cpp, trunk/libebml/src/EbmlCrc32.cpp,
+	  trunk/libebml/src/EbmlDate.cpp, trunk/libebml/src/EbmlElement.cpp,
+	  trunk/libebml/src/EbmlFloat.cpp, trunk/libebml/src/EbmlMaster.cpp,
+	  trunk/libebml/src/EbmlSInteger.cpp,
+	  trunk/libebml/src/EbmlString.cpp,
+	  trunk/libebml/src/EbmlUInteger.cpp,
+	  trunk/libebml/src/EbmlUnicodeString.cpp: Allow some elements not
+	  to be fully read
+
+2003-10-28 22:05  mosu
+
+	* trunk/libebml/src/EbmlMaster.cpp: Fixes for compilation with gcc
+	  2.95.
+
+2003-10-28 21:46  mosu
+
+	* trunk/libebml/debian/changelog: Updated version number.
+
+2003-10-28 21:01  robux4
+
+	* trunk/libebml/ebml/EbmlVersion.h: Update the version number
+
+2003-10-28 20:55  robux4
+
+	* trunk/libebml/ebml/EbmlElement.h,
+	  trunk/libebml/src/EbmlElement.cpp,
+	  trunk/libmatroska/matroska/KaxBlock.h,
+	  trunk/libmatroska/src/KaxBlock.cpp: EBML-size handling is more
+	  general and handle the Unknown Size
+
+2003-10-25 15:09  mosu
+
+	* trunk/libebml/make/mingw32/Makefile,
+	  trunk/libmatroska/make/mingw32/Makefile: Support the same targest
+	  as the Linux Makefile.
+
+2003-10-24 22:03  mosu
+
+	* trunk/libebml/ebml/EbmlElement.h,
+	  trunk/libebml/src/EbmlElement.cpp: Changed the buffer size
+	  paramter from the much too small "char" to uint32.
+
+2003-10-22 14:18  pamel
+
+	* trunk/libebml/ebml/EbmlElement.h,
+	  trunk/libebml/src/EbmlElement.cpp,
+	  trunk/libmatroska/matroska/KaxTypes.h,
+	  trunk/libmatroska/src/KaxBlock.cpp: New lacing modes reading.
+
+2003-10-21 21:21  robux4
+
+	* trunk/libebml/ebml/EbmlElement.h,
+	  trunk/libebml/src/EbmlElement.cpp, trunk/libebml/src/EbmlVoid.cpp:
+	  New way to compute the EBML-coded length
+
+2003-10-16 21:13  mosu
+
+	* trunk/libebml/src/EbmlElement.cpp,
+	  trunk/libebml/src/EbmlMaster.cpp,
+	  trunk/libebml/src/EbmlUnicodeString.cpp: Fixed some warnings.
+	  Nothing major.
+
+2003-10-15 20:34  mosu
+
+	* trunk/libebml/make/linux/Makefile,
+	  trunk/libmatroska/make/linux/Makefile: Removed -pedantic due to
+	  problems on FreeBSD.
+
+2003-10-15 05:47  jcsston
+
+	* trunk/libebml/ebml/EbmlBinary.h,
+	  trunk/libebml/ebml/StdIOCallback.h: Define/includes for Borland
+	  C++ complier, from Zen
+
+2003-10-08 15:50  jcsston
+
+	* trunk/MatroskaUtils/MatroskaCDL.rc,
+	  trunk/MatroskaUtils/MatroskaPages.cpp,
+	  trunk/MatroskaUtils/MatroskaUtils.cpp,
+	  trunk/MatroskaUtils/MatroskaUtils.h,
+	  trunk/MatroskaUtils/ShellExtension/MatroskaProp.cpp,
+	  trunk/MatroskaUtils/ShellExtension/MatroskaProp.def,
+	  trunk/MatroskaUtils/ShellExtension/MatroskaProp.vcproj,
+	  trunk/MatroskaUtils/mdump.cpp, trunk/MatroskaUtils/mdump.h,
+	  trunk/MatroskaUtils/version.ver,
+	  trunk/libebml/src/platform/win32/WinIOCallback.cpp: Works under
+	  Win9x
+
+2003-10-08 07:46  mosu
+
+	* trunk/libebml/ebml/EbmlConfig.h: Added AMD64 to the list of Little
+	  Endian processors.
+
+2003-09-29 20:56  robux4
+
+	* trunk/libebml/ebml/EbmlMaster.h, trunk/libebml/src/EbmlMaster.cpp:
+	  Added InsertElement()
+
+2003-09-28 20:15  jcsston
+
+	* trunk/libebml/ebml/EbmlMaster.h, trunk/libebml/src/EbmlMaster.cpp:
+	  Added FindAllMissingElements() method
+
+2003-09-28 20:11  jcsston
+
+	* trunk/libebml/ebml/MemIOCallback.h: Added SetDataBufferSize()
+	  method
+
+2003-09-17 20:28  mosu
+
+	* trunk/libebml/debian/changelog: Updated version information.
+
+2003-09-15 02:31  jcsston
+
+	* trunk/libebml/src/platform/win32/WinIOCallback.cpp,
+	  trunk/libebml/src/platform/win32/WinIOCallback.h: Added Cyrius to
+	  the authors list
+
+2003-09-15 02:24  jcsston
+
+	* trunk/libebml/src/platform/win32/WinIOCallback.cpp,
+	  trunk/libebml/src/platform/win32/WinIOCallback.h: Updated to have
+	  even better error reporting, also takes Unicode and ANSI filenames
+	  regardless of compile defines
+
+2003-09-14 08:22  robux4
+
+	* trunk/libebml/ebml/EbmlVersion.h: New version to reflect changes
+	  in constructors
+
+2003-09-13 20:41  robux4
+
+	* trunk/libebml/ebml/EbmlConfig.h: Added a new define for assertion
+
+2003-09-13 17:48  robux4
+
+	* trunk/libebml/ebml/EbmlHead.h, trunk/libebml/ebml/EbmlSubHead.h,
+	  trunk/libmatroska/matroska/KaxAttached.h,
+	  trunk/libmatroska/matroska/KaxAttachments.h,
+	  trunk/libmatroska/matroska/KaxBlock.h,
+	  trunk/libmatroska/matroska/KaxBlockData.h,
+	  trunk/libmatroska/matroska/KaxChapters.h,
+	  trunk/libmatroska/matroska/KaxCluster.h,
+	  trunk/libmatroska/matroska/KaxClusterData.h,
+	  trunk/libmatroska/matroska/KaxCues.h,
+	  trunk/libmatroska/matroska/KaxCuesData.h,
+	  trunk/libmatroska/matroska/KaxInfo.h,
+	  trunk/libmatroska/matroska/KaxInfoData.h,
+	  trunk/libmatroska/matroska/KaxSeekHead.h,
+	  trunk/libmatroska/matroska/KaxSegment.h,
+	  trunk/libmatroska/matroska/KaxTag.h,
+	  trunk/libmatroska/matroska/KaxTagMulti.h,
+	  trunk/libmatroska/matroska/KaxTags.h,
+	  trunk/libmatroska/matroska/KaxTrackAudio.h,
+	  trunk/libmatroska/matroska/KaxTrackEntryData.h,
+	  trunk/libmatroska/matroska/KaxTrackVideo.h,
+	  trunk/libmatroska/matroska/KaxTracks.h,
+	  trunk/libmatroska/test/mux/test6.cpp: Added a Clone() method and a
+	  IsMaster() method
+
+2003-09-13 17:24  robux4
+
+	* trunk/libebml/ebml/EbmlBinary.h, trunk/libebml/ebml/EbmlConfig.h,
+	  trunk/libebml/ebml/EbmlCrc32.h, trunk/libebml/ebml/EbmlDate.h,
+	  trunk/libebml/ebml/EbmlDummy.h, trunk/libebml/ebml/EbmlElement.h,
+	  trunk/libebml/ebml/EbmlFloat.h, trunk/libebml/ebml/EbmlHead.h,
+	  trunk/libebml/ebml/EbmlMaster.h,
+	  trunk/libebml/ebml/EbmlSInteger.h,
+	  trunk/libebml/ebml/EbmlString.h, trunk/libebml/ebml/EbmlSubHead.h,
+	  trunk/libebml/ebml/EbmlUInteger.h,
+	  trunk/libebml/ebml/EbmlUnicodeString.h,
+	  trunk/libebml/ebml/EbmlVersion.h, trunk/libebml/ebml/EbmlVoid.h,
+	  trunk/libebml/src/EbmlBinary.cpp, trunk/libebml/src/EbmlCrc32.cpp,
+	  trunk/libebml/src/EbmlDate.cpp, trunk/libebml/src/EbmlElement.cpp,
+	  trunk/libebml/src/EbmlFloat.cpp, trunk/libebml/src/EbmlMaster.cpp,
+	  trunk/libebml/src/EbmlSInteger.cpp,
+	  trunk/libebml/src/EbmlString.cpp,
+	  trunk/libebml/src/EbmlUInteger.cpp,
+	  trunk/libebml/src/EbmlUnicodeString.cpp: Added a Clone() method
+	  and a IsMaster() method
+
+2003-09-03 21:36  cyrius
+
+	* trunk/libebml/src/platform/win32/WinIOCallback.cpp,
+	  trunk/libebml/src/platform/win32/WinIOCallback.h: Win32 file flags
+	  parameter
+
+2003-09-03 20:38  robux4
+
+	* trunk/libebml/src/EbmlVoid.cpp: Fix a bug in ReplaceWith,
+	  hopefully it will not break anything else
+
+2003-09-01 21:58  robux4
+
+	* trunk/libebml/ebml/Debug.h, trunk/libebml/ebml/EbmlBinary.h,
+	  trunk/libebml/ebml/EbmlContexts.h, trunk/libebml/ebml/EbmlCrc32.h,
+	  trunk/libebml/ebml/EbmlDummy.h, trunk/libebml/ebml/EbmlEndian.h,
+	  trunk/libebml/ebml/EbmlFloat.h, trunk/libebml/ebml/EbmlHead.h,
+	  trunk/libebml/ebml/EbmlId.h, trunk/libebml/ebml/EbmlMaster.h,
+	  trunk/libebml/ebml/EbmlSInteger.h,
+	  trunk/libebml/ebml/EbmlStream.h, trunk/libebml/ebml/EbmlString.h,
+	  trunk/libebml/ebml/EbmlSubHead.h,
+	  trunk/libebml/ebml/EbmlUInteger.h,
+	  trunk/libebml/ebml/EbmlUnicodeString.h,
+	  trunk/libebml/ebml/EbmlVersion.h, trunk/libebml/ebml/EbmlVoid.h,
+	  trunk/libebml/src/Debug.cpp, trunk/libebml/src/EbmlBinary.cpp,
+	  trunk/libebml/src/EbmlContexts.cpp,
+	  trunk/libebml/src/EbmlCrc32.cpp, trunk/libebml/src/EbmlDummy.cpp,
+	  trunk/libebml/src/EbmlFloat.cpp, trunk/libebml/src/EbmlHead.cpp,
+	  trunk/libebml/src/EbmlMaster.cpp,
+	  trunk/libebml/src/EbmlStream.cpp,
+	  trunk/libebml/src/EbmlString.cpp,
+	  trunk/libebml/src/EbmlSubHead.cpp,
+	  trunk/libebml/src/EbmlUInteger.cpp,
+	  trunk/libebml/src/EbmlUnicodeString.cpp,
+	  trunk/libebml/src/EbmlVersion.cpp, trunk/libebml/src/EbmlVoid.cpp:
+	  libebml is not libmatroska
+
+2003-09-01 12:42  mosu
+
+	* trunk/libebml/LICENSE.GPL: Changed libmatroska to libebml.
+
+2003-09-01 11:36  mosu
+
+	* trunk/libebml/debian/changelog: New version number.
+
+2003-08-30 08:19  mosu
+
+	* trunk/libebml/ebml/EbmlVersion.h: Bumped version number to mark
+	  robux' changes in Read().
+
+2003-08-29 19:48  robux4
+
+	* trunk/libebml/src/EbmlElement.cpp: Changed the order of element
+	  checking
+
+2003-08-21 20:41  jcsston
+
+	* trunk/libebml/ebml/EbmlUnicodeString.h,
+	  trunk/libebml/src/EbmlUnicodeString.cpp: Removed my changes to
+	  UTFstring
+
+2003-08-04 07:36  robux4
+
+	* trunk/libebml/ebml/EbmlVersion.h,
+	  trunk/libmatroska/matroska/KaxVersion.h: Remove some old TODO
+
+2003-08-02 21:38  robux4
+
+	* trunk/libebml/src/EbmlUnicodeString.cpp: Fix a problem with some
+	  UCS-2 chars
+
+2003-08-01 22:25  robux4
+
+	* trunk/libebml/ebml/EbmlMaster.h,
+	  trunk/libebml/ebml/MemIOCallback.h,
+	  trunk/libebml/src/MemIOCallback.cpp: Additions for easier Checksum
+	  manipulation
+
+2003-08-01 12:03  robux4
+
+	* trunk/libebml/make/vc7/lib/libebml.v71.vcproj,
+	  trunk/libmatroska/make/vc7/lib/static/libmatroska.v71.vcproj,
+	  trunk/mkxds/mkxds.v71.sln, trunk/mkxds/mkxds.v71.vcproj: Added
+	  VC7.1 (VS.Net 2003) projects
+
+2003-08-01 03:49  jcsston
+
+	* trunk/libebml/src/EbmlUnicodeString.cpp: *** empty log message ***
+
+2003-08-01 03:41  jcsston
+
+	* trunk/libebml/ebml/EbmlUnicodeString.h: *** empty log message ***
+
+2003-07-31 19:42  robux4
+
+	* trunk/libebml/ebml/EbmlCrc32.h, trunk/libebml/ebml/EbmlDate.h,
+	  trunk/libebml/ebml/EbmlSInteger.h,
+	  trunk/libebml/ebml/EbmlUInteger.h, trunk/libebml/ebml/EbmlVoid.h,
+	  trunk/libebml/src/EbmlCrc32.cpp,
+	  trunk/libebml/src/EbmlSInteger.cpp,
+	  trunk/libebml/src/EbmlVoid.cpp,
+	  trunk/libebml/src/platform/win32/WinIOCallback.cpp,
+	  trunk/libmatroska/src/KaxBlock.cpp: Some fixes for better casting
+	  / type checking
+
+2003-07-31 07:53  jcsston
+
+	* trunk/libebml/ebml/EbmlUnicodeString.h,
+	  trunk/libebml/src/EbmlUnicodeString.cpp: Added some string
+	  functions and overloaded operators
+
+2003-07-30 09:31  robux4
+
+	* trunk/libebml/src/EbmlElement.cpp: Less processing in non Debug
+	  mode
+
+2003-07-29 21:43  robux4
+
+	* trunk/libebml/ebml/EbmlBinary.h, trunk/libebml/ebml/EbmlCrc32.h,
+	  trunk/libebml/ebml/EbmlDate.h, trunk/libebml/ebml/EbmlElement.h,
+	  trunk/libebml/ebml/EbmlFloat.h, trunk/libebml/ebml/EbmlMaster.h,
+	  trunk/libebml/ebml/EbmlSInteger.h,
+	  trunk/libebml/ebml/EbmlString.h,
+	  trunk/libebml/ebml/EbmlUInteger.h,
+	  trunk/libebml/ebml/EbmlUnicodeString.h,
+	  trunk/libebml/ebml/EbmlVoid.h, trunk/libebml/src/EbmlBinary.cpp,
+	  trunk/libebml/src/EbmlCrc32.cpp, trunk/libebml/src/EbmlDate.cpp,
+	  trunk/libebml/src/EbmlElement.cpp,
+	  trunk/libebml/src/EbmlFloat.cpp, trunk/libebml/src/EbmlMaster.cpp,
+	  trunk/libebml/src/EbmlSInteger.cpp,
+	  trunk/libebml/src/EbmlString.cpp,
+	  trunk/libebml/src/EbmlUInteger.cpp,
+	  trunk/libebml/src/EbmlUnicodeString.cpp,
+	  trunk/libebml/src/EbmlVoid.cpp,
+	  trunk/libmatroska/matroska/KaxBlock.h,
+	  trunk/libmatroska/matroska/KaxTrackVideo.h,
+	  trunk/libmatroska/src/KaxBlock.cpp,
+	  trunk/libmatroska/src/KaxTrackVideo.cpp: Checksum now doesn't care
+	  about mandatory data
+
+2003-07-28 22:54  robux4
+
+	* trunk/libebml/src/EbmlMaster.cpp: Fix a memory leak
+
+2003-07-28 22:42  robux4
+
+	* trunk/libebml/src/platform/win32/WinIOCallback.cpp: Fix for some
+	  compilers
+
+2003-07-28 08:49  mosu
+
+	* trunk/libebml/debian/changelog,
+	  trunk/libmatroska/debian/changelog,
+	  trunk/libmatroska/debian/control: Updated version information.
+
+2003-07-27 20:28  mosu
+
+	* trunk/libebml/make/mingw32/Makefile,
+	  trunk/libmatroska/make/mingw32/Makefile: Necessary fixes for
+	  compilation with mingw.
+
+2003-07-26 15:18  mosu
+
+	* trunk/libebml/make/mingw32/Makefile: Needed updates for
+	  compilation with mingw.
+
+2003-07-25 20:06  robux4
+
+	* trunk/libebml/src/EbmlMaster.cpp: Fix a bug of Read() when the
+	  size is zero
+
+2003-07-23 18:23  jcsston
+
+	* trunk/libebml/src/platform/win32/WinIOCallback.cpp: Added better
+	  detection if the file was really opened or not
+
+2003-07-23 17:17  jcsston
+
+	* trunk/libebml/ebml/c/libebml_t.h: Added Mosu's name to the author
+	  list
+
+2003-07-22 21:40  jcsston
+
+	* trunk/libebml/src/platform/win32/WinIOCallback.cpp: Added
+	  MODE_SAFE for opening
+
+2003-07-21 20:39  cyrius
+
+	* trunk/libebml/src/EbmlVoid.cpp: Element size fixed
+
+2003-07-21 20:23  cyrius
+
+	* trunk/libebml/src/platform/win32/WinIOCallback.cpp: 4GB limit
+	  fixed
+
+2003-07-21 02:42  jcsston
+
+	* trunk/libebml/ebml/c/libebml_t.h: Mosu's fixes to compile with
+	  Win32 GCC
+
+2003-07-17 09:48  mosu
+
+	* trunk/libebml/make/linux/Makefile,
+	  trunk/libmatroska/make/linux/Makefile: Proper Makefile that also
+	  installs the header files.
+
+2003-07-17 09:45  mosu
+
+	* trunk/libebml/make/linux/Makefile: Changes for the new directory
+	  structure for the "install" target.
+
+2003-07-16 22:09  jcsston
+
+	* trunk/libebml/make/vc7/lib/libebml.vcproj: Corrected Additional
+	  Include Directories
+
+2003-07-16 22:07  jcsston
+
+	* trunk/libebml/src/MemIOCallback.cpp: Fixed the Read() function to
+	  support seeking
+
+2003-07-16 16:21  mosu
+
+	* trunk/libebml/make/linux/Makefile,
+	  trunk/libmatroska/make/linux/Makefile: Removed old stuff.
+
+2003-07-16 15:13  robux4
+
+	* trunk/libebml/ebml/c, trunk/libebml/ebml/c/libebml_t.h,
+	  trunk/libebml/make/mingw32, trunk/libebml/make/mingw32/Makefile,
+	  trunk/libebml/make/mingw32/libebml.dev, trunk/libebml/make/vc6,
+	  trunk/libebml/make/vc6/lib, trunk/libebml/make/vc6/lib/static,
+	  trunk/libebml/make/vc6/lib/static/libebml.dsp,
+	  trunk/libebml/make/vc6/libebml.dsw, trunk/libebml/make/vc7,
+	  trunk/libebml/make/vc7/lib,
+	  trunk/libebml/make/vc7/lib/libebml.vcproj: Initial CVS version
+	  after the crash
+
+2003-07-16 15:02  robux4
+
+	* trunk/libebml/make, trunk/libebml/make/linux,
+	  trunk/libebml/make/linux/Makefile: Initial CVS version after the
+	  crash
+
+2003-07-16 14:46  robux4
+
+	* trunk/libebml, trunk/libebml/LICENSE.GPL,
+	  trunk/libebml/LICENSE.QPL, trunk/libebml/debian,
+	  trunk/libebml/debian/changelog, trunk/libebml/debian/control,
+	  trunk/libebml/debian/copyright, trunk/libebml/debian/dirs,
+	  trunk/libebml/debian/docs, trunk/libebml/debian/libebml-dev.dirs,
+	  trunk/libebml/debian/libebml-dev.files,
+	  trunk/libebml/debian/rules, trunk/libebml/ebml,
+	  trunk/libebml/ebml/Debug.h, trunk/libebml/ebml/EbmlBinary.h,
+	  trunk/libebml/ebml/EbmlConfig.h,
+	  trunk/libebml/ebml/EbmlContexts.h, trunk/libebml/ebml/EbmlCrc32.h,
+	  trunk/libebml/ebml/EbmlDate.h, trunk/libebml/ebml/EbmlDummy.h,
+	  trunk/libebml/ebml/EbmlElement.h, trunk/libebml/ebml/EbmlEndian.h,
+	  trunk/libebml/ebml/EbmlFloat.h, trunk/libebml/ebml/EbmlHead.h,
+	  trunk/libebml/ebml/EbmlId.h, trunk/libebml/ebml/EbmlMaster.h,
+	  trunk/libebml/ebml/EbmlSInteger.h,
+	  trunk/libebml/ebml/EbmlStream.h, trunk/libebml/ebml/EbmlString.h,
+	  trunk/libebml/ebml/EbmlSubHead.h, trunk/libebml/ebml/EbmlTypes.h,
+	  trunk/libebml/ebml/EbmlUInteger.h,
+	  trunk/libebml/ebml/EbmlUnicodeString.h,
+	  trunk/libebml/ebml/EbmlVersion.h, trunk/libebml/ebml/EbmlVoid.h,
+	  trunk/libebml/ebml/IOCallback.h,
+	  trunk/libebml/ebml/MemIOCallback.h,
+	  trunk/libebml/ebml/StdIOCallback.h, trunk/libebml/src,
+	  trunk/libebml/src/Debug.cpp, trunk/libebml/src/EbmlBinary.cpp,
+	  trunk/libebml/src/EbmlContexts.cpp,
+	  trunk/libebml/src/EbmlCrc32.cpp, trunk/libebml/src/EbmlDate.cpp,
+	  trunk/libebml/src/EbmlDummy.cpp,
+	  trunk/libebml/src/EbmlElement.cpp,
+	  trunk/libebml/src/EbmlFloat.cpp, trunk/libebml/src/EbmlHead.cpp,
+	  trunk/libebml/src/EbmlMaster.cpp,
+	  trunk/libebml/src/EbmlSInteger.cpp,
+	  trunk/libebml/src/EbmlStream.cpp,
+	  trunk/libebml/src/EbmlString.cpp,
+	  trunk/libebml/src/EbmlSubHead.cpp,
+	  trunk/libebml/src/EbmlUInteger.cpp,
+	  trunk/libebml/src/EbmlUnicodeString.cpp,
+	  trunk/libebml/src/EbmlVersion.cpp, trunk/libebml/src/EbmlVoid.cpp,
+	  trunk/libebml/src/IOCallback.cpp,
+	  trunk/libebml/src/MemIOCallback.cpp,
+	  trunk/libebml/src/StdIOCallback.cpp,
+	  trunk/libebml/src/StdInclude.h, trunk/libebml/src/platform,
+	  trunk/libebml/src/platform/win32,
+	  trunk/libebml/src/platform/win32/WinIOCallback.cpp,
+	  trunk/libebml/src/platform/win32/WinIOCallback.h: Initial CVS
+	  version after the crash
+

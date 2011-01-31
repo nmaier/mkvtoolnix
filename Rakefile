@@ -387,6 +387,8 @@ task :clean do
       */*.exe */*/*.exe */*/*.dll */*/*.dll.a doc/guide/*/*.hhk
       src/info/ui/*.h src/info/*.moc.cpp src/common/*/*.o
       src/mmg/*/*.o #{$applications.join(" ")} #{tools}
+      lib/libebml/src/*.o lib/libmatroska/src/*.o
+      lib/libebml/src/lib*.a lib/libmatroska/src/lib*.a
   SHELL
 end
 
@@ -436,6 +438,8 @@ end
   { :name => 'mtxcommon',  :dir => [ 'src/common', 'src/common/chapters', 'src/common/strings', 'src/common/tags', 'src/common/xml' ] },
   { :name => 'mtxinput',   :dir => 'src/input'                                                                                        },
   { :name => 'mtxoutput',  :dir => 'src/output'                                                                                       },
+  { :name => 'ebml',       :dir => 'lib/libebml/src'                                                                                  },
+  { :name => 'matroska',   :dir => 'lib/libmatroska/src'                                                                              },
 ].each do |lib|
   Library.
     new("#{[ lib[:dir] ].flatten.first}/lib#{lib[:name]}").

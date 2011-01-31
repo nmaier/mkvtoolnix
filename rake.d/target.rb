@@ -86,6 +86,8 @@ class Target
       when :avi        then "lib/avilib-0.6.10/libavi.a"
       when :rmff       then "lib/librmff/librmff.a"
       when :mpegparser then "src/mpegparser/libmpegparser.a"
+      when :ebml       then "lib/libebml/src/libebml.a"
+      when :matroska   then "lib/libmatroska/src/libmatroska.a"
       else                  nil
       end
     end.compact
@@ -104,6 +106,8 @@ class Target
       when :boost_system     then c(:BOOST_SYSTEM_LIB)
       when :qt               then c(:QT_LIBS)
       when :wxwidgets        then c(:WXWIDGETS_LIBS)
+      when :ebml             then c(:EBML_LIBS)
+      when :matroska         then c(:MATROSKA_LIBS)
       when String            then entry
       else                        "-l#{entry}"
       end
