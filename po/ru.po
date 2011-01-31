@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: Moritz Bunkus <moritz@bunkus.org>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2011-01-28 09:06+0100\n"
+"PO-Revision-Date: 2011-01-31 23:10+0300\n"
 "Last-Translator: rusguy6 rusguy6 <rusguy6@gmail.com>\n"
 "Language-Team: Russian <moritz@bunkus.org>\n"
 "Language: ru\n"
@@ -366,17 +366,16 @@ msgid "  --split-max-files <n>    Create at most n files.\n"
 msgstr "  --split-max-files <n>    Создать много n файлов.\n"
 
 #: src/merge/mkvmerge.cpp:220
-#, fuzzy
 msgid ""
 "  --stereo-mode <TID:n|keyword>\n"
 "                           Sets the stereo mode parameter. It can\n"
 "                           either be a number 0 - 11 or a keyword\n"
 "                           (see documentation for the full list).\n"
 msgstr ""
-"  --stereo-mode <TID:n|none|left|right|both>\n"
-"                           Устанавливать параметры стерео режима. Это может быть\n"
-"                           либо число 0 - 3 или одно из\n"
-"                           ключевых слов 'none', 'right', 'left' или 'both'.\n"
+"  --stereo-mode <TID:n|keyword>\n"
+"                           Устанавливает параметр стерео режима. Это может\n"
+"                           быть либо номер 0 - 11 или ключевое слово\n"
+"                           (см. документацию, полный список).\n"
 
 #: src/merge/mkvmerge.cpp:226
 msgid ""
@@ -2035,7 +2034,7 @@ msgstr "CUE листовое извлечение"
 
 #: src/info/info_cli_parser.cpp:46
 msgid "Calculate and display checksums and use verbosity level 4."
-msgstr ""
+msgstr "Вычислить и показать сумму и использовать уровень подробности 4."
 
 #: src/info/info_cli_parser.cpp:45
 msgid "Calculate and display checksums of frame contents."
@@ -5311,7 +5310,7 @@ msgstr "Показать информацию о программе"
 
 #: src/info/info_cli_parser.cpp:48
 msgid "Show statistics for each track in verbose mode."
-msgstr ""
+msgstr "Показать статистику для каждой дорожки в расширенном режиме."
 
 #: src/mmg/mmg_dialog.cpp:276
 msgid "Show the command line mmg creates for mkvmerge"
@@ -5495,7 +5494,7 @@ msgstr "Начало работы ID %d (%s) в %s"
 
 #: src/info/mkvinfo.cpp:1904
 msgid "Statistics for track number %1%: number of blocks: %2%; size in bytes: %3%; duration in seconds: %4%; approximate bitrate in bits/second: %5%\n"
-msgstr ""
+msgstr "Статистика для дорожки %1%: количество блоков: %2%; размер в байтах: %3%, длительность в секундах: %4%; приблизительный битрейт в бит/секунду: %5%\n"
 
 #: src/mmg/jobs.cpp:437
 msgid "Status"
@@ -5512,9 +5511,8 @@ msgid "Status:"
 msgstr "Статус:"
 
 #: src/merge/mkvmerge.cpp:711
-#, fuzzy
 msgid "Stereo mode parameter: not given in the form <TID>:<n|keyword> where n is a number between 0 and %1% or one of these keywords: %2% (argument was '%3%').\n"
-msgstr "Stereo режим параметр не задается в виде <TID>:<n|keyword> где n число от 0 до %1% или один из ключевых слов %2% (аргумент '%3%').\n"
+msgstr "Стерео режим параметра: не заданы в виде <TID>:<n|keyword> где n число между 0 и %1% или одно из ключевых слов: %2% (аргумент '%3%').\n"
 
 #: src/info/mkvinfo.cpp:753
 msgid "Stereo mode: %1% (%2%)"
@@ -5522,7 +5520,7 @@ msgstr "Стерео режим: %1% (%2%)"
 
 #: src/mmg/header_editor/frame.cpp:492
 msgid "Stereo-3D video mode (0 - 11, see documentation)."
-msgstr ""
+msgstr "Стерео-3D режим видео (0 - 11, см. документацию)."
 
 #: src/common/property_element.cpp:149
 msgid ""
@@ -6560,7 +6558,7 @@ msgstr "Эта дорожка звукового канала MPEG содерж�
 
 #: src/input/r_ogm.cpp:847
 msgid "This Ogg/OGM file contains chapter or title information. Unfortunately the charset used to store this information in the file cannot be identified unambiguously. The program assumes that your system's current charset is appropriate. This can be overridden with the '--chapter-charset <charset>' switch.\n"
-msgstr "Этот файл Ogg/OGM содержит информация заголовка или глава. К сожалению кодировка, чтобы хранить эту информацию в файле, не может быть идентифицирован однозначно. Программа предполагает, что электрический ток Вашей системы кодировки является соответствующим. Это может быть отменено с '--chapter-charset <charset>' переключатель.\n"
+msgstr "Этот файл Ogg/OGM содержит информацию о заголовке или главах. К сожалению, кодировка, в которой сохранена информация, не может быть однозначно определена. Программа предполагает, что кодировка по умолчанию для вашей системы ей соответствует. Это может быть переопределено с помощью опции '--chapter-charset <charset>'.\n"
 
 #: src/mmg/header_editor/value_page.cpp:171
 msgid ""
@@ -7648,7 +7646,7 @@ msgstr "Добавить"
 
 #: src/common/stereo_mode.cpp:55
 msgid "anaglyph"
-msgstr ""
+msgstr "анаглиф"
 
 #: src/mmg/tabs/input.cpp:185
 msgid "append"
@@ -7712,19 +7710,19 @@ msgstr "Каналы: %1%"
 
 #: src/common/stereo_mode.cpp:50
 msgid "checkboard (left first)"
-msgstr ""
+msgstr "проверить правильность (первый слева)"
 
 #: src/common/stereo_mode.cpp:49
 msgid "checkboard (right first)"
-msgstr ""
+msgstr "проверить правильность (первый справа)"
 
 #: src/common/stereo_mode.cpp:54
 msgid "column interleaved (left first)"
-msgstr ""
+msgstr "столбец с чередованием (первый слева)"
 
 #: src/common/stereo_mode.cpp:53
 msgid "column interleaved (right first)"
-msgstr ""
+msgstr "столбец с чередованием (первый справа)"
 
 #: src/mmg/jobs.cpp:347
 msgid "completed OK"
@@ -8518,11 +8516,11 @@ msgstr "остаток: неизвестен"
 
 #: src/common/stereo_mode.cpp:52
 msgid "row interleaved (left first)"
-msgstr ""
+msgstr "строка с чередованием (первый слева)"
 
 #: src/common/stereo_mode.cpp:51
 msgid "row interleaved (right first)"
-msgstr ""
+msgstr "строка с чередованием (первый справа)"
 
 #: src/info/mkvinfo.cpp:652
 msgid "sampling freq: %1%"
@@ -8530,11 +8528,11 @@ msgstr "частота дискретизации: %1%"
 
 #: src/common/stereo_mode.cpp:46
 msgid "side by side (left first)"
-msgstr ""
+msgstr "сторона к стороне (первый слева)"
 
 #: src/common/stereo_mode.cpp:56
 msgid "side by side (right first)"
-msgstr ""
+msgstr "сторона к стороне (первый справа)"
 
 #: src/input/subtitles.cpp:589
 msgid "spu_extraction_duration: Encountered broken SPU packet (next_off < start_off) at timecode %1%. This packet might be displayed incorrectly or not at all.\n"
@@ -8583,11 +8581,11 @@ msgstr "тайм-коды"
 
 #: src/common/stereo_mode.cpp:48
 msgid "top bottom (left first)"
-msgstr ""
+msgstr "сверху вниз (первый слева)"
 
 #: src/common/stereo_mode.cpp:47
 msgid "top bottom (right first)"
-msgstr ""
+msgstr "сверху вниз (первый справа)"
 
 #: src/merge/mkvmerge.cpp:2027
 msgid "track name"
@@ -8735,12 +8733,16 @@ msgstr "Да"
 
 #~ msgid " (both eyes)"
 #~ msgstr " (оба глаза)"
+
 #~ msgid " (left eye)"
 #~ msgstr " (левый глаз)"
+
 #~ msgid " (right eye)"
 #~ msgstr " (правый глаз)"
+
 #~ msgid "%1% at %2%"
 #~ msgstr "%1% в %2%"
+
 #~ msgid ""
 #~ "%s\n"
 #~ "\n"
@@ -8761,24 +8763,34 @@ msgstr "Да"
 #~ "\n"
 #~ "Помощь предоставляется в виде подсказки, в меню\n"
 #~ "'Справка' или нажав на кнопку 'F1'."
+
 #~ msgid "(Unknown element: %1%)"
 #~ msgstr "(Неизвестный элемент: %1%)"
+
 #~ msgid "About mkvmerge's GUI"
 #~ msgstr "О mkvmerge GUI"
+
 #~ msgid "Both eyes"
 #~ msgstr "Оба глаза"
+
 #~ msgid "DTS (Digital Theater System)"
 #~ msgstr "DTS (Digital Theater System)"
+
 #~ msgid "Dirac elementary stream"
 #~ msgstr "Dirac элементарный поток"
+
 #~ msgid "Do not write those header elements whose values are the same as their default values according to the Matroska specs."
 #~ msgstr "Не пишите заголовок тех элементов, значения которых совпадают с их значениями по умолчанию в соответствии с Matroska критериям."
+
 #~ msgid "FLAC lossless audio"
 #~ msgstr "FLAC аудио без потерь"
+
 #~ msgid "File/segment title"
 #~ msgstr "Файл/сегмент название"
+
 #~ msgid "IVF with VP8"
 #~ msgstr "IVF с VP8"
+
 #~ msgid ""
 #~ "Known file types:\n"
 #~ "  ext   description\n"
@@ -8787,42 +8799,61 @@ msgstr "Да"
 #~ "Известные типы файла:\n"
 #~ "  описание расширения\n"
 #~ "  ----  --------------------------\n"
+
 #~ msgid "Left eye"
 #~ msgstr "Левый глаз"
+
 #~ msgid "MPEG program stream"
 #~ msgstr "MPEG программный поток"
+
 #~ msgid "MPEG-1 layer II audio (CBR and VBR/ABR)"
 #~ msgstr "MPEG-1 layer II audio (CBR и VBR/ABR)"
+
 #~ msgid "MPEG-1 layer III audio (CBR and VBR/ABR)"
 #~ msgstr "MPEG-1 layer III audio (CBR и VBR/ABR)"
+
 #~ msgid "MPEG-1 video elementary stream"
 #~ msgstr "MPEG-1 video элементарный поток"
+
 #~ msgid "MPEG-2 video elementary stream"
 #~ msgstr "MPEG-2 video элементарный поток"
+
 #~ msgid "Matroska A/V files (*.mka;*.mkv)|*.mkv;*.mka|%s"
 #~ msgstr "Matroska Audio/Video файлы (*.mka;*.mkv)|*.mkv;*.mka|%s"
+
 #~ msgid "Matroska files (*.mkv;*.mka)|*.mkv;*.mka|%s"
 #~ msgstr "Matroska файлы (*.mkv;*.mka)|*.mkv;*.mka|%s"
+
 #~ msgid "Matroska files (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|All files|*.*"
 #~ msgstr "Matroska файлы (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|Все файлы|*.*"
+
 #~ msgid "None"
 #~ msgstr "Ни один"
+
 #~ msgid "Other global options"
 #~ msgstr "Другие глобальные опции"
+
 #~ msgid "Quicktime/MP4 audio and video"
 #~ msgstr "Quicktime/MP4 Audio и Video"
+
 #~ msgid "RealMedia audio and video"
 #~ msgstr "RealMedia Audio и Video"
+
 #~ msgid "Right eye"
 #~ msgstr "Правый глаз"
+
 #~ msgid "Sets the compression used for VobSub subtitles. If nothing is chosen then the VobSubs will be automatically compressed with zlib. 'none' results is files that are a lot larger."
 #~ msgstr "Устанавливает сжатие, используемое для субтитров VobSub. Если ничего не выбрали, то VobSubs будут автоматически сжимать с zlib. Результаты это файлы, которые много больше."
+
 #~ msgid "TTA lossless audio"
 #~ msgstr "TTA аудио без потерь"
+
 #~ msgid "The MPEG-4 part 2 compression only works with native MPEG-4. However, native MPEG-4 mode has not been selected with '--engage native_mpeg4'.\n"
 #~ msgstr "MPEG-4 часть 2 сжатие работает только с родным MPEG-4. Тем не менее, родной MPEG-4 режим не был выбран с '--engage native_mpeg4'.\n"
+
 #~ msgid "This track uses a Matroska feature called 'Codec state elements'. mkvmerge supports these but this feature has not been turned on with the option '--engage use_codec_state'.\n"
 #~ msgstr "Эта дорожка использует особенность Matroska, названную 'запоминающие элементы Codec'. mkvmerge поддерживает их, но эта особенность не была включена с опцией '--engage use_codec_state'.\n"
+
 #~ msgid ""
 #~ "Usage: mkvinfo [options] inname\n"
 #~ "\n"
@@ -8863,54 +8894,77 @@ msgstr "Да"
 #~ "                 Переадресуйте все сообщения к этому файлу.\n"
 #~ "  -h, --help     Показать эту справку.\n"
 #~ "  -V, --version  Показать информацию о версии.\n"
+
 #, fuzzy
 #~ msgid "Using the IVF output module.\n"
 #~ msgstr "Использование FLAC выходного модуля.\n"
+
 #, fuzzy
 #~ msgid "Using the Vp8 video output module.\n"
 #~ msgstr "Использование VP8 видео выводного модуля.\n"
+
 #~ msgid "VC1 video elementary stream"
 #~ msgstr "VC1 видео элементарный поток"
+
 #~ msgid "VobBtn buttons"
 #~ msgstr "VobBtn кнопки"
+
 #~ msgid "WAVE (uncompressed PCM)"
 #~ msgstr "WAVE (несжатый PCM)"
+
 #~ msgid "WAVPACK lossless audio"
 #~ msgstr "WAVPACK аудио без потерь"
+
 #~ msgid "Write raw FLAC files (default: write OggFLAC files)."
 #~ msgstr "Создать исходные файлы FLAC (по умолчанию: написать OggFLAC файлы)."
+
 #~ msgid "audio/video/text subtitles embedded in OGG"
 #~ msgstr "аудио/видео/текст субтитров внедренных в OGG"
+
 #~ msgid "cstrutf8_to_UTFstring: Invalid UTF-8 sequence encountered. Please contact moritz@bunkus.org and request that he implements a better UTF-8 parser."
 #~ msgstr "cstrutf8_to_UTFstring: Неверный UTF-8 последовательности столкнулись. Пожалуйста, moritz@bunkus.org связаться и попросить, чтобы он лучше реализует UTF-8 анализатор."
+
 #~ msgid "flac_header_extraction: Could not set the error callback.\n"
 #~ msgstr "flac_header_extraction: Не удалось установить ошибки обратного вызова.\n"
+
 #~ msgid "flac_header_extraction: Could not set the metadata callback.\n"
 #~ msgstr "flac_header_extraction: Не удалось установить метаданных обратного вызова.\n"
+
 #~ msgid "flac_header_extraction: Could not set the read callback.\n"
 #~ msgstr "flac_header_extraction: Не удалось установить читать обратного вызова.\n"
+
 #~ msgid "flac_header_extraction: Could not set the write callback.\n"
 #~ msgstr "flac_header_extraction: Не удалось установить написать обратного вызова.\n"
+
 #~ msgid "flac_reader: Could not set the eof callback.\n"
 #~ msgstr "flac_reader: Не удалось установить конец файла обратного вызова.\n"
+
 #~ msgid "flac_reader: Could not set the error callback.\n"
 #~ msgstr "flac_reader: Не удалось установить ошибки обратного вызова.\n"
+
 #~ msgid "flac_reader: Could not set the length callback.\n"
 #~ msgstr "flac_reader: Не удалось установить длину обратного вызова.\n"
+
 #~ msgid "flac_reader: Could not set the metadata callback.\n"
 #~ msgstr "flac_reader: Не удалось установить метаданных обратного вызова.\n"
+
 #~ msgid "flac_reader: Could not set the read callback.\n"
 #~ msgstr "flac_reader: Не удалось установить читать обратного вызова.\n"
+
 #~ msgid "flac_reader: Could not set the seek callback.\n"
 #~ msgstr "flac_reader: Не удалось установить возвратный вызов поиска.\n"
+
 #~ msgid "flac_reader: Could not set the tell callback.\n"
 #~ msgstr "flac_reader: Не удалось установить сказать обратного вызова.\n"
+
 #~ msgid "flac_reader: Could not set the write callback.\n"
 #~ msgstr "flac_reader: Не удалось установить написать обратного вызова.\n"
+
 #~ msgid "general Matroska files"
 #~ msgstr "Общие файлы Matroska"
+
 #~ msgid "mkvextract: Unknown mode!?\n"
 #~ msgstr "mkvextract: Неизвестный режим!?\n"
+
 #~ msgid "r_matroska: Cluster does not contain a cluster timecode. File is broken. Aborting.\n"
 #~ msgstr "r_matroska: Кластер не содержат кластера тайм-кода. Файл не работает. Прерывание.\n"
-
