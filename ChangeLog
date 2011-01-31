@@ -1,3 +1,13 @@
+2011-01-31  Moritz Bunkus  <moritz@bunkus.org>
+
+	* build: Building mkvtoolnix now requires libebml v1.2.0 and
+	libmatroska v1.1.0 or later.
+
+	* build: enhancement: mkvtoolnix now includes libebml and
+	libmatroska. The configure script will use them if either no
+	installed versions of them is found or if the installed version is
+	too old.
+
 2011-01-25  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Fixed an infinite loop when reading program
