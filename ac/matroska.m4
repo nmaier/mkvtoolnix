@@ -113,10 +113,10 @@ using namespace libmatroska;
       echo '*** The libMatroska library was not found.'
       exit 1
     fi
-  fi
 
-  if test x"${ac_cv_matroska_dll}" = "x${matroska_check_msg_dll}" ; then
-    MATROSKA_CFLAGS="$MATROSKA_CFLAGS -DMATROSKA_DLL"
+    if test x"${ac_cv_matroska_dll}" = "x${matroska_check_msg_dll}" ; then
+      MATROSKA_CFLAGS="$MATROSKA_CFLAGS -DMATROSKA_DLL"
+    fi
   fi
 
   if test x"${ac_cv_ebml_dll}" != "xyes" -o x"${ac_cv_matroska_dll}" != "xyes" ; then
