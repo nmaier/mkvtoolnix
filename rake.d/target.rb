@@ -86,8 +86,8 @@ class Target
       when :avi        then "lib/avilib-0.6.10/libavi.a"
       when :rmff       then "lib/librmff/librmff.a"
       when :mpegparser then "src/mpegparser/libmpegparser.a"
-      when :ebml       then "lib/libebml/src/libebml.a"
-      when :matroska   then "lib/libmatroska/src/libmatroska.a"
+      when :ebml       then c?("EBML_MATROSKA_INTERNAL") ? "lib/libebml/src/libebml.a"         : nil
+      when :matroska   then c?("EBML_MATROSKA_INTERNAL") ? "lib/libmatroska/src/libmatroska.a" : nil
       else                  nil
       end
     end.compact
