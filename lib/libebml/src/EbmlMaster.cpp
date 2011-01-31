@@ -146,7 +146,7 @@ uint64 EbmlMaster::UpdateSize(bool bWithDefault, bool bForceRender)
 		(ElementList[Index])->UpdateSize(bWithDefault, bForceRender);
 		uint64 SizeToAdd = (ElementList[Index])->ElementSize(bWithDefault);
 #if defined(_DEBUG) || defined(DEBUG)
-		if (SizeToAdd == (0-1))
+		if (static_cast<int64_t>(SizeToAdd) == (0-1))
 			return (0-1);
 #endif // DEBUG
 		SetSize_(GetSize() + SizeToAdd);
