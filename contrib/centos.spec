@@ -23,7 +23,6 @@ Matroska video utilities.
 %{_datadir}/man/ja/man1/*
 %{_datadir}/man/nl/man1/*
 %{_datadir}/man/zh_CN/man1/*
-%{_datadir}/mkvtoolnix
 %{_datadir}/applications/*.desktop
 %{_datadir}/icons/hicolor/32x32/apps/*.png
 %{_datadir}/icons/hicolor/64x64/apps/*.png
@@ -37,6 +36,7 @@ Matroska video utilities.
 %{_datadir}/locale/uk/LC_MESSAGES/mkvtoolnix.mo
 %{_datadir}/locale/zh_CN/LC_MESSAGES/mkvtoolnix.mo
 %{_datadir}/locale/zh_TW/LC_MESSAGES/mkvtoolnix.mo
+%{_datadir}/doc/mkvtoolnix/guide
 
 %changelog
 * Sat Jan 2 2004 Ronald Bultje <rbultje@ronald.bitfreak.net>
