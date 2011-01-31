@@ -61,10 +61,10 @@ class Target
     file_mode      = (options[:type] || :file) == :file
     new_sources    = list.collect { |entry| file_mode ? (entry.respond_to?(:to_a) ? entry.to_a : entry) : FileList["#{entry}/*.c", "#{entry}/*.cpp"].to_a }.flatten
     new_deps       = new_sources.collect { |file| [ file.ext(ext_map[ file.pathmap('%x') ] || 'o'), file ] }
-    @sources       = ( @sources      + new_sources                                                   ).uniq
-    @objects       = ( @objects      + new_deps.collect(&:first).select { |file| /\.o$/.match file } ).uniq
-    @dependencies  = ( @dependencies + new_deps.collect(&:first)                                     ).uniq
-    @file_deps     = ( @file_deps    + new_deps                                                      ).uniq
+    @sources       = ( @sources      + new_sources                                                          ).uniq
+    @objects       = ( @objects      + new_deps.collect { |a| a.first }.select { |file| /\.o$/.match file } ).uniq
+    @dependencies  = ( @dependencies + new_deps.collect { |a| a.first }                                     ).uniq
+    @file_deps     = ( @file_deps    + new_deps                                                             ).uniq
     self
   end
 
