@@ -2,8 +2,8 @@
 # spec file for package mkvtoolnix
 #
 
-BuildRequires: libebml >= 1.0.0
-BuildRequires: libmatroska >= 1.0.0
+BuildRequires: libebml >= 1.2.0
+BuildRequires: libmatroska >= 1.1.0
 BuildRequires: expat flac flac-devel gcc-c++ gtk2 gtk2-devel libogg libogg-devel libstdc++-devel libvorbis libvorbis-devel lzo lzo-devel pkgconfig wxGTK >= 2.6 wxGTK-devel >= 2.6 wxGTK-gl boost-devel file-devel ruby libcurl-devel
 
 Name:         mkvtoolnix
