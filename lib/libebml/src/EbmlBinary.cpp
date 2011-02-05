@@ -35,6 +35,7 @@
 	\author Julien Coloos	<suiryc @ users.sf.net>
 */
 #include <cassert>
+#include <string>
 
 #include "ebml/EbmlBinary.h"
 #include "ebml/StdIOCallback.h"
@@ -93,7 +94,7 @@ filepos_t EbmlBinary::ReadData(IOCallback & input, ScopeMode ReadFully)
 
 	Data = (binary *)malloc(GetSize() * sizeof(binary));
     if (Data == NULL)
-        throw CRTError("Error allocating data");
+	throw CRTError(std::string("Error allocating data"));
 	SetValueIsSet();
 	return input.read(Data, GetSize());
 }
