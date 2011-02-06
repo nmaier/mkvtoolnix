@@ -1,5 +1,5 @@
 dnl
-dnl Test for libmatroska, and define MATROSKA_CFLAGS and MATROSKA_LIBS
+dnl Test for libmatroska, and define MATROSKA_CFLAGS, MATROSKA_LDFLAGS and MATROSKA_LIBS
 dnl
   kax_ver_req_major=1
   kax_ver_req_minor=1
@@ -34,7 +34,8 @@ using namespace libmatroska;
 
       if test x"${ac_cv_matroska_found}" != "xyes" ; then
         MATROSKA_CFLAGS="-I/usr/local/include"
-        MATROSKA_LIBS="-L/usr/local/lib $MATROSKA_LIBS"
+        MATROSKA_LDFLAGS="-L/usr/local/lib"
+        MATROSKA_LIBS="$MATROSKA_LIBS"
         CXXFLAGS="-I/usr/local/include $CXXFLAGS"
         LIBS="-L/usr/local/lib $LIBS"
         AC_TRY_COMPILE([
@@ -67,7 +68,8 @@ using namespace libmatroska;
     EBML_CFLAGS="-Ilib/libebml"
     EBML_LIBS="-Llib/libebml/src -lebml"
     MATROSKA_CFLAGS="-Ilib/libmatroska"
-    MATROSKA_LIBS="-Llib/libmatroska/src -lmatroska"
+    MATROSKA_LDFLAGS="-Llib/libmatroska/src"
+    MATROSKA_LIBS="-lmatroska"
     EBML_MATROSKA_INTERNAL=yes
 
   else
@@ -80,7 +82,7 @@ using namespace libmatroska;
         ac_save_CXXFLAGS="$CXXFLAGS"
         ac_save_LIBS="$LIBS"
         CXXFLAGS="$CXXFLAGS $EBML_CFLAGS $MATROSKA_CFLAGS"
-        LIBS="$LIBS $MATROSKA_LIBS $EBML_LIBS"
+        LIBS="$LIBS $MATROSKA_LDFLAGS $MATROSKA_LIBS $EBML_LIBS"
         AC_TRY_LINK([
 #include <matroska/KaxVersion.h>
 #include <matroska/KaxSegment.h>
@@ -124,5 +126,6 @@ using namespace libmatroska;
   fi
 
 AC_SUBST(MATROSKA_CFLAGS)
+AC_SUBST(MATROSKA_LDFLAGS)
 AC_SUBST(MATROSKA_LIBS)
 AC_SUBST(EBML_MATROSKA_INTERNAL)

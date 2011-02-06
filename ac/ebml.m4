@@ -1,5 +1,5 @@
 dnl
-dnl Test for libebml, and define EBML_CFLAGS and EBML_LIBS
+dnl Test for libebml, and define EBML_CFLAGS, EBML_LDFLAGS and EBML_LIBS
 dnl
   ebml_ver_req_major=1
   ebml_ver_req_minor=2
@@ -29,7 +29,8 @@ using namespace libebml;
 
     if test "${ac_cv_ebml_found}" = "no" ; then
       EBML_CFLAGS="-I/usr/local/include"
-      EBML_LIBS="-L/usr/local/lib $EBML_LIBS"
+      EBML_LDFLAGS="-L/usr/local/lib"
+      EBML_LIBS="$EBML_LIBS"
       CXXFLAGS="-I/usr/local/include $CXXFLAGS"
       LIBS="-L/usr/local/lib $LIBS"
       AC_TRY_COMPILE([
@@ -58,7 +59,8 @@ using namespace libebml;
 
   if test x"${ac_cv_ebml_found}" = "xinternal" ; then
     EBML_CFLAGS="-Ilib/libebml"
-    EBML_LIBS="-Llib/libebml/src -lebml"
+    EBML_LDFLAGS="-Llib/libebml/src"
+    EBML_LIBS="-lebml"
 
   else
 dnl
@@ -73,7 +75,7 @@ dnl
         ac_save_CXXFLAGS="$CXXFLAGS"
         ac_save_LIBS="$LIBS"
         CXXFLAGS="$CXXFLAGS $EBML_CFLAGS"
-        LIBS="$LIBS $EBML_LIBS"
+        LIBS="$LIBS $EBML_LDFLAGS $EBML_LIBS"
         AC_TRY_LINK([
 #include <ebml/EbmlVersion.h>
 #include <ebml/EbmlDummy.h>
@@ -113,4 +115,5 @@ using namespace libebml;
   fi
 
 AC_SUBST(EBML_CFLAGS)
+AC_SUBST(EBML_LDFLAGS)
 AC_SUBST(EBML_LIBS)

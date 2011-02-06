@@ -1,3 +1,11 @@
+2011-02-06  Moritz Bunkus  <moritz@bunkus.org>
+
+	* build system: Fixed compilation if configure choses the internal
+	versions of libebml and libmatroska while older versions are still
+	installed in a location named with "-I..." or "-L..." in
+	CFLAGS/CXXFLAGS/LDFLAGS or with configure's
+	"--with-extra-includes" and "--with-extra-libs" options.
+
 2011-01-31  Moritz Bunkus  <moritz@bunkus.org>
 
 	* Released v4.5.0.
