@@ -61,6 +61,7 @@ translation_c::initialize_available_translations() {
   ms_available_translations.push_back(translation_c("ja_JP", "ja",    "japanese",  "Japanese",            "日本語",      true));
   ms_available_translations.push_back(translation_c("nl_NL", "nl",    "dutch",     "Dutch",               "Nederlands",  false));
   ms_available_translations.push_back(translation_c("ru_RU", "ru",    "russian",   "Russian",             "Русский",     false));
+  ms_available_translations.push_back(translation_c("tr_TR", "tr",    "turkish",   "Turkish",             "Türkçe",      false));
   ms_available_translations.push_back(translation_c("uk_UA", "uk",    "ukrainian", "Ukrainian",           "Український", false));
   ms_available_translations.push_back(translation_c("zh_CN", "zh_CN", "chinese",   "Chinese Simplified",  "简体中文",    true));
   ms_available_translations.push_back(translation_c("zh_TW", "zh_TW", "chinese",   "Chinese Traditional", "繁體中文",    true));

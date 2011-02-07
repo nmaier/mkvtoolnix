@@ -71,6 +71,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/locale/ja/LC_MESSAGES/mkvtoolnix.mo
 %{_datadir}/locale/nl/LC_MESSAGES/mkvtoolnix.mo
 %{_datadir}/locale/ru/LC_MESSAGES/mkvtoolnix.mo
+%{_datadir}/locale/tr/LC_MESSAGES/mkvtoolnix.mo
 %{_datadir}/locale/uk/LC_MESSAGES/mkvtoolnix.mo
 %{_datadir}/locale/zh_CN/LC_MESSAGES/mkvtoolnix.mo
 %{_datadir}/locale/zh_TW/LC_MESSAGES/mkvtoolnix.mo
