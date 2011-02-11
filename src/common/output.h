@@ -131,6 +131,6 @@ mxverb_tid(unsigned int level,
 
 void MTX_DLL_API mxhexdump(unsigned int level, const void *buffer_to_dump, size_t lenth);
 
-void MTX_DLL_API dump_ebml_elements(EbmlElement *element, bool with_values = false, int level = 0);
+void MTX_DLL_API dump_ebml_elements(EbmlElement *element, bool with_values = false, unsigned int level = 0);
 
 #endif  // __MTX_COMMON_OUTPUT_H
