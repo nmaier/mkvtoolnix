@@ -280,3 +280,27 @@ int
 count_simple_tags(EbmlMaster &master) {
   return count_simple_tags_recursively(master, 0);
 }
+
+void
+remove_track_uid_tag_targets(EbmlMaster *tag) {
+  size_t idx_tag;
+  for (idx_tag = 0; tag->ListSize() > idx_tag; idx_tag++) {
+    EbmlElement *el = (*tag)[idx_tag];
+
+    if (!is_id(el, KaxTagTargets))
+      continue;
+
+    KaxTagTargets *targets = static_cast<KaxTagTargets *>(el);
+    size_t idx_target      = 0;
+
+    while (targets->ListSize() > idx_target) {
+      EbmlElement *uid_el = (*targets)[idx_target];
+      if (is_id(uid_el, KaxTagTrackUID)) {
+        targets->Remove(idx_target);
+        delete uid_el;
+
+      } else
+        ++idx_target;
+    }
+  }
+}
