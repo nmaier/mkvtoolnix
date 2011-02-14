@@ -444,7 +444,7 @@ kax_reader_c::verify_mscomp_video_track(kax_track_t *t) {
 
   if (t->v_width != u) {
     if (verbose)
-      mxwarn(boost::format(Y("matroska_reader: (MS compatibility mode, track %1%) Matrosa says video width is %2%, but the BITMAPINFOHEADER says %3%.\n"))
+      mxwarn(boost::format(Y("matroska_reader: (MS compatibility mode, track %1%) Matroska says video width is %2%, but the BITMAPINFOHEADER says %3%.\n"))
              % t->tnum % t->v_width % u);
     if (0 == t->v_width)
       t->v_width = u;
@@ -453,7 +453,7 @@ kax_reader_c::verify_mscomp_video_track(kax_track_t *t) {
   u = get_uint32_le(&bih->bi_height);
   if (t->v_height != u) {
     if (verbose)
-      mxwarn(boost::format(Y("matroska_reader: (MS compatibility mode, track %1%) Matrosa video height is %2%, but the BITMAPINFOHEADER says %3%.\n"))
+      mxwarn(boost::format(Y("matroska_reader: (MS compatibility mode, track %1%) Matroska says video height is %2%, but the BITMAPINFOHEADER says %3%.\n"))
              % t->tnum % t->v_height % u);
     if (0 == t->v_height)
       t->v_height = u;

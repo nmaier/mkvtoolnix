@@ -27,8 +27,8 @@ stereo_mode_c::init() {
   s_modes.push_back("side_by_side_left_first");
   s_modes.push_back("top_bottom_right_first");
   s_modes.push_back("top_bottom_left_first");
-  s_modes.push_back("checkboard_right_first");
-  s_modes.push_back("checkboard_left_first");
+  s_modes.push_back("checkerboard_right_first");
+  s_modes.push_back("checkerboard_left_first");
   s_modes.push_back("row_interleaved_right_first");
   s_modes.push_back("row_interleaved_left_first");
   s_modes.push_back("column_interleaved_right_first");
@@ -46,8 +46,8 @@ stereo_mode_c::init_translations() {
   s_translations.push_back(Y("side by side (left first)"));
   s_translations.push_back(Y("top bottom (right first)"));
   s_translations.push_back(Y("top bottom (left first)"));
-  s_translations.push_back(Y("checkboard (right first)"));
-  s_translations.push_back(Y("checkboard (left first)"));
+  s_translations.push_back(Y("checkerboard (right first)"));
+  s_translations.push_back(Y("checkerboard (left first)"));
   s_translations.push_back(Y("row interleaved (right first)"));
   s_translations.push_back(Y("row interleaved (left first)"));
   s_translations.push_back(Y("column interleaved (right first)"));

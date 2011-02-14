@@ -1817,7 +1817,7 @@ msgid "At least one <EditionEntry> element is needed."
 msgstr "最低でも1つの<EditionEntry>要素が必要です。"
 
 #: src/extract/extract_cli_parser.cpp:91
-msgid "Atatchment extraction"
+msgid "Attachment extraction"
 msgstr "添付ファイルの抽出"
 
 #: src/info/mkvinfo.cpp:1310
@@ -7386,11 +7386,11 @@ msgid "channels: %1%"
 msgstr "チャンネル数：%1%"
 
 #: src/common/stereo_mode.cpp:50
-msgid "checkboard (left first)"
+msgid "checkerboard (left first)"
 msgstr "チェッカーボード方式（レフトファースト）"
 
 #: src/common/stereo_mode.cpp:49
-msgid "checkboard (right first)"
+msgid "checkerboard (right first)"
 msgstr "チェッカーボード方式（ライトファースト）"
 
 #: src/common/stereo_mode.cpp:54
@@ -7657,11 +7657,11 @@ msgid "matroska_reader: (MS compatibility mode for track %1%) Matroska says that
 msgstr "matroska_reader：（トラック%1%、MS互換モード）Matroskaによると1秒当たり%2%サンプルですが、WAVEFORMATEXによると%3%サンプルです。\n"
 
 #: src/input/r_matroska.cpp:447
-msgid "matroska_reader: (MS compatibility mode, track %1%) Matrosa says video width is %2%, but the BITMAPINFOHEADER says %3%.\n"
+msgid "matroska_reader: (MS compatibility mode, track %1%) Matroska says video width is %2%, but the BITMAPINFOHEADER says %3%.\n"
 msgstr "matroska_reader：（トラック%1%、MS互換モード）Matroskaによるとビデオの横解像度は%2%ですが、BITMAPINFOHEADERによると%3%です。\n"
 
 #: src/input/r_matroska.cpp:456
-msgid "matroska_reader: (MS compatibility mode, track %1%) Matrosa video height is %2%, but the BITMAPINFOHEADER says %3%.\n"
+msgid "matroska_reader: (MS compatibility mode, track %1%) Matroska says video height is %2%, but the BITMAPINFOHEADER says %3%.\n"
 msgstr "matroska_reader：（トラック%1%、MS互換モード）Matroskaによるとビデオの縦解像度は%2%ですが、BITMAPINFOHEADERによると%3%です。\n"
 
 #: src/input/r_matroska.cpp:1077

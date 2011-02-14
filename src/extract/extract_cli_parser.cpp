@@ -88,7 +88,7 @@ extract_cli_parser_c::init_parser() {
 
   add_information(YT("mkvextract tags \"a movie.mkv\" > movie_tags.xml"));
 
-  add_section_header(YT("Atatchment extraction"));
+  add_section_header(YT("Attachment extraction"));
 
   add_information(YT("The third mode extracts attachments from the source file."));
   add_informational_option("AID:outname", YT("Write the attachment with the ID 'AID' to 'outname'."));

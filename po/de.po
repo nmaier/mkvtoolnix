@@ -1849,7 +1849,7 @@ msgid "At least one <EditionEntry> element is needed."
 msgstr "Es wird mindestens ein <EditionEntry>-Element benötigt."
 
 #: src/extract/extract_cli_parser.cpp:91
-msgid "Atatchment extraction"
+msgid "Attachment extraction"
 msgstr "Extraktion von Anhängen"
 
 #: src/info/mkvinfo.cpp:1310
@@ -7474,12 +7474,12 @@ msgid "channels: %1%"
 msgstr "Kanäle: %1%"
 
 #: src/common/stereo_mode.cpp:50
-msgid "checkboard (left first)"
-msgstr "checkboard (links zuerst)"
+msgid "checkerboard (left first)"
+msgstr "checkerboard (links zuerst)"
 
 #: src/common/stereo_mode.cpp:49
-msgid "checkboard (right first)"
-msgstr "checkboard (rechts zuerst)"
+msgid "checkerboard (right first)"
+msgstr "checkerboard (rechts zuerst)"
 
 #: src/common/stereo_mode.cpp:54
 msgid "column interleaved (left first)"
@@ -7743,11 +7743,11 @@ msgid "matroska_reader: (MS compatibility mode for track %1%) Matroska says that
 msgstr "matroska_reader: (MS-Kompatibilitätsmodus für Track %1%) Laut Matroska-Kopf hat der Track %2% Abtastwerte pro Sekunde, doch laut WAVEFORMATEX-Struktur sind es %3%.\n"
 
 #: src/input/r_matroska.cpp:447
-msgid "matroska_reader: (MS compatibility mode, track %1%) Matrosa says video width is %2%, but the BITMAPINFOHEADER says %3%.\n"
+msgid "matroska_reader: (MS compatibility mode, track %1%) Matroska says video width is %2%, but the BITMAPINFOHEADER says %3%.\n"
 msgstr "matroska_reader: (MS-Kompatibilitätsmodus für Track %1%) Laut Matroska-Kopf hat der Track eine Breite von %2% Pixeln, laut BITMAPINFOHEADER-Struktur jedoch %3%.\n"
 
 #: src/input/r_matroska.cpp:456
-msgid "matroska_reader: (MS compatibility mode, track %1%) Matrosa video height is %2%, but the BITMAPINFOHEADER says %3%.\n"
+msgid "matroska_reader: (MS compatibility mode, track %1%) Matroska says video height is %2%, but the BITMAPINFOHEADER says %3%.\n"
 msgstr "matroska_reader: (MS-Kompatibilitätsmodus für Track %1%) Laut Matroska-Kopf hat der Track eine Höhe von %2% Pixeln, laut BITMAPINFOHEADER-Struktur jedoch %3%.\n"
 
 #: src/input/r_matroska.cpp:1077
