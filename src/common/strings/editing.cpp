@@ -22,28 +22,20 @@ std::vector<std::string>
 split(const char *src,
       const char *pattern,
       int max_num) {
-  int num, i, plen;
-  char *copy, *p1, *p2;
-  std::vector<std::string> v;
+  std::vector<std::string> parts;
+  size_t pattern_len = strlen(pattern);
+  const char *hit    = strstr(src, pattern);
+  const char *end    = src + strlen(src);
 
-  plen = strlen(pattern);
-  copy = safestrdup(src);
-  p2 = copy;
-  p1 = strstr(p2, pattern);
-  num = 1;
-  while ((p1 != NULL) && ((max_num == -1) || (num < max_num))) {
-    for (i = 0; i < plen; i++)
-      p1[i] = 0;
-    v.push_back(std::string(p2));
-    p2 = &p1[plen];
-    p1 = strstr(p2, pattern);
-    num++;
+  while (hit && ((0 >= max_num) || ((parts.size() + 1) < static_cast<size_t>(max_num)))) {
+    parts.push_back(std::string(src, hit - src));
+    src = hit + pattern_len;
+    hit = strstr(src, pattern);
   }
-  if (*p2 != 0)
-    v.push_back(std::string(p2));
-  safefree(copy);
 
-  return v;
+  parts.push_back(std::string(src, end - src));
+
+  return parts;
 }
 
 std::string
