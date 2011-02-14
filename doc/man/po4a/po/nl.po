@@ -6,14 +6,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Nederlands 4.0.0.\n"
-"POT-Creation-Date: 2011-01-21 14:26+0100\n"
+"POT-Creation-Date: 2011-02-12 21:48+0100\n"
 "PO-Revision-Date: 2011-01-24 17:22+0100\n"
 "Last-Translator: René Maassen <bmom43@hotmail.com>\n"
 "Language-Team: Nederlands rc1 <bmom43@hotmail.com>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
 "X-Poedit-Language: Dutch\n"
 "X-Poedit-Country: NETHERLANDS\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -38,8 +38,9 @@ msgstr "4.5.0"
 #: doc/man/mkvmerge.xml:7
 #: doc/man/mkvpropedit.xml:7
 #: doc/man/mmg.xml:7
-#| msgid "2010-09-04"
-msgid "2010-10-31"
+#, fuzzy
+#| msgid "2010-10-31"
+msgid "2011-01-31"
 msgstr "2010-10-31"
 
 #. type: Content of the mkvmerge entity
@@ -388,7 +389,6 @@ msgstr "Toon versie informatie en sluit af."
 #: doc/man/mkvinfo.xml:201
 #: doc/man/mkvmerge.xml:1363
 #: doc/man/mkvpropedit.xml:227
-#| msgid "<option>--no-cues</option>"
 msgid "<option>--check-for-updates</option>"
 msgstr "<option>--check-for-updates</option>"
 
@@ -429,7 +429,6 @@ msgstr "<option>@</option>optie's-bestand"
 #: doc/man/mkvinfo.xml:225
 #: doc/man/mkvmerge.xml:1283
 #: doc/man/mkvpropedit.xml:251
-#| msgid "Reads additional command line arguments from the file <parameter>options-file</parameter>.  Lines whose first non-whitespace character is a hash mark ('<literal>#</literal>') are treated as comments and ignored. White spaces at the start and end of a line will be stripped. Each line must contain exactly one option.  There is no meta character escaping."
 msgid "Reads additional command line arguments from the file <parameter>options-file</parameter>.  Lines whose first non-whitespace character is a hash mark ('<literal>#</literal>') are treated as comments and ignored. White spaces at the start and end of a line will be stripped. Each line must contain exactly one option."
 msgstr "Leest extra commandoregel argumenten in van een bestand <parameter>options-file</parameter>. Regels met een spatie (lege ruimte) als eerste karakter, zijn  gemarkeerd als een hash (waarde) ('<literal>#</literal>')  worden behandeld als commentaar en  genegeerd. Een spatie aan het begin en einde van een regel worden verwijderd. Elke regel mag excact één waarde bevatten"
 
@@ -636,7 +635,6 @@ msgstr "Tijdcode extraheer mode"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
 #: doc/man/mkvextract.xml:382
-#| msgid "Syntax: <command>mkvextract</command> <option>tracks</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional> <parameter>TID1:dest-filename1</parameter> <optional><parameter>TID2:dest-filename2</parameter> ...</optional>"
 msgid "Syntax: <command>mkvextract</command> <option>timecodes_v2</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional> <parameter>TID1:dest-filename1</parameter> <optional><parameter>TID2:dest-filename2</parameter> ...</optional>"
 msgstr "Ingave: <command>mkvextract</command> <option>timecodes_v2</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional> <parameter>TID1:dest-filename1</parameter> <optional><parameter>TID2:dest-filename2</parameter> ...</optional>"
 
@@ -647,22 +645,17 @@ msgstr "De geëxtraheerde hoofdstukken zijn geschreven naar het apparaat/houder 
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:395
-#| msgid "Causes extraction of the track with the ID <parameter>TID</parameter> into the file <parameter>outname</parameter> if such a track exists in the source file. This option can be given multiple times. The track IDs are the same as the ones output by &mkvmerge;'s <option>--identify</option> option."
 msgid "Causes extraction of the timecodes for the track with the ID <parameter>TID</parameter> into the file <parameter>outname</parameter> if such a track exists in the source file. This option can be given multiple times. The track IDs are the same as the ones output by &mkvmerge;'s <option>--identify</option> option."
 msgstr "Extraheert tijdcodes voor het spoor met het ID <parameter>TID</parameter> naar het bestand <parameter>outname</parameter> als een dergelijk spoor bestaat in het bronbestand. Deze optie kan meerdere keren geven worden. De spo(o)r(en) ID's zijn hetzelfde als diegene die met &mkvmerge;'s <option>--identify</option> optie worden verkregen."
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:401
-#| msgid "Example"
 msgid "Example:"
 msgstr "Voorbeeld:"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><screen>
 #: doc/man/mkvextract.xml:405
 #, no-wrap
-#| msgid ""
-#| "$ mkvextract tracks input.mkv 1:output-two-tracks.rm 2:output-two-tracks.rm\n"
-#| "      "
 msgid ""
 "$ mkvextract timecodes_v2 input.mkv 1:tc-track1.txt 2:tc-track2.txt\n"
 "      "
@@ -1024,7 +1017,6 @@ msgstr "Toon slechts een grove samenvatting van wat &mkvinfo; vindt en niet elk 
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvinfo.xml:93
-#| msgid "<option>-T</option>, <option>--no-track-tags</option>"
 msgid "<option>-t</option>, <option>--track-info</option>"
 msgstr "<option>-t</option>, <option>--track-info</option>"
 
@@ -1195,7 +1187,9 @@ msgstr "Dit programma neemt de invoer van verschillende media bestanden en voegt
 #. type: Content of: <refentry><refsect1><important><para>
 #: doc/man/mkvmerge.xml:73
 #: doc/man/mkvmerge.xml:1394
-msgid "The order of command line options is important. Please read the section <link linkend=\"mkvmerge.option_order\">&quot;Option order&quot;</link> it if you're new to the program."
+#, fuzzy
+#| msgid "The order of command line options is important. Please read the section <link linkend=\"mkvmerge.option_order\">&quot;Option order&quot;</link> it if you're new to the program."
+msgid "The order of command line options is important. Please read the section <link linkend=\"mkvmerge.option_order\">&quot;Option order&quot;</link> if you're new to the program."
 msgstr "De volgorde van de commandregel optie's is belangrijk. Lees a.u.b de sectie over <link linkend=\"mkvmerge.option_order\">&quot;Optie volgorde&quot;</link> als je nog onbekend bent met het programma."
 
 #. type: Content of: <refentry><refsect1><para>
@@ -1694,7 +1688,6 @@ msgstr ""
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvmerge.xml:576
-#| msgid "<option>+</option>"
 msgid "<option>=</option>"
 msgstr "<option>=</option>"
 
@@ -1705,17 +1698,12 @@ msgstr "Normaal kijkt mkvmerge naar bestanden in dezelfde map welke dezelfde bas
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvmerge.xml:585
-#| msgid "A single '+' causes the next file to be appended instead of added. The '+' can also be put in front of the next file name. Therefore the following two commands are equivalent:"
 msgid "The '=' can also be put in front of the next file name. Therefore the following two commands are equivalent:"
 msgstr "De '=' kan ook worden ingegeven voor elk volgende bestandsnaam. Daarom zijn de volgende twee commando's gelijkwaardig:"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><screen>
 #: doc/man/mkvmerge.xml:589
 #, no-wrap
-#| msgid ""
-#| "$ mkvmerge -o full.mkv file1.mkv + file2.mkv\n"
-#| "$ mkvmerge -o full.mkv file1.mkv +file2.mkv\n"
-#| "     "
 msgid ""
 "$ mkvmerge -o full.mkv = file1.mkv\n"
 "$ mkvmerge -o full.mkv =file1.mkv\n"
@@ -2102,25 +2090,21 @@ msgstr "Forceert de <abbrev>NALU</abbrev> lengte grootte naar <parameter>n</para
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvmerge.xml:1025
-#| msgid "<option>--compression</option> <parameter>TID:method</parameter>"
 msgid "<option>--compression</option> <parameter>TID:n</parameter>"
 msgstr "<option>--compression</option> <parameter>TID:n</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvmerge.xml:1028
-#| msgid "Selects the compression method to be used for the VobSub track. Note that the player also has to support this method. Valid values are '<literal>none</literal>', '<literal>zlib</literal>', '<literal>lzo</literal>'/'<literal>lxo1x</literal>', '<literal>bz2</literal>'/'<literal>bzlib</literal>' and '<literal>mpeg4_p2</literal>'/'<literal>mpeg4p2</literal>'.  The values '<literal>lzo</literal>'/'<literal>lxo1x</literal>' and '<literal>bz2</literal>'/'<literal>bzlib</literal>' are only available if &mkvmerge; has been compiled with support for the <productname>liblzo</productname> respectively <productname>bzlib</productname> compression libraries."
 msgid "Selects the compression method to be used for the track. Note that the player also has to support this method. Valid values are '<literal>none</literal>', '<literal>zlib</literal>', '<literal>lzo</literal>'/'<literal>lxo1x</literal>', '<literal>bz2</literal>'/'<literal>bzlib</literal>' and '<literal>mpeg4_p2</literal>'/'<literal>mpeg4p2</literal>'.  The values '<literal>lzo</literal>'/'<literal>lxo1x</literal>' and '<literal>bz2</literal>'/'<literal>bzlib</literal>' are only available if &mkvmerge; has been compiled with support for the <productname>liblzo</productname> and <productname>bzlib</productname> compression libraries, respectively."
 msgstr "Selecteert de te gebruiken compressie methode in voor het spoor. Opmerking: de afspeler dient deze methode ook te ondersteunen. Geldige waarden zijn '<literal>none</literal>', '<literal>zlib</literal>', '<literal>lzo</literal>'/'<literal>lxo1x</literal>', '<literal>bz2</literal>'/'<literal>bzlib</literal>' en '<literal>mpeg4_p2</literal>'/'<literal>mpeg4p2</literal>'. De waarden '<literal>lzo</literal>'/'<literal>lxo1x</literal>' en '<literal>bz2</literal>'/'<literal>bzlib</literal>' zijn alléén beschikbaar als &mkvmerge; is gecompileerd met de ondersteuning voor de <productname>liblzo</productname> respectievelijk <productname>bzlib</productname> compressie bibliotheken."
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvmerge.xml:1036
-#| msgid "The compression method '<literal>mpeg4_p2</literal>'/'<literal>mpeg4p2</literal>' is a special compression method called '<foreignphrase>header removal</foreignphrase>' that is only available for MPEG4 part 2 video tracks. The other methods are general compression methods that can be used with any type of track."
 msgid "The compression method '<literal>mpeg4_p2</literal>'/'<literal>mpeg4p2</literal>' is a special compression method called '<foreignphrase>header removal</foreignphrase>' that is only available for <abbrev>MPEG4</abbrev> part 2 video tracks."
 msgstr "De compressie methode '<literal>mpeg4_p2</literal>'/'<literal>mpeg4p2</literal>' is een speciale compressie methode genoemd '<foreignphrase>header removal</foreignphrase>' die is alléén beschikbaar voor<abbrev>MPEG4</abbrev> deel 2 video sporen."
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvmerge.xml:1040
-#| msgid "The default is '<literal>zlib</literal>' compression. This compression method is also the one that most if not all playback applications support. Support for other compression methods other than '<literal>none</literal>' is not assured."
 msgid "The default for some subtitle tracks is '<literal>zlib</literal>' compression. This compression method is also the one that most if not all playback applications support. Support for other compression methods other than '<literal>none</literal>' is not assured."
 msgstr "Standaard voor sommige ondertitels zijn '<literal>zlib</literal>' compressie. Deze compressie wordt door bijna alle afspelers ondersteund zoniet allen. Ondersteuning voor andere compressie methoden anders dan '<literal>none</literal>' is niet verzekerd."
 
@@ -2243,7 +2227,6 @@ msgstr "Zal &mkvmerge; (met een sonde) een enkel bestand aftasten en het type ra
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvmerge.xml:1182
-#| msgid "<option>-i</option>, <option>--identify</option> <parameter>file-name</parameter>"
 msgid "<option>-I</option>, <option>--identify-verbose</option> <parameter>file-name</parameter>"
 msgstr "<option>-I</option>, <option>--identify-verbose</option> <parameter>file-name</parameter>"
 
@@ -2371,7 +2354,6 @@ msgstr "Voor elk bestand kan de gebruiker selecteren welke sporen &mkvmerge; zou
 
 #. type: Content of: <refentry><refsect1><title>
 #: doc/man/mkvmerge.xml:1401
-#| msgid "Options:"
 msgid "Option order"
 msgstr "Optie volgorde"
 
@@ -2409,7 +2391,6 @@ msgstr "Het volgende voorbeeld toont dat het gebruiken van de optie <option>--la
 #. type: Content of: <refentry><refsect1><screen>
 #: doc/man/mkvmerge.xml:1439
 #, no-wrap
-#| msgid "$ mkvmerge -o with-lang-codes.mkv --language 2:ger --language 3:dut without-lang-codes.mkv"
 msgid "$ mkvmerge -o output.mkv --language 0:fre français.ogg --language 0:deu deutsch.ogg"
 msgstr "$ mkvmerge -o output.mkv --language 0:fre français.ogg --language 0:deu deutsch.ogg"
 
@@ -3646,4 +3627,5 @@ msgstr "De volledige documentatie is beschikbaar in HTML format (<filename>doc/m
 #: doc/man/mmg.xml:92
 msgid "&mkvmerge;, &mkvextract;, &mkvinfo;, &mkvpropedit;"
 msgstr "&mkvmerge;, &mkvextract;, &mkvinfo;, &mkvpropedit;"
+
 

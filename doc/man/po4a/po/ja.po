@@ -8,14 +8,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 2.9.9\n"
-"POT-Creation-Date: 2011-01-21 14:26+0100\n"
+"POT-Creation-Date: 2011-02-12 21:48+0100\n"
 "PO-Revision-Date: 2011-01-22 17:11+0100\n"
 "Last-Translator: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "Language-Team: none\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #. type: Content of the product entity
@@ -32,7 +32,7 @@ msgstr "4.5.0"
 #. type: Content of the date entity
 #: doc/man/mkvextract.xml:7 doc/man/mkvinfo.xml:7 doc/man/mkvmerge.xml:7
 #: doc/man/mkvpropedit.xml:7 doc/man/mmg.xml:7
-msgid "2010-10-31"
+msgid "2011-01-31"
 msgstr ""
 
 #. type: Content of the mkvmerge entity
@@ -1054,7 +1054,9 @@ msgstr "このプログラムはいくつかのメディアファイルを入力
 
 #. type: Content of: <refentry><refsect1><important><para>
 #: doc/man/mkvmerge.xml:73 doc/man/mkvmerge.xml:1394
-msgid "The order of command line options is important. Please read the section <link linkend=\"mkvmerge.option_order\">&quot;Option order&quot;</link> it if you're new to the program."
+#, fuzzy
+#| msgid "The order of command line options is important. Please read the section <link linkend=\"mkvmerge.option_order\">&quot;Option order&quot;</link> it if you're new to the program."
+msgid "The order of command line options is important. Please read the section <link linkend=\"mkvmerge.option_order\">&quot;Option order&quot;</link> if you're new to the program."
 msgstr "コマンドラインオプションの順番は重要です。もしあなたが初心者なら、<link linkend=\"mkvmerge.option_order\">&quot;オプションの順番&quot;</link>セクションを読んで下さい。"
 
 #. type: Content of: <refentry><refsect1><para>
