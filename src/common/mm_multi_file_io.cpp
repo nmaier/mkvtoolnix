@@ -15,6 +15,7 @@
 
 #include <algorithm>
 #include <boost/regex.hpp>
+#include <sstream>
 #include <vector>
 
 #include "common/mm_multi_file_io.h"
@@ -155,14 +156,17 @@ mm_multi_file_io_c::create_verbose_identification_info(std::vector<std::string> 
 
 void
 mm_multi_file_io_c::display_other_file_info() {
-  std::vector<std::string> file_names;
+  std::stringstream out;
 
   foreach(const mm_multi_file_io_c::file_t &file, m_files)
-    if (file.m_file_name != m_files.front().m_file_name)
-      file_names.push_back(file.m_file_name.leaf());
+    if (file.m_file_name != m_files.front().m_file_name) {
+      if (!out.str().empty())
+        out << ", ";
+      out << file.m_file_name.filename();
+    }
 
-  if (!file_names.empty())
-    mxinfo(boost::format(Y("'%1%': Processing the following files as well: %2%\n")) % m_display_file_name % join(", ", file_names));
+  if (!out.str().empty())
+    mxinfo(boost::format(Y("'%1%': Processing the following files as well: %2%\n")) % m_display_file_name % out.str());
 }
 
 struct path_sorter_t {

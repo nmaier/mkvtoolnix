@@ -1,5 +1,9 @@
 2011-02-15  Moritz Bunkus  <moritz@bunkus.org>
 
+	* build: Boost 1.36.0 or newer is required (up from 1.34.0). Also
+	fixed building with v3 of Boost's filesystem library, e.g. with
+	Boost 1.46.0 Beta 1 or newer.
+
 	* mkvpropedit: new feature: Added support for adding, replacing
 	and removing tags.
 
