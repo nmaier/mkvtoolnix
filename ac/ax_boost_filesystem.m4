@@ -106,10 +106,6 @@ AC_DEFUN([AX_BOOST_FILESYSTEM],
       fi
     fi
 
-    CPPFLAGS="$CPPFLAGS_SAVED"
-    LDFLAGS="$LDFLAGS_SAVED"
-    LIBS="$LIBS_SAVED"
-
     if test x"$link_filesystem" != "xyes" ; then
       if test x"$ax_lib" = "x" ; then
         AC_MSG_ERROR([The Boost::Filesystem library was not found in $BOOSTLIBDIR.])
@@ -117,5 +113,26 @@ AC_DEFUN([AX_BOOST_FILESYSTEM],
         AC_MSG_ERROR([The Boost::Filesystem library is required and it was found, but linking against it failed.])
       fi
     fi
+
+    AC_CACHE_CHECK(Boost::Filesystem library version,
+      ax_cv_boost_filesystem_version,
+      [
+        AC_LANG_PUSH([C++])
+        AC_COMPILE_IFELSE(AC_LANG_PROGRAM([[@%:@include <boost/filesystem/path.hpp>]],
+          [[using namespace boost::filesystem;
+            path my_path( "foo/bar/data.txt" );
+            my_path.filename().native();
+            return 0;]]),
+          ax_cv_boost_filesystem_version=3, ax_cv_boost_filesystem_version=2)
+        AC_LANG_POP([C++])
+      ])
+
+    if test x"$ax_cv_boost_filesystem_version" = "x3" ; then
+      AC_DEFINE(HAVE_BOOST_FILESYSTEM_V3,,[define if the Boost library is available])
+    fi
+
+    CPPFLAGS="$CPPFLAGS_SAVED"
+    LDFLAGS="$LDFLAGS_SAVED"
+    LIBS="$LIBS_SAVED"
   fi
 ])
