@@ -574,31 +574,31 @@ msgstr ""
 "  @オプションファイル      指定されたファイルから追加のコマンドラインオプション\n"
 "                           を読み込みます（man pageを参照してください。）\n"
 
-#: src/propedit/propedit_cli_parser.cpp:94
+#: src/propedit/propedit_cli_parser.cpp:103
 msgid "  B:  boolean (0 or 1)\n"
 msgstr "  B:  ブール型（0または1）\n"
 
-#: src/propedit/propedit_cli_parser.cpp:98
+#: src/propedit/propedit_cli_parser.cpp:107
 msgid "  FP: floating point number\n"
 msgstr "  FP: 浮動小数点数\n"
 
-#: src/propedit/propedit_cli_parser.cpp:95
+#: src/propedit/propedit_cli_parser.cpp:104
 msgid "  S:  string\n"
 msgstr "  S:  文字列\n"
 
-#: src/propedit/propedit_cli_parser.cpp:92
+#: src/propedit/propedit_cli_parser.cpp:101
 msgid "  SI: signed integer\n"
 msgstr "  SI: 符号付き整数\n"
 
-#: src/propedit/propedit_cli_parser.cpp:93
+#: src/propedit/propedit_cli_parser.cpp:102
 msgid "  UI: unsigned integer\n"
 msgstr "  UI: 符号無し整数\n"
 
-#: src/propedit/propedit_cli_parser.cpp:96
+#: src/propedit/propedit_cli_parser.cpp:105
 msgid "  US: Unicode string\n"
 msgstr "  US: ユニコード文字列\n"
 
-#: src/propedit/propedit_cli_parser.cpp:97
+#: src/propedit/propedit_cli_parser.cpp:106
 msgid "  X:  binary in hex\n"
 msgstr "  X:  16進数のバイナリ\n"
 
@@ -1621,7 +1621,7 @@ msgstr "%sを処理中に中断されました"
 msgid "About mkvinfo"
 msgstr "mkvinfoについて"
 
-#: src/propedit/propedit_cli_parser.cpp:145
+#: src/propedit/propedit_cli_parser.cpp:154
 msgid "Actions"
 msgstr "アクション"
 
@@ -1649,6 +1649,10 @@ msgstr "要素を追加"
 msgid "Add name"
 msgstr "名前を追加"
 
+#: src/propedit/propedit_cli_parser.cpp:161
+msgid "Add or replace tags in the file with the ones from 'filename' or remove them if 'filename' is empty (see below and man page for syntax)"
+msgstr ""
+
 #: src/mmg/tabs/chapters.cpp:328
 msgid "Add subchapter"
 msgstr "サブチャプタを追加"
@@ -1665,7 +1669,7 @@ msgstr "追加ID：%1%"
 msgid "Additions"
 msgstr "追加情報"
 
-#: src/propedit/propedit_cli_parser.cpp:148
+#: src/propedit/propedit_cli_parser.cpp:157
 msgid "Adds a property with the value even if such a property already exists"
 msgstr "当該プロパティが既に存在する場合でも指定された値でプロパティを追加します"
 
@@ -1705,9 +1709,13 @@ msgstr "全てのチャプタエントリは有効です。"
 msgid "All header values are OK."
 msgstr "全てのヘッダの値はOKです。"
 
-#: src/propedit/propedit_cli_parser.cpp:85
+#: src/propedit/propedit_cli_parser.cpp:94
 msgid "All known property names and their meaning\n"
 msgstr "全ての既知のプロパティ名とその意味\n"
+
+#: src/propedit/propedit_cli_parser.cpp:185
+msgid "All other strings work just like the track header selectors (see above)."
+msgstr ""
 
 #: src/info/wxwidgets_ui.cpp:264
 msgid "All supported files|*.mkv;*.mka;*.mks;*.mk3d;*.webm;*.webma;*.webmv|Matroska files (*.mkv;*.mka;*.mks;*.mk3d)|*.mkv;*.mka;*.mks;*.mk3d|WebM files (*.webm;*.webma;*.webmv)|*.webm;*.webma;*.webmv|All files|*.*"
@@ -1759,7 +1767,7 @@ msgid ""
 msgstr "前のセグメントに対応するエスケープされたファイル名です。"
 
 #: src/mmg/header_editor/frame.cpp:707 src/mmg/tabs/chapters.cpp:1910
-#: src/propedit/propedit.cpp:43
+#: src/propedit/propedit.cpp:44
 msgid "An unknown error occured. The file has been modified."
 msgstr "未知のエラーが発生しました。ファイルは変更されました。"
 
@@ -2686,7 +2694,7 @@ msgstr "このトラックのタイムコードを数ミリ秒遅らせます。
 msgid "Delay: %|1$.3f|ms"
 msgstr "遅延：%|1$.3f|ms"
 
-#: src/propedit/propedit_cli_parser.cpp:151
+#: src/propedit/propedit_cli_parser.cpp:160
 msgid "Delete all occurences of a property"
 msgstr "そのプロパティを全て削除します"
 
@@ -2779,7 +2787,7 @@ msgstr "Dolby TrueHD"
 msgid "Don't write variable parts to output files (only for debugging)."
 msgstr "変数部分を出力ファイルに書き込みません（デバッグ専用。）"
 
-#: src/propedit/propedit.cpp:108
+#: src/propedit/propedit.cpp:113
 msgid "Done.\n"
 msgstr "完了。\n"
 
@@ -2835,7 +2843,7 @@ msgstr "各エディションは少なくとも1つのチャプタを含んで�
 msgid "EbmlVoid (size: %1%)"
 msgstr "EbmlVoid (サイズ：%1%)"
 
-#: src/propedit/propedit_cli_parser.cpp:159
+#: src/propedit/propedit_cli_parser.cpp:171
 msgid "Edit selectors"
 msgstr "Editのselector"
 
@@ -2849,11 +2857,11 @@ msgstr "エディション%d"
 msgid "EditionEntry %u"
 msgstr "エディションエントリ%u"
 
-#: src/propedit/propedit.cpp:63
+#: src/propedit/propedit.cpp:68
 msgid "Element %1% is written.\n"
 msgstr "要素%1%が書き込まれました。\n"
 
-#: src/propedit/propedit_cli_parser.cpp:91
+#: src/propedit/propedit_cli_parser.cpp:100
 msgid "Element types:\n"
 msgstr "要素のタイプ：\n"
 
@@ -2861,7 +2869,7 @@ msgstr "要素のタイプ：\n"
 msgid "Elements"
 msgstr "要素"
 
-#: src/propedit/propedit_cli_parser.cpp:119
+#: src/propedit/propedit_cli_parser.cpp:128
 msgid "Elements in the category '%1%' ('--edit %2%'):\n"
 msgstr "カテゴリ'%1%'の要素（'--edit %2%'）：\n"
 
@@ -2929,7 +2937,7 @@ msgstr "MPEG PSパケット解析ののヘッダ読み込みフェイズでエ�
 msgid "Error parsing the file"
 msgstr "ファイルの解析中にエラーが発生しました"
 
-#: src/merge/mkvmerge.cpp:487
+#: src/propedit/target.cpp:343 src/merge/mkvmerge.cpp:487
 msgid "Error parsing the tags in '%1%': some mandatory elements are missing.\n"
 msgstr "'%1%'のタグ解析中にエラーが発生しました：必須要素のいくつかがありません。\n"
 
@@ -3665,6 +3673,7 @@ msgid "Invalid second: %1%"
 msgstr "無効な秒です：%1%"
 
 #: src/propedit/propedit_cli_parser.cpp:51
+#: src/propedit/propedit_cli_parser.cpp:72
 msgid "Invalid selector in '%1% %2%'.\n"
 msgstr "'%1% %2%'で無効なセレクタが指定されました。\n"
 
@@ -3861,7 +3870,7 @@ msgstr "%1%行目：この行は字幕エントリのようですがフォーマ
 msgid "Line %1%: The line seems to be a subtitle entry but the timecode was negative even after adding the track delay. Negative timecodes are not supported in Matroska. This entry will be skipped.\n"
 msgstr "%1%行目：この行は字幕エントリのようですがタイムコードがトラックのディレイを考慮しても負の数になります。負の数のタイムコードはMatroskaではサポートされていません。このエントリはスキップされます。\n"
 
-#: src/propedit/propedit_cli_parser.cpp:142
+#: src/propedit/propedit_cli_parser.cpp:151
 msgid "List all valid property names and exit"
 msgstr "全ての有効なプロパティ名を列挙して終了します"
 
@@ -4026,7 +4035,7 @@ msgstr "16進数の桁が1つ足りません"
 msgid "Missing output file name in argument '%1%'.\n"
 msgstr "パラメータ'%1%'で出力ファイル名が指定されていません。\n"
 
-#: src/propedit/options.cpp:137
+#: src/propedit/options.cpp:148
 msgid "Modification of properties in the section '%1%' was requested, but no corresponding level 1 element was found in the file. %2%\n"
 msgstr "セクション'%1%'のプロパティの変更が要求されましたが、ファイルには対応するレベル1の要素が見つかりませんでした。%2%\n"
 
@@ -4042,7 +4051,7 @@ msgstr "1つの添付ファイルに複数のMIMEタイプが指定されまし�
 msgid "More than one description was given for a single attachment.\n"
 msgstr "1つの添付ファイルに複数の説明が指定されました。\n"
 
-#: src/propedit/options.cpp:75
+#: src/propedit/options.cpp:85
 msgid "More than one file name has been given ('%1%' and '%2%').\n"
 msgstr "ファイル名が複数指定されました（'%1%'と'%2%'。）\n"
 
@@ -4195,7 +4204,7 @@ msgstr ""
 msgid "No file loaded"
 msgstr "ファイルが読み込まれていません"
 
-#: src/propedit/options.cpp:27 src/info/mkvinfo.cpp:2075
+#: src/propedit/options.cpp:30 src/info/mkvinfo.cpp:2075
 msgid "No file name given.\n"
 msgstr "ファイル名が指定されていません。\n"
 
@@ -4232,7 +4241,7 @@ msgstr "出力すべきストリームが見つかりませんでした。中断
 msgid "No track ID specified in '--%1% %2%'.\n"
 msgstr "'--%1% %2%'でトラックIDが指定されていません。\n"
 
-#: src/propedit/target.cpp:259
+#: src/propedit/target.cpp:302
 msgid "No track corresponding to the edit specification '%1%' was found. %2%\n"
 msgstr "editで指定された'%1%'に対応するトラックが見つかりませんでした。%2%\n"
 
@@ -4273,7 +4282,7 @@ msgid "Note"
 msgstr "注意"
 
 #: src/extract/timecodes_v2.cpp:166 src/extract/tracks.cpp:318
-#: src/extract/attachments.cpp:131 src/propedit/options.cpp:30
+#: src/extract/attachments.cpp:131 src/propedit/options.cpp:33
 msgid "Nothing to do.\n"
 msgstr "何もすることがありません。\n"
 
@@ -4365,7 +4374,7 @@ msgstr "フォルダを開く"
 msgid "Option file created."
 msgstr "オプションファイルが作成されました。"
 
-#: src/mmg/options/dialog.cpp:43 src/propedit/propedit_cli_parser.cpp:141
+#: src/mmg/options/dialog.cpp:43 src/propedit/propedit_cli_parser.cpp:150
 #: src/info/info_cli_parser.cpp:40
 msgid "Options"
 msgstr "オプション"
@@ -4382,7 +4391,7 @@ msgstr "順番：%1%"
 msgid "Original value:"
 msgstr "元の値："
 
-#: src/propedit/propedit_cli_parser.cpp:153
+#: src/propedit/propedit_cli_parser.cpp:165
 msgid "Other options"
 msgstr "その他のオプション"
 
@@ -4913,10 +4922,10 @@ msgid "Segment info files (*.xml)|*.xml|%s"
 msgstr "セグメント情報ファイル (*.xml)|*.xml|%s"
 
 #: src/mmg/header_editor/frame.cpp:322 src/extract/timecodes_v2.cpp:222
-#: src/extract/tracks.cpp:377 src/propedit/propedit_cli_parser.cpp:87
-#: src/propedit/propedit_cli_parser.cpp:160 src/propedit/options.cpp:152
-#: src/info/qt_ui.cpp:178 src/info/wxwidgets_ui.cpp:208
-#: src/info/mkvinfo.cpp:553
+#: src/extract/tracks.cpp:377 src/propedit/options.cpp:164
+#: src/propedit/propedit_cli_parser.cpp:96
+#: src/propedit/propedit_cli_parser.cpp:172 src/info/qt_ui.cpp:178
+#: src/info/wxwidgets_ui.cpp:208 src/info/mkvinfo.cpp:553
 msgid "Segment information"
 msgstr "セグメント情報"
 
@@ -5021,15 +5030,15 @@ msgstr "ファイル名からディレイの入力フィールドを設定する
 msgid "Set values"
 msgstr "値を設定"
 
-#: src/propedit/propedit_cli_parser.cpp:150
+#: src/propedit/propedit_cli_parser.cpp:159
 msgid "Sets a property to the value if it exists and add it otherwise"
 msgstr "プロパティが存在していればこの値に設定し、存在していなければ追加します"
 
-#: src/propedit/propedit_cli_parser.cpp:146
+#: src/propedit/propedit_cli_parser.cpp:155
 msgid "Sets the Matroska file section that all following add/set/delete actions operate on (see below and man page for syntax)"
 msgstr "後に続く全てのadd・set・deleteのアクションが作用するMatroskaファイルのセクションを設定します（構文は下の方とman pageを参照してください）"
 
-#: src/propedit/propedit_cli_parser.cpp:143
+#: src/propedit/propedit_cli_parser.cpp:152
 msgid "Sets the Matroska parser mode to 'fast' (default) or 'full'"
 msgstr "Matroskaパーサのモードを'fast'（デフォルト）もしくは'full'に設定します"
 
@@ -5390,7 +5399,12 @@ msgstr "タグファイル (*.xml)|*.xml|%s"
 msgid "Tag files (*.xml;*.txt)|*.xml;*.txt|%s"
 msgstr "タグファイル (*.xml;*.txt)|*.xml;*.txt|%s"
 
-#: src/info/mkvinfo.cpp:1828
+#: src/propedit/propedit_cli_parser.cpp:182
+#, fuzzy
+msgid "Tag selectors"
+msgstr "Editのselector"
+
+#: src/propedit/options.cpp:172 src/info/mkvinfo.cpp:1828
 msgid "Tags"
 msgstr "タグ"
 
@@ -5491,7 +5505,7 @@ msgstr "カラオケ・テキスト判別ヘッダを解析できませんでし
 msgid "The Matroska file is analyzed."
 msgstr "Matroskaファイルを解析中です。"
 
-#: src/mmg/header_editor/frame.cpp:701 src/propedit/propedit.cpp:38
+#: src/mmg/header_editor/frame.cpp:701 src/propedit/propedit.cpp:39
 msgid "The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file.\n"
 msgstr "Matroskaファイルは修正されましたが、メタシークエントリを更新することができませんでした。これはプレーヤがこの要素を見つけるのにかなり時間がかかることを意味します。好きなプレーヤでこのファイルをチェックしてください。\n"
 
@@ -5558,7 +5572,7 @@ msgstr "そのバイナリデータは最高でも%1%バイトでなければな
 msgid "The binary data must be exactly %1% bytes long."
 msgstr "そのバイナリデータは%1%バイトちょうどでなければなりません。"
 
-#: src/propedit/propedit.cpp:104
+#: src/propedit/propedit.cpp:109
 msgid "The changes are written to the file.\n"
 msgstr "変更をファイルに書き込みます。\n"
 
@@ -5669,12 +5683,12 @@ msgstr ""
 msgid "The duration after which a new output file is started. The time can be given either in the form HH:MM:SS.nnnnnnnnn or as the number of seconds followed by 's'. You may omit the number of hours 'HH' and the number of nanoseconds 'nnnnnnnnn'. If given then you may use up to nine digits after the decimal point. Examples: 01:00:00 (after one hour) or 1800s (after 1800 seconds)."
 msgstr "ここで指定された時間でファイルが分割作成されます。時間はHH:MM:SS.nnnnnnnnnの形または's'を後ろにつけて秒数で指定します。何時間かを指定する'HH'とナノ秒を指定する'nnnnnnnnn'は省略することができます。ナノ秒を指定する場合は小数第9位まで指定することができます。例：01:00:00（1時間で分割）　1800s（1800秒で分割）"
 
-#: src/propedit/options.cpp:188
+#: src/propedit/options.cpp:207
 msgid "The edit specifications '%1%' and '%2%' resolve to the same track with the UID %3%.\n"
 msgstr "editで指定された'%1%'と'%2%'はUID %3%の同じトラックに解決されました。\n"
 
 #: src/mmg/header_editor/frame.cpp:689 src/mmg/tabs/chapters.cpp:1891
-#: src/propedit/propedit.cpp:28
+#: src/propedit/propedit.cpp:29
 msgid "The element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
 msgstr "要素はファイルの終端に書き込まれましたが、セグメントサイズを更新できませんでした。そのため要素は不可視となります。処理は中断されます。ファイルは変更されました！"
 
@@ -5771,7 +5785,7 @@ msgstr "ファイルヘッダを正しく読み取れませんでした。\n"
 msgid "The file is an unsupported container format (%s)."
 msgstr "このファイルはサポートされていないコンテナフォーマット（%s）です。"
 
-#: src/propedit/propedit.cpp:87
+#: src/propedit/propedit.cpp:92
 msgid "The file is analyzed.\n"
 msgstr "ファイルを解析します。\n"
 
@@ -5946,7 +5960,7 @@ msgstr ""
 "0を指定すると、リファレンスの疑似キャッシュシステムは使用されません。"
 
 #: src/mmg/header_editor/frame.cpp:695 src/mmg/tabs/chapters.cpp:1897
-#: src/propedit/propedit.cpp:33
+#: src/propedit/propedit.cpp:34
 msgid "The meta seek element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
 msgstr "メタシーク要素はファイルの終端に書き込まれましたが、セグメントサイズを更新できませんでした。そのため要素は不可視となります。処理は中断されます。ファイルは変更されました！"
 
@@ -6026,7 +6040,7 @@ msgstr "イメージの上部で除去するビデオピクセル数です。"
 msgid "The option '--meta-seek-size' is no longer supported. Please read mkvmerge's documentation, especially the section about the MATROSKA FILE LAYOUT.\n"
 msgstr "'--meta-seek-size'オプションはもうサポートされていません。mkvmergeのドキュメント、特にMATROSKA FILE LAYOUTの項を読んでください。\n"
 
-#: src/propedit/propedit_cli_parser.cpp:157
+#: src/propedit/propedit_cli_parser.cpp:169
 msgid "The order of the various options is not important."
 msgstr "各種オプションの順番は重要ではありません。"
 
@@ -6136,23 +6150,31 @@ msgstr "ソースファイル'%1%'を開くのに失敗したか、最後まで�
 msgid "The stretch setting for track nr. %s in file '%s' is invalid."
 msgstr "トラック番号%s（ファイル'%s'）の引き延ばしの指定が無効です。"
 
-#: src/propedit/propedit_cli_parser.cpp:165
+#: src/propedit/propedit_cli_parser.cpp:183
+msgid "The string 'all' works on all tags."
+msgstr ""
+
+#: src/propedit/propedit_cli_parser.cpp:184
+msgid "The string 'global' works on the global tags."
+msgstr ""
+
+#: src/propedit/propedit_cli_parser.cpp:177
 msgid "The string 'track:' followed by one of the chars 'a', 'b', 's' or 'v' followed by a number 'n' selects the nth audio, button, subtitle or video track (e.g. '--edit track:a2')."
 msgstr "文字列'track:'の後に'a'、'b'、's'、または'v'、さらにその後に数字'n'を続けて、n番目のオーディオ、ボタン、字幕、またはビデオのトラックを選択します（例：'--edit track:a2'。）"
 
-#: src/propedit/propedit_cli_parser.cpp:167
+#: src/propedit/propedit_cli_parser.cpp:179
 msgid "The string 'track:=uid' with 'uid' being a number selects the track whose 'track UID' element equals 'uid'."
 msgstr "'uid'が数字である文字列'track:=uid'で、'track UID'要素が'uid'と同じトラックを選択します。"
 
-#: src/propedit/propedit_cli_parser.cpp:168
+#: src/propedit/propedit_cli_parser.cpp:180
 msgid "The string 'track:@number' with 'number' being a number selects the track whose 'track number' element equals 'number'."
 msgstr "'number'が数字である文字列'track:@number'で、'track number'要素が'number'と同じトラックを選択します。"
 
-#: src/propedit/propedit_cli_parser.cpp:164
+#: src/propedit/propedit_cli_parser.cpp:176
 msgid "The string 'track:n' with 'n' being a number selects the nth track."
 msgstr "'n'が数字である文字列'track:n'で、n番目のトラックを選択します。"
 
-#: src/propedit/propedit_cli_parser.cpp:161
+#: src/propedit/propedit_cli_parser.cpp:173
 msgid "The strings 'info', 'segment_info' or 'segmentinfo' select the segment information element. This is also the default until the first '--edit' option is found."
 msgstr "文字列'info'、'segment_info'、'segmentinfo'はセグメント情報の要素を選択します。これは最初の'--edit'オプションが見つかるまでのデフォルトでもあります。"
 
@@ -6358,7 +6380,7 @@ msgstr "このファイルはタイムコードの行に座標を含んでいま
 msgid "This file could not be opened or parsed."
 msgstr "このファイルを開く、または解析することができませんでした。。"
 
-#: src/propedit/propedit.cpp:92
+#: src/propedit/propedit.cpp:97
 msgid "This file could not be opened or parsed.\n"
 msgstr "このファイルを開く、または解析することができませんでした。。\n"
 
@@ -6540,8 +6562,8 @@ msgstr "トラックUID：%1%"
 msgid "Track extraction"
 msgstr "トラックの抽出"
 
-#: src/propedit/propedit_cli_parser.cpp:88
-#: src/propedit/propedit_cli_parser.cpp:163 src/propedit/options.cpp:157
+#: src/propedit/options.cpp:156 src/propedit/propedit_cli_parser.cpp:97
+#: src/propedit/propedit_cli_parser.cpp:175
 msgid "Track headers"
 msgstr "トラック名"
 
@@ -6701,7 +6723,7 @@ msgstr "サポートされていないフォーマットです"
 msgid "Unsupported track type for this track.\n"
 msgstr "このトラックはサポートされているトラックタイプではありません。\n"
 
-#: src/propedit/propedit.cpp:24
+#: src/propedit/propedit.cpp:25
 msgid "Updating the '%1%' element failed. Reason:\n"
 msgstr "'%1%'の要素の更新に失敗しました。理由：\n"
 
@@ -7787,11 +7809,11 @@ msgstr "memory.cpp/saferealloc() ファイル %1% から呼び出し、%2%行：
 msgid "memory_slice_cursor_c copy c'tor: Must not be used!"
 msgstr "memory_slice_cursor_c copy c'tor：使われてはいけません！"
 
-#: src/propedit/target.cpp:81
+#: src/propedit/target.cpp:86
 msgid "missing property name"
 msgstr "プロパティ名がありません"
 
-#: src/propedit/target.cpp:74
+#: src/propedit/target.cpp:79
 msgid "missing value"
 msgstr "値がありません"
 
@@ -7963,7 +7985,7 @@ msgstr "mkvmergeは割り込み信号（Ctrl+C？）によって中断されま�
 msgid "mkvmerge was not compiled with zlib. Compressed headers in QuickTime/MP4 files are therefore not supported.\n"
 msgstr "mkvmergeはzlibをサポートしてコンパイルされていません。よってQuickTime/MP4ファイルの圧縮ヘッダはサポートされていません。\n"
 
-#: src/propedit/propedit_cli_parser.cpp:139
+#: src/propedit/propedit_cli_parser.cpp:148
 msgid "mkvpropedit [options] <file> <actions>"
 msgstr "mkvpropedit [オプション] <ファイル> <アクション>"
 
@@ -8275,7 +8297,7 @@ msgstr "usf_reader：ソースファイルを開けませんでした。"
 msgid "usf_reader: Source is not a valid USF file."
 msgstr "usf_reader：ソースは有効なUSFファイルではありません。"
 
-#: src/common/strings/editing.cpp:270
+#: src/common/strings/editing.cpp:262
 msgid "utf8_strlen(): Invalid UTF-8 char. First byte: 0x%|1$02x|"
 msgstr "utf8_strlen()：無効なUTF-8の文字です。最初のバイト：0x%|1$02x|"
 

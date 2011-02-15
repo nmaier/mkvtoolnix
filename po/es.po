@@ -579,31 +579,31 @@ msgstr ""
 "  @optionsfile             Lee las opciones adicionales de la línea de comandos desde\n"
 "                           el archivo especificado (ver página principal).\n"
 
-#: src/propedit/propedit_cli_parser.cpp:94
+#: src/propedit/propedit_cli_parser.cpp:103
 msgid "  B:  boolean (0 or 1)\n"
 msgstr "  B:  booleano (0 ó 1)\n"
 
-#: src/propedit/propedit_cli_parser.cpp:98
+#: src/propedit/propedit_cli_parser.cpp:107
 msgid "  FP: floating point number\n"
 msgstr "  FP: número decimal\n"
 
-#: src/propedit/propedit_cli_parser.cpp:95
+#: src/propedit/propedit_cli_parser.cpp:104
 msgid "  S:  string\n"
 msgstr "  S:  palabra o cadena de letras\n"
 
-#: src/propedit/propedit_cli_parser.cpp:92
+#: src/propedit/propedit_cli_parser.cpp:101
 msgid "  SI: signed integer\n"
 msgstr "  SI: entero con signo\n"
 
-#: src/propedit/propedit_cli_parser.cpp:93
+#: src/propedit/propedit_cli_parser.cpp:102
 msgid "  UI: unsigned integer\n"
 msgstr "  UI: entero sin signo\n"
 
-#: src/propedit/propedit_cli_parser.cpp:96
+#: src/propedit/propedit_cli_parser.cpp:105
 msgid "  US: Unicode string\n"
 msgstr "  US: palabra Unicode\n"
 
-#: src/propedit/propedit_cli_parser.cpp:97
+#: src/propedit/propedit_cli_parser.cpp:106
 msgid "  X:  binary in hex\n"
 msgstr "  X:  binario en hexadecimal\n"
 
@@ -1673,7 +1673,7 @@ msgstr "Proceso cancelado en %s"
 msgid "About mkvinfo"
 msgstr "Acerca de mkvinfo"
 
-#: src/propedit/propedit_cli_parser.cpp:145
+#: src/propedit/propedit_cli_parser.cpp:154
 msgid "Actions"
 msgstr "Acciones"
 
@@ -1701,6 +1701,10 @@ msgstr "Añadir elemento"
 msgid "Add name"
 msgstr "Añadir nombre"
 
+#: src/propedit/propedit_cli_parser.cpp:161
+msgid "Add or replace tags in the file with the ones from 'filename' or remove them if 'filename' is empty (see below and man page for syntax)"
+msgstr ""
+
 #: src/mmg/tabs/chapters.cpp:328
 msgid "Add subchapter"
 msgstr "Añadir subcapítulo"
@@ -1717,7 +1721,7 @@ msgstr "AdicionalID: %1%"
 msgid "Additions"
 msgstr "Añadidos"
 
-#: src/propedit/propedit_cli_parser.cpp:148
+#: src/propedit/propedit_cli_parser.cpp:157
 msgid "Adds a property with the value even if such a property already exists"
 msgstr "Agrega una propiedad con el valor, incluso si dicha propiedad ya existe"
 
@@ -1757,9 +1761,13 @@ msgstr "Todos los registros son válidos."
 msgid "All header values are OK."
 msgstr "Todos los valores de encabezado son correctos."
 
-#: src/propedit/propedit_cli_parser.cpp:85
+#: src/propedit/propedit_cli_parser.cpp:94
 msgid "All known property names and their meaning\n"
 msgstr "Todos los nombres de las propiedades conocidas y su significado\n"
+
+#: src/propedit/propedit_cli_parser.cpp:185
+msgid "All other strings work just like the track header selectors (see above)."
+msgstr ""
 
 #: src/info/wxwidgets_ui.cpp:264
 msgid "All supported files|*.mkv;*.mka;*.mks;*.mk3d;*.webm;*.webma;*.webmv|Matroska files (*.mkv;*.mka;*.mks;*.mk3d)|*.mkv;*.mka;*.mks;*.mk3d|WebM files (*.webm;*.webma;*.webmv)|*.webm;*.webma;*.webmv|All files|*.*"
@@ -1819,7 +1827,7 @@ msgstr ""
 
 #: src/mmg/header_editor/frame.cpp:707
 #: src/mmg/tabs/chapters.cpp:1910
-#: src/propedit/propedit.cpp:43
+#: src/propedit/propedit.cpp:44
 msgid "An unknown error occured. The file has been modified."
 msgstr "Un error desconocido ha ocurrido. El archivo ha sido modificado."
 
@@ -2796,7 +2804,7 @@ msgstr "Retraso (Delay) de los códigos de tiempo de esta pista en ms (milisegun
 msgid "Delay: %|1$.3f|ms"
 msgstr "Retraso (Delay): %|1$.3f|ms"
 
-#: src/propedit/propedit_cli_parser.cpp:151
+#: src/propedit/propedit_cli_parser.cpp:160
 msgid "Delete all occurences of a property"
 msgstr "Eliminar todos los sucesos de una propiedad"
 
@@ -2894,7 +2902,7 @@ msgstr "Dolby TrueHD"
 msgid "Don't write variable parts to output files (only for debugging)."
 msgstr "No escribir partes variables para achivos creados (solo para método de depuración)."
 
-#: src/propedit/propedit.cpp:108
+#: src/propedit/propedit.cpp:113
 msgid "Done.\n"
 msgstr "Realizado.\n"
 
@@ -2950,7 +2958,7 @@ msgstr "Cada edición debe contener al menos un capítulo."
 msgid "EbmlVoid (size: %1%)"
 msgstr "EbmlVoid (tamaño: %1%)"
 
-#: src/propedit/propedit_cli_parser.cpp:159
+#: src/propedit/propedit_cli_parser.cpp:171
 msgid "Edit selectors"
 msgstr "Editar selectores"
 
@@ -2965,11 +2973,11 @@ msgstr "Conjunto %d"
 msgid "EditionEntry %u"
 msgstr "Conjunto de capítulos nº %u"
 
-#: src/propedit/propedit.cpp:63
+#: src/propedit/propedit.cpp:68
 msgid "Element %1% is written.\n"
 msgstr "El elemento %1% está escrito.\n"
 
-#: src/propedit/propedit_cli_parser.cpp:91
+#: src/propedit/propedit_cli_parser.cpp:100
 msgid "Element types:\n"
 msgstr "Clases de elementos:\n"
 
@@ -2977,7 +2985,7 @@ msgstr "Clases de elementos:\n"
 msgid "Elements"
 msgstr "Elementos"
 
-#: src/propedit/propedit_cli_parser.cpp:119
+#: src/propedit/propedit_cli_parser.cpp:128
 msgid "Elements in the category '%1%' ('--edit %2%'):\n"
 msgstr "Elementos en la categoría '%1%' ('--edit %2%'):\n"
 
@@ -3048,6 +3056,7 @@ msgstr "Error analizando un paquete MPEG PS durante la fase de lectura del encab
 msgid "Error parsing the file"
 msgstr "Error analizando el archivo"
 
+#: src/propedit/target.cpp:343
 #: src/merge/mkvmerge.cpp:487
 msgid "Error parsing the tags in '%1%': some mandatory elements are missing.\n"
 msgstr "Error analizando las etiquetas en '%1%': algunos elementos obligatorios están ausentes.\n"
@@ -3822,6 +3831,7 @@ msgid "Invalid second: %1%"
 msgstr "No es válido el segundo: %1%"
 
 #: src/propedit/propedit_cli_parser.cpp:51
+#: src/propedit/propedit_cli_parser.cpp:72
 msgid "Invalid selector in '%1% %2%'.\n"
 msgstr "No es válido el selector en '%1% %2%'.\n"
 
@@ -4025,7 +4035,7 @@ msgstr "Línea %1%: La línea parece ser un registro de un subtítulo, pero el f
 msgid "Line %1%: The line seems to be a subtitle entry but the timecode was negative even after adding the track delay. Negative timecodes are not supported in Matroska. This entry will be skipped.\n"
 msgstr "Línea %1%: La línea parece ser un registro de un subtítulo pero el código de tiempo era negativo incluso después de añadir el retraso (delay) de la pista. Los códigos de tiempo negativos no son compatibles en Matroska. Este registro será omitido.\n"
 
-#: src/propedit/propedit_cli_parser.cpp:142
+#: src/propedit/propedit_cli_parser.cpp:151
 msgid "List all valid property names and exit"
 msgstr "Lista de todos los nombres de propiedad y creado válidos"
 
@@ -4194,7 +4204,7 @@ msgstr "Falta un dígito hexadecimal"
 msgid "Missing output file name in argument '%1%'.\n"
 msgstr "Nombre de archivo creado ausente en el argumento '%1%'.\n"
 
-#: src/propedit/options.cpp:137
+#: src/propedit/options.cpp:148
 msgid "Modification of properties in the section '%1%' was requested, but no corresponding level 1 element was found in the file. %2%\n"
 msgstr "Fue requerida la modificación de propiedades en la sección '%1%', pero ningún elemento fue encontrado en el archivo correspondiente al nivel 1. %2%\n"
 
@@ -4210,7 +4220,7 @@ msgstr "Más de un tipo MIME fue asignado por un único archivo adjunto.  '%1%' 
 msgid "More than one description was given for a single attachment.\n"
 msgstr "Más de una descripción fue dada para un único archivo adjunto.\n"
 
-#: src/propedit/options.cpp:75
+#: src/propedit/options.cpp:85
 msgid "More than one file name has been given ('%1%' and '%2%').\n"
 msgstr "Mas de un nombre de archivo ha sido asignado ('%1%' and '%2%').\n"
 
@@ -4367,7 +4377,7 @@ msgstr ""
 msgid "No file loaded"
 msgstr "Ningún archivo cargado"
 
-#: src/propedit/options.cpp:27
+#: src/propedit/options.cpp:30
 #: src/info/mkvinfo.cpp:2075
 msgid "No file name given.\n"
 msgstr "No se dio ningún nombre al archivo.\n"
@@ -4406,7 +4416,7 @@ msgstr "No fueron encontrados los archivos de salida. Cancelando.\n"
 msgid "No track ID specified in '--%1% %2%'.\n"
 msgstr "Ninguna ID de pista especificada en '--%1% %2%'.\n"
 
-#: src/propedit/target.cpp:259
+#: src/propedit/target.cpp:302
 msgid "No track corresponding to the edit specification '%1%' was found. %2%\n"
 msgstr "No se encontró ningúna pista que corresponda a la edición especificada '%1%'. %2%\n"
 
@@ -4449,7 +4459,7 @@ msgstr "Nota"
 #: src/extract/timecodes_v2.cpp:166
 #: src/extract/tracks.cpp:318
 #: src/extract/attachments.cpp:131
-#: src/propedit/options.cpp:30
+#: src/propedit/options.cpp:33
 msgid "Nothing to do.\n"
 msgstr "Nada que hacer.\n"
 
@@ -4546,7 +4556,7 @@ msgid "Option file created."
 msgstr "Archivo de opciones creado."
 
 #: src/mmg/options/dialog.cpp:43
-#: src/propedit/propedit_cli_parser.cpp:141
+#: src/propedit/propedit_cli_parser.cpp:150
 #: src/info/info_cli_parser.cpp:40
 msgid "Options"
 msgstr "Opciones"
@@ -4563,7 +4573,7 @@ msgstr "Orden: %1%"
 msgid "Original value:"
 msgstr "Valor original:"
 
-#: src/propedit/propedit_cli_parser.cpp:153
+#: src/propedit/propedit_cli_parser.cpp:165
 msgid "Other options"
 msgstr "Otras opciones"
 
@@ -5114,9 +5124,9 @@ msgstr "Archivos de información del segmento (*.xml)|*.xml|%s"
 #: src/mmg/header_editor/frame.cpp:322
 #: src/extract/timecodes_v2.cpp:222
 #: src/extract/tracks.cpp:377
-#: src/propedit/propedit_cli_parser.cpp:87
-#: src/propedit/propedit_cli_parser.cpp:160
-#: src/propedit/options.cpp:152
+#: src/propedit/options.cpp:164
+#: src/propedit/propedit_cli_parser.cpp:96
+#: src/propedit/propedit_cli_parser.cpp:172
 #: src/info/qt_ui.cpp:178
 #: src/info/wxwidgets_ui.cpp:208
 #: src/info/mkvinfo.cpp:553
@@ -5233,15 +5243,15 @@ msgstr "Establecer el retraso (delay) desde el nombre del archivo"
 msgid "Set values"
 msgstr "Establecer valores"
 
-#: src/propedit/propedit_cli_parser.cpp:150
+#: src/propedit/propedit_cli_parser.cpp:159
 msgid "Sets a property to the value if it exists and add it otherwise"
 msgstr "Establece una propiedad en el valor si es que existe; de lo contrario, lo añade."
 
-#: src/propedit/propedit_cli_parser.cpp:146
+#: src/propedit/propedit_cli_parser.cpp:155
 msgid "Sets the Matroska file section that all following add/set/delete actions operate on (see below and man page for syntax)"
 msgstr "Establece la seccion del archivo Matroska para que todas las siguientes acciones añadir/establecer/borrar funcionen (mira más abajo y en la página principal para la sintaxis)"
 
-#: src/propedit/propedit_cli_parser.cpp:143
+#: src/propedit/propedit_cli_parser.cpp:152
 msgid "Sets the Matroska parser mode to 'fast' (default) or 'full'"
 msgstr "Establecer el modo análisis de Matroska en «rápido» (predefinido) o «total»"
 
@@ -5609,6 +5619,12 @@ msgstr "Archivos de etiquetas (*.xml)|*.xml|%s"
 msgid "Tag files (*.xml;*.txt)|*.xml;*.txt|%s"
 msgstr "Archivos de etiquetas (*.xml;*.txt)|*.xml;*.txt|%s"
 
+#: src/propedit/propedit_cli_parser.cpp:182
+#, fuzzy
+msgid "Tag selectors"
+msgstr "Editar selectores"
+
+#: src/propedit/options.cpp:172
 #: src/info/mkvinfo.cpp:1828
 msgid "Tags"
 msgstr "Etiquetas"
@@ -5711,7 +5727,7 @@ msgid "The Matroska file is analyzed."
 msgstr "El archivo Matroska está analizado."
 
 #: src/mmg/header_editor/frame.cpp:701
-#: src/propedit/propedit.cpp:38
+#: src/propedit/propedit.cpp:39
 msgid "The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file.\n"
 msgstr "El archivo Matroska ha sido modificado, pero el registro meta seek no ha podido ser actualizado. Esto significa que los reproductores podrían tener dificultades en encontrar este elemento. Por favor, usa tu reproductor favorito para comprobar este archivo.\n"
 
@@ -5779,7 +5795,7 @@ msgstr "Los datos binarios deben ser como máximo de %1% bytes de extensión."
 msgid "The binary data must be exactly %1% bytes long."
 msgstr "Los datos binarios deben ser exactamente de %1% bytes de extensión."
 
-#: src/propedit/propedit.cpp:104
+#: src/propedit/propedit.cpp:109
 msgid "The changes are written to the file.\n"
 msgstr "Los cambios son escritos al archivo.\n"
 
@@ -5892,13 +5908,13 @@ msgstr ""
 msgid "The duration after which a new output file is started. The time can be given either in the form HH:MM:SS.nnnnnnnnn or as the number of seconds followed by 's'. You may omit the number of hours 'HH' and the number of nanoseconds 'nnnnnnnnn'. If given then you may use up to nine digits after the decimal point. Examples: 01:00:00 (after one hour) or 1800s (after 1800 seconds)."
 msgstr "La duración después de la cual un nuevo archivo de salida se inicia. El tiempo puede ser asigando, ya sea en la forma HH:MM:SS.nnnnnnnnn o como el número de los segundos seguido de «s». Puedes omitir el número de las horas y el número de los nanosegundos. Puedes utilizar hasta nueve dígitos después del punto decimal. Ejemplos: 01:00:00 (después de una hora) o 1800s (después de 1800 segundos)."
 
-#: src/propedit/options.cpp:188
+#: src/propedit/options.cpp:207
 msgid "The edit specifications '%1%' and '%2%' resolve to the same track with the UID %3%.\n"
 msgstr "Los ajustes de edición '%1%' y '%2%' determinan la misma pista con la UID %3%.\n"
 
 #: src/mmg/header_editor/frame.cpp:689
 #: src/mmg/tabs/chapters.cpp:1891
-#: src/propedit/propedit.cpp:28
+#: src/propedit/propedit.cpp:29
 msgid "The element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
 msgstr "El elemento fue escrito al final del archivo, pero el tamaño del segmento no pudo ser actualizado. Por lo tanto, el elemento no será visible. El proceso será cancelado. ¡El archivo ha sido cambiado!"
 
@@ -6001,7 +6017,7 @@ msgstr "El encabezado no fue leído correctamente.\n"
 msgid "The file is an unsupported container format (%s)."
 msgstr "El archivo es un formato de contenedor no compatible (%s)."
 
-#: src/propedit/propedit.cpp:87
+#: src/propedit/propedit.cpp:92
 msgid "The file is analyzed.\n"
 msgstr "El archivo está analizado.\n"
 
@@ -6188,7 +6204,7 @@ msgstr ""
 
 #: src/mmg/header_editor/frame.cpp:695
 #: src/mmg/tabs/chapters.cpp:1897
-#: src/propedit/propedit.cpp:33
+#: src/propedit/propedit.cpp:34
 msgid "The meta seek element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
 msgstr "El elemento meta seek fue escrito al final del archivo, pero el tamaño del segmento no pudo ser actualizado. Por lo tanto, no será visible. El proceso será cancelado. ¡El archivo ha sido modificado!"
 
@@ -6284,7 +6300,7 @@ msgstr ""
 msgid "The option '--meta-seek-size' is no longer supported. Please read mkvmerge's documentation, especially the section about the MATROSKA FILE LAYOUT.\n"
 msgstr "La opción '--meta-seek-size' ya no es compatible. Por favor, lee la documentacion de mkvmerge, especialmente la sección acerca de MATROSKA FILE LAYOUT.\n"
 
-#: src/propedit/propedit_cli_parser.cpp:157
+#: src/propedit/propedit_cli_parser.cpp:169
 msgid "The order of the various options is not important."
 msgstr "El orden de las diferentes opciones no es importante."
 
@@ -6396,23 +6412,31 @@ msgstr "El archivo de origen '%1%' no pudo ser abierto correctamente, o recupera
 msgid "The stretch setting for track nr. %s in file '%s' is invalid."
 msgstr "El tramo de ajuste para la pista n.º %s en el archivo '%s' no es válido."
 
-#: src/propedit/propedit_cli_parser.cpp:165
+#: src/propedit/propedit_cli_parser.cpp:183
+msgid "The string 'all' works on all tags."
+msgstr ""
+
+#: src/propedit/propedit_cli_parser.cpp:184
+msgid "The string 'global' works on the global tags."
+msgstr ""
+
+#: src/propedit/propedit_cli_parser.cpp:177
 msgid "The string 'track:' followed by one of the chars 'a', 'b', 's' or 'v' followed by a number 'n' selects the nth audio, button, subtitle or video track (e.g. '--edit track:a2')."
 msgstr "La cadena de caracteres 'track:' seguida por uno de los caracteres a, b, s o v, y estos de un número n, selecciona el enésimo: audio, botón, subtítulo o pista de vídeo (p. ej., '--edit track:a2')."
 
-#: src/propedit/propedit_cli_parser.cpp:167
+#: src/propedit/propedit_cli_parser.cpp:179
 msgid "The string 'track:=uid' with 'uid' being a number selects the track whose 'track UID' element equals 'uid'."
 msgstr "La cadena de caracteres 'track:=uid' con 'uid' siendo un número de la pista seleccionada cuyo 'track UID' es igual al elemento 'uid'."
 
-#: src/propedit/propedit_cli_parser.cpp:168
+#: src/propedit/propedit_cli_parser.cpp:180
 msgid "The string 'track:@number' with 'number' being a number selects the track whose 'track number' element equals 'number'."
 msgstr "La cadena de caracteres 'track:@number' con 'number' siendo un número de pista seleccionada cuyo 'track number' es igual al elemento 'number'."
 
-#: src/propedit/propedit_cli_parser.cpp:164
+#: src/propedit/propedit_cli_parser.cpp:176
 msgid "The string 'track:n' with 'n' being a number selects the nth track."
 msgstr "La cadena de caracteres 'track:n' con n siendo un número que selecciona la enésima pista."
 
-#: src/propedit/propedit_cli_parser.cpp:161
+#: src/propedit/propedit_cli_parser.cpp:173
 msgid "The strings 'info', 'segment_info' or 'segmentinfo' select the segment information element. This is also the default until the first '--edit' option is found."
 msgstr "Las cadenas de caracteres  'info', 'segment_info' o 'segmentinfo' seleccionan el elemento de información del segmento. Esta es la opción predefinina hasta que '--edit' es encontrada."
 
@@ -6630,7 +6654,7 @@ msgstr "Este archivo contiene las coordenadas en las líneas del código de tiem
 msgid "This file could not be opened or parsed."
 msgstr "Este archivo no pudo ser abierto o analizado."
 
-#: src/propedit/propedit.cpp:92
+#: src/propedit/propedit.cpp:97
 msgid "This file could not be opened or parsed.\n"
 msgstr "Este archivo no pudo ser abierto o analizado.\n"
 
@@ -6822,9 +6846,9 @@ msgstr "Pista UID: %1%"
 msgid "Track extraction"
 msgstr "Extracción de pista"
 
-#: src/propedit/propedit_cli_parser.cpp:88
-#: src/propedit/propedit_cli_parser.cpp:163
-#: src/propedit/options.cpp:157
+#: src/propedit/options.cpp:156
+#: src/propedit/propedit_cli_parser.cpp:97
+#: src/propedit/propedit_cli_parser.cpp:175
 msgid "Track headers"
 msgstr "Encabezado de pista"
 
@@ -6987,7 +7011,7 @@ msgstr "Formato no compatible"
 msgid "Unsupported track type for this track.\n"
 msgstr "Tipo de pista no compatible para esta pista.\n"
 
-#: src/propedit/propedit.cpp:24
+#: src/propedit/propedit.cpp:25
 msgid "Updating the '%1%' element failed. Reason:\n"
 msgstr "Actualizando el '%1%' elemento que ha fallado. Razón:\n"
 
@@ -8152,11 +8176,11 @@ msgstr "memory.cpp/saferealloc() llamada desde el archivo %1%, línea %2%: reall
 msgid "memory_slice_cursor_c copy c'tor: Must not be used!"
 msgstr "memory_slice_cursor_c copy c'tor: ¡No dede ser usado!"
 
-#: src/propedit/target.cpp:81
+#: src/propedit/target.cpp:86
 msgid "missing property name"
 msgstr "propiedad del nombre ausente"
 
-#: src/propedit/target.cpp:74
+#: src/propedit/target.cpp:79
 msgid "missing value"
 msgstr "valor ausente"
 
@@ -8341,7 +8365,7 @@ msgstr "mkvmerge fue interrumpido por un SIGINT (señales de inteligencia) (¿Ct
 msgid "mkvmerge was not compiled with zlib. Compressed headers in QuickTime/MP4 files are therefore not supported.\n"
 msgstr "mkvmerge no fue compilado con zlib. Los encabezados comprimidos en archivos QuickTime/MP4 no son compatibles.\n"
 
-#: src/propedit/propedit_cli_parser.cpp:139
+#: src/propedit/propedit_cli_parser.cpp:148
 msgid "mkvpropedit [options] <file> <actions>"
 msgstr "mkvpropedit [options] <file> <actions>"
 
@@ -8669,7 +8693,7 @@ msgstr "usf_reader: El archivo de origen no puede ser abierto."
 msgid "usf_reader: Source is not a valid USF file."
 msgstr "usf_reader: El archivo de origen no es un USF válido."
 
-#: src/common/strings/editing.cpp:270
+#: src/common/strings/editing.cpp:262
 msgid "utf8_strlen(): Invalid UTF-8 char. First byte: 0x%|1$02x|"
 msgstr "utf8_strlen(): Codificación de caracteres UTF-8 no válida. Primer byte: 0x%|1$02x|"
 

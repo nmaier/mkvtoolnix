@@ -578,31 +578,31 @@ msgstr ""
 "  @bestandsoptie             Leest extra commando regel opties in van\n"
 "                                         het opgegeven bestand (zie handleiding).\n"
 
-#: src/propedit/propedit_cli_parser.cpp:94
+#: src/propedit/propedit_cli_parser.cpp:103
 msgid "  B:  boolean (0 or 1)\n"
 msgstr "  B:  waar of niet waar (0 of 1)\n"
 
-#: src/propedit/propedit_cli_parser.cpp:98
+#: src/propedit/propedit_cli_parser.cpp:107
 msgid "  FP: floating point number\n"
 msgstr "  FP: veranderbaar nummer\n"
 
-#: src/propedit/propedit_cli_parser.cpp:95
+#: src/propedit/propedit_cli_parser.cpp:104
 msgid "  S:  string\n"
 msgstr "  S:  reeks\n"
 
-#: src/propedit/propedit_cli_parser.cpp:92
+#: src/propedit/propedit_cli_parser.cpp:101
 msgid "  SI: signed integer\n"
 msgstr "  SI: getekend geheel\n"
 
-#: src/propedit/propedit_cli_parser.cpp:93
+#: src/propedit/propedit_cli_parser.cpp:102
 msgid "  UI: unsigned integer\n"
 msgstr "  UI: ongetekend geheel\n"
 
-#: src/propedit/propedit_cli_parser.cpp:96
+#: src/propedit/propedit_cli_parser.cpp:105
 msgid "  US: Unicode string\n"
 msgstr "  US: Unicode reeks\n"
 
-#: src/propedit/propedit_cli_parser.cpp:97
+#: src/propedit/propedit_cli_parser.cpp:106
 msgid "  X:  binary in hex\n"
 msgstr "  X:  binair getal in hexadecimaal\n"
 
@@ -1672,7 +1672,7 @@ msgstr "Proces afbreken over %s"
 msgid "About mkvinfo"
 msgstr "Over mkvinfo"
 
-#: src/propedit/propedit_cli_parser.cpp:145
+#: src/propedit/propedit_cli_parser.cpp:154
 msgid "Actions"
 msgstr "Acties"
 
@@ -1700,6 +1700,10 @@ msgstr "Voeg element toe"
 msgid "Add name"
 msgstr "Voeg naam toe"
 
+#: src/propedit/propedit_cli_parser.cpp:161
+msgid "Add or replace tags in the file with the ones from 'filename' or remove them if 'filename' is empty (see below and man page for syntax)"
+msgstr ""
+
 #: src/mmg/tabs/chapters.cpp:328
 msgid "Add subchapter"
 msgstr "Voeg sub hoofdstuk toe"
@@ -1716,7 +1720,7 @@ msgstr "Extra lID: %1%"
 msgid "Additions"
 msgstr "Toevoegingen"
 
-#: src/propedit/propedit_cli_parser.cpp:148
+#: src/propedit/propedit_cli_parser.cpp:157
 msgid "Adds a property with the value even if such a property already exists"
 msgstr "Maakt een eigendom met een waarde ook als die al bestaat"
 
@@ -1756,9 +1760,13 @@ msgstr "Alle hoofdstuk ingangen zijn geldig."
 msgid "All header values are OK."
 msgstr "Alle 'kopstukken' zijn OK."
 
-#: src/propedit/propedit_cli_parser.cpp:85
+#: src/propedit/propedit_cli_parser.cpp:94
 msgid "All known property names and their meaning\n"
 msgstr "Alle bekende eigendom namen en hun betekenissen\n"
+
+#: src/propedit/propedit_cli_parser.cpp:185
+msgid "All other strings work just like the track header selectors (see above)."
+msgstr ""
 
 #: src/info/wxwidgets_ui.cpp:264
 msgid "All supported files|*.mkv;*.mka;*.mks;*.mk3d;*.webm;*.webma;*.webmv|Matroska files (*.mkv;*.mka;*.mks;*.mk3d)|*.mkv;*.mka;*.mks;*.mk3d|WebM files (*.webm;*.webma;*.webmv)|*.webm;*.webma;*.webmv|All files|*.*"
@@ -1818,7 +1826,7 @@ msgstr ""
 
 #: src/mmg/header_editor/frame.cpp:707
 #: src/mmg/tabs/chapters.cpp:1910
-#: src/propedit/propedit.cpp:43
+#: src/propedit/propedit.cpp:44
 msgid "An unknown error occured. The file has been modified."
 msgstr "Een onbekende fout. Het bestand is veranderd."
 
@@ -2788,7 +2796,7 @@ msgstr "Vertraag dit spoor zijn tijd codes met een paar miliseconden. Mag negati
 msgid "Delay: %|1$.3f|ms"
 msgstr "Vertraging: %|1$.3f|ms"
 
-#: src/propedit/propedit_cli_parser.cpp:151
+#: src/propedit/propedit_cli_parser.cpp:160
 msgid "Delete all occurences of a property"
 msgstr "Verwijder alle gebeurtenissen van een eigendom"
 
@@ -2883,7 +2891,7 @@ msgstr "Dolby TrueHD"
 msgid "Don't write variable parts to output files (only for debugging)."
 msgstr "Schrijf geen variabele delen naar uitvoer bestanden (alleen voor foutzoeken)."
 
-#: src/propedit/propedit.cpp:108
+#: src/propedit/propedit.cpp:113
 msgid "Done.\n"
 msgstr "Gedaan.\n"
 
@@ -2939,7 +2947,7 @@ msgstr "Elke editie dient minimaall één hoofdstuk bevatten."
 msgid "EbmlVoid (size: %1%)"
 msgstr "EbmlVoid (grootte: %1%)"
 
-#: src/propedit/propedit_cli_parser.cpp:159
+#: src/propedit/propedit_cli_parser.cpp:171
 msgid "Edit selectors"
 msgstr "Bewerk selectie mogelijkheden"
 
@@ -2954,11 +2962,11 @@ msgstr "Editie %d"
 msgid "EditionEntry %u"
 msgstr "EditieIngang %u"
 
-#: src/propedit/propedit.cpp:63
+#: src/propedit/propedit.cpp:68
 msgid "Element %1% is written.\n"
 msgstr "Element %1% is geschreven.\n"
 
-#: src/propedit/propedit_cli_parser.cpp:91
+#: src/propedit/propedit_cli_parser.cpp:100
 msgid "Element types:\n"
 msgstr "Element typen:\n"
 
@@ -2966,7 +2974,7 @@ msgstr "Element typen:\n"
 msgid "Elements"
 msgstr "Elementen"
 
-#: src/propedit/propedit_cli_parser.cpp:119
+#: src/propedit/propedit_cli_parser.cpp:128
 msgid "Elements in the category '%1%' ('--edit %2%'):\n"
 msgstr "Elementen in de categorie '%1%' ('--bewerk %2%'):\n"
 
@@ -3037,6 +3045,7 @@ msgstr "Fout bij ontleden van een MPEG PS pakket tijden het lezen van de kopinfo
 msgid "Error parsing the file"
 msgstr "Fout bij ontleden van bestand"
 
+#: src/propedit/target.cpp:343
 #: src/merge/mkvmerge.cpp:487
 msgid "Error parsing the tags in '%1%': some mandatory elements are missing.\n"
 msgstr "Fout bij ontleden van markeringen '%1%': sommige verplichte elementen ontbreken.\n"
@@ -3799,6 +3808,7 @@ msgid "Invalid second: %1%"
 msgstr "Ongeldige seconde:  %1%"
 
 #: src/propedit/propedit_cli_parser.cpp:51
+#: src/propedit/propedit_cli_parser.cpp:72
 msgid "Invalid selector in '%1% %2%'.\n"
 msgstr "Ongeldige selectie in '%1% %2%'.\n"
 
@@ -4001,7 +4011,7 @@ msgstr "Regel %1%: De regel lijkt een ondertiteling maar het format kon niet her
 msgid "Line %1%: The line seems to be a subtitle entry but the timecode was negative even after adding the track delay. Negative timecodes are not supported in Matroska. This entry will be skipped.\n"
 msgstr "Regel %1%: De regel lijkt een ondertiteling maar de tijdcode was negatief, zelfs na het toevoegen van een spoor vertraging. Negatieve tijdcodes worden niet ondersteund Matroska. De ingang wordt overgeslagen.\n"
 
-#: src/propedit/propedit_cli_parser.cpp:142
+#: src/propedit/propedit_cli_parser.cpp:151
 msgid "List all valid property names and exit"
 msgstr "Lijst alle geldige eigenschap namen en sluit af."
 
@@ -4170,7 +4180,7 @@ msgstr "Mist één hex cijfer"
 msgid "Missing output file name in argument '%1%'.\n"
 msgstr "Ontbrekend de uitvoer bestandsnaam in argument '%1%'.\n"
 
-#: src/propedit/options.cpp:137
+#: src/propedit/options.cpp:148
 msgid "Modification of properties in the section '%1%' was requested, but no corresponding level 1 element was found in the file. %2%\n"
 msgstr "Veranderen van eigenschappen in de sectie '%1%' was gevraagd, maar géén corresponderend niveau 1 element is gevonden in het bestand. %2%\n"
 
@@ -4186,7 +4196,7 @@ msgstr "Meer dan één MIME type is opgegeven voor een enkele bijlage. '%1%' wor
 msgid "More than one description was given for a single attachment.\n"
 msgstr "Meer dan één beschrijving is opgegeven voor een enkele bijlage.\n"
 
-#: src/propedit/options.cpp:75
+#: src/propedit/options.cpp:85
 msgid "More than one file name has been given ('%1%' and '%2%').\n"
 msgstr "Meer dan één bestandsnaam is opgegeven.  ('%1%' and '%2%').\n"
 
@@ -4343,7 +4353,7 @@ msgstr ""
 msgid "No file loaded"
 msgstr "Geen bestand geladen"
 
-#: src/propedit/options.cpp:27
+#: src/propedit/options.cpp:30
 #: src/info/mkvinfo.cpp:2075
 msgid "No file name given.\n"
 msgstr "Geen bestandsnaam gegeven.\n"
@@ -4382,7 +4392,7 @@ msgstr "Geen stromen voor uitvoer gevonden. Afbreken.\n"
 msgid "No track ID specified in '--%1% %2%'.\n"
 msgstr "Geen spoor ID opgegeven in '--%1% %2%'.\n"
 
-#: src/propedit/target.cpp:259
+#: src/propedit/target.cpp:302
 msgid "No track corresponding to the edit specification '%1%' was found. %2%\n"
 msgstr "Geen spoor dat beantwoordt aan te bewerken specificaties '%1%' is gevonden. %2%\n"
 
@@ -4425,7 +4435,7 @@ msgstr "Opmerking"
 #: src/extract/timecodes_v2.cpp:166
 #: src/extract/tracks.cpp:318
 #: src/extract/attachments.cpp:131
-#: src/propedit/options.cpp:30
+#: src/propedit/options.cpp:33
 msgid "Nothing to do.\n"
 msgstr "Niets te doen.\n"
 
@@ -4522,7 +4532,7 @@ msgid "Option file created."
 msgstr "Optie bestand aangemaakt."
 
 #: src/mmg/options/dialog.cpp:43
-#: src/propedit/propedit_cli_parser.cpp:141
+#: src/propedit/propedit_cli_parser.cpp:150
 #: src/info/info_cli_parser.cpp:40
 msgid "Options"
 msgstr "Opties"
@@ -4539,7 +4549,7 @@ msgstr "Volgorde: %1%"
 msgid "Original value:"
 msgstr "Originele waarde:"
 
-#: src/propedit/propedit_cli_parser.cpp:153
+#: src/propedit/propedit_cli_parser.cpp:165
 msgid "Other options"
 msgstr "Overige opties"
 
@@ -5090,9 +5100,9 @@ msgstr "Segment info bestanden (*.xml)|*.xml|%s"
 #: src/mmg/header_editor/frame.cpp:322
 #: src/extract/timecodes_v2.cpp:222
 #: src/extract/tracks.cpp:377
-#: src/propedit/propedit_cli_parser.cpp:87
-#: src/propedit/propedit_cli_parser.cpp:160
-#: src/propedit/options.cpp:152
+#: src/propedit/options.cpp:164
+#: src/propedit/propedit_cli_parser.cpp:96
+#: src/propedit/propedit_cli_parser.cpp:172
 #: src/info/qt_ui.cpp:178
 #: src/info/wxwidgets_ui.cpp:208
 #: src/info/mkvinfo.cpp:553
@@ -5205,15 +5215,15 @@ msgstr "Haal de vertraging uit het bestand en plaats die op het invul veld"
 msgid "Set values"
 msgstr "Zet waarden"
 
-#: src/propedit/propedit_cli_parser.cpp:150
+#: src/propedit/propedit_cli_parser.cpp:159
 msgid "Sets a property to the value if it exists and add it otherwise"
 msgstr "Zet een eigendom naar de waarde als het bestaat en wordt anders toegevoegd"
 
-#: src/propedit/propedit_cli_parser.cpp:146
+#: src/propedit/propedit_cli_parser.cpp:155
 msgid "Sets the Matroska file section that all following add/set/delete actions operate on (see below and man page for syntax)"
 msgstr "Stelt het Matroska bestand sectie in zodat alle volgende voeg toe/zet/verwijder acties erop werken (zien onderstaand en handleiding voor de ingave)"
 
-#: src/propedit/propedit_cli_parser.cpp:143
+#: src/propedit/propedit_cli_parser.cpp:152
 msgid "Sets the Matroska parser mode to 'fast' (default) or 'full'"
 msgstr "Zet de Matroska ontleed mode op 'snel' (standaard) of 'volledigl'"
 
@@ -5580,6 +5590,12 @@ msgstr "Markeer bestanden (*.xml)|*.xml|%s"
 msgid "Tag files (*.xml;*.txt)|*.xml;*.txt|%s"
 msgstr "Markeer bestanden (*.xml;*.txt)|*.xml;*.txt|%s"
 
+#: src/propedit/propedit_cli_parser.cpp:182
+#, fuzzy
+msgid "Tag selectors"
+msgstr "Bewerk selectie mogelijkheden"
+
+#: src/propedit/options.cpp:172
 #: src/info/mkvinfo.cpp:1828
 msgid "Tags"
 msgstr "Markeringen"
@@ -5682,7 +5698,7 @@ msgid "The Matroska file is analyzed."
 msgstr "Het Matroska bestand wordt geanalyseerd."
 
 #: src/mmg/header_editor/frame.cpp:701
-#: src/propedit/propedit.cpp:38
+#: src/propedit/propedit.cpp:39
 msgid "The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file.\n"
 msgstr "Het Matroska bestand is veranderd, maar de meta zoek data kon niet opgewaardeerd worden. Dit betekend, dat afspelers moeite kunnen hebben dit element te vinden. Gebruik je favoriete afspeler en controleer dit bestand.\n"
 
@@ -5749,7 +5765,7 @@ msgstr "De binaire data moet op zijn grootst %1% bytes lang zijn."
 msgid "The binary data must be exactly %1% bytes long."
 msgstr "De binaire data moet precies %1% bytes lang zijn."
 
-#: src/propedit/propedit.cpp:104
+#: src/propedit/propedit.cpp:109
 msgid "The changes are written to the file.\n"
 msgstr "De veranderingen worden geschreven naar het bestand.\n"
 
@@ -5862,13 +5878,13 @@ msgstr ""
 msgid "The duration after which a new output file is started. The time can be given either in the form HH:MM:SS.nnnnnnnnn or as the number of seconds followed by 's'. You may omit the number of hours 'HH' and the number of nanoseconds 'nnnnnnnnn'. If given then you may use up to nine digits after the decimal point. Examples: 01:00:00 (after one hour) or 1800s (after 1800 seconds)."
 msgstr "De duur waarna een nieuw uitvoer bestand moet worden gestart. De tijd kan in één van beiden de vormen worden gegeven HH:MM:SS.nnnnnnnnn of  als een aantal seconden gevolgd door een 's'. Je mag de hoeveelheid uren overslaan 'HH' en de hoeveelheid aan nanoseconden 'nnnnnnnnn'. Indien ingegeven, mag je tot aan negen nummers gebruiken na de decimale punt. Bijvoorbeeld: 01:00:00 (na één uur) of 1800s (na 1800 seconden)."
 
-#: src/propedit/options.cpp:188
+#: src/propedit/options.cpp:207
 msgid "The edit specifications '%1%' and '%2%' resolve to the same track with the UID %3%.\n"
 msgstr "De bewerk specificaties '%1%' en '%2%' herleiden naar hetzelfde spoor met het UID %3%.\n"
 
 #: src/mmg/header_editor/frame.cpp:689
 #: src/mmg/tabs/chapters.cpp:1891
-#: src/propedit/propedit.cpp:28
+#: src/propedit/propedit.cpp:29
 msgid "The element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
 msgstr "Het element is geschreven aan het einde van het bestand, maar de segment waarde kon niet opgewaardeerd worden. Daarom is dit element niet zichtbaar. Het proces word afgebroken. Het bestand is veranderd!"
 
@@ -5971,7 +5987,7 @@ msgstr "De bestandskop is niet correct ingelezen.\n"
 msgid "The file is an unsupported container format (%s)."
 msgstr "Het bestand is een niet ondersteund inhoud formaat (%s)."
 
-#: src/propedit/propedit.cpp:87
+#: src/propedit/propedit.cpp:92
 msgid "The file is analyzed.\n"
 msgstr "Het bestand is geanaliseerd.\n"
 
@@ -6157,7 +6173,7 @@ msgstr ""
 
 #: src/mmg/header_editor/frame.cpp:695
 #: src/mmg/tabs/chapters.cpp:1897
-#: src/propedit/propedit.cpp:33
+#: src/propedit/propedit.cpp:34
 msgid "The meta seek element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
 msgstr "Het meta zoek element is geschreven aan het einde van het bestand, maar de segment grootte kon niet opgewaardeerd worden. Daarom is het element niet zichtbaar. Het proces wordt afgebroken. Het bestand is veranderd!"
 
@@ -6252,7 +6268,7 @@ msgstr ""
 msgid "The option '--meta-seek-size' is no longer supported. Please read mkvmerge's documentation, especially the section about the MATROSKA FILE LAYOUT.\n"
 msgstr "De optie,meta-zoek-grootte '--meta-seek-size' wordt niet langer ondersteund. Lees a.u.b de handleiding van mkvmerge, speciaal het gedeelte over de MATROSKA BESTANDSLAYOUT.\n"
 
-#: src/propedit/propedit_cli_parser.cpp:157
+#: src/propedit/propedit_cli_parser.cpp:169
 msgid "The order of the various options is not important."
 msgstr "De volgorde van de verschillende opties zijn niet belangrijk.."
 
@@ -6364,23 +6380,31 @@ msgstr "Het bron bestand '%1%' kon niet succesvol worden geopend, of kon de groo
 msgid "The stretch setting for track nr. %s in file '%s' is invalid."
 msgstr "De uitrek instelling voor spoor nr. %s in bestand '%s' is ongeldig."
 
-#: src/propedit/propedit_cli_parser.cpp:165
+#: src/propedit/propedit_cli_parser.cpp:183
+msgid "The string 'all' works on all tags."
+msgstr ""
+
+#: src/propedit/propedit_cli_parser.cpp:184
+msgid "The string 'global' works on the global tags."
+msgstr ""
+
+#: src/propedit/propedit_cli_parser.cpp:177
 msgid "The string 'track:' followed by one of the chars 'a', 'b', 's' or 'v' followed by a number 'n' selects the nth audio, button, subtitle or video track (e.g. '--edit track:a2')."
 msgstr "De reeks 'spoor:' gevolgd door één van de karakters 'a', 'b', 's' or 'v' gevolgd door een nummer 'n' selecteert de 'de audio, knop, ondertiteling of video spoor (b.v. '--edit track:a2')."
 
-#: src/propedit/propedit_cli_parser.cpp:167
+#: src/propedit/propedit_cli_parser.cpp:179
 msgid "The string 'track:=uid' with 'uid' being a number selects the track whose 'track UID' element equals 'uid'."
 msgstr "De reeks 'spoor:=uid' met 'uid' zijnde een nummer selecteert het spoor welke 'spoor UID' element gelijk is met 'uid'."
 
-#: src/propedit/propedit_cli_parser.cpp:168
+#: src/propedit/propedit_cli_parser.cpp:180
 msgid "The string 'track:@number' with 'number' being a number selects the track whose 'track number' element equals 'number'."
 msgstr "De reeks 'spoor:@nummer' met 'nummer' zijnde een nummer selecteert het spoor waarvan 'spoor nummer' element gelijk is met 'nummer'."
 
-#: src/propedit/propedit_cli_parser.cpp:164
+#: src/propedit/propedit_cli_parser.cpp:176
 msgid "The string 'track:n' with 'n' being a number selects the nth track."
 msgstr "De reeks 'spoor:n' met 'n' zijnde een nummer selecteert de n'de spoor."
 
-#: src/propedit/propedit_cli_parser.cpp:161
+#: src/propedit/propedit_cli_parser.cpp:173
 msgid "The strings 'info', 'segment_info' or 'segmentinfo' select the segment information element. This is also the default until the first '--edit' option is found."
 msgstr "De reeks 'info', 'segment_info' of 'segmentinfo' selecteert het  informatie element segment. Dit is tevens standaard totdat de eerste, bewerk, '--edit' optie is gevonden."
 
@@ -6598,7 +6622,7 @@ msgstr "Dit bestand bevat coördinaten in de tijd code regels. Zulke coördinate
 msgid "This file could not be opened or parsed."
 msgstr "Dit bestand kon niet geopend of ontleed worden."
 
-#: src/propedit/propedit.cpp:92
+#: src/propedit/propedit.cpp:97
 msgid "This file could not be opened or parsed.\n"
 msgstr "Dit bestand kon niet geopend of ontleed worden.\n"
 
@@ -6790,9 +6814,9 @@ msgstr "Spoor UID: %1%"
 msgid "Track extraction"
 msgstr "Sppor extractie"
 
-#: src/propedit/propedit_cli_parser.cpp:88
-#: src/propedit/propedit_cli_parser.cpp:163
-#: src/propedit/options.cpp:157
+#: src/propedit/options.cpp:156
+#: src/propedit/propedit_cli_parser.cpp:97
+#: src/propedit/propedit_cli_parser.cpp:175
 msgid "Track headers"
 msgstr "Spoor koppen"
 
@@ -6955,7 +6979,7 @@ msgstr "Niet ondersteunt format"
 msgid "Unsupported track type for this track.\n"
 msgstr "Niet ondersteunt type voor dit spoor.\n"
 
-#: src/propedit/propedit.cpp:24
+#: src/propedit/propedit.cpp:25
 msgid "Updating the '%1%' element failed. Reason:\n"
 msgstr "Opwaarderen het '%1%' element gefaald. Reden:\n"
 
@@ -8119,11 +8143,11 @@ msgstr "memory.cpp/saferealloc() opgeroepen van bestand %1%, regel %2%: realloc(
 msgid "memory_slice_cursor_c copy c'tor: Must not be used!"
 msgstr "memory_slice_cursor_c copy c'tor: Moet niet worden gebruikt!"
 
-#: src/propedit/target.cpp:81
+#: src/propedit/target.cpp:86
 msgid "missing property name"
 msgstr "eigendomsnaam ontbrekend"
 
-#: src/propedit/target.cpp:74
+#: src/propedit/target.cpp:79
 msgid "missing value"
 msgstr "ontbrekende waarde"
 
@@ -8308,7 +8332,7 @@ msgstr "mkvmerge werd onderbroken door SIGINT (Ctrl+C?)\n"
 msgid "mkvmerge was not compiled with zlib. Compressed headers in QuickTime/MP4 files are therefore not supported.\n"
 msgstr "mkvmerge is niet gecompileerd met zlib. Gecomprimeerde koppen in QuickTime/MP4 bestanden zijn daarom niet ondersteund\n"
 
-#: src/propedit/propedit_cli_parser.cpp:139
+#: src/propedit/propedit_cli_parser.cpp:148
 msgid "mkvpropedit [options] <file> <actions>"
 msgstr "mkvpropedit [opties] <bestand> <actie>"
 
@@ -8636,7 +8660,7 @@ msgstr "usf_lezer: Kon bestand niet openen."
 msgid "usf_reader: Source is not a valid USF file."
 msgstr "usf_lezer: Bron is geen geldig USF bestand."
 
-#: src/common/strings/editing.cpp:270
+#: src/common/strings/editing.cpp:262
 msgid "utf8_strlen(): Invalid UTF-8 char. First byte: 0x%|1$02x|"
 msgstr "utf8_strlen(): Ongeldig UTF-8 karakter. Eerste byte: 0x%|1$02x|"
 
