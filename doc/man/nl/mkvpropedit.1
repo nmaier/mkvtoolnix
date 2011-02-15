@@ -96,6 +96,42 @@ Verwijdert alle voorgekomen eigenschappen
 \fIname\fR\&. Opmerking: sommige eigenschappen zijn vereist en kunnen niet worden verwijderd\&.
 .RE
 .PP
+\fB\-t\fR, \fB\-\-tags\fR \fIselector\fR:\fIfilename\fR
+.RS 4
+Add or replace tags in the file with the ones from
+filename
+or remove them if
+filename
+is empty\&.
+\fBmkvpropedit\fR(1)
+reads the same XML tag format that
+\fBmkvmerge\fR(1)
+reads as well\&.
+.sp
+The
+\fIselector\fR
+must be one of the words
+\fBall\fR,
+\fBglobal\fR
+or
+\fBtrack\fR\&. For
+\fBall\fR
+\fBmkvpropedit\fR(1)
+will replace or remove all tags in a file\&. With
+\fBglobal\fR
+only global tags will be replaced or removed\&.
+.sp
+With
+\fBtrack\fR
+\fBmkvpropedit\fR(1)
+will replace tags for a specific track\&. Additionally the tags read from
+filename
+will be assigned to the same track\&. The track is specified in the same way
+edit selectors
+are specified (see below), e\&.g\&.
+\-\-tags track:a1:new\-audio\-tags\&.xml\&.
+.RE
+.PP
 Andere opties:
 .PP
 \fB\-\-command\-line\-charset\fR \fI(karakter\-set)\fR
@@ -299,6 +335,32 @@ Het tweede voorbeeld, verwijdert de \*(Aqstandaard spoor markering\*(Aq van het 
 .nf
 $ mkvpropedit film\&.mkv \-\-edit track:s1 \-\-set flag\-default=0 \-\-edit track:s2 \-\-set flag\-default=1
  
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+Replacing the tags for the second subtitle track in a file looks like this:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvpropedit movie\&.mkv \-\-tags track:s2:new\-subtitle\-tags\&.xml
+  
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+Removing all tags requires leaving out the file name:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvpropedit movie\&.mkv \-\-tags all:
+  
 .fi
 .if n \{\
 .RE
