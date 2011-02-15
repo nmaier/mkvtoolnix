@@ -95,40 +95,38 @@ Matroska(TM)
 的属性。注意部分属性是必需的，不能删除。
 .RE
 .PP
-\fB\-t\fR, \fB\-\-tags\fR \fIselector\fR:\fIfilename\fR
+\fB\-t\fR, \fB\-\-tags\fR \fI选择器\fR:\fI文件名\fR
 .RS 4
-Add or replace tags in the file with the ones from
-filename
-or remove them if
-filename
-is empty\&.
-\fBmkvpropedit\fR(1)
-reads the same XML tag format that
+用
+文件名
+中的标签添加或替换文件中的标签，或者如果
+文件名
+为空则移除标签。\fBmkvpropedit\fR(1)
+读取的 XML 标签格式与
 \fBmkvmerge\fR(1)
-reads as well\&.
+所读取的相同。
 .sp
-The
-\fIselector\fR
-must be one of the words
-\fBall\fR,
-\fBglobal\fR
-or
-\fBtrack\fR\&. For
-\fBall\fR
-\fBmkvpropedit\fR(1)
-will replace or remove all tags in a file\&. With
-\fBglobal\fR
-only global tags will be replaced or removed\&.
-.sp
-With
+
+\fI选择器\fR
+必须是
+\fBall\fR、\fBglobal\fR
+或
 \fBtrack\fR
-\fBmkvpropedit\fR(1)
-will replace tags for a specific track\&. Additionally the tags read from
-filename
-will be assigned to the same track\&. The track is specified in the same way
-edit selectors
-are specified (see below), e\&.g\&.
-\-\-tags track:a1:new\-audio\-tags\&.xml\&.
+之一。对于\fBall\fR
+选择器，\fBmkvpropedit\fR(1)
+将替换或移除文件中的所有标签。对于
+\fBglobal\fR
+选择器，将只替换或移除全局标签。
+.sp
+对于
+\fBtrack\fR
+选择器，\fBmkvpropedit\fR(1)
+将替换特定轨道的标签。读取自
+文件名
+的其他标签将分配给相同轨道。轨道与
+编辑选择器
+以相同格式指定 (参见下文)，如
+\-\-tags track:a1:新音频标签\&.xml。
 .RE
 .PP
 其他选项：
@@ -349,26 +347,26 @@ $ mkvpropedit 影片\&.mkv \-\-edit track:s1 \-\-set flag\-default=0 \-\-edit tr
 .RE
 .\}
 .PP
-Replacing the tags for the second subtitle track in a file looks like this:
+像这样替换文件中第二个字幕轨的标签:
 .sp
 .if n \{\
 .RS 4
 .\}
 .nf
-$ mkvpropedit movie\&.mkv \-\-tags track:s2:new\-subtitle\-tags\&.xml
+$ mkvpropedit 影片\&.mkv \-\-tags track:s2:新字幕标签\&.xml
   
 .fi
 .if n \{\
 .RE
 .\}
 .PP
-Removing all tags requires leaving out the file name:
+移除所有标签需要将文件名留空:
 .sp
 .if n \{\
 .RS 4
 .\}
 .nf
-$ mkvpropedit movie\&.mkv \-\-tags all:
+$ mkvpropedit 影片\&.mkv \-\-tags all:
   
 .fi
 .if n \{\
