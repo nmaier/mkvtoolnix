@@ -64,6 +64,15 @@ propedit_cli_parser_c::add_change() {
   }
 }
 
+void
+propedit_cli_parser_c::add_tags() {
+  try {
+    m_options->add_tags(m_next_arg);
+  } catch (...) {
+    mxerror(boost::format(Y("Invalid selector in '%1% %2%'.\n")) % m_current_arg % m_next_arg);
+  }
+}
+
 std::map<ebml_type_e, const char *> &
 propedit_cli_parser_c::get_ebml_type_abbrev_map() {
   static std::map<ebml_type_e, const char *> s_ebml_type_abbrevs;
@@ -139,16 +148,19 @@ propedit_cli_parser_c::init_parser() {
   add_information(YT("mkvpropedit [options] <file> <actions>"));
 
   add_section_header(YT("Options"));
-  OPT("l|list-property-names", list_property_names, YT("List all valid property names and exit"));
-  OPT("p|parse-mode=<mode>",   set_parse_mode,      YT("Sets the Matroska parser mode to 'fast' (default) or 'full'"));
+  OPT("l|list-property-names",      list_property_names, YT("List all valid property names and exit"));
+  OPT("p|parse-mode=<mode>",        set_parse_mode,      YT("Sets the Matroska parser mode to 'fast' (default) or 'full'"));
 
   add_section_header(YT("Actions"));
-  OPT("e|edit=<selector>",     add_target,          YT("Sets the Matroska file section that all following add/set/delete "
-                                                       "actions operate on (see below and man page for syntax)"));
-  OPT("a|add=<name=value>",    add_change,          YT("Adds a property with the value even if such a property already "
-                                                       "exists"));
-  OPT("s|set=<name=value>",    add_change,          YT("Sets a property to the value if it exists and add it otherwise"));
-  OPT("d|delete=<name>",       add_change,          YT("Delete all occurences of a property"));
+  OPT("e|edit=<selector>",          add_target,          YT("Sets the Matroska file section that all following add/set/delete "
+                                                            "actions operate on (see below and man page for syntax)"));
+  OPT("a|add=<name=value>",         add_change,          YT("Adds a property with the value even if such a property already "
+                                                            "exists"));
+  OPT("s|set=<name=value>",         add_change,          YT("Sets a property to the value if it exists and add it otherwise"));
+  OPT("d|delete=<name>",            add_change,          YT("Delete all occurences of a property"));
+  OPT("t|tags=<selector:filename>", add_tags,            YT("Add or replace tags in the file with the ones from 'filename' "
+                                                            "or remove them if 'filename' is empty "
+                                                            "(see below and man page for syntax)"));
 
   add_section_header(YT("Other options"));
   add_common_options();
@@ -166,6 +178,11 @@ propedit_cli_parser_c::init_parser() {
                      "(e.g. '--edit track:a2')."), 2);
   add_information(YT("The string 'track:=uid' with 'uid' being a number selects the track whose 'track UID' element equals 'uid'."), 2);
   add_information(YT("The string 'track:@number' with 'number' being a number selects the track whose 'track number' element equals 'number'."), 2);
+
+  add_section_header(YT("Tag selectors"), 0);
+  add_information(YT("The string 'all' works on all tags."), 1);
+  add_information(YT("The string 'global' works on the global tags."), 1);
+  add_information(YT("All other strings work just like the track header selectors (see above)."), 1);
 
   add_hook(cli_parser_c::ht_unknown_option, boost::bind(&propedit_cli_parser_c::set_file_name, this));
 }

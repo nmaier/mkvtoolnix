@@ -12,6 +12,9 @@
 
 #include <cassert>
 
+#include <matroska/KaxTag.h>
+#include <matroska/KaxTags.h>
+
 #include "propedit/options.h"
 #include "propedit/propedit.h"
 
@@ -67,6 +70,13 @@ options_c::add_target(target_c::target_type_e type) {
 target_cptr
 options_c::add_target(const std::string &spec) {
   return add_target(target_c::tt_undefined, spec);
+}
+
+void
+options_c::add_tags(const std::string &spec) {
+  target_cptr target(new target_c(target_c::tt_tags));
+  target->parse_tags_spec(spec);
+  m_targets.push_back(target);
 }
 
 void
@@ -126,14 +136,15 @@ options_c::remove_empty_targets() {
 
 template<typename T> static T*
 read_element(kax_analyzer_c *analyzer,
-             const std::string &category) {
+             const std::string &category,
+             bool require_existance = true) {
   int index = analyzer->find(T::ClassInfos.GlobalId);
   T *t      = NULL;
 
   if (-1 != index)
     t = dynamic_cast<T *>(analyzer->read_element(index));
 
-  if (NULL == t)
+  if ((NULL == t) && require_existance)
     mxerror(boost::format(Y("Modification of properties in the section '%1%' was requested, but no corresponding level 1 element was found in the file. %2%\n")) % category % FILE_NOT_MODIFIED);
 
   return t;
@@ -142,7 +153,8 @@ read_element(kax_analyzer_c *analyzer,
 void
 options_c::find_elements(kax_analyzer_c *analyzer) {
   KaxInfo *info     = NULL;
-  KaxTracks *tracks = NULL;
+  KaxTracks *tracks = read_element<KaxTracks>(analyzer, Y("Track headers"));
+  KaxTags *tags     = NULL;
 
   std::vector<target_cptr>::iterator target_it;
   mxforeach(target_it, m_targets) {
@@ -153,9 +165,16 @@ options_c::find_elements(kax_analyzer_c *analyzer) {
       target.set_level1_element(info);
 
     } else if (target_c::tt_track == target.m_type) {
-      if (NULL == tracks)
-        tracks = read_element<KaxTracks>(analyzer, Y("Track headers"));
       target.set_level1_element(tracks);
+
+    } else if (target_c::tt_tags == target.m_type) {
+      if (NULL == tags) {
+        tags = read_element<KaxTags>(analyzer, Y("Tags"), false);
+        if (NULL == tags)
+          tags = new KaxTags;
+      }
+
+      target.set_level1_element(tags, tracks);
 
     } else
       assert(false);

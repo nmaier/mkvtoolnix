@@ -17,6 +17,7 @@
 #include <vector>
 
 #include <ebml/EbmlMaster.h>
+#include <matroska/KaxTags.h>
 
 #include "propedit/change.h"
 
@@ -28,6 +29,7 @@ public:
     tt_undefined,
     tt_segment_info,
     tt_track,
+    tt_tags,
   };
 
   enum selection_mode_e {
@@ -38,9 +40,17 @@ public:
     sm_by_type_and_position,
   };
 
+  enum tag_operation_mode_e {
+    tom_undefined,
+    tom_all,
+    tom_global,
+    tom_track,
+  };
+
   target_type_e m_type;
   std::string m_spec;
   selection_mode_e m_selection_mode;
+  tag_operation_mode_e m_tag_operation_mode;
   uint64_t m_selection_param;
   track_type m_selection_track_type;
 
@@ -50,6 +60,8 @@ public:
 
   std::vector<change_cptr> m_changes;
 
+  std::string m_tags_file_name;
+
 public:
   target_c(target_type_e type);
 
@@ -57,6 +69,7 @@ public:
 
   void add_change(change_c::change_type_e type, const std::string &spec);
   void parse_target_spec(std::string spec);
+  void parse_tags_spec(const std::string &spec);
   void dump_info() const;
 
   bool operator ==(const target_c &cmp) const;
@@ -65,12 +78,16 @@ public:
   bool has_changes() const;
   bool has_add_or_set_change() const;
 
-  void set_level1_element(EbmlMaster *level1_element);
+  void set_level1_element(EbmlMaster *level1_element, EbmlMaster *track_headers = NULL);
 
   void execute();
 
 protected:
   void parse_track_spec(const std::string &spec);
+  void add_or_replace_tags();
+  void add_or_replace_all_tags(KaxTags *tags);
+  void add_or_replace_global_tags(KaxTags *tags);
+  void add_or_replace_track_tags(KaxTags *tags);
 };
 typedef counted_ptr<target_c> target_cptr;
 

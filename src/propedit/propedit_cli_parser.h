@@ -34,6 +34,7 @@ protected:
 
   void add_target();
   void add_change();
+  void add_tags();
   void set_parse_mode();
   void set_file_name();
 

@@ -8,7 +8,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
 #include <boost/regex.hpp>
 #include <cassert>
@@ -16,14 +16,18 @@
 
 #include <matroska/KaxInfo.h>
 #include <matroska/KaxInfoData.h>
+#include <matroska/KaxTag.h>
+#include <matroska/KaxTags.h>
 #include <matroska/KaxTracks.h>
 #include <matroska/KaxTrackAudio.h>
 #include <matroska/KaxTrackEntryData.h>
 #include <matroska/KaxTrackVideo.h>
 
-#include "common/common_pch.h"
+#include "common/output.h"
 #include "common/strings/editing.h"
 #include "common/strings/parsing.h"
+#include "common/tags/parser.h"
+#include "common/tags/tags.h"
 #include "propedit/propedit.h"
 #include "propedit/target.h"
 
@@ -34,6 +38,7 @@ using namespace libmatroska;
 target_c::target_c(target_c::target_type_e type)
   : m_type(type)
   , m_selection_mode(target_c::sm_undefined)
+  , m_tag_operation_mode(target_c::tom_undefined)
   , m_selection_param(0)
   , m_selection_track_type(INVALID_TRACK_TYPE)
   , m_level1_element(NULL)
@@ -135,6 +140,29 @@ target_c::parse_track_spec(const std::string &spec) {
 }
 
 void
+target_c::parse_tags_spec(const std::string &spec) {
+  m_spec                         = spec;
+  std::vector<std::string> parts = split(spec, ":", 2);
+  parts[0]                       = downcase(parts[0]);
+
+  if (parts[0] == "all")
+    m_tag_operation_mode = target_c::tom_all;
+
+  else if (parts[0] == "global")
+    m_tag_operation_mode = target_c::tom_global;
+
+  else if (parts[0] == "track") {
+    m_tag_operation_mode = target_c::tom_track;
+    parts                = split(parts[1], ":", 2);
+    parse_track_spec(downcase(parts[0]));
+
+  } else
+    throw false;
+
+  m_tags_file_name = parts[1];
+}
+
+void
 target_c::dump_info()
   const
 {
@@ -143,12 +171,14 @@ target_c::dump_info()
                        "    selection_mode:       %2%\n"
                        "    selection_param:      %3%\n"
                        "    selection_track_type: %4%\n"
-                       "    track_uid:            %5%\n")
+                       "    track_uid:            %5%\n"
+                       "    tags_file_name:       %6%\n")
          % static_cast<int>(m_type)
          % static_cast<int>(m_selection_mode)
          % m_selection_param
          % m_selection_track_type
-         % m_track_uid);
+         % m_track_uid
+         % m_tags_file_name);
 
   std::vector<change_cptr>::const_iterator change_it;
   mxforeach(change_it, m_changes)
@@ -176,7 +206,7 @@ bool
 target_c::has_changes()
   const
 {
-  return !m_changes.empty();
+  return !m_changes.empty() || (target_c::tt_tags == m_type);
 }
 
 bool
@@ -192,26 +222,34 @@ target_c::has_add_or_set_change()
 }
 
 void
-target_c::set_level1_element(EbmlMaster *level1_element) {
+target_c::set_level1_element(EbmlMaster *level1_element,
+                             EbmlMaster *track_headers) {
   m_level1_element = level1_element;
 
-  if (target_c::tt_segment_info == m_type) {
+  if (   (target_c::tt_segment_info == m_type)
+      || (   (target_c::tt_tags == m_type)
+          && (   (target_c::tom_all    == m_tag_operation_mode)
+              || (target_c::tom_global == m_tag_operation_mode)))) {
     m_master = m_level1_element;
     return;
   }
 
-  if (target_c::tt_track != m_type)
-    assert(false);
+  assert(   (target_c::tt_track == m_type)
+         || (   (target_c::tt_tags   == m_type)
+             && (target_c::tom_track == m_tag_operation_mode)));
 
   std::map<uint8, unsigned int> num_tracks_by_type;
   unsigned int num_tracks_total = 0;
 
+  if (!track_headers)
+    track_headers = level1_element;
+
   size_t i;
-  for (i = 0; level1_element->ListSize() > i; ++i) {
-    if (!is_id((*level1_element)[i], KaxTrackEntry))
+  for (i = 0; track_headers->ListSize() > i; ++i) {
+    if (!is_id((*track_headers)[i], KaxTrackEntry))
       continue;
 
-    KaxTrackEntry *track = dynamic_cast<KaxTrackEntry *>((*level1_element)[i]);
+    KaxTrackEntry *track = dynamic_cast<KaxTrackEntry *>((*track_headers)[i]);
     assert(NULL != track);
 
     KaxTrackType *kax_track_type     = dynamic_cast<KaxTrackType *>(FINDFIRST(track, KaxTrackType));
@@ -253,7 +291,12 @@ target_c::set_level1_element(EbmlMaster *level1_element) {
       m_master->PushElement(*m_sub_master);
     }
 
-   return;
+    if (target_c::tt_tags == m_type) {
+      m_master     = level1_element;
+      m_sub_master = track;
+    }
+
+    return;
   }
 
   mxerror(boost::format(Y("No track corresponding to the edit specification '%1%' was found. %2%\n")) % m_spec % FILE_NOT_MODIFIED);
@@ -261,8 +304,116 @@ target_c::set_level1_element(EbmlMaster *level1_element) {
 
 void
 target_c::execute() {
+  if (target_c::tt_tags == m_type) {
+    add_or_replace_tags();
+    return;
+  }
+
   std::vector<change_cptr>::iterator change_it;
   mxforeach(change_it, m_changes)
     (*change_it)->execute(m_master, m_sub_master);
 }
 
+void
+target_c::add_or_replace_tags() {
+  KaxTags *new_tags = NULL;
+
+  if (!m_tags_file_name.empty()) {
+    new_tags = new KaxTags;
+    parse_xml_tags(m_tags_file_name, new_tags);
+  }
+
+  if (target_c::tom_all == m_tag_operation_mode)
+    add_or_replace_all_tags(new_tags);
+
+  else if (target_c::tom_global == m_tag_operation_mode)
+    add_or_replace_global_tags(new_tags);
+
+  else if (target_c::tom_track == m_tag_operation_mode)
+    add_or_replace_track_tags(new_tags);
+
+  else
+    assert(false);
+
+  delete new_tags;
+
+  if (m_level1_element->ListSize()) {
+    fix_mandatory_tag_elements(m_level1_element);
+    if (!m_level1_element->CheckMandatory())
+      mxerror(boost::format(Y("Error parsing the tags in '%1%': some mandatory elements are missing.\n")) % m_tags_file_name);
+  }
+}
+
+void
+target_c::add_or_replace_all_tags(KaxTags *tags) {
+  size_t idx;
+  for (idx = 0; m_level1_element->ListSize() > idx; ++idx)
+    delete (*m_level1_element)[idx];
+  m_level1_element->RemoveAll();
+
+  if (tags) {
+    size_t idx;
+    for (idx = 0; tags->ListSize() > idx; ++idx)
+      m_level1_element->PushElement(*(*tags)[idx]);
+    tags->RemoveAll();
+  }
+}
+
+void
+target_c::add_or_replace_global_tags(KaxTags *tags) {
+  size_t idx = 0;
+  while (m_level1_element->ListSize() > idx) {
+    KaxTag *tag = dynamic_cast<KaxTag *>((*m_level1_element)[idx]);
+    if ((NULL == tag) || (-1 != get_tag_tuid(*tag)))
+      ++idx;
+    else {
+      delete tag;
+      m_level1_element->Remove(idx);
+    }
+  }
+
+  if (tags) {
+    idx = 0;
+    while (tags->ListSize() > idx) {
+      KaxTag *tag = dynamic_cast<KaxTag *>((*tags)[0]);
+      if ((NULL == tag) || (-1 != get_tag_tuid(*tag)))
+        ++idx;
+      else {
+        m_level1_element->PushElement(*tag);
+        tags->Remove(idx);
+      }
+    }
+  }
+}
+
+void
+target_c::add_or_replace_track_tags(KaxTags *tags) {
+  int64_t track_uid = static_cast<uint64>(GetChildAs<KaxTrackUID, EbmlUInteger>(m_sub_master));
+
+  size_t idx = 0;
+  while (m_level1_element->ListSize() > idx) {
+    KaxTag *tag = dynamic_cast<KaxTag *>((*m_level1_element)[idx]);
+    if ((NULL == tag) || (track_uid != get_tag_tuid(*tag)))
+      ++idx;
+    else {
+      delete tag;
+      m_level1_element->Remove(idx);
+    }
+  }
+
+  if (tags) {
+    remove_track_uid_tag_targets(tags);
+
+    idx = 0;
+    while (tags->ListSize() > idx) {
+      KaxTag *tag = dynamic_cast<KaxTag *>((*tags)[0]);
+      if (NULL == tag)
+        ++idx;
+      else {
+        GetChildAs<KaxTagTrackUID, EbmlUInteger>(GetChild<KaxTagTargets>(tag)) = track_uid;
+        m_level1_element->PushElement(*tag);
+        tags->Remove(idx);
+      }
+    }
+  }
+}

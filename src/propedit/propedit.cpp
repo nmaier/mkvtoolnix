@@ -11,6 +11,7 @@
 #include "common/os.h"
 
 #include <matroska/KaxInfo.h>
+#include <matroska/KaxTags.h>
 #include <matroska/KaxTracks.h>
 
 #include "common/command_line.h"
@@ -50,11 +51,15 @@ write_changes(options_cptr &options,
   std::vector<EbmlId> ids_to_write;
   ids_to_write.push_back(KaxInfo::ClassInfos.GlobalId);
   ids_to_write.push_back(KaxTracks::ClassInfos.GlobalId);
+  ids_to_write.push_back(KaxTags::ClassInfos.GlobalId);
 
   std::vector<EbmlId>::iterator id_to_write_it;
   mxforeach(id_to_write_it, ids_to_write) {
     std::vector<target_cptr>::iterator target_it;
     mxforeach(target_it, options->m_targets) {
+      if (NULL == (*target_it)->m_level1_element)
+        continue;
+
       EbmlMaster &l1_element = *(*target_it)->m_level1_element;
 
       if (*id_to_write_it != l1_element.Generic().GlobalId)
@@ -62,7 +67,7 @@ write_changes(options_cptr &options,
 
       mxverb(2, boost::format(Y("Element %1% is written.\n")) % l1_element.Generic().DebugName);
 
-      kax_analyzer_c::update_element_result_e result = analyzer->update_element(&l1_element, true);
+      kax_analyzer_c::update_element_result_e result = l1_element.ListSize() ? analyzer->update_element(&l1_element, true) : analyzer->remove_elements(EbmlId(l1_element));
       if (kax_analyzer_c::uer_success != result)
         display_update_element_result(l1_element.Generic(), result);
 
