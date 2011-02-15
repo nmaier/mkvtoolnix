@@ -21,6 +21,7 @@
 #include <matroska/KaxCluster.h>
 #include <matroska/KaxSeekHead.h>
 #include <matroska/KaxSegment.h>
+#include <matroska/KaxTags.h>
 
 #include "common/ebml.h"
 #include "common/error.h"
@@ -326,15 +327,17 @@ kax_analyzer_c::update_element(EbmlElement *e,
 
   fix_mandatory_elements(e);
 
+  placement_strategy_e strategy = get_placement_strategy_for(e);
+
   try {
-    call_and_validate({},                                  "update_element_0");
-    call_and_validate(overwrite_all_instances(EbmlId(*e)), "update_element_1");
-    call_and_validate(merge_void_elements(),               "update_element_2");
-    call_and_validate(write_element(e, write_defaults),    "update_element_3");
-    call_and_validate(remove_from_meta_seeks(EbmlId(*e)),  "update_element_4");
-    call_and_validate(merge_void_elements(),               "update_element_5");
-    call_and_validate(add_to_meta_seek(e),                 "update_element_6");
-    call_and_validate(merge_void_elements(),               "update_element_7");
+    call_and_validate({},                                         "update_element_0");
+    call_and_validate(overwrite_all_instances(EbmlId(*e)),        "update_element_1");
+    call_and_validate(merge_void_elements(),                      "update_element_2");
+    call_and_validate(write_element(e, write_defaults, strategy), "update_element_3");
+    call_and_validate(remove_from_meta_seeks(EbmlId(*e)),         "update_element_4");
+    call_and_validate(merge_void_elements(),                      "update_element_5");
+    call_and_validate(add_to_meta_seek(e),                        "update_element_6");
+    call_and_validate(merge_void_elements(),                      "update_element_7");
 
   } catch (kax_analyzer_c::update_element_result_e result) {
     debug_dump_elements_maybe("update_element_exception");
@@ -748,12 +751,13 @@ kax_analyzer_c::merge_void_elements() {
  */
 void
 kax_analyzer_c::write_element(EbmlElement *e,
-                              bool write_defaults) {
+                              bool write_defaults,
+                              placement_strategy_e strategy) {
   e->UpdateSize(write_defaults);
   int64_t element_size = e->ElementSize(write_defaults);
 
   size_t data_idx;
-  for (data_idx = 0; m_data.size() > data_idx; ++data_idx) {
+  for (data_idx = (ps_anywhere == strategy ? 0 : m_data.size() - 1); m_data.size() > data_idx; ++data_idx) {
     // We're only interested in EbmlVoid elements. Skip the others.
     if (m_data[data_idx]->m_id != EBML_ID(EbmlVoid))
       continue;
@@ -1067,6 +1071,11 @@ kax_analyzer_c::fix_element_sizes(uint64_t file_size) {
   for (i = 0; m_data.size() > i; ++i)
     if (-1 == m_data[i]->m_size)
       m_data[i]->m_size = ((i + 1) < m_data.size() ? m_data[i + 1]->m_pos : file_size) - m_data[i]->m_pos;
+}
+
+kax_analyzer_c::placement_strategy_e
+kax_analyzer_c::get_placement_strategy_for(EbmlElement *e) {
+  return EbmlId(*e) == EBML_ID(KaxTags) ? ps_end : ps_anywhere;
 }
 
 // ------------------------------------------------------------

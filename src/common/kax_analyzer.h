@@ -67,6 +67,11 @@ public:
     parse_mode_full,
   };
 
+  enum placement_strategy_e {
+    ps_anywhere,
+    ps_end,
+  };
+
 public:
   std::vector<kax_analyzer_data_cptr> m_data;
 
@@ -132,13 +137,15 @@ public:
   virtual void close_file();
   virtual void reopen_file(const open_mode = MODE_WRITE);
 
+  static placement_strategy_e get_placement_strategy_for(EbmlElement *e);
+
 protected:
   virtual void _log_debug_message(const std::string &message);
 
   virtual void remove_from_meta_seeks(EbmlId id);
   virtual void overwrite_all_instances(EbmlId id);
   virtual void merge_void_elements();
-  virtual void write_element(EbmlElement *e, bool write_defaults);
+  virtual void write_element(EbmlElement *e, bool write_defaults, placement_strategy_e strategy);
   virtual void add_to_meta_seek(EbmlElement *e);
 
   virtual void adjust_segment_size();
