@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2011-01-21 12:13+0100\n"
+"PO-Revision-Date: 2011-02-15 08:42+0100\n"
 "Last-Translator: Moritz Bunkus <moritz@bunkus.org>\n"
 "Language-Team: German <moritz@bunkus.org>\n"
 "MIME-Version: 1.0\n"
@@ -1679,7 +1679,7 @@ msgstr "Namen hinzufügen"
 
 #: src/propedit/propedit_cli_parser.cpp:161
 msgid "Add or replace tags in the file with the ones from 'filename' or remove them if 'filename' is empty (see below and man page for syntax)"
-msgstr ""
+msgstr "Tags in der Datei mit denen aus 'Dateiname' ergänzen, ersetzen oder entfernen, falls 'Dateiname' leer ist (siehe unten und Dokumentation für Syntax)"
 
 #: src/mmg/tabs/chapters.cpp:328
 msgid "Add subchapter"
@@ -1743,7 +1743,7 @@ msgstr "Die Namen aller bekannten Merkmale und ihre Bedeutung\n"
 
 #: src/propedit/propedit_cli_parser.cpp:185
 msgid "All other strings work just like the track header selectors (see above)."
-msgstr ""
+msgstr "Alle anderen Zeichenketten funktionieren so wie die Trackkopfdatenselektoren (siehe oben)."
 
 #: src/info/wxwidgets_ui.cpp:264
 msgid "All supported files|*.mkv;*.mka;*.mks;*.mk3d;*.webm;*.webma;*.webmv|Matroska files (*.mkv;*.mka;*.mks;*.mk3d)|*.mkv;*.mka;*.mks;*.mk3d|WebM files (*.webm;*.webma;*.webmv)|*.webm;*.webma;*.webmv|All files|*.*"
@@ -5441,9 +5441,8 @@ msgid "Tag files (*.xml;*.txt)|*.xml;*.txt|%s"
 msgstr "Tagdateien (*.xml;*.txt)|*.xml;*.txt|%s"
 
 #: src/propedit/propedit_cli_parser.cpp:182
-#, fuzzy
 msgid "Tag selectors"
-msgstr "Bearbeitungsziele"
+msgstr "Tagbearbeitungsziele"
 
 #: src/propedit/options.cpp:172 src/info/mkvinfo.cpp:1828
 msgid "Tags"
@@ -6214,11 +6213,11 @@ msgstr "Der Streck-Wert für Track Nummer %s in Datei '%s' ist ungültig."
 
 #: src/propedit/propedit_cli_parser.cpp:183
 msgid "The string 'all' works on all tags."
-msgstr ""
+msgstr "Die Zeichenkette 'all' bearbeitet alle Tags."
 
 #: src/propedit/propedit_cli_parser.cpp:184
 msgid "The string 'global' works on the global tags."
-msgstr ""
+msgstr "Die Zeichenkette 'global' bearbeitet nur die globalen Tags."
 
 #: src/propedit/propedit_cli_parser.cpp:177
 msgid "The string 'track:' followed by one of the chars 'a', 'b', 's' or 'v' followed by a number 'n' selects the nth audio, button, subtitle or video track (e.g. '--edit track:a2')."
