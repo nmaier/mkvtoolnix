@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mkvtoolnix-man\n"
 "POT-Creation-Date: 2011-02-15 08:39+0100\n"
-"PO-Revision-Date: 2011-01-21 22:17+0800\n"
+"PO-Revision-Date: 2011-02-15 22:28+0800\n"
 "Last-Translator: Dean Lee <xslidian@gmail.com>\n"
 "Language-Team: chinese simp <xslidian+mkvtoolnix@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -3412,25 +3412,24 @@ msgstr "删除所有名为 <parameter>名称</parameter> 的属性。注意部�
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvpropedit.xml:150
-#, fuzzy
 #| msgid "<option>-a</option>, <option>--add</option> <parameter>name</parameter>=<parameter>value</parameter>"
 msgid "<option>-t</option>, <option>--tags</option> <parameter>selector</parameter>:<parameter>filename</parameter>"
-msgstr "<option>-a</option>, <option>--add</option> <parameter>名称</parameter>=<parameter>数值</parameter>"
+msgstr "<option>-t</option>, <option>--tags</option> <parameter>选择器</parameter>:<parameter>文件名</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvpropedit.xml:153
 msgid "Add or replace tags in the file with the ones from <filename>filename</filename> or remove them if <filename>filename</filename> is empty. &mkvpropedit; reads the same XML tag format that &mkvmerge; reads as well."
-msgstr ""
+msgstr "用 <filename>文件名</filename> 中的标签添加或替换文件中的标签，或者如果 <filename>文件名</filename> 为空则移除标签。&mkvpropedit; 读取的 XML 标签格式与 &mkvmerge; 所读取的相同。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvpropedit.xml:158
 msgid "The <parameter>selector</parameter> must be one of the words <constant>all</constant>, <constant>global</constant> or <constant>track</constant>. For <constant>all</constant> &mkvpropedit; will replace or remove all tags in a file. With <constant>global</constant> only global tags will be replaced or removed."
-msgstr ""
+msgstr "<parameter>选择器</parameter> 必须是 <constant>all</constant>、<constant>global</constant> 或 <constant>track</constant> 之一。对于<constant>all</constant> 选择器，&mkvpropedit; 将替换或移除文件中的所有标签。对于 <constant>global</constant> 选择器，将只替换或移除全局标签。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvpropedit.xml:164
 msgid "With <constant>track</constant> &mkvpropedit; will replace tags for a specific track. Additionally the tags read from <filename>filename</filename> will be assigned to the same track. The track is specified in the same way <link linkend=\"mkvpropedit.edit_selectors\">edit selectors</link> are specified (see below), e.g. <code>--tags track:a1:new-audio-tags.xml</code>."
-msgstr ""
+msgstr "对于 <constant>track</constant> 选择器，&mkvpropedit; 将替换特定轨道的标签。读取自 <filename>文件名</filename> 的其他标签将分配给相同轨道。轨道与 <link linkend=\"mkvpropedit.edit_selectors\">编辑选择器</link> 以相同格式指定 (参见下文)，如 <code>--tags track:a1:新音频标签.xml</code>。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvpropedit.xml:202
@@ -3583,10 +3582,9 @@ msgstr ""
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvpropedit.xml:412
-#, fuzzy
 #| msgid "The shortest possible Matroska file would look like this:"
 msgid "Replacing the tags for the second subtitle track in a file looks like this:"
-msgstr "允许的最短小的 Matroska 文件是像这样的："
+msgstr "像这样替换文件中第二个字幕轨的标签:"
 
 #. type: Content of: <refentry><refsect1><screen>
 #: doc/man/mkvpropedit.xml:416
@@ -3595,15 +3593,17 @@ msgid ""
 "$ mkvpropedit movie.mkv --tags track:s2:new-subtitle-tags.xml\n"
 "  "
 msgstr ""
+"$ mkvpropedit 影片.mkv --tags track:s2:新字幕标签.xml\n"
+"  "
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvpropedit.xml:420
 msgid "Removing all tags requires leaving out the file name:"
-msgstr ""
+msgstr "移除所有标签需要将文件名留空:"
 
 #. type: Content of: <refentry><refsect1><screen>
 #: doc/man/mkvpropedit.xml:424
-#, fuzzy, no-wrap
+#, no-wrap
 #| msgid ""
 #| "$ mkvmerge -o file.mkv --tags 0:tags.xml file.avi\n"
 #| "   "
@@ -3611,8 +3611,8 @@ msgid ""
 "$ mkvpropedit movie.mkv --tags all:\n"
 "  "
 msgstr ""
-"$ mkvmerge -o 文件.mkv --tags 0:标签.xml 文件.avi\n"
-"   "
+"$ mkvpropedit 影片.mkv --tags all:\n"
+"  "
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvpropedit.xml:432
