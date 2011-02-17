@@ -77,9 +77,14 @@ he_language_value_page_c::get_current_value_as_string() {
 
 void
 he_language_value_page_c::reset_value() {
+  wxString iso639_2_code = m_original_value;
+  int idx                = map_to_iso639_2_code(wxMB(m_original_value), false);
+  if (-1 != idx)
+    iso639_2_code = wxU(iso639_languages[idx].iso639_2_code);
+
   size_t i;
   for (i = 0; sorted_iso_codes.size() > i; ++i)
-    if (extract_language_code(sorted_iso_codes[i]) == m_original_value) {
+    if (extract_language_code(sorted_iso_codes[i]) == iso639_2_code) {
       set_combobox_selection(m_cb_language, sorted_iso_codes[i]);
       return;
     }

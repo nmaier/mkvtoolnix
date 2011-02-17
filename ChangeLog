@@ -1,5 +1,10 @@
 2011-02-17  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: bug fix: If the header editor finds 'language' elements
+	with ISO-639-1 codes (e.g. "fra" instead of "fre" for "French")
+	then it will map the code to the corresponding ISO-639-2 code. Fix
+	for bug 598.
+
 	* mmg: bug fix: Fixed one of the issues causing mmg to report that
 	it is configured to use an unsupported version of mkvmerge when
 	the reported version was actually empty.
