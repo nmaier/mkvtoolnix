@@ -641,7 +641,7 @@ mmg_dialog::display_help(int id) {
     std::vector<wxString> potential_help_paths;
 
 #if defined(SYS_WINDOWS)
-    wxString installation_path = get_installation_dir();
+    wxString installation_path = wxU(get_installation_path());
     if (!installation_path.IsEmpty())
       potential_help_paths.push_back(installation_path + wxT("/doc"));
 
@@ -1602,7 +1602,7 @@ mmg_dialog::load_preferences() {
     options.mkvmerge.Empty();
 
   if (options.mkvmerge.IsEmpty()) {
-    options.mkvmerge = get_installation_dir();
+    options.mkvmerge = wxU(get_installation_path());
     if (!options.mkvmerge.IsEmpty())
       options.mkvmerge += wxT("\\mkvmerge.exe");
   }

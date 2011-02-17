@@ -1,5 +1,9 @@
 2011-02-17  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: bug fix: Fixed one of the issues causing mmg to report that
+	it is configured to use an unsupported version of mkvmerge when
+	the reported version was actually empty.
+
 	* mkvmerge: enhancement: HD-DVD subtitles are recognized as being
 	an unsupported file format. This makes the error message presented
 	to the user a bit clearer. Fix for bug 600.

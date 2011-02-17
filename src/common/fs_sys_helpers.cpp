@@ -123,14 +123,6 @@ get_current_exe_path() {
 
 std::string
 get_installation_path() {
-  std::string path;
-
-  if (get_registry_key_value("HKEY_LOCAL_MACHINE\\Software\\mkvmergeGUI\\GUI", "installation_path", path) && !path.empty())
-    return path;
-
-  if (get_registry_key_value("HKEY_CURRENT_USER\\Software\\mkvmergeGUI\\GUI", "installation_path", path) && !path.empty())
-    return path;
-
   return get_current_exe_path();
 }
 
@@ -215,6 +207,11 @@ get_application_data_folder() {
     return "";
 
   return std::string(home) + "/.mkvtoolnix";
+}
+
+std::string
+get_installation_path() {
+  return "";
 }
 
 #endif // SYS_WINDOWS

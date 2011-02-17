@@ -286,18 +286,6 @@ get_temp_dir() {
 }
 
 wxString
-get_installation_dir() {
-  wxConfig cfg(wxT("mkvmergeGUI"), wxEmptyString, wxEmptyString, wxEmptyString, wxCONFIG_USE_GLOBAL_FILE);
-  cfg.SetPath(wxT("/GUI"));
-
-  wxString path;
-  if (cfg.Read(wxT("installation_path"), &path))
-    return path;
-
-  return wxT("");
-}
-
-wxString
 create_track_order(bool all) {
   size_t i;
   wxString result;
