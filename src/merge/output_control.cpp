@@ -84,6 +84,7 @@
 #include "input/r_dts.h"
 #include "input/r_flac.h"
 #include "input/r_flv.h"
+#include "input/r_hdsub.h"
 #include "input/r_ivf.h"
 #include "input/r_matroska.h"
 #include "input/r_mp3.h"
@@ -315,6 +316,8 @@ get_file_type(filelist_t &file) {
     type = FILE_TYPE_CDXA;
   else if (flv_reader_c::probe_file(io, size))
     type = FILE_TYPE_FLV;
+  else if (hdsub_reader_c::probe_file(io, size))
+    type = FILE_TYPE_HDSUB;
   // File types that can be detected unambiguously
   else if (avi_reader_c::probe_file(io, size))
     type = FILE_TYPE_AVI;
