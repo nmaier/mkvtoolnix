@@ -192,7 +192,7 @@ parse_aac_data(const unsigned char *data,
   mxverb(4, boost::format("parse_aac_data: size %1%, data: 0x") % size);
   int i;
   for (i = 0; i < size; i++)
-    mxverb(4, boost::format("%|1$02x| ") % data[i]);
+    mxverb(4, boost::format("%|1$02x| ") % static_cast<unsigned int>(data[i]));
   mxverb(4, "\n");
 
   profile = data[0] >> 3;
