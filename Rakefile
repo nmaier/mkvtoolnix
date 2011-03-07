@@ -467,7 +467,7 @@ Application.new("src/mkvmerge").
 #
 
 $mkvinfo_ui_files = FileList["src/info/ui/*.ui"].to_a
-file "src/info/qt_ui.o" => $mkvinfo_ui_files
+file "src/info/qt_ui.o" => $mkvinfo_ui_files.collect { |file| file.ext('h') }
 
 Application.new("src/mkvinfo").
   description("Build the mkvinfo executable").
