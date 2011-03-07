@@ -77,37 +77,14 @@ mkvpropedit \- 再MUXすることなく、既存のMatroska(TM)ファイルの�
 .PP
 \fB\-t\fR, \fB\-\-tags\fR \fIselector\fR:\fIfilename\fR
 .RS 4
-Add or replace tags in the file with the ones from
-filename
-or remove them if
-filename
-is empty\&.
-\fBmkvpropedit\fR(1)
-reads the same XML tag format that
-\fBmkvmerge\fR(1)
-reads as well\&.
+
+ファイル名からのタグを、このファイル中のタグに追加、あるいは置換します。もしファイル名が空白なら、タグを削除します。\fBmkvpropedit\fR(1)は、\fBmkvmerge\fR(1)が読み込むのと同じXMLタグフォーマットを読み込みます。
 .sp
-The
-\fIselector\fR
-must be one of the words
-\fBall\fR,
-\fBglobal\fR
-or
-\fBtrack\fR\&. For
-\fBall\fR
-\fBmkvpropedit\fR(1)
-will replace or remove all tags in a file\&. With
-\fBglobal\fR
-only global tags will be replaced or removed\&.
+
+\fIセレクタ\fRは、\fBall\fR、\fBglobal\fR、または\fBtrack\fRのうちどれか一つを指定してください。\fBall\fRを指定すると、\fBmkvpropedit\fR(1)はファイル中の全てのタグを置換あるいは削除します。\fBglobal\fRを指定すると、グローバルタグだけが置換あるいは削除されます。
 .sp
-With
-\fBtrack\fR
-\fBmkvpropedit\fR(1)
-will replace tags for a specific track\&. Additionally the tags read from
-filename
-will be assigned to the same track\&. The track is specified in the same way
-edit selectors
-are specified (see below), e\&.g\&.
+
+\fBtrack\fRを指定すると、\fBmkvpropedit\fR(1)は特定のトラックのタグを置換します。また、filenameから読み込まれたタグは、同じトラックに割り当てられます。edit selectorsが指定されるのと同じ様に（下を参照してください）、トラックは指定されます。(see below), e\&.g\&.
 \-\-tags track:a1:new\-audio\-tags\&.xml\&.
 .RE
 .PP
@@ -252,20 +229,19 @@ $ mkvpropedit movie\&.mkv \-\-edit track:s1 \-\-set flag\-default=0 \-\-edit tra
 .RE
 .\}
 .PP
-Replacing the tags for the second subtitle track in a file looks like this:
+ファイル中で2番目の字幕トラックのタグを置換するには、以下のようにします：
 .sp
 .if n \{\
 .RS 4
 .\}
 .nf
 $ mkvpropedit movie\&.mkv \-\-tags track:s2:new\-subtitle\-tags\&.xml
-  
 .fi
 .if n \{\
 .RE
 .\}
 .PP
-Removing all tags requires leaving out the file name:
+タグを削除するには、ファイル名を空白にします
 .sp
 .if n \{\
 .RS 4
