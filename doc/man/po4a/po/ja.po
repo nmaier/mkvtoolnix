@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.9.9\n"
 "POT-Creation-Date: 2011-02-15 08:39+0100\n"
-"PO-Revision-Date: 2011-01-22 17:11+0100\n"
+"PO-Revision-Date: 2011-03-03 00:13+0900\n"
 "Last-Translator: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "Language-Team: none\n"
 "MIME-Version: 1.0\n"
@@ -1054,8 +1054,6 @@ msgstr "このプログラムはいくつかのメディアファイルを入力
 
 #. type: Content of: <refentry><refsect1><important><para>
 #: doc/man/mkvmerge.xml:73 doc/man/mkvmerge.xml:1394
-#, fuzzy
-#| msgid "The order of command line options is important. Please read the section <link linkend=\"mkvmerge.option_order\">&quot;Option order&quot;</link> it if you're new to the program."
 msgid "The order of command line options is important. Please read the section <link linkend=\"mkvmerge.option_order\">&quot;Option order&quot;</link> if you're new to the program."
 msgstr "コマンドラインオプションの順番は重要です。もしあなたが初心者なら、<link linkend=\"mkvmerge.option_order\">&quot;オプションの順番&quot;</link>セクションを読んで下さい。"
 
@@ -3273,25 +3271,23 @@ msgstr "見付けた全ての、プロパティ名が<parameter>name</parameter>
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvpropedit.xml:150
-#, fuzzy
-#| msgid "<option>-a</option>, <option>--add</option> <parameter>name</parameter>=<parameter>value</parameter>"
 msgid "<option>-t</option>, <option>--tags</option> <parameter>selector</parameter>:<parameter>filename</parameter>"
-msgstr "<option>-a</option>, <option>--add</option> <parameter>name</parameter>=<parameter>value</parameter>"
+msgstr "<option>-t</option>, <option>--tags</option> <parameter>selector</parameter>:<parameter>filename</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvpropedit.xml:153
 msgid "Add or replace tags in the file with the ones from <filename>filename</filename> or remove them if <filename>filename</filename> is empty. &mkvpropedit; reads the same XML tag format that &mkvmerge; reads as well."
-msgstr ""
+msgstr "<filename>ファイル名</filename>からのタグを、このファイル中のタグに追加、あるいは置換します。もし<filename>ファイル名</filename>が空白なら、タグを削除します。&mkvpropedit;は、&mkvmerge;が読み込むのと同じXMLタグフォーマットを読み込みます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvpropedit.xml:158
 msgid "The <parameter>selector</parameter> must be one of the words <constant>all</constant>, <constant>global</constant> or <constant>track</constant>. For <constant>all</constant> &mkvpropedit; will replace or remove all tags in a file. With <constant>global</constant> only global tags will be replaced or removed."
-msgstr ""
+msgstr "<parameter>セレクタ</parameter>は、<constant>all</constant>、<constant>global</constant>、または<constant>track</constant>のうちどれか一つを指定してください。<constant>all</constant>を指定すると、&mkvpropedit;はファイル中の全てのタグを置換あるいは削除します。<constant>global</constant>を指定すると、グローバルタグだけが置換あるいは削除されます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvpropedit.xml:164
 msgid "With <constant>track</constant> &mkvpropedit; will replace tags for a specific track. Additionally the tags read from <filename>filename</filename> will be assigned to the same track. The track is specified in the same way <link linkend=\"mkvpropedit.edit_selectors\">edit selectors</link> are specified (see below), e.g. <code>--tags track:a1:new-audio-tags.xml</code>."
-msgstr ""
+msgstr "<constant>track</constant>を指定すると、&mkvpropedit;は特定のトラックのタグを置換します。また、<filename>filename</filename>から読み込まれたタグは、同じトラックに割り当てられます。<link linkend=\"mkvpropedit.edit_selectors\">edit selectors</link>が指定されるのと同じ様に（下を参照してください）、トラックは指定されます。(see below), e.g. <code>--tags track:a1:new-audio-tags.xml</code>."
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvpropedit.xml:202
@@ -3444,10 +3440,9 @@ msgstr ""
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvpropedit.xml:412
-#, fuzzy
 #| msgid "The shortest possible Matroska file would look like this:"
 msgid "Replacing the tags for the second subtitle track in a file looks like this:"
-msgstr "最小構成のMatroskaファイルはこのような構成になります。"
+msgstr "ファイル中で2番目の字幕トラックのタグを置換するには、以下のようにします："
 
 #. type: Content of: <refentry><refsect1><screen>
 #: doc/man/mkvpropedit.xml:416
@@ -3456,24 +3451,22 @@ msgid ""
 "$ mkvpropedit movie.mkv --tags track:s2:new-subtitle-tags.xml\n"
 "  "
 msgstr ""
+"$ mkvpropedit movie.mkv --tags track:s2:new-subtitle-tags.xml\n"
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvpropedit.xml:420
 msgid "Removing all tags requires leaving out the file name:"
-msgstr ""
+msgstr "タグを削除するには、ファイル名を空白にします"
 
 #. type: Content of: <refentry><refsect1><screen>
 #: doc/man/mkvpropedit.xml:424
-#, fuzzy, no-wrap
-#| msgid ""
-#| "$ mkvmerge -o file.mkv --tags 0:tags.xml file.avi\n"
-#| "   "
+#, no-wrap
 msgid ""
 "$ mkvpropedit movie.mkv --tags all:\n"
 "  "
 msgstr ""
-"$ mkvmerge -o file.mkv --tags 0:tags.xml file.avi\n"
-"   "
+"$ mkvpropedit movie.mkv --tags all:\n"
+"  "
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvpropedit.xml:432
