@@ -209,7 +209,6 @@ protected:
   virtual void init_passthrough_packetizer(kax_track_t *t);
   virtual void set_packetizer_headers(kax_track_t *t);
   virtual void read_first_frames(kax_track_t *t, unsigned num_wanted = 1);
-  virtual kax_track_t *new_kax_track();
   virtual kax_track_t *find_track_by_num(uint64_t num, kax_track_t *c = NULL);
   virtual kax_track_t *find_track_by_uid(uint64_t uid, kax_track_t *c = NULL);
 
@@ -256,10 +255,10 @@ protected:
 
   virtual void read_headers_info(EbmlElement *&l1, EbmlElement *&l2, int &upper_lvl_el);
   virtual void read_headers_info_writing_app(KaxWritingApp *&kwriting_app);
-  virtual void read_headers_track_audio(kax_track_t *&track, KaxTrackAudio *&ktaudio);
-  virtual void read_headers_track_video(kax_track_t *&track, KaxTrackVideo *&ktvideo);
+  virtual void read_headers_track_audio(kax_track_t *track, KaxTrackAudio *ktaudio);
+  virtual void read_headers_track_video(kax_track_t *track, KaxTrackVideo *ktvideo);
   virtual void read_headers_tracks(mm_io_c *io, EbmlElement *l0, int64_t position);
-  virtual void read_headers_seek_head(EbmlElement *&l0, EbmlElement *&l1);
+  virtual void read_headers_seek_head(EbmlElement *l0, EbmlElement *l1);
   virtual bool read_headers();
 
   virtual void process_simple_block(KaxCluster *cluster, KaxSimpleBlock *block_simple);

@@ -234,12 +234,6 @@ kax_reader_c::packets_available() {
 }
 
 kax_track_t *
-kax_reader_c::new_kax_track() {
-  m_tracks.push_back(kax_track_cptr(new kax_track_t));
-  return m_tracks.back().get_object();
-}
-
-kax_track_t *
 kax_reader_c::find_track_by_num(uint64_t n,
                                 kax_track_t *c) {
   foreach(kax_track_cptr &track, m_tracks)
@@ -918,8 +912,8 @@ kax_reader_c::read_headers_info_writing_app(KaxWritingApp *&km_writing_app) {
 }
 
 void
-kax_reader_c::read_headers_track_audio(kax_track_t *&track,
-                                       KaxTrackAudio *&ktaudio) {
+kax_reader_c::read_headers_track_audio(kax_track_t *track,
+                                       KaxTrackAudio *ktaudio) {
   mxverb(2, "matroska_reader: |  + Audio track\n");
 
   KaxAudioSamplingFreq *ka_sfreq = FINDFIRST(ktaudio, KaxAudioSamplingFreq);
@@ -950,8 +944,8 @@ kax_reader_c::read_headers_track_audio(kax_track_t *&track,
 }
 
 void
-kax_reader_c::read_headers_track_video(kax_track_t *&track,
-                                       KaxTrackVideo *&ktvideo) {
+kax_reader_c::read_headers_track_video(kax_track_t *track,
+                                       KaxTrackVideo *ktvideo) {
   KaxVideoPixelWidth *kv_pwidth = FINDFIRST(ktvideo, KaxVideoPixelWidth);
   if (NULL != kv_pwidth) {
     track->v_width = uint64(*kv_pwidth);
@@ -1059,9 +1053,7 @@ kax_reader_c::read_headers_tracks(mm_io_c *io,
     // We actually found a track entry :) We're happy now.
     mxverb(2, "matroska_reader: | + a track...\n");
 
-    kax_track_t *track = new_kax_track();
-    if (NULL == track)
-      return;
+    kax_track_cptr track(new kax_track_t);
 
     KaxTrackNumber *ktnum = FINDFIRST(ktentry, KaxTrackNumber);
     if (NULL == ktnum)
@@ -1069,15 +1061,18 @@ kax_reader_c::read_headers_tracks(mm_io_c *io,
     mxverb(2, boost::format("matroska_reader: |  + Track number: %1%\n") % (int)uint8(*ktnum));
 
     track->tnum = uint8(*ktnum);
-    if (find_track_by_num(track->tnum, track) != NULL)
-      mxwarn(boost::format(Y("matroska_reader: |  + There's more than one track with the number %1%.\n")) % track->tnum);
+    if (find_track_by_num(track->tnum, track.get_object()) != NULL) {
+      mxverb(2, boost::format(Y("matroska_reader: |  + There's more than one track with the number %1%.\n")) % track->tnum);
+      ktentry = FINDNEXT(l1, KaxTrackEntry, ktentry);
+      continue;
+    }
 
     KaxTrackUID *ktuid = FINDFIRST(ktentry, KaxTrackUID);
     if (NULL == ktuid)
       mxerror(Y("matroska_reader: A track is missing its track UID.\n"));
     mxverb(2, boost::format("matroska_reader: |  + Track UID: %1%\n") % uint64(*ktuid));
     track->tuid = uint64(*ktuid);
-    if ((find_track_by_uid(track->tuid, track) != NULL) && (verbose > 1))
+    if ((find_track_by_uid(track->tuid, track.get_object()) != NULL) && (verbose > 1))
       mxwarn(boost::format(Y("matroska_reader: |  + There's more than one track with the UID %1%.\n")) % track->tnum);
 
     KaxTrackDefaultDuration *kdefdur = FINDFIRST(ktentry, KaxTrackDefaultDuration);
@@ -1099,11 +1094,11 @@ kax_reader_c::read_headers_tracks(mm_io_c *io,
 
     KaxTrackAudio *ktaudio = FINDFIRST(ktentry, KaxTrackAudio);
     if (NULL != ktaudio)
-      read_headers_track_audio(track, ktaudio);
+      read_headers_track_audio(track.get_object(), ktaudio);
 
     KaxTrackVideo *ktvideo = FINDFIRST(ktentry, KaxTrackVideo);
     if (NULL != ktvideo)
-      read_headers_track_video(track, ktvideo);
+      read_headers_track_video(track.get_object(), ktvideo);
 
     KaxCodecID *kcodecid = FINDFIRST(ktentry, KaxCodecID);
     if (NULL != kcodecid) {
@@ -1172,6 +1167,8 @@ kax_reader_c::read_headers_tracks(mm_io_c *io,
     }
 
     track->content_decoder.initialize(*ktentry);
+    m_tracks.push_back(track);
+
     ktentry = FINDNEXT(l1, KaxTrackEntry, ktentry);
   } // while (ktentry != NULL)
 
@@ -1180,8 +1177,8 @@ kax_reader_c::read_headers_tracks(mm_io_c *io,
 }
 
 void
-kax_reader_c::read_headers_seek_head(EbmlElement *&l0,
-                                     EbmlElement *&l1) {
+kax_reader_c::read_headers_seek_head(EbmlElement *l0,
+                                     EbmlElement *l1) {
   EbmlElement *el;
 
   KaxSeekHead &seek_head = *static_cast<KaxSeekHead *>(l1);
