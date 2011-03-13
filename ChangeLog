@@ -1,3 +1,9 @@
+2011-03-13  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: enhancement: The EBML header values "doc type version"
+	and "doc type read version" are both set to 3 if at least one of
+	the video tracks uses the stereo mode parameter.
+
 2011-03-09  Moritz Bunkus  <moritz@bunkus.org>
 
 	* Released v4.6.0.

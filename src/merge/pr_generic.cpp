@@ -557,7 +557,18 @@ generic_packetizer_c::set_video_stereo_mode(stereo_mode_c::mode stereo_mode,
   m_ti.m_stereo_mode_source = source;
 
   if ((NULL != m_track_entry) && (stereo_mode_c::unspecified != stereo_mode))
-    GetChildAs<KaxVideoStereoMode, EbmlUInteger>(GetChild<KaxTrackVideo>(*m_track_entry)) = m_ti.m_stereo_mode;
+    set_video_stereo_mode_impl(GetChild<KaxTrackVideo>(*m_track_entry), m_ti.m_stereo_mode);
+}
+
+void
+generic_packetizer_c::set_video_stereo_mode_impl(EbmlMaster &video,
+                                                 stereo_mode_c::mode stereo_mode) {
+  GetChildAs<KaxVideoStereoMode, EbmlUInteger>(video) = stereo_mode;
+  bool previous_stereo_mode                           = g_stereo_mode_used;
+  g_stereo_mode_used                                  = true;
+
+  if (!previous_stereo_mode)
+    rerender_ebml_head();
 }
 
 void
@@ -678,7 +689,7 @@ generic_packetizer_c::set_headers() {
       }
 
       if ((PARAMETER_SOURCE_NONE != m_ti.m_stereo_mode_source) && (stereo_mode_c::unspecified != m_ti.m_stereo_mode))
-        GetChildAs<KaxVideoStereoMode, EbmlUInteger>(video) = m_ti.m_stereo_mode;
+        set_video_stereo_mode_impl(video, m_ti.m_stereo_mode);
     }
 
   } else if (track_audio == m_htrack_type) {

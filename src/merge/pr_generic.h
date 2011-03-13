@@ -553,6 +553,7 @@ public:
   virtual void set_video_pixel_cropping(int left, int top, int right, int bottom, parameter_source_e source);
   virtual void set_video_pixel_cropping(const pixel_crop_t &cropping, parameter_source_e source);
   virtual void set_video_stereo_mode(stereo_mode_c::mode stereo_mode, parameter_source_e source);
+  virtual void set_video_stereo_mode_impl(EbmlMaster &video, stereo_mode_c::mode stereo_mode);
 
   virtual void set_as_default_track(int type, int priority);
 

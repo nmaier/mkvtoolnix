@@ -80,6 +80,9 @@ public:
   virtual ~cluster_helper_c();
 
   void set_output(mm_io_c *out);
+  mm_io_c *get_output() {
+    return m_out;
+  }
   void prepare_new_cluster();
   KaxCluster *get_cluster() {
     return m_cluster;

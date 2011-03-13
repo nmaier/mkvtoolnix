@@ -197,6 +197,8 @@ extern int g_split_max_num_files;
 
 extern append_mode_e g_append_mode;
 
+extern bool g_stereo_mode_used;
+
 void get_file_type(filelist_t &file);
 void create_readers();
 
@@ -209,6 +211,7 @@ void add_tags(KaxTag *tags);
 void create_next_output_file();
 int64_t finish_file(bool last_file = false);
 void rerender_track_headers();
+void rerender_ebml_head();
 std::string create_output_name();
 
 int64_t add_attachment(attachment_t attachment);

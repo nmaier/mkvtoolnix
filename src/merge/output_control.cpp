@@ -186,6 +186,8 @@ int g_split_max_num_files                   = 65535;
 
 append_mode_e g_append_mode                 = APPEND_MODE_FILE_BASED;
 
+bool g_stereo_mode_used                     = false;
+
 std::string g_default_language              = "und";
 
 bitvalue_cptr g_seguid_link_previous;
@@ -212,6 +214,8 @@ static bitvalue_c s_seguid_prev(128), s_seguid_current(128), s_seguid_next(128);
 static int s_display_files_done           = 0;
 static int s_display_path_length          = 1;
 static generic_reader_c *s_display_reader = NULL;
+
+static EbmlHead *s_head                   = NULL;
 
 /** \brief Add a segment family UID to the list if it doesn't exist already.
 
@@ -567,6 +571,31 @@ set_timecode_scale() {
   g_kax_cues->SetGlobalTimecodeScale((int64_t)g_timecode_scale);
 }
 
+static void
+render_ebml_head(mm_io_c *out) {
+  if (NULL == s_head)
+    s_head = new EbmlHead;
+
+  unsigned int doctype_version = g_stereo_mode_used                    ? 3
+                               : hack_engaged(ENGAGE_NO_SIMPLE_BLOCKS) ? 1
+                               :                                         2;
+
+  GetChildAs<EDocType, EbmlString>(*s_head)              = outputting_webm() ? "webm" : "matroska";
+
+  GetChildAs<EDocTypeVersion,     EbmlUInteger>(*s_head) = doctype_version;
+  GetChildAs<EDocTypeReadVersion, EbmlUInteger>(*s_head) = doctype_version;
+
+  s_head->Render(*out, true);
+}
+
+void
+rerender_ebml_head() {
+  mm_io_c *out = g_cluster_helper->get_output();
+  out->save_pos(s_head->GetElementPosition());
+  render_ebml_head(out);
+  out->restore_pos();
+}
+
 /** \brief Render the basic EBML and Matroska headers
 
    Renders the segment information and track headers. Also reserves
@@ -576,21 +605,7 @@ set_timecode_scale() {
 static void
 render_headers(mm_io_c *out) {
   try {
-    EbmlHead head;
-
-    bool first_file                                       = (1 == g_file_num);
-
-    GetChildAs<EDocType, EbmlString>(head)                = outputting_webm() ? "webm" : "matroska";
-    if (hack_engaged(ENGAGE_NO_SIMPLE_BLOCKS)) {
-      GetChildAs<EDocTypeVersion,     EbmlUInteger>(head) = 1;
-      GetChildAs<EDocTypeReadVersion, EbmlUInteger>(head) = 1;
-
-    } else {
-      GetChildAs<EDocTypeVersion,     EbmlUInteger>(head) = 2;
-      GetChildAs<EDocTypeReadVersion, EbmlUInteger>(head) = 2;
-    }
-
-    head.Render(*out, true);
+    render_ebml_head(out);
 
     s_kax_infos = &GetChild<KaxInfo>(*g_kax_segment);
 
@@ -616,6 +631,8 @@ render_headers(mm_io_c *out) {
 
     if (!g_segment_title.empty())
       GetChildAs<KaxTitle, EbmlUnicodeString>(s_kax_infos)      = cstrutf8_to_UTFstring(g_segment_title.c_str());
+
+    bool first_file = (1 == g_file_num);
 
     // Generate the segment UIDs.
     if (!hack_engaged(ENGAGE_NO_VARIABLE_DATA)) {
@@ -1576,6 +1593,9 @@ finish_file(bool last_file) {
   delete s_void_after_track_headers;
   if (NULL != g_kax_sh_cues)
     delete g_kax_sh_cues;
+  delete s_head;
+
+  s_head = NULL;
 
   return final_file_size;
 }
