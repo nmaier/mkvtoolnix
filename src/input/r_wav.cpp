@@ -519,7 +519,6 @@ wav_reader_c::create_demuxer() {
   m_ti.m_id = 0;                    // ID for this track.
 
   uint16_t format_tag = get_uint16_le(&m_wheader.common.wFormatTag);
-  bool ieee_float     = 0x0003 == format_tag;
 
   if (0x2000 == format_tag) {
     m_demuxer = wav_demuxer_cptr(new wav_ac3acm_demuxer_c(this, &m_wheader));
@@ -539,8 +538,8 @@ wav_reader_c::create_demuxer() {
       m_demuxer.clear();
   }
 
-  if (!m_demuxer.is_set())
-    m_demuxer = wav_demuxer_cptr(new wav_pcm_demuxer_c(this, &m_wheader, ieee_float));
+  if (!m_demuxer.is_set() && ((0x0001 == format_tag) || (0x0003 == format_tag)))
+    m_demuxer = wav_demuxer_cptr(new wav_pcm_demuxer_c(this, &m_wheader, 0x00003 == format_tag));
 
   if (verbose)
     mxinfo_fn(m_ti.m_fname, Y("Using the WAV demultiplexer.\n"));
@@ -548,7 +547,7 @@ wav_reader_c::create_demuxer() {
 
 void
 wav_reader_c::create_packetizer(int64_t) {
-  if (!demuxing_requested('a', 0) || (NPTZR() != 0))
+  if (!demuxing_requested('a', 0) || (NPTZR() != 0) || !m_demuxer.is_set())
     return;
 
   add_packetizer(m_demuxer->create_packetizer());
@@ -557,6 +556,9 @@ wav_reader_c::create_packetizer(int64_t) {
 file_status_e
 wav_reader_c::read(generic_packetizer_c *,
                    bool) {
+  if (!m_demuxer.is_set())
+    return FILE_STATUS_DONE;
+
   int64_t        requested_bytes = std::min(m_remaining_bytes_in_current_data_chunk, m_demuxer->get_preferred_input_size());
   unsigned char *buffer          = m_demuxer->get_buffer();
   int64_t        num_read;
@@ -650,6 +652,12 @@ wav_reader_c::get_progress() {
 
 void
 wav_reader_c::identify() {
-  id_result_container("WAV");
-  id_result_track(0, ID_RESULT_TRACK_AUDIO, m_demuxer->get_codec());
+  if (m_demuxer.is_set()) {
+    id_result_container("WAV");
+    id_result_track(0, ID_RESULT_TRACK_AUDIO, m_demuxer->get_codec());
+
+  } else {
+    uint16_t format_tag = get_uint16_le(&m_wheader.common.wFormatTag);
+    id_result_container_unsupported(m_io->get_file_name(), (boost::format("RIFF WAVE (wFormatTag = 0x%|1$04x|)") % format_tag).str());
+  }
 }

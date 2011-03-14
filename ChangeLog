@@ -1,3 +1,9 @@
+2011-03-14  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: WAV files with unsupported format tags are
+	rejected instead of being treated like containing PCM. Fix for bug
+	610.
+
 2011-03-13  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: enhancement: The EBML header values "doc type version"
