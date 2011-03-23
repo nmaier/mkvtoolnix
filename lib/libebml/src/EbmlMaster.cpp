@@ -30,7 +30,7 @@
 
 /*!
 	\file
-	\version \$Id: EbmlMaster.cpp 493 2010-08-12 18:27:18Z robux4 $
+	\version \$Id: EbmlMaster.cpp 708 2011-03-20 17:33:49Z robux4 $
 	\author Steve Lhomme     <robux4 @ users.sf.net>
 */
 
@@ -146,7 +146,7 @@ uint64 EbmlMaster::UpdateSize(bool bWithDefault, bool bForceRender)
 		(ElementList[Index])->UpdateSize(bWithDefault, bForceRender);
 		uint64 SizeToAdd = (ElementList[Index])->ElementSize(bWithDefault);
 #if defined(_DEBUG) || defined(DEBUG)
-		if (static_cast<int64_t>(SizeToAdd) == (0-1))
+		if (static_cast<int64>(SizeToAdd) == (0-1))
 			return (0-1);
 #endif // DEBUG
 		SetSize_(GetSize() + SizeToAdd);

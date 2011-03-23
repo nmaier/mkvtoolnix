@@ -30,7 +30,7 @@
 
 /*!
 	\file
-	\version \$Id: EbmlBinary.cpp 520 2010-08-19 12:01:28Z robux4 $
+	\version \$Id: EbmlBinary.cpp 672 2011-02-05 21:26:49Z mosub $
 	\author Steve Lhomme     <robux4 @ users.sf.net>
 	\author Julien Coloos	<suiryc @ users.sf.net>
 */
