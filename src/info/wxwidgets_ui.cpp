@@ -92,7 +92,7 @@ mi_frame::mi_frame(const wxString &title,
                    long style)
   : wxFrame(NULL, -1, title, pos, size, style)
   , dnd_load(new mi_dndfile)
-  , show_all_elements(0 != verbose)
+  , show_all_elements(0 != g_options.m_verbose)
   , expand_important_elements(true)
   , file_open(false)
   , tree(new wxTreeCtrl(this, 4254))
@@ -303,8 +303,8 @@ mi_frame::on_file_quit(wxCommandEvent &WXUNUSED(event)) {
 
 void
 mi_frame::on_options_showall(wxCommandEvent &WXUNUSED(event)) {
-  show_all_elements = !show_all_elements;
-  verbose           = show_all_elements ? 2 : 0;
+  show_all_elements   = !show_all_elements;
+  g_options.m_verbose = show_all_elements ? 2 : 0;
   menu_options->Check(mi_options_showall, show_all_elements);
 
   if (file_open)

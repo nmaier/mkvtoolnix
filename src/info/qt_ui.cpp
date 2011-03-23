@@ -47,7 +47,7 @@ main_window_c::main_window_c():
   action_Save_text_file->setEnabled(false);
 
   action_Show_all->setCheckable(true);
-  action_Show_all->setChecked(0 < verbose);
+  action_Show_all->setChecked(0 < g_options.m_verbose);
 
   action_Expand_important->setCheckable(true);
   action_Expand_important->setChecked(true);
@@ -105,7 +105,7 @@ main_window_c::write_tree(QFile &file,
 
 void
 main_window_c::show_all() {
-  verbose = action_Show_all->isChecked() ? 2 : 0;
+  g_options.m_verbose = action_Show_all->isChecked() ? 2 : 0;
   if (!current_file.isEmpty())
     parse_file(current_file);
 }

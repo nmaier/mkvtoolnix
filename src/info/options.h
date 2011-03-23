@@ -20,7 +20,7 @@ class options_c {
 public:
   std::string m_file_name;
   bool m_use_gui, m_calc_checksums, m_show_summary, m_show_hexdump, m_show_size, m_show_track_info;
-  int m_hexdump_max_size;
+  int m_hexdump_max_size, m_verbose;
 public:
   options_c();
 };

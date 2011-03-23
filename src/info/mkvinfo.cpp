@@ -218,7 +218,7 @@ create_element_text(const std::string &text,
                     int64_t size) {
   std::string additional_text;
 
-  if ((1 < verbose) && (0 <= position))
+  if ((1 < g_options.m_verbose) && (0 <= position))
     additional_text += (BF_AT % position).str();
 
   if (g_options.m_show_size && (-1 != size)) {
@@ -1132,7 +1132,7 @@ def_handle(tracks) {
 
 void
 def_handle(seek_head) {
-  if ((verbose < 2) && !g_options.m_use_gui) {
+  if ((g_options.m_verbose < 2) && !g_options.m_use_gui) {
     show_element(l1, 1, Y("Seek head (subentries will be skipped)"));
     return;
   }
@@ -1192,7 +1192,7 @@ def_handle(seek_head) {
 
 void
 def_handle(cues) {
-  if (verbose < 2) {
+  if (g_options.m_verbose < 2) {
     show_element(l1, 1, Y("Cues (subentries will be skipped)"));
     return;
   }
@@ -1552,7 +1552,7 @@ def_handle2(block_group,
     size_t fidx;
 
     for (fidx = 0; fidx < frame_sizes.size(); fidx++) {
-      if (1 <= verbose) {
+      if (1 <= g_options.m_verbose) {
         position   = (BF_BLOCK_GROUP_SUMMARY_POSITION % frame_pos).str();
         frame_pos += frame_sizes[fidx];
       }
@@ -1580,7 +1580,7 @@ def_handle2(block_group,
                % position);
     }
 
-  } else if (verbose > 2)
+  } else if (g_options.m_verbose > 2)
     show_element(NULL, 2,
                  BF_BLOCK_GROUP_SUMMARY_V2
                  % (bref_found && fref_found ? 'B' : bref_found ? 'P' : !fref_found ? 'I' : 'P')
@@ -1663,7 +1663,7 @@ def_handle2(simple_block,
     size_t fidx;
 
     for (fidx = 0; fidx < frame_sizes.size(); fidx++) {
-      if (1 <= verbose) {
+      if (1 <= g_options.m_verbose) {
         position   = (BF_SIMPLE_BLOCK_POSITION % frame_pos).str();
         frame_pos += frame_sizes[fidx];
       }
@@ -1678,7 +1678,7 @@ def_handle2(simple_block,
              % position);
     }
 
-  } else if (verbose > 2)
+  } else if (g_options.m_verbose > 2)
     show_element(NULL, 2,
                  BF_SIMPLE_BLOCK_SUMMARY_V2
                  % (block.IsKeyframe() ? 'I' : block.IsDiscardable() ? 'B' : 'P')
@@ -1987,7 +1987,7 @@ process_file(const std::string &file_name) {
 
       else if (is_id(l1, KaxCluster)) {
         show_element(l1, 1, Y("Cluster"));
-        if ((verbose == 0) && !g_options.m_show_summary) {
+        if ((g_options.m_verbose == 0) && !g_options.m_show_summary) {
           delete l1;
           delete l0;
           delete es;

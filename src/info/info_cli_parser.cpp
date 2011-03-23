@@ -119,6 +119,9 @@ info_cli_parser_c::run() {
   init_parser();
   parse_args();
 
+  m_options.m_verbose = verbose;
+  verbose             = 0;
+
   return m_options;
 }
 
