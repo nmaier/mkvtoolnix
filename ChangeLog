@@ -1,5 +1,8 @@
 2011-03-23  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: Fixed huge slowdown when splitting by size is
+	active with certain kinds of input files. Fix for bug 611.
+
 	* mkvinfo: bug fix: Fixed redirecting the output into a file with
 	"--redirect-output"/"-r" and verbosity levels of 2 and higher.
 

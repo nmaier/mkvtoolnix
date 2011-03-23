@@ -121,10 +121,7 @@ cluster_helper_c::add_packet(packet_cptr packet) {
       } else
         additional_size = 0;
 
-      if (0 < m_num_cue_elements) {
-        g_kax_cues->UpdateSize();
-        additional_size += g_kax_cues->ElementSize();
-      }
+      additional_size += 18 * m_num_cue_elements;
 
       mxverb(3,
              boost::format("cluster_helper split decision: header_overhead: %1%, additional_size: %2%, bytes_in_file: %3%, sum: %4%\n")
