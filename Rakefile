@@ -488,7 +488,7 @@ Application.new("src/mkvinfo").
 #
 
 Application.new("src/mkvextract").
-  description("Build the mkvpropedit executable").
+  description("Build the mkvextract executable").
   aliases(:mkvextract).
   sources("src/extract", :type => :dir).
   sources("src/extract/resources.o", :if => c?(:MINGW)).
