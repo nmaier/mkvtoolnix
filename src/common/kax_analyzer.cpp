@@ -31,7 +31,7 @@
 using namespace libebml;
 using namespace libmatroska;
 
-#define in_parent(p) (!p->IsFiniteSize() || (m_file->getFilePointer() < (p->GetElementPosition() + p->ElementSize())))
+#define in_parent(p) (!p->IsFiniteSize() || (m_file->getFilePointer() < (p->GetElementPosition() + p->HeadSize() + p->GetSize())))
 
 #define CONSOLE_PERCENTAGE_WIDTH 25
 
