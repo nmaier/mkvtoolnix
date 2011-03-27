@@ -32,7 +32,7 @@
 
 /*!
     \file
-    \version \$Id: test00.cpp 383 2010-07-04 09:17:57Z robux4 $
+    \version \$Id: test00.cpp 725 2011-03-27 17:09:02Z robux4 $
     \author Steve Lhomme     <robux4 @ users.sf.net>
 		Test the writing a basic EBML file
 */
@@ -48,9 +48,8 @@
 #include "ebml/EbmlVoid.h"
 #include "ebml/EbmlContexts.h"
 #include "matroska/KaxSegment.h"
-#include "matroska/KaxAttachments.h"
-#include "matroska/KaxAttached.h"
 #include "matroska/KaxContexts.h"
+#include "matroska/KaxSemantic.h"
 
 #include "ebml/EbmlVersion.h"
 #include "matroska/KaxVersion.h"

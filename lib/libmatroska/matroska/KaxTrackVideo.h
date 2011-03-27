@@ -29,82 +29,12 @@
 
 /*!
 	\file
-	\version \$Id: KaxTrackVideo.h 270 2010-05-25 12:02:30Z robux4 $
+	\version \$Id: KaxTrackVideo.h 725 2011-03-27 17:09:02Z robux4 $
 	\author Steve Lhomme     <robux4 @ users.sf.net>
 */
 #ifndef LIBMATROSKA_TRACK_VIDEO_H
 #define LIBMATROSKA_TRACK_VIDEO_H
 
-#include "matroska/KaxTypes.h"
-#include "ebml/EbmlMaster.h"
-#include "ebml/EbmlUInteger.h"
-#include "ebml/EbmlBinary.h"
-#include "ebml/EbmlFloat.h"
-#include "matroska/KaxDefines.h"
-
-using namespace LIBEBML_NAMESPACE;
-
-START_LIBMATROSKA_NAMESPACE
-
-DECLARE_MKX_MASTER(KaxTrackVideo)
-};
-
-#if MATROSKA_VERSION >= 2
-DECLARE_MKX_UINTEGER(KaxVideoFlagInterlaced)
-};
-
-DECLARE_MKX_UINTEGER(KaxVideoStereoMode)
-};
-#endif // MATROSKA_VERSION
-
-DECLARE_MKX_UINTEGER(KaxVideoPixelWidth)
-};
-
-DECLARE_MKX_UINTEGER(KaxVideoPixelHeight)
-};
-
-DECLARE_MKX_UINTEGER(KaxVideoPixelCropBottom)
-};
-
-DECLARE_MKX_UINTEGER(KaxVideoPixelCropTop)
-};
-
-DECLARE_MKX_UINTEGER(KaxVideoPixelCropLeft)
-};
-
-DECLARE_MKX_UINTEGER(KaxVideoPixelCropRight)
-};
-
-DECLARE_MKX_UINTEGER(KaxVideoDisplayWidth)
-};
-
-DECLARE_MKX_UINTEGER(KaxVideoDisplayHeight)
-};
-
-#if MATROSKA_VERSION >= 2
-DECLARE_MKX_UINTEGER(KaxVideoDisplayUnit)
-};
-
-DECLARE_MKX_UINTEGER(KaxVideoAspectRatio)
-};
-#endif // MATROSKA_VERSION
-
-DECLARE_MKX_BINARY(KaxVideoColourSpace)
-	public:
-        bool ValidateSize(void) const {return IsFiniteSize() && (GetSize() == 4);}
-};
-
-#if MATROSKA_VERSION >= 2
-DECLARE_MKX_FLOAT(KaxVideoGamma)
-};
-#endif // MATROSKA_VERSION
-
-DECLARE_MKX_FLOAT(KaxVideoFrameRate)
-	public:
-		filepos_t RenderData(IOCallback & output, bool bForceRender, bool bSaveDefault);
-};
-
-
-END_LIBMATROSKA_NAMESPACE
+#include "matroska/KaxSemantic.h"
 
 #endif // LIBMATROSKA_TRACK_VIDEO_H

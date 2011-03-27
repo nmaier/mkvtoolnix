@@ -29,7 +29,7 @@
 
 /*!
 	\file
-	\version \$Id: KaxSeekHead.h 270 2010-05-25 12:02:30Z robux4 $
+	\version \$Id: KaxSeekHead.h 725 2011-03-27 17:09:02Z robux4 $
 	\author Steve Lhomme     <robux4 @ users.sf.net>
 */
 #ifndef LIBMATROSKA_SEEK_HEAD_H
@@ -46,7 +46,13 @@ using namespace LIBEBML_NAMESPACE;
 START_LIBMATROSKA_NAMESPACE
 
 class KaxSegment;
-class KaxSeek;
+
+DECLARE_MKX_MASTER(KaxSeek)
+	public:
+		int64 Location() const;
+		bool IsEbmlId(const EbmlId & aId) const;
+		bool IsEbmlId(const KaxSeek & aPoint) const;
+};
 
 DECLARE_MKX_MASTER(KaxSeekHead)
 	public:
@@ -58,21 +64,6 @@ DECLARE_MKX_MASTER(KaxSeekHead)
 
 		KaxSeek * FindFirstOf(const EbmlCallbacks & Callbacks) const;
 		KaxSeek * FindNextOf(const KaxSeek &aPrev) const;
-};
-
-DECLARE_MKX_MASTER(KaxSeek)
-	public:
-		int64 Location() const;
-		bool IsEbmlId(const EbmlId & aId) const;
-		bool IsEbmlId(const KaxSeek & aPoint) const;
-};
-
-DECLARE_MKX_BINARY(KaxSeekID)
-	public:
-		virtual bool ValidateSize() const {return IsFiniteSize() && GetSize() <= 4;}
-};
-
-DECLARE_MKX_UINTEGER(KaxSeekPosition)
 };
 
 END_LIBMATROSKA_NAMESPACE

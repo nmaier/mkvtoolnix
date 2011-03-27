@@ -29,72 +29,12 @@
 
 /*!
 	\file
-	\version \$Id: KaxTag.h 385 2010-07-04 09:32:26Z robux4 $
-	\author Jory Stone     <jcsston @ toughguy.net>
+	\version \$Id: KaxTag.h 725 2011-03-27 17:09:02Z robux4 $
 	\author Steve Lhomme   <robux4 @ users.sf.net>
 */
 #ifndef LIBMATROSKA_TAG_H
 #define LIBMATROSKA_TAG_H
 
-#include "matroska/KaxTypes.h"
-#include "ebml/EbmlMaster.h"
-#include "ebml/EbmlFloat.h"
-#include "ebml/EbmlSInteger.h"
-#include "ebml/EbmlUInteger.h"
-#include "ebml/EbmlString.h"
-#include "ebml/EbmlUnicodeString.h"
-#include "ebml/EbmlBinary.h"
-#include "matroska/KaxDefines.h"
-
-using namespace LIBEBML_NAMESPACE;
-
-START_LIBMATROSKA_NAMESPACE
-
-DECLARE_MKX_MASTER(KaxTag)
-};
-
-DECLARE_MKX_MASTER(KaxTagTargets)
-};
-
-DECLARE_MKX_UINTEGER(KaxTagTargetTypeValue)
-};
-
-DECLARE_MKX_STRING(KaxTagTargetType)
-};
-
-DECLARE_MKX_UINTEGER(KaxTagTrackUID)
-};
-
-DECLARE_MKX_UINTEGER(KaxTagEditionUID)
-};
-
-DECLARE_MKX_UINTEGER(KaxTagChapterUID)
-};
-
-DECLARE_MKX_UINTEGER(KaxTagAttachmentUID)
-};
-
-DECLARE_MKX_STRING(KaxTagLanguage)
-};
-
-DECLARE_MKX_MASTER(KaxTagSimple)
-};
-
-DECLARE_MKX_UNISTRING(KaxTagName)
-};
-
-DECLARE_MKX_STRING(KaxTagLangue)
-};
-
-DECLARE_MKX_UINTEGER(KaxTagDefault)
-};
-
-DECLARE_MKX_UNISTRING(KaxTagString)
-};
-
-DECLARE_MKX_BINARY(KaxTagBinary)
-};
-
-END_LIBMATROSKA_NAMESPACE
+#include "matroska/KaxSemantic.h"
 
 #endif // LIBMATROSKA_TAG_H

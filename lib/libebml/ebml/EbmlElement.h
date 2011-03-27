@@ -28,7 +28,7 @@
 
 /*!
 	\file
-	\version \$Id: EbmlElement.h 364 2010-06-30 06:07:40Z robux4 $
+	\version \$Id: EbmlElement.h 722 2011-03-27 16:43:10Z robux4 $
 	\author Steve Lhomme     <robux4 @ users.sf.net>
 */
 #ifndef LIBEBML_ELEMENT_H
@@ -115,6 +115,12 @@ extern const EbmlSemanticContext Context_EbmlGlobal;
     const EbmlSemanticContext Context_##x = EbmlSemanticContext(0, NULL, &Context_##parent, global, &EBML_INFO(x)); \
     const EbmlCallbacks x::ClassInfos(x::Create, Id_##x, name, Context_##x); \
     x::x() :EbmlUInteger(defval) {}
+
+#define DEFINE_xxx_SINTEGER_DEF(x,id,idl,parent,name,global,defval) \
+    const EbmlId Id_##x    (id, idl); \
+    const EbmlSemanticContext Context_##x = EbmlSemanticContext(0, NULL, &Context_##parent, global, &EBML_INFO(x)); \
+    const EbmlCallbacks x::ClassInfos(x::Create, Id_##x, name, Context_##x); \
+    x::x() :EbmlSInteger(defval) {}
 
 #define DEFINE_xxx_STRING_DEF(x,id,idl,parent,name,global,defval) \
     const EbmlId Id_##x    (id, idl); \

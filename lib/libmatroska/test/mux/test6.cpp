@@ -29,7 +29,7 @@
 
 /*!
     \file
-    \version \$Id: test6.cpp 453 2010-07-29 19:06:19Z robux4 $
+    \version \$Id: test6.cpp 725 2011-03-27 17:09:02Z robux4 $
     \brief Test muxing two tracks into valid clusters/blocks/frames
     \author Steve Lhomme     <robux4 @ users.sf.net>
 */
@@ -48,19 +48,10 @@
 #include "matroska/FileKax.h"
 #include "matroska/KaxSegment.h"
 #include "matroska/KaxTracks.h"
-#include "matroska/KaxTrackEntryData.h"
-#include "matroska/KaxTrackAudio.h"
-#include "matroska/KaxTrackVideo.h"
 #include "matroska/KaxCluster.h"
-#include "matroska/KaxClusterData.h"
 #include "matroska/KaxSeekHead.h"
 #include "matroska/KaxCues.h"
-#include "matroska/KaxInfo.h"
 #include "matroska/KaxInfoData.h"
-#include "matroska/KaxTags.h"
-#include "matroska/KaxTag.h"
-#include "matroska/KaxChapters.h"
-#include "matroska/KaxContentEncoding.h"
 
 using namespace LIBMATROSKA_NAMESPACE;
 using namespace std;

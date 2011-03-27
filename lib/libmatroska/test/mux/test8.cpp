@@ -27,7 +27,7 @@
 
 /*!
     \file
-    \version \$Id: test8.cpp 385 2010-07-04 09:32:26Z robux4 $
+    \version \$Id: test8.cpp 725 2011-03-27 17:09:02Z robux4 $
     \brief Test reading of the Header
     \author Steve Lhomme     <robux4 @ users.sf.net>
 */
@@ -49,16 +49,11 @@
 #include "matroska/KaxSegment.h"
 #include "matroska/KaxContexts.h"
 #include "matroska/KaxTracks.h"
-#include "matroska/KaxInfo.h"
 #include "matroska/KaxInfoData.h"
 #include "matroska/KaxCluster.h"
-#include "matroska/KaxClusterData.h"
 #include "matroska/KaxBlockData.h"
 #include "matroska/KaxSeekHead.h"
 #include "matroska/KaxCuesData.h"
-#include "matroska/KaxChapters.h"
-#include "matroska/KaxTags.h"
-#include "matroska/KaxTag.h"
 #include "ebml/StdIOCallback.h"
 
 using namespace LIBMATROSKA_NAMESPACE;
