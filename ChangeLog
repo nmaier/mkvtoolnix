@@ -1,3 +1,9 @@
+2011-04-13  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: mkvmerge was dropping the last full DTS
+	packet from a DTS files if that file was not encoded in "14-in-16"
+	mode and if the file size was not divisible by 16.
+
 2011-03-23  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Fixed huge slowdown when splitting by size is

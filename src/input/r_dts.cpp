@@ -121,7 +121,9 @@ file_status_e
 dts_reader_c::read(generic_packetizer_c *,
                    bool) {
   int nread  = io->read(buf[cur_buf], READ_SIZE);
-  nread     &= ~0xf;
+
+  if (dts14_to_16)
+    nread &= ~0xf;
 
   if (0 >= nread)
     return flush_packetizers();
