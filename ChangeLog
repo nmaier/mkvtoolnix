@@ -1,3 +1,10 @@
+2011-04-14  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: bug fix: The output file name extension will be updated on
+	each track selection changed as well. The extension is based on
+	the actually selected tracks, not on the presence of tracks of
+	certain types. Fix for bug 615.
+
 2011-04-13  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: mkvmerge was dropping the last full DTS

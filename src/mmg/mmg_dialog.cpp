@@ -1326,9 +1326,14 @@ mmg_dialog::set_output_maybe(const wxString &new_output) {
 
 wxString
 mmg_dialog::suggest_file_name_extension() {
-  bool has_video = false, has_audio = false, has_stereo_mode = false;
+  bool has_video = false, has_audio = false, has_stereo_mode = false, has_tracks = false;
 
   foreach(mmg_track_t *t, tracks) {
+    if (!t->enabled)
+      continue;
+
+    has_tracks = true;
+
     if (t->is_video()) {
       has_video = true;
       if (t->stereo_mode >= 2)
@@ -1342,7 +1347,14 @@ mmg_dialog::suggest_file_name_extension() {
        : has_stereo_mode                        ? wxU("mk3d")
        : has_video                              ? wxU("mkv")
        : has_audio                              ? wxU("mka")
-       :                                          wxU("mks");
+       : has_tracks                             ? wxU("mks")
+       :                                          wxU("mkv");
+}
+
+void
+mmg_dialog::update_output_file_name_extension() {
+  if (!tc_output->IsEmpty())
+    tc_output->SetValue(tc_output->GetValue().BeforeLast(wxT('.')) + wxT(".") + suggest_file_name_extension());
 }
 
 void
@@ -1649,9 +1661,7 @@ mmg_dialog::set_on_top(bool on_top) {
 
 void
 mmg_dialog::handle_webm_mode(bool enabled) {
-  if (!tc_output->IsEmpty())
-    tc_output->SetValue(tc_output->GetValue().BeforeLast(wxT('.')) + wxT(".") + suggest_file_name_extension());
-
+  update_output_file_name_extension();
   input_page->handle_webm_mode(enabled);
   global_page->handle_webm_mode(enabled);
 }

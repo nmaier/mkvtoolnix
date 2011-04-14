@@ -951,6 +951,8 @@ tab_input::on_track_enabled(wxCommandEvent &evt) {
 
     tracks[i]->enabled = clb_tracks->IsChecked(i);
   }
+
+  mdlg->update_output_file_name_extension();
 }
 
 void

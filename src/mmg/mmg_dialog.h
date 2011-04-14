@@ -236,6 +236,7 @@ public:
   void display_help(int id);
 
   wxString suggest_file_name_extension();
+  void update_output_file_name_extension();
 
 #if defined(HAVE_CURL_EASY_H)
   void maybe_check_for_updates();
