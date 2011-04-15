@@ -1,5 +1,8 @@
 2011-04-15  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: Fixed reading AAC tracks from AVI files with
+	7 bytes long codec data. Fix for bug 613.
+
 	* mkvmerge: enhancement: Added support for WAV and AVI files that
 	use a WAVEFORMATEXTENSIBLE structure (wFormatTag == 0xfffe). Fix
 	for bug 614.

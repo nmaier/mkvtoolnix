@@ -623,10 +623,6 @@ avi_reader_c::create_aac_packetizer(int aid,
     m_ti.m_private_data    = created_aac_data;
 
   } else {
-    if ((2 != m_ti.m_private_size) && (5 != m_ti.m_private_size))
-      mxerror_tid(m_ti.m_fname, aid + 1,
-                  boost::format(Y("This AAC track does not contain valid headers. The extra header size is %1% bytes, expected were 2 or 5 bytes.\n")) % m_ti.m_private_size);
-
     if (!parse_aac_data(m_ti.m_private_data, m_ti.m_private_size, profile, channels, sample_rate, output_sample_rate, is_sbr))
       mxerror_tid(m_ti.m_fname, aid + 1, Y("This AAC track does not contain valid headers. Could not parse the AAC information.\n"));
 
