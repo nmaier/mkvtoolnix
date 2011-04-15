@@ -1,5 +1,9 @@
 2011-04-15  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvextract: bug fix: Fixed extraction of MPEG-1/2 video tracks
+	whose sequence headers change mid-stream but whose key frames are
+	not all prefixed with a sequence header. Fix for bug 556.
+
 	* mkvmerge: bug fix: Fixed reading AAC tracks from AVI files with
 	7 bytes long codec data. Fix for bug 613.
 

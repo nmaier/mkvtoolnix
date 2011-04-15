@@ -56,11 +56,27 @@ xtr_mpeg1_2_video_c::handle_frame(memory_cptr &frame,
 
   if (keyframe && m_seq_hdr.is_set()) {
     bool seq_hdr_found = false;
+    size_t size        = frame->get_size();
 
-    if (frame->get_size() >= 4) {
+    if (4 <= size) {
       uint32_t marker = get_uint32_be(buf);
-      if (MPEGVIDEO_SEQUENCE_START_CODE == marker)
-        seq_hdr_found = true;
+      seq_hdr_found   = MPEGVIDEO_SEQUENCE_START_CODE == marker;
+
+      if (seq_hdr_found && (8 <= size)) {
+        size_t end_pos = 7;
+        marker         = get_uint32_be(&buf[4]);
+        while (   ((end_pos + 1) < size)
+               && (   (0x00000100               != (marker & 0xffffff00))
+                   || (MPEGVIDEO_EXT_START_CODE == marker))) {
+          ++end_pos;
+          marker = (marker << 8) | buf[end_pos];
+        }
+
+        size_t seq_size = end_pos - (((end_pos + 1) < size) ? 3 : 4);
+
+        if ((m_seq_hdr->get_size() != seq_size) || memcmp(m_seq_hdr->get_buffer(), buf, seq_size))
+          m_seq_hdr = clone_memory(buf, seq_size);
+      }
     }
 
     if (!seq_hdr_found)
