@@ -532,7 +532,11 @@ avi_reader_c::add_audio_demuxer(int aid) {
   m_ti.m_avi_sample_scale            = get_uint32_le(&m_avi->stream_headers[aid].dw_rate);
   m_ti.m_avi_samples_per_sec         = demuxer.m_samples_per_second;
 
-  if (get_uint16_le(&wfe->cb_size) > 0) {
+  if ((0xfffe == audio_format) && (get_uint16_le(&wfe->cb_size) >= (sizeof(alWAVEFORMATEXTENSION)))) {
+    alWAVEFORMATEXTENSIBLE *ext = reinterpret_cast<alWAVEFORMATEXTENSIBLE *>(wfe);
+    audio_format                = get_uint32_le(&ext->extension.guid.data1);
+
+  } else if (get_uint16_le(&wfe->cb_size) > 0) {
     m_ti.m_private_data              = (unsigned char *)(wfe + 1);
     m_ti.m_private_size              = get_uint16_le(&wfe->cb_size);
   } else {
@@ -948,6 +952,11 @@ avi_reader_c::identify_audio() {
   for (i = 0; i < AVI_audio_tracks(m_avi); i++) {
     AVI_set_audio_track(m_avi, i);
     unsigned int audio_format = AVI_audio_format(m_avi);
+    alWAVEFORMATEX *wfe       = m_avi->wave_format_ex[i];
+    if ((0xfffe == audio_format) && (get_uint16_le(&wfe->cb_size) >= (sizeof(alWAVEFORMATEXTENSION)))) {
+      alWAVEFORMATEXTENSIBLE *ext = reinterpret_cast<alWAVEFORMATEXTENSIBLE *>(wfe);
+      audio_format = get_uint32_le(&ext->extension.guid.data1);
+    }
 
     std::string type
       = (0x0001 == audio_format) || (0x0003 == audio_format) ? "PCM"

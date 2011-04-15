@@ -72,6 +72,8 @@ private:
 
   wav_demuxer_cptr m_demuxer;
 
+  uint32_t m_format_tag;
+
 public:
   wav_reader_c(track_info_c &_ti) throw (error_c);
   virtual ~wav_reader_c();

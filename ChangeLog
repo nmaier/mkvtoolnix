@@ -1,3 +1,9 @@
+2011-04-15  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: enhancement: Added support for WAV and AVI files that
+	use a WAVEFORMATEXTENSIBLE structure (wFormatTag == 0xfffe). Fix
+	for bug 614.
+
 2011-04-14  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: bug fix: The output file name extension will be updated on

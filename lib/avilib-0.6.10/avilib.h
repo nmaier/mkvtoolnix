@@ -181,6 +181,28 @@ typedef struct PACKED_STRUCTURE
   uint16_t  cb_size;
 } alWAVEFORMATEX;
 
+typedef struct PACKED_STRUCTURE {
+  uint32_t data1;
+  uint16_t data2;
+  uint16_t data3;
+  unsigned char data4[8];
+} alGUID;
+
+typedef struct PACKED_STRUCTURE {
+  union {
+    uint16_t w_valid_bits_per_sample;
+    uint16_t w_samples_per_block;
+    uint16_t w_reserved;
+  } samples;
+  uint32_t dw_channel_mask;
+  alGUID guid;
+} alWAVEFORMATEXTENSION;
+
+typedef struct PACKED_STRUCTURE {
+  alWAVEFORMATEX format;
+  alWAVEFORMATEXTENSION extension;
+} alWAVEFORMATEXTENSIBLE;
+
 typedef struct PACKED_STRUCTURE
 {
   uint32_t fcc_type; 

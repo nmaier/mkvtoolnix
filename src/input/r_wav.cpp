@@ -473,9 +473,29 @@ wav_reader_c::parse_file() {
 
   m_io->setFilePointer(m_chunks[chunk_idx].pos, seek_beginning);
 
-  if ((m_io->read(&m_wheader.format, sizeof(m_wheader.format)) != sizeof(m_wheader.format)) ||
-      (m_io->read(&m_wheader.common, sizeof(m_wheader.common)) != sizeof(m_wheader.common)))
+  try {
+    if (m_io->read(&m_wheader.format, sizeof(m_wheader.format)) != sizeof(m_wheader.format))
+      throw false;
+
+    if (static_cast<uint64_t>(m_chunks[chunk_idx].len) >= sizeof(alWAVEFORMATEXTENSIBLE)) {
+      alWAVEFORMATEXTENSIBLE format;
+      if (m_io->read(&format, sizeof(format)) != sizeof(format))
+        throw false;
+      memcpy(&m_wheader.common, &format, sizeof(m_wheader.common));
+
+      m_format_tag = get_uint16_le(&m_wheader.common.wFormatTag);
+      if (0xfffe == m_format_tag)
+        m_format_tag = get_uint32_le(&format.extension.guid.data1);
+
+    } else if (m_io->read(&m_wheader.common, sizeof(m_wheader.common)) != sizeof(m_wheader.common))
+      throw false;
+
+    else
+      m_format_tag = get_uint16_le(&m_wheader.common.wFormatTag);
+
+  } catch (...) {
     throw error_c(Y("wav_reader: The format chunk could not be read."));
+  }
 
   if ((m_cur_data_chunk_idx = find_chunk("data", 0, false)) == -1)
     throw error_c(Y("wav_reader: No data chunk was found."));
@@ -501,7 +521,8 @@ wav_reader_c::dump_headers() {
                        "    dwSamplesPerSec:  %13%\n"
                        "    dwAvgBytesPerSec: %14%\n"
                        "    wBlockAlign:      %15%\n"
-                       "    wBitsPerSample:   %16%\n")
+                       "    wBitsPerSample:   %16%\n"
+                       "  actual format_tag:  %17%\n")
          % m_ti.m_fname
          % char(m_wheader.riff.id[0]) % char(m_wheader.riff.id[1]) % char(m_wheader.riff.id[2]) % char(m_wheader.riff.id[3])
          % get_uint32_le(&m_wheader.riff.len)
@@ -511,16 +532,15 @@ wav_reader_c::dump_headers() {
          % get_uint32_le(&m_wheader.common.dwSamplesPerSec)
          % get_uint32_le(&m_wheader.common.dwAvgBytesPerSec)
          % get_uint16_le(&m_wheader.common.wBlockAlign)
-         % get_uint16_le(&m_wheader.common.wBitsPerSample));
+         % get_uint16_le(&m_wheader.common.wBitsPerSample)
+         % m_format_tag);
 }
 
 void
 wav_reader_c::create_demuxer() {
   m_ti.m_id = 0;                    // ID for this track.
 
-  uint16_t format_tag = get_uint16_le(&m_wheader.common.wFormatTag);
-
-  if (0x2000 == format_tag) {
+  if (0x2000 == m_format_tag) {
     m_demuxer = wav_demuxer_cptr(new wav_ac3acm_demuxer_c(this, &m_wheader));
     if (!m_demuxer->probe(m_io))
       m_demuxer.clear();
@@ -538,8 +558,8 @@ wav_reader_c::create_demuxer() {
       m_demuxer.clear();
   }
 
-  if (!m_demuxer.is_set() && ((0x0001 == format_tag) || (0x0003 == format_tag)))
-    m_demuxer = wav_demuxer_cptr(new wav_pcm_demuxer_c(this, &m_wheader, 0x00003 == format_tag));
+  if (!m_demuxer.is_set() && ((0x0001 == m_format_tag) || (0x0003 == m_format_tag)))
+    m_demuxer = wav_demuxer_cptr(new wav_pcm_demuxer_c(this, &m_wheader, 0x00003 == m_format_tag));
 
   if (verbose)
     mxinfo_fn(m_ti.m_fname, Y("Using the WAV demultiplexer.\n"));
