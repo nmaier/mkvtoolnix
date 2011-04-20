@@ -1,5 +1,9 @@
 2011-04-20  Moritz Bunkus  <moritz@bunkus.org>
 
+	* build system: For the time being the build system will always
+	build and link statically against the internal versions of libEBML
+	and libMatroska.
+
 	* mkvmerge: bug fix: Fixed appending timecode calculation for
 	appended subtitle tracks if the subtitle tracks are read from
 	complex containers (e.g. Matroska, MP4, AVI etc). Fix for bug 620.

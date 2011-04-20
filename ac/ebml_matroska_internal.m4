@@ -1,0 +1,18 @@
+dnl
+dnl Define variables for the internal versions of libEBML and libMatroska
+dnl
+EBML_CFLAGS="-Ilib/libebml"
+EBML_LDFLAGS="-Llib/libebml/src"
+EBML_LIBS="-lebml"
+EBML_MATROSKA_INTERNAL=yes
+MATROSKA_CFLAGS="-Ilib/libmatroska"
+MATROSKA_LDFLAGS="-Llib/libmatroska/src"
+MATROSKA_LIBS="-lmatroska"
+
+AC_SUBST(EBML_CFLAGS)
+AC_SUBST(EBML_LDFLAGS)
+AC_SUBST(EBML_LIBS)
+AC_SUBST(EBML_MATROSKA_INTERNAL)
+AC_SUBST(MATROSKA_CFLAGS)
+AC_SUBST(MATROSKA_LDFLAGS)
+AC_SUBST(MATROSKA_LIBS)
