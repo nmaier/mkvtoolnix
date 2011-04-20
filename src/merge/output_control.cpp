@@ -237,6 +237,13 @@ family_uids_c::add_family_uid(const KaxSegmentFamily &family) {
   return true;
 }
 
+std::ostream &
+operator<<(std::ostream &str,
+           const append_spec_t &spec) {
+  str << spec.src_file_id << ":" << spec.src_track_id << ":" << spec.dst_file_id << ":" << spec.dst_track_id;
+  return str;
+}
+
 /** \brief Fix the file after mkvmerge has been interrupted
 
    On Unix like systems mkvmerge will install a signal handler. On \c SIGUSR1
