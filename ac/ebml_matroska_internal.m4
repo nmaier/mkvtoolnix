@@ -5,6 +5,7 @@ EBML_CFLAGS="-Ilib/libebml"
 EBML_LDFLAGS="-Llib/libebml/src"
 EBML_LIBS="-lebml"
 EBML_MATROSKA_INTERNAL=yes
+LIBMTXCOMMONDLL=0
 MATROSKA_CFLAGS="-Ilib/libmatroska"
 MATROSKA_LDFLAGS="-Llib/libmatroska/src"
 MATROSKA_LIBS="-lmatroska"
