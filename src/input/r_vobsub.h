@@ -77,6 +77,9 @@ public:
   virtual void create_packetizer(int64_t tid);
   virtual void add_available_track_ids();
   virtual int get_progress();
+  virtual bool is_simple_subtitle_container() {
+    return true;
+  }
 
   static int probe_file(mm_io_c *io, uint64_t size);
 

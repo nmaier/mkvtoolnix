@@ -327,6 +327,9 @@ public:
   virtual void add_available_track_ids();
 
   virtual int64_t get_queued_bytes();
+  virtual bool is_simple_subtitle_container() {
+    return false;
+  }
 
   virtual file_status_e flush_packetizer(int num);
   virtual file_status_e flush_packetizer(generic_packetizer_c *ptzr);

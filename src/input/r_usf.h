@@ -75,6 +75,9 @@ public:
   virtual void create_packetizer(int64_t tid);
   virtual void create_packetizers();
   virtual int get_progress();
+  virtual bool is_simple_subtitle_container() {
+    return true;
+  }
 
   static int probe_file(mm_text_io_c *io, uint64_t size);
 

@@ -36,6 +36,9 @@ public:
   virtual void identify();
   virtual int get_progress();
   virtual void create_packetizer(int64_t id);
+  virtual bool is_simple_subtitle_container() {
+    return true;
+  }
 
   static int probe_file(mm_io_c *in, uint64_t size);
 };

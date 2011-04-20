@@ -1,3 +1,9 @@
+2011-04-20  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Fixed appending timecode calculation for
+	appended subtitle tracks if the subtitle tracks are read from
+	complex containers (e.g. Matroska, MP4, AVI etc). Fix for bug 620.
+
 2011-04-15  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvextract: bug fix: Fixed extraction of MPEG-1/2 video tracks
