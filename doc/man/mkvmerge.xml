@@ -1661,9 +1661,9 @@ Track ID 2: audio (A_MPEG/L3)
   </para>
 
   <para>
-   The options that use the track IDs are the ones whose description contains '<literal>TID</literal>'.
-   The following options use track IDs as well: <option>--atracks</option>,
-   <option>--vtracks</option>, <option>--stracks</option> and <option>--btracks</option>.
+   The options that use the track IDs are the ones whose description contains '<literal>TID</literal>'.  The following options use track IDs
+   as well: <option>--audio-tracks</option>, <option>--video-tracks</option>, <option>--subtitle-tracks</option>,
+   <option>--button-tracks</option> and <option>--track-tags</option>.
   </para>
  </refsect1>
 

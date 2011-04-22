@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 2.9.9\n"
-"POT-Creation-Date: 2011-02-15 08:39+0100\n"
-"PO-Revision-Date: 2011-03-03 00:13+0900\n"
+"POT-Creation-Date: 2011-04-22 22:52+0300\n"
+"PO-Revision-Date: 2011-04-22 22:53+0200\n"
 "Last-Translator: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "Language-Team: none\n"
 "MIME-Version: 1.0\n"
@@ -32,7 +32,7 @@ msgstr "4.7.0"
 #. type: Content of the date entity
 #: doc/man/mkvextract.xml:7 doc/man/mkvinfo.xml:7 doc/man/mkvmerge.xml:7
 #: doc/man/mkvpropedit.xml:7 doc/man/mmg.xml:7
-msgid "2011-01-31"
+msgid "2011-04-20"
 msgstr ""
 
 #. type: Content of the mkvmerge entity
@@ -2557,8 +2557,8 @@ msgstr "'<constant>-1</constant>'は特殊で、そのスイッチが入力フ�
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvmerge.xml:1664
-msgid "The options that use the track IDs are the ones whose description contains '<literal>TID</literal>'.  The following options use track IDs as well: <option>--atracks</option>, <option>--vtracks</option>, <option>--stracks</option> and <option>--btracks</option>."
-msgstr "トラックIDを使用するオプションの説明には、'<literal>TID</literal>'が含まれています。また、<option>--atracks</option>、<option>--vtracks</option>、<option>--stracks</option>及び<option>--btracks</option>オプションもトラックIDを使用します。"
+msgid "The options that use the track IDs are the ones whose description contains '<literal>TID</literal>'.  The following options use track IDs as well: <option>--audio-tracks</option>, <option>--video-tracks</option>, <option>--subtitle-tracks</option>, <option>--button-tracks</option> and <option>--track-tags</option>."
+msgstr "トラックIDを使用するオプションの説明には、'<literal>TID</literal>'が含まれています。また、<option>--audio-tracks</option>、<option>--video-tracks</option>、<option>--subtitle-tracks</option>、<option>--button-tracks</option>及び<option>--track-tags</option>オプションもトラックIDを使用します。"
 
 #. type: Content of: <refentry><refsect1><title>
 #: doc/man/mkvmerge.xml:1671
@@ -3440,7 +3440,6 @@ msgstr ""
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvpropedit.xml:412
-#| msgid "The shortest possible Matroska file would look like this:"
 msgid "Replacing the tags for the second subtitle track in a file looks like this:"
 msgstr "ファイル中で2番目の字幕トラックのタグを置換するには、以下のようにします："
 
@@ -3450,8 +3449,7 @@ msgstr "ファイル中で2番目の字幕トラックのタグを置換する�
 msgid ""
 "$ mkvpropedit movie.mkv --tags track:s2:new-subtitle-tags.xml\n"
 "  "
-msgstr ""
-"$ mkvpropedit movie.mkv --tags track:s2:new-subtitle-tags.xml\n"
+msgstr "$ mkvpropedit movie.mkv --tags track:s2:new-subtitle-tags.xml\n"
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvpropedit.xml:420

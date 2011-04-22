@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: mkvtoolnix-man\n"
-"POT-Creation-Date: 2011-02-15 08:39+0100\n"
-"PO-Revision-Date: 2011-02-15 22:28+0800\n"
+"POT-Creation-Date: 2011-04-22 22:52+0300\n"
+"PO-Revision-Date: 2011-04-22 22:54+0200\n"
 "Last-Translator: Dean Lee <xslidian@gmail.com>\n"
 "Language-Team: chinese simp <xslidian+mkvtoolnix@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -36,8 +36,9 @@ msgstr "4.7.0"
 #: doc/man/mkvmerge.xml:7
 #: doc/man/mkvpropedit.xml:7
 #: doc/man/mmg.xml:7
-#| msgid "2010-10-31"
-msgid "2011-01-31"
+#, fuzzy
+#| msgid "2011-01-31"
+msgid "2011-04-20"
 msgstr "2011-01-31"
 
 #. type: Content of the mkvmerge entity
@@ -1184,7 +1185,6 @@ msgstr "本程序可读取多种媒体文件并将它们的数据流（全部或
 #. type: Content of: <refentry><refsect1><important><para>
 #: doc/man/mkvmerge.xml:73
 #: doc/man/mkvmerge.xml:1394
-#| msgid "The order of command line options is important. Please read the section <link linkend=\"mkvmerge.option_order\">&quot;Option order&quot;</link> it if you're new to the program."
 msgid "The order of command line options is important. Please read the section <link linkend=\"mkvmerge.option_order\">&quot;Option order&quot;</link> if you're new to the program."
 msgstr "命令行选项的顺序很重要。若您对程序还不熟悉，请阅读 <link linkend=\"mkvmerge.option_order\">&quot;选项顺序&quot;</link> 段落。"
 
@@ -2697,8 +2697,8 @@ msgstr "特殊的轨道 ID '<constant>-1</constant>' 是个百搭号，它将使
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvmerge.xml:1664
-msgid "The options that use the track IDs are the ones whose description contains '<literal>TID</literal>'.  The following options use track IDs as well: <option>--atracks</option>, <option>--vtracks</option>, <option>--stracks</option> and <option>--btracks</option>."
-msgstr "使用轨道 ID 的选项的描述中均含有 '<literal>TID</literal>'。此外下列选项也使用轨道 ID: <option>--atracks</option>、<option>--vtracks</option>、<option>--stracks</option> 以及 <option>--btracks</option>。"
+msgid "The options that use the track IDs are the ones whose description contains '<literal>TID</literal>'.  The following options use track IDs as well: <option>--audio-tracks</option>, <option>--video-tracks</option>, <option>--subtitle-tracks</option>, <option>--button-tracks</option> and <option>--track-tags</option>."
+msgstr "使用轨道 ID 的选项的描述中均含有 '<literal>TID</literal>'。此外下列选项也使用轨道 ID: <option>--audio-tracks</option>、<option>--video-tracks</option>、<option>--subtitle-tracks</option>、<option>--button-tracks</option> 以及 <option>--track-tags</option>。"
 
 #. type: Content of: <refentry><refsect1><title>
 #: doc/man/mkvmerge.xml:1671
@@ -3412,7 +3412,6 @@ msgstr "删除所有名为 <parameter>名称</parameter> 的属性。注意部�
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvpropedit.xml:150
-#| msgid "<option>-a</option>, <option>--add</option> <parameter>name</parameter>=<parameter>value</parameter>"
 msgid "<option>-t</option>, <option>--tags</option> <parameter>selector</parameter>:<parameter>filename</parameter>"
 msgstr "<option>-t</option>, <option>--tags</option> <parameter>选择器</parameter>:<parameter>文件名</parameter>"
 
@@ -3582,7 +3581,6 @@ msgstr ""
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvpropedit.xml:412
-#| msgid "The shortest possible Matroska file would look like this:"
 msgid "Replacing the tags for the second subtitle track in a file looks like this:"
 msgstr "像这样替换文件中第二个字幕轨的标签:"
 
@@ -3604,9 +3602,6 @@ msgstr "移除所有标签需要将文件名留空:"
 #. type: Content of: <refentry><refsect1><screen>
 #: doc/man/mkvpropedit.xml:424
 #, no-wrap
-#| msgid ""
-#| "$ mkvmerge -o file.mkv --tags 0:tags.xml file.avi\n"
-#| "   "
 msgid ""
 "$ mkvpropedit movie.mkv --tags all:\n"
 "  "
@@ -3681,46 +3676,33 @@ msgstr "&mkvmerge;, &mkvextract;, &mkvinfo;, &mkvpropedit;"
 
 #~ msgid "--title"
 #~ msgstr "--title"
-
 #~ msgid "--no-chapters"
 #~ msgstr "--no-chapters"
-
 #~ msgid "Sets the stereo mode for the video track with the track ID <parameter>TID</parameter>.  The mode can either be a number <parameter>n</parameter> between <constant>0</constant> and <constant>3</constant> or one of the keywords '<literal>none</literal>' (same as <parameter>n</parameter>=<constant>0</constant>), '<literal>right</literal>' (same as <parameter>n</parameter>=<constant>1</constant>), '<literal>left</literal>' (same as <parameter>n</parameter>=<constant>2</constant>)  or '<literal>both</literal>' (same as <parameter>n</parameter>=<constant>3</constant>)."
 #~ msgstr "设置 ID 为 <parameter>TID</parameter> 的视频轨的立体视法。 模式既可以是 <constant>0</constant> 到 <constant>3</constant> 之间的数字 <parameter>n</parameter>，也可以是 '<literal>none（无立体视法）</literal>' (与 <parameter>n</parameter>=<constant>0</constant> 相同), '<literal>right（右眼视角）</literal>' (与 <parameter>n</parameter>=<constant>1</constant> 相同), '<literal>left（左眼视角）</literal>' (与 <parameter>n</parameter>=<constant>2</constant> 相同)  or '<literal>both（双眼视角）</literal>' (与 <parameter>n</parameter>=<constant>3</constant> 相同)。"
-
 #~ msgid "Syntax: <command>mkvextract</command> <option>timecodes_v2</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional>"
 #~ msgstr "语法: <command>mkvextract</command> <option>timecodes_v2</option> <parameter>源文件名</parameter> <optional><parameter>选项</parameter></optional>"
-
 #~ msgid "Reads additional command line arguments from the file <parameter>options-file</parameter>.  Lines whose first non-whitespace character is a hash mark ('<literal>#</literal>') are treated as comments and ignored. White spaces at the start and end of a line will be stripped. Each line must contain exactly one option.  There is no meta character escaping."
 #~ msgstr "从文件 <parameter>选项文件</parameter> 中读取额外的命令行参数。首个非空白字符为井号 ('<literal>#</literal>') 的行将被当作注释对待，在处理过程中将被忽略。各行开头与结尾的空白将被除去。各行必须恰好含有一个选项。没有元字符转义。"
-
 #~ msgid "<option>--no-ogg</option>"
 #~ msgstr "<option>--no-ogg</option>"
-
 #~ msgid "Only valid for <abbrev>FLAC</abbrev> tracks. Normally <abbrev>FLAC</abbrev> tracks are embedded in an Ogg transport stream. With this switch they are extracted to raw <abbrev>FLAC</abbrev> files instead."
 #~ msgstr "仅对 <abbrev>FLAC</abbrev> 轨道有效。通常 <abbrev>FLAC</abbrev> 轨道是嵌套在 Ogg 传输流（TS）中的。通过本开关，它们可以被提取为原始 <abbrev>FLAC</abbrev> 文件。"
-
 #, fuzzy
 #~ msgid "<option>--webm</option>, <option>--web-media</option>"
 #~ msgstr "<option>-v</option>, <option>--verbose</option>"
-
 #~ msgid "January 2010"
 #~ msgstr "2010 年 1 月"
-
 #~ msgid "December 2009"
 #~ msgstr "2009 年 12 月"
-
 #~ msgid "--command-line-charset"
 #~ msgstr "--command-line-charset"
-
 #~ msgid "--output"
 #~ msgstr "--output"
-
 #~ msgid "--chapter-charset"
 #~ msgstr "--chapter-charset"
-
 #~ msgid "--default-duration"
 #~ msgstr "--default-duration"
-
 #~ msgid "--language"
 #~ msgstr "--language"
+
