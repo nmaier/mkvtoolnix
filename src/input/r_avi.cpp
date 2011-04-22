@@ -525,12 +525,12 @@ avi_reader_c::add_audio_demuxer(int aid) {
   demuxer.m_channels               = AVI_audio_channels(m_avi);
   demuxer.m_bits_per_sample        = AVI_audio_bits(m_avi);
 
-  m_ti.m_id                          = aid + 1;       // ID for this audio track.
-  m_ti.m_avi_block_align             = get_uint16_le(&wfe->n_block_align);
-  m_ti.m_avi_avg_bytes_per_sec       = get_uint32_le(&wfe->n_avg_bytes_per_sec);
-  m_ti.m_avi_samples_per_chunk       = get_uint32_le(&m_avi->stream_headers[aid].dw_scale);
-  m_ti.m_avi_sample_scale            = get_uint32_le(&m_avi->stream_headers[aid].dw_rate);
-  m_ti.m_avi_samples_per_sec         = demuxer.m_samples_per_second;
+  m_ti.m_id                        = aid + 1;       // ID for this audio track.
+  m_ti.m_avi_block_align           = get_uint16_le(&wfe->n_block_align);
+  m_ti.m_avi_avg_bytes_per_sec     = get_uint32_le(&wfe->n_avg_bytes_per_sec);
+  m_ti.m_avi_samples_per_chunk     = get_uint32_le(&m_avi->stream_headers[aid].dw_scale);
+  m_ti.m_avi_sample_scale          = get_uint32_le(&m_avi->stream_headers[aid].dw_rate);
+  m_ti.m_avi_samples_per_sec       = demuxer.m_samples_per_second;
 
   if ((0xfffe == audio_format) && (get_uint16_le(&wfe->cb_size) >= (sizeof(alWAVEFORMATEXTENSION)))) {
     alWAVEFORMATEXTENSIBLE *ext = reinterpret_cast<alWAVEFORMATEXTENSIBLE *>(wfe);
