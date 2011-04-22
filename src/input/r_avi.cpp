@@ -603,7 +603,9 @@ avi_reader_c::create_aac_packetizer(int aid,
   bool aac_data_created  = false;
   bool headerless        = (AVI_audio_format(m_avi) != 0x706d);
 
-  if (0 == m_ti.m_private_size) {
+  if ((0 == m_ti.m_private_size)
+      || (   (0x706d                       == AVI_audio_format(m_avi))
+          && ((sizeof(alWAVEFORMATEX) + 7)  < m_ti.m_private_size))) {
     aac_data_created     = true;
     channels             = AVI_audio_channels(m_avi);
     sample_rate          = AVI_audio_rate(m_avi);

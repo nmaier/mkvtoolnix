@@ -1,3 +1,8 @@
+2011-04-22  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Fixed handling AVIs with AAC audio format tag
+	0x706d and bogus private data size. Fix for bug 623.
+
 2011-04-20  Moritz Bunkus  <moritz@bunkus.org>
 
 	* Released v4.7.0.
