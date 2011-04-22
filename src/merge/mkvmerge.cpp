@@ -500,9 +500,14 @@ parse_and_add_tags(const std::string &file_name) {
 */
 static void
 parse_arg_tracks(std::string s,
-                 std::vector<int64_t> &tracks,
+                 item_selector_c<bool> &tracks,
                  const std::string &opt) {
   tracks.clear();
+
+  if (starts_with(s, "!")) {
+    s.erase(0, 1);
+    tracks.set_reversed();
+  }
 
   std::vector<std::string> elements = split(s, ",");
   strip(elements);
@@ -512,7 +517,7 @@ parse_arg_tracks(std::string s,
     int64_t tid;
     if (!parse_int(elements[i], tid))
       mxerror(boost::format(Y("Invalid track ID in '%1% %2%'.\n")) % opt % s);
-    tracks.push_back(tid);
+    tracks.add(tid);
   }
 }
 
@@ -1494,8 +1499,13 @@ parse_arg_default_language(const std::string &arg) {
 
 static void
 parse_arg_attachments(const std::string &param,
-                      const std::string &arg,
+                      std::string arg,
                       track_info_c &ti) {
+  if (starts_with(arg, "!")) {
+    arg.erase(0, 1);
+    ti.m_attach_mode_list.set_reversed();
+  }
+
   std::vector<std::string> elements = split(arg, ",");
 
   size_t i;
@@ -1513,10 +1523,10 @@ parse_arg_attachments(const std::string &param,
       mxerror(boost::format(Y("The argument '%1%' to '%2%' is invalid: '%3%' is not a valid track ID.\n")) % arg % param % pair[0]);
 
     if (pair[1] == "all")
-      ti.m_attach_mode_list[id] = ATTACH_MODE_TO_ALL_FILES;
+      ti.m_attach_mode_list.add(id, ATTACH_MODE_TO_ALL_FILES);
 
     else if (pair[1] == "first")
-      ti.m_attach_mode_list[id] = ATTACH_MODE_TO_FIRST_FILE;
+      ti.m_attach_mode_list.add(id, ATTACH_MODE_TO_FIRST_FILE);
 
     else
       mxerror(boost::format(Y("The argument '%1%' to '%2%' is invalid: '%3%' must be either 'all' or 'first'.\n")) % arg % param % pair[1]);
@@ -1822,23 +1832,23 @@ parse_args(std::vector<std::string> args) {
 
       inputs_found = true;
 
-    } else if (this_arg == "--no-chapters") {
+    } else if (this_arg == "--no-chapters")
       ti->m_no_chapters = true;
 
-    } else if ((this_arg == "-M") || (this_arg == "--no-attachments")) {
-      ti->m_no_attachments = true;
+    else if ((this_arg == "-M") || (this_arg == "--no-attachments"))
+      ti->m_attach_mode_list.set_none();
 
-    } else if ((this_arg == "-m") || (this_arg == "--attachments")) {
+    else if ((this_arg == "-m") || (this_arg == "--attachments")) {
       if (no_next_arg)
         mxerror(boost::format(Y("'%1%' lacks its argument.\n")) % this_arg);
 
       parse_arg_attachments(this_arg, next_arg, *ti);
       sit++;
 
-    } else if (this_arg == "--no-global-tags") {
+    } else if (this_arg == "--no-global-tags")
       ti->m_no_global_tags = true;
 
-    } else if (this_arg == "--meta-seek-size") {
+    else if (this_arg == "--meta-seek-size") {
       mxwarn(Y("The option '--meta-seek-size' is no longer supported. Please read mkvmerge's documentation, especially the section about the MATROSKA FILE LAYOUT.\n"));
       sit++;
 
@@ -1852,19 +1862,19 @@ parse_args(std::vector<std::string> args) {
 
     // Options that apply to the next input file only.
     else if ((this_arg == "-A") || (this_arg == "--noaudio") || (this_arg == "--no-audio"))
-      ti->m_no_audio = true;
+      ti->m_atracks.set_none();
 
     else if ((this_arg == "-D") || (this_arg == "--novideo") || (this_arg == "--no-video"))
-      ti->m_no_video = true;
+      ti->m_vtracks.set_none();
 
     else if ((this_arg == "-S") || (this_arg == "--nosubs") || (this_arg == "--no-subs") || (this_arg == "--no-subtitles"))
-      ti->m_no_subs = true;
+      ti->m_stracks.set_none();
 
     else if ((this_arg == "-B") || (this_arg == "--nobuttons") || (this_arg == "--no-buttons"))
-      ti->m_no_buttons = true;
+      ti->m_btracks.set_none();
 
     else if ((this_arg == "-T") || (this_arg == "--no-track-tags"))
-      ti->m_no_track_tags = true;
+      ti->m_track_tags.set_none();
 
     else if ((this_arg == "-a") || (this_arg == "--atracks") || (this_arg == "--audio-tracks")) {
       if (no_next_arg)
@@ -2087,16 +2097,16 @@ parse_args(std::vector<std::string> args) {
         mxerror(boost::format(Y("The name of the output file '%1%' and of one of the input files is the same. This would cause mkvmerge to overwrite "
                                 "one of your input files. This is most likely not what you want.\n")) % g_outfile);
 
-      if (!ti->m_atracks.empty() && ti->m_no_audio)
+      if (!ti->m_atracks.empty() && ti->m_atracks.none())
         mxerror(Y("'-A' and '-a' used on the same source file.\n"));
 
-      if (!ti->m_vtracks.empty() && ti->m_no_video)
+      if (!ti->m_vtracks.empty() && ti->m_vtracks.none())
         mxerror(Y("'-D' and '-d' used on the same source file.\n"));
 
-      if (!ti->m_stracks.empty() && ti->m_no_subs)
+      if (!ti->m_stracks.empty() && ti->m_stracks.none())
         mxerror(Y("'-S' and '-s' used on the same source file.\n"));
 
-      if (!ti->m_btracks.empty() && ti->m_no_buttons)
+      if (!ti->m_btracks.empty() && ti->m_btracks.none())
         mxerror(Y("'-B' and '-b' used on the same source file.\n"));
 
       filelist_t file;

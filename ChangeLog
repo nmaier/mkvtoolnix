@@ -1,5 +1,11 @@
 2011-04-22  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: new feature: Track, tag and attachment selection via
+	--audio-tracks, --video-tracks etc. can have their meaning
+	reversed by prefixing the list of IDs with "!". If it is then
+	mkvmerge will copy all tracks/tags/attachments but the ones with
+	the IDs given to the option (e.g. "--attachments !3,6").
+
 	* mkvmerge: bug fix: Fixed handling AVIs with AAC audio format tag
 	0x706d and bogus private data size. Fix for bug 623.
 

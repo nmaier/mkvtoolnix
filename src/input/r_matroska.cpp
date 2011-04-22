@@ -1319,7 +1319,7 @@ kax_reader_c::read_headers() {
     foreach(int64_t position, m_deferred_l1_positions[dl1t_tracks])
       read_headers_tracks(m_in.get_object(), l0, position);
 
-    if (!m_ti.m_no_attachments) {
+    if (!m_ti.m_attach_mode_list.none()) {
       foreach(int64_t position, m_deferred_l1_positions[dl1t_attachments])
         handle_attachments(m_in.get_object(), l0, position);
     }

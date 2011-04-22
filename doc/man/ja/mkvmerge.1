@@ -412,36 +412,66 @@ Matroska(TM)ファイルの内部に添付ファイルを作成します。こ�
 .PP
 各入力ファイルに指定できるオプション:
 .PP
-\fB\-a\fR, \fB\-\-audio\-tracks\fR \fIn,m,\&.\&.\&.\fR
+\fB\-a\fR, \fB\-\-audio\-tracks\fR \fI[!]\fR\fIn,m,\&.\&.\&.\fR
 .RS 4
 オーディオトラック\fIn\fR、\fIm\fR\&...をコピーします。番号は\fB\-\-identify\fRオプションで得られるトラックIDです。これは単純にトラック番号を示すものではありません(トラックIDのセクションを参照してください)。デフォルト: 全てのオーディオトラックをコピーします。
+.sp
+If the IDs are prefixed with
+!
+then the meaning is reversed: copy everything but the IDs listed after the
+!\&.
 .RE
 .PP
-\fB\-d\fR, \fB\-\-video\-tracks\fR \fIn,m,\&.\&.\&.\fR
+\fB\-d\fR, \fB\-\-video\-tracks\fR \fI[!]\fR\fIn,m,\&.\&.\&.\fR
 .RS 4
 ビデオトラック\fIn\fR、\fIm\fR\&...をコピーします。数字は\fB\-\-identify\fRオプションで得られるトラックIDです。これは単純にトラック番号を示すものではありません(トラックIDのセクションを参照してください)。 デフォルト: 全てのビデオトラックをコピーします。
+.sp
+If the IDs are prefixed with
+!
+then the meaning is reversed: copy everything but the IDs listed after the
+!\&.
 .RE
 .PP
-\fB\-s\fR, \fB\-\-subtitle\-tracks\fR \fIn,m,\&.\&.\&.\fR
+\fB\-s\fR, \fB\-\-subtitle\-tracks\fR \fI[!]\fR\fIn,m,\&.\&.\&.\fR
 .RS 4
 字幕トラック\fIn\fR、\fIm\fR\&...をコピーします。番号は\fB\-\-identify\fRオプションで得られるトラックIDです。これは単純にトラック番号を示すものではありません(トラックIDのセクションを参照してください)。デフォルト: 全ての字幕トラックをコピーします。
+.sp
+If the IDs are prefixed with
+!
+then the meaning is reversed: copy everything but the IDs listed after the
+!\&.
 .RE
 .PP
-\fB\-b\fR, \fB\-\-button\-tracks\fR \fIn,m,\&.\&.\&.\fR
+\fB\-b\fR, \fB\-\-button\-tracks\fR \fI[!]\fR\fIn,m,\&.\&.\&.\fR
 .RS 4
 ボタントラック\fIn\fR、\fIm\fR\&...をコピーします。番号は\fB\-\-identify\fRオプションで得られるトラックIDです。これは単純にトラック番号を示すものではありません(トラックIDのセクションを参照してください)。デフォルト: 全てのボタントラックをコピーします。
+.sp
+If the IDs are prefixed with
+!
+then the meaning is reversed: copy everything but the IDs listed after the
+!\&.
 .RE
 .PP
-\fB\-\-track\-tags\fR \fIn,m,\&.\&.\&.\fR
+\fB\-\-track\-tags\fR \fI[!]\fR\fIn,m,\&.\&.\&.\fR
 .RS 4
 トラック\fIn\fR、\fIm\fR\&...のタグをコピーします。番号は\fB\-\-identify\fRオプションで得られるトラックIDです。これは単純にトラック番号を示すものではありません(トラックIDのセクションを参照してください)。デフォルト: 全てのトラックのタグをコピーします。
+.sp
+If the IDs are prefixed with
+!
+then the meaning is reversed: copy everything but the IDs listed after the
+!\&.
 .RE
 .PP
-\fB\-m\fR, \fB\-\-attachments\fR \fIn\fR\fI[:all|first]\fR\fI,m\fR\fI[:all|first]\fR\fI,\&.\&.\&.\fR
+\fB\-m\fR, \fB\-\-attachments\fR \fI[!]\fR\fIn\fR\fI[:all|first]\fR\fI,m\fR\fI[:all|first]\fR\fI,\&.\&.\&.\fR
 .RS 4
 IDが\fIn\fR、\fIm\fR\&...の添付ファイルを全ての、または最初の出力ファイルにコピーします。各IDの後ろには、\*(Aq:all\*(Aq(デフォルト)又は\*(Aq:first\*(Aqを指定することができます。出力ファイル分割が有効の場合、\*(Aq:all\*(AqをつけたIDの添付ファイルは全ての出力ファイルにコピーされ、\*(Aq:first\*(Aqをつけた場合は最初の出力ファイルにのみコピーされます。分割が有効でない場合は二つは同等です。
 .sp
 デフォルトでは、全ての添付ファイルが全ての出力ファイルにコピーされます。
+.sp
+If the IDs are prefixed with
+!
+then the meaning is reversed: copy everything but the IDs listed after the
+!\&.
 .RE
 .PP
 \fB\-A\fR, \fB\-\-no\-audio\fR

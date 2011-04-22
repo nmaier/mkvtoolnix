@@ -660,62 +660,87 @@ $ mkvmerge -o full.mkv =file1.mkv
 
   <variablelist>
    <varlistentry>
-    <term><option>-a</option>, <option>--audio-tracks</option> <parameter>n,m,...</parameter></term>
+    <term><option>-a</option>, <option>--audio-tracks</option> <parameter><optional>!</optional>n,m,...</parameter></term>
     <listitem>
      <para>
       Copy the audio tracks <parameter>n</parameter>, <parameter>m</parameter> etc. The numbers are track IDs which can be obtained with the
       <link linkend="mkvmerge.description.identify"><option>--identify</option></link> switch. They're not simply the track numbers (see
       section <link linkend="mkvmerge.track_ids">track IDs</link>). Default: copy all audio tracks.
      </para>
+
+     <para>
+      If the IDs are prefixed with <literal>!</literal> then the meaning is reversed: copy everything but the IDs listed after the
+      <literal>!</literal>.
+     </para>
     </listitem>
    </varlistentry>
 
    <varlistentry>
-    <term><option>-d</option>, <option>--video-tracks</option> <parameter>n,m,...</parameter></term>
+    <term><option>-d</option>, <option>--video-tracks</option> <parameter><optional>!</optional>n,m,...</parameter></term>
     <listitem>
      <para>
       Copy the video tracks <parameter>n</parameter>, <parameter>m</parameter> etc. The numbers are track IDs which can be obtained with the
       <link linkend="mkvmerge.description.identify"><option>--identify</option></link> switch. They're not simply the track numbers (see
       section <link linkend="mkvmerge.track_ids">track IDs</link>). Default: copy all video tracks.
      </para>
+
+     <para>
+      If the IDs are prefixed with <literal>!</literal> then the meaning is reversed: copy everything but the IDs listed after the
+      <literal>!</literal>.
+     </para>
     </listitem>
    </varlistentry>
 
    <varlistentry>
-    <term><option>-s</option>, <option>--subtitle-tracks</option> <parameter>n,m,...</parameter></term>
+    <term><option>-s</option>, <option>--subtitle-tracks</option> <parameter><optional>!</optional>n,m,...</parameter></term>
     <listitem>
      <para>
       Copy the subtitle tracks <parameter>n</parameter>, <parameter>m</parameter> etc. The numbers are track IDs which can be obtained with
       the <link linkend="mkvmerge.description.identify"><option>--identify</option></link> switch. They're not simply the track numbers (see
       section <link linkend="mkvmerge.track_ids">track IDs</link>). Default: copy all subtitle tracks.
      </para>
+
+     <para>
+      If the IDs are prefixed with <literal>!</literal> then the meaning is reversed: copy everything but the IDs listed after the
+      <literal>!</literal>.
+     </para>
     </listitem>
    </varlistentry>
 
    <varlistentry>
-    <term><option>-b</option>, <option>--button-tracks</option> <parameter>n,m,...</parameter></term>
+    <term><option>-b</option>, <option>--button-tracks</option> <parameter><optional>!</optional>n,m,...</parameter></term>
     <listitem>
      <para>
       Copy the button tracks <parameter>n</parameter>, <parameter>m</parameter> etc. The numbers are track IDs which can be obtained with
       the <link linkend="mkvmerge.description.identify"><option>--identify</option></link> switch. They're not simply the track numbers (see
       section <link linkend="mkvmerge.track_ids">track IDs</link>). Default: copy all button tracks.
      </para>
+
+     <para>
+      If the IDs are prefixed with <literal>!</literal> then the meaning is reversed: copy everything but the IDs listed after the
+      <literal>!</literal>.
+     </para>
     </listitem>
    </varlistentry>
 
    <varlistentry>
-    <term><option>--track-tags</option> <parameter>n,m,...</parameter></term>
+    <term><option>--track-tags</option> <parameter><optional>!</optional>n,m,...</parameter></term>
     <listitem>
      <para>
       Copy the tags for tracks <parameter>n</parameter>, <parameter>m</parameter> etc.  The numbers are track IDs which can be obtained with
       the <link linkend="mkvmerge.description.identify"><option>--identify</option></link> switch (see section <link
       linkend="mkvmerge.track_ids">track IDs</link>).  They're not simply the track numbers.  Default: copy tags for all tracks.
      </para>
+
+     <para>
+      If the IDs are prefixed with <literal>!</literal> then the meaning is reversed: copy everything but the IDs listed after the
+      <literal>!</literal>.
+     </para>
     </listitem>
    </varlistentry>
 
    <varlistentry id="mkvmerge.description.attachments">
-    <term><option>-m</option>, <option>--attachments</option> <parameter>n<optional>:all|first</optional>,m<optional>:all|first</optional>,...</parameter></term>
+    <term><option>-m</option>, <option>--attachments</option> <parameter><optional>!</optional>n<optional>:all|first</optional>,m<optional>:all|first</optional>,...</parameter></term>
     <listitem>
      <para>
       Copy the attachments with the IDs <parameter>n</parameter>, <parameter>m</parameter> etc to all or only the first output file. Each ID
@@ -727,6 +752,11 @@ $ mkvmerge -o full.mkv =file1.mkv
 
      <para>
       The default is to copy all attachments to all output files.
+     </para>
+
+     <para>
+      If the IDs are prefixed with <literal>!</literal> then the meaning is reversed: copy everything but the IDs listed after the
+      <literal>!</literal>.
      </para>
     </listitem>
    </varlistentry>

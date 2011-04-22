@@ -34,6 +34,7 @@
 #include "common/smart_pointers.h"
 #include "common/stereo_mode.h"
 #include "common/strings/editing.h"
+#include "merge/item_selector.h"
 #include "merge/packet.h"
 #include "merge/timecode_factory.h"
 #include "merge/webm.h"
@@ -184,8 +185,7 @@ public:
 
   // Options used by the readers.
   std::string m_fname;
-  bool m_no_audio, m_no_video, m_no_subs, m_no_buttons, m_no_track_tags;
-  std::vector<int64_t> m_atracks, m_vtracks, m_stracks, m_btracks, m_track_tags;
+  item_selector_c<bool> m_atracks, m_vtracks, m_stracks, m_btracks, m_track_tags;
   bool m_disable_multi_file;
 
   // Options used by the packetizers.
@@ -250,9 +250,9 @@ public:
   std::map<int64_t, int> m_nalu_size_lengths;
   int m_nalu_size_length;
 
-  std::map<int64_t, attach_mode_e> m_attach_mode_list; // As given on the command line
+  item_selector_c<attach_mode_e> m_attach_mode_list; // As given on the command line
 
-  bool m_no_chapters, m_no_attachments, m_no_global_tags;
+  bool m_no_chapters, m_no_global_tags;
 
   // Some file formats can contain chapters, but for some the charset
   // cannot be identified unambiguously (*cough* OGM *cough*).

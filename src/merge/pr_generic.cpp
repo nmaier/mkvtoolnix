@@ -1106,13 +1106,13 @@ generic_packetizer_c::is_compatible_with(output_compatibility_e compatibility) {
 
 //--------------------------------------------------------------------
 
-#define add_all_requested_track_ids(type, container)                                              \
+#define add_all_requested_track_ids(type, container)                                                       \
   for (std::map<int64_t, type>::const_iterator i = m_ti.container.begin(); m_ti.container.end() != i; ++i) \
     add_requested_track_id(i->first);
 
-#define add_all_requested_track_ids2(container) \
-  for (size_t i = 0; i < m_ti.container.size(); i++) \
-    add_requested_track_id(m_ti.container[i]);
+#define add_all_requested_track_ids2(container)                                                                            \
+  for (std::map<int64_t, bool>::const_iterator i = m_ti.container.m_items.begin(); m_ti.container.m_items.end() != i; ++i) \
+    add_requested_track_id(i->first);
 
 generic_reader_c::generic_reader_c(track_info_c &ti)
   : m_ti(ti)
@@ -1125,7 +1125,6 @@ generic_reader_c::generic_reader_c(track_info_c &ti)
   , m_num_subtitle_tracks(0)
   , m_reference_timecode_tolerance(0)
 {
-
   add_all_requested_track_ids2(m_atracks);
   add_all_requested_track_ids2(m_vtracks);
   add_all_requested_track_ids2(m_stracks);
@@ -1168,60 +1167,32 @@ generic_reader_c::read_all() {
 bool
 generic_reader_c::demuxing_requested(char type,
                                      int64_t id) {
-  std::vector<int64_t> *tracks = NULL;
+  item_selector_c<bool> *tracks = 'v' == type ? &m_ti.m_vtracks
+                                : 'a' == type ? &m_ti.m_atracks
+                                : 's' == type ? &m_ti.m_stracks
+                                : 'b' == type ? &m_ti.m_btracks
+                                : 'T' == type ? &m_ti.m_track_tags
+                                :               NULL;
 
-  if ('v' == type) {
-    if (m_ti.m_no_video)
-      return false;
-    tracks = &m_ti.m_vtracks;
-
-  } else if ('a' == type) {
-    if (m_ti.m_no_audio)
-      return false;
-    tracks = &m_ti.m_atracks;
-
-  } else if ('s' == type) {
-    if (m_ti.m_no_subs)
-      return false;
-    tracks = &m_ti.m_stracks;
-
-  } else if ('b' == type) {
-    if (m_ti.m_no_buttons)
-      return false;
-    tracks = &m_ti.m_btracks;
-
-  } else if ('T' == type) {
-    if (m_ti.m_no_track_tags)
-      return false;
-    tracks = &m_ti.m_track_tags;
-
-  } else
+  if (NULL == tracks)
     mxerror(boost::format(Y("pr_generic.cpp/generic_reader_c::demuxing_requested(): Invalid track type %1%.")) % type);
 
-  if (tracks->empty())
-    return true;
-
-  size_t i;
-  for (i = 0; i < tracks->size(); i++)
-    if ((*tracks)[i] == id)
-      return true;
-
-  return false;
+  return tracks->selected(id);
 }
 
 attach_mode_e
 generic_reader_c::attachment_requested(int64_t id) {
-  if (m_ti.m_no_attachments)
+  if (m_ti.m_attach_mode_list.none())
     return ATTACH_MODE_SKIP;
 
   if (m_ti.m_attach_mode_list.empty())
     return ATTACH_MODE_TO_ALL_FILES;
 
-  if (map_has_key(m_ti.m_attach_mode_list, id))
-    return m_ti.m_attach_mode_list[id];
+  if (m_ti.m_attach_mode_list.selected(id))
+    return m_ti.m_attach_mode_list.get(id);
 
-  if (map_has_key(m_ti.m_attach_mode_list, -1))
-    return m_ti.m_attach_mode_list[-1];
+  if (m_ti.m_attach_mode_list.selected(-1))
+    return m_ti.m_attach_mode_list.get(-1);
 
   return ATTACH_MODE_SKIP;
 }
@@ -1500,11 +1471,6 @@ generic_reader_c::add_available_track_ids() {
 track_info_c::track_info_c()
   : m_initialized(true)
   , m_id(0)
-  , m_no_audio(false)
-  , m_no_video(false)
-  , m_no_subs(false)
-  , m_no_buttons(false)
-  , m_no_track_tags(false)
   , m_disable_multi_file(false)
   , m_private_data(NULL)
   , m_private_size(0)
@@ -1526,7 +1492,6 @@ track_info_c::track_info_c()
   , m_stereo_mode_source(PARAMETER_SOURCE_NONE)
   , m_nalu_size_length(0)
   , m_no_chapters(false)
-  , m_no_attachments(false)
   , m_no_global_tags(false)
   , m_avi_block_align(0)
   , m_avi_samples_per_sec(0)
@@ -1555,11 +1520,6 @@ track_info_c::operator =(const track_info_c &src) {
   m_id                         = src.m_id;
   m_fname                      = src.m_fname;
 
-  m_no_audio                   = src.m_no_audio;
-  m_no_video                   = src.m_no_video;
-  m_no_subs                    = src.m_no_subs;
-  m_no_buttons                 = src.m_no_buttons;
-  m_no_track_tags              = src.m_no_track_tags;
   m_atracks                    = src.m_atracks;
   m_btracks                    = src.m_btracks;
   m_stracks                    = src.m_stracks;
@@ -1629,7 +1589,6 @@ track_info_c::operator =(const track_info_c &src) {
   m_attach_mode_list           = src.m_attach_mode_list;
 
   m_no_chapters                = src.m_no_chapters;
-  m_no_attachments             = src.m_no_attachments;
   m_no_global_tags             = src.m_no_global_tags;
 
   m_chapter_charset            = src.m_chapter_charset;
