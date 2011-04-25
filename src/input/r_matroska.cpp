@@ -2313,7 +2313,7 @@ kax_reader_c::identify() {
                     : track->type == 'a' ? ID_RESULT_TRACK_AUDIO
                     : track->type == 'b' ? ID_RESULT_TRACK_BUTTONS
                     : track->type == 's' ? ID_RESULT_TRACK_SUBTITLES
-                    :                          Y("unknown"),
+                    :                      Y("unknown"),
                     info, verbose_info);
   }
 
