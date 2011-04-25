@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: Moritz Bunkus <moritz@bunkus.org>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2011-04-25 21:05+0200\n"
+"PO-Revision-Date: 2011-04-25 21:10+0200\n"
 "Last-Translator: EuGENIUS EuGENIUS <Eugenius_V@mail.ru>\n"
 "Language-Team: Russian <moritz@bunkus.org>\n"
 "MIME-Version: 1.0\n"
@@ -4894,7 +4894,7 @@ msgstr "Файлы RealMedia Audio/Video"
 
 #: src/input/r_real.cpp:377
 msgid "RealMedia files may contain HE-AAC / AAC+ / SBR AAC audio. In some cases this can NOT be detected automatically. Therefore you have to specifiy '--aac-is-sbr %1%' manually for this input file if the file actually contains SBR AAC. The file will be muxed in the WRONG way otherwise. Also read mkvmerge's documentation.\n"
-msgstr "Файлы RealMedia могут содержать HE-AAC / AAC+ / SBR AAC аудио. В некоторых случаях это НЕ МОЖЕТ быть определено автоматически. Поэтому вы должны указать '--aac-is-sbr 0' вручную, если файл действительно содержит SBR AAC. Если этого не сделать, объединение получится НЕПРАВИЛЬНО. Также читайте в документации mkvmerge.\n"
+msgstr "Файлы RealMedia могут содержать HE-AAC / AAC+ / SBR AAC аудио. В некоторых случаях это НЕ МОЖЕТ быть определено автоматически. Поэтому вы должны указать '--aac-is-sbr %1%' вручную, если файл действительно содержит SBR AAC. Если этого не сделать, объединение получится НЕПРАВИЛЬНО. Также читайте в документации mkvmerge.\n"
 
 #: src/common/cli_parser.cpp:180
 msgid "Redirects all messages into this file."
