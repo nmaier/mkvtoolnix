@@ -2301,12 +2301,12 @@ kax_reader_c::identify() {
 
     if (track->ms_compat)
       info += std::string(", ") +
-        (  track->type        == 'v'    ? track->v_fourcc
-         : track->a_formattag == 0x0001 ? "PCM"
-         : track->a_formattag == 0x0003 ? "PCM"
-         : track->a_formattag == 0x0055 ? "MP3"
-         : track->a_formattag == 0x2000 ? "AC3"
-         :                                   Y("unknown"));
+        (  track->type        == 'v'    ? std::string(track->v_fourcc)
+         : track->a_formattag == 0x0001 ? std::string("PCM")
+         : track->a_formattag == 0x0003 ? std::string("PCM")
+         : track->a_formattag == 0x0055 ? std::string("MP3")
+         : track->a_formattag == 0x2000 ? std::string("AC3")
+         :                                (boost::format(Y("unknown, format tag 0x%|1$04x|")) % track->a_formattag).str());
 
     id_result_track(track->tnum,
                       track->type == 'v' ? ID_RESULT_TRACK_VIDEO

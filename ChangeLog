@@ -1,3 +1,10 @@
+2011-04-25  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: enhancement: File identification for tracks read from
+	Matroska files with a codec ID of "A_MS/ACM" will show the track's
+	format tag field if it is unknown to mkvmerge. Implements bug
+	624.
+
 2011-04-22  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: new feature: Track, tag and attachment selection via
