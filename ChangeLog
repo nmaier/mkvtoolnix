@@ -1,5 +1,10 @@
 2011-04-25  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: The 'doc type version' and 'doc type read
+	version' EBML header fields are only set to 3 if a stereo mode
+	other than 'none' is used for at least one video track. Fix for
+	bug 625.
+
 	* mkvmerge: enhancement: File identification for tracks read from
 	Matroska files with a codec ID of "A_MS/ACM" will show the track's
 	format tag field if it is unknown to mkvmerge. Implements bug

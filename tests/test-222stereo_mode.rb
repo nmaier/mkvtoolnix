@@ -27,6 +27,11 @@ class T_222stereo_mode < Test
 
     hash << hash_file(tmp + "-3")
 
+    merge tmp + "-4", "-A --stereo-mode 0:mono data/avi/v.avi"
+    error "Fourth merge failed" if !FileTest.exist? tmp + "-4"
+
+    hash << hash_file(tmp + "-4")
+
     hash.join"-"
   end
 end
