@@ -27,7 +27,7 @@ msgstr ""
 "\n"
 "Тимчасовий файл TTA для доріжки з ID %1% у цей час копіюється до кінцевого файлу TTA. Це може зайняти деякий час.\n"
 
-#: src/merge/output_control.cpp:263
+#: src/merge/output_control.cpp:264
 msgid ""
 "\n"
 "mkvmerge received a SIGINT (probably because the user pressed Ctrl+C). Trying to sanitize the file. If mkvmerge hangs during this process you'll have to kill it manually.\n"
@@ -709,10 +709,10 @@ msgstr " Сегмент обробки інформації:\n"
 msgid " at %1%"
 msgstr " в %1%"
 
-#: src/merge/output_control.cpp:271
-#: src/merge/output_control.cpp:280
-#: src/merge/output_control.cpp:292
-#: src/merge/output_control.cpp:299
+#: src/merge/output_control.cpp:272
+#: src/merge/output_control.cpp:281
+#: src/merge/output_control.cpp:293
+#: src/merge/output_control.cpp:300
 msgid " done\n"
 msgstr " зроблено\n"
 
@@ -1635,6 +1635,10 @@ msgstr "AAC файли можуть містити HE-AAC / AAC+ / SBR AAC ау�
 msgid "AAC is SBR/HE-AAC/AAC+"
 msgstr "AAC є SBR/HE-AAC/AAC+"
 
+#: src/input/r_aac_adif.cpp:34
+msgid "AAC with ADIF headers"
+msgstr ""
+
 #: src/mmg/header_editor/value_page.cpp:143
 msgid ""
 "ASCII string (no special chars like\n"
@@ -1856,7 +1860,7 @@ msgstr "Інше завдання щодо мультиплексування щ
 msgid "Appending a track from a file to another track from the same file is not allowed. This is the case for tracks number %u and %u."
 msgstr "Додавання доріжки з файлу до іншої доріжки цього ж файлу не допускається. Це стосується доріжок номер %u і %u."
 
-#: src/merge/output_control.cpp:1685
+#: src/merge/output_control.cpp:1688
 msgid "Appending track %1% from file no. %2% ('%3%') to track %4% from file no. %5% ('%6%').\n"
 msgstr "Приєднання доріжки %1% з файлу номер %2% ('%3%') до доріжки %4% з файлу номер %5% ('%6%').\n"
 
@@ -2206,7 +2210,7 @@ msgstr "Розділи"
 msgid "Chapters (%d entries) from %s"
 msgstr "Розділи (%d записи) з %s"
 
-#: src/merge/output_control.cpp:1324
+#: src/merge/output_control.cpp:1327
 msgid "Chapters are not allowed in WebM compliant files. No chapters will be written into any output file.\n"
 msgstr "Розділи не допускаються в сумісних WebM файлах. Жодного розділу не буде записано до будь-якого вихідного файлу.\n"
 
@@ -2519,7 +2523,7 @@ msgstr "Не вдалося знайти корректний пакет MP3."
 msgid "Could not find an index for audio track %1% (avilib error message: %2%). Skipping track.\n"
 msgstr "Не знайдено індекс для звукової доріжки %1% (avilib повідомлення про помилку: %2%). Пропуск треку.\n"
 
-#: src/merge/output_control.cpp:1640
+#: src/merge/output_control.cpp:1643
 msgid "Could not find gptzr when appending. %1%\n"
 msgstr "Не знайдено gptzr при приєднанні. %1%\n"
 
@@ -2936,7 +2940,7 @@ msgstr "Версія EBML для читання: %1%"
 msgid "EBML version: %1%"
 msgstr "Версія EBML: %1%"
 
-#: src/merge/output_control.cpp:1180
+#: src/merge/output_control.cpp:1183
 msgid "EVIL internal bug! (unknown file type). %1%\n"
 msgstr "EVIL(дуже серйозна) внутрішня помилка! (невідомий тип файлу). %1%\n"
 
@@ -3293,7 +3297,7 @@ msgstr "Файл/сегмент зв'язку"
 msgid "File/segment title:"
 msgstr "Назва файла/сегмента:"
 
-#: src/merge/output_control.cpp:870
+#: src/merge/output_control.cpp:873
 msgid "Files cannot be appended to themselves. The argument for '--append-to' was invalid.\n"
 msgstr "Файли не можуть бути приєднані самі до себе. Аргумент '--append-to' був некорректним.\n"
 
@@ -4213,7 +4217,7 @@ msgstr "Більше ніж одна назва була задана для є�
 msgid "More than one root element found."
 msgstr "Більше ніж один кореневий елемент знайдений."
 
-#: src/merge/output_control.cpp:947
+#: src/merge/output_control.cpp:950
 msgid "More than one track is to be appended to the track %1% from file no. %2% ('%3%'). The argument for '--append-to' was invalid.\n"
 msgstr "Більше ніж одна доріжка повинна бути додана до доріжки %1% з файлу номер %2% (%3%). Аргумент для '--append-to' був некорректним.\n"
 
@@ -4326,7 +4330,7 @@ msgstr "Не було обрано MIME-тип для вкладення '%s'."
 msgid "No MIME type has been set for the attachment '%1%', and it could not be guessed.\n"
 msgstr "Не було задано MIME-тип для вкладення '%1%', і він не може бути визначений.\n"
 
-#: src/merge/output_control.cpp:906
+#: src/merge/output_control.cpp:909
 msgid "No append mapping was given for the file no. %1% ('%2%'). A default mapping of %3% will be used instead. Please keep that in mind if mkvmerge aborts with an error message regarding invalid '--append-to' options.\n"
 msgstr "Не було задано розподілення для файлу номер %1% (%2%). Натомість, типово буде застосовано розподілення %3%. Будь ласка, прийміть це до уваги, якщо робота mkvmerge перерветься з повідомленням про помилку щодо неприпустимої опції '--append-to'.\n"
 
@@ -4495,7 +4499,7 @@ msgstr "Дозволено лише один вихідний файл.\n"
 msgid "Only one segment info file allowed in '%1% %2%'.\n"
 msgstr "Лише один файл інформації сегмента дозволено в '%1% %2%'.\n"
 
-#: src/merge/output_control.cpp:887
+#: src/merge/output_control.cpp:890
 msgid "Only partial append mappings were given for the file no. %1% ('%2%'). Either don't specify any mapping (in which case the default mapping will be used) or specify a mapping for all tracks that are to be copied.\n"
 msgstr "Лише часткові розподілення для приєднання були означені для файла номер %1% (%2%). Необхідно, або не задавати ніякого розподілення (тоді буде використовуватись типове розподілення), або задати розподілення для всіх доріжок, які повинні бути скопійовані.\n"
 
@@ -4713,7 +4717,7 @@ msgstr "Прогрес виконання"
 
 #: src/extract/timecodes_v2.cpp:269
 #: src/extract/tracks.cpp:400
-#: src/merge/output_control.cpp:477
+#: src/merge/output_control.cpp:480
 msgid "Progress: %1%%%%2%"
 msgstr "Прогрес виконання: %1%%%%2%"
 
@@ -4722,7 +4726,7 @@ msgstr "Прогрес виконання: %1%%%%2%"
 msgid "Progress: 100%\n"
 msgstr "Прогрес виконання: 100%\n"
 
-#: src/merge/output_control.cpp:1937
+#: src/merge/output_control.cpp:1940
 msgid "Progress: 100%%%1%"
 msgstr "Прогрес виконання: 100%%%1%"
 
@@ -5425,7 +5429,7 @@ msgstr "Деякі значення заголовка були змінені. 
 msgid "Some header values have been modified. Do you really want to reload without saving the file?"
 msgstr "Деякі значення заголовка були змінені. Ви дійсно хочете повторно відкрити без збереження файлу?"
 
-#: src/merge/output_control.cpp:1365
+#: src/merge/output_control.cpp:1368
 msgid "Some tag elements are missing (this error should not have occured - another similar error should have occured earlier). %1%\n"
 msgstr "Деякі елементи тегів відсутні (ця помилка не повинна була виникнути - подібна помилка повинна була виникнути раніше). %1%\n"
 
@@ -5604,7 +5608,7 @@ msgstr "Редагувати селектори"
 msgid "Tags"
 msgstr "Теги"
 
-#: src/merge/output_control.cpp:1353
+#: src/merge/output_control.cpp:1356
 msgid "Tags are not allowed in WebM compliant files. No tags will be written into any output file.\n"
 msgstr "Теги не допускаються у сумісних WebM файлах. Жодних тегів не буде записано до будь-яких вихідних файлів.\n"
 
@@ -5826,7 +5830,7 @@ msgstr "Коригуючий заголовок файла не був прав�
 msgid "The country '%s' is not a valid ccTLD and cannot be selected."
 msgstr "Країна '%s' не є корректною з-поміж таких серед доменів ccTLD і не може бути обрана."
 
-#: src/merge/output_control.cpp:1428
+#: src/merge/output_control.cpp:1431
 msgid "The cue entries (the index) are being written..."
 msgstr "Елементи cue (індекс) в процесі запису..."
 
@@ -5848,7 +5852,7 @@ msgstr "Типовий код мови для '%1%' не є корректним
 msgid "The delay setting for track nr. %s in file '%s' is invalid."
 msgstr "Опції затримки для доріжки номер %s файлу '%s' є некорректними."
 
-#: src/merge/output_control.cpp:1184
+#: src/merge/output_control.cpp:1187
 msgid ""
 "The demultiplexer for the file '%1%' failed to initialize:\n"
 "%2%\n"
@@ -5932,7 +5936,7 @@ msgstr "Файл '%1%' не може бути відкритий для запи
 msgid "The file '%1%' could not be opened for writing (%2%, %3%).\n"
 msgstr "Файл '%1%' не може бути відкритий для запису (%2%, %3%).\n"
 
-#: src/merge/output_control.cpp:1393
+#: src/merge/output_control.cpp:1396
 msgid "The file '%1%' has been opened for writing.\n"
 msgstr "Файл '%1%' був відкритий для запису.\n"
 
@@ -5995,19 +5999,19 @@ msgstr "Файл є непідтримуваним форматом контей
 msgid "The file is analyzed.\n"
 msgstr "Файл аналізується.\n"
 
-#: src/merge/output_control.cpp:267
+#: src/merge/output_control.cpp:268
 msgid "The file is being fixed, part 1/4..."
 msgstr "Файл в процесі виправлення, частина 1/4..."
 
-#: src/merge/output_control.cpp:273
+#: src/merge/output_control.cpp:274
 msgid "The file is being fixed, part 2/4..."
 msgstr "Файл в процесі виправлення, частина 2/4..."
 
-#: src/merge/output_control.cpp:282
+#: src/merge/output_control.cpp:283
 msgid "The file is being fixed, part 3/4..."
 msgstr "Файл в процесі виправлення, частина 3/4..."
 
-#: src/merge/output_control.cpp:294
+#: src/merge/output_control.cpp:295
 msgid "The file is being fixed, part 4/4..."
 msgstr "Файл в процесі виправлення, частина 4/4..."
 
@@ -6016,15 +6020,15 @@ msgstr "Файл в процесі виправлення, частина 4/4...
 msgid "The file name for this segment."
 msgstr "Назва файлу даного сегмента."
 
-#: src/merge/output_control.cpp:920
+#: src/merge/output_control.cpp:923
 msgid "The file no. %1% ('%2%') does not contain a track with the ID %3%, or that track is not to be copied. The argument for '--append-to' was invalid.\n"
 msgstr "Файл номер %1% ('%2%') не містить доріжку з ID %3%, або дана доріжка не повинна бути скопійована. Аргумент '--append-to' є некорректним.\n"
 
-#: src/merge/output_control.cpp:926
+#: src/merge/output_control.cpp:929
 msgid "The file no. %1% ('%2%') does not contain a track with the ID %3%, or that track is not to be copied. Therefore no track can be appended to it. The argument for '--append-to' was invalid.\n"
 msgstr "Файл номер %1% ('%2%') не містить доріжку з ID %3%, або дана доріжка не повинна бути скопійована. Тому, жодної доріжки не може бути приєднано. Аргумент '--append-to' є некорректним.\n"
 
-#: src/merge/output_control.cpp:862
+#: src/merge/output_control.cpp:865
 msgid "The file no. %1% ('%2%') is not being appended. The argument for '--append-to' was invalid.\n"
 msgstr "Файл номер %1% ('%2%') не приєднується. Аргумент '--append-to' є некорректним.\n"
 
@@ -6065,7 +6069,7 @@ msgstr "Формат задання розміру розділення є не�
 msgid "The format of the split timecode/duration is invalid."
 msgstr "Формат задання тайм-коду/тривалості розділення є неправильним."
 
-#: src/merge/output_control.cpp:990
+#: src/merge/output_control.cpp:993
 msgid "The formats do not match."
 msgstr "Формати не збігаються."
 
@@ -6276,7 +6280,7 @@ msgstr "Опція '--meta-seek-size' більше не підтримуєтьс
 msgid "The order of the various options is not important."
 msgstr "Порядок розташування опцій не має значення."
 
-#: src/merge/output_control.cpp:1389
+#: src/merge/output_control.cpp:1392
 msgid "The output file '%1%' could not be opened for writing (%2%).\n"
 msgstr "Вихідний файл '%1%' не може бути відкритий для запису (%2%).\n"
 
@@ -6326,7 +6330,7 @@ msgstr "Значення параметру не є корректно зада�
 msgid "The property value is not a valid unsigned integer in '%1%'. %2%\n"
 msgstr "Значення параметру не є корректно заданим цілим беззнаковим числом в '%1%'. %2%\n"
 
-#: src/merge/output_control.cpp:992
+#: src/merge/output_control.cpp:995
 msgid "The reason is unknown."
 msgstr "Причини цього поки невідомі."
 
@@ -6374,8 +6378,8 @@ msgstr "Розмір, після якого буде починатися нов
 msgid "The size of attachment '%1%' is 0.\n"
 msgstr "Розмір вкладення '%1%' є 0.\n"
 
-#: src/merge/output_control.cpp:319
-#: src/merge/output_control.cpp:414
+#: src/merge/output_control.cpp:320
+#: src/merge/output_control.cpp:417
 msgid "The source file '%1%' could not be opened successfully, or retrieving its size by seeking to the end did not work.\n"
 msgstr "Вхідний файл '%1%' не може бути відкритий успішно, або отримання його розміру шляхом переміщення до кінця не працює.\n"
 
@@ -6475,11 +6479,11 @@ msgstr "Тайм-коди для цього потоку були викорис
 msgid "The title for the whole movie."
 msgstr "Заголовок для всього фільму."
 
-#: src/merge/output_control.cpp:936
+#: src/merge/output_control.cpp:939
 msgid "The track %1% from file no. %2% ('%3%') is to be appended more than once. The argument for '--append-to' was invalid.\n"
 msgstr "Доріжка %1% файлу номер %2% (%3%) буде приєднана більше одного разу. Параметр для '--append-to' був некорреткним.\n"
 
-#: src/merge/output_control.cpp:761
+#: src/merge/output_control.cpp:764
 msgid "The track headers could not be rendered correctly. %1%\n"
 msgstr "Заголовки доріжки не можуть бути опрацьовані корректно. %1%\n"
 
@@ -6487,11 +6491,11 @@ msgstr "Заголовки доріжки не можуть бути опрац�
 msgid "The track number %1% does not have a valid CodecID.\n"
 msgstr "Доріжка %1% не містить правильного CodecID.\n"
 
-#: src/merge/output_control.cpp:982
+#: src/merge/output_control.cpp:985
 msgid "The track number %1% from the file '%2%' can probably not be appended correctly to the track number %3% from the file '%4%': %5% Please make sure that the resulting file plays correctly the whole time. The author of this program will probably not give support for playback issues with the resulting file.\n"
 msgstr "Доріжка %1% файлу '%2%' ймовірно не може бути корректно приєднана до доріжки %3% файлу '%4%': %5% Будь ласка, впевніться, що отриманий файл відтворюється корреткно протягом всього часу перегляду. Автор цієї програми ймовірно не буде надавати підтримку при проблемах відтворення отримуваних файлів.\n"
 
-#: src/merge/output_control.cpp:993
+#: src/merge/output_control.cpp:996
 msgid "The track number %1% from the file '%2%' cannot be appended to the track number %3% from the file '%4%'. %5%\n"
 msgstr "Доріжка %1% файлу '%2%' не може бути приєднана до доріжки %3% файлу '%4%'. %5%\n"
 
@@ -6500,7 +6504,7 @@ msgstr "Доріжка %1% файлу '%2%' не може бути приєдн�
 msgid "The track number as used in the Block Header."
 msgstr "Номер доріжки як вказано в заголовку блоку."
 
-#: src/merge/output_control.cpp:991
+#: src/merge/output_control.cpp:994
 msgid "The track parameters do not match."
 msgstr "Параметри доріжок не співпадають."
 
@@ -6516,8 +6520,8 @@ msgstr "Ширина двох доріжок є різною: %1% i %2%"
 msgid "There is a new version available online."
 msgstr "Онлайн доступна нова версія."
 
-#: src/merge/output_control.cpp:856
-#: src/merge/output_control.cpp:866
+#: src/merge/output_control.cpp:859
+#: src/merge/output_control.cpp:869
 msgid "There is no file with the ID '%1%'. The argument for '--append-to' was invalid.\n"
 msgstr "Немає файлу з ID '%1%'. Аргумент для '--append-to' був некорректним.\n"
 
@@ -6654,11 +6658,11 @@ msgstr "Цей елемент є обов'язковим і не може бут
 msgid "This property is unique. More instances cannot be added in '%1%'. %2%\n"
 msgstr "Цей елемент є унікальним. Більше таких самих елементів не може бути додано до '%1%'. %2%\n"
 
-#: src/merge/output_control.cpp:290
+#: src/merge/output_control.cpp:291
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. %1%\n"
 msgstr "Цього ДІЙСНО не повинно було статися. Простір, зарезервований для першого елемента мета пошуку, був надто малим. %1%\n"
 
-#: src/merge/output_control.cpp:1578
+#: src/merge/output_control.cpp:1581
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. Size needed: %1%. %2%\n"
 msgstr "Цього ДІЙСНО не повинно було статися. Простір, зарезервований для першого елемента мета пошуку, був надто малим. Необхідний розмір: %1%. %2%\n"
 
@@ -7865,7 +7869,7 @@ msgstr "Кінець файлу"
 msgid "failed"
 msgstr "Не вдалося"
 
-#: src/merge/output_control.cpp:548
+#: src/merge/output_control.cpp:551
 msgid "filelist_t not found for generic_packetizer_c. %1%\n"
 msgstr "filelist_t не знайдено для generic_packetizer_c. %1%\n"
 
@@ -8324,8 +8328,8 @@ msgstr "mkvmerge підтримує два формати розділів: OGM-
 msgid "mkvmerge supports two chapter formats: The OGM like text format and the full featured XML format. This option specifies the language to be associated with chapters if the OGM chapter format is used. It is ignored for XML chapter files."
 msgstr "mkvmerge підтримує два формати розділів: OGM-подібний текстовий формат і повнофункціональний формат XML. Цей параметр визначає мову, яка буде асоціюватися з розділами, якщо використовуватиметься формат OGM. Ця опція ігнорується для XML файлів розділів."
 
-#: src/merge/output_control.cpp:261
-#: src/merge/output_control.cpp:301
+#: src/merge/output_control.cpp:262
+#: src/merge/output_control.cpp:302
 msgid "mkvmerge was interrupted by a SIGINT (Ctrl+C?)\n"
 msgstr "Роботу mkvmerge було перервано через SIGINT (Ctrl+C?)\n"
 

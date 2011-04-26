@@ -23,7 +23,7 @@ msgstr ""
 "\n"
 "El archivo temporal TTA para la pista ID %1% está siendo copiado al archivo final TTA. Esto llevará algún tiempo.\n"
 
-#: src/merge/output_control.cpp:263
+#: src/merge/output_control.cpp:264
 msgid ""
 "\n"
 "mkvmerge received a SIGINT (probably because the user pressed Ctrl+C). Trying to sanitize the file. If mkvmerge hangs during this process you'll have to kill it manually.\n"
@@ -705,10 +705,10 @@ msgstr " Información acerca de la manipulación del segmento:\n"
 msgid " at %1%"
 msgstr " al %1%"
 
-#: src/merge/output_control.cpp:271
-#: src/merge/output_control.cpp:280
-#: src/merge/output_control.cpp:292
-#: src/merge/output_control.cpp:299
+#: src/merge/output_control.cpp:272
+#: src/merge/output_control.cpp:281
+#: src/merge/output_control.cpp:293
+#: src/merge/output_control.cpp:300
 msgid " done\n"
 msgstr " hecho\n"
 
@@ -1631,6 +1631,10 @@ msgstr "Los archivos AAC pueden contener audio HE-AAC/AAC+/SBR AAC. Esto no pued
 msgid "AAC is SBR/HE-AAC/AAC+"
 msgstr "AAC es SBR/HE-AAC/AAC+"
 
+#: src/input/r_aac_adif.cpp:34
+msgid "AAC with ADIF headers"
+msgstr ""
+
 #: src/mmg/header_editor/value_page.cpp:143
 msgid ""
 "ASCII string (no special chars like\n"
@@ -1852,7 +1856,7 @@ msgstr "Otro proceso de multiplexado está en proceso. Por favor, espera hasta q
 msgid "Appending a track from a file to another track from the same file is not allowed. This is the case for tracks number %u and %u."
 msgstr "La unión de una pista de un archivo con otra pista del mismo archivo no está permitida. Este es el caso para número de pistas %u y %u."
 
-#: src/merge/output_control.cpp:1685
+#: src/merge/output_control.cpp:1688
 msgid "Appending track %1% from file no. %2% ('%3%') to track %4% from file no. %5% ('%6%').\n"
 msgstr "Uniendo la pista %1% del archivo n.º %2% ('%3%') a la pista %4% del archivo n.º %5% ('%6%').\n"
 
@@ -2202,7 +2206,7 @@ msgstr "Capítulos"
 msgid "Chapters (%d entries) from %s"
 msgstr "Capítulos (%d registro/s) de %s"
 
-#: src/merge/output_control.cpp:1324
+#: src/merge/output_control.cpp:1327
 msgid "Chapters are not allowed in WebM compliant files. No chapters will be written into any output file.\n"
 msgstr "Los capítulos no están permitidos en archivos WebM. Ninguno de los capítulos serán escritos en ningún archivo creado.\n"
 
@@ -2521,7 +2525,7 @@ msgstr "No se pudo encontrar un paquete válido de MP3"
 msgid "Could not find an index for audio track %1% (avilib error message: %2%). Skipping track.\n"
 msgstr "No se pudo encontrar un índice para la pista de audio %1% (mensaje de error avilib: %2%). Pista omitida.\n"
 
-#: src/merge/output_control.cpp:1640
+#: src/merge/output_control.cpp:1643
 msgid "Could not find gptzr when appending. %1%\n"
 msgstr "No se pudo encontrar gptz al unir. %1%\n"
 
@@ -2942,7 +2946,7 @@ msgstr "Versión de lectura EBML: %1%"
 msgid "EBML version: %1%"
 msgstr "Versión EBML: %1%"
 
-#: src/merge/output_control.cpp:1180
+#: src/merge/output_control.cpp:1183
 msgid "EVIL internal bug! (unknown file type). %1%\n"
 msgstr "¡DIABLOS, hay un error interno! (Tipo de archivo desconocido). %1%\n"
 
@@ -3307,7 +3311,7 @@ msgstr "Enlace de archivo/segmento"
 msgid "File/segment title:"
 msgstr "Título de archivo/segmento:"
 
-#: src/merge/output_control.cpp:870
+#: src/merge/output_control.cpp:873
 msgid "Files cannot be appended to themselves. The argument for '--append-to' was invalid.\n"
 msgstr "Los archivos no pueden ser unidos así mismos. El argumento para '--append-to' fue no válido.\n"
 
@@ -4232,7 +4236,7 @@ msgstr "Más de un nombre fue asignado para un unico archivo adjunto.  '%1%' ser
 msgid "More than one root element found."
 msgstr "Se encontró más de un elemento fundamental."
 
-#: src/merge/output_control.cpp:947
+#: src/merge/output_control.cpp:950
 msgid "More than one track is to be appended to the track %1% from file no. %2% ('%3%'). The argument for '--append-to' was invalid.\n"
 msgstr "Más de una pista es para ser unida a la pista %1% desde el archivo n.º %2% ('%3%'). El argumento para '--append-to' no es válido.\n"
 
@@ -4345,7 +4349,7 @@ msgstr "Ningún tipo MIME ha sido seleccionado para el archivo adjunto '%s'."
 msgid "No MIME type has been set for the attachment '%1%', and it could not be guessed.\n"
 msgstr "Ningún tipo MIME ha sido establecido para el archivo adjunto '%1%', y podría no ser el acertado.\n"
 
-#: src/merge/output_control.cpp:906
+#: src/merge/output_control.cpp:909
 msgid "No append mapping was given for the file no. %1% ('%2%'). A default mapping of %3% will be used instead. Please keep that in mind if mkvmerge aborts with an error message regarding invalid '--append-to' options.\n"
 msgstr "Ninguna asignación añadida ha sido dada al archivo n.º %1% ('%2%'). En su lugar se empleará un trazado por defecto de %3%. Por favor, tenlo en cuenta por si mkvmerge lo cancela, mostrando un mensaje de error, respecto a opciones no válidas '--append-to'.\n"
 
@@ -4514,7 +4518,7 @@ msgstr "Solo está permitido un archivo creado.\n"
 msgid "Only one segment info file allowed in '%1% %2%'.\n"
 msgstr "Solo está permitido un segmento de información del archivo en '%1% %2%'.\n"
 
-#: src/merge/output_control.cpp:887
+#: src/merge/output_control.cpp:890
 msgid "Only partial append mappings were given for the file no. %1% ('%2%'). Either don't specify any mapping (in which case the default mapping will be used) or specify a mapping for all tracks that are to be copied.\n"
 msgstr "Solo parte de las asignaciones añadidas se le dieron al archivo n.º %1% ('%2%'). Si no especificas ninguna asignación, se usará la establecida como predefinida; o puedes establecer una asignación para todas las pistas que van a ser copiadas.\n"
 
@@ -4732,7 +4736,7 @@ msgstr "Progreso"
 
 #: src/extract/timecodes_v2.cpp:269
 #: src/extract/tracks.cpp:400
-#: src/merge/output_control.cpp:477
+#: src/merge/output_control.cpp:480
 msgid "Progress: %1%%%%2%"
 msgstr "Progreso: %1%%%%2%"
 
@@ -4741,7 +4745,7 @@ msgstr "Progreso: %1%%%%2%"
 msgid "Progress: 100%\n"
 msgstr "Progreso: 100%\n"
 
-#: src/merge/output_control.cpp:1937
+#: src/merge/output_control.cpp:1940
 msgid "Progress: 100%%%1%"
 msgstr "Progreso: 100%%%1%"
 
@@ -5450,7 +5454,7 @@ msgstr "Algunos valores del encabezado han sido modificados. ¿De verdad quieres
 msgid "Some header values have been modified. Do you really want to reload without saving the file?"
 msgstr "Algunos valores del encabezado han sido modificados. ¿De verdad quieres recargar sin guardar el archivo?"
 
-#: src/merge/output_control.cpp:1365
+#: src/merge/output_control.cpp:1368
 msgid "Some tag elements are missing (this error should not have occured - another similar error should have occured earlier). %1%\n"
 msgstr "Algunos elementos de la etiqueta estan ausentes (este error no debería haber ocurrido; otro error similar habrá ocurrido anteriormente). %1%\n"
 
@@ -5629,7 +5633,7 @@ msgstr "Editar selectores"
 msgid "Tags"
 msgstr "Etiquetas"
 
-#: src/merge/output_control.cpp:1353
+#: src/merge/output_control.cpp:1356
 msgid "Tags are not allowed in WebM compliant files. No tags will be written into any output file.\n"
 msgstr "Las etiquetas no están permitidas en archivos compatibles WebM. Las etiquetas no serán escritas en ningún archivo creado.\n"
 
@@ -5852,7 +5856,7 @@ msgstr "El encabezado del archivo de correción no puede ser leído correctament
 msgid "The country '%s' is not a valid ccTLD and cannot be selected."
 msgstr "El país '%s' no es un ccTLD válido y no puede ser seleccionado."
 
-#: src/merge/output_control.cpp:1428
+#: src/merge/output_control.cpp:1431
 msgid "The cue entries (the index) are being written..."
 msgstr "El índice está siendo escrito..."
 
@@ -5874,7 +5878,7 @@ msgstr "El código del idioma predefinido '%1%' no es un código de idioma ISO63
 msgid "The delay setting for track nr. %s in file '%s' is invalid."
 msgstr "Los ajustes de retraso (delay) para la pista n.º %s en el archivo '%s' no es válido."
 
-#: src/merge/output_control.cpp:1184
+#: src/merge/output_control.cpp:1187
 msgid ""
 "The demultiplexer for the file '%1%' failed to initialize:\n"
 "%2%\n"
@@ -5958,7 +5962,7 @@ msgstr "El archivo %1% no pudo ser abierto para su escritura (%2%).\n"
 msgid "The file '%1%' could not be opened for writing (%2%, %3%).\n"
 msgstr "El archivo %1% no pudo ser abierto para su escritura (%2%, %3%).\n"
 
-#: src/merge/output_control.cpp:1393
+#: src/merge/output_control.cpp:1396
 msgid "The file '%1%' has been opened for writing.\n"
 msgstr "El archivo %1% ha sido abierto para su escritura.\n"
 
@@ -6021,19 +6025,19 @@ msgstr "El archivo es un formato de contenedor no compatible (%s)."
 msgid "The file is analyzed.\n"
 msgstr "El archivo está analizado.\n"
 
-#: src/merge/output_control.cpp:267
+#: src/merge/output_control.cpp:268
 msgid "The file is being fixed, part 1/4..."
 msgstr "El archivo esta siendo fijado, parte 1/4..."
 
-#: src/merge/output_control.cpp:273
+#: src/merge/output_control.cpp:274
 msgid "The file is being fixed, part 2/4..."
 msgstr "El archivo esta siendo fijado, parte 2/4..."
 
-#: src/merge/output_control.cpp:282
+#: src/merge/output_control.cpp:283
 msgid "The file is being fixed, part 3/4..."
 msgstr "El archivo esta siendo fijado, parte 3/4..."
 
-#: src/merge/output_control.cpp:294
+#: src/merge/output_control.cpp:295
 msgid "The file is being fixed, part 4/4..."
 msgstr "El archivo esta siendo fijado, parte 4/4..."
 
@@ -6042,15 +6046,15 @@ msgstr "El archivo esta siendo fijado, parte 4/4..."
 msgid "The file name for this segment."
 msgstr "El nombre del archivo para este segmento."
 
-#: src/merge/output_control.cpp:920
+#: src/merge/output_control.cpp:923
 msgid "The file no. %1% ('%2%') does not contain a track with the ID %3%, or that track is not to be copied. The argument for '--append-to' was invalid.\n"
 msgstr "El archivo n.º %1% ('%2%') no contiene una pista con la ID %3%, o que la pista no se va a copiar. El argumento para '--append-to' no es válido.\n"
 
-#: src/merge/output_control.cpp:926
+#: src/merge/output_control.cpp:929
 msgid "The file no. %1% ('%2%') does not contain a track with the ID %3%, or that track is not to be copied. Therefore no track can be appended to it. The argument for '--append-to' was invalid.\n"
 msgstr "El archivo n.º %1% ('%2%') no contiene una pista con la ID %3%, o que la pista no se va a copiar. Por lo tanto, ninguna pista puede ser unida al archivo. El argumento para '--append-to' no es válido.\n"
 
-#: src/merge/output_control.cpp:862
+#: src/merge/output_control.cpp:865
 msgid "The file no. %1% ('%2%') is not being appended. The argument for '--append-to' was invalid.\n"
 msgstr "El archivo n.º %1% ('%2%') no está siendo unido. El argumento para '--append-to' no es válido.\n"
 
@@ -6091,7 +6095,7 @@ msgstr "El formato del tamaño de la división no es válido."
 msgid "The format of the split timecode/duration is invalid."
 msgstr "El formato del código de tiempo/duración de la división no es válido."
 
-#: src/merge/output_control.cpp:990
+#: src/merge/output_control.cpp:993
 msgid "The formats do not match."
 msgstr "Los formatos no coinciden."
 
@@ -6304,7 +6308,7 @@ msgstr "La opción '--meta-seek-size' ya no es compatible. Por favor, lee la doc
 msgid "The order of the various options is not important."
 msgstr "El orden de las diferentes opciones no es importante."
 
-#: src/merge/output_control.cpp:1389
+#: src/merge/output_control.cpp:1392
 msgid "The output file '%1%' could not be opened for writing (%2%).\n"
 msgstr "El archivo de salida '%1%' no pudo ser abierto para su escritura (%2%).\n"
 
@@ -6354,7 +6358,7 @@ msgstr "El valor de la propiedad no es un entero con signo válido en '%1%'. %2%
 msgid "The property value is not a valid unsigned integer in '%1%'. %2%\n"
 msgstr "El valor de la propiedad no es un entero sin signo válido en '%1%'. %2%\n"
 
-#: src/merge/output_control.cpp:992
+#: src/merge/output_control.cpp:995
 msgid "The reason is unknown."
 msgstr "La razón es desconocida."
 
@@ -6402,8 +6406,8 @@ msgstr "El tamaño después del cual un nuevo archivo de salida se inicia. Las l
 msgid "The size of attachment '%1%' is 0.\n"
 msgstr "El tamaño del archivo adjunto '%1%' es 0.\n"
 
-#: src/merge/output_control.cpp:319
-#: src/merge/output_control.cpp:414
+#: src/merge/output_control.cpp:320
+#: src/merge/output_control.cpp:417
 msgid "The source file '%1%' could not be opened successfully, or retrieving its size by seeking to the end did not work.\n"
 msgstr "El archivo de origen '%1%' no pudo ser abierto correctamente, o recuperar su tamaño buscando hasta el final no funcionó.\n"
 
@@ -6503,11 +6507,11 @@ msgstr "Los códigos de tiempo han sido reestablecidos a la mitad del archivo. E
 msgid "The title for the whole movie."
 msgstr "El título de la película entera."
 
-#: src/merge/output_control.cpp:936
+#: src/merge/output_control.cpp:939
 msgid "The track %1% from file no. %2% ('%3%') is to be appended more than once. The argument for '--append-to' was invalid.\n"
 msgstr "La pista %1% del archivo n.º %2% ('%3%') puede ser unida más de una vez. El argumento para '--append-to' no es válido.\n"
 
-#: src/merge/output_control.cpp:761
+#: src/merge/output_control.cpp:764
 msgid "The track headers could not be rendered correctly. %1%\n"
 msgstr "Los encabezados de la pista no han podido ser reproducidos correctamente. %1%\n"
 
@@ -6515,11 +6519,11 @@ msgstr "Los encabezados de la pista no han podido ser reproducidos correctamente
 msgid "The track number %1% does not have a valid CodecID.\n"
 msgstr "El número de pista %1% no tiene un ID del codec válido.\n"
 
-#: src/merge/output_control.cpp:982
+#: src/merge/output_control.cpp:985
 msgid "The track number %1% from the file '%2%' can probably not be appended correctly to the track number %3% from the file '%4%': %5% Please make sure that the resulting file plays correctly the whole time. The author of this program will probably not give support for playback issues with the resulting file.\n"
 msgstr "El número de pista %1% del archivo '%2%' probablemente no puede ser unida correctamente al número de pista %3% del archivo '%4%': %5% Por favor, asegúrate de que el archivo resultante se reproduce todo el tiempo de forma correcta. El autor del programa probablemente no desarrollará ninguna herramienta de compatibilidad para los fallos de reproducción con el archivo resultante.\n"
 
-#: src/merge/output_control.cpp:993
+#: src/merge/output_control.cpp:996
 msgid "The track number %1% from the file '%2%' cannot be appended to the track number %3% from the file '%4%'. %5%\n"
 msgstr "El número de pista %1% del archivo '%2%' no puede ser unido al número de pista %3% del archivo '%4%'. %5%\n"
 
@@ -6528,7 +6532,7 @@ msgstr "El número de pista %1% del archivo '%2%' no puede ser unido al número 
 msgid "The track number as used in the Block Header."
 msgstr "El número de pista que se utiliza en el encabezado de bloque."
 
-#: src/merge/output_control.cpp:991
+#: src/merge/output_control.cpp:994
 msgid "The track parameters do not match."
 msgstr "Los parámetros de la pista no coinciden."
 
@@ -6544,8 +6548,8 @@ msgstr "El ancho de las dos pistas es diferente: %1% y %2%"
 msgid "There is a new version available online."
 msgstr "Hay una nueva versión disponible."
 
-#: src/merge/output_control.cpp:856
-#: src/merge/output_control.cpp:866
+#: src/merge/output_control.cpp:859
+#: src/merge/output_control.cpp:869
 msgid "There is no file with the ID '%1%'. The argument for '--append-to' was invalid.\n"
 msgstr "No hay archivo con la ID '%1%'. El argumento para '--append-to' no fue válido.\n"
 
@@ -6682,11 +6686,11 @@ msgstr "Esta propiedad es obligatoria y no puede ser eliminada en '%1%'. %2%\n"
 msgid "This property is unique. More instances cannot be added in '%1%'. %2%\n"
 msgstr "Esta propiedad es única. No pueden ser añadidos más instancias en '%1%'. %2%\n"
 
-#: src/merge/output_control.cpp:290
+#: src/merge/output_control.cpp:291
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. %1%\n"
 msgstr "REALMENTE esto no debería haber ocurrido. El espacio reservado para el primer elemento meta seek es demasiado pequeño. %1%\n"
 
-#: src/merge/output_control.cpp:1578
+#: src/merge/output_control.cpp:1581
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. Size needed: %1%. %2%\n"
 msgstr "REALMENTE esto no debería haber ocurrido. El espacio reservado para el primer elemento de meta seek es demasiado pequeño. Tamaño necesario: %1%. %2%\n"
 
@@ -7893,7 +7897,7 @@ msgstr "final del archivo"
 msgid "failed"
 msgstr "ha fallado"
 
-#: src/merge/output_control.cpp:548
+#: src/merge/output_control.cpp:551
 msgid "filelist_t not found for generic_packetizer_c. %1%\n"
 msgstr "filelist_t no se encuentra para generic_packetizer_c. %1%\n"
 
@@ -8352,8 +8356,8 @@ msgstr "mkvmerge admite dos formatos de capítulos: el OGM como formato de texto
 msgid "mkvmerge supports two chapter formats: The OGM like text format and the full featured XML format. This option specifies the language to be associated with chapters if the OGM chapter format is used. It is ignored for XML chapter files."
 msgstr "mkvmerge admite dos formatos de capítulos: El OGM como formato de texto y el formato XML con todas sus funciones. Esta opción especifica el idioma que se asocia con los capítulos si el formato del capítulo utilizado es OGM. Esto es ignorado para los archivos de capítulos XML."
 
-#: src/merge/output_control.cpp:261
-#: src/merge/output_control.cpp:301
+#: src/merge/output_control.cpp:262
+#: src/merge/output_control.cpp:302
 msgid "mkvmerge was interrupted by a SIGINT (Ctrl+C?)\n"
 msgstr "mkvmerge fue interrumpido por un SIGINT (señales de inteligencia) (¿Ctrl+C?)\n"
 
