@@ -74,6 +74,7 @@
 #include "common/version.h"
 #include "common/xml/element_mapping.h"
 #include "input/r_aac.h"
+#include "input/r_aac_adif.h"
 #include "input/r_ac3.h"
 #include "input/r_asf.h"
 #include "input/r_avc.h"
@@ -321,7 +322,9 @@ get_file_type(filelist_t &file) {
 
   file_type_e type = FILE_TYPE_IS_UNKNOWN;
   // File types that can be detected unambiguously but are not supported
-  if (asf_reader_c::probe_file(io, size))
+  if (aac_adif_reader_c::probe_file(io, size))
+    type = FILE_TYPE_AAC;
+  else if (asf_reader_c::probe_file(io, size))
     type = FILE_TYPE_ASF;
   else if (cdxa_reader_c::probe_file(io, size))
     type = FILE_TYPE_CDXA;

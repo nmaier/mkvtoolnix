@@ -1,0 +1,30 @@
+/*
+   mkvmerge -- utility for splicing together matroska files
+   from component media subtypes
+
+   Distributed under the GPL
+   see the file COPYING for details
+   or visit http://www.gnu.org/copyleft/gpl.html
+
+   class definitions for the AAC ADIF demultiplexer module
+
+   Written by Moritz Bunkus <moritz@bunkus.org>.
+*/
+
+#ifndef __R_AAC_ADIF_H
+#define __R_AAC_ADIF_H
+
+#include "common/common_pch.h"
+
+#include "common/error.h"
+#include "common/mm_io.h"
+#include "merge/pr_generic.h"
+
+class aac_adif_reader_c: public generic_reader_c {
+public:
+  aac_adif_reader_c(track_info_c &n_ti): generic_reader_c(n_ti) { };
+
+  static int probe_file(mm_io_c *io, uint64_t size);
+};
+
+#endif // __R_AAC_ADIF_H
