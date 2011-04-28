@@ -77,6 +77,7 @@
 #include "output/p_vobbtn.h"
 #include "output/p_vobsub.h"
 #include "output/p_vorbis.h"
+#include "output/p_vc1.h"
 #include "output/p_vp8.h"
 #include "output/p_wavpack.h"
 
@@ -1475,6 +1476,10 @@ kax_reader_c::create_video_packetizer(kax_track_t *t,
       set_track_packetizer(t, new vp8_video_packetizer_c(this, nti));
       t->handle_packetizer_pixel_dimensions();
       t->handle_packetizer_default_duration();
+
+    } else if ((t->codec_id == MKV_V_MSCOMP) && vc1::is_fourcc(t->v_fourcc)) {
+      mxinfo_tid(m_ti.m_fname, t->tnum, Y("Using the VC1 video output module.\n"));
+      set_track_packetizer(t, new vc1_video_packetizer_c(this, nti));
 
     } else {
       mxinfo_tid(m_ti.m_fname, t->tnum, Y("Using the video output module.\n"));

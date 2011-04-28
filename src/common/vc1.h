@@ -127,6 +127,14 @@ namespace vc1 {
     return (value & 0xffffff00) == 0x00000100;
   }
 
+  inline bool is_fourcc(uint32_t value) {
+    return FOURCC('W', 'V', 'C', '1') == value;
+  }
+
+  inline bool is_fourcc(const char *value) {
+    return !strncasecmp(value, "WVC1", 4);
+  }
+
   bool MTX_DLL_API parse_sequence_header(const unsigned char *buf, int size, sequence_header_t &seqhdr);
   bool MTX_DLL_API parse_entrypoint(const unsigned char *buf, int size, entrypoint_t &entrypoint, sequence_header_t &seqhdr);
   bool MTX_DLL_API parse_frame_header(const unsigned char *buf, int size, frame_header_t &frame_header, sequence_header_t &seqhdr);

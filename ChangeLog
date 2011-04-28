@@ -1,3 +1,11 @@
+2011-04-28  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: enhancement: mkvmerge will rederive frame types for
+	VC1 video tracks stored in Matroska files instead of relying on
+	the container information. This fixes files created by
+	e.g. MakeMKV that mark all frames as key frames even if they
+	aren't.
+
 2011-04-26  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Fixed detection of AAC files with ADIF
