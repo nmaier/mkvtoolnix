@@ -1,3 +1,8 @@
+2011-05-03  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Reading DTS files stored in 14-to-16 mode
+	were read partially.
+
 2011-04-28  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: enhancement: mkvmerge will rederive frame types for
