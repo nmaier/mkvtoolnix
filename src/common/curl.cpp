@@ -11,9 +11,11 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/common_pch.h"
+#include "config.h"
 
 #if defined(HAVE_CURL_EASY_H)
+
+# include "common/common_pch.h"
 
 # include "common/curl.h"
 

@@ -1,5 +1,8 @@
 2011-05-03  Moritz Bunkus  <moritz@bunkus.org>
 
+	* All: Avoided a segmentation fault in gcc by not including a
+	pre-compiled header if FLAC or CURL support is disabled.
+
 	* mkvmerge: bug fix: Reading DTS files stored in 14-to-16 mode
 	were read partially.
 
