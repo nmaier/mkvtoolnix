@@ -73,6 +73,15 @@ propedit_cli_parser_c::add_tags() {
   }
 }
 
+void
+propedit_cli_parser_c::add_chapters() {
+  try {
+    m_options->add_chapters(m_next_arg);
+  } catch (...) {
+    mxerror(boost::format(Y("Invalid selector in '%1% %2%'.\n")) % m_current_arg % m_next_arg);
+  }
+}
+
 std::map<ebml_type_e, const char *> &
 propedit_cli_parser_c::get_ebml_type_abbrev_map() {
   static std::map<ebml_type_e, const char *> s_ebml_type_abbrevs;
@@ -161,6 +170,8 @@ propedit_cli_parser_c::init_parser() {
   OPT("t|tags=<selector:filename>", add_tags,            YT("Add or replace tags in the file with the ones from 'filename' "
                                                             "or remove them if 'filename' is empty "
                                                             "(see below and man page for syntax)"));
+  OPT("c|chapters=<filename>",      add_chapters,        YT("Add or replace chapters in the file with the ones from 'filename' "
+                                                            "or remove them if 'filename' is empty"));
 
   add_section_header(YT("Other options"));
   add_common_options();

@@ -37,6 +37,7 @@ public:
   target_cptr add_target(target_c::target_type_e type);
   target_cptr add_target(const std::string &spec);
   void add_tags(const std::string &spec);
+  void add_chapters(const std::string &spec);
   void set_file_name(const std::string &file_name);
   void set_parse_mode(const std::string &parse_mode);
   void dump_info() const;

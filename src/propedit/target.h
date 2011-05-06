@@ -30,6 +30,7 @@ public:
     tt_segment_info,
     tt_track,
     tt_tags,
+    tt_chapters,
   };
 
   enum selection_mode_e {
@@ -60,7 +61,7 @@ public:
 
   std::vector<change_cptr> m_changes;
 
-  std::string m_tags_file_name;
+  std::string m_file_name;
 
 public:
   target_c(target_type_e type);
@@ -70,6 +71,7 @@ public:
   void add_change(change_c::change_type_e type, const std::string &spec);
   void parse_target_spec(std::string spec);
   void parse_tags_spec(const std::string &spec);
+  void parse_chapter_spec(const std::string &spec);
   void dump_info() const;
 
   bool operator ==(const target_c &cmp) const;
@@ -83,11 +85,15 @@ public:
   void execute();
 
 protected:
+  void add_or_replace_all_master_elements(EbmlMaster *source);
+
   void parse_track_spec(const std::string &spec);
   void add_or_replace_tags();
-  void add_or_replace_all_tags(KaxTags *tags);
   void add_or_replace_global_tags(KaxTags *tags);
   void add_or_replace_track_tags(KaxTags *tags);
+
+  void parse_chapters_spec(const std::string &spec);
+  void add_or_replace_chapters();
 };
 typedef counted_ptr<target_c> target_cptr;
 

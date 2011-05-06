@@ -14,6 +14,7 @@
 #include <cassert>
 #include <stdexcept>
 
+#include <matroska/KaxChapters.h>
 #include <matroska/KaxInfo.h>
 #include <matroska/KaxInfoData.h>
 #include <matroska/KaxTag.h>
@@ -23,6 +24,7 @@
 #include <matroska/KaxTrackEntryData.h>
 #include <matroska/KaxTrackVideo.h>
 
+#include "common/chapters/chapters.h"
 #include "common/output.h"
 #include "common/strings/editing.h"
 #include "common/strings/parsing.h"
@@ -159,7 +161,12 @@ target_c::parse_tags_spec(const std::string &spec) {
   } else
     throw false;
 
-  m_tags_file_name = parts[1];
+  m_file_name = parts[1];
+}
+
+void
+target_c::parse_chapter_spec(const std::string &spec) {
+  m_file_name = spec;
 }
 
 void
@@ -172,13 +179,13 @@ target_c::dump_info()
                        "    selection_param:      %3%\n"
                        "    selection_track_type: %4%\n"
                        "    track_uid:            %5%\n"
-                       "    tags_file_name:       %6%\n")
+                       "    file_name:            %6%\n")
          % static_cast<int>(m_type)
          % static_cast<int>(m_selection_mode)
          % m_selection_param
          % m_selection_track_type
          % m_track_uid
-         % m_tags_file_name);
+         % m_file_name);
 
   std::vector<change_cptr>::const_iterator change_it;
   mxforeach(change_it, m_changes)
@@ -206,7 +213,9 @@ bool
 target_c::has_changes()
   const
 {
-  return !m_changes.empty() || (target_c::tt_tags == m_type);
+  return !m_changes.empty()
+       || (target_c::tt_tags     == m_type)
+       || (target_c::tt_chapters == m_type);
 }
 
 bool
@@ -227,6 +236,7 @@ target_c::set_level1_element(EbmlMaster *level1_element,
   m_level1_element = level1_element;
 
   if (   (target_c::tt_segment_info == m_type)
+      || (target_c::tt_chapters     == m_type)
       || (   (target_c::tt_tags == m_type)
           && (   (target_c::tom_all    == m_tag_operation_mode)
               || (target_c::tom_global == m_tag_operation_mode)))) {
@@ -309,6 +319,11 @@ target_c::execute() {
     return;
   }
 
+  if (target_c::tt_chapters == m_type) {
+    add_or_replace_chapters();
+    return;
+  }
+
   std::vector<change_cptr>::iterator change_it;
   mxforeach(change_it, m_changes)
     (*change_it)->execute(m_master, m_sub_master);
@@ -318,13 +333,13 @@ void
 target_c::add_or_replace_tags() {
   KaxTags *new_tags = NULL;
 
-  if (!m_tags_file_name.empty()) {
+  if (!m_file_name.empty()) {
     new_tags = new KaxTags;
-    parse_xml_tags(m_tags_file_name, new_tags);
+    parse_xml_tags(m_file_name, new_tags);
   }
 
   if (target_c::tom_all == m_tag_operation_mode)
-    add_or_replace_all_tags(new_tags);
+    add_or_replace_all_master_elements(new_tags);
 
   else if (target_c::tom_global == m_tag_operation_mode)
     add_or_replace_global_tags(new_tags);
@@ -340,22 +355,22 @@ target_c::add_or_replace_tags() {
   if (m_level1_element->ListSize()) {
     fix_mandatory_tag_elements(m_level1_element);
     if (!m_level1_element->CheckMandatory())
-      mxerror(boost::format(Y("Error parsing the tags in '%1%': some mandatory elements are missing.\n")) % m_tags_file_name);
+      mxerror(boost::format(Y("Error parsing the tags in '%1%': some mandatory elements are missing.\n")) % m_file_name);
   }
 }
 
 void
-target_c::add_or_replace_all_tags(KaxTags *tags) {
+target_c::add_or_replace_all_master_elements(EbmlMaster *source) {
   size_t idx;
   for (idx = 0; m_level1_element->ListSize() > idx; ++idx)
     delete (*m_level1_element)[idx];
   m_level1_element->RemoveAll();
 
-  if (tags) {
+  if (source) {
     size_t idx;
-    for (idx = 0; tags->ListSize() > idx; ++idx)
-      m_level1_element->PushElement(*(*tags)[idx]);
-    tags->RemoveAll();
+    for (idx = 0; source->ListSize() > idx; ++idx)
+      m_level1_element->PushElement(*(*source)[idx]);
+    source->RemoveAll();
   }
 }
 
@@ -417,3 +432,24 @@ target_c::add_or_replace_track_tags(KaxTags *tags) {
     }
   }
 }
+
+void
+target_c::add_or_replace_chapters() {
+  KaxChapters *new_chapters = NULL;
+
+  if (!m_file_name.empty()) {
+    new_chapters = new KaxChapters;
+    new_chapters = parse_chapters(m_file_name);
+  }
+
+  add_or_replace_all_master_elements(new_chapters);
+
+  delete new_chapters;
+
+  if (m_level1_element->ListSize()) {
+    fix_mandatory_chapter_elements(m_level1_element);
+    if (!m_level1_element->CheckMandatory())
+      mxerror(boost::format(Y("Error parsing the chapters in '%1%': some mandatory elements are missing.\n")) % m_file_name);
+  }
+}
+

@@ -12,6 +12,7 @@
 
 #include <cassert>
 
+#include <matroska/KaxChapters.h>
 #include <matroska/KaxTag.h>
 #include <matroska/KaxTags.h>
 
@@ -76,6 +77,13 @@ void
 options_c::add_tags(const std::string &spec) {
   target_cptr target(new target_c(target_c::tt_tags));
   target->parse_tags_spec(spec);
+  m_targets.push_back(target);
+}
+
+void
+options_c::add_chapters(const std::string &spec) {
+  target_cptr target(new target_c(target_c::tt_chapters));
+  target->parse_chapter_spec(spec);
   m_targets.push_back(target);
 }
 
@@ -155,6 +163,7 @@ options_c::find_elements(kax_analyzer_c *analyzer) {
   KaxInfo *info     = NULL;
   KaxTracks *tracks = read_element<KaxTracks>(analyzer, Y("Track headers"));
   KaxTags *tags     = NULL;
+  KaxChapters *chapters = NULL;
 
   std::vector<target_cptr>::iterator target_it;
   mxforeach(target_it, m_targets) {
@@ -175,6 +184,15 @@ options_c::find_elements(kax_analyzer_c *analyzer) {
       }
 
       target.set_level1_element(tags, tracks);
+
+    } else if (target_c::tt_chapters == target.m_type) {
+      if (NULL == chapters) {
+        chapters = read_element<KaxChapters>(analyzer, Y("Chapters"), false);
+        if (NULL == chapters)
+          chapters = new KaxChapters;
+      }
+
+      target.set_level1_element(chapters, tracks);
 
     } else
       assert(false);

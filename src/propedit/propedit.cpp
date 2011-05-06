@@ -52,6 +52,7 @@ write_changes(options_cptr &options,
   ids_to_write.push_back(KaxInfo::ClassInfos.GlobalId);
   ids_to_write.push_back(KaxTracks::ClassInfos.GlobalId);
   ids_to_write.push_back(KaxTags::ClassInfos.GlobalId);
+  ids_to_write.push_back(KaxChapters::ClassInfos.GlobalId);
 
   std::vector<EbmlId>::iterator id_to_write_it;
   mxforeach(id_to_write_it, ids_to_write) {

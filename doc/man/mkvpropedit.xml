@@ -168,6 +168,16 @@
      </para>
     </listitem>
    </varlistentry>
+
+   <varlistentry id="mkvpropedit.description.chapters">
+    <term><option>-c</option>, <option>--chapters</option> <parameter>filename</parameter></term>
+    <listitem>
+     <para>
+      Add or replace chapters in the file with the ones from <filename>filename</filename> or remove them if <filename>filename</filename> is
+      empty. &mkvpropedit; reads the same XML and simple chapter formats that &mkvmerge; reads as well.
+     </para>
+    </listitem>
+   </varlistentry>
   </variablelist>
 
   <para>
@@ -422,6 +432,22 @@ $ mkvpropedit movie.mkv --tags track:s2:new-subtitle-tags.xml
 
   <screen>
 $ mkvpropedit movie.mkv --tags all:
+  </screen>
+
+  <para>
+   Replacing the chapters in a file looks like this:
+  </para>
+
+  <screen>
+$ mkvpropedit movie.mkv --chapters new-chapters.xml
+  </screen>
+
+  <para>
+   Removing all chapters requires leaving out the file name:
+  </para>
+
+  <screen>
+$ mkvpropedit movie.mkv --chapters ''
   </screen>
  </refsect1>
 
