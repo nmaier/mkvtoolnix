@@ -132,6 +132,19 @@ are specified (see below), e\&.g\&.
 \-\-tags track:a1:new\-audio\-tags\&.xml\&.
 .RE
 .PP
+\fB\-c\fR, \fB\-\-chapters\fR \fIfilename\fR
+.RS 4
+Add or replace chapters in the file with the ones from
+filename
+or remove them if
+filename
+is empty\&.
+\fBmkvpropedit\fR(1)
+reads the same XML and simple chapter formats that
+\fBmkvmerge\fR(1)
+reads as well\&.
+.RE
+.PP
 Andere opties:
 .PP
 \fB\-\-command\-line\-charset\fR \fI(karakter\-set)\fR
@@ -360,6 +373,32 @@ Removing all tags requires leaving out the file name:
 .\}
 .nf
 $ mkvpropedit movie\&.mkv \-\-tags all:
+  
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+Replacing the chapters in a file looks like this:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvpropedit movie\&.mkv \-\-chapters new\-chapters\&.xml
+  
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+Removing all chapters requires leaving out the file name:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvpropedit movie\&.mkv \-\-chapters \*(Aq\*(Aq
   
 .fi
 .if n \{\
