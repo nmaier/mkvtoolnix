@@ -98,7 +98,7 @@ def define_default_task
   targets << "apps:tools" if $build_tools
 
   # The tags file -- but only if it exists already
-  targets << "TAGS" if File.exist? "TAGS"
+  targets << "TAGS" if File.exist?("TAGS") && !c(:ETAGS).empty?
 
   # Build man pages and translations?
   targets += [ "manpages", "translations:manpages" ] if c?(:XSLTPROC_WORKS)
