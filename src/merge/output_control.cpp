@@ -586,14 +586,12 @@ render_ebml_head(mm_io_c *out) {
   if (NULL == s_head)
     s_head = new EbmlHead;
 
-  unsigned int doctype_version = g_stereo_mode_used                    ? 3
-                               : hack_engaged(ENGAGE_NO_SIMPLE_BLOCKS) ? 1
-                               :                                         2;
+  unsigned int doc_type_read_version                     = hack_engaged(ENGAGE_NO_SIMPLE_BLOCKS) ? 1 : 2;
 
   GetChildAs<EDocType, EbmlString>(*s_head)              = outputting_webm() ? "webm" : "matroska";
 
-  GetChildAs<EDocTypeVersion,     EbmlUInteger>(*s_head) = doctype_version;
-  GetChildAs<EDocTypeReadVersion, EbmlUInteger>(*s_head) = doctype_version;
+  GetChildAs<EDocTypeVersion,     EbmlUInteger>(*s_head) = g_stereo_mode_used ? 3 : doc_type_read_version;
+  GetChildAs<EDocTypeReadVersion, EbmlUInteger>(*s_head) = doc_type_read_version;
 
   s_head->Render(*out, true);
 }

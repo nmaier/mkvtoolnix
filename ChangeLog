@@ -1,3 +1,9 @@
+2011-05-11  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: The 'doc type read version' EBML header field
+	is only set to 2 even if a stereo mode other than 'none' is used
+	for at least one video track. Fix for bug 625.
+
 2011-05-06  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvpropedit: new feature: Added support for adding, replacing
