@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <boiled.sugar@gmail.com>\n"
-"PO-Revision-Date: 2011-05-11 19:48+0900\n"
+"PO-Revision-Date: 2011-05-11 20:18+0900\n"
 "Last-Translator: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "Language-Team: Japanese <boiled.sugar@gmail.com>\n"
 "Language: ja\n"
@@ -1654,9 +1654,8 @@ msgid "Add name"
 msgstr "名前を追加"
 
 #: src/propedit/propedit_cli_parser.cpp:173
-#, fuzzy
 msgid "Add or replace chapters in the file with the ones from 'filename' or remove them if 'filename' is empty"
-msgstr "'filename'からのタグを、このファイルのタグに追加、あるいはこのファイルのタグを置換します。'filename'が空白なら、タグを削除します。（構文は下の方とman pageを参照してください）"
+msgstr "'filename'からのチャプタを、このファイルのチャプタに追加、あるいはこのファイルのチャプタを置換します。'filename'が空白なら、チャプタを削除します。（構文は下の方とman pageを参照してください）"
 
 #: src/propedit/propedit_cli_parser.cpp:170
 msgid "Add or replace tags in the file with the ones from 'filename' or remove them if 'filename' is empty (see below and man page for syntax)"
@@ -2943,9 +2942,8 @@ msgid "Error parsing a MPEG PS packet during the header reading phase. This stre
 msgstr "MPEG PSパケット解析ののヘッダ読み込みフェイズでエラーが発生しました。このストリームはひどく壊れているようです。\n"
 
 #: src/propedit/target.cpp:452
-#, fuzzy
 msgid "Error parsing the chapters in '%1%': some mandatory elements are missing.\n"
-msgstr "'%1%'のタグ解析中にエラーが発生しました：必須要素のいくつかがありません。\n"
+msgstr "'%1%'のチャプタ解析中にエラーが発生しました：必須要素のいくつかがありません。\n"
 
 #: src/mmg/tabs/chapters.cpp:585
 msgid "Error parsing the file"
