@@ -6,10 +6,10 @@ msgstr ""
 "PO-Revision-Date: 2011-04-25 20:59+0200\n"
 "Last-Translator: Israel Lucas <lukillas.ole@gmail.com>\n"
 "Language-Team: Spanish <moritz@bunkus.org>\n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: es\n"
 "X-Poedit-Language: Spanish\n"
 "X-Poedit-Country: SPAIN\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -579,31 +579,31 @@ msgstr ""
 "  @optionsfile             Lee las opciones adicionales de la línea de comandos desde\n"
 "                           el archivo especificado (ver página principal).\n"
 
-#: src/propedit/propedit_cli_parser.cpp:103
+#: src/propedit/propedit_cli_parser.cpp:112
 msgid "  B:  boolean (0 or 1)\n"
 msgstr "  B:  booleano (0 ó 1)\n"
 
-#: src/propedit/propedit_cli_parser.cpp:107
+#: src/propedit/propedit_cli_parser.cpp:116
 msgid "  FP: floating point number\n"
 msgstr "  FP: número decimal\n"
 
-#: src/propedit/propedit_cli_parser.cpp:104
+#: src/propedit/propedit_cli_parser.cpp:113
 msgid "  S:  string\n"
 msgstr "  S:  palabra o cadena de letras\n"
 
-#: src/propedit/propedit_cli_parser.cpp:101
+#: src/propedit/propedit_cli_parser.cpp:110
 msgid "  SI: signed integer\n"
 msgstr "  SI: entero con signo\n"
 
-#: src/propedit/propedit_cli_parser.cpp:102
+#: src/propedit/propedit_cli_parser.cpp:111
 msgid "  UI: unsigned integer\n"
 msgstr "  UI: entero sin signo\n"
 
-#: src/propedit/propedit_cli_parser.cpp:105
+#: src/propedit/propedit_cli_parser.cpp:114
 msgid "  US: Unicode string\n"
 msgstr "  US: palabra Unicode\n"
 
-#: src/propedit/propedit_cli_parser.cpp:106
+#: src/propedit/propedit_cli_parser.cpp:115
 msgid "  X:  binary in hex\n"
 msgstr "  X:  binario en hexadecimal\n"
 
@@ -786,9 +786,9 @@ msgstr ""
 "Las fuentes y los últimos binarios están siempre disponibles en\n"
 "http://www.bunkus.org/videotools/mkvtoolnix/"
 
-#: src/mmg/mux_dialog.cpp:249
 #: src/mmg/jobs.cpp:297
 #: src/mmg/jobs.cpp:307
+#: src/mmg/mux_dialog.cpp:249
 #, c-format
 msgid "%d minute(s) %d second(s)"
 msgstr "%d minuto(s) %d segundo(s)"
@@ -1545,12 +1545,12 @@ msgstr "<ChapterDisplay> está ausente el <ChapterString> secundario."
 msgid "<ChapterTrack> is missing the <ChapterTrackNumber> child."
 msgstr "<ChapterTrack> está ausente el <ChapterTrackNumber> secundario."
 
-#: src/input/r_matroska.cpp:2119
+#: src/input/r_matroska.cpp:2124
 msgid "A block group was found at position %1%, but no block element was found inside it. This might make mkvmerge crash.\n"
 msgstr "Un grupo de bloques fue encontrado en la posición %1%, pero ningún elemento del bloque fue encontrado en su interior. Esto debería bloquear mkvmerge.\n"
 
-#: src/input/r_matroska.cpp:2018
-#: src/input/r_matroska.cpp:2129
+#: src/input/r_matroska.cpp:2023
+#: src/input/r_matroska.cpp:2134
 msgid "A block was found at timestamp %1% for track number %2%. However, no headers where found for that track number. The block will be skipped.\n"
 msgstr "Un bloque fue encontrado en la marca de tiempo %1%  para el número de pista %2%. Sin embargo, no se ha encontrado ningún encabezado para este número de pista. El bloque será omitido\n"
 
@@ -1677,7 +1677,7 @@ msgstr "Proceso cancelado en %s"
 msgid "About mkvinfo"
 msgstr "Acerca de mkvinfo"
 
-#: src/propedit/propedit_cli_parser.cpp:154
+#: src/propedit/propedit_cli_parser.cpp:163
 msgid "Actions"
 msgstr "Acciones"
 
@@ -1705,7 +1705,11 @@ msgstr "Añadir elemento"
 msgid "Add name"
 msgstr "Añadir nombre"
 
-#: src/propedit/propedit_cli_parser.cpp:161
+#: src/propedit/propedit_cli_parser.cpp:173
+msgid "Add or replace chapters in the file with the ones from 'filename' or remove them if 'filename' is empty"
+msgstr ""
+
+#: src/propedit/propedit_cli_parser.cpp:170
 msgid "Add or replace tags in the file with the ones from 'filename' or remove them if 'filename' is empty (see below and man page for syntax)"
 msgstr ""
 
@@ -1725,7 +1729,7 @@ msgstr "AdicionalID: %1%"
 msgid "Additions"
 msgstr "Añadidos"
 
-#: src/propedit/propedit_cli_parser.cpp:157
+#: src/propedit/propedit_cli_parser.cpp:166
 msgid "Adds a property with the value even if such a property already exists"
 msgstr "Agrega una propiedad con el valor, incluso si dicha propiedad ya existe"
 
@@ -1765,11 +1769,11 @@ msgstr "Todos los registros son válidos."
 msgid "All header values are OK."
 msgstr "Todos los valores de encabezado son correctos."
 
-#: src/propedit/propedit_cli_parser.cpp:94
+#: src/propedit/propedit_cli_parser.cpp:103
 msgid "All known property names and their meaning\n"
 msgstr "Todos los nombres de las propiedades conocidas y su significado\n"
 
-#: src/propedit/propedit_cli_parser.cpp:185
+#: src/propedit/propedit_cli_parser.cpp:196
 msgid "All other strings work just like the track header selectors (see above)."
 msgstr ""
 
@@ -1997,8 +2001,8 @@ msgstr "Bloque adicional: %1%"
 msgid "Block duration: %1%.%|2$06d|ms"
 msgstr "Duración del bloque: %1%.%|2$06d|ms"
 
-#: src/extract/timecodes_v2.cpp:283
 #: src/extract/tracks.cpp:414
+#: src/extract/timecodes_v2.cpp:283
 #: src/info/mkvinfo.cpp:1372
 msgid "Block group"
 msgstr "Grupo del bloque"
@@ -2028,13 +2032,13 @@ msgid "Brings up the job queue editor"
 msgstr "Abre el editor de la lista de tareas"
 
 #: src/mmg/mmg_dialog.cpp:311
-#: src/mmg/options/mkvmerge.cpp:59
 #: src/mmg/options/mmg.cpp:69
+#: src/mmg/options/mkvmerge.cpp:59
+#: src/mmg/tabs/input_general.cpp:188
+#: src/mmg/tabs/input_general.cpp:191
 #: src/mmg/tabs/global.cpp:276
 #: src/mmg/tabs/global.cpp:293
 #: src/mmg/tabs/global.cpp:297
-#: src/mmg/tabs/input_general.cpp:188
-#: src/mmg/tabs/input_general.cpp:191
 msgid "Browse"
 msgstr "Explorar"
 
@@ -2066,10 +2070,10 @@ msgstr "No se puede iniciar una segunda tarea de multiplexión"
 msgid "Cannot write track %1% with the CodecID '%2%' to the file '%3%' because track %4% with the CodecID '%5%' is already being written to the same file, and their CodecPrivate data (the USF styles etc) do not match.\n"
 msgstr "No se puede escribir la pista %1% con la ID de códec '%2%' en el archivo '%3%' porque la pista %4% con la ID de códec '%5%' ya está siendo escrita en el mismo archivo, y sus datos particulares del códec (los estilos USF, etc.) no coinciden.\n"
 
+#: src/extract/xtr_textsubs.cpp:308
 #: src/extract/xtr_avi.cpp:46
 #: src/extract/xtr_base.cpp:65
 #: src/extract/xtr_ivf.cpp:53
-#: src/extract/xtr_textsubs.cpp:308
 msgid "Cannot write track %1% with the CodecID '%2%' to the file '%3%' because track %4% with the CodecID '%5%' is already being written to the same file.\n"
 msgstr "No se puede escribir la pista %1% con la ID de códec '%2%' en el archivo '%3%' porque la pista %4% con la ID de códec '%5%' ya está siendo escrita en el mismo archivo.\n"
 
@@ -2077,8 +2081,8 @@ msgstr "No se puede escribir la pista %1% con la ID de códec '%2%' en el archiv
 msgid "Category is not NUL terminated"
 msgstr "La categoría no terminó en NULO"
 
-#: src/extract/timecodes_v2.cpp:362
 #: src/extract/tracks.cpp:464
+#: src/extract/timecodes_v2.cpp:362
 #: src/info/mkvinfo.cpp:2052
 msgid "Caught exception"
 msgstr "Excepción cerrada"
@@ -2197,6 +2201,7 @@ msgstr "Verificación correcta"
 
 #: src/mmg/options/chapters.cpp:130
 #: src/mmg/tabs/global.cpp:273
+#: src/propedit/options.cpp:190
 #: src/info/mkvinfo.cpp:1812
 msgid "Chapters"
 msgstr "Capítulos"
@@ -2231,8 +2236,8 @@ msgstr "Capítulos: %1% registros"
 msgid "Charset for strings on the command line"
 msgstr "Código de caracteres para palabras en la línea de comandos"
 
-#: src/mmg/tabs/global.cpp:282
 #: src/mmg/tabs/input_format.cpp:249
+#: src/mmg/tabs/global.cpp:282
 msgid "Charset:"
 msgstr "Código de caracteres:"
 
@@ -2286,8 +2291,8 @@ msgstr "Elige un archivo"
 #: src/mmg/mmg_dialog.cpp:430
 #: src/mmg/mmg_dialog.cpp:738
 #: src/mmg/mmg_dialog.cpp:759
-#: src/mmg/mux_dialog.cpp:263
 #: src/mmg/jobs.cpp:410
+#: src/mmg/mux_dialog.cpp:263
 #: src/mmg/tabs/chapters.cpp:636
 #: src/mmg/tabs/chapters.cpp:680
 msgid "Choose an output file"
@@ -2329,8 +2334,8 @@ msgstr "Borrar los registros después de añadir un trabajo a la lista de tareas
 msgid "Close the current file without saving"
 msgstr "Cierra el archivo actual sin guardar los cambios"
 
-#: src/extract/timecodes_v2.cpp:264
 #: src/extract/tracks.cpp:396
+#: src/extract/timecodes_v2.cpp:264
 #: src/info/mkvinfo.cpp:1989
 msgid "Cluster"
 msgstr "Cluster"
@@ -2351,8 +2356,8 @@ msgstr "Posición del clúster: %1%"
 msgid "Cluster previous size: %1%"
 msgstr "Tamaño previo del clúster: %1%"
 
-#: src/extract/timecodes_v2.cpp:279
 #: src/extract/tracks.cpp:405
+#: src/extract/timecodes_v2.cpp:279
 #: src/info/mkvinfo.cpp:207
 msgid "Cluster timecode: %|1$.3f|s"
 msgstr "Código de tiempo del clúster: %|1$.3f|s"
@@ -2486,8 +2491,8 @@ msgstr "El núcleo de la imagen (CorePicture) del fotograma (frame) %1% tiene un
 msgid "CorePicture frame %1% not supported.\n"
 msgstr "El núcleo de la imagen (CorePicture) del fotograma %1% no está soportado.\n"
 
-#: src/mmg/mux_dialog.cpp:130
 #: src/mmg/jobs.cpp:184
+#: src/mmg/mux_dialog.cpp:130
 #: src/mmg/tabs/input.cpp:311
 #, c-format
 msgid "Could not create a temporary file for mkvmerge's command line option called '%s' (error code %d, %s)."
@@ -2506,9 +2511,9 @@ msgstr "No se pudo crear el archivo especificado."
 msgid "Could not decode the Base64 encoded data - it seems to be malformed."
 msgstr "No se pudo decodificar los datos codificados en Base64: parece ser no válido"
 
-#: src/input/r_ogm.cpp:1157
+#: src/input/r_matroska.cpp:1834
 #: src/input/r_avi.cpp:351
-#: src/input/r_matroska.cpp:1829
+#: src/input/r_ogm.cpp:1157
 msgid "Could not extract the decoder specific config data (AVCC) from this AVC/h.264 track.\n"
 msgstr "No se pudo extraer los datos de configuración específicos del decodificador (AVCC) de esta pista AVC/h.264.\n"
 
@@ -2537,8 +2542,8 @@ msgstr "No se pudo encontrar los datos de configuración del códec MPEG4 part 2
 msgid "Could not find the next Ogg page. This indicates a damaged Ogg/Ogm file. Will try to continue.\n"
 msgstr "No se pudo encontrar la siguiente página Ogg. Esto indica que el archivo Ogg/Ogm está dañado. Se intentará continuar.\n"
 
+#: src/input/r_matroska.cpp:1577
 #: src/input/r_avi.cpp:687
-#: src/input/r_matroska.cpp:1572
 msgid "Could not find valid DTS headers in this track's first frames.\n"
 msgstr "No se pudieron encontrar encabezados válidos DTS en los fotogramas iniciales de esta pista.\n"
 
@@ -2808,7 +2813,7 @@ msgstr "Retraso (Delay) de los códigos de tiempo de esta pista en ms (milisegun
 msgid "Delay: %|1$.3f|ms"
 msgstr "Retraso (Delay): %|1$.3f|ms"
 
-#: src/propedit/propedit_cli_parser.cpp:160
+#: src/propedit/propedit_cli_parser.cpp:169
 msgid "Delete all occurences of a property"
 msgstr "Eliminar todos los sucesos de una propiedad"
 
@@ -2906,7 +2911,7 @@ msgstr "Dolby TrueHD"
 msgid "Don't write variable parts to output files (only for debugging)."
 msgstr "No escribir partes variables para achivos creados (solo para método de depuración)."
 
-#: src/propedit/propedit.cpp:113
+#: src/propedit/propedit.cpp:114
 msgid "Done.\n"
 msgstr "Realizado.\n"
 
@@ -2962,7 +2967,7 @@ msgstr "Cada edición debe contener al menos un capítulo."
 msgid "EbmlVoid (size: %1%)"
 msgstr "EbmlVoid (tamaño: %1%)"
 
-#: src/propedit/propedit_cli_parser.cpp:171
+#: src/propedit/propedit_cli_parser.cpp:182
 msgid "Edit selectors"
 msgstr "Editar selectores"
 
@@ -2977,11 +2982,11 @@ msgstr "Conjunto %d"
 msgid "EditionEntry %u"
 msgstr "Conjunto de capítulos nº %u"
 
-#: src/propedit/propedit.cpp:68
+#: src/propedit/propedit.cpp:69
 msgid "Element %1% is written.\n"
 msgstr "El elemento %1% está escrito.\n"
 
-#: src/propedit/propedit_cli_parser.cpp:100
+#: src/propedit/propedit_cli_parser.cpp:109
 msgid "Element types:\n"
 msgstr "Clases de elementos:\n"
 
@@ -2989,7 +2994,7 @@ msgstr "Clases de elementos:\n"
 msgid "Elements"
 msgstr "Elementos"
 
-#: src/propedit/propedit_cli_parser.cpp:128
+#: src/propedit/propedit_cli_parser.cpp:137
 msgid "Elements in the category '%1%' ('--edit %2%'):\n"
 msgstr "Elementos en la categoría '%1%' ('--edit %2%'):\n"
 
@@ -3056,11 +3061,16 @@ msgstr "Error abriendo archivo"
 msgid "Error parsing a MPEG PS packet during the header reading phase. This stream seems to be badly damaged.\n"
 msgstr "Error analizando un paquete MPEG PS durante la fase de lectura del encabezado. Este archivo parece estar muy corrupto.\n"
 
+#: src/propedit/target.cpp:452
+#, fuzzy
+msgid "Error parsing the chapters in '%1%': some mandatory elements are missing.\n"
+msgstr "Error analizando las etiquetas en '%1%': algunos elementos obligatorios están ausentes.\n"
+
 #: src/mmg/tabs/chapters.cpp:585
 msgid "Error parsing the file"
 msgstr "Error analizando el archivo"
 
-#: src/propedit/target.cpp:343
+#: src/propedit/target.cpp:358
 #: src/merge/mkvmerge.cpp:487
 msgid "Error parsing the tags in '%1%': some mandatory elements are missing.\n"
 msgstr "Error analizando las etiquetas en '%1%': algunos elementos obligatorios están ausentes.\n"
@@ -3093,8 +3103,8 @@ msgstr "Error: %1% el analizador ha fallado para '%2%', línea %3%, columna %4%:
 msgid "Error: Couldn't open input file %1% (%2%).\n"
 msgstr "Error: No se pudo abrir el archivo de entrada %1% (%2%).\n"
 
-#: src/extract/timecodes_v2.cpp:184
 #: src/extract/tracks.cpp:339
+#: src/extract/timecodes_v2.cpp:184
 msgid "Error: No EBML head found."
 msgstr "Error: No se encontró el encabezado de EBML."
 
@@ -3195,9 +3205,9 @@ msgstr "FPS:"
 msgid "Failed to create the VobSub data file '%1%': %2% (%3%)\n"
 msgstr "Fallo al crear el archivo de datos VobSub '%1%': %2% (%3%)\n"
 
-#: src/extract/xtr_base.cpp:73
 #: src/extract/xtr_textsubs.cpp:337
 #: src/extract/xtr_vobsub.cpp:236
+#: src/extract/xtr_base.cpp:73
 msgid "Failed to create the file '%1%': %2% (%3%)\n"
 msgstr "Fallo al crear el archivo '%1%': %2% (%3%)\n"
 
@@ -3836,6 +3846,7 @@ msgstr "No es válido el segundo: %1%"
 
 #: src/propedit/propedit_cli_parser.cpp:51
 #: src/propedit/propedit_cli_parser.cpp:72
+#: src/propedit/propedit_cli_parser.cpp:81
 msgid "Invalid selector in '%1% %2%'.\n"
 msgstr "No es válido el selector en '%1% %2%'.\n"
 
@@ -3983,8 +3994,8 @@ msgid "Language is not NUL terminated"
 msgstr "El idioma no terminó en NULO"
 
 #: src/mmg/options/chapters.cpp:86
-#: src/mmg/tabs/global.cpp:278
 #: src/mmg/tabs/input_general.cpp:181
+#: src/mmg/tabs/global.cpp:278
 #: src/mmg/tabs/chapters.cpp:349
 msgid "Language:"
 msgstr "Idioma:"
@@ -4039,7 +4050,7 @@ msgstr "Línea %1%: La línea parece ser un registro de un subtítulo, pero el f
 msgid "Line %1%: The line seems to be a subtitle entry but the timecode was negative even after adding the track delay. Negative timecodes are not supported in Matroska. This entry will be skipped.\n"
 msgstr "Línea %1%: La línea parece ser un registro de un subtítulo pero el código de tiempo era negativo incluso después de añadir el retraso (delay) de la pista. Los códigos de tiempo negativos no son compatibles en Matroska. Este registro será omitido.\n"
 
-#: src/propedit/propedit_cli_parser.cpp:151
+#: src/propedit/propedit_cli_parser.cpp:160
 msgid "List all valid property names and exit"
 msgstr "Lista de todos los nombres de propiedad y creado válidos"
 
@@ -4096,12 +4107,12 @@ msgstr "Archivos primarios de vídeo MPEG"
 msgid "Make this track the default track for its type (audio, video, subtitles). Players should prefer tracks with the default track flag set."
 msgstr "Convierte esta pista en la predefinida para cada de sus tipos (audio, vídeo o subtítulos). Los reproductores deberían preferir pistas establecidas como predeterminadas. "
 
-#: src/input/r_matroska.cpp:1507
-#: src/input/r_matroska.cpp:1522
+#: src/input/r_matroska.cpp:1512
+#: src/input/r_matroska.cpp:1527
 msgid "Malformed AAC codec initialization data found.\n"
 msgstr "Se encontraron datos de inicialización del códec AAC erróneos.\n"
 
-#: src/input/r_matroska.cpp:1515
+#: src/input/r_matroska.cpp:1520
 msgid "Malformed codec id '%1%'.\n"
 msgstr "ID del codec erróneo '%1%'.\n"
 
@@ -4208,7 +4219,7 @@ msgstr "Falta un dígito hexadecimal"
 msgid "Missing output file name in argument '%1%'.\n"
 msgstr "Nombre de archivo creado ausente en el argumento '%1%'.\n"
 
-#: src/propedit/options.cpp:148
+#: src/propedit/options.cpp:156
 msgid "Modification of properties in the section '%1%' was requested, but no corresponding level 1 element was found in the file. %2%\n"
 msgstr "Fue requerida la modificación de propiedades en la sección '%1%', pero ningún elemento fue encontrado en el archivo correspondiente al nivel 1. %2%\n"
 
@@ -4224,7 +4235,7 @@ msgstr "Más de un tipo MIME fue asignado por un único archivo adjunto.  '%1%' 
 msgid "More than one description was given for a single attachment.\n"
 msgstr "Más de una descripción fue dada para un único archivo adjunto.\n"
 
-#: src/propedit/options.cpp:85
+#: src/propedit/options.cpp:93
 msgid "More than one file name has been given ('%1%' and '%2%').\n"
 msgstr "Mas de un nombre de archivo ha sido asignado ('%1%' and '%2%').\n"
 
@@ -4281,8 +4292,8 @@ msgstr "Nombre"
 msgid "Name for this track, e.g. \"director's comments\"."
 msgstr "Nombre para esta pista; p. ej., \"Los comentarios del director\"."
 
-#: src/mmg/tabs/chapters.cpp:348
 #: src/mmg/tabs/attachments.cpp:158
+#: src/mmg/tabs/chapters.cpp:348
 msgid "Name:"
 msgstr "Nombre:"
 
@@ -4381,7 +4392,7 @@ msgstr ""
 msgid "No file loaded"
 msgstr "Ningún archivo cargado"
 
-#: src/propedit/options.cpp:30
+#: src/propedit/options.cpp:31
 #: src/info/mkvinfo.cpp:2075
 msgid "No file name given.\n"
 msgstr "No se dio ningún nombre al archivo.\n"
@@ -4406,8 +4417,8 @@ msgstr "No se encontró ningún bloque de metadatos. Este archivo está roto.\n"
 msgid "No output file name specified, will use attachment name.\n"
 msgstr "No se especificó ningún nombre para el archivo creado, por lo que será usado el nombre del archivo adjunto.\n"
 
-#: src/extract/timecodes_v2.cpp:198
 #: src/extract/tracks.cpp:354
+#: src/extract/timecodes_v2.cpp:198
 #: src/info/mkvinfo.cpp:1956
 msgid "No segment/level 0 element found."
 msgstr "No se encontró ningún elemento del segmento/nivel 0."
@@ -4420,7 +4431,7 @@ msgstr "No fueron encontrados los archivos de salida. Cancelando.\n"
 msgid "No track ID specified in '--%1% %2%'.\n"
 msgstr "Ninguna ID de pista especificada en '--%1% %2%'.\n"
 
-#: src/propedit/target.cpp:302
+#: src/propedit/target.cpp:312
 msgid "No track corresponding to the edit specification '%1%' was found. %2%\n"
 msgstr "No se encontró ningúna pista que corresponda a la edición especificada '%1%'. %2%\n"
 
@@ -4460,10 +4471,10 @@ msgstr "No es un archivo Matroska válido (no se encontró ningún elemento del 
 msgid "Note"
 msgstr "Nota"
 
-#: src/extract/timecodes_v2.cpp:166
-#: src/extract/tracks.cpp:318
 #: src/extract/attachments.cpp:131
-#: src/propedit/options.cpp:33
+#: src/extract/tracks.cpp:318
+#: src/extract/timecodes_v2.cpp:166
+#: src/propedit/options.cpp:34
 msgid "Nothing to do.\n"
 msgstr "Nada que hacer.\n"
 
@@ -4560,7 +4571,7 @@ msgid "Option file created."
 msgstr "Archivo de opciones creado."
 
 #: src/mmg/options/dialog.cpp:43
-#: src/propedit/propedit_cli_parser.cpp:150
+#: src/propedit/propedit_cli_parser.cpp:159
 #: src/info/info_cli_parser.cpp:40
 msgid "Options"
 msgstr "Opciones"
@@ -4577,7 +4588,7 @@ msgstr "Orden: %1%"
 msgid "Original value:"
 msgstr "Valor original:"
 
-#: src/propedit/propedit_cli_parser.cpp:165
+#: src/propedit/propedit_cli_parser.cpp:176
 msgid "Other options"
 msgstr "Otras opciones"
 
@@ -4729,13 +4740,13 @@ msgstr "Procesando 1000/1000"
 msgid "Processing job %d/%d"
 msgstr "Procesando trabajo %d/%d"
 
-#: src/mmg/mux_dialog.cpp:191
 #: src/mmg/jobs.cpp:249
+#: src/mmg/mux_dialog.cpp:191
 msgid "Progress"
 msgstr "Progreso"
 
-#: src/extract/timecodes_v2.cpp:269
 #: src/extract/tracks.cpp:400
+#: src/extract/timecodes_v2.cpp:269
 #: src/merge/output_control.cpp:480
 msgid "Progress: %1%%%%2%"
 msgstr "Progreso: %1%%%%2%"
@@ -4945,9 +4956,9 @@ msgstr "Referencia virtual: %1%"
 msgid "Reload the current file without saving"
 msgstr "Recargar el archivo actual sin guardar los cambios"
 
-#: src/mmg/mux_dialog.cpp:76
 #: src/mmg/jobs.cpp:72
 #: src/mmg/jobs.cpp:74
+#: src/mmg/mux_dialog.cpp:76
 msgid "Remaining time:"
 msgstr "Tiempo restante:"
 
@@ -5092,8 +5103,8 @@ msgstr "Buscar encabezado (los subregistros serán omitidos)"
 msgid "Seek position: %1%"
 msgstr "Buscar posicion: %1%"
 
-#: src/extract/timecodes_v2.cpp:202
 #: src/extract/tracks.cpp:359
+#: src/extract/timecodes_v2.cpp:202
 #: src/info/qt_ui.cpp:177
 #: src/info/wxwidgets_ui.cpp:205
 msgid "Segment"
@@ -5126,22 +5137,22 @@ msgid "Segment info files (*.xml)|*.xml|%s"
 msgstr "Archivos de información del segmento (*.xml)|*.xml|%s"
 
 #: src/mmg/header_editor/frame.cpp:322
-#: src/extract/timecodes_v2.cpp:222
 #: src/extract/tracks.cpp:377
-#: src/propedit/options.cpp:164
-#: src/propedit/propedit_cli_parser.cpp:96
-#: src/propedit/propedit_cli_parser.cpp:172
+#: src/extract/timecodes_v2.cpp:222
+#: src/propedit/propedit_cli_parser.cpp:105
+#: src/propedit/propedit_cli_parser.cpp:183
+#: src/propedit/options.cpp:173
+#: src/info/mkvinfo.cpp:553
 #: src/info/qt_ui.cpp:178
 #: src/info/wxwidgets_ui.cpp:208
-#: src/info/mkvinfo.cpp:553
 msgid "Segment information"
 msgstr "Información del segmento"
 
-#: src/extract/timecodes_v2.cpp:256
 #: src/extract/tracks.cpp:389
+#: src/extract/timecodes_v2.cpp:256
+#: src/info/mkvinfo.cpp:924
 #: src/info/qt_ui.cpp:179
 #: src/info/wxwidgets_ui.cpp:208
-#: src/info/mkvinfo.cpp:924
 msgid "Segment tracks"
 msgstr "Pistas del segmento"
 
@@ -5247,15 +5258,15 @@ msgstr "Establecer el retraso (delay) desde el nombre del archivo"
 msgid "Set values"
 msgstr "Establecer valores"
 
-#: src/propedit/propedit_cli_parser.cpp:159
+#: src/propedit/propedit_cli_parser.cpp:168
 msgid "Sets a property to the value if it exists and add it otherwise"
 msgstr "Establece una propiedad en el valor si es que existe; de lo contrario, lo añade."
 
-#: src/propedit/propedit_cli_parser.cpp:155
+#: src/propedit/propedit_cli_parser.cpp:164
 msgid "Sets the Matroska file section that all following add/set/delete actions operate on (see below and man page for syntax)"
 msgstr "Establece la seccion del archivo Matroska para que todas las siguientes acciones añadir/establecer/borrar funcionen (mira más abajo y en la página principal para la sintaxis)"
 
-#: src/propedit/propedit_cli_parser.cpp:152
+#: src/propedit/propedit_cli_parser.cpp:161
 msgid "Sets the Matroska parser mode to 'fast' (default) or 'full'"
 msgstr "Establecer el modo análisis de Matroska en «rápido» (predefinido) o «total»"
 
@@ -5538,8 +5549,8 @@ msgstr "Estadísticas para la pista número %1%: número de bloques: %2%; tamañ
 msgid "Status"
 msgstr "Estado"
 
-#: src/mmg/mux_dialog.cpp:74
 #: src/mmg/jobs.cpp:63
+#: src/mmg/mux_dialog.cpp:74
 msgid "Status and progress"
 msgstr "Estado y progreso"
 
@@ -5623,12 +5634,12 @@ msgstr "Archivos de etiquetas (*.xml)|*.xml|%s"
 msgid "Tag files (*.xml;*.txt)|*.xml;*.txt|%s"
 msgstr "Archivos de etiquetas (*.xml;*.txt)|*.xml;*.txt|%s"
 
-#: src/propedit/propedit_cli_parser.cpp:182
+#: src/propedit/propedit_cli_parser.cpp:193
 #, fuzzy
 msgid "Tag selectors"
 msgstr "Editar selectores"
 
-#: src/propedit/options.cpp:172
+#: src/propedit/options.cpp:181
 #: src/info/mkvinfo.cpp:1828
 msgid "Tags"
 msgstr "Etiquetas"
@@ -5799,7 +5810,7 @@ msgstr "Los datos binarios deben ser como máximo de %1% bytes de extensión."
 msgid "The binary data must be exactly %1% bytes long."
 msgstr "Los datos binarios deben ser exactamente de %1% bytes de extensión."
 
-#: src/propedit/propedit.cpp:109
+#: src/propedit/propedit.cpp:110
 msgid "The changes are written to the file.\n"
 msgstr "Los cambios son escritos al archivo.\n"
 
@@ -5837,8 +5848,8 @@ msgstr "El tipo de códec '%1%' no puede ser usado en archivos compatibles WebM.
 
 #: src/output/p_avc.cpp:203
 #: src/output/p_kate.cpp:113
-#: src/output/p_passthrough.cpp:63
 #: src/output/p_video.cpp:139
+#: src/output/p_passthrough.cpp:63
 #: src/output/p_textsubs.cpp:102
 msgid "The codec's private data does not match (lengths: %1% and %2%)."
 msgstr "Los datos privados del códec no coinciden (extensiónes: %1% y %2%)."
@@ -5912,7 +5923,7 @@ msgstr ""
 msgid "The duration after which a new output file is started. The time can be given either in the form HH:MM:SS.nnnnnnnnn or as the number of seconds followed by 's'. You may omit the number of hours 'HH' and the number of nanoseconds 'nnnnnnnnn'. If given then you may use up to nine digits after the decimal point. Examples: 01:00:00 (after one hour) or 1800s (after 1800 seconds)."
 msgstr "La duración después de la cual un nuevo archivo de salida se inicia. El tiempo puede ser asigando, ya sea en la forma HH:MM:SS.nnnnnnnnn o como el número de los segundos seguido de «s». Puedes omitir el número de las horas y el número de los nanosegundos. Puedes utilizar hasta nueve dígitos después del punto decimal. Ejemplos: 01:00:00 (después de una hora) o 1800s (después de 1800 segundos)."
 
-#: src/propedit/options.cpp:207
+#: src/propedit/options.cpp:225
 msgid "The edit specifications '%1%' and '%2%' resolve to the same track with the UID %3%.\n"
 msgstr "Los ajustes de edición '%1%' y '%2%' determinan la misma pista con la UID %3%.\n"
 
@@ -5934,15 +5945,15 @@ msgstr "El quinto modo intenta extraer información del capítulo y etiquetas y 
 msgid "The file '%1%' cannot be attached because it does not exist or cannot be read.\n"
 msgstr "El archivo %1% no puede ser adjuntado porque no existe o no puede ser leído.\n"
 
-#: src/extract/chapters.cpp:47
+#: src/extract/attachments.cpp:141
 #: src/extract/cuesheets.cpp:208
 #: src/extract/tags.cpp:47
-#: src/extract/attachments.cpp:141
+#: src/extract/chapters.cpp:47
 msgid "The file '%1%' could not be opened for reading (%2%)."
 msgstr "El archivo %1% no pudo ser abierto para su lectura (%2%)."
 
-#: src/extract/timecodes_v2.cpp:173
 #: src/extract/tracks.cpp:327
+#: src/extract/timecodes_v2.cpp:173
 msgid "The file '%1%' could not be opened for reading (%2%).\n"
 msgstr "El archivo %1% no pudo ser abierto para su lectura (%2%).\n"
 
@@ -5950,15 +5961,15 @@ msgstr "El archivo %1% no pudo ser abierto para su lectura (%2%).\n"
 msgid "The file '%1%' could not be opened for reading command line arguments.\n"
 msgstr "El archivo %1% no pudo ser abierto para leer los argumentos de la línea de comandos.\n"
 
-#: src/extract/xtr_tta.cpp:87
 #: src/extract/tracks.cpp:276
+#: src/extract/xtr_tta.cpp:87
 #: src/extract/xtr_avi.cpp:52
 #: src/extract/xtr_wav.cpp:113
 msgid "The file '%1%' could not be opened for writing (%2%).\n"
 msgstr "El archivo %1% no pudo ser abierto para su escritura (%2%).\n"
 
-#: src/extract/xtr_rmff.cpp:40
 #: src/extract/attachments.cpp:121
+#: src/extract/xtr_rmff.cpp:40
 msgid "The file '%1%' could not be opened for writing (%2%, %3%).\n"
 msgstr "El archivo %1% no pudo ser abierto para su escritura (%2%, %3%).\n"
 
@@ -6021,7 +6032,7 @@ msgstr "El encabezado no fue leído correctamente.\n"
 msgid "The file is an unsupported container format (%s)."
 msgstr "El archivo es un formato de contenedor no compatible (%s)."
 
-#: src/propedit/propedit.cpp:92
+#: src/propedit/propedit.cpp:93
 msgid "The file is analyzed.\n"
 msgstr "El archivo está analizado.\n"
 
@@ -6304,7 +6315,7 @@ msgstr ""
 msgid "The option '--meta-seek-size' is no longer supported. Please read mkvmerge's documentation, especially the section about the MATROSKA FILE LAYOUT.\n"
 msgstr "La opción '--meta-seek-size' ya no es compatible. Por favor, lee la documentacion de mkvmerge, especialmente la sección acerca de MATROSKA FILE LAYOUT.\n"
 
-#: src/propedit/propedit_cli_parser.cpp:169
+#: src/propedit/propedit_cli_parser.cpp:180
 msgid "The order of the various options is not important."
 msgstr "El orden de las diferentes opciones no es importante."
 
@@ -6416,31 +6427,31 @@ msgstr "El archivo de origen '%1%' no pudo ser abierto correctamente, o recupera
 msgid "The stretch setting for track nr. %s in file '%s' is invalid."
 msgstr "El tramo de ajuste para la pista n.º %s en el archivo '%s' no es válido."
 
-#: src/propedit/propedit_cli_parser.cpp:183
+#: src/propedit/propedit_cli_parser.cpp:194
 msgid "The string 'all' works on all tags."
 msgstr ""
 
-#: src/propedit/propedit_cli_parser.cpp:184
+#: src/propedit/propedit_cli_parser.cpp:195
 msgid "The string 'global' works on the global tags."
 msgstr ""
 
-#: src/propedit/propedit_cli_parser.cpp:177
+#: src/propedit/propedit_cli_parser.cpp:188
 msgid "The string 'track:' followed by one of the chars 'a', 'b', 's' or 'v' followed by a number 'n' selects the nth audio, button, subtitle or video track (e.g. '--edit track:a2')."
 msgstr "La cadena de caracteres 'track:' seguida por uno de los caracteres a, b, s o v, y estos de un número n, selecciona el enésimo: audio, botón, subtítulo o pista de vídeo (p. ej., '--edit track:a2')."
 
-#: src/propedit/propedit_cli_parser.cpp:179
+#: src/propedit/propedit_cli_parser.cpp:190
 msgid "The string 'track:=uid' with 'uid' being a number selects the track whose 'track UID' element equals 'uid'."
 msgstr "La cadena de caracteres 'track:=uid' con 'uid' siendo un número de la pista seleccionada cuyo 'track UID' es igual al elemento 'uid'."
 
-#: src/propedit/propedit_cli_parser.cpp:180
+#: src/propedit/propedit_cli_parser.cpp:191
 msgid "The string 'track:@number' with 'number' being a number selects the track whose 'track number' element equals 'number'."
 msgstr "La cadena de caracteres 'track:@number' con 'number' siendo un número de pista seleccionada cuyo 'track number' es igual al elemento 'number'."
 
-#: src/propedit/propedit_cli_parser.cpp:176
+#: src/propedit/propedit_cli_parser.cpp:187
 msgid "The string 'track:n' with 'n' being a number selects the nth track."
 msgstr "La cadena de caracteres 'track:n' con n siendo un número que selecciona la enésima pista."
 
-#: src/propedit/propedit_cli_parser.cpp:173
+#: src/propedit/propedit_cli_parser.cpp:184
 msgid "The strings 'info', 'segment_info' or 'segmentinfo' select the segment information element. This is also the default until the first '--edit' option is found."
 msgstr "Las cadenas de caracteres  'info', 'segment_info' o 'segmentinfo' seleccionan el elemento de información del segmento. Esta es la opción predefinina hasta que '--edit' es encontrada."
 
@@ -6654,7 +6665,7 @@ msgstr "Este archivo contiene las coordenadas en las líneas del código de tiem
 msgid "This file could not be opened or parsed."
 msgstr "Este archivo no pudo ser abierto o analizado."
 
-#: src/propedit/propedit.cpp:97
+#: src/propedit/propedit.cpp:98
 msgid "This file could not be opened or parsed.\n"
 msgstr "Este archivo no pudo ser abierto o analizado.\n"
 
@@ -6719,8 +6730,8 @@ msgstr "Código de tiempo de extracción"
 msgid "Timecode files (*.tmc;*.txt)|*.tmc;*.txt|%s"
 msgstr "Archivos de código de tiempo (*.tmc;*.txt)|*.tmc;*.txt|%s"
 
-#: src/extract/timecodes_v2.cpp:231
 #: src/extract/tracks.cpp:382
+#: src/extract/timecodes_v2.cpp:231
 #: src/info/mkvinfo.cpp:567
 #: src/info/mkvinfo.cpp:1099
 msgid "Timecode scale: %1%"
@@ -6788,14 +6799,14 @@ msgstr "La pista %1% con la ID de códec '%2%' no encuentra el elemento \"bits p
 msgid "Track %1% with the CodecID '%2%' is missing the \"codec private \" element and cannot be extracted.\n"
 msgstr "La pista %1% con la ID de códec '%2%' no encuentra el elemento \"codec private \" y no puede ser extraído.\n"
 
-#: src/extract/xtr_aac.cpp:42
+#: src/extract/xtr_textsubs.cpp:292
 #: src/extract/xtr_avc.cpp:54
+#: src/extract/xtr_vobsub.cpp:65
+#: src/extract/xtr_aac.cpp:42
 #: src/extract/xtr_avi.cpp:37
 #: src/extract/xtr_ogg.cpp:37
 #: src/extract/xtr_ogg.cpp:72
 #: src/extract/xtr_rmff.cpp:31
-#: src/extract/xtr_textsubs.cpp:292
-#: src/extract/xtr_vobsub.cpp:65
 #: src/extract/xtr_wav.cpp:95
 msgid "Track %1% with the CodecID '%2%' is missing the \"codec private\" element and cannot be extracted.\n"
 msgstr "La pista %1% con la ID de códec '%2%' no encuentra el elemento \"codec private\" y no puede ser extraído.\n"
@@ -6846,9 +6857,9 @@ msgstr "Pista UID: %1%"
 msgid "Track extraction"
 msgstr "Extracción de pista"
 
-#: src/propedit/options.cpp:156
-#: src/propedit/propedit_cli_parser.cpp:97
-#: src/propedit/propedit_cli_parser.cpp:175
+#: src/propedit/propedit_cli_parser.cpp:106
+#: src/propedit/propedit_cli_parser.cpp:186
+#: src/propedit/options.cpp:164
 msgid "Track headers"
 msgstr "Encabezado de pista"
 
@@ -7007,7 +7018,7 @@ msgstr "MPEG no compatible mpeg_version: 0x%|1$02x| en el paquete %2% para el c�
 msgid "Unsupported format"
 msgstr "Formato no compatible"
 
-#: src/input/r_matroska.cpp:1784
+#: src/input/r_matroska.cpp:1789
 msgid "Unsupported track type for this track.\n"
 msgstr "Tipo de pista no compatible para esta pista.\n"
 
@@ -7048,8 +7059,8 @@ msgstr "Opciones definidas por el usuario:"
 msgid "Using a NALU size length of 3 bytes might result in tracks that won't be decodable with certain AVC/h.264 codecs.\n"
 msgstr "Usando un tamaño de extensión NALU de 3 bytes debería dar lugar a pistas que no podrán ser decodificables con ciertos códecs AVC/h.264.\n"
 
+#: src/input/r_matroska.cpp:1554
 #: src/input/r_ac3.cpp:90
-#: src/input/r_matroska.cpp:1549
 #: src/input/r_mpeg_ps.cpp:1180
 msgid "Using the %1%AC3 output module.\n"
 msgstr "Usando el módulo de salida %1%AC3.\n"
@@ -7066,10 +7077,10 @@ msgstr "Usando el multiplexor AAC.\n"
 msgid "Using the AAC output module (FourCC: %1%).\n"
 msgstr "Usando el módulo de salida AAC (FourCC: %1%).\n"
 
+#: src/input/r_matroska.cpp:1542
+#: src/input/r_qtmp4.cpp:1531
 #: src/input/r_ogm.cpp:994
 #: src/input/r_aac.cpp:116
-#: src/input/r_qtmp4.cpp:1531
-#: src/input/r_matroska.cpp:1537
 msgid "Using the AAC output module.\n"
 msgstr "Usando el módulo de salida AAC.\n"
 
@@ -7081,10 +7092,10 @@ msgstr "Usando el multiplexor AC3.\n"
 msgid "Using the AC3 output module (FourCC: %1%).\n"
 msgstr "Usando el módulo de salida AC3 (FourCC: %1%).\n"
 
-#: src/input/r_wav.cpp:225
-#: src/input/r_ogm.cpp:1012
 #: src/input/r_qtmp4.cpp:1454
+#: src/input/r_wav.cpp:225
 #: src/input/r_avi.cpp:568
+#: src/input/r_ogm.cpp:1012
 msgid "Using the AC3 output module.\n"
 msgstr "Usando el módulo de salida AC3.\n"
 
@@ -7104,10 +7115,10 @@ msgstr "Usando el lector de subtítulos CorePanorama.\n"
 msgid "Using the DTS demultiplexer.\n"
 msgstr "Usando el multiplexor DTS.\n"
 
-#: src/input/r_wav.cpp:354
 #: src/input/r_dts.cpp:114
+#: src/input/r_matroska.cpp:1574
+#: src/input/r_wav.cpp:354
 #: src/input/r_avi.cpp:682
-#: src/input/r_matroska.cpp:1569
 #: src/input/r_mpeg_ps.cpp:1185
 msgid "Using the DTS output module.\n"
 msgstr "Usando el módulo de salida DTS.\n"
@@ -7116,8 +7127,8 @@ msgstr "Usando el módulo de salida DTS.\n"
 msgid "Using the Dirac demultiplexer.\n"
 msgstr "Usando el multiplexor Dirac.\n"
 
+#: src/input/r_matroska.cpp:1471
 #: src/input/r_dirac.cpp:96
-#: src/input/r_matroska.cpp:1470
 msgid "Using the Dirac video output module.\n"
 msgstr "Usando el módulo de salida de vídeo Dirac.\n"
 
@@ -7125,9 +7136,9 @@ msgstr "Usando el módulo de salida de vídeo Dirac.\n"
 msgid "Using the FLAC demultiplexer.\n"
 msgstr "Usando el multiplexor FLAC.\n"
 
-#: src/input/r_ogm_flac.cpp:287
 #: src/input/r_flac.cpp:164
-#: src/input/r_matroska.cpp:1591
+#: src/input/r_matroska.cpp:1596
+#: src/input/r_ogm_flac.cpp:287
 msgid "Using the FLAC output module.\n"
 msgstr "Usando el módulo de salida FLAC.\n"
 
@@ -7135,7 +7146,7 @@ msgstr "Usando el módulo de salida FLAC.\n"
 msgid "Using the IVF demultiplexer.\n"
 msgstr "Usando el multiplexor IVF.\n"
 
-#: src/input/r_matroska.cpp:1710
+#: src/input/r_matroska.cpp:1715
 msgid "Using the Kate output module.\n"
 msgstr "Usando el módulo de salida Kate.\n"
 
@@ -7155,17 +7166,17 @@ msgstr "Usando el multiplexor MPEG ES.\n"
 msgid "Using the MPEG PS demultiplexer.\n"
 msgstr "Usando el multiplexor MPEG PS.\n"
 
-#: src/input/r_mp3.cpp:71
-#: src/input/r_ogm.cpp:1030
+#: src/input/r_matroska.cpp:1604
 #: src/input/r_qtmp4.cpp:1537
+#: src/input/r_mp3.cpp:71
 #: src/input/r_avi.cpp:561
-#: src/input/r_matroska.cpp:1599
+#: src/input/r_ogm.cpp:1030
 #: src/input/r_mpeg_ps.cpp:1175
 msgid "Using the MPEG audio output module.\n"
 msgstr "Usando el módulo de salida de audio MPEG.\n"
 
+#: src/input/r_matroska.cpp:1455
 #: src/input/r_qtmp4.cpp:1489
-#: src/input/r_matroska.cpp:1454
 msgid "Using the MPEG-%1% video output module.\n"
 msgstr "Usando el módulo de salida de vídeo MPEG-%1%.\n"
 
@@ -7175,27 +7186,27 @@ msgstr "Usando el módulo de salida de vídeo MPEG-%1%.\n"
 msgid "Using the MPEG-1/2 video output module.\n"
 msgstr "Usando el módulo de salida de vídeo MPEG-1/2.\n"
 
+#: src/input/r_matroska.cpp:1866
 #: src/input/r_qtmp4.cpp:1507
-#: src/input/r_matroska.cpp:1861
 msgid "Using the MPEG-4 part 10 (AVC) video output module.\n"
 msgstr "Usando el módulo de salida de vídeo MPEG4 part 10 (AVC).\n"
 
+#: src/input/r_matroska.cpp:1846
 #: src/input/r_avc.cpp:136
-#: src/input/r_ogm.cpp:1154
 #: src/input/r_avi.cpp:348
-#: src/input/r_matroska.cpp:1841
+#: src/input/r_ogm.cpp:1154
 #: src/input/r_mpeg_ps.cpp:1214
 msgid "Using the MPEG-4 part 10 ES video output module.\n"
 msgstr "Usando el módulo de salida de vídeo MPEG-4 part 10 ES.\n"
 
-#: src/input/r_ogm.cpp:1258
+#: src/input/r_matroska.cpp:1459
 #: src/input/r_qtmp4.cpp:1481
 #: src/input/r_avi.cpp:331
-#: src/input/r_matroska.cpp:1458
+#: src/input/r_ogm.cpp:1258
 msgid "Using the MPEG-4 part 2 video output module.\n"
 msgstr "Usando el módulo de salida de vídeo MPEG-4 part 2.\n"
 
-#: src/input/r_matroska.cpp:210
+#: src/input/r_matroska.cpp:211
 msgid "Using the Matroska demultiplexer.\n"
 msgstr "Usando el multiplexor Matroska.\n"
 
@@ -7203,15 +7214,15 @@ msgstr "Usando el multiplexor Matroska.\n"
 msgid "Using the OGG/OGM demultiplexer.\n"
 msgstr "Usando el multiplexor OGG/OGM.\n"
 
-#: src/input/r_wav.cpp:395
-#: src/input/r_ogm.cpp:1049
+#: src/input/r_matroska.cpp:1611
 #: src/input/r_qtmp4.cpp:1543
+#: src/input/r_wav.cpp:395
 #: src/input/r_avi.cpp:553
-#: src/input/r_matroska.cpp:1606
+#: src/input/r_ogm.cpp:1049
 msgid "Using the PCM output module.\n"
 msgstr "Usando el módulo de salida PCM.\n"
 
-#: src/input/r_matroska.cpp:1716
+#: src/input/r_matroska.cpp:1721
 #: src/input/r_pgssup.cpp:72
 msgid "Using the PGS output module.\n"
 msgstr "Usando el módulo de salida PGS.\n"
@@ -7248,13 +7259,13 @@ msgstr "Usando el lector de subtítulo SSA/ASS.\n"
 msgid "Using the TTA demultiplexer.\n"
 msgstr "Usando el multiplexor TTA.\n"
 
+#: src/input/r_matroska.cpp:1622
 #: src/input/r_tta.cpp:109
-#: src/input/r_matroska.cpp:1617
 msgid "Using the TTA output module.\n"
 msgstr "Usando el módulo de salida TTA.\n"
 
+#: src/input/r_matroska.cpp:1467
 #: src/input/r_ogm.cpp:1351
-#: src/input/r_matroska.cpp:1466
 msgid "Using the Theora video output module.\n"
 msgstr "Usando el módulo de salida de vídeo Theora.\n"
 
@@ -7278,14 +7289,15 @@ msgstr "Usando el lector de subtítulo USF.\n"
 msgid "Using the VC1 ES demultiplexer.\n"
 msgstr "Usando el multiplexor VC1 ES.\n"
 
+#: src/input/r_matroska.cpp:1481
 #: src/input/r_vc1.cpp:96
 #: src/input/r_mpeg_ps.cpp:1219
 msgid "Using the VC1 video output module.\n"
 msgstr "Usando el módulo de salida VC1.\n"
 
-#: src/input/r_ogm.cpp:1445
-#: src/input/r_matroska.cpp:1474
 #: src/input/r_ivf.cpp:87
+#: src/input/r_matroska.cpp:1475
+#: src/input/r_ogm.cpp:1445
 msgid "Using the VP8 video output module.\n"
 msgstr "Usando el módulo de salida VP8.\n"
 
@@ -7293,11 +7305,11 @@ msgstr "Usando el módulo de salida VP8.\n"
 msgid "Using the VobBtn button reader.\n"
 msgstr "Usando el lector del boton VobBtn.\n"
 
-#: src/input/r_matroska.cpp:1727
+#: src/input/r_matroska.cpp:1732
 msgid "Using the VobBtn output module.\n"
 msgstr "Usando el módulo de salida VobBtn.\n"
 
-#: src/input/r_matroska.cpp:1694
+#: src/input/r_matroska.cpp:1699
 msgid "Using the VobSub output module.\n"
 msgstr "Usando el módulo de salida VobSub.\n"
 
@@ -7309,9 +7321,9 @@ msgstr "Usando el módulo de salida de subtítulo VobSub (idioma: %1%).\n"
 msgid "Using the VobSub subtitle reader (SUB file '%1%').\n"
 msgstr "Usando el lector de subtítulo VobSub (Archivo SUB '%1%').\n"
 
-#: src/input/r_ogm.cpp:1070
+#: src/input/r_matroska.cpp:1629
 #: src/input/r_avi.cpp:736
-#: src/input/r_matroska.cpp:1624
+#: src/input/r_ogm.cpp:1070
 msgid "Using the Vorbis output module.\n"
 msgstr "Usando el módulo de salida Vorbis.\n"
 
@@ -7327,7 +7339,7 @@ msgstr "Usando el demultiplexor WAV/PACK con un archivo de corrección.\n"
 msgid "Using the WAVPACK demultiplexer.\n"
 msgstr "Usando el multiplexor WAVPACK.\n"
 
-#: src/input/r_matroska.cpp:1647
+#: src/input/r_matroska.cpp:1652
 #: src/input/r_wavpack.cpp:107
 msgid "Using the WAVPACK output module.\n"
 msgstr "Usando el módulo de salida WAVPACK.\n"
@@ -7336,16 +7348,16 @@ msgstr "Usando el módulo de salida WAVPACK.\n"
 msgid "Using the generic audio output module (FourCC: %|1$.4s|).\n"
 msgstr "Usando el módulo de salida genérico de audio (FourCC: %|1$.4s|).\n"
 
-#: src/input/r_matroska.cpp:1371
+#: src/input/r_matroska.cpp:1372
 msgid "Using the passthrough output module for this %1% track.\n"
 msgstr "Usando módulo de salida de pasarela para esta %1% pista.\n"
 
-#: src/input/r_ogm.cpp:1101
 #: src/input/r_srt.cpp:60
+#: src/input/r_matroska.cpp:1707
 #: src/input/r_ssa.cpp:71
-#: src/input/r_avi.cpp:405
-#: src/input/r_matroska.cpp:1702
 #: src/input/r_usf.cpp:259
+#: src/input/r_avi.cpp:405
+#: src/input/r_ogm.cpp:1101
 msgid "Using the text subtitle output module.\n"
 msgstr "Usando el módulo de salida de subtítulos de texto.\n"
 
@@ -7358,9 +7370,9 @@ msgstr "Usando el módulo de salida de vídeo (FourCC: %1%).\n"
 msgid "Using the video output module (FourCC: %|1$.4s|).\n"
 msgstr "Usando el módulo de salida de vídeo (FourCC: %|1$.4s|).\n"
 
-#: src/input/r_ogm.cpp:1263
+#: src/input/r_matroska.cpp:1485
 #: src/input/r_avi.cpp:360
-#: src/input/r_matroska.cpp:1480
+#: src/input/r_ogm.cpp:1263
 msgid "Using the video output module.\n"
 msgstr "Usando el módulo de salida de vídeo.\n"
 
@@ -7568,8 +7580,8 @@ msgstr "Archivo elegido erróneo"
 msgid "Wrong file selected"
 msgstr "Archivo seleccionado erróneo"
 
-#: src/common/kate.cpp:46
 #: src/common/theora.cpp:35
+#: src/common/kate.cpp:46
 msgid "Wrong header type: 0x%|1$02x| != 0x%|2$02x|"
 msgstr "Tipo de encabezado erróneo: 0x%|1$02x| != 0x%|2$02x|"
 
@@ -7703,7 +7715,7 @@ msgstr "anáglifo"
 msgid "append"
 msgstr "unir"
 
-#: src/input/r_matroska.cpp:90
+#: src/input/r_matroska.cpp:91
 #: src/mmg/mmg.cpp:62
 #: src/info/mkvinfo.cpp:1116
 msgid "audio"
@@ -7733,7 +7745,7 @@ msgstr "avi_reader: El archivo de origen no es un AVI válido."
 msgid "bits per sample: %1%"
 msgstr "bits por muestra: %1%"
 
-#: src/input/r_matroska.cpp:91
+#: src/input/r_matroska.cpp:92
 #: src/info/mkvinfo.cpp:1119
 msgid "buttons"
 msgstr "botones"
@@ -7982,10 +7994,10 @@ msgstr "muy alta"
 msgid "inflateInit() failed. Result: %1%\n"
 msgstr "inflateInit() ha fallado. Resultado: %1%\n"
 
-#: src/mmg/mux_dialog.cpp:77
 #: src/mmg/jobs.cpp:73
 #: src/mmg/jobs.cpp:75
 #: src/mmg/jobs.cpp:163
+#: src/mmg/mux_dialog.cpp:77
 msgid "is being estimated"
 msgstr "está siendo estimado"
 
@@ -8033,126 +8045,126 @@ msgstr "lzo_init() ha fallado. Resultado: %1%\n"
 msgid "lzo_malloc(LZO1X_999_MEM_COMPRESS) failed.\n"
 msgstr "lzo_malloc(LZO1X_999_MEM_COMPRESS) ha fallado.\n"
 
-#: src/input/r_matroska.cpp:321
+#: src/input/r_matroska.cpp:322
 msgid "matroska_reader: (MS compatibility mode for track %1%) Matroska says that there are %2% bits per sample, but the WAVEFORMATEX says that there are %3%.\n"
 msgstr "matroska_reader: (modo de compatibilidad MS para la pista %1%) Matroska dice que hay %2% bits por muestra, pero el WAVEFORMATEX dice que hay %3%.\n"
 
-#: src/input/r_matroska.cpp:312
+#: src/input/r_matroska.cpp:313
 msgid "matroska_reader: (MS compatibility mode for track %1%) Matroska says that there are %2% channels, but the WAVEFORMATEX says that there are %3%.\n"
 msgstr "matroska_reader: (modo de compatibilidad MS para la pista %1%) Matroska dice que hay %2% canales, pero el WAVEFORMATEX dice que hay %3%.\n"
 
-#: src/input/r_matroska.cpp:303
+#: src/input/r_matroska.cpp:304
 msgid "matroska_reader: (MS compatibility mode for track %1%) Matroska says that there are %2% samples per second, but WAVEFORMATEX says that there are %3%.\n"
 msgstr "matroska_reader: (modo de compatibilidad MS para la pista %1%) Matroska dice que hay %2% muestras por segundo, pero el WAVEFORMATEX dice que hay %3%.\n"
 
-#: src/input/r_matroska.cpp:450
+#: src/input/r_matroska.cpp:451
 msgid "matroska_reader: (MS compatibility mode, track %1%) Matroska says video height is %2%, but the BITMAPINFOHEADER says %3%.\n"
 msgstr "matroska_reader: (modo de compatibilidad MS, pista %1%) la altura del vídeo Matroska es %2%, pero el BITMAPINFOHEADER dice %3%.\n"
 
-#: src/input/r_matroska.cpp:441
+#: src/input/r_matroska.cpp:442
 msgid "matroska_reader: (MS compatibility mode, track %1%) Matroska says video width is %2%, but the BITMAPINFOHEADER says %3%.\n"
 msgstr "matroska_reader: (modo de compatibilidad MS, pista %1%) la anchura del vídeo Matroska es %2%, pero el BITMAPINFOHEADER dice %3%.\n"
 
-#: src/input/r_matroska.cpp:1072
+#: src/input/r_matroska.cpp:1073
 msgid "matroska_reader: A track is missing its track UID.\n"
 msgstr "matroska_reader: A una pista le falta su UID de pista.\n"
 
-#: src/input/r_matroska.cpp:1060
+#: src/input/r_matroska.cpp:1061
 msgid "matroska_reader: A track is missing its track number.\n"
 msgstr "matroska_reader: A una pista le falta su número de pista.\n"
 
-#: src/input/r_matroska.cpp:1434
+#: src/input/r_matroska.cpp:1435
 msgid "matroska_reader: Could not keep the track UID %1% because it is already allocated for the new file.\n"
 msgstr "matroska_reader: No pudo mantenerse la pista UID %1% porque ya está asignada al nuevo archivo.\n"
 
-#: src/input/r_matroska.cpp:208
+#: src/input/r_matroska.cpp:209
 msgid "matroska_reader: Failed to read the headers."
 msgstr "matroska_reader: Fallo al leer los encabezados."
 
-#: src/input/r_matroska.cpp:1247
-#: src/input/r_matroska.cpp:1252
+#: src/input/r_matroska.cpp:1248
+#: src/input/r_matroska.cpp:1253
 msgid "matroska_reader: No segment found.\n"
 msgstr "matroska_reader: Ningún segmento encontrado.\n"
 
-#: src/input/r_matroska.cpp:961
+#: src/input/r_matroska.cpp:962
 msgid "matroska_reader: Pixel height is missing.\n"
 msgstr "matroska_reader: Falta la altura en píxeles.\n"
 
-#: src/input/r_matroska.cpp:954
+#: src/input/r_matroska.cpp:955
 msgid "matroska_reader: Pixel width is missing.\n"
 msgstr "matroska_reader: Falta la anchura en píxeles.\n"
 
-#: src/input/r_matroska.cpp:542
+#: src/input/r_matroska.cpp:543
 msgid "matroska_reader: The CodecID '%1%' for track %2% is unknown.\n"
 msgstr "matroska_reader:La ID del códec para la pista %1% es '%2%' es desconocido.\n"
 
-#: src/input/r_matroska.cpp:429
+#: src/input/r_matroska.cpp:430
 msgid "matroska_reader: The CodecID for track %1% is '%2%', but there was no BITMAPINFOHEADER struct present. Therefore we don't have a FourCC to identify the video codec used.\n"
 msgstr "matroska_reader: La ID del códec para la pista %1% es '%2%', pero no había presente estructura BITMAPINFOHEADER. Por lo tanto, no tenemos un FourCC para identificar el códec de vídeo usado.\n"
 
-#: src/input/r_matroska.cpp:282
+#: src/input/r_matroska.cpp:283
 msgid "matroska_reader: The CodecID for track %1% is '%2%', but there was no WAVEFORMATEX struct present. Therefore we don't have a format ID to identify the audio codec used.\n"
 msgstr "matroska_reader: La ID del códec para la pista %1% es '%2%', pero no había presente estructura WAVEFORMATEX. Por lo tanto, no tenemos una ID del formato para identificar el códec de audio usado.\n"
 
-#: src/input/r_matroska.cpp:467
+#: src/input/r_matroska.cpp:468
 msgid "matroska_reader: The CodecID for track %1% is '%2%', but there was no codec private headers.\n"
 msgstr "matroska_reader: La ID del códec para la pista %1% es '%2%', pero no había encabezados privados del códec.\n"
 
-#: src/input/r_matroska.cpp:509
-#: src/input/r_matroska.cpp:520
+#: src/input/r_matroska.cpp:510
+#: src/input/r_matroska.cpp:521
 msgid "matroska_reader: The CodecID for track %1% is '%2%', but there was no private data found.\n"
 msgstr "matroska_reader: La ID del códec para la pista %1% es '%2%', pero no se ha encontrado ningún dato privado.\n"
 
-#: src/input/r_matroska.cpp:346
+#: src/input/r_matroska.cpp:347
 msgid "matroska_reader: The CodecID for track %1% is 'A_VORBIS', but there are no header packets present.\n"
 msgstr "matroska_reader: La ID del códec para la pista %1% es 'A_VORBI', pero no hay presentes paquetes de encabezado.\n"
 
-#: src/input/r_matroska.cpp:1108
+#: src/input/r_matroska.cpp:1109
 msgid "matroska_reader: The CodecID is missing.\n"
 msgstr "matroska_reader: La ID del códec está ausente.\n"
 
-#: src/input/r_matroska.cpp:495
+#: src/input/r_matroska.cpp:496
 msgid "matroska_reader: The height for track %1% was not set.\n"
 msgstr "matroska_reader:  La altura para la pista %1% no ha sido establecida.\n"
 
-#: src/input/r_matroska.cpp:489
+#: src/input/r_matroska.cpp:490
 msgid "matroska_reader: The width for track %1% was not set.\n"
 msgstr "matroska_reader: La anchura para la pista %1% no ha sido establecida.\n"
 
-#: src/input/r_matroska.cpp:595
+#: src/input/r_matroska.cpp:596
 msgid "matroska_reader: Track %1% seems to be ok.\n"
 msgstr "matroska_reader: La pista %1% parece estar bien.\n"
 
-#: src/input/r_matroska.cpp:1087
+#: src/input/r_matroska.cpp:1088
 msgid "matroska_reader: Track type was not found.\n"
 msgstr "matroska_reader: No se encuentra el tipo de pista.\n"
 
-#: src/input/r_matroska.cpp:352
+#: src/input/r_matroska.cpp:353
 msgid "matroska_reader: Vorbis track does not contain valid headers.\n"
 msgstr "matroska_reader:  La pista Vorbis no contiene encabezados válidos.\n"
 
-#: src/input/r_matroska.cpp:1339
-#: src/input/r_matroska.cpp:1996
+#: src/input/r_matroska.cpp:1340
+#: src/input/r_matroska.cpp:2001
 msgid "matroska_reader: caught exception\n"
 msgstr "matroska_reader: se ha detectado una excepción\n"
 
-#: src/input/r_matroska.cpp:337
+#: src/input/r_matroska.cpp:338
 msgid "matroska_reader: mkvmerge was not compiled with FLAC support. Ignoring track %1%.\n"
 msgstr "matroska_reader: mkvmerge no fue compilado con compatibiliad para archivos FLAC. Ignorando pista %1%.\n"
 
-#: src/input/r_matroska.cpp:1233
+#: src/input/r_matroska.cpp:1234
 msgid "matroska_reader: no EBML head found.\n"
 msgstr "matroska_reader: no se encontró el encabezado EBML.\n"
 
-#: src/input/r_matroska.cpp:590
+#: src/input/r_matroska.cpp:591
 msgid "matroska_reader: unknown demuxer type for track %1%: '%2%'\n"
 msgstr "matroska_reader: tipo de demultiplexión desconocido para la pista %1%: '%2%'\n"
 
-#: src/input/r_matroska.cpp:1076
+#: src/input/r_matroska.cpp:1077
 msgid "matroska_reader: |  + There's more than one track with the UID %1%.\n"
 msgstr "matroska_reader:|  + Hay más de una pista con la UID %1%.\n"
 
-#: src/input/r_matroska.cpp:1065
+#: src/input/r_matroska.cpp:1066
 msgid "matroska_reader: |  + There's more than one track with the number %1%.\n"
 msgstr "matroska_reader: |  + Hay más de una pista con el número %1%.\n"
 
@@ -8176,11 +8188,11 @@ msgstr "memory.cpp/saferealloc() llamada desde el archivo %1%, línea %2%: reall
 msgid "memory_slice_cursor_c copy c'tor: Must not be used!"
 msgstr "memory_slice_cursor_c copy c'tor: ¡No dede ser usado!"
 
-#: src/propedit/target.cpp:86
+#: src/propedit/target.cpp:88
 msgid "missing property name"
 msgstr "propiedad del nombre ausente"
 
-#: src/propedit/target.cpp:79
+#: src/propedit/target.cpp:81
 msgid "missing value"
 msgstr "valor ausente"
 
@@ -8321,8 +8333,8 @@ msgstr "Ejecutable de mkvmerge"
 msgid "mkvmerge finished with a return code of %d. %s"
 msgstr "mkvmerge ha finalizado con un código de respuesta igual a %d. %s"
 
-#: src/mmg/mux_dialog.cpp:305
 #: src/mmg/jobs.cpp:148
+#: src/mmg/mux_dialog.cpp:305
 msgid "mkvmerge has finished"
 msgstr "mkvmerge ha finalizado"
 
@@ -8330,8 +8342,8 @@ msgstr "mkvmerge ha finalizado"
 msgid "mkvmerge has not been compiled with FLAC support but handling of this stream has been requested.\n"
 msgstr "mkvmerge no ha sido compilado con compatibilidad para archivos FLAC, pero la manipulación de estos archivos ha sido solicitado.\n"
 
-#: src/mmg/mux_dialog.cpp:45
 #: src/mmg/jobs.cpp:50
+#: src/mmg/mux_dialog.cpp:45
 msgid "mkvmerge is running"
 msgstr "mkvmerge está ejecutándose"
 
@@ -8365,7 +8377,7 @@ msgstr "mkvmerge fue interrumpido por un SIGINT (señales de inteligencia) (¿Ct
 msgid "mkvmerge was not compiled with zlib. Compressed headers in QuickTime/MP4 files are therefore not supported.\n"
 msgstr "mkvmerge no fue compilado con zlib. Los encabezados comprimidos en archivos QuickTime/MP4 no son compatibles.\n"
 
-#: src/propedit/propedit_cli_parser.cpp:148
+#: src/propedit/propedit_cli_parser.cpp:157
 msgid "mkvpropedit [options] <file> <actions>"
 msgstr "mkvpropedit [options] <file> <actions>"
 
@@ -8613,7 +8625,7 @@ msgstr "ssa_reader: El archivo SSA/ASS seleccionado no es válido "
 msgid "start >= m->ListSize(). This should not have happened. Please file a bug report. Thanks."
 msgstr "start >= m->ListSize(). Esto no debería haber ocurrido. Por favor, informa del fallo. Gracias."
 
-#: src/input/r_matroska.cpp:93
+#: src/input/r_matroska.cpp:94
 msgid "subtitle"
 msgstr "subtítulo"
 
@@ -8662,11 +8674,11 @@ msgstr "tta_reader: tamaño_etiqueta < 0 en el c'tor. %1%\n"
 msgid "und (Undetermined)"
 msgstr "und (Indeterminado)"
 
-#: src/input/r_matroska.cpp:89
-#: src/input/r_matroska.cpp:2316
+#: src/input/r_matroska.cpp:90
+#: src/input/r_matroska.cpp:2321
 #: src/input/r_mpeg_ps.cpp:1392
-#: src/common/stereo_mode.cpp:62
 #: src/common/mm_io_win.cpp:165
+#: src/common/stereo_mode.cpp:62
 #: src/mmg/mmg.cpp:65
 #: src/mmg/header_editor/value_page.cpp:150
 #: src/mmg/tabs/input.cpp:339
@@ -8680,7 +8692,7 @@ msgstr "und (Indeterminado)"
 msgid "unknown"
 msgstr "desconocido"
 
-#: src/input/r_matroska.cpp:2309
+#: src/input/r_matroska.cpp:2314
 msgid "unknown, format tag 0x%|1$04x|"
 msgstr "desconocido, formato de la etiqueta 0x%|1$04x|"
 
@@ -8708,7 +8720,7 @@ msgstr "vc1_es_reader: El archivo origen no puede ser abierto."
 msgid "verify failed: chapters->CheckMandatory() is false. This should not have happened. Please file a bug report.\n"
 msgstr "La verificación ha fallado: capítulos->CheckMandatory() es falso. Esto no debería haber pasado. Por favor, envía un informe del fallo.\n"
 
-#: src/input/r_matroska.cpp:92
+#: src/input/r_matroska.cpp:93
 #: src/mmg/mmg.cpp:63
 #: src/info/mkvinfo.cpp:1117
 msgid "video"
