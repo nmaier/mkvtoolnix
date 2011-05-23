@@ -204,6 +204,7 @@ vobsub_reader_c::parse_headers() {
         }
       }
       track          = new vobsub_track_c(language);
+      delay          = 0;
       last_timestamp = 0;
       sort_required  = false;
       continue;
@@ -216,10 +217,16 @@ vobsub_reader_c::parse_headers() {
       line.erase(0, 6);
       strip(line);
 
+      int factor = 1;
+      if (!line.empty() && (line[0] == '-')) {
+        factor = -1;
+        line.erase(0, 1);
+      }
+
       int64_t timestamp;
       if (!parse_timecode(line, timestamp, true))
         mxerror_fn(m_ti.m_fname, boost::format(Y("line %1%: The 'delay' timestamp could not be parsed.\n")) % line_no);
-      delay = timestamp;
+      delay += timestamp * factor;
     }
 
     if ((7 == version) && starts_with_case(line, "timestamp:")) {
@@ -261,6 +268,13 @@ vobsub_reader_c::parse_headers() {
       vobsub_entry_c entry;
       entry.position  = filepos;
       entry.timestamp = timestamp * factor + delay;
+
+      if (   (0 >  delay)
+          && (0 != last_timestamp)
+          && (entry.timestamp < last_timestamp)) {
+        delay           += last_timestamp - entry.timestamp;
+        entry.timestamp  = last_timestamp;
+      }
 
       if (0 > entry.timestamp) {
         mxwarn_fn(m_ti.m_fname,
