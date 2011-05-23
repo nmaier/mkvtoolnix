@@ -1,5 +1,9 @@
 2011-05-23  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: bug fix (Windows): mmg will no longer convert the "mkvmerge
+	executable" from just "mkvmerge" into a full path name when
+	writing its preferences to the registry upon existing.
+
 	* mkvmerge: enhancement: Added support for VobSub IDX files with
 	negative "delay" fields.
 

@@ -16,6 +16,7 @@
 #include <wx/wx.h>
 
 #include "common/extern_data.h"
+#include "common/fs_sys_helpers.h"
 #include "common/wx.h"
 #include "mmg/mmg.h"
 
@@ -56,3 +57,31 @@ mmg_options_t::validate() {
     priority = wxU("normal");
 }
 
+wxString
+mmg_options_t::mkvmerge_exe() {
+#if defined(SYS_WINDOWS)
+  // Check whether or not the mkvmerge executable path is still set to
+  // the default value "mkvmerge". If it is try getting the
+  // installation path from the registry and use that for a more
+  // precise location for mkvmerge.exe. Fall back to the old default
+  // value "mkvmerge" if all else fails.
+  wxString exe = mkvmerge;
+  if (exe == wxT("mkvmerge"))
+    exe.Empty();
+
+  if (exe.IsEmpty()) {
+    exe = wxU(get_installation_path());
+    if (!exe.IsEmpty())
+      exe += wxT("\\mkvmerge.exe");
+  }
+
+  if (exe.IsEmpty())
+    exe = wxT("mkvmerge");
+
+  return exe;
+
+#else  // SYS_WINDOWS
+  return mkvmerge;
+
+#endif  // SYS_WINDOWS
+}

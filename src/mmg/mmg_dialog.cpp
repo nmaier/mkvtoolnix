@@ -163,7 +163,7 @@ mmg_dialog::mmg_dialog()
 
   muxing_in_progress = false;
   last_open_dir      = wxEmptyString;
-  cmdline            = wxString::Format(wxU("\"%s\" -o \"%s\""), options.mkvmerge.c_str(), tc_output->GetValue().c_str());
+  cmdline            = wxString::Format(wxU("\"%s\" -o \"%s\""), options.mkvmerge_exe().c_str(), tc_output->GetValue().c_str());
 
   load_job_queue();
 
@@ -812,7 +812,7 @@ mmg_dialog::update_command_line() {
   unsigned int i;
 
   clargs.Clear();
-  clargs.Add(options.mkvmerge);
+  clargs.Add(options.mkvmerge_exe());
   clargs.Add(wxT("--output-charset"));
   clargs.Add(wxT("UTF-8"));
   clargs.Add(wxT("-o"));
@@ -1177,7 +1177,7 @@ mmg_dialog::update_command_line() {
     }
   }
 
-  cmdline = wxT("\"") + shell_escape(options.mkvmerge, true) + wxT("\" -o \"") + shell_escape(tc_output->GetValue()) + wxT("\" ");
+  cmdline = wxT("\"") + shell_escape(options.mkvmerge_exe(), true) + wxT("\" -o \"") + shell_escape(tc_output->GetValue()) + wxT("\" ");
 
   for (i = args_start; i < clargs.Count(); i++)
     cmdline += wxT(" \"") + shell_escape(clargs[i]) + wxT("\"");
@@ -1603,25 +1603,6 @@ mmg_dialog::load_preferences() {
 
   options.init_popular_languages(s);
   options.validate();
-
-#if defined(SYS_WINDOWS)
-  // Check whether or not the mkvmerge executable path is still set to
-  // the default value "mkvmerge". If it is try getting the
-  // installation path from the registry and use that for a more
-  // precise location for mkvmerge.exe. Fall back to the old default
-  // value "mkvmerge" if all else fails.
-  if (options.mkvmerge == wxT("mkvmerge"))
-    options.mkvmerge.Empty();
-
-  if (options.mkvmerge.IsEmpty()) {
-    options.mkvmerge = wxU(get_installation_path());
-    if (!options.mkvmerge.IsEmpty())
-      options.mkvmerge += wxT("\\mkvmerge.exe");
-  }
-
-  if (options.mkvmerge.IsEmpty())
-    options.mkvmerge = wxT("mkvmerge");
-#endif  // SYS_WINDOWS
 }
 
 void
@@ -1821,7 +1802,7 @@ mmg_dialog::query_mkvmerge_capabilities() {
   int result;
 
   wxLogMessage(Z("Querying mkvmerge's capabilities"));
-  tmp = wxT("\"") + options.mkvmerge + wxT("\" --capabilities");
+  tmp = wxT("\"") + options.mkvmerge_exe() + wxT("\" --capabilities");
 #if defined(SYS_WINDOWS)
   result = wxExecute(tmp, output);
 #else

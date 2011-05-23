@@ -319,7 +319,7 @@ tab_input::add_file(const wxString &file_name,
   opt_file->Write(wxT("\n"));
   delete opt_file;
 
-  command = wxT("\"") + mdlg->options.mkvmerge + wxT("\" \"@") + opt_file_name + wxT("\"");
+  command = wxT("\"") + mdlg->options.mkvmerge_exe() + wxT("\" \"@") + opt_file_name + wxT("\"");
 
   wxLogMessage(wxT("identify 1: command: ``%s''"), command.c_str());
 
@@ -368,7 +368,7 @@ tab_input::add_file(const wxString &file_name,
     error_message =
         Z("Command line used:")
       + wxT("\n\n")
-      + wxString::Format(wxT("\"%s\" --output-charset UTF-8 --identify-for-mmg \"%s\""), mdlg->options.mkvmerge.c_str(), file_name.c_str())
+      + wxString::Format(wxT("\"%s\" --output-charset UTF-8 --identify-for-mmg \"%s\""), mdlg->options.mkvmerge_exe().c_str(), file_name.c_str())
       + wxT("\n\n")
       + Z("Output:")
       + wxT("\n\n")

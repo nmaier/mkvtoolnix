@@ -222,6 +222,7 @@ struct mmg_options_t {
 
   void validate();
   void init_popular_languages(const wxString &list = wxEmptyString);
+  wxString mkvmerge_exe();
 };
 
 typedef std::pair<const wxString, bool> wxstring_bool_pair_t;
