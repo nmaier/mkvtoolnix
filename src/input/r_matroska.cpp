@@ -1477,11 +1477,10 @@ kax_reader_c::create_video_packetizer(kax_track_t *t,
       t->handle_packetizer_pixel_dimensions();
       t->handle_packetizer_default_duration();
 
-    } else if ((t->codec_id == MKV_V_MSCOMP) && vc1::is_fourcc(t->v_fourcc)) {
-      mxinfo_tid(m_ti.m_fname, t->tnum, Y("Using the VC1 video output module.\n"));
-      set_track_packetizer(t, new vc1_video_packetizer_c(this, nti));
+    } else if ((t->codec_id == MKV_V_MSCOMP) && vc1::is_fourcc(t->v_fourcc))
+      create_vc1_video_packetizer(t, nti);
 
-    } else {
+    else {
       mxinfo_tid(m_ti.m_fname, t->tnum, Y("Using the video output module.\n"));
       set_track_packetizer(t, new video_packetizer_c(this, nti, t->codec_id.c_str(), t->v_frate, t->v_width, t->v_height));
     }
@@ -1866,6 +1865,16 @@ kax_reader_c::create_mpeg4_p10_video_packetizer(kax_track_t *t,
     mxinfo_tid(m_ti.m_fname, t->tnum, Y("Using the MPEG-4 part 10 (AVC) video output module.\n"));
 
   set_track_packetizer(t, new mpeg4_p10_video_packetizer_c(this, nti, t->v_frate, t->v_width, t->v_height));
+}
+
+void
+kax_reader_c::create_vc1_video_packetizer(kax_track_t *t,
+                                          track_info_c &nti) {
+  mxinfo_tid(m_ti.m_fname, t->tnum, Y("Using the VC1 video output module.\n"));
+  set_track_packetizer(t, new vc1_video_packetizer_c(this, nti));
+
+  if ((NULL != t->private_data) && (sizeof(alBITMAPINFOHEADER) < t->private_size))
+    PTZR(t->ptzr)->process(new packet_t(new memory_c(reinterpret_cast<unsigned char *>(t->private_data) + sizeof(alBITMAPINFOHEADER), t->private_size - sizeof(alBITMAPINFOHEADER), false)));
 }
 
 void

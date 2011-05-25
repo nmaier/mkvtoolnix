@@ -250,6 +250,7 @@ protected:
   virtual void create_vorbis_audio_packetizer(kax_track_t *t, track_info_c &nti);
   virtual void create_wavpack_audio_packetizer(kax_track_t *t, track_info_c &nti);
 
+  virtual void create_vc1_video_packetizer(kax_track_t *t, track_info_c &nti);
   virtual void create_mpeg4_p10_video_packetizer(kax_track_t *t, track_info_c &nti);
   virtual void create_mpeg4_p10_es_video_packetizer(kax_track_t *t, track_info_c &nti);
 
