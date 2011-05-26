@@ -1,3 +1,9 @@
+2011-05-26  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: When a DTS track is read from a source file
+	that provides timecodes (e.g. Matroska files) then those timecodes
+	will be preserved.
+
 2011-05-25  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: Fixed remuxing certain VC1 video tracks from Matroska

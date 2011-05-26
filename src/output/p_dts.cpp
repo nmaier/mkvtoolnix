@@ -124,12 +124,22 @@ dts_packetizer_c::set_headers() {
 
 int
 dts_packetizer_c::process(packet_cptr packet) {
+  if (-1 != packet->timecode)
+    m_available_timecodes.push_back(packet->timecode);
+
   dts_header_t dtsheader;
   unsigned char *dts_packet;
 
   m_packet_buffer.add(packet->data->get_buffer(), packet->data->get_size());
   while ((dts_packet = get_dts_packet(dtsheader)) != NULL) {
-    int64_t new_timecode = -1 == packet->timecode ? (int64_t)(((double)m_samples_written * 1000000000.0) / ((double)dtsheader.core_sampling_frequency)) : packet->timecode;
+    int64_t new_timecode;
+    if (!m_available_timecodes.empty()) {
+      m_samples_written = 0;
+      new_timecode      = m_available_timecodes.front();
+      m_available_timecodes.pop_front();
+
+    } else
+      new_timecode = static_cast<int64_t>(m_samples_written * 1000000000.0 / static_cast<double>(dtsheader.core_sampling_frequency));
 
     add_packet(new packet_t(new memory_c(dts_packet, dtsheader.frame_byte_size, true), new_timecode, (int64_t)get_dts_packet_length_in_nanoseconds(&dtsheader)));
 
