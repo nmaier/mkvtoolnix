@@ -144,7 +144,7 @@ tab_global::tab_global(wxWindow *parent):
 
   sb_file_segment_linking = new wxStaticBox(this, -1, wxEmptyString);
   siz_linking_box         = new wxStaticBoxSizer(sb_file_segment_linking, wxVERTICAL);
-  siz_linking             = new wxFlexGridSizer(2, 2);
+  siz_linking             = new wxFlexGridSizer(2);
   siz_linking->AddGrowableCol(1);
 
   st_segment_uid = new wxStaticText(this, -1, wxEmptyString);
@@ -166,7 +166,7 @@ tab_global::tab_global(wxWindow *parent):
   sb_chapters     = new wxStaticBox(this,  -1, wxEmptyString);
   siz_chapters    = new wxStaticBoxSizer(sb_chapters, wxVERTICAL);
   st_chapter_file = new wxStaticText(this, -1, wxEmptyString);
-  siz_chap_l1_l2  = new wxFlexGridSizer(2, 2);
+  siz_chap_l1_l2  = new wxFlexGridSizer(2);
   siz_chap_l1_l2->AddGrowableCol(1);
   siz_chap_l1_l2->Add(st_chapter_file, 0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 5);
   siz_chap_l1 = new wxBoxSizer(wxHORIZONTAL);
@@ -205,7 +205,7 @@ tab_global::tab_global(wxWindow *parent):
   siz_chap_l3->Add(tc_cue_name_format, 0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 5);
   siz_chapters->Add(siz_chap_l3, 0, wxTOP, 2);
 
-  siz_fg = new wxFlexGridSizer(3, 2);
+  siz_fg = new wxFlexGridSizer(3);
   siz_fg->AddGrowableCol(1);
 
   siz_fg->Add(st_tag_file,          0, wxALIGN_CENTER_VERTICAL | wxLEFT,           5);
