@@ -237,6 +237,7 @@ set_usage() {
   usage_text += Y("  -l, --list-types         Lists supported input file types.\n");
   usage_text += Y("  --list-languages         Lists all ISO639 languages and their\n"
                   "                           ISO639-2 codes.\n");
+  usage_text += Y("  --capabilities           Lists optional features mkvmerge was compiled with.\n");
   usage_text += Y("  --priority <priority>    Set the priority mkvmerge runs with.\n");
   usage_text += Y("  --ui-language <code>     Force the translations for 'code' to be used.\n");
   usage_text += Y("  --command-line-charset <charset>\n"
@@ -244,6 +245,8 @@ set_usage() {
   usage_text += Y("  --output-charset <cset>  Output messages in this charset\n");
   usage_text += Y("  -r, --redirect-output <file>\n"
                   "                           Redirects all messages into this file.\n");
+  usage_text += Y("  --debug <topic>          Turns on debugging output for 'topic'.\n");
+  usage_text += Y("  --engage <feature>       Turns on experimental feature 'feature'.\n");
   usage_text += Y("  @optionsfile             Reads additional command line options from\n"
                   "                           the specified file (see man page).\n");
   usage_text += Y("  -h, --help               Show this help.\n");
