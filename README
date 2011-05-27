@@ -87,7 +87,9 @@ built. These include:
 
 - wxWidgets ( http://www.wxwidgets.org/ ) -- a cross-platform GUI
   toolkit. You need this if you want to use mmg (the mkvmerge GUI) or
-  mkvinfo's GUI.
+  mkvinfo's GUI. Don't use the 2.9.x series as there are several
+  unresolved problems. Also 2.9.x is still in "development libs, not
+  recommended for everyday use yet" status. The 2.8.x series is fine.
 - libFLAC ( http://downloads.xiph.org/releases/flac/ ) for FLAC
   support (Free Lossless Audio Codec)
 - lzo ( http://www.oberhumer.com/opensource/lzo/ ) and bzip2 (
