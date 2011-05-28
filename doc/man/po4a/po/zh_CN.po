@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mkvtoolnix-man\n"
 "POT-Creation-Date: 2011-05-06 10:30+0300\n"
-"PO-Revision-Date: 2011-04-22 23:03+0200\n"
+"PO-Revision-Date: 2011-05-28 17:32+0800\n"
 "Last-Translator: Dean Lee <xslidian@gmail.com>\n"
 "Language-Team: chinese simp <xslidian+mkvtoolnix@gmail.com>\n"
 "Language: \n"
@@ -15,6 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Chinese\n"
+"X-Poedit-Basepath: ../../../../\n"
 
 #. type: Content of the product entity
 #: doc/man/mkvextract.xml:5
@@ -36,10 +37,9 @@ msgstr "4.8.0"
 #: doc/man/mkvmerge.xml:7
 #: doc/man/mkvpropedit.xml:7
 #: doc/man/mmg.xml:7
-#, fuzzy
 #| msgid "2011-01-31"
 msgid "2011-04-20"
-msgstr "2011-01-31"
+msgstr "2011-04-20"
 
 #. type: Content of the mkvmerge entity
 #: doc/man/mkvextract.xml:9
@@ -1782,7 +1782,7 @@ msgstr "复制 <parameter>n</parameter>、<parameter>m</parameter> 等音频轨�
 #: doc/man/mkvmerge.xml:736
 #: doc/man/mkvmerge.xml:758
 msgid "If the IDs are prefixed with <literal>!</literal> then the meaning is reversed: copy everything but the IDs listed after the <literal>!</literal>."
-msgstr ""
+msgstr "如果 ID 以 <literal>!</literal> 作为前缀，则含义相反: 复制除了列在 <literal>!</literal> 后面的 ID 以外的所有轨道。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvmerge.xml:679
@@ -3442,17 +3442,15 @@ msgstr "对于 <constant>track</constant> 选择器，&mkvpropedit; 将替换特
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvpropedit.xml:173
-#, fuzzy
 #| msgid "<option>-o</option>, <option>--output</option> <parameter>file-name</parameter>"
 msgid "<option>-c</option>, <option>--chapters</option> <parameter>filename</parameter>"
-msgstr "<option>-o</option>, <option>--output</option> <parameter>文件名</parameter>"
+msgstr "<option>-c</option>, <option>--chapters</option> <parameter>文件名</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvpropedit.xml:176
-#, fuzzy
 #| msgid "Add or replace tags in the file with the ones from <filename>filename</filename> or remove them if <filename>filename</filename> is empty. &mkvpropedit; reads the same XML tag format that &mkvmerge; reads as well."
 msgid "Add or replace chapters in the file with the ones from <filename>filename</filename> or remove them if <filename>filename</filename> is empty. &mkvpropedit; reads the same XML and simple chapter formats that &mkvmerge; reads as well."
-msgstr "用 <filename>文件名</filename> 中的标签添加或替换文件中的标签，或者如果 <filename>文件名</filename> 为空则移除标签。&mkvpropedit; 读取的 XML 标签格式与 &mkvmerge; 所读取的相同。"
+msgstr "用 <filename>文件名</filename> 中的标签添加或替换文件中的章节，或者如果 <filename>文件名</filename> 为空则移除章节。&mkvpropedit; 读取的 XML 及简单章节格式与 &mkvmerge; 所读取的相同。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvpropedit.xml:212
@@ -3635,14 +3633,13 @@ msgstr ""
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvpropedit.xml:438
-#, fuzzy
 #| msgid "Replacing the tags for the second subtitle track in a file looks like this:"
 msgid "Replacing the chapters in a file looks like this:"
-msgstr "像这样替换文件中第二个字幕轨的标签:"
+msgstr "像这样替换文件中的章节:"
 
 #. type: Content of: <refentry><refsect1><screen>
 #: doc/man/mkvpropedit.xml:442
-#, fuzzy, no-wrap
+#, no-wrap
 #| msgid ""
 #| "$ mkvpropedit movie.mkv --tags track:s2:new-subtitle-tags.xml\n"
 #| "  "
@@ -3650,19 +3647,18 @@ msgid ""
 "$ mkvpropedit movie.mkv --chapters new-chapters.xml\n"
 "  "
 msgstr ""
-"$ mkvpropedit 影片.mkv --tags track:s2:新字幕标签.xml\n"
+"$ mkvpropedit 影片.mkv --chapters 新章节.xml\n"
 "  "
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvpropedit.xml:446
-#, fuzzy
 #| msgid "Removing all tags requires leaving out the file name:"
 msgid "Removing all chapters requires leaving out the file name:"
-msgstr "移除所有标签需要将文件名留空:"
+msgstr "移除所有章节需要将文件名留空:"
 
 #. type: Content of: <refentry><refsect1><screen>
 #: doc/man/mkvpropedit.xml:450
-#, fuzzy, no-wrap
+#, no-wrap
 #| msgid ""
 #| "$ mkvpropedit movie.mkv --tags all:\n"
 #| "  "
@@ -3670,7 +3666,7 @@ msgid ""
 "$ mkvpropedit movie.mkv --chapters ''\n"
 "  "
 msgstr ""
-"$ mkvpropedit 影片.mkv --tags all:\n"
+"$ mkvpropedit 影片.mkv --chapters ''\n"
 "  "
 
 #. type: Content of: <refentry><refsect1><para>
@@ -3740,33 +3736,46 @@ msgstr "&mkvmerge;, &mkvextract;, &mkvinfo;, &mkvpropedit;"
 
 #~ msgid "--title"
 #~ msgstr "--title"
+
 #~ msgid "--no-chapters"
 #~ msgstr "--no-chapters"
+
 #~ msgid "Sets the stereo mode for the video track with the track ID <parameter>TID</parameter>.  The mode can either be a number <parameter>n</parameter> between <constant>0</constant> and <constant>3</constant> or one of the keywords '<literal>none</literal>' (same as <parameter>n</parameter>=<constant>0</constant>), '<literal>right</literal>' (same as <parameter>n</parameter>=<constant>1</constant>), '<literal>left</literal>' (same as <parameter>n</parameter>=<constant>2</constant>)  or '<literal>both</literal>' (same as <parameter>n</parameter>=<constant>3</constant>)."
 #~ msgstr "设置 ID 为 <parameter>TID</parameter> 的视频轨的立体视法。 模式既可以是 <constant>0</constant> 到 <constant>3</constant> 之间的数字 <parameter>n</parameter>，也可以是 '<literal>none（无立体视法）</literal>' (与 <parameter>n</parameter>=<constant>0</constant> 相同), '<literal>right（右眼视角）</literal>' (与 <parameter>n</parameter>=<constant>1</constant> 相同), '<literal>left（左眼视角）</literal>' (与 <parameter>n</parameter>=<constant>2</constant> 相同)  or '<literal>both（双眼视角）</literal>' (与 <parameter>n</parameter>=<constant>3</constant> 相同)。"
+
 #~ msgid "Syntax: <command>mkvextract</command> <option>timecodes_v2</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional>"
 #~ msgstr "语法: <command>mkvextract</command> <option>timecodes_v2</option> <parameter>源文件名</parameter> <optional><parameter>选项</parameter></optional>"
+
 #~ msgid "Reads additional command line arguments from the file <parameter>options-file</parameter>.  Lines whose first non-whitespace character is a hash mark ('<literal>#</literal>') are treated as comments and ignored. White spaces at the start and end of a line will be stripped. Each line must contain exactly one option.  There is no meta character escaping."
 #~ msgstr "从文件 <parameter>选项文件</parameter> 中读取额外的命令行参数。首个非空白字符为井号 ('<literal>#</literal>') 的行将被当作注释对待，在处理过程中将被忽略。各行开头与结尾的空白将被除去。各行必须恰好含有一个选项。没有元字符转义。"
+
 #~ msgid "<option>--no-ogg</option>"
 #~ msgstr "<option>--no-ogg</option>"
+
 #~ msgid "Only valid for <abbrev>FLAC</abbrev> tracks. Normally <abbrev>FLAC</abbrev> tracks are embedded in an Ogg transport stream. With this switch they are extracted to raw <abbrev>FLAC</abbrev> files instead."
 #~ msgstr "仅对 <abbrev>FLAC</abbrev> 轨道有效。通常 <abbrev>FLAC</abbrev> 轨道是嵌套在 Ogg 传输流（TS）中的。通过本开关，它们可以被提取为原始 <abbrev>FLAC</abbrev> 文件。"
+
 #, fuzzy
 #~ msgid "<option>--webm</option>, <option>--web-media</option>"
 #~ msgstr "<option>-v</option>, <option>--verbose</option>"
+
 #~ msgid "January 2010"
 #~ msgstr "2010 年 1 月"
+
 #~ msgid "December 2009"
 #~ msgstr "2009 年 12 月"
+
 #~ msgid "--command-line-charset"
 #~ msgstr "--command-line-charset"
+
 #~ msgid "--output"
 #~ msgstr "--output"
+
 #~ msgid "--chapter-charset"
 #~ msgstr "--chapter-charset"
+
 #~ msgid "--default-duration"
 #~ msgstr "--default-duration"
+
 #~ msgid "--language"
 #~ msgstr "--language"
-
