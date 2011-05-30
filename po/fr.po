@@ -4,17 +4,17 @@
 # Trinine <trinine@free.fr> 2010, 2011.
 # Jems <anojems@gmail.com> 2011.
 #
-# commit	e8eb98e0dfa5ca9c6f4f3163a82b4e0aee9b7b8f (Translation updates)
+# commit	da17062a (Include "--capabilities", "--debug" and "--engage" in mkvmerge's --hel...)
 #
-# Note aux traducteurs : il a été décidé de ne pas traduire termes techniques (ex : fourcc, timecode)
+# Note aux traducteurs : il a été décidé de ne pas traduire certains termes techniques (ex : fourcc, timecode)
 # du fait de l'absence d'équivalent, ou du faible emploi de leur équivalent français.
 # Ces termes se retrouvent donc non traduits dans le champs "msgstr", afin de les différencier des entrées pas encore traduites.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: mkvtoolnix-4.5.0\n"
+"Project-Id-Version: mkvtoolnix-4.8.0\n"
 "POT-Creation-Date: 2009-07-30 19:00+0100\n"
-"PO-Revision-Date: 2011-04-28 16:18+0200\n"
+"PO-Revision-Date: 2011-05-29 15:49+0100\n"
 "Last-Translator: Trinine <trinine@free.fr>\n"
 "Language-Team: French\n"
 "Language: \n"
@@ -510,7 +510,8 @@ msgstr ""
 msgid " (FourCC: %1%%2%%3%%4%, 0x%|5$08x|)"
 msgstr ""
 
-#: src/info/mkvinfo.cpp:183 src/info/mkvinfo.cpp:1026
+#: src/info/mkvinfo.cpp:183
+#: src/info/mkvinfo.cpp:1026
 msgid " (adler: 0x%|1$08x|)"
 msgstr ""
 
@@ -598,12 +599,15 @@ msgstr ""
 msgid " Segment info handling:\n"
 msgstr ""
 
-#: src/extract/mkvextract.cpp:63 src/info/mkvinfo.cpp:211
+#: src/extract/mkvextract.cpp:63
+#: src/info/mkvinfo.cpp:211
 msgid " at %1%"
 msgstr ""
 
-#: src/merge/output_control.cpp:272 src/merge/output_control.cpp:281
-#: src/merge/output_control.cpp:293 src/merge/output_control.cpp:300
+#: src/merge/output_control.cpp:272
+#: src/merge/output_control.cpp:281
+#: src/merge/output_control.cpp:293
+#: src/merge/output_control.cpp:300
 msgid " done\n"
 msgstr ""
 
@@ -674,7 +678,9 @@ msgid ""
 "http://www.bunkus.org/videotools/mkvtoolnix/"
 msgstr ""
 
-#: src/mmg/mux_dialog.cpp:249 src/mmg/jobs.cpp:297 src/mmg/jobs.cpp:307
+#: src/mmg/mux_dialog.cpp:249
+#: src/mmg/jobs.cpp:297
+#: src/mmg/jobs.cpp:307
 #, c-format
 msgid "%d minute(s) %d second(s)"
 msgstr "%d minute(s) %d seconde(s)"
@@ -713,7 +719,8 @@ msgstr "&À propos…"
 msgid "&About\tF1"
 msgstr "&À propos…\tF1"
 
-#: src/mmg/mmg_dialog.cpp:280 src/mmg/mmg_dialog.cpp:314
+#: src/mmg/mmg_dialog.cpp:280
+#: src/mmg/mmg_dialog.cpp:314
 msgid "&Add to job queue"
 msgstr "Ajouter à la liste de &tâches"
 
@@ -769,7 +776,8 @@ msgstr "Dérouler toutes les entrées\tCtrl-E"
 msgid "&Expand important elements\tCtrl-E"
 msgstr "Dérouler les éléments importants\tCtrl-E"
 
-#: src/mmg/mmg_dialog.cpp:299 src/mmg/header_editor/frame.cpp:151
+#: src/mmg/mmg_dialog.cpp:299
+#: src/mmg/header_editor/frame.cpp:151
 #: src/info/wxwidgets_ui.cpp:123
 msgid "&File"
 msgstr "&Fichier"
@@ -782,12 +790,14 @@ msgstr "Options &globales\tAlt-3"
 msgid "&Header editor\tCtrl-E"
 msgstr "Éditeur d'en-têtes\tCtrl-E"
 
-#: src/mmg/mmg_dialog.cpp:303 src/mmg/header_editor/frame.cpp:153
+#: src/mmg/mmg_dialog.cpp:303
+#: src/mmg/header_editor/frame.cpp:153
 #: src/info/wxwidgets_ui.cpp:125
 msgid "&Help"
 msgstr "&Aide"
 
-#: src/mmg/mmg_dialog.cpp:293 src/mmg/header_editor/frame.cpp:150
+#: src/mmg/mmg_dialog.cpp:293
+#: src/mmg/header_editor/frame.cpp:150
 msgid "&Help\tF1"
 msgstr "&Aide\tF1"
 
@@ -819,11 +829,14 @@ msgstr "&Nouveau\tCtrl-N"
 msgid "&New chapters"
 msgstr "&Nouveaux chapitres"
 
-#: src/mmg/jobs.cpp:101 src/mmg/jobs.cpp:394 src/mmg/jobs.cpp:498
+#: src/mmg/jobs.cpp:101
+#: src/mmg/jobs.cpp:394
+#: src/mmg/jobs.cpp:498
 msgid "&Ok"
 msgstr "&Ok"
 
-#: src/mmg/header_editor/frame.cpp:142 src/info/wxwidgets_ui.cpp:107
+#: src/mmg/header_editor/frame.cpp:142
+#: src/info/wxwidgets_ui.cpp:107
 msgid "&Open\tCtrl-O"
 msgstr "&Ouvrir\tCtrl-O"
 
@@ -831,7 +844,8 @@ msgstr "&Ouvrir\tCtrl-O"
 msgid "&Options"
 msgstr "&Options"
 
-#: src/mmg/mmg_dialog.cpp:274 src/mmg/header_editor/frame.cpp:146
+#: src/mmg/mmg_dialog.cpp:274
+#: src/mmg/header_editor/frame.cpp:146
 msgid "&Quit\tCtrl-Q"
 msgstr "&Quitter\tCtrl-Q"
 
@@ -847,7 +861,8 @@ msgstr "&Recharger\tCtrl-R"
 msgid "&Reset"
 msgstr "&Remise à zéro"
 
-#: src/mmg/mmg_dialog.cpp:285 src/mmg/jobs.cpp:399
+#: src/mmg/mmg_dialog.cpp:285
+#: src/mmg/jobs.cpp:399
 msgid "&Save"
 msgstr "Enregistrer"
 
@@ -873,7 +888,7 @@ msgstr "Monter"
 
 #: src/mmg/header_editor/frame.cpp:149
 msgid "&Validate\tCtrl-T"
-msgstr ""
+msgstr "&Valider\tCtrl-T"
 
 #: src/mmg/mmg_dialog.cpp:288
 msgid "&Verify"
@@ -919,7 +934,8 @@ msgstr ""
 msgid "'%1%' is neither a valid ISO639-2 nor a valid ISO639-1 code. See 'mkvmerge --list-languages' for a list of all languages and their respective ISO639-2 codes.\n"
 msgstr ""
 
-#: src/common/chapters/chapters.cpp:184 src/common/chapters/chapters.cpp:201
+#: src/common/chapters/chapters.cpp:184
+#: src/common/chapters/chapters.cpp:201
 msgid "'%1%' is not a CHAPTERxx=... line."
 msgstr ""
 
@@ -947,7 +963,8 @@ msgstr ""
 msgid "'%1%' is not a valid ccTLD country code."
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1151 src/merge/mkvmerge.cpp:1154
+#: src/merge/mkvmerge.cpp:1151
+#: src/merge/mkvmerge.cpp:1154
 msgid "'%1%' is not a valid file ID in '--track-order %2%'.\n"
 msgstr ""
 
@@ -1003,7 +1020,8 @@ msgstr ""
 msgid "'%1%' lacks a file name.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1846 src/merge/mkvmerge.cpp:2010
+#: src/merge/mkvmerge.cpp:1846
+#: src/merge/mkvmerge.cpp:2010
 msgid "'%1%' lacks its argument.\n"
 msgstr ""
 
@@ -1023,23 +1041,30 @@ msgstr ""
 msgid "'%1%' lacks the track ID.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1884 src/merge/mkvmerge.cpp:1891
-#: src/merge/mkvmerge.cpp:1898 src/merge/mkvmerge.cpp:1905
+#: src/merge/mkvmerge.cpp:1884
+#: src/merge/mkvmerge.cpp:1891
+#: src/merge/mkvmerge.cpp:1898
+#: src/merge/mkvmerge.cpp:1905
 #: src/merge/mkvmerge.cpp:1912
 msgid "'%1%' lacks the track number(s).\n"
 msgstr ""
 
-#: src/common/output.cpp:134 src/common/output.cpp:147
-#: src/common/output.cpp:160 src/common/output.cpp:181
+#: src/common/output.cpp:134
+#: src/common/output.cpp:147
+#: src/common/output.cpp:160
+#: src/common/output.cpp:181
 msgid "'%1%' track %2%: %3%"
 msgstr ""
 
-#: src/common/output.cpp:127 src/common/output.cpp:140
-#: src/common/output.cpp:153 src/common/output.cpp:170
+#: src/common/output.cpp:127
+#: src/common/output.cpp:140
+#: src/common/output.cpp:153
+#: src/common/output.cpp:170
 msgid "'%1%': %2%"
 msgstr ""
 
-#: src/common/mm_multi_file_io.cpp:169 src/mmg/tabs/input.cpp:711
+#: src/common/mm_multi_file_io.cpp:169
+#: src/mmg/tabs/input.cpp:711
 msgid "'%1%': Processing the following files as well: %2%\n"
 msgstr ""
 
@@ -1251,15 +1276,18 @@ msgstr ""
 msgid "'-S' and '-s' used on the same source file.\n"
 msgstr ""
 
-#: src/common/property_element.cpp:116 src/mmg/header_editor/frame.cpp:396
+#: src/common/property_element.cpp:116
+#: src/mmg/header_editor/frame.cpp:396
 msgid "'Default track' flag"
 msgstr ""
 
-#: src/common/property_element.cpp:119 src/mmg/header_editor/frame.cpp:403
+#: src/common/property_element.cpp:119
+#: src/mmg/header_editor/frame.cpp:403
 msgid "'Forced display' flag"
 msgstr ""
 
-#: src/common/property_element.cpp:118 src/mmg/header_editor/frame.cpp:400
+#: src/common/property_element.cpp:118
+#: src/mmg/header_editor/frame.cpp:400
 msgid "'Track enabled' flag"
 msgstr ""
 
@@ -1279,8 +1307,10 @@ msgstr "(aucun)"
 msgid "(unnamed chapter)"
 msgstr "(chapitre sans nom)"
 
-#: src/mmg/tabs/chapters.cpp:885 src/mmg/tabs/chapters.cpp:960
-#: src/mmg/tabs/chapters.cpp:1074 src/mmg/tabs/chapters.cpp:1575
+#: src/mmg/tabs/chapters.cpp:885
+#: src/mmg/tabs/chapters.cpp:960
+#: src/mmg/tabs/chapters.cpp:1074
+#: src/mmg/tabs/chapters.cpp:1575
 #: src/mmg/tabs/chapters.cpp:1588
 msgid "(unnamed)"
 msgstr "(sans nom)"
@@ -1333,7 +1363,8 @@ msgstr "--- FIN de la tâche %d"
 msgid "--- No job output found.\n"
 msgstr "--- Aucun message de sortie.\n"
 
-#: src/mmg/options/languages.cpp:46 src/mmg/tabs/input_general.cpp:159
+#: src/mmg/options/languages.cpp:46
+#: src/mmg/tabs/input_general.cpp:159
 msgid "---all---"
 msgstr "--toutes--"
 
@@ -1381,7 +1412,8 @@ msgstr ""
 msgid "<!-- Unknown element '%1%' -->\n"
 msgstr ""
 
-#: src/common/xml/element_parser.cpp:268 src/common/xml/element_parser.cpp:285
+#: src/common/xml/element_parser.cpp:268
+#: src/common/xml/element_parser.cpp:285
 #: src/common/xml/element_parser.cpp:348
 msgid "<%1%> is not a valid child element of <%2%>."
 msgstr ""
@@ -1402,15 +1434,18 @@ msgstr ""
 msgid "A block group was found at position %1%, but no block element was found inside it. This might make mkvmerge crash.\n"
 msgstr ""
 
-#: src/input/r_matroska.cpp:2032 src/input/r_matroska.cpp:2143
+#: src/input/r_matroska.cpp:2032
+#: src/input/r_matroska.cpp:2143
 msgid "A block was found at timestamp %1% for track number %2%. However, no headers where found for that track number. The block will be skipped.\n"
 msgstr ""
 
-#: src/common/property_element.cpp:133 src/mmg/header_editor/frame.cpp:438
+#: src/common/property_element.cpp:133
+#: src/mmg/header_editor/frame.cpp:438
 msgid "A human-readable string specifying the codec."
 msgstr ""
 
-#: src/common/property_element.cpp:130 src/mmg/header_editor/frame.cpp:428
+#: src/common/property_element.cpp:130
+#: src/mmg/header_editor/frame.cpp:428
 msgid "A human-readable track name."
 msgstr ""
 
@@ -1419,7 +1454,8 @@ msgstr ""
 msgid "A job with the description '%s' already exists. Do you really want to add another one with the same description?"
 msgstr ""
 
-#: src/common/property_element.cpp:106 src/mmg/header_editor/frame.cpp:342
+#: src/common/property_element.cpp:106
+#: src/mmg/header_editor/frame.cpp:342
 msgid ""
 "A randomly generated unique ID to identify the current\n"
 "segment between many others (128 bits)."
@@ -1433,20 +1469,23 @@ msgstr ""
 msgid "A track with the ID %1% was requested but not found in the file. The corresponding option will be ignored.\n"
 msgstr ""
 
-#: src/common/property_element.cpp:114 src/mmg/header_editor/frame.cpp:393
+#: src/common/property_element.cpp:114
+#: src/mmg/header_editor/frame.cpp:393
 msgid ""
 "A unique ID to identify the Track. This should be\n"
 "kept the same when making a direct stream copy\n"
 "of the Track to another file."
 msgstr ""
 
-#: src/common/property_element.cpp:109 src/mmg/header_editor/frame.cpp:350
+#: src/common/property_element.cpp:109
+#: src/mmg/header_editor/frame.cpp:350
 msgid ""
 "A unique ID to identify the next chained\n"
 "segment (128 bits)."
 msgstr ""
 
-#: src/common/property_element.cpp:108 src/mmg/header_editor/frame.cpp:346
+#: src/common/property_element.cpp:108
+#: src/mmg/header_editor/frame.cpp:346
 msgid ""
 "A unique ID to identify the previous chained\n"
 "segment (128 bits)."
@@ -1507,7 +1546,8 @@ msgstr "Abandonner le multiplexage immédiatement"
 msgid "Aborted processing on %s"
 msgstr "Traitement abandonné le %s"
 
-#: src/info/qt_ui.cpp:125 src/info/wxwidgets_ui.cpp:338
+#: src/info/qt_ui.cpp:125
+#: src/info/wxwidgets_ui.cpp:338
 msgid "About mkvinfo"
 msgstr ""
 
@@ -1597,7 +1637,7 @@ msgstr "Tous les fichiers (*.*)|*.*"
 
 #: src/mmg/tabs/chapters.cpp:843
 msgid "All chapter entries are valid."
-msgstr ""
+msgstr "Toutes les entrées des chapitres sont valides."
 
 #: src/mmg/header_editor/frame.cpp:634
 msgid "All header values are OK."
@@ -1636,7 +1676,8 @@ msgstr ""
 msgid "Always on top"
 msgstr ""
 
-#: src/common/property_element.cpp:132 src/mmg/header_editor/frame.cpp:435
+#: src/common/property_element.cpp:132
+#: src/mmg/header_editor/frame.cpp:435
 msgid "An ID corresponding to the codec."
 msgstr ""
 
@@ -1648,19 +1689,22 @@ msgstr ""
 msgid "An empty file name is not valid.\n"
 msgstr ""
 
-#: src/common/property_element.cpp:105 src/mmg/header_editor/frame.cpp:338
+#: src/common/property_element.cpp:105
+#: src/mmg/header_editor/frame.cpp:338
 msgid ""
 "An escaped filename corresponding to\n"
 "the next segment."
 msgstr ""
 
-#: src/common/property_element.cpp:104 src/mmg/header_editor/frame.cpp:335
+#: src/common/property_element.cpp:104
+#: src/mmg/header_editor/frame.cpp:335
 msgid ""
 "An escaped filename corresponding to\n"
 "the previous segment."
 msgstr ""
 
-#: src/mmg/header_editor/frame.cpp:707 src/mmg/tabs/chapters.cpp:1910
+#: src/mmg/header_editor/frame.cpp:707
+#: src/mmg/tabs/chapters.cpp:1910
 #: src/propedit/propedit.cpp:44
 msgid "An unknown error occured. The file has been modified."
 msgstr ""
@@ -1720,7 +1764,7 @@ msgstr ""
 
 #: src/info/mkvinfo.cpp:1310
 msgid "Attached"
-msgstr ""
+msgstr "Attachés"
 
 #: src/mmg/tabs/attachments.cpp:152
 msgid "Attached files"
@@ -1736,26 +1780,31 @@ msgstr ""
 
 #: src/mmg/tabs/attachments.cpp:163
 msgid "Attachment style:"
-msgstr ""
+msgstr "Type d'attachement :"
 
-#: src/mmg/mmg_dialog.cpp:306 src/mmg/tabs/attachments.cpp:155
+#: src/mmg/mmg_dialog.cpp:306
+#: src/mmg/tabs/attachments.cpp:155
 #: src/info/mkvinfo.cpp:1298
 msgid "Attachments"
 msgstr "Fichiers joints"
 
-#: src/common/property_element.cpp:156 src/mmg/header_editor/frame.cpp:510
+#: src/common/property_element.cpp:156
+#: src/mmg/header_editor/frame.cpp:510
 msgid "Audio bit depth"
 msgstr ""
 
-#: src/common/property_element.cpp:155 src/mmg/header_editor/frame.cpp:506
+#: src/common/property_element.cpp:155
+#: src/mmg/header_editor/frame.cpp:506
 msgid "Audio channels"
 msgstr ""
 
-#: src/common/property_element.cpp:154 src/mmg/header_editor/frame.cpp:502
+#: src/common/property_element.cpp:154
+#: src/mmg/header_editor/frame.cpp:502
 msgid "Audio output sampling frequency"
 msgstr ""
 
-#: src/common/property_element.cpp:153 src/mmg/header_editor/frame.cpp:497
+#: src/common/property_element.cpp:153
+#: src/mmg/header_editor/frame.cpp:497
 msgid "Audio sampling frequency"
 msgstr ""
 
@@ -1766,7 +1815,7 @@ msgstr ""
 
 #: src/mmg/options/mmg.cpp:59
 msgid "Auto-set output filename"
-msgstr ""
+msgstr "Définir automatiquement le nom du fichier de sortie"
 
 #: src/merge/mkvmerge.cpp:328
 msgid "Automatic MIME type recognition for '%1%': %2%\n"
@@ -1788,7 +1837,8 @@ msgstr "Traductions disponibles :\n"
 msgid "Available version:"
 msgstr "Version disponible en ligne :"
 
-#: src/common/compression.cpp:213 src/common/compression.cpp:231
+#: src/common/compression.cpp:213
+#: src/common/compression.cpp:231
 msgid "BZ2_bzCompressInit() failed. Result: %1%\n"
 msgstr ""
 
@@ -1800,7 +1850,8 @@ msgstr ""
 msgid "Bit depth: %1%"
 msgstr ""
 
-#: src/common/property_element.cpp:156 src/mmg/header_editor/frame.cpp:510
+#: src/common/property_element.cpp:156
+#: src/mmg/header_editor/frame.cpp:510
 msgid "Bits per sample, mostly used for PCM."
 msgstr ""
 
@@ -1820,7 +1871,8 @@ msgstr ""
 msgid "Block duration: %1%.%|2$06d|ms"
 msgstr ""
 
-#: src/extract/timecodes_v2.cpp:283 src/extract/tracks.cpp:414
+#: src/extract/timecodes_v2.cpp:283
+#: src/extract/tracks.cpp:414
 #: src/info/mkvinfo.cpp:1372
 msgid "Block group"
 msgstr ""
@@ -1849,10 +1901,14 @@ msgstr ""
 msgid "Brings up the job queue editor"
 msgstr "Affiche le gestionnaire de la liste de tâches"
 
-#: src/mmg/mmg_dialog.cpp:311 src/mmg/options/mkvmerge.cpp:59
-#: src/mmg/options/mmg.cpp:69 src/mmg/tabs/global.cpp:276
-#: src/mmg/tabs/global.cpp:293 src/mmg/tabs/global.cpp:297
-#: src/mmg/tabs/input_general.cpp:188 src/mmg/tabs/input_general.cpp:191
+#: src/mmg/mmg_dialog.cpp:311
+#: src/mmg/options/mkvmerge.cpp:59
+#: src/mmg/options/mmg.cpp:69
+#: src/mmg/tabs/global.cpp:276
+#: src/mmg/tabs/global.cpp:293
+#: src/mmg/tabs/global.cpp:297
+#: src/mmg/tabs/input_general.cpp:188
+#: src/mmg/tabs/input_general.cpp:191
 msgid "Browse"
 msgstr "Parcourir…"
 
@@ -1884,8 +1940,10 @@ msgstr ""
 msgid "Cannot write track %1% with the CodecID '%2%' to the file '%3%' because track %4% with the CodecID '%5%' is already being written to the same file, and their CodecPrivate data (the USF styles etc) do not match.\n"
 msgstr ""
 
-#: src/extract/xtr_avi.cpp:46 src/extract/xtr_base.cpp:65
-#: src/extract/xtr_ivf.cpp:53 src/extract/xtr_textsubs.cpp:308
+#: src/extract/xtr_avi.cpp:46
+#: src/extract/xtr_base.cpp:65
+#: src/extract/xtr_ivf.cpp:53
+#: src/extract/xtr_textsubs.cpp:308
 msgid "Cannot write track %1% with the CodecID '%2%' to the file '%3%' because track %4% with the CodecID '%5%' is already being written to the same file.\n"
 msgstr ""
 
@@ -1893,7 +1951,8 @@ msgstr ""
 msgid "Category is not NUL terminated"
 msgstr ""
 
-#: src/extract/timecodes_v2.cpp:362 src/extract/tracks.cpp:464
+#: src/extract/timecodes_v2.cpp:362
+#: src/extract/tracks.cpp:464
 #: src/info/mkvinfo.cpp:2052
 msgid "Caught exception"
 msgstr ""
@@ -1920,7 +1979,7 @@ msgstr ""
 
 #: src/mmg/mmg_dialog.cpp:272
 msgid "Change mmg's preferences and options"
-msgstr "Permet de changer les paramètres de l'interface graphique de mkvmerge"
+msgstr "Permet de changer les paramètres de 'mmg'"
 
 #: src/mmg/options/languages.cpp:88
 msgid "Changes to this list do not take effect until mmg is restarted."
@@ -1997,9 +2056,12 @@ msgstr ""
 msgid "Chapter parser: The EditionUID %1% is not unique and could not be reused. A new one will be created.\n"
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:764 src/mmg/tabs/chapters.cpp:772
-#: src/mmg/tabs/chapters.cpp:778 src/mmg/tabs/chapters.cpp:785
-#: src/mmg/tabs/chapters.cpp:802 src/mmg/tabs/chapters.cpp:824
+#: src/mmg/tabs/chapters.cpp:764
+#: src/mmg/tabs/chapters.cpp:772
+#: src/mmg/tabs/chapters.cpp:778
+#: src/mmg/tabs/chapters.cpp:785
+#: src/mmg/tabs/chapters.cpp:802
+#: src/mmg/tabs/chapters.cpp:824
 msgid "Chapter verification error"
 msgstr ""
 
@@ -2007,8 +2069,10 @@ msgstr ""
 msgid "Chapter verification succeeded"
 msgstr ""
 
-#: src/mmg/options/chapters.cpp:130 src/mmg/tabs/global.cpp:273
-#: src/propedit/options.cpp:190 src/info/mkvinfo.cpp:1812
+#: src/mmg/options/chapters.cpp:130
+#: src/mmg/tabs/global.cpp:273
+#: src/propedit/options.cpp:190
+#: src/info/mkvinfo.cpp:1812
 msgid "Chapters"
 msgstr "Chapitres"
 
@@ -2025,7 +2089,8 @@ msgstr ""
 msgid "Chapters loaded."
 msgstr "Chapitres chargés."
 
-#: src/mmg/tabs/chapters.cpp:726 src/mmg/tabs/chapters.cpp:1887
+#: src/mmg/tabs/chapters.cpp:726
+#: src/mmg/tabs/chapters.cpp:1887
 msgid "Chapters written."
 msgstr "Chapitres écrits."
 
@@ -2041,15 +2106,18 @@ msgstr ""
 msgid "Charset for strings on the command line"
 msgstr ""
 
-#: src/mmg/tabs/global.cpp:282 src/mmg/tabs/input_format.cpp:249
+#: src/mmg/tabs/global.cpp:282
+#: src/mmg/tabs/input_format.cpp:249
 msgid "Charset:"
 msgstr "Jeu de caractères :"
 
-#: src/mmg/mmg_dialog.cpp:296 src/mmg/options/mmg.cpp:105
+#: src/mmg/mmg_dialog.cpp:296
+#: src/mmg/options/mmg.cpp:105
 msgid "Check online for the latest release"
 msgstr "Rechercher la dernière version en ligne"
 
-#: src/common/cli_parser.cpp:184 src/merge/mkvmerge.cpp:254
+#: src/common/cli_parser.cpp:184
+#: src/merge/mkvmerge.cpp:254
 msgid "Check online for the latest release."
 msgstr "Rechercher la dernière version en ligne."
 
@@ -2089,10 +2157,14 @@ msgstr "Choisir un fichier d'entrée à ajouter"
 msgid "Choose an input file to append"
 msgstr "Choisir un fichier d'entrée à mettre à la suite"
 
-#: src/mmg/mux_dialog.cpp:263 src/mmg/mmg_dialog.cpp:334
-#: src/mmg/mmg_dialog.cpp:430 src/mmg/mmg_dialog.cpp:738
-#: src/mmg/mmg_dialog.cpp:759 src/mmg/jobs.cpp:410
-#: src/mmg/tabs/chapters.cpp:636 src/mmg/tabs/chapters.cpp:680
+#: src/mmg/mux_dialog.cpp:263
+#: src/mmg/mmg_dialog.cpp:334
+#: src/mmg/mmg_dialog.cpp:430
+#: src/mmg/mmg_dialog.cpp:738
+#: src/mmg/mmg_dialog.cpp:759
+#: src/mmg/jobs.cpp:410
+#: src/mmg/tabs/chapters.cpp:636
+#: src/mmg/tabs/chapters.cpp:680
 msgid "Choose an output file"
 msgstr "Choisir un fichier de sortie"
 
@@ -2102,11 +2174,11 @@ msgstr "Choisir le fichier de chapitres"
 
 #: src/mmg/mmg_dialog.cpp:640
 msgid "Choose the location of the mkvmerge GUI help files"
-msgstr "Choisir l'emplacement des fichiers d'aide de l'interface graphique de mkvmerge"
+msgstr "Choisir l'emplacement des fichiers d'aide de 'mmg'"
 
 #: src/mmg/options/mkvmerge.cpp:103
 msgid "Choose the mkvmerge executable"
-msgstr ""
+msgstr "Choisir l'emplacement de l'exécutable 'mkvmerge'"
 
 #: src/mmg/options/mmg.cpp:254
 msgid "Choose the output directory"
@@ -2114,11 +2186,11 @@ msgstr "Choisir le répertoire de sortie"
 
 #: src/mmg/tabs/global.cpp:318
 msgid "Choose the segment info file"
-msgstr ""
+msgstr "Choisir le fichier d'informations des segments"
 
 #: src/mmg/tabs/global.cpp:308
 msgid "Choose the tags file"
-msgstr ""
+msgstr "Choisir le fichier d'étiquettes"
 
 #: src/mmg/options/mmg.cpp:90
 msgid "Clear inputs after a successful muxing run"
@@ -2132,7 +2204,8 @@ msgstr ""
 msgid "Close the current file without saving"
 msgstr ""
 
-#: src/extract/timecodes_v2.cpp:264 src/extract/tracks.cpp:396
+#: src/extract/timecodes_v2.cpp:264
+#: src/extract/tracks.cpp:396
 #: src/info/mkvinfo.cpp:1989
 msgid "Cluster"
 msgstr ""
@@ -2153,12 +2226,14 @@ msgstr ""
 msgid "Cluster previous size: %1%"
 msgstr ""
 
-#: src/extract/timecodes_v2.cpp:279 src/extract/tracks.cpp:405
+#: src/extract/timecodes_v2.cpp:279
+#: src/extract/tracks.cpp:405
 #: src/info/mkvinfo.cpp:207
 msgid "Cluster timecode: %|1$.3f|s"
 msgstr ""
 
-#: src/common/property_element.cpp:132 src/mmg/header_editor/frame.cpp:435
+#: src/common/property_element.cpp:132
+#: src/mmg/header_editor/frame.cpp:435
 msgid "Codec ID"
 msgstr ""
 
@@ -2178,7 +2253,8 @@ msgstr ""
 msgid "Codec info URL: %1%"
 msgstr ""
 
-#: src/common/property_element.cpp:133 src/mmg/header_editor/frame.cpp:438
+#: src/common/property_element.cpp:133
+#: src/mmg/header_editor/frame.cpp:438
 msgid "Codec name"
 msgstr ""
 
@@ -2216,7 +2292,7 @@ msgstr ""
 
 #: src/mmg/mmg_dialog.cpp:748
 msgid "Command line saved."
-msgstr ""
+msgstr "Ligne de commande enregistrée."
 
 #: src/mmg/tabs/input.cpp:369
 msgid "Command line used:"
@@ -2224,27 +2300,28 @@ msgstr ""
 
 #: src/mmg/options/languages.cpp:79
 msgid "Common languages"
-msgstr ""
+msgstr "Langues courantes"
 
 #: src/merge/pr_generic.cpp:777
 msgid "Compression failed: %1%\n"
 msgstr ""
 
-#: src/mmg/tabs/input_extra.cpp:58 src/mmg/tabs/input_extra.cpp:126
+#: src/mmg/tabs/input_extra.cpp:58
+#: src/mmg/tabs/input_extra.cpp:126
 msgid "Compression:"
 msgstr ""
 
 #: src/mmg/mmg_dialog.cpp:379
 msgid "Configuration cleared."
-msgstr ""
+msgstr "Paramètres effacés."
 
 #: src/mmg/mmg_dialog.cpp:424
 msgid "Configuration loaded."
-msgstr ""
+msgstr "Paramètres chargés."
 
 #: src/mmg/mmg_dialog.cpp:459
 msgid "Configuration saved."
-msgstr ""
+msgstr "Paramètres enregistrés."
 
 #: src/info/mkvinfo.cpp:826
 msgid "Content compression"
@@ -2278,7 +2355,9 @@ msgstr ""
 msgid "CorePicture frame %1% not supported.\n"
 msgstr ""
 
-#: src/mmg/mux_dialog.cpp:130 src/mmg/jobs.cpp:184 src/mmg/tabs/input.cpp:311
+#: src/mmg/mux_dialog.cpp:130
+#: src/mmg/jobs.cpp:184
+#: src/mmg/tabs/input.cpp:311
 #, c-format
 msgid "Could not create a temporary file for mkvmerge's command line option called '%s' (error code %d, %s)."
 msgstr "Impossible de créer un fichier temporaire pour l'option de commande de mkvmerge appelée '%s' (code d'erreur %d, %s)."
@@ -2296,12 +2375,14 @@ msgstr ""
 msgid "Could not decode the Base64 encoded data - it seems to be malformed."
 msgstr ""
 
-#: src/input/r_ogm.cpp:1157 src/input/r_matroska.cpp:1833
+#: src/input/r_ogm.cpp:1157
+#: src/input/r_matroska.cpp:1833
 #: src/input/r_avi.cpp:351
 msgid "Could not extract the decoder specific config data (AVCC) from this AVC/h.264 track.\n"
 msgstr ""
 
-#: src/input/r_avi.cpp:301 src/input/r_avi.cpp:306
+#: src/input/r_avi.cpp:301
+#: src/input/r_avi.cpp:306
 msgid "Could not extract the sequence header from this MPEG-1/2 track.\n"
 msgstr ""
 
@@ -2325,7 +2406,8 @@ msgstr ""
 msgid "Could not find the next Ogg page. This indicates a damaged Ogg/Ogm file. Will try to continue.\n"
 msgstr ""
 
-#: src/input/r_matroska.cpp:1576 src/input/r_avi.cpp:687
+#: src/input/r_matroska.cpp:1576
+#: src/input/r_avi.cpp:687
 msgid "Could not find valid DTS headers in this track's first frames.\n"
 msgstr ""
 
@@ -2337,7 +2419,8 @@ msgstr ""
 msgid "Could not initialize the iconv library for the conversion from UFT-8 to %1%. Some strings cannot be converted from UTF-8 and might be displayed incorrectly (error: %2%, %3%).\n"
 msgstr ""
 
-#: src/common/chapters/chapters.cpp:303 src/common/chapters/chapters.cpp:305
+#: src/common/chapters/chapters.cpp:303
+#: src/common/chapters/chapters.cpp:305
 #: src/common/tags/parser.cpp:58
 msgid "Could not open '%1%' for reading.\n"
 msgstr ""
@@ -2375,11 +2458,13 @@ msgstr ""
 msgid "Could not read the FLAC header packets.\n"
 msgstr ""
 
-#: src/common/mm_io_win.cpp:167 src/common/mm_io.cpp:181
+#: src/common/mm_io_win.cpp:167
+#: src/common/mm_io.cpp:181
 msgid "Could not write to the output file: %1% (%2%)\n"
 msgstr ""
 
-#: src/mmg/options/chapters.cpp:89 src/mmg/tabs/chapters.cpp:350
+#: src/mmg/options/chapters.cpp:89
+#: src/mmg/tabs/chapters.cpp:350
 msgid "Country:"
 msgstr "Pays :"
 
@@ -2421,7 +2506,7 @@ msgstr ""
 
 #: src/mmg/tabs/global.cpp:286
 msgid "Cue name format:"
-msgstr ""
+msgstr "CUE / Format des noms :"
 
 #: src/info/mkvinfo.cpp:1212
 msgid "Cue point"
@@ -2475,7 +2560,8 @@ msgstr ""
 msgid "Cues (subentries will be skipped)"
 msgstr ""
 
-#: src/mmg/tabs/input_extra.cpp:50 src/mmg/tabs/input_extra.cpp:124
+#: src/mmg/tabs/input_extra.cpp:50
+#: src/mmg/tabs/input_extra.cpp:124
 msgid "Cues:"
 msgstr ""
 
@@ -2556,11 +2642,13 @@ msgstr ""
 msgid "Debug> "
 msgstr ""
 
-#: src/mmg/tabs/input_format.cpp:194 src/mmg/tabs/input_format.cpp:212
+#: src/mmg/tabs/input_format.cpp:194
+#: src/mmg/tabs/input_format.cpp:212
 msgid "Default"
 msgstr ""
 
-#: src/common/property_element.cpp:127 src/mmg/header_editor/frame.cpp:419
+#: src/common/property_element.cpp:127
+#: src/mmg/header_editor/frame.cpp:419
 msgid "Default duration"
 msgstr ""
 
@@ -2604,7 +2692,8 @@ msgstr "Description"
 msgid "Description already exists"
 msgstr ""
 
-#: src/mmg/cli_options_dlg.cpp:51 src/mmg/header_editor/value_page.cpp:155
+#: src/mmg/cli_options_dlg.cpp:51
+#: src/mmg/header_editor/value_page.cpp:155
 #: src/mmg/tabs/attachments.cpp:160
 msgid "Description:"
 msgstr "Description :"
@@ -2629,7 +2718,8 @@ msgstr ""
 msgid "Disables lacing for all tracks. This will increase the file's size, especially if there are many audio tracks. Use only for testing."
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:653 src/merge/mkvmerge.cpp:659
+#: src/merge/mkvmerge.cpp:653
+#: src/merge/mkvmerge.cpp:659
 msgid "Display dimensions: not given in the form <TID>:<width>x<height>, e.g. 1:640x480 (argument was '%1%').\n"
 msgstr ""
 
@@ -2746,7 +2836,8 @@ msgstr ""
 msgid "Edition %d"
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:875 src/mmg/tabs/chapters.cpp:947
+#: src/mmg/tabs/chapters.cpp:875
+#: src/mmg/tabs/chapters.cpp:947
 #, c-format
 msgid "EditionEntry %u"
 msgstr "Entrée éditée %u"
@@ -2769,7 +2860,7 @@ msgstr ""
 
 #: src/mmg/tabs/global.cpp:233
 msgid "Enable splitting..."
-msgstr "Activer le fractionnement"
+msgstr "Activer le fractionnement…"
 
 #: src/info/mkvinfo.cpp:1005
 msgid "Enabled: %1%"
@@ -2795,7 +2886,8 @@ msgstr "Fin :"
 msgid "English language name"
 msgstr ""
 
-#: src/info/qt_ui.cpp:130 src/info/wxwidgets_ui.cpp:229
+#: src/info/qt_ui.cpp:130
+#: src/info/wxwidgets_ui.cpp:229
 msgid "Error"
 msgstr "Erreur"
 
@@ -2815,13 +2907,15 @@ msgstr ""
 msgid "Error initializing the tables for the chapter, tag and segment info elements: Could not find the element with the debug name '%1%'. %2%\n"
 msgstr ""
 
-#: src/mmg/mmg.cpp:225 src/mmg/mmg_dialog.cpp:389 src/mmg/mmg_dialog.cpp:408
+#: src/mmg/mmg.cpp:225
+#: src/mmg/mmg_dialog.cpp:389
+#: src/mmg/mmg_dialog.cpp:408
 msgid "Error loading settings"
-msgstr ""
+msgstr "Erreur au chargement des paramètres"
 
 #: src/mmg/tabs/chapters.cpp:705
 msgid "Error opening file"
-msgstr ""
+msgstr "Erreur au chargement du fichier"
 
 #: src/input/r_mpeg_ps.cpp:1046
 msgid "Error parsing a MPEG PS packet during the header reading phase. This stream seems to be badly damaged.\n"
@@ -2835,7 +2929,8 @@ msgstr ""
 msgid "Error parsing the file"
 msgstr ""
 
-#: src/propedit/target.cpp:358 src/merge/mkvmerge.cpp:490
+#: src/propedit/target.cpp:358
+#: src/merge/mkvmerge.cpp:490
 msgid "Error parsing the tags in '%1%': some mandatory elements are missing.\n"
 msgstr ""
 
@@ -2843,12 +2938,15 @@ msgstr ""
 msgid "Error saving the information"
 msgstr ""
 
-#: src/mmg/header_editor/frame.cpp:691 src/mmg/header_editor/frame.cpp:697
-#: src/mmg/tabs/chapters.cpp:1893 src/mmg/tabs/chapters.cpp:1899
+#: src/mmg/header_editor/frame.cpp:691
+#: src/mmg/header_editor/frame.cpp:697
+#: src/mmg/tabs/chapters.cpp:1893
+#: src/mmg/tabs/chapters.cpp:1899
 msgid "Error writing Matroska file"
 msgstr ""
 
-#: src/common/output.cpp:72 src/mmg/mux_dialog.cpp:189
+#: src/common/output.cpp:72
+#: src/mmg/mux_dialog.cpp:189
 msgid "Error:"
 msgstr "Erreur :"
 
@@ -2864,7 +2962,8 @@ msgstr ""
 msgid "Error: Couldn't open input file %1% (%2%).\n"
 msgstr ""
 
-#: src/extract/timecodes_v2.cpp:184 src/extract/tracks.cpp:339
+#: src/extract/timecodes_v2.cpp:184
+#: src/extract/tracks.cpp:339
 msgid "Error: No EBML head found."
 msgstr ""
 
@@ -2886,7 +2985,8 @@ msgstr "Erreurs :"
 msgid "Everything went fine."
 msgstr ""
 
-#: src/extract/extract_cli_parser.cpp:79 src/extract/extract_cli_parser.cpp:87
+#: src/extract/extract_cli_parser.cpp:79
+#: src/extract/extract_cli_parser.cpp:87
 #: src/extract/extract_cli_parser.cpp:96
 #: src/extract/extract_cli_parser.cpp:104
 #: src/extract/extract_cli_parser.cpp:113
@@ -2927,7 +3027,8 @@ msgstr ""
 msgid "Extract the data to a raw file."
 msgstr ""
 
-#: src/output/p_avc.cpp:131 src/output/p_mpeg4_p10.cpp:68
+#: src/output/p_avc.cpp:131
+#: src/output/p_mpeg4_p10.cpp:68
 msgid "Extracted the aspect ratio information from the MPEG-4 layer 10 (AVC) video data and set the display dimensions to %1%/%2%.\n"
 msgstr ""
 
@@ -2959,7 +3060,8 @@ msgstr "FPS :"
 msgid "Failed to create the VobSub data file '%1%': %2% (%3%)\n"
 msgstr ""
 
-#: src/extract/xtr_base.cpp:73 src/extract/xtr_textsubs.cpp:337
+#: src/extract/xtr_base.cpp:73
+#: src/extract/xtr_textsubs.cpp:337
 #: src/extract/xtr_vobsub.cpp:236
 msgid "Failed to create the file '%1%': %2% (%3%)\n"
 msgstr ""
@@ -3000,11 +3102,13 @@ msgstr ""
 msgid "File UID: %1%"
 msgstr ""
 
-#: src/input/r_real.cpp:469 src/input/r_real.cpp:479
+#: src/input/r_real.cpp:469
+#: src/input/r_real.cpp:479
 msgid "File contains fewer frames than expected or is corrupt after frame %1%.\n"
 msgstr ""
 
-#: src/mmg/mux_dialog.cpp:131 src/mmg/mmg_dialog.cpp:768
+#: src/mmg/mux_dialog.cpp:131
+#: src/mmg/mmg_dialog.cpp:768
 #: src/mmg/tabs/input.cpp:312
 msgid "File creation failed"
 msgstr ""
@@ -3017,7 +3121,8 @@ msgstr ""
 msgid "File description: %1%"
 msgstr ""
 
-#: src/mmg/tabs/input.cpp:364 src/mmg/tabs/input.cpp:377
+#: src/mmg/tabs/input.cpp:364
+#: src/mmg/tabs/input.cpp:377
 msgid "File identification failed"
 msgstr ""
 
@@ -3043,7 +3148,8 @@ msgstr ""
 msgid "File name: %1%"
 msgstr ""
 
-#: src/mmg/header_editor/frame.cpp:260 src/mmg/tabs/chapters.cpp:549
+#: src/mmg/header_editor/frame.cpp:260
+#: src/mmg/tabs/chapters.cpp:549
 msgid "File parsing failed"
 msgstr ""
 
@@ -3051,17 +3157,18 @@ msgstr ""
 msgid "File removal not possible"
 msgstr ""
 
-#: src/mmg/header_editor/frame.cpp:703 src/mmg/tabs/chapters.cpp:1906
+#: src/mmg/header_editor/frame.cpp:703
+#: src/mmg/tabs/chapters.cpp:1906
 msgid "File structure warning"
 msgstr ""
 
 #: src/mmg/tabs/global.cpp:261
 msgid "File/segment linking"
-msgstr ""
+msgstr "Lien entre fichiers/segments"
 
 #: src/mmg/tabs/global.cpp:229
 msgid "File/segment title:"
-msgstr ""
+msgstr "Titre du fichier/segment :"
 
 #: src/merge/output_control.cpp:871
 msgid "Files cannot be appended to themselves. The argument for '--append-to' was invalid.\n"
@@ -3085,7 +3192,8 @@ msgstr "Traitement terminé le %s"
 msgid "Floating point number"
 msgstr ""
 
-#: src/mmg/tabs/global.cpp:270 src/mmg/tabs/global.cpp:272
+#: src/mmg/tabs/global.cpp:270
+#: src/mmg/tabs/global.cpp:272
 msgid "For an in-depth explanantion of file/segment linking and this feature please read mkvmerge's documentation."
 msgstr ""
 
@@ -3165,7 +3273,8 @@ msgstr ""
 msgid "Frame rate: %1%"
 msgstr ""
 
-#: src/info/mkvinfo.cpp:185 src/info/mkvinfo.cpp:204
+#: src/info/mkvinfo.cpp:185
+#: src/info/mkvinfo.cpp:204
 msgid "Frame with size %1%%2%%3%"
 msgstr ""
 
@@ -3185,7 +3294,8 @@ msgstr "Options générales de la piste"
 msgid "Global"
 msgstr "Options globales"
 
-#: src/mmg/tabs/global.cpp:228 src/extract/extract_cli_parser.cpp:64
+#: src/mmg/tabs/global.cpp:228
+#: src/extract/extract_cli_parser.cpp:64
 msgid "Global options"
 msgstr "Options globales"
 
@@ -3223,25 +3333,30 @@ msgstr ""
 msgid "Header removal compression not possible because the buffer did not start with the bytes that should be removed. Wanted bytes:%1%; found:%2%."
 msgstr ""
 
-#: src/mmg/header_editor/frame.cpp:539 src/mmg/header_editor/frame.cpp:634
+#: src/mmg/header_editor/frame.cpp:539
+#: src/mmg/header_editor/frame.cpp:634
 #: src/mmg/header_editor/frame.cpp:639
 msgid "Header validation"
 msgstr ""
 
-#: src/mmg/header_editor/frame.cpp:567 src/mmg/header_editor/frame.cpp:577
+#: src/mmg/header_editor/frame.cpp:567
+#: src/mmg/header_editor/frame.cpp:577
 #: src/mmg/header_editor/frame.cpp:783
 msgid "Headers modified"
 msgstr ""
 
-#: src/common/property_element.cpp:139 src/mmg/header_editor/frame.cpp:448
+#: src/common/property_element.cpp:139
+#: src/mmg/header_editor/frame.cpp:448
 msgid "Height of the encoded video frames in pixels."
 msgstr ""
 
-#: src/common/property_element.cpp:141 src/mmg/header_editor/frame.cpp:458
+#: src/common/property_element.cpp:141
+#: src/mmg/header_editor/frame.cpp:458
 msgid "Height of the video frames to display."
 msgstr ""
 
-#: src/mmg/mmg_dialog.cpp:690 src/mmg/mmg_dialog.cpp:696
+#: src/mmg/mmg_dialog.cpp:690
+#: src/mmg/mmg_dialog.cpp:696
 msgid "Help file not found"
 msgstr "Fichier d'aide non trouvé"
 
@@ -3250,6 +3365,8 @@ msgid ""
 "Help is available in form of tool tips, from the\n"
 "'Help' menu or by pressing the 'F1' key."
 msgstr ""
+"Vous pouvez obtenir de l'aide sous forme d'infobulles,\n"
+"à partir du menu 'Aide', ou en pressant la touche 'F1' ."
 
 #: src/mmg/cli_options_dlg.cpp:31
 msgid ""
@@ -3294,9 +3411,8 @@ msgid "IVF with VP8 video files"
 msgstr ""
 
 #: src/mmg/tabs/chapters.cpp:341
-#, fuzzy
 msgid "If a chapter is marked 'hidden' then the player should not show this chapter entry to the user. Such entries could still be used by the menu system."
-msgstr "Si un chapitre est coché \"caché\" alors le lecteur n'affichera pas cette entrée à l'utilisateur. Cependant celle-ci sera toujours utilisable dans un menu de chapitres."
+msgstr "Si un chapitre est coché \"caché\" alors le lecteur n'affichera pas cette entrée à l'utilisateur. Cependant celle-ci sera toujours utilisable dans un menu de chapitres (de type \"menu DVD\")."
 
 #: src/mmg/tabs/chapters.cpp:344
 msgid "If a chapter is not marked 'enabled' then the player should skip the part of the file that this chapter occupies."
@@ -3324,7 +3440,7 @@ msgstr ""
 
 #: src/mmg/tabs/attachments.cpp:168
 msgid "If splitting is a file can be attached either to all files created or only to the first file. Has no effect if no splitting is used."
-msgstr ""
+msgstr "Si le fractionnement est activé, un fichier peut être attaché à tous les fichers de sortie générés ou seulement au premier. Option sans effet si le fractionnement n'est pas activé."
 
 #: src/output/p_textsubs.cpp:70
 msgid "Ignoring an entry which starts after it ends (%1%).\n"
@@ -3344,7 +3460,7 @@ msgstr ""
 
 #: src/mmg/mmg_dialog.cpp:1861
 msgid "Incompatible mkvmerge version"
-msgstr ""
+msgstr "Version de mkvmerge incompatible"
 
 #: src/mmg/tabs/input.cpp:948
 msgid "Incompatible track"
@@ -3362,9 +3478,12 @@ msgstr ""
 msgid "Input"
 msgstr "Entrée"
 
-#: src/mmg/tabs/chapters.cpp:1379 src/mmg/tabs/chapters.cpp:1472
-#: src/mmg/tabs/chapters.cpp:1481 src/mmg/tabs/chapters.cpp:1495
-#: src/mmg/tabs/chapters.cpp:1511 src/mmg/tabs/chapters.cpp:1519
+#: src/mmg/tabs/chapters.cpp:1379
+#: src/mmg/tabs/chapters.cpp:1472
+#: src/mmg/tabs/chapters.cpp:1481
+#: src/mmg/tabs/chapters.cpp:1495
+#: src/mmg/tabs/chapters.cpp:1511
+#: src/mmg/tabs/chapters.cpp:1519
 msgid "Input data error"
 msgstr ""
 
@@ -3378,7 +3497,7 @@ msgstr ""
 
 #: src/mmg/options/mmg.cpp:116
 msgid "Interface language:"
-msgstr ""
+msgstr "Langue de l'interface :"
 
 #: src/info/mkvinfo.cpp:748
 msgid "Interlaced: %1%"
@@ -3388,7 +3507,8 @@ msgstr ""
 msgid "Internal bug: tracks.cpp SSA #1. %1%"
 msgstr ""
 
-#: src/mmg/header_editor/frame.cpp:707 src/mmg/tabs/chapters.cpp:1910
+#: src/mmg/header_editor/frame.cpp:707
+#: src/mmg/tabs/chapters.cpp:1910
 msgid "Internal program error"
 msgstr ""
 
@@ -3416,7 +3536,9 @@ msgstr ""
 msgid "Invalid UID. This edition UID is already in use. The original UID has not been changed."
 msgstr ""
 
-#: src/input/r_avi.cpp:696 src/input/r_avi.cpp:701 src/input/r_avi.cpp:718
+#: src/input/r_avi.cpp:696
+#: src/input/r_avi.cpp:701
+#: src/input/r_avi.cpp:718
 msgid "Invalid Vorbis headers in AVI audio track."
 msgstr ""
 
@@ -3466,7 +3588,7 @@ msgstr ""
 
 #: src/mmg/mmg_dialog.cpp:585
 msgid "Invalid file name"
-msgstr ""
+msgstr "Nom de fichier invalide"
 
 #: src/merge/mkvmerge.cpp:838
 msgid "Invalid format for '--split' in '--split %1%'.\n"
@@ -3538,7 +3660,8 @@ msgstr ""
 msgid "Invalid hexadecimal data encountered: '%1%' is neither white space nor a hexadecimal number."
 msgstr ""
 
-#: src/mmg/options/chapters.cpp:114 src/mmg/tabs/chapters.cpp:1307
+#: src/mmg/options/chapters.cpp:114
+#: src/mmg/tabs/chapters.cpp:1307
 msgid "Invalid language selected"
 msgstr ""
 
@@ -3624,7 +3747,8 @@ msgstr ""
 msgid "Invalid track ID in '%1% %2%'.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:549 src/merge/mkvmerge.cpp:1100
+#: src/merge/mkvmerge.cpp:549
+#: src/merge/mkvmerge.cpp:1100
 msgid "Invalid track ID specified in '%1% %2%'.\n"
 msgstr ""
 
@@ -3696,20 +3820,23 @@ msgstr ""
 msgid "Lacing flag: %1%"
 msgstr ""
 
-#: src/common/property_element.cpp:131 src/mmg/header_editor/frame.cpp:431
+#: src/common/property_element.cpp:131
+#: src/mmg/header_editor/frame.cpp:431
 msgid "Language"
 msgstr ""
 
 #: src/mmg/tabs/input_general.cpp:182
 msgid "Language for this track. Select one of the ISO639-2 language codes."
-msgstr ""
+msgstr "Langue de cette piste. Choisissez l'une des langues de la liste des codes ISO 639-2."
 
 #: src/common/kate.cpp:78
 msgid "Language is not NUL terminated"
 msgstr ""
 
-#: src/mmg/options/chapters.cpp:86 src/mmg/tabs/global.cpp:278
-#: src/mmg/tabs/input_general.cpp:181 src/mmg/tabs/chapters.cpp:349
+#: src/mmg/options/chapters.cpp:86
+#: src/mmg/tabs/global.cpp:278
+#: src/mmg/tabs/input_general.cpp:181
+#: src/mmg/tabs/chapters.cpp:349
 msgid "Language:"
 msgstr "Langue :"
 
@@ -3719,7 +3846,7 @@ msgstr ""
 
 #: src/mmg/options/languages.cpp:116
 msgid "Languages"
-msgstr ""
+msgstr "Langues"
 
 #: src/mmg/cli_options_dlg.cpp:114
 msgid "Leave additional space (EbmlVoid) in the output file after the chapters."
@@ -3737,7 +3864,8 @@ msgstr ""
 msgid "Line %1% of the timecode file '%2%' contains inconsistent data (e.g. the start frame number is bigger than the end frame number, or some values are smaller than zero).\n"
 msgstr ""
 
-#: src/merge/timecode_factory.cpp:114 src/merge/timecode_factory.cpp:342
+#: src/merge/timecode_factory.cpp:114
+#: src/merge/timecode_factory.cpp:342
 msgid "Line %1% of the timecode file '%2%' could not be parsed.\n"
 msgstr ""
 
@@ -3753,7 +3881,8 @@ msgstr ""
 msgid "Line %1%: The current timestamp (%2%) is smaller than the previous one (%3%). The entries will be sorted according to their timestamps. This might result in the wrong order for some subtitle entries. If this is the case then you have to fix the .idx file manually.\n"
 msgstr ""
 
-#: src/input/r_vobsub.cpp:241 src/input/r_vobsub.cpp:264
+#: src/input/r_vobsub.cpp:241
+#: src/input/r_vobsub.cpp:264
 msgid "Line %1%: The line seems to be a subtitle entry but the format couldn't be recognized. This entry will be skipped.\n"
 msgstr ""
 
@@ -3788,7 +3917,7 @@ msgstr "MD5"
 
 #: src/mmg/tabs/attachments.cpp:162
 msgid "MIME type for this track. Select one of the pre-defined MIME types or enter one yourself."
-msgstr ""
+msgstr "Type MIME pour ce fichier joint. Choisissez l'un de la liste prédéfinie, ou entrez-le à la main."
 
 #: src/mmg/tabs/attachments.cpp:161
 msgid "MIME type:"
@@ -3796,7 +3925,7 @@ msgstr "Type MIME :"
 
 #: src/mmg/mmg_dialog.cpp:718
 msgid "MKVToolNix is licensed under the GNU GPL v2"
-msgstr ""
+msgstr "MKVToolNix est distribué sous licence GNU GPL v2"
 
 #: src/common/file_types.cpp:36
 msgid "MP4 audio/video files"
@@ -3818,7 +3947,8 @@ msgstr ""
 msgid "Make this track the default track for its type (audio, video, subtitles). Players should prefer tracks with the default track flag set."
 msgstr ""
 
-#: src/input/r_matroska.cpp:1511 src/input/r_matroska.cpp:1526
+#: src/input/r_matroska.cpp:1511
+#: src/input/r_matroska.cpp:1526
 msgid "Malformed AAC codec initialization data found.\n"
 msgstr ""
 
@@ -3826,7 +3956,8 @@ msgstr ""
 msgid "Malformed codec id '%1%'.\n"
 msgstr ""
 
-#: src/input/subtitles.cpp:357 src/input/subtitles.cpp:365
+#: src/input/subtitles.cpp:357
+#: src/input/subtitles.cpp:365
 #: src/input/subtitles.cpp:370
 msgid "Malformed line? (%1%)\n"
 msgstr ""
@@ -3866,7 +3997,8 @@ msgstr ""
 msgid "MaxCache: %1%"
 msgstr ""
 
-#: src/common/property_element.cpp:125 src/mmg/header_editor/frame.cpp:414
+#: src/common/property_element.cpp:125
+#: src/mmg/header_editor/frame.cpp:414
 msgid "Maximum cache"
 msgstr ""
 
@@ -3886,7 +4018,8 @@ msgstr ""
 msgid "MinCache: %1%"
 msgstr ""
 
-#: src/common/property_element.cpp:123 src/mmg/header_editor/frame.cpp:409
+#: src/common/property_element.cpp:123
+#: src/mmg/header_editor/frame.cpp:409
 msgid "Minimum cache"
 msgstr ""
 
@@ -3990,7 +4123,8 @@ msgstr ""
 msgid "NALU size length:"
 msgstr ""
 
-#: src/common/property_element.cpp:130 src/mmg/header_editor/frame.cpp:428
+#: src/common/property_element.cpp:130
+#: src/mmg/header_editor/frame.cpp:428
 msgid "Name"
 msgstr "Nom"
 
@@ -3998,7 +4132,8 @@ msgstr "Nom"
 msgid "Name for this track, e.g. \"director's comments\"."
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:348 src/mmg/tabs/attachments.cpp:158
+#: src/mmg/tabs/chapters.cpp:348
+#: src/mmg/tabs/attachments.cpp:158
 msgid "Name:"
 msgstr "Nom :"
 
@@ -4014,7 +4149,8 @@ msgstr "Nouveaux chapitres créés."
 msgid "New value:"
 msgstr "Nouvelle valeur :"
 
-#: src/common/property_element.cpp:105 src/mmg/header_editor/frame.cpp:338
+#: src/common/property_element.cpp:105
+#: src/mmg/header_editor/frame.cpp:338
 msgid "Next filename"
 msgstr "Nom de fichier suivant"
 
@@ -4034,7 +4170,8 @@ msgstr ""
 msgid "Next segment UID:%1%"
 msgstr ""
 
-#: src/common/property_element.cpp:109 src/mmg/header_editor/frame.cpp:349
+#: src/common/property_element.cpp:109
+#: src/mmg/header_editor/frame.cpp:349
 msgid "Next segment's unique ID"
 msgstr ""
 
@@ -4093,7 +4230,8 @@ msgstr ""
 msgid "No file loaded"
 msgstr "Aucun fichier chargé"
 
-#: src/propedit/options.cpp:31 src/info/mkvinfo.cpp:2075
+#: src/propedit/options.cpp:31
+#: src/info/mkvinfo.cpp:2075
 msgid "No file name given.\n"
 msgstr ""
 
@@ -4103,7 +4241,7 @@ msgstr ""
 
 #: src/mmg/cli_options_dlg.cpp:148
 msgid "No help available."
-msgstr ""
+msgstr "Aide non disponible"
 
 #: src/merge/mkvmerge.cpp:2162
 msgid "No input files were given. No output will be created.\n"
@@ -4117,7 +4255,8 @@ msgstr ""
 msgid "No output file name specified, will use attachment name.\n"
 msgstr ""
 
-#: src/extract/timecodes_v2.cpp:198 src/extract/tracks.cpp:354
+#: src/extract/timecodes_v2.cpp:198
+#: src/extract/tracks.cpp:354
 #: src/info/mkvinfo.cpp:1956
 msgid "No segment/level 0 element found."
 msgstr ""
@@ -4170,16 +4309,20 @@ msgstr ""
 msgid "Note"
 msgstr ""
 
-#: src/extract/timecodes_v2.cpp:166 src/extract/tracks.cpp:318
-#: src/extract/attachments.cpp:131 src/propedit/options.cpp:34
+#: src/extract/timecodes_v2.cpp:166
+#: src/extract/tracks.cpp:318
+#: src/extract/attachments.cpp:131
+#: src/propedit/options.cpp:34
 msgid "Nothing to do.\n"
 msgstr ""
 
-#: src/common/property_element.cpp:127 src/mmg/header_editor/frame.cpp:420
+#: src/common/property_element.cpp:127
+#: src/mmg/header_editor/frame.cpp:420
 msgid "Number of nanoseconds (not scaled) per frame."
 msgstr ""
 
-#: src/common/property_element.cpp:155 src/mmg/header_editor/frame.cpp:506
+#: src/common/property_element.cpp:155
+#: src/mmg/header_editor/frame.cpp:506
 msgid "Numbers of channels in the track."
 msgstr ""
 
@@ -4187,7 +4330,8 @@ msgstr ""
 msgid "Ogg/OGM audio/video files"
 msgstr ""
 
-#: src/mmg/message_dialog.cpp:31 src/mmg/mux_dialog.cpp:101
+#: src/mmg/message_dialog.cpp:31
+#: src/mmg/mux_dialog.cpp:101
 msgid "Ok"
 msgstr "Ok"
 
@@ -4233,7 +4377,7 @@ msgstr ""
 
 #: src/mmg/tabs/attachments.cpp:167
 msgid "Only to the first"
-msgstr ""
+msgstr "Seulement au 1er fichier"
 
 #: src/input/r_vobsub.cpp:99
 msgid "Only v7 and newer VobSub files are supported. If you have an older version then use the VSConv utility from http://sourceforge.net/projects/guliverkli/ to convert these files to v7 files.\n"
@@ -4241,13 +4385,14 @@ msgstr ""
 
 #: src/mmg/mmg_dialog.cpp:272
 msgid "Op&tions\tCtrl-P"
-msgstr ""
+msgstr "Op&tions\tCtrl-P"
 
 #: src/info/qt_ui.cpp:64
 msgid "Open File"
 msgstr "Ouvrir un fichier"
 
-#: src/mmg/header_editor/frame.cpp:238 src/info/wxwidgets_ui.cpp:107
+#: src/mmg/header_editor/frame.cpp:238
+#: src/info/wxwidgets_ui.cpp:107
 msgid "Open a Matroska file"
 msgstr "Ouvrir un fichier Matroska"
 
@@ -4263,7 +4408,8 @@ msgstr ""
 msgid "Option file created."
 msgstr ""
 
-#: src/mmg/options/dialog.cpp:43 src/propedit/propedit_cli_parser.cpp:159
+#: src/mmg/options/dialog.cpp:43
+#: src/propedit/propedit_cli_parser.cpp:159
 #: src/info/info_cli_parser.cpp:40
 msgid "Options"
 msgstr "Options"
@@ -4310,11 +4456,12 @@ msgstr "Sortie :"
 
 #: src/mmg/mmg_dialog.cpp:550
 msgid "Overwrite existing file(s)?"
-msgstr ""
+msgstr "Écraser le(s) fichier(s) existant ?"
 
-#: src/mmg/mmg_dialog.cpp:531 src/mmg/mmg_dialog.cpp:1384
+#: src/mmg/mmg_dialog.cpp:531
+#: src/mmg/mmg_dialog.cpp:1384
 msgid "Overwrite existing file?"
-msgstr ""
+msgstr "Écraser le fichier existant ?"
 
 #: src/common/file_types.cpp:41
 msgid "PGS/SUP subtitles"
@@ -4370,7 +4517,7 @@ msgstr ""
 
 #: src/mmg/options/mkvmerge.cpp:117
 msgid "Please do not select 'mmg' itself as the 'mkvmerge' executable."
-msgstr ""
+msgstr "Merci de ne pas choisir l'interface graphique 'mmg' en tant qu'exécutable 'mkvmerge'."
 
 #: src/mmg/mmg_dialog.cpp:1390
 msgid "Please enter a description for the new job:"
@@ -4392,7 +4539,8 @@ msgid ""
 "this listing.\n"
 msgstr ""
 
-#: src/common/property_element.cpp:104 src/mmg/header_editor/frame.cpp:335
+#: src/common/property_element.cpp:104
+#: src/mmg/header_editor/frame.cpp:335
 msgid "Previous filename"
 msgstr ""
 
@@ -4408,7 +4556,8 @@ msgstr ""
 msgid "Previous segment UID:%1%"
 msgstr ""
 
-#: src/common/property_element.cpp:108 src/mmg/header_editor/frame.cpp:345
+#: src/common/property_element.cpp:108
+#: src/mmg/header_editor/frame.cpp:345
 msgid "Previous segment's unique ID"
 msgstr ""
 
@@ -4425,16 +4574,19 @@ msgstr "Traitement de la tâche 1000/1000"
 msgid "Processing job %d/%d"
 msgstr "Traitement de la tâche %d/%d"
 
-#: src/mmg/mux_dialog.cpp:191 src/mmg/jobs.cpp:249
+#: src/mmg/mux_dialog.cpp:191
+#: src/mmg/jobs.cpp:249
 msgid "Progress"
 msgstr "Avancement"
 
-#: src/extract/timecodes_v2.cpp:269 src/extract/tracks.cpp:400
+#: src/extract/timecodes_v2.cpp:269
+#: src/extract/tracks.cpp:400
 #: src/merge/output_control.cpp:480
 msgid "Progress: %1%%%%2%"
 msgstr "Avancement : %1%%%%2%"
 
-#: src/extract/timecodes_v2.cpp:359 src/extract/mkvextract.cpp:93
+#: src/extract/timecodes_v2.cpp:359
+#: src/extract/mkvextract.cpp:93
 msgid "Progress: 100%\n"
 msgstr "Avancement : 100%\n"
 
@@ -4466,7 +4618,8 @@ msgstr ""
 msgid "Quicktime/MP4 reader: Could not read chunk number %1%/%2% with size %3% from position %4%. Aborting.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:1011 src/input/r_qtmp4.cpp:1024
+#: src/input/r_qtmp4.cpp:1011
+#: src/input/r_qtmp4.cpp:1024
 msgid "Quicktime/MP4 reader: Could not read the extended sound description atom for track ID %1%.\n"
 msgstr ""
 
@@ -4554,11 +4707,13 @@ msgstr ""
 msgid "Quicktime/MP4 reader: Track %1% has an unknown type.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:258 src/input/r_qtmp4.cpp:297
+#: src/input/r_qtmp4.cpp:258
+#: src/input/r_qtmp4.cpp:297
 msgid "Quicktime/MP4 reader: Track %1% is missing some data. Broken header atoms?\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:992 src/input/r_qtmp4.cpp:1066
+#: src/input/r_qtmp4.cpp:992
+#: src/input/r_qtmp4.cpp:1066
 msgid "Quicktime/MP4 reader: Track ID %1% has more than one FourCC. Only using the first one (%|2$.4s|) and not this one (%|3$.4s|).\n"
 msgstr ""
 
@@ -4598,7 +4753,8 @@ msgstr ""
 msgid "Ready"
 msgstr ""
 
-#: src/common/property_element.cpp:154 src/mmg/header_editor/frame.cpp:502
+#: src/common/property_element.cpp:154
+#: src/mmg/header_editor/frame.cpp:502
 msgid "Real output sampling frequency in Hz."
 msgstr ""
 
@@ -4634,7 +4790,9 @@ msgstr ""
 msgid "Reload the current file without saving"
 msgstr ""
 
-#: src/mmg/mux_dialog.cpp:76 src/mmg/jobs.cpp:72 src/mmg/jobs.cpp:74
+#: src/mmg/mux_dialog.cpp:76
+#: src/mmg/jobs.cpp:72
+#: src/mmg/jobs.cpp:74
 msgid "Remaining time:"
 msgstr "Temps restant :"
 
@@ -4696,9 +4854,10 @@ msgstr "Enregistrer la ligne de commande"
 
 #: src/mmg/options/mmg.cpp:64
 msgid "Same directory as the first input file's"
-msgstr ""
+msgstr "Utiliser le même répertoire que le premier fichier d'entrée"
 
-#: src/common/property_element.cpp:153 src/mmg/header_editor/frame.cpp:497
+#: src/common/property_element.cpp:153
+#: src/mmg/header_editor/frame.cpp:497
 msgid "Sampling frequency in Hz."
 msgstr ""
 
@@ -4778,8 +4937,10 @@ msgstr ""
 msgid "Seek position: %1%"
 msgstr ""
 
-#: src/extract/timecodes_v2.cpp:202 src/extract/tracks.cpp:359
-#: src/info/qt_ui.cpp:177 src/info/wxwidgets_ui.cpp:205
+#: src/extract/timecodes_v2.cpp:202
+#: src/extract/tracks.cpp:359
+#: src/info/qt_ui.cpp:177
+#: src/info/wxwidgets_ui.cpp:205
 msgid "Segment"
 msgstr ""
 
@@ -4791,7 +4952,8 @@ msgstr ""
 msgid "Segment UIDs:"
 msgstr ""
 
-#: src/common/property_element.cpp:103 src/mmg/header_editor/frame.cpp:332
+#: src/common/property_element.cpp:103
+#: src/mmg/header_editor/frame.cpp:332
 msgid "Segment filename"
 msgstr ""
 
@@ -4801,28 +4963,35 @@ msgstr ""
 
 #: src/mmg/tabs/global.cpp:296
 msgid "Segment info file:"
-msgstr ""
+msgstr "Fichier d'informations de segments :"
 
 #: src/mmg/tabs/global.cpp:318
 #, c-format
 msgid "Segment info files (*.xml)|*.xml|%s"
-msgstr ""
+msgstr "Fichiers d'infos de segments (*.xml)|*.xml|%s"
 
-#: src/mmg/header_editor/frame.cpp:322 src/extract/timecodes_v2.cpp:222
-#: src/extract/tracks.cpp:377 src/propedit/options.cpp:173
+#: src/mmg/header_editor/frame.cpp:322
+#: src/extract/timecodes_v2.cpp:222
+#: src/extract/tracks.cpp:377
+#: src/propedit/options.cpp:173
 #: src/propedit/propedit_cli_parser.cpp:105
-#: src/propedit/propedit_cli_parser.cpp:183 src/info/qt_ui.cpp:178
-#: src/info/wxwidgets_ui.cpp:208 src/info/mkvinfo.cpp:553
+#: src/propedit/propedit_cli_parser.cpp:183
+#: src/info/qt_ui.cpp:178
+#: src/info/wxwidgets_ui.cpp:208
+#: src/info/mkvinfo.cpp:553
 msgid "Segment information"
 msgstr ""
 
-#: src/extract/timecodes_v2.cpp:256 src/extract/tracks.cpp:389
-#: src/info/qt_ui.cpp:179 src/info/wxwidgets_ui.cpp:208
+#: src/extract/timecodes_v2.cpp:256
+#: src/extract/tracks.cpp:389
+#: src/info/qt_ui.cpp:179
+#: src/info/wxwidgets_ui.cpp:208
 #: src/info/mkvinfo.cpp:924
 msgid "Segment tracks"
 msgstr ""
 
-#: src/common/property_element.cpp:106 src/mmg/header_editor/frame.cpp:341
+#: src/common/property_element.cpp:106
+#: src/mmg/header_editor/frame.cpp:341
 msgid "Segment unique ID"
 msgstr ""
 
@@ -4872,14 +5041,16 @@ msgstr "Définir le fichier de s&ortie"
 msgid "Set country to:"
 msgstr "Définir le pays :"
 
-#: src/common/property_element.cpp:116 src/mmg/header_editor/frame.cpp:397
+#: src/common/property_element.cpp:116
+#: src/mmg/header_editor/frame.cpp:397
 msgid ""
 "Set if that track (audio, video or subs) SHOULD\n"
 "be used if no language found matches the\n"
 "user preference."
 msgstr ""
 
-#: src/common/property_element.cpp:119 src/mmg/header_editor/frame.cpp:404
+#: src/common/property_element.cpp:119
+#: src/mmg/header_editor/frame.cpp:404
 msgid ""
 "Set if that track MUST be used during playback.\n"
 "There can be many forced track for a kind (audio,\n"
@@ -4888,7 +5059,8 @@ msgid ""
 "default + forced track."
 msgstr ""
 
-#: src/common/property_element.cpp:118 src/mmg/header_editor/frame.cpp:400
+#: src/common/property_element.cpp:118
+#: src/mmg/header_editor/frame.cpp:400
 msgid "Set if the track is used."
 msgstr ""
 
@@ -4997,11 +5169,11 @@ msgstr ""
 
 #: src/mmg/options/mmg.cpp:111
 msgid "Show mmg's debug window"
-msgstr ""
+msgstr "Afficher la fenêtre de débogage de 'mmg'"
 
 #: src/mmg/mmg_dialog.cpp:294
 msgid "Show program information"
-msgstr "Affiche les informations sur ce programme"
+msgstr "Afficher les informations sur ce programme"
 
 #: src/info/info_cli_parser.cpp:48
 msgid "Show statistics for each track in verbose mode."
@@ -5009,7 +5181,7 @@ msgstr ""
 
 #: src/mmg/mmg_dialog.cpp:276
 msgid "Show the command line mmg creates for mkvmerge"
-msgstr "Affiche la ligne de commandes générée par l'interface graphique et passée à mkvmerge"
+msgstr "Afficher la ligne de commandes générée par 'mmg' et passée à mkvmerge"
 
 #: src/info/info_cli_parser.cpp:49
 msgid "Show the first 16 bytes of each frame as a hex dump."
@@ -5017,7 +5189,7 @@ msgstr ""
 
 #: src/mmg/mmg_dialog.cpp:293
 msgid "Show the guide to mkvmerge GUI"
-msgstr "Affiche le guide d'utilisation de l'interface graphique de mkvmerge"
+msgstr "Affiche le guide d'utilisation de 'mmg'"
 
 #: src/info/wxwidgets_ui.cpp:114
 msgid "Show the size of each element including its header"
@@ -5115,13 +5287,15 @@ msgstr ""
 msgid "Some tag elements are missing (this error should not have occured - another similar error should have occured earlier). %1%\n"
 msgstr ""
 
-#: src/common/property_element.cpp:131 src/mmg/header_editor/frame.cpp:432
+#: src/common/property_element.cpp:131
+#: src/mmg/header_editor/frame.cpp:432
 msgid ""
 "Specifies the language of the track in the\n"
 "Matroska languages form."
 msgstr ""
 
-#: src/common/property_element.cpp:147 src/mmg/header_editor/frame.cpp:488
+#: src/common/property_element.cpp:147
+#: src/mmg/header_editor/frame.cpp:488
 msgid ""
 "Specify the possible modifications to the aspect ratio\n"
 "(0: free resizing, 1: keep aspect ratio, 2: fixed)."
@@ -5189,11 +5363,13 @@ msgstr ""
 msgid "Status"
 msgstr "Statut"
 
-#: src/mmg/mux_dialog.cpp:74 src/mmg/jobs.cpp:63
+#: src/mmg/mux_dialog.cpp:74
+#: src/mmg/jobs.cpp:63
 msgid "Status and progress"
 msgstr "Statut et avancement"
 
-#: src/mmg/update_checker.cpp:57 src/mmg/header_editor/value_page.cpp:174
+#: src/mmg/update_checker.cpp:57
+#: src/mmg/header_editor/value_page.cpp:174
 msgid "Status:"
 msgstr "Statut :"
 
@@ -5274,7 +5450,8 @@ msgstr "Fichier d'étiquettes (*.xml;*.txt)|*.xml;*.txt|%s"
 msgid "Tag selectors"
 msgstr ""
 
-#: src/propedit/options.cpp:181 src/info/mkvinfo.cpp:1828
+#: src/propedit/options.cpp:181
+#: src/info/mkvinfo.cpp:1828
 msgid "Tags"
 msgstr "Étiquettes"
 
@@ -5375,7 +5552,8 @@ msgstr ""
 msgid "The Matroska file is analyzed."
 msgstr ""
 
-#: src/mmg/header_editor/frame.cpp:701 src/propedit/propedit.cpp:39
+#: src/mmg/header_editor/frame.cpp:701
+#: src/propedit/propedit.cpp:39
 msgid "The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file.\n"
 msgstr ""
 
@@ -5470,8 +5648,10 @@ msgstr ""
 msgid "The codec type '%1%' cannot be used in a WebM compliant file.\n"
 msgstr ""
 
-#: src/output/p_avc.cpp:203 src/output/p_kate.cpp:113
-#: src/output/p_passthrough.cpp:63 src/output/p_video.cpp:139
+#: src/output/p_avc.cpp:203
+#: src/output/p_kate.cpp:113
+#: src/output/p_passthrough.cpp:63
+#: src/output/p_video.cpp:139
 #: src/output/p_textsubs.cpp:102
 msgid "The codec's private data does not match (lengths: %1% and %2%)."
 msgstr ""
@@ -5517,9 +5697,10 @@ msgid ""
 "%2%\n"
 msgstr ""
 
-#: src/mmg/tabs/global.cpp:294 src/mmg/tabs/global.cpp:298
+#: src/mmg/tabs/global.cpp:294
+#: src/mmg/tabs/global.cpp:298
 msgid "The difference between tags associated with a track and global tags is explained in mkvmerge's documentation. In short: global tags apply to the complete file while the tags you can add on the 'input' tab apply to only one track."
-msgstr ""
+msgstr "La différence entre les étiquettes globales et celles associées à une piste est expliquée dans la documentation de mkvmerge. En résumé : les étiquettes globales s'appliquent à tout le fichier, tandis que celles définies dans l'onglet 'Entrée' ne s'appliquent qu'à une seule piste."
 
 #: src/merge/pr_generic.h:397
 msgid "The display height of the two tracks is different: %1% and %2%"
@@ -5538,13 +5719,14 @@ msgstr ""
 
 #: src/mmg/tabs/global.cpp:240
 msgid "The duration after which a new output file is started. The time can be given either in the form HH:MM:SS.nnnnnnnnn or as the number of seconds followed by 's'. You may omit the number of hours 'HH' and the number of nanoseconds 'nnnnnnnnn'. If given then you may use up to nine digits after the decimal point. Examples: 01:00:00 (after one hour) or 1800s (after 1800 seconds)."
-msgstr ""
+msgstr "La durée après laquelle chaque nouveau fichier de sortie sera créé. La durée peut être donnée soit au format HH:MM:SS.nnnnnnnnn, soit en nombre de secondes suivies de la lettre 's'. Il est possible d'omettre le nombre d'heures 'HH' ainsi que le nombre de nanosecondes 'nnnnnnnnn'. Si vous précisez ces dernières, vous pouvez utiliser jusqu'à neuf chiffres après le point. Exemples : 01:00:00 (après une heure) ou 1800s (après 1800 secondes)."
 
 #: src/propedit/options.cpp:225
 msgid "The edit specifications '%1%' and '%2%' resolve to the same track with the UID %3%.\n"
 msgstr ""
 
-#: src/mmg/header_editor/frame.cpp:689 src/mmg/tabs/chapters.cpp:1891
+#: src/mmg/header_editor/frame.cpp:689
+#: src/mmg/tabs/chapters.cpp:1891
 #: src/propedit/propedit.cpp:29
 msgid "The element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
 msgstr ""
@@ -5561,12 +5743,15 @@ msgstr ""
 msgid "The file '%1%' cannot be attached because it does not exist or cannot be read.\n"
 msgstr ""
 
-#: src/extract/chapters.cpp:47 src/extract/cuesheets.cpp:208
-#: src/extract/tags.cpp:47 src/extract/attachments.cpp:141
+#: src/extract/chapters.cpp:47
+#: src/extract/cuesheets.cpp:208
+#: src/extract/tags.cpp:47
+#: src/extract/attachments.cpp:141
 msgid "The file '%1%' could not be opened for reading (%2%)."
 msgstr ""
 
-#: src/extract/timecodes_v2.cpp:173 src/extract/tracks.cpp:327
+#: src/extract/timecodes_v2.cpp:173
+#: src/extract/tracks.cpp:327
 msgid "The file '%1%' could not be opened for reading (%2%).\n"
 msgstr ""
 
@@ -5574,12 +5759,15 @@ msgstr ""
 msgid "The file '%1%' could not be opened for reading command line arguments.\n"
 msgstr ""
 
-#: src/extract/xtr_tta.cpp:87 src/extract/tracks.cpp:276
-#: src/extract/xtr_avi.cpp:52 src/extract/xtr_wav.cpp:113
+#: src/extract/xtr_tta.cpp:87
+#: src/extract/tracks.cpp:276
+#: src/extract/xtr_avi.cpp:52
+#: src/extract/xtr_wav.cpp:113
 msgid "The file '%1%' could not be opened for writing (%2%).\n"
 msgstr ""
 
-#: src/extract/xtr_rmff.cpp:40 src/extract/attachments.cpp:121
+#: src/extract/xtr_rmff.cpp:40
+#: src/extract/attachments.cpp:121
 msgid "The file '%1%' could not be opened for writing (%2%, %3%).\n"
 msgstr ""
 
@@ -5662,7 +5850,8 @@ msgstr ""
 msgid "The file is being fixed, part 4/4..."
 msgstr ""
 
-#: src/common/property_element.cpp:103 src/mmg/header_editor/frame.cpp:332
+#: src/common/property_element.cpp:103
+#: src/mmg/header_editor/frame.cpp:332
 msgid "The file name for this segment."
 msgstr ""
 
@@ -5706,7 +5895,8 @@ msgstr ""
 msgid "The format of the split size is invalid (size too small)."
 msgstr ""
 
-#: src/mmg/tabs/global.cpp:546 src/mmg/tabs/global.cpp:550
+#: src/mmg/tabs/global.cpp:546
+#: src/mmg/tabs/global.cpp:550
 msgid "The format of the split size is invalid."
 msgstr ""
 
@@ -5726,7 +5916,8 @@ msgstr ""
 msgid "The given timecode scale factor is outside the valid range (1...10000000 or -1 for 'sample precision even if a video track is present').\n"
 msgstr ""
 
-#: src/common/xml/element_writer.cpp:187 src/common/xml/element_writer.cpp:197
+#: src/common/xml/element_writer.cpp:187
+#: src/common/xml/element_writer.cpp:197
 #: src/common/xml/element_writer.cpp:206
 msgid "The header has already been written."
 msgstr ""
@@ -5770,7 +5961,8 @@ msgid ""
 "(Problem occured in tab_input::load(), #3)"
 msgstr ""
 
-#: src/mmg/options/chapters.cpp:113 src/mmg/tabs/chapters.cpp:1307
+#: src/mmg/options/chapters.cpp:113
+#: src/mmg/tabs/chapters.cpp:1307
 #, c-format
 msgid "The language '%s' is not a valid language and cannot be selected."
 msgstr ""
@@ -5789,9 +5981,10 @@ msgstr ""
 
 #: src/mmg/tabs/global.cpp:258
 msgid "The maximum number of files that will be created even if the last file might contain more bytes/time than wanted. Useful e.g. when you want exactly two files. If you leave this empty then there is no limit for the number of files mkvmerge might create."
-msgstr ""
+msgstr "Le nombre maximal de fichiers qui seront créés, même si le dernier dépasse les limites de durée ou de taille fixées. Utile si vous souhaitez par exemple obtenir exactement 2 fichiers. Si ce champs est laissé vide, il n'y aura aucune limite du nombre de fichiers que mkvmerge pourra créer."
 
-#: src/common/property_element.cpp:125 src/mmg/header_editor/frame.cpp:415
+#: src/common/property_element.cpp:125
+#: src/mmg/header_editor/frame.cpp:415
 msgid ""
 "The maximum number of frames a player\n"
 "should be able to cache during playback.\n"
@@ -5799,12 +5992,14 @@ msgid ""
 "is not used."
 msgstr ""
 
-#: src/mmg/header_editor/frame.cpp:695 src/mmg/tabs/chapters.cpp:1897
+#: src/mmg/header_editor/frame.cpp:695
+#: src/mmg/tabs/chapters.cpp:1897
 #: src/propedit/propedit.cpp:34
 msgid "The meta seek element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
 msgstr ""
 
-#: src/common/property_element.cpp:123 src/mmg/header_editor/frame.cpp:410
+#: src/common/property_element.cpp:123
+#: src/mmg/header_editor/frame.cpp:410
 msgid ""
 "The minimum number of frames a player\n"
 "should be able to cache during playback.\n"
@@ -5850,25 +6045,29 @@ msgstr ""
 msgid "The number of external timecodes %1% is smaller than the number of frames in this track. The remaining frames of this track might not be timestamped the way you intended them to be. mkvmerge might even crash.\n"
 msgstr ""
 
-#: src/common/property_element.cpp:146 src/mmg/header_editor/frame.cpp:483
+#: src/common/property_element.cpp:146
+#: src/mmg/header_editor/frame.cpp:483
 msgid ""
 "The number of video pixels to remove\n"
 "on the bottom of the image."
 msgstr ""
 
-#: src/common/property_element.cpp:143 src/mmg/header_editor/frame.cpp:468
+#: src/common/property_element.cpp:143
+#: src/mmg/header_editor/frame.cpp:468
 msgid ""
 "The number of video pixels to remove\n"
 "on the left of the image."
 msgstr ""
 
-#: src/common/property_element.cpp:145 src/mmg/header_editor/frame.cpp:478
+#: src/common/property_element.cpp:145
+#: src/mmg/header_editor/frame.cpp:478
 msgid ""
 "The number of video pixels to remove\n"
 "on the right of the image."
 msgstr ""
 
-#: src/common/property_element.cpp:144 src/mmg/header_editor/frame.cpp:473
+#: src/common/property_element.cpp:144
+#: src/mmg/header_editor/frame.cpp:473
 msgid ""
 "The number of video pixels to remove\n"
 "on the top of the image."
@@ -5886,7 +6085,8 @@ msgstr ""
 msgid "The output file '%1%' could not be opened for writing (%2%).\n"
 msgstr ""
 
-#: src/mmg/mmg_dialog.cpp:531 src/mmg/mmg_dialog.cpp:1381
+#: src/mmg/mmg_dialog.cpp:531
+#: src/mmg/mmg_dialog.cpp:1381
 #, c-format
 msgid "The output file '%s' already exists. Do you want to overwrite it?"
 msgstr ""
@@ -5943,7 +6143,8 @@ msgstr ""
 msgid "The sample rate of the two audio tracks is different: %1% and %2%"
 msgstr ""
 
-#: src/common/property_element.cpp:128 src/mmg/header_editor/frame.cpp:424
+#: src/common/property_element.cpp:128
+#: src/mmg/header_editor/frame.cpp:424
 msgid ""
 "The scale to apply on this track to work at normal\n"
 "speed in relation with other tracks (mostly used\n"
@@ -5969,13 +6170,14 @@ msgstr ""
 
 #: src/mmg/tabs/global.cpp:237
 msgid "The size after which a new output file is started. The letters 'G', 'M' and 'K' can be used to indicate giga/mega/kilo bytes respectively. All units are based on 1024 (G = 1024^3, M = 1024^2, K = 1024)."
-msgstr ""
+msgstr "La taille après laquelle chaque nouveau fichier de sortie sera créé. Les lettres 'G', 'M' et 'K' peuvent être utilisées pour indiquer respectivement gibi/mébi/kibi octets. Toutes les unités sont en base 1024 (G = 1024^3, M = 1024^2, K = 1024)."
 
 #: src/merge/mkvmerge.cpp:1405
 msgid "The size of attachment '%1%' is 0.\n"
 msgstr ""
 
-#: src/merge/output_control.cpp:320 src/merge/output_control.cpp:417
+#: src/merge/output_control.cpp:320
+#: src/merge/output_control.cpp:417
 msgid "The source file '%1%' could not be opened successfully, or retrieving its size by seeking to the end did not work.\n"
 msgstr ""
 
@@ -6036,8 +6238,10 @@ msgstr ""
 msgid "The timecode file '%1%' could not be opened for reading.\n"
 msgstr ""
 
-#: src/merge/timecode_factory.cpp:87 src/merge/timecode_factory.cpp:95
-#: src/merge/timecode_factory.cpp:101 src/merge/timecode_factory.cpp:296
+#: src/merge/timecode_factory.cpp:87
+#: src/merge/timecode_factory.cpp:95
+#: src/merge/timecode_factory.cpp:101
+#: src/merge/timecode_factory.cpp:296
 msgid "The timecode file '%1%' does not contain a valid 'Assume' line with the default number of frames per second.\n"
 msgstr ""
 
@@ -6045,7 +6249,8 @@ msgstr ""
 msgid "The timecode file '%1%' does not contain a valid 'Gap' line with the duration of the gap.\n"
 msgstr ""
 
-#: src/merge/timecode_factory.cpp:241 src/merge/timecode_factory.cpp:360
+#: src/merge/timecode_factory.cpp:241
+#: src/merge/timecode_factory.cpp:360
 msgid "The timecode file '%1%' does not contain any valid entry.\n"
 msgstr ""
 
@@ -6058,13 +6263,14 @@ msgstr ""
 
 #: src/mmg/tabs/global.cpp:245
 msgid "The timecodes after which a new output file is started. The timecodes refer to the whole stream and not to each individual output file. The timecodes can be given either in the form HH:MM:SS.nnnnnnnnn or as the number of seconds followed by 's'. You may omit the number of hours 'HH'. You can specify up to nine digits for the number of nanoseconds 'nnnnnnnnn' or none at all. If given then you may use up to nine digits after the decimal point. If two or more timecodes are used then you have to separate them with commas. The formats can be mixed, too. Examples: 01:00:00,01:30:00 (after one hour and after one hour and thirty minutes) or 1800s,3000s,00:10:00 (after three, five and ten minutes)."
-msgstr ""
+msgstr "Les timecodes ('codes temporels') après lesquels chaque nouveau fichier sera créé. Ces timecodes font référence au flux tout entier, et non pas à chacun des fichiers de sortie. Ils peuvent être donnés soit au format HH:MM:SS.nnnnnnnnn, soit en nombre de secondes suivies de la lettre 's'. Il est possible d'omettre le nombre d'heures 'HH'. Vous pouvez préciser le nombre de nanosecondes 'nnnnnnnnn' jusqu'à neuf chiffres après le point, ou bien les omettre. Vous pouvez définir plusieurs timecodes en les séparant par des virgules. Les formats peuvent également être mélangés. Exemples: 01:00:00,01:30:00 (après 1 heure et après 1 heure et demi) ou 1800s,3000s,00:10:00 (après 3, 5 et 10 minutes)."
 
 #: src/input/r_ogm.cpp:598
 msgid "The timecodes for this stream have been reset in the middle of the file. This is not supported. The current packet will be discarded.\n"
 msgstr ""
 
-#: src/common/property_element.cpp:102 src/mmg/header_editor/frame.cpp:329
+#: src/common/property_element.cpp:102
+#: src/mmg/header_editor/frame.cpp:329
 msgid "The title for the whole movie."
 msgstr ""
 
@@ -6088,7 +6294,8 @@ msgstr ""
 msgid "The track number %1% from the file '%2%' cannot be appended to the track number %3% from the file '%4%'. %5%\n"
 msgstr ""
 
-#: src/common/property_element.cpp:113 src/mmg/header_editor/frame.cpp:389
+#: src/common/property_element.cpp:113
+#: src/mmg/header_editor/frame.cpp:389
 msgid "The track number as used in the Block Header."
 msgstr ""
 
@@ -6106,9 +6313,10 @@ msgstr ""
 
 #: src/mmg/mmg_dialog.cpp:1752
 msgid "There is a new version available online."
-msgstr ""
+msgstr "Une version plus récente est disponible en ligne."
 
-#: src/merge/output_control.cpp:857 src/merge/output_control.cpp:867
+#: src/merge/output_control.cpp:857
+#: src/merge/output_control.cpp:867
 msgid "There is no file with the ID '%1%'. The argument for '--append-to' was invalid.\n"
 msgstr ""
 
@@ -6118,13 +6326,14 @@ msgstr ""
 
 #: src/mmg/mmg_dialog.cpp:1753
 msgid "There was an error querying the update status."
-msgstr ""
+msgstr "Une erreur s'est produite pendant la vérification des mises à jour"
 
 #: src/mmg/mux_dialog.cpp:362
 msgid "There were ERRORs."
 msgstr ""
 
-#: src/mmg/header_editor/frame.cpp:539 src/mmg/header_editor/frame.cpp:639
+#: src/mmg/header_editor/frame.cpp:539
+#: src/mmg/header_editor/frame.cpp:639
 msgid "There were errors in the header values preventing the headers from being saved. The first error has been selected."
 msgstr ""
 
@@ -6136,7 +6345,8 @@ msgstr ""
 msgid "There were warnings, or the process was terminated."
 msgstr ""
 
-#: src/input/r_real.cpp:326 src/input/r_avi.cpp:629
+#: src/input/r_real.cpp:326
+#: src/input/r_avi.cpp:629
 msgid "This AAC track does not contain valid headers. Could not parse the AAC information.\n"
 msgstr ""
 
@@ -6197,7 +6407,8 @@ msgstr ""
 msgid "This file contains coordinates in the timecode lines. Such coordinates are not supported by the Matroska SRT subtitle format. The coordinates will be removed automatically.\n"
 msgstr ""
 
-#: src/mmg/header_editor/frame.cpp:260 src/mmg/tabs/chapters.cpp:549
+#: src/mmg/header_editor/frame.cpp:260
+#: src/mmg/tabs/chapters.cpp:549
 msgid "This file could not be opened or parsed."
 msgstr ""
 
@@ -6215,11 +6426,11 @@ msgstr "Ce fichier ne contient aucun chapitre valide."
 
 #: src/mmg/tabs/attachments.cpp:159
 msgid "This is the name that will be stored in the output file for this attachment. It defaults to the file name of the original file but can be changed."
-msgstr ""
+msgstr "Le nom qui sera utilisé pour enregistrer ce fichier joint dans le fichier de sortie. Par défaut, ce nom est défini par le nom du fichier original, mais cela peut être modifié."
 
 #: src/mmg/tabs/global.cpp:230
 msgid "This is the title that players may show as the 'main title' for this movie."
-msgstr ""
+msgstr "Le titre qui sera affiché par le lecteur pour ce film."
 
 #: src/mmg/cli_options_dlg.cpp:88
 msgid "This option needs an additional argument 'n'. Tells mkvmerge to put at most 'n' data blocks into each cluster. If the number is postfixed with 'ms' then put at most 'n' milliseconds of data into each cluster. The maximum length for a cluster that mkvmerge accepts is 60000 blocks and 32000ms; the minimum length is 100ms. Programs will only be able to seek to clusters, so creating larger clusters may lead to imprecise or slow seeking."
@@ -6266,12 +6477,15 @@ msgstr ""
 msgid "Timecode files (*.tmc;*.txt)|*.tmc;*.txt|%s"
 msgstr ""
 
-#: src/extract/timecodes_v2.cpp:231 src/extract/tracks.cpp:382
-#: src/info/mkvinfo.cpp:567 src/info/mkvinfo.cpp:1099
+#: src/extract/timecodes_v2.cpp:231
+#: src/extract/tracks.cpp:382
+#: src/info/mkvinfo.cpp:567
+#: src/info/mkvinfo.cpp:1099
 msgid "Timecode scale: %1%"
 msgstr ""
 
-#: src/common/property_element.cpp:128 src/mmg/header_editor/frame.cpp:423
+#: src/common/property_element.cpp:128
+#: src/mmg/header_editor/frame.cpp:423
 msgid "Timecode scaling"
 msgstr ""
 
@@ -6279,7 +6493,8 @@ msgstr ""
 msgid "Timecodes:"
 msgstr "Timecodes :"
 
-#: src/common/property_element.cpp:102 src/mmg/header_editor/frame.cpp:329
+#: src/common/property_element.cpp:102
+#: src/mmg/header_editor/frame.cpp:329
 msgid "Title"
 msgstr ""
 
@@ -6331,10 +6546,14 @@ msgstr ""
 msgid "Track %1% with the CodecID '%2%' is missing the \"codec private \" element and cannot be extracted.\n"
 msgstr ""
 
-#: src/extract/xtr_aac.cpp:42 src/extract/xtr_avc.cpp:54
-#: src/extract/xtr_avi.cpp:37 src/extract/xtr_ogg.cpp:37
-#: src/extract/xtr_ogg.cpp:72 src/extract/xtr_rmff.cpp:31
-#: src/extract/xtr_textsubs.cpp:292 src/extract/xtr_vobsub.cpp:65
+#: src/extract/xtr_aac.cpp:42
+#: src/extract/xtr_avc.cpp:54
+#: src/extract/xtr_avi.cpp:37
+#: src/extract/xtr_ogg.cpp:37
+#: src/extract/xtr_ogg.cpp:72
+#: src/extract/xtr_rmff.cpp:31
+#: src/extract/xtr_textsubs.cpp:292
+#: src/extract/xtr_vobsub.cpp:65
 #: src/extract/xtr_wav.cpp:95
 msgid "Track %1% with the CodecID '%2%' is missing the \"codec private\" element and cannot be extracted.\n"
 msgstr ""
@@ -6363,7 +6582,8 @@ msgstr ""
 msgid "Track %1%: The AAC information could not be parsed.\n"
 msgstr ""
 
-#: src/extract/xtr_aac.cpp:62 src/extract/xtr_aac.cpp:74
+#: src/extract/xtr_aac.cpp:62
+#: src/extract/xtr_aac.cpp:74
 msgid "Track ID %1% has an unknown AAC type.\n"
 msgstr ""
 
@@ -6371,7 +6591,8 @@ msgstr ""
 msgid "Track ID %1%: %2% (%3%)"
 msgstr ""
 
-#: src/common/property_element.cpp:114 src/mmg/header_editor/frame.cpp:392
+#: src/common/property_element.cpp:114
+#: src/mmg/header_editor/frame.cpp:392
 msgid "Track UID"
 msgstr ""
 
@@ -6383,7 +6604,8 @@ msgstr ""
 msgid "Track extraction"
 msgstr ""
 
-#: src/propedit/options.cpp:164 src/propedit/propedit_cli_parser.cpp:106
+#: src/propedit/options.cpp:164
+#: src/propedit/propedit_cli_parser.cpp:106
 #: src/propedit/propedit_cli_parser.cpp:186
 msgid "Track headers"
 msgstr ""
@@ -6392,7 +6614,8 @@ msgstr ""
 msgid "Track name:"
 msgstr "Nom de la piste :"
 
-#: src/common/property_element.cpp:113 src/mmg/header_editor/frame.cpp:388
+#: src/common/property_element.cpp:113
+#: src/mmg/header_editor/frame.cpp:388
 msgid "Track number"
 msgstr ""
 
@@ -6428,7 +6651,8 @@ msgstr ""
 msgid "Two VobSub tracks can only be extracted into the same file if their CodecPrivate data matches. This is not the case for the tracks %1% and %2%.\n"
 msgstr ""
 
-#: src/common/property_element.cpp:142 src/mmg/header_editor/frame.cpp:463
+#: src/common/property_element.cpp:142
+#: src/mmg/header_editor/frame.cpp:463
 msgid ""
 "Type of the unit for DisplayWidth/Height\n"
 "(0: pixels, 1: centimeters, 2: inches)."
@@ -6502,7 +6726,8 @@ msgstr ""
 msgid "Unknown mode '%1%'.\n"
 msgstr ""
 
-#: src/common/mm_io_win.cpp:69 src/common/mm_io.cpp:112
+#: src/common/mm_io_win.cpp:69
+#: src/common/mm_io.cpp:112
 msgid "Unknown open mode"
 msgstr ""
 
@@ -6564,13 +6789,14 @@ msgstr ""
 
 #: src/mmg/options/mmg.cpp:65
 msgid "Use the previous output directory"
-msgstr ""
+msgstr "Utiliser le dernier répertoire de sortie utilisé"
 
 #: src/mmg/options/mmg.cpp:66
 msgid "Use this directory:"
-msgstr ""
+msgstr "Utiliser ce répertoire :"
 
-#: src/mmg/tabs/input_extra.cpp:66 src/mmg/tabs/input_extra.cpp:130
+#: src/mmg/tabs/input_extra.cpp:66
+#: src/mmg/tabs/input_extra.cpp:130
 msgid "User defined options:"
 msgstr ""
 
@@ -6578,7 +6804,8 @@ msgstr ""
 msgid "Using a NALU size length of 3 bytes might result in tracks that won't be decodable with certain AVC/h.264 codecs.\n"
 msgstr ""
 
-#: src/input/r_matroska.cpp:1553 src/input/r_ac3.cpp:90
+#: src/input/r_matroska.cpp:1553
+#: src/input/r_ac3.cpp:90
 #: src/input/r_mpeg_ps.cpp:1180
 msgid "Using the %1%AC3 output module.\n"
 msgstr ""
@@ -6595,7 +6822,9 @@ msgstr ""
 msgid "Using the AAC output module (FourCC: %1%).\n"
 msgstr ""
 
-#: src/input/r_ogm.cpp:994 src/input/r_aac.cpp:116 src/input/r_qtmp4.cpp:1531
+#: src/input/r_ogm.cpp:994
+#: src/input/r_aac.cpp:116
+#: src/input/r_qtmp4.cpp:1531
 #: src/input/r_matroska.cpp:1541
 msgid "Using the AAC output module.\n"
 msgstr ""
@@ -6608,7 +6837,9 @@ msgstr ""
 msgid "Using the AC3 output module (FourCC: %1%).\n"
 msgstr ""
 
-#: src/input/r_wav.cpp:225 src/input/r_ogm.cpp:1012 src/input/r_qtmp4.cpp:1454
+#: src/input/r_wav.cpp:225
+#: src/input/r_ogm.cpp:1012
+#: src/input/r_qtmp4.cpp:1454
 #: src/input/r_avi.cpp:568
 msgid "Using the AC3 output module.\n"
 msgstr ""
@@ -6629,8 +6860,10 @@ msgstr ""
 msgid "Using the DTS demultiplexer.\n"
 msgstr ""
 
-#: src/input/r_wav.cpp:354 src/input/r_dts.cpp:114
-#: src/input/r_matroska.cpp:1573 src/input/r_avi.cpp:682
+#: src/input/r_wav.cpp:354
+#: src/input/r_dts.cpp:114
+#: src/input/r_matroska.cpp:1573
+#: src/input/r_avi.cpp:682
 #: src/input/r_mpeg_ps.cpp:1185
 msgid "Using the DTS output module.\n"
 msgstr ""
@@ -6639,7 +6872,8 @@ msgstr ""
 msgid "Using the Dirac demultiplexer.\n"
 msgstr ""
 
-#: src/input/r_dirac.cpp:96 src/input/r_matroska.cpp:1471
+#: src/input/r_dirac.cpp:96
+#: src/input/r_matroska.cpp:1471
 msgid "Using the Dirac video output module.\n"
 msgstr ""
 
@@ -6647,7 +6881,8 @@ msgstr ""
 msgid "Using the FLAC demultiplexer.\n"
 msgstr ""
 
-#: src/input/r_ogm_flac.cpp:287 src/input/r_flac.cpp:164
+#: src/input/r_ogm_flac.cpp:287
+#: src/input/r_flac.cpp:164
 #: src/input/r_matroska.cpp:1595
 msgid "Using the FLAC output module.\n"
 msgstr ""
@@ -6676,33 +6911,43 @@ msgstr ""
 msgid "Using the MPEG PS demultiplexer.\n"
 msgstr ""
 
-#: src/input/r_mp3.cpp:71 src/input/r_ogm.cpp:1030 src/input/r_qtmp4.cpp:1537
-#: src/input/r_matroska.cpp:1603 src/input/r_avi.cpp:561
+#: src/input/r_mp3.cpp:71
+#: src/input/r_ogm.cpp:1030
+#: src/input/r_qtmp4.cpp:1537
+#: src/input/r_matroska.cpp:1603
+#: src/input/r_avi.cpp:561
 #: src/input/r_mpeg_ps.cpp:1175
 msgid "Using the MPEG audio output module.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:1489 src/input/r_matroska.cpp:1455
+#: src/input/r_qtmp4.cpp:1489
+#: src/input/r_matroska.cpp:1455
 msgid "Using the MPEG-%1% video output module.\n"
 msgstr ""
 
-#: src/input/r_mpeg_es.cpp:179 src/input/r_avi.cpp:323
+#: src/input/r_mpeg_es.cpp:179
+#: src/input/r_avi.cpp:323
 #: src/input/r_mpeg_ps.cpp:1201
 msgid "Using the MPEG-1/2 video output module.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:1507 src/input/r_matroska.cpp:1865
+#: src/input/r_qtmp4.cpp:1507
+#: src/input/r_matroska.cpp:1865
 msgid "Using the MPEG-4 part 10 (AVC) video output module.\n"
 msgstr ""
 
-#: src/input/r_avc.cpp:136 src/input/r_ogm.cpp:1154
-#: src/input/r_matroska.cpp:1845 src/input/r_avi.cpp:348
+#: src/input/r_avc.cpp:136
+#: src/input/r_ogm.cpp:1154
+#: src/input/r_matroska.cpp:1845
+#: src/input/r_avi.cpp:348
 #: src/input/r_mpeg_ps.cpp:1214
 msgid "Using the MPEG-4 part 10 ES video output module.\n"
 msgstr ""
 
-#: src/input/r_ogm.cpp:1258 src/input/r_qtmp4.cpp:1481
-#: src/input/r_matroska.cpp:1459 src/input/r_avi.cpp:331
+#: src/input/r_ogm.cpp:1258
+#: src/input/r_qtmp4.cpp:1481
+#: src/input/r_matroska.cpp:1459
+#: src/input/r_avi.cpp:331
 msgid "Using the MPEG-4 part 2 video output module.\n"
 msgstr ""
 
@@ -6714,12 +6959,16 @@ msgstr ""
 msgid "Using the OGG/OGM demultiplexer.\n"
 msgstr ""
 
-#: src/input/r_wav.cpp:395 src/input/r_ogm.cpp:1049 src/input/r_qtmp4.cpp:1543
-#: src/input/r_matroska.cpp:1610 src/input/r_avi.cpp:553
+#: src/input/r_wav.cpp:395
+#: src/input/r_ogm.cpp:1049
+#: src/input/r_qtmp4.cpp:1543
+#: src/input/r_matroska.cpp:1610
+#: src/input/r_avi.cpp:553
 msgid "Using the PCM output module.\n"
 msgstr ""
 
-#: src/input/r_matroska.cpp:1720 src/input/r_pgssup.cpp:72
+#: src/input/r_matroska.cpp:1720
+#: src/input/r_pgssup.cpp:72
 msgid "Using the PGS output module.\n"
 msgstr ""
 
@@ -6755,11 +7004,13 @@ msgstr ""
 msgid "Using the TTA demultiplexer.\n"
 msgstr ""
 
-#: src/input/r_tta.cpp:109 src/input/r_matroska.cpp:1621
+#: src/input/r_tta.cpp:109
+#: src/input/r_matroska.cpp:1621
 msgid "Using the TTA output module.\n"
 msgstr ""
 
-#: src/input/r_ogm.cpp:1351 src/input/r_matroska.cpp:1467
+#: src/input/r_ogm.cpp:1351
+#: src/input/r_matroska.cpp:1467
 msgid "Using the Theora video output module.\n"
 msgstr ""
 
@@ -6783,12 +7034,14 @@ msgstr ""
 msgid "Using the VC1 ES demultiplexer.\n"
 msgstr ""
 
-#: src/input/r_vc1.cpp:96 src/input/r_matroska.cpp:1873
+#: src/input/r_vc1.cpp:96
+#: src/input/r_matroska.cpp:1873
 #: src/input/r_mpeg_ps.cpp:1219
 msgid "Using the VC1 video output module.\n"
 msgstr ""
 
-#: src/input/r_ogm.cpp:1445 src/input/r_matroska.cpp:1475
+#: src/input/r_ogm.cpp:1445
+#: src/input/r_matroska.cpp:1475
 #: src/input/r_ivf.cpp:87
 msgid "Using the VP8 video output module.\n"
 msgstr ""
@@ -6813,7 +7066,8 @@ msgstr ""
 msgid "Using the VobSub subtitle reader (SUB file '%1%').\n"
 msgstr ""
 
-#: src/input/r_ogm.cpp:1070 src/input/r_matroska.cpp:1628
+#: src/input/r_ogm.cpp:1070
+#: src/input/r_matroska.cpp:1628
 #: src/input/r_avi.cpp:736
 msgid "Using the Vorbis output module.\n"
 msgstr ""
@@ -6830,7 +7084,8 @@ msgstr ""
 msgid "Using the WAVPACK demultiplexer.\n"
 msgstr ""
 
-#: src/input/r_matroska.cpp:1651 src/input/r_wavpack.cpp:107
+#: src/input/r_matroska.cpp:1651
+#: src/input/r_wavpack.cpp:107
 msgid "Using the WAVPACK output module.\n"
 msgstr ""
 
@@ -6842,9 +7097,12 @@ msgstr ""
 msgid "Using the passthrough output module for this %1% track.\n"
 msgstr ""
 
-#: src/input/r_ogm.cpp:1101 src/input/r_srt.cpp:60
-#: src/input/r_matroska.cpp:1706 src/input/r_ssa.cpp:71
-#: src/input/r_avi.cpp:405 src/input/r_usf.cpp:259
+#: src/input/r_ogm.cpp:1101
+#: src/input/r_srt.cpp:60
+#: src/input/r_matroska.cpp:1706
+#: src/input/r_ssa.cpp:71
+#: src/input/r_avi.cpp:405
+#: src/input/r_usf.cpp:259
 msgid "Using the text subtitle output module.\n"
 msgstr ""
 
@@ -6852,11 +7110,13 @@ msgstr ""
 msgid "Using the video output module (FourCC: %1%).\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:1469 src/input/r_qtmp4.cpp:1517
+#: src/input/r_qtmp4.cpp:1469
+#: src/input/r_qtmp4.cpp:1517
 msgid "Using the video output module (FourCC: %|1$.4s|).\n"
 msgstr ""
 
-#: src/input/r_ogm.cpp:1263 src/input/r_matroska.cpp:1484
+#: src/input/r_ogm.cpp:1263
+#: src/input/r_matroska.cpp:1484
 #: src/input/r_avi.cpp:360
 msgid "Using the video output module.\n"
 msgstr ""
@@ -6877,35 +7137,43 @@ msgstr ""
 msgid "Verify the current chapter entries to see if there are any errors"
 msgstr "Vérifie l'absence d'erreurs dans le chapitrage"
 
-#: src/common/property_element.cpp:147 src/mmg/header_editor/frame.cpp:487
+#: src/common/property_element.cpp:147
+#: src/mmg/header_editor/frame.cpp:487
 msgid "Video aspect ratio type"
 msgstr ""
 
-#: src/common/property_element.cpp:146 src/mmg/header_editor/frame.cpp:483
+#: src/common/property_element.cpp:146
+#: src/mmg/header_editor/frame.cpp:483
 msgid "Video crop bottom"
 msgstr ""
 
-#: src/common/property_element.cpp:143 src/mmg/header_editor/frame.cpp:468
+#: src/common/property_element.cpp:143
+#: src/mmg/header_editor/frame.cpp:468
 msgid "Video crop left"
 msgstr ""
 
-#: src/common/property_element.cpp:145 src/mmg/header_editor/frame.cpp:478
+#: src/common/property_element.cpp:145
+#: src/mmg/header_editor/frame.cpp:478
 msgid "Video crop right"
 msgstr ""
 
-#: src/common/property_element.cpp:144 src/mmg/header_editor/frame.cpp:473
+#: src/common/property_element.cpp:144
+#: src/mmg/header_editor/frame.cpp:473
 msgid "Video crop top"
 msgstr ""
 
-#: src/common/property_element.cpp:141 src/mmg/header_editor/frame.cpp:458
+#: src/common/property_element.cpp:141
+#: src/mmg/header_editor/frame.cpp:458
 msgid "Video display height"
 msgstr ""
 
-#: src/common/property_element.cpp:142 src/mmg/header_editor/frame.cpp:463
+#: src/common/property_element.cpp:142
+#: src/mmg/header_editor/frame.cpp:463
 msgid "Video display unit"
 msgstr ""
 
-#: src/common/property_element.cpp:140 src/mmg/header_editor/frame.cpp:453
+#: src/common/property_element.cpp:140
+#: src/mmg/header_editor/frame.cpp:453
 msgid "Video display width"
 msgstr ""
 
@@ -6921,15 +7189,18 @@ msgstr ""
 msgid "Video packet assembly failed. Error code: %1% (%2%)\n"
 msgstr ""
 
-#: src/common/property_element.cpp:139 src/mmg/header_editor/frame.cpp:448
+#: src/common/property_element.cpp:139
+#: src/mmg/header_editor/frame.cpp:448
 msgid "Video pixel height"
 msgstr ""
 
-#: src/common/property_element.cpp:138 src/mmg/header_editor/frame.cpp:443
+#: src/common/property_element.cpp:138
+#: src/mmg/header_editor/frame.cpp:443
 msgid "Video pixel width"
 msgstr ""
 
-#: src/common/property_element.cpp:149 src/mmg/header_editor/frame.cpp:492
+#: src/common/property_element.cpp:149
+#: src/mmg/header_editor/frame.cpp:492
 msgid "Video stereo mode"
 msgstr ""
 
@@ -6998,11 +7269,13 @@ msgstr ""
 msgid "When a file is added its name is scanned. If it contains the word 'DELAY' followed by a number then this number is automatically put into the 'delay' input field for any audio track found in the file."
 msgstr ""
 
-#: src/common/property_element.cpp:138 src/mmg/header_editor/frame.cpp:443
+#: src/common/property_element.cpp:138
+#: src/mmg/header_editor/frame.cpp:443
 msgid "Width of the encoded video frames in pixels."
 msgstr ""
 
-#: src/common/property_element.cpp:140 src/mmg/header_editor/frame.cpp:453
+#: src/common/property_element.cpp:140
+#: src/mmg/header_editor/frame.cpp:453
 msgid "Width of the video frames to display."
 msgstr ""
 
@@ -7046,12 +7319,14 @@ msgstr ""
 msgid "Wrong file chosen"
 msgstr ""
 
-#: src/mmg/header_editor/frame.cpp:248 src/mmg/tabs/chapters.cpp:642
+#: src/mmg/header_editor/frame.cpp:248
+#: src/mmg/tabs/chapters.cpp:642
 #: src/mmg/tabs/chapters.cpp:685
 msgid "Wrong file selected"
 msgstr ""
 
-#: src/common/kate.cpp:46 src/common/theora.cpp:35
+#: src/common/kate.cpp:46
+#: src/common/theora.cpp:35
 msgid "Wrong header type: 0x%|1$02x| != 0x%|2$02x|"
 msgstr ""
 
@@ -7114,11 +7389,13 @@ msgid ""
 "This message will only be shown once unless you have enabled mmg's warnings on its 'settings' page."
 msgstr ""
 
-#: src/common/compression.cpp:139 src/common/compression.cpp:176
+#: src/common/compression.cpp:139
+#: src/common/compression.cpp:176
 msgid "Zlib decompression failed. Result: %1%\n"
 msgstr ""
 
-#: src/info/mkvinfo.cpp:202 src/info/mkvinfo.cpp:206
+#: src/info/mkvinfo.cpp:202
+#: src/info/mkvinfo.cpp:206
 msgid "[%1% frame for track %2%, timecode %3%]"
 msgstr ""
 
@@ -7138,7 +7415,9 @@ msgstr ""
 msgid "aac_reader: No valid AAC packet found in the first %1% bytes.\n"
 msgstr ""
 
-#: src/mmg/jobs.cpp:344 src/mmg/jobs.cpp:453 src/mmg/jobs.cpp:531
+#: src/mmg/jobs.cpp:344
+#: src/mmg/jobs.cpp:453
+#: src/mmg/jobs.cpp:531
 msgid "aborted"
 msgstr "abandonné"
 
@@ -7158,7 +7437,8 @@ msgstr ""
 msgid "ac3_reader: No valid AC3 packet found in the first %1% bytes.\n"
 msgstr ""
 
-#: src/mmg/tabs/attachments.cpp:156 src/mmg/tabs/input.cpp:183
+#: src/mmg/tabs/attachments.cpp:156
+#: src/mmg/tabs/input.cpp:183
 msgid "add"
 msgstr "Ajouter"
 
@@ -7170,7 +7450,9 @@ msgstr ""
 msgid "append"
 msgstr "Mettre à la suite"
 
-#: src/input/r_matroska.cpp:91 src/mmg/mmg.cpp:62 src/info/mkvinfo.cpp:1116
+#: src/input/r_matroska.cpp:91
+#: src/mmg/mmg.cpp:62
+#: src/info/mkvinfo.cpp:1116
 msgid "audio"
 msgstr ""
 
@@ -7198,7 +7480,8 @@ msgstr ""
 msgid "bits per sample: %1%"
 msgstr ""
 
-#: src/input/r_matroska.cpp:92 src/info/mkvinfo.cpp:1119
+#: src/input/r_matroska.cpp:92
+#: src/info/mkvinfo.cpp:1119
 msgid "buttons"
 msgstr ""
 
@@ -7214,7 +7497,8 @@ msgstr ""
 msgid "bzlib_compressor_c::decompress() not implemented\n"
 msgstr ""
 
-#: src/common/chapters/writer.cpp:196 src/common/chapters/xml_parser.cpp:143
+#: src/common/chapters/writer.cpp:196
+#: src/common/chapters/xml_parser.cpp:143
 msgid "cet_index: '%1%' not found\n"
 msgstr ""
 
@@ -7262,7 +7546,8 @@ msgstr ""
 msgid "create_track_number: file_num not found. %1%\n"
 msgstr ""
 
-#: src/mmg/tabs/input_extra.cpp:85 src/mmg/tabs/input_extra.cpp:158
+#: src/mmg/tabs/input_extra.cpp:85
+#: src/mmg/tabs/input_extra.cpp:158
 #: src/mmg/tabs/input_general.cpp:106
 msgid "default"
 msgstr ""
@@ -7295,7 +7580,8 @@ msgstr ""
 msgid "display width: %1%"
 msgstr ""
 
-#: src/mmg/jobs.cpp:529 src/mmg/jobs.cpp:717
+#: src/mmg/jobs.cpp:529
+#: src/mmg/jobs.cpp:717
 msgid "done"
 msgstr "terminé"
 
@@ -7331,18 +7617,30 @@ msgstr "activé"
 msgid "encryption"
 msgstr "chiffrage"
 
-#: src/input/r_qtmp4.cpp:516 src/input/r_qtmp4.cpp:598
-#: src/input/r_qtmp4.cpp:632 src/input/r_qtmp4.cpp:644
-#: src/input/r_qtmp4.cpp:738 src/input/r_qtmp4.cpp:1234
-#: src/input/r_qtmp4.cpp:1392 src/input/r_qtmp4.cpp:1408
-#: src/common/mm_io.cpp:471 src/common/mm_io.cpp:481 src/common/mm_io.cpp:491
-#: src/common/mm_io.cpp:501 src/common/mm_io.cpp:511 src/common/mm_io.cpp:521
-#: src/common/mm_io.cpp:531 src/common/mm_io.cpp:541 src/common/mm_io.cpp:551
-#: src/common/mm_io.cpp:649 src/common/mm_io.cpp:1108
+#: src/input/r_qtmp4.cpp:516
+#: src/input/r_qtmp4.cpp:598
+#: src/input/r_qtmp4.cpp:632
+#: src/input/r_qtmp4.cpp:644
+#: src/input/r_qtmp4.cpp:738
+#: src/input/r_qtmp4.cpp:1234
+#: src/input/r_qtmp4.cpp:1392
+#: src/input/r_qtmp4.cpp:1408
+#: src/common/mm_io.cpp:471
+#: src/common/mm_io.cpp:481
+#: src/common/mm_io.cpp:491
+#: src/common/mm_io.cpp:501
+#: src/common/mm_io.cpp:511
+#: src/common/mm_io.cpp:521
+#: src/common/mm_io.cpp:531
+#: src/common/mm_io.cpp:541
+#: src/common/mm_io.cpp:551
+#: src/common/mm_io.cpp:649
+#: src/common/mm_io.cpp:1108
 msgid "end-of-file"
 msgstr ""
 
-#: src/mmg/jobs.cpp:353 src/mmg/jobs.cpp:532
+#: src/mmg/jobs.cpp:353
+#: src/mmg/jobs.cpp:532
 msgid "failed"
 msgstr "échoué"
 
@@ -7406,7 +7704,8 @@ msgstr ""
 msgid "for all frames"
 msgstr ""
 
-#: src/input/r_vc1.cpp:52 src/input/r_avc.cpp:76
+#: src/input/r_vc1.cpp:52
+#: src/input/r_avc.cpp:76
 msgid "have an xcptn\n"
 msgstr ""
 
@@ -7430,7 +7729,9 @@ msgstr ""
 msgid "inflateInit() failed. Result: %1%\n"
 msgstr ""
 
-#: src/mmg/mux_dialog.cpp:77 src/mmg/jobs.cpp:73 src/mmg/jobs.cpp:75
+#: src/mmg/mux_dialog.cpp:77
+#: src/mmg/jobs.cpp:73
+#: src/mmg/jobs.cpp:75
 #: src/mmg/jobs.cpp:163
 msgid "is being estimated"
 msgstr "en cours d'estimation"
@@ -7515,7 +7816,8 @@ msgstr ""
 msgid "matroska_reader: Failed to read the headers."
 msgstr ""
 
-#: src/input/r_matroska.cpp:1248 src/input/r_matroska.cpp:1253
+#: src/input/r_matroska.cpp:1248
+#: src/input/r_matroska.cpp:1253
 msgid "matroska_reader: No segment found.\n"
 msgstr ""
 
@@ -7543,7 +7845,8 @@ msgstr ""
 msgid "matroska_reader: The CodecID for track %1% is '%2%', but there was no codec private headers.\n"
 msgstr ""
 
-#: src/input/r_matroska.cpp:510 src/input/r_matroska.cpp:521
+#: src/input/r_matroska.cpp:510
+#: src/input/r_matroska.cpp:521
 msgid "matroska_reader: The CodecID for track %1% is '%2%', but there was no private data found.\n"
 msgstr ""
 
@@ -7575,7 +7878,8 @@ msgstr ""
 msgid "matroska_reader: Vorbis track does not contain valid headers.\n"
 msgstr ""
 
-#: src/input/r_matroska.cpp:1340 src/input/r_matroska.cpp:2010
+#: src/input/r_matroska.cpp:1340
+#: src/input/r_matroska.cpp:2010
 msgid "matroska_reader: caught exception\n"
 msgstr ""
 
@@ -7627,7 +7931,8 @@ msgstr ""
 msgid "missing value"
 msgstr ""
 
-#: src/common/fs_sys_helpers.cpp:53 src/common/fs_sys_helpers.cpp:184
+#: src/common/fs_sys_helpers.cpp:53
+#: src/common/fs_sys_helpers.cpp:184
 msgid "mkdir(%1%) failed; errno = %2% (%3%)"
 msgstr ""
 
@@ -7697,7 +8002,7 @@ msgstr ""
 
 #: src/mmg/options/mkvmerge.cpp:142
 msgid "mkvmerge"
-msgstr ""
+msgstr "mkvmerge"
 
 #: src/merge/mkvmerge.cpp:73
 msgid "mkvmerge -o out [global options] [options1] <file1> [@optionsfile ...]\n"
@@ -7708,33 +8013,41 @@ msgstr ""
 msgid "mkvmerge FAILED with a return code of %d. %s"
 msgstr ""
 
-#: src/mmg/tabs/global.cpp:532 src/mmg/tabs/global.cpp:546
-#: src/mmg/tabs/global.cpp:550 src/mmg/tabs/global.cpp:554
-#: src/mmg/tabs/global.cpp:565 src/mmg/tabs/global.cpp:573
+#: src/mmg/tabs/global.cpp:532
+#: src/mmg/tabs/global.cpp:546
+#: src/mmg/tabs/global.cpp:550
+#: src/mmg/tabs/global.cpp:554
+#: src/mmg/tabs/global.cpp:565
+#: src/mmg/tabs/global.cpp:573
 #: src/mmg/tabs/global.cpp:610
 msgid "mkvmerge GUI error"
 msgstr ""
 
 #: src/mmg/mmg_dialog.cpp:176
 msgid "mkvmerge GUI ready"
-msgstr "L'interface graphique de mkvmerge est prête."
+msgstr "L'interface graphique de mkvmerge ('mmg') est prête."
 
-#: src/mmg/mmg_dialog.cpp:384 src/mmg/mmg_dialog.cpp:430
+#: src/mmg/mmg_dialog.cpp:384
+#: src/mmg/mmg_dialog.cpp:430
 #, c-format
 msgid "mkvmerge GUI settings (*.mmg)|*.mmg|%s"
 msgstr "Fichiers de configuration de mkvmerge (*.mmg)|*.mmg|%s"
 
-#: src/mmg/tabs/input.cpp:1277 src/mmg/tabs/input.cpp:1302
-#: src/mmg/tabs/input.cpp:1313 src/mmg/tabs/input.cpp:1323
-#: src/mmg/tabs/input.cpp:1335 src/mmg/tabs/input.cpp:1391
+#: src/mmg/tabs/input.cpp:1277
+#: src/mmg/tabs/input.cpp:1302
+#: src/mmg/tabs/input.cpp:1313
+#: src/mmg/tabs/input.cpp:1323
+#: src/mmg/tabs/input.cpp:1335
+#: src/mmg/tabs/input.cpp:1391
 msgid "mkvmerge GUI: error"
 msgstr ""
 
 #: src/mmg/tabs/global.cpp:287
 msgid "mkvmerge can read CUE sheets for audio CDs and automatically convert them to chapters. This option controls how the chapter names are created. The sequence '%p' is replaced by the track's PERFORMER, the sequence '%t' by the track's TITLE, '%n' by the track's number and '%N' by the track's number padded with a leading 0 for track numbers < 10. The rest is copied as is. If nothing is entered then '%p - %t' will be used."
-msgstr ""
+msgstr "mkvmerge peut lire les fichiers CUE de CD-audio et les convertit automatiquement en chapitres. Cette option permet de définir les noms des chapitres ainsi créés. La séquence '%p' sera remplacée par l'interprète de la piste, la séquence '%t' par le titre de la piste, '%n' par le numéro de piste et '%N' par le numéro de piste précédé d'un 0 pour les numéros < 10. Le reste sera copié tel quel. Si ce champ n'est pas rempli, la séquence '%p - %t' sera utilisée."
 
-#: src/mmg/tabs/input_general.cpp:190 src/mmg/tabs/input_general.cpp:192
+#: src/mmg/tabs/input_general.cpp:190
+#: src/mmg/tabs/input_general.cpp:192
 msgid "mkvmerge can read and use timecodes from an external text file. This feature is a very advanced feature. Almost all users should leave this entry empty."
 msgstr ""
 
@@ -7746,14 +8059,15 @@ msgstr ""
 
 #: src/mmg/options/mkvmerge.cpp:57
 msgid "mkvmerge executable"
-msgstr ""
+msgstr "Exécutable 'mkvmerge'"
 
 #: src/mmg/mux_dialog.cpp:352
 #, c-format
 msgid "mkvmerge finished with a return code of %d. %s"
 msgstr ""
 
-#: src/mmg/mux_dialog.cpp:305 src/mmg/jobs.cpp:148
+#: src/mmg/mux_dialog.cpp:305
+#: src/mmg/jobs.cpp:148
 msgid "mkvmerge has finished"
 msgstr "mkvmerge a terminé"
 
@@ -7761,31 +8075,34 @@ msgstr "mkvmerge a terminé"
 msgid "mkvmerge has not been compiled with FLAC support but handling of this stream has been requested.\n"
 msgstr ""
 
-#: src/mmg/mux_dialog.cpp:45 src/mmg/jobs.cpp:50
+#: src/mmg/mux_dialog.cpp:45
+#: src/mmg/jobs.cpp:50
 msgid "mkvmerge is running"
 msgstr "mkvmerge est en cours d'exécution"
 
 #: src/mmg/options/mkvmerge.cpp:80
 msgid "mkvmerge options"
-msgstr ""
+msgstr "Options de 'mkvmerge'"
 
 #: src/mmg/mux_dialog.cpp:89
 msgid "mkvmerge output:"
 msgstr ""
 
-#: src/mmg/tabs/global.cpp:275 src/mmg/tabs/global.cpp:277
+#: src/mmg/tabs/global.cpp:275
+#: src/mmg/tabs/global.cpp:277
 msgid "mkvmerge supports two chapter formats: The OGM like text format and the full featured XML format."
-msgstr ""
+msgstr "mkvmerge prend en charge deux formats de chapitres : le format texte simple OGM et le format complet XML."
 
 #: src/mmg/tabs/global.cpp:283
 msgid "mkvmerge supports two chapter formats: The OGM like text format and the full featured XML format. If the OGM format is used and the file's charset is not recognized correctly then this option can be used to correct that. This option is ignored for XML chapter files."
-msgstr ""
+msgstr "mkvmerge prend en charge deux formats de chapitres : le format texte simple OGM et le format complet XML. Si le format OGM est utilisé et si le jeu de caractères du fichier n'est pas correctement reconnu, alors cette option permet de le corriger. Cette option est ignorée pour les fichiers de chapitres XML."
 
 #: src/mmg/tabs/global.cpp:279
 msgid "mkvmerge supports two chapter formats: The OGM like text format and the full featured XML format. This option specifies the language to be associated with chapters if the OGM chapter format is used. It is ignored for XML chapter files."
-msgstr ""
+msgstr "mkvmerge prend en charge deux formats de chapitres : le format texte simple OGM et le format complet XML. Cette option définit la langue associée aux chapitres si le format OGM est utilisé. Cette option est ignorée pour les fichiers de chapitres XML."
 
-#: src/merge/output_control.cpp:262 src/merge/output_control.cpp:302
+#: src/merge/output_control.cpp:262
+#: src/merge/output_control.cpp:302
 msgid "mkvmerge was interrupted by a SIGINT (Ctrl+C?)\n"
 msgstr ""
 
@@ -7807,7 +8124,7 @@ msgstr ""
 
 #: src/mmg/options/mmg.cpp:323
 msgid "mmg"
-msgstr ""
+msgstr "mmg"
 
 #: src/mmg/mmg_dialog.cpp:266
 msgid "mmg debug output"
@@ -7815,7 +8132,7 @@ msgstr ""
 
 #: src/mmg/options/mmg.cpp:178
 msgid "mmg options"
-msgstr ""
+msgstr "Options de 'mmg'"
 
 #: src/mmg/options/languages.cpp:86
 msgid "mmg will reset to the default list if no entry is selected."
@@ -7846,7 +8163,8 @@ msgid "mpeg_ps_reader: Should not have happened #2. %1%"
 msgstr ""
 
 #: src/mmg/header_editor/bool_value_page.cpp:43
-#: src/mmg/tabs/input_general.cpp:108 src/mmg/tabs/input_general.cpp:124
+#: src/mmg/tabs/input_general.cpp:108
+#: src/mmg/tabs/input_general.cpp:124
 msgid "no"
 msgstr "non"
 
@@ -7870,8 +8188,10 @@ msgstr ""
 msgid "no signature hash algorithm"
 msgstr ""
 
-#: src/mmg/mmg_dialog.cpp:994 src/mmg/tabs/input_extra.cpp:88
-#: src/mmg/tabs/input_extra.cpp:115 src/mmg/tabs/input_extra.cpp:118
+#: src/mmg/mmg_dialog.cpp:994
+#: src/mmg/tabs/input_extra.cpp:88
+#: src/mmg/tabs/input_extra.cpp:115
+#: src/mmg/tabs/input_extra.cpp:118
 msgid "none"
 msgstr "aucun"
 
@@ -7911,7 +8231,8 @@ msgstr ""
 msgid "output sampling freq: %1%"
 msgstr ""
 
-#: src/mmg/jobs.cpp:528 src/mmg/jobs.cpp:702
+#: src/mmg/jobs.cpp:528
+#: src/mmg/jobs.cpp:702
 msgid "pending"
 msgstr "en attente"
 
@@ -7955,7 +8276,8 @@ msgstr ""
 msgid "raw data"
 msgstr ""
 
-#: src/info/wxwidgets_ui.cpp:132 src/info/wxwidgets_ui.cpp:164
+#: src/info/wxwidgets_ui.cpp:132
+#: src/info/wxwidgets_ui.cpp:164
 msgid "ready"
 msgstr ""
 
@@ -7975,7 +8297,8 @@ msgstr ""
 msgid "real_reader: Source is not a valid RealMedia file."
 msgstr ""
 
-#: src/mmg/tabs/attachments.cpp:157 src/mmg/tabs/input.cpp:184
+#: src/mmg/tabs/attachments.cpp:157
+#: src/mmg/tabs/input.cpp:184
 msgid "remove"
 msgstr "Enlever"
 
@@ -8039,7 +8362,8 @@ msgstr ""
 msgid "subtitle"
 msgstr "sous-titre"
 
-#: src/mmg/mmg.cpp:64 src/info/mkvinfo.cpp:1118
+#: src/mmg/mmg.cpp:64
+#: src/info/mkvinfo.cpp:1118
 msgid "subtitles"
 msgstr "sous-titres"
 
@@ -8083,12 +8407,20 @@ msgstr ""
 msgid "und (Undetermined)"
 msgstr "und (Indéterminé)"
 
-#: src/input/r_matroska.cpp:90 src/input/r_matroska.cpp:2330
-#: src/input/r_mpeg_ps.cpp:1392 src/common/stereo_mode.cpp:62
-#: src/common/mm_io_win.cpp:165 src/mmg/mmg.cpp:65
-#: src/mmg/header_editor/value_page.cpp:150 src/mmg/tabs/input.cpp:339
-#: src/info/mkvinfo.cpp:813 src/info/mkvinfo.cpp:823 src/info/mkvinfo.cpp:842
-#: src/info/mkvinfo.cpp:871 src/info/mkvinfo.cpp:884 src/info/mkvinfo.cpp:894
+#: src/input/r_matroska.cpp:90
+#: src/input/r_matroska.cpp:2330
+#: src/input/r_mpeg_ps.cpp:1392
+#: src/common/stereo_mode.cpp:62
+#: src/common/mm_io_win.cpp:165
+#: src/mmg/mmg.cpp:65
+#: src/mmg/header_editor/value_page.cpp:150
+#: src/mmg/tabs/input.cpp:339
+#: src/info/mkvinfo.cpp:813
+#: src/info/mkvinfo.cpp:823
+#: src/info/mkvinfo.cpp:842
+#: src/info/mkvinfo.cpp:871
+#: src/info/mkvinfo.cpp:884
+#: src/info/mkvinfo.cpp:894
 #: src/info/mkvinfo.cpp:1120
 msgid "unknown"
 msgstr "inconnu"
@@ -8121,7 +8453,9 @@ msgstr ""
 msgid "verify failed: chapters->CheckMandatory() is false. This should not have happened. Please file a bug report.\n"
 msgstr ""
 
-#: src/input/r_matroska.cpp:93 src/mmg/mmg.cpp:63 src/info/mkvinfo.cpp:1117
+#: src/input/r_matroska.cpp:93
+#: src/mmg/mmg.cpp:63
+#: src/info/mkvinfo.cpp:1117
 msgid "video"
 msgstr ""
 
@@ -8181,7 +8515,8 @@ msgstr ""
 msgid "wrong usage: increase < 0"
 msgstr ""
 
-#: src/common/mm_io.cpp:837 src/common/mm_io.cpp:853
+#: src/common/mm_io.cpp:837
+#: src/common/mm_io.cpp:853
 msgid "wrong usage: read-only with NULL memory"
 msgstr ""
 
@@ -8190,12 +8525,13 @@ msgid "wrong usage: writing to read-only memory"
 msgstr ""
 
 #: src/mmg/header_editor/bool_value_page.cpp:44
-#: src/mmg/tabs/input_general.cpp:107 src/mmg/tabs/input_general.cpp:125
+#: src/mmg/tabs/input_general.cpp:107
+#: src/mmg/tabs/input_general.cpp:125
 msgid "yes"
 msgstr "oui"
 
 #~ msgid "About mkvmerge's GUI"
-#~ msgstr "À propos de l'interface graphique de mkvmerge"
+#~ msgstr "À propos de 'mmg' (interface graphique de mkvmerge)"
 
 #~ msgid "Matroska A/V files (*.mka;*.mkv)|*.mkv;*.mka|%s"
 #~ msgstr "Fichiers Matroska audio/vidéo (*.mka;*.mkv)|*.mkv;*.mka|%s"
