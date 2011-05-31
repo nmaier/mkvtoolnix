@@ -129,17 +129,16 @@ Matroska(TM)
 \-\-tags track:a1:新音频标签\&.xml。
 .RE
 .PP
-\fB\-c\fR, \fB\-\-chapters\fR \fIfilename\fR
+\fB\-c\fR, \fB\-\-chapters\fR \fI文件名\fR
 .RS 4
-Add or replace chapters in the file with the ones from
-filename
-or remove them if
-filename
-is empty\&.
-\fBmkvpropedit\fR(1)
-reads the same XML and simple chapter formats that
+用
+文件名
+中的标签添加或替换文件中的章节，或者如果
+文件名
+为空则移除章节。\fBmkvpropedit\fR(1)
+读取的 XML 及简单章节格式与
 \fBmkvmerge\fR(1)
-reads as well\&.
+所读取的相同。
 .RE
 .PP
 其他选项：
@@ -386,26 +385,26 @@ $ mkvpropedit 影片\&.mkv \-\-tags all:
 .RE
 .\}
 .PP
-Replacing the chapters in a file looks like this:
+像这样替换文件中的章节:
 .sp
 .if n \{\
 .RS 4
 .\}
 .nf
-$ mkvpropedit movie\&.mkv \-\-chapters new\-chapters\&.xml
+$ mkvpropedit 影片\&.mkv \-\-chapters 新章节\&.xml
   
 .fi
 .if n \{\
 .RE
 .\}
 .PP
-Removing all chapters requires leaving out the file name:
+移除所有章节需要将文件名留空:
 .sp
 .if n \{\
 .RS 4
 .\}
 .nf
-$ mkvpropedit movie\&.mkv \-\-chapters \*(Aq\*(Aq
+$ mkvpropedit 影片\&.mkv \-\-chapters \*(Aq\*(Aq
   
 .fi
 .if n \{\
