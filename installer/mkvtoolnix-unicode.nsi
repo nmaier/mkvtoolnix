@@ -213,6 +213,8 @@ Section "Program files" SEC01
   File "/oname=mkvtoolnix.mo" "po\es.mo"
   SetOutPath "$INSTDIR\locale\fr\LC_MESSAGES"
   File "/oname=mkvtoolnix.mo" "po\fr.mo"
+  SetOutPath "$INSTDIR\locale\it\LC_MESSAGES"
+  File "/oname=mkvtoolnix.mo" "po\it.mo"
   SetOutPath "$INSTDIR\locale\ja\LC_MESSAGES"
   File "/oname=mkvtoolnix.mo" "po\ja.mo"
   SetOutPath "$INSTDIR\locale\nl\LC_MESSAGES"
@@ -450,6 +452,10 @@ Section Uninstall
   Delete "$INSTDIR\locale\fr\LC_MESSAGES\mkvtoolnix.mo"
   RMDir "$INSTDIR\locale\fr\LC_MESSAGES"
   RMDir "$INSTDIR\locale\fr"
+
+  Delete "$INSTDIR\locale\it\LC_MESSAGES\mkvtoolnix.mo"
+  RMDir "$INSTDIR\locale\it\LC_MESSAGES"
+  RMDir "$INSTDIR\locale\it"
 
   Delete "$INSTDIR\locale\ja\LC_MESSAGES\mkvtoolnix.mo"
   RMDir "$INSTDIR\locale\ja\LC_MESSAGES"
