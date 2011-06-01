@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2011-05-27 21:37+0200\n"
+"PO-Revision-Date: 2011-06-01 10:59+0200\n"
 "Last-Translator: Moritz Bunkus <moritz@bunkus.org>\n"
 "Language-Team: German <moritz@bunkus.org>\n"
 "Language: de\n"
@@ -2028,6 +2028,10 @@ msgstr "Checksummen für Frames berechnen und ausgeben und Gesprächigkeit auf S
 msgid "Calculate and display checksums of frame contents."
 msgstr "Checksummen für Frames berechnen und ausgeben."
 
+#: src/mmg/options/dialog.cpp:102
+msgid "Cancel"
+msgstr "Abbrechen"
+
 #: src/output/p_mpeg4_p2.cpp:117
 msgid "Cannot convert non-native MPEG4 video frames into native ones if the source container provides neither timecodes nor a number of frames per second.\n"
 msgstr "Nicht-native MPEG4 Videotracks können nicht in native umgewandelt werden, wenn das Quellformat weder Zeitstempel noch die Anzahl der Bilder pro Sekunde zur Verfügung stellt.\n"
@@ -2390,7 +2394,7 @@ msgstr "Gebräuchliche Sprachen"
 msgid "Compression failed: %1%\n"
 msgstr "Die Kompression schlug fehl: %1%\n"
 
-#: src/mmg/tabs/input_extra.cpp:58 src/mmg/tabs/input_extra.cpp:126
+#: src/mmg/tabs/input_extra.cpp:58 src/mmg/tabs/input_extra.cpp:128
 msgid "Compression:"
 msgstr "Komprimierung:"
 
@@ -2635,7 +2639,7 @@ msgstr "Index Tracknummer: %1%"
 msgid "Cues (subentries will be skipped)"
 msgstr "Indices (Untereinträge werden ausgelassen)"
 
-#: src/mmg/tabs/input_extra.cpp:50 src/mmg/tabs/input_extra.cpp:124
+#: src/mmg/tabs/input_extra.cpp:50 src/mmg/tabs/input_extra.cpp:126
 msgid "Cues:"
 msgstr "Cues:"
 
@@ -3331,7 +3335,7 @@ msgstr "Bildrate: %1%"
 msgid "Frame with size %1%%2%%3%"
 msgstr "Frame mit Größe %1%%2%%3%"
 
-#: src/mmg/tabs/input_extra.cpp:131
+#: src/mmg/tabs/input_extra.cpp:133
 msgid "Free-form edit field for user defined options for this track. What you input here is added after all the other options mmg adds so that you could overwrite any of mmg's options for this track. All occurences of the string \"<TID>\" will be replaced by the track's track ID."
 msgstr "Freitexteingabezeile für benutzerdefinierte Optionen für diesen Track. Was Sie hier eingeben wird von mmg nach allen anderen anderen Optionen in die Kommandozeile eingefügt, sodass Sie alle Optionen beliebig überschreiben können. Alle Vorkommen von \"<TID>\" werden durch die Track-ID des Tracks ersetzt."
 
@@ -5031,7 +5035,7 @@ msgstr ""
 msgid "Select values to be applied"
 msgstr "Neuen Werte auswählen"
 
-#: src/mmg/tabs/input_extra.cpp:125
+#: src/mmg/tabs/input_extra.cpp:127
 msgid "Selects for which blocks mkvmerge will produce index entries ( = cue entries). \"default\" is a good choice for almost all situations."
 msgstr "Legt fest, für welche Blöcke mkvmerge Indexeinträge ( = CUE-Einträge) erstellt. \"Standard\" ist in nahezu jeder Situation eine gute Wahl."
 
@@ -5107,7 +5111,7 @@ msgstr "Legt den Abschnitt innerhalb der Matroska-Datei fest, den alle nachfolge
 msgid "Sets the Matroska parser mode to 'fast' (default) or 'full'"
 msgstr "Setzt den Analysemodus für die Matroskadatei auf 'fast' (schnell; Standardwert) oder 'full' (vollständig)"
 
-#: src/mmg/tabs/input_extra.cpp:127
+#: src/mmg/tabs/input_extra.cpp:129
 msgid "Sets the compression algorithm to be used for this track. If no option is selected mkvmerge will decide whether or not to compress and which algorithm to use based on the track type. Most track types are not compressed at all. "
 msgstr "Legt den für diesen Track zu verwendenden Komprimierungsalgorithmus fest. Falls keine Option ausgewählt ist, entscheidet mkvmerge selbständig anhand des Tracktyps darüber, ob Kompression benutzt wird oder nicht und welcher Algorithmus zum Einsatz kommt. Die meisten Tracktypen werden nicht weiter komprimiert."
 
@@ -6397,11 +6401,11 @@ msgstr "Es gab Warnungen, oder mkvmerge wurde unerwartet beendet"
 msgid "This AAC track does not contain valid headers. Could not parse the AAC information.\n"
 msgstr "Dieser AAC-Track enthält keinen gültigen Kopf. Die AAC-Parameter konnten nicht geparst werden.\n"
 
-#: src/output/p_ac3.cpp:81
+#: src/output/p_ac3.cpp:86
 msgid "This AC3 track contains %1% bytes of non-AC3 data at the beginning. This corresponds to a delay of %2%ms. This delay will be used instead of the non-AC3 data.\n"
 msgstr "Dieser AC3-Track enthält am Anfang %1% Byte(s) Nicht-AC3-Daten. Dies entspricht einer Verzögerung von %2%ms. Diese Verzögerung wird anstelle der Nicht-AC3-Daten benutzt.\n"
 
-#: src/output/p_ac3.cpp:93
+#: src/output/p_ac3.cpp:99
 msgid "This AC3 track contains %1% bytes of non-AC3 data which were skipped. The audio/video synchronization may have been lost.\n"
 msgstr "Dieser AC3-Track enthält %1% Byte(s) Nicht-AC3-Daten, die ausgelassen werden. Die Audio-/Video-Synchronisation könnte dadurch beeinträchtigt werden.\n"
 
@@ -6847,7 +6851,7 @@ msgstr "Das vorherige Zielverzeichnis benutzen"
 msgid "Use this directory:"
 msgstr "Dieses Verzeichnis benutzen:"
 
-#: src/mmg/tabs/input_extra.cpp:66 src/mmg/tabs/input_extra.cpp:130
+#: src/mmg/tabs/input_extra.cpp:66 src/mmg/tabs/input_extra.cpp:132
 msgid "User defined options:"
 msgstr "Benutzerdefinierte Optionen:"
 
@@ -7441,7 +7445,7 @@ msgstr "aac_reader: In den ersten %1% Bytes wurde kein gültiges AAC-Paket gefun
 msgid "aborted"
 msgstr "abgebrochen"
 
-#: src/output/p_ac3.cpp:213
+#: src/output/p_ac3.cpp:228
 msgid "ac3_bs_packetizer::add_to_buffer(): Untested code ('size' is odd). If mkvmerge crashes or if the resulting file does not contain the complete and correct audio track, then please contact the author Moritz Bunkus at moritz@bunkus.org.\n"
 msgstr "ac3_bs_packetizer::add_to_buffer(): Ungetesteter Code ('size' ist ungerade). Falls mkvmerge abstürzt oder die resultierende Datei nicht den vollständigen und korrekten Audiotrack enthält, dann wenden Sie sich bitte an den Autor Moritz Bunkus <moritz@bunkus.org>.\n"
 
@@ -7561,8 +7565,8 @@ msgstr "corepicture_reader: Die Quelldatei ist keine gültige CorePanorama-Datei
 msgid "create_track_number: file_num not found. %1%\n"
 msgstr "create_track_number: file_num nicht gefunden. %1%\n"
 
-#: src/mmg/tabs/input_extra.cpp:85 src/mmg/tabs/input_extra.cpp:158
-#: src/mmg/tabs/input_general.cpp:106
+#: src/mmg/tabs/input_general.cpp:106 src/mmg/tabs/input_extra.cpp:85
+#: src/mmg/tabs/input_extra.cpp:160
 msgid "default"
 msgstr "Standard"
 
@@ -8172,7 +8176,7 @@ msgid "no signature hash algorithm"
 msgstr "kein Signaturprüfsummenalgorithmus"
 
 #: src/mmg/mmg_dialog.cpp:994 src/mmg/tabs/input_extra.cpp:88
-#: src/mmg/tabs/input_extra.cpp:115 src/mmg/tabs/input_extra.cpp:118
+#: src/mmg/tabs/input_extra.cpp:116 src/mmg/tabs/input_extra.cpp:119
 msgid "none"
 msgstr "keine"
 

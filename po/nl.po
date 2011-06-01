@@ -2066,6 +2066,10 @@ msgstr "Bereken en controleer de controlesom gebruik meldt niveaul 4."
 msgid "Calculate and display checksums of frame contents."
 msgstr "Calculeert controle som van spoor inhoud."
 
+#: src/mmg/options/dialog.cpp:102
+msgid "Cancel"
+msgstr ""
+
 #: src/output/p_mpeg4_p2.cpp:117
 msgid "Cannot convert non-native MPEG4 video frames into native ones if the source container provides neither timecodes nor a number of frames per second.\n"
 msgstr "Kan geen oneigen MPEG4 video beelden naar eigen converteren als de bron geen van beiden bevat, tijd code's noch het aantal beelden per seconde.\n"
@@ -2449,7 +2453,7 @@ msgid "Compression failed: %1%\n"
 msgstr "Compressie gefaald: %1%\n"
 
 #: src/mmg/tabs/input_extra.cpp:58
-#: src/mmg/tabs/input_extra.cpp:126
+#: src/mmg/tabs/input_extra.cpp:128
 msgid "Compression:"
 msgstr "Compressie:"
 
@@ -2703,7 +2707,7 @@ msgid "Cues (subentries will be skipped)"
 msgstr "Volg document(en) (cue) (sub ingangen worden overgeslagen)"
 
 #: src/mmg/tabs/input_extra.cpp:50
-#: src/mmg/tabs/input_extra.cpp:124
+#: src/mmg/tabs/input_extra.cpp:126
 msgid "Cues:"
 msgstr "Volg document(en) (cue):"
 
@@ -3423,7 +3427,7 @@ msgstr "Beeld verhouding: %1%"
 msgid "Frame with size %1%%2%%3%"
 msgstr "Beeld met grootte %1%%2%%3%"
 
-#: src/mmg/tabs/input_extra.cpp:131
+#: src/mmg/tabs/input_extra.cpp:133
 msgid "Free-form edit field for user defined options for this track. What you input here is added after all the other options mmg adds so that you could overwrite any of mmg's options for this track. All occurences of the string \"<TID>\" will be replaced by the track's track ID."
 msgstr "Vrij-formulier bewerk veld voor gebruiker gedefinieerde optie voor dit spoor. Wat je hier ingeeft, wordt toegevoegd na alle andere opties die mmg toevoegt. Daardoor kan je enig andere mmg optie overschrijven voor dit spoor. Alle gebeurtenissen van de reeks\"<TID>\" zullen vervangen worden door het sporen, spoor ID."
 
@@ -5180,7 +5184,7 @@ msgstr "Selecteer de talen die bovenaan moeten staan van de uitklaplijst."
 msgid "Select values to be applied"
 msgstr "Selecteer de bij te voegen waarde"
 
-#: src/mmg/tabs/input_extra.cpp:125
+#: src/mmg/tabs/input_extra.cpp:127
 msgid "Selects for which blocks mkvmerge will produce index entries ( = cue entries). \"default\" is a good choice for almost all situations."
 msgstr "Selecteerd voor welke blokken mkvmerge index ingangen aanmaakt ( = volg document(en) (cue) ingangen). \"standaard\" is een goede keuze voor bijna alles situaties."
 
@@ -5255,7 +5259,7 @@ msgstr "Stelt het Matroska bestand sectie in zodat alle volgende voeg toe/zet/ve
 msgid "Sets the Matroska parser mode to 'fast' (default) or 'full'"
 msgstr "Zet de Matroska ontleed mode op 'snel' (standaard) of 'volledigl'"
 
-#: src/mmg/tabs/input_extra.cpp:127
+#: src/mmg/tabs/input_extra.cpp:129
 msgid "Sets the compression algorithm to be used for this track. If no option is selected mkvmerge will decide whether or not to compress and which algorithm to use based on the track type. Most track types are not compressed at all. "
 msgstr "Stelt de compressie algoritme in voor dit spoor. Indien neits geselecteerd dan zal mkvmerge zelf beslissen wat te selecteren op basis van het spoor type. Meeste sporen zijn niet eens gecomprimeerd. "
 
@@ -6575,11 +6579,11 @@ msgstr "Er waren waarchuwingen, of het proces is geëindigd."
 msgid "This AAC track does not contain valid headers. Could not parse the AAC information.\n"
 msgstr "Dit AAC spoor bevat geen geldige koppen. Kon de AAC informatie niet ontleden.\n"
 
-#: src/output/p_ac3.cpp:81
+#: src/output/p_ac3.cpp:86
 msgid "This AC3 track contains %1% bytes of non-AC3 data at the beginning. This corresponds to a delay of %2%ms. This delay will be used instead of the non-AC3 data.\n"
 msgstr "Dit AC3 spoor bevat %1% bytes aan niet-AC3 data aan het begin. Wat leidt tot een vertraging van %2%ms. Deze vertraging zal worden gebruikt i.p.v de niet-AC3 data.\n"
 
-#: src/output/p_ac3.cpp:93
+#: src/output/p_ac3.cpp:99
 msgid "This AC3 track contains %1% bytes of non-AC3 data which were skipped. The audio/video synchronization may have been lost.\n"
 msgstr "Dir AC3 spoor bevat %1% bytes aan niet-AC3 data welke zijn overgeslagen. De audio/video synchronisatie kan verloren zijn gegaan.\n"
 
@@ -7032,7 +7036,7 @@ msgid "Use this directory:"
 msgstr "Gebruik deze map:"
 
 #: src/mmg/tabs/input_extra.cpp:66
-#: src/mmg/tabs/input_extra.cpp:130
+#: src/mmg/tabs/input_extra.cpp:132
 msgid "User defined options:"
 msgstr "Gebruiker gedefinieerde opties"
 
@@ -7666,7 +7670,7 @@ msgstr "aac_lezer: Geen geldig AAC pakket gevonden in de eerste %1% bytes.\n"
 msgid "aborted"
 msgstr "afgebroken"
 
-#: src/output/p_ac3.cpp:213
+#: src/output/p_ac3.cpp:228
 msgid "ac3_bs_packetizer::add_to_buffer(): Untested code ('size' is odd). If mkvmerge crashes or if the resulting file does not contain the complete and correct audio track, then please contact the author Moritz Bunkus at moritz@bunkus.org.\n"
 msgstr "ac3_bs_packetizer::add_to_buffer(): Niet geteste code ('grootte' is vreemd). Als mkvmerge vast loopt of als het resultaat bestand niet het gehele en correcte audio spoor bevat, neem dan a.u.b kontakt op met de autheur Moritz Bunkus via moritz@bunkus.org.\n"
 
@@ -7791,9 +7795,9 @@ msgstr "corepicture_lezer: Bron is geen geldig CorePanorama bestand."
 msgid "create_track_number: file_num not found. %1%\n"
 msgstr "create_track_number: file_num niet gevonden. %1%\n"
 
-#: src/mmg/tabs/input_extra.cpp:85
-#: src/mmg/tabs/input_extra.cpp:158
 #: src/mmg/tabs/input_general.cpp:106
+#: src/mmg/tabs/input_extra.cpp:85
+#: src/mmg/tabs/input_extra.cpp:160
 msgid "default"
 msgstr "standaard"
 
@@ -8437,8 +8441,8 @@ msgstr "geen hash algoritme handtekening"
 
 #: src/mmg/mmg_dialog.cpp:994
 #: src/mmg/tabs/input_extra.cpp:88
-#: src/mmg/tabs/input_extra.cpp:115
-#: src/mmg/tabs/input_extra.cpp:118
+#: src/mmg/tabs/input_extra.cpp:116
+#: src/mmg/tabs/input_extra.cpp:119
 msgid "none"
 msgstr "niets"
 

@@ -1995,6 +1995,10 @@ msgstr "チェックサムを計算・表示し、冗長レベル4を使用し�
 msgid "Calculate and display checksums of frame contents."
 msgstr "フレームの内容のチェックサムを計算し表示します。"
 
+#: src/mmg/options/dialog.cpp:102
+msgid "Cancel"
+msgstr ""
+
 #: src/output/p_mpeg4_p2.cpp:117
 msgid "Cannot convert non-native MPEG4 video frames into native ones if the source container provides neither timecodes nor a number of frames per second.\n"
 msgstr "ソースコンテナがタイムコードもfpsも供給しない場合、ネイティブでないMPEG4ビデオをネイティブに変換することはできません。\n"
@@ -2357,7 +2361,7 @@ msgstr "よく使用される言語"
 msgid "Compression failed: %1%\n"
 msgstr "圧縮に失敗しました：%1%\n"
 
-#: src/mmg/tabs/input_extra.cpp:58 src/mmg/tabs/input_extra.cpp:126
+#: src/mmg/tabs/input_extra.cpp:58 src/mmg/tabs/input_extra.cpp:128
 msgid "Compression:"
 msgstr "圧縮："
 
@@ -2602,7 +2606,7 @@ msgstr "CUEトラック：%1%"
 msgid "Cues (subentries will be skipped)"
 msgstr "CUE (サブエントリはスキップされます)"
 
-#: src/mmg/tabs/input_extra.cpp:50 src/mmg/tabs/input_extra.cpp:124
+#: src/mmg/tabs/input_extra.cpp:50 src/mmg/tabs/input_extra.cpp:126
 msgid "Cues:"
 msgstr "キュー："
 
@@ -3298,7 +3302,7 @@ msgstr "フレームレート：%1%"
 msgid "Frame with size %1%%2%%3%"
 msgstr "フレームサイズ：%1%%2%%3%"
 
-#: src/mmg/tabs/input_extra.cpp:131
+#: src/mmg/tabs/input_extra.cpp:133
 msgid "Free-form edit field for user defined options for this track. What you input here is added after all the other options mmg adds so that you could overwrite any of mmg's options for this track. All occurences of the string \"<TID>\" will be replaced by the track's track ID."
 msgstr "このトラックのユーザー定義オプションを自由に入力するフィールドです。ここに入力したオプションは、このトラックのmmgのオプションを上書きできるようにmmgが付加する全てのオプションの後ろに付加されます。文字列\"<TID>\"は全てこのトラックのトラックIDに置き換えられます。"
 
@@ -4997,7 +5001,7 @@ msgstr ""
 msgid "Select values to be applied"
 msgstr "適用する値を選択してください"
 
-#: src/mmg/tabs/input_extra.cpp:125
+#: src/mmg/tabs/input_extra.cpp:127
 msgid "Selects for which blocks mkvmerge will produce index entries ( = cue entries). \"default\" is a good choice for almost all situations."
 msgstr "mkvmergeがインデックスエントリ（＝キューエントリ）をどのブロックに生成するかを指定します。殆どの場合\"デフォルト\"がよいでしょう。"
 
@@ -5068,7 +5072,7 @@ msgstr "後に続く全てのadd・set・deleteのアクションが作用する
 msgid "Sets the Matroska parser mode to 'fast' (default) or 'full'"
 msgstr "Matroskaパーサのモードを'fast'（デフォルト）もしくは'full'に設定します"
 
-#: src/mmg/tabs/input_extra.cpp:127
+#: src/mmg/tabs/input_extra.cpp:129
 msgid "Sets the compression algorithm to be used for this track. If no option is selected mkvmerge will decide whether or not to compress and which algorithm to use based on the track type. Most track types are not compressed at all. "
 msgstr "このトラックに使用される圧縮方式を指定します。どのオプションも選択されなければ、mkvmergeが、圧縮するかどうかと、そのトラックタイプにどのアルゴリズムを使用するかを決定します。殆どのトラックタイプは全く圧縮されません。"
 
@@ -6334,11 +6338,11 @@ msgstr "警告が発せられるか、プロセスが終了されました。"
 msgid "This AAC track does not contain valid headers. Could not parse the AAC information.\n"
 msgstr "このAACトラックは有効なヘッダを含んでいません。AACの情報を解析することができませんでした。\n"
 
-#: src/output/p_ac3.cpp:81
+#: src/output/p_ac3.cpp:86
 msgid "This AC3 track contains %1% bytes of non-AC3 data at the beginning. This corresponds to a delay of %2%ms. This delay will be used instead of the non-AC3 data.\n"
 msgstr "このAC3トラックは%1%バイトのAC3ではないデータを含んでいます。これは%2%ミリ秒のディレイに相当します。AC3ではないデータの代わりにこのディレイが使用されます。\n"
 
-#: src/output/p_ac3.cpp:93
+#: src/output/p_ac3.cpp:99
 msgid "This AC3 track contains %1% bytes of non-AC3 data which were skipped. The audio/video synchronization may have been lost.\n"
 msgstr "このAC3トラックは%1%バイトのAC3ではないデータを含んでおり、それはスキップされました。オーディオ・ビデオの同期は失われました。\n"
 
@@ -6772,7 +6776,7 @@ msgstr "前に使用された出力ディレクトリを使用する"
 msgid "Use this directory:"
 msgstr "このディレクトリを使用する："
 
-#: src/mmg/tabs/input_extra.cpp:66 src/mmg/tabs/input_extra.cpp:130
+#: src/mmg/tabs/input_extra.cpp:66 src/mmg/tabs/input_extra.cpp:132
 msgid "User defined options:"
 msgstr "ユーザー定義オプション："
 
@@ -7352,7 +7356,7 @@ msgstr "aac_reader：最初の%1%バイトで有効なAACパケットが見つ�
 msgid "aborted"
 msgstr "中断"
 
-#: src/output/p_ac3.cpp:213
+#: src/output/p_ac3.cpp:228
 msgid "ac3_bs_packetizer::add_to_buffer(): Untested code ('size' is odd). If mkvmerge crashes or if the resulting file does not contain the complete and correct audio track, then please contact the author Moritz Bunkus at moritz@bunkus.org.\n"
 msgstr "ac3_bs_packetizer::add_to_buffer(): テストされていないコードです('size'が奇数)。mkvmergeがクラッシュしたり、出力されたファイルのオーディオトラックが完全で正しいものでなかった場合、作者 Moritz Bunkus に moritz@bunkus.org 宛で連絡をお願いします。\n"
 
@@ -7472,8 +7476,8 @@ msgstr "corepicture_reader：ソースは有効なCorePanoramaファイルでは
 msgid "create_track_number: file_num not found. %1%\n"
 msgstr "create_track_number：file_numが見つかりませんでした。%1%\n"
 
-#: src/mmg/tabs/input_extra.cpp:85 src/mmg/tabs/input_extra.cpp:158
-#: src/mmg/tabs/input_general.cpp:106
+#: src/mmg/tabs/input_general.cpp:106 src/mmg/tabs/input_extra.cpp:85
+#: src/mmg/tabs/input_extra.cpp:160
 msgid "default"
 msgstr "デフォルト"
 
@@ -8085,7 +8089,7 @@ msgid "no signature hash algorithm"
 msgstr "署名ハッシュアルゴリズムなし"
 
 #: src/mmg/mmg_dialog.cpp:994 src/mmg/tabs/input_extra.cpp:88
-#: src/mmg/tabs/input_extra.cpp:115 src/mmg/tabs/input_extra.cpp:118
+#: src/mmg/tabs/input_extra.cpp:116 src/mmg/tabs/input_extra.cpp:119
 msgid "none"
 msgstr "無し"
 

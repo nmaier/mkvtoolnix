@@ -1998,6 +1998,10 @@ msgstr ""
 msgid "Calculate and display checksums of frame contents."
 msgstr ""
 
+#: src/mmg/options/dialog.cpp:102
+msgid "Cancel"
+msgstr ""
+
 #: src/output/p_mpeg4_p2.cpp:117
 msgid "Cannot convert non-native MPEG4 video frames into native ones if the source container provides neither timecodes nor a number of frames per second.\n"
 msgstr ""
@@ -2360,7 +2364,7 @@ msgstr "Genel diller"
 msgid "Compression failed: %1%\n"
 msgstr "Sıkıştırma başarısız oldu: %1%\n"
 
-#: src/mmg/tabs/input_extra.cpp:58 src/mmg/tabs/input_extra.cpp:126
+#: src/mmg/tabs/input_extra.cpp:58 src/mmg/tabs/input_extra.cpp:128
 msgid "Compression:"
 msgstr "Sıkıştırma:"
 
@@ -2605,7 +2609,7 @@ msgstr "Cue izi: %1%"
 msgid "Cues (subentries will be skipped)"
 msgstr "Cue'lar (alt girdiler atlanacaktır)"
 
-#: src/mmg/tabs/input_extra.cpp:50 src/mmg/tabs/input_extra.cpp:124
+#: src/mmg/tabs/input_extra.cpp:50 src/mmg/tabs/input_extra.cpp:126
 msgid "Cues:"
 msgstr "Cue'lar:"
 
@@ -3301,7 +3305,7 @@ msgstr "Kare oranı: %1%"
 msgid "Frame with size %1%%2%%3%"
 msgstr "%1%%2%%3% boyutlu kare"
 
-#: src/mmg/tabs/input_extra.cpp:131
+#: src/mmg/tabs/input_extra.cpp:133
 msgid "Free-form edit field for user defined options for this track. What you input here is added after all the other options mmg adds so that you could overwrite any of mmg's options for this track. All occurences of the string \"<TID>\" will be replaced by the track's track ID."
 msgstr ""
 
@@ -4993,7 +4997,7 @@ msgstr "Aşağı açılır dil listesinde en üstte gösterilmesini istediğiniz
 msgid "Select values to be applied"
 msgstr "Uygulamak için değerleri seçin"
 
-#: src/mmg/tabs/input_extra.cpp:125
+#: src/mmg/tabs/input_extra.cpp:127
 msgid "Selects for which blocks mkvmerge will produce index entries ( = cue entries). \"default\" is a good choice for almost all situations."
 msgstr ""
 
@@ -5057,7 +5061,7 @@ msgstr ""
 msgid "Sets the Matroska parser mode to 'fast' (default) or 'full'"
 msgstr ""
 
-#: src/mmg/tabs/input_extra.cpp:127
+#: src/mmg/tabs/input_extra.cpp:129
 msgid "Sets the compression algorithm to be used for this track. If no option is selected mkvmerge will decide whether or not to compress and which algorithm to use based on the track type. Most track types are not compressed at all. "
 msgstr ""
 
@@ -6281,11 +6285,11 @@ msgstr "Uyarılar vardı ya da işlem sonlandırıldı."
 msgid "This AAC track does not contain valid headers. Could not parse the AAC information.\n"
 msgstr ""
 
-#: src/output/p_ac3.cpp:81
+#: src/output/p_ac3.cpp:86
 msgid "This AC3 track contains %1% bytes of non-AC3 data at the beginning. This corresponds to a delay of %2%ms. This delay will be used instead of the non-AC3 data.\n"
 msgstr ""
 
-#: src/output/p_ac3.cpp:93
+#: src/output/p_ac3.cpp:99
 msgid "This AC3 track contains %1% bytes of non-AC3 data which were skipped. The audio/video synchronization may have been lost.\n"
 msgstr ""
 
@@ -6711,7 +6715,7 @@ msgstr "Önceki çıktı dizinini kullan"
 msgid "Use this directory:"
 msgstr "Bu dizini kullan:"
 
-#: src/mmg/tabs/input_extra.cpp:66 src/mmg/tabs/input_extra.cpp:130
+#: src/mmg/tabs/input_extra.cpp:66 src/mmg/tabs/input_extra.cpp:132
 msgid "User defined options:"
 msgstr "Kullanıcı tanımlı seçenekler:"
 
@@ -7275,7 +7279,7 @@ msgstr ""
 msgid "aborted"
 msgstr "durduruldu"
 
-#: src/output/p_ac3.cpp:213
+#: src/output/p_ac3.cpp:228
 msgid "ac3_bs_packetizer::add_to_buffer(): Untested code ('size' is odd). If mkvmerge crashes or if the resulting file does not contain the complete and correct audio track, then please contact the author Moritz Bunkus at moritz@bunkus.org.\n"
 msgstr ""
 
@@ -7397,8 +7401,8 @@ msgstr ""
 msgid "create_track_number: file_num not found. %1%\n"
 msgstr ""
 
-#: src/mmg/tabs/input_extra.cpp:85 src/mmg/tabs/input_extra.cpp:158
-#: src/mmg/tabs/input_general.cpp:106
+#: src/mmg/tabs/input_general.cpp:106 src/mmg/tabs/input_extra.cpp:85
+#: src/mmg/tabs/input_extra.cpp:160
 msgid "default"
 msgstr "varsayılan"
 
@@ -8006,7 +8010,7 @@ msgid "no signature hash algorithm"
 msgstr ""
 
 #: src/mmg/mmg_dialog.cpp:994 src/mmg/tabs/input_extra.cpp:88
-#: src/mmg/tabs/input_extra.cpp:115 src/mmg/tabs/input_extra.cpp:118
+#: src/mmg/tabs/input_extra.cpp:116 src/mmg/tabs/input_extra.cpp:119
 msgid "none"
 msgstr "yok"
 

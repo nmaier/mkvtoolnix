@@ -2067,6 +2067,10 @@ msgstr "Calcular y mostrar checksums, y usar verbosity en nivel 4."
 msgid "Calculate and display checksums of frame contents."
 msgstr "Calcula y muestra checksums del contenido de un fotograma."
 
+#: src/mmg/options/dialog.cpp:102
+msgid "Cancel"
+msgstr ""
+
 #: src/output/p_mpeg4_p2.cpp:117
 msgid "Cannot convert non-native MPEG4 video frames into native ones if the source container provides neither timecodes nor a number of frames per second.\n"
 msgstr "No se pueden convertir los fotogramas de un vídeo que de origen no es MPEG4 a este formato, si la fuente del contenedor no proporciona los códigos de tiempo ni el número de fotogramas por segundo.\n"
@@ -2450,7 +2454,7 @@ msgid "Compression failed: %1%\n"
 msgstr "La compresión ha fallado: %1%\n"
 
 #: src/mmg/tabs/input_extra.cpp:58
-#: src/mmg/tabs/input_extra.cpp:126
+#: src/mmg/tabs/input_extra.cpp:128
 msgid "Compression:"
 msgstr "Compresión:"
 
@@ -2710,7 +2714,7 @@ msgid "Cues (subentries will be skipped)"
 msgstr "Índices (los subregistros serán omitidos)"
 
 #: src/mmg/tabs/input_extra.cpp:50
-#: src/mmg/tabs/input_extra.cpp:124
+#: src/mmg/tabs/input_extra.cpp:126
 msgid "Cues:"
 msgstr "Índices:"
 
@@ -3444,7 +3448,7 @@ msgstr "Velocidad de fotograma: %1%"
 msgid "Frame with size %1%%2%%3%"
 msgstr "Fotograma con tamaño %1%%2%%3%"
 
-#: src/mmg/tabs/input_extra.cpp:131
+#: src/mmg/tabs/input_extra.cpp:133
 msgid "Free-form edit field for user defined options for this track. What you input here is added after all the other options mmg adds so that you could overwrite any of mmg's options for this track. All occurences of the string \"<TID>\" will be replaced by the track's track ID."
 msgstr "El campo de edición puede ser utilizado de forma libre por el usuario para definir las opciones de esta pista. Después de que mmg añada las otras opciones, la de este campo es la que usted debería volver a escribir en cualquiera de las opciones de mmg para esta pista. Todas las apariciones de la palabra \"<TID>\" serán sustituidas por las ID de las pistas."
 
@@ -5208,7 +5212,7 @@ msgstr "Selecciona los valores que se aplicarán"
 
 #  ( = cue entries)
 # ¿Dejarlo en idioma original?
-#: src/mmg/tabs/input_extra.cpp:125
+#: src/mmg/tabs/input_extra.cpp:127
 msgid "Selects for which blocks mkvmerge will produce index entries ( = cue entries). \"default\" is a good choice for almost all situations."
 msgstr "Selecciona para qué bloques mkvmerge creará los registros en el índice ( = cue entries). \"predefinido\" es una buena elección para casi todas las situaciones."
 
@@ -5283,7 +5287,7 @@ msgstr "Establece la seccion del archivo Matroska para que todas las siguientes 
 msgid "Sets the Matroska parser mode to 'fast' (default) or 'full'"
 msgstr "Establecer el modo análisis de Matroska en «rápido» (predefinido) o «total»"
 
-#: src/mmg/tabs/input_extra.cpp:127
+#: src/mmg/tabs/input_extra.cpp:129
 msgid "Sets the compression algorithm to be used for this track. If no option is selected mkvmerge will decide whether or not to compress and which algorithm to use based on the track type. Most track types are not compressed at all. "
 msgstr "Establece el algorítmo de compresión para ser usado en esta pista. Si no hsa seleccionado ninguna opción, mkvmerge decidirá si comprimirlo o no, y qué algoritmo usar basándose en el tipo de pista. La mayoría de los tipos de pista no se comprimen."
 
@@ -6607,11 +6611,11 @@ msgstr "Se han producido advertencias o el proceso ha terminado."
 msgid "This AAC track does not contain valid headers. Could not parse the AAC information.\n"
 msgstr "Esta pista AAC no contiene encabezados válidos. La información AAC no ha podido ser analizada.\n"
 
-#: src/output/p_ac3.cpp:81
+#: src/output/p_ac3.cpp:86
 msgid "This AC3 track contains %1% bytes of non-AC3 data at the beginning. This corresponds to a delay of %2%ms. This delay will be used instead of the non-AC3 data.\n"
 msgstr "Esta pista AC3 contiene %1% bytes de información que no son datos AC3 en el inicio. Esto corresponde a un retraso (delay) de %2%ms. Este retraso (delay) será utilizado en lugar de los datos que no son AC3.\n"
 
-#: src/output/p_ac3.cpp:93
+#: src/output/p_ac3.cpp:99
 msgid "This AC3 track contains %1% bytes of non-AC3 data which were skipped. The audio/video synchronization may have been lost.\n"
 msgstr "Esta pista AC3 contiene %1% bytes de información que no son datos AC3, por lo que serán omitidos. La sincronización de audio/vídeo ha podido perderse.\n"
 
@@ -7064,7 +7068,7 @@ msgid "Use this directory:"
 msgstr "Usar este directorio:"
 
 #: src/mmg/tabs/input_extra.cpp:66
-#: src/mmg/tabs/input_extra.cpp:130
+#: src/mmg/tabs/input_extra.cpp:132
 msgid "User defined options:"
 msgstr "Opciones definidas por el usuario:"
 
@@ -7699,7 +7703,7 @@ msgstr "aac_reader: Al inicio se encontró un paquete ACC no válido %1% bytes.\
 msgid "aborted"
 msgstr "cancelado"
 
-#: src/output/p_ac3.cpp:213
+#: src/output/p_ac3.cpp:228
 msgid "ac3_bs_packetizer::add_to_buffer(): Untested code ('size' is odd). If mkvmerge crashes or if the resulting file does not contain the complete and correct audio track, then please contact the author Moritz Bunkus at moritz@bunkus.org.\n"
 msgstr "ac3_bs_packetizer::add_to_buffer(): código no probado (el tamaño es extraño). Si mkvmerge se bloquea o si el archivo generado no contiene la pista de audio correcta y completa, contacta con el autor, Moritz Bunkus, en moritz@bunkus.org.\n"
 
@@ -7824,9 +7828,9 @@ msgstr "corepicture_reader: El archivo de origen no es un CorePanorama válido."
 msgid "create_track_number: file_num not found. %1%\n"
 msgstr "create_track_number: file_num no se encuentra. %1%\n"
 
-#: src/mmg/tabs/input_extra.cpp:85
-#: src/mmg/tabs/input_extra.cpp:158
 #: src/mmg/tabs/input_general.cpp:106
+#: src/mmg/tabs/input_extra.cpp:85
+#: src/mmg/tabs/input_extra.cpp:160
 msgid "default"
 msgstr "Predefinido"
 
@@ -8470,8 +8474,8 @@ msgstr "ninguna firma con función algorítmica"
 
 #: src/mmg/mmg_dialog.cpp:994
 #: src/mmg/tabs/input_extra.cpp:88
-#: src/mmg/tabs/input_extra.cpp:115
-#: src/mmg/tabs/input_extra.cpp:118
+#: src/mmg/tabs/input_extra.cpp:116
+#: src/mmg/tabs/input_extra.cpp:119
 msgid "none"
 msgstr "ninguno"
 

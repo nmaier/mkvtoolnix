@@ -2071,6 +2071,10 @@ msgstr "Підраховувати і відображати контрольн�
 msgid "Calculate and display checksums of frame contents."
 msgstr "Обчислення і відображення контрольних сум наповнень кадру."
 
+#: src/mmg/options/dialog.cpp:102
+msgid "Cancel"
+msgstr ""
+
 #: src/output/p_mpeg4_p2.cpp:117
 msgid "Cannot convert non-native MPEG4 video frames into native ones if the source container provides neither timecodes nor a number of frames per second.\n"
 msgstr "Не має можливості перетворювати ненативні MPEG4 відео кадри у нативні, якщо вихідний контейнер не забезпечує підтримки ні тайм-кодів, ні кількості кадрів в секунду.\n"
@@ -2454,7 +2458,7 @@ msgid "Compression failed: %1%\n"
 msgstr "Стиснення перервано: %1%\n"
 
 #: src/mmg/tabs/input_extra.cpp:58
-#: src/mmg/tabs/input_extra.cpp:126
+#: src/mmg/tabs/input_extra.cpp:128
 msgid "Compression:"
 msgstr "Стиснення:"
 
@@ -2708,7 +2712,7 @@ msgid "Cues (subentries will be skipped)"
 msgstr "Cues (дочірні записи будуть пропущені)"
 
 #: src/mmg/tabs/input_extra.cpp:50
-#: src/mmg/tabs/input_extra.cpp:124
+#: src/mmg/tabs/input_extra.cpp:126
 msgid "Cues:"
 msgstr "Cue-списки:"
 
@@ -3427,7 +3431,7 @@ msgstr "Частота кадрів: %1%"
 msgid "Frame with size %1%%2%%3%"
 msgstr "Кадр з розміром %1%%2%%3%"
 
-#: src/mmg/tabs/input_extra.cpp:131
+#: src/mmg/tabs/input_extra.cpp:133
 msgid "Free-form edit field for user defined options for this track. What you input here is added after all the other options mmg adds so that you could overwrite any of mmg's options for this track. All occurences of the string \"<TID>\" will be replaced by the track's track ID."
 msgstr "Поле для призначених користувачем опцій для даної доріжки. Те, що ви тут введете, додається після всіх інших опцій, заданих mmg, тобто таким чином ви можете перезаписувати будь-які опції mmg для цієї доріжки. При появі в рядках, \"<TID>\" буде замінено на відповідні ID доріжок."
 
@@ -5184,7 +5188,7 @@ msgstr "Оберіть мови, які ви хочете щоб відобра�
 msgid "Select values to be applied"
 msgstr "Виберіть значення, які повинні бути застосовані"
 
-#: src/mmg/tabs/input_extra.cpp:125
+#: src/mmg/tabs/input_extra.cpp:127
 msgid "Selects for which blocks mkvmerge will produce index entries ( = cue entries). \"default\" is a good choice for almost all situations."
 msgstr "Обирається для яких блоків mkvmerge буде створювати індексні записи ( = cue записи). \"Типово\" є хорошим вибором майже для всіх ситуацій."
 
@@ -5258,7 +5262,7 @@ msgstr "Встановлюється розділ файлу Matroska, над я
 msgid "Sets the Matroska parser mode to 'fast' (default) or 'full'"
 msgstr "Встановлюється режим аналізатора Matroska як 'fast' (типово) або як 'full'"
 
-#: src/mmg/tabs/input_extra.cpp:127
+#: src/mmg/tabs/input_extra.cpp:129
 msgid "Sets the compression algorithm to be used for this track. If no option is selected mkvmerge will decide whether or not to compress and which algorithm to use based on the track type. Most track types are not compressed at all. "
 msgstr "Встановлюється алгоритм стиснення, що буде використовуватися для даної доріжки. Якщо нічого не вибрано, то mkvmerge буде вирішувати, чи застосовувати взагалі стиненння і який алгоритм використовувати для цього, виходячи з типу доріжки. Доріжки більшості типів не стискаються зовсім."
 
@@ -6577,11 +6581,11 @@ msgstr "Виникли попередження, або процес був пе
 msgid "This AAC track does not contain valid headers. Could not parse the AAC information.\n"
 msgstr "Дана доріжка AAC не містить корректних заголовків. Не можливо проаналізувати інформацію AAC.\n"
 
-#: src/output/p_ac3.cpp:81
+#: src/output/p_ac3.cpp:86
 msgid "This AC3 track contains %1% bytes of non-AC3 data at the beginning. This corresponds to a delay of %2%ms. This delay will be used instead of the non-AC3 data.\n"
 msgstr "Дана доріжка AAC містить %1% байт не-AC3 даних на початку. Це відповідає затримці %2% мс. Ця затримка буде використовуватися замість не-AC3 даних.\n"
 
-#: src/output/p_ac3.cpp:93
+#: src/output/p_ac3.cpp:99
 msgid "This AC3 track contains %1% bytes of non-AC3 data which were skipped. The audio/video synchronization may have been lost.\n"
 msgstr "Дана доріжка AAC містить %1% байт не-AC3 даних, що були пропущені. Синхронізація аудіо і відео можливо була втрачена.\n"
 
@@ -7034,7 +7038,7 @@ msgid "Use this directory:"
 msgstr "Використовувати обрану теку:"
 
 #: src/mmg/tabs/input_extra.cpp:66
-#: src/mmg/tabs/input_extra.cpp:130
+#: src/mmg/tabs/input_extra.cpp:132
 msgid "User defined options:"
 msgstr "Задані користувачем опції:"
 
@@ -7669,7 +7673,7 @@ msgstr "aac_reader: Жодного корректного пакету AAC не 
 msgid "aborted"
 msgstr "перервано"
 
-#: src/output/p_ac3.cpp:213
+#: src/output/p_ac3.cpp:228
 msgid "ac3_bs_packetizer::add_to_buffer(): Untested code ('size' is odd). If mkvmerge crashes or if the resulting file does not contain the complete and correct audio track, then please contact the author Moritz Bunkus at moritz@bunkus.org.\n"
 msgstr "ac3_bs_packetizer::add_to_buffer(): Неперевірений код ('size' є нестандартним). Якщо робота mkvmerge аварійно принилася або отриманий файл не містить повної і корректної звукової доріжки, то, будь ласка, зв'яжіться з автором Moritz Bunkus через <moritz@bunkus.org>.\n"
 
@@ -7794,9 +7798,9 @@ msgstr "corepicture_reader: Джерельний файл не є допусти
 msgid "create_track_number: file_num not found. %1%\n"
 msgstr "create_track_number: file_num не знайдений. %1%\n"
 
-#: src/mmg/tabs/input_extra.cpp:85
-#: src/mmg/tabs/input_extra.cpp:158
 #: src/mmg/tabs/input_general.cpp:106
+#: src/mmg/tabs/input_extra.cpp:85
+#: src/mmg/tabs/input_extra.cpp:160
 msgid "default"
 msgstr "Типово"
 
@@ -8440,8 +8444,8 @@ msgstr "немає сигнатури хеш алгоритму"
 
 #: src/mmg/mmg_dialog.cpp:994
 #: src/mmg/tabs/input_extra.cpp:88
-#: src/mmg/tabs/input_extra.cpp:115
-#: src/mmg/tabs/input_extra.cpp:118
+#: src/mmg/tabs/input_extra.cpp:116
+#: src/mmg/tabs/input_extra.cpp:119
 msgid "none"
 msgstr "не використовувати"
 

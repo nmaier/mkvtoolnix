@@ -2043,6 +2043,10 @@ msgstr "計算並顯示檢查碼且使用贅言等級 4。"
 msgid "Calculate and display checksums of frame contents."
 msgstr "僅顯示內容的摘要，而非所有元件。"
 
+#: src/mmg/options/dialog.cpp:102
+msgid "Cancel"
+msgstr ""
+
 #: src/output/p_mpeg4_p2.cpp:117
 msgid "Cannot convert non-native MPEG4 video frames into native ones if the source container provides neither timecodes nor a number of frames per second.\n"
 msgstr "在來源容器不提供時間碼或畫格率值的情況下，無法將非原生 MPEG4 視訊畫格轉換為原生畫格。\n"
@@ -2426,7 +2430,7 @@ msgid "Compression failed: %1%\n"
 msgstr "壓縮失敗: %1%\n"
 
 #: src/mmg/tabs/input_extra.cpp:58
-#: src/mmg/tabs/input_extra.cpp:126
+#: src/mmg/tabs/input_extra.cpp:128
 msgid "Compression:"
 msgstr "壓縮方式:"
 
@@ -2680,7 +2684,7 @@ msgid "Cues (subentries will be skipped)"
 msgstr "Cue 表單 (子項目將被跳過)"
 
 #: src/mmg/tabs/input_extra.cpp:50
-#: src/mmg/tabs/input_extra.cpp:124
+#: src/mmg/tabs/input_extra.cpp:126
 msgid "Cues:"
 msgstr "Cue:"
 
@@ -3400,7 +3404,7 @@ msgstr "畫格率: %1%"
 msgid "Frame with size %1%%2%%3%"
 msgstr "畫格，大小為 %1%%2%%3%"
 
-#: src/mmg/tabs/input_extra.cpp:131
+#: src/mmg/tabs/input_extra.cpp:133
 msgid "Free-form edit field for user defined options for this track. What you input here is added after all the other options mmg adds so that you could overwrite any of mmg's options for this track. All occurences of the string \"<TID>\" will be replaced by the track's track ID."
 msgstr "無格式限制的文字方塊，供使用者定義此軌的命令列選項。您在這裡輸入的選項將被放在 mmg 添加的所有其他選項之後，這樣您可以覆蓋 mmg 為此軌建立的任何選項。所有出現字串 \"<TID>\" 的地方都會被替換為目前軌道的軌道 ID。"
 
@@ -5156,7 +5160,7 @@ msgstr ""
 msgid "Select values to be applied"
 msgstr "選擇將應用的值"
 
-#: src/mmg/tabs/input_extra.cpp:125
+#: src/mmg/tabs/input_extra.cpp:127
 msgid "Selects for which blocks mkvmerge will produce index entries ( = cue entries). \"default\" is a good choice for almost all situations."
 msgstr "選擇 mkvmerge 將為哪些區塊建立索引。在幾乎所有情況下，“預設”是個合適的選擇。"
 
@@ -5229,7 +5233,7 @@ msgstr "設定 Matroska 檔案段落全部後面接著 加入/設定/刪除 動�
 msgid "Sets the Matroska parser mode to 'fast' (default) or 'full'"
 msgstr "設定 Matroska 解析器模式為「快速」(預設) 或「完整」"
 
-#: src/mmg/tabs/input_extra.cpp:127
+#: src/mmg/tabs/input_extra.cpp:129
 msgid "Sets the compression algorithm to be used for this track. If no option is selected mkvmerge will decide whether or not to compress and which algorithm to use based on the track type. Most track types are not compressed at all. "
 msgstr "設定此軌道使用的壓縮算法。如果沒有選擇壓縮算法則 mkvmerge 會決定是否壓縮且針對軌道類型使用不同壓縮算法。大部份的軌道類型為不壓縮。"
 
@@ -6534,11 +6538,11 @@ msgstr "有警告資訊，或者處理處理程序被中止。"
 msgid "This AAC track does not contain valid headers. Could not parse the AAC information.\n"
 msgstr "此 AAC 軌道不含有效的表頭。無法解析 AAC 資訊。\n"
 
-#: src/output/p_ac3.cpp:81
+#: src/output/p_ac3.cpp:86
 msgid "This AC3 track contains %1% bytes of non-AC3 data at the beginning. This corresponds to a delay of %2%ms. This delay will be used instead of the non-AC3 data.\n"
 msgstr "此 AC3 軌道的開頭包含 %1% 位元組的 非-AC3 資料。這相當於 %2%ms 的延遲。將使用此延遲替代 非-AC3 資料。\n"
 
-#: src/output/p_ac3.cpp:93
+#: src/output/p_ac3.cpp:99
 msgid "This AC3 track contains %1% bytes of non-AC3 data which were skipped. The audio/video synchronization may have been lost.\n"
 msgstr "此 AC3 軌道包含 %1% 位元組的 非-AC3 資料，已跳過。音/視訊同步可能已喪失。\n"
 
@@ -6988,7 +6992,7 @@ msgid "Use this directory:"
 msgstr "使用這個目錄:"
 
 #: src/mmg/tabs/input_extra.cpp:66
-#: src/mmg/tabs/input_extra.cpp:130
+#: src/mmg/tabs/input_extra.cpp:132
 msgid "User defined options:"
 msgstr "使用者定義選項:"
 
@@ -7621,7 +7625,7 @@ msgstr "aac_reader: 開頭 %1% 位元組未發現有效的 AAC 套件。\n"
 msgid "aborted"
 msgstr "異常中止"
 
-#: src/output/p_ac3.cpp:213
+#: src/output/p_ac3.cpp:228
 msgid "ac3_bs_packetizer::add_to_buffer(): Untested code ('size' is odd). If mkvmerge crashes or if the resulting file does not contain the complete and correct audio track, then please contact the author Moritz Bunkus at moritz@bunkus.org.\n"
 msgstr "ac3_bs_packetizer::add_to_buffer(): 未經測試的碼 (「size」很古怪)。如果 mkvmerge 不正常關閉或者生成的檔案不含完整且正常的音軌，請與作者 Moritz Bunkus 聯繫，電郵為 moritz@bunkus.org。\n"
 
@@ -7746,9 +7750,9 @@ msgstr "corepicture_reader: 來源非 CorePanorama 檔案。"
 msgid "create_track_number: file_num not found. %1%\n"
 msgstr "create_track_number: file_num 未找到。 %1%\n"
 
-#: src/mmg/tabs/input_extra.cpp:85
-#: src/mmg/tabs/input_extra.cpp:158
 #: src/mmg/tabs/input_general.cpp:106
+#: src/mmg/tabs/input_extra.cpp:85
+#: src/mmg/tabs/input_extra.cpp:160
 msgid "default"
 msgstr "預設"
 
@@ -8392,8 +8396,8 @@ msgstr "未使用簽章雜湊演算法"
 
 #: src/mmg/mmg_dialog.cpp:994
 #: src/mmg/tabs/input_extra.cpp:88
-#: src/mmg/tabs/input_extra.cpp:115
-#: src/mmg/tabs/input_extra.cpp:118
+#: src/mmg/tabs/input_extra.cpp:116
+#: src/mmg/tabs/input_extra.cpp:119
 msgid "none"
 msgstr "無"
 
