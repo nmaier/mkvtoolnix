@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <boiled.sugar@gmail.com>\n"
-"PO-Revision-Date: 2011-05-11 20:18+0900\n"
+"PO-Revision-Date: 2011-06-02 23:00+0900\n"
 "Last-Translator: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "Language-Team: Japanese <boiled.sugar@gmail.com>\n"
 "Language: ja\n"
@@ -137,6 +137,8 @@ msgstr ""
 #: src/merge/mkvmerge.cpp:240
 msgid "  --capabilities           Lists optional features mkvmerge was compiled with.\n"
 msgstr ""
+"  --capabilities           mkvmergeのコンパイル時に有効にされたオプション機能を\n"
+"                           列挙します。\n"
 
 #: src/merge/mkvmerge.cpp:86
 msgid "  --chapter-charset <cset> Charset for a simple chapter file.\n"
@@ -213,9 +215,8 @@ msgstr ""
 "                           Iフレームのみ、'all'は全フレーム対象です。\n"
 
 #: src/merge/mkvmerge.cpp:248
-#, fuzzy
 msgid "  --debug <topic>          Turns on debugging output for 'topic'.\n"
-msgstr "  --title <title>          この出力ファイルのタイトルを設定します。\n"
+msgstr "  --debug <topic>          'topic'のデバッグ出力を有効化します。\n"
 
 #: src/merge/mkvmerge.cpp:198
 msgid ""
@@ -264,7 +265,7 @@ msgstr "  --enable-durations       全てのブロックの持続時間を記録
 
 #: src/merge/mkvmerge.cpp:249
 msgid "  --engage <feature>       Turns on experimental feature 'feature'.\n"
-msgstr ""
+msgstr "  --engage <feature>       実験的な機能である'feature'を有効化します。\n"
 
 #: src/merge/mkvmerge.cpp:184
 msgid ""
@@ -1997,7 +1998,7 @@ msgstr "フレームの内容のチェックサムを計算し表示します。
 
 #: src/mmg/options/dialog.cpp:102
 msgid "Cancel"
-msgstr ""
+msgstr "キャンセル"
 
 #: src/output/p_mpeg4_p2.cpp:117
 msgid "Cannot convert non-native MPEG4 video frames into native ones if the source container provides neither timecodes nor a number of frames per second.\n"
