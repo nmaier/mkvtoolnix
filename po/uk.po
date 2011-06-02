@@ -629,15 +629,15 @@ msgid " (FourCC: %1%%2%%3%%4%, 0x%|5$08x|)"
 msgstr " (FourCC: %1%%2%%3%%4%, 0x%|5$08x|)"
 
 #: src/info/mkvinfo.cpp:183
-#: src/info/mkvinfo.cpp:1026
+#: src/info/mkvinfo.cpp:1030
 msgid " (adler: 0x%|1$08x|)"
 msgstr " (хеш: 0x%|1$08x|)"
 
-#: src/info/mkvinfo.cpp:738
+#: src/info/mkvinfo.cpp:742
 msgid " (centimeters)"
 msgstr " (сантиметри)"
 
-#: src/info/mkvinfo.cpp:764
+#: src/info/mkvinfo.cpp:768
 msgid " (fixed)"
 msgstr " (фіксований)"
 
@@ -645,7 +645,7 @@ msgstr " (фіксований)"
 msgid " (format tag: 0x%|1$04x|)"
 msgstr " (Тег форматування: 0x%|1$04x|)"
 
-#: src/info/mkvinfo.cpp:762
+#: src/info/mkvinfo.cpp:766
 msgid " (free resizing)"
 msgstr " (вільна зміна розміру)"
 
@@ -653,15 +653,15 @@ msgstr " (вільна зміна розміру)"
 msgid " (h.264 profile: %1% @L%2%.%3%)"
 msgstr " (профіль h.264: %1% @L%2%.%3%)"
 
-#: src/info/mkvinfo.cpp:739
+#: src/info/mkvinfo.cpp:743
 msgid " (inches)"
 msgstr " (дюйми)"
 
-#: src/info/mkvinfo.cpp:763
+#: src/info/mkvinfo.cpp:767
 msgid " (keep aspect ratio)"
 msgstr " (зберегти співвідношення сторін)"
 
-#: src/info/mkvinfo.cpp:737
+#: src/info/mkvinfo.cpp:741
 msgid " (pixels)"
 msgstr " (пікселі)"
 
@@ -993,8 +993,8 @@ msgstr "&Перезавантажити\tCtrl-R"
 msgid "&Reset"
 msgstr "&Скинути"
 
-#: src/mmg/mmg_dialog.cpp:285
 #: src/mmg/jobs.cpp:399
+#: src/mmg/mmg_dialog.cpp:285
 msgid "&Save"
 msgstr "&Зберегти"
 
@@ -1524,7 +1524,7 @@ msgstr "...після цього розміру:"
 msgid "...after timecodes:"
 msgstr "...після тайм-кодів:"
 
-#: src/info/mkvinfo.cpp:807
+#: src/info/mkvinfo.cpp:811
 msgid "1: all frames"
 msgstr "1: всі кадри"
 
@@ -1532,7 +1532,7 @@ msgstr "1: всі кадри"
 msgid "2 bytes"
 msgstr "2 байти"
 
-#: src/info/mkvinfo.cpp:809
+#: src/info/mkvinfo.cpp:813
 msgid "2: codec private data"
 msgstr "2: специфічні дані кодека"
 
@@ -1595,7 +1595,7 @@ msgstr ""
 "Унікальний ID, генерований випадково, для визначення поточного\n"
 "сегмента з-поміж багатьох інших (128 біт)."
 
-#: src/info/mkvinfo.cpp:937
+#: src/info/mkvinfo.cpp:941
 msgid "A track"
 msgstr "Доріжка"
 
@@ -1742,7 +1742,7 @@ msgstr "Додано"
 msgid "AdditionalID: %1%"
 msgstr "Додатковий ID: %1%"
 
-#: src/info/mkvinfo.cpp:1466
+#: src/info/mkvinfo.cpp:1470
 msgid "Additions"
 msgstr "Додатки"
 
@@ -1766,15 +1766,15 @@ msgstr "Налаштувати тайм-коди"
 msgid "After loading a file expand the most important elements"
 msgstr "Після завантаження файлу розгорнути найважливіші елементи"
 
-#: src/info/mkvinfo.cpp:836
+#: src/info/mkvinfo.cpp:840
 msgid "Algorithm: %1% (%2%)"
 msgstr "Алгоритм: %1% (%2%)"
 
-#: src/mmg/mmg.h:42
+#: src/mmg/mmg.h:43
 msgid "All Files (*)|*"
 msgstr "Всі файли (*)|*"
 
-#: src/mmg/mmg.h:36
+#: src/mmg/mmg.h:37
 msgid "All Files (*.*)|*.*"
 msgstr "Всі файли (*.*)|*.*"
 
@@ -1893,7 +1893,7 @@ msgstr "Співвідношення сторін екрану"
 msgid "Aspect ratio factor"
 msgstr "Коефіцієнт співвідношення сторін екрану"
 
-#: src/info/mkvinfo.cpp:760
+#: src/info/mkvinfo.cpp:764
 msgid "Aspect ratio type: %1%%2%"
 msgstr "Тип співвідношення сторін екрану: %1%%2%"
 
@@ -1909,7 +1909,7 @@ msgstr "Потрібен принаймні один <ChapterAtom> елемен�
 msgid "At least one <EditionEntry> element is needed."
 msgstr "Потрібен принаймні один <EditionEntry> елемент."
 
-#: src/info/mkvinfo.cpp:1310
+#: src/info/mkvinfo.cpp:1314
 msgid "Attached"
 msgstr "Приєднано"
 
@@ -1931,7 +1931,7 @@ msgstr "Стиль вкладення:"
 
 #: src/mmg/mmg_dialog.cpp:306
 #: src/mmg/tabs/attachments.cpp:155
-#: src/info/mkvinfo.cpp:1298
+#: src/info/mkvinfo.cpp:1302
 msgid "Attachments"
 msgstr "Вкладення"
 
@@ -1993,7 +1993,7 @@ msgstr "BZ2_bzCompressInit() перервано. Результат: %1%\n"
 msgid "Binary (displayed as hex numbers)"
 msgstr "Двійковий (відображається у вигляді шістнадцяткових чисел)"
 
-#: src/info/mkvinfo.cpp:672
+#: src/info/mkvinfo.cpp:676
 msgid "Bit depth: %1%"
 msgstr "Розрядність: %1%"
 
@@ -2020,7 +2020,7 @@ msgstr "Тривалість блоку: %1%.%|2$06d|ms"
 
 #: src/extract/timecodes_v2.cpp:283
 #: src/extract/tracks.cpp:414
-#: src/info/mkvinfo.cpp:1372
+#: src/info/mkvinfo.cpp:1376
 msgid "Block group"
 msgstr "Група блоків "
 
@@ -2051,11 +2051,11 @@ msgstr "Відкрити редактор черги завдань"
 #: src/mmg/mmg_dialog.cpp:311
 #: src/mmg/options/mkvmerge.cpp:59
 #: src/mmg/options/mmg.cpp:69
+#: src/mmg/tabs/input_general.cpp:188
+#: src/mmg/tabs/input_general.cpp:191
 #: src/mmg/tabs/global.cpp:276
 #: src/mmg/tabs/global.cpp:293
 #: src/mmg/tabs/global.cpp:297
-#: src/mmg/tabs/input_general.cpp:188
-#: src/mmg/tabs/input_general.cpp:191
 msgid "Browse"
 msgstr "Огляд"
 
@@ -2070,10 +2070,6 @@ msgstr "Підраховувати і відображати контрольн�
 #: src/info/info_cli_parser.cpp:45
 msgid "Calculate and display checksums of frame contents."
 msgstr "Обчислення і відображення контрольних сум наповнень кадру."
-
-#: src/mmg/options/dialog.cpp:102
-msgid "Cancel"
-msgstr ""
 
 #: src/output/p_mpeg4_p2.cpp:117
 msgid "Cannot convert non-native MPEG4 video frames into native ones if the source container provides neither timecodes nor a number of frames per second.\n"
@@ -2104,7 +2100,7 @@ msgstr "Категорія не завершена NUL-символом"
 
 #: src/extract/timecodes_v2.cpp:362
 #: src/extract/tracks.cpp:464
-#: src/info/mkvinfo.cpp:2052
+#: src/info/mkvinfo.cpp:2056
 msgid "Caught exception"
 msgstr "Зафіксоване виключення"
 
@@ -2136,11 +2132,11 @@ msgstr "Змінити налаштування і опції mmg"
 msgid "Changes to this list do not take effect until mmg is restarted."
 msgstr "Зміни до цього списку набудуть чинності лише після перезапуску mmg."
 
-#: src/info/mkvinfo.cpp:667
+#: src/info/mkvinfo.cpp:671
 msgid "Channel positions: %1%"
 msgstr "Розподіл каналів: %1%"
 
-#: src/info/mkvinfo.cpp:661
+#: src/info/mkvinfo.cpp:665
 msgid "Channels: %1%"
 msgstr "Канали: %1%"
 
@@ -2223,7 +2219,7 @@ msgstr "Перевірка розділу пройшла успішно"
 #: src/mmg/options/chapters.cpp:130
 #: src/mmg/tabs/global.cpp:273
 #: src/propedit/options.cpp:190
-#: src/info/mkvinfo.cpp:1812
+#: src/info/mkvinfo.cpp:1816
 msgid "Chapters"
 msgstr "Розділи"
 
@@ -2257,8 +2253,8 @@ msgstr "Розділи: %1% запис(и)(ів)"
 msgid "Charset for strings on the command line"
 msgstr "Набір символів для рядків командного рядка"
 
-#: src/mmg/tabs/global.cpp:282
 #: src/mmg/tabs/input_format.cpp:249
+#: src/mmg/tabs/global.cpp:282
 msgid "Charset:"
 msgstr "Набір символів:"
 
@@ -2309,11 +2305,11 @@ msgid "Choose an input file to append"
 msgstr "Оберіть вхідний файл, щоб приєднати його"
 
 #: src/mmg/mux_dialog.cpp:263
+#: src/mmg/jobs.cpp:410
 #: src/mmg/mmg_dialog.cpp:334
 #: src/mmg/mmg_dialog.cpp:430
 #: src/mmg/mmg_dialog.cpp:738
 #: src/mmg/mmg_dialog.cpp:759
-#: src/mmg/jobs.cpp:410
 #: src/mmg/tabs/chapters.cpp:636
 #: src/mmg/tabs/chapters.cpp:680
 msgid "Choose an output file"
@@ -2357,7 +2353,7 @@ msgstr "Закрити поточний файл без збереження"
 
 #: src/extract/timecodes_v2.cpp:264
 #: src/extract/tracks.cpp:396
-#: src/info/mkvinfo.cpp:1989
+#: src/info/mkvinfo.cpp:1993
 msgid "Cluster"
 msgstr "Кластер"
 
@@ -2388,19 +2384,19 @@ msgstr "Тайм-код кластера: %|1$.3f|s"
 msgid "Codec ID"
 msgstr "ID кодека"
 
-#: src/info/mkvinfo.cpp:1016
+#: src/info/mkvinfo.cpp:1020
 msgid "Codec ID: %1%"
 msgstr "ID кодека: %1%"
 
-#: src/info/mkvinfo.cpp:1053
+#: src/info/mkvinfo.cpp:1057
 msgid "Codec decode all: %1%"
 msgstr "Кодек може декодувати пошкодж. дані: %1%"
 
-#: src/info/mkvinfo.cpp:1048
+#: src/info/mkvinfo.cpp:1052
 msgid "Codec download URL: %1%"
 msgstr "URL завантаження кодека: %1%"
 
-#: src/info/mkvinfo.cpp:1044
+#: src/info/mkvinfo.cpp:1048
 msgid "Codec info URL: %1%"
 msgstr "URL інформації про кодек: %1%"
 
@@ -2409,11 +2405,11 @@ msgstr "URL інформації про кодек: %1%"
 msgid "Codec name"
 msgstr "Назва кодека"
 
-#: src/info/mkvinfo.cpp:1035
+#: src/info/mkvinfo.cpp:1039
 msgid "Codec name: %1%"
 msgstr "Назва кодека: %1%"
 
-#: src/info/mkvinfo.cpp:1040
+#: src/info/mkvinfo.cpp:1044
 msgid "Codec settings: %1%"
 msgstr "Установки кодека: %1%"
 
@@ -2421,7 +2417,7 @@ msgstr "Установки кодека: %1%"
 msgid "Codec state: %1%"
 msgstr "Стан кодека: %1%"
 
-#: src/info/mkvinfo.cpp:1031
+#: src/info/mkvinfo.cpp:1035
 msgid "CodecPrivate, length %1%%2%"
 msgstr "CodecPrivate, довжина %1%%2%"
 
@@ -2429,7 +2425,7 @@ msgstr "CodecPrivate, довжина %1%%2%"
 msgid "Collapse all entries so that none of their sub-entries will be shown"
 msgstr "Згорнути всі записи так, щоб жоден з їх дочірніх записів не було показано"
 
-#: src/info/mkvinfo.cpp:769
+#: src/info/mkvinfo.cpp:773
 msgid "Colour space: %1%"
 msgstr "Модель кольору: %1%"
 
@@ -2474,19 +2470,19 @@ msgstr "Конфігурацію завантажено."
 msgid "Configuration saved."
 msgstr "Параметри були збережені."
 
-#: src/info/mkvinfo.cpp:826
+#: src/info/mkvinfo.cpp:830
 msgid "Content compression"
 msgstr "Стиснення вмісту"
 
-#: src/info/mkvinfo.cpp:791
+#: src/info/mkvinfo.cpp:795
 msgid "Content encoding"
 msgstr "Процес кодування вмісту"
 
-#: src/info/mkvinfo.cpp:783
+#: src/info/mkvinfo.cpp:787
 msgid "Content encodings"
 msgstr "Набір символів вмісту"
 
-#: src/info/mkvinfo.cpp:853
+#: src/info/mkvinfo.cpp:857
 msgid "Content encryption"
 msgstr "Шифрування вмісту"
 
@@ -2526,9 +2522,9 @@ msgstr "Не вдалося створити вказаний файл."
 msgid "Could not decode the Base64 encoded data - it seems to be malformed."
 msgstr "Не вдалося декодувати закодовані Base64 дані - вони, здавалося б, невірні."
 
-#: src/input/r_ogm.cpp:1157
 #: src/input/r_matroska.cpp:1833
 #: src/input/r_avi.cpp:351
+#: src/input/r_ogm.cpp:1157
 msgid "Could not extract the decoder specific config data (AVCC) from this AVC/h.264 track.\n"
 msgstr "Неможливо отримати специфічні дані налаштувань декодера (AVCC) з цієї доріжки AVC/H.264.\n"
 
@@ -2609,8 +2605,8 @@ msgstr "Не вдалося розібрати розділи у '%1%': %2%\n"
 msgid "Could not read the FLAC header packets.\n"
 msgstr "Не вдалося прочитати заголовки пакетів FLAC.\n"
 
-#: src/common/mm_io_win.cpp:167
 #: src/common/mm_io.cpp:181
+#: src/common/mm_io_win.cpp:167
 msgid "Could not write to the output file: %1% (%2%)\n"
 msgstr "Не вдалося записати у вихідний файл: %1% (%2%)\n"
 
@@ -2643,15 +2639,15 @@ msgstr "Параметри обрізки: не задані у формі <TID>
 msgid "Cropping:"
 msgstr "Обрізка:"
 
-#: src/info/mkvinfo.cpp:1241
+#: src/info/mkvinfo.cpp:1245
 msgid "Cue block number: %1%"
 msgstr "Номер блоку Cue: %1%"
 
-#: src/info/mkvinfo.cpp:1237
+#: src/info/mkvinfo.cpp:1241
 msgid "Cue cluster position: %1%"
 msgstr "Положення кластеру Cue: %1%"
 
-#: src/info/mkvinfo.cpp:1246
+#: src/info/mkvinfo.cpp:1250
 msgid "Cue codec state: %1%"
 msgstr "Стан кодека Cue: %1%"
 
@@ -2659,27 +2655,27 @@ msgstr "Стан кодека Cue: %1%"
 msgid "Cue name format:"
 msgstr "Формат назви Cue:"
 
-#: src/info/mkvinfo.cpp:1212
+#: src/info/mkvinfo.cpp:1216
 msgid "Cue point"
 msgstr "Точка Cue"
 
-#: src/info/mkvinfo.cpp:1262
+#: src/info/mkvinfo.cpp:1266
 msgid "Cue ref cluster: %1%"
 msgstr "ref кластер Cue: %1%"
 
-#: src/info/mkvinfo.cpp:1270
+#: src/info/mkvinfo.cpp:1274
 msgid "Cue ref codec state: %1%"
 msgstr "ref стан кодека Cue: %1%"
 
-#: src/info/mkvinfo.cpp:1266
+#: src/info/mkvinfo.cpp:1270
 msgid "Cue ref number: %1%"
 msgstr "ref номер Cue: %1%"
 
-#: src/info/mkvinfo.cpp:1258
+#: src/info/mkvinfo.cpp:1262
 msgid "Cue ref time: %|1$.3f|s"
 msgstr "ref час Cue: %|1$.3f|s"
 
-#: src/info/mkvinfo.cpp:1249
+#: src/info/mkvinfo.cpp:1253
 msgid "Cue reference"
 msgstr "Cue посилання"
 
@@ -2695,19 +2691,19 @@ msgstr "Аналізатор Cue-списків: Невірний номер IND
 msgid "Cue sheet parser: No INDEX entry found for the previous TRACK entry (current line: %1%)\n"
 msgstr "Аналізатор Cue-списків: Жодного запису INDEX не знайдено для попереднього запису TRACK (поточний рядок: %1%)\n"
 
-#: src/info/mkvinfo.cpp:1221
+#: src/info/mkvinfo.cpp:1225
 msgid "Cue time: %|1$.3f|s"
 msgstr "Cue час: %|1$.3f|s"
 
-#: src/info/mkvinfo.cpp:1224
+#: src/info/mkvinfo.cpp:1228
 msgid "Cue track positions"
 msgstr "Позиція Cue треку"
 
-#: src/info/mkvinfo.cpp:1233
+#: src/info/mkvinfo.cpp:1237
 msgid "Cue track: %1%"
 msgstr "Cue трек: %1%"
 
-#: src/info/mkvinfo.cpp:1196
+#: src/info/mkvinfo.cpp:1200
 msgid "Cues (subentries will be skipped)"
 msgstr "Cues (дочірні записи будуть пропущені)"
 
@@ -2781,11 +2777,11 @@ msgstr "Проблема DTS_Header: не достатньо даних, щоб 
 msgid "Data is not allowed inside <%1%>."
 msgstr "Дані не допускаються у <%1%>."
 
-#: src/info/mkvinfo.cpp:595
+#: src/info/mkvinfo.cpp:599
 msgid "Date (invalid, value: %1%)"
 msgstr "Дата (невірна, значення: %1%)"
 
-#: src/info/mkvinfo.cpp:593
+#: src/info/mkvinfo.cpp:597
 msgid "Date: %1% UTC"
 msgstr "Дата: %1% UTC"
 
@@ -2803,11 +2799,11 @@ msgstr "Типово"
 msgid "Default duration"
 msgstr "Типова тривалість"
 
-#: src/info/mkvinfo.cpp:1071
+#: src/info/mkvinfo.cpp:1075
 msgid "Default duration: %|1$.3f|ms (%|2$.3f| fps for a video track)"
 msgstr "Типова тривалість: %|1$.3f|мс (%|2$.3f| кадрів_за_с для відео доріжки)"
 
-#: src/info/mkvinfo.cpp:1086
+#: src/info/mkvinfo.cpp:1090
 msgid "Default flag: %1%"
 msgstr "Прапорець типового використання: %1%"
 
@@ -2874,11 +2870,11 @@ msgstr "Відключається зшивання для всіх доріжо
 msgid "Display dimensions: not given in the form <TID>:<width>x<height>, e.g. 1:640x480 (argument was '%1%').\n"
 msgstr "Розміри відображення: не задані у вигляді <TID>:<ширина>x<висота>, наприклад, 1:640x480 (аргумент був '%1%').\n"
 
-#: src/info/mkvinfo.cpp:708
+#: src/info/mkvinfo.cpp:712
 msgid "Display height: %1%"
 msgstr "Висота відображення: %1%"
 
-#: src/info/mkvinfo.cpp:735
+#: src/info/mkvinfo.cpp:739
 msgid "Display unit: %1%%2%"
 msgstr "Блок відображення: %1%%2%"
 
@@ -2890,7 +2886,7 @@ msgstr "Відобразити довідкову інформацію"
 msgid "Display width/height:"
 msgstr "Ширина/висота відображення:"
 
-#: src/info/mkvinfo.cpp:703
+#: src/info/mkvinfo.cpp:707
 msgid "Display width: %1%"
 msgstr "Ширина відображення: %1%"
 
@@ -2902,15 +2898,15 @@ msgstr "Не додавати запис для розділів в елемен
 msgid "Do not write meta seek elements at all."
 msgstr "Не писати взагалі елементи мета-пошуку."
 
-#: src/info/mkvinfo.cpp:1876
+#: src/info/mkvinfo.cpp:1880
 msgid "Doc type read version: %1%"
 msgstr "Версія документа для читання: %1%"
 
-#: src/info/mkvinfo.cpp:1873
+#: src/info/mkvinfo.cpp:1877
 msgid "Doc type version: %1%"
 msgstr "Версія документа: %1%"
 
-#: src/info/mkvinfo.cpp:1870
+#: src/info/mkvinfo.cpp:1874
 msgid "Doc type: %1%"
 msgstr "Тип документа: %1%"
 
@@ -2934,7 +2930,7 @@ msgstr "URL завантаження:"
 msgid "Duration: %|1$.3f|ms"
 msgstr "Тривалість: %|1$.3f|мс"
 
-#: src/info/mkvinfo.cpp:572
+#: src/info/mkvinfo.cpp:576
 msgid "Duration: %|1$.3f|s (%2%)"
 msgstr "Тривалість: %|1$.3f|с (%2%)"
 
@@ -2942,23 +2938,23 @@ msgstr "Тривалість: %|1$.3f|с (%2%)"
 msgid "E&xit\tCtrl-Q"
 msgstr "&Вихід\tCtrl-Q"
 
-#: src/info/mkvinfo.cpp:1846
+#: src/info/mkvinfo.cpp:1850
 msgid "EBML head"
 msgstr "Заголовок EBML"
 
-#: src/info/mkvinfo.cpp:1864
+#: src/info/mkvinfo.cpp:1868
 msgid "EBML maximum ID length: %1%"
 msgstr "EBML максимальна довжина ID: %1%"
 
-#: src/info/mkvinfo.cpp:1867
+#: src/info/mkvinfo.cpp:1871
 msgid "EBML maximum size length: %1%"
 msgstr "EBML максимальна довжина розміру: %1%"
 
-#: src/info/mkvinfo.cpp:1861
+#: src/info/mkvinfo.cpp:1865
 msgid "EBML read version: %1%"
 msgstr "Версія EBML для читання: %1%"
 
-#: src/info/mkvinfo.cpp:1858
+#: src/info/mkvinfo.cpp:1862
 msgid "EBML version: %1%"
 msgstr "Версія EBML: %1%"
 
@@ -3013,7 +3009,7 @@ msgstr "Елементи в категорії '%1%' ('--edit %2%'):\n"
 msgid "Enable splitting..."
 msgstr "Ввімкнути розбиття..."
 
-#: src/info/mkvinfo.cpp:1005
+#: src/info/mkvinfo.cpp:1009
 msgid "Enabled: %1%"
 msgstr "Ввімкнено: %1%"
 
@@ -3021,11 +3017,11 @@ msgstr "Ввімкнено: %1%"
 msgid "Enables splitting of the output into more than one file. You can split after a given size, after a given amount of time has passed in each file or after a list of timecodes."
 msgstr "Дозволяється розділення на виході на більш ніж один файл. Ви можете розділяти, спираючись на заданий розмір, задану кількість часу, що минув, для кожного файлу, або на заданий список тайм-кодів."
 
-#: src/info/mkvinfo.cpp:863
+#: src/info/mkvinfo.cpp:867
 msgid "Encryption algorithm: %1% (%2%)"
 msgstr "Алгоритм шифрування: %1% (%2%)"
 
-#: src/info/mkvinfo.cpp:875
+#: src/info/mkvinfo.cpp:879
 msgid "Encryption key ID: %1%"
 msgstr "ID ключа шифрування: %1%"
 
@@ -3058,9 +3054,9 @@ msgstr "Помилка в рядку %1%: очікувалась певне чи
 msgid "Error initializing the tables for the chapter, tag and segment info elements: Could not find the element with the debug name '%1%'. %2%\n"
 msgstr "Помилка ініціалізації таблиць для розділів, тегів і елементів інформації сегментів: Не вдалося знайти елемент з відлагоджувальною назвою '%1%'. %2%\n"
 
-#: src/mmg/mmg.cpp:225
 #: src/mmg/mmg_dialog.cpp:389
 #: src/mmg/mmg_dialog.cpp:408
+#: src/mmg/mmg.cpp:246
 msgid "Error loading settings"
 msgstr "Помилка завантаження налаштувань"
 
@@ -3109,7 +3105,7 @@ msgstr "Помилка: "
 msgid "Error: %1% parser failed for '%2%', line %3%, column %4%: %5%\n"
 msgstr "Помилка: %1% аналізатор зробив помилку відносно '%2%', рядок %3%, стовпець %4%: %5%\n"
 
-#: src/info/mkvinfo.cpp:1928
+#: src/info/mkvinfo.cpp:1932
 msgid "Error: Couldn't open input file %1% (%2%).\n"
 msgstr "Помилка: не вдалося відкрити вхідний файл %1% (%2%).\n"
 
@@ -3235,7 +3231,7 @@ msgstr "Не вдалося обробити специфічні дані ко�
 msgid "Failed to parse the USF end tag for track %1%: %2%\n"
 msgstr "Не вдалося обробити тег закінчення USF для доріжки %1%: %2%\n"
 
-#: src/info/mkvinfo.cpp:603
+#: src/info/mkvinfo.cpp:607
 msgid "Family UID:%1%"
 msgstr "Сукупність UID:%1%"
 
@@ -3251,7 +3247,7 @@ msgstr "Файл '%1%': контейнер: %2%"
 msgid "File '%1%': unsupported container: %2%\n"
 msgstr "Файл '%1%': непідтримуваний контейнер: %2%\n"
 
-#: src/info/mkvinfo.cpp:1335
+#: src/info/mkvinfo.cpp:1339
 msgid "File UID: %1%"
 msgstr "UID файла: %1%"
 
@@ -3266,11 +3262,11 @@ msgstr "Файл містить меншу кількість кадрів, ні
 msgid "File creation failed"
 msgstr "Помилка створення файлу"
 
-#: src/info/mkvinfo.cpp:1331
+#: src/info/mkvinfo.cpp:1335
 msgid "File data, size: %1%"
 msgstr "Файл даних, розмір: %1%"
 
-#: src/info/mkvinfo.cpp:1319
+#: src/info/mkvinfo.cpp:1323
 msgid "File description: %1%"
 msgstr "Опис файлу: %1%"
 
@@ -3297,7 +3293,7 @@ msgstr "Файл вже оброблений"
 msgid "File modified"
 msgstr "Файл змінено"
 
-#: src/info/mkvinfo.cpp:1323
+#: src/info/mkvinfo.cpp:1327
 msgid "File name: %1%"
 msgstr "Назва файла: %1%"
 
@@ -3362,7 +3358,7 @@ msgstr "Примусово задавати стиль зшивання Xiph."
 msgid "Force the translations for 'code' to be used."
 msgstr "Примусово задавати використання перекладів для 'code'."
 
-#: src/info/mkvinfo.cpp:1090
+#: src/info/mkvinfo.cpp:1094
 msgid "Forced flag: %1%"
 msgstr "Прапорець примусового використання: %1%"
 
@@ -3422,7 +3418,7 @@ msgstr "FourCC: Відсутній ID доріжки в '%1% %2%'.\n"
 msgid "Frame number: %1%"
 msgstr "Число кадрів: %1%"
 
-#: src/info/mkvinfo.cpp:773
+#: src/info/mkvinfo.cpp:777
 msgid "Frame rate: %1%"
 msgstr "Частота кадрів: %1%"
 
@@ -3435,7 +3431,7 @@ msgstr "Кадр з розміром %1%%2%%3%"
 msgid "Free-form edit field for user defined options for this track. What you input here is added after all the other options mmg adds so that you could overwrite any of mmg's options for this track. All occurences of the string \"<TID>\" will be replaced by the track's track ID."
 msgstr "Поле для призначених користувачем опцій для даної доріжки. Те, що ви тут введете, додається після всіх інших опцій, заданих mmg, тобто таким чином ви можете перезаписувати будь-які опції mmg для цієї доріжки. При появі в рядках, \"<TID>\" буде замінено на відповідні ID доріжок."
 
-#: src/info/mkvinfo.cpp:744
+#: src/info/mkvinfo.cpp:748
 msgid "Gamma: %1%"
 msgstr "Гамма: %1%"
 
@@ -3656,7 +3652,7 @@ msgstr "Вхідні дані надто довгі: %1% > %2%"
 msgid "Interface language:"
 msgstr "Мова інтерфейсу:"
 
-#: src/info/mkvinfo.cpp:748
+#: src/info/mkvinfo.cpp:752
 msgid "Interlaced: %1%"
 msgstr "Черезрядкова: %1%"
 
@@ -3973,7 +3969,7 @@ msgstr "Процес LZO стиснення перервано. Результа
 msgid "Lace number: %1%"
 msgstr "Число зшивань: %1%"
 
-#: src/info/mkvinfo.cpp:1082
+#: src/info/mkvinfo.cpp:1086
 msgid "Lacing flag: %1%"
 msgstr "Прапорець зшивання: %1%"
 
@@ -3991,13 +3987,13 @@ msgid "Language is not NUL terminated"
 msgstr "Задання мови не повинно завершуватися нулем"
 
 #: src/mmg/options/chapters.cpp:86
-#: src/mmg/tabs/global.cpp:278
 #: src/mmg/tabs/input_general.cpp:181
 #: src/mmg/tabs/chapters.cpp:349
+#: src/mmg/tabs/global.cpp:278
 msgid "Language:"
 msgstr "Мова:"
 
-#: src/info/mkvinfo.cpp:1094
+#: src/info/mkvinfo.cpp:1098
 msgid "Language: %1%"
 msgstr "Мова: %1%"
 
@@ -4068,7 +4064,7 @@ msgstr "Файли журналу змін (*.txt)|*.txt|%s"
 msgid "Log output:"
 msgstr "Протокол виконання:"
 
-#: src/info/mkvinfo.cpp:893
+#: src/info/mkvinfo.cpp:897
 msgid "MD5"
 msgstr "MD5"
 
@@ -4146,11 +4142,11 @@ msgstr "Файли Matroska (*.mkv;*.mka;*.mks;*.mk3d)|*.mkv;*.mka;*.mks;*.mk3d|
 msgid "Matroska files (*.mkv;*.mka;*.mks;*.mk3d)|*.mkv;*.mka;*.mks;*.mk3d|%s"
 msgstr "Файли Matroska (*.mkv;*.mka;*.mks;*.mk3d)|*.mkv;*.mka;*.mks;*.mk3d|%s"
 
-#: src/info/mkvinfo.cpp:1103
+#: src/info/mkvinfo.cpp:1107
 msgid "Max BlockAddition ID: %1%"
 msgstr "Максимальний ID BlockAddition: %1%"
 
-#: src/info/mkvinfo.cpp:1066
+#: src/info/mkvinfo.cpp:1070
 msgid "MaxCache: %1%"
 msgstr "Максимальний кеш: %1%"
 
@@ -4167,11 +4163,11 @@ msgstr "Помилка розподілу пам'яті: %1% (%2%).\n"
 msgid "Memory for a RealAudio/RealVideo frame could not be allocated.\n"
 msgstr "Неможливо виділити об'єм пам'яті для кадрів RealAudio/RealVideo.\n"
 
-#: src/info/mkvinfo.cpp:1327
+#: src/info/mkvinfo.cpp:1331
 msgid "Mime type: %1%"
 msgstr "MIME-тип: %1%"
 
-#: src/info/mkvinfo.cpp:1062
+#: src/info/mkvinfo.cpp:1066
 msgid "MinCache: %1%"
 msgstr "Мінімальний кеш: %1%"
 
@@ -4192,11 +4188,11 @@ msgstr "Пропущено аргумент для '--ui-language'.\n"
 msgid "Missing argument to '%1%'.\n"
 msgstr "Пропущено аргумент до '%1%'.\n"
 
-#: src/mmg/mmg.cpp:216
+#: src/mmg/mmg.cpp:237
 msgid "Missing file name"
 msgstr "Відсутня назва файлу"
 
-#: src/mmg/mmg.cpp:216
+#: src/mmg/mmg.cpp:237
 msgid "Missing file name after for the option '--edit-headers'."
 msgstr "Відсутня назва файлу в кінці для опції '--edit-headers'."
 
@@ -4220,7 +4216,7 @@ msgstr "Відсутня назва вихідного файлу для арг�
 msgid "Modification of properties in the section '%1%' was requested, but no corresponding level 1 element was found in the file. %2%\n"
 msgstr "Була задана модифікація властивостей у розділі '%1%', але не було знайдено відповідного елементу 1-го  рівня у файлі. %2%\n"
 
-#: src/info/mkvinfo.cpp:1474
+#: src/info/mkvinfo.cpp:1478
 msgid "More"
 msgstr "Більше"
 
@@ -4260,7 +4256,7 @@ msgstr "Перемістити вибране(і) завдання вниз"
 msgid "Move the selected job(s) up"
 msgstr "Перемістити вибране(і) завдання вгору"
 
-#: src/info/mkvinfo.cpp:578
+#: src/info/mkvinfo.cpp:582
 msgid "Muxing application: %1%"
 msgstr "Додаток, що виконував мультиплексування: %1%"
 
@@ -4289,12 +4285,12 @@ msgstr "Назва"
 msgid "Name for this track, e.g. \"director's comments\"."
 msgstr "Назва для цієї доріжки, наприклад, \"коментарі режисера\"."
 
-#: src/mmg/tabs/chapters.cpp:348
 #: src/mmg/tabs/attachments.cpp:158
+#: src/mmg/tabs/chapters.cpp:348
 msgid "Name:"
 msgstr "Назва:"
 
-#: src/info/mkvinfo.cpp:1010
+#: src/info/mkvinfo.cpp:1014
 msgid "Name: %1%"
 msgstr "Назва: %1%"
 
@@ -4311,11 +4307,11 @@ msgstr "Нове значення:"
 msgid "Next filename"
 msgstr "Наступна назва файлу"
 
-#: src/info/mkvinfo.cpp:622
+#: src/info/mkvinfo.cpp:626
 msgid "Next filename: %1%"
 msgstr "Наступна назва файлу: %1%"
 
-#: src/info/mkvinfo.cpp:1968
+#: src/info/mkvinfo.cpp:1972
 msgid "Next level 0 element is not a segment but %1%"
 msgstr "Наступний елемент рівня 0 не є сегментом, а %1%"
 
@@ -4323,7 +4319,7 @@ msgstr "Наступний елемент рівня 0 не є сегменто�
 msgid "Next segment UID:"
 msgstr "UID наступного сегмента:"
 
-#: src/info/mkvinfo.cpp:618
+#: src/info/mkvinfo.cpp:622
 msgid "Next segment UID:%1%"
 msgstr "UID наступного сегмента:%1%"
 
@@ -4340,7 +4336,7 @@ msgstr "Немає %1%, визначеного у '--%2% %3%'.\n"
 msgid "No AC3 header found in first frame; track will be skipped.\n"
 msgstr "Жодного заголовка AC3 не знайдено в першому кадрі; доріжка буде пропущена.\n"
 
-#: src/info/mkvinfo.cpp:1942
+#: src/info/mkvinfo.cpp:1946
 msgid "No EBML head found."
 msgstr "Жодного EBML заголовка не знайдено."
 
@@ -4390,7 +4386,7 @@ msgid "No file loaded"
 msgstr "Жодного файла не завантажено"
 
 #: src/propedit/options.cpp:31
-#: src/info/mkvinfo.cpp:2075
+#: src/info/mkvinfo.cpp:2079
 msgid "No file name given.\n"
 msgstr "Не задано назву файлу.\n"
 
@@ -4416,7 +4412,7 @@ msgstr "Не вказано назву результуючого файлу, т
 
 #: src/extract/timecodes_v2.cpp:198
 #: src/extract/tracks.cpp:354
-#: src/info/mkvinfo.cpp:1956
+#: src/info/mkvinfo.cpp:1960
 msgid "No segment/level 0 element found."
 msgstr "Не знайдено сегменту/елементу рівня 0."
 
@@ -4468,9 +4464,9 @@ msgstr "Некорректний файл Matroska (не знайдено сег
 msgid "Note"
 msgstr "Примітка"
 
+#: src/extract/attachments.cpp:131
 #: src/extract/timecodes_v2.cpp:166
 #: src/extract/tracks.cpp:318
-#: src/extract/attachments.cpp:131
 #: src/propedit/options.cpp:34
 msgid "Nothing to do.\n"
 msgstr "Нічого робити.\n"
@@ -4489,8 +4485,8 @@ msgstr "Число каналів доріжки."
 msgid "Ogg/OGM audio/video files"
 msgstr "Ogg/OGM аудіо/відео файли"
 
-#: src/mmg/message_dialog.cpp:31
 #: src/mmg/mux_dialog.cpp:101
+#: src/mmg/message_dialog.cpp:31
 msgid "Ok"
 msgstr "OK"
 
@@ -4577,7 +4573,7 @@ msgstr "Опції"
 msgid "Options meant ONLY for developpers. Do not use them. If something is considered to be an officially supported option then it's NOT in this list!"
 msgstr "Опції, призначені ЛИШЕ для розробників. Не використовуйте їх. Якщо є деяка опція, яку вважають офіційно підтримуваною опцією, тоді вона не в цьому списку!"
 
-#: src/info/mkvinfo.cpp:800
+#: src/info/mkvinfo.cpp:804
 msgid "Order: %1%"
 msgstr "Порядок: %1%"
 
@@ -4605,7 +4601,7 @@ msgstr "Вихідні повідомлення з цим набором сим�
 msgid "Output of the selected jobs:"
 msgstr "Вихідна інформація щодо вибраних завдань:"
 
-#: src/info/mkvinfo.cpp:656
+#: src/info/mkvinfo.cpp:660
 msgid "Output sampling frequency: %1%"
 msgstr "Вихідна частота дискретизації: %1%"
 
@@ -4646,31 +4642,31 @@ msgstr "Аналізувати файл повністю і показувати
 msgid "Parse the whole file instead of relying on the index."
 msgstr "Аналізувати цілий файл замість того, щоб покладатися на індекс."
 
-#: src/info/mkvinfo.cpp:1706
+#: src/info/mkvinfo.cpp:1710
 msgid "Parsing file"
 msgstr "Аналіз файлу"
 
-#: src/info/mkvinfo.cpp:728
+#: src/info/mkvinfo.cpp:732
 msgid "Pixel crop bottom: %1%"
 msgstr "Обрізка пікселів знизу: %1%"
 
-#: src/info/mkvinfo.cpp:713
+#: src/info/mkvinfo.cpp:717
 msgid "Pixel crop left: %1%"
 msgstr "Обрізка пікселів зліва: %1%"
 
-#: src/info/mkvinfo.cpp:723
+#: src/info/mkvinfo.cpp:727
 msgid "Pixel crop right: %1%"
 msgstr "Обрізка пікселів справа: %1%"
 
-#: src/info/mkvinfo.cpp:718
+#: src/info/mkvinfo.cpp:722
 msgid "Pixel crop top: %1%"
 msgstr "Обрізка пікселів зверху: %1%"
 
-#: src/info/mkvinfo.cpp:698
+#: src/info/mkvinfo.cpp:702
 msgid "Pixel height: %1%"
 msgstr "Висота в пікселях: %1%"
 
-#: src/info/mkvinfo.cpp:693
+#: src/info/mkvinfo.cpp:697
 msgid "Pixel width: %1%"
 msgstr "Ширина в пікселях: %1%"
 
@@ -4707,7 +4703,7 @@ msgstr ""
 msgid "Previous filename"
 msgstr "Попередня назва файлу"
 
-#: src/info/mkvinfo.cpp:614
+#: src/info/mkvinfo.cpp:618
 msgid "Previous filename: %1%"
 msgstr "Попередня назва файлу: %1%"
 
@@ -4715,7 +4711,7 @@ msgstr "Попередня назва файлу: %1%"
 msgid "Previous segment UID:"
 msgstr "UID попереднього сегмента:"
 
-#: src/info/mkvinfo.cpp:610
+#: src/info/mkvinfo.cpp:614
 msgid "Previous segment UID:%1%"
 msgstr "UID попереднього сегмента:%1%"
 
@@ -4896,7 +4892,7 @@ msgstr "Закрити редактор заголовків"
 msgid "Quits mkvinfo"
 msgstr "Закрити mkvinfo"
 
-#: src/info/mkvinfo.cpp:883
+#: src/info/mkvinfo.cpp:887
 msgid "RSA"
 msgstr "RSA"
 
@@ -4999,7 +4995,7 @@ msgstr "&Показати командний рядок"
 msgid "S&tart selected"
 msgstr "&Розпочати виконання вибраного"
 
-#: src/info/mkvinfo.cpp:892
+#: src/info/mkvinfo.cpp:896
 msgid "SHA1-160"
 msgstr "SHA1-160"
 
@@ -5024,7 +5020,7 @@ msgstr "Використовувати ту ж теку, що і перший в
 msgid "Sampling frequency in Hz."
 msgstr "Частота дискретизації в Гц."
 
-#: src/info/mkvinfo.cpp:651
+#: src/info/mkvinfo.cpp:655
 msgid "Sampling frequency: %1%"
 msgstr "Частота дискретизації: %1%"
 
@@ -5076,27 +5072,27 @@ msgstr "&Зберегти до файлу Matroska"
 msgid "Saves the information from the current file to a text file"
 msgstr "Зберігається інформація з поточного файлу до текстового файлу"
 
-#: src/info/mkvinfo.cpp:814
+#: src/info/mkvinfo.cpp:818
 msgid "Scope: %1% (%2%)"
 msgstr "Діапазон: %1% (%2%)"
 
-#: src/info/mkvinfo.cpp:1164
+#: src/info/mkvinfo.cpp:1168
 msgid "Seek ID:%1% (%2%)"
 msgstr "ID пошуку: %1% (%2%)"
 
-#: src/info/mkvinfo.cpp:1152
+#: src/info/mkvinfo.cpp:1156
 msgid "Seek entry"
 msgstr "Запис пошуку "
 
-#: src/info/mkvinfo.cpp:1140
+#: src/info/mkvinfo.cpp:1144
 msgid "Seek head"
 msgstr "Заголовок пошуку"
 
-#: src/info/mkvinfo.cpp:1136
+#: src/info/mkvinfo.cpp:1140
 msgid "Seek head (subentries will be skipped)"
 msgstr "Шукати заголовок (дочірні записи будуть пропущені)"
 
-#: src/info/mkvinfo.cpp:1178
+#: src/info/mkvinfo.cpp:1182
 msgid "Seek position: %1%"
 msgstr "Позиція пошуку: %1%"
 
@@ -5107,7 +5103,7 @@ msgstr "Позиція пошуку: %1%"
 msgid "Segment"
 msgstr "Сегмент"
 
-#: src/info/mkvinfo.cpp:599
+#: src/info/mkvinfo.cpp:603
 msgid "Segment UID:%1%"
 msgstr "UID сегмента:%1%"
 
@@ -5120,7 +5116,7 @@ msgstr "UID сегментів:"
 msgid "Segment filename"
 msgstr "Назва файла сегмента"
 
-#: src/info/mkvinfo.cpp:627
+#: src/info/mkvinfo.cpp:631
 msgid "Segment filename: %1%"
 msgstr "Назва файла сегмента: %1%"
 
@@ -5136,9 +5132,9 @@ msgstr "Файли інформації сегмента (*.xml)|*.xml|%s"
 #: src/mmg/header_editor/frame.cpp:322
 #: src/extract/timecodes_v2.cpp:222
 #: src/extract/tracks.cpp:377
-#: src/propedit/options.cpp:173
 #: src/propedit/propedit_cli_parser.cpp:105
 #: src/propedit/propedit_cli_parser.cpp:183
+#: src/propedit/options.cpp:173
 #: src/info/qt_ui.cpp:178
 #: src/info/wxwidgets_ui.cpp:208
 #: src/info/mkvinfo.cpp:553
@@ -5149,7 +5145,7 @@ msgstr "Інформація сегмента"
 #: src/extract/tracks.cpp:389
 #: src/info/qt_ui.cpp:179
 #: src/info/wxwidgets_ui.cpp:208
-#: src/info/mkvinfo.cpp:924
+#: src/info/mkvinfo.cpp:928
 msgid "Segment tracks"
 msgstr "Доріжки сегмента"
 
@@ -5158,11 +5154,11 @@ msgstr "Доріжки сегмента"
 msgid "Segment unique ID"
 msgstr "Унікальний ID сегмента"
 
-#: src/info/mkvinfo.cpp:1964
+#: src/info/mkvinfo.cpp:1968
 msgid "Segment, size %1%"
 msgstr "Сегмент, розмір %1%"
 
-#: src/info/mkvinfo.cpp:1962
+#: src/info/mkvinfo.cpp:1966
 msgid "Segment, size unknown"
 msgstr "Сегмент невідомого розміру"
 
@@ -5304,7 +5300,7 @@ msgstr ""
 msgid "Sets the stereo mode of the video track to this value. If left empty then the track's original stereo mode will be kept or, if it didn't have one, none will be set at all."
 msgstr "Встановлюється стерео режим для відео. Якщо залишити поле порожнім, то буде збережено початковий стерео режим доріжки або, якщо його не задано, то нічого встановлено не буде."
 
-#: src/info/mkvinfo.cpp:846
+#: src/info/mkvinfo.cpp:850
 msgid "Settings: %1%"
 msgstr "Налаштування: %1%"
 
@@ -5384,19 +5380,19 @@ msgstr "Показати інформацію про версію."
 msgid "Shows mmg's debug window in which debug messages will appear. This is only useful if you're helping the author debug a problem in mmg."
 msgstr "Показує вікно налагодження mmg, в якому будуть відображатися налагоджувальні повідомлення. Це  корисно, якщо ви допомагаєте автору виявити проблему в mmg."
 
-#: src/info/mkvinfo.cpp:880
+#: src/info/mkvinfo.cpp:884
 msgid "Signature algorithm: %1% (%2%)"
 msgstr "Алгоритм сигнатури: %1% (%2%)"
 
-#: src/info/mkvinfo.cpp:889
+#: src/info/mkvinfo.cpp:893
 msgid "Signature hash algorithm: %1% (%2%)"
 msgstr "Сигнатура хеш-алгоритму: %1% (%2%)"
 
-#: src/info/mkvinfo.cpp:898
+#: src/info/mkvinfo.cpp:902
 msgid "Signature key ID: %1%"
 msgstr "Сигнатура ID ключа: %1%"
 
-#: src/info/mkvinfo.cpp:902
+#: src/info/mkvinfo.cpp:906
 msgid "Signature: %1%"
 msgstr "Сигнатура: %1%"
 
@@ -5404,7 +5400,7 @@ msgstr "Сигнатура: %1%"
 msgid "Signed integer"
 msgstr "Ціле число"
 
-#: src/info/mkvinfo.cpp:1362
+#: src/info/mkvinfo.cpp:1366
 msgid "Silent Track Number: %1%"
 msgstr "Прихований номер доріжки: %1%"
 
@@ -5440,7 +5436,7 @@ msgstr "Пропуск %1% байт (не знайдено корректног�
 msgid "Skipping %1% bytes at the beginning (no valid MP3 header found).\n"
 msgstr "Пропуск %1% байт на початку (не знайдено жодного корректного заголовку MP3).\n"
 
-#: src/info/mkvinfo.cpp:1500
+#: src/info/mkvinfo.cpp:1504
 msgid "Slices"
 msgstr "Шари (Сектори)"
 
@@ -5532,7 +5528,7 @@ msgstr "Розпочато"
 msgid "Starting job ID %d (%s) on %s"
 msgstr "Розпочато виконання завдання з ID %d (%s) %s"
 
-#: src/info/mkvinfo.cpp:1904
+#: src/info/mkvinfo.cpp:1908
 msgid "Statistics for track number %1%: number of blocks: %2%; size in bytes: %3%; duration in seconds: %4%; approximate bitrate in bits/second: %5%\n"
 msgstr "Статистика для доріжки номер %1%: кількість блоків: %2%; розмір в байтах: %3%; тривалість в секундах: %4%; орієнтовний бітрейт в бітах/с: %5%\n"
 
@@ -5554,7 +5550,7 @@ msgstr "Статус:"
 msgid "Stereo mode parameter: not given in the form <TID>:<n|keyword> where n is a number between 0 and %1% or one of these keywords: %2% (argument was '%3%').\n"
 msgstr "Параметр стереорежиму: не заданий у вигляді <TID>:<n|keyword>, де n число від 0 до %1% або одне з цих ключових слів: %2% (аргумент був '%3%').\n"
 
-#: src/info/mkvinfo.cpp:753
+#: src/info/mkvinfo.cpp:757
 msgid "Stereo mode: %1% (%2%)"
 msgstr "Стерео режим: %1% (%2%)"
 
@@ -5630,7 +5626,7 @@ msgid "Tag selectors"
 msgstr "Селектори тегів"
 
 #: src/propedit/options.cpp:181
-#: src/info/mkvinfo.cpp:1828
+#: src/info/mkvinfo.cpp:1832
 msgid "Tags"
 msgstr "Теги"
 
@@ -5837,8 +5833,8 @@ msgstr "Кодек типу '%1%' не може використовуватис
 
 #: src/output/p_avc.cpp:203
 #: src/output/p_kate.cpp:113
-#: src/output/p_passthrough.cpp:63
 #: src/output/p_video.cpp:139
+#: src/output/p_passthrough.cpp:63
 #: src/output/p_textsubs.cpp:102
 msgid "The codec's private data does not match (lengths: %1% and %2%)."
 msgstr "Специфічні дані кодеків не співпадають (довжини: %1% i %2%)."
@@ -5934,10 +5930,10 @@ msgstr "За допомогою п'ятого режиму йде спроба �
 msgid "The file '%1%' cannot be attached because it does not exist or cannot be read.\n"
 msgstr "Файл '%1%' не може бути приєднаний, тому що він не існує, або не може бути прочитаний.\n"
 
+#: src/extract/attachments.cpp:141
 #: src/extract/chapters.cpp:47
 #: src/extract/cuesheets.cpp:208
 #: src/extract/tags.cpp:47
-#: src/extract/attachments.cpp:141
 msgid "The file '%1%' could not be opened for reading (%2%)."
 msgstr "Файл '%1%' не може бути відкритий для читання (%2%)."
 
@@ -5957,8 +5953,8 @@ msgstr "Файл '%1%' не може бути відкритий для зчит
 msgid "The file '%1%' could not be opened for writing (%2%).\n"
 msgstr "Файл '%1%' не може бути відкритий для запису (%2%).\n"
 
-#: src/extract/xtr_rmff.cpp:40
 #: src/extract/attachments.cpp:121
+#: src/extract/xtr_rmff.cpp:40
 msgid "The file '%1%' could not be opened for writing (%2%, %3%).\n"
 msgstr "Файл '%1%' не може бути відкритий для запису (%2%, %3%).\n"
 
@@ -5978,7 +5974,7 @@ msgstr "Файл '%1%' має непідтримуваний тип (%2%).\n"
 msgid "The file '%1%' is empty."
 msgstr "Файл '%1%' порожній."
 
-#: src/mmg/mmg.cpp:225
+#: src/mmg/mmg.cpp:246
 #, c-format
 msgid "The file '%s' does not exist."
 msgstr "Файл '%s' не існує."
@@ -6184,7 +6180,7 @@ msgstr "Код мови '%1%' не є кодом мови ISO639-2 і буде �
 msgid "The line %1% of the timecode file '%2%' does not contain a valid floating point number.\n"
 msgstr "Рядок %1% файлу тайм-коду '%2%' не містить корректно задане число з плаваючою комою.\n"
 
-#: src/common/translation.cpp:284
+#: src/common/translation.cpp:285
 msgid "The locale could not be set properly. Check the LANG, LC_ALL and LC_MESSAGES environment variables.\n"
 msgstr "Локаль (мова) не може бути встановлена правильно. Перевірте змінні оточення LANG, LC_ALL і  LC_MESSAGES.\n"
 
@@ -6576,16 +6572,16 @@ msgstr "Виникли попередження"
 msgid "There were warnings, or the process was terminated."
 msgstr "Виникли попередження, або процес був перерваний."
 
-#: src/input/r_real.cpp:326
 #: src/input/r_avi.cpp:629
+#: src/input/r_real.cpp:326
 msgid "This AAC track does not contain valid headers. Could not parse the AAC information.\n"
 msgstr "Дана доріжка AAC не містить корректних заголовків. Не можливо проаналізувати інформацію AAC.\n"
 
-#: src/output/p_ac3.cpp:86
+#: src/output/p_ac3.cpp:81
 msgid "This AC3 track contains %1% bytes of non-AC3 data at the beginning. This corresponds to a delay of %2%ms. This delay will be used instead of the non-AC3 data.\n"
 msgstr "Дана доріжка AAC містить %1% байт не-AC3 даних на початку. Це відповідає затримці %2% мс. Ця затримка буде використовуватися замість не-AC3 даних.\n"
 
-#: src/output/p_ac3.cpp:99
+#: src/output/p_ac3.cpp:93
 msgid "This AC3 track contains %1% bytes of non-AC3 data which were skipped. The audio/video synchronization may have been lost.\n"
 msgstr "Дана доріжка AAC містить %1% байт не-AC3 даних, що були пропущені. Синхронізація аудіо і відео можливо була втрачена.\n"
 
@@ -6704,7 +6700,7 @@ msgstr "Вибрати, якщо дана доріжка містить SBR AAC/
 msgid "This track is not compatible with the WebM mode and cannot be enabled."
 msgstr "Ця доріжка несумісна з режимом WebM і не може бути ввімкнена."
 
-#: src/info/mkvinfo.cpp:1508
+#: src/info/mkvinfo.cpp:1512
 msgid "Time slice"
 msgstr "Інтервал часу"
 
@@ -6719,8 +6715,8 @@ msgstr "Файли тайм-кодів (*.tmc;*.txt)|*.tmc;*.txt|%s"
 
 #: src/extract/timecodes_v2.cpp:231
 #: src/extract/tracks.cpp:382
-#: src/info/mkvinfo.cpp:567
-#: src/info/mkvinfo.cpp:1099
+#: src/info/mkvinfo.cpp:571
+#: src/info/mkvinfo.cpp:1103
 msgid "Timecode scale: %1%"
 msgstr "Масштаб тайм-коду: %1%"
 
@@ -6738,7 +6734,7 @@ msgstr "Тайм-коди:"
 msgid "Title"
 msgstr "Назва"
 
-#: src/info/mkvinfo.cpp:631
+#: src/info/mkvinfo.cpp:635
 msgid "Title: %1%"
 msgstr "Назва: %1%"
 
@@ -6802,7 +6798,7 @@ msgstr "Для доріжки %1% з CodecID '%2%' відсутній елеме
 msgid "Track %1% with the CodecID '%2%' is missing the \"default duration\" element and cannot be extracted.\n"
 msgstr "Для доріжки %1% з CodecID '%2%' відсутній елемент \"default duration\" і вона не може бути витягнута.\n"
 
-#: src/info/mkvinfo.cpp:1114
+#: src/info/mkvinfo.cpp:1118
 msgid "Track %1%: %2%, codec ID: %3%%4%%5%%6%\n"
 msgstr "Доріжка %1%: %2%, ID кодека: %3%%4%%5%%6%\n"
 
@@ -6836,7 +6832,7 @@ msgstr "Доріжка з ID %1%: %2% (%3%)"
 msgid "Track UID"
 msgstr "UID доріжки"
 
-#: src/info/mkvinfo.cpp:970
+#: src/info/mkvinfo.cpp:974
 msgid "Track UID: %1%"
 msgstr "UID доріжки: %1%"
 
@@ -6844,9 +6840,9 @@ msgstr "UID доріжки: %1%"
 msgid "Track extraction"
 msgstr "Витягнення доріжки"
 
-#: src/propedit/options.cpp:164
 #: src/propedit/propedit_cli_parser.cpp:106
 #: src/propedit/propedit_cli_parser.cpp:186
+#: src/propedit/options.cpp:164
 msgid "Track headers"
 msgstr "Заголовки доріжки"
 
@@ -6863,15 +6859,15 @@ msgstr "Номер доріжки"
 msgid "Track number %1% has been encrypted and decryption has not yet been implemented.\n"
 msgstr "Доріжка номер %1% була зашифрована і розшифровка ще не була здійснена.\n"
 
-#: src/info/mkvinfo.cpp:961
+#: src/info/mkvinfo.cpp:965
 msgid "Track number: %1%"
 msgstr "Номер доріжки: %1%"
 
-#: src/info/mkvinfo.cpp:1057
+#: src/info/mkvinfo.cpp:1061
 msgid "Track overlay: %1%"
 msgstr "Оверлей доріжки: %1%"
 
-#: src/info/mkvinfo.cpp:995
+#: src/info/mkvinfo.cpp:999
 msgid "Track type: %1%"
 msgstr "Тип доріжки: %1%"
 
@@ -6904,7 +6900,7 @@ msgstr ""
 msgid "Type:"
 msgstr "Тип:"
 
-#: src/info/mkvinfo.cpp:819
+#: src/info/mkvinfo.cpp:823
 msgid "Type: %1% (%2%)"
 msgstr "Тип: %1% (%2%)"
 
@@ -6968,8 +6964,8 @@ msgstr "Невідомий заголовок 0x%|1$02x|%|2$02x|%|3$02x|%|4$02x|
 msgid "Unknown mode '%1%'.\n"
 msgstr "Невідомий режим '%1%'.\n"
 
-#: src/common/mm_io_win.cpp:69
 #: src/common/mm_io.cpp:112
+#: src/common/mm_io_win.cpp:69
 msgid "Unknown open mode"
 msgstr "Невідомий режим відкриття"
 
@@ -7046,8 +7042,8 @@ msgstr "Задані користувачем опції:"
 msgid "Using a NALU size length of 3 bytes might result in tracks that won't be decodable with certain AVC/h.264 codecs.\n"
 msgstr "Використання довжини NALU розміру в 3 байти може призвести до того, що отримані доріжки не будуть призначені для декодовання  деякими AVC/H.264 кодеками.\n"
 
-#: src/input/r_matroska.cpp:1553
 #: src/input/r_ac3.cpp:90
+#: src/input/r_matroska.cpp:1553
 #: src/input/r_mpeg_ps.cpp:1180
 msgid "Using the %1%AC3 output module.\n"
 msgstr "Використання %1%AC3 вихідного модуля.\n"
@@ -7064,10 +7060,10 @@ msgstr "Використання AAC демультиплексора.\n"
 msgid "Using the AAC output module (FourCC: %1%).\n"
 msgstr "Використання AAC вихідного модуля (FourCC: %1%).\n"
 
-#: src/input/r_ogm.cpp:994
 #: src/input/r_aac.cpp:116
-#: src/input/r_qtmp4.cpp:1531
 #: src/input/r_matroska.cpp:1541
+#: src/input/r_ogm.cpp:994
+#: src/input/r_qtmp4.cpp:1531
 msgid "Using the AAC output module.\n"
 msgstr "Використання AAC вихідного модуля.\n"
 
@@ -7080,9 +7076,9 @@ msgid "Using the AC3 output module (FourCC: %1%).\n"
 msgstr "Використання AC3 вихідного модуля (FourCC: %1%).\n"
 
 #: src/input/r_wav.cpp:225
+#: src/input/r_avi.cpp:568
 #: src/input/r_ogm.cpp:1012
 #: src/input/r_qtmp4.cpp:1454
-#: src/input/r_avi.cpp:568
 msgid "Using the AC3 output module.\n"
 msgstr "Використання AC3 вихідного модуля.\n"
 
@@ -7103,10 +7099,10 @@ msgid "Using the DTS demultiplexer.\n"
 msgstr "Використання DTS демультиплексора.\n"
 
 #: src/input/r_wav.cpp:354
-#: src/input/r_dts.cpp:114
 #: src/input/r_matroska.cpp:1573
 #: src/input/r_avi.cpp:682
 #: src/input/r_mpeg_ps.cpp:1185
+#: src/input/r_dts.cpp:114
 msgid "Using the DTS output module.\n"
 msgstr "Використання DTS вихідного модуля.\n"
 
@@ -7114,8 +7110,8 @@ msgstr "Використання DTS вихідного модуля.\n"
 msgid "Using the Dirac demultiplexer.\n"
 msgstr "Використання Dirac демультиплексора.\n"
 
-#: src/input/r_dirac.cpp:96
 #: src/input/r_matroska.cpp:1471
+#: src/input/r_dirac.cpp:96
 msgid "Using the Dirac video output module.\n"
 msgstr "Використання Dirac відео вихідного модуля.\n"
 
@@ -7124,8 +7120,8 @@ msgid "Using the FLAC demultiplexer.\n"
 msgstr "Використання FLAC демультиплексора.\n"
 
 #: src/input/r_ogm_flac.cpp:287
-#: src/input/r_flac.cpp:164
 #: src/input/r_matroska.cpp:1595
+#: src/input/r_flac.cpp:164
 msgid "Using the FLAC output module.\n"
 msgstr "Використання FLAC вихідного модуля.\n"
 
@@ -7153,43 +7149,43 @@ msgstr "Використання MPEG ES демультиплексора.\n"
 msgid "Using the MPEG PS demultiplexer.\n"
 msgstr "Використання MPEG PS демультиплексора.\n"
 
-#: src/input/r_mp3.cpp:71
-#: src/input/r_ogm.cpp:1030
-#: src/input/r_qtmp4.cpp:1537
 #: src/input/r_matroska.cpp:1603
 #: src/input/r_avi.cpp:561
+#: src/input/r_mp3.cpp:71
 #: src/input/r_mpeg_ps.cpp:1175
+#: src/input/r_ogm.cpp:1030
+#: src/input/r_qtmp4.cpp:1537
 msgid "Using the MPEG audio output module.\n"
 msgstr "Використання MPEG аудіо вихідного модуля.\n"
 
-#: src/input/r_qtmp4.cpp:1489
 #: src/input/r_matroska.cpp:1455
+#: src/input/r_qtmp4.cpp:1489
 msgid "Using the MPEG-%1% video output module.\n"
 msgstr "Використання MPEG-%1% відео вихідного модуля.\n"
 
-#: src/input/r_mpeg_es.cpp:179
 #: src/input/r_avi.cpp:323
+#: src/input/r_mpeg_es.cpp:179
 #: src/input/r_mpeg_ps.cpp:1201
 msgid "Using the MPEG-1/2 video output module.\n"
 msgstr "Використання MPEG-1/2 відео вихідного модуля.\n"
 
-#: src/input/r_qtmp4.cpp:1507
 #: src/input/r_matroska.cpp:1865
+#: src/input/r_qtmp4.cpp:1507
 msgid "Using the MPEG-4 part 10 (AVC) video output module.\n"
 msgstr "Використання MPEG-4 Part 10 (AVC) відео вихідного модуля.\n"
 
 #: src/input/r_avc.cpp:136
-#: src/input/r_ogm.cpp:1154
 #: src/input/r_matroska.cpp:1845
 #: src/input/r_avi.cpp:348
 #: src/input/r_mpeg_ps.cpp:1214
+#: src/input/r_ogm.cpp:1154
 msgid "Using the MPEG-4 part 10 ES video output module.\n"
 msgstr "Використання MPEG-4 Part 10 ES відео вихідного модуля.\n"
 
-#: src/input/r_ogm.cpp:1258
-#: src/input/r_qtmp4.cpp:1481
 #: src/input/r_matroska.cpp:1459
 #: src/input/r_avi.cpp:331
+#: src/input/r_ogm.cpp:1258
+#: src/input/r_qtmp4.cpp:1481
 msgid "Using the MPEG-4 part 2 video output module.\n"
 msgstr "Використання MPEG-4 Part 2 відео вихідного модуля.\n"
 
@@ -7202,10 +7198,10 @@ msgid "Using the OGG/OGM demultiplexer.\n"
 msgstr "Використання OGG/OGM демультиплексора.\n"
 
 #: src/input/r_wav.cpp:395
-#: src/input/r_ogm.cpp:1049
-#: src/input/r_qtmp4.cpp:1543
 #: src/input/r_matroska.cpp:1610
 #: src/input/r_avi.cpp:553
+#: src/input/r_ogm.cpp:1049
+#: src/input/r_qtmp4.cpp:1543
 msgid "Using the PCM output module.\n"
 msgstr "Використання PCM вихідного модуля.\n"
 
@@ -7251,8 +7247,8 @@ msgstr "Використання TTA демультиплексора.\n"
 msgid "Using the TTA output module.\n"
 msgstr "Використання TTA вихідного модуля.\n"
 
-#: src/input/r_ogm.cpp:1351
 #: src/input/r_matroska.cpp:1467
+#: src/input/r_ogm.cpp:1351
 msgid "Using the Theora video output module.\n"
 msgstr "Використання Theora відео вихідного модуля.\n"
 
@@ -7282,9 +7278,9 @@ msgstr "Використання VC1 ES демультиплексора.\n"
 msgid "Using the VC1 video output module.\n"
 msgstr "Використання VC1 відео вихідного модуля.\n"
 
-#: src/input/r_ogm.cpp:1445
 #: src/input/r_matroska.cpp:1475
 #: src/input/r_ivf.cpp:87
+#: src/input/r_ogm.cpp:1445
 msgid "Using the VP8 video output module.\n"
 msgstr "Використання VP8 відео вихідного модуля.\n"
 
@@ -7308,9 +7304,9 @@ msgstr "Використання VobSub вихідного модуля субт
 msgid "Using the VobSub subtitle reader (SUB file '%1%').\n"
 msgstr "Використання VobSub зчитувача субтитрів. (SUB файл '%1%').\n"
 
-#: src/input/r_ogm.cpp:1070
 #: src/input/r_matroska.cpp:1628
 #: src/input/r_avi.cpp:736
+#: src/input/r_ogm.cpp:1070
 msgid "Using the Vorbis output module.\n"
 msgstr "Використання Vorbis вихідного модуля.\n"
 
@@ -7339,12 +7335,12 @@ msgstr "Використання загального вихідного ауд�
 msgid "Using the passthrough output module for this %1% track.\n"
 msgstr "Використання вихідного модуля пропуску для доріжки %1%.\n"
 
+#: src/input/r_ssa.cpp:71
+#: src/input/r_usf.cpp:259
+#: src/input/r_matroska.cpp:1706
+#: src/input/r_avi.cpp:405
 #: src/input/r_ogm.cpp:1101
 #: src/input/r_srt.cpp:60
-#: src/input/r_matroska.cpp:1706
-#: src/input/r_ssa.cpp:71
-#: src/input/r_avi.cpp:405
-#: src/input/r_usf.cpp:259
 msgid "Using the text subtitle output module.\n"
 msgstr "Використання вихідного модуля текстових субтитрів.\n"
 
@@ -7357,9 +7353,9 @@ msgstr "Використання вихідного модуля відео (Fou
 msgid "Using the video output module (FourCC: %|1$.4s|).\n"
 msgstr "Використання вихідного модуля відео (FourCC: %|1$.4s|).\n"
 
-#: src/input/r_ogm.cpp:1263
 #: src/input/r_matroska.cpp:1484
 #: src/input/r_avi.cpp:360
+#: src/input/r_ogm.cpp:1263
 msgid "Using the video output module.\n"
 msgstr "Використання вихідного модуля для відео.\n"
 
@@ -7446,7 +7442,7 @@ msgstr "Ширина пікселя відео "
 msgid "Video stereo mode"
 msgstr "Стерео-режим відео "
 
-#: src/info/mkvinfo.cpp:684
+#: src/info/mkvinfo.cpp:688
 msgid "Video track"
 msgstr "Відеодоріжка"
 
@@ -7491,11 +7487,11 @@ msgstr "Попередження:"
 msgid "Warning: "
 msgstr "Попередження:"
 
-#: src/info/mkvinfo.cpp:972
+#: src/info/mkvinfo.cpp:976
 msgid "Warning: There's more than one track with the UID %1%."
 msgstr "Попередження: Присутня більше, ніж одна доріжка з UID %1%."
 
-#: src/info/mkvinfo.cpp:963
+#: src/info/mkvinfo.cpp:967
 msgid "Warning: There's more than one track with the number %1%."
 msgstr "Попередження: Присутня більше, ніж одна доріжка з номером %1%."
 
@@ -7533,7 +7529,7 @@ msgstr "Записати вкладення з ID 'AID' до 'outname'."
 msgid "Write track with the ID TID to the file 'out'."
 msgstr "Записати доріжку з ID TID в файл 'out'."
 
-#: src/info/mkvinfo.cpp:582
+#: src/info/mkvinfo.cpp:586
 msgid "Writing application: %1%"
 msgstr "Додаток запису: %1%"
 
@@ -7567,8 +7563,8 @@ msgstr "Неправильно вибраний файл"
 msgid "Wrong file selected"
 msgstr "Неправильно обраний файл"
 
-#: src/common/kate.cpp:46
 #: src/common/theora.cpp:35
+#: src/common/kate.cpp:46
 msgid "Wrong header type: 0x%|1$02x| != 0x%|2$02x|"
 msgstr "Неправильний тип заголовка: 0x%|1$02x| != 0x%|2$02x|"
 
@@ -7673,7 +7669,7 @@ msgstr "aac_reader: Жодного корректного пакету AAC не 
 msgid "aborted"
 msgstr "перервано"
 
-#: src/output/p_ac3.cpp:228
+#: src/output/p_ac3.cpp:213
 msgid "ac3_bs_packetizer::add_to_buffer(): Untested code ('size' is odd). If mkvmerge crashes or if the resulting file does not contain the complete and correct audio track, then please contact the author Moritz Bunkus at moritz@bunkus.org.\n"
 msgstr "ac3_bs_packetizer::add_to_buffer(): Неперевірений код ('size' є нестандартним). Якщо робота mkvmerge аварійно принилася або отриманий файл не містить повної і корректної звукової доріжки, то, будь ласка, зв'яжіться з автором Moritz Bunkus через <moritz@bunkus.org>.\n"
 
@@ -7704,7 +7700,7 @@ msgstr "Приєднати"
 
 #: src/input/r_matroska.cpp:91
 #: src/mmg/mmg.cpp:62
-#: src/info/mkvinfo.cpp:1116
+#: src/info/mkvinfo.cpp:1120
 msgid "audio"
 msgstr "Аудіо"
 
@@ -7728,12 +7724,12 @@ msgstr "avi_reader: Не вдалося прочитати вхідний фай
 msgid "avi_reader: Source is not a valid AVI file."
 msgstr "avi_reader: Джерельний файл не є допустимим AVI файлом."
 
-#: src/info/mkvinfo.cpp:673
+#: src/info/mkvinfo.cpp:677
 msgid "bits per sample: %1%"
 msgstr "Розрядність: %1%"
 
 #: src/input/r_matroska.cpp:92
-#: src/info/mkvinfo.cpp:1119
+#: src/info/mkvinfo.cpp:1123
 msgid "buttons"
 msgstr "Кнопки"
 
@@ -7754,7 +7750,7 @@ msgstr "bzlib_compressor_c::decompress() не впроваджено\n"
 msgid "cet_index: '%1%' not found\n"
 msgstr "cet_index: '%1%' не знайдено\n"
 
-#: src/info/mkvinfo.cpp:662
+#: src/info/mkvinfo.cpp:666
 msgid "channels: %1%"
 msgstr "Канали: %1%"
 
@@ -7782,7 +7778,7 @@ msgstr "Завершено без помилок і попереджень"
 msgid "completed with warnings"
 msgstr "Завершено з попередженнями"
 
-#: src/info/mkvinfo.cpp:821
+#: src/info/mkvinfo.cpp:825
 msgid "compression"
 msgstr "Стиснення"
 
@@ -7804,7 +7800,7 @@ msgstr "create_track_number: file_num не знайдений. %1%\n"
 msgid "default"
 msgstr "Типово"
 
-#: src/info/mkvinfo.cpp:1074
+#: src/info/mkvinfo.cpp:1078
 msgid "default duration: %|1$.3f|ms (%|2$.3f| fps for a video track)"
 msgstr "типова тривалість: %|1$.3f|мс (%|2$.3f| кадрів за секунду для доріжки відео)"
 
@@ -7820,15 +7816,15 @@ msgstr "dirac_es_reader: Не вдалося відкрити вхідний ф�
 msgid "disable all"
 msgstr "Заборонити усі"
 
-#: src/info/mkvinfo.cpp:1629
+#: src/info/mkvinfo.cpp:1633
 msgid "discardable, "
 msgstr "відкинутий, "
 
-#: src/info/mkvinfo.cpp:709
+#: src/info/mkvinfo.cpp:713
 msgid "display height: %1%"
 msgstr "висота дисплея: %1%"
 
-#: src/info/mkvinfo.cpp:704
+#: src/info/mkvinfo.cpp:708
 msgid "display width: %1%"
 msgstr "ширина дисплея: %1%"
 
@@ -7865,7 +7861,7 @@ msgstr "Дозволити усі"
 msgid "enabled"
 msgstr "Задіяний"
 
-#: src/info/mkvinfo.cpp:822
+#: src/info/mkvinfo.cpp:826
 msgid "encryption"
 msgstr "Шифрування"
 
@@ -7961,7 +7957,7 @@ msgstr "для всіх кадрів"
 msgid "have an xcptn\n"
 msgstr "містить xcptn\n"
 
-#: src/info/mkvinfo.cpp:841
+#: src/info/mkvinfo.cpp:845
 msgid "header removal"
 msgstr "Видалення заголовка"
 
@@ -7992,11 +7988,11 @@ msgstr "оцінка часу"
 msgid "ivf_reader: Could not open the file."
 msgstr "ivf_reader: Не вдалося відкрити файл."
 
-#: src/info/mkvinfo.cpp:1627
+#: src/info/mkvinfo.cpp:1631
 msgid "key, "
 msgstr "ключ, "
 
-#: src/info/mkvinfo.cpp:1095
+#: src/info/mkvinfo.cpp:1099
 msgid "language: %1%"
 msgstr "мова: %1%"
 
@@ -8422,7 +8418,7 @@ msgstr "mpeg_ps_reader: Не повинно було трапитися #2. %1%"
 msgid "no"
 msgstr "Ні"
 
-#: src/info/mkvinfo.cpp:865
+#: src/info/mkvinfo.cpp:869
 msgid "no encryption"
 msgstr "без шифрування"
 
@@ -8434,11 +8430,11 @@ msgstr "без помилок"
 msgid "no file loaded"
 msgstr "жодного файлу не завантажено"
 
-#: src/info/mkvinfo.cpp:882
+#: src/info/mkvinfo.cpp:886
 msgid "no signature algorithm"
 msgstr "немає сигнатури алгоритму"
 
-#: src/info/mkvinfo.cpp:891
+#: src/info/mkvinfo.cpp:895
 msgid "no signature hash algorithm"
 msgstr "немає сигнатури хеш алгоритму"
 
@@ -8481,7 +8477,7 @@ msgstr "on_entry_selected: display == NULL. Не повинно було тра�
 msgid "only for I frames"
 msgstr "тільки для I-кадрів"
 
-#: src/info/mkvinfo.cpp:657
+#: src/info/mkvinfo.cpp:661
 msgid "output sampling freq: %1%"
 msgstr "частота дискретизації на виході: %1%"
 
@@ -8494,27 +8490,27 @@ msgstr "очікування"
 msgid "pgssup_reader: Could not open the file."
 msgstr "pgssup_reader: Не вдалося відкрити файл."
 
-#: src/info/mkvinfo.cpp:729
+#: src/info/mkvinfo.cpp:733
 msgid "pixel crop bottom: %1%"
 msgstr "обрізка пікселів знизу: %1%"
 
-#: src/info/mkvinfo.cpp:714
+#: src/info/mkvinfo.cpp:718
 msgid "pixel crop left: %1%"
 msgstr "обрізка пікселів ліворуч: %1%"
 
-#: src/info/mkvinfo.cpp:724
+#: src/info/mkvinfo.cpp:728
 msgid "pixel crop right: %1%"
 msgstr "обрізка пікселів справа: %1%"
 
-#: src/info/mkvinfo.cpp:719
+#: src/info/mkvinfo.cpp:723
 msgid "pixel crop top: %1%"
 msgstr "обрізка пікселів зверху: %1%"
 
-#: src/info/mkvinfo.cpp:699
+#: src/info/mkvinfo.cpp:703
 msgid "pixel height: %1%"
 msgstr "висота пікселя: %1%"
 
-#: src/info/mkvinfo.cpp:694
+#: src/info/mkvinfo.cpp:698
 msgid "pixel width: %1%"
 msgstr "ширина пікселя: %1%"
 
@@ -8560,7 +8556,7 @@ msgstr "Видалити"
 msgid "remove all"
 msgstr "Видалити всі"
 
-#: src/info/mkvinfo.cpp:811
+#: src/info/mkvinfo.cpp:815
 msgid "rest: unknown"
 msgstr "залишок: невідомо"
 
@@ -8572,7 +8568,7 @@ msgstr "черезрядково з горизонтальним розділь�
 msgid "row interleaved (right first)"
 msgstr "черезрядково з горизонтальним роздільником (правий спочатку)"
 
-#: src/info/mkvinfo.cpp:652
+#: src/info/mkvinfo.cpp:656
 msgid "sampling freq: %1%"
 msgstr "частота дискретизації: %1%"
 
@@ -8617,7 +8613,7 @@ msgid "subtitle"
 msgstr "субтитр"
 
 #: src/mmg/mmg.cpp:64
-#: src/info/mkvinfo.cpp:1118
+#: src/info/mkvinfo.cpp:1122
 msgid "subtitles"
 msgstr "субтитри"
 
@@ -8664,18 +8660,18 @@ msgstr "und (Невизначено)"
 #: src/input/r_matroska.cpp:90
 #: src/input/r_matroska.cpp:2330
 #: src/input/r_mpeg_ps.cpp:1392
-#: src/common/stereo_mode.cpp:62
 #: src/common/mm_io_win.cpp:165
+#: src/common/stereo_mode.cpp:62
 #: src/mmg/mmg.cpp:65
 #: src/mmg/header_editor/value_page.cpp:150
 #: src/mmg/tabs/input.cpp:339
-#: src/info/mkvinfo.cpp:813
-#: src/info/mkvinfo.cpp:823
-#: src/info/mkvinfo.cpp:842
-#: src/info/mkvinfo.cpp:871
-#: src/info/mkvinfo.cpp:884
-#: src/info/mkvinfo.cpp:894
-#: src/info/mkvinfo.cpp:1120
+#: src/info/mkvinfo.cpp:817
+#: src/info/mkvinfo.cpp:827
+#: src/info/mkvinfo.cpp:846
+#: src/info/mkvinfo.cpp:875
+#: src/info/mkvinfo.cpp:888
+#: src/info/mkvinfo.cpp:898
+#: src/info/mkvinfo.cpp:1124
 msgid "unknown"
 msgstr "невідомий"
 
@@ -8709,7 +8705,7 @@ msgstr "збій перевірки: chapters->CheckMandatory() ist false. Ць�
 
 #: src/input/r_matroska.cpp:93
 #: src/mmg/mmg.cpp:63
-#: src/info/mkvinfo.cpp:1117
+#: src/info/mkvinfo.cpp:1121
 msgid "video"
 msgstr "Відео"
 

@@ -93,10 +93,3 @@ IMPLEMENT_CLASS(options_dialog, wxDialog);
 BEGIN_EVENT_TABLE(options_dialog, wxDialog)
   EVT_BUTTON(wxID_OK, options_dialog::on_ok)
 END_EVENT_TABLE();
-
-// Fake msgextract to find these strings as well for standard button
-// sizers:
-
-#undef Z
-#define Z(x)
-Z("Cancel")
