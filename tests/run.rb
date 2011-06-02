@@ -2,6 +2,11 @@
 
 require "pp"
 
+begin
+  require "thread"
+rescue
+end
+
 $message_mutex = Mutex.new
 def show_message(message)
   $message_mutex.lock
