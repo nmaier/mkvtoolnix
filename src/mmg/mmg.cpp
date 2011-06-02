@@ -79,6 +79,7 @@ mmg_app::init_ui_locale() {
   std::string locale;
 
 #if defined(HAVE_LIBINTL_H)
+  static bool s_first_init = true;
   wxString w_locale;
 
   translation_c::initialize_available_translations();
@@ -98,6 +99,26 @@ mmg_app::init_ui_locale() {
   }
 
   m_ui_locale = locale;
+
+  if (s_first_init) {
+    std::string installation_path = get_installation_path();
+    if (!installation_path.empty())
+      wxLocale::AddCatalogLookupPathPrefix(wxU(installation_path + "/locale"));
+  }
+
+  const wxLanguageInfo *lang_info = wxLocale::FindLanguageInfo(wxU(m_ui_locale));
+  if ((NULL != lang_info) && m_locale.Init(lang_info->Language)) {
+    m_locale.AddCatalog(wxU("wxstd"));
+#ifdef SYS_WINDOWS
+    m_locale.AddCatalog(wxU("wxmsw"));
+#endif // SYS_WINDOWS
+  }
+
+  if (s_first_init) {
+    delete wxLog::SetActiveTarget(NULL);
+    s_first_init = false;
+  }
+
 #endif  // HAVE_LIBINTL_H
 
   init_locales(locale);

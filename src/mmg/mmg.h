@@ -23,6 +23,7 @@
 #include <wx/combobox.h>
 #include <wx/config.h>
 #include <wx/filename.h>
+#include <wx/intl.h>
 #include <wx/string.h>
 
 #include <ebml/EbmlUnicodeString.h>
@@ -278,6 +279,7 @@ wxString format_tooltip(const wxString &s);
 class mmg_app: public wxApp {
 public:
   std::string m_ui_locale;
+  wxLocale m_locale;
 public:
   virtual bool OnInit();
   virtual int OnExit();
