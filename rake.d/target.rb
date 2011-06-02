@@ -1,4 +1,9 @@
 class Target
+  begin
+    include Rake::DSL
+  rescue
+  end
+
   def initialize(target)
     @target       = target
     @aliases      = []
