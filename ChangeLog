@@ -1,5 +1,8 @@
 2011-06-02  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvinfo: bug fix: The timecode scale is retrieved first before
+	applying it to the segment duration.
+
 	* all: Added an Italian translation by Roberto Boriotti and
 	Matteo Angelino (see AUTHORS).
 

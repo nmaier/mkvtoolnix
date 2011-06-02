@@ -557,6 +557,10 @@ def_handle(info) {
   EbmlElement *element_found = NULL;
   read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, element_found);
 
+  KaxTimecodeScale *tc_scale = FINDFIRST(m1, KaxTimecodeScale);
+  if (NULL != tc_scale)
+    s_tc_scale = uint64(*tc_scale);
+
   size_t i1;
   for (i1 = 0; i1 < m1->ListSize(); i1++) {
     l2 = (*m1)[i1];
