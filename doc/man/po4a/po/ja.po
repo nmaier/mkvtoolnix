@@ -1645,7 +1645,7 @@ msgstr "オーディオトラック<parameter>n</parameter>、<parameter>m</para
 #: doc/man/mkvmerge.xml:672 doc/man/mkvmerge.xml:688 doc/man/mkvmerge.xml:704
 #: doc/man/mkvmerge.xml:720 doc/man/mkvmerge.xml:736 doc/man/mkvmerge.xml:758
 msgid "If the IDs are prefixed with <literal>!</literal> then the meaning is reversed: copy everything but the IDs listed after the <literal>!</literal>."
-msgstr ""
+msgstr "もしIDにプレフィックス<literal>!</literal>がついていた場合は、意味が逆になります：<literal>!</literal>の後に列挙されたIDを除く全てをコピーします。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvmerge.xml:679
@@ -3297,17 +3297,13 @@ msgstr "<constant>track</constant>を指定すると、&mkvpropedit;は特定の
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvpropedit.xml:173
-#, fuzzy
-#| msgid "<option>-o</option>, <option>--output</option> <parameter>file-name</parameter>"
 msgid "<option>-c</option>, <option>--chapters</option> <parameter>filename</parameter>"
-msgstr "<option>-o</option>, <option>--output</option> <parameter>file-name</parameter>"
+msgstr "<option>-c</option>, <option>--chapters</option> <parameter>filename</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvpropedit.xml:176
-#, fuzzy
-#| msgid "Add or replace tags in the file with the ones from <filename>filename</filename> or remove them if <filename>filename</filename> is empty. &mkvpropedit; reads the same XML tag format that &mkvmerge; reads as well."
 msgid "Add or replace chapters in the file with the ones from <filename>filename</filename> or remove them if <filename>filename</filename> is empty. &mkvpropedit; reads the same XML and simple chapter formats that &mkvmerge; reads as well."
-msgstr "<filename>ファイル名</filename>からのタグを、このファイル中のタグに追加、あるいは置換します。もし<filename>ファイル名</filename>が空白なら、タグを削除します。&mkvpropedit;は、&mkvmerge;が読み込むのと同じXMLタグフォーマットを読み込みます。"
+msgstr "<filename>ファイル名</filename>からのチャプタを、このファイル中のタグに追加、あるいは置換します。もし<filename>ファイル名</filename>が空白なら、チャプタを削除します。&mkvpropedit;は、&mkvmerge;が読み込むのと同じXMLまたはシンプルチャプタフォーマットを読み込みます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvpropedit.xml:212
@@ -3488,40 +3484,32 @@ msgstr ""
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvpropedit.xml:438
-#, fuzzy
-#| msgid "Replacing the tags for the second subtitle track in a file looks like this:"
 msgid "Replacing the chapters in a file looks like this:"
-msgstr "ファイル中で2番目の字幕トラックのタグを置換するには、以下のようにします："
+msgstr "ファイル中のチャプタ置換するには、以下のようにします："
 
 #. type: Content of: <refentry><refsect1><screen>
 #: doc/man/mkvpropedit.xml:442
-#, fuzzy, no-wrap
-#| msgid ""
-#| "$ mkvpropedit movie.mkv --tags track:s2:new-subtitle-tags.xml\n"
-#| "  "
+#, no-wrap
 msgid ""
 "$ mkvpropedit movie.mkv --chapters new-chapters.xml\n"
 "  "
-msgstr "$ mkvpropedit movie.mkv --tags track:s2:new-subtitle-tags.xml\n"
+msgstr ""
+"$ mkvpropedit movie.mkv --chapters new-chapters.xml\n"
+"  "
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvpropedit.xml:446
-#, fuzzy
-#| msgid "Removing all tags requires leaving out the file name:"
 msgid "Removing all chapters requires leaving out the file name:"
-msgstr "タグを削除するには、ファイル名を空白にします"
+msgstr "全てのチャプタを削除するには、ファイル名を空白にします"
 
 #. type: Content of: <refentry><refsect1><screen>
 #: doc/man/mkvpropedit.xml:450
-#, fuzzy, no-wrap
-#| msgid ""
-#| "$ mkvpropedit movie.mkv --tags all:\n"
-#| "  "
+#, no-wrap
 msgid ""
 "$ mkvpropedit movie.mkv --chapters ''\n"
 "  "
 msgstr ""
-"$ mkvpropedit movie.mkv --tags all:\n"
+"$ mkvpropedit movie.mkv --chapters ''\n"
 "  "
 
 #. type: Content of: <refentry><refsect1><para>
