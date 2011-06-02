@@ -90,15 +90,8 @@ mkvpropedit \- 再MUXすることなく、既存のMatroska(TM)ファイルの�
 .PP
 \fB\-c\fR, \fB\-\-chapters\fR \fIfilename\fR
 .RS 4
-Add or replace chapters in the file with the ones from
-filename
-or remove them if
-filename
-is empty\&.
-\fBmkvpropedit\fR(1)
-reads the same XML and simple chapter formats that
-\fBmkvmerge\fR(1)
-reads as well\&.
+
+ファイル名からのチャプタを、このファイル中のタグに追加、あるいは置換します。もしファイル名が空白なら、チャプタを削除します。\fBmkvpropedit\fR(1)は、\fBmkvmerge\fR(1)が読み込むのと同じXMLまたはシンプルチャプタフォーマットを読み込みます。
 .RE
 .PP
 その他のオプション:
@@ -267,7 +260,7 @@ $ mkvpropedit movie\&.mkv \-\-tags all:
 .RE
 .\}
 .PP
-Replacing the chapters in a file looks like this:
+ファイル中のチャプタ置換するには、以下のようにします：
 .sp
 .if n \{\
 .RS 4
@@ -280,7 +273,7 @@ $ mkvpropedit movie\&.mkv \-\-chapters new\-chapters\&.xml
 .RE
 .\}
 .PP
-Removing all chapters requires leaving out the file name:
+全てのチャプタを削除するには、ファイル名を空白にします
 .sp
 .if n \{\
 .RS 4
