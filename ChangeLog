@@ -1,3 +1,9 @@
+2011-06-03  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: ISO 639-2 terminology language codes are
+	converted to the corresponding bibliography code upon file
+	identification (e.g. 'deu' is converted to 'ger').
+
 2011-06-02  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvinfo: bug fix: The timecode scale is retrieved first before
