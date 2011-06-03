@@ -297,21 +297,19 @@ gcc to use. Note that you also need a working "bjam" binary before
 building this library. See section 2.1.3 for details.
 
   cd $HOME/mingw/src
-  wget 'http://downloads.sourceforge.net/project/boost/boost/1.42.0/boost_1_42_0.tar.bz2?use_mirror=heanet'
-  bunzip2 < boost_1_42_0.tar.bz2 | tar xf -
-  cd boost_1_42_0
+  wget http://sourceforge.net/projects/boost/files/boost/1.46.1/boost_1_46_1.tar.bz2/download
+  bunzip2 < boost_1_46_1.tar.bz2 | tar xf -
+  cd boost_1_46_1
   ./bootstrap.sh --with-bjam=/usr/bin/bjam --without-libraries=python,mpi \
     --without-icu --prefix=$HOME/mingw/boost
   echo "using gcc : : i586-mingw32msvc-g++ ;" > user-config.jam
   bjam \
-    target-os=windows threading=single threadapi=win32 \
+    target-os=windows threadapi=win32 \
     link=static runtime-link=static variant=release \
     include=$HOME/mingw/include \
     --user-config=user-config.jam --prefix=$HOME/mingw/boost \
     install
   cd $HOME/mingw/boost/lib
-  for i in *.lib ; do mv $i $(basename $i .lib).a ; done
-  for i in *.a ; do i586-mingw32msvc-ranlib $i ; done
 
 Check if $HOME/prog/mingw/lib contains the filesystem, system and
 regex libraries:
