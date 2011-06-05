@@ -10,6 +10,7 @@
 
 #include "common/os.h"
 
+#include <matroska/KaxChapters.h>
 #include <matroska/KaxInfo.h>
 #include <matroska/KaxTags.h>
 #include <matroska/KaxTracks.h>
