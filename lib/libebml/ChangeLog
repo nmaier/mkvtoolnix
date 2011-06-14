@@ -1,3 +1,11 @@
+2011-06-12 robux4/mosu
+New 1.2.1 version:
+    - fix the constructor of CRTError in StdIOCallback (patch from Graham 'gbooker' Booker)
+    - fix the size returned by MemIOCallback::read() when reaching the end of the buffer
+    - add a macro to define signed integer elements that have a default value
+    - fix compilation of debug builds on win32
+    - fix for Sun Studio C compiler
+
 2011-01-30 robux4/mosu
 New 1.2.0 version:
     - no need to put the internal code of EbmlCrc32 in the public header

@@ -72,8 +72,9 @@ uint32 MemIOCallback::read(void *Buffer, size_t Size)
 	{
 		//We will only return the remaining data
 		memcpy(Buffer, dataBuffer + dataBufferPos, dataBufferTotalSize - dataBufferPos);
+        uint64 oldDataPos = dataBufferPos;
 		dataBufferPos = dataBufferTotalSize;
-		return dataBufferTotalSize - dataBufferPos;
+		return dataBufferTotalSize - oldDataPos;
 	}
 		
 	//Well... We made it here, so do a quick and simple copy

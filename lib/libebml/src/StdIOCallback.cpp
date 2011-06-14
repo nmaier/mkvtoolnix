@@ -49,13 +49,13 @@ START_LIBEBML_NAMESPACE
 
 CRTError::CRTError(int nError, const std::string & Description)
 	:std::runtime_error(Description+": "+strerror(nError))
-	,Error(Error)
+	,Error(nError)
 {
 }
 
 CRTError::CRTError(const std::string & Description,int nError)
 	:std::runtime_error(Description+": "+strerror(nError))
-	,Error(Error)
+	,Error(nError)
 {
 }
 

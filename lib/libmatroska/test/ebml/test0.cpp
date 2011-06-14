@@ -32,7 +32,7 @@
 
 /*!
     \file
-    \version \$Id: test0.cpp 383 2010-07-04 09:17:57Z robux4 $
+    \version \$Id: test0.cpp 726 2011-03-27 17:18:50Z robux4 $
     \author Steve Lhomme     <robux4 @ users.sf.net>
 		Test the EBML write possibilities
 		\see http://www.cl.cam.ac.uk/~mgk25/unicode.html
@@ -51,8 +51,9 @@
 #include "ebml/EbmlMaster.h"
 #include "ebml/EbmlFloat.h"
 #include "ebml/EbmlStream.h"
+#include "ebml/StdIOCallback.h"
 
-using namespace LIBMATROSKA_NAMESPACE;
+using namespace LIBEBML_NAMESPACE;
 
 const char RW_FILENAME[] = "test.kax";
 

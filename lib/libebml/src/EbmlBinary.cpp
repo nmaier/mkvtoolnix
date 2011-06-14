@@ -30,7 +30,7 @@
 
 /*!
 	\file
-	\version \$Id: EbmlBinary.cpp 672 2011-02-05 21:26:49Z mosub $
+	\version \$Id: EbmlBinary.cpp 757 2011-06-12 09:51:25Z robux4 $
 	\author Steve Lhomme     <robux4 @ users.sf.net>
 	\author Julien Coloos	<suiryc @ users.sf.net>
 */
@@ -92,9 +92,9 @@ filepos_t EbmlBinary::ReadData(IOCallback & input, ScopeMode ReadFully)
 		return GetSize();
 	}
 
-	Data = (binary *)malloc(GetSize() * sizeof(binary));
+	Data = (binary *)malloc(GetSize());
     if (Data == NULL)
-	throw CRTError(std::string("Error allocating data"));
+		throw CRTError(std::string("Error allocating data"));
 	SetValueIsSet();
 	return input.read(Data, GetSize());
 }
