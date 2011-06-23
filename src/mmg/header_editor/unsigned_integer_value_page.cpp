@@ -53,7 +53,7 @@ he_unsigned_integer_value_page_c::create_input_control() {
 wxString
 he_unsigned_integer_value_page_c::get_original_value_as_string() {
   if (NULL != m_element)
-    return wxString::Format(_T("%") wxLongLongFmtSpec _T("u"), m_original_value);
+    return wxString::Format(wxU("%") + wxU(wxLongLongFmtSpec) + wxU("u"), m_original_value);
 
   return wxEmptyString;
 }
