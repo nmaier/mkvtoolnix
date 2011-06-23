@@ -247,7 +247,7 @@ tab_input::setup_file_type_filter() {
   foreach(wxstring_bool_pair_t &extension, all_extensions_map)
     all_extensions.push_back(wxString::Format(wxT("*.%s"), extension.first.c_str()));
 
-  sort(all_extensions.begin(), all_extensions.end());
+  std::sort(all_extensions.begin(), all_extensions.end());
 
   media_files.Printf(Z("All supported media files|%s%s|%s"), join(wxT(";"), all_extensions).c_str(), filters.c_str(), ALLFILES.c_str());
 
