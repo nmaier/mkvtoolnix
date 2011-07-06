@@ -119,14 +119,6 @@
     </listitem>
    </varlistentry>
 
-   <varlistentry id="mkvmerge.description.tags">
-    <term><option>--tags</option> <parameter>file-name</parameter></term>
-    <listitem>
-     <para>Read global tags from the &xml; file <parameter>file-name</parameter>. See the section about tags below for
-     details.</para>
-    </listitem>
-   </varlistentry>
-
    <varlistentry>
     <term><option>--default-language</option> <parameter>language-code</parameter></term>
     <listitem>
@@ -969,7 +961,7 @@ $ mkvmerge -o full.mkv =file1.mkv
     </listitem>
    </varlistentry>
 
-   <varlistentry>
+   <varlistentry id="mkvmerge.description.tags">
     <term><option>-t</option>, <option>--tags</option> <parameter>TID:file-name</parameter></term>
     <listitem>
      <para>
