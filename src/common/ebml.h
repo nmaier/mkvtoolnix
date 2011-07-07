@@ -183,6 +183,7 @@ GetFirstOrNextChild(EbmlMaster *master,
 EbmlElement *MTX_DLL_API empty_ebml_master(EbmlElement *e);
 EbmlElement *MTX_DLL_API create_ebml_element(const EbmlCallbacks &callbacks, const EbmlId &id);
 EbmlMaster *MTX_DLL_API sort_ebml_master(EbmlMaster *e);
+void MTX_DLL_API remove_voids_from_master(EbmlElement *element);
 
 const EbmlCallbacks *MTX_DLL_API find_ebml_callbacks(const EbmlCallbacks &base, const EbmlId &id);
 const EbmlCallbacks *MTX_DLL_API find_ebml_callbacks(const EbmlCallbacks &base, const char *debug_name);

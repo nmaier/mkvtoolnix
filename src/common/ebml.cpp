@@ -27,6 +27,7 @@
 #include <ebml/EbmlString.h>
 #include <ebml/EbmlUInteger.h>
 #include <ebml/EbmlUnicodeString.h>
+#include <ebml/EbmlVoid.h>
 
 #include <matroska/KaxChapters.h>
 #include <matroska/KaxTags.h>
@@ -592,4 +593,23 @@ fix_mandatory_elements(EbmlElement *master) {
 
   else if (NULL != dynamic_cast<KaxChapters *>(master))
     fix_mandatory_chapter_elements(master);
+}
+
+void
+remove_voids_from_master(EbmlElement *element) {
+  EbmlMaster *master = dynamic_cast<EbmlMaster *>(element);
+  if (NULL == master)
+    return;
+
+  size_t idx = 0;
+  while (master->ListSize() > idx) {
+    element = (*master)[idx];
+    if (NULL != dynamic_cast<EbmlVoid *>(element))
+      master->Remove(idx);
+
+    else {
+      remove_voids_from_master(element);
+      ++idx;
+    }
+  }
 }

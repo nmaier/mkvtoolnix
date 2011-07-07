@@ -326,6 +326,7 @@ kax_analyzer_c::update_element(EbmlElement *e,
   reopen_file();
 
   fix_mandatory_elements(e);
+  remove_voids_from_master(e);
 
   placement_strategy_e strategy = get_placement_strategy_for(e);
 
