@@ -1,3 +1,7 @@
+2011-07-08  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: Various compatibility fixes for use with wxWidgets 2.9.x.
+
 2011-06-23  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: bug fix: Fixed building with Sun Studio's C compiler.
@@ -20,12 +24,6 @@
 
 	* mmg: bug fix: Fixed populating the 'compression' drop down box
 	according to what mkvmerge was compiled with.
-
-2011-05-27  Moritz Bunkus  <moritz@bunkus.org>
-
-	* build system: Added a configure check that prevents compilation
-	with wxWidgets 2.9.x due to known incompatibilities. This is also
-	mentioned in the README.
 
 2011-05-26  Moritz Bunkus  <moritz@bunkus.org>
 
