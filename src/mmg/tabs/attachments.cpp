@@ -183,7 +183,6 @@ tab_attachments::enable(bool e) {
 
 void
 tab_attachments::enable_attached_files_buttons() {
-  wxLogMessage(wxT("EAFB size %d"), m_attached_files.size());
   b_enable_all->Enable(!m_attached_files.empty());
   b_disable_all->Enable(!m_attached_files.empty());
 }

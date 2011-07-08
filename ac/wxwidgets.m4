@@ -8,7 +8,7 @@ dnl
     AC_HELP_STRING([--enable-wxwidgets],[compile the wxWidgets version of the GUIs (yes)]))
 
   wxw_min_ver=2.8.0
-  wxw_min_bad_ver=2.9.0
+#  wxw_min_bad_ver=2.9.0
   continue_wx_check=1
 
   if ! test '(' x"$enable_wxwidgets" = xyes -o x"$enable_wxwidgets" = x ')' -a '(' x"$enable_gui" = xyes -o x"$enable_gui" = x ')'; then
@@ -31,7 +31,8 @@ dnl
   fi
 
   if test x"$continue_wx_check" = x1 ; then
-    AC_MSG_CHECKING(for wxWidgets $wxw_min_ver or newer and older than $wxw_min_bad_ver)
+#    AC_MSG_CHECKING(for wxWidgets $wxw_min_ver or newer and older than $wxw_min_bad_ver)
+    AC_MSG_CHECKING(for wxWidgets $wxw_min_ver or newer)
 
     wxwversion=`$WX_CONFIG --version`
     if ! check_version $wxw_min_ver $wxwversion ; then
@@ -39,10 +40,10 @@ dnl
       continue_wx_check=0
     fi
 
-    if check_version $wxw_min_bad_ver $wxwversion ; then
-      AC_MSG_RESULT(no: there are known problems with mkvtoolnix and v$wxwversion)
-      continue_wx_check=0
-    fi
+#    if check_version $wxw_min_bad_ver $wxwversion ; then
+#      AC_MSG_RESULT(no: there are known problems with mkvtoolnix and v$wxwversion)
+#      continue_wx_check=0
+#    fi
   fi
 
   if test x"$continue_wx_check" = x1 ; then

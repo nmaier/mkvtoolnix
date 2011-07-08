@@ -24,9 +24,9 @@
 # include "mmg/taskbar_progress.h"
 #endif  // SYS_WINDOWS
 
-#define ID_B_MUX_OK                       17000
-#define ID_B_MUX_SAVELOG                  17001
-#define ID_B_MUX_ABORT                    17002
+#define ID_B_MUX_OK                       18000
+#define ID_B_MUX_SAVELOG                  18001
+#define ID_B_MUX_ABORT                    18002
 
 class mux_process;
 

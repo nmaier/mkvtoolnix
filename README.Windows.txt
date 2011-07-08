@@ -319,9 +319,6 @@ regex libraries:
 2.3.8. wxWidgets
 
 Get the full wxWidgets source archive from http://www.wxwidgets.org/
-Don't use the 2.9.x series as there are several unresolved
-problems. Also 2.9.x is still in "development libs, not recommended
-for everyday use yet" status.
 
   cd $HOME/mingw/src
   wget 'http://downloads.sourceforge.net/project/wxwindows/wxAll/2.8.10/wxWidgets-2.8.10.tar.bz2?use_mirror=ovh'

@@ -107,14 +107,14 @@ mmg_app::init_ui_locale() {
   }
 
   const wxLanguageInfo *lang_info = wxLocale::FindLanguageInfo(wxU(m_ui_locale));
-  if ((NULL != lang_info) && m_locale.Init(lang_info->Language)) {
-    m_locale.AddCatalog(wxU("wxstd"));
-#ifdef SYS_WINDOWS
-    m_locale.AddCatalog(wxU("wxmsw"));
-#endif // SYS_WINDOWS
-  }
-
   if (s_first_init) {
+    if ((NULL != lang_info) && m_locale.Init(lang_info->Language)) {
+      m_locale.AddCatalog(wxU("wxstd"));
+#ifdef SYS_WINDOWS
+      m_locale.AddCatalog(wxU("wxmsw"));
+#endif // SYS_WINDOWS
+    }
+
     delete wxLog::SetActiveTarget(NULL);
     s_first_init = false;
   }

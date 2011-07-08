@@ -64,7 +64,8 @@ update_check_dlg_c::update_check_dlg_c(wxWindow *parent)
   m_st_available_version                   = new wxStaticText(this, wxID_STATIC, wxEmptyString);
 
   wxStaticText *st_download_url_label      = new wxStaticText(this, wxID_STATIC, Z("Download URL:"));
-  m_hlc_download_url                       = new wxHyperlinkCtrl(this, ID_HLC_DOWNLOAD_URL, wxEmptyString, wxEmptyString);
+  const wxString default_url               = wxU("http://www.bunkus.org/videotools/mkvtoolnix/downloads.html");
+  m_hlc_download_url                       = new wxHyperlinkCtrl(this, ID_HLC_DOWNLOAD_URL, default_url, default_url);
 
   m_b_close                                = new wxButton(this, ID_B_UPDATE_CHECK_CLOSE, Z("&Close"));
   m_b_close->Enable(false);
