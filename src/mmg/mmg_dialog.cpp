@@ -190,67 +190,69 @@ mmg_dialog::~mmg_dialog() {
 
 void
 mmg_dialog::create_menus() {
+  const wxString dummy(wxU("dummy"));
+
   file_menu = new wxMenu();
-  file_menu->Append(ID_M_FILE_NEW);
-  file_menu->Append(ID_M_FILE_LOAD);
-  file_menu->Append(ID_M_FILE_SAVE);
+  file_menu->Append(ID_M_FILE_NEW,                   dummy);
+  file_menu->Append(ID_M_FILE_LOAD,                  dummy);
+  file_menu->Append(ID_M_FILE_SAVE,                  dummy);
   file_menu->AppendSeparator();
-  file_menu->Append(ID_M_FILE_SETOUTPUT);
+  file_menu->Append(ID_M_FILE_SETOUTPUT,             dummy);
   file_menu->AppendSeparator();
-  file_menu->Append(ID_M_FILE_OPTIONS);
+  file_menu->Append(ID_M_FILE_OPTIONS,               dummy);
   file_menu->AppendSeparator();
-  file_menu->Append(ID_M_FILE_HEADEREDITOR);
+  file_menu->Append(ID_M_FILE_HEADEREDITOR,          dummy);
   file_menu->AppendSeparator();
-  file_menu->Append(ID_M_FILE_EXIT);
+  file_menu->Append(ID_M_FILE_EXIT,                  dummy);
 
   file_menu_sep = false;
   update_file_menu();
 
   wxMenu *muxing_menu = new wxMenu();
-  muxing_menu->Append(ID_M_MUXING_START);
+  muxing_menu->Append(ID_M_MUXING_START,             dummy);
   muxing_menu->AppendSeparator();
-  muxing_menu->Append(ID_M_MUXING_SHOW_CMDLINE);
-  muxing_menu->Append(ID_M_MUXING_COPY_CMDLINE);
-  muxing_menu->Append(ID_M_MUXING_SAVE_CMDLINE);
-  muxing_menu->Append(ID_M_MUXING_CREATE_OPTIONFILE);
+  muxing_menu->Append(ID_M_MUXING_SHOW_CMDLINE,      dummy);
+  muxing_menu->Append(ID_M_MUXING_COPY_CMDLINE,      dummy);
+  muxing_menu->Append(ID_M_MUXING_SAVE_CMDLINE,      dummy);
+  muxing_menu->Append(ID_M_MUXING_CREATE_OPTIONFILE, dummy);
   muxing_menu->AppendSeparator();
-  muxing_menu->Append(ID_M_MUXING_ADD_TO_JOBQUEUE);
-  muxing_menu->Append(ID_M_MUXING_MANAGE_JOBS);
+  muxing_menu->Append(ID_M_MUXING_ADD_TO_JOBQUEUE,   dummy);
+  muxing_menu->Append(ID_M_MUXING_MANAGE_JOBS,       dummy);
   muxing_menu->AppendSeparator();
-  muxing_menu->Append(ID_M_MUXING_ADD_CLI_OPTIONS);
+  muxing_menu->Append(ID_M_MUXING_ADD_CLI_OPTIONS,   dummy);
 
   chapter_menu = new wxMenu();
-  chapter_menu->Append(ID_M_CHAPTERS_NEW);
-  chapter_menu->Append(ID_M_CHAPTERS_LOAD);
-  chapter_menu->Append(ID_M_CHAPTERS_SAVE);
-  chapter_menu->Append(ID_M_CHAPTERS_SAVETOKAX);
-  chapter_menu->Append(ID_M_CHAPTERS_SAVEAS);
+  chapter_menu->Append(ID_M_CHAPTERS_NEW,            dummy);
+  chapter_menu->Append(ID_M_CHAPTERS_LOAD,           dummy);
+  chapter_menu->Append(ID_M_CHAPTERS_SAVE,           dummy);
+  chapter_menu->Append(ID_M_CHAPTERS_SAVETOKAX,      dummy);
+  chapter_menu->Append(ID_M_CHAPTERS_SAVEAS,         dummy);
   chapter_menu->AppendSeparator();
-  chapter_menu->Append(ID_M_CHAPTERS_VERIFY);
+  chapter_menu->Append(ID_M_CHAPTERS_VERIFY,         dummy);
   chapter_menu_sep = false;
   update_chapter_menu();
 
   wxMenu *window_menu = new wxMenu();
-  window_menu->Append(ID_M_WINDOW_INPUT);
-  window_menu->Append(ID_M_WINDOW_ATTACHMENTS);
-  window_menu->Append(ID_M_WINDOW_GLOBAL);
+  window_menu->Append(ID_M_WINDOW_INPUT,             dummy);
+  window_menu->Append(ID_M_WINDOW_ATTACHMENTS,       dummy);
+  window_menu->Append(ID_M_WINDOW_GLOBAL,            dummy);
   window_menu->AppendSeparator();
-  window_menu->Append(ID_M_WINDOW_CHAPTEREDITOR);
+  window_menu->Append(ID_M_WINDOW_CHAPTEREDITOR,     dummy);
 
   wxMenu *help_menu = new wxMenu();
-  help_menu->Append(ID_M_HELP_HELP);
-  help_menu->Append(ID_M_HELP_ABOUT);
+  help_menu->Append(ID_M_HELP_HELP,                  dummy);
+  help_menu->Append(ID_M_HELP_ABOUT,                 dummy);
 #if defined(HAVE_CURL_EASY_H)
   help_menu->AppendSeparator();
-  help_menu->Append(ID_M_HELP_CHECK_FOR_UPDATES);
+  help_menu->Append(ID_M_HELP_CHECK_FOR_UPDATES,     dummy);
 #endif  // defined(HAVE_CURL_EASY_H)
 
   wxMenuBar *menu_bar = new wxMenuBar();
-  menu_bar->Append(file_menu,    wxEmptyString);
-  menu_bar->Append(muxing_menu,  wxEmptyString);
-  menu_bar->Append(chapter_menu, wxEmptyString);
-  menu_bar->Append(window_menu,  wxEmptyString);
-  menu_bar->Append(help_menu,    wxEmptyString);
+  menu_bar->Append(file_menu,                        dummy);
+  menu_bar->Append(muxing_menu,                      dummy);
+  menu_bar->Append(chapter_menu,                     dummy);
+  menu_bar->Append(window_menu,                      dummy);
+  menu_bar->Append(help_menu,                        dummy);
   SetMenuBar(menu_bar);
 }
 
