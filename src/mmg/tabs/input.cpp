@@ -1095,7 +1095,7 @@ tab_input::load(wxConfigBase *cfg,
     mmg_file_cptr fi = mmg_file_cptr(new mmg_file_t);
 
     wxString s;
-    s.Printf(wxT("file %u"), fidx);
+    s.Printf(wxT("file %ld"), fidx);
     cfg->SetPath(s);
 
     int num_tracks;
@@ -1172,7 +1172,7 @@ tab_input::load(wxConfigBase *cfg,
       tr->source = files.size();
       if (track_order.Length() > 0)
         track_order += wxT(",");
-      track_order += wxString::Format(wxUCS(format), files.size(), tr->id);
+      track_order += wxString::Format(wxUCS(format), static_cast<unsigned int>(files.size()), tr->id);
 
       fi->tracks.push_back(tr);
       cfg->SetPath(wxT(".."));
@@ -1182,7 +1182,7 @@ tab_input::load(wxConfigBase *cfg,
     if (cfg->Read(wxT("number_of_attached_files"), &num_attached_files) && (0 < num_attached_files)) {
       int i;
       for (i = 0; num_attached_files > i; ++i) {
-        cfg->SetPath(wxString::Format(wxT("attached_file %u"), i));
+        cfg->SetPath(wxString::Format(wxT("attached_file %d"), i));
 
         mmg_attached_file_cptr a = mmg_attached_file_cptr(new mmg_attached_file_t);
 
