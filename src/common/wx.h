@@ -82,8 +82,9 @@ wxU(const wxString &s) {
 
 // Use wxComboBox on non-Windows builds with wxWidgets 2.8.0 and newer
 // because GTK's combo box has serious problems (see bug 339).
+// wxWidgets 2.9.x's default wxComboBox is good, though.
 #if !defined(wxMTX_COMBOBOX_TYPE)
-# if !defined(SYS_WINDOWS) && !defined(SYS_APPLE) && defined(HAVE_WXBITMAPCOMBOBOX) && HAVE_WXBITMAPCOMBOBOX
+# if !defined(SYS_WINDOWS) && !defined(SYS_APPLE) && defined(HAVE_WXBITMAPCOMBOBOX) && HAVE_WXBITMAPCOMBOBOX && !wxCHECK_VERSION(2, 9, 0)
 #  define USE_WXBITMAPCOMBOBOX
 #  define wxMTX_COMBOBOX_TYPE wxBitmapComboBox
 #  include <wx/bmpcbox.h>

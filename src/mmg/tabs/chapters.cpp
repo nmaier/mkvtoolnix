@@ -277,11 +277,12 @@ tab_chapters::tab_chapters(wxWindow *parent,
   siz_fg->Add(st_language, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
 
   cob_language_code = new wxMTX_COMBOBOX_TYPE(this, ID_CB_CHAPTERSELECTLANGUAGECODE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
+  cob_language_code->SetMinSize(wxSize(0, 0));
   for (i = 0; i < sorted_iso_codes.Count(); i++)
     cob_language_code->Append(sorted_iso_codes[i]);
   cob_language_code->SetValue(wxEmptyString);
   siz_line = new wxBoxSizer(wxHORIZONTAL);
-  siz_line->Add(cob_language_code, 1, wxGROW, 0);
+  siz_line->Add(cob_language_code, 3, wxGROW, 0);
   siz_line->Add(10, 0, 0, 0, 0);
 
   st_country = new wxStaticText(this, wxID_STATIC, wxEmptyString);
