@@ -1470,7 +1470,7 @@ mmg_dialog::load_job_queue() {
 
   for (i = 0; i < static_cast<size_t>(num); i++) {
     cfg->SetPath(wxT("/jobs"));
-    s.Printf(wxT("%u"), i);
+    s.Printf(wxT("%u"), static_cast<unsigned int>(i));
     if (!cfg->HasGroup(s))
       continue;
     cfg->SetPath(s);
