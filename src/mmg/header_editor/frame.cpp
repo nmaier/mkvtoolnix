@@ -93,27 +93,29 @@ header_editor_frame_c::header_editor_frame_c(wxWindow *parent)
 
   clear_pages();
 
+  const wxString dummy(wxU("dummy"));
+
   m_file_menu = new wxMenu();
-  m_file_menu->Append(ID_M_HE_FILE_OPEN);
-  m_file_menu->Append(ID_M_HE_FILE_SAVE);
-  m_file_menu->Append(ID_M_HE_FILE_RELOAD);
-  m_file_menu->Append(ID_M_HE_FILE_CLOSE);
+  m_file_menu->Append(ID_M_HE_FILE_OPEN,               dummy);
+  m_file_menu->Append(ID_M_HE_FILE_SAVE,               dummy);
+  m_file_menu->Append(ID_M_HE_FILE_RELOAD,             dummy);
+  m_file_menu->Append(ID_M_HE_FILE_CLOSE,              dummy);
   m_file_menu->AppendSeparator();
-  m_file_menu->Append(ID_M_HE_FILE_QUIT);
+  m_file_menu->Append(ID_M_HE_FILE_QUIT,               dummy);
 
   m_headers_menu = new wxMenu();
-  m_headers_menu->Append(ID_M_HE_HEADERS_EXPAND_ALL);
-  m_headers_menu->Append(ID_M_HE_HEADERS_COLLAPSE_ALL);
+  m_headers_menu->Append(ID_M_HE_HEADERS_EXPAND_ALL,   dummy);
+  m_headers_menu->Append(ID_M_HE_HEADERS_COLLAPSE_ALL, dummy);
   m_headers_menu->AppendSeparator();
-  m_headers_menu->Append(ID_M_HE_HEADERS_VALIDATE);
+  m_headers_menu->Append(ID_M_HE_HEADERS_VALIDATE,     dummy);
 
   wxMenu *help_menu = new wxMenu();
-  help_menu->Append(ID_M_HE_HELP_HELP);
+  help_menu->Append(ID_M_HE_HELP_HELP,                 dummy);
 
   wxMenuBar *menu_bar = new wxMenuBar();
-  menu_bar->Append(m_file_menu,    wxEmptyString);
-  menu_bar->Append(m_headers_menu, wxEmptyString);
-  menu_bar->Append(help_menu,      wxEmptyString);
+  menu_bar->Append(m_file_menu,                        dummy);
+  menu_bar->Append(m_headers_menu,                     dummy);
+  menu_bar->Append(help_menu,                          dummy);
   SetMenuBar(menu_bar);
 
   translate_ui();
