@@ -2230,6 +2230,9 @@ kax_reader_c::process_block_group(KaxCluster *cluster,
       } else {
         packet_cptr packet(new packet_t(data, m_last_timecode + i * frame_duration, block_duration, block_bref, block_fref));
 
+        if ((NULL != duration) && (0 == uint64(*duration)))
+          packet->duration_mandatory = true;
+
         if (NULL != codec_state)
           packet->codec_state = clone_memory(codec_state->GetBuffer(), codec_state->GetSize());
 

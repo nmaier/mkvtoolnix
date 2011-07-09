@@ -1,3 +1,8 @@
+2011-07-09  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Fixed handling block groups in Matroska
+	files with a duration of 0.
+
 2011-07-08  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: Various compatibility fixes for use with wxWidgets 2.9.x.
