@@ -83,6 +83,7 @@
 #include "input/r_corepicture.h"
 #include "input/r_dirac.h"
 #include "input/r_dts.h"
+#include "input/r_dv.h"
 #include "input/r_flac.h"
 #include "input/r_flv.h"
 #include "input/r_hdsub.h"
@@ -328,6 +329,8 @@ get_file_type(filelist_t &file) {
     type = FILE_TYPE_ASF;
   else if (cdxa_reader_c::probe_file(io, size))
     type = FILE_TYPE_CDXA;
+  else if (dv_reader_c::probe_file(io, size))
+    type = FILE_TYPE_DV;
   else if (flv_reader_c::probe_file(io, size))
     type = FILE_TYPE_FLV;
   else if (hdsub_reader_c::probe_file(io, size))

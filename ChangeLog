@@ -1,5 +1,8 @@
 2011-07-09  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: DV files are recognized as an unsupported
+	container type. Fix for bug 630.
+
 	* mkvmerge: bug fix: Fixed handling block groups in Matroska
 	files with a duration of 0.
 
