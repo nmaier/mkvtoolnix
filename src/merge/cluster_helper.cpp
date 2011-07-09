@@ -368,13 +368,12 @@ cluster_helper_c::render() {
     if (-1 == m_first_timecode_in_file)
       m_first_timecode_in_file = pack->assigned_timecode;
 
-    if ((pack->assigned_timecode + pack->duration) > m_max_timecode_and_duration)
-      m_max_timecode_and_duration = pack->assigned_timecode + pack->duration;
+    m_max_timecode_and_duration = std::max(pack->assigned_timecode + (pack->has_duration() ? pack->duration : 0), m_max_timecode_and_duration);
 
     if (!pack->is_key_frame() || !track_entry.LacingEnabled())
       render_group->m_more_data = false;
 
-    render_group->m_durations.push_back(pack->unmodified_duration);
+    render_group->m_durations.push_back(pack->has_duration() ? pack->unmodified_duration : 0);
     render_group->m_duration_mandatory |= pack->duration_mandatory;
 
     if (NULL != new_block_group) {
@@ -429,9 +428,8 @@ cluster_helper_c::render() {
 
     pack->group = new_block_group;
 
-    if (   (g_video_packetizer == source)
-        && ((pack->assigned_timecode + pack->duration) > m_max_video_timecode_rendered))
-      m_max_video_timecode_rendered = pack->assigned_timecode + pack->duration;
+    if (g_video_packetizer == source)
+      m_max_video_timecode_rendered = std::max(pack->assigned_timecode + (pack->has_duration() ? pack->duration : 0), m_max_video_timecode_rendered);
   }
 
   if (0 < elements_in_cluster) {

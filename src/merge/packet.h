@@ -77,7 +77,7 @@ struct packet_t {
     , timecode(0)
     , bref(0)
     , fref(0)
-    , duration(0)
+    , duration(-1)
     , packet_num(sm_packet_number_counter++)
     , assigned_timecode(0)
     , timecode_before_factory(0)
