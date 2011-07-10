@@ -181,30 +181,14 @@ bool
 starts_with(const std::string &s,
             const char *start,
             int maxlen) {
-  int len, slen;
-
-  slen = strlen(start);
-  if (maxlen == -1)
-    len = slen;
-  else
-    len = maxlen < slen ? maxlen : slen;
-
-  return strncmp(s.c_str(), start, slen) == 0;
+  return strncmp(s.c_str(), start, -1 == maxlen ? strlen(start) : maxlen) == 0;
 }
 
 bool
 starts_with_case(const std::string &s,
                  const char *start,
                  int maxlen) {
-  int len, slen;
-
-  slen = strlen(start);
-  if (maxlen == -1)
-    len = slen;
-  else
-    len = maxlen < slen ? maxlen : slen;
-
-  return strncasecmp(s.c_str(), start, slen) == 0;
+  return strncasecmp(s.c_str(), start, -1 == maxlen ? strlen(start) : maxlen) == 0;
 }
 
 std::string
