@@ -13,7 +13,6 @@ Summary:      tools to create, alter and inspect Matroska files
 License:      GPL
 Group:        Productivity/Multimedia/Other
 Source:       %{name}-%{version}.tar.bz2
-Patch:        suse-mmg-rename.diff
 Summary:      tools to create, alter and inspect Matroska files
 BuildRoot:    %{_tmppath}/%{name}-%{version}-build
 Prefix:       /usr
@@ -33,7 +32,6 @@ Authors:
 %prep
 rm -rf $RPM_BUILD_ROOT
 %setup
-%patch -p1
 
 %build
 export CFLAGS="$RPM_OPT_FLAGS"
@@ -41,6 +39,7 @@ export CFLAGS="$RPM_OPT_FLAGS"
 ./drake
 
 %install
+sed -i -e 's/^Exec=mmg/Exec=mkvmerge-gui/' share/desktop/mkvmergeGUI.desktop
 ./drake DESTDIR=$RPM_BUILD_ROOT MMG_BIN=mkvmerge-gui install
 
 %clean
