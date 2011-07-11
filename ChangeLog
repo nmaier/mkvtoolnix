@@ -1,3 +1,12 @@
+2011-07-11  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Fixed endless loop when reading AVI files on
+	Windows if MKVToolNix was compiled with a gcc mingw cross compiler
+	v4.4.x. Fix for bug 642.
+
+	* mkvmerge: bug fix: Fixed long file identification time caused by
+	DV detection. Fix for bug 641.
+
 2011-07-10  Moritz Bunkus  <moritz@bunkus.org>
 
 	* Release v4.9.0.
