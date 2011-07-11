@@ -27,10 +27,14 @@ dv_reader_c::probe_file(mm_io_c *io,
       return 0;
 
     uint64_t probe_size = std::min(size, static_cast<uint64_t>(20 * 1024 * 1024));
+    memory_cptr mem     = memory_c::alloc(probe_size);
 
     io->setFilePointer(0, seek_beginning);
+    if (io->read(mem, probe_size) != probe_size)
+      return 0;
 
-    uint32_t state             = io->read_uint32_be();
+    mm_mem_io_c mem_io(mem->get_buffer(), probe_size);
+    uint32_t state             = mem_io.read_uint32_be();
     unsigned matches           = 0;
     unsigned secondary_matches = 0;
     uint64_t marker_pos        = 0;
@@ -51,7 +55,7 @@ dv_reader_c::probe_file(mm_io_c *io,
       if ((0xff3f0701 == state) && (80 == (i - marker_pos)))
         ++matches;
 
-      state = (state << 8) | io->read_uint8();
+      state = (state << 8) | mem_io.read_uint8();
     }
 
     if (   matches
