@@ -297,7 +297,7 @@ gcc to use. Note that you also need a working "bjam" binary before
 building this library. See section 2.1.3 for details.
 
   cd $HOME/mingw/src
-  wget http://sourceforge.net/projects/boost/files/boost/1.46.1/boost_1_46_1.tar.bz2/download
+  wget -O boost_1_46_1.tar.bz2 http://sourceforge.net/projects/boost/files/boost/1.46.1/boost_1_46_1.tar.bz2/download
   bunzip2 < boost_1_46_1.tar.bz2 | tar xf -
   cd boost_1_46_1
   ./bootstrap.sh --with-bjam=/usr/bin/bjam --without-libraries=python,mpi \
@@ -309,7 +309,6 @@ building this library. See section 2.1.3 for details.
     include=$HOME/mingw/include \
     --user-config=user-config.jam --prefix=$HOME/mingw/boost \
     install
-  cd $HOME/mingw/boost/lib
 
 Check if $HOME/prog/mingw/lib contains the filesystem, system and
 regex libraries:
