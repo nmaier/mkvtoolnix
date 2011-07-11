@@ -29,10 +29,6 @@
 
 #if defined(COMP_MSC) || defined(COMP_MINGW)
 #include <io.h>
-#define ftruncate _chsize
-#define strncasecmp _strnicmp
-#define snprintf _snprintf
-#define strtoll(x,y,z) _atoi64(x)
 #else // COMP_...
 #include <unistd.h>
 #endif
@@ -40,6 +36,11 @@
 #include "avilib.h"
 
 #include "xio.h"
+
+#if defined(COMP_MSC) || defined(COMP_MINGW)
+# define snprintf _snprintf
+# define strtoll(x,y,z) _atoi64(x)
+#endif
 
 //SLM
 #ifndef S_IRUSR
