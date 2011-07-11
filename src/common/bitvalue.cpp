@@ -38,19 +38,15 @@ bitvalue_c::bitvalue_c(std::string s,
   if ((allowed_bitlength != 0) && ((allowed_bitlength % 8) != 0))
     throw error_c("wrong usage: invalid allowed_bitlength");
 
-  unsigned int len        = s.size();
-  bool previous_was_space = true;
-  s                       = downcase(s);
+  unsigned int len = s.size();
+  s                = downcase(s);
   std::string s2;
 
   unsigned int i;
   for (i = 0; i < len; i++) {
     // Space or tab?
-    if (isblanktab(s[i])) {
-      previous_was_space = true;
+    if (isblanktab(s[i]))
       continue;
-    }
-    previous_was_space = false;
 
     // Skip hyphens and curly braces. Makes copy & paste a bit easier.
     if ((s[i] == '-') || (s[i] == '{') || (s[i] == '}'))

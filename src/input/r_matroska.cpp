@@ -2025,8 +2025,6 @@ kax_reader_c::process_simple_block(KaxCluster *cluster,
   int64_t block_duration = -1;
   int64_t block_bref     = VFT_IFRAME;
   int64_t block_fref     = VFT_NOBFRAME;
-  bool bref_found        = false;
-  bool fref_found        = false;
 
   block_simple->SetParent(*cluster);
   kax_track_t *block_track = find_track_by_num(block_simple->TrackNum());
@@ -2052,13 +2050,10 @@ kax_reader_c::process_simple_block(KaxCluster *cluster,
   }
 
   if (!block_simple->IsKeyframe()) {
-    if (block_simple->IsDiscardable()) {
+    if (block_simple->IsDiscardable())
       block_fref = block_track->previous_timecode;
-      fref_found = true;
-    } else {
+    else
       block_bref = block_track->previous_timecode;
-      bref_found = true;
-    }
   }
 
   m_last_timecode = block_simple->GlobalTimecode();

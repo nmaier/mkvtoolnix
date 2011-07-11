@@ -941,7 +941,6 @@ def_handle(tracks) {
       show_element(l2, 2, Y("A track"));
 
       std::vector<std::string> summary;
-      bool ms_compat = false;
       EbmlMaster *m2 = static_cast<EbmlMaster *>(l2);
       std::string kax_codec_id;
       std::string fourcc_buffer;
@@ -1018,9 +1017,6 @@ def_handle(tracks) {
           kax_codec_id         = std::string(codec_id);
 
           show_element(l3, 3, boost::format(Y("Codec ID: %1%")) % kax_codec_id);
-          if (   ((kax_codec_id == MKV_V_MSCOMP) && ('v' == track->type))
-              || ((kax_codec_id == MKV_A_ACM)    && ('a' == track->type)))
-            ms_compat = true;
 
         } else if (is_id(l3, KaxCodecPrivate)) {
           KaxCodecPrivate &c_priv = *static_cast<KaxCodecPrivate *>(l3);

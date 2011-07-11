@@ -819,11 +819,8 @@ kax_analyzer_c::add_to_meta_seek(EbmlElement *e) {
     // at the end of the m_file and that all consecutive EbmlVoid elements
     // have been merged into a single element.
     size_t available_space = m_data[data_idx]->m_size;
-    bool void_present      = false;
-    if (((data_idx + 1) < m_data.size()) && (m_data[data_idx + 1]->m_id == EBML_ID(EbmlVoid))) {
+    if (((data_idx + 1) < m_data.size()) && (m_data[data_idx + 1]->m_id == EBML_ID(EbmlVoid)))
       available_space += m_data[data_idx + 1]->m_size;
-      void_present     = true;
-    }
 
     // Read the seek head, index the element and see how much space it needs.
     EbmlElement *element   = read_element(data_idx);

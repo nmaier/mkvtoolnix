@@ -479,17 +479,11 @@ static boolean ProcessChunk(int fd, off_t filepos, off_t filesize,
     FOURCC chunkid;     /* read FOURCC of chunk                */
     off_t  datapos;     /* position of data in file to process */
     
-    off_t tt;
-
     if (filepos>filesize-1) {  /* Oops. Must be something wrong!      */
 	printf("  *****  Error: Data would be behind end of file!\n");
     }
     
-    tt=xio_lseek(fd, filepos, SEEK_SET); /* Go to desired file position!     */
-
-#ifdef AVI_DEBUG
-    printf("lseek64=%Lu/%Lu (%Lu)\n", tt, filepos, filesize); 
-#endif
+    xio_lseek(fd, filepos, SEEK_SET); /* Go to desired file position!     */
 
     if (!ReadChunkHead(fd, &chunkid, chunksize)) {  /* read chunk header */
 	printf("  *****  Error reading chunk at filepos 0x%s\n",

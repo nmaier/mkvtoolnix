@@ -1058,7 +1058,7 @@ static int valid_info_tag(char *c)
 // returns the length of written stream (-1 on error)
 static int avi_parse_comments (int fd, char *buf, int space_left) 
 {
-    int len=0, readlen=0, k;
+    int len=0, k;
     char *data, *c, *d;
     struct stat st;
     
@@ -1077,9 +1077,7 @@ static int avi_parse_comments (int fd, char *buf, int space_left)
 	return -1;
     }
 
-    readlen = avi_read ( fd, data, st.st_size);
-
-    //printf("Read %d bytes from %d\n", readlen, fd);
+    avi_read ( fd, data, st.st_size);
 
     c = data;
     space_left--;

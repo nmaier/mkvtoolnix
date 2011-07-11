@@ -530,7 +530,7 @@ read_index(rmff_file_t *file,
   void *fh;
   mb_file_io_t *io;
   rmff_track_t *track;
-  uint32_t object_id, object_size, object_version, num_entries;
+  uint32_t object_id, num_entries;
   uint32_t next_header_offset, i, timecode, offset, packet_number;
   uint16_t id;
 
@@ -540,8 +540,8 @@ read_index(rmff_file_t *file,
   rmff_last_error = RMFF_ERR_OK;
   io->seek(fh, pos, SEEK_SET);
   object_id = read_uint32_be();
-  object_size = read_uint32_be();
-  object_version = read_uint16_be();
+  read_uint32_be();             /* object_size */
+  read_uint16_be();             /* object_version (2) */
   if (rmff_last_error != RMFF_ERR_OK)
     return;
 
@@ -1434,7 +1434,6 @@ rmff_write_index(rmff_file_t *file) {
   void *fh;
   mb_file_io_t *io;
   rmff_file_internal_t *fint;
-  rmff_track_internal_t *tint;
   rmff_track_t *track;
   int i, j, bw, wanted_len;
   int64_t pos;
@@ -1462,7 +1461,6 @@ rmff_write_index(rmff_file_t *file) {
 
   for (i = 0; i < file->num_tracks; i++) {
     track = file->tracks[i];
-    tint = (rmff_track_internal_t *)track->internal;
     if (track->num_index_entries > 0) {
       pos = io->tell(fh);
       if (fint->index_offset == 0)
@@ -1725,7 +1723,7 @@ deliver_segments(rmff_track_t *track,
 int
 rmff_assemble_packed_video_frame(rmff_track_t *track,
                                  rmff_frame_t *frame) {
-  uint32_t vpkg_header, vpkg_length, vpkg_offset, vpkg_subseq, vpkg_seqnum;
+  uint32_t vpkg_header, vpkg_length, vpkg_offset;
   uint32_t len, this_timecode;
   int data_len, result;
   unsigned char *data;
@@ -1752,8 +1750,6 @@ rmff_assemble_packed_video_frame(rmff_track_t *track,
   data_len = frame->size;
 
   while (data_len > 2) {
-    vpkg_subseq = 0;
-    vpkg_seqnum = 0;
     vpkg_length = 0;
     vpkg_offset = 0;
     this_timecode = frame->timecode;
@@ -1776,7 +1772,7 @@ rmff_assemble_packed_video_frame(rmff_track_t *track,
           return RMFF_ERR_DATA;
         }
         // sub-seqnum (bits 0-6: number of fragment. bit 7: ???)
-        vpkg_subseq = data_get_uint8(&data, &data_len) & 0x7f;
+        data_get_uint8(&data, &data_len);
       }
 
       // size of the complete packet
@@ -1832,7 +1828,7 @@ rmff_assemble_packed_video_frame(rmff_track_t *track,
                   "data available");
         return RMFF_ERR_DATA;
       }
-      vpkg_seqnum = data_get_uint8(&data, &data_len);
+      data_get_uint8(&data, &data_len);
 
       if ((vpkg_header & 0xc0) == 0xc0) {
         this_timecode = vpkg_offset;
