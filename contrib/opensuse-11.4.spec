@@ -8,7 +8,7 @@ BuildRequires: wxWidgets-devel make gettext-tools
 
 Name:         mkvtoolnix
 URL:          http://www.bunkus.org/videotools/mkvtoolnix/
-Version: 4.9.0
+Version: 4.9.1
 Release: 1
 Summary:      tools to create, alter and inspect Matroska files
 License:      GPL
