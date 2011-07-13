@@ -663,12 +663,19 @@ avi_reader_c::create_dts_packetizer(int aid) {
     dts_header_t dtsheader;
 
     while ((-1 == dts_position) && (10 > num_read)) {
-      memory_cptr chunk = memory_c::alloc(AVI_read_audio_chunk(m_avi, NULL));
-      if (AVI_read_audio_chunk(m_avi, reinterpret_cast<char *>(chunk->get_buffer())) < 0)
-        throw false;
+      int chunk_size = AVI_read_audio_chunk(m_avi, NULL);
 
-      buffer.add(chunk);
-      dts_position = find_dts_header(buffer.get_buffer(), buffer.get_size(), &dtsheader);
+      if (0 > chunk_size) {
+        memory_cptr chunk = memory_c::alloc(chunk_size);
+        AVI_read_audio_chunk(m_avi, reinterpret_cast<char *>(chunk->get_buffer()));
+
+        buffer.add(chunk);
+        dts_position = find_dts_header(buffer.get_buffer(), buffer.get_size(), &dtsheader);
+
+      } else {
+        dts_position = find_dts_header(buffer.get_buffer(), buffer.get_size(), &dtsheader, true);
+        break;
+      }
     }
 
     if (-1 == dts_position)

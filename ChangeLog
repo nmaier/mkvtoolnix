@@ -1,3 +1,9 @@
+2011-07-13  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Fixed a crash when reading AVI files with DTS
+	audio tracks that do not contain valid headers in the first couple
+	of packets. Fix for bug 646.
+
 2011-07-11  Moritz Bunkus  <moritz@bunkus.org>
 
 	* Released v4.9.1.
