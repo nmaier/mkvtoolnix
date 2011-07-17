@@ -27,7 +27,13 @@ protected:
   double m_fps;
   int m_width, m_height, m_frames_output;
   int64_t m_ref_timecode, m_duration_shift;
-  bool m_pass_through;
+  bool m_pass_through, m_rederive_frame_types;
+
+  enum {
+    ct_unknown,
+    ct_div3,
+    ct_mpeg4_p2,
+  } m_codec_type;
 
 public:
   video_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, const char *codec_id, double fps, int width, int height);
@@ -42,6 +48,9 @@ public:
 
 protected:
   virtual void check_fourcc();
+  virtual void rederive_frame_type(packet_cptr &packet);
+  virtual void rederive_frame_type_div3(packet_cptr &packet);
+  virtual void rederive_frame_type_mpeg4_p2(packet_cptr &packet);
 };
 
 #endif // __P_VIDEO_H

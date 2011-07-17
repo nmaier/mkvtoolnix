@@ -13,10 +13,12 @@
 
 #include "common/common_pch.h"
 
+#include "common/debugging.h"
 #include "common/endian.h"
 #include "common/hacks.h"
 #include "common/math.h"
 #include "common/matroska.h"
+#include "common/mpeg4_p2.h"
 #include "merge/output_control.h"
 #include "output/p_video.h"
 
@@ -36,8 +38,10 @@ video_packetizer_c::video_packetizer_c(generic_reader_c *p_reader,
   , m_height(height)
   , m_frames_output(0)
   , m_ref_timecode(-1)
-  , m_duration_shift(0) {
-
+  , m_duration_shift(0)
+  , m_rederive_frame_types(debugging_requested("rederive_frame_types"))
+  , m_codec_type(video_packetizer_c::ct_unknown)
+{
   if (get_cue_creation() == CUE_STRATEGY_UNSPECIFIED)
     set_cue_creation(CUE_STRATEGY_IFRAMES);
 
@@ -54,14 +58,25 @@ video_packetizer_c::video_packetizer_c(generic_reader_c *p_reader,
 
 void
 video_packetizer_c::check_fourcc() {
-  if (   (m_hcodec_id                == MKV_V_MSCOMP)
-      && (NULL                       != m_ti.m_private_data)
-      && (sizeof(alBITMAPINFOHEADER) <= m_ti.m_private_size)
-      && !m_ti.m_fourcc.empty()) {
+  if (   (m_hcodec_id                != MKV_V_MSCOMP)
+      || (NULL                       == m_ti.m_private_data)
+      || (sizeof(alBITMAPINFOHEADER) >  m_ti.m_private_size))
+    return;
 
+  if (!m_ti.m_fourcc.empty()) {
     memcpy(&((alBITMAPINFOHEADER *)m_ti.m_private_data)->bi_compression, m_ti.m_fourcc.c_str(), 4);
     set_codec_private(m_ti.m_private_data, m_ti.m_private_size);
   }
+
+  char fourcc[5];
+  memcpy(fourcc, &((alBITMAPINFOHEADER *)m_ti.m_private_data)->bi_compression, 4);
+  fourcc[4] = 0;
+
+  if (mpeg4::p2::is_v3_fourcc(fourcc))
+    m_codec_type = video_packetizer_c::ct_div3;
+
+  else if (mpeg4::p2::is_fourcc(fourcc))
+    m_codec_type = video_packetizer_c::ct_mpeg4_p2;
 }
 
 void
@@ -104,6 +119,9 @@ video_packetizer_c::process(packet_cptr packet) {
 
   ++m_frames_output;
 
+  if (m_rederive_frame_types)
+    rederive_frame_type(packet);
+
   if (VFT_IFRAME == packet->bref)
     // Add a key frame and save its timecode so that we can reference it later.
     m_ref_timecode = packet->timecode;
@@ -120,6 +138,55 @@ video_packetizer_c::process(packet_cptr packet) {
   add_packet(packet);
 
   return FILE_STATUS_MOREDATA;
+}
+
+void
+video_packetizer_c::rederive_frame_type(packet_cptr &packet) {
+  switch (m_codec_type) {
+    case video_packetizer_c::ct_div3:
+      rederive_frame_type_div3(packet);
+      break;
+
+    case video_packetizer_c::ct_mpeg4_p2:
+      rederive_frame_type_mpeg4_p2(packet);
+      break;
+
+    default:
+      break;
+  }
+}
+
+void
+video_packetizer_c::rederive_frame_type_div3(packet_cptr &packet) {
+  if (1 >= packet->data->get_size())
+    return;
+
+  packet->bref = packet->data->get_buffer()[0] & 0x40 ? VFT_PFRAMEAUTOMATIC : VFT_IFRAME;
+  packet->fref = VFT_NOBFRAME;
+}
+
+void
+video_packetizer_c::rederive_frame_type_mpeg4_p2(packet_cptr &packet) {
+  size_t idx, size    = packet->data->get_size();
+  unsigned char *data = packet->data->get_buffer();
+
+  for (idx = 0; idx < size - 5; ++idx) {
+    if ((0x00 == data[idx]) && (0x00 == data[idx + 1]) && (0x01 == data[idx + 2])) {
+      if ((0 == data[idx + 3]) || (0xb0 == data[idx + 3])) {
+        packet->bref = VFT_IFRAME;
+        packet->fref = VFT_NOBFRAME;
+        return;
+      }
+
+      if (0xb6 == data[idx + 3]) {
+        packet->bref = 0x00 == (data[idx + 4] & 0xc0) ? VFT_IFRAME : VFT_PFRAMEAUTOMATIC;
+        packet->fref = VFT_NOBFRAME;
+        return;
+      }
+
+      idx += 2;
+    }
+  }
 }
 
 connection_result_e
