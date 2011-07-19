@@ -66,6 +66,7 @@
 #include "common/hacks.h"
 #include "common/math.h"
 #include "common/mm_io.h"
+#include "common/mm_read_cache_io.h"
 #include "common/mm_write_cache_io.h"
 #include "common/strings/formatting.h"
 #include "common/tags/tags.h"
@@ -315,7 +316,7 @@ get_file_type(filelist_t &file) {
   int64_t size = 0;
 
   try {
-    io   = new mm_file_io_c(file.name);
+    io   = mm_read_cache_io_c::open(file.name, 20 * 1024 * 1024);
     size = io->get_size();
   } catch (...) {
     mxerror(boost::format(Y("The source file '%1%' could not be opened successfully, or retrieving its size by seeking to the end did not work.\n")) % file.name);

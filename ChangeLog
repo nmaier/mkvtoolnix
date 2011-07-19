@@ -1,5 +1,8 @@
 2011-07-19  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: enhancement: Sped up file identification by caching
+	read operations.
+
 	* mkvmerge: bug fix: Fixed identifying QuickTime/MP4 files that
 	start with a 'skip' atom.
 
