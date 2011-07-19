@@ -69,16 +69,15 @@ space(int num) {
 int
 qtmp4_reader_c::probe_file(mm_io_c *in,
                            uint64_t size) {
-  uint32_t atom;
-  uint64_t atom_size;
-
   try {
     in->setFilePointer(0, seek_beginning);
 
     while (1) {
-      atom_size = in->read_uint32_be();
-      atom = in->read_uint32_be();
-      if (atom_size == 1)
+      uint64_t atom_pos  = in->getFilePointer();
+      uint64_t atom_size = in->read_uint32_be();
+      uint32_t atom      = in->read_uint32_be();
+
+      if (1 == atom_size)
         atom_size = in->read_uint64_be();
 
       mxverb(3, boost::format("Quicktime/MP4 reader: Atom: '%1%%2%%3%%4%'; size: %5%\n") % BE2STR(atom) % atom_size);
@@ -89,10 +88,11 @@ qtmp4_reader_c::probe_file(mm_io_c *in,
           || (FOURCC('p', 'n', 'o', 't') == atom))
         return 1;
 
-      if (FOURCC('w', 'i', 'd', 'e') == atom)
-        continue;
+      if (   (FOURCC('w', 'i', 'd', 'e') != atom)
+          && (FOURCC('s', 'k', 'i', 'p') != atom))
+        return 0;
 
-      return 0;
+      in->setFilePointer(atom_pos + atom_size);
     }
 
   } catch (...) {
