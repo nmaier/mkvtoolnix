@@ -1726,11 +1726,17 @@ Track ID 2: audio (A_MPEG/L3)
 
   <para>
    On Windows there are actually two different character sets that &mkvmerge; uses due to the way the Windows shell program
-   <command>cmd.exe</command> is implemented. The first character set is determined by a call to the <function>GetCP()</function> system
+   <command>cmd.exe</command> is implemented. The first character set is determined by a call to the <function>GetACP()</function> system
    call. This character set is used as the default for text file conversions and for all elements displayed by the <abbrev>GUI</abbrev>
-   programs in the MKVToolNix package. <command>cmd.exe</command> uses another character set which is determined by a call to the
-   <function>GetACP()</function> system call. This is the default character set for all strings read from the command line and for all
-   strings output to the console.
+   programs in the MKVToolNix package.
+  </para>
+
+  <para>
+   Another charset may be used if <command>cmd.exe</command> is used. However, reading the command line is done with the
+   <function>GetCommandLineW()</function> function which already returns a Unicode string. Therefore the option
+   <option>--command-line-charset</option> is ignored on Windows.  Output to the console is done with the
+   <function>WriteConsoleW()</function> function. Therefore the option <option>--output-charset</option> is only used on Windows if the
+   output is redirected with <option>--redirect-output</option>.
   </para>
 
   <para>

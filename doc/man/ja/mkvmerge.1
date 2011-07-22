@@ -1252,7 +1252,28 @@ BOMで始まるテキストファイルは、既にUTFエンコーディング�
 .PP
 UNIX系システム上では、\fBmkvmerge\fR(1)は\fBsetlocale\fR(3)システムコールを使うので、\fILANG\fR、\fILC_ALL\fR及び\fILC_CYPE\fR環境変数を使用します。大抵は、UTF\-8かISO\-8859\-*ファミリのどれかが全てのテキストファイルとコマンドライン文字列の処理、及びコンソールへの出力の文字コードとして使用されます。
 .PP
-Windowsでは、\fBcmd\&.exe\fRWindowsシェルプログラムの実装方式のために、\fBmkvmerge\fR(1)は二つの異なる文字コードを使用します。一つ目は\fBGetCP()\fRシステムコールによって決定される文字コードです。この文字コードはテキストファイル変換にデフォルトで使用され、MKVToolNixパッケージに含まれるGUIプログラムで表示される全ての文字列に適用されます。\fBcmd\&.exe\fRはもう一つの、\fBGetACP()\fRシステムコールにより決定される文字コードを使用します。これはコマンドライン文字列及びコンソールへの出力のデフォルト文字コードです。
+On Windows there are actually two different character sets that
+\fBmkvmerge\fR(1)
+uses due to the way the Windows shell program
+\fBcmd\&.exe\fR
+is implemented\&. The first character set is determined by a call to the
+\fBGetACP()\fR
+system call\&. This character set is used as the default for text file conversions and for all elements displayed by the
+GUI
+programs in the MKVToolNix package\&.
+.PP
+Another charset may be used if
+\fBcmd\&.exe\fR
+is used\&. However, reading the command line is done with the
+\fBGetCommandLineW()\fR
+function which already returns a Unicode string\&. Therefore the option
+\fB\-\-command\-line\-charset\fR
+is ignored on Windows\&. Output to the console is done with the
+\fBWriteConsoleW()\fR
+function\&. Therefore the option
+\fB\-\-output\-charset\fR
+is only used on Windows if the output is redirected with
+\fB\-\-redirect\-output\fR\&.
 .PP
 次のような文字コードを指定するオプションがあります。
 .sp

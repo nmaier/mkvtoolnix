@@ -1764,14 +1764,23 @@ On Windows there are actually two different character sets that
 uses due to the way the Windows shell program
 \fBcmd\&.exe\fR
 is implemented\&. The first character set is determined by a call to the
-\fBGetCP()\fR
+\fBGetACP()\fR
 system call\&. This character set is used as the default for text file conversions and for all elements displayed by the
 GUI
 programs in the MKVToolNix package\&.
+.PP
+Another charset may be used if
 \fBcmd\&.exe\fR
-uses another character set which is determined by a call to the
-\fBGetACP()\fR
-system call\&. This is the default character set for all strings read from the command line and for all strings output to the console\&.
+is used\&. However, reading the command line is done with the
+\fBGetCommandLineW()\fR
+function which already returns a Unicode string\&. Therefore the option
+\fB\-\-command\-line\-charset\fR
+is ignored on Windows\&. Output to the console is done with the
+\fBWriteConsoleW()\fR
+function\&. Therefore the option
+\fB\-\-output\-charset\fR
+is only used on Windows if the output is redirected with
+\fB\-\-redirect\-output\fR\&.
 .PP
 The following options exist that allow specifying the character sets:
 .sp

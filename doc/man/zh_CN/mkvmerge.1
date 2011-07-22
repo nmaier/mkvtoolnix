@@ -1743,17 +1743,28 @@ BOM) 出现以及系统的当前区域来进行自动转换。如何根据区域
 及
 \fILC_CYPE\fR。输出的字符集通常是 UTF\-8 或 ISO\-8859\-* 家族之一，将被用于所有文本文件操作以及编码命令行上的字符串和输出到命令行。
 .PP
-在 Windows 上
+On Windows there are actually two different character sets that
 \fBmkvmerge\fR(1)
-实际上使用两种不同的字符集，因为要执行 Windows shell 程序
-\fBcmd\&.exe\fR。第一个字符集由
-\fBGetCP()\fR
-系统指令决定。此字符集用作文本文件转换和 MKVToolNix 工具包中
-GUI
-程序所显示的所有元素的默认字符集。\fBcmd\&.exe\fR
-使用另一个字符集，由
+uses due to the way the Windows shell program
+\fBcmd\&.exe\fR
+is implemented\&. The first character set is determined by a call to the
 \fBGetACP()\fR
-系统指令决定。这是命令行读入的所有字符串以及输出到命令行的所有字符串的默认字符集。
+system call\&. This character set is used as the default for text file conversions and for all elements displayed by the
+GUI
+programs in the MKVToolNix package\&.
+.PP
+Another charset may be used if
+\fBcmd\&.exe\fR
+is used\&. However, reading the command line is done with the
+\fBGetCommandLineW()\fR
+function which already returns a Unicode string\&. Therefore the option
+\fB\-\-command\-line\-charset\fR
+is ignored on Windows\&. Output to the console is done with the
+\fBWriteConsoleW()\fR
+function\&. Therefore the option
+\fB\-\-output\-charset\fR
+is only used on Windows if the output is redirected with
+\fB\-\-redirect\-output\fR\&.
 .PP
 现有下述选项支持指定字符集:
 .sp

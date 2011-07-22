@@ -1762,19 +1762,28 @@ besturingssysteem oproep, welke beurtelings de omgevingsvariabelen gebruikt
 en
 \fILC_CYPE\fR\&. Het resulterende karakter set is vaak \('e\('en van de UTF\-8 of de ISO\-8859\-* familie en wordt gebruikt voor alle tekst bestand operaties en voor het coderen van reeksen op de commandoregel voor een uitvoer naar het apparaat/houder\&.
 .PP
-Met Windows zijn er eigenlijk twee karakter sets welke
+On Windows there are actually two different character sets that
 \fBmkvmerge\fR(1)
-gebruikt, door de manier waarop het Windows commandoregel programma
+uses due to the way the Windows shell program
 \fBcmd\&.exe\fR
-is ge\(:implementeerd\&. De eerste karakter set wordt bepaald door een vraag met de
-\fBGetCP()\fR
-besturingssysteem oproep\&. Deze karakter set wordt standaard gebruikt voor tekst bestand conversie en voor alle elementen getoond met het
-GUI
-programma in het MKVToolNix pakket\&.
-\fBcmd\&.exe\fR
-gebruikt een andere karakter set welke kan worden bepaald door een vraag met de
+is implemented\&. The first character set is determined by a call to the
 \fBGetACP()\fR
-besturingssysteem oproep\&. Dit is de standaard karakter set voor alle reeksen die gelezen worden vanaf de commandoregel en voor alle reeksen die naar het apparaat/houder worden uitgevoerd\&.
+system call\&. This character set is used as the default for text file conversions and for all elements displayed by the
+GUI
+programs in the MKVToolNix package\&.
+.PP
+Another charset may be used if
+\fBcmd\&.exe\fR
+is used\&. However, reading the command line is done with the
+\fBGetCommandLineW()\fR
+function which already returns a Unicode string\&. Therefore the option
+\fB\-\-command\-line\-charset\fR
+is ignored on Windows\&. Output to the console is done with the
+\fBWriteConsoleW()\fR
+function\&. Therefore the option
+\fB\-\-output\-charset\fR
+is only used on Windows if the output is redirected with
+\fB\-\-redirect\-output\fR\&.
 .PP
 Als de volgende optie aanwezig is dan is het toegestaan de karakter set te specificeren:
 .sp
