@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.9.9\n"
 "POT-Creation-Date: 2011-07-22 20:21+0300\n"
-"PO-Revision-Date: 2011-07-08 12:32+0200\n"
+"PO-Revision-Date: 2011-07-24 17:05+0900\n"
 "Last-Translator: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "Language-Team: none\n"
 "Language: \n"
@@ -2588,15 +2588,13 @@ msgstr "UNIX系システム上では、&mkvmerge;は<citerefentry><refentrytitle
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvmerge.xml:1728
-#, fuzzy
-#| msgid "On Windows there are actually two different character sets that &mkvmerge; uses due to the way the Windows shell program <command>cmd.exe</command> is implemented. The first character set is determined by a call to the <function>GetCP()</function> system call. This character set is used as the default for text file conversions and for all elements displayed by the <abbrev>GUI</abbrev> programs in the MKVToolNix package. <command>cmd.exe</command> uses another character set which is determined by a call to the <function>GetACP()</function> system call. This is the default character set for all strings read from the command line and for all strings output to the console."
 msgid "On Windows there are actually two different character sets that &mkvmerge; uses due to the way the Windows shell program <command>cmd.exe</command> is implemented. The first character set is determined by a call to the <function>GetACP()</function> system call. This character set is used as the default for text file conversions and for all elements displayed by the <abbrev>GUI</abbrev> programs in the MKVToolNix package."
-msgstr "Windowsでは、<command>cmd.exe</command>Windowsシェルプログラムの実装方式のために、&mkvmerge;は二つの異なる文字コードを使用します。一つ目は<function>GetCP()</function>システムコールによって決定される文字コードです。この文字コードはテキストファイル変換にデフォルトで使用され、MKVToolNixパッケージに含まれる<abbrev>GUI</abbrev>プログラムで表示される全ての文字列に適用されます。<command>cmd.exe</command>はもう一つの、<function>GetACP()</function>システムコールにより決定される文字コードを使用します。これはコマンドライン文字列及びコンソールへの出力のデフォルト文字コードです。"
+msgstr "Windowsでは、<command>cmd.exe</command>Windowsシェルプログラムの実装方式のために、&mkvmerge;は実は二つの異なる文字コードを使用します。一つ目は<function>GetCP()</function>システムコールによって決定される文字コードです。この文字コードはテキストファイル変換にデフォルトで使用され、MKVToolNixパッケージに含まれる<abbrev>GUI</abbrev>プログラムで表示される全ての文字列に適用されます。"
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvmerge.xml:1735
 msgid "Another charset may be used if <command>cmd.exe</command> is used. However, reading the command line is done with the <function>GetCommandLineW()</function> function which already returns a Unicode string. Therefore the option <option>--command-line-charset</option> is ignored on Windows.  Output to the console is done with the <function>WriteConsoleW()</function> function. Therefore the option <option>--output-charset</option> is only used on Windows if the output is redirected with <option>--redirect-output</option>."
-msgstr ""
+msgstr "<command>cmd.exe</command>を使用した場合、もう1つの文字コードが使用されるかもしれません。しかし、コマンドラインの読み込みは、既にユニコード文字列を返している<function>GetCommandLineW()</function>関数によってなされます。よって、<option>--command-line-charset</option>オプションはWindowsでは無視されます。コンソールへの出力は<function>WriteConsoleW()</function>関数によってなされます。よって、<option>--output-charset</option>オプションは、Windows上では<option>--redirect-output</option>で出力がリダイレクトされた場合のみ使用されます。"
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvmerge.xml:1743
