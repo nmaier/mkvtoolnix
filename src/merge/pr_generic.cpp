@@ -614,14 +614,16 @@ generic_packetizer_c::set_headers() {
   if (NULL != m_hcodec_private)
     GetChild<KaxCodecPrivate>(*m_track_entry).CopyBuffer((binary *)m_hcodec_private, m_hcodec_private_length);
 
-  if (-1 != m_htrack_min_cache)
-    GetChildAs<KaxTrackMinCache, EbmlUInteger>(m_track_entry)      = m_htrack_min_cache;
+  if (!outputting_webm()) {
+    if (-1 != m_htrack_min_cache)
+      GetChildAs<KaxTrackMinCache, EbmlUInteger>(m_track_entry)      = m_htrack_min_cache;
 
-  if (-1 != m_htrack_max_cache)
-    GetChildAs<KaxTrackMaxCache, EbmlUInteger>(m_track_entry)      = m_htrack_max_cache;
+    if (-1 != m_htrack_max_cache)
+      GetChildAs<KaxTrackMaxCache, EbmlUInteger>(m_track_entry)      = m_htrack_max_cache;
 
-  if (-1 != m_htrack_max_add_block_ids)
-    GetChildAs<KaxMaxBlockAdditionID, EbmlUInteger>(m_track_entry) = m_htrack_max_add_block_ids;
+    if (-1 != m_htrack_max_add_block_ids)
+      GetChildAs<KaxMaxBlockAdditionID, EbmlUInteger>(m_track_entry) = m_htrack_max_add_block_ids;
+  }
 
   if (m_timecode_factory.is_set())
     m_htrack_default_duration = (int64_t)m_timecode_factory->get_default_duration(m_htrack_default_duration);

@@ -674,41 +674,43 @@ render_headers(mm_io_c *out) {
       memset(s_seguid_next.data(),    0, 128 / 8);
     }
 
-    // Set the segment UIDs.
-    GetChild<KaxSegmentUID>(*s_kax_infos).CopyBuffer(s_seguid_current.data(), 128 / 8);
+    if (!outputting_webm()) {
+      // Set the segment UIDs.
+      GetChild<KaxSegmentUID>(*s_kax_infos).CopyBuffer(s_seguid_current.data(), 128 / 8);
 
-    // Set the segment family
-    if (!g_segfamily_uids.empty()) {
-      size_t i;
-      for (i = 0; i < g_segfamily_uids.size(); i++)
-        AddNewChild<KaxSegmentFamily>(*s_kax_infos).CopyBuffer(g_segfamily_uids[i].data(), 128 / 8);
-    }
-
-    // Set the chaptertranslate elements
-    if (NULL != g_kax_info_chap) {
-      // copy the KaxChapterTranslates in the current KaxInfo
-      KaxChapterTranslate *chapter_translate = FINDFIRST(g_kax_info_chap, KaxChapterTranslate);
-      while (NULL != chapter_translate) {
-        s_kax_infos->PushElement(*new KaxChapterTranslate(*chapter_translate));
-        chapter_translate = FINDNEXT(g_kax_info_chap, KaxChapterTranslate, chapter_translate);
+      // Set the segment family
+      if (!g_segfamily_uids.empty()) {
+        size_t i;
+        for (i = 0; i < g_segfamily_uids.size(); i++)
+          AddNewChild<KaxSegmentFamily>(*s_kax_infos).CopyBuffer(g_segfamily_uids[i].data(), 128 / 8);
       }
-    }
 
-    if (first_file && g_seguid_link_previous.is_set())
-      GetChild<KaxPrevUID>(*s_kax_infos).CopyBuffer(g_seguid_link_previous->data(), 128 / 8);
+      // Set the chaptertranslate elements
+      if (NULL != g_kax_info_chap) {
+        // copy the KaxChapterTranslates in the current KaxInfo
+        KaxChapterTranslate *chapter_translate = FINDFIRST(g_kax_info_chap, KaxChapterTranslate);
+        while (NULL != chapter_translate) {
+          s_kax_infos->PushElement(*new KaxChapterTranslate(*chapter_translate));
+          chapter_translate = FINDNEXT(g_kax_info_chap, KaxChapterTranslate, chapter_translate);
+        }
+      }
 
-    // The next segment UID is also set in finish_file(). This is not
-    // redundant! It is set here as well in order to reserve enough space
-    // for the KaxInfo structure in the file. If it is removed later then
-    // an EbmlVoid element will be used for the freed space.
-    if (g_seguid_link_next.is_set())
-      GetChild<KaxNextUID>(*s_kax_infos).CopyBuffer(g_seguid_link_next->data(), 128 / 8);
+      if (first_file && g_seguid_link_previous.is_set())
+        GetChild<KaxPrevUID>(*s_kax_infos).CopyBuffer(g_seguid_link_previous->data(), 128 / 8);
 
-    if (!g_no_linking && g_cluster_helper->splitting()) {
-      GetChild<KaxNextUID>(*s_kax_infos).CopyBuffer(s_seguid_next.data(), 128 / 8);
+      // The next segment UID is also set in finish_file(). This is not
+      // redundant! It is set here as well in order to reserve enough space
+      // for the KaxInfo structure in the file. If it is removed later then
+      // an EbmlVoid element will be used for the freed space.
+      if (g_seguid_link_next.is_set())
+        GetChild<KaxNextUID>(*s_kax_infos).CopyBuffer(g_seguid_link_next->data(), 128 / 8);
 
-      if (!first_file)
-        GetChild<KaxPrevUID>(*s_kax_infos).CopyBuffer(s_seguid_prev.data(), 128 / 8);
+      if (!g_no_linking && g_cluster_helper->splitting()) {
+        GetChild<KaxNextUID>(*s_kax_infos).CopyBuffer(s_seguid_next.data(), 128 / 8);
+
+        if (!first_file)
+          GetChild<KaxPrevUID>(*s_kax_infos).CopyBuffer(s_seguid_prev.data(), 128 / 8);
+      }
     }
 
     g_kax_segment->WriteHead(*out, 8);

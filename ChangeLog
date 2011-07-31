@@ -1,3 +1,11 @@
+2011-07-31  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Several elements are not written when
+	creating WebM compliant files. In the segment headers: SegmentUID,
+	SegmentFamily, ChapterTranslate, PreviousSegmentUID,
+	NextSegmentUID. In the track headers: MinCache, MaxCache and
+	MaxBlockAdditionID.
+
 2011-07-19  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: enhancement: Sped up file identification by caching
