@@ -28,6 +28,11 @@
 
 #if defined(SYS_WINDOWS)
 # include <windows.h>
+
+# include <boost/filesystem/path.hpp>
+# include <boost/filesystem/detail/utf8_codecvt_facet.hpp>
+# include <locale>
+
 # include "common/fs_sys_helpers.h"
 # include "common/memory.h"
 #endif
@@ -240,10 +245,14 @@ init_locales(std::string locale) {
     // modified by SetEnvironmentVariable() and the C library's cache
     // of said environment which is modified via _putenv().
 
-    set_environment_variable("LANG",        locale);
-    set_environment_variable("LC_MESSAGES", locale);
+    // set_environment_variable("LANG",        locale);
+    // set_environment_variable("LC_MESSAGES", locale);
 
     translation_c::set_active_translation(locale);
+
+    // Boost's path class uses wide chars on Windows for path
+    // names. Tell that all narrow strings are encoded in UTF-8.
+    boost::filesystem::path::imbue(std::locale(std::locale(), new boost::filesystem::detail::utf8_codecvt_facet));
   }
 
   locale_dir = get_installation_path() + "\\locale";
