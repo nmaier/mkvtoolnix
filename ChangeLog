@@ -1,3 +1,11 @@
+2011-08-02  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: enhancement: When looking for MPEG files with the same
+	base name as a source file mkvmerge will be stricter what it
+	accepts. The file name must consist of at least one char followed
+	by "-" or "_" followed by a number. That will match VTS_01_1.VOB
+	but not e.g. "some_series_s03e10.mpg".
+
 2011-07-31  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Opening MPEG files with numbers in their name

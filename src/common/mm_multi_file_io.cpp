@@ -190,7 +190,7 @@ mm_multi_file_io_c::open_multi(const std::string &display_file_name,
   bfs::path first_file_name(bfs::system_complete(bfs::path(display_file_name)));
   std::string base_name = bfs::basename(first_file_name);
   std::string extension = downcase(bfs::extension(first_file_name));
-  boost::regex file_name_re("(.+?)(\\d+)", boost::regex::perl);
+  boost::regex file_name_re("(.+[_\\-])(\\d+)$", boost::regex::perl);
   boost::smatch matches;
 
   if (!boost::regex_match(base_name, matches, file_name_re) || single_only) {
