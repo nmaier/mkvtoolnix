@@ -1,0 +1,509 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title></title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="date" content="" />
+</head>
+<body>
+<div id="TOC"
+><ul
+  ><li
+    ><a href="#file-system-layout"
+      ><span class="toc-section-number"
+	>1</span
+	> File system layout</a
+      ></li
+    ><li
+    ><a href="#strings-encoding"
+      ><span class="toc-section-number"
+	>2</span
+	> Strings &amp; encoding</a
+      ></li
+    ><li
+    ><a href="#timecodes"
+      ><span class="toc-section-number"
+	>3</span
+	> Timecodes</a
+      ></li
+    ><li
+    ><a href="#classes"
+      ><span class="toc-section-number"
+	>4</span
+	> Classes</a
+      ><ul
+      ><li
+	><a href="#general"
+	  ><span class="toc-section-number"
+	    >4.1</span
+	    > General</a
+	  ></li
+	><li
+	><a href="#memory_c-from-commonmemory.h"
+	  ><span class="toc-section-number"
+	    >4.2</span
+	    > <code
+	    >memory_c</code
+	    > (from <code
+	    >common/memory.h</code
+	    >)</a
+	  ></li
+	><li
+	><a href="#mm_io_c-from-commonmm_io.h"
+	  ><span class="toc-section-number"
+	    >4.3</span
+	    > <code
+	    >mm_io_c</code
+	    > (from <code
+	    >common/mm_io.h</code
+	    >)</a
+	  ></li
+	><li
+	><a href="#mm_file_io_c-from-commonmm_io.h"
+	  ><span class="toc-section-number"
+	    >4.4</span
+	    > <code
+	    >mm_file_io_c</code
+	    > (from <code
+	    >common/mm_io.h</code
+	    >)</a
+	  ></li
+	><li
+	><a href="#track_info_c-from-srcmergepr_generic.h"
+	  ><span class="toc-section-number"
+	    >4.5</span
+	    > <code
+	    >track_info_c</code
+	    > (from <code
+	    >src/merge/pr_generic.h</code
+	    >)</a
+	  ></li
+	></ul
+      ></li
+    ><li
+    ><a href="#readers"
+      ><span class="toc-section-number"
+	>5</span
+	> Readers</a
+      ><ul
+      ><li
+	><a href="#constructor-virtual-destructor"
+	  ><span class="toc-section-number"
+	    >5.1</span
+	    > Constructor &amp; virtual destructor</a
+	  ></li
+	><li
+	><a href="#readgeneric_packetizer_c-ptzr-bool-force-false"
+	  ><span class="toc-section-number"
+	    >5.2</span
+	    > <code
+	    >read(generic_packetizer_c *ptzr, bool force = false)</code
+	    ></a
+	  ></li
+	><li
+	><a href="#create_packetizerint64_t-track_id"
+	  ><span class="toc-section-number"
+	    >5.3</span
+	    > <code
+	    >create_packetizer(int64_t track_id)</code
+	    ></a
+	  ></li
+	><li
+	><a href="#get_progress"
+	  ><span class="toc-section-number"
+	    >5.4</span
+	    > <code
+	    >get_progress()</code
+	    ></a
+	  ></li
+	><li
+	><a href="#identify"
+	  ><span class="toc-section-number"
+	    >5.5</span
+	    > <code
+	    >identify()</code
+	    ></a
+	  ></li
+	></ul
+      ></li
+    ></ul
+  ></div
+>
+<p
+>Developer notes</p
+><div id="file-system-layout"
+><h1
+  ><a href="#TOC"
+    ><span class="header-section-number"
+      >1</span
+      > File system layout</a
+    ></h1
+  ><p
+  >There's no dedicated include directory. Each include file is located in the same directory its accompanying cpp file is located in as well.</p
+  ><p
+  >Directories in alphabetical order:</p
+  ><ul
+  ><li
+    ><code
+      >ac</code
+      >: Macro snippets used for the <code
+      >configure</code
+      > script.</li
+    ><li
+    ><code
+      >contrib</code
+      >: Spec files for RPM creation and other contributed files.</li
+    ><li
+    ><code
+      >doc/guide</code
+      >: mmg's guide.</li
+    ><li
+    ><code
+      >doc/man</code
+      >: man pages. They're written as DocBook XML files and converted to HTML and man format automatically.</li
+    ><li
+    ><code
+      >examples</code
+      >: Examples for the end user.</li
+    ><li
+    ><code
+      >installer</code
+      >: Files for the Windows installer.</li
+    ><li
+    ><code
+      >lib</code
+      >: External libraries that are required for building. Should not be touched but can be used.</li
+    ><li
+    ><code
+      >po</code
+      >: Translation of the programs (not of the man pages).</li
+    ><li
+    ><code
+      >share</code
+      >: Image, desktop files etc.</li
+    ><li
+    ><code
+      >src/common</code
+      >: Common classes used by all tools. This library is linked to each program.</li
+    ><li
+    ><code
+      >src/extract</code
+      >: mkvextract's main files.</li
+    ><li
+    ><code
+      >src/info</code
+      >: mkvinfo's main files including its GUI.</li
+    ><li
+    ><code
+      >src/input</code
+      >: Readers (demux source files). Only used in mkvmerge.</li
+    ><li
+    ><code
+      >src/merge</code
+      >: mkvmerge's main files, e.g. command line handling, output control, file creating etc.</li
+    ><li
+    ><code
+      >src/mmg</code
+      >: mkvmerge's GUI.</li
+    ><li
+    ><code
+      >src/output</code
+      >: Packetizers (create the tracks in the output file). Only used in mkvmerge.</li
+    ><li
+    ><code
+      >src/propedit</code
+      >: mkvpropedit's main files.</li
+    ><li
+    ><code
+      >src/scripts</code
+      > and <code
+      >src/tools</code
+      >: Scripts and compiled tools that may or may not be useful during development.</li
+    ><li
+    ><code
+      >tests</code
+      >: Test suite (requires external data package not distributed freely)</li
+    ></ul
+  ></div
+><div id="strings-encoding"
+><h1
+  ><a href="#TOC"
+    ><span class="header-section-number"
+      >2</span
+      > Strings &amp; encoding</a
+    ></h1
+  ><p
+  >Internally all strings are encoded in UTF-8. Strings must be re-coded during input/output.</p
+  ></div
+><div id="timecodes"
+><h1
+  ><a href="#TOC"
+    ><span class="header-section-number"
+      >3</span
+      > Timecodes</a
+    ></h1
+  ><p
+  >All timecodes and durations are stored as <code
+    >int64_t</code
+    > variables with nanosecond precision.</p
+  ></div
+><div id="classes"
+><h1
+  ><a href="#TOC"
+    ><span class="header-section-number"
+      >4</span
+      > Classes</a
+    ></h1
+  ><div id="general"
+  ><h2
+    ><a href="#TOC"
+      ><span class="header-section-number"
+	>4.1</span
+	> General</a
+      ></h2
+    ><p
+    >Most classes are nameed <code
+      >*_c</code
+      >, and the corresponding counted pointer implementation is called <code
+      >*_cptr</code
+      >. A counted pointer is a reference counter implementation that automatically deletes its instance once the counter reaches zero.</p
+    ></div
+  ><div id="memory_c-from-commonmemory.h"
+  ><h2
+    ><a href="#TOC"
+      ><span class="header-section-number"
+	>4.2</span
+	> <code
+	>memory_c</code
+	> (from <code
+	>common/memory.h</code
+	>)</a
+      ></h2
+    ><p
+    >Stores a pointer to a buffer and its size. Can free the memory if the buffer has been malloced.</p
+    ><p
+    >Allocating memory:</p
+    ><pre
+    ><code
+      >memory_cptr mem = memory_c::alloc(12345);
+</code
+      ></pre
+    ><p
+    >Copying/reading something into it:</p
+    ><pre
+    ><code
+      >memcpy(mem-&gt;get_buffer(), source_pointer, mem-&gt;get_size());
+file-&gt;read(mem, 20);
+</code
+      ></pre
+    ></div
+  ><div id="mm_io_c-from-commonmm_io.h"
+  ><h2
+    ><a href="#TOC"
+      ><span class="header-section-number"
+	>4.3</span
+	> <code
+	>mm_io_c</code
+	> (from <code
+	>common/mm_io.h</code
+	>)</a
+      ></h2
+    ><p
+    >Base class for input/output. Several derived classes implement access to binary files (<code
+      >mm_file_io_c</code
+      >), text files (<code
+      >mm_text_io_c</code
+      >, including BOM handling), memory buffers (<code
+      >mm_mem_io_c</code
+      >) etc.</p
+    ></div
+  ><div id="mm_file_io_c-from-commonmm_io.h"
+  ><h2
+    ><a href="#TOC"
+      ><span class="header-section-number"
+	>4.4</span
+	> <code
+	>mm_file_io_c</code
+	> (from <code
+	>common/mm_io.h</code
+	>)</a
+      ></h2
+    ><p
+    >File input/output class. Opening a file for reading and retrieving its size:</p
+    ><pre
+    ><code
+      >mm_file_io_cptr file(new mm_file_io_c(file_name));
+int64_t size = file-&gt;get_size();
+</code
+      ></pre
+    ><p
+    >Seeking:</p
+    ><pre
+    ><code
+      >// Seek to absolute position 123:
+file-&gt;setFilePointer(123, seek_beginning);
+// Seek forward 61 bytes:
+file-&gt;setFilePointer(61, seek_current);
+</code
+      ></pre
+    ><p
+    >Reading:</p
+    ><pre
+    ><code
+      >size_t num_read = file-&gt;read(some_buffer, 12345);
+</code
+      ></pre
+    ></div
+  ><div id="track_info_c-from-srcmergepr_generic.h"
+  ><h2
+    ><a href="#TOC"
+      ><span class="header-section-number"
+	>4.5</span
+	> <code
+	>track_info_c</code
+	> (from <code
+	>src/merge/pr_generic.h</code
+	>)</a
+      ></h2
+    ><p
+    >A file and track information storage class. It is created by the command line parser with the source file name and all the command line options the user has passed in.</p
+    ><p
+    >The instance is then passed to the reader which stores a copy in the <code
+      >m_ti</code
+      > variable. The reader also passes that copy to each packetizer it creates which in turn stores its own copy (again in the <code
+      >m_ti</code
+      > variable).</p
+    ></div
+  ></div
+><div id="readers"
+><h1
+  ><a href="#TOC"
+    ><span class="header-section-number"
+      >5</span
+      > Readers</a
+    ></h1
+  ><p
+  >A reader is a class that demuxes a certain file type. It has to parse the file content, create one packetizer for each track, report the progress etc. Each reader class is derived from <code
+    >generic_reader_c</code
+    > (from <code
+    >src/merge/pr_generic.h</code
+    >).</p
+  ><p
+  >An example for a rather minimal implementation is the MP3 reader in <code
+    >src/input/r_mp3.h</code
+    >.</p
+  ><div id="constructor-virtual-destructor"
+  ><h2
+    ><a href="#TOC"
+      ><span class="header-section-number"
+	>5.1</span
+	> Constructor &amp; virtual destructor</a
+      ></h2
+    ><p
+    >The constructor usually only takes a <code
+      >track_info_c</code
+      > argument. A virtual destructor must be present, even if it is empty. Otherwise you'll get linker errors.</p
+    ><p
+    >The constructor must open the file and parse all its headers so that all track information has been processed. This will most likely be split up into a separate function in the future.</p
+    ></div
+  ><div id="readgeneric_packetizer_c-ptzr-bool-force-false"
+  ><h2
+    ><a href="#TOC"
+      ><span class="header-section-number"
+	>5.2</span
+	> <code
+	>read(generic_packetizer_c *ptzr, bool force = false)</code
+	></a
+      ></h2
+    ><p
+    >Requests that the reader reads data for a specific track. mkvmerge uses a pulling model: the core asks each packetizer to provide data. The packetizers in turn ask the reader they've been created from to read data by calling this function.</p
+    ><p
+    >If the reader supports arbitrary access to track data (e.g. for AVI and MP4/MOV files) then the reader should only read data for the requested track in order not to consume too much memory. If the file format doesn't allow for direct access to that data then the reader can simply read the next packet regardless which track that packet belongs to. The packetizer will call the reader's <code
+      >read()</code
+      > function as often as necessary until it has enough data.</p
+    ><p
+    >The reader must return <code
+      >FILE_STATUS_MOREDATA</code
+      > if more data is available and <code
+      >FILE_STATUS_DONE</code
+      > when the end has been reached.</p
+    ><p
+    >Each data packet is stored in an instance of <code
+      >packet_c</code
+      >. If the source container provides a timecode then that timecode should be set in the packet as well.</p
+    ></div
+  ><div id="create_packetizerint64_t-track_id"
+  ><h2
+    ><a href="#TOC"
+      ><span class="header-section-number"
+	>5.3</span
+	> <code
+	>create_packetizer(int64_t track_id)</code
+	></a
+      ></h2
+    ><p
+    >Has to create a packetizer for the track with the specific ID. This ID is the same number that the user uses on the command line as well as the number used in the call to <code
+      >id_result_track()</code
+      > (see below).</p
+    ><p
+    >This function has to verify that the user actually wants this track processed. This is checked with the <code
+      >demuxing_requested()</code
+      > function. Example from the MP3 reader (as the MP3 file format can only contain one track the ID is always 0; see the Matroska reader for more complex examples):</p
+    ><pre
+    ><code
+      >// Check if the audio demuxer with ID 0 is requested. Also make
+// sure that the number of packetizers this reader has created is
+// still 0.
+if (!demuxing_requested('a', 0) || (NPTZR() != 0))
+  return;
+
+// Inform the user.
+mxinfo_tid(m_ti.m_fname, 0, Y(&quot;Using the MPEG audio output module.\n&quot;));
+
+// Create the actual packetizer.
+add_packetizer(new mp3_packetizer_c(this, m_ti, mp3header.sampling_frequency, mp3header.channels, false));
+</code
+      ></pre
+    ><p
+    >A lot of packetizers expect their codec private data to be constructed completely by the reader. This often requires that the reader processes at least a few packets. For a rather complex case see the MPEG PS reader's handling of h264 tracks.</p
+    ></div
+  ><div id="get_progress"
+  ><h2
+    ><a href="#TOC"
+      ><span class="header-section-number"
+	>5.4</span
+	> <code
+	>get_progress()</code
+	></a
+      ></h2
+    ><p
+    >Returns the demuxing progress, a value between 0 and 100. Usually based on the number of bytes processed.</p
+    ></div
+  ><div id="identify"
+  ><h2
+    ><a href="#TOC"
+      ><span class="header-section-number"
+	>5.5</span
+	> <code
+	>identify()</code
+	></a
+      ></h2
+    ><p
+    >File identification. Has to call <code
+      >id_result_container(&quot;description&quot;)</code
+      > once for the container type.</p
+    ><p
+    >For each supported track the function must call <code
+      >id_result_track(...)</code
+      > once.</p
+    ><p
+    >Both the container and the track identification can contain extended information. For an extensive example see the Matroska reader's identification function in <code
+      >src/input/r_matroska.cpp</code
+      >.</p
+    ></div
+  ></div
+>
+</body>
+</html>
+
