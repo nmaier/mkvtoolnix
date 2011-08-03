@@ -28,21 +28,27 @@
 	> Timecodes</a
       ></li
     ><li
-    ><a href="#classes"
+    ><a href="#outputting-messages-to-the-user"
       ><span class="toc-section-number"
 	>4</span
+	> Outputting messages to the user</a
+      ></li
+    ><li
+    ><a href="#classes"
+      ><span class="toc-section-number"
+	>5</span
 	> Classes</a
       ><ul
       ><li
 	><a href="#general"
 	  ><span class="toc-section-number"
-	    >4.1</span
+	    >5.1</span
 	    > General</a
 	  ></li
 	><li
 	><a href="#memory_c-from-commonmemory.h"
 	  ><span class="toc-section-number"
-	    >4.2</span
+	    >5.2</span
 	    > <code
 	    >memory_c</code
 	    > (from <code
@@ -52,7 +58,7 @@
 	><li
 	><a href="#mm_io_c-from-commonmm_io.h"
 	  ><span class="toc-section-number"
-	    >4.3</span
+	    >5.3</span
 	    > <code
 	    >mm_io_c</code
 	    > (from <code
@@ -62,7 +68,7 @@
 	><li
 	><a href="#mm_file_io_c-from-commonmm_io.h"
 	  ><span class="toc-section-number"
-	    >4.4</span
+	    >5.4</span
 	    > <code
 	    >mm_file_io_c</code
 	    > (from <code
@@ -72,7 +78,7 @@
 	><li
 	><a href="#track_info_c-from-srcmergepr_generic.h"
 	  ><span class="toc-section-number"
-	    >4.5</span
+	    >5.5</span
 	    > <code
 	    >track_info_c</code
 	    > (from <code
@@ -84,19 +90,19 @@
     ><li
     ><a href="#readers"
       ><span class="toc-section-number"
-	>5</span
+	>6</span
 	> Readers</a
       ><ul
       ><li
 	><a href="#constructor-virtual-destructor"
 	  ><span class="toc-section-number"
-	    >5.1</span
+	    >6.1</span
 	    > Constructor &amp; virtual destructor</a
 	  ></li
 	><li
 	><a href="#readgeneric_packetizer_c-ptzr-bool-force-false"
 	  ><span class="toc-section-number"
-	    >5.2</span
+	    >6.2</span
 	    > <code
 	    >read(generic_packetizer_c *ptzr, bool force = false)</code
 	    ></a
@@ -104,7 +110,7 @@
 	><li
 	><a href="#create_packetizerint64_t-track_id"
 	  ><span class="toc-section-number"
-	    >5.3</span
+	    >6.3</span
 	    > <code
 	    >create_packetizer(int64_t track_id)</code
 	    ></a
@@ -112,7 +118,7 @@
 	><li
 	><a href="#get_progress"
 	  ><span class="toc-section-number"
-	    >5.4</span
+	    >6.4</span
 	    > <code
 	    >get_progress()</code
 	    ></a
@@ -120,7 +126,7 @@
 	><li
 	><a href="#identify"
 	  ><span class="toc-section-number"
-	    >5.5</span
+	    >6.5</span
 	    > <code
 	    >identify()</code
 	    ></a
@@ -248,18 +254,81 @@
     >int64_t</code
     > variables with nanosecond precision.</p
   ></div
-><div id="classes"
+><div id="outputting-messages-to-the-user"
 ><h1
   ><a href="#TOC"
     ><span class="header-section-number"
       >4</span
+      > Outputting messages to the user</a
+    ></h1
+  ><p
+  >There are basically four functions that output stuff: <code
+    >mxinfo()</code
+    >, <code
+    >mxverb()</code
+    >, <code
+    >mxwarn()</code
+    > and <code
+    >mxerror()</code
+    >. Each takes either a string or an argument produced by <code
+    >boost::format()</code
+    > (see <a href="http://www.boost.org/doc/libs/1_47_0/libs/format/doc/format.html"
+    >the Boost::Format documentation</a
+    > if you're not familiar with it), and <code
+    >mxverb()</code
+    > also takes a verbosity level argument.</p
+  ><p
+  ><code
+    >mxinfo()</code
+    > is supposed to be used for messages that are always output. Its messages must be translatable by using the <code
+    >_()</code
+    > macro, Example:</p
+  ><pre
+  ><code
+    >mxinfo(boost::format(_(&quot;Hello, %1%\n&quot;)) % user_name);
+</code
+    ></pre
+  ><p
+  >The same applies to <code
+    >mxwarn()</code
+    > and <code
+    >mxerror()</code
+    >. However, both prefix their messages with &quot;Warning:&quot; and &quot;Error:&quot; respectively. Also they modify mkvmerge's exit code -- &quot;1&quot; if <code
+    >mxwarn()</code
+    > has been used at least once and &quot;2&quot; if <code
+    >mxerror()</code
+    > is used. <code
+    >mxerror()</code
+    > also instantly exits the program. mmg shows such warnings and errors in separate areas as to draw the user's attention to them. Therefore <code
+    >mxwarn()</code
+    > should be used for stuff the user really should know, and <code
+    >mxerror()</code
+    > for stuff that prevents further processing altogether.</p
+  ><p
+  ><code
+    >mxverb()</code
+    > is a debugging facility. mkvmerge starts out at verbosity level 1. Therefore <code
+    >mxverb(1, ...)</code
+    > is equivalent to <code
+    >mxinfo(...)</code
+    >. You can raise the verbosity level by adding the &quot;-v&quot; or &quot;--verbose&quot; command line parameters multiple times. Messages output with <code
+    >mxverb()</code
+    > should not be translatable, meaning you shouldn't use the <code
+    >_()</code
+    > macro.</p
+  ></div
+><div id="classes"
+><h1
+  ><a href="#TOC"
+    ><span class="header-section-number"
+      >5</span
       > Classes</a
     ></h1
   ><div id="general"
   ><h2
     ><a href="#TOC"
       ><span class="header-section-number"
-	>4.1</span
+	>5.1</span
 	> General</a
       ></h2
     ><p
@@ -273,7 +342,7 @@
   ><h2
     ><a href="#TOC"
       ><span class="header-section-number"
-	>4.2</span
+	>5.2</span
 	> <code
 	>memory_c</code
 	> (from <code
@@ -302,7 +371,7 @@ file-&gt;read(mem, 20);
   ><h2
     ><a href="#TOC"
       ><span class="header-section-number"
-	>4.3</span
+	>5.3</span
 	> <code
 	>mm_io_c</code
 	> (from <code
@@ -322,7 +391,7 @@ file-&gt;read(mem, 20);
   ><h2
     ><a href="#TOC"
       ><span class="header-section-number"
-	>4.4</span
+	>5.4</span
 	> <code
 	>mm_file_io_c</code
 	> (from <code
@@ -359,7 +428,7 @@ file-&gt;setFilePointer(61, seek_current);
   ><h2
     ><a href="#TOC"
       ><span class="header-section-number"
-	>4.5</span
+	>5.5</span
 	> <code
 	>track_info_c</code
 	> (from <code
@@ -380,7 +449,7 @@ file-&gt;setFilePointer(61, seek_current);
 ><h1
   ><a href="#TOC"
     ><span class="header-section-number"
-      >5</span
+      >6</span
       > Readers</a
     ></h1
   ><p
@@ -397,7 +466,7 @@ file-&gt;setFilePointer(61, seek_current);
   ><h2
     ><a href="#TOC"
       ><span class="header-section-number"
-	>5.1</span
+	>6.1</span
 	> Constructor &amp; virtual destructor</a
       ></h2
     ><p
@@ -411,7 +480,7 @@ file-&gt;setFilePointer(61, seek_current);
   ><h2
     ><a href="#TOC"
       ><span class="header-section-number"
-	>5.2</span
+	>6.2</span
 	> <code
 	>read(generic_packetizer_c *ptzr, bool force = false)</code
 	></a
@@ -437,7 +506,7 @@ file-&gt;setFilePointer(61, seek_current);
   ><h2
     ><a href="#TOC"
       ><span class="header-section-number"
-	>5.3</span
+	>6.3</span
 	> <code
 	>create_packetizer(int64_t track_id)</code
 	></a
@@ -472,7 +541,7 @@ add_packetizer(new mp3_packetizer_c(this, m_ti, mp3header.sampling_frequency, mp
   ><h2
     ><a href="#TOC"
       ><span class="header-section-number"
-	>5.4</span
+	>6.4</span
 	> <code
 	>get_progress()</code
 	></a
@@ -484,7 +553,7 @@ add_packetizer(new mp3_packetizer_c(this, m_ti, mp3header.sampling_frequency, mp
   ><h2
     ><a href="#TOC"
       ><span class="header-section-number"
-	>5.5</span
+	>6.5</span
 	> <code
 	>identify()</code
 	></a

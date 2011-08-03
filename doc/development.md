@@ -44,6 +44,37 @@ during input/output.
 All timecodes and durations are stored as `int64_t` variables with
 nanosecond precision.
 
+# Outputting messages to the user #
+
+There are basically four functions that output stuff: `mxinfo()`,
+`mxverb()`, `mxwarn()` and `mxerror()`. Each takes either a string or
+an argument produced by `boost::format()` (see
+[the Boost::Format documentation](http://www.boost.org/doc/libs/1_47_0/libs/format/doc/format.html)
+if you're not familiar with it), and `mxverb()` also takes a verbosity
+level argument.
+
+`mxinfo()` is supposed to be used for messages that are always
+output. Its messages must be translatable by using the `_()` macro,
+Example:
+
+    mxinfo(boost::format(_("Hello, %1%\n")) % user_name);
+
+The same applies to `mxwarn()` and `mxerror()`. However, both prefix
+their messages with "Warning:" and "Error:" respectively. Also they
+modify mkvmerge's exit code -- "1" if `mxwarn()` has been used at
+least once and "2" if `mxerror()` is used. `mxerror()` also instantly
+exits the program. mmg shows such warnings and errors in separate
+areas as to draw the user's attention to them. Therefore `mxwarn()`
+should be used for stuff the user really should know, and `mxerror()`
+for stuff that prevents further processing altogether.
+
+`mxverb()` is a debugging facility. mkvmerge starts out at verbosity
+level 1. Therefore `mxverb(1, ...)` is equivalent to
+`mxinfo(...)`. You can raise the verbosity level by adding the "-v" or
+"--verbose" command line parameters multiple times. Messages output
+with `mxverb()` should not be translatable, meaning you shouldn't use
+the `_()` macro.
+
 # Classes #
 
 ## General ##
