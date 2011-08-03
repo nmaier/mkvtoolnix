@@ -100,6 +100,9 @@ def define_default_task
   # The tags file -- but only if it exists already
   targets << "TAGS" if File.exist?("TAGS") && !c(:ETAGS).empty?
 
+  # Build developer documentation?
+  targets << "doc/development.html" if !c(:PANDOC).empty?
+
   # Build man pages and translations?
   targets += [ "manpages", "translations:manpages" ] if c?(:XSLTPROC_WORKS)
 
@@ -201,6 +204,11 @@ task :tags => "TAGS"
 
 file "TAGS" => $all_sources do |t|
   runq '   ETAGS', "#{c(:ETAGS)} -o #{t.name} #{t.prerequisites.join(" ")}"
+end
+
+file "doc/development.html" => [ "doc/development.md", "doc/pandoc-template.html" ] do |t|
+  runq "  PANDOC #{t.prerequisites.first}", "#{c(:PANDOC)} -o #{t.name} --standalone --from markdown --to html --strict --number-sections --table-of-contents " +
+    "--css=pandoc.css --template=doc/pandoc-template.html doc/development.md"
 end
 
 task :manpages => $manpages

@@ -55,6 +55,7 @@ install_sh_SCRIPT = $(install_sh) -c
 LD = @LD@
 MOC = @MOC@
 OBJEXT = @OBJEXT@
+PANDOC = @PANDOC@
 PATH_SEPARATOR = @PATH_SEPARATOR@
 RANLIB = @RANLIB@
 STRIP = @STRIP@

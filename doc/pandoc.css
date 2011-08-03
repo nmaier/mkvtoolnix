@@ -1,0 +1,61 @@
+body {
+  font-family: Verdana, Sans-serif;
+  font-size: small;
+  background: #FFF;
+  color: #000;
+}
+
+h1 {
+  margin: 0px 140px 0px 140px;
+  font-size: 300%;
+  text-align: center;
+  padding: 0px 0px 10px 0px;
+  font-weight: normal;
+}
+
+h1 #title {
+  text-align: center;
+}
+
+h2 {
+  margin: 0px 15px 0px 15px;
+  font-size: 200%;
+  padding: 10px 0px 0px 0px;
+  text-transform: capitalize;
+}
+
+h3 {
+  margin: 0px 40px 0px 40px;
+  font-size: 120%;
+  padding: 10px 0px 0px 0px;
+}
+
+p > code, li > code {
+  color: #000000;
+  background-color: #b0ecff;
+  border: 1px solid blue;
+  padding-left: 2px;
+  padding-right: 2px;
+}
+
+pre {
+  color: #000000;
+  background-color: #b0ecff;
+  border: 1px solid blue;
+  padding: 2px;
+  margin: 10px;
+}
+
+a:link, a:visited, a:hover, a:focus, a:active {
+  color: #00f;
+}
+
+body > div {
+  border: 1px solid #BBB;
+  font-size: small;
+  margin: 0;
+  margin-bottom: 10px;
+  color: #000;
+  background: #EEE;
+  padding: .4em;
+}

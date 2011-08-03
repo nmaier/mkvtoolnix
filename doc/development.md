@@ -1,5 +1,3 @@
-Developer notes
-
 # File system layout #
 
 There's no dedicated include directory. Each include file is located
