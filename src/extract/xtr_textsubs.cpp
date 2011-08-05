@@ -16,7 +16,6 @@
 
 #include "common/ebml.h"
 #include "common/matroska.h"
-#include "common/mm_write_cache_io.h"
 #include "common/strings/editing.h"
 #include "common/strings/formatting.h"
 #include "common/strings/parsing.h"
@@ -75,6 +74,7 @@ xtr_srt_c::handle_frame(memory_cptr &frame,
      ).str();
 
   m_out->puts(buffer);
+  m_out->flush();
   delete []text;
 }
 
@@ -325,7 +325,7 @@ xtr_usf_c::create_file(xtr_base_c *master,
       if (0 <= end_tag_pos)
         codec_private_mod.erase(end_tag_pos, end_tag.length());
 
-      m_out       = mm_write_cache_io_c::open(m_file_name, 10 * 1024 * 1024);
+      m_out       = new mm_file_io_c(m_file_name, MODE_WRITE);
       m_formatter = counted_ptr<xml_formatter_c>(new xml_formatter_c(m_out, m_sub_charset));
 
       m_formatter->set_doctype("USFSubtitles", "USFV100.dtd");
