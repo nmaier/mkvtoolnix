@@ -147,13 +147,13 @@ el_get_binary(parser_data_t *pdata,
       xmlp_error(pdata, boost::format(Y("Could not open/read the file '%1%'.")) % file_name);
     }
 
-  } else if (pdata->format.empty() || (downcase(pdata->format) == "base64")) {
+  } else if (pdata->format.empty() || (ba::iequals(pdata->format, "base64"))) {
     buffer = new binary[pdata->bin.length() / 4 * 3 + 1];
     length = base64_decode(pdata->bin, static_cast<unsigned char *>(buffer));
     if (0 > length)
       xmlp_error(pdata, Y("Could not decode the Base64 encoded data - it seems to be malformed."));
 
-  } else if (downcase(pdata->format) ==  "hex") {
+  } else if (ba::iequals(pdata->format, "hex")) {
     const char *p = pdata->bin.c_str();
     length        = 0;
 
@@ -202,7 +202,7 @@ el_get_binary(parser_data_t *pdata,
       ++p;
     }
 
-  } else if (downcase(pdata->format) ==  "ascii") {
+  } else if (ba::iequals(pdata->format, "ascii")) {
     length = pdata->bin.length();
     buffer = new binary[length];
     memcpy(buffer, pdata->bin.c_str(), pdata->bin.length());
@@ -610,7 +610,7 @@ xml_parser_c::handle_xml_encoding(std::string &line) {
         strip(m_xml_attribute_value);
 
         if (m_xml_attribute_name == "encoding") {
-          m_xml_attribute_value = downcase(m_xml_attribute_value);
+          ba::to_lower(m_xml_attribute_value);
           if ((m_xml_source->get_byte_order() == BO_NONE) && ((m_xml_attribute_value == "utf-8") || (m_xml_attribute_value == "utf8")))
             m_xml_source->set_byte_order(BO_UTF8);
 

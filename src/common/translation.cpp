@@ -79,14 +79,14 @@ translation_c::initialize_available_translations() {
 int
 translation_c::look_up_translation(const std::string &locale) {
   try {
-    std::string locale_lower               = downcase(locale_string_c(locale).str(locale_string_c::half));
+    std::string locale_country_lang        = locale_string_c(locale).str(locale_string_c::half);
     std::vector<translation_c>::iterator i = ms_available_translations.begin();
     int idx                                = 0;
 
     while (i != ms_available_translations.end()) {
-      if (   (downcase(i->get_locale()) == locale_lower)
+      if (   ba::iequals(locale_country_lang, i->get_locale())
 #if defined(SYS_WINDOWS)
-          || (downcase(i->m_windows_locale_sysname) == locale_lower)
+          || ba::iequals(locale_country_lang, i->m_windows_locale_sysname)
 #endif
            )
         return idx;

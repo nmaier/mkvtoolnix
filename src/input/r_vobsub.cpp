@@ -237,7 +237,7 @@ vobsub_reader_c::parse_headers() {
       shrink_whitespace(line);
       std::vector<std::string> parts = split(line.c_str(), " ");
 
-      if ((4 != parts.size()) || (13 > parts[1].length()) || (downcase(parts[2]) != "filepos:")) {
+      if ((4 != parts.size()) || (13 > parts[1].length()) || !ba::iequals(parts[2], "filepos:")) {
         mxwarn_fn(m_ti.m_fname, boost::format(Y("Line %1%: The line seems to be a subtitle entry but the format couldn't be recognized. This entry will be skipped.\n")) % line_no);
         continue;
       }

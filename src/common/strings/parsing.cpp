@@ -274,12 +274,12 @@ parse_timecode(const std::string &src,
    as boolean false.
 */
 bool
-parse_bool(const std::string &orig) {
-  std::string s(downcase(orig));
+parse_bool(std::string value) {
+  ba::to_lower(value);
 
-  if ((s == "yes") || (s == "true") || (s == "1"))
+  if ((value == "yes") || (value == "true") || (value == "1"))
     return true;
-  if ((s == "no") || (s == "false") || (s == "0"))
+  if ((value == "no") || (value == "false") || (value == "0"))
     return false;
   throw false;
 }

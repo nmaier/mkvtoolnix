@@ -13,6 +13,8 @@
 
 #include "common/common_pch.h"
 
+#include <boost/algorithm/string.hpp>
+
 #include "common/memory.h"
 #include "common/strings/editing.h"
 
@@ -189,30 +191,6 @@ starts_with_case(const std::string &s,
                  const char *start,
                  int maxlen) {
   return strncasecmp(s.c_str(), start, -1 == maxlen ? strlen(start) : maxlen) == 0;
-}
-
-std::string
-upcase(const std::string &s) {
-  std::string dst;
-  size_t i;
-
-  dst.reserve(s.size());
-  for (i = 0; i < s.size(); i++)
-    dst += toupper(s[i]);
-
-  return dst;
-}
-
-std::string
-downcase(const std::string &s) {
-  std::string dst;
-  size_t i;
-
-  dst.reserve(s.size());
-  for (i = 0; i < s.size(); i++)
-    dst += tolower(s[i]);
-
-  return dst;
 }
 
 std::string

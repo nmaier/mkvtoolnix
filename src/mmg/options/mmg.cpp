@@ -116,7 +116,6 @@ optdlg_mmg_tab::optdlg_mmg_tab(wxWindow *parent,
   wxStaticText *st_ui_language = new wxStaticText(this, -1, Z("Interface language:"));
   cob_ui_language = new wxMTX_COMBOBOX_TYPE(this, ID_COB_UI_LANGUAGE,  wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
 
-  std::string ui_locale_lower = downcase(app->m_ui_locale);
   std::vector<translation_c>::iterator translation = translation_c::ms_available_translations.begin();
   wxString select_locale;
   std::vector<locale_sorter_t> sorted_entries;
@@ -125,14 +124,14 @@ optdlg_mmg_tab::optdlg_mmg_tab(wxWindow *parent,
     sorted_entries.push_back(locale_sorter_t(curr_entry, translation->get_locale()));
 
     if (   (select_locale.IsEmpty() && (translation->m_english_name == "English"))
-        || (ui_locale_lower == downcase(translation->get_locale())))
+        || ba::iequals(app->m_ui_locale, translation->get_locale()))
       select_locale = curr_entry;
 
     ++translation;
   }
 
   wxLogMessage(wxT("Locale selection logic: select_locale %s uu_locale_lower %s translation_c::get_default_ui_locale() %s app->m_ui_locale %s"),
-               select_locale.c_str(), wxUCS(ui_locale_lower), wxUCS(translation_c::get_default_ui_locale()), wxUCS(app->m_ui_locale));
+               select_locale.c_str(), wxUCS(app->m_ui_locale), wxUCS(translation_c::get_default_ui_locale()), wxUCS(app->m_ui_locale));
 
   std::sort(sorted_entries.begin(), sorted_entries.end());
 
@@ -304,7 +303,7 @@ optdlg_mmg_tab::save_options() {
 #if defined(HAVE_LIBINTL_H)
   std::string new_ui_locale = get_selected_ui_language();
 
-  if (downcase(new_ui_locale) != downcase(app->m_ui_locale)) {
+  if (!ba::iequals(new_ui_locale, app->m_ui_locale)) {
     app->m_ui_locale  = new_ui_locale;
 
     wxConfigBase *cfg = wxConfigBase::Get();

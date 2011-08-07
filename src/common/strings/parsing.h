@@ -53,6 +53,6 @@ parse_double(const std::string &s,
   return parse_double(s.c_str(), value);
 }
 
-bool MTX_DLL_API parse_bool(const std::string &orig);
+bool MTX_DLL_API parse_bool(std::string value);
 
 #endif  // __MTX_COMMON_STRING_PARSING_H

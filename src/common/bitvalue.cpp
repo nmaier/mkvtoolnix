@@ -39,7 +39,7 @@ bitvalue_c::bitvalue_c(std::string s,
     throw error_c("wrong usage: invalid allowed_bitlength");
 
   unsigned int len = s.size();
-  s                = downcase(s);
+  ba::to_lower(s);
   std::string s2;
 
   unsigned int i;

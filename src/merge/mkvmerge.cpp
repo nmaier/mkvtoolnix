@@ -445,7 +445,7 @@ parse_number_with_unit(const std::string &s,
     mxerror(boost::format(Y("'%1%' is not a valid %2% in '%3% %4%'.\n")) % s % subject % argument % display_s);
 
   int64_t multiplier = 1000000000;
-  unit               = downcase(unit);
+  ba::to_lower(unit);
 
   if (unit == "ms")
     multiplier = 1000000;
@@ -984,7 +984,7 @@ parse_arg_compression(const std::string &s,
   available_compression_methods.push_back("analyze_header_removal");
 
   ti.m_compression_list[id] = COMPRESSION_UNSPECIFIED;
-  parts[1] = downcase(parts[1]);
+  ba::to_lower(parts[1]);
 
   if (parts[1] == "zlib")
     ti.m_compression_list[id] = COMPRESSION_ZLIB;

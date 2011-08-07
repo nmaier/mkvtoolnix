@@ -16,10 +16,13 @@
 
 #include "common/os.h"
 
+#include <boost/algorithm/string.hpp>
 #include <string>
 #include <vector>
 
 #include <stdarg.h>
+
+namespace ba = boost::algorithm;
 
 std::vector<std::string> MTX_DLL_API split(const char *src, const char *pattern = ",", int max_num = -1);
 inline std::vector<std::string>
@@ -57,9 +60,6 @@ starts_with_case(const std::string &s,
                  int maxlen = -1) {
   return starts_with_case(s, start.c_str(), maxlen);
 }
-
-std::string MTX_DLL_API upcase(const std::string &s);
-std::string MTX_DLL_API downcase(const std::string &s);
 
 extern const std::string MTX_DLL_API empty_string;
 

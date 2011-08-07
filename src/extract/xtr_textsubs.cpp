@@ -145,7 +145,7 @@ xtr_ssa_c::create_file(xtr_base_c *master,
   if (0 > pos2)
     pos2 = sconv.length();
 
-  std::string format_line = downcase(sconv.substr(pos1 + 7, pos2 - pos1 - 7));
+  std::string format_line = ba::to_lower_copy(sconv.substr(pos1 + 7, pos2 - pos1 - 7));
   if (std::string::npos == format_line.find("text")) {
     if (format_line[format_line.length() - 1] == '\r') {
       format_line.erase(format_line.length() - 1);
@@ -226,7 +226,7 @@ xtr_ssa_c::handle_frame(memory_cptr &frame,
   for (i = 0; i < m_ssa_format.size(); i++) {
     std::string format = m_ssa_format[i];
 
-    if (downcase(format) == "actor")
+    if (ba::iequals(format, "actor"))
       format = "name";
 
     if (0 < i)

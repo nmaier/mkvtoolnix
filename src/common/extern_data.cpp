@@ -2619,7 +2619,6 @@ guess_mime_type_by_ext(std::string ext) {
   if (std::string::npos == i)
     return "";
   ext.erase(0, i + 1);
-  ext = downcase(ext);
 
   for (i = 0; NULL != mime_types[i].name; i++) {
     if (0 == mime_types[i].extensions[0])
@@ -2627,7 +2626,7 @@ guess_mime_type_by_ext(std::string ext) {
 
     extensions = split(mime_types[i].extensions, " ");
     for (j = 0; j < extensions.size(); j++)
-      if (downcase(extensions[j]) == ext)
+      if (ba::iequals(extensions[j], ext))
         return mime_types[i].name;
   }
 

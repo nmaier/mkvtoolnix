@@ -332,7 +332,7 @@ ssa_parser_c::parse() {
         // Let's see if "Actor" is used in the format instead of "Name".
         size_t i;
         for (i = 0; m_format.size() > i; ++i)
-          if (downcase(m_format[i]) == "actor") {
+          if (ba::iequals(m_format[i], "actor")) {
             name_field = "Actor";
             break;
           }
