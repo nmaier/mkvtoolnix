@@ -46,3 +46,9 @@ fi
 if test x"$ax_cv_boost_property_tree" = "xincluded"; then
   EXTRA_CFLAGS="-I$boost_exception_dir $EXTRA_CFLAGS -I$boost_property_tree_dir"
 fi
+
+# boost::algorithm::string must be present
+AX_BOOST_ALGORITHM_STRING()
+if test x"$ax_cv_boost_algorithm_string" = xno ; then
+  AC_MSG_ERROR(The Boost String Algorithm Library was not found.)
+fi
