@@ -10,27 +10,14 @@ AX_BOOST_SYSTEM()
 AX_BOOST_FILESYSTEM()
 
 if test x"$ax_cv_boost_filesystem" != "xyes"; then
-  AC_MSG_ERROR(The Boost Filesystem library was not found.)
+  AC_MSG_ERROR(The Boost Filesystem Library was not found.)
 fi
 
 # boost::regex must be present.
 AX_BOOST_REGEX()
 
 if test x"$ax_cv_boost_regex" != "xyes"; then
-  AC_MSG_ERROR(The Boost regex library was not found.)
-fi
-
-# boost::foreach can be missing; the included version will be used in
-# that case.
-boost_foreach_dir=lib/boost/foreach
-AX_BOOST_FOREACH($boost_foreach_dir)
-
-if test x"$ax_cv_boost_foreach" = "xno"; then
-  AC_MSG_ERROR([The Boost foreach library was not found, and the included version does not work. Install Boost v1.34.0 or later.])
-fi
-
-if test x"$ax_cv_boost_foreach" = "xincluded"; then
-  EXTRA_CFLAGS="$EXTRA_CFLAGS -I$boost_foreach_dir"
+  AC_MSG_ERROR(The Boost Regex Library was not found.)
 fi
 
 # boost::property_tree can be missing; the included version will be used in
@@ -45,10 +32,4 @@ fi
 
 if test x"$ax_cv_boost_property_tree" = "xincluded"; then
   EXTRA_CFLAGS="-I$boost_exception_dir $EXTRA_CFLAGS -I$boost_property_tree_dir"
-fi
-
-# boost::algorithm::string must be present
-AX_BOOST_CHECK_HEADERS(boost/algorithm/string.hpp)
-if test x"$ac_cv_header_boost_algorithm_string_hpp" != xyes ; then
-  AC_MSG_ERROR(The Boost String Algorithm Library was not found.)
 fi
