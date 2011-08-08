@@ -14,7 +14,6 @@ AC_DEFUN([AX_BOOST_PROPERTY_TREE_TRY_COMPILE],[
 
 AC_DEFUN([AX_BOOST_PROPERTY_TREE],[
   included_boost_dir="$1"
-  included_boost_exception_dir="$2"
 
   AC_CACHE_CHECK([which boost/property_tree/ptree.hpp to use],
                  [ax_cv_boost_property_tree],[
@@ -29,7 +28,7 @@ AC_DEFUN([AX_BOOST_PROPERTY_TREE],[
     AX_BOOST_PROPERTY_TREE_TRY_COMPILE(system)
 
     if test x"$ax_cv_boost_property_tree" = "xno"; then
-      CXXFLAGS="-I$included_boost_exception_dir -I$included_boost_dir $CXXFLAGS_SAVED $BOOST_CPPFLAGS"
+      CXXFLAGS="-I$included_boost_dir $CXXFLAGS_SAVED $BOOST_CPPFLAGS"
       export CXXFLAGS
 
       AX_BOOST_PROPERTY_TREE_TRY_COMPILE(included)
