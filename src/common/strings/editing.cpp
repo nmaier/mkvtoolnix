@@ -179,20 +179,6 @@ unescape(const std::string &source) {
   return dst;
 }
 
-bool
-starts_with(const std::string &s,
-            const char *start,
-            int maxlen) {
-  return strncmp(s.c_str(), start, -1 == maxlen ? strlen(start) : maxlen) == 0;
-}
-
-bool
-starts_with_case(const std::string &s,
-                 const char *start,
-                 int maxlen) {
-  return strncasecmp(s.c_str(), start, -1 == maxlen ? strlen(start) : maxlen) == 0;
-}
-
 std::string
 get_displayable_string(const char *src,
                        int max_len) {

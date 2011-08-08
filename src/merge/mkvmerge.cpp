@@ -507,7 +507,7 @@ parse_arg_tracks(std::string s,
                  const std::string &opt) {
   tracks.clear();
 
-  if (starts_with(s, "!")) {
+  if (ba::starts_with(s, "!")) {
     s.erase(0, 1);
     tracks.set_reversed();
   }
@@ -749,7 +749,7 @@ static void
 parse_arg_split_duration(const std::string &arg) {
   std::string s = arg;
 
-  if (starts_with_case(s, "duration:"))
+  if (ba::istarts_with(s, "duration:"))
     s.erase(0, strlen("duration:"));
 
   int64_t split_after;
@@ -768,7 +768,7 @@ static void
 parse_arg_split_timecodes(const std::string &arg) {
   std::string s = arg;
 
-  if (starts_with_case(s, "timecodes:"))
+  if (ba::istarts_with(s, "timecodes:"))
     s.erase(0, 10);
 
   std::vector<std::string> timecodes = split(s, ",");
@@ -791,7 +791,7 @@ parse_arg_split_size(const std::string &arg) {
   std::string s       = arg;
   std::string err_msg = Y("Invalid split size in '--split %1%'.\n");
 
-  if (starts_with_case(s, "size:"))
+  if (ba::istarts_with(s, "size:"))
     s.erase(0, strlen("size:"));
 
   if (s.empty())
@@ -843,13 +843,13 @@ parse_arg_split(const std::string &arg) {
   std::string s = arg;
 
   // HH:MM:SS
-  if (starts_with_case(s, "duration:"))
+  if (ba::istarts_with(s, "duration:"))
     parse_arg_split_duration(arg);
 
-  else if (starts_with_case(s, "size:"))
+  else if (ba::istarts_with(s, "size:"))
     parse_arg_split_size(arg);
 
-  else if (starts_with_case(s, "timecodes:"))
+  else if (ba::istarts_with(s, "timecodes:"))
     parse_arg_split_timecodes(arg);
 
   else if ((   (s.size() == 8)
@@ -1504,7 +1504,7 @@ static void
 parse_arg_attachments(const std::string &param,
                       std::string arg,
                       track_info_c &ti) {
-  if (starts_with(arg, "!")) {
+  if (ba::starts_with(arg, "!")) {
     arg.erase(0, 1);
     ti.m_attach_mode_list.set_reversed();
   }

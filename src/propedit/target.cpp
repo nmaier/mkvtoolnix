@@ -104,7 +104,7 @@ target_c::parse_target_spec(std::string spec) {
   }
 
   std::string prefix("track:");
-  if (starts_with_case(spec, prefix)) {
+  if (ba::istarts_with(spec, prefix)) {
     m_type = target_c::tt_track;
     parse_track_spec(spec.substr(prefix.length()));
     return;

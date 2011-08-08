@@ -324,7 +324,7 @@ ssa_parser_c::parse() {
       add_to_global = false;
 
     } else if (SSA_SECTION_EVENTS == section) {
-      if (starts_with_case(line, "Format: ")) {
+      if (ba::istarts_with(line, "Format: ")) {
         // Analyze the format string.
         m_format = split(&line.c_str()[strlen("Format: ")]);
         strip(m_format);
@@ -337,7 +337,7 @@ ssa_parser_c::parse() {
             break;
           }
 
-      } else if (starts_with_case(line, "Dialogue: ")) {
+      } else if (ba::istarts_with(line, "Dialogue: ")) {
         if (m_format.empty())
           throw error_c(Y("ssa_reader: Invalid format. Could not find the \"Format\" line in the \"[Events]\" section."));
 
@@ -394,7 +394,7 @@ ssa_parser_c::parse() {
       }
 
     } else if ((SSA_SECTION_FONTS == section) || (SSA_SECTION_GRAPHICS == section)) {
-      if (starts_with_case(line, "fontname:")) {
+      if (ba::istarts_with(line, "fontname:")) {
         add_attachment_maybe(attachment_name, attachment_data_uu, section);
 
         line.erase(0, strlen("fontname:"));

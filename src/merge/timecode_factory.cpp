@@ -36,7 +36,7 @@ timecode_factory_c::create(const std::string &file_name,
 
   std::string line;
   int version;
-  if (!in->getline2(line) || !starts_with_case(line, "# timecode format v") || !parse_int(&line[strlen("# timecode format v")], version))
+  if (!in->getline2(line) || !ba::istarts_with(line, "# timecode format v") || !parse_int(&line[strlen("# timecode format v")], version))
     mxerror(boost::format(Y("The timecode file '%1%' contains an unsupported/unrecognized format line. The very first line must look like '# timecode format v1'.\n"))
             % file_name);
 
@@ -91,7 +91,7 @@ timecode_factory_v1_c::parse(mm_io_c &in) {
       break;
   } while (true);
 
-  if (!starts_with_case(line, "assume "))
+  if (!ba::istarts_with(line, "assume "))
     mxerror(boost::format(Y("The timecode file '%1%' does not contain a valid 'Assume' line with the default number of frames per second.\n")) % m_file_name);
 
   line.erase(0, 6);
@@ -305,7 +305,7 @@ timecode_factory_v3_c::parse(mm_io_c &in) {
       break;
   } while (true);
 
-  if (!starts_with_case(line, "assume "))
+  if (!ba::istarts_with(line, "assume "))
     mxerror(err_msg_assume);
   line.erase(0, 6);
   strip(line);
@@ -320,7 +320,7 @@ timecode_factory_v3_c::parse(mm_io_c &in) {
       continue;
 
     double dur;
-    if (starts_with_case(line, "gap,")) {
+    if (ba::istarts_with(line, "gap,")) {
       line.erase(0, 4);
       strip(line);
 

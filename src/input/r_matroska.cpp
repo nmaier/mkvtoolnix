@@ -381,7 +381,7 @@ kax_reader_c::verify_audio_track(kax_track_t *t) {
     is_ok = verify_acm_audio_track(t);
   else if ((t->codec_id == MKV_A_MP3) || (t->codec_id == MKV_A_MP2))
     t->a_formattag = 0x0055;
-  else if (starts_with(t->codec_id, MKV_A_AC3, strlen(MKV_A_AC3)) || (t->codec_id == MKV_A_EAC3))
+  else if (ba::starts_with(t->codec_id, MKV_A_AC3) || (t->codec_id == MKV_A_EAC3))
     t->a_formattag = 0x2000;
   else if (t->codec_id == MKV_A_DTS)
     t->a_formattag = 0x2001;
@@ -402,7 +402,7 @@ kax_reader_c::verify_audio_track(kax_track_t *t) {
            || (t->codec_id == MKV_A_AAC_4SBR)
            || (t->codec_id == MKV_A_AAC))
     t->a_formattag = FOURCC('M', 'P', '4', 'A');
-  else if (starts_with(t->codec_id, MKV_A_REAL_COOK, strlen("A_REAL/")))
+  else if (ba::starts_with(t->codec_id, "A_REAL/"))
     t->a_formattag = FOURCC('r', 'e', 'a', 'l');
   else if (t->codec_id == MKV_A_FLAC)
     is_ok = verify_flac_audio_track(t);
@@ -868,7 +868,7 @@ kax_reader_c::read_headers_info_writing_app(KaxWritingApp *&km_writing_app) {
   strip(s);
   mxverb(2, boost::format("matroska_reader: | + writing app: %1%\n") % s);
 
-  if (starts_with_case(s, "avi-mux gui"))
+  if (ba::istarts_with(s, "avi-mux gui"))
     s.replace(0, strlen("avi-mux gui"), "avimuxgui");
 
   std::vector<std::string> parts = split(s.c_str(), " ", 3);
@@ -1445,9 +1445,9 @@ kax_reader_c::create_video_packetizer(kax_track_t *t,
   if ((t->codec_id == MKV_V_MSCOMP) && mpeg4::p10::is_avc_fourcc(t->v_fourcc) && !hack_engaged(ENGAGE_ALLOW_AVC_IN_VFW_MODE))
     create_mpeg4_p10_es_video_packetizer(t, nti);
 
-  else if (   starts_with(t->codec_id, "V_MPEG4", 7)
+  else if (   ba::starts_with(t->codec_id, "V_MPEG4")
            || (t->codec_id == MKV_V_MSCOMP)
-           || starts_with(t->codec_id, "V_REAL", 6)
+           || ba::starts_with(t->codec_id, "V_REAL")
            || (t->codec_id == MKV_V_QUICKTIME)
            || (t->codec_id == MKV_V_MPEG1)
            || (t->codec_id == MKV_V_MPEG2)
@@ -1703,7 +1703,7 @@ kax_reader_c::create_subtitle_packetizer(kax_track_t *t,
 
     t->sub_type = 'v';
 
-  } else if (starts_with(t->codec_id, "S_TEXT", 6) || (t->codec_id == "S_SSA") || (t->codec_id == "S_ASS")) {
+  } else if (ba::starts_with(t->codec_id, "S_TEXT") || (t->codec_id == "S_SSA") || (t->codec_id == "S_ASS")) {
     std::string new_codec_id = ((t->codec_id == "S_SSA") || (t->codec_id == "S_ASS")) ? std::string("S_TEXT/") + std::string(&t->codec_id[2]) : t->codec_id;
 
     t->ptzr = add_packetizer(new textsubs_packetizer_c(this, nti, new_codec_id.c_str(), t->private_data, t->private_size, false, true));

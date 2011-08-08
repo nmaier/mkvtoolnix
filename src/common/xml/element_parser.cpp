@@ -614,7 +614,7 @@ xml_parser_c::handle_xml_encoding(std::string &line) {
           if ((m_xml_source->get_byte_order() == BO_NONE) && ((m_xml_attribute_value == "utf-8") || (m_xml_attribute_value == "utf8")))
             m_xml_source->set_byte_order(BO_UTF8);
 
-          else if (starts_with_case(m_xml_attribute_value, "utf"))
+          else if (ba::istarts_with(m_xml_attribute_value, "utf"))
             m_xml_attribute_value = "UTF-8";
         }
 

@@ -137,7 +137,7 @@ xtr_base_c::create_extractor(const std::string &new_codec_id,
     return new xtr_base_c(new_codec_id, new_tid, tspec, "Dolby Digital (AC3)");
   else if (new_codec_id == MKV_A_EAC3)
     return new xtr_base_c(new_codec_id, new_tid, tspec, "Dolby Digital Plus (EAC3)");
-  else if (starts_with_case(new_codec_id, "A_MPEG/L"))
+  else if (ba::istarts_with(new_codec_id, "A_MPEG/L"))
     return new xtr_base_c(new_codec_id, new_tid, tspec, "MPEG-1 Audio Layer 2/3");
   else if (new_codec_id == MKV_A_DTS)
     return new xtr_base_c(new_codec_id, new_tid, tspec, "Digital Theater System (DTS)");
@@ -147,9 +147,9 @@ xtr_base_c::create_extractor(const std::string &new_codec_id,
     return new xtr_flac_c(new_codec_id, new_tid, tspec);
   else if (new_codec_id == MKV_A_VORBIS)
     return new xtr_oggvorbis_c(new_codec_id, new_tid, tspec);
-  else if (starts_with_case(new_codec_id, "A_AAC"))
+  else if (ba::istarts_with(new_codec_id, "A_AAC"))
     return new xtr_aac_c(new_codec_id, new_tid, tspec);
-  else if (starts_with_case(new_codec_id, "A_REAL/"))
+  else if (ba::istarts_with(new_codec_id, "A_REAL/"))
     return new xtr_rmff_c(new_codec_id, new_tid, tspec);
   else if (new_codec_id == MKV_A_MLP)
     return new xtr_base_c(new_codec_id, new_tid, tspec, "MLP");
@@ -165,7 +165,7 @@ xtr_base_c::create_extractor(const std::string &new_codec_id,
     return new xtr_avi_c(new_codec_id, new_tid, tspec);
   else if (new_codec_id == MKV_V_MPEG4_AVC)
     return new xtr_avc_c(new_codec_id, new_tid, tspec);
-  else if (starts_with_case(new_codec_id, "V_REAL/"))
+  else if (ba::istarts_with(new_codec_id, "V_REAL/"))
     return new xtr_rmff_c(new_codec_id, new_tid, tspec);
   else if ((new_codec_id == MKV_V_MPEG1) || (new_codec_id == MKV_V_MPEG2))
     return new xtr_mpeg1_2_video_c(new_codec_id, new_tid, tspec);

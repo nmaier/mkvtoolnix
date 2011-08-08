@@ -86,7 +86,7 @@ vobsub_reader_c::vobsub_reader_c(track_info_c &_ti)
   len      = id_string.length();
 
   std::string line;
-  if (!idx_file->getline2(line) || !starts_with_case(line, id_string.c_str(), len) || (line.length() < (len + 1)))
+  if (!idx_file->getline2(line) || !ba::istarts_with(line, id_string) || (line.length() < (len + 1)))
     mxerror_fn(m_ti.m_fname, Y("No version number found.\n"));
 
   version = line[len] - '0';
@@ -213,7 +213,7 @@ vobsub_reader_c::parse_headers() {
     if (!strncasecmp(sline, "alt:", 4) || !strncasecmp(sline, "langidx:", 8))
       continue;
 
-    if (starts_with_case(line, "delay:")) {
+    if (ba::istarts_with(line, "delay:")) {
       line.erase(0, 6);
       strip(line);
 
@@ -229,7 +229,7 @@ vobsub_reader_c::parse_headers() {
       delay += timestamp * factor;
     }
 
-    if ((7 == version) && starts_with_case(line, "timestamp:")) {
+    if ((7 == version) && ba::istarts_with(line, "timestamp:")) {
       if (NULL == track)
         mxerror_fn(m_ti.m_fname, Y("The .idx file does not contain an 'id: ...' line to indicate the language.\n"));
 

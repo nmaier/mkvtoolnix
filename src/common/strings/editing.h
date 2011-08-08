@@ -45,22 +45,6 @@ std::string MTX_DLL_API unescape(const std::string &src);
 
 std::string MTX_DLL_API get_displayable_string(const char *src, int max_len = -1);
 
-bool MTX_DLL_API starts_with(const std::string &s, const char *start, int maxlen = -1);
-inline bool
-starts_with(const std::string &s,
-            const std::string &start,
-            int maxlen = -1) {
-  return starts_with(s, start.c_str(), maxlen);
-}
-
-bool MTX_DLL_API starts_with_case(const std::string &s, const char *start, int maxlen = -1);
-inline bool
-starts_with_case(const std::string &s,
-                 const std::string &start,
-                 int maxlen = -1) {
-  return starts_with_case(s, start.c_str(), maxlen);
-}
-
 extern const std::string MTX_DLL_API empty_string;
 
 int MTX_DLL_API get_arg_len(const char *fmt, ...);
