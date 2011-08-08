@@ -48,7 +48,7 @@ if test x"$ax_cv_boost_property_tree" = "xincluded"; then
 fi
 
 # boost::algorithm::string must be present
-AX_BOOST_ALGORITHM_STRING()
-if test x"$ax_cv_boost_algorithm_string" = xno ; then
+AX_BOOST_CHECK_HEADERS(boost/algorithm/string.hpp)
+if test x"$ac_cv_header_boost_algorithm_string_hpp" != xyes ; then
   AC_MSG_ERROR(The Boost String Algorithm Library was not found.)
 fi
