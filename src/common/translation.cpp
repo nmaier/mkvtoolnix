@@ -19,10 +19,12 @@
 #elif HAVE_LOCALE_CHARSET
 # include <libcharset.h>
 #endif
+#include <locale>
 #include <locale.h>
 #include <stdlib.h>
 
 #include "common/locale_string.h"
+#include "common/utf8_codecvt_facet.h"
 #include "common/strings/editing.h"
 #include "common/translation.h"
 
@@ -30,8 +32,6 @@
 # include <windows.h>
 
 # include <boost/filesystem/path.hpp>
-# include <boost/filesystem/detail/utf8_codecvt_facet.hpp>
-# include <locale>
 
 # include "common/fs_sys_helpers.h"
 # include "common/memory.h"
@@ -245,14 +245,16 @@ init_locales(std::string locale) {
     // modified by SetEnvironmentVariable() and the C library's cache
     // of said environment which is modified via _putenv().
 
-    // set_environment_variable("LANG",        locale);
-    // set_environment_variable("LC_MESSAGES", locale);
+    set_environment_variable("LANG",        locale);
+    set_environment_variable("LC_MESSAGES", locale);
 
     translation_c::set_active_translation(locale);
 
     // Boost's path class uses wide chars on Windows for path
     // names. Tell that all narrow strings are encoded in UTF-8.
-    boost::filesystem::path::imbue(std::locale(std::locale(), new boost::filesystem::detail::utf8_codecvt_facet));
+    std::locale utf8_locale(std::locale(), new mtx::utf8_codecvt_facet);
+    std::locale::global(utf8_locale);
+    boost::filesystem::path::imbue(utf8_locale);
   }
 
   locale_dir = get_installation_path() + "\\locale";
@@ -292,6 +294,9 @@ init_locales(std::string locale) {
 
   if (chosen_locale.empty())
     mxerror(Y("The locale could not be set properly. Check the LANG, LC_ALL and LC_MESSAGES environment variables.\n"));
+
+  std::locale utf8_locale(std::locale(), new mtx::utf8_codecvt_facet);
+  std::locale::global(utf8_locale);
 
   translation_c::set_active_translation(chosen_locale);
 
