@@ -204,6 +204,7 @@ private:
   int parse_pat(unsigned char *pat);
   int parse_pmt(unsigned char *pmt);
   file_status_e finish();
+  int send_to_packetizer(int tid);
 };
 
 #endif  // __R_MPEG_TS_H

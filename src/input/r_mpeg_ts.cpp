@@ -865,9 +865,20 @@ mpeg_ts_reader_c::parse_packet(int id, unsigned char *buf) {
       } else {
         pes_data                   = (mpeg_ts_pes_header_t *)payload;
         tracks[tidx]->payload_size = ((uint16_t) (pes_data->PES_packet_length_msb) << 8) | (pes_data->PES_packet_length_lsb);
-        //if (tracks[tidx]->payload_size > 0)
-        //  tracks[tidx]->payload_size = tracks[tidx]->payload_size - 3 - pes_data->PES_header_data_length;
+#if 1
+        if (tracks[tidx]->payload_size > 0)
+          tracks[tidx]->payload_size = tracks[tidx]->payload_size - 3 - pes_data->PES_header_data_length;
+#else
         tracks[tidx]->payload_size = 0;
+#endif
+
+        if (   (tracks[tidx]->payload_size       == 0)
+            && (tracks[tidx]->payload.get_size() != 0)
+            && (input_status                     == INPUT_READ)) {
+          tracks[tidx]->payload_size = tracks[tidx]->payload.get_size();
+          mxverb(3, boost::format("mpeg_ts: Table/PES completed (%1%) for PID %2%\n") % tracks[tidx]->payload_size % table_pid);
+          send_to_packetizer(tidx);
+        }
 
         mxverb(4, boost::format("   PES info: stream_id = %1%\n") % (int)pes_data->stream_id);
         mxverb(4, boost::format("   PES info: PES_packet_length = %1%\n") % tracks[tidx]->payload_size);
@@ -899,17 +910,10 @@ mpeg_ts_reader_c::parse_packet(int id, unsigned char *buf) {
 
         payload      = &pes_data->PES_header_data_length + pes_data->PES_header_data_length + 1;
         payload_size = ((unsigned char *) hdr + 188) - (unsigned char *) payload;
-        if (tracks[tidx]->payload_size == 0 && tracks[tidx]->payload.get_size() != 0) {
-
-          if (input_status == INPUT_READ) {
-            tracks[tidx]->payload_size = tracks[tidx]->payload.get_size();
-            mxverb(3, boost::format("mpeg_ts: Table/PES completed (%1%) for PID %2%\n") % tracks[tidx]->payload_size % table_pid);
-            track_buffer_ready = tidx;
-            io->skip(-188); // skip one TS packet back to retrieve next PES correctly
-            return true;
-          }
+        // this condition is for ES probing when there is still not enough data for detection
+        if (tracks[tidx]->payload_size == 0 && tracks[tidx]->payload.get_size() != 0)
           tracks[tidx]->data_ready = true;
-        }
+
       }
       tracks[tidx]->continuity_counter = CONTINUITY_COUNTER(hdr);
 
@@ -943,8 +947,9 @@ mpeg_ts_reader_c::parse_packet(int id, unsigned char *buf) {
         payload_size = tracks[tidx]->payload_size - tracks[tidx]->payload.get_size();
     }
 
+
     tracks[tidx]->payload.add(payload, payload_size);
-    //mxverb(3, boost::format("mpeg_ts: ---------> Written " << (int)payload_size << " bytes for pid " << table_pid << std::endl;
+    //mxverb(3, boost::format("mpeg_ts: ---------> Written %1% bytes for PID %2%\n") % payload_size % table_pid);
 
     if (tracks[tidx]->payload.get_size() == 0)
       return false;
@@ -1108,6 +1113,35 @@ mpeg_ts_reader_c::finish() {
   return flush_packetizers();
 }
 
+int
+mpeg_ts_reader_c::send_to_packetizer(int tid) {
+  if (tid == -1)
+    return -1;
+
+  //if (tid == 0)
+  //     m_file->write(tracks[tid]->payload.get_buffer(), tracks[tid]->payload_size);
+  if (tracks[tid]->timecode - global_timecode_offset < 0)
+    tracks[tid]->timecode = 0;
+  else
+    tracks[tid]->timecode = (uint64_t)(tracks[tid]->timecode - global_timecode_offset) * 100000ll / 9;
+
+  // WARNING WARNING WARNING - comment this to use source audio PTSs !!!
+  if (tracks[tid]->type == ES_AUDIO_TYPE)
+    tracks[tid]->timecode = -1;
+
+  mxverb(3, boost::format("mpeg_ts: PTS in nanoseconds: %1%\n") % tracks[tid]->timecode);
+  packet_t *new_packet = new packet_t(clone_memory(tracks[tid]->payload.get_buffer(), tracks[tid]->payload_size), tracks[tid]->timecode);
+
+  if (tracks[tid]->ptzr != -1)
+    PTZR(tracks[tid]->ptzr)->process(new_packet);
+  //mxverb(3, boost::format("mpeg_ts: packet processed... (%1% bytes)\n") % tracks[tid]->payload.get_size());
+  tracks[tid]->payload.remove(tracks[tid]->payload.get_size());
+  tracks[tid]->processed    = false;
+  tracks[tid]->data_ready   = false;
+  tracks[tid]->payload_size = 0;
+  return 0;
+}
+
 file_status_e
 mpeg_ts_reader_c::read(generic_packetizer_c *,
                        bool) {
@@ -1137,29 +1171,8 @@ mpeg_ts_reader_c::read(generic_packetizer_c *,
       done = true;
       parse_packet(-1, buf);
       if (track_buffer_ready != -1) { // ES buffer ready
-
-        //if (track_buffer_ready == 0)
-        //     m_file->write(tracks[track_buffer_ready]->payload.get_buffer(), tracks[track_buffer_ready]->payload_size);
-        if (tracks[track_buffer_ready]->timecode - global_timecode_offset < 0)
-          tracks[track_buffer_ready]->timecode = 0;
-        else
-          tracks[track_buffer_ready]->timecode = (uint64_t)(tracks[track_buffer_ready]->timecode - global_timecode_offset) * 100000ll / 9;
-
-        // WARNING WARNING WARNING - comment this to use source audio PTSs !!!
-        if (tracks[track_buffer_ready]->type == ES_AUDIO_TYPE)
-          tracks[track_buffer_ready]->timecode = -1;
-
-        mxverb(3, boost::format("mpeg_ts: PTS in nanoseconds: %1%\n") % tracks[track_buffer_ready]->timecode);
-        packet_t *new_packet = new packet_t(clone_memory(tracks[track_buffer_ready]->payload.get_buffer(), tracks[track_buffer_ready]->payload_size), tracks[track_buffer_ready]->timecode);
-
-        if (tracks[track_buffer_ready]->ptzr != -1)
-          PTZR(tracks[track_buffer_ready]->ptzr)->process(new_packet);
-        //mxverb(3, boost::format("mpeg_ts: packet processed... (%1% bytes)\n") % tracks[track_buffer_ready]->payload.get_size());
-        tracks[track_buffer_ready]->payload.remove(tracks[track_buffer_ready]->payload.get_size());
-        tracks[track_buffer_ready]->processed    = false;
-        tracks[track_buffer_ready]->data_ready   = false;
-        tracks[track_buffer_ready]->payload_size = 0;
-        track_buffer_ready                       = -1;
+        send_to_packetizer(track_buffer_ready);
+        track_buffer_ready = -1;
       }
       io->skip(-1);
     }
