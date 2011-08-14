@@ -200,7 +200,7 @@ public:
   virtual bool parse_packet(int id, unsigned char *buf);
 
 private:
-  unsigned long calculate_crc32(unsigned char *data, int len);
+  uint32_t calculate_crc32(unsigned char *data, int len);
   int parse_pat(unsigned char *pat);
   int parse_pmt(unsigned char *pmt);
   file_status_e finish();
