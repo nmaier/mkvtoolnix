@@ -101,14 +101,9 @@ typedef struct {
   unsigned char PES_packet_length_msb;
   unsigned char PES_packet_length_lsb;
   unsigned char original_or_copy:1, copyright:1, data_alignment_indicator:1, PES_priority:1, PES_scrambling_control:2, onezero:2;
-  unsigned char PES_extension:1, PES_CRC:1, additional_copy_info:1, DSM_trick_mode:1, ES_rate:1, ESCR:1, PTS_DTS:2;
+  unsigned char PES_extension:1, PES_CRC:1, additional_copy_info:1, DSM_trick_mode:1, ES_rate:1, ESCR:1, PTS_DTS_flags:2;
   unsigned char PES_header_data_length;
-  unsigned char marker_bit_2msb:1, PTS_4msb:3, fill_in:4;
-  unsigned char PTS_3msb;
-  unsigned char marker_bit_1msb:1, PTS_2msb:7;
-  unsigned char PTS_1msb;
-  unsigned char marker_bit_lsb:1, PTS_lsb:7;
-  unsigned char stuffing;
+  unsigned char PTS_DTS;
 } mpeg_ts_pes_header_t;
 
 struct mpeg_ts_track_t {
@@ -201,6 +196,7 @@ public:
   virtual bool parse_packet(int id, unsigned char *buf);
 
   static uint32_t calculate_crc32(unsigned char *data, int len);
+  static int64_t read_timestamp(unsigned char *p);
 
 private:
   int parse_pat(unsigned char *pat);

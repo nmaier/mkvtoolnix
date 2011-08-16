@@ -805,10 +805,19 @@ mpeg_ts_reader_c::new_stream_a_truehd(unsigned char *buf,
   return FILE_STATUS_MOREDATA;
 }
 
+int64_t
+mpeg_ts_reader_c::read_timestamp(unsigned char *p) {
+  int64_t pts  = static_cast<int64_t>(((p[0] >> 1) & 0x07) << 30);
+  pts         |= (get_uint16_be(&p[1]) >> 1) << 15;
+  pts         |=  get_uint16_be(&p[3]) >> 1;
+
+  return pts;
+}
+
 bool
 mpeg_ts_reader_c::parse_packet(int id, unsigned char *buf) {
   uint16_t i, ret = -1;
-  unsigned char tidx = 0;
+  int tidx = 0;
   unsigned char *payload;
   unsigned char payload_size;
   unsigned char adf_discontinuity_indicator = 0;
@@ -888,12 +897,9 @@ mpeg_ts_reader_c::parse_packet(int id, unsigned char *buf) {
         mxverb(4, boost::format("   PES info: DSM_trick_mode = %1%, add_copy = %2%, CRC = %3%, ext = %4%\n") % (int)pes_data->DSM_trick_mode % (int)pes_data->additional_copy_info % (int)pes_data->PES_CRC % (int)pes_data->PES_extension);
         mxverb(4, boost::format("   PES info: PES_header_data_length = %1%\n") % (int)pes_data->PES_header_data_length);
 
-        if (pes_data->PTS_DTS > 1) { // 10 and 11 mean PTS is present
-          int64_t PTS =        ((uint64_t)(pes_data->PTS_4msb & 0x07))   << 29;
-          PTS         = PTS | (((uint64_t)pes_data->PTS_3msb)            << 21);
-          PTS         = PTS | (((uint64_t)(pes_data->PTS_2msb & 0x00FE)) << 14);
-          PTS         = PTS | (((uint64_t)pes_data->PTS_1msb)            << 6);
-          PTS         = PTS | (((uint64_t)(pes_data->PTS_lsb & 0x00FE))  >> 1);
+        // int64_t pts = -1, dts = -1;
+        if (pes_data->PTS_DTS_flags > 1) { // 10 and 11 mean PTS is present
+          int64_t PTS = read_timestamp(&pes_data->PTS_DTS);
 
           if (global_timecode_offset == -1)
             global_timecode_offset = (int64_t)PTS;
