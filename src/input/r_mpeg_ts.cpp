@@ -807,9 +807,9 @@ mpeg_ts_reader_c::new_stream_a_truehd(unsigned char *buf,
 
 int64_t
 mpeg_ts_reader_c::read_timestamp(unsigned char *p) {
-  int64_t pts  = static_cast<int64_t>(((p[0] >> 1) & 0x07) << 30);
-  pts         |= (get_uint16_be(&p[1]) >> 1) << 15;
-  pts         |=  get_uint16_be(&p[3]) >> 1;
+  int64_t pts  =  static_cast<int64_t>(             ( p[0]   >> 1) & 0x07) << 30;
+  pts         |= (static_cast<int64_t>(get_uint16_be(&p[1])) >> 1)         << 15;
+  pts         |=  static_cast<int64_t>(get_uint16_be(&p[3]))               >>  1;
 
   return pts;
 }
