@@ -27,7 +27,7 @@ private:
   int m_samples_per_sec, m_channels, m_samples_per_frame;
   byte_buffer_c m_byte_buffer;
   bool m_codec_id_set, m_valid_headers_found;
-  int64_t m_previous_timecode, m_num_packets_with_same_timecode;
+  int64_t m_previous_timecode, m_num_packets_since_previous_timecode;
   samples_to_timecode_converter_c m_s2tc;
   int64_t m_single_packet_duration;
 

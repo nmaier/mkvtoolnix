@@ -36,8 +36,8 @@ mp3_packetizer_c::mp3_packetizer_c(generic_reader_c *p_reader,
   , m_byte_buffer(128 * 1024)
   , m_codec_id_set(false)
   , m_valid_headers_found(source_is_good)
-  , m_previous_timecode(-1)
-  , m_num_packets_with_same_timecode(0)
+  , m_previous_timecode(0)
+  , m_num_packets_since_previous_timecode(0)
   , m_s2tc(1152 * 1000000000ll, m_samples_per_sec)
   , m_single_packet_duration(1 * m_s2tc)
 {
@@ -173,21 +173,19 @@ mp3_packetizer_c::process(packet_cptr packet) {
 
   m_byte_buffer.add(packet->data->get_buffer(), packet->data->get_size());
   while ((mp3_packet = get_mp3_packet(&mp3header)) != NULL) {
+    bool timecode_valid =  (-1 != packet->timecode)
+                        && (   (0 == m_packetno)
+                            || (packet->timecode != m_previous_timecode));
+
     int64_t new_timecode;
+    if (timecode_valid) {
+      m_previous_timecode                   = packet->timecode;
+      new_timecode                          = packet->timecode;
+      m_num_packets_since_previous_timecode = 1;
 
-    if (-1 == packet->timecode)
-      new_timecode = m_packetno * m_s2tc;
-
-    else {
-      if ((-1 != m_previous_timecode) && (packet->timecode == m_previous_timecode)) {
-        new_timecode = m_previous_timecode + m_num_packets_with_same_timecode * m_s2tc;
-        ++m_num_packets_with_same_timecode;
-      } else {
-        new_timecode                     = packet->timecode;
-        m_num_packets_with_same_timecode = 0;
-      }
-
-      m_previous_timecode = packet->timecode;
+    } else {
+      new_timecode = m_previous_timecode + m_num_packets_since_previous_timecode * m_s2tc;
+      ++m_num_packets_since_previous_timecode;
     }
 
     add_packet(new packet_t(new memory_c(mp3_packet, mp3header.framesize, true), new_timecode, m_single_packet_duration));
