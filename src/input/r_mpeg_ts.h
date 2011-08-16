@@ -93,8 +93,7 @@ typedef struct {
 } mpeg_ts_pmt_pid_info_t;
 
 /* PES header */
-typedef struct
-{
+typedef struct {
   unsigned char packet_start_code_prefix_2msb;
   unsigned char packet_start_code_prefix_1msb;
   unsigned char packet_start_code_prefix_lsb;
