@@ -1138,6 +1138,9 @@ create_readers() {
         case FILE_TYPE_MPEG_PS:
           file.reader = new mpeg_ps_reader_c(*file.ti);
           break;
+        case FILE_TYPE_MPEG_TS:
+          file.reader = new mpeg_ts_reader_c(*file.ti);
+          break;
         case FILE_TYPE_OGM:
           file.reader = new ogm_reader_c(*file.ti);
           break;
