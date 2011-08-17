@@ -202,23 +202,11 @@ mpeg_ts_reader_c::~mpeg_ts_reader_c() {
 
 void
 mpeg_ts_reader_c::identify() {
-  unsigned int i;
-  /*
-  std::vector<std::string> verbose_info;
-  io->create_verbose_identification_info(verbose_info);
-  */
-
   id_result_container("MPEG2 Transport Stream (TS)");
 
+  size_t i;
   for (i = 0; i < tracks.size(); i++) {
     mpeg_ts_track_ptr &track = tracks[i];
-/*
-    verbose_info.clear();
-
-    verbose_info.push_back((boost::format("stream_id:%|1$02x| sub_stream_id:%|2$02x|") % track->id.id % track->id.sub_id).str());
-*/
-    //if ((0 != track->v_dwidth) && (0 != track->v_dheight))
-    //  verbose_info.push_back((boost::format("display_dimensions:%1%x%2%") % track->v_dwidth % track->v_dheight).str());
 
     id_result_track(i, ES_AUDIO_TYPE == track->type ? ID_RESULT_TRACK_AUDIO : ID_RESULT_TRACK_VIDEO,
                       FOURCC('M', 'P', 'G', '1') == track->fourcc ? "MPEG-1"
@@ -234,9 +222,6 @@ mpeg_ts_reader_c::identify() {
                     : FOURCC('P', 'C', 'M', ' ') == track->fourcc ? "PCM"
                     : FOURCC('L', 'P', 'C', 'M') == track->fourcc ? "LPCM"
                     : "Unknown" );
-    /*
-                    :                                               Y("unknown"),
-                    verbose_info);*/
   }
 }
 
@@ -342,15 +327,14 @@ mpeg_ts_reader_c::parse_pat(unsigned char *pat) {
   mpeg_ts_pat_section_t *pat_section = (mpeg_ts_pat_section_t *)(pat + sizeof(mpeg_ts_pat_t));
   for (; i < prog_count; i++, pat_section++) {
     unsigned short local_program_number = PROGRAM_NUMBER(pat_section);
-    mxverb(3, boost::format("mpeg_ts:parse_pat: program_number: %1%\n") % local_program_number);
+    uint16_t tmp_pid                    = GET_PID(pat_section);
 
-    uint16_t tmp_pid = GET_PID(pat_section);
+    mxverb(3, boost::format("mpeg_ts:parse_pat: program_number: %1%; %2%_pid: %3%\n")
+           % local_program_number
+           % (0 == local_program_number ? "nit" : "pmt")
+           % tmp_pid);
 
-    if (local_program_number == 0) {
-      mxverb(3, boost::format("mpeg_ts:parse_pat: nit_pid: %1%\n") % tmp_pid);
-    } else {
-      mxverb(3, boost::format("mpeg_ts:parse_pat: pmt_pid: %1%\n") % tmp_pid);
-
+    if (0 != local_program_number) {
       PAT_found = true;
 
       bool skip = false;
@@ -524,16 +508,8 @@ mpeg_ts_reader_c::parse_pmt(unsigned char *pmt) {
             track->type   = ES_AUDIO_TYPE;
             track->fourcc = FOURCC('A', 'C', '3', ' ');
             break;
-            /*
-              default:
-              mxverb(3, boost::format("mpeg_ts:parse_pmt: Unknown descriptor tag: %1%\n") % (int)pmt_descriptor->tag);
-              track->type   = ES_UNKNOWN;
-              break;
-            */
         }
       }
-
-      //mpeg_ts_parse_descriptor(verbose, pmt_descriptor, (void *)&(stream_info->pids_info[i]), PID_DESCRIPTOR);
 
       pmt_descriptor = (mpeg_ts_pmt_descriptor_t *)((unsigned char *)pmt_descriptor + sizeof(mpeg_ts_pmt_descriptor_t) + pmt_descriptor->length);
     }
@@ -567,31 +543,7 @@ mpeg_ts_reader_c::new_stream_v_mpeg_1_2(unsigned char *buf,
     mxverb(3, boost::format("new_stream_v_mpeg_1_2: no valid frame in %1% bytes\n") % length);
     return FILE_STATUS_MOREDATA;
   }
-  /*
-    while ((MPV_PARSER_STATE_FRAME != state) && (PS_PROBE_SIZE >= io->getFilePointer())) {
-    if (!find_next_packet_for_id(id, PS_PROBE_SIZE))
-    break;
 
-    int64_t timecode;
-    unsigned int full_length;
-    if (!parse_packet(id, timecode, length, full_length))
-    break;
-
-    memory_c new_buf((unsigned char *)safemalloc(length), 0, true);
-    if (io->read(new_buf.get_buffer(), length) != length)
-    break;
-
-    m2v_parser->WriteData(new_buf.get_buffer(), length);
-
-    state = m2v_parser->GetState();
-    }
-
-    if (MPV_PARSER_STATE_FRAME != state) {
-    mxverb(3, boost::format("MPEG PS: blacklisting id 0x%|1$02x|(%|2$02x|) for supposed type MPEG1/2\n") % id.id % id.sub_id);
-    blacklisted_ids[id.idx()] = true;
-    return;
-    }
-  */
   MPEG2SequenceHeader seq_hdr = m2v_parser->GetSequenceHeader();
   counted_ptr<MPEGFrame> frame(m2v_parser->ReadFrame());
   if (!frame.is_set())
@@ -634,8 +586,6 @@ mpeg_ts_reader_c::new_stream_v_avc(unsigned char *buf,
   parser.ignore_nalu_size_length_errors();
 
   mxverb(3, boost::format("new_stream_v_avc: packet size: %1%\n") % length);
-  //mxverb(3, boost::format("new_stream_v_avc: %1% %2% %3% %4%\n") % buf[0] %  buf[1] %  buf[2] %  buf[3]);
-  //mxhexdump(3, buf, 10);
   /*
   if (map_has_key(m_ti.m_nalu_size_lengths, tracks.size()))
     parser.set_nalu_size_length(m_ti.m_nalu_size_lengths[0]);
@@ -643,22 +593,7 @@ mpeg_ts_reader_c::new_stream_v_avc(unsigned char *buf,
     parser.set_nalu_size_length(m_ti.m_nalu_size_lengths[-1]);
 */
   parser.add_bytes(buf, length);
-/*
-  while (!parser.headers_parsed() && (PS_PROBE_SIZE >= io->getFilePointer())) {
-    if (!find_next_packet_for_id(id, PS_PROBE_SIZE))
-      break;
 
-    unsigned int full_length;
-    int64_t timecode;
-    if (!parse_packet(id, timecode, length, full_length))
-      break;
-    memory_c new_buf((unsigned char *)safemalloc(length), 0, true);
-    if (io->read(new_buf.get_buffer(), length) != length)
-      break;
-
-    parser.add_bytes(new_buf.get_buffer(), length);
-  }
-*/
   if (!parser.headers_parsed())
     return FILE_STATUS_MOREDATA;
 
@@ -710,7 +645,8 @@ mpeg_ts_reader_c::new_stream_v_avc(unsigned char *buf,
     track->v_width  = sps_info.width;
     track->v_height = sps_info.height;
 
-    mxverb(3, boost::format("new_stream_v_avc: timing_info_present %1%, num_units_in_tick %2%, time_scale %3%, fixed_frame_rate %4%\n") % sps_info.timing_info_present % sps_info.num_units_in_tick % sps_info.time_scale % sps_info.fixed_frame_rate);
+    mxverb(3, boost::format("new_stream_v_avc: timing_info_present %1%, num_units_in_tick %2%, time_scale %3%, fixed_frame_rate %4%\n")
+           % sps_info.timing_info_present % sps_info.num_units_in_tick % sps_info.time_scale % sps_info.fixed_frame_rate);
 
     track->v_frame_rate = sps_info.time_scale / sps_info.num_units_in_tick;
 
@@ -901,8 +837,10 @@ mpeg_ts_reader_c::parse_packet(int id, unsigned char *buf) {
         if (pes_data->PTS_DTS_flags > 1) { // 10 and 11 mean PTS is present
           int64_t PTS = read_timestamp(&pes_data->PTS_DTS);
 
-          if (global_timecode_offset == -1)
-            global_timecode_offset = (int64_t)PTS;
+          if (global_timecode_offset == -1) {
+            mxinfo(boost::format("global_timecode_offset %1%\n") % PTS);
+            global_timecode_offset = PTS;
+          }
 
           if (PTS == tracks[tidx]->timecode) {
             mxverb(3, boost::format("     Adding PES with same PTS as previous !!\n"));
