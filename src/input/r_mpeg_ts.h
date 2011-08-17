@@ -195,7 +195,6 @@ public:
   virtual int new_stream_a_truehd(unsigned char *buf, unsigned int length, mpeg_ts_track_ptr &track);
   virtual bool parse_packet(int id, unsigned char *buf);
 
-  static uint32_t calculate_crc32(unsigned char *data, int len);
   static int64_t read_timestamp(unsigned char *p);
 
 private:
