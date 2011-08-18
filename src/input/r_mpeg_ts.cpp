@@ -463,7 +463,8 @@ mpeg_ts_reader_c::parse_pmt(unsigned char *pmt) {
       track->data_ready = false;
       tracks.push_back(track);
       es_to_process++;
-      mxverb(3, boost::format("mpeg_ts:parse_pmt: PID %1% has type: 0x%|2$08x|%\n") % track->pid % get_uint32_be(&track->fourcc));
+      uint32_t fourcc = get_uint32_be(&track->fourcc);
+      mxverb(3, boost::format("mpeg_ts:parse_pmt: PID %1% has type: 0x%|2$08x| (%3%)\n") % track->pid % fourcc % std::string(reinterpret_cast<char *>(&fourcc), 4));
     }
   }
 
