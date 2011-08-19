@@ -992,8 +992,8 @@ msgstr "&Перезавантажити\tCtrl-R"
 msgid "&Reset"
 msgstr "&Скинути"
 
-#: src/mmg/mmg_dialog.cpp:287
 #: src/mmg/jobs.cpp:399
+#: src/mmg/mmg_dialog.cpp:287
 msgid "&Save"
 msgstr "&Зберегти"
 
@@ -2048,8 +2048,8 @@ msgid "Brings up the job queue editor"
 msgstr "Відкрити редактор черги завдань"
 
 #: src/mmg/mmg_dialog.cpp:313
-#: src/mmg/options/mkvmerge.cpp:59
 #: src/mmg/options/mmg.cpp:69
+#: src/mmg/options/mkvmerge.cpp:59
 #: src/mmg/tabs/input_general.cpp:188
 #: src/mmg/tabs/input_general.cpp:191
 #: src/mmg/tabs/global.cpp:276
@@ -2086,10 +2086,10 @@ msgstr "Не вдається запустити другу роботу мул�
 msgid "Cannot write track %1% with the CodecID '%2%' to the file '%3%' because track %4% with the CodecID '%5%' is already being written to the same file, and their CodecPrivate data (the USF styles etc) do not match.\n"
 msgstr "Неможливо записати доріжку %1% з CodecID '%2%' до файлу '%3%', тому що доріжка %4% з CodecID '%5%' вже записується в той же файл, і їх спицифічні дані CodecPrivate (USF-стилі і т.д.) не збігаються.\n"
 
-#: src/extract/xtr_avi.cpp:46
-#: src/extract/xtr_base.cpp:65
 #: src/extract/xtr_ivf.cpp:53
+#: src/extract/xtr_base.cpp:65
 #: src/extract/xtr_textsubs.cpp:308
+#: src/extract/xtr_avi.cpp:46
 msgid "Cannot write track %1% with the CodecID '%2%' to the file '%3%' because track %4% with the CodecID '%5%' is already being written to the same file.\n"
 msgstr "Неможливо записати доріжку %1% з CodecID '%2%' до файлу '%3%', тому що доріжка %4% з CodecID '%5%' вже записується в той же файл.\n"
 
@@ -2252,8 +2252,8 @@ msgstr "Розділи: %1% запис(и)(ів)"
 msgid "Charset for strings on the command line"
 msgstr "Набір символів для рядків командного рядка"
 
-#: src/mmg/tabs/input_format.cpp:249
 #: src/mmg/tabs/global.cpp:282
+#: src/mmg/tabs/input_format.cpp:249
 msgid "Charset:"
 msgstr "Набір символів:"
 
@@ -2303,12 +2303,12 @@ msgstr "Оберіть вхідний файл, щоб додати його"
 msgid "Choose an input file to append"
 msgstr "Оберіть вхідний файл, щоб приєднати його"
 
+#: src/mmg/mux_dialog.cpp:263
+#: src/mmg/jobs.cpp:410
 #: src/mmg/mmg_dialog.cpp:336
 #: src/mmg/mmg_dialog.cpp:432
 #: src/mmg/mmg_dialog.cpp:740
 #: src/mmg/mmg_dialog.cpp:761
-#: src/mmg/mux_dialog.cpp:263
-#: src/mmg/jobs.cpp:410
 #: src/mmg/tabs/chapters.cpp:637
 #: src/mmg/tabs/chapters.cpp:681
 msgid "Choose an output file"
@@ -2326,7 +2326,7 @@ msgstr "Оберіть розташування файлів допомоги mk
 msgid "Choose the mkvmerge executable"
 msgstr "Оберіть виконуваний файл mkvmerge"
 
-#: src/mmg/options/mmg.cpp:254
+#: src/mmg/options/mmg.cpp:253
 msgid "Choose the output directory"
 msgstr "Оберіть вихідну теку"
 
@@ -2521,8 +2521,8 @@ msgstr "Не вдалося створити вказаний файл."
 msgid "Could not decode the Base64 encoded data - it seems to be malformed."
 msgstr "Не вдалося декодувати закодовані Base64 дані - вони, здавалося б, невірні."
 
-#: src/input/r_ogm.cpp:1157
 #: src/input/r_matroska.cpp:1837
+#: src/input/r_ogm.cpp:1157
 #: src/input/r_avi.cpp:351
 msgid "Could not extract the decoder specific config data (AVCC) from this AVC/h.264 track.\n"
 msgstr "Неможливо отримати специфічні дані налаштувань декодера (AVCC) з цієї доріжки AVC/H.264.\n"
@@ -3053,9 +3053,9 @@ msgstr "Помилка в рядку %1%: очікувалась певне чи
 msgid "Error initializing the tables for the chapter, tag and segment info elements: Could not find the element with the debug name '%1%'. %2%\n"
 msgstr "Помилка ініціалізації таблиць для розділів, тегів і елементів інформації сегментів: Не вдалося знайти елемент з відлагоджувальною назвою '%1%'. %2%\n"
 
-#: src/mmg/mmg.cpp:246
 #: src/mmg/mmg_dialog.cpp:391
 #: src/mmg/mmg_dialog.cpp:410
+#: src/mmg/mmg.cpp:246
 msgid "Error loading settings"
 msgstr "Помилка завантаження налаштувань"
 
@@ -3175,8 +3175,8 @@ msgstr "Витягувати дані у необроблений (сирий) �
 msgid "Extract the data to a raw file."
 msgstr "Витягувати дані у необроблений (сирий) файл."
 
-#: src/output/p_avc.cpp:131
 #: src/output/p_mpeg4_p10.cpp:68
+#: src/output/p_avc.cpp:131
 msgid "Extracted the aspect ratio information from the MPEG-4 layer 10 (AVC) video data and set the display dimensions to %1%/%2%.\n"
 msgstr "Витягнути інформацію про співвідношення сторін екрану з відео MPEG-4 layer 10 (AVC) і встановити розміри відображення як %1%/%2%.\n"
 
@@ -3208,9 +3208,9 @@ msgstr "Кадрів за секунду:"
 msgid "Failed to create the VobSub data file '%1%': %2% (%3%)\n"
 msgstr "Не вдалося створити файл даних VobSub '%1%': %2% (%3%)\n"
 
+#: src/extract/xtr_vobsub.cpp:236
 #: src/extract/xtr_base.cpp:73
 #: src/extract/xtr_textsubs.cpp:337
-#: src/extract/xtr_vobsub.cpp:236
 msgid "Failed to create the file '%1%': %2% (%3%)\n"
 msgstr "Не вдалося створити файл '%1%': %2% (%3%)\n"
 
@@ -3255,8 +3255,8 @@ msgstr "UID файла: %1%"
 msgid "File contains fewer frames than expected or is corrupt after frame %1%.\n"
 msgstr "Файл містить меншу кількість кадрів, ніж очікувалося, або є пошкодженим після кадру %1%.\n"
 
-#: src/mmg/mmg_dialog.cpp:770
 #: src/mmg/mux_dialog.cpp:131
+#: src/mmg/mmg_dialog.cpp:770
 #: src/mmg/tabs/input.cpp:312
 msgid "File creation failed"
 msgstr "Помилка створення файлу"
@@ -3987,8 +3987,8 @@ msgstr "Задання мови не повинно завершуватися �
 
 #: src/mmg/options/chapters.cpp:86
 #: src/mmg/tabs/input_general.cpp:181
-#: src/mmg/tabs/global.cpp:278
 #: src/mmg/tabs/chapters.cpp:350
+#: src/mmg/tabs/global.cpp:278
 msgid "Language:"
 msgstr "Мова:"
 
@@ -4484,8 +4484,8 @@ msgstr "Число каналів доріжки."
 msgid "Ogg/OGM audio/video files"
 msgstr "Ogg/OGM аудіо/відео файли"
 
-#: src/mmg/message_dialog.cpp:31
 #: src/mmg/mux_dialog.cpp:101
+#: src/mmg/message_dialog.cpp:31
 msgid "Ok"
 msgstr "OK"
 
@@ -4743,8 +4743,8 @@ msgstr "Прогрес виконання"
 msgid "Progress: %1%%%%2%"
 msgstr "Прогрес виконання: %1%%%%2%"
 
-#: src/extract/timecodes_v2.cpp:359
 #: src/extract/mkvextract.cpp:93
+#: src/extract/timecodes_v2.cpp:359
 msgid "Progress: 100%\n"
 msgstr "Прогрес виконання: 100%\n"
 
@@ -5134,16 +5134,16 @@ msgstr "Файли інформації сегмента (*.xml)|*.xml|%s"
 #: src/propedit/options.cpp:173
 #: src/propedit/propedit_cli_parser.cpp:105
 #: src/propedit/propedit_cli_parser.cpp:183
-#: src/info/qt_ui.cpp:178
 #: src/info/mkvinfo.cpp:553
+#: src/info/qt_ui.cpp:178
 #: src/info/wxwidgets_ui.cpp:208
 msgid "Segment information"
 msgstr "Інформація сегмента"
 
 #: src/extract/timecodes_v2.cpp:256
 #: src/extract/tracks.cpp:389
-#: src/info/qt_ui.cpp:179
 #: src/info/mkvinfo.cpp:928
+#: src/info/qt_ui.cpp:179
 #: src/info/wxwidgets_ui.cpp:208
 msgid "Segment tracks"
 msgstr "Доріжки сегмента"
@@ -5830,11 +5830,11 @@ msgstr "Вибрана довжина NALU розміру %1% дуже мала.
 msgid "The codec type '%1%' cannot be used in a WebM compliant file.\n"
 msgstr "Кодек типу '%1%' не може використовуватися в сумісному WebM файлі.\n"
 
-#: src/output/p_avc.cpp:203
-#: src/output/p_kate.cpp:113
 #: src/output/p_passthrough.cpp:63
+#: src/output/p_kate.cpp:113
 #: src/output/p_video.cpp:206
 #: src/output/p_textsubs.cpp:102
+#: src/output/p_avc.cpp:203
 msgid "The codec's private data does not match (lengths: %1% and %2%)."
 msgstr "Специфічні дані кодеків не співпадають (довжини: %1% i %2%)."
 
@@ -5929,10 +5929,10 @@ msgstr "За допомогою п'ятого режиму йде спроба �
 msgid "The file '%1%' cannot be attached because it does not exist or cannot be read.\n"
 msgstr "Файл '%1%' не може бути приєднаний, тому що він не існує, або не може бути прочитаний.\n"
 
-#: src/extract/chapters.cpp:47
-#: src/extract/cuesheets.cpp:208
 #: src/extract/tags.cpp:47
 #: src/extract/attachments.cpp:141
+#: src/extract/cuesheets.cpp:208
+#: src/extract/chapters.cpp:47
 msgid "The file '%1%' could not be opened for reading (%2%)."
 msgstr "Файл '%1%' не може бути відкритий для читання (%2%)."
 
@@ -5945,15 +5945,15 @@ msgstr "Файл '%1%' не може бути відкритий для чита
 msgid "The file '%1%' could not be opened for reading command line arguments.\n"
 msgstr "Файл '%1%' не може бути відкритий для зчитування аргументів командного рядка.\n"
 
-#: src/extract/xtr_tta.cpp:87
 #: src/extract/tracks.cpp:276
-#: src/extract/xtr_avi.cpp:52
 #: src/extract/xtr_wav.cpp:113
+#: src/extract/xtr_tta.cpp:87
+#: src/extract/xtr_avi.cpp:52
 msgid "The file '%1%' could not be opened for writing (%2%).\n"
 msgstr "Файл '%1%' не може бути відкритий для запису (%2%).\n"
 
-#: src/extract/xtr_rmff.cpp:40
 #: src/extract/attachments.cpp:121
+#: src/extract/xtr_rmff.cpp:40
 msgid "The file '%1%' could not be opened for writing (%2%, %3%).\n"
 msgstr "Файл '%1%' не може бути відкритий для запису (%2%, %3%).\n"
 
@@ -6179,7 +6179,7 @@ msgstr "Код мови '%1%' не є кодом мови ISO639-2 і буде �
 msgid "The line %1% of the timecode file '%2%' does not contain a valid floating point number.\n"
 msgstr "Рядок %1% файлу тайм-коду '%2%' не містить корректно задане число з плаваючою комою.\n"
 
-#: src/common/translation.cpp:294
+#: src/common/translation.cpp:296
 msgid "The locale could not be set properly. Check the LANG, LC_ALL and LC_MESSAGES environment variables.\n"
 msgstr "Локаль (мова) не може бути встановлена правильно. Перевірте змінні оточення LANG, LC_ALL і  LC_MESSAGES.\n"
 
@@ -6781,15 +6781,15 @@ msgstr "Для доріжки %1% з CodecID '%2%' відсутній елеме
 msgid "Track %1% with the CodecID '%2%' is missing the \"codec private \" element and cannot be extracted.\n"
 msgstr "Для доріжки %1% з CodecID '%2%' відсутній елемент \"codec private\" і вона не може бути витягнута.\n"
 
-#: src/extract/xtr_aac.cpp:42
+#: src/extract/xtr_vobsub.cpp:65
 #: src/extract/xtr_avc.cpp:54
-#: src/extract/xtr_avi.cpp:37
 #: src/extract/xtr_ogg.cpp:37
 #: src/extract/xtr_ogg.cpp:72
-#: src/extract/xtr_rmff.cpp:31
 #: src/extract/xtr_textsubs.cpp:292
-#: src/extract/xtr_vobsub.cpp:65
 #: src/extract/xtr_wav.cpp:95
+#: src/extract/xtr_aac.cpp:42
+#: src/extract/xtr_rmff.cpp:31
+#: src/extract/xtr_avi.cpp:37
 msgid "Track %1% with the CodecID '%2%' is missing the \"codec private\" element and cannot be extracted.\n"
 msgstr "Для доріжки %1% з CodecID '%2%' відсутній елемент \"codec private\" і вона не може бути витягнута.\n"
 
@@ -6809,7 +6809,7 @@ msgstr "Доріжка %1%: AAC знайдений, але дані конфіг
 msgid "Track %1%: NAL too big\n"
 msgstr "Доріжка %1%: NAL занадто великий\n"
 
-#: src/extract/xtr_textsubs.cpp:55
+#: src/extract/xtr_textsubs.cpp:54
 msgid "Track %1%: Subtitle entry number %2% is missing its duration. Assuming a duration of 1s.\n"
 msgstr "Доріжка %1%: Для запису субтитрів %2% пропущено тривалість. Прийнято тривалість в 1с.\n"
 
@@ -7041,8 +7041,8 @@ msgstr "Задані користувачем опції:"
 msgid "Using a NALU size length of 3 bytes might result in tracks that won't be decodable with certain AVC/h.264 codecs.\n"
 msgstr "Використання довжини NALU розміру в 3 байти може призвести до того, що отримані доріжки не будуть призначені для декодовання  деякими AVC/H.264 кодеками.\n"
 
-#: src/input/r_matroska.cpp:1557
 #: src/input/r_ac3.cpp:90
+#: src/input/r_matroska.cpp:1557
 #: src/input/r_mpeg_ps.cpp:1180
 msgid "Using the %1%AC3 output module.\n"
 msgstr "Використання %1%AC3 вихідного модуля.\n"
@@ -7059,9 +7059,9 @@ msgstr "Використання AAC демультиплексора.\n"
 msgid "Using the AAC output module (FourCC: %1%).\n"
 msgstr "Використання AAC вихідного модуля (FourCC: %1%).\n"
 
-#: src/input/r_ogm.cpp:994
 #: src/input/r_aac.cpp:116
 #: src/input/r_matroska.cpp:1545
+#: src/input/r_ogm.cpp:994
 #: src/input/r_qtmp4.cpp:1531
 msgid "Using the AAC output module.\n"
 msgstr "Використання AAC вихідного модуля.\n"
@@ -7074,8 +7074,8 @@ msgstr "Використання AC3 демультиплексора.\n"
 msgid "Using the AC3 output module (FourCC: %1%).\n"
 msgstr "Використання AC3 вихідного модуля (FourCC: %1%).\n"
 
-#: src/input/r_wav.cpp:225
 #: src/input/r_ogm.cpp:1012
+#: src/input/r_wav.cpp:225
 #: src/input/r_qtmp4.cpp:1454
 #: src/input/r_avi.cpp:568
 msgid "Using the AC3 output module.\n"
@@ -7097,11 +7097,11 @@ msgstr "Використання CorePanorama зчитувача субтитр�
 msgid "Using the DTS demultiplexer.\n"
 msgstr "Використання DTS демультиплексора.\n"
 
-#: src/input/r_wav.cpp:354
 #: src/input/r_dts.cpp:114
 #: src/input/r_matroska.cpp:1577
-#: src/input/r_avi.cpp:689
+#: src/input/r_wav.cpp:354
 #: src/input/r_mpeg_ps.cpp:1185
+#: src/input/r_avi.cpp:689
 msgid "Using the DTS output module.\n"
 msgstr "Використання DTS вихідного модуля.\n"
 
@@ -7149,11 +7149,11 @@ msgid "Using the MPEG PS demultiplexer.\n"
 msgstr "Використання MPEG PS демультиплексора.\n"
 
 #: src/input/r_mp3.cpp:71
-#: src/input/r_ogm.cpp:1030
 #: src/input/r_matroska.cpp:1607
+#: src/input/r_ogm.cpp:1030
+#: src/input/r_mpeg_ps.cpp:1175
 #: src/input/r_qtmp4.cpp:1537
 #: src/input/r_avi.cpp:561
-#: src/input/r_mpeg_ps.cpp:1175
 msgid "Using the MPEG audio output module.\n"
 msgstr "Використання MPEG аудіо вихідного модуля.\n"
 
@@ -7163,8 +7163,8 @@ msgid "Using the MPEG-%1% video output module.\n"
 msgstr "Використання MPEG-%1% відео вихідного модуля.\n"
 
 #: src/input/r_mpeg_es.cpp:179
-#: src/input/r_avi.cpp:323
 #: src/input/r_mpeg_ps.cpp:1201
+#: src/input/r_avi.cpp:323
 msgid "Using the MPEG-1/2 video output module.\n"
 msgstr "Використання MPEG-1/2 відео вихідного модуля.\n"
 
@@ -7173,16 +7173,16 @@ msgstr "Використання MPEG-1/2 відео вихідного моду
 msgid "Using the MPEG-4 part 10 (AVC) video output module.\n"
 msgstr "Використання MPEG-4 Part 10 (AVC) відео вихідного модуля.\n"
 
-#: src/input/r_avc.cpp:136
-#: src/input/r_ogm.cpp:1154
 #: src/input/r_matroska.cpp:1849
-#: src/input/r_avi.cpp:348
+#: src/input/r_ogm.cpp:1154
+#: src/input/r_avc.cpp:136
 #: src/input/r_mpeg_ps.cpp:1214
+#: src/input/r_avi.cpp:348
 msgid "Using the MPEG-4 part 10 ES video output module.\n"
 msgstr "Використання MPEG-4 Part 10 ES відео вихідного модуля.\n"
 
-#: src/input/r_ogm.cpp:1258
 #: src/input/r_matroska.cpp:1463
+#: src/input/r_ogm.cpp:1258
 #: src/input/r_qtmp4.cpp:1481
 #: src/input/r_avi.cpp:331
 msgid "Using the MPEG-4 part 2 video output module.\n"
@@ -7196,16 +7196,16 @@ msgstr "Використання Matroska демультиплексора.\n"
 msgid "Using the OGG/OGM demultiplexer.\n"
 msgstr "Використання OGG/OGM демультиплексора.\n"
 
-#: src/input/r_wav.cpp:395
-#: src/input/r_ogm.cpp:1049
 #: src/input/r_matroska.cpp:1614
+#: src/input/r_ogm.cpp:1049
+#: src/input/r_wav.cpp:395
 #: src/input/r_qtmp4.cpp:1543
 #: src/input/r_avi.cpp:553
 msgid "Using the PCM output module.\n"
 msgstr "Використання PCM вихідного модуля.\n"
 
-#: src/input/r_matroska.cpp:1724
 #: src/input/r_pgssup.cpp:72
+#: src/input/r_matroska.cpp:1724
 msgid "Using the PGS output module.\n"
 msgstr "Використання PGS вихідного модуля.\n"
 
@@ -7246,8 +7246,8 @@ msgstr "Використання TTA демультиплексора.\n"
 msgid "Using the TTA output module.\n"
 msgstr "Використання TTA вихідного модуля.\n"
 
-#: src/input/r_ogm.cpp:1351
 #: src/input/r_matroska.cpp:1471
+#: src/input/r_ogm.cpp:1351
 msgid "Using the Theora video output module.\n"
 msgstr "Використання Theora відео вихідного модуля.\n"
 
@@ -7277,8 +7277,8 @@ msgstr "Використання VC1 ES демультиплексора.\n"
 msgid "Using the VC1 video output module.\n"
 msgstr "Використання VC1 відео вихідного модуля.\n"
 
-#: src/input/r_ogm.cpp:1445
 #: src/input/r_matroska.cpp:1479
+#: src/input/r_ogm.cpp:1445
 #: src/input/r_ivf.cpp:87
 msgid "Using the VP8 video output module.\n"
 msgstr "Використання VP8 відео вихідного модуля.\n"
@@ -7303,8 +7303,8 @@ msgstr "Використання VobSub вихідного модуля субт
 msgid "Using the VobSub subtitle reader (SUB file '%1%').\n"
 msgstr "Використання VobSub зчитувача субтитрів. (SUB файл '%1%').\n"
 
-#: src/input/r_ogm.cpp:1070
 #: src/input/r_matroska.cpp:1632
+#: src/input/r_ogm.cpp:1070
 #: src/input/r_avi.cpp:743
 msgid "Using the Vorbis output module.\n"
 msgstr "Використання Vorbis вихідного модуля.\n"
@@ -7321,8 +7321,8 @@ msgstr "Використання WavPack демультиплексора з ф�
 msgid "Using the WAVPACK demultiplexer.\n"
 msgstr "Використання WavPack демультиплексора.\n"
 
-#: src/input/r_matroska.cpp:1655
 #: src/input/r_wavpack.cpp:107
+#: src/input/r_matroska.cpp:1655
 msgid "Using the WAVPACK output module.\n"
 msgstr "Використання WavPack вихідного модуля.\n"
 
@@ -7334,12 +7334,12 @@ msgstr "Використання загального вихідного ауд�
 msgid "Using the passthrough output module for this %1% track.\n"
 msgstr "Використання вихідного модуля пропуску для доріжки %1%.\n"
 
+#: src/input/r_matroska.cpp:1710
 #: src/input/r_ogm.cpp:1101
 #: src/input/r_srt.cpp:60
-#: src/input/r_matroska.cpp:1710
 #: src/input/r_ssa.cpp:71
-#: src/input/r_avi.cpp:405
 #: src/input/r_usf.cpp:259
+#: src/input/r_avi.cpp:405
 msgid "Using the text subtitle output module.\n"
 msgstr "Використання вихідного модуля текстових субтитрів.\n"
 
@@ -7352,8 +7352,8 @@ msgstr "Використання вихідного модуля відео (Fou
 msgid "Using the video output module (FourCC: %|1$.4s|).\n"
 msgstr "Використання вихідного модуля відео (FourCC: %|1$.4s|).\n"
 
-#: src/input/r_ogm.cpp:1263
 #: src/input/r_matroska.cpp:1488
+#: src/input/r_ogm.cpp:1263
 #: src/input/r_avi.cpp:360
 msgid "Using the video output module.\n"
 msgstr "Використання вихідного модуля для відео.\n"
@@ -8371,7 +8371,7 @@ msgstr "mm_text_io_c: UTF32_* не підтримується в даний мо
 msgid "mm_text_io_c::read_next_char(): Invalid UTF-8 char. First byte: 0x%|1$02x|"
 msgstr "mm_text_io_c::read_next_char(): Невірний UTF-8 символ. Перший байт: 0x%|1$02x|"
 
-#: src/mmg/options/mmg.cpp:323
+#: src/mmg/options/mmg.cpp:322
 msgid "mmg"
 msgstr "mmg"
 
@@ -8379,7 +8379,7 @@ msgstr "mmg"
 msgid "mmg debug output"
 msgstr "вихідний потік налагодження mmg"
 
-#: src/mmg/options/mmg.cpp:178
+#: src/mmg/options/mmg.cpp:177
 msgid "mmg options"
 msgstr "опції mmg"
 
@@ -8659,8 +8659,8 @@ msgstr "und (Невизначено)"
 #: src/input/r_matroska.cpp:91
 #: src/input/r_matroska.cpp:2332
 #: src/input/r_mpeg_ps.cpp:1392
-#: src/common/stereo_mode.cpp:62
 #: src/common/mm_io_win.cpp:165
+#: src/common/stereo_mode.cpp:62
 #: src/mmg/mmg.cpp:65
 #: src/mmg/header_editor/value_page.cpp:150
 #: src/mmg/tabs/input.cpp:339
@@ -8690,7 +8690,7 @@ msgstr "usf_reader: Не вдалося відкрити вхідний файл
 msgid "usf_reader: Source is not a valid USF file."
 msgstr "usf_reader: Джерело не є допустимим USF файлом."
 
-#: src/common/strings/editing.cpp:246
+#: src/common/strings/editing.cpp:210
 msgid "utf8_strlen(): Invalid UTF-8 char. First byte: 0x%|1$02x|"
 msgstr "utf8_strlen(): Невірний UTF-8 символ. Перший байт: 0x%|1$02x|"
 
