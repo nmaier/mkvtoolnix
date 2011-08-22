@@ -129,6 +129,7 @@ mpeg_ts_reader_c::probe_file(mm_io_c *io,
 mpeg_ts_reader_c::mpeg_ts_reader_c(track_info_c &_ti)
   throw (error_c)
   : generic_reader_c(_ti)
+  , m_global_timecode_offset(-1)
   , file_done(false)
   , m_use_audio_pts(debugging_requested("mpeg_ts_use_audio_pts"))
 {
@@ -193,7 +194,6 @@ mpeg_ts_reader_c::mpeg_ts_reader_c(track_info_c &_ti)
     tracks[i]->payload_size    = 0;
     // tracks[i]->timecode_offset = -1;
   }
-  global_timecode_offset = -1;
 }
 
 mpeg_ts_reader_c::~mpeg_ts_reader_c() {
@@ -779,9 +779,9 @@ mpeg_ts_reader_c::parse_packet(int id, unsigned char *buf) {
         if (pes_data->PTS_DTS_flags > 1) { // 10 and 11 mean PTS is present
           int64_t PTS = read_timestamp(&pes_data->PTS_DTS);
 
-          if (global_timecode_offset == -1) {
+          if ((-1 == m_global_timecode_offset) || (PTS < m_global_timecode_offset)) {
             mxinfo(boost::format("global_timecode_offset %1%\n") % PTS);
-            global_timecode_offset = PTS;
+            m_global_timecode_offset = PTS;
           }
 
           if (PTS == tracks[tidx]->timecode) {
@@ -1007,10 +1007,10 @@ mpeg_ts_reader_c::send_to_packetizer(int tid) {
 
   //if (tid == 0)
   //     m_file->write(tracks[tid]->payload.get_buffer(), tracks[tid]->payload_size);
-  if (tracks[tid]->timecode - global_timecode_offset < 0)
+  if (tracks[tid]->timecode - m_global_timecode_offset < 0)
     tracks[tid]->timecode = 0;
   else
-    tracks[tid]->timecode = (uint64_t)(tracks[tid]->timecode - global_timecode_offset) * 100000ll / 9;
+    tracks[tid]->timecode = (uint64_t)(tracks[tid]->timecode - m_global_timecode_offset) * 100000ll / 9;
 
   // WARNING WARNING WARNING - comment this to use source audio PTSs !!!
   if ((tracks[tid]->type == ES_AUDIO_TYPE) && !m_use_audio_pts)

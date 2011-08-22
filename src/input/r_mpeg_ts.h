@@ -162,7 +162,7 @@ private:
   bool PAT_found, PMT_found;
   int16_t PMT_pid;
   int es_to_process;
-  int64_t global_timecode_offset;
+  int64_t m_global_timecode_offset;
 
   uint8_t input_status;         // can be INPUT_PROBE, INPUT_IDENTIFY, INPUT_READ
   int track_buffer_ready;
