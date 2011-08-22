@@ -131,7 +131,7 @@ mpeg_ts_reader_c::mpeg_ts_reader_c(track_info_c &_ti)
   : generic_reader_c(_ti)
   , m_global_timecode_offset(-1)
   , file_done(false)
-  , m_use_audio_pts(debugging_requested("mpeg_ts_use_audio_pts"))
+  , m_dont_use_audio_pts(debugging_requested("mpeg_ts_dont_use_audio_pts"))
 {
   uint16_t i;
 
@@ -1013,7 +1013,7 @@ mpeg_ts_reader_c::send_to_packetizer(int tid) {
     tracks[tid]->timecode = (uint64_t)(tracks[tid]->timecode - m_global_timecode_offset) * 100000ll / 9;
 
   // WARNING WARNING WARNING - comment this to use source audio PTSs !!!
-  if ((tracks[tid]->type == ES_AUDIO_TYPE) && !m_use_audio_pts)
+  if ((tracks[tid]->type == ES_AUDIO_TYPE) && m_dont_use_audio_pts)
     tracks[tid]->timecode = -1;
 
   mxverb(3, boost::format("mpeg_ts: PTS in nanoseconds: %1%\n") % tracks[tid]->timecode);

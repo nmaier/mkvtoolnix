@@ -171,7 +171,7 @@ private:
 
   std::vector<mpeg_ts_track_ptr> tracks;
 
-  bool m_use_audio_pts;
+  bool m_dont_use_audio_pts;
 
 protected:
   static int potential_packet_sizes[];
