@@ -187,6 +187,7 @@ public:
   virtual int get_progress();
   virtual void create_packetizer(int64_t tid);
   virtual void create_packetizers();
+  virtual void add_available_track_ids();
 
   virtual int new_stream_v_mpeg_1_2(unsigned char *buf, unsigned int length, mpeg_ts_track_ptr &track);
   virtual int new_stream_v_avc(unsigned char *buf, unsigned int length, mpeg_ts_track_ptr &track);

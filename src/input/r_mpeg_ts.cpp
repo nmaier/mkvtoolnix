@@ -983,6 +983,14 @@ mpeg_ts_reader_c::create_packetizers() {
     create_packetizer(i);
 }
 
+void
+mpeg_ts_reader_c::add_available_track_ids() {
+  size_t i;
+
+  for (i = 0; i < tracks.size(); i++)
+    add_available_track_id(i);
+}
+
 int
 mpeg_ts_reader_c::get_progress() {
   return 100 * io->getFilePointer() / size;
