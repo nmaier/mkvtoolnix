@@ -782,7 +782,7 @@ mpeg_ts_reader_c::parse_packet(int id, unsigned char *buf) {
           int64_t PTS = read_timestamp(&pes_data->PTS_DTS);
 
           if ((-1 == m_global_timecode_offset) || (PTS < m_global_timecode_offset)) {
-            mxinfo(boost::format("global_timecode_offset %1%\n") % PTS);
+            mxverb(3, boost::format("global_timecode_offset %1%\n") % PTS);
             m_global_timecode_offset = PTS;
           }
 
