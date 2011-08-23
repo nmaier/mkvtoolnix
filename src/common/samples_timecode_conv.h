@@ -55,7 +55,7 @@ public:
 inline int64_t
 operator *(int64_t v1,
            const samples_to_timecode_converter_c &v2) {
-  return v1 * v2.m_numerator / v2.m_denominator;
+  return v2.m_denominator ? v1 * v2.m_numerator / v2.m_denominator : v1;
 }
 
 #endif  // __MTX_COMMON_SAMPLES_TIMECODE_CONV_H
