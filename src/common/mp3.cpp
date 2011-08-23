@@ -170,7 +170,7 @@ find_mp3_header(const unsigned char *buf,
   return -1;
 }
 
-void
+bool
 decode_mp3_header(const unsigned char *buf,
                   mp3_header_t *h) {
   unsigned long header;
@@ -187,13 +187,13 @@ decode_mp3_header(const unsigned char *buf,
     if ((buf[3] >= 4) && ((buf[5] & 0x10) == 0x10))
       h->framesize += 10;
 
-    return;
+    return true;
   }
 
   if ((buf[0] == 'T') && (buf[1] == 'A') && (buf[2] == 'G')) {
     h->is_tag    = true;
     h->framesize = 128;
-    return;
+    return true;
   }
 
   for (i = 0, header = 0; i < 4; i++) {
@@ -205,9 +205,9 @@ decode_mp3_header(const unsigned char *buf,
   h->layer   = 4 - ((header >> 17) & 3);
 
   if (h->version == 1)
-    mxerror("Invalid MP3 header value for the version.\n");
+    return false;
   if (h->layer == 4)
-    mxerror("Invalid MP3 header value for the layer.\n");
+    return false;
 
   h->is_tag              = false;
   h->version             = 0 == h->version ? 3 : 3 == h->version ? 1 : h->version;
@@ -231,6 +231,8 @@ decode_mp3_header(const unsigned char *buf,
     h->framesize = 144000 * h->bitrate / h->sampling_frequency + h->padding;
   else
     h->framesize = (12000 * h->bitrate / h->sampling_frequency + h->padding) * 4;
+
+  return true;
 }
 
 int
@@ -246,8 +248,7 @@ find_consecutive_mp3_headers(const unsigned char *buf,
     pos = find_mp3_header(&buf[base], size - base);
     if (pos < 0)
       return -1;
-    decode_mp3_header(&buf[base + pos], &mp3header);
-    if (!mp3header.is_tag)
+    if (decode_mp3_header(&buf[base + pos], &mp3header) && !mp3header.is_tag)
       break;
     mxverb(4, boost::format("mp3_reader: Found tag at %1% size %2%\n") % (base + pos) % mp3header.framesize);
     base += pos + 1;
@@ -264,8 +265,7 @@ find_consecutive_mp3_headers(const unsigned char *buf,
       if ((size - base - offset) < 4)
         break;
       pos = find_mp3_header(&buf[base + offset], size - base - offset);
-      if (pos == 0) {
-        decode_mp3_header(&buf[base + offset], &new_header);
+      if ((pos == 0) && decode_mp3_header(&buf[base + offset], &new_header)) {
         if (   (new_header.version            == mp3header.version)
             && (new_header.layer              == mp3header.layer)
             && (new_header.channels           == mp3header.channels)
