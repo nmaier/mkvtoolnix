@@ -207,20 +207,22 @@ mpeg_ts_reader_c::identify() {
   for (i = 0; i < tracks.size(); i++) {
     mpeg_ts_track_ptr &track = tracks[i];
 
-    id_result_track(i, ES_AUDIO_TYPE == track->type ? ID_RESULT_TRACK_AUDIO : ID_RESULT_TRACK_VIDEO,
-                      FOURCC('M', 'P', 'G', '1') == track->fourcc ? "MPEG-1"
-                    : FOURCC('M', 'P', 'G', '2') == track->fourcc ? "MPEG-2"
-                    : FOURCC('A', 'V', 'C', '1') == track->fourcc ? "AVC/h.264"
-                    : FOURCC('W', 'V', 'C', '1') == track->fourcc ? "VC1"
-                    : FOURCC('M', 'P', '1', ' ') == track->fourcc ? "MPEG-1 layer 1"
-                    : FOURCC('M', 'P', '2', ' ') == track->fourcc ? "MPEG-1 layer 2"
-                    : FOURCC('M', 'P', '3', ' ') == track->fourcc ? "MPEG-1 layer 3"
-                    : FOURCC('A', 'C', '3', ' ') == track->fourcc ? "AC3"
-                    : FOURCC('D', 'T', 'S', ' ') == track->fourcc ? "DTS"
-                    : FOURCC('T', 'R', 'H', 'D') == track->fourcc ? "TrueHD"
-                    : FOURCC('P', 'C', 'M', ' ') == track->fourcc ? "PCM"
-                    : FOURCC('L', 'P', 'C', 'M') == track->fourcc ? "LPCM"
-                    : "Unknown" );
+    const char *fourcc = FOURCC('M', 'P', 'G', '1') == track->fourcc ? "MPEG-1"
+                       : FOURCC('M', 'P', 'G', '2') == track->fourcc ? "MPEG-2"
+                       : FOURCC('A', 'V', 'C', '1') == track->fourcc ? "AVC/h.264"
+                       : FOURCC('W', 'V', 'C', '1') == track->fourcc ? "VC1"
+                       : FOURCC('M', 'P', '1', ' ') == track->fourcc ? "MPEG-1 layer 1"
+                       : FOURCC('M', 'P', '2', ' ') == track->fourcc ? "MPEG-1 layer 2"
+                       : FOURCC('M', 'P', '3', ' ') == track->fourcc ? "MPEG-1 layer 3"
+                       : FOURCC('A', 'C', '3', ' ') == track->fourcc ? "AC3"
+                       : FOURCC('D', 'T', 'S', ' ') == track->fourcc ? "DTS"
+                       : FOURCC('T', 'R', 'H', 'D') == track->fourcc ? "TrueHD"
+                       : FOURCC('P', 'C', 'M', ' ') == track->fourcc ? "PCM"
+                       : FOURCC('L', 'P', 'C', 'M') == track->fourcc ? "LPCM"
+                       :                                               NULL;
+
+    if (fourcc)
+      id_result_track(i, ES_AUDIO_TYPE == track->type ? ID_RESULT_TRACK_AUDIO : ID_RESULT_TRACK_VIDEO, fourcc);
   }
 }
 
