@@ -931,7 +931,8 @@ mpeg_ts_reader_c::create_packetizer(int64_t id) {
         || (FOURCC('M', 'P', '3', ' ') == track->fourcc)) {
       if (verbose)
         mxinfo_tid(m_ti.m_fname, id, Y("Using the MPEG audio output module.\n"));
-      track->ptzr = add_packetizer(new mp3_packetizer_c(this, m_ti, track->a_sample_rate, track->a_channels, true));
+      track->ptzr = add_packetizer(new mp3_packetizer_c(this, m_ti, track->a_sample_rate, track->a_channels, (0 != track->a_sample_rate) && (0 != track->a_channels)));
+
     } else if (FOURCC('A', 'C', '3', ' ') == track->fourcc) {
       if (verbose)
         mxinfo_tid(m_ti.m_fname, id, boost::format(Y("Using the %1%AC3 output module.\n")) % (16 == track->a_bsid ? "E" : ""));
