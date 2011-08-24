@@ -931,17 +931,15 @@ mpeg_ts_reader_c::create_packetizer(int64_t id) {
     if (   (FOURCC('M', 'P', '1', ' ') == track->fourcc)
         || (FOURCC('M', 'P', '2', ' ') == track->fourcc)
         || (FOURCC('M', 'P', '3', ' ') == track->fourcc)) {
-      if (verbose)
-        mxinfo_tid(m_ti.m_fname, id, Y("Using the MPEG audio output module.\n"));
+      mxinfo_tid(m_ti.m_fname, id, Y("Using the MPEG audio output module.\n"));
       track->ptzr = add_packetizer(new mp3_packetizer_c(this, m_ti, track->a_sample_rate, track->a_channels, (0 != track->a_sample_rate) && (0 != track->a_channels)));
 
     } else if (FOURCC('A', 'C', '3', ' ') == track->fourcc) {
-      if (verbose)
-        mxinfo_tid(m_ti.m_fname, id, boost::format(Y("Using the %1%AC3 output module.\n")) % (16 == track->a_bsid ? "E" : ""));
+      mxinfo_tid(m_ti.m_fname, id, boost::format(Y("Using the %1%AC3 output module.\n")) % (16 == track->a_bsid ? "E" : ""));
       track->ptzr = add_packetizer(new ac3_packetizer_c(this, m_ti, track->a_sample_rate, track->a_channels, track->a_bsid));
+
     } else if (FOURCC('T', 'R', 'H', 'D') == track->fourcc) {
-      if (verbose)
-        mxinfo_tid(m_ti.m_fname, id, Y("Using the TrueHD output module.\n"));
+      mxinfo_tid(m_ti.m_fname, id, Y("Using the TrueHD output module.\n"));
       track->ptzr = add_packetizer(new truehd_packetizer_c(this, m_ti, truehd_frame_t::truehd, track->a_sample_rate, track->a_channels));
     }
 
@@ -975,8 +973,7 @@ mpeg_ts_reader_c::create_mpeg1_2_video_packetizer(mpeg_ts_track_ptr &track) {
 
 void
 mpeg_ts_reader_c::create_mpeg4_p10_es_video_packetizer(mpeg_ts_track_ptr &track) {
-  if (verbose)
-    mxinfo_tid(m_ti.m_fname, m_ti.m_id, Y("Using the MPEG-4 part 10 ES video output module.\n"));
+  mxinfo_tid(m_ti.m_fname, m_ti.m_id, Y("Using the MPEG-4 part 10 ES video output module.\n"));
 
   mpeg4_p10_es_video_packetizer_c *avcpacketizer = new mpeg4_p10_es_video_packetizer_c(this, m_ti, track->v_avcc, track->v_width, track->v_height);
   track->ptzr                                    = add_packetizer(avcpacketizer);
