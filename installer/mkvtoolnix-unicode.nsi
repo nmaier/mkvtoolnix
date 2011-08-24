@@ -61,6 +61,7 @@ Page custom showExternalLinks
 !insertmacro MUI_LANGUAGE "German"
 !insertmacro MUI_LANGUAGE "Italian"
 !insertmacro MUI_LANGUAGE "Japanese"
+!insertmacro MUI_LANGUAGE "Lithuanian"
 !insertmacro MUI_LANGUAGE "Russian"
 !insertmacro MUI_LANGUAGE "Spanish"
 !insertmacro MUI_LANGUAGE "SimpChinese"
@@ -224,6 +225,9 @@ Section "Program files" SEC01
   SetOutPath "$INSTDIR\locale\ja\LC_MESSAGES"
   File "/oname=mkvtoolnix.mo" "po\ja.mo"
   File "/oname=wxstd.mo" "wxWidgets-po\ja\LC_MESSAGES\wxstd.mo"
+  SetOutPath "$INSTDIR\locale\lt\LC_MESSAGES"
+  File "/oname=mkvtoolnix.mo" "po\lt.mo"
+  File "/oname=wxstd.mo" "wxWidgets-po\lt\LC_MESSAGES\wxstd.mo"
   SetOutPath "$INSTDIR\locale\nl\LC_MESSAGES"
   File "/oname=mkvtoolnix.mo" "po\nl.mo"
   File "/oname=wxstd.mo" "wxWidgets-po\nl\LC_MESSAGES\wxstd.mo"
@@ -473,6 +477,10 @@ Section Uninstall
   Delete "$INSTDIR\locale\ja\LC_MESSAGES\*.*"
   RMDir "$INSTDIR\locale\ja\LC_MESSAGES"
   RMDir "$INSTDIR\locale\ja"
+
+  Delete "$INSTDIR\locale\lt\LC_MESSAGES\*.*"
+  RMDir "$INSTDIR\locale\lt\LC_MESSAGES"
+  RMDir "$INSTDIR\locale\lt"
 
   Delete "$INSTDIR\locale\nl\LC_MESSAGES\*.*"
   RMDir "$INSTDIR\locale\nl\LC_MESSAGES"
