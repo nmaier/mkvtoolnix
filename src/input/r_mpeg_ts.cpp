@@ -30,6 +30,7 @@
 #include "output/p_mp3.h"
 #include "output/p_ac3.h"
 #include "output/p_truehd.h"
+#include "output/p_vc1.h"
 
 #define TS_CONSECUTIVE_PACKETS 16
 #define TS_PROBE_SIZE          (2 * TS_CONSECUTIVE_PACKETS * 204)
@@ -950,13 +951,15 @@ mpeg_ts_reader_c::create_packetizer(int64_t id) {
 
     else if (track->fourcc == FOURCC('A', 'V', 'C', '1'))
       create_mpeg4_p10_es_video_packetizer(track);
+
+    else if (track->fourcc == FOURCC('W', 'V', 'C', '1'))
+      create_vc1_video_packetizer(track);
   }
 }
 
 void
 mpeg_ts_reader_c::create_mpeg1_2_video_packetizer(mpeg_ts_track_ptr &track) {
-  if (verbose)
-    mxinfo_tid(m_ti.m_fname, m_ti.m_id, Y("Using the MPEG-1/2 video output module.\n"));
+  mxinfo_tid(m_ti.m_fname, m_ti.m_id, Y("Using the MPEG-1/2 video output module.\n"));
 
   if (track->raw_seq_hdr != NULL) {
     m_ti.m_private_data = track->raw_seq_hdr;
@@ -981,6 +984,12 @@ mpeg_ts_reader_c::create_mpeg4_p10_es_video_packetizer(mpeg_ts_track_ptr &track)
   avcpacketizer->enable_timecode_generation(false);
   if (track->v_frame_rate)
     avcpacketizer->set_track_default_duration(static_cast<int64_t>(1000000000.0 / track->v_frame_rate));
+}
+
+void
+mpeg_ts_reader_c::create_vc1_video_packetizer(mpeg_ts_track_ptr &track) {
+  mxinfo_tid(m_ti.m_fname, m_ti.m_id, Y("Using the VC1 video output module.\n"));
+  track->ptzr = add_packetizer(new vc1_video_packetizer_c(this, m_ti));
 }
 
 void

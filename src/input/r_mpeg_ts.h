@@ -205,6 +205,7 @@ private:
   int send_to_packetizer(int tid);
   void create_mpeg1_2_video_packetizer(mpeg_ts_track_ptr &track);
   void create_mpeg4_p10_es_video_packetizer(mpeg_ts_track_ptr &track);
+  void create_vc1_video_packetizer(mpeg_ts_track_ptr &track);
 };
 
 #endif  // __R_MPEG_TS_H
