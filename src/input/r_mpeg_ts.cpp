@@ -947,36 +947,43 @@ mpeg_ts_reader_c::create_packetizer(int64_t id) {
 
   } else if (ES_VIDEO_TYPE == track->type) {
     if (   (FOURCC('M', 'P', 'G', '1') == track->fourcc)
-        || (FOURCC('M', 'P', 'G', '2') == track->fourcc)) {
-      generic_packetizer_c *m2vpacketizer;
-      if (verbose)
-        mxinfo_tid(m_ti.m_fname, id, Y("Using the MPEG-1/2 video output module.\n"));
+        || (FOURCC('M', 'P', 'G', '2') == track->fourcc))
+      create_mpeg1_2_video_packetizer(track);
 
-      if (track->raw_seq_hdr != NULL) {
-        m_ti.m_private_data = track->raw_seq_hdr;
-        m_ti.m_private_size = track->raw_seq_hdr_size;
-      }
-      m2vpacketizer       = new mpeg1_2_video_packetizer_c(this, m_ti, track->v_version, track->v_frame_rate, track->v_width, track->v_height,
-                                                           track->v_dwidth, track->v_dheight, false);
-      track->ptzr         = add_packetizer(m2vpacketizer);
-      m_ti.m_private_data = NULL;
-      m_ti.m_private_size = 0;
-      m2vpacketizer->set_video_interlaced_flag(track->v_interlaced);
-
-    } else if (track->fourcc == FOURCC('A', 'V', 'C', '1')) {
-      mpeg4_p10_es_video_packetizer_c *avcpacketizer;
-      if (verbose)
-        mxinfo_tid(m_ti.m_fname, id, Y("Using the MPEG-4 part 10 ES video output module.\n"));
-      avcpacketizer = new mpeg4_p10_es_video_packetizer_c(this, m_ti, track->v_avcc, track->v_width, track->v_height);
-      /*if (track->v_frame_rate != 25)
-           avcpacketizer->enable_timecode_generation(true, 1000000000/track->v_frame_rate);*/
-      avcpacketizer->enable_timecode_generation(false);
-      if (track->v_frame_rate)
-        avcpacketizer->set_track_default_duration(static_cast<int64_t>(1000000000.0 / track->v_frame_rate));
-      track->ptzr = add_packetizer(avcpacketizer);
-
-    }
+    else if (track->fourcc == FOURCC('A', 'V', 'C', '1'))
+      create_mpeg4_p10_es_video_packetizer(track);
   }
+}
+
+void
+mpeg_ts_reader_c::create_mpeg1_2_video_packetizer(mpeg_ts_track_ptr &track) {
+  if (verbose)
+    mxinfo_tid(m_ti.m_fname, m_ti.m_id, Y("Using the MPEG-1/2 video output module.\n"));
+
+  if (track->raw_seq_hdr != NULL) {
+    m_ti.m_private_data = track->raw_seq_hdr;
+    m_ti.m_private_size = track->raw_seq_hdr_size;
+  }
+
+  generic_packetizer_c *m2vpacketizer = new mpeg1_2_video_packetizer_c(this, m_ti, track->v_version, track->v_frame_rate, track->v_width, track->v_height,
+                                                                       track->v_dwidth, track->v_dheight, false);
+  track->ptzr                         = add_packetizer(m2vpacketizer);
+  m_ti.m_private_data                 = NULL;
+  m_ti.m_private_size                 = 0;
+  m2vpacketizer->set_video_interlaced_flag(track->v_interlaced);
+}
+
+void
+mpeg_ts_reader_c::create_mpeg4_p10_es_video_packetizer(mpeg_ts_track_ptr &track) {
+  if (verbose)
+    mxinfo_tid(m_ti.m_fname, m_ti.m_id, Y("Using the MPEG-4 part 10 ES video output module.\n"));
+
+  mpeg4_p10_es_video_packetizer_c *avcpacketizer = new mpeg4_p10_es_video_packetizer_c(this, m_ti, track->v_avcc, track->v_width, track->v_height);
+  track->ptzr                                    = add_packetizer(avcpacketizer);
+
+  avcpacketizer->enable_timecode_generation(false);
+  if (track->v_frame_rate)
+    avcpacketizer->set_track_default_duration(static_cast<int64_t>(1000000000.0 / track->v_frame_rate));
 }
 
 void
