@@ -414,12 +414,11 @@ mpeg_ts_reader_c::parse_pmt(unsigned char *pmt) {
         track->fourcc = FOURCC('A', 'A', 'C', ' ');
         break;
       case STREAM_AUDIO_AC3:
-      case STREAM_AUDIO_AC3_LOSSLESS:
+      case STREAM_AUDIO_AC3_PLUS: // EAC3
         track->type   = ES_AUDIO_TYPE;
         track->fourcc = FOURCC('A', 'C', '3', ' ');
         break;
-      case STREAM_AUDIO_AC3_PLUS:
-        // is this ok ?
+      case STREAM_AUDIO_AC3_LOSSLESS:
         track->type   = ES_AUDIO_TYPE;
         track->fourcc = FOURCC('T', 'R', 'H', 'D');
         break;
