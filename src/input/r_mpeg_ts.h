@@ -191,9 +191,10 @@ private:
 
   bool m_dont_use_audio_pts;
 
+  int m_detected_packet_size;
+
 protected:
   static int potential_packet_sizes[];
-  static int detected_packet_size;
 
 public:
   mpeg_ts_reader_c(track_info_c &_ti) throw (error_c);
@@ -215,6 +216,7 @@ public:
   virtual bool parse_packet(int id, unsigned char *buf);
 
   static int64_t read_timestamp(unsigned char *p);
+  static int detect_packet_size(mm_io_c *io, uint64_t size);
 
 private:
   int parse_pat(unsigned char *pat);

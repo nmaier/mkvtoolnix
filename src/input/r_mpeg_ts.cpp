@@ -46,7 +46,6 @@
 #define ES_INFO_LENGTH(p)      (((static_cast<uint16_t>(p->es_info_length_msb) << 8 ) | p->es_info_length_lsb) & 0x0FFF)
 
 int mpeg_ts_reader_c::potential_packet_sizes[] = { 188, 192, 204, 0 };
-int mpeg_ts_reader_c::detected_packet_size     = 188;
 
 typedef enum {
   ISO_11172_VIDEO           = 0x01, // ISO/IEC 11172 Video
@@ -76,10 +75,16 @@ typedef enum {
 bool
 mpeg_ts_reader_c::probe_file(mm_io_c *io,
                              uint64_t size) {
+  return -1 != detect_packet_size(io, size);
+}
+
+int
+mpeg_ts_reader_c::detect_packet_size(mm_io_c *io,
+                                     uint64_t size) {
   try {
     std::vector<int> positions;
-    size = size > TS_PROBE_SIZE ? TS_PROBE_SIZE : size;
-    memory_cptr buffer(new memory_c(safemalloc(size), size, true));
+    size = std::min(static_cast<uint64_t>(TS_PROBE_SIZE), size);
+    memory_cptr buffer = memory_c::alloc(size);
     unsigned char *mem = buffer->get_buffer();
     size_t i, k;
 
@@ -101,16 +106,14 @@ mpeg_ts_reader_c::probe_file(mm_io_c *io,
           ++num_startcodes;
         }
 
-        if (TS_CONSECUTIVE_PACKETS <= num_startcodes) {
-          detected_packet_size = packet_size;
-          return true;
-        }
+        if (TS_CONSECUTIVE_PACKETS <= num_startcodes)
+          return packet_size;
       }
     }
   } catch (...) {
   }
 
-  return false;
+  return -1;
 }
 
 mpeg_ts_reader_c::mpeg_ts_reader_c(track_info_c &_ti)
@@ -128,6 +131,7 @@ mpeg_ts_reader_c::mpeg_ts_reader_c(track_info_c &_ti)
   , track_buffer_ready(-1)
   , file_done(false)
   , m_dont_use_audio_pts(debugging_requested("mpeg_ts_dont_use_audio_pts"))
+  , m_detected_packet_size(0)
 {
   try {
     io   = new mm_file_io_c(m_ti.m_fname);
@@ -137,7 +141,9 @@ mpeg_ts_reader_c::mpeg_ts_reader_c(track_info_c &_ti)
   }
 
   try {
-    mxverb(3, boost::format("mpeg_ts: Starting to build PID list. (packet size: %1%)\n") % detected_packet_size);
+    m_detected_packet_size = detect_packet_size(io, size);
+
+    mxverb(3, boost::format("mpeg_ts: Starting to build PID list. (packet size: %1%)\n") % m_detected_packet_size);
 
     mpeg_ts_track_ptr PAT(new mpeg_ts_track_t);
     PAT->pid  = 0;
@@ -151,9 +157,9 @@ mpeg_ts_reader_c::mpeg_ts_reader_c(track_info_c &_ti)
     while (!done) {
 
       if (buf[0] == 0x47) {
-        io->read(buf + 1, detected_packet_size);
-        if (buf[detected_packet_size] != 0x47) {
-          io->skip(0 - detected_packet_size);
+        io->read(buf + 1, m_detected_packet_size);
+        if (buf[m_detected_packet_size] != 0x47) {
+          io->skip(0 - m_detected_packet_size);
           buf[0] = io->read_uint8();
           continue;
         }
@@ -1061,11 +1067,11 @@ mpeg_ts_reader_c::read(generic_packetizer_c *,
       return finish();
 
     if (buf[0] == 0x47) {
-      if (io->read(buf + 1, detected_packet_size) != (unsigned int)detected_packet_size || io->eof())
+      if ((io->read(buf + 1, m_detected_packet_size) != (unsigned int)m_detected_packet_size) || io->eof())
         return finish();
 
-      if (buf[detected_packet_size] != 0x47) {
-        io->skip(0 - detected_packet_size);
+      if (buf[m_detected_packet_size] != 0x47) {
+        io->skip(0 - m_detected_packet_size);
         buf[0] = io->read_uint8();
         continue;
       }
