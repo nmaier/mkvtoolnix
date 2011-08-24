@@ -530,12 +530,12 @@ mpeg_ts_reader_c::new_stream_v_avc(unsigned char *buf,
   parser.ignore_nalu_size_length_errors();
 
   mxverb(3, boost::format("new_stream_v_avc: packet size: %1%\n") % length);
-  /*
+
   if (map_has_key(m_ti.m_nalu_size_lengths, tracks.size()))
     parser.set_nalu_size_length(m_ti.m_nalu_size_lengths[0]);
   else if (map_has_key(m_ti.m_nalu_size_lengths, -1))
     parser.set_nalu_size_length(m_ti.m_nalu_size_lengths[-1]);
-*/
+
   parser.add_bytes(buf, length);
 
   if (!parser.headers_parsed())
