@@ -1008,7 +1008,7 @@ mpeg_ts_reader_c::finish() {
     return flush_packetizers();
 
   foreach(mpeg_ts_track_ptr &track, tracks)
-    if (0 < track->payload.get_size())
+    if ((-1 != track->ptzr) && (0 < track->payload.get_size()))
       PTZR(track->ptzr)->process(new packet_t(clone_memory(track->payload.get_buffer(), track->payload.get_size())));
 
   file_done = true;
