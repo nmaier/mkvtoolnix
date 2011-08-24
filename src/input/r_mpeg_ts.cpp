@@ -729,184 +729,185 @@ mpeg_ts_reader_c::parse_packet(int id, unsigned char *buf) {
     }
   }
 
-  if (table_pid == match_pid) {
-    //mxverb(3, boost::format("mpeg_ts: match for PID found: " << match_pid << std::endl;
-    if (hdr->adaptation_field_control == 0x01) {
-      payload = (unsigned char *)hdr + sizeof(mpeg_ts_packet_header_t);
+  if (table_pid != match_pid)
+    return false;
 
-    } else { //hdr->adaptation_field_control == 0x03
-      mpeg_ts_adaptation_field_t *adf = (mpeg_ts_adaptation_field_t *)((unsigned char *)hdr + sizeof(mpeg_ts_packet_header_t));
+  //mxverb(3, boost::format("mpeg_ts: match for PID found: " << match_pid << std::endl;
+  if (hdr->adaptation_field_control == 0x01) {
+    payload = (unsigned char *)hdr + sizeof(mpeg_ts_packet_header_t);
 
-      if (adf->adaptation_field_length > 182) //no payload ?
-        return false;
+  } else { //hdr->adaptation_field_control == 0x03
+    mpeg_ts_adaptation_field_t *adf = (mpeg_ts_adaptation_field_t *)((unsigned char *)hdr + sizeof(mpeg_ts_packet_header_t));
 
-      adf_discontinuity_indicator = adf->discontinuity_indicator;
-      payload                     = (unsigned char *)hdr + sizeof(mpeg_ts_packet_header_t) + adf->adaptation_field_length + 1;
-    }
-
-    payload_size = 188 - (payload - (unsigned char *)hdr);
-
-    if (hdr->payload_unit_start_indicator) {
-      if (tracks[tidx]->type == PAT_TYPE || tracks[tidx]->type == PMT_TYPE) {
-        table_data                  = (mpeg_ts_pat_t *)(payload + 1 + *payload);
-        payload_size               -=  1 + *payload;
-        tracks[tidx]->payload_size  = SECTION_LENGTH(table_data) + 3;
-        payload                     = (unsigned char *)table_data;
-
-      } else {
-        pes_data                   = (mpeg_ts_pes_header_t *)payload;
-        tracks[tidx]->payload_size = ((uint16_t) (pes_data->PES_packet_length_msb) << 8) | (pes_data->PES_packet_length_lsb);
-#if 1
-        if (tracks[tidx]->payload_size > 0)
-          tracks[tidx]->payload_size = tracks[tidx]->payload_size - 3 - pes_data->PES_header_data_length;
-#else
-        tracks[tidx]->payload_size = 0;
-#endif
-
-        if (   (tracks[tidx]->payload_size       == 0)
-            && (tracks[tidx]->payload.get_size() != 0)
-            && (input_status                     == INPUT_READ)) {
-          tracks[tidx]->payload_size = tracks[tidx]->payload.get_size();
-          mxverb(3, boost::format("mpeg_ts: Table/PES completed (%1%) for PID %2%\n") % tracks[tidx]->payload_size % table_pid);
-          send_to_packetizer(tidx);
-        }
-
-        mxverb(4, boost::format("   PES info: stream_id = %1%\n") % (int)pes_data->stream_id);
-        mxverb(4, boost::format("   PES info: PES_packet_length = %1%\n") % tracks[tidx]->payload_size);
-        //mxverb(3, boost::format("scrambling = %d, priority = %d, alignment = %d, copyright = %d, copy = %d\n", pes_hdr->PES_scrambling_control, pes_hdr->PES_priority, pes_hdr->data_alignment_indicator, pes_hdr->copyright, pes_hdr->original_or_copy);
-        mxverb(4, boost::format("   PES info: PTS_DTS = %1% ESCR = %2% ES_rate = %3%\n") % (int)pes_data->PTS_DTS % (int)pes_data->ESCR % (int)pes_data->ES_rate);
-        mxverb(4, boost::format("   PES info: DSM_trick_mode = %1%, add_copy = %2%, CRC = %3%, ext = %4%\n") % (int)pes_data->DSM_trick_mode % (int)pes_data->additional_copy_info % (int)pes_data->PES_CRC % (int)pes_data->PES_extension);
-        mxverb(4, boost::format("   PES info: PES_header_data_length = %1%\n") % (int)pes_data->PES_header_data_length);
-
-        // int64_t pts = -1, dts = -1;
-        if (pes_data->PTS_DTS_flags > 1) { // 10 and 11 mean PTS is present
-          int64_t PTS = read_timestamp(&pes_data->PTS_DTS);
-
-          if ((-1 == m_global_timecode_offset) || (PTS < m_global_timecode_offset)) {
-            mxverb(3, boost::format("global_timecode_offset %1%\n") % PTS);
-            m_global_timecode_offset = PTS;
-          }
-
-          if (PTS == tracks[tidx]->timecode) {
-            mxverb(3, boost::format("     Adding PES with same PTS as previous !!\n"));
-            tracks[tidx]->payload.add(payload, payload_size);
-            return true;
-          }
-
-          tracks[tidx]->timecode = PTS;
-
-          mxverb(3, boost::format("     PTS found: %1%\n") % tracks[tidx]->timecode);
-        }
-
-        payload      = &pes_data->PES_header_data_length + pes_data->PES_header_data_length + 1;
-        payload_size = ((unsigned char *) hdr + 188) - (unsigned char *) payload;
-        // this condition is for ES probing when there is still not enough data for detection
-        if (tracks[tidx]->payload_size == 0 && tracks[tidx]->payload.get_size() != 0)
-          tracks[tidx]->data_ready = true;
-
-      }
-      tracks[tidx]->continuity_counter = CONTINUITY_COUNTER(hdr);
-
-      if (tracks[tidx]->payload_size != 0 && (payload_size + tracks[tidx]->payload.get_size()) > tracks[tidx]->payload_size)
-        payload_size = tracks[tidx]->payload_size - tracks[tidx]->payload.get_size();
-      //mxverb(3, boost::format("mpeg_ts: Payload size: %1% - PID: %2%\n") % (int)payload_size % table_pid);
-
-    } else {
-      /* Check continuity counter */
-      if (tracks[tidx]->payload.get_size() != 0) {
-        if (!adf_discontinuity_indicator) {
-          tracks[tidx]->continuity_counter++;
-          tracks[tidx]->continuity_counter %= 16;
-          if (CONTINUITY_COUNTER(hdr) != tracks[tidx]->continuity_counter) {
-            //delete tracks[tidx].table;
-            mxverb(3, boost::format("mpeg_ts: Continuity error on PID: %1%. Continue anyway...\n") % table_pid);
-            tracks[tidx]->continuity_counter = CONTINUITY_COUNTER(hdr);
-            //tracks[tidx]->payload.remove(tracks[tidx]->payload.get_size());
-            //tracks[tidx]->processed = false;
-            //tracks[tidx]->data_ready = false;
-            //tracks[tidx]->payload_size = 0;
-            //return false;
-          }
-        } else
-          tracks[tidx]->continuity_counter = CONTINUITY_COUNTER(hdr);
-
-      } else
-        return false;
-
-      if (tracks[tidx]->payload_size != 0 && payload_size > tracks[tidx]->payload_size - tracks[tidx]->payload.get_size())
-        payload_size = tracks[tidx]->payload_size - tracks[tidx]->payload.get_size();
-    }
-
-
-    tracks[tidx]->payload.add(payload, payload_size);
-    //mxverb(3, boost::format("mpeg_ts: ---------> Written %1% bytes for PID %2%\n") % payload_size % table_pid);
-
-    if (tracks[tidx]->payload.get_size() == 0)
+    if (adf->adaptation_field_length > 182) //no payload ?
       return false;
 
-    if (tracks[tidx]->payload.get_size() == tracks[tidx]->payload_size)
-      tracks[tidx]->data_ready = true;
+    adf_discontinuity_indicator = adf->discontinuity_indicator;
+    payload                     = (unsigned char *)hdr + sizeof(mpeg_ts_packet_header_t) + adf->adaptation_field_length + 1;
+  }
 
-    /*if (tracks[tidx]->payload.get_size() == tracks[tidx]->payload_size ||
-      (input_status == INPUT_PROBE && tracks[tidx]->payload_size == 0 && tracks[tidx]->type == ES_VIDEO_TYPE) ) {*/
-    if (tracks[tidx]->data_ready == true) {
-      mxverb(3, boost::format("mpeg_ts: Table/PES completed (%1%) for PID %2%\n") % tracks[tidx]->payload.get_size() % table_pid);
-      if (input_status == INPUT_PROBE) {
+  payload_size = 188 - (payload - (unsigned char *)hdr);
 
-        if (tracks[tidx]->type == PAT_TYPE)
-          ret = parse_pat(tracks[tidx]->payload.get_buffer());
-        else if (tracks[tidx]->type == PMT_TYPE)
-          ret = parse_pmt(tracks[tidx]->payload.get_buffer());
-        else if (tracks[tidx]->type == ES_VIDEO_TYPE) {
-          if ((FOURCC('M', 'P', 'G', '1') == tracks[tidx]->fourcc) || (FOURCC('M', 'P', 'G', '2') == tracks[tidx]->fourcc))
-            ret = new_stream_v_mpeg_1_2(tracks[tidx]->payload.get_buffer(), tracks[tidx]->payload.get_size(), tracks[tidx]);
-          else if (FOURCC('A', 'V', 'C', '1') == tracks[tidx]->fourcc)
-            ret = new_stream_v_avc(tracks[tidx]->payload.get_buffer(), tracks[tidx]->payload.get_size(), tracks[tidx]);
-        }
-        else if (tracks[tidx]->type == ES_AUDIO_TYPE) {
-          if (FOURCC('M', 'P', '2', ' ') == tracks[tidx]->fourcc)
-            ret = new_stream_a_mpeg(tracks[tidx]->payload.get_buffer(), tracks[tidx]->payload.get_size(), tracks[tidx]);
-          else if (FOURCC('A', 'C', '3', ' ') == tracks[tidx]->fourcc)
-            ret = new_stream_a_ac3(tracks[tidx]->payload.get_buffer(), tracks[tidx]->payload.get_size(), tracks[tidx]);
-          else if (FOURCC('T', 'R', 'H', 'D') == tracks[tidx]->fourcc)
-            ret = new_stream_a_truehd(tracks[tidx]->payload.get_buffer(), tracks[tidx]->payload.get_size(), tracks[tidx]);
-        }
-        else if (tracks[tidx]->type == ES_SUBT_TYPE) {
-          ret = 0;
-        }
+  if (hdr->payload_unit_start_indicator) {
+    if (tracks[tidx]->type == PAT_TYPE || tracks[tidx]->type == PMT_TYPE) {
+      table_data                  = (mpeg_ts_pat_t *)(payload + 1 + *payload);
+      payload_size               -=  1 + *payload;
+      tracks[tidx]->payload_size  = SECTION_LENGTH(table_data) + 3;
+      payload                     = (unsigned char *)table_data;
 
-        if (ret == 0) {
-          if (tracks[tidx]->type == PAT_TYPE || tracks[tidx]->type == PMT_TYPE)
-            tracks.erase(tracks.begin() + tidx);
-          else {
-            tracks[tidx]->processed = true;
-            es_to_process--;
-            mxverb(3, boost::format("mpeg_ts: ES to process: %1%\n") % es_to_process);
-          }
-          mxverb(3, boost::format("mpeg_ts: Table PROCESSED for PID %1%\n") % table_pid);
-        } else if (ret == FILE_STATUS_MOREDATA) {
-          mxverb(3, boost::format("mpeg_ts: Need more data to probe ES\n"));
-          tracks[tidx]->processed  = false;
-          tracks[tidx]->data_ready = false;
-        } else {
-          mxverb(3, boost::format("mpeg_ts: Failed to parse packet. Reset and retry\n"));
-          tracks[tidx]->payload.remove(tracks[tidx]->payload.get_size());
-          tracks[tidx]->processed    = false;
-          tracks[tidx]->payload_size = 0;
-          return false;
-        }
-      } else if (input_status == INPUT_READ) {
+    } else {
+      pes_data                   = (mpeg_ts_pes_header_t *)payload;
+      tracks[tidx]->payload_size = ((uint16_t) (pes_data->PES_packet_length_msb) << 8) | (pes_data->PES_packet_length_lsb);
+#if 1
+      if (tracks[tidx]->payload_size > 0)
+        tracks[tidx]->payload_size = tracks[tidx]->payload_size - 3 - pes_data->PES_header_data_length;
+#else
+      tracks[tidx]->payload_size = 0;
+#endif
 
-        // PES completed, set track to quicly send it to the rightpacketizer
-        track_buffer_ready = tidx;
+      if (   (tracks[tidx]->payload_size       == 0)
+          && (tracks[tidx]->payload.get_size() != 0)
+          && (input_status                     == INPUT_READ)) {
+        tracks[tidx]->payload_size = tracks[tidx]->payload.get_size();
+        mxverb(3, boost::format("mpeg_ts: Table/PES completed (%1%) for PID %2%\n") % tracks[tidx]->payload_size % table_pid);
+        send_to_packetizer(tidx);
       }
 
-    }
+      mxverb(4, boost::format("   PES info: stream_id = %1%\n") % (int)pes_data->stream_id);
+      mxverb(4, boost::format("   PES info: PES_packet_length = %1%\n") % tracks[tidx]->payload_size);
+      //mxverb(3, boost::format("scrambling = %d, priority = %d, alignment = %d, copyright = %d, copy = %d\n", pes_hdr->PES_scrambling_control, pes_hdr->PES_priority, pes_hdr->data_alignment_indicator, pes_hdr->copyright, pes_hdr->original_or_copy);
+      mxverb(4, boost::format("   PES info: PTS_DTS = %1% ESCR = %2% ES_rate = %3%\n") % (int)pes_data->PTS_DTS % (int)pes_data->ESCR % (int)pes_data->ES_rate);
+      mxverb(4, boost::format("   PES info: DSM_trick_mode = %1%, add_copy = %2%, CRC = %3%, ext = %4%\n") % (int)pes_data->DSM_trick_mode % (int)pes_data->additional_copy_info % (int)pes_data->PES_CRC % (int)pes_data->PES_extension);
+      mxverb(4, boost::format("   PES info: PES_header_data_length = %1%\n") % (int)pes_data->PES_header_data_length);
 
+      // int64_t pts = -1, dts = -1;
+      if (pes_data->PTS_DTS_flags > 1) { // 10 and 11 mean PTS is present
+        int64_t PTS = read_timestamp(&pes_data->PTS_DTS);
+
+        if ((-1 == m_global_timecode_offset) || (PTS < m_global_timecode_offset)) {
+          mxverb(3, boost::format("global_timecode_offset %1%\n") % PTS);
+          m_global_timecode_offset = PTS;
+        }
+
+        if (PTS == tracks[tidx]->timecode) {
+          mxverb(3, boost::format("     Adding PES with same PTS as previous !!\n"));
+          tracks[tidx]->payload.add(payload, payload_size);
+          return true;
+        }
+
+        tracks[tidx]->timecode = PTS;
+
+        mxverb(3, boost::format("     PTS found: %1%\n") % tracks[tidx]->timecode);
+      }
+
+      payload      = &pes_data->PES_header_data_length + pes_data->PES_header_data_length + 1;
+      payload_size = ((unsigned char *) hdr + 188) - (unsigned char *) payload;
+      // this condition is for ES probing when there is still not enough data for detection
+      if (tracks[tidx]->payload_size == 0 && tracks[tidx]->payload.get_size() != 0)
+        tracks[tidx]->data_ready = true;
+
+    }
+    tracks[tidx]->continuity_counter = CONTINUITY_COUNTER(hdr);
+
+    if (tracks[tidx]->payload_size != 0 && (payload_size + tracks[tidx]->payload.get_size()) > tracks[tidx]->payload_size)
+      payload_size = tracks[tidx]->payload_size - tracks[tidx]->payload.get_size();
+    //mxverb(3, boost::format("mpeg_ts: Payload size: %1% - PID: %2%\n") % (int)payload_size % table_pid);
+
+  } else {
+    /* Check continuity counter */
+    if (tracks[tidx]->payload.get_size() != 0) {
+      if (!adf_discontinuity_indicator) {
+        tracks[tidx]->continuity_counter++;
+        tracks[tidx]->continuity_counter %= 16;
+        if (CONTINUITY_COUNTER(hdr) != tracks[tidx]->continuity_counter) {
+          //delete tracks[tidx].table;
+          mxverb(3, boost::format("mpeg_ts: Continuity error on PID: %1%. Continue anyway...\n") % table_pid);
+          tracks[tidx]->continuity_counter = CONTINUITY_COUNTER(hdr);
+          //tracks[tidx]->payload.remove(tracks[tidx]->payload.get_size());
+          //tracks[tidx]->processed = false;
+          //tracks[tidx]->data_ready = false;
+          //tracks[tidx]->payload_size = 0;
+          //return false;
+        }
+      } else
+        tracks[tidx]->continuity_counter = CONTINUITY_COUNTER(hdr);
+
+    } else
+      return false;
+
+    if (tracks[tidx]->payload_size != 0 && payload_size > tracks[tidx]->payload_size - tracks[tidx]->payload.get_size())
+      payload_size = tracks[tidx]->payload_size - tracks[tidx]->payload.get_size();
+  }
+
+  tracks[tidx]->payload.add(payload, payload_size);
+  //mxverb(3, boost::format("mpeg_ts: ---------> Written %1% bytes for PID %2%\n") % payload_size % table_pid);
+
+  if (tracks[tidx]->payload.get_size() == 0)
+    return false;
+
+  if (tracks[tidx]->payload.get_size() == tracks[tidx]->payload_size)
+    tracks[tidx]->data_ready = true;
+
+  /*if (tracks[tidx]->payload.get_size() == tracks[tidx]->payload_size ||
+    (input_status == INPUT_PROBE && tracks[tidx]->payload_size == 0 && tracks[tidx]->type == ES_VIDEO_TYPE) ) {*/
+  if (!tracks[tidx]->data_ready)
+    return true;
+
+  mxverb(3, boost::format("mpeg_ts: Table/PES completed (%1%) for PID %2%\n") % tracks[tidx]->payload.get_size() % table_pid);
+  if (input_status != INPUT_PROBE) {
+    if (input_status == INPUT_READ)
+      // PES completed, set track to quicly send it to the rightpacketizer
+      track_buffer_ready = tidx;
     return true;
   }
 
-  return false;
+  if (tracks[tidx]->type == PAT_TYPE)
+    ret = parse_pat(tracks[tidx]->payload.get_buffer());
+
+  else if (tracks[tidx]->type == PMT_TYPE)
+    ret = parse_pmt(tracks[tidx]->payload.get_buffer());
+
+  else if (tracks[tidx]->type == ES_VIDEO_TYPE) {
+    if ((FOURCC('M', 'P', 'G', '1') == tracks[tidx]->fourcc) || (FOURCC('M', 'P', 'G', '2') == tracks[tidx]->fourcc))
+      ret = new_stream_v_mpeg_1_2(tracks[tidx]->payload.get_buffer(), tracks[tidx]->payload.get_size(), tracks[tidx]);
+    else if (FOURCC('A', 'V', 'C', '1') == tracks[tidx]->fourcc)
+      ret = new_stream_v_avc(tracks[tidx]->payload.get_buffer(), tracks[tidx]->payload.get_size(), tracks[tidx]);
+
+  } else if (tracks[tidx]->type == ES_AUDIO_TYPE) {
+    if (FOURCC('M', 'P', '2', ' ') == tracks[tidx]->fourcc)
+      ret = new_stream_a_mpeg(tracks[tidx]->payload.get_buffer(), tracks[tidx]->payload.get_size(), tracks[tidx]);
+    else if (FOURCC('A', 'C', '3', ' ') == tracks[tidx]->fourcc)
+      ret = new_stream_a_ac3(tracks[tidx]->payload.get_buffer(), tracks[tidx]->payload.get_size(), tracks[tidx]);
+    else if (FOURCC('T', 'R', 'H', 'D') == tracks[tidx]->fourcc)
+      ret = new_stream_a_truehd(tracks[tidx]->payload.get_buffer(), tracks[tidx]->payload.get_size(), tracks[tidx]);
+
+  } else if (tracks[tidx]->type == ES_SUBT_TYPE)
+    ret = 0;
+
+  if (ret == 0) {
+    if (tracks[tidx]->type == PAT_TYPE || tracks[tidx]->type == PMT_TYPE)
+      tracks.erase(tracks.begin() + tidx);
+    else {
+      tracks[tidx]->processed = true;
+      es_to_process--;
+      mxverb(3, boost::format("mpeg_ts: ES to process: %1%\n") % es_to_process);
+    }
+    mxverb(3, boost::format("mpeg_ts: Table PROCESSED for PID %1%\n") % table_pid);
+
+  } else if (ret == FILE_STATUS_MOREDATA) {
+    mxverb(3, boost::format("mpeg_ts: Need more data to probe ES\n"));
+    tracks[tidx]->processed  = false;
+    tracks[tidx]->data_ready = false;
+
+  } else {
+    mxverb(3, boost::format("mpeg_ts: Failed to parse packet. Reset and retry\n"));
+    tracks[tidx]->payload.remove(tracks[tidx]->payload.get_size());
+    tracks[tidx]->processed    = false;
+    tracks[tidx]->payload_size = 0;
+    return false;
+  }
+
+  return true;
 }
 
 void
