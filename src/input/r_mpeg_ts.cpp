@@ -592,7 +592,8 @@ mpeg_ts_reader_c::new_stream_v_avc(unsigned char *buf,
     mxverb(3, boost::format("new_stream_v_avc: timing_info_present %1%, num_units_in_tick %2%, time_scale %3%, fixed_frame_rate %4%\n")
            % sps_info.timing_info_present % sps_info.num_units_in_tick % sps_info.time_scale % sps_info.fixed_frame_rate);
 
-    track->v_frame_rate = sps_info.time_scale / sps_info.num_units_in_tick;
+    if (sps_info.timing_info_present && sps_info.num_units_in_tick)
+      track->v_frame_rate = sps_info.time_scale / sps_info.num_units_in_tick;
 
     if (sps_info.ar_found) {
       float aspect_ratio = (float)sps_info.width / (float)sps_info.height * (float)sps_info.par_num / (float)sps_info.par_den;
@@ -968,6 +969,9 @@ mpeg_ts_reader_c::create_packetizer(int64_t id) {
       avcpacketizer = new mpeg4_p10_es_video_packetizer_c(this, m_ti, track->v_avcc, track->v_width, track->v_height);
       /*if (track->v_frame_rate != 25)
            avcpacketizer->enable_timecode_generation(true, 1000000000/track->v_frame_rate);*/
+      avcpacketizer->enable_timecode_generation(false);
+      if (track->v_frame_rate)
+        avcpacketizer->set_track_default_duration(static_cast<int64_t>(1000000000.0 / track->v_frame_rate));
       track->ptzr = add_packetizer(avcpacketizer);
 
     }
