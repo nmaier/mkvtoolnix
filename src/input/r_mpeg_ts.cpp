@@ -582,7 +582,7 @@ mpeg_ts_reader_c::new_stream_v_avc(unsigned char *buf,
            % sps_info.timing_info_present % sps_info.num_units_in_tick % sps_info.time_scale % sps_info.fixed_frame_rate);
 
     if (sps_info.timing_info_present && sps_info.num_units_in_tick)
-      track->v_frame_rate = sps_info.time_scale / sps_info.num_units_in_tick;
+      track->v_frame_rate = static_cast<float>(sps_info.time_scale) / sps_info.num_units_in_tick;
 
     if (sps_info.ar_found) {
       float aspect_ratio = (float)sps_info.width / (float)sps_info.height * (float)sps_info.par_num / (float)sps_info.par_den;
@@ -977,9 +977,13 @@ mpeg_ts_reader_c::create_mpeg4_p10_es_video_packetizer(mpeg_ts_track_ptr &track)
   mpeg4_p10_es_video_packetizer_c *avcpacketizer = new mpeg4_p10_es_video_packetizer_c(this, m_ti, track->v_avcc, track->v_width, track->v_height);
   track->ptzr                                    = add_packetizer(avcpacketizer);
 
-  avcpacketizer->enable_timecode_generation(false);
   if (track->v_frame_rate)
     avcpacketizer->set_track_default_duration(static_cast<int64_t>(1000000000.0 / track->v_frame_rate));
+
+  // This is intentional so that the AVC parser knows the actual
+  // default duration from above but only generates timecode in
+  // emergencies.
+  avcpacketizer->enable_timecode_generation(false);
 }
 
 void

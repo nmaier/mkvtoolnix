@@ -40,6 +40,7 @@ public:
 
   virtual void enable_timecode_generation(bool enable, int64_t default_duration = -1);
   virtual void extract_aspect_ratio();
+  virtual void set_track_default_duration(int64_t default_duration);
 
   virtual const char *get_format_name() {
     return "AVC/h.264";

@@ -569,6 +569,7 @@ mpeg4::p10::avc_es_parser_c::avc_es_parser_c()
   , m_first_keyframe_found(false)
   , m_recovery_point_valid(false)
   , m_b_frames_since_keyframe(false)
+  , m_max_timecode(0)
   , m_generate_timecodes(false)
   , m_have_incomplete_frame(false)
   , m_ignore_nalu_size_length_errors(false)
@@ -684,6 +685,8 @@ mpeg4::p10::avc_es_parser_c::add_timecode(int64_t timecode) {
     --i;
   }
   m_timecodes.insert(i, timecode);
+
+  m_max_timecode = std::max(timecode, m_max_timecode);
 }
 
 void
@@ -1053,6 +1056,9 @@ mpeg4::p10::avc_es_parser_c::default_cleanup() {
   std::deque<avc_frame_t>::iterator i(m_frames.begin());
   std::deque<int64_t>::iterator t(m_timecodes.begin());
 
+  if (m_frames.size() > m_timecodes.size())
+    create_missing_timecodes();
+
   int64_t r = i->m_start = i->m_end = *t;
 
   ++i;
@@ -1094,12 +1100,8 @@ mpeg4::p10::avc_es_parser_c::cleanup() {
   // (cluster_helper etc).
   i->m_keyframe = true;
 
-  if (m_timecodes.size() < m_frames.size()) {
-    mxverb(4, boost::format("mpeg4::p10::avc_es_parser_c::cleanup() numfr %1% sti %2%\n") % m_frames.size() % m_timecodes.size());
-    m_timecodes.erase(m_timecodes.begin(), m_timecodes.begin() + m_frames.size());
-    m_frames.clear();
-    return;
-  }
+  if (m_frames.size() > m_timecodes.size())
+    create_missing_timecodes();
 
   slice_info_t &idr = i->m_si;
   sps_info_t &sps = m_sps_info_list[idr.sps];
@@ -1186,7 +1188,7 @@ mpeg4::p10::avc_es_parser_c::cleanup() {
   }
 
   m_frames_out.insert(m_frames_out.end(), m_frames.begin(), m_frames.end());
-  m_timecodes.erase(m_timecodes.begin(), m_timecodes.begin() + m_frames.size());
+  m_timecodes.erase(m_timecodes.begin(), m_timecodes.begin() + std::min(num_frames, num_timecodes));
   m_frames.clear();
 }
 
@@ -1299,4 +1301,15 @@ mpeg4::p10::avc_es_parser_c::init_nalu_names() {
   m_nalu_names_by_type[NALU_TYPE_END_OF_SEQ]    = "end of sequence";
   m_nalu_names_by_type[NALU_TYPE_END_OF_STREAM] = "end of stream";
   m_nalu_names_by_type[NALU_TYPE_FILLER_DATA]   = "filler";
+}
+
+void
+mpeg4::p10::avc_es_parser_c::create_missing_timecodes() {
+  size_t num_timecodes = m_timecodes.size();
+  size_t num_frames    = m_frames.size();
+
+  while (num_timecodes < num_frames) {
+    ++num_timecodes;
+    add_timecode(m_max_timecode + m_default_duration);
+  }
 }

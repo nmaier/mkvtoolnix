@@ -196,6 +196,7 @@ namespace mpeg4 {
 
       std::deque<avc_frame_t> m_frames, m_frames_out;
       std::deque<int64_t> m_timecodes;
+      int64_t m_max_timecode;
 
       bool m_generate_timecodes;
 
@@ -218,6 +219,10 @@ namespace mpeg4 {
     public:
       avc_es_parser_c();
       ~avc_es_parser_c();
+
+      void set_default_duration(int64_t default_duration) {
+        m_default_duration = default_duration;
+      }
 
       void enable_timecode_generation(int64_t default_duration) {
         m_default_duration   = default_duration;
@@ -308,6 +313,7 @@ namespace mpeg4 {
       void write_nalu_size(unsigned char *buffer, size_t size, int this_nalu_size_length = -1);
       memory_cptr create_nalu_with_size(const memory_cptr &src, bool add_extra_data = false);
       void init_nalu_names();
+      void create_missing_timecodes();
     };
     typedef counted_ptr<avc_es_parser_c> avc_es_parser_cptr;
   };
