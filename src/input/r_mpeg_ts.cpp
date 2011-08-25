@@ -1036,7 +1036,7 @@ mpeg_ts_reader_c::send_to_packetizer(int tid) {
 
   //if (tid == 0)
   //     m_file->write(tracks[tid]->payload->get_buffer(), tracks[tid]->payload_size);
-  if (tracks[tid]->timecode - m_global_timecode_offset < 0)
+  if (tracks[tid]->timecode < m_global_timecode_offset)
     tracks[tid]->timecode = 0;
   else
     tracks[tid]->timecode = (uint64_t)(tracks[tid]->timecode - m_global_timecode_offset) * 100000ll / 9;
