@@ -139,6 +139,78 @@ slcopy(bit_cursor_c &r,
 }
 
 void
+mpeg4::p10::sps_info_t::dump() {
+  mxinfo(boost::format("sps_info dump:\n"
+                       "  id:                                    %1%\n"
+                       "  profile_idc:                           %2%\n"
+                       "  profile_compat:                        %3%\n"
+                       "  level_idc:                             %4%\n"
+                       "  log2_max_frame_num:                    %5%\n"
+                       "  pic_order_cnt_type:                    %6%\n"
+                       "  log2_max_pic_order_cnt_lsb:            %7%\n"
+                       "  offset_for_non_ref_pic:                %8%\n"
+                       "  offset_for_top_to_bottom_field:        %9%\n"
+                       "  num_ref_frames_in_pic_order_cnt_cycle: %10%\n"
+                       "  delta_pic_order_always_zero_flag:      %11%\n"
+                       "  frame_mbs_only:                        %12%\n"
+                       "  vui_present:                           %13%\n"
+                       "  ar_found:                              %14%\n"
+                       "  par_num:                               %15%\n"
+                       "  par_den:                               %16%\n"
+                       "  timing_info_present:                   %17%\n"
+                       "  num_units_in_tick:                     %18%\n"
+                       "  time_scale:                            %19%\n"
+                       "  fixed_frame_rate:                      %20%\n"
+                       "  crop_left:                             %21%\n"
+                       "  crop_top:                              %22%\n"
+                       "  crop_right:                            %23%\n"
+                       "  crop_bottom:                           %24%\n"
+                       "  width:                                 %25%\n"
+                       "  height:                                %26%\n"
+                       "  checksum:                              %|27$08x|\n")
+         % id
+         % profile_idc
+         % profile_compat
+         % level_idc
+         % log2_max_frame_num
+         % pic_order_cnt_type
+         % log2_max_pic_order_cnt_lsb
+         % offset_for_non_ref_pic
+         % offset_for_top_to_bottom_field
+         % num_ref_frames_in_pic_order_cnt_cycle
+         % delta_pic_order_always_zero_flag
+         % frame_mbs_only
+         % vui_present
+         % ar_found
+         % par_num
+         % par_den
+         % timing_info_present
+         % num_units_in_tick
+         % time_scale
+         % fixed_frame_rate
+         % crop_left
+         % crop_top
+         % crop_right
+         % crop_bottom
+         % width
+         % height
+         % checksum);
+}
+
+void
+mpeg4::p10::pps_info_t::dump() {
+  mxinfo(boost::format("pps_info dump:\n"
+                       "id: %1%\n"
+                       "sps_id: %2%\n"
+                       "pic_order_present: %3%\n"
+                       "checksum: %|4$08x|\n")
+         % id
+         % sps_id
+         % pic_order_present
+         % checksum);
+}
+
+void
 mpeg4::p10::slice_info_t::dump() {
   mxinfo(boost::format("slice_info dump:\n"
                        "  nalu_type:                  %1%\n"

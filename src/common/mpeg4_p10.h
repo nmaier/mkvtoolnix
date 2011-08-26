@@ -82,6 +82,8 @@ namespace mpeg4 {
       sps_info_t() {
         memset(this, 0, sizeof(*this));
       }
+
+      void dump();
     };
 
     struct pps_info_t {
@@ -95,6 +97,8 @@ namespace mpeg4 {
       pps_info_t() {
         memset(this, 0, sizeof(*this));
       }
+
+      void dump();
     };
 
     struct slice_info_t {
