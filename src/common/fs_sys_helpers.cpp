@@ -206,7 +206,19 @@ get_application_data_folder() {
   if (NULL == home)
     return "";
 
-  return std::string(home) + "/.mkvtoolnix";
+  // If $HOME/.mkvtoolnix exists already then keep using it to avoid
+  // losing existing user configuration.
+  std::string old_default_folder = std::string(home) + "/.mkvtoolnix";
+  if (fs_entry_exists(old_default_folder.c_str()))
+    return old_default_folder;
+
+  // If XDG_CONFIG_HOME is set then use that folder.
+  const char *xdg_config_home = getenv("XDG_CONFIG_HOME");
+  if (NULL != xdg_config_home)
+    return std::string(xdg_config_home) + "/mkvtoolnix";
+
+  // If all fails then use the XDG fallback folder for config files.
+  return std::string(home) + "/.config/mkvtoolnix";
 }
 
 std::string

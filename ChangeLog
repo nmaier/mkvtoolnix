@@ -1,3 +1,10 @@
+2011-09-05  Cosme Domínguez  <cosme.ddiaz@gmail.com>
+
+	* mmg: mmg respects the XDG Base Directory Specification regarding
+	its configuration files (environment variable
+	$XDG_CONFIG_HOME/mkvtoolnix if set, otherwise
+	~/.config/mkvtoolnix).
+
 2011-08-24  Moritz Bunkus  <moritz@bunkus.org>
 
 	* all: Added an Lithuanian translation by Mindaugas Baranauskas
