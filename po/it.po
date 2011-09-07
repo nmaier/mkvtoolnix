@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2011-07-07 22:17+0100\n"
+"PO-Revision-Date: 2011-09-07 09:03+0200\n"
 "Last-Translator: \n"
 "Language-Team: German <moritz@bunkus.org>\n"
 "Language: it\n"
@@ -1523,7 +1523,7 @@ msgstr "<ChapterTrack> manca del processo dipendente <ChapterTrackNumber>."
 
 #: src/input/r_matroska.cpp:2132
 msgid "A block group was found at position %1%, but no block element was found inside it. This might make mkvmerge crash.\n"
-msgstr "Un gruppo di blocchi è stato trovato alla posiziione %1, ma non è stato trovato nessun elemento in essi. Questo potrebbe bloccare mkvmerge.\n"
+msgstr "Un gruppo di blocchi è stato trovato alla posiziione %1%, ma non è stato trovato nessun elemento in essi. Questo potrebbe bloccare mkvmerge.\n"
 
 #: src/input/r_matroska.cpp:2034 src/input/r_matroska.cpp:2142
 msgid "A block was found at timestamp %1% for track number %2%. However, no headers where found for that track number. The block will be skipped.\n"
@@ -1556,7 +1556,7 @@ msgstr "Una traccia"
 
 #: src/merge/pr_generic.cpp:1264
 msgid "A track with the ID %1% was requested but not found in the file. The corresponding option will be ignored.\n"
-msgstr "E' stata richiesta una traccia con ID %1 ma non è stata trovata nel file. L'opzione corrispondente verrà ignorata.\n"
+msgstr "E' stata richiesta una traccia con ID %1% ma non è stata trovata nel file. L'opzione corrispondente verrà ignorata.\n"
 
 #: src/common/property_element.cpp:114 src/mmg/header_editor/frame.cpp:395
 msgid ""
@@ -2777,7 +2777,7 @@ msgstr "Altezza visualizzazione: %1%"
 
 #: src/info/mkvinfo.cpp:739
 msgid "Display unit: %1%%2%"
-msgstr "Unità visualizzazione: %1%"
+msgstr "Unità visualizzazione: %1%%2%"
 
 #: src/mmg/header_editor/frame.cpp:152
 msgid "Display usage information"
@@ -2996,7 +2996,7 @@ msgstr "Errore: "
 
 #: src/common/xml/element_parser.cpp:63
 msgid "Error: %1% parser failed for '%2%', line %3%, column %4%: %5%\n"
-msgstr "Errore: analizzatore %1 fallito per '%2%', linea %3%, colonna %4%: %5%\n"
+msgstr "Errore: analizzatore %1% fallito per '%2%', linea %3%, colonna %4%: %5%\n"
 
 #: src/info/mkvinfo.cpp:1928
 msgid "Error: Couldn't open input file %1% (%2%).\n"
@@ -3336,7 +3336,7 @@ msgstr "Tag globali (%d elementi) da %s"
 
 #: src/merge/pr_generic.cpp:1411
 msgid "Global tags: %1% entries"
-msgstr "Tag globali: %d elementi"
+msgstr "Tag globali: %1% elementi"
 
 #: src/mmg/header_editor/frame.cpp:154
 msgid "H&eaders"
@@ -4278,7 +4278,7 @@ msgstr "Nessun ID traccia specificato in '--%1% %2%'.\n"
 
 #: src/propedit/target.cpp:312
 msgid "No track corresponding to the edit specification '%1%' was found. %2%\n"
-msgstr "Nessuna traccia rilevata corrispondente alle specifiche di modifica '%1%'.\n"
+msgstr "Nessuna traccia rilevata corrispondente alle specifiche di modifica '%1%'. %2%\n"
 
 #: src/extract/tracks.cpp:311
 msgid "No track with the ID %1% was found in the source file.\n"
@@ -4476,7 +4476,7 @@ msgstr "Il pacchetto n. %1% contiene una intestazione FLAC non valida e verrà i
 
 #: src/merge/pr_generic.cpp:252
 msgid "Packet queue not empty (flushed: %1%). Frames have been lost during remux. %2%\n"
-msgstr "La coda pacchetti non è vuota (in coda: %15). I frame verranno persii durante il remux. %2%\n"
+msgstr "La coda pacchetti non è vuota (in coda: %1%). I frame verranno persii durante il remux. %2%\n"
 
 #: src/info/wxwidgets_ui.cpp:113
 msgid "Parse the file completely and show all elements"
@@ -4508,7 +4508,7 @@ msgstr "Ritaglio pixel superiore: %1%"
 
 #: src/info/mkvinfo.cpp:702
 msgid "Pixel height: %1%"
-msgstr "Altezza pixel: 51%"
+msgstr "Altezza pixel: %1%"
 
 #: src/info/mkvinfo.cpp:697
 msgid "Pixel width: %1%"
