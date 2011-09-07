@@ -32,7 +32,7 @@ def process_file file_name
                | [0-9]+%?
                )/ix
 
-  errors = read_entries(file_name).select { |entry| !entry[:id].nil? && !entry[:str].nil? && (entry[:str] != 'msgstr ""') }.collect do |entry|
+  errors = read_entries(file_name).select { |entry| !entry[:id].nil? && (entry[:id] != 'msgid ""') && !entry[:str].nil? && (entry[:str] != 'msgstr ""') }.collect do |entry|
     formats = Hash[ *[:id, :str].collect { |idx| [idx, entry[idx].scan(matcher).uniq.sort ] }.flatten(1) ]
 
     missing = formats[:id]  - formats[:str]
