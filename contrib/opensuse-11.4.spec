@@ -5,6 +5,8 @@
 
 BuildRequires: expat libexpat-devel flac flac-devel gcc-c++ gtk2 gtk2-devel libogg libogg-devel libstdc++-devel libvorbis libvorbis-devel lzo lzo-devel pkgconfig boost-devel file-devel ruby libcurl-devel
 BuildRequires: wxWidgets-devel make gettext-tools
+BuildRequires: libebml >= 1.2.1
+BuildRequires: libmatroska >= 1.1.0
 
 Name:         mkvtoolnix
 URL:          http://www.bunkus.org/videotools/mkvtoolnix/
