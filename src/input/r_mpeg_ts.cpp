@@ -689,7 +689,6 @@ mpeg_ts_reader_c::parse_packet(int id, unsigned char *buf) {
   uint16_t i, ret = -1;
   int tidx = 0;
   unsigned char *payload;
-  unsigned char payload_size;
   unsigned char adf_discontinuity_indicator = 0;
   mpeg_ts_pat_t *table_data;
   mpeg_ts_pes_header_t *pes_data;
@@ -728,17 +727,20 @@ mpeg_ts_reader_c::parse_packet(int id, unsigned char *buf) {
   } else { //hdr->adaptation_field_control == 0x03
     mpeg_ts_adaptation_field_t *adf = (mpeg_ts_adaptation_field_t *)((unsigned char *)hdr + sizeof(mpeg_ts_packet_header_t));
 
-    if (adf->adaptation_field_length > 182) //no payload ?
+    if (adf->adaptation_field_length > (m_detected_packet_size - sizeof(mpeg_ts_packet_header_t) - 4)) //no payload ?
       return false;
 
     adf_discontinuity_indicator = adf->discontinuity_indicator;
     payload                     = (unsigned char *)hdr + sizeof(mpeg_ts_packet_header_t) + adf->adaptation_field_length + 1;
   }
 
-  payload_size = 188 - (payload - (unsigned char *)hdr);
+  unsigned char payload_size = m_detected_packet_size - (payload - (unsigned char *)hdr) - 4;
 
   if (hdr->payload_unit_start_indicator) {
     if (tracks[tidx]->type == PAT_TYPE || tracks[tidx]->type == PMT_TYPE) {
+      if ((1 + *payload) > payload_size)
+        return false;
+
       table_data                  = (mpeg_ts_pat_t *)(payload + 1 + *payload);
       payload_size               -=  1 + *payload;
       tracks[tidx]->payload_size  = SECTION_LENGTH(table_data) + 3;
@@ -790,7 +792,7 @@ mpeg_ts_reader_c::parse_packet(int id, unsigned char *buf) {
       }
 
       payload      = &pes_data->PES_header_data_length + pes_data->PES_header_data_length + 1;
-      payload_size = ((unsigned char *) hdr + 188) - (unsigned char *) payload;
+      payload_size = ((unsigned char *)hdr + m_detected_packet_size - 4) - (unsigned char *) payload;
       // this condition is for ES probing when there is still not enough data for detection
       if (tracks[tidx]->payload_size == 0 && tracks[tidx]->payload->get_size() != 0)
         tracks[tidx]->data_ready = true;
@@ -827,6 +829,9 @@ mpeg_ts_reader_c::parse_packet(int id, unsigned char *buf) {
     if (tracks[tidx]->payload_size != 0 && payload_size > tracks[tidx]->payload_size - tracks[tidx]->payload->get_size())
       payload_size = tracks[tidx]->payload_size - tracks[tidx]->payload->get_size();
   }
+
+  if ((buf + m_detected_packet_size) < (payload + payload_size))
+    payload_size = buf + m_detected_packet_size - payload;
 
   tracks[tidx]->payload->add(payload, payload_size);
   //mxverb(3, boost::format("mpeg_ts: ---------> Written %1% bytes for PID %2%\n") % payload_size % table_pid);
