@@ -89,4 +89,6 @@ public:
   };
 };
 
+typedef counted_ptr<byte_buffer_c> byte_buffer_cptr;
+
 #endif // __MTX_COMMON_BYTE_BUFFER_H

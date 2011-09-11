@@ -21,6 +21,20 @@
 #include "common/mm_io.h"
 #include "merge/pr_generic.h"
 
+enum mpeg_ts_input_type_t {
+  INPUT_PROBE = 0,
+  INPUT_READ  = 1,
+};
+
+enum mpeg_ts_pid_type_t {
+  PAT_TYPE      = 0,
+  PMT_TYPE      = 1,
+  ES_VIDEO_TYPE = 2,
+  ES_AUDIO_TYPE = 3,
+  ES_SUBT_TYPE  = 4,
+  ES_UNKNOWN    = 5,
+};
+
 /* TS packet header */
 typedef struct {
   unsigned char sync_byte;
@@ -108,12 +122,12 @@ typedef struct {
 
 struct mpeg_ts_track_t {
   bool processed;
-  char type;                   //can be PAT_TYPE, PMT_TYPE, ES_VIDEO_TYPE, ES_AUDIO_TYPE, ES_SUBT_TYPE, ES_UNKNOWN
+  mpeg_ts_pid_type_t type;      //can be PAT_TYPE, PMT_TYPE, ES_VIDEO_TYPE, ES_AUDIO_TYPE, ES_SUBT_TYPE, ES_UNKNOWN
   uint32_t fourcc;
   uint16_t pid;
   bool data_ready;
   int payload_size;       // size of the current PID payload in bytes
-  byte_buffer_c payload;       // buffer with the current PID payload
+  byte_buffer_cptr payload;       // buffer with the current PID payload
   unsigned char continuity_counter; // check for PID continuity
 
   int ptzr;                    // the actual packetizer instance
@@ -125,16 +139,22 @@ struct mpeg_ts_track_t {
   bool v_interlaced;
   int v_version, v_width, v_height, v_dwidth, v_dheight;
   double v_frame_rate, v_aspect_ratio;
-  memory_cptr v_avcc;
-  unsigned char *raw_seq_hdr;
-  int raw_seq_hdr_size;
+  memory_cptr v_avcc, raw_seq_hdr;
 
   // audio related parameters
   int a_channels, a_sample_rate, a_bits_per_sample, a_bsid;
 
   mpeg_ts_track_t()
-    : ptzr(-1)
-    //, timecode_offset(-1)
+    : processed(false)
+    , type(ES_UNKNOWN)
+    , fourcc(0)
+    , pid(0)
+    , data_ready(false)
+    , payload_size(0)
+    , payload(new byte_buffer_c)
+    , continuity_counter(0)
+    , ptzr(-1)
+    , timecode(-1)
     , v_interlaced(false)
     , v_version(0)
     , v_width(0)
@@ -143,8 +163,6 @@ struct mpeg_ts_track_t {
     , v_dheight(0)
     , v_frame_rate(0)
     , v_aspect_ratio(0)
-    , raw_seq_hdr(NULL)
-    , raw_seq_hdr_size(0)
     , a_channels(0)
     , a_sample_rate(0)
     , a_bits_per_sample(0)
@@ -164,7 +182,7 @@ private:
   int es_to_process;
   int64_t m_global_timecode_offset;
 
-  uint8_t input_status;         // can be INPUT_PROBE, INPUT_IDENTIFY, INPUT_READ
+  mpeg_ts_input_type_t input_status; // can be INPUT_PROBE, INPUT_READ
   int track_buffer_ready;
 
   bool file_done;
