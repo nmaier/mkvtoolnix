@@ -1125,11 +1125,11 @@ mpeg4::p10::avc_es_parser_c::parse_slice(memory_cptr &buffer,
 
 void
 mpeg4::p10::avc_es_parser_c::default_cleanup() {
-  std::deque<avc_frame_t>::iterator i(m_frames.begin());
-  std::deque<int64_t>::iterator t(m_timecodes.begin());
-
   if (m_frames.size() > m_timecodes.size())
     create_missing_timecodes();
+
+  std::deque<avc_frame_t>::iterator i(m_frames.begin());
+  std::deque<int64_t>::iterator t(m_timecodes.begin());
 
   int64_t r = i->m_start = i->m_end = *t;
 
@@ -1155,10 +1155,6 @@ mpeg4::p10::avc_es_parser_c::default_cleanup() {
 
 void
 mpeg4::p10::avc_es_parser_c::cleanup() {
-  std::deque<avc_frame_t>::iterator i(m_frames.begin());
-  std::deque<int64_t>::iterator t(m_timecodes.begin());
-  unsigned j;
-
   if (m_frames.empty())
     return;
 
@@ -1168,12 +1164,15 @@ mpeg4::p10::avc_es_parser_c::cleanup() {
     return;
   }
 
+  if (m_frames.size() > m_timecodes.size())
+    create_missing_timecodes();
+
+  std::deque<avc_frame_t>::iterator i(m_frames.begin());
+  std::deque<int64_t>::iterator t(m_timecodes.begin());
+
   // This may be wrong but is needed for mkvmerge to work correctly
   // (cluster_helper etc).
   i->m_keyframe = true;
-
-  if (m_frames.size() > m_timecodes.size())
-    create_missing_timecodes();
 
   slice_info_t &idr = i->m_si;
   sps_info_t &sps = m_sps_info_list[idr.sps];
@@ -1190,7 +1189,7 @@ mpeg4::p10::avc_es_parser_c::cleanup() {
   std::vector<poc_t> poc;
 
   if (0 == sps.pic_order_cnt_type) {
-    j = 0;
+    unsigned int j = 0;
 
     unsigned int prev_pic_order_cnt_msb = 0;
     unsigned int prev_pic_order_cnt_lsb = 0;
@@ -1238,6 +1237,7 @@ mpeg4::p10::avc_es_parser_c::cleanup() {
   size_t num_frames    = m_frames.size();
   size_t num_timecodes = m_timecodes.size();
 
+  unsigned int j;
   for (j = 0; num_frames > j; ++j, ++t) {
     poc[j].timecode = *t;
     poc[j].duration = num_frames > (j + 1)       ? *(t + 1)                - poc[j].timecode
