@@ -419,7 +419,7 @@ mpeg4::p10::parse_sps(memory_cptr &buffer,
     }
     sps.timing_info_present = w.copy_bits(1, r);
     if (sps.timing_info_present) {
-      sps.num_units_in_tick = w.copy_bits(32, r);
+      sps.num_units_in_tick = w.copy_bits(32, r) * 2;
       sps.time_scale        = w.copy_bits(32, r);
       sps.fixed_frame_rate  = w.copy_bits(1, r);
     }
