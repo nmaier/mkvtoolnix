@@ -784,7 +784,9 @@ mpeg_ts_reader_c::parse_packet(int id, unsigned char *buf) {
           mxverb(3, boost::format("     Adding PES with same PTS as previous !!\n"));
           tracks[tidx]->payload->add(payload, payload_size);
           return true;
-        }
+
+        } else if ((0 != tracks[tidx]->payload->get_size()) && (INPUT_READ == input_status))
+          send_to_packetizer(tidx);
 
         tracks[tidx]->timecode = PTS;
 
