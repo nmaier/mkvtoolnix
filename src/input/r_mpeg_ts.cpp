@@ -1048,10 +1048,11 @@ mpeg_ts_reader_c::send_to_packetizer(int tid) {
     tracks[tid]->timecode = -1;
 
   mxverb(3, boost::format("mpeg_ts: PTS in nanoseconds: %1%\n") % tracks[tid]->timecode);
-  packet_t *new_packet = new packet_t(clone_memory(tracks[tid]->payload->get_buffer(), tracks[tid]->payload_size), tracks[tid]->timecode);
 
-  if (tracks[tid]->ptzr != -1)
+  if (tracks[tid]->ptzr != -1) {
+    packet_t *new_packet = new packet_t(clone_memory(tracks[tid]->payload->get_buffer(), tracks[tid]->payload->get_size()), tracks[tid]->timecode);
     PTZR(tracks[tid]->ptzr)->process(new_packet);
+  }
   //mxverb(3, boost::format("mpeg_ts: packet processed... (%1% bytes)\n") % tracks[tid]->payload->get_size());
   tracks[tid]->payload->remove(tracks[tid]->payload->get_size());
   tracks[tid]->processed    = false;
