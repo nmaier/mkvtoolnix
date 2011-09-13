@@ -22,18 +22,44 @@
 #include "common/mm_io.h"
 #include "merge/pr_generic.h"
 
-enum mpeg_ts_input_type_t {
+enum mpeg_ts_input_type_e {
   INPUT_PROBE = 0,
   INPUT_READ  = 1,
 };
 
-enum mpeg_ts_pid_type_t {
+enum mpeg_ts_pid_type_e {
   PAT_TYPE      = 0,
   PMT_TYPE      = 1,
   ES_VIDEO_TYPE = 2,
   ES_AUDIO_TYPE = 3,
   ES_SUBT_TYPE  = 4,
   ES_UNKNOWN    = 5,
+};
+
+enum mpeg_ts_stream_type_e {
+  ISO_11172_VIDEO           = 0x01, // ISO/IEC 11172 Video
+  ISO_13818_VIDEO           = 0x02, // ISO/IEC 13818-2 Video
+  ISO_11172_AUDIO           = 0x03, // ISO/IEC 11172 Audio
+  ISO_13818_AUDIO           = 0x04, // ISO/IEC 13818-3 Audio
+  ISO_13818_PRIVATE         = 0x05, // ISO/IEC 13818-1 private sections
+  ISO_13818_PES_PRIVATE     = 0x06, // ISO/IEC 13818-1 PES packets containing private data
+  ISO_13522_MHEG            = 0x07, // ISO/IEC 13512 MHEG
+  ISO_13818_DSMCC           = 0x08, // ISO/IEC 13818-1 Annex A  DSM CC
+  ISO_13818_TYPE_A          = 0x0a, // ISO/IEC 13818-6 Multiprotocol encapsulation
+  ISO_13818_TYPE_B          = 0x0b, // ISO/IEC 13818-6 DSM-CC U-N Messages
+  ISO_13818_TYPE_C          = 0x0c, // ISO/IEC 13818-6 Stream Descriptors
+  ISO_13818_TYPE_D          = 0x0d, // ISO/IEC 13818-6 Sections (any type, including private data)
+  ISO_13818_AUX             = 0x0e, // ISO/IEC 13818-1 auxiliary
+  ISO_13818_PART7_AUDIO     = 0x0f, // ISO/IEC 13818-7 Audio with ADTS transport sytax
+  ISO_14496_PART2_VIDEO     = 0x10, // ISO/IEC 14496-2 Visual (MPEG-4)
+  ISO_14496_PART3_AUDIO     = 0x11, // ISO/IEC 14496-3 Audio with LATM transport syntax
+  ISO_14496_PART10_VIDEO    = 0x1b, // ISO/IEC 14496-10 Video (MPEG-4 part 10/AVC, aka H.264)
+  STREAM_AUDIO_AC3          = 0x81, // Audio AC3 (A52)
+  STREAM_AUDIO_DTS          = 0x82, // Audio DTS
+  STREAM_AUDIO_AC3_LOSSLESS = 0x83, // Audio AC3 - Dolby lossless
+  STREAM_AUDIO_AC3_PLUS     = 0x84, // Audio AC3 - Dolby Digital Plus
+  STREAM_AUDIO_DTS_HD       = 0x85, // Audio DTS HD
+  STREAM_VIDEO_VC1          = 0xEA, // Video VC-1
 };
 
 /* TS packet header */
@@ -121,9 +147,14 @@ typedef struct {
   unsigned char PTS_DTS;
 } mpeg_ts_pes_header_t;
 
-struct mpeg_ts_track_t {
+class mpeg_ts_reader_c;
+
+class mpeg_ts_track_c {
+public:
+  mpeg_ts_reader_c &reader;
+
   bool processed;
-  mpeg_ts_pid_type_t type;      //can be PAT_TYPE, PMT_TYPE, ES_VIDEO_TYPE, ES_AUDIO_TYPE, ES_SUBT_TYPE, ES_UNKNOWN
+  mpeg_ts_pid_type_e type;      //can be PAT_TYPE, PMT_TYPE, ES_VIDEO_TYPE, ES_AUDIO_TYPE, ES_SUBT_TYPE, ES_UNKNOWN
   uint32_t fourcc;
   uint16_t pid;
   bool data_ready;
@@ -146,8 +177,9 @@ struct mpeg_ts_track_t {
   int a_channels, a_sample_rate, a_bits_per_sample, a_bsid;
   dts_header_t a_dts_header;
 
-  mpeg_ts_track_t()
-    : processed(false)
+  mpeg_ts_track_c(mpeg_ts_reader_c &p_reader)
+    : reader(p_reader)
+    , processed(false)
     , type(ES_UNKNOWN)
     , fourcc(0)
     , pid(0)
@@ -171,12 +203,14 @@ struct mpeg_ts_track_t {
     , a_bsid(0)
   {
   }
+
+  void send_to_packetizer();
 };
 
-typedef counted_ptr<mpeg_ts_track_t> mpeg_ts_track_ptr;
+typedef counted_ptr<mpeg_ts_track_c> mpeg_ts_track_ptr;
 
 class mpeg_ts_reader_c: public generic_reader_c {
-private:
+protected:
   mm_io_c *io;
   int64_t bytes_processed, size;
   bool PAT_found, PMT_found;
@@ -184,7 +218,7 @@ private:
   int es_to_process;
   int64_t m_global_timecode_offset;
 
-  mpeg_ts_input_type_t input_status; // can be INPUT_PROBE, INPUT_READ
+  mpeg_ts_input_type_e input_status; // can be INPUT_PROBE, INPUT_READ
   int track_buffer_ready;
 
   bool file_done;
@@ -224,11 +258,16 @@ public:
 private:
   int parse_pat(unsigned char *pat);
   int parse_pmt(unsigned char *pmt);
+  bool  parse_start_unit_packet(mpeg_ts_track_ptr &track, mpeg_ts_packet_header_t *packet_header, unsigned char *&payload, unsigned char &payload_size);
+  void probe_packet_complete(mpeg_ts_track_ptr &track, int tidx);
+
   file_status_e finish();
-  int send_to_packetizer(int tid);
+  int send_to_packetizer(mpeg_ts_track_ptr &track);
   void create_mpeg1_2_video_packetizer(mpeg_ts_track_ptr &track);
   void create_mpeg4_p10_es_video_packetizer(mpeg_ts_track_ptr &track);
   void create_vc1_video_packetizer(mpeg_ts_track_ptr &track);
+
+  friend class mpeg_ts_track_c;
 };
 
 #endif  // __R_MPEG_TS_H
