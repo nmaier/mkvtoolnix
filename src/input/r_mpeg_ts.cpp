@@ -736,7 +736,12 @@ mpeg_ts_reader_c::parse_packet(int id, unsigned char *buf) {
 
   unsigned char payload_size = m_detected_packet_size - (payload - (unsigned char *)hdr) - 4;
 
-  mpeg_ts_track_ptr &track   = tracks[tidx];
+  // Copy the counted_ptr instead of referencing it because functions
+  // called from this one will modify tracks.
+  mpeg_ts_track_ptr track    = tracks[tidx];
+
+  if (!track.is_set())
+    return false;
 
   if (hdr->payload_unit_start_indicator) {
     if (track->type == PAT_TYPE || track->type == PMT_TYPE) {
