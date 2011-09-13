@@ -36,8 +36,8 @@ mp3_packetizer_c::mp3_packetizer_c(generic_reader_c *p_reader,
   , m_byte_buffer(128 * 1024)
   , m_codec_id_set(false)
   , m_valid_headers_found(source_is_good)
-  , m_previous_timecode(-1)
-  , m_num_packets_with_same_timecode(0)
+  , m_previous_timecode(0)
+  , m_num_packets_since_previous_timecode(0)
   , m_s2tc(1152 * 1000000000ll, m_samples_per_sec)
   , m_single_packet_duration(1 * m_s2tc)
 {
@@ -104,6 +104,7 @@ mp3_packetizer_c::get_mp3_packet(mp3_header_t *mp3header) {
   // contains valid MP3 headers before the 'real' ones...
   // Screw the guys who program apps that use _random_ _trash_ for filling
   // gaps. Screw those who try to use AVI no matter the 'cost'!
+  bool track_headers_changed = false;
   if (!m_valid_headers_found) {
     pos = find_consecutive_mp3_headers(m_byte_buffer.get_buffer(), m_byte_buffer.get_size(), 5);
     if (0 > pos)
@@ -120,6 +121,11 @@ mp3_packetizer_c::get_mp3_packet(mp3_header_t *mp3header) {
     pos             = 0;
     m_bytes_skipped = 0;
     decode_mp3_header(m_byte_buffer.get_buffer(), mp3header);
+
+    set_audio_channels(mp3header->channels);
+    set_audio_sampling_freq(mp3header->sampling_frequency);
+    m_samples_per_sec     = mp3header->sampling_frequency;
+    track_headers_changed = true;
   }
 
   m_bytes_skipped += pos;
@@ -135,14 +141,15 @@ mp3_packetizer_c::get_mp3_packet(mp3_header_t *mp3header) {
     codec_id[codec_id.length() - 1] = (char)(mp3header->layer + '0');
     set_codec_id(codec_id.c_str());
 
-    if (1152 != m_samples_per_frame) {
-      m_s2tc.set(1000000000ll * m_samples_per_frame, m_samples_per_sec);
-      m_single_packet_duration = 1 * m_s2tc;
-      set_track_default_duration(m_single_packet_duration);
-    }
+    m_s2tc.set(1000000000ll * m_samples_per_frame, m_samples_per_sec);
+    m_single_packet_duration = 1 * m_s2tc;
+    set_track_default_duration(m_single_packet_duration);
 
-    rerender_track_headers();
+    track_headers_changed = true;
   }
+
+  if (track_headers_changed)
+    rerender_track_headers();
 
   if (mp3header->framesize > m_byte_buffer.get_size())
     return NULL;
@@ -173,21 +180,19 @@ mp3_packetizer_c::process(packet_cptr packet) {
 
   m_byte_buffer.add(packet->data->get_buffer(), packet->data->get_size());
   while ((mp3_packet = get_mp3_packet(&mp3header)) != NULL) {
+    bool timecode_valid =  (-1 != packet->timecode)
+                        && (   (0 == m_packetno)
+                            || (packet->timecode != m_previous_timecode));
+
     int64_t new_timecode;
+    if (timecode_valid) {
+      m_previous_timecode                   = packet->timecode;
+      new_timecode                          = packet->timecode;
+      m_num_packets_since_previous_timecode = 1;
 
-    if (-1 == packet->timecode)
-      new_timecode = m_packetno * m_s2tc;
-
-    else {
-      if ((-1 != m_previous_timecode) && (packet->timecode == m_previous_timecode)) {
-        new_timecode = m_previous_timecode + m_num_packets_with_same_timecode * m_s2tc;
-        ++m_num_packets_with_same_timecode;
-      } else {
-        new_timecode                     = packet->timecode;
-        m_num_packets_with_same_timecode = 0;
-      }
-
-      m_previous_timecode = packet->timecode;
+    } else {
+      new_timecode = m_previous_timecode + m_num_packets_since_previous_timecode * m_s2tc;
+      ++m_num_packets_since_previous_timecode;
     }
 
     add_packet(new packet_t(new memory_c(mp3_packet, mp3header.framesize, true), new_timecode, m_single_packet_duration));

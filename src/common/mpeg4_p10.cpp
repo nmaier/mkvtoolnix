@@ -139,6 +139,78 @@ slcopy(bit_cursor_c &r,
 }
 
 void
+mpeg4::p10::sps_info_t::dump() {
+  mxinfo(boost::format("sps_info dump:\n"
+                       "  id:                                    %1%\n"
+                       "  profile_idc:                           %2%\n"
+                       "  profile_compat:                        %3%\n"
+                       "  level_idc:                             %4%\n"
+                       "  log2_max_frame_num:                    %5%\n"
+                       "  pic_order_cnt_type:                    %6%\n"
+                       "  log2_max_pic_order_cnt_lsb:            %7%\n"
+                       "  offset_for_non_ref_pic:                %8%\n"
+                       "  offset_for_top_to_bottom_field:        %9%\n"
+                       "  num_ref_frames_in_pic_order_cnt_cycle: %10%\n"
+                       "  delta_pic_order_always_zero_flag:      %11%\n"
+                       "  frame_mbs_only:                        %12%\n"
+                       "  vui_present:                           %13%\n"
+                       "  ar_found:                              %14%\n"
+                       "  par_num:                               %15%\n"
+                       "  par_den:                               %16%\n"
+                       "  timing_info_present:                   %17%\n"
+                       "  num_units_in_tick:                     %18%\n"
+                       "  time_scale:                            %19%\n"
+                       "  fixed_frame_rate:                      %20%\n"
+                       "  crop_left:                             %21%\n"
+                       "  crop_top:                              %22%\n"
+                       "  crop_right:                            %23%\n"
+                       "  crop_bottom:                           %24%\n"
+                       "  width:                                 %25%\n"
+                       "  height:                                %26%\n"
+                       "  checksum:                              %|27$08x|\n")
+         % id
+         % profile_idc
+         % profile_compat
+         % level_idc
+         % log2_max_frame_num
+         % pic_order_cnt_type
+         % log2_max_pic_order_cnt_lsb
+         % offset_for_non_ref_pic
+         % offset_for_top_to_bottom_field
+         % num_ref_frames_in_pic_order_cnt_cycle
+         % delta_pic_order_always_zero_flag
+         % frame_mbs_only
+         % vui_present
+         % ar_found
+         % par_num
+         % par_den
+         % timing_info_present
+         % num_units_in_tick
+         % time_scale
+         % fixed_frame_rate
+         % crop_left
+         % crop_top
+         % crop_right
+         % crop_bottom
+         % width
+         % height
+         % checksum);
+}
+
+void
+mpeg4::p10::pps_info_t::dump() {
+  mxinfo(boost::format("pps_info dump:\n"
+                       "id: %1%\n"
+                       "sps_id: %2%\n"
+                       "pic_order_present: %3%\n"
+                       "checksum: %|4$08x|\n")
+         % id
+         % sps_id
+         % pic_order_present
+         % checksum);
+}
+
+void
 mpeg4::p10::slice_info_t::dump() {
   mxinfo(boost::format("slice_info dump:\n"
                        "  nalu_type:                  %1%\n"
@@ -347,7 +419,7 @@ mpeg4::p10::parse_sps(memory_cptr &buffer,
     }
     sps.timing_info_present = w.copy_bits(1, r);
     if (sps.timing_info_present) {
-      sps.num_units_in_tick = w.copy_bits(32, r);
+      sps.num_units_in_tick = w.copy_bits(32, r) * 2;
       sps.time_scale        = w.copy_bits(32, r);
       sps.fixed_frame_rate  = w.copy_bits(1, r);
     }
@@ -569,6 +641,7 @@ mpeg4::p10::avc_es_parser_c::avc_es_parser_c()
   , m_first_keyframe_found(false)
   , m_recovery_point_valid(false)
   , m_b_frames_since_keyframe(false)
+  , m_max_timecode(0)
   , m_generate_timecodes(false)
   , m_have_incomplete_frame(false)
   , m_ignore_nalu_size_length_errors(false)
@@ -684,6 +757,8 @@ mpeg4::p10::avc_es_parser_c::add_timecode(int64_t timecode) {
     --i;
   }
   m_timecodes.insert(i, timecode);
+
+  m_max_timecode = std::max(timecode, m_max_timecode);
 }
 
 void
@@ -1050,6 +1125,9 @@ mpeg4::p10::avc_es_parser_c::parse_slice(memory_cptr &buffer,
 
 void
 mpeg4::p10::avc_es_parser_c::default_cleanup() {
+  if (m_frames.size() > m_timecodes.size())
+    create_missing_timecodes();
+
   std::deque<avc_frame_t>::iterator i(m_frames.begin());
   std::deque<int64_t>::iterator t(m_timecodes.begin());
 
@@ -1077,10 +1155,6 @@ mpeg4::p10::avc_es_parser_c::default_cleanup() {
 
 void
 mpeg4::p10::avc_es_parser_c::cleanup() {
-  std::deque<avc_frame_t>::iterator i(m_frames.begin());
-  std::deque<int64_t>::iterator t(m_timecodes.begin());
-  unsigned j;
-
   if (m_frames.empty())
     return;
 
@@ -1090,16 +1164,15 @@ mpeg4::p10::avc_es_parser_c::cleanup() {
     return;
   }
 
+  if (m_frames.size() > m_timecodes.size())
+    create_missing_timecodes();
+
+  std::deque<avc_frame_t>::iterator i(m_frames.begin());
+  std::deque<int64_t>::iterator t(m_timecodes.begin());
+
   // This may be wrong but is needed for mkvmerge to work correctly
   // (cluster_helper etc).
   i->m_keyframe = true;
-
-  if (m_timecodes.size() < m_frames.size()) {
-    mxverb(4, boost::format("mpeg4::p10::avc_es_parser_c::cleanup() numfr %1% sti %2%\n") % m_frames.size() % m_timecodes.size());
-    m_timecodes.erase(m_timecodes.begin(), m_timecodes.begin() + m_frames.size());
-    m_frames.clear();
-    return;
-  }
 
   slice_info_t &idr = i->m_si;
   sps_info_t &sps = m_sps_info_list[idr.sps];
@@ -1116,7 +1189,7 @@ mpeg4::p10::avc_es_parser_c::cleanup() {
   std::vector<poc_t> poc;
 
   if (0 == sps.pic_order_cnt_type) {
-    j = 0;
+    unsigned int j = 0;
 
     unsigned int prev_pic_order_cnt_msb = 0;
     unsigned int prev_pic_order_cnt_lsb = 0;
@@ -1164,6 +1237,7 @@ mpeg4::p10::avc_es_parser_c::cleanup() {
   size_t num_frames    = m_frames.size();
   size_t num_timecodes = m_timecodes.size();
 
+  unsigned int j;
   for (j = 0; num_frames > j; ++j, ++t) {
     poc[j].timecode = *t;
     poc[j].duration = num_frames > (j + 1)       ? *(t + 1)                - poc[j].timecode
@@ -1186,7 +1260,7 @@ mpeg4::p10::avc_es_parser_c::cleanup() {
   }
 
   m_frames_out.insert(m_frames_out.end(), m_frames.begin(), m_frames.end());
-  m_timecodes.erase(m_timecodes.begin(), m_timecodes.begin() + m_frames.size());
+  m_timecodes.erase(m_timecodes.begin(), m_timecodes.begin() + std::min(num_frames, num_timecodes));
   m_frames.clear();
 }
 
@@ -1299,4 +1373,15 @@ mpeg4::p10::avc_es_parser_c::init_nalu_names() {
   m_nalu_names_by_type[NALU_TYPE_END_OF_SEQ]    = "end of sequence";
   m_nalu_names_by_type[NALU_TYPE_END_OF_STREAM] = "end of stream";
   m_nalu_names_by_type[NALU_TYPE_FILLER_DATA]   = "filler";
+}
+
+void
+mpeg4::p10::avc_es_parser_c::create_missing_timecodes() {
+  size_t num_timecodes = m_timecodes.size();
+  size_t num_frames    = m_frames.size();
+
+  while (num_timecodes < num_frames) {
+    ++num_timecodes;
+    add_timecode(m_max_timecode + m_default_duration);
+  }
 }

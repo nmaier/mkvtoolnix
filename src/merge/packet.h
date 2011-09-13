@@ -149,6 +149,10 @@ struct packet_t {
 
   ~packet_t();
 
+  bool has_timecode() {
+    return 0 <= timecode;
+  }
+
   bool has_bref() {
     return 0 <= bref;
   }

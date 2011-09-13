@@ -205,6 +205,8 @@ void M2VParser::FlushWaitQueue(){
   while(!waitQueue.empty()){
     delete waitQueue.front();
     waitQueue.pop();
+    if (!m_timecodes.empty())
+      m_timecodes.pop_front();
   }
 }
 
@@ -212,7 +214,12 @@ void M2VParser::StampFrame(MPEGFrame* frame){
   MediaTime timeunit;
 
   timeunit = (MediaTime)(1000000000/(m_seqHdr.frameOrFieldRate*2));
-  frame->timecode = previousTimecode + previousDuration;
+  if (m_timecodes.empty())
+    frame->timecode = previousTimecode + previousDuration;
+  else {
+    frame->timecode = m_timecodes.front();
+    m_timecodes.pop_front();
+  }
   previousTimecode = frame->timecode;
   frame->duration = (MediaTime)(frame->duration * timeunit);
   previousDuration = frame->duration;
@@ -471,3 +478,10 @@ MPEGFrame* M2VParser::ReadFrame(){
   return frame;
 }
 
+void
+M2VParser::AddTimecode(int64_t timecode) {
+  std::list<int64_t>::iterator idx = m_timecodes.begin();
+  while ((idx != m_timecodes.end()) && (timecode > *idx))
+    idx++;
+  m_timecodes.insert(idx, timecode);
+}

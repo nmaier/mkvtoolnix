@@ -92,7 +92,7 @@ mpeg4_p10_es_video_packetizer_c::add_extra_data(memory_cptr data) {
 int
 mpeg4_p10_es_video_packetizer_c::process(packet_cptr packet) {
   try {
-    if (!m_allow_timecode_generation)
+    if (packet->has_timecode())
       m_parser.add_timecode(packet->timecode);
     m_parser.add_bytes(packet->data->get_buffer(), packet->data->get_size());
     flush_frames();
@@ -166,6 +166,12 @@ mpeg4_p10_es_video_packetizer_c::enable_timecode_generation(bool enable,
     m_parser.enable_timecode_generation(default_duration);
     set_track_default_duration(default_duration);
   }
+}
+
+void
+mpeg4_p10_es_video_packetizer_c::set_track_default_duration(int64_t default_duration) {
+  m_parser.set_default_duration(default_duration);
+  generic_packetizer_c::set_track_default_duration(default_duration);
 }
 
 void

@@ -133,6 +133,9 @@ mpeg1_2_video_packetizer_c::process(packet_cptr packet) {
   unsigned char *data_ptr = old_memory->get_buffer();
   int new_bytes           = old_memory->get_size();
 
+  if (packet->has_timecode())
+    m_parser.AddTimecode(packet->timecode);
+
   do {
     int bytes_to_add = (m_parser.GetFreeBufferSpace() < new_bytes) ? m_parser.GetFreeBufferSpace() : new_bytes;
     if (0 < bytes_to_add) {

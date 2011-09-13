@@ -88,6 +88,7 @@ private:
   MPEG2ParserState_e parserState;
   MPEGVideoBuffer * mpgBuf;
   bool bFrameMissingReferenceWarning;
+  std::list<int64_t> m_timecodes;
 
   int32_t InitParser();
   void DumpQueues();
@@ -142,6 +143,8 @@ public:
   void SetProbeMode() {
     probing = true;
   }
+
+  void AddTimecode(int64_t timecode);
 };
 
 
