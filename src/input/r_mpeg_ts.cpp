@@ -748,14 +748,14 @@ mpeg_ts_reader_c::parse_packet(int id, unsigned char *buf) {
       if ((1 + *payload) > payload_size)
         return false;
 
-      table_data                  = (mpeg_ts_pat_t *)(payload + 1 + *payload);
-      payload_size               -=  1 + *payload;
+      table_data           = (mpeg_ts_pat_t *)(payload + 1 + *payload);
+      payload_size        -=  1 + *payload;
       track->payload_size  = SECTION_LENGTH(table_data) + 3;
-      payload                     = (unsigned char *)table_data;
+      payload              = (unsigned char *)table_data;
 
     } else {
-      pes_data                   = (mpeg_ts_pes_header_t *)payload;
-      track->payload_size = ((uint16_t) (pes_data->PES_packet_length_msb) << 8) | (pes_data->PES_packet_length_lsb);
+      pes_data             = (mpeg_ts_pes_header_t *)payload;
+      track->payload_size  = ((uint16_t) (pes_data->PES_packet_length_msb) << 8) | (pes_data->PES_packet_length_lsb);
 #if 1
       if (track->payload_size > 0)
         track->payload_size = track->payload_size - 3 - pes_data->PES_header_data_length;
@@ -765,7 +765,7 @@ mpeg_ts_reader_c::parse_packet(int id, unsigned char *buf) {
 
       if (   (track->payload_size        == 0)
           && (track->payload->get_size() != 0)
-          && (input_status                      == INPUT_READ)) {
+          && (input_status               == INPUT_READ)) {
         track->payload_size = track->payload->get_size();
         mxverb(3, boost::format("mpeg_ts: Table/PES completed (%1%) for PID %2%\n") % track->payload_size % table_pid);
         send_to_packetizer(tidx);
