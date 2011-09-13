@@ -816,6 +816,8 @@ mpeg_ts_reader_c::probe_packet_complete(mpeg_ts_track_ptr &track,
     else if (FOURCC('A', 'V', 'C', '1') == track->fourcc)
       result = new_stream_v_avc(track->payload->get_buffer(), track->payload->get_size(), track);
 
+    track->payload->set_chunk_size(512 * 1024);
+
   } else if (track->type == ES_AUDIO_TYPE) {
     if (FOURCC('M', 'P', '2', ' ') == track->fourcc)
       result = new_stream_a_mpeg(track->payload->get_buffer(), track->payload->get_size(), track);

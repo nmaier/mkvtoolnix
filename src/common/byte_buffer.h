@@ -20,73 +20,90 @@
 
 class byte_buffer_c {
 private:
-  unsigned char *data;
-  int size, pos, max_size;
+  unsigned char *m_data;
+  size_t m_filled, m_offset, m_size, m_chunk_size;
+  size_t m_num_reallocs, m_max_alloced_size;
 
 public:
-  byte_buffer_c(int nmax_size = 128 * 1024):
-    data(NULL),
-    size(0),
-    pos(0),
-    max_size(nmax_size) {
+  byte_buffer_c(size_t chunk_size = 128 * 1024)
+    : m_data(safemalloc(chunk_size))
+    , m_filled(0)
+    , m_offset(0)
+    , m_size(chunk_size)
+    , m_chunk_size(chunk_size)
+    , m_num_reallocs(1)
+    , m_max_alloced_size(chunk_size)
+  {
   };
+
   virtual ~byte_buffer_c() {
-    safefree(data);
-  };
+    safefree(m_data);
+  }
 
   void trim() {
-    int new_size;
-    unsigned char *temp_buf;
+    if (m_offset == 0)
+      return;
 
-    if (pos == 0)
-      return;
-    new_size = size - pos;
-    if (new_size == 0) {
-      safefree(data);
-      data = NULL;
-      size = 0;
-      pos = 0;
-      return;
+    memmove(m_data, &m_data[m_offset], m_filled);
+
+    m_offset        = 0;
+    size_t new_size = (m_filled / m_chunk_size + 1) * m_chunk_size;
+
+    if (new_size != m_size) {
+      m_data = saferealloc(m_data, new_size);
+      m_size = new_size;
+
+      count_alloc(new_size);
     }
-    temp_buf = (unsigned char *)safemalloc(new_size);
-    memcpy(temp_buf, &data[pos], new_size);
-    safefree(data);
-    data = temp_buf;
-    size = new_size;
-    pos = 0;
   }
 
   void add(const unsigned char *new_data, int new_size) {
-    if ((pos != 0) && ((size + new_size) >= max_size))
+    if ((m_offset != 0) && ((m_filled + new_size) >= m_chunk_size))
       trim();
-    data = (unsigned char *)saferealloc(data, size + new_size);
-    memcpy(&data[size], new_data, new_size);
-    size += new_size;
-  };
+
+    if ((m_offset + m_filled + new_size) > m_size) {
+      m_size = ((m_offset + m_filled + new_size) / m_chunk_size + 1) * m_chunk_size;
+      m_data = saferealloc(m_data, m_size);
+      count_alloc(m_size);
+    }
+
+    memcpy(&m_data[m_offset + m_filled], new_data, new_size);
+    m_filled += new_size;
+  }
 
   void add(memory_cptr &new_buffer) {
     add(new_buffer->get_buffer(), new_buffer->get_size());
   }
 
-  void remove(int num) {
-    if ((pos + num) > size)
-      mxerror(Y("byte_buffer_c: (pos + num) > size. Should not have happened. Please file a bug report.\n"));
-    pos += num;
-    if (pos == size) {
-      safefree(data);
-      data = NULL;
-      size = 0;
-      pos = 0;
-    }
-  };
+  void remove(size_t num) {
+    if (num > m_filled)
+      mxerror("byte_buffer_c: num > m_filled. Should not have happened. Please file a bug report.\n");
+    m_offset += num;
+    m_filled -= num;
+
+    if (m_filled >= m_chunk_size)
+      trim();
+  }
 
   unsigned char *get_buffer() {
-    return &data[pos];
-  };
+    return &m_data[m_offset];
+  }
 
-  int get_size() {
-    return size - pos;
-  };
+  size_t get_size() {
+    return m_filled;
+  }
+
+  void set_chunk_size(size_t chunk_size) {
+    m_chunk_size = chunk_size;
+    trim();
+  }
+
+private:
+
+  void count_alloc(size_t filled) {
+    ++m_num_reallocs;
+    m_max_alloced_size = std::max(m_max_alloced_size, filled);
+  }
 };
 
 typedef counted_ptr<byte_buffer_c> byte_buffer_cptr;
