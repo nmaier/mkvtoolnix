@@ -29,6 +29,7 @@
 #include "output/p_avc.h"
 #include "output/p_mp3.h"
 #include "output/p_ac3.h"
+#include "output/p_dts.h"
 #include "output/p_truehd.h"
 #include "output/p_vc1.h"
 
@@ -66,6 +67,7 @@ typedef enum {
   ISO_14496_PART3_AUDIO     = 0x11, // ISO/IEC 14496-3 Audio with LATM transport syntax
   ISO_14496_PART10_VIDEO    = 0x1b, // ISO/IEC 14496-10 Video (MPEG-4 part 10/AVC, aka H.264)
   STREAM_AUDIO_AC3          = 0x81, // Audio AC3 (A52)
+  STREAM_AUDIO_DTS          = 0x82, // Audio DTS
   STREAM_AUDIO_AC3_LOSSLESS = 0x83, // Audio AC3 - Dolby lossless
   STREAM_AUDIO_AC3_PLUS     = 0x84, // Audio AC3 - Dolby Digital Plus
   STREAM_AUDIO_DTS_HD       = 0x85, // Audio DTS HD
@@ -409,6 +411,7 @@ mpeg_ts_reader_c::parse_pmt(unsigned char *pmt) {
         track->type   = ES_AUDIO_TYPE;
         track->fourcc = FOURCC('T', 'R', 'H', 'D');
         break;
+      case STREAM_AUDIO_DTS:
       case STREAM_AUDIO_DTS_HD:
         track->type   = ES_AUDIO_TYPE;
         track->fourcc = FOURCC('D', 'T', 'S', ' ');
@@ -642,6 +645,16 @@ mpeg_ts_reader_c::new_stream_a_ac3(unsigned char *buf,
 }
 
 int
+mpeg_ts_reader_c::new_stream_a_dts(unsigned char *buf,
+                                   unsigned int length,
+                                   mpeg_ts_track_ptr &track) {
+  if (-1 == find_dts_header(buf, length, &track->a_dts_header))
+    return FILE_STATUS_MOREDATA;
+
+  return 0;
+}
+
+int
 mpeg_ts_reader_c::new_stream_a_truehd(unsigned char *buf,
                                       unsigned int length,
                                       mpeg_ts_track_ptr &track) {
@@ -866,6 +879,8 @@ mpeg_ts_reader_c::parse_packet(int id, unsigned char *buf) {
       ret = new_stream_a_mpeg(track->payload->get_buffer(), track->payload->get_size(), track);
     else if (FOURCC('A', 'C', '3', ' ') == track->fourcc)
       ret = new_stream_a_ac3(track->payload->get_buffer(), track->payload->get_size(), track);
+    else if (FOURCC('D', 'T', 'S', ' ') == track->fourcc)
+      ret = new_stream_a_dts(track->payload->get_buffer(), track->payload->get_size(), track);
     else if (FOURCC('T', 'R', 'H', 'D') == track->fourcc)
       ret = new_stream_a_truehd(track->payload->get_buffer(), track->payload->get_size(), track);
 
@@ -922,6 +937,10 @@ mpeg_ts_reader_c::create_packetizer(int64_t id) {
     } else if (FOURCC('A', 'C', '3', ' ') == track->fourcc) {
       mxinfo_tid(m_ti.m_fname, id, boost::format(Y("Using the %1%AC3 output module.\n")) % (16 == track->a_bsid ? "E" : ""));
       track->ptzr = add_packetizer(new ac3_packetizer_c(this, m_ti, track->a_sample_rate, track->a_channels, track->a_bsid));
+
+    } else if (FOURCC('D', 'T', 'S', ' ') == track->fourcc) {
+      mxinfo_tid(m_ti.m_fname, id, Y("Using the DTS output module.\n"));
+      track->ptzr = add_packetizer(new dts_packetizer_c(this, m_ti, track->a_dts_header));
 
     } else if (FOURCC('T', 'R', 'H', 'D') == track->fourcc) {
       mxinfo_tid(m_ti.m_fname, id, Y("Using the TrueHD output module.\n"));

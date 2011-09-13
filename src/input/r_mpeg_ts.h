@@ -18,6 +18,7 @@
 #include "common/common_pch.h"
 
 #include "common/byte_buffer.h"
+#include "common/dts.h"
 #include "common/mm_io.h"
 #include "merge/pr_generic.h"
 
@@ -143,6 +144,7 @@ struct mpeg_ts_track_t {
 
   // audio related parameters
   int a_channels, a_sample_rate, a_bits_per_sample, a_bsid;
+  dts_header_t a_dts_header;
 
   mpeg_ts_track_t()
     : processed(false)
@@ -212,6 +214,7 @@ public:
   virtual int new_stream_v_avc(unsigned char *buf, unsigned int length, mpeg_ts_track_ptr &track);
   virtual int new_stream_a_mpeg(unsigned char *buf, unsigned int length, mpeg_ts_track_ptr &track);
   virtual int new_stream_a_ac3(unsigned char *buf, unsigned int length, mpeg_ts_track_ptr &track);
+  virtual int new_stream_a_dts(unsigned char *buf, unsigned int length, mpeg_ts_track_ptr &track);
   virtual int new_stream_a_truehd(unsigned char *buf, unsigned int length, mpeg_ts_track_ptr &track);
   virtual bool parse_packet(int id, unsigned char *buf);
 
