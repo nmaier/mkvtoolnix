@@ -36,6 +36,7 @@ file_type_t::get_supported() {
   s_supported_file_types.push_back(file_type_t(Y("MP4 audio/video files"),               "mp4 m4v"));
   s_supported_file_types.push_back(file_type_t(Y("MPEG audio files"),                    "mp2 mp3"));
   s_supported_file_types.push_back(file_type_t(Y("MPEG program streams"),                "mpg mpeg m2v evo evob vob"));
+  s_supported_file_types.push_back(file_type_t(Y("MPEG transport streams"),              "ts m2ts"));
   s_supported_file_types.push_back(file_type_t(Y("MPEG video elementary streams"),       "m1v m2v"));
   s_supported_file_types.push_back(file_type_t(Y("Matroska audio/video files"),          "mka mks mkv mk3d webm webmv webma"));
   s_supported_file_types.push_back(file_type_t(Y("PGS/SUP subtitles"),                   "sup"));
