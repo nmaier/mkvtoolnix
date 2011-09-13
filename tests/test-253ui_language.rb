@@ -8,7 +8,7 @@ class T_253ui_language < Test
   def run
     hashes = Array.new
 
-    %w{en_US de_DE es_ES fr_FR it_IT ja_JP nl_NL ru_RU tr_TR uk_UA zh_CN zh_TW}.each do |language|
+    %w{en_US de_DE es_ES fr_FR it_IT ja_JP lt_LT nl_NL ru_RU tr_TR uk_UA zh_CN zh_TW}.each do |language|
       merge "/dev/null", "--ui-language #{language} data/avi/v.avi | head -n 2 | tail -n 1 > #{tmp}-#{language}"
       hashes << hash_file("#{tmp}-#{language}")
 
