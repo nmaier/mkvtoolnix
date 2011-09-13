@@ -19,36 +19,40 @@
 
 #include "common/common_pch.h"
 
-void MTX_DLL_API safefree(void *p);
+inline void
+safefree(void *p) {
+  if (NULL != p)
+    free(p);
+}
 
 #define safemalloc(s) _safemalloc(s, __FILE__, __LINE__)
-void *MTX_DLL_API _safemalloc(size_t size, const char *file, int line);
+unsigned char *MTX_DLL_API _safemalloc(size_t size, const char *file, int line);
 
 #define safememdup(src, size) _safememdup(src, size, __FILE__, __LINE__)
-void *MTX_DLL_API _safememdup(const void *src, size_t size, const char *file, int line);
+unsigned char *MTX_DLL_API _safememdup(const void *src, size_t size, const char *file, int line);
 
 #define safestrdup(s) _safestrdup(s, __FILE__, __LINE__)
 inline char *
 _safestrdup(const std::string &s,
             const char *file,
             int line) {
-  return static_cast<char *>(_safememdup(s.c_str(), s.length() + 1, file, line));
+  return reinterpret_cast<char *>(_safememdup(s.c_str(), s.length() + 1, file, line));
 }
 inline unsigned char *
 _safestrdup(const unsigned char *s,
             const char *file,
             int line) {
-  return static_cast<unsigned char *>(_safememdup(s, strlen(reinterpret_cast<const char *>(s)) + 1, file, line));
+  return _safememdup(s, strlen(reinterpret_cast<const char *>(s)) + 1, file, line);
 }
 inline char *
 _safestrdup(const char *s,
             const char *file,
             int line) {
-  return static_cast<char *>(_safememdup(s, strlen(s) + 1, file, line));
+  return reinterpret_cast<char *>(_safememdup(s, strlen(s) + 1, file, line));
 }
 
 #define saferealloc(mem, size) _saferealloc(mem, size, __FILE__, __LINE__)
-void *MTX_DLL_API _saferealloc(void *mem, size_t size, const char *file, int line);
+unsigned char *MTX_DLL_API _saferealloc(void *mem, size_t size, const char *file, int line);
 
 class MTX_DLL_API memory_c;
 typedef counted_ptr<memory_c> memory_cptr;

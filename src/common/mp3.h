@@ -26,7 +26,7 @@ typedef struct {
   int channel_mode, channels;
   int mode_extension;
   int copyright, original, emphasis;
-  int framesize;
+  size_t framesize;
   int samples_per_channel;
   bool is_tag;
 } mp3_header_t;

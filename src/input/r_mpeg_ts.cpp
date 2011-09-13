@@ -781,7 +781,7 @@ mpeg_ts_reader_c::parse_packet(int id, unsigned char *buf) {
 
   track->payload->add(payload, payload_size);
 
-  if (track->payload->get_size() == track->payload_size)
+  if (static_cast<int>(track->payload->get_size()) == track->payload_size)
     track->data_ready = true;
 
   if (!track->data_ready)
