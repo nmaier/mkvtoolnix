@@ -454,7 +454,6 @@ mpeg_ts_reader_c::parse_pmt(unsigned char *pmt) {
           }
           break;
         case 0x0a: // ISO 639 language descriptor
-          mxinfo(boost::format("lang desc! len %1%\n") % static_cast<unsigned int>(pmt_descriptor->length));
           if (3 <= pmt_descriptor->length) {
             int language_idx = map_to_iso639_2_code(std::string(reinterpret_cast<char *>(pmt_descriptor + 1), 3).c_str());
             if (-1 != language_idx)
