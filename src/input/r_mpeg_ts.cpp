@@ -21,6 +21,7 @@
 #include "common/math.h"
 #include "common/mp3.h"
 #include "common/ac3.h"
+#include "common/iso639.h"
 #include "common/truehd.h"
 #include "common/mpeg1_2.h"
 #include "common/mpeg4_p2.h"
@@ -215,8 +216,13 @@ mpeg_ts_reader_c::identify() {
                        : FOURCC('L', 'P', 'C', 'M') == track->fourcc ? "LPCM"
                        :                                               NULL;
 
-    if (fourcc)
-      id_result_track(i, ES_AUDIO_TYPE == track->type ? ID_RESULT_TRACK_AUDIO : ID_RESULT_TRACK_VIDEO, fourcc);
+    if (!fourcc)
+      continue;
+
+    std::vector<std::string> verbose_info;
+    verbose_info.push_back((boost::format("language:%1%") % escape(track->language)).str());
+
+    id_result_track(i, ES_AUDIO_TYPE == track->type ? ID_RESULT_TRACK_AUDIO : ID_RESULT_TRACK_VIDEO, fourcc, verbose_info);
   }
 }
 
@@ -428,21 +434,33 @@ mpeg_ts_reader_c::parse_pmt(unsigned char *pmt) {
     pmt_descriptor = (mpeg_ts_pmt_descriptor_t *)((unsigned char *)pmt_pid_info + sizeof(mpeg_ts_pmt_pid_info_t));
 
     while (pmt_descriptor < (mpeg_ts_pmt_descriptor_t *)((unsigned char *)pmt_pid_info + sizeof(mpeg_ts_pmt_pid_info_t) + es_info_length)) {
-      if (pmt_pid_info->stream_type == ISO_13818_PES_PRIVATE) { // PES containig private data
-        switch(pmt_descriptor->tag) {
-          case 0x56: // Teletext descriptor
+      switch(pmt_descriptor->tag) {
+        case 0x56: // Teletext descriptor
+          if (pmt_pid_info->stream_type == ISO_13818_PES_PRIVATE) { // PES containig private data
             track->type   = ES_UNKNOWN;
             mxverb(3, boost::format("mpeg_ts:parse_pmt: Teletext found but not handled !!\n"));
-            break;
-          case 0x59: // Subtitles descriptor
+          }
+          break;
+        case 0x59: // Subtitles descriptor
+          if (pmt_pid_info->stream_type == ISO_13818_PES_PRIVATE) { // PES containig private data
             track->type   = ES_SUBT_TYPE;
             track->fourcc = FOURCC('V', 'S', 'U', 'B');
-            break;
-          case 0x6A: // AC3 descriptor
+          }
+          break;
+        case 0x6A: // AC3 descriptor
+          if (pmt_pid_info->stream_type == ISO_13818_PES_PRIVATE) { // PES containig private data
             track->type   = ES_AUDIO_TYPE;
             track->fourcc = FOURCC('A', 'C', '3', ' ');
-            break;
-        }
+          }
+          break;
+        case 0x0a: // ISO 639 language descriptor
+          mxinfo(boost::format("lang desc! len %1%\n") % static_cast<unsigned int>(pmt_descriptor->length));
+          if (3 <= pmt_descriptor->length) {
+            int language_idx = map_to_iso639_2_code(std::string(reinterpret_cast<char *>(pmt_descriptor + 1), 3).c_str());
+            if (-1 != language_idx)
+              track->language = iso639_languages[language_idx].iso639_2_code;
+          }
+          break;
       }
 
       pmt_descriptor = (mpeg_ts_pmt_descriptor_t *)((unsigned char *)pmt_descriptor + sizeof(mpeg_ts_pmt_descriptor_t) + pmt_descriptor->length);

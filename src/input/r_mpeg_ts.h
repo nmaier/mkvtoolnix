@@ -165,7 +165,6 @@ public:
   int ptzr;                    // the actual packetizer instance
 
   int64_t timecode;
-  //int64_t timecode_offset;
 
   // video related parameters
   bool v_interlaced;
@@ -176,6 +175,9 @@ public:
   // audio related parameters
   int a_channels, a_sample_rate, a_bits_per_sample, a_bsid;
   dts_header_t a_dts_header;
+
+  // general track parameters
+  std::string language;
 
   mpeg_ts_track_c(mpeg_ts_reader_c &p_reader)
     : reader(p_reader)
@@ -201,6 +203,7 @@ public:
     , a_sample_rate(0)
     , a_bits_per_sample(0)
     , a_bsid(0)
+    , language(std::string("und"))
   {
   }
 
