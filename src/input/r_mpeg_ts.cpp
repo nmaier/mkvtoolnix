@@ -750,14 +750,14 @@ mpeg_ts_reader_c::parse_packet(int id, unsigned char *buf) {
   else {
     mpeg_ts_adaptation_field_t *adf = (mpeg_ts_adaptation_field_t *)((unsigned char *)hdr + sizeof(mpeg_ts_packet_header_t));
 
-    if (adf->adaptation_field_length > (m_detected_packet_size - sizeof(mpeg_ts_packet_header_t) - 4)) //no payload ?
+    if (payload >= (buf + m_detected_packet_size))
       return false;
 
     adf_discontinuity_indicator = adf->discontinuity_indicator;
     payload                     = (unsigned char *)hdr + sizeof(mpeg_ts_packet_header_t) + adf->adaptation_field_length + 1;
   }
 
-  unsigned char payload_size = m_detected_packet_size - (payload - (unsigned char *)hdr) - 4;
+  unsigned char payload_size = m_detected_packet_size - (payload - (unsigned char *)hdr);
 
   // Copy the counted_ptr instead of referencing it because functions
   // called from this one will modify tracks.
@@ -927,7 +927,7 @@ mpeg_ts_reader_c::parse_start_unit_packet(mpeg_ts_track_ptr &track,
     }
 
     payload      = &pes_data->PES_header_data_length + pes_data->PES_header_data_length + 1;
-    payload_size = ((unsigned char *)packet_header + m_detected_packet_size - 4) - (unsigned char *) payload;
+    payload_size = ((unsigned char *)packet_header + m_detected_packet_size) - (unsigned char *) payload;
     // this condition is for ES probing when there is still not enough data for detection
     if (track->payload_size == 0 && track->payload->get_size() != 0)
       track->data_ready = true;
