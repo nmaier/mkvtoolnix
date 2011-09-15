@@ -211,7 +211,6 @@ public:
     , a_sample_rate(0)
     , a_bits_per_sample(0)
     , a_bsid(0)
-    , language(std::string("und"))
   {
   }
 

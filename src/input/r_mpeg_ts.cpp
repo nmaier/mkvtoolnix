@@ -218,7 +218,8 @@ mpeg_ts_reader_c::identify() {
       continue;
 
     std::vector<std::string> verbose_info;
-    verbose_info.push_back((boost::format("language:%1%") % escape(track->language)).str());
+    if (!track->language.empty())
+      verbose_info.push_back((boost::format("language:%1%") % escape(track->language)).str());
 
     id_result_track(i, ES_AUDIO_TYPE == track->type ? ID_RESULT_TRACK_AUDIO : ID_RESULT_TRACK_VIDEO, fourcc, verbose_info);
   }
@@ -950,7 +951,9 @@ mpeg_ts_reader_c::create_packetizer(int64_t id) {
   if ((0 == track->ptzr) || !demuxing_requested(type, id))
     return;
 
-  m_ti.m_id = id;
+  m_ti.m_id       = id;
+  m_ti.m_language = track->language;
+
   if (ES_AUDIO_TYPE == track->type) {
     if (   (FOURCC('M', 'P', '1', ' ') == track->fourcc)
         || (FOURCC('M', 'P', '2', ' ') == track->fourcc)
