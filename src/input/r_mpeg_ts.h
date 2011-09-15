@@ -62,28 +62,32 @@ enum mpeg_ts_stream_type_e {
   STREAM_VIDEO_VC1          = 0xEA, // Video VC-1
 };
 
+#if defined(COMP_MSC)
+#pragma pack(push,1)
+#endif
+
 /* TS packet header */
-typedef struct {
+struct PACKED_STRUCTURE mpeg_ts_packet_header_t {
   unsigned char sync_byte;
   unsigned char pid_msb:5, transport_priority:1, payload_unit_start_indicator:1, transport_error_indicator:1;
   unsigned char pid_lsb;
   unsigned char continuity_counter:4, adaptation_field_control:2, transport_scrambling_control:2;
-} mpeg_ts_packet_header_t;
+};
 
 /* Adaptation field */
-typedef struct {
+struct PACKED_STRUCTURE mpeg_ts_adaptation_field_t {
   unsigned char adaptation_field_length;
   unsigned char adaptation_field_extension_flag:1, transport_private_data_flag:1, splicing_point_flag:1, opcr_flag:1,
                 pcr_flag:1, elementary_stream_priority_indicator:1, random_access_indicator:1, discontinuity_indicator:1;
-} mpeg_ts_adaptation_field_t;
+};
 
 /* CRC */
-typedef struct {
+struct PACKED_STRUCTURE mpeg_ts_crc_t {
   unsigned char crc_3msb, crc_2msb, crc_1msb, crc_lsb;
-} mpeg_ts_crc_t;
+};
 
 /* PAT header */
-typedef struct {
+struct PACKED_STRUCTURE mpeg_ts_pat_t {
   unsigned char table_id;
   unsigned char section_length_msb:4, reserved:2, zero:1, section_syntax_indicator:1;
   unsigned char section_length_lsb;
@@ -92,18 +96,18 @@ typedef struct {
   unsigned char current_next_indicator:1, version_number:5, reserved2:2;
   unsigned char section_number;
   unsigned char last_section_number;
-} mpeg_ts_pat_t;
+};
 
 /* PAT section */
-typedef struct {
+struct PACKED_STRUCTURE mpeg_ts_pat_section_t {
   unsigned char program_number_msb;
   unsigned char program_number_lsb;
   unsigned char pid_msb:5, reserved3:3;
   unsigned char pid_lsb;
-} mpeg_ts_pat_section_t;
+};
 
 /* PMT header */
-typedef struct {
+struct PACKED_STRUCTURE mpeg_ts_pmt_t {
   unsigned char table_id;
   unsigned char section_length_msb:4, reserved:2, zero:1, section_syntax_indicator:1;
   unsigned char section_length_lsb;
@@ -116,25 +120,25 @@ typedef struct {
   unsigned char pcr_pid_lsb;
   unsigned char program_info_length_msb:4, reserved4:4;
   unsigned char program_info_length_lsb:8;
-} mpeg_ts_pmt_t;
+};
 
 /* PMT descriptor */
-typedef struct {
+struct PACKED_STRUCTURE mpeg_ts_pmt_descriptor_t {
   unsigned char tag;
   unsigned char length;
-} mpeg_ts_pmt_descriptor_t;
+};
 
 /* PMT pid info */
-typedef struct {
+struct PACKED_STRUCTURE mpeg_ts_pmt_pid_info_t {
   unsigned char stream_type;
   unsigned char pid_msb:5, reserved:3;
   unsigned char pid_lsb;
   unsigned char es_info_length_msb:4, reserved2:4;
   unsigned char es_info_length_lsb;
-} mpeg_ts_pmt_pid_info_t;
+};
 
 /* PES header */
-typedef struct {
+struct PACKED_STRUCTURE mpeg_ts_pes_header_t {
   unsigned char packet_start_code_prefix_2msb;
   unsigned char packet_start_code_prefix_1msb;
   unsigned char packet_start_code_prefix_lsb;
@@ -145,7 +149,11 @@ typedef struct {
   unsigned char PES_extension:1, PES_CRC:1, additional_copy_info:1, DSM_trick_mode:1, ES_rate:1, ESCR:1, PTS_DTS_flags:2;
   unsigned char PES_header_data_length;
   unsigned char PTS_DTS;
-} mpeg_ts_pes_header_t;
+};
+
+#if defined(COMP_MSC)
+#pragma pack(pop)
+#endif
 
 class mpeg_ts_reader_c;
 
