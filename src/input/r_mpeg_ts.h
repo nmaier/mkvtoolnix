@@ -260,7 +260,7 @@ public:
   virtual void create_packetizers();
   virtual void add_available_track_ids();
 
-  virtual bool parse_packet(int id, unsigned char *buf);
+  virtual bool parse_packet(unsigned char *buf);
 
   static int64_t read_timestamp(unsigned char *p);
   static int detect_packet_size(mm_io_c *io, uint64_t size);

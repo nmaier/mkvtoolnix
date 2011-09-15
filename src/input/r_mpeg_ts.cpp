@@ -376,7 +376,7 @@ mpeg_ts_reader_c::mpeg_ts_reader_c(track_info_c &_ti)
           buf[0] = io->read_uint8();
           continue;
         }
-        parse_packet(-1, buf);
+        parse_packet(buf);
         if (PAT_found == true && PMT_found == true && es_to_process == 0)
           done = true;
         io->skip(-1);
@@ -701,13 +701,9 @@ mpeg_ts_reader_c::read_timestamp(unsigned char *p) {
 }
 
 bool
-mpeg_ts_reader_c::parse_packet(int id, unsigned char *buf) {
-  uint16_t i;
-  int tidx = 0;
-  unsigned char adf_discontinuity_indicator = 0;
+mpeg_ts_reader_c::parse_packet(unsigned char *buf) {
   mpeg_ts_packet_header_t *hdr = (mpeg_ts_packet_header_t *)buf;
-
-  int16_t table_pid = (int16_t)GET_PID(hdr);
+  int16_t table_pid            = (int16_t)GET_PID(hdr);
 
   if (hdr->transport_error_indicator == 1) //corrupted packet
     return false;
@@ -715,24 +711,16 @@ mpeg_ts_reader_c::parse_packet(int id, unsigned char *buf) {
   if (!(hdr->adaptation_field_control & 0x01)) //no ts_payload
     return false;
 
-  int16_t match_pid = -1;
-  if (id != -1 && tracks[id]->processed == false) {
-    match_pid = tracks[id]->pid;
-    tidx      = id;
-  } else {
-    for (i = 0; i < tracks.size(); i++) {
-      if (tracks[i]->pid == table_pid && tracks[i]->processed == false) {
-        match_pid = tracks[i]->pid;
-        tidx      = i;
-        break;
-      }
-    }
-  }
+  size_t tidx;
+  for (tidx = 0; tracks.size() > tidx; ++tidx)
+    if ((tracks[tidx]->pid == table_pid) && !tracks[tidx]->processed)
+      break;
 
-  if (table_pid != match_pid)
+  if (tidx >= tracks.size())
     return false;
 
-  unsigned char *ts_payload = (unsigned char *)hdr + sizeof(mpeg_ts_packet_header_t);
+  unsigned char *ts_payload                 = (unsigned char *)hdr + sizeof(mpeg_ts_packet_header_t);
+  unsigned char adf_discontinuity_indicator = 0;
   if (hdr->adaptation_field_control & 0x02) {
     mpeg_ts_adaptation_field_t *adf  = reinterpret_cast<mpeg_ts_adaptation_field_t *>(ts_payload);
     adf_discontinuity_indicator      = adf->discontinuity_indicator;
@@ -1071,33 +1059,31 @@ mpeg_ts_reader_c::read(generic_packetizer_c *,
     if (io->eof())
       return finish();
 
-    if (buf[0] == 0x47) {
-      if ((io->read(buf + 1, m_detected_packet_size) != (unsigned int)m_detected_packet_size) || io->eof())
-        return finish();
-
-      if (buf[m_detected_packet_size] != 0x47) {
-        io->skip(0 - m_detected_packet_size);
-        buf[0] = io->read_uint8();
-        continue;
-      }
-
-      parse_packet(-1, buf);
-
-      if (track_buffer_ready != -1) { // ES buffer ready
-        tracks[track_buffer_ready]->send_to_packetizer();
-        track_buffer_ready = -1;
-      }
-
-      if (m_packet_sent_to_packetizer) {
-        io->skip(-1);
-        return FILE_STATUS_MOREDATA;
-      }
-
-      m_packet_sent_to_packetizer = false;
-    }
-    else
+    if (buf[0] != 0x47) {
       buf[0] = io->read_uint8(); // advance byte per byte to find a new sync
-  }
+      continue;
+    }
 
-  return FILE_STATUS_MOREDATA;
+    if ((io->read(buf + 1, m_detected_packet_size) != (unsigned int)m_detected_packet_size) || io->eof())
+      return finish();
+
+    if (buf[m_detected_packet_size] != 0x47) {
+      io->skip(0 - m_detected_packet_size);
+      buf[0] = io->read_uint8();
+      continue;
+    }
+
+    parse_packet(buf);
+
+    if (track_buffer_ready != -1) { // ES buffer ready
+      tracks[track_buffer_ready]->send_to_packetizer();
+      track_buffer_ready = -1;
+    }
+
+    if (!m_packet_sent_to_packetizer)
+      continue;
+
+    io->skip(-1);
+    return FILE_STATUS_MOREDATA;
+  }
 }
