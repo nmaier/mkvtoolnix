@@ -67,9 +67,10 @@ mpeg_ts_track_c::send_to_packetizer() {
     reader.m_reader_packetizers[ptzr]->process(new packet_t(clone_memory(pes_payload->get_buffer(), pes_payload->get_size()), timecode));
 
   pes_payload->remove(pes_payload->get_size());
-  processed        = false;
-  data_ready       = false;
-  pes_payload_size = 0;
+  processed                          = false;
+  data_ready                         = false;
+  pes_payload_size                   = 0;
+  reader.m_packet_sent_to_packetizer = true;
 }
 
 int
@@ -341,6 +342,7 @@ mpeg_ts_reader_c::mpeg_ts_reader_c(track_info_c &_ti)
   , input_status(INPUT_PROBE)
   , track_buffer_ready(-1)
   , file_done(false)
+  , m_packet_sent_to_packetizer(false)
   , m_dont_use_audio_pts(debugging_requested("mpeg_ts_dont_use_audio_pts"))
   , m_detected_packet_size(0)
 {
@@ -1056,7 +1058,6 @@ mpeg_ts_reader_c::finish() {
 file_status_e
 mpeg_ts_reader_c::read(generic_packetizer_c *,
                        bool) {
-  bool done = false;
   unsigned char buf[205];
 
   track_buffer_ready = -1;
@@ -1066,7 +1067,7 @@ mpeg_ts_reader_c::read(generic_packetizer_c *,
 
   buf[0] = io->read_uint8();
 
-  while (!done) {
+  while (true) {
     if (io->eof())
       return finish();
 
@@ -1079,13 +1080,20 @@ mpeg_ts_reader_c::read(generic_packetizer_c *,
         buf[0] = io->read_uint8();
         continue;
       }
-      done = true;
+
       parse_packet(-1, buf);
+
       if (track_buffer_ready != -1) { // ES buffer ready
         tracks[track_buffer_ready]->send_to_packetizer();
         track_buffer_ready = -1;
       }
-      io->skip(-1);
+
+      if (m_packet_sent_to_packetizer) {
+        io->skip(-1);
+        return FILE_STATUS_MOREDATA;
+      }
+
+      m_packet_sent_to_packetizer = false;
     }
     else
       buf[0] = io->read_uint8(); // advance byte per byte to find a new sync

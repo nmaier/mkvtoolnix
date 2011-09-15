@@ -237,7 +237,7 @@ protected:
   mpeg_ts_input_type_e input_status; // can be INPUT_PROBE, INPUT_READ
   int track_buffer_ready;
 
-  bool file_done;
+  bool file_done, m_packet_sent_to_packetizer;
 
   std::vector<mpeg_ts_track_ptr> tracks;
 
