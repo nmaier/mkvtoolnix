@@ -215,6 +215,12 @@ public:
   }
 
   void send_to_packetizer();
+  int new_stream_v_mpeg_1_2();
+  int new_stream_v_avc();
+  int new_stream_a_mpeg();
+  int new_stream_a_ac3();
+  int new_stream_a_dts();
+  int new_stream_a_truehd();
 };
 
 typedef counted_ptr<mpeg_ts_track_c> mpeg_ts_track_ptr;
@@ -254,12 +260,6 @@ public:
   virtual void create_packetizers();
   virtual void add_available_track_ids();
 
-  virtual int new_stream_v_mpeg_1_2(unsigned char *buf, unsigned int length, mpeg_ts_track_ptr &track);
-  virtual int new_stream_v_avc(unsigned char *buf, unsigned int length, mpeg_ts_track_ptr &track);
-  virtual int new_stream_a_mpeg(unsigned char *buf, unsigned int length, mpeg_ts_track_ptr &track);
-  virtual int new_stream_a_ac3(unsigned char *buf, unsigned int length, mpeg_ts_track_ptr &track);
-  virtual int new_stream_a_dts(unsigned char *buf, unsigned int length, mpeg_ts_track_ptr &track);
-  virtual int new_stream_a_truehd(unsigned char *buf, unsigned int length, mpeg_ts_track_ptr &track);
   virtual bool parse_packet(int id, unsigned char *buf);
 
   static int64_t read_timestamp(unsigned char *p);

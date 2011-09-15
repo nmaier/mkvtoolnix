@@ -72,6 +72,215 @@ mpeg_ts_track_c::send_to_packetizer() {
   pes_payload_size = 0;
 }
 
+int
+mpeg_ts_track_c::new_stream_v_mpeg_1_2() {
+  counted_ptr<M2VParser> m2v_parser(new M2VParser);
+
+  m2v_parser->SetProbeMode();
+  m2v_parser->WriteData(pes_payload->get_buffer(), pes_payload->get_size());
+
+  int state = m2v_parser->GetState();
+  if (state != MPV_PARSER_STATE_FRAME) {
+    mxverb(3, boost::format("new_stream_v_mpeg_1_2: no valid frame in %1% bytes\n") % pes_payload->get_size());
+    return FILE_STATUS_MOREDATA;
+  }
+
+  MPEG2SequenceHeader seq_hdr = m2v_parser->GetSequenceHeader();
+  counted_ptr<MPEGFrame> frame(m2v_parser->ReadFrame());
+  if (!frame.is_set())
+    return FILE_STATUS_MOREDATA;
+
+  fourcc         = FOURCC('M', 'P', 'G', '0' + m2v_parser->GetMPEGVersion());
+  v_interlaced   = !seq_hdr.progressiveSequence;
+  v_version      = m2v_parser->GetMPEGVersion();
+  v_width        = seq_hdr.width;
+  v_height       = seq_hdr.height;
+  v_frame_rate   = seq_hdr.frameOrFieldRate;
+  v_aspect_ratio = seq_hdr.aspectRatio;
+
+  if ((0 >= v_aspect_ratio) || (1 == v_aspect_ratio))
+    v_dwidth = v_width;
+  else
+    v_dwidth = (int)(v_height * v_aspect_ratio);
+  v_dheight  = v_height;
+
+  MPEGChunk *raw_seq_hdr_chunk = m2v_parser->GetRealSequenceHeader();
+  if (NULL != raw_seq_hdr_chunk) {
+    mxverb(3, boost::format("new_stream_v_mpeg_1_2: sequence header size: %1%\n") % raw_seq_hdr_chunk->GetSize());
+    raw_seq_hdr = clone_memory(raw_seq_hdr_chunk->GetPointer(), raw_seq_hdr_chunk->GetSize());
+  }
+
+  mxverb(3, boost::format("new_stream_v_mpeg_1_2: width: %1%, height: %2%\n") % v_width % v_height);
+  if (v_width == 0 || v_height == 0)
+    return FILE_STATUS_MOREDATA;
+
+  return 0;
+}
+
+int
+mpeg_ts_track_c::new_stream_v_avc() {
+  mpeg4::p10::avc_es_parser_c parser;
+
+  parser.ignore_nalu_size_length_errors();
+
+  mxverb(3, boost::format("new_stream_v_avc: packet size: %1%\n") % pes_payload->get_size());
+
+  if (map_has_key(reader.m_ti.m_nalu_size_lengths, reader.tracks.size()))
+    parser.set_nalu_size_length(reader.m_ti.m_nalu_size_lengths[0]);
+  else if (map_has_key(reader.m_ti.m_nalu_size_lengths, -1))
+    parser.set_nalu_size_length(reader.m_ti.m_nalu_size_lengths[-1]);
+
+  parser.add_bytes(pes_payload->get_buffer(), pes_payload->get_size());
+
+  if (!parser.headers_parsed())
+    return FILE_STATUS_MOREDATA;
+
+  v_avcc = parser.get_avcc();
+
+  try {
+    mm_mem_io_c avcc(v_avcc->get_buffer(), v_avcc->get_size());
+    mm_mem_io_c new_avcc(NULL, v_avcc->get_size(), 1024);
+    memory_cptr nalu(new memory_c());
+    int num_sps, sps, sps_length;
+    sps_info_t sps_info;
+
+    avcc.read(nalu, 5);
+    new_avcc.write(nalu);
+
+    num_sps = avcc.read_uint8();
+    new_avcc.write_uint8(num_sps);
+    num_sps &= 0x1f;
+
+    for (sps = 0; sps < num_sps; sps++) {
+      bool abort;
+
+      sps_length = avcc.read_uint16_be();
+      if ((sps_length + avcc.getFilePointer()) >= v_avcc->get_size())
+        sps_length = v_avcc->get_size() - avcc.getFilePointer();
+      avcc.read(nalu, sps_length);
+
+      abort = false;
+      if ((0 < sps_length) && ((nalu->get_buffer()[0] & 0x1f) == 7)) {
+        nalu_to_rbsp(nalu);
+        if (!mpeg4::p10::parse_sps(nalu, sps_info, true))
+          throw false;
+        rbsp_to_nalu(nalu);
+        abort = true;
+      }
+
+      new_avcc.write_uint16_be(nalu->get_size());
+      new_avcc.write(nalu);
+
+      if (abort) {
+        avcc.read(nalu, v_avcc->get_size() - avcc.getFilePointer());
+        new_avcc.write(nalu);
+        break;
+      }
+    }
+
+    fourcc   = FOURCC('A', 'V', 'C', '1');
+    v_avcc   = memory_cptr(new memory_c(new_avcc.get_and_lock_buffer(), new_avcc.getFilePointer(), true));
+    v_width  = sps_info.width;
+    v_height = sps_info.height;
+
+    mxverb(3, boost::format("new_stream_v_avc: timing_info_present %1%, num_units_in_tick %2%, time_scale %3%, fixed_frame_rate %4%\n")
+           % sps_info.timing_info_present % sps_info.num_units_in_tick % sps_info.time_scale % sps_info.fixed_frame_rate);
+
+    if (sps_info.timing_info_present && sps_info.num_units_in_tick)
+      v_frame_rate = static_cast<float>(sps_info.time_scale) / sps_info.num_units_in_tick;
+
+    if (sps_info.ar_found) {
+      float aspect_ratio = (float)sps_info.width / (float)sps_info.height * (float)sps_info.par_num / (float)sps_info.par_den;
+      v_aspect_ratio = aspect_ratio;
+
+      if (aspect_ratio > ((float)v_width / (float)v_height)) {
+        v_dwidth  = irnd(v_height * aspect_ratio);
+        v_dheight = v_height;
+
+      } else {
+        v_dwidth  = v_width;
+        v_dheight = irnd(v_width / aspect_ratio);
+      }
+    }
+    mxverb(3, boost::format("new_stream_v_avc: width: %1%, height: %2%\n") % v_width % v_height);
+
+  } catch (...) {
+    throw false;
+  }
+
+  return 0;
+}
+
+int
+mpeg_ts_track_c::new_stream_a_mpeg() {
+  mp3_header_t header;
+
+  if (-1 == find_mp3_header(pes_payload->get_buffer(), pes_payload->get_size()))
+    return FILE_STATUS_MOREDATA;
+
+  decode_mp3_header(pes_payload->get_buffer(), &header);
+  a_channels    = header.channels;
+  a_sample_rate = header.sampling_frequency;
+  fourcc        = FOURCC('M', 'P', '0' + header.layer, ' ');
+
+  mxverb(3, boost::format("new_stream_a_mpeg: Channels: %1%, sample rate: %2%\n") %a_channels % a_sample_rate);
+  return 0;
+}
+
+int
+mpeg_ts_track_c::new_stream_a_ac3() {
+  ac3_header_t header;
+
+  if (-1 == find_ac3_header(pes_payload->get_buffer(), pes_payload->get_size(), &header, false))
+    return FILE_STATUS_MOREDATA;
+
+  mxverb(2,
+         boost::format("first ac3 header bsid %1% channels %2% sample_rate %3% bytes %4% samples %5%\n")
+         % header.bsid % header.channels % header.sample_rate % header.bytes % header.samples);
+
+  a_channels    = header.channels;
+  a_sample_rate = header.sample_rate;
+  a_bsid        = header.bsid;
+
+  return 0;
+}
+
+int
+mpeg_ts_track_c::new_stream_a_dts() {
+  if (-1 == find_dts_header(pes_payload->get_buffer(), pes_payload->get_size(), &a_dts_header))
+    return FILE_STATUS_MOREDATA;
+
+  return 0;
+}
+
+int
+mpeg_ts_track_c::new_stream_a_truehd() {
+  truehd_parser_c parser;
+
+  parser.add_data(pes_payload->get_buffer(), pes_payload->get_size());
+
+  while (1) {
+    while (parser.frame_available()) {
+      truehd_frame_cptr frame = parser.get_next_frame();
+      if (truehd_frame_t::sync != frame->m_type)
+        continue;
+
+      mxverb(2,
+             boost::format("first TrueHD header channels %1% sampling_rate %2% samples_per_frame %3%\n")
+             % frame->m_channels % frame->m_sampling_rate % frame->m_samples_per_frame);
+
+      a_channels    = frame->m_channels;
+      a_sample_rate = frame->m_sampling_rate;
+
+      return 0;
+    }
+
+     return FILE_STATUS_MOREDATA;
+  }
+
+  return FILE_STATUS_MOREDATA;
+}
+
 // ------------------------------------------------------------
 
 bool
@@ -480,227 +689,6 @@ mpeg_ts_reader_c::parse_pmt(unsigned char *pmt) {
   return 0;
 }
 
-int
-mpeg_ts_reader_c::new_stream_v_mpeg_1_2(unsigned char *buf,
-                                        unsigned int length,
-                                        mpeg_ts_track_ptr &track) {
-  counted_ptr<M2VParser> m2v_parser(new M2VParser);
-
-  m2v_parser->SetProbeMode();
-  m2v_parser->WriteData(buf, length);
-
-  int state = m2v_parser->GetState();
-  if (state != MPV_PARSER_STATE_FRAME) {
-    mxverb(3, boost::format("new_stream_v_mpeg_1_2: no valid frame in %1% bytes\n") % length);
-    return FILE_STATUS_MOREDATA;
-  }
-
-  MPEG2SequenceHeader seq_hdr = m2v_parser->GetSequenceHeader();
-  counted_ptr<MPEGFrame> frame(m2v_parser->ReadFrame());
-  if (!frame.is_set())
-    return FILE_STATUS_MOREDATA;
-
-  track->fourcc         = FOURCC('M', 'P', 'G', '0' + m2v_parser->GetMPEGVersion());
-  track->v_interlaced   = !seq_hdr.progressiveSequence;
-  track->v_version      = m2v_parser->GetMPEGVersion();
-  track->v_width        = seq_hdr.width;
-  track->v_height       = seq_hdr.height;
-  track->v_frame_rate   = seq_hdr.frameOrFieldRate;
-  track->v_aspect_ratio = seq_hdr.aspectRatio;
-
-  if ((0 >= track->v_aspect_ratio) || (1 == track->v_aspect_ratio))
-    track->v_dwidth = track->v_width;
-  else
-    track->v_dwidth = (int)(track->v_height * track->v_aspect_ratio);
-  track->v_dheight  = track->v_height;
-
-  MPEGChunk *raw_seq_hdr = m2v_parser->GetRealSequenceHeader();
-  if (NULL != raw_seq_hdr) {
-    mxverb(3, boost::format("new_stream_v_mpeg_1_2: sequence header size: %1%\n") % raw_seq_hdr->GetSize());
-    track->raw_seq_hdr = clone_memory(raw_seq_hdr->GetPointer(), raw_seq_hdr->GetSize());
-  }
-
-  mxverb(3, boost::format("new_stream_v_mpeg_1_2: width: %1%, height: %2%\n") % track->v_width % track->v_height);
-  if (track->v_width == 0 || track->v_height == 0)
-    return FILE_STATUS_MOREDATA;
-
-  return 0;
-}
-
-int
-mpeg_ts_reader_c::new_stream_v_avc(unsigned char *buf,
-                                   unsigned int length,
-                                   mpeg_ts_track_ptr &track) {
-  mpeg4::p10::avc_es_parser_c parser;
-
-  parser.ignore_nalu_size_length_errors();
-
-  mxverb(3, boost::format("new_stream_v_avc: packet size: %1%\n") % length);
-
-  if (map_has_key(m_ti.m_nalu_size_lengths, tracks.size()))
-    parser.set_nalu_size_length(m_ti.m_nalu_size_lengths[0]);
-  else if (map_has_key(m_ti.m_nalu_size_lengths, -1))
-    parser.set_nalu_size_length(m_ti.m_nalu_size_lengths[-1]);
-
-  parser.add_bytes(buf, length);
-
-  if (!parser.headers_parsed())
-    return FILE_STATUS_MOREDATA;
-
-  track->v_avcc = parser.get_avcc();
-
-  try {
-    mm_mem_io_c avcc(track->v_avcc->get_buffer(), track->v_avcc->get_size());
-    mm_mem_io_c new_avcc(NULL, track->v_avcc->get_size(), 1024);
-    memory_cptr nalu(new memory_c());
-    int num_sps, sps, sps_length;
-    sps_info_t sps_info;
-
-    avcc.read(nalu, 5);
-    new_avcc.write(nalu);
-
-    num_sps = avcc.read_uint8();
-    new_avcc.write_uint8(num_sps);
-    num_sps &= 0x1f;
-
-    for (sps = 0; sps < num_sps; sps++) {
-      bool abort;
-
-      sps_length = avcc.read_uint16_be();
-      if ((sps_length + avcc.getFilePointer()) >= track->v_avcc->get_size())
-        sps_length = track->v_avcc->get_size() - avcc.getFilePointer();
-      avcc.read(nalu, sps_length);
-
-      abort = false;
-      if ((0 < sps_length) && ((nalu->get_buffer()[0] & 0x1f) == 7)) {
-        nalu_to_rbsp(nalu);
-        if (!mpeg4::p10::parse_sps(nalu, sps_info, true))
-          throw false;
-        rbsp_to_nalu(nalu);
-        abort = true;
-      }
-
-      new_avcc.write_uint16_be(nalu->get_size());
-      new_avcc.write(nalu);
-
-      if (abort) {
-        avcc.read(nalu, track->v_avcc->get_size() - avcc.getFilePointer());
-        new_avcc.write(nalu);
-        break;
-      }
-    }
-
-    track->fourcc   = FOURCC('A', 'V', 'C', '1');
-    track->v_avcc   = memory_cptr(new memory_c(new_avcc.get_and_lock_buffer(), new_avcc.getFilePointer(), true));
-    track->v_width  = sps_info.width;
-    track->v_height = sps_info.height;
-
-    mxverb(3, boost::format("new_stream_v_avc: timing_info_present %1%, num_units_in_tick %2%, time_scale %3%, fixed_frame_rate %4%\n")
-           % sps_info.timing_info_present % sps_info.num_units_in_tick % sps_info.time_scale % sps_info.fixed_frame_rate);
-
-    if (sps_info.timing_info_present && sps_info.num_units_in_tick)
-      track->v_frame_rate = static_cast<float>(sps_info.time_scale) / sps_info.num_units_in_tick;
-
-    if (sps_info.ar_found) {
-      float aspect_ratio = (float)sps_info.width / (float)sps_info.height * (float)sps_info.par_num / (float)sps_info.par_den;
-      track->v_aspect_ratio = aspect_ratio;
-
-      if (aspect_ratio > ((float)track->v_width / (float)track->v_height)) {
-        track->v_dwidth  = irnd(track->v_height * aspect_ratio);
-        track->v_dheight = track->v_height;
-
-      } else {
-        track->v_dwidth  = track->v_width;
-        track->v_dheight = irnd(track->v_width / aspect_ratio);
-      }
-    }
-    mxverb(3, boost::format("new_stream_v_avc: width: %1%, height: %2%\n") % track->v_width % track->v_height);
-
-  } catch (...) {
-    throw false;
-  }
-
-  return 0;
-}
-
-int
-mpeg_ts_reader_c::new_stream_a_mpeg(unsigned char *buf,
-                                    unsigned int length,
-                                    mpeg_ts_track_ptr &track) {
-  mp3_header_t header;
-
-  if (-1 == find_mp3_header(buf, length))
-    return FILE_STATUS_MOREDATA;
-
-  decode_mp3_header(buf, &header);
-  track->a_channels    = header.channels;
-  track->a_sample_rate = header.sampling_frequency;
-  track->fourcc        = FOURCC('M', 'P', '0' + header.layer, ' ');
-
-  mxverb(3, boost::format("new_stream_a_mpeg: Channels: %1%, sample rate: %2%\n") %track->a_channels % track->a_sample_rate);
-  return 0;
-}
-
-int
-mpeg_ts_reader_c::new_stream_a_ac3(unsigned char *buf,
-                                   unsigned int length,
-                                   mpeg_ts_track_ptr &track) {
-  ac3_header_t header;
-
-  if (-1 == find_ac3_header(buf, length, &header, false))
-    return FILE_STATUS_MOREDATA;
-
-  mxverb(2,
-         boost::format("first ac3 header bsid %1% channels %2% sample_rate %3% bytes %4% samples %5%\n")
-         % header.bsid % header.channels % header.sample_rate % header.bytes % header.samples);
-
-  track->a_channels    = header.channels;
-  track->a_sample_rate = header.sample_rate;
-  track->a_bsid        = header.bsid;
-
-  return 0;
-}
-
-int
-mpeg_ts_reader_c::new_stream_a_dts(unsigned char *buf,
-                                   unsigned int length,
-                                   mpeg_ts_track_ptr &track) {
-  if (-1 == find_dts_header(buf, length, &track->a_dts_header))
-    return FILE_STATUS_MOREDATA;
-
-  return 0;
-}
-
-int
-mpeg_ts_reader_c::new_stream_a_truehd(unsigned char *buf,
-                                      unsigned int length,
-                                      mpeg_ts_track_ptr &track) {
-  truehd_parser_c parser;
-
-  parser.add_data(buf, length);
-
-  while (1) {
-    while (parser.frame_available()) {
-      truehd_frame_cptr frame = parser.get_next_frame();
-      if (truehd_frame_t::sync != frame->m_type)
-        continue;
-
-      mxverb(2,
-             boost::format("first TrueHD header channels %1% sampling_rate %2% samples_per_frame %3%\n")
-             % frame->m_channels % frame->m_sampling_rate % frame->m_samples_per_frame);
-
-      track->a_channels    = frame->m_channels;
-      track->a_sample_rate = frame->m_sampling_rate;
-
-      return 0;
-    }
-
-     return FILE_STATUS_MOREDATA;
-  }
-
-  return FILE_STATUS_MOREDATA;
-}
-
 int64_t
 mpeg_ts_reader_c::read_timestamp(unsigned char *p) {
   int64_t pts  =  static_cast<int64_t>(             ( p[0]   >> 1) & 0x07) << 30;
@@ -741,7 +729,6 @@ mpeg_ts_reader_c::parse_packet(int id, unsigned char *buf) {
 
   if (table_pid != match_pid)
     return false;
-
 
   unsigned char *ts_payload = (unsigned char *)hdr + sizeof(mpeg_ts_packet_header_t);
   if (hdr->adaptation_field_control & 0x02) {
@@ -825,21 +812,21 @@ mpeg_ts_reader_c::probe_packet_complete(mpeg_ts_track_ptr &track,
 
   else if (track->type == ES_VIDEO_TYPE) {
     if ((FOURCC('M', 'P', 'G', '1') == track->fourcc) || (FOURCC('M', 'P', 'G', '2') == track->fourcc))
-      result = new_stream_v_mpeg_1_2(track->pes_payload->get_buffer(), track->pes_payload->get_size(), track);
+      result = track->new_stream_v_mpeg_1_2();
     else if (FOURCC('A', 'V', 'C', '1') == track->fourcc)
-      result = new_stream_v_avc(track->pes_payload->get_buffer(), track->pes_payload->get_size(), track);
+      result = track->new_stream_v_avc();
 
     track->pes_payload->set_chunk_size(512 * 1024);
 
   } else if (track->type == ES_AUDIO_TYPE) {
     if (FOURCC('M', 'P', '2', ' ') == track->fourcc)
-      result = new_stream_a_mpeg(track->pes_payload->get_buffer(), track->pes_payload->get_size(), track);
+      result = track->new_stream_a_mpeg();
     else if (FOURCC('A', 'C', '3', ' ') == track->fourcc)
-      result = new_stream_a_ac3(track->pes_payload->get_buffer(), track->pes_payload->get_size(), track);
+      result = track->new_stream_a_ac3();
     else if (FOURCC('D', 'T', 'S', ' ') == track->fourcc)
-      result = new_stream_a_dts(track->pes_payload->get_buffer(), track->pes_payload->get_size(), track);
+      result = track->new_stream_a_dts();
     else if (FOURCC('T', 'R', 'H', 'D') == track->fourcc)
-      result = new_stream_a_truehd(track->pes_payload->get_buffer(), track->pes_payload->get_size(), track);
+      result = track->new_stream_a_truehd();
 
   } else if (track->type == ES_SUBT_TYPE)
     result = 0;

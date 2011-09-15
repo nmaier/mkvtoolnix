@@ -6,13 +6,9 @@ class T_297mpeg_transport_streams < Test
   end
 
   def run
-    hashes = Array.new
-    Dir.glob('data/ts/*.{m2ts,ts}').sort.each do |file|
-      merge file, 1
-      hashes << hash_tmp
-    end
-
-    hashes.join '-'
+    %w{hd_distributor_regency.m2ts hd_other_sony_the_incredible_game.m2ts}.
+      map { |file| merge "data/ts/#{file}", 1 ; hash_tmp }.
+      join('-')
   end
 end
 
