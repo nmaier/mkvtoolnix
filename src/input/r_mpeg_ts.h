@@ -162,15 +162,15 @@ public:
   mpeg_ts_reader_c &reader;
 
   bool processed;
-  mpeg_ts_pid_type_e type;      //can be PAT_TYPE, PMT_TYPE, ES_VIDEO_TYPE, ES_AUDIO_TYPE, ES_SUBT_TYPE, ES_UNKNOWN
+  mpeg_ts_pid_type_e type;          //can be PAT_TYPE, PMT_TYPE, ES_VIDEO_TYPE, ES_AUDIO_TYPE, ES_SUBT_TYPE, ES_UNKNOWN
   uint32_t fourcc;
   uint16_t pid;
   bool data_ready;
-  int payload_size;       // size of the current PID payload in bytes
-  byte_buffer_cptr payload;       // buffer with the current PID payload
+  int pes_payload_size;             // size of the current PID payload in bytes
+  byte_buffer_cptr pes_payload;     // buffer with the current PID payload
   unsigned char continuity_counter; // check for PID continuity
 
-  int ptzr;                    // the actual packetizer instance
+  int ptzr;                         // the actual packetizer instance
 
   int64_t timecode;
 
@@ -194,8 +194,8 @@ public:
     , fourcc(0)
     , pid(0)
     , data_ready(false)
-    , payload_size(0)
-    , payload(new byte_buffer_c)
+    , pes_payload_size(0)
+    , pes_payload(new byte_buffer_c)
     , continuity_counter(0)
     , ptzr(-1)
     , timecode(-1)
@@ -269,7 +269,7 @@ public:
 private:
   int parse_pat(unsigned char *pat);
   int parse_pmt(unsigned char *pmt);
-  bool  parse_start_unit_packet(mpeg_ts_track_ptr &track, mpeg_ts_packet_header_t *packet_header, unsigned char *&payload, unsigned char &payload_size);
+  bool parse_start_unit_packet(mpeg_ts_track_ptr &track, mpeg_ts_packet_header_t *ts_packet_header, unsigned char *&ts_payload, unsigned char &ts_payload_size);
   void probe_packet_complete(mpeg_ts_track_ptr &track, int tidx);
 
   file_status_e finish();
