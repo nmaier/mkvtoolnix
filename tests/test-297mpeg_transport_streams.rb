@@ -2,7 +2,7 @@
 
 class T_297mpeg_transport_streams < Test
   def description
-    "MPEG transport streams"
+    "mkvmerge / MPEG transport streams"
   end
 
   def run
