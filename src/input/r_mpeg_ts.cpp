@@ -410,9 +410,9 @@ mpeg_ts_reader_c::mpeg_ts_reader_c(track_info_c &_ti)
 
   foreach(mpeg_ts_track_ptr &track, tracks) {
     track->pes_payload->remove(track->pes_payload->get_size());
-    track->processed       = false;
-    track->data_ready      = false;
-    track->pes_payload_size    = 0;
+    track->processed        = false;
+    track->data_ready       = false;
+    track->pes_payload_size = 0;
     // track->timecode_offset = -1;
   }
 }
@@ -427,6 +427,9 @@ mpeg_ts_reader_c::identify() {
   size_t i;
   for (i = 0; i < tracks.size(); i++) {
     mpeg_ts_track_ptr &track = tracks[i];
+
+    if (!track->probed_ok)
+      continue;
 
     const char *fourcc = FOURCC('M', 'P', 'G', '1') == track->fourcc ? "MPEG-1"
                        : FOURCC('M', 'P', 'G', '2') == track->fourcc ? "MPEG-2"
@@ -846,6 +849,7 @@ mpeg_ts_reader_c::probe_packet_complete(mpeg_ts_track_ptr &track,
       tracks.erase(tracks.begin() + tidx);
     else {
       track->processed = true;
+      track->probed_ok = true;
       es_to_process--;
       mxverb(3, boost::format("mpeg_ts: ES to process: %1%\n") % es_to_process);
     }
@@ -949,7 +953,7 @@ mpeg_ts_reader_c::create_packetizer(int64_t id) {
                            : ES_SUBT_TYPE  == track->type ? 's'
                            :                                'v';
 
-  if ((0 == track->ptzr) || !demuxing_requested(type, id))
+  if (!track->probed_ok || (0 == track->ptzr) || !demuxing_requested(type, id))
     return;
 
   m_ti.m_id       = id;

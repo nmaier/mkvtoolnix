@@ -170,6 +170,7 @@ public:
   byte_buffer_cptr pes_payload;     // buffer with the current PID payload
   unsigned char continuity_counter; // check for PID continuity
 
+  bool probed_ok;
   int ptzr;                         // the actual packetizer instance
 
   int64_t timecode;
@@ -197,6 +198,7 @@ public:
     , pes_payload_size(0)
     , pes_payload(new byte_buffer_c)
     , continuity_counter(0)
+    , probed_ok(false)
     , ptzr(-1)
     , timecode(-1)
     , v_interlaced(false)
