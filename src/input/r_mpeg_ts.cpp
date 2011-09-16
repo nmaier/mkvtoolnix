@@ -37,6 +37,7 @@
 #define TS_CONSECUTIVE_PACKETS 16
 #define TS_PROBE_SIZE          (2 * TS_CONSECUTIVE_PACKETS * 204)
 #define TS_PIDS_DETECT_SIZE    4 * 1024 * 1024
+#define TS_PACKET_SIZE         188
 
 #define GET_PID(p)             (((static_cast<uint16_t>(p->pid_msb) << 8) | p->pid_lsb) & 0x1FFF)
 #define CONTINUITY_COUNTER(p)  (static_cast<unsigned char>(p->continuity_counter) & 0x0F)
@@ -729,11 +730,11 @@ mpeg_ts_reader_c::parse_packet(unsigned char *buf) {
     adf_discontinuity_indicator      = adf->discontinuity_indicator;
     ts_payload                      += static_cast<unsigned int>(adf->adaptation_field_length) + 1;
 
-    if (ts_payload >= (buf + m_detected_packet_size))
+    if (ts_payload >= (buf + TS_PACKET_SIZE))
       return false;
   }
 
-  unsigned char ts_payload_size = m_detected_packet_size - (ts_payload - (unsigned char *)hdr);
+  unsigned char ts_payload_size = TS_PACKET_SIZE - (ts_payload - (unsigned char *)hdr);
 
   // Copy the counted_ptr instead of referencing it because functions
   // called from this one will modify tracks.
@@ -766,8 +767,8 @@ mpeg_ts_reader_c::parse_packet(unsigned char *buf) {
       ts_payload_size = track->pes_payload_size - track->pes_payload->get_size();
   }
 
-  if ((buf + m_detected_packet_size) < (ts_payload + ts_payload_size))
-    ts_payload_size = buf + m_detected_packet_size - ts_payload;
+  if ((buf + TS_PACKET_SIZE) < (ts_payload + ts_payload_size))
+    ts_payload_size = buf + TS_PACKET_SIZE - ts_payload;
 
   if (0 == ts_payload_size)
     return false;
@@ -881,6 +882,12 @@ mpeg_ts_reader_c::parse_start_unit_packet(mpeg_ts_track_ptr &track,
     mxverb(4, boost::format("   PES info: DSM_trick_mode = %1%, add_copy = %2%, CRC = %3%, ext = %4%\n") % (int)pes_data->DSM_trick_mode % (int)pes_data->additional_copy_info % (int)pes_data->PES_CRC % (int)pes_data->PES_extension);
     mxverb(4, boost::format("   PES info: PES_header_data_length = %1%\n") % (int)pes_data->PES_header_data_length);
 
+    ts_payload = &pes_data->PES_header_data_length + pes_data->PES_header_data_length + 1;
+    if (ts_payload >= ((unsigned char *)ts_packet_header + TS_PACKET_SIZE))
+      return false;
+
+    ts_payload_size = ((unsigned char *)ts_packet_header + TS_PACKET_SIZE) - (unsigned char *) ts_payload;
+
     if (pes_data->PTS_DTS_flags > 1) { // 10 and 11 mean PTS is present
       int64_t PTS = read_timestamp(&pes_data->PTS_DTS);
 
@@ -902,8 +909,6 @@ mpeg_ts_reader_c::parse_start_unit_packet(mpeg_ts_track_ptr &track,
       mxverb(3, boost::format("     PTS found: %1%\n") % track->timecode);
     }
 
-    ts_payload      = &pes_data->PES_header_data_length + pes_data->PES_header_data_length + 1;
-    ts_payload_size = ((unsigned char *)ts_packet_header + m_detected_packet_size) - (unsigned char *) ts_payload;
     // this condition is for ES probing when there is still not enough data for detection
     if (track->pes_payload_size == 0 && track->pes_payload->get_size() != 0)
       track->data_ready = true;
