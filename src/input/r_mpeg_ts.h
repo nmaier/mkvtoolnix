@@ -215,6 +215,8 @@ public:
   }
 
   void send_to_packetizer();
+  void add_pes_payload(unsigned char *ts_payload, size_t ts_payload_size);
+
   int new_stream_v_mpeg_1_2();
   int new_stream_v_avc();
   int new_stream_a_mpeg();

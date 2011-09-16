@@ -74,6 +74,22 @@ mpeg_ts_track_c::send_to_packetizer() {
   reader.m_packet_sent_to_packetizer = true;
 }
 
+void
+mpeg_ts_track_c::add_pes_payload(unsigned char *ts_payload,
+                                 size_t ts_payload_size) {
+  pes_payload->add(ts_payload, ts_payload_size);
+
+  // if (pid == 0x90f) {
+  //   static int the_unicorn = 0;
+  //   uint32_t cccsum = 0;
+  //   unsigned char *cccidx;
+  //   for (cccidx = ts_payload; (cccidx - ts_payload) < ts_payload_size; ++cccidx)
+  //     cccsum += *cccidx;
+  //   mxinfo(boost::format("  adding payload pnum %1% size %2% sum %|3$08x|\n") % the_unicorn % ts_payload_size % cccsum);
+  //   the_unicorn++;
+  // }
+}
+
 int
 mpeg_ts_track_c::new_stream_v_mpeg_1_2() {
   counted_ptr<M2VParser> m2v_parser(new M2VParser);
@@ -773,7 +789,7 @@ mpeg_ts_reader_c::parse_packet(unsigned char *buf) {
   if (0 == ts_payload_size)
     return false;
 
-  track->pes_payload->add(ts_payload, ts_payload_size);
+  track->add_pes_payload(ts_payload, ts_payload_size);
 
   if (static_cast<int>(track->pes_payload->get_size()) == track->pes_payload_size)
     track->data_ready = true;
@@ -898,7 +914,7 @@ mpeg_ts_reader_c::parse_start_unit_packet(mpeg_ts_track_ptr &track,
 
       if (PTS == track->timecode) {
         mxverb(3, boost::format("     Adding PES with same PTS as previous !!\n"));
-        track->pes_payload->add(ts_payload, ts_payload_size);
+        track->add_pes_payload(ts_payload, ts_payload_size);
         return false;
 
       } else if ((0 != track->pes_payload->get_size()) && (INPUT_READ == input_status))
