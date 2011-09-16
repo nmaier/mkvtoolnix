@@ -441,8 +441,8 @@ mpeg_ts_reader_c::identify() {
                        : FOURCC('A', 'C', '3', ' ') == track->fourcc ? "AC3"
                        : FOURCC('D', 'T', 'S', ' ') == track->fourcc ? "DTS"
                        : FOURCC('T', 'R', 'H', 'D') == track->fourcc ? "TrueHD"
-                       : FOURCC('P', 'C', 'M', ' ') == track->fourcc ? "PCM"
-                       : FOURCC('L', 'P', 'C', 'M') == track->fourcc ? "LPCM"
+                       // : FOURCC('P', 'C', 'M', ' ') == track->fourcc ? "PCM"
+                       // : FOURCC('L', 'P', 'C', 'M') == track->fourcc ? "LPCM"
                        :                                               NULL;
 
     if (!fourcc)
