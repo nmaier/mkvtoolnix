@@ -1849,7 +1849,7 @@ msgstr "另一個合成任務仍在處理中。要啟動一項新任務，請等
 msgid "Appending a track from a file to another track from the same file is not allowed. This is the case for tracks number %u and %u."
 msgstr "不允許將一個檔案的軌道添加至同一個檔案的其他軌道。出現問題的軌道編號為 %u 與 %u。"
 
-#: src/merge/output_control.cpp:1692
+#: src/merge/output_control.cpp:1695
 msgid "Appending track %1% from file no. %2% ('%3%') to track %4% from file no. %5% ('%6%').\n"
 msgstr "正在添加合併軌道 %1%（自檔案 %2% (「%3%」)）至軌道 %4%（自檔案 %5% (「%6%」)）。\n"
 
@@ -2200,7 +2200,7 @@ msgstr "章節"
 msgid "Chapters (%d entries) from %s"
 msgstr "章節 (%d 個項目) 自 %s"
 
-#: src/merge/output_control.cpp:1331
+#: src/merge/output_control.cpp:1334
 msgid "Chapters are not allowed in WebM compliant files. No chapters will be written into any output file.\n"
 msgstr "在 WebM 遵循檔裡不能有章節。不會將章節寫進任何輸出檔。\n"
 
@@ -2513,7 +2513,7 @@ msgstr "未找到有效的 MP3 套件。"
 msgid "Could not find an index for audio track %1% (avilib error message: %2%). Skipping track.\n"
 msgstr "找不到音軌 %1% 的索引 (avilib 錯誤訊息: %2%)。正在跳過此軌。\n"
 
-#: src/merge/output_control.cpp:1647
+#: src/merge/output_control.cpp:1650
 msgid "Could not find gptzr when appending. %1%\n"
 msgstr "添加時找不到 gptzr。 %1%\n"
 
@@ -2930,7 +2930,7 @@ msgstr "EBML 讀取版本: %1%"
 msgid "EBML version: %1%"
 msgstr "EBML 版本: %1%"
 
-#: src/merge/output_control.cpp:1187
+#: src/merge/output_control.cpp:1190
 msgid "EVIL internal bug! (unknown file type). %1%\n"
 msgstr "*邪惡的* 內部錯誤! (未知的檔案類型)。 %1%\n"
 
@@ -3359,11 +3359,11 @@ msgstr "強制時間碼縮放係數為 REPLACEME。您得用 1000 至 10000000 �
 msgid "Format specific options"
 msgstr "格式特殊選項"
 
-#: src/mpegparser/M2VParser.cpp:442
+#: src/mpegparser/M2VParser.cpp:449
 msgid "Found B frame without second reference in a non closed GOP. Fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr "在非關閉的 GOP 裡找到沒有秒數參考的 B 畫格。在分離前請修復 MPEG2 視訊串流。\n"
 
-#: src/mpegparser/M2VParser.cpp:396
+#: src/mpegparser/M2VParser.cpp:403
 msgid "Found group of picture with broken link. You may want use smart reencode before attempting to multiplex it.\n"
 msgstr "找到含有連結損壞的群組圖片。您可能在分離前會想使用智慧型重新編碼。\n"
 
@@ -3371,7 +3371,7 @@ msgstr "找到含有連結損壞的群組圖片。您可能在分離前會想使
 msgid "Found no encoded data nor '@file' to read binary data from."
 msgstr "既沒發現已編碼資料，也沒發現引用讀取二位元資料的「@file」。"
 
-#: src/mpegparser/M2VParser.cpp:444
+#: src/mpegparser/M2VParser.cpp:451
 msgid "Found one or more B frames without second reference in the first GOP. You may want to fix the MPEG2 video stream or use smart reencode before attempting to multiplex it.\n"
 msgstr "在第一個 GOP 裡找到一個或多個沒有秒數參考的 B 畫格。您可能在分離前會想修復此 MPEG2 視訊串流或使用智慧型重新編碼。\n"
 
@@ -4065,6 +4065,11 @@ msgid "MPEG program streams"
 msgstr "MPEG PS 節目流"
 
 #: src/common/file_types.cpp:39
+#, fuzzy
+msgid "MPEG transport streams"
+msgstr "MPEG PS 節目流"
+
+#: src/common/file_types.cpp:40
 msgid "MPEG video elementary streams"
 msgstr "MPEG 視訊基本流"
 
@@ -4096,7 +4101,7 @@ msgstr "將此軌標記為「強制」。播放器必須播放此軌。"
 msgid "Matroska A/V files (*.mka;*.mkv;*.mk3d)|*.mkv;*.mka;*.mk3d|%s"
 msgstr "Matroska 檔案 (*.mkv;*.mka;*.mks;*.mk3d)|*.mkv;*.mka;*.mks;*.mk3d|%s"
 
-#: src/common/file_types.cpp:40
+#: src/common/file_types.cpp:41
 msgid "Matroska audio/video files"
 msgstr "Matroska 音訊/視訊檔"
 
@@ -4453,7 +4458,7 @@ msgstr "每畫格的毫微秒數 (未縮放前的)。"
 msgid "Numbers of channels in the track."
 msgstr "此軌道的聲道數。"
 
-#: src/common/file_types.cpp:43
+#: src/common/file_types.cpp:44
 msgid "Ogg/OGM audio/video files"
 msgstr "Ogg/OGM 音訊/視訊檔"
 
@@ -4590,7 +4595,7 @@ msgstr "覆寫已存在的檔案?"
 msgid "Overwrite existing file?"
 msgstr "覆寫已存在的檔案?"
 
-#: src/common/file_types.cpp:41
+#: src/common/file_types.cpp:42
 msgid "PGS/SUP subtitles"
 msgstr "PGS/SUP 字幕"
 
@@ -4719,7 +4724,7 @@ msgstr "進度: %1%%%%2%"
 msgid "Progress: 100%\n"
 msgstr "進度: 100%\n"
 
-#: src/merge/output_control.cpp:1944
+#: src/merge/output_control.cpp:1947
 msgid "Progress: 100%%%1%"
 msgstr "進度: 100%%%1%"
 
@@ -4731,7 +4736,7 @@ msgstr "進度: [%1%%2%] %3%%%"
 msgid "Querying mkvmerge's capabilities"
 msgstr "正向 mkvmerge 查詢處理能力"
 
-#: src/common/file_types.cpp:42
+#: src/common/file_types.cpp:43
 msgid "QuickTime audio/video files"
 msgstr "QuickTime 音訊/視訊檔"
 
@@ -4887,7 +4892,7 @@ msgstr "準備就緒"
 msgid "Real output sampling frequency in Hz."
 msgstr "實際輸出的取樣頻率，單位 Hz。"
 
-#: src/common/file_types.cpp:44
+#: src/common/file_types.cpp:45
 msgid "RealMedia audio/video files"
 msgstr "RealMedia 音訊/視訊檔"
 
@@ -4969,11 +4974,11 @@ msgstr "開始所選(&T)"
 msgid "SHA1-160"
 msgstr "SHA1-160"
 
-#: src/common/file_types.cpp:45
+#: src/common/file_types.cpp:46
 msgid "SRT text subtitles"
 msgstr "SRT 文字字幕"
 
-#: src/common/file_types.cpp:46
+#: src/common/file_types.cpp:47
 msgid "SSA/ASS text subtitles"
 msgstr "SSA/ASS 文字字幕"
 
@@ -5287,7 +5292,7 @@ msgstr "短的 AAC 音訊套件 (長: %1% < %2%)\n"
 msgid "Short AAC audio packet (length: %1% < 2)\n"
 msgstr "短的 AAC 音訊套件 (長: %1% < 2)\n"
 
-#: src/mpegparser/M2VParser.cpp:392
+#: src/mpegparser/M2VParser.cpp:399
 msgid "Shortened GOP detected. Some frames have been dropped. You may want to fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr "偵測到縮短的 GOP。某些畫格已遺失。您可能在分離前會想修復 MPEG2 視訊串流。\n"
 
@@ -5391,7 +5396,7 @@ msgstr "簡單區塊"
 msgid "SimpleBlock (%1%track number %2%, %3% frame(s), timecode %|4$.3f|s = %5%)"
 msgstr "簡單區塊 (%1%軌道編號 %2%, %3% 畫格, 時間碼 %|4$.3f|s = %5%)"
 
-#: src/mpegparser/M2VParser.cpp:389
+#: src/mpegparser/M2VParser.cpp:396
 msgid "Single field frame before GOP header detected. Fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr "在 GOP 表頭前偵測到單圖場畫格。在分離前請修復 MPEG2 視訊串流。\n"
 
@@ -5423,7 +5428,7 @@ msgstr "一些表頭值已被修改。您確實要在不儲存目前檔案的情
 msgid "Some header values have been modified. Do you really want to reload without saving the file?"
 msgstr "一些表頭值已被修改。您確實要在不儲存檔案的情況下重新載入？"
 
-#: src/merge/output_control.cpp:1372
+#: src/merge/output_control.cpp:1375
 msgid "Some tag elements are missing (this error should not have occured - another similar error should have occured earlier). %1%\n"
 msgstr "缺少某些標籤元件 (不該發生此錯誤 - 另一個類似的錯誤應該在早些時候發生過)。%1%\n"
 
@@ -5568,7 +5573,7 @@ msgstr "支援的檔案類型:\n"
 msgid "Suppress status output."
 msgstr "停用狀態輸出。"
 
-#: src/common/file_types.cpp:47
+#: src/common/file_types.cpp:48
 msgid "TTA (The lossless True Audio codec)"
 msgstr "TTA (The True Audio 無損音訊編解碼)"
 
@@ -5600,7 +5605,7 @@ msgstr "編輯選擇器"
 msgid "Tags"
 msgstr "標籤"
 
-#: src/merge/output_control.cpp:1360
+#: src/merge/output_control.cpp:1363
 msgid "Tags are not allowed in WebM compliant files. No tags will be written into any output file.\n"
 msgstr "在 WebM 遵循檔裡不能有標籤。不會將標籤寫進任何輸出檔。\n"
 
@@ -5805,7 +5810,7 @@ msgstr "此編解碼器類型「%1%」無法用在 WebM 遵循檔。\n"
 #: src/output/p_kate.cpp:113
 #: src/output/p_video.cpp:206
 #: src/output/p_textsubs.cpp:102
-#: src/output/p_avc.cpp:203
+#: src/output/p_avc.cpp:209
 msgid "The codec's private data does not match (lengths: %1% and %2%)."
 msgstr "編解碼器專有資料不符 (長度: %1% 與 %2%)。"
 
@@ -5822,7 +5827,7 @@ msgstr "校正檔未能正常讀取。\n"
 msgid "The country '%s' is not a valid ccTLD and cannot be selected."
 msgstr "國家「%s」不是有效的 ccTLD，不能選擇。"
 
-#: src/merge/output_control.cpp:1435
+#: src/merge/output_control.cpp:1438
 msgid "The cue entries (the index) are being written..."
 msgstr "正在寫入 cue 項目(此索引)..."
 
@@ -5844,7 +5849,7 @@ msgstr "預設語言碼「%1%」不是有效的 ISO639-2 語言碼，將被忽�
 msgid "The delay setting for track nr. %s in file '%s' is invalid."
 msgstr "對檔案「%s」的 %s 軌的延遲設定無效。"
 
-#: src/merge/output_control.cpp:1191
+#: src/merge/output_control.cpp:1194
 msgid ""
 "The demultiplexer for the file '%1%' failed to initialize:\n"
 "%2%\n"
@@ -5928,7 +5933,7 @@ msgstr "檔案「%1%」無法開啟以寫入 (%2%)。\n"
 msgid "The file '%1%' could not be opened for writing (%2%, %3%).\n"
 msgstr "檔案「%1%」無法開啟以寫入 (%2%, %3%)。\n"
 
-#: src/merge/output_control.cpp:1400
+#: src/merge/output_control.cpp:1403
 msgid "The file '%1%' has been opened for writing.\n"
 msgstr "檔案「%1%」已開啟以寫入。\n"
 
@@ -6150,7 +6155,7 @@ msgstr "語言碼「%1%」不是有效的 ISO639-2 語言碼，將被忽略。\n
 msgid "The line %1% of the timecode file '%2%' does not contain a valid floating point number.\n"
 msgstr "時間碼檔案「%2%」的第 %1% 行不包含有效的浮點數。\n"
 
-#: src/common/translation.cpp:296
+#: src/common/translation.cpp:297
 msgid "The locale could not be set properly. Check the LANG, LC_ALL and LC_MESSAGES environment variables.\n"
 msgstr "地區無法正常設定。請檢查 LANG, LC_ALL 和 LC_MESSAGES 環境變數。\n"
 
@@ -6260,7 +6265,7 @@ msgstr "選項「--meta-seek-size」不再受支援。請閱讀 mkvmerge 的使�
 msgid "The order of the various options is not important."
 msgstr "各種選項的順序不會影響結果。"
 
-#: src/merge/output_control.cpp:1396
+#: src/merge/output_control.cpp:1399
 msgid "The output file '%1%' could not be opened for writing (%2%).\n"
 msgstr "即將輸出的檔案「%1%」無法開啟寫入 (%2%)。\n"
 
@@ -6638,7 +6643,7 @@ msgstr "這名稱是唯一的。多數情況下無法被加入到「%1%」。%2%
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. %1%\n"
 msgstr "這 *真的* 不該發生。為第一個變換定位元件預留的空間過小。%1%\n"
 
-#: src/merge/output_control.cpp:1585
+#: src/merge/output_control.cpp:1588
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. Size needed: %1%. %2%\n"
 msgstr "這 *真的* 不該發生。為第一個變換定位元件預留的空間過小。需要的大小: %1%. %2%\n"
 
@@ -6862,7 +6867,7 @@ msgstr "類型: %1% (%2%)"
 msgid "UID:"
 msgstr "UID:"
 
-#: src/common/file_types.cpp:48
+#: src/common/file_types.cpp:49
 msgid "USF text subtitles"
 msgstr "USF 文字字幕"
 
@@ -6870,7 +6875,7 @@ msgstr "USF 文字字幕"
 msgid "UTFstring_to_cstrutf8: Invalid wide character. Please contact moritz@bunkus.org if you think that this is not true."
 msgstr "UTFstring_to_cstrutf8: 無效的寬字元。如果您認為本次判斷有誤，請聯繫 moritz@bunkus.org。"
 
-#: src/mpegparser/M2VParser.cpp:237
+#: src/mpegparser/M2VParser.cpp:244
 msgid "Unexpected picture frame after single field frame. Fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr "單圖場畫格之後意外的圖片畫格。在分離前請修復 MPEG2 視訊串流。\n"
 
@@ -6998,6 +7003,7 @@ msgstr "使用 3 位元組的 NALU 長可能會導致某些 AVC/h.264 編解碼�
 
 #: src/input/r_ac3.cpp:90
 #: src/input/r_matroska.cpp:1557
+#: src/input/r_mpeg_ts.cpp:966
 #: src/input/r_mpeg_ps.cpp:1180
 msgid "Using the %1%AC3 output module.\n"
 msgstr "使用 %1%AC3 輸出模組。\n"
@@ -7054,6 +7060,7 @@ msgstr "使用 DTS 分離器。\n"
 
 #: src/input/r_dts.cpp:114
 #: src/input/r_matroska.cpp:1577
+#: src/input/r_mpeg_ts.cpp:970
 #: src/input/r_wav.cpp:354
 #: src/input/r_mpeg_ps.cpp:1185
 #: src/input/r_avi.cpp:689
@@ -7106,6 +7113,7 @@ msgstr "使用 MPEG PS 分離器。\n"
 #: src/input/r_mp3.cpp:71
 #: src/input/r_matroska.cpp:1607
 #: src/input/r_ogm.cpp:1030
+#: src/input/r_mpeg_ts.cpp:962
 #: src/input/r_mpeg_ps.cpp:1175
 #: src/input/r_qtmp4.cpp:1537
 #: src/input/r_avi.cpp:561
@@ -7117,6 +7125,7 @@ msgstr "使用 MPEG 音訊輸出模組。\n"
 msgid "Using the MPEG-%1% video output module.\n"
 msgstr "使用 MPEG-%1% 視訊輸出模組。\n"
 
+#: src/input/r_mpeg_ts.cpp:993
 #: src/input/r_mpeg_es.cpp:179
 #: src/input/r_mpeg_ps.cpp:1201
 #: src/input/r_avi.cpp:323
@@ -7131,6 +7140,7 @@ msgstr "使用 MPEG-4 part 10 (AVC) 視訊輸出模組。\n"
 #: src/input/r_matroska.cpp:1849
 #: src/input/r_ogm.cpp:1154
 #: src/input/r_avc.cpp:136
+#: src/input/r_mpeg_ts.cpp:1013
 #: src/input/r_mpeg_ps.cpp:1214
 #: src/input/r_avi.cpp:348
 msgid "Using the MPEG-4 part 10 ES video output module.\n"
@@ -7206,6 +7216,7 @@ msgstr "使用 TTA 輸出模組。\n"
 msgid "Using the Theora video output module.\n"
 msgstr "使用 Theora 視訊輸出模組。\n"
 
+#: src/input/r_mpeg_ts.cpp:974
 #: src/input/r_mpeg_ps.cpp:1190
 msgid "Using the TrueHD output module.\n"
 msgstr "使用 TrueHD 輸出模組。\n"
@@ -7228,6 +7239,7 @@ msgstr "使用 VC1 ES 分離器。\n"
 
 #: src/input/r_vc1.cpp:96
 #: src/input/r_matroska.cpp:1877
+#: src/input/r_mpeg_ts.cpp:1029
 #: src/input/r_mpeg_ps.cpp:1219
 msgid "Using the VC1 video output module.\n"
 msgstr "使用 VC1 視訊輸出模組。\n"
@@ -7313,7 +7325,7 @@ msgstr "使用視訊輸出模組 (FourCC: %|1$.4s|)。\n"
 msgid "Using the video output module.\n"
 msgstr "使用視訊輸出模組。\n"
 
-#: src/common/file_types.cpp:49
+#: src/common/file_types.cpp:50
 msgid "VC1 elementary streams"
 msgstr "VC1 基本流"
 
@@ -7409,19 +7421,19 @@ msgstr "視訊軌 %u"
 msgid "View the output that mkvmerge generated during the muxing process for the selected job(s)"
 msgstr "查看 mkvmerge 處理選中任務時的輸出資訊"
 
-#: src/common/file_types.cpp:50
+#: src/common/file_types.cpp:51
 msgid "VobButtons"
 msgstr "VobBtn 按鈕"
 
-#: src/common/file_types.cpp:51
+#: src/common/file_types.cpp:52
 msgid "VobSub subtitles"
 msgstr "VobSub 字幕"
 
-#: src/common/file_types.cpp:52
+#: src/common/file_types.cpp:53
 msgid "WAVE (uncompressed PCM audio)"
 msgstr "WAVE (未壓縮的 PCM 音訊)"
 
-#: src/common/file_types.cpp:53
+#: src/common/file_types.cpp:54
 msgid "WAVPACK v4 audio"
 msgstr "WAVPACK v4 音訊"
 
@@ -7453,7 +7465,7 @@ msgstr "警告: 序號為 %1% 的軌道多於一條。"
 msgid "Warnings:"
 msgstr "警告:"
 
-#: src/common/file_types.cpp:54
+#: src/common/file_types.cpp:55
 msgid "WebM audio/video files"
 msgstr "WebM 音訊/視訊檔"
 
@@ -7684,10 +7696,6 @@ msgstr "每次取樣多少位元: %1%"
 #: src/info/mkvinfo.cpp:1119
 msgid "buttons"
 msgstr "按鈕"
-
-#: src/common/byte_buffer.h:73
-msgid "byte_buffer_c: (pos + num) > size. Should not have happened. Please file a bug report.\n"
-msgstr "byte_buffer_c: (pos + num) > size。不該發生。請提交錯誤報告。\n"
 
 #: src/common/compression.cpp:240
 msgid "bzip2 compression failed. Result: %1%\n"
@@ -8119,7 +8127,7 @@ msgstr "memory.cpp/safememdup() 由檔案 %1%, 第 %2% 行調用: malloc() 對 %
 msgid "memory.cpp/saferealloc() called from file %1%, line %2%: realloc() returned NULL for a size of %3% bytes.\n"
 msgstr "memory.cpp/saferealloc() 由檔案 %1%, 第 %2% 行調用: realloc() 對 %3% 個位元組返回 NULL。\n"
 
-#: src/common/memory.h:213
+#: src/common/memory.h:217
 msgid "memory_slice_cursor_c copy c'tor: Must not be used!"
 msgstr "memory_slice_cursor_c copy c'tor: 不能用!"
 
@@ -8363,6 +8371,11 @@ msgstr "mpeg_ps_reader: 不該發生 #1。 %1%"
 #: src/input/r_mpeg_ps.cpp:1223
 msgid "mpeg_ps_reader: Should not have happened #2. %1%"
 msgstr "mpeg_ps_reader: 不該發生 #2。 %1%"
+
+#: src/input/r_mpeg_ts.cpp:370
+#, fuzzy
+msgid "mpeg_ts_reader_c: Could not open the file."
+msgstr "mpeg_es_reader: 無法開啟檔案。"
 
 #: src/mmg/header_editor/bool_value_page.cpp:43
 #: src/mmg/tabs/input_general.cpp:108
@@ -9088,6 +9101,8 @@ msgstr "是"
 #~ msgstr "您尚未選擇任何輸入檔和/或未發現軌道。"
 #~ msgid "audio/video/text subtitles embedded in OGG"
 #~ msgstr "嵌入在 OGG 中的音訊/視訊/文字字幕"
+#~ msgid "byte_buffer_c: (pos + num) > size. Should not have happened. Please file a bug report.\n"
+#~ msgstr "byte_buffer_c: (pos + num) > size。不該發生。請提交錯誤報告。\n"
 #~ msgid "cstrutf8_to_UTFstring: Invalid UTF-8 sequence encountered. Please contact moritz@bunkus.org and request that he implements a better UTF-8 parser."
 #~ msgstr "cstrutf8_to_UTFstring: 遇到了無效的 UTF-8 序列。請聯繫 moritz@bunkus.org 並要求他實現一套更好的 UTF-8 解析器。"
 #~ msgid "flac_header_extraction: Could not set the error callback.\n"

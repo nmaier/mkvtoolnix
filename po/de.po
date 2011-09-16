@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2011-06-01 10:59+0200\n"
+"PO-Revision-Date: 2011-09-17 00:01+0200\n"
 "Last-Translator: Moritz Bunkus <moritz@bunkus.org>\n"
 "Language-Team: German <moritz@bunkus.org>\n"
 "Language: de\n"
@@ -1846,7 +1846,7 @@ msgstr "Es wird momentan ein anderer Job ausgeführt. Bitte warten Sie, bis er b
 msgid "Appending a track from a file to another track from the same file is not allowed. This is the case for tracks number %u and %u."
 msgstr "Das Anhängen eines Tracks aus einer Datei an einen anderen Track aus derselben Datei ist nicht zulässig. Dieses ist für die Tracks Nummer %u und %u der Fall."
 
-#: src/merge/output_control.cpp:1692
+#: src/merge/output_control.cpp:1695
 msgid "Appending track %1% from file no. %2% ('%3%') to track %4% from file no. %5% ('%6%').\n"
 msgstr "Track %1% aus Datei Nummer %2% ('%3%') wird an Track %4% aus Datei Nummer %5% ('%6%') angefügt.\n"
 
@@ -2177,7 +2177,7 @@ msgstr "Kapitel"
 msgid "Chapters (%d entries) from %s"
 msgstr "Kapitel (%d Einträge) aus %s"
 
-#: src/merge/output_control.cpp:1331
+#: src/merge/output_control.cpp:1334
 msgid "Chapters are not allowed in WebM compliant files. No chapters will be written into any output file.\n"
 msgstr "Kapitel sind in WebM-konformen Dateien nicht zulässig. In keine der Ausgabedateien werden Kapitel geschrieben.\n"
 
@@ -2473,7 +2473,7 @@ msgstr "Es konnte kein gültiges MP3-Paket gefunden werden."
 msgid "Could not find an index for audio track %1% (avilib error message: %2%). Skipping track.\n"
 msgstr "Für Audio-Track %1% konnte kein Index gefunden werden (Fehlermeldung der avilib: %2%). Der Track wird ausgelassen.\n"
 
-#: src/merge/output_control.cpp:1647
+#: src/merge/output_control.cpp:1650
 msgid "Could not find gptzr when appending. %1%\n"
 msgstr "gptzr konnte beim Anhängen nicht gefunden werden. %1%\n"
 
@@ -2881,7 +2881,7 @@ msgstr "EBML Leseversion: %1%"
 msgid "EBML version: %1%"
 msgstr "EBML-Version: %1%"
 
-#: src/merge/output_control.cpp:1187
+#: src/merge/output_control.cpp:1190
 msgid "EVIL internal bug! (unknown file type). %1%\n"
 msgstr "Böser interner Fehler! (Unbekannter Dateityp). %1%\n"
 
@@ -3291,11 +3291,11 @@ msgstr "Setzt den Zeitstempelskalierungsfaktor fest auf ERSETZMICH. Sie müssen 
 msgid "Format specific options"
 msgstr "Formatspezifische Optionen"
 
-#: src/mpegparser/M2VParser.cpp:442
+#: src/mpegparser/M2VParser.cpp:449
 msgid "Found B frame without second reference in a non closed GOP. Fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr "B-Frame ohne zweites Referenzbild innerhalb einer nicht-geschlossenen Bildgruppe gefunden. Bitte diesen Fehler im MPEG2-Videostrom beheben und danach erneut versuchen, ihn zu muxen.\n"
 
-#: src/mpegparser/M2VParser.cpp:396
+#: src/mpegparser/M2VParser.cpp:403
 msgid "Found group of picture with broken link. You may want use smart reencode before attempting to multiplex it.\n"
 msgstr "Bildgruppe mit defektem Link gefunden. Bitte diesen Fehler im MPEG2-Videostrom beheben und danach erneut versuchen, ihn zu muxen.\n"
 
@@ -3303,7 +3303,7 @@ msgstr "Bildgruppe mit defektem Link gefunden. Bitte diesen Fehler im MPEG2-Vide
 msgid "Found no encoded data nor '@file' to read binary data from."
 msgstr "Es wurden weder enthaltene kodierte Binärdaten noch die Zeichenkette '@dateiname' gefunden, die eine Datei angegeben hätte, von der die Binärdaten gelesen werden sollen."
 
-#: src/mpegparser/M2VParser.cpp:444
+#: src/mpegparser/M2VParser.cpp:451
 msgid "Found one or more B frames without second reference in the first GOP. You may want to fix the MPEG2 video stream or use smart reencode before attempting to multiplex it.\n"
 msgstr "Einer oder mehrere B-Frames ohne zweites Referenzbild innerhalb der ersten Bildgruppe gefunden. Bitte diesen Fehler im MPEG2-Videostrom beheben und danach erneut versuchen, ihn zu muxen.\n"
 
@@ -3978,6 +3978,10 @@ msgid "MPEG program streams"
 msgstr "MPEG program streams"
 
 #: src/common/file_types.cpp:39
+msgid "MPEG transport streams"
+msgstr "MPEG transport streams"
+
+#: src/common/file_types.cpp:40
 msgid "MPEG video elementary streams"
 msgstr "MPEG Video elementary streams"
 
@@ -4007,7 +4011,7 @@ msgstr "Das \"Abspielen erzwungen\"-Flag des Tracks setzen. Abspielprogramme mü
 msgid "Matroska A/V files (*.mka;*.mkv;*.mk3d)|*.mkv;*.mka;*.mk3d|%s"
 msgstr "Matroska-Dateien (*.mkv;*.mka;*.mks;*.mk3d)|*.mkv;*.mka;*.mks;*.mk3d|%s"
 
-#: src/common/file_types.cpp:40
+#: src/common/file_types.cpp:41
 msgid "Matroska audio/video files"
 msgstr "Matroska Audio/Videodateien"
 
@@ -4352,7 +4356,7 @@ msgstr "Anzahl Nanosekunden (nicht skaliert) pro Bild."
 msgid "Numbers of channels in the track."
 msgstr "Anzahl Kanäle in diesem Track."
 
-#: src/common/file_types.cpp:43
+#: src/common/file_types.cpp:44
 msgid "Ogg/OGM audio/video files"
 msgstr "Ogg/OGM Audio/Video-Dateien"
 
@@ -4485,7 +4489,7 @@ msgstr "Bestehende Datei(en) überschreiben?"
 msgid "Overwrite existing file?"
 msgstr "Bestehende Datei überschreiben?"
 
-#: src/common/file_types.cpp:41
+#: src/common/file_types.cpp:42
 msgid "PGS/SUP subtitles"
 msgstr "PGS/SUP-Untertitel"
 
@@ -4611,7 +4615,7 @@ msgstr "Fortschritt: %1%%%%2%"
 msgid "Progress: 100%\n"
 msgstr "Fortschritt: 100%\n"
 
-#: src/merge/output_control.cpp:1944
+#: src/merge/output_control.cpp:1947
 msgid "Progress: 100%%%1%"
 msgstr "Fortschritt: 100%%%1%"
 
@@ -4623,7 +4627,7 @@ msgstr "Fortschritt: [%1%%2%] %3%%%"
 msgid "Querying mkvmerge's capabilities"
 msgstr "Abfrage der von mkvmerge unterstützten Features"
 
-#: src/common/file_types.cpp:42
+#: src/common/file_types.cpp:43
 msgid "QuickTime audio/video files"
 msgstr "QuickTime Audio/Video-Dateien"
 
@@ -4775,7 +4779,7 @@ msgstr "Bereit"
 msgid "Real output sampling frequency in Hz."
 msgstr "Tatsächliche Ausgabeabtastrate in Hz."
 
-#: src/common/file_types.cpp:44
+#: src/common/file_types.cpp:45
 msgid "RealMedia audio/video files"
 msgstr "RealMedia Audio/Video-Dateien"
 
@@ -4855,11 +4859,11 @@ msgstr "Ausgewählte s&tarten"
 msgid "SHA1-160"
 msgstr "SHA1-160"
 
-#: src/common/file_types.cpp:45
+#: src/common/file_types.cpp:46
 msgid "SRT text subtitles"
 msgstr "SRT Textuntertitel"
 
-#: src/common/file_types.cpp:46
+#: src/common/file_types.cpp:47
 msgid "SSA/ASS text subtitles"
 msgstr "SSA/ASS Textuntertitel"
 
@@ -5165,7 +5169,7 @@ msgstr "Zu kurzes AAC-Paket (Länge: %1% < %2%)\n"
 msgid "Short AAC audio packet (length: %1% < 2)\n"
 msgstr "Zu kurzes AAC-Paket (Länge: %1% < 2)\n"
 
-#: src/mpegparser/M2VParser.cpp:392
+#: src/mpegparser/M2VParser.cpp:399
 msgid "Shortened GOP detected. Some frames have been dropped. You may want to fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr "Verkürzte Bildergruppe gefunden. Einige Bilder wurden verworfen. Sie sollten diesen Fehler im MPEG2-Videostrom beheben und danach erneut versuchen, ihn zu muxen.\n"
 
@@ -5269,7 +5273,7 @@ msgstr "SimpleBlock"
 msgid "SimpleBlock (%1%track number %2%, %3% frame(s), timecode %|4$.3f|s = %5%)"
 msgstr "SimpleBlock (%1%Track Nummer %2%, %3% Frame(s), Zeitstempel %|4$.3f|s = %5%)"
 
-#: src/mpegparser/M2VParser.cpp:389
+#: src/mpegparser/M2VParser.cpp:396
 msgid "Single field frame before GOP header detected. Fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr "Bild mit nur einem Feld vor Bildgruppenkopf gefunden. Bitte diesen Fehler im MPEG2-Videostrom beheben und danach erneut versuchen, ihn zu muxen.\n"
 
@@ -5301,7 +5305,7 @@ msgstr "Einige Kopfdaten wurden verändert. Wollen Sie die Änderungen wirklich 
 msgid "Some header values have been modified. Do you really want to reload without saving the file?"
 msgstr "Einige Kopfdaten wurden verändert. Wollen Sie die Änderungen wirklich verwerfen und die Datei neu laden?"
 
-#: src/merge/output_control.cpp:1372
+#: src/merge/output_control.cpp:1375
 msgid "Some tag elements are missing (this error should not have occured - another similar error should have occured earlier). %1%\n"
 msgstr "Einie Tag-Elemente fehlen (dieser Fehler hätte nicht auftreten sollen, sondern früher ein ähnlicher). %1%\n"
 
@@ -5445,7 +5449,7 @@ msgstr "Unterstützte Dateitypen:\n"
 msgid "Suppress status output."
 msgstr "Statusausgaben unterdrücken."
 
-#: src/common/file_types.cpp:47
+#: src/common/file_types.cpp:48
 msgid "TTA (The lossless True Audio codec)"
 msgstr "TTA (The lossless True Audio codec)"
 
@@ -5475,7 +5479,7 @@ msgstr "Tagbearbeitungsziele"
 msgid "Tags"
 msgstr "Tags"
 
-#: src/merge/output_control.cpp:1360
+#: src/merge/output_control.cpp:1363
 msgid "Tags are not allowed in WebM compliant files. No tags will be written into any output file.\n"
 msgstr "Tags sind in WebM-konformen Dateien nicht zulässig. In keine der Ausgabedateien werden Tags geschrieben.\n"
 
@@ -5677,7 +5681,7 @@ msgstr "Der Codec-Typ '%1%' kann nicht in einer WebM-konformen Datei verwendet w
 
 #: src/output/p_passthrough.cpp:63 src/output/p_kate.cpp:113
 #: src/output/p_video.cpp:206 src/output/p_textsubs.cpp:102
-#: src/output/p_avc.cpp:203
+#: src/output/p_avc.cpp:209
 msgid "The codec's private data does not match (lengths: %1% and %2%)."
 msgstr "Die privaten Codec-Konfigurationsdaten stimmen nicht überein (Längen: %1% und %2%)."
 
@@ -5694,7 +5698,7 @@ msgstr "Der Dateikopf der Korrekturdatei konnte nicht gelesen werden.\n"
 msgid "The country '%s' is not a valid ccTLD and cannot be selected."
 msgstr "Das Land '%s' ist kein gültiger ccTLD-Code und kann nicht ausgewählt werden."
 
-#: src/merge/output_control.cpp:1435
+#: src/merge/output_control.cpp:1438
 msgid "The cue entries (the index) are being written..."
 msgstr "Die Cueeinträge (der Index) werden geschrieben..."
 
@@ -5716,7 +5720,7 @@ msgstr "Das Standardsprachkürzel '%1%' ist kein gültiger ISO639-2-Code und wir
 msgid "The delay setting for track nr. %s in file '%s' is invalid."
 msgstr "Der Wert für die Verzögerung für Track Nummer %s in Quelldatei '%s' ist ungültig."
 
-#: src/merge/output_control.cpp:1191
+#: src/merge/output_control.cpp:1194
 msgid ""
 "The demultiplexer for the file '%1%' failed to initialize:\n"
 "%2%\n"
@@ -5796,7 +5800,7 @@ msgstr "Die Datei '%1%' konnte nicht zum Schreiben geöffnet werden (%2%).\n"
 msgid "The file '%1%' could not be opened for writing (%2%, %3%).\n"
 msgstr "Die Datei '%1%' konnte nicht zum Schreiben geöffnet werden (%2%, %3%).\n"
 
-#: src/merge/output_control.cpp:1400
+#: src/merge/output_control.cpp:1403
 msgid "The file '%1%' has been opened for writing.\n"
 msgstr "Die Datei '%1%' wurde zum Schreiben geöffnet.\n"
 
@@ -6014,7 +6018,7 @@ msgstr "Das Sprachkürzel '%1%' ist kein gültiges ISO639-2-Sprachkürzel und wi
 msgid "The line %1% of the timecode file '%2%' does not contain a valid floating point number.\n"
 msgstr "Die Zeile %1% der Zeitstempeldatei '%2%' enthält keine gültige Fließkommazahl.\n"
 
-#: src/common/translation.cpp:296
+#: src/common/translation.cpp:297
 msgid "The locale could not be set properly. Check the LANG, LC_ALL and LC_MESSAGES environment variables.\n"
 msgstr "Die Sprachumgebung konnte nicht erfolgreich gesetzt werden. Bitte überprüfen Sie die Umgebungsvariablen LANG, LC_ALL und LC_MESSAGES.\n"
 
@@ -6129,7 +6133,7 @@ msgstr "Die Option '--meta-seek-size' wird nicht mehr länger unterstützt. Lese
 msgid "The order of the various options is not important."
 msgstr "Die Reihenfolge der verschiedenen Optionen ist unwichtig."
 
-#: src/merge/output_control.cpp:1396
+#: src/merge/output_control.cpp:1399
 msgid "The output file '%1%' could not be opened for writing (%2%).\n"
 msgstr "Die Zieldatei '%1%' konnte nicht zum Schreiben geöffnet werden (%2%).\n"
 
@@ -6504,7 +6508,7 @@ msgstr "Dieses Merkmal ist einzigartig. Es können keine weiteren Instanzen davo
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. %1%\n"
 msgstr "Das hätte WIRKLICH nicht passieren dürfen. Der für das erste Meta-Seek-Element reservierte Platz war zu klein. %1%\n"
 
-#: src/merge/output_control.cpp:1585
+#: src/merge/output_control.cpp:1588
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. Size needed: %1%. %2%\n"
 msgstr "Das hätte WIRKLICH nicht passieren dürfen. Der für das erste Meta-Seek-Element reservierte Platz war zu klein. Benötigter Platz: %1%. %2%\n"
 
@@ -6715,7 +6719,7 @@ msgstr "Typ: %1% (%2%)"
 msgid "UID:"
 msgstr "UID:"
 
-#: src/common/file_types.cpp:48
+#: src/common/file_types.cpp:49
 msgid "USF text subtitles"
 msgstr "USF Textuntertitel"
 
@@ -6723,7 +6727,7 @@ msgstr "USF Textuntertitel"
 msgid "UTFstring_to_cstrutf8: Invalid wide character. Please contact moritz@bunkus.org if you think that this is not true."
 msgstr "UTFstring_to_cstrutf8: Ungültiges UTF32-Zeichen. Wenden Sie sich an moritz@bunkus.org, wenn Sie der Meinung sind, dass das ein Bug ist."
 
-#: src/mpegparser/M2VParser.cpp:237
+#: src/mpegparser/M2VParser.cpp:244
 msgid "Unexpected picture frame after single field frame. Fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr "Unerwartetes Bild vom Typ \"Vollbild\" nach nur einem Bild vom Typ \"Feld\". Bitte diesen Fehler im MPEG2-Videostrom beheben und danach erneut versuchen, ihn zu muxen.\n"
 
@@ -6856,7 +6860,7 @@ msgid "Using a NALU size length of 3 bytes might result in tracks that won't be 
 msgstr "Das NALU-Längenfeld drei Bytes lang zu machen kann dazu führen, dass es zu Abspielproblemen mit manchen AVC/h.264-Codecs kommt.\n"
 
 #: src/input/r_ac3.cpp:90 src/input/r_matroska.cpp:1557
-#: src/input/r_mpeg_ps.cpp:1180
+#: src/input/r_mpeg_ts.cpp:966 src/input/r_mpeg_ps.cpp:1180
 msgid "Using the %1%AC3 output module.\n"
 msgstr "Das %1%AC3-Ausgabemodul wird benutzt.\n"
 
@@ -6907,8 +6911,8 @@ msgid "Using the DTS demultiplexer.\n"
 msgstr "Der DTS-Demultiplexer wird benutzt.\n"
 
 #: src/input/r_dts.cpp:114 src/input/r_matroska.cpp:1577
-#: src/input/r_wav.cpp:354 src/input/r_mpeg_ps.cpp:1185
-#: src/input/r_avi.cpp:689
+#: src/input/r_mpeg_ts.cpp:970 src/input/r_wav.cpp:354
+#: src/input/r_mpeg_ps.cpp:1185 src/input/r_avi.cpp:689
 msgid "Using the DTS output module.\n"
 msgstr "Das DTS-Ausgabemodul wird benutzt.\n"
 
@@ -6954,8 +6958,9 @@ msgid "Using the MPEG PS demultiplexer.\n"
 msgstr "Der MPEG PS-Demultiplexer wird benutzt.\n"
 
 #: src/input/r_mp3.cpp:71 src/input/r_matroska.cpp:1607
-#: src/input/r_ogm.cpp:1030 src/input/r_mpeg_ps.cpp:1175
-#: src/input/r_qtmp4.cpp:1537 src/input/r_avi.cpp:561
+#: src/input/r_ogm.cpp:1030 src/input/r_mpeg_ts.cpp:962
+#: src/input/r_mpeg_ps.cpp:1175 src/input/r_qtmp4.cpp:1537
+#: src/input/r_avi.cpp:561
 msgid "Using the MPEG audio output module.\n"
 msgstr "Das  MPEG-Audio-Ausgabemodul wird benutzt.\n"
 
@@ -6963,8 +6968,8 @@ msgstr "Das  MPEG-Audio-Ausgabemodul wird benutzt.\n"
 msgid "Using the MPEG-%1% video output module.\n"
 msgstr "Das MPEG-%1%-Video-Ausgabemodul wird benuztz.\n"
 
-#: src/input/r_mpeg_es.cpp:179 src/input/r_mpeg_ps.cpp:1201
-#: src/input/r_avi.cpp:323
+#: src/input/r_mpeg_ts.cpp:993 src/input/r_mpeg_es.cpp:179
+#: src/input/r_mpeg_ps.cpp:1201 src/input/r_avi.cpp:323
 msgid "Using the MPEG-1/2 video output module.\n"
 msgstr "Das MPEG-1/2-Video-Ausgabemodul wird benutzt.\n"
 
@@ -6973,8 +6978,8 @@ msgid "Using the MPEG-4 part 10 (AVC) video output module.\n"
 msgstr "Das MPEG-4 Teil 10 (AVC)-Video-Ausgabemodul wird benutzt.\n"
 
 #: src/input/r_matroska.cpp:1849 src/input/r_ogm.cpp:1154
-#: src/input/r_avc.cpp:136 src/input/r_mpeg_ps.cpp:1214
-#: src/input/r_avi.cpp:348
+#: src/input/r_avc.cpp:136 src/input/r_mpeg_ts.cpp:1013
+#: src/input/r_mpeg_ps.cpp:1214 src/input/r_avi.cpp:348
 msgid "Using the MPEG-4 part 10 ES video output module.\n"
 msgstr "Das MPEG-4 Teil 10 ES-Video-Ausgabemodul wird benutzt.\n"
 
@@ -7040,7 +7045,7 @@ msgstr "Das TTA-Ausgabemodul wird benutzt.\n"
 msgid "Using the Theora video output module.\n"
 msgstr "Das Theora-Video-Ausgabemodul wird benutzt.\n"
 
-#: src/input/r_mpeg_ps.cpp:1190
+#: src/input/r_mpeg_ts.cpp:974 src/input/r_mpeg_ps.cpp:1190
 msgid "Using the TrueHD output module.\n"
 msgstr "Das TrueHD-Ausgabemodul wird benutzt.\n"
 
@@ -7061,7 +7066,7 @@ msgid "Using the VC1 ES demultiplexer.\n"
 msgstr "Der VC1 ES-Demultiplexer wird benutzt.\n"
 
 #: src/input/r_vc1.cpp:96 src/input/r_matroska.cpp:1877
-#: src/input/r_mpeg_ps.cpp:1219
+#: src/input/r_mpeg_ts.cpp:1029 src/input/r_mpeg_ps.cpp:1219
 msgid "Using the VC1 video output module.\n"
 msgstr "Das VC1-Video-Ausgabemodul wird benutzt.\n"
 
@@ -7138,7 +7143,7 @@ msgstr "Das Video-Ausgabemodul wird benutzt (FourCC: %|1$.4s|).\n"
 msgid "Using the video output module.\n"
 msgstr "Das Video-Ausgabemodul wird benutzt.\n"
 
-#: src/common/file_types.cpp:49
+#: src/common/file_types.cpp:50
 msgid "VC1 elementary streams"
 msgstr "VC1 elementary streams"
 
@@ -7229,19 +7234,19 @@ msgstr "Video-Track %u"
 msgid "View the output that mkvmerge generated during the muxing process for the selected job(s)"
 msgstr "Die Ausgabe ansehen, die mkvmerge während des Muxprozesses der ausgewählten Jobs erzeugt hat"
 
-#: src/common/file_types.cpp:50
+#: src/common/file_types.cpp:51
 msgid "VobButtons"
 msgstr "VobButtons"
 
-#: src/common/file_types.cpp:51
+#: src/common/file_types.cpp:52
 msgid "VobSub subtitles"
 msgstr "VobSub-Untertitel"
 
-#: src/common/file_types.cpp:52
+#: src/common/file_types.cpp:53
 msgid "WAVE (uncompressed PCM audio)"
 msgstr "WAVE (unkomprimiertes PCM)"
 
-#: src/common/file_types.cpp:53
+#: src/common/file_types.cpp:54
 msgid "WAVPACK v4 audio"
 msgstr "WAVPACK v4 Audio"
 
@@ -7273,7 +7278,7 @@ msgstr "Warnung: Es gibt mehr als einen Track mit der Nummer %1%."
 msgid "Warnings:"
 msgstr "Warnungen: "
 
-#: src/common/file_types.cpp:54
+#: src/common/file_types.cpp:55
 msgid "WebM audio/video files"
 msgstr "WebM Audio/Video-Dateien"
 
@@ -7500,10 +7505,6 @@ msgstr "Bits pro Abtastwert: %1%"
 #: src/input/r_matroska.cpp:93 src/info/mkvinfo.cpp:1119
 msgid "buttons"
 msgstr "Buttons"
-
-#: src/common/byte_buffer.h:73
-msgid "byte_buffer_c: (pos + num) > size. Should not have happened. Please file a bug report.\n"
-msgstr "byte_buffer_c: (pos + num) > size. Hätte nicht passieren dürfen. Bitte legen SIe einen Fehlerbericht an.\n"
 
 #: src/common/compression.cpp:240
 msgid "bzip2 compression failed. Result: %1%\n"
@@ -7914,7 +7915,7 @@ msgstr "memory.cpp/safememdup() aus Datei %1%, Zeile %2% aufgerufen: malloc() ha
 msgid "memory.cpp/saferealloc() called from file %1%, line %2%: realloc() returned NULL for a size of %3% bytes.\n"
 msgstr "memory.cpp/saferealloc() aus Datei %1%, Zeile %2% aufgerufen: realloc() hat für eine Größe von %3% Byte(s) NULL zurückgegeben.\n"
 
-#: src/common/memory.h:213
+#: src/common/memory.h:217
 msgid "memory_slice_cursor_c copy c'tor: Must not be used!"
 msgstr "memory_slice_cursor_c copy c'tor: Darf nicht benutzt werden!"
 
@@ -8145,6 +8146,10 @@ msgstr "mpeg_ps_reader: Hätte nicht passieren sollen #1. %1%"
 #: src/input/r_mpeg_ps.cpp:1223
 msgid "mpeg_ps_reader: Should not have happened #2. %1%"
 msgstr "mpeg_ps_reader: Hätte nicht passieren sollen #2. %1%"
+
+#: src/input/r_mpeg_ts.cpp:370
+msgid "mpeg_ts_reader_c: Could not open the file."
+msgstr "mpeg_ts_reader_c: Die Quelldatei konnte nicht geöffnet werden."
 
 #: src/mmg/header_editor/bool_value_page.cpp:43
 #: src/mmg/tabs/input_general.cpp:108 src/mmg/tabs/input_general.cpp:124
@@ -9003,6 +9008,9 @@ msgstr "ja"
 
 #~ msgid "audio/video/text subtitles embedded in OGG"
 #~ msgstr "Audio/Video/Textuntertitel in Ogg eingebettet"
+
+#~ msgid "byte_buffer_c: (pos + num) > size. Should not have happened. Please file a bug report.\n"
+#~ msgstr "byte_buffer_c: (pos + num) > size. Hätte nicht passieren dürfen. Bitte legen SIe einen Fehlerbericht an.\n"
 
 #~ msgid "cstrutf8_to_UTFstring: Invalid UTF-8 sequence encountered. Please contact moritz@bunkus.org and request that he implements a better UTF-8 parser."
 #~ msgstr "cstrutf8_to_UTFstring: Ungültige UTF-8-Sequenz gefunden. Wenden Sie sich bitte an moritz@bunkus.org, und bitten Sie darum, dass er den UTF-8-Parser verbessert."

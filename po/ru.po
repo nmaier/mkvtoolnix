@@ -1876,7 +1876,7 @@ msgstr "Все еще обрабатывается друге задание. П
 msgid "Appending a track from a file to another track from the same file is not allowed. This is the case for tracks number %u and %u."
 msgstr "Присоединение дорожки из файла к другой из того же файла не допускается. Это произошло с дорожками %u и %u."
 
-#: src/merge/output_control.cpp:1692
+#: src/merge/output_control.cpp:1695
 msgid "Appending track %1% from file no. %2% ('%3%') to track %4% from file no. %5% ('%6%').\n"
 msgstr "Добавление дорожки %1% из файла № %2% ('%3%') к дорожке %4% из файла № %5% ('%6%').\n"
 
@@ -2227,7 +2227,7 @@ msgstr "Главы"
 msgid "Chapters (%d entries) from %s"
 msgstr "Главы (%d записи) из %s"
 
-#: src/merge/output_control.cpp:1331
+#: src/merge/output_control.cpp:1334
 msgid "Chapters are not allowed in WebM compliant files. No chapters will be written into any output file.\n"
 msgstr "Главы не допускаются в WebM-совместимых файлах. Главы не будут записаны в любой выходной файл.\n"
 
@@ -2540,7 +2540,7 @@ msgstr "Невозможно найти правильный пакет MP3."
 msgid "Could not find an index for audio track %1% (avilib error message: %2%). Skipping track.\n"
 msgstr "Невозможно обнаружить индекс для звуковой дорожки %1% (сообщение об ошибке avilib: %2%). Дорожка пропущена.\n"
 
-#: src/merge/output_control.cpp:1647
+#: src/merge/output_control.cpp:1650
 msgid "Could not find gptzr when appending. %1%\n"
 msgstr "Невозможно обнаружить gptzr при присоединении. %1%\n"
 
@@ -2957,7 +2957,7 @@ msgstr "Версия EBML прочитана: %1%"
 msgid "EBML version: %1%"
 msgstr "Версия EBML: %1%"
 
-#: src/merge/output_control.cpp:1187
+#: src/merge/output_control.cpp:1190
 msgid "EVIL internal bug! (unknown file type). %1%\n"
 msgstr "ЗЛАЯ внутренняя ошибка! (Неизвестный тип файла). %1%\n"
 
@@ -3386,11 +3386,11 @@ msgstr "Принудительно устанавливает множитель
 msgid "Format specific options"
 msgstr "Параметры, специфичные для формата"
 
-#: src/mpegparser/M2VParser.cpp:442
+#: src/mpegparser/M2VParser.cpp:449
 msgid "Found B frame without second reference in a non closed GOP. Fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr "Найден B-кадр без второй ссылки на незакрытый GOP. Исправьте видеопоток MPEG2 прежде чем пытаться мультиплексировать его.\n"
 
-#: src/mpegparser/M2VParser.cpp:396
+#: src/mpegparser/M2VParser.cpp:403
 msgid "Found group of picture with broken link. You may want use smart reencode before attempting to multiplex it.\n"
 msgstr "Найдена группа изображений с поврежденной связью. Возможно вам стоит применить умное перекодирование, прежде чем пытаться мультиплексировать его.\n"
 
@@ -3398,7 +3398,7 @@ msgstr "Найдена группа изображений с поврежден
 msgid "Found no encoded data nor '@file' to read binary data from."
 msgstr "Не найдено ни закодированных данных, ни '@file', из которых можно было бы прочесть бинарные данные."
 
-#: src/mpegparser/M2VParser.cpp:444
+#: src/mpegparser/M2VParser.cpp:451
 msgid "Found one or more B frames without second reference in the first GOP. You may want to fix the MPEG2 video stream or use smart reencode before attempting to multiplex it.\n"
 msgstr "Найден один или более B-кадров без второй ссылки в первом GOP. Возможно вам стоит исправить видеопоток MPEG2 или применить умное перекодирование, прежде чем пытаться его мультиплексировать.\n"
 
@@ -4093,6 +4093,11 @@ msgid "MPEG program streams"
 msgstr "Программные потоки MPEG"
 
 #: src/common/file_types.cpp:39
+#, fuzzy
+msgid "MPEG transport streams"
+msgstr "Программные потоки MPEG"
+
+#: src/common/file_types.cpp:40
 msgid "MPEG video elementary streams"
 msgstr "Элементарные потоки MPEG Video"
 
@@ -4124,7 +4129,7 @@ msgstr "Пометить эту дорожку как 'принудительн�
 msgid "Matroska A/V files (*.mka;*.mkv;*.mk3d)|*.mkv;*.mka;*.mk3d|%s"
 msgstr "Файлы Matroska Audio/Video (*.mkv;*.mka;*.mks;*.mk3d)|*.mkv;*.mka;*.mks;*.mk3d|%s"
 
-#: src/common/file_types.cpp:40
+#: src/common/file_types.cpp:41
 msgid "Matroska audio/video files"
 msgstr "Файлы Matroska Audio/Video"
 
@@ -4481,7 +4486,7 @@ msgstr "Количество наносекунд (не масштабирова
 msgid "Numbers of channels in the track."
 msgstr "Число каналов в дорожке."
 
-#: src/common/file_types.cpp:43
+#: src/common/file_types.cpp:44
 msgid "Ogg/OGM audio/video files"
 msgstr "Файлы Ogg/OGM Audio/Video"
 
@@ -4618,7 +4623,7 @@ msgstr "Заменить существующий файл(ы)?"
 msgid "Overwrite existing file?"
 msgstr "Заменить существующий файл?"
 
-#: src/common/file_types.cpp:41
+#: src/common/file_types.cpp:42
 msgid "PGS/SUP subtitles"
 msgstr "Субтитры PGS/SUP"
 
@@ -4749,7 +4754,7 @@ msgstr "Обработано: %1%%%%2%"
 msgid "Progress: 100%\n"
 msgstr "Обработано: 100%\n"
 
-#: src/merge/output_control.cpp:1944
+#: src/merge/output_control.cpp:1947
 msgid "Progress: 100%%%1%"
 msgstr "Обработано: 100%%%1%"
 
@@ -4761,7 +4766,7 @@ msgstr "Обработано: [%1%%2%] %3%%%"
 msgid "Querying mkvmerge's capabilities"
 msgstr "Уточняю возможности mkvmerge"
 
-#: src/common/file_types.cpp:42
+#: src/common/file_types.cpp:43
 msgid "QuickTime audio/video files"
 msgstr "Файлы QuickTime Audio/Video"
 
@@ -4917,7 +4922,7 @@ msgstr "Готов"
 msgid "Real output sampling frequency in Hz."
 msgstr "Реальная частота дискретизации на выходе в Hz."
 
-#: src/common/file_types.cpp:44
+#: src/common/file_types.cpp:45
 msgid "RealMedia audio/video files"
 msgstr "Файлы RealMedia Audio/Video"
 
@@ -4999,11 +5004,11 @@ msgstr "&Начать выбранное"
 msgid "SHA1-160"
 msgstr "SHA1-160"
 
-#: src/common/file_types.cpp:45
+#: src/common/file_types.cpp:46
 msgid "SRT text subtitles"
 msgstr "Текстовые субтитры SRT"
 
-#: src/common/file_types.cpp:46
+#: src/common/file_types.cpp:47
 msgid "SSA/ASS text subtitles"
 msgstr "Текстовые субтитры SSA/ASS"
 
@@ -5319,7 +5324,7 @@ msgstr "Короткий аудиопакет AAC (длина: %1% < %2%)\n"
 msgid "Short AAC audio packet (length: %1% < 2)\n"
 msgstr "Короткий аудиопакет AAC (длина: %1% < 2)\n"
 
-#: src/mpegparser/M2VParser.cpp:392
+#: src/mpegparser/M2VParser.cpp:399
 msgid "Shortened GOP detected. Some frames have been dropped. You may want to fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr "Обнаружена сокращенная GOP. Некоторые кадры были отброшены. Возможно, вам стоит исправить видеопоток MPEG2, прежде чем пытаться его мультиплексировать.\n"
 
@@ -5423,7 +5428,7 @@ msgstr "Простой блок"
 msgid "SimpleBlock (%1%track number %2%, %3% frame(s), timecode %|4$.3f|s = %5%)"
 msgstr "Простой блок (%1% номер дорожки %2%, %3% кадр(ы), тайм-код %|4$.3f|s = %5%)"
 
-#: src/mpegparser/M2VParser.cpp:389
+#: src/mpegparser/M2VParser.cpp:396
 msgid "Single field frame before GOP header detected. Fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr "Обнаружен кадр с одним полем до заголовка GOP. Исправьте видеопоток MPEG2 прежде чем пытаться мультиплексировать его.\n"
 
@@ -5455,7 +5460,7 @@ msgstr "Некоторые значения заголовка были изме
 msgid "Some header values have been modified. Do you really want to reload without saving the file?"
 msgstr "Некоторые значения заголовка были изменены. Вы действительно хотите перезагрузить без сохранения файла?"
 
-#: src/merge/output_control.cpp:1372
+#: src/merge/output_control.cpp:1375
 msgid "Some tag elements are missing (this error should not have occured - another similar error should have occured earlier). %1%\n"
 msgstr "Некоторые элементы тега отсутствуют (эта ошибка не должна произойти - другая подобная ошибка должна была иметь место ранее). %1%\n"
 
@@ -5602,7 +5607,7 @@ msgstr "Поддерживаемые типы файлов:\n"
 msgid "Suppress status output."
 msgstr "Скрыть вывод состояния."
 
-#: src/common/file_types.cpp:47
+#: src/common/file_types.cpp:48
 msgid "TTA (The lossless True Audio codec)"
 msgstr "TTA (The lossless True Audio codec)"
 
@@ -5634,7 +5639,7 @@ msgstr "Селекторы тэгов"
 msgid "Tags"
 msgstr "Теги"
 
-#: src/merge/output_control.cpp:1360
+#: src/merge/output_control.cpp:1363
 msgid "Tags are not allowed in WebM compliant files. No tags will be written into any output file.\n"
 msgstr "В WebM-совместимых файлах теги не допускаются. Теги не будут записаны в любой выходной файл.\n"
 
@@ -5839,7 +5844,7 @@ msgstr "Тип кодека '%1%' не может быть использова�
 #: src/output/p_kate.cpp:113
 #: src/output/p_video.cpp:206
 #: src/output/p_textsubs.cpp:102
-#: src/output/p_avc.cpp:203
+#: src/output/p_avc.cpp:209
 msgid "The codec's private data does not match (lengths: %1% and %2%)."
 msgstr "Частные данные кодека не совпадают (длины: %1% и %2%)."
 
@@ -5856,7 +5861,7 @@ msgstr "Заголовок файла коррекции не был прочи�
 msgid "The country '%s' is not a valid ccTLD and cannot be selected."
 msgstr "Страна '%s' не является действительным ccTLD и не может быть выбрана."
 
-#: src/merge/output_control.cpp:1435
+#: src/merge/output_control.cpp:1438
 msgid "The cue entries (the index) are being written..."
 msgstr "Пишутся записи cue (индекс)..."
 
@@ -5878,7 +5883,7 @@ msgstr "Код языка по умолчанию '%1%' не является д
 msgid "The delay setting for track nr. %s in file '%s' is invalid."
 msgstr "Выставленная задержка для дорожки %s в файле '%s' неверна."
 
-#: src/merge/output_control.cpp:1191
+#: src/merge/output_control.cpp:1194
 msgid ""
 "The demultiplexer for the file '%1%' failed to initialize:\n"
 "%2%\n"
@@ -5962,7 +5967,7 @@ msgstr "Файл '%1%' не может быть открыт для записи
 msgid "The file '%1%' could not be opened for writing (%2%, %3%).\n"
 msgstr "Файл '%1%' не может быть открыт для записи (%2%, %3%).\n"
 
-#: src/merge/output_control.cpp:1400
+#: src/merge/output_control.cpp:1403
 msgid "The file '%1%' has been opened for writing.\n"
 msgstr "Файл '%1%' был открыт для записи.\n"
 
@@ -6184,7 +6189,7 @@ msgstr "Код языка '%1%' не является допустимым ко�
 msgid "The line %1% of the timecode file '%2%' does not contain a valid floating point number.\n"
 msgstr "Строка %1% тайм-кода файла '%2%' не содержит правильное число с плавающей запятой.\n"
 
-#: src/common/translation.cpp:296
+#: src/common/translation.cpp:297
 msgid "The locale could not be set properly. Check the LANG, LC_ALL and LC_MESSAGES environment variables.\n"
 msgstr "Язык не может быть установлен правильно. Проверьте переменные окружения LANG, LC_ALL и LC_MESSAGES.\n"
 
@@ -6306,7 +6311,7 @@ msgstr "Параметр '--meta-seek-size' больше не поддержив
 msgid "The order of the various options is not important."
 msgstr "Порядок различных параметров не имеет значения."
 
-#: src/merge/output_control.cpp:1396
+#: src/merge/output_control.cpp:1399
 msgid "The output file '%1%' could not be opened for writing (%2%).\n"
 msgstr "Выходной файл '%1%' не может быть открыт для записи (%2%).\n"
 
@@ -6688,7 +6693,7 @@ msgstr "Это свойство уникально. Больше таких не
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. %1%\n"
 msgstr "Такого НА САМОМ ДЕЛЕ не должно происходить. Пространство, зарезервированное для первого элемента метапоиска, слишком мало. %1%\n"
 
-#: src/merge/output_control.cpp:1585
+#: src/merge/output_control.cpp:1588
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. Size needed: %1%. %2%\n"
 msgstr "Такого НА САМОМ ДЕЛЕ не должно происходить. Пространство, зарезервированное для первого элемента метапоиска, слишком мало. Необходимо места: %1%. %2%\n"
 
@@ -6912,7 +6917,7 @@ msgstr "Тип: %1% (%2%)"
 msgid "UID:"
 msgstr "UID:"
 
-#: src/common/file_types.cpp:48
+#: src/common/file_types.cpp:49
 msgid "USF text subtitles"
 msgstr "Текстовые субтитры USF"
 
@@ -6920,7 +6925,7 @@ msgstr "Текстовые субтитры USF"
 msgid "UTFstring_to_cstrutf8: Invalid wide character. Please contact moritz@bunkus.org if you think that this is not true."
 msgstr "UTFstring_to_cstrutf8: символ неправильной ширины. Пожалуйста, свяжитесь с moritz@bunkus.org если вы думаете, что это не так."
 
-#: src/mpegparser/M2VParser.cpp:237
+#: src/mpegparser/M2VParser.cpp:244
 msgid "Unexpected picture frame after single field frame. Fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr "Неожиданный кадр с изображением после кадра с одним полем. Исправьте поток MPEG2 видео прежде чем пытаться мультиплексировать его снова.\n"
 
@@ -7048,6 +7053,7 @@ msgstr "Использование длины размера NALU, равног�
 
 #: src/input/r_ac3.cpp:90
 #: src/input/r_matroska.cpp:1557
+#: src/input/r_mpeg_ts.cpp:966
 #: src/input/r_mpeg_ps.cpp:1180
 msgid "Using the %1%AC3 output module.\n"
 msgstr "Применяется модуль вывода %1%AC3.\n"
@@ -7104,6 +7110,7 @@ msgstr "Применяется демультиплексор DTS.\n"
 
 #: src/input/r_dts.cpp:114
 #: src/input/r_matroska.cpp:1577
+#: src/input/r_mpeg_ts.cpp:970
 #: src/input/r_wav.cpp:354
 #: src/input/r_mpeg_ps.cpp:1185
 #: src/input/r_avi.cpp:689
@@ -7156,6 +7163,7 @@ msgstr "Применяется демультиплексор MPEG PS.\n"
 #: src/input/r_mp3.cpp:71
 #: src/input/r_matroska.cpp:1607
 #: src/input/r_ogm.cpp:1030
+#: src/input/r_mpeg_ts.cpp:962
 #: src/input/r_mpeg_ps.cpp:1175
 #: src/input/r_qtmp4.cpp:1537
 #: src/input/r_avi.cpp:561
@@ -7167,6 +7175,7 @@ msgstr "Применяется модуль вывода MPEG аудио.\n"
 msgid "Using the MPEG-%1% video output module.\n"
 msgstr "Применяется модуль вывода MPEG-%1% видео.\n"
 
+#: src/input/r_mpeg_ts.cpp:993
 #: src/input/r_mpeg_es.cpp:179
 #: src/input/r_mpeg_ps.cpp:1201
 #: src/input/r_avi.cpp:323
@@ -7181,6 +7190,7 @@ msgstr "Применяется модуль вывода MPEG-4 Part 10 (AVC) в
 #: src/input/r_matroska.cpp:1849
 #: src/input/r_ogm.cpp:1154
 #: src/input/r_avc.cpp:136
+#: src/input/r_mpeg_ts.cpp:1013
 #: src/input/r_mpeg_ps.cpp:1214
 #: src/input/r_avi.cpp:348
 msgid "Using the MPEG-4 part 10 ES video output module.\n"
@@ -7256,6 +7266,7 @@ msgstr "Применяется модуль вывода TTA.\n"
 msgid "Using the Theora video output module.\n"
 msgstr "Применяется модуль вывода Theora видео.\n"
 
+#: src/input/r_mpeg_ts.cpp:974
 #: src/input/r_mpeg_ps.cpp:1190
 msgid "Using the TrueHD output module.\n"
 msgstr "Применяется модуль вывода TrueHD.\n"
@@ -7278,6 +7289,7 @@ msgstr "Применяется демультиплексор VC1 ES.\n"
 
 #: src/input/r_vc1.cpp:96
 #: src/input/r_matroska.cpp:1877
+#: src/input/r_mpeg_ts.cpp:1029
 #: src/input/r_mpeg_ps.cpp:1219
 msgid "Using the VC1 video output module.\n"
 msgstr "Применяется модуль вывода VC1 видео.\n"
@@ -7363,7 +7375,7 @@ msgstr "Применяется модуль вывода видео (FourCC: %|1
 msgid "Using the video output module.\n"
 msgstr "Применяется модуль вывода видео.\n"
 
-#: src/common/file_types.cpp:49
+#: src/common/file_types.cpp:50
 msgid "VC1 elementary streams"
 msgstr "Элементарные потоки VC1"
 
@@ -7459,19 +7471,19 @@ msgstr "Видеодорожка %u"
 msgid "View the output that mkvmerge generated during the muxing process for the selected job(s)"
 msgstr "Просмотреть отчет, созданный mkvmerge для выбранного задания(й) в ходе мультиплексирования"
 
-#: src/common/file_types.cpp:50
+#: src/common/file_types.cpp:51
 msgid "VobButtons"
 msgstr "VobButtons"
 
-#: src/common/file_types.cpp:51
+#: src/common/file_types.cpp:52
 msgid "VobSub subtitles"
 msgstr "Субтитры VobSub"
 
-#: src/common/file_types.cpp:52
+#: src/common/file_types.cpp:53
 msgid "WAVE (uncompressed PCM audio)"
 msgstr "WAVE (несжатое аудио PCM)"
 
-#: src/common/file_types.cpp:53
+#: src/common/file_types.cpp:54
 msgid "WAVPACK v4 audio"
 msgstr "Аудио WAVPACK v4"
 
@@ -7503,7 +7515,7 @@ msgstr "Предупреждение: номер %1% имеет более че�
 msgid "Warnings:"
 msgstr "Предупреждения:"
 
-#: src/common/file_types.cpp:54
+#: src/common/file_types.cpp:55
 msgid "WebM audio/video files"
 msgstr "Файла WebM Audio/Video"
 
@@ -7736,10 +7748,6 @@ msgstr "Разрядность: %1%"
 #: src/info/mkvinfo.cpp:1119
 msgid "buttons"
 msgstr "Кнопки"
-
-#: src/common/byte_buffer.h:73
-msgid "byte_buffer_c: (pos + num) > size. Should not have happened. Please file a bug report.\n"
-msgstr "byte_buffer_c: (pos + num) > size. Такого не должно было случиться. Пожалуйста, отправьте автору сообщение об ошибке.\n"
 
 #: src/common/compression.cpp:240
 msgid "bzip2 compression failed. Result: %1%\n"
@@ -8171,7 +8179,7 @@ msgstr "memory.cpp/safememdup() вызван из файла %1%, строка %
 msgid "memory.cpp/saferealloc() called from file %1%, line %2%: realloc() returned NULL for a size of %3% bytes.\n"
 msgstr "memory.cpp/saferealloc() вызван из файла %1%, строка %2%: malloc() вернул NULL для размера %3% байт.\n"
 
-#: src/common/memory.h:213
+#: src/common/memory.h:217
 msgid "memory_slice_cursor_c copy c'tor: Must not be used!"
 msgstr "memory_slice_cursor_c copy c'tor: Не использовать!"
 
@@ -8415,6 +8423,11 @@ msgstr "mpeg_ps_reader: Не должно было случиться #1. %1%"
 #: src/input/r_mpeg_ps.cpp:1223
 msgid "mpeg_ps_reader: Should not have happened #2. %1%"
 msgstr "mpeg_ps_reader: Не должно было случиться #2. %1%"
+
+#: src/input/r_mpeg_ts.cpp:370
+#, fuzzy
+msgid "mpeg_ts_reader_c: Could not open the file."
+msgstr "mpeg_es_reader: Не удалось открыть файл."
 
 #: src/mmg/header_editor/bool_value_page.cpp:43
 #: src/mmg/tabs/input_general.cpp:108
@@ -8934,6 +8947,8 @@ msgstr "Да"
 #~ msgstr "Создать исходные файлы FLAC (по умолчанию: написать OggFLAC файлы)."
 #~ msgid "audio/video/text subtitles embedded in OGG"
 #~ msgstr "аудио/видео/текстовые субтитры, внедренные в OGG"
+#~ msgid "byte_buffer_c: (pos + num) > size. Should not have happened. Please file a bug report.\n"
+#~ msgstr "byte_buffer_c: (pos + num) > size. Такого не должно было случиться. Пожалуйста, отправьте автору сообщение об ошибке.\n"
 #~ msgid "cstrutf8_to_UTFstring: Invalid UTF-8 sequence encountered. Please contact moritz@bunkus.org and request that he implements a better UTF-8 parser."
 #~ msgstr "cstrutf8_to_UTFstring: Обнаружена неверная последовательность UTF-8. Пожалуйста, собратитесь к разработчику по адресу moritz@bunkus.org и попросите, чтобы он сделал анализатор UTF-8 получше."
 #~ msgid "flac_header_extraction: Could not set the error callback.\n"
