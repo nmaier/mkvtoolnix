@@ -58,7 +58,7 @@ public:
   }
 
   void add(const unsigned char *new_data, int new_size) {
-    if ((m_offset != 0) && ((m_filled + new_size) >= m_chunk_size))
+    if ((m_offset != 0) && ((m_offset + m_filled + new_size) >= m_chunk_size))
       trim();
 
     if ((m_offset + m_filled + new_size) > m_size) {
