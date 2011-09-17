@@ -4,12 +4,14 @@ require 'pp'
 
 def read_entries file_name
   entries = Array.new
+  flags   = {}
 
   IO.readlines(file_name).each_with_index do |line, line_number|
     line.gsub! /[\r\n]/, ''
 
     if /^msgid/.match line
-      entries << { :id => line, :line_number => line_number + 1 }
+      entries << { :id => line, :line_number => line_number + 1, :flags => flags }
+      flags = {}
 
     elsif /^msgstr/.match line
       entries[-1][:str] = line
@@ -18,6 +20,9 @@ def read_entries file_name
       entry      = entries[-1]
       idx        = entry[:str] ? :str : :id
       entry[idx] = entry[idx][0 .. entry[idx].length - 2] + line[1 .. line.length - 1]
+
+    elsif /^#,/.match line
+      flags = Hash[ *line.gsub(/^#,\s*/, '').split(/,\s*/).map { |flag| [ flag.to_sym, true ] }.flatten ]
     end
   end
 
@@ -32,7 +37,7 @@ def process_file file_name
                | [0-9]+%?
                )/ix
 
-  errors = read_entries(file_name).select { |entry| !entry[:id].nil? && (entry[:id] != 'msgid ""') && !entry[:str].nil? && (entry[:str] != 'msgstr ""') }.collect do |entry|
+  errors = read_entries(file_name).select { |entry| !entry[:flags][:fuzzy] && !entry[:id].nil? && (entry[:id] != 'msgid ""') && !entry[:str].nil? && (entry[:str] != 'msgstr ""') }.collect do |entry|
     formats = Hash[ *[:id, :str].collect { |idx| [idx, entry[idx].scan(matcher).uniq.sort ] }.flatten(1) ]
 
     missing = formats[:id]  - formats[:str]
