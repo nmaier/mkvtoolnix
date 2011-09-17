@@ -230,6 +230,11 @@ mpeg_ts_track_c::new_stream_v_avc() {
 }
 
 int
+mpeg_ts_track_c::new_stream_v_vc1() {
+  return 0 == pes_payload->get_size() ? FILE_STATUS_MOREDATA : 0;
+}
+
+int
 mpeg_ts_track_c::new_stream_a_mpeg() {
   mp3_header_t header;
 
@@ -823,6 +828,8 @@ mpeg_ts_reader_c::probe_packet_complete(mpeg_ts_track_ptr &track,
       result = track->new_stream_v_mpeg_1_2();
     else if (FOURCC('A', 'V', 'C', '1') == track->fourcc)
       result = track->new_stream_v_avc();
+    else if (FOURCC('W', 'V', 'C', '1') == track->fourcc)
+      result = track->new_stream_v_vc1();
 
     track->pes_payload->set_chunk_size(512 * 1024);
 

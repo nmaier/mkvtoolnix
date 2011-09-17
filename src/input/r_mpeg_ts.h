@@ -221,6 +221,7 @@ public:
 
   int new_stream_v_mpeg_1_2();
   int new_stream_v_avc();
+  int new_stream_v_vc1();
   int new_stream_a_mpeg();
   int new_stream_a_ac3();
   int new_stream_a_dts();
