@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mkvtoolnix-man\n"
 "POT-Creation-Date: 2011-07-22 20:21+0300\n"
-"PO-Revision-Date: 2011-05-28 17:32+0800\n"
+"PO-Revision-Date: 2011-09-17 18:37+0800\n"
 "Last-Translator: Dean Lee <xslidian@gmail.com>\n"
 "Language-Team: chinese simp <xslidian+mkvtoolnix@gmail.com>\n"
 "Language: \n"
@@ -37,10 +37,9 @@ msgstr "4.9.1"
 #: doc/man/mkvmerge.xml:7
 #: doc/man/mkvpropedit.xml:7
 #: doc/man/mmg.xml:7
-#, fuzzy
 #| msgid "2011-04-20"
 msgid "2011-07-11"
-msgstr "2011-04-20"
+msgstr "2011-07-11"
 
 #. type: Content of the mkvmerge entity
 #: doc/man/mkvextract.xml:9
@@ -2733,15 +2732,14 @@ msgstr "在 类-Unix 系统 &mkvmerge; 将使用 <citerefentry><refentrytitle>se
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvmerge.xml:1728
-#, fuzzy
 #| msgid "On Windows there are actually two different character sets that &mkvmerge; uses due to the way the Windows shell program <command>cmd.exe</command> is implemented. The first character set is determined by a call to the <function>GetCP()</function> system call. This character set is used as the default for text file conversions and for all elements displayed by the <abbrev>GUI</abbrev> programs in the MKVToolNix package. <command>cmd.exe</command> uses another character set which is determined by a call to the <function>GetACP()</function> system call. This is the default character set for all strings read from the command line and for all strings output to the console."
 msgid "On Windows there are actually two different character sets that &mkvmerge; uses due to the way the Windows shell program <command>cmd.exe</command> is implemented. The first character set is determined by a call to the <function>GetACP()</function> system call. This character set is used as the default for text file conversions and for all elements displayed by the <abbrev>GUI</abbrev> programs in the MKVToolNix package."
-msgstr "在 Windows 上 &mkvmerge; 实际上使用两种不同的字符集，因为要执行 Windows shell 程序 <command>cmd.exe</command>。第一个字符集由 <function>GetCP()</function> 系统指令决定。此字符集用作文本文件转换和 MKVToolNix 工具包中 <abbrev>GUI</abbrev> 程序所显示的所有元素的默认字符集。<command>cmd.exe</command> 使用另一个字符集，由 <function>GetACP()</function> 系统指令决定。这是命令行读入的所有字符串以及输出到命令行的所有字符串的默认字符集。"
+msgstr "在 Windows 平台上，&mkvmerge; 实际上使用两种不同的字符集，因为 Windows shell 程序 <command>cmd.exe</command> 的实现方式不同。第一个字符集通过调用 <function>GetACP()</function> 系统指令决定。此字符集用作文本文件转换和 MKVToolNix 工具包中 <abbrev>GUI</abbrev> 程序所显示的所有元素的默认字符集。"
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvmerge.xml:1735
 msgid "Another charset may be used if <command>cmd.exe</command> is used. However, reading the command line is done with the <function>GetCommandLineW()</function> function which already returns a Unicode string. Therefore the option <option>--command-line-charset</option> is ignored on Windows.  Output to the console is done with the <function>WriteConsoleW()</function> function. Therefore the option <option>--output-charset</option> is only used on Windows if the output is redirected with <option>--redirect-output</option>."
-msgstr ""
+msgstr "如果使用了 <command>cmd.exe</command>。则将使用其他字符集。然而，读取命令行所用的 <function>GetCommandLineW()</function> 函数返回的已经是 Unicode 字符串。因此 <option>--command-line-charset</option> 选项在 Windows 环境直接忽略。 输出到控制台由 <function>WriteConsoleW()</function> 函数完成。因此 Windows 平台下的 <option>--output-charset</option> 选项仅当输出信息通过 <option>--redirect-output</option> 重定向时才用到。"
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvmerge.xml:1743
@@ -3724,37 +3722,52 @@ msgstr "&mkvmerge;, &mkvextract;, &mkvinfo;, &mkvpropedit;"
 
 #~ msgid "<option>--tags</option> <parameter>file-name</parameter>"
 #~ msgstr "<option>--tags</option> <parameter>文件名</parameter>"
+
 #~ msgid "Read global tags from the &xml; file <parameter>file-name</parameter>. See the section about tags below for details."
 #~ msgstr "从 &xml; 文件 <parameter>文件名</parameter> 中读取全局标签。详细情况请参阅下文关于标签的段落。"
+
 #~ msgid "--title"
 #~ msgstr "--title"
+
 #~ msgid "--no-chapters"
 #~ msgstr "--no-chapters"
+
 #~ msgid "Sets the stereo mode for the video track with the track ID <parameter>TID</parameter>.  The mode can either be a number <parameter>n</parameter> between <constant>0</constant> and <constant>3</constant> or one of the keywords '<literal>none</literal>' (same as <parameter>n</parameter>=<constant>0</constant>), '<literal>right</literal>' (same as <parameter>n</parameter>=<constant>1</constant>), '<literal>left</literal>' (same as <parameter>n</parameter>=<constant>2</constant>)  or '<literal>both</literal>' (same as <parameter>n</parameter>=<constant>3</constant>)."
 #~ msgstr "设置 ID 为 <parameter>TID</parameter> 的视频轨的立体视法。 模式既可以是 <constant>0</constant> 到 <constant>3</constant> 之间的数字 <parameter>n</parameter>，也可以是 '<literal>none（无立体视法）</literal>' (与 <parameter>n</parameter>=<constant>0</constant> 相同), '<literal>right（右眼视角）</literal>' (与 <parameter>n</parameter>=<constant>1</constant> 相同), '<literal>left（左眼视角）</literal>' (与 <parameter>n</parameter>=<constant>2</constant> 相同)  or '<literal>both（双眼视角）</literal>' (与 <parameter>n</parameter>=<constant>3</constant> 相同)。"
+
 #~ msgid "Syntax: <command>mkvextract</command> <option>timecodes_v2</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional>"
 #~ msgstr "语法: <command>mkvextract</command> <option>timecodes_v2</option> <parameter>源文件名</parameter> <optional><parameter>选项</parameter></optional>"
+
 #~ msgid "Reads additional command line arguments from the file <parameter>options-file</parameter>.  Lines whose first non-whitespace character is a hash mark ('<literal>#</literal>') are treated as comments and ignored. White spaces at the start and end of a line will be stripped. Each line must contain exactly one option.  There is no meta character escaping."
 #~ msgstr "从文件 <parameter>选项文件</parameter> 中读取额外的命令行参数。首个非空白字符为井号 ('<literal>#</literal>') 的行将被当作注释对待，在处理过程中将被忽略。各行开头与结尾的空白将被除去。各行必须恰好含有一个选项。没有元字符转义。"
+
 #~ msgid "<option>--no-ogg</option>"
 #~ msgstr "<option>--no-ogg</option>"
+
 #~ msgid "Only valid for <abbrev>FLAC</abbrev> tracks. Normally <abbrev>FLAC</abbrev> tracks are embedded in an Ogg transport stream. With this switch they are extracted to raw <abbrev>FLAC</abbrev> files instead."
 #~ msgstr "仅对 <abbrev>FLAC</abbrev> 轨道有效。通常 <abbrev>FLAC</abbrev> 轨道是嵌套在 Ogg 传输流（TS）中的。通过本开关，它们可以被提取为原始 <abbrev>FLAC</abbrev> 文件。"
+
 #, fuzzy
 #~ msgid "<option>--webm</option>, <option>--web-media</option>"
 #~ msgstr "<option>-v</option>, <option>--verbose</option>"
+
 #~ msgid "January 2010"
 #~ msgstr "2010 年 1 月"
+
 #~ msgid "December 2009"
 #~ msgstr "2009 年 12 月"
+
 #~ msgid "--command-line-charset"
 #~ msgstr "--command-line-charset"
+
 #~ msgid "--output"
 #~ msgstr "--output"
+
 #~ msgid "--chapter-charset"
 #~ msgstr "--chapter-charset"
+
 #~ msgid "--default-duration"
 #~ msgstr "--default-duration"
+
 #~ msgid "--language"
 #~ msgstr "--language"
-
