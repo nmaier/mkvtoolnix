@@ -163,7 +163,7 @@ rule '.o' => '.rc' do |t|
 end
 
 rule '.mo' => '.po' do |t|
-  runq "  MSGFMT #{t.source}", "msgfmt -o #{t.name} #{t.sources.join(" ")}"
+  runq "  MSGFMT #{t.source}", "msgfmt -c -o #{t.name} #{t.sources.join(" ")}"
 end
 
 # HTML help book stuff
