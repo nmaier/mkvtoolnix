@@ -962,7 +962,7 @@ mpeg_ts_reader_c::parse_start_unit_packet(mpeg_ts_track_ptr &track,
 
   track->continuity_counter = CONTINUITY_COUNTER(ts_packet_header);
 
-  if (track->pes_payload_size != 0 && (ts_payload_size + track->pes_payload->get_size()) > track->pes_payload_size)
+  if ((track->pes_payload_size != 0) && (ts_payload_size + track->pes_payload->get_size()) > static_cast<size_t>(track->pes_payload_size))
     ts_payload_size = track->pes_payload_size - track->pes_payload->get_size();
 
   return true;
