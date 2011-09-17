@@ -394,8 +394,7 @@ mpeg_ts_reader_c::mpeg_ts_reader_c(track_info_c &_ti)
           continue;
         }
         parse_packet(buf);
-        if (PAT_found == true && PMT_found == true && es_to_process == 0)
-          done = true;
+        done = PAT_found && PMT_found && (0 == es_to_process);
         io->skip(-1);
 
       } else
