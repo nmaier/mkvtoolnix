@@ -90,27 +90,36 @@ mpeg_ts_track_c::add_pes_payload(unsigned char *ts_payload,
   // }
 }
 
+void
+mpeg_ts_track_c::add_pes_payload_to_probe_data() {
+  if (!m_probe_data.is_set())
+    m_probe_data = byte_buffer_cptr(new byte_buffer_c);
+  m_probe_data->add(pes_payload->get_buffer(), pes_payload->get_size());
+}
+
 int
 mpeg_ts_track_c::new_stream_v_mpeg_1_2() {
-  counted_ptr<M2VParser> m2v_parser(new M2VParser);
+  if (!m_m2v_parser.is_set()) {
+    m_m2v_parser = counted_ptr<M2VParser>(new M2VParser);
+    m_m2v_parser->SetProbeMode();
+  }
 
-  m2v_parser->SetProbeMode();
-  m2v_parser->WriteData(pes_payload->get_buffer(), pes_payload->get_size());
+  m_m2v_parser->WriteData(pes_payload->get_buffer(), pes_payload->get_size());
 
-  int state = m2v_parser->GetState();
+  int state = m_m2v_parser->GetState();
   if (state != MPV_PARSER_STATE_FRAME) {
     mxverb(3, boost::format("new_stream_v_mpeg_1_2: no valid frame in %1% bytes\n") % pes_payload->get_size());
     return FILE_STATUS_MOREDATA;
   }
 
-  MPEG2SequenceHeader seq_hdr = m2v_parser->GetSequenceHeader();
-  counted_ptr<MPEGFrame> frame(m2v_parser->ReadFrame());
+  MPEG2SequenceHeader seq_hdr = m_m2v_parser->GetSequenceHeader();
+  counted_ptr<MPEGFrame> frame(m_m2v_parser->ReadFrame());
   if (!frame.is_set())
     return FILE_STATUS_MOREDATA;
 
-  fourcc         = FOURCC('M', 'P', 'G', '0' + m2v_parser->GetMPEGVersion());
+  fourcc         = FOURCC('M', 'P', 'G', '0' + m_m2v_parser->GetMPEGVersion());
   v_interlaced   = !seq_hdr.progressiveSequence;
-  v_version      = m2v_parser->GetMPEGVersion();
+  v_version      = m_m2v_parser->GetMPEGVersion();
   v_width        = seq_hdr.width;
   v_height       = seq_hdr.height;
   v_frame_rate   = seq_hdr.frameOrFieldRate;
@@ -122,7 +131,7 @@ mpeg_ts_track_c::new_stream_v_mpeg_1_2() {
     v_dwidth = (int)(v_height * v_aspect_ratio);
   v_dheight  = v_height;
 
-  MPEGChunk *raw_seq_hdr_chunk = m2v_parser->GetRealSequenceHeader();
+  MPEGChunk *raw_seq_hdr_chunk = m_m2v_parser->GetRealSequenceHeader();
   if (NULL != raw_seq_hdr_chunk) {
     mxverb(3, boost::format("new_stream_v_mpeg_1_2: sequence header size: %1%\n") % raw_seq_hdr_chunk->GetSize());
     raw_seq_hdr = clone_memory(raw_seq_hdr_chunk->GetPointer(), raw_seq_hdr_chunk->GetSize());
@@ -137,23 +146,24 @@ mpeg_ts_track_c::new_stream_v_mpeg_1_2() {
 
 int
 mpeg_ts_track_c::new_stream_v_avc() {
-  mpeg4::p10::avc_es_parser_c parser;
+  if (!m_avc_parser.is_set()) {
+    m_avc_parser = mpeg4::p10::avc_es_parser_cptr(new mpeg4::p10::avc_es_parser_c);
+    m_avc_parser->ignore_nalu_size_length_errors();
 
-  parser.ignore_nalu_size_length_errors();
+    if (map_has_key(reader.m_ti.m_nalu_size_lengths, reader.tracks.size()))
+      m_avc_parser->set_nalu_size_length(reader.m_ti.m_nalu_size_lengths[0]);
+    else if (map_has_key(reader.m_ti.m_nalu_size_lengths, -1))
+      m_avc_parser->set_nalu_size_length(reader.m_ti.m_nalu_size_lengths[-1]);
+  }
 
   mxverb(3, boost::format("new_stream_v_avc: packet size: %1%\n") % pes_payload->get_size());
 
-  if (map_has_key(reader.m_ti.m_nalu_size_lengths, reader.tracks.size()))
-    parser.set_nalu_size_length(reader.m_ti.m_nalu_size_lengths[0]);
-  else if (map_has_key(reader.m_ti.m_nalu_size_lengths, -1))
-    parser.set_nalu_size_length(reader.m_ti.m_nalu_size_lengths[-1]);
+  m_avc_parser->add_bytes(pes_payload->get_buffer(), pes_payload->get_size());
 
-  parser.add_bytes(pes_payload->get_buffer(), pes_payload->get_size());
-
-  if (!parser.headers_parsed())
+  if (!m_avc_parser->headers_parsed())
     return FILE_STATUS_MOREDATA;
 
-  v_avcc = parser.get_avcc();
+  v_avcc = m_avc_parser->get_avcc();
 
   try {
     mm_mem_io_c avcc(v_avcc->get_buffer(), v_avcc->get_size());
@@ -236,12 +246,15 @@ mpeg_ts_track_c::new_stream_v_vc1() {
 
 int
 mpeg_ts_track_c::new_stream_a_mpeg() {
+  add_pes_payload_to_probe_data();
+
   mp3_header_t header;
 
-  if (-1 == find_mp3_header(pes_payload->get_buffer(), pes_payload->get_size()))
+  int offset = find_mp3_header(m_probe_data->get_buffer(), m_probe_data->get_size());
+  if (-1 == offset)
     return FILE_STATUS_MOREDATA;
 
-  decode_mp3_header(pes_payload->get_buffer(), &header);
+  decode_mp3_header(m_probe_data->get_buffer() + offset, &header);
   a_channels    = header.channels;
   a_sample_rate = header.sampling_frequency;
   fourcc        = FOURCC('M', 'P', '0' + header.layer, ' ');
@@ -252,9 +265,11 @@ mpeg_ts_track_c::new_stream_a_mpeg() {
 
 int
 mpeg_ts_track_c::new_stream_a_ac3() {
+  add_pes_payload_to_probe_data();
+
   ac3_header_t header;
 
-  if (-1 == find_ac3_header(pes_payload->get_buffer(), pes_payload->get_size(), &header, false))
+  if (-1 == find_ac3_header(m_probe_data->get_buffer(), m_probe_data->get_size(), &header, false))
     return FILE_STATUS_MOREDATA;
 
   mxverb(2,
@@ -270,7 +285,9 @@ mpeg_ts_track_c::new_stream_a_ac3() {
 
 int
 mpeg_ts_track_c::new_stream_a_dts() {
-  if (-1 == find_dts_header(pes_payload->get_buffer(), pes_payload->get_size(), &a_dts_header))
+  add_pes_payload_to_probe_data();
+
+  if (-1 == find_dts_header(m_probe_data->get_buffer(), m_probe_data->get_size(), &a_dts_header))
     return FILE_STATUS_MOREDATA;
 
   return 0;
@@ -278,12 +295,17 @@ mpeg_ts_track_c::new_stream_a_dts() {
 
 int
 mpeg_ts_track_c::new_stream_a_truehd() {
-  truehd_parser_c parser;
+  if (!m_truehd_parser.is_set())
+    m_truehd_parser = truehd_parser_cptr(new truehd_parser_c);
 
-  parser.add_data(pes_payload->get_buffer(), pes_payload->get_size());
+  static int added = 0;
+  added += pes_payload->get_size();
 
-  while (parser.frame_available()) {
-    truehd_frame_cptr frame = parser.get_next_frame();
+  m_truehd_parser->add_data(pes_payload->get_buffer(), pes_payload->get_size());
+  pes_payload->remove(pes_payload->get_size());
+
+  while (m_truehd_parser->frame_available()) {
+    truehd_frame_cptr frame = m_truehd_parser->get_next_frame();
     if (truehd_frame_t::sync != frame->m_type)
       continue;
 
@@ -846,6 +868,8 @@ mpeg_ts_reader_c::probe_packet_complete(mpeg_ts_track_ptr &track,
   } else if (track->type == ES_SUBT_TYPE)
     result = 0;
 
+  track->pes_payload->remove(track->pes_payload->get_size());
+
   if (result == 0) {
     if (track->type == PAT_TYPE || track->type == PMT_TYPE)
       tracks.erase(tracks.begin() + tidx);
@@ -863,7 +887,6 @@ mpeg_ts_reader_c::probe_packet_complete(mpeg_ts_track_ptr &track,
 
   } else {
     mxverb(3, boost::format("mpeg_ts: Failed to parse packet. Reset and retry\n"));
-    track->pes_payload->remove(track->pes_payload->get_size());
     track->pes_payload_size = 0;
     track->processed        = false;
   }

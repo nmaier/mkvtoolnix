@@ -20,7 +20,10 @@
 #include "common/byte_buffer.h"
 #include "common/dts.h"
 #include "common/mm_io.h"
+#include "common/mpeg4_p10.h"
+#include "common/truehd.h"
 #include "merge/pr_generic.h"
+#include "mpegparser/M2VParser.h"
 
 enum mpeg_ts_input_type_e {
   INPUT_PROBE = 0,
@@ -188,6 +191,12 @@ public:
   // general track parameters
   std::string language;
 
+  // used for probing for stream types
+  byte_buffer_cptr m_probe_data;
+  mpeg4::p10::avc_es_parser_cptr m_avc_parser;
+  truehd_parser_cptr m_truehd_parser;
+  counted_ptr<M2VParser> m_m2v_parser;
+
   mpeg_ts_track_c(mpeg_ts_reader_c &p_reader)
     : reader(p_reader)
     , processed(false)
@@ -218,6 +227,7 @@ public:
 
   void send_to_packetizer();
   void add_pes_payload(unsigned char *ts_payload, size_t ts_payload_size);
+  void add_pes_payload_to_probe_data();
 
   int new_stream_v_mpeg_1_2();
   int new_stream_v_avc();
