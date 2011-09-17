@@ -219,7 +219,7 @@ namespace :translations do
   task :pot => "po/mkvtoolnix.pot"
   file "po/mkvtoolnix.pot" => $all_sources + $all_headers do |t|
     runq 'XGETTEXT', <<-COMMAND
-      xgettext --keyword=YT --keyword=Y --keyword=Z --keyword=TIP --default-domain=mkvtoolnix --from-code=UTF-8 -s --omit-header -o #{t.name} #{t.prerequisites.join(" ")}
+      xgettext --keyword=YT --keyword=Y --keyword=Z --keyword=TIP --default-domain=mkvtoolnix --from-code=UTF-8 -s --omit-header --boost -o #{t.name} #{t.prerequisites.join(" ")}
     COMMAND
   end
 
