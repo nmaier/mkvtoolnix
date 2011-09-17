@@ -277,23 +277,19 @@ mpeg_ts_track_c::new_stream_a_truehd() {
 
   parser.add_data(pes_payload->get_buffer(), pes_payload->get_size());
 
-  while (1) {
-    while (parser.frame_available()) {
-      truehd_frame_cptr frame = parser.get_next_frame();
-      if (truehd_frame_t::sync != frame->m_type)
-        continue;
+  while (parser.frame_available()) {
+    truehd_frame_cptr frame = parser.get_next_frame();
+    if (truehd_frame_t::sync != frame->m_type)
+      continue;
 
-      mxverb(2,
-             boost::format("first TrueHD header channels %1% sampling_rate %2% samples_per_frame %3%\n")
-             % frame->m_channels % frame->m_sampling_rate % frame->m_samples_per_frame);
+    mxverb(2,
+           boost::format("first TrueHD header channels %1% sampling_rate %2% samples_per_frame %3%\n")
+           % frame->m_channels % frame->m_sampling_rate % frame->m_samples_per_frame);
 
-      a_channels    = frame->m_channels;
-      a_sample_rate = frame->m_sampling_rate;
+    a_channels    = frame->m_channels;
+    a_sample_rate = frame->m_sampling_rate;
 
-      return 0;
-    }
-
-     return FILE_STATUS_MOREDATA;
+    return 0;
   }
 
   return FILE_STATUS_MOREDATA;
