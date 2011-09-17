@@ -36,7 +36,7 @@
 
 #define TS_CONSECUTIVE_PACKETS 16
 #define TS_PROBE_SIZE          (2 * TS_CONSECUTIVE_PACKETS * 204)
-#define TS_PIDS_DETECT_SIZE    20 * 1024 * 1024
+#define TS_PIDS_DETECT_SIZE    4 * 1024 * 1024
 #define TS_PACKET_SIZE         188
 
 #define GET_PID(p)             (((static_cast<uint16_t>(p->pid_msb) << 8) | p->pid_lsb) & 0x1FFF)
