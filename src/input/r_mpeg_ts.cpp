@@ -25,6 +25,7 @@
 #include "common/truehd.h"
 #include "common/mpeg1_2.h"
 #include "common/mpeg4_p2.h"
+#include "common/strings/formatting.h"
 #include "input/r_mpeg_ts.h"
 #include "output/p_mpeg1_2.h"
 #include "output/p_avc.h"
@@ -65,13 +66,16 @@ mpeg_ts_track_c::send_to_packetizer() {
 
   mxverb(3, boost::format("mpeg_ts: PTS in nanoseconds: %1%\n") % timecode);
 
-  if (ptzr != -1)
-    reader.m_reader_packetizers[ptzr]->process(new packet_t(clone_memory(pes_payload->get_buffer(), pes_payload->get_size()), timecode));
+  if (ptzr != -1) {
+    int64_t timecode_to_use = m_apply_dts_timecode_fix && (m_previous_timecode == timecode) ? -1 : timecode;
+    reader.m_reader_packetizers[ptzr]->process(new packet_t(clone_memory(pes_payload->get_buffer(), pes_payload->get_size()), timecode_to_use));
+  }
 
   pes_payload->remove(pes_payload->get_size());
   processed                          = false;
   data_ready                         = false;
   pes_payload_size                   = 0;
+  m_previous_timecode                = timecode;
   reader.m_packet_sent_to_packetizer = true;
 }
 
@@ -290,6 +294,8 @@ mpeg_ts_track_c::new_stream_a_dts() {
 
   if (-1 == find_dts_header(m_probe_data->get_buffer(), m_probe_data->get_size(), &a_dts_header))
     return FILE_STATUS_MOREDATA;
+
+  m_apply_dts_timecode_fix = true;
 
   return 0;
 }

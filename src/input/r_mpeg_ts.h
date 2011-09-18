@@ -178,7 +178,7 @@ public:
   bool probed_ok;
   int ptzr;                         // the actual packetizer instance
 
-  int64_t timecode;
+  int64_t timecode, m_previous_timecode;
 
   // video related parameters
   bool v_interlaced;
@@ -189,6 +189,8 @@ public:
   // audio related parameters
   int a_channels, a_sample_rate, a_bits_per_sample, a_bsid;
   dts_header_t a_dts_header;
+
+  bool m_apply_dts_timecode_fix;
 
   // general track parameters
   std::string language;
@@ -212,6 +214,7 @@ public:
     , probed_ok(false)
     , ptzr(-1)
     , timecode(-1)
+    , m_previous_timecode(-1)
     , v_interlaced(false)
     , v_version(0)
     , v_width(0)
@@ -224,6 +227,7 @@ public:
     , a_sample_rate(0)
     , a_bits_per_sample(0)
     , a_bsid(0)
+    , m_apply_dts_timecode_fix(false)
   {
   }
 
