@@ -661,7 +661,6 @@ mpeg_ts_reader_c::parse_pmt(unsigned char *pmt) {
         track->fourcc = FOURCC('A', 'A', 'C', ' ');
         break;
       case ISO_14496_PART3_AUDIO:
-        // this is AAC+ ... is this ok ?
         track->type   = ES_AUDIO_TYPE;
         track->fourcc = FOURCC('A', 'A', 'C', ' ');
         break;
