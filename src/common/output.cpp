@@ -14,6 +14,7 @@
 #include "common/common_pch.h"
 
 #include "common/ebml.h"
+#include "common/endian.h"
 #include "common/mm_io.h"
 #include "common/locale.h"
 #include "common/output.h"
@@ -287,3 +288,14 @@ dump_ebml_elements(EbmlElement *element,
     dump_ebml_elements((*master)[i], with_values, level + 1);
 }
 
+std::string
+fourcc_to_string(uint32_t fourcc) {
+  unsigned char buffer[4], idx;
+
+  put_uint32_be(buffer, fourcc);
+  for (idx = 0; 4 > idx; ++idx)
+    if (buffer[idx] < ' ')
+      buffer[idx] = ' ';
+
+  return std::string(reinterpret_cast<char *>(buffer), 4);
+}

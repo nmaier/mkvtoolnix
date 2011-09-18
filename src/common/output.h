@@ -133,4 +133,6 @@ void MTX_DLL_API mxhexdump(unsigned int level, const void *buffer_to_dump, size_
 
 void MTX_DLL_API dump_ebml_elements(EbmlElement *element, bool with_values = false, unsigned int level = 0);
 
+std::string fourcc_to_string(uint32_t fourcc);
+
 #endif  // __MTX_COMMON_OUTPUT_H
