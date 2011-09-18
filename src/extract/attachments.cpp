@@ -113,7 +113,7 @@ handle_attachments(KaxAttachments *atts,
       track.out_name = attachment.name;
 
     mxinfo(boost::format(Y("The attachment #%1%, ID %2%, MIME type %3%, size %4%, is written to '%5%'.\n"))
-           % attachment_ui_id % attachment.id % attachment.type % attachment.size % track.out_name);
+           % track.tid % attachment.id % attachment.type % attachment.size % track.out_name);
     try {
       mm_file_io_c out(track.out_name, MODE_CREATE);
       out.write(attachment.fdata->GetBuffer(), attachment.fdata->GetSize());
