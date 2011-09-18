@@ -22,7 +22,7 @@ file_type_t::get_supported() {
   if (!s_supported_file_types.empty())
     return s_supported_file_types;
 
-  s_supported_file_types.push_back(file_type_t(Y("A/52 (aka AC3)"),                      "ac3"));
+  s_supported_file_types.push_back(file_type_t(Y("A/52 (aka AC3)"),                      "ac3 eac3"));
   s_supported_file_types.push_back(file_type_t(Y("AAC (Advanced Audio Coding)"),         "aac m4a mp4"));
   s_supported_file_types.push_back(file_type_t(Y("AVC/h.264 elementary streams"),        "264 avc h264 x264"));
   s_supported_file_types.push_back(file_type_t(Y("AVI (Audio/Video Interleaved)"),       "avi"));
@@ -35,9 +35,9 @@ file_type_t::get_supported() {
   s_supported_file_types.push_back(file_type_t(Y("IVF with VP8 video files"),            "ivf"));
   s_supported_file_types.push_back(file_type_t(Y("MP4 audio/video files"),               "mp4 m4v"));
   s_supported_file_types.push_back(file_type_t(Y("MPEG audio files"),                    "mp2 mp3"));
-  s_supported_file_types.push_back(file_type_t(Y("MPEG program streams"),                "mpg mpeg m2v evo evob vob"));
+  s_supported_file_types.push_back(file_type_t(Y("MPEG program streams"),                "mpg mpeg m2v mpv evo evob vob"));
   s_supported_file_types.push_back(file_type_t(Y("MPEG transport streams"),              "ts m2ts"));
-  s_supported_file_types.push_back(file_type_t(Y("MPEG video elementary streams"),       "m1v m2v"));
+  s_supported_file_types.push_back(file_type_t(Y("MPEG video elementary streams"),       "m1v m2v mpv"));
   s_supported_file_types.push_back(file_type_t(Y("Matroska audio/video files"),          "mka mks mkv mk3d webm webmv webma"));
   s_supported_file_types.push_back(file_type_t(Y("PGS/SUP subtitles"),                   "sup"));
   s_supported_file_types.push_back(file_type_t(Y("QuickTime audio/video files"),         "mov"));
