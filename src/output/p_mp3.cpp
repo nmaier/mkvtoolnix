@@ -76,7 +76,8 @@ mp3_packetizer_c::get_mp3_packet(mp3_header_t *mp3header) {
   if (m_byte_buffer.get_size() == 0)
     return 0;
 
-  int pos, size;
+  int pos;
+  size_t size;
   unsigned char *buf;
 
   while (1) {
