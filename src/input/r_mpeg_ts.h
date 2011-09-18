@@ -256,6 +256,7 @@ protected:
   bool file_done, m_packet_sent_to_packetizer;
 
   std::vector<mpeg_ts_track_ptr> tracks;
+  std::map<generic_packetizer_c *, mpeg_ts_track_ptr> m_ptzr_to_track_map;
 
   bool m_dont_use_audio_pts;
 
@@ -269,7 +270,7 @@ public:
   virtual ~mpeg_ts_reader_c();
 
   static bool probe_file(mm_io_c *io, uint64_t size);
-  virtual file_status_e read(generic_packetizer_c *ptzr, bool force = false);
+  virtual file_status_e read(generic_packetizer_c *requested_ptzr, bool force = false);
   virtual void identify();
   virtual int get_progress();
   virtual void create_packetizer(int64_t tid);

@@ -1016,6 +1016,9 @@ mpeg_ts_reader_c::create_packetizer(int64_t id) {
     else if (track->fourcc == FOURCC('W', 'V', 'C', '1'))
       create_vc1_video_packetizer(track);
   }
+
+  if (-1 != track->ptzr)
+    m_ptzr_to_track_map[PTZR(track->ptzr)] = track;
 }
 
 void
@@ -1099,8 +1102,15 @@ mpeg_ts_reader_c::finish() {
 }
 
 file_status_e
-mpeg_ts_reader_c::read(generic_packetizer_c *,
-                       bool) {
+mpeg_ts_reader_c::read(generic_packetizer_c *requested_ptzr,
+                       bool force) {
+  int64_t num_queued_bytes = get_queued_bytes();
+  if (!force && (20 * 1024 * 1024 < num_queued_bytes)) {
+    mpeg_ts_track_ptr requested_ptzr_track = m_ptzr_to_track_map[requested_ptzr];
+    if (!requested_ptzr_track.is_set() || ((ES_AUDIO_TYPE != requested_ptzr_track->type) && (ES_VIDEO_TYPE != requested_ptzr_track->type)) || (512 * 1024 * 1024 < num_queued_bytes))
+      return FILE_STATUS_HOLDING;
+  }
+
   unsigned char buf[205];
 
   track_buffer_ready = -1;
