@@ -67,7 +67,9 @@ pgssup_reader_c::create_packetizer(int64_t) {
   if (!demuxing_requested('s', 0) || (NPTZR() != 0))
     return;
 
-  add_packetizer(new pgs_packetizer_c(this, m_ti));
+  pgs_packetizer_c *ptzr = new pgs_packetizer_c(this, m_ti);
+  ptzr->set_aggregate_packets(true);
+  add_packetizer(ptzr);
 
   mxinfo_tid(m_ti.m_fname, 0, Y("Using the PGS output module.\n"));
 }
@@ -79,38 +81,29 @@ pgssup_reader_c::read(generic_packetizer_c *,
     if (m_debug)
       mxinfo(boost::format("pgssup_reader_c::read(): ---------- start read at %1%\n") % m_in->getFilePointer());
 
-    memory_cptr frame  = memory_c::alloc(0);
-    uint64_t timestamp = 0;
+    if (PGSSUP_FILE_MAGIC != m_in->read_uint16_be())
+      return flush_packetizers();
 
-    while (1) {
-      if (PGSSUP_FILE_MAGIC != m_in->read_uint16_be())
-        return flush_packetizers();
+    uint64_t timestamp = static_cast<uint64_t>(m_in->read_uint32_be()) * 100000Lu / 9;
+    m_in->skip(4);
 
-      if (0 == frame->get_size())
-        timestamp = static_cast<uint64_t>(m_in->read_uint32_be()) * 100000Lu / 9;
-      else
-        m_in->skip(4);
-      m_in->skip(4);
+    memory_cptr frame = memory_c::alloc(3);
+    if (3 != m_in->read(frame->get_buffer(), 3))
+      return flush_packetizers();
 
-      unsigned char segment_type = m_in->read_uint8();
-      uint16_t segment_size      = m_in->read_uint16_be();
-      size_t previous_frame_size = frame->get_size();
+    unsigned int segment_size = get_uint16_be(frame->get_buffer() + 1);
+    frame->resize(3 + segment_size);
 
-      if (m_debug)
-        mxinfo(boost::format("pgssup_reader_c::read(): type %|1$02x| size %2% at %3%\n") % static_cast<unsigned int>(segment_type) % segment_size % (m_in->getFilePointer() - 10 - 3));
+    if (segment_size != m_in->read(frame->get_buffer() + 3, segment_size))
+      return flush_packetizers();
 
-      frame->resize(previous_frame_size + 3 + segment_size);
-      unsigned char *data = frame->get_buffer() + previous_frame_size;
-      data[0]             = segment_type;
-      put_uint16_be(&data[1], segment_size);
+    if (m_debug)
+      mxinfo(boost::format("pgssup_reader_c::read(): type %|1$02x| size %2% at %3%\n") % static_cast<unsigned int>(frame->get_buffer()[0]) % segment_size % (m_in->getFilePointer() - 10 - 3));
 
-      m_bytes_processed += 10 + 3 + segment_size;
+    m_bytes_processed += 10 + 3 + segment_size;
 
-      if ((m_in->read(&data[3], segment_size) != segment_size) || (PGSSUP_DISPLAY_SEGMENT == segment_type)) {
-        PTZR0->process(new packet_t(frame, timestamp));
-        break;
-      }
-    }
+    PTZR0->process(new packet_t(frame, timestamp));
+
   } catch (...) {
     if (m_debug)
       mxinfo("pgssup_reader_c::read(): exception\n");
