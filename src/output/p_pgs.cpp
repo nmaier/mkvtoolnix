@@ -17,6 +17,7 @@
 
 #include "common/compression.h"
 #include "common/matroska.h"
+#include "common/pgssup.h"
 #include "output/p_pgs.h"
 
 using namespace libmatroska;
@@ -43,7 +44,23 @@ pgs_packetizer_c::set_headers() {
 
 int
 pgs_packetizer_c::process(packet_cptr packet) {
-  add_packet(packet);
+  if (!m_aggregate_packets) {
+    add_packet(packet);
+    return FILE_STATUS_MOREDATA;
+  }
+
+  if (!m_aggregated.is_set()) {
+    m_aggregated = packet;
+    m_aggregated->data->grab();
+
+  } else
+    m_aggregated->data->add(packet->data);
+
+  if (   (0                      != packet->data->get_size())
+      && (PGSSUP_DISPLAY_SEGMENT == packet->data->get_buffer()[0])) {
+    add_packet(m_aggregated);
+    m_aggregated.clear();
+  }
 
   return FILE_STATUS_MOREDATA;
 }

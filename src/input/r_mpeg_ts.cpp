@@ -31,6 +31,7 @@
 #include "output/p_mp3.h"
 #include "output/p_ac3.h"
 #include "output/p_dts.h"
+#include "output/p_pgs.h"
 #include "output/p_truehd.h"
 #include "output/p_vc1.h"
 
@@ -679,6 +680,11 @@ mpeg_ts_reader_c::parse_pmt(unsigned char *pmt) {
         track->type   = ES_AUDIO_TYPE;
         track->fourcc = FOURCC('D', 'T', 'S', ' ');
         break;
+      case STREAM_SUBTITLES_HDMV_PGS:
+        track->type      = ES_SUBT_TYPE;
+        track->fourcc    = FOURCC('P', 'G', 'S', ' ');
+        track->probed_ok = true;
+        break;
       case ISO_13818_PES_PRIVATE:
         break;
       default:
@@ -866,8 +872,7 @@ mpeg_ts_reader_c::probe_packet_complete(mpeg_ts_track_ptr &track,
     else if (FOURCC('T', 'R', 'H', 'D') == track->fourcc)
       result = track->new_stream_a_truehd();
 
-  } else if (track->type == ES_SUBT_TYPE)
-    result = 0;
+  }
 
   track->pes_payload->remove(track->pes_payload->get_size());
 
@@ -1015,7 +1020,9 @@ mpeg_ts_reader_c::create_packetizer(int64_t id) {
 
     else if (track->fourcc == FOURCC('W', 'V', 'C', '1'))
       create_vc1_video_packetizer(track);
-  }
+
+  } else if (FOURCC('P', 'G', 'S', ' ') == track->fourcc)
+    create_hdmv_pgs_subtitles_packetizer(track);
 
   if (-1 != track->ptzr)
     m_ptzr_to_track_map[PTZR(track->ptzr)] = track;
@@ -1061,6 +1068,15 @@ void
 mpeg_ts_reader_c::create_vc1_video_packetizer(mpeg_ts_track_ptr &track) {
   mxinfo_tid(m_ti.m_fname, m_ti.m_id, Y("Using the VC1 video output module.\n"));
   track->ptzr = add_packetizer(new vc1_video_packetizer_c(this, m_ti));
+}
+
+void
+mpeg_ts_reader_c::create_hdmv_pgs_subtitles_packetizer(mpeg_ts_track_ptr &track) {
+  mxinfo_tid(m_ti.m_fname, m_ti.m_id, Y("Using the PGS output module.\n"));
+
+  pgs_packetizer_c *ptzr = new pgs_packetizer_c(this, m_ti);
+  ptzr->set_aggregate_packets(true);
+  track->ptzr = add_packetizer(ptzr);
 }
 
 void

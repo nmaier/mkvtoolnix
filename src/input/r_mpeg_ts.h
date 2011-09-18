@@ -64,6 +64,7 @@ enum mpeg_ts_stream_type_e {
   STREAM_AUDIO_DTS_HD       = 0x85, // Audio DTS HD
   STREAM_AUDIO_DTS_HD_MA    = 0x86, // Audio DTS HD Master Audio
   STREAM_VIDEO_VC1          = 0xEA, // Video VC-1
+  STREAM_SUBTITLES_HDMV_PGS = 0x90, // HDMV PGS subtitles
 };
 
 #if defined(COMP_MSC)
@@ -293,6 +294,7 @@ private:
   void create_mpeg1_2_video_packetizer(mpeg_ts_track_ptr &track);
   void create_mpeg4_p10_es_video_packetizer(mpeg_ts_track_ptr &track);
   void create_vc1_video_packetizer(mpeg_ts_track_ptr &track);
+  void create_hdmv_pgs_subtitles_packetizer(mpeg_ts_track_ptr &track);
 
   friend class mpeg_ts_track_c;
 };
