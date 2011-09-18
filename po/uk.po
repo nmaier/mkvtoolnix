@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: mkvtoolnix_uk\n"
 "Report-Msgid-Bugs-To: Moritz Bunkus <moritz@bunkus.org>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2011-09-17 14:36+0200\n"
+"PO-Revision-Date: 2011-09-18 13:36+0200\n"
 "Last-Translator: Andriy Bilous'ko <arestarh@ukr.net>\n"
 "Language-Team: Ukrainian <moritz@bunkus.org>\n"
 "Language: uk\n"
@@ -582,9 +582,9 @@ msgid ""
 msgstr ""
 "  -y, --sync <TID:d[,o[/p]]>\n"
 "                           Синхронізувати і налаштувати тайм-коди доріжок з\n"
-"                           id TID 'd' ms.\n"
+"                           id TID на 'd' мс.\n"
 "                           'o/p': Відрегулювати тайм-коди шляхом множення з\n"
-"                           'o/p' для усунення лінійного дрейфу. Типово 'P' відповідає\n"
+"                           'o/p' для усунення лінійного дрейфу. Типово 'p' відповідає\n"
 "                           1, якщо не вказано. Обидва 'o' і 'p' можуть бути\n"
 "                           числами з плаваючою комою.\n"
 
@@ -7552,59 +7552,59 @@ msgstr "Використання довжини NALU розміру в 3 бай�
 #: src/input/r_mpeg_ps.cpp:1180
 #, boost-format
 msgid "Using the %1%AC3 output module.\n"
-msgstr "Використання %1%AC3 вихідного модуля.\n"
+msgstr "Використання вихідного модуля %1%AC3.\n"
 
 #: src/input/r_avi.cpp:649
 msgid "Using the AAC audio output module.\n"
-msgstr "Використання AAC аудіо вихідного модуля.\n"
+msgstr "Використання вихідного модуля аудіо AAC.\n"
 
 #: src/input/r_aac.cpp:92
 msgid "Using the AAC demultiplexer.\n"
-msgstr "Використання AAC демультиплексора.\n"
+msgstr "Використання демультиплексора AAC.\n"
 
 #: src/input/r_real.cpp:371
 #, boost-format
 msgid "Using the AAC output module (FourCC: %1%).\n"
-msgstr "Використання AAC вихідного модуля (FourCC: %1%).\n"
+msgstr "Використання вихідного модуля AAC (FourCC: %1%).\n"
 
 #: src/input/r_aac.cpp:116
 #: src/input/r_matroska.cpp:1545
 #: src/input/r_ogm.cpp:994
 #: src/input/r_qtmp4.cpp:1531
 msgid "Using the AAC output module.\n"
-msgstr "Використання AAC вихідного модуля.\n"
+msgstr "Використання вихідного модуля AAC.\n"
 
 #: src/input/r_ac3.cpp:77
 msgid "Using the AC3 demultiplexer.\n"
-msgstr "Використання AC3 демультиплексора.\n"
+msgstr "Використання демультиплексора AC3.\n"
 
 #: src/input/r_real.cpp:305
 #, boost-format
 msgid "Using the AC3 output module (FourCC: %1%).\n"
-msgstr "Використання AC3 вихідного модуля (FourCC: %1%).\n"
+msgstr "Використання вихідного модуля AC3 (FourCC: %1%).\n"
 
 #: src/input/r_ogm.cpp:1012
 #: src/input/r_wav.cpp:225
 #: src/input/r_qtmp4.cpp:1454
 #: src/input/r_avi.cpp:568
 msgid "Using the AC3 output module.\n"
-msgstr "Використання AC3 вихідного модуля.\n"
+msgstr "Використання вихідного модуля AC3.\n"
 
 #: src/input/r_avc.cpp:126
 msgid "Using the AVC/h.264 ES demultiplexer.\n"
-msgstr "Використання AVC/H.264 ES демультиплексора.\n"
+msgstr "Використання демультиплексора AVC/H.264 ES.\n"
 
 #: src/input/r_avi.cpp:111
 msgid "Using the AVI demultiplexer. Opening file. This may take some time depending on the file's size.\n"
-msgstr "Використання AVI демультиплексора. Відкриття файлу. Це може зайняти якийсь час залежно від розміру файлу.\n"
+msgstr "Використання демультиплексора AVI. Відкриття файлу. Це може зайняти якийсь час залежно від розміру файлу.\n"
 
 #: src/input/r_corepicture.cpp:89
 msgid "Using the CorePanorama subtitle reader.\n"
-msgstr "Використання CorePanorama зчитувача субтитрів.\n"
+msgstr "Використання зчитувача субтитрів CorePanorama.\n"
 
 #: src/input/r_dts.cpp:83
 msgid "Using the DTS demultiplexer.\n"
-msgstr "Використання DTS демультиплексора.\n"
+msgstr "Використання демультиплексора DTS.\n"
 
 #: src/input/r_dts.cpp:114
 #: src/input/r_matroska.cpp:1577
@@ -7613,50 +7613,50 @@ msgstr "Використання DTS демультиплексора.\n"
 #: src/input/r_mpeg_ps.cpp:1185
 #: src/input/r_avi.cpp:689
 msgid "Using the DTS output module.\n"
-msgstr "Використання DTS вихідного модуля.\n"
+msgstr "Використання вихідного модуля DTS.\n"
 
 #: src/input/r_dirac.cpp:86
 msgid "Using the Dirac demultiplexer.\n"
-msgstr "Використання Dirac демультиплексора.\n"
+msgstr "Використання демультиплексора Dirac.\n"
 
 #: src/input/r_dirac.cpp:96
 #: src/input/r_matroska.cpp:1475
 msgid "Using the Dirac video output module.\n"
-msgstr "Використання Dirac відео вихідного модуля.\n"
+msgstr "Використання вихідного модуля відео Dirac.\n"
 
 #: src/input/r_flac.cpp:124
 msgid "Using the FLAC demultiplexer.\n"
-msgstr "Використання FLAC демультиплексора.\n"
+msgstr "Використання демультиплексора FLAC.\n"
 
 #: src/input/r_ogm_flac.cpp:287
 #: src/input/r_matroska.cpp:1599
 #: src/input/r_flac.cpp:164
 msgid "Using the FLAC output module.\n"
-msgstr "Використання FLAC вихідного модуля.\n"
+msgstr "Використання вихідного модуля FLAC.\n"
 
 #: src/input/r_ivf.cpp:66
 msgid "Using the IVF demultiplexer.\n"
-msgstr "Використання IVF демультиплексора.\n"
+msgstr "Використання демультиплексора IVF.\n"
 
 #: src/input/r_matroska.cpp:1718
 msgid "Using the Kate output module.\n"
-msgstr "Використання Kate вихідного модуля.\n"
+msgstr "Використання вихідного модуля Kate.\n"
 
 #: src/input/r_ogm.cpp:1520
 msgid "Using the Kate subtitle output module.\n"
-msgstr "Використання Kate вихідного модуля субтитрів.\n"
+msgstr "Використання вихідного модуля субтитрів Kate.\n"
 
 #: src/input/r_mp3.cpp:50
 msgid "Using the MP2/MP3 demultiplexer.\n"
-msgstr "Використання MP2/MP3 демультиплексора.\n"
+msgstr "Використання демультиплексора MP2/MP3.\n"
 
 #: src/input/r_mpeg_es.cpp:166
 msgid "Using the MPEG ES demultiplexer.\n"
-msgstr "Використання MPEG ES демультиплексора.\n"
+msgstr "Використання демультиплексора MPEG ES.\n"
 
 #: src/input/r_mpeg_ps.cpp:178
 msgid "Using the MPEG PS demultiplexer.\n"
-msgstr "Використання MPEG PS демультиплексора.\n"
+msgstr "Використання демультиплексора MPEG PS.\n"
 
 #: src/input/r_mp3.cpp:71
 #: src/input/r_matroska.cpp:1607
@@ -7666,25 +7666,25 @@ msgstr "Використання MPEG PS демультиплексора.\n"
 #: src/input/r_qtmp4.cpp:1537
 #: src/input/r_avi.cpp:561
 msgid "Using the MPEG audio output module.\n"
-msgstr "Використання MPEG аудіо вихідного модуля.\n"
+msgstr "Використання вихідного модуля аудіо MPEG.\n"
 
 #: src/input/r_matroska.cpp:1459
 #: src/input/r_qtmp4.cpp:1489
 #, boost-format
 msgid "Using the MPEG-%1% video output module.\n"
-msgstr "Використання MPEG-%1% відео вихідного модуля.\n"
+msgstr "Використання вихідного модуля відео MPEG-%1%.\n"
 
 #: src/input/r_mpeg_ts.cpp:997
 #: src/input/r_mpeg_es.cpp:179
 #: src/input/r_mpeg_ps.cpp:1201
 #: src/input/r_avi.cpp:323
 msgid "Using the MPEG-1/2 video output module.\n"
-msgstr "Використання MPEG-1/2 відео вихідного модуля.\n"
+msgstr "Використання вихідного модуля відео MPEG-1/2.\n"
 
 #: src/input/r_matroska.cpp:1869
 #: src/input/r_qtmp4.cpp:1507
 msgid "Using the MPEG-4 part 10 (AVC) video output module.\n"
-msgstr "Використання MPEG-4 Part 10 (AVC) відео вихідного модуля.\n"
+msgstr "Використання вихідного модуля відео MPEG-4 Part 10 (AVC).\n"
 
 #: src/input/r_matroska.cpp:1849
 #: src/input/r_ogm.cpp:1154
@@ -7693,22 +7693,22 @@ msgstr "Використання MPEG-4 Part 10 (AVC) відео вихідно�
 #: src/input/r_mpeg_ps.cpp:1214
 #: src/input/r_avi.cpp:348
 msgid "Using the MPEG-4 part 10 ES video output module.\n"
-msgstr "Використання MPEG-4 Part 10 ES відео вихідного модуля.\n"
+msgstr "Використання вихідного модуля відео MPEG-4 Part 10 ES.\n"
 
 #: src/input/r_matroska.cpp:1463
 #: src/input/r_ogm.cpp:1258
 #: src/input/r_qtmp4.cpp:1481
 #: src/input/r_avi.cpp:331
 msgid "Using the MPEG-4 part 2 video output module.\n"
-msgstr "Використання MPEG-4 Part 2 відео вихідного модуля.\n"
+msgstr "Використання вихідного модуля відео MPEG-4 Part 2.\n"
 
 #: src/input/r_matroska.cpp:212
 msgid "Using the Matroska demultiplexer.\n"
-msgstr "Використання Matroska демультиплексора.\n"
+msgstr "Використання демультиплексора Matroska.\n"
 
 #: src/input/r_ogm.cpp:337
 msgid "Using the OGG/OGM demultiplexer.\n"
-msgstr "Використання OGG/OGM демультиплексора.\n"
+msgstr "Використання демультиплексора OGG/OGM.\n"
 
 #: src/input/r_matroska.cpp:1614
 #: src/input/r_ogm.cpp:1049
@@ -7716,139 +7716,139 @@ msgstr "Використання OGG/OGM демультиплексора.\n"
 #: src/input/r_qtmp4.cpp:1543
 #: src/input/r_avi.cpp:553
 msgid "Using the PCM output module.\n"
-msgstr "Використання PCM вихідного модуля.\n"
+msgstr "Використання вихідного модуля PCM.\n"
 
 #: src/input/r_pgssup.cpp:72
 #: src/input/r_matroska.cpp:1724
 msgid "Using the PGS output module.\n"
-msgstr "Використання PGS вихідного модуля.\n"
+msgstr "Використання вихідного модуля PGS.\n"
 
 #: src/input/r_pgssup.cpp:59
 msgid "Using the PGSSUP demultiplexer.\n"
-msgstr "Використання PGSSUP демультиплексора.\n"
+msgstr "Використання демультиплексора PGSSUP.\n"
 
 #: src/input/r_qtmp4.cpp:124
 msgid "Using the Quicktime/MP4 demultiplexer.\n"
-msgstr "Використання Quicktime/MP4 демультиплексора.\n"
+msgstr "Використання демультиплексора Quicktime/MP4.\n"
 
 #: src/input/r_real.cpp:401
 #, boost-format
 msgid "Using the RealAudio output module (FourCC: %1%).\n"
-msgstr "Використання RealAudio вихідного модуля (FourCC: %1%).\n"
+msgstr "Використання вихідного модуля RealAudio (FourCC: %1%).\n"
 
 #: src/input/r_real.cpp:158
 msgid "Using the RealMedia demultiplexer.\n"
-msgstr "Використання RealMedia демультиплексора.\n"
+msgstr "Використання демультиплексора RealMedia.\n"
 
 #: src/input/r_srt.cpp:44
 msgid "Using the SRT subtitle reader.\n"
-msgstr "Використання SRT зчитувача субтитрів.\n"
+msgstr "Використання зчитувача субтитрів SRT.\n"
 
 #: src/input/r_avi.cpp:428
 msgid "Using the SSA/ASS subtitle output module.\n"
-msgstr "Використання SSA/ASS вихідного модуля субтитрів.\n"
+msgstr "Використання вихідного модуля субтитрів SSA/ASS.\n"
 
 #: src/input/r_ssa.cpp:58
 msgid "Using the SSA/ASS subtitle reader.\n"
-msgstr "Використання SSA/ASS зчитувача субтитрів.\n"
+msgstr "Використання зчитувача субтитрів SSA/ASS.\n"
 
 #: src/input/r_tta.cpp:96
 msgid "Using the TTA demultiplexer.\n"
-msgstr "Використання TTA демультиплексора.\n"
+msgstr "Використання демультиплексора TTA.\n"
 
 #: src/input/r_tta.cpp:109
 #: src/input/r_matroska.cpp:1625
 msgid "Using the TTA output module.\n"
-msgstr "Використання TTA вихідного модуля.\n"
+msgstr "Використання вихідного модуля TTA.\n"
 
 #: src/input/r_matroska.cpp:1471
 #: src/input/r_ogm.cpp:1351
 msgid "Using the Theora video output module.\n"
-msgstr "Використання Theora відео вихідного модуля.\n"
+msgstr "Використання вихідного модуля відео Theora.\n"
 
 #: src/input/r_mpeg_ts.cpp:978
 #: src/input/r_mpeg_ps.cpp:1190
 msgid "Using the TrueHD output module.\n"
-msgstr "Використання TrueHD вихідного модуля.\n"
+msgstr "Використання вихідного модуля TrueHD.\n"
 
 #: src/input/r_truehd.cpp:73
 msgid "Using the TrueHD/MLP demultiplexer.\n"
-msgstr "Використання TrueHD/MLP демультиплексора.\n"
+msgstr "Використання демультиплексора TrueHD/MLP.\n"
 
 #: src/input/r_truehd.cpp:89
 msgid "Using the TrueHD/MLP output module.\n"
-msgstr "Використання TrueHD/MLP вихідного модуля.\n"
+msgstr "Використання вихідного модуля TrueHD/MLP.\n"
 
 #: src/input/r_usf.cpp:100
 msgid "Using the USF subtitle reader.\n"
-msgstr "Використання USF зчитувача субтитрів.\n"
+msgstr "Використання зчитувача субтитрів USF.\n"
 
 #: src/input/r_vc1.cpp:86
 msgid "Using the VC1 ES demultiplexer.\n"
-msgstr "Використання VC1 ES демультиплексора.\n"
+msgstr "Використання демультиплексора VC1 ES.\n"
 
 #: src/input/r_vc1.cpp:96
 #: src/input/r_matroska.cpp:1877
 #: src/input/r_mpeg_ts.cpp:1033
 #: src/input/r_mpeg_ps.cpp:1219
 msgid "Using the VC1 video output module.\n"
-msgstr "Використання VC1 відео вихідного модуля.\n"
+msgstr "Використання вихідного модуля відео VC1.\n"
 
 #: src/input/r_matroska.cpp:1479
 #: src/input/r_ogm.cpp:1445
 #: src/input/r_ivf.cpp:87
 msgid "Using the VP8 video output module.\n"
-msgstr "Використання VP8 відео вихідного модуля.\n"
+msgstr "Використання вихідного модуля відео VP8.\n"
 
 #: src/input/r_vobbtn.cpp:67
 msgid "Using the VobBtn button reader.\n"
-msgstr "Використання VobBtn зчитувача кнопок.\n"
+msgstr "Використання зчитувача кнопок VobBtn.\n"
 
 #: src/input/r_matroska.cpp:1735
 msgid "Using the VobBtn output module.\n"
-msgstr "Використання VobBtn вихідного модуля.\n"
+msgstr "Використання вихідного модуля VobBtn.\n"
 
 #: src/input/r_matroska.cpp:1702
 msgid "Using the VobSub output module.\n"
-msgstr "Використання VobSub вихідного модуля.\n"
+msgstr "Використання вихідного модуля VobSub.\n"
 
 #: src/input/r_vobsub.cpp:149
 #, boost-format
 msgid "Using the VobSub subtitle output module (language: %1%).\n"
-msgstr "Використання VobSub вихідного модуля субтитрів (мова: %1%).\n"
+msgstr "Використання вихідного модуля субтитрів VobSub (мова: %1%).\n"
 
 #: src/input/r_vobsub.cpp:104
 #, boost-format
 msgid "Using the VobSub subtitle reader (SUB file '%1%').\n"
-msgstr "Використання VobSub зчитувача субтитрів. (SUB файл '%1%').\n"
+msgstr "Використання зчитувача субтитрів VobSub. (SUB файл '%1%').\n"
 
 #: src/input/r_matroska.cpp:1632
 #: src/input/r_ogm.cpp:1070
 #: src/input/r_avi.cpp:743
 msgid "Using the Vorbis output module.\n"
-msgstr "Використання Vorbis вихідного модуля.\n"
+msgstr "Використання вихідного модуля Vorbis.\n"
 
 #: src/input/r_wav.cpp:565
 msgid "Using the WAV demultiplexer.\n"
-msgstr "Використання WAV демультиплексора.\n"
+msgstr "Використання демультиплексора WAV.\n"
 
 #: src/input/r_wavpack.cpp:84
 msgid "Using the WAVPACK demultiplexer with a correction file.\n"
-msgstr "Використання WavPack демультиплексора з файлом поправки.\n"
+msgstr "Використання демультиплексора WavPack з файлом поправки.\n"
 
 #: src/input/r_wavpack.cpp:86
 msgid "Using the WAVPACK demultiplexer.\n"
-msgstr "Використання WavPack демультиплексора.\n"
+msgstr "Використання демультиплексора WavPack.\n"
 
 #: src/input/r_wavpack.cpp:107
 #: src/input/r_matroska.cpp:1655
 msgid "Using the WAVPACK output module.\n"
-msgstr "Використання WavPack вихідного модуля.\n"
+msgstr "Використання вихідного модуля WavPack.\n"
 
 #: src/input/r_qtmp4.cpp:1557
 #, boost-format
 msgid "Using the generic audio output module (FourCC: %|1$.4s|).\n"
-msgstr "Використання загального вихідного аудіо модуля (FourCC: %|1$.4s|).\n"
+msgstr "Використання загального вихідного модуля аудіо (FourCC: %|1$.4s|).\n"
 
 #: src/input/r_matroska.cpp:1376
 #, boost-format
@@ -7879,7 +7879,7 @@ msgstr "Використання вихідного модуля відео (Fou
 #: src/input/r_ogm.cpp:1263
 #: src/input/r_avi.cpp:360
 msgid "Using the video output module.\n"
-msgstr "Використання вихідного модуля для відео.\n"
+msgstr "Використання вихідного модуля відео.\n"
 
 #: src/common/file_types.cpp:50
 msgid "VC1 elementary streams"
@@ -7948,7 +7948,7 @@ msgstr "Прапорець черезрядковості відео "
 #: src/input/r_real.cpp:651
 #, boost-format
 msgid "Video packet assembly failed. Error code: %1% (%2%)\n"
-msgstr "Відео пакет зібрати не вдалося. Код помилки: %1% (%2%)\n"
+msgstr "Відеопакет зібрати не вдалося. Код помилки: %1% (%2%)\n"
 
 #: src/common/property_element.cpp:139
 #: src/mmg/header_editor/frame.cpp:450
@@ -9390,12 +9390,16 @@ msgstr "Так"
 
 #~ msgid " (both eyes)"
 #~ msgstr " (обидва ока)"
+
 #~ msgid " (left eye)"
 #~ msgstr " (ліве око)"
+
 #~ msgid " (right eye)"
 #~ msgstr " (праве око)"
+
 #~ msgid "%1% at %2%"
 #~ msgstr "%1% в %2%"
+
 #~ msgid ""
 #~ "%s\n"
 #~ "\n"
@@ -9416,24 +9420,34 @@ msgstr "Так"
 #~ "\n"
 #~ "Допомога надається у вигляді підказок, в меню\n"
 #~ "'Довідка' або після натиснення 'F1'."
+
 #~ msgid "(Unknown element: %1%)"
 #~ msgstr "(Невідомий елемент: %1%)"
+
 #~ msgid "About mkvmerge's GUI"
 #~ msgstr "Про mkvmerge GUI"
+
 #~ msgid "Both eyes"
 #~ msgstr "Обидва ока"
+
 #~ msgid "DTS (Digital Theater System)"
 #~ msgstr "DTS (Digital Theater System)"
+
 #~ msgid "Dirac elementary stream"
 #~ msgstr "Dirac елементарний потік"
+
 #~ msgid "Do not write those header elements whose values are the same as their default values according to the Matroska specs."
 #~ msgstr "Не пишіть заголовок тих елементів, значення яких збігаються з їхніми значеннями за замовчуванням відповідно до Matroska критеріям."
+
 #~ msgid "FLAC lossless audio"
 #~ msgstr "FLAC аудіо без втрат"
+
 #~ msgid "File/segment title"
 #~ msgstr "Файл/сегмент назву"
+
 #~ msgid "IVF with VP8"
 #~ msgstr "IVF з VP8"
+
 #~ msgid ""
 #~ "Known file types:\n"
 #~ "  ext   description\n"
@@ -9442,44 +9456,64 @@ msgstr "Так"
 #~ "Відомі типи файлу:\n"
 #~ "  опис розширення\n"
 #~ "  ----  --------------------------\n"
+
 #~ msgid "Left eye"
 #~ msgstr "Ліве око"
+
 #~ msgid "MPEG program stream"
 #~ msgstr "MPEG програмний потік"
+
 #~ msgid "MPEG-1 layer II audio (CBR and VBR/ABR)"
 #~ msgstr "MPEG-1 layer II audio (CBR и VBR/ABR)"
+
 #~ msgid "MPEG-1 layer III audio (CBR and VBR/ABR)"
 #~ msgstr "MPEG-1 layer III audio (CBR и VBR/ABR)"
+
 #~ msgid "MPEG-1 video elementary stream"
 #~ msgstr "MPEG-1 video елементарний потік"
+
 #~ msgid "MPEG-2 video elementary stream"
 #~ msgstr "MPEG-2 video елементарний потік"
+
 #~ msgid "Matroska A/V files (*.mka;*.mkv)|*.mkv;*.mka|%s"
 #~ msgstr "Аудіо/відео файли Matroska (*.mka;*.mkv)|*.mkv;*.mka|%s"
+
 #~ msgid "Matroska files (*.mkv;*.mka)|*.mkv;*.mka|%s"
 #~ msgstr "Файли Matroska (*.mkv;*.mka)|*.mkv;*.mka|%s"
+
 #~ msgid "Matroska files (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|All files|*.*"
 #~ msgstr "Matroska файли (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|Все файлы|*.*"
+
 #~ msgid "None"
 #~ msgstr "жоден"
+
 #~ msgid "Other global options"
 #~ msgstr "Інші глобальні опції"
+
 #~ msgid "Quicktime/MP4 audio and video"
 #~ msgstr "Quicktime/MP4 Audio і Video"
+
 #~ msgid "RealMedia audio and video"
 #~ msgstr "RealMedia Audio i Video"
+
 #~ msgid "Right eye"
 #~ msgstr "Праве око"
+
 #~ msgid "Sets the compression used for VobSub subtitles. If nothing is chosen then the VobSubs will be automatically compressed with zlib. 'none' results is files that are a lot larger."
 #~ msgstr "Встановлює стиск, що використовується для субтитрів VobSub. Якщо нічого не вибрали, то VobSubs будуть автоматично стискати з zlib. Результати це файли, які багато більше."
+
 #~ msgid "TTA lossless audio"
 #~ msgstr "TTA аудіо без втрат"
+
 #~ msgid "The MPEG-4 part 2 compression only works with native MPEG-4. However, native MPEG-4 mode has not been selected with '--engage native_mpeg4'.\n"
 #~ msgstr "MPEG-4 частина 2 стиск працює тільки з рідним MPEG-4. Тим не менше, рідний MPEG-4 режим не був обраний з '--engage native_mpeg4'.\n"
+
 #~ msgid "This AAC track does not contain valid headers. The extra header size is %1% bytes, expected were 2 or 5 bytes.\n"
 #~ msgstr "Дана доріжка AAC не містить корректних заголовків. Додатковий розмір заголовка - %1% байт, очікувалось - 2 або 5 байт.\n"
+
 #~ msgid "This track uses a Matroska feature called 'Codec state elements'. mkvmerge supports these but this feature has not been turned on with the option '--engage use_codec_state'.\n"
 #~ msgstr "Эта дорожка использует особенность Matroska, названную 'запоминающие элементы Codec'. mkvmerge поддерживает их, но эта особенность не была включена с опцией '--engage use_codec_state'.\n"
+
 #~ msgid ""
 #~ "Usage: mkvinfo [options] inname\n"
 #~ "\n"
@@ -9520,53 +9554,76 @@ msgstr "Так"
 #~ "                 Переадресація всіх повідомлень до цього файлу.\n"
 #~ "  -h, --help     Відображення цієї довідки.\n"
 #~ "  -V, --version  Відображення інформації про версію.\n"
+
 #, fuzzy
 #~ msgid "Using the IVF output module.\n"
 #~ msgstr "Використання FLAC вихідного модуля.\n"
+
 #~ msgid "VC1 video elementary stream"
 #~ msgstr "VC1 відео елементарний потік"
+
 #~ msgid "VobBtn buttons"
 #~ msgstr "VobBtn кнопки"
+
 #~ msgid "WAVE (uncompressed PCM)"
 #~ msgstr "WAVE (незжатий PCM)"
+
 #~ msgid "WAVPACK lossless audio"
 #~ msgstr "WAVPACK аудіо без втрат"
+
 #~ msgid "Write raw FLAC files (default: write OggFLAC files)."
 #~ msgstr "Створити вихідні файли FLAC (за замовчуванням: написати OggFLAC файли)."
+
 #~ msgid "audio/video/text subtitles embedded in OGG"
 #~ msgstr "аудіо/відео/текст субтитрів впроваджених у OGG"
+
 #~ msgid "byte_buffer_c: (pos + num) > size. Should not have happened. Please file a bug report.\n"
 #~ msgstr "byte_buffer_c: (pos + num) > size. Не повинно було трапитися. Будь ласка, відправте повідомлення про помилку.\n"
+
 #~ msgid "cstrutf8_to_UTFstring: Invalid UTF-8 sequence encountered. Please contact moritz@bunkus.org and request that he implements a better UTF-8 parser."
 #~ msgstr "cstrutf8_to_UTFstring: Натраплено на некорректну UTF-8 послідовність. Будь ласка, напишіть moritz@bunkus.org і зоставте побажання про покращення реалізації UTF-8 аналізатора."
+
 #~ msgid "flac_header_extraction: Could not set the error callback.\n"
 #~ msgstr "flac_header_extraction: Не вдалося встановити помилки зворотного виклику.\n"
+
 #~ msgid "flac_header_extraction: Could not set the metadata callback.\n"
 #~ msgstr "flac_header_extraction: Не вдалося встановити метаданих зворотного виклику.\n"
+
 #~ msgid "flac_header_extraction: Could not set the read callback.\n"
 #~ msgstr "flac_header_extraction: Не вдалося встановити читати зворотного виклику.\n"
+
 #~ msgid "flac_header_extraction: Could not set the write callback.\n"
 #~ msgstr "flac_header_extraction: Не вдалося встановити написати зворотного виклику.\n"
+
 #~ msgid "flac_reader: Could not set the eof callback.\n"
 #~ msgstr "flac_reader: Не вдалося встановити кінець файлу зворотного виклику.\n"
+
 #~ msgid "flac_reader: Could not set the error callback.\n"
 #~ msgstr "flac_reader: Не вдалося встановити помилки зворотного виклику.\n"
+
 #~ msgid "flac_reader: Could not set the length callback.\n"
 #~ msgstr "flac_reader: Не вдалося встановити довжину зворотного виклику.\n"
+
 #~ msgid "flac_reader: Could not set the metadata callback.\n"
 #~ msgstr "flac_reader: Не вдалося встановити метаданих зворотного виклику.\n"
+
 #~ msgid "flac_reader: Could not set the read callback.\n"
 #~ msgstr "flac_reader: Не вдалося встановити читати зворотного виклику.\n"
+
 #~ msgid "flac_reader: Could not set the seek callback.\n"
 #~ msgstr "flac_reader: Не вдалося встановити зворотній виклик пошуку.\n"
+
 #~ msgid "flac_reader: Could not set the tell callback.\n"
 #~ msgstr "flac_reader: Не вдалося встановити сказати зворотного виклику.\n"
+
 #~ msgid "flac_reader: Could not set the write callback.\n"
 #~ msgstr "flac_reader: Не вдалося встановити написати зворотного виклику.\n"
+
 #~ msgid "general Matroska files"
 #~ msgstr "Загальні файли Matroska"
+
 #~ msgid "mkvextract: Unknown mode!?\n"
 #~ msgstr "mkvextract: Невідомий режим!?\n"
+
 #~ msgid "r_matroska: Cluster does not contain a cluster timecode. File is broken. Aborting.\n"
 #~ msgstr "r_matroska: Кластер не містять кластеру тайм-коду. Файл не працює. Переривання.\n"
-
