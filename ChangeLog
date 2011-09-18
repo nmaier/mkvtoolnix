@@ -1,3 +1,9 @@
+2011-09-17  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: enhancement: MPEG TS: Streams that are mentioned in
+	the PMT but do not actually contain data are neither reported
+	during identification nor muxed.
+
 2011-09-14  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: new feature: MPEG TS: Added support for reading the
