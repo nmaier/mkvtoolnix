@@ -34,6 +34,17 @@ memory_c::resize(size_t new_size) throw() {
   }
 }
 
+void
+memory_c::add(unsigned char *new_buffer,
+              size_t new_size) {
+  if ((0 == new_size) || (NULL == new_buffer))
+    return;
+
+  size_t previous_size = get_size();
+  resize(previous_size + new_size);
+  memcpy(get_buffer() + previous_size, new_buffer, new_size);
+}
+
 memory_cptr
 lace_memory_xiph(const std::vector<memory_cptr> &blocks) {
   size_t i, size = 1;

@@ -138,6 +138,10 @@ public:
   }
 
   void resize(size_t new_size) throw();
+  void add(unsigned char *new_buffer, size_t new_size);
+  void add(memory_cptr &new_buffer) {
+    add(new_buffer->get_buffer(), new_buffer->get_size());
+  }
 
   operator const unsigned char *() const {
     return its_counter ? its_counter->ptr : NULL;
