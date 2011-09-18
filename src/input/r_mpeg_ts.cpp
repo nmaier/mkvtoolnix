@@ -464,6 +464,7 @@ mpeg_ts_reader_c::identify() {
                        : FOURCC('A', 'C', '3', ' ') == track->fourcc ? "AC3"
                        : FOURCC('D', 'T', 'S', ' ') == track->fourcc ? "DTS"
                        : FOURCC('T', 'R', 'H', 'D') == track->fourcc ? "TrueHD"
+                       : FOURCC('P', 'G', 'S', ' ') == track->fourcc ? "HDMV PGS"
                        // : FOURCC('P', 'C', 'M', ' ') == track->fourcc ? "PCM"
                        // : FOURCC('L', 'P', 'C', 'M') == track->fourcc ? "LPCM"
                        :                                               NULL;
@@ -478,7 +479,11 @@ mpeg_ts_reader_c::identify() {
     if (debugging_requested("mpeg_ts_pid"))
       verbose_info.push_back((boost::format("ts_pid:%1%") % track->pid).str());
 
-    id_result_track(i, ES_AUDIO_TYPE == track->type ? ID_RESULT_TRACK_AUDIO : ID_RESULT_TRACK_VIDEO, fourcc, verbose_info);
+    std::string type = ES_AUDIO_TYPE == track->type ? ID_RESULT_TRACK_AUDIO
+                     : ES_VIDEO_TYPE == track->type ? ID_RESULT_TRACK_VIDEO
+                     :                                ID_RESULT_TRACK_SUBTITLES;
+
+    id_result_track(i, type, fourcc, verbose_info);
   }
 }
 
