@@ -62,6 +62,7 @@ enum mpeg_ts_stream_type_e {
   STREAM_AUDIO_AC3_LOSSLESS = 0x83, // Audio AC3 - Dolby lossless
   STREAM_AUDIO_AC3_PLUS     = 0x84, // Audio AC3 - Dolby Digital Plus
   STREAM_AUDIO_DTS_HD       = 0x85, // Audio DTS HD
+  STREAM_AUDIO_DTS_HD_MA    = 0x86, // Audio DTS HD Master Audio
   STREAM_VIDEO_VC1          = 0xEA, // Video VC-1
 };
 

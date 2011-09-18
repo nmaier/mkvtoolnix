@@ -675,6 +675,7 @@ mpeg_ts_reader_c::parse_pmt(unsigned char *pmt) {
         break;
       case STREAM_AUDIO_DTS:
       case STREAM_AUDIO_DTS_HD:
+      case STREAM_AUDIO_DTS_HD_MA:
         track->type   = ES_AUDIO_TYPE;
         track->fourcc = FOURCC('D', 'T', 'S', ' ');
         break;
