@@ -18,6 +18,7 @@
 #include "common/common_pch.h"
 
 #include "common/mm_io.h"
+#include "common/smart_pointers.h"
 
 class MTX_DLL_API bit_cursor_c {
 private:
@@ -126,6 +127,12 @@ public:
     }
 
     return r;
+  }
+
+  void get_bytes(unsigned char *buf, size_t n) {
+    size_t idx;
+    for (idx = 0; idx < n; ++idx)
+      buf[idx] = get_bits(8);
   }
 
   void byte_align() {
@@ -240,5 +247,6 @@ public:
     return pos;
   }
 };
+typedef counted_ptr<bit_cursor_c> bit_cursor_cptr;
 
 #endif // __MTX_COMMON_BIT_CURSOR_H

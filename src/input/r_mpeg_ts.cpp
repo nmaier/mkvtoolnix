@@ -17,6 +17,7 @@
 #include "common/common_pch.h"
 
 #include "common/checksums.h"
+#include "common/clpi.h"
 #include "common/endian.h"
 #include "common/math.h"
 #include "common/mp3.h"
@@ -35,6 +36,8 @@
 #include "output/p_pgs.h"
 #include "output/p_truehd.h"
 #include "output/p_vc1.h"
+
+namespace bfs = boost::filesystem;
 
 #define TS_CONSECUTIVE_PACKETS 16
 #define TS_PROBE_SIZE          (2 * TS_CONSECUTIVE_PACKETS * 204)
@@ -444,6 +447,8 @@ mpeg_ts_reader_c::mpeg_ts_reader_c(track_info_c &_ti)
     track->pes_payload_size = 0;
     // track->timecode_offset = -1;
   }
+
+  parse_clip_info_file();
 }
 
 mpeg_ts_reader_c::~mpeg_ts_reader_c() {
@@ -1176,5 +1181,64 @@ mpeg_ts_reader_c::read(generic_packetizer_c *requested_ptzr,
 
     io->skip(-1);
     return FILE_STATUS_MOREDATA;
+  }
+}
+
+bfs::path
+mpeg_ts_reader_c::find_clip_info_file() {
+  bfs::path clpi_file(m_ti.m_fname);
+  clpi_file.replace_extension("clpi");
+
+  if (bfs::exists(clpi_file))
+    return clpi_file;
+
+  bfs::path file_name(clpi_file.filename());
+  bfs::path path(clpi_file.remove_filename());
+
+  // clpi_file = path / ".." / file_name;
+  // if (bfs::exists(clpi_file))
+  //   return clpi_file;
+
+  clpi_file = path / ".." / "clipinf" / file_name;
+  if (bfs::exists(clpi_file))
+    return clpi_file;
+
+  clpi_file = path / ".." / "CLIPINF" / file_name;
+  if (bfs::exists(clpi_file))
+    return clpi_file;
+
+  return bfs::path();
+}
+
+void
+mpeg_ts_reader_c::parse_clip_info_file() {
+  bfs::path clpi_file(find_clip_info_file());
+  if (clpi_file.empty())
+    return;
+
+  clpi::parser_c parser(clpi_file.string());
+  if (!parser.parse())
+    return;
+
+  foreach(mpeg_ts_track_ptr &track, tracks) {
+    bool found = false;
+
+    foreach(clpi::program_cptr &program, parser.m_programs) {
+      foreach(clpi::program_stream_cptr &stream, program->program_streams) {
+        if ((stream->pid != track->pid) || stream->language.empty())
+          continue;
+
+        int language_idx = map_to_iso639_2_code(stream->language.c_str());
+        if (-1 == language_idx)
+          continue;
+
+        track->language = iso639_languages[language_idx].iso639_2_code;
+        found = true;
+        break;
+      }
+
+      if (found)
+        break;
+    }
   }
 }

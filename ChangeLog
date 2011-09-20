@@ -1,5 +1,10 @@
 2011-09-20  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: new feature: MPEG TS: mkvmerge will extract the track
+	languages from a corresponding clpi (clip info) file. That file is
+	searched for in the same directory and in ../CLIPINF and must
+	have the same base name but with the ".clpi" extension.
+
 	* mkvmerge: enhancement: Added new stereo mode options to match
 	the current specs. The new options are "anaglyph_green_magenta"
 	(12), "both_eyes_laced_left_first" (13) and

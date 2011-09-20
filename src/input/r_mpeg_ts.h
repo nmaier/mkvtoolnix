@@ -17,6 +17,8 @@
 
 #include "common/common_pch.h"
 
+#include <boost/filesystem.hpp>
+
 #include "common/byte_buffer.h"
 #include "common/dts.h"
 #include "common/mm_io.h"
@@ -24,6 +26,8 @@
 #include "common/truehd.h"
 #include "merge/pr_generic.h"
 #include "mpegparser/M2VParser.h"
+
+namespace bfs = boost::filesystem;
 
 enum mpeg_ts_input_type_e {
   INPUT_PROBE = 0,
@@ -299,6 +303,9 @@ private:
   void create_mpeg4_p10_es_video_packetizer(mpeg_ts_track_ptr &track);
   void create_vc1_video_packetizer(mpeg_ts_track_ptr &track);
   void create_hdmv_pgs_subtitles_packetizer(mpeg_ts_track_ptr &track);
+
+  bfs::path find_clip_info_file();
+  void parse_clip_info_file();
 
   friend class mpeg_ts_track_c;
 };
