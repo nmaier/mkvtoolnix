@@ -50,7 +50,7 @@ public:
   static mode parse_mode(const std::string &str);
   static bool valid_index(int index);
   static unsigned int max_index() {
-    return 11;
+    return 14;
   };
 };
 
