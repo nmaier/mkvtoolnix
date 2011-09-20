@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: nl\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-05-25 23:42+0200\n"
-"PO-Revision-Date: 2011-09-17 11:50+0100\n"
+"PO-Revision-Date: 2011-09-20 21:59+0200\n"
 "Last-Translator: René Maassen <bmom43@hotmail.com>\n"
 "Language-Team: Dutch <bmom43@hotmail.com>\n"
 "Language: nl\n"
@@ -378,12 +378,12 @@ msgstr "  --split-max-files <n>               Creëert op zijn meest  n bestande
 msgid ""
 "  --stereo-mode <TID:n|keyword>\n"
 "                           Sets the stereo mode parameter. It can\n"
-"                           either be a number 0 - 11 or a keyword\n"
+"                           either be a number 0 - 14 or a keyword\n"
 "                           (see documentation for the full list).\n"
 msgstr ""
 "  --stereo-mode <TID:n|keyword>\n"
 "                           Stelt stereo mode parameter in. Het kan zijn\n"
-"                           een nummer 0 t/m 11 of een sleutelwoord\n"
+"                           een nummer 0 t/m 14 of een sleutelwoord\n"
 "                           (zie documentatie voor volledige lijst).\n"
 
 #: src/merge/mkvmerge.cpp:226
@@ -1003,8 +1003,8 @@ msgstr "&Opnieuw inladen\tCtrl-R"
 msgid "&Reset"
 msgstr "&Resetten"
 
-#: src/mmg/jobs.cpp:399
 #: src/mmg/mmg_dialog.cpp:287
+#: src/mmg/jobs.cpp:399
 msgid "&Save"
 msgstr "&Opslaan"
 
@@ -1226,18 +1226,18 @@ msgstr "'%1%' mist het spoor ID.\n"
 msgid "'%1%' lacks the track number(s).\n"
 msgstr "'%1%' mist het spoor nummer(s).\n"
 
-#: src/common/output.cpp:134
-#: src/common/output.cpp:147
-#: src/common/output.cpp:160
-#: src/common/output.cpp:181
+#: src/common/output.cpp:135
+#: src/common/output.cpp:148
+#: src/common/output.cpp:161
+#: src/common/output.cpp:182
 #, boost-format
 msgid "'%1%' track %2%: %3%"
 msgstr "'%1%' spoor %2%: %3%"
 
-#: src/common/output.cpp:127
-#: src/common/output.cpp:140
-#: src/common/output.cpp:153
-#: src/common/output.cpp:170
+#: src/common/output.cpp:128
+#: src/common/output.cpp:141
+#: src/common/output.cpp:154
+#: src/common/output.cpp:171
 #, boost-format
 msgid "'%1%': %2%"
 msgstr "'%1%': %2%"
@@ -1751,8 +1751,8 @@ msgstr "Breek het samenvoeg proces nu af"
 msgid "Aborted processing on %s"
 msgstr "Proces afbreken over %s"
 
-#: src/info/qt_ui.cpp:125
 #: src/info/wxwidgets_ui.cpp:338
+#: src/info/qt_ui.cpp:125
 msgid "About mkvinfo"
 msgstr "Over mkvinfo"
 
@@ -2127,8 +2127,8 @@ msgid "Brings up the job queue editor"
 msgstr "Toont de taak wachtrij bewerker"
 
 #: src/mmg/mmg_dialog.cpp:313
-#: src/mmg/options/mmg.cpp:69
 #: src/mmg/options/mkvmerge.cpp:59
+#: src/mmg/options/mmg.cpp:69
 #: src/mmg/tabs/input_general.cpp:188
 #: src/mmg/tabs/input_general.cpp:191
 #: src/mmg/tabs/global.cpp:276
@@ -2398,11 +2398,11 @@ msgid "Choose an input file to append"
 msgstr "Kies een invoer bestand om bij te voegen"
 
 #: src/mmg/mux_dialog.cpp:263
-#: src/mmg/jobs.cpp:410
 #: src/mmg/mmg_dialog.cpp:336
 #: src/mmg/mmg_dialog.cpp:432
 #: src/mmg/mmg_dialog.cpp:740
 #: src/mmg/mmg_dialog.cpp:761
+#: src/mmg/jobs.cpp:410
 #: src/mmg/tabs/chapters.cpp:637
 #: src/mmg/tabs/chapters.cpp:681
 msgid "Choose an output file"
@@ -2632,9 +2632,9 @@ msgstr "Kon opgegeven bestand niet maken."
 msgid "Could not decode the Base64 encoded data - it seems to be malformed."
 msgstr "Kon niet coderen Base64 gecodeerde data - het schijnt misvormd te zijn."
 
-#: src/input/r_matroska.cpp:1837
-#: src/input/r_ogm.cpp:1157
 #: src/input/r_avi.cpp:351
+#: src/input/r_ogm.cpp:1157
+#: src/input/r_matroska.cpp:1837
 msgid "Could not extract the decoder specific config data (AVCC) from this AVC/h.264 track.\n"
 msgstr "Kon decoder specifieke configuratie data niet uitpakken (AVCC) van dit AVC/h.264 spoor.\n"
 
@@ -2665,8 +2665,8 @@ msgstr "Kan de codec configuratie data niet vinden in het eerste MPEG-4 deel 2 v
 msgid "Could not find the next Ogg page. This indicates a damaged Ogg/Ogm file. Will try to continue.\n"
 msgstr "Kan de volgende Ogg pagina niet vinden. Dit geeft een beschadigde Ogg/Ogm bestand aan. Zal proberen door te gaan.\n"
 
-#: src/input/r_matroska.cpp:1580
 #: src/input/r_avi.cpp:694
+#: src/input/r_matroska.cpp:1580
 msgid "Could not find valid DTS headers in this track's first frames.\n"
 msgstr "Kon geen geldig DTS kopstuk vinden in dit spoor, eerste beeld.\n"
 
@@ -2922,7 +2922,7 @@ msgstr "Datum (ongelding, waarde: %1%)"
 msgid "Date: %1% UTC"
 msgstr "Datum: %1% UTC"
 
-#: src/common/output.cpp:79
+#: src/common/output.cpp:80
 msgid "Debug> "
 msgstr "Debug> "
 
@@ -3193,8 +3193,8 @@ msgstr "Einde:"
 msgid "English language name"
 msgstr "Engelse taal naam"
 
-#: src/info/qt_ui.cpp:130
 #: src/info/wxwidgets_ui.cpp:229
+#: src/info/qt_ui.cpp:130
 msgid "Error"
 msgstr "Fout"
 
@@ -3258,12 +3258,12 @@ msgstr "Fout bij informatie opslaan"
 msgid "Error writing Matroska file"
 msgstr "Fout bij schrijven MATROSKA bestand"
 
-#: src/common/output.cpp:72
+#: src/common/output.cpp:73
 #: src/mmg/mux_dialog.cpp:189
 msgid "Error:"
 msgstr "Fout:"
 
-#: src/common/output.cpp:73
+#: src/common/output.cpp:74
 msgid "Error: "
 msgstr "Fout:"
 
@@ -4759,9 +4759,9 @@ msgstr " (geen segment/niveaul 0 element gevonden)"
 msgid "Note"
 msgstr "Opmerking"
 
+#: src/extract/attachments.cpp:131
 #: src/extract/timecodes_v2.cpp:166
 #: src/extract/tracks.cpp:318
-#: src/extract/attachments.cpp:131
 #: src/propedit/options.cpp:34
 msgid "Nothing to do.\n"
 msgstr "Niets te doen.\n"
@@ -5445,8 +5445,8 @@ msgstr "Zoek positie: %1%"
 
 #: src/extract/timecodes_v2.cpp:202
 #: src/extract/tracks.cpp:359
-#: src/info/qt_ui.cpp:177
 #: src/info/wxwidgets_ui.cpp:205
+#: src/info/qt_ui.cpp:177
 msgid "Segment"
 msgstr "Segment"
 
@@ -5485,16 +5485,16 @@ msgstr "Segment info bestanden (*.xml)|*.xml|%s"
 #: src/propedit/propedit_cli_parser.cpp:105
 #: src/propedit/propedit_cli_parser.cpp:183
 #: src/info/mkvinfo.cpp:553
-#: src/info/qt_ui.cpp:178
 #: src/info/wxwidgets_ui.cpp:208
+#: src/info/qt_ui.cpp:178
 msgid "Segment information"
 msgstr "Segment informatie"
 
 #: src/extract/timecodes_v2.cpp:256
 #: src/extract/tracks.cpp:389
 #: src/info/mkvinfo.cpp:928
-#: src/info/qt_ui.cpp:179
 #: src/info/wxwidgets_ui.cpp:208
+#: src/info/qt_ui.cpp:179
 msgid "Segment tracks"
 msgstr "Segment sporen"
 
@@ -6222,8 +6222,8 @@ msgstr "Het codec type '%1%' kan niet gebruikt worden in een WebM herkenbaar bes
 #: src/output/p_passthrough.cpp:63
 #: src/output/p_kate.cpp:113
 #: src/output/p_video.cpp:206
-#: src/output/p_textsubs.cpp:102
 #: src/output/p_avc.cpp:209
+#: src/output/p_textsubs.cpp:102
 #, boost-format
 msgid "The codec's private data does not match (lengths: %1% and %2%)."
 msgstr "De codec's privé data komen niet overeen (lengte: %1% en %2%)."
@@ -6326,8 +6326,8 @@ msgstr "De vijde mode probeert het hoofstuk informatie te achterhalen, markeert 
 msgid "The file '%1%' cannot be attached because it does not exist or cannot be read.\n"
 msgstr "Het bestand '%1%' kan niet vastgemaakt worden het bestaat niet of kan niet gelezen worden.\n"
 
-#: src/extract/tags.cpp:47
 #: src/extract/attachments.cpp:141
+#: src/extract/tags.cpp:47
 #: src/extract/cuesheets.cpp:208
 #: src/extract/chapters.cpp:47
 #, boost-format
@@ -7016,8 +7016,8 @@ msgstr "Er waren waarschuwingen"
 msgid "There were warnings, or the process was terminated."
 msgstr "Er waren waarchuwingen, of het proces is geëindigd."
 
-#: src/input/r_real.cpp:326
 #: src/input/r_avi.cpp:629
+#: src/input/r_real.cpp:326
 msgid "This AAC track does not contain valid headers. Could not parse the AAC information.\n"
 msgstr "Dit AAC spoor bevat geen geldige koppen. Kon de AAC informatie niet ontleden.\n"
 
@@ -7542,9 +7542,9 @@ msgid "Using a NALU size length of 3 bytes might result in tracks that won't be 
 msgstr "Gebruikmakend van een NALU lengte grootte van 3 bytes kan resulteren in sporen die niet decodeerbaar zijn met bepaalde AVC/h.264 codecs.\n"
 
 #: src/input/r_ac3.cpp:90
-#: src/input/r_matroska.cpp:1557
-#: src/input/r_mpeg_ts.cpp:970
 #: src/input/r_mpeg_ps.cpp:1180
+#: src/input/r_mpeg_ts.cpp:1011
+#: src/input/r_matroska.cpp:1557
 #, boost-format
 msgid "Using the %1%AC3 output module.\n"
 msgstr "Gebruikmakend van de %1%AC3 uitvoer module.\n"
@@ -7562,10 +7562,10 @@ msgstr "Gebruikmakend van de AAC splitser.\n"
 msgid "Using the AAC output module (FourCC: %1%).\n"
 msgstr "Gebruikmakend van de AAC uitvoer module (FourCC: %1%).\n"
 
-#: src/input/r_aac.cpp:116
-#: src/input/r_matroska.cpp:1545
-#: src/input/r_ogm.cpp:994
 #: src/input/r_qtmp4.cpp:1531
+#: src/input/r_aac.cpp:116
+#: src/input/r_ogm.cpp:994
+#: src/input/r_matroska.cpp:1545
 msgid "Using the AAC output module.\n"
 msgstr "Gebruikmakend van de AAC uitvoer module.\n"
 
@@ -7578,10 +7578,10 @@ msgstr "Gebruikmakend van de AC3 splitser.\n"
 msgid "Using the AC3 output module (FourCC: %1%).\n"
 msgstr "Gebruikmakend van de AC3 uitvoer module (FourCC: %1%).\n"
 
-#: src/input/r_ogm.cpp:1012
-#: src/input/r_wav.cpp:225
 #: src/input/r_qtmp4.cpp:1454
 #: src/input/r_avi.cpp:568
+#: src/input/r_wav.cpp:225
+#: src/input/r_ogm.cpp:1012
 msgid "Using the AC3 output module.\n"
 msgstr "Gebruikmakend van de AC3 uitvoer module.\n"
 
@@ -7601,12 +7601,12 @@ msgstr "Gebruikmakend van de CorePanorama ondertitel lezer.\n"
 msgid "Using the DTS demultiplexer.\n"
 msgstr "Gebruikmakend van de DTS splitser.\n"
 
-#: src/input/r_dts.cpp:114
-#: src/input/r_matroska.cpp:1577
-#: src/input/r_mpeg_ts.cpp:974
-#: src/input/r_wav.cpp:354
-#: src/input/r_mpeg_ps.cpp:1185
 #: src/input/r_avi.cpp:689
+#: src/input/r_dts.cpp:114
+#: src/input/r_mpeg_ps.cpp:1185
+#: src/input/r_wav.cpp:354
+#: src/input/r_mpeg_ts.cpp:1015
+#: src/input/r_matroska.cpp:1577
 msgid "Using the DTS output module.\n"
 msgstr "Gebruikmakend van de DTS uitvoer module.\n"
 
@@ -7624,8 +7624,8 @@ msgid "Using the FLAC demultiplexer.\n"
 msgstr "Gebruikmakend van de FLAC splitser.\n"
 
 #: src/input/r_ogm_flac.cpp:287
-#: src/input/r_matroska.cpp:1599
 #: src/input/r_flac.cpp:164
+#: src/input/r_matroska.cpp:1599
 msgid "Using the FLAC output module.\n"
 msgstr "Gebruikmakend van de FLAC uitvoer module.\n"
 
@@ -7653,47 +7653,47 @@ msgstr "Gebruikmakend van de MPEG ES splitser.\n"
 msgid "Using the MPEG PS demultiplexer.\n"
 msgstr "Gebruikmakend van de MPEG PS splitser.\n"
 
-#: src/input/r_mp3.cpp:71
-#: src/input/r_matroska.cpp:1607
-#: src/input/r_ogm.cpp:1030
-#: src/input/r_mpeg_ts.cpp:966
-#: src/input/r_mpeg_ps.cpp:1175
 #: src/input/r_qtmp4.cpp:1537
+#: src/input/r_mp3.cpp:71
 #: src/input/r_avi.cpp:561
+#: src/input/r_mpeg_ps.cpp:1175
+#: src/input/r_mpeg_ts.cpp:1007
+#: src/input/r_ogm.cpp:1030
+#: src/input/r_matroska.cpp:1607
 msgid "Using the MPEG audio output module.\n"
 msgstr "Gebruikmakend van de MPEG audio uitvoer module.\n"
 
-#: src/input/r_matroska.cpp:1459
 #: src/input/r_qtmp4.cpp:1489
+#: src/input/r_matroska.cpp:1459
 #, boost-format
 msgid "Using the MPEG-%1% video output module.\n"
 msgstr "Gebruikmakend van de MPEG-%1% video uitvoer module.\n"
 
-#: src/input/r_mpeg_ts.cpp:997
-#: src/input/r_mpeg_es.cpp:179
-#: src/input/r_mpeg_ps.cpp:1201
 #: src/input/r_avi.cpp:323
+#: src/input/r_mpeg_ps.cpp:1201
+#: src/input/r_mpeg_es.cpp:179
+#: src/input/r_mpeg_ts.cpp:1043
 msgid "Using the MPEG-1/2 video output module.\n"
 msgstr "Gebruikmakend van de MPEG-1/2 video uitvoer module.\n"
 
-#: src/input/r_matroska.cpp:1869
 #: src/input/r_qtmp4.cpp:1507
+#: src/input/r_matroska.cpp:1869
 msgid "Using the MPEG-4 part 10 (AVC) video output module.\n"
 msgstr "Gebruikmakend van de MPEG-4 deel 10 (AVC) video uitvoer module.\n"
 
-#: src/input/r_matroska.cpp:1849
-#: src/input/r_ogm.cpp:1154
-#: src/input/r_avc.cpp:136
-#: src/input/r_mpeg_ts.cpp:1017
-#: src/input/r_mpeg_ps.cpp:1214
 #: src/input/r_avi.cpp:348
+#: src/input/r_avc.cpp:136
+#: src/input/r_mpeg_ps.cpp:1214
+#: src/input/r_mpeg_ts.cpp:1063
+#: src/input/r_ogm.cpp:1154
+#: src/input/r_matroska.cpp:1849
 msgid "Using the MPEG-4 part 10 ES video output module.\n"
 msgstr "Gebruikmakend van een MPEG-4 deel 10 ES video uitvoer module.\n"
 
-#: src/input/r_matroska.cpp:1463
-#: src/input/r_ogm.cpp:1258
 #: src/input/r_qtmp4.cpp:1481
 #: src/input/r_avi.cpp:331
+#: src/input/r_ogm.cpp:1258
+#: src/input/r_matroska.cpp:1463
 msgid "Using the MPEG-4 part 2 video output module.\n"
 msgstr "Gebruikmakend van een MPEG-4 deel 2 video uitvoer module.\n"
 
@@ -7705,15 +7705,16 @@ msgstr "Gebruikmakend van de Matroska splitser.\n"
 msgid "Using the OGG/OGM demultiplexer.\n"
 msgstr "Gebruikmakend van de OGG/OGM splitser.\n"
 
-#: src/input/r_matroska.cpp:1614
-#: src/input/r_ogm.cpp:1049
-#: src/input/r_wav.cpp:395
 #: src/input/r_qtmp4.cpp:1543
 #: src/input/r_avi.cpp:553
+#: src/input/r_wav.cpp:395
+#: src/input/r_ogm.cpp:1049
+#: src/input/r_matroska.cpp:1614
 msgid "Using the PCM output module.\n"
 msgstr "Gebruikmakend van de PCM uitvoer module.\n"
 
-#: src/input/r_pgssup.cpp:72
+#: src/input/r_pgssup.cpp:74
+#: src/input/r_mpeg_ts.cpp:1085
 #: src/input/r_matroska.cpp:1724
 msgid "Using the PGS output module.\n"
 msgstr "Gebruikmakend van de  PGS uitvoer module.\n"
@@ -7756,13 +7757,13 @@ msgstr "Gebruikmakend van de TTA splitser.\n"
 msgid "Using the TTA output module.\n"
 msgstr "Gebruikmakend van de TTA uitvoer module.\n"
 
-#: src/input/r_matroska.cpp:1471
 #: src/input/r_ogm.cpp:1351
+#: src/input/r_matroska.cpp:1471
 msgid "Using the Theora video output module.\n"
 msgstr "Gebruikmakend van de Theora video uitvoer module.\n"
 
-#: src/input/r_mpeg_ts.cpp:978
 #: src/input/r_mpeg_ps.cpp:1190
+#: src/input/r_mpeg_ts.cpp:1019
 msgid "Using the TrueHD output module.\n"
 msgstr "Gebruikmakend van de TrueHD uitvoer module.\n"
 
@@ -7783,15 +7784,15 @@ msgid "Using the VC1 ES demultiplexer.\n"
 msgstr "Gebruikmakend van de VC1 ES splitser.\n"
 
 #: src/input/r_vc1.cpp:96
-#: src/input/r_matroska.cpp:1877
-#: src/input/r_mpeg_ts.cpp:1033
 #: src/input/r_mpeg_ps.cpp:1219
+#: src/input/r_mpeg_ts.cpp:1079
+#: src/input/r_matroska.cpp:1877
 msgid "Using the VC1 video output module.\n"
 msgstr "Gebruikmakend van de VC1 video uitvoer module.\n"
 
-#: src/input/r_matroska.cpp:1479
 #: src/input/r_ogm.cpp:1445
 #: src/input/r_ivf.cpp:87
+#: src/input/r_matroska.cpp:1479
 msgid "Using the VP8 video output module.\n"
 msgstr "Gebruikmakend van de VP8 video uitvoer module.\n"
 
@@ -7817,9 +7818,9 @@ msgstr "Gebruikmakend van de VobSub ondertitel uitvoer module (taal: %1%).\n"
 msgid "Using the VobSub subtitle reader (SUB file '%1%').\n"
 msgstr "Gebruikmakend van de VobSub ondertitel lezer (SUB bestand '%1%').\n"
 
-#: src/input/r_matroska.cpp:1632
-#: src/input/r_ogm.cpp:1070
 #: src/input/r_avi.cpp:743
+#: src/input/r_ogm.cpp:1070
+#: src/input/r_matroska.cpp:1632
 msgid "Using the Vorbis output module.\n"
 msgstr "Gebruikmakend van de Vorbis uitvoer module.\n"
 
@@ -7850,12 +7851,12 @@ msgstr "Gebruikmakend van de algemene audio uitvoer module (FourCC: %|1$.4s|).\n
 msgid "Using the passthrough output module for this %1% track.\n"
 msgstr "Gebruikmakend van de doorgang uitvoer module voor dit %1% spoor.\n"
 
-#: src/input/r_matroska.cpp:1710
-#: src/input/r_ogm.cpp:1101
+#: src/input/r_avi.cpp:405
 #: src/input/r_srt.cpp:60
+#: src/input/r_ogm.cpp:1101
 #: src/input/r_ssa.cpp:71
 #: src/input/r_usf.cpp:259
-#: src/input/r_avi.cpp:405
+#: src/input/r_matroska.cpp:1710
 msgid "Using the text subtitle output module.\n"
 msgstr "Gebruikmakend van de tekst ondertitel uitvoer module.\n"
 
@@ -7870,9 +7871,9 @@ msgstr "Gebruikmakend van de video uitvoer module (FourCC: %1%).\n"
 msgid "Using the video output module (FourCC: %|1$.4s|).\n"
 msgstr "Gebruikmakend van de video uitvoer module (FourCC: %|1$.4s|).\n"
 
-#: src/input/r_matroska.cpp:1488
-#: src/input/r_ogm.cpp:1263
 #: src/input/r_avi.cpp:360
+#: src/input/r_ogm.cpp:1263
+#: src/input/r_matroska.cpp:1488
 msgid "Using the video output module.\n"
 msgstr "Gebruikmakend van de video uitvoer module.\n"
 
@@ -8002,7 +8003,7 @@ msgstr "Waarschuwing in regel %1%: De start tijdcode is kleiner dan de vorige in
 msgid "Warning:"
 msgstr "Waarschuwing:"
 
-#: src/common/output.cpp:76
+#: src/common/output.cpp:77
 msgid "Warning: "
 msgstr "Waarschuwing: "
 
@@ -8225,9 +8226,13 @@ msgstr "ac3_lezer: Geen geldig AC3 pakket gevonden in de eerste %1% bytes.\n"
 msgid "add"
 msgstr "Toevoegen"
 
-#: src/common/stereo_mode.cpp:55
-msgid "anaglyph"
-msgstr "anaglyph"
+#: src/common/stereo_mode.cpp:58
+msgid "anaglyph (cyran/red)"
+msgstr ""
+
+#: src/common/stereo_mode.cpp:60
+msgid "anaglyph (green/magenta)"
+msgstr ""
 
 #: src/mmg/tabs/input.cpp:185
 msgid "append"
@@ -8265,6 +8270,14 @@ msgstr "avi_lezer: Bron is geen geldig AVI bestand."
 msgid "bits per sample: %1%"
 msgstr "bits per voorbeeld: %1%"
 
+#: src/common/stereo_mode.cpp:61
+msgid "both eyes laced in one block (left first)"
+msgstr ""
+
+#: src/common/stereo_mode.cpp:62
+msgid "both eyes laced in one block (right first)"
+msgstr ""
+
 #: src/input/r_matroska.cpp:93
 #: src/info/mkvinfo.cpp:1119
 msgid "buttons"
@@ -8290,19 +8303,19 @@ msgstr "cet_index: '%1%' niet gevonden\n"
 msgid "channels: %1%"
 msgstr "kanalen: %1%"
 
-#: src/common/stereo_mode.cpp:50
+#: src/common/stereo_mode.cpp:53
 msgid "checkerboard (left first)"
 msgstr "skakternet (links eerst)"
 
-#: src/common/stereo_mode.cpp:49
+#: src/common/stereo_mode.cpp:52
 msgid "checkerboard (right first)"
 msgstr "skakternet (rechts eerst)"
 
-#: src/common/stereo_mode.cpp:54
+#: src/common/stereo_mode.cpp:57
 msgid "column interleaved (left first)"
 msgstr "kolom volgorde (links eerst)"
 
-#: src/common/stereo_mode.cpp:53
+#: src/common/stereo_mode.cpp:56
 msgid "column interleaved (right first)"
 msgstr "kolom volgorde (rechts eerst)"
 
@@ -8725,22 +8738,22 @@ msgstr "matroska_lezer: |  + Er is meer dan één spoor met het nummer %1%.\n"
 msgid "max. number of files:"
 msgstr "max. aantal bestanden:"
 
-#: src/common/memory.cpp:134
+#: src/common/memory.cpp:145
 #, boost-format
 msgid "memory.cpp/safemalloc() called from file %1%, line %2%: malloc() returned NULL for a size of %3% bytes.\n"
 msgstr "memory.cpp/safemalloc() opgeroepen van bestand %1%, regel %2%: malloc() returned NULL voor de grootte van %3% bytes.\n"
 
-#: src/common/memory.cpp:122
+#: src/common/memory.cpp:133
 #, boost-format
 msgid "memory.cpp/safememdup() called from file %1%, line %2%: malloc() returned NULL for a size of %3% bytes.\n"
 msgstr "memory.cpp/safememdup() opgeroepen van bestand %1%, regel %2%: malloc() returned NULL voor de grootte van %3% bytes.\n"
 
-#: src/common/memory.cpp:150
+#: src/common/memory.cpp:161
 #, boost-format
 msgid "memory.cpp/saferealloc() called from file %1%, line %2%: realloc() returned NULL for a size of %3% bytes.\n"
 msgstr "memory.cpp/saferealloc() opgeroepen van bestand %1%, regel %2%: realloc() returned NULL voor de grootte van %3% bytes.\n"
 
-#: src/common/memory.h:217
+#: src/common/memory.h:221
 msgid "memory_slice_cursor_c copy c'tor: Must not be used!"
 msgstr "memory_slice_cursor_c copy c'tor: Moet niet worden gebruikt!"
 
@@ -8965,7 +8978,7 @@ msgstr "mmg opties"
 msgid "mmg will reset to the default list if no entry is selected."
 msgstr "mmg zal de standaard lijst herstellen als er geen waarde is gekozen."
 
-#: src/common/stereo_mode.cpp:45
+#: src/common/stereo_mode.cpp:48
 msgid "mono"
 msgstr "mono"
 
@@ -8991,7 +9004,7 @@ msgstr "mpeg_ps_lezer: Had niet mogen gebeuren #1. %1%"
 msgid "mpeg_ps_reader: Should not have happened #2. %1%"
 msgstr "mpeg_ps_lezer: Had niet mogen gebeuren #2. %1%"
 
-#: src/input/r_mpeg_ts.cpp:370
+#: src/input/r_mpeg_ts.cpp:400
 msgid "mpeg_ts_reader_c: Could not open the file."
 msgstr "mpeg_ts_lezer: Kon bestand niet openen."
 
@@ -9155,11 +9168,11 @@ msgstr "Verwijder alles"
 msgid "rest: unknown"
 msgstr "rest: onbekend"
 
-#: src/common/stereo_mode.cpp:52
+#: src/common/stereo_mode.cpp:55
 msgid "row interleaved (left first)"
 msgstr "rij volgorde (links eerst)"
 
-#: src/common/stereo_mode.cpp:51
+#: src/common/stereo_mode.cpp:54
 msgid "row interleaved (right first)"
 msgstr "rij volgorde (rechts eerst)"
 
@@ -9168,11 +9181,11 @@ msgstr "rij volgorde (rechts eerst)"
 msgid "sampling freq: %1%"
 msgstr "voorbeeld frequentie: %1%"
 
-#: src/common/stereo_mode.cpp:46
+#: src/common/stereo_mode.cpp:49
 msgid "side by side (left first)"
 msgstr "naast elkaar (links eerst)"
 
-#: src/common/stereo_mode.cpp:56
+#: src/common/stereo_mode.cpp:59
 msgid "side by side (right first)"
 msgstr "naast elkaar (rechts eerst)"
 
@@ -9223,11 +9236,11 @@ msgstr "tet_index: '%1%' niet gevonden\n"
 msgid "timecodes"
 msgstr "tijd code's"
 
-#: src/common/stereo_mode.cpp:48
+#: src/common/stereo_mode.cpp:51
 msgid "top bottom (left first)"
 msgstr "bovenste beneden (links eerst)"
 
-#: src/common/stereo_mode.cpp:47
+#: src/common/stereo_mode.cpp:50
 msgid "top bottom (right first)"
 msgstr "bovenste beneden (rechts eerst)"
 
@@ -9257,11 +9270,11 @@ msgstr "tta_lezer: markeer_grootte < 0 in de c'tor. %1%\n"
 msgid "und (Undetermined)"
 msgstr "und (Onbekend)"
 
+#: src/input/r_mpeg_ps.cpp:1392
 #: src/input/r_matroska.cpp:91
 #: src/input/r_matroska.cpp:2332
-#: src/input/r_mpeg_ps.cpp:1392
 #: src/common/mm_io_win.cpp:165
-#: src/common/stereo_mode.cpp:62
+#: src/common/stereo_mode.cpp:68
 #: src/mmg/mmg.cpp:65
 #: src/mmg/header_editor/value_page.cpp:150
 #: src/mmg/tabs/input.cpp:339
@@ -9513,6 +9526,8 @@ msgstr "ja"
 #~ msgstr "WAVPACK verliesvrije audio"
 #~ msgid "Write raw FLAC files (default: write OggFLAC files)."
 #~ msgstr "Schrijf raw FLAC bestanden (standaard: schrijf OggFLAC bestanden)."
+#~ msgid "anaglyph"
+#~ msgstr "anaglyph"
 #~ msgid "audio/video/text subtitles embedded in OGG"
 #~ msgstr "audio/video/tekst ondertiteling ingebed in OGG"
 #~ msgid "byte_buffer_c: (pos + num) > size. Should not have happened. Please file a bug report.\n"

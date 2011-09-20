@@ -219,7 +219,7 @@ set_usage() {
                   "                           Sets the cropping parameters.\n");
   usage_text += Y("  --stereo-mode <TID:n|keyword>\n"
                   "                           Sets the stereo mode parameter. It can\n"
-                  "                           either be a number 0 - 11 or a keyword\n"
+                  "                           either be a number 0 - 14 or a keyword\n"
                   "                           (see documentation for the full list).\n");
   usage_text +=   "\n";
   usage_text += Y(" Options that only apply to text subtitle tracks:\n");

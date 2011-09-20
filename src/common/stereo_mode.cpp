@@ -33,8 +33,11 @@ stereo_mode_c::init() {
   s_modes.push_back("row_interleaved_left_first");
   s_modes.push_back("column_interleaved_right_first");
   s_modes.push_back("column_interleaved_left_first");
-  s_modes.push_back("anaglyph");
+  s_modes.push_back("anaglyph_cyan_red");
   s_modes.push_back("side_by_side_right_first");
+  s_modes.push_back("anaglyph_green_magenta");
+  s_modes.push_back("both_eyes_laced_left_first");
+  s_modes.push_back("both_eyes_laced_right_first");
 }
 
 void
@@ -52,8 +55,11 @@ stereo_mode_c::init_translations() {
   s_translations.push_back(Y("row interleaved (left first)"));
   s_translations.push_back(Y("column interleaved (right first)"));
   s_translations.push_back(Y("column interleaved (left first)"));
-  s_translations.push_back(Y("anaglyph"));
+  s_translations.push_back(Y("anaglyph (cyran/red)"));
   s_translations.push_back(Y("side by side (right first)"));
+  s_translations.push_back(Y("anaglyph (green/magenta)"));
+  s_translations.push_back(Y("both eyes laced in one block (left first)"));
+  s_translations.push_back(Y("both eyes laced in one block (right first)"));
 }
 
 const std::string

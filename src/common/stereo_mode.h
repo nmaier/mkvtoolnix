@@ -36,7 +36,11 @@ public:
     column_interleaved_right_first =  8,
     column_interleaved_left_first  =  9,
     anaglyph                       = 10,
+    anaglyph_cyran_red             = 10,
     side_by_side_right_first       = 11,
+    anaglyph_green_magenta         = 12,
+    both_eyes_laced_left_first     = 13,
+    both_eyes_laced_right_first    = 14,
   };
 
   static void init();
