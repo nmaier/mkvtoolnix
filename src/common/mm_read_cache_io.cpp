@@ -15,7 +15,7 @@
 
 #include "common/mm_read_cache_io.h"
 
-mm_read_cache_io_c::mm_read_cache_io_c(mm_io_c *p_in,
+mm_probe_cache_io_c::mm_probe_cache_io_c(mm_io_c *p_in,
                                        size_t cache_size,
                                        bool p_delete_in)
   : mm_proxy_io_c(p_in, p_delete_in)
@@ -29,23 +29,23 @@ mm_read_cache_io_c::mm_read_cache_io_c(mm_io_c *p_in,
   setFilePointer(0, seek_beginning);
 }
 
-mm_read_cache_io_c::~mm_read_cache_io_c() {
+mm_probe_cache_io_c::~mm_probe_cache_io_c() {
   close();
 }
 
-mm_read_cache_io_c *
-mm_read_cache_io_c::open(const std::string &file_name,
+mm_probe_cache_io_c *
+mm_probe_cache_io_c::open(const std::string &file_name,
                          size_t cache_size) {
-  return new mm_read_cache_io_c(new mm_file_io_c(file_name, MODE_READ), cache_size);
+  return new mm_probe_cache_io_c(new mm_file_io_c(file_name, MODE_READ), cache_size);
 }
 
 uint64
-mm_read_cache_io_c::getFilePointer() {
+mm_probe_cache_io_c::getFilePointer() {
   return m_cache_pos;
 }
 
 void
-mm_read_cache_io_c::setFilePointer(int64 offset,
+mm_probe_cache_io_c::setFilePointer(int64 offset,
                                    seek_mode mode) {
   int64_t new_pos
     = seek_beginning == mode ? offset
@@ -59,12 +59,12 @@ mm_read_cache_io_c::setFilePointer(int64 offset,
 }
 
 int64_t
-mm_read_cache_io_c::get_size() {
+mm_probe_cache_io_c::get_size() {
   return proxy_io->get_size();
 }
 
 uint32
-mm_read_cache_io_c::_read(void *buffer,
+mm_probe_cache_io_c::_read(void *buffer,
                           size_t size) {
   size = std::min(m_cache_pos + size, m_cache_size) - m_cache_pos;
 
@@ -84,7 +84,7 @@ mm_read_cache_io_c::_read(void *buffer,
 }
 
 size_t
-mm_read_cache_io_c::_write(const void *buffer,
+mm_probe_cache_io_c::_write(const void *buffer,
                             size_t size) {
   throw mm_io_error_c("write-for-read-only-file");
   return 0;

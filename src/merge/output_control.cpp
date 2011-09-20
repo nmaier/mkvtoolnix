@@ -316,7 +316,7 @@ get_file_type(filelist_t &file) {
   int64_t size = 0;
 
   try {
-    io   = mm_read_cache_io_c::open(file.name, 20 * 1024 * 1024);
+    io   = mm_probe_cache_io_c::open(file.name, 20 * 1024 * 1024);
     size = io->get_size();
   } catch (...) {
     mxerror(boost::format(Y("The source file '%1%' could not be opened successfully, or retrieving its size by seeking to the end did not work.\n")) % file.name);
