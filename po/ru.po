@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: Moritz Bunkus <moritz@bunkus.org>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2011-04-25 21:10+0200\n"
-"Last-Translator: EuGENIUS EuGENIUS <Eugenius_V@mail.ru>\n"
+"PO-Revision-Date: 2011-09-20 18:35+0400\n"
+"Last-Translator: EuGENIUS <Eugenius_V@mail.ru>\n"
 "Language-Team: Russian <moritz@bunkus.org>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -142,7 +142,7 @@ msgstr ""
 
 #: src/merge/mkvmerge.cpp:240
 msgid "  --capabilities           Lists optional features mkvmerge was compiled with.\n"
-msgstr ""
+msgstr "  --capabilities           Выводит список дополнительных функций, которые были включены при компиляции mkvmerge.\n"
 
 #: src/merge/mkvmerge.cpp:86
 msgid "  --chapter-charset <cset> Charset for a simple chapter file.\n"
@@ -219,9 +219,8 @@ msgstr ""
 "                           Не создавать, только для I кадров, для всех кадров.\n"
 
 #: src/merge/mkvmerge.cpp:248
-#, fuzzy
 msgid "  --debug <topic>          Turns on debugging output for 'topic'.\n"
-msgstr "  --title <title>          Название для этого выходного файла.\n"
+msgstr "  --debug <topic>          Включает вывод отладочной информации для 'topic'.\n"
 
 #: src/merge/mkvmerge.cpp:198
 msgid ""
@@ -269,7 +268,7 @@ msgstr "  --enable-durations       Включить продолжительно
 
 #: src/merge/mkvmerge.cpp:249
 msgid "  --engage <feature>       Turns on experimental feature 'feature'.\n"
-msgstr ""
+msgstr "  --engage <feature>       Включает экспериментальную функцию 'feature'.\n"
 
 #: src/merge/mkvmerge.cpp:184
 msgid ""
@@ -1717,7 +1716,7 @@ msgstr "AAC является SBR/HE-AAC/AAC+"
 
 #: src/input/r_aac_adif.cpp:34
 msgid "AAC with ADIF headers"
-msgstr ""
+msgstr "AAC с заголовками ADIF"
 
 #: src/mmg/header_editor/value_page.cpp:143
 msgid ""
@@ -1790,9 +1789,8 @@ msgid "Add name"
 msgstr "Добавить имя"
 
 #: src/propedit/propedit_cli_parser.cpp:173
-#, fuzzy
 msgid "Add or replace chapters in the file with the ones from 'filename' or remove them if 'filename' is empty"
-msgstr "Добавить или заменить тэги в файле находящимися в 'filename', или удалить их, если 'filename' пусто (синтаксис см. ниже или обратитесь к справке)"
+msgstr "Добавить или заменить главы в файле находящимися в 'filename', или удалить их, если 'filename' пусто (синтаксис см. ниже или обратитесь к справке)"
 
 #: src/propedit/propedit_cli_parser.cpp:170
 msgid "Add or replace tags in the file with the ones from 'filename' or remove them if 'filename' is empty (see below and man page for syntax)"
@@ -3239,9 +3237,9 @@ msgid "Error parsing a MPEG PS packet during the header reading phase. This stre
 msgstr "Ошибка при разборе пакетов MPEG PS во время фазы чтения заголовков. Этот поток, похоже, серьезно поврежден.\n"
 
 #: src/propedit/target.cpp:452
-#, fuzzy, boost-format
+#, boost-format
 msgid "Error parsing the chapters in '%1%': some mandatory elements are missing.\n"
-msgstr "Ошибка при разборе тегов в '%1%': некоторые обязательные элементы отсутствуют.\n"
+msgstr "Ошибка при разборе глав в '%1%': некоторые обязательные элементы отсутствуют.\n"
 
 #: src/mmg/tabs/chapters.cpp:586
 msgid "Error parsing the file"
@@ -4362,9 +4360,8 @@ msgid "MPEG program streams"
 msgstr "Программные потоки MPEG"
 
 #: src/common/file_types.cpp:39
-#, fuzzy
 msgid "MPEG transport streams"
-msgstr "Программные потоки MPEG"
+msgstr "Транспортные потоки MPEG"
 
 #: src/common/file_types.cpp:40
 msgid "MPEG video elementary streams"
@@ -6000,7 +5997,6 @@ msgid "Tag files (*.xml;*.txt)|*.xml;*.txt|%s"
 msgstr "Файлы тегов (*.xml;*.txt)|*.xml;*.txt|%s"
 
 #: src/propedit/propedit_cli_parser.cpp:193
-#, fuzzy
 msgid "Tag selectors"
 msgstr "Селекторы тэгов"
 
@@ -9003,9 +8999,8 @@ msgid "mpeg_ps_reader: Should not have happened #2. %1%"
 msgstr "mpeg_ps_reader: Не должно было случиться #2. %1%"
 
 #: src/input/r_mpeg_ts.cpp:370
-#, fuzzy
 msgid "mpeg_ts_reader_c: Could not open the file."
-msgstr "mpeg_es_reader: Не удалось открыть файл."
+msgstr "mpeg_ts_reader: Не удалось открыть файл."
 
 #: src/mmg/header_editor/bool_value_page.cpp:43
 #: src/mmg/tabs/input_general.cpp:108
@@ -9396,12 +9391,16 @@ msgstr "Да"
 
 #~ msgid " (both eyes)"
 #~ msgstr " (оба глаза)"
+
 #~ msgid " (left eye)"
 #~ msgstr " (левый глаз)"
+
 #~ msgid " (right eye)"
 #~ msgstr " (правый глаз)"
+
 #~ msgid "%1% at %2%"
 #~ msgstr "%1% в %2%"
+
 #~ msgid ""
 #~ "%s\n"
 #~ "\n"
@@ -9422,24 +9421,34 @@ msgstr "Да"
 #~ "\n"
 #~ "Помощь доступна в виде подсказки, в меню\n"
 #~ "'Справка' или при нажатии на кнопку 'F1'."
+
 #~ msgid "(Unknown element: %1%)"
 #~ msgstr "(Неизвестный элемент: %1%)"
+
 #~ msgid "About mkvmerge's GUI"
 #~ msgstr "О GUI mkvmerge"
+
 #~ msgid "Both eyes"
 #~ msgstr "Оба глаза"
+
 #~ msgid "DTS (Digital Theater System)"
 #~ msgstr "DTS (Digital Theater System)"
+
 #~ msgid "Dirac elementary stream"
 #~ msgstr "Элементарный поток Dirac"
+
 #~ msgid "Do not write those header elements whose values are the same as their default values according to the Matroska specs."
 #~ msgstr "Не записывать элементы заголовк, значения которых совпадают с их значениями по умолчанию в спецификациях Matroska."
+
 #~ msgid "FLAC lossless audio"
 #~ msgstr "Сжатое без потерь аудио FLAC"
+
 #~ msgid "File/segment title"
 #~ msgstr "Название Файла/сегмента"
+
 #~ msgid "IVF with VP8"
 #~ msgstr "IVF с VP8"
+
 #~ msgid ""
 #~ "Known file types:\n"
 #~ "  ext   description\n"
@@ -9448,44 +9457,64 @@ msgstr "Да"
 #~ "Известные типы файлов:\n"
 #~ "  описание расширения\n"
 #~ "  ----  --------------------------\n"
+
 #~ msgid "Left eye"
 #~ msgstr "Левый глаз"
+
 #~ msgid "MPEG program stream"
 #~ msgstr "Программный поток MPEG"
+
 #~ msgid "MPEG-1 layer II audio (CBR and VBR/ABR)"
 #~ msgstr "MPEG-1 layer II audio (CBR и VBR/ABR)"
+
 #~ msgid "MPEG-1 layer III audio (CBR and VBR/ABR)"
 #~ msgstr "MPEG-1 layer III audio (CBR и VBR/ABR)"
+
 #~ msgid "MPEG-1 video elementary stream"
 #~ msgstr "Элементарный поток MPEG-1 video"
+
 #~ msgid "MPEG-2 video elementary stream"
 #~ msgstr "Элементарный поток MPEG-2 video"
+
 #~ msgid "Matroska A/V files (*.mka;*.mkv)|*.mkv;*.mka|%s"
 #~ msgstr "Matroska Audio/Video файлы (*.mka;*.mkv)|*.mkv;*.mka|%s"
+
 #~ msgid "Matroska files (*.mkv;*.mka)|*.mkv;*.mka|%s"
 #~ msgstr "Matroska файлы (*.mkv;*.mka)|*.mkv;*.mka|%s"
+
 #~ msgid "Matroska files (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|All files|*.*"
 #~ msgstr "Файлы Matroska (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|Все файлы|*.*"
+
 #~ msgid "None"
 #~ msgstr "Нет"
+
 #~ msgid "Other global options"
 #~ msgstr "Другие глобальные параметры"
+
 #~ msgid "Quicktime/MP4 audio and video"
 #~ msgstr "Аудио и видео Quicktime/MP4"
+
 #~ msgid "RealMedia audio and video"
 #~ msgstr "Аудио и видео RealMedia"
+
 #~ msgid "Right eye"
 #~ msgstr "Правый глаз"
+
 #~ msgid "Sets the compression used for VobSub subtitles. If nothing is chosen then the VobSubs will be automatically compressed with zlib. 'none' results is files that are a lot larger."
 #~ msgstr "Устанавливает сжатие, используемое для субтитров VobSub. Если ничего не выбрано, VobSub будет автоматически сжат zlib. 'none' даст намного больший по размеру файл."
+
 #~ msgid "TTA lossless audio"
 #~ msgstr "Сжатое без потерь аудио TTA"
+
 #~ msgid "The MPEG-4 part 2 compression only works with native MPEG-4. However, native MPEG-4 mode has not been selected with '--engage native_mpeg4'.\n"
 #~ msgstr "Сжатие MPEG-4 part 2 работает только с родным MPEG-4. Однако родной режим MPEG-4 не был выбран при помощи '--engage native_mpeg4'.\n"
+
 #~ msgid "This AAC track does not contain valid headers. The extra header size is %1% bytes, expected were 2 or 5 bytes.\n"
 #~ msgstr "Эта дорожка AAC не содержит правильных заголовков. Размер дополнительного заголовка - %1% байт, ожидалось 2 или 5 байт.\n"
+
 #~ msgid "This track uses a Matroska feature called 'Codec state elements'. mkvmerge supports these but this feature has not been turned on with the option '--engage use_codec_state'.\n"
 #~ msgstr "Эта дорожка использует функцию Matroska 'элементы состояния кодека'. mkvmerge поддерживает их, но эта функция не была включена параметром '--engage use_codec_state'.\n"
+
 #~ msgid ""
 #~ "Usage: mkvinfo [options] inname\n"
 #~ "\n"
@@ -9526,56 +9555,80 @@ msgstr "Да"
 #~ "                 Сбрасывать все сообщения в указанный файл.\n"
 #~ "  -h, --help     Показать эту справку.\n"
 #~ "  -V, --version  Показать информацию о версии.\n"
+
 #, fuzzy
 #~ msgid "Using the IVF output module.\n"
 #~ msgstr "Применяется модуль вывода IVF.\n"
+
 #, fuzzy
 #~ msgid "Using the Vp8 video output module.\n"
 #~ msgstr "Применяется модуль вывода видео VP8.\n"
+
 #~ msgid "VC1 video elementary stream"
 #~ msgstr "Элементарный поток видео VC1"
+
 #~ msgid "VobBtn buttons"
 #~ msgstr "Кнопки VobBtn"
+
 #~ msgid "WAVE (uncompressed PCM)"
 #~ msgstr "WAVE (несжатый PCM)"
+
 #~ msgid "WAVPACK lossless audio"
 #~ msgstr "WAVPACK аудио без потерь"
+
 #~ msgid "Write raw FLAC files (default: write OggFLAC files)."
 #~ msgstr "Создать исходные файлы FLAC (по умолчанию: написать OggFLAC файлы)."
+
 #~ msgid "audio/video/text subtitles embedded in OGG"
 #~ msgstr "аудио/видео/текстовые субтитры, внедренные в OGG"
+
 #~ msgid "byte_buffer_c: (pos + num) > size. Should not have happened. Please file a bug report.\n"
 #~ msgstr "byte_buffer_c: (pos + num) > size. Такого не должно было случиться. Пожалуйста, отправьте автору сообщение об ошибке.\n"
+
 #~ msgid "cstrutf8_to_UTFstring: Invalid UTF-8 sequence encountered. Please contact moritz@bunkus.org and request that he implements a better UTF-8 parser."
 #~ msgstr "cstrutf8_to_UTFstring: Обнаружена неверная последовательность UTF-8. Пожалуйста, собратитесь к разработчику по адресу moritz@bunkus.org и попросите, чтобы он сделал анализатор UTF-8 получше."
+
 #~ msgid "flac_header_extraction: Could not set the error callback.\n"
 #~ msgstr "flac_header_extraction: Не удалось установить возврат ошибок.\n"
+
 #~ msgid "flac_header_extraction: Could not set the metadata callback.\n"
 #~ msgstr "flac_header_extraction: Не удалось установить возврат метаданных.\n"
+
 #~ msgid "flac_header_extraction: Could not set the read callback.\n"
 #~ msgstr "flac_header_extraction: Не удалось установить возврат чтения.\n"
+
 #~ msgid "flac_header_extraction: Could not set the write callback.\n"
 #~ msgstr "flac_header_extraction: Не удалось установить возврат записи.\n"
+
 #~ msgid "flac_reader: Could not set the eof callback.\n"
 #~ msgstr "flac_reader: Не удалось установить возврат конца файла.\n"
+
 #~ msgid "flac_reader: Could not set the error callback.\n"
 #~ msgstr "flac_reader: Не удалось установить возврат ошибок.\n"
+
 #~ msgid "flac_reader: Could not set the length callback.\n"
 #~ msgstr "flac_reader: Не удалось установить возврат длительности.\n"
+
 #~ msgid "flac_reader: Could not set the metadata callback.\n"
 #~ msgstr "flac_reader: Не удалось установить возврат метаданных.\n"
+
 #~ msgid "flac_reader: Could not set the read callback.\n"
 #~ msgstr "flac_reader: Не удалось установить возврат чтения.\n"
+
 #~ msgid "flac_reader: Could not set the seek callback.\n"
 #~ msgstr "flac_reader: Не удалось установить возврат поиска.\n"
+
 #~ msgid "flac_reader: Could not set the tell callback.\n"
 #~ msgstr "flac_reader: Не удалось установить возврат сообщения.\n"
+
 #~ msgid "flac_reader: Could not set the write callback.\n"
 #~ msgstr "flac_reader: Не удалось установить возврат записи.\n"
+
 #~ msgid "general Matroska files"
 #~ msgstr "Общие файлы Matroska"
+
 #~ msgid "mkvextract: Unknown mode!?\n"
 #~ msgstr "mkvextract: Неизвестный режим!?\n"
+
 #~ msgid "r_matroska: Cluster does not contain a cluster timecode. File is broken. Aborting.\n"
 #~ msgstr "r_matroska: Кластер не содержат кластера тайм-кода. Файл не работает. Прерывание.\n"
-
