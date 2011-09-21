@@ -1189,7 +1189,7 @@ mpeg_ts_reader_c::find_clip_info_file() {
   bool debug = debugging_requested("clpi");
 
   bfs::path clpi_file(m_ti.m_fname);
-  clpi_file.replace_extension("clpi");
+  clpi_file.replace_extension(".clpi");
 
   mxdebug_if(debug, boost::format("Checking %1%\n") % clpi_file.string());
 
