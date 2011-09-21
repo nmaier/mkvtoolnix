@@ -129,7 +129,7 @@ mtx_release_version_t::mtx_release_version_t()
 
 std::string
 get_version_info(const std::string &program,
-                 bool full) {
+                 version_info_flags_e flags) {
   std::string short_version_info;
   if (!program.empty())
     short_version_info += program + " ";
@@ -137,8 +137,11 @@ get_version_info(const std::string &program,
 #if !defined(HAVE_BUILD_TIMESTAMP)
   return short_version_info;
 #else  // !defined(HAVE_BUILD_TIMESTAMP)
-  if (!full)
+  if (!(flags & vif_full))
     return short_version_info;
+
+  if (flags & vif_untranslated)
+    return (boost::format("%1% built on %2% %3%") % short_version_info % __DATE__ % __TIME__).str();
 
   return (boost::format(Y("%1% built on %2% %3%")) % short_version_info % __DATE__ % __TIME__).str();
 #endif  // !defined(HAVE_BUILD_TIMESTAMP)

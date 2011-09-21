@@ -257,7 +257,7 @@ set_usage() {
                   "explains several details in great length which are not obvious from\n"
                   "this listing.\n");
 
-  version_info = get_version_info("mkvmerge", true);
+  version_info = get_version_info("mkvmerge", vif_full);
 }
 
 /** \brief Prints information about what has been compiled into mkvmerge
@@ -1604,7 +1604,7 @@ parse_args(std::vector<std::string> args) {
 
   }
 
-  mxinfo(boost::format("%1%\n") % get_version_info("mkvmerge", true));
+  mxinfo(boost::format("%1%\n") % get_version_info("mkvmerge", vif_full));
 
   // Now parse options that are needed right at the beginning.
   mxforeach(sit, args) {

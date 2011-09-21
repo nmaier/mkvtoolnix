@@ -632,7 +632,7 @@ render_headers(mm_io_c *out) {
     if (!hack_engaged(ENGAGE_NO_VARIABLE_DATA)) {
       std::string muxing_app                                    = std::string("libebml v") + EbmlCodeVersion + std::string(" + libmatroska v") + KaxCodeVersion;
       GetChildAs<KaxMuxingApp, EbmlUnicodeString>(s_kax_infos)  = cstrutf8_to_UTFstring(muxing_app);
-      GetChildAs<KaxWritingApp, EbmlUnicodeString>(s_kax_infos) = cstrutf8_to_UTFstring(get_version_info("mkvmerge", true));
+      GetChildAs<KaxWritingApp, EbmlUnicodeString>(s_kax_infos) = cstrutf8_to_UTFstring(get_version_info("mkvmerge", static_cast<version_info_flags_e>(vif_full | vif_untranslated)));
       GetChild<KaxDateUTC>(*s_kax_infos).SetEpochDate(time(NULL));
 
     } else {

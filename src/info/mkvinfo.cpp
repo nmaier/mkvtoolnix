@@ -2054,7 +2054,7 @@ setup(const std::string &locale) {
 
   init_common_boost_formats();
 
-  version_info = get_version_info("mkvinfo", true);
+  version_info = get_version_info("mkvinfo", vif_full);
 }
 
 int

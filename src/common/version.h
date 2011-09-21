@@ -41,7 +41,13 @@ struct mtx_release_version_t {
   mtx_release_version_t();
 };
 
-std::string MTX_DLL_API get_version_info(const std::string &program, bool full = false);
+enum version_info_flags_e {
+  vif_default      = 0,
+  vif_full         = 1,
+  vif_untranslated = 2,
+};
+
+std::string MTX_DLL_API get_version_info(const std::string &program, version_info_flags_e flags = vif_default);
 int MTX_DLL_API compare_current_version_to(const std::string &other_version_str);
 version_number_t MTX_DLL_API get_current_version();
 

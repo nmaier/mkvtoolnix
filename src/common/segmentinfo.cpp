@@ -86,7 +86,7 @@ fix_mandatory_segmentinfo_elements(EbmlElement *e) {
 
   if (!hack_engaged(ENGAGE_NO_VARIABLE_DATA)) {
     provide_default_for_child<KaxMuxingApp>( info, cstrutf8_to_UTFstring((boost::format("libebml v%1% + libmatroska v%2%") %  EbmlCodeVersion % KaxCodeVersion).str()));
-    provide_default_for_child<KaxWritingApp>(info, cstrutf8_to_UTFstring(get_version_info("mkvmerge", true)));
+    provide_default_for_child<KaxWritingApp>(info, cstrutf8_to_UTFstring(get_version_info("mkvmerge", static_cast<version_info_flags_e>(vif_full | vif_untranslated))));
   } else {
     provide_default_for_child<KaxMuxingApp>( info, cstrutf8_to_UTFstring("no_variable_data"));
     provide_default_for_child<KaxWritingApp>(info, cstrutf8_to_UTFstring("no_variable_data"));

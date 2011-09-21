@@ -36,7 +36,7 @@ set_usage() {
     "  decode - Read from <input>, decode to binary and write to <output>.\n"
     );
 
-  version_info = get_version_info("base64util", true);
+  version_info = get_version_info("base64util", vif_full);
 }
 
 int

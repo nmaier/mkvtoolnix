@@ -121,7 +121,7 @@ static
 void setup() {
   mtx_common_init();
   clear_list_of_unique_uint32(UNIQUE_ALL_IDS);
-  version_info = get_version_info("mkvpropedit", true);
+  version_info = get_version_info("mkvpropedit", vif_full);
 }
 
 
