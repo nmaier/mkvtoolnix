@@ -1186,8 +1186,12 @@ mpeg_ts_reader_c::read(generic_packetizer_c *requested_ptzr,
 
 bfs::path
 mpeg_ts_reader_c::find_clip_info_file() {
+  bool debug = debugging_requested("clpi");
+
   bfs::path clpi_file(m_ti.m_fname);
   clpi_file.replace_extension("clpi");
+
+  mxdebug_if(debug, boost::format("Checking %1%\n") % clpi_file.string());
 
   if (bfs::exists(clpi_file))
     return clpi_file;
@@ -1200,12 +1204,16 @@ mpeg_ts_reader_c::find_clip_info_file() {
   //   return clpi_file;
 
   clpi_file = path / ".." / "clipinf" / file_name;
+  mxdebug_if(debug, boost::format("Checking %1%\n") % clpi_file.string());
   if (bfs::exists(clpi_file))
     return clpi_file;
 
   clpi_file = path / ".." / "CLIPINF" / file_name;
+  mxdebug_if(debug, boost::format("Checking %1%\n") % clpi_file.string());
   if (bfs::exists(clpi_file))
     return clpi_file;
+
+  mxdebug_if(debug, "CLPI not found\n");
 
   return bfs::path();
 }

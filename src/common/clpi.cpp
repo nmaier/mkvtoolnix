@@ -106,9 +106,13 @@ clpi::parser_c::parse() {
     parse_header(bc);
     parse_program_info(bc);
 
+    if (m_debug)
+      dump();
+
     m_ok = true;
 
   } catch (...) {
+    mxdebug_if(m_debug, "Parsing NOT OK\n");
   }
 
   return m_ok;
@@ -119,10 +123,12 @@ clpi::parser_c::parse_header(bit_cursor_cptr &bc) {
   bc->set_bit_position(0);
 
   uint32_t magic = bc->get_bits(32);
+  mxdebug_if(m_debug, boost::format("File magic 1: 0x%|1$08x|\n") % magic);
   if (CLPI_FILE_MAGIC != magic)
     throw false;
 
   magic = bc->get_bits(32);
+  mxdebug_if(m_debug, boost::format("File magic 2: 0x%|1$08x|\n") % magic);
   if ((CLPI_FILE_MAGIC2A != magic) && (CLPI_FILE_MAGIC2B != magic))
     throw false;
 
@@ -136,6 +142,8 @@ clpi::parser_c::parse_program_info(bit_cursor_cptr &bc) {
 
   bc->skip_bits(40);            // 32 bits length, 8 bits reserved
   size_t num_program_streams = bc->get_bits(8), program_idx, stream_idx;
+
+  mxdebug_if(m_debug, boost::format("num_program_streams: %1%\n") % num_program_streams);
 
   for (program_idx = 0; program_idx < num_program_streams; ++program_idx) {
     program_cptr program(new program_t);
@@ -160,8 +168,7 @@ clpi::parser_c::parse_program_stream(bit_cursor_cptr &bc,
   stream->pid = bc->get_bits(16);
 
   if ((bc->get_bit_position() % 8) != 0) {
-    if (m_debug)
-      mxinfo(boost::format("clpi::parser_c::parse_program_stream: Bit position not divisible by 8"));
+    mxdebug_if(m_debug, "Bit position not divisible by 8\n");
     throw false;
   }
 
