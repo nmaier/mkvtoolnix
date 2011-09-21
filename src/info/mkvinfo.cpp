@@ -130,7 +130,7 @@ track_info_t::max_timecode_unset() {
 }
 
 std::vector<kax_track_cptr> s_tracks;
-std::map<unsigned int, kax_track_cptr> s_tracks_by_number, s_tracks_by_uid;
+std::map<unsigned int, kax_track_cptr> s_tracks_by_number;
 std::map<unsigned int, track_info_t> s_track_info;
 options_c g_options;
 static uint64_t s_tc_scale = TIMECODE_SCALE;
@@ -235,17 +235,11 @@ void
 add_track(kax_track_cptr t) {
   s_tracks.push_back(t);
   s_tracks_by_number[t->tnum] = t;
-  s_tracks_by_uid[t->tuid]    = t;
 }
 
 kax_track_t *
 find_track(int tnum) {
   return s_tracks_by_number[tnum].get_object();
-}
-
-kax_track_t *
-find_track_by_uid(int tuid) {
-  return s_tracks_by_uid[tuid].get_object();
 }
 
 #define UTF2STR(s)                 UTFstring_to_cstrutf8(UTFstring(s))
@@ -963,16 +957,12 @@ def_handle(tracks) {
 
           show_element(l3, 3, boost::format(Y("Track number: %1%")) % track->tnum);
           if (find_track(track->tnum) != NULL)
-            show_warning(3, boost::format(Y("Warning: There's more than one track with the number %1%.")) % track->tnum);
-          else
             add_track(track);
 
         } else if (is_id(l3, KaxTrackUID)) {
           KaxTrackUID &tuid = *static_cast<KaxTrackUID *>(l3);
           track->tuid       = uint64(tuid);
           show_element(l3, 3, boost::format(Y("Track UID: %1%")) % track->tuid);
-          if (find_track_by_uid(track->tuid) != NULL)
-            show_warning(3, boost::format(Y("Warning: There's more than one track with the UID %1%.")) % track->tuid);
 
         } else if (is_id(l3, KaxTrackType)) {
           KaxTrackType &ttype = *static_cast<KaxTrackType *>(l3);

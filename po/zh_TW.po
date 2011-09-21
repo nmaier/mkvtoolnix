@@ -607,48 +607,48 @@ msgstr "  US: Unicode 字串\n"
 msgid "  X:  binary in hex\n"
 msgstr "  X:  用十六進位表示二進位檔\n"
 
-#: src/info/mkvinfo.cpp:349
+#: src/info/mkvinfo.cpp:343
 #, boost-format
 msgid " (FourCC: %1%%2%%3%%4%, 0x%|5$08x|)"
 msgstr " (FourCC: %1%%2%%3%%4%, 0x%|5$08x|)"
 
 #: src/info/mkvinfo.cpp:183
-#: src/info/mkvinfo.cpp:1026
+#: src/info/mkvinfo.cpp:1016
 #, boost-format
 msgid " (adler: 0x%|1$08x|)"
 msgstr " (adler: 0x%|1$08x|)"
 
-#: src/info/mkvinfo.cpp:742
+#: src/info/mkvinfo.cpp:736
 msgid " (centimeters)"
 msgstr " (公分)"
 
-#: src/info/mkvinfo.cpp:768
+#: src/info/mkvinfo.cpp:762
 msgid " (fixed)"
 msgstr " (固定)"
 
-#: src/info/mkvinfo.cpp:354
+#: src/info/mkvinfo.cpp:348
 #, boost-format
 msgid " (format tag: 0x%|1$04x|)"
 msgstr " (格式標識: 0x%|1$04x|)"
 
-#: src/info/mkvinfo.cpp:766
+#: src/info/mkvinfo.cpp:760
 msgid " (free resizing)"
 msgstr " (任意調整大小)"
 
-#: src/info/mkvinfo.cpp:361
+#: src/info/mkvinfo.cpp:355
 #, boost-format
 msgid " (h.264 profile: %1% @L%2%.%3%)"
 msgstr " (h.264 描述檔: %1% @L%2%.%3%)"
 
-#: src/info/mkvinfo.cpp:743
+#: src/info/mkvinfo.cpp:737
 msgid " (inches)"
 msgstr " (英寸)"
 
-#: src/info/mkvinfo.cpp:767
+#: src/info/mkvinfo.cpp:761
 msgid " (keep aspect ratio)"
 msgstr " (保持外觀比例)"
 
-#: src/info/mkvinfo.cpp:741
+#: src/info/mkvinfo.cpp:735
 msgid " (pixels)"
 msgstr " (像素)"
 
@@ -1570,7 +1570,7 @@ msgstr "...按大小:"
 msgid "...after timecodes:"
 msgstr "...按特定時間碼:"
 
-#: src/info/mkvinfo.cpp:811
+#: src/info/mkvinfo.cpp:805
 msgid "1: all frames"
 msgstr "1: 全部畫格"
 
@@ -1578,7 +1578,7 @@ msgstr "1: 全部畫格"
 msgid "2 bytes"
 msgstr "2 位元組"
 
-#: src/info/mkvinfo.cpp:813
+#: src/info/mkvinfo.cpp:807
 msgid "2: codec private data"
 msgstr "2: 編解碼器專用資料"
 
@@ -1643,7 +1643,7 @@ msgid ""
 "segment between many others (128 bits)."
 msgstr "隨機生成的在眾多剪輯中識別目前剪輯的唯一 ID (128 位)。"
 
-#: src/info/mkvinfo.cpp:941
+#: src/info/mkvinfo.cpp:935
 msgid "A track"
 msgstr "一個軌道"
 
@@ -1788,7 +1788,7 @@ msgstr "加入時間"
 msgid "AdditionalID: %1%"
 msgstr "附加區塊 ID: %1%"
 
-#: src/info/mkvinfo.cpp:1466
+#: src/info/mkvinfo.cpp:1456
 msgid "Additions"
 msgstr "附加"
 
@@ -1812,7 +1812,7 @@ msgstr "調整時間碼"
 msgid "After loading a file expand the most important elements"
 msgstr "載入檔案後展開最重要的元件"
 
-#: src/info/mkvinfo.cpp:840
+#: src/info/mkvinfo.cpp:834
 #, boost-format
 msgid "Algorithm: %1% (%2%)"
 msgstr "演算法: %1% (%2%)"
@@ -1939,7 +1939,7 @@ msgstr "外觀比例"
 msgid "Aspect ratio factor"
 msgstr "外觀比例係數"
 
-#: src/info/mkvinfo.cpp:764
+#: src/info/mkvinfo.cpp:758
 #, boost-format
 msgid "Aspect ratio type: %1%%2%"
 msgstr "外觀比例類型: %1%%2%"
@@ -1956,7 +1956,7 @@ msgstr "至少需要一個 <ChapterAtom> 元件。"
 msgid "At least one <EditionEntry> element is needed."
 msgstr "至少需要一個 <EditionEntry> 元件。"
 
-#: src/info/mkvinfo.cpp:1310
+#: src/info/mkvinfo.cpp:1300
 msgid "Attached"
 msgstr "附加的"
 
@@ -1979,7 +1979,7 @@ msgstr "附加方式:"
 
 #: src/mmg/mmg_dialog.cpp:308
 #: src/mmg/tabs/attachments.cpp:155
-#: src/info/mkvinfo.cpp:1298
+#: src/info/mkvinfo.cpp:1288
 msgid "Attachments"
 msgstr "附件"
 
@@ -2043,7 +2043,7 @@ msgstr "BZ2_bzCompressInit() 失敗。結果: %1%\n"
 msgid "Binary (displayed as hex numbers)"
 msgstr "二位元值 (顯示為十六進位數位)"
 
-#: src/info/mkvinfo.cpp:676
+#: src/info/mkvinfo.cpp:670
 #, boost-format
 msgid "Bit depth: %1%"
 msgstr "位元深度: %1%"
@@ -2075,7 +2075,7 @@ msgstr "區塊持續時間: %1%.%|2$06d|ms"
 
 #: src/extract/timecodes_v2.cpp:283
 #: src/extract/tracks.cpp:414
-#: src/info/mkvinfo.cpp:1372
+#: src/info/mkvinfo.cpp:1362
 msgid "Block group"
 msgstr "區塊群組"
 
@@ -2160,7 +2160,7 @@ msgstr "類別未以 NUL 結尾"
 
 #: src/extract/timecodes_v2.cpp:362
 #: src/extract/tracks.cpp:464
-#: src/info/mkvinfo.cpp:2052
+#: src/info/mkvinfo.cpp:2042
 msgid "Caught exception"
 msgstr "發生異常"
 
@@ -2196,12 +2196,12 @@ msgstr "修改 mmg 的偏好設定和選項"
 msgid "Changes to this list do not take effect until mmg is restarted."
 msgstr "換成這份清單直到重新啟動 mmg 才生效。"
 
-#: src/info/mkvinfo.cpp:671
+#: src/info/mkvinfo.cpp:665
 #, boost-format
 msgid "Channel positions: %1%"
 msgstr "聲道位置: %1%"
 
-#: src/info/mkvinfo.cpp:665
+#: src/info/mkvinfo.cpp:659
 #, boost-format
 msgid "Channels: %1%"
 msgstr "聲道數: %1%"
@@ -2210,21 +2210,21 @@ msgstr "聲道數: %1%"
 msgid "Chapter Editor"
 msgstr "章節編輯器"
 
-#: src/info/mkvinfo.cpp:528
+#: src/info/mkvinfo.cpp:522
 msgid "Chapter Translate"
 msgstr "章節翻譯"
 
-#: src/info/mkvinfo.cpp:541
+#: src/info/mkvinfo.cpp:535
 #, boost-format
 msgid "Chapter Translate Codec: %1%"
 msgstr "章節翻譯編解碼器: %1%"
 
-#: src/info/mkvinfo.cpp:537
+#: src/info/mkvinfo.cpp:531
 #, boost-format
 msgid "Chapter Translate Edition UID: %1%"
 msgstr "章節翻譯版本 UID: %1%"
 
-#: src/info/mkvinfo.cpp:545
+#: src/info/mkvinfo.cpp:539
 #, boost-format
 msgid "Chapter Translate ID: %1%"
 msgstr "章節翻譯 ID: %1%"
@@ -2290,7 +2290,7 @@ msgstr "章節驗證成功"
 #: src/mmg/options/chapters.cpp:130
 #: src/mmg/tabs/global.cpp:273
 #: src/propedit/options.cpp:190
-#: src/info/mkvinfo.cpp:1812
+#: src/info/mkvinfo.cpp:1802
 msgid "Chapters"
 msgstr "章節"
 
@@ -2425,7 +2425,7 @@ msgstr "在不儲存的情況下關閉目前檔案"
 
 #: src/extract/timecodes_v2.cpp:264
 #: src/extract/tracks.cpp:396
-#: src/info/mkvinfo.cpp:1989
+#: src/info/mkvinfo.cpp:1979
 msgid "Cluster"
 msgstr "叢集"
 
@@ -2461,22 +2461,22 @@ msgstr "叢集時間碼: %|1$.3f|s"
 msgid "Codec ID"
 msgstr "編解碼器 ID"
 
-#: src/info/mkvinfo.cpp:1019
+#: src/info/mkvinfo.cpp:1009
 #, boost-format
 msgid "Codec ID: %1%"
 msgstr "編解碼器 ID: %1%"
 
-#: src/info/mkvinfo.cpp:1053
+#: src/info/mkvinfo.cpp:1043
 #, boost-format
 msgid "Codec decode all: %1%"
 msgstr "編解碼器全部解碼: %1%"
 
-#: src/info/mkvinfo.cpp:1048
+#: src/info/mkvinfo.cpp:1038
 #, boost-format
 msgid "Codec download URL: %1%"
 msgstr "編解碼器下載 URL: %1%"
 
-#: src/info/mkvinfo.cpp:1044
+#: src/info/mkvinfo.cpp:1034
 #, boost-format
 msgid "Codec info URL: %1%"
 msgstr "編解碼器資訊 URL: %1%"
@@ -2486,12 +2486,12 @@ msgstr "編解碼器資訊 URL: %1%"
 msgid "Codec name"
 msgstr "編解碼器名稱"
 
-#: src/info/mkvinfo.cpp:1035
+#: src/info/mkvinfo.cpp:1025
 #, boost-format
 msgid "Codec name: %1%"
 msgstr "編解碼器名稱: %1%"
 
-#: src/info/mkvinfo.cpp:1040
+#: src/info/mkvinfo.cpp:1030
 #, boost-format
 msgid "Codec settings: %1%"
 msgstr "編解碼器設定: %1%"
@@ -2501,7 +2501,7 @@ msgstr "編解碼器設定: %1%"
 msgid "Codec state: %1%"
 msgstr "編解碼器狀態: %1%"
 
-#: src/info/mkvinfo.cpp:1031
+#: src/info/mkvinfo.cpp:1021
 #, boost-format
 msgid "CodecPrivate, length %1%%2%"
 msgstr "編解碼器專有, 長度 %1%%2%"
@@ -2510,7 +2510,7 @@ msgstr "編解碼器專有, 長度 %1%%2%"
 msgid "Collapse all entries so that none of their sub-entries will be shown"
 msgstr "收起所有項目，這樣它們的子項目將不被顯示"
 
-#: src/info/mkvinfo.cpp:773
+#: src/info/mkvinfo.cpp:767
 #, boost-format
 msgid "Colour space: %1%"
 msgstr "色彩空間: %1%"
@@ -2557,19 +2557,19 @@ msgstr "設定檔已載入。"
 msgid "Configuration saved."
 msgstr "設定檔已儲存。"
 
-#: src/info/mkvinfo.cpp:830
+#: src/info/mkvinfo.cpp:824
 msgid "Content compression"
 msgstr "內容壓縮"
 
-#: src/info/mkvinfo.cpp:795
+#: src/info/mkvinfo.cpp:789
 msgid "Content encoding"
 msgstr "內容編碼"
 
-#: src/info/mkvinfo.cpp:787
+#: src/info/mkvinfo.cpp:781
 msgid "Content encodings"
 msgstr "內容編碼"
 
-#: src/info/mkvinfo.cpp:857
+#: src/info/mkvinfo.cpp:851
 msgid "Content encryption"
 msgstr "內容加密"
 
@@ -2740,17 +2740,17 @@ msgstr "剪裁參數: 未以 <TID>:<left>,<top>,<right>,<bottom> 的形式給定
 msgid "Cropping:"
 msgstr "剪裁:"
 
-#: src/info/mkvinfo.cpp:1241
+#: src/info/mkvinfo.cpp:1231
 #, boost-format
 msgid "Cue block number: %1%"
 msgstr "Cue 區塊數: %1%"
 
-#: src/info/mkvinfo.cpp:1237
+#: src/info/mkvinfo.cpp:1227
 #, boost-format
 msgid "Cue cluster position: %1%"
 msgstr "Cue 叢集位置: %1%"
 
-#: src/info/mkvinfo.cpp:1246
+#: src/info/mkvinfo.cpp:1236
 #, boost-format
 msgid "Cue codec state: %1%"
 msgstr "Cue 編解碼器狀態: %1%"
@@ -2759,31 +2759,31 @@ msgstr "Cue 編解碼器狀態: %1%"
 msgid "Cue name format:"
 msgstr "Cue 命名格式:"
 
-#: src/info/mkvinfo.cpp:1212
+#: src/info/mkvinfo.cpp:1202
 msgid "Cue point"
 msgstr "Cue 點"
 
-#: src/info/mkvinfo.cpp:1262
+#: src/info/mkvinfo.cpp:1252
 #, boost-format
 msgid "Cue ref cluster: %1%"
 msgstr "Cue 參考叢集: %1%"
 
-#: src/info/mkvinfo.cpp:1270
+#: src/info/mkvinfo.cpp:1260
 #, boost-format
 msgid "Cue ref codec state: %1%"
 msgstr "Cue 參考編解碼器狀態: %1%"
 
-#: src/info/mkvinfo.cpp:1266
+#: src/info/mkvinfo.cpp:1256
 #, boost-format
 msgid "Cue ref number: %1%"
 msgstr "Cue 參考數: %1%"
 
-#: src/info/mkvinfo.cpp:1258
+#: src/info/mkvinfo.cpp:1248
 #, boost-format
 msgid "Cue ref time: %|1$.3f|s"
 msgstr "Cue 參考時間: %|1$.3f|s"
 
-#: src/info/mkvinfo.cpp:1249
+#: src/info/mkvinfo.cpp:1239
 msgid "Cue reference"
 msgstr "Cue 參考"
 
@@ -2802,21 +2802,21 @@ msgstr "Cue 表單解析器: 無效的 INDEX 索引數 (已得 %1%, 預期 %2%) 
 msgid "Cue sheet parser: No INDEX entry found for the previous TRACK entry (current line: %1%)\n"
 msgstr "Cue 表單解析器: 未發現上一個 TRACK 軌道的 INDEX 索引 (目前行編號: %1%)\n"
 
-#: src/info/mkvinfo.cpp:1221
+#: src/info/mkvinfo.cpp:1211
 #, boost-format
 msgid "Cue time: %|1$.3f|s"
 msgstr "Cue 時間: %|1$.3f|s"
 
-#: src/info/mkvinfo.cpp:1224
+#: src/info/mkvinfo.cpp:1214
 msgid "Cue track positions"
 msgstr "Cue 軌道位置"
 
-#: src/info/mkvinfo.cpp:1233
+#: src/info/mkvinfo.cpp:1223
 #, boost-format
 msgid "Cue track: %1%"
 msgstr "Cue 軌: %1%"
 
-#: src/info/mkvinfo.cpp:1196
+#: src/info/mkvinfo.cpp:1186
 msgid "Cues (subentries will be skipped)"
 msgstr "Cue 表單 (子項目將被跳過)"
 
@@ -2891,12 +2891,12 @@ msgstr "DTS_Header 問題: 資料不足以讀取表頭\n"
 msgid "Data is not allowed inside <%1%>."
 msgstr "<%1%> 內部不允許有資料。"
 
-#: src/info/mkvinfo.cpp:599
+#: src/info/mkvinfo.cpp:593
 #, boost-format
 msgid "Date (invalid, value: %1%)"
 msgstr "日期 (無效, 值: %1%)"
 
-#: src/info/mkvinfo.cpp:597
+#: src/info/mkvinfo.cpp:591
 #, boost-format
 msgid "Date: %1% UTC"
 msgstr "日期: %1% UTC"
@@ -2915,12 +2915,12 @@ msgstr "預設"
 msgid "Default duration"
 msgstr "預設持續時間"
 
-#: src/info/mkvinfo.cpp:1071
+#: src/info/mkvinfo.cpp:1061
 #, boost-format
 msgid "Default duration: %|1$.3f|ms (%|2$.3f| fps for a video track)"
 msgstr "預設持續時間: %|1$.3f|ms (對於視訊軌為 %|2$.3f| fps)"
 
-#: src/info/mkvinfo.cpp:1086
+#: src/info/mkvinfo.cpp:1076
 #, boost-format
 msgid "Default flag: %1%"
 msgstr "“預設”標記: %1%"
@@ -2990,12 +2990,12 @@ msgstr "停用所有軌道的緊縮。這將增加檔案大小，尤其是有很
 msgid "Display dimensions: not given in the form <TID>:<width>x<height>, e.g. 1:640x480 (argument was '%1%').\n"
 msgstr "顯示尺寸: 未以 <TID>:<width>x<height> 的形式給定, 例如 1:640x480 (您的參數為「%1%」)。\n"
 
-#: src/info/mkvinfo.cpp:712
+#: src/info/mkvinfo.cpp:706
 #, boost-format
 msgid "Display height: %1%"
 msgstr "顯示高度: %1%"
 
-#: src/info/mkvinfo.cpp:739
+#: src/info/mkvinfo.cpp:733
 #, boost-format
 msgid "Display unit: %1%%2%"
 msgstr "顯示單位: %1%%2%"
@@ -3008,7 +3008,7 @@ msgstr "顯示用法資訊"
 msgid "Display width/height:"
 msgstr "顯示寬/高:"
 
-#: src/info/mkvinfo.cpp:707
+#: src/info/mkvinfo.cpp:701
 #, boost-format
 msgid "Display width: %1%"
 msgstr "顯示寬度: %1%"
@@ -3021,17 +3021,17 @@ msgstr "不要在變換定位元件中添加章節項目。"
 msgid "Do not write meta seek elements at all."
 msgstr "不要寫入任何變換定位元件。"
 
-#: src/info/mkvinfo.cpp:1876
+#: src/info/mkvinfo.cpp:1866
 #, boost-format
 msgid "Doc type read version: %1%"
 msgstr "文件檔類型讀取版本: %1%"
 
-#: src/info/mkvinfo.cpp:1873
+#: src/info/mkvinfo.cpp:1863
 #, boost-format
 msgid "Doc type version: %1%"
 msgstr "文件檔類型版本: %1%"
 
-#: src/info/mkvinfo.cpp:1870
+#: src/info/mkvinfo.cpp:1860
 #, boost-format
 msgid "Doc type: %1%"
 msgstr "文件檔類型: %1%"
@@ -3057,7 +3057,7 @@ msgstr "下載網址:"
 msgid "Duration: %|1$.3f|ms"
 msgstr "持續時間: %|1$.3f|ms"
 
-#: src/info/mkvinfo.cpp:576
+#: src/info/mkvinfo.cpp:570
 #, boost-format
 msgid "Duration: %|1$.3f|s (%2%)"
 msgstr "持續時間: %|1$.3f|s (%2%)"
@@ -3066,26 +3066,26 @@ msgstr "持續時間: %|1$.3f|s (%2%)"
 msgid "E&xit\tCtrl-Q"
 msgstr "離開(&X)\tCtrl-Q"
 
-#: src/info/mkvinfo.cpp:1846
+#: src/info/mkvinfo.cpp:1836
 msgid "EBML head"
 msgstr "EBML 表頭"
 
-#: src/info/mkvinfo.cpp:1864
+#: src/info/mkvinfo.cpp:1854
 #, boost-format
 msgid "EBML maximum ID length: %1%"
 msgstr "EBML 最大 ID 長: %1%"
 
-#: src/info/mkvinfo.cpp:1867
+#: src/info/mkvinfo.cpp:1857
 #, boost-format
 msgid "EBML maximum size length: %1%"
 msgstr "EBML 最大尺寸長度: %1%"
 
-#: src/info/mkvinfo.cpp:1861
+#: src/info/mkvinfo.cpp:1851
 #, boost-format
 msgid "EBML read version: %1%"
 msgstr "EBML 讀取版本: %1%"
 
-#: src/info/mkvinfo.cpp:1858
+#: src/info/mkvinfo.cpp:1848
 #, boost-format
 msgid "EBML version: %1%"
 msgstr "EBML 版本: %1%"
@@ -3145,7 +3145,7 @@ msgstr "元件於類別「%1%」(「--edit %2%」):\n"
 msgid "Enable splitting..."
 msgstr "啟用分割..."
 
-#: src/info/mkvinfo.cpp:1008
+#: src/info/mkvinfo.cpp:998
 #, boost-format
 msgid "Enabled: %1%"
 msgstr "已啟用: %1%"
@@ -3154,12 +3154,12 @@ msgstr "已啟用: %1%"
 msgid "Enables splitting of the output into more than one file. You can split after a given size, after a given amount of time has passed in each file or after a list of timecodes."
 msgstr "啟用分割，將輸出檔分割為多個檔。可以在給定大小、給定每個檔案包含的時間量或一系列時間碼後分割。"
 
-#: src/info/mkvinfo.cpp:867
+#: src/info/mkvinfo.cpp:861
 #, boost-format
 msgid "Encryption algorithm: %1% (%2%)"
 msgstr "加密演算法: %1% (%2%)"
 
-#: src/info/mkvinfo.cpp:879
+#: src/info/mkvinfo.cpp:873
 #, boost-format
 msgid "Encryption key ID: %1%"
 msgstr "加密鑰匙 ID: %1%"
@@ -3251,7 +3251,7 @@ msgstr "發生錯誤: "
 msgid "Error: %1% parser failed for '%2%', line %3%, column %4%: %5%\n"
 msgstr "發生錯誤: %1% 解析器失敗，對於「%2%」, 第 %3% 行, 第 %4% 列: %5%\n"
 
-#: src/info/mkvinfo.cpp:1928
+#: src/info/mkvinfo.cpp:1918
 #, boost-format
 msgid "Error: Couldn't open input file %1% (%2%).\n"
 msgstr "發生錯誤: 無法開啟輸入檔 %1% (%2%)。\n"
@@ -3391,7 +3391,7 @@ msgstr "解析軌道 %1% 的 USF 編解碼器專有資料失敗: %2%\n"
 msgid "Failed to parse the USF end tag for track %1%: %2%\n"
 msgstr "解析軌道 %1% 的 USF 終止標記失敗: %2%\n"
 
-#: src/info/mkvinfo.cpp:607
+#: src/info/mkvinfo.cpp:601
 #, boost-format
 msgid "Family UID:%1%"
 msgstr "家族 UID:%1%"
@@ -3411,7 +3411,7 @@ msgstr "檔案「%1%」: 容器: %2%"
 msgid "File '%1%': unsupported container: %2%\n"
 msgstr "檔案「%1%」: 不支援的容器: %2%\n"
 
-#: src/info/mkvinfo.cpp:1335
+#: src/info/mkvinfo.cpp:1325
 #, boost-format
 msgid "File UID: %1%"
 msgstr "檔案 UID: %1%"
@@ -3428,12 +3428,12 @@ msgstr "檔案包含的畫格數比預期的少，或者檔在 %1% 畫格後被�
 msgid "File creation failed"
 msgstr "建立檔案失敗"
 
-#: src/info/mkvinfo.cpp:1331
+#: src/info/mkvinfo.cpp:1321
 #, boost-format
 msgid "File data, size: %1%"
 msgstr "檔案資料, 大小: %1%"
 
-#: src/info/mkvinfo.cpp:1319
+#: src/info/mkvinfo.cpp:1309
 #, boost-format
 msgid "File description: %1%"
 msgstr "檔案描述: %1%"
@@ -3461,7 +3461,7 @@ msgstr "檔案已處理完畢"
 msgid "File modified"
 msgstr "檔案已修改"
 
-#: src/info/mkvinfo.cpp:1323
+#: src/info/mkvinfo.cpp:1313
 #, boost-format
 msgid "File name: %1%"
 msgstr "檔名: %1%"
@@ -3527,7 +3527,7 @@ msgstr "強制 Xiph 式緊縮。"
 msgid "Force the translations for 'code' to be used."
 msgstr "強制使用「code」的翻譯。"
 
-#: src/info/mkvinfo.cpp:1090
+#: src/info/mkvinfo.cpp:1080
 #, boost-format
 msgid "Forced flag: %1%"
 msgstr "“強制”標記: %1%"
@@ -3591,7 +3591,7 @@ msgstr "FourCC: 缺少軌道 ID 於「%1% %2%」。\n"
 msgid "Frame number: %1%"
 msgstr "畫格數: %1%"
 
-#: src/info/mkvinfo.cpp:777
+#: src/info/mkvinfo.cpp:771
 #, boost-format
 msgid "Frame rate: %1%"
 msgstr "畫格率: %1%"
@@ -3606,7 +3606,7 @@ msgstr "畫格，大小為 %1%%2%%3%"
 msgid "Free-form edit field for user defined options for this track. What you input here is added after all the other options mmg adds so that you could overwrite any of mmg's options for this track. All occurences of the string \"<TID>\" will be replaced by the track's track ID."
 msgstr "無格式限制的文字方塊，供使用者定義此軌的命令列選項。您在這裡輸入的選項將被放在 mmg 添加的所有其他選項之後，這樣您可以覆蓋 mmg 為此軌建立的任何選項。所有出現字串 \"<TID>\" 的地方都會被替換為目前軌道的軌道 ID。"
 
-#: src/info/mkvinfo.cpp:748
+#: src/info/mkvinfo.cpp:742
 #, boost-format
 msgid "Gamma: %1%"
 msgstr "伽瑪修正: %1%"
@@ -3836,7 +3836,7 @@ msgstr "輸入過長: %1% > %2%"
 msgid "Interface language:"
 msgstr "介面語言:"
 
-#: src/info/mkvinfo.cpp:752
+#: src/info/mkvinfo.cpp:746
 #, boost-format
 msgid "Interlaced: %1%"
 msgstr "交錯的: %1%"
@@ -4201,7 +4201,7 @@ msgstr "LZO 壓縮失敗。結果: %1%\n"
 msgid "Lace number: %1%"
 msgstr "緊縮數: %1%"
 
-#: src/info/mkvinfo.cpp:1082
+#: src/info/mkvinfo.cpp:1072
 #, boost-format
 msgid "Lacing flag: %1%"
 msgstr "“緊縮”標記: %1%"
@@ -4226,7 +4226,7 @@ msgstr "語言未以 NUL 結尾"
 msgid "Language:"
 msgstr "語言:"
 
-#: src/info/mkvinfo.cpp:1094
+#: src/info/mkvinfo.cpp:1084
 #, boost-format
 msgid "Language: %1%"
 msgstr "語言: %1%"
@@ -4305,7 +4305,7 @@ msgstr "日誌檔 (*.txt)|*.txt|%s"
 msgid "Log output:"
 msgstr "日誌輸出:"
 
-#: src/info/mkvinfo.cpp:897
+#: src/info/mkvinfo.cpp:891
 msgid "MD5"
 msgstr "MD5"
 
@@ -4389,12 +4389,12 @@ msgstr "Matroska 檔案 (*.mkv;*.mka;*.mks;*.mk3d)|*.mkv;*.mka;*.mks;*.mk3d|%s"
 msgid "Matroska files (*.mkv;*.mka;*.mks;*.mk3d)|*.mkv;*.mka;*.mks;*.mk3d|%s"
 msgstr "Matroska 檔案 (*.mkv;*.mka;*.mks;*.mk3d)|*.mkv;*.mka;*.mks;*.mk3d|%s"
 
-#: src/info/mkvinfo.cpp:1103
+#: src/info/mkvinfo.cpp:1093
 #, boost-format
 msgid "Max BlockAddition ID: %1%"
 msgstr "最大附加區塊 ID: %1%"
 
-#: src/info/mkvinfo.cpp:1066
+#: src/info/mkvinfo.cpp:1056
 #, boost-format
 msgid "MaxCache: %1%"
 msgstr "最大快取: %1%"
@@ -4413,12 +4413,12 @@ msgstr "記憶體分配發生錯誤: %1% (%2%)。\n"
 msgid "Memory for a RealAudio/RealVideo frame could not be allocated.\n"
 msgstr "無法為一個 RealAudio/RealVideo 畫格分配記憶體。\n"
 
-#: src/info/mkvinfo.cpp:1327
+#: src/info/mkvinfo.cpp:1317
 #, boost-format
 msgid "Mime type: %1%"
 msgstr "Mime 類型: %1%"
 
-#: src/info/mkvinfo.cpp:1062
+#: src/info/mkvinfo.cpp:1052
 #, boost-format
 msgid "MinCache: %1%"
 msgstr "最小快取: %1%"
@@ -4471,7 +4471,7 @@ msgstr "參數「%1%」缺少輸出檔名。\n"
 msgid "Modification of properties in the section '%1%' was requested, but no corresponding level 1 element was found in the file. %2%\n"
 msgstr "在段落「%1%」中屬性必須修改，但檔案裡未發現符合的等級 1 元件。%2%\n"
 
-#: src/info/mkvinfo.cpp:1474
+#: src/info/mkvinfo.cpp:1464
 msgid "More"
 msgstr "更多"
 
@@ -4516,7 +4516,7 @@ msgstr "將所選任務下移"
 msgid "Move the selected job(s) up"
 msgstr "將所選任務上移"
 
-#: src/info/mkvinfo.cpp:582
+#: src/info/mkvinfo.cpp:576
 #, boost-format
 msgid "Muxing application: %1%"
 msgstr "合成程式: %1%"
@@ -4552,7 +4552,7 @@ msgstr "此軌的名稱，如“導演評論”。"
 msgid "Name:"
 msgstr "名稱:"
 
-#: src/info/mkvinfo.cpp:1013
+#: src/info/mkvinfo.cpp:1003
 #, boost-format
 msgid "Name: %1%"
 msgstr "名稱: %1%"
@@ -4570,12 +4570,12 @@ msgstr "新數值:"
 msgid "Next filename"
 msgstr "下一個檔名"
 
-#: src/info/mkvinfo.cpp:626
+#: src/info/mkvinfo.cpp:620
 #, boost-format
 msgid "Next filename: %1%"
 msgstr "下一個檔名: %1%"
 
-#: src/info/mkvinfo.cpp:1968
+#: src/info/mkvinfo.cpp:1958
 #, boost-format
 msgid "Next level 0 element is not a segment but %1%"
 msgstr "下一個 0 層級元件不是剪輯而是 %1%"
@@ -4584,7 +4584,7 @@ msgstr "下一個 0 層級元件不是剪輯而是 %1%"
 msgid "Next segment UID:"
 msgstr "下一個剪輯 UID:"
 
-#: src/info/mkvinfo.cpp:622
+#: src/info/mkvinfo.cpp:616
 #, boost-format
 msgid "Next segment UID:%1%"
 msgstr "下一個剪輯 UID:%1%"
@@ -4603,7 +4603,7 @@ msgstr "未指定 %1%，在「--%2% %3%」。\n"
 msgid "No AC3 header found in first frame; track will be skipped.\n"
 msgstr "第一個畫格未發現 AC3 表頭; 此軌將被跳過。\n"
 
-#: src/info/mkvinfo.cpp:1942
+#: src/info/mkvinfo.cpp:1932
 msgid "No EBML head found."
 msgstr "未找到 EBML 表頭。"
 
@@ -4655,7 +4655,7 @@ msgid "No file loaded"
 msgstr "未載入檔案"
 
 #: src/propedit/options.cpp:31
-#: src/info/mkvinfo.cpp:2075
+#: src/info/mkvinfo.cpp:2065
 msgid "No file name given.\n"
 msgstr "未給定檔名。\n"
 
@@ -4681,7 +4681,7 @@ msgstr "未指定輸出檔名，將使用附件名。\n"
 
 #: src/extract/timecodes_v2.cpp:198
 #: src/extract/tracks.cpp:354
-#: src/info/mkvinfo.cpp:1956
+#: src/info/mkvinfo.cpp:1946
 msgid "No segment/level 0 element found."
 msgstr "未發現剪輯/0 層級元件。"
 
@@ -4850,7 +4850,7 @@ msgstr "選項"
 msgid "Options meant ONLY for developpers. Do not use them. If something is considered to be an officially supported option then it's NOT in this list!"
 msgstr "*僅* 為開發者設計的選項。不要用它們。凡是被官方支援的東西都 *不在* 這個清單中！"
 
-#: src/info/mkvinfo.cpp:804
+#: src/info/mkvinfo.cpp:798
 #, boost-format
 msgid "Order: %1%"
 msgstr "編碼指令: %1%"
@@ -4879,7 +4879,7 @@ msgstr "用這個字元集輸出訊息"
 msgid "Output of the selected jobs:"
 msgstr "所選任務的輸出資訊:"
 
-#: src/info/mkvinfo.cpp:660
+#: src/info/mkvinfo.cpp:654
 #, boost-format
 msgid "Output sampling frequency: %1%"
 msgstr "輸出取樣頻率: %1%"
@@ -4924,36 +4924,36 @@ msgstr "完整解析檔案並顯示所有元件"
 msgid "Parse the whole file instead of relying on the index."
 msgstr "解析整個檔案而不是依靠索引。"
 
-#: src/info/mkvinfo.cpp:1706
+#: src/info/mkvinfo.cpp:1696
 msgid "Parsing file"
 msgstr "正在解析檔案"
 
-#: src/info/mkvinfo.cpp:732
+#: src/info/mkvinfo.cpp:726
 #, boost-format
 msgid "Pixel crop bottom: %1%"
 msgstr "底部像素剪裁: %1%"
 
-#: src/info/mkvinfo.cpp:717
+#: src/info/mkvinfo.cpp:711
 #, boost-format
 msgid "Pixel crop left: %1%"
 msgstr "左邊像素剪裁: %1%"
 
-#: src/info/mkvinfo.cpp:727
+#: src/info/mkvinfo.cpp:721
 #, boost-format
 msgid "Pixel crop right: %1%"
 msgstr "右邊像素剪裁: %1%"
 
-#: src/info/mkvinfo.cpp:722
+#: src/info/mkvinfo.cpp:716
 #, boost-format
 msgid "Pixel crop top: %1%"
 msgstr "頂部像素剪裁: %1%"
 
-#: src/info/mkvinfo.cpp:702
+#: src/info/mkvinfo.cpp:696
 #, boost-format
 msgid "Pixel height: %1%"
 msgstr "像素高度: %1%"
 
-#: src/info/mkvinfo.cpp:697
+#: src/info/mkvinfo.cpp:691
 #, boost-format
 msgid "Pixel width: %1%"
 msgstr "像素寬度: %1%"
@@ -4989,7 +4989,7 @@ msgstr ""
 msgid "Previous filename"
 msgstr "上一個檔名"
 
-#: src/info/mkvinfo.cpp:618
+#: src/info/mkvinfo.cpp:612
 #, boost-format
 msgid "Previous filename: %1%"
 msgstr "上一個檔名: %1%"
@@ -4998,7 +4998,7 @@ msgstr "上一個檔名: %1%"
 msgid "Previous segment UID:"
 msgstr "上一個剪輯 UID:"
 
-#: src/info/mkvinfo.cpp:614
+#: src/info/mkvinfo.cpp:608
 #, boost-format
 msgid "Previous segment UID:%1%"
 msgstr "上一個剪輯 UID:%1%"
@@ -5205,7 +5205,7 @@ msgstr "離開表頭編輯器"
 msgid "Quits mkvinfo"
 msgstr "離開 mkvinfo"
 
-#: src/info/mkvinfo.cpp:887
+#: src/info/mkvinfo.cpp:881
 msgid "RSA"
 msgstr "RSA"
 
@@ -5314,7 +5314,7 @@ msgstr "顯示命令列(&H)"
 msgid "S&tart selected"
 msgstr "開始所選(&T)"
 
-#: src/info/mkvinfo.cpp:896
+#: src/info/mkvinfo.cpp:890
 msgid "SHA1-160"
 msgstr "SHA1-160"
 
@@ -5339,7 +5339,7 @@ msgstr "與第一個輸入檔同目錄"
 msgid "Sampling frequency in Hz."
 msgstr "取樣頻率，單位 Hz。"
 
-#: src/info/mkvinfo.cpp:655
+#: src/info/mkvinfo.cpp:649
 #, boost-format
 msgid "Sampling frequency: %1%"
 msgstr "取樣頻率: %1%"
@@ -5392,29 +5392,29 @@ msgstr "儲存至 &Matroska 檔(&M)"
 msgid "Saves the information from the current file to a text file"
 msgstr "從目前檔儲存資訊至純文字檔"
 
-#: src/info/mkvinfo.cpp:818
+#: src/info/mkvinfo.cpp:812
 #, boost-format
 msgid "Scope: %1% (%2%)"
 msgstr "範圍: %1% (%2%)"
 
-#: src/info/mkvinfo.cpp:1164
+#: src/info/mkvinfo.cpp:1154
 #, boost-format
 msgid "Seek ID:%1% (%2%)"
 msgstr "定位 ID:%1% (%2%)"
 
-#: src/info/mkvinfo.cpp:1152
+#: src/info/mkvinfo.cpp:1142
 msgid "Seek entry"
 msgstr "定位項"
 
-#: src/info/mkvinfo.cpp:1140
+#: src/info/mkvinfo.cpp:1130
 msgid "Seek head"
 msgstr "定位表頭"
 
-#: src/info/mkvinfo.cpp:1136
+#: src/info/mkvinfo.cpp:1126
 msgid "Seek head (subentries will be skipped)"
 msgstr "定位表頭 (子項目將被跳過)"
 
-#: src/info/mkvinfo.cpp:1178
+#: src/info/mkvinfo.cpp:1168
 #, boost-format
 msgid "Seek position: %1%"
 msgstr "定位位置: %1%"
@@ -5426,7 +5426,7 @@ msgstr "定位位置: %1%"
 msgid "Segment"
 msgstr "剪輯"
 
-#: src/info/mkvinfo.cpp:603
+#: src/info/mkvinfo.cpp:597
 #, boost-format
 msgid "Segment UID:%1%"
 msgstr "剪輯 UID:%1%"
@@ -5440,7 +5440,7 @@ msgstr "剪輯 UID:"
 msgid "Segment filename"
 msgstr "剪輯檔名"
 
-#: src/info/mkvinfo.cpp:631
+#: src/info/mkvinfo.cpp:625
 #, boost-format
 msgid "Segment filename: %1%"
 msgstr "剪輯檔名: %1%"
@@ -5460,7 +5460,7 @@ msgstr "剪輯資訊檔 (*.xml)|*.xml|%s"
 #: src/propedit/options.cpp:173
 #: src/propedit/propedit_cli_parser.cpp:105
 #: src/propedit/propedit_cli_parser.cpp:183
-#: src/info/mkvinfo.cpp:553
+#: src/info/mkvinfo.cpp:547
 #: src/info/wxwidgets_ui.cpp:208
 #: src/info/qt_ui.cpp:178
 msgid "Segment information"
@@ -5468,7 +5468,7 @@ msgstr "剪輯資訊"
 
 #: src/extract/timecodes_v2.cpp:256
 #: src/extract/tracks.cpp:389
-#: src/info/mkvinfo.cpp:928
+#: src/info/mkvinfo.cpp:922
 #: src/info/wxwidgets_ui.cpp:208
 #: src/info/qt_ui.cpp:179
 msgid "Segment tracks"
@@ -5479,12 +5479,12 @@ msgstr "剪輯軌道"
 msgid "Segment unique ID"
 msgstr "剪輯唯一 ID"
 
-#: src/info/mkvinfo.cpp:1964
+#: src/info/mkvinfo.cpp:1954
 #, boost-format
 msgid "Segment, size %1%"
 msgstr "剪輯, 大小 %1%"
 
-#: src/info/mkvinfo.cpp:1962
+#: src/info/mkvinfo.cpp:1952
 msgid "Segment, size unknown"
 msgstr "剪輯, 未知大小"
 
@@ -5627,7 +5627,7 @@ msgstr ""
 msgid "Sets the stereo mode of the video track to this value. If left empty then the track's original stereo mode will be kept or, if it didn't have one, none will be set at all."
 msgstr "選擇此視訊軌的立體視法。如果留空則保留原模式，或者如果原本就沒有，任何模式都不會設定。"
 
-#: src/info/mkvinfo.cpp:850
+#: src/info/mkvinfo.cpp:844
 #, boost-format
 msgid "Settings: %1%"
 msgstr "設定: %1%"
@@ -5710,22 +5710,22 @@ msgstr "顯示版本資訊。"
 msgid "Shows mmg's debug window in which debug messages will appear. This is only useful if you're helping the author debug a problem in mmg."
 msgstr "顯示 mmg 的除錯視窗，在該視窗中會出現除錯訊息。這只當您幫助作者除錯 mmg 的問題時有用。"
 
-#: src/info/mkvinfo.cpp:884
+#: src/info/mkvinfo.cpp:878
 #, boost-format
 msgid "Signature algorithm: %1% (%2%)"
 msgstr "簽章演算法: %1% (%2%)"
 
-#: src/info/mkvinfo.cpp:893
+#: src/info/mkvinfo.cpp:887
 #, boost-format
 msgid "Signature hash algorithm: %1% (%2%)"
 msgstr "簽章雜湊演算法: %1% (%2%)"
 
-#: src/info/mkvinfo.cpp:902
+#: src/info/mkvinfo.cpp:896
 #, boost-format
 msgid "Signature key ID: %1%"
 msgstr "簽章鑰匙 ID: %1%"
 
-#: src/info/mkvinfo.cpp:906
+#: src/info/mkvinfo.cpp:900
 #, boost-format
 msgid "Signature: %1%"
 msgstr "簽章: %1%"
@@ -5734,7 +5734,7 @@ msgstr "簽章: %1%"
 msgid "Signed integer"
 msgstr "帶正負號的整數"
 
-#: src/info/mkvinfo.cpp:1362
+#: src/info/mkvinfo.cpp:1352
 #, boost-format
 msgid "Silent Track Number: %1%"
 msgstr "靜軌號: %1%"
@@ -5776,7 +5776,7 @@ msgstr "跳過 %1% 位元組 (未發現有效的 DTS 表頭)。這可能會導�
 msgid "Skipping %1% bytes at the beginning (no valid MP3 header found).\n"
 msgstr "跳過開頭 %1% 位元組 (未發現有效的 MP3 表頭)。\n"
 
-#: src/info/mkvinfo.cpp:1500
+#: src/info/mkvinfo.cpp:1490
 msgid "Slices"
 msgstr "切面"
 
@@ -5867,7 +5867,7 @@ msgstr "啟動時間"
 msgid "Starting job ID %d (%s) on %s"
 msgstr "正在啟動任務 ID %d (%s) 於 %s"
 
-#: src/info/mkvinfo.cpp:1904
+#: src/info/mkvinfo.cpp:1894
 #, boost-format
 msgid "Statistics for track number %1%: number of blocks: %2%; size in bytes: %3%; duration in seconds: %4%; approximate bitrate in bits/second: %5%\n"
 msgstr "資料軌編號 %1% : 區塊編號: %2%的統計資料；大小: %3% 位元組；時間長度: %4% 秒；近似位元率: %5% 位元/秒\n"
@@ -5891,7 +5891,7 @@ msgstr "狀態:"
 msgid "Stereo mode parameter: not given in the form <TID>:<n|keyword> where n is a number between 0 and %1% or one of these keywords: %2% (argument was '%3%').\n"
 msgstr "立體視覺模式參數: 未以 <TID>:<n|keyword> 形式給定參數，其中可以是 0 到 %1% 中的數字或這些關鍵字其中一個: %2% (參數為「%3%」)。\n"
 
-#: src/info/mkvinfo.cpp:757
+#: src/info/mkvinfo.cpp:751
 #, boost-format
 msgid "Stereo mode: %1% (%2%)"
 msgstr "立體視法: %1% (%2%)"
@@ -5969,7 +5969,7 @@ msgid "Tag selectors"
 msgstr "標籤選擇器"
 
 #: src/propedit/options.cpp:181
-#: src/info/mkvinfo.cpp:1828
+#: src/info/mkvinfo.cpp:1818
 msgid "Tags"
 msgstr "標籤"
 
@@ -7113,7 +7113,7 @@ msgstr "此軌道包含 SBR AAC/HE-AAC/AAC+ 資料。本選項只對 AAC 輸入�
 msgid "This track is not compatible with the WebM mode and cannot be enabled."
 msgstr "此軌道不能和 WebM 模式相容且無法啟用。"
 
-#: src/info/mkvinfo.cpp:1508
+#: src/info/mkvinfo.cpp:1498
 msgid "Time slice"
 msgstr "時間切面"
 
@@ -7128,8 +7128,8 @@ msgstr "時間碼檔案 (*.tmc;*.txt)|*.tmc;*.txt|%s"
 
 #: src/extract/timecodes_v2.cpp:231
 #: src/extract/tracks.cpp:382
-#: src/info/mkvinfo.cpp:571
-#: src/info/mkvinfo.cpp:1099
+#: src/info/mkvinfo.cpp:565
+#: src/info/mkvinfo.cpp:1089
 #, boost-format
 msgid "Timecode scale: %1%"
 msgstr "時間碼縮放比例: %1%"
@@ -7148,7 +7148,7 @@ msgstr "時間碼:"
 msgid "Title"
 msgstr "標題"
 
-#: src/info/mkvinfo.cpp:635
+#: src/info/mkvinfo.cpp:629
 #, boost-format
 msgid "Title: %1%"
 msgstr "標題: %1%"
@@ -7224,7 +7224,7 @@ msgstr "軌道 %1%（CodecID 為「%2%」）缺少 \"codec private\" 編解碼�
 msgid "Track %1% with the CodecID '%2%' is missing the \"default duration\" element and cannot be extracted.\n"
 msgstr "軌道 %1%（CodecID 為「%2%」）缺少 \"default duration\" 預設持續時間元件，不能提取。\n"
 
-#: src/info/mkvinfo.cpp:1114
+#: src/info/mkvinfo.cpp:1104
 #, boost-format
 msgid "Track %1%: %2%, codec ID: %3%%4%%5%%6%\n"
 msgstr "軌道 %1%: %2%, 編解碼器 ID: %3%%4%%5%%6%\n"
@@ -7265,7 +7265,7 @@ msgstr "軌道 ID %1%: %2% (%3%)"
 msgid "Track UID"
 msgstr "軌道 UID"
 
-#: src/info/mkvinfo.cpp:973
+#: src/info/mkvinfo.cpp:965
 #, boost-format
 msgid "Track UID: %1%"
 msgstr "軌道 UID: %1%"
@@ -7294,17 +7294,17 @@ msgstr "軌道編號"
 msgid "Track number %1% has been encrypted and decryption has not yet been implemented.\n"
 msgstr "軌道編號 %1% 已被加密，且尚未實行解密。\n"
 
-#: src/info/mkvinfo.cpp:964
+#: src/info/mkvinfo.cpp:958
 #, boost-format
 msgid "Track number: %1%"
 msgstr "軌道編號: %1%"
 
-#: src/info/mkvinfo.cpp:1057
+#: src/info/mkvinfo.cpp:1047
 #, boost-format
 msgid "Track overlay: %1%"
 msgstr "軌道覆蓋: %1%"
 
-#: src/info/mkvinfo.cpp:998
+#: src/info/mkvinfo.cpp:988
 #, boost-format
 msgid "Track type: %1%"
 msgstr "軌道類型: %1%"
@@ -7339,7 +7339,7 @@ msgstr ""
 msgid "Type:"
 msgstr "類型:"
 
-#: src/info/mkvinfo.cpp:823
+#: src/info/mkvinfo.cpp:817
 #, boost-format
 msgid "Type: %1% (%2%)"
 msgstr "類型: %1% (%2%)"
@@ -7360,7 +7360,7 @@ msgstr "UTFstring_to_cstrutf8: 無效的寬字元。如果您認為本次判斷�
 msgid "Unexpected picture frame after single field frame. Fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr "單圖場畫格之後意外的圖片畫格。在分離前請修復 MPEG2 視訊串流。\n"
 
-#: src/info/mkvinfo.cpp:375
+#: src/info/mkvinfo.cpp:369
 msgid "Unknown"
 msgstr "未知"
 
@@ -7501,7 +7501,7 @@ msgstr "使用 3 位元組的 NALU 長可能會導致某些 AVC/h.264 編解碼�
 
 #: src/input/r_ac3.cpp:90
 #: src/input/r_mpeg_ps.cpp:1180
-#: src/input/r_mpeg_ts.cpp:1011
+#: src/input/r_mpeg_ts.cpp:1016
 #: src/input/r_matroska.cpp:1557
 #, boost-format
 msgid "Using the %1%AC3 output module.\n"
@@ -7563,7 +7563,7 @@ msgstr "使用 DTS 分離器。\n"
 #: src/input/r_dts.cpp:114
 #: src/input/r_mpeg_ps.cpp:1185
 #: src/input/r_wav.cpp:354
-#: src/input/r_mpeg_ts.cpp:1015
+#: src/input/r_mpeg_ts.cpp:1020
 #: src/input/r_matroska.cpp:1577
 msgid "Using the DTS output module.\n"
 msgstr "使用 DTS 輸出模組。\n"
@@ -7615,7 +7615,7 @@ msgstr "使用 MPEG PS 分離器。\n"
 #: src/input/r_mp3.cpp:71
 #: src/input/r_avi.cpp:561
 #: src/input/r_mpeg_ps.cpp:1175
-#: src/input/r_mpeg_ts.cpp:1007
+#: src/input/r_mpeg_ts.cpp:1012
 #: src/input/r_ogm.cpp:1030
 #: src/input/r_matroska.cpp:1607
 msgid "Using the MPEG audio output module.\n"
@@ -7630,7 +7630,7 @@ msgstr "使用 MPEG-%1% 視訊輸出模組。\n"
 #: src/input/r_avi.cpp:323
 #: src/input/r_mpeg_ps.cpp:1201
 #: src/input/r_mpeg_es.cpp:179
-#: src/input/r_mpeg_ts.cpp:1043
+#: src/input/r_mpeg_ts.cpp:1048
 msgid "Using the MPEG-1/2 video output module.\n"
 msgstr "使用 MPEG-1/2 視訊輸出模組。\n"
 
@@ -7642,7 +7642,7 @@ msgstr "使用 MPEG-4 part 10 (AVC) 視訊輸出模組。\n"
 #: src/input/r_avi.cpp:348
 #: src/input/r_avc.cpp:136
 #: src/input/r_mpeg_ps.cpp:1214
-#: src/input/r_mpeg_ts.cpp:1063
+#: src/input/r_mpeg_ts.cpp:1068
 #: src/input/r_ogm.cpp:1154
 #: src/input/r_matroska.cpp:1849
 msgid "Using the MPEG-4 part 10 ES video output module.\n"
@@ -7672,7 +7672,7 @@ msgid "Using the PCM output module.\n"
 msgstr "使用 PCM 輸出模組。\n"
 
 #: src/input/r_pgssup.cpp:74
-#: src/input/r_mpeg_ts.cpp:1085
+#: src/input/r_mpeg_ts.cpp:1090
 #: src/input/r_matroska.cpp:1724
 msgid "Using the PGS output module.\n"
 msgstr "使用 PGS 輸出模組。\n"
@@ -7721,7 +7721,7 @@ msgid "Using the Theora video output module.\n"
 msgstr "使用 Theora 視訊輸出模組。\n"
 
 #: src/input/r_mpeg_ps.cpp:1190
-#: src/input/r_mpeg_ts.cpp:1019
+#: src/input/r_mpeg_ts.cpp:1024
 msgid "Using the TrueHD output module.\n"
 msgstr "使用 TrueHD 輸出模組。\n"
 
@@ -7743,7 +7743,7 @@ msgstr "使用 VC1 ES 分離器。\n"
 
 #: src/input/r_vc1.cpp:96
 #: src/input/r_mpeg_ps.cpp:1219
-#: src/input/r_mpeg_ts.cpp:1079
+#: src/input/r_mpeg_ts.cpp:1084
 #: src/input/r_matroska.cpp:1877
 msgid "Using the VC1 video output module.\n"
 msgstr "使用 VC1 視訊輸出模組。\n"
@@ -7919,7 +7919,7 @@ msgstr "視訊像素寬度"
 msgid "Video stereo mode"
 msgstr "視訊立體模式"
 
-#: src/info/mkvinfo.cpp:688
+#: src/info/mkvinfo.cpp:682
 msgid "Video track"
 msgstr "視訊軌"
 
@@ -7965,16 +7965,6 @@ msgstr "警告:"
 msgid "Warning: "
 msgstr "警告: "
 
-#: src/info/mkvinfo.cpp:975
-#, boost-format
-msgid "Warning: There's more than one track with the UID %1%."
-msgstr "警告: UID 為 %1% 的軌道多於一條。"
-
-#: src/info/mkvinfo.cpp:966
-#, boost-format
-msgid "Warning: There's more than one track with the number %1%."
-msgstr "警告: 序號為 %1% 的軌道多於一條。"
-
 #: src/mmg/mux_dialog.cpp:92
 msgid "Warnings:"
 msgstr "警告:"
@@ -8009,7 +7999,7 @@ msgstr "以 ID「AID」將附件寫入到「輸出檔名」。"
 msgid "Write track with the ID TID to the file 'out'."
 msgstr "以 ID TID 將軌道寫入到檔案「out」。"
 
-#: src/info/mkvinfo.cpp:586
+#: src/info/mkvinfo.cpp:580
 #, boost-format
 msgid "Writing application: %1%"
 msgstr "寫入程式: %1%"
@@ -8197,7 +8187,7 @@ msgstr "添加"
 
 #: src/input/r_matroska.cpp:92
 #: src/mmg/mmg.cpp:62
-#: src/info/mkvinfo.cpp:1116
+#: src/info/mkvinfo.cpp:1106
 msgid "audio"
 msgstr "音訊"
 
@@ -8222,7 +8212,7 @@ msgstr "avi_reader: 無法讀取來源檔案。"
 msgid "avi_reader: Source is not a valid AVI file."
 msgstr "avi_reader: 來源非有效的 AVI 檔案。"
 
-#: src/info/mkvinfo.cpp:677
+#: src/info/mkvinfo.cpp:671
 #, boost-format
 msgid "bits per sample: %1%"
 msgstr "每次取樣多少位元: %1%"
@@ -8236,7 +8226,7 @@ msgid "both eyes laced in one block (right first)"
 msgstr ""
 
 #: src/input/r_matroska.cpp:93
-#: src/info/mkvinfo.cpp:1119
+#: src/info/mkvinfo.cpp:1109
 msgid "buttons"
 msgstr "按鈕"
 
@@ -8255,7 +8245,7 @@ msgstr "bzlib_compressor_c::decompress() 未實現\n"
 msgid "cet_index: '%1%' not found\n"
 msgstr "cet_index:「%1%」未找到\n"
 
-#: src/info/mkvinfo.cpp:666
+#: src/info/mkvinfo.cpp:660
 #, boost-format
 msgid "channels: %1%"
 msgstr "聲道數: %1%"
@@ -8284,7 +8274,7 @@ msgstr "完成，正常"
 msgid "completed with warnings"
 msgstr "完成，有警告"
 
-#: src/info/mkvinfo.cpp:825
+#: src/info/mkvinfo.cpp:819
 msgid "compression"
 msgstr "壓縮"
 
@@ -8307,7 +8297,7 @@ msgstr "create_track_number: file_num 未找到。 %1%\n"
 msgid "default"
 msgstr "預設"
 
-#: src/info/mkvinfo.cpp:1074
+#: src/info/mkvinfo.cpp:1064
 #, boost-format
 msgid "default duration: %|1$.3f|ms (%|2$.3f| fps for a video track)"
 msgstr "預設持續時間: %|1$.3f|ms (對於視訊軌為 %|2$.3f|)"
@@ -8325,16 +8315,16 @@ msgstr "dirac_es_reader: 無法開啟來源檔案。"
 msgid "disable all"
 msgstr "全部停用"
 
-#: src/info/mkvinfo.cpp:1629
+#: src/info/mkvinfo.cpp:1619
 msgid "discardable, "
 msgstr "可廢棄, "
 
-#: src/info/mkvinfo.cpp:713
+#: src/info/mkvinfo.cpp:707
 #, boost-format
 msgid "display height: %1%"
 msgstr "顯示高度: %1%"
 
-#: src/info/mkvinfo.cpp:708
+#: src/info/mkvinfo.cpp:702
 #, boost-format
 msgid "display width: %1%"
 msgstr "顯示寬度: %1%"
@@ -8374,7 +8364,7 @@ msgstr "全部啟用"
 msgid "enabled"
 msgstr "啟用"
 
-#: src/info/mkvinfo.cpp:826
+#: src/info/mkvinfo.cpp:820
 msgid "encryption"
 msgstr "加密"
 
@@ -8473,7 +8463,7 @@ msgstr "全部畫格"
 msgid "have an xcptn\n"
 msgstr "出現異常\n"
 
-#: src/info/mkvinfo.cpp:845
+#: src/info/mkvinfo.cpp:839
 msgid "header removal"
 msgstr "移除表頭"
 
@@ -8505,11 +8495,11 @@ msgstr "正在估計"
 msgid "ivf_reader: Could not open the file."
 msgstr "ivf_reader: 無法開啟檔案。"
 
-#: src/info/mkvinfo.cpp:1627
+#: src/info/mkvinfo.cpp:1617
 msgid "key, "
 msgstr "關鍵畫格, "
 
-#: src/info/mkvinfo.cpp:1095
+#: src/info/mkvinfo.cpp:1085
 #, boost-format
 msgid "language: %1%"
 msgstr "語言: %1%"
@@ -8961,7 +8951,7 @@ msgstr "mpeg_ps_reader: 不該發生 #1。 %1%"
 msgid "mpeg_ps_reader: Should not have happened #2. %1%"
 msgstr "mpeg_ps_reader: 不該發生 #2。 %1%"
 
-#: src/input/r_mpeg_ts.cpp:400
+#: src/input/r_mpeg_ts.cpp:403
 msgid "mpeg_ts_reader_c: Could not open the file."
 msgstr "mpeg_ts_reader_c: 無法開啟檔案。"
 
@@ -8971,7 +8961,7 @@ msgstr "mpeg_ts_reader_c: 無法開啟檔案。"
 msgid "no"
 msgstr "否"
 
-#: src/info/mkvinfo.cpp:869
+#: src/info/mkvinfo.cpp:863
 msgid "no encryption"
 msgstr "未加密"
 
@@ -8983,11 +8973,11 @@ msgstr "無錯誤發生"
 msgid "no file loaded"
 msgstr "未載入檔案"
 
-#: src/info/mkvinfo.cpp:886
+#: src/info/mkvinfo.cpp:880
 msgid "no signature algorithm"
 msgstr "未使用簽章演算法"
 
-#: src/info/mkvinfo.cpp:895
+#: src/info/mkvinfo.cpp:889
 msgid "no signature hash algorithm"
 msgstr "未使用簽章雜湊演算法"
 
@@ -9031,7 +9021,7 @@ msgstr "on_entry_selected: display == NULL。不該出現。"
 msgid "only for I frames"
 msgstr "僅 I 畫格"
 
-#: src/info/mkvinfo.cpp:661
+#: src/info/mkvinfo.cpp:655
 #, boost-format
 msgid "output sampling freq: %1%"
 msgstr "輸出取樣頻率: %1%"
@@ -9045,32 +9035,32 @@ msgstr "未處理"
 msgid "pgssup_reader: Could not open the file."
 msgstr "pgssup_reader: 無法開啟檔案。"
 
-#: src/info/mkvinfo.cpp:733
+#: src/info/mkvinfo.cpp:727
 #, boost-format
 msgid "pixel crop bottom: %1%"
 msgstr "底部像素剪裁: %1%"
 
-#: src/info/mkvinfo.cpp:718
+#: src/info/mkvinfo.cpp:712
 #, boost-format
 msgid "pixel crop left: %1%"
 msgstr "左邊像素剪裁: %1%"
 
-#: src/info/mkvinfo.cpp:728
+#: src/info/mkvinfo.cpp:722
 #, boost-format
 msgid "pixel crop right: %1%"
 msgstr "右邊像素剪裁: %1%"
 
-#: src/info/mkvinfo.cpp:723
+#: src/info/mkvinfo.cpp:717
 #, boost-format
 msgid "pixel crop top: %1%"
 msgstr "頂部像素剪裁: %1%"
 
-#: src/info/mkvinfo.cpp:703
+#: src/info/mkvinfo.cpp:697
 #, boost-format
 msgid "pixel height: %1%"
 msgstr "像素高度: %1%"
 
-#: src/info/mkvinfo.cpp:698
+#: src/info/mkvinfo.cpp:692
 #, boost-format
 msgid "pixel width: %1%"
 msgstr "像素寬度: %1%"
@@ -9121,7 +9111,7 @@ msgstr "移除"
 msgid "remove all"
 msgstr "移除全部"
 
-#: src/info/mkvinfo.cpp:815
+#: src/info/mkvinfo.cpp:809
 msgid "rest: unknown"
 msgstr "其他: 未知"
 
@@ -9133,7 +9123,7 @@ msgstr "橫列交錯 (從左邊開始)"
 msgid "row interleaved (right first)"
 msgstr "橫列交錯 (從右邊開始)"
 
-#: src/info/mkvinfo.cpp:656
+#: src/info/mkvinfo.cpp:650
 #, boost-format
 msgid "sampling freq: %1%"
 msgstr "取樣頻率: %1%"
@@ -9180,7 +9170,7 @@ msgid "subtitle"
 msgstr "字幕"
 
 #: src/mmg/mmg.cpp:64
-#: src/info/mkvinfo.cpp:1118
+#: src/info/mkvinfo.cpp:1108
 msgid "subtitles"
 msgstr "字幕"
 
@@ -9235,13 +9225,13 @@ msgstr "und (未定)"
 #: src/mmg/mmg.cpp:65
 #: src/mmg/header_editor/value_page.cpp:150
 #: src/mmg/tabs/input.cpp:339
-#: src/info/mkvinfo.cpp:817
-#: src/info/mkvinfo.cpp:827
-#: src/info/mkvinfo.cpp:846
-#: src/info/mkvinfo.cpp:875
-#: src/info/mkvinfo.cpp:888
-#: src/info/mkvinfo.cpp:898
-#: src/info/mkvinfo.cpp:1120
+#: src/info/mkvinfo.cpp:811
+#: src/info/mkvinfo.cpp:821
+#: src/info/mkvinfo.cpp:840
+#: src/info/mkvinfo.cpp:869
+#: src/info/mkvinfo.cpp:882
+#: src/info/mkvinfo.cpp:892
+#: src/info/mkvinfo.cpp:1110
 msgid "unknown"
 msgstr "未知"
 
@@ -9277,7 +9267,7 @@ msgstr "verify failed: chapters->CheckMandatory() 為 false。這不該發生。
 
 #: src/input/r_matroska.cpp:94
 #: src/mmg/mmg.cpp:63
-#: src/info/mkvinfo.cpp:1117
+#: src/info/mkvinfo.cpp:1107
 msgid "video"
 msgstr "視訊"
 
@@ -9700,6 +9690,10 @@ msgstr "是"
 #~ msgstr "WAVE (未壓縮的 PCM)"
 #~ msgid "WAVPACK lossless audio"
 #~ msgstr "WAVPACK 無損音訊"
+#~ msgid "Warning: There's more than one track with the UID %1%."
+#~ msgstr "警告: UID 為 %1% 的軌道多於一條。"
+#~ msgid "Warning: There's more than one track with the number %1%."
+#~ msgstr "警告: 序號為 %1% 的軌道多於一條。"
 #~ msgid "Write raw FLAC files (default: write OggFLAC files)."
 #~ msgstr "寫入 raw FLAC 檔案 (預設：寫入 OggFLAC 檔案)。"
 #~ msgid "You have not yet selected an output file."
