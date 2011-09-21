@@ -55,7 +55,7 @@ stereo_mode_c::init_translations() {
   s_translations.push_back(Y("row interleaved (left first)"));
   s_translations.push_back(Y("column interleaved (right first)"));
   s_translations.push_back(Y("column interleaved (left first)"));
-  s_translations.push_back(Y("anaglyph (cyran/red)"));
+  s_translations.push_back(Y("anaglyph (cyan/red)"));
   s_translations.push_back(Y("side by side (right first)"));
   s_translations.push_back(Y("anaglyph (green/magenta)"));
   s_translations.push_back(Y("both eyes laced in one block (left first)"));
