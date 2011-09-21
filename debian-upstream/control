@@ -2,7 +2,7 @@ Source: mkvtoolnix
 Section: graphics
 Priority: optional
 Maintainer: Moritz Bunkus <moritz@bunkus.org>
-Build-Depends: debhelper (>> 4.0.0), libogg-dev, libvorbis-dev, libwxgtk2.6-dev | libwxgtk2.8-dev, libexpat1-dev, zlib1g-dev, liblzo-dev | liblzo2-dev, libbz2-dev, libflac-dev, libmagic-dev, libboost-dev (>= 1.34), libboost-regex-dev, libboost-filesystem-dev, libboost-filesystem-dev (<< 1.35) | libboost-system-dev, ruby, libcurl4-gnutls-dev | libcurl4-openssl-dev, libebml-dev (>= 1.2.1-1), libmatroska-dev (>= 1.1.0-1)
+Build-Depends: debhelper (>> 4.0.0), libogg-dev, libvorbis-dev, libwxgtk2.8-dev, libexpat1-dev, zlib1g-dev, liblzo2-dev, libbz2-dev, libflac-dev, libmagic-dev, libboost-dev (>= 1.34), libboost-regex-dev, libboost-filesystem-dev, libboost-filesystem-dev (<< 1.35) | libboost-system-dev, ruby, libcurl4-gnutls-dev | libcurl4-openssl-dev, libebml-dev (>= 1.2.1-1), libmatroska-dev (>= 1.1.0-1)
 Standards-Version: 3.7.2
 
 Package: mkvtoolnix
