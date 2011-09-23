@@ -40,10 +40,10 @@
 
 START_LIBMATROSKA_NAMESPACE
 
-#define LIBMATROSKA_VERSION 0x010200
+#define LIBMATROSKA_VERSION 0x010300
 
-static const std::string KaxCodeVersion = "1.2.0";
-static const std::string KaxCodeDate    = __TIMESTAMP__;
+extern const std::string KaxCodeVersion;
+extern const std::string KaxCodeDate;
 
 /*!
 	\todo Improve the CRC/ECC system (backward and forward possible ?) to fit streaming/live writing/simple reading

@@ -96,7 +96,7 @@
 
 // The LIBEBML_DEBUG symbol is defined, when we are creating a debug build. In this
 // case the debug logging code is compiled in.
-#if (defined(DEBUG)||defined(_DEBUG))&&!defined(LIBEBML_DEBUG)
+#if (defined(DEBUG)||defined(_DEBUG)) && !defined(LIBEBML_DEBUG)
 #define LIBEBML_DEBUG
 #endif
 

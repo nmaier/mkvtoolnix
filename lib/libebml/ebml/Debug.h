@@ -52,7 +52,7 @@ START_LIBEBML_NAMESPACE
 
 static const int MAX_PREFIX_LENGTH = 128;
 
-#if defined(DEBUG)
+#if defined(LIBEBML_DEBUG)
 // define the working debugging class
 
 class EBML_DLL_API ADbg  
@@ -102,7 +102,7 @@ private:
 #endif // WIN32
 };
 
-#else // defined(DEBUG)
+#else // defined(LIBEBML_DEBUG)
 
 // define a class that does nothing (no output)
 
@@ -145,7 +145,7 @@ public:
 	}
 };
 
-#endif // defined(DEBUG)
+#endif // defined(LIBEBML_DEBUG)
 
 extern class EBML_DLL_API ADbg globalDebug;
 

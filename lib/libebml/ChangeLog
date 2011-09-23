@@ -1,3 +1,9 @@
+2011-09-23 robux4/mosu
+New 1.2.2 version:
+    - fix usage of the DEBUG #define (use LIBEBML_DEBUG instead)
+    - The EbmlCodeVersion variable now resides in the library instead of being declared static in the header file.
+    - only use the test element to read once in the loop
+
 2011-06-26 robux4/mosu
 New 1.2.1 version:
     - fix the constructor of CRTError in StdIOCallback (patch from Graham 'gbooker' Booker)

@@ -30,7 +30,7 @@
 
 /*!
 	\file
-	\version \$Id: EbmlVersion.h 756 2011-06-12 09:21:05Z robux4 $
+	\version \$Id: EbmlVersion.h 803 2011-09-11 09:03:43Z mosub $
 	\author Steve Lhomme     <robux4 @ users.sf.net>
 */
 #ifndef LIBEBML_VERSION_H
@@ -42,10 +42,10 @@
 
 START_LIBEBML_NAMESPACE
 
-#define LIBEBML_VERSION 0x010201
+#define LIBEBML_VERSION 0x010202
 
-static const std::string EbmlCodeVersion = "1.2.1";
-static const std::string EbmlCodeDate    = __TIMESTAMP__;
+extern const std::string EbmlCodeVersion;
+extern const std::string EbmlCodeDate;
 
 /*!
 	\todo Closer relation between an element and the context it comes from (context is an element attribute ?)

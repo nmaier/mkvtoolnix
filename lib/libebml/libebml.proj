@@ -2,7 +2,7 @@
 
 LIB ebml
 {
-  PROJECT_VERSION 1.2.1
+  PROJECT_VERSION 1.2.2
 
   INCLUDE .
   EXPINCLUDE .
@@ -14,7 +14,7 @@ LIB ebml
   REDUCE_SIZE .
   FASTER_FLOAT .
   
-//  SOURCE src/Debug.cpp
+  SOURCE src/Debug.cpp
   SOURCE src/EbmlBinary.cpp
   SOURCE src/EbmlContexts.cpp
   SOURCE src/EbmlCrc32.cpp
@@ -38,7 +38,7 @@ LIB ebml
   SOURCE(TARGET_WIN) src/platform/win32/WinIOCallback.cpp
 
   HEADER(TARGET_WIN) src/platform/win32/WinIOCallback.h
-//  HEADER ebml/Debug.h
+  HEADER ebml/Debug.h
   HEADER ebml/EbmlBinary.h
   HEADER ebml/EbmlConfig.h
   HEADER ebml/EbmlContexts.h

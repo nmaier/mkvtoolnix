@@ -30,7 +30,7 @@
 
 /*!
 	\file
-	\version \$Id: EbmlMaster.cpp 708 2011-03-20 17:33:49Z robux4 $
+	\version \$Id: EbmlMaster.cpp 796 2011-09-09 04:00:42Z robux4 $
 	\author Steve Lhomme     <robux4 @ users.sf.net>
 */
 
@@ -145,10 +145,10 @@ uint64 EbmlMaster::UpdateSize(bool bWithDefault, bool bForceRender)
 			continue;
 		(ElementList[Index])->UpdateSize(bWithDefault, bForceRender);
 		uint64 SizeToAdd = (ElementList[Index])->ElementSize(bWithDefault);
-#if defined(_DEBUG) || defined(DEBUG)
+#if defined(LIBEBML_DEBUG)
 		if (static_cast<int64>(SizeToAdd) == (0-1))
 			return (0-1);
-#endif // DEBUG
+#endif // LIBEBML_DEBUG
 		SetSize_(GetSize() + SizeToAdd);
 	}
 	if (bChecksumUsed) {
@@ -204,10 +204,10 @@ bool EbmlMaster::CheckMandatory() const
 	for (EltIdx = 0; EltIdx < EBML_CTX_SIZE(Context); EltIdx++) {
 		if (EBML_CTX_IDX(Context,EltIdx).IsMandatory()) {
 			if (FindElt(EBML_CTX_IDX_INFO(Context,EltIdx)) == NULL) {
-#if defined(_DEBUG) || defined(DEBUG)
+#if defined(LIBEBML_DEBUG)
 				// you are missing this Mandatory element
 // 				const char * MissingName = EBML_INFO_NAME(EBML_CTX_IDX_INFO(Context,EltIdx));
-#endif // DEBUG
+#endif // LIBEBML_DEBUG
 				return false;
 			}
 		}
