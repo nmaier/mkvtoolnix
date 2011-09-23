@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: Moritz Bunkus <moritz@bunkus.org>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2011-09-20 22:00+0200\n"
+"PO-Revision-Date: 2011-09-23 15:23+0300\n"
 "Last-Translator: EuGENIUS <Eugenius_V@mail.ru>\n"
 "Language-Team: Russian <moritz@bunkus.org>\n"
 "Language: ru\n"
@@ -8225,11 +8225,11 @@ msgstr "добавить"
 
 #: src/common/stereo_mode.cpp:58
 msgid "anaglyph (cyan/red)"
-msgstr ""
+msgstr "анаглиф (синий/красный)"
 
 #: src/common/stereo_mode.cpp:60
 msgid "anaglyph (green/magenta)"
-msgstr ""
+msgstr "анаглиф (зеленый/пурпурный)"
 
 #: src/mmg/tabs/input.cpp:185
 msgid "append"
@@ -8269,11 +8269,11 @@ msgstr "Разрядность: %1%"
 
 #: src/common/stereo_mode.cpp:61
 msgid "both eyes laced in one block (left first)"
-msgstr ""
+msgstr "кадры для обоих глаз, упакованные в один блок (левый первый)"
 
 #: src/common/stereo_mode.cpp:62
 msgid "both eyes laced in one block (right first)"
-msgstr ""
+msgstr "кадры для обоих глаз, упакованные в один блок (правый первый)"
 
 #: src/input/r_matroska.cpp:93
 #: src/info/mkvinfo.cpp:1109
@@ -9524,10 +9524,8 @@ msgstr "Да"
 #~ "                 Сбрасывать все сообщения в указанный файл.\n"
 #~ "  -h, --help     Показать эту справку.\n"
 #~ "  -V, --version  Показать информацию о версии.\n"
-#, fuzzy
 #~ msgid "Using the IVF output module.\n"
 #~ msgstr "Применяется модуль вывода IVF.\n"
-#, fuzzy
 #~ msgid "Using the Vp8 video output module.\n"
 #~ msgstr "Применяется модуль вывода видео VP8.\n"
 #~ msgid "VC1 video elementary stream"
