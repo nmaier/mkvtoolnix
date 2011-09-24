@@ -1,3 +1,9 @@
+2011-09-24  Moritz Bunkus  <moritz@bunkus.org>
+
+	* build system: libEBML 1.2.2 and libMatroska 1.3.0 are required
+	for building. If external versions are not found or if they're too
+	old then the included versions will be used as a fallback.
+
 2011-09-21  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: The "writing application" element will not be
