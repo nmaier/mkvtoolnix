@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2011-09-20 21:59+0200\n"
+"PO-Revision-Date: 2011-09-19 18:14+0100\n"
 "Last-Translator: bovirus <bovirus@live.it>\n"
 "Language-Team: Italian <moritz@bunkus.org>\n"
 "Language: it\n"
@@ -3363,9 +3363,9 @@ msgid "File identification failed for '%s'. Return code: %d"
 msgstr "Identificazione file fallita per '%s'. Codice ritornato: %d"
 
 #: src/mmg/tabs/input.cpp:362
-#, fuzzy, c-format, boost-format
+#, c-format, boost-format
 msgid "File identification failed. Return code: %d. Errno: %d (%s). Make sure that you've selected a mkvmerge executable in the settings dialog."
-msgstr "Identificazione file fallita per '%s'. Codice ritornato: %d. Err: %d (%s). Assicurarsi di aver selezionato un eseguibile mkvmerge nella finestra di impostazioni."
+msgstr "Identificazione file fallita. Codice ritornato: %d. Err n.: %d (%s). Assicurarsi di aver selezionato un eseguibile mkvmerge nella finestra di impostazioni."
 
 #: src/mmg/tabs/input.cpp:298
 msgid "File is already processed"
@@ -3859,14 +3859,14 @@ msgid "Invalid format used for the adjustment."
 msgstr "Formato non valido usato per la regolazione."
 
 #: src/mmg/tabs/chapters.cpp:1520
-#, fuzzy, c-format, boost-format
+#, c-format, boost-format
 msgid "Invalid format used for the end time for '%s'. Setting value to 0."
-msgstr "Formato non valido suato per il tempo finale per '%s%'. Impostazione valore a 0."
+msgstr "Formato non valido usato per il tempo finale per '%s'. Impostato valore a 0."
 
 #: src/mmg/tabs/chapters.cpp:1512
-#, fuzzy, c-format, boost-format
+#, c-format, boost-format
 msgid "Invalid format used for the start time for '%s'. Setting value to 0."
-msgstr "Formato non valido suato per il tempo iniziale per '%s%'. Impostazione valore a 0."
+msgstr "Formato non valido usato per il tempo iniziale per '%s'. Impostato valore a 0."
 
 #: src/common/strings/parsing.cpp:221
 msgid "Invalid format: At least minutes and seconds have to be given, but no colon was found"
@@ -4225,9 +4225,8 @@ msgid "MPEG program streams"
 msgstr "Flusso programma MPEG"
 
 #: src/common/file_types.cpp:39
-#, fuzzy
 msgid "MPEG transport streams"
-msgstr "Flusso programma MPEG"
+msgstr "Flusso trasporto MPEG"
 
 #: src/common/file_types.cpp:40
 msgid "MPEG video elementary streams"
@@ -4841,12 +4840,11 @@ msgid "Please enter a description for the new job:"
 msgstr "Inserire una descrizione per la nuova attività:"
 
 #: src/mmg/tabs/chapters.cpp:102
-#, fuzzy
 msgid ""
 "Please enter the values for the language and the\n"
 "country that you want to apply to all the chapters\n"
 "below and including the currently selected entry."
-msgstr "Qui è possibile impostare la lingua e la nazione che si vuole applicare a tutti i capitoli indicati sotto e includendo gli elementi attualmente selezionati."
+msgstr ""
 
 #: src/merge/mkvmerge.cpp:256
 msgid ""
@@ -4856,28 +4854,26 @@ msgid ""
 msgstr ""
 
 #: src/common/property_element.cpp:104 src/mmg/header_editor/frame.cpp:337
-#, fuzzy
 msgid "Previous filename"
-msgstr "File successivo"
+msgstr ""
 
 #: src/info/mkvinfo.cpp:612
-#, fuzzy, boost-format
+#, boost-format
 msgid "Previous filename: %1%"
-msgstr "File successivo: %1%"
+msgstr ""
 
 #: src/mmg/tabs/global.cpp:269
 msgid "Previous segment UID:"
 msgstr "UID segmento precedente:"
 
 #: src/info/mkvinfo.cpp:608
-#, fuzzy, boost-format
+#, boost-format
 msgid "Previous segment UID:%1%"
-msgstr "UID segmento precedente:"
+msgstr ""
 
 #: src/common/property_element.cpp:108 src/mmg/header_editor/frame.cpp:347
-#, fuzzy
 msgid "Previous segment's unique ID"
-msgstr "ID univoco segmento successivo"
+msgstr ""
 
 #: src/mmg/options/mkvmerge.cpp:61
 msgid "Process priority:"
@@ -4921,9 +4917,8 @@ msgid "Querying mkvmerge's capabilities"
 msgstr ""
 
 #: src/common/file_types.cpp:43
-#, fuzzy
 msgid "QuickTime audio/video files"
-msgstr "File audio/video MP4"
+msgstr ""
 
 #: src/input/r_qtmp4.cpp:473
 #, boost-format
@@ -4950,9 +4945,8 @@ msgid "Quicktime/MP4 reader: Could not read the sound description atom for track
 msgstr ""
 
 #: src/input/r_qtmp4.cpp:129
-#, fuzzy
 msgid "Quicktime/MP4 reader: Could not read the source file."
-msgstr "Impossibile creare il file specificato."
+msgstr ""
 
 #: src/input/r_qtmp4.cpp:978
 #, boost-format
@@ -5061,96 +5055,85 @@ msgid "Quicktime/MP4 reader: Unknown/unsupported FourCC '%|1$.4s|' for track %2%
 msgstr ""
 
 #: src/mmg/mmg_dialog.cpp:276
-#, fuzzy
 msgid "Quit the application"
-msgstr "Applicazione muxing: %1%"
+msgstr ""
 
 #: src/mmg/header_editor/frame.cpp:148
-#, fuzzy
 msgid "Quit the header editor"
-msgstr "Editor intestazione"
+msgstr ""
 
 #: src/info/wxwidgets_ui.cpp:111
-#, fuzzy
 msgid "Quits mkvinfo"
-msgstr "Info su mkvinfo"
+msgstr ""
 
 #: src/info/mkvinfo.cpp:881
 msgid "RSA"
 msgstr ""
 
 #: src/mmg/jobs.cpp:477
-#, fuzzy
 msgid "Re-enable the selected job(s)"
-msgstr "Sposta la/le attività in giù"
+msgstr ""
 
 #: src/input/r_mpeg_ps.cpp:371
 msgid "Reading encrypted VOBs is not supported.\n"
 msgstr ""
 
 #: src/common/cli_parser.cpp:181
-#, fuzzy
 msgid "Reads additional command line options from the specified file (see man page)."
 msgstr ""
-"  @fileopzioni            Legge opzioni linea comando addizionali dal\n"
-"                           file specificato (vedi pagina man).\n"
 
 #: src/info/qt_ui.cpp:155
 msgid "Ready"
 msgstr ""
 
 #: src/common/property_element.cpp:154 src/mmg/header_editor/frame.cpp:504
-#, fuzzy
 msgid "Real output sampling frequency in Hz."
-msgstr "Frequenza campionamento audio destinazione"
+msgstr ""
 
 #: src/common/file_types.cpp:45
-#, fuzzy
 msgid "RealMedia audio/video files"
-msgstr "File audio/video MP4"
+msgstr ""
 
 #: src/input/r_real.cpp:377
-#, fuzzy, boost-format
+#, boost-format
 msgid "RealMedia files may contain HE-AAC / AAC+ / SBR AAC audio. In some cases this can NOT be detected automatically. Therefore you have to specifiy '--aac-is-sbr %1%' manually for this input file if the file actually contains SBR AAC. The file will be muxed in the WRONG way otherwise. Also read mkvmerge's documentation.\n"
-msgstr "I file AAC possono conntenere audio HE-AAC / AAC+ / SBR AAC. Ciò non può essere riconosciuto automaticamente. Va specificato manualmente '--aac-is-sbr 0' per questo file sorgente se il file contiene attualmente SBR AAC. Altrimenti il file verrà muxato in modfo ERRATO. Consultare la documentazione di mkvmerge.\n"
+msgstr ""
 
 #: src/common/cli_parser.cpp:180
 msgid "Redirects all messages into this file."
 msgstr ""
 
 #: src/info/mkvinfo.cpp:188
-#, fuzzy, boost-format
+#, boost-format
 msgid "Reference block: %1%.%|2$06d|ms"
-msgstr "Durata blocco: %1%.%|2$06d|ms"
+msgstr ""
 
 #: src/info/mkvinfo.cpp:187
-#, fuzzy, boost-format
+#, boost-format
 msgid "Reference block: -%1%.%|2$06d|ms"
-msgstr "Durata blocco: %1%.%|2$06d|ms"
+msgstr ""
 
 #: src/info/mkvinfo.cpp:189
-#, fuzzy, boost-format
+#, boost-format
 msgid "Reference priority: %1%"
-msgstr "Priorità processo:"
+msgstr ""
 
 #: src/info/mkvinfo.cpp:191
-#, fuzzy, boost-format
+#, boost-format
 msgid "Reference virtual: %1%"
-msgstr "Blocco virtuale: %1%"
+msgstr ""
 
 #: src/mmg/header_editor/frame.cpp:146
-#, fuzzy
 msgid "Reload the current file without saving"
-msgstr "Chiudi il file corrente senza salvare"
+msgstr ""
 
 #: src/mmg/mux_dialog.cpp:76 src/mmg/jobs.cpp:72 src/mmg/jobs.cpp:74
 msgid "Remaining time:"
 msgstr ""
 
 #: src/common/xml/element_parser.cpp:565
-#, fuzzy
 msgid "Remember that special characters like &, <, > and \" must be escaped in the usual HTML way: &amp; for '&', &lt; for '<', &gt; for '>' and &quot; for '\"'."
-msgstr " Ricordarsi che i caratteri speciali tipo &, <, > und \" devonoe ssere isolati dal codice HTML nel modo usuale: &amp; per '&', &lt; per '<', &gt; perr '>' e &quot; per '\"'."
+msgstr ""
 
 #: src/mmg/tabs/chapters.cpp:330
 msgid "Remove chapter"
@@ -5165,9 +5148,8 @@ msgid "Remove name"
 msgstr "Rimuovi nome"
 
 #: src/common/kax_file.cpp:235
-#, fuzzy
 msgid "Resync failed: no valid Matroska level 1 element found.\n"
-msgstr "Non è un file Matroska valido (nessun elemento segmento/livello 0 trovato)"
+msgstr ""
 
 #: src/common/kax_file.cpp:227
 #, boost-format
@@ -5179,9 +5161,8 @@ msgid "Run mkvmerge and start the muxing process"
 msgstr ""
 
 #: src/mmg/mmg_dialog.cpp:275
-#, fuzzy
 msgid "Run the header field editor"
-msgstr "Editor intestazione"
+msgstr ""
 
 #: src/mmg/mmg_dialog.cpp:278
 msgid "S&how the command line"
@@ -5196,14 +5177,12 @@ msgid "SHA1-160"
 msgstr ""
 
 #: src/common/file_types.cpp:46
-#, fuzzy
 msgid "SRT text subtitles"
-msgstr "ottotitoli PGS/PUP"
+msgstr ""
 
 #: src/common/file_types.cpp:47
-#, fuzzy
 msgid "SSA/ASS text subtitles"
-msgstr "ottotitoli PGS/PUP"
+msgstr ""
 
 #: src/mmg/mmg_dialog.cpp:280
 msgid "Sa&ve command line"
@@ -5214,38 +5193,33 @@ msgid "Same directory as the first input file's"
 msgstr "Stessa cartella del primo file sorgente"
 
 #: src/common/property_element.cpp:153 src/mmg/header_editor/frame.cpp:499
-#, fuzzy
 msgid "Sampling frequency in Hz."
-msgstr "Frequenza campionamento audio"
+msgstr ""
 
 #: src/info/mkvinfo.cpp:649
-#, fuzzy, boost-format
+#, boost-format
 msgid "Sampling frequency: %1%"
-msgstr "Frequenza campionamento destinazione: %1%"
+msgstr ""
 
 #: src/mmg/mmg_dialog.cpp:289
 msgid "Save &as"
 msgstr "Salva &come"
 
 #: src/info/qt_ui.cpp:71
-#, fuzzy
 msgid "Save information as"
-msgstr "Errore nel salvataggio delle informazioni"
+msgstr ""
 
 #: src/mmg/mux_dialog.cpp:108
-#, fuzzy
 msgid "Save log"
-msgstr "Salva &come"
+msgstr ""
 
 #: src/mmg/mmg_dialog.cpp:272
-#, fuzzy
 msgid "Save muxing settings to a file"
-msgstr "Carica impostazioni muxing da un file"
+msgstr ""
 
 #: src/mmg/mmg_dialog.cpp:280
-#, fuzzy
 msgid "Save the command line to a file"
-msgstr "Sa&lva linea comando"
+msgstr ""
 
 #: src/mmg/mmg_dialog.cpp:281
 msgid "Save the command line to an option file that can be read by mkvmerge"
@@ -5256,19 +5230,16 @@ msgid "Save the current chapters to a XML file"
 msgstr ""
 
 #: src/mmg/mmg_dialog.cpp:289
-#, fuzzy
 msgid "Save the current chapters to a file with another name"
-msgstr "Chiudi il file corrente senza salvare"
+msgstr ""
 
 #: src/mmg/mmg_dialog.cpp:288
-#, fuzzy
 msgid "Save the current chapters to an existing Matroska file"
-msgstr "Apri un file Matroska esistente"
+msgstr ""
 
 #: src/mmg/header_editor/frame.cpp:145
-#, fuzzy
 msgid "Save the header values"
-msgstr "Imposta valori"
+msgstr ""
 
 #: src/mmg/mmg_dialog.cpp:288
 msgid "Save to &Matroska file"
@@ -5279,9 +5250,9 @@ msgid "Saves the information from the current file to a text file"
 msgstr ""
 
 #: src/info/mkvinfo.cpp:812
-#, fuzzy, boost-format
+#, boost-format
 msgid "Scope: %1% (%2%)"
-msgstr "Algoritmo: %1% (%2%)"
+msgstr ""
 
 #: src/info/mkvinfo.cpp:1154
 #, boost-format
@@ -5297,40 +5268,36 @@ msgid "Seek head"
 msgstr ""
 
 #: src/info/mkvinfo.cpp:1126
-#, fuzzy
 msgid "Seek head (subentries will be skipped)"
-msgstr "Tagli (i sotto elementi verranno ignorati)"
+msgstr ""
 
 #: src/info/mkvinfo.cpp:1168
-#, fuzzy, boost-format
+#, boost-format
 msgid "Seek position: %1%"
-msgstr ", posizione %1%"
+msgstr ""
 
 #: src/extract/timecodes_v2.cpp:202 src/extract/tracks.cpp:359
 #: src/info/wxwidgets_ui.cpp:205 src/info/qt_ui.cpp:177
-#, fuzzy
 msgid "Segment"
-msgstr "Elementi"
+msgstr ""
 
 #: src/info/mkvinfo.cpp:597
-#, fuzzy, boost-format
+#, boost-format
 msgid "Segment UID:%1%"
-msgstr "UID segmento successivo:%1%"
+msgstr ""
 
 #: src/mmg/tabs/global.cpp:262
-#, fuzzy
 msgid "Segment UIDs:"
-msgstr "UID segmento successivo:"
+msgstr ""
 
 #: src/common/property_element.cpp:103 src/mmg/header_editor/frame.cpp:334
-#, fuzzy
 msgid "Segment filename"
-msgstr "File successivo"
+msgstr ""
 
 #: src/info/mkvinfo.cpp:625
-#, fuzzy, boost-format
+#, boost-format
 msgid "Segment filename: %1%"
-msgstr "File successivo: %1%"
+msgstr ""
 
 #: src/mmg/tabs/global.cpp:296
 msgid "Segment info file:"
@@ -5346,9 +5313,8 @@ msgstr "File info segmento (*.xml)|*.xml|%s"
 #: src/propedit/propedit_cli_parser.cpp:105
 #: src/propedit/propedit_cli_parser.cpp:183 src/info/mkvinfo.cpp:547
 #: src/info/wxwidgets_ui.cpp:208 src/info/qt_ui.cpp:178
-#, fuzzy
 msgid "Segment information"
-msgstr "File info segmento:"
+msgstr ""
 
 #: src/extract/timecodes_v2.cpp:256 src/extract/tracks.cpp:389
 #: src/info/mkvinfo.cpp:922 src/info/wxwidgets_ui.cpp:208
@@ -5357,29 +5323,25 @@ msgid "Segment tracks"
 msgstr ""
 
 #: src/common/property_element.cpp:106 src/mmg/header_editor/frame.cpp:343
-#, fuzzy
 msgid "Segment unique ID"
-msgstr "ID univoco segmento successivo"
+msgstr ""
 
 #: src/info/mkvinfo.cpp:1954
-#, fuzzy, boost-format
+#, boost-format
 msgid "Segment, size %1%"
-msgstr " dimensione %1%"
+msgstr ""
 
 #: src/info/mkvinfo.cpp:1952
-#, fuzzy
 msgid "Segment, size unknown"
-msgstr " dimensione sconosciuta"
+msgstr ""
 
 #: src/info/wxwidgets_ui.cpp:263
-#, fuzzy
 msgid "Select Matroska file"
-msgstr "Salva in un file &Matroska"
+msgstr ""
 
 #: src/info/wxwidgets_ui.cpp:277
-#, fuzzy
 msgid "Select output file"
-msgstr "Imposta file &destinazione"
+msgstr ""
 
 #: src/mmg/mmg_dialog.cpp:273
 msgid "Select the file you want to write to"
@@ -5408,9 +5370,8 @@ msgid "Set &output file"
 msgstr "Imposta file &destinazione"
 
 #: src/mmg/tabs/chapters.cpp:117
-#, fuzzy
 msgid "Set country to:"
-msgstr "Nazione:"
+msgstr ""
 
 #: src/common/property_element.cpp:116 src/mmg/header_editor/frame.cpp:399
 msgid ""
@@ -5433,14 +5394,12 @@ msgid "Set if the track is used."
 msgstr ""
 
 #: src/common/property_element.cpp:137
-#, fuzzy
 msgid "Set if the video is interlaced."
-msgstr "Altezza del frame video da visualizzare."
+msgstr ""
 
 #: src/mmg/tabs/chapters.cpp:110
-#, fuzzy
 msgid "Set language to:"
-msgstr "Lingua:"
+msgstr ""
 
 #: src/mmg/options/mmg.cpp:82
 msgid "Set the delay input field from the file name"
@@ -5487,9 +5446,8 @@ msgid "Sets the display width of the track. The height must be set as well, or t
 msgstr ""
 
 #: src/mmg/options/mkvmerge.cpp:64
-#, fuzzy
 msgid "Sets the priority that mkvmerge will run with."
-msgstr "  --priority <priorità>   Imposta la priorità di esecuzione di mkvmerge.\n"
+msgstr ""
 
 #: src/mmg/tabs/global.cpp:263
 msgid ""
@@ -5503,33 +5461,31 @@ msgid "Sets the stereo mode of the video track to this value. If left empty then
 msgstr ""
 
 #: src/info/mkvinfo.cpp:844
-#, fuzzy, boost-format
+#, boost-format
 msgid "Settings: %1%"
-msgstr "Impostazioni codec: %1%"
+msgstr ""
 
 #: src/mmg/cli_options_dlg.cpp:86
 msgid "Several options that control the overall output that mkvmerge creates."
 msgstr ""
 
 #: src/input/r_real.cpp:595
-#, fuzzy, boost-format
+#, boost-format
 msgid "Short AAC audio packet (length: %1% < %2%)\n"
-msgstr "Pacchetto audio ACC inconsistente (lunghezza: %1% != check_lungh %2%)\n"
+msgstr ""
 
 #: src/input/r_real.cpp:588
-#, fuzzy, boost-format
+#, boost-format
 msgid "Short AAC audio packet (length: %1% < 2)\n"
-msgstr "Pacchetto audio ACC inconsistente (lunghezza: %1% != check_lungh %2%)\n"
+msgstr ""
 
 #: src/mpegparser/M2VParser.cpp:399
-#, fuzzy
 msgid "Shortened GOP detected. Some frames have been dropped. You may want to fix the MPEG2 video stream before attempting to multiplex it.\n"
-msgstr "Trovati uno o più frame B senza secondo riferimento nel primo GOP. E' necessario sistemare il flusso video MPEG2 o usare la ricodifica veloce prima di tentare il multiplexing.\n"
+msgstr ""
 
 #: src/info/wxwidgets_ui.cpp:113
-#, fuzzy
 msgid "Show &all elements\tCtrl-A"
-msgstr "&Minimizza tutti gli elementi\tCtrl-P"
+msgstr ""
 
 #: src/info/wxwidgets_ui.cpp:121
 msgid "Show about dialog"
@@ -5548,18 +5504,16 @@ msgid "Show mmg's debug window"
 msgstr "Visualizza finestra debug mmg"
 
 #: src/mmg/mmg_dialog.cpp:296
-#, fuzzy
 msgid "Show program information"
-msgstr "Errore nel salvataggio delle informazioni"
+msgstr ""
 
 #: src/info/info_cli_parser.cpp:48
 msgid "Show statistics for each track in verbose mode."
 msgstr ""
 
 #: src/mmg/mmg_dialog.cpp:278
-#, fuzzy
 msgid "Show the command line mmg creates for mkvmerge"
-msgstr "&Visualizza linea comando"
+msgstr ""
 
 #: src/info/info_cli_parser.cpp:49
 msgid "Show the first 16 bytes of each frame as a hex dump."
@@ -5582,43 +5536,41 @@ msgid "Show this help."
 msgstr ""
 
 #: src/common/cli_parser.cpp:183
-#, fuzzy
 msgid "Show version information."
-msgstr "Errore nel salvataggio delle informazioni"
+msgstr ""
 
 #: src/mmg/options/mmg.cpp:112
 msgid "Shows mmg's debug window in which debug messages will appear. This is only useful if you're helping the author debug a problem in mmg."
 msgstr ""
 
 #: src/info/mkvinfo.cpp:878
-#, fuzzy, boost-format
+#, boost-format
 msgid "Signature algorithm: %1% (%2%)"
-msgstr "Algoritmo: %1% (%2%)"
+msgstr ""
 
 #: src/info/mkvinfo.cpp:887
-#, fuzzy, boost-format
+#, boost-format
 msgid "Signature hash algorithm: %1% (%2%)"
-msgstr "Algritmo cifratura: %1% (%2%)"
+msgstr ""
 
 #: src/info/mkvinfo.cpp:896
-#, fuzzy, boost-format
+#, boost-format
 msgid "Signature key ID: %1%"
-msgstr "ID chiave criptazione: %1%"
+msgstr ""
 
 #: src/info/mkvinfo.cpp:900
-#, fuzzy, boost-format
+#, boost-format
 msgid "Signature: %1%"
-msgstr "CacheMin: %1%"
+msgstr ""
 
 #: src/mmg/header_editor/value_page.cpp:146
-#, fuzzy
 msgid "Signed integer"
-msgstr "  SI: numero intero\n"
+msgstr ""
 
 #: src/info/mkvinfo.cpp:1352
-#, fuzzy, boost-format
+#, boost-format
 msgid "Silent Track Number: %1%"
-msgstr "Numero blocco taglio: %1%"
+msgstr ""
 
 #: src/extract/timecodes_v2.cpp:289
 msgid "Simple block"
@@ -5634,14 +5586,13 @@ msgid "SimpleBlock"
 msgstr ""
 
 #: src/info/mkvinfo.cpp:203
-#, fuzzy, boost-format
+#, boost-format
 msgid "SimpleBlock (%1%track number %2%, %3% frame(s), timecode %|4$.3f|s = %5%)"
-msgstr "Blocco (numero traccia %1%, %2% frame, timecode %|3$.3f|s = %4%)"
+msgstr ""
 
 #: src/mpegparser/M2VParser.cpp:396
-#, fuzzy
 msgid "Single field frame before GOP header detected. Fix the MPEG2 video stream before attempting to multiplex it.\n"
-msgstr "Traovato frame B senza secondo riferimento in un non chiuso GOP. Sistemare il flusso video MPEG2 prima di effettuare il multiplex.\n"
+msgstr ""
 
 #: src/output/p_aac.cpp:73
 #, boost-format
@@ -5725,9 +5676,8 @@ msgid "Start the jobs whose status is 'pending'"
 msgstr ""
 
 #: src/mmg/jobs.cpp:508
-#, fuzzy
 msgid "Start the selected job(s) regardless of their status"
-msgstr "Disabilita le attività selezionate e imposta il loro stato a 'completato'"
+msgstr ""
 
 #: src/mmg/mmg_dialog.cpp:270
 msgid "Start with empty settings"
@@ -5738,9 +5688,8 @@ msgid "Start:"
 msgstr "Inizio:"
 
 #: src/mmg/jobs.cpp:443
-#, fuzzy
 msgid "Started on"
-msgstr ", inziato il %s"
+msgstr ""
 
 #: src/mmg/jobs.cpp:228
 #, c-format, boost-format
@@ -5753,14 +5702,12 @@ msgid "Statistics for track number %1%: number of blocks: %2%; size in bytes: %3
 msgstr ""
 
 #: src/mmg/jobs.cpp:437
-#, fuzzy
 msgid "Status"
-msgstr "Stato:"
+msgstr ""
 
 #: src/mmg/mux_dialog.cpp:74 src/mmg/jobs.cpp:63
-#, fuzzy
 msgid "Status and progress"
-msgstr "Muxing in corso..."
+msgstr ""
 
 #: src/mmg/update_checker.cpp:57 src/mmg/header_editor/value_page.cpp:174
 msgid "Status:"
@@ -5772,9 +5719,9 @@ msgid "Stereo mode parameter: not given in the form <TID>:<n|keyword> where n is
 msgstr ""
 
 #: src/info/mkvinfo.cpp:751
-#, fuzzy, boost-format
+#, boost-format
 msgid "Stereo mode: %1% (%2%)"
-msgstr "Algoritmo: %1% (%2%)"
+msgstr ""
 
 #: src/mmg/header_editor/frame.cpp:494
 msgid "Stereo-3D video mode (0 - 11, see documentation)."
@@ -5799,9 +5746,8 @@ msgid "Stretch this track's timecodes. This entry can have two formats. It is ei
 msgstr ""
 
 #: src/mmg/header_editor/value_page.cpp:144
-#, fuzzy
 msgid "String"
-msgstr "  S:  stringa\n"
+msgstr ""
 
 #: src/extract/xtr_textsubs.cpp:180
 #, boost-format
@@ -5809,9 +5755,9 @@ msgid "Subtitle track %1% is missing some duration elements. Please check the re
 msgstr ""
 
 #: src/mmg/header_editor/track_type_page.cpp:52
-#, fuzzy, c-format, boost-format
+#, c-format, boost-format
 msgid "Subtitle track %u"
-msgstr "Traccia audio %u"
+msgstr ""
 
 #: src/merge/mkvmerge.cpp:362
 msgid "Supported file types:\n"
@@ -5822,14 +5768,12 @@ msgid "Suppress status output."
 msgstr ""
 
 #: src/common/file_types.cpp:48
-#, fuzzy
 msgid "TTA (The lossless True Audio codec)"
-msgstr "FLAC (Free Lossless Audio Codec)"
+msgstr ""
 
 #: src/extract/extract_cli_parser.cpp:84
-#, fuzzy
 msgid "Tag extraction"
-msgstr "Estrazione capitoli"
+msgstr ""
 
 #: src/mmg/tabs/global.cpp:292
 msgid "Tag file:"
@@ -5841,24 +5785,21 @@ msgid "Tag files (*.xml)|*.xml|%s"
 msgstr "File tag (*.xml)|*.xml|%s"
 
 #: src/mmg/tabs/input_general.cpp:275
-#, fuzzy, c-format, boost-format
+#, c-format, boost-format
 msgid "Tag files (*.xml;*.txt)|*.xml;*.txt|%s"
-msgstr "File tag (*.xml)|*.xml|%s"
+msgstr ""
 
 #: src/propedit/propedit_cli_parser.cpp:193
-#, fuzzy
 msgid "Tag selectors"
-msgstr "Modifica selettori"
+msgstr ""
 
 #: src/propedit/options.cpp:181 src/info/mkvinfo.cpp:1818
-#, fuzzy
 msgid "Tags"
-msgstr "Tag:"
+msgstr ""
 
 #: src/merge/output_control.cpp:1363
-#, fuzzy
 msgid "Tags are not allowed in WebM compliant files. No tags will be written into any output file.\n"
-msgstr "I capitoli non sono permessi in un file compatibile WebM. Nessun capitolo verrà registrato nei file destinazione.\n"
+msgstr ""
 
 #: src/merge/pr_generic.cpp:1412
 #, boost-format
@@ -5866,9 +5807,9 @@ msgid "Tags for track ID %1%: %2% entries"
 msgstr ""
 
 #: src/mmg/mmg.cpp:56
-#, fuzzy, c-format, boost-format
+#, c-format, boost-format
 msgid "Tags for track ID %lld (%d entries) from %s"
-msgstr "Tag globali (%d elementi) da %s"
+msgstr ""
 
 #: src/mmg/tabs/input_general.cpp:187
 msgid "Tags:"
@@ -5883,19 +5824,17 @@ msgid "Tells mkvmerge to create a meta seek element at the end of the file conta
 msgstr ""
 
 #: src/info/qt_ui.cpp:71
-#, fuzzy
 msgid "Text files (*.txt);;All files (*.*)"
-msgstr "File Matroska (*.mkv *.mka *.mks *.mk3d);;Tutti i file (*.*)"
+msgstr ""
 
 #: src/mmg/jobs.cpp:410
-#, fuzzy, c-format, boost-format
+#, c-format, boost-format
 msgid "Text files (*.txt)|*.txt|%s"
-msgstr "File registro: (*.txt)|*.txt|%s"
+msgstr ""
 
 #: src/info/wxwidgets_ui.cpp:277
-#, fuzzy
 msgid "Text files (*.txt)|*.txt|All files|*.*"
-msgstr "File registro: (*.txt)|*.txt|%s"
+msgstr ""
 
 #: src/input/r_vobsub.cpp:234
 msgid "The .idx file does not contain an 'id: ...' line to indicate the language.\n"
@@ -5959,9 +5898,8 @@ msgid "The Kate identifaction header could not be parsed (%1%).\n"
 msgstr ""
 
 #: src/mmg/wx_kax_analyzer.cpp:35
-#, fuzzy
 msgid "The Matroska file is analyzed."
-msgstr "Apri un file Matroska"
+msgstr ""
 
 #: src/mmg/header_editor/frame.cpp:703 src/propedit/propedit.cpp:40
 msgid "The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file.\n"
@@ -6004,9 +5942,8 @@ msgid "The argument '%1%' to '%2%' is invalid: too many colons in element '%3%'.
 msgstr ""
 
 #: src/merge/mkvmerge.cpp:1480
-#, fuzzy
 msgid "The argument to '--timecode-scale' must be a number.\n"
-msgstr "'--timecode-scale' è stato usato più di una volta.\n"
+msgstr ""
 
 #: src/mmg/tabs/input.cpp:1390
 #, c-format, boost-format
@@ -6019,9 +5956,9 @@ msgid "The attachment #%1%, ID %2%, MIME type %3%, size %4%, is written to '%5%'
 msgstr ""
 
 #: src/merge/mkvmerge.cpp:1411
-#, fuzzy, boost-format
+#, boost-format
 msgid "The attachment '%1%' could not be read.\n"
-msgstr "La linea %1% del file timecode '%2% non può essere analizzata.\n"
+msgstr ""
 
 #: src/common/xml/element_parser.cpp:217
 #, boost-format
@@ -6043,14 +5980,14 @@ msgid "The changes are written to the file.\n"
 msgstr ""
 
 #: src/mmg/tabs/chapters.cpp:779
-#, fuzzy, c-format, boost-format
+#, c-format, boost-format
 msgid "The chapter '%s' is missing its language."
-msgstr "'--command-line-charset' senza argomenti.\n"
+msgstr ""
 
 #: src/mmg/tabs/chapters.cpp:773
-#, fuzzy, c-format, boost-format
+#, c-format, boost-format
 msgid "The chapter '%s' is missing the start time."
-msgstr "'%1%' manca del nome file.\n"
+msgstr ""
 
 #: src/mmg/mmg_dialog.cpp:600
 msgid ""
@@ -6088,9 +6025,9 @@ msgid "The correction file header was not read correctly.\n"
 msgstr ""
 
 #: src/mmg/options/chapters.cpp:120
-#, fuzzy, c-format, boost-format
+#, c-format, boost-format
 msgid "The country '%s' is not a valid ccTLD and cannot be selected."
-msgstr "'%1%' non è un codice nazione ccTLD valido."
+msgstr ""
 
 #: src/merge/output_control.cpp:1438
 msgid "The cue entries (the index) are being written..."
@@ -6107,9 +6044,9 @@ msgid "The current packet's timecode is smaller than that of the previous packet
 msgstr ""
 
 #: src/input/r_usf.cpp:129
-#, fuzzy, boost-format
+#, boost-format
 msgid "The default language code '%1%' is not a valid ISO639-2 language code and will be ignored.\n"
-msgstr "'%1%' non è un codice lingua ISO639-2 valido."
+msgstr ""
 
 #: src/mmg/tabs/input.cpp:1301
 #, c-format, boost-format
@@ -6172,45 +6109,45 @@ msgstr ""
 
 #: src/extract/attachments.cpp:141 src/extract/tags.cpp:47
 #: src/extract/cuesheets.cpp:208 src/extract/chapters.cpp:47
-#, fuzzy, boost-format
+#, boost-format
 msgid "The file '%1%' could not be opened for reading (%2%)."
-msgstr "Impossibile usare il file '%1%': il file non può essere aperto in lettura.\n"
+msgstr ""
 
 #: src/extract/timecodes_v2.cpp:173 src/extract/tracks.cpp:327
-#, fuzzy, boost-format
+#, boost-format
 msgid "The file '%1%' could not be opened for reading (%2%).\n"
-msgstr "Impossibile usare il file '%1%': il file non può essere aperto in lettura.\n"
+msgstr ""
 
 #: src/common/command_line.cpp:45
-#, fuzzy, boost-format
+#, boost-format
 msgid "The file '%1%' could not be opened for reading command line arguments.\n"
-msgstr "Impossibile usare il file '%1%': il file non può essere aperto in lettura.\n"
+msgstr ""
 
 #: src/extract/tracks.cpp:276 src/extract/xtr_wav.cpp:113
 #: src/extract/xtr_tta.cpp:87 src/extract/xtr_avi.cpp:52
-#, fuzzy, boost-format
+#, boost-format
 msgid "The file '%1%' could not be opened for writing (%2%).\n"
-msgstr "Impossibile usare il file '%1%': il file non può essere aperto in lettura.\n"
+msgstr ""
 
 #: src/extract/attachments.cpp:121 src/extract/xtr_rmff.cpp:40
-#, fuzzy, boost-format
+#, boost-format
 msgid "The file '%1%' could not be opened for writing (%2%, %3%).\n"
-msgstr "Impossibile usare il file '%1%': il file non può essere aperto in lettura.\n"
+msgstr ""
 
 #: src/merge/output_control.cpp:1403
-#, fuzzy, boost-format
+#, boost-format
 msgid "The file '%1%' has been opened for writing.\n"
-msgstr "Impossibile usare il file '%1%': il file non può essere aperto in lettura.\n"
+msgstr ""
 
 #: src/merge/mkvmerge.cpp:2140
-#, fuzzy, boost-format
+#, boost-format
 msgid "The file '%1%' has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n"
-msgstr "Il file %1% è di tipo sconosciuto. Controllare i tipi di file supportati  ('mkvmerge --list-types') e contattare l'autore Moritz Bunkus <moritz@bunkus.org> se il tipo di file è supportato ma non riconosciuto correttamente.\n"
+msgstr ""
 
 #: src/merge/pr_generic.cpp:1327
-#, fuzzy, boost-format
+#, boost-format
 msgid "The file '%1%' is a non-supported file type (%2%).\n"
-msgstr "File '%1%': contenitore non supportato: %2%\n"
+msgstr ""
 
 #: src/common/xml/element_parser.cpp:142
 #, boost-format
@@ -6228,9 +6165,8 @@ msgid "The file '%s' is already processed in combination with the file '%s'. It 
 msgstr ""
 
 #: src/info/qt_ui.cpp:77
-#, fuzzy
 msgid "The file could not be opened for writing."
-msgstr "Impossibile usare il file '%1%': il file non può essere aperto in lettura.\n"
+msgstr ""
 
 #: src/mmg/mmg_dialog.cpp:391
 msgid "The file does not exist."
@@ -6245,9 +6181,8 @@ msgid "The file has been changed by another program since it was read by the hea
 msgstr ""
 
 #: src/propedit/propedit.h:18
-#, fuzzy
 msgid "The file has not been modified."
-msgstr "Si è verificato un errore sconosciuto. Il file è stato modificato."
+msgstr ""
 
 #: src/input/r_tta.cpp:64
 msgid "The file header is too short.\n"
@@ -6258,9 +6193,9 @@ msgid "The file header was not read correctly.\n"
 msgstr ""
 
 #: src/mmg/tabs/input.cpp:346
-#, fuzzy, c-format, boost-format
+#, c-format, boost-format
 msgid "The file is an unsupported container format (%s)."
-msgstr "File '%1%': contenitore non supportato: %2%\n"
+msgstr ""
 
 #: src/propedit/propedit.cpp:94
 msgid "The file is analyzed.\n"
@@ -6283,16 +6218,13 @@ msgid "The file is being fixed, part 4/4..."
 msgstr ""
 
 #: src/common/property_element.cpp:103 src/mmg/header_editor/frame.cpp:334
-#, fuzzy
 msgid "The file name for this segment."
 msgstr ""
-"Un nome file corrispondente\n"
-"al segmento precedente."
 
 #: src/merge/output_control.cpp:927
-#, fuzzy, boost-format
+#, boost-format
 msgid "The file no. %1% ('%2%') does not contain a track with the ID %3%, or that track is not to be copied. The argument for '--append-to' was invalid.\n"
-msgstr "Più di una traccia è stata appesa alla traccia %1% dal file no. %2% ('%3%'). L'argomento per  non è valido.\n"
+msgstr ""
 
 #: src/merge/output_control.cpp:933
 #, boost-format
@@ -6300,9 +6232,9 @@ msgid "The file no. %1% ('%2%') does not contain a track with the ID %3%, or tha
 msgstr ""
 
 #: src/merge/output_control.cpp:869
-#, fuzzy, boost-format
+#, boost-format
 msgid "The file no. %1% ('%2%') is not being appended. The argument for '--append-to' was invalid.\n"
-msgstr "Il file non può essere aggiunto a sè stesso. L'argomento per '--append-to' non è valido.\n"
+msgstr ""
 
 #: src/mmg/header_editor/frame.cpp:250
 msgid "The file you tried to open is not a Matroska file."
@@ -6317,9 +6249,8 @@ msgid "The file you tried to save to is a Matroska file. For this to work you ha
 msgstr ""
 
 #: src/merge/mkvmerge.cpp:2129
-#, fuzzy
 msgid "The first file cannot be appended because there are no files to append to.\n"
-msgstr "Il file non può essere aggiunto a sè stesso. L'argomento per '--append-to' non è valido.\n"
+msgstr ""
 
 #: src/extract/extract_cli_parser.cpp:71
 msgid "The first mode extracts some tracks to external files."
@@ -6403,14 +6334,14 @@ msgid "The language '%s' is not a valid language and cannot be selected."
 msgstr ""
 
 #: src/input/r_usf.cpp:161
-#, fuzzy, boost-format
+#, boost-format
 msgid "The language code '%1%' is not a valid ISO639-2 language code and will be ignored.\n"
-msgstr "'%1%' non è un codice lingua ISO639-2 valido."
+msgstr ""
 
 #: src/merge/timecode_factory.cpp:214
-#, fuzzy, boost-format
+#, boost-format
 msgid "The line %1% of the timecode file '%2%' does not contain a valid floating point number.\n"
-msgstr "La linea %1% del file timecode '%2% non può essere analizzata.\n"
+msgstr ""
 
 #: src/common/translation.cpp:297
 msgid "The locale could not be set properly. Check the LANG, LC_ALL and LC_MESSAGES environment variables.\n"
@@ -6463,9 +6394,9 @@ msgid "The name of the output file '%1%' and of one of the input files is the sa
 msgstr ""
 
 #: src/merge/mkvmerge.cpp:1343
-#, fuzzy, boost-format
+#, boost-format
 msgid "The next UID was already given in '%1% %2%'.\n"
-msgstr "Nessun ID traccia specificato in '--%1% %2%'.\n"
+msgstr ""
 
 #: src/merge/pr_generic.h:377
 msgid "The number of bits per sample of the two audio tracks is different: %1% and %2%"
@@ -6513,14 +6444,14 @@ msgid "The order of the various options is not important."
 msgstr ""
 
 #: src/merge/output_control.cpp:1399
-#, fuzzy, boost-format
+#, boost-format
 msgid "The output file '%1%' could not be opened for writing (%2%).\n"
-msgstr "Impossibile usare il file '%1%': il file non può essere aperto in lettura.\n"
+msgstr ""
 
 #: src/mmg/mmg_dialog.cpp:533 src/mmg/mmg_dialog.cpp:1383
-#, fuzzy, c-format, boost-format
+#, c-format, boost-format
 msgid "The output file '%s' already exists. Do you want to overwrite it?"
-msgstr "Una attività con la descrizione '%s' esiste già. Aggiungerne un'altra con la stessa descrizione?"
+msgstr ""
 
 #: src/mmg/mmg_dialog.cpp:587
 msgid "The output file name is invalid, e.g. it might contain invalid characters like ':'."
@@ -6572,9 +6503,8 @@ msgid "The property value is not a valid unsigned integer in '%1%'. %2%\n"
 msgstr ""
 
 #: src/merge/output_control.cpp:999
-#, fuzzy
 msgid "The reason is unknown."
-msgstr " dimensione sconosciuta"
+msgstr ""
 
 #: src/common/xml/element_parser.cpp:335
 #, boost-format
@@ -6657,19 +6587,18 @@ msgid "The strings 'info', 'segment_info' or 'segmentinfo' select the segment in
 msgstr ""
 
 #: src/merge/pr_generic.cpp:272
-#, fuzzy, boost-format
+#, boost-format
 msgid "The tags in '%1%' could not be parsed: some mandatory elements are missing.\n"
-msgstr "Errore nell'analisi dei tag in '%1%': alcuni elementi fondamentali sono mancanti.\n"
+msgstr ""
 
 #: src/extract/xtr_tta.cpp:80
-#, fuzzy, boost-format
+#, boost-format
 msgid "The temporary file '%1%' could not be opened for reading (%2%).\n"
-msgstr "Impossibile usare il file '%1%': il file non può essere aperto in lettura.\n"
+msgstr ""
 
 #: src/extract/extract_cli_parser.cpp:93
-#, fuzzy
 msgid "The third mode extracts attachments from the source file."
-msgstr "  -M, --no-attachments     Non copia allegati da questo file sorgente.\n"
+msgstr ""
 
 #: src/merge/timecode_factory.cpp:54
 #, boost-format
@@ -6682,9 +6611,9 @@ msgid "The timecode file '%1%' contains an unsupported/unrecognized format line.
 msgstr ""
 
 #: src/merge/timecode_factory.cpp:34
-#, fuzzy, boost-format
+#, boost-format
 msgid "The timecode file '%1%' could not be opened for reading.\n"
-msgstr "Impossibile usare il file '%1%': il file non può essere aperto in lettura.\n"
+msgstr ""
 
 #: src/merge/timecode_factory.cpp:87 src/merge/timecode_factory.cpp:95
 #: src/merge/timecode_factory.cpp:101 src/merge/timecode_factory.cpp:296
@@ -6723,9 +6652,9 @@ msgid "The title for the whole movie."
 msgstr ""
 
 #: src/merge/output_control.cpp:943
-#, fuzzy, boost-format
+#, boost-format
 msgid "The track %1% from file no. %2% ('%3%') is to be appended more than once. The argument for '--append-to' was invalid.\n"
-msgstr "Il file non può essere aggiunto a sè stesso. L'argomento per '--append-to' non è valido.\n"
+msgstr ""
 
 #: src/merge/output_control.cpp:768
 #, boost-format
@@ -6769,9 +6698,9 @@ msgid "There is a new version available online."
 msgstr ""
 
 #: src/merge/output_control.cpp:863 src/merge/output_control.cpp:873
-#, fuzzy, boost-format
+#, boost-format
 msgid "There is no file with the ID '%1%'. The argument for '--append-to' was invalid.\n"
-msgstr "Il file non può essere aggiunto a sè stesso. L'argomento per '--append-to' non è valido.\n"
+msgstr ""
 
 #: src/common/command_line.cpp:236
 #, boost-format
@@ -6791,9 +6720,8 @@ msgid "There were errors in the header values preventing the headers from being 
 msgstr ""
 
 #: src/mmg/mux_dialog.cpp:357
-#, fuzzy
 msgid "There were warnings"
-msgstr "Si sono verificati degli ERRORI."
+msgstr ""
 
 #: src/mmg/mux_dialog.cpp:355
 msgid "There were warnings, or the process was terminated."
@@ -6868,24 +6796,20 @@ msgid "This file contains coordinates in the timecode lines. Such coordinates ar
 msgstr ""
 
 #: src/mmg/header_editor/frame.cpp:262 src/mmg/tabs/chapters.cpp:550
-#, fuzzy
 msgid "This file could not be opened or parsed."
-msgstr "Impossibile usare il file '%1%': il file non può essere aperto in lettura.\n"
+msgstr ""
 
 #: src/propedit/propedit.cpp:99
-#, fuzzy
 msgid "This file could not be opened or parsed.\n"
-msgstr "Impossibile usare il file '%1%': il file non può essere aperto in lettura.\n"
+msgstr ""
 
 #: src/mmg/tabs/chapters.cpp:558
-#, fuzzy
 msgid "This file does not contain any chapters."
-msgstr "Ogni edizione deve contenere almeno un capitolo"
+msgstr ""
 
 #: src/mmg/tabs/chapters.cpp:566
-#, fuzzy
 msgid "This file does not contain valid chapters."
-msgstr "Ogni edizione deve contenere almeno un capitolo"
+msgstr ""
 
 #: src/mmg/tabs/attachments.cpp:159
 msgid "This is the name that will be stored in the output file for this attachment. It defaults to the file name of the original file but can be changed."
@@ -6936,43 +6860,40 @@ msgid "Time slice"
 msgstr ""
 
 #: src/extract/extract_cli_parser.cpp:117
-#, fuzzy
 msgid "Timecode extraction"
-msgstr "Estrazione CUE sheet"
+msgstr ""
 
 #: src/mmg/tabs/input_general.cpp:289
-#, fuzzy, c-format, boost-format
+#, c-format, boost-format
 msgid "Timecode files (*.tmc;*.txt)|*.tmc;*.txt|%s"
-msgstr "File registro: (*.txt)|*.txt|%s"
+msgstr ""
 
 #: src/extract/timecodes_v2.cpp:231 src/extract/tracks.cpp:382
 #: src/info/mkvinfo.cpp:565 src/info/mkvinfo.cpp:1089
-#, fuzzy, boost-format
+#, boost-format
 msgid "Timecode scale: %1%"
-msgstr "Stato codec taglio: %1%"
+msgstr ""
 
 #: src/common/property_element.cpp:128 src/mmg/header_editor/frame.cpp:425
 msgid "Timecode scaling"
 msgstr ""
 
 #: src/mmg/tabs/input_general.cpp:189
-#, fuzzy
 msgid "Timecodes:"
-msgstr "...dopo i timecode:"
+msgstr ""
 
 #: src/common/property_element.cpp:102 src/mmg/header_editor/frame.cpp:331
 msgid "Title"
 msgstr ""
 
 #: src/info/mkvinfo.cpp:629
-#, fuzzy, boost-format
+#, boost-format
 msgid "Title: %1%"
-msgstr "UID file: %1%"
+msgstr ""
 
 #: src/mmg/tabs/attachments.cpp:166
-#, fuzzy
 msgid "To all files"
-msgstr "File tag:"
+msgstr ""
 
 #: src/common/xml/element_parser.cpp:176
 msgid "Too few hexadecimal digits found. The number of digits must be > 0 and divisable by 2."
@@ -7009,9 +6930,9 @@ msgid "Track %1% with the CodecID '%2%' contains invalid \"codec private\" data 
 msgstr ""
 
 #: src/extract/xtr_ogg.cpp:87
-#, fuzzy, boost-format
+#, boost-format
 msgid "Track %1% with the CodecID '%2%' does not contain valid headers.\n"
-msgstr "Non supportata estrazione traccia numero %1% con ID codec '%2%'.\n"
+msgstr ""
 
 #: src/extract/xtr_wav.cpp:41
 #, boost-format
@@ -7058,9 +6979,9 @@ msgid "Track %1%: Subtitle entry number %2% is missing its duration. Assuming a 
 msgstr ""
 
 #: src/input/r_qtmp4.cpp:442
-#, fuzzy, boost-format
+#, boost-format
 msgid "Track %1%: The AAC information could not be parsed.\n"
-msgstr "La linea %1% del file timecode '%2% non può essere analizzata.\n"
+msgstr ""
 
 #: src/extract/xtr_aac.cpp:62 src/extract/xtr_aac.cpp:74
 #, boost-format
@@ -7073,25 +6994,22 @@ msgid "Track ID %1%: %2% (%3%)"
 msgstr ""
 
 #: src/common/property_element.cpp:114 src/mmg/header_editor/frame.cpp:394
-#, fuzzy
 msgid "Track UID"
-msgstr "Nome traccia:"
+msgstr ""
 
 #: src/info/mkvinfo.cpp:965
-#, fuzzy, boost-format
+#, boost-format
 msgid "Track UID: %1%"
-msgstr "UID file: %1%"
+msgstr ""
 
 #: src/extract/extract_cli_parser.cpp:70
-#, fuzzy
 msgid "Track extraction"
-msgstr "Estrazione capitoli"
+msgstr ""
 
 #: src/propedit/options.cpp:164 src/propedit/propedit_cli_parser.cpp:106
 #: src/propedit/propedit_cli_parser.cpp:186
-#, fuzzy
 msgid "Track headers"
-msgstr "Nome traccia:"
+msgstr ""
 
 #: src/mmg/tabs/input_general.cpp:179
 msgid "Track name:"
@@ -7107,19 +7025,19 @@ msgid "Track number %1% has been encrypted and decryption has not yet been imple
 msgstr ""
 
 #: src/info/mkvinfo.cpp:958
-#, fuzzy, boost-format
+#, boost-format
 msgid "Track number: %1%"
-msgstr "Numero collegamento: %1%"
+msgstr ""
 
 #: src/info/mkvinfo.cpp:1047
-#, fuzzy, boost-format
+#, boost-format
 msgid "Track overlay: %1%"
-msgstr "Blocco virtuale: %1%"
+msgstr ""
 
 #: src/info/mkvinfo.cpp:988
-#, fuzzy, boost-format
+#, boost-format
 msgid "Track type: %1%"
-msgstr "Tipo documento: %1%"
+msgstr ""
 
 #: src/extract/xtr_base.cpp:120
 msgid "Tracks with unsupported content encoding schemes (compression or encryption) cannot be extracted.\n"
@@ -7134,9 +7052,9 @@ msgid "TrueHD audio streams know two frame types: sync frames and non-sync frame
 msgstr ""
 
 #: src/extract/xtr_vobsub.cpp:92
-#, fuzzy, boost-format
+#, boost-format
 msgid "Two VobSub tracks can only be extracted into the same file if their CodecPrivate data matches. This is not the case for the tracks %1% and %2%.\n"
-msgstr "Impossibile estrarre di differenti tipi dallo stesso file. Questo è stato richiesto per le tracce %1% e %2%.\n"
+msgstr ""
 
 #: src/common/property_element.cpp:142 src/mmg/header_editor/frame.cpp:465
 msgid ""
@@ -7149,27 +7067,25 @@ msgid "Type:"
 msgstr ""
 
 #: src/info/mkvinfo.cpp:817
-#, fuzzy, boost-format
+#, boost-format
 msgid "Type: %1% (%2%)"
-msgstr "Algoritmo: %1% (%2%)"
+msgstr ""
 
 #: src/mmg/tabs/chapters.cpp:338
 msgid "UID:"
 msgstr ""
 
 #: src/common/file_types.cpp:49
-#, fuzzy
 msgid "USF text subtitles"
-msgstr "ottotitoli PGS/PUP"
+msgstr ""
 
 #: src/common/ebml.cpp:85
 msgid "UTFstring_to_cstrutf8: Invalid wide character. Please contact moritz@bunkus.org if you think that this is not true."
 msgstr ""
 
 #: src/mpegparser/M2VParser.cpp:244
-#, fuzzy
 msgid "Unexpected picture frame after single field frame. Fix the MPEG2 video stream before attempting to multiplex it.\n"
-msgstr "Traovato frame B senza secondo riferimento in un non chiuso GOP. Sistemare il flusso video MPEG2 prima di effettuare il multiplex.\n"
+msgstr ""
 
 #: src/info/mkvinfo.cpp:369
 msgid "Unknown"
@@ -7216,28 +7132,28 @@ msgid "Unknown format for the segment UID '%3%' in '%1% %2%'.\n"
 msgstr ""
 
 #: src/input/r_vobsub.cpp:607
-#, fuzzy, boost-format
+#, boost-format
 msgid "Unknown header 0x%|1$02x|%|2$02x|%|3$02x|%|4$02x|\n"
-msgstr "Errore PTS: 0x%|1$02x| %|2$02x|%|3$02x| %|4$02x|%|5$02x|\n"
+msgstr ""
 
 #: src/extract/extract_cli_parser.cpp:222
-#, fuzzy, boost-format
+#, boost-format
 msgid "Unknown mode '%1%'.\n"
-msgstr "<!-- Elemento sconosciuto '%1%' -->\n"
+msgstr ""
 
 #: src/common/mm_io_win.cpp:69 src/common/mm_io.cpp:112
 msgid "Unknown open mode"
 msgstr ""
 
 #: src/common/cli_parser.cpp:113
-#, fuzzy, boost-format
+#, boost-format
 msgid "Unknown option '%1%'.\n"
-msgstr "<!-- Elemento sconosciuto '%1%' -->\n"
+msgstr ""
 
 #: src/propedit/propedit_cli_parser.cpp:42
-#, fuzzy, boost-format
+#, boost-format
 msgid "Unknown parse mode in '%1% %2%'.\n"
-msgstr "E' permesso solo un file capitolo in '%1% %2%'.\n"
+msgstr ""
 
 #: src/input/r_avi.cpp:585
 #, boost-format
@@ -7245,14 +7161,13 @@ msgid "Unknown/unsupported audio format 0x%|1$04x| for this audio track.\n"
 msgstr ""
 
 #: src/extract/extract_cli_parser.cpp:230
-#, fuzzy, boost-format
+#, boost-format
 msgid "Unrecognized command line option '%1%'.\n"
-msgstr "Aggiungi opzioni linea di comando"
+msgstr ""
 
 #: src/mmg/header_editor/value_page.cpp:145
-#, fuzzy
 msgid "Unsigned integer"
-msgstr "  UI: intero non firmato\n"
+msgstr ""
 
 #: src/common/xml/element_parser.cpp:81
 #, boost-format
@@ -7282,9 +7197,8 @@ msgid "Usage"
 msgstr ""
 
 #: src/mmg/tabs/global.cpp:256
-#, fuzzy
 msgid "Use 'segment linking' for the resulting files. For an in-depth explanation of this feature consult the mkvmerge documentation."
-msgstr "Per una spiegazione dettagliata del collegamento file/segmento e di questa funzione consultare al documentazione di mkvmerge."
+msgstr ""
 
 #: src/mmg/cli_options_dlg.cpp:127
 msgid "Use fixed values for the elements that change with each file otherwise (muxing date, segment UID, track UIDs etc.). Two files muxed with the same settings and this switch activated will be identical."
@@ -7310,8 +7224,8 @@ msgstr "Opzioni utente:"
 msgid "Using a NALU size length of 3 bytes might result in tracks that won't be decodable with certain AVC/h.264 codecs.\n"
 msgstr ""
 
-#: src/input/r_ac3.cpp:90 src/input/r_mpeg_ps.cpp:1180
-#: src/input/r_mpeg_ts.cpp:1016 src/input/r_matroska.cpp:1557
+#: src/input/r_ac3.cpp:90 src/input/r_mpeg_ts.cpp:1016
+#: src/input/r_mpeg_ps.cpp:1180 src/input/r_matroska.cpp:1557
 #, boost-format
 msgid "Using the %1%AC3 output module.\n"
 msgstr ""
@@ -7365,8 +7279,8 @@ msgid "Using the DTS demultiplexer.\n"
 msgstr ""
 
 #: src/input/r_avi.cpp:689 src/input/r_dts.cpp:114
-#: src/input/r_mpeg_ps.cpp:1185 src/input/r_wav.cpp:354
-#: src/input/r_mpeg_ts.cpp:1020 src/input/r_matroska.cpp:1577
+#: src/input/r_mpeg_ts.cpp:1020 src/input/r_mpeg_ps.cpp:1185
+#: src/input/r_wav.cpp:354 src/input/r_matroska.cpp:1577
 msgid "Using the DTS output module.\n"
 msgstr ""
 
@@ -7375,9 +7289,8 @@ msgid "Using the Dirac demultiplexer.\n"
 msgstr ""
 
 #: src/input/r_dirac.cpp:96 src/input/r_matroska.cpp:1475
-#, fuzzy
 msgid "Using the Dirac video output module.\n"
-msgstr "Usa la stessa precedente cartella destinazione"
+msgstr ""
 
 #: src/input/r_flac.cpp:124
 msgid "Using the FLAC demultiplexer.\n"
@@ -7413,7 +7326,7 @@ msgid "Using the MPEG PS demultiplexer.\n"
 msgstr ""
 
 #: src/input/r_qtmp4.cpp:1537 src/input/r_mp3.cpp:71 src/input/r_avi.cpp:561
-#: src/input/r_mpeg_ps.cpp:1175 src/input/r_mpeg_ts.cpp:1012
+#: src/input/r_mpeg_ts.cpp:1012 src/input/r_mpeg_ps.cpp:1175
 #: src/input/r_ogm.cpp:1030 src/input/r_matroska.cpp:1607
 msgid "Using the MPEG audio output module.\n"
 msgstr ""
@@ -7423,8 +7336,8 @@ msgstr ""
 msgid "Using the MPEG-%1% video output module.\n"
 msgstr ""
 
-#: src/input/r_avi.cpp:323 src/input/r_mpeg_ps.cpp:1201
-#: src/input/r_mpeg_es.cpp:179 src/input/r_mpeg_ts.cpp:1048
+#: src/input/r_avi.cpp:323 src/input/r_mpeg_ts.cpp:1048
+#: src/input/r_mpeg_ps.cpp:1201 src/input/r_mpeg_es.cpp:179
 msgid "Using the MPEG-1/2 video output module.\n"
 msgstr ""
 
@@ -7432,8 +7345,8 @@ msgstr ""
 msgid "Using the MPEG-4 part 10 (AVC) video output module.\n"
 msgstr ""
 
-#: src/input/r_avi.cpp:348 src/input/r_avc.cpp:136
-#: src/input/r_mpeg_ps.cpp:1214 src/input/r_mpeg_ts.cpp:1068
+#: src/input/r_avi.cpp:348 src/input/r_mpeg_ts.cpp:1068
+#: src/input/r_avc.cpp:136 src/input/r_mpeg_ps.cpp:1214
 #: src/input/r_ogm.cpp:1154 src/input/r_matroska.cpp:1849
 msgid "Using the MPEG-4 part 10 ES video output module.\n"
 msgstr ""
@@ -7502,7 +7415,7 @@ msgstr ""
 msgid "Using the Theora video output module.\n"
 msgstr ""
 
-#: src/input/r_mpeg_ps.cpp:1190 src/input/r_mpeg_ts.cpp:1024
+#: src/input/r_mpeg_ts.cpp:1024 src/input/r_mpeg_ps.cpp:1190
 msgid "Using the TrueHD output module.\n"
 msgstr ""
 
@@ -7522,8 +7435,8 @@ msgstr ""
 msgid "Using the VC1 ES demultiplexer.\n"
 msgstr ""
 
-#: src/input/r_vc1.cpp:96 src/input/r_mpeg_ps.cpp:1219
-#: src/input/r_mpeg_ts.cpp:1084 src/input/r_matroska.cpp:1877
+#: src/input/r_vc1.cpp:96 src/input/r_mpeg_ts.cpp:1084
+#: src/input/r_mpeg_ps.cpp:1219 src/input/r_matroska.cpp:1877
 msgid "Using the VC1 video output module.\n"
 msgstr ""
 
@@ -7556,9 +7469,8 @@ msgstr ""
 
 #: src/input/r_avi.cpp:743 src/input/r_ogm.cpp:1070
 #: src/input/r_matroska.cpp:1632
-#, fuzzy
 msgid "Using the Vorbis output module.\n"
-msgstr "Usa la stessa precedente cartella destinazione"
+msgstr ""
 
 #: src/input/r_wav.cpp:565
 msgid "Using the WAV demultiplexer.\n"
@@ -7604,14 +7516,12 @@ msgstr ""
 
 #: src/input/r_avi.cpp:360 src/input/r_ogm.cpp:1263
 #: src/input/r_matroska.cpp:1488
-#, fuzzy
 msgid "Using the video output module.\n"
-msgstr "Usa la stessa precedente cartella destinazione"
+msgstr ""
 
 #: src/common/file_types.cpp:50
-#, fuzzy
 msgid "VC1 elementary streams"
-msgstr "Flussi elementare AVC/h.264"
+msgstr ""
 
 #: src/common/hacks.cpp:60
 msgid "Valid hacks are:\n"
@@ -7626,48 +7536,40 @@ msgid "Verify the current chapter entries to see if there are any errors"
 msgstr ""
 
 #: src/common/property_element.cpp:147 src/mmg/header_editor/frame.cpp:489
-#, fuzzy
 msgid "Video aspect ratio type"
-msgstr "Tipo rapporto aspetto: %1%%2%"
+msgstr ""
 
 #: src/common/property_element.cpp:146 src/mmg/header_editor/frame.cpp:485
-#, fuzzy
 msgid "Video crop bottom"
-msgstr "Ritaglio pixel inferiore: %1%"
+msgstr ""
 
 #: src/common/property_element.cpp:143 src/mmg/header_editor/frame.cpp:470
-#, fuzzy
 msgid "Video crop left"
-msgstr "Ritaglio pixel a sinistra: %1%"
+msgstr ""
 
 #: src/common/property_element.cpp:145 src/mmg/header_editor/frame.cpp:480
-#, fuzzy
 msgid "Video crop right"
-msgstr "Ritaglio pixel a destra: %1%"
+msgstr ""
 
 #: src/common/property_element.cpp:144 src/mmg/header_editor/frame.cpp:475
-#, fuzzy
 msgid "Video crop top"
-msgstr "Ritaglio pixel superiore: %1%"
+msgstr ""
 
 #: src/common/property_element.cpp:141 src/mmg/header_editor/frame.cpp:460
-#, fuzzy
 msgid "Video display height"
-msgstr "Altezza visualizzazione: %1%"
+msgstr ""
 
 #: src/common/property_element.cpp:142 src/mmg/header_editor/frame.cpp:465
 msgid "Video display unit"
 msgstr ""
 
 #: src/common/property_element.cpp:140 src/mmg/header_editor/frame.cpp:455
-#, fuzzy
 msgid "Video display width"
-msgstr "Visualizza larghezza: %1%"
+msgstr ""
 
 #: src/mpegparser/M2VParser.cpp:163
-#, fuzzy
 msgid "Video ended with a shortened group of pictures. Some frames have been dropped. You may want to fix the MPEG2 video stream before attempting to multiplex it.\n"
-msgstr "Trovati uno o più frame B senza secondo riferimento nel primo GOP. E' necessario sistemare il flusso video MPEG2 o usare la ricodifica veloce prima di tentare il multiplexing.\n"
+msgstr ""
 
 #: src/common/property_element.cpp:137
 msgid "Video interlaced flag"
@@ -7679,42 +7581,37 @@ msgid "Video packet assembly failed. Error code: %1% (%2%)\n"
 msgstr ""
 
 #: src/common/property_element.cpp:139 src/mmg/header_editor/frame.cpp:450
-#, fuzzy
 msgid "Video pixel height"
-msgstr "Altezza pixel: %1%"
+msgstr ""
 
 #: src/common/property_element.cpp:138 src/mmg/header_editor/frame.cpp:445
-#, fuzzy
 msgid "Video pixel width"
-msgstr "Larghezza pixel: %1%"
+msgstr ""
 
 #: src/common/property_element.cpp:149 src/mmg/header_editor/frame.cpp:494
 msgid "Video stereo mode"
 msgstr ""
 
 #: src/info/mkvinfo.cpp:682
-#, fuzzy
 msgid "Video track"
-msgstr "Una traccia"
+msgstr ""
 
 #: src/mmg/header_editor/track_type_page.cpp:49
-#, fuzzy, c-format, boost-format
+#, c-format, boost-format
 msgid "Video track %u"
-msgstr "Traccia audio %u"
+msgstr ""
 
 #: src/mmg/jobs.cpp:490
 msgid "View the output that mkvmerge generated during the muxing process for the selected job(s)"
 msgstr ""
 
 #: src/common/file_types.cpp:51
-#, fuzzy
 msgid "VobButtons"
-msgstr "Pulsanti"
+msgstr ""
 
 #: src/common/file_types.cpp:52
-#, fuzzy
 msgid "VobSub subtitles"
-msgstr "ottotitoli PGS/PUP"
+msgstr ""
 
 #: src/common/file_types.cpp:53
 msgid "WAVE (uncompressed PCM audio)"
@@ -7746,42 +7643,37 @@ msgid "Warnings:"
 msgstr ""
 
 #: src/common/file_types.cpp:55
-#, fuzzy
 msgid "WebM audio/video files"
-msgstr "File audio/video MP4"
+msgstr ""
 
 #: src/mmg/options/mmg.cpp:83
 msgid "When a file is added its name is scanned. If it contains the word 'DELAY' followed by a number then this number is automatically put into the 'delay' input field for any audio track found in the file."
 msgstr ""
 
 #: src/common/property_element.cpp:138 src/mmg/header_editor/frame.cpp:445
-#, fuzzy
 msgid "Width of the encoded video frames in pixels."
-msgstr "Altezza in pixel del frame codificato."
+msgstr ""
 
 #: src/common/property_element.cpp:140 src/mmg/header_editor/frame.cpp:455
-#, fuzzy
 msgid "Width of the video frames to display."
-msgstr "Altezza del frame video da visualizzare."
+msgstr ""
 
 #: src/mmg/cli_options_dlg.cpp:102
 msgid "Write durations for all blocks. This will increase file size and does not offer any additional value for players at the moment."
 msgstr ""
 
 #: src/extract/extract_cli_parser.cpp:94
-#, fuzzy
 msgid "Write the attachment with the ID 'AID' to 'outname'."
-msgstr "Non trovato il file allegato con ID %1%.\n"
+msgstr ""
 
 #: src/extract/extract_cli_parser.cpp:77
-#, fuzzy
 msgid "Write track with the ID TID to the file 'out'."
-msgstr "Nessuna traccia rilevata nel file sorgente con l'ID %1%.\n"
+msgstr ""
 
 #: src/info/mkvinfo.cpp:580
-#, fuzzy, boost-format
+#, boost-format
 msgid "Writing application: %1%"
-msgstr "Applicazione muxing: %1%"
+msgstr ""
 
 #: src/info/wxwidgets_ui.cpp:248
 msgid "Writing info"
@@ -7793,9 +7685,9 @@ msgid "Writing the VobSub index file '%1%'.\n"
 msgstr ""
 
 #: src/common/kate.cpp:61
-#, fuzzy, boost-format
+#, boost-format
 msgid "Wrong Kate version: %1%.%2% > %3%.x"
-msgstr "Versione tipo documento: %1%"
+msgstr ""
 
 #: src/common/theora.cpp:47
 #, boost-format
@@ -7803,14 +7695,12 @@ msgid "Wrong Theora version: %1%.%2%.%3% != 3.2.x"
 msgstr ""
 
 #: src/merge/mkvmerge.cpp:1702
-#, fuzzy
 msgid "Wrong argument to '--split-max-files'.\n"
-msgstr "Argomenti mancanti per '--output-charset'.\n"
+msgstr ""
 
 #: src/mmg/options/mkvmerge.cpp:117
-#, fuzzy
 msgid "Wrong file chosen"
-msgstr "File selezionato errato"
+msgstr ""
 
 #: src/mmg/header_editor/frame.cpp:250 src/mmg/tabs/chapters.cpp:643
 #: src/mmg/tabs/chapters.cpp:686
@@ -7878,9 +7768,9 @@ msgid ""
 msgstr ""
 
 #: src/common/compression.cpp:139 src/common/compression.cpp:176
-#, fuzzy, boost-format
+#, boost-format
 msgid "Zlib decompression failed. Result: %1%\n"
-msgstr "Compressione LZO fallita. Risultato: %1%\n"
+msgstr ""
 
 #: src/info/mkvinfo.cpp:202 src/info/mkvinfo.cpp:206
 #, boost-format
@@ -7892,9 +7782,8 @@ msgid "aac_reader: ADIF header files are not supported."
 msgstr ""
 
 #: src/input/r_aac.cpp:88
-#, fuzzy
 msgid "aac_reader: Could not open the file."
-msgstr "Impossibile aprire/leggere il file '%1%'."
+msgstr ""
 
 #: src/input/r_aac.cpp:57
 #, boost-format
@@ -7907,18 +7796,16 @@ msgid "aac_reader: No valid AAC packet found in the first %1% bytes.\n"
 msgstr ""
 
 #: src/mmg/jobs.cpp:344 src/mmg/jobs.cpp:453 src/mmg/jobs.cpp:531
-#, fuzzy
 msgid "aborted"
-msgstr "Interrompi"
+msgstr ""
 
 #: src/output/p_ac3.cpp:213
 msgid "ac3_bs_packetizer::add_to_buffer(): Untested code ('size' is odd). If mkvmerge crashes or if the resulting file does not contain the complete and correct audio track, then please contact the author Moritz Bunkus at moritz@bunkus.org.\n"
 msgstr ""
 
 #: src/input/r_ac3.cpp:67
-#, fuzzy
 msgid "ac3_reader: Could not open the source file."
-msgstr "Impossibile creare il file specificato."
+msgstr ""
 
 #: src/input/r_ac3.cpp:62
 #, boost-format
@@ -7951,9 +7838,8 @@ msgid "audio"
 msgstr ""
 
 #: src/input/r_avc.cpp:122
-#, fuzzy
 msgid "avc_es_reader: Could not open the source file."
-msgstr "Impossibile creare il file specificato."
+msgstr ""
 
 #: src/input/r_avc.cpp:106
 msgid "avc_es_reader: Should not have happened."
@@ -7965,18 +7851,17 @@ msgid "avi_reader: Could not initialize AVI source. Reason: %1%"
 msgstr ""
 
 #: src/input/r_avi.cpp:107
-#, fuzzy
 msgid "avi_reader: Could not read the source file."
-msgstr "Impossibile creare il file specificato."
+msgstr ""
 
 #: src/input/r_avi.cpp:104
 msgid "avi_reader: Source is not a valid AVI file."
 msgstr ""
 
 #: src/info/mkvinfo.cpp:671
-#, fuzzy, boost-format
+#, boost-format
 msgid "bits per sample: %1%"
-msgstr "Nome file:  %1%"
+msgstr ""
 
 #: src/common/stereo_mode.cpp:61
 msgid "both eyes laced in one block (left first)"
@@ -7991,9 +7876,9 @@ msgid "buttons"
 msgstr "Pulsanti"
 
 #: src/common/compression.cpp:240
-#, fuzzy, boost-format
+#, boost-format
 msgid "bzip2 compression failed. Result: %1%\n"
-msgstr "Compressione LZO fallita. Risultato: %1%\n"
+msgstr ""
 
 #: src/common/compression.cpp:203
 msgid "bzlib_compressor_c::decompress() not implemented\n"
@@ -8005,9 +7890,9 @@ msgid "cet_index: '%1%' not found\n"
 msgstr ""
 
 #: src/info/mkvinfo.cpp:660
-#, fuzzy, boost-format
+#, boost-format
 msgid "channels: %1%"
-msgstr "Canali: %1%"
+msgstr ""
 
 #: src/common/stereo_mode.cpp:53
 msgid "checkerboard (left first)"
@@ -8034,9 +7919,8 @@ msgid "completed with warnings"
 msgstr ""
 
 #: src/info/mkvinfo.cpp:819
-#, fuzzy
 msgid "compression"
-msgstr "Compressione:"
+msgstr ""
 
 #: src/input/r_corepicture.cpp:85
 msgid "corepicture_reader: Could not open the source file."
@@ -8057,14 +7941,14 @@ msgid "default"
 msgstr "Predefinito"
 
 #: src/info/mkvinfo.cpp:1064
-#, fuzzy, boost-format
+#, boost-format
 msgid "default duration: %|1$.3f|ms (%|2$.3f| fps for a video track)"
-msgstr "Durata predifinita: %|1$.3f|ms (%|2$.3f| fps per una traccia video)"
+msgstr ""
 
 #: src/common/compression.cpp:161
-#, fuzzy, boost-format
+#, boost-format
 msgid "deflateInit() failed. Result: %1%\n"
-msgstr "BZ2_bzCompressInit() fallito. Risultato: %1%\n"
+msgstr ""
 
 #: src/input/r_dirac.cpp:82
 msgid "dirac_es_reader: Could not open the source file."
@@ -8075,24 +7959,22 @@ msgid "disable all"
 msgstr "Disabilita tutto"
 
 #: src/info/mkvinfo.cpp:1619
-#, fuzzy
 msgid "discardable, "
-msgstr "Disabilita tutto"
+msgstr ""
 
 #: src/info/mkvinfo.cpp:707
-#, fuzzy, boost-format
+#, boost-format
 msgid "display height: %1%"
-msgstr "Altezza visualizzazione: %1%"
+msgstr ""
 
 #: src/info/mkvinfo.cpp:702
-#, fuzzy, boost-format
+#, boost-format
 msgid "display width: %1%"
-msgstr "Visualizza larghezza: %1%"
+msgstr ""
 
 #: src/mmg/jobs.cpp:529 src/mmg/jobs.cpp:717
-#, fuzzy
 msgid "done"
-msgstr " completato\n"
+msgstr ""
 
 #: src/mmg/jobs.cpp:530
 msgid "done/warnings"
@@ -8103,9 +7985,8 @@ msgid "down"
 msgstr "Giù"
 
 #: src/input/r_dts.cpp:66
-#, fuzzy
 msgid "dts_reader: Could not open the source file."
-msgstr "Impossibile creare il file specificato."
+msgstr ""
 
 #: src/input/r_dts.cpp:62
 #, boost-format
@@ -8126,9 +8007,8 @@ msgid "enabled"
 msgstr "abilitato"
 
 #: src/info/mkvinfo.cpp:820
-#, fuzzy
 msgid "encryption"
-msgstr "nessuna criptazione"
+msgstr ""
 
 #: src/input/r_qtmp4.cpp:516 src/input/r_qtmp4.cpp:598
 #: src/input/r_qtmp4.cpp:632 src/input/r_qtmp4.cpp:644
@@ -8172,33 +8052,29 @@ msgid "flac_reader: Could not initialize the FLAC decoder.\n"
 msgstr ""
 
 #: src/input/r_flac.cpp:118
-#, fuzzy
 msgid "flac_reader: Could not open the source file."
-msgstr "Impossibile creare il file specificato."
+msgstr ""
 
 #: src/input/r_flac.cpp:141
-#, fuzzy
 msgid "flac_reader: Could not read a header packet.\n"
-msgstr "Impossibile leggere l'intestazione pacchetto FLAC.\n"
+msgstr ""
 
 #: src/input/r_flac.cpp:127
-#, fuzzy
 msgid "flac_reader: Could not read all header packets."
-msgstr "Impossibile leggere l'intestazione pacchetto FLAC.\n"
+msgstr ""
 
 #: src/input/r_flac.cpp:240
-#, fuzzy
 msgid "flac_reader: Could not read all header packets.\n"
-msgstr "Impossibile leggere l'intestazione pacchetto FLAC.\n"
+msgstr ""
 
 #: src/input/r_flac.cpp:184
 msgid "flac_reader: Could not set metadata_respond_all.\n"
 msgstr ""
 
 #: src/input/r_flac.cpp:321
-#, fuzzy, boost-format
+#, boost-format
 msgid "flac_reader: Error parsing the file: %1%\n"
-msgstr "Errore nell'analisi del file"
+msgstr ""
 
 #: src/input/r_flac.cpp:182
 msgid "flac_reader: FLAC__stream_decoder_new() failed.\n"
@@ -8209,9 +8085,8 @@ msgid "flac_reader: could not initialize the FLAC packetizer.\n"
 msgstr ""
 
 #: src/mmg/tabs/input_extra.cpp:87
-#, fuzzy
 msgid "for all frames"
-msgstr "1: tutti i frame"
+msgstr ""
 
 #: src/input/r_vc1.cpp:52 src/input/r_avc.cpp:76
 msgid "have an xcptn\n"
@@ -8234,9 +8109,9 @@ msgid "highest"
 msgstr "altissima"
 
 #: src/common/compression.cpp:124
-#, fuzzy, boost-format
+#, boost-format
 msgid "inflateInit() failed. Result: %1%\n"
-msgstr "BZ2_bzCompressInit() fallito. Risultato: %1%\n"
+msgstr ""
 
 #: src/mmg/mux_dialog.cpp:77 src/mmg/jobs.cpp:73 src/mmg/jobs.cpp:75
 #: src/mmg/jobs.cpp:163
@@ -8244,18 +8119,17 @@ msgid "is being estimated"
 msgstr ""
 
 #: src/input/r_ivf.cpp:62
-#, fuzzy
 msgid "ivf_reader: Could not open the file."
-msgstr "Impossibile aprire/leggere il file '%1%'."
+msgstr ""
 
 #: src/info/mkvinfo.cpp:1617
 msgid "key, "
 msgstr ""
 
 #: src/info/mkvinfo.cpp:1085
-#, fuzzy, boost-format
+#, boost-format
 msgid "language: %1%"
-msgstr "Lingua: %1%"
+msgstr ""
 
 #: src/info/mkvinfo.cpp:182
 #, boost-format
@@ -8263,14 +8137,13 @@ msgid "length %1%, data: %2%"
 msgstr ""
 
 #: src/input/r_vobsub.cpp:228
-#, fuzzy, boost-format
+#, boost-format
 msgid "line %1%: The 'delay' timestamp could not be parsed.\n"
-msgstr "La linea %1% del file timecode '%2% non può essere analizzata.\n"
+msgstr ""
 
 #: src/mmg/tabs/global.cpp:255
-#, fuzzy
 msgid "link files"
-msgstr "File sorgenti:"
+msgstr ""
 
 #: src/mmg/options/mkvmerge.cpp:51
 msgid "lower"
@@ -8285,9 +8158,9 @@ msgid "lzo_compressor_c::decompress() not implemented\n"
 msgstr ""
 
 #: src/common/compression.cpp:64
-#, fuzzy, boost-format
+#, boost-format
 msgid "lzo_init() failed. Result: %1%\n"
-msgstr "BZ2_bzCompressInit() fallito. Risultato: %1%\n"
+msgstr ""
 
 #: src/common/compression.cpp:68
 msgid "lzo_malloc(LZO1X_999_MEM_COMPRESS) failed.\n"
@@ -8405,9 +8278,8 @@ msgid "matroska_reader: Vorbis track does not contain valid headers.\n"
 msgstr ""
 
 #: src/input/r_matroska.cpp:1344 src/input/r_matroska.cpp:2014
-#, fuzzy
 msgid "matroska_reader: caught exception\n"
-msgstr "Espressione catturata"
+msgstr ""
 
 #: src/input/r_matroska.cpp:339
 #, boost-format
@@ -8415,9 +8287,8 @@ msgid "matroska_reader: mkvmerge was not compiled with FLAC support. Ignoring tr
 msgstr ""
 
 #: src/input/r_matroska.cpp:1238
-#, fuzzy
 msgid "matroska_reader: no EBML head found.\n"
-msgstr "Errore: nessuna intestazione EBML trovata"
+msgstr ""
 
 #: src/input/r_matroska.cpp:592
 #, boost-format
@@ -8430,9 +8301,9 @@ msgid "matroska_reader: |  + There's more than one track with the UID %1%.\n"
 msgstr ""
 
 #: src/input/r_matroska.cpp:1067
-#, fuzzy, boost-format
+#, boost-format
 msgid "matroska_reader: |  + There's more than one track with the number %1%.\n"
-msgstr "Rilevata più di una traccia con il numero traccia %1%.\n"
+msgstr ""
 
 #: src/mmg/tabs/global.cpp:257
 msgid "max. number of files:"
@@ -8458,14 +8329,12 @@ msgid "memory_slice_cursor_c copy c'tor: Must not be used!"
 msgstr ""
 
 #: src/propedit/target.cpp:88
-#, fuzzy
 msgid "missing property name"
-msgstr "Nome file mancante"
+msgstr ""
 
 #: src/propedit/target.cpp:81
-#, fuzzy
 msgid "missing value"
-msgstr "valore originale:"
+msgstr ""
 
 #: src/common/fs_sys_helpers.cpp:53 src/common/fs_sys_helpers.cpp:184
 #, boost-format
@@ -8509,9 +8378,8 @@ msgid "mkvextract tags \"a movie.mkv\" > movie_tags.xml"
 msgstr ""
 
 #: src/extract/extract_cli_parser.cpp:51
-#, fuzzy
 msgid "mkvextract tags <inname> [options]"
-msgstr "Opzioni mkvmerge"
+msgstr ""
 
 #: src/extract/extract_cli_parser.cpp:123
 msgid "mkvextract timecodes_v2 \"a movie.mkv\" 1:timecodes_track1.txt"
@@ -8539,9 +8407,8 @@ msgid "mkvinfo [options] <inname>"
 msgstr ""
 
 #: src/mmg/options/mkvmerge.cpp:142
-#, fuzzy
 msgid "mkvmerge"
-msgstr "Opzioni mkvmerge"
+msgstr ""
 
 #: src/merge/mkvmerge.cpp:73
 msgid "mkvmerge -o out [global options] [options1] <file1> [@optionsfile ...]\n"
@@ -8599,27 +8466,24 @@ msgid "mkvmerge finished with a return code of %d. %s"
 msgstr ""
 
 #: src/mmg/mux_dialog.cpp:305 src/mmg/jobs.cpp:148
-#, fuzzy
 msgid "mkvmerge has finished"
-msgstr "Opzioni mkvmerge"
+msgstr ""
 
 #: src/input/r_ogm.cpp:500
 msgid "mkvmerge has not been compiled with FLAC support but handling of this stream has been requested.\n"
 msgstr ""
 
 #: src/mmg/mux_dialog.cpp:45 src/mmg/jobs.cpp:50
-#, fuzzy
 msgid "mkvmerge is running"
-msgstr "Opzioni mkvmerge"
+msgstr ""
 
 #: src/mmg/options/mkvmerge.cpp:80
 msgid "mkvmerge options"
 msgstr "Opzioni mkvmerge"
 
 #: src/mmg/mux_dialog.cpp:89
-#, fuzzy
 msgid "mkvmerge output:"
-msgstr "Opzioni mkvmerge"
+msgstr ""
 
 #: src/mmg/tabs/global.cpp:275 src/mmg/tabs/global.cpp:277
 msgid "mkvmerge supports two chapter formats: The OGM like text format and the full featured XML format."
@@ -8659,9 +8523,8 @@ msgid "mmg"
 msgstr ""
 
 #: src/mmg/mmg_dialog.cpp:268
-#, fuzzy
 msgid "mmg debug output"
-msgstr "Output attività"
+msgstr ""
 
 #: src/mmg/options/mmg.cpp:177
 msgid "mmg options"
@@ -8676,19 +8539,16 @@ msgid "mono"
 msgstr ""
 
 #: src/input/r_mp3.cpp:58
-#, fuzzy
 msgid "mp3_reader: Could not open the source file."
-msgstr "Impossibile creare il file specificato."
+msgstr ""
 
 #: src/input/r_mpeg_es.cpp:163
-#, fuzzy
 msgid "mpeg_es_reader: Could not open the file."
-msgstr "Impossibile aprire/leggere il file '%1%'."
+msgstr ""
 
 #: src/input/r_mpeg_ps.cpp:82
-#, fuzzy
 msgid "mpeg_ps_reader: Could not open the file."
-msgstr "Impossibile aprire/leggere il file '%1%'."
+msgstr ""
 
 #: src/input/r_mpeg_ps.cpp:1194
 #, boost-format
@@ -8701,9 +8561,8 @@ msgid "mpeg_ps_reader: Should not have happened #2. %1%"
 msgstr ""
 
 #: src/input/r_mpeg_ts.cpp:403
-#, fuzzy
 msgid "mpeg_ts_reader_c: Could not open the file."
-msgstr "Impossibile aprire/leggere il file '%1%'."
+msgstr "mpeg_ts_reader_c: impossibile aprire il file."
 
 #: src/mmg/header_editor/bool_value_page.cpp:43
 #: src/mmg/tabs/input_general.cpp:108 src/mmg/tabs/input_general.cpp:124
@@ -8719,9 +8578,8 @@ msgid "no error"
 msgstr "nessun errore"
 
 #: src/info/qt_ui.cpp:59
-#, fuzzy
 msgid "no file loaded"
-msgstr "Nessun file caricato"
+msgstr ""
 
 #: src/info/mkvinfo.cpp:880
 msgid "no signature algorithm"
@@ -8750,14 +8608,12 @@ msgid "ogg_sync_buffer failed\n"
 msgstr ""
 
 #: src/input/r_ogm.cpp:329
-#, fuzzy
 msgid "ogm_reader: Could not open the source file."
-msgstr "Impossibile creare il file specificato."
+msgstr ""
 
 #: src/input/r_ogm.cpp:340
-#, fuzzy
 msgid "ogm_reader: Could not read all header packets."
-msgstr "Impossibile leggere l'intestazione pacchetto FLAC.\n"
+msgstr ""
 
 #: src/input/r_ogm.cpp:332
 msgid "ogm_reader: Source is not a valid OGG media file."
@@ -8772,49 +8628,47 @@ msgid "only for I frames"
 msgstr ""
 
 #: src/info/mkvinfo.cpp:655
-#, fuzzy, boost-format
+#, boost-format
 msgid "output sampling freq: %1%"
-msgstr "Frequenza campionamento destinazione: %1%"
+msgstr ""
 
 #: src/mmg/jobs.cpp:528 src/mmg/jobs.cpp:702
-#, fuzzy
 msgid "pending"
-msgstr "Appendi"
+msgstr ""
 
 #: src/input/r_pgssup.cpp:55
-#, fuzzy
 msgid "pgssup_reader: Could not open the file."
-msgstr "Impossibile aprire/leggere il file '%1%'."
+msgstr ""
 
 #: src/info/mkvinfo.cpp:727
-#, fuzzy, boost-format
+#, boost-format
 msgid "pixel crop bottom: %1%"
-msgstr "Ritaglio pixel inferiore: %1%"
+msgstr ""
 
 #: src/info/mkvinfo.cpp:712
-#, fuzzy, boost-format
+#, boost-format
 msgid "pixel crop left: %1%"
-msgstr "Ritaglio pixel a sinistra: %1%"
+msgstr ""
 
 #: src/info/mkvinfo.cpp:722
-#, fuzzy, boost-format
+#, boost-format
 msgid "pixel crop right: %1%"
-msgstr "Ritaglio pixel a destra: %1%"
+msgstr ""
 
 #: src/info/mkvinfo.cpp:717
-#, fuzzy, boost-format
+#, boost-format
 msgid "pixel crop top: %1%"
-msgstr "Ritaglio pixel superiore: %1%"
+msgstr ""
 
 #: src/info/mkvinfo.cpp:697
-#, fuzzy, boost-format
+#, boost-format
 msgid "pixel height: %1%"
-msgstr "Altezza pixel: %1%"
+msgstr ""
 
 #: src/info/mkvinfo.cpp:692
-#, fuzzy, boost-format
+#, boost-format
 msgid "pixel width: %1%"
-msgstr "Larghezza pixel: %1%"
+msgstr ""
 
 #: src/merge/pr_generic.cpp:853
 #, boost-format
@@ -8835,14 +8689,13 @@ msgid "ready"
 msgstr ""
 
 #: src/input/r_real.cpp:149
-#, fuzzy
 msgid "real_reader: Could not read the source file."
-msgstr "Impossibile creare il file specificato."
+msgstr ""
 
 #: src/input/r_real.cpp:246
-#, fuzzy, boost-format
+#, boost-format
 msgid "real_reader: Couldn't find RealAudio FourCC for id %1% (description length: %2%) Skipping track.\n"
-msgstr "Impossibile trovare un indice per la traccia audio %1% (messaggio d'errore: %2%). Traccia ingnorata.\n"
+msgstr ""
 
 #: src/input/r_real.cpp:274
 #, boost-format
@@ -8862,9 +8715,8 @@ msgid "remove all"
 msgstr "Rimuovi tutto"
 
 #: src/info/mkvinfo.cpp:809
-#, fuzzy
 msgid "rest: unknown"
-msgstr " dimensione sconosciuta"
+msgstr ""
 
 #: src/common/stereo_mode.cpp:55
 msgid "row interleaved (left first)"
@@ -8875,9 +8727,9 @@ msgid "row interleaved (right first)"
 msgstr ""
 
 #: src/info/mkvinfo.cpp:650
-#, fuzzy, boost-format
+#, boost-format
 msgid "sampling freq: %1%"
-msgstr "Frequenza campionamento destinazione: %1%"
+msgstr ""
 
 #: src/common/stereo_mode.cpp:49
 msgid "side by side (left first)"
@@ -8893,18 +8745,16 @@ msgid "spu_extraction_duration: Encountered broken SPU packet (next_off < start_
 msgstr ""
 
 #: src/input/r_srt.cpp:40
-#, fuzzy
 msgid "srt_reader: Could not open the source file."
-msgstr "Impossibile creare il file specificato."
+msgstr ""
 
 #: src/input/r_srt.cpp:34
 msgid "srt_reader: Source is not a valid SRT file."
 msgstr ""
 
 #: src/input/r_ssa.cpp:40
-#, fuzzy
 msgid "ssa_reader: Could not open the source file."
-msgstr "Impossibile creare il file specificato."
+msgstr ""
 
 #: src/input/subtitles.cpp:342
 msgid "ssa_reader: Invalid format. Could not find the \"Format\" line in the \"[Events]\" section."
@@ -8919,14 +8769,12 @@ msgid "start >= m->ListSize(). This should not have happened. Please file a bug 
 msgstr ""
 
 #: src/input/r_matroska.cpp:95
-#, fuzzy
 msgid "subtitle"
-msgstr "ottotitoli PGS/PUP"
+msgstr ""
 
 #: src/mmg/mmg.cpp:64 src/info/mkvinfo.cpp:1108
-#, fuzzy
 msgid "subtitles"
-msgstr "ottotitoli PGS/PUP"
+msgstr ""
 
 #: src/common/tags/parser.cpp:37
 #, boost-format
@@ -8934,9 +8782,8 @@ msgid "tet_index: '%1%' not found\n"
 msgstr ""
 
 #: src/merge/mkvmerge.cpp:2047
-#, fuzzy
 msgid "timecodes"
-msgstr "Regola timecode"
+msgstr ""
 
 #: src/common/stereo_mode.cpp:51
 msgid "top bottom (left first)"
@@ -8947,14 +8794,12 @@ msgid "top bottom (right first)"
 msgstr ""
 
 #: src/merge/mkvmerge.cpp:2040
-#, fuzzy
 msgid "track name"
-msgstr "Nome traccia:"
+msgstr ""
 
 #: src/input/r_truehd.cpp:76
-#, fuzzy
 msgid "truehd_reader: Could not open the source file."
-msgstr "Impossibile creare il file specificato."
+msgstr ""
 
 #: src/input/r_truehd.cpp:63
 #, boost-format
@@ -8962,9 +8807,8 @@ msgid "truehd_reader: Could not read %1% bytes."
 msgstr ""
 
 #: src/input/r_tta.cpp:93
-#, fuzzy
 msgid "tta_reader: Could not open the file."
-msgstr "Impossibile aprire/leggere il file '%1%'."
+msgstr ""
 
 #: src/input/r_tta.cpp:60
 #, boost-format
@@ -8982,9 +8826,8 @@ msgstr "und (non determinato)"
 #: src/info/mkvinfo.cpp:811 src/info/mkvinfo.cpp:821 src/info/mkvinfo.cpp:840
 #: src/info/mkvinfo.cpp:869 src/info/mkvinfo.cpp:882 src/info/mkvinfo.cpp:892
 #: src/info/mkvinfo.cpp:1110
-#, fuzzy
 msgid "unknown"
-msgstr " dimensione sconosciuta"
+msgstr ""
 
 #: src/input/r_matroska.cpp:2325
 #, boost-format
@@ -8996,9 +8839,8 @@ msgid "up"
 msgstr "Su"
 
 #: src/input/r_usf.cpp:96
-#, fuzzy
 msgid "usf_reader: Could not open the source file."
-msgstr "Impossibile creare il file specificato."
+msgstr ""
 
 #: src/input/r_usf.cpp:75
 msgid "usf_reader: Source is not a valid USF file."
@@ -9010,9 +8852,8 @@ msgid "utf8_strlen(): Invalid UTF-8 char. First byte: 0x%|1$02x|"
 msgstr ""
 
 #: src/input/r_vc1.cpp:82
-#, fuzzy
 msgid "vc1_es_reader: Could not open the source file."
-msgstr "Impossibile creare il file specificato."
+msgstr ""
 
 #: src/mmg/tabs/chapters.cpp:840
 msgid "verify failed: chapters->CheckMandatory() is false. This should not have happened. Please file a bug report.\n"
@@ -9023,9 +8864,8 @@ msgid "video"
 msgstr "Video"
 
 #: src/input/r_vobbtn.cpp:56
-#, fuzzy
 msgid "vobbtn_reader: Could not open the file."
-msgstr "Impossibile aprire/leggere il file '%1%'."
+msgstr ""
 
 #: src/input/r_vobsub.cpp:82
 msgid "vobsub_reader: Could not open the sub file"
@@ -9040,9 +8880,8 @@ msgid "vobsub_reader: sub_file->read failure"
 msgstr ""
 
 #: src/input/r_wav.cpp:449
-#, fuzzy
 msgid "wav_reader: Could not open the source file."
-msgstr "Impossibile creare il file specificato."
+msgstr ""
 
 #: src/input/r_wav.cpp:501
 msgid "wav_reader: No data chunk was found."
@@ -9065,9 +8904,8 @@ msgid "wav_reader: could not read WAVE header."
 msgstr ""
 
 #: src/input/r_wavpack.cpp:58
-#, fuzzy
 msgid "wavpack_reader: Could not open the file."
-msgstr "Impossibile aprire/leggere il file '%1%'."
+msgstr ""
 
 #: src/common/wavpack.cpp:149
 msgid "wavpack_reader: non-audio block found\n"
@@ -9093,11 +8931,3 @@ msgstr ""
 #: src/mmg/tabs/input_general.cpp:107 src/mmg/tabs/input_general.cpp:125
 msgid "yes"
 msgstr "sì"
-
-#, fuzzy
-#~ msgid "Warning: There's more than one track with the UID %1%."
-#~ msgstr "Rilevata più di una traccia con il numero traccia %1%.\n"
-
-#, fuzzy
-#~ msgid "Warning: There's more than one track with the number %1%."
-#~ msgstr "Rilevata più di una traccia con il numero traccia %1%.\n"
