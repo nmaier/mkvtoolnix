@@ -267,7 +267,7 @@ protected:
   std::vector<mpeg_ts_track_ptr> tracks;
   std::map<generic_packetizer_c *, mpeg_ts_track_ptr> m_ptzr_to_track_map;
 
-  bool m_dont_use_audio_pts;
+  bool m_dont_use_audio_pts, m_debug_resync;
 
   int m_detected_packet_size;
 
@@ -306,6 +306,8 @@ private:
 
   bfs::path find_clip_info_file();
   void parse_clip_info_file();
+
+  bool resync(int64_t start_at);
 
   friend class mpeg_ts_track_c;
 };

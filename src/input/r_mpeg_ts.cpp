@@ -43,6 +43,7 @@ namespace bfs = boost::filesystem;
 #define TS_PROBE_SIZE          (2 * TS_CONSECUTIVE_PACKETS * 204)
 #define TS_PIDS_DETECT_SIZE    10 * 1024 * 1024
 #define TS_PACKET_SIZE         188
+#define TS_MAX_PACKET_SIZE     204
 
 #define GET_PID(p)             (((static_cast<uint16_t>(p->pid_msb) << 8) | p->pid_lsb) & 0x1FFF)
 #define CONTINUITY_COUNTER(p)  (static_cast<unsigned char>(p->continuity_counter) & 0x0F)
@@ -393,6 +394,7 @@ mpeg_ts_reader_c::mpeg_ts_reader_c(track_info_c &_ti)
   , file_done(false)
   , m_packet_sent_to_packetizer(false)
   , m_dont_use_audio_pts(debugging_requested("mpeg_ts_dont_use_audio_pts"))
+  , m_debug_resync(debugging_requested("mpeg_ts_resync"))
   , m_detected_packet_size(0)
 {
   mm_io_cptr temp_io;
@@ -421,28 +423,22 @@ mpeg_ts_reader_c::mpeg_ts_reader_c(track_info_c &_ti)
     PAT->type = PAT_TYPE;
     tracks.push_back(PAT);
 
-    unsigned char buf[205]; // maximum TS packet size + 1
-    buf[0] = m_io->read_uint8();
+    unsigned char buf[TS_MAX_PACKET_SIZE]; // maximum TS packet size + 1
 
     bool done = m_io->eof();
     while (!done) {
+      if (m_io->read(buf, m_detected_packet_size) != static_cast<unsigned int>(m_detected_packet_size))
+        break;
 
-      if (buf[0] == 0x47) {
-        m_io->read(buf + 1, m_detected_packet_size);
-        if (buf[m_detected_packet_size] != 0x47) {
-          m_io->skip(0 - m_detected_packet_size);
-          buf[0] = m_io->read_uint8();
+      if (buf[0] != 0x47) {
+        if (resync(m_io->getFilePointer() - m_detected_packet_size))
           continue;
-        }
-        parse_packet(buf);
-        done  = PAT_found && PMT_found && (0 == es_to_process);
-        done |= m_io->eof() || (m_io->getFilePointer() >= TS_PIDS_DETECT_SIZE);
-        m_io->skip(-1);
-
-      } else {
-        buf[0]  = m_io->read_uint8(); // advance byte per byte to find a new sync
-        done   |= m_io->eof() || (m_io->getFilePointer() >= TS_PIDS_DETECT_SIZE);
+        break;
       }
+
+      parse_packet(buf);
+      done  = PAT_found && PMT_found && (0 == es_to_process);
+      done |= m_io->eof() || (m_io->getFilePointer() >= TS_PIDS_DETECT_SIZE);
     }
   } catch (...) {
   }
@@ -1153,31 +1149,21 @@ mpeg_ts_reader_c::read(generic_packetizer_c *requested_ptzr,
       return FILE_STATUS_HOLDING;
   }
 
-  unsigned char buf[205];
+  unsigned char buf[TS_MAX_PACKET_SIZE + 1];
 
   track_buffer_ready = -1;
 
   if (file_done)
     return flush_packetizers();
 
-  buf[0] = m_io->read_uint8();
-
   while (true) {
-    if (m_io->eof())
+    if (m_io->read(buf, m_detected_packet_size) != static_cast<unsigned int>(m_detected_packet_size))
       return finish();
 
     if (buf[0] != 0x47) {
-      buf[0] = m_io->read_uint8(); // advance byte per byte to find a new sync
-      continue;
-    }
-
-    if ((m_io->read(buf + 1, m_detected_packet_size) != (unsigned int)m_detected_packet_size) || m_io->eof())
+      if (resync(m_io->getFilePointer() - m_detected_packet_size))
+        continue;
       return finish();
-
-    if (buf[m_detected_packet_size] != 0x47) {
-      m_io->skip(0 - m_detected_packet_size);
-      buf[0] = m_io->read_uint8();
-      continue;
     }
 
     parse_packet(buf);
@@ -1187,11 +1173,8 @@ mpeg_ts_reader_c::read(generic_packetizer_c *requested_ptzr,
       track_buffer_ready = -1;
     }
 
-    if (!m_packet_sent_to_packetizer)
-      continue;
-
-    m_io->skip(-1);
-    return FILE_STATUS_MOREDATA;
+    if (m_packet_sent_to_packetizer)
+      return FILE_STATUS_MOREDATA;
   }
 }
 
@@ -1260,4 +1243,40 @@ mpeg_ts_reader_c::parse_clip_info_file() {
         break;
     }
   }
+}
+
+bool
+mpeg_ts_reader_c::resync(int64_t start_at) {
+  try {
+    mxdebug_if(m_debug_resync, boost::format("Start resync for data from %1%\n") % start_at);
+    m_io->setFilePointer(start_at);
+
+    unsigned char buf[TS_MAX_PACKET_SIZE + 1];
+
+    while (!m_io->eof()) {
+      int64_t curr_pos = m_io->getFilePointer();
+      buf[0] = m_io->read_uint8();
+
+      if (0x47 != buf[0])
+        continue;
+
+      if (m_io->read(&buf[1], m_detected_packet_size) != static_cast<unsigned int>(m_detected_packet_size))
+        return false;
+
+      if (0x47 != buf[m_detected_packet_size]) {
+        m_io->setFilePointer(curr_pos + 1);
+        continue;
+      }
+
+      mxdebug_if(m_debug_resync, boost::format("Re-established at %1%\n") % curr_pos);
+
+      m_io->setFilePointer(curr_pos);
+      return true;
+    }
+
+  } catch (...) {
+    return false;
+  }
+
+  return false;
 }
