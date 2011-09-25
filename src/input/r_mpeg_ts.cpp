@@ -381,7 +381,6 @@ mpeg_ts_reader_c::detect_packet_size(mm_io_c *io,
 mpeg_ts_reader_c::mpeg_ts_reader_c(track_info_c &_ti)
   throw (error_c)
   : generic_reader_c(_ti)
-  , io(NULL)
   , bytes_processed(0)
   , size(0)
   , PAT_found(false)
@@ -396,15 +395,24 @@ mpeg_ts_reader_c::mpeg_ts_reader_c(track_info_c &_ti)
   , m_dont_use_audio_pts(debugging_requested("mpeg_ts_dont_use_audio_pts"))
   , m_detected_packet_size(0)
 {
+  mm_io_cptr temp_io;
+
   try {
-    io   = new mm_file_io_c(m_ti.m_fname);
-    size = io->get_size();
+    temp_io = mm_io_cptr(new mm_file_io_c(m_ti.m_fname));
+
   } catch (...) {
     throw error_c(Y("mpeg_ts_reader_c: Could not open the file."));
   }
 
   try {
-    m_detected_packet_size = detect_packet_size(io, size);
+    size                     = temp_io->get_size();
+    size_t size_to_probe     = std::min(size, static_cast<int64_t>(TS_PIDS_DETECT_SIZE));
+    memory_cptr probe_buffer = memory_c::alloc(size_to_probe);
+
+    temp_io->read(probe_buffer, size_to_probe);
+
+    m_io                   = mm_io_cptr(new mm_mem_io_c(probe_buffer->get_buffer(), probe_buffer->get_size()));
+    m_detected_packet_size = detect_packet_size(m_io.get_object(), size_to_probe);
 
     mxverb(3, boost::format("mpeg_ts: Starting to build PID list. (packet size: %1%)\n") % m_detected_packet_size);
 
@@ -414,31 +422,34 @@ mpeg_ts_reader_c::mpeg_ts_reader_c(track_info_c &_ti)
     tracks.push_back(PAT);
 
     unsigned char buf[205]; // maximum TS packet size + 1
-    buf[0] = io->read_uint8();
+    buf[0] = m_io->read_uint8();
 
-    bool done = io->eof();
+    bool done = m_io->eof();
     while (!done) {
 
       if (buf[0] == 0x47) {
-        io->read(buf + 1, m_detected_packet_size);
+        m_io->read(buf + 1, m_detected_packet_size);
         if (buf[m_detected_packet_size] != 0x47) {
-          io->skip(0 - m_detected_packet_size);
-          buf[0] = io->read_uint8();
+          m_io->skip(0 - m_detected_packet_size);
+          buf[0] = m_io->read_uint8();
           continue;
         }
         parse_packet(buf);
-        done = PAT_found && PMT_found && (0 == es_to_process);
-        io->skip(-1);
+        done  = PAT_found && PMT_found && (0 == es_to_process);
+        done |= m_io->eof() || (m_io->getFilePointer() >= TS_PIDS_DETECT_SIZE);
+        m_io->skip(-1);
 
-      } else
-        buf[0] = io->read_uint8(); // advance byte per byte to find a new sync
-
-      done |= io->eof() || (io->getFilePointer() >= TS_PIDS_DETECT_SIZE);
+      } else {
+        buf[0]  = m_io->read_uint8(); // advance byte per byte to find a new sync
+        done   |= m_io->eof() || (m_io->getFilePointer() >= TS_PIDS_DETECT_SIZE);
+      }
     }
   } catch (...) {
   }
-  mxverb(3, boost::format("mpeg_ts: Detection done on %1% bytes\n") % io->getFilePointer());
-  io->setFilePointer(0, seek_beginning); // rewind file for later remux
+  mxverb(3, boost::format("mpeg_ts: Detection done on %1% bytes\n") % m_io->getFilePointer());
+
+  m_io = temp_io;
+  m_io->setFilePointer(0, seek_beginning); // rewind file for later remux
 
   foreach(mpeg_ts_track_ptr &track, tracks) {
     track->pes_payload->remove(track->pes_payload->get_size());
@@ -1115,7 +1126,7 @@ mpeg_ts_reader_c::add_available_track_ids() {
 
 int
 mpeg_ts_reader_c::get_progress() {
-  return 100 * io->getFilePointer() / size;
+  return 100 * m_io->getFilePointer() / size;
 }
 
 file_status_e
@@ -1149,23 +1160,23 @@ mpeg_ts_reader_c::read(generic_packetizer_c *requested_ptzr,
   if (file_done)
     return flush_packetizers();
 
-  buf[0] = io->read_uint8();
+  buf[0] = m_io->read_uint8();
 
   while (true) {
-    if (io->eof())
+    if (m_io->eof())
       return finish();
 
     if (buf[0] != 0x47) {
-      buf[0] = io->read_uint8(); // advance byte per byte to find a new sync
+      buf[0] = m_io->read_uint8(); // advance byte per byte to find a new sync
       continue;
     }
 
-    if ((io->read(buf + 1, m_detected_packet_size) != (unsigned int)m_detected_packet_size) || io->eof())
+    if ((m_io->read(buf + 1, m_detected_packet_size) != (unsigned int)m_detected_packet_size) || m_io->eof())
       return finish();
 
     if (buf[m_detected_packet_size] != 0x47) {
-      io->skip(0 - m_detected_packet_size);
-      buf[0] = io->read_uint8();
+      m_io->skip(0 - m_detected_packet_size);
+      buf[0] = m_io->read_uint8();
       continue;
     }
 
@@ -1179,7 +1190,7 @@ mpeg_ts_reader_c::read(generic_packetizer_c *requested_ptzr,
     if (!m_packet_sent_to_packetizer)
       continue;
 
-    io->skip(-1);
+    m_io->skip(-1);
     return FILE_STATUS_MOREDATA;
   }
 }

@@ -252,7 +252,7 @@ typedef counted_ptr<mpeg_ts_track_c> mpeg_ts_track_ptr;
 
 class mpeg_ts_reader_c: public generic_reader_c {
 protected:
-  mm_io_c *io;
+  mm_io_cptr m_io;
   int64_t bytes_processed, size;
   bool PAT_found, PMT_found;
   int16_t PMT_pid;
