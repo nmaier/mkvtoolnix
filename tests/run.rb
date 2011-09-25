@@ -149,7 +149,7 @@ class TestController
         self.add_result class_name, :passed, :message => "  NEW test. Storing result '#{result}'.", :checksum => result, :duration => duration
 
       elsif (@results.hash?(class_name) != result)
-        msg =  "  FAILED: checksum is different. Commands:\n"
+        msg =  "  #{class_name} FAILED: checksum is different. Commands:\n"
         msg << "    " + current_test.commands.join("\n    ") + "\n"
 
         if (update_failed)
@@ -162,7 +162,7 @@ class TestController
       end
 
     else
-      self.add_result class_name, :failed, :message => "  FAILED: no result from test"
+      self.add_result class_name, :failed, :message => "  #{class_name} FAILED: no result from test"
     end
   end
 
