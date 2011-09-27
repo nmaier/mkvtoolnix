@@ -918,6 +918,7 @@ mpeg_ts_reader_c::probe_packet_complete(mpeg_ts_track_ptr &track,
     mxverb(3, boost::format("mpeg_ts: Failed to parse packet. Reset and retry\n"));
     track->pes_payload_size = 0;
     track->processed        = false;
+    track->data_ready       = false;
   }
 }
 

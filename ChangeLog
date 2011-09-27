@@ -1,5 +1,9 @@
 2011-09-27  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: Fixed mkvmerge not finding any track in TS
+	streams whose first PMT packet could not be parsed (e.g. invalid
+	CRC).
+
 	* mkvmerge: bug fix: Fixed detection of TS streams that only
 	contain one PAT or PMT packet within the first few KB but no
 	others within the first 10 MB.
