@@ -415,6 +415,7 @@ mpeg_ts_reader_c::mpeg_ts_reader_c(track_info_c &_ti)
 
     m_io                   = mm_io_cptr(new mm_mem_io_c(probe_buffer->get_buffer(), probe_buffer->get_size()));
     m_detected_packet_size = detect_packet_size(m_io.get_object(), size_to_probe);
+    m_io->setFilePointer(0);
 
     mxverb(3, boost::format("mpeg_ts: Starting to build PID list. (packet size: %1%)\n") % m_detected_packet_size);
 

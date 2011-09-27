@@ -1,3 +1,9 @@
+2011-09-27  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Fixed detection of TS streams that only
+	contain one PAT or PMT packet within the first few KB but no
+	others within the first 10 MB.
+
 2011-09-24  Moritz Bunkus  <moritz@bunkus.org>
 
 	* Released v5.0.0.
