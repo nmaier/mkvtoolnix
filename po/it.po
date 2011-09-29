@@ -5269,7 +5269,7 @@ msgstr "Intestazione seek"
 
 #: src/info/mkvinfo.cpp:1126
 msgid "Seek head (subentries will be skipped)"
-msgstr "Intestazione seek (i sootoelementi verranno ignorati)"
+msgstr "Intestazione seek (i sotto elementi verranno ignorati)"
 
 #: src/info/mkvinfo.cpp:1168
 #, boost-format
@@ -5341,7 +5341,7 @@ msgstr "Seleziona un file Matroska"
 
 #: src/info/wxwidgets_ui.cpp:277
 msgid "Select output file"
-msgstr "Seelziona un file destinazione"
+msgstr "Seleziona un file destinazione"
 
 #: src/mmg/mmg_dialog.cpp:273
 msgid "Select the file you want to write to"
@@ -7089,7 +7089,7 @@ msgstr ""
 
 #: src/info/mkvinfo.cpp:369
 msgid "Unknown"
-msgstr ""
+msgstr "Sconosciuto"
 
 #: src/output/p_aac.cpp:130
 #, boost-format
@@ -7148,7 +7148,7 @@ msgstr ""
 #: src/common/cli_parser.cpp:113
 #, boost-format
 msgid "Unknown option '%1%'.\n"
-msgstr ""
+msgstr "Opzione sconosciuta '%1%'.\n"
 
 #: src/propedit/propedit_cli_parser.cpp:42
 #, boost-format
@@ -7167,7 +7167,7 @@ msgstr ""
 
 #: src/mmg/header_editor/value_page.cpp:145
 msgid "Unsigned integer"
-msgstr ""
+msgstr "Intero senza segno"
 
 #: src/common/xml/element_parser.cpp:81
 #, boost-format
@@ -7181,7 +7181,7 @@ msgstr ""
 
 #: src/mmg/tabs/input.cpp:349
 msgid "Unsupported format"
-msgstr ""
+msgstr "Formato non supportato"
 
 #: src/input/r_matroska.cpp:1792
 msgid "Unsupported track type for this track.\n"
@@ -7194,7 +7194,7 @@ msgstr ""
 
 #: src/extract/extract_cli_parser.cpp:49
 msgid "Usage"
-msgstr ""
+msgstr "Uso"
 
 #: src/mmg/tabs/global.cpp:256
 msgid "Use 'segment linking' for the resulting files. For an in-depth explanation of this feature consult the mkvmerge documentation."
@@ -7460,21 +7460,21 @@ msgstr "Uso modulo destinazione VobSub.\n"
 #: src/input/r_vobsub.cpp:149
 #, boost-format
 msgid "Using the VobSub subtitle output module (language: %1%).\n"
-msgstr ""
+msgstr "Uso modulo destinazione sottotitolo VobSub (lingua: %1%).\n"
 
 #: src/input/r_vobsub.cpp:104
 #, boost-format
 msgid "Using the VobSub subtitle reader (SUB file '%1%').\n"
-msgstr ""
+msgstr "Uso il lettore sottotitolo VobSub (file SUB '%1%').\n"
 
 #: src/input/r_avi.cpp:743 src/input/r_ogm.cpp:1070
 #: src/input/r_matroska.cpp:1632
 msgid "Using the Vorbis output module.\n"
-msgstr ""
+msgstr "Uso il modulo di destinazione Vorbis"
 
 #: src/input/r_wav.cpp:565
 msgid "Using the WAV demultiplexer.\n"
-msgstr ""
+msgstr "Uso il demultiplexer WAV.\n"
 
 #: src/input/r_wavpack.cpp:84
 msgid "Using the WAVPACK demultiplexer with a correction file.\n"
@@ -7482,11 +7482,11 @@ msgstr ""
 
 #: src/input/r_wavpack.cpp:86
 msgid "Using the WAVPACK demultiplexer.\n"
-msgstr ""
+msgstr "Uso il demultiplexer WAVPACK.\n"
 
 #: src/input/r_wavpack.cpp:107 src/input/r_matroska.cpp:1655
 msgid "Using the WAVPACK output module.\n"
-msgstr ""
+msgstr "Uso il modulo di destinazione WAVPACK.\n"
 
 #: src/input/r_qtmp4.cpp:1557
 #, boost-format
@@ -7502,7 +7502,7 @@ msgstr ""
 #: src/input/r_ssa.cpp:71 src/input/r_usf.cpp:259
 #: src/input/r_matroska.cpp:1710
 msgid "Using the text subtitle output module.\n"
-msgstr ""
+msgstr "Uso il modulo di destinazione sottotitolo testuale.\n"
 
 #: src/input/r_real.cpp:299
 #, boost-format
@@ -7517,7 +7517,7 @@ msgstr ""
 #: src/input/r_avi.cpp:360 src/input/r_ogm.cpp:1263
 #: src/input/r_matroska.cpp:1488
 msgid "Using the video output module.\n"
-msgstr ""
+msgstr "Uso il modulo di destinazione video.\n"
 
 #: src/common/file_types.cpp:50
 msgid "VC1 elementary streams"
@@ -7541,19 +7541,19 @@ msgstr ""
 
 #: src/common/property_element.cpp:146 src/mmg/header_editor/frame.cpp:485
 msgid "Video crop bottom"
-msgstr ""
+msgstr "Taglio video in basso"
 
 #: src/common/property_element.cpp:143 src/mmg/header_editor/frame.cpp:470
 msgid "Video crop left"
-msgstr ""
+msgstr "Taglio video a sinistra"
 
 #: src/common/property_element.cpp:145 src/mmg/header_editor/frame.cpp:480
 msgid "Video crop right"
-msgstr ""
+msgstr "Taglio video a destra"
 
 #: src/common/property_element.cpp:144 src/mmg/header_editor/frame.cpp:475
 msgid "Video crop top"
-msgstr ""
+msgstr "Taglio video in alto"
 
 #: src/common/property_element.cpp:141 src/mmg/header_editor/frame.cpp:460
 msgid "Video display height"
@@ -7607,7 +7607,7 @@ msgstr ""
 
 #: src/common/file_types.cpp:51
 msgid "VobButtons"
-msgstr ""
+msgstr "VobButtons"
 
 #: src/common/file_types.cpp:52
 msgid "VobSub subtitles"
@@ -7673,11 +7673,11 @@ msgstr ""
 #: src/info/mkvinfo.cpp:580
 #, boost-format
 msgid "Writing application: %1%"
-msgstr ""
+msgstr "Scrittura in corso dell'applicazione: %1%"
 
 #: src/info/wxwidgets_ui.cpp:248
 msgid "Writing info"
-msgstr ""
+msgstr "Scrittura info in corso"
 
 #: src/extract/xtr_vobsub.cpp:224
 #, boost-format
@@ -7687,12 +7687,12 @@ msgstr ""
 #: src/common/kate.cpp:61
 #, boost-format
 msgid "Wrong Kate version: %1%.%2% > %3%.x"
-msgstr ""
+msgstr "Versione Kate errata: %1%.%2% > %3%.x"
 
 #: src/common/theora.cpp:47
 #, boost-format
 msgid "Wrong Theora version: %1%.%2%.%3% != 3.2.x"
-msgstr ""
+msgstr "Versione Theora errata: %1%.%2%.%3% != 3.2.x"
 
 #: src/merge/mkvmerge.cpp:1702
 msgid "Wrong argument to '--split-max-files'.\n"
@@ -7700,7 +7700,7 @@ msgstr ""
 
 #: src/mmg/options/mkvmerge.cpp:117
 msgid "Wrong file chosen"
-msgstr ""
+msgstr "Scelta file errata"
 
 #: src/mmg/header_editor/frame.cpp:250 src/mmg/tabs/chapters.cpp:643
 #: src/mmg/tabs/chapters.cpp:686
@@ -7770,7 +7770,7 @@ msgstr ""
 #: src/common/compression.cpp:139 src/common/compression.cpp:176
 #, boost-format
 msgid "Zlib decompression failed. Result: %1%\n"
-msgstr ""
+msgstr "Decompressione Zlib fallita. Risultato: %1%\n"
 
 #: src/info/mkvinfo.cpp:202 src/info/mkvinfo.cpp:206
 #, boost-format
@@ -7783,17 +7783,17 @@ msgstr ""
 
 #: src/input/r_aac.cpp:88
 msgid "aac_reader: Could not open the file."
-msgstr ""
+msgstr "aac_reader: Impossibile aprire il file."
 
 #: src/input/r_aac.cpp:57
 #, boost-format
 msgid "aac_reader: Could not read %1% bytes."
-msgstr ""
+msgstr "aac_reader: Impossibile leggere %1% byte."
 
 #: src/input/r_aac.cpp:65
 #, boost-format
 msgid "aac_reader: No valid AAC packet found in the first %1% bytes.\n"
-msgstr ""
+msgstr "aac_reader: Nessun valido pacchetto AAC trovato nei primi %1% byte.\n"
 
 #: src/mmg/jobs.cpp:344 src/mmg/jobs.cpp:453 src/mmg/jobs.cpp:531
 msgid "aborted"
@@ -7805,17 +7805,17 @@ msgstr ""
 
 #: src/input/r_ac3.cpp:67
 msgid "ac3_reader: Could not open the source file."
-msgstr ""
+msgstr "ac3_reader: Impossibile aprire il file sorgente."
 
 #: src/input/r_ac3.cpp:62
 #, boost-format
 msgid "ac3_reader: Could not read %1% bytes."
-msgstr ""
+msgstr "ac3_reader: Impossibile leggere %1% byte."
 
 #: src/input/r_ac3.cpp:71
 #, boost-format
 msgid "ac3_reader: No valid AC3 packet found in the first %1% bytes.\n"
-msgstr ""
+msgstr "ac3_reader: Nessun valido pacchetto AC3 trovato nei primi %1% byte.\n"
 
 #: src/mmg/tabs/attachments.cpp:156 src/mmg/tabs/input.cpp:183
 msgid "add"
@@ -7823,11 +7823,11 @@ msgstr "aggiungi"
 
 #: src/common/stereo_mode.cpp:58
 msgid "anaglyph (cyan/red)"
-msgstr ""
+msgstr "anaglifi (ciano/rosso)"
 
 #: src/common/stereo_mode.cpp:60
 msgid "anaglyph (green/magenta)"
-msgstr ""
+msgstr "anaglifi (verde/magenta)"
 
 #: src/mmg/tabs/input.cpp:185
 msgid "append"
@@ -7839,24 +7839,24 @@ msgstr "audio"
 
 #: src/input/r_avc.cpp:122
 msgid "avc_es_reader: Could not open the source file."
-msgstr ""
+msgstr "avc_es_reader: Impossibile aprire il file sorgente."
 
 #: src/input/r_avc.cpp:106
 msgid "avc_es_reader: Should not have happened."
-msgstr ""
+msgstr "avc_es_reader: Non sarebbe dovuto succedere."
 
 #: src/input/r_avi.cpp:114
 #, boost-format
 msgid "avi_reader: Could not initialize AVI source. Reason: %1%"
-msgstr ""
+msgstr "avi_reader: Impossibile inizializzare il sorgente AVI. Motivo: %1%"
 
 #: src/input/r_avi.cpp:107
 msgid "avi_reader: Could not read the source file."
-msgstr ""
+msgstr "avi_reader: Impossibile leggere il file sorgente."
 
 #: src/input/r_avi.cpp:104
 msgid "avi_reader: Source is not a valid AVI file."
-msgstr ""
+msgstr "avi_reader: Il sorgente non è un file AVI valido."
 
 #: src/info/mkvinfo.cpp:671
 #, boost-format
@@ -7878,16 +7878,16 @@ msgstr "pulsanti"
 #: src/common/compression.cpp:240
 #, boost-format
 msgid "bzip2 compression failed. Result: %1%\n"
-msgstr ""
+msgstr "Compressione bzip2 fallita: Risultato: %1%\n"
 
 #: src/common/compression.cpp:203
 msgid "bzlib_compressor_c::decompress() not implemented\n"
-msgstr ""
+msgstr "bzlib_compressor_c::decompress() non implementato\n"
 
 #: src/common/chapters/writer.cpp:196 src/common/chapters/xml_parser.cpp:143
 #, boost-format
 msgid "cet_index: '%1%' not found\n"
-msgstr ""
+msgstr "cet_index: '%1%' non trovato\n"
 
 #: src/info/mkvinfo.cpp:660
 #, boost-format
@@ -7924,11 +7924,11 @@ msgstr "compressione"
 
 #: src/input/r_corepicture.cpp:85
 msgid "corepicture_reader: Could not open the source file."
-msgstr ""
+msgstr "corepicture_reader: Impossibile aprire il file sorgente."
 
 #: src/input/r_corepicture.cpp:72
 msgid "corepicture_reader: Source is not a valid CorePanorama file."
-msgstr ""
+msgstr "corepicture_reader: Il sorgente non è un file CorePanorama valido."
 
 #: src/merge/mkvmerge.cpp:296
 #, boost-format
@@ -7960,7 +7960,7 @@ msgstr "Disabilita tutto"
 
 #: src/info/mkvinfo.cpp:1619
 msgid "discardable, "
-msgstr ""
+msgstr "scartabile, "
 
 #: src/info/mkvinfo.cpp:707
 #, boost-format
@@ -7986,17 +7986,17 @@ msgstr "giù"
 
 #: src/input/r_dts.cpp:66
 msgid "dts_reader: Could not open the source file."
-msgstr ""
+msgstr "dts_reader: Impossibile aprire il file sorgente."
 
 #: src/input/r_dts.cpp:62
 #, boost-format
 msgid "dts_reader: Could not read %1% bytes."
-msgstr ""
+msgstr "dts_reader: Impossibile leggere %1% byte."
 
 #: src/input/r_dts.cpp:77
 #, boost-format
 msgid "dts_reader: No valid DTS packet found in the first %1% bytes.\n"
-msgstr ""
+msgstr "dts_reader: Nessun valido pacchetto DTS trovato nei primi %1% byte.\n"
 
 #: src/mmg/tabs/attachments.cpp:153
 msgid "enable all"
@@ -8086,7 +8086,7 @@ msgstr ""
 
 #: src/mmg/tabs/input_extra.cpp:87
 msgid "for all frames"
-msgstr ""
+msgstr "per tutti i frame"
 
 #: src/input/r_vc1.cpp:52 src/input/r_avc.cpp:76
 msgid "have an xcptn\n"
@@ -8124,7 +8124,7 @@ msgstr ""
 
 #: src/info/mkvinfo.cpp:1617
 msgid "key, "
-msgstr ""
+msgstr "chiave, "
 
 #: src/info/mkvinfo.cpp:1085
 #, boost-format
@@ -8143,7 +8143,7 @@ msgstr ""
 
 #: src/mmg/tabs/global.cpp:255
 msgid "link files"
-msgstr ""
+msgstr "file link"
 
 #: src/mmg/options/mkvmerge.cpp:51
 msgid "lower"
@@ -8155,16 +8155,16 @@ msgstr "minima"
 
 #: src/common/compression.cpp:77
 msgid "lzo_compressor_c::decompress() not implemented\n"
-msgstr ""
+msgstr "lzo_compressor_c::decompress() non implementato\n"
 
 #: src/common/compression.cpp:64
 #, boost-format
 msgid "lzo_init() failed. Result: %1%\n"
-msgstr ""
+msgstr "lzo_init() fallito. Risultato: %1%\n"
 
 #: src/common/compression.cpp:68
 msgid "lzo_malloc(LZO1X_999_MEM_COMPRESS) failed.\n"
-msgstr ""
+msgstr "lzo_malloc(LZO1X_999_MEM_COMPRESS) fallito.\n"
 
 #: src/input/r_matroska.cpp:323
 #, boost-format
@@ -8307,7 +8307,7 @@ msgstr ""
 
 #: src/mmg/tabs/global.cpp:257
 msgid "max. number of files:"
-msgstr ""
+msgstr "massimo numero di file:"
 
 #: src/common/memory.cpp:145
 #, boost-format
@@ -8330,11 +8330,11 @@ msgstr ""
 
 #: src/propedit/target.cpp:88
 msgid "missing property name"
-msgstr ""
+msgstr "Nome proprietà mancante"
 
 #: src/propedit/target.cpp:81
 msgid "missing value"
-msgstr ""
+msgstr "Valore mancante"
 
 #: src/common/fs_sys_helpers.cpp:53 src/common/fs_sys_helpers.cpp:184
 #, boost-format
@@ -8343,11 +8343,11 @@ msgstr ""
 
 #: src/extract/extract_cli_parser.cpp:56
 msgid "mkvextract <-h|-V>"
-msgstr ""
+msgstr "mkvextract <-h|-V>"
 
 #: src/extract/extract_cli_parser.cpp:47
 msgid "mkvextract <mode> <source-filename> [options] <extraction-spec>"
-msgstr ""
+msgstr "mkvextract <modo> <file-sorgente> [opzioni] <spec-estrazione>"
 
 #: src/extract/extract_cli_parser.cpp:98
 msgid "mkvextract attachments \"a movie.mkv\" 4:cover.jpg"
@@ -8408,7 +8408,7 @@ msgstr ""
 
 #: src/mmg/options/mkvmerge.cpp:142
 msgid "mkvmerge"
-msgstr ""
+msgstr "mkvmerge"
 
 #: src/merge/mkvmerge.cpp:73
 msgid "mkvmerge -o out [global options] [options1] <file1> [@optionsfile ...]\n"
@@ -8424,11 +8424,11 @@ msgstr ""
 #: src/mmg/tabs/global.cpp:565 src/mmg/tabs/global.cpp:573
 #: src/mmg/tabs/global.cpp:610
 msgid "mkvmerge GUI error"
-msgstr ""
+msgstr "errore GUI mkvmerge"
 
 #: src/mmg/mmg_dialog.cpp:176
 msgid "mkvmerge GUI ready"
-msgstr ""
+msgstr "GUI mkvmerge pronta"
 
 #: src/mmg/mmg_dialog.cpp:386 src/mmg/mmg_dialog.cpp:432
 #, c-format, boost-format
@@ -8439,7 +8439,7 @@ msgstr "Impostazioni mkvmerge GUI (*.mmg)|*.mmg|%s"
 #: src/mmg/tabs/input.cpp:1313 src/mmg/tabs/input.cpp:1323
 #: src/mmg/tabs/input.cpp:1335 src/mmg/tabs/input.cpp:1391
 msgid "mkvmerge GUI: error"
-msgstr ""
+msgstr "GUI mkvmerge: errore"
 
 #: src/mmg/tabs/global.cpp:287
 msgid "mkvmerge can read CUE sheets for audio CDs and automatically convert them to chapters. This option controls how the chapter names are created. The sequence '%p' is replaced by the track's PERFORMER, the sequence '%t' by the track's TITLE, '%n' by the track's number and '%N' by the track's number padded with a leading 0 for track numbers < 10. The rest is copied as is. If nothing is entered then '%p - %t' will be used."
@@ -8458,7 +8458,7 @@ msgstr ""
 
 #: src/mmg/options/mkvmerge.cpp:57
 msgid "mkvmerge executable"
-msgstr "Eseguibile mkvmrge"
+msgstr "eseguibile mkvmerge"
 
 #: src/mmg/mux_dialog.cpp:352
 #, c-format, boost-format
@@ -8479,7 +8479,7 @@ msgstr "mkvmerge in esecuzione"
 
 #: src/mmg/options/mkvmerge.cpp:80
 msgid "mkvmerge options"
-msgstr "Opzioni mkvmerge"
+msgstr "opzioni mkvmerge"
 
 #: src/mmg/mux_dialog.cpp:89
 msgid "mkvmerge output:"
@@ -8499,7 +8499,7 @@ msgstr ""
 
 #: src/merge/output_control.cpp:264 src/merge/output_control.cpp:304
 msgid "mkvmerge was interrupted by a SIGINT (Ctrl+C?)\n"
-msgstr ""
+msgstr "mkvmerge è stato interrotto con un SIGINT (Ctrl+C?)\n"
 
 #: src/input/r_qtmp4.cpp:557
 msgid "mkvmerge was not compiled with zlib. Compressed headers in QuickTime/MP4 files are therefore not supported.\n"
@@ -8507,7 +8507,7 @@ msgstr ""
 
 #: src/propedit/propedit_cli_parser.cpp:157
 msgid "mkvpropedit [options] <file> <actions>"
-msgstr ""
+msgstr "mkvpropedit [opzioni] <file> <azioni>"
 
 #: src/common/mm_io.cpp:1100
 msgid "mm_text_io_c: UTF32_* is not supported at the moment.\n"
@@ -8520,11 +8520,11 @@ msgstr ""
 
 #: src/mmg/options/mmg.cpp:322
 msgid "mmg"
-msgstr ""
+msgstr "mmg"
 
 #: src/mmg/mmg_dialog.cpp:268
 msgid "mmg debug output"
-msgstr ""
+msgstr "output debug mmg"
 
 #: src/mmg/options/mmg.cpp:177
 msgid "mmg options"
@@ -8532,33 +8532,33 @@ msgstr "Opzioni GUI mkvmerge (mmg)"
 
 #: src/mmg/options/languages.cpp:86
 msgid "mmg will reset to the default list if no entry is selected."
-msgstr "mmg ripristinerà l'elenco predefinito se nessun elemento verra selezionato."
+msgstr "mmg ripristinerà l'elenco predefinito se nessun elemento verrà selezionato."
 
 #: src/common/stereo_mode.cpp:48
 msgid "mono"
-msgstr ""
+msgstr "mono"
 
 #: src/input/r_mp3.cpp:58
 msgid "mp3_reader: Could not open the source file."
-msgstr ""
+msgstr "mp3_reader: Impossibile aprire il file sorgente."
 
 #: src/input/r_mpeg_es.cpp:163
 msgid "mpeg_es_reader: Could not open the file."
-msgstr ""
+msgstr "mpeg_es_reader: Impossibile aprire il file."
 
 #: src/input/r_mpeg_ps.cpp:82
 msgid "mpeg_ps_reader: Could not open the file."
-msgstr ""
+msgstr "mpeg_ps_reader: Impossibile aprire il file."
 
 #: src/input/r_mpeg_ps.cpp:1194
 #, boost-format
 msgid "mpeg_ps_reader: Should not have happened #1. %1%"
-msgstr ""
+msgstr "mpeg_ps_reader: Non sarebbe dovuto succedere #1. %1%"
 
 #: src/input/r_mpeg_ps.cpp:1223
 #, boost-format
 msgid "mpeg_ps_reader: Should not have happened #2. %1%"
-msgstr ""
+msgstr "mpeg_ps_reader: Non sarebbe dovuto succedere #2. %1%"
 
 #: src/input/r_mpeg_ts.cpp:403
 msgid "mpeg_ts_reader_c: Could not open the file."
@@ -8579,20 +8579,20 @@ msgstr "nessun errore"
 
 #: src/info/qt_ui.cpp:59
 msgid "no file loaded"
-msgstr ""
+msgstr "nessun file caricato"
 
 #: src/info/mkvinfo.cpp:880
 msgid "no signature algorithm"
-msgstr ""
+msgstr "nessun algoritmo di firma"
 
 #: src/info/mkvinfo.cpp:889
 msgid "no signature hash algorithm"
-msgstr ""
+msgstr "nessun algoritmo di firma hash"
 
 #: src/mmg/mmg_dialog.cpp:996 src/mmg/tabs/input_extra.cpp:88
 #: src/mmg/tabs/input_extra.cpp:116 src/mmg/tabs/input_extra.cpp:119
 msgid "none"
-msgstr "Nessuna"
+msgstr "nessuno"
 
 #: src/mmg/options/mkvmerge.cpp:50
 msgid "normal"
@@ -8609,7 +8609,7 @@ msgstr ""
 
 #: src/input/r_ogm.cpp:329
 msgid "ogm_reader: Could not open the source file."
-msgstr ""
+msgstr "ogm_reader: Impossibile aprire il file sorgente."
 
 #: src/input/r_ogm.cpp:340
 msgid "ogm_reader: Could not read all header packets."
@@ -8634,11 +8634,11 @@ msgstr ""
 
 #: src/mmg/jobs.cpp:528 src/mmg/jobs.cpp:702
 msgid "pending"
-msgstr ""
+msgstr "in sospeso"
 
 #: src/input/r_pgssup.cpp:55
 msgid "pgssup_reader: Could not open the file."
-msgstr ""
+msgstr "pgssup_reader: Impossibile aprire il file."
 
 #: src/info/mkvinfo.cpp:727
 #, boost-format
@@ -8663,12 +8663,12 @@ msgstr ""
 #: src/info/mkvinfo.cpp:697
 #, boost-format
 msgid "pixel height: %1%"
-msgstr ""
+msgstr "altezza pixel: %1%"
 
 #: src/info/mkvinfo.cpp:692
 #, boost-format
 msgid "pixel width: %1%"
-msgstr ""
+msgstr "larghezza pixel: %2%"
 
 #: src/merge/pr_generic.cpp:853
 #, boost-format
@@ -8682,15 +8682,15 @@ msgstr ""
 
 #: src/extract/xtr_base.cpp:47
 msgid "raw data"
-msgstr ""
+msgstr "dati raw"
 
 #: src/info/wxwidgets_ui.cpp:132 src/info/wxwidgets_ui.cpp:164
 msgid "ready"
-msgstr ""
+msgstr "pronto"
 
 #: src/input/r_real.cpp:149
 msgid "real_reader: Could not read the source file."
-msgstr ""
+msgstr "real_reader: Impossibile leggere il file sorgente."
 
 #: src/input/r_real.cpp:246
 #, boost-format
@@ -8704,7 +8704,7 @@ msgstr ""
 
 #: src/input/r_real.cpp:147
 msgid "real_reader: Source is not a valid RealMedia file."
-msgstr ""
+msgstr "real_reader: Il sorgente non è un file RealMedia valido."
 
 #: src/mmg/tabs/attachments.cpp:157 src/mmg/tabs/input.cpp:184
 msgid "remove"
@@ -8729,7 +8729,7 @@ msgstr ""
 #: src/info/mkvinfo.cpp:650
 #, boost-format
 msgid "sampling freq: %1%"
-msgstr ""
+msgstr "freq campionamento: %1%"
 
 #: src/common/stereo_mode.cpp:49
 msgid "side by side (left first)"
@@ -8746,15 +8746,15 @@ msgstr ""
 
 #: src/input/r_srt.cpp:40
 msgid "srt_reader: Could not open the source file."
-msgstr ""
+msgstr "srt_reader: Impossibile aprire il file sorgente."
 
 #: src/input/r_srt.cpp:34
 msgid "srt_reader: Source is not a valid SRT file."
-msgstr ""
+msgstr "srt_reader: Il sorgente non è un file SRT valido."
 
 #: src/input/r_ssa.cpp:40
 msgid "ssa_reader: Could not open the source file."
-msgstr ""
+msgstr "ssa_reader: Impossibile aprire il file sorgente."
 
 #: src/input/subtitles.cpp:342
 msgid "ssa_reader: Invalid format. Could not find the \"Format\" line in the \"[Events]\" section."
@@ -8762,7 +8762,7 @@ msgstr ""
 
 #: src/input/r_ssa.cpp:44
 msgid "ssa_reader: Source is not a valid SSA/ASS file."
-msgstr ""
+msgstr "ssa_reader: Il sorgente non è un file SSA/ASS valido."
 
 #: src/mmg/tabs/chapters.cpp:911
 msgid "start >= m->ListSize(). This should not have happened. Please file a bug report. Thanks."
@@ -8799,16 +8799,16 @@ msgstr ""
 
 #: src/input/r_truehd.cpp:76
 msgid "truehd_reader: Could not open the source file."
-msgstr ""
+msgstr "truehd_reader: Impossibile aprire il file sorgente."
 
 #: src/input/r_truehd.cpp:63
 #, boost-format
 msgid "truehd_reader: Could not read %1% bytes."
-msgstr ""
+msgstr "truehd_reader: Impossibile leggere %1% byte."
 
 #: src/input/r_tta.cpp:93
 msgid "tta_reader: Could not open the file."
-msgstr ""
+msgstr "tta_reader: Impossibile aprire il file."
 
 #: src/input/r_tta.cpp:60
 #, boost-format
@@ -8817,7 +8817,7 @@ msgstr ""
 
 #: src/mmg/tabs/input_general.cpp:143
 msgid "und (Undetermined)"
-msgstr "und (non determinato)"
+msgstr "und (Non determinato)"
 
 #: src/input/r_mpeg_ps.cpp:1392 src/input/r_matroska.cpp:91
 #: src/input/r_matroska.cpp:2332 src/common/mm_io_win.cpp:165
@@ -8827,7 +8827,7 @@ msgstr "und (non determinato)"
 #: src/info/mkvinfo.cpp:869 src/info/mkvinfo.cpp:882 src/info/mkvinfo.cpp:892
 #: src/info/mkvinfo.cpp:1110
 msgid "unknown"
-msgstr ""
+msgstr "sconosciuto"
 
 #: src/input/r_matroska.cpp:2325
 #, boost-format
@@ -8840,11 +8840,11 @@ msgstr "Su"
 
 #: src/input/r_usf.cpp:96
 msgid "usf_reader: Could not open the source file."
-msgstr ""
+msgstr "usf_reader: Impossibile aprire il file sorgente."
 
 #: src/input/r_usf.cpp:75
 msgid "usf_reader: Source is not a valid USF file."
-msgstr ""
+msgstr "usf_reader: Il sorgente non è un file USF valido."
 
 #: src/common/strings/editing.cpp:210
 #, boost-format
@@ -8865,15 +8865,15 @@ msgstr "video"
 
 #: src/input/r_vobbtn.cpp:56
 msgid "vobbtn_reader: Could not open the file."
-msgstr ""
+msgstr "vobbtn_reader: Impossibile aprire il file."
 
 #: src/input/r_vobsub.cpp:82
 msgid "vobsub_reader: Could not open the sub file"
-msgstr ""
+msgstr "vobsub_reader: Impossibile aprire il sub file"
 
 #: src/input/r_vobsub.cpp:70
 msgid "vobsub_reader: Cound not open the source file."
-msgstr ""
+msgstr "vobsub_reader: Impossibile aprire il file sorgente."
 
 #: src/input/r_vobsub.cpp:573
 msgid "vobsub_reader: sub_file->read failure"
@@ -8881,7 +8881,7 @@ msgstr ""
 
 #: src/input/r_wav.cpp:449
 msgid "wav_reader: Could not open the source file."
-msgstr ""
+msgstr "wav_reader: Impossibile aprire il file sorgente."
 
 #: src/input/r_wav.cpp:501
 msgid "wav_reader: No data chunk was found."
@@ -8893,7 +8893,7 @@ msgstr ""
 
 #: src/input/r_wav.cpp:453
 msgid "wav_reader: Source is not a valid WAVE file."
-msgstr ""
+msgstr "wav_reader: Il sorgente non è un file WAVE valido."
 
 #: src/input/r_wav.cpp:497
 msgid "wav_reader: The format chunk could not be read."
@@ -8905,7 +8905,7 @@ msgstr ""
 
 #: src/input/r_wavpack.cpp:58
 msgid "wavpack_reader: Could not open the file."
-msgstr ""
+msgstr "wavpack_reader: Impossibile aprire il file."
 
 #: src/common/wavpack.cpp:149
 msgid "wavpack_reader: non-audio block found\n"
