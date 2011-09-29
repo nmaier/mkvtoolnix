@@ -67,7 +67,7 @@ vobsub_reader_c::vobsub_reader_c(track_info_c &_ti)
   try {
     idx_file = new mm_text_io_c(new mm_file_io_c(m_ti.m_fname));
   } catch (...) {
-    throw error_c(Y("vobsub_reader: Cound not open the source file."));
+    throw error_c(Y("vobsub_reader: Could not open the source file."));
   }
 
   std::string sub_name = m_ti.m_fname;
