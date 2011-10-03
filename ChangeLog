@@ -1,3 +1,9 @@
+2011-10-03  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: The PGS subtitle output module was not
+	outputting any packet in certain cases due to uninitialized
+	variables.
+
 2011-09-27  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Fixed mkvmerge not finding any track in TS
