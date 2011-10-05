@@ -53,15 +53,15 @@ public:
 
 class MTX_DLL_API mm_io_c: public IOCallback {
 protected:
-  bool dos_style_newlines;
-  std::stack<int64_t> positions;
-  int64_t m_current_position, cached_size;
+  bool m_dos_style_newlines;
+  std::stack<int64_t> m_positions;
+  int64_t m_current_position, m_cached_size;
 
 public:
   mm_io_c()
-    : dos_style_newlines(false)
+    : m_dos_style_newlines(false)
     , m_current_position(0)
-    , cached_size(-1)
+    , m_cached_size(-1)
   {
   }
   virtual ~mm_io_c() { }
@@ -114,7 +114,7 @@ public:
   virtual void close() = 0;
 
   virtual void use_dos_style_newlines(bool yes) {
-    dos_style_newlines = yes;
+    m_dos_style_newlines = yes;
   }
 
 protected:
@@ -147,18 +147,19 @@ struct file_id_t {
 
 class MTX_DLL_API mm_file_io_c: public mm_io_c {
 protected:
+  std::string m_file_name;
+  void *m_file;
+
 #if defined(SYS_WINDOWS)
-  bool _eof;
+  bool m_eof;
 #endif
 #if HAVE_POSIX_FADVISE
   file_id_t m_file_id;
-  unsigned long read_count, write_count;
-  static bool use_posix_fadvise;
-  bool use_posix_fadvise_here;
-  std::string canonicalized_file_name;
+  unsigned long m_read_count, m_write_count;
+  static bool ms_use_posix_fadvise;
+  bool m_use_posix_fadvise_here;
+  std::string m_canonicalized_file_name;
 #endif
-  std::string file_name;
-  void *file;
 
 public:
   mm_file_io_c(const std::string &path, const open_mode mode = MODE_READ);
@@ -175,7 +176,7 @@ public:
   virtual bool eof();
 
   virtual std::string get_file_name() const {
-    return file_name;
+    return m_file_name;
   }
 
   virtual int truncate(int64_t pos);
@@ -196,30 +197,31 @@ typedef counted_ptr<mm_file_io_c> mm_file_io_cptr;
 
 class MTX_DLL_API mm_proxy_io_c: public mm_io_c {
 protected:
-  mm_io_c *proxy_io;
-  bool proxy_delete_io;
+  mm_io_c *m_proxy_io;
+  bool m_proxy_delete_io;
 
 public:
-  mm_proxy_io_c(mm_io_c *_proxy_io, bool _proxy_delete_io = true):
-    proxy_io(_proxy_io),
-    proxy_delete_io(_proxy_delete_io) {
+  mm_proxy_io_c(mm_io_c *proxy_io, bool proxy_delete_io = true)
+    : m_proxy_io(proxy_io)
+    , m_proxy_delete_io(proxy_delete_io)
+  {
   }
   virtual ~mm_proxy_io_c() {
     close();
   }
 
   virtual void setFilePointer(int64 offset, seek_mode mode=seek_beginning) {
-    return proxy_io->setFilePointer(offset, mode);
+    return m_proxy_io->setFilePointer(offset, mode);
   }
   virtual uint64 getFilePointer() {
-    return proxy_io->getFilePointer();
+    return m_proxy_io->getFilePointer();
   }
   virtual bool eof() {
-    return proxy_io->eof();
+    return m_proxy_io->eof();
   }
   virtual void close();
   virtual std::string get_file_name() const {
-    return proxy_io->get_file_name();
+    return m_proxy_io->get_file_name();
   }
 
 protected:
@@ -231,7 +233,7 @@ typedef counted_ptr<mm_proxy_io_c> mm_proxy_io_cptr;
 
 class MTX_DLL_API mm_null_io_c: public mm_io_c {
 protected:
-  int64_t pos;
+  int64_t m_pos;
 
 public:
   mm_null_io_c();
@@ -249,15 +251,15 @@ typedef counted_ptr<mm_null_io_c> mm_null_io_cptr;
 
 class MTX_DLL_API mm_mem_io_c: public mm_io_c {
 protected:
-  size_t pos, mem_size, allocated, increase;
-  unsigned char *mem;
-  const unsigned char *ro_mem;
-  bool free_mem, read_only;
-  std::string file_name;
+  size_t m_pos, m_mem_size, m_allocated, m_increase;
+  unsigned char *m_mem;
+  const unsigned char *m_ro_mem;
+  bool m_free_mem, m_read_only;
+  std::string m_file_name;
 
 public:
-  mm_mem_io_c(unsigned char *_mem, uint64_t _mem_size, int _increase);
-  mm_mem_io_c(const unsigned char *_mem, uint64_t _mem_size);
+  mm_mem_io_c(unsigned char *mem, uint64_t mem_size, int increase);
+  mm_mem_io_c(const unsigned char *mem, uint64_t mem_size);
   ~mm_mem_io_c();
 
   virtual uint64 getFilePointer();
@@ -265,10 +267,10 @@ public:
   virtual void close();
   virtual bool eof();
   virtual std::string get_file_name() const {
-    return file_name;
+    return m_file_name;
   }
-  virtual void set_file_name(const std::string &_file_name) {
-    file_name = _file_name;
+  virtual void set_file_name(const std::string &file_name) {
+    m_file_name = file_name;
   }
 
   virtual unsigned char *get_and_lock_buffer();
@@ -284,19 +286,19 @@ enum byte_order_e {BO_UTF8, BO_UTF16_LE, BO_UTF16_BE, BO_UTF32_LE, BO_UTF32_BE, 
 
 class MTX_DLL_API mm_text_io_c: public mm_proxy_io_c {
 protected:
-  byte_order_e byte_order;
-  unsigned int bom_len;
-  bool uses_carriage_returns, uses_newlines, eol_style_detected;
+  byte_order_e m_byte_order;
+  unsigned int m_bom_len;
+  bool m_uses_carriage_returns, m_uses_newlines, m_eol_style_detected;
 
 public:
-  mm_text_io_c(mm_io_c *_in, bool _delete_in = true);
+  mm_text_io_c(mm_io_c *in, bool delete_in = true);
 
   virtual void setFilePointer(int64 offset, seek_mode mode=seek_beginning);
   virtual std::string getline();
   virtual int read_next_char(char *buffer);
   virtual byte_order_e get_byte_order();
-  virtual void set_byte_order(byte_order_e new_byte_order) {
-    byte_order = new_byte_order;
+  virtual void set_byte_order(byte_order_e byte_order) {
+    m_byte_order = byte_order;
   }
 
 protected:

@@ -49,8 +49,8 @@ mm_probe_cache_io_c::setFilePointer(int64 offset,
                                    seek_mode mode) {
   int64_t new_pos
     = seek_beginning == mode ? offset
-    : seek_end       == mode ? proxy_io->get_size() - offset
-    :                          m_cache_pos          + offset;
+    : seek_end       == mode ? m_proxy_io->get_size() - offset
+    :                          m_cache_pos            + offset;
 
   if ((0 > new_pos) || ((0 != new_pos) && (new_pos >= static_cast<int64_t>(m_cache_size))))
     throw mm_io_seek_error_c();
@@ -60,7 +60,7 @@ mm_probe_cache_io_c::setFilePointer(int64 offset,
 
 int64_t
 mm_probe_cache_io_c::get_size() {
-  return proxy_io->get_size();
+  return m_proxy_io->get_size();
 }
 
 uint32
@@ -69,10 +69,10 @@ mm_probe_cache_io_c::_read(void *buffer,
   size = std::min(m_cache_pos + size, m_cache_size) - m_cache_pos;
 
   if ((m_cache_pos + size) >= m_cache_fill_pos) {
-    proxy_io->setFilePointer(m_cache_fill_pos);
+    m_proxy_io->setFilePointer(m_cache_fill_pos);
 
     size_t bytes_to_read  = m_cache_pos + size - m_cache_fill_pos;
-    m_cache_fill_pos     += proxy_io->read(&m_cache[m_cache_fill_pos], bytes_to_read);
+    m_cache_fill_pos     += m_proxy_io->read(&m_cache[m_cache_fill_pos], bytes_to_read);
   }
 
   size = std::min(m_cache_pos + size, m_cache_fill_pos) - m_cache_pos;

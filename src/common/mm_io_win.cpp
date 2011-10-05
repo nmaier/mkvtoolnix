@@ -41,7 +41,11 @@ CreateFileUtf8(LPCSTR lpFileName,
                HANDLE hTemplateFile);
 
 mm_file_io_c::mm_file_io_c(const std::string &path,
-                           const open_mode mode) {
+                           const open_mode mode)
+  : m_file_name(path)
+  , m_file(NULL)
+  , m_eof(false)
+{
   DWORD access_mode, share_mode, disposition;
 
   switch (mode) {
@@ -73,27 +77,25 @@ mm_file_io_c::mm_file_io_c(const std::string &path,
     prepare_path(path);
 
   file = (void *)CreateFileUtf8(path.c_str(), access_mode, share_mode, NULL, disposition, 0, NULL);
-  _eof = false;
   if ((HANDLE)file == (HANDLE)0xFFFFFFFF)
     throw mm_io_open_error_c();
 
-  file_name          = path;
-  dos_style_newlines = true;
+  m_dos_style_newlines = true;
 }
 
 void
 mm_file_io_c::close() {
-  if (NULL != file) {
-    CloseHandle((HANDLE)file);
-    file = NULL;
+  if (NULL != m_file) {
+    CloseHandle((HANDLE)m_file);
+    m_file = NULL;
   }
-  file_name = "";
+  m_file_name.clear();
 }
 
 uint64
 mm_file_io_c::get_real_file_pointer() {
   LONG high = 0;
-  DWORD low = SetFilePointer((HANDLE)file, 0, &high, FILE_CURRENT);
+  DWORD low = SetFilePointer((HANDLE)m_file, 0, &high, FILE_CURRENT);
 
   if ((low == INVALID_SET_FILE_POINTER) && (GetLastError() != NO_ERROR))
     return (uint64)-1;
@@ -109,7 +111,7 @@ mm_file_io_c::setFilePointer(int64 offset,
                : seek_end       == mode ? FILE_END
                :                          FILE_BEGIN;
   LONG high    = (LONG)(offset >> 32);
-  DWORD low    = SetFilePointer((HANDLE)file, (LONG)(offset & 0xffffffff), &high, method);
+  DWORD low    = SetFilePointer((HANDLE)m_file, (LONG)(offset & 0xffffffff), &high, method);
 
   if ((INVALID_SET_FILE_POINTER == low) && (GetLastError() != NO_ERROR))
     throw mm_io_seek_error_c();
@@ -122,15 +124,15 @@ mm_file_io_c::_read(void *buffer,
                     size_t size) {
   DWORD bytes_read;
 
-  if (!ReadFile((HANDLE)file, buffer, size, &bytes_read, NULL)) {
-    _eof               = true;
+  if (!ReadFile((HANDLE)m_file, buffer, size, &bytes_read, NULL)) {
+    m_eof              = true;
     m_current_position = get_real_file_pointer();
 
     return 0;
   }
 
   if (size != bytes_read)
-    _eof = true;
+    m_eof = true;
 
   m_current_position += bytes_read;
 
@@ -142,7 +144,7 @@ mm_file_io_c::_write(const void *buffer,
                      size_t size) {
   DWORD bytes_written;
 
-  if (!WriteFile((HANDLE)file, buffer, size, &bytes_written, NULL))
+  if (!WriteFile((HANDLE)m_file, buffer, size, &bytes_written, NULL))
     bytes_written = 0;
 
   if (bytes_written != size) {
@@ -171,19 +173,19 @@ mm_file_io_c::_write(const void *buffer,
   }
 
   m_current_position += bytes_written;
-  cached_size         = -1;
+  m_cached_size       = -1;
 
   return bytes_written;
 }
 
 bool
 mm_file_io_c::eof() {
-  return _eof;
+  return m_eof;
 }
 
 int
 mm_file_io_c::truncate(int64_t pos) {
-  cached_size = -1;
+  m_cached_size = -1;
 
   save_pos();
   if (setFilePointer2(pos)) {
@@ -228,7 +230,7 @@ mm_stdio_c::_write(const void *buffer,
   size_t bytes_written = fwrite(buffer, 1, size, stdout);
   fflush(stdout);
 
-  cached_size = -1;
+  m_cached_size = -1;
 
   return bytes_written;
 }

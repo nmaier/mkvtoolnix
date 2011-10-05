@@ -43,9 +43,9 @@ get_errno_msg() {
 }
 
 # if HAVE_POSIX_FADVISE
-static const unsigned long read_using_willneed   = 16 * 1024 * 1024;
-static const unsigned long write_before_dontneed = 8 * 1024 * 1024;
-bool mm_file_io_c::use_posix_fadvise             = false;
+static const unsigned long s_read_using_willneed   = 16 * 1024 * 1024;
+static const unsigned long s_write_before_dontneed =  8 * 1024 * 1024;
+bool mm_file_io_c::ms_use_posix_fadvise            = false;
 
 bool
 operator <(const file_id_t &file_id_1,
@@ -69,18 +69,18 @@ static std::map<file_id_t, mm_file_io_c *> s_fadvised_file_object_by_id;
   "Data integrity is not in danger."
 
 mm_file_io_c::mm_file_io_c(const std::string &path,
-                           const open_mode mode):
-  file_name(path) {
-
-  std::string local_path;
+                           const open_mode mode)
+  : m_file_name(path)
+  , m_file(NULL)
+#if HAVE_POSIX_FADVISE
+  , m_read_count(0)
+  , m_write_count(0)
+  , m_use_posix_fadvise_here(ms_use_posix_fadvise)
+#endif
+{
   const char *cmode;
 # if HAVE_POSIX_FADVISE
-  int advise;
-
-  advise = 0;
-  read_count = 0;
-  write_count = 0;
-  use_posix_fadvise_here = use_posix_fadvise;
+  int advise = 0;
 # endif
 
   switch (mode) {
@@ -114,15 +114,15 @@ mm_file_io_c::mm_file_io_c(const std::string &path,
 
   if ((MODE_WRITE == mode) || (MODE_CREATE == mode))
     prepare_path(path);
-  local_path = g_cc_local_utf8->native(path);
+  std::string local_path = g_cc_local_utf8->native(path);
 
   struct stat st;
   if ((0 == stat(local_path.c_str(), &st)) && S_ISDIR(st.st_mode))
     throw mm_io_open_error_c();
 
-  file = (FILE *)fopen(local_path.c_str(), cmode);
+  m_file = (FILE *)fopen(local_path.c_str(), cmode);
 
-  if (file == NULL)
+  if (NULL == m_file)
     throw mm_io_open_error_c();
 
 # if HAVE_POSIX_FADVISE
@@ -146,9 +146,9 @@ mm_file_io_c::setup_fadvise(const std::string &local_path) {
   s_fadvised_file_count_by_id[m_file_id]++;
 
   if (1 < s_fadvised_file_count_by_id[m_file_id]) {
-    use_posix_fadvise_here = false;
+    m_use_posix_fadvise_here = false;
     if (map_has_key(s_fadvised_file_object_by_id, m_file_id))
-      s_fadvised_file_object_by_id[m_file_id]->use_posix_fadvise_here = false;
+      s_fadvised_file_object_by_id[m_file_id]->m_use_posix_fadvise_here = false;
 
   } else
     s_fadvised_file_object_by_id[m_file_id] = this;
@@ -162,13 +162,13 @@ mm_file_io_c::setFilePointer(int64 offset,
              : mode == seek_end       ? SEEK_END
              :                          SEEK_CUR;
 
-  if (fseeko((FILE *)file, offset, whence) != 0)
+  if (fseeko((FILE *)m_file, offset, whence) != 0)
     throw mm_io_seek_error_c();
 
   if (mode == seek_beginning)
     m_current_position = offset;
   else if (mode == seek_end)
-    m_current_position = ftello((FILE *)file);
+    m_current_position = ftello((FILE *)m_file);
   else
     m_current_position += offset;
 }
@@ -176,25 +176,25 @@ mm_file_io_c::setFilePointer(int64 offset,
 size_t
 mm_file_io_c::_write(const void *buffer,
                      size_t size) {
-  size_t bwritten = fwrite(buffer, 1, size, (FILE *)file);
-  if (ferror((FILE *)file) != 0)
+  size_t bwritten = fwrite(buffer, 1, size, (FILE *)m_file);
+  if (ferror((FILE *)m_file) != 0)
     mxerror(boost::format(Y("Could not write to the output file: %1% (%2%)\n")) % errno % get_errno_msg());
 
 # if HAVE_POSIX_FADVISE
-  write_count += bwritten;
-  if (use_posix_fadvise && use_posix_fadvise_here && (write_count > write_before_dontneed)) {
-    uint64 pos  = getFilePointer();
-    write_count = 0;
+  m_write_count += bwritten;
+  if (ms_use_posix_fadvise && m_use_posix_fadvise_here && (m_write_count > s_write_before_dontneed)) {
+    uint64 pos    = getFilePointer();
+    m_write_count = 0;
 
-    if (0 != posix_fadvise(fileno((FILE *)file), 0, pos, POSIX_FADV_DONTNEED)) {
-      mxverb(2, boost::format(FADVISE_WARNING) % file_name % errno % get_errno_msg());
-      use_posix_fadvise_here = false;
+    if (0 != posix_fadvise(fileno((FILE *)m_file), 0, pos, POSIX_FADV_DONTNEED)) {
+      mxverb(2, boost::format(FADVISE_WARNING) % m_file_name % errno % get_errno_msg());
+      m_use_posix_fadvise_here = false;
     }
   }
 # endif
 
   m_current_position += bwritten;
-  cached_size         = -1;
+  m_cached_size       = -1;
 
   return bwritten;
 }
@@ -202,24 +202,24 @@ mm_file_io_c::_write(const void *buffer,
 uint32
 mm_file_io_c::_read(void *buffer,
                     size_t size) {
-  int64_t bread = fread(buffer, 1, size, (FILE *)file);
+  int64_t bread = fread(buffer, 1, size, (FILE *)m_file);
 
 # if HAVE_POSIX_FADVISE
-  if (use_posix_fadvise && use_posix_fadvise_here && (0 <= bread)) {
-    read_count += bread;
-    if (read_count > read_using_willneed) {
-      uint64 pos = getFilePointer();
-      int fd     = fileno((FILE *)file);
-      read_count = 0;
+  if (ms_use_posix_fadvise && m_use_posix_fadvise_here && (0 <= bread)) {
+    m_read_count += bread;
+    if (m_read_count > s_read_using_willneed) {
+      uint64 pos   = getFilePointer();
+      int fd       = fileno((FILE *)m_file);
+      m_read_count = 0;
 
       if (0 != posix_fadvise(fd, 0, pos, POSIX_FADV_DONTNEED)) {
-        mxverb(2, boost::format(FADVISE_WARNING) % file_name % errno % get_errno_msg());
-        use_posix_fadvise_here = false;
+        mxverb(2, boost::format(FADVISE_WARNING) % m_file_name % errno % get_errno_msg());
+        m_use_posix_fadvise_here = false;
       }
 
-      if (use_posix_fadvise_here && (0 != posix_fadvise(fd, pos, pos + read_using_willneed, POSIX_FADV_WILLNEED))) {
-        mxverb(2, boost::format(FADVISE_WARNING) % file_name % errno % get_errno_msg());
-        use_posix_fadvise_here = false;
+      if (m_use_posix_fadvise_here && (0 != posix_fadvise(fd, pos, pos + s_read_using_willneed, POSIX_FADV_WILLNEED))) {
+        mxverb(2, boost::format(FADVISE_WARNING) % m_file_name % errno % get_errno_msg());
+        m_use_posix_fadvise_here = false;
       }
     }
   }
@@ -232,9 +232,9 @@ mm_file_io_c::_read(void *buffer,
 
 void
 mm_file_io_c::close() {
-  if (NULL != file) {
-    fclose((FILE *)file);
-    file = NULL;
+  if (NULL != m_file) {
+    fclose((FILE *)m_file);
+    m_file = NULL;
 
 # if HAVE_POSIX_FADVISE
     if (m_file_id.m_initialized) {
@@ -250,13 +250,13 @@ mm_file_io_c::close() {
 
 bool
 mm_file_io_c::eof() {
-  return feof((FILE *)file) != 0;
+  return feof((FILE *)m_file) != 0;
 }
 
 int
 mm_file_io_c::truncate(int64_t pos) {
-  cached_size = -1;
-  return ftruncate(fileno((FILE *)file), pos);
+  m_cached_size = -1;
+  return ftruncate(fileno((FILE *)m_file), pos);
 }
 
 /** \brief OS and kernel dependant setup
@@ -270,13 +270,13 @@ mm_file_io_c::setup() {
 # if HAVE_POSIX_FADVISE
   struct utsname un;
 
-  use_posix_fadvise = false;
+  ms_use_posix_fadvise = false;
   if ((0 == uname(&un)) && !strcasecmp(un.sysname, "Linux")) {
     std::vector<std::string> versions = split(un.release, ".");
     int major, minor;
 
     if ((2 <= versions.size()) && parse_int(versions[0], major) && parse_int(versions[1], minor) && ((2 < major) || (6 <= minor)))
-      use_posix_fadvise = true;
+      ms_use_posix_fadvise = true;
   }
 # endif // HAVE_POSIX_FADVISE
 }
@@ -351,7 +351,7 @@ mm_file_io_c::getFilePointer() {
 
 mm_file_io_c::~mm_file_io_c() {
   close();
-  file_name = "";
+  m_file_name = "";
 }
 
 void
@@ -651,7 +651,7 @@ mm_io_c::skip(int64 num_bytes) {
 
 void
 mm_io_c::save_pos(int64_t new_pos) {
-  positions.push(getFilePointer());
+  m_positions.push(getFilePointer());
 
   if (-1 != new_pos)
     setFilePointer(new_pos);
@@ -659,11 +659,11 @@ mm_io_c::save_pos(int64_t new_pos) {
 
 bool
 mm_io_c::restore_pos() {
-  if (positions.empty())
+  if (m_positions.empty())
     return false;
 
-  setFilePointer(positions.top());
-  positions.pop();
+  setFilePointer(m_positions.top());
+  m_positions.pop();
 
   return true;
 }
@@ -706,14 +706,14 @@ mm_io_c::write_bom(const std::string &charset) {
 
 int64_t
 mm_io_c::get_size() {
-  if (-1 == cached_size) {
+  if (-1 == m_cached_size) {
     save_pos();
     setFilePointer(0, seek_end);
-    cached_size = getFilePointer();
+    m_cached_size = getFilePointer();
     restore_pos();
   }
 
-  return cached_size;
+  return m_cached_size;
 }
 
 int
@@ -733,51 +733,52 @@ mm_io_c::getch() {
 
 void
 mm_proxy_io_c::close() {
-  if ((NULL != proxy_io) && proxy_delete_io)
-    delete proxy_io;
+  if ((NULL != m_proxy_io) && m_proxy_delete_io)
+    delete m_proxy_io;
 
-  proxy_io = NULL;
+  m_proxy_io = NULL;
 }
 
 
 uint32
 mm_proxy_io_c::_read(void *buffer,
                      size_t size) {
-  return proxy_io->read(buffer, size);
+  return m_proxy_io->read(buffer, size);
 }
 
 size_t
 mm_proxy_io_c::_write(const void *buffer,
                       size_t size) {
-  return proxy_io->write(buffer, size);
+  return m_proxy_io->write(buffer, size);
 }
 
 /*
    Dummy class for output to /dev/null. Needed for two pass stuff.
 */
 
-mm_null_io_c::mm_null_io_c() {
-  pos = 0;
+mm_null_io_c::mm_null_io_c()
+  : m_pos(0)
+{
 }
 
 uint64
 mm_null_io_c::getFilePointer() {
-  return pos;
+  return m_pos;
 }
 
 void
 mm_null_io_c::setFilePointer(int64 offset,
                              seek_mode mode) {
-  pos = seek_beginning == mode ? offset
-      : seek_end       == mode ? 0
-      :                          pos + offset;
+  m_pos = seek_beginning == mode ? offset
+        : seek_end       == mode ? 0
+        :                          m_pos + offset;
 }
 
 uint32
 mm_null_io_c::_read(void *buffer,
                     size_t size) {
   memset(buffer, 0, size);
-  pos += size;
+  m_pos += size;
 
   return size;
 }
@@ -785,7 +786,7 @@ mm_null_io_c::_read(void *buffer,
 size_t
 mm_null_io_c::_write(const void *buffer,
                      size_t size) {
-  pos += size;
+  m_pos += size;
 
   return size;
 }
@@ -797,43 +798,43 @@ mm_null_io_c::close() {
 /*
    IO callback class working on memory
 */
-mm_mem_io_c::mm_mem_io_c(unsigned char *_mem,
-                         uint64_t _mem_size,
-                         int _increase)
-  : pos(0)
-  , mem_size(_mem_size)
-  , allocated(_mem_size)
-  , increase(_increase)
-  , mem(_mem)
-  , ro_mem(NULL)
-  , read_only(false)
+mm_mem_io_c::mm_mem_io_c(unsigned char *mem,
+                         uint64_t mem_size,
+                         int increase)
+  : m_pos(0)
+  , m_mem_size(mem_size)
+  , m_allocated(mem_size)
+  , m_increase(increase)
+  , m_mem(mem)
+  , m_ro_mem(NULL)
+  , m_read_only(false)
 {
-  if (0 >= increase)
+  if (0 >= m_increase)
     throw error_c(Y("wrong usage: increase < 0"));
 
-  if ((NULL == mem) && (0 < increase)) {
+  if ((NULL == m_mem) && (0 < m_increase)) {
     if (0 == mem_size)
-      allocated = increase;
+      m_allocated = increase;
 
-    mem      = (unsigned char *)safemalloc(allocated);
-    free_mem = true;
+    m_mem      = safemalloc(m_allocated);
+    m_free_mem = true;
 
   } else
-    free_mem = false;
+    m_free_mem = false;
 }
 
-mm_mem_io_c::mm_mem_io_c(const unsigned char *_mem,
-                         uint64_t _mem_size)
-  : pos(0)
-  , mem_size(_mem_size)
-  , allocated(_mem_size)
-  , increase(0)
-  , mem(NULL)
-  , ro_mem(_mem)
-  , free_mem(false)
-  , read_only(true)
+mm_mem_io_c::mm_mem_io_c(const unsigned char *mem,
+                         uint64_t mem_size)
+  : m_pos(0)
+  , m_mem_size(mem_size)
+  , m_allocated(mem_size)
+  , m_increase(0)
+  , m_mem(NULL)
+  , m_ro_mem(mem)
+  , m_free_mem(false)
+  , m_read_only(true)
 {
-  if (NULL == ro_mem)
+  if (NULL == m_ro_mem)
     throw error_c(Y("wrong usage: read-only with NULL memory"));
 }
 
@@ -843,22 +844,22 @@ mm_mem_io_c::~mm_mem_io_c() {
 
 uint64
 mm_mem_io_c::getFilePointer() {
-  return pos;
+  return m_pos;
 }
 
 void
 mm_mem_io_c::setFilePointer(int64 offset,
                             seek_mode mode) {
-  if ((NULL == mem) && (NULL == ro_mem) && (0 == mem_size))
+  if ((NULL == m_mem) && (NULL == m_ro_mem) && (0 == m_mem_size))
     throw error_c(Y("wrong usage: read-only with NULL memory"));
 
   int64_t new_pos
     = seek_beginning == mode ? offset
-    : seek_end       == mode ? mem_size - offset
-    :                          pos      + offset;
+    : seek_end       == mode ? m_mem_size - offset
+    :                          m_pos      + offset;
 
-  if ((0 <= new_pos) && (static_cast<int64_t>(mem_size) >= new_pos))
-    pos = new_pos;
+  if ((0 <= new_pos) && (static_cast<int64_t>(m_mem_size) >= new_pos))
+    m_pos = new_pos;
   else
     throw mm_io_seek_error_c();
 }
@@ -866,12 +867,12 @@ mm_mem_io_c::setFilePointer(int64 offset,
 uint32
 mm_mem_io_c::_read(void *buffer,
                    size_t size) {
-  size_t rbytes = std::min(size, mem_size - pos);
-  if (read_only)
-    memcpy(buffer, &ro_mem[pos], rbytes);
+  size_t rbytes = std::min(size, m_mem_size - m_pos);
+  if (m_read_only)
+    memcpy(buffer, &m_ro_mem[m_pos], rbytes);
   else
-    memcpy(buffer, &mem[pos], rbytes);
-  pos += rbytes;
+    memcpy(buffer, &m_mem[m_pos], rbytes);
+  m_pos += rbytes;
 
   return rbytes;
 }
@@ -879,92 +880,91 @@ mm_mem_io_c::_read(void *buffer,
 size_t
 mm_mem_io_c::_write(const void *buffer,
                     size_t size) {
-  if (read_only)
+  if (m_read_only)
     throw error_c(Y("wrong usage: writing to read-only memory"));
 
   int64_t wbytes;
-  if ((pos + size) >= allocated) {
-    if (increase) {
-      int64_t new_allocated  = pos + size - allocated;
-      new_allocated          = ((new_allocated / increase) + 1 ) * increase;
-      allocated             += new_allocated;
-      mem                    = (unsigned char *)saferealloc(mem, allocated);
+  if ((m_pos + size) >= m_allocated) {
+    if (m_increase) {
+      int64_t new_allocated  = m_pos + size - m_allocated;
+      new_allocated          = ((new_allocated / m_increase) + 1 ) * m_increase;
+      m_allocated           += new_allocated;
+      m_mem                  = (unsigned char *)saferealloc(m_mem, m_allocated);
       wbytes                 = size;
     } else
-      wbytes = allocated - pos;
+      wbytes                 = m_allocated - m_pos;
 
   } else
     wbytes = size;
 
-  if ((pos + size) > mem_size)
-    mem_size = pos + size;
+  if ((m_pos + size) > m_mem_size)
+    m_mem_size = m_pos + size;
 
-  memcpy(&mem[pos], buffer, wbytes);
-  pos         += wbytes;
-  cached_size  = -1;
+  memcpy(&m_mem[m_pos], buffer, wbytes);
+  m_pos         += wbytes;
+  m_cached_size  = -1;
 
   return wbytes;
 }
 
 void
 mm_mem_io_c::close() {
-  if (free_mem)
-    safefree(mem);
-  mem       = NULL;
-  ro_mem    = NULL;
-  read_only = true;
-  free_mem  = false;
-  mem_size  = 0;
-  increase  = 0;
-  pos       = 0;
+  if (m_free_mem)
+    safefree(m_mem);
+  m_mem       = NULL;
+  m_ro_mem    = NULL;
+  m_read_only = true;
+  m_free_mem  = false;
+  m_mem_size  = 0;
+  m_increase  = 0;
+  m_pos       = 0;
 }
 
 bool
 mm_mem_io_c::eof() {
-  return pos >= mem_size;
+  return m_pos >= m_mem_size;
 }
 
 unsigned char *
 mm_mem_io_c::get_and_lock_buffer() {
-  free_mem = false;
-  return mem;
+  m_free_mem = false;
+  return m_mem;
 }
 
 /*
    Class for handling UTF-8/UTF-16/UTF-32 text files.
 */
 
-mm_text_io_c::mm_text_io_c(mm_io_c *_in,
-                           bool _delete_in)
-  : mm_proxy_io_c(_in, _delete_in)
-  , byte_order(BO_NONE)
-  , bom_len(0)
-  , uses_carriage_returns(false)
-  , uses_newlines(false)
-  , eol_style_detected(false)
+mm_text_io_c::mm_text_io_c(mm_io_c *in,
+                           bool delete_in)
+  : mm_proxy_io_c(in, delete_in)
+  , m_byte_order(BO_NONE)
+  , m_bom_len(0)
+  , m_uses_carriage_returns(false)
+  , m_uses_newlines(false)
+  , m_eol_style_detected(false)
 {
-  _in->setFilePointer(0, seek_beginning);
+  in->setFilePointer(0, seek_beginning);
 
   unsigned char buffer[4];
-  int num_read = _in->read(buffer, 4);
+  int num_read = in->read(buffer, 4);
   if (2 > num_read) {
-    _in->setFilePointer(0, seek_beginning);
+    in->setFilePointer(0, seek_beginning);
     return;
   }
 
-  detect_byte_order_marker(buffer, num_read, byte_order, bom_len);
+  detect_byte_order_marker(buffer, num_read, m_byte_order, m_bom_len);
 
-  _in->setFilePointer(bom_len, seek_beginning);
+  in->setFilePointer(m_bom_len, seek_beginning);
 }
 
 void
 mm_text_io_c::detect_eol_style() {
-  if (eol_style_detected)
+  if (m_eol_style_detected)
     return;
 
-
-  eol_style_detected  = true;
-  bool found_cr_or_nl = false;
+  m_eol_style_detected = true;
+  bool found_cr_or_nl  = false;
 
   save_pos();
 
@@ -975,12 +975,12 @@ mm_text_io_c::detect_eol_style() {
       break;
 
     if ((1 == len) && ('\r' == utf8char[0])) {
-      found_cr_or_nl        = true;
-      uses_carriage_returns = true;
+      found_cr_or_nl          = true;
+      m_uses_carriage_returns = true;
 
     } else if ((1 == len) && ('\n' == utf8char[0])) {
-      found_cr_or_nl = true;
-      uses_newlines  = true;
+      found_cr_or_nl  = true;
+      m_uses_newlines = true;
 
     } else if (found_cr_or_nl)
       break;
@@ -1030,13 +1030,12 @@ mm_text_io_c::has_byte_order_marker(const std::string &string) {
 
 int
 mm_text_io_c::read_next_char(char *buffer) {
-  unsigned char stream[6];
-
-  if (byte_order == BO_NONE)
+  if (BO_NONE == m_byte_order)
     return read(buffer, 1);
 
+  unsigned char stream[6];
   size_t size = 0;
-  if (byte_order == BO_UTF8) {
+  if (BO_UTF8 == m_byte_order) {
     if (read(stream, 1) != 1)
       return 0;
 
@@ -1058,7 +1057,7 @@ mm_text_io_c::read_next_char(char *buffer) {
 
     return size;
 
-  } else if ((byte_order == BO_UTF16_LE) || (byte_order == BO_UTF16_BE))
+  } else if ((BO_UTF16_LE == m_byte_order) || (BO_UTF16_BE == m_byte_order))
     size = 2;
   else
     size = 4;
@@ -1068,7 +1067,7 @@ mm_text_io_c::read_next_char(char *buffer) {
 
   unsigned long data = 0;
   size_t i;
-  if ((byte_order == BO_UTF16_LE) || (byte_order == BO_UTF32_LE))
+  if ((BO_UTF16_LE == m_byte_order) || (BO_UTF32_LE == m_byte_order))
     for (i = 0; i < size; i++) {
       data <<= 8;
       data  |= stream[size - i - 1];
@@ -1107,7 +1106,7 @@ mm_text_io_c::getline() {
   if (eof())
     throw error_c(Y("end-of-file"));
 
-  if (!eol_style_detected)
+  if (!m_eol_style_detected)
     detect_eol_style();
 
   std::string s;
@@ -1122,7 +1121,7 @@ mm_text_io_c::getline() {
       return s;
 
     if ((1 == len) && (utf8char[0] == '\r')) {
-      if (previous_was_carriage_return && !uses_newlines) {
+      if (previous_was_carriage_return && !m_uses_newlines) {
         setFilePointer(-1, seek_current);
         return s;
       }
@@ -1131,7 +1130,7 @@ mm_text_io_c::getline() {
       continue;
     }
 
-    if ((1 == len) && (utf8char[0] == '\n') && (!uses_carriage_returns || previous_was_carriage_return))
+    if ((1 == len) && (utf8char[0] == '\n') && (!m_uses_carriage_returns || previous_was_carriage_return))
       return s;
 
     if (previous_was_carriage_return) {
@@ -1146,13 +1145,13 @@ mm_text_io_c::getline() {
 
 byte_order_e
 mm_text_io_c::get_byte_order() {
-  return byte_order;
+  return m_byte_order;
 }
 
 void
 mm_text_io_c::setFilePointer(int64 offset,
                              seek_mode mode) {
-  mm_proxy_io_c::setFilePointer(((0 == offset) && (seek_beginning == mode)) ? bom_len : offset, mode);
+  mm_proxy_io_c::setFilePointer(((0 == offset) && (seek_beginning == mode)) ? m_bom_len : offset, mode);
 }
 
 /*
@@ -1182,7 +1181,7 @@ mm_stdio_c::_read(void *buffer,
 size_t
 mm_stdio_c::_write(const void *buffer,
                    size_t size) {
-  cached_size = -1;
+  m_cached_size = -1;
 
   return fwrite(buffer, 1, size, stdout);
 }
