@@ -1909,6 +1909,9 @@ process_file(const std::string &file_name) {
   KaxCluster *cluster;
 
   s_tc_scale = TIMECODE_SCALE;
+  s_tracks.clear();
+  s_tracks_by_number.clear();
+  s_track_info.clear();
 
   // open input file
   mm_io_c *in;

@@ -1,3 +1,8 @@
+2011-10-05  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvinfo.cpp: bug fix: Track information was not reset when
+	opening more than one file in the GUI.
+
 2011-10-03  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: The PGS subtitle output module was not
