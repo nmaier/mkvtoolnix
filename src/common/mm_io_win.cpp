@@ -76,8 +76,8 @@ mm_file_io_c::mm_file_io_c(const std::string &path,
   if ((MODE_WRITE == mode) || (MODE_CREATE == mode))
     prepare_path(path);
 
-  file = (void *)CreateFileUtf8(path.c_str(), access_mode, share_mode, NULL, disposition, 0, NULL);
-  if ((HANDLE)file == (HANDLE)0xFFFFFFFF)
+  m_file = (void *)CreateFileUtf8(path.c_str(), access_mode, share_mode, NULL, disposition, 0, NULL);
+  if ((HANDLE)m_file == (HANDLE)0xFFFFFFFF)
     throw mm_io_open_error_c();
 
   m_dos_style_newlines = true;
@@ -189,7 +189,7 @@ mm_file_io_c::truncate(int64_t pos) {
 
   save_pos();
   if (setFilePointer2(pos)) {
-    bool result = SetEndOfFile((HANDLE)file);
+    bool result = SetEndOfFile((HANDLE)m_file);
     restore_pos();
 
     return result ? 0 : -1;
