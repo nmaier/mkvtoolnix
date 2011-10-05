@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: mkvtoolnix_uk\n"
 "Report-Msgid-Bugs-To: Moritz Bunkus <moritz@bunkus.org>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2011-09-21 12:10+0200\n"
+"PO-Revision-Date: 2011-10-04 14:42+0200\n"
 "Last-Translator: Andriy Bilous'ko <arestarh@ukr.net>\n"
 "Language-Team: Ukrainian <moritz@bunkus.org>\n"
 "Language: uk\n"
@@ -1636,7 +1636,7 @@ msgstr "Група блоків знайдена на позиції %1%, але
 #: src/input/r_matroska.cpp:2142
 #, boost-format
 msgid "A block was found at timestamp %1% for track number %2%. However, no headers where found for that track number. The block will be skipped.\n"
-msgstr "Блок був знайдений на позиції %1% для номеру треку %2%. Тим не менше, заголовки не знайдені для цього номеру треку. Блок буде пропущено.\n"
+msgstr "Блок був знайдений на позиції %1% для доріжки номер %2%. Тим не менше, заголовки не знайдені для цього номеру доріжки. Блок буде пропущено.\n"
 
 #: src/common/property_element.cpp:133
 #: src/mmg/header_editor/frame.cpp:440
@@ -2083,7 +2083,7 @@ msgstr "Бітів у вибірці, в основному використов
 #: src/info/mkvinfo.cpp:184
 #, boost-format
 msgid "Block (track number %1%, %2% frame(s), timecode %|3$.3f|s = %4%)"
-msgstr "Блок (номер треку %1%, %2% кадр(и)(ів), тайм-код %|3$.3f|s = %4%)"
+msgstr "Блок (доріжка номер %1%, %2% кадр(и)(ів), тайм-код %|3$.3f|s = %4%)"
 
 #: src/info/mkvinfo.cpp:198
 #, boost-format
@@ -3371,12 +3371,12 @@ msgstr "Витягнути інформацію про співвідношен�
 #: src/extract/tracks.cpp:110
 #, boost-format
 msgid "Extracting track %1% with the CodecID '%2%' to the file '%3%'. Container format: %4%\n"
-msgstr "Витягнення треку %1% з CodecID '%2%' у файл '%3%'. Формат контейнера: %4%\n"
+msgstr "Витягнення доріжки %1% з CodecID '%2%' у файл '%3%'. Формат контейнера: %4%\n"
 
 #: src/extract/tracks.cpp:94
 #, boost-format
 msgid "Extraction of track number %1% with the CodecID '%2%' is not supported.\n"
-msgstr "Витягнення номера треку %1% з CodecID '%2%' не підтримується.\n"
+msgstr "Витягнення доріжки номер %1% з CodecID '%2%' не підтримується.\n"
 
 #: src/common/file_types.cpp:33
 msgid "FLAC (Free Lossless Audio Codec)"
@@ -4534,7 +4534,7 @@ msgstr "Більше ніж одна доріжка повинна бути до
 #: src/extract/tracks.cpp:70
 #, boost-format
 msgid "More than one track with the track number %1% found.\n"
-msgstr "Більше ніж одна доріжка з номером доріжки %1% знайдена.\n"
+msgstr "Знайдено більш ніж одну доріжку з номером доріжки %1%.\n"
 
 #: src/mmg/jobs.cpp:472
 msgid "Move the selected job(s) down"
@@ -5784,7 +5784,7 @@ msgstr "ПростийБлок"
 #: src/info/mkvinfo.cpp:203
 #, boost-format
 msgid "SimpleBlock (%1%track number %2%, %3% frame(s), timecode %|4$.3f|s = %5%)"
-msgstr "ПростийБлок (%1% номер доріжки %2%, %3% кадри(ів), тайм-код %|4$.3f|с = %5%)"
+msgstr "ПростийБлок (%1% доріжка номер %2%, %3% кадри(ів), тайм-код %|4$.3f|с = %5%)"
 
 #: src/mpegparser/M2VParser.cpp:396
 msgid "Single field frame before GOP header detected. Fix the MPEG2 video stream before attempting to multiplex it.\n"
@@ -9393,12 +9393,16 @@ msgstr "Так"
 
 #~ msgid " (both eyes)"
 #~ msgstr " (обидва ока)"
+
 #~ msgid " (left eye)"
 #~ msgstr " (ліве око)"
+
 #~ msgid " (right eye)"
 #~ msgstr " (праве око)"
+
 #~ msgid "%1% at %2%"
 #~ msgstr "%1% в %2%"
+
 #~ msgid ""
 #~ "%s\n"
 #~ "\n"
@@ -9419,24 +9423,34 @@ msgstr "Так"
 #~ "\n"
 #~ "Допомога надається у вигляді підказок, в меню\n"
 #~ "'Довідка' або після натиснення 'F1'."
+
 #~ msgid "(Unknown element: %1%)"
 #~ msgstr "(Невідомий елемент: %1%)"
+
 #~ msgid "About mkvmerge's GUI"
 #~ msgstr "Про mkvmerge GUI"
+
 #~ msgid "Both eyes"
 #~ msgstr "Обидва ока"
+
 #~ msgid "DTS (Digital Theater System)"
 #~ msgstr "DTS (Digital Theater System)"
+
 #~ msgid "Dirac elementary stream"
 #~ msgstr "Dirac елементарний потік"
+
 #~ msgid "Do not write those header elements whose values are the same as their default values according to the Matroska specs."
 #~ msgstr "Не пишіть заголовок тих елементів, значення яких збігаються з їхніми значеннями за замовчуванням відповідно до Matroska критеріям."
+
 #~ msgid "FLAC lossless audio"
 #~ msgstr "FLAC аудіо без втрат"
+
 #~ msgid "File/segment title"
 #~ msgstr "Файл/сегмент назву"
+
 #~ msgid "IVF with VP8"
 #~ msgstr "IVF з VP8"
+
 #~ msgid ""
 #~ "Known file types:\n"
 #~ "  ext   description\n"
@@ -9445,44 +9459,64 @@ msgstr "Так"
 #~ "Відомі типи файлу:\n"
 #~ "  опис розширення\n"
 #~ "  ----  --------------------------\n"
+
 #~ msgid "Left eye"
 #~ msgstr "Ліве око"
+
 #~ msgid "MPEG program stream"
 #~ msgstr "MPEG програмний потік"
+
 #~ msgid "MPEG-1 layer II audio (CBR and VBR/ABR)"
 #~ msgstr "MPEG-1 layer II audio (CBR и VBR/ABR)"
+
 #~ msgid "MPEG-1 layer III audio (CBR and VBR/ABR)"
 #~ msgstr "MPEG-1 layer III audio (CBR и VBR/ABR)"
+
 #~ msgid "MPEG-1 video elementary stream"
 #~ msgstr "MPEG-1 video елементарний потік"
+
 #~ msgid "MPEG-2 video elementary stream"
 #~ msgstr "MPEG-2 video елементарний потік"
+
 #~ msgid "Matroska A/V files (*.mka;*.mkv)|*.mkv;*.mka|%s"
 #~ msgstr "Аудіо/відео файли Matroska (*.mka;*.mkv)|*.mkv;*.mka|%s"
+
 #~ msgid "Matroska files (*.mkv;*.mka)|*.mkv;*.mka|%s"
 #~ msgstr "Файли Matroska (*.mkv;*.mka)|*.mkv;*.mka|%s"
+
 #~ msgid "Matroska files (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|All files|*.*"
 #~ msgstr "Matroska файли (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|Все файлы|*.*"
+
 #~ msgid "None"
 #~ msgstr "жоден"
+
 #~ msgid "Other global options"
 #~ msgstr "Інші глобальні опції"
+
 #~ msgid "Quicktime/MP4 audio and video"
 #~ msgstr "Quicktime/MP4 Audio і Video"
+
 #~ msgid "RealMedia audio and video"
 #~ msgstr "RealMedia Audio i Video"
+
 #~ msgid "Right eye"
 #~ msgstr "Праве око"
+
 #~ msgid "Sets the compression used for VobSub subtitles. If nothing is chosen then the VobSubs will be automatically compressed with zlib. 'none' results is files that are a lot larger."
 #~ msgstr "Встановлює стиск, що використовується для субтитрів VobSub. Якщо нічого не вибрали, то VobSubs будуть автоматично стискати з zlib. Результати це файли, які багато більше."
+
 #~ msgid "TTA lossless audio"
 #~ msgstr "TTA аудіо без втрат"
+
 #~ msgid "The MPEG-4 part 2 compression only works with native MPEG-4. However, native MPEG-4 mode has not been selected with '--engage native_mpeg4'.\n"
 #~ msgstr "MPEG-4 частина 2 стиск працює тільки з рідним MPEG-4. Тим не менше, рідний MPEG-4 режим не був обраний з '--engage native_mpeg4'.\n"
+
 #~ msgid "This AAC track does not contain valid headers. The extra header size is %1% bytes, expected were 2 or 5 bytes.\n"
 #~ msgstr "Дана доріжка AAC не містить корректних заголовків. Додатковий розмір заголовка - %1% байт, очікувалось - 2 або 5 байт.\n"
+
 #~ msgid "This track uses a Matroska feature called 'Codec state elements'. mkvmerge supports these but this feature has not been turned on with the option '--engage use_codec_state'.\n"
 #~ msgstr "Эта дорожка использует особенность Matroska, названную 'запоминающие элементы Codec'. mkvmerge поддерживает их, но эта особенность не была включена с опцией '--engage use_codec_state'.\n"
+
 #~ msgid ""
 #~ "Usage: mkvinfo [options] inname\n"
 #~ "\n"
@@ -9523,59 +9557,85 @@ msgstr "Так"
 #~ "                 Переадресація всіх повідомлень до цього файлу.\n"
 #~ "  -h, --help     Відображення цієї довідки.\n"
 #~ "  -V, --version  Відображення інформації про версію.\n"
+
 #, fuzzy
 #~ msgid "Using the IVF output module.\n"
 #~ msgstr "Використання FLAC вихідного модуля.\n"
+
 #~ msgid "VC1 video elementary stream"
 #~ msgstr "VC1 відео елементарний потік"
+
 #~ msgid "VobBtn buttons"
 #~ msgstr "VobBtn кнопки"
+
 #~ msgid "WAVE (uncompressed PCM)"
 #~ msgstr "WAVE (незжатий PCM)"
+
 #~ msgid "WAVPACK lossless audio"
 #~ msgstr "WAVPACK аудіо без втрат"
+
 #~ msgid "Warning: There's more than one track with the UID %1%."
 #~ msgstr "Попередження: Присутня більше, ніж одна доріжка з UID %1%."
+
 #~ msgid "Warning: There's more than one track with the number %1%."
 #~ msgstr "Попередження: Присутня більше, ніж одна доріжка з номером %1%."
+
 #~ msgid "Write raw FLAC files (default: write OggFLAC files)."
 #~ msgstr "Створити вихідні файли FLAC (за замовчуванням: написати OggFLAC файли)."
+
 #~ msgid "anaglyph"
 #~ msgstr "анагліф"
+
 #~ msgid "audio/video/text subtitles embedded in OGG"
 #~ msgstr "аудіо/відео/текст субтитрів впроваджених у OGG"
+
 #~ msgid "byte_buffer_c: (pos + num) > size. Should not have happened. Please file a bug report.\n"
 #~ msgstr "byte_buffer_c: (pos + num) > size. Не повинно було трапитися. Будь ласка, відправте повідомлення про помилку.\n"
+
 #~ msgid "cstrutf8_to_UTFstring: Invalid UTF-8 sequence encountered. Please contact moritz@bunkus.org and request that he implements a better UTF-8 parser."
 #~ msgstr "cstrutf8_to_UTFstring: Натраплено на некорректну UTF-8 послідовність. Будь ласка, напишіть moritz@bunkus.org і зоставте побажання про покращення реалізації UTF-8 аналізатора."
+
 #~ msgid "flac_header_extraction: Could not set the error callback.\n"
 #~ msgstr "flac_header_extraction: Не вдалося встановити помилки зворотного виклику.\n"
+
 #~ msgid "flac_header_extraction: Could not set the metadata callback.\n"
 #~ msgstr "flac_header_extraction: Не вдалося встановити метаданих зворотного виклику.\n"
+
 #~ msgid "flac_header_extraction: Could not set the read callback.\n"
 #~ msgstr "flac_header_extraction: Не вдалося встановити читати зворотного виклику.\n"
+
 #~ msgid "flac_header_extraction: Could not set the write callback.\n"
 #~ msgstr "flac_header_extraction: Не вдалося встановити написати зворотного виклику.\n"
+
 #~ msgid "flac_reader: Could not set the eof callback.\n"
 #~ msgstr "flac_reader: Не вдалося встановити кінець файлу зворотного виклику.\n"
+
 #~ msgid "flac_reader: Could not set the error callback.\n"
 #~ msgstr "flac_reader: Не вдалося встановити помилки зворотного виклику.\n"
+
 #~ msgid "flac_reader: Could not set the length callback.\n"
 #~ msgstr "flac_reader: Не вдалося встановити довжину зворотного виклику.\n"
+
 #~ msgid "flac_reader: Could not set the metadata callback.\n"
 #~ msgstr "flac_reader: Не вдалося встановити метаданих зворотного виклику.\n"
+
 #~ msgid "flac_reader: Could not set the read callback.\n"
 #~ msgstr "flac_reader: Не вдалося встановити читати зворотного виклику.\n"
+
 #~ msgid "flac_reader: Could not set the seek callback.\n"
 #~ msgstr "flac_reader: Не вдалося встановити зворотній виклик пошуку.\n"
+
 #~ msgid "flac_reader: Could not set the tell callback.\n"
 #~ msgstr "flac_reader: Не вдалося встановити сказати зворотного виклику.\n"
+
 #~ msgid "flac_reader: Could not set the write callback.\n"
 #~ msgstr "flac_reader: Не вдалося встановити написати зворотного виклику.\n"
+
 #~ msgid "general Matroska files"
 #~ msgstr "Загальні файли Matroska"
+
 #~ msgid "mkvextract: Unknown mode!?\n"
 #~ msgstr "mkvextract: Невідомий режим!?\n"
+
 #~ msgid "r_matroska: Cluster does not contain a cluster timecode. File is broken. Aborting.\n"
 #~ msgstr "r_matroska: Кластер не містять кластеру тайм-коду. Файл не працює. Переривання.\n"
-
