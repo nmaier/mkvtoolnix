@@ -720,6 +720,8 @@ mpeg_ts_reader_c::parse_pmt(unsigned char *pmt) {
     pmt_descriptor = (mpeg_ts_pmt_descriptor_t *)((unsigned char *)pmt_pid_info + sizeof(mpeg_ts_pmt_pid_info_t));
 
     while (pmt_descriptor < (mpeg_ts_pmt_descriptor_t *)((unsigned char *)pmt_pid_info + sizeof(mpeg_ts_pmt_pid_info_t) + es_info_length)) {
+      mxdebug_if(m_debug_pat_pmt, boost::format("mpeg_ts:parse_pmt: PMT descriptor tag 0x%|1$02x| length %2%\n") % static_cast<unsigned int>(pmt_descriptor->tag) % static_cast<unsigned int>(pmt_descriptor->length));
+
       switch(pmt_descriptor->tag) {
         case 0x56: // Teletext descriptor
           if (pmt_pid_info->stream_type == ISO_13818_PES_PRIVATE) { // PES containig private data
