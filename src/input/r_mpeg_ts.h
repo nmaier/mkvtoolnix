@@ -267,7 +267,7 @@ protected:
   std::vector<mpeg_ts_track_ptr> tracks;
   std::map<generic_packetizer_c *, mpeg_ts_track_ptr> m_ptzr_to_track_map;
 
-  bool m_dont_use_audio_pts, m_debug_resync;
+  bool m_dont_use_audio_pts, m_debug_resync, m_debug_pat_pmt;
 
   int m_detected_packet_size;
 

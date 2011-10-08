@@ -395,6 +395,7 @@ mpeg_ts_reader_c::mpeg_ts_reader_c(track_info_c &_ti)
   , m_packet_sent_to_packetizer(false)
   , m_dont_use_audio_pts(debugging_requested("mpeg_ts_dont_use_audio_pts"))
   , m_debug_resync(debugging_requested("mpeg_ts_resync"))
+  , m_debug_pat_pmt(debugging_requested("mpeg_ts_pat") || debugging_requested("mpeg_ts_pmt"))
   , m_detected_packet_size(0)
 {
   mm_io_cptr temp_io;
@@ -509,24 +510,24 @@ mpeg_ts_reader_c::identify() {
 int
 mpeg_ts_reader_c::parse_pat(unsigned char *pat) {
   if (pat == NULL) {
-    mxverb(3, boost::format("mpeg_ts:parse_pat: Invalid parameters!\n"));
+    mxdebug_if(m_debug_pat_pmt, "mpeg_ts:parse_pat: Invalid parameters!\n");
     return -1;
   }
 
   mpeg_ts_pat_t *pat_header = (mpeg_ts_pat_t *)pat;
 
   if (pat_header->table_id != 0x00) {
-    mxverb(3, boost::format("mpeg_ts:parse_pat: Invalid PAT table_id!\n"));
+    mxdebug_if(m_debug_pat_pmt, "mpeg_ts:parse_pat: Invalid PAT table_id!\n");
     return -1;
   }
 
   if (pat_header->section_syntax_indicator != 1 || pat_header->current_next_indicator == 0) {
-    mxverb(3, boost::format("mpeg_ts:parse_pat: Invalid PAT section_syntax_indicator/current_next_indicator!\n"));
+    mxdebug_if(m_debug_pat_pmt, "mpeg_ts:parse_pat: Invalid PAT section_syntax_indicator/current_next_indicator!\n");
     return -1;
   }
 
   if (pat_header->section_number != 0 || pat_header->last_section_number != 0) {
-    mxverb(3, boost::format("mpeg_ts:parse_pat: Unsupported multiple section PAT!\n"));
+    mxdebug_if(m_debug_pat_pmt, "mpeg_ts:parse_pat: Unsupported multiple section PAT!\n");
     return -1;
   }
 
@@ -535,12 +536,12 @@ mpeg_ts_reader_c::parse_pat(unsigned char *pat) {
   uint32_t read_CRC                 = CRC32(((mpeg_ts_crc_t *)(pat + 3 + pat_section_length - 4)));
 
   if (elapsed_CRC != read_CRC) {
-    mxverb(3, boost::format("mpeg_ts:parse_pat: Wrong PAT CRC !!! Elapsed = 0x%|1$08x|, read 0x%|2$08x|\n") % elapsed_CRC % read_CRC);
+    mxdebug_if(m_debug_pat_pmt, boost::format("mpeg_ts:parse_pat: Wrong PAT CRC !!! Elapsed = 0x%|1$08x|, read 0x%|2$08x|\n") % elapsed_CRC % read_CRC);
     return -1;
   }
 
   if (pat_section_length < 13 || pat_section_length > 1021) {
-    mxverb(3, boost::format("mpeg_ts:parse_pat: Wrong PAT section_length (= %1%)\n") % pat_section_length);
+    mxdebug_if(m_debug_pat_pmt, boost::format("mpeg_ts:parse_pat: Wrong PAT section_length (= %1%)\n") % pat_section_length);
     return -1;
   }
 
@@ -552,10 +553,10 @@ mpeg_ts_reader_c::parse_pat(unsigned char *pat) {
     unsigned short local_program_number = PROGRAM_NUMBER(pat_section);
     uint16_t tmp_pid                    = GET_PID(pat_section);
 
-    mxverb(3, boost::format("mpeg_ts:parse_pat: program_number: %1%; %2%_pid: %3%\n")
-           % local_program_number
-           % (0 == local_program_number ? "nit" : "pmt")
-           % tmp_pid);
+    mxdebug_if(m_debug_pat_pmt, boost::format("mpeg_ts:parse_pat: program_number: %1%; %2%_pid: %3%\n")
+               % local_program_number
+               % (0 == local_program_number ? "nit" : "pmt")
+               % tmp_pid);
 
     if (0 != local_program_number) {
       PAT_found = true;
@@ -587,24 +588,24 @@ mpeg_ts_reader_c::parse_pat(unsigned char *pat) {
 int
 mpeg_ts_reader_c::parse_pmt(unsigned char *pmt) {
   if (pmt == NULL) {
-    mxverb(3, boost::format("mpeg_ts:parse_pmt: Invalid parameters!\n"));
+    mxdebug_if(m_debug_pat_pmt, "mpeg_ts:parse_pmt: Invalid parameters!\n");
     return -1;
   }
 
   mpeg_ts_pmt_t *pmt_header = (mpeg_ts_pmt_t *)pmt;
 
   if (pmt_header->table_id != 0x02) {
-    mxverb(3, boost::format("mpeg_ts:parse_pmt: Invalid PMT table_id!\n"));
+    mxdebug_if(m_debug_pat_pmt, "mpeg_ts:parse_pmt: Invalid PMT table_id!\n");
     return -1;
   }
 
   if (pmt_header->section_syntax_indicator != 1 || pmt_header->current_next_indicator == 0) {
-    mxverb(3, boost::format("mpeg_ts:parse_pmt: Invalid PMT section_syntax_indicator/current_next_indicator!\n"));
+    mxdebug_if(m_debug_pat_pmt, "mpeg_ts:parse_pmt: Invalid PMT section_syntax_indicator/current_next_indicator!\n");
     return -1;
   }
 
   if (pmt_header->section_number != 0 || pmt_header->last_section_number != 0) {
-    mxverb(3, boost::format("mpeg_ts:parse_pmt: Unsupported multiple section PMT!\n"));
+    mxdebug_if(m_debug_pat_pmt, "mpeg_ts:parse_pmt: Unsupported multiple section PMT!\n");
     return -1;
   }
 
@@ -613,12 +614,12 @@ mpeg_ts_reader_c::parse_pmt(unsigned char *pmt) {
   uint32_t read_CRC                 = CRC32(((mpeg_ts_crc_t *)(pmt + 3 + pmt_section_length - 4)));
 
   if (elapsed_CRC != read_CRC) {
-    mxverb(3, boost::format("mpeg_ts:parse_pmt: Wrong PMT CRC !!! Elapsed = 0x%|1$08x|, read 0x%|2$08x|\n") % elapsed_CRC % read_CRC);
+    mxdebug_if(m_debug_pat_pmt, boost::format("mpeg_ts:parse_pmt: Wrong PMT CRC !!! Elapsed = 0x%|1$08x|, read 0x%|2$08x|\n") % elapsed_CRC % read_CRC);
     return -1;
   }
 
   if (pmt_section_length < 13 || pmt_section_length > 1021) {
-    mxverb(3, boost::format("mpeg_ts:parse_pmt: Wrong PMT section_length (=%1%)\n") % pmt_section_length);
+    mxdebug_if(m_debug_pat_pmt, boost::format("mpeg_ts:parse_pmt: Wrong PMT section_length (=%1%)\n") % pmt_section_length);
     return -1;
   }
 
@@ -637,11 +638,11 @@ mpeg_ts_reader_c::parse_pmt(unsigned char *pmt) {
     pmt_pid_info = (mpeg_ts_pmt_pid_info_t *)((unsigned char *)pmt_pid_info + sizeof(mpeg_ts_pmt_pid_info_t) + ES_INFO_LENGTH(pmt_pid_info));
   }
 
-  mxverb(3, boost::format("mpeg_ts:parse_pmt: program number     (%1%)\n") % PROGRAM_NUMBER(pmt_header));
-  mxverb(3, boost::format("mpeg_ts:parse_pmt: pcr pid            (%1%)\n") % PCR_PID(pmt_header));
+  mxdebug_if(m_debug_pat_pmt, boost::format("mpeg_ts:parse_pmt: program number     (%1%)\n") % PROGRAM_NUMBER(pmt_header));
+  mxdebug_if(m_debug_pat_pmt, boost::format("mpeg_ts:parse_pmt: pcr pid            (%1%)\n") % PCR_PID(pmt_header));
 
   if (pids_found == 0) {
-    mxverb(3, boost::format("mpeg_ts:parse_pmt: There's no information about elementary PIDs\n"));
+    mxdebug_if(m_debug_pat_pmt, "mpeg_ts:parse_pmt: There's no information about elementary PIDs\n");
     return 0;
   }
 
@@ -711,7 +712,7 @@ mpeg_ts_reader_c::parse_pmt(unsigned char *pmt) {
       case ISO_13818_PES_PRIVATE:
         break;
       default:
-        mxverb(3, boost::format("mpeg_ts:parse_pmt: Unknown stream type: %1%\n") % (int)pmt_pid_info->stream_type);
+        mxdebug_if(m_debug_pat_pmt, boost::format("mpeg_ts:parse_pmt: Unknown stream type: %1%\n") % (int)pmt_pid_info->stream_type);
         track->type   = ES_UNKNOWN;
         break;
     }
@@ -723,7 +724,7 @@ mpeg_ts_reader_c::parse_pmt(unsigned char *pmt) {
         case 0x56: // Teletext descriptor
           if (pmt_pid_info->stream_type == ISO_13818_PES_PRIVATE) { // PES containig private data
             track->type   = ES_UNKNOWN;
-            mxverb(3, boost::format("mpeg_ts:parse_pmt: Teletext found but not handled !!\n"));
+            mxdebug_if(m_debug_pat_pmt, "mpeg_ts:parse_pmt: Teletext found but not handled !!\n");
           }
           break;
         case 0x59: // Subtitles descriptor
@@ -759,7 +760,7 @@ mpeg_ts_reader_c::parse_pmt(unsigned char *pmt) {
       tracks.push_back(track);
       es_to_process++;
       uint32_t fourcc = get_uint32_be(&track->fourcc);
-      mxverb(3, boost::format("mpeg_ts:parse_pmt: PID %1% has type: 0x%|2$08x| (%3%)\n") % track->pid % fourcc % std::string(reinterpret_cast<char *>(&fourcc), 4));
+      mxdebug_if(m_debug_pat_pmt, boost::format("mpeg_ts:parse_pmt: PID %1% has type: 0x%|2$08x| (%3%)\n") % track->pid % fourcc % std::string(reinterpret_cast<char *>(&fourcc), 4));
     }
   }
 
