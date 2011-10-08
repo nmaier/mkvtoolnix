@@ -1,107 +1,56 @@
 #!/usr/bin/make -f
-# Rules for mkvtoolnix based on Joey Hess's sample
 
-####################################################################
-# Build flags
-####################################################################
-DEB_HOST_GNU_TYPE   ?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
-DEB_BUILD_GNU_TYPE  ?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
+LDFLAGS += -Wl,-z,defs -Wl,--as-needed
 
-CFLAGS = -Wall -g
+NCPUS := $(shell getconf _NPROCESSORS_ONLN 2>/dev/null || echo 1)
 
-ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
-	CFLAGS += -O0
-else
-	CFLAGS += -O2
+ifeq ($(NCPUS),-1)
+	NCPUS:=1
 endif
 
-CONFIG_FLAGS = --host=$(DEB_HOST_GNU_TYPE) --build=$(DEB_BUILD_GNU_TYPE) --prefix=/usr --mandir=\$${prefix}/share/man --infodir=\$${prefix}/share/info
+ifeq ($(NCPUS),0)
+	NCPUS:=1
+endif
 
-RAKE=./drake
+%:
+	dh $@
 
-#######################################################################
-# BUILD : Two versions: without and with GUI.
-#	  This impacts mmg which only exists in -GUI
-#	  For mkvinfo, we use an alternative
-#######################################################################
-build: build-stamp
-
-build-stamp:
-	dh_testdir
-
-	CFLAGS="$(CFLAGS)" ./configure $(CONFIG_FLAGS) --enable-gui
-	$(RAKE) apps:mkvinfo apps:mmg
-	mv src/mkvinfo src/mkvinfo-gui
-	mv src/mmg/mmg src/mmg/mmg-gui
-
-	$(RAKE) clean:dist
-
-	CFLAGS="$(CFLAGS)" ./configure $(CONFIG_FLAGS) --disable-gui
-	$(RAKE)
-
-	touch build-stamp
-
-########################################################################
-# Other rules
-########################################################################
-clean:
-	dh_testdir
-	dh_testroot
-	rm -f build-stamp
-	rm -f src/mkvinfo-gui
-	rm -f src/mmg/mmg-gui
-
-	-$(RAKE) clean
-	rm -f build-config config.h
+override_dh_auto_configure:
 ifneq "$(wildcard /usr/share/misc/config.sub)" ""
 	cp -f /usr/share/misc/config.sub config.sub
 endif
 ifneq "$(wildcard /usr/share/misc/config.guess)" ""
 	cp -f /usr/share/misc/config.guess config.guess
 endif
-	rm -f config.log
-	rm -f config.status
+	dh_auto_configure -- --enable-gui
 
-	dh_clean
+	./drake -j $(NCPUS)
 
-install: build
-	dh_testdir
-	dh_testroot
-	dh_clean -k
+	mv src/mkvinfo src/mkvinfo-gui
+	mv src/mmg/mmg src/mmg/mmg-gui
 
-	$(RAKE) install prefix=$(CURDIR)/debian/tmp
+	./drake clean
+
+	dh_auto_configure -- --disable-gui
+
+	./drake -j $(NCPUS)
+
+override_dh_clean:
+	dh_clean src/mkvinfo-gui src/mmg/mmg-gui config.status config.log
+	[ ! -f build-config ] || ./drake clean
+
+override_dh_auto_build:
 
 
-binary-indep: build install
-binary-arch: build install
-	dh_testdir
-	dh_testroot
-	dh_installchangelogs ChangeLog
-	dh_installdocs -a
-	dh_installexamples
+override_dh_install:
+	./drake install DESTDIR=$(CURDIR)/debian/tmp
+	dh_install --fail-missing
 
-	dh_install -a
 	mv debian/mkvtoolnix/usr/bin/mkvinfo debian/mkvtoolnix/usr/bin/mkvinfo-text
 	mv debian/mkvtoolnix-gui/usr/bin/mmg-gui debian/mkvtoolnix-gui/usr/bin/mmg
-	dh_installmenu -pmkvtoolnix-gui
-	dh_installman --language=C doc/man/mkvextract.1 doc/man/mkvinfo.1 doc/man/mkvmerge.1 doc/man/mkvpropedit.1
-	dh_installman --language=C -pmkvtoolnix-gui doc/man/mmg.1
-	dh_installman --language=ja doc/man/ja/mkvextract.1 doc/man/ja/mkvinfo.1 doc/man/ja/mkvmerge.1 doc/man/ja/mkvpropedit.1
-	dh_installman --language=ja -pmkvtoolnix-gui doc/man/ja/mmg.1
-	dh_installman --language=zh_CN doc/man/zh_CN/mkvextract.1 doc/man/zh_CN/mkvinfo.1 doc/man/zh_CN/mkvmerge.1 doc/man/zh_CN/mkvpropedit.1
-	dh_installman --language=zh_CN -pmkvtoolnix-gui doc/man/zh_CN/mmg.1
 
 	dh_link -pmkvtoolnix usr/share/man/man1/mkvinfo.1.gz usr/share/man/man1/mkvinfo-text.1.gz
 	dh_link -pmkvtoolnix-gui usr/share/man/man1/mkvinfo.1.gz usr/share/man/man1/mkvinfo-gui.1.gz
 
-	dh_strip
-	dh_compress
-	dh_fixperms
-	dh_installdeb
-	dh_shlibdeps
-	dh_gencontrol
-	dh_md5sums
-	dh_builddeb
-
-binary: binary-indep binary-arch
-.PHONY: build clean binary-indep binary-arch binary install
+override_dh_builddeb:
+	dh_builddeb -- -Zbzip2
