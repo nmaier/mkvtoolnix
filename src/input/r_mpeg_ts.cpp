@@ -393,9 +393,9 @@ mpeg_ts_reader_c::mpeg_ts_reader_c(track_info_c &_ti)
   , track_buffer_ready(-1)
   , file_done(false)
   , m_packet_sent_to_packetizer(false)
-  , m_dont_use_audio_pts(debugging_requested("mpeg_ts_dont_use_audio_pts"))
-  , m_debug_resync(debugging_requested("mpeg_ts_resync"))
-  , m_debug_pat_pmt(debugging_requested("mpeg_ts_pat") || debugging_requested("mpeg_ts_pmt"))
+  , m_dont_use_audio_pts(debugging_requested("mpeg_ts_dont_use_audio_pts") || debugging_requested("mpeg_ts"))
+  , m_debug_resync(debugging_requested("mpeg_ts_resync") || debugging_requested("mpeg_ts"))
+  , m_debug_pat_pmt(debugging_requested("mpeg_ts_pat") || debugging_requested("mpeg_ts_pmt") || debugging_requested("mpeg_ts"))
   , m_detected_packet_size(0)
 {
   mm_io_cptr temp_io;
