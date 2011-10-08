@@ -717,7 +717,8 @@ mpeg_ts_reader_c::parse_pmt(unsigned char *pmt) {
         break;
     }
 
-    pmt_descriptor = (mpeg_ts_pmt_descriptor_t *)((unsigned char *)pmt_pid_info + sizeof(mpeg_ts_pmt_pid_info_t));
+    pmt_descriptor  = (mpeg_ts_pmt_descriptor_t *)((unsigned char *)pmt_pid_info + sizeof(mpeg_ts_pmt_pid_info_t));
+    bool type_known = false;
 
     while (pmt_descriptor < (mpeg_ts_pmt_descriptor_t *)((unsigned char *)pmt_pid_info + sizeof(mpeg_ts_pmt_pid_info_t) + es_info_length)) {
       mxdebug_if(m_debug_pat_pmt, boost::format("mpeg_ts:parse_pmt: PMT descriptor tag 0x%|1$02x| length %2%\n") % static_cast<unsigned int>(pmt_descriptor->tag) % static_cast<unsigned int>(pmt_descriptor->length));
@@ -726,6 +727,7 @@ mpeg_ts_reader_c::parse_pmt(unsigned char *pmt) {
         case 0x56: // Teletext descriptor
           if (pmt_pid_info->stream_type == ISO_13818_PES_PRIVATE) { // PES containig private data
             track->type   = ES_UNKNOWN;
+            type_known    = true;
             mxdebug_if(m_debug_pat_pmt, "mpeg_ts:parse_pmt: Teletext found but not handled !!\n");
           }
           break;
@@ -733,6 +735,7 @@ mpeg_ts_reader_c::parse_pmt(unsigned char *pmt) {
           if (pmt_pid_info->stream_type == ISO_13818_PES_PRIVATE) { // PES containig private data
             track->type   = ES_SUBT_TYPE;
             track->fourcc = FOURCC('V', 'S', 'U', 'B');
+            type_known    = true;
           }
           break;
         case 0x6A: // AC3 descriptor
@@ -740,6 +743,14 @@ mpeg_ts_reader_c::parse_pmt(unsigned char *pmt) {
           if (pmt_pid_info->stream_type == ISO_13818_PES_PRIVATE) { // PES containig private data
             track->type   = ES_AUDIO_TYPE;
             track->fourcc = FOURCC('A', 'C', '3', ' ');
+            type_known    = true;
+          }
+          break;
+        case 0x7b: // DTS descriptor
+          if (pmt_pid_info->stream_type == ISO_13818_PES_PRIVATE) { // PES containig private data
+            track->type   = ES_AUDIO_TYPE;
+            track->fourcc = FOURCC('D', 'T', 'S', ' ');
+            type_known    = true;
           }
           break;
         case 0x0a: // ISO 639 language descriptor
@@ -752,6 +763,13 @@ mpeg_ts_reader_c::parse_pmt(unsigned char *pmt) {
       }
 
       pmt_descriptor = (mpeg_ts_pmt_descriptor_t *)((unsigned char *)pmt_descriptor + sizeof(mpeg_ts_pmt_descriptor_t) + pmt_descriptor->length);
+    }
+
+    // Default to AC3 if it's a PES private stream type that's missing
+    // a known/more concrete descriptor tag.
+    if ((pmt_pid_info->stream_type == ISO_13818_PES_PRIVATE) && !type_known) {
+      track->type   = ES_AUDIO_TYPE;
+      track->fourcc = FOURCC('A', 'C', '3', ' ');
     }
 
     pmt_pid_info = (mpeg_ts_pmt_pid_info_t *)((unsigned char *)pmt_pid_info + sizeof(mpeg_ts_pmt_pid_info_t) + es_info_length);
