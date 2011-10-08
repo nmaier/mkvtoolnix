@@ -1,7 +1,12 @@
+2011-10-08  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: enhancement: Implemented support for yet another way
+	of storing EAC3 in MPEG transport streams.
+
 2011-10-05  Moritz Bunkus  <moritz@bunkus.org>
 
-	* mkvinfo.cpp: bug fix: Track information was not reset when
-	opening more than one file in the GUI.
+	* mkvinfo: bug fix: Track information was not reset when opening
+	more than one file in the GUI.
 
 2011-10-03  Moritz Bunkus  <moritz@bunkus.org>
 

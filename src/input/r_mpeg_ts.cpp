@@ -736,6 +736,7 @@ mpeg_ts_reader_c::parse_pmt(unsigned char *pmt) {
           }
           break;
         case 0x6A: // AC3 descriptor
+        case 0x7A: // EAC3 descriptor
           if (pmt_pid_info->stream_type == ISO_13818_PES_PRIVATE) { // PES containig private data
             track->type   = ES_AUDIO_TYPE;
             track->fourcc = FOURCC('A', 'C', '3', ' ');
