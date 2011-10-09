@@ -28,7 +28,7 @@
 #include "common/strings/parsing.h"
 #include "common/version.h"
 
-#define VERSIONNAME "Die Wahre Liebe"
+#define VERSIONNAME "Es ist Sommer"
 
 version_number_t::version_number_t()
   : valid(false)
