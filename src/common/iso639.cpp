@@ -560,39 +560,39 @@ map_iso639_2_to_iso639_1(const char *iso639_2_code) {
 
 bool
 is_popular_language(const char *lang) {
-  return
-    !strcmp(lang, "Chinese") ||
-    !strcmp(lang, "Dutch") ||
-    !strcmp(lang, "English") ||
-    !strcmp(lang, "Finnish") ||
-    !strcmp(lang, "French") ||
-    !strcmp(lang, "German") ||
-    !strcmp(lang, "Italian") ||
-    !strcmp(lang, "Japanese") ||
-    !strcmp(lang, "Norwegian") ||
-    !strcmp(lang, "Portuguese") ||
-    !strcmp(lang, "Russian") ||
-    !strcmp(lang, "Spanish") ||
-    !strcmp(lang, "Spanish; Castillan") ||
-    !strcmp(lang, "Swedish");
+  return !strcmp(lang, "Chinese")
+      || !strcmp(lang, "Dutch")
+      || !strcmp(lang, "English")
+      || !strcmp(lang, "Finnish")
+      || !strcmp(lang, "French")
+      || !strcmp(lang, "German")
+      || !strcmp(lang, "Italian")
+      || !strcmp(lang, "Japanese")
+      || !strcmp(lang, "Norwegian")
+      || !strcmp(lang, "Portuguese")
+      || !strcmp(lang, "Russian")
+      || !strcmp(lang, "Spanish")
+      || !strcmp(lang, "Spanish; Castillan")
+      || !strcmp(lang, "Swedish")
+    ;
 }
 
 bool
 is_popular_language_code(const char *code) {
-  return
-    !strcmp(code, "chi") || // Chinese
-    !strcmp(code, "dut") || // Dutch
-    !strcmp(code, "eng") || // English
-    !strcmp(code, "fin") || // Finnish
-    !strcmp(code, "fre") || // French
-    !strcmp(code, "ger") || // German
-    !strcmp(code, "ita") || // Italian
-    !strcmp(code, "jpn") || // Japanese
-    !strcmp(code, "nor") || // Norwegian
-    !strcmp(code, "por") || // Portuguese
-    !strcmp(code, "rus") || // Russian
-    !strcmp(code, "spa") || // Spanish
-    !strcmp(code, "swe");   // Swedish
+  return !strcmp(code, "chi") // Chinese
+      || !strcmp(code, "dut") // Dutch
+      || !strcmp(code, "eng") // English
+      || !strcmp(code, "fin") // Finnish
+      || !strcmp(code, "fre") // French
+      || !strcmp(code, "ger") // German
+      || !strcmp(code, "ita") // Italian
+      || !strcmp(code, "jpn") // Japanese
+      || !strcmp(code, "nor") // Norwegian
+      || !strcmp(code, "por") // Portuguese
+      || !strcmp(code, "rus") // Russian
+      || !strcmp(code, "spa") // Spanish
+      || !strcmp(code, "swe") // Swedish
+    ;
 }
 
 /** \brief Map a string to a ISO 639-2 language code
