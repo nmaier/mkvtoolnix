@@ -88,7 +88,6 @@ const iso639_language_t iso639_languages[] = {
   { "Buriat",                                                                           "bua", NULL, NULL  },
   { "Burmese",                                                                          "bur", "my", "mya" },
   { "Caddo",                                                                            "cad", NULL, NULL  },
-  { "Castilian",                                                                        "spa", "es", NULL  },
   { "Catalan; Valencian",                                                               "cat", "ca", NULL  },
   { "Caucasian languages",                                                              "cau", NULL, NULL  },
   { "Cebuano",                                                                          "ceb", NULL, NULL  },
@@ -425,7 +424,7 @@ const iso639_language_t iso639_languages[] = {
   { "South American Indian (Other)",                                                    "sai", NULL, NULL  },
   { "Southern Altai",                                                                   "alt", NULL, NULL  },
   { "Southern Sami",                                                                    "sma", NULL, NULL  },
-  { "Spanish",                                                                          "spa", "es", NULL  },
+  { "Spanishp; Castillan",                                                              "spa", "es", NULL  },
   { "Sranan Tongo",                                                                     "srn", NULL, NULL  },
   { "Sukuma",                                                                           "suk", NULL, NULL  },
   { "Sumerian",                                                                         "sux", NULL, NULL  },
@@ -574,6 +573,7 @@ is_popular_language(const char *lang) {
     !strcmp(lang, "Portuguese") ||
     !strcmp(lang, "Russian") ||
     !strcmp(lang, "Spanish") ||
+    !strcmp(lang, "Spanish; Castillan") ||
     !strcmp(lang, "Swedish");
 }
 
