@@ -1118,20 +1118,25 @@ Leest extra commandoregel argumenten in van een bestand
 Verschillende karakters kunnen worden overgeslagen, b\&.v\&. als het nodig is een niet commentaar regel te starten met \*(Aq#\*(Aq\&. Deze regels worden beschreven in
 de sectie over overslaan van tekst\&.
 .sp
+Note that backslashes must always be escaped\&. Hash marks (\*(Aq#\*(Aq) must be escaped if they should not start a comment\&.
+.sp
 De commandoregel \*(Aq\fBmkvmerge \-o "mijn bestand\&.mkv" \-A "een film\&.avi" geluid\&.ogg\fR\*(Aq kan geconverteerd worden naar het volgende optie bestand:
 .sp
 .if n \{\
 .RS 4
 .\}
 .nf
-# Write to the file "mijn bestand\&.mkv"\&.
+# Write to the file "c:\eMatroska\emy file\&.mkv" on Windows\&.
 \-o
-my file\&.mkv
-# Only take the video from "een film\&.avi"\&.
+c:\e\eMatroska\e\emy file\&.mkv
+# Set the title to \*(Aq#65\*(Aq\&.
+\-\-title
+\eh65
+# Only take the video from "a movie\&.avi"\&.
 \-A
-een film\&.avi
-geluid\&.ogg
- 
+a movie\&.avi
+sound\&.ogg
+     
 .fi
 .if n \{\
 .RE

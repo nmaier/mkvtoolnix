@@ -1105,19 +1105,24 @@ Matroska(TM)
 .sp
 有些字符可以转义，如当您需要使用 \*(Aq#\*(Aq 作为一个不是评论的行的开头。规则在关于转义文本的段落有描述。
 .sp
+Note that backslashes must always be escaped\&. Hash marks (\*(Aq#\*(Aq) must be escaped if they should not start a comment\&.
+.sp
 命令行 \*(Aq\fBmkvmerge \-o "我的文件\&.mkv" \-A "一部影片\&.avi" 声音\&.ogg\fR\*(Aq 可以转换为下述选项文件:
 .sp
 .if n \{\
 .RS 4
 .\}
 .nf
-# 输出到文件 "我的文件\&.mkv"。
+# Write to the file "c:\eMatroska\emy file\&.mkv" on Windows\&.
 \-o
-我的文件\&.mkv
-# 只取 "一部影片\&.avi" 中的视频。
+c:\e\eMatroska\e\emy file\&.mkv
+# Set the title to \*(Aq#65\*(Aq\&.
+\-\-title
+\eh65
+# Only take the video from "a movie\&.avi"\&.
 \-A
-一部影片\&.avi
-声音\&.ogg
+a movie\&.avi
+sound\&.ogg
      
 .fi
 .if n \{\

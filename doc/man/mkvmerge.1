@@ -1119,15 +1119,20 @@ Reads additional command line arguments from the file
 Several chars can be escaped, e\&.g\&. if you need to start a non\-comment line with \*(Aq#\*(Aq\&. The rules are described in
 the section about escaping text\&.
 .sp
+Note that backslashes must always be escaped\&. Hash marks (\*(Aq#\*(Aq) must be escaped if they should not start a comment\&.
+.sp
 The command line \*(Aq\fBmkvmerge \-o "my file\&.mkv" \-A "a movie\&.avi" sound\&.ogg\fR\*(Aq could be converted into the following option file:
 .sp
 .if n \{\
 .RS 4
 .\}
 .nf
-# Write to the file "my file\&.mkv"\&.
+# Write to the file "c:\eMatroska\emy file\&.mkv" on Windows\&.
 \-o
-my file\&.mkv
+c:\e\eMatroska\e\emy file\&.mkv
+# Set the title to \*(Aq#65\*(Aq\&.
+\-\-title
+\eh65
 # Only take the video from "a movie\&.avi"\&.
 \-A
 a movie\&.avi

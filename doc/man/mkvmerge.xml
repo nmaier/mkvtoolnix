@@ -1315,14 +1315,21 @@ $ mkvmerge -o full.mkv =file1.mkv
      </para>
 
      <para>
+      Note that backslashes must always be escaped. Hash marks ('#') must be escaped if they should not start a comment.
+     </para>
+
+     <para>
       The command line '<command>mkvmerge -o "my file.mkv" -A "a movie.avi" sound.ogg</command>' could be converted into the following
       option file:
      </para>
 
      <programlisting>
-# Write to the file "my file.mkv".
+# Write to the file "c:\Matroska\my file.mkv" on Windows.
 -o
-my file.mkv
+c:\\Matroska\\my file.mkv
+# Set the title to '#65'.
+--title
+\h65
 # Only take the video from "a movie.avi".
 -A
 a movie.avi
