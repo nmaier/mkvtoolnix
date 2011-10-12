@@ -2,12 +2,12 @@
 .\"     Title: mkvpropedit
 .\"    Author: Bunkus Moritz[FAMILY Given] <moritz@bunkus.org>
 .\" Generator: DocBook XSL Stylesheets v1.75.2 <http://docbook.sf.net/>
-.\"      Date: 2011-10-09
+.\"      Date: 2011-10-12
 .\"    Manual:  
 .\"    Source: MkvToolNix 5.0.1
 .\"  Language: Japanese
 .\"
-.TH "MKVPROPEDIT" "1" "2011\-10\-09" "MkvToolNix 5\&.0\&.1" ""
+.TH "MKVPROPEDIT" "1" "2011\-10\-12" "MkvToolNix 5\&.0\&.1" ""
 .\" -----------------------------------------------------------------
 .\" * Define some portability stuff
 .\" -----------------------------------------------------------------
@@ -329,7 +329,7 @@ $ mkvpropedit movie\&.mkv \-\-chapters \*(Aq\*(Aq
 .RE
 .SH "テキスト中の特殊文字をエスケープする"
 .PP
-特殊文字をエスケープしなければならない、あるいはすべき場所が少しだけあります。エスケープのルールは単純です：エスケープする必要のある各文字を、バックスラッシュ（日本語フォントでは\e記号）の後ろに違う文字が1つついたものと入れ替えます。
+特殊文字をエスケープしなければならない、あるいはすべき場所が少しだけあります。エスケープのルールは単純です：エスケープする必要のある各文字を、バックスラッシュ（Windows上の日本語フォントでは\e記号）の後ろに違う文字が1つついたものと入れ替えます。
 .PP
 ルール：\*(Aq \*(Aqは\*(Aq\es\*(Aqに、\*(Aq"\*(Aqは\*(Aq\e2\*(Aqに、\*(Aq:\*(Aqは\*(Aq\ec\*(Aqに、\*(Aq#\*(Aqは\*(Aq\eh\*(Aqに、そして\*(Aq\e\*(Aqそれ自体は\*(Aq\e\e\*(Aqになります。
 .SH "関連項目"

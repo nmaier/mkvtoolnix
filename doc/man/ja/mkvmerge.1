@@ -2,12 +2,12 @@
 .\"     Title: mkvmerge
 .\"    Author: Bunkus Moritz[FAMILY Given] <moritz@bunkus.org>
 .\" Generator: DocBook XSL Stylesheets v1.75.2 <http://docbook.sf.net/>
-.\"      Date: 2011-10-09
+.\"      Date: 2011-10-12
 .\"    Manual:  
 .\"    Source: MKVToolNix 5.0.1
 .\"  Language: Japanese
 .\"
-.TH "MKVMERGE" "1" "2011\-10\-09" "MKVToolNix 5\&.0\&.1" ""
+.TH "MKVMERGE" "1" "2011\-10\-12" "MKVToolNix 5\&.0\&.1" ""
 .\" -----------------------------------------------------------------
 .\" * Define some portability stuff
 .\" -----------------------------------------------------------------
@@ -721,7 +721,7 @@ Matroska(TM)ファイルは再生時の画像スケールを決定するため�
 .sp
 エスケープすることのできる文字もあります。例えば、コメントではない行を\*(Aq#\*(Aqで始める必要のある場合です。そのルールは、エスケープ文字についてのセクションで説明されています。
 .sp
-Note that backslashes must always be escaped\&. Hash marks (\*(Aq#\*(Aq) must be escaped if they should not start a comment\&.
+バックスラッシュ（Windows上の日本語フォントでは\e記号）は、必ずエスケープされなければなりません。ハッシュマーク（#）は、それがコメントの始まりでなければエスケープされなければなりません。
 .sp
 \*(Aq\fBmkvmerge \-o "my file\&.mkv" \-A "a movie\&.avi" sound\&.ogg\fR\*(Aqというコマンドラインと同じことは、次のようなオプションファイルによって指定できます。
 .sp
@@ -729,13 +729,10 @@ Note that backslashes must always be escaped\&. Hash marks (\*(Aq#\*(Aq) must be
 .RS 4
 .\}
 .nf
-# Write to the file "c:\eMatroska\emy file\&.mkv" on Windows\&.
+# Windowsでは、"my file\&.mkv" に書き込む。
 \-o
-c:\e\eMatroska\e\emy file\&.mkv
-# Set the title to \*(Aq#65\*(Aq\&.
-\-\-title
-\eh65
-# Only take the video from "a movie\&.avi"\&.
+my file\&.mkv
+# "a movie\&.avi" からビデオトラックのみを取り出す。
 \-A
 a movie\&.avi
 sound\&.ogg
@@ -1313,7 +1310,7 @@ Windowsでは、\fBcmd\&.exe\fRWindowsシェルプログラムの実装方式の
 .RE
 .SH "テキスト中の特殊文字をエスケープする"
 .PP
-特殊文字をエスケープしなければならない、あるいはすべき場所が少しだけあります。エスケープのルールは単純です：エスケープする必要のある各文字を、バックスラッシュ（日本語フォントでは\e記号）の後ろに違う文字が1つついたものと入れ替えます。
+特殊文字をエスケープしなければならない、あるいはすべき場所が少しだけあります。エスケープのルールは単純です：エスケープする必要のある各文字を、バックスラッシュ（Windows上の日本語フォントでは\e記号）の後ろに違う文字が1つついたものと入れ替えます。
 .PP
 ルール：\*(Aq \*(Aqは\*(Aq\es\*(Aqに、\*(Aq"\*(Aqは\*(Aq\e2\*(Aqに、\*(Aq:\*(Aqは\*(Aq\ec\*(Aqに、\*(Aq#\*(Aqは\*(Aq\eh\*(Aqに、そして\*(Aq\e\*(Aqそれ自体は\*(Aq\e\e\*(Aqになります。
 .SH "字幕"
