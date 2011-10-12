@@ -263,11 +263,7 @@ namespace :translations do
             exit exit_code
           end
 
-          if %w{es nl ru uk zh_CN zh_TW}.include? language
-            adjust_to_poedit_style tmp_file, po
-          else
-            FileUtils.mv tmp_file, po
-          end
+          adjust_to_poedit_style tmp_file, po
         end
       end
     end
