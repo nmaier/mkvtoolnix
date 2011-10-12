@@ -32,7 +32,8 @@ Description: Set of command-line tools to work with Matroska files
 Package: mkvtoolnix-gui
 Architecture: any
 Depends: mkvtoolnix, ${shlibs:Depends}, ${misc:Depends}
-Replaces: mkvtoolnix (<= 4.6.0-1)
+Breaks: mkvtoolnix (<= 5.0.1), mkvtoolnix-gui (<= 5.0.1)
+Replaces: mkvtoolnix (<= 5.0.1), mkvtoolnix-gui (<= 5.0.1)
 Description: Set of tools to work with Matroska files - GUI frontend
  Matroska is a new multimedia container format, based on EBML (Extensible
  Binary Meta Language), which is a kind of binary XML.

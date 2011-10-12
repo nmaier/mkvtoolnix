@@ -22,7 +22,7 @@ endif
 ifneq "$(wildcard /usr/share/misc/config.guess)" ""
 	cp -f /usr/share/misc/config.guess config.guess
 endif
-	dh_auto_configure -- --enable-gui
+	dh_auto_configure -- --enable-gui --docdir='$${datarootdir}/doc/mkvtoolnix-gui'
 
 	./drake -j $(NCPUS)
 
@@ -33,7 +33,7 @@ endif
 
 	dh_auto_configure -- --disable-gui
 
-	./drake -j $(NCPUS)
+	./drake -j $(NCPUS) default 'translations:guides'
 
 override_dh_clean:
 	dh_clean src/mkvinfo-gui src/mmg/mmg-gui config.status config.log
@@ -44,6 +44,7 @@ override_dh_auto_build:
 
 override_dh_install:
 	./drake install DESTDIR=$(CURDIR)/debian/tmp
+	./drake 'install:translations:guides' DESTDIR=$(CURDIR)/debian/tmp docdir='$${datarootdir}/doc/mkvtoolnix-gui'
 	dh_install --fail-missing
 
 	mv debian/mkvtoolnix/usr/bin/mkvinfo debian/mkvtoolnix/usr/bin/mkvinfo-text
