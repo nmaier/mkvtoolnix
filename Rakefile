@@ -51,8 +51,8 @@ def setup_globals
 
   $source_directories      =  %w{lib/avilib-0.6.10 lib/librmff src src/input src/output src/common src/common/chapters src/common/strings src/common/tags src/common/xml
                                  src/mmg src/mmg/header_editor src/mmg/options src/mmg/tabs src/extract src/propedit src/merge src/info src/mpegparser}
-  $all_sources             =  $source_directories.collect { |dir| FileList[ "#{dir}/*.c", "#{dir}/*.cpp" ].to_a }.flatten
-  $all_headers             =  $source_directories.collect { |dir| FileList[ "#{dir}/*.h",                ].to_a }.flatten
+  $all_sources             =  $source_directories.collect { |dir| FileList[ "#{dir}/*.c", "#{dir}/*.cpp" ].to_a }.flatten.sort
+  $all_headers             =  $source_directories.collect { |dir| FileList[ "#{dir}/*.h",                ].to_a }.flatten.sort
   $all_objects             =  $all_sources.collect { |file| file.ext('o') }
 
   $top_srcdir              = c(:top_srcdir)
