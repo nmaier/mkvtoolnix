@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: Israel Lucas Torrijos <lukillas.ole@gmail.com>\n"
 "POT-Creation-Date: 2010-06-08 10:00+0200\n"
-"PO-Revision-Date: 2011-10-11 22:35+0200\n"
+"PO-Revision-Date: 2011-10-12 22:07+0200\n"
 "Last-Translator: Israel Lucas Torrijos <lukillas.ole@gmail.com>\n"
 "Language-Team: Spanish <moritz@bunkus.org>\n"
 "Language: es\n"
@@ -6121,9 +6121,9 @@ msgid "The FourCC setting for track nr. %s in file '%s' is not excatly four char
 msgstr "El FourCC establecido para la pista n.º %s en el archivo '%s' no es exactamente de cuatro caracteres de extensión."
 
 #: src/mmg/mmg_dialog.cpp:1859
-#, c-format, boost-format
-msgid "The GUI is configured to use the mkvmerge executable from a different version (%s) than the GUI itself (%s). This is not supported but will not be prevented either. You should change the mkvmerge executable in the preferences dialog."
-msgstr "La interfaz gráfica está configurada para usar el ejecutable de mkvmerge desde una versión diferente (%s) de la propia interfaz (%s). Esta no es compatible, pero tampoco será evitada. Debes cambiar la ruta del ejecutable de mkvmerge; para ello, dirígete a la barra de menús, selecciona Archivo y después Opciones. Se abrirá una ventana que consta de cuatro pestañas, entonces dirígete a la que dice mkvmerge y verás que desde ahí podrás indicar la ruta de localización del ejecutable."
+#, boost-format
+msgid "The GUI is configured to use the mkvmerge executable from a different version (%1%) than the GUI itself (%2%). This is not supported but will not be prevented either. You should change the mkvmerge executable in the preferences dialog."
+msgstr "La interfaz gráfica está configurada para usar el ejecutable de mkvmerge desde una versión diferente (%1%) de la propia interfaz (%2%). Esta no es compatible, pero tampoco será evitada. Debes cambiar la ruta del ejecutable de mkvmerge; para ello, dirígete a la barra de menús, selecciona Archivo y después Opciones. Se abrirá una ventana que consta de cuatro pestañas, entonces dirígete a la que dice mkvmerge y verás que desde ahí podrás indicar la ruta de localización del ejecutable."
 
 #: src/input/r_ogm.cpp:1508
 #, boost-format

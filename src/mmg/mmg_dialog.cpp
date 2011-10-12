@@ -1855,11 +1855,11 @@ mmg_dialog::query_mkvmerge_capabilities() {
     }
   }
 
-  if (0 != compare_current_version_to(wxMB(capabilities[wxT("VERSION")])))
-    wxMessageBox(wxString::Format(Z("The GUI is configured to use the mkvmerge executable from a different version (%s) than the GUI itself (%s). "
-                                    "This is not supported but will not be prevented either. "
-                                    "You should change the mkvmerge executable in the preferences dialog."),
-                                  capabilities[wxT("VERSION")].c_str(), wxUCS(get_version_info("mkvmerge GUI", vif_full))),
+  // if (0 != compare_current_version_to(wxMB(capabilities[wxT("VERSION")])))
+    wxMessageBox(wxU(boost::format(Y("The GUI is configured to use the mkvmerge executable from a different version (%1%) than the GUI itself (%2%). "
+                                     "This is not supported but will not be prevented either. "
+                                     "You should change the mkvmerge executable in the preferences dialog."))
+                     % wxMB(capabilities[wxT("VERSION")]) % get_version_info("mkvmerge GUI", vif_full)),
                  Z("Incompatible mkvmerge version"),
                  wxCENTER | wxOK | wxICON_ERROR);
 }

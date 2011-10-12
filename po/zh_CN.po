@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: mkvtoolnix\n"
 "Report-Msgid-Bugs-To: Dean Lee <xslidian@gmail.com>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2011-09-20 22:01+0200\n"
+"PO-Revision-Date: 2011-10-12 22:02+0200\n"
 "Last-Translator: Dean Lee <xslidian@gmail.com>\n"
 "Language-Team: Chinese Simplified <xslidian@gmail.com>\n"
 "Language: \n"
@@ -6058,9 +6058,9 @@ msgid "The FourCC setting for track nr. %s in file '%s' is not excatly four char
 msgstr "轨道 %s（自文件 '%s'）的 FourCC 设置非四字符长。"
 
 #: src/mmg/mmg_dialog.cpp:1859
-#, c-format, boost-format
-msgid "The GUI is configured to use the mkvmerge executable from a different version (%s) than the GUI itself (%s). This is not supported but will not be prevented either. You should change the mkvmerge executable in the preferences dialog."
-msgstr "为本 GUI 配置的 mkvmerge 可执行程序的版本 (%s) 与 GUI 自身的版本 (%s) 不同。这不受支持，但也不会被阻止。您应当在“选项”对话框中更改 mkvmerge 可执行程序。"
+#, boost-format
+msgid "The GUI is configured to use the mkvmerge executable from a different version (%1%) than the GUI itself (%2%). This is not supported but will not be prevented either. You should change the mkvmerge executable in the preferences dialog."
+msgstr "为本 GUI 配置的 mkvmerge 可执行程序的版本 (%1%) 与 GUI 自身的版本 (%2%) 不同。这不受支持，但也不会被阻止。您应当在“选项”对话框中更改 mkvmerge 可执行程序。"
 
 #: src/input/r_ogm.cpp:1508
 #, boost-format

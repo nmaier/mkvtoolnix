@@ -5917,8 +5917,8 @@ msgid "The FourCC setting for track nr. %s in file '%s' is not excatly four char
 msgstr ""
 
 #: src/mmg/mmg_dialog.cpp:1859
-#, c-format, boost-format
-msgid "The GUI is configured to use the mkvmerge executable from a different version (%s) than the GUI itself (%s). This is not supported but will not be prevented either. You should change the mkvmerge executable in the preferences dialog."
+#, boost-format
+msgid "The GUI is configured to use the mkvmerge executable from a different version (%1%) than the GUI itself (%2%). This is not supported but will not be prevented either. You should change the mkvmerge executable in the preferences dialog."
 msgstr ""
 
 #: src/input/r_ogm.cpp:1508

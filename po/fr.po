@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-07-30 19:00+0100\n"
-"PO-Revision-Date: 2011-09-20 21:58+0200\n"
+"PO-Revision-Date: 2011-10-12 22:00+0200\n"
 "Last-Translator: DenB <denb10@free.fr>\n"
 "Language-Team: DenB <denb10@free.fr>\n"
 "Language: fr\n"
@@ -6082,9 +6082,9 @@ msgid "The FourCC setting for track nr. %s in file '%s' is not excatly four char
 msgstr "La valeur FourCC de la piste n°%s du fichier '%s' n'a pas exactement quatre caractères."
 
 #: src/mmg/mmg_dialog.cpp:1859
-#, c-format, boost-format
-msgid "The GUI is configured to use the mkvmerge executable from a different version (%s) than the GUI itself (%s). This is not supported but will not be prevented either. You should change the mkvmerge executable in the preferences dialog."
-msgstr "L'interface est configurée pour fonctionner avec un exécutable mkvmerge d'une version différente (%s) de la sienne (%s). Cette situation n'est pas normale bien qu'elle ne soit pas interdite. Vous devriez indiquer un autre exécutable mkvmerge dans les options."
+#, boost-format
+msgid "The GUI is configured to use the mkvmerge executable from a different version (%1%) than the GUI itself (%2%). This is not supported but will not be prevented either. You should change the mkvmerge executable in the preferences dialog."
+msgstr "L'interface est configurée pour fonctionner avec un exécutable mkvmerge d'une version différente (%1%) de la sienne (%2%). Cette situation n'est pas normale bien qu'elle ne soit pas interdite. Vous devriez indiquer un autre exécutable mkvmerge dans les options."
 
 #: src/input/r_ogm.cpp:1508
 #, boost-format

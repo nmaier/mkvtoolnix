@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: nl\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-05-25 23:42+0200\n"
-"PO-Revision-Date: 2011-09-20 21:59+0200\n"
+"PO-Revision-Date: 2011-10-12 22:01+0200\n"
 "Last-Translator: René Maassen <bmom43@hotmail.com>\n"
 "Language-Team: Dutch <bmom43@hotmail.com>\n"
 "Language: nl\n"
@@ -6090,9 +6090,9 @@ msgid "The FourCC setting for track nr. %s in file '%s' is not excatly four char
 msgstr "De FourCC instellingen voor spoor nr. %s in bestand '%s' is niet precies vier karakters lang."
 
 #: src/mmg/mmg_dialog.cpp:1859
-#, c-format, boost-format
-msgid "The GUI is configured to use the mkvmerge executable from a different version (%s) than the GUI itself (%s). This is not supported but will not be prevented either. You should change the mkvmerge executable in the preferences dialog."
-msgstr "GUI is ingesteld om mkvmerge te gebruiken vanuit/af een andere versie (%s) dan de GUI zelf (%s). Dit is niet ondersteund maar zal ook niet worden voorkomen. Je zou het mkvmerge programma moeten veranderen in de voorkeur instellingen (Bestand >> Opties >> tab Mkvmerge)."
+#, boost-format
+msgid "The GUI is configured to use the mkvmerge executable from a different version (%1%) than the GUI itself (%2%). This is not supported but will not be prevented either. You should change the mkvmerge executable in the preferences dialog."
+msgstr "GUI is ingesteld om mkvmerge te gebruiken vanuit/af een andere versie (%1%) dan de GUI zelf (%2%). Dit is niet ondersteund maar zal ook niet worden voorkomen. Je zou het mkvmerge programma moeten veranderen in de voorkeur instellingen (Bestand >> Opties >> tab Mkvmerge)."
 
 #: src/input/r_ogm.cpp:1508
 #, boost-format

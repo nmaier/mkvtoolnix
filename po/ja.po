@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <boiled.sugar@gmail.com>\n"
-"PO-Revision-Date: 2011-09-17 11:14+0900\n"
+"PO-Revision-Date: 2011-10-12 22:01+0200\n"
 "Last-Translator: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "Language-Team: Japanese <boiled.sugar@gmail.com>\n"
 "Language: ja\n"
@@ -6077,9 +6077,9 @@ msgid "The FourCC setting for track nr. %s in file '%s' is not excatly four char
 msgstr "トラックID %s（ファイル'%s'）のFourCC指定が4文字ちょうどではありません。"
 
 #: src/mmg/mmg_dialog.cpp:1859
-#, c-format, boost-format
-msgid "The GUI is configured to use the mkvmerge executable from a different version (%s) than the GUI itself (%s). This is not supported but will not be prevented either. You should change the mkvmerge executable in the preferences dialog."
-msgstr "このGUIは、GUI自体（%s）とは違うバージョン（%s）のmkvmerge実行ファイルを使用するように設定されました。これはサポートされてはいませんが、妨げられることもありません。設定ダイアログでmkvmerge実行ファイルを変更するべきです。"
+#, boost-format
+msgid "The GUI is configured to use the mkvmerge executable from a different version (%1%) than the GUI itself (%2%). This is not supported but will not be prevented either. You should change the mkvmerge executable in the preferences dialog."
+msgstr "このGUIは、GUI自体（%1%）とは違うバージョン（%2%）のmkvmerge実行ファイルを使用するように設定されました。これはサポートされてはいませんが、妨げられることもありません。設定ダイアログでmkvmerge実行ファイルを変更するべきです。"
 
 #: src/input/r_ogm.cpp:1508
 #, boost-format

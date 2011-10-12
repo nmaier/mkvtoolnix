@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: mkvtoolnix_uk\n"
 "Report-Msgid-Bugs-To: Moritz Bunkus <moritz@bunkus.org>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2011-10-04 14:42+0200\n"
+"PO-Revision-Date: 2011-10-12 22:02+0200\n"
 "Last-Translator: Andriy Bilous'ko <arestarh@ukr.net>\n"
 "Language-Team: Ukrainian <moritz@bunkus.org>\n"
 "Language: uk\n"
@@ -6095,9 +6095,9 @@ msgid "The FourCC setting for track nr. %s in file '%s' is not excatly four char
 msgstr "FourCC для доріжки номер %s у файлі '%s' не містить точно чотири символи."
 
 #: src/mmg/mmg_dialog.cpp:1859
-#, c-format, boost-format
-msgid "The GUI is configured to use the mkvmerge executable from a different version (%s) than the GUI itself (%s). This is not supported but will not be prevented either. You should change the mkvmerge executable in the preferences dialog."
-msgstr "GUI налаштований на використання виконуваного файла mkvmerge іншої версії (%s), ніж сам GUI (%s). Даний сценарій не підтримується, але не забороняється. Ви можете змінити шлях до виконуваного файла mkvmerge необхідної версії через діалог налаштувань."
+#, fuzzy, boost-format
+msgid "The GUI is configured to use the mkvmerge executable from a different version (%1%) than the GUI itself (%2%). This is not supported but will not be prevented either. You should change the mkvmerge executable in the preferences dialog."
+msgstr "GUI налаштований на використання виконуваного файла mkvmerge іншої версії (%1%), ніж сам GUI (%2%). Даний сценарій не підтримується, але не забороняється. Ви можете змінити шлях до виконуваного файла mkvmerge необхідної версії через діалог налаштувань."
 
 #: src/input/r_ogm.cpp:1508
 #, boost-format
