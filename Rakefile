@@ -110,7 +110,7 @@ def define_default_task
   targets << "translations:applications"
 
   # The GUI help
-  targets << "translations:guides"
+  targets << "translations:guides" if c?(:USE_WXWIDGETS)
 
   task :default => targets do
     puts "Done. Enjoy :)"
@@ -320,8 +320,8 @@ end
 
 # Installation tasks
 desc "Install all applications and support files"
-targets  = [ "install:programs", "install:manpages", "install:translations:manpages", "install:translations:applications", "install:translations:guides" ]
-targets << "install:shared" if c?(:USE_WXWIDGETS)
+targets  = [ "install:programs", "install:manpages", "install:translations:manpages", "install:translations:applications" ]
+targets += [ "install:translations:guides", "install:shared" ] if c?(:USE_WXWIDGETS)
 task :install => targets
 
 namespace :install do
