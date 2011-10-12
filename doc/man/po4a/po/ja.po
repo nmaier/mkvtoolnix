@@ -7,8 +7,8 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: 2.9.9\n"
-"POT-Creation-Date: 2011-10-11 18:21+0300\n"
+"Project-Id-Version: 5.0.1\n"
+"POT-Creation-Date: 2011-10-12 19:25+0900\n"
 "PO-Revision-Date: 2011-09-20 22:03+0200\n"
 "Last-Translator: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "Language-Team: none\n"
@@ -33,7 +33,7 @@ msgstr "5.0.1"
 #: doc/man/mkvextract.xml:7 doc/man/mkvinfo.xml:7 doc/man/mkvmerge.xml:7
 #: doc/man/mkvpropedit.xml:7 doc/man/mmg.xml:7
 msgid "2011-10-09"
-msgstr ""
+msgstr "2011-10-12"
 
 #. type: Content of the mkvmerge entity
 #: doc/man/mkvextract.xml:9 doc/man/mkvinfo.xml:9 doc/man/mkvmerge.xml:9
@@ -802,7 +802,7 @@ msgstr "テキスト中の特殊文字をエスケープする"
 #: doc/man/mkvextract.xml:645 doc/man/mkvinfo.xml:319
 #: doc/man/mkvmerge.xml:1791 doc/man/mkvpropedit.xml:488
 msgid "There are a few places in which special characters in text must or should be escaped. The rules for escaping are simple: each character that needs escaping is replaced with a backslash followed by another character."
-msgstr "特殊文字をエスケープしなければならない、あるいはすべき場所が少しだけあります。エスケープのルールは単純です：エスケープする必要のある各文字を、バックスラッシュ（日本語フォントでは\\記号）の後ろに違う文字が1つついたものと入れ替えます。"
+msgstr "特殊文字をエスケープしなければならない、あるいはすべき場所が少しだけあります。エスケープのルールは単純です：エスケープする必要のある各文字を、バックスラッシュ（Windows上の日本語フォントでは\\記号）の後ろに違う文字が1つついたものと入れ替えます。"
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvextract.xml:650 doc/man/mkvinfo.xml:324
@@ -2146,7 +2146,7 @@ msgstr "エスケープすることのできる文字もあります。例えば
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvmerge.xml:1318
 msgid "Note that backslashes must always be escaped. Hash marks ('#') must be escaped if they should not start a comment."
-msgstr ""
+msgstr "バックスラッシュ（Windows上の日本語フォントでは\\記号）は、必ずエスケープされなければなりません。ハッシュマーク（#）は、それがコメントの始まりでなければエスケープされなければなりません。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvmerge.xml:1322
@@ -2155,16 +2155,7 @@ msgstr "'<command>mkvmerge -o \"my file.mkv\" -A \"a movie.avi\" sound.ogg</comm
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><programlisting>
 #: doc/man/mkvmerge.xml:1327
-#, fuzzy, no-wrap
-#| msgid ""
-#| "# Write to the file \"my file.mkv\".\n"
-#| "-o\n"
-#| "my file.mkv\n"
-#| "# Only take the video from \"a movie.avi\".\n"
-#| "-A\n"
-#| "a movie.avi\n"
-#| "sound.ogg\n"
-#| "     "
+#, no-wrap
 msgid ""
 "# Write to the file \"c:\\Matroska\\my file.mkv\" on Windows.\n"
 "-o\n"
@@ -2178,7 +2169,7 @@ msgid ""
 "sound.ogg\n"
 "     "
 msgstr ""
-"# \"my file.mkv\" に書き込む。\n"
+"# Windowsでは、\"my file.mkv\" に書き込む。\n"
 "-o\n"
 "my file.mkv\n"
 "# \"a movie.avi\" からビデオトラックのみを取り出す。\n"
