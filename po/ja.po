@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <boiled.sugar@gmail.com>\n"
-"PO-Revision-Date: 2011-10-12 22:01+0200\n"
+"PO-Revision-Date: 2011-10-13 17:20+0900\n"
 "Last-Translator: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "Language-Team: Japanese <boiled.sugar@gmail.com>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date : 2009-02-27 00:38+0900\n"
+"POT-Creation-Date: 2009-02-27 00:38+0900\n"
 
 #: src/extract/xtr_tta.cpp:118
 #, boost-format
@@ -374,7 +374,6 @@ msgid "  --split-max-files <n>    Create at most n files.\n"
 msgstr "  --split-max-files <n>    ファイルの最大分割数を指定します。\n"
 
 #: src/merge/mkvmerge.cpp:220
-#, fuzzy
 msgid ""
 "  --stereo-mode <TID:n|keyword>\n"
 "                           Sets the stereo mode parameter. It can\n"
@@ -383,7 +382,7 @@ msgid ""
 msgstr ""
 "  --stereo-mode <TID:n|none|left|right|both>\n"
 "                           ステレオモードのパラメータを指定します。\n"
-"                           0～11の数字か、キーワード（全てのリストは\n"
+"                           0～14の数字か、キーワード（全てのリストは\n"
 "                           ドキュメントを参照してください）で指定します。\n"
 
 #: src/merge/mkvmerge.cpp:226
@@ -6079,7 +6078,7 @@ msgstr "トラックID %s（ファイル'%s'）のFourCC指定が4文字ちょ�
 #: src/mmg/mmg_dialog.cpp:1859
 #, boost-format
 msgid "The GUI is configured to use the mkvmerge executable from a different version (%1%) than the GUI itself (%2%). This is not supported but will not be prevented either. You should change the mkvmerge executable in the preferences dialog."
-msgstr "このGUIは、GUI自体（%1%）とは違うバージョン（%2%）のmkvmerge実行ファイルを使用するように設定されました。これはサポートされてはいませんが、妨げられることもありません。設定ダイアログでmkvmerge実行ファイルを変更するべきです。"
+msgstr "このGUIは、GUI自体（%2%）とは違うバージョン（%1%）のmkvmerge実行ファイルを使用するように設定されました。これはサポートされてはいませんが、妨げられることもありません。設定ダイアログでmkvmerge実行ファイルを変更するべきです。"
 
 #: src/input/r_ogm.cpp:1508
 #, boost-format
@@ -8188,11 +8187,11 @@ msgstr "追加"
 
 #: src/common/stereo_mode.cpp:58
 msgid "anaglyph (cyan/red)"
-msgstr ""
+msgstr "アナグリフ方式（シアン／赤）"
 
 #: src/common/stereo_mode.cpp:60
 msgid "anaglyph (green/magenta)"
-msgstr ""
+msgstr "アナグリフ方式（緑／マゼンタ）"
 
 #: src/mmg/tabs/input.cpp:185
 msgid "append"
@@ -8232,11 +8231,11 @@ msgstr "サンプルあたりビット数：%1%"
 
 #: src/common/stereo_mode.cpp:61
 msgid "both eyes laced in one block (left first)"
-msgstr ""
+msgstr "フィールドシーケンシャル方式（レフトファースト）"
 
 #: src/common/stereo_mode.cpp:62
 msgid "both eyes laced in one block (right first)"
-msgstr ""
+msgstr "フィールドシーケンシャル方式（ライトファースト）"
 
 #: src/info/mkvinfo.cpp:1109
 #: src/input/r_matroska.cpp:93
@@ -9359,10 +9358,13 @@ msgstr "はい"
 
 #~ msgid " (both eyes)"
 #~ msgstr " (両目)"
+
 #~ msgid " (left eye)"
 #~ msgstr " (左目)"
+
 #~ msgid " (right eye)"
 #~ msgstr " (右目)"
+
 #~ msgid ""
 #~ "%s\n"
 #~ "\n"
@@ -9383,20 +9385,28 @@ msgstr "はい"
 #~ "\n"
 #~ "ヘルプはツールチップの形で、または'ヘルプ'メニューから、\n"
 #~ "またはF1キーを押すことで利用できます。"
+
 #~ msgid "About mkvmerge's GUI"
 #~ msgstr "mkvmergeのGUIについて"
+
 #~ msgid "Both eyes"
 #~ msgstr "両目"
+
 #~ msgid "Cancel"
 #~ msgstr "キャンセル"
+
 #~ msgid "DTS (Digital Theater System)"
 #~ msgstr "DTS (Digital Theater System)"
+
 #~ msgid "Dirac elementary stream"
 #~ msgstr "Diracエレメンタリストリーム"
+
 #~ msgid "FLAC lossless audio"
 #~ msgstr "FLACロスレスオーディオ"
+
 #~ msgid "IVF with VP8"
 #~ msgstr "VP8入りのIVF"
+
 #~ msgid ""
 #~ "Known file types:\n"
 #~ "  ext   description\n"
@@ -9405,36 +9415,52 @@ msgstr "はい"
 #~ "既知のファイルタイプ：\n"
 #~ " 拡張子 説明\n"
 #~ "  ----  --------------------------\n"
+
 #~ msgid "Left eye"
 #~ msgstr "左目"
+
 #~ msgid "MPEG program stream"
 #~ msgstr "MPEGプログラムストリーム"
+
 #~ msgid "MPEG-1 layer II audio (CBR and VBR/ABR)"
 #~ msgstr "MPEG-1 Layer-2オーディオ（CBRとVBR/ABR）"
+
 #~ msgid "MPEG-1 layer III audio (CBR and VBR/ABR)"
 #~ msgstr "MPEG-1 Layer-3オーディオ（CBRとVBR/ABR）"
+
 #~ msgid "MPEG-1 video elementary stream"
 #~ msgstr "MPEG-1ビデオエレメンタリストリーム"
+
 #~ msgid "MPEG-2 video elementary stream"
 #~ msgstr "MPEG-2ビデオエレメンタリストリーム"
+
 #~ msgid "Matroska A/V files (*.mka;*.mkv)|*.mkv;*.mka|%s"
 #~ msgstr "Matroska A/Vファイル (*.mka;*.mkv)|*.mkv;*.mka|%s"
+
 #~ msgid "Matroska files (*.mkv;*.mka)|*.mkv;*.mka|%s"
 #~ msgstr "Matroskaファイル (*.mkv;*.mka)|*.mkv;*.mka|%s"
+
 #~ msgid "None"
 #~ msgstr "指定なし"
+
 #~ msgid "Quicktime/MP4 audio and video"
 #~ msgstr "Quicktime/MP4オーディオとビデオ"
+
 #~ msgid "RealMedia audio and video"
 #~ msgstr "RealMediaオーディオとビデオ"
+
 #~ msgid "Right eye"
 #~ msgstr "右目"
+
 #~ msgid "Sets the compression used for VobSub subtitles. If nothing is chosen then the VobSubs will be automatically compressed with zlib. 'none' results is files that are a lot larger."
 #~ msgstr "VobSub字幕に使用される圧縮方式を指定します。何も指定されていなければVobSubは自動的にzlibで圧縮されます。'無し'を指定するとファイルサイズがかなり増大します。"
+
 #~ msgid "TTA lossless audio"
 #~ msgstr "TTAロスレスオーディオ"
+
 #~ msgid "This AAC track does not contain valid headers. The extra header size is %1% bytes, expected were 2 or 5 bytes.\n"
 #~ msgstr "このAACトラックは有効なヘッダを含んでいません。追加ヘッダのサイズは%1%ですが、期待されるサイズは2～5バイトです。\n"
+
 #~ msgid ""
 #~ "Usage: mkvinfo [options] inname\n"
 #~ "\n"
@@ -9475,31 +9501,43 @@ msgstr "はい"
 #~ "                 全てのメッセージをこのファイルにリダイレクトします。\n"
 #~ "  -h, --help     このヘルプを表示します。\n"
 #~ "  -V, --version  バージョン情報を表示します。\n"
+
 #, fuzzy
 #~ msgid "Using the Vp8 video output module.\n"
 #~ msgstr "VP8ビデオ出力モジュールを使用しています。\n"
+
 #~ msgid "VC1 video elementary stream"
 #~ msgstr "VC1ビデオエレメンタリストリーム"
+
 #~ msgid "VobBtn buttons"
 #~ msgstr "VobBtnボタン"
+
 #~ msgid "WAVE (uncompressed PCM)"
 #~ msgstr "WAVE（非圧縮PCM）"
+
 #~ msgid "WAVPACK lossless audio"
 #~ msgstr "WAVPACKロスレスオーディオ"
+
 #~ msgid "Warning: There's more than one track with the UID %1%."
 #~ msgstr "警告：UID %1%のトラックが複数あります。"
+
 #~ msgid "Warning: There's more than one track with the number %1%."
 #~ msgstr "警告：番号%1%のトラックが複数あります。"
+
 #~ msgid "anaglyph"
 #~ msgstr "アナグリフ方式"
+
 #~ msgid "audio/video/text subtitles embedded in OGG"
 #~ msgstr "OGGに埋め込まれたオーディオ・ビデオ・テキスト字幕"
+
 #~ msgid "byte_buffer_c: (pos + num) > size. Should not have happened. Please file a bug report.\n"
 #~ msgstr "byte_buffer_c: (pos + num) > sizeです。発生するべきではありません。バグレポートを提出してください。\n"
+
 #~ msgid "cstrutf8_to_UTFstring: Invalid UTF-8 sequence encountered. Please contact moritz@bunkus.org and request that he implements a better UTF-8 parser."
 #~ msgstr "cstrutf8_to_UTFstring：無効なUTF-8文字列の並びに遭遇しました。moritz@bunkus.orgに連絡し、UTF-8パーサを実装するよう要求してください。"
+
 #~ msgid "general Matroska files"
 #~ msgstr "通常のMatroskaファイル"
+
 #~ msgid "mkvextract: Unknown mode!?\n"
 #~ msgstr "mkvextract：未知のモード！？\n"
-
