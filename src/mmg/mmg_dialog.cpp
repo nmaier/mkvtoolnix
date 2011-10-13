@@ -1855,7 +1855,7 @@ mmg_dialog::query_mkvmerge_capabilities() {
     }
   }
 
-  // if (0 != compare_current_version_to(wxMB(capabilities[wxT("VERSION")])))
+  if (0 != compare_current_version_to(wxMB(capabilities[wxT("VERSION")])))
     wxMessageBox(wxU(boost::format(Y("The GUI is configured to use the mkvmerge executable from a different version (%1%) than the GUI itself (%2%). "
                                      "This is not supported but will not be prevented either. "
                                      "You should change the mkvmerge executable in the preferences dialog."))
