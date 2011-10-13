@@ -9448,20 +9448,28 @@ msgstr "ja"
 #~ msgstr ""
 #~ "                       Englischer Name der Sprache | ISO639-2      | ISO639-1\n"
 #~ "---------------------------------------------------+---------------+--------------\n"
+
 #~ msgid "  --check-for-updates      Check online for the latest release.\n"
 #~ msgstr "  --check-for-updates      Online nach neuen Programmversionen suchen.\n"
+
 #~ msgid "  --check-for-updates Check online for the latest release.\n"
 #~ msgstr "  --check-for-updates Online nach neuen Programmversionen suchen.\n"
+
 #~ msgid " (both eyes)"
 #~ msgstr " (beide Augen)"
+
 #~ msgid " (left eye)"
 #~ msgstr " (linkes Auge)"
+
 #~ msgid " (right eye)"
 #~ msgstr " (Rechtes Auge)"
+
 #~ msgid "%1% at %2%"
 #~ msgstr "%1% an %2%"
+
 #~ msgid "%1% frame, track %2%, timecode %3% (%4%), size %5%, adler 0x%|6$08x|\n"
 #~ msgstr "%1% Frame, Track %2%, Zeitstempel %3% (%4%), Größe %5%, Adler 0x%|6$08x|\n"
+
 #~ msgid ""
 #~ "%s\n"
 #~ "\n"
@@ -9482,90 +9490,133 @@ msgstr "ja"
 #~ "\n"
 #~ "Hilfe gibt es in Form von Tooltips, über das 'Hilfe'-Menü,\n"
 #~ "oder indem man 'F1' drückt."
+
 #~ msgid "'%1%' is only allowed for chapter extraction.\n"
 #~ msgstr "'%1%' ist nur beim Extrahieren von Kapitelinformationen erlaubt.\n"
+
 #~ msgid "'--blockadd' is only allowed when extracting tracks.\n"
 #~ msgstr "Die Option '--blockadd' ist nur erlaubt, wenn Tracks exportiert werden.\n"
+
 #~ msgid "'--blockadd' lacks a level.\n"
 #~ msgstr "Der Option '--blockadd' fehlt das Level.\n"
+
 #~ msgid "'--cuesheet' is only allowed when extracting tracks.\n"
 #~ msgstr "Die Option '--cuesheet' darf nur beim Extrahieren von Tracks benutzt werden.\n"
+
 #~ msgid "'--fullraw' is only allowed when extracting tracks.\n"
 #~ msgstr "Die Option '--fullraw' darf nur beim Extrahieren von Tracks benutzt werden.\n"
+
 #~ msgid "'--no-ogg' is only allowed when extracting tracks.\n"
 #~ msgstr "Die Option '--no-ogg' darf nur beim Extrahieren von Tracks benutzt werden.\n"
+
 #~ msgid "'--raw' is only allowed when extracting tracks.\n"
 #~ msgstr "Die Option '--raw' darf nur beim Extrahieren von Tracks benutzt werdens.\n"
+
 #~ msgid "'-c' lacks a charset.\n"
 #~ msgstr "Der Option '-c' fehlt der Zeichensatz.\n"
+
 #~ msgid "(Unknown element: %1%)"
 #~ msgstr "(Unbekanntes Element: %1%)"
+
 #~ msgid "A single '+' is not a valid command line option. If you want to append a file use '+' directly followed by the file name, e.g. '+movie_part_2.avi'."
 #~ msgstr "Ein einfaches '+' ist keine gültige Option. Wenn Sie eine die Trackas einer Datei an vorher angegebene Tracks anfügen wollen, so geben Sie '+' direkt gefolgt vom Dateinamen an (z.B. '+film_teil_2.avi')."
+
 #~ msgid "About mkvmerge's GUI"
 #~ msgstr "Über das mkvmerge-GUI"
+
 #~ msgid "Adjusting EbmlVoid element %1% at %2% with size %3% to new pos %4% with new size %5%.\n"
 #~ msgstr "EbmlVoid-Element %1% an Position %2% mit Größe %3% wird an neuer Position %4% mit neuer Größe %5% geschrieben.\n"
+
 #~ msgid "Adjusting segment size.\n"
 #~ msgstr "Segmentgröße wird angepasst.\n"
+
 #~ msgid "Always adds '--engage use_simpleblock' to the command line. That way Matroska's new 'simple blocks' will be used which save a bit of overhead at the cost of not being backwards compatible."
 #~ msgstr "Fügt immer die Option '--engage use_simpleblock' der Kommandozeile hinzu. Dadurch wird das neue Matroska-Feature der 'vereinfachten Blöcke' benutzt, das für einen etwas geringeren Verschnitt auf Kosten der Rückwärtskompatibilität sorgt."
+
 #~ msgid "Always use simple blocks"
 #~ msgstr "Immer vereinfachte Blockelemente benutzen"
+
 #~ msgid "An unknown error occured. The file been modified."
 #~ msgstr "Ein unbekannter Fehler ist aufgetreten. Die Datei wurde verändert."
+
 #~ msgid "Analyzing Matroska file"
 #~ msgstr "Analyse der Matroska-Datei"
+
 #~ msgid "Appending new seek head.\n"
 #~ msgstr "Neuer Suchkopf wird angehängt.\n"
+
 #~ msgid "Both eyes"
 #~ msgstr "Beide Augen"
+
 #~ msgid "Cancel"
 #~ msgstr "Abbrechen"
+
 #~ msgid "Change the default values"
 #~ msgstr "Die Standardwerte ändern"
+
 #~ msgid "Changing the interface language requires a restart to take effect."
 #~ msgstr "Das Ändern der Sprache der Benutzeroberfläche erfordert einen Neustart von mmg, um wirksam zu werden."
+
 #~ msgid "Check online for a new release"
 #~ msgstr "Online nach neuen Programmversionen suchen"
+
 #~ msgid "Check online for updates"
 #~ msgstr "Online nach neuen Programmversionen suchen"
+
 #~ msgid "Could not open the file '%1%'."
 #~ msgstr "Die Datei '%1%' konnte nicht geöffnet werden."
+
 #~ msgid "Creating new seek head.\n"
 #~ msgstr "Ein neuer Suchkopf wird erstellt.\n"
+
 #~ msgid "DTS (Digital Theater System)"
 #~ msgstr "DTS (Digital Theater System)"
+
 #~ msgid "Deleting internal element %1% at %2% with size %3%.\n"
 #~ msgstr "Internes Element %1% an Position %2% mit Größe %3% wird gelöscht.\n"
+
 #~ msgid "Dirac elementary stream"
 #~ msgstr "Dirac elementary stream"
+
 #~ msgid "Do not copy chapters from this file. Only applies to a couple of formats (e.g. Matroska files)."
 #~ msgstr "Keine Kapitel aus der Quelldatei kopieren. Betrifft nur wenigen Formaten (z.B. bei Matroska-Dateien)."
+
 #~ msgid "Do not copy tags from this file. Only applies to a couple of formats (e.g. Matroska files)."
 #~ msgstr "Keine Tags aus der Quelldatei kopieren. Betrifft nur wenigen Formaten (z.B. bei Matroska-Dateien)."
+
 #~ msgid "Do not write those header elements whose values are the same as their default values according to the Matroska specs."
 #~ msgstr "Diejenigen Kopfelemente, die laut Matroska-Spezifikationen dem Standardwert für das Element entsprechen, nicht in die Zieldatei schreiben."
+
 #~ msgid "During MPEG-4 part 2 B frame handling: The frame queue contains more frames than timecodes are available that can be assigned to them (reason: %1%). Therefore %2% frame(s) had to be dropped. The video might be broken around timecode %3%.\n"
 #~ msgstr "Bei der Behandlung von MPEG-4 Teil 2 B-Frames: Die Framewarteschlange enthält mehr Frames, als momentan Zeitstempel zur Verfügung stehen, die den Frames zugewiesen werden können (Grund: %1%). Deswegen mussten %2% Frame(s) ausgelassen werden. Das Video ist in der Nähe von Zeitstempel %3% eventuell beschädigt.\n"
+
 #~ msgid "FLAC lossless audio"
 #~ msgstr "FLAC verlustfreies Audio"
+
 #~ msgid "File options:"
 #~ msgstr "Dateioptionen:"
+
 #~ msgid "File/segment title"
 #~ msgstr "Datei-/Segmenttitel"
+
 #~ msgid "Found a suitable place at %1%.\n"
 #~ msgstr "Passender Ort an Position %1% gefunden.\n"
+
 #~ msgid "Global tags"
 #~ msgstr "Globale Tags"
+
 #~ msgid "Great! Exact size. Just overwriting :)\n"
 #~ msgstr "Großartig! Exakte Größe. Wird nur überschrieben :)\n"
+
 #~ msgid "IVF with VP8"
 #~ msgstr "IVF mit VP8"
+
 #~ msgid "Inserting new EbmlVoid element at %1% with size %2%.\n"
 #~ msgstr "Neues EbmlVoid-Element wird an Position %1% mit Größe %2% eingefügt.\n"
+
 #~ msgid "Inserting new EbmlVoid not possible, remaining size too small.\n"
 #~ msgstr "Es ist nicht möglich, ein neues EbmlVoid-Element einzufügen, weil der verbleibende Platz zu klein ist.\n"
+
 #~ msgid ""
 #~ "Known file types:\n"
 #~ "  ext   description\n"
@@ -9574,74 +9625,107 @@ msgstr "ja"
 #~ "Bekannte Dateitypen:\n"
 #~ "  End.  Beschreibung\n"
 #~ "  ----  --------------------------\n"
+
 #~ msgid "Left eye"
 #~ msgstr "Linkes Auge"
+
 #~ msgid "MPEG program stream"
 #~ msgstr "MPEG program stream"
+
 #~ msgid "MPEG-1 layer II audio (CBR and VBR/ABR)"
 #~ msgstr "MPEG-1 layer II audio (CBR und VBR/ABR)"
+
 #~ msgid "MPEG-1 layer III audio (CBR and VBR/ABR)"
 #~ msgstr "MPEG-1 layer III audio (CBR und VBR/ABR)"
+
 #~ msgid "MPEG-1 video elementary stream"
 #~ msgstr "MPEG-1 video elementary stream"
+
 #~ msgid "MPEG-2 video elementary stream"
 #~ msgstr "MPEG-2 video elementary stream"
+
 #~ msgid "Matroska A/V files (*.mka;*.mkv)|*.mkv;*.mka|%s"
 #~ msgstr "Matroska Audio/Video-Dateien (*.mka;*.mkv)|*.mkv;*.mka|%s"
+
 #~ msgid "Matroska files (*.mkv;*.mka)|*.mkv;*.mka|%s"
 #~ msgstr "Matroska-Dateien (*.mkv;*.mka)|*.mkv;*.mka|%s"
+
 #~ msgid "Matroska files (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|All files|*.*"
 #~ msgstr "Matroska-Dateien (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|Alle Dateien|*.*"
+
 #~ msgid "No chapters"
 #~ msgstr "Keine Kapitel"
+
 #~ msgid "No further options allowed when extracting %1%.\n"
 #~ msgstr "Es sind keine weiteren Optionen beim Extrahieren von %1% erlaubt.\n"
+
 #~ msgid "No further options allowed when regenerating the CUE sheet.\n"
 #~ msgstr "Es sind keine weiteren Optionen erlaubt, wenn ein Cuesheet erzeugt werden soll.\n"
+
 #~ msgid "No suitable place found. Appending at the end.\n"
 #~ msgstr "Kein passender Ort gefunden. Wird am Ende angehängt.\n"
+
 #~ msgid "No tags"
 #~ msgstr "Keine Tags"
+
 #~ msgid "No tracks will be copied from this file. This usually indicates a mistake in the command line.\n"
 #~ msgstr "Aus dieser Quelldatei werden keine Tracks gemuxt. Das deutet meistens auf einen Fehler bei der Zusammenstellung der Kommandozeilenargumente hin.\n"
+
 #~ msgid "None"
 #~ msgstr "Kein"
+
 #~ msgid ""
 #~ "Nothing to do.\n"
 #~ "\n"
 #~ msgstr ""
 #~ "Nichts zu tun.\n"
 #~ "\n"
+
 #~ msgid "Other global options"
 #~ msgstr "Weitere globale Optionen"
+
 #~ msgid "Overwriting/voiding element at %1%.\n"
 #~ msgstr "Element an Position %1% wird überschrieben/durch ein Void-Element ersetzt.\n"
+
 #~ msgid "Quicktime/MP4 audio and video"
 #~ msgstr "Quicktime/MP4 Audio und Video"
+
 #~ msgid "RealMedia audio and video"
 #~ msgstr "RealMedia Audio und Video"
+
 #~ msgid "Restart required"
 #~ msgstr "Neustart erforderlich"
+
 #~ msgid "Right eye"
 #~ msgstr "Rechtes Auge"
+
 #~ msgid "Set &default values"
 #~ msgstr "Stan&dardwerte festlegen"
+
 #~ msgid "Sets the compression used for VobSub subtitles. If nothing is chosen then the VobSubs will be automatically compressed with zlib. 'none' results is files that are a lot larger."
 #~ msgstr "Legt die Komprimierung von VobSub-Untertiteln fest. Wird nichts ausgewählt, so werden die Untertitel mit der Methode 'zlib' komprimiert. 'keine' resultiert in deutlich größeren Zieldateien."
+
 #~ msgid "Subtitle charset:"
 #~ msgstr "Untertitelzeichensatz:"
+
 #~ msgid "TTA lossless audio"
 #~ msgstr "TTA verlustfreies Audio"
+
 #~ msgid "The MPEG-4 part 2 compression only works with native MPEG-4. However, native MPEG-4 mode has not been selected with '--engage native_mpeg4'.\n"
 #~ msgstr "Die MPEG-4 Teil 2-Komprimierung funktioniert nur mit nativ gemuxtem MPEG-4. Der native Modus wurde jedoch nicht mit '--engage native_mpeg4' angeschaltet.\n"
+
 #~ msgid "This AAC track does not contain valid headers. The extra header size is %1% bytes, expected were 2 or 5 bytes.\n"
 #~ msgstr "Dieser AAC-Track enthält keinen gültigen Kopf. Die Codec-Konfigurationsdaten haben eine Länge von %1% Byte(s), wohingegen entweder zwei oder fünf Bytes erwartet wurden.\n"
+
 #~ msgid "This track uses a Matroska feature called 'Codec state elements'. mkvmerge supports these but this feature has not been turned on with the option '--engage use_codec_state'.\n"
 #~ msgstr "Dieser Track benutzt ein Feature von Matroska, das 'Codec-Zustandselemente' heißt. Dieses Feature wird von mkvmerge unterstützt, aber es wurde nicht mit der Kommandozeilenoption '--engage use_codec_state' aktiviert.\n"
+
 #~ msgid "Tracks:"
 #~ msgstr "Tracks:"
+
 #~ msgid "Unrecognized command line option '%1%'. Maybe you put a mode specific option before the input file name?\n"
 #~ msgstr "Nicht erkannte Kommandozeilenoption '%1%'. Haben Sie vielleicht eine Option noch vor den Namen der Quelldatei geschrieben?\n"
+
 #~ msgid ""
 #~ "Usage: mkvextract tracks <inname> [options] [TID1:out1 [TID2:out2 ...]]\n"
 #~ "   or  mkvextract tags <inname> [options]\n"
@@ -9790,6 +9874,7 @@ msgstr "ja"
 #~ "  -v, --verbose  Die Gesprächigkeit erhöhen.\n"
 #~ "  -h, --help     Diesen Hilfetext anzeigen.\n"
 #~ "  -V, --version  Versionsinformationen anzeigen.\n"
+
 #~ msgid ""
 #~ "Usage: mkvinfo [options] inname\n"
 #~ "\n"
@@ -9834,76 +9919,112 @@ msgstr "ja"
 #~ "                 schreiben\n"
 #~ "  -h, --help     Diesen Hilfetext anzeigen\n"
 #~ "  -V, --version  Versionsinformationen anzeigen\n"
+
 #~ msgid "Using the IVF output module.\n"
 #~ msgstr "Das IVF-Ausgabemodul wird benutzt.\n"
+
 #~ msgid "Using the Vp8 video output module.\n"
 #~ msgstr "Das VP8-Video-Ausgabemodul wird benutzt.\n"
+
 #~ msgid "VC1 video elementary stream"
 #~ msgstr "VC1 Video elementary stream"
+
 #~ msgid "VobBtn buttons"
 #~ msgstr "VobBtn-Buttons"
+
 #~ msgid "WAVE (uncompressed PCM)"
 #~ msgstr "WAVE (unkomprimiertes PCM)"
+
 #~ msgid "WAVPACK lossless audio"
 #~ msgstr "WAVPACK verlustfreies Audio"
+
 #~ msgid "Warning: There's more than one track with the UID %1%."
 #~ msgstr "Warnung: Es gibt mehr als einen Track mit der UID %1%."
+
 #~ msgid "Warning: There's more than one track with the number %1%."
 #~ msgstr "Warnung: Es gibt mehr als einen Track mit der Nummer %1%."
+
 #~ msgid "Write raw FLAC files (default: write OggFLAC files)."
 #~ msgstr "Bei FLAC-Tracks die rohen FLAC-Daten extrahieren (Standard: FLAC in Ogg einbetten)."
+
 #~ msgid "You have not yet selected an output file."
 #~ msgstr "Sie haben noch keine Zieldatei ausgewählt."
+
 #~ msgid "You have not yet selected any input file and/or no tracks."
 #~ msgstr "Sie haben noch keine Quelldatei und/oder keine Tracka ausgewählt."
+
 #~ msgid "anaglyph"
 #~ msgstr "anaglyph"
+
 #~ msgid "audio/video/text subtitles embedded in OGG"
 #~ msgstr "Audio/Video/Textuntertitel in Ogg eingebettet"
+
 #~ msgid "byte_buffer_c: (pos + num) > size. Should not have happened. Please file a bug report.\n"
 #~ msgstr "byte_buffer_c: (pos + num) > size. Hätte nicht passieren dürfen. Bitte legen SIe einen Fehlerbericht an.\n"
+
 #~ msgid "cstrutf8_to_UTFstring: Invalid UTF-8 sequence encountered. Please contact moritz@bunkus.org and request that he implements a better UTF-8 parser."
 #~ msgstr "cstrutf8_to_UTFstring: Ungültige UTF-8-Sequenz gefunden. Wenden Sie sich bitte an moritz@bunkus.org, und bitten Sie darum, dass er den UTF-8-Parser verbessert."
+
 #~ msgid "flac_header_extraction: Could not set the error callback.\n"
 #~ msgstr "flac_header_extraction: Die Fehlerrücksprungfunktion konnte nicht gesetzt.\n"
+
 #~ msgid "flac_header_extraction: Could not set the metadata callback.\n"
 #~ msgstr "flac_header_extraction: Die Metadatenrücksprungfunktion konnte nicht gesetzt werden.\n"
+
 #~ msgid "flac_header_extraction: Could not set the read callback.\n"
 #~ msgstr "flac_header_extraction: Die Leserücksprungfunktion konnte nicht gesetzt werden.\n"
+
 #~ msgid "flac_header_extraction: Could not set the write callback.\n"
 #~ msgstr "flac_header_extraction: Die Schreibrücksprungfunktion konnte nicht gesetzt werden.\n"
+
 #~ msgid "flac_reader: Could not set the eof callback.\n"
 #~ msgstr "flac_reader: Die Ende-der-Datei-Rücksprungfunktion konnte nicht gesetzt werden.\n"
+
 #~ msgid "flac_reader: Could not set the error callback.\n"
 #~ msgstr "flac_reader: Die Fehlerücksprungfunktion konnte nicht gesetzt werden.\n"
+
 #~ msgid "flac_reader: Could not set the length callback.\n"
 #~ msgstr "flac_reader: Die Längenrücksprungfunktion konnte nicht gesetzt werden.\n"
+
 #~ msgid "flac_reader: Could not set the metadata callback.\n"
 #~ msgstr "flac_reader: Die Metadatenrücksprungfunktion konnte nicht gesetzt werden.\n"
+
 #~ msgid "flac_reader: Could not set the read callback.\n"
 #~ msgstr "flac_reader: Die Leserücksprungfunktion konnte nicht gesetzt werden.\n"
+
 #~ msgid "flac_reader: Could not set the seek callback.\n"
 #~ msgstr "flac_reader: Die Spulrücksprungfunktion konnte nicht gesetzt werden.\n"
+
 #~ msgid "flac_reader: Could not set the tell callback.\n"
 #~ msgstr "flac_reader: Die Dateipositionrücksprungfunktion konnte nicht gesetzt werden.\n"
+
 #~ msgid "flac_reader: Could not set the write callback.\n"
 #~ msgstr "flac_reader: Die Schreibrücksprungfunktion konnte nicht gesetzt werden.\n"
+
 #~ msgid "found_what == 0, 2nd time. Should not have happened. Please file a bug report.\n"
 #~ msgstr "found_what == 0 an der zweiten Stelle. Hätte nicht passieren dürfen. Bitte legen SIe einen Fehlerbericht an.\n"
+
 #~ msgid "found_what == 0. Should not have happened. Please file a bug report.\n"
 #~ msgstr "found_what == 0. Hätte nicht passieren dürfen. Bitte legen SIe einen Fehlerbericht an.\n"
+
 #~ msgid "general Matroska files"
 #~ msgstr "Allgemeine Matroska-Dateien"
+
 #~ msgid "locale.cpp/from_utf8(): Invalid conversion handle %1% (num: %2%).\n"
 #~ msgstr "locale.cpp/from_utf8(): Ungültiges Konvertierungs-Handle %1% (Anzahl: %2%).\n"
+
 #~ msgid "locale.cpp/to_utf8(): Invalid conversion handle %1% (num: %2%).\n"
 #~ msgstr "locale.cpp/to_utf8(): Ungültiges Konvertierungs-Handle %1% (Anzahl: %2%).\n"
+
 #~ msgid "mkvextract: Unknown mode!?\n"
 #~ msgstr "mkvextract: Unbekannter Modus!?\n"
+
 #~ msgid "mkvmerge GUI v%s ('%s')"
 #~ msgstr "mkvmerge GUI v%s ('%s')"
+
 #~ msgid "r_matroska: Cluster does not contain a cluster timecode. File is broken. Aborting.\n"
 #~ msgstr "r_matroska: Der Cluster enthält keinen Clusterzeitstempel. Die Datei ist beschädigt bzw. ungültig. Abbruch.\n"
+
 #~ msgid "start_element: pdata->bin != NULL"
 #~ msgstr "start_element: pdata->bin != NULL"
 

@@ -9387,10 +9387,13 @@ msgstr "ja"
 
 #~ msgid " (both eyes)"
 #~ msgstr " (beide ogen)"
+
 #~ msgid " (left eye)"
 #~ msgstr " (linker oog)"
+
 #~ msgid " (right eye)"
 #~ msgstr " (rechter oog)"
+
 #~ msgid ""
 #~ "%s\n"
 #~ "\n"
@@ -9411,18 +9414,25 @@ msgstr "ja"
 #~ "\n"
 #~ "Help is beschikbaar via, het 'Help'\n"
 #~ "menu of door op F1 te drukken."
+
 #~ msgid "About mkvmerge's GUI"
 #~ msgstr "Over mkvmerge's GUI"
+
 #~ msgid "Both eyes"
 #~ msgstr "Beide ogen"
+
 #~ msgid "DTS (Digital Theater System)"
 #~ msgstr "DTS (Digital Theater System)"
+
 #~ msgid "Dirac elementary stream"
 #~ msgstr "Dirac basis stroom"
+
 #~ msgid "FLAC lossless audio"
 #~ msgstr "FLAC verlies vrije audio"
+
 #~ msgid "IVF with VP8"
 #~ msgstr "IVF met VP8"
+
 #~ msgid ""
 #~ "Known file types:\n"
 #~ "  ext   description\n"
@@ -9431,38 +9441,55 @@ msgstr "ja"
 #~ "Bekende bestandstypen:\n"
 #~ "  ext   beschrijving\n"
 #~ "  ----  --------------------------\n"
+
 #~ msgid "Left eye"
 #~ msgstr "Linker oog"
+
 #~ msgid "MPEG program stream"
 #~ msgstr "MPEG programma stroom"
+
 #~ msgid "MPEG-1 layer II audio (CBR and VBR/ABR)"
 #~ msgstr "MPEG-1 layer II audio (CBR en VBR/ABR)"
+
 #~ msgid "MPEG-1 layer III audio (CBR and VBR/ABR)"
 #~ msgstr "MPEG-1 layer III audio (CBR en VBR/ABR)"
+
 #~ msgid "MPEG-1 video elementary stream"
 #~ msgstr "MPEG-1 video basis stroom"
+
 #~ msgid "MPEG-2 video elementary stream"
 #~ msgstr "MPEG-2 video basis stroom"
+
 #~ msgid "Matroska A/V files (*.mka;*.mkv)|*.mkv;*.mka|%s"
 #~ msgstr "Matroska A/V bestanden (*.mka;*.mkv)|*.mkv;*.mka|%s"
+
 #~ msgid "Matroska files (*.mkv;*.mka)|*.mkv;*.mka|%s"
 #~ msgstr "Matroska bestanden (*.mkv;*.mka)|*.mkv;*.mka|%s"
+
 #~ msgid "None"
 #~ msgstr "Geen"
+
 #~ msgid "Quicktime/MP4 audio and video"
 #~ msgstr "Quicktime/MP4 audio en video"
+
 #~ msgid "RealMedia audio and video"
 #~ msgstr "RealMedia audio en video"
+
 #~ msgid "Right eye"
 #~ msgstr "Rechter oog"
+
 #~ msgid "Sets the compression used for VobSub subtitles. If nothing is chosen then the VobSubs will be automatically compressed with zlib. 'none' results is files that are a lot larger."
 #~ msgstr "Stelt de gebruikte compressie in voor VobSub ondertitels. Als er niets is geselecteerd, dan zal de VobSubs automatisch worden gecomprimeerd met zlib. 'geen' zal resuleeren in bestanden die aanmerkelijk groter zijn."
+
 #~ msgid "TTA lossless audio"
 #~ msgstr "TTA verlies vrije audio"
+
 #~ msgid "The MPEG-4 part 2 compression only works with native MPEG-4. However, native MPEG-4 mode has not been selected with '--engage native_mpeg4'.\n"
 #~ msgstr "Het MPEG-4 part 2 compressie werkt alleen met basis MPEG-4. Hoewel, basis MPEG-4 mode is niet geselecteerd met selected with '--aangaan basis_mpeg4'.\n"
+
 #~ msgid "This AAC track does not contain valid headers. The extra header size is %1% bytes, expected were 2 or 5 bytes.\n"
 #~ msgstr "Dit AAC spoor bevat geen geldige koppen. De extra kop grootte is %1% bytes, verwacht werd 2 of 5 bytes.\n"
+
 #~ msgid ""
 #~ "Usage: mkvinfo [options] inname\n"
 #~ "\n"
@@ -9503,57 +9530,83 @@ msgstr "ja"
 #~ "                 Stuur alle berichten door naar dit bestand.\n"
 #~ "  -h, --help     toont deze help.\n"
 #~ "  -V, --version Toont deze versie informatie.\n"
+
 #, fuzzy
 #~ msgid "Using the Vp8 video output module.\n"
 #~ msgstr "Gebruikmakend van de VP8 video uitvoer module.\n"
+
 #~ msgid "VC1 video elementary stream"
 #~ msgstr "VC1 video basis stroom"
+
 #~ msgid "VobBtn buttons"
 #~ msgstr "VobBtn knoppen"
+
 #~ msgid "WAVE (uncompressed PCM)"
 #~ msgstr "WAVE (ongecompromeerd PCM)"
+
 #~ msgid "WAVPACK lossless audio"
 #~ msgstr "WAVPACK verliesvrije audio"
+
 #~ msgid "Warning: There's more than one track with the UID %1%."
 #~ msgstr "Waarschuwing: Er zijn meer dan één sporen met UID %1%."
+
 #~ msgid "Warning: There's more than one track with the number %1%."
 #~ msgstr "Waarschuwing: Er is meer dan één spoor met het nummer %1%."
+
 #~ msgid "Write raw FLAC files (default: write OggFLAC files)."
 #~ msgstr "Schrijf raw FLAC bestanden (standaard: schrijf OggFLAC bestanden)."
+
 #~ msgid "anaglyph"
 #~ msgstr "anaglyph"
+
 #~ msgid "audio/video/text subtitles embedded in OGG"
 #~ msgstr "audio/video/tekst ondertiteling ingebed in OGG"
+
 #~ msgid "byte_buffer_c: (pos + num) > size. Should not have happened. Please file a bug report.\n"
 #~ msgstr "byte_buffer_c: (pos + num) > grootte. Zou niet mogen gebeuren. Vul a.u.b. een fout (bug) rapport in.\n"
+
 #~ msgid "cstrutf8_to_UTFstring: Invalid UTF-8 sequence encountered. Please contact moritz@bunkus.org and request that he implements a better UTF-8 parser."
 #~ msgstr "cstrutf8_to_UTFstring: Ongeldig UTF-8 reeks tegengekomen. Neem a.u.b. kontakt op met moritz@bunkus.org en verzoek om een betere UTF-8 ontleder."
+
 #~ msgid "flac_header_extraction: Could not set the error callback.\n"
 #~ msgstr "flac_header_extraction: Kon niet instellen de fout terugkoppeling.\n"
+
 #~ msgid "flac_header_extraction: Could not set the metadata callback.\n"
 #~ msgstr "flac_header_extraction: Kon niet instellen de metadata terugkoppeling\n"
+
 #~ msgid "flac_header_extraction: Could not set the read callback.\n"
 #~ msgstr "flac_header_extraction: Kon niet instellen de lees terugkoppeling.\n"
+
 #~ msgid "flac_header_extraction: Could not set the write callback.\n"
 #~ msgstr "flac_header_extraction: Kon niet instellen de schrijf terugkoppeling.\n"
+
 #~ msgid "flac_reader: Could not set the eof callback.\n"
 #~ msgstr "flac_lezer: Kon niet instellen de eof terugkoppeling.\n"
+
 #~ msgid "flac_reader: Could not set the error callback.\n"
 #~ msgstr "flac_lezer: Kon niet instellen de fout terugkoppeling.\n"
+
 #~ msgid "flac_reader: Could not set the length callback.\n"
 #~ msgstr "flac_lezer: Kon niet instellen de lengte terugkoppeling.\n"
+
 #~ msgid "flac_reader: Could not set the metadata callback.\n"
 #~ msgstr "flac_lezer: Kon niet instellen de metadata terugkoppeling.\n"
+
 #~ msgid "flac_reader: Could not set the read callback.\n"
 #~ msgstr "flac_lezer: Kon niet instellen de lees terugkoppeling.\n"
+
 #~ msgid "flac_reader: Could not set the seek callback.\n"
 #~ msgstr "flac_lezer: Kon niet instellen de zoek terugkoppeling.\n"
+
 #~ msgid "flac_reader: Could not set the tell callback.\n"
 #~ msgstr "flac_lezer: Kon niet instellen de vertel terugkoppeling.\n"
+
 #~ msgid "flac_reader: Could not set the write callback.\n"
 #~ msgstr "flac_lezer: Kon niet instellen de schrijf terugkoppeling.\n"
+
 #~ msgid "general Matroska files"
 #~ msgstr "algemeen Matroska bestand"
+
 #~ msgid "mkvextract: Unknown mode!?\n"
 #~ msgstr "mkvextract: Onbekende mode!?\n"
 

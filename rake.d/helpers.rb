@@ -107,15 +107,27 @@ end
 
 def adjust_to_poedit_style(in_name, out_name)
   File.open(out_name, "w") do |out|
-    lines = IO.readlines(in_name).collect { |line| line.chomp }
+    lines = IO.readlines(in_name).collect { |line| line.chomp.gsub(/\r/, '') }
 
-    no_nl = false
+    no_nl          = false
+    state          = :initial
+    previous_state = :initial
 
     lines.each do |line|
+      previous_state = state
+
+      if '' == line
+        state = :blank
+      elsif /^#~/.match(line)
+        state = :removed
+      end
+
+      out.puts if /^#(?:,|~\s+msgid)/.match(line) && (:removed == state) && (:blank != previous_state)
+
       if /^#:/.match(line)
         out.puts line.gsub(/(\d) /, '\1' + "\n#: ")
       elsif /^#~/.match(line)
-        no_nl = true
+        # no_nl = true
         out.puts line
       elsif !(no_nl && /^\s*$/.match(line))
         out.puts line
