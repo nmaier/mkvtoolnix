@@ -26,8 +26,8 @@ public:
   virtual int process(packet_cptr packet);
   virtual void set_headers();
 
-  virtual const char *get_format_name() {
-    return "passthrough";
+  virtual const std::string get_format_name(bool translate = true) {
+    return translate ? Y("passthrough") : "passthrough";
   }
   virtual connection_result_e can_connect_to(generic_packetizer_c *src, std::string &error_message);
 };

@@ -35,8 +35,8 @@ public:
 
   virtual void flush();
 
-  virtual const char *get_format_name() {
-    return "VC1";
+  virtual const std::string get_format_name(bool translate = true) {
+    return translate ? Y("VC1") : "VC1";
   };
 
   virtual connection_result_e can_connect_to(generic_packetizer_c *src, std::string &error_message);

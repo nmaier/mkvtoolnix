@@ -44,8 +44,8 @@ public:
     m_skipping_is_normal = skipping_is_normal;
   }
 
-  virtual const char *get_format_name() {
-    return "DTS";
+  virtual const std::string get_format_name(bool translate = true) {
+    return translate ? Y("DTS") : "DTS";
   }
 
   virtual connection_result_e can_connect_to(generic_packetizer_c *src, std::string &error_message);

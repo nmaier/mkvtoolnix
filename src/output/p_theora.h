@@ -24,8 +24,8 @@ public:
   virtual void set_headers();
   virtual int process(packet_cptr packet);
 
-  virtual const char *get_format_name() {
-    return "Theora";
+  virtual const std::string get_format_name(bool translate = true) {
+    return translate ? Y("Theora") : "Theora";
   }
 
 protected:

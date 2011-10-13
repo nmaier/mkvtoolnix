@@ -36,6 +36,10 @@ public:
   tta_reader_c(track_info_c &_ti) throw (error_c);
   virtual ~tta_reader_c();
 
+  virtual const std::string get_format_name(bool translate = true) {
+    return translate ? Y("TTA") : "TTA";
+  }
+
   virtual file_status_e read(generic_packetizer_c *ptzr, bool force = false);
   virtual int get_progress();
   virtual void identify();

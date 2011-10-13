@@ -62,8 +62,8 @@ public:
   virtual int process(packet_cptr packet);
   virtual void flush();
 
-  virtual const char *get_format_name() {
-    return "MPEG-4";
+  virtual const std::string get_format_name(bool translate = true) {
+    return translate ? Y("MPEG-4") : "MPEG-4";
   }
 
 protected:

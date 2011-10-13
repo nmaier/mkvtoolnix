@@ -40,8 +40,8 @@ public:
   virtual void flush();
   virtual void flush_frames();
 
-  virtual const char *get_format_name() {
-    return "TrueHD";
+  virtual const std::string get_format_name(bool translate = true) {
+    return translate ? Y("TrueHD") : "TrueHD";
   }
 
   virtual connection_result_e can_connect_to(generic_packetizer_c *src, std::string &error_message);

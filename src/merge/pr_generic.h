@@ -306,6 +306,8 @@ public:
   generic_reader_c(track_info_c &ti);
   virtual ~generic_reader_c();
 
+  virtual const std::string get_format_name(bool translate = true) = 0;
+
   virtual file_status_e read(generic_packetizer_c *ptzr, bool force = false) = 0;
   virtual void read_all();
   virtual int get_progress() = 0;
@@ -571,7 +573,7 @@ public:
 
   virtual void force_duration_on_last_packet();
 
-  virtual const char *get_format_name() = 0;
+  virtual const std::string get_format_name(bool translate = true) = 0;
   virtual connection_result_e can_connect_to(generic_packetizer_c *src, std::string &error_message) = 0;
   virtual void connect(generic_packetizer_c *src, int64_t append_timecode_offset = -1);
 

@@ -279,6 +279,11 @@ public:
   virtual ~mpeg_ts_reader_c();
 
   static bool probe_file(mm_io_c *io, uint64_t size);
+
+  virtual const std::string get_format_name(bool translate = true) {
+    return translate ? Y("MPEG transport stream") : "MPEG transport stream";
+  }
+
   virtual file_status_e read(generic_packetizer_c *requested_ptzr, bool force = false);
   virtual void identify();
   virtual int get_progress();

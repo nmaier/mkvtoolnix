@@ -42,8 +42,8 @@ public:
   virtual void extract_aspect_ratio();
   virtual void set_track_default_duration(int64_t default_duration);
 
-  virtual const char *get_format_name() {
-    return "AVC/h.264";
+  virtual const std::string get_format_name(bool translate = true) {
+    return translate ? Y("AVC/h.264") : "AVC/h.264";
   };
 
   virtual void connect(generic_packetizer_c *src, int64_t p_append_timecode_offset = -1);
