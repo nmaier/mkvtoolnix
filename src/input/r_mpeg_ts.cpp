@@ -465,7 +465,7 @@ mpeg_ts_reader_c::~mpeg_ts_reader_c() {
 
 void
 mpeg_ts_reader_c::identify() {
-  id_result_container("MPEG2 Transport Stream (TS)");
+  id_result_container();
 
   size_t i;
   for (i = 0; i < tracks.size(); i++) {

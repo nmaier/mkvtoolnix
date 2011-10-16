@@ -89,7 +89,7 @@ ssa_reader_c::get_progress() {
 
 void
 ssa_reader_c::identify() {
-  id_result_container("SSA/ASS");
+  id_result_container();
   id_result_track(0, ID_RESULT_TRACK_SUBTITLES, "SSA/ASS");
 
   size_t i;

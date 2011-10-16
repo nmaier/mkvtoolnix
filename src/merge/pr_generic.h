@@ -285,6 +285,12 @@ public:
 #define PTZR0   PTZR(0)
 #define NPTZR() m_reader_packetizers.size()
 
+#define show_demuxer_info() \
+  if (verbose) \
+    mxinfo_fn(m_ti.m_fname, boost::format(Y("Using the demultiplexer for the format '%1%'.\n")) % get_format_name());
+#define show_packetizer_info(track_id, packetizer) \
+  mxinfo_tid(m_ti.m_fname, track_id, boost::format(Y("Using the output module for the format '%1%'.\n")) % packetizer->get_format_name());
+
 class generic_reader_c {
 public:
   track_info_c m_ti;
@@ -344,8 +350,8 @@ public:
 protected:
   virtual bool demuxing_requested(char type, int64_t id);
 
-  virtual void id_result_container(const std::string &info, const std::string &verbose_info = empty_string);
-  virtual void id_result_container(const std::string &info, const std::vector<std::string> &verbose_info);
+  virtual void id_result_container(const std::string &verbose_info = empty_string);
+  virtual void id_result_container(const std::vector<std::string> &verbose_info);
   virtual void id_result_track(int64_t track_id, const std::string &type, const std::string &info, const std::string &verbose_info = empty_string);
   virtual void id_result_track(int64_t track_id, const std::string &type, const std::string &info, const std::vector<std::string> &verbose_info);
   virtual void id_result_attachment(int64_t attachment_id, const std::string &type, int size, const std::string &file_name = empty_string, const std::string &description = empty_string);

@@ -163,7 +163,7 @@ avc_es_reader_c::get_progress() {
 
 void
 avc_es_reader_c::identify() {
-  id_result_container("AVC/h.264 elementary stream (ES)");
+  id_result_container();
   id_result_track(0, ID_RESULT_TRACK_VIDEO, "MPEG-4 part 10 ES", "packetizer:mpeg4_p10_es_video");
 }
 

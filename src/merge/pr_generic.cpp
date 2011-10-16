@@ -1328,18 +1328,16 @@ generic_reader_c::id_result_container_unsupported(const std::string &filename,
 }
 
 void
-generic_reader_c::id_result_container(const std::string &info,
-                                      const std::string &verbose_info) {
-  m_id_results_container.info = info;
+generic_reader_c::id_result_container(const std::string &verbose_info) {
+  m_id_results_container.info = get_format_name();
   m_id_results_container.verbose_info.clear();
   if (!verbose_info.empty())
     m_id_results_container.verbose_info.push_back(verbose_info);
 }
 
 void
-generic_reader_c::id_result_container(const std::string &info,
-                                      const std::vector<std::string> &verbose_info) {
-  m_id_results_container.info         = info;
+generic_reader_c::id_result_container(const std::vector<std::string> &verbose_info) {
+  m_id_results_container.info         = get_format_name();
   m_id_results_container.verbose_info = verbose_info;
 }
 

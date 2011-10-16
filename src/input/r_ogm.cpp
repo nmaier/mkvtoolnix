@@ -721,7 +721,7 @@ ogm_reader_c::identify() {
       break;
     }
 
-  id_result_container("Ogg/OGM", join(" ", verbose_info));
+  id_result_container(join(" ", verbose_info));
 
   for (i = 0; i < sdemuxers.size(); i++) {
     verbose_info.clear();

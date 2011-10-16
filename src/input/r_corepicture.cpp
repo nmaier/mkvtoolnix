@@ -250,6 +250,6 @@ corepicture_reader_c::try_to_parse_timecode(const char *s) {
 
 void
 corepicture_reader_c::identify() {
-  id_result_container("CorePanorama");
+  id_result_container();
   id_result_track(0, ID_RESULT_TRACK_VIDEO, "CorePicture");
 }

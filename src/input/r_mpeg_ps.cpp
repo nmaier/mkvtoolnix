@@ -1357,7 +1357,7 @@ mpeg_ps_reader_c::identify() {
 
   io->create_verbose_identification_info(verbose_info);
 
-  id_result_container((boost::format("MPEG %1% program stream (PS)") % version).str(), verbose_info);
+  id_result_container(verbose_info);
 
   size_t i;
   for (i = 0; i < tracks.size(); i++) {

@@ -88,8 +88,7 @@ aac_reader_c::aac_reader_c(track_info_c &_ti)
     throw error_c(Y("aac_reader: Could not open the file."));
   }
 
-  if (verbose)
-    mxinfo_fn(m_ti.m_fname, Y("Using the AAC demultiplexer.\n"));
+  show_demuxer_info();
 }
 
 aac_reader_c::~aac_reader_c() {
@@ -113,7 +112,7 @@ aac_reader_c::create_packetizer(int64_t) {
   if (AAC_PROFILE_SBR == m_aacheader.profile)
     aacpacketizer->set_audio_output_sampling_freq(m_aacheader.sample_rate * 2);
 
-  mxinfo_tid(m_ti.m_fname, 0, Y("Using the AAC output module.\n"));
+  show_packetizer_info(0, aacpacketizer);
 }
 
 // Try to guess if the MPEG4 header contains the emphasis field (2 bits)
@@ -167,7 +166,7 @@ void
 aac_reader_c::identify() {
   std::string verbose_info = std::string("aac_is_sbr:") + std::string(AAC_PROFILE_SBR == m_aacheader.profile ? "true" : "unknown");
 
-  id_result_container("AAC");
+  id_result_container();
   id_result_track(0, ID_RESULT_TRACK_AUDIO, "AAC", verbose_info);
 }
 

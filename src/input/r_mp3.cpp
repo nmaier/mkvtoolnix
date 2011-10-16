@@ -92,7 +92,7 @@ mp3_reader_c::get_progress() {
 
 void
 mp3_reader_c::identify() {
-  id_result_container("MP2/MP3");
+  id_result_container();
   id_result_track(0, ID_RESULT_TRACK_AUDIO, (boost::format("MPEG-%1% layer %2%")
                                              % (mp3header.version == 1 ? "1" : mp3header.version == 2 ? "2" : "2.5")
                                              % mp3header.layer).str());

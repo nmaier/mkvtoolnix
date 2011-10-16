@@ -111,7 +111,7 @@ truehd_reader_c::get_progress() {
 
 void
 truehd_reader_c::identify() {
-  id_result_container("TrueHD/MLP");
+  id_result_container();
   id_result_track(0, ID_RESULT_TRACK_AUDIO, m_header->is_truehd() ? "TrueHD" : "MLP");
 }
 

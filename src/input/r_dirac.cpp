@@ -120,6 +120,6 @@ dirac_es_reader_c::get_progress() {
 
 void
 dirac_es_reader_c::identify() {
-  id_result_container("Dirac elementary stream");
+  id_result_container();
   id_result_track(0, ID_RESULT_TRACK_VIDEO, "Dirac");
 }

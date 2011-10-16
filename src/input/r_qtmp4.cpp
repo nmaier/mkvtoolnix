@@ -1643,7 +1643,7 @@ qtmp4_reader_c::identify() {
   std::vector<std::string> verbose_info;
   unsigned int i;
 
-  id_result_container("Quicktime/MP4");
+  id_result_container();
 
   for (i = 0; i < demuxers.size(); ++i) {
     qtmp4_demuxer_cptr &dmx = demuxers[i];

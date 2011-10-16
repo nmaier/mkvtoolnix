@@ -104,6 +104,6 @@ vobbtn_reader_c::get_progress() {
 
 void
 vobbtn_reader_c::identify() {
-  id_result_container("VobBtn");
+  id_result_container();
   id_result_track(0, ID_RESULT_TRACK_BUTTONS, (boost::format("MPEG PCI, width %1% / height %2%") % width % height).str());
 }

@@ -121,6 +121,6 @@ pgssup_reader_c::get_progress() {
 
 void
 pgssup_reader_c::identify() {
-  id_result_container("PGSSUP");
+  id_result_container();
   id_result_track(0, ID_RESULT_TRACK_SUBTITLES, "PGS");
 }

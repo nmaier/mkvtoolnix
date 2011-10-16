@@ -648,7 +648,7 @@ vobsub_reader_c::identify() {
   std::vector<std::string> verbose_info;
   size_t i;
 
-  id_result_container("VobSub");
+  id_result_container();
 
   for (i = 0; i < tracks.size(); i++) {
     verbose_info.clear();

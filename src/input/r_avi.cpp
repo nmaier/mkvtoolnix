@@ -922,7 +922,7 @@ avi_reader_c::extended_identify_mpeg4_l2(std::vector<std::string> &extended_info
 
 void
 avi_reader_c::identify() {
-  id_result_container("AVI");
+  id_result_container();
   identify_video();
   identify_audio();
   identify_subtitles();

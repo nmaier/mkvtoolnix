@@ -624,7 +624,7 @@ real_reader_c::get_progress() {
 
 void
 real_reader_c::identify() {
-  id_result_container("RealMedia");
+  id_result_container();
 
   size_t i;
   for (i = 0; i < demuxers.size(); i++) {

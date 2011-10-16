@@ -673,7 +673,7 @@ wav_reader_c::get_progress() {
 void
 wav_reader_c::identify() {
   if (m_demuxer.is_set()) {
-    id_result_container("WAV");
+    id_result_container();
     id_result_track(0, ID_RESULT_TRACK_AUDIO, m_demuxer->get_codec());
 
   } else {

@@ -115,7 +115,7 @@ ac3_reader_c::get_progress() {
 
 void
 ac3_reader_c::identify() {
-  id_result_container("AC3");
+  id_result_container();
   id_result_track(0, ID_RESULT_TRACK_AUDIO, 16 == ac3header.bsid ? "EAC3" : "AC3");
 }
 

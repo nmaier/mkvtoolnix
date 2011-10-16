@@ -322,7 +322,7 @@ usf_reader_c::identify() {
   std::vector<std::string> verbose_info;
   size_t i;
 
-  id_result_container("USF");
+  id_result_container();
 
   for (i = 0; m_tracks.size() > i; ++i) {
     usf_track_t &track = m_tracks[i];
