@@ -68,8 +68,8 @@ mp3_reader_c::create_packetizer(int64_t) {
   if (!demuxing_requested('a', 0) || (NPTZR() != 0))
     return;
 
-  mxinfo_tid(m_ti.m_fname, 0, Y("Using the MPEG audio output module.\n"));
   add_packetizer(new mp3_packetizer_c(this, m_ti, mp3header.sampling_frequency, mp3header.channels, false));
+  show_packetizer_info(0, PTZR0);
 }
 
 file_status_e
