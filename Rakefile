@@ -129,6 +129,11 @@ define_default_task
 desc "Build all applications"
 task :apps => $applications
 
+desc "Build all command line applications"
+namespace :apps do
+  task :cli => %w{apps:mkvmerge apps:mkvinfo apps:mkvextract apps:mkvpropedit}
+end
+
 # Store compiler block for re-use
 cxx_compiler = lambda do |t|
   cxxflags = case
