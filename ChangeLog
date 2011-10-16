@@ -1,3 +1,10 @@
+2011-10-16  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: enhancement: The verbose identification mode will add
+	the properties "default_duration", "audio_sampling_frequency" and
+	"audio_channels" if appropriate and if the corresponding header
+	elements are present.
+
 2011-10-13  Moritz Bunkus  <moritz@bunkus.org>
 
 	* Packaging: In v5.0.1 mmg's guide was accidentally moved into the

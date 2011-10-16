@@ -2305,6 +2305,16 @@ kax_reader_c::identify() {
     else if (track->codec_id == MKV_V_MPEG4_AVC)
       verbose_info.push_back("packetizer:mpeg4_p10_video");
 
+    if (0 != track->default_duration)
+      verbose_info.push_back((boost::format("default_duration:%1%") % track->default_duration).str());
+
+    if ('a' == track->type) {
+      if (0.0 != track->a_sfreq)
+        verbose_info.push_back((boost::format("audio_sampling_frequency:%1%") % track->a_sfreq).str());
+      if (0 != track->a_channels)
+        verbose_info.push_back((boost::format("audio_channels:%1%") % track->a_channels).str());
+    }
+
     std::string info = track->codec_id;
 
     if (track->ms_compat)
