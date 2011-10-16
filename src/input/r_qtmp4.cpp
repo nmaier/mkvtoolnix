@@ -1450,7 +1450,7 @@ qtmp4_reader_c::create_audio_packetizer_ac3(qtmp4_demuxer_cptr &dmx) {
   }
 
   dmx->ptzr = add_packetizer(new ac3_packetizer_c(this, m_ti, dmx->m_ac3_header.sample_rate, dmx->m_ac3_header.channels, dmx->m_ac3_header.bsid));
-  show_packetizer_info(dmx->id, dmx->ptzr);
+  show_packetizer_info(dmx->id, PTZR(dmx->ptzr));
 
   return true;
 }
@@ -1477,7 +1477,7 @@ qtmp4_reader_c::create_video_packetizer_mpeg4_p2(qtmp4_demuxer_cptr &dmx) {
   dmx->ptzr         = add_packetizer(new mpeg4_p2_video_packetizer_c(this, m_ti, 0.0, dmx->v_width, dmx->v_height, false));
   m_ti.m_private_data = NULL;
 
-  show_packetizer_info(dmx->id, dmx->ptzr);
+  show_packetizer_info(dmx->id, PTZR(dmx->ptzr));
 }
 
 void
@@ -1503,7 +1503,7 @@ qtmp4_reader_c::create_video_packetizer_mpeg4_p10(qtmp4_demuxer_cptr &dmx) {
   dmx->ptzr         = add_packetizer(new mpeg4_p10_video_packetizer_c(this, m_ti, dmx->fps, dmx->v_width, dmx->v_height));
   m_ti.m_private_data = NULL;
 
-  show_packetizer_info(dmx->id, dmx->ptzr);
+  show_packetizer_info(dmx->id, PTZR(dmx->ptzr));
 }
 
 void
@@ -1527,19 +1527,19 @@ qtmp4_reader_c::create_audio_packetizer_aac(qtmp4_demuxer_cptr &dmx) {
   if (dmx->a_aac_is_sbr)
     PTZR(dmx->ptzr)->set_audio_output_sampling_freq(dmx->a_aac_output_sample_rate);
 
-  show_packetizer_info(dmx->id, dmx->ptzr);
+  show_packetizer_info(dmx->id, PTZR(dmx->ptzr));
 }
 
 void
 qtmp4_reader_c::create_audio_packetizer_mp3(qtmp4_demuxer_cptr &dmx) {
   dmx->ptzr = add_packetizer(new mp3_packetizer_c(this, m_ti, (int32_t)dmx->a_samplerate, dmx->a_channels, true));
-  show_packetizer_info(dmx->id, dmx->ptzr);
+  show_packetizer_info(dmx->id, PTZR(dmx->ptzr));
 }
 
 void
 qtmp4_reader_c::create_audio_packetizer_pcm(qtmp4_demuxer_cptr &dmx) {
   dmx->ptzr = add_packetizer(new pcm_packetizer_c(this, m_ti, (int32_t)dmx->a_samplerate, dmx->a_channels, dmx->a_bitdepth, (8 < dmx->a_bitdepth) && ('t' == dmx->fourcc[0])));
-  show_packetizer_info(dmx->id, dmx->ptzr);
+  show_packetizer_info(dmx->id, PTZR(dmx->ptzr));
 }
 
 void

@@ -1172,19 +1172,19 @@ mpeg_ps_reader_c::create_packetizer(int64_t id) {
         || (FOURCC('M', 'P', '2', ' ') == track->fourcc)
         || (FOURCC('M', 'P', '3', ' ') == track->fourcc)) {
       track->ptzr = add_packetizer(new mp3_packetizer_c(this, m_ti, track->a_sample_rate, track->a_channels, true));
-      show_packetizer_info(id, track->ptzr);
+      show_packetizer_info(id, PTZR(track->ptzr));
 
     } else if (FOURCC('A', 'C', '3', ' ') == track->fourcc) {
       track->ptzr = add_packetizer(new ac3_packetizer_c(this, m_ti, track->a_sample_rate, track->a_channels, track->a_bsid));
-      show_packetizer_info(id, track->ptzr);
+      show_packetizer_info(id, PTZR(track->ptzr));
 
     } else if (FOURCC('D', 'T', 'S', ' ') == track->fourcc) {
       track->ptzr = add_packetizer(new dts_packetizer_c(this, m_ti, track->dts_header, true));
-      show_packetizer_info(id, track->ptzr);
+      show_packetizer_info(id, PTZR(track->ptzr));
 
     } else if (FOURCC('T', 'R', 'H', 'D') == track->fourcc) {
       track->ptzr = add_packetizer(new truehd_packetizer_c(this, m_ti, truehd_frame_t::truehd, track->a_sample_rate, track->a_channels));
-      show_packetizer_info(id, track->ptzr);
+      show_packetizer_info(id, PTZR(track->ptzr));
 
     } else
       mxerror(boost::format(Y("mpeg_ps_reader: Should not have happened #1. %1%")) % BUGMSG);
@@ -1199,18 +1199,18 @@ mpeg_ps_reader_c::create_packetizer(int64_t id) {
       m2vpacketizer       = new mpeg1_2_video_packetizer_c(this, m_ti, track->v_version, track->v_frame_rate, track->v_width, track->v_height,
                                                            track->v_dwidth, track->v_dheight, false);
       track->ptzr         = add_packetizer(m2vpacketizer);
-      show_packetizer_info(id, track->ptzr);
+      show_packetizer_info(id, PTZR(track->ptzr));
       m2vpacketizer->set_video_interlaced_flag(track->v_interlaced);
       m_ti.m_private_data = NULL;
       m_ti.m_private_size = 0;
 
     } else if (track->fourcc == FOURCC('A', 'V', 'C', '1')) {
       track->ptzr = add_packetizer(new mpeg4_p10_es_video_packetizer_c(this, m_ti, track->v_avcc, track->v_width, track->v_height));
-      show_packetizer_info(id, track->ptzr);
+      show_packetizer_info(id, PTZR(track->ptzr));
 
     } else if (FOURCC('W', 'V', 'C', '1') == track->fourcc) {
       track->ptzr = add_packetizer(new vc1_video_packetizer_c(this, m_ti));
-      show_packetizer_info(id, track->ptzr);
+      show_packetizer_info(id, PTZR(track->ptzr));
 
     } else
       mxerror(boost::format(Y("mpeg_ps_reader: Should not have happened #2. %1%")) % BUGMSG);

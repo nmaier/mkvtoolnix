@@ -1041,19 +1041,19 @@ mpeg_ts_reader_c::create_packetizer(int64_t id) {
         || (FOURCC('M', 'P', '2', ' ') == track->fourcc)
         || (FOURCC('M', 'P', '3', ' ') == track->fourcc)) {
       track->ptzr = add_packetizer(new mp3_packetizer_c(this, m_ti, track->a_sample_rate, track->a_channels, (0 != track->a_sample_rate) && (0 != track->a_channels)));
-      show_packetizer_info(id, track->ptzr);
+      show_packetizer_info(id, PTZR(track->ptzr));
 
     } else if (FOURCC('A', 'C', '3', ' ') == track->fourcc) {
       track->ptzr = add_packetizer(new ac3_packetizer_c(this, m_ti, track->a_sample_rate, track->a_channels, track->a_bsid));
-      show_packetizer_info(id, track->ptzr);
+      show_packetizer_info(id, PTZR(track->ptzr));
 
     } else if (FOURCC('D', 'T', 'S', ' ') == track->fourcc) {
       track->ptzr = add_packetizer(new dts_packetizer_c(this, m_ti, track->a_dts_header));
-      show_packetizer_info(id, track->ptzr);
+      show_packetizer_info(id, PTZR(track->ptzr));
 
     } else if (FOURCC('T', 'R', 'H', 'D') == track->fourcc) {
       track->ptzr = add_packetizer(new truehd_packetizer_c(this, m_ti, truehd_frame_t::truehd, track->a_sample_rate, track->a_channels));
-      show_packetizer_info(id, track->ptzr);
+      show_packetizer_info(id, PTZR(track->ptzr));
     }
 
   } else if (ES_VIDEO_TYPE == track->type) {
@@ -1088,7 +1088,7 @@ mpeg_ts_reader_c::create_mpeg1_2_video_packetizer(mpeg_ts_track_ptr &track) {
   generic_packetizer_c *m2vpacketizer = new mpeg1_2_video_packetizer_c(this, m_ti, track->v_version, track->v_frame_rate, track->v_width, track->v_height,
                                                                        track->v_dwidth, track->v_dheight, false);
   track->ptzr                         = add_packetizer(m2vpacketizer);
-  show_packetizer_info(m_ti.m_id, track->ptzr);
+  show_packetizer_info(m_ti.m_id, PTZR(track->ptzr));
   m_ti.m_private_data                 = NULL;
   m_ti.m_private_size                 = 0;
   m2vpacketizer->set_video_interlaced_flag(track->v_interlaced);
@@ -1099,7 +1099,7 @@ mpeg_ts_reader_c::create_mpeg4_p10_es_video_packetizer(mpeg_ts_track_ptr &track)
 
   mpeg4_p10_es_video_packetizer_c *avcpacketizer = new mpeg4_p10_es_video_packetizer_c(this, m_ti, track->v_avcc, track->v_width, track->v_height);
   track->ptzr                                    = add_packetizer(avcpacketizer);
-  show_packetizer_info(m_ti.m_id, track->ptzr);
+  show_packetizer_info(m_ti.m_id, PTZR(track->ptzr));
 
   if (track->v_frame_rate)
     avcpacketizer->set_track_default_duration(static_cast<int64_t>(1000000000.0 / track->v_frame_rate));
@@ -1113,7 +1113,7 @@ mpeg_ts_reader_c::create_mpeg4_p10_es_video_packetizer(mpeg_ts_track_ptr &track)
 void
 mpeg_ts_reader_c::create_vc1_video_packetizer(mpeg_ts_track_ptr &track) {
   track->ptzr = add_packetizer(new vc1_video_packetizer_c(this, m_ti));
-  show_packetizer_info(m_ti.m_id, track->ptzr);
+  show_packetizer_info(m_ti.m_id, PTZR(track->ptzr));
 }
 
 void
@@ -1121,8 +1121,8 @@ mpeg_ts_reader_c::create_hdmv_pgs_subtitles_packetizer(mpeg_ts_track_ptr &track)
   pgs_packetizer_c *ptzr = new pgs_packetizer_c(this, m_ti);
   ptzr->set_aggregate_packets(true);
   track->ptzr = add_packetizer(ptzr);
-  
-  show_packetizer_info(m_ti.m_id, track->ptzr);
+
+  show_packetizer_info(m_ti.m_id, PTZR(track->ptzr));
 }
 
 void

@@ -47,6 +47,7 @@ class ogm_reader_c;
 class ogm_demuxer_c {
 public:
   ogm_reader_c *reader;
+  track_info_c &m_ti;
 
   ogg_stream_state os;
   int ptzr;
@@ -77,7 +78,7 @@ public:
 
   virtual void initialize() {
   };
-  virtual generic_packetizer_c *create_packetizer(track_info_c &ti) {
+  virtual generic_packetizer_c *create_packetizer() {
     return NULL;
   };
   virtual void process_page(int64_t granulepos);

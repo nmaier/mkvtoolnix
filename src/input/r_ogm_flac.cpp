@@ -266,7 +266,7 @@ ogm_a_flac_demuxer_c::initialize() {
 }
 
 generic_packetizer_c *
-ogm_a_flac_demuxer_c::create_packetizer(track_info_c &ti) {
+ogm_a_flac_demuxer_c::create_packetizer() {
   int size = 0, start_at_header = ofm_post_1_1_1 == mode ? 0 : 1;
   int i;
 
@@ -281,10 +281,10 @@ ogm_a_flac_demuxer_c::create_packetizer(track_info_c &ti) {
     size += packet_data[i]->get_size();
   }
 
-  generic_packetizer_c *ptzr_obj = new flac_packetizer_c(reader, ti, buf, size);
+  generic_packetizer_c *ptzr_obj = new flac_packetizer_c(reader, m_ti, buf, size);
   safefree(buf);
 
-  show_packetizer_info(ti.m_id, ptzr_obj);
+  show_packetizer_info(m_ti.m_id, ptzr_obj);
 
   return ptzr_obj;
 }

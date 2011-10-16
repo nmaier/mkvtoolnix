@@ -66,7 +66,7 @@ public:
 
   virtual void initialize();
 
-  virtual generic_packetizer_c *create_packetizer(track_info_c &ti);
+  virtual generic_packetizer_c *create_packetizer();
 
   virtual void process_page(int64_t granulepos);
   virtual void process_header_page();

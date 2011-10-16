@@ -66,7 +66,7 @@ public:
 public:
   ogm_a_aac_demuxer_c(ogm_reader_c *p_reader);
 
-  virtual generic_packetizer_c *create_packetizer(track_info_c &ti);
+  virtual generic_packetizer_c *create_packetizer();
 
   virtual const char *get_type() {
     return ID_RESULT_TRACK_AUDIO;
@@ -82,7 +82,7 @@ public:
 public:
   ogm_a_ac3_demuxer_c(ogm_reader_c *p_reader);
 
-  virtual generic_packetizer_c *create_packetizer(track_info_c &ti);
+  virtual generic_packetizer_c *create_packetizer();
 
   virtual const char *get_type() {
     return ID_RESULT_TRACK_AUDIO;
@@ -98,7 +98,7 @@ public:
 public:
   ogm_a_mp3_demuxer_c(ogm_reader_c *p_reader);
 
-  virtual generic_packetizer_c *create_packetizer(track_info_c &ti);
+  virtual generic_packetizer_c *create_packetizer();
 
   virtual const char *get_type() {
     return ID_RESULT_TRACK_AUDIO;
@@ -114,7 +114,7 @@ public:
 public:
   ogm_a_pcm_demuxer_c(ogm_reader_c *p_reader);
 
-  virtual generic_packetizer_c *create_packetizer(track_info_c &ti);
+  virtual generic_packetizer_c *create_packetizer();
 
   virtual const char *get_type() {
     return ID_RESULT_TRACK_AUDIO;
@@ -132,7 +132,7 @@ public:
 
   virtual void process_page(int64_t granulepos);
 
-  virtual generic_packetizer_c *create_packetizer(track_info_c &ti);
+  virtual generic_packetizer_c *create_packetizer();
 
   virtual const char *get_type() {
     return ID_RESULT_TRACK_AUDIO;
@@ -150,7 +150,7 @@ public:
 
   virtual void process_page(int64_t granulepos);
 
-  virtual generic_packetizer_c *create_packetizer(track_info_c &ti);
+  virtual generic_packetizer_c *create_packetizer();
 
   virtual const char *get_type() {
     return ID_RESULT_TRACK_SUBTITLES;
@@ -174,7 +174,7 @@ public:
   virtual std::string get_codec();
 
   virtual void initialize();
-  virtual generic_packetizer_c *create_packetizer(track_info_c &ti);
+  virtual generic_packetizer_c *create_packetizer();
   virtual void process_page(int64_t granulepos);
 };
 
@@ -188,7 +188,7 @@ public:
     return "h.264/AVC";
   };
 
-  virtual generic_packetizer_c *create_packetizer(track_info_c &ti);
+  virtual generic_packetizer_c *create_packetizer();
 
 private:
   virtual memory_cptr extract_avcc();
@@ -210,7 +210,7 @@ public:
   };
 
   virtual void initialize();
-  virtual generic_packetizer_c *create_packetizer(track_info_c &ti);
+  virtual generic_packetizer_c *create_packetizer();
   virtual void process_page(int64_t granulepos);
   virtual bool is_header_packet(ogg_packet &op);
 };
@@ -235,7 +235,7 @@ public:
   };
 
   virtual void initialize();
-  virtual generic_packetizer_c *create_packetizer(track_info_c &ti);
+  virtual generic_packetizer_c *create_packetizer();
   virtual void process_page(int64_t granulepos);
 };
 
@@ -255,7 +255,7 @@ public:
   };
 
   virtual void initialize();
-  virtual generic_packetizer_c *create_packetizer(track_info_c &ti);
+  virtual generic_packetizer_c *create_packetizer();
   virtual void process_page(int64_t granulepos);
   virtual bool is_header_packet(ogg_packet &op);
 };
@@ -413,7 +413,7 @@ ogm_reader_c::create_packetizer(int64_t tid) {
   m_ti.m_language     = dmx->language;
   m_ti.m_track_name   = dmx->title;
 
-  ptzr                = dmx->create_packetizer(m_ti);
+  ptzr                = dmx->create_packetizer();
 
   if (NULL != ptzr)
     dmx->ptzr         = add_packetizer(ptzr);
@@ -863,6 +863,7 @@ ogm_reader_c::add_available_track_ids() {
 
 ogm_demuxer_c::ogm_demuxer_c(ogm_reader_c *p_reader)
   : reader(p_reader)
+  , m_ti(p_reader->m_ti)
   , ptzr(-1)
   , stype(OGM_STREAM_TYPE_UNKNOWN)
   , serialno(0)
@@ -963,7 +964,7 @@ ogm_a_aac_demuxer_c::ogm_a_aac_demuxer_c(ogm_reader_c *p_reader)
 }
 
 generic_packetizer_c *
-ogm_a_aac_demuxer_c::create_packetizer(track_info_c &ti) {
+ogm_a_aac_demuxer_c::create_packetizer() {
   int profile, channels, sample_rate, output_sample_rate;
   stream_header *sth;
   bool sbr = false;
@@ -984,13 +985,13 @@ ogm_a_aac_demuxer_c::create_packetizer(track_info_c &ti) {
 
   mxverb(2,
          boost::format("ogm_reader: %1%/%2%: profile %3%, channels %4%, sample_rate %5%, sbr %6%, output_sample_rate %7%\n")
-         % ti.m_id % ti.m_fname % profile % channels % sample_rate % sbr % output_sample_rate);
+         % m_ti.m_id % m_ti.m_fname % profile % channels % sample_rate % sbr % output_sample_rate);
 
-  generic_packetizer_c *ptzr_obj = new aac_packetizer_c(reader, ti, AAC_ID_MPEG4, profile, sample_rate, channels, false, true);
+  generic_packetizer_c *ptzr_obj = new aac_packetizer_c(reader, m_ti, AAC_ID_MPEG4, profile, sample_rate, channels, false, true);
   if (sbr)
     ptzr_obj->set_audio_output_sampling_freq(output_sample_rate);
 
-  show_packetizer_info(ti.m_id, ptzr_obj);
+  show_packetizer_info(m_ti.m_id, ptzr_obj);
 
   return ptzr_obj;
 }
@@ -1004,11 +1005,11 @@ ogm_a_ac3_demuxer_c::ogm_a_ac3_demuxer_c(ogm_reader_c *p_reader)
 }
 
 generic_packetizer_c *
-ogm_a_ac3_demuxer_c::create_packetizer(track_info_c &ti) {
+ogm_a_ac3_demuxer_c::create_packetizer() {
   stream_header        *sth      = (stream_header *)(packet_data[0]->get_buffer() + 1);
-  generic_packetizer_c *ptzr_obj = new ac3_packetizer_c(reader, ti, get_uint64_le(&sth->samples_per_unit), get_uint16_le(&sth->sh.audio.channels), 0);
+  generic_packetizer_c *ptzr_obj = new ac3_packetizer_c(reader, m_ti, get_uint64_le(&sth->samples_per_unit), get_uint16_le(&sth->sh.audio.channels), 0);
 
-  show_packetizer_info(ti.m_id, ptzr_obj);
+  show_packetizer_info(m_ti.m_id, ptzr_obj);
 
   return ptzr_obj;
 }
@@ -1022,11 +1023,11 @@ ogm_a_mp3_demuxer_c::ogm_a_mp3_demuxer_c(ogm_reader_c *p_reader)
 }
 
 generic_packetizer_c *
-ogm_a_mp3_demuxer_c::create_packetizer(track_info_c &ti) {
+ogm_a_mp3_demuxer_c::create_packetizer() {
   stream_header        *sth      = (stream_header *)(packet_data[0]->get_buffer() + 1);
-  generic_packetizer_c *ptzr_obj = new mp3_packetizer_c(reader, ti, get_uint64_le(&sth->samples_per_unit), get_uint16_le(&sth->sh.audio.channels), true);
+  generic_packetizer_c *ptzr_obj = new mp3_packetizer_c(reader, m_ti, get_uint64_le(&sth->samples_per_unit), get_uint16_le(&sth->sh.audio.channels), true);
 
-  show_packetizer_info(ti.m_id, ptzr_obj);
+  show_packetizer_info(m_ti.m_id, ptzr_obj);
 
   return ptzr_obj;
 }
@@ -1040,12 +1041,12 @@ ogm_a_pcm_demuxer_c::ogm_a_pcm_demuxer_c(ogm_reader_c *p_reader)
 }
 
 generic_packetizer_c *
-ogm_a_pcm_demuxer_c::create_packetizer(track_info_c &ti) {
+ogm_a_pcm_demuxer_c::create_packetizer() {
   stream_header        *sth      = (stream_header *)(packet_data[0]->get_buffer() + 1);
-  generic_packetizer_c *ptzr_obj = new pcm_packetizer_c(reader, ti, get_uint64_le(&sth->samples_per_unit), get_uint16_le(&sth->sh.audio.channels),
+  generic_packetizer_c *ptzr_obj = new pcm_packetizer_c(reader, m_ti, get_uint64_le(&sth->samples_per_unit), get_uint16_le(&sth->sh.audio.channels),
                                                         get_uint16_le(&sth->bits_per_sample));
 
-  show_packetizer_info(ti.m_id, ptzr_obj);
+  show_packetizer_info(m_ti.m_id, ptzr_obj);
 
   return ptzr_obj;
 }
@@ -1060,13 +1061,13 @@ ogm_a_vorbis_demuxer_c::ogm_a_vorbis_demuxer_c(ogm_reader_c *p_reader)
 }
 
 generic_packetizer_c *
-ogm_a_vorbis_demuxer_c::create_packetizer(track_info_c &ti) {
-  generic_packetizer_c *ptzr_obj = new vorbis_packetizer_c(reader, ti,
+ogm_a_vorbis_demuxer_c::create_packetizer() {
+  generic_packetizer_c *ptzr_obj = new vorbis_packetizer_c(reader, m_ti,
                                                            packet_data[0]->get_buffer(), packet_data[0]->get_size(),
                                                            packet_data[1]->get_buffer(), packet_data[1]->get_size(),
                                                            packet_data[2]->get_buffer(), packet_data[2]->get_size());
 
-  show_packetizer_info(ti.m_id, ptzr_obj);
+  show_packetizer_info(m_ti.m_id, ptzr_obj);
 
   return ptzr_obj;
 }
@@ -1094,10 +1095,10 @@ ogm_s_text_demuxer_c::ogm_s_text_demuxer_c(ogm_reader_c *p_reader)
 }
 
 generic_packetizer_c *
-ogm_s_text_demuxer_c::create_packetizer(track_info_c &ti) {
-  generic_packetizer_c *ptzr_obj = new textsubs_packetizer_c(reader, ti, MKV_S_TEXTUTF8, NULL, 0, true, false);
+ogm_s_text_demuxer_c::create_packetizer() {
+  generic_packetizer_c *ptzr_obj = new textsubs_packetizer_c(reader, m_ti, MKV_S_TEXTUTF8, NULL, 0, true, false);
 
-  show_packetizer_info(ti.m_id, ptzr_obj);
+  show_packetizer_info(m_ti.m_id, ptzr_obj);
 
   return ptzr_obj;
 }
@@ -1135,25 +1136,25 @@ ogm_v_avc_demuxer_c::ogm_v_avc_demuxer_c(ogm_reader_c *p_reader)
 }
 
 generic_packetizer_c *
-ogm_v_avc_demuxer_c::create_packetizer(track_info_c &ti) {
+ogm_v_avc_demuxer_c::create_packetizer() {
   mpeg4_p10_es_video_packetizer_c *vptzr = NULL;
 
   try {
-    stream_header *sth = (stream_header *)&packet_data[0]->get_buffer()[1];
+    stream_header *sth  = (stream_header *)&packet_data[0]->get_buffer()[1];
 
-    ti.m_private_data  = NULL;
-    ti.m_private_size  = 0;
-    memory_cptr avcc   = extract_avcc();
+    m_ti.m_private_data = NULL;
+    m_ti.m_private_size = 0;
+    memory_cptr avcc    = extract_avcc();
 
-    vptzr              = new mpeg4_p10_es_video_packetizer_c(reader, ti, avcc, get_uint32_le(&sth->sh.video.width), get_uint32_le(&sth->sh.video.height));
+    vptzr               = new mpeg4_p10_es_video_packetizer_c(reader, m_ti, avcc, get_uint32_le(&sth->sh.video.width), get_uint32_le(&sth->sh.video.height));
 
     vptzr->enable_timecode_generation(false);
     vptzr->set_track_default_duration(default_duration);
 
-    show_packetizer_info(ti.m_id, vptzr);
+    show_packetizer_info(m_ti.m_id, vptzr);
 
   } catch (...) {
-    mxerror_tid(ti.m_fname, ti.m_id, Y("Could not extract the decoder specific config data (AVCC) from this AVC/h.264 track.\n"));
+    mxerror_tid(m_ti.m_fname, m_ti.m_id, Y("Could not extract the decoder specific config data (AVCC) from this AVC/h.264 track.\n"));
   }
 
   return vptzr;
@@ -1228,7 +1229,7 @@ ogm_v_mscomp_demuxer_c::initialize() {
 }
 
 generic_packetizer_c *
-ogm_v_mscomp_demuxer_c::create_packetizer(track_info_c &ti) {
+ogm_v_mscomp_demuxer_c::create_packetizer() {
   alBITMAPINFOHEADER bih;
   stream_header *sth = (stream_header *)&packet_data[0]->get_buffer()[1];
 
@@ -1243,26 +1244,22 @@ ogm_v_mscomp_demuxer_c::create_packetizer(track_info_c &ti) {
   put_uint32_le(&bih.bi_size_image, get_uint32_le(&bih.bi_width) * get_uint32_le(&bih.bi_height) * 3);
   memcpy(&bih.bi_compression, sth->subtype, 4);
 
-  ti.m_private_data  = (unsigned char *)&bih;
-  ti.m_private_size  = sizeof(alBITMAPINFOHEADER);
+  m_ti.m_private_data = (unsigned char *)&bih;
+  m_ti.m_private_size = sizeof(alBITMAPINFOHEADER);
 
-  double fps         = (double)10000000.0 / get_uint64_le(&sth->time_unit);
-  int width          = get_uint32_le(&sth->sh.video.width);
-  int height         = get_uint32_le(&sth->sh.video.height);
+  double fps          = (double)10000000.0 / get_uint64_le(&sth->time_unit);
+  int width           = get_uint32_le(&sth->sh.video.width);
+  int height          = get_uint32_le(&sth->sh.video.height);
 
   generic_packetizer_c *ptzr_obj;
-  if (mpeg4::p2::is_fourcc(sth->subtype)) {
-    ptzr_obj = new mpeg4_p2_video_packetizer_c(reader, ti, fps, width, height, false);
+  if (mpeg4::p2::is_fourcc(sth->subtype))
+    ptzr_obj = new mpeg4_p2_video_packetizer_c(reader, m_ti, fps, width, height, false);
+  else
+    ptzr_obj = new video_packetizer_c(reader, m_ti, NULL, fps, width, height);
 
-    show_packetizer_info(ti.m_id, ptzr_obj);
+  show_packetizer_info(m_ti.m_id, ptzr_obj);
 
-  } else {
-    ptzr_obj = new video_packetizer_c(reader, ti, NULL, fps, width, height);
-
-    show_packetizer_info(ti.m_id, ptzr_obj);
-  }
-
-  ti.m_private_data = NULL;
+  m_ti.m_private_data = NULL;
 
   return ptzr_obj;
 }
@@ -1339,17 +1336,17 @@ ogm_v_theora_demuxer_c::initialize() {
 }
 
 generic_packetizer_c *
-ogm_v_theora_demuxer_c::create_packetizer(track_info_c &ti) {
+ogm_v_theora_demuxer_c::create_packetizer() {
   memory_cptr codecprivate       = lace_memory_xiph(packet_data);
-  ti.m_private_data              = codecprivate->get_buffer();
-  ti.m_private_size              = codecprivate->get_size();
+  m_ti.m_private_data            = codecprivate->get_buffer();
+  m_ti.m_private_size            = codecprivate->get_size();
 
   double                fps      = (double)theora.frn / (double)theora.frd;
-  generic_packetizer_c *ptzr_obj = new theora_video_packetizer_c(reader, ti, fps, theora.fmbw, theora.fmbh);
+  generic_packetizer_c *ptzr_obj = new theora_video_packetizer_c(reader, m_ti, fps, theora.fmbw, theora.fmbh);
 
-  show_packetizer_info(ti.m_id, ptzr_obj);
+  show_packetizer_info(m_ti.m_id, ptzr_obj);
 
-  ti.m_private_data = NULL;
+  m_ti.m_private_data = NULL;
 
   return ptzr_obj;
 }
@@ -1432,8 +1429,8 @@ ogm_v_vp8_demuxer_c::initialize() {
 }
 
 generic_packetizer_c *
-ogm_v_vp8_demuxer_c::create_packetizer(track_info_c &ti) {
-  vp8_video_packetizer_c *ptzr_obj = new vp8_video_packetizer_c(reader, ti);
+ogm_v_vp8_demuxer_c::create_packetizer() {
+  vp8_video_packetizer_c *ptzr_obj = new vp8_video_packetizer_c(reader, m_ti);
 
   ptzr_obj->set_video_pixel_width(pixel_width);
   ptzr_obj->set_video_pixel_height(pixel_height);
@@ -1441,7 +1438,7 @@ ogm_v_vp8_demuxer_c::create_packetizer(track_info_c &ti) {
   ptzr_obj->set_video_display_height(display_height);
   ptzr_obj->set_track_default_duration(default_duration);
 
-  show_packetizer_info(ti.m_id, ptzr_obj);
+  show_packetizer_info(m_ti.m_id, ptzr_obj);
 
   return ptzr_obj;
 }
@@ -1509,16 +1506,16 @@ ogm_s_kate_demuxer_c::initialize() {
 }
 
 generic_packetizer_c *
-ogm_s_kate_demuxer_c::create_packetizer(track_info_c &ti) {
+ogm_s_kate_demuxer_c::create_packetizer() {
   memory_cptr codecprivate       = lace_memory_xiph(packet_data);
-  ti.m_private_data              = codecprivate->get_buffer();
-  ti.m_private_size              = codecprivate->get_size();
+  m_ti.m_private_data            = codecprivate->get_buffer();
+  m_ti.m_private_size            = codecprivate->get_size();
 
-  generic_packetizer_c *ptzr_obj = new kate_packetizer_c(reader, ti, ti.m_private_data, ti.m_private_size);
+  generic_packetizer_c *ptzr_obj = new kate_packetizer_c(reader, m_ti, m_ti.m_private_data, m_ti.m_private_size);
 
-  show_packetizer_info(ti.m_id, ptzr_obj);
+  show_packetizer_info(m_ti.m_id, ptzr_obj);
 
-  ti.m_private_data = NULL;
+  m_ti.m_private_data = NULL;
 
   return ptzr_obj;
 }
