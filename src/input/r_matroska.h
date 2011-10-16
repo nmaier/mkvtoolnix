@@ -100,6 +100,7 @@ struct kax_track_t {
     , passthrough(false)
     , min_cache(0)
     , max_cache(0)
+    , max_blockadd_id(0)
     , lacing_flag(true)
     , default_duration(0)
     , v_width(0)

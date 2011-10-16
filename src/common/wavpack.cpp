@@ -22,6 +22,15 @@ const uint32_t sample_rates [] = {
    6000,  8000,  9600, 11025, 12000, 16000, 22050,
   24000, 32000, 44100, 48000, 64000, 88200, 96000, 192000 };
 
+wavpack_meta_t::wavpack_meta_t()
+  : channel_count(0)
+  , bits_per_sample(0)
+  , sample_rate(0)
+  , samples_per_block(0)
+  , has_correction(false)
+{
+}
+
 static void
 little_endian_to_native(void *data,
                         const char *format) {

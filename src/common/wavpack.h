@@ -24,7 +24,7 @@
 #if defined(COMP_MSC)
 #pragma pack(push,1)
 #endif
-typedef struct PACKED_STRUCTURE {
+struct PACKED_STRUCTURE wavpack_header_t {
   char ck_id [4];         // "wvpk"
   uint32_t ck_size;       // size of entire frame (minus 8, of course)
   uint16_t version;       // 0x403 for now
@@ -35,18 +35,20 @@ typedef struct PACKED_STRUCTURE {
   uint32_t block_samples; // # samples in this block
   uint32_t flags;         // various flags for id and decoding
   uint32_t crc;           // crc for actual decoded data
-} wavpack_header_t;
+};
 #if defined(COMP_MSC)
 #pragma pack(pop)
 #endif
 
-typedef struct {
+struct wavpack_meta_t {
   int channel_count;
   int bits_per_sample;
   uint32_t sample_rate;
   uint32_t samples_per_block;
   bool has_correction;
-} wavpack_meta_t;
+
+  wavpack_meta_t();
+};
 
 // or-values for "flags"
 
