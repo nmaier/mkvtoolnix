@@ -300,21 +300,21 @@ find_consecutive_dts_headers(const unsigned char *buf,
                              unsigned int num) {
   dts_header_s dts_header, new_header;
 
-  int base = 0;
-  int pos  = find_dts_header(&buf[base], size - base, &dts_header, false);
+  int pos = find_dts_header(buf, size, &dts_header, false);
 
   if (0 > pos)
     return -1;
 
   if (1 == num)
     return pos;
-  base += pos;
+
+  unsigned int base = pos;
 
   do {
     mxverb(4, boost::format("find_cons_dts_h: starting with base at %1%\n") % base);
 
     int offset = dts_header.frame_byte_size;
-    int i;
+    unsigned int i;
     for (i = 0; (num - 1) > i; ++i) {
       if ((size - base - offset) < 2)
         break;
