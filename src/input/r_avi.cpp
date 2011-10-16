@@ -318,14 +318,14 @@ avi_reader_c::create_mpeg1_2_packetizer() {
   m_vptzr                = add_packetizer(new mpeg1_2_video_packetizer_c(this, m_ti, m2v_parser->GetMPEGVersion(), seq_hdr.frameOrFieldRate,
                                                                          seq_hdr.width, seq_hdr.height, display_width, seq_hdr.height, false));
 
-  show_packetizer_info(0, PTZR0);
+  show_packetizer_info(0, PTZR(m_vptzr));
 }
 
 void
 avi_reader_c::create_mpeg4_p2_packetizer() {
   m_vptzr = add_packetizer(new mpeg4_p2_video_packetizer_c(this, m_ti, m_fps, AVI_video_width(m_avi), AVI_video_height(m_avi), false));
 
-  show_packetizer_info(0, PTZR0);
+  show_packetizer_info(0, PTZR(m_vptzr));
 }
 
 void
@@ -352,7 +352,7 @@ void
 avi_reader_c::create_standard_video_packetizer() {
   m_vptzr = add_packetizer(new video_packetizer_c(this, m_ti, NULL, m_fps, AVI_video_width(m_avi), AVI_video_height(m_avi)));
 
-  show_packetizer_info(0, PTZR0);
+  show_packetizer_info(0, PTZR(m_vptzr));
 }
 
 void
@@ -397,7 +397,7 @@ avi_reader_c::create_srt_packetizer(int idx) {
   bool is_utf8   = demuxer.m_text_io->get_byte_order() != BO_NONE;
   demuxer.m_ptzr = add_packetizer(new textsubs_packetizer_c(this, m_ti, MKV_S_TEXTUTF8, NULL, 0, true, is_utf8));
 
-  show_packetizer_info(id, PTZR0);
+  show_packetizer_info(id, PTZR(demuxer.m_ptzr));
 }
 
 void
@@ -420,7 +420,7 @@ avi_reader_c::create_ssa_packetizer(int idx) {
   std::string global = parser->get_global();
   demuxer.m_ptzr     = add_packetizer(new textsubs_packetizer_c(this, m_ti, parser->is_ass() ?  MKV_S_TEXTASS : MKV_S_TEXTSSA, global.c_str(), global.length(), false, false));
 
-  show_packetizer_info(id, PTZR0);
+  show_packetizer_info(id, PTZR(demuxer.m_ptzr));
 }
 
 memory_cptr
@@ -543,24 +543,15 @@ avi_reader_c::add_audio_demuxer(int aid) {
     case 0x0001:                // raw PCM audio
     case 0x0003:                // raw PCM audio (float)
       packetizer = new pcm_packetizer_c(this, m_ti, demuxer.m_samples_per_second, demuxer.m_channels, demuxer.m_bits_per_sample, false, audio_format == 0x0003);
-
-      if (verbose)
-        show_packetizer_info(aid + 1, packetizer);
       break;
 
     case 0x0050:                // MP2
     case 0x0055:                // MP3
       packetizer = new mp3_packetizer_c(this, m_ti, demuxer.m_samples_per_second, demuxer.m_channels, false);
-
-      if (verbose)
-        show_packetizer_info(aid + 1, packetizer);
       break;
 
     case 0x2000:                // AC3
       packetizer = new ac3_packetizer_c(this, m_ti, demuxer.m_samples_per_second, demuxer.m_channels, 0);
-
-      if (verbose)
-        show_packetizer_info(aid + 1, packetizer);
       break;
 
     case 0x2001:                // DTS
@@ -579,6 +570,8 @@ avi_reader_c::add_audio_demuxer(int aid) {
     default:
       mxerror_tid(m_ti.m_fname, aid + 1, boost::format(Y("Unknown/unsupported audio format 0x%|1$04x| for this audio track.\n")) % audio_format);
   }
+
+  show_packetizer_info(aid + 1, packetizer);
 
   demuxer.m_ptzr = add_packetizer(packetizer);
 
@@ -640,9 +633,6 @@ avi_reader_c::create_aac_packetizer(int aid,
     m_ti.m_private_data = NULL;
   }
 
-  if (verbose)
-    show_packetizer_info(aid + 1, packetizer);
-
   return packetizer;
 }
 
@@ -678,12 +668,7 @@ avi_reader_c::create_dts_packetizer(int aid) {
 
     AVI_set_audio_position_index(m_avi, audio_position);
 
-    generic_packetizer_c *packetizer = new dts_packetizer_c(this, m_ti, dtsheader, true);
-
-    if (verbose)
-      show_packetizer_info(aid + 1, packetizer);
-
-    return packetizer;
+    return new dts_packetizer_c(this, m_ti, dtsheader, true);
 
   } catch (...) {
     mxerror_tid(m_ti.m_fname, aid + 1, Y("Could not find valid DTS headers in this track's first frames.\n"));
@@ -732,12 +717,7 @@ avi_reader_c::create_vorbis_packetizer(int aid) {
     m_ti.m_private_data = NULL;
     m_ti.m_private_size = 0;
 
-    vorbis_packetizer_c *ptzr = new vorbis_packetizer_c(this, m_ti, headers[0], header_sizes[0], headers[1], header_sizes[1], headers[2], header_sizes[2]);
-
-    if (verbose)
-      show_packetizer_info(aid + 1, ptzr);
-
-    return ptzr;
+    return new vorbis_packetizer_c(this, m_ti, headers[0], header_sizes[0], headers[1], header_sizes[1], headers[2], header_sizes[2]);
 
   } catch (error_c &e) {
     mxerror_tid(m_ti.m_fname, aid + 1, boost::format("%1%\n") % e.get_error());
