@@ -62,8 +62,7 @@ ivf_reader_c::ivf_reader_c(track_info_c &p_ti)
     throw error_c(Y("ivf_reader: Could not open the file."));
   }
 
-  if (verbose)
-    mxinfo_fn(m_ti.m_fname, Y("Using the IVF demultiplexer.\n"));
+  show_demuxer_info();
 }
 
 ivf_reader_c::~ivf_reader_c() {
@@ -84,7 +83,7 @@ ivf_reader_c::create_packetizer(int64_t) {
   if (default_duration >= 1000000)
     packetizer->set_track_default_duration(default_duration);
 
-  mxinfo_tid(m_ti.m_fname, 0, Y("Using the VP8 video output module.\n"));
+  show_packetizer_info(0, packetizer);
 }
 
 file_status_e

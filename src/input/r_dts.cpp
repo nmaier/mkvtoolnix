@@ -79,8 +79,7 @@ dts_reader_c::dts_reader_c(track_info_c &_ti)
   bytes_processed = 0;
   m_ti.m_id       = 0;          // ID for this track.
 
-  if (verbose)
-    mxinfo_fn(m_ti.m_fname, Y("Using the DTS demultiplexer.\n"));
+  show_demuxer_info();
 }
 
 dts_reader_c::~dts_reader_c() {
@@ -111,7 +110,7 @@ dts_reader_c::create_packetizer(int64_t) {
     return;
 
   add_packetizer(new dts_packetizer_c(this, m_ti, dtsheader));
-  mxinfo_tid(m_ti.m_fname, 0, Y("Using the DTS output module.\n"));
+  show_packetizer_info(0, PTZR0);
 
   if (1 < verbose)
     print_dts_header(&dtsheader);

@@ -162,8 +162,7 @@ mpeg_es_reader_c::mpeg_es_reader_c(track_info_c &_ti)
   } catch (...) {
     throw error_c(Y("mpeg_es_reader: Could not open the file."));
   }
-  if (verbose)
-    mxinfo_fn(m_ti.m_fname, Y("Using the MPEG ES demultiplexer.\n"));
+  show_demuxer_info();
 }
 
 mpeg_es_reader_c::~mpeg_es_reader_c() {
@@ -176,10 +175,11 @@ mpeg_es_reader_c::create_packetizer(int64_t) {
   if (!demuxing_requested('v', 0) || (NPTZR() != 0))
     return;
 
-  mxinfo_tid(m_ti.m_fname, 0, Y("Using the MPEG-1/2 video output module.\n"));
   m2vpacketizer = new mpeg1_2_video_packetizer_c(this, m_ti, version, frame_rate, width, height, dwidth, dheight, false);
   add_packetizer(m2vpacketizer);
   m2vpacketizer->set_video_interlaced_flag(interlaced);
+  
+  show_packetizer_info(0, m2vpacketizer);
 }
 
 file_status_e

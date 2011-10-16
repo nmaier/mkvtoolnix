@@ -46,8 +46,7 @@ mp3_reader_c::mp3_reader_c(track_info_c &_ti)
 
     io->setFilePointer(pos, seek_beginning);
 
-    if (verbose)
-      mxinfo_fn(m_ti.m_fname, Y("Using the MP2/MP3 demultiplexer.\n"));
+    show_demuxer_info();
 
     if ((0 < pos) && verbose)
       mxwarn_fn(m_ti.m_fname, boost::format(Y("Skipping %1% bytes at the beginning (no valid MP3 header found).\n")) % pos);

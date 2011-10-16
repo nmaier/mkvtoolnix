@@ -333,8 +333,7 @@ ogm_reader_c::ogm_reader_c(track_info_c &_ti)
 
   ogg_sync_init(&oy);
 
-  if (verbose)
-    mxinfo_fn(m_ti.m_fname, Y("Using the OGG/OGM demultiplexer.\n"));
+  show_demuxer_info();
 
   if (read_headers() <= 0)
     throw error_c(Y("ogm_reader: Could not read all header packets."));
@@ -991,7 +990,7 @@ ogm_a_aac_demuxer_c::create_packetizer(track_info_c &ti) {
   if (sbr)
     ptzr_obj->set_audio_output_sampling_freq(output_sample_rate);
 
-  mxinfo_tid(ti.m_fname, ti.m_id,  Y("Using the AAC output module.\n"));
+  show_packetizer_info(ti.m_id, ptzr_obj);
 
   return ptzr_obj;
 }
@@ -1009,7 +1008,7 @@ ogm_a_ac3_demuxer_c::create_packetizer(track_info_c &ti) {
   stream_header        *sth      = (stream_header *)(packet_data[0]->get_buffer() + 1);
   generic_packetizer_c *ptzr_obj = new ac3_packetizer_c(reader, ti, get_uint64_le(&sth->samples_per_unit), get_uint16_le(&sth->sh.audio.channels), 0);
 
-  mxinfo_tid(ti.m_fname, ti.m_id, Y("Using the AC3 output module.\n"));
+  show_packetizer_info(ti.m_id, ptzr_obj);
 
   return ptzr_obj;
 }
@@ -1027,7 +1026,7 @@ ogm_a_mp3_demuxer_c::create_packetizer(track_info_c &ti) {
   stream_header        *sth      = (stream_header *)(packet_data[0]->get_buffer() + 1);
   generic_packetizer_c *ptzr_obj = new mp3_packetizer_c(reader, ti, get_uint64_le(&sth->samples_per_unit), get_uint16_le(&sth->sh.audio.channels), true);
 
-  mxinfo_tid(ti.m_fname, ti.m_id, Y("Using the MPEG audio output module.\n"));
+  show_packetizer_info(ti.m_id, ptzr_obj);
 
   return ptzr_obj;
 }
@@ -1046,7 +1045,7 @@ ogm_a_pcm_demuxer_c::create_packetizer(track_info_c &ti) {
   generic_packetizer_c *ptzr_obj = new pcm_packetizer_c(reader, ti, get_uint64_le(&sth->samples_per_unit), get_uint16_le(&sth->sh.audio.channels),
                                                         get_uint16_le(&sth->bits_per_sample));
 
-  mxinfo_tid(ti.m_fname, ti.m_id, Y("Using the PCM output module.\n"));
+  show_packetizer_info(ti.m_id, ptzr_obj);
 
   return ptzr_obj;
 }
@@ -1067,7 +1066,7 @@ ogm_a_vorbis_demuxer_c::create_packetizer(track_info_c &ti) {
                                                            packet_data[1]->get_buffer(), packet_data[1]->get_size(),
                                                            packet_data[2]->get_buffer(), packet_data[2]->get_size());
 
-  mxinfo_tid(ti.m_fname, ti.m_id, Y("Using the Vorbis output module.\n"));
+  show_packetizer_info(ti.m_id, ptzr_obj);
 
   return ptzr_obj;
 }
@@ -1098,7 +1097,7 @@ generic_packetizer_c *
 ogm_s_text_demuxer_c::create_packetizer(track_info_c &ti) {
   generic_packetizer_c *ptzr_obj = new textsubs_packetizer_c(reader, ti, MKV_S_TEXTUTF8, NULL, 0, true, false);
 
-  mxinfo_tid(ti.m_fname, ti.m_id, Y("Using the text subtitle output module.\n"));
+  show_packetizer_info(ti.m_id, ptzr_obj);
 
   return ptzr_obj;
 }
@@ -1151,7 +1150,7 @@ ogm_v_avc_demuxer_c::create_packetizer(track_info_c &ti) {
     vptzr->enable_timecode_generation(false);
     vptzr->set_track_default_duration(default_duration);
 
-    mxinfo_tid(ti.m_fname, ti.m_id, Y("Using the MPEG-4 part 10 ES video output module.\n"));
+    show_packetizer_info(ti.m_id, vptzr);
 
   } catch (...) {
     mxerror_tid(ti.m_fname, ti.m_id, Y("Could not extract the decoder specific config data (AVCC) from this AVC/h.264 track.\n"));
@@ -1255,12 +1254,12 @@ ogm_v_mscomp_demuxer_c::create_packetizer(track_info_c &ti) {
   if (mpeg4::p2::is_fourcc(sth->subtype)) {
     ptzr_obj = new mpeg4_p2_video_packetizer_c(reader, ti, fps, width, height, false);
 
-    mxinfo_tid(ti.m_fname, ti.m_id, Y("Using the MPEG-4 part 2 video output module.\n"));
+    show_packetizer_info(ti.m_id, ptzr_obj);
 
   } else {
     ptzr_obj = new video_packetizer_c(reader, ti, NULL, fps, width, height);
 
-    mxinfo_tid(ti.m_fname, ti.m_id, Y("Using the video output module.\n"));
+    show_packetizer_info(ti.m_id, ptzr_obj);
   }
 
   ti.m_private_data = NULL;
@@ -1348,7 +1347,7 @@ ogm_v_theora_demuxer_c::create_packetizer(track_info_c &ti) {
   double                fps      = (double)theora.frn / (double)theora.frd;
   generic_packetizer_c *ptzr_obj = new theora_video_packetizer_c(reader, ti, fps, theora.fmbw, theora.fmbh);
 
-  mxinfo_tid(ti.m_fname, ti.m_id, Y("Using the Theora video output module.\n"));
+  show_packetizer_info(ti.m_id, ptzr_obj);
 
   ti.m_private_data = NULL;
 
@@ -1442,7 +1441,7 @@ ogm_v_vp8_demuxer_c::create_packetizer(track_info_c &ti) {
   ptzr_obj->set_video_display_height(display_height);
   ptzr_obj->set_track_default_duration(default_duration);
 
-  mxinfo_tid(ti.m_fname, ti.m_id, Y("Using the VP8 video output module.\n"));
+  show_packetizer_info(ti.m_id, ptzr_obj);
 
   return ptzr_obj;
 }
@@ -1517,7 +1516,7 @@ ogm_s_kate_demuxer_c::create_packetizer(track_info_c &ti) {
 
   generic_packetizer_c *ptzr_obj = new kate_packetizer_c(reader, ti, ti.m_private_data, ti.m_private_size);
 
-  mxinfo_tid(ti.m_fname, ti.m_id, Y("Using the Kate subtitle output module.\n"));
+  show_packetizer_info(ti.m_id, ptzr_obj);
 
   ti.m_private_data = NULL;
 

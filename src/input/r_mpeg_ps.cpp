@@ -175,7 +175,7 @@ mpeg_ps_reader_c::init_reader() {
   io->setFilePointer(0, seek_beginning);
 
   if (verbose) {
-    mxinfo_fn(m_ti.m_fname, Y("Using the MPEG PS demultiplexer.\n"));
+    show_demuxer_info();
     io->display_other_file_info();
   }
 }
@@ -1171,24 +1171,20 @@ mpeg_ps_reader_c::create_packetizer(int64_t id) {
     if (   (FOURCC('M', 'P', '1', ' ') == track->fourcc)
         || (FOURCC('M', 'P', '2', ' ') == track->fourcc)
         || (FOURCC('M', 'P', '3', ' ') == track->fourcc)) {
-      if (verbose)
-        mxinfo_tid(m_ti.m_fname, id, Y("Using the MPEG audio output module.\n"));
       track->ptzr = add_packetizer(new mp3_packetizer_c(this, m_ti, track->a_sample_rate, track->a_channels, true));
+      show_packetizer_info(id, track->ptzr);
 
     } else if (FOURCC('A', 'C', '3', ' ') == track->fourcc) {
-      if (verbose)
-        mxinfo_tid(m_ti.m_fname, id, boost::format(Y("Using the %1%AC3 output module.\n")) % (16 == track->a_bsid ? "E" : ""));
       track->ptzr = add_packetizer(new ac3_packetizer_c(this, m_ti, track->a_sample_rate, track->a_channels, track->a_bsid));
+      show_packetizer_info(id, track->ptzr);
 
     } else if (FOURCC('D', 'T', 'S', ' ') == track->fourcc) {
-      if (verbose)
-        mxinfo_tid(m_ti.m_fname, id, Y("Using the DTS output module.\n"));
       track->ptzr = add_packetizer(new dts_packetizer_c(this, m_ti, track->dts_header, true));
+      show_packetizer_info(id, track->ptzr);
 
     } else if (FOURCC('T', 'R', 'H', 'D') == track->fourcc) {
-      if (verbose)
-        mxinfo_tid(m_ti.m_fname, id, Y("Using the TrueHD output module.\n"));
       track->ptzr = add_packetizer(new truehd_packetizer_c(this, m_ti, truehd_frame_t::truehd, track->a_sample_rate, track->a_channels));
+      show_packetizer_info(id, track->ptzr);
 
     } else
       mxerror(boost::format(Y("mpeg_ps_reader: Should not have happened #1. %1%")) % BUGMSG);
@@ -1197,27 +1193,24 @@ mpeg_ps_reader_c::create_packetizer(int64_t id) {
     if (   (FOURCC('M', 'P', 'G', '1') == track->fourcc)
         || (FOURCC('M', 'P', 'G', '2') == track->fourcc)) {
       generic_packetizer_c *m2vpacketizer;
-      if (verbose)
-        mxinfo_tid(m_ti.m_fname, id, Y("Using the MPEG-1/2 video output module.\n"));
 
       m_ti.m_private_data = track->raw_seq_hdr;
       m_ti.m_private_size = track->raw_seq_hdr_size;
       m2vpacketizer       = new mpeg1_2_video_packetizer_c(this, m_ti, track->v_version, track->v_frame_rate, track->v_width, track->v_height,
                                                            track->v_dwidth, track->v_dheight, false);
       track->ptzr         = add_packetizer(m2vpacketizer);
+      show_packetizer_info(id, track->ptzr);
       m2vpacketizer->set_video_interlaced_flag(track->v_interlaced);
       m_ti.m_private_data = NULL;
       m_ti.m_private_size = 0;
 
     } else if (track->fourcc == FOURCC('A', 'V', 'C', '1')) {
-      if (verbose)
-        mxinfo_tid(m_ti.m_fname, id, Y("Using the MPEG-4 part 10 ES video output module.\n"));
       track->ptzr = add_packetizer(new mpeg4_p10_es_video_packetizer_c(this, m_ti, track->v_avcc, track->v_width, track->v_height));
+      show_packetizer_info(id, track->ptzr);
 
     } else if (FOURCC('W', 'V', 'C', '1') == track->fourcc) {
-      if (verbose)
-        mxinfo_tid(m_ti.m_fname, id, Y("Using the VC1 video output module.\n"));
       track->ptzr = add_packetizer(new vc1_video_packetizer_c(this, m_ti));
+      show_packetizer_info(id, track->ptzr);
 
     } else
       mxerror(boost::format(Y("mpeg_ps_reader: Should not have happened #2. %1%")) % BUGMSG);

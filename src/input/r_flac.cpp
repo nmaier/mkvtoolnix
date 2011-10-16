@@ -121,7 +121,7 @@ flac_reader_c::flac_reader_c(track_info_c &_ti)
   if (g_identifying)
     return;
 
-  mxinfo_fn(m_ti.m_fname, Y("Using the FLAC demultiplexer.\n"));
+  show_demuxer_info();
 
   if (!parse_file())
     throw error_c(Y("flac_reader: Could not read all header packets."));
@@ -161,7 +161,7 @@ flac_reader_c::create_packetizer(int64_t) {
     return;
 
   add_packetizer(new flac_packetizer_c(this, m_ti, header, header_size));
-  mxinfo_tid(m_ti.m_fname, 0, Y("Using the FLAC output module.\n"));
+  show_packetizer_info(0, PTZR0);
 }
 
 bool
