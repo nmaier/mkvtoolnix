@@ -192,11 +192,11 @@ complex examples):
     if (!demuxing_requested('a', 0) || (NPTZR() != 0))
       return;
 
-    // Inform the user.
-    mxinfo_tid(m_ti.m_fname, 0, Y("Using the MPEG audio output module.\n"));
-
     // Create the actual packetizer.
     add_packetizer(new mp3_packetizer_c(this, m_ti, mp3header.sampling_frequency, mp3header.channels, false));
+
+    // Inform the user.
+    show_packetizer_info(0, PTZR0);
 
 A lot of packetizers expect their codec private data to be constructed
 completely by the reader. This often requires that the reader
@@ -210,7 +210,7 @@ based on the number of bytes processed.
 
 ## `identify()` ##
 
-File identification. Has to call `id_result_container("description")`
+File identification. Has to call `id_result_container()`
 once for the container type.
 
 For each supported track the function must call `id_result_track(...)`

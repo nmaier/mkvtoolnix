@@ -533,11 +533,11 @@ file-&gt;setFilePointer(61, seek_current);
 if (!demuxing_requested('a', 0) || (NPTZR() != 0))
   return;
 
-// Inform the user.
-mxinfo_tid(m_ti.m_fname, 0, Y(&quot;Using the MPEG audio output module.\n&quot;));
-
 // Create the actual packetizer.
 add_packetizer(new mp3_packetizer_c(this, m_ti, mp3header.sampling_frequency, mp3header.channels, false));
+
+// Inform the user.
+show_packetizer_info(0, PTZR0);
 </code
       ></pre
     ><p
@@ -566,7 +566,7 @@ add_packetizer(new mp3_packetizer_c(this, m_ti, mp3header.sampling_frequency, mp
       ></h2
     ><p
     >File identification. Has to call <code
-      >id_result_container(&quot;description&quot;)</code
+      >id_result_container()</code
       > once for the container type.</p
     ><p
     >For each supported track the function must call <code
