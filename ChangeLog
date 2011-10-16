@@ -1,5 +1,8 @@
 2011-10-16  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: Fixed PCM audio in WAV sometimes being
+	detected as DTS.
+
 	* mkvmerge: enhancement: The verbose identification mode will add
 	the properties "default_duration", "audio_sampling_frequency" and
 	"audio_channels" if appropriate and if the corresponding header

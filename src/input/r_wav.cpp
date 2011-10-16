@@ -107,7 +107,7 @@ protected:
   virtual int decode_buffer(int len);
 };
 
-#define DTS_READ_SIZE 16384
+#define DTS_READ_SIZE 65536
 
 class wav_dts_demuxer_c: public wav_demuxer_c {
 private:
@@ -318,8 +318,12 @@ wav_dts_demuxer_c::probe(mm_io_cptr &io) {
   io->restore_pos();
 
   if (detect_dts(m_buf[m_cur_buf]->get_buffer(), len, m_pack_14_16, m_swap_bytes)) {
-    len = decode_buffer(len);
-    if (find_dts_header(m_buf[m_cur_buf]->get_buffer(), len, &m_dtsheader) >= 0) {
+    len     = decode_buffer(len);
+    int pos = find_consecutive_dts_headers(m_buf[m_cur_buf]->get_buffer(), len, 5);
+    if (0 <= pos) {
+      if (0 > find_dts_header(m_buf[m_cur_buf]->get_buffer() + pos, len - pos, &m_dtsheader))
+        return false;
+
       mxverb(3, boost::format("DTSinWAV: 14->16 %1% swap %2%\n") % m_pack_14_16 % m_swap_bytes);
       return true;
     }
