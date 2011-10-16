@@ -107,8 +107,7 @@ avi_reader_c::avi_reader_c(track_info_c &_ti)
     throw error_c(Y("avi_reader: Could not read the source file."));
   }
 
-  if (verbose)
-    mxinfo_fn(m_ti.m_fname, Y("Using the AVI demultiplexer. Opening file. This may take some time depending on the file's size.\n"));
+  show_demuxer_info();
 
   if (NULL == (m_avi = AVI_open_input_file(m_ti.m_fname.c_str(), 1)))
     throw error_c(boost::format(Y("avi_reader: Could not initialize AVI source. Reason: %1%")) % AVI_strerror());
@@ -319,16 +318,14 @@ avi_reader_c::create_mpeg1_2_packetizer() {
   m_vptzr                = add_packetizer(new mpeg1_2_video_packetizer_c(this, m_ti, m2v_parser->GetMPEGVersion(), seq_hdr.frameOrFieldRate,
                                                                          seq_hdr.width, seq_hdr.height, display_width, seq_hdr.height, false));
 
-  if (verbose)
-    mxinfo_tid(m_ti.m_fname, 0, Y("Using the MPEG-1/2 video output module.\n"));
+  show_packetizer_info(0, PTZR0);
 }
 
 void
 avi_reader_c::create_mpeg4_p2_packetizer() {
   m_vptzr = add_packetizer(new mpeg4_p2_video_packetizer_c(this, m_ti, m_fps, AVI_video_width(m_avi), AVI_video_height(m_avi), false));
 
-  if (verbose)
-    mxinfo_tid(m_ti.m_fname, 0, Y("Using the MPEG-4 part 2 video output module.\n"));
+  show_packetizer_info(0, PTZR0);
 }
 
 void
@@ -344,8 +341,7 @@ avi_reader_c::create_mpeg4_p10_packetizer() {
     if (m_avc_extra_nalus.is_set())
       ptzr->add_extra_data(m_avc_extra_nalus);
 
-    if (verbose)
-      mxinfo_tid(m_ti.m_fname, 0, Y("Using the MPEG-4 part 10 ES video output module.\n"));
+    show_packetizer_info(0, ptzr);
 
   } catch (...) {
     mxerror_tid(m_ti.m_fname, 0, Y("Could not extract the decoder specific config data (AVCC) from this AVC/h.264 track.\n"));
@@ -356,8 +352,7 @@ void
 avi_reader_c::create_standard_video_packetizer() {
   m_vptzr = add_packetizer(new video_packetizer_c(this, m_ti, NULL, m_fps, AVI_video_width(m_avi), AVI_video_height(m_avi)));
 
-  if (verbose)
-    mxinfo_tid(m_ti.m_fname, 0, Y("Using the video output module.\n"));
+  show_packetizer_info(0, PTZR0);
 }
 
 void
@@ -402,7 +397,7 @@ avi_reader_c::create_srt_packetizer(int idx) {
   bool is_utf8   = demuxer.m_text_io->get_byte_order() != BO_NONE;
   demuxer.m_ptzr = add_packetizer(new textsubs_packetizer_c(this, m_ti, MKV_S_TEXTUTF8, NULL, 0, true, is_utf8));
 
-  mxinfo_tid(m_ti.m_fname, id, Y("Using the text subtitle output module.\n"));
+  show_packetizer_info(id, PTZR0);
 }
 
 void
@@ -425,7 +420,7 @@ avi_reader_c::create_ssa_packetizer(int idx) {
   std::string global = parser->get_global();
   demuxer.m_ptzr     = add_packetizer(new textsubs_packetizer_c(this, m_ti, parser->is_ass() ?  MKV_S_TEXTASS : MKV_S_TEXTSSA, global.c_str(), global.length(), false, false));
 
-  mxinfo_tid(m_ti.m_fname, id, Y("Using the SSA/ASS subtitle output module.\n"));
+  show_packetizer_info(id, PTZR0);
 }
 
 memory_cptr
@@ -550,7 +545,7 @@ avi_reader_c::add_audio_demuxer(int aid) {
       packetizer = new pcm_packetizer_c(this, m_ti, demuxer.m_samples_per_second, demuxer.m_channels, demuxer.m_bits_per_sample, false, audio_format == 0x0003);
 
       if (verbose)
-        mxinfo_tid(m_ti.m_fname, aid + 1, Y("Using the PCM output module.\n"));
+        show_packetizer_info(aid + 1, packetizer);
       break;
 
     case 0x0050:                // MP2
@@ -558,14 +553,14 @@ avi_reader_c::add_audio_demuxer(int aid) {
       packetizer = new mp3_packetizer_c(this, m_ti, demuxer.m_samples_per_second, demuxer.m_channels, false);
 
       if (verbose)
-        mxinfo_tid(m_ti.m_fname, aid + 1, Y("Using the MPEG audio output module.\n"));
+        show_packetizer_info(aid + 1, packetizer);
       break;
 
     case 0x2000:                // AC3
       packetizer = new ac3_packetizer_c(this, m_ti, demuxer.m_samples_per_second, demuxer.m_channels, 0);
 
       if (verbose)
-        mxinfo_tid(m_ti.m_fname, aid + 1, Y("Using the AC3 output module.\n"));
+        show_packetizer_info(aid + 1, packetizer);
       break;
 
     case 0x2001:                // DTS
@@ -646,7 +641,7 @@ avi_reader_c::create_aac_packetizer(int aid,
   }
 
   if (verbose)
-    mxinfo_tid(m_ti.m_fname, aid + 1, Y("Using the AAC audio output module.\n"));
+    show_packetizer_info(aid + 1, packetizer);
 
   return packetizer;
 }
@@ -686,7 +681,7 @@ avi_reader_c::create_dts_packetizer(int aid) {
     generic_packetizer_c *packetizer = new dts_packetizer_c(this, m_ti, dtsheader, true);
 
     if (verbose)
-      mxinfo_tid(m_ti.m_fname, aid + 1, Y("Using the DTS output module.\n"));
+      show_packetizer_info(aid + 1, packetizer);
 
     return packetizer;
 
@@ -740,7 +735,7 @@ avi_reader_c::create_vorbis_packetizer(int aid) {
     vorbis_packetizer_c *ptzr = new vorbis_packetizer_c(this, m_ti, headers[0], header_sizes[0], headers[1], header_sizes[1], headers[2], header_sizes[2]);
 
     if (verbose)
-      mxinfo_tid(m_ti.m_fname, aid + 1, Y("Using the Vorbis output module.\n"));
+      show_packetizer_info(aid + 1, ptzr);
 
     return ptzr;
 

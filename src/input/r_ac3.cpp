@@ -73,8 +73,7 @@ ac3_reader_c::ac3_reader_c(track_info_c &_ti)
   bytes_processed = 0;
   m_ti.m_id       = 0;          // ID for this track.
 
-  if (verbose)
-    mxinfo_fn(m_ti.m_fname, Y("Using the AC3 demultiplexer.\n"));
+  show_demuxer_info();
 }
 
 ac3_reader_c::~ac3_reader_c() {

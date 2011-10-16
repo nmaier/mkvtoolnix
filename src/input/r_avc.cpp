@@ -122,8 +122,7 @@ avc_es_reader_c::avc_es_reader_c(track_info_c &n_ti)
     throw error_c(Y("avc_es_reader: Could not open the source file."));
   }
 
-  if (verbose)
-    mxinfo_fn(m_ti.m_fname, Y("Using the AVC/h.264 ES demultiplexer.\n"));
+  show_demuxer_info();
 }
 
 void
@@ -133,7 +132,7 @@ avc_es_reader_c::create_packetizer(int64_t) {
 
   add_packetizer(new mpeg4_p10_es_video_packetizer_c(this, m_ti, m_avcc, m_width, m_height));
 
-  mxinfo_tid(m_ti.m_fname, 0, Y("Using the MPEG-4 part 10 ES video output module.\n"));
+  show_packetizer_info(0, PTZR0);
 }
 
 file_status_e
