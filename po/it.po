@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: de\n"
+"Project-Id-Version: it\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2011-09-30 15:16+0200\n"
+"PO-Revision-Date: 2011-10-14 21:17+0100\n"
 "Last-Translator: Luther Stickell <l.stickell@yahoo.it>\n"
 "Language-Team: Italian <moritz@bunkus.org>\n"
 "Language: it\n"
@@ -5377,19 +5377,19 @@ msgstr ""
 
 #: src/mmg/mmg_dialog.cpp:280
 msgid "Save the command line to a file"
-msgstr ""
+msgstr "Salva la linea di comando in un file"
 
 #: src/mmg/mmg_dialog.cpp:281
 msgid "Save the command line to an option file that can be read by mkvmerge"
-msgstr ""
+msgstr "Salva la linea di comando in un file opzione che può essere letto da mkvmerge"
 
 #: src/mmg/mmg_dialog.cpp:287
 msgid "Save the current chapters to a XML file"
-msgstr ""
+msgstr "Salva i capitoli attuali in un file XML"
 
 #: src/mmg/mmg_dialog.cpp:289
 msgid "Save the current chapters to a file with another name"
-msgstr ""
+msgstr "Salva i capitoli attuali in un file con un altro nome"
 
 #: src/mmg/mmg_dialog.cpp:288
 msgid "Save the current chapters to an existing Matroska file"
@@ -5539,7 +5539,7 @@ msgstr "Imposta file &destinazione"
 
 #: src/mmg/tabs/chapters.cpp:117
 msgid "Set country to:"
-msgstr ""
+msgstr "Imposta nazione su:"
 
 #: src/common/property_element.cpp:116
 #: src/mmg/header_editor/frame.cpp:399
@@ -5562,15 +5562,15 @@ msgstr ""
 #: src/common/property_element.cpp:118
 #: src/mmg/header_editor/frame.cpp:402
 msgid "Set if the track is used."
-msgstr ""
+msgstr "Imposta se la traccia è usata."
 
 #: src/common/property_element.cpp:137
 msgid "Set if the video is interlaced."
-msgstr ""
+msgstr "Imposta se il video è interlacciato."
 
 #: src/mmg/tabs/chapters.cpp:110
 msgid "Set language to:"
-msgstr ""
+msgstr "Imposta lingua su:"
 
 #: src/mmg/options/mmg.cpp:82
 msgid "Set the delay input field from the file name"
@@ -5618,7 +5618,7 @@ msgstr ""
 
 #: src/mmg/options/mkvmerge.cpp:64
 msgid "Sets the priority that mkvmerge will run with."
-msgstr ""
+msgstr "Imposta la priorità con cui mkvmerge verrà eseguito."
 
 #: src/mmg/tabs/global.cpp:263
 msgid ""
@@ -5634,7 +5634,7 @@ msgstr ""
 #: src/info/mkvinfo.cpp:844
 #, boost-format
 msgid "Settings: %1%"
-msgstr ""
+msgstr "Impostazioni: %1%"
 
 #: src/mmg/cli_options_dlg.cpp:86
 msgid "Several options that control the overall output that mkvmerge creates."
@@ -5656,11 +5656,11 @@ msgstr ""
 
 #: src/info/wxwidgets_ui.cpp:113
 msgid "Show &all elements\tCtrl-A"
-msgstr ""
+msgstr "Mostr&a tutti gli elementi\tCtrl-A"
 
 #: src/info/wxwidgets_ui.cpp:121
 msgid "Show about dialog"
-msgstr ""
+msgstr "Mostra finestra informazioni"
 
 #: src/info/info_cli_parser.cpp:50
 msgid "Show all bytes of each frame as a hex dump."
@@ -5676,11 +5676,11 @@ msgstr "Visualizza finestra debug mmg"
 
 #: src/mmg/mmg_dialog.cpp:296
 msgid "Show program information"
-msgstr ""
+msgstr "Mostra informazioni programma"
 
 #: src/info/info_cli_parser.cpp:48
 msgid "Show statistics for each track in verbose mode."
-msgstr ""
+msgstr "Mostra statistiche per ogni traccia nella modalità prolissa."
 
 #: src/mmg/mmg_dialog.cpp:278
 msgid "Show the command line mmg creates for mkvmerge"
@@ -5704,11 +5704,11 @@ msgstr ""
 
 #: src/common/cli_parser.cpp:182
 msgid "Show this help."
-msgstr ""
+msgstr "Mostra questo aiuto."
 
 #: src/common/cli_parser.cpp:183
 msgid "Show version information."
-msgstr ""
+msgstr "Mostra informazioni di versione."
 
 #: src/mmg/options/mmg.cpp:112
 msgid "Shows mmg's debug window in which debug messages will appear. This is only useful if you're helping the author debug a problem in mmg."
@@ -5717,22 +5717,22 @@ msgstr ""
 #: src/info/mkvinfo.cpp:878
 #, boost-format
 msgid "Signature algorithm: %1% (%2%)"
-msgstr ""
+msgstr "Algoritmo di firma: %1% (%2%)"
 
 #: src/info/mkvinfo.cpp:887
 #, boost-format
 msgid "Signature hash algorithm: %1% (%2%)"
-msgstr ""
+msgstr "Algoritmo di firma hash: %1% (%2%)"
 
 #: src/info/mkvinfo.cpp:896
 #, boost-format
 msgid "Signature key ID: %1%"
-msgstr ""
+msgstr "ID chiave firma: %1%"
 
 #: src/info/mkvinfo.cpp:900
 #, boost-format
 msgid "Signature: %1%"
-msgstr ""
+msgstr "Firma: %1%"
 
 #: src/mmg/header_editor/value_page.cpp:146
 msgid "Signed integer"
@@ -5745,7 +5745,7 @@ msgstr ""
 
 #: src/extract/timecodes_v2.cpp:289
 msgid "Simple block"
-msgstr ""
+msgstr "Blocco semplice"
 
 #: src/common/chapters/chapters.cpp:48
 #, boost-format
@@ -5754,7 +5754,7 @@ msgstr ""
 
 #: src/extract/tracks.cpp:418
 msgid "SimpleBlock"
-msgstr ""
+msgstr "BloccoSemplice"
 
 #: src/info/mkvinfo.cpp:203
 #, boost-format
@@ -5782,7 +5782,7 @@ msgstr ""
 
 #: src/info/mkvinfo.cpp:1490
 msgid "Slices"
-msgstr ""
+msgstr "Fette"
 
 #: src/mmg/header_editor/frame.cpp:579
 msgid "Some header values have been modified. Do you really want to close without saving the file?"
@@ -5862,7 +5862,7 @@ msgstr "Inizio:"
 
 #: src/mmg/jobs.cpp:443
 msgid "Started on"
-msgstr ""
+msgstr "Partito alle"
 
 #: src/mmg/jobs.cpp:228
 #, c-format, boost-format
@@ -5896,7 +5896,7 @@ msgstr ""
 #: src/info/mkvinfo.cpp:751
 #, boost-format
 msgid "Stereo mode: %1% (%2%)"
-msgstr ""
+msgstr "Modalità stereo: %1% (%2%)"
 
 #: src/mmg/header_editor/frame.cpp:494
 msgid "Stereo-3D video mode (0 - 11, see documentation)."
@@ -5922,7 +5922,7 @@ msgstr ""
 
 #: src/mmg/header_editor/value_page.cpp:144
 msgid "String"
-msgstr ""
+msgstr "Stringa"
 
 #: src/extract/xtr_textsubs.cpp:180
 #, boost-format
@@ -5932,11 +5932,11 @@ msgstr ""
 #: src/mmg/header_editor/track_type_page.cpp:52
 #, c-format, boost-format
 msgid "Subtitle track %u"
-msgstr ""
+msgstr "Traccia sottotitoli %u"
 
 #: src/merge/mkvmerge.cpp:362
 msgid "Supported file types:\n"
-msgstr ""
+msgstr "Tipi di file supportati:\n"
 
 #: src/common/cli_parser.cpp:176
 msgid "Suppress status output."
@@ -5948,7 +5948,7 @@ msgstr ""
 
 #: src/extract/extract_cli_parser.cpp:84
 msgid "Tag extraction"
-msgstr ""
+msgstr "Estrazione tag"
 
 #: src/mmg/tabs/global.cpp:292
 msgid "Tag file:"
@@ -5962,16 +5962,16 @@ msgstr "File tag (*.xml)|*.xml|%s"
 #: src/mmg/tabs/input_general.cpp:275
 #, c-format, boost-format
 msgid "Tag files (*.xml;*.txt)|*.xml;*.txt|%s"
-msgstr ""
+msgstr "File tag  (*.xml;*.txt)|*.xml;*.txt|%s"
 
 #: src/propedit/propedit_cli_parser.cpp:193
 msgid "Tag selectors"
-msgstr ""
+msgstr "Selettori tag"
 
 #: src/info/mkvinfo.cpp:1818
 #: src/propedit/options.cpp:181
 msgid "Tags"
-msgstr ""
+msgstr "Tag"
 
 #: src/merge/output_control.cpp:1363
 msgid "Tags are not allowed in WebM compliant files. No tags will be written into any output file.\n"
@@ -6001,16 +6001,16 @@ msgstr ""
 
 #: src/info/qt_ui.cpp:71
 msgid "Text files (*.txt);;All files (*.*)"
-msgstr ""
+msgstr "File testuali (*.txt);;All files (*.*)"
 
 #: src/mmg/jobs.cpp:410
 #, c-format, boost-format
 msgid "Text files (*.txt)|*.txt|%s"
-msgstr ""
+msgstr "File testuali  (*.txt)|*.txt|%s"
 
 #: src/info/wxwidgets_ui.cpp:277
 msgid "Text files (*.txt)|*.txt|All files|*.*"
-msgstr ""
+msgstr "File testuali  (*.txt)|*.txt|All files|*.*"
 
 #: src/input/r_vobsub.cpp:234
 msgid "The .idx file does not contain an 'id: ...' line to indicate the language.\n"
@@ -6075,7 +6075,7 @@ msgstr ""
 
 #: src/mmg/wx_kax_analyzer.cpp:35
 msgid "The Matroska file is analyzed."
-msgstr ""
+msgstr "Il file Matroska è analizzato."
 
 #: src/mmg/header_editor/frame.cpp:703
 #: src/propedit/propedit.cpp:40
@@ -6154,7 +6154,7 @@ msgstr ""
 
 #: src/propedit/propedit.cpp:111
 msgid "The changes are written to the file.\n"
-msgstr ""
+msgstr "I cambiamenti sono scritti nel file.\n"
 
 #: src/mmg/tabs/chapters.cpp:779
 #, c-format, boost-format
@@ -6339,12 +6339,12 @@ msgstr ""
 #: src/common/xml/element_parser.cpp:142
 #, boost-format
 msgid "The file '%1%' is empty."
-msgstr ""
+msgstr "Il file '%1%' è vuoto."
 
 #: src/mmg/mmg.cpp:246
 #, c-format, boost-format
 msgid "The file '%s' does not exist."
-msgstr ""
+msgstr "Il file '%s' non esiste."
 
 #: src/mmg/tabs/input.cpp:296
 #, c-format, boost-format
@@ -6353,11 +6353,11 @@ msgstr ""
 
 #: src/info/qt_ui.cpp:77
 msgid "The file could not be opened for writing."
-msgstr ""
+msgstr "Il file non può essere aperto per la scrittura."
 
 #: src/mmg/mmg_dialog.cpp:391
 msgid "The file does not exist."
-msgstr ""
+msgstr "Il file non esiste."
 
 #: src/mmg/mmg_dialog.cpp:410
 msgid "The file does not seem to be a valid mkvmerge GUI settings file."
@@ -6369,15 +6369,15 @@ msgstr ""
 
 #: src/propedit/propedit.h:18
 msgid "The file has not been modified."
-msgstr ""
+msgstr "Il file non è stato modificato."
 
 #: src/input/r_tta.cpp:64
 msgid "The file header is too short.\n"
-msgstr ""
+msgstr "L'header del file è troppo corto.\n"
 
 #: src/input/r_wavpack.cpp:56
 msgid "The file header was not read correctly.\n"
-msgstr ""
+msgstr "L'header del file non è stato letto correttamente.\n"
 
 #: src/mmg/tabs/input.cpp:346
 #, c-format, boost-format
@@ -6386,7 +6386,7 @@ msgstr ""
 
 #: src/propedit/propedit.cpp:94
 msgid "The file is analyzed.\n"
-msgstr ""
+msgstr "Il file è analizzato.\n"
 
 #: src/merge/output_control.cpp:270
 msgid "The file is being fixed, part 1/4..."
@@ -6703,7 +6703,7 @@ msgstr ""
 
 #: src/merge/output_control.cpp:999
 msgid "The reason is unknown."
-msgstr ""
+msgstr "Il motivo è sconosciuto."
 
 #: src/common/xml/element_parser.cpp:335
 #, boost-format
@@ -6929,11 +6929,11 @@ msgstr ""
 
 #: src/mmg/mux_dialog.cpp:357
 msgid "There were warnings"
-msgstr ""
+msgstr "Ci sono stati avvisi"
 
 #: src/mmg/mux_dialog.cpp:355
 msgid "There were warnings, or the process was terminated."
-msgstr ""
+msgstr "Ci sono stati avvisi, o il processo è stato terminato."
 
 #: src/input/r_avi.cpp:629
 #: src/input/r_real.cpp:326
@@ -7098,12 +7098,12 @@ msgstr ""
 #: src/common/property_element.cpp:102
 #: src/mmg/header_editor/frame.cpp:331
 msgid "Title"
-msgstr ""
+msgstr "Titolo"
 
 #: src/info/mkvinfo.cpp:629
 #, boost-format
 msgid "Title: %1%"
-msgstr ""
+msgstr "Titolo: %1%"
 
 #: src/mmg/tabs/attachments.cpp:166
 msgid "To all files"
@@ -7215,16 +7215,16 @@ msgstr ""
 #: src/common/property_element.cpp:114
 #: src/mmg/header_editor/frame.cpp:394
 msgid "Track UID"
-msgstr ""
+msgstr "UID traccia"
 
 #: src/info/mkvinfo.cpp:965
 #, boost-format
 msgid "Track UID: %1%"
-msgstr ""
+msgstr "UID traccia: %1%"
 
 #: src/extract/extract_cli_parser.cpp:70
 msgid "Track extraction"
-msgstr ""
+msgstr "Estrazione traccia"
 
 #: src/propedit/options.cpp:164
 #: src/propedit/propedit_cli_parser.cpp:106
@@ -7249,7 +7249,7 @@ msgstr ""
 #: src/info/mkvinfo.cpp:958
 #, boost-format
 msgid "Track number: %1%"
-msgstr ""
+msgstr "Numero traccia: %1%"
 
 #: src/info/mkvinfo.cpp:1047
 #, boost-format
@@ -7259,7 +7259,7 @@ msgstr ""
 #: src/info/mkvinfo.cpp:988
 #, boost-format
 msgid "Track type: %1%"
-msgstr ""
+msgstr "Tipo traccia: %1%"
 
 #: src/extract/xtr_base.cpp:120
 msgid "Tracks with unsupported content encoding schemes (compression or encryption) cannot be extracted.\n"
