@@ -154,7 +154,10 @@ typedef struct dts_header_s {
 
 int MTX_DLL_API find_dts_sync_word(const unsigned char *buf, unsigned int size);
 int MTX_DLL_API find_dts_header(const unsigned char *buf, unsigned int size, struct dts_header_s *dts_header, bool allow_no_hd_search = false);
+int MTX_DLL_API find_consecutive_dts_headers(const unsigned char *buf, unsigned int size, unsigned int num);
 void MTX_DLL_API print_dts_header(const struct dts_header_s *dts_header);
+
+bool MTX_DLL_API operator ==(const dts_header_s &h1, const dts_header_s &h2);
 
 inline int get_dts_packet_length_in_core_samples(const struct dts_header_s
                                                  *dts_header) {

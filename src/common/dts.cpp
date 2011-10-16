@@ -294,6 +294,69 @@ find_dts_header(const unsigned char *buf,
   }
 }
 
+int
+find_consecutive_dts_headers(const unsigned char *buf,
+                             unsigned int size,
+                             unsigned int num) {
+  dts_header_s dts_header, new_header;
+
+  int base = 0;
+  int pos  = find_dts_header(&buf[base], size - base, &dts_header, false);
+
+  if (0 > pos)
+    return -1;
+
+  if (1 == num)
+    return pos;
+  base += pos;
+
+  do {
+    mxverb(4, boost::format("find_cons_dts_h: starting with base at %1%\n") % base);
+
+    int offset = dts_header.frame_byte_size;
+    int i;
+    for (i = 0; (num - 1) > i; ++i) {
+      if ((size - base - offset) < 2)
+        break;
+
+      pos = find_dts_header(&buf[base + offset], size - base - offset, &new_header, false);
+      if (0 == pos) {
+        if (new_header == dts_header) {
+          mxverb(4, boost::format("find_cons_dts_h: found good header %1%\n") % i);
+          offset += new_header.frame_byte_size;
+          continue;
+        } else
+          break;
+      } else
+        break;
+    }
+
+    if (i == (num - 1))
+      return base;
+
+    ++base;
+    offset = 0;
+    pos    = find_dts_header(&buf[base], size - base, &dts_header, false);
+
+    if (-1 == pos)
+      return -1;
+
+    base += pos;
+  } while (base < (size - 5));
+
+  return -1;
+}
+
+bool
+operator ==(const dts_header_s &h1,
+            const dts_header_s &h2) {
+  return (h1.core_sampling_frequency                == h2.core_sampling_frequency)
+      && (h1.lfe_type                               == h2.lfe_type)
+      && (h1.audio_channels                         == h2.audio_channels)
+      && (get_dts_packet_length_in_nanoseconds(&h1) == get_dts_packet_length_in_nanoseconds(&h2))
+    ;
+}
+
 // ============================================================================
 
 void
