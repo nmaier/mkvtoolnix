@@ -219,3 +219,74 @@ once.
 Both the container and the track identification can contain extended
 information. For an extensive example see the Matroska reader's
 identification function in `src/input/r_matroska.cpp`.
+
+# Translations #
+
+These are general hints for anyone wishing to translate
+MKVToolNix.
+
+There are basically three things that can be translated in the
+MKVToolNix package:
+
+1. The programs and their messages themselves. This is the most
+   important part.
+2. The manual pages.
+3. mmg's guide.
+
+All three are translated by the `gettext` system. This system uses
+.po-files which map the original English version to the translated
+version.  There are several (OpenSource) applications available that
+can be used to translate such files,
+e.g. [poedit](http://www.poedit.net/) if you're using Windows.
+
+Please ask the author for an up-to-date template of the untranslated
+strings before you start doing anything else. He will attach the
+untranslated translation file (xyz.po) for the programs themselves (the
+first point of the three mentioned above). Take a look at it and at
+the poedit software. If you feel up to the task then simply start
+translating and send the translated .po file back to the author. The
+author can notify you whenever phrases change or are added.
+
+If you want to test your translations you can do that as well:
+
+1. Install mkvtoolnix.
+2. Translate the xyz.po file.
+3. Whenever you want to test something compile the xyz.po to a .mo file
+   with your po editor application.
+4. Replace one of the installed translation files
+   (e.g. `mkvtoolnix\locale\de\mkvtoolnix.mo`) with your compiled file.
+5. Start mmg, go to the preferences dialog and select 'German' as the
+   language (the 'de' file you've replaced in step 4 is for German).
+
+Please note that a lot of strings must not be translated, especially
+command line options and their values. If a value to an option is a
+fixed string then it must not be translated, but if it is a placeholder
+e.g. for a file name then you can of course translate the `filename`
+part. Example:
+
+    --stereo-mode <TID:[none|both]>
+
+Here neither `--stereo-mode` nor `none` or `both` may be translated
+because mkvmerge expects all those in English. But in
+
+    --attach-file filename
+
+you can of course translate `filename`.
+
+Some other hints:
+
+* `TID` = track ID, a number
+* `FID` = file ID, again a number
+* `SFID`, `STID`, `DFID`, `DTID`: source file ID, source track ID, destination
+  file ID, destination track ID
+
+If you're unsure what the author is trying to say (the author is not a
+native English speaker) or what you can and what you must not
+translate just drop him a note.
+
+You can send the author your work in progress whenever you feel like
+it -- you don't have to finish everything at once.
+
+Once you have shown that you are comfortable with translating you can
+also get write access to the project's Git repository and push updates
+there yourself.
