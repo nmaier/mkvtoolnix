@@ -154,8 +154,7 @@ real_reader_c::real_reader_c(track_info_c &_ti)
 
   done = false;
 
-  if (verbose)
-    mxinfo_fn(m_ti.m_fname, Y("Using the RealMedia demultiplexer.\n"));
+  show_demuxer_info();
 
   parse_headers();
   get_information_from_data();

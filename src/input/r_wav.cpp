@@ -222,7 +222,7 @@ generic_packetizer_c *
 wav_ac3acm_demuxer_c::create_packetizer() {
   m_ptzr = new ac3_packetizer_c(m_reader, m_reader->m_ti, m_ac3header.sample_rate, m_ac3header.channels, m_ac3header.bsid);
 
-  mxinfo_tid(m_reader->m_ti.m_fname, 0, Y("Using the AC3 output module.\n"));
+  show_packetizer_info(0, m_ptzr);
 
   return m_ptzr;
 }
@@ -355,7 +355,7 @@ wav_dts_demuxer_c::create_packetizer() {
   // .wav with DTS are always filled up with other stuff to match the bitrate.
   ((dts_packetizer_c *)m_ptzr)->set_skipping_is_normal(true);
 
-  mxinfo_tid(m_reader->m_ti.m_fname, 0, Y("Using the DTS output module.\n"));
+  show_packetizer_info(0, m_ptzr);
 
   if (1 < verbose)
     print_dts_header(&m_dtsheader);
@@ -396,7 +396,7 @@ wav_pcm_demuxer_c::create_packetizer() {
                                 get_uint16_le(&m_wheader->common.wBitsPerSample),
                                 false, ieee_float);
 
-  mxinfo_tid(m_reader->m_ti.m_fname, 0, Y("Using the PCM output module.\n"));
+  show_packetizer_info(0, m_ptzr);
 
   return m_ptzr;
 }
@@ -565,8 +565,7 @@ wav_reader_c::create_demuxer() {
   if (!m_demuxer.is_set() && ((0x0001 == m_format_tag) || (0x0003 == m_format_tag)))
     m_demuxer = wav_demuxer_cptr(new wav_pcm_demuxer_c(this, &m_wheader, 0x00003 == m_format_tag));
 
-  if (verbose)
-    mxinfo_fn(m_ti.m_fname, Y("Using the WAV demultiplexer.\n"));
+  show_demuxer_info();
 }
 
 void

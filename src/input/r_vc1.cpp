@@ -82,8 +82,7 @@ vc1_es_reader_c::vc1_es_reader_c(track_info_c &n_ti)
     throw error_c(Y("vc1_es_reader: Could not open the source file."));
   }
 
-  if (verbose)
-    mxinfo_fn(m_ti.m_fname, Y("Using the VC1 ES demultiplexer.\n"));
+  show_demuxer_info();
 }
 
 void
@@ -93,7 +92,7 @@ vc1_es_reader_c::create_packetizer(int64_t) {
 
   add_packetizer(new vc1_video_packetizer_c(this, m_ti));
 
-  mxinfo_tid(m_ti.m_fname, 0, Y("Using the VC1 video output module.\n"));
+  show_packetizer_info(0, PTZR0);
 }
 
 file_status_e

@@ -92,8 +92,7 @@ tta_reader_c::tta_reader_c(track_info_c &_ti)
   } catch (...) {
     throw error_c(Y("tta_reader: Could not open the file."));
   }
-  if (verbose)
-    mxinfo_fn(m_ti.m_fname, Y("Using the TTA demultiplexer.\n"));
+  show_demuxer_info();
 }
 
 tta_reader_c::~tta_reader_c() {
@@ -106,7 +105,7 @@ tta_reader_c::create_packetizer(int64_t) {
     return;
 
   add_packetizer(new tta_packetizer_c(this, m_ti, get_uint16_le(&header.channels), get_uint16_le(&header.bits_per_sample), get_uint32_le(&header.sample_rate)));
-  mxinfo_tid(m_ti.m_fname, 0, Y("Using the TTA output module.\n"));
+  show_packetizer_info(0, PTZR0);
 }
 
 file_status_e

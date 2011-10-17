@@ -83,7 +83,7 @@ wavpack_reader_c::wavpack_reader_c(track_info_c &_ti)
     if (meta.has_correction)
       mxinfo_fn(m_ti.m_fname, Y("Using the WAVPACK demultiplexer with a correction file.\n"));
     else
-      mxinfo_fn(m_ti.m_fname, Y("Using the WAVPACK demultiplexer.\n"));
+      show_demuxer_info();
   }
 }
 
@@ -104,7 +104,7 @@ wavpack_reader_c::create_packetizer(int64_t) {
   add_packetizer(new wavpack_packetizer_c(this, m_ti, meta));
   m_ti.m_private_data = NULL;
 
-  mxinfo_tid(m_ti.m_fname, 0, Y("Using the WAVPACK output module.\n"));
+  show_packetizer_info(0, PTZR0);
 }
 
 file_status_e
