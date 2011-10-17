@@ -43,8 +43,6 @@ vp8_video_packetizer_c::process(packet_cptr packet) {
   return FILE_STATUS_MOREDATA;
 }
 
-#define CMP(member) (member != psrc->member)
-
 connection_result_e
 vp8_video_packetizer_c::can_connect_to(generic_packetizer_c *src,
                                        std::string &error_message) {
@@ -54,16 +52,8 @@ vp8_video_packetizer_c::can_connect_to(generic_packetizer_c *src,
 
   connect_check_codec_id(m_hcodec_id, psrc->m_hcodec_id);
 
-  if (CMP(m_htrack_type))
-    return CAN_CONNECT_NO_PARAMETERS;
-
   connect_check_v_width(m_hvideo_pixel_width,      psrc->m_hvideo_pixel_width);
   connect_check_v_height(m_hvideo_pixel_height,    psrc->m_hvideo_pixel_height);
-  connect_check_v_dwidth(m_hvideo_display_width,   psrc->m_hvideo_display_width);
-  connect_check_v_dheight(m_hvideo_display_height, psrc->m_hvideo_display_height);
-
-  if (CMP(m_htrack_min_cache) || CMP(m_htrack_max_cache) || CMP(m_htrack_default_duration))
-    return CAN_CONNECT_NO_PARAMETERS;
 
   return CAN_CONNECT_YES;
 }
