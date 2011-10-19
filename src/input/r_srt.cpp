@@ -40,8 +40,7 @@ srt_reader_c::srt_reader_c(track_info_c &p_ti)
     throw error_c(Y("srt_reader: Could not open the source file."));
   }
 
-  if (verbose)
-    mxinfo_fn(m_ti.m_fname, Y("Using the SRT subtitle reader.\n"));
+  show_demuxer_info();
 
   m_subs->parse();
 }
@@ -57,7 +56,7 @@ srt_reader_c::create_packetizer(int64_t) {
   bool is_utf8 = m_io->get_byte_order() != BO_NONE;
   add_packetizer(new textsubs_packetizer_c(this, m_ti, MKV_S_TEXTUTF8, NULL, 0, true, is_utf8));
 
-  mxinfo_tid(m_ti.m_fname, 0, Y("Using the text subtitle output module.\n"));
+  show_packetizer_info(0, PTZR0);
 }
 
 file_status_e

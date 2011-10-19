@@ -85,8 +85,7 @@ corepicture_reader_c::corepicture_reader_c(track_info_c &_ti)
     throw error_c(Y("corepicture_reader: Could not open the source file."));
   }
 
-  if (verbose)
-    mxinfo_fn(m_ti.m_fname, Y("Using the CorePanorama subtitle reader.\n"));
+  show_demuxer_info();
 }
 
 corepicture_reader_c::~corepicture_reader_c() {
@@ -199,6 +198,8 @@ corepicture_reader_c::create_packetizer(int64_t tid) {
   m_ti.m_private_data = (unsigned char *)safememdup(private_buffer, sizeof(private_buffer));
   m_ti.m_private_size = sizeof(private_buffer);
   m_ptzr              = add_packetizer(new video_packetizer_c(this, m_ti, MKV_V_COREPICTURE, 0.0, m_width, m_height));
+
+  show_packetizer_info(0, PTZR(m_ptzr));
 }
 
 file_status_e

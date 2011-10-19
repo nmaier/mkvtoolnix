@@ -35,7 +35,7 @@ public:
   virtual ~corepicture_reader_c();
 
   virtual const std::string get_format_name(bool translate = true) {
-    return translate ? Y("CorePicture") : "CorePicture";
+    return translate ? Y("CorePanorama pictures") : "CorePanorama pictures";
   }
 
   virtual file_status_e read(generic_packetizer_c *ptzr, bool force = false);

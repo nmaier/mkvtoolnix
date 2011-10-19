@@ -54,8 +54,7 @@ ssa_reader_c::ssa_reader_c(track_info_c &_ti)
   m_subs->set_charset_converter(cc_utf8);
   m_subs->parse();
 
-  if (verbose)
-    mxinfo_fn(m_ti.m_fname, Y("Using the SSA/ASS subtitle reader.\n"));
+  show_demuxer_info();
 }
 
 ssa_reader_c::~ssa_reader_c() {
@@ -68,7 +67,7 @@ ssa_reader_c::create_packetizer(int64_t) {
 
   std::string global = m_subs->get_global();
   add_packetizer(new textsubs_packetizer_c(this, m_ti, m_subs->is_ass() ?  MKV_S_TEXTASS : MKV_S_TEXTSSA, global.c_str(), global.length(), false, false));
-  mxinfo_tid(m_ti.m_fname, 0, Y("Using the text subtitle output module.\n"));
+  show_packetizer_info(0, PTZR0);
 }
 
 file_status_e

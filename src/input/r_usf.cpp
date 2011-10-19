@@ -96,8 +96,7 @@ usf_reader_c::usf_reader_c(track_info_c &_ti)
     throw error_c(Y("usf_reader: Could not open the source file."));
   }
 
-  if (verbose)
-    mxinfo_fn(m_ti.m_fname, Y("Using the USF subtitle reader.\n"));
+  show_demuxer_info();
 }
 
 usf_reader_c::~usf_reader_c() {
@@ -256,7 +255,7 @@ usf_reader_c::create_packetizer(int64_t tid) {
 
   m_ti.m_language = track.m_language;
   track.m_ptzr    = add_packetizer(new textsubs_packetizer_c(this, m_ti, MKV_S_TEXTUSF, m_private_data.c_str(), m_private_data.length(), false, true));
-  mxinfo_tid(m_ti.m_fname, tid, Y("Using the text subtitle output module.\n"));
+  show_packetizer_info(3, PTZR(track.m_ptzr));
 }
 
 void
