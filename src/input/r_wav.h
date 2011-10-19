@@ -33,13 +33,10 @@ public:
   wav_reader_c         *m_reader;
   wave_header          *m_wheader;
   generic_packetizer_c *m_ptzr;
+  track_info_c         &m_ti;
 
 public:
-  wav_demuxer_c(wav_reader_c *reader, wave_header *wheader):
-    m_reader(reader),
-    m_wheader(wheader),
-    m_ptzr(NULL) {
-  };
+  wav_demuxer_c(wav_reader_c *reader, wave_header *wheader);
   virtual ~wav_demuxer_c() {};
 
   virtual int64_t get_preferred_input_size() = 0;

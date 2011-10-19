@@ -39,6 +39,15 @@
 
 #define AC3ACM_READ_SIZE 100000
 
+wav_demuxer_c::wav_demuxer_c(wav_reader_c *reader,
+                             wave_header *wheader)
+  : m_reader(reader)
+  , m_wheader(wheader)
+  , m_ptzr(NULL)
+  , m_ti(reader->m_ti)
+{
+}
+
 class wav_ac3acm_demuxer_c: public wav_demuxer_c {
 protected:
   ac3_header_t m_ac3header;
@@ -220,7 +229,7 @@ wav_ac3acm_demuxer_c::decode_buffer(int len) {
 
 generic_packetizer_c *
 wav_ac3acm_demuxer_c::create_packetizer() {
-  m_ptzr = new ac3_packetizer_c(m_reader, m_reader->m_ti, m_ac3header.sample_rate, m_ac3header.channels, m_ac3header.bsid);
+  m_ptzr = new ac3_packetizer_c(m_reader, m_ti, m_ac3header.sample_rate, m_ac3header.channels, m_ac3header.bsid);
 
   show_packetizer_info(0, m_ptzr);
 
@@ -350,7 +359,7 @@ wav_dts_demuxer_c::decode_buffer(int len) {
 
 generic_packetizer_c *
 wav_dts_demuxer_c::create_packetizer() {
-  m_ptzr = new dts_packetizer_c(m_reader, m_reader->m_ti, m_dtsheader);
+  m_ptzr = new dts_packetizer_c(m_reader, m_ti, m_dtsheader);
 
   // .wav with DTS are always filled up with other stuff to match the bitrate.
   ((dts_packetizer_c *)m_ptzr)->set_skipping_is_normal(true);
@@ -390,7 +399,7 @@ wav_pcm_demuxer_c::~wav_pcm_demuxer_c() {
 
 generic_packetizer_c *
 wav_pcm_demuxer_c::create_packetizer() {
-  m_ptzr = new pcm_packetizer_c(m_reader, m_reader->m_ti,
+  m_ptzr = new pcm_packetizer_c(m_reader, m_ti,
                                 get_uint32_le(&m_wheader->common.dwSamplesPerSec),
                                 get_uint16_le(&m_wheader->common.wChannels),
                                 get_uint16_le(&m_wheader->common.wBitsPerSample),
