@@ -66,10 +66,10 @@ AC_DEFUN([AX_BOOST_FILESYSTEM],
       ax_cv_boost_filesystem,
       [
         AC_LANG_PUSH([C++])
-        AC_COMPILE_IFELSE(AC_LANG_PROGRAM([[@%:@include <boost/filesystem/path.hpp>]],
+        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[@%:@include <boost/filesystem/path.hpp>]],
           [[using namespace boost::filesystem;
             path my_path( "foo/bar/data.txt" );
-            return 0;]]),
+            return 0;]])],
         ax_cv_boost_filesystem=yes, ax_cv_boost_filesystem=no)
         AC_LANG_POP([C++])
       ])
@@ -118,11 +118,11 @@ AC_DEFUN([AX_BOOST_FILESYSTEM],
       ax_cv_boost_filesystem_version,
       [
         AC_LANG_PUSH([C++])
-        AC_COMPILE_IFELSE(AC_LANG_PROGRAM([[@%:@include <boost/filesystem/path.hpp>]],
+        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[@%:@include <boost/filesystem/path.hpp>]],
           [[using namespace boost::filesystem;
             path my_path( "foo/bar/data.txt" );
             my_path.filename().native();
-            return 0;]]),
+            return 0;]])],
           ax_cv_boost_filesystem_version=3, ax_cv_boost_filesystem_version=2)
         AC_LANG_POP([C++])
       ])
