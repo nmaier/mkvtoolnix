@@ -59,7 +59,7 @@ ac3_reader_c::ac3_reader_c(track_info_c &_ti)
     size_t init_read_len = std::min(size - tag_size_start, (int64_t)AC3_READ_SIZE);
 
     if (io->read(chunk->get_buffer(), init_read_len) != init_read_len)
-      throw error_c(boost::format(Y("ac3_reader: Could not read %1% bytes.")) % AC3_READ_SIZE);
+      throw error_c(boost::format(Y("%1%: Could not read %2% bytes.")) % get_format_name() % AC3_READ_SIZE);
 
     io->setFilePointer(tag_size_start, seek_beginning);
 

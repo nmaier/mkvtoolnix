@@ -54,7 +54,7 @@ aac_reader_c::aac_reader_c(track_info_c &_ti)
     m_chunk              = memory_c::alloc(INITCHUNKSIZE);
 
     if (m_io->read(m_chunk, init_read_len) != init_read_len)
-      throw error_c(boost::format(Y("aac_reader: Could not read %1% bytes.")) % init_read_len);
+      throw error_c(boost::format(Y("%1%: Could not read %2% bytes.")) % get_format_name() % init_read_len);
 
     m_io->setFilePointer(tag_size_start, seek_beginning);
 
