@@ -336,7 +336,7 @@ ogm_reader_c::ogm_reader_c(track_info_c &_ti)
   show_demuxer_info();
 
   if (read_headers() <= 0)
-    throw error_c(Y("ogm_reader: Could not read all header packets."));
+    throw error_c(boost::format(Y("%1%: Could not read all header packets.")) % get_format_name());
   handle_stream_comments();
 }
 
