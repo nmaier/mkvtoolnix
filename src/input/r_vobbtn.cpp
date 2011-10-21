@@ -63,8 +63,7 @@ vobbtn_reader_c::vobbtn_reader_c(track_info_c &_ti)
   // get ready to read
   btn_file->setFilePointer(16, seek_beginning);
 
-  if (verbose)
-    mxinfo_fn(m_ti.m_fname, Y("Using the VobBtn button reader.\n"));
+  show_demuxer_info();
 }
 
 vobbtn_reader_c::~vobbtn_reader_c() {
@@ -74,8 +73,11 @@ vobbtn_reader_c::~vobbtn_reader_c() {
 void
 vobbtn_reader_c::create_packetizer(int64_t tid) {
   m_ti.m_id = tid;
-  if (demuxing_requested('s', tid))
-    add_packetizer(new vobbtn_packetizer_c(this, m_ti, width, height));
+  if (!demuxing_requested('s', tid))
+    return;
+
+  add_packetizer(new vobbtn_packetizer_c(this, m_ti, width, height));
+  show_packetizer_info(0, PTZR0);
 }
 
 file_status_e

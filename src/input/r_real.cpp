@@ -295,13 +295,13 @@ real_reader_c::create_video_packetizer(real_demuxer_cptr dmx) {
   if (strcmp(dmx->fourcc, "RV40"))
     dmx->rv_dimensions = true;
 
-  mxinfo_tid(m_ti.m_fname, dmx->track->id, boost::format(Y("Using the video output module (FourCC: %1%).\n")) % dmx->fourcc);
+  show_packetizer_info(dmx->track->id, PTZR(dmx->ptzr));
 }
 
 void
 real_reader_c::create_dnet_audio_packetizer(real_demuxer_cptr dmx) {
   dmx->ptzr = add_packetizer(new ac3_bs_packetizer_c(this, m_ti, dmx->samples_per_second, dmx->channels, dmx->bsid));
-  mxinfo_tid(m_ti.m_fname, dmx->track->id, boost::format(Y("Using the AC3 output module (FourCC: %1%).\n")) % dmx->fourcc);
+  show_packetizer_info(dmx->track->id, PTZR(dmx->ptzr));
 }
 
 void
@@ -367,7 +367,7 @@ real_reader_c::create_aac_audio_packetizer(real_demuxer_cptr dmx) {
   dmx->is_aac         = true;
   dmx->ptzr           = add_packetizer(new aac_packetizer_c(this, m_ti, AAC_ID_MPEG4, profile, sample_rate, channels, false, true));
 
-  mxinfo_tid(m_ti.m_fname, tid, boost::format(Y("Using the AAC output module (FourCC: %1%).\n")) % dmx->fourcc);
+  show_packetizer_info(tid, PTZR(dmx->ptzr));
 
   if (AAC_PROFILE_SBR == profile)
     PTZR(dmx->ptzr)->set_audio_output_sampling_freq(output_sample_rate);
@@ -397,7 +397,7 @@ real_reader_c::create_audio_packetizer(real_demuxer_cptr dmx) {
     dmx->ptzr = add_packetizer(new ra_packetizer_c(this, m_ti, dmx->samples_per_second, dmx->channels, dmx->bits_per_sample, get_uint32_be(dmx->fourcc),
                                                    dmx->private_data, dmx->private_size));
 
-    mxinfo_tid(m_ti.m_fname, dmx->track->id, boost::format(Y("Using the RealAudio output module (FourCC: %1%).\n")) % dmx->fourcc);
+    show_packetizer_info(dmx->track->id, PTZR(dmx->ptzr));
   }
 }
 

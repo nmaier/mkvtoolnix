@@ -1465,7 +1465,7 @@ qtmp4_reader_c::create_video_packetizer_svq1(qtmp4_demuxer_cptr &dmx) {
   dmx->ptzr         = add_packetizer(new video_packetizer_c(this, m_ti, MKV_V_MSCOMP, 0.0, dmx->v_width, dmx->v_height));
   m_ti.m_private_data = NULL;
 
-  mxinfo_tid(m_ti.m_fname, dmx->id, boost::format(Y("Using the video output module (FourCC: %|1$.4s|).\n")) % dmx->fourcc);
+  show_packetizer_info(dmx->id, PTZR(dmx->ptzr));
 }
 
 void
@@ -1485,7 +1485,7 @@ qtmp4_reader_c::create_video_packetizer_mpeg1_2(qtmp4_demuxer_cptr &dmx) {
   int version = dmx->fourcc[3] - '0';
   dmx->ptzr   = add_packetizer(new mpeg1_2_video_packetizer_c(this, m_ti, version, -1.0, dmx->v_width, dmx->v_height, 0, 0, false));
 
-  mxinfo_tid(m_ti.m_fname, dmx->id, boost::format(Y("Using the MPEG-%1% video output module.\n")) % version);
+  show_packetizer_info(dmx->id, PTZR(dmx->ptzr));
 }
 
 void
@@ -1513,7 +1513,7 @@ qtmp4_reader_c::create_video_packetizer_standard(qtmp4_demuxer_cptr &dmx) {
   dmx->ptzr         = add_packetizer(new video_packetizer_c(this, m_ti, MKV_V_QUICKTIME, 0.0, dmx->v_width, dmx->v_height));
   m_ti.m_private_data = NULL;
 
-  mxinfo_tid(m_ti.m_fname, dmx->id, boost::format(Y("Using the video output module (FourCC: %|1$.4s|).\n")) % dmx->fourcc);
+  show_packetizer_info(dmx->id, PTZR(dmx->ptzr));
 }
 
 void
@@ -1553,7 +1553,7 @@ qtmp4_reader_c::create_audio_packetizer_passthrough(qtmp4_demuxer_cptr &dmx) {
   ptzr->set_audio_sampling_freq(dmx->a_samplerate);
   ptzr->set_audio_channels(dmx->a_channels);
 
-  mxinfo_tid(m_ti.m_fname, dmx->id, boost::format(Y("Using the generic audio output module (FourCC: %|1$.4s|).\n")) % dmx->fourcc);
+  show_packetizer_info(dmx->id, PTZR(dmx->ptzr));
 }
 
 void

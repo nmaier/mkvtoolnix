@@ -100,8 +100,7 @@ vobsub_reader_c::vobsub_reader_c(track_info_c &_ti)
                                "http://sourceforge.net/projects/guliverkli/ to convert these files to v7 files.\n"));
 
   parse_headers();
-  if (verbose)
-    mxinfo_fn(m_ti.m_fname, boost::format(Y("Using the VobSub subtitle reader (SUB file '%1%').\n")) % sub_name.c_str());
+  show_demuxer_info();
 }
 
 vobsub_reader_c::~vobsub_reader_c() {
@@ -146,8 +145,8 @@ vobsub_reader_c::create_packetizer(int64_t tid) {
 
   num_indices += track->entries.size();
 
-  mxinfo_tid(m_ti.m_fname, tid, boost::format(Y("Using the VobSub subtitle output module (language: %1%).\n")) % track->language);
   m_ti.m_language = "";
+  show_packetizer_info(tid, PTZR(track->ptzr));
 }
 
 void
