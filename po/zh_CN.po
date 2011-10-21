@@ -1498,12 +1498,12 @@ msgstr "+-> 预解析 FLAC 文件: %1%%%%2%"
 msgid "+-> Pre-parsing FLAC file: 100%\n"
 msgstr "+-> 预解析 FLAC 文件: 100%\n"
 
-#: src/merge/pr_generic.cpp:1408
+#: src/merge/pr_generic.cpp:1406
 #, boost-format
 msgid ", description '%1%'"
 msgstr ", 描述 '%1%'"
 
-#: src/merge/pr_generic.cpp:1409
+#: src/merge/pr_generic.cpp:1407
 #, boost-format
 msgid ", file name '%1%'"
 msgstr ", 文件名 '%1%'"
@@ -1606,13 +1606,13 @@ msgstr "<ChapterDisplay> 缺 <ChapterString> 子元素。"
 msgid "<ChapterTrack> is missing the <ChapterTrackNumber> child."
 msgstr "<ChapterTrack> 缺 <ChapterTrackNumber> 子元素。"
 
-#: src/input/r_matroska.cpp:2132
+#: src/input/r_matroska.cpp:2124
 #, boost-format
 msgid "A block group was found at position %1%, but no block element was found inside it. This might make mkvmerge crash.\n"
 msgstr "在 %1% 找到了一个块组，但里面没有块元。这可能会导致 mkvmerge 崩溃。\n"
 
-#: src/input/r_matroska.cpp:2034
-#: src/input/r_matroska.cpp:2142
+#: src/input/r_matroska.cpp:2026
+#: src/input/r_matroska.cpp:2134
 #, boost-format
 msgid "A block was found at timestamp %1% for track number %2%. However, no headers where found for that track number. The block will be skipped.\n"
 msgstr "在时间戳 %1% 处找到了轨道号为 %2% 的块。然而，没有找到符合该轨道号的头部信息。此块将被跳过。\n"
@@ -1677,11 +1677,16 @@ msgstr "识别链接的上一剪辑的唯一 ID (128 位)。"
 msgid "A/52 (aka AC3)"
 msgstr "A/52 (亦称 AC3)"
 
+#: src/input/r_aac.h:39
+#: src/output/p_aac.h:43
+msgid "AAC"
+msgstr ""
+
 #: src/common/file_types.cpp:26
 msgid "AAC (Advanced Audio Coding)"
 msgstr "AAC (高级音频编码)"
 
-#: src/input/r_aac.cpp:104
+#: src/input/r_aac.cpp:103
 msgid "AAC files may contain HE-AAC / AAC+ / SBR AAC audio. This can NOT be detected automatically. Therefore you have to specifiy '--aac-is-sbr 0' manually for this input file if the file actually contains SBR AAC. The file will be muxed in the WRONG way otherwise. Also read mkvmerge's documentation.\n"
 msgstr "AAC 文件可能包含 HE-AAC / AAC+ / SBR AAC 音频。这 *不会* 被自动检测出来。因此，如果一输入文件确实包含 SBR AAC，您需要手动为该文件指定 '--aac-is-sbr 0'。否则，文件会被以 *错误* 的方式混流。参阅 mkvmerge 自述文档。\n"
 
@@ -1693,6 +1698,11 @@ msgstr "AAC 是 SBR/HE-AAC/AAC+"
 msgid "AAC with ADIF headers"
 msgstr "带 ADIF 头的 AAC"
 
+#: src/input/r_ac3.h:38
+#: src/output/p_ac3.h:42
+msgid "AC3"
+msgstr ""
+
 #: src/mmg/header_editor/value_page.cpp:143
 msgid ""
 "ASCII string (no special chars like\n"
@@ -1701,9 +1711,19 @@ msgstr ""
 "ASCII 字符串 (不能使用像德语\n"
 "变元音符号¨这样的特殊字符)"
 
+#: src/input/r_avc.h:36
+#: src/output/p_avc.h:46
+#: src/output/p_mpeg4_p10.h:34
+msgid "AVC/h.264"
+msgstr ""
+
 #: src/common/file_types.cpp:27
 msgid "AVC/h.264 elementary streams"
 msgstr "AVC/h.264 基本流"
+
+#: src/input/r_avi.h:88
+msgid "AVI"
+msgstr ""
 
 #: src/common/file_types.cpp:28
 msgid "AVI (Audio/Video Interleaved)"
@@ -1858,6 +1878,11 @@ msgstr "允许 CodecState 元素的使用。它被用于 MPEG-1/-2 视频轨等�
 msgid "Also try to extract the CUE sheet from the chapter information and tags for this track."
 msgstr "同时尝试将此轨道的章节信息和标签提取为 CUE 表单。"
 
+#: src/input/r_wavpack.cpp:87
+#, fuzzy, boost-format
+msgid "Also using the correction file '%1%c'.\n"
+msgstr "无法打开一致性校正文件 '%1%c'。\n"
+
 #: src/mmg/options/mmg.cpp:92
 msgid "Always on top"
 msgstr "总在最前"
@@ -1960,7 +1985,7 @@ msgstr "附加的"
 msgid "Attached files"
 msgstr "附加文件列表"
 
-#: src/merge/pr_generic.cpp:1407
+#: src/merge/pr_generic.cpp:1405
 #, boost-format
 msgid "Attachment ID %1%: type '%2%', size %3% bytes"
 msgstr "附件 ID %1%: 类型 '%2%', 尺寸 %3% 字节"
@@ -2080,7 +2105,7 @@ msgstr "块组"
 msgid "Block virtual: %1%"
 msgstr "块实质: %1%"
 
-#: src/input/r_vobsub.cpp:546
+#: src/input/r_vobsub.cpp:545
 #, boost-format
 msgid "Bogus aid %1%\n"
 msgstr "无效 aid %1%\n"
@@ -2312,7 +2337,7 @@ msgstr "章节已写入。"
 msgid "Chapters:"
 msgstr "章节:"
 
-#: src/merge/pr_generic.cpp:1410
+#: src/merge/pr_generic.cpp:1408
 #, boost-format
 msgid "Chapters: %1% entries"
 msgstr "章节: %1% 条记录"
@@ -2577,6 +2602,10 @@ msgstr "将文本字幕转换为指定字符集 (默认: UTF-8)。"
 msgid "Copy the command line to the clipboard"
 msgstr "复制命令行到剪贴板"
 
+#: src/input/r_corepicture.h:38
+msgid "CorePanorama pictures"
+msgstr ""
+
 #: src/extract/xtr_cpic.cpp:54
 #, boost-format
 msgid "CorePicture frame %1% has an invalid header size %2%.\n"
@@ -2607,14 +2636,14 @@ msgstr "无法创建指定文件。"
 msgid "Could not decode the Base64 encoded data - it seems to be malformed."
 msgstr "无法解码以 Base64 编码的数据 - 似乎是畸形的。"
 
-#: src/input/r_avi.cpp:351
-#: src/input/r_matroska.cpp:1837
+#: src/input/r_avi.cpp:347
+#: src/input/r_matroska.cpp:1832
 #: src/input/r_ogm.cpp:1157
 msgid "Could not extract the decoder specific config data (AVCC) from this AVC/h.264 track.\n"
 msgstr "无法从该 AVC/h.264 轨道提取解码器特有配置数据 (AVCC)。\n"
 
-#: src/input/r_avi.cpp:301
-#: src/input/r_avi.cpp:306
+#: src/input/r_avi.cpp:300
+#: src/input/r_avi.cpp:305
 msgid "Could not extract the sequence header from this MPEG-1/2 track.\n"
 msgstr "无法从该 MPEG-1/2 轨道提取序列头。\n"
 
@@ -2622,7 +2651,7 @@ msgstr "无法从该 MPEG-1/2 轨道提取序列头。\n"
 msgid "Could not find a valid MP3 packet."
 msgstr "未找到有效的 MP3 包。"
 
-#: src/input/r_avi.cpp:513
+#: src/input/r_avi.cpp:508
 #, boost-format
 msgid "Could not find an index for audio track %1% (avilib error message: %2%). Skipping track.\n"
 msgstr "找不到音频轨 %1% 的索引 (avilib 错误消息: %2%)。正在跳过此轨。\n"
@@ -2636,12 +2665,12 @@ msgstr "追加合并时找不到 gptzr。 %1%\n"
 msgid "Could not find the codec configuration data in the first MPEG-4 part 2 video frame. This track cannot be stored in native mode.\n"
 msgstr "在首个 MPEG-4 part 2 视频帧中找不到编解码器配置数据。该轨不能以原生模式储存。\n"
 
-#: src/input/r_ogm.cpp:380
+#: src/input/r_ogm.cpp:379
 msgid "Could not find the next Ogg page. This indicates a damaged Ogg/Ogm file. Will try to continue.\n"
 msgstr "找不到 Ogg 的下一页。这表明 Ogg/Ogm 文件可能已损坏。将尝试继续。\n"
 
-#: src/input/r_avi.cpp:694
-#: src/input/r_matroska.cpp:1580
+#: src/input/r_avi.cpp:674
+#: src/input/r_matroska.cpp:1579
 msgid "Could not find valid DTS headers in this track's first frames.\n"
 msgstr "此轨的第一帧中未发现有效的 DTS 头。\n"
 
@@ -2850,6 +2879,11 @@ msgstr "当前版本:"
 msgid "D&elete"
 msgstr "删除(&E)"
 
+#: src/input/r_dts.h:41
+#: src/output/p_dts.h:48
+msgid "DTS"
+msgstr ""
+
 #: src/output/p_dts.cpp:84
 msgid "DTS header information changed! - New format:\n"
 msgstr "DTS 头部信息已变更! - 新格式:\n"
@@ -2961,6 +2995,8 @@ msgid "Description:"
 msgstr "描述:"
 
 #: src/common/file_types.cpp:29
+#: src/input/r_dirac.h:36
+#: src/output/p_dirac.h:40
 msgid "Dirac"
 msgstr "Dirac"
 
@@ -3347,6 +3383,11 @@ msgstr "正在提取轨道 %1% （CodecID 为 '%2%'）到文件 '%3%'。容器�
 msgid "Extraction of track number %1% with the CodecID '%2%' is not supported.\n"
 msgstr "不支持对轨道号 %1% （CodecID 为 '%2%'）的提取。\n"
 
+#: src/input/r_flac.h:54
+#: src/output/p_flac.h:39
+msgid "FLAC"
+msgstr ""
+
 #: src/common/file_types.cpp:33
 msgid "FLAC (Free Lossless Audio Codec)"
 msgstr "FLAC (自由无损音频编解码)"
@@ -3397,7 +3438,7 @@ msgstr "族 UID:%1%"
 msgid "File %1% has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n"
 msgstr "文件 %1% 类型未知。请查看受支持的文件类型列表 ('mkvmerge --list-types')，如果您的文件类型受支持但没被正常识别，请联系作者 Moritz Bunkus <moritz@bunkus.org>。\n"
 
-#: src/merge/pr_generic.cpp:1405
+#: src/merge/pr_generic.cpp:1403
 #, boost-format
 msgid "File '%1%': container: %2%"
 msgstr "文件 '%1%': 容器: %2%"
@@ -3412,8 +3453,8 @@ msgstr "文件 '%1%': 不支持的容器: %2%\n"
 msgid "File UID: %1%"
 msgstr "文件 UID: %1%"
 
-#: src/input/r_real.cpp:469
-#: src/input/r_real.cpp:479
+#: src/input/r_real.cpp:468
+#: src/input/r_real.cpp:478
 #, boost-format
 msgid "File contains fewer frames than expected or is corrupt after frame %1%.\n"
 msgstr "文件包含的帧数比预期的少，或者文件在 %1% 帧后被破坏。\n"
@@ -3625,7 +3666,7 @@ msgstr "全局选项"
 msgid "Global tags (%d entries) from %s"
 msgstr "全局标签 (%d 项) 自 %s"
 
-#: src/merge/pr_generic.cpp:1411
+#: src/merge/pr_generic.cpp:1409
 #, boost-format
 msgid "Global tags: %1% entries"
 msgstr "全局标签: %1% 条记录"
@@ -3733,6 +3774,11 @@ msgstr "ISO639-1 代码"
 msgid "ISO639-2 code"
 msgstr "ISO639-2 代码"
 
+#: src/input/r_ivf.h:35
+#, fuzzy
+msgid "IVF (VP8)"
+msgstr "含 VP8 的 IVF"
+
 #: src/common/file_types.cpp:35
 msgid "IVF with VP8 video files"
 msgstr "含 VP8 的 IVF 视频文件"
@@ -3784,7 +3830,7 @@ msgstr "导入的字体，自 %1%"
 msgid "Imported picture from %1%"
 msgstr "导入的图片，自 %1%"
 
-#: src/input/r_corepicture.cpp:226
+#: src/input/r_corepicture.cpp:227
 #, boost-format
 msgid "Impossible to use file '%1%': The file could not be opened for reading.\n"
 msgstr "无法使用文件 '%1%': 文件无法打开以读取。\n"
@@ -3797,7 +3843,7 @@ msgstr "mkvmerge 版本不兼容"
 msgid "Incompatible track"
 msgstr "不兼容轨道"
 
-#: src/input/r_real.cpp:608
+#: src/input/r_real.cpp:607
 #, boost-format
 msgid "Inconsistent AAC audio packet (length: %1% != len_check %2%)\n"
 msgstr "不相容的 AAC 音频包 (长: %1% != len_check %2%)\n"
@@ -3873,9 +3919,9 @@ msgstr "无效 UID。该章节 UID 已被使用。原 UID 没有被改变。"
 msgid "Invalid UID. This edition UID is already in use. The original UID has not been changed."
 msgstr "无效 UID。该版本 UID 已被使用。原 UID 没有被改变。"
 
-#: src/input/r_avi.cpp:703
-#: src/input/r_avi.cpp:708
-#: src/input/r_avi.cpp:725
+#: src/input/r_avi.cpp:683
+#: src/input/r_avi.cpp:688
+#: src/input/r_avi.cpp:705
 msgid "Invalid Vorbis headers in AVI audio track."
 msgstr "有无效的 Vorbis 头，在 AVI 音频轨中。"
 
@@ -4003,7 +4049,7 @@ msgstr "格式无效 最后一个字符为冒号或小数点而非一个数位"
 msgid "Invalid format: unknown character '%1%' found"
 msgstr "格式无效: 发现未知字符 '%1%'"
 
-#: src/input/r_vobsub.cpp:529
+#: src/input/r_vobsub.cpp:528
 #, boost-format
 msgid "Invalid header length: %1% (total length: %2%, idx: %3%, dataidx: %4%)\n"
 msgstr "头长度无效: %1% (总长: %2%, 索引: %3%, 数据索引: %4%)\n"
@@ -4054,11 +4100,11 @@ msgstr "无效的选择器，在 '%1% %2%'。\n"
 msgid "Invalid split size in '--split %1%'.\n"
 msgstr "无效的切割尺寸：'--split %1%'。\n"
 
-#: src/input/r_usf.cpp:315
+#: src/input/r_usf.cpp:314
 msgid "Invalid start or stop timecode"
 msgstr "无效的开始或终止时间码"
 
-#: src/input/r_corepicture.cpp:246
+#: src/input/r_corepicture.cpp:247
 msgid "Invalid start timecode"
 msgstr "无效的开始时间码"
 
@@ -4179,6 +4225,10 @@ msgstr "任务输出信息"
 msgid "Job queue management"
 msgstr "任务队列管理"
 
+#: src/output/p_kate.h:40
+msgid "Kate"
+msgstr ""
+
 #: src/output/p_kate.cpp:78
 msgid "Kate packet is too small and is being skipped.\n"
 msgstr "Kate 包过小，跳过。\n"
@@ -4264,18 +4314,18 @@ msgstr "行 %1%, 列 %2%: %3%"
 msgid "Line %1%: Negative timestamp encountered. The entry will be adjusted to start from 00:00:00.000.\n"
 msgstr "行 %1%: 遇到负的时间戳。此项将被调整为起始于 00:00:00.000。\n"
 
-#: src/input/r_vobsub.cpp:291
+#: src/input/r_vobsub.cpp:290
 #, boost-format
 msgid "Line %1%: The current timestamp (%2%) is smaller than the previous one (%3%). The entries will be sorted according to their timestamps. This might result in the wrong order for some subtitle entries. If this is the case then you have to fix the .idx file manually.\n"
 msgstr "行 %1%: 当前时间戳 (%2%) 比前一个早 (%3%)。各条将按时间戳重新排序。这可能导致某些字幕条目顺序出错。如果是这样，您需要手动修正 .idx 文件。\n"
 
-#: src/input/r_vobsub.cpp:241
-#: src/input/r_vobsub.cpp:264
+#: src/input/r_vobsub.cpp:240
+#: src/input/r_vobsub.cpp:263
 #, boost-format
 msgid "Line %1%: The line seems to be a subtitle entry but the format couldn't be recognized. This entry will be skipped.\n"
 msgstr "行 %1%: 此行似乎是字幕条目但格式无法识别。此条将被跳过。\n"
 
-#: src/input/r_vobsub.cpp:281
+#: src/input/r_vobsub.cpp:280
 #, boost-format
 msgid "Line %1%: The line seems to be a subtitle entry but the timecode was negative even after adding the track delay. Negative timecodes are not supported in Matroska. This entry will be skipped.\n"
 msgstr "行 %1%: 此行似乎是字幕条目但时间码为负即使添加了轨道延时。负的时间码不受 Matroska 的支持。此条将被跳过。\n"
@@ -4317,6 +4367,14 @@ msgstr "MIME 类型:"
 msgid "MKVToolNix is licensed under the GNU GPL v2"
 msgstr "MKVToolNix 依 GNU GPL v2 授权"
 
+#: src/input/r_mp3.h:38
+msgid "MP2/MP3"
+msgstr ""
+
+#: src/output/p_mp3.h:42
+msgid "MP3"
+msgstr ""
+
 #: src/common/file_types.cpp:36
 msgid "MP4 audio/video files"
 msgstr "MP4 音/视频文件"
@@ -4325,28 +4383,50 @@ msgstr "MP4 音/视频文件"
 msgid "MPEG audio files"
 msgstr "MPEG 音频文件"
 
+#: src/input/r_mpeg_ps.h:140
+msgid "MPEG program stream"
+msgstr "MPEG PS 程序流"
+
 #: src/common/file_types.cpp:38
 msgid "MPEG program streams"
 msgstr "MPEG PS 程序流"
+
+#: src/input/r_mpeg_ts.h:284
+#, fuzzy
+msgid "MPEG transport stream"
+msgstr "MPEG 传输流"
 
 #: src/common/file_types.cpp:39
 msgid "MPEG transport streams"
 msgstr "MPEG 传输流"
 
+#: src/input/r_mpeg_es.h:43
+#, fuzzy
+msgid "MPEG video elementary stream"
+msgstr "MPEG 视频基本流"
+
 #: src/common/file_types.cpp:40
 msgid "MPEG video elementary streams"
 msgstr "MPEG 视频基本流"
+
+#: src/output/p_mpeg1_2.h:36
+msgid "MPEG-1/2"
+msgstr ""
+
+#: src/output/p_mpeg4_p2.h:66
+msgid "MPEG-4"
+msgstr ""
 
 #: src/mmg/tabs/input_general.cpp:184
 msgid "Make this track the default track for its type (audio, video, subtitles). Players should prefer tracks with the default track flag set."
 msgstr "将此轨作为其所属类（音频，视频，字幕）的默认轨。播放器会优先使用有“默认轨”标记的轨道。"
 
-#: src/input/r_matroska.cpp:1515
-#: src/input/r_matroska.cpp:1530
+#: src/input/r_matroska.cpp:1514
+#: src/input/r_matroska.cpp:1529
 msgid "Malformed AAC codec initialization data found.\n"
 msgstr "发现畸形的 AAC 编解码器初始化数据。\n"
 
-#: src/input/r_matroska.cpp:1523
+#: src/input/r_matroska.cpp:1522
 #, boost-format
 msgid "Malformed codec id '%1%'.\n"
 msgstr "畸形的编解码器 id '%1%'。\n"
@@ -4361,6 +4441,10 @@ msgstr "畸形行? (%1%)\n"
 #: src/mmg/tabs/input_general.cpp:186
 msgid "Mark this track as 'forced'. Players must play this track."
 msgstr "将此轨标记为 '强制'。播放器必须播放此轨。"
+
+#: src/input/r_matroska.h:198
+msgid "Matroska"
+msgstr ""
 
 #: src/mmg/mmg_dialog.cpp:338
 #, c-format, boost-format
@@ -4595,7 +4679,7 @@ msgstr "下段唯一 ID"
 msgid "No %1% specified in '--%2% %3%'.\n"
 msgstr "未指定 %1%，在 '--%2% %3%'。\n"
 
-#: src/input/r_qtmp4.cpp:1447
+#: src/input/r_qtmp4.cpp:1446
 msgid "No AC3 header found in first frame; track will be skipped.\n"
 msgstr "首帧未发现 AC3 头; 此轨将被跳过。\n"
 
@@ -4750,6 +4834,10 @@ msgstr "每帧的毫微秒数 (未缩放前的)。"
 msgid "Numbers of channels in the track."
 msgstr "此轨的声道数。"
 
+#: src/input/r_ogm.h:108
+msgid "Ogg/OGM"
+msgstr ""
+
 #: src/common/file_types.cpp:44
 msgid "Ogg/OGM audio/video files"
 msgstr "Ogg/OGM 音/视频文件"
@@ -4893,11 +4981,23 @@ msgstr "覆写所有现有文件?"
 msgid "Overwrite existing file?"
 msgstr "覆写现有的文件?"
 
+#: src/output/p_pcm.h:41
+msgid "PCM"
+msgstr ""
+
+#: src/output/p_pgs.h:38
+msgid "PGS"
+msgstr ""
+
 #: src/common/file_types.cpp:42
 msgid "PGS/SUP subtitles"
 msgstr "PGS/SUP 字幕"
 
-#: src/input/r_vobsub.cpp:537
+#: src/input/r_pgssup.h:36
+msgid "PGSSUP"
+msgstr ""
+
+#: src/input/r_vobsub.cpp:536
 #, boost-format
 msgid "PTS error: 0x%|1$02x| %|2$02x|%|3$02x| %|4$02x|%|5$02x|\n"
 msgstr "PTS 错误: 0x%|1$02x| %|2$02x|%|3$02x| %|4$02x|%|5$02x|\n"
@@ -5052,64 +5152,68 @@ msgstr "正向 mkvmerge 询问处理能力"
 msgid "QuickTime audio/video files"
 msgstr "QuickTime 音/视频文件"
 
-#: src/input/r_qtmp4.cpp:473
+#: src/input/r_qtmp4.h:282
+msgid "QuickTime/MP4"
+msgstr ""
+
+#: src/input/r_qtmp4.cpp:472
 #, boost-format
 msgid "Quicktime/MP4 reader: '%1%' atom is too small. Expected size: >= %2%. Actual size: %3%.\n"
 msgstr "Quicktime/MP4 读取器: '%1%' 单元过小。预期尺寸: >= %2%。实际尺寸: %3%。\n"
 
-#: src/input/r_qtmp4.cpp:1909
+#: src/input/r_qtmp4.cpp:1908
 msgid "Quicktime/MP4 reader: Constant samplesize & variable duration not yet supported. Contact the author if you have such a sample file.\n"
 msgstr "Quicktime/MP4 读取器: 尚不支持恒定采样尺寸与可变时长。如果您有这样的文件样本，请联系作者。\n"
 
-#: src/input/r_qtmp4.cpp:1304
+#: src/input/r_qtmp4.cpp:1303
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read chunk number %1%/%2% with size %3% from position %4%. Aborting.\n"
 msgstr "Quicktime/MP4 读取器: 无法读取块号 %1%/%2% 尺寸 %3% 位置 %4%。正在中止。\n"
 
-#: src/input/r_qtmp4.cpp:1011
-#: src/input/r_qtmp4.cpp:1024
+#: src/input/r_qtmp4.cpp:1010
+#: src/input/r_qtmp4.cpp:1023
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the extended sound description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4 读取器: 无法读取轨道 %1% 的扩展音频描述单元。\n"
 
-#: src/input/r_qtmp4.cpp:984
+#: src/input/r_qtmp4.cpp:983
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the sound description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4 读取器: 无法读取轨道 %1% 的音频描述单元。\n"
 
-#: src/input/r_qtmp4.cpp:129
+#: src/input/r_qtmp4.cpp:128
 msgid "Quicktime/MP4 reader: Could not read the source file."
 msgstr "Quicktime/MP4 读取器: 无法读取源文件。"
 
-#: src/input/r_qtmp4.cpp:978
+#: src/input/r_qtmp4.cpp:977
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the stream description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4 读取器: 无法读取轨道 %1% 的流描述单元。\n"
 
-#: src/input/r_qtmp4.cpp:1060
+#: src/input/r_qtmp4.cpp:1059
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the video description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4 读取器: 无法读取轨道 %1% 的视频描述单元。\n"
 
-#: src/input/r_qtmp4.cpp:212
+#: src/input/r_qtmp4.cpp:211
 msgid "Quicktime/MP4 reader: Have not found any header atoms.\n"
 msgstr "Quicktime/MP4 读取器: 未发现任何头部单元。\n"
 
-#: src/input/r_qtmp4.cpp:214
+#: src/input/r_qtmp4.cpp:213
 msgid "Quicktime/MP4 reader: Have not found the 'mdat' atom. No movie data found.\n"
 msgstr "Quicktime/MP4 读取器: 未发现 'mdat' 单元。找不到影片数据。\n"
 
-#: src/input/r_qtmp4.cpp:161
+#: src/input/r_qtmp4.cpp:160
 #, boost-format
 msgid "Quicktime/MP4 reader: Invalid chunk size %1% at %2%.\n"
 msgstr "Quicktime/MP4 读取器: 无效的块尺寸 %1% 于 %2%。\n"
 
-#: src/input/r_qtmp4.cpp:290
+#: src/input/r_qtmp4.cpp:289
 #, boost-format
 msgid "Quicktime/MP4 reader: MPEG4 part 10/AVC track %1% is missing its decoder config. Skipping this track.\n"
 msgstr "Quicktime/MP4 读取器: MPEG4 part 10/AVC 轨道 %1% 缺解码器配置信息。正在跳过该轨。\n"
 
-#: src/input/r_qtmp4.cpp:283
+#: src/input/r_qtmp4.cpp:282
 #, boost-format
 msgid "Quicktime/MP4 reader: MPEG4 track %1% is missing the esds atom/the decoder config. Skipping this track.\n"
 msgstr "Quicktime/MP4 读取器: MPEG4 轨 %1% 缺 esds 单元/解码器配置信息。正在跳过该轨。\n"
@@ -5118,73 +5222,73 @@ msgstr "Quicktime/MP4 读取器: MPEG4 轨 %1% 缺 esds 单元/解码器配置�
 msgid "Quicktime/MP4 reader: Source is not a valid Quicktime/MP4 file."
 msgstr "Quicktime/MP4 读取器: 源非有效的 Quicktime/MP4 文件。"
 
-#: src/input/r_qtmp4.cpp:651
+#: src/input/r_qtmp4.cpp:650
 #, boost-format
 msgid "Quicktime/MP4 reader: The 'media header' atom ('mdhd') uses the unsupported version %1%.\n"
 msgstr "Quicktime/MP4 读取器: 'media header' 媒体头单元 ('mdhd') 使用了不受支持的版本 %1%。\n"
 
-#: src/input/r_qtmp4.cpp:971
+#: src/input/r_qtmp4.cpp:970
 #, boost-format
 msgid "Quicktime/MP4 reader: The 'size' field is too small in the stream description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4 读取器: 轨道 %1% 的流描述单元的 'size' 字段过小。\n"
 
-#: src/input/r_qtmp4.cpp:656
+#: src/input/r_qtmp4.cpp:655
 msgid "Quicktime/MP4 reader: The 'time scale' parameter was 0. This is not supported.\n"
 msgstr "Quicktime/MP4 读取器: 'time scale' 时间缩放参数为 0。这是不支持的。\n"
 
-#: src/input/r_qtmp4.cpp:251
+#: src/input/r_qtmp4.cpp:250
 #, boost-format
 msgid "Quicktime/MP4 reader: The AAC track %1% is missing the esds atom/the decoder config. Skipping this track.\n"
 msgstr "Quicktime/MP4 读取器: 该 AAC 轨道 %1% 缺 esds 单元/解码器配置信息。正在跳过该轨。\n"
 
-#: src/input/r_qtmp4.cpp:245
+#: src/input/r_qtmp4.cpp:244
 #, boost-format
 msgid "Quicktime/MP4 reader: The audio track %1% is using an unsupported 'object type id' of %2% in the 'esds' atom. Skipping this track.\n"
 msgstr "Quicktime/MP4 读取器: 音频轨 %1% 的 'esds' 单元使用了不支持的 'object type id' 对象类别号 %2%。正在跳过该轨。\n"
 
-#: src/input/r_qtmp4.cpp:263
+#: src/input/r_qtmp4.cpp:262
 #, boost-format
 msgid "Quicktime/MP4 reader: The video track %1% is missing the ESDS atom. Skipping this track.\n"
 msgstr "Quicktime/MP4 读取器: 视频轨 %1% 缺 ESDS 单元。正在跳过此轨。\n"
 
-#: src/input/r_qtmp4.cpp:505
+#: src/input/r_qtmp4.cpp:504
 #, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers with an unknown or unsupported compression algorithm '%1%%2%%3%%4%'. Aborting.\n"
 msgstr "Quicktime/MP4 读取器: 此文件的头部经未知或不支持的压缩算法 '%1%%2%%3%%4%' 压缩。正在中止。\n"
 
-#: src/input/r_qtmp4.cpp:538
+#: src/input/r_qtmp4.cpp:537
 #, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers, but the expected uncompressed size (%1%) was not what is available after uncompressing (%2%).\n"
 msgstr "Quicktime/MP4 读取器: 此文件头部经压缩，但预期的解压后尺寸 (%1%) 与解压得到的尺寸不符 (%2%)。\n"
 
-#: src/input/r_qtmp4.cpp:529
+#: src/input/r_qtmp4.cpp:528
 #, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers, but the zlib library could not be initialized. Error code from zlib: %1%. Aborting.\n"
 msgstr "Quicktime/MP4 读取器: 此文件头部经压缩，但无法初始化 zlib 库。zlib 错误代码: %1%。正在中止。\n"
 
-#: src/input/r_qtmp4.cpp:534
+#: src/input/r_qtmp4.cpp:533
 #, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers, but they could not be uncompressed. Error code from zlib: %1%. Aborting.\n"
 msgstr "Quicktime/MP4 读取器: 此文件头部经压缩，但无法解压。zlib 错误代码: %1%。正在中止。\n"
 
-#: src/input/r_qtmp4.cpp:302
+#: src/input/r_qtmp4.cpp:301
 #, boost-format
 msgid "Quicktime/MP4 reader: Track %1% has an unknown type.\n"
 msgstr "Quicktime/MP4 读取器: 轨道 %1% 类型未知。\n"
 
-#: src/input/r_qtmp4.cpp:258
-#: src/input/r_qtmp4.cpp:297
+#: src/input/r_qtmp4.cpp:257
+#: src/input/r_qtmp4.cpp:296
 #, boost-format
 msgid "Quicktime/MP4 reader: Track %1% is missing some data. Broken header atoms?\n"
 msgstr "Quicktime/MP4 读取器: 轨道 %1% 缺一些数据。头部单元损坏?\n"
 
-#: src/input/r_qtmp4.cpp:992
-#: src/input/r_qtmp4.cpp:1066
+#: src/input/r_qtmp4.cpp:991
+#: src/input/r_qtmp4.cpp:1065
 #, boost-format
 msgid "Quicktime/MP4 reader: Track ID %1% has more than one FourCC. Only using the first one (%|2$.4s|) and not this one (%|3$.4s|).\n"
 msgstr "Quicktime/MP4 读取器: 轨道 ID %1% 有多于一个 FourCC。只使用了第一个 (%|2$.4s|) 而非 (%|3$.4s|)。\n"
 
-#: src/input/r_qtmp4.cpp:237
+#: src/input/r_qtmp4.cpp:236
 #, boost-format
 msgid "Quicktime/MP4 reader: Unknown/unsupported FourCC '%|1$.4s|' for track %2%.\n"
 msgstr "Quicktime/MP4 读取器: 未知/不支持的 FourCC '%|1$.4s|'，轨道 %2%。\n"
@@ -5226,11 +5330,20 @@ msgstr "就绪"
 msgid "Real output sampling frequency in Hz."
 msgstr "实际输出的采样率，单位 Hz。"
 
+#: src/output/p_realaudio.h:36
+#, fuzzy
+msgid "RealAudio"
+msgstr "音频"
+
+#: src/input/r_real.h:105
+msgid "RealMedia"
+msgstr ""
+
 #: src/common/file_types.cpp:45
 msgid "RealMedia audio/video files"
 msgstr "RealMedia 音/视频文件"
 
-#: src/input/r_real.cpp:377
+#: src/input/r_real.cpp:376
 #, boost-format
 msgid "RealMedia files may contain HE-AAC / AAC+ / SBR AAC audio. In some cases this can NOT be detected automatically. Therefore you have to specifiy '--aac-is-sbr %1%' manually for this input file if the file actually contains SBR AAC. The file will be muxed in the WRONG way otherwise. Also read mkvmerge's documentation.\n"
 msgstr "RealMedia 文件可能包含 HE-AAC / AAC+ / SBR AAC 音频。某些情况下这 *无法* 自动侦测。因此当输入文件的确含有 SBR AAC 时，您需要手动指定 '--aac-is-sbr %1%'。否则文件会被 *错误地* 混流。参考阅读 mkvmerge 的自述文档。\n"
@@ -5314,9 +5427,19 @@ msgstr "启动所选(&T)"
 msgid "SHA1-160"
 msgstr "SHA1-160"
 
+#: src/input/r_srt.h:33
+#, fuzzy
+msgid "SRT subtitles"
+msgstr "SRT 文本字幕"
+
 #: src/common/file_types.cpp:46
 msgid "SRT text subtitles"
 msgstr "SRT 文本字幕"
+
+#: src/input/r_ssa.h:32
+#, fuzzy
+msgid "SSA/ASS subtitles"
+msgstr "SSA/ASS 文本字幕"
 
 #: src/common/file_types.cpp:47
 msgid "SSA/ASS text subtitles"
@@ -5630,12 +5753,12 @@ msgstr "配置: %1%"
 msgid "Several options that control the overall output that mkvmerge creates."
 msgstr "控制 mkvmerge 整体输出的一些选项。"
 
-#: src/input/r_real.cpp:595
+#: src/input/r_real.cpp:594
 #, boost-format
 msgid "Short AAC audio packet (length: %1% < %2%)\n"
 msgstr "短的 AAC 音频包 (长: %1% < %2%)\n"
 
-#: src/input/r_real.cpp:588
+#: src/input/r_real.cpp:587
 #, boost-format
 msgid "Short AAC audio packet (length: %1% < 2)\n"
 msgstr "短的 AAC 音频包 (长: %1% < 2)\n"
@@ -5765,7 +5888,7 @@ msgstr "跳过 %1% 字节 (未发现有效的 AAC 头)。这可能会导致音�
 msgid "Skipping %1% bytes (no valid DTS header found). This might cause audio/video desynchronisation.\n"
 msgstr "跳过 %1% 字节 (未发现有效的 DTS 头)。这可能会导致音画不同步。\n"
 
-#: src/input/r_mp3.cpp:53
+#: src/input/r_mp3.cpp:52
 #, boost-format
 msgid "Skipping %1% bytes at the beginning (no valid MP3 header found).\n"
 msgstr "跳过开头 %1% 字节 (未发现有效的 MP3 头)。\n"
@@ -5936,6 +6059,11 @@ msgstr "受支持的文件类型:\n"
 msgid "Suppress status output."
 msgstr "禁用状态输出。"
 
+#: src/input/r_tta.h:40
+#: src/output/p_tta.h:34
+msgid "TTA"
+msgstr ""
+
 #: src/common/file_types.cpp:48
 msgid "TTA (The lossless True Audio codec)"
 msgstr "TTA (The True Audio 无损音频编解码)"
@@ -5971,7 +6099,7 @@ msgstr "标签"
 msgid "Tags are not allowed in WebM compliant files. No tags will be written into any output file.\n"
 msgstr "WebM 兼容文件中不允许有标签。输出文件中不会写入任何标签。\n"
 
-#: src/merge/pr_generic.cpp:1412
+#: src/merge/pr_generic.cpp:1410
 #, boost-format
 msgid "Tags for track ID %1%: %2% entries"
 msgstr "轨道 %1% 的标签: %2% 条记录"
@@ -6006,7 +6134,7 @@ msgstr "文本文件 (*.txt)|*.txt|%s"
 msgid "Text files (*.txt)|*.txt|All files|*.*"
 msgstr "文本文件 (*.txt)|*.txt|所有文件|*.*"
 
-#: src/input/r_vobsub.cpp:234
+#: src/input/r_vobsub.cpp:233
 msgid "The .idx file does not contain an 'id: ...' line to indicate the language.\n"
 msgstr "此 .idx 文件不包含指明语言的 'id: ...' 行。\n"
 
@@ -6015,7 +6143,7 @@ msgstr "此 .idx 文件不包含指明语言的 'id: ...' 行。\n"
 msgid "The AAC profiles are different: %1% and %2%"
 msgstr "AAC profile 不同: %1% 与 %2%"
 
-#: src/input/r_qtmp4.cpp:1496
+#: src/input/r_qtmp4.cpp:1495
 msgid "The AVC video track is missing the 'CTTS' atom for frame timecode offsets. However, AVC/h.264 allows frames to have more than the traditional one (for P frames) or two (for B frames) references to other frames. The timecodes for such frames will be out-of-order, and the 'CTTS' atom is needed for getting the timecodes right. As it is missing the timecodes for this track might be wrong. You should watch the resulting file and make sure that it looks like you expected it to.\n"
 msgstr "此 AVC 视频轨缺 'CTTS' 帧时间码偏移单元。然而，AVC/h.264 允许帧有超过通常的一次 (对于 P 帧) 或两次 (对于 B 帧) 帧参考。此类帧的时间码会变得无序，需要 'CTTS' 单元来修正。由于缺时间码，此轨可能出错。请查看生成的文件，确认它是不是您预期的样子。\n"
 
@@ -6024,7 +6152,7 @@ msgstr "此 AVC 视频轨缺 'CTTS' 帧时间码偏移单元。然而，AVC/h.26
 msgid "The CUE sheet for track %1% will be written to '%2%'.\n"
 msgstr "轨道 %1% 的 CUE 表单将被写至 '%2%'。\n"
 
-#: src/merge/pr_generic.h:402
+#: src/merge/pr_generic.h:410
 msgid "The CodecID of the two tracks is different: %1% and %2%"
 msgstr "两轨的 CodecID 不同: %1% 与 %2%"
 
@@ -6062,7 +6190,7 @@ msgstr "轨道 %s（自文件 '%s'）的 FourCC 设置非四字符长。"
 msgid "The GUI is configured to use the mkvmerge executable from a different version (%1%) than the GUI itself (%2%). This is not supported but will not be prevented either. You should change the mkvmerge executable in the preferences dialog."
 msgstr "为本 GUI 配置的 mkvmerge 可执行程序的版本 (%1%) 与 GUI 自身的版本 (%2%) 不同。这不受支持，但也不会被阻止。您应当在“选项”对话框中更改 mkvmerge 可执行程序。"
 
-#: src/input/r_ogm.cpp:1508
+#: src/input/r_ogm.cpp:1504
 #, boost-format
 msgid "The Kate identifaction header could not be parsed (%1%).\n"
 msgstr "无法解析 Kate 识别头 (%1%)。\n"
@@ -6091,7 +6219,7 @@ msgstr ""
 msgid "The NALU size length must be a number between 2 and 4 inclusively in '--nalu-size-length %1%'.\n"
 msgstr "NALU 长必须为 2 与 4 之间（含 2 与 4）的数字，在 '--nalu-size-length %1%' 中。\n"
 
-#: src/input/r_ogm.cpp:1338
+#: src/input/r_ogm.cpp:1334
 #, boost-format
 msgid "The Theora identifaction header could not be parsed (%1%).\n"
 msgstr "Theora 识别头无法解析 (%1%)。\n"
@@ -6224,7 +6352,7 @@ msgstr "当前文件 (序号 %d) 不能移除。有其他文件 -- 至少文件�
 msgid "The current packet's timecode is smaller than that of the previous packet. This usually means that the source file is a Matroska file that has not been created 100%% correctly. The timecodes of all packets will be adjusted by %1%ms in order not to lose any data. This may throw audio/video synchronization off, but that can be corrected with mkvmerge's \"--sync\" option. If you already use \"--sync\" and you still get this warning then do NOT worry -- this is normal. If this error happens more than once and you get this message more than once for a particular track then either is the source file badly mastered, or mkvmerge contains a bug. In this case you should contact the author Moritz Bunkus <moritz@bunkus.org>.\n"
 msgstr "当前包的时间码比前一包的小。这通常表明源文件是未正常 100%% 创建的 Matroska 文件。所有包的时间码将以 %1%ms 调整以避免丢失任何数据。这可能导致音/视频不同步，但可以通过 mkvmerge 的 \"--sync\" 选项修正。如果您已经使用了 \"--sync\" 但仍然收到本警告，请 *不要* 着急 -- 这是正常的。如果对于一个特定轨超过一次出现本错误且您超过一次收到本消息，既可能是因为源文件严重错误，也可能是因为 mkvmerge 包含了某个 bug。如果是这样，请联系作者 Moritz Bunkus <moritz@bunkus.org>。\n"
 
-#: src/input/r_usf.cpp:129
+#: src/input/r_usf.cpp:128
 #, boost-format
 msgid "The default language code '%1%' is not a valid ISO639-2 language code and will be ignored.\n"
 msgstr "默认语言码 '%1%' 不是有效的 ISO639-2 语言代码，将被忽略。\n"
@@ -6248,11 +6376,11 @@ msgstr ""
 msgid "The difference between tags associated with a track and global tags is explained in mkvmerge's documentation. In short: global tags apply to the complete file while the tags you can add on the 'input' tab apply to only one track."
 msgstr "关于关联至轨道的标签与全局标签的区别已在 mkvmerge 文档中作出解释。简而言之: 全局标签应用于整个文件，而您能在 '输入' 选项卡中添加的标签仅能应用于单个轨道。"
 
-#: src/merge/pr_generic.h:397
+#: src/merge/pr_generic.h:405
 msgid "The display height of the two tracks is different: %1% and %2%"
 msgstr "两轨的显示高度不同: %1% 与 %2%"
 
-#: src/merge/pr_generic.h:392
+#: src/merge/pr_generic.h:400
 msgid "The display width of the two tracks is different: %1% and %2%"
 msgstr "两轨的显示宽度不同: %1% 与 %2%"
 
@@ -6485,7 +6613,7 @@ msgstr "给定的时间码缩放比例超出有效值域 (1...10000000 或 -1 �
 msgid "The header has already been written."
 msgstr "头部已被写入。"
 
-#: src/merge/pr_generic.h:387
+#: src/merge/pr_generic.h:395
 msgid "The height of the two tracks is different: %1% and %2%"
 msgstr "两轨高度不同: %1% 与 %2%"
 
@@ -6548,7 +6676,7 @@ msgstr ""
 msgid "The language '%s' is not a valid language and cannot be selected."
 msgstr "语言 '%s' 不是有效的语言，不可选。"
 
-#: src/input/r_usf.cpp:161
+#: src/input/r_usf.cpp:160
 #, boost-format
 msgid "The language code '%1%' is not a valid ISO639-2 language code and will be ignored.\n"
 msgstr "语言码 '%1%' 不是有效的 ISO639-2 语言代码，将被忽略。\n"
@@ -6623,11 +6751,11 @@ msgstr "输出文件 '%1%' 的名称与输入文件之一相同。这将使 mkvm
 msgid "The next UID was already given in '%1% %2%'.\n"
 msgstr "下一 UID 已在 '%1% %2%' 给出。\n"
 
-#: src/merge/pr_generic.h:377
+#: src/merge/pr_generic.h:385
 msgid "The number of bits per sample of the two audio tracks is different: %1% and %2%"
 msgstr "两轨的比特每采样数（音频位深）不同: %1% 与 %2%"
 
-#: src/merge/pr_generic.h:372
+#: src/merge/pr_generic.h:380
 msgid "The number of channels of the two audio tracks is different: %1% and %2%"
 msgstr "两音频轨的声道数不同: %1% 与 %2%"
 
@@ -6687,12 +6815,12 @@ msgstr "即将输出的文件 '%s' 已存在。是否覆盖?"
 msgid "The output file name is invalid, e.g. it might contain invalid characters like ':'."
 msgstr "输出文件名无效，可能含有 ':' 一类的无效字符。"
 
-#: src/input/r_corepicture.cpp:154
+#: src/input/r_corepicture.cpp:153
 #, boost-format
 msgid "The panoramic mode '%1%' is not recognized.\n"
 msgstr "全景模式 '%1%' 无法识别。\n"
 
-#: src/input/r_corepicture.cpp:138
+#: src/input/r_corepicture.cpp:137
 #, boost-format
 msgid "The picture type '%1%' is not recognized.\n"
 msgstr "图片类型 '%1%' 无法识别。\n"
@@ -6741,7 +6869,7 @@ msgstr "原因未知。"
 msgid "The root element must be <%1%>."
 msgstr "根元索必须为 <%1%>。"
 
-#: src/merge/pr_generic.h:367
+#: src/merge/pr_generic.h:375
 msgid "The sample rate of the two audio tracks is different: %1% and %2%"
 msgstr "两音频轨的采样率不同: %1% 与 %2%"
 
@@ -6883,7 +7011,7 @@ msgstr ""
 msgid "The timecodes after which a new output file is started. The timecodes refer to the whole stream and not to each individual output file. The timecodes can be given either in the form HH:MM:SS.nnnnnnnnn or as the number of seconds followed by 's'. You may omit the number of hours 'HH'. You can specify up to nine digits for the number of nanoseconds 'nnnnnnnnn' or none at all. If given then you may use up to nine digits after the decimal point. If two or more timecodes are used then you have to separate them with commas. The formats can be mixed, too. Examples: 01:00:00,01:30:00 (after one hour and after one hour and thirty minutes) or 1800s,3000s,00:10:00 (after three, five and ten minutes)."
 msgstr "在这些时间码后开始创建新的输出文件。这些时间码以整个流而不是分割开的各输出文件为准。时间码可以以 HH:MM:SS.nnnnnnnnn 的形式或紧跟 's' 的秒数给出。小时数 'HH' 可省略。您可以指定多达九位的毫微秒数 'nnnnnnnnn' 或者不指定小数点后的数。如果要给出，您可以在小数点后使用多达九位数字。如果使用的时间码超过一个，请使用逗号分隔。格式也可以混用。示例: 01:00:00,01:30:00 (在一小时后和一个半小时后切割) 或者 1800s,3000s,00:10:00 (在第 3 分钟，第 5 分钟和第 10 分钟后切割)。"
 
-#: src/input/r_ogm.cpp:598
+#: src/input/r_ogm.cpp:597
 msgid "The timecodes for this stream have been reset in the middle of the file. This is not supported. The current packet will be discarded.\n"
 msgstr "此流的时间码在文件中途重置。这是不支持的。当前数据包将被废除。\n"
 
@@ -6931,9 +7059,13 @@ msgstr "轨道参数不匹配。"
 msgid "The update information could not be retrieved from %1%.\n"
 msgstr "无法从 %1% 检索更新信息。\n"
 
-#: src/merge/pr_generic.h:382
+#: src/merge/pr_generic.h:390
 msgid "The width of the two tracks is different: %1% and %2%"
 msgstr "两轨宽度不同: %1% 与 %2%"
+
+#: src/output/p_theora.h:28
+msgid "Theora"
+msgstr ""
 
 #: src/mmg/mmg_dialog.cpp:1754
 msgid "There is a new version available online."
@@ -6971,8 +7103,8 @@ msgstr "有警告信息"
 msgid "There were warnings, or the process was terminated."
 msgstr "有警告信息，或者处理进程被中止。"
 
-#: src/input/r_avi.cpp:629
-#: src/input/r_real.cpp:326
+#: src/input/r_avi.cpp:617
+#: src/input/r_real.cpp:325
 msgid "This AAC track does not contain valid headers. Could not parse the AAC information.\n"
 msgstr "此 AAC 轨道不含有效的头。无法解析 AAC 信息。\n"
 
@@ -7006,7 +7138,7 @@ msgstr "此 MPEG 音频轨的开头包含 %1% 字节的 非-MP3 数据。这相�
 msgid "This MPEG audio track contains %1% bytes of non-MP3 data which were skipped. The audio/video synchronization may have been lost.\n"
 msgstr "此 MPEG 音频轨包含 %1% 字节的 非-MP3 数据，已跳过。音/视频同步可能已丧失。\n"
 
-#: src/input/r_ogm.cpp:847
+#: src/input/r_ogm.cpp:846
 msgid "This Ogg/OGM file contains chapter or title information. Unfortunately the charset used to store this information in the file cannot be identified unambiguously. The program assumes that your system's current charset is appropriate. This can be overridden with the '--chapter-charset <charset>' switch.\n"
 msgstr "此 Ogg/OGM 文件包含章节或标题信息。不幸的是此文件中存储这些信息使用的字符集无法准确识别。程序假定以您系统的当前字符集为准。您可以通过 '--chapter-charset <charset>' 开关替代该假定值。\n"
 
@@ -7037,7 +7169,7 @@ msgstr ""
 "此文件中目前不存在本元素。\n"
 "您可以让头部编辑器为该文件添加此元素。"
 
-#: src/input/r_qtmp4.cpp:339
+#: src/input/r_qtmp4.cpp:338
 #, boost-format
 msgid "This file contains at least one frame with a negative timecode. All timecodes will be adjusted by %1% so that none is negative anymore.\n"
 msgstr "此文件包含至少一个含有原生时间码的帧。全部时间码将以 %1% 调整以确保没有原生帧。\n"
@@ -7223,7 +7355,7 @@ msgstr "轨道 %1%（CodecID 为 '%2%'）缺 \"default duration\" 默认时长�
 msgid "Track %1%: %2%, codec ID: %3%%4%%5%%6%\n"
 msgstr "轨道 %1%: %2%, 编解码器 ID: %3%%4%%5%%6%\n"
 
-#: src/input/r_qtmp4.cpp:439
+#: src/input/r_qtmp4.cpp:438
 #, boost-format
 msgid "Track %1%: AAC found, but decoder config data has length %2%.\n"
 msgstr "轨道 %1%: 已发现 AAC, 但解码器配置数据长为 %2%。\n"
@@ -7238,7 +7370,7 @@ msgstr "轨道 %1%: NAL 太长\n"
 msgid "Track %1%: Subtitle entry number %2% is missing its duration. Assuming a duration of 1s.\n"
 msgstr "轨道 %1%: 字幕号 %2% 缺时长。假定为 1 秒。\n"
 
-#: src/input/r_qtmp4.cpp:442
+#: src/input/r_qtmp4.cpp:441
 #, boost-format
 msgid "Track %1%: The AAC information could not be parsed.\n"
 msgstr "轨道 %1%: AAC 信息无法解析。\n"
@@ -7249,7 +7381,7 @@ msgstr "轨道 %1%: AAC 信息无法解析。\n"
 msgid "Track ID %1% has an unknown AAC type.\n"
 msgstr "轨道 ID %1% 的 AAC 类型未知。\n"
 
-#: src/merge/pr_generic.cpp:1406
+#: src/merge/pr_generic.cpp:1404
 #, boost-format
 msgid "Track ID %1%: %2% (%3%)"
 msgstr "轨道 ID %1%: %2% (%3%)"
@@ -7311,6 +7443,12 @@ msgstr "使用不支持的内容编码（压缩或加密）方案的轨道不能
 msgid "Tracks, chapters and tags:"
 msgstr "轨道、章节与标签:"
 
+#: src/input/r_truehd.h:38
+#: src/output/p_truehd.h:44
+#, fuzzy
+msgid "TrueHD"
+msgstr "Dolby TrueHD"
+
 #: src/mmg/cli_options_dlg.cpp:143
 msgid "TrueHD audio streams know two frame types: sync frames and non-sync frames. With this switch mkvmerge will put one sync frame and all following non-sync frames into a single Matroska block. Without it each non-sync frame is put into its own Matroska block."
 msgstr "TrueHD 音频流支持两种帧类：同步帧和非同步帧。启用本开关时，mkvmerge 将一个同步帧及其后的所有非同步帧置于单个 Matroska 块中。未使用本开关时每个非同步帧将被置于各自的 Matroska 块中。"
@@ -7342,6 +7480,11 @@ msgstr "类型: %1% (%2%)"
 msgid "UID:"
 msgstr "UID:"
 
+#: src/input/r_usf.h:74
+#, fuzzy
+msgid "USF subtitles"
+msgstr "USF 文本字幕"
+
 #: src/common/file_types.cpp:49
 msgid "USF text subtitles"
 msgstr "USF 文本字幕"
@@ -7368,7 +7511,7 @@ msgstr "未知的 AAC MPEG-2 profile %1%。"
 msgid "Unknown AAC MPEG-4 object type %1%."
 msgstr "未知的 AAC MPEG-4 对象类型 %1%。"
 
-#: src/input/r_ogm.cpp:548
+#: src/input/r_ogm.cpp:547
 #, boost-format
 msgid "Unknown audio stream type 0x%|1$04x|. Stream ID %2% will be ignored.\n"
 msgstr "未知音频流类型 0x%|1$04x|。流 ID %2% 将被忽略。\n"
@@ -7398,7 +7541,7 @@ msgstr "上一 UID 格式未知，在 '%1% %2%'。\n"
 msgid "Unknown format for the segment UID '%3%' in '%1% %2%'.\n"
 msgstr "'%1% %2%' 中的剪辑 UID '%3%' 格式未知。\n"
 
-#: src/input/r_vobsub.cpp:607
+#: src/input/r_vobsub.cpp:606
 #, boost-format
 msgid "Unknown header 0x%|1$02x|%|2$02x|%|3$02x|%|4$02x|\n"
 msgstr "未知头部字段 0x%|1$02x|%|2$02x|%|3$02x|%|4$02x|\n"
@@ -7423,7 +7566,7 @@ msgstr "未知选项 '%1%'。\n"
 msgid "Unknown parse mode in '%1% %2%'.\n"
 msgstr "未知解析模式，于 '%1% %2%'。\n"
 
-#: src/input/r_avi.cpp:585
+#: src/input/r_avi.cpp:571
 #, boost-format
 msgid "Unknown/unsupported audio format 0x%|1$04x| for this audio track.\n"
 msgstr "此音频轨的格式 0x%|1$04x| 未知或不支持。\n"
@@ -7442,7 +7585,7 @@ msgstr "无符号整数"
 msgid "Unsigned integer (%1%) is too small. Mininum value is %2%."
 msgstr "无符号整数 (%1%) 太小。最小值为 %2%。"
 
-#: src/input/r_vobsub.cpp:476
+#: src/input/r_vobsub.cpp:475
 #, boost-format
 msgid "Unsupported MPEG mpeg_version: 0x%|1$02x| in packet %2% for timecode %3%, assuming MPEG2. No further warnings will be printed for this track.\n"
 msgstr "不支持 MPEG mpeg_version: 0x%|1$02x| 于数据包 %2% 时间码 %3% 处，假定为 MPEG2。不会再对此轨输出警告。\n"
@@ -7451,7 +7594,7 @@ msgstr "不支持 MPEG mpeg_version: 0x%|1$02x| 于数据包 %2% 时间码 %3% �
 msgid "Unsupported format"
 msgstr "不支持的格式"
 
-#: src/input/r_matroska.cpp:1792
+#: src/input/r_matroska.cpp:1787
 msgid "Unsupported track type for this track.\n"
 msgstr "不支持此轨道的轨道类型。\n"
 
@@ -7493,345 +7636,33 @@ msgstr "用户定义选项:"
 msgid "Using a NALU size length of 3 bytes might result in tracks that won't be decodable with certain AVC/h.264 codecs.\n"
 msgstr "使用 3 字节的 NALU 长可能会导致某些 AVC/h.264 编解码器无法解码该轨道。\n"
 
-#: src/input/r_ac3.cpp:90
-#: src/input/r_matroska.cpp:1557
-#: src/input/r_mpeg_ps.cpp:1180
-#: src/input/r_mpeg_ts.cpp:1047
-#, boost-format
-msgid "Using the %1%AC3 output module.\n"
-msgstr "使用 %1%AC3 输出模块。\n"
-
-#: src/input/r_avi.cpp:649
-msgid "Using the AAC audio output module.\n"
-msgstr "使用 AAC 音频输出模块。\n"
-
-#: src/input/r_aac.cpp:92
-msgid "Using the AAC demultiplexer.\n"
+#: src/merge/pr_generic.h:290
+#, fuzzy
+msgid "Using the demultiplexer for the format '%1%'.\n"
 msgstr "使用 AAC 分离器。\n"
 
-#: src/input/r_real.cpp:371
-#, boost-format
-msgid "Using the AAC output module (FourCC: %1%).\n"
+#: src/input/r_matroska.cpp:1375
+#, fuzzy, boost-format
+msgid "Using the generic output module for track type '%1%'.\n"
 msgstr "使用 AAC 输出模块 (FourCC: %1%)。\n"
 
-#: src/input/r_aac.cpp:116
-#: src/input/r_matroska.cpp:1545
-#: src/input/r_ogm.cpp:994
-#: src/input/r_qtmp4.cpp:1531
-msgid "Using the AAC output module.\n"
-msgstr "使用 AAC 输出模块。\n"
+#: src/merge/pr_generic.h:292
+#, fuzzy
+msgid "Using the output module for the format '%1%'.\n"
+msgstr "使用 AAC 输出模块 (FourCC: %1%)。\n"
 
-#: src/input/r_ac3.cpp:77
-msgid "Using the AC3 demultiplexer.\n"
-msgstr "使用 AC3 分离器。\n"
-
-#: src/input/r_real.cpp:305
-#, boost-format
-msgid "Using the AC3 output module (FourCC: %1%).\n"
-msgstr "使用 AC3 输出模块 (FourCC: %1%)。\n"
-
-#: src/input/r_avi.cpp:568
-#: src/input/r_ogm.cpp:1012
-#: src/input/r_qtmp4.cpp:1454
-#: src/input/r_wav.cpp:225
-msgid "Using the AC3 output module.\n"
-msgstr "使用 AC3 输出模块。\n"
-
-#: src/input/r_avc.cpp:126
-msgid "Using the AVC/h.264 ES demultiplexer.\n"
-msgstr "使用 AVC/h.264 ES 分离器。\n"
-
-#: src/input/r_avi.cpp:111
-msgid "Using the AVI demultiplexer. Opening file. This may take some time depending on the file's size.\n"
-msgstr "使用 AVI 分离器。正在打开文件。这需要一些时间（取决于文件尺寸）。\n"
-
-#: src/input/r_corepicture.cpp:89
-msgid "Using the CorePanorama subtitle reader.\n"
-msgstr "使用 CorePanorama 字幕读取器。\n"
-
-#: src/input/r_dts.cpp:83
-msgid "Using the DTS demultiplexer.\n"
-msgstr "使用 DTS 分离器。\n"
-
-#: src/input/r_avi.cpp:689
-#: src/input/r_dts.cpp:114
-#: src/input/r_matroska.cpp:1577
-#: src/input/r_mpeg_ps.cpp:1185
-#: src/input/r_mpeg_ts.cpp:1051
-#: src/input/r_wav.cpp:354
-msgid "Using the DTS output module.\n"
-msgstr "使用 DTS 输出模块。\n"
-
-#: src/input/r_dirac.cpp:86
-msgid "Using the Dirac demultiplexer.\n"
-msgstr "使用 Dirac 分离器。\n"
-
-#: src/input/r_dirac.cpp:96
-#: src/input/r_matroska.cpp:1475
-msgid "Using the Dirac video output module.\n"
-msgstr "使用 Dirac 视频输出模块。\n"
-
-#: src/input/r_flac.cpp:124
-msgid "Using the FLAC demultiplexer.\n"
-msgstr "使用 FLAC 分离器。\n"
-
-#: src/input/r_flac.cpp:164
-#: src/input/r_matroska.cpp:1599
-#: src/input/r_ogm_flac.cpp:287
-msgid "Using the FLAC output module.\n"
-msgstr "使用 FLAC 输出模块。\n"
-
-#: src/input/r_ivf.cpp:66
-msgid "Using the IVF demultiplexer.\n"
-msgstr "使用 IVF 分离器。\n"
-
-#: src/input/r_matroska.cpp:1718
-msgid "Using the Kate output module.\n"
-msgstr "使用 Kate 输出模块。\n"
-
-#: src/input/r_ogm.cpp:1520
-msgid "Using the Kate subtitle output module.\n"
-msgstr "使用 Kate 字幕输出模块。\n"
-
-#: src/input/r_mp3.cpp:50
-msgid "Using the MP2/MP3 demultiplexer.\n"
-msgstr "使用 MP2/MP3 分离器。\n"
-
-#: src/input/r_mpeg_es.cpp:166
-msgid "Using the MPEG ES demultiplexer.\n"
-msgstr "使用 MPEG ES 分离器。\n"
-
-#: src/input/r_mpeg_ps.cpp:178
-msgid "Using the MPEG PS demultiplexer.\n"
-msgstr "使用 MPEG PS 分离器。\n"
-
-#: src/input/r_avi.cpp:561
-#: src/input/r_matroska.cpp:1607
-#: src/input/r_mp3.cpp:71
-#: src/input/r_mpeg_ps.cpp:1175
-#: src/input/r_mpeg_ts.cpp:1043
-#: src/input/r_ogm.cpp:1030
-#: src/input/r_qtmp4.cpp:1537
-msgid "Using the MPEG audio output module.\n"
-msgstr "使用 MPEG 音频输出模块。\n"
-
-#: src/input/r_matroska.cpp:1459
-#: src/input/r_qtmp4.cpp:1489
-#, boost-format
-msgid "Using the MPEG-%1% video output module.\n"
-msgstr "使用 MPEG-%1% 视频输出模块。\n"
-
-#: src/input/r_avi.cpp:323
-#: src/input/r_mpeg_es.cpp:179
-#: src/input/r_mpeg_ps.cpp:1201
-#: src/input/r_mpeg_ts.cpp:1079
-msgid "Using the MPEG-1/2 video output module.\n"
-msgstr "使用 MPEG-1/2 视频输出模块。\n"
-
-#: src/input/r_matroska.cpp:1869
-#: src/input/r_qtmp4.cpp:1507
-msgid "Using the MPEG-4 part 10 (AVC) video output module.\n"
-msgstr "使用 MPEG-4 part 10 (AVC) 视频输出模块。\n"
-
-#: src/input/r_avc.cpp:136
-#: src/input/r_avi.cpp:348
-#: src/input/r_matroska.cpp:1849
-#: src/input/r_mpeg_ps.cpp:1214
-#: src/input/r_mpeg_ts.cpp:1099
-#: src/input/r_ogm.cpp:1154
-msgid "Using the MPEG-4 part 10 ES video output module.\n"
-msgstr "使用 MPEG-4 part 10 ES 视频输出模块。\n"
-
-#: src/input/r_avi.cpp:331
-#: src/input/r_matroska.cpp:1463
-#: src/input/r_ogm.cpp:1258
-#: src/input/r_qtmp4.cpp:1481
-msgid "Using the MPEG-4 part 2 video output module.\n"
-msgstr "使用 MPEG-4 part 2 视频输出模块。\n"
-
-#: src/input/r_matroska.cpp:212
-msgid "Using the Matroska demultiplexer.\n"
-msgstr "使用 Matroska 分离器。\n"
-
-#: src/input/r_ogm.cpp:337
-msgid "Using the OGG/OGM demultiplexer.\n"
-msgstr "使用 OGG/OGM 分离器。\n"
-
-#: src/input/r_avi.cpp:553
-#: src/input/r_matroska.cpp:1614
-#: src/input/r_ogm.cpp:1049
-#: src/input/r_qtmp4.cpp:1543
-#: src/input/r_wav.cpp:395
-msgid "Using the PCM output module.\n"
-msgstr "使用 PCM 输出模块。\n"
-
-#: src/input/r_matroska.cpp:1724
-#: src/input/r_mpeg_ts.cpp:1121
-#: src/input/r_pgssup.cpp:74
-msgid "Using the PGS output module.\n"
-msgstr "使用 PGS 输出模块。\n"
-
-#: src/input/r_pgssup.cpp:59
-msgid "Using the PGSSUP demultiplexer.\n"
-msgstr "使用 PGSSUP 分离器。\n"
-
-#: src/input/r_qtmp4.cpp:124
-msgid "Using the Quicktime/MP4 demultiplexer.\n"
-msgstr "使用 Quicktime/MP4 分离器。\n"
-
-#: src/input/r_real.cpp:401
-#, boost-format
-msgid "Using the RealAudio output module (FourCC: %1%).\n"
-msgstr "使用 RealAudio 输出模块 (FourCC: %1%)。\n"
-
-#: src/input/r_real.cpp:158
-msgid "Using the RealMedia demultiplexer.\n"
-msgstr "使用 RealMedia 分离器。\n"
-
-#: src/input/r_srt.cpp:44
-msgid "Using the SRT subtitle reader.\n"
-msgstr "使用 SRT 字幕读取器。\n"
-
-#: src/input/r_avi.cpp:428
-msgid "Using the SSA/ASS subtitle output module.\n"
-msgstr "使用 SSA/ASS 字幕输出模块。\n"
-
-#: src/input/r_ssa.cpp:58
-msgid "Using the SSA/ASS subtitle reader.\n"
-msgstr "使用 SSA/ASS 字幕读取器。\n"
-
-#: src/input/r_tta.cpp:96
-msgid "Using the TTA demultiplexer.\n"
-msgstr "使用 TTA 分离器。\n"
-
-#: src/input/r_matroska.cpp:1625
-#: src/input/r_tta.cpp:109
-msgid "Using the TTA output module.\n"
-msgstr "使用 TTA 输出模块。\n"
-
-#: src/input/r_matroska.cpp:1471
-#: src/input/r_ogm.cpp:1351
-msgid "Using the Theora video output module.\n"
-msgstr "使用 Theora 视频输出模块。\n"
-
-#: src/input/r_mpeg_ps.cpp:1190
-#: src/input/r_mpeg_ts.cpp:1055
-msgid "Using the TrueHD output module.\n"
-msgstr "使用 TrueHD 输出模块。\n"
-
-#: src/input/r_truehd.cpp:73
-msgid "Using the TrueHD/MLP demultiplexer.\n"
-msgstr "使用 TrueHD/MLP 分离器。\n"
-
-#: src/input/r_truehd.cpp:89
-msgid "Using the TrueHD/MLP output module.\n"
-msgstr "使用 TrueHD/MLP 输出模块。\n"
-
-#: src/input/r_usf.cpp:100
-msgid "Using the USF subtitle reader.\n"
-msgstr "使用 USF 字幕读取器。\n"
-
-#: src/input/r_vc1.cpp:86
-msgid "Using the VC1 ES demultiplexer.\n"
-msgstr "使用 VC1 ES 分离器。\n"
-
-#: src/input/r_matroska.cpp:1877
-#: src/input/r_mpeg_ps.cpp:1219
-#: src/input/r_mpeg_ts.cpp:1115
-#: src/input/r_vc1.cpp:96
-msgid "Using the VC1 video output module.\n"
-msgstr "使用 VC1 视频输出模块。\n"
-
-#: src/input/r_ivf.cpp:87
-#: src/input/r_matroska.cpp:1479
-#: src/input/r_ogm.cpp:1445
-msgid "Using the VP8 video output module.\n"
-msgstr "使用 VP8 视频输出模块。\n"
-
-#: src/input/r_vobbtn.cpp:67
-msgid "Using the VobBtn button reader.\n"
-msgstr "使用 VobBtn 按钮读取器。\n"
-
-#: src/input/r_matroska.cpp:1735
-msgid "Using the VobBtn output module.\n"
-msgstr "使用 VobBtn 输出模块。\n"
-
-#: src/input/r_matroska.cpp:1702
-msgid "Using the VobSub output module.\n"
-msgstr "使用 VobSub 输出模块。\n"
-
-#: src/input/r_vobsub.cpp:149
-#, boost-format
-msgid "Using the VobSub subtitle output module (language: %1%).\n"
-msgstr "使用 VobSub 字幕输出模块 (语言: %1%)。\n"
-
-#: src/input/r_vobsub.cpp:104
-#, boost-format
-msgid "Using the VobSub subtitle reader (SUB file '%1%').\n"
-msgstr "使用 VobSub 字幕读取器 (SUB 文件 '%1%')。\n"
-
-#: src/input/r_avi.cpp:743
-#: src/input/r_matroska.cpp:1632
-#: src/input/r_ogm.cpp:1070
-msgid "Using the Vorbis output module.\n"
-msgstr "使用 Vorbis 输出模块。\n"
-
-#: src/input/r_wav.cpp:565
-msgid "Using the WAV demultiplexer.\n"
-msgstr "使用 WAV 分离器。\n"
-
-#: src/input/r_wavpack.cpp:84
-msgid "Using the WAVPACK demultiplexer with a correction file.\n"
-msgstr "使用附带了纠错文件的 WAVPACK 分离器。\n"
-
-#: src/input/r_wavpack.cpp:86
-msgid "Using the WAVPACK demultiplexer.\n"
-msgstr "使用 WAVPACK 分离器。\n"
-
-#: src/input/r_matroska.cpp:1655
-#: src/input/r_wavpack.cpp:107
-msgid "Using the WAVPACK output module.\n"
-msgstr "使用 WAVPACK 输出模块。\n"
-
-#: src/input/r_qtmp4.cpp:1557
-#, boost-format
-msgid "Using the generic audio output module (FourCC: %|1$.4s|).\n"
-msgstr "使用通用音频输出模块 (FourCC: %|1$.4s|)。\n"
-
-#: src/input/r_matroska.cpp:1376
-#, boost-format
-msgid "Using the passthrough output module for this %1% track.\n"
-msgstr "对轨道 %1% 使用呈递输出模块。\n"
-
-#: src/input/r_avi.cpp:405
-#: src/input/r_matroska.cpp:1710
-#: src/input/r_ogm.cpp:1101
-#: src/input/r_srt.cpp:60
-#: src/input/r_ssa.cpp:71
-#: src/input/r_usf.cpp:259
-msgid "Using the text subtitle output module.\n"
-msgstr "使用文本字幕输出模块。\n"
-
-#: src/input/r_real.cpp:299
-#, boost-format
-msgid "Using the video output module (FourCC: %1%).\n"
-msgstr "使用视频输出模块 (FourCC: %1%)。\n"
-
-#: src/input/r_qtmp4.cpp:1469
-#: src/input/r_qtmp4.cpp:1517
-#, boost-format
-msgid "Using the video output module (FourCC: %|1$.4s|).\n"
-msgstr "使用视频输出模块 (FourCC: %|1$.4s|)。\n"
-
-#: src/input/r_avi.cpp:360
-#: src/input/r_matroska.cpp:1488
-#: src/input/r_ogm.cpp:1263
-msgid "Using the video output module.\n"
-msgstr "使用视频输出模块。\n"
+#: src/input/r_vc1.h:38
+#: src/output/p_vc1.h:39
+msgid "VC1"
+msgstr ""
 
 #: src/common/file_types.cpp:50
 msgid "VC1 elementary streams"
 msgstr "VC1 基本流"
+
+#: src/output/p_vp8.h:29
+msgid "VP8"
+msgstr ""
 
 #: src/common/hacks.cpp:60
 msgid "Valid hacks are:\n"
@@ -7844,6 +7675,10 @@ msgstr "检验所有可变头的内容"
 #: src/mmg/mmg_dialog.cpp:290
 msgid "Verify the current chapter entries to see if there are any errors"
 msgstr "验证当前章节条目有无错误"
+
+#: src/output/p_video.h:45
+msgid "VfW compatible video"
+msgstr ""
 
 #: src/common/property_element.cpp:147
 #: src/mmg/header_editor/frame.cpp:489
@@ -7893,7 +7728,7 @@ msgstr "视频以短缺的画面组结尾。丢弃了一些帧。您可能需要
 msgid "Video interlaced flag"
 msgstr "视频隔行扫描标记"
 
-#: src/input/r_real.cpp:651
+#: src/input/r_real.cpp:650
 #, boost-format
 msgid "Video packet assembly failed. Error code: %1% (%2%)\n"
 msgstr "视频包汇编失败。错误代码: %1% (%2%)\n"
@@ -7926,20 +7761,49 @@ msgstr "视频轨 %u"
 msgid "View the output that mkvmerge generated during the muxing process for the selected job(s)"
 msgstr "查看 mkvmerge 处理选中任务时的输出信息"
 
+#: src/input/r_vobbtn.h:38
+#: src/output/p_vobbtn.h:36
+#, fuzzy
+msgid "VobBtn"
+msgstr "VobBtn 按钮"
+
 #: src/common/file_types.cpp:51
 msgid "VobButtons"
 msgstr "VobBtn 按钮"
+
+#: src/input/r_vobsub.h:75
+#: src/output/p_vobsub.h:37
+msgid "VobSub"
+msgstr ""
 
 #: src/common/file_types.cpp:52
 msgid "VobSub subtitles"
 msgstr "VobSub 字幕"
 
+#: src/output/p_vorbis.h:43
+msgid "Vorbis"
+msgstr ""
+
+#: src/input/r_wav.h:79
+msgid "WAV"
+msgstr ""
+
 #: src/common/file_types.cpp:53
 msgid "WAVE (uncompressed PCM audio)"
 msgstr "WAVE (未压缩的 PCM 音频)"
 
+#: src/input/r_wavpack.h:38
+#, fuzzy
+msgid "WAVPACK"
+msgstr "WAVPACK v4 音频"
+
 #: src/common/file_types.cpp:54
 msgid "WAVPACK v4 audio"
+msgstr "WAVPACK v4 音频"
+
+#: src/output/p_wavpack.h:36
+#, fuzzy
+msgid "WAVPACK4"
 msgstr "WAVPACK v4 音频"
 
 #: src/mmg/options/mmg.cpp:94
@@ -8193,7 +8057,7 @@ msgstr "avc_es_reader: 无法打开源文件。"
 msgid "avc_es_reader: Should not have happened."
 msgstr "avc_es_reader: 不该发生。"
 
-#: src/input/r_avi.cpp:114
+#: src/input/r_avi.cpp:113
 #, boost-format
 msgid "avi_reader: Could not initialize AVI source. Reason: %1%"
 msgstr "avi_reader: 无法初始化 AVI 源。原因: %1%"
@@ -8373,14 +8237,14 @@ msgstr "加密"
 #: src/common/mm_io.cpp:551
 #: src/common/mm_io.cpp:649
 #: src/common/mm_io.cpp:1107
-#: src/input/r_qtmp4.cpp:516
-#: src/input/r_qtmp4.cpp:598
-#: src/input/r_qtmp4.cpp:632
-#: src/input/r_qtmp4.cpp:644
-#: src/input/r_qtmp4.cpp:738
-#: src/input/r_qtmp4.cpp:1234
-#: src/input/r_qtmp4.cpp:1392
-#: src/input/r_qtmp4.cpp:1408
+#: src/input/r_qtmp4.cpp:515
+#: src/input/r_qtmp4.cpp:597
+#: src/input/r_qtmp4.cpp:631
+#: src/input/r_qtmp4.cpp:643
+#: src/input/r_qtmp4.cpp:737
+#: src/input/r_qtmp4.cpp:1233
+#: src/input/r_qtmp4.cpp:1391
+#: src/input/r_qtmp4.cpp:1407
 msgid "end-of-file"
 msgstr "文件尾"
 
@@ -8503,7 +8367,7 @@ msgstr "语言: %1%"
 msgid "length %1%, data: %2%"
 msgstr "长 %1%, 数据: %2%"
 
-#: src/input/r_vobsub.cpp:228
+#: src/input/r_vobsub.cpp:227
 #, boost-format
 msgid "line %1%: The 'delay' timestamp could not be parsed.\n"
 msgstr "行 %1%: '延时' 时间戳无法解析。\n"
@@ -8533,40 +8397,40 @@ msgstr "lzo_init() 失败。结果: %1%\n"
 msgid "lzo_malloc(LZO1X_999_MEM_COMPRESS) failed.\n"
 msgstr "lzo_malloc(LZO1X_999_MEM_COMPRESS) 失败。\n"
 
-#: src/input/r_matroska.cpp:323
+#: src/input/r_matroska.cpp:322
 #, boost-format
 msgid "matroska_reader: (MS compatibility mode for track %1%) Matroska says that there are %2% bits per sample, but the WAVEFORMATEX says that there are %3%.\n"
 msgstr "matroska_reader: (微软兼容模式，轨道 %1%) Matroska 说每采样为 %2% 比特，但这个 WAVEFORMATEX 波形格式项索引 说有 %3% 比特。\n"
 
-#: src/input/r_matroska.cpp:314
+#: src/input/r_matroska.cpp:313
 #, boost-format
 msgid "matroska_reader: (MS compatibility mode for track %1%) Matroska says that there are %2% channels, but the WAVEFORMATEX says that there are %3%.\n"
 msgstr "matroska_reader: (微软兼容模式，轨道 %1%) Matroska 说有 %2% 声道，但这个 WAVEFORMATEX 波形格式项索引 说有 %3% 声道。\n"
 
-#: src/input/r_matroska.cpp:305
+#: src/input/r_matroska.cpp:304
 #, boost-format
 msgid "matroska_reader: (MS compatibility mode for track %1%) Matroska says that there are %2% samples per second, but WAVEFORMATEX says that there are %3%.\n"
 msgstr "matroska_reader: (微软兼容模式，轨道 %1%) Matroska 说每秒有 %2% 采样，但这个 WAVEFORMATEX 波形格式项索引 说有 %3% 采样。\n"
 
-#: src/input/r_matroska.cpp:452
+#: src/input/r_matroska.cpp:451
 #, boost-format
 msgid "matroska_reader: (MS compatibility mode, track %1%) Matroska says video height is %2%, but the BITMAPINFOHEADER says %3%.\n"
 msgstr "matroska_reader: (微软兼容模式, 轨道 %1%) Matroska 视频高度为 %2%，但这个 BITMAPINFOHEADER 位图信息头 说是 %3%。\n"
 
-#: src/input/r_matroska.cpp:443
+#: src/input/r_matroska.cpp:442
 #, boost-format
 msgid "matroska_reader: (MS compatibility mode, track %1%) Matroska says video width is %2%, but the BITMAPINFOHEADER says %3%.\n"
 msgstr "matroska_reader: (微软兼容模式, 轨道 %1%) Matroska 说视频宽度为 %2%，但这个 BITMAPINFOHEADER 位图信息头 说是 %3%。\n"
 
-#: src/input/r_matroska.cpp:1074
+#: src/input/r_matroska.cpp:1073
 msgid "matroska_reader: A track is missing its track UID.\n"
 msgstr "matroska_reader: 有一条轨道缺 UID。\n"
 
-#: src/input/r_matroska.cpp:1062
+#: src/input/r_matroska.cpp:1061
 msgid "matroska_reader: A track is missing its track number.\n"
 msgstr "matroska_reader: 有一条轨道缺轨道号。\n"
 
-#: src/input/r_matroska.cpp:1439
+#: src/input/r_matroska.cpp:1438
 #, boost-format
 msgid "matroska_reader: Could not keep the track UID %1% because it is already allocated for the new file.\n"
 msgstr "matroska_reader: 无法保留轨道 UID %1%，因为它已被指派给了新文件。\n"
@@ -8575,102 +8439,102 @@ msgstr "matroska_reader: 无法保留轨道 UID %1%，因为它已被指派给�
 msgid "matroska_reader: Failed to read the headers."
 msgstr "matroska_reader: 无法读取头部。"
 
-#: src/input/r_matroska.cpp:1252
-#: src/input/r_matroska.cpp:1257
+#: src/input/r_matroska.cpp:1251
+#: src/input/r_matroska.cpp:1256
 msgid "matroska_reader: No segment found.\n"
 msgstr "matroska_reader: 未发现剪辑。\n"
 
-#: src/input/r_matroska.cpp:963
+#: src/input/r_matroska.cpp:962
 msgid "matroska_reader: Pixel height is missing.\n"
 msgstr "matroska_reader: 缺象素高度。\n"
 
-#: src/input/r_matroska.cpp:956
+#: src/input/r_matroska.cpp:955
 msgid "matroska_reader: Pixel width is missing.\n"
 msgstr "matroska_reader: 缺象素宽度。\n"
 
-#: src/input/r_matroska.cpp:544
+#: src/input/r_matroska.cpp:543
 #, boost-format
 msgid "matroska_reader: The CodecID '%1%' for track %2% is unknown.\n"
 msgstr "matroska_reader: 轨 %2% 的 CodecID '%1%' 未知。\n"
 
-#: src/input/r_matroska.cpp:431
+#: src/input/r_matroska.cpp:430
 #, boost-format
 msgid "matroska_reader: The CodecID for track %1% is '%2%', but there was no BITMAPINFOHEADER struct present. Therefore we don't have a FourCC to identify the video codec used.\n"
 msgstr "matroska_reader: 轨 %1% 的 CodecID 为 '%2%'，但没有出现 BITMAPINFOHEADER 位图信息头结构。因此我们没有可标记视频编码的 FourCC。\n"
 
-#: src/input/r_matroska.cpp:284
+#: src/input/r_matroska.cpp:283
 #, boost-format
 msgid "matroska_reader: The CodecID for track %1% is '%2%', but there was no WAVEFORMATEX struct present. Therefore we don't have a format ID to identify the audio codec used.\n"
 msgstr "matroska_reader: 轨 %1% 的 CodecID 为 '%2%'，但没有出现 WAVEFORMATEX 波形格式项索引结构。因此我们没有可标记音频编码的 Format ID。\n"
 
-#: src/input/r_matroska.cpp:469
+#: src/input/r_matroska.cpp:468
 #, boost-format
 msgid "matroska_reader: The CodecID for track %1% is '%2%', but there was no codec private headers.\n"
 msgstr "matroska_reader: 轨 %1% 的 CodecID 为 '%2%'，但没有编解码器专有头。\n"
 
-#: src/input/r_matroska.cpp:511
-#: src/input/r_matroska.cpp:522
+#: src/input/r_matroska.cpp:510
+#: src/input/r_matroska.cpp:521
 #, boost-format
 msgid "matroska_reader: The CodecID for track %1% is '%2%', but there was no private data found.\n"
 msgstr "matroska_reader: 轨 %1% 的 CodecID 为 '%2%'，但没发现专有数据。\n"
 
-#: src/input/r_matroska.cpp:348
+#: src/input/r_matroska.cpp:347
 #, boost-format
 msgid "matroska_reader: The CodecID for track %1% is 'A_VORBIS', but there are no header packets present.\n"
 msgstr "matroska_reader: 轨 %1% 的 CodecID 为 'A_VORBIS'，但没有出现头部包。\n"
 
-#: src/input/r_matroska.cpp:1110
+#: src/input/r_matroska.cpp:1109
 msgid "matroska_reader: The CodecID is missing.\n"
 msgstr "matroska_reader: 缺 CodecID。\n"
 
-#: src/input/r_matroska.cpp:497
+#: src/input/r_matroska.cpp:496
 #, boost-format
 msgid "matroska_reader: The height for track %1% was not set.\n"
 msgstr "matroska_reader: 未设置轨道 %1% 的高。\n"
 
-#: src/input/r_matroska.cpp:491
+#: src/input/r_matroska.cpp:490
 #, boost-format
 msgid "matroska_reader: The width for track %1% was not set.\n"
 msgstr "matroska_reader: 未设置轨道 %1% 的宽。\n"
 
-#: src/input/r_matroska.cpp:597
+#: src/input/r_matroska.cpp:596
 #, boost-format
 msgid "matroska_reader: Track %1% seems to be ok.\n"
 msgstr "matroska_reader: 轨道 %1% 应该是正常的。\n"
 
-#: src/input/r_matroska.cpp:1089
+#: src/input/r_matroska.cpp:1088
 msgid "matroska_reader: Track type was not found.\n"
 msgstr "matroska_reader: 轨道类型未找到。\n"
 
-#: src/input/r_matroska.cpp:354
+#: src/input/r_matroska.cpp:353
 msgid "matroska_reader: Vorbis track does not contain valid headers.\n"
 msgstr "matroska_reader: Vorbis 轨道不含有效头。\n"
 
-#: src/input/r_matroska.cpp:1344
-#: src/input/r_matroska.cpp:2014
+#: src/input/r_matroska.cpp:1343
+#: src/input/r_matroska.cpp:2006
 msgid "matroska_reader: caught exception\n"
 msgstr "matroska_reader: 发生异常\n"
 
-#: src/input/r_matroska.cpp:339
+#: src/input/r_matroska.cpp:338
 #, boost-format
 msgid "matroska_reader: mkvmerge was not compiled with FLAC support. Ignoring track %1%.\n"
 msgstr "matroska_reader: mkvmerge 编译时没有附加 FLAC 支持。已忽略轨道 %1%。\n"
 
-#: src/input/r_matroska.cpp:1238
+#: src/input/r_matroska.cpp:1237
 msgid "matroska_reader: no EBML head found.\n"
 msgstr "matroska_reader: 未发现 EBML 头。\n"
 
-#: src/input/r_matroska.cpp:592
+#: src/input/r_matroska.cpp:591
 #, boost-format
 msgid "matroska_reader: unknown demuxer type for track %1%: '%2%'\n"
 msgstr "matroska_reader: 轨道 %1% 分离器类型未知: '%2%'\n"
 
-#: src/input/r_matroska.cpp:1078
+#: src/input/r_matroska.cpp:1077
 #, boost-format
 msgid "matroska_reader: |  + There's more than one track with the UID %1%.\n"
 msgstr "matroska_reader: |  + 有超过一个轨道使用了 UID %1%。\n"
 
-#: src/input/r_matroska.cpp:1067
+#: src/input/r_matroska.cpp:1066
 #, boost-format
 msgid "matroska_reader: |  + There's more than one track with the number %1%.\n"
 msgstr "matroska_reader: |  + 有超过一个轨道使用了数字 %1%。\n"
@@ -8851,7 +8715,7 @@ msgstr "mkvmerge 执行完毕，返回代码 %d。%s"
 msgid "mkvmerge has finished"
 msgstr "mkvmerge 已经执行完毕"
 
-#: src/input/r_ogm.cpp:500
+#: src/input/r_ogm.cpp:499
 msgid "mkvmerge has not been compiled with FLAC support but handling of this stream has been requested.\n"
 msgstr "mkvmerge 编译时未包含 FLAC 支持，但收到了对此类流的处理请求。\n"
 
@@ -8886,7 +8750,7 @@ msgstr "mkvmerge 支持两种章节格式：类似 OGM 的文本格式和全功�
 msgid "mkvmerge was interrupted by a SIGINT (Ctrl+C?)\n"
 msgstr "mkvmerge 被 SIGINT 中断 (按了 Ctrl+C?)\n"
 
-#: src/input/r_qtmp4.cpp:557
+#: src/input/r_qtmp4.cpp:556
 msgid "mkvmerge was not compiled with zlib. Compressed headers in QuickTime/MP4 files are therefore not supported.\n"
 msgstr "mkvmerge 编译时没有使用 zlib。因此不支持 QuickTime/MP4 文件中已压缩的头部。\n"
 
@@ -8923,7 +8787,7 @@ msgstr "若没有选中任何项，mmg 将重置为默认列表。"
 msgid "mono"
 msgstr "单视角"
 
-#: src/input/r_mp3.cpp:58
+#: src/input/r_mp3.cpp:57
 msgid "mp3_reader: Could not open the source file."
 msgstr "mp3_reader: 无法打开源文件。"
 
@@ -8935,12 +8799,12 @@ msgstr "mpeg_es_reader: 无法打开文件。"
 msgid "mpeg_ps_reader: Could not open the file."
 msgstr "mpeg_ps_reader: 无法打开文件。"
 
-#: src/input/r_mpeg_ps.cpp:1194
+#: src/input/r_mpeg_ps.cpp:1190
 #, boost-format
 msgid "mpeg_ps_reader: Should not have happened #1. %1%"
 msgstr "mpeg_ps_reader: 不该发生 #1。 %1%"
 
-#: src/input/r_mpeg_ps.cpp:1223
+#: src/input/r_mpeg_ps.cpp:1216
 #, boost-format
 msgid "mpeg_ps_reader: Should not have happened #2. %1%"
 msgstr "mpeg_ps_reader: 不该发生 #2。 %1%"
@@ -8986,12 +8850,12 @@ msgstr "无"
 msgid "normal"
 msgstr "普通"
 
-#: src/input/r_ogm.cpp:472
+#: src/input/r_ogm.cpp:471
 #, boost-format
 msgid "ogg_stream_init for stream number %1% failed. Will try to continue and ignore this stream.\n"
 msgstr "ogg_stream_init 对流号 %1% 失败。将尝试继续并忽略该流。\n"
 
-#: src/input/r_ogm.cpp:384
+#: src/input/r_ogm.cpp:383
 msgid "ogg_sync_buffer failed\n"
 msgstr "ogg_sync_buffer 失败\n"
 
@@ -8999,7 +8863,7 @@ msgstr "ogg_sync_buffer 失败\n"
 msgid "ogm_reader: Could not open the source file."
 msgstr "ogm_reader: 无法打开源文件。"
 
-#: src/input/r_ogm.cpp:340
+#: src/input/r_ogm.cpp:339
 msgid "ogm_reader: Could not read all header packets."
 msgstr "ogm_reader: 无法读取所有头部包。"
 
@@ -9019,6 +8883,10 @@ msgstr "仅 I 帧"
 #, boost-format
 msgid "output sampling freq: %1%"
 msgstr "输出采样率: %1%"
+
+#: src/output/p_passthrough.h:30
+msgid "passthrough"
+msgstr ""
 
 #: src/mmg/jobs.cpp:528
 #: src/mmg/jobs.cpp:702
@@ -9082,12 +8950,12 @@ msgstr "就绪"
 msgid "real_reader: Could not read the source file."
 msgstr "real_reader: 无法读取源文件。"
 
-#: src/input/r_real.cpp:246
+#: src/input/r_real.cpp:245
 #, boost-format
 msgid "real_reader: Couldn't find RealAudio FourCC for id %1% (description length: %2%) Skipping track.\n"
 msgstr "real_reader: 无法为轨 id %1% (描述信息长: %2%) 找到 RealAudio FourCC。正在跳过该轨。\n"
 
-#: src/input/r_real.cpp:274
+#: src/input/r_real.cpp:273
 #, boost-format
 msgid "real_reader: Only audio header versions 3, 4 and 5 are supported. Track ID %1% uses version %2% and will be skipped.\n"
 msgstr "real_reader: 仅支持第 3, 4 和 5 版的音频头。轨道 ID %1% 所用版本为 %2% ，将被跳过。\n"
@@ -9173,6 +9041,11 @@ msgstr "字幕"
 msgid "tet_index: '%1%' not found\n"
 msgstr "tet_index: '%1%' 未发现\n"
 
+#: src/output/p_textsubs.h:38
+#, fuzzy
+msgid "text subtitles"
+msgstr "SRT 文本字幕"
+
 #: src/merge/mkvmerge.cpp:2047
 msgid "timecodes"
 msgstr "时间码"
@@ -9189,7 +9062,7 @@ msgstr "上下 (右先)"
 msgid "track name"
 msgstr "轨道名称"
 
-#: src/input/r_truehd.cpp:76
+#: src/input/r_truehd.cpp:75
 msgid "truehd_reader: Could not open the source file."
 msgstr "truehd_reader: 无法打开源文件。"
 
@@ -9221,15 +9094,15 @@ msgstr "und (未定)"
 #: src/info/mkvinfo.cpp:892
 #: src/info/mkvinfo.cpp:1110
 #: src/input/r_matroska.cpp:91
-#: src/input/r_matroska.cpp:2332
-#: src/input/r_mpeg_ps.cpp:1392
+#: src/input/r_matroska.cpp:2334
+#: src/input/r_mpeg_ps.cpp:1385
 #: src/mmg/header_editor/value_page.cpp:150
 #: src/mmg/mmg.cpp:65
 #: src/mmg/tabs/input.cpp:339
 msgid "unknown"
 msgstr "未知"
 
-#: src/input/r_matroska.cpp:2325
+#: src/input/r_matroska.cpp:2327
 #, boost-format
 msgid "unknown, format tag 0x%|1$04x|"
 msgstr "未知，格式标识 0x%|1$04x|"
@@ -9277,31 +9150,31 @@ msgstr "vobsub_reader: 无法打开源文件。"
 msgid "vobsub_reader: Could not open the sub file"
 msgstr "vobsub_reader: 无法打开 sub 文件"
 
-#: src/input/r_vobsub.cpp:573
+#: src/input/r_vobsub.cpp:572
 msgid "vobsub_reader: sub_file->read failure"
 msgstr "vobsub_reader: sub_file->read 读取失败"
 
-#: src/input/r_wav.cpp:449
+#: src/input/r_wav.cpp:462
 msgid "wav_reader: Could not open the source file."
 msgstr "wav_reader: 无法打开源文件。"
 
-#: src/input/r_wav.cpp:501
+#: src/input/r_wav.cpp:514
 msgid "wav_reader: No data chunk was found."
 msgstr "wav_reader: 未发现数据块。"
 
-#: src/input/r_wav.cpp:472
+#: src/input/r_wav.cpp:485
 msgid "wav_reader: No format chunk found."
 msgstr "wav_reader: 未发现格式块。"
 
-#: src/input/r_wav.cpp:453
+#: src/input/r_wav.cpp:466
 msgid "wav_reader: Source is not a valid WAVE file."
 msgstr "wav_reader: 源非有效的 WAVE 文件。"
 
-#: src/input/r_wav.cpp:497
+#: src/input/r_wav.cpp:510
 msgid "wav_reader: The format chunk could not be read."
 msgstr "wav_reader: 格式块不可读。"
 
-#: src/input/r_wav.cpp:467
+#: src/input/r_wav.cpp:480
 msgid "wav_reader: could not read WAVE header."
 msgstr "wav_reader: 无法读取 WAVE 头。"
 
@@ -9309,11 +9182,11 @@ msgstr "wav_reader: 无法读取 WAVE 头。"
 msgid "wavpack_reader: Could not open the file."
 msgstr "wavpack_reader: 无法打开文件。"
 
-#: src/common/wavpack.cpp:149
+#: src/common/wavpack.cpp:158
 msgid "wavpack_reader: non-audio block found\n"
 msgstr "wavpack_reader: 未发现音频块\n"
 
-#: src/common/wavpack.cpp:117
+#: src/common/wavpack.cpp:126
 msgid "wavpack_reader: unknown sample rate!\n"
 msgstr "wavpack_reader: 未知采样率!\n"
 
@@ -9459,9 +9332,6 @@ msgstr "是"
 #~ msgid "Global tags"
 #~ msgstr "全局标签"
 
-#~ msgid "IVF with VP8"
-#~ msgstr "含 VP8 的 IVF"
-
 #~ msgid ""
 #~ "Known file types:\n"
 #~ "  ext   description\n"
@@ -9473,9 +9343,6 @@ msgstr "是"
 
 #~ msgid "Left eye"
 #~ msgstr "左眼视角"
-
-#~ msgid "MPEG program stream"
-#~ msgstr "MPEG PS 程序流"
 
 #~ msgid "MPEG-1 layer II audio (CBR and VBR/ABR)"
 #~ msgstr "MPEG-1 第 II 层音频 (CBR 或 VBR/ABR)"
@@ -9739,13 +9606,205 @@ msgstr "是"
 #~ "  -h, --help     显示本帮助。\n"
 #~ "  -V, --version  显示版本信息。\n"
 
+#~ msgid "Using the %1%AC3 output module.\n"
+#~ msgstr "使用 %1%AC3 输出模块。\n"
+
+#~ msgid "Using the AAC audio output module.\n"
+#~ msgstr "使用 AAC 音频输出模块。\n"
+
+#~ msgid "Using the AAC output module.\n"
+#~ msgstr "使用 AAC 输出模块。\n"
+
+#~ msgid "Using the AC3 demultiplexer.\n"
+#~ msgstr "使用 AC3 分离器。\n"
+
+#~ msgid "Using the AC3 output module (FourCC: %1%).\n"
+#~ msgstr "使用 AC3 输出模块 (FourCC: %1%)。\n"
+
+#~ msgid "Using the AC3 output module.\n"
+#~ msgstr "使用 AC3 输出模块。\n"
+
+#~ msgid "Using the AVC/h.264 ES demultiplexer.\n"
+#~ msgstr "使用 AVC/h.264 ES 分离器。\n"
+
+#~ msgid "Using the AVI demultiplexer. Opening file. This may take some time depending on the file's size.\n"
+#~ msgstr "使用 AVI 分离器。正在打开文件。这需要一些时间（取决于文件尺寸）。\n"
+
+#~ msgid "Using the CorePanorama subtitle reader.\n"
+#~ msgstr "使用 CorePanorama 字幕读取器。\n"
+
+#~ msgid "Using the DTS demultiplexer.\n"
+#~ msgstr "使用 DTS 分离器。\n"
+
+#~ msgid "Using the DTS output module.\n"
+#~ msgstr "使用 DTS 输出模块。\n"
+
+#~ msgid "Using the Dirac demultiplexer.\n"
+#~ msgstr "使用 Dirac 分离器。\n"
+
+#~ msgid "Using the Dirac video output module.\n"
+#~ msgstr "使用 Dirac 视频输出模块。\n"
+
+#~ msgid "Using the FLAC demultiplexer.\n"
+#~ msgstr "使用 FLAC 分离器。\n"
+
+#~ msgid "Using the FLAC output module.\n"
+#~ msgstr "使用 FLAC 输出模块。\n"
+
+#~ msgid "Using the IVF demultiplexer.\n"
+#~ msgstr "使用 IVF 分离器。\n"
+
 #, fuzzy
 #~ msgid "Using the IVF output module.\n"
 #~ msgstr "使用 FLAC 输出模块。\n"
 
+#~ msgid "Using the Kate output module.\n"
+#~ msgstr "使用 Kate 输出模块。\n"
+
+#~ msgid "Using the Kate subtitle output module.\n"
+#~ msgstr "使用 Kate 字幕输出模块。\n"
+
+#~ msgid "Using the MP2/MP3 demultiplexer.\n"
+#~ msgstr "使用 MP2/MP3 分离器。\n"
+
+#~ msgid "Using the MPEG ES demultiplexer.\n"
+#~ msgstr "使用 MPEG ES 分离器。\n"
+
+#~ msgid "Using the MPEG PS demultiplexer.\n"
+#~ msgstr "使用 MPEG PS 分离器。\n"
+
+#~ msgid "Using the MPEG audio output module.\n"
+#~ msgstr "使用 MPEG 音频输出模块。\n"
+
+#~ msgid "Using the MPEG-%1% video output module.\n"
+#~ msgstr "使用 MPEG-%1% 视频输出模块。\n"
+
+#~ msgid "Using the MPEG-1/2 video output module.\n"
+#~ msgstr "使用 MPEG-1/2 视频输出模块。\n"
+
+#~ msgid "Using the MPEG-4 part 10 (AVC) video output module.\n"
+#~ msgstr "使用 MPEG-4 part 10 (AVC) 视频输出模块。\n"
+
+#~ msgid "Using the MPEG-4 part 10 ES video output module.\n"
+#~ msgstr "使用 MPEG-4 part 10 ES 视频输出模块。\n"
+
+#~ msgid "Using the MPEG-4 part 2 video output module.\n"
+#~ msgstr "使用 MPEG-4 part 2 视频输出模块。\n"
+
+#~ msgid "Using the Matroska demultiplexer.\n"
+#~ msgstr "使用 Matroska 分离器。\n"
+
+#~ msgid "Using the OGG/OGM demultiplexer.\n"
+#~ msgstr "使用 OGG/OGM 分离器。\n"
+
+#~ msgid "Using the PCM output module.\n"
+#~ msgstr "使用 PCM 输出模块。\n"
+
+#~ msgid "Using the PGS output module.\n"
+#~ msgstr "使用 PGS 输出模块。\n"
+
+#~ msgid "Using the PGSSUP demultiplexer.\n"
+#~ msgstr "使用 PGSSUP 分离器。\n"
+
+#~ msgid "Using the Quicktime/MP4 demultiplexer.\n"
+#~ msgstr "使用 Quicktime/MP4 分离器。\n"
+
+#~ msgid "Using the RealAudio output module (FourCC: %1%).\n"
+#~ msgstr "使用 RealAudio 输出模块 (FourCC: %1%)。\n"
+
+#~ msgid "Using the RealMedia demultiplexer.\n"
+#~ msgstr "使用 RealMedia 分离器。\n"
+
+#~ msgid "Using the SRT subtitle reader.\n"
+#~ msgstr "使用 SRT 字幕读取器。\n"
+
+#~ msgid "Using the SSA/ASS subtitle output module.\n"
+#~ msgstr "使用 SSA/ASS 字幕输出模块。\n"
+
+#~ msgid "Using the SSA/ASS subtitle reader.\n"
+#~ msgstr "使用 SSA/ASS 字幕读取器。\n"
+
+#~ msgid "Using the TTA demultiplexer.\n"
+#~ msgstr "使用 TTA 分离器。\n"
+
+#~ msgid "Using the TTA output module.\n"
+#~ msgstr "使用 TTA 输出模块。\n"
+
+#~ msgid "Using the Theora video output module.\n"
+#~ msgstr "使用 Theora 视频输出模块。\n"
+
+#~ msgid "Using the TrueHD output module.\n"
+#~ msgstr "使用 TrueHD 输出模块。\n"
+
+#~ msgid "Using the TrueHD/MLP demultiplexer.\n"
+#~ msgstr "使用 TrueHD/MLP 分离器。\n"
+
+#~ msgid "Using the TrueHD/MLP output module.\n"
+#~ msgstr "使用 TrueHD/MLP 输出模块。\n"
+
+#~ msgid "Using the USF subtitle reader.\n"
+#~ msgstr "使用 USF 字幕读取器。\n"
+
+#~ msgid "Using the VC1 ES demultiplexer.\n"
+#~ msgstr "使用 VC1 ES 分离器。\n"
+
+#~ msgid "Using the VC1 video output module.\n"
+#~ msgstr "使用 VC1 视频输出模块。\n"
+
+#~ msgid "Using the VP8 video output module.\n"
+#~ msgstr "使用 VP8 视频输出模块。\n"
+
+#~ msgid "Using the VobBtn button reader.\n"
+#~ msgstr "使用 VobBtn 按钮读取器。\n"
+
+#~ msgid "Using the VobBtn output module.\n"
+#~ msgstr "使用 VobBtn 输出模块。\n"
+
+#~ msgid "Using the VobSub output module.\n"
+#~ msgstr "使用 VobSub 输出模块。\n"
+
+#~ msgid "Using the VobSub subtitle output module (language: %1%).\n"
+#~ msgstr "使用 VobSub 字幕输出模块 (语言: %1%)。\n"
+
+#~ msgid "Using the VobSub subtitle reader (SUB file '%1%').\n"
+#~ msgstr "使用 VobSub 字幕读取器 (SUB 文件 '%1%')。\n"
+
+#~ msgid "Using the Vorbis output module.\n"
+#~ msgstr "使用 Vorbis 输出模块。\n"
+
 #, fuzzy
 #~ msgid "Using the Vp8 video output module.\n"
 #~ msgstr "使用 VP8 视频输出模块。\n"
+
+#~ msgid "Using the WAV demultiplexer.\n"
+#~ msgstr "使用 WAV 分离器。\n"
+
+#~ msgid "Using the WAVPACK demultiplexer with a correction file.\n"
+#~ msgstr "使用附带了纠错文件的 WAVPACK 分离器。\n"
+
+#~ msgid "Using the WAVPACK demultiplexer.\n"
+#~ msgstr "使用 WAVPACK 分离器。\n"
+
+#~ msgid "Using the WAVPACK output module.\n"
+#~ msgstr "使用 WAVPACK 输出模块。\n"
+
+#~ msgid "Using the generic audio output module (FourCC: %|1$.4s|).\n"
+#~ msgstr "使用通用音频输出模块 (FourCC: %|1$.4s|)。\n"
+
+#~ msgid "Using the passthrough output module for this %1% track.\n"
+#~ msgstr "对轨道 %1% 使用呈递输出模块。\n"
+
+#~ msgid "Using the text subtitle output module.\n"
+#~ msgstr "使用文本字幕输出模块。\n"
+
+#~ msgid "Using the video output module (FourCC: %1%).\n"
+#~ msgstr "使用视频输出模块 (FourCC: %1%)。\n"
+
+#~ msgid "Using the video output module (FourCC: %|1$.4s|).\n"
+#~ msgstr "使用视频输出模块 (FourCC: %|1$.4s|)。\n"
+
+#~ msgid "Using the video output module.\n"
+#~ msgstr "使用视频输出模块。\n"
 
 #~ msgid "VC1 video elementary stream"
 #~ msgstr "VC1 视频基本流"

@@ -1372,7 +1372,7 @@ kax_reader_c::init_passthrough_packetizer(kax_track_t *t) {
   passthrough_packetizer_c *ptzr;
   track_info_c nti(m_ti);
 
-  mxinfo_tid(m_ti.m_fname, t->tnum, boost::format(Y("Using the output module for track type '%1%'.\n")) % MAP_TRACK_TYPE_STRING(t->type));
+  mxinfo_tid(m_ti.m_fname, t->tnum, boost::format(Y("Using the generic output module for track type '%1%'.\n")) % MAP_TRACK_TYPE_STRING(t->type));
 
   nti.m_id                  = t->tnum;
   nti.m_language            = t->language;
