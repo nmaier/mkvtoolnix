@@ -72,7 +72,7 @@ truehd_reader_c::truehd_reader_c(track_info_c &_ti)
     show_demuxer_info();
 
   } catch (...) {
-    throw error_c(Y("truehd_reader: Could not open the source file."));
+    throw error_c(boost::format(Y("%1%: Could not open the source file.")) % get_format_name());
   }
 }
 

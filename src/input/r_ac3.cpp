@@ -64,7 +64,7 @@ ac3_reader_c::ac3_reader_c(track_info_c &_ti)
     io->setFilePointer(tag_size_start, seek_beginning);
 
   } catch (...) {
-    throw error_c(Y("ac3_reader: Could not open the source file."));
+    throw error_c(boost::format(Y("%1%: Could not open the source file.")) % get_format_name());
   }
 
   if (0 > find_ac3_header(chunk->get_buffer(), AC3_READ_SIZE, &ac3header, true))

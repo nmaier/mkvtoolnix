@@ -82,7 +82,7 @@ corepicture_reader_c::corepicture_reader_c(track_info_c &_ti)
     throw error_c(error.get_error());
 
   } catch (mm_io_error_c &) {
-    throw error_c(Y("corepicture_reader: Could not open the source file."));
+    throw error_c(boost::format(Y("%1%: Could not open the source file.")) % get_format_name());
   }
 
   show_demuxer_info();

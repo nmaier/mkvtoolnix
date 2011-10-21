@@ -54,7 +54,7 @@ mp3_reader_c::mp3_reader_c(track_info_c &_ti)
     bytes_processed = 0;
     m_ti.m_id       = 0;        // ID for this track.
   } catch (...) {
-    throw error_c(Y("mp3_reader: Could not open the source file."));
+    throw error_c(boost::format(Y("%1%: Could not open the source file.")) % get_format_name());
   }
 }
 

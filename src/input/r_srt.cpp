@@ -37,7 +37,7 @@ srt_reader_c::srt_reader_c(track_info_c &p_ti)
     m_subs    = srt_parser_cptr(new srt_parser_c(m_io.get_object(), m_ti.m_fname, 0));
 
   } catch (...) {
-    throw error_c(Y("srt_reader: Could not open the source file."));
+    throw error_c(boost::format(Y("%1%: Could not open the source file.")) % get_format_name());
   }
 
   show_demuxer_info();

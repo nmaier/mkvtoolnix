@@ -63,7 +63,7 @@ dts_reader_c::dts_reader_c(track_info_c &_ti)
     io->setFilePointer(0, seek_beginning);
 
   } catch (...) {
-    throw error_c(Y("dts_reader: Could not open the source file."));
+    throw error_c(boost::format(Y("%1%: Could not open the source file.")) % get_format_name());
   }
 
   detect_dts(buf[cur_buf], READ_SIZE, dts14_to_16, swap_bytes);

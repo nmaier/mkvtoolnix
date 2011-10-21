@@ -326,7 +326,7 @@ ogm_reader_c::ogm_reader_c(track_info_c &_ti)
     io        = new mm_file_io_c(m_ti.m_fname);
     file_size = io->get_size();
   } catch (...) {
-    throw error_c(Y("ogm_reader: Could not open the source file."));
+    throw error_c(boost::format(Y("%1%: Could not open the source file.")) % get_format_name());
   }
   if (!ogm_reader_c::probe_file(io, file_size))
     throw error_c(Y("ogm_reader: Source is not a valid OGG media file."));
