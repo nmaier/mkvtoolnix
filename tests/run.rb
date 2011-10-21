@@ -21,7 +21,7 @@ end
 
 class TestController
   attr_accessor :test_failed, :test_new, :test_date_after, :teset_date_before, :update_failed, :num_failed, :record_duration
-  attr_reader   :num_threads
+  attr_reader   :num_threads, :results
 
   def initialize
     @results          = Results.new(self)
@@ -298,6 +298,8 @@ class Test
 end
 
 class Results
+  attr_reader :results
+
   def initialize(controller)
     @controller = controller
 
@@ -397,8 +399,11 @@ def main
       controller.test_date_after = Time.local($1, $2, $3, $4, $5, $6)
     elsif (arg =~ /-D([0-9]{4})([0-9]{2})([0-9]{2})-([0-9]{2})([0-9]{2})/)
       controller.test_date_before = Time.local($1, $2, $3, $4, $5, $6)
-    elsif (arg =~ /^[0-9]{3}$/)
-      controller.add_test_case arg
+    elsif /^ (\d{3}) (?: - (\d{3}) )?$/x.match arg
+      $1.to_i.upto(($2 || $1).to_i) { |idx| controller.add_test_case sprintf("%03d", idx) }
+    elsif %r{^ / (.+) / $}x.match arg
+      re = Regexp.new "^T_(\\d+)#{$1}", Regexp::IGNORECASE
+      controller.results.results.keys.collect { |e| re.match(e) ? $1 : nil }.compact.each { |e| controller.add_test_case e }
     elsif arg =~ /-j(\d+)/
       controller.num_threads = $1.to_i
     else
