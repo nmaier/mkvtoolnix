@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2011-10-13 17:20+0900\n"
+"PO-Revision-Date: 2011-10-21 19:40+0900\n"
 "Last-Translator: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "Language-Team: Japanese <boiled.sugar@gmail.com>\n"
 "Language: ja\n"
@@ -1695,7 +1695,7 @@ msgstr "A/52（別名AC3）"
 #: src/input/r_aac.h:39
 #: src/output/p_aac.h:43
 msgid "AAC"
-msgstr ""
+msgstr "AAC"
 
 #: src/common/file_types.cpp:26
 msgid "AAC (Advanced Audio Coding)"
@@ -1716,7 +1716,7 @@ msgstr "ADIFヘッダつきのAAC"
 #: src/input/r_ac3.h:38
 #: src/output/p_ac3.h:42
 msgid "AC3"
-msgstr ""
+msgstr "AC3"
 
 #: src/mmg/header_editor/value_page.cpp:143
 msgid ""
@@ -1728,7 +1728,7 @@ msgstr "ASCII文字列（日本語やウムラウトなどの特殊な文字は�
 #: src/output/p_avc.h:46
 #: src/output/p_mpeg4_p10.h:34
 msgid "AVC/h.264"
-msgstr ""
+msgstr "AVC/h.264"
 
 #: src/common/file_types.cpp:27
 msgid "AVC/h.264 elementary streams"
@@ -1736,7 +1736,7 @@ msgstr "AVC/h.264エレメンタリストリーム"
 
 #: src/input/r_avi.h:88
 msgid "AVI"
-msgstr ""
+msgstr "AVI"
 
 #: src/common/file_types.cpp:28
 msgid "AVI (Audio/Video Interleaved)"
@@ -1892,9 +1892,9 @@ msgid "Also try to extract the CUE sheet from the chapter information and tags f
 msgstr "このトラックのチャプタ情報とタグからCUEシートの抽出も試みます。"
 
 #: src/input/r_wavpack.cpp:87
-#, fuzzy, boost-format
+#, boost-format
 msgid "Also using the correction file '%1%c'.\n"
-msgstr "付随する訂正ファイル'%1%c'を開くことができませんでした。\n"
+msgstr "訂正ファイル'%1%c'も使用しています。\n"
 
 #: src/mmg/options/mmg.cpp:92
 msgid "Always on top"
@@ -2895,7 +2895,7 @@ msgstr "削除(&D)"
 #: src/input/r_dts.h:41
 #: src/output/p_dts.h:48
 msgid "DTS"
-msgstr ""
+msgstr "DTS"
 
 #: src/output/p_dts.cpp:84
 msgid "DTS header information changed! - New format:\n"
@@ -3399,7 +3399,7 @@ msgstr "コーデックID '%2%'のトラック番号%1%の抽出はサポート�
 #: src/input/r_flac.h:54
 #: src/output/p_flac.h:39
 msgid "FLAC"
-msgstr ""
+msgstr "FLAC"
 
 #: src/common/file_types.cpp:33
 msgid "FLAC (Free Lossless Audio Codec)"
@@ -3788,9 +3788,8 @@ msgid "ISO639-2 code"
 msgstr "ISO639-2コード"
 
 #: src/input/r_ivf.h:35
-#, fuzzy
 msgid "IVF (VP8)"
-msgstr "VP8入りのIVF"
+msgstr "IVF (VP8)"
 
 #: src/common/file_types.cpp:35
 msgid "IVF with VP8 video files"
@@ -4242,7 +4241,7 @@ msgstr "ジョブキューの管理"
 
 #: src/output/p_kate.h:40
 msgid "Kate"
-msgstr ""
+msgstr "Kate（カラオケテキスト）"
 
 #: src/output/p_kate.cpp:78
 msgid "Kate packet is too small and is being skipped.\n"
@@ -4384,11 +4383,11 @@ msgstr "MKVToolNixはGNU GPL v2でライセンスされています"
 
 #: src/input/r_mp3.h:38
 msgid "MP2/MP3"
-msgstr ""
+msgstr "MP2/MP3"
 
 #: src/output/p_mp3.h:42
 msgid "MP3"
-msgstr ""
+msgstr "MP3"
 
 #: src/common/file_types.cpp:36
 msgid "MP4 audio/video files"
@@ -4407,7 +4406,6 @@ msgid "MPEG program streams"
 msgstr "MPEGプログラムストリーム"
 
 #: src/input/r_mpeg_ts.h:284
-#, fuzzy
 msgid "MPEG transport stream"
 msgstr "MPEGトランスポートストリーム"
 
@@ -4416,7 +4414,6 @@ msgid "MPEG transport streams"
 msgstr "MPEGトランスポートストリーム"
 
 #: src/input/r_mpeg_es.h:43
-#, fuzzy
 msgid "MPEG video elementary stream"
 msgstr "MPEGビデオエレメンタリストリーム"
 
@@ -4426,11 +4423,11 @@ msgstr "MPEGビデオエレメンタリストリーム"
 
 #: src/output/p_mpeg1_2.h:36
 msgid "MPEG-1/2"
-msgstr ""
+msgstr "MPEG-1/2"
 
 #: src/output/p_mpeg4_p2.h:66
 msgid "MPEG-4"
-msgstr ""
+msgstr "MPEG-4"
 
 #: src/mmg/tabs/input_general.cpp:184
 msgid "Make this track the default track for its type (audio, video, subtitles). Players should prefer tracks with the default track flag set."
@@ -4459,7 +4456,7 @@ msgstr "このトラックを強制表示として設定します。プレーヤ
 
 #: src/input/r_matroska.h:198
 msgid "Matroska"
-msgstr ""
+msgstr "Matroska"
 
 #: src/mmg/mmg_dialog.cpp:338
 #, c-format, boost-format
@@ -4506,7 +4503,7 @@ msgstr "メモリアロケーションエラー：%1%（%2%）。\n"
 
 #: src/extract/xtr_rmff.cpp:74
 msgid "Memory for a RealAudio/RealVideo frame could not be allocated.\n"
-msgstr "リアルオーディオ/リアルビデオのフレームのためにメモリを確保することができませんでした。\n"
+msgstr "RealAudio/RealVideoのフレームのためのメモリを確保することができませんでした。\n"
 
 #: src/info/mkvinfo.cpp:1317
 #, boost-format
@@ -4851,7 +4848,7 @@ msgstr "トラックのチャンネル数です。"
 
 #: src/input/r_ogm.h:108
 msgid "Ogg/OGM"
-msgstr ""
+msgstr "Ogg/OGM"
 
 #: src/common/file_types.cpp:44
 msgid "Ogg/OGM audio/video files"
@@ -4998,11 +4995,11 @@ msgstr "既存のファイルに上書きしますか？"
 
 #: src/output/p_pcm.h:41
 msgid "PCM"
-msgstr ""
+msgstr "PCM"
 
 #: src/output/p_pgs.h:38
 msgid "PGS"
-msgstr ""
+msgstr "PGS"
 
 #: src/common/file_types.cpp:42
 msgid "PGS/SUP subtitles"
@@ -5010,7 +5007,7 @@ msgstr "PGS/SUP字幕"
 
 #: src/input/r_pgssup.h:36
 msgid "PGSSUP"
-msgstr ""
+msgstr "PGSSUP"
 
 #: src/input/r_vobsub.cpp:536
 #, boost-format
@@ -5169,7 +5166,7 @@ msgstr "QuickTime オーディオ/ビデオファイル"
 
 #: src/input/r_qtmp4.h:282
 msgid "QuickTime/MP4"
-msgstr ""
+msgstr "QuickTime/MP4"
 
 #: src/input/r_qtmp4.cpp:472
 #, boost-format
@@ -5346,13 +5343,12 @@ msgid "Real output sampling frequency in Hz."
 msgstr "実際の出力サンプリング周波数（Hz単位）です。"
 
 #: src/output/p_realaudio.h:36
-#, fuzzy
 msgid "RealAudio"
-msgstr "オーディオ"
+msgstr "RealAudio"
 
 #: src/input/r_real.h:105
 msgid "RealMedia"
-msgstr ""
+msgstr "RealMedia"
 
 #: src/common/file_types.cpp:45
 msgid "RealMedia audio/video files"
@@ -5443,18 +5439,16 @@ msgid "SHA1-160"
 msgstr "SHA1-160"
 
 #: src/input/r_srt.h:33
-#, fuzzy
 msgid "SRT subtitles"
-msgstr "SRTテキスト字幕"
+msgstr "SRT字幕"
 
 #: src/common/file_types.cpp:46
 msgid "SRT text subtitles"
 msgstr "SRTテキスト字幕"
 
 #: src/input/r_ssa.h:32
-#, fuzzy
 msgid "SSA/ASS subtitles"
-msgstr "SSA/ASSテキスト字幕"
+msgstr "SSA/ASS字幕"
 
 #: src/common/file_types.cpp:47
 msgid "SSA/ASS text subtitles"
@@ -6080,7 +6074,7 @@ msgstr "ステータス情報を出力しません。"
 #: src/input/r_tta.h:40
 #: src/output/p_tta.h:34
 msgid "TTA"
-msgstr ""
+msgstr "TTA"
 
 #: src/common/file_types.cpp:48
 msgid "TTA (The lossless True Audio codec)"
@@ -7083,7 +7077,7 @@ msgstr "2つのトラック間で横解像度が異なっています：%1%と%2
 
 #: src/output/p_theora.h:28
 msgid "Theora"
-msgstr ""
+msgstr "Theora"
 
 #: src/mmg/mmg_dialog.cpp:1754
 msgid "There is a new version available online."
@@ -7463,9 +7457,8 @@ msgstr "トラック、チャプタ、タグ："
 
 #: src/input/r_truehd.h:38
 #: src/output/p_truehd.h:44
-#, fuzzy
 msgid "TrueHD"
-msgstr "Dolby TrueHD"
+msgstr "TrueHD"
 
 #: src/mmg/cli_options_dlg.cpp:143
 msgid "TrueHD audio streams know two frame types: sync frames and non-sync frames. With this switch mkvmerge will put one sync frame and all following non-sync frames into a single Matroska block. Without it each non-sync frame is put into its own Matroska block."
@@ -7499,9 +7492,8 @@ msgid "UID:"
 msgstr "UID："
 
 #: src/input/r_usf.h:74
-#, fuzzy
 msgid "USF subtitles"
-msgstr "USFテキスト字幕"
+msgstr "USF字幕"
 
 #: src/common/file_types.cpp:49
 msgid "USF text subtitles"
@@ -7655,24 +7647,22 @@ msgid "Using a NALU size length of 3 bytes might result in tracks that won't be 
 msgstr "NALUサイズを3バイトにすると、特定のAVC/h.264コーデックでトラックがデコードできなくなるかもしれません。\n"
 
 #: src/merge/pr_generic.h:290
-#, fuzzy
 msgid "Using the demultiplexer for the format '%1%'.\n"
-msgstr "AACデマルチプレクサを使用しています。\n"
+msgstr "フォーマット'%1%'のデマルチプレクサを使用しています。\n"
 
 #: src/input/r_matroska.cpp:1375
-#, fuzzy, boost-format
+#, boost-format
 msgid "Using the generic output module for track type '%1%'.\n"
-msgstr "AAC出力モジュールを使用しています（FourCC：%1%）。\n"
+msgstr "トラックタイプ'%1%'の一般的出力モジュールを使用しています。\n"
 
 #: src/merge/pr_generic.h:292
-#, fuzzy
 msgid "Using the output module for the format '%1%'.\n"
-msgstr "AAC出力モジュールを使用しています（FourCC：%1%）。\n"
+msgstr "フォーマット'%1%'の出力モジュールを使用しています。\n"
 
 #: src/input/r_vc1.h:38
 #: src/output/p_vc1.h:39
 msgid "VC1"
-msgstr ""
+msgstr "VC1"
 
 #: src/common/file_types.cpp:50
 msgid "VC1 elementary streams"
@@ -7680,7 +7670,7 @@ msgstr "VC1エレメンタリストリーム"
 
 #: src/output/p_vp8.h:29
 msgid "VP8"
-msgstr ""
+msgstr "VP8"
 
 #: src/common/hacks.cpp:60
 msgid "Valid hacks are:\n"
@@ -7696,7 +7686,7 @@ msgstr "エラーチェックのために現在のチャプタをベリファイ
 
 #: src/output/p_video.h:45
 msgid "VfW compatible video"
-msgstr ""
+msgstr "VfW互換のビデオ"
 
 #: src/common/property_element.cpp:147
 #: src/mmg/header_editor/frame.cpp:489
@@ -7781,9 +7771,8 @@ msgstr "選択したジョブをMUX処理中のmkvmergeの出力を見ます"
 
 #: src/input/r_vobbtn.h:38
 #: src/output/p_vobbtn.h:36
-#, fuzzy
 msgid "VobBtn"
-msgstr "VobButton"
+msgstr "VobBtn"
 
 #: src/common/file_types.cpp:51
 msgid "VobButtons"
@@ -7792,7 +7781,7 @@ msgstr "VobButton"
 #: src/input/r_vobsub.h:75
 #: src/output/p_vobsub.h:37
 msgid "VobSub"
-msgstr ""
+msgstr "VobSub"
 
 #: src/common/file_types.cpp:52
 msgid "VobSub subtitles"
@@ -7800,29 +7789,27 @@ msgstr "VobSub字幕"
 
 #: src/output/p_vorbis.h:43
 msgid "Vorbis"
-msgstr ""
+msgstr "Vorbis"
 
 #: src/input/r_wav.h:79
 msgid "WAV"
-msgstr ""
+msgstr "WAV"
 
 #: src/common/file_types.cpp:53
 msgid "WAVE (uncompressed PCM audio)"
 msgstr "WAVE（非圧縮PCMオーディオ）"
 
 #: src/input/r_wavpack.h:38
-#, fuzzy
 msgid "WAVPACK"
-msgstr "WAVPACK v4オーディオ"
+msgstr "WAVPACK"
 
 #: src/common/file_types.cpp:54
 msgid "WAVPACK v4 audio"
 msgstr "WAVPACK v4オーディオ"
 
 #: src/output/p_wavpack.h:36
-#, fuzzy
 msgid "WAVPACK4"
-msgstr "WAVPACK v4オーディオ"
+msgstr "WAVPACK4"
 
 #: src/mmg/options/mmg.cpp:94
 msgid "Warn about possible incorrect usage of mmg"
@@ -8906,7 +8893,7 @@ msgstr "出力サンプル周波数：%1%"
 
 #: src/output/p_passthrough.h:30
 msgid "passthrough"
-msgstr ""
+msgstr "パススルー"
 
 #: src/mmg/jobs.cpp:528
 #: src/mmg/jobs.cpp:702
@@ -9062,9 +9049,8 @@ msgid "tet_index: '%1%' not found\n"
 msgstr "tet_index：'%1%'が見つかりませんでした\n"
 
 #: src/output/p_textsubs.h:38
-#, fuzzy
 msgid "text subtitles"
-msgstr "SRTテキスト字幕"
+msgstr "テキスト字幕"
 
 #: src/merge/mkvmerge.cpp:2047
 msgid "timecodes"
@@ -9600,4 +9586,3 @@ msgstr "はい"
 
 #~ msgid "mkvextract: Unknown mode!?\n"
 #~ msgstr "mkvextract：未知のモード！？\n"
-
