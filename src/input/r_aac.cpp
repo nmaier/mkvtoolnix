@@ -85,7 +85,7 @@ aac_reader_c::aac_reader_c(track_info_c &_ti)
       m_sbr_status_set = true;
 
   } catch (...) {
-    throw error_c(Y("aac_reader: Could not open the file."));
+    throw error_c(boost::format(Y("%1%: Could not open the file.")) % get_format_name());
   }
 
   show_demuxer_info();

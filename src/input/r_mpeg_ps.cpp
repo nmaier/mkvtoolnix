@@ -79,7 +79,7 @@ mpeg_ps_reader_c::init_reader() {
     size = io->get_size();
 
   } catch (...) {
-    throw error_c(Y("mpeg_ps_reader: Could not open the file."));
+    throw error_c(boost::format(Y("%1%: Could not open the file.")) % get_format_name());
   }
 
   try {
