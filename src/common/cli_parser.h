@@ -60,7 +60,7 @@ protected:
 
   std::string m_current_arg, m_next_arg;
 
-  std::map<hook_type_e, std::vector<cli_parser_cb_t> > m_hooks;
+  std::map<hook_type_e, std::vector<cli_parser_cb_t>> m_hooks;
 
 protected:
   cli_parser_c(const std::vector<std::string> &args);

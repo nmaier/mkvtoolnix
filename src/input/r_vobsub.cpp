@@ -661,7 +661,7 @@ vobsub_reader_c::identify() {
 
 file_status_e
 vobsub_reader_c::flush_packetizers() {
-  foreach(vobsub_track_c *track, tracks)
+  for (auto track : tracks)
     if (track->ptzr != -1)
       PTZR(track->ptzr)->flush();
 

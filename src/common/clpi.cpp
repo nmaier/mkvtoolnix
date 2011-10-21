@@ -32,7 +32,7 @@ clpi::program_t::dump() {
                        "  num_groups:                 %4%\n")
          % spn_program_sequence_start %program_map_pid % static_cast<unsigned int>(num_streams) % static_cast<unsigned int>(num_groups));
 
-  foreach(program_stream_cptr &program_stream, program_streams)
+  for (auto &program_stream : program_streams)
     program_stream->dump();
 }
 
@@ -85,7 +85,7 @@ clpi::parser_c::dump() {
                        "  program_info_start:  %2%\n")
          % m_sequence_info_start % m_program_info_start);
 
-  foreach(program_cptr &program, m_programs)
+  for (auto &program : m_programs)
     program->dump();
 }
 

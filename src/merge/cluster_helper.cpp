@@ -308,7 +308,7 @@ cluster_helper_c::render() {
       m_cluster->SetSilentTrackUsed();
 
     render_groups_c *render_group = NULL;
-    foreach(render_groups_cptr &rg, render_groups)
+    for (auto &rg : render_groups)
       if (rg->m_source == source) {
         render_group = rg.get_object();
         break;
@@ -433,7 +433,7 @@ cluster_helper_c::render() {
   }
 
   if (0 < elements_in_cluster) {
-    foreach(render_groups_cptr &rg, render_groups)
+    for (auto &rg : render_groups)
       set_duration(rg.get_object());
 
     m_cluster->SetPreviousTimecode(min_cl_timecode - m_timecode_offset - 1, (int64_t)g_timecode_scale);

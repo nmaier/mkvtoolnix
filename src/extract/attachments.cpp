@@ -102,7 +102,7 @@ handle_attachments(KaxAttachments *atts,
     attachments[attachment_ui_id] = attachment;
   }
 
-  foreach(track_spec_t &track, tracks) {
+  for (auto &track : tracks) {
     attachment_t attachment = attachments[ track.tid ];
 
     if (!attachment.valid)

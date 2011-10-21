@@ -43,7 +43,7 @@ mm_multi_file_io_c::mm_multi_file_io_c(std::vector<bfs::path> file_names,
   , m_current_local_pos(0)
   , m_current_file(0)
 {
-  foreach(const bfs::path &file_name, file_names) {
+  for (auto &file_name : file_names) {
     mm_file_io_cptr file(new mm_file_io_c(file_name.string()));
     m_files.push_back(mm_multi_file_io_c::file_t(file_name, m_total_size, file));
 
@@ -72,7 +72,7 @@ mm_multi_file_io_c::setFilePointer(int64 offset,
     throw mm_io_seek_error_c();
 
   m_current_file = 0;
-  foreach(const mm_multi_file_io_c::file_t &file, m_files) {
+  for (auto &file : m_files) {
     if ((file.m_global_start + file.m_size) < static_cast<uint64_t>(new_pos)) {
       ++m_current_file;
       continue;
@@ -124,7 +124,7 @@ mm_multi_file_io_c::_write(const void *buffer,
 
 void
 mm_multi_file_io_c::close() {
-  foreach(const mm_multi_file_io_c::file_t &file, m_files)
+  for (auto &file : m_files)
     file.m_file->close();
 
   m_files.clear();
@@ -141,7 +141,7 @@ mm_multi_file_io_c::eof() {
 std::vector<bfs::path>
 mm_multi_file_io_c::get_file_names() {
   std::vector<bfs::path> file_names;
-  foreach(const mm_multi_file_io_c::file_t &file, m_files)
+  for (auto &file : m_files)
     file_names.push_back(file.m_file_name);
 
   return file_names;
@@ -149,7 +149,7 @@ mm_multi_file_io_c::get_file_names() {
 
 void
 mm_multi_file_io_c::create_verbose_identification_info(std::vector<std::string> &verbose_info) {
-  foreach(const mm_multi_file_io_c::file_t &file, m_files)
+  for (auto &file : m_files)
     if (file.m_file_name != m_files.front().m_file_name)
       verbose_info.push_back((boost::format("other_file:%1%") % escape(file.m_file_name.string())).str());
 }
@@ -158,7 +158,7 @@ void
 mm_multi_file_io_c::display_other_file_info() {
   std::stringstream out;
 
-  foreach(const mm_multi_file_io_c::file_t &file, m_files)
+  for (auto &file : m_files)
     if (file.m_file_name != m_files.front().m_file_name) {
       if (!out.str().empty())
         out << ", ";
@@ -228,7 +228,7 @@ mm_multi_file_io_c::open_multi(const std::string &display_file_name,
   std::sort(paths.begin(), paths.end());
 
   std::vector<bfs::path> file_names;
-  foreach(const path_sorter_t &path, paths)
+  for (auto &path : paths)
     file_names.push_back(path.m_path);
 
   return mm_multi_file_io_cptr(new mm_multi_file_io_c(file_names, display_file_name));

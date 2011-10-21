@@ -457,7 +457,7 @@ mpeg_ts_reader_c::mpeg_ts_reader_c(track_info_c &_ti)
   m_io = temp_io;
   m_io->setFilePointer(0, seek_beginning); // rewind file for later remux
 
-  foreach(mpeg_ts_track_ptr &track, tracks) {
+  for (auto &track : tracks) {
     track->pes_payload->remove(track->pes_payload->get_size());
     track->processed        = false;
     track->data_ready       = false;
@@ -1174,7 +1174,7 @@ mpeg_ts_reader_c::finish() {
   if (file_done)
     return flush_packetizers();
 
-  foreach(mpeg_ts_track_ptr &track, tracks)
+  for (auto &track : tracks)
     if ((-1 != track->ptzr) && (0 < track->pes_payload->get_size()))
       PTZR(track->ptzr)->process(new packet_t(clone_memory(track->pes_payload->get_buffer(), track->pes_payload->get_size())));
 
@@ -1266,11 +1266,11 @@ mpeg_ts_reader_c::parse_clip_info_file() {
   if (!parser.parse())
     return;
 
-  foreach(mpeg_ts_track_ptr &track, tracks) {
+  for (auto &track : tracks) {
     bool found = false;
 
-    foreach(clpi::program_cptr &program, parser.m_programs) {
-      foreach(clpi::program_stream_cptr &stream, program->program_streams) {
+    for (auto &program : parser.m_programs) {
+      for (auto &stream : program->program_streams) {
         if ((stream->pid != track->pid) || stream->language.empty())
           continue;
 

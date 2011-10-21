@@ -103,7 +103,7 @@ vc1_video_packetizer_c::add_timecodes_to_parser(packet_cptr &packet) {
   if (-1 != packet->timecode)
     m_parser.add_timecode(packet->timecode, 0);
 
-  foreach(packet_extension_cptr &extension, packet->extensions) {
+  for (auto &extension : packet->extensions) {
     if (extension->get_type() != packet_extension_c::MULTIPLE_TIMECODES)
       continue;
 

@@ -229,7 +229,7 @@ xtr_oggvorbis_c::create_file(xtr_base_c *master,
 void
 xtr_oggvorbis_c::header_packets_unlaced(std::vector<memory_cptr> &header_packets) {
   int packet_num = 0;
-  foreach(memory_cptr &packet, header_packets) {
+  for (auto &packet : header_packets) {
     ogg_packet op;
     op.packet   = packet->get_buffer();
     op.bytes    = packet->get_size();

@@ -80,7 +80,7 @@ stereo_mode_c::parse_mode(const std::string &mode) {
 const std::string
 stereo_mode_c::displayable_modes_list() {
   std::stringstream keywords_str;
-  foreach(const std::string &keyword, s_modes) {
+  for (auto &keyword : s_modes) {
     if (!keywords_str.str().empty())
       keywords_str << ", ";
     keywords_str << "'" << keyword << "'";

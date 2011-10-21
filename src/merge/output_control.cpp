@@ -456,12 +456,12 @@ display_progress() {
     std::vector<filelist_t>::const_iterator i;
 
     const filelist_t *winner = NULL;
-    foreach(const filelist_t &current, g_files)
+    for (auto &current : g_files)
       if (!current.appending && (0 != current.reader->get_num_packetizers()) && ((NULL == winner) || (current.size > winner->size)))
         winner = &current;
 
     if (NULL == winner) {
-      foreach(const filelist_t &current, g_files)
+      for (auto &current : g_files)
         if (!current.appending && ((NULL == winner) || (current.size > winner->size)))
           winner = &current;
     }
@@ -511,7 +511,7 @@ add_attachment(attachment_t attachment) {
   // check if we already have another attachment stored. This can happen
   // if we're concatenating files.
   if (0 != attachment.id) {
-    foreach(attachment_t &ex_attachment, g_attachments)
+    for (auto &ex_attachment : g_attachments)
       if ((   (ex_attachment.id == attachment.id)
            && !hack_engaged(ENGAGE_NO_VARIABLE_DATA))
           ||
@@ -543,7 +543,7 @@ add_packetizer_globally(generic_packetizer_c *packetizer) {
   pack.file            = -1;
 
   int idx = 0;
-  foreach(filelist_t &file, g_files)
+  for (auto &file : g_files)
     if (file.reader == packetizer->m_reader) {
       pack.file      = idx;
       pack.orig_file = pack.file;
@@ -563,7 +563,7 @@ set_timecode_scale() {
   bool audio_present          = false;
   int64_t highest_sample_rate = 0;
 
-  foreach(packetizer_t &ptzr, g_packetizers)
+  for (auto &ptzr : g_packetizers)
     if (ptzr.packetizer->get_track_type() == track_video)
       video_present = true;
 
@@ -805,7 +805,7 @@ render_attachments(IOCallback *out) {
   s_kax_as           = new KaxAttachments();
   KaxAttached *kax_a = NULL;
 
-  foreach(attachment_t &attch, g_attachments) {
+  for (auto &attch : g_attachments) {
     if ((1 == g_file_num) || attch.to_all_files) {
       kax_a = NULL == kax_a ? &GetChild<KaxAttached>(*s_kax_as) : &GetNextChild<KaxAttached>(*s_kax_as, *kax_a);
 
@@ -1053,7 +1053,7 @@ check_append_mapping() {
 void
 calc_max_chapter_size() {
   // Step 1: Add all chapters from files that are not being appended.
-  foreach(filelist_t &file, g_files) {
+  for (auto &file : g_files) {
     if (file.appending)
       continue;
 
@@ -1077,7 +1077,7 @@ calc_max_chapter_size() {
     s_max_chapter_size += g_kax_chapters->ElementSize();
   }
 
-  foreach(filelist_t &file, g_files) {
+  for (auto &file : g_files) {
     KaxChapters *chapters = file.reader->m_chapters;
     if (NULL == chapters)
       continue;
@@ -1097,7 +1097,7 @@ calc_max_chapter_size() {
 */
 void
 create_readers() {
-  foreach(filelist_t &file, g_files) {
+  for (auto &file : g_files) {
     try {
       switch (file.type) {
         case FILE_TYPE_AAC:
@@ -1197,13 +1197,13 @@ create_readers() {
 
   if (!g_identifying) {
     // Create the packetizers.
-    foreach(filelist_t &file, g_files) {
+    for (auto &file : g_files) {
       file.reader->m_appending = file.appending;
       file.reader->create_packetizers();
     }
     // Check if all track IDs given on the command line are actually
     // present.
-    foreach(filelist_t &file, g_files) {
+    for (auto &file : g_files) {
       file.reader->check_track_ids_and_packetizers();
       file.num_unfinished_packetizers     = file.reader->m_reader_packetizers.size();
       file.old_num_unfinished_packetizers = file.num_unfinished_packetizers;
@@ -1213,7 +1213,7 @@ create_readers() {
     check_append_mapping();
 
     // Calculate the size of all attachments for split control.
-    foreach(attachment_t &att, g_attachments) {
+    for (auto &att : g_attachments) {
       g_attachment_sizes_first += att.data->get_size();
       if (att.to_all_files)
         g_attachment_sizes_others += att.data->get_size();
@@ -1669,7 +1669,7 @@ append_track(packetizer_t &ptzr,
       && (            -1 == src_file.deferred_max_timecode_seen)
       && (          NULL != g_video_packetizer)) {
 
-    foreach(filelist_t &file, g_files) {
+    for (auto &file : g_files) {
       if (file.done)
         continue;
 
@@ -1801,7 +1801,7 @@ bool
 append_tracks_maybe() {
   bool appended_a_track = false;
 
-  foreach(packetizer_t &ptzr, g_packetizers) {
+  for (auto &ptzr : g_packetizers) {
     if (ptzr.deferred)
       continue;
 
@@ -1812,7 +1812,7 @@ append_tracks_maybe() {
       continue;
 
     append_spec_t *amap = NULL;
-    foreach(append_spec_t &amap_idx, g_append_mapping)
+    for (auto &amap_idx : g_append_mapping)
       if ((amap_idx.dst_file_id == ptzr.file) && (amap_idx.dst_track_id == ptzr.packetizer->m_ti.m_id)) {
         amap = &amap_idx;
         break;
@@ -1847,7 +1847,7 @@ establish_deferred_connections(filelist_t &file) {
   std::vector<deferred_connection_t> def_cons = file.deferred_connections;
   file.deferred_connections.clear();
 
-  foreach(deferred_connection_t &def_con, def_cons)
+  for (auto &def_con : def_cons)
     append_track(*def_con.ptzr, def_con.amap, &file);
 
   // \todo Select a new file that the subs will defer to.
@@ -1867,7 +1867,7 @@ main_loop() {
 
     // Step 1: Make sure a packet is available for each output
     // as long we haven't already processed the last one.
-    foreach(packetizer_t &ptzr, g_packetizers) {
+    for (auto &ptzr : g_packetizers) {
       if (FILE_STATUS_HOLDING == ptzr.status)
         ptzr.status = FILE_STATUS_MOREDATA;
 
@@ -1909,7 +1909,7 @@ main_loop() {
     // Step 2: Pick the packet with the lowest timecode and
     // stuff it into the Matroska file.
     packetizer_t * winner = NULL;
-    foreach(packetizer_t &ptzr, g_packetizers) {
+    for (auto &ptzr : g_packetizers) {
       if (ptzr.pack.is_set()) {
         if ((NULL == winner) || !winner->pack.is_set())
           winner = &ptzr;
@@ -1951,7 +1951,7 @@ main_loop() {
 */
 static void
 destroy_readers() {
-  foreach(filelist_t &file, g_files) {
+  for (auto &file : g_files) {
     delete file.reader;
     delete file.ti;
   }

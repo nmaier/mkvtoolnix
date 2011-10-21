@@ -51,7 +51,7 @@ options_dialog::options_dialog(wxWindow *parent,
   tabs.push_back(new optdlg_languages_tab(nb_tabs, options));
   tabs.push_back(new optdlg_chapters_tab( nb_tabs, options));
 
-  foreach(optdlg_base_tab *tab, tabs)
+  for (auto tab : tabs)
     nb_tabs->AddPage(tab, tab->get_title());
 
   wxBoxSizer *siz_all = new wxBoxSizer(wxVERTICAL);

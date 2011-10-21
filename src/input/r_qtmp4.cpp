@@ -803,7 +803,7 @@ qtmp4_reader_c::read_chapter_track() {
   uint64_t pts_scale_num = 1000000000ull                                  / pts_scale_gcd;
   uint64_t pts_scale_den = static_cast<uint64_t>(chapter_dmx->time_scale) / pts_scale_gcd;
 
-  foreach(qt_sample_t &sample, chapter_dmx->sample_table) {
+  for (auto &sample : chapter_dmx->sample_table) {
     if (2 >= sample.size)
       continue;
 
@@ -1690,7 +1690,7 @@ qtmp4_reader_c::decode_and_verify_language(uint16_t coded_language) {
 void
 qtmp4_reader_c::recode_chapter_entries(std::vector<qtmp4_chapter_entry_t> &entries) {
   if (g_identifying) {
-    foreach(qtmp4_chapter_entry_t &entry, entries)
+    for (auto &entry : entries)
       entry.m_name = empty_string;
     return;
   }
@@ -1699,7 +1699,7 @@ qtmp4_reader_c::recode_chapter_entries(std::vector<qtmp4_chapter_entry_t> &entri
   charset_converter_cptr converter = charset_converter_c::init(m_ti.m_chapter_charset);
   converter->enable_byte_order_marker_detection(true);
 
-  foreach(qtmp4_chapter_entry_t &entry, entries)
+  for (auto &entry : entries)
     entry.m_name = converter->utf8(entry.m_name);
 
   converter->enable_byte_order_marker_detection(false);

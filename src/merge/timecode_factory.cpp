@@ -242,7 +242,7 @@ timecode_factory_v2_c::parse(mm_io_c &in) {
 
   dur_sum = -1;
   std::pair<int64_t, int64_t> entry;
-  foreach(entry, dur_map) {
+  for (auto entry : dur_map) {
     if ((0 > dur_sum) || (dur_map[dur_sum] < entry.second))
       dur_sum = entry.first;
     mxverb(4, boost::format("ext_m_timecodes v2 dur_map %1% = %2%\n") % entry.first % entry.second);

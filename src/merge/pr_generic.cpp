@@ -781,7 +781,7 @@ generic_packetizer_c::add_packet(packet_cptr pack) {
   }
 
   pack->data->grab();
-  foreach(memory_cptr &data_add, pack->data_adds)
+  for (auto &data_add : pack->data_adds)
     data_add->grab();
 
   pack->source = this;
@@ -1226,19 +1226,19 @@ void
 generic_reader_c::set_timecode_offset(int64_t offset) {
   m_max_timecode_seen = offset;
 
-  foreach(generic_packetizer_c *ptzr, m_reader_packetizers)
+  for (auto ptzr : m_reader_packetizers)
     ptzr->m_correction_timecode_offset = offset;
 }
 
 void
 generic_reader_c::set_headers() {
-  foreach(generic_packetizer_c *ptzr, m_reader_packetizers)
+  for (auto ptzr : m_reader_packetizers)
     ptzr->set_headers();
 }
 
 void
 generic_reader_c::set_headers_for_track(int64_t tid) {
-  foreach(generic_packetizer_c *ptzr, m_reader_packetizers)
+  for (auto ptzr : m_reader_packetizers)
     if (ptzr->m_ti.m_id == tid) {
       ptzr->set_headers();
       break;
@@ -1287,7 +1287,7 @@ int64_t
 generic_reader_c::get_queued_bytes() {
   int64_t bytes = 0;
 
-  foreach(generic_packetizer_c *ptzr, m_reader_packetizers)
+  for (auto ptzr : m_reader_packetizers)
     bytes += ptzr->get_queued_bytes();
 
   return bytes;
@@ -1307,7 +1307,7 @@ generic_reader_c::flush_packetizer(generic_packetizer_c *ptzr) {
 
 file_status_e
 generic_reader_c::flush_packetizers() {
-  foreach(generic_packetizer_c *ptzr, m_reader_packetizers)
+  for (auto ptzr : m_reader_packetizers)
     ptzr->flush();
 
   return FILE_STATUS_DONE;
@@ -1417,7 +1417,7 @@ generic_reader_c::display_identification_results() {
 
   mxinfo("\n");
 
-  foreach(id_result_t &result, m_id_results_tracks) {
+  for (auto &result : m_id_results_tracks) {
     mxinfo(boost::format(format_track) % result.id % result.type % result.info);
 
     if (g_identify_verbose && !result.verbose_info.empty())
@@ -1426,7 +1426,7 @@ generic_reader_c::display_identification_results() {
     mxinfo("\n");
   }
 
-  foreach(id_result_t &result, m_id_results_attachments) {
+  for (auto &result : m_id_results_attachments) {
     mxinfo(boost::format(format_attachment) % result.id % id_escape_string(result.type) % result.size);
 
     if (!result.description.empty())
@@ -1438,12 +1438,12 @@ generic_reader_c::display_identification_results() {
     mxinfo("\n");
   }
 
-  foreach(id_result_t &result, m_id_results_chapters) {
+  for (auto &result : m_id_results_chapters) {
     mxinfo(boost::format(format_chapters) % result.size);
     mxinfo("\n");
   }
 
-  foreach(id_result_t &result, m_id_results_tags) {
+  for (auto &result : m_id_results_tags) {
     if (ID_RESULT_GLOBAL_TAGS_ID == result.id)
       mxinfo(boost::format(format_tags_global) % result.size);
     else

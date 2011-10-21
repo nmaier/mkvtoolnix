@@ -391,15 +391,15 @@ void
 dirac::es_parser_c::combine_extra_data_with_packet() {
   int extra_size = 0;
 
-  foreach(memory_cptr &mem, m_pre_frame_extra_data)
+  for (auto &mem : m_pre_frame_extra_data)
     extra_size += mem->get_size();
-  foreach(memory_cptr &mem, m_post_frame_extra_data)
+  for (auto &mem : m_post_frame_extra_data)
     extra_size += mem->get_size();
 
   memory_cptr new_packet = memory_c::alloc(extra_size + m_current_frame->data->get_size());
   unsigned char *ptr     = new_packet->get_buffer();
 
-  foreach(memory_cptr &mem, m_pre_frame_extra_data) {
+  for (auto &mem : m_pre_frame_extra_data) {
     memcpy(ptr, mem->get_buffer(), mem->get_size());
     ptr += mem->get_size();
 
@@ -410,7 +410,7 @@ dirac::es_parser_c::combine_extra_data_with_packet() {
   memcpy(ptr, m_current_frame->data->get_buffer(), m_current_frame->data->get_size());
   ptr += m_current_frame->data->get_size();
 
-  foreach(memory_cptr &mem, m_post_frame_extra_data) {
+  for (auto &mem : m_post_frame_extra_data) {
     memcpy(ptr, mem->get_buffer(), mem->get_size());
     ptr += mem->get_size();
   }

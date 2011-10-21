@@ -327,7 +327,7 @@ mmg_dialog::translate_ui() {
   SetSize(GetSize().GetWidth() + 1, GetSize().GetHeight());
   // SetSize(GetSize().GetWidth() - 1, GetSize().GetHeight());
 
-  foreach(header_editor_frame_c *frame, header_editor_frames)
+  for (auto frame : header_editor_frames)
     frame->translate_ui();
 }
 
@@ -664,18 +664,18 @@ mmg_dialog::display_help(int id) {
 #if defined(HAVE_LIBINTL_H)
     if (!app->m_ui_locale.empty()) {
       locale_string_c locale_string(app->m_ui_locale);
-      foreach(const wxString &php, potential_help_paths) {
+      for (auto &php : potential_help_paths) {
         help_paths_to_test.push_back(php + wxT("/guide/") + wxU(locale_string.str(locale_string_c::half)));
         help_paths_to_test.push_back(php + wxT("/guide/") + wxU(locale_string.str(locale_string_c::language)));
       }
     }
 #endif  // HAVE_LIBINTL_H
 
-    foreach(const wxString &php, potential_help_paths)
+    for (auto &php : potential_help_paths)
       help_paths_to_test.push_back(php + wxT("/guide/en"));
 
     help_path.Empty();
-    foreach(const wxString &php, help_paths_to_test) {
+    for (auto &php : help_paths_to_test) {
       wxLogMessage(wxT("HELP PATH testing %s"), php.c_str());
       if (wxFileExists(php + wxT("/mkvmerge-gui.hhp"))) {
         help_path = php;
@@ -1330,7 +1330,7 @@ wxString
 mmg_dialog::suggest_file_name_extension() {
   bool has_video = false, has_audio = false, has_stereo_mode = false, has_tracks = false;
 
-  foreach(mmg_track_t *t, tracks) {
+  for (auto t : tracks) {
     if (!t->enabled)
       continue;
 

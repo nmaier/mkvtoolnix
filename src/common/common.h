@@ -81,8 +81,6 @@ void MTX_DLL_API set_process_priority(int priority);
 
 extern unsigned int MTX_DLL_API verbose;
 
-#define foreach                  BOOST_FOREACH
-#define reverse_foreach          BOOST_REVERSE_FOREACH
 #define mxforeach(it, vec)       for (it = (vec).begin(); it != (vec).end(); it++)
 #define mxfind(value, cont)      std::find(cont.begin(), cont.end(), value)
 #define mxfind2(it, value, cont) ((it = std::find((cont).begin(), (cont).end(), value)) != (cont).end())

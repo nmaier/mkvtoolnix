@@ -120,7 +120,7 @@ mpeg4_p2_video_packetizer_c::process_non_native(packet_cptr packet) {
   std::vector<video_frame_t> frames;
   mpeg4::p2::find_frame_types(packet->data->get_buffer(), packet->data->get_size(), frames, m_config_data);
 
-  foreach(video_frame_t &frame, frames) {
+  for (auto &frame : frames) {
     if (!frame.is_coded) {
       ++m_statistics.m_num_n_vops;
 
@@ -294,12 +294,12 @@ mpeg4_p2_video_packetizer_c::flush_frames(bool end_of_file) {
   video_frame_t &bref_frame = m_ref_frames.front();
   video_frame_t &fref_frame = m_ref_frames.back();
 
-  foreach(video_frame_t &frame, m_b_frames)
+  for (auto &frame : m_b_frames)
     get_next_timecode_and_duration(frame.timecode, frame.duration);
   get_next_timecode_and_duration(fref_frame.timecode, fref_frame.duration);
 
   add_packet(new packet_t(new memory_c(fref_frame.data, fref_frame.size, true), fref_frame.timecode, fref_frame.duration, FRAME_TYPE_P == fref_frame.type ? bref_frame.timecode : VFT_IFRAME));
-  foreach(video_frame_t &frame, m_b_frames)
+  for (auto &frame : m_b_frames)
     add_packet(new packet_t(new memory_c(frame.data, frame.size, true), frame.timecode, frame.duration, bref_frame.timecode, fref_frame.timecode));
 
   m_ref_frames.pop_front();

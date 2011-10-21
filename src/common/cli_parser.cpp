@@ -129,7 +129,7 @@ cli_parser_c::add_option(const std::string &spec,
   cli_parser_c::option_t option(spec, description, callback, needs_arg);
 
   std::vector<std::string> names = split(parts[0], "|");
-  foreach(std::string &name, names) {
+  for (auto &name : names) {
     std::string full_name = '@' == name[0]       ? name
                           : 1   == name.length() ? std::string( "-") + name
                           :                        std::string("--") + name;
@@ -189,7 +189,7 @@ cli_parser_c::add_common_options() {
 void
 cli_parser_c::set_usage() {
   usage_text = "";
-  foreach(option_t &option, m_options)
+  for (auto &option : m_options)
     usage_text += option.format_text();
 }
 
@@ -208,7 +208,7 @@ cli_parser_c::run_hooks(cli_parser_c::hook_type_e hook_type) {
   if (m_hooks[hook_type].empty())
     return false;
 
-  foreach(cli_parser_cb_t &hook, m_hooks[hook_type])
+  for (auto &hook : m_hooks[hook_type])
     if (hook)
       (hook)();
 

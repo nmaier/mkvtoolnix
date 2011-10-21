@@ -361,7 +361,7 @@ list_file_types() {
 
   mxinfo(Y("Supported file types:\n"));
 
-  foreach(file_type_t &file_type, file_types)
+  for (auto &file_type : file_types)
     mxinfo(boost::format("  %1% [%2%]\n") % file_type.title % file_type.extensions);
 }
 
@@ -1353,7 +1353,7 @@ static void
 parse_arg_segment_uid(const std::string &param,
                       const std::string &arg) {
   std::vector<std::string> parts = split(arg, ",");
-  foreach(std::string &part, parts) {
+  for (auto &part : parts) {
     try {
       g_forced_seguids.push_back(bitvalue_cptr(new bitvalue_c(part, 128)));
     } catch (...) {

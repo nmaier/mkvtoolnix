@@ -223,11 +223,11 @@ tab_input::setup_file_type_filter() {
   std::map<wxString, bool> all_extensions_map;
   wxString filters;
 
-  foreach(file_type_t &file_type, file_types) {
+  for (auto &file_type : file_types) {
     std::vector<wxString> extensions = split(wxU(file_type.extensions), wxU(" "));
     std::vector<wxString> extensions_full;
 
-    foreach(wxString &extension, extensions) {
+    for (auto &extension : extensions) {
       all_extensions_map[extension] = true;
       extensions_full.push_back(wxString::Format(wxT("*.%s"), extension.c_str()));
 
@@ -244,7 +244,7 @@ tab_input::setup_file_type_filter() {
   }
 
   std::vector<wxString> all_extensions;
-  foreach(wxstring_bool_pair_t &extension, all_extensions_map)
+  for (auto &extension : all_extensions_map)
     all_extensions.push_back(wxString::Format(wxT("*.%s"), extension.first.c_str()));
 
   std::sort(all_extensions.begin(), all_extensions.end());
@@ -290,8 +290,8 @@ tab_input::add_file(const wxString &file_name,
   std::string arg_utf8;
 
   wxFileName file_name_obj(file_name);
-  foreach(mmg_file_cptr file_itr, files)
-    foreach(const wxFileName &other_file_name, file_itr->other_files)
+  for (auto file : files)
+    for (auto &other_file_name : file->other_files)
       if (file_name_obj == other_file_name) {
         wxMessageBox(wxString::Format(Z("The file '%s' is already processed in combination with the file '%s'. It cannot be added a second time."),
                                       file_name_obj.GetFullPath().c_str(), other_file_name.GetFullPath().c_str()),
@@ -705,7 +705,7 @@ tab_input::add_file(const wxString &file_name,
   if (!file->other_files.empty()) {
     std::vector<wxString> other_file_names;
 
-    foreach(const wxFileName &other_file_name, file->other_files)
+    for (auto &other_file_name : file->other_files)
       other_file_names.push_back(other_file_name.GetFullName());
 
     wxMessageBox(wxU(boost::wformat(Z("'%1%': Processing the following files as well: %2%\n").c_str()) % file_name.c_str() % join(L", ", other_file_names).c_str()),
@@ -990,7 +990,7 @@ tab_input::save(wxConfigBase *cfg) {
     cfg->Write(wxT("appending"), f->appending);
 
     std::vector<wxString> other_file_names;
-    foreach(const wxFileName other_file_name, f->other_files)
+    for (auto other_file_name : f->other_files)
       other_file_names.push_back(other_file_name.GetFullPath());
     cfg->Write(wxT("other_files"), join(wxT(":::"), other_file_names));
 
@@ -1114,7 +1114,7 @@ tab_input::load(wxConfigBase *cfg,
 
     cfg->Read(wxT("other_files"), &s, wxT(""));
     std::vector<wxString> other_file_names = split(s, wxU(":::"));
-    foreach(const wxString &other_file_name, other_file_names)
+    for (auto &other_file_name : other_file_names)
       fi->other_files.push_back(wxFileName(other_file_name));
 
     long tidx;

@@ -178,7 +178,7 @@ struct packet_t {
   }
 
   packet_extension_c *find_extension(packet_extension_c::packet_extension_type_e type) {
-    foreach(packet_extension_cptr &extension, extensions)
+    for (auto &extension : extensions)
       if (extension->get_type() == type)
         return extension.get_object();
 

@@ -227,7 +227,7 @@ kax_reader_c::packets_available() {
   if (m_tracks.empty())
     return 0;
 
-  foreach(kax_track_cptr &track, m_tracks)
+  for (auto &track : m_tracks)
     if ((-1 != track->ptzr) && !PTZR(track->ptzr)->packet_available())
       return 0;
 
@@ -237,7 +237,7 @@ kax_reader_c::packets_available() {
 kax_track_t *
 kax_reader_c::find_track_by_num(uint64_t n,
                                 kax_track_t *c) {
-  foreach(kax_track_cptr &track, m_tracks)
+  for (auto &track : m_tracks)
     if ((track->tnum == n) && (track.get_object() != c))
       return track.get_object();
 
@@ -247,7 +247,7 @@ kax_reader_c::find_track_by_num(uint64_t n,
 kax_track_t *
 kax_reader_c::find_track_by_uid(uint64_t uid,
                                 kax_track_t *c) {
-  foreach(kax_track_cptr &track, m_tracks)
+  for (auto &track : m_tracks)
     if ((track->tuid == uid) && (track.get_object() != c))
       return track.get_object();
 
@@ -600,7 +600,7 @@ kax_reader_c::verify_tracks() {
 bool
 kax_reader_c::has_deferred_element_been_processed(kax_reader_c::deferred_l1_type_e type,
                                                   int64_t position) {
-  foreach(int64_t test_position, m_handled_l1_positions[type])
+  for (auto test_position : m_handled_l1_positions[type])
     if (position == test_position)
       return true;
 
@@ -1320,20 +1320,20 @@ kax_reader_c::read_headers() {
 
     } // while (l1 != NULL)
 
-    foreach(int64_t position, m_deferred_l1_positions[dl1t_tracks])
+    for (auto position : m_deferred_l1_positions[dl1t_tracks])
       read_headers_tracks(m_in.get_object(), l0, position);
 
     if (!m_ti.m_attach_mode_list.none()) {
-      foreach(int64_t position, m_deferred_l1_positions[dl1t_attachments])
+      for (auto position : m_deferred_l1_positions[dl1t_attachments])
         handle_attachments(m_in.get_object(), l0, position);
     }
 
     if (!m_ti.m_no_chapters) {
-      foreach(int64_t position, m_deferred_l1_positions[dl1t_chapters])
+      for (auto position : m_deferred_l1_positions[dl1t_chapters])
         handle_chapters(m_in.get_object(), l0, position);
     }
 
-    foreach(int64_t position, m_deferred_l1_positions[dl1t_tags])
+    for (auto position : m_deferred_l1_positions[dl1t_tags])
       handle_tags(m_in.get_object(), l0, position);
 
     if (!m_ti.m_no_global_tags)
@@ -1563,7 +1563,7 @@ kax_reader_c::create_dts_audio_packetizer(kax_track_t *t,
     read_first_frames(t, 5);
 
     byte_buffer_c buffer;
-    foreach(memory_cptr &frame, t->first_frames_data)
+    for (auto &frame : t->first_frames_data)
       buffer.add(frame);
 
     dts_header_t dtsheader;
@@ -1794,7 +1794,7 @@ kax_reader_c::create_packetizer(int64_t tid) {
 
 void
 kax_reader_c::create_packetizers() {
-  foreach(kax_track_cptr &track, m_tracks)
+  for (auto &track : m_tracks)
     create_packetizer(track->tnum);
 
   if (!g_segment_title_set) {
@@ -1820,7 +1820,7 @@ kax_reader_c::parse_first_mpeg4_p10_frame(kax_track_t *t,
 
     if (sizeof(alBITMAPINFOHEADER) < t->private_size)
       parser->add_bytes((unsigned char *)t->private_data + sizeof(alBITMAPINFOHEADER), t->private_size - sizeof(alBITMAPINFOHEADER));
-    foreach(memory_cptr &frame, t->first_frames_data)
+    for (auto &frame : t->first_frames_data)
       parser->add_bytes(frame->get_buffer(), frame->get_size());
     parser->flush();
 
@@ -2260,7 +2260,7 @@ void
 kax_reader_c::set_headers() {
   generic_reader_c::set_headers();
 
-  foreach(kax_track_cptr &track, m_tracks)
+  for (auto &track : m_tracks)
     if ((-1 != track->ptzr) && track->passthrough)
       PTZR(track->ptzr)->get_track_entry()->EnableLacing(track->lacing_flag);
 }
@@ -2276,7 +2276,7 @@ kax_reader_c::identify() {
 
   id_result_container(verbose_info);
 
-  foreach(kax_track_cptr &track, m_tracks) {
+  for (auto &track : m_tracks) {
     if (!track->ok)
       continue;
 
@@ -2335,7 +2335,7 @@ kax_reader_c::identify() {
                     info, verbose_info);
   }
 
-  foreach(attachment_t &attachment, g_attachments)
+  for (auto &attachment : g_attachments)
     id_result_attachment(attachment.ui_id, attachment.mime_type, attachment.data->get_size(), attachment.name, attachment.description);
 
   if (NULL != m_chapters)
@@ -2344,14 +2344,14 @@ kax_reader_c::identify() {
   if (m_tags.is_set())
     id_result_tags(ID_RESULT_GLOBAL_TAGS_ID, count_simple_tags(*m_tags));
 
-  foreach(kax_track_cptr &track, m_tracks)
+  for (auto &track : m_tracks)
     if (track->ok && (NULL != track->tags))
       id_result_tags(track->tnum, count_simple_tags(*track->tags));
 }
 
 void
 kax_reader_c::add_available_track_ids() {
-  foreach(kax_track_cptr &track, m_tracks)
+  for (auto &track : m_tracks)
     add_available_track_id(track->tnum);
 }
 

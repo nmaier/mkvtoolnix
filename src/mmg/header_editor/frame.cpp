@@ -156,7 +156,7 @@ header_editor_frame_c::translate_ui() {
 
   set_window_title();
 
-  foreach(he_page_base_c *page, m_pages) {
+  for (auto page : m_pages) {
     page->translate_ui();
     m_tc_tree->SetItemText(page->m_page_id, page->get_title());
   }

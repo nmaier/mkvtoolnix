@@ -634,7 +634,7 @@ content_decoder_c::reverse(memory_cptr &memory,
   if (!is_ok() || encodings.empty())
     return;
 
-  foreach(kax_content_encoding_t &ce, encodings)
+  for (auto &ce : encodings)
     if (0 != (ce.scope & scope))
       ce.compressor->decompress(memory);
 }

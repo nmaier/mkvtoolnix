@@ -1330,7 +1330,7 @@ mpeg_ps_reader_c::finish() {
   if (file_done)
     return flush_packetizers();
 
-  foreach(mpeg_ps_track_ptr &track, tracks)
+  for (auto &track : tracks)
     if (0 < track->buffer_usage)
       PTZR(track->ptzr)->process(new packet_t(clone_memory(track->buffer, track->buffer_usage)));
 
