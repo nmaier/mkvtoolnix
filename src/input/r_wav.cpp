@@ -463,7 +463,7 @@ wav_reader_c::wav_reader_c(track_info_c &ti_)
   }
 
   if (!wav_reader_c::probe_file(m_io.get_object(), size))
-    throw error_c(Y("wav_reader: Source is not a valid WAVE file."));
+    throw error_c(boost::format(Y("%1%: Source is not a valid %1% file.")) % get_format_name());
 
   parse_file();
   create_demuxer();

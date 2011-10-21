@@ -144,7 +144,7 @@ real_reader_c::real_reader_c(track_info_c &_ti)
   file = rmff_open_file_with_io(m_ti.m_fname.c_str(), RMFF_OPEN_MODE_READING, &mm_io_file_io);
   if (NULL == file) {
     if (RMFF_ERR_NOT_RMFF == rmff_last_error)
-      throw error_c(Y("real_reader: Source is not a valid RealMedia file."));
+      throw error_c(boost::format(Y("%1%: Source is not a valid %1% file.")) % get_format_name());
     else
       throw error_c(Y("real_reader: Could not read the source file."));
   }

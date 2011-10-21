@@ -72,7 +72,7 @@ usf_reader_c::usf_reader_c(track_info_c &_ti)
     size_t i;
 
     if (!usf_reader_c::probe_file(m_xml_source, 0))
-      throw error_c(Y("usf_reader: Source is not a valid USF file."));
+      throw error_c(boost::format(Y("%1%: Source is not a valid %1% file.")) % get_format_name());
 
     parse_xml_file();
     m_private_data += "</USFSubtitles>";

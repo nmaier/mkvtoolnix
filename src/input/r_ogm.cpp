@@ -329,7 +329,7 @@ ogm_reader_c::ogm_reader_c(track_info_c &_ti)
     throw error_c(boost::format(Y("%1%: Could not open the source file.")) % get_format_name());
   }
   if (!ogm_reader_c::probe_file(io, file_size))
-    throw error_c(Y("ogm_reader: Source is not a valid OGG media file."));
+    throw error_c(boost::format(Y("%1%: Source is not a valid %1% file.")) % get_format_name());
 
   ogg_sync_init(&oy);
 

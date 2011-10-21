@@ -69,7 +69,7 @@ corepicture_reader_c::corepicture_reader_c(track_info_c &_ti)
     m_xml_source = new mm_text_io_c(new mm_file_io_c(m_ti.m_fname));
 
     if (!corepicture_reader_c::probe_file(m_xml_source, 0))
-      throw error_c(Y("corepicture_reader: Source is not a valid CorePanorama file."));
+      throw error_c(boost::format(Y("%1%: Source is not a valid %1% file.")) % get_format_name());
 
     parse_xml_file();
 
