@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: it\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2011-10-14 21:17+0100\n"
+"PO-Revision-Date: 2011-10-21 12:30+0100\n"
 "Last-Translator: Luther Stickell <l.stickell@yahoo.it>\n"
 "Language-Team: Italian <moritz@bunkus.org>\n"
 "Language: it\n"
@@ -1704,7 +1704,7 @@ msgstr "A/52 (alias AC3)"
 #: src/input/r_aac.h:39
 #: src/output/p_aac.h:43
 msgid "AAC"
-msgstr ""
+msgstr "AAC"
 
 #: src/common/file_types.cpp:26
 msgid "AAC (Advanced Audio Coding)"
@@ -1725,7 +1725,7 @@ msgstr "AAC con intestazioni ADIF"
 #: src/input/r_ac3.h:38
 #: src/output/p_ac3.h:42
 msgid "AC3"
-msgstr ""
+msgstr "AC3"
 
 #: src/mmg/header_editor/value_page.cpp:143
 msgid ""
@@ -1739,7 +1739,7 @@ msgstr ""
 #: src/output/p_avc.h:46
 #: src/output/p_mpeg4_p10.h:34
 msgid "AVC/h.264"
-msgstr ""
+msgstr "AVC/h.264"
 
 #: src/common/file_types.cpp:27
 msgid "AVC/h.264 elementary streams"
@@ -1747,7 +1747,7 @@ msgstr "Flussi elementare AVC/h.264"
 
 #: src/input/r_avi.h:88
 msgid "AVI"
-msgstr ""
+msgstr "AVI"
 
 #: src/common/file_types.cpp:28
 msgid "AVI (Audio/Video Interleaved)"
@@ -1903,9 +1903,9 @@ msgid "Also try to extract the CUE sheet from the chapter information and tags f
 msgstr "Prova anche ad estrarre il CUE sheet dalle informazioni capitolo e tag di questa traccia."
 
 #: src/input/r_wavpack.cpp:87
-#, fuzzy, boost-format
+#, boost-format
 msgid "Also using the correction file '%1%c'.\n"
-msgstr "Impossibile aprire il corrispondente file correzione '%1%c'.\n"
+msgstr "Usando inoltre il file di correzione '%1%c'.\n"
 
 #: src/mmg/options/mmg.cpp:92
 msgid "Always on top"
@@ -2632,7 +2632,7 @@ msgstr "Copia la linea di comando negli Appunti"
 
 #: src/input/r_corepicture.h:38
 msgid "CorePanorama pictures"
-msgstr ""
+msgstr "CorePanorama pictures"
 
 #: src/extract/xtr_cpic.cpp:54
 #, boost-format
@@ -2910,7 +2910,7 @@ msgstr "&Elimina"
 #: src/input/r_dts.h:41
 #: src/output/p_dts.h:48
 msgid "DTS"
-msgstr ""
+msgstr "DTS"
 
 #: src/output/p_dts.cpp:84
 msgid "DTS header information changed! - New format:\n"
@@ -3414,7 +3414,7 @@ msgstr "Non supportata estrazione traccia numero %1% con ID codec '%2%'.\n"
 #: src/input/r_flac.h:54
 #: src/output/p_flac.h:39
 msgid "FLAC"
-msgstr ""
+msgstr "FLAC"
 
 #: src/common/file_types.cpp:33
 msgid "FLAC (Free Lossless Audio Codec)"
@@ -3804,7 +3804,7 @@ msgstr "Codice ISO639-2"
 
 #: src/input/r_ivf.h:35
 msgid "IVF (VP8)"
-msgstr ""
+msgstr "IVF (VP8)"
 
 #: src/common/file_types.cpp:35
 msgid "IVF with VP8 video files"
@@ -4254,7 +4254,7 @@ msgstr "Gestione coda lavori"
 
 #: src/output/p_kate.h:40
 msgid "Kate"
-msgstr ""
+msgstr "Kate"
 
 #: src/output/p_kate.cpp:78
 msgid "Kate packet is too small and is being skipped.\n"
@@ -4396,11 +4396,11 @@ msgstr "MKVToolNix è distribuito sotto licenza GNU GPL v2"
 
 #: src/input/r_mp3.h:38
 msgid "MP2/MP3"
-msgstr ""
+msgstr "MP2/MP3"
 
 #: src/output/p_mp3.h:42
 msgid "MP3"
-msgstr ""
+msgstr "MP3"
 
 #: src/common/file_types.cpp:36
 msgid "MP4 audio/video files"
@@ -4411,39 +4411,36 @@ msgid "MPEG audio files"
 msgstr "File audio MPEG"
 
 #: src/input/r_mpeg_ps.h:140
-#, fuzzy
 msgid "MPEG program stream"
 msgstr "Flusso programma MPEG"
 
 #: src/common/file_types.cpp:38
 msgid "MPEG program streams"
-msgstr "Flusso programma MPEG"
+msgstr "Flussi programma MPEG"
 
 #: src/input/r_mpeg_ts.h:284
-#, fuzzy
 msgid "MPEG transport stream"
 msgstr "Flusso trasporto MPEG"
 
 #: src/common/file_types.cpp:39
 msgid "MPEG transport streams"
-msgstr "Flusso trasporto MPEG"
+msgstr "Flussi trasporto MPEG"
 
 #: src/input/r_mpeg_es.h:43
-#, fuzzy
 msgid "MPEG video elementary stream"
 msgstr "Flusso elementare video MPEG"
 
 #: src/common/file_types.cpp:40
 msgid "MPEG video elementary streams"
-msgstr "Flusso elementare video MPEG"
+msgstr "Flussi elementari video MPEG"
 
 #: src/output/p_mpeg1_2.h:36
 msgid "MPEG-1/2"
-msgstr ""
+msgstr "MPEG-1/2"
 
 #: src/output/p_mpeg4_p2.h:66
 msgid "MPEG-4"
-msgstr ""
+msgstr "MPEG-4"
 
 #: src/mmg/tabs/input_general.cpp:184
 msgid "Make this track the default track for its type (audio, video, subtitles). Players should prefer tracks with the default track flag set."
@@ -4472,7 +4469,7 @@ msgstr "Imposta questa traccia come 'forzata'. Il riproduttore deve riprodurre q
 
 #: src/input/r_matroska.h:198
 msgid "Matroska"
-msgstr ""
+msgstr "Matroska"
 
 #: src/mmg/mmg_dialog.cpp:338
 #, c-format, boost-format
@@ -4864,7 +4861,7 @@ msgstr "Numero canali nella traccia."
 
 #: src/input/r_ogm.h:108
 msgid "Ogg/OGM"
-msgstr ""
+msgstr "Ogg/OGM"
 
 #: src/common/file_types.cpp:44
 msgid "Ogg/OGM audio/video files"
@@ -4873,7 +4870,7 @@ msgstr "File audio/video Ogg/OGM"
 #: src/mmg/message_dialog.cpp:31
 #: src/mmg/mux_dialog.cpp:101
 msgid "Ok"
-msgstr "OK"
+msgstr "Ok"
 
 #: src/mmg/tabs/chapters.cpp:765
 msgid "One of the chapters does not have a name."
@@ -5011,11 +5008,11 @@ msgstr "Sovrascrittura file esistenti"
 
 #: src/output/p_pcm.h:41
 msgid "PCM"
-msgstr ""
+msgstr "PCM"
 
 #: src/output/p_pgs.h:38
 msgid "PGS"
-msgstr ""
+msgstr "PGS"
 
 #: src/common/file_types.cpp:42
 msgid "PGS/SUP subtitles"
@@ -5023,7 +5020,7 @@ msgstr "Sottotitoli PGS/PUP"
 
 #: src/input/r_pgssup.h:36
 msgid "PGSSUP"
-msgstr ""
+msgstr "PGSSUP"
 
 #: src/input/r_vobsub.cpp:536
 #, boost-format
@@ -5178,7 +5175,7 @@ msgstr "File audio/video QuickTime"
 
 #: src/input/r_qtmp4.h:282
 msgid "QuickTime/MP4"
-msgstr ""
+msgstr "QuickTime/MP4"
 
 #: src/input/r_qtmp4.cpp:472
 #, boost-format
@@ -5355,13 +5352,12 @@ msgid "Real output sampling frequency in Hz."
 msgstr "Frequenza campionameno (Hz) uscita reale."
 
 #: src/output/p_realaudio.h:36
-#, fuzzy
 msgid "RealAudio"
-msgstr "audio"
+msgstr "RealAudio"
 
 #: src/input/r_real.h:105
 msgid "RealMedia"
-msgstr ""
+msgstr "RealMedia"
 
 #: src/common/file_types.cpp:45
 msgid "RealMedia audio/video files"
@@ -5452,7 +5448,6 @@ msgid "SHA1-160"
 msgstr "SHA1-160"
 
 #: src/input/r_srt.h:33
-#, fuzzy
 msgid "SRT subtitles"
 msgstr "Sottotitoli SRT"
 
@@ -5461,7 +5456,6 @@ msgid "SRT text subtitles"
 msgstr "Sottotitoli SRT"
 
 #: src/input/r_ssa.h:32
-#, fuzzy
 msgid "SSA/ASS subtitles"
 msgstr "Sottotitoli SSA/ASS"
 
@@ -6068,16 +6062,16 @@ msgstr "Tipi di file supportati:\n"
 
 #: src/common/cli_parser.cpp:176
 msgid "Suppress status output."
-msgstr ""
+msgstr "Nascondi stato output."
 
 #: src/input/r_tta.h:40
 #: src/output/p_tta.h:34
 msgid "TTA"
-msgstr ""
+msgstr "TTA"
 
 #: src/common/file_types.cpp:48
 msgid "TTA (The lossless True Audio codec)"
-msgstr ""
+msgstr "TTA (The lossless True Audio codec)"
 
 #: src/extract/extract_cli_parser.cpp:84
 msgid "Tag extraction"
@@ -7034,11 +7028,11 @@ msgstr ""
 
 #: src/output/p_theora.h:28
 msgid "Theora"
-msgstr ""
+msgstr "Theora"
 
 #: src/mmg/mmg_dialog.cpp:1754
 msgid "There is a new version available online."
-msgstr ""
+msgstr "Una nuova versione è disponibile online."
 
 #: src/merge/output_control.cpp:863
 #: src/merge/output_control.cpp:873
@@ -7049,7 +7043,7 @@ msgstr ""
 #: src/common/command_line.cpp:236
 #, boost-format
 msgid "There is no translation available for '%1%'.\n"
-msgstr ""
+msgstr "Nessuna traduzione disponibile per %1%'.\n"
 
 #: src/mmg/mmg_dialog.cpp:1755
 msgid "There was an error querying the update status."
@@ -7408,9 +7402,8 @@ msgstr "Tracce, capitoli e tag:"
 
 #: src/input/r_truehd.h:38
 #: src/output/p_truehd.h:44
-#, fuzzy
 msgid "TrueHD"
-msgstr "Dolby TrueHD"
+msgstr "TrueHD"
 
 #: src/mmg/cli_options_dlg.cpp:143
 msgid "TrueHD audio streams know two frame types: sync frames and non-sync frames. With this switch mkvmerge will put one sync frame and all following non-sync frames into a single Matroska block. Without it each non-sync frame is put into its own Matroska block."
@@ -7442,13 +7435,12 @@ msgid "UID:"
 msgstr "UID:"
 
 #: src/input/r_usf.h:74
-#, fuzzy
 msgid "USF subtitles"
 msgstr "Sottotitoli USF"
 
 #: src/common/file_types.cpp:49
 msgid "USF text subtitles"
-msgstr "Sottotitoli USF"
+msgstr "Sottotitoli testuali USF"
 
 #: src/common/ebml.cpp:85
 msgid "UTFstring_to_cstrutf8: Invalid wide character. Please contact moritz@bunkus.org if you think that this is not true."
@@ -7598,32 +7590,30 @@ msgid "Using a NALU size length of 3 bytes might result in tracks that won't be 
 msgstr ""
 
 #: src/merge/pr_generic.h:290
-#, fuzzy
 msgid "Using the demultiplexer for the format '%1%'.\n"
-msgstr "Utilizzo il demultiplexer AAC.\n"
+msgstr "Utilizzo il demultiplexer per il formato '%1%'.\n"
 
 #: src/input/r_matroska.cpp:1375
-#, fuzzy, boost-format
+#, boost-format
 msgid "Using the generic output module for track type '%1%'.\n"
-msgstr "Uso modulo destinazione AAC (FourCC: %1%).\n"
+msgstr "Uso modulo destinazione generico per la traccia di tipo '%1%'.\n"
 
 #: src/merge/pr_generic.h:292
-#, fuzzy
 msgid "Using the output module for the format '%1%'.\n"
-msgstr "Uso modulo destinazione AAC (FourCC: %1%).\n"
+msgstr "Uso modulo destinazione '%1%'.\n"
 
 #: src/input/r_vc1.h:38
 #: src/output/p_vc1.h:39
 msgid "VC1"
-msgstr ""
+msgstr "VC"
 
 #: src/common/file_types.cpp:50
 msgid "VC1 elementary streams"
-msgstr ""
+msgstr "VCI flussi elementari"
 
 #: src/output/p_vp8.h:29
 msgid "VP8"
-msgstr ""
+msgstr "VP8"
 
 #: src/common/hacks.cpp:60
 msgid "Valid hacks are:\n"
@@ -7639,7 +7629,7 @@ msgstr ""
 
 #: src/output/p_video.h:45
 msgid "VfW compatible video"
-msgstr ""
+msgstr "Video compatibile VfW"
 
 #: src/common/property_element.cpp:147
 #: src/mmg/header_editor/frame.cpp:489
@@ -7724,9 +7714,8 @@ msgstr ""
 
 #: src/input/r_vobbtn.h:38
 #: src/output/p_vobbtn.h:36
-#, fuzzy
 msgid "VobBtn"
-msgstr "VobButtons"
+msgstr "VobBtn"
 
 #: src/common/file_types.cpp:51
 msgid "VobButtons"
@@ -7735,7 +7724,7 @@ msgstr "VobButtons"
 #: src/input/r_vobsub.h:75
 #: src/output/p_vobsub.h:37
 msgid "VobSub"
-msgstr ""
+msgstr "VobSub"
 
 #: src/common/file_types.cpp:52
 msgid "VobSub subtitles"
@@ -7743,33 +7732,31 @@ msgstr "Sottotitoli VobSub"
 
 #: src/output/p_vorbis.h:43
 msgid "Vorbis"
-msgstr ""
+msgstr "Vorbis"
 
 #: src/input/r_wav.h:79
 msgid "WAV"
-msgstr ""
+msgstr "WAV"
 
 #: src/common/file_types.cpp:53
 msgid "WAVE (uncompressed PCM audio)"
 msgstr "WAVE (audio PCM non compresso)"
 
 #: src/input/r_wavpack.h:38
-#, fuzzy
 msgid "WAVPACK"
-msgstr "Audio WAVPACK v4"
+msgstr "WAVPACK"
 
 #: src/common/file_types.cpp:54
 msgid "WAVPACK v4 audio"
 msgstr "Audio WAVPACK v4"
 
 #: src/output/p_wavpack.h:36
-#, fuzzy
 msgid "WAVPACK4"
-msgstr "Audio WAVPACK v4"
+msgstr "WAVPACK4"
 
 #: src/mmg/options/mmg.cpp:94
 msgid "Warn about possible incorrect usage of mmg"
-msgstr "Avviso su possibile non corretto uso di mmg"
+msgstr "Avviso su possibile uso non corretto di mmg"
 
 #: src/input/subtitles.cpp:199
 #, boost-format
@@ -8985,9 +8972,8 @@ msgid "tet_index: '%1%' not found\n"
 msgstr ""
 
 #: src/output/p_textsubs.h:38
-#, fuzzy
 msgid "text subtitles"
-msgstr "Sottotitoli SRT"
+msgstr "sottotitoli testuali"
 
 #: src/merge/mkvmerge.cpp:2047
 msgid "timecodes"
@@ -9003,7 +8989,7 @@ msgstr ""
 
 #: src/merge/mkvmerge.cpp:2040
 msgid "track name"
-msgstr ""
+msgstr "nome traccia"
 
 #: src/input/r_truehd.cpp:75
 msgid "truehd_reader: Could not open the source file."
