@@ -146,7 +146,7 @@ real_reader_c::real_reader_c(track_info_c &_ti)
     if (RMFF_ERR_NOT_RMFF == rmff_last_error)
       throw error_c(boost::format(Y("%1%: Source is not a valid %1% file.")) % get_format_name());
     else
-      throw error_c(Y("real_reader: Could not read the source file."));
+      throw error_c(boost::format(Y("%1%: Could not read the source file.")) % get_format_name());
   }
   file->io->seek(file->handle, 0, SEEK_END);
   file_size = file->io->tell(file->handle);

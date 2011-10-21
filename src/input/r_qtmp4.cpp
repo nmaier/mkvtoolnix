@@ -125,7 +125,7 @@ qtmp4_reader_c::qtmp4_reader_c(track_info_c &_ti)
     parse_headers();
 
   } catch (...) {
-    throw error_c(Y("Quicktime/MP4 reader: Could not read the source file."));
+    throw error_c(boost::format(Y("%1%: Could not read the source file.")) % get_format_name());
   }
 }
 
