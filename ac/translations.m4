@@ -5,7 +5,9 @@ AC_CHECK_FUNCS(gettext, gettext_found=yes, gettext_found=no)
 if test x"$gettext_found" != xyes ; then
   AC_CHECK_LIB(intl, gettext,
                [ LIBINTL_LIBS="-lintl";
-                 gettext_found=yes ], gettext_found=no)
+                 gettext_found=yes ],
+               [ gettext_found=no ],
+               [ -liconv ])
 fi
 if test x"$gettext_found" = xyes ; then
   AC_CHECK_HEADERS(libintl.h, libintl_h_found=yes, libintl_h_found=no)
