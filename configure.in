@@ -12,6 +12,7 @@ dnl Optional features that are built and those that aren't
 opt_features_yes=""
 opt_features_no=""
 
+m4_include(ac/pkg.m4)
 m4_include(ac/initialization.m4)
 m4_include(ac/check_version.m4)
 m4_include(ac/gcc_version.m4)

@@ -13,6 +13,7 @@ AC_CHECK_TOOL(RANLIB, ranlib, :)
 AC_CHECK_TOOL(STRIP, strip, :)
 AC_CHECK_TOOL(AR, ar, :)
 AC_CHECK_TOOL(LD, ld, :)
+PKG_PROG_PKG_CONFIG
 
 dnl Check for headers
 AC_HEADER_STDC()
