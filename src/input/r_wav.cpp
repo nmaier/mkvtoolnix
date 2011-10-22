@@ -459,11 +459,11 @@ wav_reader_c::wav_reader_c(track_info_c &ti_)
     size = m_io->getFilePointer();
     m_io->setFilePointer(0, seek_beginning);
   } catch (...) {
-    throw error_c(Y("wav_reader: Could not open the source file."));
+    throw error_c(boost::format(Y("%1%: Could not open the source file.")) % get_format_name());
   }
 
   if (!wav_reader_c::probe_file(m_io.get_object(), size))
-    throw error_c(Y("wav_reader: Source is not a valid WAVE file."));
+    throw error_c(boost::format(Y("%1%: Source is not a valid %1% file.")) % get_format_name());
 
   parse_file();
   create_demuxer();

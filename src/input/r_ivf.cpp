@@ -59,7 +59,7 @@ ivf_reader_c::ivf_reader_c(track_info_c &p_ti)
     m_ti.m_id        = 0;       // ID for this track.
 
   } catch (...) {
-    throw error_c(Y("ivf_reader: Could not open the file."));
+    throw error_c(boost::format(Y("%1%: Could not open the file.")) % get_format_name());
   }
 
   show_demuxer_info();

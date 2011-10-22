@@ -115,7 +115,7 @@ flac_reader_c::flac_reader_c(track_info_c &_ti)
     file      = new mm_file_io_c(m_ti.m_fname);
     file_size = file->get_size();
   } catch (...) {
-    throw error_c(Y("flac_reader: Could not open the source file."));
+    throw error_c(boost::format(Y("%1%: Could not open the source file.")) % get_format_name());
   }
 
   if (g_identifying)
@@ -124,7 +124,7 @@ flac_reader_c::flac_reader_c(track_info_c &_ti)
   show_demuxer_info();
 
   if (!parse_file())
-    throw error_c(Y("flac_reader: Could not read all header packets."));
+    throw error_c(boost::format(Y("%1%: Could not read all header packets.")) % get_format_name());
 
   try {
     uint32_t block_size = 0;

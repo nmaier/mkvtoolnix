@@ -60,7 +60,7 @@ truehd_reader_c::truehd_reader_c(track_info_c &_ti)
     size_t init_read_len = std::min(m_file_size - tag_size_start, (int64_t)TRUEHD_READ_SIZE);
 
     if (m_io->read(m_chunk->get_buffer(), init_read_len) != init_read_len)
-      throw error_c(boost::format(Y("truehd_reader: Could not read %1% bytes.")) % TRUEHD_READ_SIZE);
+      throw error_c(boost::format(Y("%1%: Could not read %2% bytes.")) % get_format_name() % TRUEHD_READ_SIZE);
 
     m_io->setFilePointer(tag_size_start, seek_beginning);
 
@@ -72,7 +72,7 @@ truehd_reader_c::truehd_reader_c(track_info_c &_ti)
     show_demuxer_info();
 
   } catch (...) {
-    throw error_c(Y("truehd_reader: Could not open the source file."));
+    throw error_c(boost::format(Y("%1%: Could not open the source file.")) % get_format_name());
   }
 }
 

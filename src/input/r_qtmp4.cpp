@@ -118,14 +118,14 @@ qtmp4_reader_c::qtmp4_reader_c(track_info_c &_ti)
     file_size = io->getFilePointer();
     io->setFilePointer(0, seek_beginning);
     if (!qtmp4_reader_c::probe_file(io, file_size))
-      throw error_c(Y("Quicktime/MP4 reader: Source is not a valid Quicktime/MP4 file."));
+      throw error_c(boost::format(Y("%1%: Source is not a valid %1% file.")) % get_format_name());
 
     show_demuxer_info();
 
     parse_headers();
 
   } catch (...) {
-    throw error_c(Y("Quicktime/MP4 reader: Could not read the source file."));
+    throw error_c(boost::format(Y("%1%: Could not read the source file.")) % get_format_name());
   }
 }
 

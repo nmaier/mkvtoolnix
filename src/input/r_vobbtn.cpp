@@ -53,7 +53,7 @@ vobbtn_reader_c::vobbtn_reader_c(track_info_c &_ti)
     btn_file = new mm_file_io_c(m_ti.m_fname);
     size     = btn_file->get_size();
   } catch (...) {
-    throw error_c(Y("vobbtn_reader: Could not open the file."));
+    throw error_c(boost::format(Y("%1%: Could not open the file.")) % get_format_name());
   }
 
   // read the width & height

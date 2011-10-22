@@ -59,11 +59,11 @@ dts_reader_c::dts_reader_c(track_info_c &_ti)
     buf[1] = (unsigned short *)safemalloc(READ_SIZE);
 
     if (io->read(buf[cur_buf], READ_SIZE) != READ_SIZE)
-      throw error_c(boost::format(Y("dts_reader: Could not read %1% bytes.")) % READ_SIZE);
+      throw error_c(boost::format(Y("%1%: Could not read %2% bytes.")) % get_format_name() % READ_SIZE);
     io->setFilePointer(0, seek_beginning);
 
   } catch (...) {
-    throw error_c(Y("dts_reader: Could not open the source file."));
+    throw error_c(boost::format(Y("%1%: Could not open the source file.")) % get_format_name());
   }
 
   detect_dts(buf[cur_buf], READ_SIZE, dts14_to_16, swap_bytes);

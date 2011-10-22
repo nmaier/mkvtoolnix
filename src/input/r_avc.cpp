@@ -119,7 +119,7 @@ avc_es_reader_c::avc_es_reader_c(track_info_c &n_ti)
     m_io->setFilePointer(0, seek_beginning);
 
   } catch (...) {
-    throw error_c(Y("avc_es_reader: Could not open the source file."));
+    throw error_c(boost::format(Y("%1%: Could not open the source file.")) % get_format_name());
   }
 
   show_demuxer_info();

@@ -160,7 +160,7 @@ mpeg_es_reader_c::mpeg_es_reader_c(track_info_c &_ti)
     mxverb(2, boost::format("mpeg_es_reader: version %1% width %2% height %3% FPS %4% AR %5%\n") % version % width % height % frame_rate % aspect_ratio);
 
   } catch (...) {
-    throw error_c(Y("mpeg_es_reader: Could not open the file."));
+    throw error_c(boost::format(Y("%1%: Could not open the file.")) % get_format_name());
   }
   show_demuxer_info();
 }

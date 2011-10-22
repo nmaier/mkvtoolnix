@@ -101,10 +101,10 @@ avi_reader_c::avi_reader_c(track_info_c &_ti)
     mm_file_io_c io(m_ti.m_fname);
     size = io.get_size();
     if (!avi_reader_c::probe_file(&io, size))
-      throw error_c(Y("avi_reader: Source is not a valid AVI file."));
+      throw error_c(boost::format(Y("%1%: Source is not a valid %1% file.")) % get_format_name());
 
   } catch (...) {
-    throw error_c(Y("avi_reader: Could not read the source file."));
+    throw error_c(boost::format(Y("%1%: Could not read the source file.")) % get_format_name());
   }
 
   show_demuxer_info();

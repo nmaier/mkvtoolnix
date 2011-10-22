@@ -404,7 +404,7 @@ mpeg_ts_reader_c::mpeg_ts_reader_c(track_info_c &_ti)
     temp_io = mm_io_cptr(new mm_file_io_c(m_ti.m_fname));
 
   } catch (...) {
-    throw error_c(Y("mpeg_ts_reader_c: Could not open the file."));
+    throw error_c(boost::format(Y("%1%: Could not open the file.")) % get_format_name());
   }
 
   try {
