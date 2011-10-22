@@ -34,7 +34,7 @@
 
 extern const int MTX_DLL_API g_aac_sampling_freq[16];
 
-typedef struct {
+struct aac_header_t {
   int sample_rate;
   int bit_rate;
   int channels;
@@ -42,7 +42,11 @@ typedef struct {
   int id;                       // 0 = MPEG-4, 1 = MPEG-2
   int profile;
   int header_bit_size, header_byte_size, data_byte_size;
-} aac_header_t;
+
+  aac_header_t();
+
+  std::string to_string() const;
+};
 
 bool MTX_DLL_API operator ==(const aac_header_t &h1, const aac_header_t &h2);
 

@@ -24,6 +24,17 @@ const int g_aac_sampling_freq[16] = {96000, 88200, 64000, 48000, 44100, 32000,
                                      24000, 22050, 16000, 12000, 11025,  8000,
                                          0,     0,     0,     0}; // filling
 
+aac_header_t::aac_header_t() {
+  memset(this, 0, sizeof(aac_header_t));
+}
+
+std::string
+aac_header_t::to_string()
+  const {
+  return (boost::format("sample_rate: %1%; bit_rate: %2%; channels: %3%; bytes: %4%; id: %5%; profile: %6%; header_bit_size: %7%; header_byte_size: %8%; data_byte_size: %9%")
+          % sample_rate % bit_rate % channels % bytes % id % profile % header_bit_size % header_byte_size % data_byte_size).str();
+}
+
 static bool
 parse_aac_adif_header_internal(const unsigned char *buf,
                                int size,
