@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: it\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2011-10-22 12:00+0100\n"
+"PO-Revision-Date: 2011-10-22 21:55+0100\n"
 "Last-Translator: Luther Stickell <l.stickell@yahoo.it>\n"
 "Language-Team: Italian <moritz@bunkus.org>\n"
 "Language: it\n"
@@ -5487,11 +5487,11 @@ msgstr ""
 
 #: src/mmg/mmg_dialog.cpp:277
 msgid "Run mkvmerge and start the muxing process"
-msgstr ""
+msgstr "Esegui mkvmerge e avvia il processo di muxing"
 
 #: src/mmg/mmg_dialog.cpp:275
 msgid "Run the header field editor"
-msgstr ""
+msgstr "Esegui l'editor del campo intestazione"
 
 #: src/mmg/mmg_dialog.cpp:278
 msgid "S&how the command line"
@@ -5553,7 +5553,7 @@ msgstr "Salva log"
 
 #: src/mmg/mmg_dialog.cpp:272
 msgid "Save muxing settings to a file"
-msgstr ""
+msgstr "Salva impostazioni muxing in un file"
 
 #: src/mmg/mmg_dialog.cpp:280
 msgid "Save the command line to a file"
@@ -5823,12 +5823,12 @@ msgstr ""
 #: src/input/r_real.cpp:594
 #, boost-format
 msgid "Short AAC audio packet (length: %1% < %2%)\n"
-msgstr ""
+msgstr "Pacchetto audio AAC corto (lunghezza: %1% < %2%)\n"
 
 #: src/input/r_real.cpp:587
 #, boost-format
 msgid "Short AAC audio packet (length: %1% < 2)\n"
-msgstr ""
+msgstr "Pacchetto audio AAC corto (lunghezza: %1% < 2)\n"
 
 #: src/mpegparser/M2VParser.cpp:399
 msgid "Shortened GOP detected. Some frames have been dropped. You may want to fix the MPEG2 video stream before attempting to multiplex it.\n"
@@ -5848,7 +5848,7 @@ msgstr ""
 
 #: src/info/wxwidgets_ui.cpp:114
 msgid "Show element si&zes\tCtrl-Z"
-msgstr ""
+msgstr "Mostra dimensioni elemento\tCtrl-Z"
 
 #: src/mmg/options/mmg.cpp:111
 msgid "Show mmg's debug window"
@@ -5868,11 +5868,11 @@ msgstr ""
 
 #: src/info/info_cli_parser.cpp:49
 msgid "Show the first 16 bytes of each frame as a hex dump."
-msgstr ""
+msgstr "Mostra i primi 16 byte di ogni frame come un dump hex."
 
 #: src/mmg/mmg_dialog.cpp:295
 msgid "Show the guide to mkvmerge GUI"
-msgstr ""
+msgstr "Mostra la guida di mkvmerge GUI"
 
 #: src/info/wxwidgets_ui.cpp:114
 msgid "Show the size of each element including its header"
@@ -5916,7 +5916,7 @@ msgstr "Firma: %1%"
 
 #: src/mmg/header_editor/value_page.cpp:146
 msgid "Signed integer"
-msgstr ""
+msgstr "Intero con segno"
 
 #: src/info/mkvinfo.cpp:1352
 #, boost-format
@@ -6026,15 +6026,15 @@ msgstr ""
 
 #: src/mmg/jobs.cpp:504
 msgid "Start the jobs whose status is 'pending'"
-msgstr ""
+msgstr "Avvia i lavori con stato 'in sospeso'"
 
 #: src/mmg/jobs.cpp:508
 msgid "Start the selected job(s) regardless of their status"
-msgstr ""
+msgstr "Avvia il seguente lavoro(i) indipendentemente dal loro stato"
 
 #: src/mmg/mmg_dialog.cpp:270
 msgid "Start with empty settings"
-msgstr ""
+msgstr "Avvia con impostazioni vuote"
 
 #: src/mmg/tabs/chapters.cpp:336
 msgid "Start:"
@@ -6047,7 +6047,7 @@ msgstr "Partito alle"
 #: src/mmg/jobs.cpp:228
 #, c-format, boost-format
 msgid "Starting job ID %d (%s) on %s"
-msgstr ""
+msgstr "Avvia lavoro ID %d (%s) su %s"
 
 #: src/info/mkvinfo.cpp:1894
 #, boost-format
@@ -6344,12 +6344,12 @@ msgstr "I cambiamenti sono scritti nel file.\n"
 #: src/mmg/tabs/chapters.cpp:779
 #, c-format, boost-format
 msgid "The chapter '%s' is missing its language."
-msgstr ""
+msgstr "La lingua del capitolo '%s' è mancante."
 
 #: src/mmg/tabs/chapters.cpp:773
 #, c-format, boost-format
 msgid "The chapter '%s' is missing the start time."
-msgstr ""
+msgstr "Il tempo di partenza del capitolo '%s' è mancante."
 
 #: src/mmg/mmg_dialog.cpp:600
 msgid ""
@@ -6479,13 +6479,13 @@ msgstr ""
 #: src/extract/tags.cpp:47
 #, boost-format
 msgid "The file '%1%' could not be opened for reading (%2%)."
-msgstr ""
+msgstr "Il file '%1%' non può essere aperto per la lettura (%2%)."
 
 #: src/extract/timecodes_v2.cpp:173
 #: src/extract/tracks.cpp:327
 #, boost-format
 msgid "The file '%1%' could not be opened for reading (%2%).\n"
-msgstr ""
+msgstr "Il file '%1%' non può essere aperto per la lettura (%2%).\n"
 
 #: src/common/command_line.cpp:45
 #, boost-format
@@ -6498,13 +6498,13 @@ msgstr ""
 #: src/extract/xtr_wav.cpp:113
 #, boost-format
 msgid "The file '%1%' could not be opened for writing (%2%).\n"
-msgstr ""
+msgstr "Il file '%1%' non può essere aperto per la scrittura (%2%).\n"
 
 #: src/extract/attachments.cpp:121
 #: src/extract/xtr_rmff.cpp:40
 #, boost-format
 msgid "The file '%1%' could not be opened for writing (%2%, %3%).\n"
-msgstr ""
+msgstr "Il file '%1%' non può essere aperto per la scrittura (%2%, %3%).\n"
 
 #: src/merge/output_control.cpp:1403
 #, boost-format
@@ -6519,7 +6519,7 @@ msgstr ""
 #: src/merge/pr_generic.cpp:1327
 #, boost-format
 msgid "The file '%1%' is a non-supported file type (%2%).\n"
-msgstr ""
+msgstr "Il file '%1%' è di un tipo non supportato (%2%).\n"
 
 #: src/common/xml/element_parser.cpp:142
 #, boost-format
@@ -6575,19 +6575,19 @@ msgstr "Il file è analizzato.\n"
 
 #: src/merge/output_control.cpp:270
 msgid "The file is being fixed, part 1/4..."
-msgstr ""
+msgstr "Il file è in fase di correzione, parte 1/4..."
 
 #: src/merge/output_control.cpp:276
 msgid "The file is being fixed, part 2/4..."
-msgstr ""
+msgstr "Il file è in fase di correzione, parte 2/4..."
 
 #: src/merge/output_control.cpp:285
 msgid "The file is being fixed, part 3/4..."
-msgstr ""
+msgstr "Il file è in fase di correzione, parte 3/4..."
 
 #: src/merge/output_control.cpp:297
 msgid "The file is being fixed, part 4/4..."
-msgstr ""
+msgstr "Il file è in fase di correzione, parte 4/4..."
 
 #: src/common/property_element.cpp:103
 #: src/mmg/header_editor/frame.cpp:334
@@ -6648,7 +6648,7 @@ msgstr ""
 
 #: src/merge/output_control.cpp:997
 msgid "The formats do not match."
-msgstr ""
+msgstr "I formati non corrispondono."
 
 #: src/extract/extract_cli_parser.cpp:101
 msgid "The fourth mode extracts the chapters and converts them to XML. The output is written to the standard output. The output can be used as a source for mkvmerge."
@@ -6662,7 +6662,7 @@ msgstr ""
 #: src/common/xml/element_writer.cpp:197
 #: src/common/xml/element_writer.cpp:206
 msgid "The header has already been written."
-msgstr ""
+msgstr "L'intestazione è già stata scritta."
 
 #: src/merge/pr_generic.h:395
 msgid "The height of the two tracks is different: %1% and %2%"
@@ -6671,7 +6671,7 @@ msgstr ""
 #: src/mmg/tabs/input.cpp:615
 #, c-format, boost-format
 msgid "The input file '%s' does not contain any tracks."
-msgstr ""
+msgstr "Il file sorgente '%s' non contiene nessuna traccia."
 
 #: src/mmg/tabs/input.cpp:1225
 msgid ""
@@ -6707,7 +6707,7 @@ msgstr ""
 #: src/mmg/tabs/chapters.cpp:1308
 #, c-format, boost-format
 msgid "The language '%s' is not a valid language and cannot be selected."
-msgstr ""
+msgstr "La lingua '%s' non è una lingua valida e non può essere selezionata."
 
 #: src/input/r_usf.cpp:160
 #, boost-format
@@ -6893,7 +6893,7 @@ msgstr "Il motivo è sconosciuto."
 #: src/common/xml/element_parser.cpp:335
 #, boost-format
 msgid "The root element must be <%1%>."
-msgstr ""
+msgstr "L'elemento radice deve essere <%1%>."
 
 #: src/merge/pr_generic.h:375
 msgid "The sample rate of the two audio tracks is different: %1% and %2%"
@@ -6931,7 +6931,7 @@ msgstr ""
 #: src/merge/mkvmerge.cpp:1405
 #, boost-format
 msgid "The size of attachment '%1%' is 0.\n"
-msgstr ""
+msgstr "La dimensione dell'allegato '%1%' è 0.\n"
 
 #: src/merge/output_control.cpp:322
 #: src/merge/output_control.cpp:421
@@ -9292,4 +9292,3 @@ msgstr "sì"
 
 #~ msgid "wavpack_reader: Could not open the file."
 #~ msgstr "wavpack_reader: Impossibile aprire il file."
-
