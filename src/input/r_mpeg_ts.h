@@ -19,6 +19,7 @@
 
 #include <boost/filesystem.hpp>
 
+#include "common/aac.h"
 #include "common/byte_buffer.h"
 #include "common/dts.h"
 #include "common/mm_io.h"
@@ -193,6 +194,7 @@ public:
   // audio related parameters
   int a_channels, a_sample_rate, a_bits_per_sample, a_bsid;
   dts_header_t a_dts_header;
+  aac_header_t m_aac_header;
 
   bool m_apply_dts_timecode_fix;
 
@@ -243,6 +245,7 @@ public:
   int new_stream_v_avc();
   int new_stream_v_vc1();
   int new_stream_a_mpeg();
+  int new_stream_a_aac();
   int new_stream_a_ac3();
   int new_stream_a_dts();
   int new_stream_a_truehd();
@@ -267,7 +270,7 @@ protected:
   std::vector<mpeg_ts_track_ptr> tracks;
   std::map<generic_packetizer_c *, mpeg_ts_track_ptr> m_ptzr_to_track_map;
 
-  bool m_dont_use_audio_pts, m_debug_resync, m_debug_pat_pmt;
+  bool m_dont_use_audio_pts, m_debug_resync, m_debug_pat_pmt, m_debug_aac;
 
   int m_detected_packet_size;
 

@@ -28,6 +28,7 @@
 #include "common/mpeg4_p2.h"
 #include "common/strings/formatting.h"
 #include "input/r_mpeg_ts.h"
+#include "output/p_aac.h"
 #include "output/p_ac3.h"
 #include "output/p_avc.h"
 #include "output/p_dts.h"
@@ -273,6 +274,21 @@ mpeg_ts_track_c::new_stream_a_mpeg() {
 }
 
 int
+mpeg_ts_track_c::new_stream_a_aac() {
+  add_pes_payload_to_probe_data();
+
+  if (0 > find_aac_header(m_probe_data->get_buffer(), m_probe_data->get_size(), &m_aac_header, false))
+    return FILE_STATUS_MOREDATA;
+
+  mxdebug_if(reader.m_debug_aac, boost::format("first AAC header: %1%\n") % m_aac_header.to_string());
+
+  a_channels    = m_aac_header.channels;
+  a_sample_rate = m_aac_header.sample_rate;
+
+  return 0;
+}
+
+int
 mpeg_ts_track_c::new_stream_a_ac3() {
   add_pes_payload_to_probe_data();
 
@@ -396,6 +412,7 @@ mpeg_ts_reader_c::mpeg_ts_reader_c(track_info_c &_ti)
   , m_dont_use_audio_pts(debugging_requested("mpeg_ts_dont_use_audio_pts") || debugging_requested("mpeg_ts"))
   , m_debug_resync(debugging_requested("mpeg_ts_resync") || debugging_requested("mpeg_ts"))
   , m_debug_pat_pmt(debugging_requested("mpeg_ts_pat") || debugging_requested("mpeg_ts_pmt") || debugging_requested("mpeg_ts"))
+  , m_debug_aac(debugging_requested("mpeg_aac") || debugging_requested("mpeg_ts"))
   , m_detected_packet_size(0)
 {
   mm_io_cptr temp_io;
@@ -481,6 +498,7 @@ mpeg_ts_reader_c::identify() {
                        : FOURCC('M', 'P', '1', ' ') == track->fourcc ? "MPEG-1 layer 1"
                        : FOURCC('M', 'P', '2', ' ') == track->fourcc ? "MPEG-1 layer 2"
                        : FOURCC('M', 'P', '3', ' ') == track->fourcc ? "MPEG-1 layer 3"
+                       : FOURCC('A', 'A', 'C', ' ') == track->fourcc ? "AAC"
                        : FOURCC('A', 'C', '3', ' ') == track->fourcc ? "AC3"
                        : FOURCC('D', 'T', 'S', ' ') == track->fourcc ? "DTS"
                        : FOURCC('T', 'R', 'H', 'D') == track->fourcc ? "TrueHD"
@@ -910,6 +928,8 @@ mpeg_ts_reader_c::probe_packet_complete(mpeg_ts_track_ptr &track,
   } else if (track->type == ES_AUDIO_TYPE) {
     if (FOURCC('M', 'P', '2', ' ') == track->fourcc)
       result = track->new_stream_a_mpeg();
+    else if (FOURCC('A', 'A', 'C', ' ') == track->fourcc)
+      result = track->new_stream_a_aac();
     else if (FOURCC('A', 'C', '3', ' ') == track->fourcc)
       result = track->new_stream_a_ac3();
     else if (FOURCC('D', 'T', 'S', ' ') == track->fourcc)
@@ -1042,6 +1062,14 @@ mpeg_ts_reader_c::create_packetizer(int64_t id) {
         || (FOURCC('M', 'P', '3', ' ') == track->fourcc)) {
       track->ptzr = add_packetizer(new mp3_packetizer_c(this, m_ti, track->a_sample_rate, track->a_channels, (0 != track->a_sample_rate) && (0 != track->a_channels)));
       show_packetizer_info(id, PTZR(track->ptzr));
+
+    } else if (FOURCC('A', 'A', 'C', ' ') == track->fourcc) {
+      aac_packetizer_c *aac_packetizer = new aac_packetizer_c(this, m_ti, track->m_aac_header.id, track->m_aac_header.profile, track->m_aac_header.sample_rate, track->m_aac_header.channels, false);
+      track->ptzr                      = add_packetizer(aac_packetizer);
+
+      if (AAC_PROFILE_SBR == track->m_aac_header.profile)
+        aac_packetizer->set_audio_output_sampling_freq(track->m_aac_header.sample_rate * 2);
+      show_packetizer_info(id, aac_packetizer);
 
     } else if (FOURCC('A', 'C', '3', ' ') == track->fourcc) {
       track->ptzr = add_packetizer(new ac3_packetizer_c(this, m_ti, track->a_sample_rate, track->a_channels, track->a_bsid));
