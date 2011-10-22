@@ -765,10 +765,76 @@ msgstr "%1% beeld, spoor %2%, tiijdcode %3% (%4%), grootte %5%, adler 0x%|6$08x|
 msgid "%1% frame, track %2%, timecode %3% (%4%), size %5%, adler 0x%|6$08x|%7%%8%\n"
 msgstr "%1% beeld, spoor %2%, tijd code %3% (%4%), grootte %5%, adler 0x%|6$08x|%7%%8%\n"
 
+#: src/input/r_aac.cpp:88
+#: src/input/r_ivf.cpp:62
+#: src/input/r_mpeg_es.cpp:163
+#: src/input/r_mpeg_ps.cpp:82
+#: src/input/r_mpeg_ts.cpp:407
+#: src/input/r_pgssup.cpp:55
+#: src/input/r_tta.cpp:93
+#: src/input/r_vobbtn.cpp:56
+#: src/input/r_wavpack.cpp:58
+#, fuzzy, boost-format
+msgid "%1%: Could not open the file."
+msgstr "aac_lezer: Kan bestand niet openen."
+
+#: src/input/r_ac3.cpp:67
+#: src/input/r_avc.cpp:122
+#: src/input/r_corepicture.cpp:85
+#: src/input/r_dirac.cpp:82
+#: src/input/r_dts.cpp:66
+#: src/input/r_flac.cpp:118
+#: src/input/r_mp3.cpp:57
+#: src/input/r_ogm.cpp:329
+#: src/input/r_srt.cpp:40
+#: src/input/r_ssa.cpp:40
+#: src/input/r_truehd.cpp:75
+#: src/input/r_usf.cpp:96
+#: src/input/r_vc1.cpp:82
+#: src/input/r_vobsub.cpp:70
+#: src/input/r_wav.cpp:462
+#, fuzzy, boost-format
+msgid "%1%: Could not open the source file."
+msgstr "ac3_lezer: Kon bron bestand niet openen."
+
+#: src/input/r_aac.cpp:57
+#: src/input/r_ac3.cpp:62
+#: src/input/r_dts.cpp:62
+#: src/input/r_truehd.cpp:63
+#, fuzzy, boost-format
+msgid "%1%: Could not read %2% bytes."
+msgstr "aac_lezer: Kan%1% bytes niet lezen."
+
+#: src/input/r_flac.cpp:127
+#: src/input/r_ogm.cpp:339
+#, fuzzy, boost-format
+msgid "%1%: Could not read all header packets."
+msgstr "ogm_lezer: Kon niet alle kop paketten lezen."
+
+#: src/input/r_avi.cpp:107
+#: src/input/r_qtmp4.cpp:128
+#: src/input/r_real.cpp:149
+#, fuzzy, boost-format
+msgid "%1%: Could not read the source file."
+msgstr "avi_lezer: Kon bron bestand niet lezen."
+
 #: src/common/kax_file.cpp:165
 #, boost-format
 msgid "%1%: Error in the Matroska file structure at position %2%. Resyncing to the next level 1 element.\n"
 msgstr "%1%: Fout in de Matroska bestand structuur op positie %2%. Her-syncen naar volgende niveau 1 element.\n"
+
+#: src/input/r_avi.cpp:104
+#: src/input/r_corepicture.cpp:72
+#: src/input/r_ogm.cpp:332
+#: src/input/r_qtmp4.cpp:121
+#: src/input/r_real.cpp:147
+#: src/input/r_srt.cpp:34
+#: src/input/r_ssa.cpp:44
+#: src/input/r_usf.cpp:75
+#: src/input/r_wav.cpp:466
+#, fuzzy, boost-format
+msgid "%1%: Source is not a valid %1% file."
+msgstr "avi_lezer: Bron is geen geldig AVI bestand."
 
 #: src/merge/mkvmerge.cpp:635
 #, boost-format
@@ -5209,10 +5275,6 @@ msgstr "Quicktime/MP4 lezer: Kon uitgebreide geluidsbeschrijving deel niet lezen
 msgid "Quicktime/MP4 reader: Could not read the sound description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4 lezer: Kon  geluidsbeschrijving deel niet lezen voor spoor %1%.\n"
 
-#: src/input/r_qtmp4.cpp:128
-msgid "Quicktime/MP4 reader: Could not read the source file."
-msgstr "Quicktime/MP4 lezer: Kon bronbestand niet lezen."
-
 #: src/input/r_qtmp4.cpp:977
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the stream description atom for track ID %1%.\n"
@@ -5245,10 +5307,6 @@ msgstr "Quicktime/MP4 lezer: MPEG4 deel 10/AVC spoor %1% mist zijn decoder inste
 #, boost-format
 msgid "Quicktime/MP4 reader: MPEG4 track %1% is missing the esds atom/the decoder config. Skipping this track.\n"
 msgstr "Quicktime/MP4 lezer: MPEG4 spoor %1% mist het esds deel/de decode instelling. Sla dit spoor over.\n"
-
-#: src/input/r_qtmp4.cpp:121
-msgid "Quicktime/MP4 reader: Source is not a valid Quicktime/MP4 file."
-msgstr "Quicktime/MP4 lezer: Bron is geen geldig Quicktime/MP4 bestand."
 
 #: src/input/r_qtmp4.cpp:650
 #, boost-format
@@ -8037,15 +8095,6 @@ msgstr "[%1% beeld voor spoor %2%, tijd code %3%]"
 msgid "aac_reader: ADIF header files are not supported."
 msgstr "aac_lezer: ADIF kop bestanden zijn niet ondersteund."
 
-#: src/input/r_aac.cpp:88
-msgid "aac_reader: Could not open the file."
-msgstr "aac_lezer: Kan bestand niet openen."
-
-#: src/input/r_aac.cpp:57
-#, boost-format
-msgid "aac_reader: Could not read %1% bytes."
-msgstr "aac_lezer: Kan%1% bytes niet lezen."
-
 #: src/input/r_aac.cpp:65
 #, boost-format
 msgid "aac_reader: No valid AAC packet found in the first %1% bytes.\n"
@@ -8060,15 +8109,6 @@ msgstr "afgebroken"
 #: src/output/p_ac3.cpp:213
 msgid "ac3_bs_packetizer::add_to_buffer(): Untested code ('size' is odd). If mkvmerge crashes or if the resulting file does not contain the complete and correct audio track, then please contact the author Moritz Bunkus at moritz@bunkus.org.\n"
 msgstr "ac3_bs_packetizer::add_to_buffer(): Niet geteste code ('grootte' is vreemd). Als mkvmerge vast loopt of als het resultaat bestand niet het gehele en correcte audio spoor bevat, neem dan a.u.b kontakt op met de autheur Moritz Bunkus via moritz@bunkus.org.\n"
-
-#: src/input/r_ac3.cpp:67
-msgid "ac3_reader: Could not open the source file."
-msgstr "ac3_lezer: Kon bron bestand niet openen."
-
-#: src/input/r_ac3.cpp:62
-#, boost-format
-msgid "ac3_reader: Could not read %1% bytes."
-msgstr "ac3_lezer: Kon niet lezen %1% bytes."
 
 #: src/input/r_ac3.cpp:71
 #, boost-format
@@ -8098,10 +8138,6 @@ msgstr "Bijvoegen"
 msgid "audio"
 msgstr "audio"
 
-#: src/input/r_avc.cpp:122
-msgid "avc_es_reader: Could not open the source file."
-msgstr "avc_es_lezer: Kon bron bestand niet openen."
-
 #: src/input/r_avc.cpp:106
 msgid "avc_es_reader: Should not have happened."
 msgstr "avc_es_lezer: Had niet mogen gebeuren."
@@ -8110,14 +8146,6 @@ msgstr "avc_es_lezer: Had niet mogen gebeuren."
 #, boost-format
 msgid "avi_reader: Could not initialize AVI source. Reason: %1%"
 msgstr "avi_lezer: Kon AVI bron niet starten. Reden: %1%"
-
-#: src/input/r_avi.cpp:107
-msgid "avi_reader: Could not read the source file."
-msgstr "avi_lezer: Kon bron bestand niet lezen."
-
-#: src/input/r_avi.cpp:104
-msgid "avi_reader: Source is not a valid AVI file."
-msgstr "avi_lezer: Bron is geen geldig AVI bestand."
 
 #: src/info/mkvinfo.cpp:671
 #, boost-format
@@ -8185,14 +8213,6 @@ msgstr "voltooid met waarschuwingen"
 msgid "compression"
 msgstr "compressie"
 
-#: src/input/r_corepicture.cpp:85
-msgid "corepicture_reader: Could not open the source file."
-msgstr "corepicture_lezer: Kon bron bestand niet openen."
-
-#: src/input/r_corepicture.cpp:72
-msgid "corepicture_reader: Source is not a valid CorePanorama file."
-msgstr "corepicture_lezer: Bron is geen geldig CorePanorama bestand."
-
 #: src/merge/mkvmerge.cpp:296
 #, boost-format
 msgid "create_track_number: file_num not found. %1%\n"
@@ -8213,10 +8233,6 @@ msgstr "standaard duur: %|1$.3f|ms (%|2$.3f| fps voor een video spoor)"
 #, boost-format
 msgid "deflateInit() failed. Result: %1%\n"
 msgstr "deflateInit() gefaald. Resultaat: %1%\n"
-
-#: src/input/r_dirac.cpp:82
-msgid "dirac_es_reader: Could not open the source file."
-msgstr "dirac_es_lezer: Kon bronbestand niet openen."
 
 #: src/mmg/tabs/attachments.cpp:154
 msgid "disable all"
@@ -8248,15 +8264,6 @@ msgstr "gedaan/waarschuwingen"
 #: src/mmg/tabs/input.cpp:189
 msgid "down"
 msgstr "Omlaag"
-
-#: src/input/r_dts.cpp:66
-msgid "dts_reader: Could not open the source file."
-msgstr "dts_lezer: Kon bronbestand niet openen."
-
-#: src/input/r_dts.cpp:62
-#, boost-format
-msgid "dts_reader: Could not read %1% bytes."
-msgstr "dts_lezer: Kon niet lezen %1% bytes."
 
 #: src/input/r_dts.cpp:77
 #, boost-format
@@ -8328,17 +8335,9 @@ msgstr "flac_kop_extraheren: bytes (%1%) < op.bytes (%2%). Kon de FLAC koppen ni
 msgid "flac_reader: Could not initialize the FLAC decoder.\n"
 msgstr "flac_lezer: Kon de FLAC decoder niet starten.\n"
 
-#: src/input/r_flac.cpp:118
-msgid "flac_reader: Could not open the source file."
-msgstr "flac_lezer: Kon bron bestand niet openen."
-
 #: src/input/r_flac.cpp:141
 msgid "flac_reader: Could not read a header packet.\n"
 msgstr "flac_lezer: Kon niet een kop pakket lezen.\n"
-
-#: src/input/r_flac.cpp:127
-msgid "flac_reader: Could not read all header packets."
-msgstr "flac_lezer: Kon niet alle kop paketten lezen."
 
 #: src/input/r_flac.cpp:240
 msgid "flac_reader: Could not read all header packets.\n"
@@ -8397,10 +8396,6 @@ msgstr "inflateInit() gefaald. Resultaat: %1%\n"
 #: src/mmg/mux_dialog.cpp:77
 msgid "is being estimated"
 msgstr "wordt berekend"
-
-#: src/input/r_ivf.cpp:62
-msgid "ivf_reader: Could not open the file."
-msgstr "ivf_lezer: Kan bestand niet openen."
 
 #: src/info/mkvinfo.cpp:1617
 msgid "key, "
@@ -8836,18 +8831,6 @@ msgstr "mmg zal de standaard lijst herstellen als er geen waarde is gekozen."
 msgid "mono"
 msgstr "mono"
 
-#: src/input/r_mp3.cpp:57
-msgid "mp3_reader: Could not open the source file."
-msgstr "mp3_lezer: Kon bron bestand niet openen."
-
-#: src/input/r_mpeg_es.cpp:163
-msgid "mpeg_es_reader: Could not open the file."
-msgstr "mpeg_es_lezer: Kon bestand niet openen."
-
-#: src/input/r_mpeg_ps.cpp:82
-msgid "mpeg_ps_reader: Could not open the file."
-msgstr "mpeg_ps_lezer: Kon bestand niet openen."
-
 #: src/input/r_mpeg_ps.cpp:1190
 #, boost-format
 msgid "mpeg_ps_reader: Should not have happened #1. %1%"
@@ -8857,10 +8840,6 @@ msgstr "mpeg_ps_lezer: Had niet mogen gebeuren #1. %1%"
 #, boost-format
 msgid "mpeg_ps_reader: Should not have happened #2. %1%"
 msgstr "mpeg_ps_lezer: Had niet mogen gebeuren #2. %1%"
-
-#: src/input/r_mpeg_ts.cpp:407
-msgid "mpeg_ts_reader_c: Could not open the file."
-msgstr "mpeg_ts_lezer: Kon bestand niet openen."
 
 #: src/mmg/header_editor/bool_value_page.cpp:43
 #: src/mmg/tabs/input_general.cpp:108
@@ -8908,18 +8887,6 @@ msgstr "ogg_stream_init voor stroom nummerr %1% gefaaid. Zal proberen door te ga
 msgid "ogg_sync_buffer failed\n"
 msgstr "ogg_sync_buffer gefaald\n"
 
-#: src/input/r_ogm.cpp:329
-msgid "ogm_reader: Could not open the source file."
-msgstr "ogm_lezer: Kon bron bestand niet openen."
-
-#: src/input/r_ogm.cpp:339
-msgid "ogm_reader: Could not read all header packets."
-msgstr "ogm_lezer: Kon niet alle kop paketten lezen."
-
-#: src/input/r_ogm.cpp:332
-msgid "ogm_reader: Source is not a valid OGG media file."
-msgstr "ogm_reade: Bron is geen geldig OGG media bestand."
-
 #: src/mmg/tabs/chapters.cpp:1067
 msgid "on_entry_selected: display == NULL. Should not have happened."
 msgstr "on_entry_selected: toon == NULL. Had niet mogen gebeuren."
@@ -8941,10 +8908,6 @@ msgstr ""
 #: src/mmg/jobs.cpp:702
 msgid "pending"
 msgstr "wachtend"
-
-#: src/input/r_pgssup.cpp:55
-msgid "pgssup_reader: Could not open the file."
-msgstr "pgssup_reader:: Kon bestand niet openen."
 
 #: src/info/mkvinfo.cpp:727
 #, boost-format
@@ -8995,10 +8958,6 @@ msgstr "raw data"
 msgid "ready"
 msgstr "gereed"
 
-#: src/input/r_real.cpp:149
-msgid "real_reader: Could not read the source file."
-msgstr "real_lezer: Kon bronbestand niet lezen."
-
 #: src/input/r_real.cpp:245
 #, boost-format
 msgid "real_reader: Couldn't find RealAudio FourCC for id %1% (description length: %2%) Skipping track.\n"
@@ -9008,10 +8967,6 @@ msgstr "real_lezer: Kon niet vinden RealAudio FourCC voor id %1% (beschrijving l
 #, boost-format
 msgid "real_reader: Only audio header versions 3, 4 and 5 are supported. Track ID %1% uses version %2% and will be skipped.\n"
 msgstr "real_lezer: Alleen audio koppen versie 3, 4 en 5 worden ondersteund. Spoor %1% gebruikt versie %2% en wordt overgeslagen.\n"
-
-#: src/input/r_real.cpp:147
-msgid "real_reader: Source is not a valid RealMedia file."
-msgstr "real_lezer: Bron is geen echt RealMedia bestand."
 
 #: src/mmg/tabs/attachments.cpp:157
 #: src/mmg/tabs/input.cpp:184
@@ -9052,25 +9007,9 @@ msgstr "naast elkaar (rechts eerst)"
 msgid "spu_extraction_duration: Encountered broken SPU packet (next_off < start_off) at timecode %1%. This packet might be displayed incorrectly or not at all.\n"
 msgstr "spu_extractie_duur: Een gebroken SPU pakket tegengekomen (next_off < start_off) bij tijdcode %1%. Dit pakket kan onjuist worden weergegeven of zelfs helemaal niet.\n"
 
-#: src/input/r_srt.cpp:40
-msgid "srt_reader: Could not open the source file."
-msgstr "srt_lezer: Kon het bronbestand niet openen."
-
-#: src/input/r_srt.cpp:34
-msgid "srt_reader: Source is not a valid SRT file."
-msgstr "srt_lezer: Bron is geen geldig SRT bestand."
-
-#: src/input/r_ssa.cpp:40
-msgid "ssa_reader: Could not open the source file."
-msgstr "ssa_lezer: Kon het bronbestand niet openen."
-
 #: src/input/subtitles.cpp:342
 msgid "ssa_reader: Invalid format. Could not find the \"Format\" line in the \"[Events]\" section."
 msgstr "ssa_lezer: Ongeldig formaat. Kon niet vinden \"Format\" regel in de \"[Events]\" sectie."
-
-#: src/input/r_ssa.cpp:44
-msgid "ssa_reader: Source is not a valid SSA/ASS file."
-msgstr "ssa_lezer: Bron is geen geldig SSA/ASS bestand."
 
 #: src/mmg/tabs/chapters.cpp:911
 msgid "start >= m->ListSize(). This should not have happened. Please file a bug report. Thanks."
@@ -9111,19 +9050,6 @@ msgstr "bovenste beneden (rechts eerst)"
 msgid "track name"
 msgstr "spoor naam"
 
-#: src/input/r_truehd.cpp:75
-msgid "truehd_reader: Could not open the source file."
-msgstr "truehd_lezer: Kon bronbestand niet openen."
-
-#: src/input/r_truehd.cpp:63
-#, boost-format
-msgid "truehd_reader: Could not read %1% bytes."
-msgstr "truehd_lezer: Kon niet lezen %1% bytes."
-
-#: src/input/r_tta.cpp:93
-msgid "tta_reader: Could not open the file."
-msgstr "tta_lezer: Kon bestand niet openen."
-
 #: src/input/r_tta.cpp:60
 #, boost-format
 msgid "tta_reader: tag_size < 0 in the c'tor. %1%\n"
@@ -9160,22 +9086,10 @@ msgstr "onbekend, markeer formaat 0x%|1$04x|"
 msgid "up"
 msgstr "Omhoog"
 
-#: src/input/r_usf.cpp:96
-msgid "usf_reader: Could not open the source file."
-msgstr "usf_lezer: Kon bestand niet openen."
-
-#: src/input/r_usf.cpp:75
-msgid "usf_reader: Source is not a valid USF file."
-msgstr "usf_lezer: Bron is geen geldig USF bestand."
-
 #: src/common/strings/editing.cpp:210
 #, boost-format
 msgid "utf8_strlen(): Invalid UTF-8 char. First byte: 0x%|1$02x|"
 msgstr "utf8_strlen(): Ongeldig UTF-8 karakter. Eerste byte: 0x%|1$02x|"
-
-#: src/input/r_vc1.cpp:82
-msgid "vc1_es_reader: Could not open the source file."
-msgstr "vc1_es_lezer: Kon bronbestand niet openen."
 
 #: src/mmg/tabs/chapters.cpp:840
 msgid "verify failed: chapters->CheckMandatory() is false. This should not have happened. Please file a bug report.\n"
@@ -9187,14 +9101,6 @@ msgstr "verifiëren gefaald: chapters->CheckMandatory() is fout. Dit had niet mo
 msgid "video"
 msgstr "video"
 
-#: src/input/r_vobbtn.cpp:56
-msgid "vobbtn_reader: Could not open the file."
-msgstr "lezer_vobbtn: Kon bestand niet openen."
-
-#: src/input/r_vobsub.cpp:70
-msgid "vobsub_reader: Could not open the source file."
-msgstr "lezer_vobsub: Kon bronbestand niet openen."
-
 #: src/input/r_vobsub.cpp:82
 msgid "vobsub_reader: Could not open the sub file"
 msgstr "lezer_vobsub: Kon sub bestand niet openen"
@@ -9202,10 +9108,6 @@ msgstr "lezer_vobsub: Kon sub bestand niet openen"
 #: src/input/r_vobsub.cpp:572
 msgid "vobsub_reader: sub_file->read failure"
 msgstr "lezer_vobsub: sub_bestand->leesfout"
-
-#: src/input/r_wav.cpp:462
-msgid "wav_reader: Could not open the source file."
-msgstr "lezer wavepack: Kon bronbestand niet openen."
 
 #: src/input/r_wav.cpp:514
 msgid "wav_reader: No data chunk was found."
@@ -9215,10 +9117,6 @@ msgstr "lezer wavepack: Geen deel gegevens gevonden."
 msgid "wav_reader: No format chunk found."
 msgstr "lezer wavepack: Geen deel gegevens gevonden."
 
-#: src/input/r_wav.cpp:466
-msgid "wav_reader: Source is not a valid WAVE file."
-msgstr "lezer wavepack: De bron is geen geldig WAVE bestand."
-
 #: src/input/r_wav.cpp:510
 msgid "wav_reader: The format chunk could not be read."
 msgstr "lezer wavepack: Geen deel gegevens kon worden gelezen."
@@ -9226,10 +9124,6 @@ msgstr "lezer wavepack: Geen deel gegevens kon worden gelezen."
 #: src/input/r_wav.cpp:480
 msgid "wav_reader: could not read WAVE header."
 msgstr "lezer wavepack: Kon WAVE kop niet lezen."
-
-#: src/input/r_wavpack.cpp:58
-msgid "wavpack_reader: Could not open the file."
-msgstr "lezer wavepack: Kon bestand niet openen."
 
 #: src/common/wavpack.cpp:158
 msgid "wavpack_reader: non-audio block found\n"
@@ -9338,6 +9232,12 @@ msgstr "ja"
 
 #~ msgid "Quicktime/MP4 audio and video"
 #~ msgstr "Quicktime/MP4 audio en video"
+
+#~ msgid "Quicktime/MP4 reader: Could not read the source file."
+#~ msgstr "Quicktime/MP4 lezer: Kon bronbestand niet lezen."
+
+#~ msgid "Quicktime/MP4 reader: Source is not a valid Quicktime/MP4 file."
+#~ msgstr "Quicktime/MP4 lezer: Bron is geen geldig Quicktime/MP4 bestand."
 
 #~ msgid "RealMedia audio and video"
 #~ msgstr "RealMedia audio en video"
@@ -9615,17 +9515,38 @@ msgstr "ja"
 #~ msgid "Write raw FLAC files (default: write OggFLAC files)."
 #~ msgstr "Schrijf raw FLAC bestanden (standaard: schrijf OggFLAC bestanden)."
 
+#~ msgid "ac3_reader: Could not read %1% bytes."
+#~ msgstr "ac3_lezer: Kon niet lezen %1% bytes."
+
 #~ msgid "anaglyph"
 #~ msgstr "anaglyph"
 
 #~ msgid "audio/video/text subtitles embedded in OGG"
 #~ msgstr "audio/video/tekst ondertiteling ingebed in OGG"
 
+#~ msgid "avc_es_reader: Could not open the source file."
+#~ msgstr "avc_es_lezer: Kon bron bestand niet openen."
+
 #~ msgid "byte_buffer_c: (pos + num) > size. Should not have happened. Please file a bug report.\n"
 #~ msgstr "byte_buffer_c: (pos + num) > grootte. Zou niet mogen gebeuren. Vul a.u.b. een fout (bug) rapport in.\n"
 
+#~ msgid "corepicture_reader: Could not open the source file."
+#~ msgstr "corepicture_lezer: Kon bron bestand niet openen."
+
+#~ msgid "corepicture_reader: Source is not a valid CorePanorama file."
+#~ msgstr "corepicture_lezer: Bron is geen geldig CorePanorama bestand."
+
 #~ msgid "cstrutf8_to_UTFstring: Invalid UTF-8 sequence encountered. Please contact moritz@bunkus.org and request that he implements a better UTF-8 parser."
 #~ msgstr "cstrutf8_to_UTFstring: Ongeldig UTF-8 reeks tegengekomen. Neem a.u.b. kontakt op met moritz@bunkus.org en verzoek om een betere UTF-8 ontleder."
+
+#~ msgid "dirac_es_reader: Could not open the source file."
+#~ msgstr "dirac_es_lezer: Kon bronbestand niet openen."
+
+#~ msgid "dts_reader: Could not open the source file."
+#~ msgstr "dts_lezer: Kon bronbestand niet openen."
+
+#~ msgid "dts_reader: Could not read %1% bytes."
+#~ msgstr "dts_lezer: Kon niet lezen %1% bytes."
 
 #~ msgid "flac_header_extraction: Could not set the error callback.\n"
 #~ msgstr "flac_header_extraction: Kon niet instellen de fout terugkoppeling.\n"
@@ -9638,6 +9559,12 @@ msgstr "ja"
 
 #~ msgid "flac_header_extraction: Could not set the write callback.\n"
 #~ msgstr "flac_header_extraction: Kon niet instellen de schrijf terugkoppeling.\n"
+
+#~ msgid "flac_reader: Could not open the source file."
+#~ msgstr "flac_lezer: Kon bron bestand niet openen."
+
+#~ msgid "flac_reader: Could not read all header packets."
+#~ msgstr "flac_lezer: Kon niet alle kop paketten lezen."
 
 #~ msgid "flac_reader: Could not set the eof callback.\n"
 #~ msgstr "flac_lezer: Kon niet instellen de eof terugkoppeling.\n"
@@ -9666,6 +9593,81 @@ msgstr "ja"
 #~ msgid "general Matroska files"
 #~ msgstr "algemeen Matroska bestand"
 
+#~ msgid "ivf_reader: Could not open the file."
+#~ msgstr "ivf_lezer: Kan bestand niet openen."
+
 #~ msgid "mkvextract: Unknown mode!?\n"
 #~ msgstr "mkvextract: Onbekende mode!?\n"
+
+#~ msgid "mp3_reader: Could not open the source file."
+#~ msgstr "mp3_lezer: Kon bron bestand niet openen."
+
+#~ msgid "mpeg_es_reader: Could not open the file."
+#~ msgstr "mpeg_es_lezer: Kon bestand niet openen."
+
+#~ msgid "mpeg_ps_reader: Could not open the file."
+#~ msgstr "mpeg_ps_lezer: Kon bestand niet openen."
+
+#~ msgid "mpeg_ts_reader_c: Could not open the file."
+#~ msgstr "mpeg_ts_lezer: Kon bestand niet openen."
+
+#~ msgid "ogm_reader: Could not open the source file."
+#~ msgstr "ogm_lezer: Kon bron bestand niet openen."
+
+#~ msgid "ogm_reader: Source is not a valid OGG media file."
+#~ msgstr "ogm_reade: Bron is geen geldig OGG media bestand."
+
+#~ msgid "pgssup_reader: Could not open the file."
+#~ msgstr "pgssup_reader:: Kon bestand niet openen."
+
+#~ msgid "real_reader: Could not read the source file."
+#~ msgstr "real_lezer: Kon bronbestand niet lezen."
+
+#~ msgid "real_reader: Source is not a valid RealMedia file."
+#~ msgstr "real_lezer: Bron is geen echt RealMedia bestand."
+
+#~ msgid "srt_reader: Could not open the source file."
+#~ msgstr "srt_lezer: Kon het bronbestand niet openen."
+
+#~ msgid "srt_reader: Source is not a valid SRT file."
+#~ msgstr "srt_lezer: Bron is geen geldig SRT bestand."
+
+#~ msgid "ssa_reader: Could not open the source file."
+#~ msgstr "ssa_lezer: Kon het bronbestand niet openen."
+
+#~ msgid "ssa_reader: Source is not a valid SSA/ASS file."
+#~ msgstr "ssa_lezer: Bron is geen geldig SSA/ASS bestand."
+
+#~ msgid "truehd_reader: Could not open the source file."
+#~ msgstr "truehd_lezer: Kon bronbestand niet openen."
+
+#~ msgid "truehd_reader: Could not read %1% bytes."
+#~ msgstr "truehd_lezer: Kon niet lezen %1% bytes."
+
+#~ msgid "tta_reader: Could not open the file."
+#~ msgstr "tta_lezer: Kon bestand niet openen."
+
+#~ msgid "usf_reader: Could not open the source file."
+#~ msgstr "usf_lezer: Kon bestand niet openen."
+
+#~ msgid "usf_reader: Source is not a valid USF file."
+#~ msgstr "usf_lezer: Bron is geen geldig USF bestand."
+
+#~ msgid "vc1_es_reader: Could not open the source file."
+#~ msgstr "vc1_es_lezer: Kon bronbestand niet openen."
+
+#~ msgid "vobbtn_reader: Could not open the file."
+#~ msgstr "lezer_vobbtn: Kon bestand niet openen."
+
+#~ msgid "vobsub_reader: Could not open the source file."
+#~ msgstr "lezer_vobsub: Kon bronbestand niet openen."
+
+#~ msgid "wav_reader: Could not open the source file."
+#~ msgstr "lezer wavepack: Kon bronbestand niet openen."
+
+#~ msgid "wav_reader: Source is not a valid WAVE file."
+#~ msgstr "lezer wavepack: De bron is geen geldig WAVE bestand."
+
+#~ msgid "wavpack_reader: Could not open the file."
+#~ msgstr "lezer wavepack: Kon bestand niet openen."
 

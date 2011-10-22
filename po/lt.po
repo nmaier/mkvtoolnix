@@ -643,9 +643,75 @@ msgstr ""
 msgid "%1% frame, track %2%, timecode %3% (%4%), size %5%, adler 0x%|6$08x|%7%%8%\n"
 msgstr ""
 
+#: src/input/r_aac.cpp:88
+#: src/input/r_ivf.cpp:62
+#: src/input/r_mpeg_es.cpp:163
+#: src/input/r_mpeg_ps.cpp:82
+#: src/input/r_mpeg_ts.cpp:407
+#: src/input/r_pgssup.cpp:55
+#: src/input/r_tta.cpp:93
+#: src/input/r_vobbtn.cpp:56
+#: src/input/r_wavpack.cpp:58
+#, fuzzy, boost-format
+msgid "%1%: Could not open the file."
+msgstr "Nepavyksta atverti iškarpinės."
+
+#: src/input/r_ac3.cpp:67
+#: src/input/r_avc.cpp:122
+#: src/input/r_corepicture.cpp:85
+#: src/input/r_dirac.cpp:82
+#: src/input/r_dts.cpp:66
+#: src/input/r_flac.cpp:118
+#: src/input/r_mp3.cpp:57
+#: src/input/r_ogm.cpp:329
+#: src/input/r_srt.cpp:40
+#: src/input/r_ssa.cpp:40
+#: src/input/r_truehd.cpp:75
+#: src/input/r_usf.cpp:96
+#: src/input/r_vc1.cpp:82
+#: src/input/r_vobsub.cpp:70
+#: src/input/r_wav.cpp:462
+#, fuzzy, boost-format
+msgid "%1%: Could not open the source file."
+msgstr "Nepavyksta atverti iškarpinės."
+
+#: src/input/r_aac.cpp:57
+#: src/input/r_ac3.cpp:62
+#: src/input/r_dts.cpp:62
+#: src/input/r_truehd.cpp:63
+#, boost-format
+msgid "%1%: Could not read %2% bytes."
+msgstr ""
+
+#: src/input/r_flac.cpp:127
+#: src/input/r_ogm.cpp:339
+#, boost-format
+msgid "%1%: Could not read all header packets."
+msgstr ""
+
+#: src/input/r_avi.cpp:107
+#: src/input/r_qtmp4.cpp:128
+#: src/input/r_real.cpp:149
+#, boost-format
+msgid "%1%: Could not read the source file."
+msgstr ""
+
 #: src/common/kax_file.cpp:165
 #, boost-format
 msgid "%1%: Error in the Matroska file structure at position %2%. Resyncing to the next level 1 element.\n"
+msgstr ""
+
+#: src/input/r_avi.cpp:104
+#: src/input/r_corepicture.cpp:72
+#: src/input/r_ogm.cpp:332
+#: src/input/r_qtmp4.cpp:121
+#: src/input/r_real.cpp:147
+#: src/input/r_srt.cpp:34
+#: src/input/r_ssa.cpp:44
+#: src/input/r_usf.cpp:75
+#: src/input/r_wav.cpp:466
+#, boost-format
+msgid "%1%: Source is not a valid %1% file."
 msgstr ""
 
 #: src/merge/mkvmerge.cpp:635
@@ -5050,10 +5116,6 @@ msgstr ""
 msgid "Quicktime/MP4 reader: Could not read the sound description atom for track ID %1%.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:128
-msgid "Quicktime/MP4 reader: Could not read the source file."
-msgstr ""
-
 #: src/input/r_qtmp4.cpp:977
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the stream description atom for track ID %1%.\n"
@@ -5085,10 +5147,6 @@ msgstr ""
 #: src/input/r_qtmp4.cpp:282
 #, boost-format
 msgid "Quicktime/MP4 reader: MPEG4 track %1% is missing the esds atom/the decoder config. Skipping this track.\n"
-msgstr ""
-
-#: src/input/r_qtmp4.cpp:121
-msgid "Quicktime/MP4 reader: Source is not a valid Quicktime/MP4 file."
 msgstr ""
 
 #: src/input/r_qtmp4.cpp:650
@@ -7775,15 +7833,6 @@ msgstr ""
 msgid "aac_reader: ADIF header files are not supported."
 msgstr ""
 
-#: src/input/r_aac.cpp:88
-msgid "aac_reader: Could not open the file."
-msgstr ""
-
-#: src/input/r_aac.cpp:57
-#, boost-format
-msgid "aac_reader: Could not read %1% bytes."
-msgstr ""
-
 #: src/input/r_aac.cpp:65
 #, boost-format
 msgid "aac_reader: No valid AAC packet found in the first %1% bytes.\n"
@@ -7797,15 +7846,6 @@ msgstr "nutraukta"
 
 #: src/output/p_ac3.cpp:213
 msgid "ac3_bs_packetizer::add_to_buffer(): Untested code ('size' is odd). If mkvmerge crashes or if the resulting file does not contain the complete and correct audio track, then please contact the author Moritz Bunkus at moritz@bunkus.org.\n"
-msgstr ""
-
-#: src/input/r_ac3.cpp:67
-msgid "ac3_reader: Could not open the source file."
-msgstr ""
-
-#: src/input/r_ac3.cpp:62
-#, boost-format
-msgid "ac3_reader: Could not read %1% bytes."
 msgstr ""
 
 #: src/input/r_ac3.cpp:71
@@ -7836,10 +7876,6 @@ msgstr "papildyti"
 msgid "audio"
 msgstr "garsas"
 
-#: src/input/r_avc.cpp:122
-msgid "avc_es_reader: Could not open the source file."
-msgstr ""
-
 #: src/input/r_avc.cpp:106
 msgid "avc_es_reader: Should not have happened."
 msgstr ""
@@ -7847,14 +7883,6 @@ msgstr ""
 #: src/input/r_avi.cpp:113
 #, boost-format
 msgid "avi_reader: Could not initialize AVI source. Reason: %1%"
-msgstr ""
-
-#: src/input/r_avi.cpp:107
-msgid "avi_reader: Could not read the source file."
-msgstr ""
-
-#: src/input/r_avi.cpp:104
-msgid "avi_reader: Source is not a valid AVI file."
 msgstr ""
 
 #: src/info/mkvinfo.cpp:671
@@ -7923,14 +7951,6 @@ msgstr "užbaigta, bet buvo įspėjimų"
 msgid "compression"
 msgstr "glaudinimas"
 
-#: src/input/r_corepicture.cpp:85
-msgid "corepicture_reader: Could not open the source file."
-msgstr ""
-
-#: src/input/r_corepicture.cpp:72
-msgid "corepicture_reader: Source is not a valid CorePanorama file."
-msgstr ""
-
 #: src/merge/mkvmerge.cpp:296
 #, boost-format
 msgid "create_track_number: file_num not found. %1%\n"
@@ -7950,10 +7970,6 @@ msgstr ""
 #: src/common/compression.cpp:161
 #, boost-format
 msgid "deflateInit() failed. Result: %1%\n"
-msgstr ""
-
-#: src/input/r_dirac.cpp:82
-msgid "dirac_es_reader: Could not open the source file."
 msgstr ""
 
 #: src/mmg/tabs/attachments.cpp:154
@@ -7986,15 +8002,6 @@ msgstr "atlikta/įspėjimai"
 #: src/mmg/tabs/input.cpp:189
 msgid "down"
 msgstr "žemyn"
-
-#: src/input/r_dts.cpp:66
-msgid "dts_reader: Could not open the source file."
-msgstr ""
-
-#: src/input/r_dts.cpp:62
-#, boost-format
-msgid "dts_reader: Could not read %1% bytes."
-msgstr ""
 
 #: src/input/r_dts.cpp:77
 #, boost-format
@@ -8066,16 +8073,8 @@ msgstr ""
 msgid "flac_reader: Could not initialize the FLAC decoder.\n"
 msgstr ""
 
-#: src/input/r_flac.cpp:118
-msgid "flac_reader: Could not open the source file."
-msgstr ""
-
 #: src/input/r_flac.cpp:141
 msgid "flac_reader: Could not read a header packet.\n"
-msgstr ""
-
-#: src/input/r_flac.cpp:127
-msgid "flac_reader: Could not read all header packets."
 msgstr ""
 
 #: src/input/r_flac.cpp:240
@@ -8134,10 +8133,6 @@ msgstr ""
 #: src/mmg/jobs.cpp:163
 #: src/mmg/mux_dialog.cpp:77
 msgid "is being estimated"
-msgstr ""
-
-#: src/input/r_ivf.cpp:62
-msgid "ivf_reader: Could not open the file."
 msgstr ""
 
 #: src/info/mkvinfo.cpp:1617
@@ -8572,18 +8567,6 @@ msgstr ""
 msgid "mono"
 msgstr ""
 
-#: src/input/r_mp3.cpp:57
-msgid "mp3_reader: Could not open the source file."
-msgstr ""
-
-#: src/input/r_mpeg_es.cpp:163
-msgid "mpeg_es_reader: Could not open the file."
-msgstr ""
-
-#: src/input/r_mpeg_ps.cpp:82
-msgid "mpeg_ps_reader: Could not open the file."
-msgstr ""
-
 #: src/input/r_mpeg_ps.cpp:1190
 #, boost-format
 msgid "mpeg_ps_reader: Should not have happened #1. %1%"
@@ -8592,10 +8575,6 @@ msgstr ""
 #: src/input/r_mpeg_ps.cpp:1216
 #, boost-format
 msgid "mpeg_ps_reader: Should not have happened #2. %1%"
-msgstr ""
-
-#: src/input/r_mpeg_ts.cpp:407
-msgid "mpeg_ts_reader_c: Could not open the file."
 msgstr ""
 
 #: src/mmg/header_editor/bool_value_page.cpp:43
@@ -8644,18 +8623,6 @@ msgstr ""
 msgid "ogg_sync_buffer failed\n"
 msgstr ""
 
-#: src/input/r_ogm.cpp:329
-msgid "ogm_reader: Could not open the source file."
-msgstr ""
-
-#: src/input/r_ogm.cpp:339
-msgid "ogm_reader: Could not read all header packets."
-msgstr ""
-
-#: src/input/r_ogm.cpp:332
-msgid "ogm_reader: Source is not a valid OGG media file."
-msgstr ""
-
 #: src/mmg/tabs/chapters.cpp:1067
 msgid "on_entry_selected: display == NULL. Should not have happened."
 msgstr ""
@@ -8677,10 +8644,6 @@ msgstr ""
 #: src/mmg/jobs.cpp:702
 msgid "pending"
 msgstr "laukiama"
-
-#: src/input/r_pgssup.cpp:55
-msgid "pgssup_reader: Could not open the file."
-msgstr ""
 
 #: src/info/mkvinfo.cpp:727
 #, boost-format
@@ -8731,10 +8694,6 @@ msgstr "neapdoroti duomenys"
 msgid "ready"
 msgstr "parengta"
 
-#: src/input/r_real.cpp:149
-msgid "real_reader: Could not read the source file."
-msgstr ""
-
 #: src/input/r_real.cpp:245
 #, boost-format
 msgid "real_reader: Couldn't find RealAudio FourCC for id %1% (description length: %2%) Skipping track.\n"
@@ -8743,10 +8702,6 @@ msgstr ""
 #: src/input/r_real.cpp:273
 #, boost-format
 msgid "real_reader: Only audio header versions 3, 4 and 5 are supported. Track ID %1% uses version %2% and will be skipped.\n"
-msgstr ""
-
-#: src/input/r_real.cpp:147
-msgid "real_reader: Source is not a valid RealMedia file."
 msgstr ""
 
 #: src/mmg/tabs/attachments.cpp:157
@@ -8788,24 +8743,8 @@ msgstr ""
 msgid "spu_extraction_duration: Encountered broken SPU packet (next_off < start_off) at timecode %1%. This packet might be displayed incorrectly or not at all.\n"
 msgstr ""
 
-#: src/input/r_srt.cpp:40
-msgid "srt_reader: Could not open the source file."
-msgstr ""
-
-#: src/input/r_srt.cpp:34
-msgid "srt_reader: Source is not a valid SRT file."
-msgstr ""
-
-#: src/input/r_ssa.cpp:40
-msgid "ssa_reader: Could not open the source file."
-msgstr ""
-
 #: src/input/subtitles.cpp:342
 msgid "ssa_reader: Invalid format. Could not find the \"Format\" line in the \"[Events]\" section."
-msgstr ""
-
-#: src/input/r_ssa.cpp:44
-msgid "ssa_reader: Source is not a valid SSA/ASS file."
 msgstr ""
 
 #: src/mmg/tabs/chapters.cpp:911
@@ -8847,19 +8786,6 @@ msgstr ""
 msgid "track name"
 msgstr "takelio pavadinimas"
 
-#: src/input/r_truehd.cpp:75
-msgid "truehd_reader: Could not open the source file."
-msgstr ""
-
-#: src/input/r_truehd.cpp:63
-#, boost-format
-msgid "truehd_reader: Could not read %1% bytes."
-msgstr ""
-
-#: src/input/r_tta.cpp:93
-msgid "tta_reader: Could not open the file."
-msgstr ""
-
 #: src/input/r_tta.cpp:60
 #, boost-format
 msgid "tta_reader: tag_size < 0 in the c'tor. %1%\n"
@@ -8896,21 +8822,9 @@ msgstr ""
 msgid "up"
 msgstr "aukštyn"
 
-#: src/input/r_usf.cpp:96
-msgid "usf_reader: Could not open the source file."
-msgstr ""
-
-#: src/input/r_usf.cpp:75
-msgid "usf_reader: Source is not a valid USF file."
-msgstr ""
-
 #: src/common/strings/editing.cpp:210
 #, boost-format
 msgid "utf8_strlen(): Invalid UTF-8 char. First byte: 0x%|1$02x|"
-msgstr ""
-
-#: src/input/r_vc1.cpp:82
-msgid "vc1_es_reader: Could not open the source file."
 msgstr ""
 
 #: src/mmg/tabs/chapters.cpp:840
@@ -8923,24 +8837,12 @@ msgstr ""
 msgid "video"
 msgstr "vaizdo įrašas"
 
-#: src/input/r_vobbtn.cpp:56
-msgid "vobbtn_reader: Could not open the file."
-msgstr ""
-
-#: src/input/r_vobsub.cpp:70
-msgid "vobsub_reader: Could not open the source file."
-msgstr ""
-
 #: src/input/r_vobsub.cpp:82
 msgid "vobsub_reader: Could not open the sub file"
 msgstr ""
 
 #: src/input/r_vobsub.cpp:572
 msgid "vobsub_reader: sub_file->read failure"
-msgstr ""
-
-#: src/input/r_wav.cpp:462
-msgid "wav_reader: Could not open the source file."
 msgstr ""
 
 #: src/input/r_wav.cpp:514
@@ -8951,20 +8853,12 @@ msgstr ""
 msgid "wav_reader: No format chunk found."
 msgstr ""
 
-#: src/input/r_wav.cpp:466
-msgid "wav_reader: Source is not a valid WAVE file."
-msgstr ""
-
 #: src/input/r_wav.cpp:510
 msgid "wav_reader: The format chunk could not be read."
 msgstr ""
 
 #: src/input/r_wav.cpp:480
 msgid "wav_reader: could not read WAVE header."
-msgstr ""
-
-#: src/input/r_wavpack.cpp:58
-msgid "wavpack_reader: Could not open the file."
 msgstr ""
 
 #: src/common/wavpack.cpp:158

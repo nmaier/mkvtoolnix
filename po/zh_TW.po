@@ -754,10 +754,76 @@ msgstr "%1% 畫格, 軌道 %2%, 時間碼 %3% (%4%), 大小 %5%, adler 0x%|6$08x
 msgid "%1% frame, track %2%, timecode %3% (%4%), size %5%, adler 0x%|6$08x|%7%%8%\n"
 msgstr "%1% 畫格, 軌道 %2%, 時間碼 %3% (%4%), 大小 %5%, adler 0x%|6$08x|%7%%8%\n"
 
+#: src/input/r_aac.cpp:88
+#: src/input/r_ivf.cpp:62
+#: src/input/r_mpeg_es.cpp:163
+#: src/input/r_mpeg_ps.cpp:82
+#: src/input/r_mpeg_ts.cpp:407
+#: src/input/r_pgssup.cpp:55
+#: src/input/r_tta.cpp:93
+#: src/input/r_vobbtn.cpp:56
+#: src/input/r_wavpack.cpp:58
+#, fuzzy, boost-format
+msgid "%1%: Could not open the file."
+msgstr "無法開啟檔案 '%1%'。"
+
+#: src/input/r_ac3.cpp:67
+#: src/input/r_avc.cpp:122
+#: src/input/r_corepicture.cpp:85
+#: src/input/r_dirac.cpp:82
+#: src/input/r_dts.cpp:66
+#: src/input/r_flac.cpp:118
+#: src/input/r_mp3.cpp:57
+#: src/input/r_ogm.cpp:329
+#: src/input/r_srt.cpp:40
+#: src/input/r_ssa.cpp:40
+#: src/input/r_truehd.cpp:75
+#: src/input/r_usf.cpp:96
+#: src/input/r_vc1.cpp:82
+#: src/input/r_vobsub.cpp:70
+#: src/input/r_wav.cpp:462
+#, fuzzy, boost-format
+msgid "%1%: Could not open the source file."
+msgstr "ac3_reader: 無法開啟來源檔案。"
+
+#: src/input/r_aac.cpp:57
+#: src/input/r_ac3.cpp:62
+#: src/input/r_dts.cpp:62
+#: src/input/r_truehd.cpp:63
+#, fuzzy, boost-format
+msgid "%1%: Could not read %2% bytes."
+msgstr "aac_reader: 無法讀取 %1% 位元組。"
+
+#: src/input/r_flac.cpp:127
+#: src/input/r_ogm.cpp:339
+#, fuzzy, boost-format
+msgid "%1%: Could not read all header packets."
+msgstr "ogm_reader: 無法讀取所有表頭套件。"
+
+#: src/input/r_avi.cpp:107
+#: src/input/r_qtmp4.cpp:128
+#: src/input/r_real.cpp:149
+#, fuzzy, boost-format
+msgid "%1%: Could not read the source file."
+msgstr "avi_reader: 無法讀取來源檔案。"
+
 #: src/common/kax_file.cpp:165
 #, boost-format
 msgid "%1%: Error in the Matroska file structure at position %2%. Resyncing to the next level 1 element.\n"
 msgstr "%1%: Matroska 在檔案結構的位置 %2% 裡發生錯誤。重新同步為下一等級 1 元件。\n"
+
+#: src/input/r_avi.cpp:104
+#: src/input/r_corepicture.cpp:72
+#: src/input/r_ogm.cpp:332
+#: src/input/r_qtmp4.cpp:121
+#: src/input/r_real.cpp:147
+#: src/input/r_srt.cpp:34
+#: src/input/r_ssa.cpp:44
+#: src/input/r_usf.cpp:75
+#: src/input/r_wav.cpp:466
+#, fuzzy, boost-format
+msgid "%1%: Source is not a valid %1% file."
+msgstr "avi_reader: 來源非有效的 AVI 檔案。"
 
 #: src/merge/mkvmerge.cpp:635
 #, boost-format
@@ -5185,10 +5251,6 @@ msgstr "Quicktime/MP4 讀取器: 無法讀取軌道 %1% 的擴展音訊描述單
 msgid "Quicktime/MP4 reader: Could not read the sound description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4 讀取器: 無法讀取軌道 %1% 的音訊描述單元。\n"
 
-#: src/input/r_qtmp4.cpp:128
-msgid "Quicktime/MP4 reader: Could not read the source file."
-msgstr "Quicktime/MP4 讀取器: 無法讀取來源檔。"
-
 #: src/input/r_qtmp4.cpp:977
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the stream description atom for track ID %1%.\n"
@@ -5221,10 +5283,6 @@ msgstr "Quicktime/MP4 讀取器: MPEG4 part 10/AVC 軌道 %1% 缺少解碼器設
 #, boost-format
 msgid "Quicktime/MP4 reader: MPEG4 track %1% is missing the esds atom/the decoder config. Skipping this track.\n"
 msgstr "Quicktime/MP4 讀取器: MPEG4 軌 %1% 缺少 esds 單元/解碼器設定資訊。正在跳過該軌。\n"
-
-#: src/input/r_qtmp4.cpp:121
-msgid "Quicktime/MP4 reader: Source is not a valid Quicktime/MP4 file."
-msgstr "Quicktime/MP4 讀取器: 來源非有效的 Quicktime/MP4 檔案。"
 
 #: src/input/r_qtmp4.cpp:650
 #, boost-format
@@ -7994,15 +8052,6 @@ msgstr "[%1% 畫格，軌道 %2%, 時間碼 %3%]"
 msgid "aac_reader: ADIF header files are not supported."
 msgstr "aac_reader: 不支援 ADIF 表頭檔。"
 
-#: src/input/r_aac.cpp:88
-msgid "aac_reader: Could not open the file."
-msgstr "aac_reader: 無法開啟檔案。"
-
-#: src/input/r_aac.cpp:57
-#, boost-format
-msgid "aac_reader: Could not read %1% bytes."
-msgstr "aac_reader: 無法讀取 %1% 位元組。"
-
 #: src/input/r_aac.cpp:65
 #, boost-format
 msgid "aac_reader: No valid AAC packet found in the first %1% bytes.\n"
@@ -8017,15 +8066,6 @@ msgstr "異常中止"
 #: src/output/p_ac3.cpp:213
 msgid "ac3_bs_packetizer::add_to_buffer(): Untested code ('size' is odd). If mkvmerge crashes or if the resulting file does not contain the complete and correct audio track, then please contact the author Moritz Bunkus at moritz@bunkus.org.\n"
 msgstr "ac3_bs_packetizer::add_to_buffer(): 未經測試的碼 (「size」很古怪)。如果 mkvmerge 不正常關閉或者生成的檔案不含完整且正常的音軌，請與作者 Moritz Bunkus 聯繫，電郵為 moritz@bunkus.org。\n"
-
-#: src/input/r_ac3.cpp:67
-msgid "ac3_reader: Could not open the source file."
-msgstr "ac3_reader: 無法開啟來源檔案。"
-
-#: src/input/r_ac3.cpp:62
-#, boost-format
-msgid "ac3_reader: Could not read %1% bytes."
-msgstr "ac3_reader: 無法讀取 %1% 位元組。"
 
 #: src/input/r_ac3.cpp:71
 #, boost-format
@@ -8055,10 +8095,6 @@ msgstr "添加"
 msgid "audio"
 msgstr "音訊"
 
-#: src/input/r_avc.cpp:122
-msgid "avc_es_reader: Could not open the source file."
-msgstr "avc_es_reader: 無法開啟來源檔案。"
-
 #: src/input/r_avc.cpp:106
 msgid "avc_es_reader: Should not have happened."
 msgstr "avc_es_reader: 不該發生。"
@@ -8067,14 +8103,6 @@ msgstr "avc_es_reader: 不該發生。"
 #, boost-format
 msgid "avi_reader: Could not initialize AVI source. Reason: %1%"
 msgstr "avi_reader: 無法初始化 AVI 源。原因: %1%"
-
-#: src/input/r_avi.cpp:107
-msgid "avi_reader: Could not read the source file."
-msgstr "avi_reader: 無法讀取來源檔案。"
-
-#: src/input/r_avi.cpp:104
-msgid "avi_reader: Source is not a valid AVI file."
-msgstr "avi_reader: 來源非有效的 AVI 檔案。"
 
 #: src/info/mkvinfo.cpp:671
 #, boost-format
@@ -8142,14 +8170,6 @@ msgstr "完成，有警告"
 msgid "compression"
 msgstr "壓縮"
 
-#: src/input/r_corepicture.cpp:85
-msgid "corepicture_reader: Could not open the source file."
-msgstr "corepicture_reader: 無法開啟來源檔案。"
-
-#: src/input/r_corepicture.cpp:72
-msgid "corepicture_reader: Source is not a valid CorePanorama file."
-msgstr "corepicture_reader: 來源非 CorePanorama 檔案。"
-
 #: src/merge/mkvmerge.cpp:296
 #, boost-format
 msgid "create_track_number: file_num not found. %1%\n"
@@ -8170,10 +8190,6 @@ msgstr "預設持續時間: %|1$.3f|ms (對於視訊軌為 %|2$.3f|)"
 #, boost-format
 msgid "deflateInit() failed. Result: %1%\n"
 msgstr "deflateInit() 失敗。結果: %1%\n"
-
-#: src/input/r_dirac.cpp:82
-msgid "dirac_es_reader: Could not open the source file."
-msgstr "dirac_es_reader: 無法開啟來源檔案。"
 
 #: src/mmg/tabs/attachments.cpp:154
 msgid "disable all"
@@ -8205,15 +8221,6 @@ msgstr "完成/有警告"
 #: src/mmg/tabs/input.cpp:189
 msgid "down"
 msgstr "下移"
-
-#: src/input/r_dts.cpp:66
-msgid "dts_reader: Could not open the source file."
-msgstr "dts_reader: 無法開啟來源檔案。"
-
-#: src/input/r_dts.cpp:62
-#, boost-format
-msgid "dts_reader: Could not read %1% bytes."
-msgstr "dts_reader: 無法讀取 %1% 位元組。"
 
 #: src/input/r_dts.cpp:77
 #, boost-format
@@ -8285,17 +8292,9 @@ msgstr "flac_header_extraction: bytes (%1%) < op.bytes (%2%)。無法讀取 FLAC
 msgid "flac_reader: Could not initialize the FLAC decoder.\n"
 msgstr "flac_reader: 無法初始化 FLAC 解碼器。\n"
 
-#: src/input/r_flac.cpp:118
-msgid "flac_reader: Could not open the source file."
-msgstr "flac_reader: 無法開啟來源檔案。"
-
 #: src/input/r_flac.cpp:141
 msgid "flac_reader: Could not read a header packet.\n"
 msgstr "flac_reader: 無法讀取表頭套件。\n"
-
-#: src/input/r_flac.cpp:127
-msgid "flac_reader: Could not read all header packets."
-msgstr "flac_reader: 無法讀取全部表頭套件。"
 
 #: src/input/r_flac.cpp:240
 msgid "flac_reader: Could not read all header packets.\n"
@@ -8354,10 +8353,6 @@ msgstr "inflateInit() 失敗。結果: %1%\n"
 #: src/mmg/mux_dialog.cpp:77
 msgid "is being estimated"
 msgstr "正在估計"
-
-#: src/input/r_ivf.cpp:62
-msgid "ivf_reader: Could not open the file."
-msgstr "ivf_reader: 無法開啟檔案。"
 
 #: src/info/mkvinfo.cpp:1617
 msgid "key, "
@@ -8793,18 +8788,6 @@ msgstr "如果沒有選擇任何項目 mmg 將會重設為預設值。"
 msgid "mono"
 msgstr "單視角"
 
-#: src/input/r_mp3.cpp:57
-msgid "mp3_reader: Could not open the source file."
-msgstr "mp3_reader: 無法開啟來源檔案。"
-
-#: src/input/r_mpeg_es.cpp:163
-msgid "mpeg_es_reader: Could not open the file."
-msgstr "mpeg_es_reader: 無法開啟檔案。"
-
-#: src/input/r_mpeg_ps.cpp:82
-msgid "mpeg_ps_reader: Could not open the file."
-msgstr "mpeg_ps_reader: 無法開啟檔案。"
-
 #: src/input/r_mpeg_ps.cpp:1190
 #, boost-format
 msgid "mpeg_ps_reader: Should not have happened #1. %1%"
@@ -8814,10 +8797,6 @@ msgstr "mpeg_ps_reader: 不該發生 #1。 %1%"
 #, boost-format
 msgid "mpeg_ps_reader: Should not have happened #2. %1%"
 msgstr "mpeg_ps_reader: 不該發生 #2。 %1%"
-
-#: src/input/r_mpeg_ts.cpp:407
-msgid "mpeg_ts_reader_c: Could not open the file."
-msgstr "mpeg_ts_reader_c: 無法開啟檔案。"
 
 #: src/mmg/header_editor/bool_value_page.cpp:43
 #: src/mmg/tabs/input_general.cpp:108
@@ -8865,18 +8844,6 @@ msgstr "ogg_stream_init 對媒體流編號 %1% 失敗。將嘗試繼續並忽略
 msgid "ogg_sync_buffer failed\n"
 msgstr "ogg_sync_buffer 失敗\n"
 
-#: src/input/r_ogm.cpp:329
-msgid "ogm_reader: Could not open the source file."
-msgstr "ogm_reader: 無法開啟來源檔案。"
-
-#: src/input/r_ogm.cpp:339
-msgid "ogm_reader: Could not read all header packets."
-msgstr "ogm_reader: 無法讀取所有表頭套件。"
-
-#: src/input/r_ogm.cpp:332
-msgid "ogm_reader: Source is not a valid OGG media file."
-msgstr "ogm_reader: 來源非有效的 OGG 媒體檔案。"
-
 #: src/mmg/tabs/chapters.cpp:1067
 msgid "on_entry_selected: display == NULL. Should not have happened."
 msgstr "on_entry_selected: display == NULL。不該出現。"
@@ -8898,10 +8865,6 @@ msgstr ""
 #: src/mmg/jobs.cpp:702
 msgid "pending"
 msgstr "未處理"
-
-#: src/input/r_pgssup.cpp:55
-msgid "pgssup_reader: Could not open the file."
-msgstr "pgssup_reader: 無法開啟檔案。"
 
 #: src/info/mkvinfo.cpp:727
 #, boost-format
@@ -8952,10 +8915,6 @@ msgstr "raw 資料"
 msgid "ready"
 msgstr "準備就緒"
 
-#: src/input/r_real.cpp:149
-msgid "real_reader: Could not read the source file."
-msgstr "real_reader: 無法讀取來源檔案。"
-
 #: src/input/r_real.cpp:245
 #, boost-format
 msgid "real_reader: Couldn't find RealAudio FourCC for id %1% (description length: %2%) Skipping track.\n"
@@ -8965,10 +8924,6 @@ msgstr "real_reader: 無法為軌 id %1% (描述資訊長度: %2%) 找到 RealAu
 #, boost-format
 msgid "real_reader: Only audio header versions 3, 4 and 5 are supported. Track ID %1% uses version %2% and will be skipped.\n"
 msgstr "real_reader: 僅支援第 3, 4 和 5 版的音訊頭。軌道 ID %1% 所用版本為 %2% ，將被跳過。\n"
-
-#: src/input/r_real.cpp:147
-msgid "real_reader: Source is not a valid RealMedia file."
-msgstr "real_reader: 來源非有效的 RealMedia 檔案。"
 
 #: src/mmg/tabs/attachments.cpp:157
 #: src/mmg/tabs/input.cpp:184
@@ -9009,25 +8964,9 @@ msgstr "左右並排 (從右邊開始)"
 msgid "spu_extraction_duration: Encountered broken SPU packet (next_off < start_off) at timecode %1%. This packet might be displayed incorrectly or not at all.\n"
 msgstr "spu_extraction_duration: 遇到損壞的 SPU 套件 (next_off < start_off) 於時間碼 %1%。該套件可能會被錯誤顯示或者根本不顯示。\n"
 
-#: src/input/r_srt.cpp:40
-msgid "srt_reader: Could not open the source file."
-msgstr "srt_reader: 無法開啟來源檔案。"
-
-#: src/input/r_srt.cpp:34
-msgid "srt_reader: Source is not a valid SRT file."
-msgstr "srt_reader: 來來源非有效的 SRT 檔。"
-
-#: src/input/r_ssa.cpp:40
-msgid "ssa_reader: Could not open the source file."
-msgstr "ssa_reader: 無法開啟來源檔案。"
-
 #: src/input/subtitles.cpp:342
 msgid "ssa_reader: Invalid format. Could not find the \"Format\" line in the \"[Events]\" section."
 msgstr "ssa_reader: 無效格式。\"[Events]\" 區段中未找到 \"Format\" 這一行。"
-
-#: src/input/r_ssa.cpp:44
-msgid "ssa_reader: Source is not a valid SSA/ASS file."
-msgstr "ssa_reader: 來來源非有效的 SSA/ASS 檔。"
 
 #: src/mmg/tabs/chapters.cpp:911
 msgid "start >= m->ListSize(). This should not have happened. Please file a bug report. Thanks."
@@ -9068,19 +9007,6 @@ msgstr "上下並排 (從右邊開始)"
 msgid "track name"
 msgstr "軌道名稱"
 
-#: src/input/r_truehd.cpp:75
-msgid "truehd_reader: Could not open the source file."
-msgstr "truehd_reader: 無法開啟來源檔案。"
-
-#: src/input/r_truehd.cpp:63
-#, boost-format
-msgid "truehd_reader: Could not read %1% bytes."
-msgstr "truehd_reader: 無法讀取 %1% 位元組。"
-
-#: src/input/r_tta.cpp:93
-msgid "tta_reader: Could not open the file."
-msgstr "tta_reader: 無法開啟檔案。"
-
 #: src/input/r_tta.cpp:60
 #, boost-format
 msgid "tta_reader: tag_size < 0 in the c'tor. %1%\n"
@@ -9117,22 +9043,10 @@ msgstr "未知、格式標識 0x%|1$04x|"
 msgid "up"
 msgstr "上移"
 
-#: src/input/r_usf.cpp:96
-msgid "usf_reader: Could not open the source file."
-msgstr "usf_reader: 無法開啟來源檔案。"
-
-#: src/input/r_usf.cpp:75
-msgid "usf_reader: Source is not a valid USF file."
-msgstr "usf_reader: 來來源非有效的 USF 檔。"
-
 #: src/common/strings/editing.cpp:210
 #, boost-format
 msgid "utf8_strlen(): Invalid UTF-8 char. First byte: 0x%|1$02x|"
 msgstr "utf8_strlen(): 無效 UTF-8 字元。第一位元組: 0x%|1$02x|"
-
-#: src/input/r_vc1.cpp:82
-msgid "vc1_es_reader: Could not open the source file."
-msgstr "vc1_es_reader: 無法開啟來源檔案。"
 
 #: src/mmg/tabs/chapters.cpp:840
 msgid "verify failed: chapters->CheckMandatory() is false. This should not have happened. Please file a bug report.\n"
@@ -9144,14 +9058,6 @@ msgstr "verify failed: chapters->CheckMandatory() 為 false。這不該發生。
 msgid "video"
 msgstr "視訊"
 
-#: src/input/r_vobbtn.cpp:56
-msgid "vobbtn_reader: Could not open the file."
-msgstr "vobbtn_reader: 無法開啟檔案。"
-
-#: src/input/r_vobsub.cpp:70
-msgid "vobsub_reader: Could not open the source file."
-msgstr "vobsub_reader: 無法開啟來源檔案。"
-
 #: src/input/r_vobsub.cpp:82
 msgid "vobsub_reader: Could not open the sub file"
 msgstr "vobsub_reader: 無法開啟 sub 檔"
@@ -9159,10 +9065,6 @@ msgstr "vobsub_reader: 無法開啟 sub 檔"
 #: src/input/r_vobsub.cpp:572
 msgid "vobsub_reader: sub_file->read failure"
 msgstr "vobsub_reader: sub_file->讀取失敗"
-
-#: src/input/r_wav.cpp:462
-msgid "wav_reader: Could not open the source file."
-msgstr "wav_reader: 無法開啟來源檔案。"
 
 #: src/input/r_wav.cpp:514
 msgid "wav_reader: No data chunk was found."
@@ -9172,10 +9074,6 @@ msgstr "wav_reader: 未發現資料塊。"
 msgid "wav_reader: No format chunk found."
 msgstr "wav_reader: 未發現格式區塊。"
 
-#: src/input/r_wav.cpp:466
-msgid "wav_reader: Source is not a valid WAVE file."
-msgstr "wav_reader: 來來源非有效的 WAVE 檔。"
-
 #: src/input/r_wav.cpp:510
 msgid "wav_reader: The format chunk could not be read."
 msgstr "wav_reader: 格式區塊不可讀。"
@@ -9183,10 +9081,6 @@ msgstr "wav_reader: 格式區塊不可讀。"
 #: src/input/r_wav.cpp:480
 msgid "wav_reader: could not read WAVE header."
 msgstr "wav_reader: 無法讀取 WAVE 表頭。"
-
-#: src/input/r_wavpack.cpp:58
-msgid "wavpack_reader: Could not open the file."
-msgstr "wavpack_reader: 無法開啟檔案。"
 
 #: src/common/wavpack.cpp:158
 msgid "wavpack_reader: non-audio block found\n"
@@ -9305,9 +9199,6 @@ msgstr "是"
 #~ msgid "Changing the interface language requires a restart to take effect."
 #~ msgstr "變更介面語言需要重新啟動才會生效。"
 
-#~ msgid "Could not open the file '%1%'."
-#~ msgstr "無法開啟檔案 '%1%'。"
-
 #~ msgid "DTS (Digital Theater System)"
 #~ msgstr "DTS (數位電影院系統)"
 
@@ -9401,6 +9292,12 @@ msgstr "是"
 
 #~ msgid "Quicktime/MP4 audio and video"
 #~ msgstr "Quicktime/MP4 音訊和視訊"
+
+#~ msgid "Quicktime/MP4 reader: Could not read the source file."
+#~ msgstr "Quicktime/MP4 讀取器: 無法讀取來源檔。"
+
+#~ msgid "Quicktime/MP4 reader: Source is not a valid Quicktime/MP4 file."
+#~ msgstr "Quicktime/MP4 讀取器: 來源非有效的 Quicktime/MP4 檔案。"
 
 #~ msgid "RealMedia audio and video"
 #~ msgstr "RealMedia 音視訊"
@@ -9838,17 +9735,41 @@ msgstr "是"
 #~ msgid "You have not yet selected any input file and/or no tracks."
 #~ msgstr "您尚未選擇任何輸入檔和/或未發現軌道。"
 
+#~ msgid "aac_reader: Could not open the file."
+#~ msgstr "aac_reader: 無法開啟檔案。"
+
+#~ msgid "ac3_reader: Could not read %1% bytes."
+#~ msgstr "ac3_reader: 無法讀取 %1% 位元組。"
+
 #~ msgid "anaglyph"
 #~ msgstr "立體影片"
 
 #~ msgid "audio/video/text subtitles embedded in OGG"
 #~ msgstr "嵌入在 OGG 中的音訊/視訊/文字字幕"
 
+#~ msgid "avc_es_reader: Could not open the source file."
+#~ msgstr "avc_es_reader: 無法開啟來源檔案。"
+
 #~ msgid "byte_buffer_c: (pos + num) > size. Should not have happened. Please file a bug report.\n"
 #~ msgstr "byte_buffer_c: (pos + num) > size。不該發生。請提交錯誤報告。\n"
 
+#~ msgid "corepicture_reader: Could not open the source file."
+#~ msgstr "corepicture_reader: 無法開啟來源檔案。"
+
+#~ msgid "corepicture_reader: Source is not a valid CorePanorama file."
+#~ msgstr "corepicture_reader: 來源非 CorePanorama 檔案。"
+
 #~ msgid "cstrutf8_to_UTFstring: Invalid UTF-8 sequence encountered. Please contact moritz@bunkus.org and request that he implements a better UTF-8 parser."
 #~ msgstr "cstrutf8_to_UTFstring: 遇到了無效的 UTF-8 序列。請聯繫 moritz@bunkus.org 並要求他實現一套更好的 UTF-8 解析器。"
+
+#~ msgid "dirac_es_reader: Could not open the source file."
+#~ msgstr "dirac_es_reader: 無法開啟來源檔案。"
+
+#~ msgid "dts_reader: Could not open the source file."
+#~ msgstr "dts_reader: 無法開啟來源檔案。"
+
+#~ msgid "dts_reader: Could not read %1% bytes."
+#~ msgstr "dts_reader: 無法讀取 %1% 位元組。"
 
 #~ msgid "flac_header_extraction: Could not set the error callback.\n"
 #~ msgstr "flac_header_extraction: 無法設定錯誤回呼。\n"
@@ -9861,6 +9782,12 @@ msgstr "是"
 
 #~ msgid "flac_header_extraction: Could not set the write callback.\n"
 #~ msgstr "flac_header_extraction: 無法設定寫入回呼。\n"
+
+#~ msgid "flac_reader: Could not open the source file."
+#~ msgstr "flac_reader: 無法開啟來源檔案。"
+
+#~ msgid "flac_reader: Could not read all header packets."
+#~ msgstr "flac_reader: 無法讀取全部表頭套件。"
 
 #~ msgid "flac_reader: Could not set the eof callback.\n"
 #~ msgstr "flac_reader: 無法設定檔尾回呼。\n"
@@ -9892,6 +9819,9 @@ msgstr "是"
 #~ msgid "general Matroska files"
 #~ msgstr "一般 Matroska 檔"
 
+#~ msgid "ivf_reader: Could not open the file."
+#~ msgstr "ivf_reader: 無法開啟檔案。"
+
 #~ msgid "locale.cpp/from_utf8(): Invalid conversion handle %1% (num: %2%).\n"
 #~ msgstr "locale.cpp/from_utf8(): 無效的轉換名號 %1% (數位: %2%)。\n"
 
@@ -9904,9 +9834,81 @@ msgstr "是"
 #~ msgid "mkvmerge GUI v%s ('%s')"
 #~ msgstr "mkvmerge GUI v%s ('%s')"
 
+#~ msgid "mp3_reader: Could not open the source file."
+#~ msgstr "mp3_reader: 無法開啟來源檔案。"
+
+#~ msgid "mpeg_es_reader: Could not open the file."
+#~ msgstr "mpeg_es_reader: 無法開啟檔案。"
+
+#~ msgid "mpeg_ps_reader: Could not open the file."
+#~ msgstr "mpeg_ps_reader: 無法開啟檔案。"
+
+#~ msgid "mpeg_ts_reader_c: Could not open the file."
+#~ msgstr "mpeg_ts_reader_c: 無法開啟檔案。"
+
+#~ msgid "ogm_reader: Could not open the source file."
+#~ msgstr "ogm_reader: 無法開啟來源檔案。"
+
+#~ msgid "ogm_reader: Source is not a valid OGG media file."
+#~ msgstr "ogm_reader: 來源非有效的 OGG 媒體檔案。"
+
+#~ msgid "pgssup_reader: Could not open the file."
+#~ msgstr "pgssup_reader: 無法開啟檔案。"
+
 #~ msgid "r_matroska: Cluster does not contain a cluster timecode. File is broken. Aborting.\n"
 #~ msgstr "r_matroska: 叢集不含叢集時間碼。檔案已損壞。正在中止操作。\n"
 
+#~ msgid "real_reader: Could not read the source file."
+#~ msgstr "real_reader: 無法讀取來源檔案。"
+
+#~ msgid "real_reader: Source is not a valid RealMedia file."
+#~ msgstr "real_reader: 來源非有效的 RealMedia 檔案。"
+
+#~ msgid "srt_reader: Could not open the source file."
+#~ msgstr "srt_reader: 無法開啟來源檔案。"
+
+#~ msgid "srt_reader: Source is not a valid SRT file."
+#~ msgstr "srt_reader: 來來源非有效的 SRT 檔。"
+
+#~ msgid "ssa_reader: Could not open the source file."
+#~ msgstr "ssa_reader: 無法開啟來源檔案。"
+
+#~ msgid "ssa_reader: Source is not a valid SSA/ASS file."
+#~ msgstr "ssa_reader: 來來源非有效的 SSA/ASS 檔。"
+
 #~ msgid "start_element: pdata->bin != NULL"
 #~ msgstr "start_element: pdata->bin != NULL"
+
+#~ msgid "truehd_reader: Could not open the source file."
+#~ msgstr "truehd_reader: 無法開啟來源檔案。"
+
+#~ msgid "truehd_reader: Could not read %1% bytes."
+#~ msgstr "truehd_reader: 無法讀取 %1% 位元組。"
+
+#~ msgid "tta_reader: Could not open the file."
+#~ msgstr "tta_reader: 無法開啟檔案。"
+
+#~ msgid "usf_reader: Could not open the source file."
+#~ msgstr "usf_reader: 無法開啟來源檔案。"
+
+#~ msgid "usf_reader: Source is not a valid USF file."
+#~ msgstr "usf_reader: 來來源非有效的 USF 檔。"
+
+#~ msgid "vc1_es_reader: Could not open the source file."
+#~ msgstr "vc1_es_reader: 無法開啟來源檔案。"
+
+#~ msgid "vobbtn_reader: Could not open the file."
+#~ msgstr "vobbtn_reader: 無法開啟檔案。"
+
+#~ msgid "vobsub_reader: Could not open the source file."
+#~ msgstr "vobsub_reader: 無法開啟來源檔案。"
+
+#~ msgid "wav_reader: Could not open the source file."
+#~ msgstr "wav_reader: 無法開啟來源檔案。"
+
+#~ msgid "wav_reader: Source is not a valid WAVE file."
+#~ msgstr "wav_reader: 來來源非有效的 WAVE 檔。"
+
+#~ msgid "wavpack_reader: Could not open the file."
+#~ msgstr "wavpack_reader: 無法開啟檔案。"
 

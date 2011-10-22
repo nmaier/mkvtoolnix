@@ -764,10 +764,76 @@ msgstr "%1% フレーム、トラック %2%、タイムコード %3% (%4%)、サ
 msgid "%1% frame, track %2%, timecode %3% (%4%), size %5%, adler 0x%|6$08x|%7%%8%\n"
 msgstr "%1% フレーム、トラック %2%、タイムコード %3% (%4%)、サイズ %5%、adler 0x%|6$08x|%7%%8%\n"
 
+#: src/input/r_aac.cpp:88
+#: src/input/r_ivf.cpp:62
+#: src/input/r_mpeg_es.cpp:163
+#: src/input/r_mpeg_ps.cpp:82
+#: src/input/r_mpeg_ts.cpp:407
+#: src/input/r_pgssup.cpp:55
+#: src/input/r_tta.cpp:93
+#: src/input/r_vobbtn.cpp:56
+#: src/input/r_wavpack.cpp:58
+#, fuzzy, boost-format
+msgid "%1%: Could not open the file."
+msgstr "aac_reader：ファイルを開くことができませんでした。"
+
+#: src/input/r_ac3.cpp:67
+#: src/input/r_avc.cpp:122
+#: src/input/r_corepicture.cpp:85
+#: src/input/r_dirac.cpp:82
+#: src/input/r_dts.cpp:66
+#: src/input/r_flac.cpp:118
+#: src/input/r_mp3.cpp:57
+#: src/input/r_ogm.cpp:329
+#: src/input/r_srt.cpp:40
+#: src/input/r_ssa.cpp:40
+#: src/input/r_truehd.cpp:75
+#: src/input/r_usf.cpp:96
+#: src/input/r_vc1.cpp:82
+#: src/input/r_vobsub.cpp:70
+#: src/input/r_wav.cpp:462
+#, fuzzy, boost-format
+msgid "%1%: Could not open the source file."
+msgstr "ac3_reader：ソースファイルを開けませんでした。"
+
+#: src/input/r_aac.cpp:57
+#: src/input/r_ac3.cpp:62
+#: src/input/r_dts.cpp:62
+#: src/input/r_truehd.cpp:63
+#, fuzzy, boost-format
+msgid "%1%: Could not read %2% bytes."
+msgstr "aac_reader：%1%バイトを読み込むことができませんでした。"
+
+#: src/input/r_flac.cpp:127
+#: src/input/r_ogm.cpp:339
+#, fuzzy, boost-format
+msgid "%1%: Could not read all header packets."
+msgstr "ogm_reader：全てのヘッダパケットを読み込むことはできませんでした。"
+
+#: src/input/r_avi.cpp:107
+#: src/input/r_qtmp4.cpp:128
+#: src/input/r_real.cpp:149
+#, fuzzy, boost-format
+msgid "%1%: Could not read the source file."
+msgstr "avi_reader：ソースファイルを読み込めませんでした。"
+
 #: src/common/kax_file.cpp:165
 #, boost-format
 msgid "%1%: Error in the Matroska file structure at position %2%. Resyncing to the next level 1 element.\n"
 msgstr "%1%：%2%の位置でMatroskaファイル構造にエラーが発生しました。次のレベル1要素に再同期します。\n"
+
+#: src/input/r_avi.cpp:104
+#: src/input/r_corepicture.cpp:72
+#: src/input/r_ogm.cpp:332
+#: src/input/r_qtmp4.cpp:121
+#: src/input/r_real.cpp:147
+#: src/input/r_srt.cpp:34
+#: src/input/r_ssa.cpp:44
+#: src/input/r_usf.cpp:75
+#: src/input/r_wav.cpp:466
+#, fuzzy, boost-format
+msgid "%1%: Source is not a valid %1% file."
+msgstr "avi_reader：ソースファイルは有効なAVIファイルではありません。"
 
 #: src/merge/mkvmerge.cpp:635
 #, boost-format
@@ -5193,10 +5259,6 @@ msgstr "Quicktime/MP4リーダ：トラックID %1%の拡張サウンド説明at
 msgid "Quicktime/MP4 reader: Could not read the sound description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4リーダ：トラックID %1%のサウンド説明atomを読み込むことができませんでした。\n"
 
-#: src/input/r_qtmp4.cpp:128
-msgid "Quicktime/MP4 reader: Could not read the source file."
-msgstr "Quicktime/MP4リーダ：ソースファイルを読み込むことができませんでした。"
-
 #: src/input/r_qtmp4.cpp:977
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the stream description atom for track ID %1%.\n"
@@ -5229,10 +5291,6 @@ msgstr "Quicktime/MP4リーダ：MPEG4 part 10/AVCトラック%1%にはデコー
 #, boost-format
 msgid "Quicktime/MP4 reader: MPEG4 track %1% is missing the esds atom/the decoder config. Skipping this track.\n"
 msgstr "Quicktime/MP4リーダ：MPEG4トラック%1%にはesds atom/デコーダ設定がありません。このトラックをスキップします。\n"
-
-#: src/input/r_qtmp4.cpp:121
-msgid "Quicktime/MP4 reader: Source is not a valid Quicktime/MP4 file."
-msgstr "Quicktime/MP4リーダ：ソースは有効なQuicktime/MP4 fileではありません。"
 
 #: src/input/r_qtmp4.cpp:650
 #, boost-format
@@ -7993,15 +8051,6 @@ msgstr "[トラック%2%の%1%フレーム、タイムコード %3%]"
 msgid "aac_reader: ADIF header files are not supported."
 msgstr "aac_reader：ADIFヘッダファイルはサポートされていません。"
 
-#: src/input/r_aac.cpp:88
-msgid "aac_reader: Could not open the file."
-msgstr "aac_reader：ファイルを開くことができませんでした。"
-
-#: src/input/r_aac.cpp:57
-#, boost-format
-msgid "aac_reader: Could not read %1% bytes."
-msgstr "aac_reader：%1%バイトを読み込むことができませんでした。"
-
 #: src/input/r_aac.cpp:65
 #, boost-format
 msgid "aac_reader: No valid AAC packet found in the first %1% bytes.\n"
@@ -8016,15 +8065,6 @@ msgstr "中断"
 #: src/output/p_ac3.cpp:213
 msgid "ac3_bs_packetizer::add_to_buffer(): Untested code ('size' is odd). If mkvmerge crashes or if the resulting file does not contain the complete and correct audio track, then please contact the author Moritz Bunkus at moritz@bunkus.org.\n"
 msgstr "ac3_bs_packetizer::add_to_buffer(): テストされていないコードです('size'が奇数)。mkvmergeがクラッシュしたり、出力されたファイルのオーディオトラックが完全で正しいものでなかった場合、作者 Moritz Bunkus に moritz@bunkus.org 宛で連絡をお願いします。\n"
-
-#: src/input/r_ac3.cpp:67
-msgid "ac3_reader: Could not open the source file."
-msgstr "ac3_reader：ソースファイルを開けませんでした。"
-
-#: src/input/r_ac3.cpp:62
-#, boost-format
-msgid "ac3_reader: Could not read %1% bytes."
-msgstr "ac3_reader：%1%バイトを読み込むことができませんでした。"
 
 #: src/input/r_ac3.cpp:71
 #, boost-format
@@ -8054,10 +8094,6 @@ msgstr "追加結合"
 msgid "audio"
 msgstr "オーディオ"
 
-#: src/input/r_avc.cpp:122
-msgid "avc_es_reader: Could not open the source file."
-msgstr "avc_es_reader：ソースファイルを開けませんでした。"
-
 #: src/input/r_avc.cpp:106
 msgid "avc_es_reader: Should not have happened."
 msgstr "avc_es_reader：発生するべきではありません。"
@@ -8066,14 +8102,6 @@ msgstr "avc_es_reader：発生するべきではありません。"
 #, boost-format
 msgid "avi_reader: Could not initialize AVI source. Reason: %1%"
 msgstr "avi_reader：AVIソースを初期化できませんでした。理由：%1%"
-
-#: src/input/r_avi.cpp:107
-msgid "avi_reader: Could not read the source file."
-msgstr "avi_reader：ソースファイルを読み込めませんでした。"
-
-#: src/input/r_avi.cpp:104
-msgid "avi_reader: Source is not a valid AVI file."
-msgstr "avi_reader：ソースファイルは有効なAVIファイルではありません。"
 
 #: src/info/mkvinfo.cpp:671
 #, boost-format
@@ -8141,14 +8169,6 @@ msgstr "完了しましたが、警告があります"
 msgid "compression"
 msgstr "圧縮"
 
-#: src/input/r_corepicture.cpp:85
-msgid "corepicture_reader: Could not open the source file."
-msgstr "corepicture_reader：ソースファイルを開けませんでした。"
-
-#: src/input/r_corepicture.cpp:72
-msgid "corepicture_reader: Source is not a valid CorePanorama file."
-msgstr "corepicture_reader：ソースは有効なCorePanoramaファイルではありません。"
-
 #: src/merge/mkvmerge.cpp:296
 #, boost-format
 msgid "create_track_number: file_num not found. %1%\n"
@@ -8169,10 +8189,6 @@ msgstr "デフォルトのフレーム持続期間：%|1$.3f|ms (ビデオトラ
 #, boost-format
 msgid "deflateInit() failed. Result: %1%\n"
 msgstr "deflateInit()が失敗しました。結果：%1%\n"
-
-#: src/input/r_dirac.cpp:82
-msgid "dirac_es_reader: Could not open the source file."
-msgstr "dirac_es_reader：ソースファイルを開けませんでした。"
 
 #: src/mmg/tabs/attachments.cpp:154
 msgid "disable all"
@@ -8204,15 +8220,6 @@ msgstr "完了/警告有り"
 #: src/mmg/tabs/input.cpp:189
 msgid "down"
 msgstr "下へ"
-
-#: src/input/r_dts.cpp:66
-msgid "dts_reader: Could not open the source file."
-msgstr "dts_reader：ソースファイルを開けませんでした。"
-
-#: src/input/r_dts.cpp:62
-#, boost-format
-msgid "dts_reader: Could not read %1% bytes."
-msgstr "dts_reader：%1%バイトを読み込むことができませんでした。"
 
 #: src/input/r_dts.cpp:77
 #, boost-format
@@ -8286,17 +8293,9 @@ msgstr ""
 msgid "flac_reader: Could not initialize the FLAC decoder.\n"
 msgstr "flac_reader：FLACデコーダを初期化できませんでした。\n"
 
-#: src/input/r_flac.cpp:118
-msgid "flac_reader: Could not open the source file."
-msgstr "flac_reader：ソースファイルを開けませんでした。"
-
 #: src/input/r_flac.cpp:141
 msgid "flac_reader: Could not read a header packet.\n"
 msgstr "flac_reader：ヘッダパケットを読み込むことができませんでした。\n"
-
-#: src/input/r_flac.cpp:127
-msgid "flac_reader: Could not read all header packets."
-msgstr "flac_reader：全てのヘッダパケットを読み込むことはできませんでした。"
 
 #: src/input/r_flac.cpp:240
 msgid "flac_reader: Could not read all header packets.\n"
@@ -8355,10 +8354,6 @@ msgstr "inflateInit()が失敗しました。結果：%1%\n"
 #: src/mmg/mux_dialog.cpp:77
 msgid "is being estimated"
 msgstr "計算中です"
-
-#: src/input/r_ivf.cpp:62
-msgid "ivf_reader: Could not open the file."
-msgstr "ivf_reader：ファイルを開くことができませんでした。"
 
 #: src/info/mkvinfo.cpp:1617
 msgid "key, "
@@ -8794,18 +8789,6 @@ msgstr "どのエントリも選択されていない場合はデフォルトの
 msgid "mono"
 msgstr "モノラル"
 
-#: src/input/r_mp3.cpp:57
-msgid "mp3_reader: Could not open the source file."
-msgstr "mp3_reader：ソースファイルを開けませんでした。"
-
-#: src/input/r_mpeg_es.cpp:163
-msgid "mpeg_es_reader: Could not open the file."
-msgstr "mpeg_es_reader：ファイルを開けませんでした。"
-
-#: src/input/r_mpeg_ps.cpp:82
-msgid "mpeg_ps_reader: Could not open the file."
-msgstr "mpeg_ps_reader：ファイルを開けませんでした。"
-
 #: src/input/r_mpeg_ps.cpp:1190
 #, boost-format
 msgid "mpeg_ps_reader: Should not have happened #1. %1%"
@@ -8815,10 +8798,6 @@ msgstr "mpeg_ps_reader：発生するべきではありません #1。%1%"
 #, boost-format
 msgid "mpeg_ps_reader: Should not have happened #2. %1%"
 msgstr "mpeg_ps_reader：発生するべきではありません #2。%1%"
-
-#: src/input/r_mpeg_ts.cpp:407
-msgid "mpeg_ts_reader_c: Could not open the file."
-msgstr "mpeg_ts_reader_c：ファイルを開けませんでした。"
 
 #: src/mmg/header_editor/bool_value_page.cpp:43
 #: src/mmg/tabs/input_general.cpp:108
@@ -8866,18 +8845,6 @@ msgstr "ストリーム番号%1%に対するogg_stream_initが失敗しました
 msgid "ogg_sync_buffer failed\n"
 msgstr "ogg_sync_bufferが失敗しました\n"
 
-#: src/input/r_ogm.cpp:329
-msgid "ogm_reader: Could not open the source file."
-msgstr "ogm_reader：ソースファイルを開けませんでした。"
-
-#: src/input/r_ogm.cpp:339
-msgid "ogm_reader: Could not read all header packets."
-msgstr "ogm_reader：全てのヘッダパケットを読み込むことはできませんでした。"
-
-#: src/input/r_ogm.cpp:332
-msgid "ogm_reader: Source is not a valid OGG media file."
-msgstr "ogm_reader：ソースは有効なOGGメディアファイルではありません。"
-
 #: src/mmg/tabs/chapters.cpp:1067
 msgid "on_entry_selected: display == NULL. Should not have happened."
 msgstr "on_entry_selected：display == NULLです。発生するべきではありません。"
@@ -8899,10 +8866,6 @@ msgstr "パススルー"
 #: src/mmg/jobs.cpp:702
 msgid "pending"
 msgstr "未処理"
-
-#: src/input/r_pgssup.cpp:55
-msgid "pgssup_reader: Could not open the file."
-msgstr "pgssup_reader：ファイルを開けませんでした。"
 
 #: src/info/mkvinfo.cpp:727
 #, boost-format
@@ -8953,10 +8916,6 @@ msgstr "生データ"
 msgid "ready"
 msgstr "準備完了"
 
-#: src/input/r_real.cpp:149
-msgid "real_reader: Could not read the source file."
-msgstr "real_reader：ソースファイルを読み込めませんでした。"
-
 #: src/input/r_real.cpp:245
 #, boost-format
 msgid "real_reader: Couldn't find RealAudio FourCC for id %1% (description length: %2%) Skipping track.\n"
@@ -8966,10 +8925,6 @@ msgstr "real_reader：ID %1%のRealAudio FourCCを見つけることができま
 #, boost-format
 msgid "real_reader: Only audio header versions 3, 4 and 5 are supported. Track ID %1% uses version %2% and will be skipped.\n"
 msgstr "real_reader：オーディオヘッダバージョン3、4、5のみがサポートされています。トラックID %1%はバージョン%2%を使っているのでスキップされます。\n"
-
-#: src/input/r_real.cpp:147
-msgid "real_reader: Source is not a valid RealMedia file."
-msgstr "real_reader：ソースは有効なRealMediaファイルではありません。"
 
 #: src/mmg/tabs/attachments.cpp:157
 #: src/mmg/tabs/input.cpp:184
@@ -9010,25 +8965,9 @@ msgstr "サイドバイサイド方式（ライトファースト）"
 msgid "spu_extraction_duration: Encountered broken SPU packet (next_off < start_off) at timecode %1%. This packet might be displayed incorrectly or not at all.\n"
 msgstr "spu_extraction_duration：タイムコード%1%で壊れたSPUパケットに遭遇しました（next_off < start_off）。このパケットは正しく表示されないか、あるいは全く表示されないかもしれません。\n"
 
-#: src/input/r_srt.cpp:40
-msgid "srt_reader: Could not open the source file."
-msgstr "srt_reader：ソースファイルを開けませんでした。"
-
-#: src/input/r_srt.cpp:34
-msgid "srt_reader: Source is not a valid SRT file."
-msgstr "srt_reader：ソースは有効なSRTファイルではありません。"
-
-#: src/input/r_ssa.cpp:40
-msgid "ssa_reader: Could not open the source file."
-msgstr "ssa_reader：ソースファイルを開けませんでした。"
-
 #: src/input/subtitles.cpp:342
 msgid "ssa_reader: Invalid format. Could not find the \"Format\" line in the \"[Events]\" section."
 msgstr "ssa_reader：無効なフォーマットです。\"[Events]\"セクションで\"Format\"行を見つけることができませんでした。"
-
-#: src/input/r_ssa.cpp:44
-msgid "ssa_reader: Source is not a valid SSA/ASS file."
-msgstr "ssa_reader：ソースは有効なSSA/ASSファイルではありません。"
 
 #: src/mmg/tabs/chapters.cpp:911
 msgid "start >= m->ListSize(). This should not have happened. Please file a bug report. Thanks."
@@ -9068,19 +9007,6 @@ msgstr "トップアンドボトム方式（ライトファースト）"
 msgid "track name"
 msgstr "トラック名"
 
-#: src/input/r_truehd.cpp:75
-msgid "truehd_reader: Could not open the source file."
-msgstr "truehd_reader：ソースファイルを開けませんでした。"
-
-#: src/input/r_truehd.cpp:63
-#, boost-format
-msgid "truehd_reader: Could not read %1% bytes."
-msgstr "truehd_reader：%1%バイトを読み込むことができませんでした。"
-
-#: src/input/r_tta.cpp:93
-msgid "tta_reader: Could not open the file."
-msgstr "tta_reader：ファイルを開けませんでした。"
-
 #: src/input/r_tta.cpp:60
 #, boost-format
 msgid "tta_reader: tag_size < 0 in the c'tor. %1%\n"
@@ -9117,22 +9043,10 @@ msgstr "未知、フォーマットタグ 0x%|1$04x|"
 msgid "up"
 msgstr "上へ"
 
-#: src/input/r_usf.cpp:96
-msgid "usf_reader: Could not open the source file."
-msgstr "usf_reader：ソースファイルを開けませんでした。"
-
-#: src/input/r_usf.cpp:75
-msgid "usf_reader: Source is not a valid USF file."
-msgstr "usf_reader：ソースは有効なUSFファイルではありません。"
-
 #: src/common/strings/editing.cpp:210
 #, boost-format
 msgid "utf8_strlen(): Invalid UTF-8 char. First byte: 0x%|1$02x|"
 msgstr "utf8_strlen()：無効なUTF-8の文字です。最初のバイト：0x%|1$02x|"
-
-#: src/input/r_vc1.cpp:82
-msgid "vc1_es_reader: Could not open the source file."
-msgstr "vc1_es_reader：ソースファイルを開けませんでした。"
 
 #: src/mmg/tabs/chapters.cpp:840
 msgid "verify failed: chapters->CheckMandatory() is false. This should not have happened. Please file a bug report.\n"
@@ -9144,14 +9058,6 @@ msgstr "ベリファイが失敗しました：chapters->CheckMandatory()がfals
 msgid "video"
 msgstr "ビデオ"
 
-#: src/input/r_vobbtn.cpp:56
-msgid "vobbtn_reader: Could not open the file."
-msgstr "vobbtn_reader：ファイルを開けませんでした。"
-
-#: src/input/r_vobsub.cpp:70
-msgid "vobsub_reader: Could not open the source file."
-msgstr "vobsub_reader：ソースファイルを開けませんでした。"
-
 #: src/input/r_vobsub.cpp:82
 msgid "vobsub_reader: Could not open the sub file"
 msgstr "vobsub_reader：字幕ファイルを開けませんでした"
@@ -9159,10 +9065,6 @@ msgstr "vobsub_reader：字幕ファイルを開けませんでした"
 #: src/input/r_vobsub.cpp:572
 msgid "vobsub_reader: sub_file->read failure"
 msgstr "vobsub_reader: sub_file->readが失敗"
-
-#: src/input/r_wav.cpp:462
-msgid "wav_reader: Could not open the source file."
-msgstr "wav_reader：ソースファイルを開けませんでした。"
 
 #: src/input/r_wav.cpp:514
 msgid "wav_reader: No data chunk was found."
@@ -9172,10 +9074,6 @@ msgstr "wav_reader：データチャンクが見つかりませんでした。"
 msgid "wav_reader: No format chunk found."
 msgstr "wav_reader：フォーマットチャンクが見つかりませんでした。"
 
-#: src/input/r_wav.cpp:466
-msgid "wav_reader: Source is not a valid WAVE file."
-msgstr "wav_reader：ソースは有効なWAVEファイルではありません。"
-
 #: src/input/r_wav.cpp:510
 msgid "wav_reader: The format chunk could not be read."
 msgstr "wav_reader：フォーマットチャンクを読み込めませんでした。"
@@ -9183,10 +9081,6 @@ msgstr "wav_reader：フォーマットチャンクを読み込めませんで�
 #: src/input/r_wav.cpp:480
 msgid "wav_reader: could not read WAVE header."
 msgstr "wav_reader：WAVEヘッダを読み込めませんでした。"
-
-#: src/input/r_wavpack.cpp:58
-msgid "wavpack_reader: Could not open the file."
-msgstr "wavpack_reader：ファイルを開けませんでした。"
 
 #: src/common/wavpack.cpp:158
 msgid "wavpack_reader: non-audio block found\n"
@@ -9298,6 +9192,12 @@ msgstr "はい"
 
 #~ msgid "Quicktime/MP4 audio and video"
 #~ msgstr "Quicktime/MP4オーディオとビデオ"
+
+#~ msgid "Quicktime/MP4 reader: Could not read the source file."
+#~ msgstr "Quicktime/MP4リーダ：ソースファイルを読み込むことができませんでした。"
+
+#~ msgid "Quicktime/MP4 reader: Source is not a valid Quicktime/MP4 file."
+#~ msgstr "Quicktime/MP4リーダ：ソースは有効なQuicktime/MP4 fileではありません。"
 
 #~ msgid "RealMedia audio and video"
 #~ msgstr "RealMediaオーディオとビデオ"
@@ -9569,20 +9469,123 @@ msgstr "はい"
 #~ msgid "Warning: There's more than one track with the number %1%."
 #~ msgstr "警告：番号%1%のトラックが複数あります。"
 
+#~ msgid "ac3_reader: Could not read %1% bytes."
+#~ msgstr "ac3_reader：%1%バイトを読み込むことができませんでした。"
+
 #~ msgid "anaglyph"
 #~ msgstr "アナグリフ方式"
 
 #~ msgid "audio/video/text subtitles embedded in OGG"
 #~ msgstr "OGGに埋め込まれたオーディオ・ビデオ・テキスト字幕"
 
+#~ msgid "avc_es_reader: Could not open the source file."
+#~ msgstr "avc_es_reader：ソースファイルを開けませんでした。"
+
 #~ msgid "byte_buffer_c: (pos + num) > size. Should not have happened. Please file a bug report.\n"
 #~ msgstr "byte_buffer_c: (pos + num) > sizeです。発生するべきではありません。バグレポートを提出してください。\n"
+
+#~ msgid "corepicture_reader: Could not open the source file."
+#~ msgstr "corepicture_reader：ソースファイルを開けませんでした。"
+
+#~ msgid "corepicture_reader: Source is not a valid CorePanorama file."
+#~ msgstr "corepicture_reader：ソースは有効なCorePanoramaファイルではありません。"
 
 #~ msgid "cstrutf8_to_UTFstring: Invalid UTF-8 sequence encountered. Please contact moritz@bunkus.org and request that he implements a better UTF-8 parser."
 #~ msgstr "cstrutf8_to_UTFstring：無効なUTF-8文字列の並びに遭遇しました。moritz@bunkus.orgに連絡し、UTF-8パーサを実装するよう要求してください。"
 
+#~ msgid "dirac_es_reader: Could not open the source file."
+#~ msgstr "dirac_es_reader：ソースファイルを開けませんでした。"
+
+#~ msgid "dts_reader: Could not open the source file."
+#~ msgstr "dts_reader：ソースファイルを開けませんでした。"
+
+#~ msgid "dts_reader: Could not read %1% bytes."
+#~ msgstr "dts_reader：%1%バイトを読み込むことができませんでした。"
+
+#~ msgid "flac_reader: Could not open the source file."
+#~ msgstr "flac_reader：ソースファイルを開けませんでした。"
+
+#~ msgid "flac_reader: Could not read all header packets."
+#~ msgstr "flac_reader：全てのヘッダパケットを読み込むことはできませんでした。"
+
 #~ msgid "general Matroska files"
 #~ msgstr "通常のMatroskaファイル"
 
+#~ msgid "ivf_reader: Could not open the file."
+#~ msgstr "ivf_reader：ファイルを開くことができませんでした。"
+
 #~ msgid "mkvextract: Unknown mode!?\n"
 #~ msgstr "mkvextract：未知のモード！？\n"
+
+#~ msgid "mp3_reader: Could not open the source file."
+#~ msgstr "mp3_reader：ソースファイルを開けませんでした。"
+
+#~ msgid "mpeg_es_reader: Could not open the file."
+#~ msgstr "mpeg_es_reader：ファイルを開けませんでした。"
+
+#~ msgid "mpeg_ps_reader: Could not open the file."
+#~ msgstr "mpeg_ps_reader：ファイルを開けませんでした。"
+
+#~ msgid "mpeg_ts_reader_c: Could not open the file."
+#~ msgstr "mpeg_ts_reader_c：ファイルを開けませんでした。"
+
+#~ msgid "ogm_reader: Could not open the source file."
+#~ msgstr "ogm_reader：ソースファイルを開けませんでした。"
+
+#~ msgid "ogm_reader: Source is not a valid OGG media file."
+#~ msgstr "ogm_reader：ソースは有効なOGGメディアファイルではありません。"
+
+#~ msgid "pgssup_reader: Could not open the file."
+#~ msgstr "pgssup_reader：ファイルを開けませんでした。"
+
+#~ msgid "real_reader: Could not read the source file."
+#~ msgstr "real_reader：ソースファイルを読み込めませんでした。"
+
+#~ msgid "real_reader: Source is not a valid RealMedia file."
+#~ msgstr "real_reader：ソースは有効なRealMediaファイルではありません。"
+
+#~ msgid "srt_reader: Could not open the source file."
+#~ msgstr "srt_reader：ソースファイルを開けませんでした。"
+
+#~ msgid "srt_reader: Source is not a valid SRT file."
+#~ msgstr "srt_reader：ソースは有効なSRTファイルではありません。"
+
+#~ msgid "ssa_reader: Could not open the source file."
+#~ msgstr "ssa_reader：ソースファイルを開けませんでした。"
+
+#~ msgid "ssa_reader: Source is not a valid SSA/ASS file."
+#~ msgstr "ssa_reader：ソースは有効なSSA/ASSファイルではありません。"
+
+#~ msgid "truehd_reader: Could not open the source file."
+#~ msgstr "truehd_reader：ソースファイルを開けませんでした。"
+
+#~ msgid "truehd_reader: Could not read %1% bytes."
+#~ msgstr "truehd_reader：%1%バイトを読み込むことができませんでした。"
+
+#~ msgid "tta_reader: Could not open the file."
+#~ msgstr "tta_reader：ファイルを開けませんでした。"
+
+#~ msgid "usf_reader: Could not open the source file."
+#~ msgstr "usf_reader：ソースファイルを開けませんでした。"
+
+#~ msgid "usf_reader: Source is not a valid USF file."
+#~ msgstr "usf_reader：ソースは有効なUSFファイルではありません。"
+
+#~ msgid "vc1_es_reader: Could not open the source file."
+#~ msgstr "vc1_es_reader：ソースファイルを開けませんでした。"
+
+#~ msgid "vobbtn_reader: Could not open the file."
+#~ msgstr "vobbtn_reader：ファイルを開けませんでした。"
+
+#~ msgid "vobsub_reader: Could not open the source file."
+#~ msgstr "vobsub_reader：ソースファイルを開けませんでした。"
+
+#~ msgid "wav_reader: Could not open the source file."
+#~ msgstr "wav_reader：ソースファイルを開けませんでした。"
+
+#~ msgid "wav_reader: Source is not a valid WAVE file."
+#~ msgstr "wav_reader：ソースは有効なWAVEファイルではありません。"
+
+#~ msgid "wavpack_reader: Could not open the file."
+#~ msgstr "wavpack_reader：ファイルを開けませんでした。"
+

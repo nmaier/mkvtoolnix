@@ -771,10 +771,76 @@ msgstr "%1% кадр, доріжка %2%, тайм-код %3% (%4%), розмі�
 msgid "%1% frame, track %2%, timecode %3% (%4%), size %5%, adler 0x%|6$08x|%7%%8%\n"
 msgstr "%1% кадр, доріжка %2%, тайм-код %3% (%4%), розмір %5%, хеш 0x%|6$08x|%7%%8%\n"
 
+#: src/input/r_aac.cpp:88
+#: src/input/r_ivf.cpp:62
+#: src/input/r_mpeg_es.cpp:163
+#: src/input/r_mpeg_ps.cpp:82
+#: src/input/r_mpeg_ts.cpp:407
+#: src/input/r_pgssup.cpp:55
+#: src/input/r_tta.cpp:93
+#: src/input/r_vobbtn.cpp:56
+#: src/input/r_wavpack.cpp:58
+#, fuzzy, boost-format
+msgid "%1%: Could not open the file."
+msgstr "aac_reader: Не вдалося відкрити файл."
+
+#: src/input/r_ac3.cpp:67
+#: src/input/r_avc.cpp:122
+#: src/input/r_corepicture.cpp:85
+#: src/input/r_dirac.cpp:82
+#: src/input/r_dts.cpp:66
+#: src/input/r_flac.cpp:118
+#: src/input/r_mp3.cpp:57
+#: src/input/r_ogm.cpp:329
+#: src/input/r_srt.cpp:40
+#: src/input/r_ssa.cpp:40
+#: src/input/r_truehd.cpp:75
+#: src/input/r_usf.cpp:96
+#: src/input/r_vc1.cpp:82
+#: src/input/r_vobsub.cpp:70
+#: src/input/r_wav.cpp:462
+#, fuzzy, boost-format
+msgid "%1%: Could not open the source file."
+msgstr "ac3_reader: Не вдалося відкрити вхідний файл."
+
+#: src/input/r_aac.cpp:57
+#: src/input/r_ac3.cpp:62
+#: src/input/r_dts.cpp:62
+#: src/input/r_truehd.cpp:63
+#, fuzzy, boost-format
+msgid "%1%: Could not read %2% bytes."
+msgstr "aac_reader: Не вдалося прочитати %1% байт."
+
+#: src/input/r_flac.cpp:127
+#: src/input/r_ogm.cpp:339
+#, fuzzy, boost-format
+msgid "%1%: Could not read all header packets."
+msgstr "ogm_reader: Не вдалося прочитати всі пакети заголовку."
+
+#: src/input/r_avi.cpp:107
+#: src/input/r_qtmp4.cpp:128
+#: src/input/r_real.cpp:149
+#, fuzzy, boost-format
+msgid "%1%: Could not read the source file."
+msgstr "avi_reader: Не вдалося прочитати вхідний файл."
+
 #: src/common/kax_file.cpp:165
 #, boost-format
 msgid "%1%: Error in the Matroska file structure at position %2%. Resyncing to the next level 1 element.\n"
 msgstr "%1%: Помилка в структурі файлу Matroska на позиції %2%. Повторна синхронізація на наступний елемент першого рівня.\n"
+
+#: src/input/r_avi.cpp:104
+#: src/input/r_corepicture.cpp:72
+#: src/input/r_ogm.cpp:332
+#: src/input/r_qtmp4.cpp:121
+#: src/input/r_real.cpp:147
+#: src/input/r_srt.cpp:34
+#: src/input/r_ssa.cpp:44
+#: src/input/r_usf.cpp:75
+#: src/input/r_wav.cpp:466
+#, fuzzy, boost-format
+msgid "%1%: Source is not a valid %1% file."
+msgstr "avi_reader: Джерельний файл не є допустимим AVI файлом."
 
 #: src/merge/mkvmerge.cpp:635
 #, boost-format
@@ -5215,10 +5281,6 @@ msgstr "Quicktime/MP4 зчитувач: Неможливо прочитати е
 msgid "Quicktime/MP4 reader: Could not read the sound description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4 зчитувач: Неможливо прочитати елемент опису аудіо для ID доріжки %1%.\n"
 
-#: src/input/r_qtmp4.cpp:128
-msgid "Quicktime/MP4 reader: Could not read the source file."
-msgstr "Quicktime/MP4 зчитувач: Неможливо прочитати вхідний файл."
-
 #: src/input/r_qtmp4.cpp:977
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the stream description atom for track ID %1%.\n"
@@ -5251,10 +5313,6 @@ msgstr "Quicktime/MP4 зчитувач: Для доріжки MPEG4 part 10/AVC 
 #, boost-format
 msgid "Quicktime/MP4 reader: MPEG4 track %1% is missing the esds atom/the decoder config. Skipping this track.\n"
 msgstr "Quicktime/MP4 зчитувач: Для доріжки MPEG4 %1% відсутні елемент esds/налаштування декодера. Пропуск цієї доріжки.\n"
-
-#: src/input/r_qtmp4.cpp:121
-msgid "Quicktime/MP4 reader: Source is not a valid Quicktime/MP4 file."
-msgstr "Quicktime/MP4 зчитувач: Даний файл не є придатним Quicktime/MP4 файлом."
 
 #: src/input/r_qtmp4.cpp:650
 #, boost-format
@@ -8043,15 +8101,6 @@ msgstr "[%1% кадр для доріжки %2%, тайм-код %3%]"
 msgid "aac_reader: ADIF header files are not supported."
 msgstr "aac_reader: файли заголовків ADIF не підтримуються."
 
-#: src/input/r_aac.cpp:88
-msgid "aac_reader: Could not open the file."
-msgstr "aac_reader: Не вдалося відкрити файл."
-
-#: src/input/r_aac.cpp:57
-#, boost-format
-msgid "aac_reader: Could not read %1% bytes."
-msgstr "aac_reader: Не вдалося прочитати %1% байт."
-
 #: src/input/r_aac.cpp:65
 #, boost-format
 msgid "aac_reader: No valid AAC packet found in the first %1% bytes.\n"
@@ -8066,15 +8115,6 @@ msgstr "перервано"
 #: src/output/p_ac3.cpp:213
 msgid "ac3_bs_packetizer::add_to_buffer(): Untested code ('size' is odd). If mkvmerge crashes or if the resulting file does not contain the complete and correct audio track, then please contact the author Moritz Bunkus at moritz@bunkus.org.\n"
 msgstr "ac3_bs_packetizer::add_to_buffer(): Неперевірений код ('size' є нестандартним). Якщо робота mkvmerge аварійно принилася або отриманий файл не містить повної і корректної звукової доріжки, то, будь ласка, зв'яжіться з автором Moritz Bunkus через <moritz@bunkus.org>.\n"
-
-#: src/input/r_ac3.cpp:67
-msgid "ac3_reader: Could not open the source file."
-msgstr "ac3_reader: Не вдалося відкрити вхідний файл."
-
-#: src/input/r_ac3.cpp:62
-#, boost-format
-msgid "ac3_reader: Could not read %1% bytes."
-msgstr "ac3_reader: Не вдалося прочитати %1% байт."
 
 #: src/input/r_ac3.cpp:71
 #, boost-format
@@ -8104,10 +8144,6 @@ msgstr "Приєднати"
 msgid "audio"
 msgstr "Аудіо"
 
-#: src/input/r_avc.cpp:122
-msgid "avc_es_reader: Could not open the source file."
-msgstr "avc_es_reader: Не вдалося відкрити вхідний файл."
-
 #: src/input/r_avc.cpp:106
 msgid "avc_es_reader: Should not have happened."
 msgstr "avc_es_reader: Цього не повинно було трапитися."
@@ -8116,14 +8152,6 @@ msgstr "avc_es_reader: Цього не повинно було трапитис�
 #, boost-format
 msgid "avi_reader: Could not initialize AVI source. Reason: %1%"
 msgstr "avi_reader: Не вдалося ініціалізувати джерело AVI. Причина: %1%"
-
-#: src/input/r_avi.cpp:107
-msgid "avi_reader: Could not read the source file."
-msgstr "avi_reader: Не вдалося прочитати вхідний файл."
-
-#: src/input/r_avi.cpp:104
-msgid "avi_reader: Source is not a valid AVI file."
-msgstr "avi_reader: Джерельний файл не є допустимим AVI файлом."
 
 #: src/info/mkvinfo.cpp:671
 #, boost-format
@@ -8191,14 +8219,6 @@ msgstr "Завершено з попередженнями"
 msgid "compression"
 msgstr "Стиснення"
 
-#: src/input/r_corepicture.cpp:85
-msgid "corepicture_reader: Could not open the source file."
-msgstr "corepicture_reader: Не вдалося відкрити вхідний файл."
-
-#: src/input/r_corepicture.cpp:72
-msgid "corepicture_reader: Source is not a valid CorePanorama file."
-msgstr "corepicture_reader: Вхідний файл не є допустимим файлом CorePanorama."
-
 #: src/merge/mkvmerge.cpp:296
 #, boost-format
 msgid "create_track_number: file_num not found. %1%\n"
@@ -8219,10 +8239,6 @@ msgstr "типова тривалість: %|1$.3f|мс (%|2$.3f| кадрів �
 #, boost-format
 msgid "deflateInit() failed. Result: %1%\n"
 msgstr "deflateInit() завершено невдало. Результат: %1%\n"
-
-#: src/input/r_dirac.cpp:82
-msgid "dirac_es_reader: Could not open the source file."
-msgstr "dirac_es_reader: Не вдалося відкрити вхідний файл."
 
 #: src/mmg/tabs/attachments.cpp:154
 msgid "disable all"
@@ -8254,15 +8270,6 @@ msgstr "виконано/є попередження"
 #: src/mmg/tabs/input.cpp:189
 msgid "down"
 msgstr "Вниз"
-
-#: src/input/r_dts.cpp:66
-msgid "dts_reader: Could not open the source file."
-msgstr "dts_reader: Не вдалося відкрити вхідний файл."
-
-#: src/input/r_dts.cpp:62
-#, boost-format
-msgid "dts_reader: Could not read %1% bytes."
-msgstr "dts_reader: Не вдалося прочитати %1% байт."
 
 #: src/input/r_dts.cpp:77
 #, boost-format
@@ -8334,17 +8341,9 @@ msgstr "flac_header_extraction: bytes (%1%) < op.bytes (%2%). Не вдалос�
 msgid "flac_reader: Could not initialize the FLAC decoder.\n"
 msgstr "flac_reader: Не вдалося ініціалізувати декодер FLAC.\n"
 
-#: src/input/r_flac.cpp:118
-msgid "flac_reader: Could not open the source file."
-msgstr "flac_reader: Не вдалося відкрити вхідний файл."
-
 #: src/input/r_flac.cpp:141
 msgid "flac_reader: Could not read a header packet.\n"
 msgstr "flac_reader: Не вдалося прочитати пакет заголовку.\n"
-
-#: src/input/r_flac.cpp:127
-msgid "flac_reader: Could not read all header packets."
-msgstr "flac_reader: Не вдалося прочитати всі пакети заголовку."
 
 #: src/input/r_flac.cpp:240
 msgid "flac_reader: Could not read all header packets.\n"
@@ -8403,10 +8402,6 @@ msgstr "збій inflateInit(). Результат: %1%\n"
 #: src/mmg/mux_dialog.cpp:77
 msgid "is being estimated"
 msgstr "оцінка часу"
-
-#: src/input/r_ivf.cpp:62
-msgid "ivf_reader: Could not open the file."
-msgstr "ivf_reader: Не вдалося відкрити файл."
 
 #: src/info/mkvinfo.cpp:1617
 msgid "key, "
@@ -8842,18 +8837,6 @@ msgstr "mmg буде використовувати типовий список,
 msgid "mono"
 msgstr "моно"
 
-#: src/input/r_mp3.cpp:57
-msgid "mp3_reader: Could not open the source file."
-msgstr "mp3_reader: Не вдалося відкрити вхідний файл."
-
-#: src/input/r_mpeg_es.cpp:163
-msgid "mpeg_es_reader: Could not open the file."
-msgstr "mpeg_es_reader: Не вдалося відкрити файл."
-
-#: src/input/r_mpeg_ps.cpp:82
-msgid "mpeg_ps_reader: Could not open the file."
-msgstr "mpeg_ps_reader: Не вдалося відкрити файл."
-
 #: src/input/r_mpeg_ps.cpp:1190
 #, boost-format
 msgid "mpeg_ps_reader: Should not have happened #1. %1%"
@@ -8863,10 +8846,6 @@ msgstr "mpeg_ps_reader: Цього не повинно було трапитис
 #, boost-format
 msgid "mpeg_ps_reader: Should not have happened #2. %1%"
 msgstr "mpeg_ps_reader: Цього не повинно було трапитися #2. %1%"
-
-#: src/input/r_mpeg_ts.cpp:407
-msgid "mpeg_ts_reader_c: Could not open the file."
-msgstr "mpeg_ts_reader_c: Не вдалося відкрити файл."
 
 #: src/mmg/header_editor/bool_value_page.cpp:43
 #: src/mmg/tabs/input_general.cpp:108
@@ -8914,18 +8893,6 @@ msgstr "збій ogg_stream_init для потоку номер %1%. Буде з
 msgid "ogg_sync_buffer failed\n"
 msgstr "збій ogg_sync_buffer\n"
 
-#: src/input/r_ogm.cpp:329
-msgid "ogm_reader: Could not open the source file."
-msgstr "ogm_reader: Не вдалося відкрити вхідний файл."
-
-#: src/input/r_ogm.cpp:339
-msgid "ogm_reader: Could not read all header packets."
-msgstr "ogm_reader: Не вдалося прочитати всі пакети заголовку."
-
-#: src/input/r_ogm.cpp:332
-msgid "ogm_reader: Source is not a valid OGG media file."
-msgstr "ogm_reader: Вхідний файл не є допустимим OGG медіа файлом."
-
 #: src/mmg/tabs/chapters.cpp:1067
 msgid "on_entry_selected: display == NULL. Should not have happened."
 msgstr "on_entry_selected: display == NULL. Цього не повинно було трапитися."
@@ -8947,10 +8914,6 @@ msgstr ""
 #: src/mmg/jobs.cpp:702
 msgid "pending"
 msgstr "очікування"
-
-#: src/input/r_pgssup.cpp:55
-msgid "pgssup_reader: Could not open the file."
-msgstr "pgssup_reader: Не вдалося відкрити файл."
 
 #: src/info/mkvinfo.cpp:727
 #, boost-format
@@ -9001,10 +8964,6 @@ msgstr "необроблені (сирі) дані"
 msgid "ready"
 msgstr "готовий"
 
-#: src/input/r_real.cpp:149
-msgid "real_reader: Could not read the source file."
-msgstr "real_reader: Не вдалося прочитати вхідний файл."
-
 #: src/input/r_real.cpp:245
 #, boost-format
 msgid "real_reader: Couldn't find RealAudio FourCC for id %1% (description length: %2%) Skipping track.\n"
@@ -9014,10 +8973,6 @@ msgstr "real_reader: Не вдалося знайти RealAudio FourCC для id
 #, boost-format
 msgid "real_reader: Only audio header versions 3, 4 and 5 are supported. Track ID %1% uses version %2% and will be skipped.\n"
 msgstr "real_reader: Тільки заголовки аудіо версій 3, 4 і 5 підтримуються. Доріжка з ID %1% використовує версію %2% і буде пропущена.\n"
-
-#: src/input/r_real.cpp:147
-msgid "real_reader: Source is not a valid RealMedia file."
-msgstr "real_reader: Вхідний файл не є допустимим RealMedia файлом."
 
 #: src/mmg/tabs/attachments.cpp:157
 #: src/mmg/tabs/input.cpp:184
@@ -9058,25 +9013,9 @@ msgstr "розміщення поряд (правий спочатку)"
 msgid "spu_extraction_duration: Encountered broken SPU packet (next_off < start_off) at timecode %1%. This packet might be displayed incorrectly or not at all.\n"
 msgstr "spu_extraction_duration: Виявлено пошкоджений пакет SPU (next_off < start_off) для тайм-коду %1%. Цей пакет може взагалі не відображатися або відображатися неправильно.\n"
 
-#: src/input/r_srt.cpp:40
-msgid "srt_reader: Could not open the source file."
-msgstr "srt_reader: Не вдалося відкрити вхідний файл."
-
-#: src/input/r_srt.cpp:34
-msgid "srt_reader: Source is not a valid SRT file."
-msgstr "srt_reader: Джерельний файл не є допустимим SRT файлом."
-
-#: src/input/r_ssa.cpp:40
-msgid "ssa_reader: Could not open the source file."
-msgstr "ssa_reader: Не вдалося відкрити вхідний файл."
-
 #: src/input/subtitles.cpp:342
 msgid "ssa_reader: Invalid format. Could not find the \"Format\" line in the \"[Events]\" section."
 msgstr "ssa_reader: Невірний формат. Не знайдено рядок \"Format\" у секції \"[Events]\"."
-
-#: src/input/r_ssa.cpp:44
-msgid "ssa_reader: Source is not a valid SSA/ASS file."
-msgstr "ssa_reader: Джерельний файл не є допустимим SSA/ASS файлом."
 
 #: src/mmg/tabs/chapters.cpp:911
 msgid "start >= m->ListSize(). This should not have happened. Please file a bug report. Thanks."
@@ -9117,19 +9056,6 @@ msgstr "один над іншим (правий зверху)"
 msgid "track name"
 msgstr "назва доріжки"
 
-#: src/input/r_truehd.cpp:75
-msgid "truehd_reader: Could not open the source file."
-msgstr "truehd_reader: Не вдалося відкрити вхідний файл."
-
-#: src/input/r_truehd.cpp:63
-#, boost-format
-msgid "truehd_reader: Could not read %1% bytes."
-msgstr "truehd_reader: Не вдалося прочитати %1% байт."
-
-#: src/input/r_tta.cpp:93
-msgid "tta_reader: Could not open the file."
-msgstr "tta_reader: Не вдалося відкрити файл."
-
 #: src/input/r_tta.cpp:60
 #, boost-format
 msgid "tta_reader: tag_size < 0 in the c'tor. %1%\n"
@@ -9166,22 +9092,10 @@ msgstr "невідомий, тег форматування 0x%|1$04x|"
 msgid "up"
 msgstr "Вгору"
 
-#: src/input/r_usf.cpp:96
-msgid "usf_reader: Could not open the source file."
-msgstr "usf_reader: Не вдалося відкрити вхідний файл."
-
-#: src/input/r_usf.cpp:75
-msgid "usf_reader: Source is not a valid USF file."
-msgstr "usf_reader: Вхідний файл не є допустимим USF файлом."
-
 #: src/common/strings/editing.cpp:210
 #, boost-format
 msgid "utf8_strlen(): Invalid UTF-8 char. First byte: 0x%|1$02x|"
 msgstr "utf8_strlen(): Невірний UTF-8 символ. Перший байт: 0x%|1$02x|"
-
-#: src/input/r_vc1.cpp:82
-msgid "vc1_es_reader: Could not open the source file."
-msgstr "vc1_es_reader: Не вдалося відкрити вхідний файл."
 
 #: src/mmg/tabs/chapters.cpp:840
 msgid "verify failed: chapters->CheckMandatory() is false. This should not have happened. Please file a bug report.\n"
@@ -9193,14 +9107,6 @@ msgstr "збій перевірки: chapters->CheckMandatory() ist false. Ць�
 msgid "video"
 msgstr "Відео"
 
-#: src/input/r_vobbtn.cpp:56
-msgid "vobbtn_reader: Could not open the file."
-msgstr "vobbtn_reader: Не вдалося відкрити файл."
-
-#: src/input/r_vobsub.cpp:70
-msgid "vobsub_reader: Could not open the source file."
-msgstr "vobsub_reader: Не вдалося відкрити вхідний файл."
-
 #: src/input/r_vobsub.cpp:82
 msgid "vobsub_reader: Could not open the sub file"
 msgstr "vobsub_reader: Не вдалося відкрити sub файл"
@@ -9208,10 +9114,6 @@ msgstr "vobsub_reader: Не вдалося відкрити sub файл"
 #: src/input/r_vobsub.cpp:572
 msgid "vobsub_reader: sub_file->read failure"
 msgstr "vobsub_reader: збій sub_file->read"
-
-#: src/input/r_wav.cpp:462
-msgid "wav_reader: Could not open the source file."
-msgstr "wav_reader: Не вдалося відкрити вхідний файл."
 
 #: src/input/r_wav.cpp:514
 msgid "wav_reader: No data chunk was found."
@@ -9221,10 +9123,6 @@ msgstr "wav_reader: Не знайдено жодного фрагмента да
 msgid "wav_reader: No format chunk found."
 msgstr "wav_reader: Не знайдено фрагмента, що відповідає за формат даних."
 
-#: src/input/r_wav.cpp:466
-msgid "wav_reader: Source is not a valid WAVE file."
-msgstr "wav_reader: Вхідний файл не є допустимим WAVE файлом."
-
 #: src/input/r_wav.cpp:510
 msgid "wav_reader: The format chunk could not be read."
 msgstr "wav_reader: Фрагмент, що відповідає за формат даних, не може бути прочитаний."
@@ -9232,10 +9130,6 @@ msgstr "wav_reader: Фрагмент, що відповідає за форма�
 #: src/input/r_wav.cpp:480
 msgid "wav_reader: could not read WAVE header."
 msgstr "wav_reader: не вдалося прочитати WAVE заголовок."
-
-#: src/input/r_wavpack.cpp:58
-msgid "wavpack_reader: Could not open the file."
-msgstr "wavpack_reader: Не вдалося відкрити файл."
 
 #: src/common/wavpack.cpp:158
 msgid "wavpack_reader: non-audio block found\n"
@@ -9362,6 +9256,12 @@ msgstr "Так"
 
 #~ msgid "Quicktime/MP4 audio and video"
 #~ msgstr "Quicktime/MP4 Audio і Video"
+
+#~ msgid "Quicktime/MP4 reader: Could not read the source file."
+#~ msgstr "Quicktime/MP4 зчитувач: Неможливо прочитати вхідний файл."
+
+#~ msgid "Quicktime/MP4 reader: Source is not a valid Quicktime/MP4 file."
+#~ msgstr "Quicktime/MP4 зчитувач: Даний файл не є придатним Quicktime/MP4 файлом."
 
 #~ msgid "RealMedia audio and video"
 #~ msgstr "RealMedia Audio i Video"
@@ -9642,17 +9542,38 @@ msgstr "Так"
 #~ msgid "Write raw FLAC files (default: write OggFLAC files)."
 #~ msgstr "Створити вихідні файли FLAC (за замовчуванням: написати OggFLAC файли)."
 
+#~ msgid "ac3_reader: Could not read %1% bytes."
+#~ msgstr "ac3_reader: Не вдалося прочитати %1% байт."
+
 #~ msgid "anaglyph"
 #~ msgstr "анагліф"
 
 #~ msgid "audio/video/text subtitles embedded in OGG"
 #~ msgstr "аудіо/відео/текст субтитрів впроваджених у OGG"
 
+#~ msgid "avc_es_reader: Could not open the source file."
+#~ msgstr "avc_es_reader: Не вдалося відкрити вхідний файл."
+
 #~ msgid "byte_buffer_c: (pos + num) > size. Should not have happened. Please file a bug report.\n"
 #~ msgstr "byte_buffer_c: (pos + num) > size. Не повинно було трапитися. Будь ласка, відправте повідомлення про помилку.\n"
 
+#~ msgid "corepicture_reader: Could not open the source file."
+#~ msgstr "corepicture_reader: Не вдалося відкрити вхідний файл."
+
+#~ msgid "corepicture_reader: Source is not a valid CorePanorama file."
+#~ msgstr "corepicture_reader: Вхідний файл не є допустимим файлом CorePanorama."
+
 #~ msgid "cstrutf8_to_UTFstring: Invalid UTF-8 sequence encountered. Please contact moritz@bunkus.org and request that he implements a better UTF-8 parser."
 #~ msgstr "cstrutf8_to_UTFstring: Натраплено на некорректну UTF-8 послідовність. Будь ласка, напишіть moritz@bunkus.org і зоставте побажання про покращення реалізації UTF-8 аналізатора."
+
+#~ msgid "dirac_es_reader: Could not open the source file."
+#~ msgstr "dirac_es_reader: Не вдалося відкрити вхідний файл."
+
+#~ msgid "dts_reader: Could not open the source file."
+#~ msgstr "dts_reader: Не вдалося відкрити вхідний файл."
+
+#~ msgid "dts_reader: Could not read %1% bytes."
+#~ msgstr "dts_reader: Не вдалося прочитати %1% байт."
 
 #~ msgid "flac_header_extraction: Could not set the error callback.\n"
 #~ msgstr "flac_header_extraction: Не вдалося встановити помилки зворотного виклику.\n"
@@ -9665,6 +9586,12 @@ msgstr "Так"
 
 #~ msgid "flac_header_extraction: Could not set the write callback.\n"
 #~ msgstr "flac_header_extraction: Не вдалося встановити написати зворотного виклику.\n"
+
+#~ msgid "flac_reader: Could not open the source file."
+#~ msgstr "flac_reader: Не вдалося відкрити вхідний файл."
+
+#~ msgid "flac_reader: Could not read all header packets."
+#~ msgstr "flac_reader: Не вдалося прочитати всі пакети заголовку."
 
 #~ msgid "flac_reader: Could not set the eof callback.\n"
 #~ msgstr "flac_reader: Не вдалося встановити кінець файлу зворотного виклику.\n"
@@ -9693,9 +9620,84 @@ msgstr "Так"
 #~ msgid "general Matroska files"
 #~ msgstr "Загальні файли Matroska"
 
+#~ msgid "ivf_reader: Could not open the file."
+#~ msgstr "ivf_reader: Не вдалося відкрити файл."
+
 #~ msgid "mkvextract: Unknown mode!?\n"
 #~ msgstr "mkvextract: Невідомий режим!?\n"
 
+#~ msgid "mp3_reader: Could not open the source file."
+#~ msgstr "mp3_reader: Не вдалося відкрити вхідний файл."
+
+#~ msgid "mpeg_es_reader: Could not open the file."
+#~ msgstr "mpeg_es_reader: Не вдалося відкрити файл."
+
+#~ msgid "mpeg_ps_reader: Could not open the file."
+#~ msgstr "mpeg_ps_reader: Не вдалося відкрити файл."
+
+#~ msgid "mpeg_ts_reader_c: Could not open the file."
+#~ msgstr "mpeg_ts_reader_c: Не вдалося відкрити файл."
+
+#~ msgid "ogm_reader: Could not open the source file."
+#~ msgstr "ogm_reader: Не вдалося відкрити вхідний файл."
+
+#~ msgid "ogm_reader: Source is not a valid OGG media file."
+#~ msgstr "ogm_reader: Вхідний файл не є допустимим OGG медіа файлом."
+
+#~ msgid "pgssup_reader: Could not open the file."
+#~ msgstr "pgssup_reader: Не вдалося відкрити файл."
+
 #~ msgid "r_matroska: Cluster does not contain a cluster timecode. File is broken. Aborting.\n"
 #~ msgstr "r_matroska: Кластер не містять кластеру тайм-коду. Файл не працює. Переривання.\n"
+
+#~ msgid "real_reader: Could not read the source file."
+#~ msgstr "real_reader: Не вдалося прочитати вхідний файл."
+
+#~ msgid "real_reader: Source is not a valid RealMedia file."
+#~ msgstr "real_reader: Вхідний файл не є допустимим RealMedia файлом."
+
+#~ msgid "srt_reader: Could not open the source file."
+#~ msgstr "srt_reader: Не вдалося відкрити вхідний файл."
+
+#~ msgid "srt_reader: Source is not a valid SRT file."
+#~ msgstr "srt_reader: Джерельний файл не є допустимим SRT файлом."
+
+#~ msgid "ssa_reader: Could not open the source file."
+#~ msgstr "ssa_reader: Не вдалося відкрити вхідний файл."
+
+#~ msgid "ssa_reader: Source is not a valid SSA/ASS file."
+#~ msgstr "ssa_reader: Джерельний файл не є допустимим SSA/ASS файлом."
+
+#~ msgid "truehd_reader: Could not open the source file."
+#~ msgstr "truehd_reader: Не вдалося відкрити вхідний файл."
+
+#~ msgid "truehd_reader: Could not read %1% bytes."
+#~ msgstr "truehd_reader: Не вдалося прочитати %1% байт."
+
+#~ msgid "tta_reader: Could not open the file."
+#~ msgstr "tta_reader: Не вдалося відкрити файл."
+
+#~ msgid "usf_reader: Could not open the source file."
+#~ msgstr "usf_reader: Не вдалося відкрити вхідний файл."
+
+#~ msgid "usf_reader: Source is not a valid USF file."
+#~ msgstr "usf_reader: Вхідний файл не є допустимим USF файлом."
+
+#~ msgid "vc1_es_reader: Could not open the source file."
+#~ msgstr "vc1_es_reader: Не вдалося відкрити вхідний файл."
+
+#~ msgid "vobbtn_reader: Could not open the file."
+#~ msgstr "vobbtn_reader: Не вдалося відкрити файл."
+
+#~ msgid "vobsub_reader: Could not open the source file."
+#~ msgstr "vobsub_reader: Не вдалося відкрити вхідний файл."
+
+#~ msgid "wav_reader: Could not open the source file."
+#~ msgstr "wav_reader: Не вдалося відкрити вхідний файл."
+
+#~ msgid "wav_reader: Source is not a valid WAVE file."
+#~ msgstr "wav_reader: Вхідний файл не є допустимим WAVE файлом."
+
+#~ msgid "wavpack_reader: Could not open the file."
+#~ msgstr "wavpack_reader: Не вдалося відкрити файл."
 
