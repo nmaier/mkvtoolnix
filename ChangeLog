@@ -1,5 +1,8 @@
 2011-10-22  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: Fixed reading MPEG transport streams on big
+	endian systems.
+
 	* mkvmerge: enhancement: Added support for reading AAC tracks from
 	MPEG transport streams.
 

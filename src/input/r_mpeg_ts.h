@@ -21,6 +21,7 @@
 
 #include "common/aac.h"
 #include "common/byte_buffer.h"
+#include "common/endian.h"
 #include "common/dts.h"
 #include "common/mm_io.h"
 #include "common/mpeg4_p10.h"
@@ -76,89 +77,186 @@ enum mpeg_ts_stream_type_e {
 #pragma pack(push,1)
 #endif
 
-/* TS packet header */
+// TS packet header
 struct PACKED_STRUCTURE mpeg_ts_packet_header_t {
   unsigned char sync_byte;
-  unsigned char pid_msb:5, transport_priority:1, payload_unit_start_indicator:1, transport_error_indicator:1;
+  unsigned char pid_msb_flags1; // msb:5 transport_priority:1 payload_unit_start_indicator:1 transport_error_indicator:1
   unsigned char pid_lsb;
-  unsigned char continuity_counter:4, adaptation_field_control:2, transport_scrambling_control:2;
+  unsigned char flags2;         // continuity_counter:4 adaptation_field_control:2 transport_scrambling_control:2
+
+  uint16_t get_pid() {
+    return ((static_cast<uint16_t>(pid_msb_flags1) & 0x1f) << 8) | static_cast<uint16_t>(pid_lsb);
+  }
+
+  unsigned char get_payload_unit_start_indicator() {
+    return (pid_msb_flags1 & 0x40) >> 6;
+  }
+
+  unsigned char get_transport_error_indicator() {
+    return (pid_msb_flags1 & 0x80) >> 7;
+  }
+
+  unsigned char get_continuity_counter() {
+    return flags2 & 0x0f;
+  }
+
+  unsigned char get_adaptation_field_control() {
+    return (flags2 & 0x30) >> 4;
+  }
 };
 
-/* Adaptation field */
+// Adaptation field
 struct PACKED_STRUCTURE mpeg_ts_adaptation_field_t {
-  unsigned char adaptation_field_length;
-  unsigned char adaptation_field_extension_flag:1, transport_private_data_flag:1, splicing_point_flag:1, opcr_flag:1,
-                pcr_flag:1, elementary_stream_priority_indicator:1, random_access_indicator:1, discontinuity_indicator:1;
+  unsigned char length;
+  unsigned char flags;  // extension:1 transport_private_data:1 splicing_point:1 opcr:1 pcr:1 elementary_stream_priority_indicator:1 random_access_indicator:1 discontinuity_indicator:1
+
+  unsigned char get_discontinuity_indicator() {
+    return (flags & 80) >> 7;
+  }
 };
 
-/* CRC */
-struct PACKED_STRUCTURE mpeg_ts_crc_t {
-  unsigned char crc_3msb, crc_2msb, crc_1msb, crc_lsb;
-};
-
-/* PAT header */
+// PAT header
 struct PACKED_STRUCTURE mpeg_ts_pat_t {
   unsigned char table_id;
-  unsigned char section_length_msb:4, reserved:2, zero:1, section_syntax_indicator:1;
+  unsigned char section_length_msb_flags1; // msb:4 reserved:2 zero:1 section_syntax_indicator:1
   unsigned char section_length_lsb;
   unsigned char transport_stream_id_msb;
   unsigned char transport_stream_id_lsb;
-  unsigned char current_next_indicator:1, version_number:5, reserved2:2;
+  unsigned char flags2; // current_next_indicator:1 version_number:5 reserved2:2
   unsigned char section_number;
   unsigned char last_section_number;
+
+  uint16_t get_section_length() {
+    return ((static_cast<uint16_t>(section_length_msb_flags1) & 0x0f) << 8) | static_cast<uint16_t>(section_length_lsb);
+  }
+
+  unsigned char get_section_syntax_indicator() {
+    return (section_length_msb_flags1 & 0x80) >> 7;
+  }
+
+  unsigned char get_current_next_indicator() {
+    return flags2 & 0x01;
+  }
 };
 
-/* PAT section */
+// PAT section
 struct PACKED_STRUCTURE mpeg_ts_pat_section_t {
-  unsigned char program_number_msb;
-  unsigned char program_number_lsb;
-  unsigned char pid_msb:5, reserved3:3;
+  uint16_t program_number;
+  unsigned char pid_msb_flags;
   unsigned char pid_lsb;
+
+  uint16_t get_pid() {
+    return ((static_cast<uint16_t>(pid_msb_flags) & 0x1f) << 8) | static_cast<uint16_t>(pid_lsb);
+  }
+
+  uint16_t get_program_number() {
+    return get_uint16_be(&program_number);
+  }
 };
 
-/* PMT header */
+// PMT header
 struct PACKED_STRUCTURE mpeg_ts_pmt_t {
   unsigned char table_id;
-  unsigned char section_length_msb:4, reserved:2, zero:1, section_syntax_indicator:1;
+  unsigned char section_length_msb_flags1; // msb:4 reserved:2 zero:1 section_syntax_indicator:1
   unsigned char section_length_lsb;
-  unsigned char program_number_msb;
-  unsigned char program_number_lsb;
-  unsigned char current_next_indicator:1, version_number:5, reserved2:2;
+  uint16_t program_number;
+  unsigned char flags2; // current_next_indicator:1 version_number:5 reserved2:2
   unsigned char section_number;
   unsigned char last_section_number;
-  unsigned char pcr_pid_msb:5, reserved3:3;
+  unsigned char pcr_pid_msb_flags;
   unsigned char pcr_pid_lsb;
-  unsigned char program_info_length_msb:4, reserved4:4;
-  unsigned char program_info_length_lsb:8;
+  unsigned char program_info_length_msb_reserved; // msb:4 reserved4:4
+  unsigned char program_info_length_lsb;
+
+  uint16_t get_pcr_pid() {
+    return ((static_cast<uint16_t>(pcr_pid_msb_flags) & 0x1f) << 8) | static_cast<uint16_t>(pcr_pid_lsb);
+  }
+
+  uint16_t get_section_length() {
+    return ((static_cast<uint16_t>(section_length_msb_flags1) & 0x0f) << 8) | static_cast<uint16_t>(section_length_lsb);
+  }
+
+  uint16_t get_program_info_length() {
+    return ((static_cast<uint16_t>(program_info_length_msb_reserved) & 0x0f) << 8) | static_cast<uint16_t>(program_info_length_lsb);
+  }
+
+  unsigned char get_section_syntax_indicator() {
+    return (section_length_msb_flags1 & 0x80) >> 7;
+  }
+
+  unsigned char get_current_next_indicator() {
+    return flags2 & 0x01;
+  }
+
+  uint16_t get_program_number() {
+    return get_uint16_be(&program_number);
+  }
 };
 
-/* PMT descriptor */
+// PMT descriptor
 struct PACKED_STRUCTURE mpeg_ts_pmt_descriptor_t {
   unsigned char tag;
   unsigned char length;
 };
 
-/* PMT pid info */
+// PMT pid info
 struct PACKED_STRUCTURE mpeg_ts_pmt_pid_info_t {
   unsigned char stream_type;
-  unsigned char pid_msb:5, reserved:3;
+  unsigned char pid_msb_flags;
   unsigned char pid_lsb;
-  unsigned char es_info_length_msb:4, reserved2:4;
+  unsigned char es_info_length_msb_flags;
   unsigned char es_info_length_lsb;
+
+  uint16_t get_pid() {
+    return ((static_cast<uint16_t>(pid_msb_flags) & 0x1f) << 8) | static_cast<uint16_t>(pid_lsb);
+  }
+
+  uint16_t get_es_info_length() {
+    return ((static_cast<uint16_t>(es_info_length_msb_flags) & 0x0f) << 8) | static_cast<uint16_t>(es_info_length_lsb);
+  }
 };
 
-/* PES header */
+// PES header
 struct PACKED_STRUCTURE mpeg_ts_pes_header_t {
-  unsigned char packet_start_code_prefix_2msb;
-  unsigned char packet_start_code_prefix_1msb;
-  unsigned char packet_start_code_prefix_lsb;
+  unsigned char packet_start_code[3];
   unsigned char stream_id;
-  unsigned char PES_packet_length_msb;
-  unsigned char PES_packet_length_lsb;
-  unsigned char original_or_copy:1, copyright:1, data_alignment_indicator:1, PES_priority:1, PES_scrambling_control:2, onezero:2;
-  unsigned char PES_extension:1, PES_CRC:1, additional_copy_info:1, DSM_trick_mode:1, ES_rate:1, ESCR:1, PTS_DTS_flags:2;
-  unsigned char PES_header_data_length;
-  unsigned char PTS_DTS;
+  uint16_t pes_packet_length;
+  unsigned char flags1; // original_or_copy:1 copyright:1 data_alignment_indicator:1 pes_priority:1 pes_scrambling_control:2 onezero:2
+  unsigned char flags2; // pes_extension:1 pes_crc:1 additional_copy_info:1 dsm_trick_mode:1 es_rate:1 escr:1 pts_dts_flags:2
+  unsigned char pes_header_data_length;
+  unsigned char pts_dts;
+
+  uint16_t get_pes_packet_length() {
+    return get_uint16_be(&pes_packet_length);
+  }
+
+  unsigned char get_pes_extension() {
+    return flags2 & 0x01;
+  }
+
+  unsigned char get_pes_crc() {
+    return (flags2 & 0x02) >> 1;
+  }
+
+  unsigned char get_additional_copy_info() {
+    return (flags2 & 0x04) >> 2;
+  }
+
+  unsigned char get_dsm_trick_mode() {
+    return (flags2 & 0x08) >> 3;
+  }
+
+  unsigned char get_es_rate() {
+    return (flags2 & 0x10) >> 4;
+  }
+
+  unsigned char get_escr() {
+    return (flags2 & 0x20) >> 5;
+  }
+
+  unsigned char get_pts_dts_flags() {
+    return (flags2 & 0xc0) >> 6;
+  }
 };
 
 #if defined(COMP_MSC)
