@@ -55,19 +55,29 @@ the Subversion repository version might not even compile.
 
 In order to compile MKVToolNix you need a couple of libraries. Most of
 them should be available pre-compiled for your distribution. The
-libraries you absolutely need are:
+programs and libraries you absolutely need are:
+
+- A C++ compiler that supports several features of the C++11 standard:
+  initializer lists, range-based 'for' loops, right angle brackets,
+  the 'auto' keyword and lambda functions. For GCC this means at least
+  v4.6.0.
 
 - libebml and libmatroska for low-level access to Matroska files.
   Instructions on how to compile them are a bit further down in this
   file.
+
 - expat ( http://expat.sourceforge.net/ ) -- a light-weight XML
   parser library
+
 - libOgg ( http://downloads.xiph.org/releases/ogg/ ) and libVorbis
   ( http://downloads.xiph.org/releases/vorbis/ ) for access to Ogg/OGM
   files and Vorbis support
+
 - zlib ( http://www.zlib.net/ ) -- a compression library
-- Several of Boost's libraries: "format", "RegEx", "filesystem",
-  "system", "foreach" ( http://www.boost.org/ )
+
+- Boost ( http://www.boost.org/ ) -- Several of Boost's libraries are
+  used: "format", "RegEx", "filesystem", "system", "foreach",
+  "Range". At least v1.46.0 is required.
 
 You also need the "rake" or "drake" build program or at least the
 programming language Ruby and the "rubygems" package. MKVToolNix comes
@@ -88,21 +98,28 @@ built. These include:
 - wxWidgets ( http://www.wxwidgets.org/ ) -- a cross-platform GUI
   toolkit. You need this if you want to use mmg (the mkvmerge GUI) or
   mkvinfo's GUI.
+
 - libFLAC ( http://downloads.xiph.org/releases/flac/ ) for FLAC
   support (Free Lossless Audio Codec)
+
 - lzo ( http://www.oberhumer.com/opensource/lzo/ ) and bzip2 (
   http://www.bzip.org/ ) are compression libraries. These are the
   least important libraries as almost no application supports Matroska
   content that is compressed with either of these libs. The
   aforementioned zlib is what every program supports.
+
 - libMagic from the "file" package ( http://www.darwinsys.com/file/ )
   for automatic content type detection
+
 - libcurl ( http://curl.haxx.se/ ) for online update checks
 
 2.3. Building libmatroska and libebml
 
-Start with the two libraries. Either get libebml 1.0.0 from
-http://dl.matroska.org/downloads/libebml/ and libmatroska 1.0.0 from
+This is optional as MKVToolNix comes with its own set of the
+libraries. It will use them if no version is found on the system.
+
+Start with the two libraries. Either get libebml 1.2.2 from
+http://dl.matroska.org/downloads/libebml/ and libmatroska 1.3.0 from
 http://dl.matroska.org/downloads/libmatroska/ or a fresh copy from the
 Subversion repository:
 

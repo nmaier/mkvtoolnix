@@ -1,3 +1,17 @@
+2011-10-23  Moritz Bunkus  <moritz@bunkus.org>
+
+	* build system: Boost's "Range" library is now required.
+
+	* build system: Boost v1.46.0 or newer is now required. As a
+	consequence included copies of some of Boost's libraries have been
+	removed (foreach, property tree).
+
+	* build system: The C++ compiler must now support several features
+	of the C++11 standard: initializer lists, range-based 'for' loops,
+	right angle brackets, the 'auto' keyword and lambda
+	functions. configure checks for each of these. For GCC this means
+	at least v4.6.0.
+
 2011-10-22  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Fixed reading MPEG transport streams on big
