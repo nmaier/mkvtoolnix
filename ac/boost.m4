@@ -20,16 +20,6 @@ if test x"$ax_cv_boost_regex" != "xyes"; then
   AC_MSG_ERROR(The Boost Regex Library was not found.)
 fi
 
-# boost::property_tree can be missing; the included version will be used in
-# that case.
-boost_property_tree_dir=lib/boost/property_tree
-AX_BOOST_PROPERTY_TREE($boost_property_tree_dir)
-
-if test x"$ax_cv_boost_property_tree" = "xno"; then
-  AC_MSG_ERROR([The Boost property_tree library was not found, and the included version does not work. Install Boost v1.41.0 or later.])
-fi
-
-if test x"$ax_cv_boost_property_tree" = "xincluded"; then
-  EXTRA_CFLAGS="$EXTRA_CFLAGS -I$boost_property_tree_dir"
-fi
-
+AX_BOOST_CHECK_HEADERS([boost/property_tree/ptree.hpp],,[
+  AC_MSG_ERROR([Boost's property tree library is required but wasn't found])
+])
