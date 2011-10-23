@@ -14,6 +14,8 @@ if test "x$magic_found" = "xyes" ; then
   else
     opt_features_no="$opt_features_no\n   * libMagic file type detection"
   fi
+else
+  opt_features_no="$opt_features_no\n   * libMagic file type detection"
 fi
 
 AC_SUBST(MAGIC_LIBS)
