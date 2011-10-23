@@ -35,6 +35,9 @@
 #include <iostream>
 #include <typeinfo>
 
+#include <boost/range/algorithm.hpp>
+#include <boost/range/numeric.hpp>
+
 #include <ebml/EbmlHead.h>
 #include <ebml/EbmlSubHead.h>
 #include <ebml/EbmlVersion.h>
@@ -850,60 +853,57 @@ render_attachments(IOCallback *out) {
 */
 static void
 check_append_mapping() {
-  std::vector<append_spec_t>::iterator amap, cmp_amap, trav_amap;
   std::vector<int64_t>::iterator id;
   std::vector<filelist_t>::iterator src_file, dst_file;
-  int file_id;
 
-  mxforeach(amap, g_append_mapping) {
+  for (auto &amap : g_append_mapping) {
     // Check each mapping entry for validity.
 
     // 1. Is there a file with the src_file_id?
-    if ((0 > amap->src_file_id) || (g_files.size() <= static_cast<size_t>(amap->src_file_id)))
-      mxerror(boost::format(Y("There is no file with the ID '%1%'. The argument for '--append-to' was invalid.\n")) % amap->src_file_id);
+    if ((0 > amap.src_file_id) || (g_files.size() <= static_cast<size_t>(amap.src_file_id)))
+      mxerror(boost::format(Y("There is no file with the ID '%1%'. The argument for '--append-to' was invalid.\n")) % amap.src_file_id);
 
     // 2. Is the "source" file in "append mode", meaning does its file name
     // start with a '+'?
-    src_file = g_files.begin() + amap->src_file_id;
+    src_file = g_files.begin() + amap.src_file_id;
     if (!src_file->appending)
-      mxerror(boost::format(Y("The file no. %1% ('%2%') is not being appended. The argument for '--append-to' was invalid.\n")) % amap->src_file_id % src_file->name);
+      mxerror(boost::format(Y("The file no. %1% ('%2%') is not being appended. The argument for '--append-to' was invalid.\n")) % amap.src_file_id % src_file->name);
 
     // 3. Is there a file with the dst_file_id?
-    if ((0 > amap->dst_file_id) || (g_files.size() <= static_cast<size_t>(amap->dst_file_id)))
-      mxerror(boost::format(Y("There is no file with the ID '%1%'. The argument for '--append-to' was invalid.\n")) % amap->dst_file_id);
+    if ((0 > amap.dst_file_id) || (g_files.size() <= static_cast<size_t>(amap.dst_file_id)))
+      mxerror(boost::format(Y("There is no file with the ID '%1%'. The argument for '--append-to' was invalid.\n")) % amap.dst_file_id);
 
     // 4. G_Files cannot be appended to itself.
-    if (amap->src_file_id == amap->dst_file_id)
+    if (amap.src_file_id == amap.dst_file_id)
       mxerror(Y("Files cannot be appended to themselves. The argument for '--append-to' was invalid.\n"));
   }
 
   // Now let's check each appended file if there are NO append to mappings
   // available (in which case we fill in default ones) or if there are fewer
   // mappings than tracks that are to be copied (which is an error).
-  mxforeach(src_file, g_files) {
-    file_id = std::distance(g_files.begin(), src_file);
-    if (!src_file->appending)
+  int file_id = -1;
+  for (auto &src_file : g_files) {
+    ++file_id;
+
+    if (!src_file.appending)
       continue;
 
-    unsigned int count = 0;
-    mxforeach(amap, g_append_mapping)
-      if (amap->src_file_id == file_id)
-        count++;
+    size_t count = boost::count_if(g_append_mapping, [=](const append_spec_t &e) { return e.src_file_id == file_id; });
 
-    if ((0 < count) && (src_file->reader->m_used_track_ids.size() > count))
+    if ((0 < count) && (src_file.reader->m_used_track_ids.size() > count))
       mxerror(boost::format(Y("Only partial append mappings were given for the file no. %1% ('%2%'). Either don't specify any mapping (in which case the "
-                              "default mapping will be used) or specify a mapping for all tracks that are to be copied.\n")) % file_id % src_file->name);
+                              "default mapping will be used) or specify a mapping for all tracks that are to be copied.\n")) % file_id % src_file.name);
     else if (0 == count) {
       std::string missing_mappings;
 
       // Default mapping.
-      mxforeach(id, src_file->reader->m_used_track_ids) {
+      for (auto id : src_file.reader->m_used_track_ids) {
         append_spec_t new_amap;
 
         new_amap.src_file_id  = file_id;
-        new_amap.src_track_id = *id;
+        new_amap.src_track_id = id;
         new_amap.dst_file_id  = file_id - 1;
-        new_amap.dst_track_id = *id;
+        new_amap.dst_track_id = id;
         g_append_mapping.push_back(new_amap);
 
         if (!missing_mappings.empty())
@@ -912,70 +912,70 @@ check_append_mapping() {
       }
       mxinfo(boost::format(Y("No append mapping was given for the file no. %1% ('%2%'). A default mapping of %3% will be used instead. "
                              "Please keep that in mind if mkvmerge aborts with an error message regarding invalid '--append-to' options.\n"))
-             % file_id % src_file->name % missing_mappings);
+             % file_id % src_file.name % missing_mappings);
     }
   }
 
   // Some more checks.
-  mxforeach(amap, g_append_mapping) {
-    src_file = g_files.begin() + amap->src_file_id;
-    dst_file = g_files.begin() + amap->dst_file_id;
+  for (auto &amap : g_append_mapping) {
+    src_file = g_files.begin() + amap.src_file_id;
+    dst_file = g_files.begin() + amap.dst_file_id;
 
     // 5. Does the "source" file have a track with the src_track_id, and is
     // that track selected for copying?
-    if (!mxfind2(id, amap->src_track_id, src_file->reader->m_used_track_ids))
+    if (!mxfind2(id, amap.src_track_id, src_file->reader->m_used_track_ids))
       mxerror(boost::format(Y("The file no. %1% ('%2%') does not contain a track with the ID %3%, or that track is not to be copied. "
-                              "The argument for '--append-to' was invalid.\n")) % amap->src_file_id % src_file->name % amap->src_track_id);
+                              "The argument for '--append-to' was invalid.\n")) % amap.src_file_id % src_file->name % amap.src_track_id);
 
     // 6. Does the "destination" file have a track with the dst_track_id, and
     // that track selected for copying?
-    if (!mxfind2(id, amap->dst_track_id, dst_file->reader->m_used_track_ids))
+    if (!mxfind2(id, amap.dst_track_id, dst_file->reader->m_used_track_ids))
       mxerror(boost::format(Y("The file no. %1% ('%2%') does not contain a track with the ID %3%, or that track is not to be copied. Therefore no "
-                              "track can be appended to it. The argument for '--append-to' was invalid.\n")) % amap->dst_file_id % dst_file->name % amap->dst_track_id);
+                              "track can be appended to it. The argument for '--append-to' was invalid.\n")) % amap.dst_file_id % dst_file->name % amap.dst_track_id);
 
     // 7. Is this track already mapped to somewhere else?
-    mxforeach(cmp_amap, g_append_mapping) {
+    for (auto &cmp_amap : g_append_mapping) {
       if (cmp_amap == amap)
         continue;
 
-      if (   ((*cmp_amap).src_file_id  == amap->src_file_id)
-          && ((*cmp_amap).src_track_id == amap->src_track_id))
+      if (   (cmp_amap.src_file_id  == amap.src_file_id)
+          && (cmp_amap.src_track_id == amap.src_track_id))
         mxerror(boost::format(Y("The track %1% from file no. %2% ('%3%') is to be appended more than once. The argument for '--append-to' was invalid.\n"))
-                % amap->src_track_id % amap->src_file_id % src_file->name);
+                % amap.src_track_id % amap.src_file_id % src_file->name);
     }
 
     // 8. Is there another track that is being appended to the dst_track_id?
-    mxforeach(cmp_amap, g_append_mapping) {
+    for (auto &cmp_amap : g_append_mapping) {
       if (cmp_amap == amap)
         continue;
 
-      if (   ((*cmp_amap).dst_file_id  == amap->dst_file_id)
-          && ((*cmp_amap).dst_track_id == amap->dst_track_id))
+      if (   (cmp_amap.dst_file_id  == amap.dst_file_id)
+          && (cmp_amap.dst_track_id == amap.dst_track_id))
         mxerror(boost::format(Y("More than one track is to be appended to the track %1% from file no. %2% ('%3%'). The argument for '--append-to' was invalid.\n"))
-                % amap->dst_track_id % amap->dst_file_id % dst_file->name);
+                % amap.dst_track_id % amap.dst_file_id % dst_file->name);
     }
   }
 
   // Finally see if the packetizers can be connected and connect them if they
   // can.
-  mxforeach(amap, g_append_mapping) {
+  for (auto &amap : g_append_mapping) {
     std::vector<generic_packetizer_c *>::const_iterator gptzr;
     generic_packetizer_c *src_ptzr, *dst_ptzr;
     std::string error_message;
     int result;
 
-    src_file = g_files.begin() + amap->src_file_id;
+    src_file = g_files.begin() + amap.src_file_id;
     src_ptzr = NULL;
     mxforeach(gptzr, src_file->reader->m_reader_packetizers)
-      if ((*gptzr)->m_ti.m_id == amap->src_track_id) {
+      if ((*gptzr)->m_ti.m_id == amap.src_track_id) {
         src_ptzr = (*gptzr);
         break;
       }
 
-    dst_file = g_files.begin() + amap->dst_file_id;
+    dst_file = g_files.begin() + amap.dst_file_id;
     dst_ptzr = NULL;
     mxforeach(gptzr, dst_file->reader->m_reader_packetizers)
-      if ((*gptzr)->m_ti.m_id == amap->dst_track_id) {
+      if ((*gptzr)->m_ti.m_id == amap.dst_track_id) {
         dst_ptzr = (*gptzr);
         break;
       }
@@ -989,8 +989,8 @@ check_append_mapping() {
       mxwarn(boost::format(Y("The track number %1% from the file '%2%' can probably not be appended correctly to the track number %3% from the file '%4%': %5% "
                              "Please make sure that the resulting file plays correctly the whole time. "
                              "The author of this program will probably not give support for playback issues with the resulting file.\n"))
-             % amap->src_track_id % g_files[amap->src_file_id].name
-             % amap->dst_track_id % g_files[amap->dst_file_id].name
+             % amap.src_track_id % g_files[amap.src_file_id].name
+             % amap.dst_track_id % g_files[amap.dst_file_id].name
              % error_message);
 
     else if (CAN_CONNECT_YES != result) {
@@ -998,8 +998,8 @@ check_append_mapping() {
                          : result == CAN_CONNECT_NO_PARAMETERS ? Y("The track parameters do not match.")
                          :                                       Y("The reason is unknown."));
       mxerror(boost::format(Y("The track number %1% from the file '%2%' cannot be appended to the track number %3% from the file '%4%'. %5%\n"))
-              % amap->src_track_id % g_files[amap->src_file_id].name
-              % amap->dst_track_id % g_files[amap->dst_file_id].name
+              % amap.src_track_id % g_files[amap.src_file_id].name
+              % amap.dst_track_id % g_files[amap.dst_file_id].name
               % reason);
     }
 
@@ -1009,20 +1009,20 @@ check_append_mapping() {
 
   // Calculate the "longest path" -- meaning the maximum number of
   // concatenated files. This is needed for displaying the progress.
+  std::vector<append_spec_t>::iterator amap;
   mxforeach(amap, g_append_mapping) {
     // Is this the first in a chain?
-    mxforeach(cmp_amap, g_append_mapping) {
-      if (amap == cmp_amap)
-        continue;
-      if ((amap->dst_file_id == cmp_amap->src_file_id) &&
-          (amap->dst_track_id == cmp_amap->src_track_id))
-        break;
-    }
+    auto cmp_amap = boost::find_if(g_append_mapping, [&](const append_spec_t &e) {
+      return (*amap              != e)
+          && (amap->dst_file_id  == e.src_file_id)
+          && (amap->dst_track_id == e.src_track_id);
+      });
+
     if (cmp_amap != g_append_mapping.end())
       continue;
 
     // Find consecutive mappings.
-    trav_amap       = amap;
+    auto trav_amap  = amap;
     int path_length = 2;
     do {
       mxforeach(cmp_amap, g_append_mapping)

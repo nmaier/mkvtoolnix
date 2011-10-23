@@ -14,6 +14,7 @@
 #include "common/common_pch.h"
 
 #include <cassert>
+#include <boost/range/algorithm.hpp>
 
 #include "common/hacks.h"
 #include "common/random.h"
@@ -46,12 +47,8 @@ is_unique_uint32(uint32_t number,
   if (hack_engaged(ENGAGE_NO_VARIABLE_DATA))
     return true;
 
-  size_t i;
-  for (i = 0; s_random_unique_numbers[category].size() > i; ++i)
-    if (s_random_unique_numbers[category][i] == number)
-      return false;
-
-  return true;
+  return boost::find_if(s_random_unique_numbers[category], [=](uint32_t stored_number) { return number == stored_number; })
+    == s_random_unique_numbers[category].end();
 }
 
 void
@@ -65,22 +62,11 @@ add_unique_uint32(uint32_t number,
     s_random_unique_numbers[category].push_back(number);
 }
 
-bool
+void
 remove_unique_uint32(uint32_t number,
                      unique_id_category_e category) {
   assert_valid_category(category);
-
-  if (hack_engaged(ENGAGE_NO_VARIABLE_DATA))
-    return true;
-
-  std::vector<uint32_t>::iterator dit;
-  mxforeach(dit, s_random_unique_numbers[category])
-    if (*dit == number) {
-      s_random_unique_numbers[category].erase(dit);
-      return true;
-    }
-
-  return false;
+  boost::remove_if(s_random_unique_numbers[category], [=](uint32_t stored_number) { return number == stored_number; });
 }
 
 uint32_t

@@ -57,17 +57,16 @@ static std::vector<timecode_extractor_t> timecode_extractors;
 
 static void
 close_timecode_files() {
-  std::vector<timecode_extractor_t>::iterator extractor;
-
-  mxforeach(extractor, timecode_extractors) {
-    std::vector<int64_t> &timecodes = extractor->m_timecodes;
+  for (auto &extractor : timecode_extractors) {
+    std::vector<int64_t> &timecodes = extractor.m_timecodes;
     std::vector<int64_t>::const_iterator timecode;
 
     std::sort(timecodes.begin(), timecodes.end());
-    mxforeach(timecode, timecodes)
-      extractor->m_file->puts(to_string(*timecode, 1000000, 6) + "\n");
-    delete extractor->m_file;
+    for (auto timecode : timecodes)
+      extractor.m_file->puts(to_string(timecode, 1000000, 6) + "\n");
+    delete extractor.m_file;
   }
+
   timecode_extractors.clear();
 }
 
@@ -75,12 +74,9 @@ static void
 create_timecode_files(KaxTracks &kax_tracks,
                       std::vector<track_spec_t> &tracks,
                       int version) {
-  std::vector<track_spec_t>::iterator tspec;
   size_t i;
-  int64_t default_duration;
-
-  mxforeach(tspec, tracks) {
-    default_duration = 0;
+  for (auto &tspec : tracks) {
+    int64_t default_duration = 0;
 
     for (i = 0; kax_tracks.ListSize() > i; ++i) {
       if (!is_id(kax_tracks[i], KaxTrackEntry))
@@ -88,7 +84,7 @@ create_timecode_files(KaxTracks &kax_tracks,
 
       KaxTrackEntry &track = *static_cast<KaxTrackEntry *>(kax_tracks[i]);
 
-      if (kt_get_number(track) != tspec->tid)
+      if (kt_get_number(track) != tspec.tid)
         continue;
 
       default_duration = kt_get_default_duration(track);
@@ -97,15 +93,22 @@ create_timecode_files(KaxTracks &kax_tracks,
     }
 
     try {
-      mm_io_c *file = mm_write_cache_io_c::open(tspec->out_name, 128 * 1024);
-      timecode_extractors.push_back(timecode_extractor_t(tspec->tid, file, default_duration));
+      mm_io_c *file = mm_write_cache_io_c::open(tspec.out_name, 128 * 1024);
+      timecode_extractors.push_back(timecode_extractor_t(tspec.tid, file, default_duration));
       file->puts(boost::format("# timecode format v%1%\n") % version);
 
     } catch(...) {
       close_timecode_files();
-      mxerror(boost::format(Y("Could not open the timecode file '%1%' for writing (%2%).\n")) % tspec->out_name % strerror(errno));
+      mxerror(boost::format(Y("Could not open the timecode file '%1%' for writing (%2%).\n")) % tspec.out_name % strerror(errno));
     }
   }
+}
+
+static
+std::vector<timecode_extractor_t>::iterator
+find_extractor_by_track_number(unsigned int track_number) {
+  return std::find_if(timecode_extractors.begin(), timecode_extractors.end(),
+                      [=](timecode_extractor_t &xtr) { return track_number == xtr.m_tid; });
 }
 
 static void
@@ -119,10 +122,7 @@ handle_blockgroup(KaxBlockGroup &blockgroup,
   block->SetParent(cluster);
 
   // Do we need this block group?
-  std::vector<timecode_extractor_t>::iterator extractor;
-  mxforeach(extractor, timecode_extractors)
-    if (block->TrackNum() == extractor->m_tid)
-      break;
+  std::vector<timecode_extractor_t>::iterator extractor = find_extractor_by_track_number(block->TrackNum());
   if (timecode_extractors.end() == extractor)
     return;
 
@@ -144,11 +144,7 @@ handle_simpleblock(KaxSimpleBlock &simpleblock,
 
   simpleblock.SetParent(cluster);
 
-  std::vector<timecode_extractor_t>::iterator extractor;
-  // Do we need this simple block?
-  mxforeach(extractor, timecode_extractors)
-    if (simpleblock.TrackNum() == extractor->m_tid)
-      break;
+  std::vector<timecode_extractor_t>::iterator extractor = find_extractor_by_track_number(simpleblock.TrackNum());
   if (timecode_extractors.end() == extractor)
     return;
 

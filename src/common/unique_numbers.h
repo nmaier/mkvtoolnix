@@ -27,7 +27,7 @@ enum unique_id_category_e {
 void MTX_DLL_API clear_list_of_unique_uint32(unique_id_category_e category);
 bool MTX_DLL_API is_unique_uint32(uint32_t number, unique_id_category_e category);
 void MTX_DLL_API add_unique_uint32(uint32_t number, unique_id_category_e category);
-bool MTX_DLL_API remove_unique_uint32(uint32_t number, unique_id_category_e category);
+void MTX_DLL_API remove_unique_uint32(uint32_t number, unique_id_category_e category);
 uint32_t MTX_DLL_API create_unique_uint32(unique_id_category_e category);
 
 #endif  // __MTX_COMMON_UNIQUE_NUMBERS_H

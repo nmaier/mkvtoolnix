@@ -51,6 +51,21 @@ struct append_spec_t {
   int64_t dst_track_id;
 };
 
+inline
+bool operator ==(const append_spec_t &a1,
+                 const append_spec_t &a2) {
+  return (a1.src_file_id  == a2.src_file_id)
+      && (a1.src_track_id == a2.src_track_id)
+      && (a1.dst_file_id  == a2.dst_file_id)
+      && (a1.dst_track_id == a2.dst_track_id);
+}
+
+inline
+bool operator !=(const append_spec_t &a1,
+                 const append_spec_t &a2) {
+  return !(a1 == a2);
+}
+
 struct packetizer_t {
   file_status_e status, old_status;
   packet_cptr pack;

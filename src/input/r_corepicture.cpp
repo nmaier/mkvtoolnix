@@ -183,14 +183,13 @@ corepicture_reader_c::create_packetizer(int64_t tid) {
 
   uint8 private_buffer[5];
   uint32 codec_used = 0;
-  std::vector<corepicture_pic_t>::const_iterator picture;
 
   private_buffer[0] = 0; // version 0
 
-  mxforeach(picture, m_pictures) {
-    if (COREPICTURE_TYPE_JPEG == picture->m_pic_type)
+  for (auto &picture : m_pictures) {
+    if (COREPICTURE_TYPE_JPEG == picture.m_pic_type)
       codec_used |= COREPICTURE_USE_JPEG;
-    else if (COREPICTURE_TYPE_PNG == picture->m_pic_type)
+    else if (COREPICTURE_TYPE_PNG == picture.m_pic_type)
       codec_used |= COREPICTURE_USE_PNG;
   }
   put_uint32_be(&private_buffer[1], codec_used);

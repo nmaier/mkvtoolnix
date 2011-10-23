@@ -11,6 +11,7 @@
 #include "common/os.h"
 
 #include <cassert>
+#include <boost/range/algorithm.hpp>
 
 #include <matroska/KaxChapters.h>
 #include <matroska/KaxTag.h>
@@ -33,16 +34,14 @@ options_c::validate() {
   if (!has_changes())
     mxerror(Y("Nothing to do.\n"));
 
-  std::vector<target_cptr>::iterator target_it;
-  mxforeach(target_it, m_targets)
-    (*target_it)->validate();
+  for (auto &target : m_targets)
+    target->validate();
 }
 
 void
 options_c::execute() {
-  std::vector<target_cptr>::iterator target_it;
-  mxforeach(target_it, m_targets)
-    (*target_it)->execute();
+  for (auto &target : m_targets)
+    target->execute();
 }
 
 target_cptr
@@ -51,12 +50,9 @@ options_c::add_target(target_c::target_type_e type,
   target_cptr target(new target_c(type));
   target->parse_target_spec(spec);
 
-  if (!m_targets.empty()) {
-    std::vector<target_cptr>::iterator target_it;
-    mxforeach(target_it, m_targets)
-      if (**target_it == *target)
-        return *target_it;
-  }
+  for (auto &existing_target : m_targets)
+    if (*existing_target == *target)
+      return existing_target;
 
   m_targets.push_back(target);
 
@@ -119,9 +115,8 @@ options_c::dump_info()
          % m_show_progress
          % static_cast<int>(m_parse_mode));
 
-  std::vector<target_cptr>::const_iterator target_it;
-  mxforeach(target_it, m_targets)
-    (*target_it)->dump_info();
+  for (auto &target : m_targets)
+    target->dump_info();
 }
 
 bool
@@ -133,13 +128,7 @@ options_c::has_changes()
 
 void
 options_c::remove_empty_targets() {
-  std::vector<target_cptr> temp;
-  std::vector<target_cptr>::const_iterator target_it;
-  mxforeach(target_it, m_targets)
-    if ((*target_it)->has_changes())
-      temp.push_back(*target_it);
-
-  m_targets = temp;
+  boost::remove_if(m_targets, [](target_cptr &target) { return !target->has_changes(); });
 }
 
 template<typename T> static T*
@@ -165,9 +154,8 @@ options_c::find_elements(kax_analyzer_c *analyzer) {
   KaxTags *tags     = NULL;
   KaxChapters *chapters = NULL;
 
-  std::vector<target_cptr>::iterator target_it;
-  mxforeach(target_it, m_targets) {
-    target_c &target = **target_it;
+  for (auto &target_ptr : m_targets) {
+    target_c &target = *target_ptr;
     if (target_c::tt_segment_info == target.m_type) {
       if (NULL == info)
         info = read_element<KaxInfo>(analyzer, Y("Segment information"));
@@ -204,26 +192,25 @@ options_c::find_elements(kax_analyzer_c *analyzer) {
 void
 options_c::merge_targets() {
   std::map<uint64_t, target_c *> targets_by_track_uid;
-  std::vector<target_cptr>::iterator target_it;
   std::vector<target_cptr> targets_to_keep;
 
-  mxforeach(target_it, m_targets) {
-    if (target_c::tt_segment_info == (*target_it)->m_type) {
-      targets_to_keep.push_back(*target_it);
+  for (auto &target : m_targets) {
+    if (target_c::tt_segment_info == target->m_type) {
+      targets_to_keep.push_back(target);
       continue;
     }
 
-    std::map<uint64_t, target_c *>::iterator existing_target_it = targets_by_track_uid.find((*target_it)->m_track_uid);
+    std::map<uint64_t, target_c *>::iterator existing_target_it = targets_by_track_uid.find(target->m_track_uid);
     if (targets_by_track_uid.end() == existing_target_it) {
-      targets_to_keep.push_back(*target_it);
-      targets_by_track_uid[(*target_it)->m_track_uid] = target_it->get_object();
+      targets_to_keep.push_back(target);
+      targets_by_track_uid[target->m_track_uid] = target.get_object();
       continue;
     }
 
-    existing_target_it->second->m_changes.insert(existing_target_it->second->m_changes.end(), (*target_it)->m_changes.begin(), (*target_it)->m_changes.end());
+    existing_target_it->second->m_changes.insert(existing_target_it->second->m_changes.end(), target->m_changes.begin(), target->m_changes.end());
 
     mxwarn(boost::format(Y("The edit specifications '%1%' and '%2%' resolve to the same track with the UID %3%.\n"))
-           % existing_target_it->second->m_spec % (*target_it)->m_spec % (*target_it)->m_track_uid);
+           % existing_target_it->second->m_spec % target->m_spec % target->m_track_uid);
   }
 
   m_targets = targets_to_keep;

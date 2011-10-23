@@ -772,10 +772,9 @@ parse_arg_split_timecodes(const std::string &arg) {
     s.erase(0, 10);
 
   std::vector<std::string> timecodes = split(s, ",");
-  std::vector<std::string>::const_iterator timecode;
-  mxforeach(timecode, timecodes) {
+  for (auto &timecode : timecodes) {
     int64_t split_after;
-    if (!parse_timecode(*timecode, split_after))
+    if (!parse_timecode(timecode, split_after))
       mxerror(boost::format(Y("Invalid time for '--split' in '--split %1%'. Additional error message: %2%.\n")) % arg % timecode_parser_error);
     g_cluster_helper->add_split_point(split_point_t(split_after, split_point_t::SPT_TIMECODE, true));
   }
@@ -1181,11 +1180,10 @@ parse_arg_append_to(const std::string &s,
   std::vector<std::string> entries = split(s, ",");
   strip(entries);
 
-  std::vector<std::string>::const_iterator entry;
-  mxforeach(entry, entries) {
+  for (auto &entry : entries) {
     append_spec_t mapping;
 
-    std::vector<std::string> parts = split(entry->c_str(), ":");
+    std::vector<std::string> parts = split(entry, ":");
 
     if (   (parts.size() != 4)
         || !parse_int(parts[0], mapping.src_file_id)
@@ -1196,7 +1194,7 @@ parse_arg_append_to(const std::string &s,
         || (0 > mapping.src_track_id)
         || (0 > mapping.dst_file_id)
         || (0 > mapping.dst_track_id))
-      mxerror(boost::format(Y("'%1%' is not a valid mapping of file and track IDs in '--append-to %2%'.\n")) % (*entry) % s);
+      mxerror(boost::format(Y("'%1%' is not a valid mapping of file and track IDs in '--append-to %2%'.\n")) % entry % s);
 
     g_append_mapping.push_back(mapping);
   }

@@ -63,9 +63,8 @@ target_c::validate() {
                                                                     :                               NULL,
                                                                     false);
 
-  std::vector<change_cptr>::iterator change_it;
-  mxforeach(change_it, m_changes)
-    (*change_it)->validate(property_table);
+  for (auto &change : m_changes)
+    change->validate(property_table);
 }
 
 void
@@ -187,9 +186,8 @@ target_c::dump_info()
          % m_track_uid
          % m_file_name);
 
-  std::vector<change_cptr>::const_iterator change_it;
-  mxforeach(change_it, m_changes)
-    (*change_it)->dump_info();
+  for (auto &change : m_changes)
+    change->dump_info();
 }
 
 bool
@@ -222,9 +220,8 @@ bool
 target_c::has_add_or_set_change()
   const
 {
-  std::vector<change_cptr>::const_iterator change_it;
-  mxforeach(change_it, m_changes)
-    if (change_c::ct_delete != (*change_it)->m_type)
+  for (auto &change : m_changes)
+    if (change_c::ct_delete != change->m_type)
       return true;
 
   return false;
@@ -324,9 +321,8 @@ target_c::execute() {
     return;
   }
 
-  std::vector<change_cptr>::iterator change_it;
-  mxforeach(change_it, m_changes)
-    (*change_it)->execute(m_master, m_sub_master);
+  for (auto &change : m_changes)
+    change->execute(m_master, m_sub_master);
 }
 
 void

@@ -45,10 +45,9 @@ change_c::validate(std::vector<property_element_c> *property_table) {
   if (NULL == property_table)
     return;
 
-  std::vector<property_element_c>::iterator property_it;
-  mxforeach(property_it, *property_table)
-    if (property_it->m_name == m_name) {
-      m_property = *property_it;
+  for (auto &property : *property_table)
+    if (property.m_name == m_name) {
+      m_property = property;
 
       if (change_c::ct_delete == m_type)
         validate_deletion_of_mandatory();
@@ -82,10 +81,9 @@ change_c::dump_info()
 
 bool
 change_c::lookup_property(std::vector<property_element_c> &table) {
-  std::vector<property_element_c>::iterator property_it;
-  mxforeach(property_it, table)
-    if (property_it->m_name == m_name) {
-      m_property = *property_it;
+  for (auto &property : table)
+    if (property.m_name == m_name) {
+      m_property = property;
       return true;
     }
 

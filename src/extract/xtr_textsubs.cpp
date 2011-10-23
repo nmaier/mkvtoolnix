@@ -364,12 +364,11 @@ xtr_usf_c::finish_track() {
   try {
     m_formatter->format((boost::format("<subtitles>\n<language code=\"%1%\"/>\n") % m_language).str());
 
-    std::vector<usf_entry_t>::const_iterator entry;
-    mxforeach(entry, m_entries) {
-      std::string text = entry->m_text;
+    for (auto &entry : m_entries) {
+      std::string text = entry.m_text;
       strip(text, true);
       m_formatter->format((boost::format("<subtitle start=\"%1%\" stop=\"%2%\">")
-                           % format_timecode(entry->m_start * 1000000, 3) % format_timecode(entry->m_end * 1000000, 3)).str());
+                           % format_timecode(entry.m_start * 1000000, 3) % format_timecode(entry.m_end * 1000000, 3)).str());
       m_formatter->format_fixed(text);
       m_formatter->format("</subtitle>\n");
     }

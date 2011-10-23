@@ -15,7 +15,7 @@
 
 #include <algorithm>
 #include <boost/bind.hpp>
-#include <boost/regex.hpp>
+#include <boost/range/numeric.hpp>
 #include <stdexcept>
 #include <string>
 #include <typeinfo>
@@ -123,11 +123,8 @@ propedit_cli_parser_c::list_property_names_for_table(const std::vector<property_
                                                      const std::string &title,
                                                      const std::string &edit_spec) {
   std::map<ebml_type_e, const char *> &ebml_type_map = get_ebml_type_abbrev_map();
-  size_t max_name_len                                = 0;
 
-  std::vector<property_element_c>::const_iterator table_it;
-  mxforeach(table_it, table)
-    max_name_len = std::max(max_name_len, table_it->m_name.length());
+  auto max_name_len = boost::accumulate(table, 0u, [](size_t a, const property_element_c &e) { return std::max(a, e.m_name.length()); });
 
   static boost::regex s_newline_re("\\s*\\n\\s*", boost::regex::perl);
   boost::format format((boost::format("%%|1$-%1%s| | %%|2$-2s| |") % max_name_len).str());
@@ -136,11 +133,11 @@ propedit_cli_parser_c::list_property_names_for_table(const std::vector<property_
   mxinfo("\n");
   mxinfo(boost::format(Y("Elements in the category '%1%' ('--edit %2%'):\n")) % title % edit_spec);
 
-  mxforeach(table_it, table) {
-    std::string name        = (format % table_it->m_name % ebml_type_map[table_it->m_type]).str();
-    std::string description = table_it->m_title.get_translated()
+  for (auto &property : table) {
+    std::string name        = (format % property.m_name % ebml_type_map[property.m_type]).str();
+    std::string description = property.m_title.get_translated()
                             + ": "
-                            + boost::regex_replace(table_it->m_description.get_translated(), s_newline_re, " ",  boost::match_default | boost::match_single_line);
+                            + boost::regex_replace(property.m_description.get_translated(), s_newline_re, " ",  boost::match_default | boost::match_single_line);
     mxinfo(format_paragraph(description, max_name_len + 8, name, indent_string));
   }
 }

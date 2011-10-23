@@ -55,16 +55,14 @@ write_changes(options_cptr &options,
   ids_to_write.push_back(KaxTags::ClassInfos.GlobalId);
   ids_to_write.push_back(KaxChapters::ClassInfos.GlobalId);
 
-  std::vector<EbmlId>::iterator id_to_write_it;
-  mxforeach(id_to_write_it, ids_to_write) {
-    std::vector<target_cptr>::iterator target_it;
-    mxforeach(target_it, options->m_targets) {
-      if (NULL == (*target_it)->m_level1_element)
+  for (auto &id_to_write : ids_to_write) {
+    for (auto &target : options->m_targets) {
+      if (NULL == target->m_level1_element)
         continue;
 
-      EbmlMaster &l1_element = *(*target_it)->m_level1_element;
+      EbmlMaster &l1_element = *target->m_level1_element;
 
-      if (*id_to_write_it != l1_element.Generic().GlobalId)
+      if (id_to_write != l1_element.Generic().GlobalId)
         continue;
 
       mxverb(2, boost::format(Y("Element %1% is written.\n")) % l1_element.Generic().DebugName);

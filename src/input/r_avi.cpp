@@ -497,10 +497,8 @@ avi_reader_c::extract_avcc() {
 
 void
 avi_reader_c::add_audio_demuxer(int aid) {
-  std::vector<avi_demuxer_t>::const_iterator it;
-
-  mxforeach(it, m_audio_demuxers)
-    if (it->m_aid == aid) // Demuxer already added?
+  for (auto &demuxer : m_audio_demuxers)
+    if (demuxer.m_aid == aid) // Demuxer already added?
       return;
 
   AVI_set_audio_track(m_avi, aid);
@@ -845,15 +843,13 @@ avi_reader_c::read(generic_packetizer_c *ptzr,
   if ((-1 != m_vptzr) && (PTZR(m_vptzr) == ptzr))
     return read_video();
 
-  std::vector<avi_demuxer_t>::iterator demuxer;
-  mxforeach(demuxer, m_audio_demuxers)
-    if ((-1 != demuxer->m_ptzr) && (PTZR(demuxer->m_ptzr) == ptzr))
-      return read_audio(*demuxer);
+  for (auto &demuxer : m_audio_demuxers)
+    if ((-1 != demuxer.m_ptzr) && (PTZR(demuxer.m_ptzr) == ptzr))
+      return read_audio(demuxer);
 
-  std::vector<avi_subs_demuxer_t>::iterator subs_demuxer;
-  mxforeach(subs_demuxer, m_subtitle_demuxers)
-    if ((-1 != subs_demuxer->m_ptzr) && (PTZR(subs_demuxer->m_ptzr) == ptzr))
-      return read_subtitles(*subs_demuxer);
+  for (auto &subs_demuxer : m_subtitle_demuxers)
+    if ((-1 != subs_demuxer.m_ptzr) && (PTZR(subs_demuxer.m_ptzr) == ptzr))
+      return read_subtitles(subs_demuxer);
 
   return flush_packetizers();
 }

@@ -14,6 +14,7 @@
 
 #include "common/common_pch.h"
 
+#include <boost/range/numeric.hpp>
 #include <string.h>
 
 #include "common/bit_cursor.h"
@@ -480,33 +481,28 @@ vc1::es_parser_c::flush_frame() {
 
 void
 vc1::es_parser_c::combine_extra_data_with_packet() {
-  int extra_size = 0;
-  std::deque<memory_cptr>::iterator it;
+  auto sum_fn     = [](size_t size, const memory_cptr &buffer) { return size + buffer->get_size(); };
+  auto extra_size = boost::accumulate(m_pre_frame_extra_data, 0, sum_fn) + boost::accumulate(m_post_frame_extra_data, 0, sum_fn);
 
-  mxforeach(it, m_pre_frame_extra_data)
-    extra_size += (*it)->get_size();
-  mxforeach(it, m_post_frame_extra_data)
-    extra_size += (*it)->get_size();
+  auto new_packet = memory_c::alloc(extra_size + m_current_frame->data->get_size());
+  auto ptr        = new_packet->get_buffer();
 
-  memory_cptr new_packet = memory_c::alloc(extra_size + m_current_frame->data->get_size());
-  unsigned char *ptr     = new_packet->get_buffer();
+  for (const auto &mem : m_pre_frame_extra_data) {
+    memcpy(ptr, mem->get_buffer(), mem->get_size());
+    ptr += mem->get_size();
 
-  mxforeach(it, m_pre_frame_extra_data) {
-    memcpy(ptr, (*it)->get_buffer(), (*it)->get_size());
-    ptr += (*it)->get_size();
-
-    if (VC1_MARKER_SEQHDR == get_uint32_be((*it)->get_buffer()))
+    if (VC1_MARKER_SEQHDR == get_uint32_be(mem->get_buffer()))
       m_current_frame->contains_sequence_header = true;
   }
 
   memcpy(ptr, m_current_frame->data->get_buffer(), m_current_frame->data->get_size());
   ptr += m_current_frame->data->get_size();
 
-  mxforeach(it, m_post_frame_extra_data) {
-    memcpy(ptr, (*it)->get_buffer(), (*it)->get_size());
-    ptr += (*it)->get_size();
+  for (const auto &mem : m_post_frame_extra_data) {
+    memcpy(ptr, mem->get_buffer(), mem->get_size());
+    ptr += mem->get_size();
 
-    if (VC1_MARKER_FIELD == get_uint32_be((*it)->get_buffer()))
+    if (VC1_MARKER_FIELD == get_uint32_be(mem->get_buffer()))
       m_current_frame->contains_field = true;
   }
 

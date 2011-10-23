@@ -17,7 +17,6 @@
 #undef min
 #undef max
 
-#include <boost/foreach.hpp>
 #include <boost/format.hpp>
 #include <boost/regex.hpp>
 #include <string>

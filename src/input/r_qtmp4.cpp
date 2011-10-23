@@ -317,12 +317,9 @@ qtmp4_reader_c::parse_headers() {
 
 void
 qtmp4_reader_c::calculate_timecodes() {
-  std::vector<qtmp4_demuxer_cptr>::iterator idmx;
   int64_t min_timecode = 0;
 
-  mxforeach(idmx, demuxers) {
-    qtmp4_demuxer_cptr &dmx = *idmx;
-
+  for (auto &dmx : demuxers) {
     dmx->calculate_fps();
     dmx->calculate_timecodes();
     if (dmx->min_timecode < min_timecode)
@@ -331,8 +328,8 @@ qtmp4_reader_c::calculate_timecodes() {
 
   if (0 > min_timecode) {
     min_timecode *= -1;
-    mxforeach(idmx, demuxers)
-      (*idmx)->adjust_timecodes(min_timecode);
+    for (auto &dmx : demuxers)
+      dmx->adjust_timecodes(min_timecode);
 
     mxwarn_fn(m_ti.m_fname,
               boost::format(Y("This file contains at least one frame with a negative timecode. "
@@ -342,8 +339,8 @@ qtmp4_reader_c::calculate_timecodes() {
   } else
     min_timecode = 0;
 
-  mxforeach(idmx, demuxers)
-    (*idmx)->build_index();
+  for (auto &dmx : demuxers)
+    dmx->build_index();
 }
 
 void
@@ -1716,27 +1713,20 @@ qtmp4_demuxer_c::calculate_fps() {
     fps = (double)time_scale / (double)durmap_table[0].duration;
     mxverb(3, boost::format("Quicktime/MP4 reader: calculate_fps: case 1: %1%\n") % fps);
 
-  } else {
+  } else if (!sample_table.empty()) {
     std::map<int64_t, int> duration_map;
 
-    for (size_t i = 0; sample_table.size() > (i + 1); ++i) {
-      int64_t this_duration = sample_table[i + 1].pts - sample_table[i].pts;
+    std::accumulate(sample_table.begin() + 1, sample_table.end(), sample_table[0], [&](qt_sample_t &previous_sample, qt_sample_t &current_sample) {
+      duration_map[current_sample.pts - previous_sample.pts]++;
+      return current_sample;
+    });
 
-      if (duration_map.find(this_duration) == duration_map.end())
-        duration_map[this_duration] = 0;
-      ++duration_map[this_duration];
-    }
+    auto most_common = std::accumulate(duration_map.begin(), duration_map.end(), std::pair<int64_t, int>(*duration_map.begin()),
+                                       [](std::pair<int64_t, int> &a, std::pair<int64_t, int> e) { return e.second > a.second ? e : a; });
+    if (most_common.first)
+      fps = (double)1000000000.0 / (double)to_nsecs(most_common.first);
 
-    std::map<int64_t, int>::const_iterator most_common = duration_map.begin();
-    std::map<int64_t, int>::const_iterator it;
-    mxforeach(it, duration_map)
-      if (it->second > most_common->second)
-        most_common = it;
-
-    if ((most_common != duration_map.end()) && most_common->first)
-      fps = (double)1000000000.0 / (double)to_nsecs(most_common->first);
-
-    mxverb(3, boost::format("Quicktime/MP4 reader: calculate_fps: case 2: most_common %1% = %2%, fps %3%\n") % most_common->first % most_common->second % fps);
+    mxverb(3, boost::format("Quicktime/MP4 reader: calculate_fps: case 2: most_common %1% = %2%, fps %3%\n") % most_common.first % most_common.second % fps);
   }
 }
 
