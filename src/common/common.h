@@ -16,6 +16,7 @@
 
 #undef min
 #undef max
+#undef __STRICT_ANSI__
 
 #include <boost/format.hpp>
 #include <boost/regex.hpp>

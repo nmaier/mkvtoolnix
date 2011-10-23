@@ -12,10 +12,9 @@
    Modified by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include <string.h>
-#include <stdio.h>
-
 #include "common/common_pch.h"
+
+#include <stdio.h>
 
 #include "common/bit_cursor.h"
 #include "common/dts.h"

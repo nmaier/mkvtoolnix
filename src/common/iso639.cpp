@@ -11,10 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include <stdio.h>
-#include <string.h>
-
 #include "common/common_pch.h"
+
 #include "common/iso639.h"
 #include "common/strings/editing.h"
 #include "common/strings/utf8.h"

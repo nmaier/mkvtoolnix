@@ -13,6 +13,8 @@
 #ifndef __MTX_COMMON_OS_H
 #define __MTX_COMMON_OS_H
 
+#undef __STRICT_ANSI__
+
 #include "config.h"
 
 // For PRId64 and PRIu64:

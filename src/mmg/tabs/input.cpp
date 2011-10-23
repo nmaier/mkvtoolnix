@@ -11,12 +11,19 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
+// This order is required. wx/wxprec.h includes wx's winundef.h which
+// cannot be included after windows.h has been included. But
+// mkvtoolnix' common.h includes windows.h.
+#undef __STRICT_ANSI__
+
+#include <wx/wxprec.h>
+
+#include "common/common.h"
+
 #include <errno.h>
 
 #include <algorithm>
 #include <map>
-
-#include <wx/wxprec.h>
 
 #include <wx/wx.h>
 #include <wx/dnd.h>
@@ -26,7 +33,6 @@
 #include <wx/regex.h>
 #include <wx/statline.h>
 
-#include "common/common_pch.h"
 #include "common/extern_data.h"
 #include "common/file_types.h"
 #include "common/iso639.h"
