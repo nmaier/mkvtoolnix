@@ -1,5 +1,5 @@
 # boost's headers must be present.
-AX_BOOST_BASE([1.36.0])
+AX_BOOST_BASE([1.46.0])
 
 # boost::system can be absend for older versions. However, the test
 # for boost::filesystem might fail if boost::system is not available
