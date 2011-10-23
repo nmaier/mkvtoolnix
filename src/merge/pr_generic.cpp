@@ -867,10 +867,8 @@ generic_packetizer_c::add_packet2(packet_cptr pack) {
 
 void
 generic_packetizer_c::process_deferred_packets() {
-  std::deque<packet_cptr>::iterator packet;
-
-  mxforeach(packet, m_deferred_packets)
-    add_packet2(*packet);
+  for (auto &packet : m_deferred_packets)
+    add_packet2(packet);
   m_deferred_packets.clear();
 }
 

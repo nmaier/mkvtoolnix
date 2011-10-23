@@ -14,6 +14,8 @@
 
 #include "common/common_pch.h"
 
+#include <boost/range/numeric.hpp>
+
 #include <algorithm>
 #include <cassert>
 #include <limits.h>
@@ -107,19 +109,9 @@ cluster_helper_c::add_packet(packet_cptr packet) {
     if (split_point_t::SPT_SIZE == m_current_split_point->m_type) {
       int64_t additional_size = 0;
 
-      if (!m_packets.empty()) {
-        // Cluster + Cluster timecode (roughly)
-        additional_size = 21;
-
-        // Add sizes for all frames.
-        std::vector<packet_cptr>::iterator p_it;
-        mxforeach(p_it, m_packets) {
-          packet_cptr &p   = *p_it;
-          additional_size += p->data->get_size() + (p->is_key_frame() ? 10 : p->is_p_frame() ? 13 : 16);
-        }
-
-      } else
-        additional_size = 0;
+      if (!m_packets.empty())
+        // Cluster + Cluster timecode: roughly 21 bytes. Add all frame sizes & their overheaders, too.
+        additional_size = 21 + boost::accumulate(m_packets, 0, [](size_t size, const packet_cptr &p) { return size + p->data->get_size() + (p->is_key_frame() ? 10 : p->is_p_frame() ? 13 : 16); });
 
       additional_size += 18 * m_num_cue_elements;
 
@@ -295,12 +287,9 @@ cluster_helper_c::render() {
 
   // Make sure that we don't have negative/wrapped around timecodes in the output file.
   // Can happend when we're splitting; so adjust timecode_offset accordingly.
-  std::vector<packet_cptr>::iterator pack_it;
-  mxforeach(pack_it, m_packets)
-    m_timecode_offset = std::min(m_timecode_offset, (*pack_it)->assigned_timecode);
+  m_timecode_offset = boost::accumulate(m_packets, m_timecode_offset, [](int64_t a, const packet_cptr &p) { return std::min(a, p->assigned_timecode); });
 
-  mxforeach(pack_it, m_packets) {
-    packet_cptr &pack            = *pack_it;
+  for (auto &pack : m_packets) {
     generic_packetizer_c *source = pack->source;
     bool has_codec_state         = pack->codec_state.is_set();
 
