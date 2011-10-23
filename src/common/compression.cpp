@@ -102,7 +102,6 @@ lzo_compressor_c::compress(memory_cptr &buffer) {
 
 // ---------------------------------------------------------------------
 
-#if defined(HAVE_ZLIB_H)
 zlib_compressor_c::zlib_compressor_c()
   : compressor_c(COMPRESSION_ZLIB)
 {
@@ -184,8 +183,6 @@ zlib_compressor_c::compress(memory_cptr &buffer) {
 
   buffer = memory_cptr(new memory_c((unsigned char *)saferealloc(dst, dstsize), dstsize, true));
 }
-
-#endif // HAVE_ZLIB_H
 
 // ---------------------------------------------------------------------
 
@@ -437,10 +434,8 @@ compressor_c::create(const char *method) {
     return compressor_ptr(new lzo_compressor_c());
 #endif // HAVE_LZO1X_H
 
-#if defined(HAVE_ZLIB_H)
   if (!strcasecmp(method, compression_methods[COMPRESSION_ZLIB]))
     return compressor_ptr(new zlib_compressor_c());
-#endif // HAVE_ZLIB_H
 
 #if defined(HAVE_BZLIB_H)
   if (!strcasecmp(method, compression_methods[COMPRESSION_BZ2]))
@@ -584,15 +579,10 @@ content_decoder_c::initialize(KaxTrackEntry &ktentry) {
       break;
     }
 
-    if (0 == enc.comp_algo) {
-#if !defined(HAVE_ZLIB_H)
-      mxwarn(boost::format(Y("Track %1% was compressed with zlib but mkvmerge has not been compiled with support for zlib compression.\n")) % tid);
-      ok = false;
-      break;
-#else
+    if (0 == enc.comp_algo)
       enc.compressor = counted_ptr<compressor_c>(new zlib_compressor_c());
-#endif
-    } else if (1 == enc.comp_algo) {
+
+    else if (1 == enc.comp_algo) {
 #if !defined(HAVE_BZLIB_H)
       mxwarn(boost::format(Y("Track %1% was compressed with bzlib but mkvmerge has not been compiled with support for bzlib compression.\n")) % tid);
       ok = false;

@@ -102,7 +102,6 @@ public:
 };
 #endif // HAVE_LZO
 
-#if defined(HAVE_ZLIB_H)
 #include <zlib.h>
 
 class MTX_DLL_API zlib_compressor_c: public compressor_c {
@@ -113,7 +112,6 @@ public:
   virtual void decompress(memory_cptr &buffer);
   virtual void compress(memory_cptr &buffer);
 };
-#endif // HAVE_ZLIB_H
 
 #if defined(HAVE_BZLIB_H)
 #include <bzlib.h>

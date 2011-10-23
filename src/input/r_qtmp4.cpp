@@ -20,9 +20,7 @@
 #include <algorithm>
 #include <boost/math/common_factor.hpp>
 #include <cstring>
-#if defined(HAVE_ZLIB_H)
 #include <zlib.h>
-#endif
 
 #include <avilib.h>
 
@@ -492,8 +490,6 @@ qtmp4_reader_c::handle_cmov_atom(qt_atom_t parent,
 void
 qtmp4_reader_c::handle_cmvd_atom(qt_atom_t atom,
                                  int level) {
-#if defined(HAVE_ZLIB_H)
-
   uint32_t moov_size = io->read_uint32_be();
   mxverb(2, boost::format("Quicktime/MP4 reader:%1%Uncompressed size: %2%\n") % space((level + 1) * 2 + 1) % moov_size);
 
@@ -548,10 +544,6 @@ qtmp4_reader_c::handle_cmvd_atom(qt_atom_t atom,
   }
   delete io;
   io = old_io;
-
-#else // HAVE_ZLIB_H
-  mxerror(Y("mkvmerge was not compiled with zlib. Compressed headers in QuickTime/MP4 files are therefore not supported.\n"));
-#endif // HAVE_ZLIB_H
 }
 
 void
