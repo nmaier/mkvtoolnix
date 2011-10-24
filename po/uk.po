@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: mkvtoolnix_uk\n"
 "Report-Msgid-Bugs-To: Moritz Bunkus <moritz@bunkus.org>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2011-10-13 11:43+0200\n"
+"PO-Revision-Date: 2011-10-24 11:56+0200\n"
 "Last-Translator: Andriy Bilous'ko <arestarh@ukr.net>\n"
 "Language-Team: Ukrainian <moritz@bunkus.org>\n"
 "Language: uk\n"
@@ -780,9 +780,9 @@ msgstr "%1% кадр, доріжка %2%, тайм-код %3% (%4%), розмі�
 #: src/input/r_tta.cpp:93
 #: src/input/r_vobbtn.cpp:56
 #: src/input/r_wavpack.cpp:58
-#, fuzzy, boost-format
+#, boost-format
 msgid "%1%: Could not open the file."
-msgstr "aac_reader: Не вдалося відкрити файл."
+msgstr "%1%: Не вдалося відкрити файл."
 
 #: src/input/r_ac3.cpp:67
 #: src/input/r_avc.cpp:122
@@ -799,30 +799,30 @@ msgstr "aac_reader: Не вдалося відкрити файл."
 #: src/input/r_vc1.cpp:82
 #: src/input/r_vobsub.cpp:70
 #: src/input/r_wav.cpp:462
-#, fuzzy, boost-format
+#, boost-format
 msgid "%1%: Could not open the source file."
-msgstr "ac3_reader: Не вдалося відкрити вхідний файл."
+msgstr "%1%: Не вдалося відкрити вхідний файл."
 
 #: src/input/r_aac.cpp:57
 #: src/input/r_ac3.cpp:62
 #: src/input/r_dts.cpp:62
 #: src/input/r_truehd.cpp:63
-#, fuzzy, boost-format
+#, boost-format
 msgid "%1%: Could not read %2% bytes."
-msgstr "aac_reader: Не вдалося прочитати %1% байт."
+msgstr "%1%: Не вдалося прочитати %2% байт."
 
 #: src/input/r_flac.cpp:127
 #: src/input/r_ogm.cpp:339
-#, fuzzy, boost-format
+#, boost-format
 msgid "%1%: Could not read all header packets."
-msgstr "ogm_reader: Не вдалося прочитати всі пакети заголовку."
+msgstr "%1%: Не вдалося прочитати всі пакети заголовку."
 
 #: src/input/r_avi.cpp:107
 #: src/input/r_qtmp4.cpp:128
 #: src/input/r_real.cpp:149
-#, fuzzy, boost-format
+#, boost-format
 msgid "%1%: Could not read the source file."
-msgstr "avi_reader: Не вдалося прочитати вхідний файл."
+msgstr "%1%: Не вдалося прочитати вхідний файл."
 
 #: src/common/kax_file.cpp:165
 #, boost-format
@@ -838,9 +838,9 @@ msgstr "%1%: Помилка в структурі файлу Matroska на по�
 #: src/input/r_ssa.cpp:44
 #: src/input/r_usf.cpp:75
 #: src/input/r_wav.cpp:466
-#, fuzzy, boost-format
+#, boost-format
 msgid "%1%: Source is not a valid %1% file."
-msgstr "avi_reader: Джерельний файл не є допустимим AVI файлом."
+msgstr "%1%: Вхідний файл не є допустимим %1% файлом."
 
 #: src/merge/mkvmerge.cpp:635
 #, boost-format
@@ -1773,7 +1773,7 @@ msgstr "A/52 (aka AC3)"
 #: src/input/r_aac.h:39
 #: src/output/p_aac.h:43
 msgid "AAC"
-msgstr ""
+msgstr "AAC"
 
 #: src/common/file_types.cpp:26
 msgid "AAC (Advanced Audio Coding)"
@@ -1794,7 +1794,7 @@ msgstr "AAC з ADIF заголовками"
 #: src/input/r_ac3.h:38
 #: src/output/p_ac3.h:42
 msgid "AC3"
-msgstr ""
+msgstr "AC3"
 
 #: src/mmg/header_editor/value_page.cpp:143
 msgid ""
@@ -1808,7 +1808,7 @@ msgstr ""
 #: src/output/p_avc.h:46
 #: src/output/p_mpeg4_p10.h:34
 msgid "AVC/h.264"
-msgstr ""
+msgstr "AVC/h.264"
 
 #: src/common/file_types.cpp:27
 msgid "AVC/h.264 elementary streams"
@@ -1816,7 +1816,7 @@ msgstr "AVC/H.264 елементарні потоки"
 
 #: src/input/r_avi.h:88
 msgid "AVI"
-msgstr ""
+msgstr "AVI"
 
 #: src/common/file_types.cpp:28
 msgid "AVI (Audio/Video Interleaved)"
@@ -1972,9 +1972,9 @@ msgid "Also try to extract the CUE sheet from the chapter information and tags f
 msgstr "Крім того, намагатися витягти CUE-лист з інформації розділів і тегів для цієї доріжки."
 
 #: src/input/r_wavpack.cpp:87
-#, fuzzy, boost-format
+#, boost-format
 msgid "Also using the correction file '%1%c'.\n"
-msgstr "Не вдалося відкрити відповідний файл корекції '%1%c'.\n"
+msgstr "Також з використанням файлу корекції '%1%c'.\n"
 
 #: src/mmg/options/mmg.cpp:92
 msgid "Always on top"
@@ -2701,7 +2701,7 @@ msgstr "Копіювати командний рядок до буферу об�
 
 #: src/input/r_corepicture.h:38
 msgid "CorePanorama pictures"
-msgstr ""
+msgstr "зображення CorePanorama"
 
 #: src/extract/xtr_cpic.cpp:54
 #, boost-format
@@ -2979,7 +2979,7 @@ msgstr "&Видалити"
 #: src/input/r_dts.h:41
 #: src/output/p_dts.h:48
 msgid "DTS"
-msgstr ""
+msgstr "DTS"
 
 #: src/output/p_dts.cpp:84
 msgid "DTS header information changed! - New format:\n"
@@ -3483,7 +3483,7 @@ msgstr "Витягнення доріжки номер %1% з CodecID '%2%' не
 #: src/input/r_flac.h:54
 #: src/output/p_flac.h:39
 msgid "FLAC"
-msgstr ""
+msgstr "FLAC"
 
 #: src/common/file_types.cpp:33
 msgid "FLAC (Free Lossless Audio Codec)"
@@ -3873,9 +3873,8 @@ msgid "ISO639-2 code"
 msgstr "ISO639-2 код"
 
 #: src/input/r_ivf.h:35
-#, fuzzy
 msgid "IVF (VP8)"
-msgstr "IVF з VP8"
+msgstr "IVF (VP8)"
 
 #: src/common/file_types.cpp:35
 msgid "IVF with VP8 video files"
@@ -4325,7 +4324,7 @@ msgstr "Керування чергою завдань"
 
 #: src/output/p_kate.h:40
 msgid "Kate"
-msgstr ""
+msgstr "Kate"
 
 #: src/output/p_kate.cpp:78
 msgid "Kate packet is too small and is being skipped.\n"
@@ -4467,11 +4466,11 @@ msgstr "MKVToolNix розповсюджується під ліцензією GN
 
 #: src/input/r_mp3.h:38
 msgid "MP2/MP3"
-msgstr ""
+msgstr "MP2/MP3"
 
 #: src/output/p_mp3.h:42
 msgid "MP3"
-msgstr ""
+msgstr "MP3"
 
 #: src/common/file_types.cpp:36
 msgid "MP4 audio/video files"
@@ -4490,18 +4489,16 @@ msgid "MPEG program streams"
 msgstr "MPEG програмні потоки"
 
 #: src/input/r_mpeg_ts.h:284
-#, fuzzy
 msgid "MPEG transport stream"
-msgstr "MPEG транспортні потоки"
+msgstr "транспортний потік MPEG"
 
 #: src/common/file_types.cpp:39
 msgid "MPEG transport streams"
 msgstr "MPEG транспортні потоки"
 
 #: src/input/r_mpeg_es.h:43
-#, fuzzy
 msgid "MPEG video elementary stream"
-msgstr "MPEG відео елементарний потік"
+msgstr "елементарний потік MPEG відео"
 
 #: src/common/file_types.cpp:40
 msgid "MPEG video elementary streams"
@@ -4509,11 +4506,11 @@ msgstr "MPEG відео елементарний потік"
 
 #: src/output/p_mpeg1_2.h:36
 msgid "MPEG-1/2"
-msgstr ""
+msgstr "MPEG-1/2"
 
 #: src/output/p_mpeg4_p2.h:66
 msgid "MPEG-4"
-msgstr ""
+msgstr "MPEG-4"
 
 #: src/mmg/tabs/input_general.cpp:184
 msgid "Make this track the default track for its type (audio, video, subtitles). Players should prefer tracks with the default track flag set."
@@ -4542,7 +4539,7 @@ msgstr "Позначає цю доріжку як 'forced', тобто як ту
 
 #: src/input/r_matroska.h:198
 msgid "Matroska"
-msgstr ""
+msgstr "Matroska"
 
 #: src/mmg/mmg_dialog.cpp:338
 #, c-format, boost-format
@@ -4934,7 +4931,7 @@ msgstr "Число каналів доріжки."
 
 #: src/input/r_ogm.h:108
 msgid "Ogg/OGM"
-msgstr ""
+msgstr "Ogg/OGM"
 
 #: src/common/file_types.cpp:44
 msgid "Ogg/OGM audio/video files"
@@ -5081,11 +5078,11 @@ msgstr "Замінювати існуючий файл?"
 
 #: src/output/p_pcm.h:41
 msgid "PCM"
-msgstr ""
+msgstr "PCM"
 
 #: src/output/p_pgs.h:38
 msgid "PGS"
-msgstr ""
+msgstr "PGS"
 
 #: src/common/file_types.cpp:42
 msgid "PGS/SUP subtitles"
@@ -5093,7 +5090,7 @@ msgstr "PGS/SUP субтитри"
 
 #: src/input/r_pgssup.h:36
 msgid "PGSSUP"
-msgstr ""
+msgstr "PGSSUP"
 
 #: src/input/r_vobsub.cpp:536
 #, boost-format
@@ -5254,7 +5251,7 @@ msgstr "QuickTime аудіо/відео файли"
 
 #: src/input/r_qtmp4.h:282
 msgid "QuickTime/MP4"
-msgstr ""
+msgstr "QuickTime/MP4"
 
 #: src/input/r_qtmp4.cpp:472
 #, boost-format
@@ -5423,13 +5420,12 @@ msgid "Real output sampling frequency in Hz."
 msgstr "Реальна частота дискретизації на виході в Гц."
 
 #: src/output/p_realaudio.h:36
-#, fuzzy
 msgid "RealAudio"
-msgstr "Аудіо"
+msgstr "RealAudio"
 
 #: src/input/r_real.h:105
 msgid "RealMedia"
-msgstr ""
+msgstr "RealMedia"
 
 #: src/common/file_types.cpp:45
 msgid "RealMedia audio/video files"
@@ -5520,18 +5516,16 @@ msgid "SHA1-160"
 msgstr "SHA1-160"
 
 #: src/input/r_srt.h:33
-#, fuzzy
 msgid "SRT subtitles"
-msgstr "SRT текстові субтитри"
+msgstr "субтитри SRT"
 
 #: src/common/file_types.cpp:46
 msgid "SRT text subtitles"
 msgstr "SRT текстові субтитри"
 
 #: src/input/r_ssa.h:32
-#, fuzzy
 msgid "SSA/ASS subtitles"
-msgstr "SSA/ASS текстові субтитри"
+msgstr "субтитри SSA/ASS"
 
 #: src/common/file_types.cpp:47
 msgid "SSA/ASS text subtitles"
@@ -6157,7 +6151,7 @@ msgstr "Приховати статусну вихідну інформацію.
 #: src/input/r_tta.h:40
 #: src/output/p_tta.h:34
 msgid "TTA"
-msgstr ""
+msgstr "TTA"
 
 #: src/common/file_types.cpp:48
 msgid "TTA (The lossless True Audio codec)"
@@ -7173,7 +7167,7 @@ msgstr "Ширина двох доріжок є різною: %1% i %2%"
 
 #: src/output/p_theora.h:28
 msgid "Theora"
-msgstr ""
+msgstr "Theora"
 
 #: src/mmg/mmg_dialog.cpp:1754
 msgid "There is a new version available online."
@@ -7556,9 +7550,8 @@ msgstr "Доріжки, розділи i теги:"
 
 #: src/input/r_truehd.h:38
 #: src/output/p_truehd.h:44
-#, fuzzy
 msgid "TrueHD"
-msgstr "Dolby TrueHD"
+msgstr "TrueHD"
 
 #: src/mmg/cli_options_dlg.cpp:143
 msgid "TrueHD audio streams know two frame types: sync frames and non-sync frames. With this switch mkvmerge will put one sync frame and all following non-sync frames into a single Matroska block. Without it each non-sync frame is put into its own Matroska block."
@@ -7592,9 +7585,8 @@ msgid "UID:"
 msgstr "UID:"
 
 #: src/input/r_usf.h:74
-#, fuzzy
 msgid "USF subtitles"
-msgstr "USF текстові субтитри"
+msgstr "субтитри USF"
 
 #: src/common/file_types.cpp:49
 msgid "USF text subtitles"
@@ -7748,24 +7740,22 @@ msgid "Using a NALU size length of 3 bytes might result in tracks that won't be 
 msgstr "Використання довжини поля розміру NALU у 3 байти може призвести до того, що отримані доріжки не будуть призначені для декодування деякими AVC/H.264 кодеками.\n"
 
 #: src/merge/pr_generic.h:290
-#, fuzzy
 msgid "Using the demultiplexer for the format '%1%'.\n"
-msgstr "Використання демультиплексора AAC.\n"
+msgstr "Використання демультиплексора для формату '%1%'.\n"
 
 #: src/input/r_matroska.cpp:1375
-#, fuzzy, boost-format
+#, boost-format
 msgid "Using the generic output module for track type '%1%'.\n"
-msgstr "Використання вихідного модуля AAC (FourCC: %1%).\n"
+msgstr "Використання вихідного модуля для доріжки типу '%1%'.\n"
 
 #: src/merge/pr_generic.h:292
-#, fuzzy
 msgid "Using the output module for the format '%1%'.\n"
-msgstr "Використання вихідного модуля AAC (FourCC: %1%).\n"
+msgstr "Використання вихідного модуля для формату '%1%'.\n"
 
 #: src/input/r_vc1.h:38
 #: src/output/p_vc1.h:39
 msgid "VC1"
-msgstr ""
+msgstr "VC1"
 
 #: src/common/file_types.cpp:50
 msgid "VC1 elementary streams"
@@ -7773,7 +7763,7 @@ msgstr "VC1 елементарні потоки"
 
 #: src/output/p_vp8.h:29
 msgid "VP8"
-msgstr ""
+msgstr "VP8"
 
 #: src/common/hacks.cpp:60
 msgid "Valid hacks are:\n"
@@ -7789,7 +7779,7 @@ msgstr "Перевірити поточні записи розділів на �
 
 #: src/output/p_video.h:45
 msgid "VfW compatible video"
-msgstr ""
+msgstr "сумісне VfW відео"
 
 #: src/common/property_element.cpp:147
 #: src/mmg/header_editor/frame.cpp:489
@@ -7874,9 +7864,8 @@ msgstr "Показати вихідну інформацію, яку згене�
 
 #: src/input/r_vobbtn.h:38
 #: src/output/p_vobbtn.h:36
-#, fuzzy
 msgid "VobBtn"
-msgstr "VobButtons"
+msgstr "VobBtn"
 
 #: src/common/file_types.cpp:51
 msgid "VobButtons"
@@ -7885,7 +7874,7 @@ msgstr "VobButtons"
 #: src/input/r_vobsub.h:75
 #: src/output/p_vobsub.h:37
 msgid "VobSub"
-msgstr ""
+msgstr "VobSub"
 
 #: src/common/file_types.cpp:52
 msgid "VobSub subtitles"
@@ -7893,29 +7882,27 @@ msgstr "VobSub субтитри"
 
 #: src/output/p_vorbis.h:43
 msgid "Vorbis"
-msgstr ""
+msgstr "Vorbis"
 
 #: src/input/r_wav.h:79
 msgid "WAV"
-msgstr ""
+msgstr "WAV"
 
 #: src/common/file_types.cpp:53
 msgid "WAVE (uncompressed PCM audio)"
 msgstr "WAVE (нестиснуте PCM аудіо)"
 
 #: src/input/r_wavpack.h:38
-#, fuzzy
 msgid "WAVPACK"
-msgstr "Аудіо WAVPACK v4"
+msgstr "WAVPACK"
 
 #: src/common/file_types.cpp:54
 msgid "WAVPACK v4 audio"
 msgstr "Аудіо WAVPACK v4"
 
 #: src/output/p_wavpack.h:36
-#, fuzzy
 msgid "WAVPACK4"
-msgstr "Аудіо WAVPACK v4"
+msgstr "WAVPACK4"
 
 #: src/mmg/options/mmg.cpp:94
 msgid "Warn about possible incorrect usage of mmg"
@@ -8908,7 +8895,7 @@ msgstr "частота дискретизації на виході: %1%"
 
 #: src/output/p_passthrough.h:30
 msgid "passthrough"
-msgstr ""
+msgstr "пропуск"
 
 #: src/mmg/jobs.cpp:528
 #: src/mmg/jobs.cpp:702
@@ -9036,9 +9023,8 @@ msgid "tet_index: '%1%' not found\n"
 msgstr "tet_index: '%1%' не знайдено\n"
 
 #: src/output/p_textsubs.h:38
-#, fuzzy
 msgid "text subtitles"
-msgstr "SRT текстові субтитри"
+msgstr "текстові субтитри"
 
 #: src/merge/mkvmerge.cpp:2047
 msgid "timecodes"
@@ -9700,4 +9686,3 @@ msgstr "Так"
 
 #~ msgid "wavpack_reader: Could not open the file."
 #~ msgstr "wavpack_reader: Не вдалося відкрити файл."
-
