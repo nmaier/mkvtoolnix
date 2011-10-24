@@ -294,7 +294,7 @@ public:
   dts_header_t a_dts_header;
   aac_header_t m_aac_header;
 
-  bool m_apply_dts_timecode_fix;
+  bool m_apply_dts_timecode_fix, m_use_dts;
 
   // general track parameters
   std::string language;
@@ -332,6 +332,7 @@ public:
     , a_bits_per_sample(0)
     , a_bsid(0)
     , m_apply_dts_timecode_fix(false)
+    , m_use_dts(false)
   {
   }
 

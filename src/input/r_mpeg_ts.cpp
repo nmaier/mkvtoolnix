@@ -997,15 +997,26 @@ mpeg_ts_reader_c::parse_start_unit_packet(mpeg_ts_track_ptr &track,
 
     ts_payload_size = ((unsigned char *)ts_packet_header + TS_PACKET_SIZE) - (unsigned char *) ts_payload;
 
-    if (pes_data->get_pts_dts_flags() > 1) { // 10 and 11 mean PTS is present
-      int64_t PTS = read_timestamp(&pes_data->pts_dts);
+    int64_t pts = -1, dts = -1;
+    if ((pes_data->get_pts_dts_flags() & 0x02) == 0x02) { // 10 and 11 mean PTS is present
+      pts = read_timestamp(&pes_data->pts_dts);
+      dts = pts;
+    }
 
-      if ((-1 == m_global_timecode_offset) || (PTS < m_global_timecode_offset)) {
-        mxverb(3, boost::format("global_timecode_offset %1%\n") % PTS);
-        m_global_timecode_offset = PTS;
+    if ((pes_data->get_pts_dts_flags() & 0x01) == 0x01) { // 01 and 11 mean DTS is present
+      dts = read_timestamp(&pes_data->pts_dts + 5);
+    }
+
+    if (!track->m_use_dts)
+      dts = pts;
+
+    if (-1 != pts) {
+      if ((-1 == m_global_timecode_offset) || (dts < m_global_timecode_offset)) {
+        mxverb(3, boost::format("new global_timecode_offset %1%\n") % dts);
+        m_global_timecode_offset = dts;
       }
 
-      if (PTS == track->timecode) {
+      if (pts == track->timecode) {
         mxverb(3, boost::format("     Adding PES with same PTS as previous !!\n"));
         track->add_pes_payload(ts_payload, ts_payload_size);
         return false;
@@ -1013,9 +1024,9 @@ mpeg_ts_reader_c::parse_start_unit_packet(mpeg_ts_track_ptr &track,
       } else if ((0 != track->pes_payload->get_size()) && (INPUT_READ == input_status))
         track->send_to_packetizer();
 
-      track->timecode = PTS;
+      track->timecode = dts;
 
-      mxverb(3, boost::format("     PTS found: %1%\n") % track->timecode);
+      mxverb(3, boost::format("     PTS/DTS found: %1%\n") % track->timecode);
     }
 
     // this condition is for ES probing when there is still not enough data for detection
@@ -1132,7 +1143,8 @@ mpeg_ts_reader_c::create_mpeg4_p10_es_video_packetizer(mpeg_ts_track_ptr &track)
 
 void
 mpeg_ts_reader_c::create_vc1_video_packetizer(mpeg_ts_track_ptr &track) {
-  track->ptzr = add_packetizer(new vc1_video_packetizer_c(this, m_ti));
+  track->m_use_dts = true;
+  track->ptzr      = add_packetizer(new vc1_video_packetizer_c(this, m_ti));
   show_packetizer_info(m_ti.m_id, PTZR(track->ptzr));
 }
 
