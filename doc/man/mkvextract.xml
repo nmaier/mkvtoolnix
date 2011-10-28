@@ -180,7 +180,7 @@
     </varlistentry>
 
     <varlistentry>
-     <term><option>@</option>options-file</term>
+     <term><option>@</option><parameter>options-file</parameter></term>
      <listitem>
       <para>
        Reads additional command line arguments from the file <parameter>options-file</parameter>.  Lines whose first non-whitespace
@@ -198,14 +198,12 @@
        option file:
       </para>
 
-      <programlisting>
-# Extract a track from source.mkv
+      <programlisting># Extract a track from source.mkv
 tracks
 source.mkv
 # Output the track as raw data.
 --raw
-1:destination.raw
-      </programlisting>
+1:destination.raw</programlisting>
      </listitem>
     </varlistentry>
    </variablelist>
@@ -293,9 +291,7 @@ source.mkv
        tracks then those tracks will be saved in the same file. Example:
       </para>
 
-      <screen>
-$ mkvextract tracks input.mkv 1:output-two-tracks.rm 2:output-two-tracks.rm
-      </screen>
+      <screen>$ mkvextract tracks input.mkv 1:output-two-tracks.rm 2:output-two-tracks.rm</screen>
      </listitem>
     </varlistentry>
    </variablelist>
@@ -323,7 +319,7 @@ $ mkvextract tracks input.mkv 1:output-two-tracks.rm 2:output-two-tracks.rm
 
    <variablelist>
     <varlistentry>
-     <term>AID:outname</term>
+     <term><parameter>AID</parameter>:<parameter>outname</parameter></term>
      <listitem>
       <para>
        Causes extraction of the attachment with the ID <parameter>AID</parameter> into the file <parameter>outname</parameter> if such an
@@ -401,9 +397,7 @@ $ mkvextract tracks input.mkv 1:output-two-tracks.rm 2:output-two-tracks.rm
        Example:
       </para>
 
-      <screen>
-$ mkvextract timecodes_v2 input.mkv 1:tc-track1.txt 2:tc-track2.txt
-      </screen>
+      <screen>$ mkvextract timecodes_v2 input.mkv 1:tc-track1.txt 2:tc-track2.txt</screen>
      </listitem>
     </varlistentry>
    </variablelist>
@@ -423,18 +417,14 @@ $ mkvextract timecodes_v2 input.mkv 1:tc-track1.txt 2:tc-track2.txt
    line. Example:
   </para>
 
-  <screen>
-$ mkvextract tags source.mkv &gt; tags.xml
-  </screen>
+  <screen>$ mkvextract tags source.mkv &gt; tags.xml</screen>
 
   <para>
    &mkvextract;'s own redirection is invoked with the <link
    linkend="mkvextract.description.common.redirect_output"><option>--redirect-output</option></link> option. Example:
    </para>
 
-  <screen>
-$ mkvextract tags source.mkv --redirect-output tags.xml
-  </screen>
+  <screen>$ mkvextract tags source.mkv --redirect-output tags.xml</screen>
 
   <note>
    <para>
@@ -647,7 +637,7 @@ $ mkvextract tags source.mkv --redirect-output tags.xml
   </para>
 
   <para>
-   The rules are: ' ' becomes '\s', '&quot;' becomes '\2', ':' becomes '\c', '#' becomes '\h' and '\' itself becomes '\\'.
+   The rules are: ' ' (a space) becomes '\s', '&quot;' (double quotes) becomes '\2', ':' becomes '\c', '#' becomes '\h' and '\' (a single backslash) itself becomes '\\'.
   </para>
  </refsect1>
 

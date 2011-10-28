@@ -392,7 +392,7 @@
        </para>
 
        <para>
-        Syntax: <option>--split</option> <optional>size:</optional><parameter>d</parameter><optional>k|m|g</optional>
+        Syntax: <option>--split</option> <optional><literal>size:</literal></optional><parameter>d</parameter><optional>k|m|g</optional>
        </para>
 
        <para>
@@ -401,7 +401,7 @@
 
        <para>
         The parameter <parameter>d</parameter> may end with '<literal>k</literal>', '<literal>m</literal>' or '<literal>g</literal>' to
-        indicate that the size is in KB, MB or GB respectively.  Otherwise a size in Bytes is assumed.  After the current output file has
+        indicate that the size is in KB, MB or GB respectively.  Otherwise a size in bytes is assumed.  After the current output file has
         reached this size limit a new one will be started.
        </para>
 
@@ -416,7 +416,7 @@
        </para>
 
        <para>
-        Syntax: <option>--split</option> <optional>duration:</optional><parameter>HH:MM:SS.nnnnnnnnn</parameter>|<parameter>d</parameter>s
+        Syntax: <option>--split</option> <optional><literal>duration:</literal></optional><parameter>HH:MM:SS.nnnnnnnnn</parameter>|<parameter>d</parameter>s
        </para>
 
        <para>
@@ -443,7 +443,7 @@
        </para>
 
        <para>
-        Syntax: <option>--split</option> timecodes:<parameter>A</parameter><optional>,<parameter>B</parameter><optional>,<parameter>C</parameter>...</optional></optional>
+        Syntax: <option>--split</option> <literal>timecodes:</literal><parameter>A</parameter><optional>,<parameter>B</parameter><optional>,<parameter>C</parameter>...</optional></optional>
        </para>
 
        <para>
@@ -463,11 +463,11 @@
      </orderedlist>
      <para>
        For this splitting mode the output filename is treated differently than for the normal operation. It may contain a
-       <function>printf</function> like expression '<literal>%d</literal>' including an optional field width,
-       e.g. '<literal>%02d</literal>'. If it does then the current file number will be formatted appropriately and inserted at that point
-       in the filename.  If there is no such pattern then a pattern of '<literal>-%03d</literal>' is assumed right before the file's
-       extension: '<literal>-o output.mkv</literal>' would result in '<literal>output-001.mkv</literal>' and so on. If there's no extension
-       then '<literal>-%03d</literal>' will be appended to the name.
+       <function>printf</function> like expression '<code>%d</code>' including an optional field width,
+       e.g. '<code>%02d</code>'. If it does then the current file number will be formatted appropriately and inserted at that point
+       in the filename.  If there is no such pattern then a pattern of '<code>-%03d</code>' is assumed right before the file's
+       extension: '<code>-o output.mkv</code>' would result in '<code>output-001.mkv</code>' and so on. If there's no extension
+       then '<code>-%03d</code>' will be appended to the name.
      </para>
     </listitem>
    </varlistentry>
@@ -557,10 +557,8 @@
       the following two commands are equivalent:
      </para>
 
-     <screen>
-$ mkvmerge -o full.mkv file1.mkv + file2.mkv
-$ mkvmerge -o full.mkv file1.mkv +file2.mkv
-     </screen>
+     <screen>$ mkvmerge -o full.mkv file1.mkv + file2.mkv
+$ mkvmerge -o full.mkv file1.mkv +file2.mkv</screen>
     </listitem>
    </varlistentry>
 
@@ -577,10 +575,8 @@ $ mkvmerge -o full.mkv file1.mkv +file2.mkv
       The '=' can also be put in front of the next file name. Therefore the following two commands are equivalent:
      </para>
 
-     <screen>
-$ mkvmerge -o full.mkv = file1.mkv
-$ mkvmerge -o full.mkv =file1.mkv
-     </screen>
+     <screen>$ mkvmerge -o full.mkv = file1.mkv
+$ mkvmerge -o full.mkv =file1.mkv</screen>
     </listitem>
    </varlistentry>
   </variablelist>
@@ -1301,7 +1297,7 @@ $ mkvmerge -o full.mkv =file1.mkv
    </varlistentry>
 
    <varlistentry>
-    <term><option>@</option>options-file</term>
+    <term><option>@</option><parameter>options-file</parameter></term>
     <listitem>
      <para>
       Reads additional command line arguments from the file <parameter>options-file</parameter>.  Lines whose first non-whitespace character
@@ -1323,8 +1319,7 @@ $ mkvmerge -o full.mkv =file1.mkv
       option file:
      </para>
 
-     <programlisting>
-# Write to the file "c:\Matroska\my file.mkv" on Windows.
+     <programlisting># Write to the file "c:\Matroska\my file.mkv" on Windows.
 -o
 c:\\Matroska\\my file.mkv
 # Set the title to '#65'.
@@ -1333,8 +1328,7 @@ c:\\Matroska\\my file.mkv
 # Only take the video from "a movie.avi".
 -A
 a movie.avi
-sound.ogg
-     </programlisting>
+sound.ogg</programlisting>
     </listitem>
    </varlistentry>
 
@@ -1497,10 +1491,8 @@ sound.ogg
    '<literal>MyMovie-add-audio.wav</literal>'.  Encode it again and join it up with the other file:
   </para>
 
-  <screen>
-$ oggenc -q4 -oMyMovie-add-audio.ogg MyMovie-add-audio.wav
-$ mkvmerge -o MM-complete.mkv MyMovie-with-sound.mkv MyMovie-add-audio.ogg
-  </screen>
+  <screen>$ oggenc -q4 -oMyMovie-add-audio.ogg MyMovie-add-audio.wav
+$ mkvmerge -o MM-complete.mkv MyMovie-with-sound.mkv MyMovie-add-audio.ogg</screen>
 
   <para>
    The same result can be achieved with
@@ -1631,12 +1623,10 @@ $ mkvmerge -o MM-complete.mkv MyMovie-with-sound.mkv MyMovie-add-audio.ogg
    linkend="mkvmerge.description.identify"><option>--identify</option></link> option.  An example for such output:
   </para>
 
-  <screen>
-$ mkvmerge -i v.mkv
+  <screen>$ mkvmerge -i v.mkv
 File 'v.mkv': container: &matroska;
 Track ID 1: video (V_MS/VFW/FOURCC, DIV3)
-Track ID 2: audio (A_MPEG/L3)
-  </screen>
+Track ID 2: audio (A_MPEG/L3)</screen>
 
   <para>
    Do not confuse the track IDs that are assigned to the tracks that are placed in the output MKV file with the track IDs of the input
@@ -1793,7 +1783,7 @@ Track ID 2: audio (A_MPEG/L3)
   </para>
 
   <para>
-   The rules are: ' ' becomes '\s', '&quot;' becomes '\2', ':' becomes '\c', '#' becomes '\h' and '\' itself becomes '\\'.
+   The rules are: ' ' (a space) becomes '\s', '&quot;' (double quotes) becomes '\2', ':' becomes '\c', '#' becomes '\h' and '\' (a single backslash) itself becomes '\\'.
   </para>
  </refsect1>
 
@@ -1862,10 +1852,10 @@ Track ID 2: audio (A_MPEG/L3)
    Regardless of whether splitting is active or not the user can tell &mkvmerge; to link the produced files to specific
    <abbrev>SIDs</abbrev>. This is achieved with the options <option>--link-to-previous</option> and <option>--link-to-next</option>.  These
    options accept a segment <abbrev>SID</abbrev> in the format that &mkvinfo; outputs: 16 hexadecimal numbers between
-   <constant>0x00</constant> and <constant>0xff</constant> prefixed with '<literal>0x</literal>' each, e.g. '<literal>0x41 0xda 0x73 0x66
-   0xd9 0xcf 0xb2 0x1e 0xae 0x78 0xeb 0xb4 0x5e 0xca 0xb3 0x93</literal>'. Alternatively a shorter form can be used: 16 hexadecimal numbers
+   <constant>0x00</constant> and <constant>0xff</constant> prefixed with '<literal>0x</literal>' each, e.g. '<code>0x41 0xda 0x73 0x66
+   0xd9 0xcf 0xb2 0x1e 0xae 0x78 0xeb 0xb4 0x5e 0xca 0xb3 0x93</code>'. Alternatively a shorter form can be used: 16 hexadecimal numbers
    between <constant>0x00</constant> and <constant>0xff</constant> without the '<literal>0x</literal>' prefixes and without the spaces, e.g.
-   '<literal>41da7366d9cfb21eae78ebb45ecab393</literal>'.
+   '<code>41da7366d9cfb21eae78ebb45ecab393</code>'.
   </para>
 
   <para>
@@ -1900,9 +1890,13 @@ Track ID 2: audio (A_MPEG/L3)
    Here's an example how to attach a photo and a <productname>TrueType</productname> font to the output file:
   </para>
 
-  <screen>
-$ mkvmerge -o output.mkv -A video.avi sound.ogg --attachment-description "Me and the band behind the stage in a small get-together" --attachment-mime-type image/jpeg --attach-file me_and_the_band.jpg --attachment-description "The real rare and unbelievably good looking font" --attachment-type application/octet-stream --attach-file really_cool_font.ttf
-  </screen>
+  <screen>$ mkvmerge -o output.mkv -A video.avi sound.ogg \
+  --attachment-description "Me and the band behind the stage in a small get-together" \
+  --attachment-mime-type image/jpeg \
+  --attach-file me_and_the_band.jpg \
+  --attachment-description "The real rare and unbelievably good looking font" \
+  --attachment-type application/octet-stream \
+  --attach-file really_cool_font.ttf</screen>
 
   <para>
    If a &matroska; containing attachments file is used as an input file then &mkvmerge; will copy the attachments into the new file. The
@@ -1933,14 +1927,12 @@ $ mkvmerge -o output.mkv -A video.avi sound.ogg --attachment-description "Me and
     respectively. The first one contains the start timecode while the second one contains the title. Here's an example:
    </para>
 
-   <screen>
-CHAPTER01=00:00:00.000
+   <screen>CHAPTER01=00:00:00.000
 CHAPTER01NAME=Intro
 CHAPTER02=00:02:30.000
 CHAPTER02NAME=Baby prepares to rock
 CHAPTER03=00:02:42.300
-CHAPTER03NAME=Baby rocks the house
-   </screen>
+CHAPTER03NAME=Baby rocks the house</screen>
 
    <para>
     &mkvmerge; will transform every pair or lines into one &matroska; <classname>ChapterAtom</classname>. It does not set any
@@ -1960,8 +1952,7 @@ CHAPTER03NAME=Baby rocks the house
     The &xml; based chapter format looks like this example:
    </para>
 
-   <screen>
-&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;
+   <screen>&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;
 &lt;!DOCTYPE Chapters SYSTEM &quot;matroskachapters.dtd&quot;&gt;
 &lt;Chapters&gt;
   &lt;EditionEntry&gt;
@@ -1982,8 +1973,7 @@ CHAPTER03NAME=Baby rocks the house
       &lt;/ChapterAtom&gt;
     &lt;/ChapterAtom&gt;
   &lt;/EditionEntry&gt;
-&lt;/Chapters&gt;
-   </screen>
+&lt;/Chapters&gt;</screen>
 
    <para>
     With this format three things are possible that are not possible with the simple chapter format:
@@ -2070,9 +2060,7 @@ CHAPTER03NAME=Baby rocks the house
     <classname>Targets</classname> elements and call &mkvmerge;:
    </para>
 
-   <screen>
-$ mkvmerge -o file.mkv --tags 0:tags.xml file.avi
-   </screen>
+   <screen>$ mkvmerge -o file.mkv --tags 0:tags.xml file.avi</screen>
   </refsect2>
 
   <refsect2>
@@ -2180,9 +2168,7 @@ $ mkvmerge -o file.mkv --tags 0:tags.xml file.avi
    example if you append two files, v1.avi and v2.avi, and want to use timecodes then your command line must look something like this:
   </para>
 
-  <screen>
-mkvmerge ... --timecodes 0:my_timecodes.txt v1.avi +v2.avi
-  </screen>
+  <screen>$ mkvmerge ... --timecodes 0:my_timecodes.txt v1.avi +v2.avi</screen>
 
   <para>
    There are four formats that are recognized by &mkvmerge;. The first line always contains the version number. Empty lines, lines
@@ -2198,12 +2184,10 @@ mkvmerge ... --timecodes 0:my_timecodes.txt v1.avi +v2.avi
     can contain gaps for which the default <abbrev>FPS</abbrev> is used. An example:
    </para>
 
-   <screen>
-# timecode format v1
+   <screen># timecode format v1
 assume 27.930
 800,1000,25
-1500,1700,30
-   </screen>
+1500,1700,30</screen>
   </refsect2>
 
   <refsect2>
@@ -2215,12 +2199,10 @@ assume 27.930
     are frames in the track.  The timecodes in this file must be sorted.  Example for 25fps:
    </para>
 
-   <screen>
-# timecode format v2
+   <screen># timecode format v2
 0
 40
-80
-   </screen>
+80</screen>
   </refsect2>
 
   <refsect2>
@@ -2232,14 +2214,12 @@ assume 27.930
     gaps in the stream by using the '<literal>gap</literal>' keyword followed by the duration of the gap.  Example for an audio file:
    </para>
 
-   <screen>
-# timecode format v3
+   <screen># timecode format v3
 assume 0.0
 25.325
 7.530,38.236
 gap, 10.050
-2.000,38.236
-   </screen>
+2.000,38.236</screen>
   </refsect2>
 
   <refsect2>
