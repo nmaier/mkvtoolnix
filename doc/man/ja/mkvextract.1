@@ -98,7 +98,7 @@ download_url)。
 このオプションは、プログラムがlibcurlのサポートつきでビルドされた場合のみ使用できます。
 .RE
 .PP
-\fB@\fRoptions\-file
+\fB@\fR\fIoptions\-file\fR
 .RS 4
 
 \fIoptions\-file\fRで指定されたファイルから追加のコマンドラインオプションを読み込みます。行で最初の空白文字でない文字がハッシュマーク(\*(Aq#\*(Aq)である行はコメントとして扱われ、無視されます。行頭、及び行末の空白文字は取り除かれます。各行には一つずつしかオプションを指定できません。
@@ -116,8 +116,7 @@ tracks
 source\&.mkv
 # トラックをrawデータとして出力
 \-\-raw 
-1:destination\&.raw
-      
+1:destination\&.raw      
 .fi
 .if n \{\
 .RE
@@ -171,8 +170,7 @@ IDが\fITID\fRであるトラックがソースファイルに存在すれば、
 .RS 4
 .\}
 .nf
-$ mkvextract tracks input\&.mkv 1:output\-two\-tracks\&.rm 2:output\-two\-tracks\&.rm
-      
+$ mkvextract tracks input\&.mkv 1:output\-two\-tracks\&.rm 2:output\-two\-tracks\&.rm      
 .fi
 .if n \{\
 .RE
@@ -197,7 +195,7 @@ $ mkvextract tracks input\&.mkv 1:output\-two\-tracks\&.rm 2:output\-two\-tracks
 \fIAID1:outname1\fR
 [\fIAID2:outname2\fR \&.\&.\&.]
 .PP
-AID:outname
+\fIAID\fR:\fIoutname\fR
 .RS 4
 IDが\fIAID\fRである添付ファイルがもしソースファイルに存在すれば抽出します。\fIoutname\fRが指定されない場合、Matroska(TM)に格納された添付ファイルの名前が使用されます。このオプションは複数回指定できます。添付ファイルIDは、\fBmkvmerge\fR(1)に\fB\-\-identify\fRオプションを指定したときに出力されるものと同じです。
 .RE
@@ -248,7 +246,6 @@ IDが\fITID\fRであるトラックがソースファイルに存在すれば、
 .\}
 .nf
 $ mkvextract timecodes_v2 input\&.mkv 1:tc\-track1\&.txt 2:tc\-track2\&.txt
-      
 .fi
 .if n \{\
 .RE
@@ -265,7 +262,6 @@ $ mkvextract timecodes_v2 input\&.mkv 1:tc\-track1\&.txt 2:tc\-track2\&.txt
 .\}
 .nf
 $ mkvextract tags source\&.mkv > tags\&.xml
-  
 .fi
 .if n \{\
 .RE
@@ -279,7 +275,6 @@ $ mkvextract tags source\&.mkv > tags\&.xml
 .\}
 .nf
 $ mkvextract tags source\&.mkv \-\-redirect\-output tags\&.xml
-  
 .fi
 .if n \{\
 .RE
@@ -437,7 +432,7 @@ Kate(TM)ストリームはOgg(TM)コンテナに格納されます。
 .PP
 特殊文字をエスケープしなければならない、あるいはすべき場所が少しだけあります。エスケープのルールは単純です：エスケープする必要のある各文字を、バックスラッシュ（Windows上の日本語フォントでは\e記号）の後ろに違う文字が1つついたものと入れ替えます。
 .PP
-ルール：\*(Aq \*(Aqは\*(Aq\es\*(Aqに、\*(Aq"\*(Aqは\*(Aq\e2\*(Aqに、\*(Aq:\*(Aqは\*(Aq\ec\*(Aqに、\*(Aq#\*(Aqは\*(Aq\eh\*(Aqに、そして\*(Aq\e\*(Aqそれ自体は\*(Aq\e\e\*(Aqになります。
+ルール：\*(Aq \*(Aq（半角スペース）は\*(Aq\es\*(Aqに、\*(Aq"\*(Aq（ダブルクォーテーション）は\*(Aq\e2\*(Aqに、\*(Aq:\*(Aqは\*(Aq\ec\*(Aqに、\*(Aq#\*(Aqは\*(Aq\eh\*(Aqに、そして\*(Aq\e\*(Aqそれ自体は\*(Aq\e\e\*(Aqになります。
 .SH "関連項目"
 .PP
 

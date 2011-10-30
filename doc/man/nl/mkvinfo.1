@@ -148,7 +148,7 @@ Nadien sluit het programma af met een afsluitwaarde van 0 als er geen nieuwere v
 Deze optie is alleeen beschikbaar indien het gebouwd is met ondersteuning voor libcurl\&.
 .RE
 .PP
-\fB@\fRoptie\*(Aqs\-bestand
+\fB@\fR\fIoptions\-file\fR
 .RS 4
 Leest extra commandoregel argumenten in van een bestand
 \fIoptions\-file\fR\&. Regels met een spatie (lege ruimte) als eerste karakter, zijn gemarkeerd als een hash (waarde) (\*(Aq#\*(Aq) worden behandeld als commentaar en genegeerd\&. Een spatie aan het begin en einde van een regel worden verwijderd\&. Elke regel mag excact \('e\('en waarde bevatten
@@ -162,15 +162,14 @@ De commandoregel \*(Aq\fBmkvinfo \-v \-v input\&.mkv \-\-redirect\-output info\&
 .RS 4
 .\}
 .nf
-# Wees uitgebreider
+# Be more verbose
 \-v
 \-v
-# Ontleed invoer\&.mkv
+# Parse input\&.mkv
 input\&.mkv
-# schrijf uitvoer naar info\&.txt
+# and write the output to info\&.txt
 \-\-redirect\-output
 info\&.txt
- 
 .fi
 .if n \{\
 .RE
@@ -260,7 +259,7 @@ breekt direct af na het geven van dit waarschuw bericht\&. Fout! bereik in beric
 .PP
 Er zijn een paar plaatsen waar speciale karakters zouden of moeten worden overgeslagen\&. De regels voor het overslaan zijn simpel: elk karakter dat overgeslagen dient te worden wordt vervangen door een backslash "\e" gevolgd door een ander karakter\&.
 .PP
-De regels zijn: \*(Aq \*(Aq wordt \*(Aq\es\*(Aq, \*(Aq"\*(Aq wordt \*(Aq\e2\*(Aq, \*(Aq:\*(Aq wordt \*(Aq\ec\*(Aq, \*(Aq#\*(Aq wordt \*(Aq\eh\*(Aq en \*(Aq\e\*(Aq zelf wordt \*(Aq\e\e\*(Aq\&.
+The rules are: \*(Aq \*(Aq (a space) becomes \*(Aq\es\*(Aq, \*(Aq"\*(Aq (double quotes) becomes \*(Aq\e2\*(Aq, \*(Aq:\*(Aq becomes \*(Aq\ec\*(Aq, \*(Aq#\*(Aq becomes \*(Aq\eh\*(Aq and \*(Aq\e\*(Aq (a single backslash) itself becomes \*(Aq\e\e\*(Aq\&.
 .SH "ZIE OOK"
 .PP
 

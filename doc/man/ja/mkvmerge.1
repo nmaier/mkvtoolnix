@@ -51,8 +51,7 @@ mkvmerge \- マルチメディアストリームをMatroska(TM)ファイルに�
 コマンドラインオプションの順番は重要です。もしあなたが初心者なら、"オプションの順番"セクションを読んで下さい。
 .sp .5v
 .RE
-.PP
-グローバルオプション:
+.SS "Global options"
 .PP
 \fB\-v\fR, \fB\-\-verbose\fR
 .RS 4
@@ -83,8 +82,7 @@ WebMの規格に準拠したファイルを作成します。mkvmergeは出力�
 .RS 4
 デフォルトの言語コードを指定します。\fB\-\-language\fRオプションで指定しなかったトラックはすべてここで指定した言語コードになります。デフォルトは\*(Aqund\*(Aq、つまり\*(Aq未定義\*(Aqです。
 .RE
-.PP
-セグメント情報の扱い: (グローバルオプション)
+.SS "Segment info handling (global options)"
 .PP
 \fB\-\-segmentinfo\fR \fIfilename\&.xml\fR
 .RS 4
@@ -98,8 +96,7 @@ XMLファイルからセグメント情報を読み取ります。このファ�
 .sp
 作成される各ファイルは一つのセグメントを含み、そして各セグメントは一つのセグメントUIDを持ちます。もし、作成されたセグメントよりも多数のセグメントUIDが指定された場合、余ったセグメントUIDは無視されます。また、もし指定されたセグメントUIDよりも多数のセグメントが作成された場合は、ランダムなUIDが作成されて使用されます。
 .RE
-.PP
-チャプタ及びタグの扱い: (グローバルオプション)
+.SS "Chapter and tag handling (global options)"
 .PP
 \fB\-\-chapter\-language\fR \fIlanguage\-code\fR
 .RS 4
@@ -179,8 +176,7 @@ XMLファイルからセグメント情報を読み取ります。このファ�
 
 \fIfile\-name\fRで指定したファイルからグローバルタグを読み込みます。詳細はタグのセクションを参照してください。
 .RE
-.PP
-出力一般のコントロール（グローバルオプションの続き）:
+.SS "General output control (advanced global options)"
 .PP
 \fB\-\-track\-order\fR \fIFID1:TID1,FID2:TID2,\&.\&.\&.\fR
 .RS 4
@@ -228,8 +224,7 @@ XMLファイルからセグメント情報を読み取ります。このファ�
 .sp
 特殊な値\fB\-1\fRが指定された場合、たとえビデオトラックが存在していてもサンプリング音の精度を使用します。
 .RE
-.PP
-ファイルの分割と紐付け(グローバルオプションの続き):
+.SS "File splitting, linking and appending (more global options)"
 .PP
 \fB\-\-split\fR \fIspecification\fR
 .RS 4
@@ -307,7 +302,7 @@ timecodes:\fIA\fR[,\fIB\fR[,\fIC\fR\&.\&.\&.]]
 \*(Aqtimecodes:\*(Aqという接頭辞は、互換性のために省略できるようになっています。
 .RE
 .sp
-この分割モードでは、出力ファイル名は通常の操作とは異る扱いを受けます。このモードでは出力ファイル名は\fBprintf\fRのように\*(Aq%d\*(Aqというパターンを含むことができます。\*(Aq%02d\*(Aqのように幅指定を追加することもできます。出力ファイル名がこのパターンを含む場合、ファイル番号が適切なフォーマットで指定された位置に挿入されます。含まない場合、\*(Aq\-%03d\*(Aqというパターンがファイルの拡張子の直前に指定されたものとみなされ、例えば\*(Aq\-o output\&.mkv\*(Aqを指定した場合、\*(Aqoutput\-001\&.mkv\*(Aq等のファイル名に出力されます。拡張子が存在しない場合、\*(Aq\-%03d\*(Aqはファイル名の末尾に追加されます。
+この分割モードでは、出力ファイル名は通常の操作とは異なる扱いを受けます。このモードでは出力ファイル名は\fBprintf\fRのように\*(Aq%d\*(Aqというパターンを含むことができます。\*(Aq%02d\*(Aqのように幅指定を追加することもできます。出力ファイル名がこのパターンを含む場合、ファイル番号が適切なフォーマットで指定された位置に挿入されます。含まない場合、\*(Aq\-%03d\*(Aqというパターンがファイルの拡張子の直前に指定されたものとみなされ、例えば\*(Aq\-o output\&.mkv\*(Aqを指定した場合、\*(Aqoutput\-001\&.mkv\*(Aq等のファイル名に出力されます。拡張子が存在しない場合、\*(Aq\-%03d\*(Aqはファイル名の末尾に追加されます。
 .RE
 .PP
 \fB\-\-link\fR
@@ -353,7 +348,6 @@ mkvmergeが二つめのファイル(以後\*(Aqfile2\*(Aqと呼ぶ)のトラッ�
 .nf
 $ mkvmerge \-o full\&.mkv file1\&.mkv + file2\&.mkv
 $ mkvmerge \-o full\&.mkv file1\&.mkv +file2\&.mkv
-     
 .fi
 .if n \{\
 .RE
@@ -370,16 +364,14 @@ $ mkvmerge \-o full\&.mkv file1\&.mkv +file2\&.mkv
 .RS 4
 .\}
 .nf
-$ mkvmerge \-o full\&.mkv file1\&.mkv = file2\&.mkv
-$ mkvmerge \-o full\&.mkv file1\&.mkv =file2\&.mkv
-     
+$ mkvmerge \-o full\&.mkv = file1\&.mkv
+$ mkvmerge \-o full\&.mkv =file1\&.mkv
 .fi
 .if n \{\
 .RE
 .\}
 .RE
-.PP
-添付ファイルのサポート（グローバルオプションの続き）:
+.SS "Attachment support (more global options)"
 .PP
 \fB\-\-attachment\-description\fR \fIdescription\fR
 .RS 4
@@ -404,8 +396,7 @@ Matroska(TM)ファイルの内部に添付ファイルを作成します。こ�
 
 \fBmkvextract\fR(1)でMatroska(TM)ファイルから添付ファイルを抽出することができます。
 .RE
-.PP
-各入力ファイルに指定できるオプション:
+.SS "Options that can be used for each input file"
 .PP
 \fB\-a\fR, \fB\-\-audio\-tracks\fR \fI[!]\fR\fIn,m,\&.\&.\&.\fR
 .RS 4
@@ -606,8 +597,7 @@ part2 ビデオトラックにのみ適用できる、\*(Aqheader removal\*(Aq�
 .sp
 いくつかの字幕トラックにおけるデフォルトは\*(Aqzlib\*(Aq圧縮法です。この圧縮法はほとんど全ての再生アプリケーションでサポートされています。\*(Aqnone\*(Aq以外の他の圧縮法については、サポートされているとは限りません。
 .RE
-.PP
-ビデオトラックにのみ適用されるオプション:
+.SS "Options that only apply to video tracks"
 .PP
 \fB\-f\fR, \fB\-\-fourcc\fR \fITID:FourCC\fR
 .RS 4
@@ -649,8 +639,7 @@ Matroska(TM)ファイルは再生時の画像スケールを決定するため�
 .sp
 \*(Aqmono\*(Aq, \*(Aqside_by_side_left_first\*(Aq, \*(Aqtop_bottom_right_first\*(Aq, \*(Aqtop_bottom_left_first\*(Aq, \*(Aqcheckerboard_right_first\*(Aq, \*(Aqcheckerboard_left_first\*(Aq, \*(Aqrow_interleaved_right_first\*(Aq, \*(Aqrow_interleaved_left_first\*(Aq, \*(Aqcolumn_interleaved_right_first\*(Aq, \*(Aqcolumn_interleaved_left_first\*(Aq, \*(Aqanaglyph_cyan_red\*(Aq, \*(Aqside_by_side_right_first\*(Aq, \*(Aqanaglyph_green_magenta\*(Aq, \*(Aqboth_eyes_laced_left_first\*(Aq, \*(Aqboth_eyes_laced_right_first\*(Aq\&.
 .RE
-.PP
-テキスト字幕トラックにのみ適用されるオプション:
+.SS "Options that only apply to text subtitle tracks"
 .PP
 \fB\-\-sub\-charset\fR \fITID:character\-set\fR
 .RS 4
@@ -658,8 +647,7 @@ Matroska(TM)ファイルは再生時の画像スケールを決定するため�
 .sp
 このオプションは異るトラックIDを指定することで複数の入力トラックに対して使用することができます。
 .RE
-.PP
-その他のオプション:
+.SS "Other options"
 .PP
 \fB\-i\fR, \fB\-\-identify\fR \fIfile\-name\fR
 .RS 4
@@ -714,7 +702,7 @@ Matroska(TM)ファイルは再生時の画像スケールを決定するため�
 指定した\fIcode\fRを強制的に言語コード(例: 日本語ならば\*(Aqja_JP\*(Aq)として使用します。しかし、環境変数\fILANG\fRや\fILC_MESSAGES\fR、\fILC_ALL\fRを使用したほうが好ましいでしょう。\fIcode\fRにlistと指定すると、指定できる言語コードの一覧を出力します。
 .RE
 .PP
-\fB@\fRoptions\-file
+\fB@\fR\fIoptions\-file\fR
 .RS 4
 
 \fIoptions\-file\fRで指定されたファイルから追加のコマンドラインオプションを読み込みます。行で最初の空白文字でない文字がハッシュマーク(\*(Aq#\*(Aq)である行はコメントとして扱われ、無視されます。行頭、及び行末の空白文字は取り除かれます。各行には一つずつしかオプションを指定できません。
@@ -731,12 +719,14 @@ Matroska(TM)ファイルは再生時の画像スケールを決定するため�
 .nf
 # Windowsでは、"my file\&.mkv" に書き込む。
 \-o
-my file\&.mkv
+c:\e\eMatroska\e\emy file\&.mkv
+# タイトルを\*(Aq#65\*(Aqに設定する。
+\-\-title
+\eh65
 # "a movie\&.avi" からビデオトラックのみを取り出す。
 \-A
 a movie\&.avi
-sound\&.ogg
-     
+sound\&.ogg     
 .fi
 .if n \{\
 .RE
@@ -922,7 +912,6 @@ $ mkvmerge \-o MyMovie\-with\-sound\&.mkv \-A MyMovie\&.avi MyMovie\&.ogg
 .nf
 $ oggenc \-q4 \-oMyMovie\-add\-audio\&.ogg MyMovie\-add\-audio\&.wav
 $ mkvmerge \-o MM\-complete\&.mkv MyMovie\-with\-sound\&.mkv MyMovie\-add\-audio\&.ogg
-  
 .fi
 .if n \{\
 .RE
@@ -1148,7 +1137,6 @@ $ mkvmerge \-i v\&.mkv
 File \*(Aqv\&.mkv\*(Aq: container: Matroska(TM)
 Track ID 1: video (V_MS/VFW/FOURCC, DIV3)
 Track ID 2: audio (A_MPEG/L3)
-  
 .fi
 .if n \{\
 .RE
@@ -1312,7 +1300,7 @@ Windowsでは、\fBcmd\&.exe\fRWindowsシェルプログラムの実装方式の
 .PP
 特殊文字をエスケープしなければならない、あるいはすべき場所が少しだけあります。エスケープのルールは単純です：エスケープする必要のある各文字を、バックスラッシュ（Windows上の日本語フォントでは\e記号）の後ろに違う文字が1つついたものと入れ替えます。
 .PP
-ルール：\*(Aq \*(Aqは\*(Aq\es\*(Aqに、\*(Aq"\*(Aqは\*(Aq\e2\*(Aqに、\*(Aq:\*(Aqは\*(Aq\ec\*(Aqに、\*(Aq#\*(Aqは\*(Aq\eh\*(Aqに、そして\*(Aq\e\*(Aqそれ自体は\*(Aq\e\e\*(Aqになります。
+ルール：\*(Aq \*(Aq（半角スペース）は\*(Aq\es\*(Aqに、\*(Aq"\*(Aq（ダブルクォーテーション）は\*(Aq\e2\*(Aqに、\*(Aq:\*(Aqは\*(Aq\ec\*(Aqに、\*(Aq#\*(Aqは\*(Aq\eh\*(Aqに、そして\*(Aq\e\*(Aqそれ自体は\*(Aq\e\e\*(Aqになります。
 .SH "字幕"
 .PP
 
@@ -1372,7 +1360,7 @@ Matroska(TM)はファイル紐付けをサポートします。ファイル紐�
 .PP
 もしひとつのファイルがいくつかの小さなファイルに分割されて紐付けされる場合、タイムコードは0から始まらず、前のファイルの続きから始まります。この方式では、前のファイルが無い場合も絶対時間が保たれます(例: ストリーミングを使用している際)。もし、紐付けが使用されない場合、タイムコードは各ファイルで0から始まります。デフォルトでは\fBmkvmerge\fR(1)はファイル紐付けを使用しません。ファイル紐付けを使用したい場合は、\fB\-\-link\fRオプションを使用する必要があります。このオプションはファイル分割が有効な場合以外には無効です。
 .PP
-ファイル分割が有効か無効かに関わらず、ユーザは\fBmkvmerge\fR(1)に、生成したファイルを特定のSIDに紐付けすることができます。これは\fB\-\-link\-to\-previous\fRオプションと\fB\-\-link\-to\-next\fRオプションにより可能です。これらのオプションは\fBmkvinfo\fR(1)が出力するフォーマット(16個の\fB0x00\fRから\fB0xff\fRまでの、\*(Aq0x\*(Aqを頭につけた16進数)のSIDを受け付けます(例: \*(Aq0x41 0xda 0x73 0x66 0xd9 0xcf 0xb2 0x1e 0xae 0x78 0xeb 0xb4 0x5e 0xca 0xb3 0x93\*(Aq)。もしくは、\*(Aq0x\*(Aq及び数字の間のスペースを省いた短形式(例: \*(Aq41da7366d9cfb21eae78ebb45ecab393\*(Aq)を指定することもできます。
+ファイル分割が有効か無効かに関わらず、ユーザは\fBmkvmerge\fR(1)に、生成したファイルを特定のSIDに紐付けすることができます。これは\fB\-\-link\-to\-previous\fRオプションと\fB\-\-link\-to\-next\fRオプションにより可能です。これらのオプションは\fBmkvinfo\fR(1)が出力するフォーマット(16個の\fB0x00\fRから\fB0xff\fRまでの、\*(Aq0x\*(Aqを頭につけた16進数)のSIDを受け付けます(例: \*(Aq0x41 0xda 0x73 0x66 0xd9 0xcf 0xb2 0x1e 0xae 0x78 0xeb 0xb4 0x5e 0xca 0xb3 0x93\*(Aq)。もしくは短い形式（\*(Aq0x\*(Aq及び数字の間のスペースを省いた\fB0x00\fRから\fB0xff\fRまでの16進数の数字）を指定することもできます。例: \*(Aq41da7366d9cfb21eae78ebb45ecab393\*(Aq
 .PP
 もしファイル分割が有効の場合、最初のファイルが\fB\-\-link\-to\-previous\fRオプションで指定したSIDに紐付けされ、最後のファイルが\fB\-\-link\-to\-next\fRオプションで指定したSIDに紐付けされます。ファイル分割が無効の場合、一つの出力ファイルが両方のSIDに紐付けされます。
 .SH "デフォルト値"
@@ -1390,8 +1378,13 @@ Matroska(TM)ファイルに写真を入れておきたいということや、�
 .RS 4
 .\}
 .nf
-$ mkvmerge \-o output\&.mkv \-A video\&.avi sound\&.ogg \-\-attachment\-description "Me and the band behind the stage in a small get\-together" \-\-attachment\-mime\-type image/jpeg \-\-attach\-file me_and_the_band\&.jpg \-\-attachment\-description "The real rare and unbelievably good looking font" \-\-attachment\-type application/octet\-stream \-\-attach\-file really_cool_font\&.ttf
-  
+$ mkvmerge \-o output\&.mkv \-A video\&.avi sound\&.ogg \e
+  \-\-attachment\-description "Me and the band behind the stage in a small get\-together" \e
+  \-\-attachment\-mime\-type image/jpeg \e
+  \-\-attach\-file me_and_the_band\&.jpg \e
+  \-\-attachment\-description "The real rare and unbelievably good looking font" \e
+  \-\-attachment\-type application/octet\-stream \e
+  \-\-attach\-file really_cool_font\&.ttf
 .fi
 .if n \{\
 .RE
@@ -1420,7 +1413,6 @@ CHAPTER02=00:02:30\&.000
 CHAPTER02NAME=Baby prepares to rock
 CHAPTER03=00:02:42\&.300
 CHAPTER03NAME=Baby rocks the house
-   
 .fi
 .if n \{\
 .RE
@@ -1461,7 +1453,6 @@ XMLチャプタフォーマットの例を以下に示します。
     </ChapterAtom>
   </EditionEntry>
 </Chapters>
-   
 .fi
 .if n \{\
 .RE
@@ -1534,7 +1525,6 @@ Matroska(TM)タグは自動的にはファイル全体に適用はされませ�
 .\}
 .nf
 $ mkvmerge \-o file\&.mkv \-\-tags 0:tags\&.xml file\&.avi
-   
 .fi
 .if n \{\
 .RE
@@ -1633,8 +1623,7 @@ Matroska(TM)ファイルのレイアウトは非常に柔軟性に富んでい�
 .RS 4
 .\}
 .nf
-mkvmerge \&.\&.\&. \-\-timecodes 0:my_timecodes\&.txt v1\&.avi +v2\&.avi
-  
+$ mkvmerge \&.\&.\&. \-\-timecodes 0:my_timecodes\&.txt v1\&.avi +v2\&.avi
 .fi
 .if n \{\
 .RE
@@ -1654,7 +1643,6 @@ mkvmerge \&.\&.\&. \-\-timecodes 0:my_timecodes\&.txt v1\&.avi +v2\&.avi
 assume 27\&.930
 800,1000,25
 1500,1700,30
-   
 .fi
 .if n \{\
 .RE
@@ -1671,7 +1659,6 @@ assume 27\&.930
 0
 40
 80
-   
 .fi
 .if n \{\
 .RE
@@ -1690,7 +1677,6 @@ assume 0\&.0
 7\&.530,38\&.236
 gap, 10\&.050
 2\&.000,38\&.236
-   
 .fi
 .if n \{\
 .RE

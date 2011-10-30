@@ -56,8 +56,7 @@ Matroska(TM)
 段落。
 .sp .5v
 .RE
-.PP
-全局选项:
+.SS "Global options"
 .PP
 \fB\-v\fR, \fB\-\-verbose\fR
 .RS 4
@@ -93,8 +92,7 @@ Matroska(TM)
 \fB\-\-language\fR
 选项覆盖。默认的语言代码是 \*(Aqund\*(Aq 代表 \*(Aqundefined\*(Aq（未定）。
 .RE
-.PP
-剪辑信息处理: (全局选项)
+.SS "Segment info handling (global options)"
 .PP
 \fB\-\-segmentinfo\fR \fI文件名\&.xml\fR
 .RS 4
@@ -115,8 +113,7 @@ DTD
 .sp
 创建的每个文件都包含一个剪辑，每个剪辑有一个剪辑 UID。如果指定的剪辑 UID 比创建的剪辑多，则多余的 UID 将被忽略。如果指定的 UID 比创建的剪辑少，则将随机创建 UID。
 .RE
-.PP
-章节与标签处理: (全局选项)
+.SS "Chapter and tag handling (global options)"
 .PP
 \fB\-\-chapter\-language\fR \fI语言代码\fR
 .RS 4
@@ -228,8 +225,7 @@ CUE
 标签
 的段落。
 .RE
-.PP
-全局输出控制 (高级全局选项):
+.SS "General output control (advanced global options)"
 .PP
 \fB\-\-track\-order\fR \fIFID1:TID1,FID2:TID2,\&.\&.\&.\fR
 .RS 4
@@ -311,8 +307,7 @@ Matroska(TM) 文件规划
 \fB\-1\fR，即使有视频轨，\fBmkvmerge\fR(1)
 也将使用采样精度。
 .RE
-.PP
-文件切割、链接与追加合并 (其他全局选项):
+.SS "File splitting, linking and appending (more global options)"
 .PP
 \fB\-\-split\fR \fI指令\fR
 .RS 4
@@ -333,7 +328,7 @@ Matroska(TM) 文件规划
 .\}
 按尺寸切割。
 .sp
-语法:
+Syntax:
 \fB\-\-split\fR
 [size:]\fId\fR[k|m|g]
 .sp
@@ -342,9 +337,9 @@ Matroska(TM) 文件规划
 或者
 \-\-split 150000000
 .sp
-参数
+The parameter
 \fId\fR
-可以以 \*(Aqk\*(Aq、\*(Aqm\*(Aq 或 \*(Aqg\*(Aq 结尾，分别说明尺寸的单位为 KB、MB 或 GB。若不加单位，则假定单位为字节。 当前输出文件达到此尺寸限制后将开始输出新的文件。
+may end with \*(Aqk\*(Aq, \*(Aqm\*(Aq or \*(Aqg\*(Aq to indicate that the size is in KB, MB or GB respectively\&. Otherwise a size in bytes is assumed\&. After the current output file has reached this size limit a new one will be started\&.
 .sp
 为兼顾兼容性，\*(Aqsize:\*(Aq 前缀可以省略。
 .RE
@@ -359,7 +354,7 @@ Matroska(TM) 文件规划
 .\}
 在一定时长后切割。
 .sp
-语法:
+Syntax:
 \fB\-\-split\fR
 [duration:]\fIHH:MM:SS\&.nnnnnnnnn\fR|\fId\fRs
 .sp
@@ -390,7 +385,7 @@ Matroska(TM) 文件规划
 .\}
 在指定时间码后切割。
 .sp
-语法:
+Syntax:
 \fB\-\-split\fR
 timecodes:\fIA\fR[,\fIB\fR[,\fIC\fR\&.\&.\&.]]
 .sp
@@ -404,9 +399,9 @@ timecodes:\fIA\fR[,\fIB\fR[,\fIC\fR\&.\&.\&.]]
 \*(Aqtimecodes:\*(Aq 前缀不得省略。
 .RE
 .sp
-此切割模式下输出文件名将以不同于常用操作的方式对待。可能会含有类似
+For this splitting mode the output filename is treated differently than for the normal operation\&. It may contain a
 \fBprintf\fR
-的表达式 \*(Aq%d\*(Aq，包括可选的字段宽度，如 \*(Aq%02d\*(Aq。如果含有上述表达式，当前文件序号将按相应格式生成，然后插入到文件名中的相应位置。 如果没有此类匹配模式，则假定匹配模式为在文件扩展名之前插入 \*(Aq\-%03d\*(Aq: \*(Aq\-o 输出\&.mkv\*(Aq 将生成 \*(Aq输出\-001\&.mkv\*(Aq 这样的一系列文件。如果没有扩展名，\*(Aq\-%03d\*(Aq 将被追加在文件名之后。
+like expression \*(Aq%d\*(Aq including an optional field width, e\&.g\&. \*(Aq%02d\*(Aq\&. If it does then the current file number will be formatted appropriately and inserted at that point in the filename\&. If there is no such pattern then a pattern of \*(Aq\-%03d\*(Aq is assumed right before the file\*(Aqs extension: \*(Aq\-o output\&.mkv\*(Aq would result in \*(Aqoutput\-001\&.mkv\*(Aq and so on\&. If there\*(Aqs no extension then \*(Aq\-%03d\*(Aq will be appended to the name\&.
 .RE
 .PP
 \fB\-\-link\fR
@@ -471,9 +466,8 @@ EVO
 .RS 4
 .\}
 .nf
-$ mkvmerge \-o 完整\&.mkv 文件1\&.mkv + 文件2\&.mkv
-$ mkvmerge \-o 完整\&.mkv 文件1\&.mkv +文件2\&.mkv
-     
+$ mkvmerge \-o full\&.mkv file1\&.mkv + file2\&.mkv
+$ mkvmerge \-o full\&.mkv file1\&.mkv +file2\&.mkv
 .fi
 .if n \{\
 .RE
@@ -490,16 +484,14 @@ $ mkvmerge \-o 完整\&.mkv 文件1\&.mkv +文件2\&.mkv
 .RS 4
 .\}
 .nf
-$ mkvmerge \-o 完整\&.mkv = 文件1\&.mkv
-$ mkvmerge \-o 完整\&.mkv =文件1\&.mkv
-     
+$ mkvmerge \-o full\&.mkv = file1\&.mkv
+$ mkvmerge \-o full\&.mkv =file1\&.mkv
 .fi
 .if n \{\
 .RE
 .\}
 .RE
-.PP
-附件支持（其他全局选项）：
+.SS "Attachment support (more global options)"
 .PP
 \fB\-\-attachment\-description\fR \fI描述\fR
 .RS 4
@@ -552,8 +544,7 @@ Matroska(TM)
 Matroska(TM)
 文件中提取附件文件。
 .RE
-.PP
-用于各输入文件的选项：
+.SS "Options that can be used for each input file"
 .PP
 \fB\-a\fR, \fB\-\-audio\-tracks\fR \fI[!]\fR\fIn,m,\&.\&.\&.\fR
 .RS 4
@@ -924,8 +915,7 @@ part 2 视频轨可用。
 .sp
 部分字幕轨的默认值为 \*(Aqzlib\*(Aq 压缩。此压缩方式也是大部分（如果不是所有）回放应用程序都支持的压缩方式。无法保证对除 \*(Aqnone（无压缩）\*(Aq 以外的其他压缩方式的支持。
 .RE
-.PP
-仅用于视频轨的选项：
+.SS "Options that only apply to video tracks"
 .PP
 \fB\-f\fR, \fB\-\-fourcc\fR \fITID:FourCC\fR
 .RS 4
@@ -997,8 +987,7 @@ Matroska(TM)
 .sp
 \*(Aqmono\*(Aq、\*(Aqside_by_side_left_first\*(Aq、\*(Aqtop_bottom_right_first\*(Aq、\*(Aqtop_bottom_left_first\*(Aq、\*(Aqcheckerboard_right_first\*(Aq、\*(Aqcheckerboard_left_first\*(Aq、\*(Aqrow_interleaved_right_first\*(Aq、\*(Aqrow_interleaved_left_first\*(Aq、\*(Aqcolumn_interleaved_right_first\*(Aq、\*(Aqcolumn_interleaved_left_first\*(Aq、\*(Aqanaglyph_cyan_red\*(Aq、\*(Aqside_by_side_right_first\*(Aq、\*(Aqanaglyph_green_magenta\*(Aq、\*(Aqboth_eyes_laced_left_first\*(Aq、\*(Aqboth_eyes_laced_right_first\*(Aq。
 .RE
-.PP
-仅适用于文本字幕轨道的选项:
+.SS "Options that only apply to text subtitle tracks"
 .PP
 \fB\-\-sub\-charset\fR \fITID:字符集\fR
 .RS 4
@@ -1012,8 +1001,7 @@ Matroska(TM)
 .sp
 此选项可以对同一输入文件多次使用，通过每次选择不同轨道 ID 分别应用到多个轨道。
 .RE
-.PP
-其他选项：
+.SS "Other options"
 .PP
 \fB\-i\fR, \fB\-\-identify\fR \fI文件名\fR
 .RS 4
@@ -1097,7 +1085,7 @@ Matroska(TM)
 将输出可用翻译列表。
 .RE
 .PP
-\fB@\fR选项文件
+\fB@\fR\fIoptions\-file\fR
 .RS 4
 从文件
 \fI选项文件\fR
@@ -1123,7 +1111,6 @@ c:\e\eMatroska\e\emy file\&.mkv
 \-A
 a movie\&.avi
 sound\&.ogg
-     
 .fi
 .if n \{\
 .RE
@@ -1345,9 +1332,8 @@ $ mkvmerge \-o 我的有声影片\&.mkv \-A 我的影片\&.avi 我的影片\&.og
 .RS 4
 .\}
 .nf
-$ oggenc \-q4 \-o 我影片的另一音轨\&.ogg 我影片的另一音轨\&.wav
-$ mkvmerge \-o 我的影片\-成品\&.mkv 我的有声影片\&.mkv 我影片的另一音轨\&.ogg
-  
+$ oggenc \-q4 \-oMyMovie\-add\-audio\&.ogg MyMovie\-add\-audio\&.wav
+$ mkvmerge \-o MM\-complete\&.mkv MyMovie\-with\-sound\&.mkv MyMovie\-add\-audio\&.ogg
 .fi
 .if n \{\
 .RE
@@ -1607,7 +1593,6 @@ $ mkvmerge \-i v\&.mkv
 File \*(Aqv\&.mkv\*(Aq: container: Matroska(TM)
 Track ID 1: video (V_MS/VFW/FOURCC, DIV3)
 Track ID 2: audio (A_MPEG/L3)
-  
 .fi
 .if n \{\
 .RE
@@ -1829,7 +1814,7 @@ GUI
 .PP
 有时文本中的特殊字符必须或应该转义。转义规则很简单: 用反斜杠后接一字符替换需要转义的各字符。
 .PP
-规则为: \*(Aq \*(Aq 变为 \*(Aq\es\*(Aq，\*(Aq"\*(Aq 变为 \*(Aq\e2\*(Aq，\*(Aq:\*(Aq 变为 \*(Aq\ec\*(Aq，\*(Aq#\*(Aq 变为 \*(Aq\eh\*(Aq，而 \*(Aq\e\*(Aq 自己则变为 \*(Aq\e\e\*(Aq。
+The rules are: \*(Aq \*(Aq (a space) becomes \*(Aq\es\*(Aq, \*(Aq"\*(Aq (double quotes) becomes \*(Aq\e2\*(Aq, \*(Aq:\*(Aq becomes \*(Aq\ec\*(Aq, \*(Aq#\*(Aq becomes \*(Aq\eh\*(Aq and \*(Aq\e\*(Aq (a single backslash) itself becomes \*(Aq\e\e\*(Aq\&.
 .SH "SUBTITLES"
 .PP
 可在
@@ -1910,26 +1895,25 @@ SID
 \fB\-\-link\fR
 选项打开。此选项仅当同时启用切割功能时有用。
 .PP
-无论是否开启了切割功能，用户都可以让
+Regardless of whether splitting is active or not the user can tell
 \fBmkvmerge\fR(1)
-将生成的文件与指定的
-SID
-建立链接。可通过
+to link the produced files to specific
+SIDs\&. This is achieved with the options
 \fB\-\-link\-to\-previous\fR
-与
-\fB\-\-link\-to\-next\fR
-选项实现。 这些选项只接受
-\fBmkvinfo\fR(1)
-所输出的
+and
+\fB\-\-link\-to\-next\fR\&. These options accept a segment
 SID
-格式: 16 个
+in the format that
+\fBmkvinfo\fR(1)
+outputs: 16 hexadecimal numbers between
 \fB0x00\fR
-与
+and
 \fB0xff\fR
-之间的十六进制数，各数字带有 \*(Aq0x\*(Aq 前缀，如 \*(Aq0x41 0xda 0x73 0x66 0xd9 0xcf 0xb2 0x1e 0xae 0x78 0xeb 0xb4 0x5e 0xca 0xb3 0x93\*(Aq。还可以选用另一种较短的格式: 16 个
+prefixed with \*(Aq0x\*(Aq each, e\&.g\&. \*(Aq0x41 0xda 0x73 0x66 0xd9 0xcf 0xb2 0x1e 0xae 0x78 0xeb 0xb4 0x5e 0xca 0xb3 0x93\*(Aq\&. Alternatively a shorter form can be used: 16 hexadecimal numbers between
 \fB0x00\fR
-与\fB0xff\fR
-之间的十六进制数，无 \*(Aq0x\*(Aq 前缀，无空格，如 \*(Aq41da7366d9cfb21eae78ebb45ecab393\*(Aq。
+and
+\fB0xff\fR
+without the \*(Aq0x\*(Aq prefixes and without the spaces, e\&.g\&. \*(Aq41da7366d9cfb21eae78ebb45ecab393\*(Aq\&.
 .PP
 如果启用了切割功能，第一个文件将与通过
 \fB\-\-link\-to\-previous\fR
@@ -1981,8 +1965,13 @@ TrueType(TM)
 .RS 4
 .\}
 .nf
-$ mkvmerge \-o 输出\&.mkv \-A 视频\&.avi 声音\&.ogg \-\-attachment\-description "乐队与我在后台小聚" \-\-attachment\-mime\-type image/jpeg \-\-attach\-file 乐队与我\&.jpg \-\-attachment\-description "难得一见的绝美字体" \-\-attachment\-type application/octet\-stream \-\-attach\-file 很酷的字体\&.ttf
-  
+$ mkvmerge \-o output\&.mkv \-A video\&.avi sound\&.ogg \e
+  \-\-attachment\-description "Me and the band behind the stage in a small get\-together" \e
+  \-\-attachment\-mime\-type image/jpeg \e
+  \-\-attach\-file me_and_the_band\&.jpg \e
+  \-\-attachment\-description "The real rare and unbelievably good looking font" \e
+  \-\-attachment\-type application/octet\-stream \e
+  \-\-attach\-file really_cool_font\&.ttf
 .fi
 .if n \{\
 .RE
@@ -2024,12 +2013,11 @@ Matroska(TM)
 .\}
 .nf
 CHAPTER01=00:00:00\&.000
-CHAPTER01NAME=导入部分
+CHAPTER01NAME=Intro
 CHAPTER02=00:02:30\&.000
-CHAPTER02NAME=宝宝准备摇
+CHAPTER02NAME=Baby prepares to rock
 CHAPTER03=00:02:42\&.300
-CHAPTER03NAME=宝宝摇屋子
-   
+CHAPTER03NAME=Baby rocks the house
 .fi
 .if n \{\
 .RE
@@ -2065,21 +2053,20 @@ XML
       <ChapterTimeStart>00:00:30\&.000</ChapterTimeStart>
       <ChapterTimeEnd>00:01:20\&.000</ChapterTimeEnd>
       <ChapterDisplay>
-        <ChapterString>短短的一节</ChapterString>
+        <ChapterString>A short chapter</ChapterString>
         <ChapterLanguage>eng</ChapterLanguage>
       </ChapterDisplay>
       <ChapterAtom>
         <ChapterTimeStart>00:00:46\&.000</ChapterTimeStart>
         <ChapterTimeEnd>00:01:10\&.000</ChapterTimeEnd>
         <ChapterDisplay>
-          <ChapterString>那短短的一节的一部分</ChapterString>
+          <ChapterString>A part of that short chapter</ChapterString>
           <ChapterLanguage>eng</ChapterLanguage>
         </ChapterDisplay>
       </ChapterAtom>
     </ChapterAtom>
   </EditionEntry>
 </Chapters>
-   
 .fi
 .if n \{\
 .RE
@@ -2216,8 +2203,7 @@ Targets
 .RS 4
 .\}
 .nf
-$ mkvmerge \-o 文件\&.mkv \-\-tags 0:标签\&.xml 文件\&.avi
-   
+$ mkvmerge \-o file\&.mkv \-\-tags 0:tags\&.xml file\&.avi
 .fi
 .if n \{\
 .RE
@@ -2365,8 +2351,7 @@ AC3
 .RS 4
 .\}
 .nf
-mkvmerge \&.\&.\&. \-\-timecodes 0:我的时间码\&.txt v1\&.avi +v2\&.avi
-  
+$ mkvmerge \&.\&.\&. \-\-timecodes 0:my_timecodes\&.txt v1\&.avi +v2\&.avi
 .fi
 .if n \{\
 .RE
@@ -2390,7 +2375,6 @@ FPS。一个示例：
 assume 27\&.930
 800,1000,25
 1500,1700,30
-   
 .fi
 .if n \{\
 .RE
@@ -2409,7 +2393,6 @@ assume 27\&.930
 0
 40
 80
-   
 .fi
 .if n \{\
 .RE
@@ -2430,7 +2413,6 @@ assume 0\&.0
 7\&.530,38\&.236
 gap, 10\&.050
 2\&.000,38\&.236
-   
 .fi
 .if n \{\
 .RE

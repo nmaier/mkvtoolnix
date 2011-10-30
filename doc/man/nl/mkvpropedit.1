@@ -215,7 +215,7 @@ Nadien sluit het programma af met een afsluitwaarde van 0 als er geen nieuwere v
 Deze optie is alleeen beschikbaar indien het gebouwd is met ondersteuning voor libcurl\&.
 .RE
 .PP
-\fB@\fRoptie\*(Aqs\-bestand
+\fB@\fR\fIoptions\-file\fR
 .RS 4
 Leest extra commandoregel argumenten in van een bestand
 \fIoptions\-file\fR\&. Regels met een spatie (lege ruimte) als eerste karakter, zijn gemarkeerd als een hash (waarde) (\*(Aq#\*(Aq) worden behandeld als commentaar en genegeerd\&. Een spatie aan het begin en einde van een regel worden verwijderd\&. Elke regel mag excact \('e\('en waarde bevatten
@@ -237,7 +237,6 @@ track:a2
 # and set the title to \*(AqComments\*(Aq
 \-\-set
 title=Comments
- 
 .fi
 .if n \{\
 .RE
@@ -331,8 +330,7 @@ optie\&.
 .RS 4
 .\}
 .nf
-$ mkvpropedit film\&.mkv \-\-edit info \-\-set "title=De film" \-\-edit track:a1 \-\-set language=dut \-\-edit track:a2 \-\-set language=eng
- 
+$ mkvpropedit movie\&.mkv \-\-edit info \-\-set "title=The movie" \-\-edit track:a1 \-\-set language=fre \-\-edit track:a2 \-\-set language=ita
 .fi
 .if n \{\
 .RE
@@ -346,8 +344,7 @@ Het tweede voorbeeld, verwijdert de \*(Aqstandaard spoor markering\*(Aq van het 
 .RS 4
 .\}
 .nf
-$ mkvpropedit film\&.mkv \-\-edit track:s1 \-\-set flag\-default=0 \-\-edit track:s2 \-\-set flag\-default=1
- 
+$ mkvpropedit movie\&.mkv \-\-edit track:s1 \-\-set flag\-default=0 \-\-edit track:s2 \-\-set flag\-default=1
 .fi
 .if n \{\
 .RE
@@ -360,7 +357,6 @@ Replacing the tags for the second subtitle track in a file looks like this:
 .\}
 .nf
 $ mkvpropedit movie\&.mkv \-\-tags track:s2:new\-subtitle\-tags\&.xml
-  
 .fi
 .if n \{\
 .RE
@@ -373,7 +369,6 @@ Removing all tags requires leaving out the file name:
 .\}
 .nf
 $ mkvpropedit movie\&.mkv \-\-tags all:
-  
 .fi
 .if n \{\
 .RE
@@ -386,7 +381,6 @@ Replacing the chapters in a file looks like this:
 .\}
 .nf
 $ mkvpropedit movie\&.mkv \-\-chapters new\-chapters\&.xml
-  
 .fi
 .if n \{\
 .RE
@@ -399,7 +393,6 @@ Removing all chapters requires leaving out the file name:
 .\}
 .nf
 $ mkvpropedit movie\&.mkv \-\-chapters \*(Aq\*(Aq
-  
 .fi
 .if n \{\
 .RE
@@ -456,7 +449,7 @@ breekt direct af na het geven van dit waarschuw bericht\&. Fout berichten, berei
 .PP
 Er zijn een paar plaatsen waar speciale karakters zouden of moeten worden overgeslagen\&. De regels voor het overslaan zijn simpel: elk karakter dat overgeslagen dient te worden wordt vervangen door een backslash "\e" gevolgd door een ander karakter\&.
 .PP
-De regels zijn: \*(Aq \*(Aq wordt \*(Aq\es\*(Aq, \*(Aq"\*(Aq wordt \*(Aq\e2\*(Aq, \*(Aq:\*(Aq wordt \*(Aq\ec\*(Aq, \*(Aq#\*(Aq wordt \*(Aq\eh\*(Aq en \*(Aq\e\*(Aq zelf wordt \*(Aq\e\e\*(Aq\&.
+The rules are: \*(Aq \*(Aq (a space) becomes \*(Aq\es\*(Aq, \*(Aq"\*(Aq (double quotes) becomes \*(Aq\e2\*(Aq, \*(Aq:\*(Aq becomes \*(Aq\ec\*(Aq, \*(Aq#\*(Aq becomes \*(Aq\eh\*(Aq and \*(Aq\e\*(Aq (a single backslash) itself becomes \*(Aq\e\e\*(Aq\&.
 .SH "ZIE OOK"
 .PP
 

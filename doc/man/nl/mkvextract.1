@@ -126,7 +126,7 @@ Nadien sluit het programma af met een afsluitwaarde van 0 als er geen nieuwere v
 Deze optie is alleeen beschikbaar indien het gebouwd is met ondersteuning voor libcurl\&.
 .RE
 .PP
-\fB@\fRoptie\*(Aqs\-bestand
+\fB@\fR\fIoptions\-file\fR
 .RS 4
 Leest extra commandoregel argumenten in van een bestand
 \fIoptions\-file\fR\&. Regels met een spatie (lege ruimte) als eerste karakter, zijn gemarkeerd als een hash (waarde) (\*(Aq#\*(Aq) worden behandeld als commentaar en genegeerd\&. Een spatie aan het begin en einde van een regel worden verwijderd\&. Elke regel mag excact \('e\('en waarde bevatten
@@ -146,7 +146,6 @@ source\&.mkv
 # Output the track as raw data\&.
 \-\-raw
 1:destination\&.raw
- 
 .fi
 .if n \{\
 .RE
@@ -223,7 +222,6 @@ Eke uitvoernaam zou slechts \('e\('enmaal mogen worden gebruikt\&. De uitzonderi
 .\}
 .nf
 $ mkvextract tracks input\&.mkv 1:output\-two\-tracks\&.rm 2:output\-two\-tracks\&.rm
- 
 .fi
 .if n \{\
 .RE
@@ -250,7 +248,7 @@ Ingave:
 \fIAID1:outname1\fR
 [\fIAID2:outname2\fR \&.\&.\&.]
 .PP
-AID:outname
+\fIAID\fR:\fIoutname\fR
 .RS 4
 Zorgt voor het uitpakken van bijlage met het ID
 \fIAID\fR
@@ -328,7 +326,6 @@ Voorbeeld:
 .\}
 .nf
 $ mkvextract timecodes_v2 input\&.mkv 1:tc\-track1\&.txt 2:tc\-track2\&.txt
- 
 .fi
 .if n \{\
 .RE
@@ -349,7 +346,6 @@ De in het schil ingebouwde omleidingsmechanisme wordt gebruikt door het toevoege
 .\}
 .nf
 $ mkvextract tags source\&.mkv > tags\&.xml
- 
 .fi
 .if n \{\
 .RE
@@ -365,7 +361,6 @@ option\&. Voorbeeld:
 .\}
 .nf
 $ mkvextract tags source\&.mkv \-\-redirect\-output tags\&.xml
- 
 .fi
 .if n \{\
 .RE
@@ -598,7 +593,7 @@ breekt direct af na het uitgeven van de waarschuwing\&. Fout berichten, bereik v
 .PP
 Er zijn een paar plaatsen waar speciale karakters zouden of moeten worden overgeslagen\&. De regels voor het overslaan zijn simpel: elk karakter dat overgeslagen dient te worden wordt vervangen door een backslash "\e" gevolgd door een ander karakter\&.
 .PP
-De regels zijn: \*(Aq \*(Aq wordt \*(Aq\es\*(Aq, \*(Aq"\*(Aq wordt \*(Aq\e2\*(Aq, \*(Aq:\*(Aq wordt \*(Aq\ec\*(Aq, \*(Aq#\*(Aq wordt \*(Aq\eh\*(Aq en \*(Aq\e\*(Aq zelf wordt \*(Aq\e\e\*(Aq\&.
+The rules are: \*(Aq \*(Aq (a space) becomes \*(Aq\es\*(Aq, \*(Aq"\*(Aq (double quotes) becomes \*(Aq\e2\*(Aq, \*(Aq:\*(Aq becomes \*(Aq\ec\*(Aq, \*(Aq#\*(Aq becomes \*(Aq\eh\*(Aq and \*(Aq\e\*(Aq (a single backslash) itself becomes \*(Aq\e\e\*(Aq\&.
 .SH "ZIE OOK"
 .PP
 

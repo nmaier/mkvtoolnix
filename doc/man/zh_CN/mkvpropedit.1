@@ -211,7 +211,7 @@ download_url）。
 此选项仅当程序附带 libcurl 支持编译时可用。
 .RE
 .PP
-\fB@\fR选项文件
+\fB@\fR\fIoptions\-file\fR
 .RS 4
 从文件
 \fI选项文件\fR
@@ -225,15 +225,14 @@ download_url）。
 .RS 4
 .\}
 .nf
-# 修改 源\&.mkv
-源\&.mkv
-#编辑第二条音频轨
+# Modify source\&.mkv
+source\&.mkv
+# Edit the second audio track
 \-\-edit
 track:a2
-# 并设置标题为 \*(Aq注释\*(Aq
+# and set the title to \*(AqComments\*(Aq
 \-\-set
-title=注释
-     
+title=Comments
 .fi
 .if n \{\
 .RE
@@ -335,8 +334,7 @@ UID
 .RS 4
 .\}
 .nf
-$ mkvpropedit 电影\&.mkv \-\-edit info \-\-set "title=影片" \-\-edit track:a1 \-\-set language=fre \-\-edit track:a2 \-\-set language=ita
-  
+$ mkvpropedit movie\&.mkv \-\-edit info \-\-set "title=The movie" \-\-edit track:a1 \-\-set language=fre \-\-edit track:a2 \-\-set language=ita
 .fi
 .if n \{\
 .RE
@@ -352,8 +350,7 @@ $ mkvpropedit 电影\&.mkv \-\-edit info \-\-set "title=影片" \-\-edit track:a
 .RS 4
 .\}
 .nf
-$ mkvpropedit 影片\&.mkv \-\-edit track:s1 \-\-set flag\-default=0 \-\-edit track:s2 \-\-set flag\-default=1
-  
+$ mkvpropedit movie\&.mkv \-\-edit track:s1 \-\-set flag\-default=0 \-\-edit track:s2 \-\-set flag\-default=1
 .fi
 .if n \{\
 .RE
@@ -365,8 +362,7 @@ $ mkvpropedit 影片\&.mkv \-\-edit track:s1 \-\-set flag\-default=0 \-\-edit tr
 .RS 4
 .\}
 .nf
-$ mkvpropedit 影片\&.mkv \-\-tags track:s2:新字幕标签\&.xml
-  
+$ mkvpropedit movie\&.mkv \-\-tags track:s2:new\-subtitle\-tags\&.xml
 .fi
 .if n \{\
 .RE
@@ -378,8 +374,7 @@ $ mkvpropedit 影片\&.mkv \-\-tags track:s2:新字幕标签\&.xml
 .RS 4
 .\}
 .nf
-$ mkvpropedit 影片\&.mkv \-\-tags all:
-  
+$ mkvpropedit movie\&.mkv \-\-tags all:
 .fi
 .if n \{\
 .RE
@@ -391,8 +386,7 @@ $ mkvpropedit 影片\&.mkv \-\-tags all:
 .RS 4
 .\}
 .nf
-$ mkvpropedit 影片\&.mkv \-\-chapters 新章节\&.xml
-  
+$ mkvpropedit movie\&.mkv \-\-chapters new\-chapters\&.xml
 .fi
 .if n \{\
 .RE
@@ -404,8 +398,7 @@ $ mkvpropedit 影片\&.mkv \-\-chapters 新章节\&.xml
 .RS 4
 .\}
 .nf
-$ mkvpropedit 影片\&.mkv \-\-chapters \*(Aq\*(Aq
-  
+$ mkvpropedit movie\&.mkv \-\-chapters \*(Aq\*(Aq
 .fi
 .if n \{\
 .RE
@@ -462,7 +455,7 @@ $ mkvpropedit 影片\&.mkv \-\-chapters \*(Aq\*(Aq
 .PP
 有时文本中的特殊字符必须或应该转义。转义规则很简单: 用反斜杠后接一字符替换需要转义的各字符。
 .PP
-规则为: \*(Aq \*(Aq 变为 \*(Aq\es\*(Aq，\*(Aq"\*(Aq 变为 \*(Aq\e2\*(Aq，\*(Aq:\*(Aq 变为 \*(Aq\ec\*(Aq，\*(Aq#\*(Aq 变为 \*(Aq\eh\*(Aq，而 \*(Aq\e\*(Aq 自己则变为 \*(Aq\e\e\*(Aq。
+The rules are: \*(Aq \*(Aq (a space) becomes \*(Aq\es\*(Aq, \*(Aq"\*(Aq (double quotes) becomes \*(Aq\e2\*(Aq, \*(Aq:\*(Aq becomes \*(Aq\ec\*(Aq, \*(Aq#\*(Aq becomes \*(Aq\eh\*(Aq and \*(Aq\e\*(Aq (a single backslash) itself becomes \*(Aq\e\e\*(Aq\&.
 .SH "参阅"
 .PP
 
