@@ -41,12 +41,12 @@ enum job_status_e {
   JOBS_FAILED
 };
 
-typedef struct {
-  int32_t id;
+struct job_t {
+  int id;
   job_status_e status;
-  int32_t added_on, started_on, finished_on;
+  int added_on, started_on, finished_on;
   wxString *description, *log;
-} job_t;
+};
 
 extern std::vector<job_t> jobs;
 

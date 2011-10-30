@@ -125,7 +125,7 @@ public:
 
   wxButton *b_start_muxing, *b_copy_to_clipboard, *b_add_to_jobqueue;
 
-  int32_t last_job_id;
+  int last_job_id;
 
   bool muxing_in_progress;
 
