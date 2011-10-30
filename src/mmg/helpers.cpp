@@ -46,7 +46,7 @@ break_line(wxString &line,
         broken += line[i];
         chars++;
       }
-    } else if ((chars != 0) || (broken[i] != wxT(' '))) {
+    } else if ((chars != 0) || !broken.EndsWith(wxT(" "))) {
       broken += line[i];
       chars++;
     }

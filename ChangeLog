@@ -1,3 +1,10 @@
+2011-10-30  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: bug fix: A utility function for breaking a line into
+	multiple ones was accessing invalid memory in rare situations
+	causing mmg to crash. Could happen e.g. when adding a job to the
+	job queue.
+
 2011-10-23  Moritz Bunkus  <moritz@bunkus.org>
 
 	* build system: Boost's "Range" library is now required.
