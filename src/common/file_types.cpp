@@ -41,7 +41,7 @@ file_type_t::get_supported() {
   s_supported_file_types.push_back(file_type_t(Y("Matroska audio/video files"),          "mka mks mkv mk3d webm webmv webma"));
   s_supported_file_types.push_back(file_type_t(Y("PGS/SUP subtitles"),                   "sup"));
   s_supported_file_types.push_back(file_type_t(Y("QuickTime audio/video files"),         "mov"));
-  s_supported_file_types.push_back(file_type_t(Y("Ogg/OGM audio/video files"),           "ogg ogm"));
+  s_supported_file_types.push_back(file_type_t(Y("Ogg/OGM audio/video files"),           "ogg ogm ogv"));
   s_supported_file_types.push_back(file_type_t(Y("RealMedia audio/video files"),         "ra ram rm rmvb rv"));
   s_supported_file_types.push_back(file_type_t(Y("SRT text subtitles"),                  "srt"));
   s_supported_file_types.push_back(file_type_t(Y("SSA/ASS text subtitles"),              "ass ssa"));

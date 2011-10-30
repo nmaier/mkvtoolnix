@@ -1,5 +1,8 @@
 2011-10-30  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: enhancement: Added "ogv" to the list of known file
+	extensions for "Ogg/OGM audio/video files". Implements bug 667.
+
 	* mmg: bug fix: A utility function for breaking a line into
 	multiple ones was accessing invalid memory in rare situations
 	causing mmg to crash. Could happen e.g. when adding a job to the
