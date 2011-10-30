@@ -1395,13 +1395,13 @@ mmg_dialog::on_add_to_jobqueue(wxCommandEvent &evt) {
 
     if (!options.ask_before_overwriting)
       break;
-    break_line(line, 60);
+
     ok = true;
     for (i = 0; i < jobs.size(); i++)
       if (description == *jobs[i].description) {
         ok = false;
         line.Printf(Z("A job with the description '%s' already exists. Do you really want to add another one with the same description?"), description.c_str());
-        result = wxMessageBox(line, Z("Description already exists"), wxYES_NO | wxCANCEL);
+        result = wxMessageBox(break_line(line, 60), Z("Description already exists"), wxYES_NO | wxCANCEL);
         if (result == wxYES)
           ok = true;
         else if (result == wxCANCEL)
