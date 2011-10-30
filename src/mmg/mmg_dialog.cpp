@@ -1410,8 +1410,9 @@ mmg_dialog::on_add_to_jobqueue(wxCommandEvent &evt) {
       }
   } while (!ok);
 
-  if (!wxDirExists(wxT("jobs")))
-    wxMkdir(wxT("jobs"));
+  wxString jobs_folder = app->get_jobs_folder();
+  if (!wxDirExists(jobs_folder))
+    wxMkdir(jobs_folder);
 
   last_job_id++;
   if (last_job_id > 2000000000)
@@ -1425,7 +1426,7 @@ mmg_dialog::on_add_to_jobqueue(wxCommandEvent &evt) {
   job.log = new wxString();
   jobs.push_back(job);
 
-  save(wxString::Format(wxT("%s/%d.mmg"), app->get_jobs_folder().c_str(), job.id));
+  save(wxString::Format(wxT("%s/%d.mmg"), jobs_folder.c_str(), job.id));
 
   save_job_queue();
 
