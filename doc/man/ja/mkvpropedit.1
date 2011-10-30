@@ -145,7 +145,7 @@ download_url)。
 このオプションは、プログラムがlibcurlのサポートつきでビルドされた場合のみ使用できます。
 .RE
 .PP
-\fB@\fRoptions\-file
+\fB@\fR\fIoptions\-file\fR
 .RS 4
 
 \fIoptions\-file\fRで指定されたファイルから追加のコマンドラインオプションを読み込みます。行で最初の空白文字でない文字がハッシュマーク(\*(Aq#\*(Aq)である行はコメントとして扱われ、無視されます。行頭、及び行末の空白文字は取り除かれます。各行には一つずつしかオプションを指定できません。
@@ -158,15 +158,14 @@ download_url)。
 .RS 4
 .\}
 .nf
-# Modify source\&.mkv
+# source\&.mkvを修正する
 source\&.mkv
-# Edit the second audio track
+# 2番目のオーディオトラックを編集する
 \-\-edit
 track:a2
-# and set the title to \*(AqComments\*(Aq
+# そのタイトルを\*(AqComments\*(Aqに設定する
 \-\-set
-title=Comments
-     
+title=Comments     
 .fi
 .if n \{\
 .RE
@@ -216,7 +215,6 @@ title=Comments
 .\}
 .nf
 $ mkvpropedit movie\&.mkv \-\-edit info \-\-set "title=The movie" \-\-edit track:a1 \-\-set language=fre \-\-edit track:a2 \-\-set language=ita
-  
 .fi
 .if n \{\
 .RE
@@ -229,7 +227,6 @@ $ mkvpropedit movie\&.mkv \-\-edit info \-\-set "title=The movie" \-\-edit track
 .\}
 .nf
 $ mkvpropedit movie\&.mkv \-\-edit track:s1 \-\-set flag\-default=0 \-\-edit track:s2 \-\-set flag\-default=1
-  
 .fi
 .if n \{\
 .RE
@@ -242,7 +239,6 @@ $ mkvpropedit movie\&.mkv \-\-edit track:s1 \-\-set flag\-default=0 \-\-edit tra
 .\}
 .nf
 $ mkvpropedit movie\&.mkv \-\-tags track:s2:new\-subtitle\-tags\&.xml
-  
 .fi
 .if n \{\
 .RE
@@ -255,7 +251,6 @@ $ mkvpropedit movie\&.mkv \-\-tags track:s2:new\-subtitle\-tags\&.xml
 .\}
 .nf
 $ mkvpropedit movie\&.mkv \-\-tags all:
-  
 .fi
 .if n \{\
 .RE
@@ -268,7 +263,6 @@ $ mkvpropedit movie\&.mkv \-\-tags all:
 .\}
 .nf
 $ mkvpropedit movie\&.mkv \-\-chapters new\-chapters\&.xml
-  
 .fi
 .if n \{\
 .RE
@@ -281,7 +275,6 @@ $ mkvpropedit movie\&.mkv \-\-chapters new\-chapters\&.xml
 .\}
 .nf
 $ mkvpropedit movie\&.mkv \-\-chapters \*(Aq\*(Aq
-  
 .fi
 .if n \{\
 .RE
@@ -331,7 +324,7 @@ $ mkvpropedit movie\&.mkv \-\-chapters \*(Aq\*(Aq
 .PP
 特殊文字をエスケープしなければならない、あるいはすべき場所が少しだけあります。エスケープのルールは単純です：エスケープする必要のある各文字を、バックスラッシュ（Windows上の日本語フォントでは\e記号）の後ろに違う文字が1つついたものと入れ替えます。
 .PP
-ルール：\*(Aq \*(Aqは\*(Aq\es\*(Aqに、\*(Aq"\*(Aqは\*(Aq\e2\*(Aqに、\*(Aq:\*(Aqは\*(Aq\ec\*(Aqに、\*(Aq#\*(Aqは\*(Aq\eh\*(Aqに、そして\*(Aq\e\*(Aqそれ自体は\*(Aq\e\e\*(Aqになります。
+ルール：\*(Aq \*(Aq（半角スペース）は\*(Aq\es\*(Aqに、\*(Aq"\*(Aq（ダブルクォーテーション）は\*(Aq\e2\*(Aqに、\*(Aq:\*(Aqは\*(Aq\ec\*(Aqに、\*(Aq#\*(Aqは\*(Aq\eh\*(Aqに、そして\*(Aq\e\*(Aqそれ自体は\*(Aq\e\e\*(Aqになります。
 .SH "関連項目"
 .PP
 

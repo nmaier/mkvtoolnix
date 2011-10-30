@@ -278,7 +278,7 @@
    </varlistentry>
 
    <varlistentry>
-    <term><option>@</option>options-file</term>
+    <term><option>@</option><parameter>options-file</parameter></term>
     <listitem>
      <para>
       Reads additional command line arguments from the file <parameter>options-file</parameter>.  Lines whose first non-whitespace
@@ -296,16 +296,14 @@
       following option file:
      </para>
 
-     <programlisting>
-# Modify source.mkv
+     <programlisting># Modify source.mkv
 source.mkv
 # Edit the second audio track
 --edit
 track:a2
 # and set the title to 'Comments'
 --set
-title=Comments
-     </programlisting>
+title=Comments</programlisting>
     </listitem>
    </varlistentry>
   </variablelist>
@@ -404,9 +402,7 @@ title=Comments
    default for all options found before the first <link linkend="mkvpropedit.description.edit"><option>--edit</option></link> option anyway.
   </para>
 
-  <screen>
-$ mkvpropedit movie.mkv --edit info --set "title=The movie" --edit track:a1 --set language=fre --edit track:a2 --set language=ita
-  </screen>
+  <screen>$ mkvpropedit movie.mkv --edit info --set "title=The movie" --edit track:a1 --set language=fre --edit track:a2 --set language=ita</screen>
 
   <para>
    The second example removes the 'default track flag' from the first subtitle track and sets it for the second one. Note that
@@ -414,41 +410,31 @@ $ mkvpropedit movie.mkv --edit info --set "title=The movie" --edit track:a1 --se
    automatically.
   </para>
 
-  <screen>
-$ mkvpropedit movie.mkv --edit track:s1 --set flag-default=0 --edit track:s2 --set flag-default=1
-  </screen>
+  <screen>$ mkvpropedit movie.mkv --edit track:s1 --set flag-default=0 --edit track:s2 --set flag-default=1</screen>
 
   <para>
    Replacing the tags for the second subtitle track in a file looks like this:
   </para>
 
-  <screen>
-$ mkvpropedit movie.mkv --tags track:s2:new-subtitle-tags.xml
-  </screen>
+  <screen>$ mkvpropedit movie.mkv --tags track:s2:new-subtitle-tags.xml</screen>
 
   <para>
    Removing all tags requires leaving out the file name:
   </para>
 
-  <screen>
-$ mkvpropedit movie.mkv --tags all:
-  </screen>
+  <screen>$ mkvpropedit movie.mkv --tags all:</screen>
 
   <para>
    Replacing the chapters in a file looks like this:
   </para>
 
-  <screen>
-$ mkvpropedit movie.mkv --chapters new-chapters.xml
-  </screen>
+  <screen>$ mkvpropedit movie.mkv --chapters new-chapters.xml</screen>
 
   <para>
    Removing all chapters requires leaving out the file name:
   </para>
 
-  <screen>
-$ mkvpropedit movie.mkv --chapters ''
-  </screen>
+  <screen>$ mkvpropedit movie.mkv --chapters ''</screen>
  </refsect1>
 
  <refsect1>
@@ -490,7 +476,7 @@ $ mkvpropedit movie.mkv --chapters ''
   </para>
 
   <para>
-   The rules are: ' ' becomes '\s', '&quot;' becomes '\2', ':' becomes '\c', '#' becomes '\h' and '\' itself becomes '\\'.
+   The rules are: ' ' (a space) becomes '\s', '&quot;' (double quotes) becomes '\2', ':' becomes '\c', '#' becomes '\h' and '\' (a single backslash) itself becomes '\\'.
   </para>
  </refsect1>
 

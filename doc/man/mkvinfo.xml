@@ -219,7 +219,7 @@
    </varlistentry>
 
    <varlistentry>
-    <term><option>@</option>options-file</term>
+    <term><option>@</option><parameter>options-file</parameter></term>
     <listitem>
      <para>
       Reads additional command line arguments from the file <parameter>options-file</parameter>.  Lines whose first non-whitespace
@@ -237,16 +237,14 @@
       option file:
      </para>
 
-     <programlisting>
-# Be more verbose
+     <programlisting># Be more verbose
 -v
 -v
 # Parse input.mkv
 input.mkv
 # and write the output to info.txt
 --redirect-output
-info.txt
-     </programlisting>
+info.txt</programlisting>
     </listitem>
    </varlistentry>
   </variablelist>
@@ -321,7 +319,7 @@ info.txt
   </para>
 
   <para>
-   The rules are: ' ' becomes '\s', '&quot;' becomes '\2', ':' becomes '\c', '#' becomes '\h' and '\' itself becomes '\\'.
+   The rules are: ' ' (a space) becomes '\s', '&quot;' (double quotes) becomes '\2', ':' becomes '\c', '#' becomes '\h' and '\' (a single backslash) itself becomes '\\'.
   </para>
  </refsect1>
 

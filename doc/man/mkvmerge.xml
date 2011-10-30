@@ -75,1256 +75,1250 @@
    </para>
   </important>
 
-  <para>
-   Global options:
-  </para>
+  <refsect2>
+   <title>Global options</title>
 
-  <variablelist>
-   <varlistentry>
-    <term><option>-v</option>, <option>--verbose</option></term>
-    <listitem>
-     <para>Increase verbosity.</para>
-    </listitem>
-   </varlistentry>
+   <variablelist>
+    <varlistentry>
+     <term><option>-v</option>, <option>--verbose</option></term>
+     <listitem>
+      <para>Increase verbosity.</para>
+     </listitem>
+    </varlistentry>
 
-   <varlistentry>
-    <term><option>-q</option>, <option>--quiet</option></term>
-    <listitem>
-     <para>Suppress status output.</para>
-    </listitem>
-   </varlistentry>
+    <varlistentry>
+     <term><option>-q</option>, <option>--quiet</option></term>
+     <listitem>
+      <para>Suppress status output.</para>
+     </listitem>
+    </varlistentry>
 
-   <varlistentry>
-    <term><option>-o</option>, <option>--output</option> <parameter>file-name</parameter></term>
-    <listitem>
-     <para>Write to the file <parameter>file-name</parameter>.  If splitting is used then this parameter is treated a bit differently.  See
-     the explanation for the <link linkend="mkvmerge.description.split"><option>--split</option></link> option for details.</para>
-    </listitem>
-   </varlistentry>
+    <varlistentry>
+     <term><option>-o</option>, <option>--output</option> <parameter>file-name</parameter></term>
+     <listitem>
+      <para>Write to the file <parameter>file-name</parameter>.  If splitting is used then this parameter is treated a bit differently.  See
+      the explanation for the <link linkend="mkvmerge.description.split"><option>--split</option></link> option for details.</para>
+     </listitem>
+    </varlistentry>
 
-   <varlistentry>
-    <term><option>-w</option>, <option>--webm</option></term>
-    <listitem>
-     <para>Create a WebM compliant file. This is also turned on if the output file name's extension is &quot;webm&quot;. This mode
-     enforces several restrictions. The only allowed codecs are VP8 video and Vorbis audio tracks. Neither chapters nor tags are
-     allowed. The DocType header item is changed to &quot;webm&quot;.
-     </para>
-    </listitem>
-   </varlistentry>
+    <varlistentry>
+     <term><option>-w</option>, <option>--webm</option></term>
+     <listitem>
+      <para>Create a WebM compliant file. This is also turned on if the output file name's extension is &quot;webm&quot;. This mode
+      enforces several restrictions. The only allowed codecs are VP8 video and Vorbis audio tracks. Neither chapters nor tags are
+      allowed. The DocType header item is changed to &quot;webm&quot;.
+      </para>
+     </listitem>
+    </varlistentry>
 
-   <varlistentry id="mkvmerge.description.title">
-    <term><option>--title</option> <parameter>title</parameter></term>
-    <listitem>
-     <para>Sets the general title for the output file, e.g. the movie name.</para>
-    </listitem>
-   </varlistentry>
+    <varlistentry id="mkvmerge.description.title">
+     <term><option>--title</option> <parameter>title</parameter></term>
+     <listitem>
+      <para>Sets the general title for the output file, e.g. the movie name.</para>
+     </listitem>
+    </varlistentry>
 
-   <varlistentry>
-    <term><option>--default-language</option> <parameter>language-code</parameter></term>
-    <listitem>
-     <para>Sets the default language code that will be used for all tracks unless overwritten with the <link
-     linkend="mkvmerge.description.language"><option>--language</option></link> option. The default language code is
-     '<literal>und</literal>' for 'undefined'.</para>
-    </listitem>
-   </varlistentry>
-  </variablelist>
+    <varlistentry>
+     <term><option>--default-language</option> <parameter>language-code</parameter></term>
+     <listitem>
+      <para>Sets the default language code that will be used for all tracks unless overwritten with the <link
+      linkend="mkvmerge.description.language"><option>--language</option></link> option. The default language code is
+      '<literal>und</literal>' for 'undefined'.</para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+  </refsect2>
 
-  <para>
-   Segment info handling: (global options)
-  </para>
+  <refsect2>
+   <title>Segment info handling (global options)</title>
 
-  <variablelist>
-   <varlistentry>
-    <term><option>--segmentinfo</option> <parameter>filename.xml</parameter></term>
-    <listitem>
-     <para>
-      Read segment information from a <abbrev>XML</abbrev> file. This file can contain the segment family <abbrev>UID</abbrev>, segment
-      <abbrev>UID</abbrev>, previous and next segment <abbrev>UID</abbrev> elements. An example file and a <abbrev>DTD</abbrev> are included
-      in the MKVToolNix distribution.
-     </para>
-    </listitem>
-   </varlistentry>
+   <variablelist>
+    <varlistentry>
+     <term><option>--segmentinfo</option> <parameter>filename.xml</parameter></term>
+     <listitem>
+      <para>
+       Read segment information from a <abbrev>XML</abbrev> file. This file can contain the segment family <abbrev>UID</abbrev>, segment
+       <abbrev>UID</abbrev>, previous and next segment <abbrev>UID</abbrev> elements. An example file and a <abbrev>DTD</abbrev> are included
+       in the MKVToolNix distribution.
+      </para>
+     </listitem>
+    </varlistentry>
 
-   <varlistentry>
-    <term><option>--segment-uid</option> <parameter>SID1,SID2,...</parameter></term>
-    <listitem>
-     <para>
-      Sets the segment UIDs to use. This is a comma-separated list of 128bit segment UIDs in the usual UID form: hex numbers with or without
-      the &quot;0x&quot; prefix, with or without spaces, exactly 32 digits.
-     </para>
+    <varlistentry>
+     <term><option>--segment-uid</option> <parameter>SID1,SID2,...</parameter></term>
+     <listitem>
+      <para>
+       Sets the segment UIDs to use. This is a comma-separated list of 128bit segment UIDs in the usual UID form: hex numbers with or without
+       the &quot;0x&quot; prefix, with or without spaces, exactly 32 digits.
+      </para>
 
-     <para>
-      Each file created contains one segment, and each segment has one segment UID. If more segment UIDs are specified than segments are
-      created then the surplus UIDs are ignored. If fewer UIDs are specified than segments are created then random UIDs will be created for
-      them.
-     </para>
-    </listitem>
-   </varlistentry>
-  </variablelist>
+      <para>
+       Each file created contains one segment, and each segment has one segment UID. If more segment UIDs are specified than segments are
+       created then the surplus UIDs are ignored. If fewer UIDs are specified than segments are created then random UIDs will be created for
+       them.
+      </para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+  </refsect2>
 
-  <para>
-   Chapter and tag handling: (global options)
-  </para>
+  <refsect2>
+   <title>Chapter and tag handling (global options)</title>
 
-  <variablelist>
-   <varlistentry>
-    <term><option>--chapter-language</option> <parameter>language-code</parameter></term>
-    <listitem>
-     <para>
-      Sets the ISO639-2 language code that is written for each chapter entry.  Defaults to '<literal>eng</literal>'.  See the section about
-      <link linkend="mkvmerge.chapters">chapters</link> below for details.
-     </para>
+   <variablelist>
+    <varlistentry>
+     <term><option>--chapter-language</option> <parameter>language-code</parameter></term>
+     <listitem>
+      <para>
+       Sets the ISO639-2 language code that is written for each chapter entry.  Defaults to '<literal>eng</literal>'.  See the section about
+       <link linkend="mkvmerge.chapters">chapters</link> below for details.
+      </para>
 
-     <para>
-      This option can be used both for simple chapter files and for source files that contain chapters but no information about the
-      chapters' language, e.g. MP4 and OGM files.
-     </para>
-    </listitem>
-   </varlistentry>
+      <para>
+       This option can be used both for simple chapter files and for source files that contain chapters but no information about the
+       chapters' language, e.g. MP4 and OGM files.
+      </para>
+     </listitem>
+    </varlistentry>
 
-   <varlistentry id="mkvmerge.description.chapter_charset">
-    <term><option>--chapter-charset</option> <parameter>character-set</parameter></term>
-    <listitem>
-     <para>
-      Sets the character set that is used for the conversion to UTF-8 for simple chapter files. See the section about <link
-      linkend="mkvmerge.text_files_and_charsets"> text files and character sets</link> for an explanation how &mkvmerge; converts between
-      character sets.
-     </para>
+    <varlistentry id="mkvmerge.description.chapter_charset">
+     <term><option>--chapter-charset</option> <parameter>character-set</parameter></term>
+     <listitem>
+      <para>
+       Sets the character set that is used for the conversion to UTF-8 for simple chapter files. See the section about <link
+       linkend="mkvmerge.text_files_and_charsets"> text files and character sets</link> for an explanation how &mkvmerge; converts between
+       character sets.
+      </para>
 
-     <para>
-      This switch does also apply to chapters that are copied from certain container types, e.g. Ogg/OGM and MP4 files.
-      See the section about chapters below for details.
-     </para>
-    </listitem>
-   </varlistentry>
+      <para>
+       This switch does also apply to chapters that are copied from certain container types, e.g. Ogg/OGM and MP4 files.
+       See the section about chapters below for details.
+      </para>
+     </listitem>
+    </varlistentry>
 
-   <varlistentry>
-    <term><option>--cue-chapter-name-format</option> <parameter>format</parameter></term>
-    <listitem>
-     <para>
-      &mkvmerge; supports reading <abbrev>CUE</abbrev> sheets for audio files as the input for chapters. <abbrev>CUE</abbrev> sheets usually
-      contain the entries <varname>PERFORMER</varname> and <varname>TITLE</varname> for each index entry. &mkvmerge; uses these two strings
-      in order to construct the chapter name. With this option the format used for this name can be set.
-     </para>
+    <varlistentry>
+     <term><option>--cue-chapter-name-format</option> <parameter>format</parameter></term>
+     <listitem>
+      <para>
+       &mkvmerge; supports reading <abbrev>CUE</abbrev> sheets for audio files as the input for chapters. <abbrev>CUE</abbrev> sheets usually
+       contain the entries <varname>PERFORMER</varname> and <varname>TITLE</varname> for each index entry. &mkvmerge; uses these two strings
+       in order to construct the chapter name. With this option the format used for this name can be set.
+      </para>
 
-     <para>
-      If this option is not given then &mkvmerge; defaults to the format '<code>%p - %t</code>' (the performer, followed by a space, a dash,
-      another space and the title).
-     </para>
+      <para>
+       If this option is not given then &mkvmerge; defaults to the format '<code>%p - %t</code>' (the performer, followed by a space, a dash,
+       another space and the title).
+      </para>
 
-     <para>
-      If the format is given then everything except the following meta characters is copied as-is, and the meta
-      characters are replaced like this:
-     </para>
+      <para>
+       If the format is given then everything except the following meta characters is copied as-is, and the meta
+       characters are replaced like this:
+      </para>
 
-     <itemizedlist>
-      <listitem>
-       <para><parameter>%p</parameter> is replaced by the current entry's <varname>PERFORMER</varname> string,</para>
-      </listitem>
-      <listitem>
-       <para><parameter>%t</parameter> is replaced by the current entry's <varname>TITLE</varname> string,</para>
-      </listitem>
-      <listitem>
-       <para><parameter>%n</parameter> is replaced by the current track number and</para>
-      </listitem>
-      <listitem>
-       <para><parameter>%N</parameter> is replaced by the current track number padded with a leading zero if
-       it is &lt; 10.</para>
-      </listitem>
-     </itemizedlist>
-    </listitem>
-   </varlistentry>
+      <itemizedlist>
+       <listitem>
+        <para><parameter>%p</parameter> is replaced by the current entry's <varname>PERFORMER</varname> string,</para>
+       </listitem>
+       <listitem>
+        <para><parameter>%t</parameter> is replaced by the current entry's <varname>TITLE</varname> string,</para>
+       </listitem>
+       <listitem>
+        <para><parameter>%n</parameter> is replaced by the current track number and</para>
+       </listitem>
+       <listitem>
+        <para><parameter>%N</parameter> is replaced by the current track number padded with a leading zero if
+        it is &lt; 10.</para>
+       </listitem>
+      </itemizedlist>
+     </listitem>
+    </varlistentry>
 
-   <varlistentry>
-    <term><option>--chapters</option> <parameter>file-name</parameter></term>
-    <listitem>
-     <para>
-      Read chapter information from the file <parameter>file-name</parameter>. See the section about <link
-      linkend="mkvmerge.chapters">chapters</link> below for details.
-     </para>
-    </listitem>
-   </varlistentry>
+    <varlistentry>
+     <term><option>--chapters</option> <parameter>file-name</parameter></term>
+     <listitem>
+      <para>
+       Read chapter information from the file <parameter>file-name</parameter>. See the section about <link
+       linkend="mkvmerge.chapters">chapters</link> below for details.
+      </para>
+     </listitem>
+    </varlistentry>
 
-   <varlistentry id="mkvmerge.description.global_tags">
-    <term><option>--global-tags</option> <parameter>file-name</parameter></term>
-    <listitem>
-     <para>
-      Read global tags from the file <parameter>file-name</parameter>. See the section about <link linkend="mkvmerge.tags">tags</link> below
-      for details.
-     </para>
-    </listitem>
-   </varlistentry>
-  </variablelist>
+    <varlistentry id="mkvmerge.description.global_tags">
+     <term><option>--global-tags</option> <parameter>file-name</parameter></term>
+     <listitem>
+      <para>
+       Read global tags from the file <parameter>file-name</parameter>. See the section about <link linkend="mkvmerge.tags">tags</link> below
+       for details.
+      </para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+  </refsect2>
 
-  <para>
-   General output control (advanced global options):
-  </para>
+  <refsect2>
+   <title>General output control (advanced global options)</title>
 
-  <variablelist>
-   <varlistentry>
-    <term><option>--track-order</option> <parameter>FID1:TID1,FID2:TID2,...</parameter></term>
-    <listitem>
-     <para>
-      This option changes the order in which the tracks for an input file are created. The argument is a comma separated list of pairs
-      IDs. Each pair contains first the file ID (<parameter>FID1</parameter>) which is simply the number of the file on the command line
-      starting at 0. The second is a track ID (<parameter>TID1</parameter>) from that file.  If some track IDs are omitted then those tracks
-      are created after the ones given with this option have been created.
-     </para>
-    </listitem>
-   </varlistentry>
+   <variablelist>
+    <varlistentry>
+     <term><option>--track-order</option> <parameter>FID1:TID1,FID2:TID2,...</parameter></term>
+     <listitem>
+      <para>
+       This option changes the order in which the tracks for an input file are created. The argument is a comma separated list of pairs
+       IDs. Each pair contains first the file ID (<parameter>FID1</parameter>) which is simply the number of the file on the command line
+       starting at 0. The second is a track ID (<parameter>TID1</parameter>) from that file.  If some track IDs are omitted then those tracks
+       are created after the ones given with this option have been created.
+      </para>
+     </listitem>
+    </varlistentry>
 
-   <varlistentry>
-    <term><option>--cluster-length</option> <parameter>spec</parameter></term>
-    <listitem>
-     <para>
-      Limit the number of data blocks or the duration of data in each cluster. The <parameter>spec</parameter> parameter can either be a
-      number <parameter>n</parameter> without a unit or a number <parameter>d</parameter> postfixed with '<literal>ms</literal>'.
-     </para>
+    <varlistentry>
+     <term><option>--cluster-length</option> <parameter>spec</parameter></term>
+     <listitem>
+      <para>
+       Limit the number of data blocks or the duration of data in each cluster. The <parameter>spec</parameter> parameter can either be a
+       number <parameter>n</parameter> without a unit or a number <parameter>d</parameter> postfixed with '<literal>ms</literal>'.
+      </para>
 
-     <para>
-      If no unit is used then &mkvmerge; will put at most <parameter>n</parameter> data blocks into each cluster. The maximum number of
-      blocks is 65535.
-     </para>
+      <para>
+       If no unit is used then &mkvmerge; will put at most <parameter>n</parameter> data blocks into each cluster. The maximum number of
+       blocks is 65535.
+      </para>
 
-     <para>
-      If the number <parameter>d</parameter> is postfixed with '<literal>ms</literal>' then &mkvmerge; puts at most <parameter>d</parameter>
-      milliseconds of data into each cluster. The minimum for <parameter>d</parameter> is '<literal>100ms</literal>', and the maximum is
-      '<literal>32000ms</literal>'.
-     </para>
+      <para>
+       If the number <parameter>d</parameter> is postfixed with '<literal>ms</literal>' then &mkvmerge; puts at most <parameter>d</parameter>
+       milliseconds of data into each cluster. The minimum for <parameter>d</parameter> is '<literal>100ms</literal>', and the maximum is
+       '<literal>32000ms</literal>'.
+      </para>
 
-     <para>
-      &mkvmerge; defaults to putting at most 65535 data blocks and 5000ms of data into a cluster.
-     </para>
+      <para>
+       &mkvmerge; defaults to putting at most 65535 data blocks and 5000ms of data into a cluster.
+      </para>
 
-     <para>
-      Programs trying to find a certain frame can only seek directly to a cluster and have to read the whole cluster afterwards. Therefore
-      creating larger clusters may lead to imprecise or slow seeking.
-     </para>
-    </listitem>
-   </varlistentry>
+      <para>
+       Programs trying to find a certain frame can only seek directly to a cluster and have to read the whole cluster afterwards. Therefore
+       creating larger clusters may lead to imprecise or slow seeking.
+      </para>
+     </listitem>
+    </varlistentry>
 
-   <varlistentry id="mkvmerge.description.no_cues">
-    <term><option>--no-cues</option></term>
-    <listitem>
-     <para>
-      Tells &mkvmerge; not to create and write the cue data which can be compared to an index in an AVI. &matroska; files can be played back
-      without the cue data, but seeking will probably be imprecise and slower. Use this only if you're really desperate for space or for
-      testing purposes. See also option <link linkend="mkvmerge.description.cues"><option>--cues</option></link> which can be specified for
-      each input file.
-     </para>
-    </listitem>
-   </varlistentry>
+    <varlistentry id="mkvmerge.description.no_cues">
+     <term><option>--no-cues</option></term>
+     <listitem>
+      <para>
+       Tells &mkvmerge; not to create and write the cue data which can be compared to an index in an AVI. &matroska; files can be played back
+       without the cue data, but seeking will probably be imprecise and slower. Use this only if you're really desperate for space or for
+       testing purposes. See also option <link linkend="mkvmerge.description.cues"><option>--cues</option></link> which can be specified for
+       each input file.
+      </para>
+     </listitem>
+    </varlistentry>
 
-   <varlistentry>
-    <term><option>--clusters-in-meta-seek</option></term>
-    <listitem>
-     <para>
-      Tells &mkvmerge; to create a meta seek element at the end of the file containing all clusters. See also the section about the
-      <link linkend="mkvmerge.file_layout">&matroska; file layout</link>.
-     </para>
-    </listitem>
-   </varlistentry>
+    <varlistentry>
+     <term><option>--clusters-in-meta-seek</option></term>
+     <listitem>
+      <para>
+       Tells &mkvmerge; to create a meta seek element at the end of the file containing all clusters. See also the section about the
+       <link linkend="mkvmerge.file_layout">&matroska; file layout</link>.
+      </para>
+     </listitem>
+    </varlistentry>
 
-   <varlistentry>
-    <term><option>--disable-lacing</option></term>
-    <listitem>
-     <para>
-      Disables lacing for all tracks. This will increase the file's size, especially if there are many audio tracks. This option is not
-      intended for everyday use.
-     </para>
-    </listitem>
-   </varlistentry>
+    <varlistentry>
+     <term><option>--disable-lacing</option></term>
+     <listitem>
+      <para>
+       Disables lacing for all tracks. This will increase the file's size, especially if there are many audio tracks. This option is not
+       intended for everyday use.
+      </para>
+     </listitem>
+    </varlistentry>
 
-   <varlistentry>
-    <term><option>--enable-durations</option></term>
-    <listitem>
-     <para>
-      Write durations for all blocks. This will increase file size and does not offer any additional value for players at the moment.
-     </para>
-    </listitem>
-   </varlistentry>
+    <varlistentry>
+     <term><option>--enable-durations</option></term>
+     <listitem>
+      <para>
+       Write durations for all blocks. This will increase file size and does not offer any additional value for players at the moment.
+      </para>
+     </listitem>
+    </varlistentry>
 
-   <varlistentry>
-    <term><option>--timecode-scale</option> <parameter>factor</parameter></term>
-    <listitem>
-     <para>
-      Forces the timecode scale factor to <parameter>factor</parameter>. Valid values are in the range
-      <constant>1000</constant>..<constant>10000000</constant> or the special value <constant>-1</constant>.
-     </para>
+    <varlistentry>
+     <term><option>--timecode-scale</option> <parameter>factor</parameter></term>
+     <listitem>
+      <para>
+       Forces the timecode scale factor to <parameter>factor</parameter>. Valid values are in the range
+       <constant>1000</constant>..<constant>10000000</constant> or the special value <constant>-1</constant>.
+      </para>
 
-     <para>
-      Normally &mkvmerge; will use a value of <constant>1000000</constant> which means that timecodes and durations will have a precision of
-      1ms. For files that will not contain a video track but at least one audio track &mkvmerge; will automatically chose a timecode scale
-      factor so that all timecodes and durations have a precision of one audio sample. This causes bigger overhead but allows precise
-      seeking and extraction.
-     </para>
+      <para>
+       Normally &mkvmerge; will use a value of <constant>1000000</constant> which means that timecodes and durations will have a precision of
+       1ms. For files that will not contain a video track but at least one audio track &mkvmerge; will automatically chose a timecode scale
+       factor so that all timecodes and durations have a precision of one audio sample. This causes bigger overhead but allows precise
+       seeking and extraction.
+      </para>
 
-     <para>
-      If the special value <constant>-1</constant> is used then &mkvmerge; will use sample precision even if a video track is present.
-     </para>
-    </listitem>
-   </varlistentry>
-  </variablelist>
+      <para>
+       If the special value <constant>-1</constant> is used then &mkvmerge; will use sample precision even if a video track is present.
+      </para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+  </refsect2>
 
-  <para>
-   File splitting, linking and appending (more global options):
-  </para>
+  <refsect2>
+   <title>File splitting, linking and appending (more global options)</title>
 
-  <variablelist>
-   <varlistentry id="mkvmerge.description.split">
-    <term><option>--split</option> <parameter>specification</parameter></term>
+   <variablelist>
+    <varlistentry id="mkvmerge.description.split">
+     <term><option>--split</option> <parameter>specification</parameter></term>
 
-    <listitem>
-     <para>
-      Splits the output file after a given size or a given time.  Please note that tracks can only be split right before a key frame.  Due
-      to buffering &mkvmerge; will split right before the next key frame after the split point has been reached.  Therefore the split point
-      may be a bit off from what the user has specified.
-     </para>
+     <listitem>
+      <para>
+       Splits the output file after a given size or a given time.  Please note that tracks can only be split right before a key frame.  Due
+       to buffering &mkvmerge; will split right before the next key frame after the split point has been reached.  Therefore the split point
+       may be a bit off from what the user has specified.
+      </para>
 
-     <para>
-      At the moment &mkvmerge; supports three different modes.
-     </para>
+      <para>
+       At the moment &mkvmerge; supports three different modes.
+      </para>
 
-     <orderedlist>
-      <listitem>
-       <para>
-        Splitting by size.
-       </para>
+      <orderedlist>
+       <listitem>
+        <para>
+         Splitting by size.
+        </para>
 
-       <para>
-        Syntax: <option>--split</option> <optional>size:</optional><parameter>d</parameter><optional>k|m|g</optional>
-       </para>
+        <para>
+         Syntax: <option>--split</option> <optional><literal>size:</literal></optional><parameter>d</parameter><optional>k|m|g</optional>
+        </para>
 
-       <para>
-        Examples: <code>--split size:700m</code> or <code>--split 150000000</code>
-       </para>
+        <para>
+         Examples: <code>--split size:700m</code> or <code>--split 150000000</code>
+        </para>
 
-       <para>
-        The parameter <parameter>d</parameter> may end with '<literal>k</literal>', '<literal>m</literal>' or '<literal>g</literal>' to
-        indicate that the size is in KB, MB or GB respectively.  Otherwise a size in Bytes is assumed.  After the current output file has
-        reached this size limit a new one will be started.
-       </para>
+        <para>
+         The parameter <parameter>d</parameter> may end with '<literal>k</literal>', '<literal>m</literal>' or '<literal>g</literal>' to
+         indicate that the size is in KB, MB or GB respectively.  Otherwise a size in bytes is assumed.  After the current output file has
+         reached this size limit a new one will be started.
+        </para>
 
-       <para>
-        The '<literal>size:</literal>' prefix may be omitted for compatibility reasons.
-       </para>
-      </listitem>
+        <para>
+         The '<literal>size:</literal>' prefix may be omitted for compatibility reasons.
+        </para>
+       </listitem>
 
-      <listitem>
-       <para>
-        Splitting after a duration.
-       </para>
+       <listitem>
+        <para>
+         Splitting after a duration.
+        </para>
 
-       <para>
-        Syntax: <option>--split</option> <optional>duration:</optional><parameter>HH:MM:SS.nnnnnnnnn</parameter>|<parameter>d</parameter>s
-       </para>
+        <para>
+         Syntax: <option>--split</option> <optional><literal>duration:</literal></optional><parameter>HH:MM:SS.nnnnnnnnn</parameter>|<parameter>d</parameter>s
+        </para>
 
-       <para>
-        Examples: <code>--split duration:00:60:00.000</code> or <code>--split 3600s</code>
-       </para>
+        <para>
+         Examples: <code>--split duration:00:60:00.000</code> or <code>--split 3600s</code>
+        </para>
 
-       <para>
-        The parameter must either have the form <parameter>HH:MM:SS.nnnnnnnnn</parameter> for specifying the duration in up to nano-second
-        precision or be a number <parameter>d</parameter> followed by the letter '<literal>s</literal>' for the duration in
-        seconds. <parameter>HH</parameter> is the number of hours, <parameter>MM</parameter> the number of minutes,
-        <parameter>SS</parameter> the number of seconds and <parameter>nnnnnnnnn</parameter> the number of nanoseconds.  Both the number of
-        hours and the number of nanoseconds can be omitted.  There can be up to nine digits after the decimal point.  After the duration of
-        the contents in the current output has reached this limit a new output file will be started.
-       </para>
+        <para>
+         The parameter must either have the form <parameter>HH:MM:SS.nnnnnnnnn</parameter> for specifying the duration in up to nano-second
+         precision or be a number <parameter>d</parameter> followed by the letter '<literal>s</literal>' for the duration in
+         seconds. <parameter>HH</parameter> is the number of hours, <parameter>MM</parameter> the number of minutes,
+         <parameter>SS</parameter> the number of seconds and <parameter>nnnnnnnnn</parameter> the number of nanoseconds.  Both the number of
+         hours and the number of nanoseconds can be omitted.  There can be up to nine digits after the decimal point.  After the duration of
+         the contents in the current output has reached this limit a new output file will be started.
+        </para>
 
-       <para>
-        The '<literal>duration:</literal>' prefix may be omitted for compatibility reasons.
-       </para>
-      </listitem>
+        <para>
+         The '<literal>duration:</literal>' prefix may be omitted for compatibility reasons.
+        </para>
+       </listitem>
 
-      <listitem>
-       <para>
-        Splitting after specific timecodes.
-       </para>
+       <listitem>
+        <para>
+         Splitting after specific timecodes.
+        </para>
 
-       <para>
-        Syntax: <option>--split</option> timecodes:<parameter>A</parameter><optional>,<parameter>B</parameter><optional>,<parameter>C</parameter>...</optional></optional>
-       </para>
+        <para>
+         Syntax: <option>--split</option> <literal>timecodes:</literal><parameter>A</parameter><optional>,<parameter>B</parameter><optional>,<parameter>C</parameter>...</optional></optional>
+        </para>
 
-       <para>
-        Example: <code>--split timecodes:00:45:00.000,01:20:00.250,6300s</code>
-       </para>
+        <para>
+         Example: <code>--split timecodes:00:45:00.000,01:20:00.250,6300s</code>
+        </para>
 
-       <para>
-        The parameters <parameter>A</parameter>, <parameter>B</parameter>, <parameter>C</parameter> etc must all have the same format as the
-        ones used for the duration (see above). The list of timecodes is separated by commas.  After the input stream has reached the
-        current split point's timecode a new file is created. Then the next split point given in this list is used.
-       </para>
+        <para>
+         The parameters <parameter>A</parameter>, <parameter>B</parameter>, <parameter>C</parameter> etc must all have the same format as the
+         ones used for the duration (see above). The list of timecodes is separated by commas.  After the input stream has reached the
+         current split point's timecode a new file is created. Then the next split point given in this list is used.
+        </para>
 
-       <para>
-        The '<literal>timecodes:</literal>' prefix must not be omitted.
-       </para>
-      </listitem>
-     </orderedlist>
-     <para>
+        <para>
+         The '<literal>timecodes:</literal>' prefix must not be omitted.
+        </para>
+       </listitem>
+      </orderedlist>
+      <para>
        For this splitting mode the output filename is treated differently than for the normal operation. It may contain a
-       <function>printf</function> like expression '<literal>%d</literal>' including an optional field width,
-       e.g. '<literal>%02d</literal>'. If it does then the current file number will be formatted appropriately and inserted at that point
-       in the filename.  If there is no such pattern then a pattern of '<literal>-%03d</literal>' is assumed right before the file's
-       extension: '<literal>-o output.mkv</literal>' would result in '<literal>output-001.mkv</literal>' and so on. If there's no extension
-       then '<literal>-%03d</literal>' will be appended to the name.
-     </para>
-    </listitem>
-   </varlistentry>
-
-   <varlistentry id="mkvmerge.description.link">
-    <term><option>--link</option></term>
-    <listitem>
-     <para>
-      Link files to one another when splitting the output file. See the section on <link linkend="mkvmerge.file_linking">file linking</link>
-      below for details.
-     </para>
-    </listitem>
-   </varlistentry>
-
-   <varlistentry>
-    <term><option>--link-to-previous</option> <parameter>segment-UID</parameter></term>
-    <listitem>
-     <para>
-      Links the first output file to the segment with the segment UID given by the <parameter>segment-UID</parameter> parameter. See the
-      section on <link linkend="mkvmerge.file_linking">file linking</link> below for details.
-     </para>
-    </listitem>
-   </varlistentry>
-
-   <varlistentry>
-    <term><option>--link-to-next</option> <parameter>segment-UID</parameter></term>
-    <listitem>
-     <para>
-      Links the last output file to the segment with the segment UID given by the <parameter>segment-UID</parameter> parameter. See the
-      section on <link linkend="mkvmerge.file_linking">file linking</link> below for details.
-     </para>
-    </listitem>
-   </varlistentry>
-
-   <varlistentry>
-    <term><option>--append-mode</option> <parameter>mode</parameter></term>
-    <listitem>
-     <para>
-      Determines how timecodes are calculated when appending files.  The parameter <parameter>mode</parameter> can have two values:
-      '<literal>file</literal>' which is also the default and '<literal>track</literal>'.
-     </para>
-
-     <para>
-      When mkvmerge appends a track (called '<literal>track2_1</literal>' from now on) from a second file (called
-      '<literal>file2</literal>') to a track (called '<literal>track1_1</literal>') from the first file (called '<literal>file1</literal>')
-      then it has to offset all timecodes for '<literal>track2_1</literal>' by an amount.  For '<literal>file</literal>' mode this amount is
-      the highest timecode encountered in '<literal>file1</literal>' even if that timecode was from a different track than
-      '<literal>track1_1</literal>'. In track mode the offset is the highest timecode of '<literal>track1_1</literal>'.
-     </para>
-
-     <para>
-      Unfortunately mkvmerge cannot detect which mode to use reliably. Therefore it defaults to '<literal>file</literal>'
-      mode. '<literal>file</literal>' mode usually works better for files that have been created independently of each other; e.g. when
-      appending <abbrev>AVI</abbrev> or <abbrev>MP4</abbrev> files. '<literal>track</literal>' mode may work better for sources that are
-      essentially just parts of one big file, e.g. for <abbrev>VOB</abbrev> and <abbrev>EVO</abbrev> files.
-     </para>
-
-     <para>
-      Subtitle tracks are always treated as if '<literal>file</literal>' mode were active even if '<literal>track</literal>' mode actually
-      is.
-     </para>
-    </listitem>
-   </varlistentry>
-
-   <varlistentry>
-    <term><option>--append-to</option> <parameter>SFID1:STID1:DFID1:DTID1<optional>,...</optional></parameter></term>
-    <listitem>
-     <para>
-      This option controls to which track another track is appended.  Each spec contains four IDs: a file ID, a track ID, a second file ID
-      and a second track ID.  The first pair, "source file ID" and "source track ID", identifies the track that is to be appended.  The
-      second pair, "destination file ID" and "destination track ID", identifies the track the first one is appended to.
-     </para>
-
-     <para>
-      If this option has been omitted then a standard mapping is used.  This standard mapping appends each track from the current file to a
-      track from the previous file with the same track ID.  This allows for easy appending if a movie has been split into two parts and both
-      file have the same number of tracks and track IDs with the command <command>mkvmerge -o output.mkv part1.mkv +part2.mkv</command>.
-     </para>
-    </listitem>
-   </varlistentry>
-
-   <varlistentry>
-    <term><option>+</option></term>
-    <listitem>
-     <para>
-      A single '+' causes the next file to be appended instead of added. The '+' can also be put in front of the next file name. Therefore
-      the following two commands are equivalent:
-     </para>
-
-     <screen>
-$ mkvmerge -o full.mkv file1.mkv + file2.mkv
-$ mkvmerge -o full.mkv file1.mkv +file2.mkv
-     </screen>
-    </listitem>
-   </varlistentry>
-
-   <varlistentry>
-    <term><option>=</option></term>
-    <listitem>
-     <para>
-      Normally mkvmerge looks for files in the same directory as an input file that have the same base name and only differ in their running
-      number (e.g. 'VTS_01_1.VOB', 'VTS_01_2.VOB', 'VTS_01_3.VOB' etc). This option, a single '=', causes mkvmerge not to look for those
-      additional files.
-     </para>
-
-     <para>
-      The '=' can also be put in front of the next file name. Therefore the following two commands are equivalent:
-     </para>
-
-     <screen>
-$ mkvmerge -o full.mkv = file1.mkv
-$ mkvmerge -o full.mkv =file1.mkv
-     </screen>
-    </listitem>
-   </varlistentry>
-  </variablelist>
-
-  <para>
-   Attachment support (more global options):
-  </para>
-
-  <variablelist>
-   <varlistentry  id="mkvmerge.description.attachment_description">
-    <term><option>--attachment-description</option> <parameter>description</parameter></term>
-    <listitem>
-     <para>
-      Plain text description of the following attachment. Applies to the next <link
-      linkend="mkvmerge.description.attach_file"><option>--attach-file</option></link> or <option>--attach-file-once</option> option.
-
-     </para>
-    </listitem>
-   </varlistentry>
-
-   <varlistentry>
-    <term><option>--attachment-mime-type</option> <parameter>MIME type</parameter></term>
-    <listitem>
-     <para>
-      <abbrev >MIME</abbrev> type of the following attachment. Applies to the next <link
-      linkend="mkvmerge.description.attach_file"><option>--attach-file</option></link> or <link
-      linkend="mkvmerge.description.attach_file"><option>--attach-file-once</option></link> option.  A list of officially recognized
-      <abbrev>MIME</abbrev> types can be found e.g. at <ulink url="http://www.iana.org/assignments/media-types/">the IANA
-      homepage</ulink>. The <abbrev>MIME</abbrev> type is mandatory for an attachment.
-     </para>
-    </listitem>
-   </varlistentry>
-
-   <varlistentry>
-    <term><option>--attachment-name</option> <parameter>name</parameter></term>
-    <listitem>
-     <para>
-      Sets the name that will be stored in the output file for this attachment.  If this option is not given then the name will be derived
-      from the file name of the attachment as given with the <link
-      linkend="mkvmerge.description.attach_file"><option>--attach-file</option></link> or the <link
-      linkend="mkvmerge.description.attach_file"><option>--attach-file-once</option></link> option.
-     </para>
-    </listitem>
-   </varlistentry>
-
-   <varlistentry id="mkvmerge.description.attach_file">
-    <term>
-     <option>--attach-file</option> <parameter>file-name</parameter>,
-     <option>--attach-file-once</option> <parameter>file-name</parameter>
-    </term>
-    <listitem>
-     <para>
-      Creates a file attachment inside the &matroska; file. The <abbrev>MIME</abbrev> type must have been set before this option can used. The
-      difference between the two forms is that during splitting the files attached with <option>--attach-file</option> are attached to all
-      output files while the ones attached with <option>--attach-file-once</option> are only attached to the first file created.  If
-      splitting is not used then both do the same.
-     </para>
-
-     <para>
-      &mkvextract; can be used to extract attached files from a &matroska; file.
-     </para>
-    </listitem>
-   </varlistentry>
-  </variablelist>
-
-  <para>
-   Options that can be used for each input file:
-  </para>
-
-  <variablelist>
-   <varlistentry>
-    <term><option>-a</option>, <option>--audio-tracks</option> <parameter><optional>!</optional>n,m,...</parameter></term>
-    <listitem>
-     <para>
-      Copy the audio tracks <parameter>n</parameter>, <parameter>m</parameter> etc. The numbers are track IDs which can be obtained with the
-      <link linkend="mkvmerge.description.identify"><option>--identify</option></link> switch. They're not simply the track numbers (see
-      section <link linkend="mkvmerge.track_ids">track IDs</link>). Default: copy all audio tracks.
-     </para>
-
-     <para>
-      If the IDs are prefixed with <literal>!</literal> then the meaning is reversed: copy everything but the IDs listed after the
-      <literal>!</literal>.
-     </para>
-    </listitem>
-   </varlistentry>
-
-   <varlistentry>
-    <term><option>-d</option>, <option>--video-tracks</option> <parameter><optional>!</optional>n,m,...</parameter></term>
-    <listitem>
-     <para>
-      Copy the video tracks <parameter>n</parameter>, <parameter>m</parameter> etc. The numbers are track IDs which can be obtained with the
-      <link linkend="mkvmerge.description.identify"><option>--identify</option></link> switch. They're not simply the track numbers (see
-      section <link linkend="mkvmerge.track_ids">track IDs</link>). Default: copy all video tracks.
-     </para>
-
-     <para>
-      If the IDs are prefixed with <literal>!</literal> then the meaning is reversed: copy everything but the IDs listed after the
-      <literal>!</literal>.
-     </para>
-    </listitem>
-   </varlistentry>
-
-   <varlistentry>
-    <term><option>-s</option>, <option>--subtitle-tracks</option> <parameter><optional>!</optional>n,m,...</parameter></term>
-    <listitem>
-     <para>
-      Copy the subtitle tracks <parameter>n</parameter>, <parameter>m</parameter> etc. The numbers are track IDs which can be obtained with
-      the <link linkend="mkvmerge.description.identify"><option>--identify</option></link> switch. They're not simply the track numbers (see
-      section <link linkend="mkvmerge.track_ids">track IDs</link>). Default: copy all subtitle tracks.
-     </para>
-
-     <para>
-      If the IDs are prefixed with <literal>!</literal> then the meaning is reversed: copy everything but the IDs listed after the
-      <literal>!</literal>.
-     </para>
-    </listitem>
-   </varlistentry>
-
-   <varlistentry>
-    <term><option>-b</option>, <option>--button-tracks</option> <parameter><optional>!</optional>n,m,...</parameter></term>
-    <listitem>
-     <para>
-      Copy the button tracks <parameter>n</parameter>, <parameter>m</parameter> etc. The numbers are track IDs which can be obtained with
-      the <link linkend="mkvmerge.description.identify"><option>--identify</option></link> switch. They're not simply the track numbers (see
-      section <link linkend="mkvmerge.track_ids">track IDs</link>). Default: copy all button tracks.
-     </para>
-
-     <para>
-      If the IDs are prefixed with <literal>!</literal> then the meaning is reversed: copy everything but the IDs listed after the
-      <literal>!</literal>.
-     </para>
-    </listitem>
-   </varlistentry>
-
-   <varlistentry>
-    <term><option>--track-tags</option> <parameter><optional>!</optional>n,m,...</parameter></term>
-    <listitem>
-     <para>
-      Copy the tags for tracks <parameter>n</parameter>, <parameter>m</parameter> etc.  The numbers are track IDs which can be obtained with
-      the <link linkend="mkvmerge.description.identify"><option>--identify</option></link> switch (see section <link
-      linkend="mkvmerge.track_ids">track IDs</link>).  They're not simply the track numbers.  Default: copy tags for all tracks.
-     </para>
-
-     <para>
-      If the IDs are prefixed with <literal>!</literal> then the meaning is reversed: copy everything but the IDs listed after the
-      <literal>!</literal>.
-     </para>
-    </listitem>
-   </varlistentry>
-
-   <varlistentry id="mkvmerge.description.attachments">
-    <term><option>-m</option>, <option>--attachments</option> <parameter><optional>!</optional>n<optional>:all|first</optional>,m<optional>:all|first</optional>,...</parameter></term>
-    <listitem>
-     <para>
-      Copy the attachments with the IDs <parameter>n</parameter>, <parameter>m</parameter> etc to all or only the first output file. Each ID
-      can be followed by either '<literal>:all</literal>' (which is the default if neither is entered) or '<literal>:first</literal>'. If
-      splitting is active then those attachments whose IDs are specified with '<literal>:all</literal>' are copied to all of the resulting
-      output files while the others are only copied into the first output file. If splitting is not active then both variants have the same
-      effect.
-     </para>
-
-     <para>
-      The default is to copy all attachments to all output files.
-     </para>
-
-     <para>
-      If the IDs are prefixed with <literal>!</literal> then the meaning is reversed: copy everything but the IDs listed after the
-      <literal>!</literal>.
-     </para>
-    </listitem>
-   </varlistentry>
-
-   <varlistentry>
-    <term><option>-A</option>, <option>--no-audio</option></term>
-    <listitem>
-     <para>
-      Don't copy any audio track from this file.
-     </para>
-    </listitem>
-   </varlistentry>
-
-   <varlistentry>
-    <term><option>-D</option>, <option>--no-video</option></term>
-    <listitem>
-     <para>
-      Don't copy any video track from this file.
-     </para>
-    </listitem>
-   </varlistentry>
-
-   <varlistentry>
-    <term><option>-S</option>, <option>--no-subtitles</option></term>
-    <listitem>
-     <para>
-      Don't copy any subtitle track from this file.
-     </para>
-    </listitem>
-   </varlistentry>
-
-   <varlistentry>
-    <term><option>-B</option>, <option>--no-buttons</option></term>
-    <listitem>
-     <para>
-      Don't copy any button track from this file.
-     </para>
-    </listitem>
-   </varlistentry>
-
-   <varlistentry>
-    <term><option>-T</option>, <option>--no-track-tags</option></term>
-    <listitem>
-     <para>
-      Don't copy any track specific tags from this file.
-     </para>
-    </listitem>
-   </varlistentry>
-
-   <varlistentry id="mkvmerge.description.no_chapters">
-    <term><option>--no-chapters</option></term>
-    <listitem>
-     <para>
-      Don't copy chapters from this file.
-     </para>
-    </listitem>
-   </varlistentry>
-
-   <varlistentry id="mkvmerge.description.no_attachments">
-    <term><option>-M</option>, <option>--no-attachments</option></term>
-    <listitem>
-     <para>
-      Don't copy attachments from this file.
-     </para>
-    </listitem>
-   </varlistentry>
-
-   <varlistentry>
-    <term><option>--no-global-tags</option></term>
-    <listitem>
-     <para>
-      Don't copy global tags from this file.
-     </para>
-    </listitem>
-   </varlistentry>
-
-   <varlistentry>
-    <term><option>--chapter-charset</option> <parameter>character-set</parameter></term>
-    <listitem>
-     <para>
-      Sets the charset that is used for the conversion to UTF-8 for chapter information contained in the source file. See the section about
-      <link linkend="mkvmerge.text_files_and_charsets"> text files and character sets</link> for an explanation how &mkvmerge; converts
-      between character sets.
-     </para>
-    </listitem>
-   </varlistentry>
-
-   <varlistentry>
-    <term><option>--chapter-language</option> <parameter>language-code</parameter></term>
-    <listitem>
-     <para>
-      Sets the ISO639-2 language code that is written for each chapter entry.  This option can be used for source files that contain
-      chapters but no information about the chapters' languages, e.g. for MP4 and OGM files.
-     </para>
-    </listitem>
-  </varlistentry>
-
-   <varlistentry>
-    <term><option>-y</option>, <option>--sync</option> <parameter>TID:d<optional>,o<optional>/p</optional></optional></parameter></term>
-    <listitem>
-     <para>
-      Adjust the timecodes of the track with the id <parameter>TID</parameter> by <parameter>d</parameter> ms. The track IDs are the same as
-      the ones given with <link linkend="mkvmerge.description.identify"><option>--identify</option></link> (see section <link
-      linkend="mkvmerge.track_ids">track IDs</link>).
-     </para>
-
-     <para>
-      <parameter>o</parameter>/<parameter>p</parameter>: adjust the timestamps by <parameter>o</parameter>/<parameter>p</parameter> to fix
-      linear drifts. <parameter>p</parameter> defaults to 1 if omitted. Both <parameter>o</parameter> and <parameter>p</parameter> can be
-      floating point numbers.
-     </para>
-
-     <para>
-      Defaults: no manual sync correction (which is the same as <parameter>d</parameter> = <constant>0</constant> and
-      <parameter>o</parameter>/<parameter>p</parameter> = <constant>1.0</constant>).
-     </para>
-
-     <para>
-      This option can be used multiple times for an input file applying to several tracks by selecting different track IDs each time.
-     </para>
-    </listitem>
-   </varlistentry>
-
-   <varlistentry id="mkvmerge.description.cues">
-    <term><option>--cues</option> <parameter>TID:none|iframes|all</parameter></term>
-    <listitem>
-     <para>
-      Controls for which tracks cue (index) entries are created for the given track (see section <link linkend="mkvmerge.track_ids">track
-      IDs</link>). '<literal>none</literal>' inhibits the creation of cue entries.  For '<literal>iframes</literal>' only blocks with
-      no backward or forward references ( = I frames in video tracks) are put into the cue sheet. '<literal>all</literal>' causes
-      &mkvmerge; to create cue entries for all blocks which will make the file very big.
-     </para>
-
-     <para>
-      The default is '<literal>iframes</literal>' for video tracks and '<literal>none</literal>' for all others.  See also option <link
-      linkend="mkvmerge.description.no_cues"><option>--no-cues</option></link> which inhibits the creation of cue entries regardless of the
-      <option>--cues</option> options used.
-     </para>
-
-     <para>
-      This option can be used multiple times for an input file applying to several tracks by selecting different track IDs each time.
-     </para>
-    </listitem>
-   </varlistentry>
-
-   <varlistentry>
-    <term><option>--default-track</option> <parameter>TID<optional>:bool</optional></parameter></term>
-    <listitem>
-     <para>
-      Sets the 'default' flag for the given track (see section <link linkend="mkvmerge.track_ids">track IDs</link>) if the optional argument
-      <parameter>bool</parameter> is not present.  If the user does not explicitly select a track himself then the player should prefer the
-      track that has his 'default' flag set. Only one track of each kind (audio, video, subtitles, buttons) can have his 'default' flag set.
-      If the user wants no track to have the default track flag set then he has to set <parameter>bool</parameter> to <constant>0</constant>
-      for all tracks.
-     </para>
-
-     <para>
-      This option can be used multiple times for an input file applying to several tracks by selecting different track IDs each time.
-     </para>
-    </listitem>
-   </varlistentry>
-
-   <varlistentry>
-    <term><option>--forced-track</option> <parameter>TID<optional>:bool</optional></parameter></term>
-    <listitem>
-     <para>
-      Sets the 'forced' flag for the given track (see section <link linkend="mkvmerge.track_ids">track IDs</link>) if the optional argument
-      <parameter>bool</parameter> is not present. A player must play all tracks for which this flag is set to <constant>1</constant>.
-     </para>
-
-     <para>
-      This option can be used multiple times for an input file applying to several tracks by selecting different track IDs each time.
-     </para>
-    </listitem>
-   </varlistentry>
-
-   <varlistentry>
-    <term><option>--blockadd</option> <parameter>TID:level</parameter></term>
-    <listitem>
-     <para>
-      Keep only the <classname>BlockAdditions</classname> up to the level <parameter>level</parameter> for the given track.  The default is
-      to keep all levels.  This option only affects certain kinds of codecs like WAVPACK4.
-     </para>
-    </listitem>
-   </varlistentry>
-
-   <varlistentry id="mkvmerge.description.track_name">
-    <term><option>--track-name</option> <parameter>TID:name</parameter></term>
-    <listitem>
-     <para>
-      Sets the track name for the given track (see section <link linkend="mkvmerge.track_ids">track IDs</link>) to
-      <parameter>name</parameter>.
-     </para>
-    </listitem>
-   </varlistentry>
-
-   <varlistentry id="mkvmerge.description.language">
-    <term><option>--language</option> <parameter>TID:language</parameter></term>
-    <listitem>
-     <para>
-      Sets the language for the given track (see section <link linkend="mkvmerge.track_ids">track IDs</link>). Both ISO639-2 language codes
-      and ISO639-1 country codes are allowed. The country codes will be converted to language codes automatically.  All languages including
-      their ISO639-2 codes can be listed with the <link
-      linkend="mkvmerge.description.list_languages"><option>--list-languages</option></link> option.
-     </para>
-
-     <para>
-      This option can be used multiple times for an input file applying to several tracks by selecting different track IDs each time.
-     </para>
-    </listitem>
-   </varlistentry>
-
-   <varlistentry id="mkvmerge.description.tags">
-    <term><option>-t</option>, <option>--tags</option> <parameter>TID:file-name</parameter></term>
-    <listitem>
-     <para>
-      Read tags for the track with the number <parameter>TID</parameter> from the file <parameter>file-name</parameter>. See the section
-      about <link linkend="mkvmerge.tags">tags</link> below for details.
-     </para>
-    </listitem>
-   </varlistentry>
-
-   <varlistentry>
-    <term><option>--aac-is-sbr</option> <parameter>TID<optional>:0|1</optional></parameter></term>
-    <listitem>
-     <para>
-      Tells &mkvmerge; that the track with the ID <parameter>TID</parameter> is <abbrev>SBR AAC</abbrev> (also known as
-      <abbrev>HE-AAC</abbrev> or <abbrev>AAC+</abbrev>). This options is needed if a) the source file is an <abbrev>AAC</abbrev> file
-      (<emphasis>not</emphasis> for a &matroska; file) and b) the <abbrev>AAC</abbrev> file contains <abbrev>SBR AAC</abbrev> data.  The
-      reason for this switch is that it is technically impossible to automatically tell normal <abbrev>AAC</abbrev> data from <abbrev>SBR
-      AAC</abbrev> data without decoding a complete <abbrev>AAC</abbrev> frame. As there are several patent issues with <abbrev>AAC</abbrev>
-      decoders &mkvmerge; will never contain this decoding stage. So for <abbrev>SBR AAC</abbrev> files this switch is mandatory. The
-      resulting file might not play back correctly or even not at all if the switch was omitted.
-     </para>
-
-     <para>
-      If the source file is a &matroska; file then the <classname>CodecID</classname> should be enough to detect <abbrev>SBR
-      AAC</abbrev>. However, if the <classname>CodecID</classname> is wrong then this switch can be used to correct that.
-     </para>
-
-     <para>
-      If mkvmerge wrongfully detects that an <abbrev>AAC</abbrev> file is <abbrev>SBR</abbrev> then you can add
-      '<literal>:0</literal>' to the track ID.
-     </para>
-    </listitem>
-   </varlistentry>
-
-   <varlistentry>
-    <term><option>--timecodes</option> <parameter>TID:file-name</parameter></term>
-    <listitem>
-     <para>
-      Read the timecodes to be used for the specific track ID from <parameter>file-name</parameter>.  These timecodes forcefully override
-      the timecodes that &mkvmerge; normally calculates. Read the section about <link linkend="mkvmerge.external_timecode_files">external
-      timecode files</link>.
-     </para>
-    </listitem>
-   </varlistentry>
-
-   <varlistentry>
-    <term><option>--default-duration</option> <parameter>TID:x</parameter></term>
-    <listitem>
-     <para>
-      Forces the default duration of a given track to the specified value.  Also modifies the track's timecodes to match the default
-      duration.  The argument <parameter>x</parameter> must be postfixed with '<literal>s</literal>', '<literal>ms</literal>',
-      '<literal>us</literal>', '<literal>ns</literal>' or '<literal>fps</literal>' to specify the default duration in seconds, milliseconds,
-      microseconds, nanoseconds or 'frames per second' respectively.  The number <parameter>x</parameter> itself can be a floating point
-      number or a fraction.
-     </para>
-
-     <para>
-      If the default duration is not forced then mkvmerge will try to derive the track's default duration from the container and/or codec
-      used.  One case in which this option is of use is when adding <foreignphrase>AVC/h.264</foreignphrase> elementary streams because
-      these do not contain information about their number of frames or a default duration for each frame.  For such files &mkvmerge; will
-      assume a default duration of '<literal>25fps</literal>' unless overridden.
-     </para>
-
-     <para>
-      This option can also be used to change the <abbrev>FPS</abbrev> of video tracks without having to use an external timecode file.
-     </para>
-    </listitem>
-   </varlistentry>
-
-   <varlistentry>
-    <term><option>--nalu-size-length</option> <parameter>TID:n</parameter></term>
-    <listitem>
-     <para>
-      Forces the <abbrev>NALU</abbrev> size length to <parameter>n</parameter> bytes.  This parameter is only used if the
-      <foreignphrase>AVC/h.264</foreignphrase> elementary stream packetizer is used.  If left out it defaults to 4 bytes, but there are
-      files that contain frames or slices that are all smaller than 65536 bytes.  For such files you can use this parameter and decrease
-      the size to 2.
-     </para>
-    </listitem>
-   </varlistentry>
-
-   <varlistentry id="mkvmerge.description.compression">
-    <term><option>--compression</option> <parameter>TID:n</parameter></term>
-    <listitem>
-     <para>
-      Selects the compression method to be used for the track. Note that the player also has to support this method. Valid values are
-      '<literal>none</literal>', '<literal>zlib</literal>', '<literal>lzo</literal>'/'<literal>lxo1x</literal>',
-      '<literal>bz2</literal>'/'<literal>bzlib</literal>' and '<literal>mpeg4_p2</literal>'/'<literal>mpeg4p2</literal>'.  The values
-      '<literal>lzo</literal>'/'<literal>lxo1x</literal>' and '<literal>bz2</literal>'/'<literal>bzlib</literal>' are only available if
-      &mkvmerge; has been compiled with support for the <productname>liblzo</productname> and <productname>bzlib</productname> compression libraries,
-      respectively.
-     </para>
-     <para>
-      The compression method '<literal>mpeg4_p2</literal>'/'<literal>mpeg4p2</literal>' is a special compression method called
-      '<foreignphrase>header removal</foreignphrase>' that is only available for <abbrev>MPEG4</abbrev> part 2 video tracks.
-     </para>
-     <para>
-      The default for some subtitle tracks is '<literal>zlib</literal>' compression. This compression method is also the one that most if
-      not all playback applications support. Support for other compression methods other than '<literal>none</literal>' is not assured.
-     </para>
-    </listitem>
-   </varlistentry>
-  </variablelist>
-
-  <para>
-   Options that only apply to video tracks:
-  </para>
-
-  <variablelist>
-   <varlistentry>
-    <term><option>-f</option>, <option>--fourcc</option> <parameter>TID:FourCC</parameter></term>
-    <listitem>
-     <para>
-      Forces the <classname>FourCC</classname> to the specified value. Works only for video tracks in the '<foreignphrase>MS compatibility
-      mode</foreignphrase>'.
-     </para>
-    </listitem>
-   </varlistentry>
-
-   <varlistentry id="mkvmerge.description.display_dimensions">
-    <term><option>--display-dimensions</option> <parameter>TID:widthxheight</parameter></term>
-    <listitem>
-     <para>
-      &matroska; files contain two values that set the display properties that a player should scale the image on playback to: display width
-      and display height.  These values can be set with this option, e.g. '<literal>1:640x480</literal>'.
-     </para>
-
-     <para>
-      Another way to specify the values is to use the <link
-      linkend="mkvmerge.description.aspect_ratio"><option>--aspect-ratio</option></link> or the <link
-      linkend="mkvmerge.description.aspect_ratio_factor"><option>--aspect-ratio-factor</option></link> option (see below).  These options
-      are mutually exclusive.
-     </para>
-    </listitem>
-   </varlistentry>
-
-   <varlistentry id="mkvmerge.description.aspect_ratio">
-    <term><option>--aspect-ratio</option> <parameter>TID:ratio|width/height</parameter></term>
-    <listitem>
-     <para>
-      &matroska; files contain two values that set the display properties that a player should scale the image on playback to: display width
-      and display height.  With this option &mkvmerge; will automatically calculate the display width and display height based on the
-      image's original width and height and the aspect ratio given with this option.  The ratio can be given either as a floating point
-      number <parameter>ratio</parameter> or as a fraction '<parameter>width</parameter>/<parameter>height</parameter>',
-      e.g. '<literal>16/9</literal>'.
-     </para>
-
-     <para>
-      Another way to specify the values is to use the <link
-      linkend="mkvmerge.description.aspect_ratio_factor"><option>--aspect-ratio-factor</option></link> or <link
-      linkend="mkvmerge.description.display_dimensions"><option>--display-dimensions</option></link> options (see above and below). These
-      options are mutually exclusive.
-     </para>
-    </listitem>
-   </varlistentry>
-
-   <varlistentry id="mkvmerge.description.aspect_ratio_factor">
-    <term><option>--aspect-ratio-factor</option> <parameter>TID:factor|n/d</parameter></term>
-    <listitem>
-     <para>
-      Another way to set the aspect ratio is to specify a <parameter>factor</parameter>. The original aspect ratio is first multiplied with
-      this <parameter>factor</parameter> and used as the target aspect ratio afterwards.
-     </para>
-
-     <para>
-      Another way to specify the values is to use the <link
-      linkend="mkvmerge.description.aspect_ratio"><option>--aspect-ratio</option></link> or <link
-      linkend="mkvmerge.description.display_dimensions"><option>--display-dimensions</option></link> options (see above). These options are
-      mutually exclusive.
-     </para>
-    </listitem>
-   </varlistentry>
-
-   <varlistentry>
-    <term><option>--cropping</option> <parameter>TID:left,top,right,bottom</parameter></term>
-    <listitem>
-     <para>
-      Sets the pixel cropping parameters of a video track to the given values.
-     </para>
-    </listitem>
-   </varlistentry>
-
-   <varlistentry>
-    <term><option>--stereo-mode</option> <parameter>TID:n|keyword</parameter></term>
-    <listitem>
-     <para>
-      Sets the stereo mode for the video track with the track ID <parameter>TID</parameter>.  The mode can either be a number
-      <parameter>n</parameter> between <constant>0</constant> and <constant>14</constant> or one of these keywords:
-     </para>
-
-     <para>
-      '<literal>mono</literal>', '<literal>side_by_side_left_first</literal>', '<literal>top_bottom_right_first</literal>',
-      '<literal>top_bottom_left_first</literal>', '<literal>checkerboard_right_first</literal>',
-      '<literal>checkerboard_left_first</literal>', '<literal>row_interleaved_right_first</literal>',
-      '<literal>row_interleaved_left_first</literal>', '<literal>column_interleaved_right_first</literal>',
-      '<literal>column_interleaved_left_first</literal>', '<literal>anaglyph_cyan_red</literal>',
-      '<literal>side_by_side_right_first</literal>', '<literal>anaglyph_green_magenta</literal>',
-      '<literal>both_eyes_laced_left_first</literal>', '<literal>both_eyes_laced_right_first</literal>'.
-     </para>
-    </listitem>
-   </varlistentry>
-  </variablelist>
-
-  <para>
-   Options that only apply to text subtitle tracks:
-  </para>
-
-  <variablelist>
-   <varlistentry id="mkvmerge.description.sub_charset">
-    <term><option>--sub-charset</option> <parameter>TID:character-set</parameter></term>
-    <listitem>
-     <para>
-      Sets the character set for the conversion to UTF-8 for UTF-8 subtitles for the given track ID. If not specified the charset will be
-      derived from the current locale settings. Note that a charset is not needed for subtitles read from &matroska; files or from Kate
-      streams, as these are always stored in UTF-8. See the section about <link linkend="mkvmerge.text_files_and_charsets"> text files and
-      character sets</link> for an explanation how &mkvmerge; converts between character sets.
-     </para>
-
-     <para>
-      This option can be used multiple times for an input file applying to several tracks by selecting different track IDs each time.
-     </para>
-    </listitem>
-   </varlistentry>
-  </variablelist>
-
-  <para>
-   Other options:
-  </para>
-
-  <variablelist>
-   <varlistentry id="mkvmerge.description.identify">
-    <term><option>-i</option>, <option>--identify</option> <parameter>file-name</parameter></term>
-    <listitem>
-     <para>
-      Will let &mkvmerge; probe the single file and report its type, the tracks contained in the file and their track IDs. If this option is
-      used then the only other option allowed is the filename.
-     </para>
-    </listitem>
-   </varlistentry>
-
-   <varlistentry id="mkvmerge.description.identify_verbose">
-    <term><option>-I</option>, <option>--identify-verbose</option> <parameter>file-name</parameter></term>
-    <listitem>
-     <para>
-      Will let &mkvmerge; probe the single file and report its type, the tracks contained in the file and their track IDs. If this option is
-      used then the only other option allowed is the filename.
-     </para>
-
-     <para>
-      This option causes &mkvmerge; to output additional information about the container and each track within. The extra information is
-      surronded by square brackets. It consists of space-saparated key/value pairs where keys and values are separated by a colon.
-     </para>
-
-     <para>
-      Each value is escaped according to the rules described in <link linkend="mkvmerge.escaping">the section about escaping special
-      characters in text</link>.
-     </para>
-    </listitem>
-   </varlistentry>
-
-   <varlistentry>
-    <term><option>-l</option>, <option>--list-types</option></term>
-    <listitem>
-     <para>
-      Lists supported input file types.
-     </para>
-    </listitem>
-   </varlistentry>
-
-   <varlistentry id="mkvmerge.description.list_languages">
-    <term><option>--list-languages</option></term>
-    <listitem>
-     <para>
-      Lists all languages and their ISO639-2 code which can be used with the <link
-      linkend="mkvmerge.description.language"><option>--language</option></link> option.
-     </para>
-    </listitem>
-   </varlistentry>
-
-   <varlistentry>
-    <term><option>--priority</option> <parameter>priority</parameter></term>
-    <listitem>
-     <para>
-      Sets the process priority that &mkvmerge; runs with. Valid values are '<literal>lowest</literal>', '<literal>lower</literal>',
-      '<literal>normal</literal>', '<literal>higher</literal>' and '<literal>highest</literal>'. If nothing is given then
-      '<literal>normal</literal>' is used. On Unix like systems &mkvmerge; will use the
-      <citerefentry><refentrytitle>nice</refentrytitle><manvolnum>2</manvolnum></citerefentry> function. Therefore only the super user can
-      use '<literal>higher</literal>' and '<literal>highest</literal>'. On Windows all values are useable for every user.
-     </para>
-    </listitem>
-   </varlistentry>
-
-   <varlistentry id="mkvmerge.description.command_line_charset">
-    <term><option>--command-line-charset</option> <parameter>character-set</parameter></term>
-    <listitem>
-     <para>
-      Sets the character set to convert strings given on the command line from. It defaults to the character set given by system's current
-      locale. This settings applies to arguments of the following options: <link
-      linkend="mkvmerge.description.title"><option>--title</option></link>, <link
-      linkend="mkvmerge.description.track_name"><option>--track-name</option></link> and <link
-      linkend="mkvmerge.description.attachment_description"><option>--attachment-description</option></link>.
-     </para>
-    </listitem>
-   </varlistentry>
-
-   <varlistentry id="mkvmerge.description.output_charset">
-    <term><option>--output-charset</option> <parameter>character-set</parameter></term>
-    <listitem>
-     <para>
-      Sets the character set to which strings are converted that are to be output.  It defaults to the character set given by system's
-      current locale.
-     </para>
-    </listitem>
-   </varlistentry>
-
-   <varlistentry id="mkvmerge.description.redirect_output">
-    <term><option>-r</option>, <option>--redirect-output</option> <parameter>file-name</parameter></term>
-    <listitem>
-     <para>
-      Writes all messages to the file <parameter>file-name</parameter> instead of to the console.  While this can be done easily with output
-      redirection there are cases in which this option is needed: when the terminal reinterprets the output before writing it to a file.
-      The character set set with <link linkend="mkvmerge.description.output_charset"><option>--output-charset</option></link> is honored.
-     </para>
-    </listitem>
-   </varlistentry>
-
-   <varlistentry id="mkvmerge.description.ui_language">
-    <term><option>--ui-language</option> <parameter>code</parameter></term>
-    <listitem>
-     <para>
-      Forces the translations for the language <parameter>code</parameter> to be used (e.g.  '<literal>de_DE</literal>' for the German
-      translations). It is preferable to use the environment variables <varname>LANG</varname>, <varname>LC_MESSAGES</varname> and
-      <varname>LC_ALL</varname> though. Entering '<literal>list</literal>' as the <parameter>code</parameter> will cause &mkvmerge; to
-      output a list of available translations.
-     </para>
-    </listitem>
-   </varlistentry>
-
-   <varlistentry>
-    <term><option>@</option>options-file</term>
-    <listitem>
-     <para>
-      Reads additional command line arguments from the file <parameter>options-file</parameter>.  Lines whose first non-whitespace character
-      is a hash mark ('<literal>#</literal>') are treated as comments and ignored. White spaces at the start and end of a line will be
-      stripped. Each line must contain exactly one option.
-     </para>
-
-     <para>
-      Several chars can be escaped, e.g. if you need to start a non-comment line with '#'. The rules are described in <link
-      linkend="mkvmerge.escaping">the section about escaping text</link>.
-     </para>
-
-     <para>
-      Note that backslashes must always be escaped. Hash marks ('#') must be escaped if they should not start a comment.
-     </para>
-
-     <para>
-      The command line '<command>mkvmerge -o "my file.mkv" -A "a movie.avi" sound.ogg</command>' could be converted into the following
-      option file:
-     </para>
-
-     <programlisting>
-# Write to the file "c:\Matroska\my file.mkv" on Windows.
+       <function>printf</function> like expression '<code>%d</code>' including an optional field width,
+       e.g. '<code>%02d</code>'. If it does then the current file number will be formatted appropriately and inserted at that point
+       in the filename.  If there is no such pattern then a pattern of '<code>-%03d</code>' is assumed right before the file's
+       extension: '<code>-o output.mkv</code>' would result in '<code>output-001.mkv</code>' and so on. If there's no extension
+       then '<code>-%03d</code>' will be appended to the name.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry id="mkvmerge.description.link">
+     <term><option>--link</option></term>
+     <listitem>
+      <para>
+       Link files to one another when splitting the output file. See the section on <link linkend="mkvmerge.file_linking">file linking</link>
+       below for details.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry>
+     <term><option>--link-to-previous</option> <parameter>segment-UID</parameter></term>
+     <listitem>
+      <para>
+       Links the first output file to the segment with the segment UID given by the <parameter>segment-UID</parameter> parameter. See the
+       section on <link linkend="mkvmerge.file_linking">file linking</link> below for details.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry>
+     <term><option>--link-to-next</option> <parameter>segment-UID</parameter></term>
+     <listitem>
+      <para>
+       Links the last output file to the segment with the segment UID given by the <parameter>segment-UID</parameter> parameter. See the
+       section on <link linkend="mkvmerge.file_linking">file linking</link> below for details.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry>
+     <term><option>--append-mode</option> <parameter>mode</parameter></term>
+     <listitem>
+      <para>
+       Determines how timecodes are calculated when appending files.  The parameter <parameter>mode</parameter> can have two values:
+       '<literal>file</literal>' which is also the default and '<literal>track</literal>'.
+      </para>
+
+      <para>
+       When mkvmerge appends a track (called '<literal>track2_1</literal>' from now on) from a second file (called
+       '<literal>file2</literal>') to a track (called '<literal>track1_1</literal>') from the first file (called '<literal>file1</literal>')
+       then it has to offset all timecodes for '<literal>track2_1</literal>' by an amount.  For '<literal>file</literal>' mode this amount is
+       the highest timecode encountered in '<literal>file1</literal>' even if that timecode was from a different track than
+       '<literal>track1_1</literal>'. In track mode the offset is the highest timecode of '<literal>track1_1</literal>'.
+      </para>
+
+      <para>
+       Unfortunately mkvmerge cannot detect which mode to use reliably. Therefore it defaults to '<literal>file</literal>'
+       mode. '<literal>file</literal>' mode usually works better for files that have been created independently of each other; e.g. when
+       appending <abbrev>AVI</abbrev> or <abbrev>MP4</abbrev> files. '<literal>track</literal>' mode may work better for sources that are
+       essentially just parts of one big file, e.g. for <abbrev>VOB</abbrev> and <abbrev>EVO</abbrev> files.
+      </para>
+
+      <para>
+       Subtitle tracks are always treated as if '<literal>file</literal>' mode were active even if '<literal>track</literal>' mode actually
+       is.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry>
+     <term><option>--append-to</option> <parameter>SFID1:STID1:DFID1:DTID1<optional>,...</optional></parameter></term>
+     <listitem>
+      <para>
+       This option controls to which track another track is appended.  Each spec contains four IDs: a file ID, a track ID, a second file ID
+       and a second track ID.  The first pair, "source file ID" and "source track ID", identifies the track that is to be appended.  The
+       second pair, "destination file ID" and "destination track ID", identifies the track the first one is appended to.
+      </para>
+
+      <para>
+       If this option has been omitted then a standard mapping is used.  This standard mapping appends each track from the current file to a
+       track from the previous file with the same track ID.  This allows for easy appending if a movie has been split into two parts and both
+       file have the same number of tracks and track IDs with the command <command>mkvmerge -o output.mkv part1.mkv +part2.mkv</command>.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry>
+     <term><option>+</option></term>
+     <listitem>
+      <para>
+       A single '+' causes the next file to be appended instead of added. The '+' can also be put in front of the next file name. Therefore
+       the following two commands are equivalent:
+      </para>
+
+      <screen>$ mkvmerge -o full.mkv file1.mkv + file2.mkv
+$ mkvmerge -o full.mkv file1.mkv +file2.mkv</screen>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry>
+     <term><option>=</option></term>
+     <listitem>
+      <para>
+       Normally mkvmerge looks for files in the same directory as an input file that have the same base name and only differ in their running
+       number (e.g. 'VTS_01_1.VOB', 'VTS_01_2.VOB', 'VTS_01_3.VOB' etc). This option, a single '=', causes mkvmerge not to look for those
+       additional files.
+      </para>
+
+      <para>
+       The '=' can also be put in front of the next file name. Therefore the following two commands are equivalent:
+      </para>
+
+      <screen>$ mkvmerge -o full.mkv = file1.mkv
+$ mkvmerge -o full.mkv =file1.mkv</screen>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+  </refsect2>
+
+  <refsect2>
+   <title>Attachment support (more global options)</title>
+
+   <variablelist>
+    <varlistentry  id="mkvmerge.description.attachment_description">
+     <term><option>--attachment-description</option> <parameter>description</parameter></term>
+     <listitem>
+      <para>
+       Plain text description of the following attachment. Applies to the next <link
+       linkend="mkvmerge.description.attach_file"><option>--attach-file</option></link> or <option>--attach-file-once</option> option.
+
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry>
+     <term><option>--attachment-mime-type</option> <parameter>MIME type</parameter></term>
+     <listitem>
+      <para>
+       <abbrev >MIME</abbrev> type of the following attachment. Applies to the next <link
+       linkend="mkvmerge.description.attach_file"><option>--attach-file</option></link> or <link
+       linkend="mkvmerge.description.attach_file"><option>--attach-file-once</option></link> option.  A list of officially recognized
+       <abbrev>MIME</abbrev> types can be found e.g. at <ulink url="http://www.iana.org/assignments/media-types/">the IANA
+       homepage</ulink>. The <abbrev>MIME</abbrev> type is mandatory for an attachment.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry>
+     <term><option>--attachment-name</option> <parameter>name</parameter></term>
+     <listitem>
+      <para>
+       Sets the name that will be stored in the output file for this attachment.  If this option is not given then the name will be derived
+       from the file name of the attachment as given with the <link
+       linkend="mkvmerge.description.attach_file"><option>--attach-file</option></link> or the <link
+       linkend="mkvmerge.description.attach_file"><option>--attach-file-once</option></link> option.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry id="mkvmerge.description.attach_file">
+     <term>
+      <option>--attach-file</option> <parameter>file-name</parameter>,
+      <option>--attach-file-once</option> <parameter>file-name</parameter>
+     </term>
+     <listitem>
+      <para>
+       Creates a file attachment inside the &matroska; file. The <abbrev>MIME</abbrev> type must have been set before this option can used. The
+       difference between the two forms is that during splitting the files attached with <option>--attach-file</option> are attached to all
+       output files while the ones attached with <option>--attach-file-once</option> are only attached to the first file created.  If
+       splitting is not used then both do the same.
+      </para>
+
+      <para>
+       &mkvextract; can be used to extract attached files from a &matroska; file.
+      </para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+  </refsect2>
+
+  <refsect2>
+   <title>Options that can be used for each input file</title>
+
+   <variablelist>
+    <varlistentry>
+     <term><option>-a</option>, <option>--audio-tracks</option> <parameter><optional>!</optional>n,m,...</parameter></term>
+     <listitem>
+      <para>
+       Copy the audio tracks <parameter>n</parameter>, <parameter>m</parameter> etc. The numbers are track IDs which can be obtained with the
+       <link linkend="mkvmerge.description.identify"><option>--identify</option></link> switch. They're not simply the track numbers (see
+       section <link linkend="mkvmerge.track_ids">track IDs</link>). Default: copy all audio tracks.
+      </para>
+
+      <para>
+       If the IDs are prefixed with <literal>!</literal> then the meaning is reversed: copy everything but the IDs listed after the
+       <literal>!</literal>.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry>
+     <term><option>-d</option>, <option>--video-tracks</option> <parameter><optional>!</optional>n,m,...</parameter></term>
+     <listitem>
+      <para>
+       Copy the video tracks <parameter>n</parameter>, <parameter>m</parameter> etc. The numbers are track IDs which can be obtained with the
+       <link linkend="mkvmerge.description.identify"><option>--identify</option></link> switch. They're not simply the track numbers (see
+       section <link linkend="mkvmerge.track_ids">track IDs</link>). Default: copy all video tracks.
+      </para>
+
+      <para>
+       If the IDs are prefixed with <literal>!</literal> then the meaning is reversed: copy everything but the IDs listed after the
+       <literal>!</literal>.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry>
+     <term><option>-s</option>, <option>--subtitle-tracks</option> <parameter><optional>!</optional>n,m,...</parameter></term>
+     <listitem>
+      <para>
+       Copy the subtitle tracks <parameter>n</parameter>, <parameter>m</parameter> etc. The numbers are track IDs which can be obtained with
+       the <link linkend="mkvmerge.description.identify"><option>--identify</option></link> switch. They're not simply the track numbers (see
+       section <link linkend="mkvmerge.track_ids">track IDs</link>). Default: copy all subtitle tracks.
+      </para>
+
+      <para>
+       If the IDs are prefixed with <literal>!</literal> then the meaning is reversed: copy everything but the IDs listed after the
+       <literal>!</literal>.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry>
+     <term><option>-b</option>, <option>--button-tracks</option> <parameter><optional>!</optional>n,m,...</parameter></term>
+     <listitem>
+      <para>
+       Copy the button tracks <parameter>n</parameter>, <parameter>m</parameter> etc. The numbers are track IDs which can be obtained with
+       the <link linkend="mkvmerge.description.identify"><option>--identify</option></link> switch. They're not simply the track numbers (see
+       section <link linkend="mkvmerge.track_ids">track IDs</link>). Default: copy all button tracks.
+      </para>
+
+      <para>
+       If the IDs are prefixed with <literal>!</literal> then the meaning is reversed: copy everything but the IDs listed after the
+       <literal>!</literal>.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry>
+     <term><option>--track-tags</option> <parameter><optional>!</optional>n,m,...</parameter></term>
+     <listitem>
+      <para>
+       Copy the tags for tracks <parameter>n</parameter>, <parameter>m</parameter> etc.  The numbers are track IDs which can be obtained with
+       the <link linkend="mkvmerge.description.identify"><option>--identify</option></link> switch (see section <link
+       linkend="mkvmerge.track_ids">track IDs</link>).  They're not simply the track numbers.  Default: copy tags for all tracks.
+      </para>
+
+      <para>
+       If the IDs are prefixed with <literal>!</literal> then the meaning is reversed: copy everything but the IDs listed after the
+       <literal>!</literal>.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry id="mkvmerge.description.attachments">
+     <term><option>-m</option>, <option>--attachments</option> <parameter><optional>!</optional>n<optional>:all|first</optional>,m<optional>:all|first</optional>,...</parameter></term>
+     <listitem>
+      <para>
+       Copy the attachments with the IDs <parameter>n</parameter>, <parameter>m</parameter> etc to all or only the first output file. Each ID
+       can be followed by either '<literal>:all</literal>' (which is the default if neither is entered) or '<literal>:first</literal>'. If
+       splitting is active then those attachments whose IDs are specified with '<literal>:all</literal>' are copied to all of the resulting
+       output files while the others are only copied into the first output file. If splitting is not active then both variants have the same
+       effect.
+      </para>
+
+      <para>
+       The default is to copy all attachments to all output files.
+      </para>
+
+      <para>
+       If the IDs are prefixed with <literal>!</literal> then the meaning is reversed: copy everything but the IDs listed after the
+       <literal>!</literal>.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry>
+     <term><option>-A</option>, <option>--no-audio</option></term>
+     <listitem>
+      <para>
+       Don't copy any audio track from this file.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry>
+     <term><option>-D</option>, <option>--no-video</option></term>
+     <listitem>
+      <para>
+       Don't copy any video track from this file.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry>
+     <term><option>-S</option>, <option>--no-subtitles</option></term>
+     <listitem>
+      <para>
+       Don't copy any subtitle track from this file.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry>
+     <term><option>-B</option>, <option>--no-buttons</option></term>
+     <listitem>
+      <para>
+       Don't copy any button track from this file.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry>
+     <term><option>-T</option>, <option>--no-track-tags</option></term>
+     <listitem>
+      <para>
+       Don't copy any track specific tags from this file.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry id="mkvmerge.description.no_chapters">
+     <term><option>--no-chapters</option></term>
+     <listitem>
+      <para>
+       Don't copy chapters from this file.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry id="mkvmerge.description.no_attachments">
+     <term><option>-M</option>, <option>--no-attachments</option></term>
+     <listitem>
+      <para>
+       Don't copy attachments from this file.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry>
+     <term><option>--no-global-tags</option></term>
+     <listitem>
+      <para>
+       Don't copy global tags from this file.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry>
+     <term><option>--chapter-charset</option> <parameter>character-set</parameter></term>
+     <listitem>
+      <para>
+       Sets the charset that is used for the conversion to UTF-8 for chapter information contained in the source file. See the section about
+       <link linkend="mkvmerge.text_files_and_charsets"> text files and character sets</link> for an explanation how &mkvmerge; converts
+       between character sets.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry>
+     <term><option>--chapter-language</option> <parameter>language-code</parameter></term>
+     <listitem>
+      <para>
+       Sets the ISO639-2 language code that is written for each chapter entry.  This option can be used for source files that contain
+       chapters but no information about the chapters' languages, e.g. for MP4 and OGM files.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry>
+     <term><option>-y</option>, <option>--sync</option> <parameter>TID:d<optional>,o<optional>/p</optional></optional></parameter></term>
+     <listitem>
+      <para>
+       Adjust the timecodes of the track with the id <parameter>TID</parameter> by <parameter>d</parameter> ms. The track IDs are the same as
+       the ones given with <link linkend="mkvmerge.description.identify"><option>--identify</option></link> (see section <link
+       linkend="mkvmerge.track_ids">track IDs</link>).
+      </para>
+
+      <para>
+       <parameter>o</parameter>/<parameter>p</parameter>: adjust the timestamps by <parameter>o</parameter>/<parameter>p</parameter> to fix
+       linear drifts. <parameter>p</parameter> defaults to 1 if omitted. Both <parameter>o</parameter> and <parameter>p</parameter> can be
+       floating point numbers.
+      </para>
+
+      <para>
+       Defaults: no manual sync correction (which is the same as <parameter>d</parameter> = <constant>0</constant> and
+       <parameter>o</parameter>/<parameter>p</parameter> = <constant>1.0</constant>).
+      </para>
+
+      <para>
+       This option can be used multiple times for an input file applying to several tracks by selecting different track IDs each time.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry id="mkvmerge.description.cues">
+     <term><option>--cues</option> <parameter>TID:none|iframes|all</parameter></term>
+     <listitem>
+      <para>
+       Controls for which tracks cue (index) entries are created for the given track (see section <link linkend="mkvmerge.track_ids">track
+       IDs</link>). '<literal>none</literal>' inhibits the creation of cue entries.  For '<literal>iframes</literal>' only blocks with
+       no backward or forward references ( = I frames in video tracks) are put into the cue sheet. '<literal>all</literal>' causes
+       &mkvmerge; to create cue entries for all blocks which will make the file very big.
+      </para>
+
+      <para>
+       The default is '<literal>iframes</literal>' for video tracks and '<literal>none</literal>' for all others.  See also option <link
+       linkend="mkvmerge.description.no_cues"><option>--no-cues</option></link> which inhibits the creation of cue entries regardless of the
+       <option>--cues</option> options used.
+      </para>
+
+      <para>
+       This option can be used multiple times for an input file applying to several tracks by selecting different track IDs each time.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry>
+     <term><option>--default-track</option> <parameter>TID<optional>:bool</optional></parameter></term>
+     <listitem>
+      <para>
+       Sets the 'default' flag for the given track (see section <link linkend="mkvmerge.track_ids">track IDs</link>) if the optional argument
+       <parameter>bool</parameter> is not present.  If the user does not explicitly select a track himself then the player should prefer the
+       track that has his 'default' flag set. Only one track of each kind (audio, video, subtitles, buttons) can have his 'default' flag set.
+       If the user wants no track to have the default track flag set then he has to set <parameter>bool</parameter> to <constant>0</constant>
+       for all tracks.
+      </para>
+
+      <para>
+       This option can be used multiple times for an input file applying to several tracks by selecting different track IDs each time.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry>
+     <term><option>--forced-track</option> <parameter>TID<optional>:bool</optional></parameter></term>
+     <listitem>
+      <para>
+       Sets the 'forced' flag for the given track (see section <link linkend="mkvmerge.track_ids">track IDs</link>) if the optional argument
+       <parameter>bool</parameter> is not present. A player must play all tracks for which this flag is set to <constant>1</constant>.
+      </para>
+
+      <para>
+       This option can be used multiple times for an input file applying to several tracks by selecting different track IDs each time.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry>
+     <term><option>--blockadd</option> <parameter>TID:level</parameter></term>
+     <listitem>
+      <para>
+       Keep only the <classname>BlockAdditions</classname> up to the level <parameter>level</parameter> for the given track.  The default is
+       to keep all levels.  This option only affects certain kinds of codecs like WAVPACK4.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry id="mkvmerge.description.track_name">
+     <term><option>--track-name</option> <parameter>TID:name</parameter></term>
+     <listitem>
+      <para>
+       Sets the track name for the given track (see section <link linkend="mkvmerge.track_ids">track IDs</link>) to
+       <parameter>name</parameter>.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry id="mkvmerge.description.language">
+     <term><option>--language</option> <parameter>TID:language</parameter></term>
+     <listitem>
+      <para>
+       Sets the language for the given track (see section <link linkend="mkvmerge.track_ids">track IDs</link>). Both ISO639-2 language codes
+       and ISO639-1 country codes are allowed. The country codes will be converted to language codes automatically.  All languages including
+       their ISO639-2 codes can be listed with the <link
+       linkend="mkvmerge.description.list_languages"><option>--list-languages</option></link> option.
+      </para>
+
+      <para>
+       This option can be used multiple times for an input file applying to several tracks by selecting different track IDs each time.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry id="mkvmerge.description.tags">
+     <term><option>-t</option>, <option>--tags</option> <parameter>TID:file-name</parameter></term>
+     <listitem>
+      <para>
+       Read tags for the track with the number <parameter>TID</parameter> from the file <parameter>file-name</parameter>. See the section
+       about <link linkend="mkvmerge.tags">tags</link> below for details.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry>
+     <term><option>--aac-is-sbr</option> <parameter>TID<optional>:0|1</optional></parameter></term>
+     <listitem>
+      <para>
+       Tells &mkvmerge; that the track with the ID <parameter>TID</parameter> is <abbrev>SBR AAC</abbrev> (also known as
+       <abbrev>HE-AAC</abbrev> or <abbrev>AAC+</abbrev>). This options is needed if a) the source file is an <abbrev>AAC</abbrev> file
+       (<emphasis>not</emphasis> for a &matroska; file) and b) the <abbrev>AAC</abbrev> file contains <abbrev>SBR AAC</abbrev> data.  The
+       reason for this switch is that it is technically impossible to automatically tell normal <abbrev>AAC</abbrev> data from <abbrev>SBR
+       AAC</abbrev> data without decoding a complete <abbrev>AAC</abbrev> frame. As there are several patent issues with <abbrev>AAC</abbrev>
+       decoders &mkvmerge; will never contain this decoding stage. So for <abbrev>SBR AAC</abbrev> files this switch is mandatory. The
+       resulting file might not play back correctly or even not at all if the switch was omitted.
+      </para>
+
+      <para>
+       If the source file is a &matroska; file then the <classname>CodecID</classname> should be enough to detect <abbrev>SBR
+       AAC</abbrev>. However, if the <classname>CodecID</classname> is wrong then this switch can be used to correct that.
+      </para>
+
+      <para>
+       If mkvmerge wrongfully detects that an <abbrev>AAC</abbrev> file is <abbrev>SBR</abbrev> then you can add
+       '<literal>:0</literal>' to the track ID.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry>
+     <term><option>--timecodes</option> <parameter>TID:file-name</parameter></term>
+     <listitem>
+      <para>
+       Read the timecodes to be used for the specific track ID from <parameter>file-name</parameter>.  These timecodes forcefully override
+       the timecodes that &mkvmerge; normally calculates. Read the section about <link linkend="mkvmerge.external_timecode_files">external
+       timecode files</link>.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry>
+     <term><option>--default-duration</option> <parameter>TID:x</parameter></term>
+     <listitem>
+      <para>
+       Forces the default duration of a given track to the specified value.  Also modifies the track's timecodes to match the default
+       duration.  The argument <parameter>x</parameter> must be postfixed with '<literal>s</literal>', '<literal>ms</literal>',
+       '<literal>us</literal>', '<literal>ns</literal>' or '<literal>fps</literal>' to specify the default duration in seconds, milliseconds,
+       microseconds, nanoseconds or 'frames per second' respectively.  The number <parameter>x</parameter> itself can be a floating point
+       number or a fraction.
+      </para>
+
+      <para>
+       If the default duration is not forced then mkvmerge will try to derive the track's default duration from the container and/or codec
+       used.  One case in which this option is of use is when adding <foreignphrase>AVC/h.264</foreignphrase> elementary streams because
+       these do not contain information about their number of frames or a default duration for each frame.  For such files &mkvmerge; will
+       assume a default duration of '<literal>25fps</literal>' unless overridden.
+      </para>
+
+      <para>
+       This option can also be used to change the <abbrev>FPS</abbrev> of video tracks without having to use an external timecode file.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry>
+     <term><option>--nalu-size-length</option> <parameter>TID:n</parameter></term>
+     <listitem>
+      <para>
+       Forces the <abbrev>NALU</abbrev> size length to <parameter>n</parameter> bytes.  This parameter is only used if the
+       <foreignphrase>AVC/h.264</foreignphrase> elementary stream packetizer is used.  If left out it defaults to 4 bytes, but there are
+       files that contain frames or slices that are all smaller than 65536 bytes.  For such files you can use this parameter and decrease
+       the size to 2.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry id="mkvmerge.description.compression">
+     <term><option>--compression</option> <parameter>TID:n</parameter></term>
+     <listitem>
+      <para>
+       Selects the compression method to be used for the track. Note that the player also has to support this method. Valid values are
+       '<literal>none</literal>', '<literal>zlib</literal>', '<literal>lzo</literal>'/'<literal>lxo1x</literal>',
+       '<literal>bz2</literal>'/'<literal>bzlib</literal>' and '<literal>mpeg4_p2</literal>'/'<literal>mpeg4p2</literal>'.  The values
+       '<literal>lzo</literal>'/'<literal>lxo1x</literal>' and '<literal>bz2</literal>'/'<literal>bzlib</literal>' are only available if
+       &mkvmerge; has been compiled with support for the <productname>liblzo</productname> and <productname>bzlib</productname> compression libraries,
+       respectively.
+      </para>
+      <para>
+       The compression method '<literal>mpeg4_p2</literal>'/'<literal>mpeg4p2</literal>' is a special compression method called
+       '<foreignphrase>header removal</foreignphrase>' that is only available for <abbrev>MPEG4</abbrev> part 2 video tracks.
+      </para>
+      <para>
+       The default for some subtitle tracks is '<literal>zlib</literal>' compression. This compression method is also the one that most if
+       not all playback applications support. Support for other compression methods other than '<literal>none</literal>' is not assured.
+      </para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+  </refsect2>
+
+  <refsect2>
+   <title>Options that only apply to video tracks</title>
+
+   <variablelist>
+    <varlistentry>
+     <term><option>-f</option>, <option>--fourcc</option> <parameter>TID:FourCC</parameter></term>
+     <listitem>
+      <para>
+       Forces the <classname>FourCC</classname> to the specified value. Works only for video tracks in the '<foreignphrase>MS compatibility
+       mode</foreignphrase>'.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry id="mkvmerge.description.display_dimensions">
+     <term><option>--display-dimensions</option> <parameter>TID:widthxheight</parameter></term>
+     <listitem>
+      <para>
+       &matroska; files contain two values that set the display properties that a player should scale the image on playback to: display width
+       and display height.  These values can be set with this option, e.g. '<literal>1:640x480</literal>'.
+      </para>
+
+      <para>
+       Another way to specify the values is to use the <link
+       linkend="mkvmerge.description.aspect_ratio"><option>--aspect-ratio</option></link> or the <link
+       linkend="mkvmerge.description.aspect_ratio_factor"><option>--aspect-ratio-factor</option></link> option (see below).  These options
+       are mutually exclusive.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry id="mkvmerge.description.aspect_ratio">
+     <term><option>--aspect-ratio</option> <parameter>TID:ratio|width/height</parameter></term>
+     <listitem>
+      <para>
+       &matroska; files contain two values that set the display properties that a player should scale the image on playback to: display width
+       and display height.  With this option &mkvmerge; will automatically calculate the display width and display height based on the
+       image's original width and height and the aspect ratio given with this option.  The ratio can be given either as a floating point
+       number <parameter>ratio</parameter> or as a fraction '<parameter>width</parameter>/<parameter>height</parameter>',
+       e.g. '<literal>16/9</literal>'.
+      </para>
+
+      <para>
+       Another way to specify the values is to use the <link
+       linkend="mkvmerge.description.aspect_ratio_factor"><option>--aspect-ratio-factor</option></link> or <link
+       linkend="mkvmerge.description.display_dimensions"><option>--display-dimensions</option></link> options (see above and below). These
+       options are mutually exclusive.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry id="mkvmerge.description.aspect_ratio_factor">
+     <term><option>--aspect-ratio-factor</option> <parameter>TID:factor|n/d</parameter></term>
+     <listitem>
+      <para>
+       Another way to set the aspect ratio is to specify a <parameter>factor</parameter>. The original aspect ratio is first multiplied with
+       this <parameter>factor</parameter> and used as the target aspect ratio afterwards.
+      </para>
+
+      <para>
+       Another way to specify the values is to use the <link
+       linkend="mkvmerge.description.aspect_ratio"><option>--aspect-ratio</option></link> or <link
+       linkend="mkvmerge.description.display_dimensions"><option>--display-dimensions</option></link> options (see above). These options are
+       mutually exclusive.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry>
+     <term><option>--cropping</option> <parameter>TID:left,top,right,bottom</parameter></term>
+     <listitem>
+      <para>
+       Sets the pixel cropping parameters of a video track to the given values.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry>
+     <term><option>--stereo-mode</option> <parameter>TID:n|keyword</parameter></term>
+     <listitem>
+      <para>
+       Sets the stereo mode for the video track with the track ID <parameter>TID</parameter>.  The mode can either be a number
+       <parameter>n</parameter> between <constant>0</constant> and <constant>14</constant> or one of these keywords:
+      </para>
+
+      <para>
+       '<literal>mono</literal>', '<literal>side_by_side_left_first</literal>', '<literal>top_bottom_right_first</literal>',
+       '<literal>top_bottom_left_first</literal>', '<literal>checkerboard_right_first</literal>',
+       '<literal>checkerboard_left_first</literal>', '<literal>row_interleaved_right_first</literal>',
+       '<literal>row_interleaved_left_first</literal>', '<literal>column_interleaved_right_first</literal>',
+       '<literal>column_interleaved_left_first</literal>', '<literal>anaglyph_cyan_red</literal>',
+       '<literal>side_by_side_right_first</literal>', '<literal>anaglyph_green_magenta</literal>',
+       '<literal>both_eyes_laced_left_first</literal>', '<literal>both_eyes_laced_right_first</literal>'.
+      </para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+  </refsect2>
+
+  <refsect2>
+   <title>Options that only apply to text subtitle tracks</title>
+
+   <variablelist>
+    <varlistentry id="mkvmerge.description.sub_charset">
+     <term><option>--sub-charset</option> <parameter>TID:character-set</parameter></term>
+     <listitem>
+      <para>
+       Sets the character set for the conversion to UTF-8 for UTF-8 subtitles for the given track ID. If not specified the charset will be
+       derived from the current locale settings. Note that a charset is not needed for subtitles read from &matroska; files or from Kate
+       streams, as these are always stored in UTF-8. See the section about <link linkend="mkvmerge.text_files_and_charsets"> text files and
+       character sets</link> for an explanation how &mkvmerge; converts between character sets.
+      </para>
+
+      <para>
+       This option can be used multiple times for an input file applying to several tracks by selecting different track IDs each time.
+      </para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+  </refsect2>
+
+  <refsect2>
+   <title>Other options</title>
+
+   <variablelist>
+    <varlistentry id="mkvmerge.description.identify">
+     <term><option>-i</option>, <option>--identify</option> <parameter>file-name</parameter></term>
+     <listitem>
+      <para>
+       Will let &mkvmerge; probe the single file and report its type, the tracks contained in the file and their track IDs. If this option is
+       used then the only other option allowed is the filename.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry id="mkvmerge.description.identify_verbose">
+     <term><option>-I</option>, <option>--identify-verbose</option> <parameter>file-name</parameter></term>
+     <listitem>
+      <para>
+       Will let &mkvmerge; probe the single file and report its type, the tracks contained in the file and their track IDs. If this option is
+       used then the only other option allowed is the filename.
+      </para>
+
+      <para>
+       This option causes &mkvmerge; to output additional information about the container and each track within. The extra information is
+       surronded by square brackets. It consists of space-saparated key/value pairs where keys and values are separated by a colon.
+      </para>
+
+      <para>
+       Each value is escaped according to the rules described in <link linkend="mkvmerge.escaping">the section about escaping special
+       characters in text</link>.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry>
+     <term><option>-l</option>, <option>--list-types</option></term>
+     <listitem>
+      <para>
+       Lists supported input file types.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry id="mkvmerge.description.list_languages">
+     <term><option>--list-languages</option></term>
+     <listitem>
+      <para>
+       Lists all languages and their ISO639-2 code which can be used with the <link
+       linkend="mkvmerge.description.language"><option>--language</option></link> option.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry>
+     <term><option>--priority</option> <parameter>priority</parameter></term>
+     <listitem>
+      <para>
+       Sets the process priority that &mkvmerge; runs with. Valid values are '<literal>lowest</literal>', '<literal>lower</literal>',
+       '<literal>normal</literal>', '<literal>higher</literal>' and '<literal>highest</literal>'. If nothing is given then
+       '<literal>normal</literal>' is used. On Unix like systems &mkvmerge; will use the
+       <citerefentry><refentrytitle>nice</refentrytitle><manvolnum>2</manvolnum></citerefentry> function. Therefore only the super user can
+       use '<literal>higher</literal>' and '<literal>highest</literal>'. On Windows all values are useable for every user.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry id="mkvmerge.description.command_line_charset">
+     <term><option>--command-line-charset</option> <parameter>character-set</parameter></term>
+     <listitem>
+      <para>
+       Sets the character set to convert strings given on the command line from. It defaults to the character set given by system's current
+       locale. This settings applies to arguments of the following options: <link
+       linkend="mkvmerge.description.title"><option>--title</option></link>, <link
+       linkend="mkvmerge.description.track_name"><option>--track-name</option></link> and <link
+       linkend="mkvmerge.description.attachment_description"><option>--attachment-description</option></link>.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry id="mkvmerge.description.output_charset">
+     <term><option>--output-charset</option> <parameter>character-set</parameter></term>
+     <listitem>
+      <para>
+       Sets the character set to which strings are converted that are to be output.  It defaults to the character set given by system's
+       current locale.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry id="mkvmerge.description.redirect_output">
+     <term><option>-r</option>, <option>--redirect-output</option> <parameter>file-name</parameter></term>
+     <listitem>
+      <para>
+       Writes all messages to the file <parameter>file-name</parameter> instead of to the console.  While this can be done easily with output
+       redirection there are cases in which this option is needed: when the terminal reinterprets the output before writing it to a file.
+       The character set set with <link linkend="mkvmerge.description.output_charset"><option>--output-charset</option></link> is honored.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry id="mkvmerge.description.ui_language">
+     <term><option>--ui-language</option> <parameter>code</parameter></term>
+     <listitem>
+      <para>
+       Forces the translations for the language <parameter>code</parameter> to be used (e.g.  '<literal>de_DE</literal>' for the German
+       translations). It is preferable to use the environment variables <varname>LANG</varname>, <varname>LC_MESSAGES</varname> and
+       <varname>LC_ALL</varname> though. Entering '<literal>list</literal>' as the <parameter>code</parameter> will cause &mkvmerge; to
+       output a list of available translations.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry>
+     <term><option>@</option><parameter>options-file</parameter></term>
+     <listitem>
+      <para>
+       Reads additional command line arguments from the file <parameter>options-file</parameter>.  Lines whose first non-whitespace character
+       is a hash mark ('<literal>#</literal>') are treated as comments and ignored. White spaces at the start and end of a line will be
+       stripped. Each line must contain exactly one option.
+      </para>
+
+      <para>
+       Several chars can be escaped, e.g. if you need to start a non-comment line with '#'. The rules are described in <link
+       linkend="mkvmerge.escaping">the section about escaping text</link>.
+      </para>
+
+      <para>
+       Note that backslashes must always be escaped. Hash marks ('#') must be escaped if they should not start a comment.
+      </para>
+
+      <para>
+       The command line '<command>mkvmerge -o "my file.mkv" -A "a movie.avi" sound.ogg</command>' could be converted into the following
+       option file:
+      </para>
+
+      <programlisting># Write to the file "c:\Matroska\my file.mkv" on Windows.
 -o
 c:\\Matroska\\my file.mkv
 # Set the title to '#65'.
@@ -1333,84 +1327,84 @@ c:\\Matroska\\my file.mkv
 # Only take the video from "a movie.avi".
 -A
 a movie.avi
-sound.ogg
-     </programlisting>
-    </listitem>
-   </varlistentry>
+sound.ogg</programlisting>
+     </listitem>
+    </varlistentry>
 
-   <varlistentry>
-    <term><option>--capabilities</option></term>
-    <listitem>
-     <para>
-      Lists information about optional features that have been compiled in and exit. The first line output will be the version
-      information. All following lines contain exactly one word whose presence indicates that the feature has been compiled in. These
-      features are:
-     </para>
+    <varlistentry>
+     <term><option>--capabilities</option></term>
+     <listitem>
+      <para>
+       Lists information about optional features that have been compiled in and exit. The first line output will be the version
+       information. All following lines contain exactly one word whose presence indicates that the feature has been compiled in. These
+       features are:
+      </para>
 
-     <itemizedlist>
-      <listitem>
-       <para>
-        '<literal>BZ2</literal>' -- the <productname>bzlib</productname> compression library. Affects the available compression methods for
-        the <link linkend="mkvmerge.description.compression"><option>--compression</option></link> option.
-       </para>
-      </listitem>
+      <itemizedlist>
+       <listitem>
+        <para>
+         '<literal>BZ2</literal>' -- the <productname>bzlib</productname> compression library. Affects the available compression methods for
+         the <link linkend="mkvmerge.description.compression"><option>--compression</option></link> option.
+        </para>
+       </listitem>
 
-      <listitem>
-       <para>
-        '<literal>LZO</literal>' -- the <productname>lzo</productname> compression library. Affects the available compression methods for
-        the <link linkend="mkvmerge.description.compression"><option>--compression</option></link> option.
-       </para>
-      </listitem>
+       <listitem>
+        <para>
+         '<literal>LZO</literal>' -- the <productname>lzo</productname> compression library. Affects the available compression methods for
+         the <link linkend="mkvmerge.description.compression"><option>--compression</option></link> option.
+        </para>
+       </listitem>
 
-      <listitem>
-       <para>
-        '<literal>FLAC</literal>' -- reading raw <abbrev>FLAC</abbrev> files and handling <abbrev>FLAC</abbrev> tracks in other containers,
-        e.g. <productname>Ogg</productname> or &matroska;.
-       </para>
-      </listitem>
-     </itemizedlist>
-    </listitem>
-   </varlistentry>
+       <listitem>
+        <para>
+         '<literal>FLAC</literal>' -- reading raw <abbrev>FLAC</abbrev> files and handling <abbrev>FLAC</abbrev> tracks in other containers,
+         e.g. <productname>Ogg</productname> or &matroska;.
+        </para>
+       </listitem>
+      </itemizedlist>
+     </listitem>
+    </varlistentry>
 
-   <varlistentry>
-    <term><option>-h</option>, <option>--help</option></term>
-    <listitem>
-     <para>
-      Show usage information and exit.
-     </para>
-    </listitem>
-   </varlistentry>
+    <varlistentry>
+     <term><option>-h</option>, <option>--help</option></term>
+     <listitem>
+      <para>
+       Show usage information and exit.
+      </para>
+     </listitem>
+    </varlistentry>
 
-   <varlistentry>
-    <term><option>-V</option>, <option>--version</option></term>
-    <listitem>
-     <para>
-      Show version information and exit.
-     </para>
-    </listitem>
-   </varlistentry>
+    <varlistentry>
+     <term><option>-V</option>, <option>--version</option></term>
+     <listitem>
+      <para>
+       Show version information and exit.
+      </para>
+     </listitem>
+    </varlistentry>
 
-   <varlistentry>
-    <term><option>--check-for-updates</option></term>
-    <listitem>
-     <para>
-      Checks online for new releases by downloading the URL <uri>http://mkvtoolnix-releases.bunkus.org/latest-release.xml</uri>. Four lines
-      will be output in <literal>key=value</literal> style: the URL from where the information was retrieved (key
-      <literal>version_check_url</literal>), the currently running version (key <literal>running_version</literal>), the latest release's
-      version (key <literal>available_version</literal>) and the download URL (key <literal>download_url</literal>).
-     </para>
+    <varlistentry>
+     <term><option>--check-for-updates</option></term>
+     <listitem>
+      <para>
+       Checks online for new releases by downloading the URL <uri>http://mkvtoolnix-releases.bunkus.org/latest-release.xml</uri>. Four lines
+       will be output in <literal>key=value</literal> style: the URL from where the information was retrieved (key
+       <literal>version_check_url</literal>), the currently running version (key <literal>running_version</literal>), the latest release's
+       version (key <literal>available_version</literal>) and the download URL (key <literal>download_url</literal>).
+      </para>
 
-     <para>
-      Afterwards the program exists with an exit code of 0 if no newer release is available, with 1 if a newer release is available and with
-      2 if an error occured (e.g. if the update information could not be retrieved).
-     </para>
+      <para>
+       Afterwards the program exists with an exit code of 0 if no newer release is available, with 1 if a newer release is available and with
+       2 if an error occured (e.g. if the update information could not be retrieved).
+      </para>
 
-     <para>
-      This option is only available if the program was built with support for libcurl.
-     </para>
-    </listitem>
-   </varlistentry>
-  </variablelist>
+      <para>
+       This option is only available if the program was built with support for libcurl.
+      </para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+  </refsect2>
  </refsect1>
 
  <refsect1 id="mkvmerge.usage">
@@ -1497,10 +1491,8 @@ sound.ogg
    '<literal>MyMovie-add-audio.wav</literal>'.  Encode it again and join it up with the other file:
   </para>
 
-  <screen>
-$ oggenc -q4 -oMyMovie-add-audio.ogg MyMovie-add-audio.wav
-$ mkvmerge -o MM-complete.mkv MyMovie-with-sound.mkv MyMovie-add-audio.ogg
-  </screen>
+  <screen>$ oggenc -q4 -oMyMovie-add-audio.ogg MyMovie-add-audio.wav
+$ mkvmerge -o MM-complete.mkv MyMovie-with-sound.mkv MyMovie-add-audio.ogg</screen>
 
   <para>
    The same result can be achieved with
@@ -1631,12 +1623,10 @@ $ mkvmerge -o MM-complete.mkv MyMovie-with-sound.mkv MyMovie-add-audio.ogg
    linkend="mkvmerge.description.identify"><option>--identify</option></link> option.  An example for such output:
   </para>
 
-  <screen>
-$ mkvmerge -i v.mkv
+  <screen>$ mkvmerge -i v.mkv
 File 'v.mkv': container: &matroska;
 Track ID 1: video (V_MS/VFW/FOURCC, DIV3)
-Track ID 2: audio (A_MPEG/L3)
-  </screen>
+Track ID 2: audio (A_MPEG/L3)</screen>
 
   <para>
    Do not confuse the track IDs that are assigned to the tracks that are placed in the output MKV file with the track IDs of the input
@@ -1793,7 +1783,7 @@ Track ID 2: audio (A_MPEG/L3)
   </para>
 
   <para>
-   The rules are: ' ' becomes '\s', '&quot;' becomes '\2', ':' becomes '\c', '#' becomes '\h' and '\' itself becomes '\\'.
+   The rules are: ' ' (a space) becomes '\s', '&quot;' (double quotes) becomes '\2', ':' becomes '\c', '#' becomes '\h' and '\' (a single backslash) itself becomes '\\'.
   </para>
  </refsect1>
 
@@ -1862,10 +1852,10 @@ Track ID 2: audio (A_MPEG/L3)
    Regardless of whether splitting is active or not the user can tell &mkvmerge; to link the produced files to specific
    <abbrev>SIDs</abbrev>. This is achieved with the options <option>--link-to-previous</option> and <option>--link-to-next</option>.  These
    options accept a segment <abbrev>SID</abbrev> in the format that &mkvinfo; outputs: 16 hexadecimal numbers between
-   <constant>0x00</constant> and <constant>0xff</constant> prefixed with '<literal>0x</literal>' each, e.g. '<literal>0x41 0xda 0x73 0x66
-   0xd9 0xcf 0xb2 0x1e 0xae 0x78 0xeb 0xb4 0x5e 0xca 0xb3 0x93</literal>'. Alternatively a shorter form can be used: 16 hexadecimal numbers
+   <constant>0x00</constant> and <constant>0xff</constant> prefixed with '<literal>0x</literal>' each, e.g. '<code>0x41 0xda 0x73 0x66
+   0xd9 0xcf 0xb2 0x1e 0xae 0x78 0xeb 0xb4 0x5e 0xca 0xb3 0x93</code>'. Alternatively a shorter form can be used: 16 hexadecimal numbers
    between <constant>0x00</constant> and <constant>0xff</constant> without the '<literal>0x</literal>' prefixes and without the spaces, e.g.
-   '<literal>41da7366d9cfb21eae78ebb45ecab393</literal>'.
+   '<code>41da7366d9cfb21eae78ebb45ecab393</code>'.
   </para>
 
   <para>
@@ -1900,9 +1890,13 @@ Track ID 2: audio (A_MPEG/L3)
    Here's an example how to attach a photo and a <productname>TrueType</productname> font to the output file:
   </para>
 
-  <screen>
-$ mkvmerge -o output.mkv -A video.avi sound.ogg --attachment-description "Me and the band behind the stage in a small get-together" --attachment-mime-type image/jpeg --attach-file me_and_the_band.jpg --attachment-description "The real rare and unbelievably good looking font" --attachment-type application/octet-stream --attach-file really_cool_font.ttf
-  </screen>
+  <screen>$ mkvmerge -o output.mkv -A video.avi sound.ogg \
+  --attachment-description "Me and the band behind the stage in a small get-together" \
+  --attachment-mime-type image/jpeg \
+  --attach-file me_and_the_band.jpg \
+  --attachment-description "The real rare and unbelievably good looking font" \
+  --attachment-type application/octet-stream \
+  --attach-file really_cool_font.ttf</screen>
 
   <para>
    If a &matroska; containing attachments file is used as an input file then &mkvmerge; will copy the attachments into the new file. The
@@ -1933,14 +1927,12 @@ $ mkvmerge -o output.mkv -A video.avi sound.ogg --attachment-description "Me and
     respectively. The first one contains the start timecode while the second one contains the title. Here's an example:
    </para>
 
-   <screen>
-CHAPTER01=00:00:00.000
+   <screen>CHAPTER01=00:00:00.000
 CHAPTER01NAME=Intro
 CHAPTER02=00:02:30.000
 CHAPTER02NAME=Baby prepares to rock
 CHAPTER03=00:02:42.300
-CHAPTER03NAME=Baby rocks the house
-   </screen>
+CHAPTER03NAME=Baby rocks the house</screen>
 
    <para>
     &mkvmerge; will transform every pair or lines into one &matroska; <classname>ChapterAtom</classname>. It does not set any
@@ -1960,8 +1952,7 @@ CHAPTER03NAME=Baby rocks the house
     The &xml; based chapter format looks like this example:
    </para>
 
-   <screen>
-&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;
+   <screen>&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;
 &lt;!DOCTYPE Chapters SYSTEM &quot;matroskachapters.dtd&quot;&gt;
 &lt;Chapters&gt;
   &lt;EditionEntry&gt;
@@ -1982,8 +1973,7 @@ CHAPTER03NAME=Baby rocks the house
       &lt;/ChapterAtom&gt;
     &lt;/ChapterAtom&gt;
   &lt;/EditionEntry&gt;
-&lt;/Chapters&gt;
-   </screen>
+&lt;/Chapters&gt;</screen>
 
    <para>
     With this format three things are possible that are not possible with the simple chapter format:
@@ -2070,9 +2060,7 @@ CHAPTER03NAME=Baby rocks the house
     <classname>Targets</classname> elements and call &mkvmerge;:
    </para>
 
-   <screen>
-$ mkvmerge -o file.mkv --tags 0:tags.xml file.avi
-   </screen>
+   <screen>$ mkvmerge -o file.mkv --tags 0:tags.xml file.avi</screen>
   </refsect2>
 
   <refsect2>
@@ -2180,9 +2168,7 @@ $ mkvmerge -o file.mkv --tags 0:tags.xml file.avi
    example if you append two files, v1.avi and v2.avi, and want to use timecodes then your command line must look something like this:
   </para>
 
-  <screen>
-mkvmerge ... --timecodes 0:my_timecodes.txt v1.avi +v2.avi
-  </screen>
+  <screen>$ mkvmerge ... --timecodes 0:my_timecodes.txt v1.avi +v2.avi</screen>
 
   <para>
    There are four formats that are recognized by &mkvmerge;. The first line always contains the version number. Empty lines, lines
@@ -2198,12 +2184,10 @@ mkvmerge ... --timecodes 0:my_timecodes.txt v1.avi +v2.avi
     can contain gaps for which the default <abbrev>FPS</abbrev> is used. An example:
    </para>
 
-   <screen>
-# timecode format v1
+   <screen># timecode format v1
 assume 27.930
 800,1000,25
-1500,1700,30
-   </screen>
+1500,1700,30</screen>
   </refsect2>
 
   <refsect2>
@@ -2215,12 +2199,10 @@ assume 27.930
     are frames in the track.  The timecodes in this file must be sorted.  Example for 25fps:
    </para>
 
-   <screen>
-# timecode format v2
+   <screen># timecode format v2
 0
 40
-80
-   </screen>
+80</screen>
   </refsect2>
 
   <refsect2>
@@ -2232,14 +2214,12 @@ assume 27.930
     gaps in the stream by using the '<literal>gap</literal>' keyword followed by the duration of the gap.  Example for an audio file:
    </para>
 
-   <screen>
-# timecode format v3
+   <screen># timecode format v3
 assume 0.0
 25.325
 7.530,38.236
 gap, 10.050
-2.000,38.236
-   </screen>
+2.000,38.236</screen>
   </refsect2>
 
   <refsect2>

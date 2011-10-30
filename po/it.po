@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the mkvtoolnix package.
 #
 # Moritz Bunkus <moritz@bunkus.org>, 2008-2011.
-# Luther Stickell <l.stickell@yahoo.it>, 2011.
+# Stefano Codari <l.stickell@yahoo.it>, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: it\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2011-10-22 21:55+0100\n"
-"Last-Translator: Luther Stickell <l.stickell@yahoo.it>\n"
+"PO-Revision-Date: 2011-10-30 11:00+0100\n"
+"Last-Translator: Stefano Codari <l.stickell@yahoo.it>\n"
 "Language-Team: Italian <moritz@bunkus.org>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -3669,7 +3669,7 @@ msgstr "Indicatore traccia forzata:"
 
 #: src/mmg/tabs/input_format.cpp:228
 msgid "Forces the FourCC of the video track to this value. Note that this only works for video tracks that use the AVI compatibility mode or for QuickTime video tracks. This option CANNOT be used to change Matroska's CodecID."
-msgstr ""
+msgstr "Forza il FourCC della traccia video a questo valore. Nota che questo funzionerà solo per le traccie video che usano la modalità AVI compatibile o per le traccie video QuickTime. Questa opzione NON PUÒ essere usata per cambiare il CodecID Matroska."
 
 #: src/mmg/cli_options_dlg.cpp:130
 msgid "Forces the Matroska reader to use the generic passthrough packetizer even for known and supported track types."
@@ -5159,6 +5159,9 @@ msgid ""
 "country that you want to apply to all the chapters\n"
 "below and including the currently selected entry."
 msgstr ""
+"Inserire i valori per la lingua e la nazione\n"
+"che vuoi applicare a tutti i capitoli sotto\n"
+"compreso la voce attualmente selezionata."
 
 #: src/merge/mkvmerge.cpp:256
 msgid ""
@@ -5166,6 +5169,9 @@ msgid ""
 "explains several details in great length which are not obvious from\n"
 "this listing.\n"
 msgstr ""
+"Per favore leggere la guida/la documentazione HTML di mkvmerge.\n"
+"Essa spiega molti dettagli in modo accurato che non sono ovvi\n"
+"da questa lista.\n"
 
 #: src/common/property_element.cpp:104
 #: src/mmg/header_editor/frame.cpp:337
@@ -5246,131 +5252,131 @@ msgstr "QuickTime/MP4"
 #: src/input/r_qtmp4.cpp:472
 #, boost-format
 msgid "Quicktime/MP4 reader: '%1%' atom is too small. Expected size: >= %2%. Actual size: %3%.\n"
-msgstr ""
+msgstr "Quicktime/MP4 reader: atom '%1%' troppo piccolo. Dimensione attesa: >= %2%. Dimensione attuale: %3%.\n"
 
 #: src/input/r_qtmp4.cpp:1908
 msgid "Quicktime/MP4 reader: Constant samplesize & variable duration not yet supported. Contact the author if you have such a sample file.\n"
-msgstr ""
+msgstr "Quicktime/MP4 reader: Dimensione campione costante & durata variabile non ancora supportati. Contattare l'autore se si ha un esempio di questo file.\n"
 
 #: src/input/r_qtmp4.cpp:1303
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read chunk number %1%/%2% with size %3% from position %4%. Aborting.\n"
-msgstr ""
+msgstr "Quicktime/MP4 reader: Impossibile leggere pezzo numero %1%/%2% con dimensione %3% dalla posizione %4%. Annullo.\n"
 
 #: src/input/r_qtmp4.cpp:1010
 #: src/input/r_qtmp4.cpp:1023
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the extended sound description atom for track ID %1%.\n"
-msgstr ""
+msgstr "Quicktime/MP4 reader: Impossibile leggere la descrizione atom suono estesa per la traccia ID %1%.\n"
 
 #: src/input/r_qtmp4.cpp:983
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the sound description atom for track ID %1%.\n"
-msgstr ""
+msgstr "Quicktime/MP4 reader: Impossibile leggere la descrizione atom suono per la traccia ID %1%.\n"
 
 #: src/input/r_qtmp4.cpp:977
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the stream description atom for track ID %1%.\n"
-msgstr ""
+msgstr "Quicktime/MP4 reader: Impossibile leggere la descrizione del flusso atom per la traccia ID %1%.\n"
 
 #: src/input/r_qtmp4.cpp:1059
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the video description atom for track ID %1%.\n"
-msgstr ""
+msgstr "Quicktime/MP4 reader: Impossibile leggere la descrizione video atom per la traccia ID %1%.\n"
 
 #: src/input/r_qtmp4.cpp:211
 msgid "Quicktime/MP4 reader: Have not found any header atoms.\n"
-msgstr ""
+msgstr "Quicktime/MP4 reader: Nessun atom di intestazione trovato.\n"
 
 #: src/input/r_qtmp4.cpp:213
 msgid "Quicktime/MP4 reader: Have not found the 'mdat' atom. No movie data found.\n"
-msgstr ""
+msgstr "Quicktime/MP4 reader: Atom 'mdat' non trovato. Nessun dato film trovato.\n"
 
 #: src/input/r_qtmp4.cpp:160
 #, boost-format
 msgid "Quicktime/MP4 reader: Invalid chunk size %1% at %2%.\n"
-msgstr ""
+msgstr "Quicktime/MP4 reader: Dimensione pezzo non valida %1% a %2%.\n"
 
 #: src/input/r_qtmp4.cpp:289
 #, boost-format
 msgid "Quicktime/MP4 reader: MPEG4 part 10/AVC track %1% is missing its decoder config. Skipping this track.\n"
-msgstr ""
+msgstr "Quicktime/MP4 reader: La traccia MPEG4 part 10/AVC %1% manca della sua configurazione decoder. Salto questa traccia.\n"
 
 #: src/input/r_qtmp4.cpp:282
 #, boost-format
 msgid "Quicktime/MP4 reader: MPEG4 track %1% is missing the esds atom/the decoder config. Skipping this track.\n"
-msgstr ""
+msgstr "Quicktime/MP4 reader: La traccia MPEG4 %1% manca dell'atom esds/la configurazione del decoder. Salto questa traccia.\n"
 
 #: src/input/r_qtmp4.cpp:650
 #, boost-format
 msgid "Quicktime/MP4 reader: The 'media header' atom ('mdhd') uses the unsupported version %1%.\n"
-msgstr ""
+msgstr "Quicktime/MP4 reader: L'atom 'media header' ('mdhd') usa la versione non supportata %1%.\n"
 
 #: src/input/r_qtmp4.cpp:970
 #, boost-format
 msgid "Quicktime/MP4 reader: The 'size' field is too small in the stream description atom for track ID %1%.\n"
-msgstr ""
+msgstr "Quicktime/MP4 reader: Il campo 'dimensione' è troppo piccolo nell'atom descrizione flusso per la traccia ID %1%.\n"
 
 #: src/input/r_qtmp4.cpp:655
 msgid "Quicktime/MP4 reader: The 'time scale' parameter was 0. This is not supported.\n"
-msgstr ""
+msgstr "Quicktime/MP4 reader: Il parametro 'time scale' era 0. Questo non è supportato.\n"
 
 #: src/input/r_qtmp4.cpp:250
 #, boost-format
 msgid "Quicktime/MP4 reader: The AAC track %1% is missing the esds atom/the decoder config. Skipping this track.\n"
-msgstr ""
+msgstr "Quicktime/MP4 reader: La traccia AAC %1% manca dell'atom esds/la configurazione del decoder. Salto questa traccia.\n"
 
 #: src/input/r_qtmp4.cpp:244
 #, boost-format
 msgid "Quicktime/MP4 reader: The audio track %1% is using an unsupported 'object type id' of %2% in the 'esds' atom. Skipping this track.\n"
-msgstr ""
+msgstr "Quicktime/MP4 reader: La traccia audio %1% sta usando un 'object type id' di %2% nell'atom 'esds' non supportato. Salto questa traccia.\n"
 
 #: src/input/r_qtmp4.cpp:262
 #, boost-format
 msgid "Quicktime/MP4 reader: The video track %1% is missing the ESDS atom. Skipping this track.\n"
-msgstr ""
+msgstr "Quicktime/MP4 reader: La traccia video %1% manca dell'atom ESDS. Salto questa traccia.\n"
 
 #: src/input/r_qtmp4.cpp:504
 #, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers with an unknown or unsupported compression algorithm '%1%%2%%3%%4%'. Aborting.\n"
-msgstr ""
+msgstr "Quicktime/MP4 reader: Questo file usa intestazioni compresse con un algoritmo di compressione sconosciuto o non supportato '%1%%2%%3%%4%'. Annullo.\n"
 
 #: src/input/r_qtmp4.cpp:537
 #, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers, but the expected uncompressed size (%1%) was not what is available after uncompressing (%2%).\n"
-msgstr ""
+msgstr "Quicktime/MP4 reader: Questo file usa intestazioni compresse, ma la dimensione non compressa attesa (%1%) non è quella ottenuta dopo la decompressione (%2%).\n"
 
 #: src/input/r_qtmp4.cpp:528
 #, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers, but the zlib library could not be initialized. Error code from zlib: %1%. Aborting.\n"
-msgstr ""
+msgstr "Quicktime/MP4 reader: Questo file usa intestazioni compresse, ma la libreria zlib non può essere inizializzata. Codice di errore da zlib: %1%. Annullo.\n"
 
 #: src/input/r_qtmp4.cpp:533
 #, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers, but they could not be uncompressed. Error code from zlib: %1%. Aborting.\n"
-msgstr ""
+msgstr "Quicktime/MP4 reader: Questo file usa intestazioni compresse, ma non possono essere decompresse. Codice di errore da zlib: %1%. Annullo.\n"
 
 #: src/input/r_qtmp4.cpp:301
 #, boost-format
 msgid "Quicktime/MP4 reader: Track %1% has an unknown type.\n"
-msgstr ""
+msgstr "Quicktime/MP4 reader: La traccia %1% è di tipo sconosciuto.\n"
 
 #: src/input/r_qtmp4.cpp:257
 #: src/input/r_qtmp4.cpp:296
 #, boost-format
 msgid "Quicktime/MP4 reader: Track %1% is missing some data. Broken header atoms?\n"
-msgstr ""
+msgstr "Quicktime/MP4 reader: La traccia %1% manca di alcuni dati. Atom di intestazione danneggiati?\n"
 
 #: src/input/r_qtmp4.cpp:991
 #: src/input/r_qtmp4.cpp:1065
 #, boost-format
 msgid "Quicktime/MP4 reader: Track ID %1% has more than one FourCC. Only using the first one (%|2$.4s|) and not this one (%|3$.4s|).\n"
-msgstr ""
+msgstr "Quicktime/MP4 reader: La traccia ID %1% ha più di un FourCC. Uso solo il primo (%|2$.4s|) e non questo (%|3$.4s|).\n"
 
 #: src/input/r_qtmp4.cpp:236
 #, boost-format
 msgid "Quicktime/MP4 reader: Unknown/unsupported FourCC '%|1$.4s|' for track %2%.\n"
-msgstr ""
+msgstr "Quicktime/MP4 reader: FourCC sconosciuto/non supportato '%|1$.4s|' per la traccia %2%.\n"
 
 #: src/mmg/mmg_dialog.cpp:276
 msgid "Quit the application"

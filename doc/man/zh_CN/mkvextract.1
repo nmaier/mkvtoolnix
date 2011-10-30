@@ -119,7 +119,7 @@ download_url）。
 此选项仅当程序附带 libcurl 支持编译时可用。
 .RE
 .PP
-\fB@\fR选项文件
+\fB@\fR\fIoptions\-file\fR
 .RS 4
 从文件
 \fI选项文件\fR
@@ -133,13 +133,12 @@ download_url）。
 .RS 4
 .\}
 .nf
-# 从 源\&.mkv 提取轨道
+# Extract a track from source\&.mkv
 tracks
-源\&.mkv
-# 将轨道以原始数据形式输出。
+source\&.mkv
+# Output the track as raw data\&.
 \-\-raw
-1:目标\&.raw
-      
+1:destination\&.raw
 .fi
 .if n \{\
 .RE
@@ -218,7 +217,6 @@ CodecIDs
 .\}
 .nf
 $ mkvextract tracks input\&.mkv 1:output\-two\-tracks\&.rm 2:output\-two\-tracks\&.rm
-      
 .fi
 .if n \{\
 .RE
@@ -245,7 +243,7 @@ $ mkvextract tracks input\&.mkv 1:output\-two\-tracks\&.rm 2:output\-two\-tracks
 \fIAID1:输出文件名1\fR
 [\fIAID2:输出文件名2\fR \&.\&.\&.]
 .PP
-AID:输出文件名
+\fIAID\fR:\fIoutname\fR
 .RS 4
 如果源文件中存在 ID 为
 \fIAID\fR
@@ -323,7 +321,6 @@ XML
 .\}
 .nf
 $ mkvextract timecodes_v2 input\&.mkv 1:tc\-track1\&.txt 2:tc\-track2\&.txt
-      
 .fi
 .if n \{\
 .RE
@@ -343,8 +340,7 @@ shell 的报告重定向功能可以通过在命令行后追加 \*(Aq> 输出文
 .RS 4
 .\}
 .nf
-$ mkvextract tags 源\&.mkv > 标签\&.xml
-  
+$ mkvextract tags source\&.mkv > tags\&.xml
 .fi
 .if n \{\
 .RE
@@ -360,8 +356,7 @@ $ mkvextract tags 源\&.mkv > 标签\&.xml
 .RS 4
 .\}
 .nf
-$ mkvextract tags 源\&.mkv \-\-redirect\-output 标签\&.xml
-  
+$ mkvextract tags source\&.mkv \-\-redirect\-output tags\&.xml
 .fi
 .if n \{\
 .RE
@@ -593,7 +588,7 @@ OGM
 .PP
 有时文本中的特殊字符必须或应该转义。转义规则很简单: 用反斜杠后接一字符替换需要转义的各字符。
 .PP
-规则为: \*(Aq \*(Aq 变为 \*(Aq\es\*(Aq，\*(Aq"\*(Aq 变为 \*(Aq\e2\*(Aq，\*(Aq:\*(Aq 变为 \*(Aq\ec\*(Aq，\*(Aq#\*(Aq 变为 \*(Aq\eh\*(Aq，而 \*(Aq\e\*(Aq 自己则变为 \*(Aq\e\e\*(Aq。
+The rules are: \*(Aq \*(Aq (a space) becomes \*(Aq\es\*(Aq, \*(Aq"\*(Aq (double quotes) becomes \*(Aq\e2\*(Aq, \*(Aq:\*(Aq becomes \*(Aq\ec\*(Aq, \*(Aq#\*(Aq becomes \*(Aq\eh\*(Aq and \*(Aq\e\*(Aq (a single backslash) itself becomes \*(Aq\e\e\*(Aq\&.
 .SH "参阅"
 .PP
 

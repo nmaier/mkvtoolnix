@@ -50,12 +50,12 @@
   <cmdsynopsis>
    <command>mmg</command>
    <group>
-    <arg>
-     <arg choice="req">--edit-headers</arg>
+    <arg choice="opt">
+     <arg choice="plain">--edit-headers</arg>
      <arg choice="req">filename.mkv</arg>
     </arg>
-    <arg>preferences-file.mmg</arg>
-    <arg>source-file.ext</arg>
+    <arg choice="opt">preferences-file.mmg</arg>
+    <arg choice="opt">source-file.ext</arg>
    </group>
   </cmdsynopsis>
  </refsynopsisdiv>

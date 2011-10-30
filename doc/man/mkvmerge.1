@@ -56,8 +56,7 @@ The order of command line options is important\&. Please read the section
 if you\*(Aqre new to the program\&.
 .sp .5v
 .RE
-.PP
-Global options:
+.SS "Global options"
 .PP
 \fB\-v\fR, \fB\-\-verbose\fR
 .RS 4
@@ -93,8 +92,7 @@ Sets the default language code that will be used for all tracks unless overwritt
 \fB\-\-language\fR
 option\&. The default language code is \*(Aqund\*(Aq for \*(Aqundefined\*(Aq\&.
 .RE
-.PP
-Segment info handling: (global options)
+.SS "Segment info handling (global options)"
 .PP
 \fB\-\-segmentinfo\fR \fIfilename\&.xml\fR
 .RS 4
@@ -115,8 +113,7 @@ Sets the segment UIDs to use\&. This is a comma\-separated list of 128bit segmen
 .sp
 Each file created contains one segment, and each segment has one segment UID\&. If more segment UIDs are specified than segments are created then the surplus UIDs are ignored\&. If fewer UIDs are specified than segments are created then random UIDs will be created for them\&.
 .RE
-.PP
-Chapter and tag handling: (global options)
+.SS "Chapter and tag handling (global options)"
 .PP
 \fB\-\-chapter\-language\fR \fIlanguage\-code\fR
 .RS 4
@@ -228,8 +225,7 @@ Read global tags from the file
 tags
 below for details\&.
 .RE
-.PP
-General output control (advanced global options):
+.SS "General output control (advanced global options)"
 .PP
 \fB\-\-track\-order\fR \fIFID1:TID1,FID2:TID2,\&.\&.\&.\fR
 .RS 4
@@ -320,8 +316,7 @@ is used then
 \fBmkvmerge\fR(1)
 will use sample precision even if a video track is present\&.
 .RE
-.PP
-File splitting, linking and appending (more global options):
+.SS "File splitting, linking and appending (more global options)"
 .PP
 \fB\-\-split\fR \fIspecification\fR
 .RS 4
@@ -354,7 +349,7 @@ or
 .sp
 The parameter
 \fId\fR
-may end with \*(Aqk\*(Aq, \*(Aqm\*(Aq or \*(Aqg\*(Aq to indicate that the size is in KB, MB or GB respectively\&. Otherwise a size in Bytes is assumed\&. After the current output file has reached this size limit a new one will be started\&.
+may end with \*(Aqk\*(Aq, \*(Aqm\*(Aq or \*(Aqg\*(Aq to indicate that the size is in KB, MB or GB respectively\&. Otherwise a size in bytes is assumed\&. After the current output file has reached this size limit a new one will be started\&.
 .sp
 The \*(Aqsize:\*(Aq prefix may be omitted for compatibility reasons\&.
 .RE
@@ -490,7 +485,6 @@ A single \*(Aq+\*(Aq causes the next file to be appended instead of added\&. The
 .nf
 $ mkvmerge \-o full\&.mkv file1\&.mkv + file2\&.mkv
 $ mkvmerge \-o full\&.mkv file1\&.mkv +file2\&.mkv
-     
 .fi
 .if n \{\
 .RE
@@ -509,14 +503,12 @@ The \*(Aq=\*(Aq can also be put in front of the next file name\&. Therefore the 
 .nf
 $ mkvmerge \-o full\&.mkv = file1\&.mkv
 $ mkvmerge \-o full\&.mkv =file1\&.mkv
-     
 .fi
 .if n \{\
 .RE
 .\}
 .RE
-.PP
-Attachment support (more global options):
+.SS "Attachment support (more global options)"
 .PP
 \fB\-\-attachment\-description\fR \fIdescription\fR
 .RS 4
@@ -570,8 +562,7 @@ can be used to extract attached files from a
 Matroska(TM)
 file\&.
 .RE
-.PP
-Options that can be used for each input file:
+.SS "Options that can be used for each input file"
 .PP
 \fB\-a\fR, \fB\-\-audio\-tracks\fR \fI[!]\fR\fIn,m,\&.\&.\&.\fR
 .RS 4
@@ -938,8 +929,7 @@ part 2 video tracks\&.
 .sp
 The default for some subtitle tracks is \*(Aqzlib\*(Aq compression\&. This compression method is also the one that most if not all playback applications support\&. Support for other compression methods other than \*(Aqnone\*(Aq is not assured\&.
 .RE
-.PP
-Options that only apply to video tracks:
+.SS "Options that only apply to video tracks"
 .PP
 \fB\-f\fR, \fB\-\-fourcc\fR \fITID:FourCC\fR
 .RS 4
@@ -1010,8 +1000,7 @@ or one of these keywords:
 .sp
 \*(Aqmono\*(Aq, \*(Aqside_by_side_left_first\*(Aq, \*(Aqtop_bottom_right_first\*(Aq, \*(Aqtop_bottom_left_first\*(Aq, \*(Aqcheckerboard_right_first\*(Aq, \*(Aqcheckerboard_left_first\*(Aq, \*(Aqrow_interleaved_right_first\*(Aq, \*(Aqrow_interleaved_left_first\*(Aq, \*(Aqcolumn_interleaved_right_first\*(Aq, \*(Aqcolumn_interleaved_left_first\*(Aq, \*(Aqanaglyph_cyan_red\*(Aq, \*(Aqside_by_side_right_first\*(Aq, \*(Aqanaglyph_green_magenta\*(Aq, \*(Aqboth_eyes_laced_left_first\*(Aq, \*(Aqboth_eyes_laced_right_first\*(Aq\&.
 .RE
-.PP
-Options that only apply to text subtitle tracks:
+.SS "Options that only apply to text subtitle tracks"
 .PP
 \fB\-\-sub\-charset\fR \fITID:character\-set\fR
 .RS 4
@@ -1025,8 +1014,7 @@ converts between character sets\&.
 .sp
 This option can be used multiple times for an input file applying to several tracks by selecting different track IDs each time\&.
 .RE
-.PP
-Other options:
+.SS "Other options"
 .PP
 \fB\-i\fR, \fB\-\-identify\fR \fIfile\-name\fR
 .RS 4
@@ -1111,7 +1099,7 @@ will cause
 to output a list of available translations\&.
 .RE
 .PP
-\fB@\fRoptions\-file
+\fB@\fR\fIoptions\-file\fR
 .RS 4
 Reads additional command line arguments from the file
 \fIoptions\-file\fR\&. Lines whose first non\-whitespace character is a hash mark (\*(Aq#\*(Aq) are treated as comments and ignored\&. White spaces at the start and end of a line will be stripped\&. Each line must contain exactly one option\&.
@@ -1137,7 +1125,6 @@ c:\e\eMatroska\e\emy file\&.mkv
 \-A
 a movie\&.avi
 sound\&.ogg
-     
 .fi
 .if n \{\
 .RE
@@ -1360,7 +1347,6 @@ After some minutes of consideration you rip another audio track, e\&.g\&. the di
 .nf
 $ oggenc \-q4 \-oMyMovie\-add\-audio\&.ogg MyMovie\-add\-audio\&.wav
 $ mkvmerge \-o MM\-complete\&.mkv MyMovie\-with\-sound\&.mkv MyMovie\-add\-audio\&.ogg
-  
 .fi
 .if n \{\
 .RE
@@ -1617,7 +1603,6 @@ $ mkvmerge \-i v\&.mkv
 File \*(Aqv\&.mkv\*(Aq: container: Matroska(TM)
 Track ID 1: video (V_MS/VFW/FOURCC, DIV3)
 Track ID 2: audio (A_MPEG/L3)
-  
 .fi
 .if n \{\
 .RE
@@ -1846,7 +1831,7 @@ option\&.
 .PP
 There are a few places in which special characters in text must or should be escaped\&. The rules for escaping are simple: each character that needs escaping is replaced with a backslash followed by another character\&.
 .PP
-The rules are: \*(Aq \*(Aq becomes \*(Aq\es\*(Aq, \*(Aq"\*(Aq becomes \*(Aq\e2\*(Aq, \*(Aq:\*(Aq becomes \*(Aq\ec\*(Aq, \*(Aq#\*(Aq becomes \*(Aq\eh\*(Aq and \*(Aq\e\*(Aq itself becomes \*(Aq\e\e\*(Aq\&.
+The rules are: \*(Aq \*(Aq (a space) becomes \*(Aq\es\*(Aq, \*(Aq"\*(Aq (double quotes) becomes \*(Aq\e2\*(Aq, \*(Aq:\*(Aq becomes \*(Aq\ec\*(Aq, \*(Aq#\*(Aq becomes \*(Aq\eh\*(Aq and \*(Aq\e\*(Aq (a single backslash) itself becomes \*(Aq\e\e\*(Aq\&.
 .SH "SUBTITLES"
 .PP
 There are several text subtitle formats that can be embedded into
@@ -1995,8 +1980,13 @@ font to the output file:
 .RS 4
 .\}
 .nf
-$ mkvmerge \-o output\&.mkv \-A video\&.avi sound\&.ogg \-\-attachment\-description "Me and the band behind the stage in a small get\-together" \-\-attachment\-mime\-type image/jpeg \-\-attach\-file me_and_the_band\&.jpg \-\-attachment\-description "The real rare and unbelievably good looking font" \-\-attachment\-type application/octet\-stream \-\-attach\-file really_cool_font\&.ttf
-  
+$ mkvmerge \-o output\&.mkv \-A video\&.avi sound\&.ogg \e
+  \-\-attachment\-description "Me and the band behind the stage in a small get\-together" \e
+  \-\-attachment\-mime\-type image/jpeg \e
+  \-\-attach\-file me_and_the_band\&.jpg \e
+  \-\-attachment\-description "The real rare and unbelievably good looking font" \e
+  \-\-attachment\-type application/octet\-stream \e
+  \-\-attach\-file really_cool_font\&.ttf
 .fi
 .if n \{\
 .RE
@@ -2041,7 +2031,6 @@ CHAPTER02=00:02:30\&.000
 CHAPTER02NAME=Baby prepares to rock
 CHAPTER03=00:02:42\&.300
 CHAPTER03NAME=Baby rocks the house
-   
 .fi
 .if n \{\
 .RE
@@ -2092,7 +2081,6 @@ based chapter format looks like this example:
     </ChapterAtom>
   </EditionEntry>
 </Chapters>
-   
 .fi
 .if n \{\
 .RE
@@ -2234,7 +2222,6 @@ elements and call
 .\}
 .nf
 $ mkvmerge \-o file\&.mkv \-\-tags 0:tags\&.xml file\&.avi
-   
 .fi
 .if n \{\
 .RE
@@ -2384,8 +2371,7 @@ Timecode files that are used when tracks are appended to each other must only be
 .RS 4
 .\}
 .nf
-mkvmerge \&.\&.\&. \-\-timecodes 0:my_timecodes\&.txt v1\&.avi +v2\&.avi
-  
+$ mkvmerge \&.\&.\&. \-\-timecodes 0:my_timecodes\&.txt v1\&.avi +v2\&.avi
 .fi
 .if n \{\
 .RE
@@ -2410,7 +2396,6 @@ is used\&. An example:
 assume 27\&.930
 800,1000,25
 1500,1700,30
-   
 .fi
 .if n \{\
 .RE
@@ -2429,7 +2414,6 @@ give at least as many timecode lines as there are frames in the track\&. The tim
 0
 40
 80
-   
 .fi
 .if n \{\
 .RE
@@ -2450,7 +2434,6 @@ assume 0\&.0
 7\&.530,38\&.236
 gap, 10\&.050
 2\&.000,38\&.236
-   
 .fi
 .if n \{\
 .RE

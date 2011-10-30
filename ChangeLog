@@ -5,6 +5,11 @@
 	causing mmg to crash. Could happen e.g. when adding a job to the
 	job queue.
 
+2011-10-24  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: mkvmerge will use DTS instead of PTS for VC1
+	video tracks read from MPEG transport streams.
+
 2011-10-23  Moritz Bunkus  <moritz@bunkus.org>
 
 	* build system: Boost's "Range" library is now required.
