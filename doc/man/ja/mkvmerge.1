@@ -51,7 +51,7 @@ mkvmerge \- マルチメディアストリームをMatroska(TM)ファイルに�
 コマンドラインオプションの順番は重要です。もしあなたが初心者なら、"オプションの順番"セクションを読んで下さい。
 .sp .5v
 .RE
-.SS "Global options"
+.SS "グローバルオプション"
 .PP
 \fB\-v\fR, \fB\-\-verbose\fR
 .RS 4
@@ -82,7 +82,7 @@ WebMの規格に準拠したファイルを作成します。mkvmergeは出力�
 .RS 4
 デフォルトの言語コードを指定します。\fB\-\-language\fRオプションで指定しなかったトラックはすべてここで指定した言語コードになります。デフォルトは\*(Aqund\*(Aq、つまり\*(Aq未定義\*(Aqです。
 .RE
-.SS "Segment info handling (global options)"
+.SS "セグメント情報の扱い (グローバルオプション)"
 .PP
 \fB\-\-segmentinfo\fR \fIfilename\&.xml\fR
 .RS 4
@@ -96,7 +96,7 @@ XMLファイルからセグメント情報を読み取ります。このファ�
 .sp
 作成される各ファイルは一つのセグメントを含み、そして各セグメントは一つのセグメントUIDを持ちます。もし、作成されたセグメントよりも多数のセグメントUIDが指定された場合、余ったセグメントUIDは無視されます。また、もし指定されたセグメントUIDよりも多数のセグメントが作成された場合は、ランダムなUIDが作成されて使用されます。
 .RE
-.SS "Chapter and tag handling (global options)"
+.SS "チャプタ及びタグの扱い (グローバルオプション)"
 .PP
 \fB\-\-chapter\-language\fR \fIlanguage\-code\fR
 .RS 4
@@ -176,7 +176,7 @@ XMLファイルからセグメント情報を読み取ります。このファ�
 
 \fIfile\-name\fRで指定したファイルからグローバルタグを読み込みます。詳細はタグのセクションを参照してください。
 .RE
-.SS "General output control (advanced global options)"
+.SS "出力一般のコントロール（高度なグローバルオプション）"
 .PP
 \fB\-\-track\-order\fR \fIFID1:TID1,FID2:TID2,\&.\&.\&.\fR
 .RS 4
@@ -224,7 +224,7 @@ XMLファイルからセグメント情報を読み取ります。このファ�
 .sp
 特殊な値\fB\-1\fRが指定された場合、たとえビデオトラックが存在していてもサンプリング音の精度を使用します。
 .RE
-.SS "File splitting, linking and appending (more global options)"
+.SS "ファイルの分割と紐付け、追加結合(グローバルオプションの続き):"
 .PP
 \fB\-\-split\fR \fIspecification\fR
 .RS 4
@@ -371,7 +371,7 @@ $ mkvmerge \-o full\&.mkv =file1\&.mkv
 .RE
 .\}
 .RE
-.SS "Attachment support (more global options)"
+.SS "添付ファイルのサポート（グローバルオプションの続き）"
 .PP
 \fB\-\-attachment\-description\fR \fIdescription\fR
 .RS 4
@@ -396,7 +396,7 @@ Matroska(TM)ファイルの内部に添付ファイルを作成します。こ�
 
 \fBmkvextract\fR(1)でMatroska(TM)ファイルから添付ファイルを抽出することができます。
 .RE
-.SS "Options that can be used for each input file"
+.SS "各入力ファイルに指定できるオプション"
 .PP
 \fB\-a\fR, \fB\-\-audio\-tracks\fR \fI[!]\fR\fIn,m,\&.\&.\&.\fR
 .RS 4
@@ -597,7 +597,7 @@ part2 ビデオトラックにのみ適用できる、\*(Aqheader removal\*(Aq�
 .sp
 いくつかの字幕トラックにおけるデフォルトは\*(Aqzlib\*(Aq圧縮法です。この圧縮法はほとんど全ての再生アプリケーションでサポートされています。\*(Aqnone\*(Aq以外の他の圧縮法については、サポートされているとは限りません。
 .RE
-.SS "Options that only apply to video tracks"
+.SS "ビデオトラックにのみ適用されるオプション"
 .PP
 \fB\-f\fR, \fB\-\-fourcc\fR \fITID:FourCC\fR
 .RS 4
@@ -639,7 +639,7 @@ Matroska(TM)ファイルは再生時の画像スケールを決定するため�
 .sp
 \*(Aqmono\*(Aq, \*(Aqside_by_side_left_first\*(Aq, \*(Aqtop_bottom_right_first\*(Aq, \*(Aqtop_bottom_left_first\*(Aq, \*(Aqcheckerboard_right_first\*(Aq, \*(Aqcheckerboard_left_first\*(Aq, \*(Aqrow_interleaved_right_first\*(Aq, \*(Aqrow_interleaved_left_first\*(Aq, \*(Aqcolumn_interleaved_right_first\*(Aq, \*(Aqcolumn_interleaved_left_first\*(Aq, \*(Aqanaglyph_cyan_red\*(Aq, \*(Aqside_by_side_right_first\*(Aq, \*(Aqanaglyph_green_magenta\*(Aq, \*(Aqboth_eyes_laced_left_first\*(Aq, \*(Aqboth_eyes_laced_right_first\*(Aq\&.
 .RE
-.SS "Options that only apply to text subtitle tracks"
+.SS "テキスト字幕トラックにのみ適用されるオプション"
 .PP
 \fB\-\-sub\-charset\fR \fITID:character\-set\fR
 .RS 4
@@ -647,7 +647,7 @@ Matroska(TM)ファイルは再生時の画像スケールを決定するため�
 .sp
 このオプションは異るトラックIDを指定することで複数の入力トラックに対して使用することができます。
 .RE
-.SS "Other options"
+.SS "その他のオプション"
 .PP
 \fB\-i\fR, \fB\-\-identify\fR \fIfile\-name\fR
 .RS 4
