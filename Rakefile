@@ -223,9 +223,42 @@ namespace :translations do
   desc "Create a template for translating the programs"
   task :pot => "po/mkvtoolnix.pot"
   file "po/mkvtoolnix.pot" => $all_sources + $all_headers do |t|
-    runq 'XGETTEXT', <<-COMMAND
+    runq "XGETTEXT #{t.name}", <<-COMMAND
       xgettext --keyword=YT --keyword=Y --keyword=Z --keyword=TIP --default-domain=mkvtoolnix --from-code=UTF-8 -s --omit-header --boost -o #{t.name} #{t.prerequisites.join(" ")}
     COMMAND
+  end
+
+  desc "Create a new .po file with an empty template"
+  task "new-po" => "po/mkvtoolnix.pot" do
+    %w{LANGUAGE EMAIL}.each { |e| fail "Variable '#{e}' is not set" if ENV[e].blank? }
+
+    require 'rexml/document'
+    node   = REXML::XPath.first REXML::Document.new(File.new("/usr/share/xml/iso-codes/iso_639.xml")), "//iso_639_entry[@name='#{ENV['LANGUAGE']}']"
+    locale = node ? node.attributes['iso_639_1_code'] : nil
+    fail "Unknown language/ISO-639-1 code not found" if locale.blank?
+
+    puts "  CREATE po/#{locale}.po"
+    File.open "po/#{locale}.po", "w" do |out|
+      now = Time.now
+      out.puts <<EOT
+# translation of mkvtoolnix.pot to #{ENV['LANGUAGE']}
+# Copyright (C) #{now.year} Moritz Bunkus
+# This file is distributed under the same license as the mkvtoolnix package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: #{locale}\\n"
+"Report-Msgid-Bugs-To: Moritz Bunkus <moritz@bunkus.org>\\n"
+"POT-Creation-Date: #{now.strftime('%Y-%m-%d %H:%M%z')}\\n"
+"PO-Revision-Date: #{now.strftime('%Y-%m-%d %H:%M%z')}\\n"
+"Last-Translator: YOUR NAME <#{ENV['EMAIL']}>\\n"
+"Language-Team: #{ENV['LANGUAGE']} <moritz@bunkus.org>\\n"
+"Language: #{locale}\\n"
+"MIME-Version: 1.0\\n"
+
+EOT
+      out.puts IO.readlines("po/mkvtoolnix.pot")
+    end
   end
 
   desc "Verify format strings in translations"
