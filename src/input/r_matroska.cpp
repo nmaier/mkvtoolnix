@@ -1866,6 +1866,14 @@ kax_reader_c::create_mpeg4_p10_video_packetizer(kax_track_t *t,
 void
 kax_reader_c::create_vc1_video_packetizer(kax_track_t *t,
                                           track_info_c &nti) {
+  read_first_frames(t, 1);
+  if (   !t->first_frames_data.empty()
+      && (4 <= t->first_frames_data[0]->get_size())
+      && !vc1::is_marker(get_uint32_be(t->first_frames_data[0]->get_buffer()))) {
+    init_passthrough_packetizer(t);
+    return;
+  }
+
   set_track_packetizer(t, new vc1_video_packetizer_c(this, nti));
   show_packetizer_info(t->tnum, t->ptzr_ptr);
 

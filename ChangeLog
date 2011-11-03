@@ -1,3 +1,8 @@
+2011-11-04  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Fixed reading VC1 video tracks from Matroska
+	files that don't use VC1 start markers (0x00 0x00 0x01 ...).
+
 2011-10-30  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: enhancement: Added "ogv" to the list of known file
