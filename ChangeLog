@@ -1,5 +1,11 @@
 2011-11-04  Moritz Bunkus  <moritz@bunkus.org>
 
+	* examples: Added XSLT 2.0 stylesheets in the
+	"examples/stylesheets" directory for turning Matroska chapters
+	into cue sheet and split points for "shntool" (useful for
+	situations in which you have e.g. a live recording from a concert
+	including chapters and want to create one audio file per song).
+
 	* mkvmerge: bug fix: Fixed reading VC1 video tracks from Matroska
 	files that don't use VC1 start markers (0x00 0x00 0x01 ...).
 
