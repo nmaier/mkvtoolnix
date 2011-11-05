@@ -55,9 +55,9 @@ struct ac3_header_t {
   ac3_header_t();
 };
 
-int MTX_DLL_API find_ac3_header(const unsigned char *buf, size_t size, ac3_header_t *ac3_header, bool look_for_second_header);
-int MTX_DLL_API find_consecutive_ac3_headers(const unsigned char *buf, size_t size, unsigned int num);
-bool MTX_DLL_API parse_ac3_header(const unsigned char *buf, ac3_header_t &header);
-bool MTX_DLL_API verify_ac3_checksum(const unsigned char *buf, size_t size);
+int find_ac3_header(const unsigned char *buf, size_t size, ac3_header_t *ac3_header, bool look_for_second_header);
+int find_consecutive_ac3_headers(const unsigned char *buf, size_t size, unsigned int num);
+bool parse_ac3_header(const unsigned char *buf, ac3_header_t &header);
+bool verify_ac3_checksum(const unsigned char *buf, size_t size);
 
 #endif // __MTX_COMMON_AC3COMMON_H

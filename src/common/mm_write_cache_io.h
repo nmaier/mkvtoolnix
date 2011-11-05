@@ -18,7 +18,7 @@
 
 #include "common/mm_io.h"
 
-class MTX_DLL_API mm_write_cache_io_c: public mm_proxy_io_c {
+class mm_write_cache_io_c: public mm_proxy_io_c {
 protected:
   memory_cptr m_af_cache;
   size_t m_cache_pos, m_cache_size;

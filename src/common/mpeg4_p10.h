@@ -124,15 +124,15 @@ namespace mpeg4 {
       void dump();
     };
 
-    void MTX_DLL_API nalu_to_rbsp(memory_cptr &buffer);
-    void MTX_DLL_API rbsp_to_nalu(memory_cptr &buffer);
+    void nalu_to_rbsp(memory_cptr &buffer);
+    void rbsp_to_nalu(memory_cptr &buffer);
 
-    bool MTX_DLL_API parse_sps(memory_cptr &buffer, sps_info_t &sps, bool keep_ar_info = false);
-    bool MTX_DLL_API parse_pps(memory_cptr &buffer, pps_info_t &pps);
+    bool parse_sps(memory_cptr &buffer, sps_info_t &sps, bool keep_ar_info = false);
+    bool parse_pps(memory_cptr &buffer, pps_info_t &pps);
 
-    bool MTX_DLL_API extract_par(uint8_t *&buffer, size_t &buffer_size, uint32_t &par_num, uint32_t &par_den);
-    bool MTX_DLL_API is_avc_fourcc(const char *fourcc);
-    memory_cptr MTX_DLL_API avcc_to_nalus(const unsigned char *buffer, size_t size);
+    bool extract_par(uint8_t *&buffer, size_t &buffer_size, uint32_t &par_num, uint32_t &par_den);
+    bool is_avc_fourcc(const char *fourcc);
+    memory_cptr avcc_to_nalus(const unsigned char *buffer, size_t size);
 
     struct avc_frame_t {
       memory_cptr m_data;
@@ -172,7 +172,7 @@ namespace mpeg4 {
       };
     };
 
-    class MTX_DLL_API nalu_size_length_error_c {
+    class nalu_size_length_error_c {
     protected:
       int m_required_length;
 
@@ -187,7 +187,7 @@ namespace mpeg4 {
       };
     };
 
-    class MTX_DLL_API avc_es_parser_c {
+    class avc_es_parser_c {
     protected:
       int m_nalu_size_length;
 

@@ -21,8 +21,8 @@ enum output_compatibility_e {
   OC_WEBM,
 };
 
-bool MTX_DLL_API outputting_webm();
-void MTX_DLL_API set_output_compatibility(output_compatibility_e compatibility);
-output_compatibility_e MTX_DLL_API get_output_compatbility();
+bool outputting_webm();
+void set_output_compatibility(output_compatibility_e compatibility);
+output_compatibility_e get_output_compatbility();
 
 #endif // __MTX_MERGE_WEBM_H

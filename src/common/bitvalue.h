@@ -20,7 +20,7 @@
 
 #include <ebml/EbmlBinary.h>
 
-class MTX_DLL_API bitvalue_c {
+class bitvalue_c {
 private:
   memory_cptr m_value;
 public:

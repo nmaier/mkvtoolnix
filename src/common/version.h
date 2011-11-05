@@ -47,12 +47,12 @@ enum version_info_flags_e {
   vif_untranslated = 2,
 };
 
-std::string MTX_DLL_API get_version_info(const std::string &program, version_info_flags_e flags = vif_default);
-int MTX_DLL_API compare_current_version_to(const std::string &other_version_str);
-version_number_t MTX_DLL_API get_current_version();
+std::string get_version_info(const std::string &program, version_info_flags_e flags = vif_default);
+int compare_current_version_to(const std::string &other_version_str);
+version_number_t get_current_version();
 
 # if defined(HAVE_CURL_EASY_H)
-mtx_release_version_t MTX_DLL_API get_latest_release_version();
+mtx_release_version_t get_latest_release_version();
 # endif  // defined(HAVE_CURL_EASY_H)
 
 #endif  // __MTX_COMMON_VERSION_H

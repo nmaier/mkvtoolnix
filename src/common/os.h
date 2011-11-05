@@ -106,17 +106,6 @@ typedef _fsize_t ssize_t;
 
 #if defined(COMP_MINGW) || defined(COMP_MSC)
 
-// For DLL stuff...
-# if defined(MTX_DLL)
-#  if defined(MTX_DLL_EXPORT)
-#   define MTX_DLL_API __declspec(dllexport)
-#  else // MTX_DLL_EXPORT
-#   define MTX_DLL_API __declspec(dllimport)
-#  endif
-# else // MTX_DLL
-#  define MTX_DLL_API
-# endif
-
 # if defined(COMP_MINGW)
 // mingw is a special case. It does have inttypes.h declaring
 // PRId64 to be I64d, but it warns about "int type format, different
@@ -134,10 +123,6 @@ typedef _fsize_t ssize_t;
 #  define PRIu64 "I64u"
 #  define PRIx64 "I64x"
 # endif // defined(COMP_MINGW)
-
-#else  // COMP_MINGW || COMP_MSC
-
-# define MTX_DLL_API
 
 #endif // COMP_MINGW || COMP_MSC
 

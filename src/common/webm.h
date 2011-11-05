@@ -18,6 +18,6 @@
 
 #include <string>
 
-bool MTX_DLL_API is_webm_file_name(const std::string &file_name);
+bool is_webm_file_name(const std::string &file_name);
 
 #endif // __MTX_COMMON_WEBM_H

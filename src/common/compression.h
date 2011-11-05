@@ -42,9 +42,9 @@ enum compression_method_e {
   COMPRESSION_NUM = COMPRESSION_NONE
 };
 
-extern const char *MTX_DLL_API xcompression_methods[];
+extern const char *xcompression_methods[];
 
-class MTX_DLL_API compression_error_c: public error_c {
+class compression_error_c: public error_c {
 public:
   compression_error_c(const std::string &n_error): error_c(n_error) { }
   compression_error_c(const boost::format &n_error): error_c(n_error.str()) { }
@@ -53,7 +53,7 @@ public:
 class compressor_c;
 typedef counted_ptr<compressor_c> compressor_ptr;
 
-class MTX_DLL_API compressor_c {
+class compressor_c {
 protected:
   compression_method_e method;
   int64_t raw_size, compressed_size, items;
@@ -89,7 +89,7 @@ public:
 # include <lzo1x.h>
 #endif
 
-class MTX_DLL_API lzo_compressor_c: public compressor_c {
+class lzo_compressor_c: public compressor_c {
 protected:
   lzo_byte *wrkmem;
 
@@ -104,7 +104,7 @@ public:
 
 #include <zlib.h>
 
-class MTX_DLL_API zlib_compressor_c: public compressor_c {
+class zlib_compressor_c: public compressor_c {
 public:
   zlib_compressor_c();
   virtual ~zlib_compressor_c();
@@ -116,7 +116,7 @@ public:
 #if defined(HAVE_BZLIB_H)
 #include <bzlib.h>
 
-class MTX_DLL_API bzlib_compressor_c: public compressor_c {
+class bzlib_compressor_c: public compressor_c {
 public:
   bzlib_compressor_c();
   virtual ~bzlib_compressor_c();
@@ -126,7 +126,7 @@ public:
 };
 #endif // HAVE_BZLIB_H
 
-class MTX_DLL_API header_removal_compressor_c: public compressor_c {
+class header_removal_compressor_c: public compressor_c {
 protected:
   memory_cptr m_bytes;
 
@@ -144,7 +144,7 @@ public:
   virtual void set_track_headers(KaxContentEncoding &c_encoding);
 };
 
-class MTX_DLL_API analyze_header_removal_compressor_c: public compressor_c {
+class analyze_header_removal_compressor_c: public compressor_c {
 protected:
   memory_cptr m_bytes;
   unsigned int m_packet_counter;
@@ -159,32 +159,32 @@ public:
   virtual void set_track_headers(KaxContentEncoding &c_encoding);
 };
 
-class MTX_DLL_API mpeg4_p2_compressor_c: public header_removal_compressor_c {
+class mpeg4_p2_compressor_c: public header_removal_compressor_c {
 public:
   mpeg4_p2_compressor_c();
 };
 
-class MTX_DLL_API mpeg4_p10_compressor_c: public header_removal_compressor_c {
+class mpeg4_p10_compressor_c: public header_removal_compressor_c {
 public:
   mpeg4_p10_compressor_c();
 };
 
-class MTX_DLL_API dirac_compressor_c: public header_removal_compressor_c {
+class dirac_compressor_c: public header_removal_compressor_c {
 public:
   dirac_compressor_c();
 };
 
-class MTX_DLL_API dts_compressor_c: public header_removal_compressor_c {
+class dts_compressor_c: public header_removal_compressor_c {
 public:
   dts_compressor_c();
 };
 
-class MTX_DLL_API ac3_compressor_c: public header_removal_compressor_c {
+class ac3_compressor_c: public header_removal_compressor_c {
 public:
   ac3_compressor_c();
 };
 
-class MTX_DLL_API mp3_compressor_c: public header_removal_compressor_c {
+class mp3_compressor_c: public header_removal_compressor_c {
 public:
   mp3_compressor_c();
 };
@@ -208,7 +208,7 @@ struct kax_content_encoding_t {
   kax_content_encoding_t();
 };
 
-class MTX_DLL_API content_decoder_c {
+class content_decoder_c {
 protected:
   std::vector<kax_content_encoding_t> encodings;
   bool ok;

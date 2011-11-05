@@ -66,11 +66,11 @@
 #define MPEGVIDEO_FOURCC_MPEG2  0x10000002
 
 namespace mpeg1_2 {
-  int MTX_DLL_API extract_fps_idx(const unsigned char *buffer, int buffer_size);
-  double MTX_DLL_API get_fps(int idx);
-  bool MTX_DLL_API extract_ar(const unsigned char *buffer, int buffer_size, float &ar);
-  bool MTX_DLL_API is_fourcc(uint32_t fourcc);
-  bool MTX_DLL_API version_from_fourcc(uint32_t fourcc);
+  int extract_fps_idx(const unsigned char *buffer, int buffer_size);
+  double get_fps(int idx);
+  bool extract_ar(const unsigned char *buffer, int buffer_size, float &ar);
+  bool is_fourcc(uint32_t fourcc);
+  bool version_from_fourcc(uint32_t fourcc);
 };
 
 #endif  // __MTX_COMMON_MPEG1_2_H

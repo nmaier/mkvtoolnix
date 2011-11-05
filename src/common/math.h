@@ -19,8 +19,8 @@
 #define irnd(a) ((int64_t)((double)(a) + 0.5))
 #define iabs(a) ((a) < 0 ? (a) * -1 : (a))
 
-uint32_t MTX_DLL_API round_to_nearest_pow2(uint32_t value);
+uint32_t round_to_nearest_pow2(uint32_t value);
 
-int MTX_DLL_API int_log2(uint32_t value);
+int int_log2(uint32_t value);
 
 #endif  // __MTX_COMMON_MATH_H

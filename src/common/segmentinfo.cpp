@@ -47,7 +47,7 @@ using namespace libmatroska;
    \return A segment element containing the elements parsed from the file or
      \c NULL if an error occured.
 */
-KaxInfo *MTX_DLL_API
+KaxInfo *
 parse_segmentinfo(const std::string &file_name,
                   bool exception_on_error) {
   try {

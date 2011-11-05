@@ -22,11 +22,11 @@ typedef struct {
   const char *name, *extensions;
 } mime_type_t;
 
-extern MTX_DLL_API const char *sub_charsets[];
-extern MTX_DLL_API const mime_type_t mime_types[];
-extern MTX_DLL_API const char *cctlds[];
+extern const char *sub_charsets[];
+extern const mime_type_t mime_types[];
+extern const char *cctlds[];
 
-std::string MTX_DLL_API guess_mime_type(std::string ext, bool is_file);
-bool MTX_DLL_API is_valid_cctld(const std::string &s);
+std::string guess_mime_type(std::string ext, bool is_file);
+bool is_valid_cctld(const std::string &s);
 
 #endif // __MTX_COMMON_EXTERN_DATA_H

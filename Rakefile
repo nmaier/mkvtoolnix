@@ -136,16 +136,10 @@ end
 
 # Store compiler block for re-use
 cxx_compiler = lambda do |t|
-  cxxflags = case
-             when !c?(:LIBMTXCOMMONDLL)       then ''
-             when /src\/common/.match(t.name) then c(:CXXFLAGS_SRC_COMMON)
-             else                                  c(:CXXFLAGS_NO_SRC_COMMON)
-             end
-
   # t.sources is empty for a 'file' task (common_pch.h.o).
   sources = t.sources.empty? ? [ t.prerequisites.first ] : t.sources
 
-  runq "     CXX #{sources.first}", "#{c(:CXX)} #{$flags[:cxxflags]} #{$system_includes} #{cxxflags} -c -MMD -o #{t.name} #{sources.join(" ")}", :allow_failure => true
+  runq "     CXX #{sources.first}", "#{c(:CXX)} #{$flags[:cxxflags]} #{$system_includes} -c -MMD -o #{t.name} #{sources.join(" ")}", :allow_failure => true
   handle_deps t.name, last_exit_code
 end
 

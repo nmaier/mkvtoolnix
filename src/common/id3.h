@@ -18,9 +18,9 @@
 
 class mm_io_c;
 
-int MTX_DLL_API skip_id3v2_tag(mm_io_c &io);
-int MTX_DLL_API id3v1_tag_present_at_end(mm_io_c &io);
-int MTX_DLL_API id3v2_tag_present_at_end(mm_io_c &io);
-int MTX_DLL_API id3_tag_present_at_end(mm_io_c &io);
+int skip_id3v2_tag(mm_io_c &io);
+int id3v1_tag_present_at_end(mm_io_c &io);
+int id3v2_tag_present_at_end(mm_io_c &io);
+int id3_tag_present_at_end(mm_io_c &io);
 
 #endif /* __ID3_COMMON_H */

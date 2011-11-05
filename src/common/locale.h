@@ -104,17 +104,17 @@ private:                        // Static functions
   static UINT extract_code_page(const std::string &charset);
 };
 
-unsigned MTX_DLL_API Utf8ToUtf16(const char *utf8, int utf8len, wchar_t *utf16, unsigned utf16len);
-char * MTX_DLL_API win32_wide_to_multi(const wchar_t *wbuffer);
-wchar_t * MTX_DLL_API win32_utf8_to_utf16(const char *s);
-std::string MTX_DLL_API win32_wide_to_multi_utf8(const wchar_t *wbuffer);
+unsigned Utf8ToUtf16(const char *utf8, int utf8len, wchar_t *utf16, unsigned utf16len);
+char * win32_wide_to_multi(const wchar_t *wbuffer);
+wchar_t * win32_utf8_to_utf16(const char *s);
+std::string win32_wide_to_multi_utf8(const wchar_t *wbuffer);
 #endif
 
-extern charset_converter_cptr MTX_DLL_API g_cc_local_utf8;
+extern charset_converter_cptr g_cc_local_utf8;
 
-std::string MTX_DLL_API get_local_charset();
-std::string MTX_DLL_API get_local_console_charset();
+std::string get_local_charset();
+std::string get_local_console_charset();
 
-std::vector<std::string> MTX_DLL_API command_line_utf8(int argc, char **argv);
+std::vector<std::string> command_line_utf8(int argc, char **argv);
 
 #endif  // __MTX_COMMON_LOCALE_H

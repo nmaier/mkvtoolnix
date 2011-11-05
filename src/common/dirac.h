@@ -68,9 +68,9 @@ namespace dirac {
   };
   typedef counted_ptr<frame_t> frame_cptr;
 
-  bool MTX_DLL_API parse_sequence_header(const unsigned char *buf, int size, sequence_header_t &seqhdr);
+  bool parse_sequence_header(const unsigned char *buf, int size, sequence_header_t &seqhdr);
 
-  class MTX_DLL_API es_parser_c {
+  class es_parser_c {
   protected:
     int64_t m_stream_pos;
 

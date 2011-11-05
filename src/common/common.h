@@ -78,16 +78,16 @@ using namespace libebml;
 
 #define TIMECODE_SCALE 1000000
 
-void MTX_DLL_API mxexit(int code = -1);
-void MTX_DLL_API set_process_priority(int priority);
+void mxexit(int code = -1);
+void set_process_priority(int priority);
 
-extern unsigned int MTX_DLL_API verbose;
+extern unsigned int verbose;
 
 #define mxforeach(it, vec)       for (it = (vec).begin(); it != (vec).end(); it++)
 #define mxfind(value, cont)      std::find(cont.begin(), cont.end(), value)
 #define mxfind2(it, value, cont) ((it = std::find((cont).begin(), (cont).end(), value)) != (cont).end())
 #define map_has_key(m, k)        ((m).end() != (m).find(k))
 
-void MTX_DLL_API mtx_common_init();
+void mtx_common_init();
 
 #endif // __MTX_COMMON_COMMON_H

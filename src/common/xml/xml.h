@@ -18,7 +18,7 @@
 
 #include <string>
 
-std::string MTX_DLL_API escape_xml(const std::string &src);
-std::string MTX_DLL_API create_xml_node_name(const char *name, const char **atts);
+std::string escape_xml(const std::string &src);
+std::string create_xml_node_name(const char *name, const char **atts);
 
 #endif  // __MTX_COMMON_XML_H

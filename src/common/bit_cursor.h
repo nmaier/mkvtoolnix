@@ -20,7 +20,7 @@
 #include "common/mm_io.h"
 #include "common/smart_pointers.h"
 
-class MTX_DLL_API bit_cursor_c {
+class bit_cursor_c {
 private:
   const unsigned char *m_end_of_data;
   const unsigned char *m_byte_position;
@@ -167,7 +167,7 @@ public:
   }
 };
 
-class MTX_DLL_API bit_writer_c {
+class bit_writer_c {
 private:
   unsigned char *m_end_of_data;
   unsigned char *m_byte_position;

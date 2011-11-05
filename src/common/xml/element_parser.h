@@ -29,7 +29,7 @@ class mm_text_io_c;
 
 using namespace libebml;
 
-class MTX_DLL_API xml_parser_error_c: public error_c {
+class xml_parser_error_c: public error_c {
 public:
   int m_line, m_column;
 
@@ -52,7 +52,7 @@ public:
   }
 };
 
-class MTX_DLL_API xml_parser_c {
+class xml_parser_c {
 private:
   std::string m_xml_attribute_name, m_xml_attribute_value;
 
@@ -116,12 +116,11 @@ typedef counted_ptr<parser_data_t> parser_data_cptr;
 #define xmlp_pelt  static_cast<parser_data_t *>(pdata)->parents.back()
 #define xmlp_pname xmlp_parent_name(static_cast<parser_data_t *>(pdata), xmlp_pelt)
 
-EbmlMaster * MTX_DLL_API parse_xml_elements(const char *parser_name, const parser_element_t *mapping, mm_text_io_c *in);
+EbmlMaster * parse_xml_elements(const char *parser_name, const parser_element_t *mapping, mm_text_io_c *in);
 
-const char * MTX_DLL_API
-xmlp_parent_name(parser_data_t *pdata, EbmlElement *e);
+const char *xmlp_parent_name(parser_data_t *pdata, EbmlElement *e);
 
-void MTX_DLL_API xmlp_error(parser_data_t *pdata, const std::string &message);
+void xmlp_error(parser_data_t *pdata, const std::string &message);
 inline void
 xmlp_error(parser_data_t *pdata,
            const boost::format &format) {

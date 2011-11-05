@@ -152,12 +152,12 @@ typedef struct dts_header_s {
 
 } dts_header_t;
 
-int MTX_DLL_API find_dts_sync_word(const unsigned char *buf, unsigned int size);
-int MTX_DLL_API find_dts_header(const unsigned char *buf, unsigned int size, struct dts_header_s *dts_header, bool allow_no_hd_search = false);
-int MTX_DLL_API find_consecutive_dts_headers(const unsigned char *buf, unsigned int size, unsigned int num);
-void MTX_DLL_API print_dts_header(const struct dts_header_s *dts_header);
+int find_dts_sync_word(const unsigned char *buf, unsigned int size);
+int find_dts_header(const unsigned char *buf, unsigned int size, struct dts_header_s *dts_header, bool allow_no_hd_search = false);
+int find_consecutive_dts_headers(const unsigned char *buf, unsigned int size, unsigned int num);
+void print_dts_header(const struct dts_header_s *dts_header);
 
-bool MTX_DLL_API operator ==(const dts_header_s &h1, const dts_header_s &h2);
+bool operator ==(const dts_header_s &h1, const dts_header_s &h2);
 
 inline int get_dts_packet_length_in_core_samples(const struct dts_header_s
                                                  *dts_header) {
@@ -182,13 +182,13 @@ inline double get_dts_packet_length_in_nanoseconds(const struct dts_header_s
   return t;
 }
 
-void MTX_DLL_API dts_14_to_dts_16(const unsigned short *src,
+void dts_14_to_dts_16(const unsigned short *src,
                                   unsigned long srcwords,
                                   unsigned short *dst);
 
-bool MTX_DLL_API detect_dts(const void *src_buf, int len,
+bool detect_dts(const void *src_buf, int len,
                             bool &dts14_to_16, bool &swap_bytes);
 
-bool MTX_DLL_API operator!=(const dts_header_t &l, const dts_header_t &r);
+bool operator!=(const dts_header_t &l, const dts_header_t &r);
 
 #endif // __MTX_COMMON_DTSCOMMON_H

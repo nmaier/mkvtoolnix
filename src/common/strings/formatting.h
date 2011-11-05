@@ -36,28 +36,28 @@
 
 #define WRAP_AT_TERMINAL_WIDTH -1
 
-std::string MTX_DLL_API format_timecode(int64_t timecode, unsigned int precision = 9);
-std::string MTX_DLL_API format_paragraph(const std::string &text_to_wrap,
+std::string format_timecode(int64_t timecode, unsigned int precision = 9);
+std::string format_paragraph(const std::string &text_to_wrap,
                                          int indent_column                    = 0,
                                          const std::string &indent_first_line = empty_string,
                                          std::string indent_following_lines   = empty_string,
                                          int wrap_column                      = WRAP_AT_TERMINAL_WIDTH,
                                          const char *break_chars              = " ,.)/:");
 
-std::wstring MTX_DLL_API format_paragraph(const std::wstring &text_to_wrap,
+std::wstring format_paragraph(const std::wstring &text_to_wrap,
                                           int indent_column                     = 0,
                                           const std::wstring &indent_first_line = L" ",
                                           std::wstring indent_following_lines   = L" ",
                                           int wrap_column                       = WRAP_AT_TERMINAL_WIDTH,
                                           const std::wstring &break_chars       = L" ,.)/:");
 
-void MTX_DLL_API fix_format(const char *fmt, std::string &new_fmt);
+void fix_format(const char *fmt, std::string &new_fmt);
 
-std::string MTX_DLL_API to_string(int value);
-std::string MTX_DLL_API to_string(unsigned int value);
-std::string MTX_DLL_API to_string(int64_t value);
-std::string MTX_DLL_API to_string(uint64_t value);
-std::string MTX_DLL_API to_string(double value, unsigned int precision);
-std::string MTX_DLL_API to_string(int64_t numerator, int64_t denominator, unsigned int precision);
+std::string to_string(int value);
+std::string to_string(unsigned int value);
+std::string to_string(int64_t value);
+std::string to_string(uint64_t value);
+std::string to_string(double value, unsigned int precision);
+std::string to_string(int64_t numerator, int64_t denominator, unsigned int precision);
 
 #endif  // __MTX_COMMON_STRING_FORMATTING_H

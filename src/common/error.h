@@ -17,7 +17,7 @@
 #include "common/common_pch.h"
 
 
-class MTX_DLL_API error_c {
+class error_c {
 protected:
   std::string error;
 

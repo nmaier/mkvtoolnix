@@ -26,38 +26,38 @@
 using namespace libebml;
 class mm_io_c;
 
-extern bool MTX_DLL_API g_suppress_info, g_suppress_warnings;
-extern std::string MTX_DLL_API g_stdio_charset;
-extern charset_converter_cptr MTX_DLL_API g_cc_stdio;
-extern counted_ptr<mm_io_c> MTX_DLL_API g_mm_stdio;
+extern bool g_suppress_info, g_suppress_warnings;
+extern std::string g_stdio_charset;
+extern charset_converter_cptr g_cc_stdio;
+extern counted_ptr<mm_io_c> g_mm_stdio;
 
-void MTX_DLL_API redirect_stdio(mm_io_c *new_stdio);
-bool MTX_DLL_API stdio_redirected();
+void redirect_stdio(mm_io_c *new_stdio);
+bool stdio_redirected();
 
-void MTX_DLL_API init_cc_stdio();
-void MTX_DLL_API set_cc_stdio(const std::string &charset);
+void init_cc_stdio();
+void set_cc_stdio(const std::string &charset);
 
-void MTX_DLL_API mxmsg(unsigned int level, std::string message);
+void mxmsg(unsigned int level, std::string message);
 inline void
 mxmsg(unsigned int level,
       const boost::format &message) {
   mxmsg(level, message.str());
 }
 
-void MTX_DLL_API mxinfo(const std::string &info);
+void mxinfo(const std::string &info);
 inline void mxinfo(const boost::format &info) {
   mxinfo(info.str());
 }
-void MTX_DLL_API mxinfo(const std::wstring &info);
-void MTX_DLL_API mxinfo(const boost::wformat &info);
+void mxinfo(const std::wstring &info);
+void mxinfo(const boost::wformat &info);
 
-void MTX_DLL_API mxwarn(const std::string &warning);
+void mxwarn(const std::string &warning);
 inline void
 mxwarn(const boost::format &warning) {
   mxwarn(warning.str());
 }
 
-void MTX_DLL_API mxerror(const std::string &error);
+void mxerror(const std::string &error);
 inline void
 mxerror(const boost::format &error) {
   mxerror(error.str());
@@ -76,14 +76,14 @@ mxerror(const boost::format &error) {
     mxdebug(msg);                  \
   }
 
-void MTX_DLL_API mxinfo_fn(const std::string &file_name, const std::string &info);
+void mxinfo_fn(const std::string &file_name, const std::string &info);
 inline void
 mxinfo_fn(const std::string &file_name,
           const boost::format &info) {
   mxinfo_fn(file_name, info.str());
 }
 
-void MTX_DLL_API mxinfo_tid(const std::string &file_name, int64_t track_id, const std::string &info);
+void mxinfo_tid(const std::string &file_name, int64_t track_id, const std::string &info);
 inline void
 mxinfo_tid(const std::string &file_name,
            int64_t track_id,
@@ -91,14 +91,14 @@ mxinfo_tid(const std::string &file_name,
   mxinfo_tid(file_name, track_id, info.str());
 }
 
-void MTX_DLL_API mxwarn_fn(const std::string &file_name, const std::string &info);
+void mxwarn_fn(const std::string &file_name, const std::string &info);
 inline void
 mxwarn_fn(const std::string &file_name,
           const boost::format &info) {
   mxwarn_fn(file_name, info.str());
 }
 
-void MTX_DLL_API mxwarn_tid(const std::string &file_name, int64_t track_id, const std::string &warning);
+void mxwarn_tid(const std::string &file_name, int64_t track_id, const std::string &warning);
 inline void
 mxwarn_tid(const std::string &file_name,
            int64_t track_id,
@@ -106,14 +106,14 @@ mxwarn_tid(const std::string &file_name,
   mxwarn_tid(file_name, track_id, warning.str());
 }
 
-void MTX_DLL_API mxerror_fn(const std::string &file_name, const std::string &error);
+void mxerror_fn(const std::string &file_name, const std::string &error);
 inline void
 mxerror_fn(const std::string &file_name,
            const boost::format &error) {
   mxerror_fn(file_name, error.str());
 }
 
-void MTX_DLL_API mxerror_tid(const std::string &file_name, int64_t track_id, const std::string &error);
+void mxerror_tid(const std::string &file_name, int64_t track_id, const std::string &error);
 inline void
 mxerror_tid(const std::string &file_name,
             int64_t track_id,
@@ -121,7 +121,7 @@ mxerror_tid(const std::string &file_name,
   mxerror_tid(file_name, track_id, error.str());
 }
 
-void MTX_DLL_API mxverb_fn(unsigned int level, const std::string &file_name, const std::string &message);
+void mxverb_fn(unsigned int level, const std::string &file_name, const std::string &message);
 inline void
 mxverb_fn(unsigned int level,
           const std::string &file_name,
@@ -129,7 +129,7 @@ mxverb_fn(unsigned int level,
   mxverb_fn(level, file_name, message.str());
 }
 
-void MTX_DLL_API mxverb_tid(unsigned int level, const std::string &file_name, int64_t track_id, const std::string &message);
+void mxverb_tid(unsigned int level, const std::string &file_name, int64_t track_id, const std::string &message);
 inline void
 mxverb_tid(unsigned int level,
            const std::string &file_name,
@@ -138,9 +138,9 @@ mxverb_tid(unsigned int level,
   mxverb_tid(level, file_name, track_id, message.str());
 }
 
-void MTX_DLL_API mxhexdump(unsigned int level, const void *buffer_to_dump, size_t lenth);
+void mxhexdump(unsigned int level, const void *buffer_to_dump, size_t lenth);
 
-void MTX_DLL_API dump_ebml_elements(EbmlElement *element, bool with_values = false, unsigned int level = 0);
+void dump_ebml_elements(EbmlElement *element, bool with_values = false, unsigned int level = 0);
 
 std::string fourcc_to_string(uint32_t fourcc);
 

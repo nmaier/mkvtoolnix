@@ -31,27 +31,27 @@
 
 using namespace libebml;
 
-class MTX_DLL_API mm_io_error_c: public error_c {
+class mm_io_error_c: public error_c {
 public:
   mm_io_error_c(const std::string &_error): error_c(_error) { }
 };
 
-class MTX_DLL_API mm_io_eof_error_c: public mm_io_error_c {
+class mm_io_eof_error_c: public mm_io_error_c {
 public:
   mm_io_eof_error_c(): mm_io_error_c("end-of-file") { }
 };
 
-class MTX_DLL_API mm_io_seek_error_c: public mm_io_error_c {
+class mm_io_seek_error_c: public mm_io_error_c {
 public:
   mm_io_seek_error_c(): mm_io_error_c("seeking failed") { }
 };
 
-class MTX_DLL_API mm_io_open_error_c: public mm_io_error_c {
+class mm_io_open_error_c: public mm_io_error_c {
 public:
   mm_io_open_error_c(): mm_io_error_c("opening the file failed") { }
 };
 
-class MTX_DLL_API mm_io_c: public IOCallback {
+class mm_io_c: public IOCallback {
 protected:
   bool m_dos_style_newlines;
   std::stack<int64_t> m_positions;
@@ -145,7 +145,7 @@ struct file_id_t {
 };
 #endif
 
-class MTX_DLL_API mm_file_io_c: public mm_io_c {
+class mm_file_io_c: public mm_io_c {
 protected:
   std::string m_file_name;
   void *m_file;
@@ -195,7 +195,7 @@ protected:
 
 typedef counted_ptr<mm_file_io_c> mm_file_io_cptr;
 
-class MTX_DLL_API mm_proxy_io_c: public mm_io_c {
+class mm_proxy_io_c: public mm_io_c {
 protected:
   mm_io_c *m_proxy_io;
   bool m_proxy_delete_io;
@@ -231,7 +231,7 @@ protected:
 
 typedef counted_ptr<mm_proxy_io_c> mm_proxy_io_cptr;
 
-class MTX_DLL_API mm_null_io_c: public mm_io_c {
+class mm_null_io_c: public mm_io_c {
 protected:
   int64_t m_pos;
 
@@ -249,7 +249,7 @@ protected:
 
 typedef counted_ptr<mm_null_io_c> mm_null_io_cptr;
 
-class MTX_DLL_API mm_mem_io_c: public mm_io_c {
+class mm_mem_io_c: public mm_io_c {
 protected:
   size_t m_pos, m_mem_size, m_allocated, m_increase;
   unsigned char *m_mem;
@@ -284,7 +284,7 @@ typedef counted_ptr<mm_mem_io_c> mm_mem_io_cptr;
 
 enum byte_order_e {BO_UTF8, BO_UTF16_LE, BO_UTF16_BE, BO_UTF32_LE, BO_UTF32_BE, BO_NONE};
 
-class MTX_DLL_API mm_text_io_c: public mm_proxy_io_c {
+class mm_text_io_c: public mm_proxy_io_c {
 protected:
   byte_order_e m_byte_order;
   unsigned int m_bom_len;
@@ -311,7 +311,7 @@ public:
 
 typedef counted_ptr<mm_text_io_c> mm_text_io_cptr;
 
-class MTX_DLL_API mm_stdio_c: public mm_io_c {
+class mm_stdio_c: public mm_io_c {
 public:
   mm_stdio_c();
 

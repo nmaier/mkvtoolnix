@@ -26,10 +26,10 @@ safefree(void *p) {
 }
 
 #define safemalloc(s) _safemalloc(s, __FILE__, __LINE__)
-unsigned char *MTX_DLL_API _safemalloc(size_t size, const char *file, int line);
+unsigned char *_safemalloc(size_t size, const char *file, int line);
 
 #define safememdup(src, size) _safememdup(src, size, __FILE__, __LINE__)
-unsigned char *MTX_DLL_API _safememdup(const void *src, size_t size, const char *file, int line);
+unsigned char *_safememdup(const void *src, size_t size, const char *file, int line);
 
 #define safestrdup(s) _safestrdup(s, __FILE__, __LINE__)
 inline char *
@@ -52,13 +52,13 @@ _safestrdup(const char *s,
 }
 
 #define saferealloc(mem, size) _saferealloc(mem, size, __FILE__, __LINE__)
-unsigned char *MTX_DLL_API _saferealloc(void *mem, size_t size, const char *file, int line);
+unsigned char *_saferealloc(void *mem, size_t size, const char *file, int line);
 
-class MTX_DLL_API memory_c;
+class memory_c;
 typedef counted_ptr<memory_c> memory_cptr;
 typedef std::vector<memory_cptr> memories_c;
 
-class MTX_DLL_API memory_c {
+class memory_c {
 public:
   typedef unsigned char X;
 
@@ -202,7 +202,7 @@ private:
   }
 };
 
-class MTX_DLL_API memory_slice_cursor_c {
+class memory_slice_cursor_c {
  protected:
   size_t m_pos, m_pos_in_slice, m_size;
   std::deque<memory_cptr> m_slices;
@@ -341,7 +341,7 @@ struct buffer_t {
   ~buffer_t();
 };
 
-memory_cptr MTX_DLL_API lace_memory_xiph(const std::vector<memory_cptr> &blocks);
-std::vector<memory_cptr> MTX_DLL_API unlace_memory_xiph(memory_cptr &buffer);
+memory_cptr lace_memory_xiph(const std::vector<memory_cptr> &blocks);
+std::vector<memory_cptr> unlace_memory_xiph(memory_cptr &buffer);
 
 #endif  // __MTX_COMMON_MEMORY_H

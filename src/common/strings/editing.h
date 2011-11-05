@@ -24,7 +24,7 @@
 
 namespace ba = boost::algorithm;
 
-std::vector<std::string> MTX_DLL_API split(const char *src, const char *pattern = ",", int max_num = -1);
+std::vector<std::string> split(const char *src, const char *pattern = ",", int max_num = -1);
 inline std::vector<std::string>
 split(const std::string &src,
       const std::string &pattern = std::string(","),
@@ -32,24 +32,24 @@ split(const std::string &src,
   return split(src.c_str(), pattern.c_str(), max_num);
 }
 
-std::string MTX_DLL_API join(const char *pattern, const std::vector<std::string> &strings);
+std::string join(const char *pattern, const std::vector<std::string> &strings);
 
-void MTX_DLL_API strip(std::string &s, bool newlines = false);
-void MTX_DLL_API strip(std::vector<std::string> &v, bool newlines = false);
-void MTX_DLL_API strip_back(std::string &s, bool newlines = false);
+void strip(std::string &s, bool newlines = false);
+void strip(std::vector<std::string> &v, bool newlines = false);
+void strip_back(std::string &s, bool newlines = false);
 
-std::string &MTX_DLL_API shrink_whitespace(std::string &s);
+std::string &shrink_whitespace(std::string &s);
 
-std::string MTX_DLL_API escape(const std::string &src);
-std::string MTX_DLL_API unescape(const std::string &src);
+std::string escape(const std::string &src);
+std::string unescape(const std::string &src);
 
-std::string MTX_DLL_API get_displayable_string(const char *src, int max_len = -1);
+std::string get_displayable_string(const char *src, int max_len = -1);
 
-extern const std::string MTX_DLL_API empty_string;
+extern const std::string empty_string;
 
-int MTX_DLL_API get_arg_len(const char *fmt, ...);
-int MTX_DLL_API get_varg_len(const char *fmt, va_list ap);
+int get_arg_len(const char *fmt, ...);
+int get_varg_len(const char *fmt, va_list ap);
 
-size_t MTX_DLL_API utf8_strlen(const std::string &s);
+size_t utf8_strlen(const std::string &s);
 
 #endif  // __MTX_COMMON_STRINGS_H

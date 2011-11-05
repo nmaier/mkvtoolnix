@@ -22,7 +22,7 @@
 #define THEORA_HEADERTYPE_COMMENT        0x81
 #define THEORA_HEADERTYPE_SETUP          0x82
 
-struct MTX_DLL_API theora_identification_header_t {
+struct theora_identification_header_t {
   uint8_t headertype;
   char theora_string[6];
 
@@ -57,6 +57,6 @@ struct MTX_DLL_API theora_identification_header_t {
   theora_identification_header_t();
 };
 
-void MTX_DLL_API theora_parse_identification_header(unsigned char *buffer, int size, theora_identification_header_t &header) throw(error_c);
+void theora_parse_identification_header(unsigned char *buffer, int size, theora_identification_header_t &header) throw(error_c);
 
 #endif // __MTX_COMMON_THEORA_COMMON_H

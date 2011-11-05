@@ -40,7 +40,7 @@
 #define ENGAGE_VOBSUB_SUBPIC_STOP_CMDS      17
 #define ENGAGE_MAX_IDX                      ENGAGE_VOBSUB_SUBPIC_STOP_CMDS
 
-void MTX_DLL_API engage_hacks(const std::string &hacks);
-bool MTX_DLL_API hack_engaged(unsigned int id);
+void engage_hacks(const std::string &hacks);
+bool hack_engaged(unsigned int id);
 
 #endif // __MTX_COMMON_HACKS_H

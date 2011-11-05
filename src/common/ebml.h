@@ -26,24 +26,24 @@ using namespace libmatroska;
 
 #define can_be_cast(c, e) (dynamic_cast<c *>(e) != NULL)
 
-bool MTX_DLL_API is_valid_utf8_string(const std::string &c);
-UTFstring MTX_DLL_API cstrutf8_to_UTFstring(const std::string &c);
-std::string MTX_DLL_API UTFstring_to_cstrutf8(const UTFstring &u);
+bool is_valid_utf8_string(const std::string &c);
+UTFstring cstrutf8_to_UTFstring(const std::string &c);
+std::string UTFstring_to_cstrutf8(const UTFstring &u);
 
-int64_t MTX_DLL_API kt_get_default_duration(KaxTrackEntry &track);
-int64_t MTX_DLL_API kt_get_number(KaxTrackEntry &track);
-int64_t MTX_DLL_API kt_get_uid(KaxTrackEntry &track);
-std::string MTX_DLL_API kt_get_codec_id(KaxTrackEntry &track);
-int MTX_DLL_API kt_get_max_blockadd_id(KaxTrackEntry &track);
-std::string MTX_DLL_API kt_get_language(KaxTrackEntry &track);
+int64_t kt_get_default_duration(KaxTrackEntry &track);
+int64_t kt_get_number(KaxTrackEntry &track);
+int64_t kt_get_uid(KaxTrackEntry &track);
+std::string kt_get_codec_id(KaxTrackEntry &track);
+int kt_get_max_blockadd_id(KaxTrackEntry &track);
+std::string kt_get_language(KaxTrackEntry &track);
 
-int MTX_DLL_API kt_get_a_channels(KaxTrackEntry &track);
-float MTX_DLL_API kt_get_a_sfreq(KaxTrackEntry &track);
-float MTX_DLL_API kt_get_a_osfreq(KaxTrackEntry &track);
-int MTX_DLL_API kt_get_a_bps(KaxTrackEntry &track);
+int kt_get_a_channels(KaxTrackEntry &track);
+float kt_get_a_sfreq(KaxTrackEntry &track);
+float kt_get_a_osfreq(KaxTrackEntry &track);
+int kt_get_a_bps(KaxTrackEntry &track);
 
-int MTX_DLL_API kt_get_v_pixel_width(KaxTrackEntry &track);
-int MTX_DLL_API kt_get_v_pixel_height(KaxTrackEntry &track);
+int kt_get_v_pixel_width(KaxTrackEntry &track);
+int kt_get_v_pixel_height(KaxTrackEntry &track);
 
 #define is_id(e, ref) (EbmlId(*e) == EBML_ID(ref))
 #if !defined(EBML_INFO)
@@ -180,19 +180,19 @@ GetFirstOrNextChild(EbmlMaster *master,
   return NULL == previous_child ? GetChild<A>(*master) : GetNextChild<A>(*master, *previous_child);
 }
 
-EbmlElement *MTX_DLL_API empty_ebml_master(EbmlElement *e);
-EbmlElement *MTX_DLL_API create_ebml_element(const EbmlCallbacks &callbacks, const EbmlId &id);
-EbmlMaster *MTX_DLL_API sort_ebml_master(EbmlMaster *e);
-void MTX_DLL_API remove_voids_from_master(EbmlElement *element);
+EbmlElement *empty_ebml_master(EbmlElement *e);
+EbmlElement *create_ebml_element(const EbmlCallbacks &callbacks, const EbmlId &id);
+EbmlMaster *sort_ebml_master(EbmlMaster *e);
+void remove_voids_from_master(EbmlElement *element);
 
-const EbmlCallbacks *MTX_DLL_API find_ebml_callbacks(const EbmlCallbacks &base, const EbmlId &id);
-const EbmlCallbacks *MTX_DLL_API find_ebml_callbacks(const EbmlCallbacks &base, const char *debug_name);
-const EbmlCallbacks *MTX_DLL_API find_ebml_parent_callbacks(const EbmlCallbacks &base, const EbmlId &id);
-const EbmlSemantic *MTX_DLL_API find_ebml_semantic(const EbmlCallbacks &base, const EbmlId &id);
+const EbmlCallbacks *find_ebml_callbacks(const EbmlCallbacks &base, const EbmlId &id);
+const EbmlCallbacks *find_ebml_callbacks(const EbmlCallbacks &base, const char *debug_name);
+const EbmlCallbacks *find_ebml_parent_callbacks(const EbmlCallbacks &base, const EbmlId &id);
+const EbmlSemantic *find_ebml_semantic(const EbmlCallbacks &base, const EbmlId &id);
 
-EbmlElement *MTX_DLL_API find_ebml_element_by_id(EbmlMaster *master, const EbmlId &id);
+EbmlElement *find_ebml_element_by_id(EbmlMaster *master, const EbmlId &id);
 
-void MTX_DLL_API fix_mandatory_elements(EbmlElement *master);
+void fix_mandatory_elements(EbmlElement *master);
 
 template<typename A> void
 provide_default_for_child(EbmlMaster &master,

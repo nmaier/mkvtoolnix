@@ -121,10 +121,6 @@ using namespace libmatroska;
     fi
   fi
 
-  if test x"${ac_cv_ebml_dll}" != "xyes" -o x"${ac_cv_matroska_dll}" != "xyes" ; then
-    LIBMTXCOMMONDLL=0
-  fi
-
 AC_SUBST(MATROSKA_CFLAGS)
 AC_SUBST(MATROSKA_LDFLAGS)
 AC_SUBST(MATROSKA_LIBS)

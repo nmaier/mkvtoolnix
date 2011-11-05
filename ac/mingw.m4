@@ -15,16 +15,12 @@ AC_CACHE_CHECK([if being compiled with mingw32],
   if test "x$ac_cv_mingw32" = "xyes"; then
     export MINGW=1
     MINGW_GUIAPP=-mwindows
-    LIBMTXCOMMONDLL=1
     EXEEXT=.exe
 
     AC_CHECK_TOOL(WINDRES, windres, :)
-  else
-    LIBMTXCOMMONDLL=0
   fi
 
 AC_SUBST(MINGW)
 AC_SUBST(MINGW_LIBS)
 AC_SUBST(MINGW_GUIAPP)
-AC_SUBST(LIBMTXCOMMONDLL)
 AC_SUBST(EXEEXT)

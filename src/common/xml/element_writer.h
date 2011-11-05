@@ -35,7 +35,7 @@ struct xml_writer_cb_t {
   mm_io_c *out;
 };
 
-void MTX_DLL_API write_xml_element_rec(int level, int parent_idx, EbmlElement *e, mm_io_c *out, const parser_element_t *element_map);
+void write_xml_element_rec(int level, int parent_idx, EbmlElement *e, mm_io_c *out, const parser_element_t *element_map);
 
 class xml_formatter_error_c: public error_c {
 public:

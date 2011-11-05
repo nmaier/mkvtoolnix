@@ -21,7 +21,7 @@
 using namespace libebml;
 using namespace libmatroska;
 
-void MTX_DLL_API fix_mandatory_segment_tracks_elements(EbmlElement *e);
+void fix_mandatory_segment_tracks_elements(EbmlElement *e);
 
 #endif // __MTX_COMMON_SEGMENT_TRACKS_H
 

@@ -24,6 +24,6 @@ namespace libmatroska {
 
 using namespace libmatroska;
 
-void MTX_DLL_API parse_xml_tags(const std::string &name, KaxTags *tags);
+void parse_xml_tags(const std::string &name, KaxTags *tags);
 
 #endif // __MTX_COMMON_TAGPARSER_H

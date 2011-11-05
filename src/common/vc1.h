@@ -135,11 +135,11 @@ namespace vc1 {
     return !strncasecmp(value, "WVC1", 4);
   }
 
-  bool MTX_DLL_API parse_sequence_header(const unsigned char *buf, int size, sequence_header_t &seqhdr);
-  bool MTX_DLL_API parse_entrypoint(const unsigned char *buf, int size, entrypoint_t &entrypoint, sequence_header_t &seqhdr);
-  bool MTX_DLL_API parse_frame_header(const unsigned char *buf, int size, frame_header_t &frame_header, sequence_header_t &seqhdr);
+  bool parse_sequence_header(const unsigned char *buf, int size, sequence_header_t &seqhdr);
+  bool parse_entrypoint(const unsigned char *buf, int size, entrypoint_t &entrypoint, sequence_header_t &seqhdr);
+  bool parse_frame_header(const unsigned char *buf, int size, frame_header_t &frame_header, sequence_header_t &seqhdr);
 
-  class MTX_DLL_API es_parser_c {
+  class es_parser_c {
   protected:
     int64_t m_stream_pos;
 

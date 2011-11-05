@@ -16,6 +16,6 @@
 
 #include "common/os.h"
 
-int MTX_DLL_API get_terminal_columns();
+int get_terminal_columns();
 
 #endif  // __MTX_COMMON_TERMINAL_H

@@ -18,12 +18,12 @@
 
 #include <string>
 
-bool MTX_DLL_API debugging_requested(const char *option, std::string *arg = NULL);
-bool MTX_DLL_API debugging_requested(const std::string &option, std::string *arg = NULL);
-void MTX_DLL_API request_debugging(const std::string &options);
-void MTX_DLL_API clear_debugging_requests();
-void MTX_DLL_API init_debugging();
+bool debugging_requested(const char *option, std::string *arg = NULL);
+bool debugging_requested(const std::string &option, std::string *arg = NULL);
+void request_debugging(const std::string &options);
+void clear_debugging_requests();
+void init_debugging();
 
-int MTX_DLL_API parse_debug_interval_arg(const std::string &option, int default_value = 1000, int invalid_value = -1);
+int parse_debug_interval_arg(const std::string &option, int default_value = 1000, int invalid_value = -1);
 
 #endif  // __MTX_COMMON_DEBUGGING_H

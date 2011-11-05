@@ -18,10 +18,10 @@
 
 #include <string>
 
-std::wstring MTX_DLL_API to_wide(const std::string &source);
-std::string MTX_DLL_API to_utf8(const std::wstring &source);
+std::wstring to_wide(const std::string &source);
+std::string to_utf8(const std::wstring &source);
 
-size_t MTX_DLL_API get_width_in_em(wchar_t c);
-size_t MTX_DLL_API get_width_in_em(const std::wstring &s);
+size_t get_width_in_em(wchar_t c);
+size_t get_width_in_em(const std::wstring &s);
 
 #endif  // __MTX_COMMON_LOCALE_UTF8_H

@@ -21,7 +21,7 @@
 
 #define KATE_HEADERTYPE_IDENTIFICATION 0x80
 
-struct MTX_DLL_API kate_identification_header_t {
+struct kate_identification_header_t {
   uint8_t headertype;
   char kate_string[7];
 
@@ -43,6 +43,6 @@ struct MTX_DLL_API kate_identification_header_t {
   kate_identification_header_t();
 };
 
-void MTX_DLL_API kate_parse_identification_header(const unsigned char *buffer, int size, kate_identification_header_t &header) throw(error_c);
+void kate_parse_identification_header(const unsigned char *buffer, int size, kate_identification_header_t &header) throw(error_c);
 
 #endif // __MTX_COMMON_KATE_COMMON_H

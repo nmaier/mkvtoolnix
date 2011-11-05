@@ -19,7 +19,7 @@
 #include "common/mm_io.h"
 #include "common/smart_pointers.h"
 
-class MTX_DLL_API random_c {
+class random_c {
 private:
   static bool m_seeded;
 

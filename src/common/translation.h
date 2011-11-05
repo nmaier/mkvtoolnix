@@ -19,7 +19,7 @@
 #include <string>
 #include <vector>
 
-class MTX_DLL_API translation_c {
+class translation_c {
 public:
   static std::vector<translation_c> ms_available_translations;
   static int ms_active_translation_idx;
@@ -44,7 +44,7 @@ public:
   static void set_active_translation(const std::string &locale);
 };
 
-class MTX_DLL_API translatable_string_c {
+class translatable_string_c {
 protected:
   std::string m_untranslated_string;
 
@@ -59,6 +59,6 @@ public:
 
 #define YT(s) translatable_string_c(s)
 
-void MTX_DLL_API init_locales(std::string locale = "");
+void init_locales(std::string locale = "");
 
 #endif  // __MTX_COMMON_TRANSLATION_H

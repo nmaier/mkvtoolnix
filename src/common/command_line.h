@@ -19,9 +19,9 @@
 #include <string>
 #include <vector>
 
-extern std::string MTX_DLL_API usage_text, version_info;
+extern std::string usage_text, version_info;
 
-void MTX_DLL_API usage(int exit_code = 0);
-bool MTX_DLL_API handle_common_cli_args(std::vector<std::string> &args, const std::string &redirect_output_short);
+void usage(int exit_code = 0);
+bool handle_common_cli_args(std::vector<std::string> &args, const std::string &redirect_output_short);
 
 #endif  // __MTX_COMMON_COMMAND_LINE_H

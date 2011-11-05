@@ -17,18 +17,18 @@
 
 #include <string>
 
-int MTX_DLL_API fs_entry_exists(const char *path);
-void MTX_DLL_API create_directory(const char *path);
-int64_t MTX_DLL_API get_current_time_millis();
-std::string MTX_DLL_API get_application_data_folder();
-std::string MTX_DLL_API get_installation_path();
+int fs_entry_exists(const char *path);
+void create_directory(const char *path);
+int64_t get_current_time_millis();
+std::string get_application_data_folder();
+std::string get_installation_path();
 
 #if defined(SYS_WINDOWS)
 
-bool MTX_DLL_API get_registry_key_value(const std::string &key, const std::string &value_name, std::string &value);
+bool get_registry_key_value(const std::string &key, const std::string &value_name, std::string &value);
 
-void MTX_DLL_API set_environment_variable(const std::string &key, const std::string &value);
-std::string MTX_DLL_API get_environment_variable(const std::string &key);
+void set_environment_variable(const std::string &key, const std::string &value);
+std::string get_environment_variable(const std::string &key);
 
 #define WINDOWS_VERSION_UNKNOWN      0x00000000
 #define WINDOWS_VERSION_2000         0x00050000
@@ -39,7 +39,7 @@ std::string MTX_DLL_API get_environment_variable(const std::string &key);
 #define WINDOWS_VERSION_SERVER2008R2 0x00060001
 #define WINDOWS_VERSION_7            0x00060001
 
-unsigned int MTX_DLL_API get_windows_version();
+unsigned int get_windows_version();
 
 #endif
 

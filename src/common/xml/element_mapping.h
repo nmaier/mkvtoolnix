@@ -40,15 +40,15 @@ typedef struct {
   const char *debug_name;
 } parser_element_t;
 
-extern parser_element_t MTX_DLL_API *chapter_elements;
-extern parser_element_t MTX_DLL_API *tag_elements;
-extern parser_element_t MTX_DLL_API *segmentinfo_elements;
+extern parser_element_t *chapter_elements;
+extern parser_element_t *tag_elements;
+extern parser_element_t *segmentinfo_elements;
 
 #define chapter_element_map_index(name)     xml_element_map_index(chapter_elements,     name)
 #define tag_element_map_index(name)         xml_element_map_index(tag_elements,         name)
 #define segmentinfo_element_map_index(name) xml_element_map_index(segmentinfo_elements, name)
 
-int MTX_DLL_API xml_element_map_index(const parser_element_t *element_map, const char *name);
-void MTX_DLL_API xml_element_map_init();
+int xml_element_map_index(const parser_element_t *element_map, const char *name);
+void xml_element_map_init();
 
 #endif

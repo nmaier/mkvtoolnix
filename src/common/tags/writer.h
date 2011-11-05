@@ -22,6 +22,6 @@ using namespace libmatroska;
 
 class mm_io_c;
 
-void MTX_DLL_API write_tags_xml(KaxTags &tags, mm_io_c *out);
+void write_tags_xml(KaxTags &tags, mm_io_c *out);
 
 #endif // __MTX_COMMON_TAGWRITER_H
