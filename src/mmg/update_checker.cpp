@@ -11,7 +11,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/common_pch.h"
+#include "common/os.h"
 
 #if defined(HAVE_CURL_EASY_H)
 
