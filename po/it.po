@@ -16,6 +16,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: src/extract/xtr_tta.cpp:118
 #, boost-format
@@ -772,15 +773,15 @@ msgstr "Frame %1%, traccia %2%, timecode %3% (%4%), dimensione %5%, adler 0x%|6$
 #, boost-format
 msgid "%1% minute"
 msgid_plural "%1% minutes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1% minuto"
+msgstr[1] "%1% minuti"
 
 #: src/mmg/helpers.cpp:408
 #, boost-format
 msgid "%1% second"
 msgid_plural "%1% seconds"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1% secondo"
+msgstr[1] "%1% secondi"
 
 #: src/input/r_aac.cpp:88
 #: src/input/r_ivf.cpp:62
