@@ -1190,6 +1190,9 @@ create_readers() {
           mxerror(boost::format(Y("EVIL internal bug! (unknown file type). %1%\n")) % BUGMSG);
           break;
       }
+
+      file.reader->read_headers();
+
     } catch (error_c &error) {
       mxerror(boost::format(Y("The demultiplexer for the file '%1%' failed to initialize:\n%2%\n")) % file.ti->m_fname % error.get_error());
     }

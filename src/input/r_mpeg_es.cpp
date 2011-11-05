@@ -120,7 +120,10 @@ mpeg_es_reader_c::mpeg_es_reader_c(track_info_c &_ti)
   : generic_reader_c(_ti)
   , bytes_processed(0)
 {
+}
 
+void
+mpeg_es_reader_c::read_headers() {
   try {
     M2VParser parser;
 
@@ -178,7 +181,7 @@ mpeg_es_reader_c::create_packetizer(int64_t) {
   m2vpacketizer = new mpeg1_2_video_packetizer_c(this, m_ti, version, frame_rate, width, height, dwidth, dheight, false);
   add_packetizer(m2vpacketizer);
   m2vpacketizer->set_video_interlaced_flag(interlaced);
-  
+
   show_packetizer_info(0, m2vpacketizer);
 }
 

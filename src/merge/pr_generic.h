@@ -314,6 +314,7 @@ public:
 
   virtual const std::string get_format_name(bool translate = true) = 0;
 
+  virtual void read_headers() = 0;
   virtual file_status_e read(generic_packetizer_c *ptzr, bool force = false) = 0;
   virtual void read_all();
   virtual int get_progress() = 0;

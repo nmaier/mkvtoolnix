@@ -43,7 +43,10 @@ ac3_reader_c::ac3_reader_c(track_info_c &_ti)
   throw (error_c):
   generic_reader_c(_ti),
   chunk(memory_c::alloc(AC3_READ_SIZE)) {
+}
 
+void
+ac3_reader_c::read_headers() {
   try {
     io                 = new mm_file_io_c(m_ti.m_fname);
     size               = io->get_size();

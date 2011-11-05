@@ -31,13 +31,18 @@ aac_reader_c::probe_file(mm_io_c *io,
 
 #define INITCHUNKSIZE 16384
 
-aac_reader_c::aac_reader_c(track_info_c &_ti)
+aac_reader_c::aac_reader_c(track_info_c &ti)
   throw (error_c)
-  : generic_reader_c(_ti)
+  : generic_reader_c(ti)
   , m_bytes_processed(0)
+  , m_size(0)
   , m_emphasis_present(false)
   , m_sbr_status_set(false)
 {
+}
+
+void
+aac_reader_c::read_headers() {
   try {
     m_io               = mm_io_cptr(new mm_file_io_c(m_ti.m_fname));
     m_size             = m_io->get_size();

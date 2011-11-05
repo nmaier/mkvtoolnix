@@ -198,6 +198,7 @@ public:
     return translate ? Y("Matroska") : "Matroska";
   }
 
+  virtual void read_headers();
   virtual file_status_e read(generic_packetizer_c *ptzr, bool force = false);
 
   virtual int get_progress();
@@ -265,7 +266,7 @@ protected:
   virtual void read_headers_track_video(kax_track_t *track, KaxTrackVideo *ktvideo);
   virtual void read_headers_tracks(mm_io_c *io, EbmlElement *l0, int64_t position);
   virtual void read_headers_seek_head(EbmlElement *l0, EbmlElement *l1);
-  virtual bool read_headers();
+  virtual bool read_headers_internal();
 
   virtual void process_simple_block(KaxCluster *cluster, KaxSimpleBlock *block_simple);
   virtual void process_block_group(KaxCluster *cluster, KaxBlockGroup *block_group);

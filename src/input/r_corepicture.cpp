@@ -64,7 +64,10 @@ corepicture_reader_c::corepicture_reader_c(track_info_c &_ti)
   generic_reader_c(_ti),
   m_width(-1),
   m_height(-1) {
+}
 
+void
+corepicture_reader_c::read_headers() {
   try {
     m_xml_source = new mm_text_io_c(new mm_file_io_c(m_ti.m_fname));
 

@@ -75,6 +75,7 @@ public:
     return translate ? Y("VobSub") : "VobSub";
   }
 
+  virtual void read_headers();
   virtual file_status_e read(generic_packetizer_c *ptzr, bool force = false);
   virtual void identify();
   virtual void create_packetizers();

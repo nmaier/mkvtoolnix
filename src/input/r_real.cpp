@@ -140,7 +140,10 @@ real_reader_c::probe_file(mm_io_c *io,
 real_reader_c::real_reader_c(track_info_c &_ti)
   throw (error_c):
   generic_reader_c(_ti) {
+}
 
+void
+real_reader_c::read_headers() {
   file = rmff_open_file_with_io(m_ti.m_fname.c_str(), RMFF_OPEN_MODE_READING, &mm_io_file_io);
   if (NULL == file) {
     if (RMFF_ERR_NOT_RMFF == rmff_last_error)

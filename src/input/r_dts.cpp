@@ -51,7 +51,10 @@ dts_reader_c::dts_reader_c(track_info_c &_ti)
   cur_buf(0),
   dts14_to_16(false),
   swap_bytes(false) {
+}
 
+void
+dts_reader_c::read_headers() {
   try {
     io     = new mm_file_io_c(m_ti.m_fname);
     size   = io->get_size();

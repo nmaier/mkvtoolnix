@@ -63,7 +63,10 @@ vobsub_reader_c::vobsub_reader_c(track_info_c &_ti)
   throw (error_c):
   generic_reader_c(_ti),
   delay(0) {
+}
 
+void
+vobsub_reader_c::read_headers() {
   try {
     idx_file = new mm_text_io_c(new mm_file_io_c(m_ti.m_fname));
   } catch (...) {

@@ -32,6 +32,10 @@ ssa_reader_c::ssa_reader_c(track_info_c &_ti)
   throw (error_c)
   : generic_reader_c(_ti)
 {
+}
+
+void
+ssa_reader_c::read_headers() {
   counted_ptr<mm_text_io_c> io;
 
   try {

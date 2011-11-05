@@ -46,6 +46,10 @@ pgssup_reader_c::pgssup_reader_c(track_info_c &p_ti)
  , m_bytes_processed(0)
  , m_debug(debugging_requested("pgssup_reader"))
 {
+}
+
+void
+pgssup_reader_c::read_headers() {
   try {
     m_in        = mm_io_cptr(new mm_file_io_c(m_ti.m_fname));
     m_file_size = m_in->get_size();

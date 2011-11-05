@@ -110,7 +110,10 @@ flac_reader_c::flac_reader_c(track_info_c &_ti)
   generic_reader_c(_ti),
   samples(0),
   header(NULL) {
+}
 
+void
+flac_reader_c::read_headers() {
   try {
     file      = new mm_file_io_c(m_ti.m_fname);
     file_size = file->get_size();

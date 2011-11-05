@@ -450,7 +450,10 @@ wav_reader_c::wav_reader_c(track_info_c &ti_)
   m_bytes_in_data_chunks(0),
   m_remaining_bytes_in_current_data_chunk(0),
   m_cur_data_chunk_idx(0) {
+}
 
+void
+wav_reader_c::read_headers() {
   int64_t size;
 
   try {

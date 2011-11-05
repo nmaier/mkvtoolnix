@@ -321,7 +321,10 @@ ogm_reader_c::probe_file(mm_io_c *io,
 ogm_reader_c::ogm_reader_c(track_info_c &_ti)
   throw (error_c):
   generic_reader_c(_ti) {
+}
 
+void
+ogm_reader_c::read_headers() {
   try {
     io        = new mm_file_io_c(m_ti.m_fname);
     file_size = io->get_size();
@@ -335,7 +338,7 @@ ogm_reader_c::ogm_reader_c(track_info_c &_ti)
 
   show_demuxer_info();
 
-  if (read_headers() <= 0)
+  if (read_headers_internal() <= 0)
     throw error_c(boost::format(Y("%1%: Could not read all header packets.")) % get_format_name());
   handle_stream_comments();
 }
@@ -633,7 +636,7 @@ ogm_reader_c::process_header_packets(ogm_demuxer_cptr dmx) {
    codec data packets.
 */
 int
-ogm_reader_c::read_headers() {
+ogm_reader_c::read_headers_internal() {
   ogg_page og;
 
   bool done = false;

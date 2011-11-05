@@ -47,7 +47,10 @@ tta_reader_c::probe_file(mm_io_c *io,
 tta_reader_c::tta_reader_c(track_info_c &_ti)
   throw (error_c):
   generic_reader_c(_ti) {
+}
 
+void
+tta_reader_c::read_headers() {
   try {
     io   = new mm_file_io_c(m_ti.m_fname);
     size = io->get_size();

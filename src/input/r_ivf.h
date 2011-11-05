@@ -35,6 +35,7 @@ public:
     return translate ? Y("IVF (VP8)") : "IVF (VP8)";
   }
 
+  virtual void read_headers();
   virtual file_status_e read(generic_packetizer_c *ptzr, bool force = false);
   virtual void identify();
   virtual int get_progress();

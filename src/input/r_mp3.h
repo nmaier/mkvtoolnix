@@ -38,6 +38,7 @@ public:
     return translate ? Y("MP2/MP3") : "MP2/MP3";
   }
 
+  virtual void read_headers();
   virtual file_status_e read(generic_packetizer_c *ptzr, bool force = false);
   virtual void identify();
   virtual void create_packetizer(int64_t tid);

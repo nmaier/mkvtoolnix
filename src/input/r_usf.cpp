@@ -66,7 +66,10 @@ usf_reader_c::usf_reader_c(track_info_c &_ti)
   m_copy_depth(0),
   m_longest_track(-1),
   m_strip(false) {
+}
 
+void
+usf_reader_c::read_headers() {
   try {
     m_xml_source = new mm_text_io_c(new mm_file_io_c(m_ti.m_fname));
     size_t i;

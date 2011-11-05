@@ -108,6 +108,7 @@ public:
     return translate ? Y("Ogg/OGM") : "Ogg/OGM";
   }
 
+  virtual void read_headers();
   virtual file_status_e read(generic_packetizer_c *ptzr, bool force = false);
   virtual void identify();
   virtual void create_packetizers();
@@ -125,7 +126,7 @@ private:
   virtual void handle_new_stream_and_packets(ogg_page *);
   virtual void process_page(ogg_page *);
   virtual int packet_available();
-  virtual int read_headers();
+  virtual int read_headers_internal();
   virtual void process_header_page(ogg_page *pg);
   virtual void process_header_packets(ogm_demuxer_cptr dmx);
   virtual void handle_stream_comments();

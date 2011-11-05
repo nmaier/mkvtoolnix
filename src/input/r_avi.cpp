@@ -95,6 +95,10 @@ avi_reader_c::avi_reader_c(track_info_c &_ti)
   , m_bytes_processed(0)
   , m_video_track_ok(false)
 {
+}
+
+void
+avi_reader_c::read_headers() {
   int64_t size;
 
   try {

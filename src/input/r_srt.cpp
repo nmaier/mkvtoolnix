@@ -27,7 +27,10 @@ srt_reader_c::srt_reader_c(track_info_c &p_ti)
   throw (error_c)
   : generic_reader_c(p_ti)
 {
+}
 
+void
+srt_reader_c::read_headers() {
   try {
     m_io = mm_text_io_cptr(new mm_text_io_c(new mm_file_io_c(m_ti.m_fname)));
     if (!srt_parser_c::probe(m_io.get_object()))

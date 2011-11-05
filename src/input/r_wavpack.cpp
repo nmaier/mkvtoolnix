@@ -46,7 +46,10 @@ wavpack_reader_c::probe_file(mm_io_c *io,
 wavpack_reader_c::wavpack_reader_c(track_info_c &_ti)
   throw (error_c):
   generic_reader_c(_ti) {
+}
 
+void
+wavpack_reader_c::read_headers() {
   try {
     io              = new mm_file_io_c(m_ti.m_fname);
     size            = io->get_size();

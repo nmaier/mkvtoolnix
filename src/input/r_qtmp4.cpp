@@ -109,7 +109,10 @@ qtmp4_reader_c::qtmp4_reader_c(track_info_c &_ti)
   time_scale(1),
   compression_algorithm(0),
   main_dmx(-1) {
+}
 
+void
+qtmp4_reader_c::read_headers() {
   try {
     io = new mm_file_io_c(m_ti.m_fname);
     io->setFilePointer(0, seek_end);
