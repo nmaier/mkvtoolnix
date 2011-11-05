@@ -85,7 +85,7 @@ class Target
 
     @dependencies += list.collect do |entry|
       case entry
-      when :mtxcommon  then "src/common/libmtxcommon." + c(:LIBMTXCOMMONEXT)
+      when :mtxcommon  then "src/common/libmtxcommon.a"
       when :mtxinput   then "src/input/libmtxinput.a"
       when :mtxoutput  then "src/output/libmtxoutput.a"
       when :avi        then "lib/avilib-0.6.10/libavi.a"

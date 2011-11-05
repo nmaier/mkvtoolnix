@@ -8,16 +8,6 @@ def read_config
   $config.default = ''
 end
 
-def adjust_config
-  if c?(:LIBMTXCOMMONDLL)
-    $config[:LIBMTXCOMMONEXT]         = 'dll'
-    $config[:CXXFLAGS_SRC_COMMON]    += '-DMTX_DLL_EXPORT'
-    $config[:CXXFLAGS_NO_SRC_COMMON] += '-DMTX_DLL'
-  else
-    $config[:LIBMTXCOMMONEXT]         = 'a'
-  end
-end
-
 def c(idx)
   idx_s = idx.to_s
   var   = (ENV[idx_s].nil? ? $config[idx.to_sym] : ENV[idx_s]).to_s

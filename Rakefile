@@ -119,7 +119,6 @@ end
 
 # main
 read_config
-adjust_config
 setup_globals
 import_dependencies
 
