@@ -29,6 +29,10 @@ mp3_reader_c::probe_file(mm_io_c *io,
 mp3_reader_c::mp3_reader_c(track_info_c &_ti)
   throw (error_c):
   generic_reader_c(_ti) {
+}
+
+void
+mp3_reader_c::read_headers() {
   unsigned char buf[16384];
 
   try {

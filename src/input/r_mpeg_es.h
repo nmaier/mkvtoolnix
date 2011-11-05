@@ -43,6 +43,7 @@ public:
     return translate ? Y("MPEG video elementary stream") : "MPEG video elementary stream";
   }
 
+  virtual void read_headers();
   virtual file_status_e read(generic_packetizer_c *ptzr, bool force = false);
   virtual int get_progress();
   virtual void identify();

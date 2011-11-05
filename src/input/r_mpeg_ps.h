@@ -140,6 +140,7 @@ public:
     return translate ? Y("MPEG program stream") : "MPEG program stream";
   }
 
+  virtual void read_headers();
   virtual file_status_e read(generic_packetizer_c *ptzr, bool force = false);
   virtual int get_progress();
   virtual void identify();
@@ -172,8 +173,6 @@ private:
   virtual file_status_e finish();
   void sort_tracks();
   void calculate_global_timecode_offset();
-
-  void init_reader();
 };
 
 #endif // __R_MPEG_PS_H

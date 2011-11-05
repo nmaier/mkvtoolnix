@@ -69,11 +69,10 @@ mpeg_ps_reader_c::mpeg_ps_reader_c(track_info_c &_ti)
   : generic_reader_c(_ti)
   , file_done(false)
 {
-  init_reader();
 }
 
 void
-mpeg_ps_reader_c::init_reader() {
+mpeg_ps_reader_c::read_headers() {
   try {
     io   = mm_multi_file_io_c::open_multi(m_ti.m_fname, m_ti.m_disable_multi_file);
     size = io->get_size();

@@ -41,6 +41,7 @@ public:
     return translate ? Y("DTS") : "DTS";
   }
 
+  virtual void read_headers();
   virtual file_status_e read(generic_packetizer_c *ptzr, bool force = false);
   virtual int get_progress();
   virtual void identify();

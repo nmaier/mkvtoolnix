@@ -61,7 +61,10 @@ dirac_es_reader_c::dirac_es_reader_c(track_info_c &n_ti)
   , m_bytes_processed(0)
   , m_buffer(memory_c::alloc(READ_SIZE))
 {
+}
 
+void
+dirac_es_reader_c::read_headers() {
   try {
     m_io   = counted_ptr<mm_io_c>(new mm_file_io_c(m_ti.m_fname));
     m_size = m_io->get_size();

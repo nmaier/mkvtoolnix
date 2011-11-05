@@ -205,10 +205,6 @@ kax_reader_c::kax_reader_c(track_info_c &_ti)
 {
   init_l1_position_storage(m_deferred_l1_positions);
   init_l1_position_storage(m_handled_l1_positions);
-
-  if (!read_headers())
-    throw error_c(Y("matroska_reader: Failed to read the headers."));
-  show_demuxer_info();
 }
 
 kax_reader_c::~kax_reader_c() {
@@ -1220,8 +1216,15 @@ kax_reader_c::read_headers_seek_head(EbmlElement *l0,
   }
 }
 
-bool
+void
 kax_reader_c::read_headers() {
+  if (!read_headers_internal())
+    throw error_c(Y("matroska_reader: Failed to read the headers."));
+  show_demuxer_info();
+}
+
+bool
+kax_reader_c::read_headers_internal() {
   // Elements for different levels
 
   KaxCluster *cluster = NULL;

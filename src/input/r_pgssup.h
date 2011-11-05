@@ -36,6 +36,7 @@ public:
     return translate ? Y("PGSSUP") : "PGSSUP";
   }
 
+  virtual void read_headers();
   virtual file_status_e read(generic_packetizer_c *ptzr, bool force = false);
   virtual void identify();
   virtual int get_progress();

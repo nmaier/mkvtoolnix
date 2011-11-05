@@ -386,6 +386,7 @@ public:
     return translate ? Y("MPEG transport stream") : "MPEG transport stream";
   }
 
+  virtual void read_headers();
   virtual file_status_e read(generic_packetizer_c *requested_ptzr, bool force = false);
   virtual void identify();
   virtual int get_progress();

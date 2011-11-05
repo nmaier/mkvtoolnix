@@ -406,6 +406,10 @@ mpeg_ts_reader_c::mpeg_ts_reader_c(track_info_c &_ti)
   , m_debug_aac(debugging_requested("mpeg_aac") || debugging_requested("mpeg_ts"))
   , m_detected_packet_size(0)
 {
+}
+
+void
+mpeg_ts_reader_c::read_headers() {
   mm_io_cptr temp_io;
 
   try {

@@ -43,7 +43,10 @@ ivf_reader_c::ivf_reader_c(track_info_c &p_ti)
   , m_bytes_processed(0)
   , m_previous_timestamp(0)
 {
+}
 
+void
+ivf_reader_c::read_headers() {
   try {
     m_in   = mm_file_io_cptr(new mm_file_io_c(m_ti.m_fname));
     m_size = m_in->get_size();
