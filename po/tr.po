@@ -28,7 +28,7 @@ msgstr ""
 "\n"
 "İz ID %1% için geçici TTA dosyası son TTA dosyasına kopyalandı. Bu biraz zaman alabilir.\n"
 
-#: src/merge/output_control.cpp:266
+#: src/merge/output_control.cpp:269
 msgid ""
 "\n"
 "mkvmerge received a SIGINT (probably because the user pressed Ctrl+C). Trying to sanitize the file. If mkvmerge hangs during this process you'll have to kill it manually.\n"
@@ -724,10 +724,10 @@ msgstr "Parça bilgisi işleme:\n"
 msgid " at %1%"
 msgstr " de %1%"
 
-#: src/merge/output_control.cpp:274
-#: src/merge/output_control.cpp:283
-#: src/merge/output_control.cpp:295
-#: src/merge/output_control.cpp:302
+#: src/merge/output_control.cpp:277
+#: src/merge/output_control.cpp:286
+#: src/merge/output_control.cpp:298
+#: src/merge/output_control.cpp:305
 msgid " done\n"
 msgstr " bitti\n"
 
@@ -768,11 +768,23 @@ msgstr "%1% kare, iz %2%, zaman kodu %3% (%4%), boyut %5%, adler 0x%|6$08x|%7%\n
 msgid "%1% frame, track %2%, timecode %3% (%4%), size %5%, adler 0x%|6$08x|%7%%8%\n"
 msgstr "%1% kare, iz %2%, zaman kodu %3% (%4%), boyut %5%, adler 0x%|6$08x|%7%%8%\n"
 
+#: src/mmg/helpers.cpp:407
+#, boost-format
+msgid "%1% minute"
+msgid_plural "%1% minutes"
+msgstr[0] ""
+
+#: src/mmg/helpers.cpp:408
+#, boost-format
+msgid "%1% second"
+msgid_plural "%1% seconds"
+msgstr[0] ""
+
 #: src/input/r_aac.cpp:88
 #: src/input/r_ivf.cpp:62
 #: src/input/r_mpeg_es.cpp:163
 #: src/input/r_mpeg_ps.cpp:82
-#: src/input/r_mpeg_ts.cpp:407
+#: src/input/r_mpeg_ts.cpp:415
 #: src/input/r_pgssup.cpp:55
 #: src/input/r_tta.cpp:93
 #: src/input/r_vobbtn.cpp:56
@@ -815,7 +827,7 @@ msgid "%1%: Could not read all header packets."
 msgstr "ogm_reader: Tüm başlık paketleri okunamadı."
 
 #: src/input/r_avi.cpp:107
-#: src/input/r_qtmp4.cpp:128
+#: src/input/r_qtmp4.cpp:126
 #: src/input/r_real.cpp:149
 #, fuzzy, boost-format
 msgid "%1%: Could not read the source file."
@@ -829,7 +841,7 @@ msgstr "%1%: %2% konumunda Matroska dosya yapısında hata. Sonraki seviye 1 uns
 #: src/input/r_avi.cpp:104
 #: src/input/r_corepicture.cpp:72
 #: src/input/r_ogm.cpp:332
-#: src/input/r_qtmp4.cpp:121
+#: src/input/r_qtmp4.cpp:119
 #: src/input/r_real.cpp:147
 #: src/input/r_srt.cpp:34
 #: src/input/r_ssa.cpp:44
@@ -882,14 +894,7 @@ msgstr ""
 "Kaynakları ve en son binarileri her zaman\n"
 "http://www.bunkus.org/videotools/mkvtoolnix/ adresinde mevcuttur."
 
-#: src/mmg/jobs.cpp:297
-#: src/mmg/jobs.cpp:307
-#: src/mmg/mux_dialog.cpp:249
-#, c-format, boost-format
-msgid "%d minute(s) %d second(s)"
-msgstr "%d dakika %d saniye"
-
-#: src/mmg/tabs/attachments.cpp:400
+#: src/mmg/tabs/attachments.cpp:406
 #, c-format, boost-format
 msgid "%s (MIME type %s, size %ld) from %s (%s)"
 msgstr "%s (MIME türü %s, boyut %ld), dosya: %s (%s)"
@@ -1113,7 +1118,7 @@ msgstr "&Günlüğü göster"
 msgid "&Window"
 msgstr "&Pencere"
 
-#: src/merge/mkvmerge.cpp:1597
+#: src/merge/mkvmerge.cpp:1595
 #, boost-format
 msgid "'%1%' can only be used with a file name. No further options are allowed if this option is used.\n"
 msgstr "'%1%' sadece dosya adıyla kullanılabilir. Eğer bu seçenek kullanılırsa, daha fazla seçeneklere izin verilmez.\n"
@@ -1123,12 +1128,12 @@ msgstr "'%1%' sadece dosya adıyla kullanılabilir. Eğer bu seçenek kullanıl�
 msgid "'%1%' does not contain a valid unit ('s', 'ms', 'us' or 'ns') in '%2% %3%'.\n"
 msgstr "'%1%', '%2% %3%' içinde geçerli bir birim içermez ('s', 'ms', 'us' veya 'ns').\n"
 
-#: src/merge/mkvmerge.cpp:1016
+#: src/merge/mkvmerge.cpp:1015
 #, boost-format
 msgid "'%1%' is an unsupported argument for --compression. Available compression methods are: %2%\n"
 msgstr "'%1%' --compression için desteklenmeyen değişken. Mevcut sıkıştırma yöntemleri: %2%\n"
 
-#: src/merge/mkvmerge.cpp:957
+#: src/merge/mkvmerge.cpp:956
 #, boost-format
 msgid "'%1%' is an unsupported argument for --cues.\n"
 msgstr "'%1%' --cues için desteklenmeyen değişken.\n"
@@ -1138,17 +1143,17 @@ msgstr "'%1%' --cues için desteklenmeyen değişken.\n"
 msgid "'%1%' is missing the file name.\n"
 msgstr "'%1%' kayıp dosya adı.\n"
 
-#: src/merge/mkvmerge.cpp:1429
+#: src/merge/mkvmerge.cpp:1427
 #, boost-format
 msgid "'%1%' is neither a valid ISO639-2 nor a valid ISO639-1 code in '--chapter-language %1%'. See 'mkvmerge --list-languages' for a list of all languages and their respective ISO639-2 codes.\n"
 msgstr "'%1%', '--chapter-language %1%' içinde ne geçerli ISO639-2 ne de geçerli bir ISO639-1 kodu. Tüm dillerin listesi ve onların kendi ISO639-2 kodları için  'mkvmerge --list-languages' bakın.\n"
 
-#: src/merge/mkvmerge.cpp:1497
+#: src/merge/mkvmerge.cpp:1495
 #, boost-format
 msgid "'%1%' is neither a valid ISO639-2 nor a valid ISO639-1 code in '--default-language %1%'. See 'mkvmerge --list-languages' for a list of all languages and their respective ISO639-2 codes.\n"
 msgstr "'%1%', '--default-language %1%' içinde ne geçerli ISO639-2 ne de geçerli bir ISO639-1 kodu. Tüm dillerin listesi ve onların kendi ISO639-2 kodları için  'mkvmerge --list-languages' bakın.\n"
 
-#: src/merge/mkvmerge.cpp:1052
+#: src/merge/mkvmerge.cpp:1051
 #, boost-format
 msgid "'%1%' is neither a valid ISO639-2 nor a valid ISO639-1 code. See 'mkvmerge --list-languages' for a list of all languages and their respective ISO639-2 codes.\n"
 msgstr "'%1%', ne geçerli ISO639-2 ne de geçerli bir ISO639-1 kodu. Tüm dillerin listesi ve onların kendi ISO639-2 kodları için  'mkvmerge --list-languages' bakın.\n"
@@ -1174,12 +1179,12 @@ msgstr "'%1%', '%3% %4%' içinde geçerli %2% değil.\n"
 msgid "'%1%' is not a valid ISO639-2 language code."
 msgstr "'%1%', geçerli ISO639-2 dil kodu değil."
 
-#: src/merge/mkvmerge.cpp:1215
+#: src/merge/mkvmerge.cpp:1213
 #, boost-format
 msgid "'%1%' is not a valid append mode in '--append-mode %1%'.\n"
 msgstr "'%1%' '--append-mode %1%' içinde geçerli ekleme kipi değil.\n"
 
-#: src/merge/mkvmerge.cpp:1286
+#: src/merge/mkvmerge.cpp:1284
 #, boost-format
 msgid "'%1%' is not a valid block additional max in '--blockadd %2%'.\n"
 msgstr "'%1%' '--blockadd %2%' içindeki ilave en fazla geçerli blok değil.\n"
@@ -1189,8 +1194,8 @@ msgstr "'%1%' '--blockadd %2%' içindeki ilave en fazla geçerli blok değil.\n"
 msgid "'%1%' is not a valid ccTLD country code."
 msgstr "'%1%' geçerli ccTLD ülke kodu değil."
 
-#: src/merge/mkvmerge.cpp:1151
-#: src/merge/mkvmerge.cpp:1154
+#: src/merge/mkvmerge.cpp:1150
+#: src/merge/mkvmerge.cpp:1153
 #, boost-format
 msgid "'%1%' is not a valid file ID in '--track-order %2%'.\n"
 msgstr "'%1%' '--track-order %2%' içindeki geçerli dosya ID değil.\n"
@@ -1200,47 +1205,47 @@ msgstr "'%1%' '--track-order %2%' içindeki geçerli dosya ID değil.\n"
 msgid "'%1%' is not a valid hack.\n"
 msgstr "'%1%' geçerli kurcalama değil.\n"
 
-#: src/merge/mkvmerge.cpp:1199
+#: src/merge/mkvmerge.cpp:1197
 #, boost-format
 msgid "'%1%' is not a valid mapping of file and track IDs in '--append-to %2%'.\n"
 msgstr "'%1%', '--append-to %2%' içindeki dosya ve iz ID'lerinin geçerli eşlemesi değil.\n"
 
-#: src/merge/mkvmerge.cpp:1148
+#: src/merge/mkvmerge.cpp:1147
 #, boost-format
 msgid "'%1%' is not a valid pair of file ID and track ID in '--track-order %2%'.\n"
 msgstr "%1%', '--track-order %2%' içindeki dosya ID ve iz ID'si çifti geçerli değil.\n"
 
-#: src/merge/mkvmerge.cpp:1278
+#: src/merge/mkvmerge.cpp:1276
 #, boost-format
 msgid "'%1%' is not a valid pair of track ID and block additional in '--blockadd %1%'.\n"
 msgstr "'%1%', '--blockadd %1%' içindeki ilave blok ve iz ID'si çifti geçerli değil.\n"
 
-#: src/merge/mkvmerge.cpp:1323
+#: src/merge/mkvmerge.cpp:1321
 #, boost-format
 msgid "'%1%' is not a valid priority class.\n"
 msgstr "'%1%' geçerli bir öncelik sınıfında değil.\n"
 
-#: src/merge/mkvmerge.cpp:1282
+#: src/merge/mkvmerge.cpp:1280
 #, boost-format
 msgid "'%1%' is not a valid track ID in '--blockadd %2%'.\n"
 msgstr "'%1%', '--blockadd %2% içindeki geçerli bir iz ID'si değil'.\n"
 
-#: src/merge/mkvmerge.cpp:1233
+#: src/merge/mkvmerge.cpp:1231
 #, boost-format
 msgid "'%1%' is not a valid track ID in '--default-duration %2%'.\n"
 msgstr "'%1%', '--default-duration %2%' içindeki geçerli bir iz ID'si değil.\n"
 
-#: src/merge/mkvmerge.cpp:1254
+#: src/merge/mkvmerge.cpp:1252
 #, boost-format
 msgid "'%1%' is not a valid track ID in '--nalu-size-length %2%'.\n"
 msgstr "'%1%', '--nalu-size-length %2%' içindeki geçerli bir iz ID'si değil.\n"
 
-#: src/merge/mkvmerge.cpp:1250
+#: src/merge/mkvmerge.cpp:1248
 #, boost-format
 msgid "'%1%' is not a valid tuple of track ID and NALU size length in '--nalu-size-length %1%'.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1229
+#: src/merge/mkvmerge.cpp:1227
 #, boost-format
 msgid "'%1%' is not a valid tuple of track ID and default duration in '--default-duration %1%'.\n"
 msgstr ""
@@ -1255,42 +1260,42 @@ msgstr "'%1%' sadece bölümler çıkartıldığında izin verilir.\n"
 msgid "'%1%' is only allowed when extracting tracks.\n"
 msgstr "'%1%' sadece izler çıkartıldığında izin verilir.\n"
 
-#: src/merge/mkvmerge.cpp:1617
+#: src/merge/mkvmerge.cpp:1615
 #, boost-format
 msgid "'%1%' lacks a file name.\n"
 msgstr "'%1%', bir dosya adına ihtiyacı var.\n"
 
-#: src/merge/mkvmerge.cpp:1846
-#: src/merge/mkvmerge.cpp:2010
+#: src/merge/mkvmerge.cpp:1844
+#: src/merge/mkvmerge.cpp:2008
 #, boost-format
 msgid "'%1%' lacks its argument.\n"
 msgstr "'%1%', bağımsız değişkene ihtiyacı var.\n"
 
-#: src/merge/mkvmerge.cpp:1919
+#: src/merge/mkvmerge.cpp:1917
 #, boost-format
 msgid "'%1%' lacks the FourCC.\n"
 msgstr "'%1%', FourCC'ye ihtiyacı var.\n"
 
-#: src/merge/mkvmerge.cpp:1961
+#: src/merge/mkvmerge.cpp:1959
 #, boost-format
 msgid "'%1%' lacks the delay.\n"
 msgstr "'%1%', gecikmeye ihtiyacı var.\n"
 
-#: src/merge/mkvmerge.cpp:1780
+#: src/merge/mkvmerge.cpp:1778
 #, boost-format
 msgid "'%1%' lacks the file name.\n"
 msgstr "'%1%', dosya adına ihtiyacı var.\n"
 
-#: src/merge/mkvmerge.cpp:2017
+#: src/merge/mkvmerge.cpp:2015
 #, boost-format
 msgid "'%1%' lacks the track ID.\n"
 msgstr "'%1%', iz ID'sine ihtiyacı var.\n"
 
-#: src/merge/mkvmerge.cpp:1884
-#: src/merge/mkvmerge.cpp:1891
-#: src/merge/mkvmerge.cpp:1898
-#: src/merge/mkvmerge.cpp:1905
-#: src/merge/mkvmerge.cpp:1912
+#: src/merge/mkvmerge.cpp:1882
+#: src/merge/mkvmerge.cpp:1889
+#: src/merge/mkvmerge.cpp:1896
+#: src/merge/mkvmerge.cpp:1903
+#: src/merge/mkvmerge.cpp:1910
 #, boost-format
 msgid "'%1%' lacks the track number(s).\n"
 msgstr "'%1%', iz numarasına(larına) ihtiyacı var.\n"
@@ -1312,76 +1317,76 @@ msgid "'%1%': %2%"
 msgstr "'%1%': %2%"
 
 #: src/common/mm_multi_file_io.cpp:169
-#: src/mmg/tabs/input.cpp:711
+#: src/mmg/tabs/input.cpp:717
 #, boost-format
 msgid "'%1%': Processing the following files as well: %2%\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:2069
+#: src/merge/mkvmerge.cpp:2067
 msgid "'--append-mode' lacks its argument.\n"
 msgstr "'--append-mode' bağımsız değişkenine ihtiyacı olur.\n"
 
-#: src/merge/mkvmerge.cpp:2062
+#: src/merge/mkvmerge.cpp:2060
 msgid "'--append-to' lacks its argument.\n"
 msgstr "'--append-to' bağımsız değişkenine ihtiyacı olur.\n"
 
-#: src/merge/mkvmerge.cpp:1926
+#: src/merge/mkvmerge.cpp:1924
 msgid "'--aspect-ratio' lacks the aspect ratio.\n"
 msgstr "'--aspect-ratio' en-boy oranına ihtiyacı olur.\n"
 
-#: src/merge/mkvmerge.cpp:1933
+#: src/merge/mkvmerge.cpp:1931
 msgid "'--aspect-ratio-factor' lacks the aspect ratio factor.\n"
 msgstr "'--aspect-ratio-factor' en-boy oranı etkenine ihtiyacı olur.\n"
 
-#: src/merge/mkvmerge.cpp:1751
+#: src/merge/mkvmerge.cpp:1749
 msgid "'--attachment-description' lacks the description.\n"
 msgstr "'--attachment-description' açıklamaya ihtiyacı olur.\n"
 
-#: src/merge/mkvmerge.cpp:1760
+#: src/merge/mkvmerge.cpp:1758
 msgid "'--attachment-mime-type' lacks the MIME type.\n"
 msgstr "'--attachment-mime-type' MIME türüne ihtiyacı olur.\n"
 
-#: src/merge/mkvmerge.cpp:1770
+#: src/merge/mkvmerge.cpp:1768
 msgid "'--attachment-name' lacks the name.\n"
 msgstr "'--attachment-name' isime ihtiyacı olur.\n"
 
-#: src/merge/mkvmerge.cpp:2031
+#: src/merge/mkvmerge.cpp:2029
 msgid "'--blockadd' lacks its argument.\n"
 msgstr "'--blockadd' bağımsız değişkenine ihtiyacı olur.\n"
 
-#: src/merge/mkvmerge.cpp:1805
+#: src/merge/mkvmerge.cpp:1803
 msgid "'--chapter-charset' lacks the charset.\n"
 msgstr "'--chapter-charset' karakter grubuna ihtiyacı olur.\n"
 
-#: src/merge/mkvmerge.cpp:1440
+#: src/merge/mkvmerge.cpp:1438
 #, boost-format
 msgid "'--chapter-charset' may only be given once in '--chapter-charset %1%'.\n"
 msgstr "'--chapter-charset' sadece bir defa '--chapter-charset %1%' içinde verilebilir.\n"
 
-#: src/merge/mkvmerge.cpp:1443
+#: src/merge/mkvmerge.cpp:1441
 #, boost-format
 msgid "'--chapter-charset' must be given before '--chapters' in '--chapter-charset %1%'.\n"
 msgstr "'--chapter-charset', '--chapter-charset %1%' içinde '--chapters' dan önce verilmek zorundadır.\n"
 
-#: src/merge/mkvmerge.cpp:1798
+#: src/merge/mkvmerge.cpp:1796
 msgid "'--chapter-language' lacks the language.\n"
 msgstr "'--chapter-language' dile ihtiyacı olur.\n"
 
-#: src/merge/mkvmerge.cpp:1422
+#: src/merge/mkvmerge.cpp:1420
 #, boost-format
 msgid "'--chapter-language' may only be given once in '--chapter-language %1%'.\n"
 msgstr "'--chapter-language' sadece bir defa '--chapter-language %1%' içinde verilebilir.\n"
 
-#: src/merge/mkvmerge.cpp:1425
+#: src/merge/mkvmerge.cpp:1423
 #, boost-format
 msgid "'--chapter-language' must be given before '--chapters' in '--chapter-language %1%'.\n"
 msgstr "'--chapter-language', '--chapter-language %1%' içinde '--chapters' dan önce verilmek zorundadır.\n"
 
-#: src/merge/mkvmerge.cpp:1822
+#: src/merge/mkvmerge.cpp:1820
 msgid "'--chapters' lacks the file name.\n"
 msgstr "'--chapters' dosya adına ihtiyacı olur.\n"
 
-#: src/merge/mkvmerge.cpp:1732
+#: src/merge/mkvmerge.cpp:1730
 msgid "'--cluster-length' lacks the length.\n"
 msgstr "'--cluster-length' uzunluğa ihtiyacı olur.\n"
 
@@ -1389,143 +1394,143 @@ msgstr "'--cluster-length' uzunluğa ihtiyacı olur.\n"
 msgid "'--command-line-charset' is missing its argument.\n"
 msgstr "'--command-line-charset' bağımsız değişkeni eksik.\n"
 
-#: src/merge/mkvmerge.cpp:2024
+#: src/merge/mkvmerge.cpp:2022
 msgid "'--compression' lacks its argument.\n"
 msgstr "'--compression' bağımsız değişkenine ihtiyacı olur.\n"
 
-#: src/merge/mkvmerge.cpp:1947
+#: src/merge/mkvmerge.cpp:1945
 msgid "'--cropping' lacks the crop parameters.\n"
 msgstr "'--cropping' kırpma parametrelerine ihtiyacı olur.\n"
 
-#: src/merge/mkvmerge.cpp:1812
+#: src/merge/mkvmerge.cpp:1810
 msgid "'--cue-chapter-name-format' lacks the format.\n"
 msgstr "'--cue-chapter-name-format' biçime ihtiyacı olur.\n"
 
-#: src/merge/mkvmerge.cpp:1815
+#: src/merge/mkvmerge.cpp:1813
 msgid "'--cue-chapter-name-format' must be given before '--chapters'.\n"
 msgstr "'--cue-chapter-name-format', '--chapters' dan önce verilmek zorundadır.\n"
 
-#: src/merge/mkvmerge.cpp:1968
+#: src/merge/mkvmerge.cpp:1966
 msgid "'--cues' lacks its argument.\n"
 msgstr "'--cues' bağımsız değişkenine ihtiyacı olur.\n"
 
-#: src/merge/mkvmerge.cpp:2076
+#: src/merge/mkvmerge.cpp:2074
 msgid "'--default-duration' lacks its argument.\n"
 msgstr "'--default-duration' bağımsız değişkenine ihtiyacı olur.\n"
 
-#: src/merge/mkvmerge.cpp:1996
+#: src/merge/mkvmerge.cpp:1994
 msgid "'--default-language' lacks its argument.\n"
 msgstr "'--default-language' bağımsız değişkenine ihtiyacı olur.\n"
 
-#: src/merge/mkvmerge.cpp:1975
+#: src/merge/mkvmerge.cpp:1973
 msgid "'--default-track' lacks its argument.\n"
 msgstr "'--default-track' bağımsız değişkenine ihtiyacı olur.\n"
 
-#: src/merge/mkvmerge.cpp:1940
+#: src/merge/mkvmerge.cpp:1938
 msgid "'--display-dimensions' lacks the dimensions.\n"
 msgstr "'--display-dimensions' boyutlara ihtiyacı olur.\n"
 
-#: src/merge/mkvmerge.cpp:1627
+#: src/merge/mkvmerge.cpp:1625
 msgid "'--engage' lacks its argument.\n"
 msgstr "'--engage' bağımsız değişkenine ihtiyacı olur.\n"
 
-#: src/merge/mkvmerge.cpp:1982
+#: src/merge/mkvmerge.cpp:1980
 msgid "'--forced-track' lacks its argument.\n"
 msgstr "'--forced-track' bağımsız değişkenine ihtiyacı olur.\n"
 
-#: src/merge/mkvmerge.cpp:1789
+#: src/merge/mkvmerge.cpp:1787
 msgid "'--global-tags' lacks the file name.\n"
 msgstr "'--global-tags' dosya adına ihtiyacı olur.\n"
 
-#: src/merge/mkvmerge.cpp:1989
+#: src/merge/mkvmerge.cpp:1987
 msgid "'--language' lacks its argument.\n"
 msgstr "'--language' bağımsız değişkenine ihtiyacı olur.\n"
 
-#: src/merge/mkvmerge.cpp:2157
+#: src/merge/mkvmerge.cpp:2155
 msgid "'--link' is only useful in combination with '--split'.\n"
 msgstr "'--link' sadece '--split' ile olan birleşimde faydalıdır.\n"
 
-#: src/merge/mkvmerge.cpp:1718
+#: src/merge/mkvmerge.cpp:1716
 msgid "'--link-to-next' lacks the next UID.\n"
 msgstr "'--link-to-next' sonraki UID'ye ihtiyacı olur.\n"
 
-#: src/merge/mkvmerge.cpp:1711
+#: src/merge/mkvmerge.cpp:1709
 msgid "'--link-to-previous' lacks the previous UID.\n"
 msgstr "'--link-to-previous' önceki UID'ye ihtiyacı olur.\n"
 
-#: src/merge/mkvmerge.cpp:2083
+#: src/merge/mkvmerge.cpp:2081
 msgid "'--nalu-size-length' lacks its argument.\n"
 msgstr "'--nalu-size-length' bağımsız değişkenine ihtiyacı olur.\n"
 
-#: src/merge/mkvmerge.cpp:1671
+#: src/merge/mkvmerge.cpp:1669
 msgid "'--priority' lacks its argument.\n"
 msgstr "'--priority' bağımsız değişkenine ihtiyacı olur.\n"
 
-#: src/merge/mkvmerge.cpp:1725
+#: src/merge/mkvmerge.cpp:1723
 msgid "'--segment-uid' lacks the segment UID.\n"
 msgstr "'--segment-uid' parça UID'ye ihtiyacı olur.\n"
 
-#: src/merge/mkvmerge.cpp:1831
+#: src/merge/mkvmerge.cpp:1829
 msgid "'--segmentinfo' lacks the file name.\n"
 msgstr "'--segmentinfo' dosya adına ihtiyacı olur.\n"
 
-#: src/merge/mkvmerge.cpp:1692
+#: src/merge/mkvmerge.cpp:1690
 msgid "'--split' lacks the size.\n"
 msgstr "'--split' boyuta ihtiyacı olur.\n"
 
-#: src/merge/mkvmerge.cpp:1699
+#: src/merge/mkvmerge.cpp:1697
 msgid "'--split-max-files' lacks the number of files.\n"
 msgstr "'--split-max-files' dosya sayısına ihtiyacı olur.\n"
 
-#: src/merge/mkvmerge.cpp:1954
+#: src/merge/mkvmerge.cpp:1952
 msgid "'--stereo-mode' lacks its argument.\n"
 msgstr "'--stereo-mode' bağımsız değişkenine ihtiyacı olur.\n"
 
-#: src/merge/mkvmerge.cpp:2003
+#: src/merge/mkvmerge.cpp:2001
 msgid "'--sub-charset' lacks its argument.\n"
 msgstr "'--sub-charset' bağımsız değişkenine ihtiyacı olur.\n"
 
-#: src/merge/mkvmerge.cpp:1860
+#: src/merge/mkvmerge.cpp:1858
 msgid "'--timecode-scale' lacks its argument.\n"
 msgstr "'--timecode-scale' bağımsız değişkenine ihtiyacı olur.\n"
 
-#: src/merge/mkvmerge.cpp:1476
+#: src/merge/mkvmerge.cpp:1474
 msgid "'--timecode-scale' was used more than once.\n"
 msgstr "'--timecode-scale' birden fazla kullanıldı.\n"
 
-#: src/merge/mkvmerge.cpp:2045
+#: src/merge/mkvmerge.cpp:2043
 msgid "'--timecodes' lacks its argument.\n"
 msgstr "'--timecodes' bağımsız değişkenine ihtiyacı olur.\n"
 
-#: src/merge/mkvmerge.cpp:1684
+#: src/merge/mkvmerge.cpp:1682
 msgid "'--title' lacks the title.\n"
 msgstr "'--title' başlığa ihtiyacı olur.\n"
 
-#: src/merge/mkvmerge.cpp:2038
+#: src/merge/mkvmerge.cpp:2036
 msgid "'--track-name' lacks its argument.\n"
 msgstr "'--track-name' bağımsız değişkenine ihtiyacı olur.\n"
 
-#: src/merge/mkvmerge.cpp:2052
+#: src/merge/mkvmerge.cpp:2050
 msgid "'--track-order' lacks its argument.\n"
 msgstr "'--track-order' bağımsız değişkenine ihtiyacı olur.\n"
 
-#: src/merge/mkvmerge.cpp:2055
+#: src/merge/mkvmerge.cpp:2053
 msgid "'--track-order' may only be given once.\n"
 msgstr "'--track-order' sadece bir defa verilebilir.\n"
 
-#: src/merge/mkvmerge.cpp:2104
+#: src/merge/mkvmerge.cpp:2102
 msgid "'-A' and '-a' used on the same source file.\n"
 msgstr "'-A' ve '-a' aynı kaynak dosyada kullanıldı.\n"
 
-#: src/merge/mkvmerge.cpp:2113
+#: src/merge/mkvmerge.cpp:2111
 msgid "'-B' and '-b' used on the same source file.\n"
 msgstr "'-B' ve '-b' aynı kaynak dosyada kullanıldı.\n"
 
-#: src/merge/mkvmerge.cpp:2107
+#: src/merge/mkvmerge.cpp:2105
 msgid "'-D' and '-d' used on the same source file.\n"
 msgstr "'-D' ve '-d' aynı kaynak dosyada kullanıldı.\n"
 
-#: src/merge/mkvmerge.cpp:2110
+#: src/merge/mkvmerge.cpp:2108
 msgid "'-S' and '-s' used on the same source file.\n"
 msgstr "'-S' ve '-s' aynı kaynak dosyada kullanıldı.\n"
 
@@ -1582,12 +1587,12 @@ msgstr ""
 msgid "+-> Pre-parsing FLAC file: 100%\n"
 msgstr ""
 
-#: src/merge/pr_generic.cpp:1406
+#: src/merge/pr_generic.cpp:1404
 #, boost-format
 msgid ", description '%1%'"
 msgstr ", tanımı '%1%'"
 
-#: src/merge/pr_generic.cpp:1407
+#: src/merge/pr_generic.cpp:1405
 #, boost-format
 msgid ", file name '%1%'"
 msgstr ", dosya adı '%1%'"
@@ -1690,13 +1695,13 @@ msgstr ""
 msgid "<ChapterTrack> is missing the <ChapterTrackNumber> child."
 msgstr ""
 
-#: src/input/r_matroska.cpp:2124
+#: src/input/r_matroska.cpp:2132
 #, boost-format
 msgid "A block group was found at position %1%, but no block element was found inside it. This might make mkvmerge crash.\n"
 msgstr ""
 
-#: src/input/r_matroska.cpp:2026
-#: src/input/r_matroska.cpp:2134
+#: src/input/r_matroska.cpp:2034
+#: src/input/r_matroska.cpp:2142
 #, boost-format
 msgid "A block was found at timestamp %1% for track number %2%. However, no headers where found for that track number. The block will be skipped.\n"
 msgstr ""
@@ -1727,7 +1732,7 @@ msgstr ""
 msgid "A track"
 msgstr "İz"
 
-#: src/merge/pr_generic.cpp:1264
+#: src/merge/pr_generic.cpp:1262
 #, boost-format
 msgid "A track with the ID %1% was requested but not found in the file. The corresponding option will be ignored.\n"
 msgstr ""
@@ -1836,7 +1841,7 @@ msgstr "%s üzerindeki işlem durduruldu"
 msgid "About mkvinfo"
 msgstr "mkvinfo Hakkında"
 
-#: src/propedit/propedit_cli_parser.cpp:163
+#: src/propedit/propedit_cli_parser.cpp:160
 msgid "Actions"
 msgstr "Eylemler"
 
@@ -1864,11 +1869,11 @@ msgstr "Unsur ekle"
 msgid "Add name"
 msgstr "Ad ekle"
 
-#: src/propedit/propedit_cli_parser.cpp:173
+#: src/propedit/propedit_cli_parser.cpp:170
 msgid "Add or replace chapters in the file with the ones from 'filename' or remove them if 'filename' is empty"
 msgstr ""
 
-#: src/propedit/propedit_cli_parser.cpp:170
+#: src/propedit/propedit_cli_parser.cpp:167
 msgid "Add or replace tags in the file with the ones from 'filename' or remove them if 'filename' is empty (see below and man page for syntax)"
 msgstr ""
 
@@ -1889,7 +1894,7 @@ msgstr "İlaveID: %1%"
 msgid "Additions"
 msgstr "İlaveler"
 
-#: src/propedit/propedit_cli_parser.cpp:166
+#: src/propedit/propedit_cli_parser.cpp:163
 msgid "Adds a property with the value even if such a property already exists"
 msgstr "Böyle bir özellik zaten olsa bile değerle birlikte bir özellik ekler"
 
@@ -1934,7 +1939,7 @@ msgstr "Tüm başlık değerleri TAMAM."
 msgid "All known property names and their meaning\n"
 msgstr "Tüm bilinen özellik adları ve anlamları.\n"
 
-#: src/propedit/propedit_cli_parser.cpp:196
+#: src/propedit/propedit_cli_parser.cpp:193
 msgid "All other strings work just like the track header selectors (see above)."
 msgstr ""
 
@@ -1942,7 +1947,7 @@ msgstr ""
 msgid "All supported files|*.mkv;*.mka;*.mks;*.mk3d;*.webm;*.webma;*.webmv|Matroska files (*.mkv;*.mka;*.mks;*.mk3d)|*.mkv;*.mka;*.mks;*.mk3d|WebM files (*.webm;*.webma;*.webmv)|*.webm;*.webma;*.webmv|All files|*.*"
 msgstr "Tüm destekl. dosyalar|*.mkv;*.mka;*.mks;*.mk3d;*.webm;*.webma;*.webmv|Matroska dosyaları (*.mkv;*.mka;*.mks;*.mk3d)|*.mkv;*.mka;*.mks;*.mk3d|WebM dosyaları (*.webm;*.webma;*.webmv)|*.webm;*.webma;*.webmv|Tüm dosyalar|*.*"
 
-#: src/mmg/tabs/input.cpp:252
+#: src/mmg/tabs/input.cpp:258
 #, c-format, boost-format
 msgid "All supported media files|%s%s|%s"
 msgstr "Tüm destek. medya dosyaları|%s%s|%s"
@@ -1978,7 +1983,7 @@ msgstr ""
 msgid "An attachment with the ID %1% was not found.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:2089
+#: src/merge/mkvmerge.cpp:2087
 msgid "An empty file name is not valid.\n"
 msgstr "Boş dosya adı geçerli değil.\n"
 
@@ -2019,7 +2024,7 @@ msgstr ""
 msgid "Another muxing job in still in progress. Please wait until it has finished or abort it manually before starting a new one."
 msgstr ""
 
-#: src/mmg/tabs/input.cpp:1274
+#: src/mmg/tabs/input.cpp:1280
 #, c-format, boost-format
 msgid "Appending a track from a file to another track from the same file is not allowed. This is the case for tracks number %u and %u."
 msgstr ""
@@ -2062,11 +2067,11 @@ msgstr ""
 msgid "Attached"
 msgstr "Ekli"
 
-#: src/mmg/tabs/attachments.cpp:152
+#: src/mmg/tabs/attachments.cpp:158
 msgid "Attached files"
 msgstr "Ekli dosyalar"
 
-#: src/merge/pr_generic.cpp:1405
+#: src/merge/pr_generic.cpp:1403
 #, boost-format
 msgid "Attachment ID %1%: type '%2%', size %3% bytes"
 msgstr "Ek ID %1%: türü '%2%', boyutu %3% bayt"
@@ -2075,13 +2080,13 @@ msgstr "Ek ID %1%: türü '%2%', boyutu %3% bayt"
 msgid "Attachment extraction"
 msgstr "Ek çıkarma"
 
-#: src/mmg/tabs/attachments.cpp:163
+#: src/mmg/tabs/attachments.cpp:169
 msgid "Attachment style:"
 msgstr "Ek stili:"
 
 #: src/info/mkvinfo.cpp:1288
 #: src/mmg/mmg_dialog.cpp:308
-#: src/mmg/tabs/attachments.cpp:155
+#: src/mmg/tabs/attachments.cpp:161
 msgid "Attachments"
 msgstr "Ekler"
 
@@ -2119,7 +2124,7 @@ msgstr "Çıktı dosya adını otomatik ayarla"
 msgid "Automatic MIME type recognition for '%1%': %2%\n"
 msgstr " '%1%' için otomatik MIME türü tanıma: %2%\n"
 
-#: src/merge/mkvmerge.cpp:1642
+#: src/merge/mkvmerge.cpp:1640
 msgid "Automatically enabling WebM compliance mode due to output file name extension.\n"
 msgstr ""
 
@@ -2135,8 +2140,8 @@ msgstr "Mevcut çeviriler:\n"
 msgid "Available version:"
 msgstr "Kullanılabilir sürüm:"
 
-#: src/common/compression.cpp:213
-#: src/common/compression.cpp:231
+#: src/common/compression.cpp:210
+#: src/common/compression.cpp:228
 #, boost-format
 msgid "BZ2_bzCompressInit() failed. Result: %1%\n"
 msgstr ""
@@ -2175,7 +2180,7 @@ msgstr "Blok ilavesi: %1%"
 msgid "Block duration: %1%.%|2$06d|ms"
 msgstr "Blok süresi: %1%.%|2$06d|ms"
 
-#: src/extract/timecodes_v2.cpp:283
+#: src/extract/timecodes_v2.cpp:279
 #: src/extract/tracks.cpp:414
 #: src/info/mkvinfo.cpp:1362
 msgid "Block group"
@@ -2260,7 +2265,7 @@ msgstr ""
 msgid "Category is not NUL terminated"
 msgstr ""
 
-#: src/extract/timecodes_v2.cpp:362
+#: src/extract/timecodes_v2.cpp:358
 #: src/extract/tracks.cpp:464
 #: src/info/mkvinfo.cpp:2045
 msgid "Caught exception"
@@ -2270,22 +2275,22 @@ msgstr ""
 msgid "Causes mkvmerge to add 'stop display' commands to VobSub subtitle packets that do not contain a duration field."
 msgstr ""
 
-#: src/propedit/change.cpp:207
+#: src/propedit/change.cpp:205
 #, boost-format
 msgid "Change for '%1%' executed. No property of this type found. One entry added.\n"
 msgstr ""
 
-#: src/propedit/change.cpp:187
+#: src/propedit/change.cpp:185
 #, boost-format
 msgid "Change for '%1%' executed. Number of entries deleted: %2%\n"
 msgstr ""
 
-#: src/propedit/change.cpp:213
+#: src/propedit/change.cpp:211
 #, boost-format
 msgid "Change for '%1%' executed. Number of entries set: %2%.\n"
 msgstr ""
 
-#: src/propedit/change.cpp:224
+#: src/propedit/change.cpp:222
 #, boost-format
 msgid "Change for '%1%' executed. One entry added.\n"
 msgstr ""
@@ -2392,7 +2397,7 @@ msgstr "Bölüm doğrulama başarılı oldu"
 #: src/info/mkvinfo.cpp:1802
 #: src/mmg/options/chapters.cpp:130
 #: src/mmg/tabs/global.cpp:273
-#: src/propedit/options.cpp:190
+#: src/propedit/options.cpp:178
 msgid "Chapters"
 msgstr "Bölümler"
 
@@ -2418,7 +2423,7 @@ msgstr "Bölümler yazıldı."
 msgid "Chapters:"
 msgstr "Bölümler:"
 
-#: src/merge/pr_generic.cpp:1408
+#: src/merge/pr_generic.cpp:1406
 #, boost-format
 msgid "Chapters: %1% entries"
 msgstr "Bölüm: %1% girdi"
@@ -2437,7 +2442,7 @@ msgstr "Karakter grubu:"
 msgid "Check online for the latest release"
 msgstr "En son yayımı çevrimiçi kontrol et"
 
-#: src/common/cli_parser.cpp:184
+#: src/common/cli_parser.cpp:185
 #: src/merge/mkvmerge.cpp:254
 msgid "Check online for the latest release."
 msgstr "En son yayımı çevrimiçi kontrol et."
@@ -2446,7 +2451,7 @@ msgstr "En son yayımı çevrimiçi kontrol et."
 msgid "Check online whether or not a new release of MKVToolNix is available on the home page. Will only check when mmg starts and at most once a day. No information is transmitted to the server."
 msgstr ""
 
-#: src/mmg/mmg_dialog.cpp:1721
+#: src/mmg/mmg_dialog.cpp:1722
 msgid "Checking for updates online; please wait"
 msgstr "Güncellemeler çevrimiçi kontrol ediliyor; lütfen bekleyin"
 
@@ -2462,7 +2467,7 @@ msgstr "Etiket dosyasını seçin"
 msgid "Choose a timecodes file"
 msgstr "Zaman kodu dosyasını seçin"
 
-#: src/mmg/tabs/attachments.cpp:192
+#: src/mmg/tabs/attachments.cpp:198
 msgid "Choose an attachment file"
 msgstr "Ek dosyasını seçin"
 
@@ -2470,11 +2475,11 @@ msgstr "Ek dosyasını seçin"
 msgid "Choose an input file"
 msgstr "Girdi dosyasını seçin"
 
-#: src/mmg/tabs/input.cpp:259
+#: src/mmg/tabs/input.cpp:265
 msgid "Choose an input file to add"
 msgstr "Eklemek için girdi dosyasını seçin"
 
-#: src/mmg/tabs/input.cpp:259
+#: src/mmg/tabs/input.cpp:265
 msgid "Choose an input file to append"
 msgstr "İlave etmek için girdi dosyasını seçin"
 
@@ -2525,18 +2530,18 @@ msgstr "İş kuyruğuna iş eklendikten sonra girdileri temizle"
 msgid "Close the current file without saving"
 msgstr "Şu anki dosyayı kaydetmeden kapat"
 
-#: src/extract/timecodes_v2.cpp:264
+#: src/extract/timecodes_v2.cpp:260
 #: src/extract/tracks.cpp:396
 #: src/info/mkvinfo.cpp:1982
 msgid "Cluster"
 msgstr "Küme"
 
-#: src/merge/mkvmerge.cpp:1379
+#: src/merge/mkvmerge.cpp:1377
 #, boost-format
 msgid "Cluster length '%1%' out of range (0..65535).\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1372
+#: src/merge/mkvmerge.cpp:1370
 #, boost-format
 msgid "Cluster length '%1%' out of range (100..32000).\n"
 msgstr ""
@@ -2551,7 +2556,7 @@ msgstr "Küme konumu: %1%"
 msgid "Cluster previous size: %1%"
 msgstr "Küme önceki boyutu: %1%"
 
-#: src/extract/timecodes_v2.cpp:279
+#: src/extract/timecodes_v2.cpp:275
 #: src/extract/tracks.cpp:405
 #: src/info/mkvinfo.cpp:207
 #, boost-format
@@ -2629,7 +2634,7 @@ msgstr "Komut satırı seçenekleri:"
 msgid "Command line saved."
 msgstr "Komut satırı kaydedildi."
 
-#: src/mmg/tabs/input.cpp:369
+#: src/mmg/tabs/input.cpp:375
 msgid "Command line used:"
 msgstr "Komut satırı kullanımı:"
 
@@ -2699,7 +2704,7 @@ msgstr "Çekirdek Resim karesi %1% desteklenmiyor.\n"
 
 #: src/mmg/jobs.cpp:184
 #: src/mmg/mux_dialog.cpp:130
-#: src/mmg/tabs/input.cpp:311
+#: src/mmg/tabs/input.cpp:317
 #, c-format, boost-format
 msgid "Could not create a temporary file for mkvmerge's command line option called '%s' (error code %d, %s)."
 msgstr "mkvmerge'nin komut satırı '%s' için geçici dosya oluşturulamadı (hata kodu %d, %s)."
@@ -2732,7 +2737,7 @@ msgstr "Bu MPEG-1/2 izinden sıralı başlık çıkartılamadı.\n"
 msgid "Could not find a valid MP3 packet."
 msgstr "Geçerli MP3 paketi bulunamadı."
 
-#: src/input/r_avi.cpp:508
+#: src/input/r_avi.cpp:506
 #, boost-format
 msgid "Could not find an index for audio track %1% (avilib error message: %2%). Skipping track.\n"
 msgstr "Ses izi %1% için bir indeks bulunamadı (avilib hata mesajı: %2%). İz atlanıyor.\n"
@@ -2750,7 +2755,7 @@ msgstr "Kodek yapılandırma verisi ilk MPEG-4 part 2 görüntü karesinde bulun
 msgid "Could not find the next Ogg page. This indicates a damaged Ogg/Ogm file. Will try to continue.\n"
 msgstr "Sonraki Ogg sayfasında bulunamadı. Bu, hasarlı bir Ogg/Ogm dosyasını belirtir. Devam etmek için tekrarlanacak.\n"
 
-#: src/input/r_avi.cpp:674
+#: src/input/r_avi.cpp:672
 #: src/input/r_matroska.cpp:1579
 msgid "Could not find valid DTS headers in this track's first frames.\n"
 msgstr "Bu izin ilk karelerinde geçerli DTS başlıkları bulunamadı.\n"
@@ -2791,7 +2796,7 @@ msgstr ""
 msgid "Could not open the file '%1%' for directing the output.\n"
 msgstr ""
 
-#: src/extract/timecodes_v2.cpp:106
+#: src/extract/timecodes_v2.cpp:102
 #, boost-format
 msgid "Could not open the timecode file '%1%' for writing (%2%).\n"
 msgstr ""
@@ -2973,27 +2978,27 @@ msgstr "DTS başlığı bilgisi değişti! - Yeni biçim:\n"
 msgid "DTS/DTS-HD (Digital Theater System)"
 msgstr "DTS/DTS-HD (Digital Theater System)"
 
-#: src/common/dts.cpp:194
+#: src/common/dts.cpp:193
 msgid "DTS_Header problem: encoded with an incompatible new encoder version\n"
 msgstr "DTS_Başlığı sorunu: uyumsuz yeni kodlayıcı sürümü ile kodlanmış\n"
 
-#: src/common/dts.cpp:158
+#: src/common/dts.cpp:157
 msgid "DTS_Header problem: invalid core sampling frequency\n"
 msgstr "DTS_Başlığı sorunu: geçersiz çekirdek örnekleme aralığı\n"
 
-#: src/common/dts.cpp:140
+#: src/common/dts.cpp:139
 msgid "DTS_Header problem: invalid frame bytes size\n"
 msgstr "DTS_Başlığı sorunu: geçersiz kare bayt boyutu\n"
 
-#: src/common/dts.cpp:133
+#: src/common/dts.cpp:132
 msgid "DTS_Header problem: invalid number of blocks in frame\n"
 msgstr "DTS_Başlığı sorunu: karedeki geçersiz blok sayısı\n"
 
-#: src/common/dts.cpp:234
+#: src/common/dts.cpp:233
 msgid "DTS_Header problem: invalid source PCM resolution\n"
 msgstr "DTS_Başlığı sorunu: geçersiz kaynak PCM çözünürlüğü\n"
 
-#: src/common/dts.cpp:292
+#: src/common/dts.cpp:291
 msgid "DTS_Header problem: not enough data to read header\n"
 msgstr "DTS_Başlığı sorunu: başlığı okumak için yeterli veri yok\n"
 
@@ -3053,7 +3058,7 @@ msgstr ""
 msgid "Delay: %|1$.3f|ms"
 msgstr "Gecikme: %|1$.3f|ms"
 
-#: src/propedit/propedit_cli_parser.cpp:169
+#: src/propedit/propedit_cli_parser.cpp:166
 msgid "Delete all occurences of a property"
 msgstr "Özelliğin tüm olaylarını sil"
 
@@ -3071,7 +3076,7 @@ msgstr "Tanım zaten var"
 
 #: src/mmg/cli_options_dlg.cpp:51
 #: src/mmg/header_editor/value_page.cpp:155
-#: src/mmg/tabs/attachments.cpp:160
+#: src/mmg/tabs/attachments.cpp:166
 msgid "Description:"
 msgstr "Tanım:"
 
@@ -3157,7 +3162,7 @@ msgstr "Dolby TrueHD"
 msgid "Don't write variable parts to output files (only for debugging)."
 msgstr ""
 
-#: src/propedit/propedit.cpp:115
+#: src/propedit/propedit.cpp:113
 msgid "Done.\n"
 msgstr "Bitti.\n"
 
@@ -3221,7 +3226,7 @@ msgstr ""
 msgid "EbmlVoid (size: %1%)"
 msgstr "EbmlVoid (boyut: %1%)"
 
-#: src/propedit/propedit_cli_parser.cpp:182
+#: src/propedit/propedit_cli_parser.cpp:179
 msgid "Edit selectors"
 msgstr "Seçicileri düzenle"
 
@@ -3236,7 +3241,7 @@ msgstr "Bölüm %d"
 msgid "EditionEntry %u"
 msgstr "Bölüm Girişi %u"
 
-#: src/propedit/propedit.cpp:70
+#: src/propedit/propedit.cpp:68
 #, boost-format
 msgid "Element %1% is written.\n"
 msgstr "Unsur %1% yazılmakta.\n"
@@ -3249,7 +3254,7 @@ msgstr "Unsur türü:\n"
 msgid "Elements"
 msgstr "Unsur"
 
-#: src/propedit/propedit_cli_parser.cpp:137
+#: src/propedit/propedit_cli_parser.cpp:134
 #, boost-format
 msgid "Elements in the category '%1%' ('--edit %2%'):\n"
 msgstr ""
@@ -3281,7 +3286,7 @@ msgstr "Şifreleme anahtarı ID: %1%"
 msgid "End:"
 msgstr "Bitiş:"
 
-#: src/common/iso639.cpp:526
+#: src/common/iso639.cpp:524
 msgid "English language name"
 msgstr "İngilizce dil adı"
 
@@ -3324,7 +3329,7 @@ msgstr "Dosya açma hatası"
 msgid "Error parsing a MPEG PS packet during the header reading phase. This stream seems to be badly damaged.\n"
 msgstr ""
 
-#: src/propedit/target.cpp:452
+#: src/propedit/target.cpp:448
 #, boost-format
 msgid "Error parsing the chapters in '%1%': some mandatory elements are missing.\n"
 msgstr ""
@@ -3334,7 +3339,7 @@ msgid "Error parsing the file"
 msgstr "Dosyayı ayrıştırma hatası"
 
 #: src/merge/mkvmerge.cpp:490
-#: src/propedit/target.cpp:358
+#: src/propedit/target.cpp:354
 #, boost-format
 msgid "Error parsing the tags in '%1%': some mandatory elements are missing.\n"
 msgstr ""
@@ -3369,12 +3374,12 @@ msgstr ""
 msgid "Error: Couldn't open input file %1% (%2%).\n"
 msgstr "Hata: Girdi dosyası %1% (%2%) açılamadı.\n"
 
-#: src/extract/timecodes_v2.cpp:184
+#: src/extract/timecodes_v2.cpp:180
 #: src/extract/tracks.cpp:339
 msgid "Error: No EBML head found."
 msgstr "Hata: Bulunan EBML başı yok. "
 
-#: src/merge/mkvmerge.cpp:1636
+#: src/merge/mkvmerge.cpp:1634
 msgid ""
 "Error: no output file name was given.\n"
 "\n"
@@ -3426,7 +3431,7 @@ msgstr ""
 msgid "Exports the chapter infomartion in the simple format used in OGM tools (CHAPTER01=... CHAPTER01NAME=...)."
 msgstr ""
 
-#: src/mmg/tabs/input.cpp:192
+#: src/mmg/tabs/input.cpp:198
 msgid "Extra options"
 msgstr "Ekstra seçenekler"
 
@@ -3494,7 +3499,7 @@ msgstr ""
 msgid "Failed to create the temporary file '%1%': %2% (%3%)\n"
 msgstr ""
 
-#: src/extract/xtr_textsubs.cpp:379
+#: src/extract/xtr_textsubs.cpp:378
 #, boost-format
 msgid "Failed to parse an USF subtitle entry for track %1%: %2%\n"
 msgstr ""
@@ -3504,7 +3509,7 @@ msgstr ""
 msgid "Failed to parse the USF codec private data for track %1%: %2%\n"
 msgstr ""
 
-#: src/extract/xtr_textsubs.cpp:391
+#: src/extract/xtr_textsubs.cpp:390
 #, boost-format
 msgid "Failed to parse the USF end tag for track %1%: %2%\n"
 msgstr ""
@@ -3519,12 +3524,12 @@ msgstr ""
 msgid "File %1% has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n"
 msgstr ""
 
-#: src/merge/pr_generic.cpp:1403
+#: src/merge/pr_generic.cpp:1401
 #, boost-format
 msgid "File '%1%': container: %2%"
 msgstr "Dosya '%1%': kalıp: %2%"
 
-#: src/merge/pr_generic.cpp:1323
+#: src/merge/pr_generic.cpp:1321
 #, boost-format
 msgid "File '%1%': unsupported container: %2%\n"
 msgstr "Dosya '%1%': desteklenmeyen kalıp: %2%\n"
@@ -3542,7 +3547,7 @@ msgstr ""
 
 #: src/mmg/mmg_dialog.cpp:770
 #: src/mmg/mux_dialog.cpp:131
-#: src/mmg/tabs/input.cpp:312
+#: src/mmg/tabs/input.cpp:318
 msgid "File creation failed"
 msgstr "Dosya oluşturma başarısız oldu"
 
@@ -3556,22 +3561,22 @@ msgstr "Dosya verisi, boyutu: %1%"
 msgid "File description: %1%"
 msgstr "Dosya tanımlaması: %1%"
 
-#: src/mmg/tabs/input.cpp:364
-#: src/mmg/tabs/input.cpp:377
+#: src/mmg/tabs/input.cpp:370
+#: src/mmg/tabs/input.cpp:383
 msgid "File identification failed"
 msgstr "Dosya tanımlama başarısız oldu"
 
-#: src/mmg/tabs/input.cpp:359
+#: src/mmg/tabs/input.cpp:365
 #, c-format, boost-format
 msgid "File identification failed for '%s'. Return code: %d"
 msgstr "'%s' için dosya tanımlama başarısız oldu. Dönüş kodu: %d"
 
-#: src/mmg/tabs/input.cpp:362
+#: src/mmg/tabs/input.cpp:368
 #, c-format, boost-format
 msgid "File identification failed. Return code: %d. Errno: %d (%s). Make sure that you've selected a mkvmerge executable in the settings dialog."
 msgstr "Dosya tanımlama başarısız oldu. Dönüş kodu: %d. Hata no: %d (%s). Ayarlar iletisinden çalıştırılabilir mkvmerge'yi seçtiğinizden emin olun."
 
-#: src/mmg/tabs/input.cpp:298
+#: src/mmg/tabs/input.cpp:304
 msgid "File is already processed"
 msgstr "Dosya zaten işleniyor"
 
@@ -3589,7 +3594,7 @@ msgstr "Dosya adı: %1%"
 msgid "File parsing failed"
 msgstr "Dosya ayrıştırma başarısız oldu"
 
-#: src/mmg/tabs/input.cpp:737
+#: src/mmg/tabs/input.cpp:743
 msgid "File removal not possible"
 msgstr "Dosya kaldırma mümkün değil"
 
@@ -3606,7 +3611,7 @@ msgstr "Dosya/parça bağlama"
 msgid "File/segment title:"
 msgstr "Dosya/parça başlığı:"
 
-#: src/merge/output_control.cpp:877
+#: src/merge/output_control.cpp:878
 msgid "Files cannot be appended to themselves. The argument for '--append-to' was invalid.\n"
 msgstr ""
 
@@ -3670,7 +3675,7 @@ msgstr ""
 msgid "Forces the timecode scale factor to REPLACEME. You have to replace REPLACEME with a value between 1000 and 10000000 or with -1. Normally mkvmerge will use a value of 1000000 which means that timecodes and durations will have a precision of 1ms. For files that will not contain a video track but at least one audio track mkvmerge will automatically choose a timecode scale factor so that all timecodes and durations have a precision of one sample. This causes bigger overhead but allows precise seeking and extraction. If the magical value -1 is used then mkvmerge will use sample precision even if a video track is present."
 msgstr ""
 
-#: src/mmg/tabs/input.cpp:191
+#: src/mmg/tabs/input.cpp:197
 msgid "Format specific options"
 msgstr "Biçime özgü seçenekler"
 
@@ -3694,12 +3699,12 @@ msgstr ""
 msgid "FourCC:"
 msgstr "FourCC:"
 
-#: src/merge/mkvmerge.cpp:1124
+#: src/merge/mkvmerge.cpp:1123
 #, boost-format
 msgid "FourCC: Invalid track ID in '%1% %2%'.\n"
 msgstr "FourCC: '%1% %2%' içindeki geçersiz iz ID.\n"
 
-#: src/merge/mkvmerge.cpp:1120
+#: src/merge/mkvmerge.cpp:1119
 #, boost-format
 msgid "FourCC: Missing track ID in '%1% %2%'.\n"
 msgstr "FourCC: '%1% %2%' içindeki eksik iz ID.\n"
@@ -3729,7 +3734,7 @@ msgstr ""
 msgid "Gamma: %1%"
 msgstr "Gama: %1%"
 
-#: src/mmg/tabs/input.cpp:190
+#: src/mmg/tabs/input.cpp:196
 msgid "General track options"
 msgstr "Genel iz seçenekleri"
 
@@ -3747,7 +3752,7 @@ msgstr "Genel seçenekler"
 msgid "Global tags (%d entries) from %s"
 msgstr "Genel etiket (%d girdi), dosya: %s"
 
-#: src/merge/pr_generic.cpp:1409
+#: src/merge/pr_generic.cpp:1407
 #, boost-format
 msgid "Global tags: %1% entries"
 msgstr "Genel etiket: %1% girdi"
@@ -3769,12 +3774,12 @@ msgstr "Başlık düzenleyicisi hazır."
 msgid "Header editor: %s"
 msgstr "Başlık düzenleyicisi: %s"
 
-#: src/common/compression.cpp:284
+#: src/common/compression.cpp:281
 #, boost-format
 msgid "Header removal compression not possible because the buffer contained %1% bytes which is less than the size of the headers that should be removed, %2%."
 msgstr ""
 
-#: src/common/compression.cpp:298
+#: src/common/compression.cpp:295
 #, boost-format
 msgid "Header removal compression not possible because the buffer did not start with the bytes that should be removed. Wanted bytes:%1%; found:%2%."
 msgstr ""
@@ -3845,11 +3850,11 @@ msgstr ""
 msgid "ID"
 msgstr "ID"
 
-#: src/common/iso639.cpp:528
+#: src/common/iso639.cpp:526
 msgid "ISO639-1 code"
 msgstr "ISO639-1 kodu"
 
-#: src/common/iso639.cpp:527
+#: src/common/iso639.cpp:525
 msgid "ISO639-2 code"
 msgstr "ISO639-2 kodu"
 
@@ -3889,7 +3894,7 @@ msgstr "Eğer işaretlenmişse mmg yanlış olarak kullandığınızı düşün�
 msgid "If left empty then mmg will set the output file name to be in the same directory as the first file added to this job. Otherwise this directory will be used."
 msgstr "Eğer boş bırakırsanız sonrasında mmg bu işe eklenmiş aynı dizinde olan ilk dosyayı çıktı dosya adına ayarlayacak. Aksi halde bu dizin kullanılacaktır."
 
-#: src/mmg/tabs/attachments.cpp:168
+#: src/mmg/tabs/attachments.cpp:174
 msgid "If splitting is a file can be attached either to all files created or only to the first file. Has no effect if no splitting is used."
 msgstr ""
 
@@ -3908,16 +3913,16 @@ msgstr "%1% dosyasından içe aktarılmış yazı tipi"
 msgid "Imported picture from %1%"
 msgstr "%1% dosyasından içe aktarılmış resim"
 
-#: src/input/r_corepicture.cpp:227
+#: src/input/r_corepicture.cpp:226
 #, boost-format
 msgid "Impossible to use file '%1%': The file could not be opened for reading.\n"
 msgstr ""
 
-#: src/mmg/mmg_dialog.cpp:1863
+#: src/mmg/mmg_dialog.cpp:1864
 msgid "Incompatible mkvmerge version"
 msgstr "Uyumsuz mkvmerge sürümü"
 
-#: src/mmg/tabs/input.cpp:948
+#: src/mmg/tabs/input.cpp:954
 msgid "Incompatible track"
 msgstr "Uyumsuz iz"
 
@@ -3943,7 +3948,7 @@ msgstr "Girdi"
 msgid "Input data error"
 msgstr "Girdi veri hatası"
 
-#: src/mmg/tabs/input.cpp:182
+#: src/mmg/tabs/input.cpp:188
 msgid "Input files:"
 msgstr "Girdi dosyaları:"
 
@@ -3971,7 +3976,7 @@ msgstr "Dahili hata: tracks.cpp SSA #1. %1%"
 msgid "Internal program error"
 msgstr "Dahili program hatası"
 
-#: src/merge/mkvmerge.cpp:1048
+#: src/merge/mkvmerge.cpp:1047
 #, boost-format
 msgid "Invalid %1% specified in '--%2% %3%'.\n"
 msgstr "'--%2% %3%' içinde belirlenmiş geçersiz %1%.\n"
@@ -3997,9 +4002,9 @@ msgstr "Geçersiz UID. Bu bölüm UID'si zaten kullanımda. Orijinal UID değiş
 msgid "Invalid UID. This edition UID is already in use. The original UID has not been changed."
 msgstr "Geçersiz UID. Bu yayın UID'si zaten kullanımda. Orijinal UID değiştirilmedi."
 
-#: src/input/r_avi.cpp:683
-#: src/input/r_avi.cpp:688
-#: src/input/r_avi.cpp:705
+#: src/input/r_avi.cpp:681
+#: src/input/r_avi.cpp:686
+#: src/input/r_avi.cpp:703
 msgid "Invalid Vorbis headers in AVI audio track."
 msgstr "AVI ses izinde geçersiz Vorbis başlıkları."
 
@@ -4013,17 +4018,17 @@ msgstr "'%1%' konusunda geçersiz ek ID/dosya adı belirtme.\n"
 msgid "Invalid binary data format '%1%' specified. Supported are 'Base64', 'ASCII' and 'hex'."
 msgstr "Geçersiz binari veri biçimi '%1%' belirlendi. Desteklenenler 'Base64', 'ASCII' ve 'hex'."
 
-#: src/merge/mkvmerge.cpp:897
+#: src/merge/mkvmerge.cpp:896
 #, boost-format
 msgid "Invalid boolean option specified in '--default-track %1%'.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:923
+#: src/merge/mkvmerge.cpp:922
 #, boost-format
 msgid "Invalid boolean option specified in '--forced-track %1%'.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1307
+#: src/merge/mkvmerge.cpp:1305
 #, boost-format
 msgid "Invalid boolean specified in '--aac-is-sbr %1%'.\n"
 msgstr ""
@@ -4033,12 +4038,12 @@ msgstr ""
 msgid "Invalid change spec (%3%) in '%1% %2%'.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:978
+#: src/merge/mkvmerge.cpp:977
 #, boost-format
 msgid "Invalid compression option specified in '--compression %1%'.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:971
+#: src/merge/mkvmerge.cpp:970
 #, boost-format
 msgid "Invalid compression option. No track ID specified in '--compression %1%'.\n"
 msgstr ""
@@ -4047,12 +4052,12 @@ msgstr ""
 msgid "Invalid country selected"
 msgstr "Geçersiz ülke seçildi"
 
-#: src/merge/mkvmerge.cpp:948
+#: src/merge/mkvmerge.cpp:947
 #, boost-format
 msgid "Invalid cues option specified in '--cues %1%'.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:941
+#: src/merge/mkvmerge.cpp:940
 #, boost-format
 msgid "Invalid cues option. No track ID specified in '--cues %1%'.\n"
 msgstr ""
@@ -4061,7 +4066,7 @@ msgstr ""
 msgid "Invalid file name"
 msgstr "Geçersiz dosya adı"
 
-#: src/merge/mkvmerge.cpp:838
+#: src/merge/mkvmerge.cpp:837
 #, boost-format
 msgid "Invalid format for '--split' in '--split %1%'.\n"
 msgstr "'--split %1%' içinde '--split' için geçersiz biçim.\n"
@@ -4173,7 +4178,7 @@ msgstr "Geçersiz saniye: %1%"
 msgid "Invalid selector in '%1% %2%'.\n"
 msgstr "'%1% %2%' içinde geçersiz seçici.\n"
 
-#: src/merge/mkvmerge.cpp:792
+#: src/merge/mkvmerge.cpp:791
 #, boost-format
 msgid "Invalid split size in '--split %1%'.\n"
 msgstr "'--split %1%' içinde geçersiz ayırma boyutu.\n"
@@ -4182,16 +4187,16 @@ msgstr "'--split %1%' içinde geçersiz ayırma boyutu.\n"
 msgid "Invalid start or stop timecode"
 msgstr "Geçersiz başlatma ve durdurma zaman kodu"
 
-#: src/input/r_corepicture.cpp:247
+#: src/input/r_corepicture.cpp:246
 msgid "Invalid start timecode"
 msgstr "Geçersiz başlatma zaman kodu"
 
-#: src/merge/mkvmerge.cpp:1072
+#: src/merge/mkvmerge.cpp:1071
 #, boost-format
 msgid "Invalid sub charset option. No track ID specified in '--sub-charset %1%'.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1079
+#: src/merge/mkvmerge.cpp:1078
 #, boost-format
 msgid "Invalid sub charset specified in '--sub-charset %1%'.\n"
 msgstr ""
@@ -4216,12 +4221,12 @@ msgstr ""
 msgid "Invalid sync option. No track ID specified in '%1% %2%'.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1103
+#: src/merge/mkvmerge.cpp:1102
 #, boost-format
 msgid "Invalid tags file name specified in '%1% %2%'.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1096
+#: src/merge/mkvmerge.cpp:1095
 #, boost-format
 msgid "Invalid tags option. No track ID specified in '%1% %2%'.\n"
 msgstr ""
@@ -4231,7 +4236,7 @@ msgstr ""
 msgid "Invalid time for '--split' in '--split %1%'. Additional error message: %2%\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:779
+#: src/merge/mkvmerge.cpp:778
 #, boost-format
 msgid "Invalid time for '--split' in '--split %1%'. Additional error message: %2%.\n"
 msgstr ""
@@ -4242,42 +4247,42 @@ msgid "Invalid track ID in '%1% %2%'.\n"
 msgstr "'%1% %2%' içindeki geçersiz iz ID.\n"
 
 #: src/merge/mkvmerge.cpp:549
-#: src/merge/mkvmerge.cpp:1100
+#: src/merge/mkvmerge.cpp:1099
 #, boost-format
 msgid "Invalid track ID specified in '%1% %2%'.\n"
 msgstr "'%1% %2%' içinde belirlenen geçersiz iz ID.\n"
 
-#: src/merge/mkvmerge.cpp:1044
+#: src/merge/mkvmerge.cpp:1043
 #, boost-format
 msgid "Invalid track ID specified in '--%1% %2%'.\n"
 msgstr "'--%1% %2%' içinde belirlenen geçersiz iz ID.\n"
 
-#: src/merge/mkvmerge.cpp:1304
+#: src/merge/mkvmerge.cpp:1302
 #, boost-format
 msgid "Invalid track ID specified in '--aac-is-sbr %1%'.\n"
 msgstr "'--aac-is-sbr %1%' içinde belirlenen geçersiz iz ID.\n"
 
-#: src/merge/mkvmerge.cpp:975
+#: src/merge/mkvmerge.cpp:974
 #, boost-format
 msgid "Invalid track ID specified in '--compression %1%'.\n"
 msgstr "'--compression %1%' içinde belirlenen geçersiz iz ID.\n"
 
-#: src/merge/mkvmerge.cpp:945
+#: src/merge/mkvmerge.cpp:944
 #, boost-format
 msgid "Invalid track ID specified in '--cues %1%'.\n"
 msgstr "'--cues %1%' içinde belirlenen geçersiz iz ID.\n"
 
-#: src/merge/mkvmerge.cpp:891
+#: src/merge/mkvmerge.cpp:890
 #, boost-format
 msgid "Invalid track ID specified in '--default-track %1%'.\n"
 msgstr "'--default-track %1%' içinde belirlenen geçersiz iz ID.\n"
 
-#: src/merge/mkvmerge.cpp:917
+#: src/merge/mkvmerge.cpp:916
 #, boost-format
 msgid "Invalid track ID specified in '--forced-track %1%'.\n"
 msgstr "'--forced-track %1%' içinde belirlenen geçersiz iz ID.\n"
 
-#: src/merge/mkvmerge.cpp:1076
+#: src/merge/mkvmerge.cpp:1075
 #, boost-format
 msgid "Invalid track ID specified in '--sub-charset %1%'.\n"
 msgstr "'--sub-charset %1%' içinde belirlenen geçersiz iz ID.\n"
@@ -4287,7 +4292,7 @@ msgstr "'--sub-charset %1%' içinde belirlenen geçersiz iz ID.\n"
 msgid "Invalid track ID/file name specification in argument '%1%'.\n"
 msgstr "'%1%' bağımsız değişkenindeki geçersiz iz ID/dosya adı belirleme.\n"
 
-#: src/mmg/mmg_dialog.cpp:1439
+#: src/mmg/mmg_dialog.cpp:1440
 msgid "Job added to job queue"
 msgstr "İş, iş kuyruğuna eklendi"
 
@@ -4408,7 +4413,7 @@ msgstr ""
 msgid "Line %1%: The line seems to be a subtitle entry but the timecode was negative even after adding the track delay. Negative timecodes are not supported in Matroska. This entry will be skipped.\n"
 msgstr ""
 
-#: src/propedit/propedit_cli_parser.cpp:160
+#: src/propedit/propedit_cli_parser.cpp:157
 msgid "List all valid property names and exit"
 msgstr "Tüm geçerli özellik adlarını ve çıkışı listele"
 
@@ -4433,11 +4438,11 @@ msgstr "Günlük çıktısı:"
 msgid "MD5"
 msgstr "MD5"
 
-#: src/mmg/tabs/attachments.cpp:162
+#: src/mmg/tabs/attachments.cpp:168
 msgid "MIME type for this track. Select one of the pre-defined MIME types or enter one yourself."
 msgstr "Bu iz için MIME türü. Öntanımlı MIME türlerinden birini seçin veya birini kendiniz girin."
 
-#: src/mmg/tabs/attachments.cpp:161
+#: src/mmg/tabs/attachments.cpp:167
 msgid "MIME type:"
 msgstr "MIME türü:"
 
@@ -4470,7 +4475,7 @@ msgstr "MPEG program akışları"
 msgid "MPEG program streams"
 msgstr "MPEG program akışları"
 
-#: src/input/r_mpeg_ts.h:284
+#: src/input/r_mpeg_ts.h:386
 #, fuzzy
 msgid "MPEG transport stream"
 msgstr "MPEG taşıma akışları"
@@ -4612,7 +4617,7 @@ msgstr ""
 msgid "Missing header/comment packets for stream. This file is broken but should be muxed correctly. If not please contact the author Moritz Bunkus <moritz@bunkus.org>.\n"
 msgstr ""
 
-#: src/mmg/tabs/attachments.cpp:388
+#: src/mmg/tabs/attachments.cpp:394
 msgid "Missing input"
 msgstr "Eksik girdi"
 
@@ -4625,7 +4630,7 @@ msgstr ""
 msgid "Missing output file name in argument '%1%'.\n"
 msgstr ""
 
-#: src/propedit/options.cpp:156
+#: src/propedit/options.cpp:145
 #, boost-format
 msgid "Modification of properties in the section '%1%' was requested, but no corresponding level 1 element was found in the file. %2%\n"
 msgstr ""
@@ -4634,21 +4639,21 @@ msgstr ""
 msgid "More"
 msgstr "Daha Fazla"
 
-#: src/merge/mkvmerge.cpp:1763
+#: src/merge/mkvmerge.cpp:1761
 #, boost-format
 msgid "More than one MIME type was given for a single attachment. '%1%' will be discarded and '%2%' used instead.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1754
+#: src/merge/mkvmerge.cpp:1752
 msgid "More than one description was given for a single attachment.\n"
 msgstr ""
 
-#: src/propedit/options.cpp:93
+#: src/propedit/options.cpp:89
 #, boost-format
 msgid "More than one file name has been given ('%1%' and '%2%').\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1773
+#: src/merge/mkvmerge.cpp:1771
 #, boost-format
 msgid "More than one name was given for a single attachment. '%1%' will be discarded and '%2%' used instead.\n"
 msgstr ""
@@ -4684,12 +4689,12 @@ msgstr "Çoklama uygulaması: %1%"
 msgid "Muxing in progress."
 msgstr "Çoklama devam ediyor."
 
-#: src/merge/mkvmerge.cpp:2219
+#: src/merge/mkvmerge.cpp:2217
 #, boost-format
 msgid "Muxing took %1% seconds.\n"
 msgstr "Çoklama %1% saniye sürdü.\n"
 
-#: src/merge/mkvmerge.cpp:2221
+#: src/merge/mkvmerge.cpp:2219
 msgid "Muxing took 1 second.\n"
 msgstr "Çoklama 1 saniye sürdü.\n"
 
@@ -4706,7 +4711,7 @@ msgstr "Adı"
 msgid "Name for this track, e.g. \"director's comments\"."
 msgstr ""
 
-#: src/mmg/tabs/attachments.cpp:158
+#: src/mmg/tabs/attachments.cpp:164
 #: src/mmg/tabs/chapters.cpp:349
 msgid "Name:"
 msgstr "Adı:"
@@ -4753,12 +4758,12 @@ msgstr "Sonraki parça UID: %1%"
 msgid "Next segment's unique ID"
 msgstr "Sonraki parçanın benzersiz ID'si"
 
-#: src/merge/mkvmerge.cpp:1038
+#: src/merge/mkvmerge.cpp:1037
 #, boost-format
 msgid "No %1% specified in '--%2% %3%'.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:1446
+#: src/input/r_qtmp4.cpp:1435
 msgid "No AC3 header found in first frame; track will be skipped.\n"
 msgstr ""
 
@@ -4766,11 +4771,11 @@ msgstr ""
 msgid "No EBML head found."
 msgstr "Bulunan EBML başı yok."
 
-#: src/mmg/tabs/input.cpp:1350
+#: src/mmg/tabs/input.cpp:1356
 msgid "No FPS selected for AVC/h.264 track"
 msgstr "AVC/h.264 izi için seçili FPS yok"
 
-#: src/mmg/tabs/attachments.cpp:388
+#: src/mmg/tabs/attachments.cpp:394
 #, c-format, boost-format
 msgid "No MIME type has been selected for the attachment '%s'."
 msgstr "'%s' eki için seçilmiş MIME türü yok."
@@ -4814,7 +4819,7 @@ msgid "No file loaded"
 msgstr "Dosya yüklenmedi"
 
 #: src/info/mkvinfo.cpp:2068
-#: src/propedit/options.cpp:31
+#: src/propedit/options.cpp:32
 msgid "No file name given.\n"
 msgstr "Verilen dosya adı yok.\n"
 
@@ -4826,7 +4831,7 @@ msgstr "'@'ten sonra bulunan dosya adı yok."
 msgid "No help available."
 msgstr "Yardım mevcut değil."
 
-#: src/merge/mkvmerge.cpp:2162
+#: src/merge/mkvmerge.cpp:2160
 msgid "No input files were given. No output will be created.\n"
 msgstr ""
 
@@ -4838,22 +4843,22 @@ msgstr ""
 msgid "No output file name specified, will use attachment name.\n"
 msgstr ""
 
-#: src/extract/timecodes_v2.cpp:198
+#: src/extract/timecodes_v2.cpp:194
 #: src/extract/tracks.cpp:354
 #: src/info/mkvinfo.cpp:1949
 msgid "No segment/level 0 element found."
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:2210
+#: src/merge/mkvmerge.cpp:2208
 msgid "No streams to output were found. Aborting.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1035
+#: src/merge/mkvmerge.cpp:1034
 #, boost-format
 msgid "No track ID specified in '--%1% %2%'.\n"
 msgstr ""
 
-#: src/propedit/target.cpp:312
+#: src/propedit/target.cpp:309
 #, boost-format
 msgid "No track corresponding to the edit specification '%1%' was found. %2%\n"
 msgstr ""
@@ -4863,7 +4868,7 @@ msgstr ""
 msgid "No track with the ID %1% was found in the source file.\n"
 msgstr ""
 
-#: src/mmg/tabs/input.cpp:615
+#: src/mmg/tabs/input.cpp:621
 msgid "No tracks found"
 msgstr "Bulunan iz yok"
 
@@ -4892,14 +4897,14 @@ msgstr "Geçerli Matroska dosyası değil (bulunan EBML başı yok)"
 msgid "Not a valid Matroska file (no segment/level 0 element found)"
 msgstr "Geçerli Matroska dosyası değil (parça yok/seviye 0 unsuru bulundu)"
 
-#: src/mmg/tabs/input.cpp:712
+#: src/mmg/tabs/input.cpp:718
 msgid "Note"
 msgstr "Not"
 
 #: src/extract/attachments.cpp:131
-#: src/extract/timecodes_v2.cpp:166
+#: src/extract/timecodes_v2.cpp:162
 #: src/extract/tracks.cpp:318
-#: src/propedit/options.cpp:34
+#: src/propedit/options.cpp:35
 msgid "Nothing to do.\n"
 msgstr "Hiçbir şey yapma.\n"
 
@@ -4934,7 +4939,7 @@ msgstr "Bölümlerden birinin adı yok."
 msgid "Online check for updates"
 msgstr "Güncellemeleri çevrimiçi kontrol et"
 
-#: src/merge/mkvmerge.cpp:1453
+#: src/merge/mkvmerge.cpp:1451
 #, boost-format
 msgid "Only one chapter file allowed in '%1% %2%'.\n"
 msgstr ""
@@ -4952,11 +4957,11 @@ msgstr ""
 msgid "Only one of <String> and <Binary> may be used beneath <Simple> but not both at the same time."
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1620
+#: src/merge/mkvmerge.cpp:1618
 msgid "Only one output file allowed.\n"
 msgstr "Sadece bir çıktı dosyasına izin verildi.\n"
 
-#: src/merge/mkvmerge.cpp:1465
+#: src/merge/mkvmerge.cpp:1463
 #, boost-format
 msgid "Only one segment info file allowed in '%1% %2%'.\n"
 msgstr ""
@@ -4970,7 +4975,7 @@ msgstr ""
 msgid "Only show summaries of the contents, not each element."
 msgstr ""
 
-#: src/mmg/tabs/attachments.cpp:167
+#: src/mmg/tabs/attachments.cpp:173
 msgid "Only to the first"
 msgstr "Sadece ilkine"
 
@@ -5005,7 +5010,7 @@ msgstr "Seçenek dosyası oluşturuldu."
 
 #: src/info/info_cli_parser.cpp:40
 #: src/mmg/options/dialog.cpp:43
-#: src/propedit/propedit_cli_parser.cpp:159
+#: src/propedit/propedit_cli_parser.cpp:156
 msgid "Options"
 msgstr "Seçenekler"
 
@@ -5022,7 +5027,7 @@ msgstr "Sıra: %1%"
 msgid "Original value:"
 msgstr "Özgün değer:"
 
-#: src/propedit/propedit_cli_parser.cpp:176
+#: src/propedit/propedit_cli_parser.cpp:173
 msgid "Other options"
 msgstr "Diğer seçenekler"
 
@@ -5047,7 +5052,7 @@ msgstr "Seçili işlerin çıktısı:"
 msgid "Output sampling frequency: %1%"
 msgstr "Çıktı örnekleme sıklığı: %1%"
 
-#: src/mmg/tabs/input.cpp:373
+#: src/mmg/tabs/input.cpp:379
 msgid "Output:"
 msgstr "Çıktı:"
 
@@ -5202,15 +5207,15 @@ msgstr "İşlenen iş %d/%d"
 msgid "Progress"
 msgstr "İlerleme"
 
-#: src/extract/timecodes_v2.cpp:269
+#: src/extract/timecodes_v2.cpp:265
 #: src/extract/tracks.cpp:400
-#: src/merge/output_control.cpp:484
+#: src/merge/output_control.cpp:487
 #, boost-format
 msgid "Progress: %1%%%%2%"
 msgstr "İlerleme: %1%%%%2%"
 
 #: src/extract/mkvextract.cpp:93
-#: src/extract/timecodes_v2.cpp:359
+#: src/extract/timecodes_v2.cpp:355
 msgid "Progress: 100%\n"
 msgstr "İlerleme: 100%\n"
 
@@ -5224,7 +5229,7 @@ msgstr "İlerleme: 100%%%1%"
 msgid "Progress: [%1%%2%] %3%%%"
 msgstr "İlerleme: [%1%%2%] %3%%%"
 
-#: src/mmg/mmg_dialog.cpp:1806
+#: src/mmg/mmg_dialog.cpp:1807
 msgid "Querying mkvmerge's capabilities"
 msgstr "mkvmerge'nin yetenekleri sorgulanıyor"
 
@@ -5236,131 +5241,131 @@ msgstr "QuickTime ses/görüntü dosyaları"
 msgid "QuickTime/MP4"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:472
+#: src/input/r_qtmp4.cpp:467
 #, boost-format
 msgid "Quicktime/MP4 reader: '%1%' atom is too small. Expected size: >= %2%. Actual size: %3%.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:1908
+#: src/input/r_qtmp4.cpp:1890
 msgid "Quicktime/MP4 reader: Constant samplesize & variable duration not yet supported. Contact the author if you have such a sample file.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:1303
+#: src/input/r_qtmp4.cpp:1292
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read chunk number %1%/%2% with size %3% from position %4%. Aborting.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:1010
-#: src/input/r_qtmp4.cpp:1023
+#: src/input/r_qtmp4.cpp:999
+#: src/input/r_qtmp4.cpp:1012
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the extended sound description atom for track ID %1%.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:983
+#: src/input/r_qtmp4.cpp:972
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the sound description atom for track ID %1%.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:977
+#: src/input/r_qtmp4.cpp:966
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the stream description atom for track ID %1%.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:1059
+#: src/input/r_qtmp4.cpp:1048
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the video description atom for track ID %1%.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:211
+#: src/input/r_qtmp4.cpp:209
 msgid "Quicktime/MP4 reader: Have not found any header atoms.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:213
+#: src/input/r_qtmp4.cpp:211
 msgid "Quicktime/MP4 reader: Have not found the 'mdat' atom. No movie data found.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:160
+#: src/input/r_qtmp4.cpp:158
 #, boost-format
 msgid "Quicktime/MP4 reader: Invalid chunk size %1% at %2%.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:289
+#: src/input/r_qtmp4.cpp:287
 #, boost-format
 msgid "Quicktime/MP4 reader: MPEG4 part 10/AVC track %1% is missing its decoder config. Skipping this track.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:282
+#: src/input/r_qtmp4.cpp:280
 #, boost-format
 msgid "Quicktime/MP4 reader: MPEG4 track %1% is missing the esds atom/the decoder config. Skipping this track.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:650
+#: src/input/r_qtmp4.cpp:639
 #, boost-format
 msgid "Quicktime/MP4 reader: The 'media header' atom ('mdhd') uses the unsupported version %1%.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:970
+#: src/input/r_qtmp4.cpp:959
 #, boost-format
 msgid "Quicktime/MP4 reader: The 'size' field is too small in the stream description atom for track ID %1%.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:655
+#: src/input/r_qtmp4.cpp:644
 msgid "Quicktime/MP4 reader: The 'time scale' parameter was 0. This is not supported.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:250
+#: src/input/r_qtmp4.cpp:248
 #, boost-format
 msgid "Quicktime/MP4 reader: The AAC track %1% is missing the esds atom/the decoder config. Skipping this track.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:244
+#: src/input/r_qtmp4.cpp:242
 #, boost-format
 msgid "Quicktime/MP4 reader: The audio track %1% is using an unsupported 'object type id' of %2% in the 'esds' atom. Skipping this track.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:262
+#: src/input/r_qtmp4.cpp:260
 #, boost-format
 msgid "Quicktime/MP4 reader: The video track %1% is missing the ESDS atom. Skipping this track.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:504
+#: src/input/r_qtmp4.cpp:497
 #, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers with an unknown or unsupported compression algorithm '%1%%2%%3%%4%'. Aborting.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:537
+#: src/input/r_qtmp4.cpp:530
 #, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers, but the expected uncompressed size (%1%) was not what is available after uncompressing (%2%).\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:528
+#: src/input/r_qtmp4.cpp:521
 #, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers, but the zlib library could not be initialized. Error code from zlib: %1%. Aborting.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:533
+#: src/input/r_qtmp4.cpp:526
 #, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers, but they could not be uncompressed. Error code from zlib: %1%. Aborting.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:301
+#: src/input/r_qtmp4.cpp:299
 #, boost-format
 msgid "Quicktime/MP4 reader: Track %1% has an unknown type.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:257
-#: src/input/r_qtmp4.cpp:296
+#: src/input/r_qtmp4.cpp:255
+#: src/input/r_qtmp4.cpp:294
 #, boost-format
 msgid "Quicktime/MP4 reader: Track %1% is missing some data. Broken header atoms?\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:991
-#: src/input/r_qtmp4.cpp:1065
+#: src/input/r_qtmp4.cpp:980
+#: src/input/r_qtmp4.cpp:1054
 #, boost-format
 msgid "Quicktime/MP4 reader: Track ID %1% has more than one FourCC. Only using the first one (%|2$.4s|) and not this one (%|3$.4s|).\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:236
+#: src/input/r_qtmp4.cpp:234
 #, boost-format
 msgid "Quicktime/MP4 reader: Unknown/unsupported FourCC '%|1$.4s|' for track %2%.\n"
 msgstr ""
@@ -5610,7 +5615,7 @@ msgstr "Arama başı (altgirdiler atlanacaktır)"
 msgid "Seek position: %1%"
 msgstr "Arama konumu: %1%"
 
-#: src/extract/timecodes_v2.cpp:202
+#: src/extract/timecodes_v2.cpp:198
 #: src/extract/tracks.cpp:359
 #: src/info/qt_ui.cpp:177
 #: src/info/wxwidgets_ui.cpp:205
@@ -5645,19 +5650,19 @@ msgstr "Parça bilgi dosyası:"
 msgid "Segment info files (*.xml)|*.xml|%s"
 msgstr "Parça bilgi dosyaları (*.xml)|*.xml|%s"
 
-#: src/extract/timecodes_v2.cpp:222
+#: src/extract/timecodes_v2.cpp:218
 #: src/extract/tracks.cpp:377
 #: src/info/mkvinfo.cpp:547
 #: src/info/qt_ui.cpp:178
 #: src/info/wxwidgets_ui.cpp:208
 #: src/mmg/header_editor/frame.cpp:324
-#: src/propedit/options.cpp:173
+#: src/propedit/options.cpp:161
 #: src/propedit/propedit_cli_parser.cpp:105
-#: src/propedit/propedit_cli_parser.cpp:183
+#: src/propedit/propedit_cli_parser.cpp:180
 msgid "Segment information"
 msgstr "Parça bilgisi"
 
-#: src/extract/timecodes_v2.cpp:256
+#: src/extract/timecodes_v2.cpp:252
 #: src/extract/tracks.cpp:389
 #: src/info/mkvinfo.cpp:922
 #: src/info/qt_ui.cpp:179
@@ -5756,15 +5761,15 @@ msgstr "Dosya adında gecikme girdi alanını ayarla"
 msgid "Set values"
 msgstr "Değerleri ayarla"
 
-#: src/propedit/propedit_cli_parser.cpp:168
+#: src/propedit/propedit_cli_parser.cpp:165
 msgid "Sets a property to the value if it exists and add it otherwise"
 msgstr ""
 
-#: src/propedit/propedit_cli_parser.cpp:164
+#: src/propedit/propedit_cli_parser.cpp:161
 msgid "Sets the Matroska file section that all following add/set/delete actions operate on (see below and man page for syntax)"
 msgstr ""
 
-#: src/propedit/propedit_cli_parser.cpp:161
+#: src/propedit/propedit_cli_parser.cpp:158
 msgid "Sets the Matroska parser mode to 'fast' (default) or 'full'"
 msgstr ""
 
@@ -5919,7 +5924,7 @@ msgstr ""
 msgid "Silent Track Number: %1%"
 msgstr "Sessiz İz Numarası: %1%"
 
-#: src/extract/timecodes_v2.cpp:289
+#: src/extract/timecodes_v2.cpp:285
 msgid "Simple block"
 msgstr "Basit blok"
 
@@ -6147,12 +6152,12 @@ msgstr "Etiket dosyaları (*.xml)|*.xml|%s"
 msgid "Tag files (*.xml;*.txt)|*.xml;*.txt|%s"
 msgstr "Etiket dosyaları (*.xml;*.txt)|*.xml;*.txt|%s"
 
-#: src/propedit/propedit_cli_parser.cpp:193
+#: src/propedit/propedit_cli_parser.cpp:190
 msgid "Tag selectors"
 msgstr "Etiket seçicileri"
 
 #: src/info/mkvinfo.cpp:1818
-#: src/propedit/options.cpp:181
+#: src/propedit/options.cpp:169
 msgid "Tags"
 msgstr "Etiketler"
 
@@ -6160,7 +6165,7 @@ msgstr "Etiketler"
 msgid "Tags are not allowed in WebM compliant files. No tags will be written into any output file.\n"
 msgstr ""
 
-#: src/merge/pr_generic.cpp:1410
+#: src/merge/pr_generic.cpp:1408
 #, boost-format
 msgid "Tags for track ID %1%: %2% entries"
 msgstr ""
@@ -6204,7 +6209,7 @@ msgstr ""
 msgid "The AAC profiles are different: %1% and %2%"
 msgstr "AAC profilleri farklı: %1% ve %2%"
 
-#: src/input/r_qtmp4.cpp:1495
+#: src/input/r_qtmp4.cpp:1484
 msgid "The AVC video track is missing the 'CTTS' atom for frame timecode offsets. However, AVC/h.264 allows frames to have more than the traditional one (for P frames) or two (for B frames) references to other frames. The timecodes for such frames will be out-of-order, and the 'CTTS' atom is needed for getting the timecodes right. As it is missing the timecodes for this track might be wrong. You should watch the resulting file and make sure that it looks like you expected it to.\n"
 msgstr ""
 
@@ -6231,22 +6236,22 @@ msgstr ""
 msgid "The FPS is 0.0 but the reader did not provide a timecode for a packet. %1%\n"
 msgstr ""
 
-#: src/mmg/tabs/input.cpp:1334
+#: src/mmg/tabs/input.cpp:1340
 #, c-format, boost-format
 msgid "The FPS setting for track nr. %s in file '%s' is invalid."
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1127
+#: src/merge/mkvmerge.cpp:1126
 #, boost-format
 msgid "The FourCC must be exactly four characters long in '%1% %2%'.\n"
 msgstr ""
 
-#: src/mmg/tabs/input.cpp:1322
+#: src/mmg/tabs/input.cpp:1328
 #, c-format, boost-format
 msgid "The FourCC setting for track nr. %s in file '%s' is not excatly four characters long."
 msgstr ""
 
-#: src/mmg/mmg_dialog.cpp:1859
+#: src/mmg/mmg_dialog.cpp:1860
 #, boost-format
 msgid "The GUI is configured to use the mkvmerge executable from a different version (%1%) than the GUI itself (%2%). This is not supported but will not be prevented either. You should change the mkvmerge executable in the preferences dialog."
 msgstr ""
@@ -6272,7 +6277,7 @@ msgid ""
 "The proper solution is to save these chapters into a XML file and then to remux the file with the chapters included."
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1258
+#: src/merge/mkvmerge.cpp:1256
 #, boost-format
 msgid "The NALU size length must be a number between 2 and 4 inclusively in '--nalu-size-length %1%'.\n"
 msgstr ""
@@ -6286,26 +6291,26 @@ msgstr ""
 msgid "The Vorbis codebooks are different; such tracks cannot be concatenated without reencoding"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1526
+#: src/merge/mkvmerge.cpp:1524
 #, boost-format
 msgid "The argument '%1%' to '%2%' is invalid: '%3%' is not a valid track ID.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1535
+#: src/merge/mkvmerge.cpp:1533
 #, boost-format
 msgid "The argument '%1%' to '%2%' is invalid: '%3%' must be either 'all' or 'first'.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1522
+#: src/merge/mkvmerge.cpp:1520
 #, boost-format
 msgid "The argument '%1%' to '%2%' is invalid: too many colons in element '%3%'.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1480
+#: src/merge/mkvmerge.cpp:1478
 msgid "The argument to '--timecode-scale' must be a number.\n"
 msgstr ""
 
-#: src/mmg/tabs/input.cpp:1390
+#: src/mmg/tabs/input.cpp:1396
 #, c-format, boost-format
 msgid "The aspect ratio setting for track nr. %s in file '%s' is invalid."
 msgstr ""
@@ -6315,7 +6320,7 @@ msgstr ""
 msgid "The attachment #%1%, ID %2%, MIME type %3%, size %4%, is written to '%5%'.\n"
 msgstr "Ek #%1%, ID %2%, MIME türü %3%, boyut %4%, '%5%' dosyasına yazıldı.\n"
 
-#: src/merge/mkvmerge.cpp:1411
+#: src/merge/mkvmerge.cpp:1409
 #, boost-format
 msgid "The attachment '%1%' could not be read.\n"
 msgstr "Ek '%1%' okunamadı.\n"
@@ -6335,7 +6340,7 @@ msgstr ""
 msgid "The binary data must be exactly %1% bytes long."
 msgstr ""
 
-#: src/propedit/propedit.cpp:111
+#: src/propedit/propedit.cpp:109
 msgid "The changes are written to the file.\n"
 msgstr "Değişiklikler dosyaya yazıldı.\n"
 
@@ -6363,7 +6368,7 @@ msgstr ""
 msgid "The chosen NALU size length of %1% is too small. Try using '4'.\n"
 msgstr ""
 
-#: src/merge/pr_generic.cpp:1208
+#: src/merge/pr_generic.cpp:1206
 #, boost-format
 msgid "The codec type '%1%' cannot be used in a WebM compliant file.\n"
 msgstr ""
@@ -6395,7 +6400,7 @@ msgstr "'%s' ülkesi geçerli bir ccTLD değil ve seçilemiyor."
 msgid "The cue entries (the index) are being written..."
 msgstr "Cue girdileri (indeks) yazılıyor..."
 
-#: src/mmg/tabs/input.cpp:733
+#: src/mmg/tabs/input.cpp:739
 #, c-format, boost-format
 msgid "The current file (number %d) cannot be removed. There are other files -- at least file number %d -- whose tracks are supposed to be appended to tracks from this file. Please remove those files first."
 msgstr ""
@@ -6410,7 +6415,7 @@ msgstr ""
 msgid "The default language code '%1%' is not a valid ISO639-2 language code and will be ignored.\n"
 msgstr ""
 
-#: src/mmg/tabs/input.cpp:1301
+#: src/mmg/tabs/input.cpp:1307
 #, c-format, boost-format
 msgid "The delay setting for track nr. %s in file '%s' is invalid."
 msgstr ""
@@ -6450,7 +6455,7 @@ msgstr ""
 msgid "The duration after which a new output file is started. The time can be given either in the form HH:MM:SS.nnnnnnnnn or as the number of seconds followed by 's'. You may omit the number of hours 'HH' and the number of nanoseconds 'nnnnnnnnn'. If given then you may use up to nine digits after the decimal point. Examples: 01:00:00 (after one hour) or 1800s (after 1800 seconds)."
 msgstr ""
 
-#: src/propedit/options.cpp:225
+#: src/propedit/options.cpp:212
 #, boost-format
 msgid "The edit specifications '%1%' and '%2%' resolve to the same track with the UID %3%.\n"
 msgstr ""
@@ -6470,7 +6475,7 @@ msgstr ""
 msgid "The fifth mode tries to extract chapter information and tags and outputs them as a CUE sheet. This is the reverse of using a CUE sheet with mkvmerge's '--chapters' option."
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1392
+#: src/merge/mkvmerge.cpp:1390
 #, boost-format
 msgid "The file '%1%' cannot be attached because it does not exist or cannot be read.\n"
 msgstr "'%1%' dosyası eklenemiyor çünkü mevcut değil ya da okunamıyor.\n"
@@ -6483,7 +6488,7 @@ msgstr "'%1%' dosyası eklenemiyor çünkü mevcut değil ya da okunamıyor.\n"
 msgid "The file '%1%' could not be opened for reading (%2%)."
 msgstr "'%1%' dosyası okumak için açılamadı (%2%)."
 
-#: src/extract/timecodes_v2.cpp:173
+#: src/extract/timecodes_v2.cpp:169
 #: src/extract/tracks.cpp:327
 #, boost-format
 msgid "The file '%1%' could not be opened for reading (%2%).\n"
@@ -6513,12 +6518,12 @@ msgstr "'%1%' dosyası yazmak için açılamadı (%2%, %3%).\n"
 msgid "The file '%1%' has been opened for writing.\n"
 msgstr "'%1%' dosyası yazmak için açıldı.\n"
 
-#: src/merge/mkvmerge.cpp:2140
+#: src/merge/mkvmerge.cpp:2138
 #, boost-format
 msgid "The file '%1%' has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n"
 msgstr "Dosya '%1%' bilinmeyen bir tür. Lütfen desteklenen dosya türlerine ('mkvmerge --list-types') bakın ve eğer dosya türünüz destekleniyor ama düzgün olarak tanınmıyorsa, yazar Moritz Bunkus <moritz@bunkus.org> ile temasa geçin.\n"
 
-#: src/merge/pr_generic.cpp:1327
+#: src/merge/pr_generic.cpp:1325
 #, boost-format
 msgid "The file '%1%' is a non-supported file type (%2%).\n"
 msgstr "'%1%' dosyası desteklenmeyen bir dosya türü (%2%).\n"
@@ -6533,7 +6538,7 @@ msgstr "Dosya '%1%' boş."
 msgid "The file '%s' does not exist."
 msgstr "Dosya '%s' mevcut değil."
 
-#: src/mmg/tabs/input.cpp:296
+#: src/mmg/tabs/input.cpp:302
 #, c-format, boost-format
 msgid "The file '%s' is already processed in combination with the file '%s'. It cannot be added a second time."
 msgstr "Dosya '%s' zaten '%s' dosyasının birleştirilmesiyle işleniyor. İkinci bir kez eklenemez."
@@ -6566,28 +6571,28 @@ msgstr "Dosya başlığı çok kısa.\n"
 msgid "The file header was not read correctly.\n"
 msgstr "Dosya başlığı doğru olarak okunamadı.\n"
 
-#: src/mmg/tabs/input.cpp:346
+#: src/mmg/tabs/input.cpp:352
 #, c-format, boost-format
 msgid "The file is an unsupported container format (%s)."
 msgstr "Dosya desteklenmeyen kalıp biçimidir (%s)."
 
-#: src/propedit/propedit.cpp:94
+#: src/propedit/propedit.cpp:92
 msgid "The file is analyzed.\n"
 msgstr "Dosya analiz ediliyor.\n"
 
-#: src/merge/output_control.cpp:270
+#: src/merge/output_control.cpp:273
 msgid "The file is being fixed, part 1/4..."
 msgstr "Dosya onarılıyor, parça 1/4..."
 
-#: src/merge/output_control.cpp:276
+#: src/merge/output_control.cpp:279
 msgid "The file is being fixed, part 2/4..."
 msgstr "Dosya onarılıyor, parça 2/4..."
 
-#: src/merge/output_control.cpp:285
+#: src/merge/output_control.cpp:288
 msgid "The file is being fixed, part 3/4..."
 msgstr "Dosya onarılıyor, parça 3/4..."
 
-#: src/merge/output_control.cpp:297
+#: src/merge/output_control.cpp:300
 msgid "The file is being fixed, part 4/4..."
 msgstr "Dosya onarılıyor, parça 4/4..."
 
@@ -6606,7 +6611,7 @@ msgstr ""
 msgid "The file no. %1% ('%2%') does not contain a track with the ID %3%, or that track is not to be copied. Therefore no track can be appended to it. The argument for '--append-to' was invalid.\n"
 msgstr ""
 
-#: src/merge/output_control.cpp:869
+#: src/merge/output_control.cpp:870
 #, boost-format
 msgid "The file no. %1% ('%2%') is not being appended. The argument for '--append-to' was invalid.\n"
 msgstr ""
@@ -6623,7 +6628,7 @@ msgstr "Kaydetmeyi denediğiniz dosya Matroska dosyası DEĞİL."
 msgid "The file you tried to save to is a Matroska file. For this to work you have to use the 'Save to Matroska file' menu option."
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:2129
+#: src/merge/mkvmerge.cpp:2127
 msgid "The first file cannot be appended because there are no files to append to.\n"
 msgstr ""
 
@@ -6656,7 +6661,7 @@ msgstr "Biçimler uyuşmuyor."
 msgid "The fourth mode extracts the chapters and converts them to XML. The output is written to the standard output. The output can be used as a source for mkvmerge."
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1486
+#: src/merge/mkvmerge.cpp:1484
 msgid "The given timecode scale factor is outside the valid range (1...10000000 or -1 for 'sample precision even if a video track is present').\n"
 msgstr ""
 
@@ -6670,12 +6675,12 @@ msgstr "Başlık zaten yazılmış."
 msgid "The height of the two tracks is different: %1% and %2%"
 msgstr "İki izin yükseklikleri farklı: %1% ve %2%"
 
-#: src/mmg/tabs/input.cpp:615
+#: src/mmg/tabs/input.cpp:621
 #, c-format, boost-format
 msgid "The input file '%s' does not contain any tracks."
 msgstr "Girdi dosyası '%s' hiç iz içermiyor."
 
-#: src/mmg/tabs/input.cpp:1225
+#: src/mmg/tabs/input.cpp:1231
 msgid ""
 "The job file could not have been parsed correctly.\n"
 "Either it is invalid / damaged, or you've just found\n"
@@ -6685,7 +6690,7 @@ msgid ""
 "(Problem occured in tab_input::load(), #1)"
 msgstr ""
 
-#: src/mmg/tabs/input.cpp:1232
+#: src/mmg/tabs/input.cpp:1238
 msgid ""
 "The job file could not have been parsed correctly.\n"
 "Either it is invalid / damaged, or you've just found\n"
@@ -6695,7 +6700,7 @@ msgid ""
 "(Problem occured in tab_input::load(), #2)"
 msgstr ""
 
-#: src/mmg/tabs/input.cpp:1245
+#: src/mmg/tabs/input.cpp:1251
 msgid ""
 "The job file could not have been parsed correctly.\n"
 "Either it is invalid / damaged, or you've just found\n"
@@ -6764,17 +6769,17 @@ msgid ""
 "Please select the location of the 'mkvmerge-gui.hhp' file."
 msgstr ""
 
-#: src/propedit/change.cpp:61
+#: src/propedit/change.cpp:60
 #, boost-format
 msgid "The name '%1%' is not a valid property name for the current edit specification in '%2%'.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:2100
+#: src/merge/mkvmerge.cpp:2098
 #, boost-format
 msgid "The name of the output file '%1%' and of one of the input files is the same. This would cause mkvmerge to overwrite one of your input files. This is most likely not what you want.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1343
+#: src/merge/mkvmerge.cpp:1341
 #, boost-format
 msgid "The next UID was already given in '%1% %2%'.\n"
 msgstr "Sonraki UID, '%1% %2%' içinde zaten verildi.\n"
@@ -6820,11 +6825,11 @@ msgid ""
 "on the top of the image."
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1855
+#: src/merge/mkvmerge.cpp:1853
 msgid "The option '--meta-seek-size' is no longer supported. Please read mkvmerge's documentation, especially the section about the MATROSKA FILE LAYOUT.\n"
 msgstr ""
 
-#: src/propedit/propedit_cli_parser.cpp:180
+#: src/propedit/propedit_cli_parser.cpp:177
 msgid "The order of the various options is not important."
 msgstr "Çeşitli seçeneklerin sırası önemli değil."
 
@@ -6853,37 +6858,37 @@ msgstr ""
 msgid "The picture type '%1%' is not recognized.\n"
 msgstr "Resim türü '%1%' tanınamıyor.\n"
 
-#: src/merge/mkvmerge.cpp:1330
+#: src/merge/mkvmerge.cpp:1328
 #, boost-format
 msgid "The previous UID was already given in '%1% %2%'.\n"
 msgstr "Önceki UID, '%1% %2%' içinde zaten verildi.\n"
 
-#: src/propedit/change.cpp:114
+#: src/propedit/change.cpp:112
 #, boost-format
 msgid "The property value contains non-ASCII characters, but the property is not a Unicode string in '%1%'. %2%\n"
 msgstr ""
 
-#: src/propedit/change.cpp:156
+#: src/propedit/change.cpp:154
 #, boost-format
 msgid "The property value is not a valid binary spec or it is not exactly 128 bits long in '%1%'. %2%\n"
 msgstr ""
 
-#: src/propedit/change.cpp:141
+#: src/propedit/change.cpp:139
 #, boost-format
 msgid "The property value is not a valid boolean in '%1%'. %2%\n"
 msgstr ""
 
-#: src/propedit/change.cpp:148
+#: src/propedit/change.cpp:146
 #, boost-format
 msgid "The property value is not a valid floating point number in '%1%'. %2%\n"
 msgstr ""
 
-#: src/propedit/change.cpp:133
+#: src/propedit/change.cpp:131
 #, boost-format
 msgid "The property value is not a valid signed integer in '%1%'. %2%\n"
 msgstr ""
 
-#: src/propedit/change.cpp:127
+#: src/propedit/change.cpp:125
 #, boost-format
 msgid "The property value is not a valid unsigned integer in '%1%'. %2%\n"
 msgstr ""
@@ -6930,47 +6935,47 @@ msgstr ""
 msgid "The size after which a new output file is started. The letters 'G', 'M' and 'K' can be used to indicate giga/mega/kilo bytes respectively. All units are based on 1024 (G = 1024^3, M = 1024^2, K = 1024)."
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1405
+#: src/merge/mkvmerge.cpp:1403
 #, boost-format
 msgid "The size of attachment '%1%' is 0.\n"
 msgstr "'%1%' ekinin boyutu 0.\n"
 
-#: src/merge/output_control.cpp:322
-#: src/merge/output_control.cpp:421
+#: src/merge/output_control.cpp:325
+#: src/merge/output_control.cpp:424
 #, boost-format
 msgid "The source file '%1%' could not be opened successfully, or retrieving its size by seeking to the end did not work.\n"
 msgstr ""
 
-#: src/mmg/tabs/input.cpp:1312
+#: src/mmg/tabs/input.cpp:1318
 #, c-format, boost-format
 msgid "The stretch setting for track nr. %s in file '%s' is invalid."
 msgstr ""
 
-#: src/propedit/propedit_cli_parser.cpp:194
+#: src/propedit/propedit_cli_parser.cpp:191
 msgid "The string 'all' works on all tags."
 msgstr ""
 
-#: src/propedit/propedit_cli_parser.cpp:195
+#: src/propedit/propedit_cli_parser.cpp:192
 msgid "The string 'global' works on the global tags."
 msgstr ""
 
-#: src/propedit/propedit_cli_parser.cpp:188
+#: src/propedit/propedit_cli_parser.cpp:185
 msgid "The string 'track:' followed by one of the chars 'a', 'b', 's' or 'v' followed by a number 'n' selects the nth audio, button, subtitle or video track (e.g. '--edit track:a2')."
 msgstr ""
 
-#: src/propedit/propedit_cli_parser.cpp:190
+#: src/propedit/propedit_cli_parser.cpp:187
 msgid "The string 'track:=uid' with 'uid' being a number selects the track whose 'track UID' element equals 'uid'."
 msgstr ""
 
-#: src/propedit/propedit_cli_parser.cpp:191
+#: src/propedit/propedit_cli_parser.cpp:188
 msgid "The string 'track:@number' with 'number' being a number selects the track whose 'track number' element equals 'number'."
 msgstr ""
 
-#: src/propedit/propedit_cli_parser.cpp:187
+#: src/propedit/propedit_cli_parser.cpp:184
 msgid "The string 'track:n' with 'n' being a number selects the nth track."
 msgstr ""
 
-#: src/propedit/propedit_cli_parser.cpp:184
+#: src/propedit/propedit_cli_parser.cpp:181
 msgid "The strings 'info', 'segment_info' or 'segmentinfo' select the segment information element. This is also the default until the first '--edit' option is found."
 msgstr ""
 
@@ -7048,7 +7053,7 @@ msgstr "Bütün film için başlık."
 msgid "The track %1% from file no. %2% ('%3%') is to be appended more than once. The argument for '--append-to' was invalid.\n"
 msgstr ""
 
-#: src/merge/output_control.cpp:768
+#: src/merge/output_control.cpp:771
 #, boost-format
 msgid "The track headers could not be rendered correctly. %1%\n"
 msgstr ""
@@ -7090,12 +7095,12 @@ msgstr "İki izin genişlikleri farklı: %1% ve %2%"
 msgid "Theora"
 msgstr ""
 
-#: src/mmg/mmg_dialog.cpp:1754
+#: src/mmg/mmg_dialog.cpp:1755
 msgid "There is a new version available online."
 msgstr "Çevrimiçi yeni sürüm mevcut."
 
-#: src/merge/output_control.cpp:863
-#: src/merge/output_control.cpp:873
+#: src/merge/output_control.cpp:864
+#: src/merge/output_control.cpp:874
 #, boost-format
 msgid "There is no file with the ID '%1%'. The argument for '--append-to' was invalid.\n"
 msgstr ""
@@ -7105,7 +7110,7 @@ msgstr ""
 msgid "There is no translation available for '%1%'.\n"
 msgstr "'%1%' için mevcut çeviri yok.\n"
 
-#: src/mmg/mmg_dialog.cpp:1755
+#: src/mmg/mmg_dialog.cpp:1756
 msgid "There was an error querying the update status."
 msgstr "Güncelleme durumunu sorgularken hata oldu."
 
@@ -7126,7 +7131,7 @@ msgstr "Uyarılar vardı"
 msgid "There were warnings, or the process was terminated."
 msgstr "Uyarılar vardı ya da işlem sonlandırıldı."
 
-#: src/input/r_avi.cpp:617
+#: src/input/r_avi.cpp:615
 #: src/input/r_real.cpp:325
 msgid "This AAC track does not contain valid headers. Could not parse the AAC information.\n"
 msgstr ""
@@ -7186,7 +7191,7 @@ msgid ""
 "to the file."
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:338
+#: src/input/r_qtmp4.cpp:333
 #, boost-format
 msgid "This file contains at least one frame with a negative timecode. All timecodes will be adjusted by %1% so that none is negative anymore.\n"
 msgstr ""
@@ -7200,7 +7205,7 @@ msgstr ""
 msgid "This file could not be opened or parsed."
 msgstr "Bu dosya açılamadı veya ayrıştırılamadı."
 
-#: src/propedit/propedit.cpp:99
+#: src/propedit/propedit.cpp:97
 msgid "This file could not be opened or parsed.\n"
 msgstr "Bu dosya açılamadı veya ayrıştırılamadı.\n"
 
@@ -7212,7 +7217,7 @@ msgstr "Bu dosya hiç bölüm içermiyor."
 msgid "This file does not contain valid chapters."
 msgstr "Bu dosya geçerli bölüm içermiyor."
 
-#: src/mmg/tabs/attachments.cpp:159
+#: src/mmg/tabs/attachments.cpp:165
 msgid "This is the name that will be stored in the output file for this attachment. It defaults to the file name of the original file but can be changed."
 msgstr ""
 
@@ -7224,17 +7229,17 @@ msgstr ""
 msgid "This option needs an additional argument 'n'. Tells mkvmerge to put at most 'n' data blocks into each cluster. If the number is postfixed with 'ms' then put at most 'n' milliseconds of data into each cluster. The maximum length for a cluster that mkvmerge accepts is 60000 blocks and 32000ms; the minimum length is 100ms. Programs will only be able to seek to clusters, so creating larger clusters may lead to imprecise or slow seeking."
 msgstr ""
 
-#: src/propedit/change.cpp:253
+#: src/propedit/change.cpp:251
 #, boost-format
 msgid "This property is mandatory and cannot be deleted in '%1%'. %2%\n"
 msgstr ""
 
-#: src/propedit/change.cpp:219
+#: src/propedit/change.cpp:217
 #, boost-format
 msgid "This property is unique. More instances cannot be added in '%1%'. %2%\n"
 msgstr ""
 
-#: src/merge/output_control.cpp:293
+#: src/merge/output_control.cpp:296
 #, boost-format
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. %1%\n"
 msgstr ""
@@ -7244,7 +7249,7 @@ msgstr ""
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. Size needed: %1%. %2%\n"
 msgstr ""
 
-#: src/common/common.h:56
+#: src/common/common.h:58
 msgid "This should not have happened. Please contact the author Moritz Bunkus <moritz@bunkus.org> with this error/warning message, a description of what you were trying to do, the command line used and which operating system you are using. Thank you."
 msgstr ""
 
@@ -7252,7 +7257,7 @@ msgstr ""
 msgid "This track contains SBR AAC/HE-AAC/AAC+ data. Only needed for AAC input files, because SBR AAC cannot be detected automatically for these files. Not needed for AAC tracks read from MP4 or Matroska files."
 msgstr ""
 
-#: src/mmg/tabs/input.cpp:948
+#: src/mmg/tabs/input.cpp:954
 msgid "This track is not compatible with the WebM mode and cannot be enabled."
 msgstr ""
 
@@ -7269,7 +7274,7 @@ msgstr "Zaman kodu çıkartma"
 msgid "Timecode files (*.tmc;*.txt)|*.tmc;*.txt|%s"
 msgstr "Zaman kodu dosyaları (*.tmc;*.txt)|*.tmc;*.txt|%s"
 
-#: src/extract/timecodes_v2.cpp:231
+#: src/extract/timecodes_v2.cpp:227
 #: src/extract/tracks.cpp:382
 #: src/info/mkvinfo.cpp:565
 #: src/info/mkvinfo.cpp:1089
@@ -7296,7 +7301,7 @@ msgstr "Başlık"
 msgid "Title: %1%"
 msgstr "Başlık: %1%"
 
-#: src/mmg/tabs/attachments.cpp:166
+#: src/mmg/tabs/attachments.cpp:172
 msgid "To all files"
 msgstr "Tüm dosyalara"
 
@@ -7309,24 +7314,19 @@ msgstr ""
 msgid "Track %1% CodecPrivate is too small.\n"
 msgstr ""
 
-#: src/common/compression.cpp:617
+#: src/common/compression.cpp:607
 #, boost-format
 msgid "Track %1% has been compressed with an unknown/unsupported compression algorithm (%2%).\n"
 msgstr ""
 
-#: src/common/compression.cpp:597
+#: src/common/compression.cpp:587
 #, boost-format
 msgid "Track %1% was compressed with bzlib but mkvmerge has not been compiled with support for bzlib compression.\n"
 msgstr ""
 
-#: src/common/compression.cpp:605
+#: src/common/compression.cpp:595
 #, boost-format
 msgid "Track %1% was compressed with lzo1x but mkvmerge has not been compiled with support for lzo1x compression.\n"
-msgstr ""
-
-#: src/common/compression.cpp:589
-#, boost-format
-msgid "Track %1% was compressed with zlib but mkvmerge has not been compiled with support for zlib compression.\n"
 msgstr ""
 
 #: src/extract/xtr_aac.cpp:51
@@ -7372,7 +7372,7 @@ msgstr ""
 msgid "Track %1%: %2%, codec ID: %3%%4%%5%%6%\n"
 msgstr "İz %1%: %2%, kodek ID: %3%%4%%5%%6%\n"
 
-#: src/input/r_qtmp4.cpp:438
+#: src/input/r_qtmp4.cpp:433
 #, boost-format
 msgid "Track %1%: AAC found, but decoder config data has length %2%.\n"
 msgstr ""
@@ -7387,7 +7387,7 @@ msgstr "İz %1%: NAL çok büyük\n"
 msgid "Track %1%: Subtitle entry number %2% is missing its duration. Assuming a duration of 1s.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:441
+#: src/input/r_qtmp4.cpp:436
 #, boost-format
 msgid "Track %1%: The AAC information could not be parsed.\n"
 msgstr ""
@@ -7398,7 +7398,7 @@ msgstr ""
 msgid "Track ID %1% has an unknown AAC type.\n"
 msgstr ""
 
-#: src/merge/pr_generic.cpp:1404
+#: src/merge/pr_generic.cpp:1402
 #, boost-format
 msgid "Track ID %1%: %2% (%3%)"
 msgstr "İz ID %1%: %2% (%3%)"
@@ -7417,9 +7417,9 @@ msgstr "İz UID: %1%"
 msgid "Track extraction"
 msgstr "İz çıkartma"
 
-#: src/propedit/options.cpp:164
+#: src/propedit/options.cpp:153
 #: src/propedit/propedit_cli_parser.cpp:106
-#: src/propedit/propedit_cli_parser.cpp:186
+#: src/propedit/propedit_cli_parser.cpp:183
 msgid "Track headers"
 msgstr "İz başlıkları"
 
@@ -7432,7 +7432,7 @@ msgstr "İz adı:"
 msgid "Track number"
 msgstr "İz sayısı"
 
-#: src/common/compression.cpp:576
+#: src/common/compression.cpp:571
 #, boost-format
 msgid "Track number %1% has been encrypted and decryption has not yet been implemented.\n"
 msgstr ""
@@ -7456,7 +7456,7 @@ msgstr "İz türü: %1%"
 msgid "Tracks with unsupported content encoding schemes (compression or encryption) cannot be extracted.\n"
 msgstr ""
 
-#: src/mmg/tabs/input.cpp:187
+#: src/mmg/tabs/input.cpp:193
 msgid "Tracks, chapters and tags:"
 msgstr "İzler, bölümler ve etiketler:"
 
@@ -7536,22 +7536,22 @@ msgstr "Bilinmeyen ses akış türü 0x%|1$04x|. Akış ID %2% yoksayılacak.\n"
 msgid "Unknown chapter file format in '%1%'. It does not contain a supported chapter format.\n"
 msgstr "'%1%' içinde bilinmeyen bölüm dosyası biçimi. Desteklenen bölüm biçimini içermiyor.\n"
 
-#: src/common/compression.cpp:582
+#: src/common/compression.cpp:577
 #, boost-format
 msgid "Unknown content encoding type %1% for track %2%.\n"
 msgstr "%2% izi için bilinmeyen içerik kodlama türü %1%.\n"
 
-#: src/merge/mkvmerge.cpp:1348
+#: src/merge/mkvmerge.cpp:1346
 #, boost-format
 msgid "Unknown format for the next UID in '%1% %2%'.\n"
 msgstr "'%1% %2%' içinde sonraki UID için bilinmeyen biçim.\n"
 
-#: src/merge/mkvmerge.cpp:1335
+#: src/merge/mkvmerge.cpp:1333
 #, boost-format
 msgid "Unknown format for the previous UID in '%1% %2%'.\n"
 msgstr "'%1% %2%' içinde önceki UID için bilinmeyen biçim.\n"
 
-#: src/merge/mkvmerge.cpp:1360
+#: src/merge/mkvmerge.cpp:1358
 #, boost-format
 msgid "Unknown format for the segment UID '%3%' in '%1% %2%'.\n"
 msgstr "'%3%' in '%1% %2%' içinde parça UID '%3%' için bilinmeyen biçim.\n"
@@ -7581,7 +7581,7 @@ msgstr "Bilinmeyen seçenek '%1%'.\n"
 msgid "Unknown parse mode in '%1% %2%'.\n"
 msgstr "'%1% %2%' içinde bilinmeyen ayrıştırma kipi.\n"
 
-#: src/input/r_avi.cpp:571
+#: src/input/r_avi.cpp:569
 #, boost-format
 msgid "Unknown/unsupported audio format 0x%|1$04x| for this audio track.\n"
 msgstr "Bu ses izi için bilinmeyen/desteklenmeyen ses biçimi 0x%|1$04x|.\n"
@@ -7605,7 +7605,7 @@ msgstr ""
 msgid "Unsupported MPEG mpeg_version: 0x%|1$02x| in packet %2% for timecode %3%, assuming MPEG2. No further warnings will be printed for this track.\n"
 msgstr ""
 
-#: src/mmg/tabs/input.cpp:349
+#: src/mmg/tabs/input.cpp:355
 msgid "Unsupported format"
 msgstr "Desteklenmeyen biçim"
 
@@ -7647,7 +7647,7 @@ msgstr "Bu dizini kullan:"
 msgid "User defined options:"
 msgstr "Kullanıcı tanımlı seçenekler:"
 
-#: src/merge/mkvmerge.cpp:1262
+#: src/merge/mkvmerge.cpp:1260
 msgid "Using a NALU size length of 3 bytes might result in tracks that won't be decodable with certain AVC/h.264 codecs.\n"
 msgstr ""
 
@@ -7896,7 +7896,7 @@ msgstr "Yanlış Kate sürümü: %1%.%2% > %3%.x"
 msgid "Wrong Theora version: %1%.%2%.%3% != 3.2.x"
 msgstr "Yanlış Theora sürümü: %1%.%2%.%3% != 3.2.x"
 
-#: src/merge/mkvmerge.cpp:1702
+#: src/merge/mkvmerge.cpp:1700
 msgid "Wrong argument to '--split-max-files'.\n"
 msgstr "'--split-max-files' için yanlış bağımsız değişken.\n"
 
@@ -7936,7 +7936,7 @@ msgstr ""
 msgid "XML parser error at line %1%: %2%."
 msgstr ""
 
-#: src/mmg/mmg_dialog.cpp:1753
+#: src/mmg/mmg_dialog.cpp:1754
 msgid "You are already running the latest version."
 msgstr "Zaten en son sürümü çalıştırmaktasınız."
 
@@ -7952,7 +7952,7 @@ msgid ""
 "5minutes and 23seconds earlier than now."
 msgstr ""
 
-#: src/mmg/tabs/input.cpp:1344
+#: src/mmg/tabs/input.cpp:1350
 #, c-format, boost-format
 msgid ""
 "You haven't selected a number of frames per second for track %lld of file '%s'. mkvmerge cannot determine the number of frames per second for such files itself. Therefore you have to set this parameter yourself on the 'format specific options' page.\n"
@@ -7962,7 +7962,7 @@ msgid ""
 "Do you still want to continue?"
 msgstr ""
 
-#: src/mmg/tabs/input.cpp:488
+#: src/mmg/tabs/input.cpp:494
 msgid ""
 "You're adding an AVC/h.264 elementary stream to the output file. mkvmerge cannot determine the number of frames per second for such files itself. Therefore you have to set this parameter yourself on the 'format specific options' page.\n"
 "\n"
@@ -7971,8 +7971,8 @@ msgid ""
 "This message will only be shown once unless you have enabled mmg's warnings on its 'settings' page."
 msgstr ""
 
-#: src/common/compression.cpp:139
-#: src/common/compression.cpp:176
+#: src/common/compression.cpp:138
+#: src/common/compression.cpp:175
 #, boost-format
 msgid "Zlib decompression failed. Result: %1%\n"
 msgstr "Zlib çıkartması başarısız oldu. Sonuç: %1%\n"
@@ -8007,8 +8007,8 @@ msgstr ""
 msgid "ac3_reader: No valid AC3 packet found in the first %1% bytes.\n"
 msgstr ""
 
-#: src/mmg/tabs/attachments.cpp:156
-#: src/mmg/tabs/input.cpp:183
+#: src/mmg/tabs/attachments.cpp:162
+#: src/mmg/tabs/input.cpp:189
 msgid "add"
 msgstr "ekle"
 
@@ -8020,7 +8020,7 @@ msgstr ""
 msgid "anaglyph (green/magenta)"
 msgstr ""
 
-#: src/mmg/tabs/input.cpp:185
+#: src/mmg/tabs/input.cpp:191
 msgid "append"
 msgstr "ilave et"
 
@@ -8057,12 +8057,12 @@ msgstr ""
 msgid "buttons"
 msgstr "butonlar"
 
-#: src/common/compression.cpp:240
+#: src/common/compression.cpp:237
 #, boost-format
 msgid "bzip2 compression failed. Result: %1%\n"
 msgstr "bzip2 sıkıştırması başarısız oldu. Sonuç: %1%\n"
 
-#: src/common/compression.cpp:203
+#: src/common/compression.cpp:200
 msgid "bzlib_compressor_c::decompress() not implemented\n"
 msgstr ""
 
@@ -8121,12 +8121,12 @@ msgstr "varsayılan"
 msgid "default duration: %|1$.3f|ms (%|2$.3f| fps for a video track)"
 msgstr "varsayılan süre: %|1$.3f|ms (görüntü izi için %|2$.3f| fps)"
 
-#: src/common/compression.cpp:161
+#: src/common/compression.cpp:160
 #, boost-format
 msgid "deflateInit() failed. Result: %1%\n"
 msgstr "deflateInit() başarısız oldu. Sonuç: %1%\n"
 
-#: src/mmg/tabs/attachments.cpp:154
+#: src/mmg/tabs/attachments.cpp:160
 msgid "disable all"
 msgstr "tümü etkisiz"
 
@@ -8153,7 +8153,7 @@ msgstr "bitti"
 msgid "done/warnings"
 msgstr "bitti/uyarılar"
 
-#: src/mmg/tabs/input.cpp:189
+#: src/mmg/tabs/input.cpp:195
 msgid "down"
 msgstr "aşağı"
 
@@ -8162,7 +8162,7 @@ msgstr "aşağı"
 msgid "dts_reader: No valid DTS packet found in the first %1% bytes.\n"
 msgstr ""
 
-#: src/mmg/tabs/attachments.cpp:153
+#: src/mmg/tabs/attachments.cpp:159
 msgid "enable all"
 msgstr "tümü etkin"
 
@@ -8185,14 +8185,14 @@ msgstr "şifreleme"
 #: src/common/mm_io.cpp:551
 #: src/common/mm_io.cpp:649
 #: src/common/mm_io.cpp:1107
-#: src/input/r_qtmp4.cpp:515
-#: src/input/r_qtmp4.cpp:597
-#: src/input/r_qtmp4.cpp:631
-#: src/input/r_qtmp4.cpp:643
-#: src/input/r_qtmp4.cpp:737
-#: src/input/r_qtmp4.cpp:1233
-#: src/input/r_qtmp4.cpp:1391
-#: src/input/r_qtmp4.cpp:1407
+#: src/input/r_qtmp4.cpp:508
+#: src/input/r_qtmp4.cpp:586
+#: src/input/r_qtmp4.cpp:620
+#: src/input/r_qtmp4.cpp:632
+#: src/input/r_qtmp4.cpp:726
+#: src/input/r_qtmp4.cpp:1222
+#: src/input/r_qtmp4.cpp:1380
+#: src/input/r_qtmp4.cpp:1396
 msgid "end-of-file"
 msgstr "dosyanın sonu"
 
@@ -8201,7 +8201,7 @@ msgstr "dosyanın sonu"
 msgid "failed"
 msgstr "başarısız"
 
-#: src/merge/output_control.cpp:555
+#: src/merge/output_control.cpp:558
 #, boost-format
 msgid "filelist_t not found for generic_packetizer_c. %1%\n"
 msgstr ""
@@ -8277,7 +8277,7 @@ msgstr "yüksek"
 msgid "highest"
 msgstr "en yüksek"
 
-#: src/common/compression.cpp:124
+#: src/common/compression.cpp:123
 #, boost-format
 msgid "inflateInit() failed. Result: %1%\n"
 msgstr "inflateInit() başarısız. Sonuç: %1%\n"
@@ -8447,7 +8447,7 @@ msgid "matroska_reader: Vorbis track does not contain valid headers.\n"
 msgstr "matroska_okuyucusu: Vorbis izi geçerli başlıkları içermiyor.\n"
 
 #: src/input/r_matroska.cpp:1343
-#: src/input/r_matroska.cpp:2006
+#: src/input/r_matroska.cpp:2014
 msgid "matroska_reader: caught exception\n"
 msgstr ""
 
@@ -8498,11 +8498,11 @@ msgstr ""
 msgid "memory_slice_cursor_c copy c'tor: Must not be used!"
 msgstr "memory_slice_cursor_c copy c'tor: Kullanılmamalı!"
 
-#: src/propedit/target.cpp:88
+#: src/propedit/target.cpp:87
 msgid "missing property name"
 msgstr "eksik özellik adı"
 
-#: src/propedit/target.cpp:81
+#: src/propedit/target.cpp:80
 msgid "missing value"
 msgstr "eksik değer"
 
@@ -8610,12 +8610,12 @@ msgstr "mkvmerge GKA hazır"
 msgid "mkvmerge GUI settings (*.mmg)|*.mmg|%s"
 msgstr "mkvmerge GKA ayarları (*.mmg)|*.mmg|%s"
 
-#: src/mmg/tabs/input.cpp:1277
-#: src/mmg/tabs/input.cpp:1302
-#: src/mmg/tabs/input.cpp:1313
-#: src/mmg/tabs/input.cpp:1323
-#: src/mmg/tabs/input.cpp:1335
-#: src/mmg/tabs/input.cpp:1391
+#: src/mmg/tabs/input.cpp:1283
+#: src/mmg/tabs/input.cpp:1308
+#: src/mmg/tabs/input.cpp:1319
+#: src/mmg/tabs/input.cpp:1329
+#: src/mmg/tabs/input.cpp:1341
+#: src/mmg/tabs/input.cpp:1397
 msgid "mkvmerge GUI: error"
 msgstr "mkvmerge GKA: hata"
 
@@ -8679,16 +8679,12 @@ msgstr ""
 msgid "mkvmerge supports two chapter formats: The OGM like text format and the full featured XML format. This option specifies the language to be associated with chapters if the OGM chapter format is used. It is ignored for XML chapter files."
 msgstr ""
 
-#: src/merge/output_control.cpp:264
-#: src/merge/output_control.cpp:304
+#: src/merge/output_control.cpp:267
+#: src/merge/output_control.cpp:307
 msgid "mkvmerge was interrupted by a SIGINT (Ctrl+C?)\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:556
-msgid "mkvmerge was not compiled with zlib. Compressed headers in QuickTime/MP4 files are therefore not supported.\n"
-msgstr ""
-
-#: src/propedit/propedit_cli_parser.cpp:157
+#: src/propedit/propedit_cli_parser.cpp:154
 msgid "mkvpropedit [options] <file> <actions>"
 msgstr "mkvpropedit [seçenekler] <dosya> <eylemler>"
 
@@ -8834,7 +8830,7 @@ msgstr "piksel genişliği: %1%"
 msgid "pr_generic.cpp/generic_packetizer_c::add_packet(): timecode < last_timecode (%1% < %2%). %3%\n"
 msgstr ""
 
-#: src/merge/pr_generic.cpp:1183
+#: src/merge/pr_generic.cpp:1181
 #, boost-format
 msgid "pr_generic.cpp/generic_reader_c::demuxing_requested(): Invalid track type %1%."
 msgstr ""
@@ -8858,12 +8854,12 @@ msgstr ""
 msgid "real_reader: Only audio header versions 3, 4 and 5 are supported. Track ID %1% uses version %2% and will be skipped.\n"
 msgstr ""
 
-#: src/mmg/tabs/attachments.cpp:157
-#: src/mmg/tabs/input.cpp:184
+#: src/mmg/tabs/attachments.cpp:163
+#: src/mmg/tabs/input.cpp:190
 msgid "remove"
 msgstr "kaldır"
 
-#: src/mmg/tabs/input.cpp:186
+#: src/mmg/tabs/input.cpp:192
 msgid "remove all"
 msgstr "tümünü kaldır"
 
@@ -8924,7 +8920,7 @@ msgstr "tet_index: '%1%' bulunamadı\n"
 msgid "text subtitles"
 msgstr "SRT metni altyazıları"
 
-#: src/merge/mkvmerge.cpp:2047
+#: src/merge/mkvmerge.cpp:2045
 msgid "timecodes"
 msgstr "zaman kodları"
 
@@ -8936,7 +8932,7 @@ msgstr "üst alt (önce sol)"
 msgid "top bottom (right first)"
 msgstr "üst alt (önce sağ)"
 
-#: src/merge/mkvmerge.cpp:2040
+#: src/merge/mkvmerge.cpp:2038
 msgid "track name"
 msgstr "iz adı"
 
@@ -8959,20 +8955,20 @@ msgstr "und (Belirsiz)"
 #: src/info/mkvinfo.cpp:892
 #: src/info/mkvinfo.cpp:1110
 #: src/input/r_matroska.cpp:91
-#: src/input/r_matroska.cpp:2334
+#: src/input/r_matroska.cpp:2342
 #: src/input/r_mpeg_ps.cpp:1385
 #: src/mmg/header_editor/value_page.cpp:150
 #: src/mmg/mmg.cpp:65
-#: src/mmg/tabs/input.cpp:339
+#: src/mmg/tabs/input.cpp:345
 msgid "unknown"
 msgstr "bilinmiyor"
 
-#: src/input/r_matroska.cpp:2327
+#: src/input/r_matroska.cpp:2335
 #, boost-format
 msgid "unknown, format tag 0x%|1$04x|"
 msgstr "bilinmiyor, biçim etiketi: 0x%|1$04x|"
 
-#: src/mmg/tabs/input.cpp:188
+#: src/mmg/tabs/input.cpp:194
 msgid "up"
 msgstr "yukarı"
 
@@ -9050,6 +9046,9 @@ msgstr "evet"
 
 #~ msgid " (right eye)"
 #~ msgstr " (sağ göz)"
+
+#~ msgid "%d minute(s) %d second(s)"
+#~ msgstr "%d dakika %d saniye"
 
 #~ msgid "Both eyes"
 #~ msgstr "Her iki göz"
