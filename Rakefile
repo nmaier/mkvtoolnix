@@ -216,17 +216,19 @@ file "doc/development.html" => [ "doc/development.md", "doc/pandoc-template.html
     "--css=pandoc.css --template=doc/pandoc-template.html doc/development.md"
 end
 
+file "po/mkvtoolnix.pot" => $all_sources + $all_headers + %w{Rakefile} do |t|
+  sources = t.prerequisites.dup - %w{Rakefile}
+  runq "XGETTEXT #{t.name}", <<-COMMAND
+    xgettext --keyword=YT --keyword=Y --keyword=Z --keyword=TIP --keyword=NY:1,2 --keyword=NZ:1,2 --default-domain=mkvtoolnix --from-code=UTF-8 -s --omit-header --boost -o #{t.name} #{sources.join(" ")}
+  COMMAND
+end
+
 task :manpages => $manpages
 
 # Translations for the programs
 namespace :translations do
   desc "Create a template for translating the programs"
   task :pot => "po/mkvtoolnix.pot"
-  file "po/mkvtoolnix.pot" => $all_sources + $all_headers do |t|
-    runq "XGETTEXT #{t.name}", <<-COMMAND
-      xgettext --keyword=YT --keyword=Y --keyword=Z --keyword=TIP --default-domain=mkvtoolnix --from-code=UTF-8 -s --omit-header --boost -o #{t.name} #{t.prerequisites.join(" ")}
-    COMMAND
-  end
 
   desc "Create a new .po file with an empty template"
   task "new-po" => "po/mkvtoolnix.pot" do

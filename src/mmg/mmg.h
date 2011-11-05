@@ -266,6 +266,7 @@ void set_combobox_selection(wxBitmapComboBox *cb, const wxString wanted);
 #endif  // USE_WXBITMAPCOMBOBOX
 void set_menu_item_strings(wxFrame *frame, int id, const wxString &title, const wxString &help_text);
 void set_menu_label(wxFrame *frame, int pos, const wxString &label);
+wxString create_remaining_time_string(unsigned int remaining_minutes, unsigned int remaining_seconds);
 
 void wxdie(const wxString &errmsg);
 

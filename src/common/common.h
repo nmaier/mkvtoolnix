@@ -36,10 +36,12 @@
 # include <libintl.h>
 # if !defined Y
 #  define Y(s) gettext(s)
+#  define NY(s_singular, s_plural, count) ngettext(s_singular, s_plural, count)
 # endif
 #else /* HAVE_LIBINTL_H */
 # if !defined Y
 #  define Y(s) (s)
+#  define NY(s_singular, s_plural, count) (s_singular)
 # endif
 #endif
 

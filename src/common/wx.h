@@ -69,15 +69,9 @@ wxU(const wxString &s) {
 #define wxMB(s)  ((const char *)(s).mb_str(wxConvUTF8))
 
 /* i18n stuff */
-#if defined(HAVE_LIBINTL_H)
-# include <libintl.h>
-# if !defined Z
-#  define Z(s) wxU(gettext(s))
-# endif
-#else /* HAVE_LIBINTL_H */
-# if !defined Z
-#  define Z(s) wxU(s)
-# endif
+#if !defined Z
+# define Z(s) wxU(Y(s))
+# define NZ(s_singular, s_plural, count) wxU(NY(s))
 #endif
 
 // Use wxComboBox on non-Windows builds with wxWidgets 2.8.0 and newer

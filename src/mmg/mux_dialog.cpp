@@ -246,7 +246,7 @@ mux_dialog::update_remaining_time() {
 
   int64_t total_time     = (now - m_start_time) * 100 / m_progress;
   int64_t remaining_time = total_time - now + m_start_time;
-  st_remaining_time->SetLabel(wxString::Format(Z("%d minute(s) %d second(s)"), static_cast<int>(remaining_time / 60000), static_cast<int>((remaining_time / 1000) % 60)));
+  st_remaining_time->SetLabel(create_remaining_time_string(static_cast<unsigned int>(remaining_time / 60000), static_cast<unsigned int>((remaining_time / 1000) % 60)));
 
   m_next_remaining_time_update = now + 1000;
 }

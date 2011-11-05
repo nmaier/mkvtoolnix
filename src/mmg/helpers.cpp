@@ -399,3 +399,11 @@ set_menu_label(wxFrame *frame,
   frame->GetMenuBar()->SetLabelTop(pos, label);
 #endif
 }
+
+wxString
+create_remaining_time_string(unsigned int remaining_minutes,
+                             unsigned int remaining_seconds) {
+  return wxU((  boost::format("%1% %2%")
+              % (boost::format(NY("%1% minute", "%1% minutes", remaining_minutes)) % remaining_minutes)
+              % (boost::format(NY("%1% second", "%1% seconds", remaining_seconds)) % remaining_seconds)).str());
+}
