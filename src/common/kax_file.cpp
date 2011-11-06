@@ -13,9 +13,12 @@
 
 #include "common/common_pch.h"
 
+#include <typeinfo>
+
 #include <ebml/EbmlCrc32.h>
 #include <ebml/EbmlStream.h>
 #include <ebml/EbmlVoid.h>
+#include <ebml/StdIOCallback.h>
 
 #include "common/ebml.h"
 #include "common/fs_sys_helpers.h"
@@ -36,10 +39,14 @@ EbmlElement *
 kax_file_c::read_next_level1_element(uint32_t wanted_id) {
   try {
     return read_next_level1_element_internal(wanted_id);
+  } catch (mtx::exception &e) {
+    mxinfo(boost::format("\nmtx ex: %1% (type: %2%)\n") % e.error() % typeid(e).name());
+  } catch (std::exception &e) {
+    mxinfo(boost::format("\n\nstd ex: %1% (type: %2%)\n") % e.what() % typeid(e).name());
   } catch (...) {
     mxinfo("READ X\n");
-    return NULL;
   }
+  return NULL;
 }
 
 kax_file_c::~kax_file_c() {
@@ -56,7 +63,7 @@ kax_file_c::read_next_level1_element_internal(uint32_t wanted_id) {
   m_in->setFilePointer(search_start_pos, seek_beginning);
 
   if (m_debug_read_next)
-    mxinfo(boost::format("kax_file::read_next_level1_element(): SEARCH AT %1% ACT ID %|2$x|\n") % search_start_pos % actual_id.m_value);
+    mxinfo(boost::format("kax_file::read_next_level1_element(): search at %1% for %|4$x| act id %|2$x| is_valid %3%\n") % search_start_pos % actual_id.m_value % actual_id.is_valid() % wanted_id);
 
   // If no valid ID was read then re-sync right away. No other tests
   // can be run.
@@ -117,7 +124,15 @@ kax_file_c::read_one_element() {
     callbacks = &EBML_CLASS_CALLBACK(KaxSegment);
 
   EbmlElement *l2 = NULL;
-  l1->Read(*m_es.get_object(), EBML_INFO_CONTEXT(*callbacks), upper_lvl_el, l2, true);
+  try {
+    l1->Read(*m_es.get_object(), EBML_INFO_CONTEXT(*callbacks), upper_lvl_el, l2, true);
+
+  } catch (libebml::CRTError &e) {
+    mxdebug_if(m_debug_resync, boost::format("exception reading element data: %1% (%2%)\n") % e.what() % e.getError());
+    m_in->setFilePointer(l1->GetElementPosition() + 1);
+    delete l1;
+    return NULL;
+  }
 
   unsigned long element_size = get_element_size(l1);
   if (m_debug_resync)
