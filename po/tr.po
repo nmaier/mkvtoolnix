@@ -666,10 +666,6 @@ msgstr " (en-boy oranını tut)"
 msgid " (pixels)"
 msgstr " (piksel)"
 
-#: src/common/xml/element_parser.cpp:464
-msgid " Aborting.\n"
-msgstr " Durduruluyor.\n"
-
 #: src/merge/mkvmerge.cpp:133
 msgid " Attachment support (more global options):\n"
 msgstr "Ek desteği (daha fazla genel seçenekler):\n"
@@ -709,10 +705,6 @@ msgstr " Sadece görüntü izlerine uygulanan seçenekler:\n"
 #: src/merge/mkvmerge.cpp:235
 msgid " Other options:\n"
 msgstr " Diğer seçenekler:\n"
-
-#: src/common/xml/element_parser.cpp:460
-msgid " Remember that special characters like &, <, > and \" must be escaped in the usual HTML way: &amp; for '&', &lt; for '<', &gt; for '>' and &quot; for '\"'."
-msgstr " &, <, > ve \" gibi özel karakterleri olağan HTML usulünden kaçınılmak zorunda olunduğunu hatırlayın: '&' için &amp; , '<' için &lt; , '>' için &gt; ve '\"' için &quot;."
 
 #: src/merge/mkvmerge.cpp:93
 msgid " Segment info handling:\n"
@@ -780,76 +772,15 @@ msgid "%1% second"
 msgid_plural "%1% seconds"
 msgstr[0] ""
 
-#: src/input/r_aac.cpp:88
-#: src/input/r_ivf.cpp:62
-#: src/input/r_mpeg_es.cpp:163
-#: src/input/r_mpeg_ps.cpp:82
-#: src/input/r_mpeg_ts.cpp:415
-#: src/input/r_pgssup.cpp:55
-#: src/input/r_tta.cpp:93
-#: src/input/r_vobbtn.cpp:56
-#: src/input/r_wavpack.cpp:58
+#: src/input/r_vobsub.cpp:84
 #, fuzzy, boost-format
-msgid "%1%: Could not open the file."
+msgid "%1%: Could not open the sub file"
 msgstr "aac_reader: Dosyayı açamadı."
-
-#: src/input/r_ac3.cpp:67
-#: src/input/r_avc.cpp:122
-#: src/input/r_corepicture.cpp:85
-#: src/input/r_dirac.cpp:82
-#: src/input/r_dts.cpp:66
-#: src/input/r_flac.cpp:118
-#: src/input/r_mp3.cpp:57
-#: src/input/r_ogm.cpp:329
-#: src/input/r_srt.cpp:40
-#: src/input/r_ssa.cpp:40
-#: src/input/r_truehd.cpp:75
-#: src/input/r_usf.cpp:96
-#: src/input/r_vc1.cpp:82
-#: src/input/r_vobsub.cpp:70
-#: src/input/r_wav.cpp:462
-#, fuzzy, boost-format
-msgid "%1%: Could not open the source file."
-msgstr "ac3_reader: Kaynak dosya açılamadı."
-
-#: src/input/r_aac.cpp:57
-#: src/input/r_ac3.cpp:62
-#: src/input/r_dts.cpp:62
-#: src/input/r_truehd.cpp:63
-#, fuzzy, boost-format
-msgid "%1%: Could not read %2% bytes."
-msgstr "aac_reader: %1% bayt okuyamadı."
-
-#: src/input/r_flac.cpp:127
-#: src/input/r_ogm.cpp:339
-#, fuzzy, boost-format
-msgid "%1%: Could not read all header packets."
-msgstr "ogm_reader: Tüm başlık paketleri okunamadı."
-
-#: src/input/r_avi.cpp:107
-#: src/input/r_qtmp4.cpp:126
-#: src/input/r_real.cpp:149
-#, fuzzy, boost-format
-msgid "%1%: Could not read the source file."
-msgstr "avi_reader: Kaynak dosya okunamadı."
 
 #: src/common/kax_file.cpp:165
 #, boost-format
 msgid "%1%: Error in the Matroska file structure at position %2%. Resyncing to the next level 1 element.\n"
 msgstr "%1%: %2% konumunda Matroska dosya yapısında hata. Sonraki seviye 1 unsuruna yeniden eşitleniyor.\n"
-
-#: src/input/r_avi.cpp:104
-#: src/input/r_corepicture.cpp:72
-#: src/input/r_ogm.cpp:332
-#: src/input/r_qtmp4.cpp:119
-#: src/input/r_real.cpp:147
-#: src/input/r_srt.cpp:34
-#: src/input/r_ssa.cpp:44
-#: src/input/r_usf.cpp:75
-#: src/input/r_wav.cpp:466
-#, fuzzy, boost-format
-msgid "%1%: Source is not a valid %1% file."
-msgstr "avi_reader: Kaynak geçerli bir AVI dosyası değil."
 
 #: src/merge/mkvmerge.cpp:635
 #, boost-format
@@ -1574,25 +1505,25 @@ msgstr "(isimsiz bölüm)"
 msgid "(unnamed)"
 msgstr "(isimsiz)"
 
-#: src/input/r_flac.cpp:179
+#: src/input/r_flac.cpp:181
 msgid "+-> Parsing the FLAC file. This can take a LONG time.\n"
 msgstr ""
 
-#: src/input/r_flac.cpp:214
+#: src/input/r_flac.cpp:216
 #, boost-format
 msgid "+-> Pre-parsing FLAC file: %1%%%%2%"
 msgstr ""
 
-#: src/input/r_flac.cpp:235
+#: src/input/r_flac.cpp:237
 msgid "+-> Pre-parsing FLAC file: 100%\n"
 msgstr ""
 
-#: src/merge/pr_generic.cpp:1404
+#: src/merge/pr_generic.cpp:1403
 #, boost-format
 msgid ", description '%1%'"
 msgstr ", tanımı '%1%'"
 
-#: src/merge/pr_generic.cpp:1405
+#: src/merge/pr_generic.cpp:1404
 #, boost-format
 msgid ", file name '%1%'"
 msgstr ", dosya adı '%1%'"
@@ -1676,9 +1607,9 @@ msgstr "4 bayt"
 msgid "<!-- Unknown element '%1%' -->\n"
 msgstr "<!-- Bilinmeyen unsur '%1%' -->\n"
 
-#: src/common/xml/element_parser.cpp:268
-#: src/common/xml/element_parser.cpp:285
-#: src/common/xml/element_parser.cpp:348
+#: src/common/xml/element_parser.cpp:264
+#: src/common/xml/element_parser.cpp:281
+#: src/common/xml/element_parser.cpp:344
 #, boost-format
 msgid "<%1%> is not a valid child element of <%2%>."
 msgstr ""
@@ -1695,13 +1626,13 @@ msgstr ""
 msgid "<ChapterTrack> is missing the <ChapterTrackNumber> child."
 msgstr ""
 
-#: src/input/r_matroska.cpp:2132
+#: src/input/r_matroska.cpp:2134
 #, boost-format
 msgid "A block group was found at position %1%, but no block element was found inside it. This might make mkvmerge crash.\n"
 msgstr ""
 
-#: src/input/r_matroska.cpp:2034
-#: src/input/r_matroska.cpp:2142
+#: src/input/r_matroska.cpp:2036
+#: src/input/r_matroska.cpp:2144
 #, boost-format
 msgid "A block was found at timestamp %1% for track number %2%. However, no headers where found for that track number. The block will be skipped.\n"
 msgstr ""
@@ -1732,7 +1663,7 @@ msgstr ""
 msgid "A track"
 msgstr "İz"
 
-#: src/merge/pr_generic.cpp:1262
+#: src/merge/pr_generic.cpp:1261
 #, boost-format
 msgid "A track with the ID %1% was requested but not found in the file. The corresponding option will be ignored.\n"
 msgstr ""
@@ -1764,7 +1695,7 @@ msgid "A/52 (aka AC3)"
 msgstr "A/52 (AC3 olarak bilinir)"
 
 #: src/input/r_aac.h:39
-#: src/output/p_aac.h:43
+#: src/output/p_aac.h:42
 msgid "AAC"
 msgstr ""
 
@@ -1772,7 +1703,7 @@ msgstr ""
 msgid "AAC (Advanced Audio Coding)"
 msgstr "AAC (Gelişmiş Ses Kodlama)"
 
-#: src/input/r_aac.cpp:103
+#: src/input/r_aac.cpp:104
 msgid "AAC files may contain HE-AAC / AAC+ / SBR AAC audio. This can NOT be detected automatically. Therefore you have to specifiy '--aac-is-sbr 0' manually for this input file if the file actually contains SBR AAC. The file will be muxed in the WRONG way otherwise. Also read mkvmerge's documentation.\n"
 msgstr ""
 
@@ -1964,7 +1895,7 @@ msgstr ""
 msgid "Also try to extract the CUE sheet from the chapter information and tags for this track."
 msgstr ""
 
-#: src/input/r_wavpack.cpp:87
+#: src/input/r_wavpack.cpp:90
 #, fuzzy, boost-format
 msgid "Also using the correction file '%1%c'.\n"
 msgstr "VobSub indeks dosyası '%1%' yazılıyor.\n"
@@ -2015,7 +1946,7 @@ msgstr "Analiz çalışıyor"
 msgid "Analyze MPEG4 bitstreams, put each frame into one Matroska block, use proper timestamping (I P B B = 0 120 40 80), use V_MPEG4/ISO/... CodecIDs."
 msgstr ""
 
-#: src/merge/pr_generic.cpp:506
+#: src/merge/pr_generic.cpp:505
 #, boost-format
 msgid "Another default track for %1% tracks has already been set. The 'default' flag for track %2% of '%3%' will not be set.\n"
 msgstr ""
@@ -2029,7 +1960,7 @@ msgstr ""
 msgid "Appending a track from a file to another track from the same file is not allowed. This is the case for tracks number %u and %u."
 msgstr ""
 
-#: src/merge/output_control.cpp:1695
+#: src/merge/output_control.cpp:1707
 #, boost-format
 msgid "Appending track %1% from file no. %2% ('%3%') to track %4% from file no. %5% ('%6%').\n"
 msgstr ""
@@ -2059,7 +1990,7 @@ msgstr "En-boy oranı:"
 msgid "At least one <ChapterAtom> element is needed."
 msgstr ""
 
-#: src/common/xml/element_parser.cpp:382
+#: src/common/xml/element_parser.cpp:378
 msgid "At least one <EditionEntry> element is needed."
 msgstr ""
 
@@ -2071,7 +2002,7 @@ msgstr "Ekli"
 msgid "Attached files"
 msgstr "Ekli dosyalar"
 
-#: src/merge/pr_generic.cpp:1403
+#: src/merge/pr_generic.cpp:1402
 #, boost-format
 msgid "Attachment ID %1%: type '%2%', size %3% bytes"
 msgstr "Ek ID %1%: türü '%2%', boyutu %3% bayt"
@@ -2191,7 +2122,7 @@ msgstr "Blok grubu"
 msgid "Block virtual: %1%"
 msgstr "Blok sanalı: %1%"
 
-#: src/input/r_vobsub.cpp:545
+#: src/input/r_vobsub.cpp:547
 #, boost-format
 msgid "Bogus aid %1%\n"
 msgstr ""
@@ -2200,11 +2131,11 @@ msgstr ""
 msgid "Boolean (yes/no, on/off etc)"
 msgstr "Boolean (evet/hayır, açık/kapalı v.s.)"
 
-#: src/merge/pr_generic.cpp:193
+#: src/merge/pr_generic.cpp:192
 msgid "Both the aspect ratio and '--display-dimensions' were given.\n"
 msgstr ""
 
-#: src/merge/pr_generic.cpp:191
+#: src/merge/pr_generic.cpp:190
 msgid "Both the aspect ratio factor and '--display-dimensions' were given.\n"
 msgstr ""
 
@@ -2261,7 +2192,7 @@ msgstr ""
 msgid "Cannot write track %1% with the CodecID '%2%' to the file '%3%' because track %4% with the CodecID '%5%' is already being written to the same file.\n"
 msgstr ""
 
-#: src/common/kate.cpp:82
+#: src/common/kate.cpp:80
 msgid "Category is not NUL terminated"
 msgstr ""
 
@@ -2406,7 +2337,7 @@ msgstr "Bölümler"
 msgid "Chapters (%d entries) from %s"
 msgstr "Bölümler (%d girdi), dosya: %s"
 
-#: src/merge/output_control.cpp:1334
+#: src/merge/output_control.cpp:1346
 msgid "Chapters are not allowed in WebM compliant files. No chapters will be written into any output file.\n"
 msgstr ""
 
@@ -2423,7 +2354,7 @@ msgstr "Bölümler yazıldı."
 msgid "Chapters:"
 msgstr "Bölümler:"
 
-#: src/merge/pr_generic.cpp:1406
+#: src/merge/pr_generic.cpp:1405
 #, boost-format
 msgid "Chapters: %1% entries"
 msgstr "Bölüm: %1% girdi"
@@ -2642,7 +2573,7 @@ msgstr "Komut satırı kullanımı:"
 msgid "Common languages"
 msgstr "Genel diller"
 
-#: src/merge/pr_generic.cpp:779
+#: src/merge/pr_generic.cpp:778
 #, boost-format
 msgid "Compression failed: %1%\n"
 msgstr "Sıkıştırma başarısız oldu: %1%\n"
@@ -2718,31 +2649,27 @@ msgstr "'%s' dosyası oluşturulamadı."
 msgid "Could not create the specified file."
 msgstr "Belirlenen dosya oluşturulamadı."
 
-#: src/common/xml/element_parser.cpp:154
+#: src/common/xml/element_parser.cpp:150
 msgid "Could not decode the Base64 encoded data - it seems to be malformed."
 msgstr "Base64 ile kodlanmış veri çözülemedi - hasarlanmış görünüyor."
 
-#: src/input/r_avi.cpp:347
-#: src/input/r_matroska.cpp:1832
-#: src/input/r_ogm.cpp:1157
+#: src/input/r_avi.cpp:350
+#: src/input/r_matroska.cpp:1834
+#: src/input/r_ogm.cpp:1160
 msgid "Could not extract the decoder specific config data (AVCC) from this AVC/h.264 track.\n"
 msgstr "AVC/h.264 izinden çözücü belirli yapılandırma verisi (AVCC) çıkartılamadı.\n"
 
-#: src/input/r_avi.cpp:300
-#: src/input/r_avi.cpp:305
+#: src/input/r_avi.cpp:303
+#: src/input/r_avi.cpp:308
 msgid "Could not extract the sequence header from this MPEG-1/2 track.\n"
 msgstr "Bu MPEG-1/2 izinden sıralı başlık çıkartılamadı.\n"
 
-#: src/input/r_mp3.cpp:40
-msgid "Could not find a valid MP3 packet."
-msgstr "Geçerli MP3 paketi bulunamadı."
-
-#: src/input/r_avi.cpp:506
+#: src/input/r_avi.cpp:509
 #, boost-format
 msgid "Could not find an index for audio track %1% (avilib error message: %2%). Skipping track.\n"
 msgstr "Ses izi %1% için bir indeks bulunamadı (avilib hata mesajı: %2%). İz atlanıyor.\n"
 
-#: src/merge/output_control.cpp:1650
+#: src/merge/output_control.cpp:1662
 #, boost-format
 msgid "Could not find gptzr when appending. %1%\n"
 msgstr "Eklenirken gptzr bulunamadı. %1%\n"
@@ -2751,12 +2678,12 @@ msgstr "Eklenirken gptzr bulunamadı. %1%\n"
 msgid "Could not find the codec configuration data in the first MPEG-4 part 2 video frame. This track cannot be stored in native mode.\n"
 msgstr "Kodek yapılandırma verisi ilk MPEG-4 part 2 görüntü karesinde bulunamadı. Bu iz yerel kip içinde depolanamıyor.\n"
 
-#: src/input/r_ogm.cpp:379
+#: src/input/r_ogm.cpp:382
 msgid "Could not find the next Ogg page. This indicates a damaged Ogg/Ogm file. Will try to continue.\n"
 msgstr "Sonraki Ogg sayfasında bulunamadı. Bu, hasarlı bir Ogg/Ogm dosyasını belirtir. Devam etmek için tekrarlanacak.\n"
 
-#: src/input/r_avi.cpp:672
-#: src/input/r_matroska.cpp:1579
+#: src/input/r_avi.cpp:675
+#: src/input/r_matroska.cpp:1581
 msgid "Could not find valid DTS headers in this track's first frames.\n"
 msgstr "Bu izin ilk karelerinde geçerli DTS başlıkları bulunamadı.\n"
 
@@ -2781,7 +2708,7 @@ msgstr "Okumak için '%1%' açılamadı.\n"
 msgid "Could not open the clipboard."
 msgstr "Pano açılamadı."
 
-#: src/input/r_wavpack.cpp:79
+#: src/input/r_wavpack.cpp:82
 #, boost-format
 msgid "Could not open the corresponding correction file '%1%c'.\n"
 msgstr ""
@@ -2801,7 +2728,7 @@ msgstr ""
 msgid "Could not open the timecode file '%1%' for writing (%2%).\n"
 msgstr ""
 
-#: src/common/xml/element_parser.cpp:147
+#: src/common/xml/element_parser.cpp:143
 #, boost-format
 msgid "Could not open/read the file '%1%'."
 msgstr "'%1%' dosyası açılamadı/okunamadı."
@@ -2966,11 +2893,11 @@ msgid "D&elete"
 msgstr "&Sil"
 
 #: src/input/r_dts.h:41
-#: src/output/p_dts.h:48
+#: src/output/p_dts.h:47
 msgid "DTS"
 msgstr ""
 
-#: src/output/p_dts.cpp:84
+#: src/output/p_dts.cpp:83
 msgid "DTS header information changed! - New format:\n"
 msgstr "DTS başlığı bilgisi değişti! - Yeni biçim:\n"
 
@@ -3002,7 +2929,7 @@ msgstr "DTS_Başlığı sorunu: geçersiz kaynak PCM çözünürlüğü\n"
 msgid "DTS_Header problem: not enough data to read header\n"
 msgstr "DTS_Başlığı sorunu: başlığı okumak için yeterli veri yok\n"
 
-#: src/common/xml/element_parser.cpp:238
+#: src/common/xml/element_parser.cpp:234
 #, boost-format
 msgid "Data is not allowed inside <%1%>."
 msgstr "Tarihe <%1%> içerisinde izin verilmiyor."
@@ -3325,7 +3252,7 @@ msgstr "Ayarları yükleme hatası"
 msgid "Error opening file"
 msgstr "Dosya açma hatası"
 
-#: src/input/r_mpeg_ps.cpp:1046
+#: src/input/r_mpeg_ps.cpp:1041
 msgid "Error parsing a MPEG PS packet during the header reading phase. This stream seems to be badly damaged.\n"
 msgstr ""
 
@@ -3364,8 +3291,7 @@ msgstr "Hata:"
 msgid "Error: "
 msgstr "Hata:"
 
-#: src/common/xml/element_parser.cpp:63
-#, boost-format
+#: src/common/xml/element_parser.h:88
 msgid "Error: %1% parser failed for '%2%', line %3%, column %4%: %5%\n"
 msgstr ""
 
@@ -3387,7 +3313,7 @@ msgstr ""
 "Hata: hiç çıktı dosya adı verilmedi.\n"
 "\n"
 
-#: src/output/p_vorbis.cpp:63
+#: src/output/p_vorbis.cpp:62
 msgid "Error: vorbis_packetizer: Could not extract the stream's parameters from the first packets.\n"
 msgstr ""
 
@@ -3417,12 +3343,12 @@ msgstr "Çalıştırılabilir dosyalar (*.exe)|*.exe|%s"
 msgid "Expand all entries so that their sub-entries will be shown"
 msgstr "Tüm girdileri genişlet böylece alt-girdileri gösterilebilecektir"
 
-#: src/common/xml/element_parser.cpp:111
+#: src/common/xml/element_parser.cpp:107
 #, boost-format
 msgid "Expected a time in the following format: HH:MM:SS.nnn (HH = hour, MM = minute, SS = second, nnn = millisecond up to nanosecond. You may use up to nine digits for 'n' which would mean nanosecond precision). You may omit the hour as well. Found '%1%' instead. Additional error message: %2%"
 msgstr ""
 
-#: src/common/xml/element_parser.cpp:78
+#: src/common/xml/element_parser.cpp:74
 #, boost-format
 msgid "Expected an unsigned integer but found '%1%'."
 msgstr ""
@@ -3524,12 +3450,12 @@ msgstr ""
 msgid "File %1% has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n"
 msgstr ""
 
-#: src/merge/pr_generic.cpp:1401
+#: src/merge/pr_generic.cpp:1400
 #, boost-format
 msgid "File '%1%': container: %2%"
 msgstr "Dosya '%1%': kalıp: %2%"
 
-#: src/merge/pr_generic.cpp:1321
+#: src/merge/pr_generic.cpp:1320
 #, boost-format
 msgid "File '%1%': unsupported container: %2%\n"
 msgstr "Dosya '%1%': desteklenmeyen kalıp: %2%\n"
@@ -3539,8 +3465,8 @@ msgstr "Dosya '%1%': desteklenmeyen kalıp: %2%\n"
 msgid "File UID: %1%"
 msgstr "Dosya UID: %1%"
 
-#: src/input/r_real.cpp:468
-#: src/input/r_real.cpp:478
+#: src/input/r_real.cpp:471
+#: src/input/r_real.cpp:481
 #, boost-format
 msgid "File contains fewer frames than expected or is corrupt after frame %1%.\n"
 msgstr ""
@@ -3687,7 +3613,7 @@ msgstr ""
 msgid "Found group of picture with broken link. You may want use smart reencode before attempting to multiplex it.\n"
 msgstr ""
 
-#: src/common/xml/element_parser.cpp:131
+#: src/common/xml/element_parser.cpp:127
 msgid "Found no encoded data nor '@file' to read binary data from."
 msgstr ""
 
@@ -3752,7 +3678,7 @@ msgstr "Genel seçenekler"
 msgid "Global tags (%d entries) from %s"
 msgstr "Genel etiket (%d girdi), dosya: %s"
 
-#: src/merge/pr_generic.cpp:1407
+#: src/merge/pr_generic.cpp:1406
 #, boost-format
 msgid "Global tags: %1% entries"
 msgstr "Genel etiket: %1% girdi"
@@ -3898,7 +3824,7 @@ msgstr "Eğer boş bırakırsanız sonrasında mmg bu işe eklenmiş aynı dizin
 msgid "If splitting is a file can be attached either to all files created or only to the first file. Has no effect if no splitting is used."
 msgstr ""
 
-#: src/output/p_textsubs.cpp:70
+#: src/output/p_textsubs.cpp:69
 #, boost-format
 msgid "Ignoring an entry which starts after it ends (%1%).\n"
 msgstr ""
@@ -3913,7 +3839,7 @@ msgstr "%1% dosyasından içe aktarılmış yazı tipi"
 msgid "Imported picture from %1%"
 msgstr "%1% dosyasından içe aktarılmış resim"
 
-#: src/input/r_corepicture.cpp:226
+#: src/input/r_corepicture.cpp:228
 #, boost-format
 msgid "Impossible to use file '%1%': The file could not be opened for reading.\n"
 msgstr ""
@@ -3926,7 +3852,7 @@ msgstr "Uyumsuz mkvmerge sürümü"
 msgid "Incompatible track"
 msgstr "Uyumsuz iz"
 
-#: src/input/r_real.cpp:607
+#: src/input/r_real.cpp:610
 #, boost-format
 msgid "Inconsistent AAC audio packet (length: %1% != len_check %2%)\n"
 msgstr ""
@@ -3981,7 +3907,7 @@ msgstr "Dahili program hatası"
 msgid "Invalid %1% specified in '--%2% %3%'.\n"
 msgstr "'--%2% %3%' içinde belirlenmiş geçersiz %1%.\n"
 
-#: src/common/base64.cpp:135
+#: src/common/base64.h:32
 msgid "Invalid Base64 character encountered"
 msgstr "Geçersiz Base64 karakteriyle kaşılaşıldı"
 
@@ -4002,9 +3928,9 @@ msgstr "Geçersiz UID. Bu bölüm UID'si zaten kullanımda. Orijinal UID değiş
 msgid "Invalid UID. This edition UID is already in use. The original UID has not been changed."
 msgstr "Geçersiz UID. Bu yayın UID'si zaten kullanımda. Orijinal UID değiştirilmedi."
 
-#: src/input/r_avi.cpp:681
-#: src/input/r_avi.cpp:686
-#: src/input/r_avi.cpp:703
+#: src/input/r_avi.cpp:684
+#: src/input/r_avi.cpp:689
+#: src/input/r_avi.cpp:706
 msgid "Invalid Vorbis headers in AVI audio track."
 msgstr "AVI ses izinde geçersiz Vorbis başlıkları."
 
@@ -4013,7 +3939,7 @@ msgstr "AVI ses izinde geçersiz Vorbis başlıkları."
 msgid "Invalid attachment ID/file name specification in argument '%1%'.\n"
 msgstr "'%1%' konusunda geçersiz ek ID/dosya adı belirtme.\n"
 
-#: src/common/xml/element_parser.cpp:211
+#: src/common/xml/element_parser.cpp:207
 #, boost-format
 msgid "Invalid binary data format '%1%' specified. Supported are 'Base64', 'ASCII' and 'hex'."
 msgstr "Geçersiz binari veri biçimi '%1%' belirlendi. Desteklenenler 'Base64', 'ASCII' ve 'hex'."
@@ -4132,12 +4058,12 @@ msgstr "Geçersiz biçim: Son karakter bir sütun veya rakam yerine ondalık nok
 msgid "Invalid format: unknown character '%1%' found"
 msgstr "Geçersiz biçim: bilinmeyen karakter '%1%' bulundu"
 
-#: src/input/r_vobsub.cpp:528
+#: src/input/r_vobsub.cpp:530
 #, boost-format
 msgid "Invalid header length: %1% (total length: %2%, idx: %3%, dataidx: %4%)\n"
 msgstr "Geçersiz başlık uzunluğu: %1% (toplam uzunluk: %2%, idx: %3%, dataidx: %4%)\n"
 
-#: src/common/xml/element_parser.cpp:170
+#: src/common/xml/element_parser.cpp:166
 #, boost-format
 msgid "Invalid hexadecimal data encountered: '%1%' is neither white space nor a hexadecimal number."
 msgstr ""
@@ -4183,11 +4109,11 @@ msgstr "'%1% %2%' içinde geçersiz seçici.\n"
 msgid "Invalid split size in '--split %1%'.\n"
 msgstr "'--split %1%' içinde geçersiz ayırma boyutu.\n"
 
-#: src/input/r_usf.cpp:314
+#: src/input/r_usf.cpp:316
 msgid "Invalid start or stop timecode"
 msgstr "Geçersiz başlatma ve durdurma zaman kodu"
 
-#: src/input/r_corepicture.cpp:246
+#: src/input/r_corepicture.cpp:248
 msgid "Invalid start timecode"
 msgstr "Geçersiz başlatma zaman kodu"
 
@@ -4312,7 +4238,7 @@ msgstr "İş kuyruğu yönetimi"
 msgid "Kate"
 msgstr ""
 
-#: src/output/p_kate.cpp:78
+#: src/output/p_kate.cpp:77
 msgid "Kate packet is too small and is being skipped.\n"
 msgstr "Kate paketi çok küçük ve atlanıyor.\n"
 
@@ -4344,7 +4270,7 @@ msgstr "Dil"
 msgid "Language for this track. Select one of the ISO639-2 language codes."
 msgstr "Bu iz için dil. ISO639-2 dil kodlarından birini seçin."
 
-#: src/common/kate.cpp:78
+#: src/common/kate.cpp:76
 msgid "Language is not NUL terminated"
 msgstr "Dil HİÇ sonlandırılmadı"
 
@@ -4388,7 +4314,7 @@ msgstr ""
 msgid "Line %1% of the timecode file '%2%' could not be parsed.\n"
 msgstr ""
 
-#: src/common/xml/element_parser.h:51
+#: src/common/xml/element_parser.h:62
 msgid "Line %1%, column %2%: %3%"
 msgstr "Satır %1%, sütun %2%: %3%"
 
@@ -4397,18 +4323,18 @@ msgstr "Satır %1%, sütun %2%: %3%"
 msgid "Line %1%: Negative timestamp encountered. The entry will be adjusted to start from 00:00:00.000.\n"
 msgstr ""
 
-#: src/input/r_vobsub.cpp:290
+#: src/input/r_vobsub.cpp:292
 #, boost-format
 msgid "Line %1%: The current timestamp (%2%) is smaller than the previous one (%3%). The entries will be sorted according to their timestamps. This might result in the wrong order for some subtitle entries. If this is the case then you have to fix the .idx file manually.\n"
 msgstr ""
 
-#: src/input/r_vobsub.cpp:240
-#: src/input/r_vobsub.cpp:263
+#: src/input/r_vobsub.cpp:242
+#: src/input/r_vobsub.cpp:265
 #, boost-format
 msgid "Line %1%: The line seems to be a subtitle entry but the format couldn't be recognized. This entry will be skipped.\n"
 msgstr ""
 
-#: src/input/r_vobsub.cpp:280
+#: src/input/r_vobsub.cpp:282
 #, boost-format
 msgid "Line %1%: The line seems to be a subtitle entry but the timecode was negative even after adding the track delay. Negative timecodes are not supported in Matroska. This entry will be skipped.\n"
 msgstr ""
@@ -4484,7 +4410,7 @@ msgstr "MPEG taşıma akışları"
 msgid "MPEG transport streams"
 msgstr "MPEG taşıma akışları"
 
-#: src/input/r_mpeg_es.h:43
+#: src/input/r_mpeg_es.h:42
 #, fuzzy
 msgid "MPEG video elementary stream"
 msgstr "MPEG görüntü temel akışları"
@@ -4505,12 +4431,12 @@ msgstr ""
 msgid "Make this track the default track for its type (audio, video, subtitles). Players should prefer tracks with the default track flag set."
 msgstr ""
 
-#: src/input/r_matroska.cpp:1514
-#: src/input/r_matroska.cpp:1529
+#: src/input/r_matroska.cpp:1516
+#: src/input/r_matroska.cpp:1531
 msgid "Malformed AAC codec initialization data found.\n"
 msgstr ""
 
-#: src/input/r_matroska.cpp:1522
+#: src/input/r_matroska.cpp:1524
 #, boost-format
 msgid "Malformed codec id '%1%'.\n"
 msgstr ""
@@ -4613,7 +4539,7 @@ msgstr "Eksik dosya adı"
 msgid "Missing file name after for the option '--edit-headers'."
 msgstr ""
 
-#: src/input/r_ogm.cpp:941
+#: src/input/r_ogm.cpp:944
 msgid "Missing header/comment packets for stream. This file is broken but should be muxed correctly. If not please contact the author Moritz Bunkus <moritz@bunkus.org>.\n"
 msgstr ""
 
@@ -4658,7 +4584,7 @@ msgstr ""
 msgid "More than one name was given for a single attachment. '%1%' will be discarded and '%2%' used instead.\n"
 msgstr ""
 
-#: src/common/xml/element_parser.cpp:333
+#: src/common/xml/element_parser.cpp:329
 msgid "More than one root element found."
 msgstr ""
 
@@ -4763,7 +4689,7 @@ msgstr "Sonraki parçanın benzersiz ID'si"
 msgid "No %1% specified in '--%2% %3%'.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:1435
+#: src/input/r_qtmp4.cpp:1437
 msgid "No AC3 header found in first frame; track will be skipped.\n"
 msgstr ""
 
@@ -4798,7 +4724,7 @@ msgstr "Henüz oluşturulmuş bölüm girişleri yok."
 msgid "No chapters found"
 msgstr "Bulunan bölüm yok"
 
-#: src/common/xml/element_parser.h:45
+#: src/common/xml/element_parser.h:49
 msgid "No error"
 msgstr "Hata yok"
 
@@ -4823,7 +4749,7 @@ msgstr "Dosya yüklenmedi"
 msgid "No file name given.\n"
 msgstr "Verilen dosya adı yok.\n"
 
-#: src/common/xml/element_parser.cpp:135
+#: src/common/xml/element_parser.cpp:131
 msgid "No filename found after the '@'."
 msgstr "'@'ten sonra bulunan dosya adı yok."
 
@@ -4835,7 +4761,7 @@ msgstr "Yardım mevcut değil."
 msgid "No input files were given. No output will be created.\n"
 msgstr ""
 
-#: src/input/r_flac.cpp:194
+#: src/input/r_flac.cpp:196
 msgid "No metadata block found. This file is broken.\n"
 msgstr ""
 
@@ -4872,7 +4798,7 @@ msgstr ""
 msgid "No tracks found"
 msgstr "Bulunan iz yok"
 
-#: src/input/r_vobsub.cpp:90
+#: src/input/r_vobsub.cpp:92
 msgid "No version number found.\n"
 msgstr "Bulunan sürüm numarası yok.\n"
 
@@ -4948,7 +4874,7 @@ msgstr ""
 msgid "Only one input file is allowed.\n"
 msgstr "Sadece bir çıktı dosyasına izin verilir.\n"
 
-#: src/common/xml/element_parser.cpp:295
+#: src/common/xml/element_parser.cpp:291
 #, boost-format
 msgid "Only one instance of <%1%> is allowed beneath <%2%>."
 msgstr ""
@@ -4979,7 +4905,7 @@ msgstr ""
 msgid "Only to the first"
 msgstr "Sadece ilkine"
 
-#: src/input/r_vobsub.cpp:99
+#: src/input/r_vobsub.cpp:101
 msgid "Only v7 and newer VobSub files are supported. If you have an older version then use the VSConv utility from http://sourceforge.net/projects/guliverkli/ to convert these files to v7 files.\n"
 msgstr ""
 
@@ -5065,7 +4991,7 @@ msgstr "Mevcut dosyanın(ların) üzerine yazılsın mı?"
 msgid "Overwrite existing file?"
 msgstr "Mevcut dosyanın üzerine yazılsın mı?"
 
-#: src/output/p_pcm.h:41
+#: src/output/p_pcm.h:40
 msgid "PCM"
 msgstr ""
 
@@ -5081,17 +5007,17 @@ msgstr "PGS/SUP altyazıları"
 msgid "PGSSUP"
 msgstr ""
 
-#: src/input/r_vobsub.cpp:536
+#: src/input/r_vobsub.cpp:538
 #, boost-format
 msgid "PTS error: 0x%|1$02x| %|2$02x|%|3$02x| %|4$02x|%|5$02x|\n"
 msgstr "PTS hatası: 0x%|1$02x| %|2$02x|%|3$02x| %|4$02x|%|5$02x|\n"
 
-#: src/output/p_flac.cpp:77
+#: src/output/p_flac.cpp:76
 #, boost-format
 msgid "Packet number %1% contained an invalid FLAC header and is being skipped.\n"
 msgstr ""
 
-#: src/merge/pr_generic.cpp:252
+#: src/merge/pr_generic.cpp:251
 #, boost-format
 msgid "Packet queue not empty (flushed: %1%). Frames have been lost during remux. %2%\n"
 msgstr ""
@@ -5219,7 +5145,7 @@ msgstr "İlerleme: %1%%%%2%"
 msgid "Progress: 100%\n"
 msgstr "İlerleme: 100%\n"
 
-#: src/merge/output_control.cpp:1947
+#: src/merge/output_control.cpp:1959
 #, boost-format
 msgid "Progress: 100%%%1%"
 msgstr "İlerleme: 100%%%1%"
@@ -5241,131 +5167,131 @@ msgstr "QuickTime ses/görüntü dosyaları"
 msgid "QuickTime/MP4"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:467
+#: src/input/r_qtmp4.cpp:469
 #, boost-format
 msgid "Quicktime/MP4 reader: '%1%' atom is too small. Expected size: >= %2%. Actual size: %3%.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:1890
+#: src/input/r_qtmp4.cpp:1892
 msgid "Quicktime/MP4 reader: Constant samplesize & variable duration not yet supported. Contact the author if you have such a sample file.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:1292
+#: src/input/r_qtmp4.cpp:1294
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read chunk number %1%/%2% with size %3% from position %4%. Aborting.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:999
-#: src/input/r_qtmp4.cpp:1012
+#: src/input/r_qtmp4.cpp:1001
+#: src/input/r_qtmp4.cpp:1014
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the extended sound description atom for track ID %1%.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:972
+#: src/input/r_qtmp4.cpp:974
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the sound description atom for track ID %1%.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:966
+#: src/input/r_qtmp4.cpp:968
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the stream description atom for track ID %1%.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:1048
+#: src/input/r_qtmp4.cpp:1050
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the video description atom for track ID %1%.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:209
+#: src/input/r_qtmp4.cpp:211
 msgid "Quicktime/MP4 reader: Have not found any header atoms.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:211
+#: src/input/r_qtmp4.cpp:213
 msgid "Quicktime/MP4 reader: Have not found the 'mdat' atom. No movie data found.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:158
+#: src/input/r_qtmp4.cpp:160
 #, boost-format
 msgid "Quicktime/MP4 reader: Invalid chunk size %1% at %2%.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:287
+#: src/input/r_qtmp4.cpp:289
 #, boost-format
 msgid "Quicktime/MP4 reader: MPEG4 part 10/AVC track %1% is missing its decoder config. Skipping this track.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:280
+#: src/input/r_qtmp4.cpp:282
 #, boost-format
 msgid "Quicktime/MP4 reader: MPEG4 track %1% is missing the esds atom/the decoder config. Skipping this track.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:639
+#: src/input/r_qtmp4.cpp:641
 #, boost-format
 msgid "Quicktime/MP4 reader: The 'media header' atom ('mdhd') uses the unsupported version %1%.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:959
+#: src/input/r_qtmp4.cpp:961
 #, boost-format
 msgid "Quicktime/MP4 reader: The 'size' field is too small in the stream description atom for track ID %1%.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:644
+#: src/input/r_qtmp4.cpp:646
 msgid "Quicktime/MP4 reader: The 'time scale' parameter was 0. This is not supported.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:248
+#: src/input/r_qtmp4.cpp:250
 #, boost-format
 msgid "Quicktime/MP4 reader: The AAC track %1% is missing the esds atom/the decoder config. Skipping this track.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:242
+#: src/input/r_qtmp4.cpp:244
 #, boost-format
 msgid "Quicktime/MP4 reader: The audio track %1% is using an unsupported 'object type id' of %2% in the 'esds' atom. Skipping this track.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:260
+#: src/input/r_qtmp4.cpp:262
 #, boost-format
 msgid "Quicktime/MP4 reader: The video track %1% is missing the ESDS atom. Skipping this track.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:497
+#: src/input/r_qtmp4.cpp:499
 #, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers with an unknown or unsupported compression algorithm '%1%%2%%3%%4%'. Aborting.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:530
+#: src/input/r_qtmp4.cpp:532
 #, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers, but the expected uncompressed size (%1%) was not what is available after uncompressing (%2%).\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:521
+#: src/input/r_qtmp4.cpp:523
 #, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers, but the zlib library could not be initialized. Error code from zlib: %1%. Aborting.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:526
+#: src/input/r_qtmp4.cpp:528
 #, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers, but they could not be uncompressed. Error code from zlib: %1%. Aborting.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:299
+#: src/input/r_qtmp4.cpp:301
 #, boost-format
 msgid "Quicktime/MP4 reader: Track %1% has an unknown type.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:255
-#: src/input/r_qtmp4.cpp:294
+#: src/input/r_qtmp4.cpp:257
+#: src/input/r_qtmp4.cpp:296
 #, boost-format
 msgid "Quicktime/MP4 reader: Track %1% is missing some data. Broken header atoms?\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:980
-#: src/input/r_qtmp4.cpp:1054
+#: src/input/r_qtmp4.cpp:982
+#: src/input/r_qtmp4.cpp:1056
 #, boost-format
 msgid "Quicktime/MP4 reader: Track ID %1% has more than one FourCC. Only using the first one (%|2$.4s|) and not this one (%|3$.4s|).\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:234
+#: src/input/r_qtmp4.cpp:236
 #, boost-format
 msgid "Quicktime/MP4 reader: Unknown/unsupported FourCC '%|1$.4s|' for track %2%.\n"
 msgstr ""
@@ -5390,7 +5316,7 @@ msgstr "RSA"
 msgid "Re-enable the selected job(s)"
 msgstr "Seçili işi(leri) yeniden etkinleştir"
 
-#: src/input/r_mpeg_ps.cpp:371
+#: src/input/r_mpeg_ps.cpp:369
 msgid "Reading encrypted VOBs is not supported.\n"
 msgstr "Şifrelenmiş VOB'ları okuma desteklenmiyor.\n"
 
@@ -5407,7 +5333,7 @@ msgstr "Hazır"
 msgid "Real output sampling frequency in Hz."
 msgstr "Hz. olarak gerçek çıktı örnekleme sıklığı."
 
-#: src/output/p_realaudio.h:36
+#: src/output/p_realaudio.h:35
 #, fuzzy
 msgid "RealAudio"
 msgstr "ses"
@@ -5420,7 +5346,7 @@ msgstr ""
 msgid "RealMedia audio/video files"
 msgstr "RealMedia ses/görüntü dosyası"
 
-#: src/input/r_real.cpp:376
+#: src/input/r_real.cpp:379
 #, boost-format
 msgid "RealMedia files may contain HE-AAC / AAC+ / SBR AAC audio. In some cases this can NOT be detected automatically. Therefore you have to specifiy '--aac-is-sbr %1%' manually for this input file if the file actually contains SBR AAC. The file will be muxed in the WRONG way otherwise. Also read mkvmerge's documentation.\n"
 msgstr ""
@@ -5459,7 +5385,7 @@ msgstr "Şu anki dosyayı kaydetmeden yeniden yükle"
 msgid "Remaining time:"
 msgstr "Kalan süre:"
 
-#: src/common/xml/element_parser.cpp:565
+#: src/common/xml/element_parser.cpp:542
 msgid "Remember that special characters like &, <, > and \" must be escaped in the usual HTML way: &amp; for '&', &lt; for '<', &gt; for '>' and &quot; for '\"'."
 msgstr ""
 
@@ -5821,12 +5747,12 @@ msgstr "Ayarlar: %1%"
 msgid "Several options that control the overall output that mkvmerge creates."
 msgstr ""
 
-#: src/input/r_real.cpp:594
+#: src/input/r_real.cpp:597
 #, boost-format
 msgid "Short AAC audio packet (length: %1% < %2%)\n"
 msgstr "Kısa AAC ses paketi (uzunluk: %1% < %2%)\n"
 
-#: src/input/r_real.cpp:587
+#: src/input/r_real.cpp:590
 #, boost-format
 msgid "Short AAC audio packet (length: %1% < 2)\n"
 msgstr "Kısa AAC ses paketi (uzunluk: %1% < 2)\n"
@@ -5946,17 +5872,17 @@ msgstr "Basit Blok (%1% iz numarası %2%, %3% kare, zaman kodu %|4$.3f|s = %5%)"
 msgid "Single field frame before GOP header detected. Fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr ""
 
-#: src/output/p_aac.cpp:73
+#: src/output/p_aac.cpp:72
 #, boost-format
 msgid "Skipping %1% bytes (no valid AAC header found). This might cause audio/video desynchronisation.\n"
 msgstr ""
 
-#: src/output/p_dts.cpp:100
+#: src/output/p_dts.cpp:99
 #, boost-format
 msgid "Skipping %1% bytes (no valid DTS header found). This might cause audio/video desynchronisation.\n"
 msgstr ""
 
-#: src/input/r_mp3.cpp:52
+#: src/input/r_mp3.cpp:56
 #, boost-format
 msgid "Skipping %1% bytes at the beginning (no valid MP3 header found).\n"
 msgstr ""
@@ -5977,7 +5903,7 @@ msgstr "Bazı başlık değerleri değiştirilmiş. Şu ankini kaydetmeden yeni 
 msgid "Some header values have been modified. Do you really want to reload without saving the file?"
 msgstr "Bazı başlık değerleri değiştirilmiş. Dosyayı kaydetmeden yeniden yüklemek istiyor musunuz?"
 
-#: src/merge/output_control.cpp:1375
+#: src/merge/output_control.cpp:1387
 #, boost-format
 msgid "Some tag elements are missing (this error should not have occured - another similar error should have occured earlier). %1%\n"
 msgstr ""
@@ -6161,11 +6087,11 @@ msgstr "Etiket seçicileri"
 msgid "Tags"
 msgstr "Etiketler"
 
-#: src/merge/output_control.cpp:1363
+#: src/merge/output_control.cpp:1375
 msgid "Tags are not allowed in WebM compliant files. No tags will be written into any output file.\n"
 msgstr ""
 
-#: src/merge/pr_generic.cpp:1408
+#: src/merge/pr_generic.cpp:1407
 #, boost-format
 msgid "Tags for track ID %1%: %2% entries"
 msgstr ""
@@ -6200,16 +6126,16 @@ msgstr "Metin dosyaları (*.txt)|*.txt|%s"
 msgid "Text files (*.txt)|*.txt|All files|*.*"
 msgstr "Metin dosyaları (*.txt)|*.txt|Tüm dosyalar|*.*"
 
-#: src/input/r_vobsub.cpp:233
+#: src/input/r_vobsub.cpp:235
 msgid "The .idx file does not contain an 'id: ...' line to indicate the language.\n"
 msgstr ""
 
-#: src/output/p_aac.cpp:207
+#: src/output/p_aac.cpp:206
 #, boost-format
 msgid "The AAC profiles are different: %1% and %2%"
 msgstr "AAC profilleri farklı: %1% ve %2%"
 
-#: src/input/r_qtmp4.cpp:1484
+#: src/input/r_qtmp4.cpp:1486
 msgid "The AVC video track is missing the 'CTTS' atom for frame timecode offsets. However, AVC/h.264 allows frames to have more than the traditional one (for P frames) or two (for B frames) references to other frames. The timecodes for such frames will be out-of-order, and the 'CTTS' atom is needed for getting the timecodes right. As it is missing the timecodes for this track might be wrong. You should watch the resulting file and make sure that it looks like you expected it to.\n"
 msgstr ""
 
@@ -6218,16 +6144,16 @@ msgstr ""
 msgid "The CUE sheet for track %1% will be written to '%2%'.\n"
 msgstr ""
 
-#: src/merge/pr_generic.h:410
+#: src/merge/pr_generic.h:456
 msgid "The CodecID of the two tracks is different: %1% and %2%"
 msgstr "İki izin KodekID'leri farklı: %1% ve %2%"
 
-#: src/output/p_flac.cpp:102
+#: src/output/p_flac.cpp:101
 #, boost-format
 msgid "The FLAC header data is different for the two tracks (lengths: %1% and %2%)"
 msgstr ""
 
-#: src/output/p_flac.cpp:49
+#: src/output/p_flac.cpp:48
 msgid "The FLAC headers could not be parsed: the stream info structure was not found.\n"
 msgstr ""
 
@@ -6256,7 +6182,7 @@ msgstr ""
 msgid "The GUI is configured to use the mkvmerge executable from a different version (%1%) than the GUI itself (%2%). This is not supported but will not be prevented either. You should change the mkvmerge executable in the preferences dialog."
 msgstr ""
 
-#: src/input/r_ogm.cpp:1504
+#: src/input/r_ogm.cpp:1507
 #, boost-format
 msgid "The Kate identifaction header could not be parsed (%1%).\n"
 msgstr ""
@@ -6282,12 +6208,12 @@ msgstr ""
 msgid "The NALU size length must be a number between 2 and 4 inclusively in '--nalu-size-length %1%'.\n"
 msgstr ""
 
-#: src/input/r_ogm.cpp:1334
+#: src/input/r_ogm.cpp:1337
 #, boost-format
 msgid "The Theora identifaction header could not be parsed (%1%).\n"
 msgstr ""
 
-#: src/output/p_vorbis.cpp:142
+#: src/output/p_vorbis.cpp:141
 msgid "The Vorbis codebooks are different; such tracks cannot be concatenated without reencoding"
 msgstr ""
 
@@ -6325,17 +6251,17 @@ msgstr "Ek #%1%, ID %2%, MIME türü %3%, boyut %4%, '%5%' dosyasına yazıldı.
 msgid "The attachment '%1%' could not be read.\n"
 msgstr "Ek '%1%' okunamadı.\n"
 
-#: src/common/xml/element_parser.cpp:217
+#: src/common/xml/element_parser.cpp:213
 #, boost-format
 msgid "The binary data must be at least %1% bytes long."
 msgstr ""
 
-#: src/common/xml/element_parser.cpp:220
+#: src/common/xml/element_parser.cpp:216
 #, boost-format
 msgid "The binary data must be at most %1% bytes long."
 msgstr ""
 
-#: src/common/xml/element_parser.cpp:214
+#: src/common/xml/element_parser.cpp:210
 #, boost-format
 msgid "The binary data must be exactly %1% bytes long."
 msgstr ""
@@ -6368,15 +6294,15 @@ msgstr ""
 msgid "The chosen NALU size length of %1% is too small. Try using '4'.\n"
 msgstr ""
 
-#: src/merge/pr_generic.cpp:1206
+#: src/merge/pr_generic.cpp:1205
 #, boost-format
 msgid "The codec type '%1%' cannot be used in a WebM compliant file.\n"
 msgstr ""
 
 #: src/output/p_avc.cpp:209
-#: src/output/p_kate.cpp:113
-#: src/output/p_passthrough.cpp:63
-#: src/output/p_textsubs.cpp:102
+#: src/output/p_kate.cpp:112
+#: src/output/p_passthrough.cpp:62
+#: src/output/p_textsubs.cpp:101
 #: src/output/p_video.cpp:206
 #, boost-format
 msgid "The codec's private data does not match (lengths: %1% and %2%)."
@@ -6387,7 +6313,7 @@ msgstr ""
 msgid "The codec's private data does not match. Both have the same length (%1%) but different content."
 msgstr ""
 
-#: src/input/r_wavpack.cpp:72
+#: src/input/r_wavpack.cpp:75
 msgid "The correction file header was not read correctly.\n"
 msgstr ""
 
@@ -6396,7 +6322,7 @@ msgstr ""
 msgid "The country '%s' is not a valid ccTLD and cannot be selected."
 msgstr "'%s' ülkesi geçerli bir ccTLD değil ve seçilemiyor."
 
-#: src/merge/output_control.cpp:1438
+#: src/merge/output_control.cpp:1450
 msgid "The cue entries (the index) are being written..."
 msgstr "Cue girdileri (indeks) yazılıyor..."
 
@@ -6405,12 +6331,12 @@ msgstr "Cue girdileri (indeks) yazılıyor..."
 msgid "The current file (number %d) cannot be removed. There are other files -- at least file number %d -- whose tracks are supposed to be appended to tracks from this file. Please remove those files first."
 msgstr ""
 
-#: src/merge/pr_generic.cpp:841
+#: src/merge/pr_generic.cpp:840
 #, boost-format
 msgid "The current packet's timecode is smaller than that of the previous packet. This usually means that the source file is a Matroska file that has not been created 100%% correctly. The timecodes of all packets will be adjusted by %1%ms in order not to lose any data. This may throw audio/video synchronization off, but that can be corrected with mkvmerge's \"--sync\" option. If you already use \"--sync\" and you still get this warning then do NOT worry -- this is normal. If this error happens more than once and you get this message more than once for a particular track then either is the source file badly mastered, or mkvmerge contains a bug. In this case you should contact the author Moritz Bunkus <moritz@bunkus.org>.\n"
 msgstr ""
 
-#: src/input/r_usf.cpp:128
+#: src/input/r_usf.cpp:130
 #, boost-format
 msgid "The default language code '%1%' is not a valid ISO639-2 language code and will be ignored.\n"
 msgstr ""
@@ -6420,7 +6346,10 @@ msgstr ""
 msgid "The delay setting for track nr. %s in file '%s' is invalid."
 msgstr ""
 
-#: src/merge/output_control.cpp:1194
+#: src/merge/output_control.cpp:1197
+#: src/merge/output_control.cpp:1200
+#: src/merge/output_control.cpp:1203
+#: src/merge/output_control.cpp:1206
 #, boost-format
 msgid ""
 "The demultiplexer for the file '%1%' failed to initialize:\n"
@@ -6434,11 +6363,11 @@ msgstr ""
 msgid "The difference between tags associated with a track and global tags is explained in mkvmerge's documentation. In short: global tags apply to the complete file while the tags you can add on the 'input' tab apply to only one track."
 msgstr ""
 
-#: src/merge/pr_generic.h:405
+#: src/merge/pr_generic.h:451
 msgid "The display height of the two tracks is different: %1% and %2%"
 msgstr "İki izin görüntü yüksekliği farklı: %1% ve %2%"
 
-#: src/merge/pr_generic.h:400
+#: src/merge/pr_generic.h:446
 msgid "The display width of the two tracks is different: %1% and %2%"
 msgstr "İki izin görüntü genişliği farklı: %1% ve %2%"
 
@@ -6513,7 +6442,7 @@ msgstr "'%1%' dosyası yazmak için açılamadı (%2%).\n"
 msgid "The file '%1%' could not be opened for writing (%2%, %3%).\n"
 msgstr "'%1%' dosyası yazmak için açılamadı (%2%, %3%).\n"
 
-#: src/merge/output_control.cpp:1403
+#: src/merge/output_control.cpp:1415
 #, boost-format
 msgid "The file '%1%' has been opened for writing.\n"
 msgstr "'%1%' dosyası yazmak için açıldı.\n"
@@ -6523,12 +6452,12 @@ msgstr "'%1%' dosyası yazmak için açıldı.\n"
 msgid "The file '%1%' has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n"
 msgstr "Dosya '%1%' bilinmeyen bir tür. Lütfen desteklenen dosya türlerine ('mkvmerge --list-types') bakın ve eğer dosya türünüz destekleniyor ama düzgün olarak tanınmıyorsa, yazar Moritz Bunkus <moritz@bunkus.org> ile temasa geçin.\n"
 
-#: src/merge/pr_generic.cpp:1325
+#: src/merge/pr_generic.cpp:1324
 #, boost-format
 msgid "The file '%1%' is a non-supported file type (%2%).\n"
 msgstr "'%1%' dosyası desteklenmeyen bir dosya türü (%2%).\n"
 
-#: src/common/xml/element_parser.cpp:142
+#: src/common/xml/element_parser.cpp:138
 #, boost-format
 msgid "The file '%1%' is empty."
 msgstr "Dosya '%1%' boş."
@@ -6542,6 +6471,15 @@ msgstr "Dosya '%s' mevcut değil."
 #, c-format, boost-format
 msgid "The file '%s' is already processed in combination with the file '%s'. It cannot be added a second time."
 msgstr "Dosya '%s' zaten '%s' dosyasının birleştirilmesiyle işleniyor. İkinci bir kez eklenemez."
+
+#: src/merge/output_control.cpp:1200
+msgid "The file content does not match its format type and was not recognized."
+msgstr ""
+
+#: src/merge/output_control.cpp:1197
+#, fuzzy
+msgid "The file could not be opened for reading, or there was not enough data to parse its headers."
+msgstr "'%1%' dosyası komut satırı bağımsız değişkenlerini okumak için açılamadı.\n"
 
 #: src/info/qt_ui.cpp:77
 msgid "The file could not be opened for writing."
@@ -6563,13 +6501,17 @@ msgstr ""
 msgid "The file has not been modified."
 msgstr "Dosya değiştirilmiş."
 
-#: src/input/r_tta.cpp:64
+#: src/input/r_tta.cpp:67
 msgid "The file header is too short.\n"
 msgstr "Dosya başlığı çok kısa.\n"
 
-#: src/input/r_wavpack.cpp:56
+#: src/input/r_wavpack.cpp:59
 msgid "The file header was not read correctly.\n"
 msgstr "Dosya başlığı doğru olarak okunamadı.\n"
+
+#: src/merge/output_control.cpp:1203
+msgid "The file headers could not be parsed, e.g. because they're inomplete, invalid or damaged."
+msgstr ""
 
 #: src/mmg/tabs/input.cpp:352
 #, c-format, boost-format
@@ -6671,7 +6613,7 @@ msgstr ""
 msgid "The header has already been written."
 msgstr "Başlık zaten yazılmış."
 
-#: src/merge/pr_generic.h:395
+#: src/merge/pr_generic.h:441
 msgid "The height of the two tracks is different: %1% and %2%"
 msgstr "İki izin yükseklikleri farklı: %1% ve %2%"
 
@@ -6716,7 +6658,7 @@ msgstr ""
 msgid "The language '%s' is not a valid language and cannot be selected."
 msgstr "'%s' dili geçerli bir dil değil ve seçilemiyor."
 
-#: src/input/r_usf.cpp:160
+#: src/input/r_usf.cpp:162
 #, boost-format
 msgid "The language code '%1%' is not a valid ISO639-2 language code and will be ignored.\n"
 msgstr "Dil kodu '%1%' geçerli bir ISO639-2 dil kodu değil ve yoksayılacak.\n"
@@ -6784,11 +6726,11 @@ msgstr ""
 msgid "The next UID was already given in '%1% %2%'.\n"
 msgstr "Sonraki UID, '%1% %2%' içinde zaten verildi.\n"
 
-#: src/merge/pr_generic.h:385
+#: src/merge/pr_generic.h:431
 msgid "The number of bits per sample of the two audio tracks is different: %1% and %2%"
 msgstr "İki ses izinin örnek başına bit sayıları farklı: %1% ve %2%"
 
-#: src/merge/pr_generic.h:380
+#: src/merge/pr_generic.h:426
 msgid "The number of channels of the two audio tracks is different: %1% and %2%"
 msgstr "İki ses izinin kanal sayıları farklı: %1% ve %2%"
 
@@ -6833,7 +6775,7 @@ msgstr ""
 msgid "The order of the various options is not important."
 msgstr "Çeşitli seçeneklerin sırası önemli değil."
 
-#: src/merge/output_control.cpp:1399
+#: src/merge/output_control.cpp:1411
 #, boost-format
 msgid "The output file '%1%' could not be opened for writing (%2%).\n"
 msgstr "Çıktı dosyası '%1%' yazmak için açılamadı (%2%).\n"
@@ -6848,12 +6790,12 @@ msgstr "Çıktı dosyası '%s' zaten mevcut. Üzerine yazmak istiyor musunuz?"
 msgid "The output file name is invalid, e.g. it might contain invalid characters like ':'."
 msgstr "Çıktı dosya adı geçersiz, örn. ':' gibi geçersiz karakterler içeriyor olabilir."
 
-#: src/input/r_corepicture.cpp:153
+#: src/input/r_corepicture.cpp:155
 #, boost-format
 msgid "The panoramic mode '%1%' is not recognized.\n"
 msgstr ""
 
-#: src/input/r_corepicture.cpp:137
+#: src/input/r_corepicture.cpp:139
 #, boost-format
 msgid "The picture type '%1%' is not recognized.\n"
 msgstr "Resim türü '%1%' tanınamıyor.\n"
@@ -6897,12 +6839,12 @@ msgstr ""
 msgid "The reason is unknown."
 msgstr "Sebep bilinmiyor."
 
-#: src/common/xml/element_parser.cpp:335
+#: src/common/xml/element_parser.cpp:331
 #, boost-format
 msgid "The root element must be <%1%>."
 msgstr "Kök unsur <%1%> olmak zorunda."
 
-#: src/merge/pr_generic.h:375
+#: src/merge/pr_generic.h:421
 msgid "The sample rate of the two audio tracks is different: %1% and %2%"
 msgstr ""
 
@@ -6918,7 +6860,7 @@ msgstr ""
 msgid "The second mode extracts the tags and converts them to XML. The output is written to the standard output. The output can be used as a source for mkvmerge."
 msgstr ""
 
-#: src/input/r_tta.cpp:84
+#: src/input/r_tta.cpp:87
 msgid "The seek table in this TTA file seems to be broken.\n"
 msgstr ""
 
@@ -6979,7 +6921,7 @@ msgstr ""
 msgid "The strings 'info', 'segment_info' or 'segmentinfo' select the segment information element. This is also the default until the first '--edit' option is found."
 msgstr ""
 
-#: src/merge/pr_generic.cpp:272
+#: src/merge/pr_generic.cpp:271
 #, boost-format
 msgid "The tags in '%1%' could not be parsed: some mandatory elements are missing.\n"
 msgstr ""
@@ -7039,7 +6981,7 @@ msgstr ""
 msgid "The timecodes after which a new output file is started. The timecodes refer to the whole stream and not to each individual output file. The timecodes can be given either in the form HH:MM:SS.nnnnnnnnn or as the number of seconds followed by 's'. You may omit the number of hours 'HH'. You can specify up to nine digits for the number of nanoseconds 'nnnnnnnnn' or none at all. If given then you may use up to nine digits after the decimal point. If two or more timecodes are used then you have to separate them with commas. The formats can be mixed, too. Examples: 01:00:00,01:30:00 (after one hour and after one hour and thirty minutes) or 1800s,3000s,00:10:00 (after three, five and ten minutes)."
 msgstr ""
 
-#: src/input/r_ogm.cpp:597
+#: src/input/r_ogm.cpp:600
 msgid "The timecodes for this stream have been reset in the middle of the file. This is not supported. The current packet will be discarded.\n"
 msgstr ""
 
@@ -7087,7 +7029,7 @@ msgstr "İz parametreleri uyuşmuyor."
 msgid "The update information could not be retrieved from %1%.\n"
 msgstr "%1% adresinden güncelleme bilgisi alınamadı.\n"
 
-#: src/merge/pr_generic.h:390
+#: src/merge/pr_generic.h:436
 msgid "The width of the two tracks is different: %1% and %2%"
 msgstr "İki izin genişlikleri farklı: %1% ve %2%"
 
@@ -7131,17 +7073,17 @@ msgstr "Uyarılar vardı"
 msgid "There were warnings, or the process was terminated."
 msgstr "Uyarılar vardı ya da işlem sonlandırıldı."
 
-#: src/input/r_avi.cpp:615
-#: src/input/r_real.cpp:325
+#: src/input/r_avi.cpp:618
+#: src/input/r_real.cpp:328
 msgid "This AAC track does not contain valid headers. Could not parse the AAC information.\n"
 msgstr ""
 
-#: src/output/p_ac3.cpp:81
+#: src/output/p_ac3.cpp:80
 #, boost-format
 msgid "This AC3 track contains %1% bytes of non-AC3 data at the beginning. This corresponds to a delay of %2%ms. This delay will be used instead of the non-AC3 data.\n"
 msgstr ""
 
-#: src/output/p_ac3.cpp:93
+#: src/output/p_ac3.cpp:92
 #, boost-format
 msgid "This AC3 track contains %1% bytes of non-AC3 data which were skipped. The audio/video synchronization may have been lost.\n"
 msgstr ""
@@ -7156,17 +7098,17 @@ msgstr ""
 msgid "This AVC/h.264 track does not start with a key frame. The first %1% frames have been skipped.\n"
 msgstr ""
 
-#: src/output/p_mp3.cpp:61
+#: src/output/p_mp3.cpp:60
 #, boost-format
 msgid "This MPEG audio track contains %1% bytes of non-MP3 data at the beginning. This corresponds to a delay of %2%ms. This delay will be used instead of the garbage data.\n"
 msgstr ""
 
-#: src/output/p_mp3.cpp:70
+#: src/output/p_mp3.cpp:69
 #, boost-format
 msgid "This MPEG audio track contains %1% bytes of non-MP3 data which were skipped. The audio/video synchronization may have been lost.\n"
 msgstr ""
 
-#: src/input/r_ogm.cpp:846
+#: src/input/r_ogm.cpp:849
 msgid "This Ogg/OGM file contains chapter or title information. Unfortunately the charset used to store this information in the file cannot be identified unambiguously. The program assumes that your system's current charset is appropriate. This can be overridden with the '--chapter-charset <charset>' switch.\n"
 msgstr ""
 
@@ -7191,7 +7133,7 @@ msgid ""
 "to the file."
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:333
+#: src/input/r_qtmp4.cpp:335
 #, boost-format
 msgid "This file contains at least one frame with a negative timecode. All timecodes will be adjusted by %1% so that none is negative anymore.\n"
 msgstr ""
@@ -7213,7 +7155,7 @@ msgstr "Bu dosya açılamadı veya ayrıştırılamadı.\n"
 msgid "This file does not contain any chapters."
 msgstr "Bu dosya hiç bölüm içermiyor."
 
-#: src/mmg/tabs/chapters.cpp:566
+#: src/mmg/tabs/chapters.cpp:582
 msgid "This file does not contain valid chapters."
 msgstr "Bu dosya geçerli bölüm içermiyor."
 
@@ -7244,7 +7186,7 @@ msgstr ""
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. %1%\n"
 msgstr ""
 
-#: src/merge/output_control.cpp:1588
+#: src/merge/output_control.cpp:1600
 #, boost-format
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. Size needed: %1%. %2%\n"
 msgstr ""
@@ -7305,7 +7247,7 @@ msgstr "Başlık: %1%"
 msgid "To all files"
 msgstr "Tüm dosyalara"
 
-#: src/common/xml/element_parser.cpp:176
+#: src/common/xml/element_parser.cpp:172
 msgid "Too few hexadecimal digits found. The number of digits must be > 0 and divisable by 2."
 msgstr ""
 
@@ -7372,7 +7314,7 @@ msgstr ""
 msgid "Track %1%: %2%, codec ID: %3%%4%%5%%6%\n"
 msgstr "İz %1%: %2%, kodek ID: %3%%4%%5%%6%\n"
 
-#: src/input/r_qtmp4.cpp:433
+#: src/input/r_qtmp4.cpp:435
 #, boost-format
 msgid "Track %1%: AAC found, but decoder config data has length %2%.\n"
 msgstr ""
@@ -7387,7 +7329,7 @@ msgstr "İz %1%: NAL çok büyük\n"
 msgid "Track %1%: Subtitle entry number %2% is missing its duration. Assuming a duration of 1s.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:436
+#: src/input/r_qtmp4.cpp:438
 #, boost-format
 msgid "Track %1%: The AAC information could not be parsed.\n"
 msgstr ""
@@ -7398,7 +7340,7 @@ msgstr ""
 msgid "Track ID %1% has an unknown AAC type.\n"
 msgstr ""
 
-#: src/merge/pr_generic.cpp:1402
+#: src/merge/pr_generic.cpp:1401
 #, boost-format
 msgid "Track ID %1%: %2% (%3%)"
 msgstr "İz ID %1%: %2% (%3%)"
@@ -7516,17 +7458,17 @@ msgstr ""
 msgid "Unknown"
 msgstr "Bilinmiyor"
 
-#: src/output/p_aac.cpp:130
+#: src/output/p_aac.cpp:129
 #, boost-format
 msgid "Unknown AAC MPEG-2 profile %1%."
 msgstr "Bilinmeyen AAC MPEG-2 profili %1%."
 
-#: src/output/p_aac.cpp:118
+#: src/output/p_aac.cpp:117
 #, boost-format
 msgid "Unknown AAC MPEG-4 object type %1%."
 msgstr "Bilinmeyen AAC MPEG-4 nesne türü %1%."
 
-#: src/input/r_ogm.cpp:547
+#: src/input/r_ogm.cpp:550
 #, boost-format
 msgid "Unknown audio stream type 0x%|1$04x|. Stream ID %2% will be ignored.\n"
 msgstr "Bilinmeyen ses akış türü 0x%|1$04x|. Akış ID %2% yoksayılacak.\n"
@@ -7556,7 +7498,7 @@ msgstr "'%1% %2%' içinde önceki UID için bilinmeyen biçim.\n"
 msgid "Unknown format for the segment UID '%3%' in '%1% %2%'.\n"
 msgstr "'%3%' in '%1% %2%' içinde parça UID '%3%' için bilinmeyen biçim.\n"
 
-#: src/input/r_vobsub.cpp:606
+#: src/input/r_vobsub.cpp:608
 #, boost-format
 msgid "Unknown header 0x%|1$02x|%|2$02x|%|3$02x|%|4$02x|\n"
 msgstr "Bilinmeyen başlık 0x%|1$02x|%|2$02x|%|3$02x|%|4$02x|\n"
@@ -7565,11 +7507,6 @@ msgstr "Bilinmeyen başlık 0x%|1$02x|%|2$02x|%|3$02x|%|4$02x|\n"
 #, boost-format
 msgid "Unknown mode '%1%'.\n"
 msgstr "Bilinmeyen kip '%1%'.\n"
-
-#: src/common/mm_io.cpp:112
-#: src/common/mm_io_win.cpp:73
-msgid "Unknown open mode"
-msgstr "Bilinmeyen açma kipi"
 
 #: src/common/cli_parser.cpp:113
 #, boost-format
@@ -7581,7 +7518,7 @@ msgstr "Bilinmeyen seçenek '%1%'.\n"
 msgid "Unknown parse mode in '%1% %2%'.\n"
 msgstr "'%1% %2%' içinde bilinmeyen ayrıştırma kipi.\n"
 
-#: src/input/r_avi.cpp:569
+#: src/input/r_avi.cpp:572
 #, boost-format
 msgid "Unknown/unsupported audio format 0x%|1$04x| for this audio track.\n"
 msgstr "Bu ses izi için bilinmeyen/desteklenmeyen ses biçimi 0x%|1$04x|.\n"
@@ -7595,12 +7532,12 @@ msgstr "Tanınmayan komut satırı seçeneği '%1%'.\n"
 msgid "Unsigned integer"
 msgstr ""
 
-#: src/common/xml/element_parser.cpp:81
+#: src/common/xml/element_parser.cpp:77
 #, boost-format
 msgid "Unsigned integer (%1%) is too small. Mininum value is %2%."
 msgstr ""
 
-#: src/input/r_vobsub.cpp:475
+#: src/input/r_vobsub.cpp:477
 #, boost-format
 msgid "Unsupported MPEG mpeg_version: 0x%|1$02x| in packet %2% for timecode %3%, assuming MPEG2. No further warnings will be printed for this track.\n"
 msgstr ""
@@ -7609,7 +7546,7 @@ msgstr ""
 msgid "Unsupported format"
 msgstr "Desteklenmeyen biçim"
 
-#: src/input/r_matroska.cpp:1787
+#: src/input/r_matroska.cpp:1789
 msgid "Unsupported track type for this track.\n"
 msgstr "Bu iz için desteklenmeyen biçim.\n"
 
@@ -7651,17 +7588,17 @@ msgstr "Kullanıcı tanımlı seçenekler:"
 msgid "Using a NALU size length of 3 bytes might result in tracks that won't be decodable with certain AVC/h.264 codecs.\n"
 msgstr ""
 
-#: src/merge/pr_generic.h:290
+#: src/merge/pr_generic.h:335
 #, fuzzy
 msgid "Using the demultiplexer for the format '%1%'.\n"
 msgstr "AAC demultiplexer kullanılıyor.\n"
 
-#: src/input/r_matroska.cpp:1375
+#: src/input/r_matroska.cpp:1377
 #, fuzzy, boost-format
 msgid "Using the generic output module for track type '%1%'.\n"
 msgstr "AAC çıktı modülü kullanılıyor (FourCC: %1%).\n"
 
-#: src/merge/pr_generic.h:292
+#: src/merge/pr_generic.h:337
 #, fuzzy
 msgid "Using the output module for the format '%1%'.\n"
 msgstr "AAC çıktı modülü kullanılıyor (FourCC: %1%).\n"
@@ -7743,7 +7680,7 @@ msgstr ""
 msgid "Video interlaced flag"
 msgstr ""
 
-#: src/input/r_real.cpp:650
+#: src/input/r_real.cpp:653
 #, boost-format
 msgid "Video packet assembly failed. Error code: %1% (%2%)\n"
 msgstr ""
@@ -7787,7 +7724,7 @@ msgid "VobButtons"
 msgstr "VobButtons"
 
 #: src/input/r_vobsub.h:75
-#: src/output/p_vobsub.h:37
+#: src/output/p_vobsub.h:34
 msgid "VobSub"
 msgstr ""
 
@@ -7795,7 +7732,7 @@ msgstr ""
 msgid "VobSub subtitles"
 msgstr "VobSub altyazıları"
 
-#: src/output/p_vorbis.h:43
+#: src/output/p_vorbis.h:60
 msgid "Vorbis"
 msgstr ""
 
@@ -7886,12 +7823,12 @@ msgstr "Yazma bilgisi"
 msgid "Writing the VobSub index file '%1%'.\n"
 msgstr "VobSub indeks dosyası '%1%' yazılıyor.\n"
 
-#: src/common/kate.cpp:61
+#: src/common/kate.cpp:59
 #, boost-format
 msgid "Wrong Kate version: %1%.%2% > %3%.x"
 msgstr "Yanlış Kate sürümü: %1%.%2% > %3%.x"
 
-#: src/common/theora.cpp:47
+#: src/common/theora.cpp:45
 #, boost-format
 msgid "Wrong Theora version: %1%.%2%.%3% != 3.2.x"
 msgstr "Yanlış Theora sürümü: %1%.%2%.%3% != 3.2.x"
@@ -7910,26 +7847,21 @@ msgstr "Yanlış dosya seçimi"
 msgid "Wrong file selected"
 msgstr "Yanlış dosya seçildi"
 
-#: src/common/kate.cpp:46
-#: src/common/theora.cpp:35
+#: src/common/kate.cpp:44
+#: src/common/theora.cpp:33
 #, boost-format
 msgid "Wrong header type: 0x%|1$02x| != 0x%|2$02x|"
 msgstr "Yanlış başlık türü: 0x%|1$02x| != 0x%|2$02x|"
 
-#: src/common/theora.cpp:40
+#: src/common/theora.cpp:38
 #, boost-format
 msgid "Wrong identifaction string: '%|1$6s|' != 'theora'"
 msgstr "Yanlış tanımlama dizgisi: '%|1$6s|' != 'theora'"
 
-#: src/common/kate.cpp:51
+#: src/common/kate.cpp:49
 #, boost-format
 msgid "Wrong identification string: '%|1$7s|' != 'kate\\0\\0\\0'"
 msgstr "Yanlış tanımlama dizgisi: '%|1$7s|' != 'kate\\0\\0\\0'"
-
-#: src/common/xml/element_parser.cpp:457
-#, boost-format
-msgid "XML parser error at line %1% of '%2%': %3%.%4%%5%"
-msgstr ""
 
 #: src/common/xml/element_writer.cpp:232
 #, boost-format
@@ -7983,28 +7915,14 @@ msgstr "Zlib çıkartması başarısız oldu. Sonuç: %1%\n"
 msgid "[%1% frame for track %2%, timecode %3%]"
 msgstr "[iz %2% için %1% kare, zaman kodu %3%]"
 
-#: src/input/r_aac.cpp:62
-msgid "aac_reader: ADIF header files are not supported."
-msgstr "aac_reader: ADIF başlık dosyaları desteklenmiyor."
-
-#: src/input/r_aac.cpp:65
-#, boost-format
-msgid "aac_reader: No valid AAC packet found in the first %1% bytes.\n"
-msgstr ""
-
 #: src/mmg/jobs.cpp:344
 #: src/mmg/jobs.cpp:453
 #: src/mmg/jobs.cpp:531
 msgid "aborted"
 msgstr "durduruldu"
 
-#: src/output/p_ac3.cpp:213
+#: src/output/p_ac3.cpp:211
 msgid "ac3_bs_packetizer::add_to_buffer(): Untested code ('size' is odd). If mkvmerge crashes or if the resulting file does not contain the complete and correct audio track, then please contact the author Moritz Bunkus at moritz@bunkus.org.\n"
-msgstr ""
-
-#: src/input/r_ac3.cpp:71
-#, boost-format
-msgid "ac3_reader: No valid AC3 packet found in the first %1% bytes.\n"
 msgstr ""
 
 #: src/mmg/tabs/attachments.cpp:162
@@ -8029,15 +7947,6 @@ msgstr "ilave et"
 #: src/mmg/mmg.cpp:62
 msgid "audio"
 msgstr "ses"
-
-#: src/input/r_avc.cpp:106
-msgid "avc_es_reader: Should not have happened."
-msgstr "avc_es_reader: Olmamalıydı."
-
-#: src/input/r_avi.cpp:113
-#, boost-format
-msgid "avi_reader: Could not initialize AVI source. Reason: %1%"
-msgstr "avi_reader: AVI kaynağı başlatılamadı. Sebep: %1%"
 
 #: src/info/mkvinfo.cpp:671
 #, boost-format
@@ -8157,11 +8066,6 @@ msgstr "bitti/uyarılar"
 msgid "down"
 msgstr "aşağı"
 
-#: src/input/r_dts.cpp:77
-#, boost-format
-msgid "dts_reader: No valid DTS packet found in the first %1% bytes.\n"
-msgstr ""
-
 #: src/mmg/tabs/attachments.cpp:159
 msgid "enable all"
 msgstr "tümü etkin"
@@ -8173,28 +8077,6 @@ msgstr "etkinleştirildi"
 #: src/info/mkvinfo.cpp:820
 msgid "encryption"
 msgstr "şifreleme"
-
-#: src/common/mm_io.cpp:471
-#: src/common/mm_io.cpp:481
-#: src/common/mm_io.cpp:491
-#: src/common/mm_io.cpp:501
-#: src/common/mm_io.cpp:511
-#: src/common/mm_io.cpp:521
-#: src/common/mm_io.cpp:531
-#: src/common/mm_io.cpp:541
-#: src/common/mm_io.cpp:551
-#: src/common/mm_io.cpp:649
-#: src/common/mm_io.cpp:1107
-#: src/input/r_qtmp4.cpp:508
-#: src/input/r_qtmp4.cpp:586
-#: src/input/r_qtmp4.cpp:620
-#: src/input/r_qtmp4.cpp:632
-#: src/input/r_qtmp4.cpp:726
-#: src/input/r_qtmp4.cpp:1222
-#: src/input/r_qtmp4.cpp:1380
-#: src/input/r_qtmp4.cpp:1396
-msgid "end-of-file"
-msgstr "dosyanın sonu"
 
 #: src/mmg/jobs.cpp:353
 #: src/mmg/jobs.cpp:532
@@ -8223,32 +8105,32 @@ msgstr ""
 msgid "flac_header_extraction: bytes (%1%) < op.bytes (%2%). Could not read the FLAC headers.\n"
 msgstr ""
 
-#: src/input/r_flac.cpp:187
+#: src/input/r_flac.cpp:189
 msgid "flac_reader: Could not initialize the FLAC decoder.\n"
 msgstr ""
 
-#: src/input/r_flac.cpp:141
+#: src/input/r_flac.cpp:143
 msgid "flac_reader: Could not read a header packet.\n"
 msgstr ""
 
-#: src/input/r_flac.cpp:240
+#: src/input/r_flac.cpp:242
 msgid "flac_reader: Could not read all header packets.\n"
 msgstr ""
 
-#: src/input/r_flac.cpp:184
+#: src/input/r_flac.cpp:186
 msgid "flac_reader: Could not set metadata_respond_all.\n"
 msgstr ""
 
-#: src/input/r_flac.cpp:321
+#: src/input/r_flac.cpp:323
 #, boost-format
 msgid "flac_reader: Error parsing the file: %1%\n"
 msgstr ""
 
-#: src/input/r_flac.cpp:182
+#: src/input/r_flac.cpp:184
 msgid "flac_reader: FLAC__stream_decoder_new() failed.\n"
 msgstr ""
 
-#: src/input/r_flac.cpp:149
+#: src/input/r_flac.cpp:151
 msgid "flac_reader: could not initialize the FLAC packetizer.\n"
 msgstr ""
 
@@ -8303,7 +8185,7 @@ msgstr "dil: %1%"
 msgid "length %1%, data: %2%"
 msgstr "uzunluk %1%, veri: %2%"
 
-#: src/input/r_vobsub.cpp:227
+#: src/input/r_vobsub.cpp:229
 #, boost-format
 msgid "line %1%: The 'delay' timestamp could not be parsed.\n"
 msgstr ""
@@ -8333,144 +8215,140 @@ msgstr "lzo_init() başarısız. Sonuç: %1%\n"
 msgid "lzo_malloc(LZO1X_999_MEM_COMPRESS) failed.\n"
 msgstr ""
 
-#: src/input/r_matroska.cpp:322
+#: src/input/r_matroska.cpp:317
 #, boost-format
 msgid "matroska_reader: (MS compatibility mode for track %1%) Matroska says that there are %2% bits per sample, but the WAVEFORMATEX says that there are %3%.\n"
 msgstr ""
 
-#: src/input/r_matroska.cpp:313
+#: src/input/r_matroska.cpp:308
 #, boost-format
 msgid "matroska_reader: (MS compatibility mode for track %1%) Matroska says that there are %2% channels, but the WAVEFORMATEX says that there are %3%.\n"
 msgstr ""
 
-#: src/input/r_matroska.cpp:304
+#: src/input/r_matroska.cpp:299
 #, boost-format
 msgid "matroska_reader: (MS compatibility mode for track %1%) Matroska says that there are %2% samples per second, but WAVEFORMATEX says that there are %3%.\n"
 msgstr ""
 
-#: src/input/r_matroska.cpp:451
+#: src/input/r_matroska.cpp:446
 #, boost-format
 msgid "matroska_reader: (MS compatibility mode, track %1%) Matroska says video height is %2%, but the BITMAPINFOHEADER says %3%.\n"
 msgstr ""
 
-#: src/input/r_matroska.cpp:442
+#: src/input/r_matroska.cpp:437
 #, boost-format
 msgid "matroska_reader: (MS compatibility mode, track %1%) Matroska says video width is %2%, but the BITMAPINFOHEADER says %3%.\n"
 msgstr ""
 
-#: src/input/r_matroska.cpp:1073
+#: src/input/r_matroska.cpp:1068
 msgid "matroska_reader: A track is missing its track UID.\n"
 msgstr ""
 
-#: src/input/r_matroska.cpp:1061
+#: src/input/r_matroska.cpp:1056
 msgid "matroska_reader: A track is missing its track number.\n"
 msgstr ""
 
-#: src/input/r_matroska.cpp:1438
+#: src/input/r_matroska.cpp:1440
 #, boost-format
 msgid "matroska_reader: Could not keep the track UID %1% because it is already allocated for the new file.\n"
 msgstr ""
 
-#: src/input/r_matroska.cpp:210
-msgid "matroska_reader: Failed to read the headers."
-msgstr "matroska_okuyucusu: Başlıkları okuma başarısız."
-
-#: src/input/r_matroska.cpp:1251
-#: src/input/r_matroska.cpp:1256
+#: src/input/r_matroska.cpp:1253
+#: src/input/r_matroska.cpp:1258
 msgid "matroska_reader: No segment found.\n"
 msgstr "matroska_okuyucusu: Bulunan parça yok.\n"
 
-#: src/input/r_matroska.cpp:962
+#: src/input/r_matroska.cpp:957
 msgid "matroska_reader: Pixel height is missing.\n"
 msgstr "matroska_okuyucusu: Piksel yüksekliği eksik.\n"
 
-#: src/input/r_matroska.cpp:955
+#: src/input/r_matroska.cpp:950
 msgid "matroska_reader: Pixel width is missing.\n"
 msgstr "matroska_okuyucusu: Piksel genişliği eksik.\n"
 
-#: src/input/r_matroska.cpp:543
+#: src/input/r_matroska.cpp:538
 #, boost-format
 msgid "matroska_reader: The CodecID '%1%' for track %2% is unknown.\n"
 msgstr ""
 
-#: src/input/r_matroska.cpp:430
+#: src/input/r_matroska.cpp:425
 #, boost-format
 msgid "matroska_reader: The CodecID for track %1% is '%2%', but there was no BITMAPINFOHEADER struct present. Therefore we don't have a FourCC to identify the video codec used.\n"
 msgstr ""
 
-#: src/input/r_matroska.cpp:283
+#: src/input/r_matroska.cpp:278
 #, boost-format
 msgid "matroska_reader: The CodecID for track %1% is '%2%', but there was no WAVEFORMATEX struct present. Therefore we don't have a format ID to identify the audio codec used.\n"
 msgstr ""
 
-#: src/input/r_matroska.cpp:468
+#: src/input/r_matroska.cpp:463
 #, boost-format
 msgid "matroska_reader: The CodecID for track %1% is '%2%', but there was no codec private headers.\n"
 msgstr ""
 
-#: src/input/r_matroska.cpp:510
-#: src/input/r_matroska.cpp:521
+#: src/input/r_matroska.cpp:505
+#: src/input/r_matroska.cpp:516
 #, boost-format
 msgid "matroska_reader: The CodecID for track %1% is '%2%', but there was no private data found.\n"
 msgstr ""
 
-#: src/input/r_matroska.cpp:347
+#: src/input/r_matroska.cpp:342
 #, boost-format
 msgid "matroska_reader: The CodecID for track %1% is 'A_VORBIS', but there are no header packets present.\n"
 msgstr ""
 
-#: src/input/r_matroska.cpp:1109
+#: src/input/r_matroska.cpp:1104
 msgid "matroska_reader: The CodecID is missing.\n"
 msgstr "matroska_okuyucusu: Kodek ID eksik.\n"
 
-#: src/input/r_matroska.cpp:496
+#: src/input/r_matroska.cpp:491
 #, boost-format
 msgid "matroska_reader: The height for track %1% was not set.\n"
 msgstr ""
 
-#: src/input/r_matroska.cpp:490
+#: src/input/r_matroska.cpp:485
 #, boost-format
 msgid "matroska_reader: The width for track %1% was not set.\n"
 msgstr ""
 
-#: src/input/r_matroska.cpp:596
+#: src/input/r_matroska.cpp:591
 #, boost-format
 msgid "matroska_reader: Track %1% seems to be ok.\n"
 msgstr "matroska_okuyucusu: İz %1% tamam görünüyor.\n"
 
-#: src/input/r_matroska.cpp:1088
+#: src/input/r_matroska.cpp:1083
 msgid "matroska_reader: Track type was not found.\n"
 msgstr "matroska_okuyucusu: İz türü bulunamadı.\n"
 
-#: src/input/r_matroska.cpp:353
+#: src/input/r_matroska.cpp:348
 msgid "matroska_reader: Vorbis track does not contain valid headers.\n"
 msgstr "matroska_okuyucusu: Vorbis izi geçerli başlıkları içermiyor.\n"
 
-#: src/input/r_matroska.cpp:1343
-#: src/input/r_matroska.cpp:2014
+#: src/input/r_matroska.cpp:1345
+#: src/input/r_matroska.cpp:2016
 msgid "matroska_reader: caught exception\n"
 msgstr ""
 
-#: src/input/r_matroska.cpp:338
+#: src/input/r_matroska.cpp:333
 #, boost-format
 msgid "matroska_reader: mkvmerge was not compiled with FLAC support. Ignoring track %1%.\n"
 msgstr ""
 
-#: src/input/r_matroska.cpp:1237
+#: src/input/r_matroska.cpp:1239
 msgid "matroska_reader: no EBML head found.\n"
 msgstr "matroska_okuyucusu: Bulunan EBML başı yok.\n"
 
-#: src/input/r_matroska.cpp:591
+#: src/input/r_matroska.cpp:586
 #, boost-format
 msgid "matroska_reader: unknown demuxer type for track %1%: '%2%'\n"
 msgstr ""
 
-#: src/input/r_matroska.cpp:1077
+#: src/input/r_matroska.cpp:1072
 #, boost-format
 msgid "matroska_reader: |  + There's more than one track with the UID %1%.\n"
 msgstr ""
 
-#: src/input/r_matroska.cpp:1066
+#: src/input/r_matroska.cpp:1061
 #, boost-format
 msgid "matroska_reader: |  + There's more than one track with the number %1%.\n"
 msgstr ""
@@ -8479,22 +8357,22 @@ msgstr ""
 msgid "max. number of files:"
 msgstr "en fazla dosya sayısı:"
 
-#: src/common/memory.cpp:145
+#: src/common/memory.cpp:147
 #, boost-format
 msgid "memory.cpp/safemalloc() called from file %1%, line %2%: malloc() returned NULL for a size of %3% bytes.\n"
 msgstr ""
 
-#: src/common/memory.cpp:133
+#: src/common/memory.cpp:135
 #, boost-format
 msgid "memory.cpp/safememdup() called from file %1%, line %2%: malloc() returned NULL for a size of %3% bytes.\n"
 msgstr ""
 
-#: src/common/memory.cpp:161
+#: src/common/memory.cpp:163
 #, boost-format
 msgid "memory.cpp/saferealloc() called from file %1%, line %2%: realloc() returned NULL for a size of %3% bytes.\n"
 msgstr ""
 
-#: src/common/memory.h:221
+#: src/common/memory.h:247
 msgid "memory_slice_cursor_c copy c'tor: Must not be used!"
 msgstr "memory_slice_cursor_c copy c'tor: Kullanılmamalı!"
 
@@ -8506,9 +8384,7 @@ msgstr "eksik özellik adı"
 msgid "missing value"
 msgstr "eksik değer"
 
-#: src/common/fs_sys_helpers.cpp:53
-#: src/common/fs_sys_helpers.cpp:184
-#, boost-format
+#: src/common/fs_sys_helpers.h:39
 msgid "mkdir(%1%) failed; errno = %2% (%3%)"
 msgstr "mkdir(%1%) başarısız oldu; hatano = %2% (%3%)"
 
@@ -8649,7 +8525,7 @@ msgstr "mkvmerge dönen %d kodu ile bitirdi. %s"
 msgid "mkvmerge has finished"
 msgstr "mkvmerge bitti"
 
-#: src/input/r_ogm.cpp:499
+#: src/input/r_ogm.cpp:502
 msgid "mkvmerge has not been compiled with FLAC support but handling of this stream has been requested.\n"
 msgstr ""
 
@@ -8717,12 +8593,12 @@ msgstr "Eğer hiç giriş seçilmezse, mmg varsayılan listeye sıfırlayacaktı
 msgid "mono"
 msgstr "mono"
 
-#: src/input/r_mpeg_ps.cpp:1190
+#: src/input/r_mpeg_ps.cpp:1185
 #, boost-format
 msgid "mpeg_ps_reader: Should not have happened #1. %1%"
 msgstr "mpeg_ps_reader: Olmamalıydı #1. %1%"
 
-#: src/input/r_mpeg_ps.cpp:1216
+#: src/input/r_mpeg_ps.cpp:1211
 #, boost-format
 msgid "mpeg_ps_reader: Should not have happened #2. %1%"
 msgstr "mpeg_ps_reader: Olmamalıydı #2. %1%"
@@ -8764,12 +8640,12 @@ msgstr "yok"
 msgid "normal"
 msgstr "normal"
 
-#: src/input/r_ogm.cpp:471
+#: src/input/r_ogm.cpp:474
 #, boost-format
 msgid "ogg_stream_init for stream number %1% failed. Will try to continue and ignore this stream.\n"
 msgstr ""
 
-#: src/input/r_ogm.cpp:383
+#: src/input/r_ogm.cpp:386
 msgid "ogg_sync_buffer failed\n"
 msgstr "ogg_sync_buffer başarısız\n"
 
@@ -8786,7 +8662,7 @@ msgstr "sadece 1 kare için"
 msgid "output sampling freq: %1%"
 msgstr "çıktı örnekleme aralığı: %1%"
 
-#: src/output/p_passthrough.h:30
+#: src/output/p_passthrough.h:29
 msgid "passthrough"
 msgstr ""
 
@@ -8825,12 +8701,12 @@ msgstr "piksel yüksekliği: %1%"
 msgid "pixel width: %1%"
 msgstr "piksel genişliği: %1%"
 
-#: src/merge/pr_generic.cpp:853
+#: src/merge/pr_generic.cpp:852
 #, boost-format
 msgid "pr_generic.cpp/generic_packetizer_c::add_packet(): timecode < last_timecode (%1% < %2%). %3%\n"
 msgstr ""
 
-#: src/merge/pr_generic.cpp:1181
+#: src/merge/pr_generic.cpp:1180
 #, boost-format
 msgid "pr_generic.cpp/generic_reader_c::demuxing_requested(): Invalid track type %1%."
 msgstr ""
@@ -8844,12 +8720,12 @@ msgstr "ham veri"
 msgid "ready"
 msgstr "hazır"
 
-#: src/input/r_real.cpp:245
+#: src/input/r_real.cpp:248
 #, boost-format
 msgid "real_reader: Couldn't find RealAudio FourCC for id %1% (description length: %2%) Skipping track.\n"
 msgstr ""
 
-#: src/input/r_real.cpp:273
+#: src/input/r_real.cpp:276
 #, boost-format
 msgid "real_reader: Only audio header versions 3, 4 and 5 are supported. Track ID %1% uses version %2% and will be skipped.\n"
 msgstr ""
@@ -8915,7 +8791,7 @@ msgstr "altyazı"
 msgid "tet_index: '%1%' not found\n"
 msgstr "tet_index: '%1%' bulunamadı\n"
 
-#: src/output/p_textsubs.h:38
+#: src/output/p_textsubs.h:37
 #, fuzzy
 msgid "text subtitles"
 msgstr "SRT metni altyazıları"
@@ -8936,7 +8812,7 @@ msgstr "üst alt (önce sağ)"
 msgid "track name"
 msgstr "iz adı"
 
-#: src/input/r_tta.cpp:60
+#: src/input/r_tta.cpp:63
 #, boost-format
 msgid "tta_reader: tag_size < 0 in the c'tor. %1%\n"
 msgstr "tta_reader: c'tor içinde tag_size < 0. %1%\n"
@@ -8955,15 +8831,15 @@ msgstr "und (Belirsiz)"
 #: src/info/mkvinfo.cpp:892
 #: src/info/mkvinfo.cpp:1110
 #: src/input/r_matroska.cpp:91
-#: src/input/r_matroska.cpp:2342
-#: src/input/r_mpeg_ps.cpp:1385
+#: src/input/r_matroska.cpp:2344
+#: src/input/r_mpeg_ps.cpp:1380
 #: src/mmg/header_editor/value_page.cpp:150
 #: src/mmg/mmg.cpp:65
 #: src/mmg/tabs/input.cpp:345
 msgid "unknown"
 msgstr "bilinmiyor"
 
-#: src/input/r_matroska.cpp:2335
+#: src/input/r_matroska.cpp:2337
 #, boost-format
 msgid "unknown, format tag 0x%|1$04x|"
 msgstr "bilinmiyor, biçim etiketi: 0x%|1$04x|"
@@ -8987,29 +8863,9 @@ msgstr "doğrulama başarısız: bölümler->CheckMandatory() yanlış. Bu olmam
 msgid "video"
 msgstr "görüntü"
 
-#: src/input/r_vobsub.cpp:82
-msgid "vobsub_reader: Could not open the sub file"
-msgstr "vobsub_reader: Sub dosyasını açamadı"
-
-#: src/input/r_vobsub.cpp:572
+#: src/input/r_vobsub.cpp:574
 msgid "vobsub_reader: sub_file->read failure"
 msgstr "vobsub_reader: sub_file->okuma başarısız"
-
-#: src/input/r_wav.cpp:514
-msgid "wav_reader: No data chunk was found."
-msgstr "wav_reader: Bulunan iri veri parçası yok."
-
-#: src/input/r_wav.cpp:485
-msgid "wav_reader: No format chunk found."
-msgstr "wav_reader: Bulunan iri biçim parçası yok."
-
-#: src/input/r_wav.cpp:510
-msgid "wav_reader: The format chunk could not be read."
-msgstr "wav_reader: İri biçim parçası okunamadı."
-
-#: src/input/r_wav.cpp:480
-msgid "wav_reader: could not read WAVE header."
-msgstr "wav_reader: WAVE başlığı okunamadı."
 
 #: src/common/wavpack.cpp:158
 msgid "wavpack_reader: non-audio block found\n"
@@ -9018,19 +8874,6 @@ msgstr "wavpack_reader: ses olmayan blok bulundu\n"
 #: src/common/wavpack.cpp:126
 msgid "wavpack_reader: unknown sample rate!\n"
 msgstr "wavpack_reader: bilinmeyen örnekleme oranı!\n"
-
-#: src/common/mm_io.cpp:813
-msgid "wrong usage: increase < 0"
-msgstr "yanlış kullanım: yüksek < 0"
-
-#: src/common/mm_io.cpp:838
-#: src/common/mm_io.cpp:854
-msgid "wrong usage: read-only with NULL memory"
-msgstr "yanlış kullanım: BOŞ bellek ile salt okunur"
-
-#: src/common/mm_io.cpp:884
-msgid "wrong usage: writing to read-only memory"
-msgstr "yanlış kullanım: salt okunur belleğe yazılıyor"
 
 #: src/mmg/header_editor/bool_value_page.cpp:44
 #: src/mmg/tabs/input_general.cpp:107
@@ -9047,11 +8890,40 @@ msgstr "evet"
 #~ msgid " (right eye)"
 #~ msgstr " (sağ göz)"
 
+#~ msgid " Aborting.\n"
+#~ msgstr " Durduruluyor.\n"
+
+#~ msgid " Remember that special characters like &, <, > and \" must be escaped in the usual HTML way: &amp; for '&', &lt; for '<', &gt; for '>' and &quot; for '\"'."
+#~ msgstr " &, <, > ve \" gibi özel karakterleri olağan HTML usulünden kaçınılmak zorunda olunduğunu hatırlayın: '&' için &amp; , '<' için &lt; , '>' için &gt; ve '\"' için &quot;."
+
+#, fuzzy
+#~ msgid "%1%: Could not open the source file."
+#~ msgstr "ac3_reader: Kaynak dosya açılamadı."
+
+#, fuzzy
+#~ msgid "%1%: Could not read %2% bytes."
+#~ msgstr "aac_reader: %1% bayt okuyamadı."
+
+#, fuzzy
+#~ msgid "%1%: Could not read all header packets."
+#~ msgstr "ogm_reader: Tüm başlık paketleri okunamadı."
+
+#, fuzzy
+#~ msgid "%1%: Could not read the source file."
+#~ msgstr "avi_reader: Kaynak dosya okunamadı."
+
+#, fuzzy
+#~ msgid "%1%: Source is not a valid %1% file."
+#~ msgstr "avi_reader: Kaynak geçerli bir AVI dosyası değil."
+
 #~ msgid "%d minute(s) %d second(s)"
 #~ msgstr "%d dakika %d saniye"
 
 #~ msgid "Both eyes"
 #~ msgstr "Her iki göz"
+
+#~ msgid "Could not find a valid MP3 packet."
+#~ msgstr "Geçerli MP3 paketi bulunamadı."
 
 #~ msgid "Left eye"
 #~ msgstr "Sol göz"
@@ -9067,6 +8939,9 @@ msgstr "evet"
 
 #~ msgid "Right eye"
 #~ msgstr "Sağ göz"
+
+#~ msgid "Unknown open mode"
+#~ msgstr "Bilinmeyen açma kipi"
 
 #~ msgid "Using the %1%AC3 output module.\n"
 #~ msgstr "%1%AC3 çıktı modülü kullanılıyor.\n"
@@ -9266,6 +9141,9 @@ msgstr "evet"
 #~ msgid "Warning: There's more than one track with the number %1%."
 #~ msgstr "Uyarı: %1% sayısıyla birden fazla iz var."
 
+#~ msgid "aac_reader: ADIF header files are not supported."
+#~ msgstr "aac_reader: ADIF başlık dosyaları desteklenmiyor."
+
 #~ msgid "ac3_reader: Could not read %1% bytes."
 #~ msgstr "ac3_reader: %1% bayt okunamadı."
 
@@ -9275,14 +9153,26 @@ msgstr "evet"
 #~ msgid "avc_es_reader: Could not open the source file."
 #~ msgstr "avc_es_reader: Kaynak dosya açılamadı."
 
+#~ msgid "avc_es_reader: Should not have happened."
+#~ msgstr "avc_es_reader: Olmamalıydı."
+
+#~ msgid "avi_reader: Could not initialize AVI source. Reason: %1%"
+#~ msgstr "avi_reader: AVI kaynağı başlatılamadı. Sebep: %1%"
+
 #~ msgid "dts_reader: Could not open the source file."
 #~ msgstr "dts_reader: Kaynak dosya açılamadı."
 
 #~ msgid "dts_reader: Could not read %1% bytes."
 #~ msgstr "dts_reader: %1% bayt okunamadı."
 
+#~ msgid "end-of-file"
+#~ msgstr "dosyanın sonu"
+
 #~ msgid "ivf_reader: Could not open the file."
 #~ msgstr "ivf_reader: Dosya açılamadı."
+
+#~ msgid "matroska_reader: Failed to read the headers."
+#~ msgstr "matroska_okuyucusu: Başlıkları okuma başarısız."
 
 #~ msgid "mp3_reader: Could not open the source file."
 #~ msgstr "mp3_reader: Kaynak dosya açılamadı."
@@ -9347,12 +9237,36 @@ msgstr "evet"
 #~ msgid "vobsub_reader: Could not open the source file."
 #~ msgstr "vobsub_reader: Kaynak dosyayı açamadı."
 
+#~ msgid "vobsub_reader: Could not open the sub file"
+#~ msgstr "vobsub_reader: Sub dosyasını açamadı"
+
 #~ msgid "wav_reader: Could not open the source file."
 #~ msgstr "wav_reader: Kaynak dosyayı açamadı."
+
+#~ msgid "wav_reader: No data chunk was found."
+#~ msgstr "wav_reader: Bulunan iri veri parçası yok."
+
+#~ msgid "wav_reader: No format chunk found."
+#~ msgstr "wav_reader: Bulunan iri biçim parçası yok."
 
 #~ msgid "wav_reader: Source is not a valid WAVE file."
 #~ msgstr "wav_reader: Kaynak geçerli WAVE dosyası değil."
 
+#~ msgid "wav_reader: The format chunk could not be read."
+#~ msgstr "wav_reader: İri biçim parçası okunamadı."
+
+#~ msgid "wav_reader: could not read WAVE header."
+#~ msgstr "wav_reader: WAVE başlığı okunamadı."
+
 #~ msgid "wavpack_reader: Could not open the file."
 #~ msgstr "wavpack_reader: Dosyayı açamadı."
+
+#~ msgid "wrong usage: increase < 0"
+#~ msgstr "yanlış kullanım: yüksek < 0"
+
+#~ msgid "wrong usage: read-only with NULL memory"
+#~ msgstr "yanlış kullanım: BOŞ bellek ile salt okunur"
+
+#~ msgid "wrong usage: writing to read-only memory"
+#~ msgstr "yanlış kullanım: salt okunur belleğe yazılıyor"
 
