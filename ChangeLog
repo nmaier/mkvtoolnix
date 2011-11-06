@@ -1,5 +1,8 @@
 2011-11-06  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvinfo: bug fix: Improved skipping broken data on all operating
+	systems.
+
 	* mkvmerge, mkvextract: bug fix: Skipping broken data in Matroska
 	file often caused the program to abort on Windows. This has been
 	fixed so that processing continues after the broken part. Fix for

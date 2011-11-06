@@ -71,6 +71,7 @@
 #include "common/command_line.h"
 #include "common/ebml.h"
 #include "common/endian.h"
+#include "common/kax_file.h"
 #include "common/matroska.h"
 #include "common/mm_io.h"
 #include "common/stereo_mode.h"
@@ -481,21 +482,21 @@ format_binary(EbmlBinary &bin,
 }
 
 #define handle(f) handle_##f(in, es, upper_lvl_el, l1, l2, l3, l4, l5, l6)
-#define def_handle(f) handle_##f(mm_io_c *&in, \
-                                 EbmlStream *&es, \
+#define def_handle(f) handle_##f(mm_io_cptr &in,    \
+                                 EbmlStream *&es,   \
                                  int &upper_lvl_el, \
-                                 EbmlElement *&l1, \
-                                 EbmlElement *&l2, \
-                                 EbmlElement *&l3, \
-                                 EbmlElement *&l4, \
-                                 EbmlElement *&l5, \
+                                 EbmlElement *&l1,  \
+                                 EbmlElement *&l2,  \
+                                 EbmlElement *&l3,  \
+                                 EbmlElement *&l4,  \
+                                 EbmlElement *&l5,  \
                                  EbmlElement *&l6)
 
 #define handle2(f, arg1) \
   handle_##f(in, es, upper_lvl_el, l1, l2, l3, l4, l5, l6, arg1)
 #define handle3(f, arg1, arg2) \
   handle_##f(in, es, upper_lvl_el, l1, l2, l3, l4, l5, l6, arg1, arg2)
-#define def_handle2(f, arg1) handle_##f(mm_io_c *&in,      \
+#define def_handle2(f, arg1) handle_##f(mm_io_cptr &in,    \
                                         EbmlStream *&es,   \
                                         int &upper_lvl_el, \
                                         EbmlElement *&l1,  \
@@ -505,7 +506,7 @@ format_binary(EbmlBinary &bin,
                                         EbmlElement *&l5,  \
                                         EbmlElement *&l6,  \
                                         arg1)
-#define def_handle3(f, arg1, arg2) handle_##f(mm_io_c *&in,      \
+#define def_handle3(f, arg1, arg2) handle_##f(mm_io_cptr &in,    \
                                               EbmlStream *&es,   \
                                               int &upper_lvl_el, \
                                               EbmlElement *&l1,  \
@@ -1831,7 +1832,7 @@ def_handle(tags) {
 
 void
 handle_ebml_head(EbmlElement *l0,
-                 mm_io_c *in,
+                 mm_io_cptr in,
                  EbmlStream *es) {
   show_element(l0, 0, Y("EBML head"));
 
@@ -1914,9 +1915,9 @@ process_file(const std::string &file_name) {
   s_track_info.clear();
 
   // open input file
-  mm_io_c *in;
+  mm_io_cptr in;
   try {
-    in = new mm_file_io_c(file_name);
+    in = mm_io_cptr(new mm_file_io_c(file_name));
   } catch (...) {
     show_error((boost::format(Y("Error: Couldn't open input file %1% (%2%).\n")) % file_name % strerror(errno)).str());
     return false;
@@ -1943,7 +1944,7 @@ process_file(const std::string &file_name) {
     delete l0;
 
     while (1) {
-      // Next element must be a segment
+      // NEXT element must be a segment
       l0 = es->FindNextID(EBML_INFO(KaxSegment), 0xFFFFFFFFFFFFFFFFLL);
       if (NULL == l0) {
         show_error(Y("No segment/level 0 element found."));
@@ -1964,11 +1965,11 @@ process_file(const std::string &file_name) {
       delete l0;
     }
 
-    upper_lvl_el = 0;
-    // We've got our segment, so let's find the tracks
-    l1 = es->FindNextElement(EBML_CONTEXT(l0), upper_lvl_el, 0xFFFFFFFFL, true);
+    kax_file_cptr kax_file = kax_file_cptr(new kax_file_c(in));
 
-    while ((NULL != l1) && (0 >= upper_lvl_el)) {
+    while (NULL != (l1 = kax_file->read_next_level1_element())) {
+      counted_ptr<EbmlElement> af_l1(l1);
+
       if (is_id(l1, KaxInfo))
         handle(info);
 
@@ -1981,10 +1982,8 @@ process_file(const std::string &file_name) {
       else if (is_id(l1, KaxCluster)) {
         show_element(l1, 1, Y("Cluster"));
         if ((g_options.m_verbose == 0) && !g_options.m_show_summary) {
-          delete l1;
           delete l0;
           delete es;
-          delete in;
 
           return true;
         }
@@ -2007,35 +2006,14 @@ process_file(const std::string &file_name) {
       else if (!is_global(es, l1, 1))
         show_unknown_element(l1, 1);
 
-      if (!in_parent(l0)) {
-        delete l1;
+      if (!in->setFilePointer2(l1->GetElementPosition() + kax_file->get_element_size(l1)))
         break;
-      }
-
-      if (0 < upper_lvl_el) {
-        upper_lvl_el--;
-        if (0 < upper_lvl_el)
-          break;
-        delete l1;
-        l1 = l2;
-        continue;
-
-      } else if (0 > upper_lvl_el) {
-        upper_lvl_el++;
-        if (0 > upper_lvl_el)
-          break;
-
-      }
-
-      l1->SkipData(*es, EBML_CONTEXT(l1));
-      delete l1;
-      l1 = es->FindNextElement(EBML_CONTEXT(l0), upper_lvl_el, 0xFFFFFFFFL, true);
-
+      if (!in_parent(l0))
+        break;
     } // while (l1 != NULL)
 
     delete l0;
     delete es;
-    delete in;
 
     if (!g_options.m_use_gui && g_options.m_show_track_info)
       display_track_info();
@@ -2043,8 +2021,6 @@ process_file(const std::string &file_name) {
     return true;
   } catch (...) {
     show_error(Y("Caught exception"));
-    delete in;
-
     return false;
   }
 }
