@@ -30,8 +30,7 @@ flac_packetizer_c::flac_packetizer_c(generic_reader_c *p_reader,
                                      track_info_c &p_ti,
                                      unsigned char *header,
                                      int l_header)
-  throw (error_c):
-  generic_packetizer_c(p_reader, p_ti)
+  : generic_packetizer_c(p_reader, p_ti)
   , m_num_packets(0)
 {
   int result;

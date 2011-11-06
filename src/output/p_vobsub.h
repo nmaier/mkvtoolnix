@@ -24,10 +24,7 @@ private:
   memory_cptr idx_data;
 
 public:
-  vobsub_packetizer_c(generic_reader_c *_reader,
-                      const void *_idx_data, int _idx_data_size,
-                      track_info_c &_ti)
-    throw (error_c);
+  vobsub_packetizer_c(generic_reader_c *_reader, const void *_idx_data, int _idx_data_size, track_info_c &_ti);
   virtual ~vobsub_packetizer_c();
 
   virtual int process(packet_cptr packet);

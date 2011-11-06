@@ -40,8 +40,7 @@ ac3_reader_c::probe_file(mm_io_c *io,
 }
 
 ac3_reader_c::ac3_reader_c(track_info_c &_ti)
-  throw (error_c):
-  generic_reader_c(_ti),
+  : generic_reader_c(_ti),
   chunk(memory_c::alloc(AC3_READ_SIZE)) {
 }
 
@@ -62,16 +61,16 @@ ac3_reader_c::read_headers() {
     size_t init_read_len = std::min(size - tag_size_start, (int64_t)AC3_READ_SIZE);
 
     if (io->read(chunk->get_buffer(), init_read_len) != init_read_len)
-      throw error_c(boost::format(Y("%1%: Could not read %2% bytes.")) % get_format_name() % AC3_READ_SIZE);
+      throw mtx::input::header_parsing_x();
 
     io->setFilePointer(tag_size_start, seek_beginning);
 
-  } catch (...) {
-    throw error_c(boost::format(Y("%1%: Could not open the source file.")) % get_format_name());
+  } catch (mtx::mm_io::exception &) {
+    throw mtx::input::open_x();
   }
 
   if (0 > find_ac3_header(chunk->get_buffer(), AC3_READ_SIZE, &ac3header, true))
-    throw error_c(boost::format(Y("ac3_reader: No valid AC3 packet found in the first %1% bytes.\n")) % AC3_READ_SIZE);
+    throw mtx::input::header_parsing_x();
 
   bytes_processed = 0;
   m_ti.m_id       = 0;          // ID for this track.

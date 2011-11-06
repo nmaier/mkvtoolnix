@@ -24,7 +24,7 @@ private:
   int64_t m_samples_output;
 
 public:
-  tta_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, int channels, int bits_per_sample, int sample_rate) throw (error_c);
+  tta_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, int channels, int bits_per_sample, int sample_rate);
   virtual ~tta_packetizer_c();
 
   virtual int process(packet_cptr packet);

@@ -22,7 +22,6 @@
 #include "common/smart_pointers.h"
 #include "mpegparser/M2VParser.h"
 
-class error_c;
 class generic_reader_c;
 class mm_io_c;
 class track_info_c;
@@ -36,7 +35,7 @@ private:
   double frame_rate, aspect_ratio;
 
 public:
-  mpeg_es_reader_c(track_info_c &_ti) throw (error_c);
+  mpeg_es_reader_c(track_info_c &_ti);
   virtual ~mpeg_es_reader_c();
 
   virtual const std::string get_format_name(bool translate = true) {

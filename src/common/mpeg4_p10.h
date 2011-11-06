@@ -172,19 +172,28 @@ namespace mpeg4 {
       };
     };
 
-    class nalu_size_length_error_c {
+    class nalu_size_length_x: public mtx::exception {
     protected:
-      int m_required_length;
+      unsigned int m_required_length;
 
     public:
-      nalu_size_length_error_c(int required_length)
+      nalu_size_length_x(unsigned int required_length)
         : m_required_length(required_length)
-        {
-      };
+      {
+      }
+      virtual ~nalu_size_length_x() throw() { }
 
-      int get_required_length() {
+      virtual const char *what() const throw() {
+        return "'NALU size' length too small";
+      }
+
+      virtual std::string error() const throw() {
+        return (boost::format("length of the 'NALU size' field too small: need at least %1% bytes") % m_required_length).str();
+      }
+
+      virtual unsigned int get_required_length() const {
         return m_required_length;
-      };
+      }
     };
 
     class avc_es_parser_c {

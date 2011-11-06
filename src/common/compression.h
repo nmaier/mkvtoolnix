@@ -44,11 +44,20 @@ enum compression_method_e {
 
 extern const char *xcompression_methods[];
 
-class compression_error_c: public error_c {
-public:
-  compression_error_c(const std::string &n_error): error_c(n_error) { }
-  compression_error_c(const boost::format &n_error): error_c(n_error.str()) { }
-};
+namespace mtx {
+  class compression_x: public exception {
+  protected:
+    std::string m_message;
+  public:
+    compression_x(const std::string &message)  : m_message(message)       { }
+    compression_x(const boost::format &message): m_message(message.str()) { }
+    virtual ~compression_x() throw() { }
+
+    virtual const char *what() const throw() {
+      return m_message.c_str();
+    }
+  };
+}
 
 class compressor_c;
 typedef counted_ptr<compressor_c> compressor_ptr;

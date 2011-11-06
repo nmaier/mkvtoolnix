@@ -50,7 +50,7 @@ create_directory(const char *path) {
   delete []wbuffer;
 
   if (0 != result)
-    throw error_c(boost::format(Y("mkdir(%1%) failed; errno = %2% (%3%)")) % path % errno % strerror(errno));
+    throw mtx::mm_io::create_directory_x(path, strerror(errno), errno);
 }
 
 int
@@ -181,7 +181,7 @@ void
 create_directory(const char *path) {
   std::string local_path = g_cc_local_utf8->native(path);
   if (0 != mkdir(local_path.c_str(), 0777))
-    throw error_c(boost::format(Y("mkdir(%1%) failed; errno = %2% (%3%)")) % path % errno % strerror(errno));
+    throw mtx::mm_io::create_directory_x(path, strerror(errno), errno);
 }
 
 int

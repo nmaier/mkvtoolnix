@@ -138,8 +138,8 @@ real_reader_c::probe_file(mm_io_c *io,
 }
 
 real_reader_c::real_reader_c(track_info_c &_ti)
-  throw (error_c):
-  generic_reader_c(_ti) {
+  : generic_reader_c(_ti)
+{
 }
 
 void
@@ -147,9 +147,9 @@ real_reader_c::read_headers() {
   file = rmff_open_file_with_io(m_ti.m_fname.c_str(), RMFF_OPEN_MODE_READING, &mm_io_file_io);
   if (NULL == file) {
     if (RMFF_ERR_NOT_RMFF == rmff_last_error)
-      throw error_c(boost::format(Y("%1%: Source is not a valid %1% file.")) % get_format_name());
+      throw mtx::input::invalid_format_x();
     else
-      throw error_c(boost::format(Y("%1%: Could not read the source file.")) % get_format_name());
+      throw mtx::input::open_x();
   }
   file->io->seek(file->handle, 0, SEEK_END);
   file_size = file->io->tell(file->handle);

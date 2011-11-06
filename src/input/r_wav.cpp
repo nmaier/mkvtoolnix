@@ -444,8 +444,7 @@ wav_reader_c::probe_file(mm_io_c *io,
 }
 
 wav_reader_c::wav_reader_c(track_info_c &ti_)
-  throw (error_c):
-  generic_reader_c(ti_),
+  : generic_reader_c(ti_),
   m_bytes_processed(0),
   m_bytes_in_data_chunks(0),
   m_remaining_bytes_in_current_data_chunk(0),
@@ -462,11 +461,11 @@ wav_reader_c::read_headers() {
     size = m_io->getFilePointer();
     m_io->setFilePointer(0, seek_beginning);
   } catch (...) {
-    throw error_c(boost::format(Y("%1%: Could not open the source file.")) % get_format_name());
+    throw mtx::input::open_x();
   }
 
   if (!wav_reader_c::probe_file(m_io.get_object(), size))
-    throw error_c(boost::format(Y("%1%: Source is not a valid %1% file.")) % get_format_name());
+    throw mtx::input::invalid_format_x();
 
   parse_file();
   create_demuxer();
@@ -480,12 +479,12 @@ wav_reader_c::parse_file() {
   int chunk_idx;
 
   if (m_io->read(&m_wheader.riff, sizeof(m_wheader.riff)) != sizeof(m_wheader.riff))
-    throw error_c(Y("wav_reader: could not read WAVE header."));
+    throw mtx::input::header_parsing_x();
 
   scan_chunks();
 
   if ((chunk_idx = find_chunk("fmt ")) == -1)
-    throw error_c(Y("wav_reader: No format chunk found."));
+    throw mtx::input::header_parsing_x();
 
   m_io->setFilePointer(m_chunks[chunk_idx].pos, seek_beginning);
 
@@ -510,11 +509,11 @@ wav_reader_c::parse_file() {
       m_format_tag = get_uint16_le(&m_wheader.common.wFormatTag);
 
   } catch (...) {
-    throw error_c(Y("wav_reader: The format chunk could not be read."));
+    throw mtx::input::header_parsing_x();
   }
 
   if ((m_cur_data_chunk_idx = find_chunk("data", 0, false)) == -1)
-    throw error_c(Y("wav_reader: No data chunk was found."));
+    throw mtx::input::header_parsing_x();
 
   if (debugging_requested("wav_reader") || debugging_requested("wav_reader_headers"))
     dump_headers();

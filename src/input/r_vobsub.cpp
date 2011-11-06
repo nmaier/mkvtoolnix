@@ -60,8 +60,7 @@ vobsub_reader_c::probe_file(mm_io_c *io,
 }
 
 vobsub_reader_c::vobsub_reader_c(track_info_c &_ti)
-  throw (error_c):
-  generic_reader_c(_ti),
+  : generic_reader_c(_ti),
   delay(0) {
 }
 
@@ -70,7 +69,7 @@ vobsub_reader_c::read_headers() {
   try {
     idx_file = new mm_text_io_c(new mm_file_io_c(m_ti.m_fname));
   } catch (...) {
-    throw error_c(boost::format(Y("%1%: Could not open the source file.")) % get_format_name());
+    throw mtx::input::open_x();
   }
 
   std::string sub_name = m_ti.m_fname;
@@ -82,7 +81,7 @@ vobsub_reader_c::read_headers() {
   try {
     sub_file = new mm_file_io_c(sub_name.c_str());
   } catch (...) {
-    throw error_c(Y("vobsub_reader: Could not open the sub file"));
+    throw mtx::input::extended_x(boost::format(Y("%1%: Could not open the sub file")) % get_format_name());
   }
 
   idx_data = "";

@@ -563,7 +563,7 @@ tab_chapters::load(wxString name) {
 
       e = analyzer->read_element(pos);
       if (e == NULL)
-        throw error_c(Y("This file does not contain valid chapters."));
+        throw mtx::exception();
       new_chapters = static_cast<KaxChapters *>(e);
       source_is_kax_file = true;
       source_is_simple_format = false;
@@ -575,11 +575,11 @@ tab_chapters::load(wxString name) {
                                     &source_is_simple_format);
       source_is_kax_file = false;
     }
-  } catch (error_c ex) {
+  } catch (mtx::exception &) {
     if (analyzer)
       delete analyzer;
     analyzer = NULL;
-    s = wxU(ex.get_error());
+    s = Z("This file does not contain valid chapters.");
     break_line(s);
     while (s[s.Length() - 1] == wxT('\n'))
       s.Remove(s.Length() - 1);

@@ -21,6 +21,23 @@
 
 #define KATE_HEADERTYPE_IDENTIFICATION 0x80
 
+namespace mtx {
+  namespace kate {
+    class header_parsing_x: public exception {
+    protected:
+      std::string m_message;
+    public:
+      header_parsing_x(const std::string &message)  : m_message(message)       { }
+      header_parsing_x(const boost::format &message): m_message(message.str()) { }
+      virtual ~header_parsing_x() throw() { }
+
+      virtual const char *what() const throw() {
+        return m_message.c_str();
+      }
+    };
+  }
+}
+
 struct kate_identification_header_t {
   uint8_t headertype;
   char kate_string[7];
@@ -43,6 +60,6 @@ struct kate_identification_header_t {
   kate_identification_header_t();
 };
 
-void kate_parse_identification_header(const unsigned char *buffer, int size, kate_identification_header_t &header) throw(error_c);
+void kate_parse_identification_header(const unsigned char *buffer, int size, kate_identification_header_t &header);
 
 #endif // __MTX_COMMON_KATE_COMMON_H

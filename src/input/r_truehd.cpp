@@ -38,7 +38,6 @@ truehd_reader_c::probe_file(mm_io_c *io,
 }
 
 truehd_reader_c::truehd_reader_c(track_info_c &_ti)
-  throw (error_c)
   : generic_reader_c(_ti)
   , m_chunk(memory_c::alloc(TRUEHD_READ_SIZE))
   , m_bytes_processed(0)
@@ -63,7 +62,7 @@ truehd_reader_c::read_headers() {
     size_t init_read_len = std::min(m_file_size - tag_size_start, (int64_t)TRUEHD_READ_SIZE);
 
     if (m_io->read(m_chunk->get_buffer(), init_read_len) != init_read_len)
-      throw error_c(boost::format(Y("%1%: Could not read %2% bytes.")) % get_format_name() % TRUEHD_READ_SIZE);
+      throw mtx::input::header_parsing_x();
 
     m_io->setFilePointer(tag_size_start, seek_beginning);
 
@@ -74,8 +73,8 @@ truehd_reader_c::read_headers() {
 
     show_demuxer_info();
 
-  } catch (...) {
-    throw error_c(boost::format(Y("%1%: Could not open the source file.")) % get_format_name());
+  } catch (mtx::mm_io::exception &) {
+    throw mtx::input::open_x();
   }
 }
 

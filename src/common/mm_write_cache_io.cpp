@@ -71,7 +71,7 @@ mm_write_cache_io_c::close() {
 uint32
 mm_write_cache_io_c::_read(void *buffer,
                            size_t size) {
-  throw mm_io_error_c("read-for-write-only-file");
+  throw mtx::mm_io::wrong_read_write_access_x();
   return 0;
 }
 
@@ -103,7 +103,7 @@ mm_write_cache_io_c::flush_cache() {
   size_t bytes_written = mm_proxy_io_c::_write(m_cache, m_cache_pos);
   mxverb(2, boost::format("mm_write_cache_io_c::flush_cache(): requested %1% written %2%\n") % m_cache_pos % bytes_written);
   if (bytes_written != m_cache_pos)
-    throw mm_io_error_c((boost::format("write-error: requested %1%, written %2%") % m_cache_pos % bytes_written).str());
+    throw mtx::mm_io::insufficient_space_x();
 
   m_cache_pos = 0;
 }

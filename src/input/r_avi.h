@@ -81,7 +81,7 @@ private:
   bool m_video_track_ok;
 
 public:
-  avi_reader_c(track_info_c &_ti) throw (error_c);
+  avi_reader_c(track_info_c &_ti);
   virtual ~avi_reader_c();
 
   virtual const std::string get_format_name(bool translate = true) {

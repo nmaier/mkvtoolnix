@@ -28,7 +28,6 @@ vobbtn_packetizer_c::vobbtn_packetizer_c(generic_reader_c *p_reader,
                                          track_info_c &p_ti,
                                          int width,
                                          int height)
-  throw (error_c)
   : generic_packetizer_c(p_reader, p_ti)
   , m_previous_timecode(0)
   , m_width(width)

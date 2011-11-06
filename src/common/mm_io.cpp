@@ -109,7 +109,7 @@ mm_file_io_c::mm_file_io_c(const std::string &path,
 # endif
       break;
     default:
-      throw mm_io_error_c(Y("Unknown open mode"));
+      throw mtx::invalid_parameter_x();
   }
 
   if ((MODE_WRITE == mode) || (MODE_CREATE == mode))
@@ -118,12 +118,12 @@ mm_file_io_c::mm_file_io_c(const std::string &path,
 
   struct stat st;
   if ((0 == stat(local_path.c_str(), &st)) && S_ISDIR(st.st_mode))
-    throw mm_io_open_error_c();
+    throw mtx::mm_io::open_x();
 
   m_file = (FILE *)fopen(local_path.c_str(), cmode);
 
   if (NULL == m_file)
-    throw mm_io_open_error_c();
+    throw mtx::mm_io::open_x();
 
 # if HAVE_POSIX_FADVISE
   if (POSIX_FADV_WILLNEED == advise)
@@ -136,7 +136,7 @@ void
 mm_file_io_c::setup_fadvise(const std::string &local_path) {
   struct stat st;
   if (0 != stat(local_path.c_str(), &st))
-    throw mm_io_open_error_c();
+    throw mtx::mm_io::open_x();
 
   m_file_id.initialize(st);
 
@@ -163,7 +163,7 @@ mm_file_io_c::setFilePointer(int64 offset,
              :                          SEEK_CUR;
 
   if (fseeko((FILE *)m_file, offset, whence) != 0)
-    throw mm_io_seek_error_c();
+    throw mtx::mm_io::seek_x();
 
   if (mode == seek_beginning)
     m_current_position = offset;
@@ -372,7 +372,7 @@ mm_io_c::getline() {
   std::string s;
 
   if (eof())
-    throw mm_io_eof_error_c();
+    throw mtx::mm_io::end_of_file_x();
 
   while (read(&c, 1) == 1) {
     if (c == '\r')
@@ -468,7 +468,7 @@ mm_io_c::read_uint8() {
   unsigned char value;
 
   if (read(&value, 1) != 1)
-    throw error_c(Y("end-of-file"));
+    throw mtx::mm_io::end_of_file_x();
 
   return value;
 }
@@ -478,7 +478,7 @@ mm_io_c::read_uint16_le() {
   unsigned char buffer[2];
 
   if (read(buffer, 2) != 2)
-    throw error_c(Y("end-of-file"));
+    throw mtx::mm_io::end_of_file_x();
 
   return get_uint16_le(buffer);
 }
@@ -488,7 +488,7 @@ mm_io_c::read_uint24_le() {
   unsigned char buffer[3];
 
   if (read(buffer, 3) != 3)
-    throw error_c(Y("end-of-file"));
+    throw mtx::mm_io::end_of_file_x();
 
   return get_uint24_le(buffer);
 }
@@ -498,7 +498,7 @@ mm_io_c::read_uint32_le() {
   unsigned char buffer[4];
 
   if (read(buffer, 4) != 4)
-    throw error_c(Y("end-of-file"));
+    throw mtx::mm_io::end_of_file_x();
 
   return get_uint32_le(buffer);
 }
@@ -508,7 +508,7 @@ mm_io_c::read_uint64_le() {
   unsigned char buffer[8];
 
   if (read(buffer, 8) != 8)
-    throw error_c(Y("end-of-file"));
+    throw mtx::mm_io::end_of_file_x();
 
   return get_uint64_le(buffer);
 }
@@ -518,7 +518,7 @@ mm_io_c::read_uint16_be() {
   unsigned char buffer[2];
 
   if (read(buffer, 2) != 2)
-    throw error_c(Y("end-of-file"));
+    throw mtx::mm_io::end_of_file_x();
 
   return get_uint16_be(buffer);
 }
@@ -528,7 +528,7 @@ mm_io_c::read_uint24_be() {
   unsigned char buffer[3];
 
   if (read(buffer, 3) != 3)
-    throw error_c(Y("end-of-file"));
+    throw mtx::mm_io::end_of_file_x();
 
   return get_uint24_be(buffer);
 }
@@ -538,7 +538,7 @@ mm_io_c::read_uint32_be() {
   unsigned char buffer[4];
 
   if (read(buffer, 4) != 4)
-    throw error_c(Y("end-of-file"));
+    throw mtx::mm_io::end_of_file_x();
 
   return get_uint32_be(buffer);
 }
@@ -548,7 +548,7 @@ mm_io_c::read_uint64_be() {
   unsigned char buffer[8];
 
   if (read(buffer, 8) != 8)
-    throw error_c(Y("end-of-file"));
+    throw mtx::mm_io::end_of_file_x();
 
   return get_uint64_be(buffer);
 }
@@ -564,7 +564,7 @@ mm_io_c::read(memory_cptr &buffer,
     buffer->resize(size + offset);
 
   if (read(buffer->get_buffer() + offset, size) != size)
-    throw mm_io_eof_error_c();
+    throw mtx::mm_io::end_of_file_x();
 
   buffer->set_size(size + offset);
 
@@ -637,7 +637,7 @@ mm_io_c::write(const memory_cptr &buffer,
   size = std::min(buffer->get_size() - offset, size);
 
   if (write(buffer->get_buffer() + offset, size) != size)
-    throw mm_io_eof_error_c();
+    throw mtx::mm_io::end_of_file_x();
   return size;
 }
 
@@ -646,7 +646,7 @@ mm_io_c::skip(int64 num_bytes) {
   uint64_t pos = getFilePointer();
   setFilePointer(pos + num_bytes);
   if ((pos + num_bytes) != getFilePointer())
-    throw error_c(Y("end-of-file"));
+    throw mtx::mm_io::end_of_file_x();
 }
 
 void
@@ -810,7 +810,7 @@ mm_mem_io_c::mm_mem_io_c(unsigned char *mem,
   , m_read_only(false)
 {
   if (0 >= m_increase)
-    throw error_c(Y("wrong usage: increase < 0"));
+    throw mtx::invalid_parameter_x();
 
   if ((NULL == m_mem) && (0 < m_increase)) {
     if (0 == mem_size)
@@ -835,7 +835,7 @@ mm_mem_io_c::mm_mem_io_c(const unsigned char *mem,
   , m_read_only(true)
 {
   if (NULL == m_ro_mem)
-    throw error_c(Y("wrong usage: read-only with NULL memory"));
+    throw mtx::invalid_parameter_x();
 }
 
 mm_mem_io_c::~mm_mem_io_c() {
@@ -851,7 +851,7 @@ void
 mm_mem_io_c::setFilePointer(int64 offset,
                             seek_mode mode) {
   if ((NULL == m_mem) && (NULL == m_ro_mem) && (0 == m_mem_size))
-    throw error_c(Y("wrong usage: read-only with NULL memory"));
+    throw mtx::invalid_parameter_x();
 
   int64_t new_pos
     = seek_beginning == mode ? offset
@@ -861,7 +861,7 @@ mm_mem_io_c::setFilePointer(int64 offset,
   if ((0 <= new_pos) && (static_cast<int64_t>(m_mem_size) >= new_pos))
     m_pos = new_pos;
   else
-    throw mm_io_seek_error_c();
+    throw mtx::mm_io::seek_x();
 }
 
 uint32
@@ -881,7 +881,7 @@ size_t
 mm_mem_io_c::_write(const void *buffer,
                     size_t size) {
   if (m_read_only)
-    throw error_c(Y("wrong usage: writing to read-only memory"));
+    throw mtx::mm_io::wrong_read_write_access_x();
 
   int64_t wbytes;
   if ((m_pos + size) >= m_allocated) {
@@ -1104,7 +1104,7 @@ mm_text_io_c::read_next_char(char *buffer) {
 std::string
 mm_text_io_c::getline() {
   if (eof())
-    throw error_c(Y("end-of-file"));
+    throw mtx::mm_io::end_of_file_x();
 
   if (!m_eol_style_detected)
     detect_eol_style();

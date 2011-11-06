@@ -226,7 +226,7 @@ read_id(int64_t end_pos) {
 
     return vint_c(id, id_len);
 
-  } catch (error_c &error) {
+  } catch (mtx::exception &error) {
     throw id_error_c(id_error_c::end_of_file);
   }
 }
@@ -263,7 +263,7 @@ read_size(int64_t end_pos) {
 
     return vint_c(size, size_len);
 
-  } catch (error_c &error) {
+  } catch (mtx::exception &error) {
     throw size_error_c(size_error_c::end_of_file);
   }
 }

@@ -318,9 +318,9 @@ ogm_reader_c::probe_file(mm_io_c *io,
    Opens the file for processing, initializes an ogg_sync_state used for
    reading from an OGG stream.
 */
-ogm_reader_c::ogm_reader_c(track_info_c &_ti)
-  throw (error_c):
-  generic_reader_c(_ti) {
+ogm_reader_c::ogm_reader_c(track_info_c &ti)
+  : generic_reader_c(ti)
+{
 }
 
 void
@@ -329,17 +329,17 @@ ogm_reader_c::read_headers() {
     io        = new mm_file_io_c(m_ti.m_fname);
     file_size = io->get_size();
   } catch (...) {
-    throw error_c(boost::format(Y("%1%: Could not open the source file.")) % get_format_name());
+    throw mtx::input::open_x();
   }
   if (!ogm_reader_c::probe_file(io, file_size))
-    throw error_c(boost::format(Y("%1%: Source is not a valid %1% file.")) % get_format_name());
+    throw mtx::input::invalid_format_x();
 
   ogg_sync_init(&oy);
 
   show_demuxer_info();
 
   if (read_headers_internal() <= 0)
-    throw error_c(boost::format(Y("%1%: Could not read all header packets.")) % get_format_name());
+    throw mtx::input::header_parsing_x();
   handle_stream_comments();
 }
 
@@ -1333,8 +1333,8 @@ ogm_v_theora_demuxer_c::initialize() {
 
     display_width  = theora.display_width;
     display_height = theora.display_height;
-  } catch (error_c &e) {
-    mxerror_tid(reader->m_ti.m_fname, track_id, boost::format(Y("The Theora identifaction header could not be parsed (%1%).\n")) % e.get_error());
+  } catch (mtx::theora::header_parsing_x &e) {
+    mxerror_tid(reader->m_ti.m_fname, track_id, boost::format(Y("The Theora identifaction header could not be parsed (%1%).\n")) % e.error());
   }
 }
 
@@ -1503,8 +1503,8 @@ ogm_s_kate_demuxer_c::initialize() {
     memory_cptr &mem = packet_data[0];
     kate_parse_identification_header(mem->get_buffer(), mem->get_size(), kate);
     num_header_packets = kate.nheaders;
-  } catch (error_c &e) {
-    mxerror_tid(reader->m_ti.m_fname, track_id, boost::format(Y("The Kate identifaction header could not be parsed (%1%).\n")) % e.get_error());
+  } catch (mtx::kate::header_parsing_x &e) {
+    mxerror_tid(reader->m_ti.m_fname, track_id, boost::format(Y("The Kate identifaction header could not be parsed (%1%).\n")) % e.error());
   }
 }
 

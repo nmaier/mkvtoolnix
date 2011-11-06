@@ -35,20 +35,18 @@ get_bits32_le(bit_cursor_c &bc) {
 void
 kate_parse_identification_header(const unsigned char *buffer,
                                  int size,
-                                 kate_identification_header_t &header)
-  throw(error_c) {
-
+                                 kate_identification_header_t &header) {
   bit_cursor_c bc(buffer, size);
   int i;
 
   header.headertype = bc.get_bits(8);
   if (KATE_HEADERTYPE_IDENTIFICATION != header.headertype)
-    throw error_c(boost::format(Y("Wrong header type: 0x%|1$02x| != 0x%|2$02x|")) % header.headertype % KATE_HEADERTYPE_IDENTIFICATION);
+    throw mtx::kate::header_parsing_x(boost::format(Y("Wrong header type: 0x%|1$02x| != 0x%|2$02x|")) % header.headertype % KATE_HEADERTYPE_IDENTIFICATION);
 
   for (i = 0; 7 > i; ++i)
     header.kate_string[i] = bc.get_bits(8);
   if (memcmp(header.kate_string, "kate\0\0\0", 7))
-    throw error_c(boost::format(Y("Wrong identification string: '%|1$7s|' != 'kate\\0\\0\\0'")) % header.kate_string); /* won't print NULs well, but hey */
+    throw mtx::kate::header_parsing_x(boost::format(Y("Wrong identification string: '%|1$7s|' != 'kate\\0\\0\\0'")) % header.kate_string); /* won't print NULs well, but hey */
 
   bc.get_bits(8); // we don't need those - they are reserved
 
@@ -58,7 +56,7 @@ kate_parse_identification_header(const unsigned char *buffer,
   // do not test vmin, as the header is stable for minor version changes
   static const int supported_version = 0;
   if (header.vmaj > supported_version)
-    throw error_c(boost::format(Y("Wrong Kate version: %1%.%2% > %3%.x")) % header.vmaj % header.vmin % supported_version);
+    throw mtx::kate::header_parsing_x(boost::format(Y("Wrong Kate version: %1%.%2% > %3%.x")) % header.vmaj % header.vmin % supported_version);
 
   header.nheaders = bc.get_bits(8);
   header.tenc     = bc.get_bits(8);
@@ -75,9 +73,9 @@ kate_parse_identification_header(const unsigned char *buffer,
   for (i = 0; 16 > i; ++i)
     header.language[i] = bc.get_bits(8);
   if (header.language[15])
-    throw error_c(Y("Language is not NUL terminated"));
+    throw mtx::kate::header_parsing_x(Y("Language is not NUL terminated"));
   for (i = 0; 16 > i; ++i)
     header.category[i] = bc.get_bits(8);
   if (header.category[15])
-    throw error_c(Y("Category is not NUL terminated"));
+    throw mtx::kate::header_parsing_x(Y("Category is not NUL terminated"));
 }

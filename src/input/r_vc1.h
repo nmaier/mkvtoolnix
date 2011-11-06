@@ -32,7 +32,7 @@ private:
   vc1::sequence_header_t m_seqhdr;
 
 public:
-  vc1_es_reader_c(track_info_c &n_ti) throw (error_c);
+  vc1_es_reader_c(track_info_c &n_ti);
 
   virtual const std::string get_format_name(bool translate = true) {
     return translate ? Y("VC1") : "VC1";

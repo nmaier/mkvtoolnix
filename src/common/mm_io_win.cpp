@@ -70,7 +70,7 @@ mm_file_io_c::mm_file_io_c(const std::string &path,
       disposition = CREATE_ALWAYS;
       break;
     default:
-      throw mm_io_error_c(Y("Unknown open mode"));
+      throw mtx::invalid_set_file_pointer;
   }
 
   if ((MODE_WRITE == mode) || (MODE_CREATE == mode))
@@ -78,7 +78,7 @@ mm_file_io_c::mm_file_io_c(const std::string &path,
 
   m_file = (void *)CreateFileUtf8(path.c_str(), access_mode, share_mode, NULL, disposition, 0, NULL);
   if ((HANDLE)m_file == (HANDLE)0xFFFFFFFF)
-    throw mm_io_open_error_c();
+    throw mtx::mm_io::open_x();
 
   m_dos_style_newlines = true;
 }
@@ -114,7 +114,7 @@ mm_file_io_c::setFilePointer(int64 offset,
   DWORD low    = SetFilePointer((HANDLE)m_file, (LONG)(offset & 0xffffffff), &high, method);
 
   if ((INVALID_SET_FILE_POINTER == low) && (GetLastError() != NO_ERROR))
-    throw mm_io_seek_error_c();
+    throw mtx::mm_io::seek_x();
 
   m_current_position = (int64_t)low + ((int64_t)high << 32);
 }

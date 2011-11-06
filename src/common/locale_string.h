@@ -18,16 +18,20 @@
 
 #include "common/error.h"
 
-class locale_string_format_error_c: public error_c {
-public:
-  std::string m_format;
+namespace mtx {
+  class locale_string_format_x: public exception {
+  protected:
+    std::string m_format;
+  public:
+    locale_string_format_x(const std::string &format)  : m_format(format)       { }
+    locale_string_format_x(const boost::format &format): m_format(format.str()) { }
+    virtual ~locale_string_format_x() throw() { }
 
-public:
-  locale_string_format_error_c(std::string format)
-    : m_format(format)
-  {
+    virtual const char *what() const throw() {
+      return m_format.c_str();
+    }
   };
-};
+}
 
 class locale_string_c {
 protected:

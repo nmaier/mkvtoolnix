@@ -31,7 +31,7 @@ protected:
   std::vector<truehd_frame_cptr> m_frames;
 
 public:
-  truehd_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, truehd_frame_t::codec_e codec, int sampling_rate, int channels) throw (error_c);
+  truehd_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, truehd_frame_t::codec_e codec, int sampling_rate, int channels);
   virtual ~truehd_packetizer_c();
 
   virtual int process(packet_cptr packet);

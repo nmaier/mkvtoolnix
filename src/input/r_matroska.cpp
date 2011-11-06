@@ -194,7 +194,6 @@ kax_reader_c::probe_file(mm_io_c *io,
 }
 
 kax_reader_c::kax_reader_c(track_info_c &_ti)
-  throw (error_c)
   : generic_reader_c(_ti)
   , m_segment_duration(0)
   , m_last_timecode(0)
@@ -1219,7 +1218,7 @@ kax_reader_c::read_headers_seek_head(EbmlElement *l0,
 void
 kax_reader_c::read_headers() {
   if (!read_headers_internal())
-    throw error_c(Y("matroska_reader: Failed to read the headers."));
+    throw mtx::input::header_parsing_x();
   show_demuxer_info();
 }
 

@@ -31,7 +31,7 @@ private:
   truehd_frame_cptr m_header;
 
 public:
-  truehd_reader_c(track_info_c &_ti) throw (error_c);
+  truehd_reader_c(track_info_c &_ti);
   virtual ~truehd_reader_c();
 
   virtual const std::string get_format_name(bool translate = true) {

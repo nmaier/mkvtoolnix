@@ -26,7 +26,7 @@ private:
   srt_parser_cptr m_subs;
 
 public:
-  srt_reader_c(track_info_c &_ti) throw (error_c);
+  srt_reader_c(track_info_c &_ti);
   virtual ~srt_reader_c();
 
   virtual const std::string get_format_name(bool translate = true) {

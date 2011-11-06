@@ -132,7 +132,7 @@ base64_decode(const std::string &src,
         :                                                        255;
 
       if (255 == values[values_idx])
-        throw error_c(Y("Invalid Base64 character encountered"));
+        throw mtx::base64::invalid_data_x();
     }
 
     unsigned char mid[6];

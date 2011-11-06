@@ -28,7 +28,6 @@ aac_packetizer_c::aac_packetizer_c(generic_reader_c *p_reader,
                                    int channels,
                                    bool emphasis_present,
                                    bool headerless)
-  throw (error_c)
   : generic_packetizer_c(p_reader, p_ti)
   , m_bytes_output(0)
   , m_packetno(0)

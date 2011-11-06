@@ -191,7 +191,7 @@ private:
   file_status_e m_file_status;
 
 public:
-  kax_reader_c(track_info_c &_ti) throw (error_c);
+  kax_reader_c(track_info_c &_ti);
   virtual ~kax_reader_c();
 
   virtual const std::string get_format_name(bool translate = true) {

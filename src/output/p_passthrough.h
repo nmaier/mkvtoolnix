@@ -20,8 +20,7 @@
 
 class passthrough_packetizer_c: public generic_packetizer_c {
 public:
-  passthrough_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti)
-    throw (error_c);
+  passthrough_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti);
 
   virtual int process(packet_cptr packet);
   virtual void set_headers();

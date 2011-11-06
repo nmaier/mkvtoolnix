@@ -98,7 +98,7 @@ private:
   bool done;
 
 public:
-  real_reader_c(track_info_c &_ti) throw (error_c);
+  real_reader_c(track_info_c &_ti);
   virtual ~real_reader_c();
 
   virtual const std::string get_format_name(bool translate = true) {

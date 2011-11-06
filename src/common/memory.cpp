@@ -17,7 +17,9 @@
 #include "common/error.h"
 
 void
-memory_c::resize(size_t new_size) throw() {
+memory_c::resize(size_t new_size)
+  throw()
+{
   if (!its_counter)
     its_counter = new counter(NULL, 0, false);
 
@@ -78,7 +80,7 @@ lace_memory_xiph(const std::vector<memory_cptr> &blocks) {
 std::vector<memory_cptr>
 unlace_memory_xiph(memory_cptr &buffer) {
   if (1 > buffer->get_size())
-    throw error_c("Lacing error: Buffer too small");
+    throw mtx::mem::lacing_x("Buffer too small");
 
   std::vector<int> sizes;
   unsigned char *ptr = buffer->get_buffer();
@@ -96,7 +98,7 @@ unlace_memory_xiph(memory_cptr &buffer) {
     }
 
     if (ptr >= end)
-      throw error_c("Lacing error: End-of-buffer while reading the block sizes");
+      throw mtx::mem::lacing_x("End-of-buffer while reading the block sizes");
 
     size += *ptr;
     ++ptr;
@@ -111,7 +113,7 @@ unlace_memory_xiph(memory_cptr &buffer) {
 
   for (i = 0; sizes.size() > i; ++i) {
     if ((ptr + sizes[i]) > end)
-      throw error_c("Lacing error: End-of-buffer while assigning the blocks");
+      throw mtx::mem::lacing_x("End-of-buffer while assigning the blocks");
 
     blocks.push_back(memory_cptr(new memory_c(ptr, sizes[i], false)));
     ptr += sizes[i];

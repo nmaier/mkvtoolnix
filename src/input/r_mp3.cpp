@@ -27,8 +27,8 @@ mp3_reader_c::probe_file(mm_io_c *io,
 }
 
 mp3_reader_c::mp3_reader_c(track_info_c &_ti)
-  throw (error_c):
-  generic_reader_c(_ti) {
+  : generic_reader_c(_ti)
+{
 }
 
 void
@@ -41,7 +41,7 @@ mp3_reader_c::read_headers() {
 
     int pos = find_valid_headers(io, 2 * 1024 * 1024, 5);
     if (0 > pos)
-      throw error_c(Y("Could not find a valid MP3 packet."));
+      throw mtx::input::header_parsing_x();
 
     io->setFilePointer(pos, seek_beginning);
     io->read(buf, 4);
@@ -57,8 +57,9 @@ mp3_reader_c::read_headers() {
 
     bytes_processed = 0;
     m_ti.m_id       = 0;        // ID for this track.
-  } catch (...) {
-    throw error_c(boost::format(Y("%1%: Could not open the source file.")) % get_format_name());
+
+  } catch (mtx::mm_io::exception &) {
+    throw mtx::input::open_x();
   }
 }
 

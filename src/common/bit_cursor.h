@@ -51,7 +51,7 @@ public:
     while (n > 0) {
       if (m_byte_position >= m_end_of_data) {
         m_out_of_data = true;
-        throw mm_io_eof_error_c();
+        throw mtx::mm_io::end_of_file_x();
       }
 
       unsigned int b = 8; // number of bits to extract from the current byte
@@ -104,7 +104,7 @@ public:
 
     while (0 < n) {
       if (tmp_byte_position >= m_end_of_data)
-        throw mm_io_eof_error_c();
+        throw mtx::mm_io::end_of_file_x();
 
       unsigned int b = 8; // number of bits to extract from the current byte
       if (b > n)
@@ -140,7 +140,7 @@ public:
       return;
 
     if (m_out_of_data)
-      throw mm_io_eof_error_c();
+      throw mtx::mm_io::end_of_file_x();
 
     m_bits_valid     = 0;
     m_byte_position += 1;
@@ -151,7 +151,7 @@ public:
       m_byte_position = m_end_of_data;
       m_out_of_data   = true;
 
-      throw mm_io_seek_error_c();
+      throw mtx::mm_io::end_of_file_x();
     }
 
     m_byte_position = m_start_of_data + (pos / 8);
@@ -203,7 +203,7 @@ public:
   void put_bit(bool bit) {
     if (m_byte_position >= m_end_of_data) {
       m_out_of_data = true;
-      throw mm_io_eof_error_c();
+      throw mtx::mm_io::end_of_file_x();
     }
 
     if (bit)
@@ -229,7 +229,7 @@ public:
       m_byte_position = m_end_of_data;
       m_out_of_data   = true;
 
-      throw mm_io_seek_error_c();
+      throw mtx::mm_io::seek_x();
     }
 
     m_byte_position = m_start_of_data + (pos / 8);

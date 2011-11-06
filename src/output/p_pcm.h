@@ -29,8 +29,7 @@ private:
   samples_to_timecode_converter_c m_s2tc;
 
 public:
-  pcm_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, int p_samples_per_sec, int channels, int bits_per_sample,
-                   bool big_endian = false, bool ieee_float = false) throw (error_c);
+  pcm_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, int p_samples_per_sec, int channels, int bits_per_sample, bool big_endian = false, bool ieee_float = false);
   virtual ~pcm_packetizer_c();
 
   virtual int process(packet_cptr packet);

@@ -60,7 +60,6 @@ std::vector<generic_packetizer_c *> ptzrs_in_header_order;
 
 generic_packetizer_c::generic_packetizer_c(generic_reader_c *reader,
                                            track_info_c &ti)
-  throw(error_c)
   : m_num_packets(0)
   , m_next_packet_wo_assigned_timecode(0)
   , m_free_refs(-1)
@@ -775,8 +774,8 @@ generic_packetizer_c::add_packet(packet_cptr pack) {
       for (i = 0; pack->data_adds.size() > i; ++i)
         m_compressor->compress(pack->data_adds[i]);
 
-    } catch (compression_error_c &e) {
-      mxerror_tid(m_ti.m_fname, m_ti.m_id, boost::format(Y("Compression failed: %1%\n")) % e.get_error());
+    } catch (mtx::compression_x &e) {
+      mxerror_tid(m_ti.m_fname, m_ti.m_id, boost::format(Y("Compression failed: %1%\n")) % e.error());
     }
   }
 

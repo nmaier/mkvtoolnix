@@ -61,8 +61,7 @@ usf_reader_c::probe_file(mm_text_io_c *io,
 }
 
 usf_reader_c::usf_reader_c(track_info_c &_ti)
-  throw (error_c):
-  generic_reader_c(_ti),
+  : generic_reader_c(_ti),
   m_copy_depth(0),
   m_longest_track(-1),
   m_strip(false) {
@@ -75,7 +74,7 @@ usf_reader_c::read_headers() {
     size_t i;
 
     if (!usf_reader_c::probe_file(m_xml_source, 0))
-      throw error_c(boost::format(Y("%1%: Source is not a valid %1% file.")) % get_format_name());
+      throw mtx::input::invalid_format_x();
 
     parse_xml_file();
     m_private_data += "</USFSubtitles>";
@@ -92,11 +91,11 @@ usf_reader_c::read_headers() {
         m_tracks[i].m_language = m_default_language;
     }
 
-  } catch (xml_parser_error_c &error) {
-    throw error_c(error.get_error());
+  } catch (mtx::xml::parser_x &error) {
+    throw mtx::input::extended_x(error.error());
 
-  } catch (mm_io_error_c &) {
-    throw error_c(boost::format(Y("%1%: Could not open the source file.")) % get_format_name());
+  } catch (mtx::mm_io::exception &) {
+    throw mtx::input::open_x();
   }
 
   show_demuxer_info();
@@ -314,7 +313,7 @@ usf_reader_c::try_to_parse_timecode(const char *s) {
   int64_t timecode;
 
   if (!parse_timecode(s, timecode))
-    throw xml_parser_error_c(Y("Invalid start or stop timecode"), m_xml_parser);
+    throw mtx::xml::parser_x(Y("Invalid start or stop timecode"), m_xml_parser);
 
   return timecode;
 }

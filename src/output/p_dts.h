@@ -34,8 +34,7 @@ private:
   std::deque<int64_t> m_available_timecodes;
 
 public:
-
-  dts_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, const dts_header_t &dts_header, bool get_first_header_later = false) throw (error_c);
+  dts_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, const dts_header_t &dts_header, bool get_first_header_later = false);
   virtual ~dts_packetizer_c();
 
   virtual int process(packet_cptr packet);

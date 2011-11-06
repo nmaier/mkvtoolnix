@@ -72,7 +72,7 @@ private:
   uint32_t m_format_tag;
 
 public:
-  wav_reader_c(track_info_c &_ti) throw (error_c);
+  wav_reader_c(track_info_c &_ti);
   virtual ~wav_reader_c();
 
   virtual const std::string get_format_name(bool translate = true) {

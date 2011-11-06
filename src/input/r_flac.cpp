@@ -106,8 +106,7 @@ flac_reader_c::probe_file(mm_io_c *io,
 }
 
 flac_reader_c::flac_reader_c(track_info_c &_ti)
-  throw (error_c):
-  generic_reader_c(_ti),
+  : generic_reader_c(_ti),
   samples(0),
   header(NULL) {
 }
@@ -118,7 +117,7 @@ flac_reader_c::read_headers() {
     file      = new mm_file_io_c(m_ti.m_fname);
     file_size = file->get_size();
   } catch (...) {
-    throw error_c(boost::format(Y("%1%: Could not open the source file.")) % get_format_name());
+    throw mtx::input::open_x();
   }
 
   if (g_identifying)
@@ -127,7 +126,7 @@ flac_reader_c::read_headers() {
   show_demuxer_info();
 
   if (!parse_file())
-    throw error_c(boost::format(Y("%1%: Could not read all header packets.")) % get_format_name());
+    throw mtx::input::header_parsing_x();
 
   try {
     uint32_t block_size = 0;
@@ -148,7 +147,7 @@ flac_reader_c::read_headers() {
     header      = buf;
     header_size = block_size;
 
-  } catch (error_c &error) {
+  } catch (mtx::exception &) {
     mxerror(Y("flac_reader: could not initialize the FLAC packetizer.\n"));
   }
 }

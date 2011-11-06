@@ -27,6 +27,23 @@ namespace libebml {
 
 using namespace libebml;
 
+namespace mtx {
+  namespace xml {
+    class formatter_x: public exception {
+    protected:
+      std::string m_message;
+    public:
+      formatter_x(const std::string &message)  : m_message(message)       { }
+      formatter_x(const boost::format &message): m_message(message.str()) { }
+      virtual ~formatter_x() throw() { }
+
+      virtual const char *what() const throw() {
+        return m_message.c_str();
+      }
+    };
+  }
+}
+
 struct xml_writer_cb_t {
   int level;
   int parent_idx;
@@ -36,18 +53,6 @@ struct xml_writer_cb_t {
 };
 
 void write_xml_element_rec(int level, int parent_idx, EbmlElement *e, mm_io_c *out, const parser_element_t *element_map);
-
-class xml_formatter_error_c: public error_c {
-public:
-  xml_formatter_error_c(const std::string &_error)
-    : error_c(_error)
-  {
-  }
-  xml_formatter_error_c(const boost::format &_error)
-    : error_c(_error.str())
-  {
-  }
-};
 
 class xml_formatter_c: public xml_parser_c {
 private:

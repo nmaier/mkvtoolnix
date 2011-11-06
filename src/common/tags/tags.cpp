@@ -127,7 +127,7 @@ find_simple_tag(const UTFstring &name,
       }
     }
 
-  throw "";
+  throw false;
 }
 
 std::string

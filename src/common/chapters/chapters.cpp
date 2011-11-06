@@ -45,7 +45,7 @@ std::string g_default_chapter_country;
 */
 inline void
 chapter_error(const std::string &error) {
-  throw error_c(boost::format(Y("Simple chapter parser: %1%\n")) % error);
+  throw mtx::chapter_parser_x(boost::format(Y("Simple chapter parser: %1%\n")) % error);
 }
 
 inline void
@@ -232,9 +232,9 @@ parse_simple_chapters(mm_text_io_c *in,
         }
       }
     }
-  } catch (error_c e) {
+  } catch (mtx::chapter_parser_x &e) {
     delete chaps;
-    throw error_c(e);
+    throw;
   }
 
   if (0 == num) {
@@ -293,14 +293,14 @@ parse_chapters(const std::string &file_name,
     mm_text_io_c in(new mm_file_io_c(file_name));
     return parse_chapters(&in, min_tc, max_tc, offset, language, charset, exception_on_error, is_simple_format, tags);
 
-  } catch (error_c &e) {
+  } catch (mtx::chapter_parser_x &e) {
     if (exception_on_error)
       throw;
-    mxerror(boost::format(Y("Could not parse the chapters in '%1%': %2%\n")) % file_name % e.get_error());
+    mxerror(boost::format(Y("Could not parse the chapters in '%1%': %2%\n")) % file_name % e.error());
 
   } catch (...) {
     if (exception_on_error)
-      throw error_c(boost::format(Y("Could not open '%1%' for reading.\n")) % file_name);
+      throw mtx::chapter_parser_x(boost::format(Y("Could not open '%1%' for reading.\n")) % file_name);
     else
       mxerror(boost::format(Y("Could not open '%1%' for reading.\n")) % file_name);
   }
@@ -371,11 +371,11 @@ parse_chapters(mm_text_io_c *in,
     if (probe_xml_chapters(in))
       return parse_xml_chapters(in, min_tc, max_tc, offset, exception_on_error);
 
-    throw error_c(boost::format(Y("Unknown chapter file format in '%1%'. It does not contain a supported chapter format.\n")) % in->get_file_name());
-  } catch (error_c e) {
+    throw mtx::chapter_parser_x(boost::format(Y("Unknown chapter file format in '%1%'. It does not contain a supported chapter format.\n")) % in->get_file_name());
+  } catch (mtx::chapter_parser_x &e) {
     if (exception_on_error)
-      throw e;
-    mxerror(e.get_error());
+      throw;
+    mxerror(e.error());
   }
 
   return NULL;

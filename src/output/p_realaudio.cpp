@@ -27,7 +27,6 @@ ra_packetizer_c::ra_packetizer_c(generic_reader_c *p_reader,
                                  uint32_t fourcc,
                                  unsigned char *private_data,
                                  int private_size)
-  throw (error_c)
   : generic_packetizer_c(p_reader, p_ti)
   , m_samples_per_sec(samples_per_sec)
   , m_channels(channels)

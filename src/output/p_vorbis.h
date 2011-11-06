@@ -22,6 +22,23 @@
 #include "merge/pr_generic.h"
 #include "merge/pr_generic.h"
 
+namespace mtx {
+  namespace output {
+    class vorbis_x: public exception {
+    protected:
+      std::string m_message;
+    public:
+      vorbis_x(const std::string &message)  : m_message(message)       { }
+      vorbis_x(const boost::format &message): m_message(message.str()) { }
+      virtual ~vorbis_x() throw() { }
+
+      virtual const char *what() const throw() {
+        return m_message.c_str();
+      }
+    };
+  }
+}
+
 class vorbis_packetizer_c: public generic_packetizer_c {
 private:
   int64_t m_previous_bs, m_samples, m_previous_samples_sum, m_previous_timecode, m_timecode_offset;
@@ -33,7 +50,7 @@ public:
   vorbis_packetizer_c(generic_reader_c *p_reader,  track_info_c &p_ti,
                       unsigned char *d_header,     int l_header,
                       unsigned char *d_comments,   int l_comments,
-                      unsigned char *d_codecsetup, int l_codecsetup) throw (error_c);
+                      unsigned char *d_codecsetup, int l_codecsetup);
   virtual ~vorbis_packetizer_c();
 
   virtual int process(packet_cptr packet);

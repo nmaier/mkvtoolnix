@@ -26,7 +26,6 @@ dts_packetizer_c::dts_packetizer_c(generic_reader_c *p_reader,
                                    track_info_c &p_ti,
                                    const dts_header_t &dtsheader,
                                    bool get_first_header_later)
-  throw (error_c)
   : generic_packetizer_c(p_reader, p_ti)
   , m_samples_written(0)
   , m_bytes_written(0)

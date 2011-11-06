@@ -278,8 +278,8 @@ header_removal_compressor_c::compress(memory_cptr &buffer) {
 
   size_t size = m_bytes->get_size();
   if (buffer->get_size() < size)
-    throw compression_error_c(boost::format(Y("Header removal compression not possible because the buffer contained %1% bytes "
-                                              "which is less than the size of the headers that should be removed, %2%.")) % buffer->get_size() % size);
+    throw mtx::compression_x(boost::format(Y("Header removal compression not possible because the buffer contained %1% bytes "
+                                             "which is less than the size of the headers that should be removed, %2%.")) % buffer->get_size() % size);
 
   unsigned char *buffer_ptr = buffer->get_buffer();
   unsigned char *bytes_ptr  = m_bytes->get_buffer();
@@ -292,8 +292,8 @@ header_removal_compressor_c::compress(memory_cptr &buffer) {
       b_buffer += (boost::format(" %|1$02x|") % static_cast<unsigned int>(buffer_ptr[i])).str();
       b_bytes  += (boost::format(" %|1$02x|") % static_cast<unsigned int>(bytes_ptr[i])).str();
     }
-    throw compression_error_c(boost::format(Y("Header removal compression not possible because the buffer did not start with the bytes that should be removed. "
-                                              "Wanted bytes:%1%; found:%2%.")) % b_bytes % b_buffer);
+    throw mtx::compression_x(boost::format(Y("Header removal compression not possible because the buffer did not start with the bytes that should be removed. "
+                                             "Wanted bytes:%1%; found:%2%.")) % b_bytes % b_buffer);
   }
 
   size_t new_size = buffer->get_size() - size;

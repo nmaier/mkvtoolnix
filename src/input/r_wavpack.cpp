@@ -44,8 +44,8 @@ wavpack_reader_c::probe_file(mm_io_c *io,
 }
 
 wavpack_reader_c::wavpack_reader_c(track_info_c &_ti)
-  throw (error_c):
-  generic_reader_c(_ti) {
+  : generic_reader_c(_ti)
+{
 }
 
 void
@@ -58,7 +58,7 @@ wavpack_reader_c::read_headers() {
     if (0 > packet_size)
       mxerror_fn(m_ti.m_fname, Y("The file header was not read correctly.\n"));
   } catch (...) {
-    throw error_c(boost::format(Y("%1%: Could not open the file.")) % get_format_name());
+    throw mtx::input::open_x();
   }
 
   io->setFilePointer(io->getFilePointer() - sizeof(wavpack_header_t), seek_beginning);

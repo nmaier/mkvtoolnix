@@ -100,8 +100,7 @@ qtmp4_reader_c::probe_file(mm_io_c *in,
 }
 
 qtmp4_reader_c::qtmp4_reader_c(track_info_c &_ti)
-  throw (error_c):
-  generic_reader_c(_ti),
+  : generic_reader_c(_ti),
   io(NULL),
   file_size(0),
   mdat_pos(-1),
@@ -119,14 +118,14 @@ qtmp4_reader_c::read_headers() {
     file_size = io->getFilePointer();
     io->setFilePointer(0, seek_beginning);
     if (!qtmp4_reader_c::probe_file(io, file_size))
-      throw error_c(boost::format(Y("%1%: Source is not a valid %1% file.")) % get_format_name());
+      throw mtx::input::invalid_format_x();
 
     show_demuxer_info();
 
     parse_headers();
 
-  } catch (...) {
-    throw error_c(boost::format(Y("%1%: Could not read the source file.")) % get_format_name());
+  } catch (mtx::mm_io::exception &) {
+    throw mtx::input::open_x();
   }
 }
 
@@ -508,7 +507,7 @@ qtmp4_reader_c::handle_cmvd_atom(qt_atom_t atom,
   unsigned char *moov_buf = af_moov_buf->get_buffer();
 
   if (io->read(cmov_buf, cmov_size) != cmov_size)
-    throw error_c(Y("end-of-file"));
+    throw mtx::input::header_parsing_x();
 
   z_stream zs;
   zs.zalloc    = (alloc_func)NULL;
@@ -586,7 +585,7 @@ qtmp4_reader_c::handle_hdlr_atom(qtmp4_demuxer_cptr &new_dmx,
     print_atom_too_small_error("hdlr", hdlr_atom_t);
 
   if (io->read(&hdlr, sizeof(hdlr_atom_t)) != sizeof(hdlr_atom_t))
-    throw error_c(Y("end-of-file"));
+    throw mtx::input::header_parsing_x();
 
   mxverb(2, boost::format("Quicktime/MP4 reader:%1%Component type: %|2$.4s| subtype: %|3$.4s|\n") % space(level * 2 + 1) % (char *)&hdlr.type % (char *)&hdlr.subtype);
 
@@ -620,7 +619,7 @@ qtmp4_reader_c::handle_mdhd_atom(qtmp4_demuxer_cptr &new_dmx,
     if (sizeof(mdhd_atom_t) > atom.size)
       print_atom_too_small_error("mdhd", mdhd_atom_t);
     if (io->read(&mdhd.flags, sizeof(mdhd_atom_t) - 1) != (sizeof(mdhd_atom_t) - 1))
-      throw error_c(Y("end-of-file"));
+      throw mtx::input::header_parsing_x();
 
     new_dmx->time_scale      = get_uint32_be(&mdhd.time_scale);
     new_dmx->global_duration = get_uint32_be(&mdhd.duration);
@@ -632,7 +631,7 @@ qtmp4_reader_c::handle_mdhd_atom(qtmp4_demuxer_cptr &new_dmx,
     if (sizeof(mdhd64_atom_t) > atom.size)
       print_atom_too_small_error("mdhd", mdhd64_atom_t);
     if (io->read(&mdhd.flags, sizeof(mdhd64_atom_t) - 1) != (sizeof(mdhd64_atom_t) - 1))
-      throw error_c(Y("end-of-file"));
+      throw mtx::input::header_parsing_x();
 
     new_dmx->time_scale      = get_uint32_be(&mdhd.time_scale);
     new_dmx->global_duration = get_uint64_be(&mdhd.duration);
@@ -726,7 +725,7 @@ qtmp4_reader_c::handle_mvhd_atom(qt_atom_t atom,
   if (sizeof(mvhd_atom_t) > (atom.size - atom.hsize))
     print_atom_too_small_error("mvhd", mvhd_atom_t);
   if (io->read(&mvhd, sizeof(mvhd_atom_t)) != sizeof(mvhd_atom_t))
-    throw error_c(Y("end-of-file"));
+    throw mtx::input::header_parsing_x();
 
   time_scale = get_uint32_be(&mvhd.time_scale);
 
@@ -1222,7 +1221,7 @@ qtmp4_reader_c::handle_tkhd_atom(qtmp4_demuxer_cptr &new_dmx,
     print_atom_too_small_error("tkhd", tkhd_atom_t);
 
   if (io->read(&tkhd, sizeof(tkhd_atom_t)) != sizeof(tkhd_atom_t))
-    throw error_c(Y("end-of-file"));
+    throw mtx::input::header_parsing_x();
 
   mxverb(2, boost::format("Quicktime/MP4 reader:%1%Track ID: %2%\n") % space(level * 2 + 1) % get_uint32_be(&tkhd.track_id));
 
@@ -1380,7 +1379,7 @@ qtmp4_reader_c::parse_esds_atom(mm_mem_io_c &memio,
     e->decoder_config_len = len;
     e->decoder_config     = (uint8_t *)safemalloc(len);
     if (memio.read(e->decoder_config, len) != len)
-      throw error_c(Y("end-of-file"));
+      throw mtx::input::header_parsing_x();
 
     tag = memio.read_uint8();
 
@@ -1396,7 +1395,7 @@ qtmp4_reader_c::parse_esds_atom(mm_mem_io_c &memio,
     e->sl_config_len = len;
     e->sl_config     = (uint8_t *)safemalloc(len);
     if (memio.read(e->sl_config, len) != len)
-      throw error_c(Y("end-of-file"));
+      throw mtx::input::header_parsing_x();
 
     mxverb(2, boost::format("Quicktime/MP4 reader:%1%esds: sync layer config descriptor, len: %2%\n") % space(lsp + 1) % len);
 

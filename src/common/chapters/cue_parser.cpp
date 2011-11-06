@@ -478,10 +478,10 @@ parse_cue_chapters(mm_text_io_c *in,
     if (1 <= a.num)
       add_elements_for_cue_entry(a, tags);
 
-  } catch(error_c e) {
+  } catch(mtx::exception &e) {
 
     delete a.chapters;
-    throw error_c(e);
+    throw;
   }
 
   if (0 == a.num) {

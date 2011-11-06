@@ -27,7 +27,6 @@ pcm_packetizer_c::pcm_packetizer_c(generic_reader_c *p_reader,
                                    int bits_per_sample,
                                    bool big_endian,
                                    bool ieee_float)
-  throw (error_c)
   : generic_packetizer_c(p_reader, p_ti)
   , m_packetno(0)
   , m_bytes_per_second(channels * bits_per_sample * samples_per_sec / 8)

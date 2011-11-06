@@ -20,6 +20,21 @@
 
 #include <ebml/EbmlBinary.h>
 
+namespace mtx {
+  class bitvalue_parser_x: public exception {
+  protected:
+    std::string m_message;
+  public:
+    bitvalue_parser_x(const std::string &message)  : m_message(message)       { }
+    bitvalue_parser_x(const boost::format &message): m_message(message.str()) { }
+    virtual ~bitvalue_parser_x() throw() { }
+
+    virtual const char *what() const throw() {
+      return m_message.c_str();
+    }
+  };
+}
+
 class bitvalue_c {
 private:
   memory_cptr m_value;

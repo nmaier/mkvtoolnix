@@ -377,7 +377,7 @@ protected:
   static int potential_packet_sizes[];
 
 public:
-  mpeg_ts_reader_c(track_info_c &_ti) throw (error_c);
+  mpeg_ts_reader_c(track_info_c &_ti);
   virtual ~mpeg_ts_reader_c();
 
   static bool probe_file(mm_io_c *io, uint64_t size);

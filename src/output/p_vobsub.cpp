@@ -26,11 +26,10 @@ using namespace libmatroska;
 vobsub_packetizer_c::vobsub_packetizer_c(generic_reader_c *_reader,
                                          const void *_idx_data,
                                          int _idx_data_size,
-                                         track_info_c &_ti) throw (error_c):
-  generic_packetizer_c(_reader, _ti),
-  idx_data(new memory_c((unsigned char *)safememdup(_idx_data,
-                                                    _idx_data_size),
-                        _idx_data_size, true)) {
+                                         track_info_c &_ti)
+  : generic_packetizer_c(_reader, _ti)
+  , idx_data(new memory_c((unsigned char *)safememdup(_idx_data, _idx_data_size), _idx_data_size, true))
+{
   set_track_type(track_subtitle);
   set_default_compression_method(COMPRESSION_ZLIB);
 }

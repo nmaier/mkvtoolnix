@@ -32,7 +32,7 @@ private:
   aac_header_t m_aacheader;
 
 public:
-  aac_reader_c(track_info_c &ti) throw (error_c);
+  aac_reader_c(track_info_c &ti);
   virtual ~aac_reader_c();
 
   virtual const std::string get_format_name(bool translate = true) {

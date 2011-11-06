@@ -31,25 +31,51 @@
 
 using namespace libebml;
 
-class mm_io_error_c: public error_c {
-public:
-  mm_io_error_c(const std::string &_error): error_c(_error) { }
-};
+namespace mtx {
+  namespace mm_io {
+    class exception: public mtx::exception {
+    public:
+      virtual const char *what() const throw() {
+        return "unspecified I/O error";
+      }
+    };
 
-class mm_io_eof_error_c: public mm_io_error_c {
-public:
-  mm_io_eof_error_c(): mm_io_error_c("end-of-file") { }
-};
+    class end_of_file_x: public exception {
+    public:
+      virtual const char *what() const throw() {
+        return "end of file error";
+      }
+    };
 
-class mm_io_seek_error_c: public mm_io_error_c {
-public:
-  mm_io_seek_error_c(): mm_io_error_c("seeking failed") { }
-};
+    class seek_x: public exception {
+    public:
+      virtual const char *what() const throw() {
+        return "seek in file error";
+      }
+    };
 
-class mm_io_open_error_c: public mm_io_error_c {
-public:
-  mm_io_open_error_c(): mm_io_error_c("opening the file failed") { }
-};
+    class open_x: public exception {
+    public:
+      virtual const char *what() const throw() {
+        return "open file error";
+      }
+    };
+
+    class wrong_read_write_access_x: public exception {
+    public:
+      virtual const char *what() const throw() {
+        return "write operation to read-only file or vice versa";
+      }
+    };
+
+    class insufficient_space_x: public exception {
+    public:
+      virtual const char *what() const throw() {
+        return "insufficient space for write operation";
+      }
+    };
+  }
+}
 
 class mm_io_c: public IOCallback {
 protected:

@@ -30,7 +30,7 @@ private:
   memory_cptr m_buffer;
 
 public:
-  avc_es_reader_c(track_info_c &n_ti) throw (error_c);
+  avc_es_reader_c(track_info_c &n_ti);
 
   virtual const std::string get_format_name(bool translate = true) {
     return translate ? Y("AVC/h.264") : "AVC/h.264";

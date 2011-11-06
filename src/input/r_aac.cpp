@@ -32,7 +32,6 @@ aac_reader_c::probe_file(mm_io_c *io,
 #define INITCHUNKSIZE 16384
 
 aac_reader_c::aac_reader_c(track_info_c &ti)
-  throw (error_c)
   : generic_reader_c(ti)
   , m_bytes_processed(0)
   , m_size(0)
@@ -59,15 +58,12 @@ aac_reader_c::read_headers() {
     m_chunk              = memory_c::alloc(INITCHUNKSIZE);
 
     if (m_io->read(m_chunk, init_read_len) != init_read_len)
-      throw error_c(boost::format(Y("%1%: Could not read %2% bytes.")) % get_format_name() % init_read_len);
+      throw mtx::input::header_parsing_x();
 
     m_io->setFilePointer(tag_size_start, seek_beginning);
 
-    if (parse_aac_adif_header(*m_chunk, init_read_len, &m_aacheader))
-      throw error_c(Y("aac_reader: ADIF header files are not supported."));
-
     if (find_aac_header(*m_chunk, init_read_len, &m_aacheader, m_emphasis_present) < 0)
-      throw error_c(boost::format(Y("aac_reader: No valid AAC packet found in the first %1% bytes.\n")) % init_read_len);
+      throw mtx::input::header_parsing_x();
 
     guess_adts_version();
 
@@ -90,7 +86,7 @@ aac_reader_c::read_headers() {
       m_sbr_status_set = true;
 
   } catch (...) {
-    throw error_c(boost::format(Y("%1%: Could not open the file.")) % get_format_name());
+    throw mtx::input::open_x();
   }
 
   show_demuxer_info();

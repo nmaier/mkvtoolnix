@@ -31,7 +31,7 @@ private:
   ac3_header_t ac3header;
 
 public:
-  ac3_reader_c(track_info_c &_ti) throw (error_c);
+  ac3_reader_c(track_info_c &_ti);
   virtual ~ac3_reader_c();
 
   virtual const std::string get_format_name(bool translate = true) {

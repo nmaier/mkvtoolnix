@@ -32,7 +32,7 @@ private:
   int64_t m_single_packet_duration;
 
 public:
-  mp3_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, int samples_per_sec, int channels, bool source_is_good) throw (error_c);
+  mp3_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, int samples_per_sec, int channels, bool source_is_good);
   virtual ~mp3_packetizer_c();
 
   virtual int process(packet_cptr packet);

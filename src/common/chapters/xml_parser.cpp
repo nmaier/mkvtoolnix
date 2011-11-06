@@ -169,7 +169,6 @@ parse_xml_chapters(mm_text_io_c *in,
                    int64_t offset,
                    bool exception_on_error) {
   KaxChapters *chapters;
-  std::string error;
 
   try {
     int i;
@@ -192,15 +191,11 @@ parse_xml_chapters(mm_text_io_c *in,
     assert(NULL != chapters);
     chapters = select_chapters_in_timeframe(chapters, min_tc, max_tc, offset);
 
-  } catch (error_c e) {
+  } catch (mtx::xml::parser_x &e) {
     if (!exception_on_error)
-      mxerror(e.get_error());
-    error = e.get_error();
-    chapters = NULL;
+      mxerror(e.error());
+    throw;
   }
-
-  if (error.length() > 0)
-    throw error_c(error);
 
   fix_mandatory_chapter_elements(chapters);
 

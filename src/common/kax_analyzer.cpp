@@ -223,7 +223,7 @@ kax_analyzer_c::process(kax_analyzer_c::parse_mode_e parse_mode,
   // Find the EbmlHead element. Must be the first one.
   EbmlElement *l0 = m_stream->FindNextID(EBML_INFO(EbmlHead), 0xFFFFFFFFL);
   if (NULL == l0)
-    throw error_c(Y("Not a valid Matroska file (no EBML head found)"));
+    throw mtx::kax_analyzer_x(Y("Not a valid Matroska file (no EBML head found)"));
 
   // Don't verify its data for now.
   l0->SkipData(*m_stream, EBML_CONTEXT(l0));
@@ -233,7 +233,7 @@ kax_analyzer_c::process(kax_analyzer_c::parse_mode_e parse_mode,
     // Next element must be a segment
     l0 = m_stream->FindNextID(EBML_INFO(KaxSegment), 0xFFFFFFFFFFFFFFFFLL);
     if (NULL == l0)
-      throw error_c(Y("Not a valid Matroska file (no segment/level 0 element found)"));
+      throw mtx::kax_analyzer_x(Y("Not a valid Matroska file (no segment/level 0 element found)"));
 
     if (EbmlId(*l0) == EBML_ID(KaxSegment))
       break;

@@ -56,7 +56,6 @@ vc1_es_reader_c::probe_file(mm_io_c *io,
 }
 
 vc1_es_reader_c::vc1_es_reader_c(track_info_c &n_ti)
-  throw (error_c)
   : generic_reader_c(n_ti)
   , m_bytes_processed(0)
   , m_buffer(memory_c::alloc(READ_SIZE))
@@ -82,7 +81,7 @@ vc1_es_reader_c::read_headers() {
     m_io->setFilePointer(0, seek_beginning);
 
   } catch (...) {
-    throw error_c(boost::format(Y("%1%: Could not open the source file.")) % get_format_name());
+    throw mtx::input::open_x();
   }
 
   show_demuxer_info();

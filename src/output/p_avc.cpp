@@ -97,18 +97,18 @@ mpeg4_p10_es_video_packetizer_c::process(packet_cptr packet) {
     m_parser.add_bytes(packet->data->get_buffer(), packet->data->get_size());
     flush_frames();
 
-  } catch (nalu_size_length_error_c &error) {
+  } catch (nalu_size_length_x &error) {
     mxerror_tid(m_ti.m_fname, m_ti.m_id,
                 boost::format(Y("This AVC/h.264 contains frames that are too big for the current maximum NALU size. "
                                 "You have to re-run mkvmerge and set the maximum NALU size to %1% for this track "
                                 "(command line parameter '--nalu-size-length %2%:%1%').\n"))
                 % error.get_required_length() % m_ti.m_id);
 
-  } catch (error_c &error) {
+  } catch (mtx::exception &error) {
     mxerror_tid(m_ti.m_fname, m_ti.m_id,
                 boost::format(Y("mkvmerge encountered broken or unparsable data in this AVC/h.264 video track. "
                                 "Either your file is damaged (which mkvmerge cannot cope with yet) or this is a bug in mkvmerge itself. "
-                                "The error message was:\n%1%\n")) % error.get_error());
+                                "The error message was:\n%1%\n")) % error.error());
   }
 
   return FILE_STATUS_MOREDATA;

@@ -28,7 +28,6 @@ kate_packetizer_c::kate_packetizer_c(generic_reader_c *p_reader,
                                      track_info_c &p_ti,
                                      const void *global_data,
                                      int global_size)
-  throw (error_c)
   : generic_packetizer_c(p_reader, p_ti)
   , m_global_data(new memory_c((unsigned char *)safememdup(global_data ? global_data : m_ti.m_private_data,
                                                            global_data ? global_size : m_ti.m_private_size),

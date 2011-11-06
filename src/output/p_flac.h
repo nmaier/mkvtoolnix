@@ -29,7 +29,7 @@ private:
   FLAC__StreamMetadata_StreamInfo m_stream_info;
 
 public:
-  flac_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, unsigned char *header, int l_header) throw (error_c);
+  flac_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, unsigned char *header, int l_header);
   virtual ~flac_packetizer_c();
 
   virtual int process(packet_cptr packet);

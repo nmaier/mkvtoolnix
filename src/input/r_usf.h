@@ -67,7 +67,7 @@ private:
   bool m_strip;
 
 public:
-  usf_reader_c(track_info_c &_ti) throw (error_c);
+  usf_reader_c(track_info_c &_ti);
   virtual ~usf_reader_c();
 
   virtual const std::string get_format_name(bool translate = true) {

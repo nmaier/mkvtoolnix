@@ -25,8 +25,7 @@ private:
   memory_cptr m_private_data;
 
 public:
-  ra_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, int samples_per_sec, int channels, int bits_per_sample, uint32_t fourcc,
-                  unsigned char *private_data, int private_size) throw (error_c);
+  ra_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, int samples_per_sec, int channels, int bits_per_sample, uint32_t fourcc, unsigned char *private_data, int private_size);
   virtual ~ra_packetizer_c();
 
   virtual int process(packet_cptr packet);

@@ -16,34 +16,27 @@
 
 #include "common/common_pch.h"
 
+#include <exception>
+#include <string>
 
-class error_c {
-protected:
-  std::string error;
+namespace mtx {
+  class exception: public std::exception {
+  public:
+    virtual const char *what() const throw() {
+      return "unspecified MKVToolNix error";
+    }
 
-public:
-  error_c():
-    error("unknown error") {
-  }
+    virtual std::string error() const throw() {
+      return what();
+    }
+  };
 
-  error_c(const char *_error):
-    error(_error) {
-  }
-
-  error_c(const std::string &_error):
-    error(_error) {
-  }
-
-  error_c(const boost::format &format)
-    : error(format.str()) {
-  }
-
-  virtual ~error_c() {
-  }
-
-  virtual std::string get_error() const {
-    return error;
-  }
-};
+  class invalid_parameter_x: public exception {
+  public:
+    virtual const char *what() const throw() {
+      return "invalid parameter in function call";
+    }
+  };
+}
 
 #endif // __MTX_COMMON_ERROR_H

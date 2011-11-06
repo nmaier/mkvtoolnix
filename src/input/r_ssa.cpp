@@ -29,7 +29,6 @@ ssa_reader_c::probe_file(mm_text_io_c *io,
 }
 
 ssa_reader_c::ssa_reader_c(track_info_c &_ti)
-  throw (error_c)
   : generic_reader_c(_ti)
 {
 }
@@ -41,11 +40,11 @@ ssa_reader_c::read_headers() {
   try {
     io = counted_ptr<mm_text_io_c>(new mm_text_io_c(new mm_file_io_c(m_ti.m_fname)));
   } catch (...) {
-    throw error_c(boost::format(Y("%1%: Could not open the source file.")) % get_format_name());
+    throw mtx::input::open_x();
   }
 
   if (!ssa_reader_c::probe_file(io.get_object(), 0))
-    throw error_c(boost::format(Y("%1%: Source is not a valid %1% file.")) % get_format_name());
+    throw mtx::input::invalid_format_x();
 
   charset_converter_cptr cc_utf8 = map_has_key(m_ti.m_sub_charsets,  0) ? charset_converter_c::init(m_ti.m_sub_charsets[ 0])
                                  : map_has_key(m_ti.m_sub_charsets, -1) ? charset_converter_c::init(m_ti.m_sub_charsets[-1])

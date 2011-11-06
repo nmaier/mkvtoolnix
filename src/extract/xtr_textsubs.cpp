@@ -333,11 +333,11 @@ xtr_usf_c::create_file(xtr_base_c *master,
       m_formatter->write_header();
       m_formatter->format(codec_private_mod + "\n");
 
-    } catch (mm_io_error_c &) {
+    } catch (mtx::mm_io::exception &) {
       mxerror(boost::format(Y("Failed to create the file '%1%': %2% (%3%)\n")) % m_file_name % errno % strerror(errno));
 
-    } catch (xml_formatter_error_c &error) {
-      mxerror(boost::format(Y("Failed to parse the USF codec private data for track %1%: %2%\n")) % m_tid % error.get_error());
+    } catch (mtx::xml::formatter_x &error) {
+      mxerror(boost::format(Y("Failed to parse the USF codec private data for track %1%: %2%\n")) % m_tid % error.error());
     }
   }
 }
@@ -374,8 +374,8 @@ xtr_usf_c::finish_track() {
     }
     m_formatter->format("</subtitles>\n");
 
-  } catch (xml_formatter_error_c &error) {
-    mxerror(boost::format(Y("Failed to parse an USF subtitle entry for track %1%: %2%\n")) % m_tid % error.get_error());
+  } catch (mtx::xml::formatter_x &error) {
+    mxerror(boost::format(Y("Failed to parse an USF subtitle entry for track %1%: %2%\n")) % m_tid % error.error());
   }
 }
 
@@ -386,7 +386,7 @@ xtr_usf_c::finish_file() {
       m_formatter->format("</USFSubtitles>");
       m_out->puts("\n");
     }
-  } catch (xml_formatter_error_c &error) {
-    mxerror(boost::format(Y("Failed to parse the USF end tag for track %1%: %2%\n")) % m_tid % error.get_error());
+  } catch (mtx::xml::formatter_x &error) {
+    mxerror(boost::format(Y("Failed to parse the USF end tag for track %1%: %2%\n")) % m_tid % error.error());
   }
 }

@@ -31,6 +31,7 @@
 #include "common/hacks.h"
 #include "common/segmentinfo.h"
 #include "common/version.h"
+#include "common/xml/element_parser.h"
 
 using namespace libmatroska;
 
@@ -53,10 +54,10 @@ parse_segmentinfo(const std::string &file_name,
   try {
     mm_text_io_c *in = new mm_text_io_c(new mm_file_io_c(file_name));
     return parse_xml_segmentinfo(in, exception_on_error);
-  } catch (error_c &e) {
+  } catch (mtx::xml::parser_x &e) {
     if (exception_on_error)
-      throw e;
-    mxerror(e.get_error());
+      throw;
+    mxerror(e.error());
   }
 
   return NULL;

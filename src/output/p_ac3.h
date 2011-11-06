@@ -32,7 +32,7 @@ protected:
   int64_t m_single_packet_duration;
 
 public:
-  ac3_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, int samples_per_sec, int channels, int bsid) throw (error_c);
+  ac3_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, int samples_per_sec, int channels, int bsid);
   virtual ~ac3_packetizer_c();
 
   virtual int process(packet_cptr packet);
@@ -56,7 +56,7 @@ protected:
   bool m_bsb_present;
 
 public:
-  ac3_bs_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, unsigned long samples_per_sec, int channels, int bsid) throw (error_c);
+  ac3_bs_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, unsigned long samples_per_sec, int channels, int bsid);
 
 protected:
   virtual void add_to_buffer(unsigned char *buf, int size);

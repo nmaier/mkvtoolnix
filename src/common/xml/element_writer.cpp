@@ -184,7 +184,7 @@ void
 xml_formatter_c::set_doctype(const std::string &dtd,
                              const std::string &file) {
   if (m_header_written)
-    throw xml_formatter_error_c(Y("The header has already been written."));
+    throw mtx::xml::formatter_x(Y("The header has already been written."));
 
   m_dtd = dtd;
   m_dtd_file = file;
@@ -194,7 +194,7 @@ void
 xml_formatter_c::set_stylesheet(const std::string &type,
                                 const std::string &file) {
   if (m_header_written)
-    throw xml_formatter_error_c(Y("The header has already been written."));
+    throw mtx::xml::formatter_x(Y("The header has already been written."));
 
   m_stylesheet_type = type;
   m_stylesheet_file = file;
@@ -203,7 +203,7 @@ xml_formatter_c::set_stylesheet(const std::string &type,
 void
 xml_formatter_c::write_header() {
   if (m_header_written)
-    throw xml_formatter_error_c(Y("The header has already been written."));
+    throw mtx::xml::formatter_x(Y("The header has already been written."));
 
 #if defined(SYS_WINDOWS)
   m_out->use_dos_style_newlines(true);
@@ -228,8 +228,8 @@ xml_formatter_c::format(const std::string &text) {
     while (parse_one_xml_line())
       ;
 
-  } catch (xml_parser_error_c &error) {
-    throw xml_formatter_error_c(boost::format(Y("XML parser error at line %1%: %2%.")) % error.m_line % error.get_error());
+  } catch (mtx::xml::parser_x &error) {
+    throw mtx::xml::formatter_x(boost::format(Y("XML parser error at line %1%: %2%.")) % error.get_line() % error.error());
   }
 }
 

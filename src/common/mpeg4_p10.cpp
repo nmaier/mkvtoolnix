@@ -772,7 +772,7 @@ mpeg4::p10::avc_es_parser_c::write_nalu_size(unsigned char *buffer,
     while (size >= (1u << (required_bytes * 8)))
       ++required_bytes;
 
-    throw nalu_size_length_error_c(required_bytes);
+    throw nalu_size_length_x(required_bytes);
   }
 
   unsigned int i;

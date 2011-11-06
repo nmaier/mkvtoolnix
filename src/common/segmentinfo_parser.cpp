@@ -73,22 +73,17 @@ parse_xml_segmentinfo(mm_text_io_c *in,
   segmentinfo_elements[chapter_element_map_index("FamilyUID")].end_hook = end_segmentinfo_family;
   segmentinfo_elements[chapter_element_map_index("Links")].end_hook     = end_segmentinfo_links;
 
-  std::string error;
   KaxInfo *info = NULL;
   try {
     EbmlMaster *m = parse_xml_elements("Info", segmentinfo_elements, in);
     info          = dynamic_cast<KaxInfo *>(sort_ebml_master(m));
     assert(NULL != info);
 
-  } catch (error_c e) {
+  } catch (mtx::xml::parser_x &e) {
     if (!exception_on_error)
-      mxerror(e.get_error());
-    error = e.get_error();
-    info  = NULL;
+      mxerror(e.error());
+    throw;
   }
-
-  if (!error.empty())
-    throw error_c(error);
 
   fix_mandatory_segmentinfo_elements(info);
 

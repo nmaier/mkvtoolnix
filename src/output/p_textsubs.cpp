@@ -31,7 +31,6 @@ textsubs_packetizer_c::textsubs_packetizer_c(generic_reader_c *p_reader,
                                              int global_size,
                                              bool recode,
                                              bool is_utf8)
-  throw (error_c)
   : generic_packetizer_c(p_reader, p_ti)
   , m_packetno(0)
   , m_global_data(new memory_c((unsigned char *)safememdup(global_data, global_size), global_size, true))

@@ -20,7 +20,7 @@ locale_string_c::locale_string_c(std::string locale_string) {
   boost::smatch matches;
 
   if (!boost::regex_match(locale_string, matches, locale_re))
-    throw locale_string_format_error_c(locale_string);
+    throw mtx::locale_string_format_x(locale_string);
 
   m_language  = matches[1].str();
   m_territory = matches[2].str();

@@ -36,7 +36,7 @@ bitvalue_c::bitvalue_c(const bitvalue_c &src) {
 bitvalue_c::bitvalue_c(std::string s,
                        unsigned int allowed_bitlength) {
   if ((allowed_bitlength != 0) && ((allowed_bitlength % 8) != 0))
-    throw error_c("wrong usage: invalid allowed_bitlength");
+    throw mtx::invalid_parameter_x();
 
   unsigned int len = s.size();
   ba::to_lower(s);
@@ -60,11 +60,11 @@ bitvalue_c::bitvalue_c(std::string s,
 
     // Invalid character?
     if (!ishexdigit(s[i]))
-      throw error_c(boost::format(Y("Not a hex digit at position %1%")) % i);
+      throw mtx::bitvalue_parser_x(boost::format(Y("Not a hex digit at position %1%")) % i);
 
     // Input too long?
     if ((allowed_bitlength > 0) && ((s2.length() * 4) >= allowed_bitlength))
-      throw error_c(boost::format(Y("Input too long: %1% > %2%")) % (s2.length() * 4) % allowed_bitlength);
+      throw mtx::bitvalue_parser_x(boost::format(Y("Input too long: %1% > %2%")) % (s2.length() * 4) % allowed_bitlength);
 
     // Store the value.
     s2 += s[i];
@@ -75,7 +75,7 @@ bitvalue_c::bitvalue_c(std::string s,
   if (((len % 2) != 0)
       ||
       ((allowed_bitlength != 0) && ((len * 4) < allowed_bitlength)))
-    throw error_c(Y("Missing one hex digit"));
+    throw mtx::bitvalue_parser_x(Y("Missing one hex digit"));
 
   m_value = memory_c::alloc(len / 2);
 

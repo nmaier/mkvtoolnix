@@ -47,7 +47,7 @@ private:
   FLAC__StreamMetadata_StreamInfo stream_info;
 
 public:
-  flac_reader_c(track_info_c &_ti) throw (error_c);
+  flac_reader_c(track_info_c &_ti);
   virtual ~flac_reader_c();
 
   virtual const std::string get_format_name(bool translate = true) {

@@ -208,7 +208,7 @@ handle_common_cli_args(std::vector<std::string> &args,
           redirect_stdio(file);
         }
         args.erase(args.begin() + i, args.begin() + i + 2);
-      } catch(mm_io_open_error_c &) {
+      } catch(mtx::mm_io::open_x &) {
         mxerror(boost::format(Y("Could not open the file '%1%' for directing the output.\n")) % args[i + 1]);
       }
     } else

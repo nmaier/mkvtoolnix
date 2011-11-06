@@ -116,7 +116,6 @@ mpeg_es_reader_c::probe_file(mm_io_c *io,
 }
 
 mpeg_es_reader_c::mpeg_es_reader_c(track_info_c &_ti)
-  throw (error_c)
   : generic_reader_c(_ti)
   , bytes_processed(0)
 {
@@ -135,7 +134,7 @@ mpeg_es_reader_c::read_headers() {
     parser.SetProbeMode();
     if (!read_frame(parser, *io, 1024 * 1024)) {
       delete io;
-      throw "";
+      throw mtx::input::header_parsing_x();
     }
 
     io->setFilePointer(0);
@@ -162,8 +161,8 @@ mpeg_es_reader_c::read_headers() {
 
     mxverb(2, boost::format("mpeg_es_reader: version %1% width %2% height %3% FPS %4% AR %5%\n") % version % width % height % frame_rate % aspect_ratio);
 
-  } catch (...) {
-    throw error_c(boost::format(Y("%1%: Could not open the file.")) % get_format_name());
+  } catch (mtx::mm_io::exception &) {
+    throw mtx::input::open_x();
   }
   show_demuxer_info();
 }

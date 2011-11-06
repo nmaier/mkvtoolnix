@@ -53,7 +53,7 @@ mm_probe_cache_io_c::setFilePointer(int64 offset,
     :                          m_cache_pos            + offset;
 
   if ((0 > new_pos) || ((0 != new_pos) && (new_pos >= static_cast<int64_t>(m_cache_size))))
-    throw mm_io_seek_error_c();
+    throw mtx::mm_io::seek_x();
 
   m_cache_pos = new_pos;
 }
@@ -86,6 +86,6 @@ mm_probe_cache_io_c::_read(void *buffer,
 size_t
 mm_probe_cache_io_c::_write(const void *buffer,
                             size_t size) {
-  throw mm_io_error_c("write-for-read-only-file");
+  throw mtx::mm_io::wrong_read_write_access_x();
   return 0;
 }

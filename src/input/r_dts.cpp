@@ -46,8 +46,7 @@ dts_reader_c::probe_file(mm_io_c *io,
 }
 
 dts_reader_c::dts_reader_c(track_info_c &_ti)
-  throw (error_c):
-  generic_reader_c(_ti),
+  : generic_reader_c(_ti),
   cur_buf(0),
   dts14_to_16(false),
   swap_bytes(false) {
@@ -62,11 +61,11 @@ dts_reader_c::read_headers() {
     buf[1] = (unsigned short *)safemalloc(READ_SIZE);
 
     if (io->read(buf[cur_buf], READ_SIZE) != READ_SIZE)
-      throw error_c(boost::format(Y("%1%: Could not read %2% bytes.")) % get_format_name() % READ_SIZE);
+      throw mtx::input::header_parsing_x();
     io->setFilePointer(0, seek_beginning);
 
   } catch (...) {
-    throw error_c(boost::format(Y("%1%: Could not open the source file.")) % get_format_name());
+    throw mtx::input::open_x();
   }
 
   detect_dts(buf[cur_buf], READ_SIZE, dts14_to_16, swap_bytes);
@@ -77,7 +76,7 @@ dts_reader_c::read_headers() {
   int pos = find_dts_header((const unsigned char *)buf[cur_buf], READ_SIZE, &dtsheader);
 
   if (0 > pos)
-    throw error_c(boost::format(Y("dts_reader: No valid DTS packet found in the first %1% bytes.\n")) % READ_SIZE);
+    throw mtx::input::header_parsing_x();
 
   bytes_processed = 0;
   m_ti.m_id       = 0;          // ID for this track.

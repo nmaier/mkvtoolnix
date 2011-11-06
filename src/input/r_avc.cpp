@@ -69,8 +69,8 @@ avc_es_reader_c::probe_file(mm_io_c *io,
         return 1;
     }
 
-  } catch (error_c &err) {
-    mxinfo(boost::format(Y("Error %1%\n")) % err.get_error());
+  } catch (mtx::exception &e) {
+    mxinfo(boost::format(Y("Error %1%\n")) % e.error());
 
   } catch (...) {
     mxinfo(Y("have an xcptn\n"));
@@ -80,7 +80,6 @@ avc_es_reader_c::probe_file(mm_io_c *io,
 }
 
 avc_es_reader_c::avc_es_reader_c(track_info_c &n_ti)
-  throw (error_c)
   : generic_reader_c(n_ti)
   , m_bytes_processed(0)
   , m_buffer(memory_c::alloc(READ_SIZE))
@@ -107,7 +106,7 @@ avc_es_reader_c::read_headers() {
     for (i = 0; MAX_PROBE_BUFFERS > i; ++i) {
       num_read = m_io->read(m_buffer->get_buffer(), READ_SIZE);
       if (0 == num_read)
-        throw error_c(Y("avc_es_reader: Should not have happened."));
+        throw mtx::exception();
       parser.add_bytes(m_buffer->get_buffer(), num_read);
       if (parser.headers_parsed())
         break;
@@ -123,7 +122,7 @@ avc_es_reader_c::read_headers() {
     m_io->setFilePointer(0, seek_beginning);
 
   } catch (...) {
-    throw error_c(boost::format(Y("%1%: Could not open the source file.")) % get_format_name());
+    throw mtx::input::open_x();
   }
 
   show_demuxer_info();

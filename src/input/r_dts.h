@@ -34,7 +34,7 @@ private:
   bool dts14_to_16, swap_bytes;
 
 public:
-  dts_reader_c(track_info_c &_ti) throw (error_c);
+  dts_reader_c(track_info_c &_ti);
   virtual ~dts_reader_c();
 
   virtual const std::string get_format_name(bool translate = true) {

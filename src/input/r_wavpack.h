@@ -31,7 +31,7 @@ private:
   wavpack_meta_t meta, meta_correc;
 
 public:
-  wavpack_reader_c(track_info_c &_ti) throw (error_c);
+  wavpack_reader_c(track_info_c &_ti);
   virtual ~wavpack_reader_c();
 
   virtual const std::string get_format_name(bool translate = true) {

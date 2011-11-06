@@ -45,8 +45,8 @@ tta_reader_c::probe_file(mm_io_c *io,
 }
 
 tta_reader_c::tta_reader_c(track_info_c &_ti)
-  throw (error_c):
-  generic_reader_c(_ti) {
+  : generic_reader_c(_ti)
+{
 }
 
 void
@@ -93,7 +93,7 @@ tta_reader_c::read_headers() {
     m_ti.m_id       = 0;        // ID for this track.
 
   } catch (...) {
-    throw error_c(boost::format(Y("%1%: Could not open the file.")) % get_format_name());
+    throw mtx::input::open_x();
   }
   show_demuxer_info();
 }

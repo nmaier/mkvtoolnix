@@ -27,8 +27,7 @@ private:
   bool m_recode;
 
 public:
-  textsubs_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, const char *codec_id, const void *global_data, int global_size, bool recode, bool is_utf8)
-    throw (error_c);
+  textsubs_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, const char *codec_id, const void *global_data, int global_size, bool recode, bool is_utf8);
   virtual ~textsubs_packetizer_c();
 
   virtual int process(packet_cptr packet);

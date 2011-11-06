@@ -275,7 +275,7 @@ private:
   int main_dmx;
 
 public:
-  qtmp4_reader_c(track_info_c &_ti) throw (error_c);
+  qtmp4_reader_c(track_info_c &_ti);
   virtual ~qtmp4_reader_c();
 
   virtual const std::string get_format_name(bool translate = true) {

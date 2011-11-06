@@ -30,7 +30,6 @@ truehd_packetizer_c::truehd_packetizer_c(generic_reader_c *p_reader,
                                          truehd_frame_t::codec_e codec,
                                          int sampling_rate,
                                          int channels)
-  throw (error_c)
   : generic_packetizer_c(p_reader, p_ti)
   , m_first_frame(true)
   , m_current_samples_per_frame(0)

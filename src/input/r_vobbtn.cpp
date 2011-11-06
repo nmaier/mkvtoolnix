@@ -46,8 +46,8 @@ vobbtn_reader_c::probe_file(mm_io_c *io,
 }
 
 vobbtn_reader_c::vobbtn_reader_c(track_info_c &_ti)
-  throw (error_c):
-  generic_reader_c(_ti) {
+  : generic_reader_c(_ti)
+{
 }
 
 void
@@ -56,7 +56,7 @@ vobbtn_reader_c::read_headers() {
     btn_file = new mm_file_io_c(m_ti.m_fname);
     size     = btn_file->get_size();
   } catch (...) {
-    throw error_c(boost::format(Y("%1%: Could not open the file.")) % get_format_name());
+    throw mtx::input::open_x();
   }
 
   // read the width & height

@@ -30,7 +30,6 @@ vorbis_packetizer_c::vorbis_packetizer_c(generic_reader_c *p_reader,
                                          int l_comments,
                                          unsigned char *d_codecsetup,
                                          int l_codecsetup)
-  throw (error_c)
   : generic_packetizer_c(p_reader, p_ti)
   , m_previous_bs(0)
   , m_samples(0)
@@ -60,7 +59,7 @@ vorbis_packetizer_c::vorbis_packetizer_c(generic_reader_c *p_reader,
   int i;
   for (i = 0; 3 > i; ++i)
     if (vorbis_synthesis_headerin(&m_vi, &m_vc, &ogg_headers[i]) < 0)
-      throw error_c(Y("Error: vorbis_packetizer: Could not extract the stream's parameters from the first packets.\n"));
+      throw mtx::output::vorbis_x(Y("Error: vorbis_packetizer: Could not extract the stream's parameters from the first packets.\n"));
 
   set_track_type(track_audio);
   if (g_use_durations)

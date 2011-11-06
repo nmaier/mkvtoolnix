@@ -25,7 +25,6 @@ tta_packetizer_c::tta_packetizer_c(generic_reader_c *p_reader,
                                    int channels,
                                    int bits_per_sample,
                                    int sample_rate)
-  throw (error_c)
   : generic_packetizer_c(p_reader, p_ti)
   , m_channels(channels)
   , m_bits_per_sample(bits_per_sample)

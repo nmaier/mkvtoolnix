@@ -133,7 +133,7 @@ private:
   std::vector<mpeg_ps_track_ptr> tracks;
 
 public:
-  mpeg_ps_reader_c(track_info_c &_ti) throw (error_c);
+  mpeg_ps_reader_c(track_info_c &_ti);
   virtual ~mpeg_ps_reader_c();
 
   virtual const std::string get_format_name(bool translate = true) {

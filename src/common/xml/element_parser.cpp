@@ -59,11 +59,7 @@ xmlp_parent_name(parser_data_t *pdata,
 void
 xmlp_error(parser_data_t *pdata,
            const std::string &message) {
-  std::string error_message =
-    (boost::format(Y("Error: %1% parser failed for '%2%', line %3%, column %4%: %5%\n"))
-     % pdata->parser_name % pdata->file_name % XML_GetCurrentLineNumber(pdata->parser) % XML_GetCurrentColumnNumber(pdata->parser) % message).str();
-
-  throw error_c(error_message);
+  throw mtx::xml::file_parser_x(pdata->parser_name, pdata->file_name, message, pdata->parser);
 }
 
 static void
@@ -445,44 +441,25 @@ parse_xml_elements(const char *parser_name,
 
   in->setFilePointer(0);
 
-  std::string error;
-
   try {
     std::string buffer;
     bool done = !in->getline2(buffer);
     while (!done) {
       buffer += "\n";
-      if (XML_Parse(parser, buffer.c_str(), buffer.length(), done) == 0) {
-        XML_Error xerror    = XML_GetErrorCode(parser);
-        std::string message = (boost::format(Y("XML parser error at line %1% of '%2%': %3%.%4%%5%"))
-                               % XML_GetCurrentLineNumber(parser) % pdata->file_name % XML_ErrorString(xerror)
-                               % ((xerror == XML_ERROR_INVALID_TOKEN)
-                                  ? Y(" Remember that special characters like &, <, > and \" "
-                                      "must be escaped in the usual HTML way: &amp; for '&', "
-                                      "&lt; for '<', &gt; for '>' and &quot; for '\"'.")
-                                  : "")
-                               % Y(" Aborting.\n")
-                               ).str();
-        throw error_c(message);
-      }
+      if (XML_Parse(parser, buffer.c_str(), buffer.length(), done) == 0)
+        throw mtx::xml::file_parser_x(parser_name, in->get_file_name(), XML_ErrorString(XML_GetErrorCode(parser)), parser);
 
       done = !in->getline2(buffer);
     }
 
-  } catch (error_c e) {
-    error = e.get_error();
+  } catch (mtx::xml::parser_x &e) {
+    XML_ParserFree(parser);
+    delete pdata->root_element;
+    throw;
   }
 
-  EbmlMaster *root_element = pdata->root_element;
   XML_ParserFree(parser);
-
-  if (!error.empty()) {
-    if (NULL != root_element)
-      delete root_element;
-    throw error_c(error);
-  }
-
-  return root_element;
+  return pdata->root_element;
 }
 
 // -------------------------------------------------------------------
@@ -563,7 +540,7 @@ xml_parser_c::parse_one_xml_line() {
 
     if (XML_ERROR_INVALID_TOKEN == xerror)
       error += Y("Remember that special characters like &, <, > and \" must be escaped in the usual HTML way: &amp; for '&', &lt; for '<', &gt; for '>' and &quot; for '\"'.");
-    throw xml_parser_error_c(error, m_xml_parser);
+    throw mtx::xml::parser_x(error, m_xml_parser);
   }
 
   return true;

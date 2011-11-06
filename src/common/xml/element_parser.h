@@ -18,6 +18,7 @@
 
 #include <expat.h>
 
+#include "common/error.h"
 #include "common/xml/element_mapping.h"
 
 namespace libebml {
@@ -29,28 +30,66 @@ class mm_text_io_c;
 
 using namespace libebml;
 
-class xml_parser_error_c: public error_c {
-public:
-  int m_line, m_column;
+namespace mtx {
+  namespace xml {
+    class parser_x: public exception {
+    protected:
+      std::string m_error;
+      int m_line, m_column;
 
-public:
-  xml_parser_error_c(const std::string &message, XML_Parser &parser)
-    : error_c(message)
-    , m_line(XML_GetCurrentLineNumber(parser))
-    , m_column(XML_GetCurrentColumnNumber(parser))
-  {
-  }
+    public:
+      parser_x(const std::string &error, XML_Parser &parser)
+        : m_error(error)
+        , m_line(XML_GetCurrentLineNumber(parser))
+        , m_column(XML_GetCurrentColumnNumber(parser))
+      {
+      }
 
-  xml_parser_error_c()
-    : error_c(Y("No error"))
-    , m_line(-1)
-    , m_column(-1) {
-  }
+      parser_x()
+        : m_error(Y("No error"))
+        , m_line(-1)
+        , m_column(-1)
+      {
+      }
 
-  virtual std::string get_error() const {
-    return (boost::format(Y("Line %1%, column %2%: %3%")) % m_line % m_column % error).str();
+      virtual ~parser_x() throw() { }
+
+      virtual const char *what() const throw() {
+        return "XML parser error";
+      }
+
+      virtual std::string error() const throw() {
+        return (boost::format(Y("Line %1%, column %2%: %3%")) % m_line % m_column % m_error).str();
+      }
+
+      virtual int get_line() const {
+        return m_line;
+      }
+
+      virtual int get_column() const {
+        return m_column;
+      }
+    };
+
+    class file_parser_x: public parser_x {
+    protected:
+      std::string m_parser_name, m_file_name;
+
+    public:
+      file_parser_x(const std::string &parser_name, const std::string &file_name, const std::string &message, XML_Parser &parser)
+        : parser_x(message, parser)
+        , m_parser_name(parser_name)
+        , m_file_name(file_name)
+      {
+      }
+      virtual ~file_parser_x() throw() { }
+
+      virtual std::string error() const throw() {
+        return (boost::format(Y("Error: %1% parser failed for '%2%', line %3%, column %4%: %5%\n")) % m_parser_name % m_file_name % m_line % m_column % m_error).str();
+      }
+    };
   }
-};
+}
 
 class xml_parser_c {
 private:

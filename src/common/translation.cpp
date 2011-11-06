@@ -95,7 +95,7 @@ translation_c::look_up_translation(const std::string &locale) {
       ++idx;
     }
 
-  } catch (locale_string_format_error_c &) {
+  } catch (mtx::locale_string_format_x &) {
   }
 
   return -1;
@@ -279,9 +279,9 @@ init_locales(std::string locale) {
         chosen_locale = loc_req_with_utf8;
     }
 
-  } catch (locale_string_format_error_c &error) {
+  } catch (mtx::locale_string_format_x &error) {
     if (debugging_requested("locale"))
-      mxinfo(boost::format("[init_locales format error in %1%]\n") % error.m_format);
+      mxinfo(boost::format("[init_locales format error in %1%]\n") % error.error());
   }
 
   if (debugging_requested("locale"))

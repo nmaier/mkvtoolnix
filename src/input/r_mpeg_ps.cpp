@@ -65,7 +65,6 @@ mpeg_ps_reader_c::probe_file(mm_io_c *io,
 }
 
 mpeg_ps_reader_c::mpeg_ps_reader_c(track_info_c &_ti)
-  throw (error_c)
   : generic_reader_c(_ti)
   , file_done(false)
 {
@@ -78,7 +77,7 @@ mpeg_ps_reader_c::read_headers() {
     size = io->get_size();
 
   } catch (...) {
-    throw error_c(boost::format(Y("%1%: Could not open the file.")) % get_format_name());
+    throw mtx::input::open_x();
   }
 
   try {
@@ -1037,9 +1036,6 @@ mpeg_ps_reader_c::found_new_stream(mpeg_ps_id_t id) {
 
   } catch (bool) {
     blacklisted_ids[id.idx()] = true;
-
-  } catch (const char *msg) {
-    mxerror_fn(m_ti.m_fname, msg);
 
   } catch (...) {
     mxerror_fn(m_ti.m_fname, Y("Error parsing a MPEG PS packet during the header reading phase. This stream seems to be badly damaged.\n"));

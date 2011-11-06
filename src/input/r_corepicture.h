@@ -31,7 +31,7 @@ private:
   std::vector<corepicture_pic_t>::const_iterator m_current_picture;
 
 public:
-  corepicture_reader_c(track_info_c &_ti) throw (error_c);
+  corepicture_reader_c(track_info_c &_ti);
   virtual ~corepicture_reader_c();
 
   virtual const std::string get_format_name(bool translate = true) {

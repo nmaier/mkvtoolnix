@@ -69,7 +69,7 @@ mm_multi_file_io_c::setFilePointer(int64 offset,
     :                          m_current_pos + offset;
 
   if ((0 > new_pos) || (static_cast<int64_t>(m_total_size) < new_pos))
-    throw mm_io_seek_error_c();
+    throw mtx::mm_io::seek_x();
 
   m_current_file = 0;
   for (auto &file : m_files) {
@@ -119,7 +119,7 @@ mm_multi_file_io_c::_read(void *buffer,
 size_t
 mm_multi_file_io_c::_write(const void *buffer,
                            size_t size) {
-  throw mm_io_error_c("write-to-multi-file-io-object");
+  throw mtx::mm_io::wrong_read_write_access_x();
 }
 
 void

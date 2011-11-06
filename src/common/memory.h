@@ -19,6 +19,32 @@
 
 #include "common/common_pch.h"
 
+#include "common/error.h"
+
+namespace mtx {
+  namespace mem {
+    class exception: public mtx::exception {
+    public:
+      virtual const char *what() const throw() {
+        return "unspecified memory error";
+      }
+    };
+
+    class lacing_x: public exception {
+    protected:
+      std::string m_message;
+    public:
+      lacing_x(const std::string &message)  : m_message(message)       { }
+      lacing_x(const boost::format &message): m_message(message.str()) { }
+      virtual ~lacing_x() throw() { }
+
+      virtual const char *what() const throw() {
+        return m_message.c_str();
+      }
+    };
+  }
+}
+
 inline void
 safefree(void *p) {
   if (NULL != p)

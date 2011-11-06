@@ -22,6 +22,23 @@
 #define THEORA_HEADERTYPE_COMMENT        0x81
 #define THEORA_HEADERTYPE_SETUP          0x82
 
+namespace mtx {
+  namespace theora {
+    class header_parsing_x: public mtx::exception {
+    protected:
+      std::string m_message;
+    public:
+      header_parsing_x(const std::string &message)  : m_message(message)       { }
+      header_parsing_x(const boost::format &message): m_message(message.str()) { }
+      virtual ~header_parsing_x() throw() { }
+
+      virtual const char *what() const throw() {
+        return m_message.c_str();
+      }
+    };
+  }
+}
+
 struct theora_identification_header_t {
   uint8_t headertype;
   char theora_string[6];
@@ -57,6 +74,6 @@ struct theora_identification_header_t {
   theora_identification_header_t();
 };
 
-void theora_parse_identification_header(unsigned char *buffer, int size, theora_identification_header_t &header) throw(error_c);
+void theora_parse_identification_header(unsigned char *buffer, int size, theora_identification_header_t &header);
 
 #endif // __MTX_COMMON_THEORA_COMMON_H

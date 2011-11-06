@@ -101,7 +101,7 @@ private:
   int64_t file_size;
 
 public:
-  ogm_reader_c(track_info_c &_ti) throw (error_c);
+  ogm_reader_c(track_info_c &ti);
   virtual ~ogm_reader_c();
 
   virtual const std::string get_format_name(bool translate = true) {

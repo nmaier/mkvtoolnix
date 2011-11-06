@@ -26,7 +26,7 @@ protected:
   int m_width, m_height;
 
 public:
-  vobbtn_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, int width, int height) throw (error_c);
+  vobbtn_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, int width, int height);
   virtual ~vobbtn_packetizer_c();
 
   virtual int process(packet_cptr packet);

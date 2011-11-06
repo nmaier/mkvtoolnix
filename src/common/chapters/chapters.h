@@ -20,6 +20,8 @@
 
 #include <ebml/EbmlElement.h>
 
+#include "common/error.h"
+
 namespace libebml {
   class EbmlMaster;
 };
@@ -33,6 +35,21 @@ namespace libmatroska {
 
 using namespace libebml;
 using namespace libmatroska;
+
+namespace mtx {
+  class chapter_parser_x: public exception {
+  protected:
+    std::string m_message;
+  public:
+    chapter_parser_x(const std::string &message)  : m_message(message)       { }
+    chapter_parser_x(const boost::format &message): m_message(message.str()) { }
+    virtual ~chapter_parser_x() throw() { }
+
+    virtual const char *what() const throw() {
+      return m_message.c_str();
+    }
+  };
+}
 
 class mm_io_c;
 class mm_text_io_c;

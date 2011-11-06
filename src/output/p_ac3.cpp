@@ -26,7 +26,6 @@ ac3_packetizer_c::ac3_packetizer_c(generic_reader_c *p_reader,
                                    int samples_per_sec,
                                    int channels,
                                    int bsid)
-  throw (error_c)
   : generic_packetizer_c(p_reader, p_ti)
   , m_bytes_output(0)
   , m_packetno(0)
@@ -197,8 +196,7 @@ ac3_bs_packetizer_c::ac3_bs_packetizer_c(generic_reader_c *p_reader,
                                          unsigned long samples_per_sec,
                                          int channels,
                                          int bsid)
-  throw (error_c)
-  :  ac3_packetizer_c(p_reader, p_ti, samples_per_sec, channels, bsid)
+  : ac3_packetizer_c(p_reader, p_ti, samples_per_sec, channels, bsid)
   , m_bsb(0)
   , m_bsb_present(false)
 {

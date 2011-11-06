@@ -51,6 +51,21 @@ public:
 
 bool operator <(const kax_analyzer_data_cptr &d1, const kax_analyzer_data_cptr &d2);
 
+namespace mtx {
+  class kax_analyzer_x: public exception {
+  protected:
+    std::string m_message;
+  public:
+    kax_analyzer_x(const std::string &message)  : m_message(message)       { }
+    kax_analyzer_x(const boost::format &message): m_message(message.str()) { }
+    virtual ~kax_analyzer_x() throw() { }
+
+    virtual const char *what() const throw() {
+      return m_message.c_str();
+    }
+  };
+}
+
 class kax_analyzer_c {
 public:
   enum update_element_result_e {

@@ -30,7 +30,7 @@ private:
   int64_t m_previous_timecode;
 
 public:
-  kate_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, const void *global_data, int global_size) throw (error_c);
+  kate_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, const void *global_data, int global_size);
   virtual ~kate_packetizer_c();
 
   virtual int process(packet_cptr packet);

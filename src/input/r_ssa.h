@@ -25,7 +25,7 @@ private:
   ssa_parser_cptr m_subs;
 
 public:
-  ssa_reader_c(track_info_c &_ti) throw (error_c);
+  ssa_reader_c(track_info_c &_ti);
   virtual ~ssa_reader_c();
 
   virtual const std::string get_format_name(bool translate = true) {

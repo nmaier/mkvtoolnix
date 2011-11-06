@@ -41,6 +41,51 @@
 
 using namespace libmatroska;
 
+namespace mtx {
+  namespace input {
+    class exception: public mtx::exception {
+    public:
+      virtual const char *what() const throw() {
+        return "unspecified reader error";
+      }
+    };
+
+    class open_x: public exception {
+    public:
+      virtual const char *what() const throw() {
+        return "open error";
+      }
+    };
+
+    class invalid_format_x: public exception {
+    public:
+      virtual const char *what() const throw() {
+        return "invalid format";
+      }
+    };
+
+    class header_parsing_x: public exception {
+    public:
+      virtual const char *what() const throw() {
+        return "headers could not be parsed or were incomplete";
+      }
+    };
+
+    class extended_x: public exception {
+    protected:
+      std::string m_message;
+    public:
+      extended_x(const std::string &message)  : m_message(message)       { }
+      extended_x(const boost::format &message): m_message(message.str()) { }
+      virtual ~extended_x() throw() { }
+
+      virtual const char *what() const throw() {
+        return m_message.c_str();
+      }
+    };
+  }
+}
+
 // CUE_STRATEGY_* control the creation of cue entries for a track.
 // UNSPECIFIED: is used for command line parsing.
 // NONE:        don't create any cue entries.
@@ -462,7 +507,7 @@ public:
   bool m_relaxed_timecode_checking;
 
 public:
-  generic_packetizer_c(generic_reader_c *reader, track_info_c &ti) throw (error_c);
+  generic_packetizer_c(generic_reader_c *reader, track_info_c &ti);
   virtual ~generic_packetizer_c();
 
   virtual bool contains_gap();

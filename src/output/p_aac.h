@@ -32,8 +32,7 @@ private:
   int64_t m_single_packet_duration;
 
 public:
-  aac_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, int id, int profile, int samples_per_sec, int channels,
-                   bool emphasis_present, bool _headerless = false) throw (error_c);
+  aac_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, int id, int profile, int samples_per_sec, int channels, bool emphasis_present, bool _headerless = false);
   virtual ~aac_packetizer_c();
 
   virtual int process(packet_cptr packet);

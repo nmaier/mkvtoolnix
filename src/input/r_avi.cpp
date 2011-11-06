@@ -80,7 +80,6 @@ avi_reader_c::probe_file(mm_io_c *io,
 }
 
 avi_reader_c::avi_reader_c(track_info_c &_ti)
-  throw (error_c)
   : generic_reader_c(_ti)
   , m_divx_type(DIVX_TYPE_NONE)
   , m_avi(NULL)
@@ -105,16 +104,16 @@ avi_reader_c::read_headers() {
     mm_file_io_c io(m_ti.m_fname);
     size = io.get_size();
     if (!avi_reader_c::probe_file(&io, size))
-      throw error_c(boost::format(Y("%1%: Source is not a valid %1% file.")) % get_format_name());
+      throw mtx::input::invalid_format_x();
 
-  } catch (...) {
-    throw error_c(boost::format(Y("%1%: Could not read the source file.")) % get_format_name());
+  } catch (mtx::mm_io::exception &) {
+    throw mtx::input::open_x();
   }
 
   show_demuxer_info();
 
   if (NULL == (m_avi = AVI_open_input_file(m_ti.m_fname.c_str(), 1)))
-    throw error_c(boost::format(Y("avi_reader: Could not initialize AVI source. Reason: %1%")) % AVI_strerror());
+    throw mtx::input::invalid_format_x();
 
   m_fps              = AVI_frame_rate(m_avi);
   m_max_video_frames = AVI_video_frames(m_avi);
@@ -682,12 +681,12 @@ generic_packetizer_c *
 avi_reader_c::create_vorbis_packetizer(int aid) {
   try {
     if (!m_ti.m_private_data || !m_ti.m_private_size)
-      throw error_c(Y("Invalid Vorbis headers in AVI audio track."));
+      throw mtx::input::extended_x(Y("Invalid Vorbis headers in AVI audio track."));
 
     unsigned char *c = (unsigned char *)m_ti.m_private_data;
 
     if (2 != c[0])
-      throw error_c(Y("Invalid Vorbis headers in AVI audio track."));
+      throw mtx::input::extended_x(Y("Invalid Vorbis headers in AVI audio track."));
 
     int offset           = 1;
     const int laced_size = m_ti.m_private_size;
@@ -704,7 +703,7 @@ avi_reader_c::create_vorbis_packetizer(int aid) {
         ++offset;
       }
       if ((laced_size - 1) <= offset)
-        throw error_c(Y("Invalid Vorbis headers in AVI audio track."));
+        throw mtx::input::extended_x(Y("Invalid Vorbis headers in AVI audio track."));
 
       size            += c[offset];
       header_sizes[i]  = size;
@@ -721,8 +720,8 @@ avi_reader_c::create_vorbis_packetizer(int aid) {
 
     return new vorbis_packetizer_c(this, m_ti, headers[0], header_sizes[0], headers[1], header_sizes[1], headers[2], header_sizes[2]);
 
-  } catch (error_c &e) {
-    mxerror_tid(m_ti.m_fname, aid + 1, boost::format("%1%\n") % e.get_error());
+  } catch (mtx::exception &e) {
+    mxerror_tid(m_ti.m_fname, aid + 1, boost::format("%1%\n") % e.error());
 
     // Never reached, but make the compiler happy:
     return NULL;

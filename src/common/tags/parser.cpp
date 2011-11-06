@@ -79,8 +79,8 @@ parse_xml_tags(const std::string &name,
 
       delete new_tags;
     }
-  } catch (error_c e) {
-    mxerror(e.get_error());
+  } catch (mtx::exception &e) {
+    mxerror(e.error());
   }
 
   delete in;

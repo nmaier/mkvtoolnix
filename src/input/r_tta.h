@@ -33,7 +33,7 @@ private:
   tta_file_header_t header;
 
 public:
-  tta_reader_c(track_info_c &_ti) throw (error_c);
+  tta_reader_c(track_info_c &_ti);
   virtual ~tta_reader_c();
 
   virtual const std::string get_format_name(bool translate = true) {
