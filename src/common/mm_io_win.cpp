@@ -70,7 +70,7 @@ mm_file_io_c::mm_file_io_c(const std::string &path,
       disposition = CREATE_ALWAYS;
       break;
     default:
-      throw mtx::invalid_set_file_pointer;
+      throw mtx::invalid_parameter_x();
   }
 
   if ((MODE_WRITE == mode) || (MODE_CREATE == mode))
