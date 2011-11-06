@@ -4,10 +4,10 @@
 .\" Generator: DocBook XSL Stylesheets v1.75.2 <http://docbook.sf.net/>
 .\"      Date: 2011-10-09
 .\"    Manual: User Commands
-.\"    Source: MkvToolNix 5.0.1
+.\"    Source: MKVToolNix 5.0.1
 .\"  Language: English
 .\"
-.TH "MKVINFO" "1" "2011\-10\-09" "MkvToolNix 5\&.0\&.1" "User Commands"
+.TH "MKVINFO" "1" "2011\-10\-09" "MKVToolNix 5\&.0\&.1" "User Commands"
 .\" -----------------------------------------------------------------
 .\" * Define some portability stuff
 .\" -----------------------------------------------------------------
@@ -147,7 +147,7 @@ Afterwards the program exists with an exit code of 0 if no newer release is avai
 This option is only available if the program was built with support for libcurl\&.
 .RE
 .PP
-\fB@\fRoptions\-file
+\fB@\fR\fIoptions\-file\fR
 .RS 4
 Reads additional command line arguments from the file
 \fIoptions\-file\fR\&. Lines whose first non\-whitespace character is a hash mark (\*(Aq#\*(Aq) are treated as comments and ignored\&. White spaces at the start and end of a line will be stripped\&. Each line must contain exactly one option\&.
@@ -169,7 +169,6 @@ input\&.mkv
 # and write the output to info\&.txt
 \-\-redirect\-output
 info\&.txt
-     
 .fi
 .if n \{\
 .RE
@@ -259,7 +258,7 @@ aborts right after outputting the error message\&. Error messages range from wro
 .PP
 There are a few places in which special characters in text must or should be escaped\&. The rules for escaping are simple: each character that needs escaping is replaced with a backslash followed by another character\&.
 .PP
-The rules are: \*(Aq \*(Aq becomes \*(Aq\es\*(Aq, \*(Aq"\*(Aq becomes \*(Aq\e2\*(Aq, \*(Aq:\*(Aq becomes \*(Aq\ec\*(Aq, \*(Aq#\*(Aq becomes \*(Aq\eh\*(Aq and \*(Aq\e\*(Aq itself becomes \*(Aq\e\e\*(Aq\&.
+The rules are: \*(Aq \*(Aq (a space) becomes \*(Aq\es\*(Aq, \*(Aq"\*(Aq (double quotes) becomes \*(Aq\e2\*(Aq, \*(Aq:\*(Aq becomes \*(Aq\ec\*(Aq, \*(Aq#\*(Aq becomes \*(Aq\eh\*(Aq and \*(Aq\e\*(Aq (a single backslash) itself becomes \*(Aq\e\e\*(Aq\&.
 .SH "SEE ALSO"
 .PP
 

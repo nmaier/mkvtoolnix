@@ -4,10 +4,10 @@
 .\" Generator: DocBook XSL Stylesheets v1.75.2 <http://docbook.sf.net/>
 .\"      Date: 2011-10-09
 .\"    Manual: User Commands
-.\"    Source: MkvToolNix 5.0.1
+.\"    Source: MKVToolNix 5.0.1
 .\"  Language: English
 .\"
-.TH "MKVEXTRACT" "1" "2011\-10\-09" "MkvToolNix 5\&.0\&.1" "User Commands"
+.TH "MKVEXTRACT" "1" "2011\-10\-09" "MKVToolNix 5\&.0\&.1" "User Commands"
 .\" -----------------------------------------------------------------
 .\" * Define some portability stuff
 .\" -----------------------------------------------------------------
@@ -126,7 +126,7 @@ Afterwards the program exists with an exit code of 0 if no newer release is avai
 This option is only available if the program was built with support for libcurl\&.
 .RE
 .PP
-\fB@\fRoptions\-file
+\fB@\fR\fIoptions\-file\fR
 .RS 4
 Reads additional command line arguments from the file
 \fIoptions\-file\fR\&. Lines whose first non\-whitespace character is a hash mark (\*(Aq#\*(Aq) are treated as comments and ignored\&. White spaces at the start and end of a line will be stripped\&. Each line must contain exactly one option\&.
@@ -146,7 +146,6 @@ source\&.mkv
 # Output the track as raw data\&.
 \-\-raw
 1:destination\&.raw
-      
 .fi
 .if n \{\
 .RE
@@ -223,7 +222,6 @@ Each output name should be used only once\&. The exception are RealAudio and Rea
 .\}
 .nf
 $ mkvextract tracks input\&.mkv 1:output\-two\-tracks\&.rm 2:output\-two\-tracks\&.rm
-      
 .fi
 .if n \{\
 .RE
@@ -250,7 +248,7 @@ Syntax:
 \fIAID1:outname1\fR
 [\fIAID2:outname2\fR \&.\&.\&.]
 .PP
-AID:outname
+\fIAID\fR:\fIoutname\fR
 .RS 4
 Causes extraction of the attachment with the ID
 \fIAID\fR
@@ -328,7 +326,6 @@ Example:
 .\}
 .nf
 $ mkvextract timecodes_v2 input\&.mkv 1:tc\-track1\&.txt 2:tc\-track2\&.txt
-      
 .fi
 .if n \{\
 .RE
@@ -349,7 +346,6 @@ The shell\*(Aqs builtin redirection mechanism is used by appending \*(Aq> output
 .\}
 .nf
 $ mkvextract tags source\&.mkv > tags\&.xml
-  
 .fi
 .if n \{\
 .RE
@@ -365,7 +361,6 @@ option\&. Example:
 .\}
 .nf
 $ mkvextract tags source\&.mkv \-\-redirect\-output tags\&.xml
-  
 .fi
 .if n \{\
 .RE
@@ -598,7 +593,7 @@ aborts right after outputting the error message\&. Error messages range from wro
 .PP
 There are a few places in which special characters in text must or should be escaped\&. The rules for escaping are simple: each character that needs escaping is replaced with a backslash followed by another character\&.
 .PP
-The rules are: \*(Aq \*(Aq becomes \*(Aq\es\*(Aq, \*(Aq"\*(Aq becomes \*(Aq\e2\*(Aq, \*(Aq:\*(Aq becomes \*(Aq\ec\*(Aq, \*(Aq#\*(Aq becomes \*(Aq\eh\*(Aq and \*(Aq\e\*(Aq itself becomes \*(Aq\e\e\*(Aq\&.
+The rules are: \*(Aq \*(Aq (a space) becomes \*(Aq\es\*(Aq, \*(Aq"\*(Aq (double quotes) becomes \*(Aq\e2\*(Aq, \*(Aq:\*(Aq becomes \*(Aq\ec\*(Aq, \*(Aq#\*(Aq becomes \*(Aq\eh\*(Aq and \*(Aq\e\*(Aq (a single backslash) itself becomes \*(Aq\e\e\*(Aq\&.
 .SH "SEE ALSO"
 .PP
 
