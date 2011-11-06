@@ -136,7 +136,8 @@ kax_file_c::read_one_element() {
 
   unsigned long element_size = get_element_size(l1);
   if (m_debug_resync)
-    mxinfo(boost::format("kax_file::read_one_element(): read element at %1% size %2%\n") % l1->GetElementPosition() % element_size);
+    mxinfo(boost::format("kax_file::read_one_element(): read element at %1% calculated size %2% stored size %3%\n")
+           % l1->GetElementPosition() % element_size % (l1->IsFiniteSize() ? (boost::format("%1%") % l1->ElementSize()).str() : std::string("unknown")));
   m_in->setFilePointer(l1->GetElementPosition() + element_size, seek_beginning);
 
   return l1;
