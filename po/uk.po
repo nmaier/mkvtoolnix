@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: mkvtoolnix_uk\n"
 "Report-Msgid-Bugs-To: Moritz Bunkus <moritz@bunkus.org>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2011-10-24 11:56+0200\n"
+"PO-Revision-Date: 2011-11-08 19:44+0200\n"
 "Last-Translator: Andriy Bilous'ko <arestarh@ukr.net>\n"
 "Language-Team: Ukrainian <moritz@bunkus.org>\n"
 "Language: uk\n"
@@ -776,11 +776,12 @@ msgid "%1% second"
 msgid_plural "%1% seconds"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: src/input/r_vobsub.cpp:84
-#, fuzzy, boost-format
+#, boost-format
 msgid "%1%: Could not open the sub file"
-msgstr "%1%: Не вдалося відкрити файл."
+msgstr "%1%: Не вдалося відкрити файл субтитрів."
 
 #: src/common/kax_file.cpp:165
 #, boost-format
@@ -6512,12 +6513,11 @@ msgstr "Файл '%s' вже оброблений у поєднанні з фа�
 
 #: src/merge/output_control.cpp:1200
 msgid "The file content does not match its format type and was not recognized."
-msgstr ""
+msgstr "Вмістиме файлу не співпадає з типом його формату і не було розпізнане."
 
 #: src/merge/output_control.cpp:1197
-#, fuzzy
 msgid "The file could not be opened for reading, or there was not enough data to parse its headers."
-msgstr "Файл '%1%' не може бути відкритий для зчитування аргументів командного рядка.\n"
+msgstr "Файл не може бути відкритий для зчитування, або було недостатньо даних для аналізу його заголовків."
 
 #: src/info/qt_ui.cpp:77
 msgid "The file could not be opened for writing."
@@ -6548,9 +6548,8 @@ msgid "The file header was not read correctly.\n"
 msgstr "Заголовок файлу не був правильно прочитаний.\n"
 
 #: src/merge/output_control.cpp:1203
-#, fuzzy
 msgid "The file headers could not be parsed, e.g. because they're inomplete, invalid or damaged."
-msgstr "Заголовки FLAC не можуть бути проаналізовані: структура інформації потоку не була знайдена.\n"
+msgstr "Заголовки файлу не можуть бути проаналізовані, наприклад через те, що вони неповні, некоректні або пошкоджені."
 
 #: src/mmg/tabs/input.cpp:352
 #, c-format, boost-format
@@ -9615,4 +9614,3 @@ msgstr "Так"
 
 #~ msgid "wrong usage: writing to read-only memory"
 #~ msgstr "wrong usage: запис тільки до \"пам'яті для читання\""
-
