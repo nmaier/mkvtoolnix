@@ -219,7 +219,7 @@ struct qtmp4_demuxer_c {
 
   void build_index();
 
-  bool read_first_bytes(memory_cptr &buf, int num_bytes, mm_io_c *io);
+  bool read_first_bytes(memory_cptr &buf, int num_bytes, mm_io_cptr in);
 
 private:
   void build_index_chunk_mode();
@@ -267,15 +267,15 @@ struct qtmp4_chapter_entry_t {
 
 class qtmp4_reader_c: public generic_reader_c {
 private:
-  mm_io_c *io;
-  std::vector<qtmp4_demuxer_cptr> demuxers;
-  qtmp4_demuxer_cptr chapter_dmx;
-  int64_t file_size, mdat_pos, mdat_size;
-  uint32_t time_scale, compression_algorithm;
-  int main_dmx;
+  mm_io_cptr m_in;
+  std::vector<qtmp4_demuxer_cptr> m_demuxers;
+  qtmp4_demuxer_cptr m_chapter_dmx;
+  int64_t m_file_size, m_mdat_pos, m_mdat_size;
+  uint32_t m_time_scale, m_compression_algorithm;
+  int m_main_dmx;
 
 public:
-  qtmp4_reader_c(track_info_c &_ti);
+  qtmp4_reader_c(track_info_c &ti);
   virtual ~qtmp4_reader_c();
 
   virtual const std::string get_format_name(bool translate = true) {
