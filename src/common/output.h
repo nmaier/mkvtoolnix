@@ -140,7 +140,8 @@ mxverb_tid(unsigned int level,
   mxverb_tid(level, file_name, track_id, message.str());
 }
 
-void mxhexdump(unsigned int level, const void *buffer_to_dump, size_t lenth);
+extern const std::string empty_string;
+void mxhexdump(unsigned int level, const void *buffer_to_dump, size_t lenth, const std::string &prefix = empty_string);
 
 void dump_ebml_elements(EbmlElement *element, bool with_values = false, unsigned int level = 0);
 

@@ -196,7 +196,8 @@ set_cc_stdio(const std::string &charset) {
 void
 mxhexdump(unsigned int level,
           const void *buffer_to_dump,
-          size_t length) {
+          size_t length,
+          const std::string &prefix) {
   if (verbose < level)
     return;
 
@@ -212,7 +213,7 @@ mxhexdump(unsigned int level,
         mxinfo(boost::format("%1%\n") % output);
         output_idx = 0;
       }
-      mxinfo(boost::format("%|1$08x|  ") % buffer_idx);
+      mxinfo(boost::format("%2%%|1$08x|  ") % buffer_idx % prefix);
 
     } else if ((buffer_idx % 8) == 0) {
       mxinfo(" ");
