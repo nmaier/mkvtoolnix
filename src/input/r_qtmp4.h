@@ -274,6 +274,8 @@ private:
   uint32_t m_time_scale, m_compression_algorithm;
   int m_main_dmx;
 
+  bool m_debug_chapters;
+
 public:
   qtmp4_reader_c(track_info_c &ti);
   virtual ~qtmp4_reader_c();

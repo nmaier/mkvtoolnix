@@ -107,6 +107,7 @@ qtmp4_reader_c::qtmp4_reader_c(track_info_c &ti)
   , m_time_scale(1)
   , m_compression_algorithm(0)
   , m_main_dmx(-1)
+  , m_debug_chapters(debugging_requested("qtmp4") || debugging_requested("qtmp4_chapters"))
 {
 }
 
@@ -749,7 +750,7 @@ qtmp4_reader_c::handle_chpl_atom(qt_atom_t atom,
   m_in->skip(1 + 3 + 4);          // Version, flags, zero
 
   int count = m_in->read_uint8();
-  mxverb(2, boost::format("Quicktime/MP4 reader:%1%Chapter list: %2% entries\n") % space(level * 2 + 1) % count);
+  mxdebug_if(m_debug_chapters, boost::format("%1%Chapter list: %2% entries\n") % space(level * 2 + 1) % count);
 
   if (0 == count)
     return;
@@ -814,7 +815,7 @@ qtmp4_reader_c::process_chapter_entries(int level,
   if (entries.empty())
     return;
 
-  mxverb(3, boost::format("Quicktime/MP4 reader:%1%%2% chapter(s):\n") % space((level + 1) * 2 + 1) % entries.size());
+  mxdebug_if(m_debug_chapters, boost::format("%1%%2% chapter(s):\n") % space((level + 1) * 2 + 1) % entries.size());
 
   std::stable_sort(entries.begin(), entries.end());
 
@@ -826,7 +827,7 @@ qtmp4_reader_c::process_chapter_entries(int level,
   for (; entries.size() > i; ++i) {
     qtmp4_chapter_entry_t &chapter = entries[i];
 
-    mxverb(3, boost::format("Quicktime/MP4 reader:%1%%2%: start %4% name %3%\n") % space((level + 1) * 2 + 1) % i % chapter.m_name % format_timecode(chapter.m_timecode));
+    mxdebug_if(m_debug_chapters, boost::format("%1%%2%: start %4% name %3%\n") % space((level + 1) * 2 + 1) % i % chapter.m_name % format_timecode(chapter.m_timecode));
 
     out.puts(boost::format("CHAPTER%|1$02d|=%|2$02d|:%|3$02d|:%|4$02d|.%|5$03d|\n"
                            "CHAPTER%|1$02d|NAME=%6%\n")
@@ -1682,6 +1683,15 @@ qtmp4_reader_c::recode_chapter_entries(std::vector<qtmp4_chapter_entry_t> &entri
   std::string charset              = m_ti.m_chapter_charset.empty() ? "UTF-8" : m_ti.m_chapter_charset;
   charset_converter_cptr converter = charset_converter_c::init(m_ti.m_chapter_charset);
   converter->enable_byte_order_marker_detection(true);
+
+  if (m_debug_chapters) {
+    mxdebug(boost::format("Number of chapter entries: %1%\n") % entries.size());
+    size_t num = 0;
+    for (auto &entry : entries) {
+      mxdebug(boost::format("  Chapter %1%: name length %2%\n") % num++ % entry.m_name.length());
+      mxhexdump(0, entry.m_name.c_str(), entry.m_name.length(), "Debug> ");
+    }
+  }
 
   for (auto &entry : entries)
     entry.m_name = converter->utf8(entry.m_name);
