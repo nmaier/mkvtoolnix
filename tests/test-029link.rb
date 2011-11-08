@@ -46,17 +46,17 @@ class T_029link < Test
       # previous UID and the last one a valid next UID.
       merge("--split 30s --link-to-previous \"#{PreviousUID}\" " +
              "--link-to-next \"#{NextUID}\" data/avi/v.avi")
-      raise SubtestError("test 1-1p failed") unless
+      raise SubtestError.new("test 1-1p failed") unless
         (valid_previous_uid?(1, true, false))
-      raise SubtestError("test 1-1n failed") unless
+      raise SubtestError.new("test 1-1n failed") unless
         (valid_next_uid?(1, false, false))
-      raise SubtestError("test 1-2p failed") unless
+      raise SubtestError.new("test 1-2p failed") unless
         (valid_previous_uid?(2, false, false))
-      raise SubtestError("test 1-2n failed") unless
+      raise SubtestError.new("test 1-2n failed") unless
         (valid_next_uid?(2, false, false))
-      raise SubtestError("test 1-3p failed") unless
+      raise SubtestError.new("test 1-3p failed") unless
         (valid_previous_uid?(3, false, false))
-      raise SubtestError("test 1-3n failed") unless
+      raise SubtestError.new("test 1-3n failed") unless
         (valid_next_uid?(3, true, false))
 
       # Part 2: --split and --link. The first file must have a valid
@@ -64,26 +64,26 @@ class T_029link < Test
       # be set as well.
       merge("--split 30s --link --link-to-previous \"#{PreviousUID}\" " +
              "--link-to-next \"#{NextUID}\" data/avi/v.avi")
-      raise SubtestError("test 1-1p failed") unless
+      raise SubtestError.new("test 1-1p failed") unless
         (valid_previous_uid?(1, true, false))
-      raise SubtestError("test 1-1n failed") unless
+      raise SubtestError.new("test 1-1n failed") unless
         (valid_next_uid?(1, false, true))
-      raise SubtestError("test 1-2p failed") unless
+      raise SubtestError.new("test 1-2p failed") unless
         (valid_previous_uid?(2, false, true))
-      raise SubtestError("test 1-2n failed") unless
+      raise SubtestError.new("test 1-2n failed") unless
         (valid_next_uid?(2, false, true))
-      raise SubtestError("test 1-3p failed") unless
+      raise SubtestError.new("test 1-3p failed") unless
         (valid_previous_uid?(3, false, true))
-      raise SubtestError("test 1-3n failed") unless
+      raise SubtestError.new("test 1-3n failed") unless
         (valid_next_uid?(3, true, false))
 
       # Part 3: Neither --split nor --link. The file must have a valid
       # previous UID and a valid next UID.
       merge("--link-to-previous \"#{PreviousUID}\" --link-to-next " +
              "\"#{NextUID}\" data/avi/v.avi")
-      raise SubtestError("test 3p failed") unless
+      raise SubtestError.new("test 3p failed") unless
         (valid_previous_uid?(nil, true, false))
-      raise SubtestError("test 3n failed") unless
+      raise SubtestError.new("test 3n failed") unless
         (valid_next_uid?(nil, true, false))
     rescue SubtestError => e
       puts("  failed subtest: " + e.to_s)
