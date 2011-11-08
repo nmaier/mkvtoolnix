@@ -169,6 +169,8 @@ struct qtmp4_demuxer_c {
 
   std::string language;
 
+  bool m_debug_tables, m_debug_fps;
+
   qtmp4_demuxer_c():
     ok(false),
     type('?'),
@@ -197,8 +199,10 @@ struct qtmp4_demuxer_c {
     priv(NULL),
     priv_size(0),
     warning_printed(false),
-    ptzr(-1) {
-
+    ptzr(-1)
+    , m_debug_tables(                                debugging_requested("qtmp4_full") || debugging_requested("qtmp4_tables"))
+    , m_debug_fps(   debugging_requested("qtmp4") || debugging_requested("qtmp4_full") || debugging_requested("qtmp4_fps"))
+  {
     memset(fourcc, 0, 4);
     memset(&esds, 0, sizeof(esds_t));
   }
@@ -274,7 +278,7 @@ private:
   uint32_t m_time_scale, m_compression_algorithm;
   int m_main_dmx;
 
-  bool m_debug_chapters;
+  bool m_debug_chapters, m_debug_headers, m_debug_tables;
 
 public:
   qtmp4_reader_c(track_info_c &ti);

@@ -107,7 +107,9 @@ qtmp4_reader_c::qtmp4_reader_c(track_info_c &ti)
   , m_time_scale(1)
   , m_compression_algorithm(0)
   , m_main_dmx(-1)
-  , m_debug_chapters(debugging_requested("qtmp4") || debugging_requested("qtmp4_chapters"))
+  , m_debug_chapters(debugging_requested("qtmp4") || debugging_requested("qtmp4_full") || debugging_requested("qtmp4_chapters"))
+  , m_debug_headers( debugging_requested("qtmp4") || debugging_requested("qtmp4_full") || debugging_requested("qtmp4_headers"))
+  , m_debug_tables(                                  debugging_requested("qtmp4_full") || debugging_requested("qtmp4_tables"))
 {
 }
 
@@ -174,17 +176,17 @@ qtmp4_reader_c::parse_headers() {
   bool headers_parsed = false;
   do {
     qt_atom_t atom = read_atom();
-    mxverb(2, boost::format("Quicktime/MP4 reader: '%1%%2%%3%%4%' atom, size %5%, at %6%\n") % BE2STR(atom) % atom.size % atom.pos);
+    mxdebug_if(m_debug_headers, boost::format("'%1%%2%%3%%4%' atom, size %5%, at %6%\n") % BE2STR(atom) % atom.size % atom.pos);
 
     if (FOURCC('f', 't', 'y', 'p') == atom.fourcc) {
       tmp = m_in->read_uint32_be();
-      mxverb(2, boost::format("Quicktime/MP4 reader:   File type major brand: %1%%2%%3%%4%\n") % BE2STR(tmp));
+      mxdebug_if(m_debug_headers, boost::format("  File type major brand: %1%%2%%3%%4%\n") % BE2STR(tmp));
       tmp = m_in->read_uint32_be();
-      mxverb(2, boost::format("Quicktime/MP4 reader:   File type minor brand: 0x%|1$08x|\n") % tmp);
+      mxdebug_if(m_debug_headers, boost::format("  File type minor brand: 0x%|1$08x|\n") % tmp);
 
       for (idx = 0; idx < ((atom.size - 16) / 4); ++idx) {
         tmp = m_in->read_uint32_be();
-        mxverb(2, boost::format("Quicktime/MP4 reader:   File type compatible brands #%1%: %2%%3%%4%%5%\n") % idx % BE2STR(tmp));
+        mxdebug_if(m_debug_headers, boost::format("  File type compatible brands #%1%: %2%%3%%4%%5%\n") % idx % BE2STR(tmp));
       }
 
     } else if (FOURCC('m', 'o', 'o', 'v') == atom.fourcc) {
@@ -307,7 +309,7 @@ qtmp4_reader_c::parse_headers() {
   if (!g_identifying)
     calculate_timecodes();
 
-  mxverb(2, boost::format("Quicktime/MP4 reader: Number of valid tracks found: %1%\n") % m_demuxers.size());
+  mxdebug_if(m_debug_headers, boost::format("Number of valid tracks found: %1%\n") % m_demuxers.size());
 }
 
 void
@@ -362,9 +364,7 @@ qtmp4_reader_c::parse_video_header_priv_atoms(qtmp4_demuxer_cptr &dmx,
         return;
       }
 
-      mxverb(2,
-             boost::format("Quicktime/MP4 reader:%1%Video private data size: %2%, type: '%3%%4%%5%%6%'\n")
-             % space((level + 1) * 2 + 1) % atom.size % BE2STR(atom.fourcc));
+      mxdebug_if(m_debug_headers, boost::format("%1%Video private data size: %2%, type: '%3%%4%%5%%6%'\n") % space((level + 1) * 2 + 1) % atom.size % BE2STR(atom.fourcc));
 
       if ((FOURCC('e', 's', 'd', 's') == atom.fourcc) ||
           (FOURCC('a', 'v', 'c', 'C') == atom.fourcc)) {
@@ -414,9 +414,7 @@ qtmp4_reader_c::parse_audio_header_priv_atoms(qtmp4_demuxer_cptr &dmx,
         continue;
       }
 
-      mxverb(2,
-             boost::format("Quicktime/MP4 reader:%1%Audio private data size: %2%, type: '%3%%4%%5%%6%'\n")
-             % space((level + 1) * 2 + 1) % atom.size % BE2STR(atom.fourcc));
+      mxdebug_if(m_debug_headers, boost::format("%1%Audio private data size: %2%, type: '%3%%4%%5%%6%'\n") % space((level + 1) * 2 + 1) % atom.size % BE2STR(atom.fourcc));
 
       if (!dmx->esds_parsed) {
         mm_mem_io_c memio(mem + atom.pos + atom.hsize, atom.size - atom.hsize);
@@ -433,9 +431,7 @@ qtmp4_reader_c::parse_audio_header_priv_atoms(qtmp4_demuxer_cptr &dmx,
             mxwarn(boost::format(Y("Track %1%: The AAC information could not be parsed.\n")) % dmx->id);
 
           else {
-            mxverb(2,
-                   boost::format("Quicktime/MP4 reader: AAC: profile: %1%, sample_rate: %2%, channels: %3%, output_sample_rate: %4%, sbr: %5%\n")
-                   % profile % sample_rate % channels % output_sample_rate % aac_is_sbr);
+            mxdebug_if(m_debug_headers, boost::format(" AAC: profile: %1%, sample_rate: %2%, channels: %3%, output_sample_rate: %4%, sbr: %5%\n") % profile % sample_rate % channels % output_sample_rate % aac_is_sbr);
             if (aac_is_sbr)
               profile = AAC_PROFILE_SBR;
 
@@ -455,10 +451,8 @@ qtmp4_reader_c::parse_audio_header_priv_atoms(qtmp4_demuxer_cptr &dmx,
   }
 }
 
-#define print_basic_atom_info()                                                           \
-  mxverb(2,                                                                               \
-         boost::format("Quicktime/MP4 reader:%1%'%2%%3%%4%%5%' atom, size %6%, at %7%\n") \
-         % space(2 * level + 1) % BE2STR(atom.fourcc) % atom.size % atom.pos);
+#define print_basic_atom_info() \
+  mxdebug_if(m_debug_headers, boost::format("%1%'%2%%3%%4%%5%' atom, size %6%, at %7%\n") % space(2 * level + 1) % BE2STR(atom.fourcc) % atom.size % atom.pos);
 
 #define print_atom_too_small_error(name, type)                                                                          \
   mxerror(boost::format(Y("Quicktime/MP4 reader: '%1%' atom is too small. Expected size: >= %2%. Actual size: %3%.\n")) \
@@ -488,7 +482,7 @@ void
 qtmp4_reader_c::handle_cmvd_atom(qt_atom_t atom,
                                  int level) {
   uint32_t moov_size = m_in->read_uint32_be();
-  mxverb(2, boost::format("Quicktime/MP4 reader:%1%Uncompressed size: %2%\n") % space((level + 1) * 2 + 1) % moov_size);
+  mxdebug_if(m_debug_headers, boost::format("%1%Uncompressed size: %2%\n") % space((level + 1) * 2 + 1) % moov_size);
 
   if (m_compression_algorithm != FOURCC('z', 'l', 'i', 'b'))
     mxerror(boost::format(Y("Quicktime/MP4 reader: This file uses compressed headers with an unknown "
@@ -532,7 +526,7 @@ qtmp4_reader_c::handle_cmvd_atom(qt_atom_t atom,
   m_in = mm_io_cptr(new mm_mem_io_c(moov_buf, zs.total_out));
   while (!m_in->eof()) {
     qt_atom_t next_atom = read_atom();
-    mxverb(2, boost::format("Quicktime/MP4 reader:%1%'%2%%3%%4%%5%' atom at %6%\n") % space((level + 1) * 2 + 1) % BE2STR(next_atom.fourcc) % next_atom.pos);
+    mxdebug_if(m_debug_headers, boost::format("%1%'%2%%3%%4%%5%' atom at %6%\n") % space((level + 1) * 2 + 1) % BE2STR(next_atom.fourcc) % next_atom.pos);
 
     if (FOURCC('m', 'o', 'o', 'v') == next_atom.fourcc)
       handle_moov_atom(next_atom.to_parent(), level + 1);
@@ -548,7 +542,7 @@ qtmp4_reader_c::handle_ctts_atom(qtmp4_demuxer_cptr &new_dmx,
                                  int level) {
   m_in->skip(1 + 3);        // version & flags
   uint32_t count = m_in->read_uint32_be();
-  mxverb(2, boost::format("Quicktime/MP4 reader:%1%Frame offset table: %2% raw entries\n") % space(level * 2 + 1) % count);
+  mxdebug_if(m_debug_headers, boost::format("%1%Frame offset table: %2% raw entries\n") % space(level * 2 + 1) % count);
 
   size_t i;
   for (i = 0; i < count; ++i) {
@@ -558,7 +552,7 @@ qtmp4_reader_c::handle_ctts_atom(qtmp4_demuxer_cptr &new_dmx,
     frame_offset.offset = m_in->read_uint32_be();
     new_dmx->raw_frame_offset_table.push_back(frame_offset);
 
-    mxverb(3, boost::format("Quicktime/MP4 reader:%1%%2%: count %3% offset %4%\n") % space((level + 1) * 2 + 1) % i % frame_offset.count % frame_offset.offset);
+    mxdebug_if(m_debug_tables, boost::format("%1%%2%: count %3% offset %4%\n") % space((level + 1) * 2 + 1) % i % frame_offset.count % frame_offset.offset);
   }
 }
 
@@ -566,7 +560,7 @@ void
 qtmp4_reader_c::handle_dcom_atom(qt_atom_t atom,
                                  int level) {
   m_compression_algorithm = m_in->read_uint32_be();
-  mxverb(2, boost::format("Quicktime/MP4 reader:%1%Compression algorithm: %2%%3%%4%%5%\n") % space(level * 2 + 1) % BE2STR(m_compression_algorithm));
+  mxdebug_if(m_debug_headers, boost::format("%1%Compression algorithm: %2%%3%%4%%5%\n") % space(level * 2 + 1) % BE2STR(m_compression_algorithm));
 }
 
 void
@@ -581,7 +575,7 @@ qtmp4_reader_c::handle_hdlr_atom(qtmp4_demuxer_cptr &new_dmx,
   if (m_in->read(&hdlr, sizeof(hdlr_atom_t)) != sizeof(hdlr_atom_t))
     throw mtx::input::header_parsing_x();
 
-  mxverb(2, boost::format("Quicktime/MP4 reader:%1%Component type: %|2$.4s| subtype: %|3$.4s|\n") % space(level * 2 + 1) % (char *)&hdlr.type % (char *)&hdlr.subtype);
+  mxdebug_if(m_debug_headers, boost::format("%1%Component type: %|2$.4s| subtype: %|3$.4s|\n") % space(level * 2 + 1) % (char *)&hdlr.type % (char *)&hdlr.subtype);
 
   switch (get_uint32_be(&hdlr.subtype)) {
     case FOURCC('s', 'o', 'u', 'n'):
@@ -634,7 +628,7 @@ qtmp4_reader_c::handle_mdhd_atom(qtmp4_demuxer_cptr &new_dmx,
   } else
     mxerror(boost::format(Y("Quicktime/MP4 reader: The 'media header' atom ('mdhd') uses the unsupported version %1%.\n")) % version);
 
-  mxverb(2, boost::format("Quicktime/MP4 reader:%1%Time scale: %2%, duration: %3%, language: %4%\n") % space(level * 2 + 1) % new_dmx->time_scale % new_dmx->global_duration % new_dmx->language);
+  mxdebug_if(m_debug_headers, boost::format("%1%Time scale: %2%, duration: %3%, language: %4%\n") % space(level * 2 + 1) % new_dmx->time_scale % new_dmx->global_duration % new_dmx->language);
 
   if (0 == new_dmx->time_scale)
     mxerror(Y("Quicktime/MP4 reader: The 'time scale' parameter was 0. This is not supported.\n"));
@@ -723,7 +717,7 @@ qtmp4_reader_c::handle_mvhd_atom(qt_atom_t atom,
 
   m_time_scale = get_uint32_be(&mvhd.time_scale);
 
-  mxverb(2, boost::format("Quicktime/MP4 reader:%1%Time scale: %2%\n") % space(level * 2 + 1) % m_time_scale);
+  mxdebug_if(m_debug_headers, boost::format("%1%Time scale: %2%\n") % space(level * 2 + 1) % m_time_scale);
 }
 
 void
@@ -888,7 +882,7 @@ qtmp4_reader_c::handle_stco_atom(qtmp4_demuxer_cptr &new_dmx,
   m_in->skip(1 + 3);        // version & flags
   uint32_t count = m_in->read_uint32_be();
 
-  mxverb(2, boost::format("Quicktime/MP4 reader:%1%Chunk offset table: %2% entries\n") % space(level * 2 + 1) % count);
+  mxdebug_if(m_debug_headers, boost::format("%1%Chunk offset table: %2% entries\n") % space(level * 2 + 1) % count);
 
   size_t i;
   for (i = 0; i < count; ++i) {
@@ -896,7 +890,7 @@ qtmp4_reader_c::handle_stco_atom(qtmp4_demuxer_cptr &new_dmx,
 
     chunk.pos = m_in->read_uint32_be();
     new_dmx->chunk_table.push_back(chunk);
-    mxverb(3, boost::format("Quicktime/MP4 reader:%1%  %2%\n") % space(level * 2 + 1) % chunk.pos);
+    mxdebug_if(m_debug_tables, boost::format("%1%  %2%\n") % space(level * 2 + 1) % chunk.pos);
   }
 }
 
@@ -907,7 +901,7 @@ qtmp4_reader_c::handle_co64_atom(qtmp4_demuxer_cptr &new_dmx,
   m_in->skip(1 + 3);        // version & flags
   uint32_t count = m_in->read_uint32_be();
 
-  mxverb(2, boost::format("Quicktime/MP4 reader:%1%64bit chunk offset table: %2% entries\n") % space(level * 2 + 1) % count);
+  mxdebug_if(m_debug_headers, boost::format("%1%64bit chunk offset table: %2% entries\n") % space(level * 2 + 1) % count);
 
   size_t i;
   for (i = 0; i < count; ++i) {
@@ -915,7 +909,7 @@ qtmp4_reader_c::handle_co64_atom(qtmp4_demuxer_cptr &new_dmx,
 
     chunk.pos = m_in->read_uint64_be();
     new_dmx->chunk_table.push_back(chunk);
-    mxverb(3, boost::format("Quicktime/MP4 reader:%1%  %2%\n") % space(level * 2 + 1) % chunk.pos);
+    mxdebug_if(m_debug_tables, boost::format("%1%  %2%\n") % space(level * 2 + 1) % chunk.pos);
   }
 }
 
@@ -935,7 +929,7 @@ qtmp4_reader_c::handle_stsc_atom(qtmp4_demuxer_cptr &new_dmx,
     new_dmx->chunkmap_table.push_back(chunkmap);
   }
 
-  mxverb(2, boost::format("Quicktime/MP4 reader:%1%Sample to chunk/chunkmap table: %2% entries\n") % space(level * 2 + 1) % count);
+  mxdebug_if(m_debug_headers, boost::format("%1%Sample to chunk/chunkmap table: %2% entries\n") % space(level * 2 + 1) % count);
 }
 
 void
@@ -980,15 +974,14 @@ qtmp4_reader_c::handle_stsd_atom(qtmp4_demuxer_cptr &new_dmx,
 
       uint16_t version = get_uint16_be(&sv1_stsd.v0.version);
 
-      mxverb(2,
-             boost::format("Quicktime/MP4 reader:%1%FourCC: %|2$.4s|, channels: %3%, sample size: %4%, compression id: %5%, sample rate: 0x%|6$08x|, version: %7%")
-             % space(level * 2 + 1)
-             % (const unsigned char *)sv1_stsd.v0.base.fourcc
-             % get_uint16_be(&sv1_stsd.v0.channels)
-             % get_uint16_be(&sv1_stsd.v0.sample_size)
-             % get_uint16_be(&sv1_stsd.v0.compression_id)
-             % get_uint32_be(&sv1_stsd.v0.sample_rate)
-             % get_uint16_be(&sv1_stsd.v0.version));
+      mxdebug_if(m_debug_headers, boost::format("%1%FourCC: %|2$.4s|, channels: %3%, sample size: %4%, compression id: %5%, sample rate: 0x%|6$08x|, version: %7%")
+                 % space(level * 2 + 1)
+                 % (const unsigned char *)sv1_stsd.v0.base.fourcc
+                 % get_uint16_be(&sv1_stsd.v0.channels)
+                 % get_uint16_be(&sv1_stsd.v0.sample_size)
+                 % get_uint16_be(&sv1_stsd.v0.compression_id)
+                 % get_uint32_be(&sv1_stsd.v0.sample_rate)
+                 % get_uint16_be(&sv1_stsd.v0.version));
 
       if (1 == version) {
         if (sizeof(sound_v1_stsd_atom_t) > size)
@@ -996,12 +989,12 @@ qtmp4_reader_c::handle_stsd_atom(qtmp4_demuxer_cptr &new_dmx,
 
         memcpy(&sv1_stsd, priv, sizeof(sound_v1_stsd_atom_t));
 
-        mxverb(2,
-               boost::format(" samples per packet: %1% bytes per packet: %2% bytes per frame: %3% bytes_per_sample: %4%")
-               % get_uint32_be(&sv1_stsd.v1.samples_per_packet)
-               % get_uint32_be(&sv1_stsd.v1.bytes_per_packet)
-               % get_uint32_be(&sv1_stsd.v1.bytes_per_frame)
-               % get_uint32_be(&sv1_stsd.v1.bytes_per_sample));
+        if (m_debug_headers)
+          mxinfo(boost::format(" samples per packet: %1% bytes per packet: %2% bytes per frame: %3% bytes_per_sample: %4%")
+                 % get_uint32_be(&sv1_stsd.v1.samples_per_packet)
+                 % get_uint32_be(&sv1_stsd.v1.bytes_per_packet)
+                 % get_uint32_be(&sv1_stsd.v1.bytes_per_frame)
+                 % get_uint32_be(&sv1_stsd.v1.bytes_per_sample));
 
       } else if (2 == version) {
         if (sizeof(sound_v2_stsd_atom_t) > size)
@@ -1009,19 +1002,20 @@ qtmp4_reader_c::handle_stsd_atom(qtmp4_demuxer_cptr &new_dmx,
 
         memcpy(&sv2_stsd, priv, sizeof(sound_v2_stsd_atom_t));
 
-        mxverb(2,
-               boost::format(" struct size: %1% sample rate: %|2$016x| channels: %3% const1: 0x%|4$08x| bits per channel: %5% flags: %6% bytes per frame: %7% samples per frame: %8%")
-               % get_uint32_be(&sv2_stsd.v2.v2_struct_size)
-               % get_uint64_be(&sv2_stsd.v2.sample_rate)
-               % get_uint32_be(&sv2_stsd.v2.channels)
-               % get_uint32_be(&sv2_stsd.v2.const1)
-               % get_uint32_be(&sv2_stsd.v2.bits_per_channel)
-               % get_uint32_be(&sv2_stsd.v2.flags)
-               % get_uint32_be(&sv2_stsd.v2.bytes_per_frame)
-               % get_uint32_be(&sv2_stsd.v2.samples_per_frame));
+        if (m_debug_headers)
+          mxinfo(boost::format(" struct size: %1% sample rate: %|2$016x| channels: %3% const1: 0x%|4$08x| bits per channel: %5% flags: %6% bytes per frame: %7% samples per frame: %8%")
+                 % get_uint32_be(&sv2_stsd.v2.v2_struct_size)
+                 % get_uint64_be(&sv2_stsd.v2.sample_rate)
+                 % get_uint32_be(&sv2_stsd.v2.channels)
+                 % get_uint32_be(&sv2_stsd.v2.const1)
+                 % get_uint32_be(&sv2_stsd.v2.bits_per_channel)
+                 % get_uint32_be(&sv2_stsd.v2.flags)
+                 % get_uint32_be(&sv2_stsd.v2.bytes_per_frame)
+                 % get_uint32_be(&sv2_stsd.v2.samples_per_frame));
       }
 
-      mxverb(2, "\n");
+      if (m_debug_headers)
+        mxinfo("\n");
 
       new_dmx->a_channels   = get_uint16_be(&sv1_stsd.v0.channels);
       new_dmx->a_bitdepth   = get_uint16_be(&sv1_stsd.v0.sample_size);
@@ -1055,13 +1049,12 @@ qtmp4_reader_c::handle_stsd_atom(qtmp4_demuxer_cptr &new_dmx,
         new_dmx->v_is_avc = !strncasecmp(new_dmx->fourcc, "avc1", 4);
       }
 
-      mxverb(2,
-             boost::format("Quicktime/MP4 reader:%1%FourCC: %|2$.4s|, width: %3%, height: %4%, depth: %5%\n")
-             % space(level * 2 + 1)
-             % (const unsigned char *)v_stsd.base.fourcc
-             % get_uint16_be(&v_stsd.width)
-             % get_uint16_be(&v_stsd.height)
-             % get_uint16_be(&v_stsd.depth));
+      mxdebug_if(m_debug_headers, boost::format("%1%FourCC: %|2$.4s|, width: %3%, height: %4%, depth: %5%\n")
+                 % space(level * 2 + 1)
+                 % (const unsigned char *)v_stsd.base.fourcc
+                 % get_uint16_be(&v_stsd.width)
+                 % get_uint16_be(&v_stsd.height)
+                 % get_uint16_be(&v_stsd.depth));
 
       new_dmx->v_width    = get_uint16_be(&v_stsd.width);
       new_dmx->v_height   = get_uint16_be(&v_stsd.height);
@@ -1093,9 +1086,9 @@ qtmp4_reader_c::handle_stss_atom(qtmp4_demuxer_cptr &new_dmx,
 
   std::sort(new_dmx->keyframe_table.begin(), new_dmx->keyframe_table.end());
 
-  mxverb(2, boost::format("Quicktime/MP4 reader:%1%Sync/keyframe table: %2% entries\n") % space(level * 2 + 1) % count);
+  mxdebug_if(m_debug_headers, boost::format("%1%Sync/keyframe table: %2% entries\n") % space(level * 2 + 1) % count);
   for (i = 0; i < count; ++i)
-    mxverb(4, boost::format("Quicktime/MP4 reader:%1%keyframe at %2%\n") % space((level + 1) * 2 + 1) % new_dmx->keyframe_table[i]);
+    mxdebug_if(m_debug_tables, boost::format("%1%keyframe at %2%\n") % space((level + 1) * 2 + 1) % new_dmx->keyframe_table[i]);
 }
 
 void
@@ -1115,11 +1108,11 @@ qtmp4_reader_c::handle_stsz_atom(qtmp4_demuxer_cptr &new_dmx,
       new_dmx->sample_table.push_back(sample);
     }
 
-    mxverb(2, boost::format("Quicktime/MP4 reader:%1%Sample size table: %2% entries\n") % space(level * 2 + 1) % count);
+    mxdebug_if(m_debug_headers, boost::format("%1%Sample size table: %2% entries\n") % space(level * 2 + 1) % count);
 
   } else {
     new_dmx->sample_size = sample_size;
-    mxverb(2, boost::format("Quicktime/MP4 reader:%1%Sample size table; global sample size: %2%\n") % space(level * 2 + 1) % sample_size);
+    mxdebug_if(m_debug_headers, boost::format("%1%Sample size table; global sample size: %2%\n") % space(level * 2 + 1) % sample_size);
   }
 }
 
@@ -1139,7 +1132,7 @@ qtmp4_reader_c::handle_sttd_atom(qtmp4_demuxer_cptr &new_dmx,
     new_dmx->durmap_table.push_back(durmap);
   }
 
-  mxverb(2, boost::format("Quicktime/MP4 reader:%1%Sample duration table: %2% entries\n") % space(level * 2 + 1) % count);
+  mxdebug_if(m_debug_headers, boost::format("%1%Sample duration table: %2% entries\n") % space(level * 2 + 1) % count);
 }
 
 void
@@ -1158,7 +1151,7 @@ qtmp4_reader_c::handle_stts_atom(qtmp4_demuxer_cptr &new_dmx,
     new_dmx->durmap_table.push_back(durmap);
   }
 
-  mxverb(2, boost::format("Quicktime/MP4 reader:%1%Sample duration table: %2% entries\n") % space(level * 2 + 1) % count);
+  mxdebug_if(m_debug_headers, boost::format("%1%Sample duration table: %2% entries\n") % space(level * 2 + 1) % count);
 }
 
 void
@@ -1194,15 +1187,14 @@ qtmp4_reader_c::handle_elst_atom(qtmp4_demuxer_cptr &new_dmx,
     editlist.speed    = m_in->read_uint32_be();
   }
 
-  mxverb(2, boost::format("Quicktime/MP4 reader:%1%Edit list table: %2% entries\n") % space(level * 2 + 1) % count);
+  mxdebug_if(m_debug_headers, boost::format("%1%Edit list table: %2% entries\n") % space(level * 2 + 1) % count);
   for (i = 0; i < count; ++i)
-    mxverb(4,
-           boost::format("Quicktime/MP4 reader:%1%%2%: duration %3% pos %4% speed %5%\n")
-           % space((level + 1) * 2 + 1)
-           % i
-           % new_dmx->editlist_table[i].duration
-           % new_dmx->editlist_table[i].pos
-           % new_dmx->editlist_table[i].speed);
+    mxdebug_if(m_debug_tables, boost::format("%1%%2%: duration %3% pos %4% speed %5%\n")
+               % space((level + 1) * 2 + 1)
+               % i
+               % new_dmx->editlist_table[i].duration
+               % new_dmx->editlist_table[i].pos
+               % new_dmx->editlist_table[i].speed);
 }
 
 void
@@ -1217,7 +1209,7 @@ qtmp4_reader_c::handle_tkhd_atom(qtmp4_demuxer_cptr &new_dmx,
   if (m_in->read(&tkhd, sizeof(tkhd_atom_t)) != sizeof(tkhd_atom_t))
     throw mtx::input::header_parsing_x();
 
-  mxverb(2, boost::format("Quicktime/MP4 reader:%1%Track ID: %2%\n") % space(level * 2 + 1) % get_uint32_be(&tkhd.track_id));
+  mxdebug_if(m_debug_headers, boost::format("%1%Track ID: %2%\n") % space(level * 2 + 1) % get_uint32_be(&tkhd.track_id));
 
   new_dmx->id = get_uint32_be(&tkhd.track_id);
 }
@@ -1325,25 +1317,23 @@ qtmp4_reader_c::parse_esds_atom(mm_mem_io_c &memio,
   esds_t *e  = &dmx->esds;
   e->version = memio.read_uint8();
   e->flags   = memio.read_uint24_be();
-  mxverb(2, boost::format("Quicktime/MP4 reader:%1%esds: version: %2%, flags: %3%\n") % space(lsp + 1) % (int)e->version % (int)e->flags);
+  mxdebug_if(m_debug_headers, boost::format("%1%esds: version: %2%, flags: %3%\n") % space(lsp + 1) % (int)e->version % (int)e->flags);
 
   uint8_t tag = memio.read_uint8();
   if (MP4DT_ES == tag) {
     uint32_t len       = read_esds_descr_len(memio);
     e->esid            = memio.read_uint16_be();
     e->stream_priority = memio.read_uint8();
-    mxverb(2,
-           boost::format("Quicktime/MP4 reader:%1%esds: id: %2%, stream priority: %3%, len: %4%\n")
-           % space(lsp + 1) % (int)e->esid % (int)e->stream_priority % len);
+    mxdebug_if(m_debug_headers, boost::format("%1%esds: id: %2%, stream priority: %3%, len: %4%\n") % space(lsp + 1) % (int)e->esid % (int)e->stream_priority % len);
 
   } else {
     e->esid = memio.read_uint16_be();
-    mxverb(2, boost::format("Quicktime/MP4 reader:%1%esds: id: %2%\n") % space(lsp + 1) % (int)e->esid);
+    mxdebug_if(m_debug_headers, boost::format("%1%esds: id: %2%\n") % space(lsp + 1) % (int)e->esid);
   }
 
   tag = memio.read_uint8();
   if (MP4DT_DEC_CONFIG != tag) {
-    mxverb(2, boost::format("Quicktime/MP4 reader:%1%tag is not DEC_CONFIG (0x%|2$02x|) but 0x%|3$02x|.\n") % space(lsp + 1) % MP4DT_DEC_CONFIG % tag);
+    mxdebug_if(m_debug_headers, boost::format("%1%tag is not DEC_CONFIG (0x%|2$02x|) but 0x%|3$02x|.\n") % space(lsp + 1) % MP4DT_DEC_CONFIG % tag);
     return false;
   }
 
@@ -1356,16 +1346,15 @@ qtmp4_reader_c::parse_esds_atom(mm_mem_io_c &memio,
   e->avg_bitrate        = memio.read_uint32_be();
   e->decoder_config_len = 0;
 
-  mxverb(2,
-         boost::format("Quicktime/MP4 reader:%1%esds: decoder config descriptor, len: %2%, object_type_id: %3%, "
-                       "stream_type: 0x%|4$2x|, buffer_size_db: %5%, max_bitrate: %|6$.3f|kbit/s, avg_bitrate: %|7$.3f|kbit/s\n")
-         % space(lsp + 1)
-         % len
-         % (int)e->object_type_id
-         % (int)e->stream_type
-         % (int)e->buffer_size_db
-         % (e->max_bitrate / 1000.0)
-         % (e->avg_bitrate / 1000.0));
+  mxdebug_if(m_debug_headers, boost::format("%1%esds: decoder config descriptor, len: %2%, object_type_id: %3%, "
+                                            "stream_type: 0x%|4$2x|, buffer_size_db: %5%, max_bitrate: %|6$.3f|kbit/s, avg_bitrate: %|7$.3f|kbit/s\n")
+             % space(lsp + 1)
+             % len
+             % (int)e->object_type_id
+             % (int)e->stream_type
+             % (int)e->buffer_size_db
+             % (e->max_bitrate / 1000.0)
+             % (e->avg_bitrate / 1000.0));
 
   tag = memio.read_uint8();
   if (MP4DT_DEC_SPECIFIC == tag) {
@@ -1377,12 +1366,14 @@ qtmp4_reader_c::parse_esds_atom(mm_mem_io_c &memio,
 
     tag = memio.read_uint8();
 
-    mxverb(2, boost::format("Quicktime/MP4 reader:%1%esds: decoder specific descriptor, len: %2%\n") % space(lsp + 1) % len);
-    mxverb(3, boost::format("Quicktime/MP4 reader:%1%esds: dumping decoder specific descriptor\n") % space(lsp + 3));
-    mxhexdump(3, e->decoder_config, e->decoder_config_len);
+    if (m_debug_headers) {
+      mxinfo(boost::format("%1%esds: decoder specific descriptor, len: %2%\n") % space(lsp + 1) % len);
+      mxinfo(boost::format("Quicktime/MP4 reader:%1%esds: dumping decoder specific descriptor\n") % space(lsp + 3));
+      mxhexdump(0, e->decoder_config, e->decoder_config_len, "Debug> ");
+    }
 
   } else
-    mxverb(2, boost::format("Quicktime/MP4 reader:%1%tag is not DEC_SPECIFIC (0x%|2$02x|) but 0x%|3$02x|.\n") % space(lsp + 1) % MP4DT_DEC_SPECIFIC % tag);
+    mxdebug_if(m_debug_headers, boost::format("%1%tag is not DEC_SPECIFIC (0x%|2$02x|) but 0x%|3$02x|.\n") % space(lsp + 1) % MP4DT_DEC_SPECIFIC % tag);
 
   if (MP4DT_SL_CONFIG == tag) {
     len              = read_esds_descr_len(memio);
@@ -1391,10 +1382,10 @@ qtmp4_reader_c::parse_esds_atom(mm_mem_io_c &memio,
     if (memio.read(e->sl_config, len) != len)
       throw mtx::input::header_parsing_x();
 
-    mxverb(2, boost::format("Quicktime/MP4 reader:%1%esds: sync layer config descriptor, len: %2%\n") % space(lsp + 1) % len);
+    mxdebug_if(m_debug_headers, boost::format("%1%esds: sync layer config descriptor, len: %2%\n") % space(lsp + 1) % len);
 
   } else
-    mxverb(2, boost::format("Quicktime/MP4 reader:%1%tag is not SL_CONFIG (0x%|2$02x|) but 0x%|3$02x|.\n") % space(lsp + 1) % MP4DT_SL_CONFIG % tag);
+    mxdebug_if(m_debug_headers, boost::format("%1%tag is not SL_CONFIG (0x%|2$02x|) but 0x%|3$02x|.\n") % space(lsp + 1) % MP4DT_SL_CONFIG % tag);
 
   return true;
 }
@@ -1708,7 +1699,7 @@ qtmp4_demuxer_c::calculate_fps() {
   if ((1 == durmap_table.size()) && (0 != durmap_table[0].duration) && ((0 != sample_size) || (0 == frame_offset_table.size()))) {
     // Constant FPS. Let's set the default duration.
     fps = (double)time_scale / (double)durmap_table[0].duration;
-    mxverb(3, boost::format("Quicktime/MP4 reader: calculate_fps: case 1: %1%\n") % fps);
+    mxdebug_if(m_debug_fps, boost::format("calculate_fps: case 1: %1%\n") % fps);
 
   } else if (!sample_table.empty()) {
     std::map<int64_t, int> duration_map;
@@ -1723,7 +1714,7 @@ qtmp4_demuxer_c::calculate_fps() {
     if (most_common.first)
       fps = (double)1000000000.0 / (double)to_nsecs(most_common.first);
 
-    mxverb(3, boost::format("Quicktime/MP4 reader: calculate_fps: case 2: most_common %1% = %2%, fps %3%\n") % most_common.first % most_common.second % fps);
+    mxdebug_if(m_debug_fps, boost::format("calculate_fps: case 2: most_common %1% = %2%, fps %3%\n") % most_common.first % most_common.second % fps);
   }
 }
 
@@ -1929,11 +1920,11 @@ qtmp4_demuxer_c::update_tables(int64_t global_m_time_scale) {
       frame_offset_table.push_back(raw_frame_offset_table[j].offset);
   }
 
-  mxverb(3, boost::format("Quicktime/MP4 reader: Frame offset table: %1% entries\n")    % frame_offset_table.size());
-  mxverb(4, boost::format("Quicktime/MP4 reader: Sample table contents: %1% entries\n") % sample_table.size());
+  mxdebug_if(m_debug_tables, boost::format(" Frame offset table: %1% entries\n")    % frame_offset_table.size());
+  mxdebug_if(m_debug_tables, boost::format(" Sample table contents: %1% entries\n") % sample_table.size());
   for (i = 0; i < sample_table.size(); ++i) {
     qt_sample_t &sample = sample_table[i];
-    mxverb(4, boost::format("Quicktime/MP4 reader:   %1%: pts %2% size %3% pos %4%\n") % i % sample.pts % sample.size % sample.pos);
+    mxdebug_if(m_debug_tables, boost::format("   %1%: pts %2% size %3% pos %4%\n") % i % sample.pts % sample.size % sample.pos);
   }
 
   update_editlist_table(global_m_time_scale);
@@ -1955,7 +1946,7 @@ qtmp4_demuxer_c::update_editlist_table(int64_t global_time_scale) {
   if (('v' == type) && v_is_avc && !frame_offset_table.empty() && (frame_offset_table[0] <= min_editlist_pts))
     pts_offset = frame_offset_table[0];
 
-  mxverb(4, boost::format("qtmp4: Updating edit list table for track %1%; pts_offset = %2%\n") % id % pts_offset);
+  mxdebug_if(m_debug_tables, boost::format("Updating edit list table for track %1%; pts_offset = %2%\n") % id % pts_offset);
 
   for (i = 0; editlist_table.size() > i; ++i) {
     qt_editlist_t &el   = editlist_table[i];
@@ -1990,9 +1981,7 @@ qtmp4_demuxer_c::update_editlist_table(int64_t global_time_scale) {
     el.frames  = sample - el.start_sample;
     frame     += el.frames;
 
-    mxverb(4,
-           boost::format("  %1%: pts: %2%  1st_sample: %3%  frames: %4% (%|5$5.3f|s)  pts_offset: %6%\n")
-           % i % el.pos % el.start_sample % el.frames % ((float)(el.duration) / (float)time_scale) % el.pts_offset);
+    mxdebug_if(m_debug_tables, boost::format("  %1%: pts: %2%  1st_sample: %3%  frames: %4% (%|5$5.3f|s)  pts_offset: %6%\n") % i % el.pos % el.start_sample % el.frames % ((float)(el.duration) / (float)time_scale) % el.pts_offset);
   }
 }
 
