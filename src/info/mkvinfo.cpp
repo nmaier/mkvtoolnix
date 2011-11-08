@@ -321,19 +321,6 @@ create_hexdump(const unsigned char *buf,
   return hex;
 }
 
-static std::string
-to_hex(const unsigned char *buf,
-       int size) {
-  static boost::format s_bf_to_hex(" 0x%|1$02x|");
-
-  std::string hex;
-  int b;
-  for (b = 0; b < size; ++b)
-    hex += (s_bf_to_hex % (int)buf[b]).str();
-
-  return hex;
-}
-
 std::string
 create_codec_dependent_private_info(KaxCodecPrivate &c_priv,
                                     char track_type,

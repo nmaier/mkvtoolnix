@@ -60,4 +60,10 @@ std::string to_string(uint64_t value);
 std::string to_string(double value, unsigned int precision);
 std::string to_string(int64_t numerator, int64_t denominator, unsigned int precision);
 
+std::string to_hex(const unsigned char *buf, size_t size);
+inline std::string
+to_hex(const std::string &buf) {
+  return to_hex(reinterpret_cast<const unsigned char *>(buf.c_str()), buf.length());
+}
+
 #endif  // __MTX_COMMON_STRING_FORMATTING_H

@@ -240,3 +240,15 @@ format_paragraph(const std::string &text_to_wrap,
                  const char *break_chars) {
   return to_utf8(format_paragraph(to_wide(text_to_wrap), indent_column, to_wide(indent_first_line), to_wide(indent_following_lines), wrap_column, to_wide(break_chars)));
 }
+
+std::string
+to_hex(const unsigned char *buf,
+       size_t size) {
+  static boost::format s_bf_to_hex("%|1$02x| ");
+
+  std::string hex("0x");
+  for (size_t idx = 0; idx < size; ++idx)
+    hex += (s_bf_to_hex % static_cast<unsigned int>(buf[idx])).str();
+
+  return hex;
+}
