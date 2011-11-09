@@ -686,7 +686,12 @@ tab_chapters::select_file_name() {
   }
 
   last_open_dir = dlg.GetDirectory();
-  file_name     = dlg.GetPath();
+
+  wxFileName fn(dlg.GetPath());
+  if (!fn.HasExt())
+    fn.SetExt(wxU("xml"));
+  file_name = fn.GetFullPath();
+
   tc_chapters->SetItemText(tid_root, file_name);
 
   return true;

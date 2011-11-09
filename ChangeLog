@@ -1,3 +1,8 @@
+2011-11-09  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: bug fix: mmg will append ".xml" to the file name entered
+	when saving from the chapter editor if no extension was given.
+
 2011-11-06  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvinfo: bug fix: Improved skipping broken data on all operating
