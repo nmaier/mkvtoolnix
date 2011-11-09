@@ -1200,7 +1200,7 @@ create_readers() {
       mxerror(boost::format(Y("The demultiplexer for the file '%1%' failed to initialize:\n%2%\n")) % file.ti->m_fname % Y("The file content does not match its format type and was not recognized."));
 
     } catch (mtx::input::header_parsing_x &error) {
-      mxerror(boost::format(Y("The demultiplexer for the file '%1%' failed to initialize:\n%2%\n")) % file.ti->m_fname % Y("The file headers could not be parsed, e.g. because they're inomplete, invalid or damaged."));
+      mxerror(boost::format(Y("The demultiplexer for the file '%1%' failed to initialize:\n%2%\n")) % file.ti->m_fname % Y("The file headers could not be parsed, e.g. because they're incomplete, invalid or damaged."));
 
     } catch (mtx::input::exception &error) {
       mxerror(boost::format(Y("The demultiplexer for the file '%1%' failed to initialize:\n%2%\n")) % file.ti->m_fname % error.error());
