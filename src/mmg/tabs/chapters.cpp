@@ -668,42 +668,38 @@ tab_chapters::on_save_chapters_to_kax_file(wxCommandEvent &evt) {
 
 void
 tab_chapters::on_save_chapters_as(wxCommandEvent &evt) {
-  if (!verify())
-    return;
-
-  if (!select_file_name())
-    return;
-  save();
+  if (verify() && select_file_name())
+    save();
 }
 
 bool
 tab_chapters::select_file_name() {
   wxFileDialog dlg(this, Z("Choose an output file"), last_open_dir, wxEmptyString,
                    wxString::Format(Z("Chapter files (*.xml)|*.xml|%s"), ALLFILES.c_str()), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
-  if(dlg.ShowModal() == wxID_OK) {
-    if (kax_analyzer_c::probe(wxMB(dlg.GetPath()))) {
-      wxMessageBox(Z("The file you tried to save to is a Matroska file. For this to work you have to use the 'Save to Matroska file' menu option."),
-                   Z("Wrong file selected"), wxOK | wxCENTER | wxICON_ERROR);
-      return false;
-    }
-    last_open_dir = dlg.GetDirectory();
-    file_name = dlg.GetPath();
-    tc_chapters->SetItemText(tid_root, file_name);
-    return true;
+  if (dlg.ShowModal() != wxID_OK)
+    return false;
+
+  if (kax_analyzer_c::probe(wxMB(dlg.GetPath()))) {
+    wxMessageBox(Z("The file you tried to save to is a Matroska file. For this to work you have to use the 'Save to Matroska file' menu option."),
+                 Z("Wrong file selected"), wxOK | wxCENTER | wxICON_ERROR);
+    return false;
   }
-  return false;
+
+  last_open_dir = dlg.GetDirectory();
+  file_name     = dlg.GetPath();
+  tc_chapters->SetItemText(tid_root, file_name);
+
+  return true;
 }
 
 void
 tab_chapters::save() {
-  mm_io_c *out;
-  wxString err;
+  mm_io_cptr out;
 
   try {
-    out = mm_write_cache_io_c::open(wxMB(file_name), 128 * 1024);
+    out = mm_io_cptr(mm_write_cache_io_c::open(wxMB(file_name), 128 * 1024));
   } catch (...) {
-    err.Printf(Z("Could not open the destination file '%s' for writing. Error code: %d (%s)."), file_name.c_str(), errno, wxUCS(strerror(errno)));
-    wxMessageBox(err, Z("Error opening file"), wxCENTER | wxOK | wxICON_ERROR);
+    wxMessageBox(wxString::Format(Z("Could not open the destination file '%s' for writing. Error code: %d (%s)."), file_name.c_str(), errno, wxUCS(strerror(errno))), Z("Error opening file"), wxCENTER | wxOK | wxICON_ERROR);
     return;
   }
 
@@ -716,9 +712,8 @@ tab_chapters::save() {
             "<!-- <!DOCTYPE Tags SYSTEM \"matroskatags.dtd\"> -->\n"
             "\n"
             "<Chapters>\n");
-  write_chapters_xml(chapters, out);
+  write_chapters_xml(chapters, out.get_object());
   out->puts("</Chapters>\n");
-  delete out;
 
   source_is_kax_file = false;
   source_is_simple_format = false;
