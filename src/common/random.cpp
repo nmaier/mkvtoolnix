@@ -87,7 +87,7 @@ random_c::generate_bytes(void *destination,
 
 #else  // defined(SYS_WINDOWS)
 
-mm_file_io_cptr random_c::m_dev_urandom;
+mm_io_cptr random_c::m_dev_urandom;
 bool random_c::m_tried_dev_urandom = false;
 
 void
@@ -96,7 +96,7 @@ random_c::generate_bytes(void *destination,
   try {
     if (!m_tried_dev_urandom) {
       m_tried_dev_urandom = true;
-      m_dev_urandom       = mm_file_io_cptr(new mm_file_io_c("/dev/urandom", MODE_READ));
+      m_dev_urandom       = mm_file_io_c::open("/dev/urandom");
     }
     if (m_dev_urandom.is_set() && (m_dev_urandom->read(destination, num_bytes) == num_bytes))
       return;

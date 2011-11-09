@@ -70,12 +70,11 @@ xtr_tta_c::handle_frame(memory_cptr &frame,
 
 void
 xtr_tta_c::finish_file() {
-  delete m_out;
-  m_out = NULL;
+  m_out.clear();
 
-  mm_io_c *in = NULL;
+  mm_io_cptr in;
   try {
-    in = new mm_file_io_c(m_temp_file_name);
+    in = mm_file_io_c::open(m_temp_file_name);
   } catch (...) {
     mxerror(boost::format(Y("The temporary file '%1%' could not be opened for reading (%2%).\n")) % m_temp_file_name % strerror(errno));
   }
@@ -83,7 +82,6 @@ xtr_tta_c::finish_file() {
   try {
     m_out = mm_write_cache_io_c::open(m_file_name, 5 * 1024 * 1024);
   } catch (...) {
-    delete in;
     mxerror(boost::format(Y("The file '%1%' could not be opened for writing (%2%).\n")) % m_file_name % strerror(errno));
   }
 
@@ -124,8 +122,6 @@ xtr_tta_c::finish_file() {
     m_out->write(buffer, nread);
   } while (nread == 128000);
 
-  delete in;
-  delete m_out;
-  m_out = NULL;
+  m_out.clear();
   unlink(m_temp_file_name.c_str());
 }

@@ -1904,7 +1904,7 @@ process_file(const std::string &file_name) {
   // open input file
   mm_io_cptr in;
   try {
-    in = mm_io_cptr(new mm_file_io_c(file_name));
+    in = mm_file_io_c::open(file_name);
   } catch (...) {
     show_error((boost::format(Y("Error: Couldn't open input file %1% (%2%).\n")) % file_name % strerror(errno)).str());
     return false;

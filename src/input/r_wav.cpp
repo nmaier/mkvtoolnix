@@ -456,7 +456,7 @@ wav_reader_c::read_headers() {
   int64_t size;
 
   try {
-    m_io = mm_io_cptr(new mm_file_io_c(m_ti.m_fname));
+    m_io = mm_file_io_c::open(m_ti.m_fname);
     m_io->setFilePointer(0, seek_end);
     size = m_io->getFilePointer();
     m_io->setFilePointer(0, seek_beginning);

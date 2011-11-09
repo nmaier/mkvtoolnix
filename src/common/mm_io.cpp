@@ -362,6 +362,12 @@ mm_file_io_c::cleanup() {
 #endif
 }
 
+mm_io_cptr
+mm_file_io_c::open(const std::string &path,
+                   const open_mode mode) {
+  return mm_io_cptr(new mm_file_io_c(path, mode));
+}
+
 /*
    Abstract base class.
 */

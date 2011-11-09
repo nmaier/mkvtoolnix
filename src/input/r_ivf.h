@@ -21,7 +21,7 @@
 
 class ivf_reader_c: public generic_reader_c {
 private:
-  mm_file_io_cptr m_in;
+  mm_io_cptr m_in;
   uint64_t m_bytes_processed, m_size;
   uint16_t m_width, m_height;
   uint64_t m_frame_rate_num, m_frame_rate_den;

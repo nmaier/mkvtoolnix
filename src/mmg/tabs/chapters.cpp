@@ -23,6 +23,7 @@
 
 #include <ebml/EbmlStream.h>
 
+#include "common/common_pch.h"
 #include "common/chapters/chapters.h"
 #include "common/common_pch.h"
 #include "common/ebml.h"

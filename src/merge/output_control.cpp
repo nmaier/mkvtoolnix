@@ -213,7 +213,7 @@ static EbmlVoid *s_kax_chapters_void        = NULL;
 static int64_t s_max_chapter_size           = 0;
 static EbmlVoid *s_void_after_track_headers = NULL;
 
-static mm_io_c *s_out                       = NULL;
+static mm_io_cptr s_out;
 
 static bitvalue_c s_seguid_prev(128), s_seguid_current(128), s_seguid_next(128);
 
@@ -263,7 +263,7 @@ operator<<(std::ostream &str,
 #if defined(SYS_UNIX) || defined(COMP_CYGWIN) || defined(SYS_APPLE)
 void
 sighandler(int signum) {
-  if (NULL == s_out)
+  if (!s_out.is_set())
     mxerror(Y("mkvmerge was interrupted by a SIGINT (Ctrl+C?)\n"));
 
   mxwarn(Y("\nmkvmerge received a SIGINT (probably because the user pressed "
@@ -1414,9 +1414,9 @@ create_next_output_file() {
   if (verbose)
     mxinfo(boost::format(Y("The file '%1%' has been opened for writing.\n")) % this_outfile);
 
-  g_cluster_helper->set_output(s_out);
-  render_headers(s_out);
-  render_attachments(s_out);
+  g_cluster_helper->set_output(s_out.get_object());
+  render_headers(s_out.get_object());
+  render_attachments(s_out.get_object());
   render_chapter_void_placeholder();
   add_tags_from_cue_chapters();
   prepare_tags_for_rendering();
@@ -1606,7 +1606,7 @@ finish_file(bool last_file) {
   if (g_kax_segment->ForceSize(final_file_size - g_kax_segment->GetElementPosition() - g_kax_segment->HeadSize()))
     g_kax_segment->OverwriteHead(*s_out);
 
-  delete s_out;
+  s_out.clear();
 
   // The tracks element must not be deleted.
   size_t i;

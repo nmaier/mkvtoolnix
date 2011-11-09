@@ -181,7 +181,7 @@ xtr_wavpack4_c::handle_frame(memory_cptr &frame,
   }
 
   // support hybrid mode data
-  if ((NULL != m_corr_out) && (NULL != additions)) {
+  if (m_corr_out.is_set() && (NULL != additions)) {
     KaxBlockMore *block_more = FINDFIRST(additions, KaxBlockMore);
 
     if (NULL == block_more)
@@ -224,9 +224,8 @@ xtr_wavpack4_c::finish_file() {
   m_out->setFilePointer(12);
   m_out->write_uint32_le(m_number_of_samples);
 
-  if (NULL != m_corr_out) {
+  if (m_corr_out.is_set()) {
     m_corr_out->setFilePointer(12);
     m_corr_out->write_uint32_le(m_number_of_samples);
-    delete m_corr_out;
   }
 }

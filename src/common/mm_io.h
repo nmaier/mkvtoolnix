@@ -77,6 +77,9 @@ namespace mtx {
   }
 }
 
+class mm_io_c;
+typedef counted_ptr<mm_io_c> mm_io_cptr;
+
 class mm_io_c: public IOCallback {
 protected:
   bool m_dos_style_newlines;
@@ -148,8 +151,6 @@ protected:
   virtual size_t _write(const void *buffer, size_t size) = 0;
 };
 
-typedef counted_ptr<mm_io_c> mm_io_cptr;
-
 #if HAVE_POSIX_FADVISE
 struct file_id_t {
   bool m_initialized;
@@ -213,6 +214,7 @@ public:
 
   static void setup();
   static void cleanup();
+  static mm_io_cptr open(const std::string &path, const open_mode mode = MODE_READ);
 
 protected:
   virtual uint32 _read(void *buffer, size_t size);

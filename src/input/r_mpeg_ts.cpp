@@ -412,7 +412,7 @@ mpeg_ts_reader_c::read_headers() {
   mm_io_cptr temp_io;
 
   try {
-    temp_io = mm_io_cptr(new mm_file_io_c(m_ti.m_fname));
+    temp_io = mm_file_io_c::open(m_ti.m_fname);
 
   } catch (...) {
     throw mtx::input::open_x();

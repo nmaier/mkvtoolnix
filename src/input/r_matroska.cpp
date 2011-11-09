@@ -1228,7 +1228,7 @@ kax_reader_c::read_headers_internal() {
 
   KaxCluster *cluster = NULL;
   try {
-    m_in        = mm_io_cptr(new mm_file_io_c(m_ti.m_fname));
+    m_in        = mm_file_io_c::open(m_ti.m_fname);
     m_file_size = m_in->get_size();
     m_es        = counted_ptr<EbmlStream>(new EbmlStream(*m_in));
     m_in_file   = kax_file_cptr(new kax_file_c(m_in));

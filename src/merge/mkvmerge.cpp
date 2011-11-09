@@ -1397,7 +1397,7 @@ parse_arg_attach_file(attachment_t &attachment,
     attachment.mime_type  = guess_mime_type_and_report(arg);
 
   try {
-    mm_io_cptr io = mm_io_cptr(new mm_file_io_c(attachment.name));
+    mm_io_cptr io = mm_file_io_c::open(attachment.name);
 
     if (0 == io->get_size())
       mxerror(boost::format(Y("The size of attachment '%1%' is 0.\n")) % attachment.name);

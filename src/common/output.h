@@ -22,16 +22,16 @@
 #include <ebml/EbmlElement.h>
 
 #include "common/locale.h"
+#include "common/mm_io.h"
 
 using namespace libebml;
-class mm_io_c;
 
 extern bool g_suppress_info, g_suppress_warnings;
 extern std::string g_stdio_charset;
 extern charset_converter_cptr g_cc_stdio;
 extern counted_ptr<mm_io_c> g_mm_stdio;
 
-void redirect_stdio(mm_io_c *new_stdio);
+void redirect_stdio(const mm_io_cptr &new_stdio);
 bool stdio_redirected();
 
 void init_cc_stdio();

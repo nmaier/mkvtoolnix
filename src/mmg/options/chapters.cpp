@@ -25,6 +25,7 @@
 #include <wx/process.h>
 #include <wx/statline.h>
 
+#include "common/common_pch.h"
 #include "common/chapters/chapters.h"
 #include "common/common_pch.h"
 #include "common/extern_data.h"

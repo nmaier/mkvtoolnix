@@ -33,7 +33,7 @@ public:
   virtual void flush();
   virtual void close();
 
-  static mm_write_cache_io_c *open(const std::string &file_name, size_t cache_size);
+  static mm_io_cptr open(const std::string &file_name, size_t cache_size);
 
 protected:
   virtual uint32 _read(void *buffer, size_t size);

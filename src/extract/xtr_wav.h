@@ -37,7 +37,7 @@ private:
   uint32_t m_number_of_samples;
   int m_extract_blockadd_level;
   binary m_version[2];
-  mm_io_c *m_corr_out;
+  mm_io_cptr m_corr_out;
   int m_channels;
 
 public:

@@ -14,10 +14,10 @@
 #ifndef __MTX_COMMON_MEMORY_H
 #define __MTX_COMMON_MEMORY_H
 
+#include "common/common_pch.h"
+
 #include <cassert>
 #include <deque>
-
-#include "common/common_pch.h"
 
 #include "common/error.h"
 
@@ -243,10 +243,6 @@ class memory_slice_cursor_c {
   {
   }
 
-  memory_slice_cursor_c(const memory_slice_cursor_c &) {
-    mxerror(Y("memory_slice_cursor_c copy c'tor: Must not be used!"));
-  }
-
   ~memory_slice_cursor_c() {
   }
 
@@ -345,6 +341,8 @@ class memory_slice_cursor_c {
     }
   };
 
+private:
+  memory_slice_cursor_c(const memory_slice_cursor_c &) { }
 };
 
 inline memory_cptr

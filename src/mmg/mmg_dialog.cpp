@@ -29,6 +29,7 @@
 #include <wx/statline.h>
 #include <wx/strconv.h>
 
+#include "common/common_pch.h"
 #include "common/chapters/chapters.h"
 #include "common/command_line.h"
 #include "common/common_pch.h"

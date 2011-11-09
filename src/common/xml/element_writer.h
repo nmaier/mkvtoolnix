@@ -56,7 +56,7 @@ void write_xml_element_rec(int level, int parent_idx, EbmlElement *e, mm_io_c *o
 
 class xml_formatter_c: public xml_parser_c {
 private:
-  mm_io_c *m_out;
+  mm_io_c &m_out;
   counted_ptr<mm_text_io_c> m_temp_io;
   std::string m_encoding, m_dtd, m_dtd_file, m_stylesheet_type, m_stylesheet_file;
   charset_converter_cptr m_cc_utf8;
@@ -74,7 +74,7 @@ private:
   xml_formatter_state_e m_state;
 
 public:
-  xml_formatter_c(mm_io_c *out, const std::string &encoding = std::string("UTF-8"));
+  xml_formatter_c(mm_io_c &out, const std::string &encoding = std::string("UTF-8"));
   virtual ~xml_formatter_c();
 
   virtual void set_doctype(const std::string &dtd, const std::string &file);

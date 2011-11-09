@@ -65,10 +65,9 @@ xtr_cpic_c::handle_frame(memory_cptr &frame,
       frame_file_name += ".png";
   }
 
-  m_out = new mm_file_io_c(frame_file_name, MODE_CREATE);
+  m_out = mm_file_io_c::open(frame_file_name, MODE_CREATE);
   m_out->write(&mybuffer[header_size], data_size - header_size);
-  delete m_out;
-  m_out = NULL;
+  m_out.clear();
 
   ++m_frame_counter;
 }

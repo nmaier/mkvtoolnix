@@ -116,7 +116,7 @@ qtmp4_reader_c::qtmp4_reader_c(track_info_c &ti)
 void
 qtmp4_reader_c::read_headers() {
   try {
-    m_in        = mm_io_cptr(new mm_file_io_c(m_ti.m_fname));
+    m_in        = mm_file_io_c::open(m_ti.m_fname);
     m_file_size = m_in->get_size();
     if (!qtmp4_reader_c::probe_file(m_in.get_object(), m_file_size))
       throw mtx::input::invalid_format_x();

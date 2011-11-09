@@ -48,7 +48,7 @@ ivf_reader_c::ivf_reader_c(track_info_c &p_ti)
 void
 ivf_reader_c::read_headers() {
   try {
-    m_in   = mm_file_io_cptr(new mm_file_io_c(m_ti.m_fname));
+    m_in   = mm_file_io_c::open(m_ti.m_fname);
     m_size = m_in->get_size();
 
     ivf_file_header_t header;

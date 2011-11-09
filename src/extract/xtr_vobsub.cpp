@@ -217,8 +217,7 @@ xtr_vobsub_c::finish_file() {
 
     m_base_name += ".idx";
 
-    delete m_out;
-    m_out = NULL;
+    m_out.clear();
 
     mm_write_cache_io_c idx(new mm_file_io_c(m_base_name, MODE_CREATE), 128 * 1024);
     mxinfo(boost::format(Y("Writing the VobSub index file '%1%'.\n")) % m_base_name);

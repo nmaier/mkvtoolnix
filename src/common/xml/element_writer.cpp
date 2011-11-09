@@ -164,7 +164,7 @@ write_xml_element_rec(int level,
 
 // ------------------------------------------------------------------------
 
-xml_formatter_c::xml_formatter_c(mm_io_c *out,
+xml_formatter_c::xml_formatter_c(mm_io_c &out,
                                  const std::string &encoding)
   : m_out(out)
   , m_temp_io(counted_ptr<mm_text_io_c>(new mm_text_io_c(new mm_mem_io_c(NULL, 100000, 4000))))
@@ -206,14 +206,14 @@ xml_formatter_c::write_header() {
     throw mtx::xml::formatter_x(Y("The header has already been written."));
 
 #if defined(SYS_WINDOWS)
-  m_out->use_dos_style_newlines(true);
+  m_out.use_dos_style_newlines(true);
 #endif
-  m_out->write_bom(m_encoding);
-  m_out->puts(boost::format("<?xml version=\"1.0\" encoding=\"%1%\"?>\n") % escape_xml(m_encoding));
+  m_out.write_bom(m_encoding);
+  m_out.puts(boost::format("<?xml version=\"1.0\" encoding=\"%1%\"?>\n") % escape_xml(m_encoding));
   if ((m_dtd != "") && (m_dtd_file != ""))
-    m_out->puts(boost::format("\n<!-- DOCTYPE %1% SYSTEM \"%2%\" -->\n") % m_dtd % escape_xml(m_dtd_file));
+    m_out.puts(boost::format("\n<!-- DOCTYPE %1% SYSTEM \"%2%\" -->\n") % m_dtd % escape_xml(m_dtd_file));
   if ((m_stylesheet_type != "") && (m_stylesheet_file != ""))
-    m_out->puts(boost::format("\n<?xml-stylesheet type=\"%1%\" href=\"%2%\"?>\n") % escape_xml(m_stylesheet_type) % escape_xml(m_stylesheet_file));
+    m_out.puts(boost::format("\n<?xml-stylesheet type=\"%1%\" href=\"%2%\"?>\n") % escape_xml(m_stylesheet_type) % escape_xml(m_stylesheet_file));
 
   m_header_written = true;
 }
@@ -246,13 +246,13 @@ xml_formatter_c::start_element_cb(const char *name,
   m_data_buffer = escape_xml(m_cc_utf8->native(m_data_buffer));
 
   if (XMLF_STATE_START == m_state)
-    m_out->puts(">");
+    m_out.puts(">");
   else if (XMLF_STATE_DATA == m_state)
-    m_out->puts(m_data_buffer);
+    m_out.puts(m_data_buffer);
 
   element = create_xml_node_name(name, atts);
   element.erase(element.length() - 1);
-  m_out->puts(boost::format("\n%1%%2%") % space(m_depth * 2) % element);
+  m_out.puts(boost::format("\n%1%%2%") % space(m_depth * 2) % element);
 
   ++m_depth;
   m_data_buffer = "";
@@ -267,14 +267,14 @@ xml_formatter_c::end_element_cb(const char *name) {
   --m_depth;
 
   if (XMLF_STATE_END == m_state)
-    m_out->puts(boost::format("\n%1%</%2%>") % space(m_depth * 2) % name);
+    m_out.puts(boost::format("\n%1%</%2%>") % space(m_depth * 2) % name);
   else if (XMLF_STATE_START == m_state) {
     if (m_data_buffer == "")
-      m_out->puts("/>");
+      m_out.puts("/>");
     else
-      m_out->puts(boost::format(">\n%1%%2%\n%3%</%4%>") % space((m_depth + 1) * 2) % m_data_buffer % space(m_depth * 2));
+      m_out.puts(boost::format(">\n%1%%2%\n%3%</%4%>") % space((m_depth + 1) * 2) % m_data_buffer % space(m_depth * 2));
   } else if (XMLF_STATE_DATA == m_state)
-    m_out->puts(boost::format("%1%\n%2%</%3%>") % m_data_buffer % space(m_depth * 2) % name);
+    m_out.puts(boost::format("%1%\n%2%</%3%>") % m_data_buffer % space(m_depth * 2) % name);
 
   m_data_buffer = "";
   m_state = XMLF_STATE_END;
@@ -292,18 +292,18 @@ xml_formatter_c::add_data_cb(const XML_Char *s,
     return;
 
   if ((XMLF_STATE_START == m_state) && (test_data_buffer != ""))
-    m_out->puts(boost::format(">\n%1%") % space(m_depth * 2));
+    m_out.puts(boost::format(">\n%1%") % space(m_depth * 2));
   else if (XMLF_STATE_END == m_state)
-    m_out->puts(boost::format("\n%1%") % space(m_depth * 2));
+    m_out.puts(boost::format("\n%1%") % space(m_depth * 2));
   m_state = XMLF_STATE_DATA;
 }
 
 void
 xml_formatter_c::format_fixed(const std::string &text) {
   if (XMLF_STATE_START == m_state)
-    m_out->puts(boost::format(">\n%1%") % space(m_depth * 2));
+    m_out.puts(boost::format(">\n%1%") % space(m_depth * 2));
   else if (XMLF_STATE_END == m_state)
-    m_out->puts(boost::format("\n%1%") % space(m_depth * 2));
+    m_out.puts(boost::format("\n%1%") % space(m_depth * 2));
   m_state = XMLF_STATE_DATA;
-  m_out->puts(text);
+  m_out.puts(text);
 }

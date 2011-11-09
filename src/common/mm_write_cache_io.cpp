@@ -30,10 +30,10 @@ mm_write_cache_io_c::~mm_write_cache_io_c() {
   close();
 }
 
-mm_write_cache_io_c *
+mm_io_cptr
 mm_write_cache_io_c::open(const std::string &file_name,
                           size_t cache_size) {
-  return new mm_write_cache_io_c(new mm_file_io_c(file_name, MODE_CREATE), cache_size);
+  return mm_io_cptr(new mm_write_cache_io_c(new mm_file_io_c(file_name, MODE_CREATE), cache_size));
 }
 
 uint64

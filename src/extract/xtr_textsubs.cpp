@@ -325,8 +325,8 @@ xtr_usf_c::create_file(xtr_base_c *master,
       if (0 <= end_tag_pos)
         codec_private_mod.erase(end_tag_pos, end_tag.length());
 
-      m_out       = new mm_file_io_c(m_file_name, MODE_WRITE);
-      m_formatter = counted_ptr<xml_formatter_c>(new xml_formatter_c(m_out, m_sub_charset));
+      m_out       = mm_file_io_c::open(m_file_name, MODE_WRITE);
+      m_formatter = counted_ptr<xml_formatter_c>(new xml_formatter_c(*m_out, m_sub_charset));
 
       m_formatter->set_doctype("USFSubtitles", "USFV100.dtd");
       m_formatter->set_stylesheet("text/xsl", "USFV100.xsl");

@@ -43,7 +43,7 @@ aac_reader_c::aac_reader_c(track_info_c &ti)
 void
 aac_reader_c::read_headers() {
   try {
-    m_io               = mm_io_cptr(new mm_file_io_c(m_ti.m_fname));
+    m_io               = mm_file_io_c::open(m_ti.m_fname);
     m_size             = m_io->get_size();
 
     int tag_size_start = skip_id3v2_tag(*m_io);

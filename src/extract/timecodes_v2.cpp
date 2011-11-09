@@ -43,11 +43,11 @@ using namespace libmatroska;
 
 struct timecode_extractor_t {
   int64_t m_tid;
-  mm_io_c *m_file;
+  mm_io_cptr m_file;
   std::vector<int64_t> m_timecodes;
   int64_t m_default_duration;
 
-  timecode_extractor_t(int64_t tid, mm_io_c *file, int64_t default_duration):
+  timecode_extractor_t(int64_t tid, const mm_io_cptr &file, int64_t default_duration):
     m_tid(tid), m_file(file), m_default_duration(default_duration) {}
 };
 
@@ -64,7 +64,6 @@ close_timecode_files() {
     std::sort(timecodes.begin(), timecodes.end());
     for (auto timecode : timecodes)
       extractor.m_file->puts(to_string(timecode, 1000000, 6) + "\n");
-    delete extractor.m_file;
   }
 
   timecode_extractors.clear();
@@ -93,7 +92,7 @@ create_timecode_files(KaxTracks &kax_tracks,
     }
 
     try {
-      mm_io_c *file = mm_write_cache_io_c::open(tspec.out_name, 128 * 1024);
+      mm_io_cptr file = mm_write_cache_io_c::open(tspec.out_name, 128 * 1024);
       timecode_extractors.push_back(timecode_extractor_t(tspec.tid, file, default_duration));
       file->puts(boost::format("# timecode format v%1%\n") % version);
 

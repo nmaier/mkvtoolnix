@@ -46,7 +46,6 @@ xtr_base_c::xtr_base_c(const std::string &codec_id,
   , m_file_name(tspec.out_name)
   , m_container_name(NULL == container_name ? Y("raw data") : container_name)
   , m_master(NULL)
-  , m_out(NULL)
   , m_tid(tid)
   , m_default_duration(0)
   , m_bytes_written(0)
@@ -55,7 +54,6 @@ xtr_base_c::xtr_base_c(const std::string &codec_id,
 }
 
 xtr_base_c::~xtr_base_c() {
-  delete m_out;
 }
 
 void
