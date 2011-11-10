@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: it\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2011-10-30 11:00+0100\n"
+"PO-Revision-Date: 2011-11-10 11:00+0100\n"
 "Last-Translator: Stefano Codari <l.stickell@yahoo.it>\n"
 "Language-Team: Italian <moritz@bunkus.org>\n"
 "Language: it\n"
@@ -776,9 +776,9 @@ msgstr[0] "%1% secondo"
 msgstr[1] "%1% secondi"
 
 #: src/input/r_vobsub.cpp:84
-#, fuzzy, boost-format
+#, boost-format
 msgid "%1%: Could not open the sub file"
-msgstr "%1%: Impossibile aprire il file."
+msgstr "%1%: Impossibile aprire il file sottotitoli."
 
 #: src/common/kax_file.cpp:165
 #, boost-format
@@ -6481,11 +6481,11 @@ msgstr ""
 
 #: src/merge/output_control.cpp:1200
 msgid "The file content does not match its format type and was not recognized."
-msgstr ""
+msgstr "Il contenuto del file non corrisponde al suo formato e non è stato riconosciuto."
 
 #: src/merge/output_control.cpp:1197
 msgid "The file could not be opened for reading, or there was not enough data to parse its headers."
-msgstr ""
+msgstr "Il file non può essere aperto per la lettura, o non c'erano abbastanza dati per analizzare le sue intestazioni."
 
 #: src/info/qt_ui.cpp:77
 msgid "The file could not be opened for writing."
@@ -6517,12 +6517,12 @@ msgstr "L'header del file non è stato letto correttamente.\n"
 
 #: src/merge/output_control.cpp:1203
 msgid "The file headers could not be parsed, e.g. because they're incomplete, invalid or damaged."
-msgstr ""
+msgstr "Le intestazioni del file non possono essere analizzate, ad esempio perchè sono incompleti, non validi o danneggiati."
 
 #: src/mmg/tabs/input.cpp:352
 #, c-format, boost-format
 msgid "The file is an unsupported container format (%s)."
-msgstr ""
+msgstr "Il file è un formato contenitore non supportato (%s)."
 
 #: src/propedit/propedit.cpp:92
 msgid "The file is analyzed.\n"
