@@ -271,17 +271,16 @@ struct qtmp4_chapter_entry_t {
 
 class qtmp4_reader_c: public generic_reader_c {
 private:
-  mm_io_cptr m_in;
   std::vector<qtmp4_demuxer_cptr> m_demuxers;
   qtmp4_demuxer_cptr m_chapter_dmx;
-  int64_t m_file_size, m_mdat_pos, m_mdat_size;
+  int64_t m_mdat_pos, m_mdat_size;
   uint32_t m_time_scale, m_compression_algorithm;
   int m_main_dmx;
 
   bool m_debug_chapters, m_debug_headers, m_debug_tables;
 
 public:
-  qtmp4_reader_c(track_info_c &ti);
+  qtmp4_reader_c(const track_info_c &ti, const mm_io_cptr &in);
   virtual ~qtmp4_reader_c();
 
   virtual const std::string get_format_name(bool translate = true) {

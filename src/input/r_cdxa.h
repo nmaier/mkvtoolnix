@@ -16,14 +16,11 @@
 
 #include "common/common_pch.h"
 
-#include "merge/pr_generic.h"
+#include "common/mm_io.h"
 
-class cdxa_reader_c: public generic_reader_c {
+class cdxa_reader_c {
 public:
-  static bool probe_file(mm_io_c *io, uint64_t size);
-
-public:
-  cdxa_reader_c(track_info_c &n_ti): generic_reader_c(n_ti) { };
+  static bool probe_file(mm_io_c *in, uint64_t size);
 };
 
 #endif  // __R_CDXA_H

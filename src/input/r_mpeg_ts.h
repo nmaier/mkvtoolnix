@@ -354,8 +354,6 @@ typedef counted_ptr<mpeg_ts_track_c> mpeg_ts_track_ptr;
 
 class mpeg_ts_reader_c: public generic_reader_c {
 protected:
-  mm_io_cptr m_io;
-  int64_t bytes_processed, size;
   bool PAT_found, PMT_found;
   int16_t PMT_pid;
   int es_to_process;
@@ -377,10 +375,10 @@ protected:
   static int potential_packet_sizes[];
 
 public:
-  mpeg_ts_reader_c(track_info_c &_ti);
+  mpeg_ts_reader_c(const track_info_c &ti, const mm_io_cptr &in);
   virtual ~mpeg_ts_reader_c();
 
-  static bool probe_file(mm_io_c *io, uint64_t size);
+  static bool probe_file(mm_io_c *in, uint64_t size);
 
   virtual const std::string get_format_name(bool translate = true) {
     return translate ? Y("MPEG transport stream") : "MPEG transport stream";
@@ -389,7 +387,6 @@ public:
   virtual void read_headers();
   virtual file_status_e read(generic_packetizer_c *requested_ptzr, bool force = false);
   virtual void identify();
-  virtual int get_progress();
   virtual void create_packetizer(int64_t tid);
   virtual void create_packetizers();
   virtual void add_available_track_ids();
@@ -397,7 +394,7 @@ public:
   virtual bool parse_packet(unsigned char *buf);
 
   static int64_t read_timestamp(unsigned char *p);
-  static int detect_packet_size(mm_io_c *io, uint64_t size);
+  static int detect_packet_size(mm_io_c &in, uint64_t size);
 
 private:
   int parse_pat(unsigned char *pat);

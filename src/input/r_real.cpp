@@ -36,70 +36,49 @@ extern "C" {
 
 static void *
 mm_io_file_open(const char *path,
-                int mode) {
+                int) {
   try {
-    open_mode omode;
-
-    if (MB_OPEN_MODE_READING == mode)
-      omode = MODE_READ;
-    else
-      omode = MODE_CREATE;
-
-    return new mm_file_io_c(path, omode);
+    return reinterpret_cast<mm_io_c *>(const_cast<char *>(path));
   } catch(...) {
     return NULL;
   }
 }
 
 static int
-mm_io_file_close(void *file) {
-  if (NULL != file)
-    delete static_cast<mm_file_io_c *>(file);
+mm_io_file_close(void *) {
   return 0;
 }
 
 static int64_t
 mm_io_file_tell(void *file) {
-  if (NULL != file)
-    return static_cast<mm_file_io_c *>(file)->getFilePointer();
-  return -1;
+  return NULL != file ? static_cast<mm_io_c *>(file)->getFilePointer() : -1;
 }
 
 static int64_t
 mm_io_file_seek(void *file,
                 int64_t offset,
                 int whence) {
-  seek_mode smode;
-
   if (NULL == file)
     return -1;
-  if (SEEK_END == whence)
-    smode = seek_end;
-  else if (SEEK_CUR == whence)
-    smode = seek_current;
-  else
-    smode = seek_beginning;
-  if (!static_cast<mm_file_io_c *>(file)->setFilePointer2(offset, smode))
-    return -1;
-  return 0;
+
+  seek_mode smode = SEEK_END == whence ? seek_end
+                  : SEEK_CUR == whence ? seek_current
+                  :                      seek_beginning;
+  return static_cast<mm_io_c *>(file)->setFilePointer2(offset, smode) ? 0 : -1;
 }
 
 static int64_t
 mm_io_file_read(void *file,
                 void *buffer,
                 int64_t bytes) {
-  if (NULL == file)
-    return -1;
-  return static_cast<mm_file_io_c *>(file)->read(buffer, bytes);
+  return NULL == file ? -1 : static_cast<mm_io_c *>(file)->read(buffer, bytes);
 }
 
 static int64_t
 mm_io_file_write(void *file,
                  const void *buffer,
                  int64_t bytes) {
-  if (NULL == file)
-    return -1;
-  return static_cast<mm_file_io_c *>(file)->write(buffer, bytes);
+  return NULL == file ? -1 : static_cast<mm_io_c *>(file)->write(buffer, bytes);
 }
 
 }
@@ -114,7 +93,7 @@ mb_file_io_t mm_io_file_io = {
 };
 
 int
-real_reader_c::probe_file(mm_io_c *io,
+real_reader_c::probe_file(mm_io_c *in,
                           uint64_t size) {
   unsigned char data[4];
 
@@ -122,10 +101,10 @@ real_reader_c::probe_file(mm_io_c *io,
     return 0;
 
   try {
-    io->setFilePointer(0, seek_beginning);
-    if (io->read(data, 4) != 4)
+    in->setFilePointer(0, seek_beginning);
+    if (in->read(data, 4) != 4)
       return 0;
-    io->setFilePointer(0, seek_beginning);
+    in->setFilePointer(0, seek_beginning);
 
   } catch (...) {
     return 0;
@@ -137,23 +116,22 @@ real_reader_c::probe_file(mm_io_c *io,
   return 1;
 }
 
-real_reader_c::real_reader_c(track_info_c &_ti)
-  : generic_reader_c(_ti)
+real_reader_c::real_reader_c(const track_info_c &ti,
+                             const mm_io_cptr &in)
+  : generic_reader_c(ti, in)
 {
 }
 
 void
 real_reader_c::read_headers() {
-  file = rmff_open_file_with_io(m_ti.m_fname.c_str(), RMFF_OPEN_MODE_READING, &mm_io_file_io);
+  file = rmff_open_file_with_io(reinterpret_cast<const char *>(m_in.get_object()), RMFF_OPEN_MODE_READING, &mm_io_file_io);
   if (NULL == file) {
     if (RMFF_ERR_NOT_RMFF == rmff_last_error)
       throw mtx::input::invalid_format_x();
     else
       throw mtx::input::open_x();
   }
-  file->io->seek(file->handle, 0, SEEK_END);
-  file_size = file->io->tell(file->handle);
-  file->io->seek(file->handle, 0, SEEK_SET);
+  m_in->setFilePointer(0, seek_beginning);
 
   done = false;
 
@@ -783,7 +761,7 @@ real_reader_c::set_dimensions(real_demuxer_cptr dmx,
 
 void
 real_reader_c::get_information_from_data() {
-  int64_t old_pos        = file->io->tell(file->handle);
+  int64_t old_pos        = m_in->getFilePointer();
   bool information_found = true;
 
   size_t i;
@@ -818,7 +796,7 @@ real_reader_c::get_information_from_data() {
     }
   }
 
-  file->io->seek(file->handle, old_pos, SEEK_SET);
+  m_in->setFilePointer(old_pos, seek_beginning);
   file->num_packets_read = 0;
 }
 

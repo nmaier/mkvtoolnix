@@ -77,11 +77,11 @@ private:
   memory_cptr m_avc_extra_nalus;
   int m_avc_nal_size_size;
 
-  int64_t m_bytes_to_process, m_bytes_processed;
+  uint64_t m_bytes_to_process, m_bytes_processed;
   bool m_video_track_ok;
 
 public:
-  avi_reader_c(track_info_c &_ti);
+  avi_reader_c(const track_info_c &ti, const mm_io_cptr &in);
   virtual ~avi_reader_c();
 
   virtual const std::string get_format_name(bool translate = true) {

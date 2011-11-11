@@ -421,17 +421,17 @@ wav_pcm_demuxer_c::process(int64_t len) {
 // ----------------------------------------------------------
 
 int
-wav_reader_c::probe_file(mm_io_c *io,
+wav_reader_c::probe_file(mm_io_c *in,
                          uint64_t size) {
   wave_header wheader;
 
   if (sizeof(wave_header) > size)
     return 0;
   try {
-    io->setFilePointer(0, seek_beginning);
-    if (io->read(&wheader.riff, sizeof(wheader.riff)) != sizeof(wheader.riff))
+    in->setFilePointer(0, seek_beginning);
+    if (in->read(&wheader.riff, sizeof(wheader.riff)) != sizeof(wheader.riff))
       return 0;
-    io->setFilePointer(0, seek_beginning);
+    in->setFilePointer(0, seek_beginning);
   } catch (...) {
     return 0;
   }
@@ -443,28 +443,18 @@ wav_reader_c::probe_file(mm_io_c *io,
   return 1;
 }
 
-wav_reader_c::wav_reader_c(track_info_c &ti_)
-  : generic_reader_c(ti_),
-  m_bytes_processed(0),
-  m_bytes_in_data_chunks(0),
-  m_remaining_bytes_in_current_data_chunk(0),
-  m_cur_data_chunk_idx(0) {
+wav_reader_c::wav_reader_c(const track_info_c &ti,
+                           const mm_io_cptr &in)
+  : generic_reader_c(ti, in)
+  , m_bytes_in_data_chunks(0)
+  , m_remaining_bytes_in_current_data_chunk(0)
+  , m_cur_data_chunk_idx(0)
+{
 }
 
 void
 wav_reader_c::read_headers() {
-  int64_t size;
-
-  try {
-    m_io = mm_file_io_c::open(m_ti.m_fname);
-    m_io->setFilePointer(0, seek_end);
-    size = m_io->getFilePointer();
-    m_io->setFilePointer(0, seek_beginning);
-  } catch (...) {
-    throw mtx::input::open_x();
-  }
-
-  if (!wav_reader_c::probe_file(m_io.get_object(), size))
+  if (!wav_reader_c::probe_file(m_in.get_object(), m_size))
     throw mtx::input::invalid_format_x();
 
   parse_file();
@@ -478,7 +468,7 @@ void
 wav_reader_c::parse_file() {
   int chunk_idx;
 
-  if (m_io->read(&m_wheader.riff, sizeof(m_wheader.riff)) != sizeof(m_wheader.riff))
+  if (m_in->read(&m_wheader.riff, sizeof(m_wheader.riff)) != sizeof(m_wheader.riff))
     throw mtx::input::header_parsing_x();
 
   scan_chunks();
@@ -486,15 +476,15 @@ wav_reader_c::parse_file() {
   if ((chunk_idx = find_chunk("fmt ")) == -1)
     throw mtx::input::header_parsing_x();
 
-  m_io->setFilePointer(m_chunks[chunk_idx].pos, seek_beginning);
+  m_in->setFilePointer(m_chunks[chunk_idx].pos, seek_beginning);
 
   try {
-    if (m_io->read(&m_wheader.format, sizeof(m_wheader.format)) != sizeof(m_wheader.format))
+    if (m_in->read(&m_wheader.format, sizeof(m_wheader.format)) != sizeof(m_wheader.format))
       throw false;
 
     if (static_cast<uint64_t>(m_chunks[chunk_idx].len) >= sizeof(alWAVEFORMATEXTENSIBLE)) {
       alWAVEFORMATEXTENSIBLE format;
-      if (m_io->read(&format, sizeof(format)) != sizeof(format))
+      if (m_in->read(&format, sizeof(format)) != sizeof(format))
         throw false;
       memcpy(&m_wheader.common, &format, sizeof(m_wheader.common));
 
@@ -502,7 +492,7 @@ wav_reader_c::parse_file() {
       if (0xfffe == m_format_tag)
         m_format_tag = get_uint32_le(&format.extension.guid.data1);
 
-    } else if (m_io->read(&m_wheader.common, sizeof(m_wheader.common)) != sizeof(m_wheader.common))
+    } else if (m_in->read(&m_wheader.common, sizeof(m_wheader.common)) != sizeof(m_wheader.common))
       throw false;
 
     else
@@ -518,7 +508,7 @@ wav_reader_c::parse_file() {
   if (debugging_requested("wav_reader") || debugging_requested("wav_reader_headers"))
     dump_headers();
 
-  m_io->setFilePointer(m_chunks[m_cur_data_chunk_idx].pos + sizeof(struct chunk_struct), seek_beginning);
+  m_in->setFilePointer(m_chunks[m_cur_data_chunk_idx].pos + sizeof(struct chunk_struct), seek_beginning);
 
   m_remaining_bytes_in_current_data_chunk = m_chunks[m_cur_data_chunk_idx].len;
 }
@@ -557,19 +547,19 @@ wav_reader_c::create_demuxer() {
 
   if (0x2000 == m_format_tag) {
     m_demuxer = wav_demuxer_cptr(new wav_ac3acm_demuxer_c(this, &m_wheader));
-    if (!m_demuxer->probe(m_io))
+    if (!m_demuxer->probe(m_in))
       m_demuxer.clear();
   }
 
   if (!m_demuxer.is_set()) {
     m_demuxer = wav_demuxer_cptr(new wav_dts_demuxer_c(this, &m_wheader));
-    if (!m_demuxer->probe(m_io))
+    if (!m_demuxer->probe(m_in))
       m_demuxer.clear();
   }
 
   if (!m_demuxer.is_set()) {
     m_demuxer = wav_demuxer_cptr(new wav_ac3wav_demuxer_c(this, &m_wheader));
-    if (!m_demuxer->probe(m_io))
+    if (!m_demuxer->probe(m_in))
       m_demuxer.clear();
   }
 
@@ -597,14 +587,13 @@ wav_reader_c::read(generic_packetizer_c *,
   unsigned char *buffer          = m_demuxer->get_buffer();
   int64_t        num_read;
 
-  num_read = m_io->read(buffer, requested_bytes);
+  num_read = m_in->read(buffer, requested_bytes);
 
   if (0 >= num_read)
     return flush_packetizers();
 
   m_demuxer->process(num_read);
 
-  m_bytes_processed                       += num_read;
   m_remaining_bytes_in_current_data_chunk -= num_read;
 
   if (!m_remaining_bytes_in_current_data_chunk) {
@@ -613,7 +602,7 @@ wav_reader_c::read(generic_packetizer_c *,
     if (-1 == m_cur_data_chunk_idx)
       return flush_packetizers();
 
-    m_io->setFilePointer(m_chunks[m_cur_data_chunk_idx].pos + sizeof(struct chunk_struct), seek_beginning);
+    m_in->setFilePointer(m_chunks[m_cur_data_chunk_idx].pos + sizeof(struct chunk_struct), seek_beginning);
 
     m_remaining_bytes_in_current_data_chunk = m_chunks[m_cur_data_chunk_idx].len;
   }
@@ -627,15 +616,15 @@ wav_reader_c::scan_chunks() {
   bool debug_chunks = debugging_requested("wav_reader") || debugging_requested("wav_reader_chunks");
 
   try {
-    int64_t file_size = m_io->get_size();
+    int64_t file_size = m_in->get_size();
 
     while (true) {
-      new_chunk.pos = m_io->getFilePointer();
+      new_chunk.pos = m_in->getFilePointer();
 
-      if (m_io->read(new_chunk.id, 4) != 4)
+      if (m_in->read(new_chunk.id, 4) != 4)
         return;
 
-      new_chunk.len = m_io->read_uint32_le();
+      new_chunk.len = m_in->read_uint32_le();
 
       if (debug_chunks)
         mxinfo(boost::format("wav_reader_c::scan_chunks() new chunk at %1% type %2% length %3%\n")
@@ -659,7 +648,7 @@ wav_reader_c::scan_chunks() {
       }
 
       m_chunks.push_back(new_chunk);
-      m_io->setFilePointer(new_chunk.len, seek_current);
+      m_in->setFilePointer(new_chunk.len, seek_current);
 
     }
   } catch (...) {
@@ -679,11 +668,6 @@ wav_reader_c::find_chunk(const char *id,
   return -1;
 }
 
-int
-wav_reader_c::get_progress() {
-  return m_bytes_in_data_chunks ? (100 * m_bytes_processed / m_bytes_in_data_chunks) : 100;
-}
-
 void
 wav_reader_c::identify() {
   if (m_demuxer.is_set()) {
@@ -692,6 +676,6 @@ wav_reader_c::identify() {
 
   } else {
     uint16_t format_tag = get_uint16_le(&m_wheader.common.wFormatTag);
-    id_result_container_unsupported(m_io->get_file_name(), (boost::format("RIFF WAVE (wFormatTag = 0x%|1$04x|)") % format_tag).str());
+    id_result_container_unsupported(m_in->get_file_name(), (boost::format("RIFF WAVE (wFormatTag = 0x%|1$04x|)") % format_tag).str());
   }
 }

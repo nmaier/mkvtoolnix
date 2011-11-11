@@ -339,6 +339,9 @@ public:
 class generic_reader_c {
 public:
   track_info_c m_ti;
+  mm_io_cptr m_in;
+  uint64_t m_size;
+
   std::vector<generic_packetizer_c *> m_reader_packetizers;
   generic_packetizer_c *m_ptzr_first_packet;
   std::vector<int64_t> m_requested_track_ids, m_available_track_ids, m_used_track_ids;
@@ -354,7 +357,7 @@ private:
   std::vector<id_result_t> m_id_results_tracks, m_id_results_attachments, m_id_results_chapters, m_id_results_tags;
 
 public:
-  generic_reader_c(track_info_c &ti);
+  generic_reader_c(const track_info_c &ti, const mm_io_cptr &in);
   virtual ~generic_reader_c();
 
   virtual const std::string get_format_name(bool translate = true) = 0;
@@ -362,7 +365,7 @@ public:
   virtual void read_headers() = 0;
   virtual file_status_e read(generic_packetizer_c *ptzr, bool force = false) = 0;
   virtual void read_all();
-  virtual int get_progress() = 0;
+  virtual int get_progress();
   virtual void set_headers();
   virtual void set_headers_for_track(int64_t tid);
   virtual void identify() = 0;
@@ -406,8 +409,9 @@ protected:
 
   virtual std::string id_escape_string(const std::string &s);
 
-  static void id_result_container_unsupported(const std::string &filename, const std::string &info);
 };
+
+void id_result_container_unsupported(const std::string &filename, const std::string &info);
 
 enum connection_result_e {
   CAN_CONNECT_YES,

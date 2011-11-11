@@ -60,9 +60,8 @@ struct wav_chunk_t {
 
 class wav_reader_c: public generic_reader_c {
 private:
-  mm_io_cptr m_io;
   struct wave_header m_wheader;
-  int64_t m_bytes_processed, m_bytes_in_data_chunks, m_remaining_bytes_in_current_data_chunk;
+  int64_t m_bytes_in_data_chunks, m_remaining_bytes_in_current_data_chunk;
 
   std::vector<wav_chunk_t> m_chunks;
   int m_cur_data_chunk_idx;
@@ -72,7 +71,7 @@ private:
   uint32_t m_format_tag;
 
 public:
-  wav_reader_c(track_info_c &_ti);
+  wav_reader_c(const track_info_c &ti, const mm_io_cptr &in);
   virtual ~wav_reader_c();
 
   virtual const std::string get_format_name(bool translate = true) {
@@ -84,9 +83,7 @@ public:
   virtual void identify();
   virtual void create_packetizer(int64_t tid);
 
-  virtual int get_progress();
-
-  static int probe_file(mm_io_c *io, uint64_t size);
+  static int probe_file(mm_io_c *in, uint64_t size);
 
 protected:
   void scan_chunks();

@@ -25,13 +25,11 @@
 
 class vobbtn_reader_c: public generic_reader_c {
 private:
-  mm_io_c *btn_file;
-  uint32_t size;
   uint16_t width, height;
   unsigned char chunk[0x400];
 
 public:
-  vobbtn_reader_c(track_info_c &_ti);
+  vobbtn_reader_c(const track_info_c &ti, const mm_io_cptr &in);
   virtual ~vobbtn_reader_c();
 
   virtual const std::string get_format_name(bool translate = true) {
@@ -42,9 +40,8 @@ public:
   virtual file_status_e read(generic_packetizer_c *ptzr, bool force = false);
   virtual void identify();
   virtual void create_packetizer(int64_t tid);
-  virtual int get_progress();
 
-  static int probe_file(mm_io_c *io, uint64_t size);
+  static int probe_file(mm_io_c *in, uint64_t size);
 };
 
 #endif  // __R_VOBBTN_H

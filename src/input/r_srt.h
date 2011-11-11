@@ -22,11 +22,11 @@
 
 class srt_reader_c: public generic_reader_c {
 private:
-  mm_text_io_cptr m_io;
+  mm_text_io_cptr m_text_in;
   srt_parser_cptr m_subs;
 
 public:
-  srt_reader_c(track_info_c &_ti);
+  srt_reader_c(const track_info_c &ti, const mm_io_cptr &in);
   virtual ~srt_reader_c();
 
   virtual const std::string get_format_name(bool translate = true) {
@@ -42,7 +42,7 @@ public:
     return true;
   }
 
-  static int probe_file(mm_text_io_c *io, uint64_t size);
+  static int probe_file(mm_text_io_c *in, uint64_t size);
 };
 
 #endif  // __R_SRT_H

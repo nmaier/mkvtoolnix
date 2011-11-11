@@ -45,32 +45,25 @@ vobbtn_reader_c::probe_file(mm_io_c *io,
   return 1;
 }
 
-vobbtn_reader_c::vobbtn_reader_c(track_info_c &_ti)
-  : generic_reader_c(_ti)
+vobbtn_reader_c::vobbtn_reader_c(const track_info_c &ti,
+                                 const mm_io_cptr &in)
+  : generic_reader_c(ti, in)
 {
 }
 
 void
 vobbtn_reader_c::read_headers() {
-  try {
-    btn_file = new mm_file_io_c(m_ti.m_fname);
-    size     = btn_file->get_size();
-  } catch (...) {
-    throw mtx::input::open_x();
-  }
-
   // read the width & height
-  btn_file->setFilePointer(8, seek_beginning);
-  width  = btn_file->read_uint16_be();
-  height = btn_file->read_uint16_be();
+  m_in->setFilePointer(8, seek_beginning);
+  width  = m_in->read_uint16_be();
+  height = m_in->read_uint16_be();
   // get ready to read
-  btn_file->setFilePointer(16, seek_beginning);
+  m_in->setFilePointer(16, seek_beginning);
 
   show_demuxer_info();
 }
 
 vobbtn_reader_c::~vobbtn_reader_c() {
-  delete btn_file;
 }
 
 void
@@ -89,22 +82,17 @@ vobbtn_reader_c::read(generic_packetizer_c *ptzr,
   uint8_t tmp[4];
 
   // _todo_ add some tests on the header and size
-  int nread = btn_file->read(tmp, 4);
+  int nread = m_in->read(tmp, 4);
   if (0 >= nread)
     return flush_packetizers();
 
-  uint16_t frame_size = btn_file->read_uint16_be();
-  nread               = btn_file->read(chunk, frame_size);
+  uint16_t frame_size = m_in->read_uint16_be();
+  nread               = m_in->read(chunk, frame_size);
   if (0 >= nread)
     return flush_packetizers();
 
   PTZR0->process(new packet_t(new memory_c(chunk, nread, false)));
   return FILE_STATUS_MOREDATA;
-}
-
-int
-vobbtn_reader_c::get_progress() {
-  return 100 * btn_file->getFilePointer() / size;
 }
 
 void

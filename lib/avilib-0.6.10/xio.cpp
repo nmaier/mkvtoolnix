@@ -39,15 +39,14 @@
 
 #define MAX_INSTANCES 4000
 
-static mm_file_io_c *instances[MAX_INSTANCES];
+static mm_io_c *instances[MAX_INSTANCES];
 static bool instances_initialized = false;
 
 int
-xio_open(const char *pathname,
-         int flags,
+xio_open(void *pathname,
+         int,
          ...) {
   int i, idx;
-  open_mode omode;
 
   if (!instances_initialized) {
     memset(instances, 0, MAX_INSTANCES * sizeof(mm_io_c *));
@@ -64,18 +63,7 @@ xio_open(const char *pathname,
   if (idx == -1)
     return -1;
 
-  if ((flags & O_CREAT) != 0)
-    omode = MODE_CREATE;
-  else if (flags == O_RDONLY)
-    omode = MODE_READ;
-  else
-    omode = MODE_WRITE;
-
-  try {
-    instances[idx] = new mm_file_io_c(pathname, omode);
-  } catch(...) {
-    return -1;
-  }
+  instances[idx] = static_cast<mm_io_c *>(pathname);
 
   return idx;
 }
@@ -135,7 +123,6 @@ int
 xio_close(int fd) {
   if ((fd < 0) || (fd >= MAX_INSTANCES) || (instances[fd] == NULL))
     return -1;
-  delete instances[fd];
   instances[fd] = NULL;
   return 0;
 }

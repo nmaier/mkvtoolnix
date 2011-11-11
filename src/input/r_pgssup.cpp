@@ -41,23 +41,16 @@ pgssup_reader_c::probe_file(mm_io_c *in,
   return PGSSUP_FILE_MAGIC != in->read_uint16_be() ? 0 : 1;
 }
 
-pgssup_reader_c::pgssup_reader_c(track_info_c &p_ti)
- : generic_reader_c(p_ti)
- , m_bytes_processed(0)
- , m_debug(debugging_requested("pgssup_reader"))
+pgssup_reader_c::pgssup_reader_c(const track_info_c &ti,
+                                 const mm_io_cptr &in)
+  : generic_reader_c(ti, in)
+  , m_debug(debugging_requested("pgssup_reader"))
 {
 }
 
 void
 pgssup_reader_c::read_headers() {
-  try {
-    m_in        = mm_file_io_c::open(m_ti.m_fname);
-    m_file_size = m_in->get_size();
-    m_ti.m_id   = 0;       // ID for this track.
-
-  } catch (...) {
-    throw mtx::input::open_x();
-  }
+  m_ti.m_id = 0;       // ID for this track.
 
   show_demuxer_info();
 }
@@ -103,8 +96,6 @@ pgssup_reader_c::read(generic_packetizer_c *,
     if (m_debug)
       mxinfo(boost::format("pgssup_reader_c::read(): type %|1$02x| size %2% at %3%\n") % static_cast<unsigned int>(frame->get_buffer()[0]) % segment_size % (m_in->getFilePointer() - 10 - 3));
 
-    m_bytes_processed += 10 + 3 + segment_size;
-
     PTZR0->process(new packet_t(frame, timestamp));
 
   } catch (...) {
@@ -115,11 +106,6 @@ pgssup_reader_c::read(generic_packetizer_c *,
   }
 
   return FILE_STATUS_MOREDATA;
-}
-
-int
-pgssup_reader_c::get_progress() {
-  return 100 * m_bytes_processed / m_file_size;
 }
 
 void

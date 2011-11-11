@@ -81,6 +81,6 @@ struct wavpack_meta_t {
 #define WV_UNKNOWN_FLAGS  0xC0000000  // also reserved, but refuse decode if
                                       //  encountered
 
-int32_t wv_parse_frame(mm_io_c *mm_io, wavpack_header_t &header, wavpack_meta_t &meta, bool read_blocked_frames, bool keep_initial_position);
+int32_t wv_parse_frame(mm_io_c &mm_io, wavpack_header_t &header, wavpack_meta_t &meta, bool read_blocked_frames, bool keep_initial_position);
 
 #endif // __MTX_COMMON_WAVPACK_COMMON_H

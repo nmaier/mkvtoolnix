@@ -1116,8 +1116,11 @@ generic_packetizer_c::is_compatible_with(output_compatibility_e compatibility) {
   for (std::map<int64_t, bool>::const_iterator i = m_ti.container.m_items.begin(); m_ti.container.m_items.end() != i; ++i) \
     add_requested_track_id(i->first);
 
-generic_reader_c::generic_reader_c(track_info_c &ti)
+generic_reader_c::generic_reader_c(const track_info_c &ti,
+                                   const mm_io_cptr &in)
   : m_ti(ti)
+  , m_in(in)
+  , m_size(in->get_size())
   , m_ptzr_first_packet(NULL)
   , m_max_timecode_seen(0)
   , m_chapters(NULL)
@@ -1311,20 +1314,6 @@ generic_reader_c::flush_packetizers() {
 }
 
 void
-generic_reader_c::id_result_container_unsupported(const std::string &filename,
-                                                  const std::string &info) {
-  if (g_identifying) {
-    if (g_identify_for_mmg)
-      mxinfo(boost::format("File '%1%': unsupported container: %2%\n") % filename % info);
-    else
-      mxinfo(boost::format(Y("File '%1%': unsupported container: %2%\n")) % filename % info);
-    mxexit(3);
-
-  } else
-    mxerror(boost::format(Y("The file '%1%' is a non-supported file type (%2%).\n")) % filename % info);
-}
-
-void
 generic_reader_c::id_result_container(const std::string &verbose_info) {
   m_id_results_container.info = get_format_name();
   m_id_results_container.verbose_info.clear();
@@ -1463,6 +1452,11 @@ generic_reader_c::add_available_track_id(int64_t id) {
 void
 generic_reader_c::add_available_track_ids() {
   add_available_track_id(0);
+}
+
+int
+generic_reader_c::get_progress() {
+  return 100 * m_in->getFilePointer() / m_size;
 }
 
 //
@@ -1613,5 +1607,21 @@ track_info_c::operator =(const track_info_c &src) {
 bool
 track_info_c::display_dimensions_or_aspect_ratio_set() {
   return PARAMETER_SOURCE_NONE != m_display_dimensions_source;
+}
+
+//--------------------------------------------------------------------
+
+void
+id_result_container_unsupported(const std::string &filename,
+                                const std::string &info) {
+  if (g_identifying) {
+    if (g_identify_for_mmg)
+      mxinfo(boost::format("File '%1%': unsupported container: %2%\n") % filename % info);
+    else
+      mxinfo(boost::format(Y("File '%1%': unsupported container: %2%\n")) % filename % info);
+    mxexit(3);
+
+  } else
+    mxerror(boost::format(Y("The file '%1%' is a non-supported file type (%2%).\n")) % filename % info);
 }
 

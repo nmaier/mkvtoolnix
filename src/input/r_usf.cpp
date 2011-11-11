@@ -43,12 +43,12 @@ public:
 };
 
 int
-usf_reader_c::probe_file(mm_text_io_c *io,
+usf_reader_c::probe_file(mm_text_io_c *in,
                          uint64_t) {
   try {
-    usf_xml_find_root_c root_finder(io);
+    usf_xml_find_root_c root_finder(in);
 
-    io->setFilePointer(0);
+    in->setFilePointer(0);
     while (root_finder.parse_one_xml_line() && (root_finder.m_root_element == ""))
       ;
 
@@ -60,27 +60,28 @@ usf_reader_c::probe_file(mm_text_io_c *io,
   return 0;
 }
 
-usf_reader_c::usf_reader_c(track_info_c &_ti)
-  : generic_reader_c(_ti),
-  m_copy_depth(0),
-  m_longest_track(-1),
-  m_strip(false) {
+usf_reader_c::usf_reader_c(const track_info_c &ti,
+                           const mm_io_cptr &in)
+  : generic_reader_c(ti, in)
+  , m_copy_depth(0)
+  , m_longest_track(-1)
+  , m_strip(false)
+{
 }
 
 void
 usf_reader_c::read_headers() {
   try {
-    m_xml_source = new mm_text_io_c(new mm_file_io_c(m_ti.m_fname));
-    size_t i;
+    mm_text_io_c text_in(new mm_text_io_c(m_in.get_object(), false));
+    m_xml_source = &text_in;
 
-    if (!usf_reader_c::probe_file(m_xml_source, 0))
+    if (!usf_reader_c::probe_file(&text_in, 0))
       throw mtx::input::invalid_format_x();
 
     parse_xml_file();
     m_private_data += "</USFSubtitles>";
 
-    delete m_xml_source;
-
+    size_t i;
     for (i = 0; m_tracks.size() > i; ++i) {
       std::stable_sort(m_tracks[i].m_entries.begin(), m_tracks[i].m_entries.end());
       m_tracks[i].m_current_entry = m_tracks[i].m_entries.begin();

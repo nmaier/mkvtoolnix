@@ -36,18 +36,16 @@ typedef struct {
 
 class flac_reader_c: public generic_reader_c {
 private:
-  mm_io_c *file;
+  memory_cptr m_header;
   int sample_rate;
   bool metadata_parsed;
-  uint64_t samples, file_size;
-  unsigned char *header;
-  int header_size;
+  uint64_t samples;
   std::vector<flac_block_t> blocks;
   std::vector<flac_block_t>::iterator current_block;
   FLAC__StreamMetadata_StreamInfo stream_info;
 
 public:
-  flac_reader_c(track_info_c &_ti);
+  flac_reader_c(const track_info_c &ti, const mm_io_cptr &in);
   virtual ~flac_reader_c();
 
   virtual const std::string get_format_name(bool translate = true) {
@@ -59,9 +57,7 @@ public:
   virtual void identify();
   virtual void create_packetizer(int64_t id);
 
-  virtual int get_progress();
-
-  static int probe_file(mm_io_c *io, uint64_t size);
+  static int probe_file(mm_io_c *in, uint64_t size);
 
   virtual FLAC__StreamDecoderReadStatus
   read_cb(FLAC__byte buffer[], size_t *bytes);
@@ -82,12 +78,9 @@ protected:
 
 #else  // HAVE_FLAC_FORMAT_H
 
-class flac_reader_c: public generic_reader_c {
+class flac_reader_c {
 public:
-  static int probe_file(mm_io_c *file, uint64_t size);
-
-public:
-  flac_reader_c(track_info_c &n_ti): generic_reader_c(n_ti) { };
+  static int probe_file(mm_io_c *in, uint64_t size);
 };
 
 #endif // HAVE_FLAC_FORMAT_H

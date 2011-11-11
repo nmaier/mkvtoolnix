@@ -123,6 +123,9 @@ public:
   virtual bool eof() = 0;
   virtual void flush() {
   }
+  virtual int truncate(int64_t) {
+    return 0;
+  }
 
   virtual std::string get_file_name() const = 0;
 

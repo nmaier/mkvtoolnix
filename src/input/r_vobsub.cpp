@@ -42,32 +42,34 @@ vobsub_entry_c::operator < (const vobsub_entry_c &cmp) const {
 }
 
 int
-vobsub_reader_c::probe_file(mm_io_c *io,
+vobsub_reader_c::probe_file(mm_io_c *in,
                             uint64_t size) {
   char chunk[80];
 
   try {
-    io->setFilePointer(0, seek_beginning);
-    if (io->read(chunk, 80) != 80)
+    in->setFilePointer(0, seek_beginning);
+    if (in->read(chunk, 80) != 80)
       return 0;
     if (strncasecmp(chunk, id_string.c_str(), id_string.length()))
       return 0;
-    io->setFilePointer(0, seek_beginning);
+    in->setFilePointer(0, seek_beginning);
   } catch (...) {
     return 0;
   }
   return 1;
 }
 
-vobsub_reader_c::vobsub_reader_c(track_info_c &_ti)
-  : generic_reader_c(_ti),
-  delay(0) {
+vobsub_reader_c::vobsub_reader_c(const track_info_c &ti,
+                                 const mm_io_cptr &in)
+  : generic_reader_c(ti, in)
+  , delay(0)
+{
 }
 
 void
 vobsub_reader_c::read_headers() {
   try {
-    idx_file = new mm_text_io_c(new mm_file_io_c(m_ti.m_fname));
+    m_idx_file = mm_text_io_cptr(new mm_text_io_c(m_in.get_object(), false));
   } catch (...) {
     throw mtx::input::open_x();
   }
@@ -79,7 +81,7 @@ vobsub_reader_c::read_headers() {
   sub_name += ".sub";
 
   try {
-    sub_file = new mm_file_io_c(sub_name.c_str());
+    m_sub_file = mm_file_io_cptr(new mm_file_io_c(sub_name));
   } catch (...) {
     throw mtx::input::extended_x(boost::format(Y("%1%: Could not open the sub file")) % get_format_name());
   }
@@ -88,7 +90,7 @@ vobsub_reader_c::read_headers() {
   len      = id_string.length();
 
   std::string line;
-  if (!idx_file->getline2(line) || !ba::istarts_with(line, id_string) || (line.length() < (len + 1)))
+  if (!m_idx_file->getline2(line) || !ba::istarts_with(line, id_string) || (line.length() < (len + 1)))
     mxerror_fn(m_ti.m_fname, Y("No version number found.\n"));
 
   version = line[len] - '0';
@@ -115,8 +117,6 @@ vobsub_reader_c::~vobsub_reader_c() {
            % (float)(100.0 * tracks[i]->overhead / (tracks[i]->overhead + tracks[i]->spu_size)));
     delete tracks[i];
   }
-  delete sub_file;
-  delete idx_file;
 }
 
 void
@@ -169,10 +169,10 @@ vobsub_reader_c::parse_headers() {
   num_indices            = 0;
   indices_processed      = 0;
 
-  idx_file->setFilePointer(0, seek_beginning);
+  m_idx_file->setFilePointer(0, seek_beginning);
 
   while (1) {
-    if (!idx_file->getline2(line))
+    if (!m_idx_file->getline2(line))
       break;
     line_no++;
 
@@ -426,7 +426,7 @@ vobsub_reader_c::extract_one_spu_packet(int64_t track_id) {
   int64_t timecode              = track->entries[track->idx].timestamp;
   int64_t duration              = track->entries[track->idx].duration;
   uint64_t extraction_start_pos = track->entries[track->idx].position;
-  uint64_t extraction_end_pos   = track->idx >= track->entries.size() - 1 ? sub_file->get_size() : track->entries[track->idx + 1].position;
+  uint64_t extraction_end_pos   = track->idx >= track->entries.size() - 1 ? m_sub_file->get_size() : track->entries[track->idx + 1].position;
 
   int64_t pts                   = 0;
   unsigned char *dst_buf        = NULL;
@@ -435,24 +435,24 @@ vobsub_reader_c::extract_one_spu_packet(int64_t track_id) {
   unsigned int spu_len          = 0;
   bool spu_len_valid            = false;
 
-  sub_file->setFilePointer(extraction_start_pos);
+  m_sub_file->setFilePointer(extraction_start_pos);
   track->packet_num++;
 
   while (1) {
-    if (spu_len_valid && ((dst_size >= spu_len) || (sub_file->getFilePointer() >= extraction_end_pos))) {
+    if (spu_len_valid && ((dst_size >= spu_len) || (m_sub_file->getFilePointer() >= extraction_end_pos))) {
       if (dst_size != spu_len)
         mxverb(3,
                boost::format("r_vobsub.cpp: stddeliver spu_len different from dst_size; pts %5% spu_len %1% dst_size %2% curpos %3% endpos %4%\n")
-               % spu_len % dst_size % sub_file->getFilePointer() % extraction_end_pos % format_timecode(pts));
+               % spu_len % dst_size % m_sub_file->getFilePointer() % extraction_end_pos % format_timecode(pts));
       if (2 < dst_size)
         put_uint16_be(dst_buf, dst_size);
 
       return deliver();
     }
-    if (sub_file->read(buf, 4) != 4)
+    if (m_sub_file->read(buf, 4) != 4)
       return deliver();
     while (memcmp(buf, wanted, sizeof(wanted)) != 0) {
-      c = sub_file->getch();
+      c = m_sub_file->getch();
       if (0 > c)
         return deliver();
       memmove(buf, buf + 1, 3);
@@ -464,7 +464,7 @@ vobsub_reader_c::extract_one_spu_packet(int64_t track_id) {
         break;
 
       case 0xba:                // Packet start code
-        c = sub_file->getch();
+        c = m_sub_file->getch();
         if (0 > c)
           return deliver();
         if ((c & 0xc0) == 0x40)
@@ -483,29 +483,29 @@ vobsub_reader_c::extract_one_spu_packet(int64_t track_id) {
         }
 
         if (4 == mpeg_version) {
-          if (!sub_file->setFilePointer2(9, seek_current))
+          if (!m_sub_file->setFilePointer2(9, seek_current))
             return deliver();
         } else if (2 == mpeg_version) {
-          if (!sub_file->setFilePointer2(7, seek_current))
+          if (!m_sub_file->setFilePointer2(7, seek_current))
             return deliver();
         } else
           abort();
         break;
 
       case 0xbd:                // packet
-        if (sub_file->read(buf, 2) != 2)
+        if (m_sub_file->read(buf, 2) != 2)
           return deliver();
 
         len = buf[0] << 8 | buf[1];
-        idx = sub_file->getFilePointer() - extraction_start_pos;
-        c   = sub_file->getch();
+        idx = m_sub_file->getFilePointer() - extraction_start_pos;
+        c   = m_sub_file->getch();
 
         if (0 > c)
           return deliver();
         if ((c & 0xC0) == 0x40) { // skip STD scale & size
-          if (sub_file->getch() < 0)
+          if (m_sub_file->getch() < 0)
             return deliver();
-          c = sub_file->getch();
+          c = m_sub_file->getch();
           if (0 > c)
             return deliver();
         }
@@ -515,24 +515,24 @@ vobsub_reader_c::extract_one_spu_packet(int64_t track_id) {
           abort();
         else if ((c & 0xc0) == 0x80) { // System-2 (.VOB) stream
           uint32_t pts_flags, hdrlen, dataidx;
-          c = sub_file->getch();
+          c = m_sub_file->getch();
           if (0 > c)
             return deliver();
 
           pts_flags = c;
-          c         = sub_file->getch();
+          c         = m_sub_file->getch();
           if (0 > c)
             return deliver();
 
           hdrlen  = c;
-          dataidx = sub_file->getFilePointer() - extraction_start_pos + hdrlen;
+          dataidx = m_sub_file->getFilePointer() - extraction_start_pos + hdrlen;
           if (dataidx > idx + len) {
             mxwarn_fn(m_ti.m_fname, boost::format(Y("Invalid header length: %1% (total length: %2%, idx: %3%, dataidx: %4%)\n")) % hdrlen % len % idx % dataidx);
             return deliver();
           }
 
           if ((pts_flags & 0xc0) == 0x80) {
-            if (sub_file->read(buf, 5) != 5)
+            if (m_sub_file->read(buf, 5) != 5)
               return deliver();
             if (!(((buf[0] & 0xf0) == 0x20) && (buf[0] & 1) && (buf[2] & 1) && (buf[4] & 1))) {
               mxwarn_fn(m_ti.m_fname, boost::format(Y("PTS error: 0x%|1$02x| %|2$02x|%|3$02x| %|4$02x|%|5$02x|\n")) % buf[0] % buf[1] % buf[2] % buf[3] % buf[4]);
@@ -541,22 +541,22 @@ vobsub_reader_c::extract_one_spu_packet(int64_t track_id) {
               pts = ((int64_t)((buf[0] & 0x0e) << 29 | buf[1] << 22 | (buf[2] & 0xfe) << 14 | buf[3] << 7 | (buf[4] >> 1))) * 100000 / 9;
           }
 
-          sub_file->setFilePointer2(dataidx + extraction_start_pos, seek_beginning);
-          packet_aid = sub_file->getch();
+          m_sub_file->setFilePointer2(dataidx + extraction_start_pos, seek_beginning);
+          packet_aid = m_sub_file->getch();
           if (0 > packet_aid) {
             mxwarn_fn(m_ti.m_fname, boost::format(Y("Bogus aid %1%\n")) % packet_aid);
             return deliver();
           }
 
-          packet_size = len - ((unsigned int)sub_file->getFilePointer() - extraction_start_pos - idx);
+          packet_size = len - ((unsigned int)m_sub_file->getFilePointer() - extraction_start_pos - idx);
           if (-1 == track->aid)
             track->aid = packet_aid;
           else if (track->aid != packet_aid) {
             // The packet does not belong to the current subtitle stream.
             mxverb(3,
                    boost::format("vobsub_reader: skipping sub packet with aid %1% (wanted aid: %2%) with size %3% at %4%\n")
-                   % packet_aid % track->aid % packet_size % (sub_file->getFilePointer() - extraction_start_pos));
-            sub_file->skip(packet_size);
+                   % packet_aid % track->aid % packet_size % (m_sub_file->getFilePointer() - extraction_start_pos));
+            m_sub_file->skip(packet_size);
             idx = len;
             break;
           }
@@ -570,8 +570,8 @@ vobsub_reader_c::extract_one_spu_packet(int64_t track_id) {
             dst_buf = (unsigned char *)saferealloc(dst_buf, dst_size + packet_size);
 
           mxverb(3, boost::format("vobsub_reader: sub packet data: aid: %1%, pts: %2%, packet_size: %3%\n") % track->aid % format_timecode(pts, 3) % packet_size);
-          if (sub_file->read(&dst_buf[dst_size], packet_size) != packet_size) {
-            mxwarn(Y("vobsub_reader: sub_file->read failure"));
+          if (m_sub_file->read(&dst_buf[dst_size], packet_size) != packet_size) {
+            mxwarn(Y("vobsub_reader: m_sub_file->read failure"));
             return deliver();
           }
           if (!spu_len_valid) {
@@ -581,27 +581,27 @@ vobsub_reader_c::extract_one_spu_packet(int64_t track_id) {
 
           dst_size        += packet_size;
           track->spu_size += packet_size;
-          track->overhead += sub_file->getFilePointer() - extraction_start_pos - packet_size;
+          track->overhead += m_sub_file->getFilePointer() - extraction_start_pos - packet_size;
 
           idx              = len;
         }
         break;
 
       case 0xbe:                // Padding
-        if (sub_file->read(buf, 2) != 2)
+        if (m_sub_file->read(buf, 2) != 2)
           return deliver();
         len = buf[0] << 8 | buf[1];
-        if ((0 < len) && !sub_file->setFilePointer2(len, seek_current))
+        if ((0 < len) && !m_sub_file->setFilePointer2(len, seek_current))
           return deliver();
         break;
 
       default:
         if ((0xc0 <= buf[3]) && (buf[3] < 0xf0)) {
           // MPEG audio or video
-          if (sub_file->read(buf, 2) != 2)
+          if (m_sub_file->read(buf, 2) != 2)
             return deliver();
           len = (buf[0] << 8) | buf[1];
-          if ((0 < len) && !sub_file->setFilePointer2(len, seek_current))
+          if ((0 < len) && !m_sub_file->setFilePointer2(len, seek_current))
             return deliver();
 
         } else {

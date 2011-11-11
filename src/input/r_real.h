@@ -98,7 +98,7 @@ private:
   bool done;
 
 public:
-  real_reader_c(track_info_c &_ti);
+  real_reader_c(const track_info_c &ti, const mm_io_cptr &in);
   virtual ~real_reader_c();
 
   virtual const std::string get_format_name(bool translate = true) {
@@ -113,7 +113,7 @@ public:
   virtual void create_packetizer(int64_t tid);
   virtual void add_available_track_ids();
 
-  static int probe_file(mm_io_c *io, uint64_t size);
+  static int probe_file(mm_io_c *in, uint64_t size);
 
 protected:
   virtual void parse_headers();

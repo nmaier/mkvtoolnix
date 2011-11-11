@@ -16,9 +16,10 @@
 #include "common/endian.h"
 #include "common/hdsub.h"
 #include "input/r_hdsub.h"
+#include "merge/pr_generic.h"
 
 int
-hdsub_reader_c::probe_file(mm_io_c *io,
+hdsub_reader_c::probe_file(mm_io_c *in,
                          uint64_t size) {
   try {
     if (2 > size)
@@ -26,13 +27,13 @@ hdsub_reader_c::probe_file(mm_io_c *io,
 
     unsigned char buf[2];
 
-    io->setFilePointer(0, seek_beginning);
-    if (io->read(buf, 2) != 2)
+    in->setFilePointer(0, seek_beginning);
+    if (in->read(buf, 2) != 2)
       return 0;
-    io->setFilePointer(0, seek_beginning);
+    in->setFilePointer(0, seek_beginning);
 
     if (HDSUB_FILE_MAGIC == get_uint16_be(buf)) {
-      id_result_container_unsupported(io->get_file_name(), "HD-DVD sub");
+      id_result_container_unsupported(in->get_file_name(), "HD-DVD sub");
       // Never reached:
       return 1;
     }

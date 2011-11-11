@@ -31,10 +31,10 @@ aac_reader_c::probe_file(mm_io_c *io,
 
 #define INITCHUNKSIZE 16384
 
-aac_reader_c::aac_reader_c(track_info_c &ti)
-  : generic_reader_c(ti)
-  , m_bytes_processed(0)
-  , m_size(0)
+aac_reader_c::aac_reader_c(const track_info_c &ti,
+                           const mm_io_cptr &in)
+  : generic_reader_c(ti, in)
+  , m_chunk(memory_c::alloc(INITCHUNKSIZE))
   , m_emphasis_present(false)
   , m_sbr_status_set(false)
 {
@@ -43,24 +43,20 @@ aac_reader_c::aac_reader_c(track_info_c &ti)
 void
 aac_reader_c::read_headers() {
   try {
-    m_io               = mm_file_io_c::open(m_ti.m_fname);
-    m_size             = m_io->get_size();
-
-    int tag_size_start = skip_id3v2_tag(*m_io);
-    int tag_size_end   = id3_tag_present_at_end(*m_io);
+    int tag_size_start = skip_id3v2_tag(*m_in);
+    int tag_size_end   = id3_tag_present_at_end(*m_in);
 
     if (0 > tag_size_start)
       tag_size_start = 0;
     if (0 < tag_size_end)
       m_size -= tag_size_end;
 
-    size_t init_read_len = std::min(m_size - tag_size_start, (int64_t)INITCHUNKSIZE);
-    m_chunk              = memory_c::alloc(INITCHUNKSIZE);
+    size_t init_read_len = std::min(m_size - tag_size_start, static_cast<uint64_t>(INITCHUNKSIZE));
 
-    if (m_io->read(m_chunk, init_read_len) != init_read_len)
+    if (m_in->read(m_chunk, init_read_len) != init_read_len)
       throw mtx::input::header_parsing_x();
 
-    m_io->setFilePointer(tag_size_start, seek_beginning);
+    m_in->setFilePointer(tag_size_start, seek_beginning);
 
     if (find_aac_header(*m_chunk, init_read_len, &m_aacheader, m_emphasis_present) < 0)
       throw mtx::input::header_parsing_x();
@@ -143,24 +139,14 @@ aac_reader_c::guess_adts_version() {
 file_status_e
 aac_reader_c::read(generic_packetizer_c *,
                    bool) {
-  int remaining_bytes = m_size - m_io->getFilePointer();
+  int remaining_bytes = m_size - m_in->getFilePointer();
   int read_len        = std::min(INITCHUNKSIZE, remaining_bytes);
-  int num_read        = m_io->read(m_chunk, read_len);
+  int num_read        = m_in->read(m_chunk, read_len);
 
-  if (0 < num_read) {
+  if (0 < num_read)
     PTZR0->process(new packet_t(new memory_c(*m_chunk, num_read, false)));
-    m_bytes_processed += num_read;
 
-    if (0 < (remaining_bytes - num_read))
-      return FILE_STATUS_MOREDATA;
-  }
-
-  return flush_packetizers();
-}
-
-int
-aac_reader_c::get_progress() {
-  return 100 * m_bytes_processed / m_size;
+  return (0 != num_read) && (0 < (remaining_bytes - num_read)) ? FILE_STATUS_MOREDATA : flush_packetizers();
 }
 
 void

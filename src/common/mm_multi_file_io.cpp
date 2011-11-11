@@ -184,7 +184,7 @@ struct path_sorter_t {
   }
 };
 
-mm_multi_file_io_cptr
+mm_io_cptr
 mm_multi_file_io_c::open_multi(const std::string &display_file_name,
                                bool single_only) {
   bfs::path first_file_name(bfs::system_complete(bfs::path(display_file_name)));
@@ -196,7 +196,7 @@ mm_multi_file_io_c::open_multi(const std::string &display_file_name,
   if (!boost::regex_match(base_name, matches, file_name_re) || single_only) {
     std::vector<bfs::path> file_names;
     file_names.push_back(first_file_name);
-    return mm_multi_file_io_cptr(new mm_multi_file_io_c(file_names, display_file_name));
+    return mm_io_cptr(new mm_multi_file_io_c(file_names, display_file_name));
   }
 
   int start_number = 1;
@@ -231,5 +231,5 @@ mm_multi_file_io_c::open_multi(const std::string &display_file_name,
   for (auto &path : paths)
     file_names.push_back(path.m_path);
 
-  return mm_multi_file_io_cptr(new mm_multi_file_io_c(file_names, display_file_name));
+  return mm_io_cptr(new mm_multi_file_io_c(file_names, display_file_name));
 }

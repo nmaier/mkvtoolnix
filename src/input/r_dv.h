@@ -16,15 +16,9 @@
 
 #include "common/common_pch.h"
 
-#include "common/mm_io.h"
-#include "merge/pr_generic.h"
-
-class dv_reader_c: public generic_reader_c {
+class dv_reader_c {
 public:
-  static int probe_file(mm_io_c *io, uint64_t size);
-
-public:
-  dv_reader_c(track_info_c &n_ti): generic_reader_c(n_ti) { };
+  static int probe_file(mm_io_c *in, uint64_t size);
 };
 
 #endif // __R_DV_H

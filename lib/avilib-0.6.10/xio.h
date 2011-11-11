@@ -31,7 +31,7 @@ extern "C" {
 #include <sys/types.h>
 #include <sys/stat.h>
 
-int xio_open(const char *pathname, int flags, ...);
+int xio_open(void *pathname, int flags, ...);
 ssize_t xio_read(int fd, void *buf, size_t count);
 ssize_t xio_write(int fd, const void *buf, size_t count);
 int xio_ftruncate(int fd, int64_t length);

@@ -38,9 +38,9 @@ ivf_reader_c::probe_file(mm_io_c *io,
   return 1;
 }
 
-ivf_reader_c::ivf_reader_c(track_info_c &p_ti)
-  : generic_reader_c(p_ti)
-  , m_bytes_processed(0)
+ivf_reader_c::ivf_reader_c(const track_info_c &ti,
+                           const mm_io_cptr &in)
+  : generic_reader_c(ti, in)
   , m_previous_timestamp(0)
 {
 }
@@ -48,9 +48,6 @@ ivf_reader_c::ivf_reader_c(track_info_c &p_ti)
 void
 ivf_reader_c::read_headers() {
   try {
-    m_in   = mm_file_io_c::open(m_ti.m_fname);
-    m_size = m_in->get_size();
-
     ivf_file_header_t header;
     m_in->read(&header, sizeof(ivf_file_header_t));
 
@@ -120,14 +117,8 @@ ivf_reader_c::read(generic_packetizer_c *,
   PTZR0->process(new packet_t(buffer, timestamp, -1, is_keyframe ? -1 : m_previous_timestamp));
 
   m_previous_timestamp  = timestamp;
-  m_bytes_processed    += frame_size + sizeof(ivf_frame_header_t);
 
   return FILE_STATUS_MOREDATA;
-}
-
-int
-ivf_reader_c::get_progress() {
-  return 100 * m_bytes_processed / m_size;
 }
 
 void

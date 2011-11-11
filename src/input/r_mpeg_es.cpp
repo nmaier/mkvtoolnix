@@ -27,7 +27,7 @@
 #define READ_SIZE 1024 * 1024
 
 int
-mpeg_es_reader_c::probe_file(mm_io_c *io,
+mpeg_es_reader_c::probe_file(mm_io_c *in,
                              uint64_t size) {
   if (PROBESIZE > size)
     return 0;
@@ -35,13 +35,13 @@ mpeg_es_reader_c::probe_file(mm_io_c *io,
   try {
     memory_cptr af_buf = memory_c::alloc(READ_SIZE);
     unsigned char *buf = af_buf->get_buffer();
-    io->setFilePointer(0, seek_beginning);
-    int num_read = io->read(buf, READ_SIZE);
+    in->setFilePointer(0, seek_beginning);
+    int num_read = in->read(buf, READ_SIZE);
 
     if (4 > num_read)
       return 0;
 
-    io->setFilePointer(0, seek_beginning);
+    in->setFilePointer(0, seek_beginning);
 
     // MPEG TS starts with 0x47.
     if (0x47 == buf[0])
@@ -105,7 +105,7 @@ mpeg_es_reader_c::probe_file(mm_io_c *io,
     // Let's try to read one frame.
     M2VParser parser;
     parser.SetProbeMode();
-    if (!read_frame(parser, *io, READ_SIZE, true))
+    if (!read_frame(parser, *in, READ_SIZE, true))
       return 0;
 
   } catch (...) {
@@ -115,9 +115,9 @@ mpeg_es_reader_c::probe_file(mm_io_c *io,
   return 1;
 }
 
-mpeg_es_reader_c::mpeg_es_reader_c(track_info_c &_ti)
-  : generic_reader_c(_ti)
-  , bytes_processed(0)
+mpeg_es_reader_c::mpeg_es_reader_c(const track_info_c &ti,
+                                   const mm_io_cptr &in)
+  : generic_reader_c(ti, in)
 {
 }
 
@@ -126,18 +126,13 @@ mpeg_es_reader_c::read_headers() {
   try {
     M2VParser parser;
 
-    io   = new mm_file_io_c(m_ti.m_fname);
-    size = io->get_size();
-
     // Let's find the first frame. We need its information like
     // resolution, MPEG version etc.
     parser.SetProbeMode();
-    if (!read_frame(parser, *io, 1024 * 1024)) {
-      delete io;
+    if (!read_frame(parser, *m_in, 1024 * 1024))
       throw mtx::input::header_parsing_x();
-    }
 
-    io->setFilePointer(0);
+    m_in->setFilePointer(0);
 
     MPEG2SequenceHeader seq_hdr = parser.GetSequenceHeader();
     version                     = parser.GetMPEGVersion();
@@ -168,7 +163,6 @@ mpeg_es_reader_c::read_headers() {
 }
 
 mpeg_es_reader_c::~mpeg_es_reader_c() {
-  delete io;
 }
 
 void
@@ -187,17 +181,16 @@ mpeg_es_reader_c::create_packetizer(int64_t) {
 file_status_e
 mpeg_es_reader_c::read(generic_packetizer_c *,
                        bool) {
-  int64_t bytes_to_read = std::min(static_cast<int64_t>(READ_SIZE), size - bytes_processed);
+  int64_t bytes_to_read = std::min(static_cast<uint64_t>(READ_SIZE), m_size - m_in->getFilePointer());
   if (0 >= bytes_to_read)
     return flush_packetizers();
 
   memory_cptr chunk = memory_c::alloc(bytes_to_read);
-  int64_t num_read  = io->read(chunk, bytes_to_read);
+  int64_t num_read  = m_in->read(chunk, bytes_to_read);
 
   if (0 < num_read) {
     chunk->set_size(num_read);
     PTZR0->process(new packet_t(chunk));
-    bytes_processed = io->getFilePointer();
   }
 
   return bytes_to_read > num_read ? flush_packetizers() : FILE_STATUS_MOREDATA;
@@ -241,11 +234,6 @@ mpeg_es_reader_c::read_frame(M2VParser &parser,
   }
 
   return false;
-}
-
-int
-mpeg_es_reader_c::get_progress() {
-  return 100 * bytes_processed / size;
 }
 
 void

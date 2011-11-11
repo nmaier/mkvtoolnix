@@ -79,8 +79,9 @@ avi_reader_c::probe_file(mm_io_c *io,
   return 1;
 }
 
-avi_reader_c::avi_reader_c(track_info_c &_ti)
-  : generic_reader_c(_ti)
+avi_reader_c::avi_reader_c(const track_info_c &ti,
+                           const mm_io_cptr &in)
+  : generic_reader_c(ti, in)
   , m_divx_type(DIVX_TYPE_NONE)
   , m_avi(NULL)
   , m_vptzr(-1)
@@ -98,12 +99,8 @@ avi_reader_c::avi_reader_c(track_info_c &_ti)
 
 void
 avi_reader_c::read_headers() {
-  int64_t size;
-
   try {
-    mm_file_io_c io(m_ti.m_fname);
-    size = io.get_size();
-    if (!avi_reader_c::probe_file(&io, size))
+    if (!avi_reader_c::probe_file(m_in.get_object(), m_size))
       throw mtx::input::invalid_format_x();
 
   } catch (mtx::mm_io::exception &) {
@@ -112,7 +109,7 @@ avi_reader_c::read_headers() {
 
   show_demuxer_info();
 
-  if (NULL == (m_avi = AVI_open_input_file(m_ti.m_fname.c_str(), 1)))
+  if (NULL == (m_avi = AVI_open_input_file(m_in.get_object(), 1)))
     throw mtx::input::invalid_format_x();
 
   m_fps              = AVI_frame_rate(m_avi);

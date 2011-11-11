@@ -25,7 +25,7 @@ private:
   ssa_parser_cptr m_subs;
 
 public:
-  ssa_reader_c(track_info_c &_ti);
+  ssa_reader_c(const track_info_c &ti, const mm_io_cptr &in);
   virtual ~ssa_reader_c();
 
   virtual const std::string get_format_name(bool translate = true) {
@@ -41,7 +41,7 @@ public:
     return true;
   }
 
-  static int probe_file(mm_text_io_c *io, uint64_t size);
+  static int probe_file(mm_text_io_c *in, uint64_t size);
 };
 
 #endif  // __R_SSA_H

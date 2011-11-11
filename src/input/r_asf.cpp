@@ -15,11 +15,12 @@
 
 #include "common/endian.h"
 #include "input/r_asf.h"
+#include "merge/pr_generic.h"
 
 #define MAGIC_ASF_WMV 0x3026b275
 
 int
-asf_reader_c::probe_file(mm_io_c *io,
+asf_reader_c::probe_file(mm_io_c *in,
                          uint64_t size) {
   try {
     if (4 > size)
@@ -27,13 +28,13 @@ asf_reader_c::probe_file(mm_io_c *io,
 
     unsigned char buf[4];
 
-    io->setFilePointer(0, seek_beginning);
-    if (io->read(buf, 4) != 4)
+    in->setFilePointer(0, seek_beginning);
+    if (in->read(buf, 4) != 4)
       return 0;
-    io->setFilePointer(0, seek_beginning);
+    in->setFilePointer(0, seek_beginning);
 
     if (MAGIC_ASF_WMV == get_uint32_be(buf)) {
-      id_result_container_unsupported(io->get_file_name(), "Windows Media (ASF/WMV)");
+      id_result_container_unsupported(in->get_file_name(), "Windows Media (ASF/WMV)");
       // Never reached:
       return 1;
     }

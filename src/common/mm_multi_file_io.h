@@ -58,7 +58,7 @@ public:
   virtual void create_verbose_identification_info(std::vector<std::string> &verbose_info);
   virtual void display_other_file_info();
 
-  static mm_multi_file_io_cptr open_multi(const std::string &display_file_name, bool single_only = false);
+  static mm_io_cptr open_multi(const std::string &display_file_name, bool single_only = false);
 
 protected:
   virtual uint32 _read(void *buffer, size_t size);

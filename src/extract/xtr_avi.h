@@ -24,6 +24,7 @@ public:
   avi_t *m_avi;
   double m_fps;
   alBITMAPINFOHEADER *m_bih;
+  mm_io_cptr m_out;
 
 public:
   xtr_avi_c(const std::string &codec_id, int64_t tid, track_spec_t &tspec);

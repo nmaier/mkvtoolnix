@@ -18,12 +18,9 @@
 
 #include "common/error.h"
 #include "common/mm_io.h"
-#include "merge/pr_generic.h"
 
-class aac_adif_reader_c: public generic_reader_c {
+class aac_adif_reader_c {
 public:
-  aac_adif_reader_c(track_info_c &n_ti): generic_reader_c(n_ti) { };
-
   static int probe_file(mm_io_c *io, uint64_t size);
 };
 

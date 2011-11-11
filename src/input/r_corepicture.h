@@ -23,6 +23,8 @@
 
 class corepicture_reader_c: public generic_reader_c, public xml_parser_c {
 private:
+  mm_text_io_cptr m_xml_source;
+
   int m_ptzr;
 
   std::vector<std::string> m_parents;
@@ -31,7 +33,7 @@ private:
   std::vector<corepicture_pic_t>::const_iterator m_current_picture;
 
 public:
-  corepicture_reader_c(track_info_c &_ti);
+  corepicture_reader_c(const track_info_c &ti, const mm_io_cptr &in);
   virtual ~corepicture_reader_c();
 
   virtual const std::string get_format_name(bool translate = true) {
@@ -44,7 +46,7 @@ public:
   virtual void create_packetizer(int64_t tid);
   virtual int get_progress();
 
-  static int probe_file(mm_text_io_c *io, uint64_t size);
+  static int probe_file(mm_text_io_c *in, uint64_t size);
 
   virtual void start_element_cb(const char *name, const char **atts);
   virtual void end_element_cb(const char *name);

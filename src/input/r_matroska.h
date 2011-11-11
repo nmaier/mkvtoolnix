@@ -169,9 +169,7 @@ private:
 
   int64_t m_tc_scale;
 
-  mm_io_cptr m_in;
   kax_file_cptr m_in_file;
-  int64_t m_file_size;
 
   counted_ptr<EbmlStream> m_es;
 
@@ -191,7 +189,7 @@ private:
   file_status_e m_file_status;
 
 public:
-  kax_reader_c(track_info_c &_ti);
+  kax_reader_c(const track_info_c &ti, const mm_io_cptr &in);
   virtual ~kax_reader_c();
 
   virtual const std::string get_format_name(bool translate = true) {
@@ -208,7 +206,7 @@ public:
   virtual void create_packetizer(int64_t tid);
   virtual void add_available_track_ids();
 
-  static int probe_file(mm_io_c *io, uint64_t size);
+  static int probe_file(mm_io_c *in, uint64_t size);
 
 protected:
   virtual void set_track_packetizer(kax_track_t *t, generic_packetizer_c *ptzr);

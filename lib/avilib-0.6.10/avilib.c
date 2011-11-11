@@ -646,7 +646,7 @@ int AVI_can_read_text(avi_t *AVI)
    returns a pointer to avi_t on success, a zero pointer on error
 */
 
-avi_t* AVI_open_output_file(const char * filename)
+avi_t* AVI_open_output_file(void * filename)
 {
    avi_t *AVI;
    int i;
@@ -1998,7 +1998,7 @@ avi_t *AVI_open_input_indexfile(const char *filename, int getIndex, const char *
   /* Open the file */
 
 #if defined(SYS_WINDOWS)  
-  AVI->fdes = open(filename,O_RDONLY|O_BINARY);
+  AVI->fdes = xio_open(filename,O_RDONLY|O_BINARY);
 #else
   AVI->fdes = xio_open(filename,O_RDONLY);
 #endif
@@ -2057,7 +2057,7 @@ avi_t *AVI_open_indexfd(int fd, int getIndex, const char *indexfile)
 }
 
 
-avi_t *AVI_open_input_file(const char *filename, int getIndex)
+avi_t *AVI_open_input_file(void *filename, int getIndex)
 {
   avi_t *AVI=NULL;
   

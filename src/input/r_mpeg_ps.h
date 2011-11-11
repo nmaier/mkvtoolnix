@@ -120,8 +120,7 @@ typedef counted_ptr<mpeg_ps_track_t> mpeg_ps_track_ptr;
 
 class mpeg_ps_reader_c: public generic_reader_c {
 private:
-  mm_multi_file_io_cptr io;
-  int64_t bytes_processed, size, duration, global_timecode_offset;
+  int64_t duration, global_timecode_offset;
 
   std::map<int, int> id2idx;
   std::map<int, bool> blacklisted_ids;
@@ -133,7 +132,7 @@ private:
   std::vector<mpeg_ps_track_ptr> tracks;
 
 public:
-  mpeg_ps_reader_c(track_info_c &_ti);
+  mpeg_ps_reader_c(const track_info_c &ti, const mm_io_cptr &in);
   virtual ~mpeg_ps_reader_c();
 
   virtual const std::string get_format_name(bool translate = true) {
@@ -142,7 +141,6 @@ public:
 
   virtual void read_headers();
   virtual file_status_e read(generic_packetizer_c *ptzr, bool force = false);
-  virtual int get_progress();
   virtual void identify();
   virtual void create_packetizer(int64_t id);
   virtual void create_packetizers();
@@ -158,7 +156,7 @@ public:
 
   virtual void parse_program_stream_map();
 
-  static int probe_file(mm_io_c *io, uint64_t size);
+  static int probe_file(mm_io_c *in, uint64_t size);
 
 private:
   virtual void new_stream_v_avc_or_mpeg_1_2(mpeg_ps_id_t id, unsigned char *buf, unsigned int length, mpeg_ps_track_ptr &track);

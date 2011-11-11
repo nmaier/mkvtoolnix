@@ -295,17 +295,17 @@ extract_vorbis_comments(const memory_cptr &mem) {
    Probes a file by simply comparing the first four bytes to 'OggS'.
 */
 int
-ogm_reader_c::probe_file(mm_io_c *io,
+ogm_reader_c::probe_file(mm_io_c *in,
                          uint64_t size) {
   unsigned char data[4];
 
   if (4 > size)
     return 0;
   try {
-    io->setFilePointer(0, seek_beginning);
-    if (io->read(data, 4) != 4)
+    in->setFilePointer(0, seek_beginning);
+    if (in->read(data, 4) != 4)
       return 0;
-    io->setFilePointer(0, seek_beginning);
+    in->setFilePointer(0, seek_beginning);
   } catch (...) {
     return 0;
   }
@@ -318,20 +318,15 @@ ogm_reader_c::probe_file(mm_io_c *io,
    Opens the file for processing, initializes an ogg_sync_state used for
    reading from an OGG stream.
 */
-ogm_reader_c::ogm_reader_c(track_info_c &ti)
-  : generic_reader_c(ti)
+ogm_reader_c::ogm_reader_c(const track_info_c &ti,
+                           const mm_io_cptr &in)
+  : generic_reader_c(ti, in)
 {
 }
 
 void
 ogm_reader_c::read_headers() {
-  try {
-    io        = new mm_file_io_c(m_ti.m_fname);
-    file_size = io->get_size();
-  } catch (...) {
-    throw mtx::input::open_x();
-  }
-  if (!ogm_reader_c::probe_file(io, file_size))
+  if (!ogm_reader_c::probe_file(m_in.get_object(), m_size))
     throw mtx::input::invalid_format_x();
 
   ogg_sync_init(&oy);
@@ -345,7 +340,6 @@ ogm_reader_c::read_headers() {
 
 ogm_reader_c::~ogm_reader_c() {
   ogg_sync_clear(&oy);
-  delete io;
 }
 
 ogm_demuxer_cptr
@@ -385,7 +379,7 @@ ogm_reader_c::read_page(ogg_page *og) {
       if (!buf)
         mxerror_fn(m_ti.m_fname, Y("ogg_sync_buffer failed\n"));
 
-      if (0 >= (nread = io->read(buf, BUFFER_SIZE)))
+      if (0 >= (nread = m_in->read(buf, BUFFER_SIZE)))
         return 0;
 
       ogg_sync_wrote(&oy, nread);
@@ -665,7 +659,7 @@ ogm_reader_c::read_headers_internal() {
     }
   }
 
-  io->setFilePointer(0, seek_beginning);
+  m_in->setFilePointer(0, seek_beginning);
   ogg_sync_clear(&oy);
   ogg_sync_init(&oy);
 
@@ -703,11 +697,6 @@ ogm_reader_c::read(generic_packetizer_c *,
 
   // No, we're done with this file.
   return flush_packetizers();
-}
-
-int
-ogm_reader_c::get_progress() {
-  return (int)(io->getFilePointer() * 100 / file_size);
 }
 
 void

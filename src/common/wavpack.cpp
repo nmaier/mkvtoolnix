@@ -64,7 +64,7 @@ little_endian_to_native(void *data,
 }
 
 static int32_t
-read_next_header(mm_io_c *mm_io,
+read_next_header(mm_io_c &in,
                  wavpack_header_t *wphdr) {
   char buffer[sizeof(*wphdr)], *sp = buffer + sizeof(*wphdr), *ep = sp;
   uint32_t bytes_skipped = 0;
@@ -77,7 +77,7 @@ read_next_header(mm_io_c *mm_io,
     } else
       bleft = 0;
 
-    if (mm_io->read(buffer + bleft, sizeof(*wphdr) - bleft) != static_cast<unsigned int>(sizeof(*wphdr) - bleft))
+    if (in.read(buffer + bleft, sizeof(*wphdr) - bleft) != static_cast<unsigned int>(sizeof(*wphdr) - bleft))
       return -1;
 
     sp = buffer;
@@ -99,18 +99,18 @@ read_next_header(mm_io_c *mm_io,
 }
 
 int32_t
-wv_parse_frame(mm_io_c *mm_io,
+wv_parse_frame(mm_io_c &in,
                wavpack_header_t &wphdr,
                wavpack_meta_t &meta,
                bool read_blocked_frames,
                bool keep_initial_position) {
   uint32_t bcount;
-  uint64_t first_data_pos = mm_io->getFilePointer();
+  uint64_t first_data_pos = in.getFilePointer();
   bool can_leave = !read_blocked_frames;
 
   do {
     // read next WavPack header
-    bcount = read_next_header(mm_io, &wphdr);
+    bcount = read_next_header(in, &wphdr);
 
     if (bcount == (uint32_t) -1) {
       return -1;
@@ -134,7 +134,7 @@ wv_parse_frame(mm_io_c *mm_io,
 
         meta.samples_per_block = wphdr.block_samples;
 
-        first_data_pos = mm_io->getFilePointer();
+        first_data_pos = in.getFilePointer();
         meta.channel_count = (wphdr.flags & WV_MONO_FLAG) ? 1 : 2;
         if (wphdr.flags & WV_FINAL_BLOCK) {
           can_leave = true;
@@ -157,12 +157,12 @@ wv_parse_frame(mm_io_c *mm_io,
     } else
       mxwarn(Y("wavpack_reader: non-audio block found\n"));
     if (!can_leave) {
-      mm_io->skip(wphdr.ck_size - sizeof(wavpack_header_t) + 8);
+      in.skip(wphdr.ck_size - sizeof(wavpack_header_t) + 8);
     }
   } while (!can_leave);
 
   if (keep_initial_position)
-    mm_io->setFilePointer(first_data_pos);
+    in.setFilePointer(first_data_pos);
 
   return wphdr.ck_size - sizeof(wavpack_header_t) + 8;
 }

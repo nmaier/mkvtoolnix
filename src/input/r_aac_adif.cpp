@@ -15,9 +15,10 @@
 
 #include "common/endian.h"
 #include "input/r_aac_adif.h"
+#include "merge/pr_generic.h"
 
 int
-aac_adif_reader_c::probe_file(mm_io_c *io,
+aac_adif_reader_c::probe_file(mm_io_c *in,
                               uint64_t size) {
   try {
     if (4 > size)
@@ -25,13 +26,13 @@ aac_adif_reader_c::probe_file(mm_io_c *io,
 
     unsigned char buf[4];
 
-    io->setFilePointer(0, seek_beginning);
-    if (io->read(buf, 4) != 4)
+    in->setFilePointer(0, seek_beginning);
+    if (in->read(buf, 4) != 4)
       return 0;
-    io->setFilePointer(0, seek_beginning);
+    in->setFilePointer(0, seek_beginning);
 
     if (FOURCC('A', 'D', 'I', 'F') == get_uint32_be(buf)) {
-      id_result_container_unsupported(io->get_file_name(), Y("AAC with ADIF headers"));
+      id_result_container_unsupported(in->get_file_name(), Y("AAC with ADIF headers"));
       // Never reached:
       return 1;
     }

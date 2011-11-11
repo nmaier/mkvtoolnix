@@ -14,9 +14,10 @@
 #include "common/common_pch.h"
 
 #include "input/r_flv.h"
+#include "merge/pr_generic.h"
 
 int
-flv_reader_c::probe_file(mm_io_c *io,
+flv_reader_c::probe_file(mm_io_c *in,
                          uint64_t size) {
   try {
     if (3 > size)
@@ -24,13 +25,13 @@ flv_reader_c::probe_file(mm_io_c *io,
 
     unsigned char buf[3];
 
-    io->setFilePointer(0, seek_beginning);
-    if (io->read(buf, 3) != 3)
+    in->setFilePointer(0, seek_beginning);
+    if (in->read(buf, 3) != 3)
       return 0;
-    io->setFilePointer(0, seek_beginning);
+    in->setFilePointer(0, seek_beginning);
 
     if (!memcmp(buf, "FLV", 3)) {
-      id_result_container_unsupported(io->get_file_name(), "Macromedia Flash Video (FLV)");
+      id_result_container_unsupported(in->get_file_name(), "Macromedia Flash Video (FLV)");
       // Never reached:
       return 1;
     }

@@ -42,12 +42,12 @@ public:
 };
 
 int
-corepicture_reader_c::probe_file(mm_text_io_c *io,
+corepicture_reader_c::probe_file(mm_text_io_c *in,
                                  uint64_t) {
   try {
-    corepicture_xml_find_root_c root_finder(io);
+    corepicture_xml_find_root_c root_finder(in);
 
-    io->setFilePointer(0);
+    in->setFilePointer(0);
     while (root_finder.parse_one_xml_line() && (root_finder.m_root_element == ""))
       ;
 
@@ -59,23 +59,23 @@ corepicture_reader_c::probe_file(mm_text_io_c *io,
   return 0;
 }
 
-corepicture_reader_c::corepicture_reader_c(track_info_c &_ti)
-  : generic_reader_c(_ti),
-  m_width(-1),
-  m_height(-1) {
+corepicture_reader_c::corepicture_reader_c(const track_info_c &ti,
+                                           const mm_io_cptr &in)
+  : generic_reader_c(ti, in)
+  , m_width(-1)
+  , m_height(-1)
+{
 }
 
 void
 corepicture_reader_c::read_headers() {
   try {
-    m_xml_source = new mm_text_io_c(new mm_file_io_c(m_ti.m_fname));
+    m_xml_source = mm_text_io_cptr(new mm_text_io_c(m_in.get_object(), false));
 
-    if (!corepicture_reader_c::probe_file(m_xml_source, 0))
+    if (!corepicture_reader_c::probe_file(m_xml_source.get_object(), 0))
       throw mtx::input::invalid_format_x();
 
     parse_xml_file();
-
-    delete m_xml_source;
 
     std::stable_sort(m_pictures.begin(), m_pictures.end());
     m_current_picture = m_pictures.begin();

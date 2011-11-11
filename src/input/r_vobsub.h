@@ -56,8 +56,8 @@ public:
 
 class vobsub_reader_c: public generic_reader_c {
 private:
-  mm_io_c *sub_file;
-  mm_text_io_c *idx_file;
+  mm_text_io_cptr m_idx_file;
+  mm_file_io_cptr m_sub_file;
   int version, ifo_data_size;
   int64_t num_indices, indices_processed, delay;
   std::string idx_data;
@@ -68,7 +68,7 @@ private:
   static const std::string id_string;
 
 public:
-  vobsub_reader_c(track_info_c &_ti);
+  vobsub_reader_c(const track_info_c &ti, const mm_io_cptr &in);
   virtual ~vobsub_reader_c();
 
   virtual const std::string get_format_name(bool translate = true) {
@@ -86,7 +86,7 @@ public:
     return true;
   }
 
-  static int probe_file(mm_io_c *io, uint64_t size);
+  static int probe_file(mm_io_c *in, uint64_t size);
 
 protected:
   virtual void parse_headers();

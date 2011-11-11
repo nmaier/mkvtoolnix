@@ -22,20 +22,13 @@
 #include "common/smart_pointers.h"
 #include "mpegparser/M2VParser.h"
 
-class generic_reader_c;
-class mm_io_c;
-class track_info_c;
-
 class mpeg_es_reader_c: public generic_reader_c {
 private:
-  mm_io_c *io;
-  int64_t bytes_processed, size;
-
   int version, interlaced, width, height, dwidth, dheight;
   double frame_rate, aspect_ratio;
 
 public:
-  mpeg_es_reader_c(track_info_c &_ti);
+  mpeg_es_reader_c(const track_info_c &ti, const mm_io_cptr &in);
   virtual ~mpeg_es_reader_c();
 
   virtual const std::string get_format_name(bool translate = true) {
@@ -44,13 +37,12 @@ public:
 
   virtual void read_headers();
   virtual file_status_e read(generic_packetizer_c *ptzr, bool force = false);
-  virtual int get_progress();
   virtual void identify();
   virtual void create_packetizer(int64_t id);
 
   static bool read_frame(M2VParser &parser, mm_io_c &in, int64_t max_size = -1, bool flush_parser = false);
 
-  static int probe_file(mm_io_c *io, uint64_t size);
+  static int probe_file(mm_io_c *in, uint64_t size);
 };
 
 #endif // __R_MPEG_ES_H

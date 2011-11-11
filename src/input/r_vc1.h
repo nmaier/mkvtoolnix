@@ -21,9 +21,6 @@
 
 class vc1_es_reader_c: public generic_reader_c {
 private:
-  counted_ptr<mm_io_c> m_io;
-  int64_t m_bytes_processed, m_size;
-
   memory_cptr m_raw_seqhdr;
   int m_width, m_height;
 
@@ -32,7 +29,7 @@ private:
   vc1::sequence_header_t m_seqhdr;
 
 public:
-  vc1_es_reader_c(track_info_c &n_ti);
+  vc1_es_reader_c(const track_info_c &ti, const mm_io_cptr &in);
 
   virtual const std::string get_format_name(bool translate = true) {
     return translate ? Y("VC1") : "VC1";
@@ -40,11 +37,10 @@ public:
 
   virtual void read_headers();
   virtual file_status_e read(generic_packetizer_c *ptzr, bool force = false);
-  virtual int get_progress();
   virtual void identify();
   virtual void create_packetizer(int64_t id);
 
-  static int probe_file(mm_io_c *io, uint64_t size);
+  static int probe_file(mm_io_c *in, uint64_t size);
 };
 
 #endif // __R_VC1_H

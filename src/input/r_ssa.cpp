@@ -23,36 +23,37 @@
 
 
 int
-ssa_reader_c::probe_file(mm_text_io_c *io,
+ssa_reader_c::probe_file(mm_text_io_c *in,
                          uint64_t) {
-  return ssa_parser_c::probe(io);
+  return ssa_parser_c::probe(in);
 }
 
-ssa_reader_c::ssa_reader_c(track_info_c &_ti)
-  : generic_reader_c(_ti)
+ssa_reader_c::ssa_reader_c(const track_info_c &ti,
+                           const mm_io_cptr &in)
+  : generic_reader_c(ti, in)
 {
 }
 
 void
 ssa_reader_c::read_headers() {
-  counted_ptr<mm_text_io_c> io;
+  mm_text_io_cptr text_in;
 
   try {
-    io = counted_ptr<mm_text_io_c>(new mm_text_io_c(new mm_file_io_c(m_ti.m_fname)));
+    text_in = counted_ptr<mm_text_io_c>(new mm_text_io_c(m_in.get_object(), false));
   } catch (...) {
     throw mtx::input::open_x();
   }
 
-  if (!ssa_reader_c::probe_file(io.get_object(), 0))
+  if (!ssa_reader_c::probe_file(text_in.get_object(), 0))
     throw mtx::input::invalid_format_x();
 
   charset_converter_cptr cc_utf8 = map_has_key(m_ti.m_sub_charsets,  0) ? charset_converter_c::init(m_ti.m_sub_charsets[ 0])
                                  : map_has_key(m_ti.m_sub_charsets, -1) ? charset_converter_c::init(m_ti.m_sub_charsets[-1])
-                                 : io->get_byte_order() != BO_NONE      ? charset_converter_c::init("UTF-8")
+                                 : text_in->get_byte_order() != BO_NONE ? charset_converter_c::init("UTF-8")
                                  :                                        g_cc_local_utf8;
 
   m_ti.m_id = 0;
-  m_subs    = ssa_parser_cptr(new ssa_parser_c(this, io.get_object(), m_ti.m_fname, 0));
+  m_subs    = ssa_parser_cptr(new ssa_parser_c(this, text_in.get_object(), m_ti.m_fname, 0));
 
   m_subs->set_charset_converter(cc_utf8);
   m_subs->parse();

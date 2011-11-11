@@ -1099,92 +1099,94 @@ void
 create_readers() {
   for (auto &file : g_files) {
     try {
+      mm_io_cptr input_file = mm_file_io_c::open(file.ti->m_fname);
+
       switch (file.type) {
         case FILE_TYPE_AAC:
-          file.reader = new aac_reader_c(*file.ti);
+          file.reader = new aac_reader_c(*file.ti, input_file);
           break;
         case FILE_TYPE_AC3:
-          file.reader = new ac3_reader_c(*file.ti);
+          file.reader = new ac3_reader_c(*file.ti, input_file);
           break;
         case FILE_TYPE_AVC_ES:
-          file.reader = new avc_es_reader_c(*file.ti);
+          file.reader = new avc_es_reader_c(*file.ti, input_file);
           break;
         case FILE_TYPE_AVI:
-          file.reader = new avi_reader_c(*file.ti);
+          file.reader = new avi_reader_c(*file.ti, input_file);
           break;
         case FILE_TYPE_DIRAC:
-          file.reader = new dirac_es_reader_c(*file.ti);
+          file.reader = new dirac_es_reader_c(*file.ti, input_file);
           break;
         case FILE_TYPE_DTS:
-          file.reader = new dts_reader_c(*file.ti);
+          file.reader = new dts_reader_c(*file.ti, input_file);
           break;
 #if defined(HAVE_FLAC_FORMAT_H)
         case FILE_TYPE_FLAC:
-          file.reader = new flac_reader_c(*file.ti);
+          file.reader = new flac_reader_c(*file.ti, input_file);
           break;
 #endif
         case FILE_TYPE_IVF:
-          file.reader = new ivf_reader_c(*file.ti);
+          file.reader = new ivf_reader_c(*file.ti, input_file);
           break;
         case FILE_TYPE_MATROSKA:
-          file.reader = new kax_reader_c(*file.ti);
+          file.reader = new kax_reader_c(*file.ti, input_file);
           break;
         case FILE_TYPE_MP3:
-          file.reader = new mp3_reader_c(*file.ti);
+          file.reader = new mp3_reader_c(*file.ti, input_file);
           break;
         case FILE_TYPE_MPEG_ES:
-          file.reader = new mpeg_es_reader_c(*file.ti);
+          file.reader = new mpeg_es_reader_c(*file.ti, input_file);
           break;
         case FILE_TYPE_MPEG_PS:
-          file.reader = new mpeg_ps_reader_c(*file.ti);
+          file.reader = new mpeg_ps_reader_c(*file.ti, input_file);
           break;
         case FILE_TYPE_MPEG_TS:
-          file.reader = new mpeg_ts_reader_c(*file.ti);
+          file.reader = new mpeg_ts_reader_c(*file.ti, input_file);
           break;
         case FILE_TYPE_OGM:
-          file.reader = new ogm_reader_c(*file.ti);
+          file.reader = new ogm_reader_c(*file.ti, input_file);
           break;
         case FILE_TYPE_PGSSUP:
-          file.reader = new pgssup_reader_c(*file.ti);
+          file.reader = new pgssup_reader_c(*file.ti, input_file);
           break;
         case FILE_TYPE_QTMP4:
-          file.reader = new qtmp4_reader_c(*file.ti);
+          file.reader = new qtmp4_reader_c(*file.ti, input_file);
           break;
         case FILE_TYPE_REAL:
-          file.reader = new real_reader_c(*file.ti);
+          file.reader = new real_reader_c(*file.ti, input_file);
           break;
         case FILE_TYPE_SSA:
-          file.reader = new ssa_reader_c(*file.ti);
+          file.reader = new ssa_reader_c(*file.ti, input_file);
           break;
         case FILE_TYPE_SRT:
-          file.reader = new srt_reader_c(*file.ti);
+          file.reader = new srt_reader_c(*file.ti, input_file);
           break;
         case FILE_TYPE_TRUEHD:
-          file.reader = new truehd_reader_c(*file.ti);
+          file.reader = new truehd_reader_c(*file.ti, input_file);
           break;
         case FILE_TYPE_TTA:
-          file.reader = new tta_reader_c(*file.ti);
+          file.reader = new tta_reader_c(*file.ti, input_file);
           break;
         case FILE_TYPE_USF:
-          file.reader = new usf_reader_c(*file.ti);
+          file.reader = new usf_reader_c(*file.ti, input_file);
           break;
         case FILE_TYPE_COREPICTURE:
-          file.reader = new corepicture_reader_c(*file.ti);
+          file.reader = new corepicture_reader_c(*file.ti, input_file);
           break;
         case FILE_TYPE_VC1:
-          file.reader = new vc1_es_reader_c(*file.ti);
+          file.reader = new vc1_es_reader_c(*file.ti, input_file);
           break;
         case FILE_TYPE_VOBBTN:
-          file.reader = new vobbtn_reader_c(*file.ti);
+          file.reader = new vobbtn_reader_c(*file.ti, input_file);
           break;
         case FILE_TYPE_VOBSUB:
-          file.reader = new vobsub_reader_c(*file.ti);
+          file.reader = new vobsub_reader_c(*file.ti, input_file);
           break;
         case FILE_TYPE_WAV:
-          file.reader = new wav_reader_c(*file.ti);
+          file.reader = new wav_reader_c(*file.ti, input_file);
           break;
         case FILE_TYPE_WAVPACK4:
-          file.reader = new wavpack_reader_c(*file.ti);
+          file.reader = new wavpack_reader_c(*file.ti, input_file);
           break;
         default:
           mxerror(boost::format(Y("EVIL internal bug! (unknown file type). %1%\n")) % BUGMSG);
@@ -1192,6 +1194,9 @@ create_readers() {
       }
 
       file.reader->read_headers();
+
+    } catch (mtx::mm_io::open_x &error) {
+      mxerror(boost::format(Y("The demultiplexer for the file '%1%' failed to initialize:\n%2%\n")) % file.ti->m_fname % Y("The file could not be opened for reading, or there was not enough data to parse its headers."));
 
     } catch (mtx::input::open_x &error) {
       mxerror(boost::format(Y("The demultiplexer for the file '%1%' failed to initialize:\n%2%\n")) % file.ti->m_fname % Y("The file could not be opened for reading, or there was not enough data to parse its headers."));

@@ -174,17 +174,17 @@ kax_track_t::fix_display_dimension_parameters() {
    head signature.
 */
 int
-kax_reader_c::probe_file(mm_io_c *io,
+kax_reader_c::probe_file(mm_io_c *in,
                          uint64_t size) {
   unsigned char data[4];
 
   if (4 > size)
     return 0;
   try {
-    io->setFilePointer(0, seek_beginning);
-    if (io->read(data, 4) != 4)
+    in->setFilePointer(0, seek_beginning);
+    if (in->read(data, 4) != 4)
       return 0;
-    io->setFilePointer(0, seek_beginning);
+    in->setFilePointer(0, seek_beginning);
   } catch (...) {
     return 0;
   }
@@ -193,8 +193,9 @@ kax_reader_c::probe_file(mm_io_c *io,
   return 1;
 }
 
-kax_reader_c::kax_reader_c(track_info_c &_ti)
-  : generic_reader_c(_ti)
+kax_reader_c::kax_reader_c(const track_info_c &ti,
+                           const mm_io_cptr &in)
+  : generic_reader_c(ti, in)
   , m_segment_duration(0)
   , m_last_timecode(0)
   , m_first_timecode(-1)
@@ -1228,8 +1229,6 @@ kax_reader_c::read_headers_internal() {
 
   KaxCluster *cluster = NULL;
   try {
-    m_in        = mm_file_io_c::open(m_ti.m_fname);
-    m_file_size = m_in->get_size();
     m_es        = counted_ptr<EbmlStream>(new EbmlStream(*m_in));
     m_in_file   = kax_file_cptr(new kax_file_c(m_in));
 
@@ -2263,7 +2262,7 @@ kax_reader_c::get_progress() {
   if (0 != m_segment_duration)
     return (m_last_timecode - std::max(m_first_timecode, static_cast<int64_t>(0))) * 100 / m_segment_duration;
 
-  return 100 * m_in->getFilePointer() / m_file_size;
+  return 100 * m_in->getFilePointer() / m_size;
 }
 
 void

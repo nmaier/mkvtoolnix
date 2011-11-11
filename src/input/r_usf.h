@@ -67,7 +67,7 @@ private:
   bool m_strip;
 
 public:
-  usf_reader_c(track_info_c &_ti);
+  usf_reader_c(const track_info_c &ti, const mm_io_cptr &in);
   virtual ~usf_reader_c();
 
   virtual const std::string get_format_name(bool translate = true) {
@@ -84,7 +84,7 @@ public:
     return true;
   }
 
-  static int probe_file(mm_text_io_c *io, uint64_t size);
+  static int probe_file(mm_text_io_c *in, uint64_t size);
 
   virtual void start_element_cb(const char *name, const char **atts);
   virtual void end_element_cb(const char *name);

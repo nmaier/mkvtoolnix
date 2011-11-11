@@ -47,7 +47,12 @@ xtr_avi_c::create_file(xtr_base_c *master,
                             "track %4% with the CodecID '%5%' is already being written to the same file.\n"))
             % m_tid % m_codec_id % m_file_name % master->m_tid % master->m_codec_id);
 
-  m_avi = AVI_open_output_file(m_file_name.c_str());
+  try {
+    m_out = mm_file_io_c::open(m_file_name.c_str(), MODE_CREATE);
+    m_avi = AVI_open_output_file(m_out.get_object());
+  } catch (mtx::mm_io::exception &) {
+  }
+
   if (NULL == m_avi)
     mxerror(boost::format(Y("The file '%1%' could not be opened for writing (%2%).\n")) % m_file_name % AVI_strerror());
 

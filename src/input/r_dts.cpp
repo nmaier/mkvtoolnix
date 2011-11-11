@@ -22,7 +22,7 @@
 #define READ_SIZE 16384
 
 int
-dts_reader_c::probe_file(mm_io_c *io,
+dts_reader_c::probe_file(mm_io_c *in,
                          uint64_t size) {
   if (size < READ_SIZE)
     return 0;
@@ -31,10 +31,10 @@ dts_reader_c::probe_file(mm_io_c *io,
     unsigned char buf[READ_SIZE];
     bool dts14_to_16 = false, swap_bytes = false;
 
-    io->setFilePointer(0, seek_beginning);
-    if (io->read(buf, READ_SIZE) != READ_SIZE)
+    in->setFilePointer(0, seek_beginning);
+    if (in->read(buf, READ_SIZE) != READ_SIZE)
       return 0;
-    io->setFilePointer(0, seek_beginning);
+    in->setFilePointer(0, seek_beginning);
 
     if (detect_dts(buf, READ_SIZE, dts14_to_16, swap_bytes))
       return 1;
@@ -45,24 +45,24 @@ dts_reader_c::probe_file(mm_io_c *io,
   return 0;
 }
 
-dts_reader_c::dts_reader_c(track_info_c &_ti)
-  : generic_reader_c(_ti),
-  cur_buf(0),
-  dts14_to_16(false),
-  swap_bytes(false) {
+dts_reader_c::dts_reader_c(const track_info_c &ti,
+                           const mm_io_cptr &in)
+  : generic_reader_c(ti, in)
+  , m_af_buf(memory_c::alloc(2 * READ_SIZE))
+  , cur_buf(0)
+  , dts14_to_16(false)
+  , swap_bytes(false)
+{
+  buf[0] = reinterpret_cast<unsigned short *>(m_af_buf->get_buffer());
+  buf[1] = reinterpret_cast<unsigned short *>(m_af_buf->get_buffer() + READ_SIZE);
 }
 
 void
 dts_reader_c::read_headers() {
   try {
-    io     = new mm_file_io_c(m_ti.m_fname);
-    size   = io->get_size();
-    buf[0] = (unsigned short *)safemalloc(READ_SIZE);
-    buf[1] = (unsigned short *)safemalloc(READ_SIZE);
-
-    if (io->read(buf[cur_buf], READ_SIZE) != READ_SIZE)
+    if (m_in->read(buf[cur_buf], READ_SIZE) != READ_SIZE)
       throw mtx::input::header_parsing_x();
-    io->setFilePointer(0, seek_beginning);
+    m_in->setFilePointer(0, seek_beginning);
 
   } catch (...) {
     throw mtx::input::open_x();
@@ -78,16 +78,12 @@ dts_reader_c::read_headers() {
   if (0 > pos)
     throw mtx::input::header_parsing_x();
 
-  bytes_processed = 0;
-  m_ti.m_id       = 0;          // ID for this track.
+  m_ti.m_id = 0;          // ID for this track.
 
   show_demuxer_info();
 }
 
 dts_reader_c::~dts_reader_c() {
-  delete io;
-  safefree(buf[0]);
-  safefree(buf[1]);
 }
 
 int
@@ -121,7 +117,7 @@ dts_reader_c::create_packetizer(int64_t) {
 file_status_e
 dts_reader_c::read(generic_packetizer_c *,
                    bool) {
-  int nread  = io->read(buf[cur_buf], READ_SIZE);
+  int nread = m_in->read(buf[cur_buf], READ_SIZE);
 
   if (dts14_to_16)
     nread &= ~0xf;
@@ -132,14 +128,8 @@ dts_reader_c::read(generic_packetizer_c *,
   int num_to_output = decode_buffer(nread);
 
   PTZR0->process(new packet_t(new memory_c(buf[cur_buf], num_to_output, false)));
-  bytes_processed += nread;
 
-  return ((nread < READ_SIZE) || io->eof()) ? flush_packetizers() : FILE_STATUS_MOREDATA;
-}
-
-int
-dts_reader_c::get_progress() {
-  return 100 * bytes_processed / size;
+  return ((nread < READ_SIZE) || m_in->eof()) ? flush_packetizers() : FILE_STATUS_MOREDATA;
 }
 
 void

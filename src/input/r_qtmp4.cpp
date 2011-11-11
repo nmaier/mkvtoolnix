@@ -99,9 +99,9 @@ qtmp4_reader_c::probe_file(mm_io_c *in,
   return 0;
 }
 
-qtmp4_reader_c::qtmp4_reader_c(track_info_c &ti)
-  : generic_reader_c(ti)
-  , m_file_size(0)
+qtmp4_reader_c::qtmp4_reader_c(const track_info_c &ti,
+                               const mm_io_cptr &in)
+  : generic_reader_c(ti, in)
   , m_mdat_pos(-1)
   , m_mdat_size(0)
   , m_time_scale(1)
@@ -116,9 +116,7 @@ qtmp4_reader_c::qtmp4_reader_c(track_info_c &ti)
 void
 qtmp4_reader_c::read_headers() {
   try {
-    m_in        = mm_file_io_c::open(m_ti.m_fname);
-    m_file_size = m_in->get_size();
-    if (!qtmp4_reader_c::probe_file(m_in.get_object(), m_file_size))
+    if (!qtmp4_reader_c::probe_file(m_in.get_object(), m_size))
       throw mtx::input::invalid_format_x();
 
     show_demuxer_info();
@@ -152,7 +150,7 @@ qtmp4_reader_c::read_atom(mm_io_c *read_from,
     a.hsize += 8;
 
   } else if (0 == a.size)
-    a.size   = m_file_size - read_from->getFilePointer() + 8;
+    a.size   = m_size - read_from->getFilePointer() + 8;
 
   if (a.size < a.hsize) {
     if (exit_on_error)
