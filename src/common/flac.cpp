@@ -22,7 +22,7 @@
 #include <FLAC/stream_decoder.h>
 
 #include "common/bit_cursor.h"
-#include "input/flac_common.h"
+#include "common/flac.h"
 
 static bool
 flac_skip_utf8(bit_cursor_c &bits,

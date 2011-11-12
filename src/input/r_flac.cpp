@@ -16,8 +16,8 @@
 #include <ogg/ogg.h>
 #include <vorbis/codec.h>
 
+#include "common/flac.h"
 #include "common/matroska.h"
-#include "input/flac_common.h"
 #include "input/r_flac.h"
 #include "merge/output_control.h"
 #include "merge/pr_generic.h"
