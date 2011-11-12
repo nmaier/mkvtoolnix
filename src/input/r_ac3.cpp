@@ -91,9 +91,9 @@ ac3_reader_c::create_packetizer(int64_t) {
 file_status_e
 ac3_reader_c::read(generic_packetizer_c *,
                    bool) {
-  int64_t remaining_bytes = m_size - m_in->getFilePointer();
-  int64_t read_len        = std::min((int64_t)AC3_READ_SIZE, remaining_bytes);
-  int num_read            = m_in->read(m_chunk->get_buffer(), read_len);
+  uint64_t remaining_bytes = m_size - m_in->getFilePointer();
+  uint64_t read_len        = std::min(static_cast<uint64_t>(AC3_READ_SIZE), remaining_bytes);
+  int num_read             = m_in->read(m_chunk->get_buffer(), read_len);
 
   if (0 < num_read)
     PTZR0->process(new packet_t(new memory_c(m_chunk->get_buffer(), num_read, false)));

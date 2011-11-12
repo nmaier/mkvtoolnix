@@ -57,26 +57,24 @@ avi_subs_demuxer_t::avi_subs_demuxer_t()
 {
 }
 
-int
-avi_reader_c::probe_file(mm_io_c *io,
+bool
+avi_reader_c::probe_file(mm_io_c *in,
                          uint64_t size) {
-  unsigned char data[12];
-
   if (12 > size)
-    return 0;
+    return false;
+
+  std::string data;
   try {
-    io->setFilePointer(0, seek_beginning);
-    if (io->read(data, 12) != 12)
-      return 0;
-    io->setFilePointer(0, seek_beginning);
+    in->setFilePointer(0, seek_beginning);
+    if (in->read(data, 12) != 12)
+      return false;
+    in->setFilePointer(0, seek_beginning);
   } catch (...) {
-    return 0;
+    return false;
   }
 
-  if (strncasecmp((char *)data, "RIFF", 4) || strncasecmp((char *)data + 8, "AVI ", 4))
-    return 0;
-
-  return 1;
+  ba::to_lower(data);
+  return (data.substr(0, 4) == "riff") && (data.substr(8, 4) == "avi ");
 }
 
 avi_reader_c::avi_reader_c(const track_info_c &ti,
@@ -160,7 +158,7 @@ avi_reader_c::parse_subtitle_chunks() {
       continue;
 
     memory_cptr chunk(memory_c::alloc(chunk_size));
-    chunk_size = AVI_read_text_chunk(m_avi, (char *)chunk->get_buffer());
+    chunk_size = AVI_read_text_chunk(m_avi, reinterpret_cast<char *>(chunk->get_buffer()));
 
     if (0 >= chunk_size)
       continue;
@@ -225,7 +223,7 @@ avi_reader_c::create_video_packetizer() {
     mxverb(4, boost::format("  %1%: %2%\n") % i % AVI_frame_size(m_avi, i));
   }
 
-  m_ti.m_private_data = (unsigned char *)m_avi->bitmap_info_header;
+  m_ti.m_private_data = reinterpret_cast<unsigned char *>(m_avi->bitmap_info_header);
   if (NULL != m_ti.m_private_data)
     m_ti.m_private_size = get_uint32_le(&m_avi->bitmap_info_header->bi_size);
 
@@ -284,7 +282,7 @@ avi_reader_c::create_mpeg1_2_packetizer() {
 
     memory_cptr buffer = memory_c::alloc(size);
     int key      = 0;
-    int num_read = AVI_read_frame(m_avi, (char *)buffer->get_buffer(), &key);
+    int num_read = AVI_read_frame(m_avi, reinterpret_cast<char *>(buffer->get_buffer()), &key);
 
     if (0 >= num_read)
       continue;
@@ -304,7 +302,7 @@ avi_reader_c::create_mpeg1_2_packetizer() {
   if (!frame.is_set())
     mxerror_tid(m_ti.m_fname, 0, Y("Could not extract the sequence header from this MPEG-1/2 track.\n"));
 
-  int display_width      = ((0 >= seq_hdr.aspectRatio) || (1 == seq_hdr.aspectRatio)) ? seq_hdr.width : (int)(seq_hdr.height * seq_hdr.aspectRatio);
+  int display_width      = ((0 >= seq_hdr.aspectRatio) || (1 == seq_hdr.aspectRatio)) ? seq_hdr.width : static_cast<int>(seq_hdr.height * seq_hdr.aspectRatio);
 
   MPEGChunk *raw_seq_hdr = m2v_parser->GetRealSequenceHeader();
   if (NULL != raw_seq_hdr) {
@@ -336,7 +334,7 @@ avi_reader_c::create_mpeg4_p10_packetizer() {
     m_vptzr                               = add_packetizer(ptzr);
 
     ptzr->enable_timecode_generation(false);
-    ptzr->set_track_default_duration((int64_t)(1000000000 / m_fps));
+    ptzr->set_track_default_duration(static_cast<int64_t>(1000000000 / m_fps));
 
     if (m_avc_extra_nalus.is_set())
       ptzr->add_extra_data(m_avc_extra_nalus);
@@ -435,11 +433,11 @@ avi_reader_c::extract_avcc() {
 
   int extra_data_size = get_uint32_le(&m_avi->bitmap_info_header->bi_size) - sizeof(alBITMAPINFOHEADER);
   if (0 < extra_data_size) {
-    m_avc_extra_nalus = mpeg4::p10::avcc_to_nalus((unsigned char *)(m_avi->bitmap_info_header + 1), extra_data_size);
+    m_avc_extra_nalus = mpeg4::p10::avcc_to_nalus(reinterpret_cast<unsigned char *>(m_avi->bitmap_info_header + 1), extra_data_size);
     if (m_avc_extra_nalus.is_set()) {
       uint32_t marker = get_uint32_be(m_avi->bitmap_info_header + 1);
       if ((0x00000001 != marker) && (0x00000100 != (marker & 0xffffff00)))
-        m_avc_nal_size_size = 1 + (((unsigned char *)(m_avi->bitmap_info_header + 1))[4] & 0x03);
+        m_avc_nal_size_size = 1 + (reinterpret_cast<unsigned char *>(m_avi->bitmap_info_header + 1)[4] & 0x03);
       parser.add_bytes(m_avc_extra_nalus->get_buffer(), m_avc_extra_nalus->get_size());
     }
   }
@@ -454,7 +452,7 @@ avi_reader_c::extract_avcc() {
 
     AVI_set_video_position(m_avi, i);
     int key = 0;
-    size    = AVI_read_frame(m_avi, (char *)buffer->get_buffer(), &key);
+    size    = AVI_read_frame(m_avi, reinterpret_cast<char *>(buffer->get_buffer()), &key);
 
     if (   (0 == i)
         && (4 <= size)
@@ -530,7 +528,7 @@ avi_reader_c::add_audio_demuxer(int aid) {
     audio_format                = get_uint32_le(&ext->extension.guid.data1);
 
   } else if (get_uint16_le(&wfe->cb_size) > 0) {
-    m_ti.m_private_data              = (unsigned char *)(wfe + 1);
+    m_ti.m_private_data              = reinterpret_cast<unsigned char *>(wfe + 1);
     m_ti.m_private_size              = get_uint16_le(&wfe->cb_size);
   } else {
     m_ti.m_private_data              = NULL;
@@ -680,7 +678,7 @@ avi_reader_c::create_vorbis_packetizer(int aid) {
     if (!m_ti.m_private_data || !m_ti.m_private_size)
       throw mtx::input::extended_x(Y("Invalid Vorbis headers in AVI audio track."));
 
-    unsigned char *c = (unsigned char *)m_ti.m_private_data;
+    unsigned char *c = m_ti.m_private_data;
 
     if (2 != c[0])
       throw mtx::input::extended_x(Y("Invalid Vorbis headers in AVI audio track."));
@@ -695,7 +693,7 @@ avi_reader_c::create_vorbis_packetizer(int aid) {
     for (i = 0; 2 > i; ++i) {
       int size = 0;
 
-      while ((offset < laced_size) && ((unsigned char)255 == c[offset])) {
+      while ((offset < laced_size) && (255u == c[offset])) {
         size += 255;
         ++offset;
       }
@@ -741,7 +739,7 @@ avi_reader_c::read_video() {
   do {
     size  = AVI_frame_size(m_avi, m_video_frames_read);
     chunk = memory_c::alloc(size);
-    num_read = AVI_read_frame(m_avi, (char *)chunk->get_buffer(), &key);
+    num_read = AVI_read_frame(m_avi, reinterpret_cast<char *>(chunk->get_buffer()), &key);
 
     ++m_video_frames_read;
 
@@ -770,8 +768,8 @@ avi_reader_c::read_video() {
     ++m_video_frames_read;
   }
 
-  int64_t timestamp       = (int64_t)(((int64_t)old_video_frames_read)   * 1000000000ll / m_fps);
-  int64_t duration        = (int64_t)(((int64_t)dropped_frames_here + 1) * 1000000000ll / m_fps);
+  int64_t timestamp       = static_cast<int64_t>(static_cast<int64_t>(old_video_frames_read)   * 1000000000ll / m_fps);
+  int64_t duration        = static_cast<int64_t>(static_cast<int64_t>(dropped_frames_here + 1) * 1000000000ll / m_fps);
 
   m_dropped_video_frames += dropped_frames_here;
 
@@ -814,7 +812,7 @@ avi_reader_c::read_audio(avi_demuxer_t &demuxer) {
     return flush_packetizer(demuxer.m_ptzr);
 
   memory_cptr chunk = memory_c::alloc(size);
-  size              = AVI_read_audio_chunk(m_avi, (char *)chunk->get_buffer());
+  size              = AVI_read_audio_chunk(m_avi, reinterpret_cast<char *>(chunk->get_buffer()));
 
   if (0 >= size)
     return flush_packetizer(demuxer.m_ptzr);
@@ -869,16 +867,16 @@ avi_reader_c::extended_identify_mpeg4_l2(std::vector<std::string> &extended_info
   unsigned char *buffer = af_buffer->get_buffer();
   int dummy_key;
 
-  AVI_read_frame(m_avi, (char *)buffer, &dummy_key);
+  AVI_read_frame(m_avi, reinterpret_cast<char *>(buffer), &dummy_key);
 
   uint32_t par_num, par_den;
   if (mpeg4::p2::extract_par(buffer, size, par_num, par_den)) {
     int width          = AVI_video_width(m_avi);
     int height         = AVI_video_height(m_avi);
-    float aspect_ratio = (float)width / (float)height * (float)par_num / (float)par_den;
+    float aspect_ratio = static_cast<float>(width) * par_num / height / par_den;
 
     int disp_width, disp_height;
-    if (aspect_ratio > ((float)width / (float)height)) {
+    if (aspect_ratio > (static_cast<float>(width) / height)) {
       disp_width  = irnd(height * aspect_ratio);
       disp_height = height;
 

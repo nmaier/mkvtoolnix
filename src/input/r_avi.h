@@ -96,7 +96,7 @@ public:
   virtual void create_packetizer(int64_t tid);
   virtual void add_available_track_ids();
 
-  static int probe_file(mm_io_c *io, uint64_t size);
+  static bool probe_file(mm_io_c *in, uint64_t size);
 
 protected:
   virtual void add_audio_demuxer(int aid);
