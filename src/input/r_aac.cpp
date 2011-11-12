@@ -22,11 +22,11 @@
 #include "merge/output_control.h"
 
 int
-aac_reader_c::probe_file(mm_io_c *io,
+aac_reader_c::probe_file(mm_io_c *in,
                          uint64_t size,
                          int64_t probe_range,
                          int num_headers) {
-  return (find_valid_headers(io, probe_range, num_headers) != -1) ? 1 : 0;
+  return (find_valid_headers(*in, probe_range, num_headers) != -1) ? 1 : 0;
 }
 
 #define INITCHUNKSIZE 16384
@@ -158,17 +158,16 @@ aac_reader_c::identify() {
 }
 
 int
-aac_reader_c::find_valid_headers(mm_io_c *io,
+aac_reader_c::find_valid_headers(mm_io_c &in,
                                  int64_t probe_range,
                                  int num_headers) {
   try {
-    io->setFilePointer(0, seek_beginning);
+    in.setFilePointer(0, seek_beginning);
     memory_cptr buf = memory_c::alloc(probe_range);
-    int num_read    = io->read(buf->get_buffer(), probe_range);
-    int pos         = find_consecutive_aac_headers(buf->get_buffer(), num_read, num_headers);
-    io->setFilePointer(0, seek_beginning);
+    int num_read    = in.read(buf->get_buffer(), probe_range);
+    in.setFilePointer(0, seek_beginning);
 
-    return pos;
+    return find_consecutive_aac_headers(buf->get_buffer(), num_read, num_headers);
   } catch (...) {
     return -1;
   }

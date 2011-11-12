@@ -27,10 +27,10 @@
 class dts_reader_c: public generic_reader_c {
 private:
   memory_cptr m_af_buf;
-  unsigned short *buf[2];
-  int cur_buf;
-  dts_header_t dtsheader;
-  bool dts14_to_16, swap_bytes;
+  unsigned short *m_buf[2];
+  unsigned int m_cur_buf;
+  dts_header_t m_dtsheader;
+  bool m_dts14_to_16, m_swap_bytes, m_debug;
 
 public:
   dts_reader_c(const track_info_c &ti, const mm_io_cptr &in);
@@ -48,7 +48,7 @@ public:
   static int probe_file(mm_io_c *in, uint64_t size);
 
 protected:
-  virtual int decode_buffer(int len);
+  virtual int decode_buffer(size_t length);
 };
 
 #endif // __R_DTS_H

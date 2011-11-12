@@ -42,11 +42,11 @@ public:
   virtual void identify();
   virtual void create_packetizer(int64_t id);
 
-  static int probe_file(mm_io_c *io, uint64_t size, int64_t probe_range, int num_headers);
+  static int probe_file(mm_io_c *in, uint64_t size, int64_t probe_range, int num_headers);
 
 protected:
   virtual void guess_adts_version();
-  static int find_valid_headers(mm_io_c *io, int64_t probe_range, int num_headers);
+  static int find_valid_headers(mm_io_c &in, int64_t probe_range, int num_headers);
 };
 
 #endif // __R_AAC_H

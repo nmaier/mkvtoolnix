@@ -49,18 +49,19 @@ dts_reader_c::dts_reader_c(const track_info_c &ti,
                            const mm_io_cptr &in)
   : generic_reader_c(ti, in)
   , m_af_buf(memory_c::alloc(2 * READ_SIZE))
-  , cur_buf(0)
-  , dts14_to_16(false)
-  , swap_bytes(false)
+  , m_cur_buf(0)
+  , m_dts14_to_16(false)
+  , m_swap_bytes(false)
+  , m_debug(debugging_requested("dts") || debugging_requested("dts_reader"))
 {
-  buf[0] = reinterpret_cast<unsigned short *>(m_af_buf->get_buffer());
-  buf[1] = reinterpret_cast<unsigned short *>(m_af_buf->get_buffer() + READ_SIZE);
+  m_buf[0] = reinterpret_cast<unsigned short *>(m_af_buf->get_buffer());
+  m_buf[1] = reinterpret_cast<unsigned short *>(m_af_buf->get_buffer() + READ_SIZE);
 }
 
 void
 dts_reader_c::read_headers() {
   try {
-    if (m_in->read(buf[cur_buf], READ_SIZE) != READ_SIZE)
+    if (m_in->read(m_buf[m_cur_buf], READ_SIZE) != READ_SIZE)
       throw mtx::input::header_parsing_x();
     m_in->setFilePointer(0, seek_beginning);
 
@@ -68,12 +69,12 @@ dts_reader_c::read_headers() {
     throw mtx::input::open_x();
   }
 
-  detect_dts(buf[cur_buf], READ_SIZE, dts14_to_16, swap_bytes);
+  detect_dts(m_buf[m_cur_buf], READ_SIZE, m_dts14_to_16, m_swap_bytes);
 
-  mxverb(3, boost::format("DTS: 14->16 %1% swap %2%\n") % dts14_to_16 % swap_bytes);
+  mxdebug_if(m_debug, boost::format("DTS: 14->16 %1% swap %2%\n") % m_dts14_to_16 % m_swap_bytes);
 
   decode_buffer(READ_SIZE);
-  int pos = find_dts_header((const unsigned char *)buf[cur_buf], READ_SIZE, &dtsheader);
+  int pos = find_dts_header(reinterpret_cast<const unsigned char *>(m_buf[m_cur_buf]), READ_SIZE, &m_dtsheader);
 
   if (0 > pos)
     throw mtx::input::header_parsing_x();
@@ -87,19 +88,19 @@ dts_reader_c::~dts_reader_c() {
 }
 
 int
-dts_reader_c::decode_buffer(int len) {
-  if (swap_bytes) {
-    swab((char *)buf[cur_buf], (char *)buf[cur_buf ^ 1], len);
-    cur_buf ^= 1;
+dts_reader_c::decode_buffer(size_t length) {
+  if (m_swap_bytes) {
+    swab(reinterpret_cast<char *>(m_buf[m_cur_buf]), reinterpret_cast<char *>(m_buf[m_cur_buf ^ 1]), length);
+    m_cur_buf ^= 1;
   }
 
-  if (dts14_to_16) {
-    dts_14_to_dts_16(buf[cur_buf], len / 2, buf[cur_buf ^ 1]);
-    cur_buf ^= 1;
-    len      = len * 7 / 8;
+  if (m_dts14_to_16) {
+    dts_14_to_dts_16(m_buf[m_cur_buf], length / 2, m_buf[m_cur_buf ^ 1]);
+    m_cur_buf ^= 1;
+    length     = length * 7 / 8;
   }
 
-  return len;
+  return length;
 }
 
 void
@@ -107,29 +108,29 @@ dts_reader_c::create_packetizer(int64_t) {
   if (!demuxing_requested('a', 0) || (NPTZR() != 0))
     return;
 
-  add_packetizer(new dts_packetizer_c(this, m_ti, dtsheader));
+  add_packetizer(new dts_packetizer_c(this, m_ti, m_dtsheader));
   show_packetizer_info(0, PTZR0);
 
-  if (1 < verbose)
-    print_dts_header(&dtsheader);
+  if (m_debug)
+    print_dts_header(&m_dtsheader);
 }
 
 file_status_e
 dts_reader_c::read(generic_packetizer_c *,
                    bool) {
-  int nread = m_in->read(buf[cur_buf], READ_SIZE);
+  size_t num_read = m_in->read(m_buf[m_cur_buf], READ_SIZE);
 
-  if (dts14_to_16)
-    nread &= ~0xf;
+  if (m_dts14_to_16)
+    num_read &= ~0xf;
 
-  if (0 >= nread)
+  if (0 >= num_read)
     return flush_packetizers();
 
-  int num_to_output = decode_buffer(nread);
+  int num_to_output = decode_buffer(num_read);
 
-  PTZR0->process(new packet_t(new memory_c(buf[cur_buf], num_to_output, false)));
+  PTZR0->process(new packet_t(new memory_c(m_buf[m_cur_buf], num_to_output, false)));
 
-  return ((nread < READ_SIZE) || m_in->eof()) ? flush_packetizers() : FILE_STATUS_MOREDATA;
+  return ((num_read < READ_SIZE) || m_in->eof()) ? flush_packetizers() : FILE_STATUS_MOREDATA;
 }
 
 void
