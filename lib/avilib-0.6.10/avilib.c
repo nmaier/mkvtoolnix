@@ -1979,7 +1979,7 @@ int AVI_close(avi_t *AVI)
    return 0; \
 }
 
-avi_t *AVI_open_input_indexfile(const char *filename, int getIndex, const char *indexfile)
+avi_t *AVI_open_input_indexfile(void *filename, int getIndex, const char *indexfile)
 {
   avi_t *AVI=NULL;
   

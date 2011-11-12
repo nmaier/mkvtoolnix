@@ -368,7 +368,7 @@ int  AVI_close(avi_t *AVI);
 long AVI_bytes_written(avi_t *AVI);
 
 avi_t *AVI_open_input_file(void *filename, int getIndex);
-avi_t *AVI_open_input_indexfile(const char *filename, int getIndex, const char *indexfile);
+avi_t *AVI_open_input_indexfile(void *filename, int getIndex, const char *indexfile);
 avi_t *AVI_open_fd(int fd, int getIndex);
 avi_t *AVI_open_indexfd(int fd, int getIndex, const char *indexfile);
 int avi_parse_input_file(avi_t *AVI, int getIndex);
