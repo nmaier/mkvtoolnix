@@ -196,7 +196,7 @@ corepicture_reader_c::create_packetizer(int64_t tid) {
   }
   put_uint32_be(&private_buffer[1], codec_used);
 
-  m_ti.m_private_data = (unsigned char *)safememdup(private_buffer, sizeof(private_buffer));
+  m_ti.m_private_data = safememdup(private_buffer, sizeof(private_buffer));
   m_ti.m_private_size = sizeof(private_buffer);
   m_ptzr              = add_packetizer(new video_packetizer_c(this, m_ti, MKV_V_COREPICTURE, 0.0, m_width, m_height));
 
@@ -210,8 +210,9 @@ corepicture_reader_c::read(generic_packetizer_c *ptzr,
   if (m_current_picture != m_pictures.end()) {
     try {
       counted_ptr<mm_io_c> io(new mm_file_io_c(m_current_picture->m_url));
-      uint64_t size  = io->get_size();
-      binary *buffer = (binary *)safemalloc(7 + size);
+      uint64_t size         = io->get_size();
+      memory_cptr mem       = memory_c::alloc(7 + size);
+      unsigned char *buffer = mem->get_buffer();
 
       put_uint16_be(&buffer[0], 7);
       put_uint32_be(&buffer[2], m_current_picture->m_pan_type);
@@ -220,8 +221,9 @@ corepicture_reader_c::read(generic_packetizer_c *ptzr,
       uint32_t bytes_read = io->read(&buffer[7], size);
 
       if (0 != bytes_read) {
+        mem->resize(7 + bytes_read);
         int64_t duration = m_current_picture->m_end_time == -1 ? -1 : m_current_picture->m_end_time - m_current_picture->m_time;
-        PTZR(m_ptzr)->process(new packet_t(new memory_c(buffer, 7 + bytes_read, false), m_current_picture->m_time, duration));
+        PTZR(m_ptzr)->process(new packet_t(mem, m_current_picture->m_time, duration));
       }
 
     } catch(...) {
@@ -237,7 +239,7 @@ int
 corepicture_reader_c::get_progress() {
   if (m_pictures.size() == 0)
     return 0;
-  return 100 - std::distance(m_current_picture, (std::vector<corepicture_pic_t>::const_iterator)m_pictures.end()) * 100 / m_pictures.size();
+  return 100 - std::distance(m_current_picture, static_cast<std::vector<corepicture_pic_t>::const_iterator>(m_pictures.end())) * 100 / m_pictures.size();
 }
 
 int64_t

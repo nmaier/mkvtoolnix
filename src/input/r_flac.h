@@ -57,7 +57,7 @@ public:
   virtual void identify();
   virtual void create_packetizer(int64_t id);
 
-  static int probe_file(mm_io_c *in, uint64_t size);
+  static bool probe_file(mm_io_c *in, uint64_t size);
 
   virtual FLAC__StreamDecoderReadStatus
   read_cb(FLAC__byte buffer[], size_t *bytes);
@@ -80,7 +80,7 @@ protected:
 
 class flac_reader_c {
 public:
-  static int probe_file(mm_io_c *in, uint64_t size);
+  static bool probe_file(mm_io_c *in, uint64_t size);
 };
 
 #endif // HAVE_FLAC_FORMAT_H
