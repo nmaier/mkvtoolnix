@@ -454,19 +454,17 @@ mm_io_c::read(void *buffer,
 
 uint32_t
 mm_io_c::read(std::string &buffer,
-              size_t size) {
-  char *cbuffer = new char[size + 1];
-  int nread     = read(buffer, size);
+              size_t size,
+              size_t offset) {
+  buffer.resize(offset + size);
 
-  if (0 > nread)
-    buffer = "";
-  else {
-    cbuffer[nread] = 0;
-    buffer = cbuffer;
-  }
-  delete [] cbuffer;
+  int num_read = read(&buffer[offset], size);
+  if (0 > num_read)
+    num_read = 0;
 
-  return nread;
+  buffer.resize(offset + num_read);
+
+  return num_read;
 }
 
 unsigned char
