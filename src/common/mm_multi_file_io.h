@@ -43,7 +43,7 @@ protected:
   std::vector<mm_multi_file_io_c::file_t> m_files;
 
 public:
-  mm_multi_file_io_c(std::vector<bfs::path> file_names, const std::string &display_file_name);
+  mm_multi_file_io_c(const std::vector<bfs::path> &file_names, const std::string &display_file_name);
   virtual ~mm_multi_file_io_c();
 
   virtual uint64 getFilePointer();

@@ -35,7 +35,7 @@ mm_multi_file_io_c::file_t::file_t(const bfs::path &file_name,
 {
 }
 
-mm_multi_file_io_c::mm_multi_file_io_c(std::vector<bfs::path> file_names,
+mm_multi_file_io_c::mm_multi_file_io_c(const std::vector<bfs::path> &file_names,
                                        const std::string &display_file_name)
   : m_display_file_name(display_file_name)
   , m_total_size(0)
