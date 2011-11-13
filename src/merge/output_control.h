@@ -87,6 +87,7 @@ struct deferred_connection_t {
 
 struct filelist_t {
   std::string name;
+  std::vector<std::string> all_names;
   int64_t size;
 
   file_type_e type;

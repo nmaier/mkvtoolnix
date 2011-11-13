@@ -118,6 +118,7 @@
 #include "merge/webm.h"
 
 using namespace libmatroska;
+namespace bfs = boost::filesystem;
 
 namespace libmatroska {
 
@@ -308,6 +309,30 @@ sighandler(int signum) {
 }
 #endif
 
+static std::vector<bfs::path>
+file_names_to_paths(const std::vector<std::string> &file_names) {
+  std::vector<bfs::path> paths;
+  for (auto &file_name : file_names)
+    paths.push_back(bfs::system_complete(bfs::path(file_name)));
+
+  return paths;
+}
+
+static mm_io_cptr
+open_input_file(filelist_t &file) {
+  try {
+    if (file.all_names.size() == 1)
+      return mm_io_cptr(mm_probe_cache_io_c::open(file.name, 20 * 1024 * 1024));
+    else {
+      std::vector<bfs::path> paths = file_names_to_paths(file.all_names);
+      return mm_io_cptr(new mm_probe_cache_io_c(new mm_multi_file_io_c(paths, file.name), 20 * 1024 * 1024));
+    }
+  } catch (...) {
+    mxerror(boost::format(Y("The source file '%1%' could not be opened successfully, or retrieving its size by seeking to the end did not work.\n")) % file.name);
+    return mm_io_cptr(NULL);
+  }
+}
+
 /** \brief Probe the file type
 
    Opens the input file and calls the \c probe_file function for each known
@@ -315,15 +340,9 @@ sighandler(int signum) {
 */
 void
 get_file_type(filelist_t &file) {
-  mm_io_c *io  = NULL;
-  int64_t size = 0;
-
-  try {
-    io   = mm_probe_cache_io_c::open(file.name, 20 * 1024 * 1024);
-    size = io->get_size();
-  } catch (...) {
-    mxerror(boost::format(Y("The source file '%1%' could not be opened successfully, or retrieving its size by seeking to the end did not work.\n")) % file.name);
-  }
+  mm_io_cptr af_io = open_input_file(file);
+  mm_io_c *io      = af_io.get_object();
+  int64_t size     = io->get_size();
 
   file_type_e type = FILE_TYPE_IS_UNKNOWN;
   // File types that can be detected unambiguously but are not supported
@@ -439,8 +458,6 @@ get_file_type(filelist_t &file) {
 
     delete text_io;
   }
-
-  delete io;
 
   g_file_sizes += size;
 
@@ -1099,7 +1116,7 @@ void
 create_readers() {
   for (auto &file : g_files) {
     try {
-      mm_io_cptr input_file = mm_file_io_c::open(file.ti->m_fname);
+      mm_io_cptr input_file = open_input_file(file);
 
       switch (file.type) {
         case FILE_TYPE_AAC:

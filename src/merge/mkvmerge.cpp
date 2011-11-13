@@ -1534,6 +1534,95 @@ parse_arg_attachments(const std::string &param,
   }
 }
 
+void
+handle_file_name_arg(const std::string &this_arg,
+                     std::vector<std::string>::const_iterator &sit,
+                     const std::vector<std::string>::const_iterator &end,
+                     bool &append_next_file,
+                     track_info_c *&ti) {
+  std::vector<std::string> file_names;
+
+  if (this_arg == "(") {
+    bool end_found = false;
+    while ((sit + 1) < end) {
+      sit++;
+      if (*sit == ")") {
+        end_found = true;
+        break;
+      }
+      file_names.push_back(*sit);
+    }
+
+    if (!end_found)
+      mxerror(Y("The closing parenthesis ')' are missing.\n"));
+
+  } else
+    file_names.push_back(this_arg);
+
+  for (auto &file_name : file_names) {
+    if (file_name.empty())
+      mxerror(Y("An empty file name is not valid.\n"));
+
+    else if (g_outfile == file_name)
+      mxerror(boost::format(Y("The name of the output file '%1%' and of one of the input files is the same. This would cause mkvmerge to overwrite "
+                              "one of your input files. This is most likely not what you want.\n")) % g_outfile);
+  }
+
+  if (!ti->m_atracks.empty() && ti->m_atracks.none())
+    mxerror(Y("'-A' and '-a' used on the same source file.\n"));
+
+  if (!ti->m_vtracks.empty() && ti->m_vtracks.none())
+    mxerror(Y("'-D' and '-d' used on the same source file.\n"));
+
+  if (!ti->m_stracks.empty() && ti->m_stracks.none())
+    mxerror(Y("'-S' and '-s' used on the same source file.\n"));
+
+  if (!ti->m_btracks.empty() && ti->m_btracks.none())
+    mxerror(Y("'-B' and '-b' used on the same source file.\n"));
+
+  filelist_t file;
+  file.all_names = file_names;
+  file.name      = file_names[0];
+
+  if (file_names.size() == 1) {
+    if ('+' == this_arg[0]) {
+      append_next_file = true;
+      file.name.erase(0, 1);
+
+    } else if ('=' == this_arg[0]) {
+      ti->m_disable_multi_file = true;
+      file.name.erase(0, 1);
+    }
+
+    if (append_next_file) {
+      if (g_files.empty())
+        mxerror(Y("The first file cannot be appended because there are no files to append to.\n"));
+
+      file.appending   = true;
+      append_next_file = false;
+    }
+  }
+
+  ti->m_fname = file.name;
+
+  get_file_type(file);
+
+  if (FILE_TYPE_IS_UNKNOWN == file.type)
+    mxerror(boost::format(Y("The file '%1%' has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and "
+                            "contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n")) % file.name);
+
+  if (FILE_TYPE_CHAPTERS != file.type) {
+    file.ti = ti;
+
+    g_files.push_back(file);
+  } else
+    delete ti;
+
+  ti = new track_info_c;
+  g_chapter_charset.clear();
+  g_chapter_language.clear();
+}
+
 /** \brief Parses and handles command line arguments
 
    Also probes input files for their type and creates the appropriate
@@ -2083,72 +2172,15 @@ parse_args(std::vector<std::string> args) {
       parse_arg_nalu_size_length(next_arg, *ti);
       sit++;
 
-    } else if (this_arg.length() == 0)
-      mxerror(Y("An empty file name is not valid.\n"));
-
-    else if (this_arg == "+")
+    } else if (this_arg == "+")
       append_next_file = true;
 
     else if (this_arg == "=")
       ti->m_disable_multi_file = true;
 
     // The argument is an input file.
-    else {
-      if (g_outfile == this_arg)
-        mxerror(boost::format(Y("The name of the output file '%1%' and of one of the input files is the same. This would cause mkvmerge to overwrite "
-                                "one of your input files. This is most likely not what you want.\n")) % g_outfile);
-
-      if (!ti->m_atracks.empty() && ti->m_atracks.none())
-        mxerror(Y("'-A' and '-a' used on the same source file.\n"));
-
-      if (!ti->m_vtracks.empty() && ti->m_vtracks.none())
-        mxerror(Y("'-D' and '-d' used on the same source file.\n"));
-
-      if (!ti->m_stracks.empty() && ti->m_stracks.none())
-        mxerror(Y("'-S' and '-s' used on the same source file.\n"));
-
-      if (!ti->m_btracks.empty() && ti->m_btracks.none())
-        mxerror(Y("'-B' and '-b' used on the same source file.\n"));
-
-      filelist_t file;
-      if ('+' == this_arg[0]) {
-        append_next_file = true;
-        file.name        = this_arg.substr(1);
-
-      } else if ('=' == this_arg[0]) {
-        ti->m_disable_multi_file = true;
-        file.name                = this_arg.substr(1);
-
-      } else
-        file.name        = this_arg;
-
-      if (append_next_file) {
-        if (g_files.empty())
-          mxerror(Y("The first file cannot be appended because there are no files to append to.\n"));
-
-        file.appending   = true;
-        append_next_file = false;
-      }
-
-      ti->m_fname = file.name;
-
-      get_file_type(file);
-
-      if (FILE_TYPE_IS_UNKNOWN == file.type)
-        mxerror(boost::format(Y("The file '%1%' has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and "
-                                "contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n")) % file.name);
-
-      if (FILE_TYPE_CHAPTERS != file.type) {
-        file.ti = ti;
-
-        g_files.push_back(file);
-      } else
-        delete ti;
-
-      ti = new track_info_c;
-      g_chapter_charset.clear();
-      g_chapter_language.clear();
-    }
+    else
+      handle_file_name_arg(this_arg, sit, args.end(), append_next_file, ti);
   }
 
   if (!g_cluster_helper->splitting() && !g_no_linking)
