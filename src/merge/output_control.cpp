@@ -319,13 +319,14 @@ file_names_to_paths(const std::vector<std::string> &file_names) {
 }
 
 static mm_io_cptr
-open_input_file(filelist_t &file) {
+open_input_file(filelist_t &file,
+                bool use_probe_cache) {
   try {
     if (file.all_names.size() == 1)
-      return mm_io_cptr(mm_probe_cache_io_c::open(file.name, 20 * 1024 * 1024));
+      return use_probe_cache ? mm_io_cptr(mm_probe_cache_io_c::open(file.name, 20 * 1024 * 1024)) : mm_file_io_c::open(file.name);
     else {
       std::vector<bfs::path> paths = file_names_to_paths(file.all_names);
-      return mm_io_cptr(new mm_probe_cache_io_c(new mm_multi_file_io_c(paths, file.name), 20 * 1024 * 1024));
+      return use_probe_cache ?  mm_io_cptr(new mm_probe_cache_io_c(new mm_multi_file_io_c(paths, file.name), 20 * 1024 * 1024)) : mm_io_cptr(new mm_multi_file_io_c(paths, file.name));
     }
   } catch (...) {
     mxerror(boost::format(Y("The source file '%1%' could not be opened successfully, or retrieving its size by seeking to the end did not work.\n")) % file.name);
@@ -340,7 +341,7 @@ open_input_file(filelist_t &file) {
 */
 void
 get_file_type(filelist_t &file) {
-  mm_io_cptr af_io = open_input_file(file);
+  mm_io_cptr af_io = open_input_file(file, true);
   mm_io_c *io      = af_io.get_object();
   int64_t size     = io->get_size();
 
@@ -1116,7 +1117,7 @@ void
 create_readers() {
   for (auto &file : g_files) {
     try {
-      mm_io_cptr input_file = open_input_file(file);
+      mm_io_cptr input_file = open_input_file(file, false);
 
       switch (file.type) {
         case FILE_TYPE_AAC:
