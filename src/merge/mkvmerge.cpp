@@ -385,6 +385,7 @@ identify(std::string &filename) {
   g_suppress_warnings = true;
   g_identifying       = true;
   file.name           = filename;
+  file.all_names.push_back(filename);
 
   get_file_type(file);
 
