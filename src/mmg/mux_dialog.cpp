@@ -37,6 +37,7 @@
 #include "common/common_pch.h"
 #include "common/fs_sys_helpers.h"
 #include "common/strings/editing.h"
+#include "common/strings/formatting.h"
 #include "mmg/mmg.h"
 #include "mmg/mmg_dialog.h"
 #include "mmg/mux_dialog.h"
@@ -246,7 +247,7 @@ mux_dialog::update_remaining_time() {
 
   int64_t total_time     = (now - m_start_time) * 100 / m_progress;
   int64_t remaining_time = total_time - now + m_start_time;
-  st_remaining_time->SetLabel(create_remaining_time_string(static_cast<unsigned int>(remaining_time / 60000), static_cast<unsigned int>((remaining_time / 1000) % 60)));
+  st_remaining_time->SetLabel(wxU(create_minutes_seconds_time_string(static_cast<unsigned int>(remaining_time / 1000))));
 
   m_next_remaining_time_update = now + 1000;
 }

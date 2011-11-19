@@ -66,4 +66,6 @@ to_hex(const std::string &buf) {
   return to_hex(reinterpret_cast<const unsigned char *>(buf.c_str()), buf.length());
 }
 
+std::string create_minutes_seconds_time_string(unsigned int seconds, bool omit_minutes_if_zero = false);
+
 #endif  // __MTX_COMMON_STRING_FORMATTING_H

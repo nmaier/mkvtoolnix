@@ -252,3 +252,19 @@ to_hex(const unsigned char *buf,
 
   return hex;
 }
+
+std::string
+create_minutes_seconds_time_string(unsigned int seconds,
+                                   bool omit_minutes_if_zero) {
+  unsigned int minutes = seconds / 60;
+  seconds              = seconds % 60;
+
+  std::string  result  = (boost::format(NY("%1% second", "%1% seconds", seconds)) % seconds).str();
+
+  if (!minutes && omit_minutes_if_zero)
+    return result;
+
+  return (  boost::format("%1% %2%")
+          % (boost::format(NY("%1% minute", "%1% minutes", minutes)) % minutes)
+          % result).str();
+}
