@@ -571,7 +571,7 @@ vobsub_reader_c::extract_one_spu_packet(int64_t track_id) {
 
           mxverb(3, boost::format("vobsub_reader: sub packet data: aid: %1%, pts: %2%, packet_size: %3%\n") % track->aid % format_timecode(pts, 3) % packet_size);
           if (m_sub_file->read(&dst_buf[dst_size], packet_size) != packet_size) {
-            mxwarn(Y("vobsub_reader: m_sub_file->read failure"));
+            mxwarn(Y("vobsub_reader: sub file read failure"));
             return deliver();
           }
           if (!spu_len_valid) {
