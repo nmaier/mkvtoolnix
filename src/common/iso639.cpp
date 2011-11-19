@@ -422,7 +422,7 @@ const iso639_language_t iso639_languages[] = {
   { "South American Indian (Other)",                                                    "sai", NULL, NULL  },
   { "Southern Altai",                                                                   "alt", NULL, NULL  },
   { "Southern Sami",                                                                    "sma", NULL, NULL  },
-  { "Spanishp; Castillan",                                                              "spa", "es", NULL  },
+  { "Spanish; Castillan",                                                               "spa", "es", NULL  },
   { "Sranan Tongo",                                                                     "srn", NULL, NULL  },
   { "Sukuma",                                                                           "suk", NULL, NULL  },
   { "Sumerian",                                                                         "sux", NULL, NULL  },
