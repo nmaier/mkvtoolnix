@@ -1176,8 +1176,7 @@ parse_arg_track_order(const std::string &s) {
    appended to the one specified by the "source" file and track ID.
 */
 static void
-parse_arg_append_to(const std::string &s,
-                    track_info_c &ti) {
+parse_arg_append_to(const std::string &s) {
   g_append_mapping.clear();
   std::vector<std::string> entries = split(s, ",");
   strip(entries);
@@ -1203,8 +1202,7 @@ parse_arg_append_to(const std::string &s,
 }
 
 static void
-parse_arg_append_mode(const std::string &s,
-                      track_info_c &ti) {
+parse_arg_append_mode(const std::string &s) {
   if ((s == "track") || (s == "track-based"))
     g_append_mode = APPEND_MODE_TRACK_BASED;
 
@@ -2150,14 +2148,14 @@ parse_args(std::vector<std::string> args) {
       if (no_next_arg)
         mxerror(Y("'--append-to' lacks its argument.\n"));
 
-      parse_arg_append_to(next_arg, *ti);
+      parse_arg_append_to(next_arg);
       sit++;
 
     } else if (this_arg == "--append-mode") {
       if (no_next_arg)
         mxerror(Y("'--append-mode' lacks its argument.\n"));
 
-      parse_arg_append_mode(next_arg, *ti);
+      parse_arg_append_mode(next_arg);
       sit++;
 
     } else if (this_arg == "--default-duration") {

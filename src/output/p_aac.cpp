@@ -51,8 +51,7 @@ aac_packetizer_c::~aac_packetizer_c() {
 }
 
 unsigned char *
-aac_packetizer_c::get_aac_packet(unsigned long *header,
-                                 aac_header_t *aacheader) {
+aac_packetizer_c::get_aac_packet(aac_header_t *aacheader) {
   unsigned char *packet_buffer = m_byte_buffer.get_buffer();
   int size                     = m_byte_buffer.get_size();
   int pos                      = find_aac_header(packet_buffer, size, aacheader, m_emphasis_present);
@@ -181,11 +180,10 @@ aac_packetizer_c::process(packet_cptr packet) {
     return process_headerless(packet);
 
   unsigned char *aac_packet;
-  unsigned long header;
   aac_header_t aacheader;
 
   m_byte_buffer.add(packet->data->get_buffer(), packet->data->get_size());
-  while ((aac_packet = get_aac_packet(&header, &aacheader)) != NULL) {
+  while ((aac_packet = get_aac_packet(&aacheader)) != NULL) {
     add_packet(new packet_t(new memory_c(aac_packet, aacheader.data_byte_size, true), -1 == packet->timecode ? m_packetno * m_s2tc : packet->timecode, m_single_packet_duration));
     m_packetno++;
   }

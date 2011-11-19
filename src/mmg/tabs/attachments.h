@@ -72,7 +72,7 @@ public:
   void load(wxConfigBase *cfg, int version);
   bool validate_settings();
 
-  void add_attached_file(mmg_attached_file_cptr &a, bool update_column_widths = false);
+  void add_attached_file(mmg_attached_file_cptr &a);
   void remove_attached_files_for(mmg_file_cptr &f);
   void remove_all_attached_files();
 

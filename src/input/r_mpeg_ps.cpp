@@ -42,7 +42,7 @@ operator <(const mpeg_ps_track_ptr &a,
 
 int
 mpeg_ps_reader_c::probe_file(mm_io_c *in,
-                             uint64_t size) {
+                             uint64_t) {
   try {
     memory_c af_buf((unsigned char *)safemalloc(PS_PROBE_SIZE), 0, true);
     unsigned char *buf = af_buf.get_buffer();
@@ -758,7 +758,7 @@ mpeg_ps_reader_c::new_stream_v_vc1(mpeg_ps_id_t id,
 }
 
 void
-mpeg_ps_reader_c::new_stream_a_mpeg(mpeg_ps_id_t id,
+mpeg_ps_reader_c::new_stream_a_mpeg(mpeg_ps_id_t,
                                     unsigned char *buf,
                                     unsigned int length,
                                     mpeg_ps_track_ptr &track) {
@@ -774,7 +774,7 @@ mpeg_ps_reader_c::new_stream_a_mpeg(mpeg_ps_id_t id,
 }
 
 void
-mpeg_ps_reader_c::new_stream_a_ac3(mpeg_ps_id_t id,
+mpeg_ps_reader_c::new_stream_a_ac3(mpeg_ps_id_t,
                                    unsigned char *buf,
                                    unsigned int length,
                                    mpeg_ps_track_ptr &track) {

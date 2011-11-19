@@ -171,7 +171,7 @@ flac_metadata_cb(const FLAC__StreamDecoder *,
 
 static FLAC__StreamDecoderWriteStatus
 flac_write_cb(const FLAC__StreamDecoder *,
-              const FLAC__Frame *frame,
+              const FLAC__Frame *,
               const FLAC__int32 * const [],
               void *) {
   return FLAC__STREAM_DECODER_WRITE_STATUS_CONTINUE;

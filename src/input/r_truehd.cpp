@@ -26,7 +26,7 @@
 
 int
 truehd_reader_c::probe_file(mm_io_c *in,
-                            uint64_t size) {
+                            uint64_t /* size */) {
   try {
     in->setFilePointer(0, seek_beginning);
     skip_id3v2_tag(*in);

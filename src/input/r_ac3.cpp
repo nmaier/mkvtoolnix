@@ -26,7 +26,7 @@
 
 int
 ac3_reader_c::probe_file(mm_io_c *in,
-                         uint64_t size,
+                         uint64_t,
                          int64_t probe_size,
                          int num_headers) {
   try {

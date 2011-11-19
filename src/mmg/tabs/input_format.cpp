@@ -324,7 +324,7 @@ tab_input_format::set_track_mode(mmg_track_t *t) {
 }
 
 void
-tab_input_format::on_aac_is_sbr_clicked(wxCommandEvent &evt) {
+tab_input_format::on_aac_is_sbr_clicked(wxCommandEvent &) {
   if (input->dont_copy_values_now || (input->selected_track == -1))
     return;
 
@@ -332,7 +332,7 @@ tab_input_format::on_aac_is_sbr_clicked(wxCommandEvent &evt) {
 }
 
 void
-tab_input_format::on_subcharset_selected(wxCommandEvent &evt) {
+tab_input_format::on_subcharset_selected(wxCommandEvent &) {
   if (input->dont_copy_values_now || (input->selected_track == -1))
     return;
 
@@ -340,7 +340,7 @@ tab_input_format::on_subcharset_selected(wxCommandEvent &evt) {
 }
 
 void
-tab_input_format::on_delay_changed(wxCommandEvent &evt) {
+tab_input_format::on_delay_changed(wxCommandEvent &) {
   if (input->dont_copy_values_now || (input->selected_track == -1))
     return;
 
@@ -348,7 +348,7 @@ tab_input_format::on_delay_changed(wxCommandEvent &evt) {
 }
 
 void
-tab_input_format::on_stretch_changed(wxCommandEvent &evt) {
+tab_input_format::on_stretch_changed(wxCommandEvent &) {
   if (input->dont_copy_values_now || (input->selected_track == -1))
     return;
 
@@ -356,7 +356,7 @@ tab_input_format::on_stretch_changed(wxCommandEvent &evt) {
 }
 
 void
-tab_input_format::on_cropping_changed(wxCommandEvent &evt) {
+tab_input_format::on_cropping_changed(wxCommandEvent &) {
   if (input->dont_copy_values_now || (-1 == input->selected_track))
     return;
 
@@ -364,7 +364,7 @@ tab_input_format::on_cropping_changed(wxCommandEvent &evt) {
 }
 
 void
-tab_input_format::on_aspect_ratio_changed(wxCommandEvent &evt) {
+tab_input_format::on_aspect_ratio_changed(wxCommandEvent &) {
   if (input->dont_copy_values_now || (input->selected_track == -1))
     return;
 
@@ -372,7 +372,7 @@ tab_input_format::on_aspect_ratio_changed(wxCommandEvent &evt) {
 }
 
 void
-tab_input_format::on_fourcc_changed(wxCommandEvent &evt) {
+tab_input_format::on_fourcc_changed(wxCommandEvent &) {
   if (input->dont_copy_values_now || (input->selected_track == -1))
     return;
 
@@ -380,7 +380,7 @@ tab_input_format::on_fourcc_changed(wxCommandEvent &evt) {
 }
 
 void
-tab_input_format::on_fps_changed(wxCommandEvent &evt) {
+tab_input_format::on_fps_changed(wxCommandEvent &) {
   if (input->dont_copy_values_now || (input->selected_track == -1))
     return;
 
@@ -388,7 +388,7 @@ tab_input_format::on_fps_changed(wxCommandEvent &evt) {
 }
 
 void
-tab_input_format::on_nalu_size_length_changed(wxCommandEvent &evt) {
+tab_input_format::on_nalu_size_length_changed(wxCommandEvent &) {
   if (input->dont_copy_values_now || (input->selected_track == -1))
     return;
 
@@ -396,7 +396,7 @@ tab_input_format::on_nalu_size_length_changed(wxCommandEvent &evt) {
 }
 
 void
-tab_input_format::on_stereo_mode_changed(wxCommandEvent &evt) {
+tab_input_format::on_stereo_mode_changed(wxCommandEvent &) {
   if (input->dont_copy_values_now || (input->selected_track == -1))
     return;
 
@@ -406,7 +406,7 @@ tab_input_format::on_stereo_mode_changed(wxCommandEvent &evt) {
 }
 
 void
-tab_input_format::on_display_width_changed(wxCommandEvent &evt) {
+tab_input_format::on_display_width_changed(wxCommandEvent &) {
   if (input->dont_copy_values_now || (input->selected_track == -1))
     return;
 
@@ -414,7 +414,7 @@ tab_input_format::on_display_width_changed(wxCommandEvent &evt) {
 }
 
 void
-tab_input_format::on_display_height_changed(wxCommandEvent &evt) {
+tab_input_format::on_display_height_changed(wxCommandEvent &) {
   if (input->dont_copy_values_now || (input->selected_track == -1))
     return;
 
@@ -422,7 +422,7 @@ tab_input_format::on_display_height_changed(wxCommandEvent &evt) {
 }
 
 void
-tab_input_format::on_aspect_ratio_selected(wxCommandEvent &evt) {
+tab_input_format::on_aspect_ratio_selected(wxCommandEvent &) {
   mmg_track_t *track;
 
   if (input->dont_copy_values_now || (input->selected_track == -1))
@@ -434,7 +434,7 @@ tab_input_format::on_aspect_ratio_selected(wxCommandEvent &evt) {
 }
 
 void
-tab_input_format::on_display_dimensions_selected(wxCommandEvent &evt) {
+tab_input_format::on_display_dimensions_selected(wxCommandEvent &) {
   mmg_track_t *track;
 
   if (input->dont_copy_values_now || (input->selected_track == -1))

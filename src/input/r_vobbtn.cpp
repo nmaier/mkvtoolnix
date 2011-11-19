@@ -25,7 +25,7 @@
 
 int
 vobbtn_reader_c::probe_file(mm_io_c *io,
-                            uint64_t size) {
+                            uint64_t) {
   unsigned char chunk[23];
 
   try {
@@ -77,8 +77,8 @@ vobbtn_reader_c::create_packetizer(int64_t tid) {
 }
 
 file_status_e
-vobbtn_reader_c::read(generic_packetizer_c *ptzr,
-                      bool force) {
+vobbtn_reader_c::read(generic_packetizer_c *,
+                      bool) {
   uint8_t tmp[4];
 
   // _todo_ add some tests on the header and size

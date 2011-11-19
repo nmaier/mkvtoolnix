@@ -66,7 +66,7 @@ space(int num) {
 
 int
 qtmp4_reader_c::probe_file(mm_io_c *in,
-                           uint64_t size) {
+                           uint64_t) {
   try {
     in->setFilePointer(0, seek_beginning);
 
@@ -536,7 +536,7 @@ qtmp4_reader_c::handle_cmvd_atom(qt_atom_t atom,
 
 void
 qtmp4_reader_c::handle_ctts_atom(qtmp4_demuxer_cptr &new_dmx,
-                                 qt_atom_t atom,
+                                 qt_atom_t,
                                  int level) {
   m_in->skip(1 + 3);        // version & flags
   uint32_t count = m_in->read_uint32_be();
@@ -555,7 +555,7 @@ qtmp4_reader_c::handle_ctts_atom(qtmp4_demuxer_cptr &new_dmx,
 }
 
 void
-qtmp4_reader_c::handle_dcom_atom(qt_atom_t atom,
+qtmp4_reader_c::handle_dcom_atom(qt_atom_t,
                                  int level) {
   m_compression_algorithm = m_in->read_uint32_be();
   mxdebug_if(m_debug_headers, boost::format("%1%Compression algorithm: %2%%3%%4%%5%\n") % space(level * 2 + 1) % BE2STR(m_compression_algorithm));
@@ -734,7 +734,7 @@ qtmp4_reader_c::handle_udta_atom(qt_atom_t parent,
 }
 
 void
-qtmp4_reader_c::handle_chpl_atom(qt_atom_t atom,
+qtmp4_reader_c::handle_chpl_atom(qt_atom_t,
                                  int level) {
   if (m_ti.m_no_chapters || (NULL != m_chapters))
     return;
@@ -875,7 +875,7 @@ qtmp4_reader_c::handle_stbl_atom(qtmp4_demuxer_cptr &new_dmx,
 
 void
 qtmp4_reader_c::handle_stco_atom(qtmp4_demuxer_cptr &new_dmx,
-                                 qt_atom_t atom,
+                                 qt_atom_t,
                                  int level) {
   m_in->skip(1 + 3);        // version & flags
   uint32_t count = m_in->read_uint32_be();
@@ -894,7 +894,7 @@ qtmp4_reader_c::handle_stco_atom(qtmp4_demuxer_cptr &new_dmx,
 
 void
 qtmp4_reader_c::handle_co64_atom(qtmp4_demuxer_cptr &new_dmx,
-                                 qt_atom_t atom,
+                                 qt_atom_t,
                                  int level) {
   m_in->skip(1 + 3);        // version & flags
   uint32_t count = m_in->read_uint32_be();
@@ -913,7 +913,7 @@ qtmp4_reader_c::handle_co64_atom(qtmp4_demuxer_cptr &new_dmx,
 
 void
 qtmp4_reader_c::handle_stsc_atom(qtmp4_demuxer_cptr &new_dmx,
-                                 qt_atom_t atom,
+                                 qt_atom_t,
                                  int level) {
   m_in->skip(1 + 3);        // version & flags
   uint32_t count = m_in->read_uint32_be();
@@ -932,7 +932,7 @@ qtmp4_reader_c::handle_stsc_atom(qtmp4_demuxer_cptr &new_dmx,
 
 void
 qtmp4_reader_c::handle_stsd_atom(qtmp4_demuxer_cptr &new_dmx,
-                                 qt_atom_t atom,
+                                 qt_atom_t,
                                  int level) {
   uint32_t stsd_size = 0;
   m_in->skip(1 + 3);        // version & flags
@@ -1073,7 +1073,7 @@ qtmp4_reader_c::handle_stsd_atom(qtmp4_demuxer_cptr &new_dmx,
 
 void
 qtmp4_reader_c::handle_stss_atom(qtmp4_demuxer_cptr &new_dmx,
-                                 qt_atom_t atom,
+                                 qt_atom_t,
                                  int level) {
   m_in->skip(1 + 3);        // version & flags
   uint32_t count = m_in->read_uint32_be();
@@ -1091,7 +1091,7 @@ qtmp4_reader_c::handle_stss_atom(qtmp4_demuxer_cptr &new_dmx,
 
 void
 qtmp4_reader_c::handle_stsz_atom(qtmp4_demuxer_cptr &new_dmx,
-                                 qt_atom_t atom,
+                                 qt_atom_t,
                                  int level) {
   m_in->skip(1 + 3);        // version & flags
   uint32_t sample_size = m_in->read_uint32_be();
@@ -1116,7 +1116,7 @@ qtmp4_reader_c::handle_stsz_atom(qtmp4_demuxer_cptr &new_dmx,
 
 void
 qtmp4_reader_c::handle_sttd_atom(qtmp4_demuxer_cptr &new_dmx,
-                                 qt_atom_t atom,
+                                 qt_atom_t,
                                  int level) {
   m_in->skip(1 + 3);        // version & flags
   uint32_t count = m_in->read_uint32_be();
@@ -1135,7 +1135,7 @@ qtmp4_reader_c::handle_sttd_atom(qtmp4_demuxer_cptr &new_dmx,
 
 void
 qtmp4_reader_c::handle_stts_atom(qtmp4_demuxer_cptr &new_dmx,
-                                 qt_atom_t atom,
+                                 qt_atom_t,
                                  int level) {
   m_in->skip(1 + 3);        // version & flags
   uint32_t count = m_in->read_uint32_be();
@@ -1170,7 +1170,7 @@ qtmp4_reader_c::handle_edts_atom(qtmp4_demuxer_cptr &new_dmx,
 
 void
 qtmp4_reader_c::handle_elst_atom(qtmp4_demuxer_cptr &new_dmx,
-                                 qt_atom_t atom,
+                                 qt_atom_t,
                                  int level) {
   m_in->skip(1 + 3);        // version & flags
   uint32_t count = m_in->read_uint32_be();
@@ -1236,7 +1236,7 @@ qtmp4_reader_c::handle_trak_atom(qtmp4_demuxer_cptr &new_dmx,
 
 file_status_e
 qtmp4_reader_c::read(generic_packetizer_c *ptzr,
-                     bool force) {
+                     bool) {
   size_t dmx_idx;
 
   for (dmx_idx = 0; dmx_idx < m_demuxers.size(); ++dmx_idx) {
@@ -1947,19 +1947,20 @@ qtmp4_demuxer_c::update_editlist_table(int64_t global_time_scale) {
   mxdebug_if(m_debug_tables, boost::format("Updating edit list table for track %1%; pts_offset = %2%\n") % id % pts_offset);
 
   for (i = 0; editlist_table.size() > i; ++i) {
-    qt_editlist_t &el   = editlist_table[i];
-    uint64_t pts        = el.pos;
-    unsigned int sample = 0;
+    qt_editlist_t &el = editlist_table[i];
+    uint64_t pts      = el.pos;
 
-    pts                -= pts_offset;
-    el.start_frame      = frame;
-
-    if (pts < 0) {
+    if (pts < pts_offset) {
       // skip!
       el.frames  = 0;
       e_pts     += el.duration;
       continue;
     }
+
+    unsigned int sample = 0;
+
+    pts                -= pts_offset;
+    el.start_frame      = frame;
 
     // find start sample
     for (; sample_table.size() > sample; ++sample)

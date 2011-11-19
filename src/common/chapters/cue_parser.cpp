@@ -348,7 +348,6 @@ parse_cue_chapters(mm_text_io_c *in,
                    int64_t offset,
                    const std::string &language,
                    const std::string &charset,
-                   bool exception_on_error,
                    KaxTags **tags) {
   cue_parser_args_t a;
   std::string line;
@@ -398,7 +397,7 @@ parse_cue_chapters(mm_text_io_c *in,
           mxerror(boost::format(Y("Cue sheet parser: Invalid INDEX entry in line %1%.\n")) % a.line_num);
 
         bool index_ok = false;
-        if ((0 <= index) && (99 >= index)) {
+        if (99 >= index) {
           if ((a.start_indices.empty()) && (1 == index))
             a.index00_missing = true;
 

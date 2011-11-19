@@ -24,7 +24,7 @@
 #define BUFFER_SIZE 4096
 
 static FLAC__StreamDecoderReadStatus
-fhe_read_cb(const FLAC__StreamDecoder *decoder,
+fhe_read_cb(const FLAC__StreamDecoder *,
             FLAC__byte buffer[],
             size_t *bytes,
             void *client_data) {
@@ -67,7 +67,7 @@ fhe_write_cb(const FLAC__StreamDecoder *,
 }
 
 static void
-fhe_metadata_cb(const FLAC__StreamDecoder *decoder,
+fhe_metadata_cb(const FLAC__StreamDecoder *,
                 const FLAC__StreamMetadata *metadata,
                 void *client_data) {
 

@@ -90,13 +90,11 @@ get_chapter_index(int idx,
   return -1;
 }
 
-#define print_if_global(name, format) \
-  _print_if_global(out, name, format, chapters.ListSize(), tuid, tags)
+#define print_if_global(name, format) _print_if_global(out, name, format, tuid, tags)
 static void
 _print_if_global(mm_io_c &out,
                  const char *name,
                  const char *format,
-                 int num_entries,
                  int64_t tuid,
                  KaxTags &tags) {
   std::string global = get_global_tag(name, tuid, tags);

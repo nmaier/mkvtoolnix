@@ -57,7 +57,7 @@ vobsub_packetizer_c::process(packet_cptr packet) {
 
 connection_result_e
 vobsub_packetizer_c::can_connect_to(generic_packetizer_c *src,
-                                    std::string &error_message) {
+                                    std::string &) {
   vobsub_packetizer_c *vsrc;
 
   vsrc = dynamic_cast<vobsub_packetizer_c *>(src);

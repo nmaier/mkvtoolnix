@@ -40,7 +40,7 @@ private:
 public:
   attachments_drop_target_c(tab_attachments *n_owner):
     owner(n_owner) {};
-  virtual bool OnDropFiles(wxCoord x, wxCoord y, const wxArrayString &dropped_files) {
+  virtual bool OnDropFiles(wxCoord /* x */, wxCoord /* y */, const wxArrayString &dropped_files) {
     size_t i;
 
     for (i = 0; i < dropped_files.Count(); i++)
@@ -194,7 +194,7 @@ tab_attachments::enable_attached_files_buttons() {
 }
 
 void
-tab_attachments::on_add_attachment(wxCommandEvent &evt) {
+tab_attachments::on_add_attachment(wxCommandEvent &) {
   wxFileDialog dlg(NULL, Z("Choose an attachment file"), last_open_dir, wxEmptyString, ALLFILES, wxFD_OPEN | wxFD_MULTIPLE);
 
   if(dlg.ShowModal() == wxID_OK) {
@@ -227,7 +227,7 @@ tab_attachments::add_attachment(const wxString &file_name) {
 }
 
 void
-tab_attachments::on_remove_attachment(wxCommandEvent &evt) {
+tab_attachments::on_remove_attachment(wxCommandEvent &) {
   if (selected_attachment == -1)
     return;
 
@@ -239,7 +239,7 @@ tab_attachments::on_remove_attachment(wxCommandEvent &evt) {
 }
 
 void
-tab_attachments::on_attachment_selected(wxCommandEvent &evt) {
+tab_attachments::on_attachment_selected(wxCommandEvent &) {
   int new_sel;
 
   selected_attachment = -1;
@@ -258,7 +258,7 @@ tab_attachments::on_attachment_selected(wxCommandEvent &evt) {
 }
 
 void
-tab_attachments::on_name_changed(wxCommandEvent &evt) {
+tab_attachments::on_name_changed(wxCommandEvent &) {
   if (selected_attachment == -1)
     return;
 
@@ -266,7 +266,7 @@ tab_attachments::on_name_changed(wxCommandEvent &evt) {
 }
 
 void
-tab_attachments::on_description_changed(wxCommandEvent &evt) {
+tab_attachments::on_description_changed(wxCommandEvent &) {
   if (selected_attachment == -1)
     return;
 
@@ -274,7 +274,7 @@ tab_attachments::on_description_changed(wxCommandEvent &evt) {
 }
 
 void
-tab_attachments::on_mimetype_changed(wxTimerEvent &evt) {
+tab_attachments::on_mimetype_changed(wxTimerEvent &) {
   if (selected_attachment == -1)
     return;
 
@@ -282,7 +282,7 @@ tab_attachments::on_mimetype_changed(wxTimerEvent &evt) {
 }
 
 void
-tab_attachments::on_style_changed(wxCommandEvent &evt) {
+tab_attachments::on_style_changed(wxCommandEvent &) {
   if (selected_attachment == -1)
     return;
 
@@ -324,7 +324,7 @@ tab_attachments::derive_stored_name_from_file_name(const wxString &file_name) {
 
 void
 tab_attachments::load(wxConfigBase *cfg,
-                      int version) {
+                      int) {
   size_t i;
   int num;
 
@@ -400,8 +400,7 @@ tab_attachments::validate_settings() {
 }
 
 void
-tab_attachments::add_attached_file(mmg_attached_file_cptr &a,
-                                   bool update_column_widths) {
+tab_attachments::add_attached_file(mmg_attached_file_cptr &a) {
   wxFileName file_name(a->source->file_name);
   clb_attached_files->Append(wxString::Format(Z("%s (MIME type %s, size %ld) from %s (%s)"),
                                               a->name.c_str(), a->mime_type.c_str(), a->size, file_name.GetFullName().c_str(), file_name.GetPath().c_str()));
@@ -435,12 +434,12 @@ tab_attachments::remove_all_attached_files() {
 void
 tab_attachments::on_attached_file_enabled(wxCommandEvent &evt) {
   size_t idx = evt.GetSelection();
-  if ((0 <= idx) && (m_attached_files.size() > idx))
+  if (m_attached_files.size() > idx)
     m_attached_files[idx]->enabled = clb_attached_files->IsChecked(idx);
 }
 
 void
-tab_attachments::on_enable_all(wxCommandEvent &evt) {
+tab_attachments::on_enable_all(wxCommandEvent &) {
   size_t idx;
   for (idx = 0; m_attached_files.size() > idx; ++idx) {
     clb_attached_files->Check(idx, true);
@@ -449,7 +448,7 @@ tab_attachments::on_enable_all(wxCommandEvent &evt) {
 }
 
 void
-tab_attachments::on_disable_all(wxCommandEvent &evt) {
+tab_attachments::on_disable_all(wxCommandEvent &) {
   size_t idx;
   for (idx = 0; m_attached_files.size() > idx; ++idx) {
     clb_attached_files->Check(idx, false);

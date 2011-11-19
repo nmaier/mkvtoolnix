@@ -77,13 +77,13 @@ xtr_avi_c::create_file(xtr_base_c *master,
 
 void
 xtr_avi_c::handle_frame(memory_cptr &frame,
-                        KaxBlockAdditions *additions,
-                        int64_t timecode,
+                        KaxBlockAdditions *,
+                        int64_t,
                         int64_t duration,
                         int64_t bref,
-                        int64_t fref,
+                        int64_t,
                         bool keyframe,
-                        bool discardable,
+                        bool,
                         bool references_valid) {
   if (references_valid)
     keyframe = (0 == bref);

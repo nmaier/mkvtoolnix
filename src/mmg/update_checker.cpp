@@ -122,12 +122,12 @@ update_check_dlg_c::readjust() {
 }
 
 void
-update_check_dlg_c::on_close(wxCloseEvent &evt) {
+update_check_dlg_c::on_close(wxCloseEvent &) {
   close_dialog();
 }
 
 void
-update_check_dlg_c::on_close_pressed(wxCommandEvent &evt) {
+update_check_dlg_c::on_close_pressed(wxCommandEvent &) {
   close_dialog();
 }
 

@@ -35,7 +35,7 @@ public:
     xml_parser_c(io) {
   }
 
-  virtual void start_element_cb(const char *name, const char **atts) {
+  virtual void start_element_cb(const char *name, const char **/* atts */) {
     if (m_root_element == "")
       m_root_element = name;
   }
@@ -164,7 +164,7 @@ corepicture_reader_c::start_element_cb(const char *name,
 }
 
 void
-corepicture_reader_c::end_element_cb(const char *name) {
+corepicture_reader_c::end_element_cb(const char *) {
   size_t i;
   std::string node;
 
@@ -179,7 +179,7 @@ corepicture_reader_c::end_element_cb(const char *name) {
 }
 
 void
-corepicture_reader_c::create_packetizer(int64_t tid) {
+corepicture_reader_c::create_packetizer(int64_t) {
   if (!demuxing_requested('v', 0) || (NPTZR() != 0))
     return;
 
@@ -204,7 +204,7 @@ corepicture_reader_c::create_packetizer(int64_t tid) {
 }
 
 file_status_e
-corepicture_reader_c::read(generic_packetizer_c *ptzr,
+corepicture_reader_c::read(generic_packetizer_c *,
                            bool) {
 
   if (m_current_picture != m_pictures.end()) {

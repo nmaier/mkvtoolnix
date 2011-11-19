@@ -304,7 +304,7 @@ tab_global::translate_ui() {
 }
 
 void
-tab_global::on_browse_global_tags(wxCommandEvent &evt) {
+tab_global::on_browse_global_tags(wxCommandEvent &) {
   wxFileDialog dlg(NULL, Z("Choose the tags file"), last_open_dir, wxEmptyString, wxString::Format(Z("Tag files (*.xml)|*.xml|%s"), ALLFILES.c_str()), wxFD_OPEN);
   if(dlg.ShowModal() != wxID_OK)
     return;
@@ -314,7 +314,7 @@ tab_global::on_browse_global_tags(wxCommandEvent &evt) {
 }
 
 void
-tab_global::on_browse_segmentinfo(wxCommandEvent &evt) {
+tab_global::on_browse_segmentinfo(wxCommandEvent &) {
   wxFileDialog dlg(NULL, Z("Choose the segment info file"), last_open_dir, wxEmptyString, wxString::Format(Z("Segment info files (*.xml)|*.xml|%s"), ALLFILES.c_str()), wxFD_OPEN);
   if(dlg.ShowModal() != wxID_OK)
     return;
@@ -324,7 +324,7 @@ tab_global::on_browse_segmentinfo(wxCommandEvent &evt) {
 }
 
 void
-tab_global::on_browse_chapters(wxCommandEvent &evt) {
+tab_global::on_browse_chapters(wxCommandEvent &) {
   wxFileDialog dlg(NULL, Z("Choose the chapter file"), last_open_dir, wxEmptyString,
                    wxString::Format(Z("Chapter files (*.xml;*.txt;*.cue)|*.xml;*.txt;*.cue|%s"), ALLFILES.c_str()), wxFD_OPEN);
   if(dlg.ShowModal() != wxID_OK)
@@ -335,7 +335,7 @@ tab_global::on_browse_chapters(wxCommandEvent &evt) {
 }
 
 void
-tab_global::on_split_clicked(wxCommandEvent &evt) {
+tab_global::on_split_clicked(wxCommandEvent &) {
   bool ec = cb_split->IsChecked();
   bool es = rb_split_by_size->GetValue();
   bool et = rb_split_by_time->GetValue();
@@ -355,12 +355,12 @@ tab_global::on_split_clicked(wxCommandEvent &evt) {
 }
 
 void
-tab_global::on_webm_mode_clicked(wxCommandEvent &evt) {
+tab_global::on_webm_mode_clicked(wxCommandEvent &) {
   mdlg->handle_webm_mode(cb_webm_mode->IsChecked());
 }
 
 void
-tab_global::on_splitby_time_clicked(wxCommandEvent &evt) {
+tab_global::on_splitby_time_clicked(wxCommandEvent &) {
   cob_split_by_size->Enable(false);
   cob_split_by_time->Enable(true);
   tc_split_after_timecodes->Enable(false);
@@ -371,7 +371,7 @@ tab_global::on_splitby_time_clicked(wxCommandEvent &evt) {
 }
 
 void
-tab_global::on_splitby_size_clicked(wxCommandEvent &evt) {
+tab_global::on_splitby_size_clicked(wxCommandEvent &) {
   cob_split_by_size->Enable(true);
   cob_split_by_time->Enable(false);
   tc_split_after_timecodes->Enable(false);
@@ -382,7 +382,7 @@ tab_global::on_splitby_size_clicked(wxCommandEvent &evt) {
 }
 
 void
-tab_global::on_splitafter_timecodes_clicked(wxCommandEvent &evt) {
+tab_global::on_splitafter_timecodes_clicked(wxCommandEvent &) {
   cob_split_by_size->Enable(false);
   cob_split_by_time->Enable(false);
   tc_split_after_timecodes->Enable(true);

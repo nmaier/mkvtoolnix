@@ -135,8 +135,7 @@ parse_simple_chapters(mm_text_io_c *in,
                       int64_t max_tc,
                       int64_t offset,
                       const std::string &language,
-                      const std::string &charset,
-                      bool exception_on_error) {
+                      const std::string &charset) {
   assert(NULL != in);
 
   in->setFilePointer(0);
@@ -358,12 +357,12 @@ parse_chapters(mm_text_io_c *in,
     if (probe_simple_chapters(in)) {
       if (NULL != is_simple_format)
         *is_simple_format = true;
-      return parse_simple_chapters(in, min_tc, max_tc, offset, language, charset, exception_on_error);
+      return parse_simple_chapters(in, min_tc, max_tc, offset, language, charset);
 
     } else if (probe_cue_chapters(in)) {
       if (NULL != is_simple_format)
         *is_simple_format = true;
-      return parse_cue_chapters(in, min_tc, max_tc, offset, language, charset, exception_on_error, tags);
+      return parse_cue_chapters(in, min_tc, max_tc, offset, language, charset, tags);
 
     } else if (NULL != is_simple_format)
       *is_simple_format = false;

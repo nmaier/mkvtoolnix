@@ -78,10 +78,10 @@ public:
     return method;
   };
 
-  virtual void decompress(memory_cptr &buffer) {
+  virtual void decompress(memory_cptr &/* buffer */) {
   };
 
-  virtual void compress(memory_cptr &buffer) {
+  virtual void compress(memory_cptr &/* buffer */) {
   };
 
   virtual void set_track_headers(KaxContentEncoding &c_encoding);

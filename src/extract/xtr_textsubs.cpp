@@ -40,14 +40,14 @@ xtr_srt_c::create_file(xtr_base_c *master,
 
 void
 xtr_srt_c::handle_frame(memory_cptr &frame,
-                        KaxBlockAdditions *additions,
+                        KaxBlockAdditions *,
                         int64_t timecode,
                         int64_t duration,
-                        int64_t bref,
-                        int64_t fref,
-                        bool keyframe,
-                        bool discardable,
-                        bool references_valid) {
+                        int64_t,
+                        int64_t,
+                        bool,
+                        bool,
+                        bool) {
   m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
 
   if (-1 == duration) {
@@ -165,15 +165,14 @@ xtr_ssa_c::create_file(xtr_base_c *master,
 
 void
 xtr_ssa_c::handle_frame(memory_cptr &frame,
-                        KaxBlockAdditions *additions,
+                        KaxBlockAdditions *,
                         int64_t timecode,
                         int64_t duration,
-                        int64_t bref,
-                        int64_t fref,
-                        bool keyframe,
-                        bool discardable,
-                        bool references_valid) {
-
+                        int64_t,
+                        int64_t,
+                        bool,
+                        bool,
+                        bool) {
   m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
 
   if (0 > duration) {
@@ -344,14 +343,14 @@ xtr_usf_c::create_file(xtr_base_c *master,
 
 void
 xtr_usf_c::handle_frame(memory_cptr &frame,
-                        KaxBlockAdditions *additions,
+                        KaxBlockAdditions *,
                         int64_t timecode,
                         int64_t duration,
-                        int64_t bref,
-                        int64_t fref,
-                        bool keyframe,
-                        bool discardable,
-                        bool references_valid) {
+                        int64_t,
+                        int64_t,
+                        bool,
+                        bool,
+                        bool) {
   m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
 
   usf_entry_t entry("", timecode, timecode + duration);

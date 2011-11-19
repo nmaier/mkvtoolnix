@@ -115,11 +115,11 @@ public:
 
   void setup_xml_parser();
 
-  virtual void start_element_cb(const char *name, const char **atts) {
+  virtual void start_element_cb(const char */* name */, const char **/* atts */) {
   }
-  virtual void end_element_cb(const char *name) {
+  virtual void end_element_cb(const char */* name */) {
   }
-  virtual void add_data_cb(const XML_Char *s, int len) {
+  virtual void add_data_cb(const XML_Char */* s */, int /* len */) {
   }
 
   virtual void parse_xml_file();

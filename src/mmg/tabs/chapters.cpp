@@ -50,7 +50,7 @@ private:
 public:
   chapters_drop_target_c(tab_chapters *n_owner):
     owner(n_owner) {};
-  virtual bool OnDropFiles(wxCoord x, wxCoord y, const wxArrayString &dropped_files) {
+  virtual bool OnDropFiles(wxCoord /* x */, wxCoord /* y */, const wxArrayString &dropped_files) {
     owner->load(dropped_files[0]);
 
     return true;
@@ -147,12 +147,12 @@ chapter_values_dlg::chapter_values_dlg(wxWindow *parent)
 }
 
 void
-chapter_values_dlg::on_language_clicked(wxCommandEvent &evt) {
+chapter_values_dlg::on_language_clicked(wxCommandEvent &) {
   cob_language->Enable(cb_language->IsChecked());
 }
 
 void
-chapter_values_dlg::on_country_clicked(wxCommandEvent &evt) {
+chapter_values_dlg::on_country_clicked(wxCommandEvent &) {
   cob_country->Enable(cb_country->IsChecked());
 }
 
@@ -385,7 +385,7 @@ tab_chapters::enable_buttons(bool enable) {
 }
 
 void
-tab_chapters::on_new_chapters(wxCommandEvent &evt) {
+tab_chapters::on_new_chapters(wxCommandEvent &) {
   file_name = wxEmptyString;
   tc_chapters->DeleteAllItems();
   tid_root = tc_chapters->AddRoot(Z("(new chapter file)"));
@@ -522,7 +522,7 @@ tab_chapters::fix_missing_languages(EbmlMaster &master) {
 }
 
 void
-tab_chapters::on_load_chapters(wxCommandEvent &evt) {
+tab_chapters::on_load_chapters(wxCommandEvent &) {
   wxFileDialog dlg(NULL, Z("Choose a chapter file"), last_open_dir, wxEmptyString,
                    wxString::Format(Z("Chapter files (*.xml;*.txt;*.mka;*.mkv;*.mk3d;*.cue)|*.xml;*.txt;*.mka;*.mkv;*.mk3d;*.cue|%s"), ALLFILES.c_str()), wxFD_OPEN);
 
@@ -615,7 +615,7 @@ tab_chapters::load(wxString name) {
 }
 
 void
-tab_chapters::on_save_chapters(wxCommandEvent &evt) {
+tab_chapters::on_save_chapters(wxCommandEvent &) {
   if (!verify())
     return;
 
@@ -631,7 +631,7 @@ tab_chapters::on_save_chapters(wxCommandEvent &evt) {
 }
 
 void
-tab_chapters::on_save_chapters_to_kax_file(wxCommandEvent &evt) {
+tab_chapters::on_save_chapters_to_kax_file(wxCommandEvent &) {
   if (!verify())
     return;
 
@@ -668,7 +668,7 @@ tab_chapters::on_save_chapters_to_kax_file(wxCommandEvent &evt) {
 }
 
 void
-tab_chapters::on_save_chapters_as(wxCommandEvent &evt) {
+tab_chapters::on_save_chapters_as(wxCommandEvent &) {
   if (verify() && select_file_name())
     save();
 }
@@ -729,7 +729,7 @@ tab_chapters::save() {
 }
 
 void
-tab_chapters::on_verify_chapters(wxCommandEvent &evt) {
+tab_chapters::on_verify_chapters(wxCommandEvent &) {
   verify(true);
 }
 
@@ -848,7 +848,7 @@ tab_chapters::verify(bool called_interactively) {
 }
 
 void
-tab_chapters::on_add_chapter(wxCommandEvent &evt) {
+tab_chapters::on_add_chapter(wxCommandEvent &) {
   wxTreeItemId id, pid;
   KaxEditionEntry *eentry;
   KaxChapterAtom *chapter;
@@ -928,7 +928,7 @@ tab_chapters::on_add_chapter(wxCommandEvent &evt) {
 }
 
 void
-tab_chapters::on_add_subchapter(wxCommandEvent &evt) {
+tab_chapters::on_add_subchapter(wxCommandEvent &) {
   wxTreeItemId id;
   KaxEditionEntry *eentry;
   KaxChapterAtom *chapter;
@@ -973,7 +973,7 @@ tab_chapters::on_add_subchapter(wxCommandEvent &evt) {
 }
 
 void
-tab_chapters::on_remove_chapter(wxCommandEvent &evt) {
+tab_chapters::on_remove_chapter(wxCommandEvent &) {
   uint32_t i;
   wxTreeItemId id, p_id;
   chapter_node_data_c *d, *p_d;
@@ -1113,7 +1113,7 @@ tab_chapters::on_entry_selected(wxTreeEvent &evt) {
 }
 
 void
-tab_chapters::on_language_code_selected(wxCommandEvent &evt) {
+tab_chapters::on_language_code_selected(wxCommandEvent &) {
   KaxChapterDisplay *cdisplay;
   KaxChapterLanguage *clanguage;
   chapter_node_data_c *t;
@@ -1150,7 +1150,7 @@ tab_chapters::on_language_code_selected(wxCommandEvent &evt) {
 }
 
 void
-tab_chapters::on_country_code_selected(wxCommandEvent &evt) {
+tab_chapters::on_country_code_selected(wxCommandEvent &) {
   KaxChapterDisplay *cdisplay;
   KaxChapterCountry *ccountry;
   chapter_node_data_c *t;
@@ -1194,7 +1194,7 @@ tab_chapters::on_country_code_selected(wxCommandEvent &evt) {
 }
 
 void
-tab_chapters::on_chapter_name_changed(wxCommandEvent &evt) {
+tab_chapters::on_chapter_name_changed(wxCommandEvent &) {
   KaxChapterDisplay *cdisplay;
   chapter_node_data_c *t;
   size_t i, n;
@@ -1288,7 +1288,7 @@ tab_chapters::set_values_recursively(wxTreeItemId id,
 }
 
 void
-tab_chapters::on_set_values(wxCommandEvent &evt) {
+tab_chapters::on_set_values(wxCommandEvent &) {
   KaxChapterDisplay *cdisplay;
   wxTreeItemId id;
   chapter_node_data_c *t;
@@ -1337,7 +1337,7 @@ tab_chapters::on_set_values(wxCommandEvent &evt) {
 }
 
 void
-tab_chapters::on_adjust_timecodes(wxCommandEvent &evt) {
+tab_chapters::on_adjust_timecodes(wxCommandEvent &) {
   KaxChapterDisplay *cdisplay;
   wxTreeItemId id;
   chapter_node_data_c *t;
@@ -1546,7 +1546,7 @@ tab_chapters::copy_values(wxTreeItemId id) {
 }
 
 void
-tab_chapters::on_add_chapter_name(wxCommandEvent &evt) {
+tab_chapters::on_add_chapter_name(wxCommandEvent &) {
   KaxChapterDisplay *cdisplay;
   chapter_node_data_c *t;
   size_t i, n;
@@ -1597,7 +1597,7 @@ tab_chapters::on_add_chapter_name(wxCommandEvent &evt) {
 }
 
 void
-tab_chapters::on_remove_chapter_name(wxCommandEvent &evt) {
+tab_chapters::on_remove_chapter_name(wxCommandEvent &) {
   KaxChapterDisplay *cdisplay;
   chapter_node_data_c *t;
   size_t i, n;
@@ -1654,7 +1654,7 @@ tab_chapters::on_remove_chapter_name(wxCommandEvent &evt) {
 }
 
 void
-tab_chapters::on_chapter_name_selected(wxCommandEvent &evt) {
+tab_chapters::on_chapter_name_selected(wxCommandEvent &) {
   KaxChapterDisplay *cdisplay;
   chapter_node_data_c *t;
   size_t i, n;
@@ -1685,7 +1685,7 @@ tab_chapters::on_chapter_name_selected(wxCommandEvent &evt) {
 }
 
 void
-tab_chapters::on_chapter_name_enter(wxCommandEvent &evt) {
+tab_chapters::on_chapter_name_enter(wxCommandEvent &) {
   wxTreeItemId id;
   wxTreeItemIdValue cookie;
 
@@ -1722,7 +1722,7 @@ tab_chapters::on_chapter_name_enter(wxCommandEvent &evt) {
 }
 
 void
-tab_chapters::on_flag_hidden(wxCommandEvent &evt) {
+tab_chapters::on_flag_hidden(wxCommandEvent &) {
   wxTreeItemId selected;
   chapter_node_data_c *t;
   size_t i;
@@ -1746,7 +1746,7 @@ tab_chapters::on_flag_hidden(wxCommandEvent &evt) {
 }
 
 void
-tab_chapters::on_flag_enabled(wxCommandEvent &evt) {
+tab_chapters::on_flag_enabled(wxCommandEvent &) {
   wxTreeItemId selected;
   chapter_node_data_c *t;
   size_t i;

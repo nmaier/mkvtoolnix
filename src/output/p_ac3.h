@@ -45,7 +45,7 @@ public:
   virtual connection_result_e can_connect_to(generic_packetizer_c *src, std::string &error_message);
 
 protected:
-  virtual unsigned char *get_ac3_packet(unsigned long *header, ac3_header_t *ac3header);
+  virtual unsigned char *get_ac3_packet(ac3_header_t *ac3header);
   virtual void add_to_buffer(unsigned char *buf, int size);
   virtual void adjust_header_values(ac3_header_t &ac3_header);
 };

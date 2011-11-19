@@ -68,6 +68,6 @@ pgs_packetizer_c::process(packet_cptr packet) {
 
 connection_result_e
 pgs_packetizer_c::can_connect_to(generic_packetizer_c *src,
-                                 std::string &error_message) {
+                                 std::string &) {
   return dynamic_cast<pgs_packetizer_c *>(src) == NULL ? CAN_CONNECT_NO_FORMAT : CAN_CONNECT_YES;
 }

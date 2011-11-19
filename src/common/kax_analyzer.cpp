@@ -718,11 +718,10 @@ kax_analyzer_c::merge_void_elements() {
   }
 
   // See how many void elements there are at the end of the m_file.
-  start_idx = m_data.size() - 1;
+  start_idx = m_data.size();
 
-  while ((0 <= start_idx) && (EBML_ID(EbmlVoid) == m_data[start_idx]->m_id))
+  while ((0 < start_idx) && (EBML_ID(EbmlVoid) == m_data[start_idx - 1]->m_id))
     --start_idx;
-  ++start_idx;
 
   // If there are none then we're done.
   if (m_data.size() <= start_idx)
@@ -1098,7 +1097,7 @@ console_kax_analyzer_c::set_show_progress(bool show_progress) {
 }
 
 void
-console_kax_analyzer_c::show_progress_start(int64_t size) {
+console_kax_analyzer_c::show_progress_start(int64_t) {
   if (!m_show_progress)
     return;
 

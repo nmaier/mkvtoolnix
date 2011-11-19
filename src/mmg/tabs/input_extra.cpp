@@ -165,7 +165,7 @@ tab_input_extra::set_track_mode(mmg_track_t *t) {
 }
 
 void
-tab_input_extra::on_user_defined_changed(wxCommandEvent &evt) {
+tab_input_extra::on_user_defined_changed(wxCommandEvent &) {
   if (input->dont_copy_values_now || (input->selected_track == -1))
     return;
 
@@ -173,7 +173,7 @@ tab_input_extra::on_user_defined_changed(wxCommandEvent &evt) {
 }
 
 void
-tab_input_extra::on_cues_selected(wxCommandEvent &evt) {
+tab_input_extra::on_cues_selected(wxCommandEvent &) {
   if (input->dont_copy_values_now || (input->selected_track == -1))
     return;
 
@@ -181,7 +181,7 @@ tab_input_extra::on_cues_selected(wxCommandEvent &evt) {
 }
 
 void
-tab_input_extra::on_compression_selected(wxCommandEvent &evt) {
+tab_input_extra::on_compression_selected(wxCommandEvent &) {
   if (input->dont_copy_values_now || (input->selected_track == -1))
     return;
 

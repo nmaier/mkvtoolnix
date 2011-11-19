@@ -99,7 +99,7 @@ optdlg_mkvmerge_tab::optdlg_mkvmerge_tab(wxWindow *parent,
 }
 
 void
-optdlg_mkvmerge_tab::on_browse_mkvmerge(wxCommandEvent &evt) {
+optdlg_mkvmerge_tab::on_browse_mkvmerge(wxCommandEvent &) {
   wxFileDialog dlg(this, Z("Choose the mkvmerge executable"), tc_mkvmerge->GetValue().BeforeLast(PSEP), wxEmptyString,
 #ifdef SYS_WINDOWS
                    wxString::Format(Z("Executable files (*.exe)|*.exe|%s"), ALLFILES.c_str()),

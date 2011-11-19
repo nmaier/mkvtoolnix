@@ -39,13 +39,13 @@ xtr_mpeg1_2_video_c::create_file(xtr_base_c *master,
 
 void
 xtr_mpeg1_2_video_c::handle_frame(memory_cptr &frame,
-                                  KaxBlockAdditions *additions,
-                                  int64_t timecode,
-                                  int64_t duration,
+                                  KaxBlockAdditions *,
+                                  int64_t,
+                                  int64_t,
                                   int64_t bref,
-                                  int64_t fref,
+                                  int64_t,
                                   bool keyframe,
-                                  bool discardable,
+                                  bool,
                                   bool references_valid) {
   m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
 

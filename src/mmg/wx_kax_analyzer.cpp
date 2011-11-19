@@ -31,7 +31,7 @@ wx_kax_analyzer_c::~wx_kax_analyzer_c() {
 }
 
 void
-wx_kax_analyzer_c::show_progress_start(int64_t file_size) {
+wx_kax_analyzer_c::show_progress_start(int64_t) {
   m_prog_dlg = new wxProgressDialog(Z("Analysis is running"), Z("The Matroska file is analyzed."), 100, m_parent,
                                     wxPD_AUTO_HIDE | wxPD_APP_MODAL | wxPD_CAN_ABORT | wxPD_REMAINING_TIME);
 

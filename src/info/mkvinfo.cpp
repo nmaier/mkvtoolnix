@@ -468,45 +468,10 @@ format_binary(EbmlBinary &bin,
   return result;
 }
 
-#define handle(f) handle_##f(in, es, upper_lvl_el, l1, l2, l3, l4, l5, l6)
-#define def_handle(f) handle_##f(mm_io_cptr &in,    \
-                                 EbmlStream *&es,   \
-                                 int &upper_lvl_el, \
-                                 EbmlElement *&l1,  \
-                                 EbmlElement *&l2,  \
-                                 EbmlElement *&l3,  \
-                                 EbmlElement *&l4,  \
-                                 EbmlElement *&l5,  \
-                                 EbmlElement *&l6)
-
-#define handle2(f, arg1) \
-  handle_##f(in, es, upper_lvl_el, l1, l2, l3, l4, l5, l6, arg1)
-#define handle3(f, arg1, arg2) \
-  handle_##f(in, es, upper_lvl_el, l1, l2, l3, l4, l5, l6, arg1, arg2)
-#define def_handle2(f, arg1) handle_##f(mm_io_cptr &in,    \
-                                        EbmlStream *&es,   \
-                                        int &upper_lvl_el, \
-                                        EbmlElement *&l1,  \
-                                        EbmlElement *&l2,  \
-                                        EbmlElement *&l3,  \
-                                        EbmlElement *&l4,  \
-                                        EbmlElement *&l5,  \
-                                        EbmlElement *&l6,  \
-                                        arg1)
-#define def_handle3(f, arg1, arg2) handle_##f(mm_io_cptr &in,    \
-                                              EbmlStream *&es,   \
-                                              int &upper_lvl_el, \
-                                              EbmlElement *&l1,  \
-                                              EbmlElement *&l2,  \
-                                              EbmlElement *&l3,  \
-                                              EbmlElement *&l4,  \
-                                              EbmlElement *&l5,  \
-                                              EbmlElement *&l6,  \
-                                              arg1,              \
-                                              arg2)
-
 void
-def_handle(chaptertranslate) {
+handle_chaptertranslate(EbmlStream *&es,
+                        EbmlElement *&l2,
+                        EbmlElement *&l3) {
   show_element(l2, 2, Y("Chapter Translate"));
 
   size_t i2;
@@ -530,7 +495,11 @@ def_handle(chaptertranslate) {
 }
 
 void
-def_handle(info) {
+handle_info(EbmlStream *&es,
+            int &upper_lvl_el,
+            EbmlElement *&l1,
+            EbmlElement *&l2,
+            EbmlElement *&l3) {
   // General info about this Matroska file
   show_element(l1, 1, Y("Segment information"));
 
@@ -589,7 +558,7 @@ def_handle(info) {
       show_element(l2, 2, boost::format(Y("Family UID:%1%")) % to_hex(family.GetBuffer(), family.GetSize()));
 
     } else if (is_id(l2, KaxChapterTranslate))
-      handle(chaptertranslate);
+      handle_chaptertranslate(es, l2, l3);
 
     else if (is_id(l2, KaxPrevUID)) {
       KaxPrevUID &uid = *static_cast<KaxPrevUID *>(l2);
@@ -623,8 +592,10 @@ def_handle(info) {
 }
 
 void
-def_handle2(audio_track,
-            std::vector<std::string> &summary) {
+handle_audio_track(EbmlStream *&es,
+                   EbmlElement *&l3,
+                   EbmlElement *&l4,
+                   std::vector<std::string> &summary) {
   show_element(l3, 3, "Audio track");
 
   size_t i3;
@@ -665,8 +636,10 @@ def_handle2(audio_track,
 }
 
 void
-def_handle2(video_track,
-            std::vector<std::string> &summary) {
+handle_video_track(EbmlStream *&es,
+                   EbmlElement *&l3,
+                   EbmlElement *&l4,
+                   std::vector<std::string> &summary) {
   show_element(l3, 3, Y("Video track"));
 
   EbmlMaster *m3 = static_cast<EbmlMaster *>(l3);
@@ -765,7 +738,11 @@ def_handle2(video_track,
 }
 
 void
-def_handle(content_encodings) {
+handle_content_encodings(EbmlStream *&es,
+                         EbmlElement *&l3,
+                         EbmlElement *&l4,
+                         EbmlElement *&l5,
+                         EbmlElement *&l6) {
   show_element(l3, 3, Y("Content encodings"));
 
   EbmlMaster *m3 = static_cast<EbmlMaster *>(l3);
@@ -904,7 +881,14 @@ def_handle(content_encodings) {
 }
 
 void
-def_handle(tracks) {
+handle_tracks(EbmlStream *&es,
+              int &upper_lvl_el,
+              EbmlElement *&l1,
+              EbmlElement *&l2,
+              EbmlElement *&l3,
+              EbmlElement *&l4,
+              EbmlElement *&l5,
+              EbmlElement *&l6) {
   // Yep, we've found our KaxTracks element. Now find all tracks
   // contained in this segment.
   show_element(l1, 1, Y("Segment tracks"));
@@ -934,10 +918,10 @@ def_handle(tracks) {
 
         // Now evaluate the data belonging to this track
         if (is_id(l3, KaxTrackAudio))
-          handle2(audio_track, summary);
+          handle_audio_track(es, l3, l4, summary);
 
         else if (is_id(l3, KaxTrackVideo))
-          handle2(video_track, summary);
+          handle_video_track(es, l3, l4, summary);
 
         else if (is_id(l3, KaxTrackNumber)) {
           KaxTrackNumber &tnum = *static_cast<KaxTrackNumber *>(l3);
@@ -1081,7 +1065,7 @@ def_handle(tracks) {
           show_element(l3, 3, boost::format(Y("Max BlockAddition ID: %1%")) % uint64(max_block_add_id));
 
         } else if (is_id(l3, KaxContentEncodings))
-          handle(content_encodings);
+          handle_content_encodings(es, l3, l4, l5, l6);
 
         else if (!is_global(es, l3, 3))
           show_unknown_element(l3, 3);
@@ -1109,7 +1093,11 @@ def_handle(tracks) {
 }
 
 void
-def_handle(seek_head) {
+handle_seek_head(EbmlStream *&es,
+                 int &upper_lvl_el,
+                 EbmlElement *&l1,
+                 EbmlElement *&l2,
+                 EbmlElement *&l3) {
   if ((g_options.m_verbose < 2) && !g_options.m_use_gui) {
     show_element(l1, 1, Y("Seek head (subentries will be skipped)"));
     return;
@@ -1169,7 +1157,13 @@ def_handle(seek_head) {
 }
 
 void
-def_handle(cues) {
+handle_cues(EbmlStream *&es,
+            int &upper_lvl_el,
+            EbmlElement *&l1,
+            EbmlElement *&l2,
+            EbmlElement *&l3,
+            EbmlElement *&l4,
+            EbmlElement *&l5) {
   if (g_options.m_verbose < 2) {
     show_element(l1, 1, Y("Cues (subentries will be skipped)"));
     return;
@@ -1272,7 +1266,11 @@ def_handle(cues) {
 }
 
 void
-def_handle(attachments) {
+handle_attachments(EbmlStream *&es,
+                   int &upper_lvl_el,
+                   EbmlElement *&l1,
+                   EbmlElement *&l2,
+                   EbmlElement *&l3) {
   show_element(l1, 1, Y("Attachments"));
 
   upper_lvl_el               = 0;
@@ -1326,8 +1324,9 @@ def_handle(attachments) {
 }
 
 void
-def_handle2(silent_track,
-            KaxCluster *&cluster) {
+handle_silent_track(EbmlStream *&es,
+                    EbmlElement *&l2,
+                    EbmlElement *&l3) {
   show_element(l2, 2, "Silent Tracks");
   EbmlMaster *m2 = static_cast<EbmlMaster *>(l2);
 
@@ -1345,8 +1344,12 @@ def_handle2(silent_track,
 }
 
 void
-def_handle2(block_group,
-            KaxCluster *&cluster) {
+handle_block_group(EbmlStream *&es,
+                   EbmlElement *&l2,
+                   EbmlElement *&l3,
+                   EbmlElement *&l4,
+                   EbmlElement *&l5,
+                   KaxCluster *&cluster) {
   show_element(l2, 2, Y("Block group"));
 
   std::vector<int> frame_sizes;
@@ -1588,8 +1591,9 @@ def_handle2(block_group,
 }
 
 void
-def_handle2(simple_block,
-            KaxCluster *&cluster) {
+handle_simple_block(EbmlStream *&es,
+                    EbmlElement *&l2,
+                    KaxCluster *&cluster) {
   std::vector<int> frame_sizes;
   std::vector<uint32_t> frame_adlers;
 
@@ -1675,9 +1679,15 @@ def_handle2(simple_block,
 }
 
 void
-def_handle3(cluster,
-            KaxCluster *&cluster,
-            int64_t file_size) {
+handle_cluster(EbmlStream *&es,
+               int &upper_lvl_el,
+               EbmlElement *&l1,
+               EbmlElement *&l2,
+               EbmlElement *&l3,
+               EbmlElement *&l4,
+               EbmlElement *&l5,
+               KaxCluster *&cluster,
+               int64_t file_size) {
   cluster = (KaxCluster *)l1;
 
   if (g_options.m_use_gui)
@@ -1708,13 +1718,13 @@ def_handle3(cluster,
       show_element(l2, 2, BF_CLUSTER_PREVIOUS_SIZE % uint64(c_psize));
 
     } else if (is_id(l2, KaxClusterSilentTracks))
-      handle2(silent_track, cluster);
+      handle_silent_track(es, l2, l3);
 
     else if (is_id(l2, KaxBlockGroup))
-      handle2(block_group, cluster);
+      handle_block_group(es, l2, l3, l4, l5, cluster);
 
     else if (is_id(l2, KaxSimpleBlock))
-      handle2(simple_block, cluster);
+      handle_simple_block(es, l2, cluster);
 
     else if (!is_global(es, l2, 2))
       show_unknown_element(l2, 2);
@@ -1727,7 +1737,6 @@ def_handle3(cluster,
 void
 handle_elements_rec(EbmlStream *es,
                     int level,
-                    int parent_idx,
                     EbmlElement *e,
                     const parser_element_t *mapping) {
   static boost::format s_bf_handle_elements_rec("%1%: %2%");
@@ -1756,7 +1765,7 @@ handle_elements_rec(EbmlStream *es,
 
       size_t i;
       for (i = 0; m->ListSize() > i; ++i)
-        handle_elements_rec(es, level + 1, elt_idx, (*m)[i], mapping);
+        handle_elements_rec(es, level + 1, (*m)[i], mapping);
       break;
 
     case EBMLT_UINT:
@@ -1786,7 +1795,10 @@ handle_elements_rec(EbmlStream *es,
 }
 
 void
-def_handle(chapters) {
+handle_chapters(EbmlStream *&es,
+                int &upper_lvl_el,
+                EbmlElement *&l1,
+                EbmlElement *&l2) {
   show_element(l1, 1, Y("Chapters"));
 
   upper_lvl_el               = 0;
@@ -1796,13 +1808,16 @@ def_handle(chapters) {
 
   size_t i1;
   for (i1 = 0; i1 < m1->ListSize(); i1++)
-    handle_elements_rec(es, 2, 0, (*m1)[i1], chapter_elements);
+    handle_elements_rec(es, 2, (*m1)[i1], chapter_elements);
 
   l2 = element_found;
 }
 
 void
-def_handle(tags) {
+handle_tags(EbmlStream *&es,
+            int &upper_lvl_el,
+            EbmlElement *&l1,
+            EbmlElement *&l2) {
   show_element(l1, 1, Y("Tags"));
 
   upper_lvl_el               = 0;
@@ -1812,7 +1827,7 @@ def_handle(tags) {
 
   size_t i1;
   for (i1 = 0; i1 < m1->ListSize(); i1++)
-    handle_elements_rec(es, 2, 0, (*m1)[i1], tag_elements);
+    handle_elements_rec(es, 2, (*m1)[i1], tag_elements);
 
   l2 = element_found;
 }
@@ -1892,8 +1907,7 @@ bool
 process_file(const std::string &file_name) {
   int upper_lvl_el;
   // Elements for different levels
-  EbmlElement *l0 = NULL, *l1 = NULL, *l2 = NULL, *l3 = NULL, *l4 = NULL;
-  EbmlElement *l5 = NULL, *l6 = NULL;
+  EbmlElement *l0 = NULL, *l1 = NULL, *l2 = NULL, *l3 = NULL, *l4 = NULL, *l5 = NULL, *l6 = NULL;
   KaxCluster *cluster;
 
   s_tc_scale = TIMECODE_SCALE;
@@ -1958,13 +1972,13 @@ process_file(const std::string &file_name) {
       counted_ptr<EbmlElement> af_l1(l1);
 
       if (is_id(l1, KaxInfo))
-        handle(info);
+        handle_info(es, upper_lvl_el, l1, l2, l3);
 
       else if (is_id(l1, KaxTracks))
-        handle(tracks);
+        handle_tracks(es, upper_lvl_el, l1, l2, l3, l4, l5, l6);
 
       else if (is_id(l1, KaxSeekHead))
-        handle(seek_head);
+        handle_seek_head(es, upper_lvl_el, l1, l2, l3);
 
       else if (is_id(l1, KaxCluster)) {
         show_element(l1, 1, Y("Cluster"));
@@ -1974,21 +1988,21 @@ process_file(const std::string &file_name) {
 
           return true;
         }
-        handle3(cluster, cluster, file_size);
+        handle_cluster(es, upper_lvl_el, l1, l2, l3, l4, l5, cluster, file_size);
 
       } else if (is_id(l1, KaxCues))
-        handle(cues);
+        handle_cues(es, upper_lvl_el, l1, l2, l3, l4, l5);
 
         // Weee! Attachments!
       else if (is_id(l1, KaxAttachments))
-        handle(attachments);
+        handle_attachments(es, upper_lvl_el, l1, l2, l3);
 
       else if (is_id(l1, KaxChapters))
-        handle(chapters);
+        handle_chapters(es, upper_lvl_el, l1, l2);
 
         // Let's handle some TAGS.
       else if (is_id(l1, KaxTags))
-        handle(tags);
+        handle_tags(es, upper_lvl_el, l1, l2);
 
       else if (!is_global(es, l1, 1))
         show_unknown_element(l1, 1);

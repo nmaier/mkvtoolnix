@@ -73,7 +73,7 @@ lzo_compressor_c::~lzo_compressor_c() {
 }
 
 void
-lzo_compressor_c::decompress(memory_cptr &buffer) {
+lzo_compressor_c::decompress(memory_cptr &) {
   mxerror(Y("lzo_compressor_c::decompress() not implemented\n"));
 }
 
@@ -196,7 +196,7 @@ bzlib_compressor_c::~bzlib_compressor_c() {
 }
 
 void
-bzlib_compressor_c::decompress(memory_cptr &buffer) {
+bzlib_compressor_c::decompress(memory_cptr &) {
   mxerror(Y("bzlib_compressor_c::decompress() not implemented\n"));
 
   bz_stream d_stream;
@@ -335,7 +335,7 @@ analyze_header_removal_compressor_c::~analyze_header_removal_compressor_c() {
 }
 
 void
-analyze_header_removal_compressor_c::decompress(memory_cptr &buffer) {
+analyze_header_removal_compressor_c::decompress(memory_cptr &) {
   mxerror("analyze_header_removal_compressor_c::decompress(): not supported\n");
 }
 
@@ -360,7 +360,7 @@ analyze_header_removal_compressor_c::compress(memory_cptr &buffer) {
 }
 
 void
-analyze_header_removal_compressor_c::set_track_headers(KaxContentEncoding &c_encoding) {
+analyze_header_removal_compressor_c::set_track_headers(KaxContentEncoding &) {
 }
 
 // ------------------------------------------------------------

@@ -348,8 +348,8 @@ mi_frame::on_right_click(wxTreeEvent &event) {
 }
 
 bool
-mi_dndfile::OnDropFiles(wxCoord x,
-                        wxCoord y,
+mi_dndfile::OnDropFiles(wxCoord,
+                        wxCoord,
                         const wxArrayString &filenames) {
   unsigned int i;
 

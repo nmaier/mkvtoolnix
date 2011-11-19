@@ -229,7 +229,7 @@ header_editor_frame_c::clear_pages() {
 }
 
 void
-header_editor_frame_c::on_file_open(wxCommandEvent &evt) {
+header_editor_frame_c::on_file_open(wxCommandEvent &) {
   if (debugging_requested("he_open_std")) {
     wxString home;
     wxGetEnv(wxT("HOME"), &home);
@@ -519,7 +519,7 @@ header_editor_frame_c::handle_tracks(kax_analyzer_data_c *data) {
 }
 
 void
-header_editor_frame_c::on_file_save(wxCommandEvent &evt) {
+header_editor_frame_c::on_file_save(wxCommandEvent &) {
   wxDateTime curr_mtime;
   m_file_name.GetTimes(NULL, &curr_mtime, NULL);
 
@@ -564,7 +564,7 @@ header_editor_frame_c::on_file_save(wxCommandEvent &evt) {
 }
 
 void
-header_editor_frame_c::on_file_reload(wxCommandEvent &evt) {
+header_editor_frame_c::on_file_reload(wxCommandEvent &) {
   if (   have_been_modified()
       && (wxYES != wxMessageBox(Z("Some header values have been modified. Do you really want to reload without saving the file?"), Z("Headers modified"),
                                 wxYES_NO | wxICON_QUESTION, this)))
@@ -574,7 +574,7 @@ header_editor_frame_c::on_file_reload(wxCommandEvent &evt) {
 }
 
 void
-header_editor_frame_c::on_file_close(wxCommandEvent &evt) {
+header_editor_frame_c::on_file_close(wxCommandEvent &) {
   if (   have_been_modified()
       && (wxYES != wxMessageBox(Z("Some header values have been modified. Do you really want to close without saving the file?"), Z("Headers modified"),
                                 wxYES_NO | wxICON_QUESTION, this)))
@@ -601,12 +601,12 @@ header_editor_frame_c::on_close_window(wxCloseEvent &evt) {
 }
 
 void
-header_editor_frame_c::on_file_quit(wxCommandEvent &evt) {
+header_editor_frame_c::on_file_quit(wxCommandEvent &) {
   Close();
 }
 
 void
-header_editor_frame_c::on_headers_expand_all(wxCommandEvent &evt) {
+header_editor_frame_c::on_headers_expand_all(wxCommandEvent &) {
   m_tc_tree->Freeze();
   size_t i;
   for (i = 0; m_pages.size() > i; ++i)
@@ -615,7 +615,7 @@ header_editor_frame_c::on_headers_expand_all(wxCommandEvent &evt) {
 }
 
 void
-header_editor_frame_c::on_headers_collapse_all(wxCommandEvent &evt) {
+header_editor_frame_c::on_headers_collapse_all(wxCommandEvent &) {
   m_tc_tree->Freeze();
   size_t i;
   for (i = 0; m_pages.size() > i; ++i)
@@ -624,7 +624,7 @@ header_editor_frame_c::on_headers_collapse_all(wxCommandEvent &evt) {
 }
 
 void
-header_editor_frame_c::on_headers_validate(wxCommandEvent &evt) {
+header_editor_frame_c::on_headers_validate(wxCommandEvent &) {
   validate();
 }
 
@@ -644,7 +644,7 @@ header_editor_frame_c::validate() {
 }
 
 void
-header_editor_frame_c::on_help_help(wxCommandEvent &evt) {
+header_editor_frame_c::on_help_help(wxCommandEvent &) {
   mdlg->display_help(HELP_ID_HEADER_EDITOR);
 }
 
@@ -773,13 +773,13 @@ header_editor_frame_c::set_status_bar(const wxString &text) {
 }
 
 void
-header_editor_frame_c::on_status_bar_timer(wxTimerEvent &evt) {
+header_editor_frame_c::on_status_bar_timer(wxTimerEvent &) {
   m_status_bar->SetStatusText(wxEmptyString);
 }
 
 bool
-header_editor_frame_c::on_drop_files(wxCoord x,
-                                     wxCoord y,
+header_editor_frame_c::on_drop_files(wxCoord,
+                                     wxCoord,
                                      const wxArrayString &dropped_files) {
   if (   have_been_modified()
       && (wxYES != wxMessageBox(Z("Some header values have been modified. Do you really want to load a new file without saving the current one?"), Z("Headers modified"),

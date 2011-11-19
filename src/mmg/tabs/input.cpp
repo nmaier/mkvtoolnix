@@ -79,7 +79,7 @@ private:
 public:
   input_drop_target_c(tab_input *n_owner):
     owner(n_owner) {}
-  virtual bool OnDropFiles(wxCoord x, wxCoord y, const wxArrayString &dropped_files) {
+  virtual bool OnDropFiles(wxCoord /* x */, wxCoord /* y */, const wxArrayString &dropped_files) {
     size_t i;
 
     for (i = 0; i < dropped_files.Count(); i++)
@@ -275,12 +275,12 @@ tab_input::select_file(bool append) {
 }
 
 void
-tab_input::on_add_file(wxCommandEvent &evt) {
+tab_input::on_add_file(wxCommandEvent &) {
   select_file(false);
 }
 
 void
-tab_input::on_append_file(wxCommandEvent &evt) {
+tab_input::on_append_file(wxCommandEvent &) {
   select_file(true);
 }
 
@@ -720,7 +720,7 @@ tab_input::add_file(const wxString &file_name,
 }
 
 void
-tab_input::on_remove_file(wxCommandEvent &evt) {
+tab_input::on_remove_file(wxCommandEvent &) {
   mmg_track_t *t;
   std::vector<mmg_file_t>::iterator eit;
 
@@ -787,7 +787,7 @@ tab_input::on_remove_file(wxCommandEvent &evt) {
 }
 
 void
-tab_input::on_remove_all_files(wxCommandEvent &evt) {
+tab_input::on_remove_all_files(wxCommandEvent &) {
   dont_copy_values_now = true;
 
   mdlg->attachments_page->remove_all_attached_files();
@@ -816,7 +816,7 @@ tab_input::on_remove_all_files(wxCommandEvent &evt) {
 }
 
 void
-tab_input::on_move_track_up(wxCommandEvent &evt) {
+tab_input::on_move_track_up(wxCommandEvent &) {
   if (1 > selected_track)
     return;
 
@@ -848,7 +848,7 @@ tab_input::on_move_track_up(wxCommandEvent &evt) {
 }
 
 void
-tab_input::on_move_track_down(wxCommandEvent &evt) {
+tab_input::on_move_track_down(wxCommandEvent &) {
   if ((0 > selected_track) || (static_cast<size_t>(selected_track) >= tracks.size() - 1))
     return;
 
@@ -880,7 +880,7 @@ tab_input::on_move_track_down(wxCommandEvent &evt) {
 }
 
 void
-tab_input::on_file_selected(wxCommandEvent &evt) {
+tab_input::on_file_selected(wxCommandEvent &) {
   selected_file = -1;
   int new_sel   = lb_input_files->GetSelection();
   if (0 > new_sel)
@@ -893,7 +893,7 @@ tab_input::on_file_selected(wxCommandEvent &evt) {
 }
 
 void
-tab_input::on_track_selected(wxCommandEvent &evt) {
+tab_input::on_track_selected(wxCommandEvent &) {
   dont_copy_values_now = true;
 
   selected_track       = -1;
@@ -947,7 +947,7 @@ tab_input::on_track_selected(wxCommandEvent &evt) {
 }
 
 void
-tab_input::on_track_enabled(wxCommandEvent &evt) {
+tab_input::on_track_enabled(wxCommandEvent &) {
   unsigned int i;
   for (i = 0; i < tracks.size(); i++) {
     if (mdlg->global_page->cb_webm_mode->IsChecked() && clb_tracks->IsChecked(i) && !tracks[i]->is_webm_compatible()) {
@@ -962,7 +962,7 @@ tab_input::on_track_enabled(wxCommandEvent &evt) {
 }
 
 void
-tab_input::on_value_copy_timer(wxTimerEvent &evt) {
+tab_input::on_value_copy_timer(wxTimerEvent &) {
   if (dont_copy_values_now || (selected_track == -1))
     return;
 
@@ -973,7 +973,7 @@ tab_input::on_value_copy_timer(wxTimerEvent &evt) {
 }
 
 void
-tab_input::on_file_new(wxCommandEvent &evt) {
+tab_input::on_file_new(wxCommandEvent &) {
   b_append_file->Enable(false);
   b_remove_file->Enable(false);
   b_track_up->Enable(false);
@@ -1070,7 +1070,7 @@ tab_input::save(wxConfigBase *cfg) {
 
 void
 tab_input::load(wxConfigBase *cfg,
-                int version) {
+                int) {
   dont_copy_values_now = true;
 
   clb_tracks->Clear();

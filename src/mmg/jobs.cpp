@@ -45,7 +45,7 @@
 #define JOB_LOG_DIALOG_WIDTH 600
 #define JOB_RUN_DIALOG_WIDTH 500
 
-job_run_dialog::job_run_dialog(wxWindow *parent,
+job_run_dialog::job_run_dialog(wxWindow *,
                                std::vector<int> &n_jobs_to_start)
   : wxDialog(NULL, -1, Z("mkvmerge is running"), wxDefaultPosition, wxSize(400, 700), wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxMINIMIZE_BOX | wxMAXIMIZE_BOX)
   , t_update(new wxTimer(this, 1))
@@ -310,17 +310,17 @@ job_run_dialog::update_remaining_time() {
 }
 
 void
-job_run_dialog::on_timer(wxTimerEvent &evt) {
+job_run_dialog::on_timer(wxTimerEvent &) {
   process_input();
 }
 
 void
-job_run_dialog::on_idle(wxIdleEvent &evt) {
+job_run_dialog::on_idle(wxIdleEvent &) {
   process_input();
 }
 
 void
-job_run_dialog::on_abort(wxCommandEvent &evt) {
+job_run_dialog::on_abort(wxCommandEvent &) {
   abort = true;
 #if defined(SYS_WINDOWS)
   wxKill(pid, wxSIGKILL);
@@ -406,7 +406,7 @@ job_log_dialog::job_log_dialog(wxWindow *parent,
 }
 
 void
-job_log_dialog::on_save(wxCommandEvent &evt) {
+job_log_dialog::on_save(wxCommandEvent &) {
   wxFileDialog dialog(NULL, Z("Choose an output file"), last_open_dir, wxEmptyString, wxString::Format(Z("Text files (*.txt)|*.txt|%s"), ALLFILES.c_str()), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
   if(dialog.ShowModal() != wxID_OK)
     return;
@@ -565,7 +565,7 @@ job_dialog::enable_buttons(bool enable,
 }
 
 void
-job_dialog::on_start(wxCommandEvent &evt) {
+job_dialog::on_start(wxCommandEvent &) {
   size_t i;
   std::vector<int> jobs_to_start;
 
@@ -578,7 +578,7 @@ job_dialog::on_start(wxCommandEvent &evt) {
 }
 
 void
-job_dialog::on_start_selected(wxCommandEvent &evt) {
+job_dialog::on_start_selected(wxCommandEvent &) {
   size_t i;
   std::vector<int> jobs_to_start;
 
@@ -591,7 +591,7 @@ job_dialog::on_start_selected(wxCommandEvent &evt) {
 }
 
 void
-job_dialog::on_delete(wxCommandEvent &evt) {
+job_dialog::on_delete(wxCommandEvent &) {
   size_t i;
   std::vector<bool> selected;
 
@@ -618,7 +618,7 @@ void
 job_dialog::swap_rows(unsigned int lower,
                       unsigned int higher,
                       bool up) {
-  if ((lower == higher) || (0 > lower) || (0 > higher) || (jobs.size() <= lower) || (jobs.size() <= higher))
+  if ((lower == higher) || (jobs.size() <= lower) || (jobs.size() <= higher))
     return;
 
   if (lower > higher) {
@@ -641,7 +641,7 @@ job_dialog::swap_rows(unsigned int lower,
 }
 
 void
-job_dialog::on_up(wxCommandEvent &evt) {
+job_dialog::on_up(wxCommandEvent &) {
   std::vector<bool> selected;
 
   bool first = true;
@@ -666,7 +666,7 @@ job_dialog::on_up(wxCommandEvent &evt) {
 }
 
 void
-job_dialog::on_down(wxCommandEvent &evt) {
+job_dialog::on_down(wxCommandEvent &) {
   std::vector<bool> selected;
 
   bool first = true;
@@ -691,7 +691,7 @@ job_dialog::on_down(wxCommandEvent &evt) {
 }
 
 void
-job_dialog::on_reenable(wxCommandEvent &evt) {
+job_dialog::on_reenable(wxCommandEvent &) {
   long item = -1;
   while (true) {
     item = lv_jobs->GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
@@ -706,7 +706,7 @@ job_dialog::on_reenable(wxCommandEvent &evt) {
 }
 
 void
-job_dialog::on_disable(wxCommandEvent &evt) {
+job_dialog::on_disable(wxCommandEvent &) {
   long item = -1;
   while (true) {
     item = lv_jobs->GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
@@ -721,7 +721,7 @@ job_dialog::on_disable(wxCommandEvent &evt) {
 }
 
 void
-job_dialog::on_view_log(wxCommandEvent &evt) {
+job_dialog::on_view_log(wxCommandEvent &) {
   wxString log;
   size_t i;
 
@@ -751,7 +751,7 @@ job_dialog::on_view_log(wxCommandEvent &evt) {
 }
 
 void
-job_dialog::on_item_selected(wxListEvent &evt) {
+job_dialog::on_item_selected(wxListEvent &) {
   enable_buttons(lv_jobs->GetSelectedItemCount() > 0,
                  lv_jobs->GetSelectedItemCount() < lv_jobs->GetItemCount());
 }

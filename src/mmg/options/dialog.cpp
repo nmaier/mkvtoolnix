@@ -75,7 +75,7 @@ options_dialog::options_dialog(wxWindow *parent,
 }
 
 void
-options_dialog::on_ok(wxCommandEvent &evt) {
+options_dialog::on_ok(wxCommandEvent &) {
   unsigned int idx;
   for (idx = 0; tabs.size() > idx; ++idx) {
     if (!tabs[idx]->validate_choices()) {

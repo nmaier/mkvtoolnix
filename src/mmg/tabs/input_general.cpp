@@ -235,7 +235,7 @@ tab_input_general::set_track_mode(mmg_track_t *t) {
 }
 
 void
-tab_input_general::on_default_track_selected(wxCommandEvent &evt) {
+tab_input_general::on_default_track_selected(wxCommandEvent &) {
   mmg_track_t *t;
 
   if (input->dont_copy_values_now || (input->selected_track == -1))
@@ -252,7 +252,7 @@ tab_input_general::on_default_track_selected(wxCommandEvent &evt) {
 }
 
 void
-tab_input_general::on_forced_track_selected(wxCommandEvent &evt) {
+tab_input_general::on_forced_track_selected(wxCommandEvent &) {
   if (input->dont_copy_values_now || (-1 == input->selected_track))
     return;
 
@@ -260,7 +260,7 @@ tab_input_general::on_forced_track_selected(wxCommandEvent &evt) {
 }
 
 void
-tab_input_general::on_language_selected(wxCommandEvent &evt) {
+tab_input_general::on_language_selected(wxCommandEvent &) {
   if (input->dont_copy_values_now || (input->selected_track == -1))
     return;
 
@@ -268,7 +268,7 @@ tab_input_general::on_language_selected(wxCommandEvent &evt) {
 }
 
 void
-tab_input_general::on_browse_tags(wxCommandEvent &evt) {
+tab_input_general::on_browse_tags(wxCommandEvent &) {
   if (input->selected_track == -1)
     return;
 
@@ -282,7 +282,7 @@ tab_input_general::on_browse_tags(wxCommandEvent &evt) {
 }
 
 void
-tab_input_general::on_browse_timecodes_clicked(wxCommandEvent &evt) {
+tab_input_general::on_browse_timecodes_clicked(wxCommandEvent &) {
   if (input->selected_track == -1)
     return;
 
@@ -296,7 +296,7 @@ tab_input_general::on_browse_timecodes_clicked(wxCommandEvent &evt) {
 }
 
 void
-tab_input_general::on_tags_changed(wxCommandEvent &evt) {
+tab_input_general::on_tags_changed(wxCommandEvent &) {
   if (input->dont_copy_values_now || (input->selected_track == -1))
     return;
 
@@ -304,7 +304,7 @@ tab_input_general::on_tags_changed(wxCommandEvent &evt) {
 }
 
 void
-tab_input_general::on_timecodes_changed(wxCommandEvent &evt) {
+tab_input_general::on_timecodes_changed(wxCommandEvent &) {
   if (input->dont_copy_values_now || (input->selected_track == -1))
     return;
 
@@ -312,7 +312,7 @@ tab_input_general::on_timecodes_changed(wxCommandEvent &evt) {
 }
 
 void
-tab_input_general::on_track_name_changed(wxCommandEvent &evt) {
+tab_input_general::on_track_name_changed(wxCommandEvent &) {
   if (input->dont_copy_values_now || (input->selected_track == -1))
     return;
 

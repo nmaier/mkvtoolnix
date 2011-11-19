@@ -395,7 +395,7 @@ vc1::es_parser_c::handle_packet(memory_cptr packet) {
 }
 
 void
-vc1::es_parser_c::handle_end_of_sequence_packet(memory_cptr packet) {
+vc1::es_parser_c::handle_end_of_sequence_packet(memory_cptr) {
 }
 
 void
@@ -458,7 +458,7 @@ vc1::es_parser_c::handle_slice_packet(memory_cptr packet) {
 }
 
 void
-vc1::es_parser_c::handle_unknown_packet(uint32_t marker,
+vc1::es_parser_c::handle_unknown_packet(uint32_t,
                                         memory_cptr packet) {
   add_post_frame_extra_data(packet);
 }

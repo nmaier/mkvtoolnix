@@ -128,15 +128,15 @@ xio_close(int fd) {
 }
 
 int
-xio_stat(const char *file_name,
-         struct stat *buf) {
+xio_stat(const char *,
+         struct stat *) {
   // Not implemented for mkvtoolnix.
   return -1;
 }
 
 int
-xio_lstat(const char *file_name,
-          struct stat *buf) {
+xio_lstat(const char *,
+          struct stat *) {
   // Not implemented for mkvtoolnix.
   return -1;
 }
@@ -148,8 +148,8 @@ xio_rename(const char *oldpath,
 }
 
 int
-xio_fstat(int fd,
-          struct stat *buf) {
+xio_fstat(int,
+          struct stat *) {
   // Not implemented for mkvtoolnix.
   return -1;
 }

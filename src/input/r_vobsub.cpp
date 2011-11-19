@@ -43,7 +43,7 @@ vobsub_entry_c::operator < (const vobsub_entry_c &cmp) const {
 
 int
 vobsub_reader_c::probe_file(mm_io_c *in,
-                            uint64_t size) {
+                            uint64_t) {
   char chunk[80];
 
   try {
@@ -616,7 +616,7 @@ vobsub_reader_c::extract_one_spu_packet(int64_t track_id) {
 
 file_status_e
 vobsub_reader_c::read(generic_packetizer_c *ptzr,
-                      bool force) {
+                      bool) {
   vobsub_track_c *track = NULL;
   uint32_t id;
 

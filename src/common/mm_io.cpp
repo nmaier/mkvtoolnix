@@ -788,7 +788,7 @@ mm_null_io_c::_read(void *buffer,
 }
 
 size_t
-mm_null_io_c::_write(const void *buffer,
+mm_null_io_c::_write(const void *,
                      size_t size) {
   m_pos += size;
 

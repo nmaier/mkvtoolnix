@@ -263,7 +263,7 @@ operator<<(std::ostream &str,
 */
 #if defined(SYS_UNIX) || defined(COMP_CYGWIN) || defined(SYS_APPLE)
 void
-sighandler(int signum) {
+sighandler(int /* signum */) {
   if (!s_out.is_set())
     mxerror(Y("mkvmerge was interrupted by a SIGINT (Ctrl+C?)\n"));
 

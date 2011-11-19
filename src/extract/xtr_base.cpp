@@ -76,14 +76,14 @@ xtr_base_c::create_file(xtr_base_c *master,
 
 void
 xtr_base_c::handle_frame(memory_cptr &frame,
-                         KaxBlockAdditions *additions,
-                         int64_t timecode,
-                         int64_t duration,
-                         int64_t bref,
-                         int64_t fref,
-                         bool keyframe,
-                         bool discardable,
-                         bool references_valid) {
+                         KaxBlockAdditions *,
+                         int64_t,
+                         int64_t,
+                         int64_t,
+                         int64_t,
+                         bool,
+                         bool,
+                         bool) {
   m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
   m_out->write(frame);
   m_bytes_written += frame->get_size();

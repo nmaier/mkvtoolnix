@@ -117,8 +117,8 @@ mm_multi_file_io_c::_read(void *buffer,
 }
 
 size_t
-mm_multi_file_io_c::_write(const void *buffer,
-                           size_t size) {
+mm_multi_file_io_c::_write(const void *,
+                           size_t) {
   throw mtx::mm_io::wrong_read_write_access_x();
 }
 

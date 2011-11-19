@@ -109,19 +109,19 @@ xtr_oggbase_c::create_standard_file(xtr_base_c *master,
 }
 
 void
-xtr_oggbase_c::header_packets_unlaced(std::vector<memory_cptr> &header_packets) {
+xtr_oggbase_c::header_packets_unlaced(std::vector<memory_cptr> &) {
 }
 
 void
 xtr_oggbase_c::handle_frame(memory_cptr &frame,
-                            KaxBlockAdditions *additions,
+                            KaxBlockAdditions *,
                             int64_t timecode,
                             int64_t duration,
-                            int64_t bref,
-                            int64_t fref,
-                            bool keyframe,
-                            bool discardable,
-                            bool references_valid) {
+                            int64_t,
+                            int64_t,
+                            bool,
+                            bool,
+                            bool) {
   m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
 
   if (-1 != m_queued_granulepos)
@@ -244,14 +244,14 @@ xtr_oggvorbis_c::header_packets_unlaced(std::vector<memory_cptr> &header_packets
 
 void
 xtr_oggvorbis_c::handle_frame(memory_cptr &frame,
-                              KaxBlockAdditions *additions,
-                              int64_t timecode,
-                              int64_t duration,
-                              int64_t bref,
-                              int64_t fref,
-                              bool keyframe,
-                              bool discardable,
-                              bool references_valid) {
+                              KaxBlockAdditions *,
+                              int64_t,
+                              int64_t,
+                              int64_t,
+                              int64_t,
+                              bool,
+                              bool,
+                              bool) {
   m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
 
   ogg_packet op;
@@ -294,14 +294,14 @@ xtr_oggkate_c::header_packets_unlaced(std::vector<memory_cptr> &header_packets) 
 
 void
 xtr_oggkate_c::handle_frame(memory_cptr &frame,
-                            KaxBlockAdditions *additions,
+                            KaxBlockAdditions *,
                             int64_t timecode,
-                            int64_t duration,
-                            int64_t bref,
-                            int64_t fref,
-                            bool keyframe,
-                            bool discardable,
-                            bool references_valid) {
+                            int64_t,
+                            int64_t,
+                            int64_t,
+                            bool,
+                            bool,
+                            bool) {
   m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
 
   ogg_packet op;
@@ -355,18 +355,17 @@ xtr_oggtheora_c::header_packets_unlaced(std::vector<memory_cptr> &header_packets
 
 void
 xtr_oggtheora_c::handle_frame(memory_cptr &frame,
-                              KaxBlockAdditions *additions,
-                              int64_t timecode,
-                              int64_t duration,
-                              int64_t bref,
-                              int64_t fref,
-                              bool keyframe,
-                              bool discardable,
-                              bool references_valid) {
+                              KaxBlockAdditions *,
+                              int64_t,
+                              int64_t,
+                              int64_t,
+                              int64_t,
+                              bool,
+                              bool,
+                              bool) {
   m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
 
   if (frame->get_size() && (0x00 == (frame->get_buffer()[0] & 0x40))) {
-    keyframe               = true;
     m_keyframe_number     += m_non_keyframe_number + 1;
     m_non_keyframe_number  = 0;
 

@@ -253,12 +253,12 @@ mux_dialog::update_remaining_time() {
 }
 
 void
-mux_dialog::on_ok(wxCommandEvent &evt) {
+mux_dialog::on_ok(wxCommandEvent &) {
   Close(true);
 }
 
 void
-mux_dialog::on_save_log(wxCommandEvent &evt) {
+mux_dialog::on_save_log(wxCommandEvent &) {
   wxFile *file;
   wxString s;
   wxFileDialog dlg(NULL, Z("Choose an output file"), last_open_dir, wxEmptyString, wxString::Format(Z("Log files (*.txt)|*.txt|%s"), ALLFILES.c_str()), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
@@ -275,7 +275,7 @@ mux_dialog::on_save_log(wxCommandEvent &evt) {
 }
 
 void
-mux_dialog::on_abort(wxCommandEvent &evt) {
+mux_dialog::on_abort(wxCommandEvent &) {
 #if defined(SYS_WINDOWS)
   if (0 == pid) {
     wxFileName output_file_name(static_cast<mmg_dialog *>(GetParent())->tc_output->GetValue());
@@ -295,14 +295,14 @@ mux_dialog::on_abort(wxCommandEvent &evt) {
 }
 
 void
-mux_dialog::on_close(wxCloseEvent &evt) {
+mux_dialog::on_close(wxCloseEvent &) {
   mdlg->muxing_has_finished(m_exit_code);
   delete m_window_disabler;
   Destroy();
 }
 
 void
-mux_dialog::done(int status) {
+mux_dialog::done(int) {
   SetTitle(Z("mkvmerge has finished"));
   st_remaining_time_label->SetLabel(wxEmptyString);
   st_remaining_time->SetLabel(wxEmptyString);
@@ -339,7 +339,7 @@ mux_process::mux_process(mux_dialog *mux_dlg):
 }
 
 void
-mux_process::OnTerminate(int terminated_pid,
+mux_process::OnTerminate(int,
                          int status) {
   if (NULL == dlg)
     return;

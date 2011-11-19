@@ -108,7 +108,7 @@ bitvalue_c::operator ==(const bitvalue_c &cmp)
 unsigned char
 bitvalue_c::operator [](size_t index)
   const {
-  assert((0 <= index) && (m_value->get_size() > index));
+  assert(m_value->get_size() > index);
   return m_value->get_buffer()[index];
 }
 

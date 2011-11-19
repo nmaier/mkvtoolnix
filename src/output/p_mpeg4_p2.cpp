@@ -223,7 +223,7 @@ mpeg4_p2_video_packetizer_c::fix_codec_string() {
 }
 
 int
-mpeg4_p2_video_packetizer_c::process_native(packet_cptr packet) {
+mpeg4_p2_video_packetizer_c::process_native(packet_cptr) {
   // Not implemented yet.
   return FILE_STATUS_MOREDATA;
 }

@@ -249,7 +249,7 @@ optdlg_mmg_tab::optdlg_mmg_tab(wxWindow *parent,
 }
 
 void
-optdlg_mmg_tab::on_browse_output_directory(wxCommandEvent &evt) {
+optdlg_mmg_tab::on_browse_output_directory(wxCommandEvent &) {
   wxDirDialog dlg(this, Z("Choose the output directory"), tc_output_directory->GetValue());
 
   if (dlg.ShowModal() == wxID_OK)
@@ -257,7 +257,7 @@ optdlg_mmg_tab::on_browse_output_directory(wxCommandEvent &evt) {
 }
 
 void
-optdlg_mmg_tab::on_autoset_output_filename_selected(wxCommandEvent &evt) {
+optdlg_mmg_tab::on_autoset_output_filename_selected(wxCommandEvent &) {
   enable_output_filename_controls(cb_autoset_output_filename->IsChecked());
 }
 

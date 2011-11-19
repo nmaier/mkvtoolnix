@@ -66,12 +66,11 @@ bool probe_xml_chapters(mm_text_io_c *in);
 KaxChapters *parse_xml_chapters(mm_text_io_c *in, int64_t min_tc, int64_t max_tc, int64_t offset, bool exception_on_error = false);
 
 bool probe_simple_chapters(mm_text_io_c *in);
-KaxChapters *parse_simple_chapters(mm_text_io_c *in, int64_t min_tc, int64_t max_tc, int64_t offset, const std::string &language, const std::string &charset, bool exception_on_error = false);
+KaxChapters *parse_simple_chapters(mm_text_io_c *in, int64_t min_tc, int64_t max_tc, int64_t offset, const std::string &language, const std::string &charset);
 
 extern std::string g_cue_to_chapter_name_format;
 bool probe_cue_chapters(mm_text_io_c *in);
-KaxChapters *parse_cue_chapters(mm_text_io_c *in, int64_t min_tc, int64_t max_tc, int64_t offset, const std::string &language, const std::string &charset,
-                                            bool exception_on_error = false, KaxTags **tags = NULL);
+KaxChapters *parse_cue_chapters(mm_text_io_c *in, int64_t min_tc, int64_t max_tc, int64_t offset, const std::string &language, const std::string &charset, KaxTags **tags = NULL);
 
 void write_chapters_xml(KaxChapters *chapters, mm_io_c *out);
 void write_chapters_simple(int &chapter_num, KaxChapters *chapters, mm_io_c *out);

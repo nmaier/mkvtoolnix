@@ -22,7 +22,7 @@
 
 int
 wavpack_reader_c::probe_file(mm_io_c *in,
-                             uint64_t size) {
+                             uint64_t) {
   wavpack_header_t header;
 
   try {
@@ -105,8 +105,8 @@ wavpack_reader_c::create_packetizer(int64_t) {
 }
 
 file_status_e
-wavpack_reader_c::read(generic_packetizer_c *ptzr,
-                       bool force) {
+wavpack_reader_c::read(generic_packetizer_c *,
+                       bool) {
   wavpack_header_t dummy_header, dummy_header_correc;
   wavpack_meta_t dummy_meta;
   uint64_t initial_position = m_in->getFilePointer();

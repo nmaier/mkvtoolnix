@@ -36,7 +36,7 @@ xtr_tta_c::xtr_tta_c(const std::string &codec_id,
 }
 
 void
-xtr_tta_c::create_file(xtr_base_c *master,
+xtr_tta_c::create_file(xtr_base_c *,
                        KaxTrackEntry &track) {
   try {
     m_out = mm_write_cache_io_c::open(m_temp_file_name, 5 * 1024 * 1024);
@@ -51,14 +51,14 @@ xtr_tta_c::create_file(xtr_base_c *master,
 
 void
 xtr_tta_c::handle_frame(memory_cptr &frame,
-                        KaxBlockAdditions *additions,
-                        int64_t timecode,
+                        KaxBlockAdditions *,
+                        int64_t,
                         int64_t duration,
-                        int64_t bref,
-                        int64_t fref,
-                        bool keyframe,
-                        bool discardable,
-                        bool references_valid) {
+                        int64_t,
+                        int64_t,
+                        bool,
+                        bool,
+                        bool) {
   m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
 
   m_frame_sizes.push_back(frame->get_size());

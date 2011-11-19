@@ -177,7 +177,7 @@ he_value_page_c::translate_ui() {
 }
 
 void
-he_value_page_c::on_reset_clicked(wxCommandEvent &evt) {
+he_value_page_c::on_reset_clicked(wxCommandEvent &) {
   reset_value();
   m_cb_add_or_remove->SetValue(false);
   m_input->Enable(m_present);

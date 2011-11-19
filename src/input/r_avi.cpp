@@ -837,7 +837,7 @@ avi_reader_c::read_subtitles(avi_subs_demuxer_t &demuxer) {
 
 file_status_e
 avi_reader_c::read(generic_packetizer_c *ptzr,
-                   bool force) {
+                   bool) {
   if ((-1 != m_vptzr) && (PTZR(m_vptzr) == ptzr))
     return read_video();
 

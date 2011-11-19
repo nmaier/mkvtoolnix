@@ -57,8 +57,7 @@ ac3_packetizer_c::add_to_buffer(unsigned char *buf,
 }
 
 unsigned char *
-ac3_packetizer_c::get_ac3_packet(unsigned long *header,
-                                 ac3_header_t *ac3header) {
+ac3_packetizer_c::get_ac3_packet(ac3_header_t *ac3header) {
   unsigned char *packet_buffer = m_byte_buffer.get_buffer();
   size_t size                  = m_byte_buffer.get_size();
 
@@ -127,11 +126,10 @@ ac3_packetizer_c::set_headers() {
 int
 ac3_packetizer_c::process(packet_cptr packet) {
   unsigned char *ac3_packet;
-  unsigned long header;
   ac3_header_t ac3header;
 
   add_to_buffer(packet->data->get_buffer(), packet->data->get_size());
-  while ((ac3_packet = get_ac3_packet(&header, &ac3header)) != NULL) {
+  while ((ac3_packet = get_ac3_packet(&ac3header)) != NULL) {
     adjust_header_values(ac3header);
 
     int64_t new_timecode;

@@ -333,7 +333,7 @@ mmg_dialog::translate_ui() {
 }
 
 void
-mmg_dialog::on_browse_output(wxCommandEvent &evt) {
+mmg_dialog::on_browse_output(wxCommandEvent &) {
   wxFileDialog dlg(NULL, Z("Choose an output file"), last_open_dir,
                    tc_output->GetValue().AfterLast(PSEP),
                    wxString::Format(Z("Matroska A/V files (*.mka;*.mkv;*.mk3d)|*.mkv;*.mka;*.mk3d|%s"), ALLFILES.c_str()),
@@ -354,12 +354,12 @@ mmg_dialog::set_status_bar(wxString text) {
 }
 
 void
-mmg_dialog::on_clear_status_bar(wxTimerEvent &evt) {
+mmg_dialog::on_clear_status_bar(wxTimerEvent &) {
   status_bar->SetStatusText(wxEmptyString);
 }
 
 void
-mmg_dialog::on_quit(wxCommandEvent &evt) {
+mmg_dialog::on_quit(wxCommandEvent &) {
   Close(true);
 }
 
@@ -383,7 +383,7 @@ mmg_dialog::on_file_new(wxCommandEvent &evt) {
 }
 
 void
-mmg_dialog::on_file_load(wxCommandEvent &evt) {
+mmg_dialog::on_file_load(wxCommandEvent &) {
   wxFileDialog dlg(NULL, Z("Choose an input file"), last_open_dir, wxEmptyString, wxString::Format(Z("mkvmerge GUI settings (*.mmg)|*.mmg|%s"), ALLFILES.c_str()), wxFD_OPEN);
   if(dlg.ShowModal() != wxID_OK)
     return;
@@ -429,7 +429,7 @@ mmg_dialog::load(wxString file_name,
 }
 
 void
-mmg_dialog::on_file_save(wxCommandEvent &evt) {
+mmg_dialog::on_file_save(wxCommandEvent &) {
   wxFileDialog dlg(NULL, Z("Choose an output file"), last_open_dir, wxEmptyString, wxString::Format(Z("mkvmerge GUI settings (*.mmg)|*.mmg|%s"), ALLFILES.c_str()), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
   if(dlg.ShowModal() != wxID_OK)
     return;
@@ -575,7 +575,7 @@ mmg_dialog::is_output_file_name_valid() {
 }
 
 void
-mmg_dialog::on_run(wxCommandEvent &evt) {
+mmg_dialog::on_run(wxCommandEvent &) {
   if (muxing_in_progress) {
     wxMessageBox(Z("Another muxing job in still in progress. Please wait until it has finished or abort it manually before starting a new one."),
                  Z("Cannot start second muxing job"), wxOK | wxCENTER | wxICON_ERROR);
@@ -633,7 +633,7 @@ mmg_dialog::muxing_has_finished(int exit_code) {
 }
 
 void
-mmg_dialog::on_help(wxCommandEvent &evt) {
+mmg_dialog::on_help(wxCommandEvent &) {
   display_help(notebook->GetCurrentPage() == chapter_editor_page ? HELP_ID_CHAPTER_EDITOR : HELP_ID_CONTENTS);
 }
 
@@ -713,7 +713,7 @@ mmg_dialog::display_help(int id) {
 }
 
 void
-mmg_dialog::on_about(wxCommandEvent &evt) {
+mmg_dialog::on_about(wxCommandEvent &) {
   wxAboutDialogInfo info;
   info.SetName(wxU("mkvmerge GUI"));
   info.SetVersion(wxU(get_version_info("")));
@@ -727,7 +727,7 @@ mmg_dialog::on_about(wxCommandEvent &evt) {
 }
 
 void
-mmg_dialog::on_show_cmdline(wxCommandEvent &evt) {
+mmg_dialog::on_show_cmdline(wxCommandEvent &) {
   update_command_line();
 
   show_text_dlg dlg(this, Z("Current command line"), cmdline);
@@ -735,7 +735,7 @@ mmg_dialog::on_show_cmdline(wxCommandEvent &evt) {
 }
 
 void
-mmg_dialog::on_save_cmdline(wxCommandEvent &evt) {
+mmg_dialog::on_save_cmdline(wxCommandEvent &) {
   wxFile *file;
   wxString s;
   wxFileDialog dlg(NULL, Z("Choose an output file"), last_open_dir, wxEmptyString, ALLFILES, wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
@@ -753,7 +753,7 @@ mmg_dialog::on_save_cmdline(wxCommandEvent &evt) {
 }
 
 void
-mmg_dialog::on_create_optionfile(wxCommandEvent &evt) {
+mmg_dialog::on_create_optionfile(wxCommandEvent &) {
   const unsigned char utf8_bom[3] = {0xef, 0xbb, 0xbf};
   uint32_t i;
   std::string arg_utf8;
@@ -785,7 +785,7 @@ mmg_dialog::on_create_optionfile(wxCommandEvent &evt) {
 }
 
 void
-mmg_dialog::on_copy_to_clipboard(wxCommandEvent &evt) {
+mmg_dialog::on_copy_to_clipboard(wxCommandEvent &) {
   update_command_line();
   if (wxTheClipboard->Open()) {
     wxTheClipboard->SetData(new wxTextDataObject(cmdline));
@@ -806,7 +806,7 @@ mmg_dialog::get_command_line_args() {
 }
 
 void
-mmg_dialog::on_update_command_line(wxTimerEvent &evt) {
+mmg_dialog::on_update_command_line(wxTimerEvent &) {
   update_command_line();
 }
 
@@ -1369,7 +1369,7 @@ mmg_dialog::remove_output_filename() {
 }
 
 void
-mmg_dialog::on_add_to_jobqueue(wxCommandEvent &evt) {
+mmg_dialog::on_add_to_jobqueue(wxCommandEvent &) {
   wxString description, line;
   job_t job;
   size_t i;
@@ -1442,7 +1442,7 @@ mmg_dialog::on_add_to_jobqueue(wxCommandEvent &evt) {
 }
 
 void
-mmg_dialog::on_manage_jobs(wxCommandEvent &evt) {
+mmg_dialog::on_manage_jobs(wxCommandEvent &) {
   set_on_top(false);
   job_dialog jdlg(this);
   restore_on_top();
@@ -1619,7 +1619,7 @@ mmg_dialog::remember_previous_output_directory() {
 }
 
 void
-mmg_dialog::on_add_cli_options(wxCommandEvent &evt) {
+mmg_dialog::on_add_cli_options(wxCommandEvent &) {
   cli_options_dlg dlg(this);
 
   if (dlg.go(cli_options))
@@ -1627,7 +1627,7 @@ mmg_dialog::on_add_cli_options(wxCommandEvent &evt) {
 }
 
 void
-mmg_dialog::on_close(wxCloseEvent &evt) {
+mmg_dialog::on_close(wxCloseEvent &) {
   save_preferences();
   Destroy();
 }
@@ -1657,7 +1657,7 @@ mmg_dialog::restore_on_top() {
 }
 
 void
-mmg_dialog::on_file_options(wxCommandEvent &evt) {
+mmg_dialog::on_file_options(wxCommandEvent &) {
   options_dialog dlg(this, options);
 
   if (dlg.ShowModal() != wxID_OK)
@@ -1669,7 +1669,7 @@ mmg_dialog::on_file_options(wxCommandEvent &evt) {
 }
 
 void
-mmg_dialog::on_run_header_editor(wxCommandEvent &evt) {
+mmg_dialog::on_run_header_editor(wxCommandEvent &) {
   create_header_editor_window();
 }
 
@@ -1703,7 +1703,7 @@ mmg_dialog::maybe_check_for_updates() {
 }
 
 void
-mmg_dialog::on_check_for_updates(wxCommandEvent &evt) {
+mmg_dialog::on_check_for_updates(wxCommandEvent &) {
   check_for_updates(true);
 }
 

@@ -105,7 +105,7 @@ mpeg_es_reader_c::probe_file(mm_io_c *in,
     // Let's try to read one frame.
     M2VParser parser;
     parser.SetProbeMode();
-    if (!read_frame(parser, *in, READ_SIZE, true))
+    if (!read_frame(parser, *in, READ_SIZE))
       return 0;
 
   } catch (...) {
@@ -199,8 +199,7 @@ mpeg_es_reader_c::read(generic_packetizer_c *,
 bool
 mpeg_es_reader_c::read_frame(M2VParser &parser,
                              mm_io_c &in,
-                             int64_t max_size,
-                             bool flush) {
+                             int64_t max_size) {
   int bytes_probed;
 
   bytes_probed = 0;

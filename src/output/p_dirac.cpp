@@ -116,7 +116,7 @@ dirac_video_packetizer_c::flush_frames() {
 
 connection_result_e
 dirac_video_packetizer_c::can_connect_to(generic_packetizer_c *src,
-                                         std::string &error_message) {
+                                         std::string &) {
   dirac_video_packetizer_c *vsrc = dynamic_cast<dirac_video_packetizer_c *>(src);
   if (vsrc == NULL)
     return CAN_CONNECT_NO_FORMAT;

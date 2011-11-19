@@ -897,7 +897,7 @@ ogm_demuxer_c::get_duration_and_len(ogg_packet &op,
 }
 
 void
-ogm_demuxer_c::process_page(int64_t granulepos) {
+ogm_demuxer_c::process_page(int64_t /* granulepos */) {
   ogg_packet op;
 
   while (ogg_stream_packetout(&os, &op) == 1) {
@@ -1065,7 +1065,7 @@ ogm_a_vorbis_demuxer_c::create_packetizer() {
 }
 
 void
-ogm_a_vorbis_demuxer_c::process_page(int64_t granulepos) {
+ogm_a_vorbis_demuxer_c::process_page(int64_t /* granulepos */) {
   ogg_packet op;
 
   while (ogg_stream_packetout(&os, &op) == 1) {
@@ -1513,7 +1513,7 @@ ogm_s_kate_demuxer_c::create_packetizer() {
 }
 
 void
-ogm_s_kate_demuxer_c::process_page(int64_t granulepos) {
+ogm_s_kate_demuxer_c::process_page(int64_t /* granulepos */) {
   ogg_packet op;
 
   while (ogg_stream_packetout(&os, &op) == 1) {

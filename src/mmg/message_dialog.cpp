@@ -50,7 +50,7 @@ message_dialog::~message_dialog() {
 }
 
 void
-message_dialog::on_ok(wxCommandEvent &evt) {
+message_dialog::on_ok(wxCommandEvent &) {
   EndModal(wxOK);
 }
 

@@ -115,8 +115,7 @@ timecode_factory_v1_c::parse(mm_io_c &in) {
       continue;
     }
 
-    if ((t.fps <= 0) || (t.start_frame < 0) || (t.end_frame < 0) ||
-        (t.end_frame < t.start_frame)) {
+    if ((t.fps <= 0) || (t.end_frame < t.start_frame)) {
       mxwarn(boost::format(Y("Line %1% of the timecode file '%2%' contains inconsistent data (e.g. the start frame number is bigger than the end frame "
                              "number, or some values are smaller than zero).\n")) % line_no % m_file_name);
       continue;

@@ -1791,7 +1791,7 @@ kax_reader_c::create_packetizers() {
 
 mpeg4::p10::avc_es_parser_cptr
 kax_reader_c::parse_first_mpeg4_p10_frame(kax_track_t *t,
-                                          track_info_c &nti) {
+                                          track_info_c &) {
   try {
     read_first_frames(t, 5);
 

@@ -36,7 +36,7 @@ public:
   }
 
   virtual void start_element_cb(const char *name,
-                                const char **atts) {
+                                const char **) {
     if (m_root_element == "")
       m_root_element = name;
   }
