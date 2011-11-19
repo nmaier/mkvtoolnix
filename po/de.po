@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2011-11-19 14:43+0100\n"
+"PO-Revision-Date: 2011-11-19 14:45+0100\n"
 "Last-Translator: Moritz Bunkus <moritz@bunkus.org>\n"
 "Language-Team: German <moritz@bunkus.org>\n"
 "Language: de\n"
@@ -6351,7 +6351,7 @@ msgstr "Die gewählte Länge des NALU-Längenfeldes '%1%' ist zu klein. Versuche
 
 #: src/merge/mkvmerge.cpp:1559
 msgid "The closing parenthesis ')' are missing.\n"
-msgstr "Die schließende Klammer ')' fehlt."
+msgstr "Die schließende Klammer ')' fehlt.\n"
 
 #: src/merge/pr_generic.cpp:1208
 #, boost-format
@@ -9015,9 +9015,8 @@ msgid "video"
 msgstr "Video"
 
 #: src/input/r_vobsub.cpp:574
-#, fuzzy
-msgid "vobsub_reader: m_sub_file->read failure"
-msgstr "vobsub_reader: Fehler bei sub_file->read"
+msgid "vobsub_reader: sub file read failure"
+msgstr "vobsub_reader: Fehler beim Lesen der Sub-Datei"
 
 #: src/common/wavpack.cpp:158
 msgid "wavpack_reader: non-audio block found\n"

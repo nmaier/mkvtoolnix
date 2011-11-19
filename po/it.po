@@ -8860,8 +8860,9 @@ msgid "video"
 msgstr "video"
 
 #: src/input/r_vobsub.cpp:574
-msgid "vobsub_reader: m_sub_file->read failure"
-msgstr ""
+#, fuzzy
+msgid "vobsub_reader: sub file read failure"
+msgstr "vobsub_reader: Impossibile aprire il sub file"
 
 #: src/common/wavpack.cpp:158
 msgid "wavpack_reader: non-audio block found\n"
@@ -9179,9 +9180,6 @@ msgstr "sì"
 
 #~ msgid "vobsub_reader: Could not open the source file."
 #~ msgstr "vobsub_reader: Impossibile aprire il file sorgente."
-
-#~ msgid "vobsub_reader: Could not open the sub file"
-#~ msgstr "vobsub_reader: Impossibile aprire il sub file"
 
 #~ msgid "wav_reader: Could not open the source file."
 #~ msgstr "wav_reader: Impossibile aprire il file sorgente."
