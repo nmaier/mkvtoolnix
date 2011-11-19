@@ -53,6 +53,7 @@
 #include "common/iso639.h"
 #include "common/mm_io.h"
 #include "common/segmentinfo.h"
+#include "common/strings/formatting.h"
 #include "common/strings/parsing.h"
 #include "common/tags/tags.h"
 #include "common/tags/parser.h"
@@ -2244,12 +2245,7 @@ main(int argc,
   main_loop();
   finish_file(true);
 
-  int64_t duration = (get_current_time_millis() - start + 500) / 1000;
-
-  if (1 != duration)
-    mxinfo(boost::format(Y("Muxing took %1% seconds.\n")) % duration);
-  else
-    mxinfo(Y("Muxing took 1 second.\n"));
+  mxinfo(boost::format(Y("Muxing took %1%.\n")) % create_minutes_seconds_time_string((get_current_time_millis() - start + 500) / 1000, true));
 
   cleanup();
 
