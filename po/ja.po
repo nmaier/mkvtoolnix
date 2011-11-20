@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2011-11-07 19:48+0900\n"
+"PO-Revision-Date: 2011-11-20 17:25+0900\n"
 "Last-Translator: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "Language-Team: Japanese <boiled.sugar@gmail.com>\n"
 "Language: ja\n"
@@ -4616,9 +4616,9 @@ msgid "Muxing in progress."
 msgstr "MUXが進行中です。"
 
 #: src/merge/mkvmerge.cpp:2248
-#, fuzzy, boost-format
+#, boost-format
 msgid "Muxing took %1%.\n"
-msgstr "MUXに%1%秒かかりました。\n"
+msgstr "MUXに%1%かかりました。\n"
 
 #: src/mmg/tabs/input_format.cpp:237
 msgid "NALU size length:"
@@ -8929,9 +8929,8 @@ msgid "video"
 msgstr "ビデオ"
 
 #: src/input/r_vobsub.cpp:574
-#, fuzzy
 msgid "vobsub_reader: sub file read failure"
-msgstr "vobsub_reader: sub_file->readが失敗"
+msgstr "vobsub_reader: sub file readが失敗"
 
 #: src/common/wavpack.cpp:158
 msgid "wavpack_reader: non-audio block found\n"
@@ -9519,4 +9518,3 @@ msgstr "はい"
 
 #~ msgid "wrong usage: writing to read-only memory"
 #~ msgstr "間違った使用法：読み込み専用メモリへの書き込み"
-
