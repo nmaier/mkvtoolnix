@@ -6303,12 +6303,12 @@ msgstr ""
 
 #: src/merge/mkvmerge.cpp:1559
 msgid "The closing parenthesis ')' are missing.\n"
-msgstr "Mancano la parentesi chiuse ')'.\n"
+msgstr "Mancano le parentesi chiuse ')'.\n"
 
 #: src/merge/pr_generic.cpp:1208
 #, boost-format
 msgid "The codec type '%1%' cannot be used in a WebM compliant file.\n"
-msgstr ""
+msgstr "Il tipo di codec '%1%' non può essere usato in un file WebM compatibile.\n"
 
 #: src/output/p_avc.cpp:209
 #: src/output/p_kate.cpp:112
@@ -6317,21 +6317,21 @@ msgstr ""
 #: src/output/p_video.cpp:206
 #, boost-format
 msgid "The codec's private data does not match (lengths: %1% and %2%)."
-msgstr ""
+msgstr "I dati privati del codec non coincidono (lunghezze: %1% e %2%)."
 
 #: src/output/p_mpeg4_p10.cpp:103
 #, boost-format
 msgid "The codec's private data does not match. Both have the same length (%1%) but different content."
-msgstr ""
+msgstr "I dati privati del codec non coincidono. Entrambi hanno la stessa lunghezza (%1%) ma differente contenuto."
 
 #: src/input/r_wavpack.cpp:71
 msgid "The correction file header was not read correctly.\n"
-msgstr ""
+msgstr "L'intestazione del file di correzione non è stata letta correttamente.\n"
 
 #: src/mmg/options/chapters.cpp:121
 #, c-format, boost-format
 msgid "The country '%s' is not a valid ccTLD and cannot be selected."
-msgstr ""
+msgstr "La nazione '%s' non è un valido ccTLD e non può essere selezionata."
 
 #: src/merge/output_control.cpp:1473
 msgid "The cue entries (the index) are being written..."
@@ -6350,12 +6350,12 @@ msgstr ""
 #: src/input/r_usf.cpp:131
 #, boost-format
 msgid "The default language code '%1%' is not a valid ISO639-2 language code and will be ignored.\n"
-msgstr ""
+msgstr "Il codice lingua predefinito '%1%' non è un codice lingua ISO639-2 valido e sarà ignorato.\n"
 
 #: src/mmg/tabs/input.cpp:1307
 #, c-format, boost-format
 msgid "The delay setting for track nr. %s in file '%s' is invalid."
-msgstr ""
+msgstr "Il ritardo impostato per la traccia nr. %s nel file '%s' non è valido."
 
 #: src/merge/output_control.cpp:1217
 #: src/merge/output_control.cpp:1220
@@ -6387,6 +6387,8 @@ msgid ""
 "The dragged file '%s'\n"
 "is not a Matroska file."
 msgstr ""
+"Il file trascinato '%s'\n"
+"non è un file Matroska."
 
 #: src/mmg/tabs/global.cpp:240
 msgid "The duration after which a new output file is started. The time can be given either in the form HH:MM:SS.nnnnnnnnn or as the number of seconds followed by 's'. You may omit the number of hours 'HH' and the number of nanoseconds 'nnnnnnnnn'. If given then you may use up to nine digits after the decimal point. Examples: 01:00:00 (after one hour) or 1800s (after 1800 seconds)."
