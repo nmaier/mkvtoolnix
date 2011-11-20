@@ -1,6 +1,11 @@
 #!/usr/bin/env ruby
 
 require 'pp'
+require 'digest/sha1'
+
+$errors_to_ignore = {
+  "d2820b11" => true,
+}
 
 def read_entries file_name
   entries = Array.new
@@ -54,16 +59,21 @@ def process_file file_name
 
     next nil if missing.empty? && added.empty?
 
+    digest = Digest::SHA1.new.update(([ file_name.gsub(/.*\//, ''), entry[:id][-1] ] + added + missing).join(':')).hexdigest[0..7]
+    next nil if $errors_to_ignore[digest]
+
     { :line_number => entry[:line_number],
       :added       => added,
-      :missing     => missing }
+      :missing     => missing,
+      :digest      => digest
+    }
   end.compact
 
   errors.each do |error|
     messages = []
     messages << ("- " + error[:missing].join(' ')) if !error[:missing].empty?
     messages << ("+ " + error[:added  ].join(' ')) if !error[:added  ].empty?
-    puts "#{file_name}:#{error[:line_number]}: error: #{messages.join('; ')}"
+    puts "#{file_name}:#{error[:line_number]}: error: #{messages.join('; ')} (id: #{error[:digest]})"
   end
 end
 
