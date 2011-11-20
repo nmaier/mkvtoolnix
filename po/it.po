@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: it\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2011-11-10 11:00+0100\n"
+"PO-Revision-Date: 2011-11-20 12:00+0100\n"
 "Last-Translator: Stefano Codari <l.stickell@yahoo.it>\n"
 "Language-Team: Italian <moritz@bunkus.org>\n"
 "Language: it\n"
@@ -4631,9 +4631,9 @@ msgid "Muxing in progress."
 msgstr "Muxing in corso."
 
 #: src/merge/mkvmerge.cpp:2248
-#, fuzzy, boost-format
+#, boost-format
 msgid "Muxing took %1%.\n"
-msgstr "Il muxing ha richiesto %1% secondi.\n"
+msgstr "Il muxing ha richiesto %1%.\n"
 
 #: src/mmg/tabs/input_format.cpp:237
 msgid "NALU size length:"
@@ -6303,7 +6303,7 @@ msgstr ""
 
 #: src/merge/mkvmerge.cpp:1559
 msgid "The closing parenthesis ')' are missing.\n"
-msgstr ""
+msgstr "Mancano la parentesi chiuse ')'.\n"
 
 #: src/merge/pr_generic.cpp:1208
 #, boost-format
@@ -8847,11 +8847,11 @@ msgstr "su"
 #: src/common/strings/editing.cpp:210
 #, boost-format
 msgid "utf8_strlen(): Invalid UTF-8 char. First byte: 0x%|1$02x|"
-msgstr ""
+msgstr "utf8_strlen(): Carattere UTF-8 non valido. Primo byte: 0x%|1$02x|"
 
 #: src/mmg/tabs/chapters.cpp:841
 msgid "verify failed: chapters->CheckMandatory() is false. This should not have happened. Please file a bug report.\n"
-msgstr ""
+msgstr "verifica fallita: chapters->CheckMandatory() è falso. Questo non sarebbe dovuto succedere. Per favore compilare una segnalazione bug.\n"
 
 #: src/info/mkvinfo.cpp:1095
 #: src/input/r_matroska.cpp:95
@@ -8860,17 +8860,16 @@ msgid "video"
 msgstr "video"
 
 #: src/input/r_vobsub.cpp:574
-#, fuzzy
 msgid "vobsub_reader: sub file read failure"
-msgstr "vobsub_reader: Impossibile aprire il sub file"
+msgstr "vobsub_reader: lettura del file sottotitolo fallita"
 
 #: src/common/wavpack.cpp:158
 msgid "wavpack_reader: non-audio block found\n"
-msgstr ""
+msgstr "wavpack_reader: blocco non audio trovato\n"
 
 #: src/common/wavpack.cpp:126
 msgid "wavpack_reader: unknown sample rate!\n"
-msgstr ""
+msgstr "wavpack_reader: frequenza di campionamento sconosciuta!\n"
 
 #: src/mmg/header_editor/bool_value_page.cpp:44
 #: src/mmg/tabs/input_general.cpp:107
