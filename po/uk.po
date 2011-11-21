@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: mkvtoolnix_uk\n"
 "Report-Msgid-Bugs-To: Moritz Bunkus <moritz@bunkus.org>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2011-11-08 20:42+0200\n"
+"PO-Revision-Date: 2011-11-21 23:15+0200\n"
 "Last-Translator: Andriy Bilous'ko <arestarh@ukr.net>\n"
 "Language-Team: Ukrainian <moritz@bunkus.org>\n"
 "Language: uk\n"
@@ -4637,9 +4637,9 @@ msgid "Muxing in progress."
 msgstr "Мультиплексування в процесі."
 
 #: src/merge/mkvmerge.cpp:2248
-#, fuzzy, boost-format
+#, boost-format
 msgid "Muxing took %1%.\n"
-msgstr "Мультиплексування тривало %1% секунд.\n"
+msgstr "Мультиплексування тривало %1%.\n"
 
 #: src/mmg/tabs/input_format.cpp:237
 msgid "NALU size length:"
@@ -6333,7 +6333,7 @@ msgstr "Вибрана довжина поля розміру NALU %1% дуже 
 
 #: src/merge/mkvmerge.cpp:1559
 msgid "The closing parenthesis ')' are missing.\n"
-msgstr ""
+msgstr "Пропущено закриваючу дужку ')'.\n"
 
 #: src/merge/pr_generic.cpp:1208
 #, boost-format
@@ -8968,9 +8968,8 @@ msgid "video"
 msgstr "Відео"
 
 #: src/input/r_vobsub.cpp:574
-#, fuzzy
 msgid "vobsub_reader: sub file read failure"
-msgstr "vobsub_reader: збій sub_file->read"
+msgstr "vobsub_reader: збій читання файла sub"
 
 #: src/common/wavpack.cpp:158
 msgid "wavpack_reader: non-audio block found\n"
@@ -9621,4 +9620,3 @@ msgstr "Так"
 
 #~ msgid "wrong usage: writing to read-only memory"
 #~ msgstr "wrong usage: запис тільки до \"пам'яті для читання\""
-
