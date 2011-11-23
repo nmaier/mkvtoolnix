@@ -516,9 +516,11 @@ Application.new("src/mkvinfo").
   only_if(c?(:USE_QT)).
   sources("src/info/qt_ui.cpp", "src/info/qt_ui.moc.cpp", "src/info/rightclick_tree_widget.moc.cpp", $mkvinfo_ui_files).
   libraries(:qt).
+  end_if.
   only_if(!c?(:USE_QT) && c?(:USE_WXWIDGETS)).
   sources("src/info/wxwidgets_ui.cpp").
   libraries(:wxwidgets).
+  end_if.
   create
 
 #
