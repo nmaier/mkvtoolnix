@@ -302,7 +302,7 @@ mux_dialog::on_close(wxCloseEvent &) {
 }
 
 void
-mux_dialog::done(int) {
+mux_dialog::done(int status) {
   SetTitle(Z("mkvmerge has finished"));
   st_remaining_time_label->SetLabel(wxEmptyString);
   st_remaining_time->SetLabel(wxEmptyString);
@@ -318,6 +318,8 @@ mux_dialog::done(int) {
 #else  // SYS_WINDOWS
   b_abort->Enable(false);
 #endif  // SYS_WINDOWS
+
+  wxLogMessage(wxT("Muxing done, status: %d"), status);
 }
 
 #if defined(SYS_WINDOWS)
