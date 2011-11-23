@@ -161,6 +161,14 @@ rule '.o' => '.rc' do |t|
   runq " WINDRES #{t.source}", "#{c(:WINDRES)} #{$flags[:windres]} -Isrc/mmg -o #{t.name} #{t.sources.join(" ")}"
 end
 
+# Resources depend on the manifest.xml file for Windows builds.
+if c?(:MINGW)
+  $programs.each do |program|
+    path = program.gsub(/^mkv/, '')
+    file "src/#{path}/resources.o" => "src/#{path}/manifest.xml"
+  end
+end
+
 rule '.mo' => '.po' do |t|
   runq "  MSGFMT #{t.source}", "msgfmt -c -o #{t.name} #{t.sources.join(" ")}"
 end
