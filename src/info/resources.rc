@@ -1,6 +1,8 @@
 MATROSKAICON ICON  "../../share/icons/windows/mkvinfo.ico"
 
+#ifndef NOWXWIDGETS
 #include "wx/msw/wx.rc"
+#endif
 
 1 VERSIONINFO
  FILEVERSION 5, 0, 1, 0
