@@ -1,6 +1,7 @@
 MATROSKAICON ICON  "../../share/icons/windows/mkvinfo.ico"
 
 #ifndef NOWXWIDGETS
+#define wxUSE_NO_MANIFEST 1
 #include "wx/msw/wx.rc"
 #endif
 
@@ -29,3 +30,5 @@ BEGIN
     VALUE "Translation", 0x0409, 1252 // Englisch (USA)
   END
 END
+
+1 RT_MANIFEST "manifest.xml"

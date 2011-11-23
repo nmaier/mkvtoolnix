@@ -22,6 +22,8 @@
 # include "mmg/taskbar_progress.h"
 
 static UINT gs_msg_taskbar_button_created = 0;
+size_t mmg_dialog::ms_dpi_x               = 96;
+size_t mmg_dialog::ms_dpi_y               = 96;
 
 WXLRESULT
 mmg_dialog::MSWWindowProc(WXUINT msg,
@@ -42,6 +44,28 @@ mmg_dialog::RegisterWindowMessages() {
 
   gs_msg_taskbar_button_created = RegisterWindowMessage(wxT("TaskbarButtonCreated"));
   s_registered                  = true;
+}
+
+void
+mmg_dialog::init_dpi_settings() {
+  HDC hdc = GetDC(NULL);
+  if (!hdc)
+    return;
+
+  ms_dpi_x = GetDeviceCaps(hdc, LOGPIXELSX);
+  ms_dpi_y = GetDeviceCaps(hdc, LOGPIXELSY);
+  ReleaseDC(NULL, hdc);
+}
+
+size_t
+mmg_dialog::scale_with_dpi(size_t width_or_height,
+                           bool is_width) {
+  return width_or_height * (is_width ? ms_dpi_x : ms_dpi_y) / 96;
+}
+
+bool
+mmg_dialog::is_higher_dpi() {
+  return (96 != ms_dpi_x) || (96 != ms_dpi_y);
 }
 
 #endif  // SYS_WINDOWS

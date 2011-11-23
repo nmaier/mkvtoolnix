@@ -95,6 +95,10 @@ mmg_dialog::mmg_dialog()
   app->init_ui_locale();
 #endif
 
+#if defined(SYS_WINDOWS)
+  init_dpi_settings();
+#endif
+
   SetTitle(wxU(get_version_info("mkvmerge GUI")));
 
   log_window = new wxLogWindow(this, wxEmptyString, false);
@@ -151,8 +155,15 @@ mmg_dialog::mmg_dialog()
   bs_main->Add(bs_buttons, 0, wxALIGN_CENTER_HORIZONTAL);
 
 #ifdef SYS_WINDOWS
-  SetSizeHints(700, 680);
-  SetSize(700, 680);
+  wxSize size(700, 680);
+  wxLogMessage(wxT("dpi is %u/%u"), static_cast<unsigned int>(ms_dpi_x), static_cast<unsigned int>(ms_dpi_y));
+  if (is_higher_dpi()) {
+    size.SetWidth( size.GetWidth()  + scale_with_dpi((840 - 700) / 1.5, true));
+    size.SetHeight(size.GetHeight() + scale_with_dpi((850 - 680) / 1.5, false));
+  }
+
+  SetSizeHints(size);
+  SetSize(size);
 #else
   SetSizeHints(700, 660);
   SetSize(700, 660);
@@ -1865,6 +1876,24 @@ mmg_dialog::query_mkvmerge_capabilities() {
                  Z("Incompatible mkvmerge version"),
                  wxCENTER | wxOK | wxICON_ERROR);
 }
+
+wxSize
+mmg_dialog::scale_with_dpi(const wxSize &size) {
+  return wxSize(scale_with_dpi(size.GetWidth(), true), scale_with_dpi(size.GetHeight(), false));
+}
+
+#if !defined(SYS_WINDOWS)
+bool
+mmg_dialog::is_higher_dpi() {
+  return false;
+}
+
+size_t
+mmg_dialog::scale_with_dpi(size_t width_or_height,
+                           bool) {
+  return width_or_height;
+}
+#endif
 
 IMPLEMENT_CLASS(mmg_dialog, wxFrame);
 BEGIN_EVENT_TABLE(mmg_dialog, wxFrame)

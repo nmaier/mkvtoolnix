@@ -149,6 +149,11 @@ public:
   update_check_dlg_c *m_update_check_dlg;
 #endif  // defined(HAVE_CURL_EASY_H)
 
+#if defined(SYS_WINDOWS)
+public:
+  static size_t ms_dpi_x, ms_dpi_y;
+#endif
+
 public:
   mmg_dialog();
   virtual ~mmg_dialog();
@@ -248,10 +253,16 @@ public:
   wxString version_key_for_config();
 #endif  // defined(HAVE_CURL_EASY_H)
 
+public:
+  static size_t scale_with_dpi(size_t width_or_height, bool is_width = true);
+  static wxSize scale_with_dpi(const wxSize &size);
+  static bool is_higher_dpi();
+
 protected:
 #if defined(SYS_WINDOWS)
   virtual WXLRESULT MSWWindowProc(WXUINT msg, WXWPARAM wParam, WXLPARAM lParam);
   void RegisterWindowMessages();
+  void init_dpi_settings();
 #endif
 
   void set_menu_item_strings(int id, const wxString &title, const wxString &help_text = wxEmptyString);

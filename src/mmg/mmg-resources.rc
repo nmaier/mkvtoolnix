@@ -1,5 +1,6 @@
 MATROSKAICON ICON  "../../share/icons/windows/mkvmergeGUI.ico"
 
+#define wxUSE_NO_MANIFEST 1
 #include "wx/msw/wx.rc"
 
 1 VERSIONINFO
@@ -27,3 +28,5 @@ BEGIN
     VALUE "Translation", 0x0409, 1252 // Englisch (USA)
   END
 END
+
+1 RT_MANIFEST "manifest.xml"
