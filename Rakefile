@@ -558,7 +558,7 @@ if c?(:USE_WXWIDGETS)
     description("Build the mmg executable").
     aliases(:mmg).
     sources("src/mmg", "src/mmg/header_editor", "src/mmg/options", "src/mmg/tabs", :type => :dir).
-    sources("src/mmg/mmg-resources.o", :if => c?(:MINGW)).
+    sources("src/mmg/resources.o", :if => c?(:MINGW)).
     libraries(:mtxcommon, :magic, :matroska, :ebml, :avi, :rmff, :vorbis, :ogg, :z, :compression, :expat, :iconv, :intl, :wxwidgets, :curl,
                :boost_regex, :boost_filesystem, :boost_system).
     libraries(:ole32, :shell32, "-mwindows", :if => c?(:MINGW)).
