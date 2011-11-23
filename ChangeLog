@@ -1,5 +1,8 @@
 2011-11-24  Moritz Bunkus  <moritz@bunkus.org>
 
+	* all: enhancement: Made all EXEs declare their required access
+	level privileges for Windows' User Access Control.
+
 	* mmg: enhancement: Made mmg DPI-aware on Windows (tested up to
 	144 DPI).
 
