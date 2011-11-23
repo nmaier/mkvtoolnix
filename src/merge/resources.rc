@@ -20,4 +20,8 @@ BEGIN
       VALUE "ProductVersion", "5.0.1"
     END
   END
+  BLOCK "VarFileInfo"
+  BEGIN
+    VALUE "Translation", 0x0409, 1252 // Englisch (USA)
+  END
 END
