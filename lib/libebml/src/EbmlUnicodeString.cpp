@@ -30,7 +30,7 @@
 
 /*!
 	\file
-	\version \$Id: EbmlUnicodeString.cpp 647 2011-01-29 11:42:15Z mosub $
+	\version \$Id: EbmlUnicodeString.cpp 822 2011-11-25 21:01:45Z mosub $
 	\author Steve Lhomme     <robux4 @ users.sf.net>
 	\author Jory Stone       <jcsston @ toughguy.net>
 */

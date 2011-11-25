@@ -111,7 +111,7 @@
 #define EBML_PRETTYLONGINT(c) (c)
 #endif // __GNUC__
 
-#if __BORLANDC__ >= 0x0581 //Borland C++ Builder 2006 preview
+#if defined(__BORLANDC__) && __BORLANDC__ >= 0x0581 //Borland C++ Builder 2006 preview
    #include <stdlib.h>  //malloc(), free()
    #include <memory.h> //memcpy()
 #endif //__BORLANDC__

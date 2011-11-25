@@ -30,7 +30,7 @@
 
 /*!
 	\file
-	\version \$Id: EbmlMaster.cpp 796 2011-09-09 04:00:42Z robux4 $
+	\version \$Id: EbmlMaster.cpp 822 2011-11-25 21:01:45Z mosub $
 	\author Steve Lhomme     <robux4 @ users.sf.net>
 */
 

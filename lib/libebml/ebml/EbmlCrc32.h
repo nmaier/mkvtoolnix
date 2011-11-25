@@ -30,7 +30,7 @@
 
 /*!
 	\file
-	\version \$Id: EbmlCrc32.h 486 2010-08-08 11:16:14Z robux4 $
+	\version \$Id: EbmlCrc32.h 822 2011-11-25 21:01:45Z mosub $
 	\author Steve Lhomme     <robux4 @ users.sf.net>
 	\author Jory Stone       <jcsston @ toughguy.net>
 */
@@ -103,7 +103,7 @@ DECLARE_EBML_BINARY(EbmlCrc32)
 template <class T>
 inline unsigned int GetAlignment(T */* dummy */=NULL) // VC60 workaround
 {
-#if (_MSC_VER >= 1300)
+#if defined(_MSC_VER) && (_MSC_VER >= 1300)
 	return __alignof(T);
 #elif defined(__GNUC__)
 	return __alignof__(T);

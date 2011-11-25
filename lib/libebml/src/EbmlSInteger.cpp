@@ -28,7 +28,7 @@
 
 /*!
 	\file
-	\version \$Id: EbmlSInteger.cpp 347 2010-06-26 09:07:13Z robux4 $
+	\version \$Id: EbmlSInteger.cpp 822 2011-11-25 21:01:45Z mosub $
 	\author Steve Lhomme     <robux4 @ users.sf.net>
 	\author Moritz Bunkus <moritz @ bunkus.org>
 */

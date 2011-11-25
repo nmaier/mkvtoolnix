@@ -30,7 +30,7 @@
 
 /*!
 	\file
-	\version \$Id: EbmlVersion.h 803 2011-09-11 09:03:43Z mosub $
+	\version \$Id: EbmlVersion.h 821 2011-10-18 16:55:49Z robux4 $
 	\author Steve Lhomme     <robux4 @ users.sf.net>
 */
 #ifndef LIBEBML_VERSION_H
@@ -42,7 +42,7 @@
 
 START_LIBEBML_NAMESPACE
 
-#define LIBEBML_VERSION 0x010202
+#define LIBEBML_VERSION 0x010203
 
 extern const std::string EbmlCodeVersion;
 extern const std::string EbmlCodeDate;
