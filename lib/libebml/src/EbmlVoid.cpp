@@ -45,7 +45,7 @@ EbmlVoid::EbmlVoid()
 	SetValueIsSet();
 }
 
-filepos_t EbmlVoid::RenderData(IOCallback & output, bool bForceRender, bool bWithDefault)
+filepos_t EbmlVoid::RenderData(IOCallback & output, bool /* bForceRender */, bool /* bWithDefault */)
 {
 	// write dummy data by 4KB chunks
 	static binary DummyBuf[4*1024];

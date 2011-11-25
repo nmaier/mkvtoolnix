@@ -67,21 +67,21 @@ void EbmlFloat::SetDefaultValue(double aValue)
     SetDefaultIsSet();
 }
 
-const double EbmlFloat::DefaultVal() const
+double EbmlFloat::DefaultVal() const
 {
     assert(DefaultISset());
     return DefaultValue;
 }
 
-EbmlFloat::operator const float() const {return float(Value);}
-EbmlFloat::operator const double() const {return double(Value);}
+EbmlFloat::operator float() const {return float(Value);}
+EbmlFloat::operator double() const {return double(Value);}
 
 
 /*!
 	\todo handle exception on errors
 	\todo handle 10 bits precision
 */
-filepos_t EbmlFloat::RenderData(IOCallback & output, bool bForceRender, bool bWithDefault)
+filepos_t EbmlFloat::RenderData(IOCallback & output, bool /* bForceRender */, bool /* bWithDefault */)
 {
 	assert(GetSize() == 4 || GetSize() == 8);
 
@@ -102,7 +102,7 @@ filepos_t EbmlFloat::RenderData(IOCallback & output, bool bForceRender, bool bWi
 	return GetSize();
 }
 
-uint64 EbmlFloat::UpdateSize(bool bWithDefault, bool bForceRender)
+uint64 EbmlFloat::UpdateSize(bool bWithDefault, bool  /* bForceRender */)
 {
 	if (!bWithDefault && IsDefaultValue())
 		return 0;

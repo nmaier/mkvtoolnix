@@ -183,7 +183,7 @@ void UTFstring::UpdateFromUCS2()
 			Size++;
 		} else if (_Data[i] < 0x800) {
 			Size += 2;
-		} else if (_Data[i] < 0x10000) {
+		} else {
 			Size += 3;
 		}
 	}
@@ -195,7 +195,7 @@ void UTFstring::UpdateFromUCS2()
 		} else if (_Data[i] < 0x800) {
 			tmpStr[Size++] = 0xC0 | (_Data[i] >> 6);
 			tmpStr[Size++] = 0x80 | (_Data[i] & 0x3F);
-		} else if (_Data[i] < 0x10000) {
+		} else {
 			tmpStr[Size++] = 0xE0 | (_Data[i] >> 12);
 			tmpStr[Size++] = 0x80 | ((_Data[i] >> 6) & 0x3F);
 			tmpStr[Size++] = 0x80 | (_Data[i] & 0x3F);
@@ -256,7 +256,7 @@ const UTFstring & EbmlUnicodeString::DefaultVal() const
 \note limited to UCS-2
 \todo handle exception on errors
 */
-filepos_t EbmlUnicodeString::RenderData(IOCallback & output, bool bForceRender, bool bWithDefault)
+filepos_t EbmlUnicodeString::RenderData(IOCallback & output, bool /* bForceRender */, bool /* bWithDefault */)
 {
 	uint32 Result = Value.GetUTF8().length();
 
@@ -291,7 +291,7 @@ EbmlUnicodeString & EbmlUnicodeString::operator=(const UTFstring & NewString)
 /*!
 \note limited to UCS-2
 */
-uint64 EbmlUnicodeString::UpdateSize(bool bWithDefault, bool bForceRender)
+uint64 EbmlUnicodeString::UpdateSize(bool bWithDefault, bool /* bForceRender */)
 {
 	if (!bWithDefault && IsDefaultValue())
 		return 0;

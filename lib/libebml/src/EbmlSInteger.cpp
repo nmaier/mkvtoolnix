@@ -63,7 +63,7 @@ EbmlSInteger::operator int64() {return Value;}
 /*!
 	\todo handle exception on errors
 */
-filepos_t EbmlSInteger::RenderData(IOCallback & output, bool bForceRender, bool bWithDefault)
+filepos_t EbmlSInteger::RenderData(IOCallback & output, bool /* bForceRender */, bool /* bWithDefault */)
 {
 	binary FinalData[8]; // we don't handle more than 64 bits integers
 	unsigned int i;
@@ -82,7 +82,7 @@ filepos_t EbmlSInteger::RenderData(IOCallback & output, bool bForceRender, bool 
 	return GetSize();
 }
 
-uint64 EbmlSInteger::UpdateSize(bool bWithDefault, bool bForceRender)
+uint64 EbmlSInteger::UpdateSize(bool bWithDefault, bool /* bForceRender */)
 {
 	if (!bWithDefault && IsDefaultValue())
 		return 0;

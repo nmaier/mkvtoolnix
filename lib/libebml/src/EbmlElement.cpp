@@ -655,7 +655,7 @@ bool EbmlElement::CompareElements(const EbmlElement *A, const EbmlElement *B)
 		return false;
 }
 
-void EbmlElement::Read(EbmlStream & inDataStream, const EbmlSemanticContext & Context, int & UpperEltFound, EbmlElement * & FoundElt, bool AllowDummyElt, ScopeMode ReadFully)
+void EbmlElement::Read(EbmlStream & inDataStream, const EbmlSemanticContext & /* Context */, int & /* UpperEltFound */, EbmlElement * & /* FoundElt */, bool /* AllowDummyElt */, ScopeMode ReadFully)
 {
 	ReadData(inDataStream.I_O(), ReadFully);
 }

@@ -109,14 +109,14 @@ private:
 class EBML_DLL_API ADbg
 {
 public:
-	ADbg(int level = 0){}
+	ADbg(int /* level */ = 0){}
 	virtual ~ADbg() {}
 
-	inline int OutPut(int level, const char * format,...) const {
+	inline int OutPut(int /* level */, const char * /* format */,...) const {
 		return 0;
 	}
 
-	inline int OutPut(const char * format,...) const {
+	inline int OutPut(const char * /* format */,...) const {
 		return 0;
 	}
 
@@ -124,11 +124,11 @@ public:
 		return level;
 	}
 
-	inline bool setIncludeTime(const bool included = true) {
+	inline bool setIncludeTime(const bool /* included */ = true) {
 		return true;
 	}
 
-	inline bool setDebugFile(const char * NewFilename) {
+	inline bool setDebugFile(const char * /* NewFilename */) {
 		return true;
 	}
 
@@ -136,7 +136,7 @@ public:
 		return true;
 	}
 
-	inline bool setUseFile(const bool usefile = true) {
+	inline bool setUseFile(const bool /* usefile */ = true) {
 		return true;
 	}
 

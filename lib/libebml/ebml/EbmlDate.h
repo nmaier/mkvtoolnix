@@ -65,7 +65,7 @@ class EBML_DLL_API EbmlDate : public EbmlElement {
 		/*!
 			\note no Default date handled
 		*/
-		filepos_t UpdateSize(bool bWithDefault = false, bool bForceRender = false) {
+		filepos_t UpdateSize(bool /* bWithDefault = false */, bool /* bForceRender = false */) {
 			if(!ValueIsSet())
 				SetSize_(0);
 			else

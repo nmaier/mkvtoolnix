@@ -79,12 +79,12 @@ class EBML_DLL_API EbmlFloat : public EbmlElement {
 
 		virtual bool IsSmallerThan(const EbmlElement *Cmp) const;
 		
-		operator const float() const;
-		operator const double() const;
+		operator float() const;
+		operator double() const;
 
 		void SetDefaultValue(double);
     
-		const double DefaultVal() const;
+		double DefaultVal() const;
 
 		bool IsDefaultValue() const {
 			return (DefaultISset() && Value == DefaultValue);

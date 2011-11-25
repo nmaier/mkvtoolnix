@@ -87,7 +87,7 @@ const std::string & EbmlString::DefaultVal() const
 /*!
 	\todo handle exception on errors
 */
-filepos_t EbmlString::RenderData(IOCallback & output, bool bForceRender, bool bWithDefault)
+filepos_t EbmlString::RenderData(IOCallback & output, bool /* bForceRender */, bool /* bWithDefault */)
 {
 	filepos_t Result;
 	output.writeFully(Value.c_str(), Value.length());
@@ -122,7 +122,7 @@ EbmlString & EbmlString::operator=(const std::string & NewString)
 	return *this;
 }
 
-uint64 EbmlString::UpdateSize(bool bWithDefault, bool bForceRender)
+uint64 EbmlString::UpdateSize(bool bWithDefault, bool /* bForceRender */)
 {
 	if (!bWithDefault && IsDefaultValue())
 		return 0;
