@@ -455,6 +455,8 @@ mpeg_ts_reader_c::read_headers() {
   }
 
   parse_clip_info_file();
+
+  show_demuxer_info();
 }
 
 mpeg_ts_reader_c::~mpeg_ts_reader_c() {
