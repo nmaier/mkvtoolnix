@@ -52,18 +52,16 @@ int mpeg_ts_reader_c::potential_packet_sizes[] = { 188, 192, 204, 0 };
 
 void
 mpeg_ts_track_c::send_to_packetizer() {
-  if (timecode < reader.m_global_timecode_offset)
-    timecode = 0;
-  else
-    timecode = (uint64_t)(timecode - reader.m_global_timecode_offset) * 100000ll / 9;
+  int64_t timecode_to_use = (timecode < reader.m_global_timecode_offset) ? 0 : (timecode - reader.m_global_timecode_offset) * 100000ll / 9;
 
   if ((type == ES_AUDIO_TYPE) && reader.m_dont_use_audio_pts)
-    timecode = -1;
+    timecode_to_use = -1;
 
-  mxverb(3, boost::format("mpeg_ts: PTS in nanoseconds: %1%\n") % timecode);
+  mxverb(3, boost::format("mpeg_ts: PTS in nanoseconds: %1%\n") % timecode_to_use);
 
   if (ptzr != -1) {
-    int64_t timecode_to_use = m_apply_dts_timecode_fix && (m_previous_timecode == timecode) ? -1 : timecode;
+    if (m_apply_dts_timecode_fix && (m_previous_timecode == timecode))
+      timecode_to_use = -1;
     reader.m_reader_packetizers[ptzr]->process(new packet_t(clone_memory(pes_payload->get_buffer(), pes_payload->get_size()), timecode_to_use));
   }
 

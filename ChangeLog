@@ -1,3 +1,9 @@
+2011-11-26  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Fixed bogus huge timecodes sometimes
+	occurring for AVC/h.264 video tracks read from MPEG transport
+	streams.
+
 2011-11-24  Moritz Bunkus  <moritz@bunkus.org>
 
 	* all: enhancement: Made all EXEs declare their required access
