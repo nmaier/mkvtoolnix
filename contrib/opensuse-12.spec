@@ -10,7 +10,7 @@ BuildRequires: libmatroska >= 1.3.0
 
 Name:         mkvtoolnix
 URL:          http://www.bunkus.org/videotools/mkvtoolnix/
-Version: 5.0.1
+Version: 5.1.0
 Release: 1
 Summary:      tools to create, alter and inspect Matroska files
 License:      GPL
