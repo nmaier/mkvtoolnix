@@ -9,8 +9,6 @@ Group: Multimedia
 Source: %{name}-%{version}.tar.bz2
 BuildRoot: %{_tmppath}/%{name}-%{version}-tmproot
 BuildRequires: gcc-c++ gcc gcc-c++ make flac-devel libogg-devel libvorbis-devel wxGTK-devel >= 2.8 boost-devel file lzo-devel bzip2-devel zlib-devel expat-devel gettext-devel ruby libcurl-devel
-BuildRequires: libebml-devel >= 1.2.2
-BuildRequires: libmatroska-devel >= 1.3.0
 
 %description
 Matroska video utilities.

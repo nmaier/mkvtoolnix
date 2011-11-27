@@ -9,8 +9,7 @@ Build-Depends: debhelper (>= 7.0.50~), libwxgtk2.8-dev, ruby,
  libflac-dev, libogg-dev, libvorbis-dev,
  libcurl4-gnutls-dev | libcurl4-openssl-dev,
  libboost-dev (>= 1.46), libboost-filesystem-dev (>= 1.46),
- libboost-regex-dev (>= 1.46), libboost-system-dev (>= 1.46),
- libebml-dev (>= 1.2.0), libmatroska-dev (>= 1.1.0)
+ libboost-regex-dev (>= 1.46), libboost-system-dev (>= 1.46)
 
 Package: mkvtoolnix
 Architecture: any
