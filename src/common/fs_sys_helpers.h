@@ -17,7 +17,6 @@
 
 #include "common/mm_io.h"
 
-int fs_entry_exists(const char *path);
 int64_t get_current_time_millis();
 std::string get_application_data_folder();
 std::string get_installation_path();

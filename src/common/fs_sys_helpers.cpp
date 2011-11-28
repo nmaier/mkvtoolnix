@@ -43,17 +43,6 @@ CreateFileUtf8(LPCSTR lpFileName,
   return ret;
 }
 
-int
-fs_entry_exists(const char *path) {
-  struct _stat s;
-
-  wchar_t *wbuffer = win32_utf8_to_utf16(path);
-  int result       = _wstat(wbuffer, &s);
-  delete []wbuffer;
-
-  return 0 == result;
-}
-
 int64_t
 get_current_time_millis() {
   struct _timeb tb;
@@ -160,19 +149,10 @@ get_application_data_folder() {
 
 #else // SYS_WINDOWS
 
-# include <errno.h>
 # include <stdlib.h>
-# include <sys/stat.h>
 # include <sys/time.h>
-# include <sys/types.h>
-# include <unistd.h>
 
-int
-fs_entry_exists(const char *path) {
-  std::string local_path = g_cc_local_utf8->native(path);
-  struct stat s;
-  return 0 == stat(local_path.c_str(), &s);
-}
+# include <boost/filesystem.hpp>
 
 int64_t
 get_current_time_millis() {
@@ -192,7 +172,7 @@ get_application_data_folder() {
   // If $HOME/.mkvtoolnix exists already then keep using it to avoid
   // losing existing user configuration.
   std::string old_default_folder = std::string(home) + "/.mkvtoolnix";
-  if (fs_entry_exists(old_default_folder.c_str()))
+  if (boost::filesystem::exists(old_default_folder))
     return old_default_folder;
 
   // If XDG_CONFIG_HOME is set then use that folder.
