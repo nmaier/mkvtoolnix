@@ -1,5 +1,11 @@
 2011-11-28  Moritz Bunkus  <moritz@bunkus.org>
 
+	* Released v5.1.0.
+
+	* mkvmerge: bug fix: Fixed more timecode handling issues for video
+	tracks in MPEG transport streams whose PES packets sometimes don't
+	have a timecode.
+
 	* mkvmerge: bug fix: mkvmerge will no longer create folders on
 	drives it shouldn't create them on on Windows.
 
