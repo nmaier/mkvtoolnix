@@ -74,6 +74,27 @@ namespace mtx {
         return "insufficient space for write operation";
       }
     };
+
+    class create_directory_x: public exception {
+    protected:
+      std::string m_path, m_error;
+      int m_error_number;
+    public:
+      create_directory_x(const std::string &path, const std::string &error, int error_number)
+        : m_path(path)
+        , m_error(error)
+        , m_error_number(error_number)
+      {
+      }
+      virtual ~create_directory_x() throw() { }
+
+      virtual const char *what() const throw() {
+        return "create_directory() failed";
+      }
+      virtual std::string error() const throw() {
+        return (boost::format(Y("mkdir(%1%) failed; errno = %2% (%3%)")) % m_path % m_error_number % m_error).str();
+      }
+    };
   }
 }
 

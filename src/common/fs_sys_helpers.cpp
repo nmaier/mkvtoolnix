@@ -43,16 +43,6 @@ CreateFileUtf8(LPCSTR lpFileName,
   return ret;
 }
 
-void
-create_directory(const char *path) {
-  wchar_t *wbuffer = win32_utf8_to_utf16(path);
-  int result       = _wmkdir(wbuffer);
-  delete []wbuffer;
-
-  if (0 != result)
-    throw mtx::mm_io::create_directory_x(path, strerror(errno), errno);
-}
-
 int
 fs_entry_exists(const char *path) {
   struct _stat s;
@@ -176,13 +166,6 @@ get_application_data_folder() {
 # include <sys/time.h>
 # include <sys/types.h>
 # include <unistd.h>
-
-void
-create_directory(const char *path) {
-  std::string local_path = g_cc_local_utf8->native(path);
-  if (0 != mkdir(local_path.c_str(), 0777))
-    throw mtx::mm_io::create_directory_x(path, strerror(errno), errno);
-}
 
 int
 fs_entry_exists(const char *path) {

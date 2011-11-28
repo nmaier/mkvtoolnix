@@ -29,6 +29,9 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
+#include <boost/filesystem.hpp>
+#include <boost/system/error_code.hpp>
+
 #include "common/endian.h"
 #include "common/error.h"
 #include "common/fs_sys_helpers.h"
@@ -285,63 +288,10 @@ mm_file_io_c::setup() {
 
 void
 mm_file_io_c::prepare_path(const std::string &path) {
-  std::string local_path = path; // contains copy of given path
-  std::string cur_path;
-
-#if defined(SYS_WINDOWS)
-  const std::string SEPARATOR ("\\");
-  // convert separators for current OS
-  std::replace(local_path.begin(), local_path.end(), '/', '\\');
-
-  if (local_path.substr(0, 2) == "\\\\") {
-    // UNC paths -- don't try to create the host name as a directory.
-
-    // Find the host name
-    std::string::size_type position = local_path.find(SEPARATOR, 2);
-    if (std::string::npos == position)
-      return;
-
-    // Find the share name
-    position = local_path.find(SEPARATOR, position + 1);
-    if (std::string::npos == position)
-      return;
-
-    cur_path = local_path.substr(0, position);
-    local_path.erase(0, position + 1);
-
-  } else if ((local_path.size() > 1) && (local_path[1] == ':')) {
-    // Skip drive letters.
-    cur_path = local_path.substr(0, 2);
-    local_path.erase(0, 3);
-
-  }
-
-#else  // SYS_WINDOWS
-  const std::string SEPARATOR ("/");
-  // convert separators for current OS
-  std::replace(local_path.begin(), local_path.end(), '\\', '/');
-#endif // SYS_WINDOWS
-
-  if (local_path.substr(0, SEPARATOR.length()) == SEPARATOR)
-    cur_path = SEPARATOR;
-
-  std::vector<std::string> parts = split(local_path, SEPARATOR);
-
-  // The file name is the last element -- remove it.
-  parts.pop_back();
-
-  for (size_t i = 0; parts.size() > i; ++i) {
-    // Ignore empty path components.
-    if (parts[i].empty())
-      continue;
-
-    if (!cur_path.empty() && (cur_path != SEPARATOR))
-      cur_path += SEPARATOR;
-    cur_path   += parts[i];
-
-    if (!fs_entry_exists(cur_path.c_str()))
-      create_directory(cur_path.c_str());
-  }
+  boost::system::error_code error_code;
+  boost::filesystem::create_directories(boost::filesystem::path(path).parent_path(), error_code);
+  if (error_code)
+    throw mtx::mm_io::create_directory_x(path, strerror(error_code.value()), error_code.value());
 }
 
 uint64
