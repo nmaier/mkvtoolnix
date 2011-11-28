@@ -52,24 +52,23 @@ int mpeg_ts_reader_c::potential_packet_sizes[] = { 188, 192, 204, 0 };
 
 void
 mpeg_ts_track_c::send_to_packetizer() {
-  int64_t timecode_to_use = (timecode < reader.m_global_timecode_offset) ? 0 : (timecode - reader.m_global_timecode_offset) * 100000ll / 9;
-
-  if ((type == ES_AUDIO_TYPE) && reader.m_dont_use_audio_pts)
-    timecode_to_use = -1;
+  int64_t timecode_to_use = (-1 == timecode)                                              ? -1
+                          : reader.m_dont_use_audio_pts && (ES_AUDIO_TYPE == type)        ? -1
+                          : m_apply_dts_timecode_fix && (m_previous_timecode == timecode) ? -1
+                          : (timecode  < reader.m_global_timecode_offset)                 ?  0
+                          :                                                                  (timecode - reader.m_global_timecode_offset) * 100000ll / 9;
 
   mxverb(3, boost::format("mpeg_ts: PTS in nanoseconds: %1%\n") % timecode_to_use);
 
-  if (ptzr != -1) {
-    if (m_apply_dts_timecode_fix && (m_previous_timecode == timecode))
-      timecode_to_use = -1;
+  if (ptzr != -1)
     reader.m_reader_packetizers[ptzr]->process(new packet_t(clone_memory(pes_payload->get_buffer(), pes_payload->get_size()), timecode_to_use));
-  }
 
   pes_payload->remove(pes_payload->get_size());
   processed                          = false;
   data_ready                         = false;
   pes_payload_size                   = 0;
   m_previous_timecode                = timecode;
+  timecode                           = -1;
   reader.m_packet_sent_to_packetizer = true;
 }
 
