@@ -38,7 +38,13 @@ class TestController
   end
 
   def get_num_processors
-    IO.readlines("/proc/cpuinfo").collect { |line| /^processor\s+:\s+(\d+)/.match(line) ? $1.to_i : 0 }.max + 1
+    case RUBY_PLATFORM
+    when /darwin/
+      np = `/usr/sbin/sysctl -n hw.availcpu`.to_i
+    else
+      np = IO.readlines("/proc/cpuinfo").collect { |line| /^processor\s+:\s+(\d+)/.match(line) ? $1.to_i : 0 }.max + 1
+    end
+    return np > 0 ? np : 1
   end
 
   def num_threads=(num)
@@ -197,6 +203,20 @@ class Test
     @tmp_num_mutex  = Mutex.new
     @commands       = Array.new
     @debug_commands = Array.new
+
+    # install md5 handler
+    case RUBY_PLATFORM
+      when /darwin/
+        @md5 = lambda do |name|
+          @debug_commands << "/sbin/md5 #{name}"
+          `/sbin/md5 #{name}`.chomp.gsub(/.*=\s*/, "")
+        end
+      else
+        @md5 = lambda do |name|
+          @debug_commands << "md5sum #{name}"
+          `md5sum #{name}`.chomp.gsub(/\s+.*/, "")
+      end
+    end
   end
 
   def description
@@ -259,8 +279,7 @@ class Test
   end
 
   def hash_file(name)
-    @debug_commands << "md5sum #{name}"
-    `md5sum #{name}`.chomp.gsub(/\s+.*/, "")
+    @md5.call name
   end
 
   def hash_tmp(erase = true)
@@ -381,7 +400,7 @@ class Results
 end
 
 def main
-  ENV['LC_ALL'] = "en_US.UTF-8"
+  ENV[ /darwin/i.match(RUBY_PLATFORM) ? 'LANG' : 'LC_ALL' ] = 'en_US.UTF-8'
   ENV['PATH']   = "../src:" + ENV['PATH']
 
   controller = TestController.new
