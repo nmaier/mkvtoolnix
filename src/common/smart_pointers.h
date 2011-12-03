@@ -74,6 +74,9 @@ public:
   bool is_set() const throw() {
     return (NULL != its_counter) && (NULL != its_counter->ptr);
   }
+  operator bool() const throw() {
+    return is_set();
+  }
 
 private:
   struct counter {
