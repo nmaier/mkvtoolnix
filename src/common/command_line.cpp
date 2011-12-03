@@ -19,6 +19,7 @@
 #endif
 
 #include "common/command_line.h"
+#include "common/hacks.h"
 #include "common/mm_io.h"
 #include "common/mm_write_cache_io.h"
 #include "common/strings/editing.h"
@@ -177,6 +178,14 @@ handle_common_cli_args(std::vector<std::string> &args,
       debug_options_found = true;
 
       args.erase(args.begin() + i, args.begin() + i + 2);
+
+    } else if (args[i] == "--engage") {
+      if ((i + 1) == args.size())
+        mxerror(Y("'--engage' lacks its argument.\n"));
+
+      engage_hacks(args[i + 1]);
+      args.erase(args.begin() + i, args.begin() + i + 2);
+
     } else
       ++i;
   }

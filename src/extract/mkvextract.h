@@ -32,8 +32,6 @@
 using namespace libebml;
 using namespace libmatroska;
 
-extern bool g_no_variable_data;
-
 #define in_parent(p)                                                                     \
   (   !p->IsFiniteSize()                                                                 \
    || (in->getFilePointer() < (p->GetElementPosition() + p->HeadSize() + p->GetSize())))

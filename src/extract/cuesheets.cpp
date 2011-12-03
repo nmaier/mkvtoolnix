@@ -29,6 +29,7 @@
 
 #include "common/chapters/chapters.h"
 #include "common/ebml.h"
+#include "common/hacks.h"
 #include "common/kax_analyzer.h"
 #include "common/math.h"
 #include "common/matroska.h"
@@ -138,7 +139,7 @@ write_cuesheet(std::string file_name,
   if (chapters.ListSize() == 0)
     return;
 
-  if (g_no_variable_data)
+  if (hack_engaged(ENGAGE_NO_VARIABLE_DATA))
     file_name = "no-variable-data";
 
   out.write_bom("UTF-8");

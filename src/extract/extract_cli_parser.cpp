@@ -63,7 +63,6 @@ extract_cli_parser_c::init_parser() {
 
   add_section_header(YT("Global options"));
   OPT("f|parse-fully",    set_parse_fully,      YT("Parse the whole file instead of relying on the index."));
-  OPT("no-variable-data", set_no_variable_data, YT("Don't write variable parts to output files (only for debugging)."));
 
   add_common_options();
 
@@ -190,11 +189,6 @@ extract_cli_parser_c::set_mode_or_extraction_spec() {
 
   else
     add_extraction_spec();
-}
-
-void
-extract_cli_parser_c::set_no_variable_data() {
-  g_no_variable_data = true;
 }
 
 void

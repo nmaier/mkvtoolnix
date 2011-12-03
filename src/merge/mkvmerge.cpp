@@ -49,7 +49,6 @@
 #include "common/extern_data.h"
 #include "common/file_types.h"
 #include "common/fs_sys_helpers.h"
-#include "common/hacks.h"
 #include "common/iso639.h"
 #include "common/mm_io.h"
 #include "common/segmentinfo.h"
@@ -1707,12 +1706,6 @@ parse_args(std::vector<std::string> args) {
         mxerror(Y("Only one output file allowed.\n"));
 
       g_outfile = next_arg;
-      sit++;
-
-    } else if (this_arg == "--engage") {
-      if (no_next_arg)
-        mxerror(Y("'--engage' lacks its argument.\n"));
-      engage_hacks(next_arg);
       sit++;
 
     } else if ((this_arg == "-w") || (this_arg == "--webm"))

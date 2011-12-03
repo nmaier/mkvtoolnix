@@ -16,6 +16,7 @@
 
 #include "common/ebml.h"
 #include "common/endian.h"
+#include "common/hacks.h"
 #include "common/random.h"
 #include "common/kate.h"
 #include "extract/xtr_ogg.h"
@@ -61,7 +62,7 @@ xtr_oggbase_c::create_file(xtr_base_c *master,
 
   xtr_base_c::create_file(master, track);
 
-  ogg_stream_init(&m_os, g_no_variable_data ? 1804289383 : random_c::generate_31bits());
+  ogg_stream_init(&m_os, hack_engaged(ENGAGE_NO_VARIABLE_DATA) ? 1804289383 : random_c::generate_31bits());
 }
 
 void

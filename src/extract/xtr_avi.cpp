@@ -14,6 +14,7 @@
 
 #include "common/ebml.h"
 #include "common/endian.h"
+#include "common/hacks.h"
 #include "common/math.h"
 #include "extract/xtr_avi.h"
 
@@ -57,7 +58,7 @@ xtr_avi_c::create_file(xtr_base_c *master,
     mxerror(boost::format(Y("The file '%1%' could not be opened for writing (%2%).\n")) % m_file_name % AVI_strerror());
 
   std::string writing_app = "mkvextract";
-  if (!g_no_variable_data)
+  if (!hack_engaged(ENGAGE_NO_VARIABLE_DATA))
     writing_app += (boost::format(" %1%") % VERSION).str();
   m_avi->writing_app = safestrdup(writing_app.c_str());
 

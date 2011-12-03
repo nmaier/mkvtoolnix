@@ -308,18 +308,18 @@ class Test
     retcode = args.detect { |a| !a.is_a? String } || 0
     args.reject!          { |a| !a.is_a? String }
 
-    command = "../src/mkvpropedit " + (args.size == 1 ? tmp : args.shift) + " " + args.shift
+    command = "../src/mkvpropedit --engage no_variable_data " + (args.size == 1 ? tmp : args.shift) + " " + args.shift
     sys command, retcode
   end
 
   def xtr_tracks_s(*args)
-    command = "../src/mkvextract tracks data/mkv/complex.mkv --no-variable-data " + args.join(" ") + ":#{tmp}"
+    command = "../src/mkvextract tracks data/mkv/complex.mkv --engage no_variable_data " + args.join(" ") + ":#{tmp}"
     sys command, 0
     hash_tmp
   end
 
   def xtr_tracks(*args)
-    command = "../src/mkvextract tracks #{args.shift} --no-variable-data " + args.join(" ")
+    command = "../src/mkvextract tracks #{args.shift} --engage no_variable_data " + args.join(" ")
     sys command, 0
   end
 end

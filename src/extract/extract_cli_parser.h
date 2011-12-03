@@ -51,7 +51,6 @@ protected:
   void set_mode_or_extraction_spec();
   void set_extraction_mode();
   void add_extraction_spec();
-  void set_no_variable_data();
 };
 
 #endif // __EXTRACT_EXTRACT_CLI_PARSER_H

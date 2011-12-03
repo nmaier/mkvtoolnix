@@ -41,8 +41,6 @@ enum operation_mode_e {
   MODE_TIMECODES_V2,
 };
 
-bool g_no_variable_data = false;
-
 void
 show_element(EbmlElement *l,
              int level,
