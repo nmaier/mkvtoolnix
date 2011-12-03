@@ -18,6 +18,7 @@
 
 #include <matroska/KaxSegment.h>
 
+#include "common/ebml.h"
 #include "common/matroska.h"
 #include "common/mm_io.h"
 
@@ -108,14 +109,17 @@ public:
   virtual ~kax_analyzer_c();
 
   virtual update_element_result_e update_element(EbmlElement *e, bool write_defaults = false);
+  virtual update_element_result_e update_element(ebml_element_cptr e, bool write_defaults = false) {
+    return update_element(e.get_object(), write_defaults);
+  }
   virtual update_element_result_e remove_elements(EbmlId id);
-  virtual EbmlMaster *read_all(const EbmlCallbacks &callbacks);
+  virtual ebml_master_cptr read_all(const EbmlCallbacks &callbacks);
 
-  virtual EbmlElement *read_element(kax_analyzer_data_c *element_data);
-  virtual EbmlElement *read_element(kax_analyzer_data_cptr element_data) {
+  virtual ebml_element_cptr read_element(kax_analyzer_data_c *element_data);
+  virtual ebml_element_cptr read_element(kax_analyzer_data_cptr element_data) {
     return read_element(element_data.get_object());
   }
-  virtual EbmlElement *read_element(unsigned int pos) {
+  virtual ebml_element_cptr read_element(unsigned int pos) {
     return read_element(m_data[pos]);
   }
 
@@ -153,6 +157,9 @@ public:
   virtual void reopen_file(const open_mode = MODE_WRITE);
 
   static placement_strategy_e get_placement_strategy_for(EbmlElement *e);
+  static placement_strategy_e get_placement_strategy_for(ebml_element_cptr e) {
+    return get_placement_strategy_for(e.get_object());
+  }
 
 protected:
   virtual void _log_debug_message(const std::string &message);

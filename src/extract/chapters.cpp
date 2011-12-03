@@ -48,11 +48,11 @@ extract_chapters(const std::string &file_name,
     return;
   }
 
-  EbmlMaster *master = analyzer->read_all(EBML_INFO(KaxChapters));
-  if (NULL == master)
+  ebml_master_cptr master = analyzer->read_all(EBML_INFO(KaxChapters));
+  if (!master)
     return;
 
-  KaxChapters *chapters = dynamic_cast<KaxChapters *>(master);
+  KaxChapters *chapters = dynamic_cast<KaxChapters *>(master.get_object());
   assert(NULL != chapters);
 
   if (!chapter_format_simple) {
@@ -69,6 +69,4 @@ extract_chapters(const std::string &file_name,
     int dummy = 1;
     write_chapters_simple(dummy, chapters, g_mm_stdio.get_object());
   }
-
-  delete chapters;
 }

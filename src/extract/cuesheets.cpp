@@ -209,8 +209,10 @@ extract_cuesheet(const std::string &file_name,
   }
 
   KaxChapters all_chapters;
-  KaxChapters *chapters = dynamic_cast<KaxChapters *>(analyzer->read_all(EBML_INFO(KaxChapters)));
-  KaxTags *all_tags     = dynamic_cast<KaxTags *>(analyzer->read_all(EBML_INFO(KaxTags)));
+  ebml_master_cptr chapters_m(analyzer->read_all(EBML_INFO(KaxChapters)));
+  ebml_master_cptr tags_m(    analyzer->read_all(EBML_INFO(KaxTags)));
+  KaxChapters *chapters = dynamic_cast<KaxChapters *>(chapters_m.get_object());
+  KaxTags *all_tags     = dynamic_cast<KaxTags *>(    tags_m.get_object());
 
   if ((NULL != chapters) && (NULL != all_tags)) {
     size_t i;
@@ -230,7 +232,4 @@ extract_cuesheet(const std::string &file_name,
     while (all_chapters.ListSize() > 0)
       all_chapters.Remove(0);
   }
-
-  delete all_tags;
-  delete chapters;
 }

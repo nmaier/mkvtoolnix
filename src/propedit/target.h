@@ -55,6 +55,7 @@ public:
   uint64_t m_selection_param;
   track_type m_selection_track_type;
 
+  ebml_element_cptr m_level1_element_cp, m_track_headers_cp;
   EbmlMaster *m_level1_element, *m_master, *m_sub_master;
   uint64_t m_track_uid;
   track_type m_track_type;
@@ -80,7 +81,7 @@ public:
   bool has_changes() const;
   bool has_add_or_set_change() const;
 
-  void set_level1_element(EbmlMaster *level1_element, EbmlMaster *track_headers = NULL);
+  void set_level1_element(ebml_element_cptr level1_element, ebml_element_cptr track_headers = ebml_element_cptr(NULL));
 
   void execute();
 

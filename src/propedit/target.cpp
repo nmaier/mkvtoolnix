@@ -228,9 +228,12 @@ target_c::has_add_or_set_change()
 }
 
 void
-target_c::set_level1_element(EbmlMaster *level1_element,
-                             EbmlMaster *track_headers) {
-  m_level1_element = level1_element;
+target_c::set_level1_element(ebml_element_cptr level1_element_cp,
+                             ebml_element_cptr track_headers_cp) {
+  m_level1_element_cp = level1_element_cp;
+  m_level1_element    = static_cast<EbmlMaster *>(m_level1_element_cp.get_object());
+
+  m_track_headers_cp  = track_headers_cp;
 
   if (   (target_c::tt_segment_info == m_type)
       || (target_c::tt_chapters     == m_type)
@@ -248,8 +251,10 @@ target_c::set_level1_element(EbmlMaster *level1_element,
   std::map<uint8, unsigned int> num_tracks_by_type;
   unsigned int num_tracks_total = 0;
 
-  if (!track_headers)
-    track_headers = level1_element;
+  if (!track_headers_cp)
+    track_headers_cp = level1_element_cp;
+
+  EbmlMaster *track_headers = static_cast<EbmlMaster *>(track_headers_cp.get_object());
 
   size_t i;
   for (i = 0; track_headers->ListSize() > i; ++i) {
@@ -299,7 +304,7 @@ target_c::set_level1_element(EbmlMaster *level1_element,
     }
 
     if (target_c::tt_tags == m_type) {
-      m_master     = level1_element;
+      m_master     = m_level1_element;
       m_sub_master = track;
     }
 

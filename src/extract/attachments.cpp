@@ -142,9 +142,8 @@ extract_attachments(const std::string &file_name,
     return;
   }
 
-  KaxAttachments *attachments = dynamic_cast<KaxAttachments *>(analyzer->read_all(EBML_INFO(KaxAttachments)));
-  if (NULL != attachments) {
+  ebml_master_cptr attachments_m(analyzer->read_all(EBML_INFO(KaxAttachments)));
+  KaxAttachments *attachments = dynamic_cast<KaxAttachments *>(attachments_m.get_object());
+  if (attachments)
     handle_attachments(attachments, tracks);
-    delete attachments;
-  }
 }

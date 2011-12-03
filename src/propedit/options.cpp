@@ -131,33 +131,31 @@ options_c::remove_empty_targets() {
   boost::remove_if(m_targets, [](target_cptr &target) { return !target->has_changes(); });
 }
 
-template<typename T> static T*
+template<typename T> static ebml_element_cptr
 read_element(kax_analyzer_c *analyzer,
              const std::string &category,
              bool require_existance = true) {
   int index = analyzer->find(T::ClassInfos.GlobalId);
-  T *t      = NULL;
+  ebml_element_cptr e;
 
   if (-1 != index)
-    t = dynamic_cast<T *>(analyzer->read_element(index));
+    e = analyzer->read_element(index);
 
-  if ((NULL == t) && require_existance)
+  if (require_existance && (!e || !dynamic_cast<T *>(e.get_object())))
     mxerror(boost::format(Y("Modification of properties in the section '%1%' was requested, but no corresponding level 1 element was found in the file. %2%\n")) % category % FILE_NOT_MODIFIED);
 
-  return t;
+  return e;
 }
 
 void
 options_c::find_elements(kax_analyzer_c *analyzer) {
-  KaxInfo *info     = NULL;
-  KaxTracks *tracks = read_element<KaxTracks>(analyzer, Y("Track headers"));
-  KaxTags *tags     = NULL;
-  KaxChapters *chapters = NULL;
+  ebml_element_cptr tracks(read_element<KaxTracks>(analyzer, Y("Track headers")));
+  ebml_element_cptr info, tags, chapters;
 
   for (auto &target_ptr : m_targets) {
     target_c &target = *target_ptr;
     if (target_c::tt_segment_info == target.m_type) {
-      if (NULL == info)
+      if (!info)
         info = read_element<KaxInfo>(analyzer, Y("Segment information"));
       target.set_level1_element(info);
 
@@ -165,19 +163,19 @@ options_c::find_elements(kax_analyzer_c *analyzer) {
       target.set_level1_element(tracks);
 
     } else if (target_c::tt_tags == target.m_type) {
-      if (NULL == tags) {
+      if (!tags) {
         tags = read_element<KaxTags>(analyzer, Y("Tags"), false);
-        if (NULL == tags)
-          tags = new KaxTags;
+        if (!tags)
+          tags = ebml_element_cptr(new KaxTags);
       }
 
       target.set_level1_element(tags, tracks);
 
     } else if (target_c::tt_chapters == target.m_type) {
-      if (NULL == chapters) {
+      if (!chapters) {
         chapters = read_element<KaxChapters>(analyzer, Y("Chapters"), false);
-        if (NULL == chapters)
-          chapters = new KaxChapters;
+        if (!chapters)
+          chapters = ebml_element_cptr(new KaxChapters);
       }
 
       target.set_level1_element(chapters, tracks);

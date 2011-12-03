@@ -48,18 +48,17 @@ extract_tags(const std::string &file_name,
     return;
   }
 
-  EbmlMaster *m = analyzer->read_all(EBML_INFO(KaxTags));
-  if (NULL != m) {
-    KaxTags *tags = dynamic_cast<KaxTags *>(m);
-    assert(NULL != tags);
+  ebml_master_cptr m = analyzer->read_all(EBML_INFO(KaxTags));
+  if (!m)
+    return;
 
-    g_mm_stdio->write_bom("UTF-8");
-    g_mm_stdio->puts("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n"
-                     "<!DOCTYPE Tags SYSTEM \"matroskatags.dtd\">\n\n"
-                     "<Tags>\n");
-    write_tags_xml(*tags, g_mm_stdio.get_object());
-    g_mm_stdio->puts("</Tags>\n");
+  KaxTags *tags = dynamic_cast<KaxTags *>(m.get_object());
+  assert(NULL != tags);
 
-    delete tags;
-  }
+  g_mm_stdio->write_bom("UTF-8");
+  g_mm_stdio->puts("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n"
+                   "<!DOCTYPE Tags SYSTEM \"matroskatags.dtd\">\n\n"
+                   "<Tags>\n");
+  write_tags_xml(*tags, g_mm_stdio.get_object());
+  g_mm_stdio->puts("</Tags>\n");
 }

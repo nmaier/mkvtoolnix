@@ -21,6 +21,8 @@
 
 #include <matroska/KaxTracks.h>
 
+#include "common/smart_pointers.h"
+
 using namespace libebml;
 using namespace libmatroska;
 
@@ -207,5 +209,8 @@ provide_default_for_child(EbmlMaster *master,
                           const UTFstring &default_value) {
   provide_default_for_child<A>(*master, default_value);
 }
+
+typedef counted_ptr<EbmlElement> ebml_element_cptr;
+typedef counted_ptr<EbmlMaster> ebml_master_cptr;
 
 #endif // __MTX_COMMON_EBML_H
