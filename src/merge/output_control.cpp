@@ -68,9 +68,7 @@
 #include "common/fs_sys_helpers.h"
 #include "common/hacks.h"
 #include "common/math.h"
-#include "common/mm_io.h"
-#include "common/mm_read_cache_io.h"
-#include "common/mm_write_cache_io.h"
+#include "common/mm_buffered_io.h"
 #include "common/strings/formatting.h"
 #include "common/tags/tags.h"
 #include "common/translation.h"
@@ -321,17 +319,19 @@ file_names_to_paths(const std::vector<std::string> &file_names) {
 static mm_io_cptr
 open_input_file(filelist_t &file,
                 bool use_probe_cache) {
+  mm_io_c *rv;
   try {
     if (file.all_names.size() == 1)
-      return use_probe_cache ? mm_io_cptr(mm_probe_cache_io_c::open(file.name, 20 * 1024 * 1024)) : mm_file_io_c::open(file.name);
+      rv = new mm_file_io_c(file.name);
     else {
       std::vector<bfs::path> paths = file_names_to_paths(file.all_names);
-      return use_probe_cache ?  mm_io_cptr(new mm_probe_cache_io_c(new mm_multi_file_io_c(paths, file.name), 20 * 1024 * 1024)) : mm_io_cptr(new mm_multi_file_io_c(paths, file.name));
+      rv = new mm_multi_file_io_c(paths, file.name);
     }
   } catch (...) {
     mxerror(boost::format(Y("The source file '%1%' could not be opened successfully, or retrieving its size by seeking to the end did not work.\n")) % file.name);
     return mm_io_cptr(NULL);
   }
+  return mm_io_cptr(new mm_rbuffer_io_c(rv, 1<<16));
 }
 
 /** \brief Probe the file type
@@ -1429,7 +1429,7 @@ create_next_output_file() {
 
   // Open the output file.
   try {
-    s_out = mm_write_cache_io_c::open(this_outfile, 20 * 1024 * 1024);
+    s_out = mm_wbuffer_io_c::open(this_outfile, 20 * 1024 * 1024);
   } catch (...) {
     mxerror(boost::format(Y("The output file '%1%' could not be opened for writing (%2%).\n")) % this_outfile % strerror(errno));
   }
