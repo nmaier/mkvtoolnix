@@ -304,6 +304,14 @@ class Test
     sys command, retcode
   end
 
+  def propedit *args
+    retcode = args.detect { |a| !a.is_a? String } || 0
+    args.reject!          { |a| !a.is_a? String }
+
+    command = "../src/mkvpropedit " + (args.size == 1 ? tmp : args.shift) + " " + args.shift
+    sys command, retcode
+  end
+
   def xtr_tracks_s(*args)
     command = "../src/mkvextract tracks data/mkv/complex.mkv --no-variable-data " + args.join(" ") + ":#{tmp}"
     sys command, 0
