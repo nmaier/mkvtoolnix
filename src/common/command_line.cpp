@@ -20,7 +20,7 @@
 
 #include "common/command_line.h"
 #include "common/hacks.h"
-#include "common/mm_buffered_io.h"
+#include "common/mm_write_buffer_io.h"
 #include "common/strings/editing.h"
 #include "common/translation.h"
 #include "common/version.h"
@@ -211,7 +211,7 @@ handle_common_cli_args(std::vector<std::string> &args,
         mxerror(boost::format(Y("'%1%' is missing the file name.\n")) % args[i]);
       try {
         if (!stdio_redirected()) {
-          mm_io_cptr file = mm_wbuffer_io_c::open(args[i + 1], 128 * 1024);
+          mm_io_cptr file = mm_write_buffer_io_c::open(args[i + 1], 128 * 1024);
           file->write_bom(g_stdio_charset);
           redirect_stdio(file);
         }

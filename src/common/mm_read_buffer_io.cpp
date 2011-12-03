@@ -14,9 +14,9 @@
 
 #include "common/common_pch.h"
 
-#include "common/mm_buffered_io.h"
+#include "common/mm_read_buffer_io.h"
 
-mm_rbuffer_io_c::mm_rbuffer_io_c(mm_io_c *p_in,
+mm_read_buffer_io_c::mm_read_buffer_io_c(mm_io_c *p_in,
                                        size_t p_buffer_size,
                                        bool p_delete_in)
   : mm_proxy_io_c(p_in, p_delete_in)
@@ -30,17 +30,17 @@ mm_rbuffer_io_c::mm_rbuffer_io_c(mm_io_c *p_in,
   setFilePointer(0, seek_beginning);
 }
 
-mm_rbuffer_io_c::~mm_rbuffer_io_c() {
+mm_read_buffer_io_c::~mm_read_buffer_io_c() {
   close();
 }
 
 uint64
-mm_rbuffer_io_c::getFilePointer() {
+mm_read_buffer_io_c::getFilePointer() {
   return m_offset + m_cursor;
 }
 
 void
-mm_rbuffer_io_c::setFilePointer(int64 offset,
+mm_read_buffer_io_c::setFilePointer(int64 offset,
                                    seek_mode mode) {
   int64_t new_pos = 0;
   // FIXME int64_t overflow
@@ -71,20 +71,20 @@ mm_rbuffer_io_c::setFilePointer(int64 offset,
   m_proxy_io->setFilePointer(offset, mode);
 
   // Get the actual offset from the underlying stream
-  // Better be safe than sorry and use this instead of just taking 
+  // Better be safe than sorry and use this instead of just taking
   m_offset = m_proxy_io->getFilePointer();
- 
+
   // "Drop" the buffer content
   m_cursor = m_fill = 0;
 }
 
 int64_t
-mm_rbuffer_io_c::get_size() {
+mm_read_buffer_io_c::get_size() {
   return m_proxy_io->get_size();
 }
 
 uint32
-mm_rbuffer_io_c::_read(void *buffer,
+mm_read_buffer_io_c::_read(void *buffer,
                           size_t size) {
 
   char *buf = (char*)buffer;
@@ -114,7 +114,7 @@ mm_rbuffer_io_c::_read(void *buffer,
 }
 
 size_t
-mm_rbuffer_io_c::_write(const void *,
+mm_read_buffer_io_c::_write(const void *,
                             size_t) {
   throw mtx::mm_io::wrong_read_write_access_x();
   return 0;

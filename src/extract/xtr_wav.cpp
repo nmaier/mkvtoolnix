@@ -17,7 +17,7 @@
 
 #include "common/ebml.h"
 #include "common/endian.h"
-#include "common/mm_buffered_io.h"
+#include "common/mm_write_buffer_io.h"
 #include "extract/xtr_wav.h"
 
 xtr_wav_c::xtr_wav_c(const std::string &codec_id,
@@ -108,7 +108,7 @@ xtr_wavpack4_c::create_file(xtr_base_c *master,
     corr_name += "wvc";
 
     try {
-      m_corr_out = mm_wbuffer_io_c::open(corr_name, 5 * 1024 * 1024);
+      m_corr_out = mm_write_buffer_io_c::open(corr_name, 5 * 1024 * 1024);
     } catch (...) {
       mxerror(boost::format(Y("The file '%1%' could not be opened for writing (%2%).\n")) % corr_name % strerror(errno));
     }

@@ -30,7 +30,7 @@
 #include "common/error.h"
 #include "common/extern_data.h"
 #include "common/iso639.h"
-#include "common/mm_buffered_io.h"
+#include "common/mm_write_buffer_io.h"
 #include "common/strings/editing.h"
 #include "common/strings/formatting.h"
 #include "common/strings/parsing.h"
@@ -687,7 +687,7 @@ tab_chapters::save() {
   mm_io_cptr out;
 
   try {
-    out = mm_io_cptr(mm_wbuffer_io_c::open(wxMB(file_name), 128 * 1024));
+    out = mm_io_cptr(mm_write_buffer_io_c::open(wxMB(file_name), 128 * 1024));
   } catch (...) {
     wxMessageBox(wxString::Format(Z("Could not open the destination file '%s' for writing. Error code: %d (%s)."), file_name.c_str(), errno, wxUCS(strerror(errno))), Z("Error opening file"), wxCENTER | wxOK | wxICON_ERROR);
     return;

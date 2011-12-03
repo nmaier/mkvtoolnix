@@ -17,7 +17,7 @@
 #include "common/checksums.h"
 #include "common/ebml.h"
 #include "common/iso639.h"
-#include "common/mm_buffered_io.h"
+#include "common/mm_write_buffer_io.h"
 #include "common/smart_pointers.h"
 #include "common/tta.h"
 #include "extract/xtr_vobsub.h"
@@ -76,7 +76,7 @@ xtr_vobsub_c::create_file(xtr_base_c *master,
     std::string sub_file_name = m_base_name + ".sub";
 
     try {
-      m_out = mm_wbuffer_io_c::open(sub_file_name, 128 * 1024);
+      m_out = mm_write_buffer_io_c::open(sub_file_name, 128 * 1024);
     } catch (...) {
       mxerror(boost::format(Y("Failed to create the VobSub data file '%1%': %2% (%3%)\n")) % sub_file_name % errno % strerror(errno));
     }
@@ -219,7 +219,7 @@ xtr_vobsub_c::finish_file() {
 
     m_out.clear();
 
-    mm_wbuffer_io_c idx(new mm_file_io_c(m_base_name, MODE_CREATE), 128 * 1024);
+    mm_write_buffer_io_c idx(new mm_file_io_c(m_base_name, MODE_CREATE), 128 * 1024);
     mxinfo(boost::format(Y("Writing the VobSub index file '%1%'.\n")) % m_base_name);
 
     if ((25 > m_private_data->get_size()) || strncasecmp((char *)m_private_data->get_buffer(), header_line, 25))

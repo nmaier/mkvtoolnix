@@ -68,7 +68,8 @@
 #include "common/fs_sys_helpers.h"
 #include "common/hacks.h"
 #include "common/math.h"
-#include "common/mm_buffered_io.h"
+#include "common/mm_read_buffer_io.h"
+#include "common/mm_write_buffer_io.h"
 #include "common/strings/formatting.h"
 #include "common/tags/tags.h"
 #include "common/translation.h"
@@ -330,7 +331,7 @@ open_input_file(filelist_t &file) {
     mxerror(boost::format(Y("The source file '%1%' could not be opened successfully, or retrieving its size by seeking to the end did not work.\n")) % file.name);
     return mm_io_cptr(NULL);
   }
-  return mm_io_cptr(new mm_rbuffer_io_c(rv, 1<<17));
+  return mm_io_cptr(new mm_read_buffer_io_c(rv, 1<<17));
 }
 
 /** \brief Probe the file type
@@ -1428,7 +1429,7 @@ create_next_output_file() {
 
   // Open the output file.
   try {
-    s_out = mm_wbuffer_io_c::open(this_outfile, 20 * 1024 * 1024);
+    s_out = mm_write_buffer_io_c::open(this_outfile, 20 * 1024 * 1024);
   } catch (...) {
     mxerror(boost::format(Y("The output file '%1%' could not be opened for writing (%2%).\n")) % this_outfile % strerror(errno));
   }
