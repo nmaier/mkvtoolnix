@@ -317,8 +317,7 @@ file_names_to_paths(const std::vector<std::string> &file_names) {
 }
 
 static mm_io_cptr
-open_input_file(filelist_t &file,
-                bool use_probe_cache) {
+open_input_file(filelist_t &file) {
   mm_io_c *rv;
   try {
     if (file.all_names.size() == 1)
@@ -331,7 +330,7 @@ open_input_file(filelist_t &file,
     mxerror(boost::format(Y("The source file '%1%' could not be opened successfully, or retrieving its size by seeking to the end did not work.\n")) % file.name);
     return mm_io_cptr(NULL);
   }
-  return mm_io_cptr(new mm_rbuffer_io_c(rv, 1<<16));
+  return mm_io_cptr(new mm_rbuffer_io_c(rv, 1<<17));
 }
 
 /** \brief Probe the file type
@@ -341,9 +340,9 @@ open_input_file(filelist_t &file,
 */
 void
 get_file_type(filelist_t &file) {
-  mm_io_cptr af_io = open_input_file(file, true);
+  mm_io_cptr af_io = open_input_file(file);
   mm_io_c *io      = af_io.get_object();
-  int64_t size     = io->get_size();
+  int64_t size     = std::min(io->get_size(), int64_t(1<<25));
 
   file_type_e type = FILE_TYPE_IS_UNKNOWN;
   // File types that can be detected unambiguously but are not supported
@@ -1117,7 +1116,7 @@ void
 create_readers() {
   for (auto &file : g_files) {
     try {
-      mm_io_cptr input_file = open_input_file(file, false);
+      mm_io_cptr input_file = open_input_file(file);
 
       switch (file.type) {
         case FILE_TYPE_AAC:
