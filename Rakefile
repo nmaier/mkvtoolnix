@@ -165,7 +165,8 @@ end
 if c?(:MINGW)
   $programs.each do |program|
     path = program.gsub(/^mkv/, '')
-    file "src/#{path}/resources.o" => "src/#{path}/manifest.xml"
+    icon = program == 'mkvinfo' ? 'share/icons/windows/mkvinfo.ico' : 'share/icons/windows/mkvmergeGUI.ico'
+    file "src/#{path}/resources.o" => [ "src/#{path}/manifest.xml", icon ]
   end
 end
 
