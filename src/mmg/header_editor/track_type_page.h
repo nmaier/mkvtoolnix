@@ -26,7 +26,7 @@ public:
   unsigned int m_track_number;
 
 public:
-  he_track_type_page_c(header_editor_frame_c *parent, int track_type, unsigned int track_number, EbmlElement *l1_element);
+  he_track_type_page_c(header_editor_frame_c *parent, int track_type, unsigned int track_number, ebml_element_cptr l1_element);
   virtual ~he_track_type_page_c();
 
   virtual void translate_ui();

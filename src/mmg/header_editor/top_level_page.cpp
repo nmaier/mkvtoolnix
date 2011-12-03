@@ -28,7 +28,7 @@
 
 he_top_level_page_c::he_top_level_page_c(header_editor_frame_c *parent,
                                          const translatable_string_c &title,
-                                         EbmlElement *l1_element)
+                                         ebml_element_cptr l1_element)
   : he_empty_page_c(parent, title, "")
 {
   m_l1_element = l1_element;
@@ -47,10 +47,10 @@ he_top_level_page_c::do_modifications() {
   he_page_base_c::do_modifications();
 
   if (is_id(m_l1_element, KaxInfo))
-    fix_mandatory_segmentinfo_elements(m_l1_element);
+    fix_mandatory_segmentinfo_elements(m_l1_element.get_object());
 
   else if (is_id(m_l1_element, KaxTracks))
-    fix_mandatory_segment_tracks_elements(m_l1_element);
+    fix_mandatory_segment_tracks_elements(m_l1_element.get_object());
 
   m_l1_element->UpdateSize(true);
 }

@@ -67,9 +67,6 @@ header_editor_frame_c::header_editor_frame_c(wxWindow *parent)
   , m_page_panel(NULL)
   , m_bs_main(NULL)
   , m_bs_page(NULL)
-  , m_analyzer(NULL)
-  , m_e_segment_info(NULL)
-  , m_e_tracks(NULL)
   , m_ignore_tree_selection_changes(false)
 {
   wxPanel *frame_panel = new wxPanel(this);
@@ -134,9 +131,6 @@ header_editor_frame_c::header_editor_frame_c(wxWindow *parent)
 }
 
 header_editor_frame_c::~header_editor_frame_c() {
-  delete m_e_segment_info;
-  delete m_e_tracks;
-  delete m_analyzer;
 }
 
 void
@@ -170,7 +164,7 @@ header_editor_frame_c::translate_ui() {
 
 void
 header_editor_frame_c::set_window_title() {
-  if (NULL == m_analyzer)
+  if (!m_analyzer.is_set())
     SetTitle(Z("Header editor"));
   else
     SetTitle(wxString::Format(Z("Header editor: %s"), m_file_name.GetFullName().c_str()));
@@ -251,17 +245,14 @@ header_editor_frame_c::open_file(wxFileName file_name) {
     return false;
   }
 
-  delete m_e_segment_info;
-  delete m_e_tracks;
-  m_e_segment_info = NULL;
-  m_e_tracks       = NULL;
+  m_e_segment_info.clear();
+  m_e_tracks.clear();
 
-  delete m_analyzer;
-  m_analyzer = new wx_kax_analyzer_c(this, wxMB(file_name.GetFullPath()));
+  m_analyzer = wx_kax_analyzer_cptr(new wx_kax_analyzer_c(this, wxMB(file_name.GetFullPath())));
+
   if (!m_analyzer->process(kax_analyzer_c::parse_mode_fast)) {
     wxMessageBox(Z("This file could not be opened or parsed."), Z("File parsing failed"), wxOK | wxCENTER | wxICON_ERROR);
-    delete m_analyzer;
-    m_analyzer = NULL;
+    m_analyzer.clear();
 
     return false;
   }
@@ -317,15 +308,14 @@ header_editor_frame_c::open_file(wxFileName file_name) {
 
 void
 header_editor_frame_c::handle_segment_info(kax_analyzer_data_c *data) {
-  EbmlElement *e = m_analyzer->read_element(data);
-  if (NULL == e)
+  m_e_segment_info = m_analyzer->read_element(data);
+  if (!m_e_segment_info)
     return;
 
-  he_top_level_page_c *page = new he_top_level_page_c(this, YT("Segment information"), e);
+  he_top_level_page_c *page = new he_top_level_page_c(this, YT("Segment information"), m_e_segment_info);
   page->init();
 
-  m_e_segment_info = e;
-  KaxInfo *info    = static_cast<KaxInfo *>(e);
+  KaxInfo *info    = static_cast<KaxInfo *>(m_e_segment_info.get_object());
   he_value_page_c *child_page;
 
   child_page = new he_string_value_page_c(this, page, info, KaxTitle::ClassInfos, YT("Title"), YT("The title for the whole movie."));
@@ -357,12 +347,11 @@ header_editor_frame_c::handle_segment_info(kax_analyzer_data_c *data) {
 
 void
 header_editor_frame_c::handle_tracks(kax_analyzer_data_c *data) {
-  EbmlElement *e = m_analyzer->read_element(data);
-  if (NULL == e)
+  m_e_tracks = m_analyzer->read_element(data);
+  if (!m_e_tracks)
     return;
 
-  m_e_tracks            = e;
-  KaxTracks *kax_tracks = static_cast<KaxTracks *>(e);
+  KaxTracks *kax_tracks = static_cast<KaxTracks *>(m_e_tracks.get_object());
   int track_type        = -1;
   size_t i;
   for (i = 0; kax_tracks->ListSize() > i; ++i) {
@@ -382,7 +371,7 @@ header_editor_frame_c::handle_tracks(kax_analyzer_data_c *data) {
     wxString title;
     track_type = uint64(*k_track_type);
 
-    he_track_type_page_c *page = new he_track_type_page_c(this, track_type, track_number, kax_tracks);
+    he_track_type_page_c *page = new he_track_type_page_c(this, track_type, track_number, m_e_tracks);
     page->init();
 
     he_value_page_c *child_page;
@@ -582,8 +571,7 @@ header_editor_frame_c::on_file_close(wxCommandEvent &) {
 
   clear_pages();
 
-  delete m_analyzer;
-  m_analyzer = NULL;
+  m_analyzer.clear();
 
   m_file_name.Clear();
 
@@ -717,7 +705,7 @@ header_editor_frame_c::append_sub_page(he_page_base_c *page,
 
   wxTreeItemId id = m_tc_tree->AppendItem(parent_id, page->get_title());
   page->m_page_id = id;
-  m_pages.push_back(page);
+  m_pages.push_back(he_page_base_cptr(page));
 
   if (parent_id == m_root_id)
     m_top_level_pages.push_back(page);
@@ -732,7 +720,7 @@ he_page_base_c *
 header_editor_frame_c::find_page_for_item(wxTreeItemId id) {
   for (size_t i = 0; m_pages.size() > i; ++i)
     if (m_pages[i]->m_page_id == id)
-      return m_pages[i];
+      return m_pages[i].get_object();
 
   return NULL;
 }

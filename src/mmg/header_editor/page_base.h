@@ -23,6 +23,8 @@
 
 #include <ebml/EbmlElement.h>
 
+#include "common/ebml.h"
+
 using namespace libebml;
 
 class header_editor_frame_c;
@@ -32,7 +34,7 @@ public:
   std::vector<he_page_base_c *> m_children;
   header_editor_frame_c *m_parent;
   wxTreeItemId m_page_id;
-  EbmlElement *m_l1_element;
+  ebml_element_cptr m_l1_element;
   translatable_string_c m_title;
 
 public:
@@ -48,5 +50,6 @@ public:
   virtual void translate_ui() = 0;
   wxString get_title();
 };
+typedef counted_ptr<he_page_base_c> he_page_base_cptr;
 
 #endif // __HE_PAGE_BASE_H

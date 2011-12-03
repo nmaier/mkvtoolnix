@@ -27,7 +27,7 @@
 he_track_type_page_c::he_track_type_page_c(header_editor_frame_c *parent,
                                            int track_type,
                                            unsigned int track_number,
-                                           EbmlElement *l1_element)
+                                           ebml_element_cptr l1_element)
   : he_top_level_page_c(parent, "" , l1_element)
   , m_track_type(track_type)
   , m_track_number(track_number)

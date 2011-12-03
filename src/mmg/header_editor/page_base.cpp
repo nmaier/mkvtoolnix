@@ -24,7 +24,6 @@ he_page_base_c::he_page_base_c(header_editor_frame_c *parent,
   : wxPanel(parent->get_page_panel(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL)
   , m_parent(parent)
   , m_page_id()
-  , m_l1_element(NULL)
   , m_title(title)
 {
   Hide();

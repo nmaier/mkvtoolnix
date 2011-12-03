@@ -54,7 +54,8 @@ class header_editor_frame_c: public wxFrame {
   DECLARE_CLASS(header_editor_frame_c);
   DECLARE_EVENT_TABLE();
 public:
-  std::vector<he_page_base_c *> m_pages, m_top_level_pages;
+  std::vector<he_page_base_cptr> m_pages;
+  std::vector<he_page_base_c *> m_top_level_pages;
 
   wxFileName m_file_name;
   wxDateTime m_file_mtime;
@@ -70,9 +71,9 @@ public:
   wxTreeCtrl *m_tc_tree;
   wxTreeItemId m_root_id;
 
-  wx_kax_analyzer_c *m_analyzer;
+  wx_kax_analyzer_cptr m_analyzer;
 
-  EbmlElement *m_e_segment_info, *m_e_tracks;
+  counted_ptr<EbmlElement> m_e_segment_info, m_e_tracks;
 
   bool m_ignore_tree_selection_changes;
 
