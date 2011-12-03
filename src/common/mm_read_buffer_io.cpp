@@ -51,7 +51,7 @@ mm_read_buffer_io_c::setFilePointer(int64 offset,
       break;
 
     case seek_current:
-      new_pos  = m_proxy_io->getFilePointer();
+      new_pos  = m_offset;
       new_pos += m_cursor;
       new_pos += offset;
       break;
@@ -72,7 +72,10 @@ mm_read_buffer_io_c::setFilePointer(int64 offset,
   }
 
   // Actual seeking
-  m_proxy_io->setFilePointer(offset, mode);
+  if (new_pos < 0)
+    m_proxy_io->setFilePointer(offset, seek_end);
+  else
+    m_proxy_io->setFilePointer(new_pos, seek_beginning);
 
   // Get the actual offset from the underlying stream
   // Better be safe than sorry and use this instead of just taking
