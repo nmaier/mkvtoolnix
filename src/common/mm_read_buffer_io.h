@@ -22,7 +22,6 @@
 class mm_read_buffer_io_c: public mm_proxy_io_c {
 protected:
   memory_cptr m_af_buffer;
-
   unsigned char *m_buffer;
   size_t m_cursor;
   size_t m_fill;
@@ -30,7 +29,7 @@ protected:
   const size_t m_size;
 
 public:
-  mm_read_buffer_io_c(mm_io_c *p_in, size_t p_buffer_size = 1<<12, bool p_delete_in = true);
+  mm_read_buffer_io_c(mm_io_c *in, size_t buffer_size = 1 << 12, bool delete_in = true);
   virtual ~mm_read_buffer_io_c();
 
   virtual uint64 getFilePointer();

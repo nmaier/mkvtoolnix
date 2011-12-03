@@ -16,14 +16,14 @@
 
 #include "common/mm_write_buffer_io.h"
 
-mm_write_buffer_io_c::mm_write_buffer_io_c(mm_io_c *p_out,
-                                         size_t p_buffer_size,
-                                         bool p_delete_out)
-  : mm_proxy_io_c(p_out, p_delete_out)
-  , m_af_buffer(memory_c::alloc(p_buffer_size))
+mm_write_buffer_io_c::mm_write_buffer_io_c(mm_io_c *out,
+                                           size_t buffer_size,
+                                           bool delete_out)
+  : mm_proxy_io_c(out, delete_out)
+  , m_af_buffer(memory_c::alloc(buffer_size))
   , m_buffer(m_af_buffer->get_buffer())
   , m_fill(0)
-  , m_size(p_buffer_size)
+  , m_size(buffer_size)
 {
 }
 
@@ -33,8 +33,8 @@ mm_write_buffer_io_c::~mm_write_buffer_io_c() {
 
 mm_io_cptr
 mm_write_buffer_io_c::open(const std::string &file_name,
-                          size_t p_buffer_size) {
-  return mm_io_cptr(new mm_write_buffer_io_c(new mm_file_io_c(file_name, MODE_CREATE), p_buffer_size));
+                           size_t buffer_size) {
+  return mm_io_cptr(new mm_write_buffer_io_c(new mm_file_io_c(file_name, MODE_CREATE), buffer_size));
 }
 
 uint64
@@ -44,7 +44,7 @@ mm_write_buffer_io_c::getFilePointer() {
 
 void
 mm_write_buffer_io_c::setFilePointer(int64 offset,
-                                    seek_mode mode) {
+                                     seek_mode mode) {
   int64_t new_pos
     = seek_beginning == mode ? offset
     : seek_end       == mode ? get_size()       - offset
@@ -70,17 +70,18 @@ mm_write_buffer_io_c::close() {
 }
 
 uint32
-mm_write_buffer_io_c::_read(void *, size_t) {
+mm_write_buffer_io_c::_read(void *,
+                            size_t) {
   throw mtx::mm_io::wrong_read_write_access_x();
   return 0;
 }
 
 size_t
-mm_write_buffer_io_c::_write(const void *buffer, size_t size) {
-
+mm_write_buffer_io_c::_write(const void *buffer,
+                             size_t size) {
   size_t avail;
-  char *buf = (char*)buffer;
-  size_t remain = size;
+  const char *buf = static_cast<const char *>(buffer);
+  size_t remain   = size;
 
   // whole blocks
   while (remain >= (avail = m_size - m_fill)) {
@@ -91,21 +92,24 @@ mm_write_buffer_io_c::_write(const void *buffer, size_t size) {
       m_fill = m_size;
       flush_buffer();
       remain -= avail;
-      buf += avail;
-    }
-    else {
+      buf    += avail;
+
+    } else {
       // write whole blocks, skipping the buffer
       avail = mm_proxy_io_c::_write(buf, m_size);
       if (avail != m_size)
         throw mtx::mm_io::insufficient_space_x();
+
       remain -= avail;
-      buf += avail;
+      buf    += avail;
     }
   }
+
   if (remain) {
     memcpy(m_buffer + m_fill, buf, remain);
     m_fill += remain;
   }
+
   return size;
 }
 
@@ -114,9 +118,12 @@ mm_write_buffer_io_c::flush_buffer() {
   if (!m_fill)
     return;
 
-  size_t written = mm_proxy_io_c::_write(m_buffer, m_fill), fill = m_fill;
-  m_fill = 0;
+  size_t written = mm_proxy_io_c::_write(m_buffer, m_fill);
+  size_t fill    = m_fill;
+  m_fill         = 0;
+
   mxverb(2, boost::format("mm_write_buffer_io_c::flush_buffer(): requested %1% written %2%\n") % fill % written);
+
   if (written != fill)
     throw mtx::mm_io::insufficient_space_x();
 }

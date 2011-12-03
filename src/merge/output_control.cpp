@@ -319,19 +319,19 @@ file_names_to_paths(const std::vector<std::string> &file_names) {
 
 static mm_io_cptr
 open_input_file(filelist_t &file) {
-  mm_io_c *rv;
   try {
     if (file.all_names.size() == 1)
-      rv = new mm_file_io_c(file.name);
+      return mm_io_cptr(new mm_read_buffer_io_c(new mm_file_io_c(file.name), 1 << 17));
+
     else {
       std::vector<bfs::path> paths = file_names_to_paths(file.all_names);
-      rv = new mm_multi_file_io_c(paths, file.name);
+      return mm_io_cptr(new mm_read_buffer_io_c(new mm_multi_file_io_c(paths, file.name), 1 << 17));
     }
+
   } catch (...) {
     mxerror(boost::format(Y("The source file '%1%' could not be opened successfully, or retrieving its size by seeking to the end did not work.\n")) % file.name);
     return mm_io_cptr(NULL);
   }
-  return mm_io_cptr(new mm_read_buffer_io_c(rv, 1<<17));
 }
 
 /** \brief Probe the file type
@@ -343,7 +343,7 @@ void
 get_file_type(filelist_t &file) {
   mm_io_cptr af_io = open_input_file(file);
   mm_io_c *io      = af_io.get_object();
-  int64_t size     = std::min(io->get_size(), int64_t(1<<25));
+  int64_t size     = std::min(io->get_size(), static_cast<int64_t>(1 << 25));
 
   file_type_e type = FILE_TYPE_IS_UNKNOWN;
   // File types that can be detected unambiguously but are not supported

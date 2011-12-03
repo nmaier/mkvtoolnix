@@ -27,7 +27,7 @@ protected:
   const size_t m_size;
 
 public:
-  mm_write_buffer_io_c(mm_io_c *p_out, size_t p_buffer_size, bool p_delete_out = true);
+  mm_write_buffer_io_c(mm_io_c *out, size_t buffer_size, bool delete_out = true);
   virtual ~mm_write_buffer_io_c();
 
   virtual uint64 getFilePointer();
@@ -35,7 +35,7 @@ public:
   virtual void flush();
   virtual void close();
 
-  static mm_io_cptr open(const std::string &file_name, size_t p_buffer_size);
+  static mm_io_cptr open(const std::string &file_name, size_t buffer_size);
 
 protected:
   virtual uint32 _read(void *buffer, size_t size);
