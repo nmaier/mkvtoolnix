@@ -33,8 +33,7 @@
 
 #include "common/ebml.h"
 #include "common/matroska.h"
-#include "common/mm_io.h"
-#include "common/mm_write_cache_io.h"
+#include "common/mm_buffered_io.h"
 #include "common/strings/formatting.h"
 #include "extract/mkvextract.h"
 #include "extract/xtr_base.h"
@@ -92,7 +91,7 @@ create_timecode_files(KaxTracks &kax_tracks,
     }
 
     try {
-      mm_io_cptr file = mm_write_cache_io_c::open(tspec.out_name, 128 * 1024);
+      mm_io_cptr file = mm_wbuffer_io_c::open(tspec.out_name, 128 * 1024);
       timecode_extractors.push_back(timecode_extractor_t(tspec.tid, file, default_duration));
       file->puts(boost::format("# timecode format v%1%\n") % version);
 

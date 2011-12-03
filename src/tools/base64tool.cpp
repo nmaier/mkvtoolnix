@@ -20,8 +20,7 @@
 #include "common/base64.h"
 #include "common/command_line.h"
 #include "common/common_pch.h"
-#include "common/mm_io.h"
-#include "common/mm_write_cache_io.h"
+#include "common/mm_buffered_io.h"
 #include "common/strings/editing.h"
 #include "common/strings/parsing.h"
 #include "common/version.h"
@@ -84,7 +83,7 @@ main(int argc,
   }
 
   try {
-    out = mm_write_cache_io_c::open(argv[3], 128 * 1024);
+    out = mm_wbuffer_io_c::open(argv[3], 128 * 1024);
   } catch(...) {
     mxerror(boost::format(Y("The file '%1%' could not be opened for writing (%2%, %3%).\n")) % argv[3] % errno % strerror(errno));
   }

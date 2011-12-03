@@ -35,8 +35,7 @@
 #include "common/ebml.h"
 #include "common/kax_file.h"
 #include "common/matroska.h"
-#include "common/mm_io.h"
-#include "common/mm_write_cache_io.h"
+#include "common/mm_buffered_io.h"
 #include "extract/mkvextract.h"
 #include "extract/xtr_base.h"
 
@@ -270,7 +269,7 @@ write_all_cuesheets(KaxChapters &chapters,
       cue_file_name += ".cue";
 
       try {
-        mm_io_cptr out = mm_write_cache_io_c::open(cue_file_name, 128 * 1024);
+        mm_io_cptr out = mm_wbuffer_io_c::open(cue_file_name, 128 * 1024);
         mxinfo(boost::format(Y("The CUE sheet for track %1% will be written to '%2%'.\n")) % tspecs[i].tid % cue_file_name);
         write_cuesheet(file_name, chapters, tags, tspecs[i].tuid, *out);
 

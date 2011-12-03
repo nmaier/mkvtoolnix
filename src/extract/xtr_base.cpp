@@ -19,7 +19,7 @@
 
 #include "common/ebml.h"
 #include "common/matroska.h"
-#include "common/mm_write_cache_io.h"
+#include "common/mm_buffered_io.h"
 #include "common/strings/editing.h"
 #include "extract/xtr_aac.h"
 #include "extract/xtr_avc.h"
@@ -66,7 +66,7 @@ xtr_base_c::create_file(xtr_base_c *master,
 
   try {
     init_content_decoder(track);
-    m_out = mm_write_cache_io_c::open(m_file_name, 5 * 1024 * 1024);
+    m_out = mm_wbuffer_io_c::open(m_file_name, 5 * 1024 * 1024);
   } catch(...) {
     mxerror(boost::format(Y("Failed to create the file '%1%': %2% (%3%)\n")) % m_file_name % errno % strerror(errno));
   }
