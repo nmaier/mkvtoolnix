@@ -52,7 +52,7 @@ public:
   wxTreeItemId tid_root;
   wxButton *b_add_chapter, *b_add_subchapter, *b_remove_chapter;
   wxButton *b_set_values, *b_adjust_timecodes;
-  wxMenu *m_chapters;
+  wxMenu *m_chapters_menu;
 
   wxTextCtrl *tc_chapter_name, *tc_start_time, *tc_end_time;
   wxTextCtrl *tc_uid;
@@ -69,12 +69,13 @@ public:
   wxString file_name;
   bool source_is_kax_file, source_is_simple_format;
 
-  KaxChapters *chapters;
+  wx_kax_analyzer_cptr analyzer;
 
-  wx_kax_analyzer_c *analyzer;
+  ebml_element_cptr m_chapters_cp;
+  KaxChapters *m_chapters;
 
 public:
-  tab_chapters(wxWindow *parent, wxMenu *nm_chapters);
+  tab_chapters(wxWindow *parent, wxMenu *chapters_menu);
   ~tab_chapters();
 
   void on_new_chapters(wxCommandEvent &evt);

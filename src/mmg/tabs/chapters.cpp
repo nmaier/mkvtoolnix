@@ -178,14 +178,16 @@ expand_subtree(wxTreeCtrl &tree,
 #define X1 100
 
 tab_chapters::tab_chapters(wxWindow *parent,
-                           wxMenu *nm_chapters):
-  wxPanel(parent, -1, wxDefaultPosition, wxSize(100, 400), wxTAB_TRAVERSAL) {
+                           wxMenu *chapters_menu)
+  : wxPanel(parent, -1, wxDefaultPosition, wxSize(100, 400), wxTAB_TRAVERSAL)
+  , m_chapters(NULL)
+{
   wxBoxSizer *siz_all, *siz_line, *siz_column;
   wxStaticBoxSizer *siz_sb;
   wxFlexGridSizer *siz_fg;
   uint32_t i;
 
-  m_chapters = nm_chapters;
+  m_chapters_menu = chapters_menu;
 
   siz_all = new wxBoxSizer(wxVERTICAL);
 
@@ -301,15 +303,13 @@ tab_chapters::tab_chapters(wxWindow *parent,
 
   enable_inputs(false);
 
-  m_chapters->Enable(ID_M_CHAPTERS_SAVE,      false);
-  m_chapters->Enable(ID_M_CHAPTERS_SAVEAS,    false);
-  m_chapters->Enable(ID_M_CHAPTERS_SAVETOKAX, false);
-  m_chapters->Enable(ID_M_CHAPTERS_VERIFY,    false);
+  m_chapters_menu->Enable(ID_M_CHAPTERS_SAVE,      false);
+  m_chapters_menu->Enable(ID_M_CHAPTERS_SAVEAS,    false);
+  m_chapters_menu->Enable(ID_M_CHAPTERS_SAVETOKAX, false);
+  m_chapters_menu->Enable(ID_M_CHAPTERS_VERIFY,    false);
   enable_buttons(false);
 
   file_name               = wxEmptyString;
-  chapters                = NULL;
-  analyzer                = NULL;
   source_is_kax_file      = false;
   source_is_simple_format = false;
   no_update               = false;
@@ -319,8 +319,6 @@ tab_chapters::tab_chapters(wxWindow *parent,
 }
 
 tab_chapters::~tab_chapters() {
-  delete chapters;
-  delete analyzer;
 }
 
 void
@@ -389,22 +387,19 @@ tab_chapters::on_new_chapters(wxCommandEvent &) {
   file_name = wxEmptyString;
   tc_chapters->DeleteAllItems();
   tid_root = tc_chapters->AddRoot(Z("(new chapter file)"));
-  if (chapters != NULL)
-    delete chapters;
-  chapters = new KaxChapters;
+  m_chapters_cp = ebml_element_cptr(new KaxChapters);
+  m_chapters    = static_cast<KaxChapters *>(m_chapters_cp.get_object());
 
-  m_chapters->Enable(ID_M_CHAPTERS_SAVE, true);
-  m_chapters->Enable(ID_M_CHAPTERS_SAVEAS, true);
-  m_chapters->Enable(ID_M_CHAPTERS_SAVETOKAX, true);
-  m_chapters->Enable(ID_M_CHAPTERS_VERIFY, true);
+  m_chapters_menu->Enable(ID_M_CHAPTERS_SAVE, true);
+  m_chapters_menu->Enable(ID_M_CHAPTERS_SAVEAS, true);
+  m_chapters_menu->Enable(ID_M_CHAPTERS_SAVETOKAX, true);
+  m_chapters_menu->Enable(ID_M_CHAPTERS_VERIFY, true);
   enable_buttons(true);
 
   enable_inputs(false);
   source_is_kax_file = false;
-  if (analyzer != NULL) {
-    delete analyzer;
-    analyzer = NULL;
-  }
+  if (analyzer)
+    analyzer.clear();
 
   clear_list_of_unique_uint32(UNIQUE_CHAPTER_IDS);
   clear_list_of_unique_uint32(UNIQUE_EDITION_IDS);
@@ -533,8 +528,7 @@ tab_chapters::on_load_chapters(wxCommandEvent &) {
 
 bool
 tab_chapters::load(wxString name) {
-  KaxChapters *new_chapters;
-  EbmlElement *e;
+  ebml_element_cptr new_chapters;
   wxString s;
   int pos;
 
@@ -543,43 +537,36 @@ tab_chapters::load(wxString name) {
 
   try {
     if (kax_analyzer_c::probe(wxMB(name))) {
-      if (analyzer != NULL)
-        delete analyzer;
-      analyzer = new wx_kax_analyzer_c(this, wxMB(name));
+      analyzer  = wx_kax_analyzer_cptr(new wx_kax_analyzer_c(this, wxMB(name)));
       file_name = name;
       if (!analyzer->process()) {
         wxMessageBox(Z("This file could not be opened or parsed."), Z("File parsing failed"), wxOK | wxCENTER | wxICON_ERROR);
-        delete analyzer;
-        analyzer = NULL;
+        analyzer.clear();
 
         return false;
       }
       pos = analyzer->find(KaxChapters::ClassInfos.GlobalId);
       if (pos == -1) {
         wxMessageBox(Z("This file does not contain any chapters."), Z("No chapters found"), wxOK | wxCENTER | wxICON_INFORMATION);
-        delete analyzer;
-        analyzer = NULL;
+        analyzer.clear();
+
         return false;
       }
 
-      e = analyzer->read_element(pos);
-      if (e == NULL)
+      new_chapters = analyzer->read_element(pos);
+      if (!new_chapters)
         throw mtx::exception();
-      new_chapters = static_cast<KaxChapters *>(e);
       source_is_kax_file = true;
       source_is_simple_format = false;
 
       analyzer->close_file();
 
     } else {
-      new_chapters = parse_chapters(wxMB(name), 0, -1, 0, "", "", true,
-                                    &source_is_simple_format);
+      new_chapters = ebml_element_cptr(parse_chapters(wxMB(name), 0, -1, 0, "", "", true, &source_is_simple_format));
       source_is_kax_file = false;
     }
   } catch (mtx::exception &) {
-    if (analyzer)
-      delete analyzer;
-    analyzer = NULL;
+    analyzer.clear();
     s = Z("This file does not contain valid chapters.");
     break_line(s);
     while (s[s.Length() - 1] == wxT('\n'))
@@ -588,22 +575,22 @@ tab_chapters::load(wxString name) {
     return false;
   }
 
-  if (chapters != NULL)
-    delete chapters;
+  m_chapters_cp = new_chapters;
+  m_chapters    = static_cast<KaxChapters *>(m_chapters_cp.get_object());
+
   tc_chapters->DeleteAllItems();
-  chapters = new_chapters;
-  m_chapters->Enable(ID_M_CHAPTERS_SAVE, true);
-  m_chapters->Enable(ID_M_CHAPTERS_SAVEAS, true);
-  m_chapters->Enable(ID_M_CHAPTERS_SAVETOKAX, true);
-  m_chapters->Enable(ID_M_CHAPTERS_VERIFY, true);
+  m_chapters_menu->Enable(ID_M_CHAPTERS_SAVE, true);
+  m_chapters_menu->Enable(ID_M_CHAPTERS_SAVEAS, true);
+  m_chapters_menu->Enable(ID_M_CHAPTERS_SAVETOKAX, true);
+  m_chapters_menu->Enable(ID_M_CHAPTERS_VERIFY, true);
   enable_buttons(true);
 
   file_name = name;
   clear_list_of_unique_uint32(UNIQUE_CHAPTER_IDS);
   clear_list_of_unique_uint32(UNIQUE_EDITION_IDS);
-  fix_missing_languages(*chapters);
+  fix_missing_languages(*m_chapters);
   tid_root = tc_chapters->AddRoot(file_name);
-  add_recursively(tid_root, *chapters);
+  add_recursively(tid_root, *m_chapters);
   expand_subtree(*tc_chapters, tid_root);
 
   enable_inputs(false);
@@ -652,12 +639,9 @@ tab_chapters::on_save_chapters_to_kax_file(wxCommandEvent &) {
   source_is_kax_file = true;
   source_is_simple_format = false;
 
-  if (analyzer != NULL)
-    delete analyzer;
-  analyzer = new wx_kax_analyzer_c(this, wxMB(file_name));
+  analyzer = wx_kax_analyzer_cptr(new wx_kax_analyzer_c(this, wxMB(file_name)));
   if (!analyzer->process()) {
-    delete analyzer;
-    analyzer = NULL;
+    analyzer.clear();
     return;
   }
 
@@ -718,7 +702,7 @@ tab_chapters::save() {
             "<!-- <!DOCTYPE Tags SYSTEM \"matroskatags.dtd\"> -->\n"
             "\n"
             "<Chapters>\n");
-  write_chapters_xml(chapters, out.get_object());
+  write_chapters_xml(m_chapters, out.get_object());
   out->puts("</Chapters>\n");
 
   source_is_kax_file = false;
@@ -800,20 +784,20 @@ bool
 tab_chapters::verify(bool called_interactively) {
   uint32_t eidx, cidx;
 
-  if (NULL == chapters){
+  if (!m_chapters_cp){
     wxMessageBox(Z("No chapter entries have been create yet."), Z("Chapter verification error"), wxCENTER | wxOK | wxICON_ERROR);
     return false;
   }
 
-  if (0 == chapters->ListSize())
+  if (0 == m_chapters->ListSize())
     return true;
 
   wxTreeItemId id = tc_chapters->GetSelection();
   if (id.IsOk())
     copy_values(id);
 
-  for (eidx = 0; eidx < chapters->ListSize(); eidx++) {
-    KaxEditionEntry *eentry = static_cast<KaxEditionEntry *>((*chapters)[eidx]);
+  for (eidx = 0; eidx < m_chapters->ListSize(); eidx++) {
+    KaxEditionEntry *eentry = static_cast<KaxEditionEntry *>((*m_chapters)[eidx]);
     bool contains_atom      = false;
 
     for (cidx = 0; cidx < eentry->ListSize(); cidx++)
@@ -828,18 +812,18 @@ tab_chapters::verify(bool called_interactively) {
     }
   }
 
-  fix_mandatory_chapter_elements(chapters);
+  fix_mandatory_chapter_elements(m_chapters);
 
-  for (eidx = 0; eidx < chapters->ListSize(); eidx++) {
-    KaxEditionEntry *eentry = static_cast<KaxEditionEntry *>((*chapters)[eidx]);
+  for (eidx = 0; eidx < m_chapters->ListSize(); eidx++) {
+    KaxEditionEntry *eentry = static_cast<KaxEditionEntry *>((*m_chapters)[eidx]);
     for (cidx = 0; cidx < eentry->ListSize(); cidx++)
       if ((dynamic_cast<KaxChapterAtom *>((*eentry)[cidx]) != NULL) && !verify_atom_recursively((*eentry)[cidx]))
         return false;
   }
 
-  if (!chapters->CheckMandatory())
+  if (!m_chapters->CheckMandatory())
     wxdie(Z("verify failed: chapters->CheckMandatory() is false. This should not have happened. Please file a bug report.\n"));
-  chapters->UpdateSize();
+  m_chapters->UpdateSize();
 
   if (called_interactively)
     wxMessageBox(Z("All chapter entries are valid."), Z("Chapter verification succeeded"), wxCENTER | wxOK | wxICON_INFORMATION);
@@ -868,13 +852,13 @@ tab_chapters::on_add_chapter(wxCommandEvent &) {
     KaxEditionUID *euid;
 
     eentry = new KaxEditionEntry;
-    chapters->PushElement(*eentry);
+    m_chapters->PushElement(*eentry);
     euid = new KaxEditionUID;
     *static_cast<EbmlUInteger *>(euid) =
       create_unique_uint32(UNIQUE_EDITION_IDS);
     eentry->PushElement(*euid);
     d = new chapter_node_data_c(eentry);
-    s.Printf(Z("EditionEntry %u"), (unsigned int)chapters->ListSize());
+    s.Printf(Z("EditionEntry %u"), (unsigned int)m_chapters->ListSize());
     id = tc_chapters->AppendItem(tid_root, s, -1, -1, d);
   }
 
@@ -944,9 +928,9 @@ tab_chapters::on_add_subchapter(wxCommandEvent &) {
   d = (chapter_node_data_c *)tc_chapters->GetItemData(id);
   if (id == tid_root) {
     eentry = new KaxEditionEntry;
-    chapters->PushElement(*eentry);
+    m_chapters->PushElement(*eentry);
     d = new chapter_node_data_c(eentry);
-    s.Printf(Z("EditionEntry %u"), (unsigned int)chapters->ListSize());
+    s.Printf(Z("EditionEntry %u"), (unsigned int)m_chapters->ListSize());
     id = tc_chapters->AppendItem(tid_root, s, -1, -1, d);
   }
   if (d->is_atom)
@@ -985,7 +969,7 @@ tab_chapters::on_remove_chapter(wxCommandEvent &) {
 
   p_id = tc_chapters->GetItemParent(id);
   if (p_id == tid_root)
-    m = chapters;
+    m = m_chapters;
   else {
     p_d = (chapter_node_data_c *)tc_chapters->GetItemData(p_id);
     if (p_d == NULL)
@@ -1882,7 +1866,7 @@ tab_chapters::is_empty() {
 
 void
 tab_chapters::write_chapters_to_matroska_file() {
-  kax_analyzer_c::update_element_result_e result = (0 == chapters->ListSize() ? analyzer->remove_elements(KaxChapters::ClassInfos.GlobalId) : analyzer->update_element(chapters));
+  kax_analyzer_c::update_element_result_e result = (0 == m_chapters->ListSize() ? analyzer->remove_elements(KaxChapters::ClassInfos.GlobalId) : analyzer->update_element(m_chapters));
 
   switch (result) {
     case kax_analyzer_c::uer_success:
