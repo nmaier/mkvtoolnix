@@ -24,6 +24,7 @@ protected:
   memory_cptr m_af_buffer;
   unsigned char *m_buffer;
   size_t m_cursor;
+  bool m_eof;
   size_t m_fill;
   int64_t m_offset;
   const size_t m_size;
@@ -35,6 +36,7 @@ public:
   virtual uint64 getFilePointer();
   virtual void setFilePointer(int64 offset, seek_mode mode = seek_beginning);
   virtual int64_t get_size();
+  inline virtual bool eof() { return m_eof; }
 
 protected:
   virtual uint32 _read(void *buffer, size_t size);
