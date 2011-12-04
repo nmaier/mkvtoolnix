@@ -34,21 +34,22 @@
 #endif
 
 #if defined(SYS_WINDOWS)
-typedef UINT (WINAPI *pGetErrorMode)(void);
-static void fix_windows_errormode() {
-    UINT mode = SEM_FAILCRITICALERRORS | SEM_NOGPFAULTERRORBOX;
-    HMODULE hKern = ::LoadLibrary("kernel32");
-    if (hKern) {
-        // Vista+ only, but one can do without
-        pGetErrorMode _GetErrorMode = reinterpret_cast<pGetErrorMode>(
-                ::GetProcAddress(hKern, "GetErrorMode")
-                );
-        if (_GetErrorMode)
-            mode |= _GetErrorMode();
+typedef UINT (WINAPI *p_get_error_mode)(void);
+static void
+fix_windows_errormode() {
+  UINT mode      = SEM_FAILCRITICALERRORS | SEM_NOGPFAULTERRORBOX;
+  HMODULE h_kern = ::LoadLibrary("kernel32");
 
-        ::FreeLibrary(hKern);
-    }
-    ::SetErrorMode(mode);
+  if (h_kern) {
+    // Vista+ only, but one can do without
+    p_get_error_mode get_error_mode = reinterpret_cast<p_get_error_mode>(::GetProcAddress(h_kern, "GetErrorMode"));
+    if (get_error_mode)
+      mode |= get_error_mode();
+
+    ::FreeLibrary(h_kern);
+  }
+
+  ::SetErrorMode(mode);
 }
 #endif
 
