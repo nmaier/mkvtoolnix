@@ -437,13 +437,13 @@ task :clean do
       lib/libebml/src/*.o lib/libmatroska/src/*.o
       lib/libebml/src/lib*.a lib/libmatroska/src/lib*.a
   SHELL
+  run "rm -rf #{$dependency_dir}", :allow_failure => true
 end
 
 namespace :clean do
   desc "Remove all compiled and generated files ('tarball' clean)"
   task :dist => :clean do
     run "rm -f config.h config.log config.cache build-config Makefile */Makefile */*/Makefile TAGS", :allow_failure => true
-    run "rm -rf #{$dependency_dir}", :allow_failure => true
   end
 
   desc "Remove all compiled and generated files ('git' clean)"
