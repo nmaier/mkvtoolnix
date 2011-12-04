@@ -23,6 +23,7 @@ mm_read_buffer_io_c::mm_read_buffer_io_c(mm_io_c *in,
   , m_af_buffer(memory_c::alloc(buffer_size))
   , m_buffer(m_af_buffer->get_buffer())
   , m_cursor(0)
+  , m_eof(false)
   , m_fill(0)
   , m_offset(0)
   , m_size(buffer_size)
@@ -44,6 +45,9 @@ mm_read_buffer_io_c::setFilePointer(int64 offset,
                                     seek_mode mode) {
   int64_t new_pos = 0;
   // FIXME int64_t overflow
+
+  // No need to actually compute this here; _read() will do just that
+  m_eof = false;
 
   switch (mode) {
     case seek_beginning:
@@ -110,12 +114,22 @@ mm_read_buffer_io_c::_read(void *buffer,
       // Refill the buffer
       m_offset += m_cursor;
       m_cursor  = 0;
+      m_fill    = 0;
       avail     = std::min(get_size() - m_offset, static_cast<int64_t>(m_size));
 
-      if (!avail)
-          break;
+      if (!avail) {
+        // must keep track of eof, as m_proxy_io->eof() will never be reached
+        // because of the above eof calculation
+        m_eof = true;
+        break;
+      }
 
       m_fill = m_proxy_io->read(m_buffer, avail);
+      if (m_fill != avail) {
+        m_eof = true;
+        if (!m_fill)
+          break;
+      }
     }
   }
 
