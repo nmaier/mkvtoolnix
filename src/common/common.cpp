@@ -33,6 +33,25 @@
 #define matroska_done()
 #endif
 
+#if defined(SYS_WINDOWS)
+typedef UINT (WINAPI *pGetErrorMode)(void);
+static void fix_windows_errormode() {
+    UINT mode = SEM_FAILCRITICALERRORS | SEM_NOGPFAULTERRORBOX;
+    HMODULE hKern = ::LoadLibrary("kernel32");
+    if (hKern) {
+        // Vista+ only, but one can do without
+        pGetErrorMode _GetErrorMode = reinterpret_cast<pGetErrorMode>(
+                ::GetProcAddress(hKern, "GetErrorMode")
+                );
+        if (_GetErrorMode)
+            mode |= _GetErrorMode();
+
+        ::FreeLibrary(hKern);
+    }
+    ::SetErrorMode(mode);
+}
+#endif
+
 // Global and static variables
 
 unsigned int verbose = 1;
@@ -98,6 +117,10 @@ mtx_common_cleanup() {
 
 void
 mtx_common_init() {
+#if defined(SYS_WINDOWS)
+  fix_windows_errormode();
+#endif
+
   matroska_init();
 
   atexit(mtx_common_cleanup);
