@@ -145,8 +145,8 @@ end
 
 # Precompiled headers
 if c?(:USE_PRECOMPILED_HEADERS)
-  $all_objects.each { |name| file name => "src/common/common.h.gch" }
-  file "src/common/common.h.gch" => "src/common/common.h", &cxx_compiler
+  $all_objects.each { |name| file name => "src/common/common_pch.h.gch" }
+  file "src/common/common_pch.h.gch" => "src/common/common_pch.h", &cxx_compiler
 end
 
 # Pattern rules
