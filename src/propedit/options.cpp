@@ -12,6 +12,7 @@
 
 #include <cassert>
 #include <boost/range/algorithm.hpp>
+#include <boost/range/algorithm_ext/erase.hpp>
 
 #include <matroska/KaxChapters.h>
 #include <matroska/KaxTag.h>
@@ -128,7 +129,7 @@ options_c::has_changes()
 
 void
 options_c::remove_empty_targets() {
-  boost::remove_if(m_targets, [](target_cptr &target) { return !target->has_changes(); });
+  boost::remove_erase_if(m_targets, [](target_cptr &target) { return !target->has_changes(); });
 }
 
 template<typename T> static ebml_element_cptr

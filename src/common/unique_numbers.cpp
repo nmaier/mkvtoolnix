@@ -15,6 +15,7 @@
 
 #include <cassert>
 #include <boost/range/algorithm.hpp>
+#include <boost/range/algorithm_ext/erase.hpp>
 
 #include "common/hacks.h"
 #include "common/random.h"
@@ -66,7 +67,7 @@ void
 remove_unique_uint32(uint32_t number,
                      unique_id_category_e category) {
   assert_valid_category(category);
-  boost::remove_if(s_random_unique_numbers[category], [=](uint32_t stored_number) { return number == stored_number; });
+  boost::remove_erase_if(s_random_unique_numbers[category], [=](uint32_t stored_number) { return number == stored_number; });
 }
 
 uint32_t
