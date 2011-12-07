@@ -46,6 +46,7 @@
 #include "output/p_pcm.h"
 #include "output/p_video.h"
 #include "output/p_vorbis.h"
+#include "output/p_vp8.h"
 
 #define GAB2_TAG                 FOURCC('G', 'A', 'B', '2')
 #define GAB2_ID_LANGUAGE         0x0000
@@ -257,6 +258,9 @@ avi_reader_c::create_video_packetizer() {
   else if (mpeg1_2::is_fourcc(get_uint32_le(codec)))
     create_mpeg1_2_packetizer();
 
+  else if (FOURCC('V', 'P', '8', '0') == get_uint32_be(codec))
+    create_vp8_packetizer();
+
   else
     create_standard_video_packetizer();
 }
@@ -344,6 +348,19 @@ avi_reader_c::create_mpeg4_p10_packetizer() {
   } catch (...) {
     mxerror_tid(m_ti.m_fname, 0, Y("Could not extract the decoder specific config data (AVCC) from this AVC/h.264 track.\n"));
   }
+}
+
+void
+avi_reader_c::create_vp8_packetizer() {
+  m_ti.m_private_data = NULL;
+  m_ti.m_private_size = 0;
+  m_vptzr             = add_packetizer(new vp8_video_packetizer_c(this, m_ti));
+
+  PTZR(m_vptzr)->set_track_default_duration(1000000000ll / m_fps);
+  PTZR(m_vptzr)->set_video_pixel_width(AVI_video_width(m_avi));
+  PTZR(m_vptzr)->set_video_pixel_height(AVI_video_height(m_avi));
+
+  show_packetizer_info(0, PTZR(m_vptzr));
 }
 
 void
@@ -916,6 +933,9 @@ avi_reader_c::identify_video() {
 
   else if (mpeg1_2::is_fourcc(get_uint32_le(fourcc_str)))
     type = "MPEG-1/2";
+
+  else if (type == "VP80")
+    type = "VP8";
 
   id_result_track(0, ID_RESULT_TRACK_VIDEO, type, join(" ", extended_info));
 }

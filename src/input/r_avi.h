@@ -115,6 +115,7 @@ protected:
   virtual void create_mpeg1_2_packetizer();
   virtual void create_mpeg4_p2_packetizer();
   virtual void create_mpeg4_p10_packetizer();
+  virtual void create_vp8_packetizer();
   virtual void create_video_packetizer();
 
   void extended_identify_mpeg4_l2(std::vector<std::string> &extended_info);
