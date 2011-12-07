@@ -1,5 +1,8 @@
 2011-12-07  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: enhancement: The VP8 output module will always
+	re-derive frame types (key frame vs. non-key frame).
+
 	* mkvmerge: bug fix: VP8 read from AVI could not be put into WebM
 	compatible files.
 
