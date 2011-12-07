@@ -19,6 +19,9 @@
 #include "merge/pr_generic.h"
 
 class vp8_video_packetizer_c: public generic_packetizer_c {
+protected:
+  int64_t m_previous_timecode;
+
 public:
   vp8_video_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti);
 

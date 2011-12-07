@@ -13,6 +13,7 @@
 
 #include "common/common_pch.h"
 
+#include "common/ivf.h"
 #include "common/matroska.h"
 #include "output/p_vp8.h"
 
@@ -21,6 +22,7 @@ using namespace libmatroska;
 vp8_video_packetizer_c::vp8_video_packetizer_c(generic_reader_c *p_reader,
                                                track_info_c &p_ti)
   : generic_packetizer_c(p_reader, p_ti)
+  , m_previous_timecode(-1)
 {
   m_timecode_factory_application_mode = TFA_SHORT_QUEUEING;
 
@@ -38,6 +40,9 @@ vp8_video_packetizer_c::set_headers() {
 
 int
 vp8_video_packetizer_c::process(packet_cptr packet) {
+  packet->bref        = ivf::is_keyframe(packet->data) ? -1 : m_previous_timecode;
+  m_previous_timecode = packet->timecode;
+
   add_packet(packet);
 
   return FILE_STATUS_MOREDATA;

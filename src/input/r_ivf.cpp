@@ -110,13 +110,10 @@ ivf_reader_c::read(generic_packetizer_c *,
   }
 
   int64_t timestamp = get_uint64_le(&header.timestamp) * 1000000000ull * m_frame_rate_den / m_frame_rate_num;
-  bool is_keyframe  = ivf::is_keyframe(buffer);
 
-  mxverb(3, boost::format("r_ivf.cpp: key %5% header.ts %1% num %2% den %3% res %4%\n") % get_uint64_le(&header.timestamp) % m_frame_rate_num % m_frame_rate_den % timestamp % is_keyframe);
+  mxverb(3, boost::format("r_ivf.cpp: key %5% header.ts %1% num %2% den %3% res %4%\n") % get_uint64_le(&header.timestamp) % m_frame_rate_num % m_frame_rate_den % timestamp % ivf::is_keyframe(buffer));
 
-  PTZR0->process(new packet_t(buffer, timestamp, -1, is_keyframe ? -1 : m_previous_timestamp));
-
-  m_previous_timestamp  = timestamp;
+  PTZR0->process(new packet_t(buffer, timestamp));
 
   return FILE_STATUS_MOREDATA;
 }
