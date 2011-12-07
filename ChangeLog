@@ -1,3 +1,9 @@
+2011-12-07  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Fixed a rare audio type mis-detection of
+	MP2/MP3 audio tracks in MPEG program streams causing mkvmerge to
+	abort with an error message.
+
 2011-12-04  Nils Maier  <maierman@web.de>
 
 	* mkvmerge, mkvextract: enhancement: Implemented input file

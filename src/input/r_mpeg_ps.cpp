@@ -770,7 +770,7 @@ mpeg_ps_reader_c::new_stream_a_mpeg(mpeg_ps_id_t,
   decode_mp3_header(buf, &header);
   track->a_channels    = header.channels;
   track->a_sample_rate = header.sampling_frequency;
-  track->fourcc        = FOURCC('M', 'P', '0' + header.layer, ' ');
+  track->fourcc        = FOURCC('M', 'P', '0' + std::max(2, std::min(3, header.layer)), ' ');
 }
 
 void
