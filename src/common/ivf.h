@@ -45,6 +45,8 @@ namespace ivf {
     frame_header_t();
   };
 
+  bool is_keyframe(const memory_cptr &buffer);
+
 #if defined(COMP_MSC)
 #pragma pack(pop)
 #endif

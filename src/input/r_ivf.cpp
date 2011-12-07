@@ -110,7 +110,7 @@ ivf_reader_c::read(generic_packetizer_c *,
   }
 
   int64_t timestamp = get_uint64_le(&header.timestamp) * 1000000000ull * m_frame_rate_den / m_frame_rate_num;
-  bool is_keyframe  = (0 != frame_size) && ((buffer->get_buffer()[0] & 0x01) == 0);
+  bool is_keyframe  = ivf::is_keyframe(buffer);
 
   mxverb(3, boost::format("r_ivf.cpp: key %5% header.ts %1% num %2% den %3% res %4%\n") % get_uint64_le(&header.timestamp) % m_frame_rate_num % m_frame_rate_den % timestamp % is_keyframe);
 
