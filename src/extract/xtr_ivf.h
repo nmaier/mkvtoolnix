@@ -22,7 +22,7 @@ class xtr_ivf_c: public xtr_base_c {
 public:
   uint64_t m_frame_rate_num, m_frame_rate_den;
   uint32_t m_frame_count;
-  ivf_file_header_t m_file_header;
+  ivf::file_header_t m_file_header;
 
 public:
   xtr_ivf_c(const std::string &codec_id, int64_t tid, track_spec_t &tspec);

@@ -84,7 +84,7 @@ xtr_ivf_c::handle_frame(memory_cptr &frame,
          % timecode % m_frame_rate_num % m_frame_rate_den % frame_number
          % (frame_number * 1000000000ull * m_frame_rate_den / m_frame_rate_num));
 
-  ivf_frame_header_t frame_header;
+  ivf::frame_header_t frame_header;
   put_uint32_le(&frame_header.frame_size, frame->get_size());
   put_uint32_le(&frame_header.timestamp,  frame_number);
 

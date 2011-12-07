@@ -24,12 +24,12 @@
 int
 ivf_reader_c::probe_file(mm_io_c *io,
                          uint64_t size) {
-  if (sizeof(ivf_file_header_t) > size)
+  if (sizeof(ivf::file_header_t) > size)
     return 0;
 
-  ivf_file_header_t header;
+  ivf::file_header_t header;
   io->setFilePointer(0, seek_beginning);
-  if (io->read(&header, sizeof(ivf_file_header_t)) < sizeof(ivf_file_header_t))
+  if (io->read(&header, sizeof(ivf::file_header_t)) < sizeof(ivf::file_header_t))
     return 0;
 
   if (memcmp(header.file_magic, "DKIF", 4) || memcmp(header.fourcc, "VP80", 4))
@@ -48,8 +48,8 @@ ivf_reader_c::ivf_reader_c(const track_info_c &ti,
 void
 ivf_reader_c::read_headers() {
   try {
-    ivf_file_header_t header;
-    m_in->read(&header, sizeof(ivf_file_header_t));
+    ivf::file_header_t header;
+    m_in->read(&header, sizeof(ivf::file_header_t));
 
     m_width          = get_uint16_le(&header.width);
     m_height         = get_uint16_le(&header.height);
@@ -91,11 +91,11 @@ ivf_reader_c::read(generic_packetizer_c *,
                    bool) {
   size_t remaining_bytes = m_size - m_in->getFilePointer();
 
-  ivf_frame_header_t header;
-  if ((sizeof(ivf_frame_header_t) > remaining_bytes) || (m_in->read(&header, sizeof(ivf_frame_header_t)) != sizeof(ivf_frame_header_t)))
+  ivf::frame_header_t header;
+  if ((sizeof(ivf::frame_header_t) > remaining_bytes) || (m_in->read(&header, sizeof(ivf::frame_header_t)) != sizeof(ivf::frame_header_t)))
     return flush_packetizers();
 
-  remaining_bytes     -= sizeof(ivf_frame_header_t);
+  remaining_bytes     -= sizeof(ivf::frame_header_t);
   uint32_t frame_size  = get_uint32_le(&header.frame_size);
 
   if (remaining_bytes < frame_size) {

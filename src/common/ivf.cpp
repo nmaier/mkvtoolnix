@@ -17,12 +17,12 @@
 
 #include "common/ivf.h"
 
-ivf_file_header_t::ivf_file_header_t()
+ivf::file_header_t::file_header_t()
 {
   memset(this, 0, sizeof(*this));
 }
 
-ivf_frame_header_t::ivf_frame_header_t()
+ivf::frame_header_t::frame_header_t()
 {
   memset(this, 0, sizeof(*this));
 }
