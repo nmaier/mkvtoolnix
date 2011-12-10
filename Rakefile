@@ -140,7 +140,7 @@ cxx_compiler = lambda do |t|
   sources = t.sources.empty? ? [ t.prerequisites.first ] : t.sources
 
   runq "     CXX #{sources.first}", "#{c(:CXX)} #{$flags[:cxxflags]} #{$system_includes} -c -MMD -o #{t.name} #{sources.join(" ")}", :allow_failure => true
-  handle_deps t.name, last_exit_code
+  handle_deps t.name, last_exit_code, skip_abspath=true
 end
 
 # Precompiled headers

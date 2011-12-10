@@ -48,7 +48,7 @@ def runq(msg, cmdline, options = {})
   run cmdline, options.clone.merge(:dont_echo => !verbose)
 end
 
-def handle_deps(target, exit_code)
+def handle_deps(target, exit_code, skip_abspath=false)
   dep_file = target.ext 'd'
   get_out  = lambda do
     File.unlink(dep_file) if FileTest.exist?(dep_file)
@@ -67,7 +67,15 @@ def handle_deps(target, exit_code)
       target  = $1
       sources = $2.gsub(/^\s+/, '').gsub(/\s+$/, '').split(/\s+/)
 
-      out.puts "file \"#{target}\" => [ " + sources.collect { |entry| "\"#{entry}\"" }.join(", ") + " ]"
+      if skip_abspath
+        sources.delete_if { |entry| entry.start_with? '/' }
+      end
+
+      if sources.length == 1
+        out.puts "file '#{target}' => [ '#{sources[0]}' ]"
+      else
+        out.puts "file '#{target}' => [" + sources.collect { |entry| "\n  '#{entry}'" }.join(',') + " ]"
+      end
     end
   end
 
