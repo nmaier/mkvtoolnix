@@ -692,6 +692,7 @@ qtmp4_reader_c::handle_moov_atom(qt_atom_t parent,
 
     else if (FOURCC('t', 'r', 'a', 'k') == atom.fourcc) {
       qtmp4_demuxer_cptr new_dmx(new qtmp4_demuxer_c);
+      new_dmx->id = m_demuxers.size();
 
       handle_trak_atom(new_dmx, atom.to_parent(), level + 1);
       if (('?' != new_dmx->type) && (0 != get_uint32_le(new_dmx->fourcc)))
@@ -1196,7 +1197,7 @@ qtmp4_reader_c::handle_elst_atom(qtmp4_demuxer_cptr &new_dmx,
 }
 
 void
-qtmp4_reader_c::handle_tkhd_atom(qtmp4_demuxer_cptr &new_dmx,
+qtmp4_reader_c::handle_tkhd_atom(qtmp4_demuxer_cptr &/* new_dmx */,
                                  qt_atom_t atom,
                                  int level) {
   tkhd_atom_t tkhd;
@@ -1208,8 +1209,6 @@ qtmp4_reader_c::handle_tkhd_atom(qtmp4_demuxer_cptr &new_dmx,
     throw mtx::input::header_parsing_x();
 
   mxdebug_if(m_debug_headers, boost::format("%1%Track ID: %2%\n") % space(level * 2 + 1) % get_uint32_be(&tkhd.track_id));
-
-  new_dmx->id = get_uint32_be(&tkhd.track_id);
 }
 
 void

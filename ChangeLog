@@ -1,3 +1,10 @@
+2011-12-11  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Changed how mkvmerge assigns IDs to tracks in
+	source files for Matroska and MP4 files. That way files whose
+	headers contain the same ID for multiple tracks will work
+	correctly. Fix for bug 681.
+
 2011-12-07  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: enhancement: The VP8 output module will always

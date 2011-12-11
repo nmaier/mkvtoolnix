@@ -23,7 +23,7 @@ class T_255aspect_ratio_display_dimensions < Test
   def run
     result = ""
 
-    [ "--display-dimensions 3:4254x815", "--aspect-ratio 3:10", "--aspect-ratio-factor 3:10" ].each_with_index do |args, idx|
+    [ "--display-dimensions 0:4254x815", "--aspect-ratio 0:10", "--aspect-ratio-factor 0:10" ].each_with_index do |args, idx|
       result += "#{idx}[" + run_test_with_args(args) + "]"
     end
 
