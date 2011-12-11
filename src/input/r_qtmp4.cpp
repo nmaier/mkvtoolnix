@@ -46,6 +46,8 @@
 
 using namespace libmatroska;
 
+#define MAX_INTERLEAVING_BADNESS 0.4
+
 #if defined(ARCH_BIGENDIAN)
 #define BE2STR(a) ((char *)&a)[0] % ((char *)&a)[1] % ((char *)&a)[2] % ((char *)&a)[3]
 #define LE2STR(a) ((char *)&a)[3] % ((char *)&a)[2] % ((char *)&a)[1] % ((char *)&a)[0]
@@ -1693,7 +1695,7 @@ qtmp4_reader_c::recode_chapter_entries(std::vector<qtmp4_chapter_entry_t> &entri
 
 void
 qtmp4_reader_c::detect_interleaving() {
-  std::vector<qtmp4_demuxer_cptr> demuxers_to_read;
+  std::list<qtmp4_demuxer_cptr> demuxers_to_read;
   boost::remove_copy_if(m_demuxers, std::back_inserter(demuxers_to_read), [&](const qtmp4_demuxer_cptr &dmx) {
       return !(dmx->ok && (dmx->is_audio() || dmx->is_video()) && demuxing_requested(dmx->type, dmx->id) && (dmx->sample_table.size() > 1));
     });
@@ -1703,23 +1705,22 @@ qtmp4_reader_c::detect_interleaving() {
     return;
   }
 
-  std::vector<float> gradients;
+  auto cmp = [](const qt_sample_t &s1, const qt_sample_t &s2) -> uint64_t { return s1.pos < s2.pos; };
+
+  std::list<float> gradients;
   for (auto &dmx : demuxers_to_read) {
-    auto cmp = [](const qt_sample_t &s1, const qt_sample_t &s2) -> uint64_t { return s1.pos < s2.pos; };
     uint64_t min = boost::min_element(dmx->sample_table, cmp)->pos;
     uint64_t max = boost::max_element(dmx->sample_table, cmp)->pos;
     gradients.push_back(static_cast<float>(max - min) / m_in->get_size());
 
-    mxdebug_if(m_debug_interleaving, boost::format("Interleaving: track id %1% min %2% max %3% gradient %4%\n") % dmx->id % min % max % gradients.back());
+    mxdebug_if(m_debug_interleaving, boost::format("Interleaving: Track id %1% min %2% max %3% gradient %4%\n") % dmx->id % min % max % gradients.back());
   }
 
   float badness = *boost::max_element(gradients) - *boost::min_element(gradients);
-  mxdebug_if(m_debug_interleaving, boost::format("Interleaving: interleaving badness: %1%\n") % badness);
+  mxdebug_if(m_debug_interleaving, boost::format("Interleaving: Badness: %1% (%2%)\n") % badness % (MAX_INTERLEAVING_BADNESS < badness ? "badly interleaved" : "ok"));
 
-  if (0.4 < badness) {
+  if (MAX_INTERLEAVING_BADNESS < badness)
     m_in->enable_buffering(false);
-    mxdebug_if(m_debug_interleaving, boost::format("Interleaving: Turning off buffering due to lack of interleaving on the file\n"));
-  }
 }
 
 // ----------------------------------------------------------------------
