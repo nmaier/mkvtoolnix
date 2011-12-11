@@ -170,6 +170,9 @@ public:
     m_dos_style_newlines = yes;
   }
 
+  virtual void enable_buffering(bool /* enable */) {
+  }
+
 protected:
   virtual uint32 _read(void *buffer, size_t size) = 0;
   virtual size_t _write(const void *buffer, size_t size) = 0;

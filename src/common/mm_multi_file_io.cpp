@@ -169,6 +169,12 @@ mm_multi_file_io_c::display_other_file_info() {
     mxinfo(boost::format(Y("'%1%': Processing the following files as well: %2%\n")) % m_display_file_name % out.str());
 }
 
+void
+mm_multi_file_io_c::enable_buffering(bool enable) {
+  for (auto &file : m_files)
+    file.m_file->enable_buffering(enable);
+}
+
 struct path_sorter_t {
   bfs::path m_path;
   int m_number;

@@ -27,6 +27,7 @@ mm_read_buffer_io_c::mm_read_buffer_io_c(mm_io_c *in,
   , m_fill(0)
   , m_offset(0)
   , m_size(buffer_size)
+  , m_buffering(true)
 {
   setFilePointer(0, seek_beginning);
 }
@@ -37,12 +38,17 @@ mm_read_buffer_io_c::~mm_read_buffer_io_c() {
 
 uint64
 mm_read_buffer_io_c::getFilePointer() {
-  return m_offset + m_cursor;
+  return m_buffering ? m_offset + m_cursor : m_proxy_io->getFilePointer();
 }
 
 void
 mm_read_buffer_io_c::setFilePointer(int64 offset,
                                     seek_mode mode) {
+  if (!m_buffering) {
+    m_proxy_io->setFilePointer(offset, mode);
+    return;
+  }
+
   int64_t new_pos = 0;
   // FIXME int64_t overflow
 
@@ -97,6 +103,9 @@ mm_read_buffer_io_c::get_size() {
 uint32
 mm_read_buffer_io_c::_read(void *buffer,
                            size_t size) {
+  if (!m_buffering)
+    return m_proxy_io->read(buffer, size);
+
   char *buf    = static_cast<char *>(buffer);
   uint32_t res = 0;
 
@@ -141,4 +150,14 @@ mm_read_buffer_io_c::_write(const void *,
                             size_t) {
   throw mtx::mm_io::wrong_read_write_access_x();
   return 0;
+}
+
+void
+mm_read_buffer_io_c::enable_buffering(bool enable) {
+  m_buffering = enable;
+  if (!m_buffering) {
+    m_offset = 0;
+    m_cursor = 0;
+    m_fill   = 0;
+  }
 }

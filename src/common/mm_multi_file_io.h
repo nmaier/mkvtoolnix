@@ -57,6 +57,7 @@ public:
   virtual std::vector<bfs::path> get_file_names();
   virtual void create_verbose_identification_info(std::vector<std::string> &verbose_info);
   virtual void display_other_file_info();
+  virtual void enable_buffering(bool enable);
 
   static mm_io_cptr open_multi(const std::string &display_file_name, bool single_only = false);
 

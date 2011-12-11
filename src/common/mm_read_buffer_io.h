@@ -28,6 +28,7 @@ protected:
   size_t m_fill;
   int64_t m_offset;
   const size_t m_size;
+  bool m_buffering;
 
 public:
   mm_read_buffer_io_c(mm_io_c *in, size_t buffer_size = 1 << 12, bool delete_in = true);
@@ -37,6 +38,7 @@ public:
   virtual void setFilePointer(int64 offset, seek_mode mode = seek_beginning);
   virtual int64_t get_size();
   inline virtual bool eof() { return m_eof; }
+  virtual void enable_buffering(bool enable);
 
 protected:
   virtual uint32 _read(void *buffer, size_t size);
