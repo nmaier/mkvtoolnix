@@ -225,6 +225,9 @@ struct qtmp4_demuxer_c {
 
   bool read_first_bytes(memory_cptr &buf, int num_bytes, mm_io_cptr in);
 
+  bool is_audio() const;
+  bool is_video() const;
+
 private:
   void build_index_chunk_mode();
   void build_index_constant_sample_size_mode();
@@ -277,7 +280,7 @@ private:
   uint32_t m_time_scale, m_compression_algorithm;
   int m_main_dmx;
 
-  bool m_debug_chapters, m_debug_headers, m_debug_tables;
+  bool m_debug_chapters, m_debug_headers, m_debug_tables, m_debug_interleaving;
 
 public:
   qtmp4_reader_c(const track_info_c &ti, const mm_io_cptr &in);
@@ -350,6 +353,8 @@ protected:
   virtual void read_chapter_track();
   virtual void recode_chapter_entries(std::vector<qtmp4_chapter_entry_t> &entries);
   virtual void process_chapter_entries(int level, std::vector<qtmp4_chapter_entry_t> &entries);
+
+  virtual void detect_interleaving();
 };
 
 #endif  // __R_QTMP4_H

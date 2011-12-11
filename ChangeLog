@@ -1,3 +1,8 @@
+2011-12-12  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Turn off input file buffering for badly
+	interleaved MP4 files.
+
 2011-12-11  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Changed how mkvmerge assigns IDs to tracks in
