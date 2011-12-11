@@ -2,13 +2,12 @@
 
 class T_027default_track < Test
   def description
-    return "mkvmerge / default track flag / in(MKV)"
+    "mkvmerge / default track flag / in(MKV)"
   end
 
   def run
-    merge("--default-track 1 --default-track 5 --default-track 10 " +
-           "data/mkv/complex.mkv")
-    return hash_tmp
+    merge "--default-track 0 --default-track 4 --default-track 9 data/mkv/complex.mkv"
+    hash_tmp
   end
 end
 

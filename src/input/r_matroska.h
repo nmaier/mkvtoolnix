@@ -36,7 +36,7 @@ using namespace libebml;
 using namespace libmatroska;
 
 struct kax_track_t {
-  uint64_t tnum, tuid;
+  uint64_t tnum, track_number, track_uid;
 
   std::string codec_id;
   bool ms_compat;
@@ -93,7 +93,8 @@ struct kax_track_t {
 
   kax_track_t()
     : tnum(0)
-    , tuid(0)
+    , track_number(0)
+    , track_uid(0)
     , ms_compat(false)
     , type(' ')
     , sub_type(' ')

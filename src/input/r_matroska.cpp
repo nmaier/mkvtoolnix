@@ -235,7 +235,7 @@ kax_track_t *
 kax_reader_c::find_track_by_num(uint64_t n,
                                 kax_track_t *c) {
   for (auto &track : m_tracks)
-    if ((track->tnum == n) && (track.get_object() != c))
+    if ((track->track_number == n) && (track.get_object() != c))
       return track.get_object();
 
   return NULL;
@@ -245,7 +245,7 @@ kax_track_t *
 kax_reader_c::find_track_by_uid(uint64_t uid,
                                 kax_track_t *c) {
   for (auto &track : m_tracks)
-    if ((track->tuid == uid) && (track.get_object() != c))
+    if ((track->track_uid == uid) && (track.get_object() != c))
       return track.get_object();
 
   return NULL;
@@ -1036,15 +1036,16 @@ kax_reader_c::read_headers_tracks(mm_io_c *io,
     mxverb(2, "matroska_reader: | + a track...\n");
 
     kax_track_cptr track(new kax_track_t);
+    track->tnum = m_tracks.size();
 
     KaxTrackNumber *ktnum = FINDFIRST(ktentry, KaxTrackNumber);
     if (NULL == ktnum)
       mxerror(Y("matroska_reader: A track is missing its track number.\n"));
     mxverb(2, boost::format("matroska_reader: |  + Track number: %1%\n") % static_cast<unsigned int>(uint8(*ktnum)));
 
-    track->tnum = uint8(*ktnum);
-    if (find_track_by_num(track->tnum, track.get_object()) != NULL) {
-      mxverb(2, boost::format(Y("matroska_reader: |  + There's more than one track with the number %1%.\n")) % track->tnum);
+    track->track_number = uint8(*ktnum);
+    if (find_track_by_num(track->track_number, track.get_object()) != NULL) {
+      mxverb(2, boost::format(Y("matroska_reader: |  + There's more than one track with the number %1%.\n")) % track->track_number);
       ktentry = FINDNEXT(l1, KaxTrackEntry, ktentry);
       continue;
     }
@@ -1053,8 +1054,8 @@ kax_reader_c::read_headers_tracks(mm_io_c *io,
     if (NULL == ktuid)
       mxerror(Y("matroska_reader: A track is missing its track UID.\n"));
     mxverb(2, boost::format("matroska_reader: |  + Track UID: %1%\n") % uint64(*ktuid));
-    track->tuid = uint64(*ktuid);
-    if ((find_track_by_uid(track->tuid, track.get_object()) != NULL) && (verbose > 1))
+    track->track_uid = uint64(*ktuid);
+    if ((find_track_by_uid(track->track_uid, track.get_object()) != NULL) && (verbose > 1))
       mxwarn(boost::format(Y("matroska_reader: |  + There's more than one track with the UID %1%.\n")) % track->tnum);
 
     KaxTrackDefaultDuration *kdefdur = FINDFIRST(ktentry, KaxTrackDefaultDuration);
@@ -1420,8 +1421,8 @@ kax_reader_c::set_packetizer_headers(kax_track_t *t) {
   if (t->forced_track && boost::logic::indeterminate(PTZR(t->ptzr)->m_ti.m_forced_track))
     PTZR(t->ptzr)->set_track_forced_flag(true);
 
-  if ((0 != t->tuid) && !PTZR(t->ptzr)->set_uid(t->tuid))
-    mxwarn(boost::format(Y("matroska_reader: Could not keep the track UID %1% because it is already allocated for the new file.\n")) % t->tuid);
+  if ((0 != t->track_uid) && !PTZR(t->ptzr)->set_uid(t->track_uid))
+    mxwarn(boost::format(Y("matroska_reader: Could not keep the track UID %1% because it is already allocated for the new file.\n")) % t->track_uid);
 }
 
 void
@@ -1728,9 +1729,9 @@ kax_reader_c::create_button_packetizer(kax_track_t *t,
 
 void
 kax_reader_c::create_packetizer(int64_t tid) {
-  kax_track_t *t = find_track_by_num(tid);
+  kax_track_t *t = m_tracks[tid].get_object();
 
-  if ((NULL == t) || (-1 != t->ptzr) || !t->ok || !demuxing_requested(t->type, t->tnum))
+  if ((-1 != t->ptzr) || !t->ok || !demuxing_requested(t->type, t->tnum))
     return;
 
   track_info_c nti(m_ti);

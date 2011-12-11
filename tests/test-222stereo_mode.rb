@@ -16,8 +16,8 @@ class T_222stereo_mode < Test
     hash = [ hash_file(tmp + "-1") ]
 
     merge tmp + "-2",
-           "--stereo-mode 4:mono --stereo-mode 3:side_by_side_left_first " +
-           "--stereo-mode 2:top_bottom_right_first --stereo-mode 1:top_bottom_left_first #{tmp}-1"
+           "--stereo-mode 3:mono --stereo-mode 2:side_by_side_left_first " +
+           "--stereo-mode 1:top_bottom_right_first --stereo-mode 0:top_bottom_left_first #{tmp}-1"
     error "Second merge failed" if !FileTest.exist? tmp + "-2"
 
     hash << hash_file(tmp + "-2")
