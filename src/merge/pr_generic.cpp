@@ -1454,6 +1454,13 @@ generic_reader_c::add_available_track_ids() {
   add_available_track_id(0);
 }
 
+void
+generic_reader_c::add_available_track_id_range(int64_t start,
+                                               int64_t end) {
+  for (int64_t id = start; id <= end; ++id)
+    add_available_track_id(id);
+}
+
 int
 generic_reader_c::get_progress() {
   return 100 * m_in->getFilePointer() / m_size;

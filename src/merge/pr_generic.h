@@ -382,6 +382,10 @@ public:
   virtual void add_requested_track_id(int64_t id);
   virtual void add_available_track_id(int64_t id);
   virtual void add_available_track_ids();
+  virtual void add_available_track_id_range(int64_t start, int64_t end);
+  virtual void add_available_track_id_range(int64_t num) {
+    add_available_track_id_range(0, num - 1);
+  }
 
   virtual int64_t get_queued_bytes();
   virtual bool is_simple_subtitle_container() {

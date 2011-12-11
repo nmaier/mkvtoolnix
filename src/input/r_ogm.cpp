@@ -845,10 +845,7 @@ ogm_reader_c::handle_stream_comments() {
 
 void
 ogm_reader_c::add_available_track_ids() {
-  size_t i;
-
-  for (i = 0; i < sdemuxers.size(); i++)
-    add_available_track_id(i);
+  add_available_track_id_range(sdemuxers.size());
 }
 
 // -----------------------------------------------------------

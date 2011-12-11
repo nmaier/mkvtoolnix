@@ -1216,10 +1216,7 @@ mpeg_ps_reader_c::create_packetizers() {
 
 void
 mpeg_ps_reader_c::add_available_track_ids() {
-  size_t i;
-
-  for (i = 0; i < tracks.size(); i++)
-    add_available_track_id(i);
+  add_available_track_id_range(tracks.size());
 }
 
 file_status_e

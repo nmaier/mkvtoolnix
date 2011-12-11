@@ -1000,11 +1000,8 @@ avi_reader_c::identify_attachments() {
 
 void
 avi_reader_c::add_available_track_ids() {
-  size_t i;
-
   // Yes, '>=' is correct. Don't forget the video track!
-  for (i = 0; (AVI_audio_tracks(m_avi) + m_subtitle_demuxers.size()) >= i; i++)
-    add_available_track_id(i);
+  add_available_track_id_range(AVI_audio_tracks(m_avi) + m_subtitle_demuxers.size() + 1);
 }
 
 void
