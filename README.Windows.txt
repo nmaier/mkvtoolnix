@@ -121,8 +121,8 @@ $HOME/mingw-cross-env.
 Next, build the required libraries:
 
   cd $HOME/mingw-cross-env
-  make gcc w32api mingwrt gettext boost bzip2 curl flac expat libiconv \
-    ogg pthreads vorbis wxwidgets zlib
+  make gcc w32api mingwrt gettext boost bzip2 curl file flac expat libiconv \
+    lzo ogg pthreads vorbis wxwidgets zlib
 
 Append the installation directory to your PATH variable:
 
