@@ -551,18 +551,18 @@ handle_info(EbmlStream *&es,
 
     } else if (is_id(l2, KaxSegmentUID)) {
       KaxSegmentUID &uid = *static_cast<KaxSegmentUID *>(l2);
-      show_element(l2, 2, boost::format(Y("Segment UID:%1%")) % to_hex(uid.GetBuffer(), uid.GetSize()));
+      show_element(l2, 2, boost::format(Y("Segment UID: %1%")) % to_hex(uid.GetBuffer(), uid.GetSize()));
 
     } else if (is_id(l2, KaxSegmentFamily)) {
       KaxSegmentFamily &family = *static_cast<KaxSegmentFamily *>(l2);
-      show_element(l2, 2, boost::format(Y("Family UID:%1%")) % to_hex(family.GetBuffer(), family.GetSize()));
+      show_element(l2, 2, boost::format(Y("Family UID: %1%")) % to_hex(family.GetBuffer(), family.GetSize()));
 
     } else if (is_id(l2, KaxChapterTranslate))
       handle_chaptertranslate(es, l2, l3);
 
     else if (is_id(l2, KaxPrevUID)) {
       KaxPrevUID &uid = *static_cast<KaxPrevUID *>(l2);
-      show_element(l2, 2, boost::format(Y("Previous segment UID:%1%")) % to_hex(uid.GetBuffer(), uid.GetSize()));
+      show_element(l2, 2, boost::format(Y("Previous segment UID: %1%")) % to_hex(uid.GetBuffer(), uid.GetSize()));
 
     } else if (is_id(l2, KaxPrevFilename)) {
       KaxPrevFilename &filename = *static_cast<KaxPrevFilename *>(l2);
@@ -570,7 +570,7 @@ handle_info(EbmlStream *&es,
 
     } else if (is_id(l2, KaxNextUID)) {
       KaxNextUID &uid = *static_cast<KaxNextUID *>(l2);
-      show_element(l2, 2, boost::format(Y("Next segment UID:%1%")) % to_hex(uid.GetBuffer(), uid.GetSize()));
+      show_element(l2, 2, boost::format(Y("Next segment UID: %1%")) % to_hex(uid.GetBuffer(), uid.GetSize()));
 
     } else if (is_id(l2, KaxNextFilename)) {
       KaxNextFilename &filename = *static_cast<KaxNextFilename *>(l2);
@@ -1127,7 +1127,7 @@ handle_seek_head(EbmlStream *&es,
           EbmlId id(seek_id.GetBuffer(), seek_id.GetSize());
 
           show_element(l3, 3,
-                       boost::format(Y("Seek ID:%1% (%2%)"))
+                       boost::format(Y("Seek ID: %1% (%2%)"))
                        % to_hex(seek_id.GetBuffer(), seek_id.GetSize())
                        % (  EBML_ID(KaxInfo)        == id ? "KaxInfo"
                           : EBML_ID(KaxCluster)     == id ? "KaxCluster"

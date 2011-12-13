@@ -1,3 +1,9 @@
+2011-12-13  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvinfo: bug fix: Various elements used to have a space between
+	their names and their value's hex dump. In v5.1.0 that space was
+	accentally removed. It has been added again. Fix for bug 583.
+
 2011-12-12  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Turn off input file buffering for badly
