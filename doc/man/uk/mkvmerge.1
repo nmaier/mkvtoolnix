@@ -1,0 +1,2530 @@
+'\" t
+.\"     Title: mkvmerge
+.\"    Author: Moritz Bunkus <moritz@bunkus.org>
+.\" Generator: DocBook XSL Stylesheets v1.75.2 <http://docbook.sf.net/>
+.\"      Date: 2011-11-27
+.\"    Manual: Користувацькі команди
+.\"    Source: MKVToolNix 5.1.0
+.\"  Language: Ukrainian
+.\"
+.TH "mkvmerge" "1" "2011\-11\-27" "MKVToolNix 5\&.1\&.0" "Користувацькі команди"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "НАЗВА"
+mkvmerge \- Merge multimedia streams into a Matroska(TM) file
+.SH "КОРОТКИЙ ОПИС"
+.HP \w'\fBmkvmerge\fR\ 'u
+\fBmkvmerge\fR [global\ options] {\-o\ out} [options1] {file1} [[options2]\ {file2}] [@optionsfile]
+.SH "ОПИС"
+.PP
+This program takes the input from several media files and joins their streams (all of them or just a selection) into a
+Matroska(TM)
+file; see
+\m[blue]\fBthe Matroska(TM) website\fR\m[]\&\s-2\u[1]\d\s+2\&.
+.if n \{\
+.sp
+.\}
+.RS 4
+.it 1 an-trap
+.nr an-no-space-flag 1
+.nr an-break-flag 1
+.br
+.ps +1
+\fBВажливо\fR
+.ps -1
+.br
+.PP
+The order of command line options is important\&. Please read the section
+"Option order"
+if you\*(Aqre new to the program\&.
+.sp .5v
+.RE
+.SS "Global options"
+.PP
+\fB\-v\fR, \fB\-\-verbose\fR
+.RS 4
+Increase verbosity\&.
+.RE
+.PP
+\fB\-q\fR, \fB\-\-quiet\fR
+.RS 4
+Suppress status output\&.
+.RE
+.PP
+\fB\-o\fR, \fB\-\-output\fR \fIfile\-name\fR
+.RS 4
+Write to the file
+\fIfile\-name\fR\&. If splitting is used then this parameter is treated a bit differently\&. See the explanation for the
+\fB\-\-split\fR
+option for details\&.
+.RE
+.PP
+\fB\-w\fR, \fB\-\-webm\fR
+.RS 4
+Create a WebM compliant file\&. This is also turned on if the output file name\*(Aqs extension is "webm"\&. This mode enforces several restrictions\&. The only allowed codecs are VP8 video and Vorbis audio tracks\&. Neither chapters nor tags are allowed\&. The DocType header item is changed to "webm"\&.
+.RE
+.PP
+\fB\-\-title\fR \fItitle\fR
+.RS 4
+Sets the general title for the output file, e\&.g\&. the movie name\&.
+.RE
+.PP
+\fB\-\-default\-language\fR \fIlanguage\-code\fR
+.RS 4
+Sets the default language code that will be used for all tracks unless overwritten with the
+\fB\-\-language\fR
+option\&. The default language code is \*(Aqund\*(Aq for \*(Aqundefined\*(Aq\&.
+.RE
+.SS "Segment info handling (global options)"
+.PP
+\fB\-\-segmentinfo\fR \fIfilename\&.xml\fR
+.RS 4
+Read segment information from a
+XML
+file\&. This file can contain the segment family
+UID, segment
+UID, previous and next segment
+UID
+elements\&. An example file and a
+DTD
+are included in the MKVToolNix distribution\&.
+.RE
+.PP
+\fB\-\-segment\-uid\fR \fISID1,SID2,\&.\&.\&.\fR
+.RS 4
+Sets the segment UIDs to use\&. This is a comma\-separated list of 128bit segment UIDs in the usual UID form: hex numbers with or without the "0x" prefix, with or without spaces, exactly 32 digits\&.
+.sp
+Each file created contains one segment, and each segment has one segment UID\&. If more segment UIDs are specified than segments are created then the surplus UIDs are ignored\&. If fewer UIDs are specified than segments are created then random UIDs will be created for them\&.
+.RE
+.SS "Chapter and tag handling (global options)"
+.PP
+\fB\-\-chapter\-language\fR \fIlanguage\-code\fR
+.RS 4
+Sets the ISO639\-2 language code that is written for each chapter entry\&. Defaults to \*(Aqeng\*(Aq\&. See the section about
+chapters
+below for details\&.
+.sp
+This option can be used both for simple chapter files and for source files that contain chapters but no information about the chapters\*(Aq language, e\&.g\&. MP4 and OGM files\&.
+.RE
+.PP
+\fB\-\-chapter\-charset\fR \fIcharacter\-set\fR
+.RS 4
+Sets the character set that is used for the conversion to UTF\-8 for simple chapter files\&. See the section about
+text files and character sets
+for an explanation how
+\fBmkvmerge\fR(1)
+converts between character sets\&.
+.sp
+This switch does also apply to chapters that are copied from certain container types, e\&.g\&. Ogg/OGM and MP4 files\&. See the section about chapters below for details\&.
+.RE
+.PP
+\fB\-\-cue\-chapter\-name\-format\fR \fIformat\fR
+.RS 4
+
+\fBmkvmerge\fR(1)
+supports reading
+CUE
+sheets for audio files as the input for chapters\&.
+CUE
+sheets usually contain the entries
+\fIPERFORMER\fR
+and
+\fITITLE\fR
+for each index entry\&.
+\fBmkvmerge\fR(1)
+uses these two strings in order to construct the chapter name\&. With this option the format used for this name can be set\&.
+.sp
+If this option is not given then
+\fBmkvmerge\fR(1)
+defaults to the format \*(Aq%p \- %t\*(Aq (the performer, followed by a space, a dash, another space and the title)\&.
+.sp
+If the format is given then everything except the following meta characters is copied as\-is, and the meta characters are replaced like this:
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+\fI%p\fR
+is replaced by the current entry\*(Aqs
+\fIPERFORMER\fR
+string,
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+\fI%t\fR
+is replaced by the current entry\*(Aqs
+\fITITLE\fR
+string,
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+\fI%n\fR
+is replaced by the current track number and
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+\fI%N\fR
+is replaced by the current track number padded with a leading zero if it is < 10\&.
+.RE
+.RE
+.PP
+\fB\-\-chapters\fR \fIfile\-name\fR
+.RS 4
+Read chapter information from the file
+\fIfile\-name\fR\&. See the section about
+chapters
+below for details\&.
+.RE
+.PP
+\fB\-\-global\-tags\fR \fIfile\-name\fR
+.RS 4
+Read global tags from the file
+\fIfile\-name\fR\&. See the section about
+tags
+below for details\&.
+.RE
+.SS "General output control (advanced global options)"
+.PP
+\fB\-\-track\-order\fR \fIFID1:TID1,FID2:TID2,\&.\&.\&.\fR
+.RS 4
+This option changes the order in which the tracks for an input file are created\&. The argument is a comma separated list of pairs IDs\&. Each pair contains first the file ID (\fIFID1\fR) which is simply the number of the file on the command line starting at 0\&. The second is a track ID (\fITID1\fR) from that file\&. If some track IDs are omitted then those tracks are created after the ones given with this option have been created\&.
+.RE
+.PP
+\fB\-\-cluster\-length\fR \fIspec\fR
+.RS 4
+Limit the number of data blocks or the duration of data in each cluster\&. The
+\fIspec\fR
+parameter can either be a number
+\fIn\fR
+without a unit or a number
+\fId\fR
+postfixed with \*(Aqms\*(Aq\&.
+.sp
+If no unit is used then
+\fBmkvmerge\fR(1)
+will put at most
+\fIn\fR
+data blocks into each cluster\&. The maximum number of blocks is 65535\&.
+.sp
+If the number
+\fId\fR
+is postfixed with \*(Aqms\*(Aq then
+\fBmkvmerge\fR(1)
+puts at most
+\fId\fR
+milliseconds of data into each cluster\&. The minimum for
+\fId\fR
+is \*(Aq100ms\*(Aq, and the maximum is \*(Aq32000ms\*(Aq\&.
+.sp
+
+\fBmkvmerge\fR(1)
+defaults to putting at most 65535 data blocks and 5000ms of data into a cluster\&.
+.sp
+Programs trying to find a certain frame can only seek directly to a cluster and have to read the whole cluster afterwards\&. Therefore creating larger clusters may lead to imprecise or slow seeking\&.
+.RE
+.PP
+\fB\-\-no\-cues\fR
+.RS 4
+Tells
+\fBmkvmerge\fR(1)
+not to create and write the cue data which can be compared to an index in an AVI\&.
+Matroska(TM)
+files can be played back without the cue data, but seeking will probably be imprecise and slower\&. Use this only if you\*(Aqre really desperate for space or for testing purposes\&. See also option
+\fB\-\-cues\fR
+which can be specified for each input file\&.
+.RE
+.PP
+\fB\-\-clusters\-in\-meta\-seek\fR
+.RS 4
+Tells
+\fBmkvmerge\fR(1)
+to create a meta seek element at the end of the file containing all clusters\&. See also the section about the
+Matroska(TM) file layout\&.
+.RE
+.PP
+\fB\-\-disable\-lacing\fR
+.RS 4
+Disables lacing for all tracks\&. This will increase the file\*(Aqs size, especially if there are many audio tracks\&. This option is not intended for everyday use\&.
+.RE
+.PP
+\fB\-\-enable\-durations\fR
+.RS 4
+Write durations for all blocks\&. This will increase file size and does not offer any additional value for players at the moment\&.
+.RE
+.PP
+\fB\-\-timecode\-scale\fR \fIfactor\fR
+.RS 4
+Forces the timecode scale factor to
+\fIfactor\fR\&. Valid values are in the range
+\fB1000\fR\&.\&.\fB10000000\fR
+or the special value
+\fB\-1\fR\&.
+.sp
+Normally
+\fBmkvmerge\fR(1)
+will use a value of
+\fB1000000\fR
+which means that timecodes and durations will have a precision of 1ms\&. For files that will not contain a video track but at least one audio track
+\fBmkvmerge\fR(1)
+will automatically chose a timecode scale factor so that all timecodes and durations have a precision of one audio sample\&. This causes bigger overhead but allows precise seeking and extraction\&.
+.sp
+If the special value
+\fB\-1\fR
+is used then
+\fBmkvmerge\fR(1)
+will use sample precision even if a video track is present\&.
+.RE
+.SS "File splitting, linking and appending (more global options)"
+.PP
+\fB\-\-split\fR \fIspecification\fR
+.RS 4
+Splits the output file after a given size or a given time\&. Please note that tracks can only be split right before a key frame\&. Due to buffering
+\fBmkvmerge\fR(1)
+will split right before the next key frame after the split point has been reached\&. Therefore the split point may be a bit off from what the user has specified\&.
+.sp
+At the moment
+\fBmkvmerge\fR(1)
+supports three different modes\&.
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 1.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  1." 4.2
+.\}
+Splitting by size\&.
+.sp
+Syntax:
+\fB\-\-split\fR
+[size:]\fId\fR[k|m|g]
+.sp
+Examples:
+\-\-split size:700m
+or
+\-\-split 150000000
+.sp
+The parameter
+\fId\fR
+may end with \*(Aqk\*(Aq, \*(Aqm\*(Aq or \*(Aqg\*(Aq to indicate that the size is in KB, MB or GB respectively\&. Otherwise a size in bytes is assumed\&. After the current output file has reached this size limit a new one will be started\&.
+.sp
+The \*(Aqsize:\*(Aq prefix may be omitted for compatibility reasons\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 2.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  2." 4.2
+.\}
+Splitting after a duration\&.
+.sp
+Syntax:
+\fB\-\-split\fR
+[duration:]\fIHH:MM:SS\&.nnnnnnnnn\fR|\fId\fRs
+.sp
+Examples:
+\-\-split duration:00:60:00\&.000
+or
+\-\-split 3600s
+.sp
+The parameter must either have the form
+\fIHH:MM:SS\&.nnnnnnnnn\fR
+for specifying the duration in up to nano\-second precision or be a number
+\fId\fR
+followed by the letter \*(Aqs\*(Aq for the duration in seconds\&.
+\fIHH\fR
+is the number of hours,
+\fIMM\fR
+the number of minutes,
+\fISS\fR
+the number of seconds and
+\fInnnnnnnnn\fR
+the number of nanoseconds\&. Both the number of hours and the number of nanoseconds can be omitted\&. There can be up to nine digits after the decimal point\&. After the duration of the contents in the current output has reached this limit a new output file will be started\&.
+.sp
+The \*(Aqduration:\*(Aq prefix may be omitted for compatibility reasons\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 3.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  3." 4.2
+.\}
+Splitting after specific timecodes\&.
+.sp
+Syntax:
+\fB\-\-split\fR
+timecodes:\fIA\fR[,\fIB\fR[,\fIC\fR\&.\&.\&.]]
+.sp
+Example:
+\-\-split timecodes:00:45:00\&.000,01:20:00\&.250,6300s
+.sp
+The parameters
+\fIA\fR,
+\fIB\fR,
+\fIC\fR
+etc must all have the same format as the ones used for the duration (see above)\&. The list of timecodes is separated by commas\&. After the input stream has reached the current split point\*(Aqs timecode a new file is created\&. Then the next split point given in this list is used\&.
+.sp
+The \*(Aqtimecodes:\*(Aq prefix must not be omitted\&.
+.RE
+.sp
+For this splitting mode the output filename is treated differently than for the normal operation\&. It may contain a
+\fBprintf\fR
+like expression \*(Aq%d\*(Aq including an optional field width, e\&.g\&. \*(Aq%02d\*(Aq\&. If it does then the current file number will be formatted appropriately and inserted at that point in the filename\&. If there is no such pattern then a pattern of \*(Aq\-%03d\*(Aq is assumed right before the file\*(Aqs extension: \*(Aq\-o output\&.mkv\*(Aq would result in \*(Aqoutput\-001\&.mkv\*(Aq and so on\&. If there\*(Aqs no extension then \*(Aq\-%03d\*(Aq will be appended to the name\&.
+.RE
+.PP
+\fB\-\-link\fR
+.RS 4
+Link files to one another when splitting the output file\&. See the section on
+file linking
+below for details\&.
+.RE
+.PP
+\fB\-\-link\-to\-previous\fR \fIsegment\-UID\fR
+.RS 4
+Links the first output file to the segment with the segment UID given by the
+\fIsegment\-UID\fR
+parameter\&. See the section on
+file linking
+below for details\&.
+.RE
+.PP
+\fB\-\-link\-to\-next\fR \fIsegment\-UID\fR
+.RS 4
+Links the last output file to the segment with the segment UID given by the
+\fIsegment\-UID\fR
+parameter\&. See the section on
+file linking
+below for details\&.
+.RE
+.PP
+\fB\-\-append\-mode\fR \fImode\fR
+.RS 4
+Determines how timecodes are calculated when appending files\&. The parameter
+\fImode\fR
+can have two values: \*(Aqfile\*(Aq which is also the default and \*(Aqtrack\*(Aq\&.
+.sp
+When mkvmerge appends a track (called \*(Aqtrack2_1\*(Aq from now on) from a second file (called \*(Aqfile2\*(Aq) to a track (called \*(Aqtrack1_1\*(Aq) from the first file (called \*(Aqfile1\*(Aq) then it has to offset all timecodes for \*(Aqtrack2_1\*(Aq by an amount\&. For \*(Aqfile\*(Aq mode this amount is the highest timecode encountered in \*(Aqfile1\*(Aq even if that timecode was from a different track than \*(Aqtrack1_1\*(Aq\&. In track mode the offset is the highest timecode of \*(Aqtrack1_1\*(Aq\&.
+.sp
+Unfortunately mkvmerge cannot detect which mode to use reliably\&. Therefore it defaults to \*(Aqfile\*(Aq mode\&. \*(Aqfile\*(Aq mode usually works better for files that have been created independently of each other; e\&.g\&. when appending
+AVI
+or
+MP4
+files\&. \*(Aqtrack\*(Aq mode may work better for sources that are essentially just parts of one big file, e\&.g\&. for
+VOB
+and
+EVO
+files\&.
+.sp
+Subtitle tracks are always treated as if \*(Aqfile\*(Aq mode were active even if \*(Aqtrack\*(Aq mode actually is\&.
+.RE
+.PP
+\fB\-\-append\-to\fR \fISFID1:STID1:DFID1:DTID1\fR\fI[,\&.\&.\&.]\fR
+.RS 4
+This option controls to which track another track is appended\&. Each spec contains four IDs: a file ID, a track ID, a second file ID and a second track ID\&. The first pair, "source file ID" and "source track ID", identifies the track that is to be appended\&. The second pair, "destination file ID" and "destination track ID", identifies the track the first one is appended to\&.
+.sp
+If this option has been omitted then a standard mapping is used\&. This standard mapping appends each track from the current file to a track from the previous file with the same track ID\&. This allows for easy appending if a movie has been split into two parts and both file have the same number of tracks and track IDs with the command
+\fBmkvmerge \-o output\&.mkv part1\&.mkv +part2\&.mkv\fR\&.
+.RE
+.PP
+\fB+\fR
+.RS 4
+A single \*(Aq+\*(Aq causes the next file to be appended instead of added\&. The \*(Aq+\*(Aq can also be put in front of the next file name\&. Therefore the following two commands are equivalent:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-o full\&.mkv file1\&.mkv + file2\&.mkv
+$ mkvmerge \-o full\&.mkv file1\&.mkv +file2\&.mkv
+.fi
+.if n \{\
+.RE
+.\}
+.RE
+.PP
+\fB=\fR
+.RS 4
+Normally mkvmerge looks for files in the same directory as an input file that have the same base name and only differ in their running number (e\&.g\&. \*(AqVTS_01_1\&.VOB\*(Aq, \*(AqVTS_01_2\&.VOB\*(Aq, \*(AqVTS_01_3\&.VOB\*(Aq etc)\&. This option, a single \*(Aq=\*(Aq, causes mkvmerge not to look for those additional files\&.
+.sp
+The \*(Aq=\*(Aq can also be put in front of the next file name\&. Therefore the following two commands are equivalent:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-o full\&.mkv = file1\&.mkv
+$ mkvmerge \-o full\&.mkv =file1\&.mkv
+.fi
+.if n \{\
+.RE
+.\}
+.RE
+.SS "Attachment support (more global options)"
+.PP
+\fB\-\-attachment\-description\fR \fIdescription\fR
+.RS 4
+Plain text description of the following attachment\&. Applies to the next
+\fB\-\-attach\-file\fR
+or
+\fB\-\-attach\-file\-once\fR
+option\&.
+.RE
+.PP
+\fB\-\-attachment\-mime\-type\fR \fIMIME type\fR
+.RS 4
+
+MIME
+type of the following attachment\&. Applies to the next
+\fB\-\-attach\-file\fR
+or
+\fB\-\-attach\-file\-once\fR
+option\&. A list of officially recognized
+MIME
+types can be found e\&.g\&. at
+\m[blue]\fBthe IANA homepage\fR\m[]\&\s-2\u[2]\d\s+2\&. The
+MIME
+type is mandatory for an attachment\&.
+.RE
+.PP
+\fB\-\-attachment\-name\fR \fIname\fR
+.RS 4
+Sets the name that will be stored in the output file for this attachment\&. If this option is not given then the name will be derived from the file name of the attachment as given with the
+\fB\-\-attach\-file\fR
+or the
+\fB\-\-attach\-file\-once\fR
+option\&.
+.RE
+.PP
+\fB\-\-attach\-file\fR \fIfile\-name\fR, \fB\-\-attach\-file\-once\fR \fIfile\-name\fR
+.RS 4
+Creates a file attachment inside the
+Matroska(TM)
+file\&. The
+MIME
+type must have been set before this option can used\&. The difference between the two forms is that during splitting the files attached with
+\fB\-\-attach\-file\fR
+are attached to all output files while the ones attached with
+\fB\-\-attach\-file\-once\fR
+are only attached to the first file created\&. If splitting is not used then both do the same\&.
+.sp
+
+\fBmkvextract\fR(1)
+can be used to extract attached files from a
+Matroska(TM)
+file\&.
+.RE
+.SS "Options that can be used for each input file"
+.PP
+\fB\-a\fR, \fB\-\-audio\-tracks\fR \fI[!]\fR\fIn,m,\&.\&.\&.\fR
+.RS 4
+Copy the audio tracks
+\fIn\fR,
+\fIm\fR
+etc\&. The numbers are track IDs which can be obtained with the
+\fB\-\-identify\fR
+switch\&. They\*(Aqre not simply the track numbers (see section
+track IDs)\&. Default: copy all audio tracks\&.
+.sp
+If the IDs are prefixed with
+!
+then the meaning is reversed: copy everything but the IDs listed after the
+!\&.
+.RE
+.PP
+\fB\-d\fR, \fB\-\-video\-tracks\fR \fI[!]\fR\fIn,m,\&.\&.\&.\fR
+.RS 4
+Copy the video tracks
+\fIn\fR,
+\fIm\fR
+etc\&. The numbers are track IDs which can be obtained with the
+\fB\-\-identify\fR
+switch\&. They\*(Aqre not simply the track numbers (see section
+track IDs)\&. Default: copy all video tracks\&.
+.sp
+If the IDs are prefixed with
+!
+then the meaning is reversed: copy everything but the IDs listed after the
+!\&.
+.RE
+.PP
+\fB\-s\fR, \fB\-\-subtitle\-tracks\fR \fI[!]\fR\fIn,m,\&.\&.\&.\fR
+.RS 4
+Copy the subtitle tracks
+\fIn\fR,
+\fIm\fR
+etc\&. The numbers are track IDs which can be obtained with the
+\fB\-\-identify\fR
+switch\&. They\*(Aqre not simply the track numbers (see section
+track IDs)\&. Default: copy all subtitle tracks\&.
+.sp
+If the IDs are prefixed with
+!
+then the meaning is reversed: copy everything but the IDs listed after the
+!\&.
+.RE
+.PP
+\fB\-b\fR, \fB\-\-button\-tracks\fR \fI[!]\fR\fIn,m,\&.\&.\&.\fR
+.RS 4
+Copy the button tracks
+\fIn\fR,
+\fIm\fR
+etc\&. The numbers are track IDs which can be obtained with the
+\fB\-\-identify\fR
+switch\&. They\*(Aqre not simply the track numbers (see section
+track IDs)\&. Default: copy all button tracks\&.
+.sp
+If the IDs are prefixed with
+!
+then the meaning is reversed: copy everything but the IDs listed after the
+!\&.
+.RE
+.PP
+\fB\-\-track\-tags\fR \fI[!]\fR\fIn,m,\&.\&.\&.\fR
+.RS 4
+Copy the tags for tracks
+\fIn\fR,
+\fIm\fR
+etc\&. The numbers are track IDs which can be obtained with the
+\fB\-\-identify\fR
+switch (see section
+track IDs)\&. They\*(Aqre not simply the track numbers\&. Default: copy tags for all tracks\&.
+.sp
+If the IDs are prefixed with
+!
+then the meaning is reversed: copy everything but the IDs listed after the
+!\&.
+.RE
+.PP
+\fB\-m\fR, \fB\-\-attachments\fR \fI[!]\fR\fIn\fR\fI[:all|first]\fR\fI,m\fR\fI[:all|first]\fR\fI,\&.\&.\&.\fR
+.RS 4
+Copy the attachments with the IDs
+\fIn\fR,
+\fIm\fR
+etc to all or only the first output file\&. Each ID can be followed by either \*(Aq:all\*(Aq (which is the default if neither is entered) or \*(Aq:first\*(Aq\&. If splitting is active then those attachments whose IDs are specified with \*(Aq:all\*(Aq are copied to all of the resulting output files while the others are only copied into the first output file\&. If splitting is not active then both variants have the same effect\&.
+.sp
+The default is to copy all attachments to all output files\&.
+.sp
+If the IDs are prefixed with
+!
+then the meaning is reversed: copy everything but the IDs listed after the
+!\&.
+.RE
+.PP
+\fB\-A\fR, \fB\-\-no\-audio\fR
+.RS 4
+Don\*(Aqt copy any audio track from this file\&.
+.RE
+.PP
+\fB\-D\fR, \fB\-\-no\-video\fR
+.RS 4
+Don\*(Aqt copy any video track from this file\&.
+.RE
+.PP
+\fB\-S\fR, \fB\-\-no\-subtitles\fR
+.RS 4
+Don\*(Aqt copy any subtitle track from this file\&.
+.RE
+.PP
+\fB\-B\fR, \fB\-\-no\-buttons\fR
+.RS 4
+Don\*(Aqt copy any button track from this file\&.
+.RE
+.PP
+\fB\-T\fR, \fB\-\-no\-track\-tags\fR
+.RS 4
+Don\*(Aqt copy any track specific tags from this file\&.
+.RE
+.PP
+\fB\-\-no\-chapters\fR
+.RS 4
+Don\*(Aqt copy chapters from this file\&.
+.RE
+.PP
+\fB\-M\fR, \fB\-\-no\-attachments\fR
+.RS 4
+Don\*(Aqt copy attachments from this file\&.
+.RE
+.PP
+\fB\-\-no\-global\-tags\fR
+.RS 4
+Don\*(Aqt copy global tags from this file\&.
+.RE
+.PP
+\fB\-\-chapter\-charset\fR \fIcharacter\-set\fR
+.RS 4
+Sets the charset that is used for the conversion to UTF\-8 for chapter information contained in the source file\&. See the section about
+text files and character sets
+for an explanation how
+\fBmkvmerge\fR(1)
+converts between character sets\&.
+.RE
+.PP
+\fB\-\-chapter\-language\fR \fIlanguage\-code\fR
+.RS 4
+Sets the ISO639\-2 language code that is written for each chapter entry\&. This option can be used for source files that contain chapters but no information about the chapters\*(Aq languages, e\&.g\&. for MP4 and OGM files\&.
+.RE
+.PP
+\fB\-y\fR, \fB\-\-sync\fR \fITID:d\fR\fI[,o[/p]]\fR
+.RS 4
+Adjust the timecodes of the track with the id
+\fITID\fR
+by
+\fId\fR
+ms\&. The track IDs are the same as the ones given with
+\fB\-\-identify\fR
+(see section
+track IDs)\&.
+.sp
+
+\fIo\fR/\fIp\fR: adjust the timestamps by
+\fIo\fR/\fIp\fR
+to fix linear drifts\&.
+\fIp\fR
+defaults to 1 if omitted\&. Both
+\fIo\fR
+and
+\fIp\fR
+can be floating point numbers\&.
+.sp
+Defaults: no manual sync correction (which is the same as
+\fId\fR
+=
+\fB0\fR
+and
+\fIo\fR/\fIp\fR
+=
+\fB1\&.0\fR)\&.
+.sp
+This option can be used multiple times for an input file applying to several tracks by selecting different track IDs each time\&.
+.RE
+.PP
+\fB\-\-cues\fR \fITID:none|iframes|all\fR
+.RS 4
+Controls for which tracks cue (index) entries are created for the given track (see section
+track IDs)\&. \*(Aqnone\*(Aq inhibits the creation of cue entries\&. For \*(Aqiframes\*(Aq only blocks with no backward or forward references ( = I frames in video tracks) are put into the cue sheet\&. \*(Aqall\*(Aq causes
+\fBmkvmerge\fR(1)
+to create cue entries for all blocks which will make the file very big\&.
+.sp
+The default is \*(Aqiframes\*(Aq for video tracks and \*(Aqnone\*(Aq for all others\&. See also option
+\fB\-\-no\-cues\fR
+which inhibits the creation of cue entries regardless of the
+\fB\-\-cues\fR
+options used\&.
+.sp
+This option can be used multiple times for an input file applying to several tracks by selecting different track IDs each time\&.
+.RE
+.PP
+\fB\-\-default\-track\fR \fITID\fR\fI[:bool]\fR
+.RS 4
+Sets the \*(Aqdefault\*(Aq flag for the given track (see section
+track IDs) if the optional argument
+\fIbool\fR
+is not present\&. If the user does not explicitly select a track himself then the player should prefer the track that has his \*(Aqdefault\*(Aq flag set\&. Only one track of each kind (audio, video, subtitles, buttons) can have his \*(Aqdefault\*(Aq flag set\&. If the user wants no track to have the default track flag set then he has to set
+\fIbool\fR
+to
+\fB0\fR
+for all tracks\&.
+.sp
+This option can be used multiple times for an input file applying to several tracks by selecting different track IDs each time\&.
+.RE
+.PP
+\fB\-\-forced\-track\fR \fITID\fR\fI[:bool]\fR
+.RS 4
+Sets the \*(Aqforced\*(Aq flag for the given track (see section
+track IDs) if the optional argument
+\fIbool\fR
+is not present\&. A player must play all tracks for which this flag is set to
+\fB1\fR\&.
+.sp
+This option can be used multiple times for an input file applying to several tracks by selecting different track IDs each time\&.
+.RE
+.PP
+\fB\-\-blockadd\fR \fITID:level\fR
+.RS 4
+Keep only the
+BlockAdditions
+up to the level
+\fIlevel\fR
+for the given track\&. The default is to keep all levels\&. This option only affects certain kinds of codecs like WAVPACK4\&.
+.RE
+.PP
+\fB\-\-track\-name\fR \fITID:name\fR
+.RS 4
+Sets the track name for the given track (see section
+track IDs) to
+\fIname\fR\&.
+.RE
+.PP
+\fB\-\-language\fR \fITID:language\fR
+.RS 4
+Sets the language for the given track (see section
+track IDs)\&. Both ISO639\-2 language codes and ISO639\-1 country codes are allowed\&. The country codes will be converted to language codes automatically\&. All languages including their ISO639\-2 codes can be listed with the
+\fB\-\-list\-languages\fR
+option\&.
+.sp
+This option can be used multiple times for an input file applying to several tracks by selecting different track IDs each time\&.
+.RE
+.PP
+\fB\-t\fR, \fB\-\-tags\fR \fITID:file\-name\fR
+.RS 4
+Read tags for the track with the number
+\fITID\fR
+from the file
+\fIfile\-name\fR\&. See the section about
+tags
+below for details\&.
+.RE
+.PP
+\fB\-\-aac\-is\-sbr\fR \fITID\fR\fI[:0|1]\fR
+.RS 4
+Tells
+\fBmkvmerge\fR(1)
+that the track with the ID
+\fITID\fR
+is
+SBR AAC
+(also known as
+HE\-AAC
+or
+AAC+)\&. This options is needed if a) the source file is an
+AAC
+file (\fInot\fR
+for a
+Matroska(TM)
+file) and b) the
+AAC
+file contains
+SBR AAC
+data\&. The reason for this switch is that it is technically impossible to automatically tell normal
+AAC
+data from
+SBR AAC
+data without decoding a complete
+AAC
+frame\&. As there are several patent issues with
+AAC
+decoders
+\fBmkvmerge\fR(1)
+will never contain this decoding stage\&. So for
+SBR AAC
+files this switch is mandatory\&. The resulting file might not play back correctly or even not at all if the switch was omitted\&.
+.sp
+If the source file is a
+Matroska(TM)
+file then the
+CodecID
+should be enough to detect
+SBR AAC\&. However, if the
+CodecID
+is wrong then this switch can be used to correct that\&.
+.sp
+If mkvmerge wrongfully detects that an
+AAC
+file is
+SBR
+then you can add \*(Aq:0\*(Aq to the track ID\&.
+.RE
+.PP
+\fB\-\-timecodes\fR \fITID:file\-name\fR
+.RS 4
+Read the timecodes to be used for the specific track ID from
+\fIfile\-name\fR\&. These timecodes forcefully override the timecodes that
+\fBmkvmerge\fR(1)
+normally calculates\&. Read the section about
+external timecode files\&.
+.RE
+.PP
+\fB\-\-default\-duration\fR \fITID:x\fR
+.RS 4
+Forces the default duration of a given track to the specified value\&. Also modifies the track\*(Aqs timecodes to match the default duration\&. The argument
+\fIx\fR
+must be postfixed with \*(Aqs\*(Aq, \*(Aqms\*(Aq, \*(Aqus\*(Aq, \*(Aqns\*(Aq or \*(Aqfps\*(Aq to specify the default duration in seconds, milliseconds, microseconds, nanoseconds or \*(Aqframes per second\*(Aq respectively\&. The number
+\fIx\fR
+itself can be a floating point number or a fraction\&.
+.sp
+If the default duration is not forced then mkvmerge will try to derive the track\*(Aqs default duration from the container and/or codec used\&. One case in which this option is of use is when adding
+AVC/h\&.264
+elementary streams because these do not contain information about their number of frames or a default duration for each frame\&. For such files
+\fBmkvmerge\fR(1)
+will assume a default duration of \*(Aq25fps\*(Aq unless overridden\&.
+.sp
+This option can also be used to change the
+FPS
+of video tracks without having to use an external timecode file\&.
+.RE
+.PP
+\fB\-\-nalu\-size\-length\fR \fITID:n\fR
+.RS 4
+Forces the
+NALU
+size length to
+\fIn\fR
+bytes\&. This parameter is only used if the
+AVC/h\&.264
+elementary stream packetizer is used\&. If left out it defaults to 4 bytes, but there are files that contain frames or slices that are all smaller than 65536 bytes\&. For such files you can use this parameter and decrease the size to 2\&.
+.RE
+.PP
+\fB\-\-compression\fR \fITID:n\fR
+.RS 4
+Selects the compression method to be used for the track\&. Note that the player also has to support this method\&. Valid values are \*(Aqnone\*(Aq, \*(Aqzlib\*(Aq, \*(Aqlzo\*(Aq/\*(Aqlxo1x\*(Aq, \*(Aqbz2\*(Aq/\*(Aqbzlib\*(Aq and \*(Aqmpeg4_p2\*(Aq/\*(Aqmpeg4p2\*(Aq\&. The values \*(Aqlzo\*(Aq/\*(Aqlxo1x\*(Aq and \*(Aqbz2\*(Aq/\*(Aqbzlib\*(Aq are only available if
+\fBmkvmerge\fR(1)
+has been compiled with support for the
+liblzo(TM)
+and
+bzlib(TM)
+compression libraries, respectively\&.
+.sp
+The compression method \*(Aqmpeg4_p2\*(Aq/\*(Aqmpeg4p2\*(Aq is a special compression method called \*(Aqheader removal\*(Aq that is only available for
+MPEG4
+part 2 video tracks\&.
+.sp
+The default for some subtitle tracks is \*(Aqzlib\*(Aq compression\&. This compression method is also the one that most if not all playback applications support\&. Support for other compression methods other than \*(Aqnone\*(Aq is not assured\&.
+.RE
+.SS "Options that only apply to video tracks"
+.PP
+\fB\-f\fR, \fB\-\-fourcc\fR \fITID:FourCC\fR
+.RS 4
+Forces the
+FourCC
+to the specified value\&. Works only for video tracks in the \*(AqMS compatibility mode\*(Aq\&.
+.RE
+.PP
+\fB\-\-display\-dimensions\fR \fITID:widthxheight\fR
+.RS 4
+
+Matroska(TM)
+files contain two values that set the display properties that a player should scale the image on playback to: display width and display height\&. These values can be set with this option, e\&.g\&. \*(Aq1:640x480\*(Aq\&.
+.sp
+Another way to specify the values is to use the
+\fB\-\-aspect\-ratio\fR
+or the
+\fB\-\-aspect\-ratio\-factor\fR
+option (see below)\&. These options are mutually exclusive\&.
+.RE
+.PP
+\fB\-\-aspect\-ratio\fR \fITID:ratio|width/height\fR
+.RS 4
+
+Matroska(TM)
+files contain two values that set the display properties that a player should scale the image on playback to: display width and display height\&. With this option
+\fBmkvmerge\fR(1)
+will automatically calculate the display width and display height based on the image\*(Aqs original width and height and the aspect ratio given with this option\&. The ratio can be given either as a floating point number
+\fIratio\fR
+or as a fraction \*(Aq\fIwidth\fR/\fIheight\fR\*(Aq, e\&.g\&. \*(Aq16/9\*(Aq\&.
+.sp
+Another way to specify the values is to use the
+\fB\-\-aspect\-ratio\-factor\fR
+or
+\fB\-\-display\-dimensions\fR
+options (see above and below)\&. These options are mutually exclusive\&.
+.RE
+.PP
+\fB\-\-aspect\-ratio\-factor\fR \fITID:factor|n/d\fR
+.RS 4
+Another way to set the aspect ratio is to specify a
+\fIfactor\fR\&. The original aspect ratio is first multiplied with this
+\fIfactor\fR
+and used as the target aspect ratio afterwards\&.
+.sp
+Another way to specify the values is to use the
+\fB\-\-aspect\-ratio\fR
+or
+\fB\-\-display\-dimensions\fR
+options (see above)\&. These options are mutually exclusive\&.
+.RE
+.PP
+\fB\-\-cropping\fR \fITID:left,top,right,bottom\fR
+.RS 4
+Sets the pixel cropping parameters of a video track to the given values\&.
+.RE
+.PP
+\fB\-\-stereo\-mode\fR \fITID:n|keyword\fR
+.RS 4
+Sets the stereo mode for the video track with the track ID
+\fITID\fR\&. The mode can either be a number
+\fIn\fR
+between
+\fB0\fR
+and
+\fB14\fR
+or one of these keywords:
+.sp
+\*(Aqmono\*(Aq, \*(Aqside_by_side_left_first\*(Aq, \*(Aqtop_bottom_right_first\*(Aq, \*(Aqtop_bottom_left_first\*(Aq, \*(Aqcheckerboard_right_first\*(Aq, \*(Aqcheckerboard_left_first\*(Aq, \*(Aqrow_interleaved_right_first\*(Aq, \*(Aqrow_interleaved_left_first\*(Aq, \*(Aqcolumn_interleaved_right_first\*(Aq, \*(Aqcolumn_interleaved_left_first\*(Aq, \*(Aqanaglyph_cyan_red\*(Aq, \*(Aqside_by_side_right_first\*(Aq, \*(Aqanaglyph_green_magenta\*(Aq, \*(Aqboth_eyes_laced_left_first\*(Aq, \*(Aqboth_eyes_laced_right_first\*(Aq\&.
+.RE
+.SS "Options that only apply to text subtitle tracks"
+.PP
+\fB\-\-sub\-charset\fR \fITID:character\-set\fR
+.RS 4
+Sets the character set for the conversion to UTF\-8 for UTF\-8 subtitles for the given track ID\&. If not specified the charset will be derived from the current locale settings\&. Note that a charset is not needed for subtitles read from
+Matroska(TM)
+files or from Kate streams, as these are always stored in UTF\-8\&. See the section about
+text files and character sets
+for an explanation how
+\fBmkvmerge\fR(1)
+converts between character sets\&.
+.sp
+This option can be used multiple times for an input file applying to several tracks by selecting different track IDs each time\&.
+.RE
+.SS "Other options"
+.PP
+\fB\-i\fR, \fB\-\-identify\fR \fIfile\-name\fR
+.RS 4
+Will let
+\fBmkvmerge\fR(1)
+probe the single file and report its type, the tracks contained in the file and their track IDs\&. If this option is used then the only other option allowed is the filename\&.
+.RE
+.PP
+\fB\-I\fR, \fB\-\-identify\-verbose\fR \fIfile\-name\fR
+.RS 4
+Will let
+\fBmkvmerge\fR(1)
+probe the single file and report its type, the tracks contained in the file and their track IDs\&. If this option is used then the only other option allowed is the filename\&.
+.sp
+This option causes
+\fBmkvmerge\fR(1)
+to output additional information about the container and each track within\&. The extra information is surronded by square brackets\&. It consists of space\-saparated key/value pairs where keys and values are separated by a colon\&.
+.sp
+Each value is escaped according to the rules described in
+the section about escaping special characters in text\&.
+.RE
+.PP
+\fB\-l\fR, \fB\-\-list\-types\fR
+.RS 4
+Lists supported input file types\&.
+.RE
+.PP
+\fB\-\-list\-languages\fR
+.RS 4
+Lists all languages and their ISO639\-2 code which can be used with the
+\fB\-\-language\fR
+option\&.
+.RE
+.PP
+\fB\-\-priority\fR \fIpriority\fR
+.RS 4
+Sets the process priority that
+\fBmkvmerge\fR(1)
+runs with\&. Valid values are \*(Aqlowest\*(Aq, \*(Aqlower\*(Aq, \*(Aqnormal\*(Aq, \*(Aqhigher\*(Aq and \*(Aqhighest\*(Aq\&. If nothing is given then \*(Aqnormal\*(Aq is used\&. On Unix like systems
+\fBmkvmerge\fR(1)
+will use the
+\fBnice\fR(2)
+function\&. Therefore only the super user can use \*(Aqhigher\*(Aq and \*(Aqhighest\*(Aq\&. On Windows all values are useable for every user\&.
+.RE
+.PP
+\fB\-\-command\-line\-charset\fR \fIcharacter\-set\fR
+.RS 4
+Sets the character set to convert strings given on the command line from\&. It defaults to the character set given by system\*(Aqs current locale\&. This settings applies to arguments of the following options:
+\fB\-\-title\fR,
+\fB\-\-track\-name\fR
+and
+\fB\-\-attachment\-description\fR\&.
+.RE
+.PP
+\fB\-\-output\-charset\fR \fIcharacter\-set\fR
+.RS 4
+Встановлює вихідний набір символів заданого в командному рядку для конвертації\&. Типово використовується набір символів згідно поточної локалі системи\&.
+.RE
+.PP
+\fB\-r\fR, \fB\-\-redirect\-output\fR \fIfile\-name\fR
+.RS 4
+Writes all messages to the file
+\fIfile\-name\fR
+instead of to the console\&. While this can be done easily with output redirection there are cases in which this option is needed: when the terminal reinterprets the output before writing it to a file\&. The character set set with
+\fB\-\-output\-charset\fR
+is honored\&.
+.RE
+.PP
+\fB\-\-ui\-language\fR \fIcode\fR
+.RS 4
+Forces the translations for the language
+\fIcode\fR
+to be used (e\&.g\&. \*(Aqde_DE\*(Aq for the German translations)\&. It is preferable to use the environment variables
+\fILANG\fR,
+\fILC_MESSAGES\fR
+and
+\fILC_ALL\fR
+though\&. Entering \*(Aqlist\*(Aq as the
+\fIcode\fR
+will cause
+\fBmkvmerge\fR(1)
+to output a list of available translations\&.
+.RE
+.PP
+\fB@\fR\fIoptions\-file\fR
+.RS 4
+Зчитує додаткові параметри командного рядка з файла
+\fIoptions\-file\fR\&. Рядки, які містять зразу після символу переносу рядка мітку хеша (\*(Aq#\*(Aq) сприймаються як коментарі і ігноруються\&. Символи переносу на початку і в кінці рядка опускаються\&. Кожний рядок має містити лише один параметр\&.
+.sp
+Several chars can be escaped, e\&.g\&. if you need to start a non\-comment line with \*(Aq#\*(Aq\&. The rules are described in
+the section about escaping text\&.
+.sp
+Note that backslashes must always be escaped\&. Hash marks (\*(Aq#\*(Aq) must be escaped if they should not start a comment\&.
+.sp
+The command line \*(Aq\fBmkvmerge \-o "my file\&.mkv" \-A "a movie\&.avi" sound\&.ogg\fR\*(Aq could be converted into the following option file:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+# Write to the file "c:\eMatroska\emy file\&.mkv" on Windows\&.
+\-o
+c:\e\eMatroska\e\emy file\&.mkv
+# Set the title to \*(Aq#65\*(Aq\&.
+\-\-title
+\eh65
+# Only take the video from "a movie\&.avi"\&.
+\-A
+a movie\&.avi
+sound\&.ogg
+.fi
+.if n \{\
+.RE
+.\}
+.RE
+.PP
+\fB\-\-capabilities\fR
+.RS 4
+Lists information about optional features that have been compiled in and exit\&. The first line output will be the version information\&. All following lines contain exactly one word whose presence indicates that the feature has been compiled in\&. These features are:
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+\*(AqBZ2\*(Aq \-\- the
+bzlib(TM)
+compression library\&. Affects the available compression methods for the
+\fB\-\-compression\fR
+option\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+\*(AqLZO\*(Aq \-\- the
+lzo(TM)
+compression library\&. Affects the available compression methods for the
+\fB\-\-compression\fR
+option\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+\*(AqFLAC\*(Aq \-\- reading raw
+FLAC
+files and handling
+FLAC
+tracks in other containers, e\&.g\&.
+Ogg(TM)
+or
+Matroska(TM)\&.
+.RE
+.RE
+.PP
+\fB\-h\fR, \fB\-\-help\fR
+.RS 4
+Відображається інформація про використання додатку і відбувається завершення роботи додатку\&.
+.RE
+.PP
+\fB\-V\fR, \fB\-\-version\fR
+.RS 4
+Відображається інформація про версію додатку і відбувається завершення роботи додатку\&.
+.RE
+.PP
+\fB\-\-check\-for\-updates\fR
+.RS 4
+Відбувається перевірка на наявність нової версії шляхом завантаження з URL
+http://mkvtoolnix\-releases\&.bunkus\&.org/latest\-release\&.xml\&. Буде відображено чотири рядка у
+key=value
+стилі: URL, звідки отримана інформація (key
+version_check_url), поточна запущена версія (key
+running_version), остання випущена версія (key
+available_version) і URL для завантаження (key
+download_url)\&.
+.sp
+Після чого додаток завершує роботу з кодом повернення 0, якщо немає нової версії, і з кодом 2, якщо виникла помилка (наприклад, коли не було отримано інформації про оновлення взагалі)\&.
+.sp
+Дана опція наявна лише тоді, коли додаток компілювався з підтримкою libcurl\&.
+.RE
+.SH "Usage"
+.PP
+For each file the user can select which tracks
+\fBmkvmerge\fR(1)
+should take\&. They are all put into the file specified with
+\fB\-o\fR\&. A list of known (and supported) source formats can be obtained with the
+\fB\-l\fR
+option\&.
+.if n \{\
+.sp
+.\}
+.RS 4
+.it 1 an-trap
+.nr an-no-space-flag 1
+.nr an-break-flag 1
+.br
+.ps +1
+\fBВажливо\fR
+.ps -1
+.br
+.PP
+The order of command line options is important\&. Please read the section
+"Option order"
+if you\*(Aqre new to the program\&.
+.sp .5v
+.RE
+.SH "Option order"
+.PP
+The order in which options are entered is important for some options\&. Options fall into two categories:
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 1.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  1." 4.2
+.\}
+Options that affect the whole program and are not tied to any input file\&. These include but are not limited to
+\fB\-\-command\-line\-charset\fR,
+\fB\-\-output\fR
+or
+\fB\-\-title\fR\&. These can appear anywhere on the command line\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 2.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  2." 4.2
+.\}
+Options that affect a single input file or a single track in an input file\&. These options all apply to the following input file on the command line\&. All options applying to the same input (or to tracks from the same input file) file can be written in any order as long as they all appear before that input file\*(Aqs name\&. Examples for options applying to an input file are
+\fB\-\-no\-chapters\fR
+or
+\fB\-\-chapter\-charset\fR\&. Examples for options applying to a single track are
+\fB\-\-default\-duration\fR
+or
+\fB\-\-language\fR\&.
+.RE
+.PP
+The options are processed from left to right\&. If an option appears multiple times within the same scope then the last occurence will be used\&. Therefore the title will be set to "Something else" in the following example:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-o output\&.mkv \-\-title \*(AqThis and that\*(Aq input\&.avi \-\-title \*(AqSomething else\*(Aq
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+The following example shows that using the
+\fB\-\-language\fR
+option twice is OK because they\*(Aqre used in different scopes\&. Even though they apply to the same track ID they apply to different input files and therefore have different scopes:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-o output\&.mkv \-\-language 0:fre fran\(,cais\&.ogg \-\-language 0:deu deutsch\&.ogg
+.fi
+.if n \{\
+.RE
+.\}
+.SH "Examples"
+.PP
+Let\*(Aqs assume you have a file called MyMovie\&.avi and the audio track in a separate file, e\&.g\&. \*(AqMyMovie\&.wav\*(Aq\&. First you want to encode the audio to
+OggVorbis(TM):
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ oggenc \-q4 \-oMyMovie\&.ogg MyMovie\&.wav
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+After a couple of minutes you can join video and audio:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-o MyMovie\-with\-sound\&.mkv MyMovie\&.avi MyMovie\&.ogg
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+If your
+AVI
+already contains an audio track then it will be copied as well (if
+\fBmkvmerge\fR(1)
+supports the audio format)\&. To avoid that simply do
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-o MyMovie\-with\-sound\&.mkv \-A MyMovie\&.avi MyMovie\&.ogg
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+After some minutes of consideration you rip another audio track, e\&.g\&. the director\*(Aqs comments or another language to \*(AqMyMovie\-add\-audio\&.wav\*(Aq\&. Encode it again and join it up with the other file:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ oggenc \-q4 \-oMyMovie\-add\-audio\&.ogg MyMovie\-add\-audio\&.wav
+$ mkvmerge \-o MM\-complete\&.mkv MyMovie\-with\-sound\&.mkv MyMovie\-add\-audio\&.ogg
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+The same result can be achieved with
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-o MM\-complete\&.mkv \-A MyMovie\&.avi MyMovie\&.ogg MyMovie\-add\-audio\&.ogg
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+Now fire up
+mplayer(TM)
+and enjoy\&. If you have multiple audio tracks (or even video tracks) then you can tell
+mplayer(TM)
+which track to play with the \*(Aq\fB\-vid\fR\*(Aq and \*(Aq\fB\-aid\fR\*(Aq options\&. These are 0\-based and do not distinguish between video and audio\&.
+.PP
+If you need an audio track synchronized you can do that easily\&. First find out which track ID the Vorbis track has with
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-\-identify outofsync\&.ogg
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+Now you can use that ID in the following command line:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-o goodsync\&.mkv \-A source\&.avi \-y 12345:200 outofsync\&.ogg
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+This would add 200ms of silence at the beginning of the audio track with the ID
+\fB12345\fR
+taken from \*(Aqoutofsync\&.ogg\*(Aq\&.
+.PP
+Some movies start synced correctly but slowly drift out of sync\&. For these kind of movies you can specify a delay factor that is applied to all timestamps \-\- no data is added or removed\&. So if you make that factor too big or too small you\*(Aqll get bad results\&. An example is that an episode I transcoded was
+\fB0\&.2\fR
+seconds out of sync at the end of the movie which was
+\fB77340\fR
+frames long\&. At
+\fB29\&.97fps\fR
+\fB0\&.2\fR
+seconds correspond to approx\&.
+\fB6\fR
+frames\&. So I did
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-o goodsync\&.mkv \-y 23456:0,77346/77340 outofsync\&.mkv
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+The result was fine\&.
+.PP
+The sync options can also be used for subtitles in the same manner\&.
+.PP
+For text subtitles you can either use some Windows software (like
+SubRipper(TM)) or the
+subrip(TM)
+package found in
+\fBtranscode\fR(1)\*(Aqs sources in the \*(Aqcontrib/subrip\*(Aq directory\&. The general process is:
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 1.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  1." 4.2
+.\}
+extract a raw subtitle stream from the source:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ tccat \-i /path/to/copied/dvd/ \-T 1 \-L | tcextract \-x ps1 \-t vob \-a 0x20 | subtitle2pgm \-o mymovie
+.fi
+.if n \{\
+.RE
+.\}
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 2.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  2." 4.2
+.\}
+convert the resulting PGM images to text with gocr:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ pgm2txt mymovie
+.fi
+.if n \{\
+.RE
+.\}
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 3.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  3." 4.2
+.\}
+spell\-check the resulting text files:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ ispell \-d american *txt
+.fi
+.if n \{\
+.RE
+.\}
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 4.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  4." 4.2
+.\}
+convert the text files to a SRT file:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ srttool \-s \-w \-i mymovie\&.srtx \-o mymovie\&.srt
+.fi
+.if n \{\
+.RE
+.\}
+.RE
+.PP
+The resulting file can be used as another input file for
+\fBmkvmerge\fR(1):
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-o mymovie\&.mkv mymovie\&.avi mymovie\&.srt
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+If you want to specify the language for a given track then this is easily done\&. First find out the ISO639\-2 code for your language\&.
+\fBmkvmerge\fR(1)
+can list all of those codes for you:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-\-list\-languages
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+Search the list for the languages you need\&. Let\*(Aqs assume you have put two audio tracks into a
+Matroska(TM)
+file and want to set their language codes and that their track IDs are 2 and 3\&. This can be done with
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-o with\-lang\-codes\&.mkv \-\-language 2:ger \-\-language 3:dut without\-lang\-codes\&.mkv
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+As you can see you can use the
+\fB\-\-language\fR
+switch multiple times\&.
+.PP
+Maybe you\*(Aqd also like to have the player use the Dutch language as the default language\&. You also have extra subtitles, e\&.g\&. in English and French, and want to have the player display the French ones by default\&. This can be done with
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-o with\-lang\-codes\&.mkv \-\-language 2:ger \-\-language 3:dut \-\-default\-track 3 without\-lang\-codes\&.mkv \-\-language 0:eng english\&.srt \-\-default\-track 0 \-\-language 0:fre french\&.srt
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+If you do not see the language or default track flags that you\*(Aqve specified in
+\fBmkvinfo\fR(1)\*(Aqs output then please read the section about
+default values\&.
+.PP
+Turn off the compression for an input file\&.
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-o no\-compression\&.mkv \-\-compression \-1:none MyMovie\&.avi \-\-compression \-1:none mymovie\&.srt
+.fi
+.if n \{\
+.RE
+.\}
+.SH "Track IDs"
+.PP
+Some of the options for
+\fBmkvmerge\fR(1)
+need a track ID to specify which track they should be applied to\&. Those track IDs are printed by the readers when demuxing the current input file, or if
+\fBmkvmerge\fR(1)
+is called with the
+\fB\-\-identify\fR
+option\&. An example for such output:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-i v\&.mkv
+File \*(Aqv\&.mkv\*(Aq: container: Matroska(TM)
+Track ID 1: video (V_MS/VFW/FOURCC, DIV3)
+Track ID 2: audio (A_MPEG/L3)
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+Do not confuse the track IDs that are assigned to the tracks that are placed in the output MKV file with the track IDs of the input files\&. Only the input file track IDs are used for options needing these values\&.
+.PP
+Also note that each input file has its own set of track IDs\&. Therefore the track IDs for file \*(Aqfile1\&.ext\*(Aq as reported by \*(Aqmkvmerge \-\-identify\*(Aq do not change no matter how many other input files are there or in which position \*(Aqfile1\&.ext\*(Aq is used\&.
+.PP
+Track IDs are assigned like this:
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+
+AVI
+files: The video track has the ID 0\&. The audio tracks get IDs in ascending order starting at 1\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+
+MP4
+files: As output from x264, the video track has the ID 1\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+
+AAC,
+AC3,
+MP3,
+SRT
+and
+WAV
+files: The one \*(Aqtrack\*(Aq in that file gets the ID 0\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+Ogg/OGM
+files: The track IDs are assigned in order the tracks are found in the file starting at 0\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+
+Matroska(TM)
+files: The track\*(Aqs ID is the track number as reported by
+\fBmkvinfo\fR(1)\&. It is
+\fInot\fR
+the track UID\&.
+.RE
+.PP
+The special track ID \*(Aq\fB\-1\fR\*(Aq is a wild card and applies the given switch to all tracks that are read from an input file\&.
+.PP
+The options that use the track IDs are the ones whose description contains \*(AqTID\*(Aq\&. The following options use track IDs as well:
+\fB\-\-audio\-tracks\fR,
+\fB\-\-video\-tracks\fR,
+\fB\-\-subtitle\-tracks\fR,
+\fB\-\-button\-tracks\fR
+and
+\fB\-\-track\-tags\fR\&.
+.SH "Text files and character set conversions"
+.if n \{\
+.sp
+.\}
+.RS 4
+.it 1 an-trap
+.nr an-no-space-flag 1
+.nr an-break-flag 1
+.br
+.ps +1
+\fBПримітка\fR
+.ps -1
+.br
+.PP
+This section applies to all programs in MKVToolNix even if it only mentions
+\fBmkvmerge\fR(1)\&.
+.sp .5v
+.RE
+.PP
+All text in a
+Matroska(TM)
+file is encoded in UTF\-8\&. This means that
+\fBmkvmerge\fR(1)
+has to convert every text file it reads as well as every text given on the command line from one character set into UTF\-8\&. In return this also means that
+\fBmkvmerge\fR(1)\*(Aqs output has to be converted back to that character set from UTF\-8, e\&.g\&. if a non\-English translation is used with
+\fB\-\-ui\-language\fR
+or for text originating from a
+Matroska(TM)
+file\&.
+.PP
+
+\fBmkvmerge\fR(1)
+does this conversion automatically based on the presence of a
+byte order marker
+(short:
+BOM) or the system\*(Aqs current locale\&. How the character set is inferred from the locale depends on the operating system that
+\fBmkvmerge\fR(1)
+is run on\&.
+.PP
+Text files that start with a BOM are already encoded in one representation of UTF\&.
+\fBmkvmerge\fR(1)
+supports the following five modes: UTF\-8, UTF\-16 Little and Big Endian, UTF\-32 Little and Big Endian\&. Text files with a BOM are automatically converted to UTF\-8\&. Any of the parameters that would otherwise set the character set for such a file (e\&.g\&.
+\fB\-\-sub\-charset\fR) is silently ignored\&.
+.PP
+On Unix\-like systems
+\fBmkvmerge\fR(1)
+uses the
+\fBsetlocale\fR(3)
+system call which in turn uses the environment variables
+\fILANG\fR,
+\fILC_ALL\fR
+and
+\fILC_CYPE\fR\&. The resulting character set is often one of UTF\-8 or the ISO\-8859\-* family and is used for all text file operations and for encoding strings on the command line and for output to the console\&.
+.PP
+On Windows there are actually two different character sets that
+\fBmkvmerge\fR(1)
+uses due to the way the Windows shell program
+\fBcmd\&.exe\fR
+is implemented\&. The first character set is determined by a call to the
+\fBGetACP()\fR
+system call\&. This character set is used as the default for text file conversions and for all elements displayed by the
+GUI
+programs in the MKVToolNix package\&.
+.PP
+Another charset may be used if
+\fBcmd\&.exe\fR
+is used\&. However, reading the command line is done with the
+\fBGetCommandLineW()\fR
+function which already returns a Unicode string\&. Therefore the option
+\fB\-\-command\-line\-charset\fR
+is ignored on Windows\&. Output to the console is done with the
+\fBWriteConsoleW()\fR
+function\&. Therefore the option
+\fB\-\-output\-charset\fR
+is only used on Windows if the output is redirected with
+\fB\-\-redirect\-output\fR\&.
+.PP
+The following options exist that allow specifying the character sets:
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+
+\fB\-\-sub\-charset\fR
+for text subtitle files and for text subtitle tracks stored in container formats for which the character set cannot be determined unambiguously (e\&.g\&. Ogg files),
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+
+\fB\-\-chapter\-charset\fR
+for chapter text files and for chapters and file titles stored in container formats for which the character set cannot be determined unambiguously (e\&.g\&. Ogg files for chapter information, track and file titles etc; MP4 files for chapter information),
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+
+\fB\-\-command\-line\-charset\fR
+for all strings on the command line,
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+
+\fB\-\-output\-charset\fR
+for all strings written to the console or to a file if the output has been redirected with the
+\fB\-\-redirect\-output\fR
+option\&.
+.RE
+.SH "ВИОКРЕМЛЕННЯ СПЕЦІАЛЬНИХ СИМВОЛІВ У ТЕКСТІ"
+.PP
+Є декілька місць, де спеціальні символи у тексті мають або повинні бути виокремлені\&. Правила для виокремлювання прості: кожен символ, що потребує виокремлення, замінюється на зворотній слеш з деяким символом, що йде після нього\&.
+.PP
+The rules are: \*(Aq \*(Aq (a space) becomes \*(Aq\es\*(Aq, \*(Aq"\*(Aq (double quotes) becomes \*(Aq\e2\*(Aq, \*(Aq:\*(Aq becomes \*(Aq\ec\*(Aq, \*(Aq#\*(Aq becomes \*(Aq\eh\*(Aq and \*(Aq\e\*(Aq (a single backslash) itself becomes \*(Aq\e\e\*(Aq\&.
+.SH "Subtitles"
+.PP
+There are several text subtitle formats that can be embedded into
+Matroska(TM)\&. At the moment
+\fBmkvmerge\fR(1)
+supports only text, VobSub and Kate subtitle formats\&. Text subtitles must be recoded to UTF\-8 so that they can be displayed correctly by a player (see the section about
+text files and character sets
+for an explanation how
+\fBmkvmerge\fR(1)
+converts between character sets)\&. Kate subtitles are already encoded in UTF\-8 and do not have to be re\-encoded\&.
+.PP
+The following subtitle formats are supported at the moment:
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+Subtitle Ripper (SRT) files
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+Substation Alpha (SSA) / Advanced Substation Alpha scripts (ASS)
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+OggKate streams
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+VobSub bitmap subtitle files
+.RE
+.SH "File linking"
+.PP
+
+Matroska(TM)
+supports file linking which simply says that a specific file is the predecessor or successor of the current file\&. To be precise, it\*(Aqs not really the files that are linked but the
+Matroska(TM)
+segments\&. As most files will probably only contain one
+Matroska(TM)
+segment the following explanations use the term \*(Aqfile linking\*(Aq although \*(Aqsegment linking\*(Aq would be more appropriate\&.
+.PP
+Each segment is identified by a unique 128 bit wide segment UID\&. This UID is automatically generated by
+\fBmkvmerge\fR(1)\&. The linking is done primarily via putting the segment UIDs (short:
+SID) of the previous/next file into the segment header information\&.
+\fBmkvinfo\fR(1)
+prints these
+SIDs
+if it finds them\&.
+.PP
+If a file is split into several smaller ones and linking is used then the timecodes will not start at 0 again but will continue where the last file has left off\&. This way the absolute time is kept even if the previous files are not available (e\&.g\&. when streaming)\&. If no linking is used then the timecodes should start at 0 for each file\&. By default
+\fBmkvmerge\fR(1)
+does not use file linking\&. If you want that you can turn it on with the
+\fB\-\-link\fR
+option\&. This option is only useful if splitting is activated as well\&.
+.PP
+Regardless of whether splitting is active or not the user can tell
+\fBmkvmerge\fR(1)
+to link the produced files to specific
+SIDs\&. This is achieved with the options
+\fB\-\-link\-to\-previous\fR
+and
+\fB\-\-link\-to\-next\fR\&. These options accept a segment
+SID
+in the format that
+\fBmkvinfo\fR(1)
+outputs: 16 hexadecimal numbers between
+\fB0x00\fR
+and
+\fB0xff\fR
+prefixed with \*(Aq0x\*(Aq each, e\&.g\&. \*(Aq0x41 0xda 0x73 0x66 0xd9 0xcf 0xb2 0x1e 0xae 0x78 0xeb 0xb4 0x5e 0xca 0xb3 0x93\*(Aq\&. Alternatively a shorter form can be used: 16 hexadecimal numbers between
+\fB0x00\fR
+and
+\fB0xff\fR
+without the \*(Aq0x\*(Aq prefixes and without the spaces, e\&.g\&. \*(Aq41da7366d9cfb21eae78ebb45ecab393\*(Aq\&.
+.PP
+If splitting is used then the first file is linked to the
+SID
+given with
+\fB\-\-link\-to\-previous\fR
+and the last file is linked to the
+SID
+given with
+\fB\-\-link\-to\-next\fR\&. If splitting is not used then the one output file will be linked to both of the two
+SIDs\&.
+.SH "Default values"
+.PP
+The
+Matroska(TM)
+specification states that some elements have a default value\&. Usually an element is not written to the file if its value is equal to its default value in order to save space\&. The elements that the user might miss in
+\fBmkvinfo\fR(1)\*(Aqs output are the
+\fIlanguage\fR
+and the
+\fIdefault track flag\fR
+elements\&. The default value for the
+\fIlanguage\fR
+is English (\*(Aqeng\*(Aq), and the default value for the
+\fIdefault track flag\fR
+is
+\fItrue\fR\&. Therefore if you used
+\fB\-\-language 0:eng\fR
+for a track then it will not show up in
+\fBmkvinfo\fR(1)\*(Aqs output\&.
+.SH "ВКЛАДЕННЯ"
+.PP
+Maybe you also want to keep some photos along with your
+Matroska(TM)
+file, or you\*(Aqre using
+SSA
+subtitles and need a special
+TrueType(TM)
+font that\*(Aqs really rare\&. In these cases you can attach those files to the
+Matroska(TM)
+file\&. They will not be just appended to the file but embedded in it\&. A player can then show those files (the \*(Aqphotos\*(Aq case) or use them to render the subtitles (the \*(AqTrueType(TM)
+fonts\*(Aq case)\&.
+.PP
+Here\*(Aqs an example how to attach a photo and a
+TrueType(TM)
+font to the output file:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-o output\&.mkv \-A video\&.avi sound\&.ogg \e
+  \-\-attachment\-description "Me and the band behind the stage in a small get\-together" \e
+  \-\-attachment\-mime\-type image/jpeg \e
+  \-\-attach\-file me_and_the_band\&.jpg \e
+  \-\-attachment\-description "The real rare and unbelievably good looking font" \e
+  \-\-attachment\-type application/octet\-stream \e
+  \-\-attach\-file really_cool_font\&.ttf
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+If a
+Matroska(TM)
+containing attachments file is used as an input file then
+\fBmkvmerge\fR(1)
+will copy the attachments into the new file\&. The selection which attachments are copied and which are not can be changed with the options
+\fB\-\-attachments\fR
+and
+\fB\-\-no\-attachments\fR\&.
+.SH "РОЗДІЛИ"
+.PP
+The
+Matroska(TM)
+chapter system is more powerful than the old known system used by
+OGM
+files\&. The full specifications can be found at
+\m[blue]\fBthe Matroska(TM) website\fR\m[]\&\s-2\u[1]\d\s+2\&.
+.PP
+
+\fBmkvmerge\fR(1)
+supports two kinds of chapter files as its input\&. The first format, called \*(Aqsimple chapter format\*(Aq, is the same format that the
+OGM
+tools expect\&. The second format is a
+XML
+based chapter format which supports all of
+Matroska(TM)\*(Aqs chapter functionality\&.
+.SS "The simple chapter format"
+.PP
+This formmat consists of pairs of lines that start with \*(AqCHAPTERxx=\*(Aq and \*(AqCHAPTERxxNAME=\*(Aq respectively\&. The first one contains the start timecode while the second one contains the title\&. Here\*(Aqs an example:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+CHAPTER01=00:00:00\&.000
+CHAPTER01NAME=Intro
+CHAPTER02=00:02:30\&.000
+CHAPTER02NAME=Baby prepares to rock
+CHAPTER03=00:02:42\&.300
+CHAPTER03NAME=Baby rocks the house
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+
+\fBmkvmerge\fR(1)
+will transform every pair or lines into one
+Matroska(TM)
+ChapterAtom\&. It does not set any
+ChapterTrackNumber
+which means that the chapters all apply to all tracks in the file\&.
+.PP
+As this is a text file character set conversion may need to be done\&. See the section about
+text files and character sets
+for an explanation how
+\fBmkvmerge\fR(1)
+converts between character sets\&.
+.SS "The XML based chapter format"
+.PP
+The
+XML
+based chapter format looks like this example:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+<?xml version="1\&.0" encoding="ISO\-8859\-1"?>
+<!DOCTYPE Chapters SYSTEM "matroskachapters\&.dtd">
+<Chapters>
+  <EditionEntry>
+    <ChapterAtom>
+      <ChapterTimeStart>00:00:30\&.000</ChapterTimeStart>
+      <ChapterTimeEnd>00:01:20\&.000</ChapterTimeEnd>
+      <ChapterDisplay>
+        <ChapterString>A short chapter</ChapterString>
+        <ChapterLanguage>eng</ChapterLanguage>
+      </ChapterDisplay>
+      <ChapterAtom>
+        <ChapterTimeStart>00:00:46\&.000</ChapterTimeStart>
+        <ChapterTimeEnd>00:01:10\&.000</ChapterTimeEnd>
+        <ChapterDisplay>
+          <ChapterString>A part of that short chapter</ChapterString>
+          <ChapterLanguage>eng</ChapterLanguage>
+        </ChapterDisplay>
+      </ChapterAtom>
+    </ChapterAtom>
+  </EditionEntry>
+</Chapters>
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+With this format three things are possible that are not possible with the simple chapter format:
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 1.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  1." 4.2
+.\}
+The timestamp for the end of the chapter can be set,
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 2.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  2." 4.2
+.\}
+chapters can be nested,
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 3.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  3." 4.2
+.\}
+the language and country can be set\&.
+.RE
+.PP
+The mkvtoolnix distribution contains some sample files in the
+doc
+subdirectory which can be used as a basis\&.
+.SS "General notes"
+.PP
+When splitting files
+\fBmkvmerge\fR(1)
+will correctly adjust the chapters as well\&. This means that each file only includes the chapter entries that apply to it, and that the timecodes will be offset to match the new timecodes of each output file\&.
+.PP
+
+\fBmkvmerge\fR(1)
+is able to copy chapters from
+Matroska(TM)
+source files unless this is explicitly disabled with the
+\fB\-\-no\-chapters\fR
+option\&. The chapters from all sources (Matroska(TM)
+files, Ogg files,
+MP4
+files, chapter text files) are usually not merged but end up in separate
+ChapterEditions\&. Only if chapters are read from several
+Matroska(TM)
+or
+XML
+files that share the same edition UIDs will chapters be merged into a single
+ChapterEdition\&. If such a merge is desired in other situations as well then the user has to extract the chapters from all sources with
+\fBmkvextract\fR(1)
+first, merge the
+XML
+files manually and mux them afterwards\&.
+.SH "ТЕГИ"
+.SS "Introduction"
+.PP
+
+Matroska(TM)
+supports an extensive set of tags that is deprecated and a new, simpler system like it is is used in most other containers:
+\fIKEY=VALUE\fR\&. However, in
+Matroska(TM)
+these tags can also be nested, and both the
+\fIKEY\fR
+and the
+\fIVALUE\fR
+are elements of their own\&. The example file
+example\-tags\-2\&.xml
+shows how to use this new system\&.
+.SS "Scope of the tags"
+.PP
+
+Matroska(TM)
+tags do not automatically apply to the complete file\&. They can, but they also may apply to different parts of the file: to one or more tracks, to one or more chapters, or even to a combination of both\&. The
+\m[blue]\fBthe Matroska(TM) specification\fR\m[]\&\s-2\u[3]\d\s+2
+gives more details about this fact\&.
+.PP
+One important fact is that tags are linked to tracks or chapters with the
+Targets
+Matroska(TM)
+tag element, and that the UIDs used for this linking are
+\fInot\fR
+the track IDs
+\fBmkvmerge\fR(1)
+uses everywhere\&. Instead the numbers used are the UIDs which
+\fBmkvmerge\fR(1)
+calculates automatically (if the track is taken from a file format other than
+Matroska(TM)) or which are copied from the source file if the track\*(Aqs source file is a
+Matroska(TM)
+file\&. Therefore it is difficult to know which UIDs to use in the tag file before the file is handed over to
+\fBmkvmerge\fR(1)\&.
+.PP
+
+\fBmkvmerge\fR(1)
+knows two options with which you can add tags to
+Matroska(TM)
+files: The
+\fB\-\-global\-tags\fR
+and the
+\fB\-\-tags\fR
+options\&. The difference is that the former option,
+\fB\-\-global\-tags\fR, will make the tags apply to the complete file by removing any of those
+Targets
+elements mentioned above\&. The latter option,
+\fB\-\-tags\fR, automatically inserts the UID that
+\fBmkvmerge\fR(1)
+generates for the tag specified with the
+\fITID\fR
+part of the
+\fB\-\-tags\fR
+option\&.
+.SS "Example"
+.PP
+Let\*(Aqs say that you want to add tags to a video track read from an
+AVI\&.
+\fBmkvmerge \-\-identify file\&.avi\fR
+tells you that the video track\*(Aqs ID (do not mix this ID with the UID!) is 0\&. So you create your tag file, leave out all
+Targets
+elements and call
+\fBmkvmerge\fR(1):
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-o file\&.mkv \-\-tags 0:tags\&.xml file\&.avi
+.fi
+.if n \{\
+.RE
+.\}
+.SS "Tag file format"
+.PP
+
+\fBmkvmerge\fR(1)
+supports a
+XML
+based tag file format\&. The format is very closely modeled after
+\m[blue]\fBthe Matroska(TM) specification\fR\m[]\&\s-2\u[3]\d\s+2\&. Both the binary and the source distributions of MKVToolNix come with a sample file called
+example\-tags\-2\&.xml
+which simply lists all known tags and which can be used as a basis for real life tag files\&.
+.PP
+The basics are:
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+The outermost element must be
+<Tags>\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+One logical tag is contained inside one pair of
+<Tag>
+XML
+tags\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+White spaces directly before and after tag contents are ignored\&.
+.RE
+.SS "Data types"
+.PP
+The new
+Matroska(TM)
+tagging system only knows two data types, a UTF\-8 string and a binary type\&. The first is used for the tag\*(Aqs name and the
+<String>
+element while the binary type is used for the
+<Binary>
+element\&.
+.PP
+As binary data itself would not fit into a
+XML
+file
+\fBmkvmerge\fR(1)
+supports two other methods of storing binary data\&. If the contents of a
+XML
+tag starts with \*(Aq@\*(Aq then the following text is treated as a file name\&. The corresponding file\*(Aqs content is copied into the
+Matroska(TM)
+element\&.
+.PP
+Otherwise the data is expected to be
+Base64
+encoded\&. This is an encoding that transforms binary data into a limited set of
+ASCII
+characters and is used e\&.g\&. in email programs\&.
+\fBmkvextract\fR(1)
+will output
+Base64
+encoded data for binary elements\&.
+.PP
+The deprecated tagging system knows some more data types which can be found in the official
+Matroska(TM)
+tag specs\&. As
+\fBmkvmerge\fR(1)
+does not support this system anymore these types aren\*(Aqt described here\&.
+.SH "Matroska(TM) file layout"
+.PP
+The
+Matroska(TM)
+file layout is quite flexible\&.
+\fBmkvmerge\fR(1)
+will render a file in a predefined way\&. The resulting file looks like this:
+.PP
+[EBML head] [segment {meta seek #1} [segment information] [track information] {attachments} {chapters} [cluster 1] {cluster 2} \&.\&.\&. {cluster n} {cues} {meta seek #2} {tags}]
+.PP
+The elements in curly braces are optional and depend on the contents and options used\&. A couple of notes:
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+meta seek #1 includes only a small number of level 1 elements, and only if they actually exist: attachments, chapters, cues, tags, meta seek #2\&. Older versions of
+\fBmkvmerge\fR(1)
+used to put the clusters into this meta seek element as well\&. Therefore some imprecise guessing was necessary to reserve enough space\&. It often failed\&. Now only the clusters are stored in meta seek #2, and meta seek #1 refers to the meta seek element #2\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+Attachment, chapter and tag elements are only present if they were added\&.
+.RE
+.PP
+The shortest possible Matroska file would look like this:
+.PP
+[EBML head] [segment [segment information] [track information] [cluster 1]]
+.PP
+This might be the case for audio\-only files\&.
+.SH "External timecode files"
+.PP
+
+\fBmkvmerge\fR(1)
+allows the user to chose the timecodes for a specific track himself\&. This can be used in order to create files with variable frame rate video or include gaps in audio\&. A frame in this case is the unit that
+\fBmkvmerge\fR(1)
+creates separately per
+Matroska(TM)
+block\&. For video this is exactly one frame, for audio this is one packet of the specific audio type\&. E\&.g\&. for
+AC3
+this would be a packet containing
+\fB1536\fR
+samples\&.
+.PP
+Timecode files that are used when tracks are appended to each other must only be specified for the first part in a chain of tracks\&. For example if you append two files, v1\&.avi and v2\&.avi, and want to use timecodes then your command line must look something like this:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \&.\&.\&. \-\-timecodes 0:my_timecodes\&.txt v1\&.avi +v2\&.avi
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+There are four formats that are recognized by
+\fBmkvmerge\fR(1)\&. The first line always contains the version number\&. Empty lines, lines containing only whitespace and lines beginning with \*(Aq#\*(Aq are ignored\&.
+.SS "Timecode file format v1"
+.PP
+This format starts with the version line\&. The second line declares the default number of frames per second\&. All following lines contain three numbers separated by commas: the start frame (\fB0\fR
+is the first frame), the end frame and the number of frames in this range\&. The
+FPS
+is a floating point number with the dot \*(Aq\&.\*(Aq as the decimal point\&. The ranges can contain gaps for which the default
+FPS
+is used\&. An example:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+# timecode format v1
+assume 27\&.930
+800,1000,25
+1500,1700,30
+.fi
+.if n \{\
+.RE
+.\}
+.SS "Timecode file format v2"
+.PP
+In this format each line contains a timecode for the corresponding frame\&. This timecode must be given in millisecond precision\&. It can be a floating point number, but it doesn\*(Aqt have to be\&. You
+\fIhave to\fR
+give at least as many timecode lines as there are frames in the track\&. The timecodes in this file must be sorted\&. Example for 25fps:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+# timecode format v2
+0
+40
+80
+.fi
+.if n \{\
+.RE
+.\}
+.SS "Timecode file format v3"
+.PP
+In this format each line contains a duration in seconds followed by an optional number of frames per second\&. Both can be floating point numbers\&. If the number of frames per second is not present the default one is used\&. For audio you should let the codec calculate the frame timecodes itself\&. For that you should be using
+\fB0\&.0\fR
+as the number of frames per second\&. You can also create gaps in the stream by using the \*(Aqgap\*(Aq keyword followed by the duration of the gap\&. Example for an audio file:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+# timecode format v3
+assume 0\&.0
+25\&.325
+7\&.530,38\&.236
+gap, 10\&.050
+2\&.000,38\&.236
+.fi
+.if n \{\
+.RE
+.\}
+.SS "Timecode file format v4"
+.PP
+This format is identical to the v2 format\&. The only difference is that the timecodes do not have to be sorted\&. This format should almost never be used\&.
+.SH "КОДИ ЗАВЕРШЕННЯ"
+.PP
+
+\fBmkvmerge\fR(1)
+exits with one of three exit codes:
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+
+\fB0\fR
+\-\- This exit codes means that muxing has completed successfully\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+
+\fB1\fR
+\-\- In this case
+\fBmkvmerge\fR(1)
+has output at least one warning, but muxing did continue\&. A warning is prefixed with the text \*(AqWarning:\*(Aq\&. Depending on the issues involved the resulting file might be ok or not\&. The user is urged to check both the warning and the resulting file\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+
+\fB2\fR
+\-\- This exit code is used after an error occurred\&.
+\fBmkvmerge\fR(1)
+aborts right after outputting the error message\&. Error messages range from wrong command line arguments over read/write errors to broken files\&.
+.RE
+.SH "ДИВІТЬСЯ ТАКОЖ"
+.PP
+
+\fBmkvinfo\fR(1),
+\fBmkvextract\fR(1),
+\fBmkvpropedit\fR(1),
+\fBmmg\fR(1)
+.SH "WWW"
+.PP
+Остання версія завжди може бути знайдена на веб\-сторінці
+\m[blue]\fBthe MKVToolNix homepage\fR\m[]\&\s-2\u[4]\d\s+2\&.
+.SH "Author"
+.PP
+\fBMoritz Bunkus\fR <\&moritz@bunkus\&.org\&>
+.RS 4
+Розробник
+.RE
+.SH "ПРИМІТКИ"
+.IP " 1." 4
+the Matroska(TM) website
+.RS 4
+\%http://www.matroska.org/
+.RE
+.IP " 2." 4
+the IANA homepage
+.RS 4
+\%http://www.iana.org/assignments/media-types/
+.RE
+.IP " 3." 4
+the Matroska(TM)
+specification
+.RS 4
+\%http://matroska.org/technical/specs/index.html
+.RE
+.IP " 4." 4
+the MKVToolNix homepage
+.RS 4
+\%http://www.bunkus.org/videotools/mkvtoolnix/
+.RE

@@ -1,0 +1,284 @@
+'\" t
+.\"     Title: mkvinfo
+.\"    Author: Moritz Bunkus <moritz@bunkus.org>
+.\" Generator: DocBook XSL Stylesheets v1.75.2 <http://docbook.sf.net/>
+.\"      Date: 2011-11-27
+.\"    Manual: Користувацькі команди
+.\"    Source: MKVToolNix 5.1.0
+.\"  Language: Ukrainian
+.\"
+.TH "mkvinfo" "1" "2011\-11\-27" "MKVToolNix 5\&.1\&.0" "Користувацькі команди"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "НАЗВА"
+mkvinfo \- Print information about elements in Matroska(TM) files
+.SH "КОРОТКИЙ ОПИС"
+.HP \w'\fBmkvinfo\fR\ 'u
+\fBmkvinfo\fR [options] {source\-filename}
+.SH "ОПИС"
+.PP
+This program lists all elements contained in a
+Matroska(TM)\&. The output can be limited to a list of tracks in the file including information about the codecs used\&.
+.PP
+\fB\-g\fR, \fB\-\-gui\fR
+.RS 4
+Start the
+GUI\&. This option is only available if mkvinfo was compiled with
+GUI
+support\&.
+.RE
+.PP
+\fB\-c\fR, \fB\-\-checksums\fR
+.RS 4
+Calculates and display the
+\fBAdler32\fR
+checksum for each frame\&. Useful for debugging only\&.
+.RE
+.PP
+\fB\-s\fR, \fB\-\-summary\fR
+.RS 4
+Only show a terse summary of what
+\fBmkvinfo\fR(1)
+finds and not each element\&.
+.RE
+.PP
+\fB\-t\fR, \fB\-\-track\-info\fR
+.RS 4
+Show statistics for each track in verbose mode\&. Also sets verbosity to 1 if it was at level 0 before\&.
+.RE
+.PP
+\fB\-x\fR, \fB\-\-hexdump\fR
+.RS 4
+Show the first 16 bytes of each frame as a hex dump\&.
+.RE
+.PP
+\fB\-X\fR, \fB\-\-full\-hexdump\fR
+.RS 4
+Show all bytes of each frame as a hex dump\&.
+.RE
+.PP
+\fB\-z\fR, \fB\-\-size\fR
+.RS 4
+Show the size of each element including its header\&.
+.RE
+.PP
+\fB\-\-command\-line\-charset\fR \fIcharacter\-set\fR
+.RS 4
+Встановлює набір символів заданого в командному рядку для конвертації\&. Типово використовується набір символів згідно поточної локалі системи\&.
+.RE
+.PP
+\fB\-\-output\-charset\fR \fIcharacter\-set\fR
+.RS 4
+Встановлює вихідний набір символів заданого в командному рядку для конвертації\&. Типово використовується набір символів згідно поточної локалі системи\&.
+.RE
+.PP
+\fB\-r\fR, \fB\-\-redirect\-output\fR \fIfile\-name\fR
+.RS 4
+Writes all messages to the file
+\fIfile\-name\fR
+instead of to the console\&. While this can be done easily with output redirection there are cases in which this option is needed: when the terminal reinterprets the output before writing it to a file\&. The character set set with
+\fB\-\-output\-charset\fR
+is honored\&.
+.RE
+.PP
+\fB\-\-ui\-language\fR \fIcode\fR
+.RS 4
+Forces the translations for the language
+\fIcode\fR
+to be used (e\&.g\&. \*(Aqde_DE\*(Aq for the German translations)\&. It is preferable to use the environment variables
+\fILANG\fR,
+\fILC_MESSAGES\fR
+and
+\fILC_ALL\fR
+though\&. Entering \*(Aqlist\*(Aq as the
+\fIcode\fR
+will cause
+\fBmkvinfo\fR(1)
+to output a list of available translations\&.
+.RE
+.PP
+\fB\-v\fR, \fB\-\-verbose\fR
+.RS 4
+Be more verbose\&. See the section about
+verbosity levels
+for a description which information will be output at which level\&.
+.RE
+.PP
+\fB\-h\fR, \fB\-\-help\fR
+.RS 4
+Відображається інформація про використання додатку і відбувається завершення роботи додатку\&.
+.RE
+.PP
+\fB\-V\fR, \fB\-\-version\fR
+.RS 4
+Відображається інформація про версію додатку і відбувається завершення роботи додатку\&.
+.RE
+.PP
+\fB\-\-check\-for\-updates\fR
+.RS 4
+Відбувається перевірка на наявність нової версії шляхом завантаження з URL
+http://mkvtoolnix\-releases\&.bunkus\&.org/latest\-release\&.xml\&. Буде відображено чотири рядка у
+key=value
+стилі: URL, звідки отримана інформація (key
+version_check_url), поточна запущена версія (key
+running_version), остання випущена версія (key
+available_version) і URL для завантаження (key
+download_url)\&.
+.sp
+Після чого додаток завершує роботу з кодом повернення 0, якщо немає нової версії, і з кодом 2, якщо виникла помилка (наприклад, коли не було отримано інформації про оновлення взагалі)\&.
+.sp
+Дана опція наявна лише тоді, коли додаток компілювався з підтримкою libcurl\&.
+.RE
+.PP
+\fB@\fR\fIoptions\-file\fR
+.RS 4
+Зчитує додаткові параметри командного рядка з файла
+\fIoptions\-file\fR\&. Рядки, які містять зразу після символу переносу рядка мітку хеша (\*(Aq#\*(Aq) сприймаються як коментарі і ігноруються\&. Символи переносу на початку і в кінці рядка опускаються\&. Кожний рядок має містити лише один параметр\&.
+.sp
+Several chars can be escaped, e\&.g\&. if you need to start a non\-comment line with \*(Aq#\*(Aq\&. The rules are described in
+the section about escaping text\&.
+.sp
+The command line \*(Aq\fBmkvinfo \-v \-v input\&.mkv \-\-redirect\-output info\&.txt\fR\*(Aq could be converted into the following option file:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+# Be more verbose
+\-v
+\-v
+# Parse input\&.mkv
+input\&.mkv
+# and write the output to info\&.txt
+\-\-redirect\-output
+info\&.txt
+.fi
+.if n \{\
+.RE
+.\}
+.RE
+.SH "Verbosity levels"
+.PP
+The
+\fB\-v\fR
+option can be used to increase
+\fBmkvinfo\fR(1)\*(Aqs verbosity level and print more information about the current file\&.
+.PP
+At level 0
+\fBmkvinfo\fR(1)
+will print only the track headers it finds and their types\&.
+\fBmkvinfo\fR(1)
+will exit as soon as the headers are parsed completely (more technical: as soon as the first cluster is encountered)\&. In this level the seek head entries and the cues will not be displayed \-\- even if they\*(Aqre located in front of the track information\&.
+.PP
+At level 1
+\fBmkvinfo\fR(1)
+will also print all
+Matroska(TM)
+elements encountered for the complete file but the seek head entries and the cue entries\&. If the summary mode is enabled then
+\fBmkvinfo\fR(1)
+will output the frame position as well\&.
+.PP
+At level 2
+\fBmkvinfo\fR(1)
+will also print the seek head entries, the cue entries and the file position at which each
+Matroska(TM)
+element can be found at\&.
+.PP
+At level 3 and above
+\fBmkvinfo\fR(1)
+will print some information that is not directly connected to a
+Matroska(TM)
+element\&. All other elements only print stuff about the elements that were just found\&. Level 3 adds meta information to ease debugging (read: it\*(Aqs intended for developers only)\&. All lines written by level 3 are enclosed in square brackets to make filtering them out easy\&.
+.SH "КОДИ ЗАВЕРШЕННЯ"
+.PP
+
+\fBmkvinfo\fR(1)
+exits with one of three exit codes:
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+
+\fB0\fR
+\-\- This exit codes means that the run has completed successfully\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+
+\fB1\fR
+\-\- In this case
+\fBmkvinfo\fR(1)
+has output at least one warning, but the run did continue\&. A warning is prefixed with the text \*(AqWarning:\*(Aq\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+
+\fB2\fR
+\-\- This exit code is used after an error occurred\&.
+\fBmkvinfo\fR(1)
+aborts right after outputting the error message\&. Error messages range from wrong command line arguments over read/write errors to broken files\&.
+.RE
+.SH "ВИОКРЕМЛЕННЯ СПЕЦІАЛЬНИХ СИМВОЛІВ У ТЕКСТІ"
+.PP
+Є декілька місць, де спеціальні символи у тексті мають або повинні бути виокремлені\&. Правила для виокремлювання прості: кожен символ, що потребує виокремлення, замінюється на зворотній слеш з деяким символом, що йде після нього\&.
+.PP
+The rules are: \*(Aq \*(Aq (a space) becomes \*(Aq\es\*(Aq, \*(Aq"\*(Aq (double quotes) becomes \*(Aq\e2\*(Aq, \*(Aq:\*(Aq becomes \*(Aq\ec\*(Aq, \*(Aq#\*(Aq becomes \*(Aq\eh\*(Aq and \*(Aq\e\*(Aq (a single backslash) itself becomes \*(Aq\e\e\*(Aq\&.
+.SH "ДИВІТЬСЯ ТАКОЖ"
+.PP
+
+\fBmkvmerge\fR(1),
+\fBmkvextract\fR(1),
+\fBmkvpropedit\fR(1),
+\fBmmg\fR(1)
+.SH "WWW"
+.PP
+Остання версія завжди може бути знайдена на веб\-сторінці
+\m[blue]\fBthe MKVToolNix homepage\fR\m[]\&\s-2\u[1]\d\s+2\&.
+.SH "Author"
+.PP
+\fBMoritz Bunkus\fR <\&moritz@bunkus\&.org\&>
+.RS 4
+Розробник
+.RE
+.SH "ПРИМІТКИ"
+.IP " 1." 4
+the MKVToolNix homepage
+.RS 4
+\%http://www.bunkus.org/videotools/mkvtoolnix/
+.RE

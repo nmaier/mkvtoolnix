@@ -1,0 +1,473 @@
+'\" t
+.\"     Title: mkvpropedit
+.\"    Author: Moritz Bunkus <moritz@bunkus.org>
+.\" Generator: DocBook XSL Stylesheets v1.75.2 <http://docbook.sf.net/>
+.\"      Date: 2011-11-27
+.\"    Manual: Користувацькі команди
+.\"    Source: MKVToolNix 5.1.0
+.\"  Language: Ukrainian
+.\"
+.TH "mkvpropedit" "1" "2011\-11\-27" "MKVToolNix 5\&.1\&.0" "Користувацькі команди"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "НАЗВА"
+mkvpropedit \- Modify properties of existing Matroska(TM) files without a complete remux
+.SH "КОРОТКИЙ ОПИС"
+.HP \w'\fBmkvpropedit\fR\ 'u
+\fBmkvpropedit\fR [options] {source\-filename} {actions}
+.SH "ОПИС"
+.PP
+This program analyses an existing
+Matroska(TM)
+file and modifies some of its properties\&. Then it writes those modifications to the existing file\&. Among the properties that can be changed are the segment information elements (e\&.g\&. the title) and the track headers (e\&.g\&. the language code, \*(Aqdefault track\*(Aq flag or the name)\&.
+.PP
+Options:
+.PP
+\fB\-l\fR, \fB\-\-list\-property\-names\fR
+.RS 4
+Lists all known and editable property names, their type (string, integer, boolean etc) and a short description\&. The program exits afterwards\&. Therefore the
+\fIsource\-filename\fR
+parameter does not have to be supplied\&.
+.RE
+.PP
+\fB\-p\fR, \fB\-\-parse\-mode\fR \fImode\fR
+.RS 4
+Sets the parse mode\&. The parameter \*(Aq\fImode\fR\*(Aq can either be \*(Aqfast\*(Aq (which is also the default) or \*(Aqfull\*(Aq\&. The \*(Aqfast\*(Aq mode does not parse the whole file but uses the meta seek elements for locating the required elements of a source file\&. In 99% of all cases this is enough\&. But for files that do not contain meta seek elements or which are damaged the user might have to set the \*(Aqfull\*(Aq parse mode\&. A full scan of a file can take a couple of minutes while a fast scan only takes seconds\&.
+.RE
+.PP
+Actions:
+.PP
+\fB\-e\fR, \fB\-\-edit\fR \fIselector\fR
+.RS 4
+Sets the
+Matroska(TM)
+file section (segment information or a certain track\*(Aqs headers) that all following
+add,
+set
+and
+delete
+actions operate on\&. This option can be used multiple times in order to make modifications to more than one element\&.
+.sp
+By default
+\fBmkvpropedit\fR(1)
+will edit the segment information section\&.
+.sp
+See the section about
+edit selectors
+for a full description of the syntax\&.
+.RE
+.PP
+\fB\-a\fR, \fB\-\-add\fR \fIname\fR=\fIvalue\fR
+.RS 4
+Adds a property
+\fIname\fR
+with the value
+\fIvalue\fR\&. The property will be added even if such a property exists already\&. Note that most properties are unique and cannot occur more than once\&.
+.RE
+.PP
+\fB\-s\fR, \fB\-\-set\fR \fIname\fR=\fIvalue\fR
+.RS 4
+Sets all occurrences of the property
+\fIname\fR
+to the value
+\fIvalue\fR\&. If no such property exists then it will be added\&.
+.RE
+.PP
+\fB\-d\fR, \fB\-\-delete\fR \fIname\fR
+.RS 4
+Deletes all occurrences of the property
+\fIname\fR\&. Note that some properties are required and cannot be deleted\&.
+.RE
+.PP
+\fB\-t\fR, \fB\-\-tags\fR \fIselector\fR:\fIfilename\fR
+.RS 4
+Add or replace tags in the file with the ones from
+filename
+or remove them if
+filename
+is empty\&.
+\fBmkvpropedit\fR(1)
+reads the same XML tag format that
+\fBmkvmerge\fR(1)
+reads as well\&.
+.sp
+The
+\fIselector\fR
+must be one of the words
+\fBall\fR,
+\fBglobal\fR
+or
+\fBtrack\fR\&. For
+\fBall\fR
+\fBmkvpropedit\fR(1)
+will replace or remove all tags in a file\&. With
+\fBglobal\fR
+only global tags will be replaced or removed\&.
+.sp
+With
+\fBtrack\fR
+\fBmkvpropedit\fR(1)
+will replace tags for a specific track\&. Additionally the tags read from
+filename
+will be assigned to the same track\&. The track is specified in the same way
+edit selectors
+are specified (see below), e\&.g\&.
+\-\-tags track:a1:new\-audio\-tags\&.xml\&.
+.RE
+.PP
+\fB\-c\fR, \fB\-\-chapters\fR \fIfilename\fR
+.RS 4
+Add or replace chapters in the file with the ones from
+filename
+or remove them if
+filename
+is empty\&.
+\fBmkvpropedit\fR(1)
+reads the same XML and simple chapter formats that
+\fBmkvmerge\fR(1)
+reads as well\&.
+.RE
+.PP
+Other options:
+.PP
+\fB\-\-command\-line\-charset\fR \fIcharacter\-set\fR
+.RS 4
+Встановлює набір символів заданого в командному рядку для конвертації\&. Типово використовується набір символів згідно поточної локалі системи\&.
+.RE
+.PP
+\fB\-\-output\-charset\fR \fIcharacter\-set\fR
+.RS 4
+Встановлює вихідний набір символів заданого в командному рядку для конвертації\&. Типово використовується набір символів згідно поточної локалі системи\&.
+.RE
+.PP
+\fB\-r\fR, \fB\-\-redirect\-output\fR \fIfile\-name\fR
+.RS 4
+Writes all messages to the file
+\fIfile\-name\fR
+instead of to the console\&. While this can be done easily with output redirection there are cases in which this option is needed: when the terminal reinterprets the output before writing it to a file\&. The character set set with
+\fB\-\-output\-charset\fR
+is honored\&.
+.RE
+.PP
+\fB\-\-ui\-language\fR \fIcode\fR
+.RS 4
+Задає примусове використання мовного перекладу
+\fIcode\fR
+інтерфейсу (наприклад, \*(Aqde_DE\*(Aq для німецького перекладу)\&. Тому, краще використовувати змінні середовища
+\fILANG\fR,
+\fILC_MESSAGES\fR
+і
+\fILC_ALL\fR\&. Після введення
+list\*(Aq як
+\fIcode\fR
+\fBmkvextract\fR(1)
+відобразить список доступних перекладів\&.
+.RE
+.PP
+\fB\-v\fR, \fB\-\-verbose\fR
+.RS 4
+Задає відображення розширеної інформації про важливі елементи
+Matroska(TM)\&.
+.RE
+.PP
+\fB\-h\fR, \fB\-\-help\fR
+.RS 4
+Відображається інформація про використання додатку і відбувається завершення роботи додатку\&.
+.RE
+.PP
+\fB\-V\fR, \fB\-\-version\fR
+.RS 4
+Відображається інформація про версію додатку і відбувається завершення роботи додатку\&.
+.RE
+.PP
+\fB\-\-check\-for\-updates\fR
+.RS 4
+Відбувається перевірка на наявність нової версії шляхом завантаження з URL
+http://mkvtoolnix\-releases\&.bunkus\&.org/latest\-release\&.xml\&. Буде відображено чотири рядка у
+key=value
+стилі: URL, звідки отримана інформація (key
+version_check_url), поточна запущена версія (key
+running_version), остання випущена версія (key
+available_version) і URL для завантаження (key
+download_url)\&.
+.sp
+Після чого додаток завершує роботу з кодом повернення 0, якщо немає нової версії, і з кодом 2, якщо виникла помилка (наприклад, коли не було отримано інформації про оновлення взагалі)\&.
+.sp
+Дана опція наявна лише тоді, коли додаток компілювався з підтримкою libcurl\&.
+.RE
+.PP
+\fB@\fR\fIoptions\-file\fR
+.RS 4
+Зчитує додаткові параметри командного рядка з файла
+\fIoptions\-file\fR\&. Рядки, які містять зразу після символу переносу рядка мітку хеша (\*(Aq#\*(Aq) сприймаються як коментарі і ігноруються\&. Символи переносу на початку і в кінці рядка опускаються\&. Кожний рядок має містити лише один параметр\&.
+.sp
+Several chars can be escaped, e\&.g\&. if you need to start a non\-comment line with \*(Aq#\*(Aq\&. The rules are described in
+the section about escaping text\&.
+.sp
+The command line \*(Aq\fBmkvpropedit source\&.mkv \-\-edit track:a2 \-\-set name=Comments\fR\*(Aq could be converted into the following option file:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+# Modify source\&.mkv
+source\&.mkv
+# Edit the second audio track
+\-\-edit
+track:a2
+# and set the title to \*(AqComments\*(Aq
+\-\-set
+title=Comments
+.fi
+.if n \{\
+.RE
+.\}
+.RE
+.SH "Edit selectors"
+.PP
+The
+\fB\-\-edit\fR
+option sets the
+Matroska(TM)
+file section (segment information or a certain track\*(Aqs headers) that all following
+add,
+set
+and
+delete
+actions operate on\&. This stays valid until the next
+\fB\-\-edit\fR
+option is found\&. The argument to this option is called the edit selector\&.
+.PP
+By default
+\fBmkvpropedit\fR(1)
+will edit the segment information section\&.
+.SS "Segment information"
+.PP
+The segment information can be selected with one of these three words: \*(Aqinfo\*(Aq, \*(Aqsegment_info\*(Aq or \*(Aqsegmentinfo\*(Aq\&. It contains properties like the segment title or the segment
+UID\&.
+.SS "Track headers"
+.PP
+Track headers can be selected with a slightly more complex selector\&. All variations start with \*(Aqtrack:\*(Aq\&. The track header properties include elements like the language code, \*(Aqdefault track\*(Aq flag or the track\*(Aqs name\&.
+.PP
+\fBtrack:\fR\fIn\fR
+.RS 4
+If the parameter
+\fIn\fR
+is a number then the
+\fIn\fRth track will be selected\&. The track order is the same that
+\fBmkvmerge\fR(1)\*(Aqs
+\fB\-\-identify\fR
+option outputs\&.
+.RE
+.PP
+\fBtrack:\fR\fIt\fR\fIn\fR
+.RS 4
+If the parameter starts with a single character
+\fIt\fR
+followed by a
+\fIn\fR
+then the
+\fIn\fRth track of a specific track type will be selected\&. The track type parameter
+\fIt\fR
+must be one of these four characters: \*(Aqa\*(Aq for an audio track, \*(Aqb\*(Aq for a button track, \*(Aqs\*(Aq for a subtitle track and \*(Aqv\*(Aq for a video track\&. The track order is the same that
+\fBmkvmerge\fR(1)\*(Aqs
+\fB\-\-identify\fR
+option outputs\&.
+.RE
+.PP
+\fBtrack:\fR=\fIuid\fR
+.RS 4
+If the parameter starts with a \*(Aq=\*(Aq followed by a number
+\fIuid\fR
+then the track whose track
+UID
+element equals this
+\fIuid\fR\&. Track
+UIDs
+can be obtained with
+\fBmkvinfo\fR(1)\&.
+.RE
+.PP
+\fBtrack:\fR@\fInumber\fR
+.RS 4
+If the parameter starts with a \*(Aq@\*(Aq followed by a number
+\fInumber\fR
+then the track whose track number element equals this
+\fInumber\fR\&. Track number can be obtained with
+\fBmkvinfo\fR(1)\&.
+.RE
+.SS "Notes"
+.PP
+Due to the nature of the track edit selectors it is possible that several selectors actually match the same track headers\&. In such cases all actions for those edit selectors will be combined and executed in the order in which they\*(Aqre given on the command line\&.
+.SH "Examples"
+.PP
+The following example edits a file called \*(Aqmovie\&.mkv\*(Aq\&. It sets the segment title and modifies the language code of an audio and a subtitle track\&. Note that this example can be shortened by leaving out the first
+\fB\-\-edit\fR
+option because editing the segment information element is the default for all options found before the first
+\fB\-\-edit\fR
+option anyway\&.
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvpropedit movie\&.mkv \-\-edit info \-\-set "title=The movie" \-\-edit track:a1 \-\-set language=fre \-\-edit track:a2 \-\-set language=ita
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+The second example removes the \*(Aqdefault track flag\*(Aq from the first subtitle track and sets it for the second one\&. Note that
+\fBmkvpropedit\fR(1), unlike
+\fBmkvmerge\fR(1), does not set the \*(Aqdefault track flag\*(Aq of other tracks to \*(Aq0\*(Aq if it is set to \*(Aq1\*(Aq for a different track automatically\&.
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvpropedit movie\&.mkv \-\-edit track:s1 \-\-set flag\-default=0 \-\-edit track:s2 \-\-set flag\-default=1
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+Replacing the tags for the second subtitle track in a file looks like this:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvpropedit movie\&.mkv \-\-tags track:s2:new\-subtitle\-tags\&.xml
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+Removing all tags requires leaving out the file name:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvpropedit movie\&.mkv \-\-tags all:
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+Replacing the chapters in a file looks like this:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvpropedit movie\&.mkv \-\-chapters new\-chapters\&.xml
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+Removing all chapters requires leaving out the file name:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvpropedit movie\&.mkv \-\-chapters \*(Aq\*(Aq
+.fi
+.if n \{\
+.RE
+.\}
+.SH "КОДИ ЗАВЕРШЕННЯ"
+.PP
+
+\fBmkvpropedit\fR(1)
+exits with one of three exit codes:
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+
+\fB0\fR
+\-\- This exit codes means that the modification has completed successfully\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+
+\fB1\fR
+\-\- In this case
+\fBmkvpropedit\fR(1)
+has output at least one warning, but the modification did continue\&. A warning is prefixed with the text \*(AqWarning:\*(Aq\&. Depending on the issues involved the resulting files might be ok or not\&. The user is urged to check both the warning and the resulting files\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+
+\fB2\fR
+\-\- This exit code is used after an error occurred\&.
+\fBmkvpropedit\fR(1)
+aborts right after outputting the error message\&. Error messages range from wrong command line arguments over read/write errors to broken files\&.
+.RE
+.SH "ВИОКРЕМЛЕННЯ СПЕЦІАЛЬНИХ СИМВОЛІВ У ТЕКСТІ"
+.PP
+Є декілька місць, де спеціальні символи у тексті мають або повинні бути виокремлені\&. Правила для виокремлювання прості: кожен символ, що потребує виокремлення, замінюється на зворотній слеш з деяким символом, що йде після нього\&.
+.PP
+The rules are: \*(Aq \*(Aq (a space) becomes \*(Aq\es\*(Aq, \*(Aq"\*(Aq (double quotes) becomes \*(Aq\e2\*(Aq, \*(Aq:\*(Aq becomes \*(Aq\ec\*(Aq, \*(Aq#\*(Aq becomes \*(Aq\eh\*(Aq and \*(Aq\e\*(Aq (a single backslash) itself becomes \*(Aq\e\e\*(Aq\&.
+.SH "ДИВІТЬСЯ ТАКОЖ"
+.PP
+
+\fBmkvmerge\fR(1),
+\fBmkvinfo\fR(1),
+\fBmkvextract\fR(1),
+\fBmmg\fR(1)
+.SH "WWW"
+.PP
+Остання версія завжди може бути знайдена на веб\-сторінці
+\m[blue]\fBthe MKVToolNix homepage\fR\m[]\&\s-2\u[1]\d\s+2\&.
+.SH "Author"
+.PP
+\fBMoritz Bunkus\fR <\&moritz@bunkus\&.org\&>
+.RS 4
+Розробник
+.RE
+.SH "ПРИМІТКИ"
+.IP " 1." 4
+the MKVToolNix homepage
+.RS 4
+\%http://www.bunkus.org/videotools/mkvtoolnix/
+.RE

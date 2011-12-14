@@ -314,7 +314,7 @@ EOT
     desc "Update the man pages' translation files"
     task :manpages do
       runq "    PO4A doc/man/po4a/po4a.cfg", "#{c(:PO4A)} #{c(:PO4A_FLAGS)} --msgmerge-opt=--no-wrap doc/man/po4a/po4a.cfg"
-      %w{nl zh_CN}.each do |language|
+      %w{nl uk zh_CN}.each do |language|
         name = "doc/man/po4a/po/#{language}.po"
         FileUtils.cp name, "#{name}.tmp"
         adjust_to_poedit_style "#{name}.tmp", name
