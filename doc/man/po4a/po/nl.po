@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Nederlands 4.0.0.\n"
-"POT-Creation-Date: 2011-10-30 20:29+0100\n"
+"POT-Creation-Date: 2011-12-14 22:12+0100\n"
 "PO-Revision-Date: 2011-09-20 22:05+0200\n"
 "Last-Translator: René Maassen <bmom43@hotmail.com>\n"
 "Language-Team: Nederlands rc1 <bmom43@hotmail.com>\n"
@@ -40,7 +40,7 @@ msgstr "5.1.0"
 #: doc/man/mmg.xml:7
 #, fuzzy
 #| msgid "2010-10-31"
-msgid "2011-10-09"
+msgid "2011-11-27"
 msgstr "2010-10-31"
 
 #. type: Content of the mkvmerge entity
@@ -213,10 +213,11 @@ msgstr "&date;"
 #. type: Content of: <refentry><refmeta><refmiscinfo>
 #: doc/man/mkvextract.xml:39
 #: doc/man/mkvinfo.xml:39
+#: doc/man/mkvmerge.xml:39
 #: doc/man/mkvpropedit.xml:39
 #: doc/man/mmg.xml:39
-msgid "MkvToolNix"
-msgstr "MkvToolNix"
+msgid "MKVToolNix"
+msgstr "MKVToolNix"
 
 #. type: Content of: <refentry><refmeta><refmiscinfo>
 #: doc/man/mkvextract.xml:40
@@ -1189,11 +1190,6 @@ msgstr "&mkvmerge;, &mkvextract;, &mkvpropedit;, &mmg;"
 #: doc/man/mkvmerge.xml:5
 msgid "mkvmerge"
 msgstr "mkvmerge"
-
-#. type: Content of: <refentry><refmeta><refmiscinfo>
-#: doc/man/mkvmerge.xml:39
-msgid "MKVToolNix"
-msgstr "MKVToolNix"
 
 #. type: Content of: <refentry><refnamediv><refpurpose>
 #: doc/man/mkvmerge.xml:45
@@ -3899,6 +3895,9 @@ msgstr "De volledige documentatie is beschikbaar in HTML format (<filename>doc/m
 msgid "&mkvmerge;, &mkvextract;, &mkvinfo;, &mkvpropedit;"
 msgstr "&mkvmerge;, &mkvextract;, &mkvinfo;, &mkvpropedit;"
 
+#~ msgid "MkvToolNix"
+#~ msgstr "MkvToolNix"
+
 #~ msgid "<option>@</option>options-file"
 #~ msgstr "<option>@</option>optie's-bestand"
 
@@ -3910,4 +3909,5 @@ msgstr "&mkvmerge;, &mkvextract;, &mkvinfo;, &mkvpropedit;"
 
 #~ msgid "Read global tags from the &xml; file <parameter>file-name</parameter>. See the section about tags below for details."
 #~ msgstr "Leest de globale markeringen van een &xml; bestand <parameter>file-name</parameter>. Zie de sectie details over markeringen hier beneden."
+
 

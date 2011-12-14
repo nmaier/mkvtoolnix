@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: mkvtoolnix-man\n"
-"POT-Creation-Date: 2011-10-30 20:29+0100\n"
+"POT-Creation-Date: 2011-12-14 22:12+0100\n"
 "PO-Revision-Date: 2011-09-20 22:06+0200\n"
 "Last-Translator: Dean Lee <xslidian@gmail.com>\n"
 "Language-Team: chinese simp <xslidian+mkvtoolnix@gmail.com>\n"
@@ -39,7 +39,7 @@ msgstr "5.1.0"
 #: doc/man/mmg.xml:7
 #, fuzzy
 #| msgid "2011-07-11"
-msgid "2011-10-09"
+msgid "2011-11-27"
 msgstr "2011-07-11"
 
 #. type: Content of the mkvmerge entity
@@ -212,10 +212,11 @@ msgstr "&date;"
 #. type: Content of: <refentry><refmeta><refmiscinfo>
 #: doc/man/mkvextract.xml:39
 #: doc/man/mkvinfo.xml:39
+#: doc/man/mkvmerge.xml:39
 #: doc/man/mkvpropedit.xml:39
 #: doc/man/mmg.xml:39
-msgid "MkvToolNix"
-msgstr "MkvToolNix"
+msgid "MKVToolNix"
+msgstr "MKVToolNix"
 
 #. type: Content of: <refentry><refmeta><refmiscinfo>
 #: doc/man/mkvextract.xml:40
@@ -1188,11 +1189,6 @@ msgstr "&mkvmerge;, &mkvextract;, &mkvpropedit;, &mmg;"
 #: doc/man/mkvmerge.xml:5
 msgid "mkvmerge"
 msgstr "mkvmerge"
-
-#. type: Content of: <refentry><refmeta><refmiscinfo>
-#: doc/man/mkvmerge.xml:39
-msgid "MKVToolNix"
-msgstr "MKVToolNix"
 
 #. type: Content of: <refentry><refnamediv><refpurpose>
 #: doc/man/mkvmerge.xml:45
@@ -3886,6 +3882,9 @@ msgstr "另有完整的 HTML 格式的文档（<filename>doc/mkvmerge-gui.html</
 msgid "&mkvmerge;, &mkvextract;, &mkvinfo;, &mkvpropedit;"
 msgstr "&mkvmerge;, &mkvextract;, &mkvinfo;, &mkvpropedit;"
 
+#~ msgid "MkvToolNix"
+#~ msgstr "MkvToolNix"
+
 #~ msgid "<option>@</option>options-file"
 #~ msgstr "<option>@</option>选项文件"
 
@@ -3943,4 +3942,5 @@ msgstr "&mkvmerge;, &mkvextract;, &mkvinfo;, &mkvpropedit;"
 
 #~ msgid "--language"
 #~ msgstr "--language"
+
 
