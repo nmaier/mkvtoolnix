@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2011-12-13 21:39+0100\n"
+"PO-Revision-Date: 2011-12-15 21:34+0900\n"
 "Last-Translator: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "Language-Team: Japanese <boiled.sugar@gmail.com>\n"
 "Language: ja\n"
@@ -3436,9 +3436,9 @@ msgid "Failed to parse the USF end tag for track %1%: %2%\n"
 msgstr "トラック%1%のUSFエンドタグの解析に失敗しました：%2%\n"
 
 #: src/info/mkvinfo.cpp:558
-#, fuzzy, boost-format
+#, boost-format
 msgid "Family UID: %1%"
-msgstr "ファミリUID：%1%"
+msgstr "ファミリーUID: %1%"
 
 #: src/merge/mkvmerge.cpp:395
 #, boost-format
@@ -9517,4 +9517,3 @@ msgstr "はい"
 
 #~ msgid "wrong usage: writing to read-only memory"
 #~ msgstr "間違った使用法：読み込み専用メモリへの書き込み"
-
