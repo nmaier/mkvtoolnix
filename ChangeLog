@@ -1,3 +1,9 @@
+2011-12-18  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge, mmg: bug fix: Automatic MIME type recognition for
+	TrueType fonts will result in "application/x-truetype-font" again
+	instead of "application/x-font-ttf". Fix for bug 682.
+
 2011-12-14  Andriy Bilous'ko  <arestarh@ukr.net>
 
 	* documentation: enhancement: Added a Ukrainian translation for

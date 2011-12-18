@@ -2668,9 +2668,9 @@ guess_mime_type_by_content(magic_t &m,
 }
 #endif  // HAVE_MAGIC_H
 
-std::string
-guess_mime_type(std::string ext,
-                bool is_file) {
+static std::string
+guess_mime_type_internal(std::string ext,
+                         bool is_file) {
 #if HAVE_MAGIC_H
   std::string ret;
   magic_t m;
@@ -2709,14 +2709,25 @@ guess_mime_type(std::string ext,
     if (ret == "application/octet-stream")
       ret = guess_mime_type_by_ext(ext);
 
-    if (ret == "")
-      ret = "application/octet-stream";
-
     return ret;
   }
 #else  // HAVE_MAGIC_H
   return guess_mime_type_by_ext(ext);
 #endif  // HAVE_MAGIC_H
+}
+
+std::string
+guess_mime_type(std::string ext,
+                bool is_file) {
+  std::string mime_type = guess_mime_type_internal(ext, is_file);
+
+  if (mime_type.empty())
+    return "application/octet-stream";
+
+  else if (mime_type == "application/x-font-ttf")
+    return "application/x-truetype-font";
+
+  return mime_type;
 }
 
 bool
