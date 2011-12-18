@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: mkvtoolnix\n"
 "Report-Msgid-Bugs-To: Dean Lee <xslidian@gmail.com>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2011-12-13 21:56+0100\n"
+"PO-Revision-Date: 2011-12-17 20:27+0800\n"
 "Last-Translator: Dean Lee <xslidian@gmail.com>\n"
 "Language-Team: Chinese Simplified <xslidian@gmail.com>\n"
 "Language: \n"
@@ -17,6 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Chinese\n"
 "X-Poedit-Basepath: ../\n"
+"Plural-Forms: nplurals=1; plural=0\n"
 
 #: src/extract/xtr_tta.cpp:116
 #, boost-format
@@ -746,20 +747,18 @@ msgstr "%1% 帧, 轨道 %2%, 时间码 %3% (%4%), 尺寸 %5%, adler 0x%|6$08x|%7
 #, boost-format
 msgid "%1% minute"
 msgid_plural "%1% minutes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1% 分钟"
 
 #: src/common/strings/formatting.cpp:262
 #, boost-format
 msgid "%1% second"
 msgid_plural "%1% seconds"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1% 秒"
 
 #: src/input/r_vobsub.cpp:86
-#, fuzzy, boost-format
+#, boost-format
 msgid "%1%: Could not open the sub file"
-msgstr "无法打开文件 '%1%'。"
+msgstr "%1%: 无法打开字幕文件"
 
 #: src/common/kax_file.cpp:181
 #, boost-format
@@ -1684,7 +1683,7 @@ msgstr "A/52 (亦称 AC3)"
 #: src/input/r_aac.h:37
 #: src/output/p_aac.h:42
 msgid "AAC"
-msgstr ""
+msgstr "AAC"
 
 #: src/common/file_types.cpp:26
 msgid "AAC (Advanced Audio Coding)"
@@ -1705,7 +1704,7 @@ msgstr "带 ADIF 头的 AAC"
 #: src/input/r_ac3.h:36
 #: src/output/p_ac3.h:42
 msgid "AC3"
-msgstr ""
+msgstr "AC3"
 
 #: src/mmg/header_editor/value_page.cpp:143
 msgid ""
@@ -1719,7 +1718,7 @@ msgstr ""
 #: src/output/p_avc.h:46
 #: src/output/p_mpeg4_p10.h:34
 msgid "AVC/h.264"
-msgstr ""
+msgstr "AVC/h.264"
 
 #: src/common/file_types.cpp:27
 msgid "AVC/h.264 elementary streams"
@@ -1727,7 +1726,7 @@ msgstr "AVC/h.264 基本流"
 
 #: src/input/r_avi.h:88
 msgid "AVI"
-msgstr ""
+msgstr "AVI"
 
 #: src/common/file_types.cpp:28
 msgid "AVI (Audio/Video Interleaved)"
@@ -1883,9 +1882,9 @@ msgid "Also try to extract the CUE sheet from the chapter information and tags f
 msgstr "同时尝试将此轨道的章节信息和标签提取为 CUE 表单。"
 
 #: src/input/r_wavpack.cpp:86
-#, fuzzy, boost-format
+#, boost-format
 msgid "Also using the correction file '%1%c'.\n"
-msgstr "无法打开一致性校正文件 '%1%c'。\n"
+msgstr "同时使用校正文件 '%1%c'。\n"
 
 #: src/mmg/options/mmg.cpp:92
 msgid "Always on top"
@@ -2608,7 +2607,7 @@ msgstr "复制命令行到剪贴板"
 
 #: src/input/r_corepicture.h:40
 msgid "CorePanorama pictures"
-msgstr ""
+msgstr "CorePanorama 图像"
 
 #: src/extract/xtr_cpic.cpp:54
 #, boost-format
@@ -2882,7 +2881,7 @@ msgstr "删除(&E)"
 #: src/input/r_dts.h:40
 #: src/output/p_dts.h:47
 msgid "DTS"
-msgstr ""
+msgstr "DTS"
 
 #: src/output/p_dts.cpp:83
 msgid "DTS header information changed! - New format:\n"
@@ -3381,7 +3380,7 @@ msgstr "不支持对轨道号 %1% （CodecID 为 '%2%'）的提取。\n"
 #: src/input/r_flac.h:52
 #: src/output/p_flac.h:39
 msgid "FLAC"
-msgstr ""
+msgstr "FLAC"
 
 #: src/common/file_types.cpp:33
 msgid "FLAC (Free Lossless Audio Codec)"
@@ -3770,9 +3769,8 @@ msgid "ISO639-2 code"
 msgstr "ISO639-2 代码"
 
 #: src/input/r_ivf.h:33
-#, fuzzy
 msgid "IVF (VP8)"
-msgstr "含 VP8 的 IVF"
+msgstr "IVF (VP8)"
 
 #: src/common/file_types.cpp:35
 msgid "IVF with VP8 video files"
@@ -4222,7 +4220,7 @@ msgstr "任务队列管理"
 
 #: src/output/p_kate.h:40
 msgid "Kate"
-msgstr ""
+msgstr "Kate"
 
 #: src/output/p_kate.cpp:77
 msgid "Kate packet is too small and is being skipped.\n"
@@ -4364,11 +4362,11 @@ msgstr "MKVToolNix 依 GNU GPL v2 授权"
 
 #: src/input/r_mp3.h:36
 msgid "MP2/MP3"
-msgstr ""
+msgstr "MP2/MP3"
 
 #: src/output/p_mp3.h:42
 msgid "MP3"
-msgstr ""
+msgstr "MP3"
 
 #: src/common/file_types.cpp:36
 msgid "MP4 audio/video files"
@@ -4387,7 +4385,6 @@ msgid "MPEG program streams"
 msgstr "MPEG PS 程序流"
 
 #: src/input/r_mpeg_ts.h:384
-#, fuzzy
 msgid "MPEG transport stream"
 msgstr "MPEG 传输流"
 
@@ -4396,7 +4393,6 @@ msgid "MPEG transport streams"
 msgstr "MPEG 传输流"
 
 #: src/input/r_mpeg_es.h:35
-#, fuzzy
 msgid "MPEG video elementary stream"
 msgstr "MPEG 视频基本流"
 
@@ -4406,11 +4402,11 @@ msgstr "MPEG 视频基本流"
 
 #: src/output/p_mpeg1_2.h:36
 msgid "MPEG-1/2"
-msgstr ""
+msgstr "MPEG-1/2"
 
 #: src/output/p_mpeg4_p2.h:66
 msgid "MPEG-4"
-msgstr ""
+msgstr "MPEG-4"
 
 #: src/mmg/tabs/input_general.cpp:184
 msgid "Make this track the default track for its type (audio, video, subtitles). Players should prefer tracks with the default track flag set."
@@ -4439,7 +4435,7 @@ msgstr "将此轨标记为 '强制'。播放器必须播放此轨。"
 
 #: src/input/r_matroska.h:197
 msgid "Matroska"
-msgstr ""
+msgstr "Matroska"
 
 #: src/mmg/mmg_dialog.cpp:350
 #, c-format, boost-format
@@ -4601,9 +4597,9 @@ msgid "Muxing in progress."
 msgstr "混流进行中。"
 
 #: src/merge/mkvmerge.cpp:2239
-#, fuzzy, boost-format
+#, boost-format
 msgid "Muxing took %1%.\n"
-msgstr "混流耗时 %1% 秒。\n"
+msgstr "混流耗时 %1%。\n"
 
 #: src/mmg/tabs/input_format.cpp:237
 msgid "NALU size length:"
@@ -4827,7 +4823,7 @@ msgstr "此轨的声道数。"
 
 #: src/input/r_ogm.h:106
 msgid "Ogg/OGM"
-msgstr ""
+msgstr "Ogg/OGM"
 
 #: src/common/file_types.cpp:44
 msgid "Ogg/OGM audio/video files"
@@ -4974,11 +4970,11 @@ msgstr "覆写现有的文件?"
 
 #: src/output/p_pcm.h:40
 msgid "PCM"
-msgstr ""
+msgstr "PCM"
 
 #: src/output/p_pgs.h:38
 msgid "PGS"
-msgstr ""
+msgstr "PGS"
 
 #: src/common/file_types.cpp:42
 msgid "PGS/SUP subtitles"
@@ -4986,7 +4982,7 @@ msgstr "PGS/SUP 字幕"
 
 #: src/input/r_pgssup.h:34
 msgid "PGSSUP"
-msgstr ""
+msgstr "PGSSUP"
 
 #: src/input/r_vobsub.cpp:538
 #, boost-format
@@ -5145,7 +5141,7 @@ msgstr "QuickTime 音/视频文件"
 
 #: src/input/r_qtmp4.h:290
 msgid "QuickTime/MP4"
-msgstr ""
+msgstr "QuickTime/MP4"
 
 #: src/input/r_qtmp4.cpp:462
 #, boost-format
@@ -5314,13 +5310,12 @@ msgid "Real output sampling frequency in Hz."
 msgstr "实际输出的采样率，单位 Hz。"
 
 #: src/output/p_realaudio.h:35
-#, fuzzy
 msgid "RealAudio"
-msgstr "音频"
+msgstr "RealAudio"
 
 #: src/input/r_real.h:105
 msgid "RealMedia"
-msgstr ""
+msgstr "RealMedia"
 
 #: src/common/file_types.cpp:45
 msgid "RealMedia audio/video files"
@@ -5411,18 +5406,16 @@ msgid "SHA1-160"
 msgstr "SHA1-160"
 
 #: src/input/r_srt.h:33
-#, fuzzy
 msgid "SRT subtitles"
-msgstr "SRT 文本字幕"
+msgstr "SRT 字幕"
 
 #: src/common/file_types.cpp:46
 msgid "SRT text subtitles"
 msgstr "SRT 文本字幕"
 
 #: src/input/r_ssa.h:32
-#, fuzzy
 msgid "SSA/ASS subtitles"
-msgstr "SSA/ASS 文本字幕"
+msgstr "SSA/ASS 字幕"
 
 #: src/common/file_types.cpp:47
 msgid "SSA/ASS text subtitles"
@@ -6045,7 +6038,7 @@ msgstr "禁用状态输出。"
 #: src/input/r_tta.h:38
 #: src/output/p_tta.h:34
 msgid "TTA"
-msgstr ""
+msgstr "TTA"
 
 #: src/common/file_types.cpp:48
 msgid "TTA (The lossless True Audio codec)"
@@ -6295,7 +6288,7 @@ msgstr "选择的 NALU 长 %1% 过小。请尝试使用 '4'。\n"
 
 #: src/merge/mkvmerge.cpp:1556
 msgid "The closing parenthesis ')' are missing.\n"
-msgstr ""
+msgstr "缺少闭合括号 ')'。\n"
 
 #: src/merge/pr_generic.cpp:1208
 #, boost-format
@@ -6478,13 +6471,12 @@ msgstr "文件 '%s' 已经与文件 '%s' 作为组合处理。不能重复添加
 
 #: src/merge/output_control.cpp:1223
 msgid "The file content does not match its format type and was not recognized."
-msgstr ""
+msgstr "文件内容与格式类型不相匹配，未能识别。"
 
 #: src/merge/output_control.cpp:1217
 #: src/merge/output_control.cpp:1220
-#, fuzzy
 msgid "The file could not be opened for reading, or there was not enough data to parse its headers."
-msgstr "文件 '%1%' 无法打开以读取命令行参数。\n"
+msgstr "文件无法打开以读取，或没有足够的数据解析文件头部。"
 
 #: src/info/qt_ui.cpp:77
 msgid "The file could not be opened for writing."
@@ -6515,9 +6507,8 @@ msgid "The file header was not read correctly.\n"
 msgstr "文件头读取异常。\n"
 
 #: src/merge/output_control.cpp:1226
-#, fuzzy
 msgid "The file headers could not be parsed, e.g. because they're incomplete, invalid or damaged."
-msgstr "无法解析 FLAC 头: 找不到流信息结构。\n"
+msgstr "文件头部无法解析，可能是因为不完整、无效或损坏。"
 
 #: src/mmg/tabs/input.cpp:352
 #, c-format, boost-format
@@ -7071,7 +7062,7 @@ msgstr "两轨宽度不同: %1% 与 %2%"
 
 #: src/output/p_theora.h:28
 msgid "Theora"
-msgstr ""
+msgstr "Theora"
 
 #: src/mmg/mmg_dialog.cpp:1767
 msgid "There is a new version available online."
@@ -7446,9 +7437,8 @@ msgstr "轨道、章节与标签:"
 
 #: src/input/r_truehd.h:36
 #: src/output/p_truehd.h:44
-#, fuzzy
 msgid "TrueHD"
-msgstr "Dolby TrueHD"
+msgstr "TrueHD"
 
 #: src/mmg/cli_options_dlg.cpp:143
 msgid "TrueHD audio streams know two frame types: sync frames and non-sync frames. With this switch mkvmerge will put one sync frame and all following non-sync frames into a single Matroska block. Without it each non-sync frame is put into its own Matroska block."
@@ -7482,9 +7472,8 @@ msgid "UID:"
 msgstr "UID:"
 
 #: src/input/r_usf.h:74
-#, fuzzy
 msgid "USF subtitles"
-msgstr "USF 文本字幕"
+msgstr "USF 字幕"
 
 #: src/common/file_types.cpp:49
 msgid "USF text subtitles"
@@ -7633,24 +7622,22 @@ msgid "Using a NALU size length of 3 bytes might result in tracks that won't be 
 msgstr "使用 3 字节的 NALU 长可能会导致某些 AVC/h.264 编解码器无法解码该轨道。\n"
 
 #: src/merge/pr_generic.h:335
-#, fuzzy
 msgid "Using the demultiplexer for the format '%1%'.\n"
-msgstr "使用 AAC 分离器。\n"
+msgstr "使用 %1% 格式分离器。\n"
 
 #: src/input/r_matroska.cpp:1362
-#, fuzzy, boost-format
+#, boost-format
 msgid "Using the generic output module for track type '%1%'.\n"
-msgstr "使用 AAC 输出模块 (FourCC: %1%)。\n"
+msgstr "使用 %1% 类型轨道通用输出模块。\n"
 
 #: src/merge/pr_generic.h:337
-#, fuzzy
 msgid "Using the output module for the format '%1%'.\n"
-msgstr "使用 AAC 输出模块 (FourCC: %1%)。\n"
+msgstr "使用 %1% 格式通用输出模块。\n"
 
 #: src/input/r_vc1.h:35
 #: src/output/p_vc1.h:39
 msgid "VC1"
-msgstr ""
+msgstr "VC1"
 
 #: src/common/file_types.cpp:50
 msgid "VC1 elementary streams"
@@ -7658,7 +7645,7 @@ msgstr "VC1 基本流"
 
 #: src/output/p_vp8.h:32
 msgid "VP8"
-msgstr ""
+msgstr "VP8"
 
 #: src/common/hacks.cpp:60
 msgid "Valid hacks are:\n"
@@ -7674,7 +7661,7 @@ msgstr "验证当前章节条目有无错误"
 
 #: src/output/p_video.h:45
 msgid "VfW compatible video"
-msgstr ""
+msgstr "VfW 兼容视频"
 
 #: src/common/property_element.cpp:147
 #: src/mmg/header_editor/frame.cpp:478
@@ -7759,9 +7746,8 @@ msgstr "查看 mkvmerge 处理选中任务时的输出信息"
 
 #: src/input/r_vobbtn.h:36
 #: src/output/p_vobbtn.h:36
-#, fuzzy
 msgid "VobBtn"
-msgstr "VobBtn 按钮"
+msgstr "VobBtn"
 
 #: src/common/file_types.cpp:51
 msgid "VobButtons"
@@ -7770,7 +7756,7 @@ msgstr "VobBtn 按钮"
 #: src/input/r_vobsub.h:75
 #: src/output/p_vobsub.h:34
 msgid "VobSub"
-msgstr ""
+msgstr "VobSub"
 
 #: src/common/file_types.cpp:52
 msgid "VobSub subtitles"
@@ -7778,29 +7764,27 @@ msgstr "VobSub 字幕"
 
 #: src/output/p_vorbis.h:60
 msgid "Vorbis"
-msgstr ""
+msgstr "Vorbis"
 
 #: src/input/r_wav.h:78
 msgid "WAV"
-msgstr ""
+msgstr "WAV"
 
 #: src/common/file_types.cpp:53
 msgid "WAVE (uncompressed PCM audio)"
 msgstr "WAVE (未压缩的 PCM 音频)"
 
 #: src/input/r_wavpack.h:37
-#, fuzzy
 msgid "WAVPACK"
-msgstr "WAVPACK v4 音频"
+msgstr "WAVPACK"
 
 #: src/common/file_types.cpp:54
 msgid "WAVPACK v4 audio"
 msgstr "WAVPACK v4 音频"
 
 #: src/output/p_wavpack.h:36
-#, fuzzy
 msgid "WAVPACK4"
-msgstr "WAVPACK v4 音频"
+msgstr "WAVPACK4"
 
 #: src/mmg/options/mmg.cpp:94
 msgid "Warn about possible incorrect usage of mmg"
@@ -7992,11 +7976,11 @@ msgstr "添加"
 
 #: src/common/stereo_mode.cpp:58
 msgid "anaglyph (cyan/red)"
-msgstr ""
+msgstr "浮雕式 (青/红)"
 
 #: src/common/stereo_mode.cpp:60
 msgid "anaglyph (green/magenta)"
-msgstr ""
+msgstr "浮雕式 (绿/品红)"
 
 #: src/mmg/tabs/input.cpp:191
 msgid "append"
@@ -8015,11 +7999,11 @@ msgstr "比特每采样: %1%"
 
 #: src/common/stereo_mode.cpp:61
 msgid "both eyes laced in one block (left first)"
-msgstr ""
+msgstr "双眼同块 (左先)"
 
 #: src/common/stereo_mode.cpp:62
 msgid "both eyes laced in one block (right first)"
-msgstr ""
+msgstr "双眼同块 (右先)"
 
 #: src/info/mkvinfo.cpp:1081
 #: src/input/r_matroska.cpp:94
@@ -8722,7 +8706,7 @@ msgstr "输出采样率: %1%"
 
 #: src/output/p_passthrough.h:29
 msgid "passthrough"
-msgstr ""
+msgstr "呈递"
 
 #: src/mmg/jobs.cpp:528
 #: src/mmg/jobs.cpp:702
@@ -8850,9 +8834,8 @@ msgid "tet_index: '%1%' not found\n"
 msgstr "tet_index: '%1%' 未发现\n"
 
 #: src/output/p_textsubs.h:37
-#, fuzzy
 msgid "text subtitles"
-msgstr "SRT 文本字幕"
+msgstr "文本字幕"
 
 #: src/merge/mkvmerge.cpp:2127
 msgid "timecodes"
@@ -8922,9 +8905,8 @@ msgid "video"
 msgstr "视频"
 
 #: src/input/r_vobsub.cpp:574
-#, fuzzy
 msgid "vobsub_reader: sub file read failure"
-msgstr "vobsub_reader: sub_file->read 读取失败"
+msgstr "vobsub_reader: 字幕文件读取失败"
 
 #: src/common/wavpack.cpp:158
 msgid "wavpack_reader: non-audio block found\n"
@@ -9844,4 +9826,3 @@ msgstr "是"
 
 #~ msgid "wrong usage: writing to read-only memory"
 #~ msgstr "错误用法: 写入到只读内存"
-

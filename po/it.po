@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: it\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2011-12-13 21:38+0100\n"
+"PO-Revision-Date: 2011-12-16 22:30+0100\n"
 "Last-Translator: Stefano Codari <l.stickell@yahoo.it>\n"
 "Language-Team: Italian <moritz@bunkus.org>\n"
 "Language: it\n"
@@ -1718,7 +1718,7 @@ msgstr "AAC (Advanced Audio Coding)"
 
 #: src/input/r_aac.cpp:100
 msgid "AAC files may contain HE-AAC / AAC+ / SBR AAC audio. This can NOT be detected automatically. Therefore you have to specifiy '--aac-is-sbr 0' manually for this input file if the file actually contains SBR AAC. The file will be muxed in the WRONG way otherwise. Also read mkvmerge's documentation.\n"
-msgstr "I file AAC possono conntenere audio HE-AAC / AAC+ / SBR AAC. Ciò non può essere riconosciuto automaticamente. Va specificato manualmente '--aac-is-sbr 0' per questo file sorgente se il file contiene attualmente SBR AAC. Altrimenti il file verrà muxato in modfo ERRATO. Consultare la documentazione di mkvmerge.\n"
+msgstr "I file AAC possono contenere audio HE-AAC / AAC+ / SBR AAC. Ciò non può essere rilevato automaticamente. Perciò devi specificare manualmente '--aac-is-sbr 0' per questo file sorgente se il file contiene attualmente SBR AAC. Altrimenti il file verrà muxato in modo ERRATO. Consultare inoltre la documentazione di mkvmerge.\n"
 
 #: src/mmg/tabs/input_format.cpp:254
 msgid "AAC is SBR/HE-AAC/AAC+"
@@ -5357,7 +5357,7 @@ msgstr "File audio/video RealMedia"
 #: src/input/r_real.cpp:357
 #, boost-format
 msgid "RealMedia files may contain HE-AAC / AAC+ / SBR AAC audio. In some cases this can NOT be detected automatically. Therefore you have to specifiy '--aac-is-sbr %1%' manually for this input file if the file actually contains SBR AAC. The file will be muxed in the WRONG way otherwise. Also read mkvmerge's documentation.\n"
-msgstr ""
+msgstr "I file RealMedia possono contenere audio HE-AAC / AAC+ / SBR AAC. In alcuni casi ciò NON può essere rilevato automaticamente. Perciò devi specificare manualmente '--aac-is-sbr %1%' per questo file sorgente se il file attualmente contiene SBR AAC. Altrimenti il file sarà muxato in modo ERRATO. Consultare inoltre la documentazione di mkvmerge.\n"
 
 #: src/common/cli_parser.cpp:180
 msgid "Redirects all messages into this file."
