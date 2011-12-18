@@ -28,7 +28,7 @@
 #include "common/strings/parsing.h"
 #include "common/version.h"
 
-#define VERSIONNAME "And so it goes"
+#define VERSIONNAME "I can't explain"
 
 version_number_t::version_number_t()
   : valid(false)
