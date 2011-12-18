@@ -2681,20 +2681,20 @@ guess_mime_type(std::string ext,
   // In newer versions of libmagic MAGIC_MIME is declared as MAGIC_MIME_TYPE | MAGIC_MIME_ENCODING.
   // Older versions don't know MAGIC_MIME_TYPE, though -- the old MAGIC_MIME is the new MAGIC_MIME_TYPE,
   // and the new MAGIC_MIME has been redefined.
-#ifdef MAGIC_MIME_TYPE
+# ifdef MAGIC_MIME_TYPE
   m = magic_open(MAGIC_MIME_TYPE | MAGIC_SYMLINK);
-#else
+# else  // MAGIC_MIME_TYPE
   m = magic_open(MAGIC_MIME      | MAGIC_SYMLINK);
-#endif
+# endif  // MAGIC_MIME_TYPE
 
-#ifdef SYS_WINDOWS
+# ifdef SYS_WINDOWS
   std::string magic_filename = get_installation_path() + "\\data\\magic";
   if (!m || (-1 == magic_load(m, magic_filename.c_str())))
     return guess_mime_type_by_ext(ext);
-#else
+# else  // defined(SYS_WINDOWS)
   if (!m || (-1 == magic_load(m, NULL)))
     return guess_mime_type_by_ext(ext);
-#endif
+# endif  // defined(SYS_WINDOWS)
 
   ret = guess_mime_type_by_content(m, ext);
   magic_close(m);
@@ -2714,9 +2714,9 @@ guess_mime_type(std::string ext,
 
     return ret;
   }
-#else
+#else  // HAVE_MAGIC_H
   return guess_mime_type_by_ext(ext);
-#endif
+#endif  // HAVE_MAGIC_H
 }
 
 bool
