@@ -20,6 +20,7 @@ Matroska video utilities.
 %{_datadir}/man/man1/*
 %{_datadir}/man/ja/man1/*
 %{_datadir}/man/nl/man1/*
+%{_datadir}/man/uk/man1/*
 %{_datadir}/man/zh_CN/man1/*
 %{_datadir}/applications/*.desktop
 %{_datadir}/icons/hicolor/32x32/apps/*.png
