@@ -198,7 +198,7 @@ msgid ""
 "  --cropping <TID:left,top,right,bottom>\n"
 "                           Sets the cropping parameters.\n"
 msgstr ""
-"  --cropping <TID:links,oben,rechts,untne>\n"
+"  --cropping <TID:links,oben,rechts,unten>\n"
 "                           Setzt die Anzahl der abzuschneidenden Pixel.\n"
 
 #: src/merge/mkvmerge.cpp:87
@@ -208,7 +208,7 @@ msgid ""
 "                           entries to chapter names.\n"
 msgstr ""
 "  --cue-chapter-name-format <Muster>\n"
-"                           Muster für die Konviertierung von Einträgen aus\n"
+"                           Muster für die Konvertierung von Einträgen aus\n"
 "                           Cuesheets in Kapitelnamen.\n"
 
 #: src/merge/mkvmerge.cpp:190
@@ -592,7 +592,7 @@ msgid ""
 msgstr ""
 "  -y, --sync <TID:d[,o[/p]]>\n"
 "                           Manuelle Synchronisation. Addiert den Wert 'd' zu\n"
-"                           allen Zeitstempeln und multiplziert sie mit 'o/p'.\n"
+"                           allen Zeitstempeln und multipliziert sie mit 'o/p'.\n"
 "                           'p' wird mit 1 angenommen, wenn es nicht angegeben\n"
 "                           wird. 'o' und 'p' können Fließkommazahlen sein.\n"
 
@@ -3475,7 +3475,7 @@ msgstr "Familien-UID: %1%"
 #: src/merge/mkvmerge.cpp:395
 #, boost-format
 msgid "File %1% has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n"
-msgstr "Die Datei %1% hat einen unbekannte Typ. Schauen Sie bitte in der Liste der unterstützten Dateiformate nach ('mkvmerge --list-types'), und kotaktieren Sie den Autor Moritz Bunkus <moritz@bunkus.org>, falls Ihre Datei zwar von mkvmerge unterstützt aber nicht erkannt wird.\n"
+msgstr "Die Datei %1% hat einen unbekannte Typ. Schauen Sie bitte in der Liste der unterstützten Dateiformate nach ('mkvmerge --list-types'), und kontaktieren Sie den Autor Moritz Bunkus <moritz@bunkus.org>, falls Ihre Datei zwar von mkvmerge unterstützt aber nicht erkannt wird.\n"
 
 #: src/merge/pr_generic.cpp:1389
 #, boost-format
