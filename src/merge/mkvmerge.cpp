@@ -141,7 +141,7 @@ set_usage() {
                   "                           Matroska file.\n");
   usage_text += Y("  --attach-file-once <file>\n"
                   "                           Creates a file attachment inside the\n"
-                  "                           firsts Matroska file written.\n");
+                  "                           first Matroska file written.\n");
   usage_text +=   "\n";
   usage_text += Y(" Options for each input file:\n");
   usage_text += Y("  -a, --audio-tracks <n,m,...>\n"
