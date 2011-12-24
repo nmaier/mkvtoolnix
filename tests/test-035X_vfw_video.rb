@@ -6,7 +6,7 @@ class T_035X_vfw_video < Test
   end
 
   def run
-    return xtr_tracks_s(1)
+    xtr_tracks_s 0
   end
 end
 

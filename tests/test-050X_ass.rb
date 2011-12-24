@@ -10,7 +10,7 @@ class T_050X_ass < Test
     my_tmp = tmp
     merge("--sub-charset 0:ISO-8859-1 data/textsubs/11.Magyar.ass")
     @tmp = nil
-    xtr_tracks(my_tmp, "-c ISO-8859-1 1:#{tmp}")
+    xtr_tracks(my_tmp, "-c ISO-8859-1 0:#{tmp}")
     File.unlink(my_tmp)
     return my_hash + "-" + hash_tmp
   end

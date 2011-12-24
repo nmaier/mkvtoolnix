@@ -6,7 +6,7 @@ class T_038X_ac3 < Test
   end
 
   def run
-    return xtr_tracks_s(4)
+    xtr_tracks_s 3
   end
 end
 

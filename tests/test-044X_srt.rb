@@ -6,7 +6,7 @@ class T_044X_srt < Test
   end
 
   def run
-    return xtr_tracks_s(9)
+    xtr_tracks_s 8
   end
 end
 

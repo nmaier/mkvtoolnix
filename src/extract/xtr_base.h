@@ -28,7 +28,7 @@ public:
   std::string m_codec_id, m_file_name, m_container_name;
   xtr_base_c *m_master;
   mm_io_cptr m_out;
-  int64_t m_tid;
+  int64_t m_tid, m_track_num;
   int64_t m_default_duration;
 
   int64_t m_bytes_written;

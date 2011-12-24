@@ -47,6 +47,7 @@ xtr_base_c::xtr_base_c(const std::string &codec_id,
   , m_container_name(NULL == container_name ? Y("raw data") : container_name)
   , m_master(NULL)
   , m_tid(tid)
+  , m_track_num(-1)
   , m_default_duration(0)
   , m_bytes_written(0)
   , m_content_decoder_initialized(false)

@@ -49,10 +49,13 @@ static void
 create_extractors(KaxTracks &kax_tracks,
                   std::vector<track_spec_t> &tracks) {
   size_t i;
+  int64_t track_id = -1;
 
   for (i = 0; i < kax_tracks.ListSize(); i++) {
     if (!is_id(kax_tracks[i], KaxTrackEntry))
       continue;
+
+    ++track_id;
 
     KaxTrackEntry &track = *static_cast<KaxTrackEntry *>(kax_tracks[i]);
     int64_t tnum         = kt_get_number(track);
@@ -76,7 +79,7 @@ create_extractors(KaxTracks &kax_tracks,
     // Does the user want this track to be extracted?
     track_spec_t *tspec = NULL;
     for (k = 0; k < tracks.size(); k++)
-      if (tracks[k].tid == tnum) {
+      if (tracks[k].tid == track_id) {
         tspec = &tracks[k];
         break;
       }
@@ -86,11 +89,13 @@ create_extractors(KaxTracks &kax_tracks,
     // Let's find the codec ID and create an extractor for it.
     std::string codec_id = kt_get_codec_id(track);
     if (codec_id.empty())
-      mxerror(boost::format(Y("The track number %1% does not have a valid CodecID.\n")) % tnum);
+      mxerror(boost::format(Y("The track number %1% does not have a valid CodecID.\n")) % track_id);
 
-    extractor = xtr_base_c::create_extractor(codec_id, tnum, *tspec);
+    extractor = xtr_base_c::create_extractor(codec_id, track_id, *tspec);
     if (NULL == extractor)
-      mxerror(boost::format(Y("Extraction of track number %1% with the CodecID '%2%' is not supported.\n")) % tnum % codec_id);
+      mxerror(boost::format(Y("Extraction of track number %1% with the CodecID '%2%' is not supported.\n")) % track_id % codec_id);
+
+    extractor->m_track_num = tnum;
 
     // Has there another file been requested with the same name?
     xtr_base_c *master = NULL;
@@ -107,7 +112,7 @@ create_extractors(KaxTracks &kax_tracks,
     extractors.push_back(extractor);
 
     mxinfo(boost::format(Y("Extracting track %1% with the CodecID '%2%' to the file '%3%'. Container format: %4%\n"))
-           % tnum % codec_id % tspec->out_name % extractor->get_container_name());
+           % track_id % codec_id % tspec->out_name % extractor->get_container_name());
   }
 
   // Signal that all headers have been taken care of.
@@ -130,7 +135,7 @@ handle_blockgroup(KaxBlockGroup &blockgroup,
   xtr_base_c *extractor = NULL;
   size_t i;
   for (i = 0; i < extractors.size(); i++)
-    if (block->TrackNum() == extractors[i]->m_tid) {
+    if (block->TrackNum() == extractors[i]->m_track_num) {
       extractor = extractors[i];
       break;
     }
@@ -195,7 +200,7 @@ handle_simpleblock(KaxSimpleBlock &simpleblock,
   xtr_base_c *extractor = NULL;
   size_t i;
   for (i = 0; i < extractors.size(); i++)
-    if (simpleblock.TrackNum() == extractors[i]->m_tid) {
+    if (simpleblock.TrackNum() == extractors[i]->m_track_num) {
       extractor = extractors[i];
       break;
     }
@@ -283,29 +288,28 @@ write_all_cuesheets(KaxChapters &chapters,
 void
 find_and_verify_track_uids(KaxTracks &tracks,
                            std::vector<track_spec_t> &tspecs) {
-  std::map<int64_t, bool> available_tnums;
+  std::map<int64_t, bool> available_track_ids;
   size_t t;
+  int64_t track_id = -1;
 
   for (t = 0; t < tracks.ListSize(); t++) {
     KaxTrackEntry *track_entry = dynamic_cast<KaxTrackEntry *>(tracks[t]);
     if (NULL == track_entry)
       continue;
 
-    int64_t track_number = kt_get_number(*track_entry);
-    available_tnums[track_number] = true;
+    ++track_id;
+    available_track_ids[track_id] = true;
 
-    size_t s;
-    for (s = 0; tspecs.size() > s; ++s)
-      if (tspecs[s].tid == track_number) {
-        tspecs[s].tuid = kt_get_uid(*track_entry);
+    for (auto &tspec : tspecs)
+      if (tspec.tid == track_id) {
+        tspec.tuid = kt_get_uid(*track_entry);
         break;
       }
   }
 
-  size_t s;
-  for (s = 0; tspecs.size() > s; ++s)
-    if (!available_tnums[ tspecs[s].tid ])
-      mxerror(boost::format(Y("No track with the ID %1% was found in the source file.\n")) % tspecs[s].tid);
+  for (auto &tspec : tspecs)
+    if (!available_track_ids[ tspec.tid ])
+      mxerror(boost::format(Y("No track with the ID %1% was found in the source file.\n")) % tspec.tid);
 }
 
 bool

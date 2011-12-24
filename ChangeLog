@@ -1,3 +1,9 @@
+2011-12-24  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvextract: bug fix: The track IDs used for extraction are
+	consistent again with the IDs that mkvmerge's identification
+	reports. Fix for bug 689.
+
 2011-12-21  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Fix compilation if FLAC is not available. Fix

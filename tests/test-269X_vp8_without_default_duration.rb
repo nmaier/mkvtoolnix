@@ -6,7 +6,7 @@ class T_269X_vp8_without_default_duration < Test
   end
 
   def run
-    xtr_tracks "data/webm/yt3.webm", "1:#{tmp}"
+    xtr_tracks "data/webm/yt3.webm", "0:#{tmp}"
     return hash_tmp
   end
 end
