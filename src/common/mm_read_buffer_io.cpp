@@ -28,6 +28,8 @@ mm_read_buffer_io_c::mm_read_buffer_io_c(mm_io_c *in,
   , m_offset(0)
   , m_size(buffer_size)
   , m_buffering(true)
+  , m_debug_seek(debugging_requested("read_buffer_io") || debugging_requested("read_buffer_io_read"))
+  , m_debug_read(debugging_requested("read_buffer_io") || debugging_requested("read_buffer_io_read"))
 {
   setFilePointer(0, seek_beginning);
 }
@@ -81,6 +83,8 @@ mm_read_buffer_io_c::setFilePointer(int64 offset,
     return;
   }
 
+  int64_t previous_pos = m_proxy_io->getFilePointer();
+
   // Actual seeking
   if (new_pos < 0)
     m_proxy_io->setFilePointer(offset, seek_end);
@@ -93,6 +97,8 @@ mm_read_buffer_io_c::setFilePointer(int64 offset,
 
   // "Drop" the buffer content
   m_cursor = m_fill = 0;
+
+  mxdebug_if(m_debug_seek, boost::format("seek on proxy from %1% to %2% relative %3%\n") % previous_pos % m_offset % (m_offset - previous_pos));
 }
 
 int64_t
@@ -133,7 +139,10 @@ mm_read_buffer_io_c::_read(void *buffer,
         break;
       }
 
+      int64_t previous_pos = m_proxy_io->getFilePointer();
+
       m_fill = m_proxy_io->read(m_buffer, avail);
+      mxdebug_if(m_debug_read, boost::format("physical read from position %3% for %1% returned %2%\n") % avail % m_fill % previous_pos);
       if (m_fill != avail) {
         m_eof = true;
         if (!m_fill)
