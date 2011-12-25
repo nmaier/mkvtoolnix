@@ -1,3 +1,11 @@
+2011-12-25  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: MPEG program streams in which a track
+	suddenly ends and others continue or in which a track has huge
+	gaps will no longer cause mkvmerge to try to read the whole file
+	at once. This could lead to excessive swapping and finally
+	mkvmerge crashing if no more memory was available.
+
 2011-12-24  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvextract: bug fix: The track IDs used for extraction are

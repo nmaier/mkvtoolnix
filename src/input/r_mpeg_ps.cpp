@@ -1204,6 +1204,8 @@ mpeg_ps_reader_c::create_packetizer(int64_t id) {
 
   if (-1 != track->timecode_offset)
     PTZR(track->ptzr)->m_ti.m_tcsync.displacement += track->timecode_offset;
+
+  m_ptzr_to_track_map[ PTZR(track->ptzr) ] = track;
 }
 
 void
@@ -1220,14 +1222,21 @@ mpeg_ps_reader_c::add_available_track_ids() {
 }
 
 file_status_e
-mpeg_ps_reader_c::read(generic_packetizer_c *,
-                       bool) {
+mpeg_ps_reader_c::read(generic_packetizer_c *requested_ptzr,
+                       bool force) {
   int64_t timecode, packet_pos;
   unsigned int length, full_length;
   unsigned char *buf;
 
   if (file_done)
     return flush_packetizers();
+
+  int64_t num_queued_bytes = get_queued_bytes();
+  if (!force && (20 * 1024 * 1024 < num_queued_bytes)) {
+    mpeg_ps_track_ptr requested_ptzr_track = m_ptzr_to_track_map[requested_ptzr];
+    if (!requested_ptzr_track || (('a' != requested_ptzr_track->type) && ('v' != requested_ptzr_track->type)) || (64 * 1024 * 1024 < num_queued_bytes))
+      return FILE_STATUS_HOLDING;
+  }
 
   try {
     mpeg_ps_id_t new_id;

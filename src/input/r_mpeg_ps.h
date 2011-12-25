@@ -130,6 +130,7 @@ private:
   bool file_done;
 
   std::vector<mpeg_ps_track_ptr> tracks;
+  std::map<generic_packetizer_c *, mpeg_ps_track_ptr> m_ptzr_to_track_map;
 
 public:
   mpeg_ps_reader_c(const track_info_c &ti, const mm_io_cptr &in);
@@ -140,7 +141,7 @@ public:
   }
 
   virtual void read_headers();
-  virtual file_status_e read(generic_packetizer_c *ptzr, bool force = false);
+  virtual file_status_e read(generic_packetizer_c *requested_ptzr, bool force = false);
   virtual void identify();
   virtual void create_packetizer(int64_t id);
   virtual void create_packetizers();
