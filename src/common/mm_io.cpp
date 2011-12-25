@@ -1002,7 +1002,7 @@ mm_text_io_c::read_next_char(char *buffer) {
          :                                99;
 
     if (99 == size)
-      mxerror(boost::format(Y("mm_text_io_c::read_next_char(): Invalid UTF-8 char. First byte: 0x%|1$02x|")) % (unsigned int)stream[0]);
+      throw mtx::mm_io::text::invalid_utf8_char_x(stream[0]);
 
     if ((1 < size) && (read(&stream[1], size - 1) != (size - 1)))
       return 0;

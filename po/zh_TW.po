@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: zh-TW\n"
 "Report-Msgid-Bugs-To: Dean Lee <xslidian@gmail.com>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2011-12-13 21:57+0100\n"
+"PO-Revision-Date: 2011-12-25 15:19+0100\n"
 "Last-Translator: Dongjun Wu <ziyawu@gmail.com>\n"
 "Language-Team: Chinese Traditional <zh-l10n@linux.org.tw>\n"
 "Language: \n"
@@ -2103,7 +2103,7 @@ msgid "Block duration: %1%.%|2$06d|ms"
 msgstr "區塊持續時間: %1%.%|2$06d|ms"
 
 #: src/extract/timecodes_v2.cpp:277
-#: src/extract/tracks.cpp:411
+#: src/extract/tracks.cpp:415
 #: src/info/mkvinfo.cpp:1353
 msgid "Block group"
 msgstr "區塊群組"
@@ -2176,7 +2176,7 @@ msgid "Cannot write track %1% with the CodecID '%2%' to the file '%3%' because t
 msgstr "無法寫入軌道 %1%（CodecID「%2%」）至檔案「%3%」，因為軌道 %4%（CodecID「%5%」）已被寫入同一檔案，且它們的 CodecPrivate 編解碼器私有資料 (如 USF 樣式) 不相符。\n"
 
 #: src/extract/xtr_avi.cpp:47
-#: src/extract/xtr_base.cpp:63
+#: src/extract/xtr_base.cpp:64
 #: src/extract/xtr_ivf.cpp:53
 #: src/extract/xtr_textsubs.cpp:307
 #, boost-format
@@ -2188,7 +2188,7 @@ msgid "Category is not NUL terminated"
 msgstr "類別未以 NUL 結尾"
 
 #: src/extract/timecodes_v2.cpp:356
-#: src/extract/tracks.cpp:461
+#: src/extract/tracks.cpp:465
 #: src/info/mkvinfo.cpp:2024
 msgid "Caught exception"
 msgstr "發生異常"
@@ -2453,7 +2453,7 @@ msgid "Close the current file without saving"
 msgstr "在不儲存的情況下關閉目前檔案"
 
 #: src/extract/timecodes_v2.cpp:258
-#: src/extract/tracks.cpp:393
+#: src/extract/tracks.cpp:397
 #: src/info/mkvinfo.cpp:1984
 msgid "Cluster"
 msgstr "叢集"
@@ -2479,7 +2479,7 @@ msgid "Cluster previous size: %1%"
 msgstr "叢集上一個長度: %1%"
 
 #: src/extract/timecodes_v2.cpp:273
-#: src/extract/tracks.cpp:402
+#: src/extract/tracks.cpp:406
 #: src/info/mkvinfo.cpp:208
 #, boost-format
 msgid "Cluster timecode: %|1$.3f|s"
@@ -3288,7 +3288,7 @@ msgid "Error: Couldn't open input file %1% (%2%).\n"
 msgstr "發生錯誤: 無法開啟輸入檔 %1% (%2%)。\n"
 
 #: src/extract/timecodes_v2.cpp:178
-#: src/extract/tracks.cpp:336
+#: src/extract/tracks.cpp:340
 msgid "Error: No EBML head found."
 msgstr "發生錯誤: 未發現 EBML 表頭。"
 
@@ -3372,12 +3372,12 @@ msgstr "從 MPEG4 layer 2 視訊資料中提取外觀比例資訊並設定顯示
 msgid "Extracted the aspect ratio information from the Theora video headers and set the display dimensions to %1%/%2%.\n"
 msgstr "從 Theora 視訊頭中提取外觀比例資訊並設定顯示尺寸為 %1%/%2%。\n"
 
-#: src/extract/tracks.cpp:109
+#: src/extract/tracks.cpp:114
 #, boost-format
 msgid "Extracting track %1% with the CodecID '%2%' to the file '%3%'. Container format: %4%\n"
 msgstr "正在提取軌道 %1% （CodecID 為「%2%」）至檔案「%3%」。容器格式: %4%\n"
 
-#: src/extract/tracks.cpp:93
+#: src/extract/tracks.cpp:96
 #, boost-format
 msgid "Extraction of track number %1% with the CodecID '%2%' is not supported.\n"
 msgstr "不支援對軌道編號 %1%（CodecID 為「%2%」）的提取。\n"
@@ -3400,7 +3400,7 @@ msgstr "畫格率 (fps):"
 msgid "Failed to create the VobSub data file '%1%': %2% (%3%)\n"
 msgstr "建立 VobSub 資料檔案「%1%」失敗: %2% (%3%)\n"
 
-#: src/extract/xtr_base.cpp:71
+#: src/extract/xtr_base.cpp:72
 #: src/extract/xtr_textsubs.cpp:336
 #: src/extract/xtr_vobsub.cpp:235
 #, boost-format
@@ -3918,6 +3918,10 @@ msgstr "無效 UID。該章節 UID 已被使用。原 UID 沒有被改變。"
 msgid "Invalid UID. This edition UID is already in use. The original UID has not been changed."
 msgstr "無效 UID。該版本 UID 已被使用。原 UID 沒有被改變。"
 
+#: src/common/mm_io.h:121
+msgid "Invalid UTF-8 char. First byte: 0x%|1$02x|"
+msgstr "無效 UTF-8 字元。第一位元組: 0x%|1$02x|"
+
 #: src/input/r_avi.cpp:696
 #: src/input/r_avi.cpp:701
 #: src/input/r_avi.cpp:718
@@ -4382,7 +4386,7 @@ msgstr "MP4 音/視訊檔"
 msgid "MPEG audio files"
 msgstr "MPEG 音訊檔"
 
-#: src/input/r_mpeg_ps.h:139
+#: src/input/r_mpeg_ps.h:140
 msgid "MPEG program stream"
 msgstr "MPEG PS 節目流"
 
@@ -4582,7 +4586,7 @@ msgstr "根元件多於一個。"
 msgid "More than one track is to be appended to the track %1% from file no. %2% ('%3%'). The argument for '--append-to' was invalid.\n"
 msgstr "被添加至軌道 %1%（自檔案 %2% (「%3%」)）的軌道多於一條。「--append-to」的參數無效。\n"
 
-#: src/extract/tracks.cpp:69
+#: src/extract/tracks.cpp:72
 #, boost-format
 msgid "More than one track with the track number %1% found.\n"
 msgstr "軌道編號為 %1% 的軌道多於一條。\n"
@@ -4674,7 +4678,7 @@ msgstr "下一個剪輯的唯一 ID"
 msgid "No %1% specified in '--%2% %3%'.\n"
 msgstr "未指定 %1%，在「--%2% %3%」。\n"
 
-#: src/input/r_qtmp4.cpp:1425
+#: src/input/r_qtmp4.cpp:1429
 msgid "No AC3 header found in first frame; track will be skipped.\n"
 msgstr "第一個畫格未發現 AC3 表頭; 此軌將被跳過。\n"
 
@@ -4755,7 +4759,7 @@ msgid "No output file name specified, will use attachment name.\n"
 msgstr "未指定輸出檔名，將使用附件名。\n"
 
 #: src/extract/timecodes_v2.cpp:192
-#: src/extract/tracks.cpp:351
+#: src/extract/tracks.cpp:355
 #: src/info/mkvinfo.cpp:1951
 msgid "No segment/level 0 element found."
 msgstr "未發現剪輯/0 層級元件。"
@@ -4774,7 +4778,7 @@ msgstr "未指定軌道 ID，在「--%1% %2%」。\n"
 msgid "No track corresponding to the edit specification '%1%' was found. %2%\n"
 msgstr "沒有發現符合編輯規格「%1%」的軌道。%2%\n"
 
-#: src/extract/tracks.cpp:308
+#: src/extract/tracks.cpp:312
 #, boost-format
 msgid "No track with the ID %1% was found in the source file.\n"
 msgstr "在來源檔案裡找不到 ID 為 %1% 的軌道。\n"
@@ -4814,7 +4818,7 @@ msgstr "備註"
 
 #: src/extract/attachments.cpp:131
 #: src/extract/timecodes_v2.cpp:160
-#: src/extract/tracks.cpp:315
+#: src/extract/tracks.cpp:319
 #: src/propedit/options.cpp:36
 msgid "Nothing to do.\n"
 msgstr "什麼都不做。\n"
@@ -5118,7 +5122,7 @@ msgid "Progress"
 msgstr "進度"
 
 #: src/extract/timecodes_v2.cpp:263
-#: src/extract/tracks.cpp:397
+#: src/extract/tracks.cpp:401
 #: src/merge/output_control.cpp:505
 #, boost-format
 msgid "Progress: %1%%%%2%"
@@ -5156,32 +5160,32 @@ msgstr ""
 msgid "Quicktime/MP4 reader: '%1%' atom is too small. Expected size: >= %2%. Actual size: %3%.\n"
 msgstr "Quicktime/MP4 讀取器:「%1%」單元過小。預期大小: >= %2%。實際大小: %3%。\n"
 
-#: src/input/r_qtmp4.cpp:1919
+#: src/input/r_qtmp4.cpp:1923
 msgid "Quicktime/MP4 reader: Constant samplesize & variable duration not yet supported. Contact the author if you have such a sample file.\n"
 msgstr "Quicktime/MP4 讀取器: 尚不支援固定取樣大小與可變持續時間。如果您有這樣的樣本檔案，請聯繫作者。\n"
 
-#: src/input/r_qtmp4.cpp:1283
+#: src/input/r_qtmp4.cpp:1287
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read chunk number %1%/%2% with size %3% from position %4%. Aborting.\n"
 msgstr "Quicktime/MP4 讀取器: 無法讀取塊號 %1%/%2% 大小 %3% 位置 %4%。正在中止。\n"
 
-#: src/input/r_qtmp4.cpp:993
-#: src/input/r_qtmp4.cpp:1006
+#: src/input/r_qtmp4.cpp:997
+#: src/input/r_qtmp4.cpp:1010
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the extended sound description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4 讀取器: 無法讀取軌道 %1% 的擴展音訊描述單元。\n"
 
-#: src/input/r_qtmp4.cpp:967
+#: src/input/r_qtmp4.cpp:971
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the sound description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4 讀取器: 無法讀取軌道 %1% 的音訊描述單元。\n"
 
-#: src/input/r_qtmp4.cpp:961
+#: src/input/r_qtmp4.cpp:965
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the stream description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4 讀取器: 無法讀取軌道 %1% 的流描述單元。\n"
 
-#: src/input/r_qtmp4.cpp:1043
+#: src/input/r_qtmp4.cpp:1047
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the video description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4 讀取器: 無法讀取軌道 %1% 的視訊描述單元。\n"
@@ -5214,7 +5218,7 @@ msgstr "Quicktime/MP4 讀取器: MPEG4 軌 %1% 缺少 esds 單元/解碼器設�
 msgid "Quicktime/MP4 reader: The 'media header' atom ('mdhd') uses the unsupported version %1%.\n"
 msgstr "Quicktime/MP4 讀取器: 「media header」媒體表頭單元 (「mdhd」) 使用了不受支援的版本 %1%。\n"
 
-#: src/input/r_qtmp4.cpp:954
+#: src/input/r_qtmp4.cpp:958
 #, boost-format
 msgid "Quicktime/MP4 reader: The 'size' field is too small in the stream description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4 讀取器: 軌道 %1% 的媒體流描述單元的「size」欄位過小。\n"
@@ -5269,8 +5273,8 @@ msgstr "Quicktime/MP4 讀取器: 軌道 %1% 類型未知。\n"
 msgid "Quicktime/MP4 reader: Track %1% is missing some data. Broken header atoms?\n"
 msgstr "Quicktime/MP4 讀取器: 軌道 %1% 缺少一些資料。表頭單元損壞?\n"
 
-#: src/input/r_qtmp4.cpp:975
-#: src/input/r_qtmp4.cpp:1049
+#: src/input/r_qtmp4.cpp:979
+#: src/input/r_qtmp4.cpp:1053
 #, boost-format
 msgid "Quicktime/MP4 reader: Track ID %1% has more than one FourCC. Only using the first one (%|2$.4s|) and not this one (%|3$.4s|).\n"
 msgstr "Quicktime/MP4 讀取器: 軌道 ID %1% 有多於一個 FourCC。只使用了第一個 (%|2$.4s|) 而非 (%|3$.4s|)。\n"
@@ -5526,7 +5530,7 @@ msgid "Seek position: %1%"
 msgstr "定位位置: %1%"
 
 #: src/extract/timecodes_v2.cpp:196
-#: src/extract/tracks.cpp:356
+#: src/extract/tracks.cpp:360
 #: src/info/qt_ui.cpp:177
 #: src/info/wxwidgets_ui.cpp:205
 msgid "Segment"
@@ -5561,7 +5565,7 @@ msgid "Segment info files (*.xml)|*.xml|%s"
 msgstr "剪輯資訊檔 (*.xml)|*.xml|%s"
 
 #: src/extract/timecodes_v2.cpp:216
-#: src/extract/tracks.cpp:374
+#: src/extract/tracks.cpp:378
 #: src/info/mkvinfo.cpp:504
 #: src/info/qt_ui.cpp:178
 #: src/info/wxwidgets_ui.cpp:208
@@ -5573,7 +5577,7 @@ msgid "Segment information"
 msgstr "剪輯資訊"
 
 #: src/extract/timecodes_v2.cpp:250
-#: src/extract/tracks.cpp:386
+#: src/extract/tracks.cpp:390
 #: src/info/mkvinfo.cpp:894
 #: src/info/qt_ui.cpp:179
 #: src/info/wxwidgets_ui.cpp:208
@@ -5854,7 +5858,7 @@ msgstr "簡單區塊"
 msgid "Simple chapter parser: %1%\n"
 msgstr "簡單章節解析器: %1%\n"
 
-#: src/extract/tracks.cpp:415
+#: src/extract/tracks.cpp:419
 msgid "SimpleBlock"
 msgstr "簡單區塊"
 
@@ -6132,11 +6136,11 @@ msgstr "此 .idx 檔案不包含指明語言的第「id: ...」行。\n"
 msgid "The AAC profiles are different: %1% and %2%"
 msgstr "AAC profile 不同: %1% 與 %2%"
 
-#: src/input/r_qtmp4.cpp:1474
+#: src/input/r_qtmp4.cpp:1478
 msgid "The AVC video track is missing the 'CTTS' atom for frame timecode offsets. However, AVC/h.264 allows frames to have more than the traditional one (for P frames) or two (for B frames) references to other frames. The timecodes for such frames will be out-of-order, and the 'CTTS' atom is needed for getting the timecodes right. As it is missing the timecodes for this track might be wrong. You should watch the resulting file and make sure that it looks like you expected it to.\n"
 msgstr "此 AVC 視訊軌缺少「CTTS」畫格時間碼偏移單元。然而，AVC/h.264 允許畫格有超過通常的一次 (對於 P 畫格) 或兩次 (對於 B 畫格) 畫格參考。此類畫格的時間碼會變得無序，需要「CTTS」單元來修正。由於缺少時間碼，此軌可能發生錯誤。請查看生成的檔案，確認它是不是您預期的樣子。\n"
 
-#: src/extract/tracks.cpp:273
+#: src/extract/tracks.cpp:278
 #, boost-format
 msgid "The CUE sheet for track %1% will be written to '%2%'.\n"
 msgstr "軌道 %1% 的 CUE 表單會寫入到 「%2%」。\n"
@@ -6183,6 +6187,11 @@ msgstr "此 GUI 設定成使用 mkvmerge 可執行檔版本 (%1%) 不同於 GUI 
 #, boost-format
 msgid "The Kate identifaction header could not be parsed (%1%).\n"
 msgstr "無法解析 Kate 識別表頭 (%1%)。\n"
+
+#: src/input/r_qtmp4.cpp:846
+#, boost-format
+msgid "The MP4 file '%1%' contains chapters whose format was not recognized. This is often the case if the chapters are not encoded in UTF-8. Use the '--chapter-charset' option in order to specify the charset to use.\n"
+msgstr ""
 
 #: src/mmg/wx_kax_analyzer.cpp:35
 msgid "The Matroska file is analyzed."
@@ -6428,7 +6437,7 @@ msgid "The file '%1%' could not be opened for reading (%2%)."
 msgstr "檔案「%1%」無法開啟以讀取 (%2%)。"
 
 #: src/extract/timecodes_v2.cpp:167
-#: src/extract/tracks.cpp:324
+#: src/extract/tracks.cpp:328
 #, boost-format
 msgid "The file '%1%' could not be opened for reading (%2%).\n"
 msgstr "檔案「%1%」無法開啟以讀取 (%2%)。\n"
@@ -6438,7 +6447,7 @@ msgstr "檔案「%1%」無法開啟以讀取 (%2%)。\n"
 msgid "The file '%1%' could not be opened for reading command line arguments.\n"
 msgstr "檔案「%1%」無法開啟以讀取命令列參數。\n"
 
-#: src/extract/tracks.cpp:277
+#: src/extract/tracks.cpp:282
 #: src/extract/xtr_avi.cpp:58
 #: src/extract/xtr_tta.cpp:85
 #: src/extract/xtr_wav.cpp:113
@@ -7042,7 +7051,7 @@ msgstr "軌道 %1% （自檔案 %2% (「%3%」)）被添加超過一次。「--a
 msgid "The track headers could not be rendered correctly. %1%\n"
 msgstr "軌道頭無法正確演算。%1%\n"
 
-#: src/extract/tracks.cpp:89
+#: src/extract/tracks.cpp:92
 #, boost-format
 msgid "The track number %1% does not have a valid CodecID.\n"
 msgstr "軌道編號 %1% 無有效的 CodecID。\n"
@@ -7265,7 +7274,7 @@ msgid "Timecode files (*.tmc;*.txt)|*.tmc;*.txt|%s"
 msgstr "時間碼檔案 (*.tmc;*.txt)|*.tmc;*.txt|%s"
 
 #: src/extract/timecodes_v2.cpp:225
-#: src/extract/tracks.cpp:379
+#: src/extract/tracks.cpp:383
 #: src/info/mkvinfo.cpp:522
 #: src/info/mkvinfo.cpp:1061
 #, boost-format
@@ -7442,7 +7451,7 @@ msgstr "軌道覆蓋: %1%"
 msgid "Track type: %1%"
 msgstr "軌道類型: %1%"
 
-#: src/extract/xtr_base.cpp:118
+#: src/extract/xtr_base.cpp:119
 msgid "Tracks with unsupported content encoding schemes (compression or encryption) cannot be extracted.\n"
 msgstr "使用不支援的內容編碼（壓縮或加密）方案的軌道不能提取。\n"
 
@@ -8632,11 +8641,6 @@ msgstr "mkvpropedit [選項] <檔案> <動作>"
 msgid "mm_text_io_c: UTF32_* is not supported at the moment.\n"
 msgstr "mm_text_io_c: 目前尚不支援 UTF32_*。\n"
 
-#: src/common/mm_io.cpp:1005
-#, boost-format
-msgid "mm_text_io_c::read_next_char(): Invalid UTF-8 char. First byte: 0x%|1$02x|"
-msgstr "mm_text_io_c::read_next_char(): 無效 UTF-8 字元。第一位元組: 0x%|1$02x|"
-
 #: src/mmg/options/mmg.cpp:322
 msgid "mmg"
 msgstr "mmg"
@@ -8896,7 +8900,7 @@ msgstr "und (未定)"
 #: src/info/mkvinfo.cpp:1082
 #: src/input/r_matroska.cpp:92
 #: src/input/r_matroska.cpp:2330
-#: src/input/r_mpeg_ps.cpp:1363
+#: src/input/r_mpeg_ps.cpp:1372
 #: src/mmg/header_editor/value_page.cpp:150
 #: src/mmg/mmg.cpp:66
 #: src/mmg/tabs/input.cpp:345
@@ -9747,6 +9751,9 @@ msgstr "是"
 
 #~ msgid "mkvmerge was not compiled with zlib. Compressed headers in QuickTime/MP4 files are therefore not supported.\n"
 #~ msgstr "mkvmerge 編譯時沒有使用 zlib。因此不支援 QuickTime/MP4 檔中已壓縮的表頭。\n"
+
+#~ msgid "mm_text_io_c::read_next_char(): Invalid UTF-8 char. First byte: 0x%|1$02x|"
+#~ msgstr "mm_text_io_c::read_next_char(): 無效 UTF-8 字元。第一位元組: 0x%|1$02x|"
 
 #~ msgid "mp3_reader: Could not open the source file."
 #~ msgstr "mp3_reader: 無法開啟來源檔案。"

@@ -95,6 +95,33 @@ namespace mtx {
         return (boost::format(Y("mkdir(%1%) failed; errno = %2% (%3%)")) % m_path % m_error_number % m_error).str();
       }
     };
+
+    namespace text {
+      class exception: public mtx::exception {
+      public:
+        virtual const char *what() const throw() {
+          return "unspecified text I/O error";
+        }
+      };
+
+      class invalid_utf8_char_x: public exception {
+      protected:
+        char m_first_char;
+      public:
+        invalid_utf8_char_x(char first_char)
+          : m_first_char(first_char)
+        {
+        }
+
+        virtual const char *what() const throw() {
+          return "invalid UTF-8 char";
+        }
+
+        virtual std::string error() const throw() {
+          return (boost::format(Y("Invalid UTF-8 char. First byte: 0x%|1$02x|")) % static_cast<unsigned int>(m_first_char)).str();
+        }
+      };
+    };
   }
 }
 

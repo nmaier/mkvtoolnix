@@ -839,8 +839,12 @@ qtmp4_reader_c::process_chapter_entries(int level,
   }
 
   mm_text_io_c text_out(&out, false);
-  m_chapters = parse_chapters(&text_out, 0, -1, 0, m_ti.m_chapter_language);
-  align_chapter_edition_uids(m_chapters);
+  try {
+    m_chapters = parse_chapters(&text_out, 0, -1, 0, m_ti.m_chapter_language, "", true);
+    align_chapter_edition_uids(m_chapters);
+  } catch (mtx::chapter_parser_x &ex) {
+    mxerror(boost::format(Y("The MP4 file '%1%' contains chapters whose format was not recognized. This is often the case if the chapters are not encoded in UTF-8. Use the '--chapter-charset' option in order to specify the charset to use.\n")) % m_ti.m_fname);
+  }
 }
 
 void

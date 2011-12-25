@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: Moritz Bunkus <moritz@bunkus.org>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2011-12-13 21:57+0100\n"
+"PO-Revision-Date: 2011-12-25 15:18+0100\n"
 "Last-Translator: EuGENIUS <Eugenius_V@mail.ru>\n"
 "Language-Team: Russian <moritz@bunkus.org>\n"
 "Language: ru\n"
@@ -2128,7 +2128,7 @@ msgid "Block duration: %1%.%|2$06d|ms"
 msgstr "Продолжительность блока: %1%.%|2$06d|ms"
 
 #: src/extract/timecodes_v2.cpp:277
-#: src/extract/tracks.cpp:411
+#: src/extract/tracks.cpp:415
 #: src/info/mkvinfo.cpp:1353
 msgid "Block group"
 msgstr "Группа блоков"
@@ -2201,7 +2201,7 @@ msgid "Cannot write track %1% with the CodecID '%2%' to the file '%3%' because t
 msgstr "Невозможно записать дорожку %1% с CodecID '%2%' в файл '%3%' потому что дорожка %4% с CodecID '%5%' уже записана в тот же файл и их частные данные кодека (USF стили и т.д.) не совпадают.\n"
 
 #: src/extract/xtr_avi.cpp:47
-#: src/extract/xtr_base.cpp:63
+#: src/extract/xtr_base.cpp:64
 #: src/extract/xtr_ivf.cpp:53
 #: src/extract/xtr_textsubs.cpp:307
 #, boost-format
@@ -2213,7 +2213,7 @@ msgid "Category is not NUL terminated"
 msgstr "Категория не завершена нулем"
 
 #: src/extract/timecodes_v2.cpp:356
-#: src/extract/tracks.cpp:461
+#: src/extract/tracks.cpp:465
 #: src/info/mkvinfo.cpp:2024
 msgid "Caught exception"
 msgstr "Произошло исключение"
@@ -2478,7 +2478,7 @@ msgid "Close the current file without saving"
 msgstr "Закрыть текущий файл без сохранения"
 
 #: src/extract/timecodes_v2.cpp:258
-#: src/extract/tracks.cpp:393
+#: src/extract/tracks.cpp:397
 #: src/info/mkvinfo.cpp:1984
 msgid "Cluster"
 msgstr "Кластер"
@@ -2504,7 +2504,7 @@ msgid "Cluster previous size: %1%"
 msgstr "Предыдущий размер кластера: %1%"
 
 #: src/extract/timecodes_v2.cpp:273
-#: src/extract/tracks.cpp:402
+#: src/extract/tracks.cpp:406
 #: src/info/mkvinfo.cpp:208
 #, boost-format
 msgid "Cluster timecode: %|1$.3f|s"
@@ -3313,7 +3313,7 @@ msgid "Error: Couldn't open input file %1% (%2%).\n"
 msgstr "Ошибка: не удалось открыть входной файл %1% (%2%).\n"
 
 #: src/extract/timecodes_v2.cpp:178
-#: src/extract/tracks.cpp:336
+#: src/extract/tracks.cpp:340
 msgid "Error: No EBML head found."
 msgstr "Ошибка: не найдена глава EBML."
 
@@ -3397,12 +3397,12 @@ msgstr "Данные о соотношении сторон изображени
 msgid "Extracted the aspect ratio information from the Theora video headers and set the display dimensions to %1%/%2%.\n"
 msgstr "Данные о соотношении сторон изображения извлечены из заголовков Theora, установлены размеры изображения %1%/%2%.\n"
 
-#: src/extract/tracks.cpp:109
+#: src/extract/tracks.cpp:114
 #, boost-format
 msgid "Extracting track %1% with the CodecID '%2%' to the file '%3%'. Container format: %4%\n"
 msgstr "Извлечение дорожки %1% с CodecID '%2%' в файл '%3%'. Формат контейнера: %4%\n"
 
-#: src/extract/tracks.cpp:93
+#: src/extract/tracks.cpp:96
 #, boost-format
 msgid "Extraction of track number %1% with the CodecID '%2%' is not supported.\n"
 msgstr "Извлечение дорожки номер %1% с CodecID '%2%' не поддерживается.\n"
@@ -3425,7 +3425,7 @@ msgstr "FPS:"
 msgid "Failed to create the VobSub data file '%1%': %2% (%3%)\n"
 msgstr "Не удалось создать файл данных VobSub '%1%': %2% (%3%)\n"
 
-#: src/extract/xtr_base.cpp:71
+#: src/extract/xtr_base.cpp:72
 #: src/extract/xtr_textsubs.cpp:336
 #: src/extract/xtr_vobsub.cpp:235
 #, boost-format
@@ -3944,6 +3944,10 @@ msgstr "Неверный UID. UID этой главы уже используе�
 msgid "Invalid UID. This edition UID is already in use. The original UID has not been changed."
 msgstr "Неверный UID. UID этого варианта уже используется. Оригинальный UID не был изменен."
 
+#: src/common/mm_io.h:121
+msgid "Invalid UTF-8 char. First byte: 0x%|1$02x|"
+msgstr "Неверный символ UTF-8. Первый байт: 0x%|1$02x|"
+
 #: src/input/r_avi.cpp:696
 #: src/input/r_avi.cpp:701
 #: src/input/r_avi.cpp:718
@@ -4408,7 +4412,7 @@ msgstr "Файлы MP4 Audio/Video"
 msgid "MPEG audio files"
 msgstr "Файлы MPEG Audio"
 
-#: src/input/r_mpeg_ps.h:139
+#: src/input/r_mpeg_ps.h:140
 msgid "MPEG program stream"
 msgstr "Программный поток MPEG"
 
@@ -4608,7 +4612,7 @@ msgstr "Найдено более одного корневого элемент
 msgid "More than one track is to be appended to the track %1% from file no. %2% ('%3%'). The argument for '--append-to' was invalid.\n"
 msgstr "К дорожке %1% должно быть присоединено более одной дорожки из файла номер %2% (%3%). Параметр для '--append-to' неверен.\n"
 
-#: src/extract/tracks.cpp:69
+#: src/extract/tracks.cpp:72
 #, boost-format
 msgid "More than one track with the track number %1% found.\n"
 msgstr "Найдено более одной дорожки с номером %1%.\n"
@@ -4700,7 +4704,7 @@ msgstr "Уникальный ID следующего сегмента"
 msgid "No %1% specified in '--%2% %3%'.\n"
 msgstr "Не определено %1%, в '--%2% %3%'.\n"
 
-#: src/input/r_qtmp4.cpp:1425
+#: src/input/r_qtmp4.cpp:1429
 msgid "No AC3 header found in first frame; track will be skipped.\n"
 msgstr "Не найден заголовок AC3 в первом кадре; дорожка будет пропущена.\n"
 
@@ -4781,7 +4785,7 @@ msgid "No output file name specified, will use attachment name.\n"
 msgstr "Не указано имя результирующего файла, будет использовано имя вложения.\n"
 
 #: src/extract/timecodes_v2.cpp:192
-#: src/extract/tracks.cpp:351
+#: src/extract/tracks.cpp:355
 #: src/info/mkvinfo.cpp:1951
 msgid "No segment/level 0 element found."
 msgstr "Не найдено сегмента/элемента нулевого уровня."
@@ -4800,7 +4804,7 @@ msgstr "Не указан ID дорожки в '--%1% %2%'.\n"
 msgid "No track corresponding to the edit specification '%1%' was found. %2%\n"
 msgstr "Не найдено дорожки, соответствующей спецификации редактирования '%1%'. %2%\n"
 
-#: src/extract/tracks.cpp:308
+#: src/extract/tracks.cpp:312
 #, boost-format
 msgid "No track with the ID %1% was found in the source file.\n"
 msgstr "В исходном файле не найдено дорожки с ID %1%.\n"
@@ -4840,7 +4844,7 @@ msgstr "Примечание"
 
 #: src/extract/attachments.cpp:131
 #: src/extract/timecodes_v2.cpp:160
-#: src/extract/tracks.cpp:315
+#: src/extract/tracks.cpp:319
 #: src/propedit/options.cpp:36
 msgid "Nothing to do.\n"
 msgstr "Нечего делать.\n"
@@ -5146,7 +5150,7 @@ msgid "Progress"
 msgstr "Обработано"
 
 #: src/extract/timecodes_v2.cpp:263
-#: src/extract/tracks.cpp:397
+#: src/extract/tracks.cpp:401
 #: src/merge/output_control.cpp:505
 #, boost-format
 msgid "Progress: %1%%%%2%"
@@ -5184,32 +5188,32 @@ msgstr ""
 msgid "Quicktime/MP4 reader: '%1%' atom is too small. Expected size: >= %2%. Actual size: %3%.\n"
 msgstr "Считыватель Quicktime/MP4: атом '%1%' слишком мал. Ожидаемый размер: >= %2%. Фактический размер: %3%.\n"
 
-#: src/input/r_qtmp4.cpp:1919
+#: src/input/r_qtmp4.cpp:1923
 msgid "Quicktime/MP4 reader: Constant samplesize & variable duration not yet supported. Contact the author if you have such a sample file.\n"
 msgstr "Считыватель Quicktime/MP4: постоянный размер сэмпла и переменная продолжительность пока не поддерживается. Если у вас есть образец такого файла, свяжитесь с автором.\n"
 
-#: src/input/r_qtmp4.cpp:1283
+#: src/input/r_qtmp4.cpp:1287
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read chunk number %1%/%2% with size %3% from position %4%. Aborting.\n"
 msgstr "Считыватель Quicktime/MP4: Не могу прочитать участок %1%/%2% с размером %3% из позиции %4%. Прерывание.\n"
 
-#: src/input/r_qtmp4.cpp:993
-#: src/input/r_qtmp4.cpp:1006
+#: src/input/r_qtmp4.cpp:997
+#: src/input/r_qtmp4.cpp:1010
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the extended sound description atom for track ID %1%.\n"
 msgstr "Считыватель Quicktime/MP4: Не могу прочитать атом расширенного описания звука для дорожки ID %1%.\n"
 
-#: src/input/r_qtmp4.cpp:967
+#: src/input/r_qtmp4.cpp:971
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the sound description atom for track ID %1%.\n"
 msgstr "Считыватель Quicktime/MP4: Не могу прочитать атом описания звука для дорожки ID %1%.\n"
 
-#: src/input/r_qtmp4.cpp:961
+#: src/input/r_qtmp4.cpp:965
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the stream description atom for track ID %1%.\n"
 msgstr "Считыватель Quicktime/MP4: Не могу прочитать атом описания потока для дорожки ID %1%.\n"
 
-#: src/input/r_qtmp4.cpp:1043
+#: src/input/r_qtmp4.cpp:1047
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the video description atom for track ID %1%.\n"
 msgstr "Считыватель Quicktime/MP4: Не могу прочитать атом описания видео для дорожки ID %1%.\n"
@@ -5242,7 +5246,7 @@ msgstr "Считыватель Quicktime/MP4: дорожка MPEG4 %1% не им
 msgid "Quicktime/MP4 reader: The 'media header' atom ('mdhd') uses the unsupported version %1%.\n"
 msgstr "Считыватель Quicktime/MP4: атом 'медиазаголовок' ('mdhd') использует неподдерживаемую версию %1%.\n"
 
-#: src/input/r_qtmp4.cpp:954
+#: src/input/r_qtmp4.cpp:958
 #, boost-format
 msgid "Quicktime/MP4 reader: The 'size' field is too small in the stream description atom for track ID %1%.\n"
 msgstr "Считыватель Quicktime/MP4: поле 'размер' слишком мало в атоме описания потока для дорожки ID %1%.\n"
@@ -5297,8 +5301,8 @@ msgstr "Считыватель Quicktime/MP4: Тип дорожки %1% неиз
 msgid "Quicktime/MP4 reader: Track %1% is missing some data. Broken header atoms?\n"
 msgstr "Считыватель Quicktime/MP4: в дорожке %1% не хватает некоторых данных. Повреждены атомы заголовка?\n"
 
-#: src/input/r_qtmp4.cpp:975
-#: src/input/r_qtmp4.cpp:1049
+#: src/input/r_qtmp4.cpp:979
+#: src/input/r_qtmp4.cpp:1053
 #, boost-format
 msgid "Quicktime/MP4 reader: Track ID %1% has more than one FourCC. Only using the first one (%|2$.4s|) and not this one (%|3$.4s|).\n"
 msgstr "Считыватель Quicktime/MP4: Дорожка ID %1% имеет более одного FourCC. Использую только первый (%|2$.4s|), а не этот (%|3$.4s|).\n"
@@ -5554,7 +5558,7 @@ msgid "Seek position: %1%"
 msgstr "Искать позицию: %1%"
 
 #: src/extract/timecodes_v2.cpp:196
-#: src/extract/tracks.cpp:356
+#: src/extract/tracks.cpp:360
 #: src/info/qt_ui.cpp:177
 #: src/info/wxwidgets_ui.cpp:205
 msgid "Segment"
@@ -5589,7 +5593,7 @@ msgid "Segment info files (*.xml)|*.xml|%s"
 msgstr "Файлы информации о сегментах (*.xml)|*.xml|%s"
 
 #: src/extract/timecodes_v2.cpp:216
-#: src/extract/tracks.cpp:374
+#: src/extract/tracks.cpp:378
 #: src/info/mkvinfo.cpp:504
 #: src/info/qt_ui.cpp:178
 #: src/info/wxwidgets_ui.cpp:208
@@ -5601,7 +5605,7 @@ msgid "Segment information"
 msgstr "Информация о сегментах"
 
 #: src/extract/timecodes_v2.cpp:250
-#: src/extract/tracks.cpp:386
+#: src/extract/tracks.cpp:390
 #: src/info/mkvinfo.cpp:894
 #: src/info/qt_ui.cpp:179
 #: src/info/wxwidgets_ui.cpp:208
@@ -5884,7 +5888,7 @@ msgstr "Простой блок"
 msgid "Simple chapter parser: %1%\n"
 msgstr "Парсер простых глав: %1%\n"
 
-#: src/extract/tracks.cpp:415
+#: src/extract/tracks.cpp:419
 msgid "SimpleBlock"
 msgstr "Простой блок"
 
@@ -6164,11 +6168,11 @@ msgstr ".idx файл не содержит строку 'id: ...' для ука
 msgid "The AAC profiles are different: %1% and %2%"
 msgstr "AAC профили отличаются: %1% и %2%"
 
-#: src/input/r_qtmp4.cpp:1474
+#: src/input/r_qtmp4.cpp:1478
 msgid "The AVC video track is missing the 'CTTS' atom for frame timecode offsets. However, AVC/h.264 allows frames to have more than the traditional one (for P frames) or two (for B frames) references to other frames. The timecodes for such frames will be out-of-order, and the 'CTTS' atom is needed for getting the timecodes right. As it is missing the timecodes for this track might be wrong. You should watch the resulting file and make sure that it looks like you expected it to.\n"
 msgstr "В дорожке видео AVC отсутствует атом 'CTTS' для смещений тайм-кодов. Однако AVC/H.264 позволяет кадров иметь больше чем традиционные для предыдущих форматов одну (для P-кадров) или две (для B-кадров) ссылки на другие кадры. Тайм-коды для таких кадров могут быть неупорядочены, и атом 'CTTS' необходим для правильного упорядочивания тайм-кодов. Так как его нет, тайм-коды для этой дорожки могут быть неправильными. Просмотрите получившийся файл и убедитесь что он выглядит так, как полагается.\n"
 
-#: src/extract/tracks.cpp:273
+#: src/extract/tracks.cpp:278
 #, boost-format
 msgid "The CUE sheet for track %1% will be written to '%2%'.\n"
 msgstr "Таблица CUE для дорожки %1% будет записан в '%2%'.\n"
@@ -6215,6 +6219,11 @@ msgstr "GUI настроен на использование исполняем�
 #, boost-format
 msgid "The Kate identifaction header could not be parsed (%1%).\n"
 msgstr "Идентификационный заголовок Kate не может быть обработан (%1%).\n"
+
+#: src/input/r_qtmp4.cpp:846
+#, boost-format
+msgid "The MP4 file '%1%' contains chapters whose format was not recognized. This is often the case if the chapters are not encoded in UTF-8. Use the '--chapter-charset' option in order to specify the charset to use.\n"
+msgstr ""
 
 #: src/mmg/wx_kax_analyzer.cpp:35
 msgid "The Matroska file is analyzed."
@@ -6460,7 +6469,7 @@ msgid "The file '%1%' could not be opened for reading (%2%)."
 msgstr "Файл '%1%' не может быть открыт для чтения (%2%)."
 
 #: src/extract/timecodes_v2.cpp:167
-#: src/extract/tracks.cpp:324
+#: src/extract/tracks.cpp:328
 #, boost-format
 msgid "The file '%1%' could not be opened for reading (%2%).\n"
 msgstr "Файл '%1%' не может быть открыт для чтения (%2%).\n"
@@ -6470,7 +6479,7 @@ msgstr "Файл '%1%' не может быть открыт для чтения
 msgid "The file '%1%' could not be opened for reading command line arguments.\n"
 msgstr "Файл '%1%' не может быть открыт для чтения аргументов командной строки.\n"
 
-#: src/extract/tracks.cpp:277
+#: src/extract/tracks.cpp:282
 #: src/extract/xtr_avi.cpp:58
 #: src/extract/xtr_tta.cpp:85
 #: src/extract/xtr_wav.cpp:113
@@ -7087,7 +7096,7 @@ msgstr "Дорожка %1% файла номер %2% (%3%) присоеденя�
 msgid "The track headers could not be rendered correctly. %1%\n"
 msgstr "Заголовки дорожки не могут быть обработаны правильно. %1%\n"
 
-#: src/extract/tracks.cpp:89
+#: src/extract/tracks.cpp:92
 #, boost-format
 msgid "The track number %1% does not have a valid CodecID.\n"
 msgstr "Дорожка номер %1% не имеет правильного CodecID.\n"
@@ -7313,7 +7322,7 @@ msgid "Timecode files (*.tmc;*.txt)|*.tmc;*.txt|%s"
 msgstr "Файлы тайм-кодов (*.tmc;*.txt)|*.tmc;*.txt|%s"
 
 #: src/extract/timecodes_v2.cpp:225
-#: src/extract/tracks.cpp:379
+#: src/extract/tracks.cpp:383
 #: src/info/mkvinfo.cpp:522
 #: src/info/mkvinfo.cpp:1061
 #, boost-format
@@ -7490,7 +7499,7 @@ msgstr "Оверлей дорожки: %1%"
 msgid "Track type: %1%"
 msgstr "Тип дорожки: %1%"
 
-#: src/extract/xtr_base.cpp:118
+#: src/extract/xtr_base.cpp:119
 msgid "Tracks with unsupported content encoding schemes (compression or encryption) cannot be extracted.\n"
 msgstr "Дорожки с неподдерживаемыми схемами кодирования данных (сжатие или шифрование) не могут быть извлечены.\n"
 
@@ -8682,11 +8691,6 @@ msgstr "mkvpropedit [параметры] <файл> <действия>"
 msgid "mm_text_io_c: UTF32_* is not supported at the moment.\n"
 msgstr "mm_text_io_c: UTF32_* пока не поддерживается.\n"
 
-#: src/common/mm_io.cpp:1005
-#, boost-format
-msgid "mm_text_io_c::read_next_char(): Invalid UTF-8 char. First byte: 0x%|1$02x|"
-msgstr "mm_text_io_c::read_next_char(): Неверный символ UTF-8. Первый байт: 0x%|1$02x|"
-
 #: src/mmg/options/mmg.cpp:322
 msgid "mmg"
 msgstr "mmg"
@@ -8946,7 +8950,7 @@ msgstr "und (Неопределенный)"
 #: src/info/mkvinfo.cpp:1082
 #: src/input/r_matroska.cpp:92
 #: src/input/r_matroska.cpp:2330
-#: src/input/r_mpeg_ps.cpp:1363
+#: src/input/r_mpeg_ps.cpp:1372
 #: src/mmg/header_editor/value_page.cpp:150
 #: src/mmg/mmg.cpp:66
 #: src/mmg/tabs/input.cpp:345
@@ -9542,6 +9546,9 @@ msgstr "Да"
 
 #~ msgid "mkvmerge was not compiled with zlib. Compressed headers in QuickTime/MP4 files are therefore not supported.\n"
 #~ msgstr "mkvmerge не был скомпилирован с zlib. Поэтому сжатые заголовки в файлах QuickTime/MP4 не поддерживаются.\n"
+
+#~ msgid "mm_text_io_c::read_next_char(): Invalid UTF-8 char. First byte: 0x%|1$02x|"
+#~ msgstr "mm_text_io_c::read_next_char(): Неверный символ UTF-8. Первый байт: 0x%|1$02x|"
 
 #~ msgid "mp3_reader: Could not open the source file."
 #~ msgstr "mp3_reader: Не удалось открыть исходный файл."

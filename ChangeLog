@@ -1,5 +1,12 @@
 2011-12-25  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: If an MP4 file contains chapters encoded in a
+	different charset than UTF-8 and --chapter-charset is not used
+	then the error message shown is a lot clearer why mkvmerge aborts
+	muxing. Before the error message was a generic
+	"mm_text_io_c::read_next_char(): invalid UTF-8 character. The
+	first byte:..."
+
 	* mkvmerge: bug fix: MPEG program streams in which a track
 	suddenly ends and others continue or in which a track has huge
 	gaps will no longer cause mkvmerge to try to read the whole file
