@@ -1,3 +1,10 @@
+2011-12-27  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: enhancement: Removed the posix_fadvise() code. The
+	application is using its own caching code which caused bad
+	performance if the OS caching provided via posix_fadvise() is used
+	as well.
+
 2011-12-25  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: If an MP4 file contains chapters encoded in a

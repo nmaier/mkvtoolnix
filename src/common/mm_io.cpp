@@ -15,10 +15,6 @@
 #include "common/common_pch.h"
 
 #include <errno.h>
-#if HAVE_POSIX_FADVISE
-# include <fcntl.h>
-# include <sys/utsname.h>
-#endif
 #include <string.h>
 #include <stdarg.h>
 #include <stdio.h>
@@ -45,71 +41,25 @@ get_errno_msg() {
   return g_cc_local_utf8->utf8(strerror(errno));
 }
 
-# if HAVE_POSIX_FADVISE
-static const unsigned long s_read_using_willneed   = 16 * 1024 * 1024;
-static const unsigned long s_write_before_dontneed =  8 * 1024 * 1024;
-bool mm_file_io_c::ms_use_posix_fadvise            = false;
-
-bool
-operator <(const file_id_t &file_id_1,
-           const file_id_t &file_id_2) {
-  return (file_id_1.m_dev < file_id_2.m_dev) || ((file_id_1.m_dev == file_id_2.m_dev) && (file_id_1.m_ino < file_id_2.m_ino));
-}
-
-bool
-operator ==(const file_id_t &file_id_1,
-            const file_id_t &file_id_2) {
-  return (file_id_1.m_dev == file_id_2.m_dev) && (file_id_1.m_ino == file_id_2.m_ino);
-}
-
-static std::map<file_id_t, int> s_fadvised_file_count_by_id;
-static std::map<file_id_t, mm_file_io_c *> s_fadvised_file_object_by_id;
-# endif
-
-#define FADVISE_WARNING                                                         \
-  "mm_file_io_c: Could not posix_fadvise() file '%1%' (errno = %2%, %3%). "     \
-  "This only means that access to this file might be slower than it could be. " \
-  "Data integrity is not in danger."
-
 mm_file_io_c::mm_file_io_c(const std::string &path,
                            const open_mode mode)
   : m_file_name(path)
   , m_file(NULL)
-#if HAVE_POSIX_FADVISE
-  , m_read_count(0)
-  , m_write_count(0)
-  , m_use_posix_fadvise_here(ms_use_posix_fadvise)
-#endif
 {
   const char *cmode;
-# if HAVE_POSIX_FADVISE
-  int advise = 0;
-# endif
 
   switch (mode) {
     case MODE_READ:
       cmode = "rb";
-# if HAVE_POSIX_FADVISE
-      advise = POSIX_FADV_WILLNEED;
-# endif
       break;
     case MODE_WRITE:
       cmode = "r+b";
-# if HAVE_POSIX_FADVISE
-      advise = POSIX_FADV_DONTNEED;
-# endif
       break;
     case MODE_CREATE:
       cmode = "w+b";
-# if HAVE_POSIX_FADVISE
-      advise = POSIX_FADV_DONTNEED;
-# endif
       break;
     case MODE_SAFE:
       cmode = "rb";
-# if HAVE_POSIX_FADVISE
-      advise = POSIX_FADV_WILLNEED;
-# endif
       break;
     default:
       throw mtx::invalid_parameter_x();
@@ -127,36 +77,7 @@ mm_file_io_c::mm_file_io_c(const std::string &path,
 
   if (NULL == m_file)
     throw mtx::mm_io::open_x();
-
-# if HAVE_POSIX_FADVISE
-  if (POSIX_FADV_WILLNEED == advise)
-    setup_fadvise(local_path);
-# endif
 }
-
-# if HAVE_POSIX_FADVISE
-void
-mm_file_io_c::setup_fadvise(const std::string &local_path) {
-  struct stat st;
-  if (0 != stat(local_path.c_str(), &st))
-    throw mtx::mm_io::open_x();
-
-  m_file_id.initialize(st);
-
-  if (!map_has_key(s_fadvised_file_count_by_id, m_file_id))
-    s_fadvised_file_count_by_id[m_file_id] = 0;
-
-  s_fadvised_file_count_by_id[m_file_id]++;
-
-  if (1 < s_fadvised_file_count_by_id[m_file_id]) {
-    m_use_posix_fadvise_here = false;
-    if (map_has_key(s_fadvised_file_object_by_id, m_file_id))
-      s_fadvised_file_object_by_id[m_file_id]->m_use_posix_fadvise_here = false;
-
-  } else
-    s_fadvised_file_object_by_id[m_file_id] = this;
-}
-#endif  // HAVE_POSIX_FADVISE
 
 void
 mm_file_io_c::setFilePointer(int64 offset,
@@ -183,19 +104,6 @@ mm_file_io_c::_write(const void *buffer,
   if (ferror((FILE *)m_file) != 0)
     mxerror(boost::format(Y("Could not write to the output file: %1% (%2%)\n")) % errno % get_errno_msg());
 
-# if HAVE_POSIX_FADVISE
-  m_write_count += bwritten;
-  if (ms_use_posix_fadvise && m_use_posix_fadvise_here && (m_write_count > s_write_before_dontneed)) {
-    uint64 pos    = getFilePointer();
-    m_write_count = 0;
-
-    if (0 != posix_fadvise(fileno((FILE *)m_file), 0, pos, POSIX_FADV_DONTNEED)) {
-      mxverb(2, boost::format(FADVISE_WARNING) % m_file_name % errno % get_errno_msg());
-      m_use_posix_fadvise_here = false;
-    }
-  }
-# endif
-
   m_current_position += bwritten;
   m_cached_size       = -1;
 
@@ -207,27 +115,6 @@ mm_file_io_c::_read(void *buffer,
                     size_t size) {
   int64_t bread = fread(buffer, 1, size, (FILE *)m_file);
 
-# if HAVE_POSIX_FADVISE
-  if (ms_use_posix_fadvise && m_use_posix_fadvise_here && (0 <= bread)) {
-    m_read_count += bread;
-    if (m_read_count > s_read_using_willneed) {
-      uint64 pos   = getFilePointer();
-      int fd       = fileno((FILE *)m_file);
-      m_read_count = 0;
-
-      if (0 != posix_fadvise(fd, 0, pos, POSIX_FADV_DONTNEED)) {
-        mxverb(2, boost::format(FADVISE_WARNING) % m_file_name % errno % get_errno_msg());
-        m_use_posix_fadvise_here = false;
-      }
-
-      if (m_use_posix_fadvise_here && (0 != posix_fadvise(fd, pos, pos + s_read_using_willneed, POSIX_FADV_WILLNEED))) {
-        mxverb(2, boost::format(FADVISE_WARNING) % m_file_name % errno % get_errno_msg());
-        m_use_posix_fadvise_here = false;
-      }
-    }
-  }
-# endif
-
   m_current_position += bread;
 
   return bread;
@@ -238,16 +125,6 @@ mm_file_io_c::close() {
   if (NULL != m_file) {
     fclose((FILE *)m_file);
     m_file = NULL;
-
-# if HAVE_POSIX_FADVISE
-    if (m_file_id.m_initialized) {
-      s_fadvised_file_count_by_id[m_file_id]--;
-      if (0 == s_fadvised_file_count_by_id[m_file_id])
-        s_fadvised_file_object_by_id.erase(m_file_id);
-
-      m_file_id.m_initialized = false;
-    }
-# endif
   }
 }
 
@@ -263,25 +140,9 @@ mm_file_io_c::truncate(int64_t pos) {
 }
 
 /** \brief OS and kernel dependant setup
-
-   The \c posix_fadvise call can improve read/write performance a lot.
-   Unfortunately it is pretty new and a buggy on a couple of Linux kernels
-   in the 2.4.x series. So only enable its usage for 2.6.x kernels.
 */
 void
 mm_file_io_c::setup() {
-# if HAVE_POSIX_FADVISE
-  struct utsname un;
-
-  ms_use_posix_fadvise = false;
-  if ((0 == uname(&un)) && !strcasecmp(un.sysname, "Linux")) {
-    std::vector<std::string> versions = split(un.release, ".");
-    int major, minor;
-
-    if ((2 <= versions.size()) && parse_int(versions[0], major) && parse_int(versions[1], minor) && ((2 < major) || (6 <= minor)))
-      ms_use_posix_fadvise = true;
-  }
-# endif // HAVE_POSIX_FADVISE
 }
 
 #endif // !defined(SYS_WINDOWS)
@@ -306,10 +167,6 @@ mm_file_io_c::~mm_file_io_c() {
 
 void
 mm_file_io_c::cleanup() {
-#if HAVE_POSIX_FADVISE
-  s_fadvised_file_count_by_id.clear();
-  s_fadvised_file_object_by_id.clear();
-#endif
 }
 
 mm_io_cptr

@@ -17,11 +17,6 @@
 #include "common/common_pch.h"
 
 #include <stack>
-#if HAVE_POSIX_FADVISE
-# include <unistd.h>
-# include <sys/stat.h>
-# include <sys/types.h>
-#endif
 
 #include <ebml/IOCallback.h>
 
@@ -205,27 +200,6 @@ protected:
   virtual size_t _write(const void *buffer, size_t size) = 0;
 };
 
-#if HAVE_POSIX_FADVISE
-struct file_id_t {
-  bool m_initialized;
-  dev_t m_dev;
-  ino_t m_ino;
-
-  file_id_t()
-    : m_initialized(false)
-    , m_dev(0)
-    , m_ino(0)
-  {
-  }
-
-  void initialize(const struct stat &st) {
-    m_dev         = st.st_dev;
-    m_ino         = st.st_ino;
-    m_initialized = true;
-  }
-};
-#endif
-
 class mm_file_io_c: public mm_io_c {
 protected:
   std::string m_file_name;
@@ -233,13 +207,6 @@ protected:
 
 #if defined(SYS_WINDOWS)
   bool m_eof;
-#endif
-#if HAVE_POSIX_FADVISE
-  file_id_t m_file_id;
-  unsigned long m_read_count, m_write_count;
-  static bool ms_use_posix_fadvise;
-  bool m_use_posix_fadvise_here;
-  std::string m_canonicalized_file_name;
 #endif
 
 public:
@@ -261,10 +228,6 @@ public:
   }
 
   virtual int truncate(int64_t pos);
-
-#if HAVE_POSIX_FADVISE
-  void setup_fadvise(const std::string &local_path);
-#endif
 
   static void setup();
   static void cleanup();
