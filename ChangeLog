@@ -1,5 +1,8 @@
 2011-12-28  Moritz Bunkus  <moritz@bunkus.org>
 
+	* build system: Added an option "--without-curl" that allows for
+	building without CURL support even if CURL itself is installed.
+
 	* all: bug fix: Fixed compilation if gettext/libintl is not
 	available.
 
