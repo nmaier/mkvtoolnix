@@ -76,9 +76,9 @@ wxU(const wxString &s) {
 #  define NZ(s_singular, s_plural, count) wxU(ngettext(s_singular, s_plural, count))
 # endif
 #else /* HAVE_LIBINTL_H */
-# if !defined Y
-#  define Z(s) (s)
-#  define NZ(s_singular, s_plural, count) (s_singular)
+# if !defined Z
+#  define Z(s) wxU(s)
+#  define NZ(s_singular, s_plural, count) wxU(s_singular)
 # endif
 #endif
 
