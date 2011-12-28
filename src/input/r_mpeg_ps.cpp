@@ -78,6 +78,7 @@ mpeg_ps_reader_c::read_headers() {
 
     m_in.clear();               // Close the source file first before opening it a second time.
     m_in            = mm_multi_file_io_c::open_multi(m_ti.m_fname, m_ti.m_disable_multi_file);
+    m_size          = m_in->get_size();
     uint32_t header = m_in->read_uint32_be();
     bool done       = m_in->eof();
     version         = -1;

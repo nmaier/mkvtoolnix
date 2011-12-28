@@ -1,3 +1,9 @@
+2011-12-28  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: The MPEG program stream reader was reporting
+	wrong progress percentage if multiple files were used since
+	v5.1.0.
+
 2011-12-27  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: enhancement: Removed the posix_fadvise() code. The
