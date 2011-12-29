@@ -45,7 +45,7 @@ public:
   virtual void identify();
   virtual void create_packetizer(int64_t id);
 
-  static int probe_file(mm_io_c *in, uint64_t size);
+  static int probe_file(mm_io_c *in, uint64_t size, bool strict_mode = false);
 
 protected:
   virtual int decode_buffer(size_t length);

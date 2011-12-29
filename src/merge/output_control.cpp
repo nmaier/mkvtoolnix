@@ -387,6 +387,8 @@ get_file_type(filelist_t &file) {
   else if (dirac_es_reader_c::probe_file(io, size))
     type = FILE_TYPE_DIRAC;
   // File types that are misdetected sometimes
+  else if (dts_reader_c::probe_file(io, size, true))
+    type = FILE_TYPE_DTS;
   else if (mpeg_ts_reader_c::probe_file(io, size))
     type = FILE_TYPE_MPEG_TS;
   else if (mpeg_ps_reader_c::probe_file(io, size))

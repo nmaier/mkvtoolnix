@@ -1,3 +1,8 @@
+2011-12-29  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Fixed certain DTS files being mis-detected as
+	AC3. Fix for bug 693.
+
 2011-12-28  Moritz Bunkus  <moritz@bunkus.org>
 
 	* build system: Added an option "--without-gettext" that allows

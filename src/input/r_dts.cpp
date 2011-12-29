@@ -23,7 +23,8 @@
 
 int
 dts_reader_c::probe_file(mm_io_c *in,
-                         uint64_t size) {
+                         uint64_t size,
+                         bool strict_mode) {
   if (size < READ_SIZE)
     return 0;
 
@@ -36,7 +37,11 @@ dts_reader_c::probe_file(mm_io_c *in,
       return 0;
     in->setFilePointer(0, seek_beginning);
 
-    if (detect_dts(buf, READ_SIZE, dts14_to_16, swap_bytes))
+    if (!strict_mode && detect_dts(buf, READ_SIZE, dts14_to_16, swap_bytes))
+      return 1;
+
+    int pos = find_consecutive_dts_headers(buf, READ_SIZE, 5);
+    if ((!strict_mode && (0 <= pos)) || (strict_mode && (0 == pos)))
       return 1;
 
   } catch (...) {
