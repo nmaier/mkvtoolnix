@@ -159,35 +159,27 @@ void print_dts_header(const struct dts_header_s *dts_header);
 
 bool operator ==(const dts_header_s &h1, const dts_header_s &h2);
 
-inline int get_dts_packet_length_in_core_samples(const struct dts_header_s
-                                                 *dts_header) {
+inline int
+get_dts_packet_length_in_core_samples(const struct dts_header_s *dts_header) {
   // computes the length (in time, not size) of the packet in "samples".
-  int r;
-
-  r = dts_header->num_pcm_sample_blocks * 32;
-  if (dts_header->frametype == dts_header_s::FRAMETYPE_TERMINATION)
+  int r = dts_header->num_pcm_sample_blocks * 32;
+  if (dts_header_s::FRAMETYPE_TERMINATION == dts_header->frametype)
     r -= dts_header->deficit_sample_count;
 
   return r;
 }
 
-inline double get_dts_packet_length_in_nanoseconds(const struct dts_header_s
-                                                   *dts_header) {
+inline double
+get_dts_packet_length_in_nanoseconds(const struct dts_header_s *dts_header) {
   // computes the length (in time, not size) of the packet in "samples".
   int samples = get_dts_packet_length_in_core_samples(dts_header);
 
-  double t = ((double)samples * 1000000000.0) /
-    ((double)dts_header->core_sampling_frequency);
-
-  return t;
+  return static_cast<double>(samples) * 1000000000.0 / dts_header->core_sampling_frequency;
 }
 
-void dts_14_to_dts_16(const unsigned short *src,
-                                  unsigned long srcwords,
-                                  unsigned short *dst);
+void dts_14_to_dts_16(const unsigned short *src, unsigned long srcwords, unsigned short *dst);
 
-bool detect_dts(const void *src_buf, int len,
-                            bool &dts14_to_16, bool &swap_bytes);
+bool detect_dts(const void *src_buf, int len, bool &dts14_to_16, bool &swap_bytes);
 
 bool operator!=(const dts_header_t &l, const dts_header_t &r);
 
