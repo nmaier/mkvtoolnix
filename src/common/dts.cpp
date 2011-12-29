@@ -308,9 +308,10 @@ find_consecutive_dts_headers(const unsigned char *buf,
     return pos;
 
   unsigned int base = pos;
+  bool debug        = debugging_requested("dts_detection");
 
   do {
-    mxverb(4, boost::format("find_cons_dts_h: starting with base at %1%\n") % base);
+    mxdebug_if(debug, boost::format("find_cons_dts_h: starting with base at %1%\n") % base);
 
     int offset = dts_header.frame_byte_size;
     unsigned int i;
@@ -321,7 +322,7 @@ find_consecutive_dts_headers(const unsigned char *buf,
       pos = find_dts_header(&buf[base + offset], size - base - offset, &new_header, false);
       if (0 == pos) {
         if (new_header == dts_header) {
-          mxverb(4, boost::format("find_cons_dts_h: found good header %1%\n") % i);
+          mxdebug_if(debug, boost::format("find_cons_dts_h: found good header %1%\n") % i);
           offset += new_header.frame_byte_size;
           continue;
         } else
