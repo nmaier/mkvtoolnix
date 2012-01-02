@@ -1636,19 +1636,6 @@ files: The video track has the ID 0\&. The audio tracks get IDs in ascending ord
 .IP \(bu 2.3
 .\}
 
-MP4
-files: As output from x264, the video track has the ID 1\&.
-.RE
-.sp
-.RS 4
-.ie n \{\
-\h'-04'\(bu\h'+03'\c
-.\}
-.el \{\
-.sp -1
-.IP \(bu 2.3
-.\}
-
 AAC,
 AC3,
 MP3,
@@ -1666,24 +1653,7 @@ files: The one \*(Aqtrack\*(Aq in that file gets the ID 0\&.
 .sp -1
 .IP \(bu 2.3
 .\}
-Ogg/OGM
-files: The track IDs are assigned in order the tracks are found in the file starting at 0\&.
-.RE
-.sp
-.RS 4
-.ie n \{\
-\h'-04'\(bu\h'+03'\c
-.\}
-.el \{\
-.sp -1
-.IP \(bu 2.3
-.\}
-
-Matroska(TM)
-files: The track\*(Aqs ID is the track number as reported by
-\fBmkvinfo\fR(1)\&. It is
-\fInot\fR
-the track UID\&.
+Most other files: The track IDs are assigned in order the tracks are found in the file starting at 0\&.
 .RE
 .PP
 The special track ID \*(Aq\fB\-1\fR\*(Aq is a wild card and applies the given switch to all tracks that are read from an input file\&.

@@ -1638,19 +1638,6 @@ bestanden: Het video spoor heeft het ID 0\&. De audio sporen krijgen de ID\*(Aqs
 .IP \(bu 2.3
 .\}
 
-MP4
-bestanden: Als uitvoer van x264, het video spoor het ID 1 heeft\&.
-.RE
-.sp
-.RS 4
-.ie n \{\
-\h'-04'\(bu\h'+03'\c
-.\}
-.el \{\
-.sp -1
-.IP \(bu 2.3
-.\}
-
 AAC,
 AC3,
 MP3,
@@ -1668,24 +1655,7 @@ bestanden: Het \*(Aqspoor\*(Aq in dat bestand krijgt het ID 0\&.
 .sp -1
 .IP \(bu 2.3
 .\}
-Ogg/OGM
-bestanden: De spoor ID\*(Aqs worden toegekend volgens de volgorde zoals het gevonden is in het bestand startend bij 0\&.
-.RE
-.sp
-.RS 4
-.ie n \{\
-\h'-04'\(bu\h'+03'\c
-.\}
-.el \{\
-.sp -1
-.IP \(bu 2.3
-.\}
-
-Matroska(TM)
-bestanden: Het spoor ID is het spoornummer zoals gerapporteerd door
-\fBmkvinfo\fR(1)\&. Het is
-\fIniet\fR
-het spoor UID\&.
+Most other files: The track IDs are assigned in order the tracks are found in the file starting at 0\&.
 .RE
 .PP
 Het speciale spoor ID \*(Aq\fB\-1\fR\*(Aq is de \*(Aqjoker\*(Aq en past de bepaalde schakelaar toe op alle sporen die van een invoerbestand worden gelezen\&.

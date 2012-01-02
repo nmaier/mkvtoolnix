@@ -1169,18 +1169,6 @@ AVIファイル: ビデオトラックのIDは0になります。オーディオ
 .IP \(bu 2.3
 .\}
 
-MP4ファイル: x264からの出力なので、ビデオトラックのIDは1です。
-.RE
-.sp
-.RS 4
-.ie n \{\
-\h'-04'\(bu\h'+03'\c
-.\}
-.el \{\
-.sp -1
-.IP \(bu 2.3
-.\}
-
 AAC、AC3、MP3、SRT、及びWAVファイル: ファイル中の唯一のトラックがID 0 を割り当てられます。
 .RE
 .sp
@@ -1192,22 +1180,7 @@ AAC、AC3、MP3、SRT、及びWAVファイル: ファイル中の唯一のトラ
 .sp -1
 .IP \(bu 2.3
 .\}
-Ogg/OGM
-ファイル: 最初のトラックを0として、見付かった順に割り当てられます。
-.RE
-.sp
-.RS 4
-.ie n \{\
-\h'-04'\(bu\h'+03'\c
-.\}
-.el \{\
-.sp -1
-.IP \(bu 2.3
-.\}
-
-Matroska(TM)
-ファイル:
-\fBmkvinfo\fR(1)が表示するトラック番号がトラックIDとして使用されます。これはトラックUIDでは\fIありません\fR。
+Most other files: The track IDs are assigned in order the tracks are found in the file starting at 0\&.
 .RE
 .PP
 \*(Aq\fB\-1\fR\*(Aqは特殊で、そのスイッチが入力ファイルから読み込まれる全てのトラックに適用されることを示します。

@@ -1626,19 +1626,6 @@ AVI
 .IP \(bu 2.3
 .\}
 
-MP4
-文件: 如 x264 所输出的文件，视频轨 ID 为 1。
-.RE
-.sp
-.RS 4
-.ie n \{\
-\h'-04'\(bu\h'+03'\c
-.\}
-.el \{\
-.sp -1
-.IP \(bu 2.3
-.\}
-
 AAC、AC3、MP3、SRT
 与
 WAV
@@ -1653,25 +1640,7 @@ WAV
 .sp -1
 .IP \(bu 2.3
 .\}
-Ogg/OGM
-文件: 轨道 ID 按在文件中被找到的顺序由 0 开始分配。
-.RE
-.sp
-.RS 4
-.ie n \{\
-\h'-04'\(bu\h'+03'\c
-.\}
-.el \{\
-.sp -1
-.IP \(bu 2.3
-.\}
-
-Matroska(TM)
-文件: 轨道 ID 与
-\fBmkvinfo\fR(1)
-所报告的相同。注意
-\fI不是\fR
-轨道 UID。
+Most other files: The track IDs are assigned in order the tracks are found in the file starting at 0\&.
 .RE
 .PP
 特殊的轨道 ID \*(Aq\fB\-1\fR\*(Aq 是个百搭号，它将使给定的开关应用到从输入文件中读到的所有轨道。

@@ -1652,12 +1652,6 @@ Track ID 2: audio (A_MPEG/L3)</screen>
 
    <listitem>
     <para>
-     <abbrev>MP4</abbrev> files: As output from x264, the video track has the ID 1.
-    </para>
-   </listitem>
-
-   <listitem>
-    <para>
      <abbrev>AAC</abbrev>, <abbrev>AC3</abbrev>, <abbrev>MP3</abbrev>, <abbrev>SRT</abbrev> and <abbrev>WAV</abbrev> files: The one 'track'
      in that file gets the ID 0.
     </para>
@@ -1665,13 +1659,7 @@ Track ID 2: audio (A_MPEG/L3)</screen>
 
    <listitem>
     <para>
-     Ogg/<abbrev>OGM</abbrev> files: The track IDs are assigned in order the tracks are found in the file starting at 0.
-    </para>
-   </listitem>
-
-   <listitem>
-    <para>
-     &matroska; files: The track's ID is the track number as reported by &mkvinfo;. It is <emphasis>not</emphasis> the track UID.
+     Most other files: The track IDs are assigned in order the tracks are found in the file starting at 0.
     </para>
    </listitem>
   </itemizedlist>
