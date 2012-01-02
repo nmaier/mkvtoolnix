@@ -4,7 +4,7 @@ AC_PREREQ(2.50)
 AC_CONFIG_HEADERS(config.h:config.h.in)
 
 PACKAGE="mkvtoolnix"
-VERSION="5.2.0"
+VERSION="5.2.1"
 AC_SUBST(PACKAGE)
 AC_SUBST(VERSION)
 
