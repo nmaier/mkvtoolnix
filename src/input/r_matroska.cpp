@@ -2284,6 +2284,9 @@ kax_reader_c::identify() {
     if (track->track_name != "")
       verbose_info.push_back((boost::format("track_name:%1%") % escape(track->track_name)).str());
 
+    if ((0 != track->v_width) && (0 != track->v_height))
+      verbose_info.push_back((boost::format("pixel_dimensions:%1%x%2%") % track->v_width % track->v_height).str());
+
     if ((0 != track->v_dwidth) && (0 != track->v_dheight))
       verbose_info.push_back((boost::format("display_dimensions:%1%x%2%") % track->v_dwidth % track->v_dheight).str());
 
