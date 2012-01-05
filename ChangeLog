@@ -1,3 +1,10 @@
+2012-01-05  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvextract: bug fix: The track IDs used in the "timecodes_v2"
+	extraction mode are consistent again with the IDs that mkvmerge's
+	identification reports and that mkvextract's "tracks" extraction
+	mode uses. Fix for bugs 689 and 694.
+
 2012-01-04  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: enhancement: Added video pixel dimensions to the

@@ -41,13 +41,18 @@
 using namespace libmatroska;
 
 struct timecode_extractor_t {
-  int64_t m_tid;
+  int64_t m_tid, m_tnum;
   mm_io_cptr m_file;
   std::vector<int64_t> m_timecodes;
   int64_t m_default_duration;
 
-  timecode_extractor_t(int64_t tid, const mm_io_cptr &file, int64_t default_duration):
-    m_tid(tid), m_file(file), m_default_duration(default_duration) {}
+  timecode_extractor_t(int64_t tid, int64_t tnum, const mm_io_cptr &file, int64_t default_duration)
+    : m_tid(tid)
+    , m_tnum(tnum)
+    , m_file(file)
+    , m_default_duration(default_duration)
+  {
+  }
 };
 
 static std::vector<timecode_extractor_t> timecode_extractors;
@@ -74,25 +79,26 @@ create_timecode_files(KaxTracks &kax_tracks,
                       int version) {
   size_t i;
   for (auto &tspec : tracks) {
-    int64_t default_duration = 0;
-
+    int track_number     = -1;
+    KaxTrackEntry *track = NULL;
     for (i = 0; kax_tracks.ListSize() > i; ++i) {
       if (!is_id(kax_tracks[i], KaxTrackEntry))
         continue;
 
-      KaxTrackEntry &track = *static_cast<KaxTrackEntry *>(kax_tracks[i]);
-
-      if (kt_get_number(track) != tspec.tid)
+      ++track_number;
+      if (track_number != tspec.tid)
         continue;
 
-      default_duration = kt_get_default_duration(track);
-      if (0 > default_duration)
-        default_duration = 0;
+      track = static_cast<KaxTrackEntry *>(kax_tracks[i]);
+      break;
     }
+
+    if (NULL == track)
+      continue;
 
     try {
       mm_io_cptr file = mm_write_buffer_io_c::open(tspec.out_name, 128 * 1024);
-      timecode_extractors.push_back(timecode_extractor_t(tspec.tid, file, default_duration));
+      timecode_extractors.push_back(timecode_extractor_t(tspec.tid, kt_get_number(*track), file, std::max(kt_get_default_duration(*track), static_cast<int64_t>(0))));
       file->puts(boost::format("# timecode format v%1%\n") % version);
 
     } catch(...) {
@@ -106,7 +112,7 @@ static
 std::vector<timecode_extractor_t>::iterator
 find_extractor_by_track_number(unsigned int track_number) {
   return std::find_if(timecode_extractors.begin(), timecode_extractors.end(),
-                      [=](timecode_extractor_t &xtr) { return track_number == xtr.m_tid; });
+                      [=](timecode_extractor_t &xtr) { return track_number == xtr.m_tnum; });
 }
 
 static void

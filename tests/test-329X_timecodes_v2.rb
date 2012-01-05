@@ -6,7 +6,7 @@ class T_329X_timecodes_v2 < Test
   end
 
   def run
-    (1..10).collect do |track_id|
+    (0..9).collect do |track_id|
       sys "../src/mkvextract timecodes_v2 data/mkv/complex.mkv #{track_id}:#{tmp}"
       hash_tmp
     end.join('-')
