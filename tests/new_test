@@ -6,8 +6,8 @@ if [ "$1" = "" ]; then
 fi
 
 name="${1%.rb}"
-max_num=$(ls | grep test- | sort -r | head -n 1 | cut -c 6-8)
-let next_num=$max_num+1
+max_num=(test*(.On[1]))
+let next_num=${max_num[1][6,8]}+1
 
 new_file="test-${next_num}${name}.rb"
 
