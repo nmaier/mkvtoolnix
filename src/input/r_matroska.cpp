@@ -2342,7 +2342,7 @@ kax_reader_c::identify() {
   }
 
   for (auto &attachment : g_attachments)
-    id_result_attachment(attachment.ui_id, attachment.mime_type, attachment.data->get_size(), attachment.name, attachment.description, attachment.position);
+    id_result_attachment(attachment.ui_id, attachment.mime_type, attachment.data->get_size(), attachment.name, attachment.description);
 
   if (NULL != m_chapters)
     id_result_chapters(count_chapter_atoms(*m_chapters));
