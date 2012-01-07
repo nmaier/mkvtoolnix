@@ -2278,6 +2278,13 @@ kax_reader_c::identify() {
 
     verbose_info.clear();
 
+    verbose_info.push_back((boost::format("uid:%1%") % track->track_uid).str());
+    verbose_info.push_back((boost::format("codec_id:%1%") % escape(track->codec_id)).str());
+    verbose_info.push_back((boost::format("codec_private_length:%1%") % track->private_size).str());
+
+    if ((0 != track->private_size) && (NULL != track->private_data))
+      verbose_info.push_back((boost::format("codec_private_data:%1%") % to_hex(static_cast<const unsigned char *>(track->private_data), track->private_size, true)).str());
+
     if (track->language != "")
       verbose_info.push_back((boost::format("language:%1%") % escape(track->language)).str());
 
@@ -2335,7 +2342,7 @@ kax_reader_c::identify() {
   }
 
   for (auto &attachment : g_attachments)
-    id_result_attachment(attachment.ui_id, attachment.mime_type, attachment.data->get_size(), attachment.name, attachment.description);
+    id_result_attachment(attachment.ui_id, attachment.mime_type, attachment.data->get_size(), attachment.name, attachment.description, attachment.position);
 
   if (NULL != m_chapters)
     id_result_chapters(count_chapter_atoms(*m_chapters));

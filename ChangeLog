@@ -1,5 +1,9 @@
 2012-01-07  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: enhancement: Added several fields to mkvmerge's
+	verbose identification mode for tracks: UID, CodecID, length and
+	content (as a hex dump) of the codec private data.
+
 	* mkvmerge: bug fix: Fixed a segmentation fault in the DTS
 	detection code. Fix for bug 698.
 
