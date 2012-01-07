@@ -316,7 +316,7 @@ find_consecutive_dts_headers(const unsigned char *buf,
     int offset = dts_header.frame_byte_size;
     unsigned int i;
     for (i = 0; (num - 1) > i; ++i) {
-      if ((size - base - offset) < 2)
+      if (size < (2 + base + offset))
         break;
 
       pos = find_dts_header(&buf[base + offset], size - base - offset, &new_header, false);

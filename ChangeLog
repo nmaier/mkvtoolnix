@@ -1,3 +1,8 @@
+2012-01-07  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Fixed a segmentation fault in the DTS
+	detection code. Fix for bug 698.
+
 2012-01-05  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvextract: bug fix: The track IDs used in the "timecodes_v2"
