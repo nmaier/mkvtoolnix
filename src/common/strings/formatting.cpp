@@ -243,12 +243,14 @@ format_paragraph(const std::string &text_to_wrap,
 
 std::string
 to_hex(const unsigned char *buf,
-       size_t size) {
+       size_t size,
+       bool compact) {
   static boost::format s_bf_to_hex("0x%|1$02x| ");
+  static boost::format s_bf_to_hex_compact("%|1$02x|");
 
   std::string hex;
   for (size_t idx = 0; idx < size; ++idx)
-    hex += (s_bf_to_hex % static_cast<unsigned int>(buf[idx])).str();
+    hex += ((compact ? s_bf_to_hex_compact : s_bf_to_hex) % static_cast<unsigned int>(buf[idx])).str();
 
   return hex;
 }

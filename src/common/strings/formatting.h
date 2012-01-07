@@ -60,10 +60,11 @@ std::string to_string(uint64_t value);
 std::string to_string(double value, unsigned int precision);
 std::string to_string(int64_t numerator, int64_t denominator, unsigned int precision);
 
-std::string to_hex(const unsigned char *buf, size_t size);
+std::string to_hex(const unsigned char *buf, size_t size, bool compact = false);
 inline std::string
-to_hex(const std::string &buf) {
-  return to_hex(reinterpret_cast<const unsigned char *>(buf.c_str()), buf.length());
+to_hex(const std::string &buf,
+       bool compact = false) {
+  return to_hex(reinterpret_cast<const unsigned char *>(buf.c_str()), buf.length(), compact);
 }
 
 std::string create_minutes_seconds_time_string(unsigned int seconds, bool omit_minutes_if_zero = false);
