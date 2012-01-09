@@ -232,6 +232,10 @@ public:
   bool is_ok() {
     return ok;
   }
+  bool has_encodings() {
+    return !encodings.empty();
+  }
+  std::string descriptive_algorithm_list();
 };
 
 #endif // __MTX_COMMON_COMPRESSION_H

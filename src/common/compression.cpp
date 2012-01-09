@@ -13,6 +13,8 @@
 
 #include "common/common_pch.h"
 
+#include <boost/range/algorithm/for_each.hpp>
+
 #include <matroska/KaxContentEncoding.h>
 #include <matroska/KaxTracks.h>
 
@@ -23,6 +25,7 @@
 #include "common/ebml.h"
 #include "common/endian.h"
 #include "common/hacks.h"
+#include "common/strings/formatting.h"
 
 using namespace libmatroska;
 
@@ -627,4 +630,14 @@ content_decoder_c::reverse(memory_cptr &memory,
   for (auto &ce : encodings)
     if (0 != (ce.scope & scope))
       ce.compressor->decompress(memory);
+}
+
+std::string
+content_decoder_c::descriptive_algorithm_list() {
+  std::string list;
+  std::vector<std::string> algorithms;
+
+  boost::for_each(encodings, [&](const kax_content_encoding_t &enc) { algorithms.push_back(to_string(enc.comp_algo)); });
+
+  return join(",", algorithms);
 }

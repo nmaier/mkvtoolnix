@@ -2321,6 +2321,9 @@ kax_reader_c::identify() {
         verbose_info.push_back((boost::format("audio_channels:%1%") % track->a_channels).str());
     }
 
+    if (track->content_decoder.has_encodings())
+      verbose_info.push_back((boost::format("content_encoding_algorithms:%1%") % escape(track->content_decoder.descriptive_algorithm_list())).str());
+
     std::string info = track->codec_id;
 
     if (track->ms_compat)

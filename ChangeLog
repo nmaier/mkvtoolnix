@@ -1,3 +1,11 @@
+2012-01-09  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: enhancement: Added a field
+	"content_encoding_algorithms" that contains a comma-separated list
+	of encoding algorithm IDs used for that track. For example,
+	"content_encoding_algorithms:3" would indicate that header removal
+	compression is used.
+
 2012-01-07  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: enhancement: Added several fields to mkvmerge's
