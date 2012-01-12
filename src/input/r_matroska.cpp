@@ -2278,6 +2278,7 @@ kax_reader_c::identify() {
 
     verbose_info.clear();
 
+    verbose_info.push_back((boost::format("number:%1%") % track->track_number).str());
     verbose_info.push_back((boost::format("uid:%1%") % track->track_uid).str());
     verbose_info.push_back((boost::format("codec_id:%1%") % escape(track->codec_id)).str());
     verbose_info.push_back((boost::format("codec_private_length:%1%") % track->private_size).str());
