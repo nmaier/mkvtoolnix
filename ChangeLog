@@ -1,3 +1,8 @@
+2012-01-12  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Fixed writing into paths on which a drive is
+	mounted on Windows. Fix for bug 701.
+
 2012-01-09  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: enhancement: Added a field

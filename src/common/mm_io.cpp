@@ -149,8 +149,12 @@ mm_file_io_c::setup() {
 
 void
 mm_file_io_c::prepare_path(const std::string &path) {
+  boost::filesystem::path directory = boost::filesystem::path(path).parent_path();
+  if (boost::filesystem::exists(directory))
+    return;
+
   boost::system::error_code error_code;
-  boost::filesystem::create_directories(boost::filesystem::path(path).parent_path(), error_code);
+  boost::filesystem::create_directories(directory, error_code);
   if (error_code)
     throw mtx::mm_io::create_directory_x(path, strerror(error_code.value()), error_code.value());
 }
