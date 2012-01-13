@@ -1,3 +1,11 @@
+2012-01-13  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvextract: bug fix for the "timecodes_v2" mode: mkvextract will
+	write one more timecode than there are frames in the file. The
+	last timecode written will be the the sum of the last frame's
+	timecode and duration with the "last frame" being the one with the
+	highest timecode. Fix for bug 691.
+
 2012-01-12  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Fixed writing into paths on which a drive is

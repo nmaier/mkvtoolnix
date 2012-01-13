@@ -40,10 +40,26 @@
 
 using namespace libmatroska;
 
+struct timecode_t {
+  int64_t m_timecode, m_duration;
+
+  timecode_t(int64_t timecode, int64_t duration)
+    : m_timecode(timecode)
+    , m_duration(duration)
+  {
+  }
+};
+
+bool
+operator <(const timecode_t &t1,
+           const timecode_t &t2) {
+  return t1.m_timecode < t2.m_timecode;
+}
+
 struct timecode_extractor_t {
   int64_t m_tid, m_tnum;
   mm_io_cptr m_file;
-  std::vector<int64_t> m_timecodes;
+  std::vector<timecode_t> m_timecodes;
   int64_t m_default_duration;
 
   timecode_extractor_t(int64_t tid, int64_t tnum, const mm_io_cptr &file, int64_t default_duration)
@@ -62,12 +78,16 @@ static std::vector<timecode_extractor_t> timecode_extractors;
 static void
 close_timecode_files() {
   for (auto &extractor : timecode_extractors) {
-    std::vector<int64_t> &timecodes = extractor.m_timecodes;
-    std::vector<int64_t>::const_iterator timecode;
+    auto &timecodes = extractor.m_timecodes;
 
     std::sort(timecodes.begin(), timecodes.end());
     for (auto timecode : timecodes)
-      extractor.m_file->puts(to_string(timecode, 1000000, 6) + "\n");
+      extractor.m_file->puts(to_string(timecode.m_timecode, 1000000, 6) + "\n");
+
+    if (!timecodes.empty()) {
+      timecode_t &last_timecode = timecodes.back();
+      extractor.m_file->puts(to_string(last_timecode.m_timecode + last_timecode.m_duration, 1000000, 6) + "\n");
+    }
   }
 
   timecode_extractors.clear();
@@ -137,7 +157,7 @@ handle_blockgroup(KaxBlockGroup &blockgroup,
   // Pass the block to the extractor.
   size_t i;
   for (i = 0; block->NumberFrames() > i; ++i)
-    extractor->m_timecodes.push_back((int64_t)(block->GlobalTimecode() + i * (double)duration / block->NumberFrames()));
+    extractor->m_timecodes.push_back(timecode_t(block->GlobalTimecode() + i * duration / block->NumberFrames(), duration / block->NumberFrames()));
 }
 
 static void
@@ -155,7 +175,7 @@ handle_simpleblock(KaxSimpleBlock &simpleblock,
   // Pass the block to the extractor.
   size_t i;
   for (i = 0; simpleblock.NumberFrames() > i; ++i)
-    extractor->m_timecodes.push_back((int64_t)(simpleblock.GlobalTimecode() + i * (double)extractor->m_default_duration));
+    extractor->m_timecodes.push_back(timecode_t(simpleblock.GlobalTimecode() + i * extractor->m_default_duration, extractor->m_default_duration));
 }
 
 void
