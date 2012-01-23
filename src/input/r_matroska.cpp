@@ -1559,7 +1559,7 @@ kax_reader_c::create_dts_audio_packetizer(kax_track_t *t,
     if (-1 == position)
       throw false;
 
-    set_track_packetizer(t, new dts_packetizer_c(this, nti, dtsheader, true));
+    set_track_packetizer(t, new dts_packetizer_c(this, nti, dtsheader));
     show_packetizer_info(t->tnum, t->ptzr_ptr);
 
   } catch (...) {

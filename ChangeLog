@@ -1,3 +1,10 @@
+2012-01-23  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Appending AVI, Matroska or MPEG program
+	stream files with DTS audio tracks will not result in a warning
+	that the appended DTS tracks might not be compatible. Fix for bug
+	705.
+
 2012-01-13  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvextract: bug fix for the "timecodes_v2" mode: mkvextract will

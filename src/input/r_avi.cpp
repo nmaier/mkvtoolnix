@@ -681,7 +681,7 @@ avi_reader_c::create_dts_packetizer(int aid) {
 
     AVI_set_audio_position_index(m_avi, audio_position);
 
-    return new dts_packetizer_c(this, m_ti, dtsheader, true);
+    return new dts_packetizer_c(this, m_ti, dtsheader);
 
   } catch (...) {
     mxerror_tid(m_ti.m_fname, aid + 1, Y("Could not find valid DTS headers in this track's first frames.\n"));

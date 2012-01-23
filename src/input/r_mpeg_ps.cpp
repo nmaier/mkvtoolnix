@@ -1166,7 +1166,7 @@ mpeg_ps_reader_c::create_packetizer(int64_t id) {
       show_packetizer_info(id, PTZR(track->ptzr));
 
     } else if (FOURCC('D', 'T', 'S', ' ') == track->fourcc) {
-      track->ptzr = add_packetizer(new dts_packetizer_c(this, m_ti, track->dts_header, true));
+      track->ptzr = add_packetizer(new dts_packetizer_c(this, m_ti, track->dts_header));
       show_packetizer_info(id, PTZR(track->ptzr));
 
     } else if (FOURCC('T', 'R', 'H', 'D') == track->fourcc) {

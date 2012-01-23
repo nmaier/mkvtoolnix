@@ -27,14 +27,13 @@ private:
 
   byte_buffer_c m_packet_buffer;
 
-  bool m_get_first_header_later;
   dts_header_t m_first_header, m_previous_header;
   bool m_skipping_is_normal;
 
   std::deque<int64_t> m_available_timecodes;
 
 public:
-  dts_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, const dts_header_t &dts_header, bool get_first_header_later = false);
+  dts_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, const dts_header_t &dts_header);
   virtual ~dts_packetizer_c();
 
   virtual int process(packet_cptr packet);
