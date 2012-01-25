@@ -41,6 +41,7 @@ public:
   virtual void set_skipping_is_normal(bool skipping_is_normal) {
     m_skipping_is_normal = skipping_is_normal;
   }
+  virtual void flush();
 
   virtual const std::string get_format_name(bool translate = true) {
     return translate ? Y("DTS") : "DTS";
@@ -49,7 +50,8 @@ public:
   virtual connection_result_e can_connect_to(generic_packetizer_c *src, std::string &error_message);
 
 private:
-  virtual unsigned char *get_dts_packet(dts_header_t &dts_header);
+  virtual unsigned char *get_dts_packet(dts_header_t &dts_header, bool flushing);
+  virtual void process_available_packets(bool flushing);
 };
 
 #endif // __P_DTS_H
