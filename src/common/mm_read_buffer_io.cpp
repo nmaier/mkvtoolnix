@@ -89,7 +89,7 @@ mm_read_buffer_io_c::setFilePointer(int64 offset,
   if (new_pos < 0)
     m_proxy_io->setFilePointer(offset, seek_end);
   else
-    m_proxy_io->setFilePointer(new_pos, seek_beginning);
+    m_proxy_io->setFilePointer(std::min(new_pos, get_size()), seek_beginning);
 
   // Get the actual offset from the underlying stream
   // Better be safe than sorry and use this instead of just taking

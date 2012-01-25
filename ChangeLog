@@ -1,3 +1,9 @@
+2012-01-25  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Fixed integer underflows in the read caching
+	code resulting in invalid memory access. Happened in broken or
+	incomplete files only. Fix for bug 709.
+
 2012-01-23  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Appending AVI, Matroska or MPEG program
