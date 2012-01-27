@@ -344,6 +344,10 @@ kax_analyzer_c::update_element(EbmlElement *e,
   } catch (kax_analyzer_c::update_element_result_e result) {
     debug_dump_elements_maybe("update_element_exception");
     return result;
+
+  } catch (mtx::mm_io::exception &ex) {
+    mxdebug_if(m_debugging_requested, boost::format("I/O exception: %1%\n") % ex.what());
+    return uer_error_unknown;
   }
 
   return uer_success;

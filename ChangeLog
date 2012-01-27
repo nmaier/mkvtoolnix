@@ -1,3 +1,10 @@
+2012-01-27  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvpropedit, mmg: bug fix: Trying to modify a file located in a
+	path mounted with GVFS SFTP will no longer crash the
+	programs. Instead an error message is output if an error
+	occurs. Fix for bug 710.
+
 2012-01-25  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Fixed integer underflows in the read caching
