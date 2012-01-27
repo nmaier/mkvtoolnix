@@ -1,5 +1,9 @@
 2012-01-27  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: bug fix: The header editor was sometimes creating two
+	instances of an element if an element was added to the second or
+	one of the later tracks. Fix for bug 711.
+
 	* mkvpropedit, mmg: bug fix: Trying to modify a file located in a
 	path mounted with GVFS SFTP will no longer crash the
 	programs. Instead an error message is output if an error

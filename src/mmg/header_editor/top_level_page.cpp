@@ -21,7 +21,6 @@
 
 #include "common/ebml.h"
 #include "common/segmentinfo.h"
-#include "common/segment_tracks.h"
 #include "common/wx.h"
 #include "mmg/header_editor/frame.h"
 #include "mmg/header_editor/top_level_page.h"
@@ -48,9 +47,6 @@ he_top_level_page_c::do_modifications() {
 
   if (is_id(m_l1_element, KaxInfo))
     fix_mandatory_segmentinfo_elements(m_l1_element.get_object());
-
-  else if (is_id(m_l1_element, KaxTracks))
-    fix_mandatory_segment_tracks_elements(m_l1_element.get_object());
 
   m_l1_element->UpdateSize(true);
 }
