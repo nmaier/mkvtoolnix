@@ -17,6 +17,7 @@ require "pp"
 require_relative "test.d/controller.rb"
 require_relative "test.d/results.rb"
 require_relative "test.d/test.rb"
+require_relative "test.d/simple_test.rb"
 require_relative "test.d/util.rb"
 
 begin

@@ -112,8 +112,9 @@ class Controller
     end
 
     begin
-      current_test = eval "#{class_name}.new"
-    rescue
+      current_test = constantize class_name
+      current_test = current_test.new if current_test.ancestors.include?(Test)
+    rescue Exception => ex
       self.add_result class_name, :failed, :message => " Failed to create an instance of class '#{class_name}'."
       return
     end
@@ -135,7 +136,13 @@ class Controller
 
       elsif (@results.hash?(class_name) != result)
         msg =  "  #{class_name} FAILED: checksum is different. Commands:\n"
-        msg << "    " + current_test.commands.join("\n    ") + "\n"
+
+        expected_results = @results.hash?(class_name).split(/-/)
+        actual_results   = result.split(/-/)
+
+        current_test.commands.each_with_index do |command, idx|
+          msg += "  " + ((expected_results[idx] != actual_results[idx]) ? "(*)" : "   ") + " #{command}\n"
+        end
 
         if (update_failed)
           self.add_result class_name, :passed, :message => msg + "  UPDATING result\n", :checksum => result, :duration => duration
