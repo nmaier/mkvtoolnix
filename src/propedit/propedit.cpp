@@ -23,27 +23,29 @@
 static void
 display_update_element_result(const EbmlCallbacks &callbacks,
                               kax_analyzer_c::update_element_result_e result) {
-  mxinfo(boost::format(Y("Updating the '%1%' element failed. Reason:\n")) % callbacks.DebugName);
+  std::string message((boost::format(Y("Updating the '%1%' element failed. Reason:\n")) % callbacks.DebugName).str());
 
   switch (result) {
     case kax_analyzer_c::uer_error_segment_size_for_element:
-      mxerror(Y("The element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. "
-                "The process will be aborted. The file has been changed!"));
+      message += Y("The element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!");
       break;
 
     case kax_analyzer_c::uer_error_segment_size_for_meta_seek:
-      mxerror(Y("The meta seek element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. "
-                "The process will be aborted. The file has been changed!"));
+      message += Y("The meta seek element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!");
       break;
 
     case kax_analyzer_c::uer_error_meta_seek:
-      mxerror(Y("The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. "
-                "Please use your favorite player to check this file.\n"));
+      message += Y("The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file.\n");
       break;
 
     default:
-      mxerror(Y("An unknown error occured. The file has been modified."));
+      message += Y("An unknown error occured. The file has been modified.");
   }
+
+  if (message.substr(message.length() - 1) != "\n")
+    message += "\n";
+
+  mxerror(message);
 }
 
 static void
