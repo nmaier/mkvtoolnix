@@ -689,7 +689,7 @@ header_editor_frame_c::display_update_element_result(kax_analyzer_c::update_elem
 
     case kax_analyzer_c::uer_error_meta_seek:
       wxMessageBox(Z("The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. "
-                     "Please use your favorite player to check this file.\n"),
+                     "Please use your favorite player to check this file."),
                    Z("File structure warning"), wxOK | wxCENTER | wxICON_EXCLAMATION, this);
       break;
 

@@ -6245,8 +6245,8 @@ msgstr "Die Matroska-Datei wird analysiert."
 
 #: src/mmg/header_editor/frame.cpp:691
 #: src/propedit/propedit.cpp:40
-msgid "The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file.\n"
-msgstr "Die Matroska-Datei wurde bereits geändert, aber der Meta-Index konnte nicht aktualisiert werden. Das bedeutet, dass Abspielprogramme das neu geschriebene Element nicht so leicht oder gar nicht finden werden. Bitte benutzen Sie Ihr favorisiertes Abspielprogramm, um zu überprüfen, ob die Datei problemlos abgespielt werden kann.\n"
+msgid "The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file."
+msgstr "Die Matroska-Datei wurde bereits geändert, aber der Meta-Index konnte nicht aktualisiert werden. Das bedeutet, dass Abspielprogramme das neu geschriebene Element nicht so leicht oder gar nicht finden werden. Bitte benutzen Sie Ihr favorisiertes Abspielprogramm, um zu überprüfen, ob die Datei problemlos abgespielt werden kann."
 
 #: src/mmg/tabs/chapters.cpp:1889
 msgid ""
@@ -7681,8 +7681,8 @@ msgstr "Nicht unterstützter Track-Typ.\n"
 
 #: src/propedit/propedit.cpp:26
 #, boost-format
-msgid "Updating the '%1%' element failed. Reason:\n"
-msgstr "Die Aktualisierung des '%1%'-Elementes schlug fehl. Grund:\n"
+msgid "Updating the '%1%' element failed. Reason:"
+msgstr "Die Aktualisierung des '%1%'-Elementes schlug fehl. Grund:"
 
 #: src/extract/extract_cli_parser.cpp:49
 msgid "Usage"

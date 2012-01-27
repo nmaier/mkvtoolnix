@@ -23,7 +23,8 @@
 static void
 display_update_element_result(const EbmlCallbacks &callbacks,
                               kax_analyzer_c::update_element_result_e result) {
-  std::string message((boost::format(Y("Updating the '%1%' element failed. Reason:\n")) % callbacks.DebugName).str());
+  std::string message((boost::format(Y("Updating the '%1%' element failed. Reason:")) % callbacks.DebugName).str());
+  message += " ";
 
   switch (result) {
     case kax_analyzer_c::uer_error_segment_size_for_element:
@@ -35,17 +36,14 @@ display_update_element_result(const EbmlCallbacks &callbacks,
       break;
 
     case kax_analyzer_c::uer_error_meta_seek:
-      message += Y("The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file.\n");
+      message += Y("The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file.");
       break;
 
     default:
       message += Y("An unknown error occured. The file has been modified.");
   }
 
-  if (message.substr(message.length() - 1) != "\n")
-    message += "\n";
-
-  mxerror(message);
+  mxerror(message + "\n");
 }
 
 static void
