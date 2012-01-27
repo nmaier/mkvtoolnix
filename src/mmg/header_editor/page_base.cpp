@@ -37,13 +37,9 @@ he_page_base_c::has_been_modified() {
   if (has_this_been_modified())
     return true;
 
-  std::vector<he_page_base_c *>::iterator it = m_children.begin();
-
-  while (it != m_children.end()) {
-    if ((*it)->has_been_modified())
+  for (auto child : m_children)
+    if (child->has_been_modified())
       return true;
-    ++it;
-  }
 
   return false;
 }
@@ -52,12 +48,8 @@ void
 he_page_base_c::do_modifications() {
   modify_this();
 
-  std::vector<he_page_base_c *>::iterator it = m_children.begin();
-
-  while (it != m_children.end()) {
-    (*it)->do_modifications();
-    ++it;
-  }
+  for (auto child : m_children)
+    child->do_modifications();
 }
 
 wxTreeItemId
@@ -65,13 +57,10 @@ he_page_base_c::validate() {
   if (!validate_this())
     return m_page_id;
 
-  std::vector<he_page_base_c *>::iterator it = m_children.begin();
-
-  while (it != m_children.end()) {
-    wxTreeItemId result = (*it)->validate();
+  for (auto child : m_children) {
+    wxTreeItemId result = child->validate();
     if (result.IsOk())
       return result;
-    ++it;
   }
 
   return wxTreeItemId();

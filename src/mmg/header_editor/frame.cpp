@@ -150,7 +150,7 @@ header_editor_frame_c::translate_ui() {
 
   set_window_title();
 
-  for (auto page : m_pages) {
+  for (auto &page : m_pages) {
     page->translate_ui();
     m_tc_tree->SetItemText(page->m_page_id, page->get_title());
   }
@@ -172,8 +172,8 @@ header_editor_frame_c::set_window_title() {
 
 bool
 header_editor_frame_c::have_been_modified() {
-  for (size_t i = 0; m_top_level_pages.size() > i; ++i)
-    if (m_top_level_pages[i]->has_been_modified())
+  for (auto &page : m_top_level_pages)
+    if (page->has_been_modified())
       return true;
 
   return false;
@@ -181,14 +181,14 @@ header_editor_frame_c::have_been_modified() {
 
 void
 header_editor_frame_c::do_modifications() {
-  for (size_t i = 0; m_top_level_pages.size() > i; ++i)
-    m_top_level_pages[i]->do_modifications();
+  for (auto &page : m_top_level_pages)
+    page->do_modifications();
 }
 
 wxTreeItemId
 header_editor_frame_c::validate_pages() {
-  for (size_t i = 0; m_top_level_pages.size() > i; ++i) {
-    wxTreeItemId result = m_top_level_pages[i]->validate();
+  for (auto &page : m_top_level_pages) {
+    wxTreeItemId result = page->validate();
     if (result.IsOk())
       return result;
   }
@@ -200,9 +200,9 @@ void
 header_editor_frame_c::clear_pages() {
   m_ignore_tree_selection_changes = true;
 
-  for (size_t i = 0; m_pages.size() > i; ++i)
-    if (m_pages[i]->IsShown())
-      m_pages[i]->Hide();
+  for (auto &page : m_pages)
+    if (page->IsShown())
+      page->Hide();
 
   m_bs_page->Clear();
   m_bs_main->Hide(m_tc_tree);
@@ -268,31 +268,26 @@ header_editor_frame_c::open_file(wxFileName file_name) {
 
   m_bs_main->Hide(m_tc_tree);
 
-  size_t i;
-  for (i = 0; m_pages.size() > i; ++i)
-    if (m_pages[i]->IsShown())
-      m_pages[i]->Hide();
+  for (auto &page : m_pages)
+    if (page->IsShown())
+      page->Hide();
 
   m_tc_tree->DeleteChildren(m_root_id);
   m_bs_page->Clear();
   m_pages.clear();
   m_top_level_pages.clear();
 
-  for (i = 0; m_analyzer->m_data.size() > i; ++i) {
-    kax_analyzer_data_c *data = m_analyzer->m_data[i].get_object();
+  for (auto &data : m_analyzer->m_data)
     if (data->m_id == KaxInfo::ClassInfos.GlobalId) {
-      handle_segment_info(data);
+      handle_segment_info(data.get_object());
       break;
     }
-  }
 
-  for (i = 0; m_analyzer->m_data.size() > i; ++i) {
-    kax_analyzer_data_c *data = m_analyzer->m_data[i].get_object();
+  for (auto &data : m_analyzer->m_data)
     if (data->m_id == KaxTracks::ClassInfos.GlobalId) {
-      handle_tracks(data);
+      handle_tracks(data.get_object());
       break;
     }
-  }
 
   m_analyzer->close_file();
 
@@ -533,20 +528,20 @@ header_editor_frame_c::on_file_save(wxCommandEvent &) {
 
   do_modifications();
 
-  size_t i;
   bool tracks_written = false;
-  for (i = 0; m_top_level_pages.size() > i; ++i) {
-    if (m_top_level_pages[i]->has_been_modified()) {
-      if (m_top_level_pages[i]->m_l1_element->Generic().GlobalId == KaxTracks::ClassInfos.GlobalId) {
-        if (tracks_written)
-          continue;
-        tracks_written = true;
-      }
+  for (auto &page : m_top_level_pages) {
+    if (!page->has_been_modified())
+      continue;
 
-      kax_analyzer_c::update_element_result_e result = m_analyzer->update_element(m_top_level_pages[i]->m_l1_element, true);
-      if (kax_analyzer_c::uer_success != result)
-        display_update_element_result(result);
+    if (page->m_l1_element->Generic().GlobalId == KaxTracks::ClassInfos.GlobalId) {
+      if (tracks_written)
+        continue;
+      tracks_written = true;
     }
+
+    kax_analyzer_c::update_element_result_e result = m_analyzer->update_element(page->m_l1_element, true);
+    if (kax_analyzer_c::uer_success != result)
+      display_update_element_result(result);
   }
 
   open_file(m_file_name);
@@ -555,8 +550,7 @@ header_editor_frame_c::on_file_save(wxCommandEvent &) {
 void
 header_editor_frame_c::on_file_reload(wxCommandEvent &) {
   if (   have_been_modified()
-      && (wxYES != wxMessageBox(Z("Some header values have been modified. Do you really want to reload without saving the file?"), Z("Headers modified"),
-                                wxYES_NO | wxICON_QUESTION, this)))
+      && (wxYES != wxMessageBox(Z("Some header values have been modified. Do you really want to reload without saving the file?"), Z("Headers modified"), wxYES_NO | wxICON_QUESTION, this)))
     return;
 
   open_file(m_file_name);
@@ -565,8 +559,7 @@ header_editor_frame_c::on_file_reload(wxCommandEvent &) {
 void
 header_editor_frame_c::on_file_close(wxCommandEvent &) {
   if (   have_been_modified()
-      && (wxYES != wxMessageBox(Z("Some header values have been modified. Do you really want to close without saving the file?"), Z("Headers modified"),
-                                wxYES_NO | wxICON_QUESTION, this)))
+      && (wxYES != wxMessageBox(Z("Some header values have been modified. Do you really want to close without saving the file?"), Z("Headers modified"), wxYES_NO | wxICON_QUESTION, this)))
     return;
 
   clear_pages();
@@ -596,18 +589,16 @@ header_editor_frame_c::on_file_quit(wxCommandEvent &) {
 void
 header_editor_frame_c::on_headers_expand_all(wxCommandEvent &) {
   m_tc_tree->Freeze();
-  size_t i;
-  for (i = 0; m_pages.size() > i; ++i)
-    m_tc_tree->Expand(m_pages[i]->m_page_id);
+  for (auto &page : m_pages)
+    m_tc_tree->Expand(page->m_page_id);
   m_tc_tree->Thaw();
 }
 
 void
 header_editor_frame_c::on_headers_collapse_all(wxCommandEvent &) {
   m_tc_tree->Freeze();
-  size_t i;
-  for (i = 0; m_pages.size() > i; ++i)
-    m_tc_tree->Collapse(m_pages[i]->m_page_id);
+  for (auto &page : m_pages)
+    m_tc_tree->Collapse(page->m_page_id);
   m_tc_tree->Thaw();
 }
 
@@ -648,15 +639,6 @@ header_editor_frame_c::update_file_menu() {
     wxMenuItem *mi = m_file_menu->Remove(i);
     delete mi;
   }
-
-  // if ((last_settings.size() > 0) && !file_menu_sep) {
-  //   file_menu->AppendSeparator();
-  //   file_menu_sep = true;
-  // }
-  // for (i = 0; i < last_settings.size(); i++) {
-  //   s.Printf(wxT("&%u. %s"), i + 1, last_settings[i].c_str());
-  //   file_menu->Append(ID_M_FILE_LOADLAST1 + i, s);
-  // }
 }
 
 void
@@ -718,9 +700,9 @@ header_editor_frame_c::append_page(he_page_base_c *page) {
 
 he_page_base_c *
 header_editor_frame_c::find_page_for_item(wxTreeItemId id) {
-  for (size_t i = 0; m_pages.size() > i; ++i)
-    if (m_pages[i]->m_page_id == id)
-      return m_pages[i].get_object();
+  for (auto &page : m_pages)
+    if (page->m_page_id == id)
+      return page.get_object();
 
   return NULL;
 }
@@ -739,10 +721,9 @@ header_editor_frame_c::on_tree_sel_changed(wxTreeEvent &evt) {
 
   m_page_panel->Freeze();
 
-  size_t i;
-  for (i = 0; m_pages.size() > i; ++i)
-    if (m_pages[i]->IsShown())
-      m_pages[i]->Hide();
+  for (auto &page : m_pages)
+    if (page->IsShown())
+      page->Hide();
 
   page->Show();
 
@@ -770,8 +751,7 @@ header_editor_frame_c::on_drop_files(wxCoord,
                                      wxCoord,
                                      const wxArrayString &dropped_files) {
   if (   have_been_modified()
-      && (wxYES != wxMessageBox(Z("Some header values have been modified. Do you really want to load a new file without saving the current one?"), Z("Headers modified"),
-                                wxYES_NO | wxICON_QUESTION, this)))
+      && (wxYES != wxMessageBox(Z("Some header values have been modified. Do you really want to load a new file without saving the current one?"), Z("Headers modified"), wxYES_NO | wxICON_QUESTION, this)))
     return false;
 
   open_file(wxFileName(dropped_files[0]));
