@@ -116,9 +116,15 @@ class SimpleTest
     self.sys command, :exit_code => options[:exit_code]
   end
 
+  @@exit_code_aliases = {
+    :success => 0,
+    :warning => 1,
+    :error   => 2,
+  }
+
   def self.sys *args
-    options               = args.extract_options!
-    options[:exit_code] ||= 0
+    options             = args.extract_options!
+    options[:exit_code] = @@exit_code_aliases[ options[:exit_code] ] || options[:exit_code] || 0
     fail ArgumentError if args.empty?
 
     command     = args.shift
