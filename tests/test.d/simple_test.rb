@@ -79,7 +79,7 @@ class SimpleTest
       :name  => full_command_line,
       :block => lambda {
         merge file, :exit_code => options[:exit_code]
-        hash_tmp
+        options[:keep_tmp] ? hash_file(tmp) : hash_tmp
       },
     }
   end
@@ -112,11 +112,12 @@ class SimpleTest
       rescue RuntimeError => ex
         show_message "Test case '#{self.name}', sub-test '#{test[:name]}': #{ex}"
       end
-      unlink_tmp_files
       result
     end
 
     @@blocks[:cleanup].each &:call
+
+    unlink_tmp_files
 
     results.join '-'
   end
@@ -127,6 +128,16 @@ class SimpleTest
 
     output  = options[:output] || self.tmp
     command = "../src/mkvmerge --engage no_variable_data -o #{output} #{args.first}"
+    self.sys command, :exit_code => options[:exit_code]
+  end
+
+  def self.extract *args
+    options = args.extract_options!
+    fail ArgumentError if args.empty?
+
+    mode     = options[:mode] || :tracks
+    command  = "../src/mkvextract --engage no_variable_data #{mode} #{args.first} " + options.keys.select { |key| key.is_a?(Numeric) }.sort.collect { |key| "#{key}:#{options[key]}" }.join(' ')
+
     self.sys command, :exit_code => options[:exit_code]
   end
 
