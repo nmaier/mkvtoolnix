@@ -73,7 +73,7 @@ class SimpleTest
 
   def self.test_merge file, *args
     options             = args.extract_options!
-    full_command_line   = "#{options[:args]} #{file}"
+    full_command_line   = [ options[:args], file ].flatten.join(' ')
     options[:name]    ||= full_command_line
     @@blocks[:tests] << {
       :name  => full_command_line,
@@ -96,7 +96,7 @@ class SimpleTest
       begin
         result = test[:block].call
       rescue RuntimeError => ex
-        show_message "Test case '#{self.class.name}', sub-test '#{test[:name]}': #{ex}"
+        show_message "Test case '#{self.name}', sub-test '#{test[:name]}': #{ex}"
       end
       unlink_tmp_files
       result
