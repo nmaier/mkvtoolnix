@@ -305,6 +305,8 @@ public:
   truehd_parser_cptr m_truehd_parser;
   counted_ptr<M2VParser> m_m2v_parser;
 
+  bool m_debug_delivery;
+
   mpeg_ts_track_c(mpeg_ts_reader_c &p_reader)
     : reader(p_reader)
     , processed(false)
@@ -333,6 +335,7 @@ public:
     , a_bsid(0)
     , m_apply_dts_timecode_fix(false)
     , m_use_dts(false)
+    , m_debug_delivery(false)
   {
   }
 
@@ -348,6 +351,8 @@ public:
   int new_stream_a_ac3();
   int new_stream_a_dts();
   int new_stream_a_truehd();
+
+  void set_pid(uint16_t new_pid);
 };
 
 typedef counted_ptr<mpeg_ts_track_c> mpeg_ts_track_ptr;

@@ -60,6 +60,9 @@ mpeg_ts_track_c::send_to_packetizer() {
 
   mxverb(3, boost::format("mpeg_ts: PTS in nanoseconds: %1%\n") % timecode_to_use);
 
+  mxdebug_if(m_debug_delivery, boost::format("send_to_packetizer() PID %1% expected %2% actual %3% timecode_to_use %4% m_previous_timecode %5%\n")
+             % pid % pes_payload_size % pes_payload->get_size() % format_timecode(timecode_to_use) % (-1 == m_previous_timecode ? std::string("-1") : format_timecode(m_previous_timecode)));
+
   if (ptzr != -1)
     reader.m_reader_packetizers[ptzr]->process(new packet_t(clone_memory(pes_payload->get_buffer(), pes_payload->get_size()), timecode_to_use));
 
@@ -337,6 +340,16 @@ mpeg_ts_track_c::new_stream_a_truehd() {
   return FILE_STATUS_MOREDATA;
 }
 
+void
+mpeg_ts_track_c::set_pid(uint16_t new_pid) {
+  pid = new_pid;
+
+  std::string arg;
+  m_debug_delivery = debugging_requested("mpeg_ts")
+                  || (   debugging_requested("mpeg_ts_delivery", &arg)
+                      && (arg.empty() || (arg == to_string(pid))));
+}
+
 // ------------------------------------------------------------
 
 bool
@@ -416,7 +429,6 @@ mpeg_ts_reader_c::read_headers() {
     mxverb(3, boost::format("mpeg_ts: Starting to build PID list. (packet size: %1%)\n") % m_detected_packet_size);
 
     mpeg_ts_track_ptr PAT(new mpeg_ts_track_c(*this));
-    PAT->pid  = 0;
     PAT->type = PAT_TYPE;
     tracks.push_back(PAT);
 
@@ -569,11 +581,13 @@ mpeg_ts_reader_c::parse_pat(unsigned char *pat) {
         continue;
 
       mpeg_ts_track_ptr PMT(new mpeg_ts_track_c(*this));
-      PMT->pid        = tmp_pid;
       PMT->type       = PMT_TYPE;
       PMT->processed  = false;
       PMT->data_ready = false;
       es_to_process   = 0;
+
+      PMT->set_pid(tmp_pid);
+
       tracks.push_back(PMT);
     }
   }
@@ -648,8 +662,9 @@ mpeg_ts_reader_c::parse_pmt(unsigned char *pmt) {
   while (pmt_pid_info < (mpeg_ts_pmt_pid_info_t *)(pmt + 3 + pmt_section_length - 4/*CRC32*/)) {
     mpeg_ts_track_ptr track(new mpeg_ts_track_c(*this));
     unsigned short es_info_length = pmt_pid_info->get_es_info_length();
-    track->pid                    = pmt_pid_info->get_pid();
     track->type                   = ES_UNKNOWN;
+
+    track->set_pid(pmt_pid_info->get_pid());
 
     switch(pmt_pid_info->stream_type) {
       case ISO_11172_VIDEO:
@@ -867,6 +882,9 @@ mpeg_ts_reader_c::parse_packet(unsigned char *buf) {
   if (static_cast<int>(track->pes_payload->get_size()) == track->pes_payload_size)
     track->data_ready = true;
 
+  mxdebug_if(track->m_debug_delivery, boost::format("PID %1%: Adding PES payload (normal case) num %2% bytes; expected %3% actual %4%\n")
+             % track->pid % static_cast<unsigned int>(ts_payload_size) % track->pes_payload_size % track->pes_payload->get_size());
+
   if (!track->data_ready)
     return true;
 
@@ -1006,6 +1024,10 @@ mpeg_ts_reader_c::parse_start_unit_packet(mpeg_ts_track_ptr &track,
       if (pts == track->timecode) {
         mxverb(3, boost::format("     Adding PES with same PTS as previous !!\n"));
         track->add_pes_payload(ts_payload, ts_payload_size);
+
+        mxdebug_if(track->m_debug_delivery, boost::format("PID %1%: Adding PES payload (same PTS case) num %2% bytes; expected %3% actual %4%\n")
+                   % track->pid % static_cast<unsigned int>(ts_payload_size) % track->pes_payload_size % track->pes_payload->get_size());
+
         return false;
 
       } else if ((0 != track->pes_payload->get_size()) && (INPUT_READ == input_status))
