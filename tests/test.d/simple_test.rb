@@ -84,6 +84,20 @@ class SimpleTest
     }
   end
 
+  def self.test_identify file, *args
+    options             = args.extract_options!
+    options[:verbose]   = true if options[:verbose].nil?
+    full_command_line   = [ options[:verbose] ? "--identify-verbose" : "--identify", options[:args], file ].flatten.join(' ')
+    options[:name]    ||= full_command_line
+    @@blocks[:tests] << {
+      :name  => full_command_line,
+      :block => lambda {
+        sys "../src/mkvmerge #{full_command_line} > #{tmp}", 0
+        hash_tmp
+      },
+    }
+  end
+
   def self.description
     @@description || fail("Class #{self.class.name} misses its description")
   end

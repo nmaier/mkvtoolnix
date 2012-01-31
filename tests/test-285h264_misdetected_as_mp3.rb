@@ -1,13 +1,8 @@
 #!/usr/bin/ruby -w
 
-class T_285h264_misdetected_as_mp3 < Test
-  def description
-    "mkvmerge / h264 ES mis-detected as MP3"
-  end
+class T_285h264_misdetected_as_mp3 < SimpleTest
+  describe "mkvmerge / h264 ES mis-detected as MP3"
 
-  def run
-    sys "../src/mkvmerge --identify-verbose data/h264/bug574.h264 > #{tmp}", 0
-    hash_tmp
-  end
+  test_identify "data/h264/bug574.h264"
 end
 
