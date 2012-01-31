@@ -14,26 +14,24 @@ new_file="test-${next_num}${name}.rb"
 cat > "$new_file" <<EOF
 #!/usr/bin/ruby -w
 
-class T_${next_num}${name} < SimpleTest
-  describe "FIXTHIS"
+# T_${next_num}${name}
+describe "FIXTHIS"
 
-  setup do
-    # FIXTHIS
-  end
-
-  cleanup do
-    # FIXTHIS
-  end
-
-  test_merge "data/FIXTHIS"
-  test_merge "data/FIXTHIS", :args => "FIXTHIS"
-
-  test "data/FIXTHIS" do
-    # INSERT COMMANDS
-    hash_tmp
-  end
+setup do
+  # FIXTHIS
 end
 
+cleanup do
+  # FIXTHIS
+end
+
+test_merge "data/FIXTHIS"
+test_merge "data/FIXTHIS", :args => "FIXTHIS"
+
+test "data/FIXTHIS" do
+  # INSERT COMMANDS
+  hash_tmp
+end
 EOF
 
 echo "New file is $new_file"

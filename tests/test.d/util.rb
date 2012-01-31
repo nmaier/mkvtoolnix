@@ -21,6 +21,14 @@ def constantize camel_cased_word
   constant
 end
 
+def file_name_to_class_name file_name
+  "T_" + file_name.gsub(/^test-/, "").gsub(/\.rb$/, "")
+end
+
+def class_name_to_file_name class_name
+  class_name.gsub(/^T_/, "test-") + ".rb"
+end
+
 class Array
   def extract_options!
     last.is_a?(::Hash) ? pop : {}

@@ -1,64 +1,94 @@
 class SimpleTest
-  @@blocks   = {
-    :setup   => [],
-    :tests   => [],
-    :cleanup => [],
+  EXIT_CODE_ALIASES = {
+    :success => 0,
+    :warning => 1,
+    :error   => 2,
   }
 
-  @@commands       = []
-  @@tmp_num        = 0
-  @@tmp_num_mutex  = Mutex.new
+  def self.instantiate class_name
+    file_name = class_name_to_file_name class_name
+    content   = IO.readlines(file_name).join("")
 
-  def self.commands
-    @@commands
+    if ! /class\s+.*?\s+<\s+Test/.match(content)
+      content = %Q!
+        class ::#{class_name} < SimpleTest
+          def initialize
+            super
+
+            #{content}
+          end
+        end
+!
+    else
+      content.gsub!(/class\s+/, 'class ::')
+    end
+
+    eval content, nil, file_name, 5
+
+    constantize(class_name).new
   end
 
-  def self.describe description
-    @@description = description
+  def initialize
+    @commands      = []
+    @tmp_num       = 0
+    @tmp_num_mutex = Mutex.new
+    @blocks        = {
+      :setup       => [],
+      :tests       => [],
+      :cleanup     => [],
+    }
   end
 
-  def self.setup &block
-    @@blocks[:setup] << block
+  def commands
+    @commands
   end
 
-  def self.cleanup &block
-    @@blocks[:cleanup] << block
+  def describe description
+    @description = description
   end
 
-  def self.tmp_name_prefix
-    [ "/tmp/mkvtoolnix-auto-test-#{self.name}", $$.to_s, Thread.current[:number] ].join("-") + "-"
+  def setup &block
+    @blocks[:setup] << block
   end
 
-  def self.tmp_name
-    @@tmp_num_mutex.lock
-    @@tmp_num ||= 0
-    @@tmp_num  += 1
-    result      = self.tmp_name_prefix + @@tmp_num.to_s
-    @@tmp_num_mutex.unlock
+  def cleanup &block
+    @blocks[:cleanup] << block
+  end
+
+  def tmp_name_prefix
+    [ "/tmp/mkvtoolnix-auto-test-#{self.class.name}", $$.to_s, Thread.current[:number] ].join("-") + "-"
+  end
+
+  def tmp_name
+    @tmp_num_mutex.lock
+    @tmp_num ||= 0
+    @tmp_num  += 1
+    result      = self.tmp_name_prefix + @tmp_num.to_s
+    @tmp_num_mutex.unlock
 
     result
   end
 
-  def self.tmp
-    @@tmp ||= tmp_name
+  def tmp
+    @tmp ||= tmp_name
   end
 
-  def self.hash_file name
+  def hash_file name
     md5 name
   end
 
-  def self.hash_tmp erase = true
-    output = hash_file @@tmp
+  def hash_tmp erase = true
+    output = hash_file @tmp
 
     if erase
-      File.unlink(@@tmp) if File.exists?(@@tmp) && (ENV["KEEP_TMPFILES"] != "1")
-      @@tmp = nil
+      File.unlink(@tmp) if File.exists?(@tmp) && (ENV["KEEP_TMPFILES"] != "1")
+      @tmp = nil
     end
 
     output
   end
 
-  def self.unlink_tmp_files
+  def unlink_tmp_files
     return if ENV["KEEP_TMPFILES"] == "1"
     re = /^#{self.tmp_name_prefix}/
     Dir.entries("/tmp").each do |entry|
@@ -67,15 +97,15 @@ class SimpleTest
     end
   end
 
-  def self.test name, &block
-    @@blocks[:tests] << { :name => name, :block => block }
+  def test name, &block
+    @blocks[:tests] << { :name => name, :block => block }
   end
 
-  def self.test_merge file, *args
+  def test_merge file, *args
     options             = args.extract_options!
     full_command_line   = [ options[:args], file ].flatten.join(' ')
     options[:name]    ||= full_command_line
-    @@blocks[:tests] << {
+    @blocks[:tests] << {
       :name  => full_command_line,
       :block => lambda {
         merge file, :exit_code => options[:exit_code]
@@ -84,12 +114,12 @@ class SimpleTest
     }
   end
 
-  def self.test_identify file, *args
+  def test_identify file, *args
     options             = args.extract_options!
     options[:verbose]   = true if options[:verbose].nil?
     full_command_line   = [ options[:verbose] ? "--identify-verbose" : "--identify", options[:args], file ].flatten.join(' ')
     options[:name]    ||= full_command_line
-    @@blocks[:tests] << {
+    @blocks[:tests] << {
       :name  => full_command_line,
       :block => lambda {
         sys "../src/mkvmerge #{full_command_line} > #{tmp}", 0
@@ -98,31 +128,31 @@ class SimpleTest
     }
   end
 
-  def self.description
-    @@description || fail("Class #{self.class.name} misses its description")
+  def description
+    @description || fail("Class #{self.class.name} misses its description")
   end
 
-  def self.run_test
-    @@blocks[:setup].each &:call
+  def run_test
+    @blocks[:setup].each &:call
 
-    results = @@blocks[:tests].collect do |test|
+    results = @blocks[:tests].collect do |test|
       result = nil
       begin
         result = test[:block].call
       rescue RuntimeError => ex
-        show_message "Test case '#{self.name}', sub-test '#{test[:name]}': #{ex}"
+        show_message "Test case '#{self.class.name}', sub-test '#{test[:name]}': #{ex}"
       end
       result
     end
 
-    @@blocks[:cleanup].each &:call
+    @blocks[:cleanup].each &:call
 
     unlink_tmp_files
 
     results.join '-'
   end
 
-  def self.merge *args
+  def merge *args
     options = args.extract_options!
     fail ArgumentError if args.empty?
 
@@ -131,7 +161,7 @@ class SimpleTest
     self.sys command, :exit_code => options[:exit_code]
   end
 
-  def self.extract *args
+  def extract *args
     options = args.extract_options!
     fail ArgumentError if args.empty?
 
@@ -141,25 +171,19 @@ class SimpleTest
     self.sys command, :exit_code => options[:exit_code]
   end
 
-  @@exit_code_aliases = {
-    :success => 0,
-    :warning => 1,
-    :error   => 2,
-  }
-
-  def self.sys *args
+  def sys *args
     options             = args.extract_options!
-    options[:exit_code] = @@exit_code_aliases[ options[:exit_code] ] || options[:exit_code] || 0
+    options[:exit_code] = EXIT_CODE_ALIASES[ options[:exit_code] ] || options[:exit_code] || 0
     fail ArgumentError if args.empty?
 
-    command     = args.shift
-    @@commands << command
-    command    << " >/dev/null 2>/dev/null " unless />/.match(command)
+    command    = args.shift
+    @commands << command
+    command   << " >/dev/null 2>/dev/null " unless />/.match(command)
 
     self.error "system command failed: #{command} (#{$? >> 8})" if !system(command) && (options[:exit_code] != ($? >> 8))
   end
 
-  def self.error reason
+  def error reason
     show_message "  Failed. Reason: #{reason}"
     raise "test failed"
   end

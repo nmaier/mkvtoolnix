@@ -40,7 +40,7 @@ class Controller
 
     return (@tests.empty? ? @dir_entries : @tests).collect do |entry|
       if (FileTest.file?(entry) && (entry =~ /^test-.*\.rb$/))
-        class_name  = self.class.file_name_to_class_name entry
+        class_name  = file_name_to_class_name entry
         test_this   = test_all
         test_this ||= (@results.exist?(class_name) && ((@test_failed      && (@results.status?(class_name) == :failed)) || (@test_new && (@results.status?(class_name) == :new))) ||
                                                        (@test_date_after  && (@results.date_added?(class_name) < @test_date_after)) ||
@@ -52,14 +52,6 @@ class Controller
         nil
       end
     end.compact.sort_by { |class_name| @results.duration? class_name }.reverse
-  end
-
-  def self.file_name_to_class_name(file_name)
-    "T_" + file_name.gsub(/^test-/, "").gsub(/\.rb$/, "")
-  end
-
-  def self.class_name_to_file_name(class_name)
-    class_name.gsub(/^T_/, "test-") + ".rb"
   end
 
   def go
@@ -104,18 +96,10 @@ class Controller
   end
 
   def run_test(class_name)
-    file_name = self.class.class_name_to_file_name class_name
-
-    if (!require("./#{file_name}"))
-      self.add_result class_name, :failed, :message => " Failed to load '#{file_name}'."
-      return
-    end
-
     begin
-      current_test = constantize class_name
-      current_test = current_test.new if current_test.ancestors.include?(Test)
+      current_test = SimpleTest.instantiate class_name
     rescue Exception => ex
-      self.add_result class_name, :failed, :message => " Failed to create an instance of class '#{class_name}'."
+      self.add_result class_name, :failed, :message => " Failed to load or create an instance of class '#{class_name}'. #{ex}"
       return
     end
 
