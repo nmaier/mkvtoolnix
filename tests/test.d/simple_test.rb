@@ -26,7 +26,7 @@ class SimpleTest
   end
 
   def self.tmp_name_prefix
-    [ "/tmp/mkvtoolnix-auto-test", $$.to_s, Thread.current[:number] ].join("-") + "-"
+    [ "/tmp/mkvtoolnix-auto-test-#{self.name}", $$.to_s, Thread.current[:number] ].join("-") + "-"
   end
 
   def self.tmp_name

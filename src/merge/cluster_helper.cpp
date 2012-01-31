@@ -269,17 +269,15 @@ int
 cluster_helper_c::render() {
   std::vector<render_groups_cptr> render_groups;
 
-  bool use_simpleblock              = !hack_engaged(ENGAGE_NO_SIMPLE_BLOCKS);
+  bool use_simpleblock    = !hack_engaged(ENGAGE_NO_SIMPLE_BLOCKS);
 
-  BlockBlobType std_block_blob_type = use_simpleblock ? BLOCK_BLOB_ALWAYS_SIMPLE : BLOCK_BLOB_NO_SIMPLE;
+  LacingType lacing_type  = hack_engaged(ENGAGE_LACING_XIPH) ? LACING_XIPH : hack_engaged(ENGAGE_LACING_EBML) ? LACING_EBML : LACING_AUTO;
 
-  LacingType lacing_type            = hack_engaged(ENGAGE_LACING_XIPH) ? LACING_XIPH : hack_engaged(ENGAGE_LACING_EBML) ? LACING_EBML : LACING_AUTO;
+  int64_t min_cl_timecode = std::numeric_limits<int64_t>::max();
+  int64_t max_cl_timecode = 0;
 
-  int64_t min_cl_timecode           = 9223372036854775807LL;
-  int64_t max_cl_timecode           = 0;
-
-  int elements_in_cluster           = 0;
-  bool added_to_cues                = false;
+  int elements_in_cluster = 0;
+  bool added_to_cues      = false;
 
   // Splitpoint stuff
   if ((-1 == m_header_overhead) && splitting())
@@ -327,8 +325,9 @@ cluster_helper_c::render() {
       render_group->m_duration_mandatory = false;
 
       BlockBlobType this_block_blob_type
-        = !use_simpleblock                         ? std_block_blob_type
+        = !use_simpleblock                         ? BLOCK_BLOB_NO_SIMPLE
         : must_duration_be_set(render_group, pack) ? BLOCK_BLOB_NO_SIMPLE
+        : !pack->data_adds.empty()                 ? BLOCK_BLOB_NO_SIMPLE
         :                                            BLOCK_BLOB_ALWAYS_SIMPLE;
 
       if (has_codec_state)
