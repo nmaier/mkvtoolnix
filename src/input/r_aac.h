@@ -42,7 +42,7 @@ public:
   virtual void identify();
   virtual void create_packetizer(int64_t id);
 
-  static int probe_file(mm_io_c *in, uint64_t size, int64_t probe_range, int num_headers);
+  static int probe_file(mm_io_c *in, uint64_t size, int64_t probe_range, int num_headers, bool require_zero_offset = false);
 
 protected:
   virtual void guess_adts_version();

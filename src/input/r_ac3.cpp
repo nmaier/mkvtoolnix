@@ -28,11 +28,14 @@ int
 ac3_reader_c::probe_file(mm_io_c *in,
                          uint64_t,
                          int64_t probe_size,
-                         int num_headers) {
+                         int num_headers,
+                         bool require_zero_offset) {
   try {
     in->setFilePointer(0, seek_beginning);
     skip_id3v2_tag(*in);
-    return (find_valid_headers(*in, probe_size, num_headers) != -1) ? 1 : 0;
+    int offset = find_valid_headers(*in, probe_size, num_headers);
+
+    return (require_zero_offset && (0 == offset)) || (!require_zero_offset && (0 <= offset));
 
   } catch (...) {
     return 0;

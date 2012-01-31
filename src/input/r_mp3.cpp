@@ -24,8 +24,10 @@ int
 mp3_reader_c::probe_file(mm_io_c *in,
                          uint64_t,
                          int64_t probe_range,
-                         int num_headers) {
-  return (find_valid_headers(*in, probe_range, num_headers) != -1) ? 1 : 0;
+                         int num_headers,
+                         bool require_zero_offset) {
+  int offset = find_valid_headers(*in, probe_range, num_headers);
+  return (require_zero_offset && (0 == offset)) || (!require_zero_offset && (0 <= offset));
 }
 
 mp3_reader_c::mp3_reader_c(const track_info_c &ti,

@@ -419,6 +419,17 @@ get_file_type(filelist_t &file) {
     type = FILE_TYPE_DTS;
   else if (vobbtn_reader_c::probe_file(io, size))
     type = FILE_TYPE_VOBBTN;
+
+  // Try some more of the raw audio formats before trying h.264 (which
+  // often enough simply works). However, require that the first frame
+  // starts at the beginning of the file.
+  else if (mp3_reader_c::probe_file(io, size, 32 * 1024, 1, true))
+    type = FILE_TYPE_MP3;
+  else if (ac3_reader_c::probe_file(io, size, 32 * 1024, 1, true))
+    type = FILE_TYPE_AC3;
+  else if (aac_reader_c::probe_file(io, size, 32 * 1024, 1, true))
+    type = FILE_TYPE_AAC;
+
   else if (avc_es_reader_c::probe_file(io, size))
     type = FILE_TYPE_AVC_ES;
   else {
@@ -436,6 +447,7 @@ get_file_type(filelist_t &file) {
       else if (aac_reader_c::probe_file(io, size, s_probe_sizes[i], s_probe_num_required_consecutive_packets))
         type = FILE_TYPE_AAC;
   }
+
   if (FILE_TYPE_IS_UNKNOWN == type) {
     // All text file types (subtitles).
     mm_text_io_c *text_io = NULL;
