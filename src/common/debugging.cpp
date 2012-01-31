@@ -43,7 +43,7 @@ request_debugging(const std::string &options) {
   std::vector<std::string> all_options = split(options);
 
   for (auto &one_option : all_options) {
-    std::vector<std::string> parts = split(one_option, ":", 2);
+    std::vector<std::string> parts = split(one_option, "=", 2);
     if (1 == parts.size())
       s_debugging_options[parts[0]] = "";
     else
