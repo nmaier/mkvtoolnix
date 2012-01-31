@@ -493,8 +493,7 @@ mpeg_ts_reader_c::identify() {
     if (!track->language.empty())
       verbose_info.push_back((boost::format("language:%1%") % escape(track->language)).str());
 
-    if (debugging_requested("mpeg_ts_pid"))
-      verbose_info.push_back((boost::format("ts_pid:%1%") % track->pid).str());
+    verbose_info.push_back((boost::format("ts_pid:%1%") % track->pid).str());
 
     std::string type = ES_AUDIO_TYPE == track->type ? ID_RESULT_TRACK_AUDIO
                      : ES_VIDEO_TYPE == track->type ? ID_RESULT_TRACK_VIDEO
