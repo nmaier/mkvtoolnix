@@ -108,17 +108,9 @@ set_usage() {
   usage_text += Y("  --clusters-in-meta-seek  Write meta seek data for clusters.\n");
   usage_text += Y("  --disable-lacing         Do not Use lacing.\n");
   usage_text += Y("  --enable-durations       Enable block durations for all blocks.\n");
-  usage_text += Y("  --append-to <SFID1:STID1:DFID1:DTID1,SFID2:STID2:DFID2:DTID2,...>\n"
-                  "                           A comma separated list of file and track IDs\n"
-                  "                           that controls which track of a file is\n"
-                  "                           appended to another track of the preceding\n"
-                  "                           file.\n");
-  usage_text += Y("  --append-mode <file|track>\n"
-                  "                           Selects how mkvmerge calculates timecodes when\n"
-                  "                           appending files.\n");
   usage_text += Y("  --timecode-scale <n>     Force the timecode scale factor to n.\n");
   usage_text +=   "\n";
-  usage_text += Y(" File splitting and linking (more global options):\n");
+  usage_text += Y(" File splitting, linking, appending and concatenating (more global options):\n");
   usage_text += Y("  --split <d[K,M,G]|HH:MM:SS|s>\n"
                   "                           Create a new file after d bytes (KB, MB, GB)\n"
                   "                           or after a specific time.\n");
@@ -129,6 +121,21 @@ set_usage() {
   usage_text += Y("  --link                   Link splitted files.\n");
   usage_text += Y("  --link-to-previous <SID> Link the first file to the given SID.\n");
   usage_text += Y("  --link-to-next <SID>     Link the last file to the given SID.\n");
+  usage_text += Y("  --append-to <SFID1:STID1:DFID1:DTID1,SFID2:STID2:DFID2:DTID2,...>\n"
+                  "                           A comma separated list of file and track IDs\n"
+                  "                           that controls which track of a file is\n"
+                  "                           appended to another track of the preceding\n"
+                  "                           file.\n");
+  usage_text += Y("  --append-mode <file|track>\n"
+                  "                           Selects how mkvmerge calculates timecodes when\n"
+                  "                           appending files.\n");
+  usage_text += Y("  <file1> + <file2>        Append file2 to file1.\n");
+  usage_text += Y("  <file1> +<file2>         Same as \"<file1> + <file2>\".\n");
+  usage_text += Y("  = <file>                 Don't look for and concatenate files with the same\n"
+                  "                           base name but with a different trailing number.\n");
+  usage_text += Y("  =<file>                  Same as \"= <file>\".\n");
+  usage_text += Y("  ( <file1> <file2> )      Treat file1 and file2 as if they were concatenated\n"
+                  "                           into a single big file.\n");
   usage_text +=   "\n";
   usage_text += Y(" Attachment support (more global options):\n");
   usage_text += Y("  --attachment-description <desc>\n"

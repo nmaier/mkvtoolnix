@@ -316,7 +316,7 @@ is used then
 \fBmkvmerge\fR(1)
 will use sample precision even if a video track is present\&.
 .RE
-.SS "File splitting, linking and appending (more global options)"
+.SS "File splitting, linking, appending and concatenation (more global options)"
 .PP
 \fB\-\-split\fR \fIspecification\fR
 .RS 4
@@ -493,7 +493,9 @@ $ mkvmerge \-o full\&.mkv file1\&.mkv +file2\&.mkv
 .PP
 \fB=\fR
 .RS 4
-Normally mkvmerge looks for files in the same directory as an input file that have the same base name and only differ in their running number (e\&.g\&. \*(AqVTS_01_1\&.VOB\*(Aq, \*(AqVTS_01_2\&.VOB\*(Aq, \*(AqVTS_01_3\&.VOB\*(Aq etc)\&. This option, a single \*(Aq=\*(Aq, causes mkvmerge not to look for those additional files\&.
+Normally
+\fBmkvmerge\fR(1)
+looks for files in the same directory as an input file that have the same base name and only differ in their running number (e\&.g\&. \*(AqVTS_01_1\&.VOB\*(Aq, \*(AqVTS_01_2\&.VOB\*(Aq, \*(AqVTS_01_3\&.VOB\*(Aq etc) and treats all of those files as if they were concatenated into a single big file\&. This option, a single \*(Aq=\*(Aq, causes mkvmerge not to look for those additional files\&.
 .sp
 The \*(Aq=\*(Aq can also be put in front of the next file name\&. Therefore the following two commands are equivalent:
 .sp
@@ -507,6 +509,64 @@ $ mkvmerge \-o full\&.mkv =file1\&.mkv
 .if n \{\
 .RE
 .\}
+.RE
+.PP
+\fB(\fR \fIfile1\fR \fIfile2\fR \fB)\fR
+.RS 4
+If multiple file names are contained in a pair of parenthesis then those files will be treated as if they were concatenated into a single big file consisting of the content of each of the files one after the other\&.
+.sp
+This can be used for e\&.g\&. VOB files coming from a DVD or MPEG transport streams\&. It cannot be used if each file contains its own set of headers which is usually the case with stand\-alone files like AVI or MP4\&.
+.sp
+Putting a file name into parenthesis also prevents
+\fBmkvmerge\fR(1)
+from looking for additional files with the same base name as described in
+option \fB=\fR\&. Therefore these two command lines are equivalent:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-o out\&.mkv = file\&.mkv
+$ mkvmerge \-o out\&.mkv \*(Aq(\*(Aq file\&.mkv \*(Aq)\*(Aq
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+Several things should be noted:
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 1.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  1." 4.2
+.\}
+There must be spaces both after the opening and before the closing parenthesis\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 2.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  2." 4.2
+.\}
+Every parameter between parenthesis is interpreted as a file name\&. Therefore all options applying to this logical file must be listed before the opening parenthesis\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 3.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  3." 4.2
+.\}
+Some shells treat parenthesis as special characters\&. Hence you must escape or quote them as shown in the example above\&.
+.RE
 .RE
 .SS "Attachment support (more global options)"
 .PP

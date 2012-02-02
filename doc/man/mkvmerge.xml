@@ -367,7 +367,7 @@
   </refsect2>
 
   <refsect2>
-   <title>File splitting, linking and appending (more global options)</title>
+   <title>File splitting, linking, appending and concatenation (more global options)</title>
 
    <variablelist>
     <varlistentry id="mkvmerge.description.split">
@@ -561,13 +561,13 @@ $ mkvmerge -o full.mkv file1.mkv +file2.mkv</screen>
      </listitem>
     </varlistentry>
 
-    <varlistentry>
+    <varlistentry id="mkvmerge.description.prevent_concatenation">
      <term><option>=</option></term>
      <listitem>
       <para>
-       Normally mkvmerge looks for files in the same directory as an input file that have the same base name and only differ in their running
-       number (e.g. 'VTS_01_1.VOB', 'VTS_01_2.VOB', 'VTS_01_3.VOB' etc). This option, a single '=', causes mkvmerge not to look for those
-       additional files.
+       Normally &mkvmerge; looks for files in the same directory as an input file that have the same base name and only differ in their
+       running number (e.g. 'VTS_01_1.VOB', 'VTS_01_2.VOB', 'VTS_01_3.VOB' etc) and treats all of those files as if they were concatenated
+       into a single big file. This option, a single '=', causes mkvmerge not to look for those additional files.
       </para>
 
       <para>
@@ -579,6 +579,55 @@ $ mkvmerge -o full.mkv =file1.mkv</screen>
      </listitem>
     </varlistentry>
    </variablelist>
+
+    <varlistentry id="mkvmerge.description.concatenation">
+     <term><option>(</option> <parameter>file1</parameter> <parameter>file2</parameter> <option>)</option></term>
+     <listitem>
+      <para>
+       If multiple file names are contained in a pair of parenthesis then those files will be treated as if they were concatenated into a
+       single big file consisting of the content of each of the files one after the other.
+      </para>
+
+      <para>
+       This can be used for e.g. VOB files coming from a DVD or MPEG transport streams. It cannot be used if each file contains its own set
+       of headers which is usually the case with stand-alone files like AVI or MP4.
+      </para>
+
+      <para>
+       Putting a file name into parenthesis also prevents &mkvmerge; from looking for additional files with the same base name as described
+       in <link linkend="mkvmerge.description.prevent_concatenation">option <option>=</option></link>. Therefore these two command lines are
+       equivalent:
+      </para>
+
+      <screen>$ mkvmerge -o out.mkv = file.mkv
+$ mkvmerge -o out.mkv '(' file.mkv ')'</screen>
+
+      <para>
+       Several things should be noted:
+      </para>
+
+      <orderedlist>
+       <listitem>
+        <para>
+         There must be spaces both after the opening and before the closing parenthesis.
+        </para>
+       </listitem>
+
+       <listitem>
+        <para>
+         Every parameter between parenthesis is interpreted as a file name. Therefore all options applying to this logical file must be listed before the opening parenthesis.
+        </para>
+       </listitem>
+
+       <listitem>
+        <para>
+         Some shells treat parenthesis as special characters. Hence you must escape or quote them as shown in the example above.
+        </para>
+       </listitem>
+      </orderedlist>
+     </listitem>
+    </varlistentry>
+
   </refsect2>
 
   <refsect2>
