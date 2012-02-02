@@ -1,3 +1,12 @@
+2012-02-02  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: new feature: Implemented support for treating several
+	input files as if they they had been concatenated binarily into a
+	single big input file. Snytax is "mkvmerge -o out.mkv ( in1.ts
+	in2.ts in3.ts )". This feature has already been present since
+	version 5.1.0 but never been mentioned in the ChangeLog. Support
+	for this feature in mmg is still missing.
+
 2012-01-31  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Blocks with "BlockAdditions" will no longer
