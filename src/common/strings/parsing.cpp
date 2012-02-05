@@ -283,3 +283,26 @@ parse_bool(std::string value) {
     return false;
   throw false;
 }
+
+uint64_t
+from_hex(const std::string &data) {
+  const char *s = data.c_str();
+  if (*s == 0)
+    throw std::bad_cast();
+
+  uint64_t value = 0;
+
+  while (*s) {
+    unsigned int digit = isdigit(*s)                  ? *s - '0'
+                       : (('a' <= *s) && ('f' >= *s)) ? *s - 'a' + 10
+                       : (('A' <= *s) && ('F' >= *s)) ? *s - 'A' + 10
+                       :                                16;
+    if (16 == digit)
+      throw std::bad_cast();
+
+    value = (value << 4) + digit;
+    ++s;
+  }
+
+  return value;
+}

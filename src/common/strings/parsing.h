@@ -55,4 +55,6 @@ parse_double(const std::string &s,
 
 bool parse_bool(std::string value);
 
+uint64_t from_hex(const std::string &data);
+
 #endif  // __MTX_COMMON_STRING_PARSING_H
