@@ -122,8 +122,26 @@ class SimpleTest
     @blocks[:tests] << {
       :name  => full_command_line,
       :block => lambda {
-        sys "../src/mkvmerge #{full_command_line} > #{tmp}", 0
-        hash_tmp
+        sys "../src/mkvmerge #{full_command_line} > #{tmp}", :exit_code => options[:exit_code]
+        options[:keep_tmp] ? hash_file(tmp) : hash_tmp
+      },
+    }
+  end
+
+  def test_ui_locale locale, *args
+    options = args.extract_options!
+    @blocks[:tests] << {
+      :name  => "mkvmerge UI locale #{locale}",
+      :block => lambda {
+        sys "../src/mkvmerge -o /dev/null --ui-language #{locale} data/avi/v.avi | head -n 2 | tail -n 1 > #{tmp}-#{locale}"
+        hash_file "#{tmp}-#{locale}"
+      },
+    }
+    @blocks[:tests] << {
+      :name  => "mkvinfo UI locale #{locale}",
+      :block => lambda {
+        sys "../src/mkvinfo --ui-language #{locale} data/mkv/complex.mkv | head -n 2 > #{tmp}-#{locale}"
+        hash_file "#{tmp}-#{locale}"
       },
     }
   end

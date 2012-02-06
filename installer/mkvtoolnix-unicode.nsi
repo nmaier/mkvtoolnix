@@ -55,6 +55,7 @@ Page custom showExternalLinks
 !insertmacro MUI_UNPAGE_INSTFILES
 
 # Language files
+!insertmacro MUI_LANGUAGE "Czech"
 !insertmacro MUI_LANGUAGE "Dutch"
 !insertmacro MUI_LANGUAGE "English"
 !insertmacro MUI_LANGUAGE "French"
@@ -212,6 +213,9 @@ Section "Program files" SEC01
   File "examples\matroskachapters.dtd"
   File "examples\matroskasegmentinfo.dtd"
   File "examples\matroskatags.dtd"
+  SetOutPath "$INSTDIR\locale\cs\LC_MESSAGES"
+  File "/oname=mkvtoolnix.mo" "po\cs.mo"
+  File "/oname=wxstd.mo" "wxWidgets-po\cs\LC_MESSAGES\wxstd.mo"
   SetOutPath "$INSTDIR\locale\de\LC_MESSAGES"
   File "/oname=mkvtoolnix.mo" "po\de.mo"
   File "/oname=wxstd.mo" "wxWidgets-po\de\LC_MESSAGES\wxstd.mo"
@@ -484,6 +488,10 @@ Section Uninstall
 
   Delete "$INSTDIR\examples\*.*"
   RMDir "$INSTDIR\examples"
+
+  Delete "$INSTDIR\locale\cs\LC_MESSAGES\*.*"
+  RMDir "$INSTDIR\locale\cs\LC_MESSAGES"
+  RMDir "$INSTDIR\locale\cs"
 
   Delete "$INSTDIR\locale\de\LC_MESSAGES\*.*"
   RMDir "$INSTDIR\locale\de\LC_MESSAGES"

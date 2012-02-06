@@ -26,6 +26,7 @@ Matroska video utilities.
 %{_datadir}/icons/hicolor/32x32/apps/*.png
 %{_datadir}/icons/hicolor/64x64/apps/*.png
 %{_datadir}/mime/packages/*.xml
+%{_datadir}/locale/cs/LC_MESSAGES/mkvtoolnix.mo
 %{_datadir}/locale/de/LC_MESSAGES/mkvtoolnix.mo
 %{_datadir}/locale/es/LC_MESSAGES/mkvtoolnix.mo
 %{_datadir}/locale/fr/LC_MESSAGES/mkvtoolnix.mo
