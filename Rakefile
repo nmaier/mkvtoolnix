@@ -89,6 +89,13 @@ def setup_globals
   }
 end
 
+def setup_overrides
+  [ :applications, :manpages, :guides ].each do |type|
+    value                      = c("AVAILABLE_LANGUAGES_#{type.to_s.upcase}")
+    $available_languages[type] = value.split(/\s+/) unless value.empty?
+  end
+end
+
 def define_default_task
   desc "Build everything"
 
@@ -121,6 +128,7 @@ end
 # main
 read_config
 setup_globals
+setup_overrides
 import_dependencies
 
 # Default task
