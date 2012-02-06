@@ -280,6 +280,8 @@ private:
   uint32_t m_time_scale, m_compression_algorithm;
   int m_main_dmx;
 
+  unsigned int m_audio_encoder_delay_samples;
+
   bool m_debug_chapters, m_debug_headers, m_debug_tables, m_debug_interleaving;
 
 public:
@@ -308,6 +310,7 @@ protected:
   virtual void parse_audio_header_priv_atoms(qtmp4_demuxer_cptr &dmx, unsigned char *mem, size_t size, int level);
   virtual bool parse_esds_atom(mm_mem_io_c &memio, qtmp4_demuxer_cptr &dmx, int level);
   virtual uint32_t read_esds_descr_len(mm_mem_io_c &memio);
+  virtual void parse_itunsmpb(std::string data);
 
   virtual void handle_cmov_atom(qt_atom_t parent, int level);
   virtual void handle_cmvd_atom(qt_atom_t parent, int level);
@@ -321,6 +324,9 @@ protected:
   virtual void handle_mvhd_atom(qt_atom_t parent, int level);
   virtual void handle_udta_atom(qt_atom_t parent, int level);
   virtual void handle_chpl_atom(qt_atom_t parent, int level);
+  virtual void handle_meta_atom(qt_atom_t parent, int level);
+  virtual void handle_ilst_atom(qt_atom_t parent, int level);
+  virtual void handle_4dashes_atom(qt_atom_t parent, int level);
   virtual void handle_stbl_atom(qtmp4_demuxer_cptr &new_dmx, qt_atom_t parent, int level);
   virtual void handle_stco_atom(qtmp4_demuxer_cptr &new_dmx, qt_atom_t parent, int level);
   virtual void handle_co64_atom(qtmp4_demuxer_cptr &new_dmx, qt_atom_t parent, int level);
@@ -349,12 +355,16 @@ protected:
   virtual void create_video_packetizer_standard(qtmp4_demuxer_cptr &dmx);
   virtual void create_video_packetizer_svq1(qtmp4_demuxer_cptr &dmx);
 
+  virtual void handle_audio_encoder_delay(qtmp4_demuxer_cptr &dmx);
+
   virtual std::string decode_and_verify_language(uint16_t coded_language);
   virtual void read_chapter_track();
   virtual void recode_chapter_entries(std::vector<qtmp4_chapter_entry_t> &entries);
   virtual void process_chapter_entries(int level, std::vector<qtmp4_chapter_entry_t> &entries);
 
   virtual void detect_interleaving();
+
+  virtual std::string read_string_atom(qt_atom_t atom, size_t num_skipped);
 };
 
 #endif  // __R_QTMP4_H

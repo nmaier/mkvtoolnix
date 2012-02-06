@@ -32,6 +32,7 @@
 #include "common/iso639.h"
 #include "common/matroska.h"
 #include "common/strings/formatting.h"
+#include "common/strings/parsing.h"
 #include "input/r_qtmp4.h"
 #include "merge/output_control.h"
 #include "output/p_aac.h"
@@ -110,6 +111,7 @@ qtmp4_reader_c::qtmp4_reader_c(const track_info_c &ti,
   , m_time_scale(1)
   , m_compression_algorithm(0)
   , m_main_dmx(-1)
+  , m_audio_encoder_delay_samples(0)
   , m_debug_chapters(    debugging_requested("qtmp4") || debugging_requested("qtmp4_full") || debugging_requested("qtmp4_chapters"))
   , m_debug_headers(     debugging_requested("qtmp4") || debugging_requested("qtmp4_full") || debugging_requested("qtmp4_headers"))
   , m_debug_tables(                                      debugging_requested("qtmp4_full") || debugging_requested("qtmp4_tables"))
@@ -342,6 +344,15 @@ qtmp4_reader_c::calculate_timecodes() {
 
   for (auto &dmx : m_demuxers)
     dmx->build_index();
+}
+
+void
+qtmp4_reader_c::handle_audio_encoder_delay(qtmp4_demuxer_cptr &dmx) {
+  if ((0 == m_audio_encoder_delay_samples) || (0 == dmx->a_samplerate) || (-1 == dmx->ptzr))
+    return;
+
+  PTZR(dmx->ptzr)->m_ti.m_tcsync.displacement -= (m_audio_encoder_delay_samples * 1000000000ll) / dmx->a_samplerate;
+  m_audio_encoder_delay_samples                = 0;
 }
 
 void
@@ -735,6 +746,9 @@ qtmp4_reader_c::handle_udta_atom(qt_atom_t parent,
     if (FOURCC('c', 'h', 'p', 'l') == atom.fourcc)
       handle_chpl_atom(atom.to_parent(), level + 1);
 
+    else if (FOURCC('m', 'e', 't', 'a') == atom.fourcc)
+      handle_meta_atom(atom.to_parent(), level + 1);
+
     skip_atom();
     parent.size -= atom.size;
   }
@@ -770,6 +784,94 @@ qtmp4_reader_c::handle_chpl_atom(qt_atom_t,
 
   recode_chapter_entries(entries);
   process_chapter_entries(level, entries);
+}
+
+void
+qtmp4_reader_c::handle_meta_atom(qt_atom_t parent,
+                                 int level) {
+  m_in->skip(1 + 3);        // version & flags
+
+  while (8 <= parent.size) {
+    qt_atom_t atom = read_atom();
+    print_basic_atom_info();
+
+    if (FOURCC('i', 'l', 's', 't') == atom.fourcc)
+      handle_ilst_atom(atom.to_parent(), level + 1);
+
+    skip_atom();
+    parent.size -= atom.size;
+  }
+}
+
+void
+qtmp4_reader_c::handle_ilst_atom(qt_atom_t parent,
+                                 int level) {
+  while (8 <= parent.size) {
+    qt_atom_t atom = read_atom();
+    print_basic_atom_info();
+
+    if (FOURCC('-', '-', '-', '-') == atom.fourcc)
+      handle_4dashes_atom(atom.to_parent(), level + 1);
+
+    skip_atom();
+    parent.size -= atom.size;
+  }
+}
+
+std::string
+qtmp4_reader_c::read_string_atom(qt_atom_t atom,
+                                 size_t num_skipped) {
+  if ((num_skipped + atom.hsize) > atom.size)
+    return "";
+
+  std::string string;
+  size_t length = atom.size - atom.hsize - num_skipped;
+
+  m_in->skip(num_skipped);
+  m_in->read(string, length);
+
+  return string;
+}
+
+void
+qtmp4_reader_c::handle_4dashes_atom(qt_atom_t parent,
+                                    int level) {
+  std::string name, mean, data;
+
+  while (8 <= parent.size) {
+    qt_atom_t atom = read_atom();
+    print_basic_atom_info();
+
+    if (FOURCC('n', 'a', 'm', 'e') == atom.fourcc)
+      name = read_string_atom(atom, 4);
+
+    else if (FOURCC('m', 'e', 'a', 'n') == atom.fourcc)
+      mean = read_string_atom(atom, 4);
+
+    else if (FOURCC('d', 'a', 't', 'a') == atom.fourcc)
+      data = read_string_atom(atom, 8);
+
+    skip_atom();
+    parent.size -= atom.size;
+  }
+
+  mxdebug_if(m_debug_headers, boost::format("'----' content: name=%1% mean=%2% data=%3%\n") % name % mean % data);
+
+  if (name == "iTunSMPB")
+    parse_itunsmpb(data);
+}
+
+void
+qtmp4_reader_c::parse_itunsmpb(std::string data) {
+  data = boost::regex_replace(data, boost::regex("[^\\da-fA-F]+", boost::regex::perl), "");
+
+  if (16 > data.length())
+    return;
+
+  try {
+    m_audio_encoder_delay_samples = from_hex(data.substr(8, 8));
+  } catch (std::bad_cast &) {
+  }
 }
 
 void
@@ -1593,6 +1695,8 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
 
     else
       create_audio_packetizer_passthrough(dmx);
+
+    handle_audio_encoder_delay(dmx);
   }
 
   if (packetizer_ok && (-1 == m_main_dmx))

@@ -1,3 +1,9 @@
+2012-02-06  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: new feature: mkvmerge will parse and apply the audio
+	encoder delay in MP4 files that contain said information in the
+	format that iTunes writes it. Fix for bug 715.
+
 2012-02-02  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: new feature: Implemented support for treating several
