@@ -3430,8 +3430,8 @@ msgid "Extracting track %1% with the CodecID '%2%' to the file '%3%'. Container 
 msgstr "Extrahování stopy %1% s ID kodeku '%2%' do souboru '%3%'. Formát kontejneru: %4%\n"
 
 #: src/extract/tracks.cpp:96
-#, boost-format
-msgid "Extraction of track number %1% with the CodecID '%2%' is not supported.\n"
+#, fuzzy, boost-format
+msgid "Extraction of track ID %1% with the CodecID '%2%' is not supported.\n"
 msgstr "Extraction of track number %1% with the CodecID '%2%' is not supported.\n"
 
 #: src/input/r_flac.h:52
@@ -6710,7 +6710,7 @@ msgstr ""
 msgid "The line %1% of the timecode file '%2%' does not contain a valid floating point number.\n"
 msgstr ""
 
-#: src/common/translation.cpp:297
+#: src/common/translation.cpp:298
 msgid "The locale could not be set properly. Check the LANG, LC_ALL and LC_MESSAGES environment variables.\n"
 msgstr ""
 
@@ -7037,14 +7037,14 @@ msgstr "Název pro celý film."
 msgid "The track %1% from file no. %2% ('%3%') is to be appended more than once. The argument for '--append-to' was invalid.\n"
 msgstr ""
 
+#: src/extract/tracks.cpp:92
+#, boost-format
+msgid "The track ID %1% does not have a valid CodecID.\n"
+msgstr ""
+
 #: src/merge/output_control.cpp:803
 #, boost-format
 msgid "The track headers could not be rendered correctly. %1%\n"
-msgstr ""
-
-#: src/extract/tracks.cpp:92
-#, boost-format
-msgid "The track number %1% does not have a valid CodecID.\n"
 msgstr ""
 
 #: src/merge/output_control.cpp:1021

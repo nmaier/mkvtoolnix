@@ -3434,8 +3434,8 @@ msgid "Extracting track %1% with the CodecID '%2%' to the file '%3%'. Container 
 msgstr "Извлечение дорожки %1% с CodecID '%2%' в файл '%3%'. Формат контейнера: %4%\n"
 
 #: src/extract/tracks.cpp:96
-#, boost-format
-msgid "Extraction of track number %1% with the CodecID '%2%' is not supported.\n"
+#, fuzzy, boost-format
+msgid "Extraction of track ID %1% with the CodecID '%2%' is not supported.\n"
 msgstr "Извлечение дорожки номер %1% с CodecID '%2%' не поддерживается.\n"
 
 #: src/input/r_flac.h:52
@@ -4735,7 +4735,7 @@ msgstr "Уникальный ID следующего сегмента"
 msgid "No %1% specified in '--%2% %3%'.\n"
 msgstr "Не определено %1%, в '--%2% %3%'.\n"
 
-#: src/input/r_qtmp4.cpp:1429
+#: src/input/r_qtmp4.cpp:1531
 msgid "No AC3 header found in first frame; track will be skipped.\n"
 msgstr "Не найден заголовок AC3 в первом кадре; дорожка будет пропущена.\n"
 
@@ -5210,135 +5210,135 @@ msgstr "Уточняю возможности mkvmerge"
 msgid "QuickTime audio/video files"
 msgstr "Файлы QuickTime Audio/Video"
 
-#: src/input/r_qtmp4.h:290
+#: src/input/r_qtmp4.h:292
 msgid "QuickTime/MP4"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:462
+#: src/input/r_qtmp4.cpp:473
 #, boost-format
 msgid "Quicktime/MP4 reader: '%1%' atom is too small. Expected size: >= %2%. Actual size: %3%.\n"
 msgstr "Считыватель Quicktime/MP4: атом '%1%' слишком мал. Ожидаемый размер: >= %2%. Фактический размер: %3%.\n"
 
-#: src/input/r_qtmp4.cpp:1923
+#: src/input/r_qtmp4.cpp:2027
 msgid "Quicktime/MP4 reader: Constant samplesize & variable duration not yet supported. Contact the author if you have such a sample file.\n"
 msgstr "Считыватель Quicktime/MP4: постоянный размер сэмпла и переменная продолжительность пока не поддерживается. Если у вас есть образец такого файла, свяжитесь с автором.\n"
 
-#: src/input/r_qtmp4.cpp:1287
+#: src/input/r_qtmp4.cpp:1389
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read chunk number %1%/%2% with size %3% from position %4%. Aborting.\n"
 msgstr "Считыватель Quicktime/MP4: Не могу прочитать участок %1%/%2% с размером %3% из позиции %4%. Прерывание.\n"
 
-#: src/input/r_qtmp4.cpp:997
-#: src/input/r_qtmp4.cpp:1010
+#: src/input/r_qtmp4.cpp:1099
+#: src/input/r_qtmp4.cpp:1112
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the extended sound description atom for track ID %1%.\n"
 msgstr "Считыватель Quicktime/MP4: Не могу прочитать атом расширенного описания звука для дорожки ID %1%.\n"
 
-#: src/input/r_qtmp4.cpp:971
+#: src/input/r_qtmp4.cpp:1073
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the sound description atom for track ID %1%.\n"
 msgstr "Считыватель Quicktime/MP4: Не могу прочитать атом описания звука для дорожки ID %1%.\n"
 
-#: src/input/r_qtmp4.cpp:965
+#: src/input/r_qtmp4.cpp:1067
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the stream description atom for track ID %1%.\n"
 msgstr "Считыватель Quicktime/MP4: Не могу прочитать атом описания потока для дорожки ID %1%.\n"
 
-#: src/input/r_qtmp4.cpp:1047
+#: src/input/r_qtmp4.cpp:1149
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the video description atom for track ID %1%.\n"
 msgstr "Считыватель Quicktime/MP4: Не могу прочитать атом описания видео для дорожки ID %1%.\n"
 
-#: src/input/r_qtmp4.cpp:212
+#: src/input/r_qtmp4.cpp:214
 msgid "Quicktime/MP4 reader: Have not found any header atoms.\n"
 msgstr "Считыватель Quicktime/MP4: Не найдено ни одного заголовочного атома.\n"
 
-#: src/input/r_qtmp4.cpp:214
+#: src/input/r_qtmp4.cpp:216
 msgid "Quicktime/MP4 reader: Have not found the 'mdat' atom. No movie data found.\n"
 msgstr "Считыватель Quicktime/MP4: Не найден атом 'mdat'. Данные видео не найдены.\n"
 
-#: src/input/r_qtmp4.cpp:161
+#: src/input/r_qtmp4.cpp:163
 #, boost-format
 msgid "Quicktime/MP4 reader: Invalid chunk size %1% at %2%.\n"
 msgstr "Считыватель Quicktime/MP4: недопустимый размер участка %1% в %2%.\n"
 
-#: src/input/r_qtmp4.cpp:288
+#: src/input/r_qtmp4.cpp:290
 #, boost-format
 msgid "Quicktime/MP4 reader: MPEG4 part 10/AVC track %1% is missing its decoder config. Skipping this track.\n"
 msgstr "Считыватель Quicktime/MP4: дорожка MPEG4 part 10/AVC %1% не имеет конфигурации декодера. Пропускаю эту дорожку.\n"
 
-#: src/input/r_qtmp4.cpp:281
+#: src/input/r_qtmp4.cpp:283
 #, boost-format
 msgid "Quicktime/MP4 reader: MPEG4 track %1% is missing the esds atom/the decoder config. Skipping this track.\n"
 msgstr "Считыватель Quicktime/MP4: дорожка MPEG4 %1% не имеет атома esds/конфигурации декодера. Пропускаю эту дорожку.\n"
 
-#: src/input/r_qtmp4.cpp:633
+#: src/input/r_qtmp4.cpp:644
 #, boost-format
 msgid "Quicktime/MP4 reader: The 'media header' atom ('mdhd') uses the unsupported version %1%.\n"
 msgstr "Считыватель Quicktime/MP4: атом 'медиазаголовок' ('mdhd') использует неподдерживаемую версию %1%.\n"
 
-#: src/input/r_qtmp4.cpp:958
+#: src/input/r_qtmp4.cpp:1060
 #, boost-format
 msgid "Quicktime/MP4 reader: The 'size' field is too small in the stream description atom for track ID %1%.\n"
 msgstr "Считыватель Quicktime/MP4: поле 'размер' слишком мало в атоме описания потока для дорожки ID %1%.\n"
 
-#: src/input/r_qtmp4.cpp:638
+#: src/input/r_qtmp4.cpp:649
 msgid "Quicktime/MP4 reader: The 'time scale' parameter was 0. This is not supported.\n"
 msgstr "Считыватель Quicktime/MP4: параметр 'масштаб времени' установлен в 0. Не поддерживается.\n"
 
-#: src/input/r_qtmp4.cpp:249
+#: src/input/r_qtmp4.cpp:251
 #, boost-format
 msgid "Quicktime/MP4 reader: The AAC track %1% is missing the esds atom/the decoder config. Skipping this track.\n"
 msgstr "Считыватель Quicktime/MP4: Дорожка AAC %1% не имеет атома esds/конфигурации декодера. Пропускаю эту дорожку.\n"
 
-#: src/input/r_qtmp4.cpp:243
+#: src/input/r_qtmp4.cpp:245
 #, boost-format
 msgid "Quicktime/MP4 reader: The audio track %1% is using an unsupported 'object type id' of %2% in the 'esds' atom. Skipping this track.\n"
 msgstr "Считыватель Quicktime/MP4: Аудиодорожка %1% использует неподдерживаемый 'id типа объекта' %2% в атоме 'esds'. Пропускаю эту дорожку.\n"
 
-#: src/input/r_qtmp4.cpp:261
+#: src/input/r_qtmp4.cpp:263
 #, boost-format
 msgid "Quicktime/MP4 reader: The video track %1% is missing the ESDS atom. Skipping this track.\n"
 msgstr "Считыватель Quicktime/MP4: Видеодорожка %1% не имеет атома ESDS. Пропускаю эту дорожку.\n"
 
-#: src/input/r_qtmp4.cpp:492
+#: src/input/r_qtmp4.cpp:503
 #, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers with an unknown or unsupported compression algorithm '%1%%2%%3%%4%'. Aborting.\n"
 msgstr "Считыватель Quicktime/MP4: Этот файл использует неизвестный или неподдерживаемый алгоритм сжатия заголовков '%1%%2%%3%%4%'. Отмена.\n"
 
-#: src/input/r_qtmp4.cpp:525
+#: src/input/r_qtmp4.cpp:536
 #, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers, but the expected uncompressed size (%1%) was not what is available after uncompressing (%2%).\n"
 msgstr "Считыватель Quicktime/MP4: Этот файл использует сжатые заголовки, но ожидаемый несжатый размер (%1%) не совпадает с полученным после распаковки (%2%).\n"
 
-#: src/input/r_qtmp4.cpp:516
+#: src/input/r_qtmp4.cpp:527
 #, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers, but the zlib library could not be initialized. Error code from zlib: %1%. Aborting.\n"
 msgstr "Считыватель Quicktime/MP4: Этот файл использует сжатые заголовки, но библиотека zlib не может быть инициализирована. Код ошибки zlib: %1%. Отмена.\n"
 
-#: src/input/r_qtmp4.cpp:521
+#: src/input/r_qtmp4.cpp:532
 #, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers, but they could not be uncompressed. Error code from zlib: %1%. Aborting.\n"
 msgstr "Считыватель Quicktime/MP4: этот файл использует сжатые заголовки, но они не могут быть распакованы. Код ошибки zlib: %1%. Отмена.\n"
 
-#: src/input/r_qtmp4.cpp:300
+#: src/input/r_qtmp4.cpp:302
 #, boost-format
 msgid "Quicktime/MP4 reader: Track %1% has an unknown type.\n"
 msgstr "Считыватель Quicktime/MP4: Тип дорожки %1% неизвестен.\n"
 
-#: src/input/r_qtmp4.cpp:256
-#: src/input/r_qtmp4.cpp:295
+#: src/input/r_qtmp4.cpp:258
+#: src/input/r_qtmp4.cpp:297
 #, boost-format
 msgid "Quicktime/MP4 reader: Track %1% is missing some data. Broken header atoms?\n"
 msgstr "Считыватель Quicktime/MP4: в дорожке %1% не хватает некоторых данных. Повреждены атомы заголовка?\n"
 
-#: src/input/r_qtmp4.cpp:979
-#: src/input/r_qtmp4.cpp:1053
+#: src/input/r_qtmp4.cpp:1081
+#: src/input/r_qtmp4.cpp:1155
 #, boost-format
 msgid "Quicktime/MP4 reader: Track ID %1% has more than one FourCC. Only using the first one (%|2$.4s|) and not this one (%|3$.4s|).\n"
 msgstr "Считыватель Quicktime/MP4: Дорожка ID %1% имеет более одного FourCC. Использую только первый (%|2$.4s|), а не этот (%|3$.4s|).\n"
 
-#: src/input/r_qtmp4.cpp:235
+#: src/input/r_qtmp4.cpp:237
 #, boost-format
 msgid "Quicktime/MP4 reader: Unknown/unsupported FourCC '%|1$.4s|' for track %2%.\n"
 msgstr "Считыватель Quicktime/MP4: неизвестный/неподдерживаемый FourCC '%|1$.4s|' для дорожки %2%.\n"
@@ -6199,7 +6199,7 @@ msgstr ".idx файл не содержит строку 'id: ...' для ука
 msgid "The AAC profiles are different: %1% and %2%"
 msgstr "AAC профили отличаются: %1% и %2%"
 
-#: src/input/r_qtmp4.cpp:1478
+#: src/input/r_qtmp4.cpp:1580
 msgid "The AVC video track is missing the 'CTTS' atom for frame timecode offsets. However, AVC/h.264 allows frames to have more than the traditional one (for P frames) or two (for B frames) references to other frames. The timecodes for such frames will be out-of-order, and the 'CTTS' atom is needed for getting the timecodes right. As it is missing the timecodes for this track might be wrong. You should watch the resulting file and make sure that it looks like you expected it to.\n"
 msgstr "В дорожке видео AVC отсутствует атом 'CTTS' для смещений тайм-кодов. Однако AVC/H.264 позволяет кадров иметь больше чем традиционные для предыдущих форматов одну (для P-кадров) или две (для B-кадров) ссылки на другие кадры. Тайм-коды для таких кадров могут быть неупорядочены, и атом 'CTTS' необходим для правильного упорядочивания тайм-кодов. Так как его нет, тайм-коды для этой дорожки могут быть неправильными. Просмотрите получившийся файл и убедитесь что он выглядит так, как полагается.\n"
 
@@ -6251,7 +6251,7 @@ msgstr "GUI настроен на использование исполняем�
 msgid "The Kate identifaction header could not be parsed (%1%).\n"
 msgstr "Идентификационный заголовок Kate не может быть обработан (%1%).\n"
 
-#: src/input/r_qtmp4.cpp:846
+#: src/input/r_qtmp4.cpp:948
 #, boost-format
 msgid "The MP4 file '%1%' contains chapters whose format was not recognized. This is often the case if the chapters are not encoded in UTF-8. Use the '--chapter-charset' option in order to specify the charset to use.\n"
 msgstr ""
@@ -6770,7 +6770,7 @@ msgstr "Код языка '%1%' не является допустимым ко�
 msgid "The line %1% of the timecode file '%2%' does not contain a valid floating point number.\n"
 msgstr "Строка %1% тайм-кода файла '%2%' не содержит правильное число с плавающей запятой.\n"
 
-#: src/common/translation.cpp:297
+#: src/common/translation.cpp:298
 msgid "The locale could not be set properly. Check the LANG, LC_ALL and LC_MESSAGES environment variables.\n"
 msgstr "Язык не может быть установлен правильно. Проверьте переменные окружения LANG, LC_ALL и LC_MESSAGES.\n"
 
@@ -7122,15 +7122,15 @@ msgstr "Название для всего фильма."
 msgid "The track %1% from file no. %2% ('%3%') is to be appended more than once. The argument for '--append-to' was invalid.\n"
 msgstr "Дорожка %1% файла номер %2% (%3%) присоеденяется более чем один раз. Параметр для '--append-to' неверен.\n"
 
+#: src/extract/tracks.cpp:92
+#, fuzzy, boost-format
+msgid "The track ID %1% does not have a valid CodecID.\n"
+msgstr "Дорожка номер %1% не имеет правильного CodecID.\n"
+
 #: src/merge/output_control.cpp:803
 #, boost-format
 msgid "The track headers could not be rendered correctly. %1%\n"
 msgstr "Заголовки дорожки не могут быть обработаны правильно. %1%\n"
-
-#: src/extract/tracks.cpp:92
-#, boost-format
-msgid "The track number %1% does not have a valid CodecID.\n"
-msgstr "Дорожка номер %1% не имеет правильного CodecID.\n"
 
 #: src/merge/output_control.cpp:1021
 #, boost-format
@@ -7269,7 +7269,7 @@ msgstr ""
 "Вы можете позволить редактору заголовка добавить его\n"
 "в файл."
 
-#: src/input/r_qtmp4.cpp:336
+#: src/input/r_qtmp4.cpp:338
 #, boost-format
 msgid "This file contains at least one frame with a negative timecode. All timecodes will be adjusted by %1% so that none is negative anymore.\n"
 msgstr "Этот файл содержит по крайней мере один кадр с отрицательным тайм-кодом. Все тайм-коды будут сдвинуты на %1% так, чтобы отрицательных значений не было.\n"
@@ -7450,7 +7450,7 @@ msgstr "Дорожка %1% с CodecID '%2%' не имеет элемента \"d
 msgid "Track %1%: %2%, codec ID: %3%%4%%5%%6%\n"
 msgstr "Дорожка %1%: %2%, Codec ID: %3%%4%%5%%6%\n"
 
-#: src/input/r_qtmp4.cpp:432
+#: src/input/r_qtmp4.cpp:443
 #, boost-format
 msgid "Track %1%: AAC found, but decoder config data has length %2%.\n"
 msgstr "Дорожка %1%: обнаружен AAC, но данные конфигурации декодера имеют длину %2%.\n"
@@ -7465,7 +7465,7 @@ msgstr "Дорожка %1%: NAL слишком велик\n"
 msgid "Track %1%: Subtitle entry number %2% is missing its duration. Assuming a duration of 1s.\n"
 msgstr "Дорожка %1%: для элемента субтитров номер %2% не указана длительность. Будет установлена длительность 1s.\n"
 
-#: src/input/r_qtmp4.cpp:435
+#: src/input/r_qtmp4.cpp:446
 #, boost-format
 msgid "Track %1%: The AAC information could not be parsed.\n"
 msgstr "Дорожка %1%: Информация AAC не может быть проанализирована.\n"

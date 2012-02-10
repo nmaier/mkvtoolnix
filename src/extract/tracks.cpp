@@ -89,11 +89,11 @@ create_extractors(KaxTracks &kax_tracks,
     // Let's find the codec ID and create an extractor for it.
     std::string codec_id = kt_get_codec_id(track);
     if (codec_id.empty())
-      mxerror(boost::format(Y("The track number %1% does not have a valid CodecID.\n")) % track_id);
+      mxerror(boost::format(Y("The track ID %1% does not have a valid CodecID.\n")) % track_id);
 
     extractor = xtr_base_c::create_extractor(codec_id, track_id, *tspec);
     if (NULL == extractor)
-      mxerror(boost::format(Y("Extraction of track number %1% with the CodecID '%2%' is not supported.\n")) % track_id % codec_id);
+      mxerror(boost::format(Y("Extraction of track ID %1% with the CodecID '%2%' is not supported.\n")) % track_id % codec_id);
 
     extractor->m_track_num = tnum;
 
