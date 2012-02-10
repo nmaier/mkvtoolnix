@@ -68,7 +68,7 @@ create_extractors(KaxTracks &kax_tracks,
     xtr_base_c *extractor = NULL;
     size_t k;
     for (k = 0; k < extractors.size(); k++)
-      if (extractors[k]->m_tid == tnum) {
+      if (extractors[k]->m_track_num == tnum) {
         mxwarn(boost::format(Y("More than one track with the track number %1% found.\n")) % tnum);
         extractor = extractors[k];
         break;
