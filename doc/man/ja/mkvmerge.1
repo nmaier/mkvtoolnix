@@ -764,33 +764,10 @@ Matroska(TM)ファイルは再生時の画像スケールを決定するため�
 .PP
 \fB@\fR\fIoptions\-file\fR
 .RS 4
-
-\fIoptions\-file\fRで指定されたファイルから追加のコマンドラインオプションを読み込みます。行で最初の空白文字でない文字がハッシュマーク(\*(Aq#\*(Aq)である行はコメントとして扱われ、無視されます。行頭、及び行末の空白文字は取り除かれます。各行には一つずつしかオプションを指定できません。
-.sp
-エスケープすることのできる文字もあります。例えば、コメントではない行を\*(Aq#\*(Aqで始める必要のある場合です。そのルールは、エスケープ文字についてのセクションで説明されています。
-.sp
-バックスラッシュ（Windows上の日本語フォントでは\e記号）は、必ずエスケープされなければなりません。ハッシュマーク（#）は、それがコメントの始まりでなければエスケープされなければなりません。
-.sp
-\*(Aq\fBmkvmerge \-o "my file\&.mkv" \-A "a movie\&.avi" sound\&.ogg\fR\*(Aqというコマンドラインと同じことは、次のようなオプションファイルによって指定できます。
-.sp
-.if n \{\
-.RS 4
-.\}
-.nf
-# Windowsでは、"my file\&.mkv" に書き込む。
-\-o
-c:\e\eMatroska\e\emy file\&.mkv
-# タイトルを\*(Aq#65\*(Aqに設定する。
-\-\-title
-\eh65
-# "a movie\&.avi" からビデオトラックのみを取り出す。
-\-A
-a movie\&.avi
-sound\&.ogg     
-.fi
-.if n \{\
-.RE
-.\}
+Reads additional command line arguments from the file
+\fIoptions\-file\fR\&. See the section about
+option files
+for further information\&.
 .RE
 .PP
 \fB\-\-capabilities\fR
@@ -1329,6 +1306,40 @@ Windowsでは、\fBcmd\&.exe\fRWindowsシェルプログラムの実装方式の
 
 \fB\-\-output\-charset\fRはコンソールに出力される文字列の文字コード及び、\fB\-\-redirect\-output\fRオプションによりファイルに出力がリダイレクトされている場合、そのファイルの文字列の文字コードを指定します。
 .RE
+.SH "OPTION FILES"
+.PP
+An option file is a file
+\fBmkvmerge\fR(1)
+can read additional command line arguments from\&. This can be used in order to circumvent certain limitations of the shell or the operating system when executing external programs like a limited command line length\&.
+.PP
+There are several rules regarding option files\&. Lines whose first non\-whitespace character is a hash mark (\*(Aq#\*(Aq) are treated as comments and ignored\&. White spaces at the start and end of a line will be stripped\&. Each line must contain exactly one option\&.
+.PP
+A line not containing anything is also ignored\&. An empty argument is represented by the line \*(Aq#EMPTY#\*(Aq\&.
+.PP
+エスケープすることのできる文字もあります。例えば、コメントではない行を\*(Aq#\*(Aqで始める必要のある場合です。そのルールは、エスケープ文字についてのセクションで説明されています。
+.PP
+バックスラッシュ（Windows上の日本語フォントでは\e記号）は、必ずエスケープされなければなりません。ハッシュマーク（#）は、それがコメントの始まりでなければエスケープされなければなりません。
+.PP
+\*(Aq\fBmkvmerge \-o "my file\&.mkv" \-A "a movie\&.avi" sound\&.ogg\fR\*(Aqというコマンドラインと同じことは、次のようなオプションファイルによって指定できます。
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+# Windowsでは、"my file\&.mkv" に書き込む。
+\-o
+c:\e\eMatroska\e\emy file\&.mkv
+# タイトルを\*(Aq#65\*(Aqに設定する。
+\-\-title
+\eh65
+# "a movie\&.avi" からビデオトラックのみを取り出す。
+\-A
+a movie\&.avi
+sound\&.ogg     
+.fi
+.if n \{\
+.RE
+.\}
 .SH "テキスト中の特殊文字をエスケープする"
 .PP
 特殊文字をエスケープしなければならない、あるいはすべき場所が少しだけあります。エスケープのルールは単純です：エスケープする必要のある各文字を、バックスラッシュ（Windows上の日本語フォントでは\e記号）の後ろに違う文字が1つついたものと入れ替えます。

@@ -1348,35 +1348,9 @@ $ mkvmerge -o out.mkv '(' file.mkv ')'</screen>
      <term><option>@</option><parameter>options-file</parameter></term>
      <listitem>
       <para>
-       Reads additional command line arguments from the file <parameter>options-file</parameter>.  Lines whose first non-whitespace character
-       is a hash mark ('<literal>#</literal>') are treated as comments and ignored. White spaces at the start and end of a line will be
-       stripped. Each line must contain exactly one option.
+       Reads additional command line arguments from the file <parameter>options-file</parameter>. See the section about <link
+       linkend="mkvmerge.option_files">option files</link> for further information.
       </para>
-
-      <para>
-       Several chars can be escaped, e.g. if you need to start a non-comment line with '#'. The rules are described in <link
-       linkend="mkvmerge.escaping">the section about escaping text</link>.
-      </para>
-
-      <para>
-       Note that backslashes must always be escaped. Hash marks ('#') must be escaped if they should not start a comment.
-      </para>
-
-      <para>
-       The command line '<command>mkvmerge -o "my file.mkv" -A "a movie.avi" sound.ogg</command>' could be converted into the following
-       option file:
-      </para>
-
-      <programlisting># Write to the file "c:\Matroska\my file.mkv" on Windows.
--o
-c:\\Matroska\\my file.mkv
-# Set the title to '#65'.
---title
-\h65
-# Only take the video from "a movie.avi".
--A
-a movie.avi
-sound.ogg</programlisting>
      </listitem>
     </varlistentry>
 
@@ -1810,6 +1784,51 @@ Track ID 2: audio (A_MPEG/L3)</screen>
     </para>
    </listitem>
   </itemizedlist>
+ </refsect1>
+
+ <refsect1 id="mkvmerge.option_files">
+  <title>Option files</title>
+
+  <para>
+   An option file is a file &mkvmerge; can read additional command line arguments from. This can be used in order to circumvent certain
+   limitations of the shell or the operating system when executing external programs like a limited command line length.
+  </para>
+
+  <para>
+   There are several rules regarding option files. Lines whose first non-whitespace character is a hash mark ('<literal>#</literal>') are
+   treated as comments and ignored. White spaces at the start and end of a line will be stripped. Each line must contain exactly one
+   option.
+  </para>
+
+  <para>
+   A line not containing anything is also ignored. An empty argument is represented by the line '<literal>#EMPTY#</literal>'.
+  </para>
+
+  <para>
+   Several chars can be escaped, e.g. if you need to start a non-comment line with '#'. The rules are described in <link
+   linkend="mkvmerge.escaping">the section about escaping text</link>.
+  </para>
+
+  <para>
+   Note that backslashes must always be escaped. Hash marks ('#') must be escaped if they should not start a comment.
+  </para>
+
+  <para>
+   The command line '<command>mkvmerge -o "my file.mkv" -A "a movie.avi" sound.ogg</command>' could be converted into the following
+   option file:
+  </para>
+
+  <programlisting># Write to the file "c:\Matroska\my file.mkv" on Windows.
+-o
+c:\\Matroska\\my file.mkv
+# Set the title to '#65'.
+--title
+\h65
+# Only take the video from "a movie.avi".
+-A
+a movie.avi
+sound.ogg</programlisting>
+
  </refsect1>
 
  <refsect1 id="mkvmerge.escaping">

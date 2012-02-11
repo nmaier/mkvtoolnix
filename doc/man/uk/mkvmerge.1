@@ -1161,34 +1161,10 @@ to output a list of available translations\&.
 .PP
 \fB@\fR\fIoptions\-file\fR
 .RS 4
-Зчитує додаткові параметри командного рядка з файла
-\fIoptions\-file\fR\&. Рядки, які містять зразу після символу переносу рядка мітку хеша (\*(Aq#\*(Aq) сприймаються як коментарі і ігноруються\&. Символи переносу на початку і в кінці рядка опускаються\&. Кожний рядок має містити лише один параметр\&.
-.sp
-Several chars can be escaped, e\&.g\&. if you need to start a non\-comment line with \*(Aq#\*(Aq\&. The rules are described in
-the section about escaping text\&.
-.sp
-Note that backslashes must always be escaped\&. Hash marks (\*(Aq#\*(Aq) must be escaped if they should not start a comment\&.
-.sp
-The command line \*(Aq\fBmkvmerge \-o "my file\&.mkv" \-A "a movie\&.avi" sound\&.ogg\fR\*(Aq could be converted into the following option file:
-.sp
-.if n \{\
-.RS 4
-.\}
-.nf
-# Write to the file "c:\eMatroska\emy file\&.mkv" on Windows\&.
-\-o
-c:\e\eMatroska\e\emy file\&.mkv
-# Set the title to \*(Aq#65\*(Aq\&.
-\-\-title
-\eh65
-# Only take the video from "a movie\&.avi"\&.
-\-A
-a movie\&.avi
-sound\&.ogg
-.fi
-.if n \{\
-.RE
-.\}
+Reads additional command line arguments from the file
+\fIoptions\-file\fR\&. See the section about
+option files
+for further information\&.
 .RE
 .PP
 \fB\-\-capabilities\fR
@@ -1857,6 +1833,41 @@ for all strings written to the console or to a file if the output has been redir
 \fB\-\-redirect\-output\fR
 option\&.
 .RE
+.SH "Option files"
+.PP
+An option file is a file
+\fBmkvmerge\fR(1)
+can read additional command line arguments from\&. This can be used in order to circumvent certain limitations of the shell or the operating system when executing external programs like a limited command line length\&.
+.PP
+There are several rules regarding option files\&. Lines whose first non\-whitespace character is a hash mark (\*(Aq#\*(Aq) are treated as comments and ignored\&. White spaces at the start and end of a line will be stripped\&. Each line must contain exactly one option\&.
+.PP
+A line not containing anything is also ignored\&. An empty argument is represented by the line \*(Aq#EMPTY#\*(Aq\&.
+.PP
+Several chars can be escaped, e\&.g\&. if you need to start a non\-comment line with \*(Aq#\*(Aq\&. The rules are described in
+the section about escaping text\&.
+.PP
+Note that backslashes must always be escaped\&. Hash marks (\*(Aq#\*(Aq) must be escaped if they should not start a comment\&.
+.PP
+The command line \*(Aq\fBmkvmerge \-o "my file\&.mkv" \-A "a movie\&.avi" sound\&.ogg\fR\*(Aq could be converted into the following option file:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+# Write to the file "c:\eMatroska\emy file\&.mkv" on Windows\&.
+\-o
+c:\e\eMatroska\e\emy file\&.mkv
+# Set the title to \*(Aq#65\*(Aq\&.
+\-\-title
+\eh65
+# Only take the video from "a movie\&.avi"\&.
+\-A
+a movie\&.avi
+sound\&.ogg
+.fi
+.if n \{\
+.RE
+.\}
 .SH "ВИОКРЕМЛЕННЯ СПЕЦІАЛЬНИХ СИМВОЛІВ У ТЕКСТІ"
 .PP
 Є декілька місць, де спеціальні символи у тексті мають або повинні бути виокремлені\&. Правила для виокремлювання прості: кожен символ, що потребує виокремлення, замінюється на зворотній слеш з деяким символом, що йде після нього\&.
