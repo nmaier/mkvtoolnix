@@ -55,19 +55,33 @@ Page custom showExternalLinks
 !insertmacro MUI_UNPAGE_INSTFILES
 
 # Language files
-!insertmacro MUI_LANGUAGE "Czech"
-!insertmacro MUI_LANGUAGE "Dutch"
-!insertmacro MUI_LANGUAGE "English"
-!insertmacro MUI_LANGUAGE "French"
-!insertmacro MUI_LANGUAGE "German"
-!insertmacro MUI_LANGUAGE "Italian"
-!insertmacro MUI_LANGUAGE "Japanese"
-!insertmacro MUI_LANGUAGE "Lithuanian"
-!insertmacro MUI_LANGUAGE "Russian"
-!insertmacro MUI_LANGUAGE "Spanish"
-!insertmacro MUI_LANGUAGE "SimpChinese"
-!insertmacro MUI_LANGUAGE "TradChinese"
-!insertmacro MUI_LANGUAGE "Ukrainian"
+!macro LANG_LOAD LANGLOAD
+  !insertmacro MUI_LANGUAGE "${LANGLOAD}"
+  !include "translations\${LANGLOAD}.nsh"
+  !undef LANG
+!macroend
+
+!macro LANG_STRING NAME VALUE
+  LangString "${NAME}" "${LANG_${LANG}}" "${VALUE}"
+!macroend
+
+!macro LANG_UNSTRING NAME VALUE
+  !insertmacro LANG_STRING "un.${NAME}" "${VALUE}"
+!macroend
+
+!insertmacro LANG_LOAD "Czech"
+!insertmacro LANG_LOAD "Dutch"
+!insertmacro LANG_LOAD "English"
+!insertmacro LANG_LOAD "French"
+!insertmacro LANG_LOAD "German"
+!insertmacro LANG_LOAD "Italian"
+!insertmacro LANG_LOAD "Japanese"
+!insertmacro LANG_LOAD "Lithuanian"
+!insertmacro LANG_LOAD "Russian"
+!insertmacro LANG_LOAD "Spanish"
+!insertmacro LANG_LOAD "SimpChinese"
+!insertmacro LANG_LOAD "TradChinese"
+!insertmacro LANG_LOAD "Ukrainian"
 !define MUI_LANGDLL_ALLLANGUAGES
 
 !insertmacro MUI_RESERVEFILE_LANGDLL
@@ -103,7 +117,7 @@ Function .onInit
   # Check if we're running on a Unicode capable Windows.
   # If not, abort.
   ${IfNot} ${AtLeastWinNT4}
-    MessageBox MB_OK|MB_ICONSTOP "You are trying to install MKVToolNix on a Windows version that does not support Unicode (95, 98 or ME). These old Windows versions are not supported anymore. You can still get an older version (v2.2.0) for Windows 95, 98 and ME from http://www.bunkus.org/videotools/mkvtoolnix/"
+    MessageBox MB_OK|MB_ICONSTOP "$(STRING_WINDOWS_TOO_OLD)"
     Quit
   ${EndIf}
 
@@ -350,7 +364,7 @@ Section "Program files" SEC01
 
   SetOutPath "$INSTDIR"
   IfSilent +3 0
-  MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "Should a shortcut be placed on the desktop?" IDNO +2
+  MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "$(STRING_SHORTCUT_ON_DESKTOP)" IDNO +2
   CreateShortCut "$DESKTOP\mkvmerge GUI.lnk" "$INSTDIR\mmg.exe" "" "$INSTDIR\mmg.exe"
 SectionEnd
 
@@ -385,17 +399,17 @@ var unRemoveJobs
 
 Function un.onUninstSuccess
   HideWindow
-  MessageBox MB_ICONINFORMATION|MB_OK "$(^Name) was successfully uninstalled."
+  MessageBox MB_ICONINFORMATION|MB_OK "$(STRING_UNINSTALLED_OK)"
 FunctionEnd
 
 Function un.onInit
   !insertmacro MUI_UNGETLANGUAGE
-  MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "Do you really want to remove $(^Name) and all of its components?" IDYES +2
+  MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "$(STRING_REMOVE_PROGRAM_QUESTION)" IDYES +2
   Abort
   StrCpy $unRemoveJobs "No"
   IfFileExists "$INSTDIR\jobs\*.*" +2
   Return
-  MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "Should job files created by the GUI be deleted as well?" IDYES +2
+  MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "$(STRING_REMOVE_JOB_FILES_QUESTION)" IDYES +2
   Return
   StrCpy $unRemoveJobs "Yes"
 FunctionEnd
