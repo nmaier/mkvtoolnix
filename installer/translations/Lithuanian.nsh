@@ -7,4 +7,5 @@
 
 # Local Variables:
 # mode: nsi
+# coding: windows-1257
 # End:

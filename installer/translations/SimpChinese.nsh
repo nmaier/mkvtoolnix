@@ -7,4 +7,5 @@
 
 # Local Variables:
 # mode: nsi
+# coding: windows-936
 # End:

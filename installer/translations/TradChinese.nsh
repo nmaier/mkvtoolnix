@@ -7,4 +7,5 @@
 
 # Local Variables:
 # mode: nsi
+# coding: cp950
 # End:

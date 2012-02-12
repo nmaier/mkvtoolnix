@@ -7,4 +7,5 @@
 
 # Local Variables:
 # mode: nsi
+# coding: cp932
 # End:
