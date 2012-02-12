@@ -1878,14 +1878,12 @@ Er zijn een paar plaatsen waar speciale karakters zouden of moeten worden overge
 The rules are: \*(Aq \*(Aq (a space) becomes \*(Aq\es\*(Aq, \*(Aq"\*(Aq (double quotes) becomes \*(Aq\e2\*(Aq, \*(Aq:\*(Aq becomes \*(Aq\ec\*(Aq, \*(Aq#\*(Aq becomes \*(Aq\eh\*(Aq and \*(Aq\e\*(Aq (a single backslash) itself becomes \*(Aq\e\e\*(Aq\&.
 .SH "ONDERTITELINGEN"
 .PP
-Er zijn verschillende tekst ondertitel formaten welke kunnen worden \*(Aqingebakken\*(Aq in
-Matroska(TM)\&. Op het moment ondersteunt
+There are several text and bitmap subtitle formats that can be embedded into
+Matroska(TM)\&. Text subtitles must be recoded to UTF\-8 so that they can be displayed correctly by a player (see the section about
+text files and character sets
+for an explanation how
 \fBmkvmerge\fR(1)
-all\('e\('en tekst, VobSub en Kate ondertitel formaten\&. Tekst ondertitels moet worden hergecodeerd naar UTF\-8 zodat deze juist kunnen worden getoond door een afspeler (zie de sectie over
-tekst bestanden en karakter sets
-voor een uitleg hoe
-\fBmkvmerge\fR(1)
-converteert tussen de verschillende karakter sets)\&. Kate ondertitels zijn reeds gecodeerd met UTF\-8 en hoeven niet ge\-hercodeerd te worden\&.
+converts between character sets)\&. Kate subtitles are already encoded in UTF\-8 and do not have to be re\-encoded\&.
 .PP
 De volgende ondertitel formaten worden momenteel ondersteund:
 .sp
@@ -1931,6 +1929,17 @@ OggKate stromen
 .IP \(bu 2.3
 .\}
 VobSub bitmap ondertitel bestanden
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+PGS bitmap subtitle files as found on BluRay discs
 .RE
 .SH "BESTAND LINKEN"
 .PP

@@ -1856,15 +1856,12 @@ sound\&.ogg
 The rules are: \*(Aq \*(Aq (a space) becomes \*(Aq\es\*(Aq, \*(Aq"\*(Aq (double quotes) becomes \*(Aq\e2\*(Aq, \*(Aq:\*(Aq becomes \*(Aq\ec\*(Aq, \*(Aq#\*(Aq becomes \*(Aq\eh\*(Aq and \*(Aq\e\*(Aq (a single backslash) itself becomes \*(Aq\e\e\*(Aq\&.
 .SH "SUBTITLES"
 .PP
-可在
-Matroska(TM)
-文件中嵌入多种文本字幕格式目前
+There are several text and bitmap subtitle formats that can be embedded into
+Matroska(TM)\&. Text subtitles must be recoded to UTF\-8 so that they can be displayed correctly by a player (see the section about
+text files and character sets
+for an explanation how
 \fBmkvmerge\fR(1)
-支持纯文本、VobSub 以及 Kate 字幕格式。文本字幕将被重新编码为 UTF\-8 以确保播放器能准确显示（关于
-\fBmkvmerge\fR(1)
-如何在字符集间进行转换的说明请参见关于
-文本文件与字符集
-的段落）。Kate 字幕已经是 UTF\-8 编码，因此不会被重新编码。
+converts between character sets)\&. Kate subtitles are already encoded in UTF\-8 and do not have to be re\-encoded\&.
 .PP
 目前支持以下字幕格式:
 .sp
@@ -1910,6 +1907,17 @@ OggKate 流
 .IP \(bu 2.3
 .\}
 VobSub 位图字幕文件
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+PGS bitmap subtitle files as found on BluRay discs
 .RE
 .SH "文件链接"
 .PP

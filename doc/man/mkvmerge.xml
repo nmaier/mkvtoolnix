@@ -1846,10 +1846,10 @@ sound.ogg</programlisting>
  <refsect1 id="mkvmerge.subtitles">
   <title>Subtitles</title>
   <para>
-   There are several text subtitle formats that can be embedded into &matroska;.  At the moment &mkvmerge; supports only text, VobSub and Kate
-   subtitle formats. Text subtitles must be recoded to UTF-8 so that they can be displayed correctly by a player (see the section about
-   <link linkend="mkvmerge.text_files_and_charsets"> text files and character sets</link> for an explanation how &mkvmerge; converts between
-   character sets). Kate subtitles are already encoded in UTF-8 and do not have to be re-encoded.
+   There are several text and bitmap subtitle formats that can be embedded into &matroska;. Text subtitles must be recoded to UTF-8 so that
+   they can be displayed correctly by a player (see the section about <link linkend="mkvmerge.text_files_and_charsets"> text files and
+   character sets</link> for an explanation how &mkvmerge; converts between character sets). Kate subtitles are already encoded in UTF-8 and
+   do not have to be re-encoded.
   </para>
 
   <para>
@@ -1878,6 +1878,12 @@ sound.ogg</programlisting>
    <listitem>
     <para>
      VobSub bitmap subtitle files
+    </para>
+   </listitem>
+
+   <listitem>
+    <para>
+     PGS bitmap subtitle files as found on BluRay discs
     </para>
    </listitem>
   </itemizedlist>

@@ -1347,8 +1347,12 @@ sound\&.ogg
 ルール：\*(Aq \*(Aq（半角スペース）は\*(Aq\es\*(Aqに、\*(Aq"\*(Aq（ダブルクォーテーション）は\*(Aq\e2\*(Aqに、\*(Aq:\*(Aqは\*(Aq\ec\*(Aqに、\*(Aq#\*(Aqは\*(Aq\eh\*(Aqに、そして\*(Aq\e\*(Aqそれ自体は\*(Aq\e\e\*(Aqになります。
 .SH "字幕"
 .PP
-
-Matroska(TM)には、いくつか字幕の埋め込み方法があります。現時点では、\fBmkvmerge\fR(1)はテキスト、VobSub、及びKate字幕フォーマットのみをサポートしています。テキスト字幕は、プレイヤーで正しく表示されるためにUTF\-8で保存されなればなりません(\fBmkvmerge\fR(1)の文字コード変換についてはテキストファイルと文字コードのセクションを参照してください)。Kate字幕は既にUTF\-8でエンコードされているので、再変換する必要はありません。
+There are several text and bitmap subtitle formats that can be embedded into
+Matroska(TM)\&. Text subtitles must be recoded to UTF\-8 so that they can be displayed correctly by a player (see the section about
+text files and character sets
+for an explanation how
+\fBmkvmerge\fR(1)
+converts between character sets)\&. Kate subtitles are already encoded in UTF\-8 and do not have to be re\-encoded\&.
 .PP
 現在、次の字幕フォーマットがサポートされています。
 .sp
@@ -1394,6 +1398,17 @@ OggKateストリーム
 .IP \(bu 2.3
 .\}
 VobSubビットマップ字幕
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+PGS bitmap subtitle files as found on BluRay discs
 .RE
 .SH "ファイル紐付け"
 .PP

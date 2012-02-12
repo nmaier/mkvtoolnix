@@ -1875,10 +1875,8 @@ There are a few places in which special characters in text must or should be esc
 The rules are: \*(Aq \*(Aq (a space) becomes \*(Aq\es\*(Aq, \*(Aq"\*(Aq (double quotes) becomes \*(Aq\e2\*(Aq, \*(Aq:\*(Aq becomes \*(Aq\ec\*(Aq, \*(Aq#\*(Aq becomes \*(Aq\eh\*(Aq and \*(Aq\e\*(Aq (a single backslash) itself becomes \*(Aq\e\e\*(Aq\&.
 .SH "SUBTITLES"
 .PP
-There are several text subtitle formats that can be embedded into
-Matroska(TM)\&. At the moment
-\fBmkvmerge\fR(1)
-supports only text, VobSub and Kate subtitle formats\&. Text subtitles must be recoded to UTF\-8 so that they can be displayed correctly by a player (see the section about
+There are several text and bitmap subtitle formats that can be embedded into
+Matroska(TM)\&. Text subtitles must be recoded to UTF\-8 so that they can be displayed correctly by a player (see the section about
 text files and character sets
 for an explanation how
 \fBmkvmerge\fR(1)
@@ -1928,6 +1926,17 @@ OggKate streams
 .IP \(bu 2.3
 .\}
 VobSub bitmap subtitle files
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+PGS bitmap subtitle files as found on BluRay discs
 .RE
 .SH "FILE LINKING"
 .PP
