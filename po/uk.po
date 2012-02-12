@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: mkvtoolnix_uk\n"
 "Report-Msgid-Bugs-To: Moritz Bunkus <moritz@bunkus.org>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2011-12-25 15:18+0100\n"
+"PO-Revision-Date: 2012-02-12 18:16+0100\n"
 "Last-Translator: Andriy Bilous'ko <arestarh@ukr.net>\n"
 "Language-Team: Ukrainian <moritz@bunkus.org>\n"
 "Language: uk\n"
@@ -38,13 +38,12 @@ msgstr ""
 "mkvmerge отримав команду SIGINT (ймовірно тому, що користувач натиснув Ctrl+C). Спроба виправити файл. Якщо mkvmerge 'зависає' під час цього процесу, вам доведеться завершити виконання програми вручну.\n"
 
 #: src/merge/mkvmerge.cpp:137
-#, fuzzy
 msgid ""
 "  ( <file1> <file2> )      Treat file1 and file2 as if they were concatenated\n"
 "                           into a single big file.\n"
 msgstr ""
-"  --attach-file <file>     Створює файл-вкладення в\n"
-"                           файлі Matroska.\n"
+"  ( <file1> <file2> )      Обробляти file1 і file2 так само, ніби вони були\n"
+"                           об'єднані до одного великого файлу.\n"
 
 #: src/merge/mkvmerge.cpp:202
 msgid ""
@@ -599,25 +598,24 @@ msgstr ""
 "                           числами з плаваючою комою.\n"
 
 #: src/merge/mkvmerge.cpp:132
-#, fuzzy
 msgid "  <file1> + <file2>        Append file2 to file1.\n"
-msgstr "  --title <title>          Назва (в полі 'title') для цього вихідного файлу.\n"
+msgstr "  <file1> + <file2>        Приєднати файл file2 до файлу file1.\n"
 
 #: src/merge/mkvmerge.cpp:133
-#, fuzzy
 msgid "  <file1> +<file2>         Same as \"<file1> + <file2>\".\n"
-msgstr "  --title <title>          Назва (в полі 'title') для цього вихідного файлу.\n"
+msgstr "  <file1> +<file2>         Те ж саме, що і \"<file1> + <file2>\".\n"
 
 #: src/merge/mkvmerge.cpp:134
 msgid ""
 "  = <file>                 Don't look for and concatenate files with the same\n"
 "                           base name but with a different trailing number.\n"
 msgstr ""
+"  = <file>                 Не шукати і не об'єднувати файли з однаковою основною назвою,\n"
+"                           але з різними завершуючими номерами.\n"
 
 #: src/merge/mkvmerge.cpp:136
-#, fuzzy
 msgid "  =<file>                  Same as \"= <file>\".\n"
-msgstr "  --link                   З'єднати розділені файли.\n"
+msgstr "  =<file>                  Те ж саме, що і \"= <file>\".\n"
 
 #: src/merge/mkvmerge.cpp:257
 msgid ""
@@ -709,9 +707,8 @@ msgid " Chapter handling:\n"
 msgstr "Обробка розділів:\n"
 
 #: src/merge/mkvmerge.cpp:113
-#, fuzzy
 msgid " File splitting, linking, appending and concatenating (more global options):\n"
-msgstr " Поділ і об'єднанння файлів (більше глобальних опцій):\n"
+msgstr " Розділення, об'єднанння (посегментно), приєднання (зазвичай або як один віртуальний файл) файлів (більше глобальних опцій):\n"
 
 #: src/merge/mkvmerge.cpp:98
 msgid " General output control (advanced global options):\n"
@@ -3236,7 +3233,7 @@ msgstr "Елементи в категорії '%1%' ('--edit %2%'):\n"
 
 #: src/mmg/tabs/global.cpp:233
 msgid "Enable splitting..."
-msgstr "Ввімкнути розбиття..."
+msgstr "Ввімкнути розділення..."
 
 #: src/info/mkvinfo.cpp:970
 #, boost-format
@@ -6250,7 +6247,7 @@ msgstr "Заголовок ідентифікації Kate не може бут�
 #: src/input/r_qtmp4.cpp:948
 #, boost-format
 msgid "The MP4 file '%1%' contains chapters whose format was not recognized. This is often the case if the chapters are not encoded in UTF-8. Use the '--chapter-charset' option in order to specify the charset to use.\n"
-msgstr ""
+msgstr "Файл MP4 '%1%' містить розділи, формат яких не був розпізнаний. Часто цьому причиною є те, що розділи не закодовані в UTF-8. Щоб задати набір символів для використання, треба використовувати опцію '--chapter-charset'.\n"
 
 #: src/mmg/wx_kax_analyzer.cpp:35
 msgid "The Matroska file is analyzed."
