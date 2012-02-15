@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: tr\n"
 "Report-Msgid-Bugs-To: moritz@bunkus.org\n"
 "POT-Creation-Date: 2011-01-17 08:47:00+0100\n"
-"PO-Revision-Date: 2011-12-25 15:18+0100\n"
+"PO-Revision-Date: 2012-02-14 22:56+0200\n"
 "Last-Translator: Burak Yavuz <hitowerdigit@hotmail.com>\n"
 "Language-Team: Turkish <moritz@bunkus.org>\n"
 "Language: tr\n"
@@ -37,13 +37,12 @@ msgstr ""
 "mkvmerge, SIGINT (muhtemelen çünkü kullanıcı Ctrl+C'ye bastı) aldı. Dosya temizlenmeye çalışılıyor. Eğer mkvmerge işlem sırasında takılı kalırsa elle sonlandırmak zorundasınız.\n"
 
 #: src/merge/mkvmerge.cpp:137
-#, fuzzy
 msgid ""
 "  ( <file1> <file2> )      Treat file1 and file2 as if they were concatenated\n"
 "                           into a single big file.\n"
 msgstr ""
-"  --attach-file <file>     Matroska dosyası içinde dosya eki\n"
-"                           oluşturur.\n"
+"  ( <file1> <file2> )      Tek büyük bir dosya içine bitiştirilmiş gibi\n"
+"                           işleme dosyası1 ve dosyası2.\n"
 
 #: src/merge/mkvmerge.cpp:202
 msgid ""
@@ -60,7 +59,7 @@ msgid ""
 "                           appending files.\n"
 msgstr ""
 "  --append-mode <file|track>\n"
-"                           Dosyalar eklendiğinde mkvmerge'nin zaman kodlarını\n"
+"                           Dosyalar eklendiğinde mkvmerge'ün zaman kodlarını\n"
 "                           nasıl hesaplayacağını seçer.\n"
 
 #: src/merge/mkvmerge.cpp:124
@@ -238,7 +237,7 @@ msgid ""
 msgstr ""
 "  --default-duration <TID:Xs|ms|us|ns|fps>\n"
 "                           İzin varsayılan süresini X'e zorla.\n"
-"                           X kayan noktalı bir sayı ya da bir kesir sayısı olabilir.\n"
+"                           X kayan noktalı sayı ya da bir kesir sayısı olabilir.\n"
 
 #: src/merge/mkvmerge.cpp:90
 msgid ""
@@ -348,7 +347,7 @@ msgstr "  --output-charset <cset>  Bu karakter grubundaki çıktı mesajları\n"
 
 #: src/merge/mkvmerge.cpp:248
 msgid "  --priority <priority>    Set the priority mkvmerge runs with.\n"
-msgstr "  --priority <priority>    mkvmerge'nin birlikte çalışacağı önceliği ayarlar.\n"
+msgstr "  --priority <priority>    mkvmerge'ün birlikte çalışacağı önceliği ayarlar.\n"
 
 #: src/merge/mkvmerge.cpp:95
 msgid ""
@@ -592,28 +591,27 @@ msgstr ""
 "                           'o/p': Doğrusal sürüklemeleri sabitlemek için 'o/p'\n"
 "                           ile çarparak zaman kodlarını ayarlar. Eğer dahil\n"
 "                           edilirse 'p' varsayılanı 1'dir. Her iki 'o' ve 'p'\n"
-"                           kayan noktalı sayı olabilir.\n"
+"                           kayan noktalı sayılar olabilir.\n"
 
 #: src/merge/mkvmerge.cpp:132
-#, fuzzy
 msgid "  <file1> + <file2>        Append file2 to file1.\n"
-msgstr "  --title <title>          Bu çıktı dosyası için başlık.\n"
+msgstr "  <file1> + <file2>        Dosya2'yi dosya1'e ekle.\n"
 
 #: src/merge/mkvmerge.cpp:133
-#, fuzzy
 msgid "  <file1> +<file2>         Same as \"<file1> + <file2>\".\n"
-msgstr "  --title <title>          Bu çıktı dosyası için başlık.\n"
+msgstr "  <file1> +<file2>         \"<file1> + <file2>\" ile aynı.\n"
 
 #: src/merge/mkvmerge.cpp:134
 msgid ""
 "  = <file>                 Don't look for and concatenate files with the same\n"
 "                           base name but with a different trailing number.\n"
 msgstr ""
+"  = <file>                 Aynı temel ad ile ama farklı izleme numaralı dosyaları\n"
+"                           aramayın ve bitiştirmeyin\n"
 
 #: src/merge/mkvmerge.cpp:136
-#, fuzzy
 msgid "  =<file>                  Same as \"= <file>\".\n"
-msgstr "  --link                   Bağlantısı bölünmüş dosyalar.\n"
+msgstr "  =<file>                  \"= <file>\" ile aynı.\n"
 
 #: src/merge/mkvmerge.cpp:257
 msgid ""
@@ -705,9 +703,8 @@ msgid " Chapter handling:\n"
 msgstr " Bölüm işleme:\n"
 
 #: src/merge/mkvmerge.cpp:113
-#, fuzzy
 msgid " File splitting, linking, appending and concatenating (more global options):\n"
-msgstr " Dosya bölme ve bağlama (daha fazla genel seçenekler):\n"
+msgstr " Dosya bölme, bağlama, ekleme ve bitiştirme (daha fazla genel seçenekler):\n"
 
 #: src/merge/mkvmerge.cpp:98
 msgid " General output control (advanced global options):\n"
@@ -1538,16 +1535,16 @@ msgstr "(isimsiz)"
 
 #: src/input/r_flac.cpp:167
 msgid "+-> Parsing the FLAC file. This can take a LONG time.\n"
-msgstr ""
+msgstr "+-> FLAC dosyası ayrıştırılıyor. Bu UZUN bir zaman alabilir.\n"
 
 #: src/input/r_flac.cpp:202
 #, boost-format
 msgid "+-> Pre-parsing FLAC file: %1%%%%2%"
-msgstr ""
+msgstr "+-> FLAC dosyası ön-ayrıştırması yapılıyor: %1%%%%2%"
 
 #: src/input/r_flac.cpp:223
 msgid "+-> Pre-parsing FLAC file: 100%\n"
-msgstr ""
+msgstr "+-> FLAC dosyası ön-ayrıştırması yapılıyor: %100\n"
 
 #: src/merge/pr_generic.cpp:1392
 #, boost-format
@@ -2669,7 +2666,7 @@ msgstr "Çekirdek Resim karesi %1% desteklenmiyor.\n"
 #: src/mmg/tabs/input.cpp:317
 #, c-format, boost-format
 msgid "Could not create a temporary file for mkvmerge's command line option called '%s' (error code %d, %s)."
-msgstr "mkvmerge'nin komut satırı '%s' için geçici dosya oluşturulamadı (hata kodu %d, %s)."
+msgstr "mkvmerge'ün komut satırı '%s' için geçici dosya oluşturulamadı (hata kodu %d, %s)."
 
 #: src/info/wxwidgets_ui.cpp:283
 #, c-format, boost-format
@@ -2771,7 +2768,7 @@ msgstr "'%1%' içindeki bölümler ayrıştırılamadı: %2%\n"
 
 #: src/input/r_ogm_flac.cpp:255
 msgid "Could not read the FLAC header packets.\n"
-msgstr ""
+msgstr "FLAC başlık paketlerini okuyamadı.\n"
 
 #: src/common/mm_io.cpp:105
 #: src/common/mm_io_win.cpp:169
@@ -2794,7 +2791,7 @@ msgstr "WebM uyum dosyası oluştur"
 
 #: src/mmg/tabs/global.cpp:301
 msgid "Create a WebM compliant file. mkvmerge also turns this on if the output file name's extension is \"webm\". This mode enforces several restrictions. The only allowed codecs are VP8 video and Vorbis audio tracks. Neither chapters nor tags are allowed. The DocType header item is changed to \"webm\"."
-msgstr ""
+msgstr "WebM uyumlu dosya oluşturur. mkvmerge aynı zamanda eğer dosya adının uzantısı \"webm\" ise bunu açar. Bu kip birkaç kısıtlamayı zorlar. Sadece izin verilen kodekler VP8 görüntü ve Vorbis ses izleridir. Ne bölümlere ne de etiketlere izin verilmez. DocType başlığı öğesi \"webm\" olarak değiştirilir."
 
 #: src/mmg/mmg_dialog.cpp:297
 msgid "Create a new chapter file"
@@ -2803,7 +2800,7 @@ msgstr "Yeni bölüm dosyası oluştur"
 #: src/merge/mkvmerge.cpp:688
 #, boost-format
 msgid "Cropping parameters: not given in the form <TID>:<left>,<top>,<right>,<bottom> e.g. 0:10,5,10,5 (argument was '%1%').\n"
-msgstr ""
+msgstr "Kırpma parametreleri: formda verilmez <TID>:<left>,<top>,<right>,<bottom> örn. 0:10,5,10,5 (bağımsız değişkeni '%1%'dir).\n"
 
 #: src/mmg/tabs/input_format.cpp:252
 msgid "Cropping:"
@@ -3009,7 +3006,7 @@ msgstr "Gecikme (ms olarak):"
 
 #: src/mmg/tabs/input_format.cpp:243
 msgid "Delay this track's timecodes by a couple of ms. Can be negative. Works with all track types, but negative delays should not be used with video tracks."
-msgstr ""
+msgstr "Bu iz'in zaman kodlarını bir çift ms ile geciktirin. Eksi olabilir. Tüm iz türleriyle çalışır ama eksi gecikmeler görüntü izleriyle kullanılmamalıdır."
 
 #: src/info/mkvinfo.cpp:197
 #, boost-format
@@ -3058,13 +3055,13 @@ msgstr "Blok Gruplarının yerine Basit Blokların kullanımı etkisiz."
 
 #: src/mmg/cli_options_dlg.cpp:100
 msgid "Disables lacing for all tracks. This will increase the file's size, especially if there are many audio tracks. Use only for testing."
-msgstr ""
+msgstr "Tüm izler için bağlamayı etkisizleştirir. Bu dosyanın boyutunu arttıracaktır, özelliklede eğer çok ses izi varsa. Sadece deneme iiçin kullanın."
 
 #: src/merge/mkvmerge.cpp:663
 #: src/merge/mkvmerge.cpp:669
 #, boost-format
 msgid "Display dimensions: not given in the form <TID>:<width>x<height>, e.g. 1:640x480 (argument was '%1%').\n"
-msgstr ""
+msgstr "Görüntüleme boyutları: formda verilmez <TID>:<width>x<height>, örn. 1:640x480 (bağımsız değişkeni '%1%'dir).\n"
 
 #: src/info/mkvinfo.cpp:667
 #, boost-format
@@ -3091,11 +3088,11 @@ msgstr "Görüntü genişlik: %1%"
 
 #: src/mmg/cli_options_dlg.cpp:116
 msgid "Do not add an entry for the chapters in the meta seek element."
-msgstr ""
+msgstr "Meta arama öğesinde bölümler için giriş eklemeyin."
 
 #: src/mmg/cli_options_dlg.cpp:118
 msgid "Do not write meta seek elements at all."
-msgstr ""
+msgstr "Hiçbir şekilde meta arama öğesi yazmayın."
 
 #: src/info/mkvinfo.cpp:1869
 #, boost-format
@@ -3169,11 +3166,11 @@ msgstr ""
 
 #: src/mmg/tabs/chapters.cpp:338
 msgid "Each chapter and each edition has a unique identifier. This identifier is normally assigned automatically by the programs, but it can be changed manually if it is really needed."
-msgstr ""
+msgstr "Her bölüm ve her yayın eşsiz tanımlayıcıya sahiptir. Bu tanımlayıcı normalde programlar tarafından otomatik olarak atanır ama eğer gerçekten ona ihtiyaç varsa el ile değiştirilebilir."
 
 #: src/mmg/tabs/chapters.cpp:810
 msgid "Each edition must contain at least one chapter."
-msgstr ""
+msgstr "Her yayın en az bir bölüm içermek zorundadır."
 
 #: src/info/mkvinfo.cpp:182
 #, boost-format
@@ -3211,7 +3208,7 @@ msgstr "Unsur"
 #: src/propedit/propedit_cli_parser.cpp:134
 #, boost-format
 msgid "Elements in the category '%1%' ('--edit %2%'):\n"
-msgstr ""
+msgstr "'%1%' kategorisi içindeki öğeler ('--edit %2%'):\n"
 
 #: src/mmg/tabs/global.cpp:233
 msgid "Enable splitting..."
@@ -3224,7 +3221,7 @@ msgstr "Etkinleştirilen: %1%"
 
 #: src/mmg/tabs/global.cpp:234
 msgid "Enables splitting of the output into more than one file. You can split after a given size, after a given amount of time has passed in each file or after a list of timecodes."
-msgstr ""
+msgstr "Çıktının birden fazla dosyaya bölünmesini etkinleştirir. Verilen boyuttan sonra, her dosyanın içinde geçen verilen zaman miktarından sonra ya da zaman kodları listesinden sonra bölebilirsiniz."
 
 #: src/info/mkvinfo.cpp:826
 #, boost-format
@@ -3425,7 +3422,7 @@ msgstr ""
 #: src/input/r_flac.h:52
 #: src/output/p_flac.h:39
 msgid "FLAC"
-msgstr ""
+msgstr "FLAC"
 
 #: src/common/file_types.cpp:33
 msgid "FLAC (Free Lossless Audio Codec)"
@@ -3468,9 +3465,9 @@ msgid "Failed to parse the USF end tag for track %1%: %2%\n"
 msgstr ""
 
 #: src/info/mkvinfo.cpp:558
-#, fuzzy, boost-format
+#, boost-format
 msgid "Family UID: %1%"
-msgstr "Dosya UID: %1%"
+msgstr "Aile UID: %1%"
 
 #: src/merge/mkvmerge.cpp:404
 #, boost-format
@@ -3527,7 +3524,7 @@ msgstr "'%s' için dosya tanımlama başarısız oldu. Dönüş kodu: %d"
 #: src/mmg/tabs/input.cpp:368
 #, c-format, boost-format
 msgid "File identification failed. Return code: %d. Errno: %d (%s). Make sure that you've selected a mkvmerge executable in the settings dialog."
-msgstr "Dosya tanımlama başarısız oldu. Dönüş kodu: %d. Hata no: %d (%s). Ayarlar iletisinden çalıştırılabilir mkvmerge'yi seçtiğinizden emin olun."
+msgstr "Dosya tanımlama başarısız oldu. Dönüş kodu: %d. Hata no: %d (%s). Ayarlar iletisinden çalıştırılabilir mkvmerge'ü seçtiğinizden emin olun."
 
 #: src/mmg/tabs/input.cpp:304
 msgid "File is already processed"
@@ -3584,20 +3581,20 @@ msgstr "İşlemin bitme zamanı %s"
 
 #: src/mmg/header_editor/value_page.cpp:147
 msgid "Floating point number"
-msgstr "Kayan nokta nuamrası"
+msgstr "Kayan noktalı sayı"
 
 #: src/mmg/tabs/global.cpp:270
 #: src/mmg/tabs/global.cpp:272
 msgid "For an in-depth explanantion of file/segment linking and this feature please read mkvmerge's documentation."
-msgstr ""
+msgstr "Dosya/parça bağlamasının geniş kapsamlı açıklaması ve bu özellik için lütfen mkvmerge'ün belgesini okuyun."
 
 #: src/mmg/cli_options_dlg.cpp:122
 msgid "Force EBML style lacing."
-msgstr ""
+msgstr "EBML stili bağlamaya zorla."
 
 #: src/mmg/cli_options_dlg.cpp:120
 msgid "Force Xiph style lacing."
-msgstr ""
+msgstr "Xiph stili bağlamaya zorla."
 
 #: src/common/cli_parser.cpp:177
 msgid "Force the translations for 'code' to be used."
@@ -3622,7 +3619,7 @@ msgstr ""
 
 #: src/mmg/tabs/input_format.cpp:238
 msgid "Forces the NALU size length to a certain number of bytes. This parameter is only available for AVC/h.264 elementary streams read from AVC/h.264 ES files, AVIs or Matroska files created with '--engage allow_avc_in_vwf_mode'. It defaults to 4 bytes, but there are files which do not contain a frame or slice that is bigger than 65535 bytes. For such files you can use this parameter and decrease the size to 2."
-msgstr ""
+msgstr "NALU boyutu uzunluğunu belirli bayt sayısına zorlar. Bu parametre sadece AVC/h.264 ES dosyalarından, '--engage allow_avc_in_vwf_mode' ile oluşturulmuş AVI'ler veya Matroska dosyalarından AVC/h.264 temel akışlarını okumak için kullanılabilir. Varsayılanı 4 bayttır ama kare içermeyen veya 65535 bayttan büyük kesilmiş dosyalar vardır. Böyle dosyalar için parametreler kullanabilirsiniz ve boyutu 2'ye düşürebilirsiniz."
 
 #: src/mmg/cli_options_dlg.cpp:104
 msgid "Forces the timecode scale factor to REPLACEME. You have to replace REPLACEME with a value between 1000 and 10000000 or with -1. Normally mkvmerge will use a value of 1000000 which means that timecodes and durations will have a precision of 1ms. For files that will not contain a video track but at least one audio track mkvmerge will automatically choose a timecode scale factor so that all timecodes and durations have a precision of one sample. This causes bigger overhead but allows precise seeking and extraction. If the magical value -1 is used then mkvmerge will use sample precision even if a video track is present."
@@ -3680,7 +3677,7 @@ msgstr "%1%%2%%3% boyutlu kare"
 
 #: src/mmg/tabs/input_extra.cpp:133
 msgid "Free-form edit field for user defined options for this track. What you input here is added after all the other options mmg adds so that you could overwrite any of mmg's options for this track. All occurences of the string \"<TID>\" will be replaced by the track's track ID."
-msgstr ""
+msgstr "Bu iz için kullanıcı tanımlı seçenekler için serbest form düzenleme alanı. Mmg'nin eklediği tüm diğer seçeneklerden sonra buraya ne girerseniz eklenir onun için bu iz için mmg'nin seçeneklerinin herhangi birinin üzerine yazabilirsiniz. \"<TID>\" dizgisinin tüm olayları iz'in iz ID'si tarafından değiştirilir."
 
 #: src/info/mkvinfo.cpp:703
 #, boost-format
@@ -3778,10 +3775,13 @@ msgid ""
 "entering them below or by chosing one from the drop\n"
 "down box and pressing the 'add' button."
 msgstr ""
+"Buradan ya aşağıdan onları girerek ya da aşağı açılır kutudan\n"
+"birini seçerek ve 'ekle' düğmesine basarak daha fazla\n"
+"komut satırı ekleyebilirsiniz."
 
 #: src/mmg/tabs/chapters.cpp:334
 msgid "Here you can adjust all the timecodes of the selected chapter and of all its sub-chapters by a specific amount either increasing or decreasing them."
-msgstr ""
+msgstr "Buradan belirli bir miktarını ya arttırarak ya da azaltarak seçilmiş bölümün tüm zaman kodlarını ve bunların tüm alt bölümlerini ayarlayabilirsiniz."
 
 #: src/mmg/options/chapters.cpp:77
 msgid ""
@@ -3797,7 +3797,7 @@ msgstr ""
 
 #: src/mmg/tabs/chapters.cpp:331
 msgid "Here you can set the values for the language and the country that you want to apply to all the chapters below and including the currently selected entry."
-msgstr ""
+msgstr "Buradan şimdiki seçili giriş dahil aşağıdaki tüm bölümlere uygulamak istediğiniz dil ve ülke için değerleri ayarlayabilirsiniz."
 
 #: src/mmg/jobs.cpp:434
 msgid "ID"
@@ -4457,7 +4457,7 @@ msgstr "MPEG-4"
 
 #: src/mmg/tabs/input_general.cpp:184
 msgid "Make this track the default track for its type (audio, video, subtitles). Players should prefer tracks with the default track flag set."
-msgstr ""
+msgstr "Türleri (ses, görüntü, altyazılar) için bu izi varsayılan iz yapın. Oynatıcılar varsayılan iz işareti ayarlı izleri tercih ederler."
 
 #: src/input/r_matroska.cpp:1501
 #: src/input/r_matroska.cpp:1516
@@ -4478,7 +4478,7 @@ msgstr ""
 
 #: src/mmg/tabs/input_general.cpp:186
 msgid "Mark this track as 'forced'. Players must play this track."
-msgstr ""
+msgstr "Bu izi 'zorlanan' olarak işaretleyin. Oynatıcılar bu izi oynatmak zorundadır."
 
 #: src/input/r_matroska.h:197
 msgid "Matroska"
@@ -4659,7 +4659,7 @@ msgstr "Adı"
 
 #: src/mmg/tabs/input_general.cpp:180
 msgid "Name for this track, e.g. \"director's comments\"."
-msgstr ""
+msgstr "Bu iz için ad, örn. \"yönetmenin yorumları\"."
 
 #: src/mmg/tabs/attachments.cpp:164
 #: src/mmg/tabs/chapters.cpp:348
@@ -4711,7 +4711,7 @@ msgstr "Sonraki parçanın benzersiz ID'si"
 #: src/merge/mkvmerge.cpp:1047
 #, boost-format
 msgid "No %1% specified in '--%2% %3%'.\n"
-msgstr ""
+msgstr "%1%, '--%2% %3%' içinde belirtilmemiş.\n"
 
 #: src/input/r_qtmp4.cpp:1531
 msgid "No AC3 header found in first frame; track will be skipped.\n"
@@ -4806,7 +4806,7 @@ msgstr ""
 #: src/merge/mkvmerge.cpp:1044
 #, boost-format
 msgid "No track ID specified in '--%1% %2%'.\n"
-msgstr ""
+msgstr "'--%1% %2%' içinde iz ID'si belirtilmemiş.\n"
 
 #: src/propedit/target.cpp:314
 #, boost-format
@@ -5181,7 +5181,7 @@ msgstr "İlerleme: [%1%%2%] %3%%%"
 
 #: src/mmg/mmg_dialog.cpp:1819
 msgid "Querying mkvmerge's capabilities"
-msgstr "mkvmerge'nin yetenekleri sorgulanıyor"
+msgstr "mkvmerge'ün yetenekleri sorgulanıyor"
 
 #: src/common/file_types.cpp:43
 msgid "QuickTime audio/video files"
@@ -5346,7 +5346,7 @@ msgstr "Şifrelenmiş VOB'ları okuma desteklenmiyor.\n"
 
 #: src/common/cli_parser.cpp:181
 msgid "Reads additional command line options from the specified file (see man page)."
-msgstr ""
+msgstr "Belirlenmiş dosyadan ilave komut satırı seçeneklerini okur (ana sayfaya bakın)."
 
 #: src/info/qt_ui.cpp:155
 msgid "Ready"
@@ -5372,7 +5372,7 @@ msgstr "RealMedia ses/görüntü dosyası"
 #: src/input/r_real.cpp:357
 #, boost-format
 msgid "RealMedia files may contain HE-AAC / AAC+ / SBR AAC audio. In some cases this can NOT be detected automatically. Therefore you have to specifiy '--aac-is-sbr %1%' manually for this input file if the file actually contains SBR AAC. The file will be muxed in the WRONG way otherwise. Also read mkvmerge's documentation.\n"
-msgstr ""
+msgstr "RealMedia dosyaları HE-AAC / AAC+ / SBR AAC sesi içerebilir. Bazı durumlarda bu otomatik olarak algılanmayabilir. Bundan dolayı eğer dosya aslında SBR AAC içeriyorsa, bu girdi dosyası için el ile '--aac-is-sbr %1%' belirlemek zorundasınız. Yoksa dosya YANLIŞ yolla çoklanacaktır. Ayrıca mkvmerge'ün belgesini okuyun.\n"
 
 #: src/common/cli_parser.cpp:180
 msgid "Redirects all messages into this file."
@@ -5410,7 +5410,7 @@ msgstr "Kalan süre:"
 
 #: src/common/xml/element_parser.cpp:542
 msgid "Remember that special characters like &, <, > and \" must be escaped in the usual HTML way: &amp; for '&', &lt; for '<', &gt; for '>' and &quot; for '\"'."
-msgstr ""
+msgstr "&, <, > ve \" gibi özel karakterleri alışılmış HTML yoluyla kullanmaktan kaçınmak zorunda olunduğunu unutmayın: '&' için &amp;, '<' için &lt;, '>' için &gt; ve '\"' için &quot;."
 
 #: src/mmg/tabs/chapters.cpp:329
 msgid "Remove chapter"
@@ -5426,16 +5426,16 @@ msgstr "Adı kaldır"
 
 #: src/common/kax_file.cpp:251
 msgid "Resync failed: no valid Matroska level 1 element found.\n"
-msgstr ""
+msgstr "Yeniden eşitleme başarısız oldu: geçerli Matroska seviye 1 öğesi bulunamadı.\n"
 
 #: src/common/kax_file.cpp:243
 #, boost-format
 msgid "Resyncing successful at position %1%.\n"
-msgstr ""
+msgstr "Yeniden eşitleme %1% konumunda başarılı.\n"
 
 #: src/mmg/mmg_dialog.cpp:289
 msgid "Run mkvmerge and start the muxing process"
-msgstr "mkvmerge'yi çalıştır ve çoklama işlemini başlat"
+msgstr "mkvmerge'ü çalıştır ve çoklama işlemini başlat"
 
 #: src/mmg/mmg_dialog.cpp:287
 msgid "Run the header field editor"
@@ -5659,7 +5659,7 @@ msgstr "mkvmerge'ün üreteceği indeks girişleri bloklarını seçer (= cue gi
 
 #: src/mmg/tabs/input_format.cpp:250
 msgid "Selects the character set a subtitle file or chapter information was written with. Only needed for non-UTF encoded subtitle files or for files with chapter information (e.g. OGM, MP4) for which mkvmerge does not detect the encoding correctly."
-msgstr ""
+msgstr "Altyazı dosyası olarak karakter grubunu veya birlikte yazılmış bölüm bilgisini seçer. Sadece UTF-olmayan kodlamalı altyazı dosyaları için veya mkvmerge'ün kodlamayı doğru olarak algılamadığı bölüm bilgisi (örn. OGM, MP4) ile olan dosyalar için gereklidir."
 
 #: src/mmg/mmg_dialog.cpp:285
 msgid "Set &output file"
@@ -5676,6 +5676,9 @@ msgid ""
 "be used if no language found matches the\n"
 "user preference."
 msgstr ""
+"Eğer kullanıcı tercihiyle eşleşen dil bulunamadığında\n"
+"bu iz (ses, görüntü veya altyazılar) KULLANILMALIYSA\n"
+"ayarlayın."
 
 #: src/common/property_element.cpp:119
 #: src/mmg/header_editor/frame.cpp:393
@@ -5686,6 +5689,10 @@ msgid ""
 "whose language matches the user preference or the\n"
 "default + forced track."
 msgstr ""
+"Eğer iz oynatma sırasında kullanılmak ZORUNDAYSA\n"
+"ayarlayın. Bir tür (ses, görüntü veya altyazılar) için\n"
+"pek çok zorlanmış iz olabilir. Oynatıcı, dili kullanıcı tercihiyle\n"
+"eşleşen ya da varsayılan + zorlanan izden birini seçmelidir."
 
 #: src/common/property_element.cpp:118
 #: src/mmg/header_editor/frame.cpp:389
@@ -5694,7 +5701,7 @@ msgstr "Eğer iz kullanılıyorsa ayarla."
 
 #: src/common/property_element.cpp:137
 msgid "Set if the video is interlaced."
-msgstr ""
+msgstr "Eğer görüntü üst üste bindirilmişse ayarlayın."
 
 #: src/mmg/tabs/chapters.cpp:111
 msgid "Set language to:"
@@ -5710,39 +5717,39 @@ msgstr "Değerleri ayarla"
 
 #: src/propedit/propedit_cli_parser.cpp:165
 msgid "Sets a property to the value if it exists and add it otherwise"
-msgstr ""
+msgstr "Eğer mevcutsa değere özelliği ayarlar ve aksi halde ekler"
 
 #: src/propedit/propedit_cli_parser.cpp:161
 msgid "Sets the Matroska file section that all following add/set/delete actions operate on (see below and man page for syntax)"
-msgstr ""
+msgstr "Tüm aşağıdaki ekle/ayarla/sil eylemlerini Matroska dosyası bölümüne işlemeyi ayarlar (söz dizimi için aşağı ve ana sayfaya bakın)"
 
 #: src/propedit/propedit_cli_parser.cpp:158
 msgid "Sets the Matroska parser mode to 'fast' (default) or 'full'"
-msgstr ""
+msgstr "Matroska ayrışırıcı kipini 'hızlı' (varsayılan) veya 'tam' olarak ayarlar"
 
 #: src/mmg/tabs/input_extra.cpp:129
 msgid "Sets the compression algorithm to be used for this track. If no option is selected mkvmerge will decide whether or not to compress and which algorithm to use based on the track type. Most track types are not compressed at all. "
-msgstr ""
+msgstr "Bu iz için kullanılan sıkıştırma algoritmasını ayarlar. Eğer hiç seçenek seçilmezse mkvmerge sıkıştırıp sıkıştırmayacağına ve iz türüne bağlı hangi algoritmayı kullanacağına karar verecektir. Çoğu iz türü hiçbir şekilde sıkıştırılmaz."
 
 #: src/mmg/tabs/input_format.cpp:253
 msgid "Sets the cropping parameters. Must be comma-separated list of four numbers for the cropping to be used at the left, top, right and bottom."
-msgstr ""
+msgstr "Kırpma parametrelerini ayarlar. Solda, üztte, sağda ve altta kırpmanın kullanılması için dört sayının virgülle ayrılmış listesi olmak zorundadır."
 
 #: src/mmg/tabs/input_format.cpp:234
 msgid "Sets the default duration or number of frames per second for a track. This is only possible for video tracks. For AVC/h.264 elementary streams this option must be given. This can either be a floating point number or a fraction."
-msgstr ""
+msgstr "Varsayılan süreyi veya bir iz için saniye başına kare sayısnı ayarlar. Bu sadece görüntü izleri için mümkündür. AVC/h.264 temel akışları için bu seçenek verilmek zorundadır. Bu ya kayan noktalı sayı ya da bir kesir olabilir."
 
 #: src/mmg/tabs/input_format.cpp:222
 msgid "Sets the display aspect ratio of the track. The format can be either 'a/b' in which case both numbers must be integer (e.g. 16/9) or just a single floting point number 'f' (e.g. 2.35)."
-msgstr ""
+msgstr "İzin görüntüleme en boy oranını ayarlar. Biçim ya her iki sayının tam sayı (örn. 16/9) olması durumunda 'a/b' olabilir ya da sadece tek kayan noktalı sayı 'f' (örn. 2.35) olabilir."
 
 #: src/mmg/tabs/input_format.cpp:226
 msgid "Sets the display height of the track. The width must be set as well, or this field will be ignored."
-msgstr ""
+msgstr "İzin görüntüleme yüksekliğini ayarlar. Genişlik te ayarlanmak zorundadır ya da bu alan yoksayılacaktır."
 
 #: src/mmg/tabs/input_format.cpp:225
 msgid "Sets the display width of the track. The height must be set as well, or this field will be ignored."
-msgstr ""
+msgstr "İzin görüntüleme genişliğini ayarlar. Yükseklik te ayarlanmak zorundadır ya da bu alan yoksayılacaktır."
 
 #: src/mmg/options/mkvmerge.cpp:64
 msgid "Sets the priority that mkvmerge will run with."
@@ -5754,10 +5761,13 @@ msgid ""
 "\n"
 "Each file created contains one segment, and each segment has one segment UID. If more segment UIDs are specified than segments are created then the surplus UIDs are ignored. If fewer UIDs are specified than segments are created then random UIDs will be created for them."
 msgstr ""
+"Kullanmak için parça UID'lerini ayarlar. Bu alışılmış UID formu içindeki 128bit parça UID'lerinin virgülle ayrılmış listesidir: onaltılık sayılar, \"0x\"  önekiyle ya da öneksiz, boşluklu ya da boşluksuz, tam olarak 32 rakam.\n"
+"\n"
+"Oluşturulmuş her dosya bir parça içerir ve her parça bir parça UID'sine sahiptir. Eğer oluşturulmuş parçalardan daha fazla parça UID'leri belirlendiyse artan UID'ler yoksayılır. Eğer oluşturulmuş parçalardan daha az UID'ler belirlendiyse onlar için rastgele UID'ler oluşturulacaktır."
 
 #: src/mmg/tabs/input_format.cpp:231
 msgid "Sets the stereo mode of the video track to this value. If left empty then the track's original stereo mode will be kept or, if it didn't have one, none will be set at all."
-msgstr ""
+msgstr "Bu değere görüntü izinin stereo kipini ayarlar. Eğer boş bırakılırsa sonrasında izin orijinal stereo kipi tutulacaktır ya da eğer birine sahip olmadıysa, hiçbir şekilde hiçbiri ayarlanmayacaktır."
 
 #: src/info/mkvinfo.cpp:809
 #, boost-format
@@ -5766,7 +5776,7 @@ msgstr "Ayarlar: %1%"
 
 #: src/mmg/cli_options_dlg.cpp:86
 msgid "Several options that control the overall output that mkvmerge creates."
-msgstr ""
+msgstr "mkvmerge'ün oluşturduğu bütün çıktıyı denetleyen birkaç seçenek."
 
 #: src/input/r_real.cpp:575
 #, boost-format
@@ -5792,7 +5802,7 @@ msgstr "Hakkında iletisini göster"
 
 #: src/info/info_cli_parser.cpp:50
 msgid "Show all bytes of each frame as a hex dump."
-msgstr ""
+msgstr "Her bir karenin tüm baytlarını onaltılık döküm olarak göster."
 
 #: src/info/wxwidgets_ui.cpp:114
 msgid "Show element si&zes\tCtrl-Z"
@@ -5808,7 +5818,7 @@ msgstr "Program bilgisini göster"
 
 #: src/info/info_cli_parser.cpp:48
 msgid "Show statistics for each track in verbose mode."
-msgstr ""
+msgstr "Her bir iz için istatistikleri ayrıntılı kipte göster."
 
 #: src/mmg/mmg_dialog.cpp:290
 msgid "Show the command line mmg creates for mkvmerge"
@@ -5816,7 +5826,7 @@ msgstr "mkvmerge için mmg'nin oluşturduğu komut satırını göster"
 
 #: src/info/info_cli_parser.cpp:49
 msgid "Show the first 16 bytes of each frame as a hex dump."
-msgstr ""
+msgstr "Her bir karenin ilk 16 baytını onaltılık döküm olarak göster."
 
 #: src/mmg/mmg_dialog.cpp:307
 msgid "Show the guide to mkvmerge GUI"
@@ -5850,7 +5860,7 @@ msgstr "İmza algoritması: %1% (%2%)"
 #: src/info/mkvinfo.cpp:852
 #, boost-format
 msgid "Signature hash algorithm: %1% (%2%)"
-msgstr ""
+msgstr "İmza adresleme algoritması: %1% (%2%)"
 
 #: src/info/mkvinfo.cpp:861
 #, boost-format
@@ -5864,7 +5874,7 @@ msgstr "İmza: %1%"
 
 #: src/mmg/header_editor/value_page.cpp:146
 msgid "Signed integer"
-msgstr ""
+msgstr "İşaretli tam sayı"
 
 #: src/info/mkvinfo.cpp:1339
 #, boost-format
@@ -5896,17 +5906,17 @@ msgstr ""
 #: src/output/p_aac.cpp:71
 #, boost-format
 msgid "Skipping %1% bytes (no valid AAC header found). This might cause audio/video desynchronisation.\n"
-msgstr ""
+msgstr "%1% bayt atlanıyor (bulunan geçerli AAC başlığı yok). Bu, ses/görüntü eşitliliği bozukluğuna neden olabilir.\n"
 
 #: src/output/p_dts.cpp:87
 #, boost-format
 msgid "Skipping %1% bytes (no valid DTS header found). This might cause audio/video desynchronisation.\n"
-msgstr ""
+msgstr "%1% bayt atlanıyor (bulunan geçerli DTS başlığı yok). Bu, ses/görüntü eşitliliği bozukluğuna neden olabilir.\n"
 
 #: src/input/r_mp3.cpp:57
 #, boost-format
 msgid "Skipping %1% bytes at the beginning (no valid MP3 header found).\n"
-msgstr ""
+msgstr "Başlangıçtan %1% bayt atlanıyor (bulunan geçerli MP3 başlığı yok).\n"
 
 #: src/info/mkvinfo.cpp:1481
 msgid "Slices"
@@ -5927,14 +5937,14 @@ msgstr "Bazı başlık değerleri değiştirilmiş. Dosyayı kaydetmeden yeniden
 #: src/merge/output_control.cpp:1424
 #, boost-format
 msgid "Some tag elements are missing (this error should not have occured - another similar error should have occured earlier). %1%\n"
-msgstr ""
+msgstr "Bazı etiket öğeleri eksik (bu hata meydana gelmemeliydi - başka bir benzer hata önceden meydana gelmişti). %1%\n"
 
 #: src/common/property_element.cpp:131
 #: src/mmg/header_editor/frame.cpp:421
 msgid ""
 "Specifies the language of the track in the\n"
 "Matroska languages form."
-msgstr ""
+msgstr "Matroska dilleri formundaki izin dilini belirler."
 
 #: src/common/property_element.cpp:147
 #: src/mmg/header_editor/frame.cpp:477
@@ -5942,6 +5952,8 @@ msgid ""
 "Specify the possible modifications to the aspect ratio\n"
 "(0: free resizing, 1: keep aspect ratio, 2: fixed)."
 msgstr ""
+"En boy oranı için olası değişiklikleri belirler\n"
+"(0: serbest boyutlandırma, 1: en boy oranını tutma, 2: sabitleme)."
 
 #: src/mmg/tabs/global.cpp:232
 msgid "Splitting"
@@ -5949,16 +5961,16 @@ msgstr "Bölme"
 
 #: src/mmg/tabs/global.cpp:532
 msgid "Splitting by size was selected, but no size has been given."
-msgstr ""
+msgstr "Boyuta göre bölme seçildi ama hiç boyut verilmedi."
 
 #: src/mmg/tabs/global.cpp:565
 msgid "Splitting by timecode/duration was selected, but nothing was entered."
-msgstr ""
+msgstr "Zaman koduna/süreye göre bölme seçildi ama hiçbir şey girilmedi."
 
 #: src/mmg/mmg_dialog.cpp:562
 #, c-format, boost-format
 msgid "Splitting is active, and at least one of the potential output files '%s%s*%s' already exists. Do you want to overwrite them?"
-msgstr ""
+msgstr "Bölme etkin ve olası çıktı dosyalarından en az biri '%s%s*%s' zaten mevcut. Üzerlerine yazmak istiyor musunuz?"
 
 #: src/mmg/mmg_dialog.cpp:326
 msgid "Sta&rt muxing"
@@ -5966,7 +5978,7 @@ msgstr "Çoklamayı &başlat"
 
 #: src/mmg/mmg_dialog.cpp:289
 msgid "Sta&rt muxing (run mkvmerge)\tCtrl-R"
-msgstr "Çoklamayı &başlat (mkvmerge'yi çalıştır)\tCtrl-R"
+msgstr "Çoklamayı &başlat (mkvmerge'ü çalıştır)\tCtrl-R"
 
 #: src/info/info_cli_parser.cpp:43
 msgid "Start the GUI (and open inname if it was given)."
@@ -6000,7 +6012,7 @@ msgstr "Başlayan iş ID'si %d (%s), dosya: %s"
 #: src/info/mkvinfo.cpp:1897
 #, boost-format
 msgid "Statistics for track number %1%: number of blocks: %2%; size in bytes: %3%; duration in seconds: %4%; approximate bitrate in bits/second: %5%\n"
-msgstr ""
+msgstr "İz sayısı %1%: blok sayısı: %2%; bayt olarak boyut: %3%; saniye olarak süre: %4%; bit/saniye olarak yaklaşık bit oranı: %5% için istatistikler\n"
 
 #: src/mmg/jobs.cpp:437
 msgid "Status"
@@ -6048,7 +6060,7 @@ msgstr "Genişleten:"
 
 #: src/mmg/tabs/input_format.cpp:246
 msgid "Stretch this track's timecodes. This entry can have two formats. It is either a positive floating point number, or a fraction like e.g. 1200/1253. Works best on video and subtitle tracks."
-msgstr ""
+msgstr "Bu iz'in zaman kodunu uzatır. Bu giriş iki biçime sahiptir. Ya artı kayan noktalı sayıdır ya da örn. 1200/1253 gibi kesirdir. Görüntü ve altyazı izlerinde çok iyi çalışır."
 
 #: src/mmg/header_editor/value_page.cpp:144
 msgid "String"
@@ -6070,7 +6082,7 @@ msgstr "Desteklenen dosya türleri:\n"
 
 #: src/common/cli_parser.cpp:176
 msgid "Suppress status output."
-msgstr ""
+msgstr "Durdurma durumu çıktısı."
 
 #: src/input/r_tta.h:38
 #: src/output/p_tta.h:34
@@ -6110,17 +6122,17 @@ msgstr "Etiketler"
 
 #: src/merge/output_control.cpp:1412
 msgid "Tags are not allowed in WebM compliant files. No tags will be written into any output file.\n"
-msgstr ""
+msgstr "WebM uyumlu dosyalarda etiketlere izin verilmez. Herhangi bir çıktı dosyasına hiç etiket yazılmadı.\n"
 
 #: src/merge/pr_generic.cpp:1396
 #, boost-format
 msgid "Tags for track ID %1%: %2% entries"
-msgstr ""
+msgstr "İz ID %1% için etiket: %2% giriş"
 
 #: src/mmg/mmg.cpp:57
 #, c-format, boost-format
 msgid "Tags for track ID %lld (%d entries) from %s"
-msgstr ""
+msgstr "İz ID %lld (%d giriş) için etiket, dosya %s"
 
 #: src/mmg/tabs/input_general.cpp:187
 msgid "Tags:"
@@ -6128,11 +6140,11 @@ msgstr "Etiketler:"
 
 #: src/mmg/cli_options_dlg.cpp:94
 msgid "Tells mkvmerge not to create and write the cue data which can be compared to an index in an AVI. Matroska files can be played back without the cue data, but seeking will probably be imprecise and slower. Use this only for testing purposes."
-msgstr ""
+msgstr "mkvmerge'e AVI içindeki indeksi karşılaştırabilen cue verisini yazmamasını ve oluşturmamasını söyler. Matroska dosyaları cue verisi olmadan oynatılabilir ama arama muhtemelen yavaş ve özensiz olacaktır. Bunu sadece deneme amaçlı kullanın. "
 
 #: src/mmg/cli_options_dlg.cpp:98
 msgid "Tells mkvmerge to create a meta seek element at the end of the file containing all clusters."
-msgstr ""
+msgstr "mkvmerge'e dosyanın sonunda içerdiği tüm kümelerin meta arama öğesini oluşturmasını söyler."
 
 #: src/info/qt_ui.cpp:71
 msgid "Text files (*.txt);;All files (*.*)"
@@ -6220,7 +6232,7 @@ msgstr "Matroska dosyası analiz ediliyor."
 #: src/mmg/header_editor/frame.cpp:679
 #: src/propedit/propedit.cpp:39
 msgid "The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file."
-msgstr ""
+msgstr "Matroska dosyası değiştirldi ama meta arama girişi güncellenemedi. Bu, oynatıcıların bu öğeyi bulmada zorlanabileceği anlamına gelir. Lütfen dosyayı kontrol etmek için sık kullandığınız oynatıcınızı kullanın."
 
 #: src/mmg/tabs/chapters.cpp:1889
 msgid ""
@@ -6228,6 +6240,9 @@ msgid ""
 "\n"
 "The proper solution is to save these chapters into a XML file and then to remux the file with the chapters included."
 msgstr ""
+"Matroska dosyası değiştirldi ama meta arama girişi güncellenemedi. Bu, oynatıcıların bu öğeyi bulmada zorlanabileceği anlamına gelir. Lütfen dosyayı kontrol etmek için sık kullandığınız oynatıcınızı kullanın.\n"
+"\n"
+"Uygun çözüm bu bölümleri bir XML dosyası içine kaydetmek ve sonra bu bölümlerin dahil olduğu dosyayı yeniden çoklamak."
 
 #: src/merge/mkvmerge.cpp:1264
 #, boost-format
@@ -6392,7 +6407,7 @@ msgstr ""
 #: src/mmg/tabs/global.cpp:294
 #: src/mmg/tabs/global.cpp:298
 msgid "The difference between tags associated with a track and global tags is explained in mkvmerge's documentation. In short: global tags apply to the complete file while the tags you can add on the 'input' tab apply to only one track."
-msgstr ""
+msgstr "İz ile ilişkilendirlmiş etiketler ve genel etiketler arasındaki fark mkvmerge'ün belgesinde açıklanır. Kısaca: genel etiketler tamamlanmış dosyalara uygulanırken etiketleri 'girdi' sekmesinde sadece bir ize ekleyebilirsiniz."
 
 #: src/merge/pr_generic.h:459
 msgid "The display height of the two tracks is different: %1% and %2%"
@@ -6413,7 +6428,7 @@ msgstr ""
 
 #: src/mmg/tabs/global.cpp:240
 msgid "The duration after which a new output file is started. The time can be given either in the form HH:MM:SS.nnnnnnnnn or as the number of seconds followed by 's'. You may omit the number of hours 'HH' and the number of nanoseconds 'nnnnnnnnn'. If given then you may use up to nine digits after the decimal point. Examples: 01:00:00 (after one hour) or 1800s (after 1800 seconds)."
-msgstr ""
+msgstr "Yeni bir çıktı dosyası başladıktan sonraki süre. Süre ya HH:MM:SS.nnnnnnnnn formunda verilebilir ya da 's' ile takip eden saniye sayısı olarak verilebilir. Saat sayısını 'HH' ve nanosaniye sayısını 'nnnnnnnnn' dahil edebilirsiniz. Eğer verilmişse sonrasında ondalık noktasından sonra dokuz rakama kadar kullanabilirsiniz. Örnekler: 01:00:00 (bir saatten sonra) veya 1800s (1800 saniyeden sonra)."
 
 #: src/propedit/options.cpp:211
 #, boost-format
@@ -6705,7 +6720,7 @@ msgstr "Yerel dil düzgün olarak ayarlanamadı. LANG, LC_ALL ve LC_MESSAGES ort
 
 #: src/mmg/tabs/global.cpp:258
 msgid "The maximum number of files that will be created even if the last file might contain more bytes/time than wanted. Useful e.g. when you want exactly two files. If you leave this empty then there is no limit for the number of files mkvmerge might create."
-msgstr ""
+msgstr "Son dosya istenenden daha fazla bayt/süre içerebilse bile oluşturulacak en fazla dosya sayısı. Faydalıdır örn. tam olarak iki dosya istediğinizde. Eğer bunu boş bırakırsanız sonrasında mkvmerge'ün oluşturabilir dosya sayısı için sınır yoktur."
 
 #: src/common/property_element.cpp:125
 #: src/mmg/header_editor/frame.cpp:404
@@ -6906,7 +6921,7 @@ msgstr ""
 
 #: src/mmg/tabs/global.cpp:237
 msgid "The size after which a new output file is started. The letters 'G', 'M' and 'K' can be used to indicate giga/mega/kilo bytes respectively. All units are based on 1024 (G = 1024^3, M = 1024^2, K = 1024)."
-msgstr ""
+msgstr "Yeni çıktı dosyası başladıktan sonraki boyut. 'G', 'M' ve 'K' harfleri sırasıyla giga/mega/kilo baytı göstermesi için kullanılabilir. Tüm birimler 1024 (G = 1024^3, M = 1024^2, K = 1024) temeline dayanır."
 
 #: src/merge/mkvmerge.cpp:1411
 #, boost-format
@@ -7010,7 +7025,7 @@ msgstr ""
 
 #: src/mmg/tabs/global.cpp:245
 msgid "The timecodes after which a new output file is started. The timecodes refer to the whole stream and not to each individual output file. The timecodes can be given either in the form HH:MM:SS.nnnnnnnnn or as the number of seconds followed by 's'. You may omit the number of hours 'HH'. You can specify up to nine digits for the number of nanoseconds 'nnnnnnnnn' or none at all. If given then you may use up to nine digits after the decimal point. If two or more timecodes are used then you have to separate them with commas. The formats can be mixed, too. Examples: 01:00:00,01:30:00 (after one hour and after one hour and thirty minutes) or 1800s,3000s,00:10:00 (after three, five and ten minutes)."
-msgstr ""
+msgstr "Yeni bir çıktı dosyası başladıktan sonraki zaman kodları. Zaman kodları bütün akışı işaret eder ve her bireysel çıktı dosyasını değil. Zaman kodları ya HH:MM:SS.nnnnnnnnn formunda verilebilir ya da 's' ile takip eden saniye sayısı olarak verilebilir. Saat sayısını 'HH' dahil edebilirsiniz. Nanosaniye sayısı 'nnnnnnnnn' için dokuz rakama kadar belirleyebilirsiniz ya da hiç belirlemezsiniz. Eğer verilmişse sonrasında ondalık noktasından sonra dokuz rakama kadar kullanabilirsiniz. Eğer iki veya daha fazla zaman kodları kullanılırsa sonrasında onları virgül ile ayırmak zorundasınız. Biçimler de karıştırılabilir. Örnekler: 01:00:00,01:30:00 (bir saatten sonra ve bir saatten sonra ve otuz dakika) veya 1800s,3000s,00:10:00 (üç, beş ve on dakika sonra)."
 
 #: src/input/r_ogm.cpp:594
 msgid "The timecodes for this stream have been reset in the middle of the file. This is not supported. The current packet will be discarded.\n"
@@ -7029,7 +7044,7 @@ msgstr ""
 #: src/extract/tracks.cpp:92
 #, boost-format
 msgid "The track ID %1% does not have a valid CodecID.\n"
-msgstr ""
+msgstr "İz ID %1% geçerli KodekID'sine sahip değil.\n"
 
 #: src/merge/output_control.cpp:803
 #, boost-format
@@ -7192,11 +7207,11 @@ msgstr "Bu dosya geçerli bölüm içermiyor."
 
 #: src/mmg/tabs/attachments.cpp:165
 msgid "This is the name that will be stored in the output file for this attachment. It defaults to the file name of the original file but can be changed."
-msgstr ""
+msgstr "Bu, bu ek için çıktı dosyasından saklanacak olan addır. Varsayılanı orijinal dosyanın dosya adıdır ama değiştirilebilir."
 
 #: src/mmg/tabs/global.cpp:230
 msgid "This is the title that players may show as the 'main title' for this movie."
-msgstr ""
+msgstr "Bu, oynatıcının bu film için 'ana başlıkta' gösterebileceği başlıktır."
 
 #: src/mmg/cli_options_dlg.cpp:88
 msgid "This option needs an additional argument 'n'. Tells mkvmerge to put at most 'n' data blocks into each cluster. If the number is postfixed with 'ms' then put at most 'n' milliseconds of data into each cluster. The maximum length for a cluster that mkvmerge accepts is 60000 blocks and 32000ms; the minimum length is 100ms. Programs will only be able to seek to clusters, so creating larger clusters may lead to imprecise or slow seeking."
@@ -7590,7 +7605,7 @@ msgstr "Kullanım"
 
 #: src/mmg/tabs/global.cpp:256
 msgid "Use 'segment linking' for the resulting files. For an in-depth explanation of this feature consult the mkvmerge documentation."
-msgstr ""
+msgstr "Dosyaları sonuçlandırmak için 'parça bağlama' kullan. Bu özelliğin geniş kapsamlı açıklaması için mkvmerge'ün belgesine danışın."
 
 #: src/mmg/cli_options_dlg.cpp:127
 msgid "Use fixed values for the elements that change with each file otherwise (muxing date, segment UID, track UIDs etc.). Two files muxed with the same settings and this switch activated will be identical."
@@ -7738,7 +7753,7 @@ msgstr "Görüntü izi %u"
 
 #: src/mmg/jobs.cpp:490
 msgid "View the output that mkvmerge generated during the muxing process for the selected job(s)"
-msgstr "Seçili iş(ler) için çoklama işlemi sırasında mkvmerge'nin oluşturduğu çıktıyı göster"
+msgstr "Seçili iş(ler) için çoklama işlemi sırasında mkvmerge'ün oluşturduğu çıktıyı göster"
 
 #: src/input/r_vobbtn.h:36
 #: src/output/p_vobbtn.h:36
@@ -7907,6 +7922,13 @@ msgid ""
 "Example: -00:05:23 would let all the chapters begin\n"
 "5minutes and 23seconds earlier than now."
 msgstr ""
+"Seçili bölümün zaman kodlarını ayarlamak için ve sabit miktarla\n"
+"alttakilerinde bu işlevi kullanabilirsiniz. Miktar artı veya eksi olabilir.\n"
+"Kullanılan biçim ya saniye sayısı olarak yorumlanır ki bu durumda\n"
+"sadece sayı olabilir, sırasıyla milisaniye ve saniye için 'ms' veya 's' gibi\n"
+"birimle takip edebilir ya da alışılmış HH:MM:SS.mmm veya HH:MM:SS biçimine\n"
+"sahip olabilir. Örnek: -00:05:23 tüm bölümlerin şu andan 5 dakika ve 23 saniye\n"
+"önce başlamasına izin verecektir."
 
 #: src/mmg/tabs/input.cpp:1350
 #, c-format, boost-format
@@ -8114,49 +8136,49 @@ msgstr ""
 
 #: src/input/r_ogm_flac.cpp:132
 msgid "flac_header_extraction: Could not initialize the FLAC decoder.\n"
-msgstr ""
+msgstr "flac_header_extraction: FLAC çözücüsü başlatılamadı.\n"
 
 #: src/input/r_ogm_flac.cpp:130
 msgid "flac_header_extraction: Could not set metadata_respond_all.\n"
-msgstr ""
+msgstr "flac_header_extraction: metadata_respond_all ayarlanamadı.\n"
 
 #: src/input/r_ogm_flac.cpp:128
 msgid "flac_header_extraction: FLAC__stream_decoder_new() failed.\n"
-msgstr ""
+msgstr "flac_header_extraction: FLAC__stream_decoder_new() başarısız oldu.\n"
 
 #: src/input/r_ogm_flac.cpp:42
 #, boost-format
 msgid "flac_header_extraction: bytes (%1%) < op.bytes (%2%). Could not read the FLAC headers.\n"
-msgstr ""
+msgstr "flac_header_extraction: bayt (%1%) < işl.bayt (%2%). FLAC başlıkları okunamadı.\n"
 
 #: src/input/r_flac.cpp:175
 msgid "flac_reader: Could not initialize the FLAC decoder.\n"
-msgstr ""
+msgstr "flac_reader: FLAC çözücüsü başlatılamadı.\n"
 
 #: src/input/r_flac.cpp:134
 msgid "flac_reader: Could not read a header packet.\n"
-msgstr ""
+msgstr "flac_reader: Başlık paketi okunamadı.\n"
 
 #: src/input/r_flac.cpp:228
 msgid "flac_reader: Could not read all header packets.\n"
-msgstr ""
+msgstr "flac_reader: Tüm başlık paketleri okunamadı.\n"
 
 #: src/input/r_flac.cpp:172
 msgid "flac_reader: Could not set metadata_respond_all.\n"
-msgstr ""
+msgstr "flac_reader: metadata_respond_all ayarlanamadı.\n"
 
 #: src/input/r_flac.cpp:309
 #, boost-format
 msgid "flac_reader: Error parsing the file: %1%\n"
-msgstr ""
+msgstr "flac_reader: Ayrıştırma hatası olan dosya: %1%\n"
 
 #: src/input/r_flac.cpp:170
 msgid "flac_reader: FLAC__stream_decoder_new() failed.\n"
-msgstr ""
+msgstr "flac_reader: FLAC__stream_decoder_new() başarısız oldu.\n"
 
 #: src/input/r_flac.cpp:139
 msgid "flac_reader: could not initialize the FLAC packetizer.\n"
-msgstr ""
+msgstr "flac_reader: FLAC paketleyicisi başlatılamadı.\n"
 
 #: src/mmg/tabs/input_extra.cpp:87
 msgid "for all frames"
@@ -8165,7 +8187,7 @@ msgstr "tüm karaler için"
 #: src/input/r_avc.cpp:76
 #: src/input/r_vc1.cpp:52
 msgid "have an xcptn\n"
-msgstr ""
+msgstr "xcptn'e sahip\n"
 
 #: src/info/mkvinfo.cpp:804
 msgid "header removal"
@@ -8517,12 +8539,12 @@ msgstr "mkvmerge GKA: hata"
 
 #: src/mmg/tabs/global.cpp:287
 msgid "mkvmerge can read CUE sheets for audio CDs and automatically convert them to chapters. This option controls how the chapter names are created. The sequence '%p' is replaced by the track's PERFORMER, the sequence '%t' by the track's TITLE, '%n' by the track's number and '%N' by the track's number padded with a leading 0 for track numbers < 10. The rest is copied as is. If nothing is entered then '%p - %t' will be used."
-msgstr ""
+msgstr "mkvmerge ses CD'leri için CUE sheet'leri okuyabilir ve otomatik olarak onları bölümlere dönüştürebilir. Bu seçenek bölüm adlarının nasıl oluşturulduğunu denetler. '%p' dizisi iz'in SANATÇISI ile, '%t' dizisi iz'in BAŞLIĞI ile, '%n' iz'in numarası ile ve '%N' 10'dan küçük iz sayıları için başında 0 ile takviye edilmiş iz sayısı ile değiştirilir. Geri kalan olduğu gibi kopyalanır. Eğer hiçbir şey girilmezse sonrasında '%p - %t' kullanılacaktır."
 
 #: src/mmg/tabs/input_general.cpp:190
 #: src/mmg/tabs/input_general.cpp:192
 msgid "mkvmerge can read and use timecodes from an external text file. This feature is a very advanced feature. Almost all users should leave this entry empty."
-msgstr ""
+msgstr "mkvmerge harici metin dosyalarını okuyabilir ve zaman kodlarını kullanabilir. Bu özellik çok gelişmiş bir özelliktir. Hemen hemen tüm kullanıcılar bu girişi boş bırakmalıdır."
 
 #: src/output/p_avc.cpp:109
 #, boost-format
@@ -8530,6 +8552,8 @@ msgid ""
 "mkvmerge encountered broken or unparsable data in this AVC/h.264 video track. Either your file is damaged (which mkvmerge cannot cope with yet) or this is a bug in mkvmerge itself. The error message was:\n"
 "%1%\n"
 msgstr ""
+"mkvmerge bu AVC/h.264 görüntü izinde bozuk veya ayrıştırılamaz veriyle karşılaştı. Ya (mkvmerge'ün henüz bununla başa çıkamadığı) dosyanız hasarlı ya da bu mkvmerge'ün kendisindeki bir hata. Hata mesajı:\n"
+"%1%\n"
 
 #: src/mmg/options/mkvmerge.cpp:57
 msgid "mkvmerge executable"
@@ -8547,7 +8571,7 @@ msgstr "mkvmerge bitti"
 
 #: src/input/r_ogm.cpp:496
 msgid "mkvmerge has not been compiled with FLAC support but handling of this stream has been requested.\n"
-msgstr ""
+msgstr "mkvmerge FLAC desteğiyle derlenmedi ama bu akışı kullanabilmesi talep edildi.\n"
 
 #: src/mmg/jobs.cpp:50
 #: src/mmg/mux_dialog.cpp:46
@@ -8565,20 +8589,20 @@ msgstr "mkvmerge çıktısı:"
 #: src/mmg/tabs/global.cpp:275
 #: src/mmg/tabs/global.cpp:277
 msgid "mkvmerge supports two chapter formats: The OGM like text format and the full featured XML format."
-msgstr ""
+msgstr "mkvmerge iki bölüm biçimini destekler: Metin biçimi gibi olan OGM ve tam özellikli XML biçimi."
 
 #: src/mmg/tabs/global.cpp:283
 msgid "mkvmerge supports two chapter formats: The OGM like text format and the full featured XML format. If the OGM format is used and the file's charset is not recognized correctly then this option can be used to correct that. This option is ignored for XML chapter files."
-msgstr ""
+msgstr "mkvmerge iki bölüm biçimini destekler: Metin biçimi gibi olan OGM ve tam özellikli XML biçimi. Eğer OGM biçimi kullanılırsa ve dosyanın karakter grubu tanınmazsa sonrasında bu seçenek bunu düzeltmek için kullanılabilir. Bu seçenek XML bölüm dosyaları için yoksayılır."
 
 #: src/mmg/tabs/global.cpp:279
 msgid "mkvmerge supports two chapter formats: The OGM like text format and the full featured XML format. This option specifies the language to be associated with chapters if the OGM chapter format is used. It is ignored for XML chapter files."
-msgstr ""
+msgstr "mkvmerge iki bölüm biçimini destekler: Metin biçimi gibi olan OGM ve tam özellikli XML biçimi. Bu seçenek eğer OGM bölüm biçimi kullanılırsa, bölümler ile ilişkilendirmek için dili belirler. Bu seçenek XML bölüm dosyaları için yoksayılır."
 
 #: src/merge/output_control.cpp:267
 #: src/merge/output_control.cpp:307
 msgid "mkvmerge was interrupted by a SIGINT (Ctrl+C?)\n"
-msgstr ""
+msgstr "mkvmerge'ün SIGINT tarafından çalışması kesildi (Ctrl+C?)\n"
 
 #: src/propedit/propedit_cli_parser.cpp:154
 msgid "mkvpropedit [options] <file> <actions>"
@@ -8658,7 +8682,7 @@ msgstr "normal"
 #: src/input/r_ogm.cpp:468
 #, boost-format
 msgid "ogg_stream_init for stream number %1% failed. Will try to continue and ignore this stream.\n"
-msgstr ""
+msgstr "Akış numarası %1% için ogg_stream_init başarısız oldu. Devam etmeyi deneyecek ve bu akışı yoksayacak.\n"
 
 #: src/input/r_ogm.cpp:380
 msgid "ogg_sync_buffer failed\n"
@@ -8679,7 +8703,7 @@ msgstr "çıktı örnekleme aralığı: %1%"
 
 #: src/output/p_passthrough.h:29
 msgid "passthrough"
-msgstr ""
+msgstr "içinden geçen"
 
 #: src/mmg/jobs.cpp:528
 #: src/mmg/jobs.cpp:702
