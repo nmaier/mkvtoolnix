@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: mkvtoolnix_uk\n"
 "Report-Msgid-Bugs-To: Moritz Bunkus <moritz@bunkus.org>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2012-02-12 18:16+0100\n"
+"PO-Revision-Date: 2012-02-22 11:29+0200\n"
 "Last-Translator: Andriy Bilous'ko <arestarh@ukr.net>\n"
 "Language-Team: Ukrainian <moritz@bunkus.org>\n"
 "Language: uk\n"
@@ -2009,7 +2009,7 @@ msgstr "Інше завдання щодо мультиплексування щ
 msgid "Appending a track from a file to another track from the same file is not allowed. This is the case for tracks number %u and %u."
 msgstr "Додавання доріжки з файлу до іншої доріжки цього ж файлу не допускається. Це стосується доріжок номер %u і %u."
 
-#: src/merge/output_control.cpp:1744
+#: src/merge/output_control.cpp:1745
 #, boost-format
 msgid "Appending track %1% from file no. %2% ('%3%') to track %4% from file no. %5% ('%6%').\n"
 msgstr "Приєднання доріжки %1% з файлу номер %2% ('%3%') до доріжки %4% з файлу номер %5% ('%6%').\n"
@@ -2386,7 +2386,7 @@ msgstr "Розділи"
 msgid "Chapters (%d entries) from %s"
 msgstr "Розділи (%d записи) з %s"
 
-#: src/merge/output_control.cpp:1383
+#: src/merge/output_control.cpp:1384
 msgid "Chapters are not allowed in WebM compliant files. No chapters will be written into any output file.\n"
 msgstr "Розділи не допускаються в сумісних WebM файлах. Жодного розділу не буде записано до будь-якого вихідного файлу.\n"
 
@@ -2718,7 +2718,7 @@ msgstr "Неможливо одержати заголовок послідов�
 msgid "Could not find an index for audio track %1% (avilib error message: %2%). Skipping track.\n"
 msgstr "Не знайдено індекс для звукової доріжки %1% (avilib повідомлення про помилку: %2%). Пропуск доріжки.\n"
 
-#: src/merge/output_control.cpp:1699
+#: src/merge/output_control.cpp:1700
 #, boost-format
 msgid "Could not find gptzr when appending. %1%\n"
 msgstr "Не знайдено gptzr при приєднанні. %1%\n"
@@ -3180,7 +3180,7 @@ msgstr "Версія EBML для читання: %1%"
 msgid "EBML version: %1%"
 msgstr "Версія EBML: %1%"
 
-#: src/merge/output_control.cpp:1224
+#: src/merge/output_control.cpp:1225
 #, boost-format
 msgid "EVIL internal bug! (unknown file type). %1%\n"
 msgstr "EVIL(дуже серйозна) внутрішня помилка! (невідомий тип файлу). %1%\n"
@@ -3233,7 +3233,7 @@ msgstr "Елементи в категорії '%1%' ('--edit %2%'):\n"
 
 #: src/mmg/tabs/global.cpp:233
 msgid "Enable splitting..."
-msgstr "Ввімкнути розділення..."
+msgstr "Ввімкнути розбиття..."
 
 #: src/info/mkvinfo.cpp:970
 #, boost-format
@@ -3436,9 +3436,9 @@ msgid "Extracting track %1% with the CodecID '%2%' to the file '%3%'. Container 
 msgstr "Витягнення доріжки %1% з CodecID '%2%' у файл '%3%'. Формат контейнера: %4%\n"
 
 #: src/extract/tracks.cpp:96
-#, fuzzy, boost-format
+#, boost-format
 msgid "Extraction of track ID %1% with the CodecID '%2%' is not supported.\n"
-msgstr "Витягнення доріжки номер %1% з CodecID '%2%' не підтримується.\n"
+msgstr "Витягнення доріжки з ID %1% з CodecID '%2%' не підтримується.\n"
 
 #: src/input/r_flac.h:52
 #: src/output/p_flac.h:39
@@ -3582,7 +3582,7 @@ msgstr "Файл/сегмент зв'язку"
 msgid "File/segment title:"
 msgstr "Назва файла/сегмента:"
 
-#: src/merge/output_control.cpp:910
+#: src/merge/output_control.cpp:911
 msgid "Files cannot be appended to themselves. The argument for '--append-to' was invalid.\n"
 msgstr "Файли не можуть бути приєднані самі до себе. Аргумент '--append-to' був некорректним.\n"
 
@@ -4637,7 +4637,7 @@ msgstr "Більше ніж одна назва була задана для є�
 msgid "More than one root element found."
 msgstr "Більше ніж один кореневий елемент знайдений."
 
-#: src/merge/output_control.cpp:986
+#: src/merge/output_control.cpp:987
 #, boost-format
 msgid "More than one track is to be appended to the track %1% from file no. %2% ('%3%'). The argument for '--append-to' was invalid.\n"
 msgstr "Більше ніж одна доріжка повинна бути додана до доріжки %1% з файлу номер %2% (%3%). Аргумент для '--append-to' був некорректним.\n"
@@ -4756,7 +4756,7 @@ msgstr "Не було обрано MIME-тип для вкладення '%s'."
 msgid "No MIME type has been set for the attachment '%1%', and it could not be guessed.\n"
 msgstr "Не було задано MIME-тип для вкладення '%1%', і він не може бути визначений.\n"
 
-#: src/merge/output_control.cpp:945
+#: src/merge/output_control.cpp:946
 #, boost-format
 msgid "No append mapping was given for the file no. %1% ('%2%'). A default mapping of %3% will be used instead. Please keep that in mind if mkvmerge aborts with an error message regarding invalid '--append-to' options.\n"
 msgstr "Не було задано розподілення для файлу номер %1% (%2%). Натомість, типово буде застосовано розподілення %3%. Будь ласка, прийміть це до уваги, якщо робота mkvmerge перерветься з повідомленням про помилку щодо неприпустимої опції '--append-to'.\n"
@@ -4937,7 +4937,7 @@ msgstr "Дозволено лише один вихідний файл.\n"
 msgid "Only one segment info file allowed in '%1% %2%'.\n"
 msgstr "Лише один файл інформації сегмента дозволено в '%1% %2%'.\n"
 
-#: src/merge/output_control.cpp:926
+#: src/merge/output_control.cpp:927
 #, boost-format
 msgid "Only partial append mappings were given for the file no. %1% ('%2%'). Either don't specify any mapping (in which case the default mapping will be used) or specify a mapping for all tracks that are to be copied.\n"
 msgstr "Лише часткові розподілення для приєднання були означені для файла номер %1% (%2%). Необхідно, або не задавати ніякого розподілення (тоді буде використовуватись типове розподілення), або задати розподілення для всіх доріжок, які повинні бути скопійовані.\n"
@@ -5181,7 +5181,7 @@ msgstr "Прогрес виконання"
 
 #: src/extract/timecodes_v2.cpp:289
 #: src/extract/tracks.cpp:401
-#: src/merge/output_control.cpp:519
+#: src/merge/output_control.cpp:520
 #, boost-format
 msgid "Progress: %1%%%%2%"
 msgstr "Прогрес виконання: %1%%%%2%"
@@ -5191,7 +5191,7 @@ msgstr "Прогрес виконання: %1%%%%2%"
 msgid "Progress: 100%\n"
 msgstr "Прогрес виконання: 100%\n"
 
-#: src/merge/output_control.cpp:1996
+#: src/merge/output_control.cpp:1997
 #, boost-format
 msgid "Progress: 100%%%1%"
 msgstr "Прогрес виконання: 100%%%1%"
@@ -5956,7 +5956,7 @@ msgstr "Деякі значення заголовка були змінені. 
 msgid "Some header values have been modified. Do you really want to reload without saving the file?"
 msgstr "Деякі значення заголовка були змінені. Ви дійсно хочете повторно відкрити без збереження файлу?"
 
-#: src/merge/output_control.cpp:1424
+#: src/merge/output_control.cpp:1425
 #, boost-format
 msgid "Some tag elements are missing (this error should not have occured - another similar error should have occured earlier). %1%\n"
 msgstr "Деякі елементи тегів відсутні (ця помилка не повинна була виникнути - подібна помилка повинна була виникнути раніше). %1%\n"
@@ -6144,7 +6144,7 @@ msgstr "Селектори тегів"
 msgid "Tags"
 msgstr "Теги"
 
-#: src/merge/output_control.cpp:1412
+#: src/merge/output_control.cpp:1413
 msgid "Tags are not allowed in WebM compliant files. No tags will be written into any output file.\n"
 msgstr "Теги не допускаються у сумісних WebM файлах. Жодних тегів не буде записано до будь-яких вихідних файлів.\n"
 
@@ -6396,7 +6396,7 @@ msgstr "Коригуючий заголовок файла не був прав�
 msgid "The country '%s' is not a valid ccTLD and cannot be selected."
 msgstr "Країна '%s' не є корректною з-поміж таких серед доменів ccTLD і не може бути обрана."
 
-#: src/merge/output_control.cpp:1487
+#: src/merge/output_control.cpp:1488
 msgid "The cue entries (the index) are being written..."
 msgstr "Елементи cue (індекс) в процесі запису..."
 
@@ -6420,11 +6420,11 @@ msgstr "Типовий код мови для '%1%' не є корректним
 msgid "The delay setting for track nr. %s in file '%s' is invalid."
 msgstr "Опції затримки для доріжки номер %s файлу '%s' є некорректними."
 
-#: src/merge/output_control.cpp:1231
-#: src/merge/output_control.cpp:1234
-#: src/merge/output_control.cpp:1237
-#: src/merge/output_control.cpp:1240
-#: src/merge/output_control.cpp:1243
+#: src/merge/output_control.cpp:1232
+#: src/merge/output_control.cpp:1235
+#: src/merge/output_control.cpp:1238
+#: src/merge/output_control.cpp:1241
+#: src/merge/output_control.cpp:1244
 #, boost-format
 msgid ""
 "The demultiplexer for the file '%1%' failed to initialize:\n"
@@ -6517,7 +6517,7 @@ msgstr "Файл '%1%' не може бути відкритий для запи
 msgid "The file '%1%' could not be opened for writing (%2%, %3%).\n"
 msgstr "Файл '%1%' не може бути відкритий для запису (%2%, %3%).\n"
 
-#: src/merge/output_control.cpp:1452
+#: src/merge/output_control.cpp:1453
 #, boost-format
 msgid "The file '%1%' has been opened for writing.\n"
 msgstr "Файл '%1%' був відкритий для запису.\n"
@@ -6547,12 +6547,12 @@ msgstr "Файл '%s' не існує."
 msgid "The file '%s' is already processed in combination with the file '%s'. It cannot be added a second time."
 msgstr "Файл '%s' вже оброблений у поєднанні з файлом '%s'. Він не може бути приєднаний вдруге."
 
-#: src/merge/output_control.cpp:1237
+#: src/merge/output_control.cpp:1238
 msgid "The file content does not match its format type and was not recognized."
 msgstr "Вмістиме файлу не співпадає з типом його формату і не було розпізнане."
 
-#: src/merge/output_control.cpp:1231
-#: src/merge/output_control.cpp:1234
+#: src/merge/output_control.cpp:1232
+#: src/merge/output_control.cpp:1235
 msgid "The file could not be opened for reading, or there was not enough data to parse its headers."
 msgstr "Файл не може бути відкритий для зчитування, або було недостатньо даних для аналізу його заголовків."
 
@@ -6584,7 +6584,7 @@ msgstr "Заголовок файлу є занадто коротким.\n"
 msgid "The file header was not read correctly.\n"
 msgstr "Заголовок файлу не був правильно прочитаний.\n"
 
-#: src/merge/output_control.cpp:1240
+#: src/merge/output_control.cpp:1241
 msgid "The file headers could not be parsed, e.g. because they're incomplete, invalid or damaged."
 msgstr "Заголовки файлу не можуть бути проаналізовані, наприклад через те, що вони неповні, некоректні або пошкоджені."
 
@@ -6618,17 +6618,17 @@ msgstr "Файл в процесі виправлення, частина 4/4...
 msgid "The file name for this segment."
 msgstr "Назва файлу даного сегмента."
 
-#: src/merge/output_control.cpp:959
+#: src/merge/output_control.cpp:960
 #, boost-format
 msgid "The file no. %1% ('%2%') does not contain a track with the ID %3%, or that track is not to be copied. The argument for '--append-to' was invalid.\n"
 msgstr "Файл номер %1% ('%2%') не містить доріжку з ID %3%, або дана доріжка не повинна бути скопійована. Аргумент '--append-to' є некорректним.\n"
 
-#: src/merge/output_control.cpp:965
+#: src/merge/output_control.cpp:966
 #, boost-format
 msgid "The file no. %1% ('%2%') does not contain a track with the ID %3%, or that track is not to be copied. Therefore no track can be appended to it. The argument for '--append-to' was invalid.\n"
 msgstr "Файл номер %1% ('%2%') не містить доріжку з ID %3%, або дана доріжка не повинна бути скопійована. Тому, жодної доріжки не може бути приєднано. Аргумент '--append-to' є некорректним.\n"
 
-#: src/merge/output_control.cpp:902
+#: src/merge/output_control.cpp:903
 #, boost-format
 msgid "The file no. %1% ('%2%') is not being appended. The argument for '--append-to' was invalid.\n"
 msgstr "Файл номер %1% ('%2%') не приєднується. Аргумент '--append-to' є некорректним.\n"
@@ -6670,7 +6670,7 @@ msgstr "Формат задання розміру розділення є не�
 msgid "The format of the split timecode/duration is invalid."
 msgstr "Формат задання тайм-коду/тривалості розділення є неправильним."
 
-#: src/merge/output_control.cpp:1029
+#: src/merge/output_control.cpp:1030
 msgid "The formats do not match."
 msgstr "Формати не збігаються."
 
@@ -6887,7 +6887,7 @@ msgstr "Опція '--meta-seek-size' більше не підтримуєтьс
 msgid "The order of the various options is not important."
 msgstr "Порядок розташування опцій не має значення."
 
-#: src/merge/output_control.cpp:1448
+#: src/merge/output_control.cpp:1449
 #, boost-format
 msgid "The output file '%1%' could not be opened for writing (%2%).\n"
 msgstr "Вихідний файл '%1%' не може бути відкритий для запису (%2%).\n"
@@ -6947,7 +6947,7 @@ msgstr "Значення параметру не є корректно зада�
 msgid "The property value is not a valid unsigned integer in '%1%'. %2%\n"
 msgstr "Значення параметру не є корректно заданим цілим беззнаковим числом в '%1%'. %2%\n"
 
-#: src/merge/output_control.cpp:1031
+#: src/merge/output_control.cpp:1032
 msgid "The reason is unknown."
 msgstr "Причини цього поки невідомі."
 
@@ -6998,7 +6998,7 @@ msgid "The size of attachment '%1%' is 0.\n"
 msgstr "Розмір вкладення '%1%' є 0.\n"
 
 #: src/merge/output_control.cpp:332
-#: src/merge/output_control.cpp:458
+#: src/merge/output_control.cpp:459
 #, boost-format
 msgid "The source file '%1%' could not be opened successfully, or retrieving its size by seeking to the end did not work.\n"
 msgstr "Вхідний файл '%1%' не може бути відкритий успішно, або отримання його розміру шляхом переміщення до кінця не працює.\n"
@@ -7108,27 +7108,27 @@ msgstr "Тайм-коди для цього потоку були викорис
 msgid "The title for the whole movie."
 msgstr "Заголовок для всього фільму."
 
-#: src/merge/output_control.cpp:975
+#: src/merge/output_control.cpp:976
 #, boost-format
 msgid "The track %1% from file no. %2% ('%3%') is to be appended more than once. The argument for '--append-to' was invalid.\n"
 msgstr "Доріжка %1% файлу номер %2% (%3%) буде приєднана більше одного разу. Параметр для '--append-to' був некорреткним.\n"
 
 #: src/extract/tracks.cpp:92
-#, fuzzy, boost-format
+#, boost-format
 msgid "The track ID %1% does not have a valid CodecID.\n"
-msgstr "Доріжка %1% не містить правильного CodecID.\n"
+msgstr "Доріжка з ID %1% не містить правильного CodecID.\n"
 
-#: src/merge/output_control.cpp:803
+#: src/merge/output_control.cpp:804
 #, boost-format
 msgid "The track headers could not be rendered correctly. %1%\n"
 msgstr "Заголовки доріжки не можуть бути опрацьовані корректно. %1%\n"
 
-#: src/merge/output_control.cpp:1021
+#: src/merge/output_control.cpp:1022
 #, boost-format
 msgid "The track number %1% from the file '%2%' can probably not be appended correctly to the track number %3% from the file '%4%': %5% Please make sure that the resulting file plays correctly the whole time. The author of this program will probably not give support for playback issues with the resulting file.\n"
 msgstr "Доріжка %1% файлу '%2%' ймовірно не може бути корректно приєднана до доріжки %3% файлу '%4%': %5% Будь ласка, впевніться, що отриманий файл відтворюється корреткно протягом всього часу перегляду. Автор цієї програми ймовірно не буде надавати підтримку при проблемах відтворення отримуваних файлів.\n"
 
-#: src/merge/output_control.cpp:1032
+#: src/merge/output_control.cpp:1033
 #, boost-format
 msgid "The track number %1% from the file '%2%' cannot be appended to the track number %3% from the file '%4%'. %5%\n"
 msgstr "Доріжка %1% файлу '%2%' не може бути приєднана до доріжки %3% файлу '%4%'. %5%\n"
@@ -7138,7 +7138,7 @@ msgstr "Доріжка %1% файлу '%2%' не може бути приєдн�
 msgid "The track number as used in the Block Header."
 msgstr "Номер доріжки як вказано в заголовку блоку."
 
-#: src/merge/output_control.cpp:1030
+#: src/merge/output_control.cpp:1031
 msgid "The track parameters do not match."
 msgstr "Параметри доріжок не співпадають."
 
@@ -7159,8 +7159,8 @@ msgstr "Theora"
 msgid "There is a new version available online."
 msgstr "Онлайн доступна нова версія."
 
-#: src/merge/output_control.cpp:896
-#: src/merge/output_control.cpp:906
+#: src/merge/output_control.cpp:897
+#: src/merge/output_control.cpp:907
 #, boost-format
 msgid "There is no file with the ID '%1%'. The argument for '--append-to' was invalid.\n"
 msgstr "Немає файлу з ID '%1%'. Аргумент для '--append-to' був некорректним.\n"
@@ -7313,7 +7313,7 @@ msgstr "Цей елемент є унікальним. Більше таких �
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. %1%\n"
 msgstr "Цього ДІЙСНО не повинно було статися. Простір, зарезервований для першого елемента мета пошуку, був надто малим. %1%\n"
 
-#: src/merge/output_control.cpp:1637
+#: src/merge/output_control.cpp:1638
 #, boost-format
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. Size needed: %1%. %2%\n"
 msgstr "Цього ДІЙСНО не повинно було статися. Простір, зарезервований для першого елемента мета пошуку, був надто малим. Необхідний розмір: %1%. %2%\n"
@@ -8223,7 +8223,7 @@ msgstr "Шифрування"
 msgid "failed"
 msgstr "Не вдалося"
 
-#: src/merge/output_control.cpp:590
+#: src/merge/output_control.cpp:591
 #, boost-format
 msgid "filelist_t not found for generic_packetizer_c. %1%\n"
 msgstr "filelist_t не знайдено для generic_packetizer_c. %1%\n"
