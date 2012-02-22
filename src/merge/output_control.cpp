@@ -353,8 +353,6 @@ get_file_type(filelist_t &file) {
     type = FILE_TYPE_ASF;
   else if (cdxa_reader_c::probe_file(io, size))
     type = FILE_TYPE_CDXA;
-  else if (dv_reader_c::probe_file(io, size))
-    type = FILE_TYPE_DV;
   else if (flv_reader_c::probe_file(io, size))
     type = FILE_TYPE_FLV;
   else if (hdsub_reader_c::probe_file(io, size))
@@ -386,6 +384,9 @@ get_file_type(filelist_t &file) {
     type = FILE_TYPE_IVF;
   else if (dirac_es_reader_c::probe_file(io, size))
     type = FILE_TYPE_DIRAC;
+  // File types that are misdetected sometimes and that aren't supported
+  else if (dv_reader_c::probe_file(io, size))
+    type = FILE_TYPE_DV;
   // File types that are misdetected sometimes
   else if (dts_reader_c::probe_file(io, size, true))
     type = FILE_TYPE_DTS;
