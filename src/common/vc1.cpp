@@ -400,7 +400,8 @@ vc1::es_parser_c::handle_end_of_sequence_packet(memory_cptr) {
 
 void
 vc1::es_parser_c::handle_entrypoint_packet(memory_cptr packet) {
-  add_pre_frame_extra_data(packet);
+  if (!postpone_processing(packet))
+    add_pre_frame_extra_data(packet);
 
   if (!m_raw_entrypoint.is_set())
     m_raw_entrypoint = memory_cptr(packet->clone());
@@ -408,15 +409,21 @@ vc1::es_parser_c::handle_entrypoint_packet(memory_cptr packet) {
 
 void
 vc1::es_parser_c::handle_field_packet(memory_cptr packet) {
+  if (postpone_processing(packet))
+    return;
+
   add_post_frame_extra_data(packet);
 }
 
 void
 vc1::es_parser_c::handle_frame_packet(memory_cptr packet) {
+  if (postpone_processing(packet))
+    return;
+
   flush_frame();
 
   vc1::frame_header_t frame_header;
-  if (!m_seqhdr_found || !vc1::parse_frame_header(packet->get_buffer(), packet->get_size(), frame_header, m_seqhdr))
+  if (!vc1::parse_frame_header(packet->get_buffer(), packet->get_size(), frame_header, m_seqhdr))
     return;
 
   m_current_frame        = frame_cptr(new frame_t);
@@ -450,16 +457,24 @@ vc1::es_parser_c::handle_sequence_header_packet(memory_cptr packet) {
 
   if (!m_default_duration_forced && m_seqhdr.framerate_flag && (0 != m_seqhdr.framerate_num) && (0 != m_seqhdr.framerate_den))
     m_default_duration = 1000000000ll * m_seqhdr.framerate_num / m_seqhdr.framerate_den;
+
+  process_unparsed_packets();
 }
 
 void
 vc1::es_parser_c::handle_slice_packet(memory_cptr packet) {
+  if (postpone_processing(packet))
+    return;
+
   add_post_frame_extra_data(packet);
 }
 
 void
 vc1::es_parser_c::handle_unknown_packet(uint32_t,
                                         memory_cptr packet) {
+  if (postpone_processing(packet))
+    return;
+
   add_post_frame_extra_data(packet);
 }
 
@@ -477,6 +492,24 @@ vc1::es_parser_c::flush_frame() {
   m_frames.push_back(m_current_frame);
 
   m_current_frame = frame_cptr(NULL);
+}
+
+bool
+vc1::es_parser_c::postpone_processing(memory_cptr &packet) {
+  if (m_seqhdr_found)
+    return false;
+
+  packet->grab();
+  m_unparsed_packets.push_back(packet);
+  return true;
+}
+
+void
+vc1::es_parser_c::process_unparsed_packets() {
+  for (auto &packet : m_unparsed_packets)
+    handle_frame_packet(packet);
+
+  m_unparsed_packets.clear();
 }
 
 void

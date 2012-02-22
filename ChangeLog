@@ -1,5 +1,9 @@
 2012-02-22  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: Fixed file type recognition and frame drops
+	for VC1 elementary streams that do not start with a sequence
+	header but with frame or field packets instead.
+
 	* mkvmerge: bug fix: Fixed mis-detection as unsupported DV files
 	(happened for e.g. PGS subtitle files).
 

@@ -157,6 +157,8 @@ namespace vc1 {
     std::deque<frame_cptr> m_frames;
     frame_cptr m_current_frame;
 
+    std::deque<memory_cptr> m_unparsed_packets;
+
     std::deque<int64_t> m_timecodes;
     std::deque<int64_t> m_timecode_positions;
     int64_t m_previous_timecode;
@@ -248,6 +250,9 @@ namespace vc1 {
     virtual void add_pre_frame_extra_data(memory_cptr packet);
     virtual void add_post_frame_extra_data(memory_cptr packet);
     virtual void combine_extra_data_with_packet();
+
+    virtual bool postpone_processing(memory_cptr &packet);
+    virtual void process_unparsed_packets();
 
     virtual void flush_frame();
 
