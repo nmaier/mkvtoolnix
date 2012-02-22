@@ -10,7 +10,7 @@ test "extract with correction file" do
 end
 
 test "look for SimpleBlock" do
-  sys "../src/mkvinfo #{tmp} | grep -q SimpleBlock", :exit_code => 1
+  sys "../src/mkvinfo --ui-language en_US #{tmp} | grep -q SimpleBlock", :exit_code => 1
   "ok"
 end
 
