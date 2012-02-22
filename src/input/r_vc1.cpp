@@ -22,7 +22,7 @@
 
 
 #define PROBESIZE 4
-#define READ_SIZE 1024 * 1024
+#define READ_SIZE 20 * 1024 * 1024
 
 int
 vc1_es_reader_c::probe_file(mm_io_c *in,
