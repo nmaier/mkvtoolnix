@@ -315,8 +315,8 @@ mpeg4::p10::parse_sps(memory_cptr &buffer,
   sps.level_idc      = w.copy_bits(8, r); // level_idc
   sps.id             = gecopy(r, w);      // sps id
   if (sps.profile_idc >= 100) {           // high profile
-    if (gecopy(r, w) == 3)                // chroma_format_idc
-      w.copy_bits(1, r);                  // residue_transform_flag
+    if ((sps.chroma_format_idc = gecopy(r, w)) == 3) // chroma_format_idc
+      w.copy_bits(1, r);                  // separate_colour_plane_flag
     gecopy(r, w);                         // bit_depth_luma_minus8
     gecopy(r, w);                         // bit_depth_chroma_minus8
     w.copy_bits(1, r);                    // qpprime_y_zero_transform_bypass_flag
@@ -324,7 +324,9 @@ mpeg4::p10::parse_sps(memory_cptr &buffer,
       for (i = 0; i < 8; ++i)
         if (w.copy_bits(1, r) == 1)       // seq_scaling_list_present_flag
           slcopy(r, w, i < 6 ? 16 : 64);
-  }
+  } else
+    sps.chroma_format_idc = 1;            // 4:2:0 assumed
+
   sps.log2_max_frame_num = gecopy(r, w) + 4; // log2_max_frame_num_minus4
   sps.pic_order_cnt_type = gecopy(r, w);     // pic_order_cnt_type
   switch (sps.pic_order_cnt_type) {
@@ -363,15 +365,29 @@ mpeg4::p10::parse_sps(memory_cptr &buffer,
   sps.height = (2 - sps.frame_mbs_only) * mb_height * 16;
 
   w.copy_bits(1, r);            // direct_8x8_inference_flag
-  if (w.copy_bits(1, r) == 1) {
+  if (w.copy_bits(1, r) == 1) { // frame_cropping_flag
+    unsigned int crop_unit_x;
+    unsigned int crop_unit_y;
+    if (0 == sps.chroma_format_idc) { // monochrome
+      crop_unit_x = 1;
+      crop_unit_y = 2 - sps.frame_mbs_only;
+    } else if (1 == sps.chroma_format_idc) { // 4:2:0
+      crop_unit_x = 2;
+      crop_unit_y = 2 * (2 - sps.frame_mbs_only);
+    } else if (2 == sps.chroma_format_idc) { // 4:2:2
+      crop_unit_x = 2;
+      crop_unit_y = 2 - sps.frame_mbs_only;
+    } else { // 3 == sps.chroma_format_idc   // 4:4:4
+      crop_unit_x = 1;
+      crop_unit_y = 2 - sps.frame_mbs_only;
+    }
     sps.crop_left   = gecopy(r, w); // frame_crop_left_offset
     sps.crop_right  = gecopy(r, w); // frame_crop_right_offset
     sps.crop_top    = gecopy(r, w); // frame_crop_top_offset
     sps.crop_bottom = gecopy(r, w); // frame_crop_bottom_offset
 
-    sps.width   = 16 * mb_width - 2 * (sps.crop_left + sps.crop_right);
-    sps.height -= (2 - sps.frame_mbs_only) * 2 *
-      (sps.crop_top + sps.crop_bottom);
+    sps.width      -= crop_unit_x * (sps.crop_left + sps.crop_right);
+    sps.height     -= crop_unit_y * (sps.crop_top  + sps.crop_bottom);
   }
   sps.vui_present = w.copy_bits(1, r);
   if (sps.vui_present == 1) {

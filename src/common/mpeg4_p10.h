@@ -56,6 +56,7 @@ namespace mpeg4 {
       unsigned int profile_idc;
       unsigned int profile_compat;
       unsigned int level_idc;
+      unsigned int chroma_format_idc;
       unsigned int log2_max_frame_num;
       unsigned int pic_order_cnt_type;
       unsigned int log2_max_pic_order_cnt_lsb;
