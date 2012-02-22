@@ -10,7 +10,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
 #include <errno.h>
 #include <string.h>
@@ -46,8 +46,6 @@ main(int argc,
   unsigned char *buffer;
   char mode;
   std::string s, line;
-  mm_io_c *in, *out;
-  mm_text_io_c *intext;
 
   set_usage();
 
@@ -55,9 +53,6 @@ main(int argc,
     usage(0);
 
   mode = 0;
-  in = NULL;
-  out = NULL;
-  intext = NULL;
   if (!strcmp(argv[1], "encode"))
     mode = 'e';
   else if (!strcmp(argv[1], "decode"))
@@ -74,14 +69,16 @@ main(int argc,
 
   maxlen = ((maxlen + 3) / 4) * 4;
 
+  mm_io_cptr in, intext;
   try {
-    in = new mm_file_io_c(argv[2]);
+    in = mm_io_cptr(new mm_file_io_c(argv[2]));
     if (mode != 'e')
-      intext = new mm_text_io_c(in);
+      intext = mm_io_cptr(new mm_text_io_c(in.get_object(), false));
   } catch(...) {
     mxerror(boost::format(Y("The file '%1%' could not be opened for reading (%2%, %3%).\n")) % argv[2] % errno % strerror(errno));
   }
 
+  mm_io_cptr out;
   try {
     out = mm_write_buffer_io_c::open(argv[3], 128 * 1024);
   } catch(...) {
@@ -96,13 +93,11 @@ main(int argc,
   if (mode == 'e') {
     buffer = (unsigned char *)safemalloc(size);
     size = in->read(buffer, size);
-    delete in;
 
     s = base64_encode(buffer, size, true, maxlen);
     safefree(buffer);
 
     out->write(s.c_str(), s.length());
-    delete out;
 
   } else {
 
@@ -110,20 +105,16 @@ main(int argc,
       strip(line);
       s += line;
     }
-    delete intext;
 
     buffer = (unsigned char *)safemalloc(s.length() / 4 * 3 + 100);
     try {
       size = base64_decode(s, buffer);
     } catch(...) {
-      delete in;
-      delete out;
       mxerror(Y("The Base64 encoded data could not be decoded.\n"));
     }
     out->write(buffer, size);
 
     safefree(buffer);
-    delete out;
   }
 
   mxinfo(Y("Done.\n"));
