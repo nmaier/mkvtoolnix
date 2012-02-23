@@ -97,6 +97,11 @@ public:
       its_counter = new counter(static_cast<unsigned char *>(p), s, f);
   }
 
+  explicit memory_c(size_t s)
+    : its_counter(new counter(static_cast<unsigned char *>(safemalloc(s)), s, true))
+  {
+  }
+
   ~memory_c() {
     release();
   }
@@ -140,8 +145,8 @@ public:
     return (NULL != its_counter) && (NULL != its_counter->ptr);
   }
 
-  memory_c *clone() const {
-    return new memory_c(static_cast<unsigned char *>(safememdup(get_buffer(), get_size())), get_size(), true);
+  memory_cptr clone() const {
+    return memory_c::clone(get_buffer(), get_size());
   }
 
   bool is_free() const {
@@ -186,9 +191,16 @@ public:
   }
 
 public:
-  static memory_cptr alloc(size_t size) {
+  static memory_cptr
+  alloc(size_t size) {
     return memory_cptr(new memory_c(static_cast<unsigned char *>(safemalloc(size)), size, true));
   };
+
+  static inline memory_cptr
+  clone(const void *buffer,
+        size_t size) {
+    return memory_cptr(new memory_c(static_cast<unsigned char *>(safememdup(buffer, size)), size, true));
+  }
 
 private:
   struct counter {
@@ -344,17 +356,6 @@ class memory_slice_cursor_c {
 private:
   memory_slice_cursor_c(const memory_slice_cursor_c &) { }
 };
-
-inline memory_cptr
-clone_memory(const void *buffer,
-             size_t size) {
-  return memory_cptr(new memory_c(static_cast<unsigned char *>(safememdup(buffer, size)), size, true));
-}
-
-inline memory_cptr
-clone_memory(memory_cptr data) {
-  return clone_memory(data->get_buffer(), data->get_size());
-}
 
 struct buffer_t {
   unsigned char *m_buffer;

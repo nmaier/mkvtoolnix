@@ -606,7 +606,7 @@ mpeg4::p10::avcc_to_nalus(const unsigned char *buffer,
 
     uint32_t marker = get_uint32_be(buffer);
     if (((marker & 0xffffff00) == 0x00000100) || (0x00000001 == marker))
-      return clone_memory(buffer, size);
+      return memory_c::clone(buffer, size);
 
     mm_mem_io_c mem(buffer, size);
     byte_buffer_c nalus(size * 2);
@@ -638,7 +638,7 @@ mpeg4::p10::avcc_to_nalus(const unsigned char *buffer,
     }
 
     if (mem.getFilePointer() == size)
-      return clone_memory(nalus.get_buffer(), nalus.get_size());
+      return memory_c::clone(nalus.get_buffer(), nalus.get_size());
 
   } catch (...) {
   }
@@ -752,7 +752,7 @@ void
 mpeg4::p10::avc_es_parser_c::flush() {
   if (m_unparsed_buffer.is_set() && (5 <= m_unparsed_buffer->get_size())) {
     int marker_size = get_uint32_be(m_unparsed_buffer->get_buffer()) == NALU_START_CODE ? 4 : 3;
-    handle_nalu(clone_memory(m_unparsed_buffer->get_buffer() + marker_size, m_unparsed_buffer->get_size() - marker_size));
+    handle_nalu(memory_c::clone(m_unparsed_buffer->get_buffer() + marker_size, m_unparsed_buffer->get_size() - marker_size));
   }
 
   m_unparsed_buffer = memory_cptr(NULL);

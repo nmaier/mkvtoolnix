@@ -85,13 +85,13 @@ bitvalue_c::bitvalue_c(std::string s,
 }
 
 bitvalue_c::bitvalue_c(const EbmlBinary &elt)
-  : m_value(clone_memory(static_cast<const void *>(elt.GetBuffer()), elt.GetSize()))
+  : m_value(memory_c::clone(static_cast<const void *>(elt.GetBuffer()), elt.GetSize()))
 {
 }
 
 bitvalue_c &
 bitvalue_c::operator =(const bitvalue_c &src) {
-  m_value = clone_memory(src.m_value);
+  m_value = src.m_value->clone();
 
   return *this;
 }

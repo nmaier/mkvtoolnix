@@ -214,10 +214,8 @@ ogm_a_flac_demuxer_c::process_page(int64_t granulepos) {
     if (units_processed <= flac_header_packets)
       continue;
 
-    for (int i = 0; i < (int)nh_packet_data.size(); i++) {
-      memory_c *mem = nh_packet_data[i]->clone();
-      reader->m_reader_packetizers[ptzr]->process(new packet_t(mem, 0));
-    }
+    for (int i = 0; i < (int)nh_packet_data.size(); i++)
+      reader->m_reader_packetizers[ptzr]->process(new packet_t(nh_packet_data[i]->clone(), 0));
 
     nh_packet_data.clear();
 
@@ -236,15 +234,14 @@ ogm_a_flac_demuxer_c::process_header_page() {
 
   while ((packet_data.size() < flac_header_packets) && (ogg_stream_packetout(&os, &op) == 1)) {
     eos |= op.e_o_s;
-    packet_data.push_back(clone_memory(op.packet, op.bytes));
+    packet_data.push_back(memory_c::clone(op.packet, op.bytes));
   }
 
   if (packet_data.size() >= flac_header_packets)
     headers_read = true;
 
-  while (ogg_stream_packetout(&os, &op) == 1) {
-    nh_packet_data.push_back(clone_memory(op.packet, op.bytes));
-  }
+  while (ogg_stream_packetout(&os, &op) == 1)
+    nh_packet_data.push_back(memory_c::clone(op.packet, op.bytes));
 }
 
 void

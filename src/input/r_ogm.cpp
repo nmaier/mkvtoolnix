@@ -922,7 +922,7 @@ ogm_demuxer_c::process_header_page() {
 
     if (!is_header_packet(op)) {
       if (nh_packet_data.size() != num_non_header_packets) {
-        nh_packet_data.push_back(clone_memory(op.packet, op.bytes));
+        nh_packet_data.push_back(memory_c::clone(op.packet, op.bytes));
         continue;
       }
 
@@ -934,7 +934,7 @@ ogm_demuxer_c::process_header_page() {
       return;
     }
 
-    packet_data.push_back(clone_memory(op.packet, op.bytes));
+    packet_data.push_back(memory_c::clone(op.packet, op.bytes));
 
     eos |= op.e_o_s;
   }

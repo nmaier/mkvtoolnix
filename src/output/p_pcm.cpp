@@ -85,7 +85,7 @@ pcm_packetizer_c::process(packet_cptr packet) {
   m_buffer.add(packet->data->get_buffer(), packet->data->get_size());
 
   while (m_buffer.get_size() >= m_packet_size) {
-    add_packet(new packet_t(clone_memory(m_buffer.get_buffer(), m_packet_size), m_samples_output * m_s2tc, m_samples_per_packet * m_s2tc));
+    add_packet(new packet_t(memory_c::clone(m_buffer.get_buffer(), m_packet_size), m_samples_output * m_s2tc, m_samples_per_packet * m_s2tc));
 
     m_buffer.remove(m_packet_size);
     m_samples_output += m_samples_per_packet;
@@ -99,7 +99,7 @@ pcm_packetizer_c::flush() {
   uint32_t size = m_buffer.get_size();
   if (0 < size) {
     int64_t samples_here = size * 8 / m_channels / m_bits_per_sample;
-    add_packet(new packet_t(clone_memory(m_buffer.get_buffer(), size), m_samples_output * m_s2tc, samples_here * m_s2tc));
+    add_packet(new packet_t(memory_c::clone(m_buffer.get_buffer(), size), m_samples_output * m_s2tc, samples_here * m_s2tc));
 
     m_samples_output += samples_here;
     m_buffer.remove(size);

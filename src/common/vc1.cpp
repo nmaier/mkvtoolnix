@@ -351,7 +351,7 @@ vc1::es_parser_c::flush() {
   if (m_unparsed_buffer.is_set() && (4 <= m_unparsed_buffer->get_size())) {
     uint32_t marker = get_uint32_be(m_unparsed_buffer->get_buffer());
     if (vc1::is_marker(marker))
-      handle_packet(clone_memory(m_unparsed_buffer->get_buffer(), m_unparsed_buffer->get_size()));
+      handle_packet(memory_c::clone(m_unparsed_buffer->get_buffer(), m_unparsed_buffer->get_size()));
   }
 
   m_unparsed_buffer = memory_cptr(NULL);

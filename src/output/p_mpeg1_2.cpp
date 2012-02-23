@@ -102,8 +102,8 @@ mpeg1_2_video_packetizer_c::put_sequence_headers_into_codec_state(packet_cptr pa
   }
 
   if (!m_seq_hdr.is_set() || (sh_size != m_seq_hdr->get_size()) || memcmp(&buf[start], m_seq_hdr->get_buffer(), sh_size)) {
-    m_seq_hdr           = clone_memory(&buf[start], sh_size);
-    packet->codec_state = clone_memory(&buf[start], sh_size);
+    m_seq_hdr           = memory_c::clone(&buf[start], sh_size);
+    packet->codec_state = memory_c::clone(&buf[start], sh_size);
   }
 
   if (hack_engaged(ENGAGE_USE_CODEC_STATE_ONLY)) {

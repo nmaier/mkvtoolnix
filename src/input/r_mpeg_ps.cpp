@@ -1325,7 +1325,7 @@ mpeg_ps_reader_c::finish() {
 
   for (auto &track : tracks)
     if (0 < track->buffer_usage)
-      PTZR(track->ptzr)->process(new packet_t(clone_memory(track->buffer, track->buffer_usage)));
+      PTZR(track->ptzr)->process(new packet_t(memory_c::clone(track->buffer, track->buffer_usage)));
 
   file_done = true;
 

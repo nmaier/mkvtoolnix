@@ -305,7 +305,7 @@ header_removal_compressor_c::compress(memory_cptr &buffer) {
     memmove(buffer_ptr, buffer_ptr + size, new_size);
     buffer->set_size(new_size);
   } else
-    buffer = clone_memory(buffer_ptr + size, new_size);
+    buffer = memory_c::clone(buffer_ptr + size, new_size);
 }
 
 void
@@ -499,7 +499,7 @@ content_decoder_c::content_decoder_c(KaxTrackEntry &ktentry)
 content_decoder_c::~content_decoder_c() {
 }
 
-#define EBMLBIN_TO_COUNTEDMEM(bin) clone_memory(bin->GetBuffer(), bin->GetSize())
+#define EBMLBIN_TO_COUNTEDMEM(bin) memory_c::clone(bin->GetBuffer(), bin->GetSize())
 
 bool
 content_decoder_c::initialize(KaxTrackEntry &ktentry) {

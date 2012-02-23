@@ -1067,7 +1067,7 @@ qtmp4_reader_c::handle_stsd_atom(qtmp4_demuxer_cptr &new_dmx,
       mxerror(boost::format(Y("Quicktime/MP4 reader: Could not read the stream description atom for track ID %1%.\n")) % new_dmx->id);
 
     if ('a' == new_dmx->type) {
-      new_dmx->a_stsd = clone_memory(priv, size);
+      new_dmx->a_stsd = memory_c::clone(priv, size);
 
       if (sizeof(sound_v0_stsd_atom_t) > size)
         mxerror(boost::format(Y("Quicktime/MP4 reader: Could not read the sound description atom for track ID %1%.\n")) % new_dmx->id);
@@ -1143,7 +1143,7 @@ qtmp4_reader_c::handle_stsd_atom(qtmp4_demuxer_cptr &new_dmx,
         stsd_size = sizeof(sound_v2_stsd_atom_t);
 
     } else if ('v' == new_dmx->type) {
-      new_dmx->v_stsd = clone_memory(priv, size);
+      new_dmx->v_stsd = memory_c::clone(priv, size);
 
       if (sizeof(video_stsd_atom_t) > size)
         mxerror(boost::format(Y("Quicktime/MP4 reader: Could not read the video description atom for track ID %1%.\n")) % new_dmx->id);

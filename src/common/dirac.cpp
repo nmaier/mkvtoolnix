@@ -287,7 +287,7 @@ dirac::es_parser_c::flush() {
   if (m_unparsed_buffer.is_set() && (4 <= m_unparsed_buffer->get_size())) {
     uint32_t marker = get_uint32_be(m_unparsed_buffer->get_buffer());
     if (DIRAC_SYNC_WORD == marker)
-      handle_unit(clone_memory(m_unparsed_buffer->get_buffer(), m_unparsed_buffer->get_size()));
+      handle_unit(memory_c::clone(m_unparsed_buffer->get_buffer(), m_unparsed_buffer->get_size()));
   }
 
   m_unparsed_buffer = memory_cptr(NULL);

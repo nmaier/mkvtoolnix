@@ -654,7 +654,7 @@ kax_reader_c::handle_attachments(mm_io_c *io,
 
       else if (EbmlId(*l2) == EBML_ID(KaxFileData)) {
         KaxFileData &fdata = static_cast<KaxFileData &>(*l2);
-        matt.data          = clone_memory(static_cast<unsigned char *>(fdata.GetBuffer()), fdata.GetSize());
+        matt.data          = memory_c::clone(static_cast<unsigned char *>(fdata.GetBuffer()), fdata.GetSize());
       }
     }
 
@@ -2176,7 +2176,7 @@ kax_reader_c::process_block_group(KaxCluster *cluster,
       packet->duration_mandatory = duration != NULL;
 
       if (NULL != codec_state)
-        packet->codec_state = clone_memory(codec_state->GetBuffer(), codec_state->GetSize());
+        packet->codec_state = memory_c::clone(codec_state->GetBuffer(), codec_state->GetSize());
 
       static_cast<passthrough_packetizer_c *>(PTZR(block_track->ptzr))->process(packet);
     }
@@ -2205,7 +2205,7 @@ kax_reader_c::process_block_group(KaxCluster *cluster,
 
           packet_cptr packet(new packet_t(mem, m_last_timecode, block_duration, block_bref, block_fref));
           if (NULL != codec_state)
-            packet->codec_state = clone_memory(codec_state->GetBuffer(), codec_state->GetSize());
+            packet->codec_state = memory_c::clone(codec_state->GetBuffer(), codec_state->GetSize());
 
           PTZR(block_track->ptzr)->process(packet);
         }
@@ -2217,7 +2217,7 @@ kax_reader_c::process_block_group(KaxCluster *cluster,
           packet->duration_mandatory = true;
 
         if (NULL != codec_state)
-          packet->codec_state = clone_memory(codec_state->GetBuffer(), codec_state->GetSize());
+          packet->codec_state = memory_c::clone(codec_state->GetBuffer(), codec_state->GetSize());
 
         if (blockadd) {
           size_t k;

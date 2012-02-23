@@ -204,7 +204,7 @@ namespace vc1 {
     }
 
     virtual memory_cptr get_raw_entrypoint() {
-      return memory_cptr(m_raw_entrypoint.is_set() ? m_raw_entrypoint->clone() : NULL);
+      return m_raw_entrypoint.is_set() ? m_raw_entrypoint->clone() : memory_cptr(NULL);
     }
 
     virtual void handle_packet(memory_cptr packet);

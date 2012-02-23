@@ -125,7 +125,7 @@ truehd_parser_c::parse(bool end_of_stream) {
     if ((frame->m_size + offset) > size)
       break;
 
-    frame->m_data = clone_memory(&data[offset], frame->m_size);
+    frame->m_data = memory_c::clone(&data[offset], frame->m_size);
 
     mxverb(3,
            boost::format("codec %7% type %1% offset %2% size %3% channels %4% sampling_rate %5% samples_per_frame %6%\n")

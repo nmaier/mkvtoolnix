@@ -64,7 +64,7 @@ mpeg_ts_track_c::send_to_packetizer() {
              % pid % pes_payload_size % pes_payload->get_size() % format_timecode(timecode_to_use) % (-1 == m_previous_timecode ? std::string("-1") : format_timecode(m_previous_timecode)));
 
   if (ptzr != -1)
-    reader.m_reader_packetizers[ptzr]->process(new packet_t(clone_memory(pes_payload->get_buffer(), pes_payload->get_size()), timecode_to_use));
+    reader.m_reader_packetizers[ptzr]->process(new packet_t(memory_c::clone(pes_payload->get_buffer(), pes_payload->get_size()), timecode_to_use));
 
   pes_payload->remove(pes_payload->get_size());
   processed                          = false;
@@ -135,7 +135,7 @@ mpeg_ts_track_c::new_stream_v_mpeg_1_2() {
   MPEGChunk *raw_seq_hdr_chunk = m_m2v_parser->GetRealSequenceHeader();
   if (NULL != raw_seq_hdr_chunk) {
     mxverb(3, boost::format("new_stream_v_mpeg_1_2: sequence header size: %1%\n") % raw_seq_hdr_chunk->GetSize());
-    raw_seq_hdr = clone_memory(raw_seq_hdr_chunk->GetPointer(), raw_seq_hdr_chunk->GetSize());
+    raw_seq_hdr = memory_c::clone(raw_seq_hdr_chunk->GetPointer(), raw_seq_hdr_chunk->GetSize());
   }
 
   mxverb(3, boost::format("new_stream_v_mpeg_1_2: width: %1%, height: %2%\n") % v_width % v_height);
@@ -1192,7 +1192,7 @@ mpeg_ts_reader_c::finish() {
 
   for (auto &track : tracks)
     if ((-1 != track->ptzr) && (0 < track->pes_payload->get_size()))
-      PTZR(track->ptzr)->process(new packet_t(clone_memory(track->pes_payload->get_buffer(), track->pes_payload->get_size())));
+      PTZR(track->ptzr)->process(new packet_t(memory_c::clone(track->pes_payload->get_buffer(), track->pes_payload->get_size())));
 
   file_done = true;
 
