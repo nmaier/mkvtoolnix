@@ -48,8 +48,7 @@ struct real_demuxer_t {
   real_audio_v4_props_t *ra4p;
   real_audio_v5_props_t *ra5p;
 
-  unsigned char *private_data, *extra_data;
-  unsigned int private_size, extra_data_size;
+  memory_cptr private_data, extra_data;
 
   bool first_frame;
   int num_packets;
@@ -75,10 +74,6 @@ struct real_demuxer_t {
     rvp(NULL),
     ra4p(NULL),
     ra5p(NULL),
-    private_data(NULL),
-    extra_data(NULL),
-    private_size(0),
-    extra_data_size(0),
     first_frame(true),
     num_packets(0),
     last_timecode(0),

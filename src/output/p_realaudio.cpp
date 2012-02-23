@@ -25,14 +25,13 @@ ra_packetizer_c::ra_packetizer_c(generic_reader_c *p_reader,
                                  int channels,
                                  int bits_per_sample,
                                  uint32_t fourcc,
-                                 unsigned char *private_data,
-                                 int private_size)
+                                 const memory_cptr &private_data)
   : generic_packetizer_c(p_reader, p_ti)
   , m_samples_per_sec(samples_per_sec)
   , m_channels(channels)
   , m_bits_per_sample(bits_per_sample)
   , m_fourcc(fourcc)
-  , m_private_data(new memory_c((unsigned char *)safememdup(private_data, private_size), private_size, true))
+  , m_private_data(private_data.is_set() ? private_data->clone() : private_data)
 {
   set_track_type(track_audio, TFA_SHORT_QUEUEING);
 }
@@ -48,7 +47,8 @@ ra_packetizer_c::set_headers() {
   set_audio_sampling_freq((float)m_samples_per_sec);
   set_audio_channels(m_channels);
   set_audio_bit_depth(m_bits_per_sample);
-  set_codec_private(m_private_data->get_buffer(), m_private_data->get_size());
+  if (m_private_data.is_set())
+    set_codec_private(m_private_data->get_buffer(), m_private_data->get_size());
 
   generic_packetizer_c::set_headers();
   m_track_entry->EnableLacing(false);
