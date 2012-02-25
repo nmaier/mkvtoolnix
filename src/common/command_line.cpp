@@ -13,6 +13,7 @@
 
 #include "common/common_pch.h"
 
+#include <algorithm>
 #include <cstring>
 #ifdef SYS_WINDOWS
 # include <windows.h>
@@ -71,6 +72,24 @@ read_args_from_file(std::vector<std::string> &args,
   delete mm_io;
 }
 
+static std::vector<std::string>
+command_line_args_from_environment() {
+  std::vector<std::string> args;
+
+  char const *value = getenv("MKVTOOLNIX_OPTIONS");
+  if (NULL != value)
+    args = split(value, " ");
+  else {
+    value = getenv("MTX_OPTIONS");
+    if (NULL != value)
+      args = split(value, " ");
+  }
+
+  std::transform(args.begin(), args.end(), args.begin(), [](std::string const &s) -> std::string { return unescape(s); });
+
+  return args;
+}
+
 /** \brief Expand the command line parameters
 
    Takes each command line paramter, converts it to UTF-8, and reads more
@@ -91,7 +110,7 @@ std::vector<std::string>
 command_line_utf8(int argc,
                   char **argv) {
   int i;
-  std::vector<std::string> args;
+  std::vector<std::string> args = command_line_args_from_environment();
 
   charset_converter_cptr cc_command_line = g_cc_stdio;
 
@@ -116,7 +135,7 @@ command_line_utf8(int argc,
 std::vector<std::string>
 command_line_utf8(int,
                   char **) {
-  std::vector<std::string> args;
+  std::vector<std::string> args = command_line_args_from_environment();
   std::string utf8;
 
   int num_args     = 0;

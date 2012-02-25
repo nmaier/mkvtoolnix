@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 4.4.0\n"
-"POT-Creation-Date: 2012-02-25 12:43+0100\n"
+"POT-Creation-Date: 2012-02-25 15:06+0100\n"
 "PO-Revision-Date: 2011-12-14 22:25+0200\n"
 "Last-Translator: Andriy Bilous'ko <arestarh@ukr.net>\n"
 "Language-Team: uk <moritz@bunkus.org>\n"
@@ -1021,34 +1021,47 @@ msgstr ""
 msgid "The content is treated as if it had been passed via the <link linkend=\"mkvextract.description.engage\"><option>--engage</option></link> option."
 msgstr "Перенаправлення за допомогою &mkvextract; здійснюється через опцію <link linkend=\"mkvextract.description.common.redirect_output\"><option>--redirect-output</option></link>. Наприклад:"
 
-#. type: Content of: <refentry><refsect1><title>
+#. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
+#: doc/man/mkvextract.xml:689
+#: doc/man/mkvinfo.xml:371
+#: doc/man/mkvmerge.xml:2378
+#: doc/man/mkvpropedit.xml:528
+msgid "<varname>MKVTOOLNIX_OPTIONS</varname> and its short form <varname>MTX_OPTIONS</varname>"
+msgstr ""
+
+#. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:691
-#: doc/man/mkvinfo.xml:373
-#: doc/man/mkvmerge.xml:2380
-#: doc/man/mkvpropedit.xml:530
+msgid "The content is split on white space. The resulting partial strings are treated as if it had been passed as command line options. If you need to pass special characters (e.g. spaces) then you have to escape them (see <link linkend=\"mkvextract.escaping\">the section about escaping special characters in text</link>)."
+msgstr ""
+
+#. type: Content of: <refentry><refsect1><title>
+#: doc/man/mkvextract.xml:700
+#: doc/man/mkvinfo.xml:382
+#: doc/man/mkvmerge.xml:2389
+#: doc/man/mkvpropedit.xml:539
 #: doc/man/mmg.xml:90
 msgid "See also"
 msgstr "Дивіться також"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvextract.xml:693
+#: doc/man/mkvextract.xml:702
 msgid "&mkvmerge;, &mkvinfo;, &mkvpropedit;, &mmg;"
 msgstr "&mkvmerge;, &mkvinfo;, &mkvpropedit;, &mmg;"
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvextract.xml:698
-#: doc/man/mkvinfo.xml:380
-#: doc/man/mkvmerge.xml:2387
-#: doc/man/mkvpropedit.xml:537
+#: doc/man/mkvextract.xml:707
+#: doc/man/mkvinfo.xml:389
+#: doc/man/mkvmerge.xml:2396
+#: doc/man/mkvpropedit.xml:546
 #: doc/man/mmg.xml:97
 msgid "WWW"
 msgstr "WWW"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvextract.xml:700
-#: doc/man/mkvinfo.xml:382
-#: doc/man/mkvmerge.xml:2389
-#: doc/man/mkvpropedit.xml:539
+#: doc/man/mkvextract.xml:709
+#: doc/man/mkvinfo.xml:391
+#: doc/man/mkvmerge.xml:2398
+#: doc/man/mkvpropedit.xml:548
 #: doc/man/mmg.xml:99
 msgid "The latest version can always be found at <ulink url=\"http://www.bunkus.org/videotools/mkvtoolnix/\">the MKVToolNix homepage</ulink>."
 msgstr "Остання версія завжди може бути знайдена на веб-сторінці <ulink url=\"http://www.bunkus.org/videotools/mkvtoolnix/\">the MKVToolNix homepage</ulink>."
@@ -1258,8 +1271,13 @@ msgstr "Перенаправлення за допомогою &mkvextract; зд
 msgid "The content is treated as if it had been passed via the <link linkend=\"mkvinfo.description.engage\"><option>--engage</option></link> option."
 msgstr "Перенаправлення за допомогою &mkvextract; здійснюється через опцію <link linkend=\"mkvextract.description.common.redirect_output\"><option>--redirect-output</option></link>. Наприклад:"
 
+#. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: doc/man/mkvinfo.xml:373
+msgid "The content is split on white space. The resulting partial strings are treated as if it had been passed as command line options. If you need to pass special characters (e.g. spaces) then you have to escape them (see <link linkend=\"mkvinfo.escaping\">the section about escaping special characters in text</link>)."
+msgstr ""
+
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvinfo.xml:375
+#: doc/man/mkvinfo.xml:384
 msgid "&mkvmerge;, &mkvextract;, &mkvpropedit;, &mmg;"
 msgstr ""
 
@@ -3450,8 +3468,13 @@ msgstr "Перенаправлення за допомогою &mkvextract; зд
 msgid "The content is treated as if it had been passed via the <link linkend=\"mkvmerge.description.engage\"><option>--engage</option></link> option."
 msgstr "Перенаправлення за допомогою &mkvextract; здійснюється через опцію <link linkend=\"mkvextract.description.common.redirect_output\"><option>--redirect-output</option></link>. Наприклад:"
 
+#. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: doc/man/mkvmerge.xml:2380
+msgid "The content is split on white space. The resulting partial strings are treated as if it had been passed as command line options. If you need to pass special characters (e.g. spaces) then you have to escape them (see <link linkend=\"mkvmerge.escaping\">the section about escaping special characters in text</link>)."
+msgstr ""
+
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:2382
+#: doc/man/mkvmerge.xml:2391
 msgid "&mkvinfo;, &mkvextract;, &mkvpropedit;, &mmg;"
 msgstr ""
 
@@ -3814,8 +3837,13 @@ msgstr "Перенаправлення за допомогою &mkvextract; зд
 msgid "The content is treated as if it had been passed via the <link linkend=\"mkvpropedit.description.engage\"><option>--engage</option></link> option."
 msgstr "Перенаправлення за допомогою &mkvextract; здійснюється через опцію <link linkend=\"mkvextract.description.common.redirect_output\"><option>--redirect-output</option></link>. Наприклад:"
 
+#. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: doc/man/mkvpropedit.xml:530
+msgid "The content is split on white space. The resulting partial strings are treated as if it had been passed as command line options. If you need to pass special characters (e.g. spaces) then you have to escape them (see <link linkend=\"mkvpropedit.escaping\">the section about escaping special characters in text</link>)."
+msgstr ""
+
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvpropedit.xml:532
+#: doc/man/mkvpropedit.xml:541
 msgid "&mkvmerge;, &mkvinfo;, &mkvextract;, &mmg;"
 msgstr ""
 

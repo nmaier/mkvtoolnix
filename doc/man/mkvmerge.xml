@@ -2373,6 +2373,15 @@ gap, 10.050
      linkend="mkvmerge.description.engage"><option>--engage</option></link> option.</para>
     </listitem>
    </varlistentry>
+
+   <varlistentry>
+    <term><varname>MKVTOOLNIX_OPTIONS</varname> and its short form <varname>MTX_OPTIONS</varname></term>
+    <listitem>
+     <para>The content is split on white space. The resulting partial strings are treated as if it had been passed as command line
+     options. If you need to pass special characters (e.g. spaces) then you have to escape them (see <link linkend="mkvmerge.escaping">the
+     section about escaping special characters in text</link>).</para>
+    </listitem>
+   </varlistentry>
   </variablelist>
  </refsect1>
 
