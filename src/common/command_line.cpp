@@ -85,7 +85,7 @@ command_line_args_from_environment() {
       args = split(value, " ");
   }
 
-  std::transform(args.begin(), args.end(), args.begin(), [](std::string const &s) -> std::string { return unescape(s); });
+  std::transform(args.begin(), args.end(), args.begin(), unescape);
 
   return args;
 }
