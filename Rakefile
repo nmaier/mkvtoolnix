@@ -190,7 +190,17 @@ end
 # man pages from DocBook XML
 if c?(:XSLTPROC_WORKS)
   rule '.1' => '.xml' do |t|
-    runq "XSLTPROC #{t.source}", "#{c(:XSLTPROC)} #{c(:XSLTPROC_FLAGS)} -o #{t.name} #{c(:DOCBOOK_MANPAGES_STYLESHEET)} #{t.sources.join(" ")}"
+    filter = lambda do |code, lines|
+      puts lines.join('')
+      if (0 == code) && lines.any? { |line| /^error/i.match(line) }
+        File.unlink(t.name) if File.exists?(t.name)
+        1
+      else
+        0
+      end
+    end
+
+    runq "XSLTPROC #{t.source}", "#{c(:XSLTPROC)} #{c(:XSLTPROC_FLAGS)} -o #{t.name} #{c(:DOCBOOK_MANPAGES_STYLESHEET)} #{t.sources.join(" ")}", :filter_output => filter
   end
 
   $manpages.each do |manpage|

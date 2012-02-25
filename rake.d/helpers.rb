@@ -1,5 +1,5 @@
 $use_tempfile_for_run = defined?(RUBY_PLATFORM) && /mingw/i.match(RUBY_PLATFORM)
-require "tempfile" if $use_tempfile_for_run
+require "tempfile"
 
 if defined? Mutex
   $message_mutex = Mutex.new
@@ -20,12 +20,25 @@ def last_exit_code
   $?.respond_to?(:exitstatus) ? $?.exitstatus : $?.to_i
 end
 
-def run(cmdline, opts = {})
+def run cmdline, opts = {}
+  code = run_wrapper cmdline, opts
+  exit code if (code != 0) && !opts[:allow_failure].to_bool
+end
+
+def run_wrapper cmdline, opts = {}
   cmdline = cmdline.gsub(/\n/, ' ').gsub(/^\s+/, '').gsub(/\s+$/, '').gsub(/\s+/, ' ')
   code    = nil
   shell   = ENV["RUBYSHELL"].blank? ? "c:/msys/bin/sh" : ENV["RUBYSHELL"]
 
   puts cmdline unless opts[:dont_echo].to_bool
+
+  output = nil
+
+  if opts[:filter_output]
+    output   = Tempfile.new("mkvtoolnix-rake-output")
+    cmdline += " > #{output.path} 2>&1"
+  end
+
   if $use_tempfile_for_run
     Tempfile.open("mkvtoolnix-rake-run") do |t|
       t.puts cmdline
@@ -39,7 +52,15 @@ def run(cmdline, opts = {})
     code = last_exit_code
   end
 
-  exit code if (code != 0) && !opts[:allow_failure].to_bool
+  code = opts[:filter_output].call code, output.readlines if opts[:filter_output]
+
+  return code
+
+ensure
+  if output
+    output.close
+    output.unlink
+  end
 end
 
 def runq(msg, cmdline, options = {})
