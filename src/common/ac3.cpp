@@ -16,9 +16,307 @@
 #include <cstring>
 
 #include "common/ac3.h"
+#include "common/bit_cursor.h"
 #include "common/bswap.h"
+#include "common/byte_buffer.h"
 #include "common/checksums.h"
 #include "common/endian.h"
+
+ac3::frame_c::frame_c() {
+  init();
+}
+
+void
+ac3::frame_c::init() {
+  m_sample_rate     = 0;
+  m_bit_rate        = 0;
+  m_channels        = 0;
+  m_flags           = 0;
+  m_bytes           = 0;
+  m_bs_id           = 0;
+  m_samples         = 0;
+  m_frame_type      = 0;
+  m_sub_stream_id   = 0;
+  m_stream_position = 0;
+  m_garbage_size    = 0;
+  m_valid           = false;
+  m_data.clear();
+}
+
+bool
+ac3::frame_c::is_eac3()
+  const {
+  return (0x10 == m_bs_id) || !m_dependent_frames.empty();
+}
+
+void
+ac3::frame_c::add_dependent_frame(const frame_c &frame,
+                                  unsigned char *const buffer,
+                                  size_t buffer_size) {
+  m_data->add(buffer, buffer_size);
+  m_dependent_frames.push_back(frame);
+}
+
+bool
+ac3::frame_c::decode_header(unsigned char *const buffer,
+                            size_t buffer_size) {
+  bit_cursor_c bc(buffer, buffer_size);
+
+  try {
+    init();
+
+    if (AC3_SYNC_WORD != bc.get_bits(16))
+      return false;
+
+    m_bs_id = bc.get_bits(29) & 0x1f;
+    bc.set_bit_position(16);
+    m_valid = 0x10 == m_bs_id ? decode_header_type_eac3(bc)
+            : 0x0c <= m_bs_id ? false
+            :                   decode_header_type_ac3(bc);
+
+  } catch (mtx::mm_io::end_of_file_x &) {
+  }
+
+  return m_valid;
+}
+
+bool
+ac3::frame_c::decode_header_type_eac3(bit_cursor_c &bc) {
+  static const int sample_rates[] = { 48000, 44100, 32000, 24000, 22050, 16000 };
+  static const int channels[]     = {     2,     1,     2,     3,     3,     4,     4,     5 };
+  static const int samples[]      = {   256,   512,   768,  1536 };
+
+  m_frame_type = bc.get_bits(2);
+
+  if (EAC3_FRAME_TYPE_RESERVED == m_frame_type)
+    return false;
+
+  m_sub_stream_id = bc.get_bits(3);
+  m_bytes         = (bc.get_bits(11) + 1) << 1;
+
+  uint8_t fscod   = bc.get_bits(2);
+  uint8_t fscod2  = bc.get_bits(2);
+
+  if ((0x03 == fscod) && (0x03 == fscod2))
+    return false;
+
+  uint8_t acmod = bc.get_bits(3);
+  uint8_t lfeon = bc.get_bit();
+
+  m_sample_rate = sample_rates[0x03 == fscod ? 3 + fscod2 : fscod];
+  m_channels    = channels[acmod] + lfeon;
+  m_samples     = (0x03 == fscod) ? 1536 : samples[fscod2];
+
+  return true;
+}
+
+bool
+ac3::frame_c::decode_header_type_ac3(bit_cursor_c &bc) {
+  static const uint16_t sample_rates[]     = { 48000, 44100, 32000 };
+  static const uint8_t channel_modes[]     = {  2,  1,  2,  3,  3,  4,  4,   5 };
+  static const uint16_t bit_rates[]        = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 384, 448, 512, 576, 640 };
+  static const uint16_t frame_sizes[38][3] = {
+    { 64,   69,   96   },
+    { 64,   70,   96   },
+    { 80,   87,   120  },
+    { 80,   88,   120  },
+    { 96,   104,  144  },
+    { 96,   105,  144  },
+    { 112,  121,  168  },
+    { 112,  122,  168  },
+    { 128,  139,  192  },
+    { 128,  140,  192  },
+    { 160,  174,  240  },
+    { 160,  175,  240  },
+    { 192,  208,  288  },
+    { 192,  209,  288  },
+    { 224,  243,  336  },
+    { 224,  244,  336  },
+    { 256,  278,  384  },
+    { 256,  279,  384  },
+    { 320,  348,  480  },
+    { 320,  349,  480  },
+    { 384,  417,  576  },
+    { 384,  418,  576  },
+    { 448,  487,  672  },
+    { 448,  488,  672  },
+    { 512,  557,  768  },
+    { 512,  558,  768  },
+    { 640,  696,  960  },
+    { 640,  697,  960  },
+    { 768,  835,  1152 },
+    { 768,  836,  1152 },
+    { 896,  975,  1344 },
+    { 896,  976,  1344 },
+    { 1024, 1114, 1536 },
+    { 1024, 1115, 1536 },
+    { 1152, 1253, 1728 },
+    { 1152, 1254, 1728 },
+    { 1280, 1393, 1920 },
+    { 1280, 1394, 1920 },
+  };
+
+  bc.skip_bits(16);             // crc1
+  uint8_t fscod = bc.get_bits(2);
+  if (0x03 == fscod)
+    return false;
+
+  uint8_t frmsizecod = bc.get_bits(6);
+  if (38 < frmsizecod)
+    return false;
+
+  bc.skip_bits(5 + 3);          // bsid, bsmod
+  uint8_t acmod      = bc.get_bits(3);
+  bc.skip_bits(2);              // cmixlev/surmixlev/dsurmod
+  uint8_t lfeon      = bc.get_bit();
+
+  uint8_t sr_shift   = std::max(m_bs_id, 8u) - 8;
+
+  m_sample_rate      = sample_rates[fscod] >> sr_shift;
+  m_bit_rate         = (bit_rates[frmsizecod >> 1] * 1000) >> sr_shift;
+  m_channels         = channel_modes[acmod] + lfeon;
+  m_bytes            = frame_sizes[frmsizecod][fscod] << 1;
+
+  m_samples          = 1536;
+  m_frame_type       = EAC3_FRAME_TYPE_INDEPENDENT;
+  m_valid            = true;
+
+  return true;
+}
+
+std::string
+ac3::frame_c::to_string(bool verbose)
+  const {
+  if (!verbose)
+    return (boost::format("position %1% BS ID %2% size %3% EAC3 %4%") % m_stream_position % m_bs_id % m_bytes % is_eac3()).str();
+
+  const std::string &frame_type = !is_eac3()                                  ? "---"
+                                : m_frame_type == EAC3_FRAME_TYPE_INDEPENDENT ? "independent"
+                                : m_frame_type == EAC3_FRAME_TYPE_DEPENDENT   ? "dependent"
+                                : m_frame_type == EAC3_FRAME_TYPE_AC3_CONVERT ? "AC3 convert"
+                                : m_frame_type == EAC3_FRAME_TYPE_RESERVED    ? "reserved"
+                                :                                               "unknown";
+
+  std::string output = (boost::format("position %1% size %3% garbage %2% BS ID %4% EAC3 %15% sample rate %5% bit rate %6% channels %7% flags %8% samples %9% type %10% (%13%) "
+                                      "sub stream ID %11% has dependent frames %12% total size %14%")
+                        % m_stream_position
+                        % m_garbage_size
+                        % m_bytes
+                        % m_bs_id
+                        % m_sample_rate
+                        % m_bit_rate
+                        % m_channels
+                        % m_flags
+                        % m_samples
+                        % m_frame_type
+                        % m_sub_stream_id
+                        % m_dependent_frames.size()
+                        % frame_type
+                        % (m_data.is_set() ? m_data->get_size() : 0)
+                        % is_eac3()
+                        ).str();
+
+  for (auto &frame : m_dependent_frames)
+    output += (boost::format(" { %1% }") % frame.to_string(verbose)).str();
+
+  return output;
+}
+
+// ------------------------------------------------------------
+
+ac3::parser_c::parser_c()
+  : m_parsed_stream_position(0)
+  , m_total_stream_position(0)
+  , m_garbage_size(0)
+{
+}
+
+void
+ac3::parser_c::add_bytes(memory_cptr const &mem) {
+  add_bytes(mem->get_buffer(), mem->get_size());
+}
+
+void
+ac3::parser_c::add_bytes(unsigned char *const buffer,
+                         size_t size) {
+  m_buffer.add(buffer, size);
+  m_total_stream_position += size;
+  parse(false);
+}
+
+void
+ac3::parser_c::flush() {
+  parse(true);
+}
+
+bool
+ac3::parser_c::frame_available()
+  const {
+  return !m_frames.empty();
+}
+
+ac3::frame_c
+ac3::parser_c::get_frame() {
+  frame_c frame = m_frames.front();
+  m_frames.pop_front();
+  return frame;
+}
+
+uint64_t
+ac3::parser_c::get_total_stream_position()
+  const {
+  return m_total_stream_position;
+}
+
+uint64_t
+ac3::parser_c::get_parsed_stream_position()
+  const {
+  return m_parsed_stream_position;
+}
+
+void
+ac3::parser_c::parse(bool end_of_stream) {
+  unsigned char *const buffer = m_buffer.get_buffer();
+  size_t buffer_size          = m_buffer.get_size();
+  size_t position             = 0;
+
+  while ((position + 8) < buffer_size) {
+    ac3::frame_c frame;
+
+    if (!frame.decode_header(&buffer[position], buffer_size - position)) {
+      ++position;
+      ++m_garbage_size;
+      continue;
+    }
+
+    if ((position + frame.m_bytes) > buffer_size)
+      break;
+
+    frame.m_stream_position = m_parsed_stream_position + position;
+
+    if (!m_current_frame.m_valid || (EAC3_FRAME_TYPE_DEPENDENT != frame.m_frame_type)) {
+      if (m_current_frame.m_valid)
+        m_frames.push_back(m_current_frame);
+
+      m_current_frame        = frame;
+      m_current_frame.m_data = memory_c::clone(&buffer[position], frame.m_bytes);
+
+    } else
+      m_current_frame.add_dependent_frame(frame, &buffer[position], frame.m_bytes);
+
+    m_current_frame.m_garbage_size += m_garbage_size;
+    m_garbage_size                  = 0;
+    position                       += frame.m_bytes;
+  }
+
+  m_buffer.remove(position);
+  m_parsed_stream_position += position;
+
+  if (m_current_frame.m_valid && end_of_stream) {
+    m_frames.push_back(m_current_frame);
+    m_current_frame.init();
+  }
+}
 
 ac3_header_t::ac3_header_t() {
   memset(this, 0, sizeof(ac3_header_t));

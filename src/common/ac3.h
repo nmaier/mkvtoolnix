@@ -14,7 +14,10 @@
 #ifndef __MTX_COMMON_AC3COMMON_H
 #define __MTX_COMMON_AC3COMMON_H
 
-#include "common/os.h"
+#include "common/common_pch.h"
+
+#include "common/bit_cursor.h"
+#include "common/byte_buffer.h"
 
 #define AC3_SYNC_WORD           0x0b77
 
@@ -37,6 +40,50 @@
 #define EAC3_FRAME_TYPE_DEPENDENT    1
 #define EAC3_FRAME_TYPE_AC3_CONVERT  2
 #define EAC3_FRAME_TYPE_RESERVED     3
+
+namespace ac3 {
+  class frame_c {
+  public:
+    unsigned int m_sample_rate, m_bit_rate, m_channels, m_flags, m_bytes, m_bs_id, m_samples, m_frame_type, m_sub_stream_id;
+    uint64_t m_stream_position, m_garbage_size;
+    bool m_valid;
+    memory_cptr m_data;
+    std::vector<frame_c> m_dependent_frames;
+
+  public:
+    frame_c();
+    void init();
+    bool is_eac3() const;
+    void add_dependent_frame(const frame_c &frame, unsigned char *const buffer, size_t buffer_size);
+    bool decode_header(unsigned char *const buffer, size_t buffer_size);
+    bool decode_header_type_eac3(bit_cursor_c &bc);
+    bool decode_header_type_ac3(bit_cursor_c &bc);
+
+    std::string to_string(bool verbose) const;
+  };
+
+  class parser_c {
+  protected:
+    std::deque<frame_c> m_frames;
+    byte_buffer_c m_buffer;
+    uint64_t m_parsed_stream_position, m_total_stream_position;
+    frame_c m_current_frame;
+    size_t m_garbage_size;
+
+  public:
+    parser_c();
+    void add_bytes(memory_cptr const &mem);
+    void add_bytes(unsigned char *const buffer, size_t size);
+    void flush();
+    bool frame_available() const;
+    frame_c get_frame();
+    uint64_t get_parsed_stream_position() const;
+    uint64_t get_total_stream_position() const;
+
+  protected:
+    void parse(bool end_of_stream);
+  };
+};
 
 struct ac3_header_t {
   unsigned int sample_rate;
