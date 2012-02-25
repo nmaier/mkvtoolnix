@@ -38,7 +38,7 @@ require_relative "rake.d/library"
 def setup_globals
   $programs                =  %w{mkvmerge mkvinfo mkvextract mkvpropedit}
   $programs                << "mmg" if c?(:USE_WXWIDGETS)
-  $tools                   =  %w{base64tool diracparser ebml_validator vc1parser}
+  $tools                   =  %w{ac3parser base64tool diracparser ebml_validator vc1parser}
   $mmg_bin                 =  c(:MMG_BIN)
   $mmg_bin                 =  "mmg" if $mmg_bin.empty?
 
@@ -599,6 +599,16 @@ if $build_tools
   namespace :apps do
     task :tools => $tools.collect { |name| "apps:tools:#{name}" }
   end
+
+  #
+  # tools: ac3parser
+  #
+  Application.new("src/tools/ac3parser").
+    description("Build the ac3parser executable").
+    aliases("tools:ac3parser").
+    sources("src/tools/ac3parser.cpp").
+    libraries(:mtxcommon, :magic, :matroska, :ebml, :expat, :iconv, :intl, :boost_regex, :boost_filesystem, :boost_system, :curl).
+    create
 
   #
   # tools: base64tool
