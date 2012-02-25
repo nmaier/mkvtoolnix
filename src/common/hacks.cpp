@@ -87,3 +87,15 @@ engage_hacks(const std::string &hacks) {
       mxerror(boost::format(Y("'%1%' is not a valid hack.\n")) % engage_args[aidx]);
   }
 }
+
+void
+init_hacks() {
+  char const *value = getenv("MKVTOOLNIX_ENGAGE");
+  if (NULL != value)
+    engage_hacks(value);
+  else {
+    value = getenv("MTX_ENGAGE");
+    if (NULL != value)
+      engage_hacks(value);
+  }
+}

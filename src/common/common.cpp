@@ -21,6 +21,7 @@
 #include <matroska/KaxVersion.h>
 #include <matroska/FileKax.h>
 
+#include "common/hacks.h"
 #include "common/mm_io.h"
 #include "common/random.h"
 #include "common/stereo_mode.h"
@@ -129,6 +130,7 @@ mtx_common_init() {
   srand(time(NULL));
 
   init_debugging();
+  init_hacks();
 
   init_locales();
 

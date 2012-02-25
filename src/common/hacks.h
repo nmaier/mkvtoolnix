@@ -42,5 +42,6 @@
 
 void engage_hacks(const std::string &hacks);
 bool hack_engaged(unsigned int id);
+void init_hacks();
 
 #endif // __MTX_COMMON_HACKS_H
