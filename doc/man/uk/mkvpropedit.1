@@ -181,6 +181,17 @@ list\*(Aq як
 відобразить список доступних перекладів\&.
 .RE
 .PP
+\fB\-\-debug\fR \fItopic\fR
+.RS 4
+Turn on debugging for a specific feature\&. This option is only useful for developers\&.
+.RE
+.PP
+\fB\-\-engage\fR \fIfeature\fR
+.RS 4
+Turn on experimental features\&. A list of available features can be requested with
+\fBmkvpropedit \-\-engage list\fR\&. These features are not meant to be used in normal situations\&.
+.RE
+.PP
 \fB\-v\fR, \fB\-\-verbose\fR
 .RS 4
 Задає відображення розширеної інформації про важливі елементи
@@ -448,6 +459,29 @@ aborts right after outputting the error message\&. Error messages range from wro
 Є декілька місць, де спеціальні символи у тексті мають або повинні бути виокремлені\&. Правила для виокремлювання прості: кожен символ, що потребує виокремлення, замінюється на зворотній слеш з деяким символом, що йде після нього\&.
 .PP
 The rules are: \*(Aq \*(Aq (a space) becomes \*(Aq\es\*(Aq, \*(Aq"\*(Aq (double quotes) becomes \*(Aq\e2\*(Aq, \*(Aq:\*(Aq becomes \*(Aq\ec\*(Aq, \*(Aq#\*(Aq becomes \*(Aq\eh\*(Aq and \*(Aq\e\*(Aq (a single backslash) itself becomes \*(Aq\e\e\*(Aq\&.
+.SH "Environment variables"
+.PP
+
+\fBmkvpropedit\fR(1)
+uses the default variables that determine the system\*(Aqs locale (e\&.g\&.
+\fILANG\fR
+and the
+\fILC_*\fR
+family)\&. Additional variables:
+.PP
+\fIMKVTOOLNIX_DEBUG\fR and its short form \fIMTX_DEBUG\fR
+.RS 4
+The content is treated as if it had been passed via the
+\fB\-\-debug\fR
+option\&.
+.RE
+.PP
+\fIMKVTOOLNIX_ENGAGE\fR and its short form \fIMTX_ENGAGE\fR
+.RS 4
+The content is treated as if it had been passed via the
+\fB\-\-engage\fR
+option\&.
+.RE
 .SH "ДИВІТЬСЯ ТАКОЖ"
 .PP
 

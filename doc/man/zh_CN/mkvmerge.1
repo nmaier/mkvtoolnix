@@ -1145,6 +1145,17 @@ Matroska(TM)
 将输出可用翻译列表。
 .RE
 .PP
+\fB\-\-debug\fR \fItopic\fR
+.RS 4
+Turn on debugging for a specific feature\&. This option is only useful for developers\&.
+.RE
+.PP
+\fB\-\-engage\fR \fIfeature\fR
+.RS 4
+Turn on experimental features\&. A list of available features can be requested with
+\fBmkvmerge \-\-engage list\fR\&. These features are not meant to be used in normal situations\&.
+.RE
+.PP
 \fB@\fR\fIoptions\-file\fR
 .RS 4
 Reads additional command line arguments from the file
@@ -2525,6 +2536,29 @@ gap, 10\&.050
 \-\- 此退出代码用于错误发生之后。
 \fBmkvmerge\fR(1)
 在输出错误信息后即中断处理。错误信息可能是错误的命令行参数，也可能是损坏文件的读取/写入错误。
+.RE
+.SH "ENVIRONMENT VARIABLES"
+.PP
+
+\fBmkvmerge\fR(1)
+uses the default variables that determine the system\*(Aqs locale (e\&.g\&.
+\fILANG\fR
+and the
+\fILC_*\fR
+family)\&. Additional variables:
+.PP
+\fIMKVTOOLNIX_DEBUG\fR and its short form \fIMTX_DEBUG\fR
+.RS 4
+The content is treated as if it had been passed via the
+\fB\-\-debug\fR
+option\&.
+.RE
+.PP
+\fIMKVTOOLNIX_ENGAGE\fR and its short form \fIMTX_ENGAGE\fR
+.RS 4
+The content is treated as if it had been passed via the
+\fB\-\-engage\fR
+option\&.
 .RE
 .SH "参阅"
 .PP

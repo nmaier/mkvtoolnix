@@ -1344,6 +1344,25 @@ $ mkvmerge -o out.mkv '(' file.mkv ')'</screen>
      </listitem>
     </varlistentry>
 
+    <varlistentry id="mkvmerge.description.debug">
+     <term><option>--debug</option> <parameter>topic</parameter></term>
+     <listitem>
+      <para>
+       Turn on debugging for a specific feature. This option is only useful for developers.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry id="mkvmerge.description.engage">
+     <term><option>--engage</option> <parameter>feature</parameter></term>
+     <listitem>
+      <para>
+       Turn on experimental features. A list of available features can be requested with <command>mkvmerge --engage list</command>. These
+       features are not meant to be used in normal situations.
+      </para>
+     </listitem>
+    </varlistentry>
+
     <varlistentry>
      <term><option>@</option><parameter>options-file</parameter></term>
      <listitem>
@@ -2328,6 +2347,33 @@ gap, 10.050
     </para>
    </listitem>
   </itemizedlist>
+ </refsect1>
+
+ <refsect1 id="mkvmerge.environment_variables">
+  <title>Environment variables</title>
+
+  <para>
+   &mkvmerge; uses the default variables that determine the system's locale (e.g. <varname>LANG</varname> and the <varname>LC_*</varname>
+   family). Additional variables:
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term><varname>MKVTOOLNIX_DEBUG</varname> and its short form <varname>MTX_DEBUG</varname></term>
+    <listitem>
+     <para>The content is treated as if it had been passed via the <link
+     linkend="mkvmerge.description.debug"><option>--debug</option></link> option.</para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><varname>MKVTOOLNIX_ENGAGE</varname> and its short form <varname>MTX_ENGAGE</varname></term>
+    <listitem>
+     <para>The content is treated as if it had been passed via the <link
+     linkend="mkvmerge.description.engage"><option>--engage</option></link> option.</para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
  </refsect1>
 
  <refsect1 id="mkvmerge.seealso">

@@ -762,6 +762,17 @@ Matroska(TM)ファイルは再生時の画像スケールを決定するため�
 指定した\fIcode\fRを強制的に言語コード(例: 日本語ならば\*(Aqja_JP\*(Aq)として使用します。しかし、環境変数\fILANG\fRや\fILC_MESSAGES\fR、\fILC_ALL\fRを使用したほうが好ましいでしょう。\fIcode\fRにlistと指定すると、指定できる言語コードの一覧を出力します。
 .RE
 .PP
+\fB\-\-debug\fR \fItopic\fR
+.RS 4
+Turn on debugging for a specific feature\&. This option is only useful for developers\&.
+.RE
+.PP
+\fB\-\-engage\fR \fIfeature\fR
+.RS 4
+Turn on experimental features\&. A list of available features can be requested with
+\fBmkvmerge \-\-engage list\fR\&. These features are not meant to be used in normal situations\&.
+.RE
+.PP
 \fB@\fR\fIoptions\-file\fR
 .RS 4
 Reads additional command line arguments from the file
@@ -1796,6 +1807,29 @@ gap, 10\&.050
 
 \fB2\fR
 \-\- この返り値は、エラーが発生し、エラーメッセージを出力した後に\fBmkvmerge\fR(1)が処理を中断したことを示します。エラーメッセージは不正なコマンドラインやファイルI/Oエラー、壊れたファイルなど様々です。
+.RE
+.SH "ENVIRONMENT VARIABLES"
+.PP
+
+\fBmkvmerge\fR(1)
+uses the default variables that determine the system\*(Aqs locale (e\&.g\&.
+\fILANG\fR
+and the
+\fILC_*\fR
+family)\&. Additional variables:
+.PP
+\fIMKVTOOLNIX_DEBUG\fR and its short form \fIMTX_DEBUG\fR
+.RS 4
+The content is treated as if it had been passed via the
+\fB\-\-debug\fR
+option\&.
+.RE
+.PP
+\fIMKVTOOLNIX_ENGAGE\fR and its short form \fIMTX_ENGAGE\fR
+.RS 4
+The content is treated as if it had been passed via the
+\fB\-\-engage\fR
+option\&.
 .RE
 .SH "関連項目"
 .PP
