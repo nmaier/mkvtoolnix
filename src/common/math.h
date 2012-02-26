@@ -14,7 +14,9 @@
 #ifndef __MTX_COMMON_MATH_H
 #define __MTX_COMMON_MATH_H
 
-#include "common/os.h"
+#include "common/common_pch.h"
+
+#include <boost/rational.hpp>
 
 #define irnd(a) ((int64_t)((double)(a) + 0.5))
 #define iabs(a) ((a) < 0 ? (a) * -1 : (a))
@@ -22,5 +24,7 @@
 uint32_t round_to_nearest_pow2(uint32_t value);
 
 int int_log2(uint32_t value);
+
+typedef boost::rational<int64_t> int64_rational_c;
 
 #endif  // __MTX_COMMON_MATH_H
