@@ -6,7 +6,7 @@ class T_209ac3misdeetected_as_mpeges < Test
   end
 
   def run
-    merge("data/simple/misdetected_as_mpeges.ac3")
+    merge("data/ac3/misdetected_as_mpeges.ac3")
     return hash_tmp
   end
 end

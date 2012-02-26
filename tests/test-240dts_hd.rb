@@ -8,7 +8,7 @@ class T_240dts_hd < Test
   def run
     hashes = Array.new
 
-    merge("data/simple/dts-hd.dts")
+    merge("data/dts/dts-hd.dts")
     hashes << hash_tmp
 
     merge("-D data/vob/VC1WithDTSHD.EVO")

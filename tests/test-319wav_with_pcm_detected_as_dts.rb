@@ -6,7 +6,7 @@ class T_319wav_with_pcm_detected_as_dts < Test
   end
 
   def run
-    merge "data/simple/wav_with_pcm_detected_as_dts.wav"
+    merge "data/wav/wav_with_pcm_detected_as_dts.wav"
     hash_tmp
   end
 end

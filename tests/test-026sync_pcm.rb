@@ -6,9 +6,9 @@ class T_026sync_pcm < Test
   end
 
   def run
-    merge("--sync 0:500 data/simple/v.wav")
+    merge("--sync 0:500 data/wav/v.wav")
     hash = hash_tmp
-    merge("--sync 0:-500 data/simple/v.wav")
+    merge("--sync 0:-500 data/wav/v.wav")
     return hash + "-" + hash_tmp
   end
 end

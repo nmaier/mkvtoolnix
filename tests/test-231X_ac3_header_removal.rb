@@ -6,7 +6,7 @@ class T_231X_ac3_header_removal < Test
   end
 
   def run
-    xtr_tracks "data/simple/ac3_header_removal.mka", "0:#{tmp}"
+    xtr_tracks "data/ac3/ac3_header_removal.mka", "0:#{tmp}"
     return hash_tmp
   end
 end

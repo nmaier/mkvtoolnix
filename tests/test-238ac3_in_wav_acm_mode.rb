@@ -6,7 +6,7 @@ class T_238ac3_in_wav_acm_mode < Test
   end
 
   def run
-    merge(1, "data/simple/Pirates.Of.The.Caribbean.At.Worlds.End_30secssample.wav")
+    merge(1, "data/wav/Pirates.Of.The.Caribbean.At.Worlds.End_30secssample.wav")
     return hash_tmp
   end
 end
