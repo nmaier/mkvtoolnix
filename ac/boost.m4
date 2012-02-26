@@ -25,3 +25,7 @@ fi
 AX_BOOST_CHECK_HEADERS([boost/property_tree/ptree.hpp],,[
   AC_MSG_ERROR([Boost's property tree library is required but wasn't found])
 ])
+
+AX_BOOST_CHECK_HEADERS([boost/rational.hpp],,[
+  AC_MSG_ERROR([Boost's rational library is required but wasn't found])
+])

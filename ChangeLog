@@ -1,5 +1,7 @@
 2012-02-26  Moritz Bunkus  <moritz@bunkus.org>
 
+	* build system: Boost's "rational" library is now required.
+
 	* mkvmerge: bug fix: Complete re-write of the (E)AC3 parsing and
 	handling code. Dependent EAC3 frames are now handled
 	correctly. Fix for bug 704.
