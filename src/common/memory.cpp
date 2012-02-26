@@ -37,7 +37,7 @@ memory_c::resize(size_t new_size)
 }
 
 void
-memory_c::add(unsigned char *new_buffer,
+memory_c::add(unsigned char const *new_buffer,
               size_t new_size) {
   if ((0 == new_size) || (NULL == new_buffer))
     return;

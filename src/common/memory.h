@@ -169,8 +169,8 @@ public:
   }
 
   void resize(size_t new_size) throw();
-  void add(unsigned char *new_buffer, size_t new_size);
-  void add(memory_cptr &new_buffer) {
+  void add(unsigned char const *new_buffer, size_t new_size);
+  void add(memory_cptr const &new_buffer) {
     add(new_buffer->get_buffer(), new_buffer->get_size());
   }
 
