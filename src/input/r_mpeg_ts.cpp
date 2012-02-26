@@ -216,7 +216,7 @@ mpeg_ts_track_c::new_stream_v_avc() {
            % sps_info.timing_info_present % sps_info.num_units_in_tick % sps_info.time_scale % sps_info.fixed_frame_rate);
 
     if (sps_info.timing_info_present && sps_info.num_units_in_tick)
-      v_frame_rate = static_cast<float>(sps_info.time_scale) / sps_info.num_units_in_tick;
+      v_frame_rate = static_cast<float>(sps_info.time_scale) / sps_info.num_units_in_tick / 2;
 
     if (sps_info.ar_found) {
       float aspect_ratio = (float)sps_info.width / (float)sps_info.height * (float)sps_info.par_num / (float)sps_info.par_den;
