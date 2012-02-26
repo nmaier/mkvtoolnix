@@ -50,15 +50,15 @@ ac3::frame_c::is_eac3()
 }
 
 void
-ac3::frame_c::add_dependent_frame(const frame_c &frame,
-                                  unsigned char *const buffer,
+ac3::frame_c::add_dependent_frame(frame_c const &frame,
+                                  unsigned char const *buffer,
                                   size_t buffer_size) {
   m_data->add(buffer, buffer_size);
   m_dependent_frames.push_back(frame);
 }
 
 bool
-ac3::frame_c::decode_header(unsigned char *const buffer,
+ac3::frame_c::decode_header(unsigned char const *buffer,
                             size_t buffer_size) {
   bit_cursor_c bc(buffer, buffer_size);
 
@@ -167,7 +167,12 @@ ac3::frame_c::decode_header_type_ac3(bit_cursor_c &bc) {
 
   bc.skip_bits(5 + 3);          // bsid, bsmod
   uint8_t acmod      = bc.get_bits(3);
-  bc.skip_bits(2);              // cmixlev/surmixlev/dsurmod
+  if ((acmod & 0x01) && (acmod != 0x01))
+    bc.skip_bits(2);            // cmixlev
+  if (acmod & 0x04)
+    bc.skip_bits(2);            // surmixlev
+  if (0x02 == acmod)
+    bc.skip_bits(2);            // dsurmod
   uint8_t lfeon      = bc.get_bit();
 
   uint8_t sr_shift   = std::max(m_bs_id, 8u) - 8;
@@ -179,9 +184,22 @@ ac3::frame_c::decode_header_type_ac3(bit_cursor_c &bc) {
 
   m_samples          = 1536;
   m_frame_type       = EAC3_FRAME_TYPE_INDEPENDENT;
-  m_valid            = true;
 
   return true;
+}
+
+int
+ac3::frame_c::find_in(memory_cptr const &buffer) {
+  return find_in(buffer->get_buffer(), buffer->get_size());
+}
+
+int
+ac3::frame_c::find_in(unsigned char const *buffer,
+                      size_t buffer_size) {
+  for (size_t offset = 0; offset < buffer_size; ++offset)
+    if (decode_header(&buffer[offset], buffer_size - offset))
+      return offset;
+  return -1;
 }
 
 std::string
@@ -249,10 +267,10 @@ ac3::parser_c::flush() {
   parse(true);
 }
 
-bool
+size_t
 ac3::parser_c::frame_available()
   const {
-  return !m_frames.empty();
+  return m_frames.size();
 }
 
 ac3::frame_c
@@ -318,267 +336,64 @@ ac3::parser_c::parse(bool end_of_stream) {
   }
 }
 
-ac3_header_t::ac3_header_t() {
-  memset(this, 0, sizeof(ac3_header_t));
-}
-
-/*
-  EAC3 Header:
-  AAAAAAAA AAAAAAAA BBCCCDDD DDDDDDDD EEFFGGGH IIIII...
-  A = sync, always 0x0B77
-  B = frame type
-  C = sub stream id
-  D = frame size - 1 in words
-  E = fscod
-  F = fscod2 if fscod == 3, else numblkscod
-  G = acmod
-  H = LEF on
-  I = bitstream ID, 16 for EAC3 (same position and length as for AC3)
-*/
-
-static bool
-parse_eac3_header(const unsigned char *buf,
-                  ac3_header_t &header) {
-  static const int sample_rates[] = { 48000, 44100, 32000, 24000, 22050, 16000 };
-  static const int channels[]     = {     2,     1,     2,     3,     3,     4,     4,     5 };
-  static const int samples[]      = {   256,   512,   768,  1536 };
-
-  int fscod  =  buf[4] >> 6;
-  int fscod2 = (buf[4] >> 4) & 0x03;
-
-  if ((0x03 == fscod) && (0x03 == fscod2))
-    return false;
-
-  int acmod                   = (buf[4] >> 1) & 0x07;
-  int lfeon                   =  buf[4]       & 0x01;
-
-  header.frame_type           = (buf[2] >> 6) & 0x03;
-  header.sub_stream_id        = (buf[2] >> 3) & 0x07;
-  header.sample_rate          = sample_rates[0x03 == fscod ? 3 + fscod2 : fscod];
-  header.bytes                = (((buf[2] & 0x03) << 8) + buf[3] + 1) * 2;
-  header.channels             = channels[acmod] + lfeon;
-  header.samples              = (0x03 == fscod) ? 1536 : samples[fscod2];
-
-  header.has_dependent_frames = false;
-
-  if (EAC3_FRAME_TYPE_RESERVED == header.frame_type)
-    return false;
-
-  return true;
-}
-
-static bool
-parse_eac3_header_full(const unsigned char *buf,
-                       size_t size,
-                       ac3_header_t &header,
-                       bool look_for_second_header) {
-  if (!parse_eac3_header(buf, header))
-    return false;
-
-  if (!look_for_second_header)
-    return true;
-
-  if (((header.bytes + 5) > size) || (get_uint16_be(&buf[header.bytes]) != AC3_SYNC_WORD))
-    return false;
-
-  ac3_header_t second_header;
-  if (!parse_eac3_header(buf + header.bytes, second_header))
-    return false;
-
-  if (EAC3_FRAME_TYPE_DEPENDENT == second_header.frame_type) {
-    header.has_dependent_frames  = true;
-    header.channels              = 8; // TODO: Don't hardcode 7.1, but get the values from the frames
-    header.bytes                += second_header.bytes;
-  }
-
-  return true;
-}
-
-/*
-  <S_O> AC3 Header:
-  <S_O> AAAAAAAA AAAAAAAA BBBBBBBB BBBBBBBB CCDDDDDD EEEEEFFF
-  <S_O> A = sync, always 0x0B77
-  <S_O> B = CRC 16 of 5/8 frame
-  <S_O> C = samplerate:
-  <S_O>  if E <= 8: 00 = 48kHz; 01 = 44,1kHz; 10 = 32kHz; 11 = reserved
-  <S_O>  if E = 9:  00 = 24kHz; 01 = 22,05kHz; 10 = 16kHz; 11 = reserved
-  <S_O>  if E = 10: 00 = 12kHz; 01 = 11,025kHz; 10 = 8KHz; 11 = reserved
-  <S_O> D = framesize code, 12/24KHz is like 48kHz, 8/16kHz like 32kHz etc.
-  <S_O> E = bitstream ID, if <=8 compatible to all standard decoders
-  <S_O>  9 and 10 = low samplerate additions
-  <S_O> F = bitstream mode
-*/
-
-bool
-parse_ac3_header(const unsigned char *buf,
-                 ac3_header_t &header) {
-  static const int rate[]                 = {   32,   40,   48,   56,   64,   80,   96,  112,  128,  160,  192,  224,  256,  320,  384,  448,  512,  576,  640 };
-  static const unsigned char lfeon[8]     = { 0x10, 0x10, 0x04, 0x04, 0x04, 0x01, 0x04, 0x01 };
-  static const unsigned char halfrate[12] = {    0,    0,    0,    0,    0,    0,    0,    0,    0,    1,    2,    3 };
-
-  int frmsizecod = buf[4] & 63;
-  if (38 <= frmsizecod)
-    return false;
-
-  int half        = halfrate[buf[5] >> 3];
-  int bitrate     = rate[frmsizecod >> 1];
-  header.bit_rate = (bitrate * 1000) >> half;
-
-  switch (buf[4] & 0xc0) {
-    case 0:
-      header.sample_rate = 48000 >> half;
-      header.bytes       = 4 * bitrate;
-      break;
-
-    case 0x40:
-      header.sample_rate = 44100 >> half;
-      header.bytes       = 2 * (320 * bitrate / 147 + (frmsizecod & 1));
-      break;
-
-    case 0x80:
-      header.sample_rate = 32000 >> half;
-      header.bytes       = 6 * bitrate;
-      break;
-
-    default:
-      return false;
-  }
-
-  int acmod    = buf[6] >> 5;
-  header.flags = ((((buf[6] & 0xf8) == 0x50) ? AC3_DOLBY : acmod) | ((buf[6] & lfeon[acmod]) ? AC3_LFE : 0));
-
-  switch (header.flags & AC3_CHANNEL_MASK) {
-    case AC3_MONO:
-      header.channels = 1;
-      break;
-
-    case AC3_CHANNEL:
-    case AC3_STEREO:
-    case AC3_CHANNEL1:
-    case AC3_CHANNEL2:
-    case AC3_DOLBY:
-      header.channels = 2;
-      break;
-
-    case AC3_2F1R:
-    case AC3_3F:
-      header.channels = 3;
-      break;
-
-    case AC3_3F1R:
-    case AC3_2F2R:
-      header.channels = 4;
-      break;
-
-    case AC3_3F2R:
-      header.channels = 5;
-      break;
-  }
-
-  if (header.flags & AC3_LFE)
-    header.channels++;
-
-  header.samples              = 1536;
-  header.has_dependent_frames = false;
-
-  return true;
-}
-
 int
-find_ac3_header(const unsigned char *buf,
-                size_t size,
-                ac3_header_t *ac3_header,
-                bool look_for_second_header) {
-  if (8 > size)
-    return -1;
+ac3::parser_c::find_consecutive_frames(unsigned char const *buffer,
+                                       size_t buffer_size,
+                                       size_t num_required_headers) {
+  size_t base = 0;
+  bool debug  = debugging_requested("ac3_consecutive_frames");
 
-  ac3_header_t header;
-  size_t i;
-
-  for (i = 0; size > i + 7; ++i) {
-    if (get_uint16_be(&buf[i]) != AC3_SYNC_WORD)
-      continue;
-
-    header.bsid = (buf[i + 5] >> 3);
-    bool found  = false;
-
-    if (0x10 == header.bsid)
-      found = parse_eac3_header_full(&buf[i], size, header, look_for_second_header);
-
-    else if (0x0c <= header.bsid)
-      continue;
-
-    else
-      found = parse_ac3_header(&buf[i], header);
-
-    if (found) {
-      memcpy(ac3_header, &header, sizeof(ac3_header_t));
-      return i;
-    }
-  }
-
-  return -1;
-}
-
-int
-find_consecutive_ac3_headers(const unsigned char *buf,
-                             size_t size,
-                             unsigned int num) {
-  ac3_header_t ac3header, new_header;
-
-  int pos = find_ac3_header(buf, size, &ac3header, true);
-  if (0 > pos)
-    return -1;
-
-  mxverb(4, boost::format("ac3_reader: Found tag at %1% size %2%\n") % pos % ac3header.bytes);
-
-  if (1 == num)
-    return pos;
-
-  unsigned int base = pos;
   do {
-    mxverb(4, boost::format("find_cons_ac3_h: starting with base at %1%\n") % base);
+    mxdebug_if(debug, boost::format("Starting search for %2% headers with base %1%, buffer size %3%\n") % base % num_required_headers % buffer_size);
 
-    unsigned int offset = ac3header.bytes;
-    size_t i;
-    for (i = 0; (num - 1) > i; ++i) {
-      if (4 + base + offset > size)
-        break;
+    size_t position = base;
 
-      pos = find_ac3_header(&buf[base + offset], size - base - offset, &new_header, ac3header.has_dependent_frames);
+    ac3::frame_c first_frame;
+    while (((position + 8) < buffer_size) && !first_frame.decode_header(&buffer[position], buffer_size - position))
+      ++position;
 
-      if (0 == pos) {
-        if (   (new_header.bsid        == ac3header.bsid)
-            && (new_header.channels    == ac3header.channels)
-            && (new_header.sample_rate == ac3header.sample_rate)) {
-          mxverb(4, boost::format("find_cons_ac3_h: found good header %1%\n") % i);
-          if ((offset + new_header.bytes) >= size)
-            break;
-          offset += new_header.bytes;
-          continue;
-        } else
-          break;
+    mxdebug_if(debug, boost::format("First frame at %1% valid %2%\n") % position % first_frame.m_valid);
 
-      } else
-        break;
-    }
-
-    if ((i + 1) == num)
-      return base;
-
-    ++base;
-    offset = 0;
-    pos    = find_ac3_header(&buf[base], size - base, &ac3header, true);
-
-    if (-1 == pos)
+    if (!first_frame.m_valid)
       return -1;
 
-    base += pos;
+    size_t offset            = position + first_frame.m_bytes;
+    size_t num_headers_found = 1;
 
-  } while ((size - 5) > base);
+    while (   (num_headers_found < num_required_headers)
+           && (offset            < buffer_size)) {
+
+      ac3::frame_c current_frame;
+      if (!current_frame.decode_header(&buffer[offset], buffer_size - offset))
+        break;
+
+      if (   (current_frame.m_bs_id       != first_frame.m_bs_id)
+          && (current_frame.m_channels    != first_frame.m_channels)
+          && (current_frame.m_sample_rate != first_frame.m_sample_rate)) {
+        mxdebug_if(debug,
+                   boost::format("Current frame at %7% differs from first frame. (first/current) BS ID: %1%/%2% channels: %3%/%4% sample rate: %5%/%6%\n")
+                   % first_frame.m_bs_id % current_frame.m_bs_id % first_frame.m_channels % current_frame.m_channels % first_frame.m_sample_rate % current_frame.m_sample_rate % offset);
+        break;
+      }
+
+      mxdebug_if(debug, boost::format("Current frame at %1% equals first frame, found %2%\n") % offset % (num_headers_found + 1));
+
+      ++num_headers_found;
+      offset += current_frame.m_bytes;
+    }
+
+    if (num_headers_found == num_required_headers) {
+      mxdebug_if(debug, boost::format("Found required number of headers at %1%\n") % position);
+      return position;
+    }
+
+    base = position + 2;
+  } while (base < buffer_size);
 
   return -1;
 }
+
+// ------------------------------------------------------------
 
 /*
    The functions mul_poly, pow_poly and verify_ac3_crc were taken
@@ -593,9 +408,7 @@ static unsigned int
 mul_poly(unsigned int a,
          unsigned int b,
          unsigned int poly) {
-  unsigned int c;
-
-  c = 0;
+  unsigned int c = 0;
   while (a) {
     if (a & 1)
       c ^= b;
@@ -611,8 +424,7 @@ static unsigned int
 pow_poly(unsigned int a,
          unsigned int n,
          unsigned int poly) {
-  unsigned int r;
-  r = 1;
+  unsigned int r = 1;
   while (n) {
     if (n & 1)
       r = mul_poly(r, a, poly);
@@ -625,17 +437,17 @@ pow_poly(unsigned int a,
 bool
 verify_ac3_checksum(const unsigned char *buf,
                     size_t size) {
-  ac3_header_t ac3_header;
+  ac3::frame_c frame;
 
-  if (0 != find_ac3_header(buf, size, &ac3_header, false))
+  if (!frame.decode_header(buf, size))
     return false;
 
-  if (size < ac3_header.bytes)
+  if (size < frame.m_bytes)
     return false;
 
   uint16_t expected_crc = get_uint16_be(&buf[2]);
 
-  int frame_size_words  = ac3_header.bytes >> 1;
+  int frame_size_words  = frame.m_bytes >> 1;
   int frame_size_58     = (frame_size_words >> 1) + (frame_size_words >> 3);
 
   uint16_t actual_crc   = bswap_16(crc_calc(crc_get_table(CRC_16_ANSI), 0, buf + 4, 2 * frame_size_58 - 4));

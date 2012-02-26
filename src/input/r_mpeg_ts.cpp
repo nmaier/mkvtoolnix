@@ -12,9 +12,9 @@
    and Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include <iostream>
-
 #include "common/common_pch.h"
+
+#include <iostream>
 
 #include "common/checksums.h"
 #include "common/clpi.h"
@@ -283,18 +283,20 @@ int
 mpeg_ts_track_c::new_stream_a_ac3() {
   add_pes_payload_to_probe_data();
 
-  ac3_header_t header;
-
-  if (-1 == find_ac3_header(m_probe_data->get_buffer(), m_probe_data->get_size(), &header, false))
+  ac3::parser_c parser;
+  parser.add_bytes(m_probe_data->get_buffer(), m_probe_data->get_size());
+  if (!parser.frame_available())
     return FILE_STATUS_MOREDATA;
+
+  ac3::frame_c header = parser.get_frame();
 
   mxverb(2,
          boost::format("first ac3 header bsid %1% channels %2% sample_rate %3% bytes %4% samples %5%\n")
-         % header.bsid % header.channels % header.sample_rate % header.bytes % header.samples);
+         % header.m_bs_id % header.m_channels % header.m_sample_rate % header.m_bytes % header.m_samples);
 
-  a_channels    = header.channels;
-  a_sample_rate = header.sample_rate;
-  a_bsid        = header.bsid;
+  a_channels    = header.m_channels;
+  a_sample_rate = header.m_sample_rate;
+  a_bsid        = header.m_bs_id;
 
   return 0;
 }

@@ -25,7 +25,7 @@
 
 class ac3_reader_c: public generic_reader_c {
 private:
-  ac3_header_t m_ac3header;
+  ac3::frame_c m_ac3header;
   memory_cptr m_chunk;
 
 public:

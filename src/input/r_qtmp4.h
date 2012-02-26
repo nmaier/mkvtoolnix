@@ -158,7 +158,7 @@ struct qtmp4_demuxer_c {
   float a_samplerate;
   int a_aac_profile, a_aac_output_sample_rate;
   bool a_aac_is_sbr, a_aac_config_parsed;
-  ac3_header_t m_ac3_header;
+  ac3::frame_c m_ac3_header;
 
   unsigned char *priv;
   uint32_t priv_size;

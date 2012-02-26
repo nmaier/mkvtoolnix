@@ -779,18 +779,17 @@ mpeg_ps_reader_c::new_stream_a_ac3(mpeg_ps_id_t,
                                    unsigned char *buf,
                                    unsigned int length,
                                    mpeg_ps_track_ptr &track) {
-  ac3_header_t header;
-
-  if (-1 == find_ac3_header(buf, length, &header, false))
+  ac3::frame_c header;
+  if (-1 == header.find_in(buf, length))
     throw false;
 
   mxverb(2,
          boost::format("first ac3 header bsid %1% channels %2% sample_rate %3% bytes %4% samples %5%\n")
-         % header.bsid % header.channels % header.sample_rate % header.bytes % header.samples);
+         % header.m_bs_id % header.m_channels % header.m_sample_rate % header.m_bytes % header.m_samples);
 
-  track->a_channels    = header.channels;
-  track->a_sample_rate = header.sample_rate;
-  track->a_bsid        = header.bsid;
+  track->a_channels    = header.m_channels;
+  track->a_sample_rate = header.m_sample_rate;
+  track->a_bsid        = header.m_bs_id;
 }
 
 void

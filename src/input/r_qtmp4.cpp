@@ -1527,14 +1527,14 @@ bool
 qtmp4_reader_c::create_audio_packetizer_ac3(qtmp4_demuxer_cptr &dmx) {
   memory_cptr buf = memory_c::alloc(64);
 
-  if (!dmx->read_first_bytes(buf, 64, m_in) || (-1 == find_ac3_header(buf->get_buffer(), buf->get_size(), &dmx->m_ac3_header, false))) {
+  if (!dmx->read_first_bytes(buf, 64, m_in) || (-1 == dmx->m_ac3_header.find_in(buf))) {
     mxwarn_tid(m_ti.m_fname, dmx->id, Y("No AC3 header found in first frame; track will be skipped.\n"));
     dmx->ok = false;
 
     return false;
   }
 
-  dmx->ptzr = add_packetizer(new ac3_packetizer_c(this, m_ti, dmx->m_ac3_header.sample_rate, dmx->m_ac3_header.channels, dmx->m_ac3_header.bsid));
+  dmx->ptzr = add_packetizer(new ac3_packetizer_c(this, m_ti, dmx->m_ac3_header.m_sample_rate, dmx->m_ac3_header.m_channels, dmx->m_ac3_header.m_bs_id));
   show_packetizer_info(dmx->id, PTZR(dmx->ptzr));
 
   return true;

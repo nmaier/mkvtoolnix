@@ -54,12 +54,15 @@ namespace ac3 {
     frame_c();
     void init();
     bool is_eac3() const;
-    void add_dependent_frame(const frame_c &frame, unsigned char *const buffer, size_t buffer_size);
-    bool decode_header(unsigned char *const buffer, size_t buffer_size);
+    void add_dependent_frame(frame_c const &frame, unsigned char const *buffer, size_t buffer_size);
+    bool decode_header(unsigned char const *buffer, size_t buffer_size);
     bool decode_header_type_eac3(bit_cursor_c &bc);
     bool decode_header_type_ac3(bit_cursor_c &bc);
 
     std::string to_string(bool verbose) const;
+
+    int find_in(memory_cptr const &buffer);
+    int find_in(unsigned char const *buffer, size_t buffer_size);
   };
 
   class parser_c {
@@ -75,36 +78,18 @@ namespace ac3 {
     void add_bytes(memory_cptr const &mem);
     void add_bytes(unsigned char *const buffer, size_t size);
     void flush();
-    bool frame_available() const;
+    size_t frame_available() const;
     frame_c get_frame();
     uint64_t get_parsed_stream_position() const;
     uint64_t get_total_stream_position() const;
+
+    int find_consecutive_frames(unsigned char const *buffer, size_t buffer_size, size_t num_required_headers);
 
   protected:
     void parse(bool end_of_stream);
   };
 };
 
-struct ac3_header_t {
-  unsigned int sample_rate;
-  unsigned int bit_rate;
-  unsigned int channels;
-  unsigned int flags;
-  unsigned int bytes;
-  unsigned int bsid;
-  unsigned int samples;
-
-  unsigned int frame_type;
-  unsigned int sub_stream_id;
-
-  bool has_dependent_frames;
-
-  ac3_header_t();
-};
-
-int find_ac3_header(const unsigned char *buf, size_t size, ac3_header_t *ac3_header, bool look_for_second_header);
-int find_consecutive_ac3_headers(const unsigned char *buf, size_t size, unsigned int num);
-bool parse_ac3_header(const unsigned char *buf, ac3_header_t &header);
-bool verify_ac3_checksum(const unsigned char *buf, size_t size);
+bool verify_ac3_checksum(unsigned char const *buf, size_t size);
 
 #endif // __MTX_COMMON_AC3COMMON_H

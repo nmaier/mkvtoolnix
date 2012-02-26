@@ -97,14 +97,14 @@ truehd_parser_c::parse(bool end_of_stream) {
       }
 
     } else if (get_uint16_be(&data[offset]) == 0x0b77) {
-      ac3_header_t ac3_header;
-      if (parse_ac3_header(&data[offset], ac3_header)) {
-        if (((size - offset) < ac3_header.bytes) && !end_of_stream)
+      ac3::frame_c ac3_frame;
+      if (ac3_frame.decode_header(&data[offset], size - offset)) {
+        if (((size - offset) < ac3_frame.m_bytes) && !end_of_stream)
           break;
 
-        if (((size - offset) >= ac3_header.bytes) && verify_ac3_checksum(&data[offset], size - offset)) {
+        if (((size - offset) >= ac3_frame.m_bytes) && verify_ac3_checksum(&data[offset], size - offset)) {
           frame->m_type = truehd_frame_t::ac3;
-          frame->m_size = ac3_header.bytes;
+          frame->m_size = ac3_frame.m_bytes;
         }
       }
     }
