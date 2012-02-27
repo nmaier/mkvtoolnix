@@ -226,9 +226,24 @@ namespace mpeg4 {
 
       bool m_ignore_nalu_size_length_errors, m_discard_actual_frames;
 
-      std::vector<int> m_num_slices_by_type;
-      bool m_debug_keyframe_detection, m_debug_nalu_types;
+      bool m_debug_keyframe_detection, m_debug_nalu_types, m_debug_timecode_statistics, m_debug_missing_timecodes_generation;
       std::map<int, std::string> m_nalu_names_by_type;
+
+      struct stats_t {
+        std::vector<int> num_slices_by_type;
+        size_t num_frames_out, num_frames_discarded, num_timecodes_in, num_timecodes_generated_normal, num_timecodes_generated_missing, num_timecodes_discarded;
+
+        stats_t()
+          : num_slices_by_type(11, 0)
+          , num_frames_out(0)
+          , num_frames_discarded(0)
+          , num_timecodes_in(0)
+          , num_timecodes_generated_normal(0)
+          , num_timecodes_generated_missing(0)
+          , num_timecodes_discarded(0)
+        {
+        }
+      } m_stats;
 
     public:
       avc_es_parser_c();

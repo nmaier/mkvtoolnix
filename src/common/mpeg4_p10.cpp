@@ -662,15 +662,19 @@ mpeg4::p10::avc_es_parser_c::avc_es_parser_c()
   , m_have_incomplete_frame(false)
   , m_ignore_nalu_size_length_errors(false)
   , m_discard_actual_frames(false)
-  , m_num_slices_by_type(11, 0)
   , m_debug_keyframe_detection(debugging_requested("avc_keyframe_detection") || debugging_requested("avc_parser"))
   , m_debug_nalu_types(debugging_requested("avc_nalu_types") || debugging_requested("avc_parser"))
+  , m_debug_missing_timecodes_generation(debugging_requested("avc_missing_timecodes_generation") || debugging_requested("avc_parser"))
 {
   if (m_debug_nalu_types)
     init_nalu_names();
 }
 
 mpeg4::p10::avc_es_parser_c::~avc_es_parser_c() {
+  mxdebug_if(debugging_requested("avc_statistics"),
+             boost::format("AVC statistics: #frames: out %1% discarded %2%  #timecodes: in %3% generated normal %4% generated missing %5% discarded %6%\n")
+             % m_stats.num_frames_out % m_stats.num_frames_discarded % m_stats.num_timecodes_in % m_stats.num_timecodes_generated_normal % m_stats.num_timecodes_generated_missing % m_stats.num_timecodes_discarded);
+
   if (!debugging_requested("avc_num_slices_by_type"))
     return;
 
@@ -681,10 +685,10 @@ mpeg4::p10::avc_es_parser_c::~avc_es_parser_c() {
   };
 
   int i;
-  mxinfo("mpeg4::p10: Number of slices by type:\n");
+  mxdebug("mpeg4::p10: Number of slices by type:\n");
   for (i = 0; 10 >= i; ++i)
-    if (0 != m_num_slices_by_type[i])
-      mxinfo(boost::format("  %1%: %2%\n") % s_type_names[i] % m_num_slices_by_type[i]);
+    if (0 != m_stats.num_slices_by_type[i])
+      mxdebug(boost::format("  %1%: %2%\n") % s_type_names[i] % m_stats.num_slices_by_type[i]);
 }
 
 void
@@ -775,6 +779,8 @@ mpeg4::p10::avc_es_parser_c::add_timecode(int64_t timecode) {
   m_timecodes.insert(i, timecode);
 
   m_max_timecode = std::max(timecode, m_max_timecode);
+
+  ++m_stats.num_timecodes_in;
 }
 
 void
@@ -905,8 +911,16 @@ mpeg4::p10::avc_es_parser_c::handle_slice_nalu(memory_cptr &nalu) {
   m_incomplete_frame.m_data = create_nalu_with_size(nalu, true);
   m_have_incomplete_frame   = true;
 
-  if (m_generate_timecodes)
+  if (m_generate_timecodes) {
     add_timecode(m_frame_number * m_default_duration);
+
+    // add_timecode() always increases num_timcodes_in because it is
+    // the interface for the caller to provide its timeocde. In this
+    // case increasing it would be wrong though, therefore decrease it
+    // again.
+    --m_stats.num_timecodes_in;
+    ++m_stats.num_timecodes_generated_normal;
+  }
   ++m_frame_number;
 }
 
@@ -1010,8 +1024,7 @@ mpeg4::p10::avc_es_parser_c::handle_nalu(memory_cptr nalu) {
 
   int type = *(nalu->get_buffer()) & 0x1f;
 
-  if (m_debug_nalu_types)
-    mxinfo(boost::format("NALU type 0x%|1$02x| (%2%) size %3%\n") % type % get_nalu_type_name(type) % nalu->get_size());
+  mxdebug_if(m_debug_nalu_types, boost::format("NALU type 0x%|1$02x| (%2%) size %3%\n") % type % get_nalu_type_name(type) % nalu->get_size());
 
   switch (type) {
     case NALU_TYPE_SEQ_PARAM:
@@ -1079,7 +1092,7 @@ mpeg4::p10::avc_es_parser_c::parse_slice(memory_cptr &buffer,
     si.first_mb_in_slice = geread(r); // first_mb_in_slice
     si.type              = geread(r); // slice_type
 
-    ++m_num_slices_by_type[9 < si.type ? 10 : si.type];
+    ++m_stats.num_slices_by_type[9 < si.type ? 10 : si.type];
 
     if (9 < si.type) {
       mxverb(3, boost::format("slice parser error: 9 < si.type: %1%\n") % si.type);
@@ -1164,6 +1177,8 @@ mpeg4::p10::avc_es_parser_c::default_cleanup() {
   if ((m_frames.size() >= 2) && (m_timecodes.end() != t))
     (i - 1)->m_end = *t;
 
+  m_stats.num_frames_out += m_frames.size();
+
   m_frames_out.insert(m_frames_out.end(), m_frames.begin(), m_frames.end());
   m_timecodes.erase(m_timecodes.begin(), m_timecodes.begin() + m_frames.size());
   m_frames.clear();
@@ -1175,6 +1190,9 @@ mpeg4::p10::avc_es_parser_c::cleanup() {
     return;
 
   if (m_discard_actual_frames) {
+    m_stats.num_frames_discarded    += m_frames.size();
+    m_stats.num_timecodes_discarded += m_timecodes.size();
+
     m_frames.clear();
     m_timecodes.clear();
     return;
@@ -1274,6 +1292,8 @@ mpeg4::p10::avc_es_parser_c::cleanup() {
     i->m_end   = poc[j].timecode + poc[j].duration;
     ++i;
   }
+
+  m_stats.num_frames_out += num_frames;
 
   m_frames_out.insert(m_frames_out.end(), m_frames.begin(), m_frames.end());
   m_timecodes.erase(m_timecodes.begin(), m_timecodes.begin() + std::min(num_frames, num_timecodes));
@@ -1396,8 +1416,20 @@ mpeg4::p10::avc_es_parser_c::create_missing_timecodes() {
   size_t num_timecodes = m_timecodes.size();
   size_t num_frames    = m_frames.size();
 
+  if (m_debug_missing_timecodes_generation)
+    mxdebug(boost::format("Missing timecode generation. #frames: %1% #timecodes: %2% need to generate %3% timecodes with default duration %4%. Existing timecodes:%5%\n")
+            % num_frames % num_timecodes % (num_frames - std::min(num_timecodes, num_frames)) % m_default_duration
+            % boost::accumulate(m_timecodes, std::string(""), [](const std::string &accu, int64_t timecode) -> std::string { return accu + " " + to_string(timecode); }));
+
   while (num_timecodes < num_frames) {
     ++num_timecodes;
     add_timecode(m_max_timecode + m_default_duration);
+
+    // add_timecode() always increases num_timcodes_in because it is
+    // the interface for the caller to provide its timeocde. In this
+    // case increasing it would be wrong though, therefore decrease it
+    // again.
+    --m_stats.num_timecodes_in;
+    ++m_stats.num_timecodes_generated_missing;
   }
 }
