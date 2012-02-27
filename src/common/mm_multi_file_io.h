@@ -16,13 +16,7 @@
 
 #include "common/common_pch.h"
 
-#include <boost/filesystem.hpp>
-#include <string>
-#include <vector>
-
 #include "common/mm_io.h"
-
-namespace bfs = boost::filesystem;
 
 class mm_multi_file_io_c;
 typedef counted_ptr<mm_multi_file_io_c> mm_multi_file_io_cptr;

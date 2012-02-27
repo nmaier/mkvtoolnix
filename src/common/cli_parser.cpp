@@ -11,8 +11,6 @@
 
 #include "common/common_pch.h"
 
-#include <boost/bind.hpp>
-
 #include "common/cli_parser.h"
 #include "common/command_line.h"
 #include "common/strings/editing.h"

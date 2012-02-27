@@ -13,8 +13,6 @@
 
 #include "common/common_pch.h"
 
-#include <boost/regex.hpp>
-
 #if defined(HAVE_CURL_EASY_H)
 # include <boost/property_tree/ptree.hpp>
 # include <boost/property_tree/xml_parser.hpp>

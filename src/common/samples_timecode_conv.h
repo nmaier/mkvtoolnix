@@ -16,8 +16,6 @@
 
 #include "common/os.h"
 
-#include <boost/math/common_factor.hpp>
-
 class samples_to_timecode_converter_c {
 protected:
   int64_t m_numerator, m_denominator;

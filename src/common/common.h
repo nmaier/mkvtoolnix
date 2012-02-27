@@ -18,9 +18,31 @@
 #undef max
 #undef __STRICT_ANSI__
 
-#include <boost/format.hpp>
-#include <boost/regex.hpp>
+#include <algorithm>
+#include <stdexcept>
 #include <string>
+#include <vector>
+
+#include <cassert>
+#include <cstring>
+
+#include <boost/algorithm/string.hpp>
+#include <boost/bind.hpp>
+#include <boost/filesystem.hpp>
+#include <boost/format.hpp>
+#include <boost/function.hpp>
+#include <boost/logic/tribool.hpp>
+#include <boost/math/common_factor.hpp>
+#include <boost/range.hpp>
+#include <boost/range/algorithm_ext.hpp>
+#include <boost/range/algorithm.hpp>
+#include <boost/range/numeric.hpp>
+#include <boost/rational.hpp>
+#include <boost/regex.hpp>
+#include <boost/system/error_code.hpp>
+
+namespace ba  = boost::algorithm;
+namespace bfs = boost::filesystem;
 
 #include "common/os.h"
 

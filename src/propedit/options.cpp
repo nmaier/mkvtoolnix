@@ -8,11 +8,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
-
-#include <cassert>
-#include <boost/range/algorithm.hpp>
-#include <boost/range/algorithm_ext/erase.hpp>
+#include "common/common_pch.h"
 
 #include <matroska/KaxChapters.h>
 #include <matroska/KaxTag.h>

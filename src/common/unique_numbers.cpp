@@ -13,10 +13,6 @@
 
 #include "common/common_pch.h"
 
-#include <cassert>
-#include <boost/range/algorithm.hpp>
-#include <boost/range/algorithm_ext/erase.hpp>
-
 #include "common/hacks.h"
 #include "common/random.h"
 #include "common/unique_numbers.h"

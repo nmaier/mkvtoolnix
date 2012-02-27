@@ -11,17 +11,8 @@
    \author Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
-
-#include <algorithm>
-#include <boost/bind.hpp>
-#include <boost/range/numeric.hpp>
-#include <stdexcept>
-#include <string>
-#include <typeinfo>
-#include <vector>
-
 #include "common/common_pch.h"
+
 #include "common/ebml.h"
 #include "common/strings/formatting.h"
 #include "common/translation.h"

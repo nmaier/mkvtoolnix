@@ -13,8 +13,6 @@
 
 #include "common/common_pch.h"
 
-#include <boost/algorithm/string.hpp>
-
 #include "common/memory.h"
 #include "common/strings/editing.h"
 

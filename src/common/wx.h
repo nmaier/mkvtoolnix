@@ -13,10 +13,7 @@
 #ifndef __MTX_COMMON_WXCOMMON_H
 #define __MTX_COMMON_WXCOMMON_H
 
-#include "common/os.h"
-
-#include <boost/format.hpp>
-#include <string>
+#include "common/common_pch.h"
 
 #include <ebml/EbmlString.h>
 

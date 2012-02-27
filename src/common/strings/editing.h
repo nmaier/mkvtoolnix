@@ -14,15 +14,9 @@
 #ifndef __MTX_COMMON_STRINGS_H
 #define __MTX_COMMON_STRINGS_H
 
-#include "common/os.h"
-
-#include <boost/algorithm/string.hpp>
-#include <string>
-#include <vector>
+#include "common/common_pch.h"
 
 #include <stdarg.h>
-
-namespace ba = boost::algorithm;
 
 std::vector<std::string> split(const char *src, const char *pattern = ",", int max_num = -1);
 inline std::vector<std::string>

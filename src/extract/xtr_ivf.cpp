@@ -12,8 +12,6 @@
 
 #include "common/common_pch.h"
 
-#include <boost/math/common_factor.hpp>
-
 #include "common/ebml.h"
 #include "common/endian.h"
 #include "common/math.h"

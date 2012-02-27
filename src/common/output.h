@@ -16,9 +16,6 @@
 
 #include "common/os.h"
 
-#include <boost/format.hpp>
-#include <string>
-
 #include <ebml/EbmlElement.h>
 
 #include "common/locale.h"

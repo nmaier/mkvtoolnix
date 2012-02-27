@@ -17,7 +17,6 @@
 
 #include "common/common_pch.h"
 
-#include <boost/logic/tribool.hpp>
 #include <deque>
 
 #include <matroska/KaxAttachments.h>

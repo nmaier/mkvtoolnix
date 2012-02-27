@@ -16,8 +16,6 @@
 
 #include "common/common_pch.h"
 
-#include <boost/rational.hpp>
-
 #define irnd(a) ((int64_t)((double)(a) + 0.5))
 #define iabs(a) ((a) < 0 ? (a) * -1 : (a))
 

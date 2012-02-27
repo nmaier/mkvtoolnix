@@ -22,7 +22,6 @@
 #endif
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
 #include <time.h>
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
@@ -31,12 +30,8 @@
 #include <windows.h>
 #endif
 
-#include <algorithm>
 #include <iostream>
 #include <typeinfo>
-
-#include <boost/range/algorithm.hpp>
-#include <boost/range/numeric.hpp>
 
 #include <ebml/EbmlHead.h>
 #include <ebml/EbmlSubHead.h>
@@ -117,7 +112,6 @@
 #include "merge/webm.h"
 
 using namespace libmatroska;
-namespace bfs = boost::filesystem;
 
 namespace libmatroska {
 

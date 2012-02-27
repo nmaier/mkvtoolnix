@@ -25,9 +25,6 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-#include <boost/filesystem.hpp>
-#include <boost/system/error_code.hpp>
-
 #include "common/endian.h"
 #include "common/error.h"
 #include "common/fs_sys_helpers.h"

@@ -13,7 +13,6 @@
 
 #include "common/common_pch.h"
 
-#include <algorithm>
 #if HAVE_NL_LANGINFO
 # include <langinfo.h>
 #elif HAVE_LOCALE_CHARSET
@@ -30,8 +29,6 @@
 
 #if defined(SYS_WINDOWS)
 # include <windows.h>
-
-# include <boost/filesystem/path.hpp>
 
 # include "common/fs_sys_helpers.h"
 # include "common/memory.h"

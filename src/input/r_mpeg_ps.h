@@ -23,8 +23,6 @@
 #include "merge/packet_extensions.h"
 #include "merge/pr_generic.h"
 
-namespace bfs = boost::filesystem;
-
 struct mpeg_ps_id_t {
   int id;
   int sub_id;

@@ -152,8 +152,6 @@ get_application_data_folder() {
 # include <stdlib.h>
 # include <sys/time.h>
 
-# include <boost/filesystem.hpp>
-
 int64_t
 get_current_time_millis() {
   struct timeval tv;

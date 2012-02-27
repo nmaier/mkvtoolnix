@@ -14,10 +14,6 @@
 
 #include "common/common_pch.h"
 
-#include <boost/range/numeric.hpp>
-
-#include <algorithm>
-#include <cassert>
 #include <limits.h>
 
 #include "common/ebml.h"

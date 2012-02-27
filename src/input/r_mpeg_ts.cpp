@@ -38,8 +38,6 @@
 #include "output/p_truehd.h"
 #include "output/p_vc1.h"
 
-namespace bfs = boost::filesystem;
-
 #define TS_CONSECUTIVE_PACKETS 16
 #define TS_PROBE_SIZE          (2 * TS_CONSECUTIVE_PACKETS * 204)
 #define TS_PIDS_DETECT_SIZE    10 * 1024 * 1024

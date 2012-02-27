@@ -13,8 +13,6 @@
 
 #include "common/common_pch.h"
 
-#include <boost/range/algorithm/for_each.hpp>
-
 #include <matroska/KaxContentEncoding.h>
 #include <matroska/KaxTracks.h>
 

@@ -13,8 +13,6 @@
 
 #include "common/common_pch.h"
 
-#include <cassert>
-
 #include "common/hacks.h"
 #include "common/math.h"
 #include "common/matroska.h"

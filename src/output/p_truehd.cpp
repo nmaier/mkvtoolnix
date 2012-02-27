@@ -13,9 +13,6 @@
 
 #include "common/common_pch.h"
 
-#include <boost/math/common_factor.hpp>
-#include <vector>
-
 #include "common/hacks.h"
 #include "common/matroska.h"
 #include "common/truehd.h"

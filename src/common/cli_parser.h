@@ -11,12 +11,7 @@
 #ifndef __COMMON_CLI_PARSER_H
 #define __COMMON_CLI_PARSER_H
 
-#include "common/os.h"
-
-#include <boost/function.hpp>
-#include <map>
-#include <string>
-#include <vector>
+#include "common/common_pch.h"
 
 #include "common/translation.h"
 

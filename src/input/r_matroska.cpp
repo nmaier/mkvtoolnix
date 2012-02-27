@@ -15,7 +15,6 @@
 #include "common/common_pch.h"
 
 #include <avilib.h>   // for BITMAPINFOHEADER
-#include <boost/math/common_factor.hpp>
 
 #include <ebml/EbmlContexts.h>
 #include <ebml/EbmlHead.h>

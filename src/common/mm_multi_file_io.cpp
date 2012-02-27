@@ -13,17 +13,12 @@
 
 #include "common/common_pch.h"
 
-#include <algorithm>
-#include <boost/regex.hpp>
 #include <sstream>
-#include <vector>
 
 #include "common/mm_multi_file_io.h"
 #include "common/output.h"
 #include "common/strings/editing.h"
 #include "common/strings/parsing.h"
-
-namespace bfs = boost::filesystem;
 
 mm_multi_file_io_c::file_t::file_t(const bfs::path &file_name,
                                    uint64_t global_start,

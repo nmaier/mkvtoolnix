@@ -10,10 +10,6 @@
 
 #include "common/common_pch.h"
 
-#include <boost/regex.hpp>
-#include <cassert>
-#include <stdexcept>
-
 #include <matroska/KaxChapters.h>
 #include <matroska/KaxInfo.h>
 #include <matroska/KaxInfoData.h>

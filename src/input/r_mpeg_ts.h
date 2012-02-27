@@ -17,8 +17,6 @@
 
 #include "common/common_pch.h"
 
-#include <boost/filesystem.hpp>
-
 #include "common/aac.h"
 #include "common/byte_buffer.h"
 #include "common/endian.h"
@@ -28,8 +26,6 @@
 #include "common/truehd.h"
 #include "merge/pr_generic.h"
 #include "mpegparser/M2VParser.h"
-
-namespace bfs = boost::filesystem;
 
 enum mpeg_ts_input_type_e {
   INPUT_PROBE = 0,
