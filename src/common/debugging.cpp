@@ -22,14 +22,19 @@ static std::map<std::string, std::string> s_debugging_options;
 bool
 debugging_requested(const char *option,
                     std::string *arg) {
-  std::map<std::string, std::string>::iterator option_ptr = s_debugging_options.find(std::string(option));
-  if (s_debugging_options.end() == option_ptr)
-    return false;
+  std::vector<std::string> options = split(option, "|");
 
-  if (NULL != arg)
-    *arg = option_ptr->second;
+  for (auto &current_option : options) {
+    std::map<std::string, std::string>::iterator option_ptr = s_debugging_options.find(current_option);
 
-  return true;
+    if (s_debugging_options.end() != option_ptr) {
+      if (NULL != arg)
+        *arg = option_ptr->second;
+      return true;
+    }
+  }
+
+  return false;
 }
 
 bool
