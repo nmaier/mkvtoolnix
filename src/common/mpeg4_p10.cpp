@@ -1411,25 +1411,155 @@ mpeg4::p10::avc_es_parser_c::init_nalu_names() {
   m_nalu_names_by_type[NALU_TYPE_FILLER_DATA]   = "filler";
 }
 
+// ------------------------------------------------------------
+
+mpeg4::p10::avcc::parser_c::parser_c()
+  : m_par_mode(hack_engaged(ENGAGE_KEEP_BITSTREAM_AR_INFO) ? keep_par : remove_par)
+  , m_par_found(false)
+  , m_timing_info_found(false)
+  , m_debug(debugging_requested("avcc_parser"))
+{
+}
+
+bool
+mpeg4::p10::avcc::parser_c::has_been_parsed()
+  const {
+  return m_avcc_out.is_set();
+}
+
+memory_cptr const &
+mpeg4::p10::avcc::parser_c::get_avcc()
+  const {
+  if (!has_been_parsed())
+    throw state_error();
+  return m_avcc_out;
+}
+
 void
-mpeg4::p10::avc_es_parser_c::create_missing_timecodes() {
-  size_t num_timecodes = m_timecodes.size();
-  size_t num_frames    = m_frames.size();
+mpeg4::p10::avcc::parser_c::set_par_mode(par_mode mode,
+                                         int64_rational_c const &par) {
+  // Not implemented yet:
+  assert(set_par != mode);
 
-  if (m_debug_missing_timecodes_generation)
-    mxdebug(boost::format("Missing timecode generation. #frames: %1% #timecodes: %2% need to generate %3% timecodes with default duration %4%. Existing timecodes:%5%\n")
-            % num_frames % num_timecodes % (num_frames - std::min(num_timecodes, num_frames)) % m_default_duration
-            % boost::accumulate(m_timecodes, std::string(""), [](const std::string &accu, int64_t timecode) -> std::string { return accu + " " + to_string(timecode); }));
+  if (has_been_parsed())
+    throw state_error();
+  m_par_mode = mode;
+  m_par_out  = par;
+}
 
-  while (num_timecodes < num_frames) {
-    ++num_timecodes;
-    add_timecode(m_max_timecode + m_default_duration);
+bool
+mpeg4::p10::avcc::parser_c::has_par_been_found()
+  const {
+  if (!has_been_parsed())
+    throw state_error();
+  return m_par_found;
+}
 
-    // add_timecode() always increases num_timcodes_in because it is
-    // the interface for the caller to provide its timeocde. In this
-    // case increasing it would be wrong though, therefore decrease it
-    // again.
-    --m_stats.num_timecodes_in;
-    ++m_stats.num_timecodes_generated_missing;
+int64_rational_c const &
+mpeg4::p10::avcc::parser_c::get_par()
+  const {
+  if (!has_been_parsed() || !m_par_found)
+    throw state_error();
+  return m_par_in;
+}
+
+bool
+mpeg4::p10::avcc::parser_c::has_timing_info_been_found()
+  const {
+  if (!has_been_parsed())
+    throw state_error();
+  return m_timing_info_found;
+}
+
+int64_rational_c const &
+mpeg4::p10::avcc::parser_c::get_timing_info()
+  const {
+  if (!has_been_parsed() && !m_timing_info_found)
+    throw state_error();
+  return m_timing_info_in;
+}
+
+uint64_t
+mpeg4::p10::avcc::parser_c::get_default_duration()
+  const {
+  if (!has_been_parsed() && !m_timing_info_found)
+    throw state_error();
+  return 1000000000ull * m_timing_info_in.numerator() / m_timing_info_in.denominator();
+}
+
+void
+mpeg4::p10::avcc::parser_c::process(memory_cptr const &avcc) {
+  if (m_avcc_in.is_set())
+    throw state_error();
+
+  m_avcc_in = avcc;
+  m_avcc_in->grab();
+  size_t avcc_size = m_avcc_in->get_size();
+
+  try {
+    mm_mem_io_c in(m_avcc_in->get_buffer(), avcc_size), out(NULL, avcc_size, 1024);
+    memory_cptr nalu(new memory_c());
+
+    in.read(nalu, 5);
+    out.write(nalu);
+
+    unsigned int num_sps = in.read_uint8();
+    out.write_uint8(num_sps);
+    num_sps &= 0x1f;
+
+    mxdebug_if(m_debug, boost::format("num_sps %1%\n") % num_sps);
+
+    for (unsigned int sps = 0; sps < num_sps; sps++) {
+      unsigned int sps_length = in.read_uint16_be();
+      if ((sps_length + in.getFilePointer()) >= avcc_size)
+        throw parser_error();
+
+      in.read(nalu, sps_length);
+
+      bool sps_parsed = false;
+      if ((0 < sps_length) && ((nalu->get_buffer()[0] & 0x1f) == 7)) {
+        mxdebug_if(m_debug, boost::format("Parsing SPS #%1%\n") % sps);
+        nalu_to_rbsp(nalu);
+        parse_sps(nalu);
+        rbsp_to_nalu(nalu);
+        sps_parsed = true;
+      }
+
+      out.write_uint16_be(nalu->get_size());
+      out.write(nalu);
+
+      if (sps_parsed) {
+        in.read(nalu, avcc_size - in.getFilePointer());
+        out.write(nalu);
+        break;
+      }
+    }
+
+    m_avcc_out = memory_cptr(new memory_c(out.get_and_lock_buffer(), out.getFilePointer()));
+
+    mxdebug_if(m_debug,
+               boost::format("Parsing done; new AVCC size: %1% PAR found: %2% PAR in: %3%/%4% timing info found: %5% timing info: %6%/%7%\n")
+               % m_avcc_out->get_size() % m_par_found % m_par_in.numerator() % m_par_in.denominator() % m_timing_info_found % m_timing_info_in.numerator() % m_timing_info_in.denominator());
+
+  } catch(mtx::mm_io::exception &ex) {
+    mxdebug_if(m_debug, boost::format("MM/IO exception: %1%\n") % ex.error());
+    throw parser_error();
+  }
+}
+
+void
+mpeg4::p10::avcc::parser_c::parse_sps(memory_cptr &nalu) {
+  sps_info_t sps;
+  if (!mpeg4::p10::parse_sps(nalu, sps, keep_par == m_par_mode))
+    throw parser_error();
+
+  if (sps.ar_found && (0 != sps.par_den)) {
+    m_par_found = true;
+    m_par_in    = int64_rational_c(sps.par_num, sps.par_den);
+  }
+
+  if (sps.timing_info_present && (0 != sps.time_scale)) {
+    m_timing_info_found = true;
+    m_timing_info_in    = int64_rational_c(sps.num_units_in_tick, sps.time_scale);
   }
 }
