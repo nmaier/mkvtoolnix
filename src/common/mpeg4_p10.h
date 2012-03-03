@@ -143,34 +143,25 @@ namespace mpeg4 {
 
       avc_frame_t() {
         clear();
-      };
+      }
 
       avc_frame_t(const avc_frame_t &f) {
         *this = f;
-      };
-
-      avc_frame_t &operator =(const avc_frame_t &f) {
-        m_data     = f.m_data;
-        m_start    = f.m_start;
-        m_end      = f.m_end;
-        m_ref1     = f.m_ref1;
-        m_ref2     = f.m_ref2;
-        m_keyframe = f.m_keyframe;
-        m_si       = f.m_si;
-
-        return *this;
-      };
+      }
 
       void clear() {
-        m_start    = 0;
-        m_end      = 0;
-        m_ref1     = 0;
-        m_ref2     = 0;
-        m_keyframe = false;
-        m_data     = memory_cptr(NULL);
+        m_start                 = 0;
+        m_end                   = 0;
+        m_ref1                  = 0;
+        m_ref2                  = 0;
+        m_keyframe              = false;
+        m_has_provided_timecode = false;
+        m_presentation_order    = 0;
+        m_decode_order          = 0;
+        m_data.clear();
 
-        memset(&m_si, 0, sizeof(m_si));
-      };
+        m_si.clear();
+      }
     };
 
     class nalu_size_length_x: public mtx::exception {
@@ -260,18 +251,18 @@ namespace mpeg4 {
 
       void set_keep_ar_info(bool keep) {
         m_keep_ar_info = keep;
-      };
+      }
 
-      void add_bytes(unsigned char *buf, int size);
+      void add_bytes(unsigned char *buf, size_t size);
       void add_bytes(memory_cptr &buf) {
         add_bytes(buf->get_buffer(), buf->get_size());
-      };
+      }
 
       void flush();
 
       bool frame_available() {
         return !m_frames_out.empty();
-      };
+      }
 
       avc_frame_t get_frame() {
         assert(!m_frames_out.empty());
@@ -280,23 +271,23 @@ namespace mpeg4 {
         m_frames_out.erase(m_frames_out.begin(), m_frames_out.begin() + 1);
 
         return frame;
-      };
+      }
 
       memory_cptr get_avcc();
 
       bool avcc_changed() {
         return m_avcc_changed;
-      };
+      }
 
       int get_width() {
         assert(!m_sps_info_list.empty());
         return m_sps_info_list.begin()->width;
-      };
+      }
 
       int get_height() {
         assert(!m_sps_info_list.empty());
         return m_sps_info_list.begin()->height;
-      };
+      }
 
       void handle_nalu(memory_cptr nalu);
 
@@ -304,25 +295,25 @@ namespace mpeg4 {
 
       bool headers_parsed() {
         return m_avcc_ready;
-      };
+      }
 
       void set_nalu_size_length(int nalu_size_length) {
         m_nalu_size_length = nalu_size_length;
-      };
+      }
 
       int get_nalu_size_length() {
         return m_nalu_size_length;
-      };
+      }
 
       void ignore_nalu_size_length_errors() {
         m_ignore_nalu_size_length_errors = true;
-      };
+      }
 
       void discard_actual_frames(bool discard = true);
 
       int get_num_skipped_frames() {
         return m_num_skipped_frames;
-      };
+      }
 
       void dump_info();
 
