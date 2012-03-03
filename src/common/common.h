@@ -43,6 +43,7 @@
 
 namespace ba  = boost::algorithm;
 namespace bfs = boost::filesystem;
+namespace br  = boost::range;
 
 #include "common/os.h"
 
