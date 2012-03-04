@@ -1,3 +1,15 @@
+2012-03-04  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: The warning that no default duration/FPS has been given for
+	AVC/h.264 tracks has been removed.
+
+	* mkvmerge: bug fix: Complete re-write of the timecode handling
+	code for AVC/h.264 tracks. Now handles several cases correctly:
+	interlaced video, video with multiple or changing SPS with
+	different timing information. The timing information is extracted
+	from the bitstream. Therefore the user doesn't have to specify the
+	default duration/FPS himself anymore. Fix for bug 434.
+
 2012-02-26  Moritz Bunkus  <moritz@bunkus.org>
 
 	* build system: Boost's "rational" library is now required.
