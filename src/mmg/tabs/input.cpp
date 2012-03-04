@@ -178,7 +178,6 @@ tab_input::tab_input(wxWindow *parent):
   wxConfig *cfg = (wxConfig *)wxConfigBase::Get();
 
   cfg->SetPath(wxT("/GUI"));
-  cfg->Read(wxT("avc_es_fps_warning_shown"), &avc_es_fps_warning_shown, false);
 }
 
 void
@@ -485,24 +484,6 @@ tab_input::add_file(const wxString &file_name,
       track->appending = append;
 
       file->tracks.push_back(track);
-
-      if (   (FILE_TYPE_AVC_ES == file->container)
-          && !track->appending
-          && ('v' == track->type)
-          && (track->ctype.Find(wxT("MPEG-4 part 10 ES")) >= 0)
-          && (!avc_es_fps_warning_shown || mdlg->options.warn_usage)) {
-        wxMessageBox(Z("You're adding an AVC/h.264 elementary stream to the output file. "
-                       "mkvmerge cannot determine the number of frames per second for such files itself. "
-                       "Therefore you have to set this parameter yourself on the 'format specific options' page.\n\n"
-                       "If you don't do this then mkvmerge will assume 25 fps.\n\n"
-                       "This message will only be shown once unless you have enabled mmg's warnings on its 'settings' page."));
-        avc_es_fps_warning_shown = true;
-
-        wxConfig *cfg = (wxConfig *)wxConfigBase::Get();
-        cfg->SetPath(wxT("/GUI"));
-        cfg->Write(wxT("avc_es_fps_warning_shown"), true);
-        cfg->Flush();
-      }
 
       if (   mdlg->options.disable_a_v_compression
           && !track->appending
@@ -1341,20 +1322,6 @@ tab_input::validate_settings() {
           wxMessageBox(err, Z("mkvmerge GUI: error"), wxOK | wxCENTER | wxICON_ERROR);
           return false;
         }
-      } else if (   (FILE_TYPE_AVC_ES == f->container)
-                 && !t->appending
-                 && ('v' == t->type)
-                 && (t->ctype.Find(wxT("MPEG-4 part 10 ES")) >= 0)
-                 && mdlg->options.warn_usage) {
-        wxString message;
-        message.Printf(Z("You haven't selected a number of frames per second for track %lld of file '%s'. "
-                         "mkvmerge cannot determine the number of frames per second for such files itself. "
-                         "Therefore you have to set this parameter yourself on the 'format specific options' page.\n\n"
-                         "If you don't do this then mkvmerge will assume 25 fps.\n\n"
-                         "Do you still want to continue?"),
-                       t->id, f->file_name.c_str());
-        if (wxMessageBox(message, Z("No FPS selected for AVC/h.264 track"), wxYES | wxNO, mdlg) == wxNO)
-          return false;
       }
 
       s = wxMB(t->aspect_ratio);

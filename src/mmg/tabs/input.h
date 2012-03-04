@@ -184,7 +184,6 @@ public:
 
   wxTimer value_copy_timer;
   bool dont_copy_values_now;
-  bool avc_es_fps_warning_shown;
 
   int selected_file, selected_track;
 
