@@ -15,9 +15,9 @@
 #ifndef __MTX_COMMON_MPEG4_P10_H
 #define __MTX_COMMON_MPEG4_P10_H
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
-#include "common/memory.h"
+#include "common/math.h"
 
 #define NALU_START_CODE 0x00000001
 
@@ -85,6 +85,9 @@ namespace mpeg4 {
       }
 
       void dump();
+
+      bool timing_info_valid() const;
+      int64_t default_duration() const;
     };
 
     struct pps_info_t {
@@ -119,10 +122,13 @@ namespace mpeg4 {
       unsigned int pps;
 
       slice_info_t() {
-        memset(this, 0, sizeof(*this));
+        clear();
       }
 
-      void dump();
+      void dump() const;
+      void clear() {
+        memset(this, 0, sizeof(*this));
+      }
     };
 
     void nalu_to_rbsp(memory_cptr &buffer);
@@ -138,8 +144,9 @@ namespace mpeg4 {
     struct avc_frame_t {
       memory_cptr m_data;
       int64_t m_start, m_end, m_ref1, m_ref2;
-      bool m_keyframe;
+      bool m_keyframe, m_has_provided_timecode;
       slice_info_t m_si;
+      int m_presentation_order, m_decode_order;
 
       avc_frame_t() {
         clear();
@@ -195,21 +202,22 @@ namespace mpeg4 {
       bool m_keep_ar_info;
       bool m_avcc_ready, m_avcc_changed;
 
-      int64_t m_default_duration;
+      int64_t m_stream_default_duration, m_forced_default_duration, m_container_default_duration;
       int m_frame_number, m_num_skipped_frames;
       bool m_first_keyframe_found, m_recovery_point_valid, m_b_frames_since_keyframe;
 
       std::deque<avc_frame_t> m_frames, m_frames_out;
-      std::deque<int64_t> m_timecodes;
+      std::deque<int64_t> m_provided_timecodes;
+      std::deque<uint64_t> m_provided_stream_positions;
       int64_t m_max_timecode;
-
-      bool m_generate_timecodes;
+      std::map<int64_t, int64_t> m_duration_frequency;
 
       std::deque<memory_cptr> m_sps_list, m_pps_list, m_extra_data;
       std::vector<sps_info_t> m_sps_info_list;
       std::vector<pps_info_t> m_pps_info_list;
 
       memory_cptr m_unparsed_buffer;
+      uint64_t m_stream_position, m_parsed_position;
 
       avc_frame_t m_incomplete_frame;
       bool m_have_incomplete_frame;
@@ -217,20 +225,19 @@ namespace mpeg4 {
 
       bool m_ignore_nalu_size_length_errors, m_discard_actual_frames;
 
-      bool m_debug_keyframe_detection, m_debug_nalu_types, m_debug_timecode_statistics, m_debug_missing_timecodes_generation;
+      bool m_debug_keyframe_detection, m_debug_nalu_types, m_debug_timecode_statistics, m_debug_timecodes, m_debug_sps_info;
       std::map<int, std::string> m_nalu_names_by_type;
 
       struct stats_t {
         std::vector<int> num_slices_by_type;
-        size_t num_frames_out, num_frames_discarded, num_timecodes_in, num_timecodes_generated_normal, num_timecodes_generated_missing, num_timecodes_discarded;
+        size_t num_frames_out, num_frames_discarded, num_timecodes_in, num_timecodes_generated, num_timecodes_discarded;
 
         stats_t()
           : num_slices_by_type(11, 0)
           , num_frames_out(0)
           , num_frames_discarded(0)
           , num_timecodes_in(0)
-          , num_timecodes_generated_normal(0)
-          , num_timecodes_generated_missing(0)
+          , num_timecodes_generated(0)
           , num_timecodes_discarded(0)
         {
         }
@@ -240,14 +247,13 @@ namespace mpeg4 {
       avc_es_parser_c();
       ~avc_es_parser_c();
 
-      void set_default_duration(int64_t default_duration) {
-        m_default_duration = default_duration;
+      void force_default_duration(int64_t default_duration) {
+        m_forced_default_duration = default_duration;
       }
 
-      void enable_timecode_generation(int64_t default_duration) {
-        m_default_duration   = default_duration;
-        m_generate_timecodes = true;
-      };
+      void set_container_default_duration(int64_t default_duration) {
+        m_container_default_duration = default_duration;
+      }
 
       void set_keep_ar_info(bool keep) {
         m_keep_ar_info = keep;
@@ -319,6 +325,13 @@ namespace mpeg4 {
 
       std::string get_nalu_type_name(int type);
 
+      bool has_stream_default_duration() {
+        return -1 != m_stream_default_duration;
+      }
+
+      int64_t duration_for(slice_info_t const &si);
+      int64_t get_most_often_used_duration() const;
+
     protected:
       bool parse_slice(memory_cptr &buffer, slice_info_t &si);
       void handle_sps_nalu(memory_cptr &nalu);
@@ -326,14 +339,12 @@ namespace mpeg4 {
       void handle_sei_nalu(memory_cptr &nalu);
       void handle_slice_nalu(memory_cptr &nalu);
       void cleanup();
-      void default_cleanup();
       bool flush_decision(slice_info_t &si, slice_info_t &ref);
       void flush_incomplete_frame();
       void flush_unhandled_nalus();
       void write_nalu_size(unsigned char *buffer, size_t size, int this_nalu_size_length = -1);
       memory_cptr create_nalu_with_size(const memory_cptr &src, bool add_extra_data = false);
       void init_nalu_names();
-      void create_missing_timecodes();
     };
     typedef counted_ptr<avc_es_parser_c> avc_es_parser_cptr;
 

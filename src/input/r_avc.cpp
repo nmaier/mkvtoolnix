@@ -50,7 +50,6 @@ avc_es_reader_c::probe_file(mm_io_c *in,
     avc_es_parser_c parser;
     parser.ignore_nalu_size_length_errors();
     parser.set_nalu_size_length(4);
-    parser.enable_timecode_generation(40000000);
 
     in->setFilePointer(0, seek_beginning);
     for (i = 0; MAX_PROBE_BUFFERS > i; ++i) {
@@ -91,7 +90,6 @@ avc_es_reader_c::read_headers() {
   try {
     avc_es_parser_c parser;
     parser.ignore_nalu_size_length_errors();
-    parser.enable_timecode_generation(40000000);
 
     if (map_has_key(m_ti.m_nalu_size_lengths, 0))
       parser.set_nalu_size_length(m_ti.m_nalu_size_lengths[0]);

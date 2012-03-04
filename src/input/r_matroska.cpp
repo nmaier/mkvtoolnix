@@ -1829,10 +1829,6 @@ kax_reader_c::create_mpeg4_p10_es_video_packetizer(kax_track_t *t,
   mpeg4_p10_es_video_packetizer_c *ptzr = new mpeg4_p10_es_video_packetizer_c(this, nti, parser->get_avcc(), t->v_width, t->v_height);
   set_track_packetizer(t, ptzr);
 
-  ptzr->enable_timecode_generation(false);
-  if (t->default_duration)
-    ptzr->set_track_default_duration(t->default_duration);
-
   show_packetizer_info(t->tnum, t->ptzr_ptr);
 }
 

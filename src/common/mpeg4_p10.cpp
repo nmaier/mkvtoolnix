@@ -31,18 +31,6 @@
 
 namespace mpeg4 {
   namespace p10 {
-    struct poc_t {
-      int poc, dec;
-      int64_t timecode, duration;
-
-      poc_t(int p, int d):
-        poc(p), dec(d), timecode(0), duration(0) {
-      };
-    };
-
-    static bool compare_poc_by_poc(const poc_t &poc1, const poc_t &poc2);
-    static bool compare_poc_by_dec(const poc_t &poc1, const poc_t &poc2);
-
     static const struct {
       int numerator, denominator;
     } s_predefined_pars[AVC_NUM_PREDEFINED_PARS] = {
@@ -197,6 +185,20 @@ mpeg4::p10::sps_info_t::dump() {
          % checksum);
 }
 
+bool
+mpeg4::p10::sps_info_t::timing_info_valid()
+  const {
+  return timing_info_present
+      && (0 != num_units_in_tick)
+      && (0 != time_scale);
+}
+
+int64_t
+mpeg4::p10::sps_info_t::default_duration()
+  const {
+  return 1000000000ll * num_units_in_tick / time_scale;
+}
+
 void
 mpeg4::p10::pps_info_t::dump() {
   mxinfo(boost::format("pps_info dump:\n"
@@ -211,7 +213,8 @@ mpeg4::p10::pps_info_t::dump() {
 }
 
 void
-mpeg4::p10::slice_info_t::dump() {
+mpeg4::p10::slice_info_t::dump()
+  const {
   mxinfo(boost::format("slice_info dump:\n"
                        "  nalu_type:                  %1%\n"
                        "  nal_ref_idc:                %2%\n"
@@ -585,18 +588,6 @@ mpeg4::p10::is_avc_fourcc(const char *fourcc) {
       || !strncasecmp(fourcc, "x264", 4);
 }
 
-static bool
-mpeg4::p10::compare_poc_by_poc(const poc_t &poc1,
-                               const poc_t &poc2) {
-  return poc1.poc < poc2.poc;
-}
-
-static bool
-mpeg4::p10::compare_poc_by_dec(const poc_t &poc1,
-                               const poc_t &poc2) {
-  return poc1.dec < poc2.dec;
-}
-
 memory_cptr
 mpeg4::p10::avcc_to_nalus(const unsigned char *buffer,
                           size_t size) {
@@ -651,20 +642,24 @@ mpeg4::p10::avc_es_parser_c::avc_es_parser_c()
   , m_keep_ar_info(true)
   , m_avcc_ready(false)
   , m_avcc_changed(false)
-  , m_default_duration(40000000)
+  , m_stream_default_duration(-1)
+  , m_forced_default_duration(-1)
+  , m_container_default_duration(-1)
   , m_frame_number(0)
   , m_num_skipped_frames(0)
   , m_first_keyframe_found(false)
   , m_recovery_point_valid(false)
   , m_b_frames_since_keyframe(false)
   , m_max_timecode(0)
-  , m_generate_timecodes(false)
+  , m_stream_position(0)
+  , m_parsed_position(0)
   , m_have_incomplete_frame(false)
   , m_ignore_nalu_size_length_errors(false)
   , m_discard_actual_frames(false)
-  , m_debug_keyframe_detection(debugging_requested("avc_keyframe_detection") || debugging_requested("avc_parser"))
-  , m_debug_nalu_types(debugging_requested("avc_nalu_types") || debugging_requested("avc_parser"))
-  , m_debug_missing_timecodes_generation(debugging_requested("avc_missing_timecodes_generation") || debugging_requested("avc_parser"))
+  , m_debug_keyframe_detection(debugging_requested("avc_parser|avc_keyframe_detection"))
+  , m_debug_nalu_types(        debugging_requested("avc_parser|avc_nalu_types"))
+  , m_debug_timecodes(         debugging_requested("avc_parser|avc_timecodes"))
+  , m_debug_sps_info(          debugging_requested("avc_parser|avc_sps|avc_sps_info"))
 {
   if (m_debug_nalu_types)
     init_nalu_names();
@@ -672,8 +667,10 @@ mpeg4::p10::avc_es_parser_c::avc_es_parser_c()
 
 mpeg4::p10::avc_es_parser_c::~avc_es_parser_c() {
   mxdebug_if(debugging_requested("avc_statistics"),
-             boost::format("AVC statistics: #frames: out %1% discarded %2%  #timecodes: in %3% generated normal %4% generated missing %5% discarded %6%\n")
-             % m_stats.num_frames_out % m_stats.num_frames_discarded % m_stats.num_timecodes_in % m_stats.num_timecodes_generated_normal % m_stats.num_timecodes_generated_missing % m_stats.num_timecodes_discarded);
+             boost::format("AVC statistics: #frames: out %1% discarded %2% #timecodes: in %3% generated %4% discarded %5%\n")
+             % m_stats.num_frames_out % m_stats.num_frames_discarded % m_stats.num_timecodes_in % m_stats.num_timecodes_generated % m_stats.num_timecodes_discarded);
+
+  mxdebug_if(m_debug_timecodes, boost::format("stream_position %1% parsed_position %2%\n") % m_stream_position % m_parsed_position);
 
   if (!debugging_requested("avc_num_slices_by_type"))
     return;
@@ -698,11 +695,12 @@ mpeg4::p10::avc_es_parser_c::discard_actual_frames(bool discard) {
 
 void
 mpeg4::p10::avc_es_parser_c::add_bytes(unsigned char *buffer,
-                                       int size) {
+                                       size_t size) {
   memory_slice_cursor_c cursor;
-  int marker_size          = 0;
-  int previous_marker_size = 0;
-  int previous_pos         = -1;
+  int marker_size              = 0;
+  int previous_marker_size     = 0;
+  int previous_pos             = -1;
+  uint64_t previous_parsed_pos = m_parsed_position;
 
   if (m_unparsed_buffer.is_set() && (0 != m_unparsed_buffer->get_size()))
     cursor.add_slice(m_unparsed_buffer);
@@ -725,6 +723,7 @@ mpeg4::p10::avc_es_parser_c::add_bytes(unsigned char *buffer,
           int new_size = cursor.get_position() - marker_size - previous_pos - previous_marker_size;
           memory_cptr nalu(new memory_c(safemalloc(new_size), new_size, true));
           cursor.copy(nalu->get_buffer(), previous_pos + previous_marker_size, new_size);
+          m_parsed_position = previous_parsed_pos + previous_pos;
           handle_nalu(nalu);
         }
         previous_pos         = cursor.get_position() - marker_size;
@@ -743,23 +742,27 @@ mpeg4::p10::avc_es_parser_c::add_bytes(unsigned char *buffer,
   if (-1 == previous_pos)
     previous_pos = 0;
 
+  m_stream_position += size;
+  m_parsed_position  = previous_parsed_pos + previous_pos;
+
   int new_size = cursor.get_size() - previous_pos;
   if (0 != new_size) {
     m_unparsed_buffer = memory_cptr(new memory_c(safemalloc(new_size), new_size, true));
     cursor.copy(m_unparsed_buffer->get_buffer(), previous_pos, new_size);
 
   } else
-    m_unparsed_buffer = memory_cptr(NULL);
+    m_unparsed_buffer.clear();
 }
 
 void
 mpeg4::p10::avc_es_parser_c::flush() {
   if (m_unparsed_buffer.is_set() && (5 <= m_unparsed_buffer->get_size())) {
+    m_parsed_position += m_unparsed_buffer->get_size();
     int marker_size = get_uint32_be(m_unparsed_buffer->get_buffer()) == NALU_START_CODE ? 4 : 3;
     handle_nalu(memory_c::clone(m_unparsed_buffer->get_buffer() + marker_size, m_unparsed_buffer->get_size() - marker_size));
   }
 
-  m_unparsed_buffer = memory_cptr(NULL);
+  m_unparsed_buffer.clear();
   if (m_have_incomplete_frame) {
     m_frames.push_back(m_incomplete_frame);
     m_have_incomplete_frame = false;
@@ -770,16 +773,8 @@ mpeg4::p10::avc_es_parser_c::flush() {
 
 void
 mpeg4::p10::avc_es_parser_c::add_timecode(int64_t timecode) {
-  std::deque<int64_t>::iterator i = m_timecodes.end();
-  while (i != m_timecodes.begin()) {
-    if (timecode >= *(i - 1))
-      break;
-    --i;
-  }
-  m_timecodes.insert(i, timecode);
-
-  m_max_timecode = std::max(timecode, m_max_timecode);
-
+  m_provided_timecodes.push_back(timecode);
+  m_provided_stream_positions.push_back(m_stream_position);
   ++m_stats.num_timecodes_in;
 }
 
@@ -911,16 +906,11 @@ mpeg4::p10::avc_es_parser_c::handle_slice_nalu(memory_cptr &nalu) {
   m_incomplete_frame.m_data = create_nalu_with_size(nalu, true);
   m_have_incomplete_frame   = true;
 
-  if (m_generate_timecodes) {
-    add_timecode(m_frame_number * m_default_duration);
-
-    // add_timecode() always increases num_timcodes_in because it is
-    // the interface for the caller to provide its timeocde. In this
-    // case increasing it would be wrong though, therefore decrease it
-    // again.
-    --m_stats.num_timecodes_in;
-    ++m_stats.num_timecodes_generated_normal;
+  if (!m_provided_stream_positions.empty() && (m_parsed_position >= m_provided_stream_positions.front())) {
+    m_incomplete_frame.m_has_provided_timecode = true;
+    m_provided_stream_positions.pop_front();
   }
+
   ++m_frame_number;
 }
 
@@ -938,6 +928,7 @@ mpeg4::p10::avc_es_parser_c::handle_sps_nalu(memory_cptr &nalu) {
     if (m_sps_info_list[i].id == sps_info.id)
       break;
 
+  bool use_sps_info = true;
   if (m_sps_info_list.size() == i) {
     m_sps_list.push_back(nalu);
     m_sps_info_list.push_back(sps_info);
@@ -949,9 +940,21 @@ mpeg4::p10::avc_es_parser_c::handle_sps_nalu(memory_cptr &nalu) {
     m_sps_info_list[i] = sps_info;
     m_sps_list[i]      = nalu;
     m_avcc_changed     = true;
-  }
+
+  } else
+    use_sps_info = false;
 
   m_extra_data.push_back(create_nalu_with_size(nalu));
+
+  if (use_sps_info && m_debug_sps_info)
+    sps_info.dump();
+
+  if (   use_sps_info
+      && !has_stream_default_duration()
+      && sps_info.timing_info_valid()) {
+    m_stream_default_duration = sps_info.default_duration();
+    mxdebug_if(m_debug_timecodes, boost::format("Stream default duration: %1%\n") % m_stream_default_duration);
+  }
 }
 
 void
@@ -1152,36 +1155,51 @@ mpeg4::p10::avc_es_parser_c::parse_slice(memory_cptr &buffer,
   }
 }
 
-void
-mpeg4::p10::avc_es_parser_c::default_cleanup() {
-  if (m_frames.size() > m_timecodes.size())
-    create_missing_timecodes();
+int64_t
+mpeg4::p10::avc_es_parser_c::duration_for(slice_info_t const &si) {
+  int64_t duration = -1 != m_forced_default_duration                                                  ? m_forced_default_duration
+                   : (m_sps_info_list.size() > si.sps) && m_sps_info_list[si.sps].timing_info_valid() ? m_sps_info_list[si.sps].default_duration()
+                   : -1 != m_stream_default_duration                                                  ? m_stream_default_duration
+                   : -1 != m_container_default_duration                                               ? m_container_default_duration
+                   :                                                                                    20000000;
+  return duration * (si.field_pic_flag ? 1 : 2);
+}
 
-  std::deque<avc_frame_t>::iterator i(m_frames.begin());
-  std::deque<int64_t>::iterator t(m_timecodes.begin());
+int64_t
+mpeg4::p10::avc_es_parser_c::get_most_often_used_duration()
+  const {
+  int64_t const s_common_default_durations[] = {
+    1000000000ll / 50,
+    1000000000ll / 25,
+    1000000000ll / 60,
+    1000000000ll / 30,
+    1000000000ll * 1001 / 48000,
+    1000000000ll * 1001 / 24000,
+    1000000000ll * 1001 / 60000,
+    1000000000ll * 1001 / 30000,
+  };
 
-  int64_t r = i->m_start = i->m_end = *t;
+  auto most_often = m_duration_frequency.begin();
+  for (auto current = m_duration_frequency.begin(); m_duration_frequency.end() != current; ++current)
+    if (current->second > most_often->second)
+      most_often = current;
 
-  ++i;
-  ++t;
+  int64_t best   = m_duration_frequency.end() == most_often ? -1 : most_often->first;
+  int64_t result = best;
 
-  while ((m_frames.end() != i) && (m_timecodes.end() != t)) {
-    i->m_ref1        = r - *t;
-    r                =
-      i->m_start     =
-      (i - 1)->m_end = *t;
-    ++i;
-    ++t;
-  }
+  for (auto common_default_duration : s_common_default_durations)
+    if (std::abs(result - common_default_duration) < 20000) {
+      result = common_default_duration;
+      break;
+    }
 
-  if ((m_frames.size() >= 2) && (m_timecodes.end() != t))
-    (i - 1)->m_end = *t;
+  mxdebug_if(m_debug_timecodes, boost::format("Duration frequency. Result: %1%. Best before adjustment: %2%. All: %3%\n")
+             % result % best
+             % boost::accumulate(m_duration_frequency, std::string(""), [](std::string const &accu, std::pair<int64_t, int64_t> const &pair) {
+                 return accu + (boost::format(" <%1% %2%>") % pair.first % pair.second).str();
+               }));
 
-  m_stats.num_frames_out += m_frames.size();
-
-  m_frames_out.insert(m_frames_out.end(), m_frames.begin(), m_frames.end());
-  m_timecodes.erase(m_timecodes.begin(), m_timecodes.begin() + m_frames.size());
-  m_frames.clear();
+  return result;
 }
 
 void
@@ -1191,112 +1209,128 @@ mpeg4::p10::avc_es_parser_c::cleanup() {
 
   if (m_discard_actual_frames) {
     m_stats.num_frames_discarded    += m_frames.size();
-    m_stats.num_timecodes_discarded += m_timecodes.size();
+    m_stats.num_timecodes_discarded += m_provided_timecodes.size();
 
     m_frames.clear();
-    m_timecodes.clear();
+    m_provided_timecodes.clear();
+    m_provided_stream_positions.clear();
+
     return;
   }
 
-  if (m_frames.size() > m_timecodes.size())
-    create_missing_timecodes();
-
-  std::deque<avc_frame_t>::iterator i(m_frames.begin());
-  std::deque<int64_t>::iterator t(m_timecodes.begin());
+  auto frames_begin = m_frames.begin();
+  auto frames_end   = m_frames.end();
+  auto frame_itr    = frames_begin;
 
   // This may be wrong but is needed for mkvmerge to work correctly
   // (cluster_helper etc).
-  i->m_keyframe = true;
+  frame_itr->m_keyframe = true;
 
-  slice_info_t &idr = i->m_si;
-  sps_info_t &sps = m_sps_info_list[idr.sps];
+  slice_info_t &idr         = frame_itr->m_si;
+  sps_info_t &sps           = m_sps_info_list[idr.sps];
+  bool simple_picture_order = false;
+
   if (   (   (AVC_SLICE_TYPE_I   != idr.type)
           && (AVC_SLICE_TYPE_SI  != idr.type)
           && (AVC_SLICE_TYPE2_I  != idr.type)
           && (AVC_SLICE_TYPE2_SI != idr.type))
       || (0 == idr.nal_ref_idc)
-      || (2 == sps.pic_order_cnt_type)) {
-    default_cleanup();
-    return;
+      || (0 != sps.pic_order_cnt_type)) {
+    simple_picture_order = true;
+    // return;
   }
 
-  std::vector<poc_t> poc;
+  unsigned int idx                    = 0;
+  unsigned int prev_pic_order_cnt_msb = 0;
+  unsigned int prev_pic_order_cnt_lsb = 0;
+  unsigned int pic_order_cnt_msb      = 0;
 
-  if (0 == sps.pic_order_cnt_type) {
-    unsigned int j = 0;
+  while (frames_end != frame_itr) {
+    slice_info_t &si = frame_itr->m_si;
 
-    unsigned int prev_pic_order_cnt_msb = 0;
-    unsigned int prev_pic_order_cnt_lsb = 0;
-    unsigned int pic_order_cnt_msb      = 0;
-    bool first                          = true;
-
-    while (m_frames.end() != i) {
-      slice_info_t &si = i->m_si;
-
-      if (si.sps != idr.sps) {
-        default_cleanup();
-        return;
-      }
-
-      if (first)
-        first = false;
-
-      else if ((si.pic_order_cnt_lsb < prev_pic_order_cnt_lsb) && ((prev_pic_order_cnt_lsb - si.pic_order_cnt_lsb) >= (1u << (sps.log2_max_pic_order_cnt_lsb - 1))))
-        pic_order_cnt_msb = prev_pic_order_cnt_msb + (1 << sps.log2_max_pic_order_cnt_lsb);
-
-      else if ((si.pic_order_cnt_lsb > prev_pic_order_cnt_lsb) && ((si.pic_order_cnt_lsb - prev_pic_order_cnt_lsb) > (1u << (sps.log2_max_pic_order_cnt_lsb - 1))))
-        pic_order_cnt_msb = prev_pic_order_cnt_msb - (1 << sps.log2_max_pic_order_cnt_lsb);
-
-      else
-        pic_order_cnt_msb = prev_pic_order_cnt_msb;
-
-      poc.push_back(poc_t(pic_order_cnt_msb + si.pic_order_cnt_lsb, j));
-
-      if (0 != si.nal_ref_idc) {
-        prev_pic_order_cnt_lsb = si.pic_order_cnt_lsb;
-        prev_pic_order_cnt_msb = pic_order_cnt_msb;
-      }
-
-      ++i;
-      ++j;
+    if (si.sps != idr.sps) {
+      simple_picture_order = true;
+      break;
     }
 
-  } else {
-    default_cleanup();
-    return;
+    if (frames_begin == frame_itr)
+      ;
+
+    else if ((si.pic_order_cnt_lsb < prev_pic_order_cnt_lsb) && ((prev_pic_order_cnt_lsb - si.pic_order_cnt_lsb) >= (1u << (sps.log2_max_pic_order_cnt_lsb - 1))))
+      pic_order_cnt_msb = prev_pic_order_cnt_msb + (1 << sps.log2_max_pic_order_cnt_lsb);
+
+    else if ((si.pic_order_cnt_lsb > prev_pic_order_cnt_lsb) && ((si.pic_order_cnt_lsb - prev_pic_order_cnt_lsb) > (1u << (sps.log2_max_pic_order_cnt_lsb - 1))))
+      pic_order_cnt_msb = prev_pic_order_cnt_msb - (1 << sps.log2_max_pic_order_cnt_lsb);
+
+    else
+      pic_order_cnt_msb = prev_pic_order_cnt_msb;
+
+    frame_itr->m_presentation_order = pic_order_cnt_msb + si.pic_order_cnt_lsb;
+    frame_itr->m_decode_order       = idx;
+
+    ++frame_itr;
+    ++idx;
+
+    if (0 != si.nal_ref_idc) {
+      prev_pic_order_cnt_lsb = si.pic_order_cnt_lsb;
+      prev_pic_order_cnt_msb = pic_order_cnt_msb;
+    }
   }
 
-  std::sort(poc.begin(), poc.end(), compare_poc_by_poc);
+  if (!simple_picture_order)
+    br::sort(m_frames, [](const avc_frame_t &f1, const avc_frame_t &f2) { return f1.m_presentation_order < f2.m_presentation_order; });
 
-  size_t num_frames    = m_frames.size();
-  size_t num_timecodes = m_timecodes.size();
+  br::sort(m_provided_timecodes);
 
-  unsigned int j;
-  for (j = 0; num_frames > j; ++j, ++t) {
-    poc[j].timecode = *t;
-    poc[j].duration = num_frames > (j + 1)       ? *(t + 1)                - poc[j].timecode
-                    : num_frames < num_timecodes ? m_timecodes[num_frames] - poc[j].timecode
-                    :                              0;
+  frames_begin               = m_frames.begin();
+  frames_end                 = m_frames.end();
+  auto previous_frame_itr    = frames_begin;
+  auto provided_timecode_itr = m_provided_timecodes.begin();
+  for (frame_itr = frames_begin; frames_end != frame_itr; ++frame_itr) {
+    if (frame_itr->m_has_provided_timecode) {
+      frame_itr->m_start = *provided_timecode_itr;
+      ++provided_timecode_itr;
+
+      if (frames_begin != frame_itr)
+        previous_frame_itr->m_end = frame_itr->m_start;
+
+    } else {
+      frame_itr->m_start = frames_begin == frame_itr ? m_max_timecode : previous_frame_itr->m_end;
+      ++m_stats.num_timecodes_generated;
+    }
+
+    if (frame_itr->m_start == 1033333333)
+      mxinfo("muh\n");
+    frame_itr->m_end = frame_itr->m_start + duration_for(frame_itr->m_si);
+
+    previous_frame_itr = frame_itr;
   }
 
-  std::sort(poc.begin(), poc.end(), compare_poc_by_dec);
+  m_max_timecode = m_frames.back().m_end;
+  m_provided_timecodes.erase(m_provided_timecodes.begin(), provided_timecode_itr);
 
-  i          = m_frames.begin();
-  i->m_start = poc[0].timecode;
-  i->m_end   = poc[0].timecode + poc[0].duration;
-  ++i;
+  mxdebug_if(m_debug_timecodes, boost::format("CLEANUP frames <pres_ord dec_ord has_prov_tc tc>: %1%\n")
+             % boost::accumulate(m_frames, std::string(""), [](std::string const &accu, avc_frame_t const &frame) {
+                 return accu + (boost::format(" <%1% %2% %3% %4% %5%>") % frame.m_presentation_order % frame.m_decode_order % frame.m_has_provided_timecode % frame.m_start % (frame.m_end - frame.m_start)).str();
+               }));
 
-  for (j = 1; poc.size() > j; ++j) {
-    i->m_ref1  = poc[j-1].timecode - poc[j].timecode;
-    i->m_start = poc[j].timecode;
-    i->m_end   = poc[j].timecode + poc[j].duration;
-    ++i;
+
+  if (!simple_picture_order)
+    br::sort(m_frames, [](const avc_frame_t &f1, const avc_frame_t &f2) { return f1.m_decode_order < f2.m_decode_order; });
+
+  frames_begin       = m_frames.begin();
+  frames_end         = m_frames.end();
+  previous_frame_itr = frames_begin;
+  for (frame_itr = frames_begin; frames_end != frame_itr; ++frame_itr) {
+    if (frames_begin != frame_itr)
+      frame_itr->m_ref1 = previous_frame_itr->m_start - frame_itr->m_start;
+
+    previous_frame_itr = frame_itr;
+    m_duration_frequency[frame_itr->m_end - frame_itr->m_start]++;
   }
 
-  m_stats.num_frames_out += num_frames;
-
-  m_frames_out.insert(m_frames_out.end(), m_frames.begin(), m_frames.end());
-  m_timecodes.erase(m_timecodes.begin(), m_timecodes.begin() + std::min(num_frames, num_timecodes));
+  m_stats.num_frames_out += m_frames.size();
+  m_frames_out.insert(m_frames_out.end(), frames_begin, frames_end);
   m_frames.clear();
 }
 

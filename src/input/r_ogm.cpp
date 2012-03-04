@@ -1137,9 +1137,6 @@ ogm_v_avc_demuxer_c::create_packetizer() {
 
     vptzr               = new mpeg4_p10_es_video_packetizer_c(reader, m_ti, avcc, get_uint32_le(&sth->sh.video.width), get_uint32_le(&sth->sh.video.height));
 
-    vptzr->enable_timecode_generation(false);
-    vptzr->set_track_default_duration(default_duration);
-
     show_packetizer_info(m_ti.m_id, vptzr);
 
   } catch (...) {

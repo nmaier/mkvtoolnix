@@ -337,8 +337,8 @@ avi_reader_c::create_mpeg4_p10_packetizer() {
     mpeg4_p10_es_video_packetizer_c *ptzr = new mpeg4_p10_es_video_packetizer_c(this, m_ti, avcc, AVI_video_width(m_avi), AVI_video_height(m_avi));
     m_vptzr                               = add_packetizer(ptzr);
 
-    ptzr->enable_timecode_generation(false);
-    ptzr->set_track_default_duration(static_cast<int64_t>(1000000000 / m_fps));
+    if (0 != m_fps)
+      ptzr->set_container_default_field_duration(1000000000ll / m_fps / 2);
 
     if (m_avc_extra_nalus.is_set())
       ptzr->add_extra_data(m_avc_extra_nalus);
