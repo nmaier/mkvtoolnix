@@ -2805,16 +2805,16 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
 	 chunk_start = en = malloc (AVI->video_superindex->aIndex[j].dwSize+odml_hrdl_len);
 
 	 if (xio_lseek(AVI->fdes, AVI->video_superindex->aIndex[j].qwOffset, SEEK_SET) == (int64_t)-1) {
-	    fprintf(stderr, "(%s) cannot seek to 0x%llx\n", __FILE__, 
-		    (unsigned long long)AVI->video_superindex->aIndex[j].qwOffset);
+	    /* fprintf(stderr, "(%s) cannot seek to 0x%llx\n", __FILE__,  */
+	    /*         (unsigned long long)AVI->video_superindex->aIndex[j].qwOffset); */
 	    free(chunk_start);
 	    continue;
 	 }
 
 	 if (avi_read(AVI->fdes, en, AVI->video_superindex->aIndex[j].dwSize+odml_hrdl_len) <= 0) {
-	    fprintf(stderr, "(%s) cannot read from offset 0x%llx %ld bytes; broken (incomplete) file?\n", 
-		  __FILE__, (unsigned long long)AVI->video_superindex->aIndex[j].qwOffset,
-		  (unsigned long)AVI->video_superindex->aIndex[j].dwSize+odml_hrdl_len);
+	    /* fprintf(stderr, "(%s) cannot read from offset 0x%llx %ld bytes; broken (incomplete) file?\n",  */
+	    /*       __FILE__, (unsigned long long)AVI->video_superindex->aIndex[j].qwOffset, */
+	    /*       (unsigned long)AVI->video_superindex->aIndex[j].dwSize+odml_hrdl_len); */
 	    free(chunk_start);
 	    continue;
 	 }
@@ -2886,14 +2886,14 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
 	    chunk_start = en = malloc (AVI->track[audtr].audio_superindex->aIndex[j].dwSize+odml_hrdl_len);
 
 	    if (xio_lseek(AVI->fdes, AVI->track[audtr].audio_superindex->aIndex[j].qwOffset, SEEK_SET) == (int64_t)-1) {
-	       fprintf(stderr, "(%s) cannot seek to 0x%llx\n", __FILE__, (unsigned long long)AVI->track[audtr].audio_superindex->aIndex[j].qwOffset);
+	       /* fprintf(stderr, "(%s) cannot seek to 0x%llx\n", __FILE__, (unsigned long long)AVI->track[audtr].audio_superindex->aIndex[j].qwOffset); */
 	       free(chunk_start);
 	       continue;
 	    }
 
 	    if (avi_read(AVI->fdes, en, AVI->track[audtr].audio_superindex->aIndex[j].dwSize+odml_hrdl_len) <= 0) {
-	       fprintf(stderr, "(%s) cannot read from offset 0x%llx; broken (incomplete) file?\n", 
-		     __FILE__,(unsigned long long) AVI->track[audtr].audio_superindex->aIndex[j].qwOffset);
+	       /* fprintf(stderr, "(%s) cannot read from offset 0x%llx; broken (incomplete) file?\n",  */
+	       /*       __FILE__,(unsigned long long) AVI->track[audtr].audio_superindex->aIndex[j].qwOffset); */
 	       free(chunk_start);
 	       continue;
 	    }
@@ -2953,14 +2953,14 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
 	    chunk_start = en = malloc (AVI->ttrack[audtr].audio_superindex->aIndex[j].dwSize+odml_hrdl_len);
 
 	    if (xio_lseek(AVI->fdes, AVI->ttrack[audtr].audio_superindex->aIndex[j].qwOffset, SEEK_SET) == (int64_t)-1) {
-	       fprintf(stderr, "(%s) cannot seek to 0x%llx\n", __FILE__, (unsigned long long)AVI->ttrack[audtr].audio_superindex->aIndex[j].qwOffset);
+	       /* fprintf(stderr, "(%s) cannot seek to 0x%llx\n", __FILE__, (unsigned long long)AVI->ttrack[audtr].audio_superindex->aIndex[j].qwOffset); */
 	       free(chunk_start);
 	       continue;
 	    }
 
 	    if (avi_read(AVI->fdes, en, AVI->ttrack[audtr].audio_superindex->aIndex[j].dwSize+odml_hrdl_len) <= 0) {
-	       fprintf(stderr, "(%s) cannot read from offset 0x%llx; broken (incomplete) file?\n", 
-		     __FILE__,(unsigned long long) AVI->ttrack[audtr].audio_superindex->aIndex[j].qwOffset);
+	       /* fprintf(stderr, "(%s) cannot read from offset 0x%llx; broken (incomplete) file?\n",  */
+	       /*       __FILE__,(unsigned long long) AVI->ttrack[audtr].audio_superindex->aIndex[j].qwOffset); */
 	       free(chunk_start);
 	       continue;
 	    }
