@@ -162,12 +162,15 @@ mpeg_ts_track_c::new_stream_v_avc() {
   if (!m_avc_parser->headers_parsed())
     return FILE_STATUS_MOREDATA;
 
-  auto dimensions = m_avc_parser->get_display_dimensions();
-  fourcc          = FOURCC('A', 'V', 'C', '1');
-  v_width         = m_avc_parser->get_width();
-  v_height        = m_avc_parser->get_height();
-  v_dwidth        = dimensions.first;
-  v_dheight       = dimensions.second;
+  fourcc   = FOURCC('A', 'V', 'C', '1');
+  v_width  = m_avc_parser->get_width();
+  v_height = m_avc_parser->get_height();
+
+  if (m_avc_parser->has_par_been_found()) {
+    auto dimensions = m_avc_parser->get_display_dimensions();
+    v_dwidth        = dimensions.first;
+    v_dheight       = dimensions.second;
+  }
 
   return 0;
 }

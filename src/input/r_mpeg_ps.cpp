@@ -650,12 +650,15 @@ mpeg_ps_reader_c::new_stream_v_avc(mpeg_ps_id_t id,
   if (!parser.headers_parsed())
     throw false;
 
-  auto dimensions  = parser.get_display_dimensions();
-  track->fourcc    = FOURCC('A', 'V', 'C', '1');
-  track->v_width   = parser.get_width();
-  track->v_height  = parser.get_height();
-  track->v_dwidth  = dimensions.first;
-  track->v_dheight = dimensions.second;
+  track->fourcc   = FOURCC('A', 'V', 'C', '1');
+  track->v_width  = parser.get_width();
+  track->v_height = parser.get_height();
+
+  if (parser.has_par_been_found()) {
+    auto dimensions  = parser.get_display_dimensions();
+    track->v_dwidth  = dimensions.first;
+    track->v_dheight = dimensions.second;
+  }
 }
 
 void
