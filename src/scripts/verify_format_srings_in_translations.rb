@@ -5,6 +5,7 @@ require 'digest/sha1'
 
 $errors_to_ignore = {
   "d2820b11" => true,
+  "f3230d7f" => true,
 }
 
 def read_entries file_name
