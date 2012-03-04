@@ -131,6 +131,12 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *reader,
   else if (map_has_key(m_ti.m_forced_track_flags, -1))
     m_ti.m_forced_track = m_ti.m_forced_track_flags[-1];
 
+  // Let's see if the user has given a enabled track flag for this track.
+  if (map_has_key(m_ti.m_enabled_track_flags, m_ti.m_id))
+    m_ti.m_enabled_track = m_ti.m_enabled_track_flags[m_ti.m_id];
+  else if (map_has_key(m_ti.m_enabled_track_flags, -1))
+    m_ti.m_enabled_track = m_ti.m_enabled_track_flags[-1];
+
   // Let's see if the user has specified a language for this track.
   if (map_has_key(m_ti.m_languages, m_ti.m_id))
     m_ti.m_language = m_ti.m_languages[m_ti.m_id];
@@ -398,6 +404,13 @@ generic_packetizer_c::set_track_forced_flag(bool forced_track) {
 }
 
 void
+generic_packetizer_c::set_track_enabled_flag(bool enabled_track) {
+  m_ti.m_enabled_track = enabled_track;
+  if (NULL != m_track_entry)
+    GetChildAs<KaxTrackFlagEnabled, EbmlUInteger>(m_track_entry) = enabled_track ? 1 : 0;
+}
+
+void
 generic_packetizer_c::set_audio_sampling_freq(float freq) {
   m_haudio_sampling_freq = freq;
   if (NULL != m_track_entry)
@@ -652,6 +665,9 @@ generic_packetizer_c::set_headers() {
 
   if (!boost::logic::indeterminate(m_ti.m_forced_track))
     GetChildAs<KaxTrackFlagForced, EbmlUInteger>(m_track_entry) = m_ti.m_forced_track ? 1 : 0;
+
+  if (!boost::logic::indeterminate(m_ti.m_enabled_track))
+    GetChildAs<KaxTrackFlagEnabled, EbmlUInteger>(m_track_entry) = m_ti.m_enabled_track ? 1 : 0;
 
   if (track_video == m_htrack_type) {
     KaxTrackVideo &video = GetChild<KaxTrackVideo>(m_track_entry);
@@ -1493,6 +1509,7 @@ track_info_c::track_info_c()
   , m_cues(CUE_STRATEGY_UNSPECIFIED)
   , m_default_track(boost::logic::indeterminate)
   , m_forced_track(boost::logic::indeterminate)
+  , m_enabled_track(boost::logic::indeterminate)
   , m_tags(NULL)
   , m_compression(COMPRESSION_UNSPECIFIED)
   , m_pixel_cropping_source(PARAMETER_SOURCE_NONE)
@@ -1561,6 +1578,9 @@ track_info_c::operator =(const track_info_c &src) {
 
   m_forced_track_flags         = src.m_forced_track_flags;
   m_forced_track               = src.m_forced_track;
+
+  m_enabled_track_flags        = src.m_enabled_track_flags;
+  m_enabled_track              = src.m_enabled_track;
 
   m_languages                  = src.m_languages;
   m_language                   = src.m_language;

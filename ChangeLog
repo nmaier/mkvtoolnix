@@ -1,5 +1,9 @@
 2012-03-04  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: enhancement: mkvmerge will keep the "enabled" track
+	header flag when muxing. mkvmerge will also output its value in
+	verbose identification mode as "enabled_track".
+
 	* mkvmerge: enhancement: MicroDVD text subtitles are recognized as
 	an unsupported format instead of an unknown format.
 

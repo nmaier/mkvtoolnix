@@ -66,7 +66,7 @@ struct kax_track_t {
   unsigned char *headers[3];
   uint32_t header_sizes[3];
 
-  boost::logic::tribool default_track, forced_track;
+  boost::logic::tribool default_track, forced_track, enabled_track;
   std::string language;
 
   int64_t units_processed;
@@ -123,6 +123,7 @@ struct kax_track_t {
     , private_size(0)
     , default_track(true)
     , forced_track(boost::logic::indeterminate)
+    , enabled_track(true)
     , language("eng")
     , units_processed(0)
     , ok(false)
