@@ -128,6 +128,19 @@ class SimpleTest
     }
   end
 
+  def test_merge_unsupported file, *args
+    options             = args.extract_options!
+    full_command_line   = [ options[:args], file ].flatten.join(' ')
+    options[:name]    ||= full_command_line
+    @blocks[:tests] << {
+      :name  => full_command_line,
+      :block => lambda {
+        sys "../src/mkvmerge --identify-verbose #{full_command_line} > #{tmp}", :exit_code => 3
+        /unsupported container/.match(IO.readlines(tmp).first || '') ? :ok : :bad
+      },
+    }
+  end
+
   def test_ui_locale locale, *args
     options = args.extract_options!
     @blocks[:tests] << {
