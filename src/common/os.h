@@ -20,16 +20,6 @@
 // For PRId64 and PRIu64:
 #define __STDC_FORMAT_MACROS
 
-#if defined(HAVE_SYS_TYPES_H)
-# include <sys/types.h>
-#endif // HAVE_SYS_TYPES_H
-#if defined(HAVE_STDINT_H)
-# include <stdint.h>
-#endif // HAVE_STDINT_H
-#if defined(HAVE_INTTYPES_H)
-# include <inttypes.h>
-#endif // HAVE_INTTYPES_H
-
 #if defined(HAVE_COREC_H)
 #include "corec.h"
 

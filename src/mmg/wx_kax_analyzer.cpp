@@ -13,6 +13,7 @@
 
 #include "common/os.h"
 
+#include <wx/app.h>
 #include <wx/log.h>
 #include <wx/progdlg.h>
 

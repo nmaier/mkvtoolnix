@@ -20,6 +20,8 @@
 
  **/
 
+#include "common/common_pch.h"
+
 #include "MPEGVideoBuffer.h"
 #include <cstring>
 #include <stddef.h>
