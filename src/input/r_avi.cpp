@@ -37,7 +37,6 @@
 #include "merge/output_control.h"
 #include "output/p_aac.h"
 #include "output/p_ac3.h"
-#include "output/p_avc.h"
 #include "output/p_dts.h"
 #include "output/p_mp3.h"
 #include "output/p_mpeg1_2.h"
@@ -333,15 +332,22 @@ avi_reader_c::create_mpeg4_p2_packetizer() {
 void
 avi_reader_c::create_mpeg4_p10_packetizer() {
   try {
-    memory_cptr avcc                      = extract_avcc();
-    mpeg4_p10_es_video_packetizer_c *ptzr = new mpeg4_p10_es_video_packetizer_c(this, m_ti, avcc, AVI_video_width(m_avi), AVI_video_height(m_avi));
+    mpeg4_p10_es_video_packetizer_c *ptzr = new mpeg4_p10_es_video_packetizer_c(this, m_ti);
     m_vptzr                               = add_packetizer(ptzr);
+
+    ptzr->set_video_pixel_dimensions(AVI_video_width(m_avi), AVI_video_height(m_avi));
 
     if (0 != m_fps)
       ptzr->set_container_default_field_duration(1000000000ll / m_fps / 2);
 
-    if (m_avc_extra_nalus.is_set())
-      ptzr->add_extra_data(m_avc_extra_nalus);
+    uint32_t extra_data_size = get_uint32_le(&m_avi->bitmap_info_header->bi_size) - sizeof(alBITMAPINFOHEADER);
+    if (0 < extra_data_size) {
+      memory_cptr avc_extra_nalus = mpeg4::p10::avcc_to_nalus(reinterpret_cast<unsigned char *>(m_avi->bitmap_info_header + 1), extra_data_size);
+      if (avc_extra_nalus.is_set())
+        ptzr->add_extra_data(avc_extra_nalus);
+    }
+
+    set_avc_nal_size_size(ptzr);
 
     show_packetizer_info(0, ptzr);
 
@@ -436,78 +442,6 @@ avi_reader_c::create_ssa_packetizer(int idx) {
   demuxer.m_ptzr     = add_packetizer(new textsubs_packetizer_c(this, m_ti, parser->is_ass() ?  MKV_S_TEXTASS : MKV_S_TEXTSSA, global.c_str(), global.length(), false, false));
 
   show_packetizer_info(id, PTZR(demuxer.m_ptzr));
-}
-
-memory_cptr
-avi_reader_c::extract_avcc() {
-  avc_es_parser_c parser;
-
-  parser.ignore_nalu_size_length_errors();
-  if (map_has_key(m_ti.m_nalu_size_lengths, 0))
-    parser.set_nalu_size_length(m_ti.m_nalu_size_lengths[0]);
-  else if (map_has_key(m_ti.m_nalu_size_lengths, -1))
-    parser.set_nalu_size_length(m_ti.m_nalu_size_lengths[-1]);
-
-  int extra_data_size = get_uint32_le(&m_avi->bitmap_info_header->bi_size) - sizeof(alBITMAPINFOHEADER);
-  if (0 < extra_data_size) {
-    m_avc_extra_nalus = mpeg4::p10::avcc_to_nalus(reinterpret_cast<unsigned char *>(m_avi->bitmap_info_header + 1), extra_data_size);
-    if (m_avc_extra_nalus.is_set()) {
-      uint32_t marker = get_uint32_be(m_avi->bitmap_info_header + 1);
-      if ((0x00000001 != marker) && (0x00000100 != (marker & 0xffffff00)))
-        m_avc_nal_size_size = 1 + (reinterpret_cast<unsigned char *>(m_avi->bitmap_info_header + 1)[4] & 0x03);
-      parser.add_bytes(m_avc_extra_nalus->get_buffer(), m_avc_extra_nalus->get_size());
-    }
-  }
-
-  size_t i;
-  for (i = 0; i < m_max_video_frames; ++i) {
-    int size = AVI_frame_size(m_avi, i);
-    if (0 == size)
-      continue;
-
-    memory_cptr buffer = memory_c::alloc(size);
-
-    AVI_set_video_position(m_avi, i);
-    int key = 0;
-    size    = AVI_read_frame(m_avi, reinterpret_cast<char *>(buffer->get_buffer()), &key);
-
-    if (   (0 == i)
-        && (4 <= size)
-        && (get_uint32_be(buffer->get_buffer()) == NALU_START_CODE))
-      m_avc_nal_size_size = -1;
-
-    if (0 < size) {
-      if (0 >= m_avc_nal_size_size)
-        parser.add_bytes(buffer->get_buffer(), size);
-      else {
-        int offset = 0;
-
-        while ((offset + m_avc_nal_size_size) < size) {
-          int nalu_size  = get_uint_be(buffer->get_buffer() + offset, m_avc_nal_size_size);
-          offset        += m_avc_nal_size_size;
-
-          if ((offset + nalu_size) > size)
-            break;
-
-          memory_cptr nalu = memory_c::alloc(4 + nalu_size);
-          put_uint32_be(nalu->get_buffer(), NALU_START_CODE);
-          memcpy(nalu->get_buffer() + 4, buffer->get_buffer() + offset, nalu_size);
-          offset += nalu_size;
-
-          parser.add_bytes(nalu);
-        }
-      }
-    }
-
-    if (parser.headers_parsed()) {
-      AVI_set_video_position(m_avi, 0);
-      return parser.get_avcc();
-    }
-  }
-
-  AVI_set_video_position(m_avi, 0);
-
-  throw false;
 }
 
 void
@@ -738,6 +672,32 @@ avi_reader_c::create_vorbis_packetizer(int aid) {
     // Never reached, but make the compiler happy:
     return NULL;
   }
+}
+
+void
+avi_reader_c::set_avc_nal_size_size(mpeg4_p10_es_video_packetizer_c *ptzr) {
+  m_avc_nal_size_size = ptzr->get_nalu_size_length();
+
+  for (size_t i = 0; i < m_max_video_frames; ++i) {
+    int size = AVI_frame_size(m_avi, i);
+    if (0 == size)
+      continue;
+
+    memory_cptr buffer = memory_c::alloc(size);
+
+    AVI_set_video_position(m_avi, i);
+    int key = 0;
+    size    = AVI_read_frame(m_avi, reinterpret_cast<char *>(buffer->get_buffer()), &key);
+
+    if (   (4 <= size)
+        && (   (get_uint32_be(buffer->get_buffer()) == NALU_START_CODE)
+            || (get_uint24_be(buffer->get_buffer()) == NALU_START_CODE)))
+      m_avc_nal_size_size = -1;
+
+    break;
+  }
+
+  AVI_set_video_position(m_avi, 0);
 }
 
 file_status_e

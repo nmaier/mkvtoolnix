@@ -189,9 +189,6 @@ public:
   };
 
   virtual generic_packetizer_c *create_packetizer();
-
-private:
-  virtual memory_cptr extract_avcc();
 };
 
 class ogm_v_theora_demuxer_c: public ogm_demuxer_c {
@@ -1126,62 +1123,17 @@ ogm_v_avc_demuxer_c::ogm_v_avc_demuxer_c(ogm_reader_c *p_reader)
 
 generic_packetizer_c *
 ogm_v_avc_demuxer_c::create_packetizer() {
-  mpeg4_p10_es_video_packetizer_c *vptzr = NULL;
+  stream_header *sth          = (stream_header *)&packet_data[0]->get_buffer()[1];
 
-  try {
-    stream_header *sth  = (stream_header *)&packet_data[0]->get_buffer()[1];
+  m_ti.m_private_data         = NULL;
+  m_ti.m_private_size         = 0;
+  generic_packetizer_c *vptzr = new mpeg4_p10_es_video_packetizer_c(reader, m_ti);
 
-    m_ti.m_private_data = NULL;
-    m_ti.m_private_size = 0;
-    memory_cptr avcc    = extract_avcc();
+  vptzr->set_video_pixel_dimensions(get_uint32_le(&sth->sh.video.width), get_uint32_le(&sth->sh.video.height));
 
-    vptzr               = new mpeg4_p10_es_video_packetizer_c(reader, m_ti, avcc, get_uint32_le(&sth->sh.video.width), get_uint32_le(&sth->sh.video.height));
-
-    show_packetizer_info(m_ti.m_id, vptzr);
-
-  } catch (...) {
-    mxerror_tid(m_ti.m_fname, m_ti.m_id, Y("Could not extract the decoder specific config data (AVCC) from this AVC/h.264 track.\n"));
-  }
+  show_packetizer_info(m_ti.m_id, vptzr);
 
   return vptzr;
-}
-
-memory_cptr
-ogm_v_avc_demuxer_c::extract_avcc() {
-  avc_es_parser_c parser;
-
-  parser.ignore_nalu_size_length_errors();
-  if (map_has_key(reader->m_ti.m_nalu_size_lengths, track_id))
-    parser.set_nalu_size_length(reader->m_ti.m_nalu_size_lengths[track_id]);
-  else if (map_has_key(reader->m_ti.m_nalu_size_lengths, -1))
-    parser.set_nalu_size_length(reader->m_ti.m_nalu_size_lengths[-1]);
-
-  unsigned char *private_data = packet_data[0]->get_buffer() + 1 + sizeof(stream_header);
-  int private_size            = packet_data[0]->get_size()   - 1 - sizeof(stream_header);
-
-  while (4 < private_size) {
-    if (get_uint32_be(private_data) == 0x00000001) {
-      parser.add_bytes(private_data, private_size);
-      break;
-    }
-
-    ++private_data;
-    --private_size;
-  }
-
-  std::vector<memory_cptr>::iterator packet(nh_packet_data.begin());
-
-  while (packet != nh_packet_data.end()) {
-    if ((*packet)->get_size()) {
-      parser.add_bytes((*packet)->get_buffer(), (*packet)->get_size());
-      if (parser.headers_parsed())
-        return parser.get_avcc();
-    }
-
-    ++packet;
-  }
-
-  throw false;
 }
 
 // -----------------------------------------------------------

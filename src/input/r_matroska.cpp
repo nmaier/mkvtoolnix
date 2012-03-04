@@ -1789,45 +1789,13 @@ kax_reader_c::create_packetizers() {
   }
 }
 
-mpeg4::p10::avc_es_parser_cptr
-kax_reader_c::parse_first_mpeg4_p10_frame(kax_track_t *t,
-                                          track_info_c &) {
-  try {
-    read_first_frames(t, 5);
-
-    avc_es_parser_cptr parser(new avc_es_parser_c);
-
-    parser->ignore_nalu_size_length_errors();
-    parser->discard_actual_frames();
-    if (map_has_key(m_ti.m_nalu_size_lengths, t->tnum))
-      parser->set_nalu_size_length(m_ti.m_nalu_size_lengths[t->tnum]);
-    else if (map_has_key(m_ti.m_nalu_size_lengths, -1))
-      parser->set_nalu_size_length(m_ti.m_nalu_size_lengths[-1]);
-
-    if (sizeof(alBITMAPINFOHEADER) < t->private_size)
-      parser->add_bytes(static_cast<unsigned char *>(t->private_data) + sizeof(alBITMAPINFOHEADER), t->private_size - sizeof(alBITMAPINFOHEADER));
-    for (auto &frame : t->first_frames_data)
-      parser->add_bytes(frame->get_buffer(), frame->get_size());
-    parser->flush();
-
-    if (!parser->headers_parsed())
-      throw false;
-
-    return parser;
-  } catch (...) {
-    mxerror_tid(m_ti.m_fname, t->tnum, Y("Could not extract the decoder specific config data (AVCC) from this AVC/h.264 track.\n"));
-  }
-
-  return avc_es_parser_cptr(NULL);
-}
-
 void
 kax_reader_c::create_mpeg4_p10_es_video_packetizer(kax_track_t *t,
                                                    track_info_c &nti) {
-  avc_es_parser_cptr parser = parse_first_mpeg4_p10_frame(t, nti);
-
-  mpeg4_p10_es_video_packetizer_c *ptzr = new mpeg4_p10_es_video_packetizer_c(this, nti, parser->get_avcc(), t->v_width, t->v_height);
+  mpeg4_p10_es_video_packetizer_c *ptzr = new mpeg4_p10_es_video_packetizer_c(this, nti);
   set_track_packetizer(t, ptzr);
+
+  ptzr->set_video_pixel_dimensions(t->v_width, t->v_height);
 
   show_packetizer_info(t->tnum, t->ptzr_ptr);
 }

@@ -162,75 +162,12 @@ mpeg_ts_track_c::new_stream_v_avc() {
   if (!m_avc_parser->headers_parsed())
     return FILE_STATUS_MOREDATA;
 
-  v_avcc = m_avc_parser->get_avcc();
-
-  try {
-    mm_mem_io_c avcc(v_avcc->get_buffer(), v_avcc->get_size());
-    mm_mem_io_c new_avcc(NULL, v_avcc->get_size(), 1024);
-    memory_cptr nalu(new memory_c());
-    int num_sps, sps, sps_length;
-    sps_info_t sps_info;
-
-    avcc.read(nalu, 5);
-    new_avcc.write(nalu);
-
-    num_sps = avcc.read_uint8();
-    new_avcc.write_uint8(num_sps);
-    num_sps &= 0x1f;
-
-    for (sps = 0; sps < num_sps; sps++) {
-      bool abort;
-
-      sps_length = avcc.read_uint16_be();
-      if ((sps_length + avcc.getFilePointer()) >= v_avcc->get_size())
-        sps_length = v_avcc->get_size() - avcc.getFilePointer();
-      avcc.read(nalu, sps_length);
-
-      abort = false;
-      if ((0 < sps_length) && ((nalu->get_buffer()[0] & 0x1f) == 7)) {
-        nalu_to_rbsp(nalu);
-        if (!mpeg4::p10::parse_sps(nalu, sps_info, true))
-          throw false;
-        rbsp_to_nalu(nalu);
-        abort = true;
-      }
-
-      new_avcc.write_uint16_be(nalu->get_size());
-      new_avcc.write(nalu);
-
-      if (abort) {
-        avcc.read(nalu, v_avcc->get_size() - avcc.getFilePointer());
-        new_avcc.write(nalu);
-        break;
-      }
-    }
-
-    fourcc   = FOURCC('A', 'V', 'C', '1');
-    v_avcc   = memory_cptr(new memory_c(new_avcc.get_and_lock_buffer(), new_avcc.getFilePointer(), true));
-    v_width  = sps_info.width;
-    v_height = sps_info.height;
-
-    mxverb(3, boost::format("new_stream_v_avc: timing_info_present %1%, num_units_in_tick %2%, time_scale %3%, fixed_frame_rate %4%\n")
-           % sps_info.timing_info_present % sps_info.num_units_in_tick % sps_info.time_scale % sps_info.fixed_frame_rate);
-
-    if (sps_info.ar_found) {
-      float aspect_ratio = (float)sps_info.width / (float)sps_info.height * (float)sps_info.par_num / (float)sps_info.par_den;
-      v_aspect_ratio = aspect_ratio;
-
-      if (aspect_ratio > ((float)v_width / (float)v_height)) {
-        v_dwidth  = irnd(v_height * aspect_ratio);
-        v_dheight = v_height;
-
-      } else {
-        v_dwidth  = v_width;
-        v_dheight = irnd(v_width / aspect_ratio);
-      }
-    }
-    mxverb(3, boost::format("new_stream_v_avc: width: %1%, height: %2%\n") % v_width % v_height);
-
-  } catch (...) {
-    throw false;
-  }
+  auto dimensions = m_avc_parser->get_display_dimensions();
+  fourcc          = FOURCC('A', 'V', 'C', '1');
+  v_width         = m_avc_parser->get_width();
+  v_height        = m_avc_parser->get_height();
+  v_dwidth        = dimensions.first;
+  v_dheight       = dimensions.second;
 
   return 0;
 }
@@ -1133,8 +1070,10 @@ mpeg_ts_reader_c::create_mpeg1_2_video_packetizer(mpeg_ts_track_ptr &track) {
 
 void
 mpeg_ts_reader_c::create_mpeg4_p10_es_video_packetizer(mpeg_ts_track_ptr &track) {
-  mpeg4_p10_es_video_packetizer_c *avcpacketizer = new mpeg4_p10_es_video_packetizer_c(this, m_ti, track->v_avcc, track->v_width, track->v_height);
-  track->ptzr                                    = add_packetizer(avcpacketizer);
+  generic_packetizer_c *ptzr = new mpeg4_p10_es_video_packetizer_c(this, m_ti);
+  track->ptzr                = add_packetizer(ptzr);
+  ptzr->set_video_pixel_dimensions(track->v_width, track->v_height);
+
   show_packetizer_info(m_ti.m_id, PTZR(track->ptzr));
 }
 

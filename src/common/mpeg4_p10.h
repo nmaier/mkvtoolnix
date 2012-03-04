@@ -206,6 +206,9 @@ namespace mpeg4 {
       int m_frame_number, m_num_skipped_frames;
       bool m_first_keyframe_found, m_recovery_point_valid, m_b_frames_since_keyframe;
 
+      bool m_par_found;
+      int64_rational_c m_par;
+
       std::deque<avc_frame_t> m_frames, m_frames_out;
       std::deque<int64_t> m_provided_timecodes;
       std::deque<uint64_t> m_provided_stream_positions;
@@ -279,18 +282,18 @@ namespace mpeg4 {
         return frame;
       }
 
-      memory_cptr get_avcc();
+      memory_cptr get_avcc() const;
 
-      bool avcc_changed() {
+      bool avcc_changed() const {
         return m_avcc_changed;
       }
 
-      int get_width() {
+      int get_width() const {
         assert(!m_sps_info_list.empty());
         return m_sps_info_list.begin()->width;
       }
 
-      int get_height() {
+      int get_height() const {
         assert(!m_sps_info_list.empty());
         return m_sps_info_list.begin()->height;
       }
@@ -299,7 +302,7 @@ namespace mpeg4 {
 
       void add_timecode(int64_t timecode);
 
-      bool headers_parsed() {
+      bool headers_parsed() const {
         return m_avcc_ready;
       }
 
@@ -307,7 +310,7 @@ namespace mpeg4 {
         m_nalu_size_length = nalu_size_length;
       }
 
-      int get_nalu_size_length() {
+      int get_nalu_size_length() const {
         return m_nalu_size_length;
       }
 
@@ -317,20 +320,28 @@ namespace mpeg4 {
 
       void discard_actual_frames(bool discard = true);
 
-      int get_num_skipped_frames() {
+      int get_num_skipped_frames() const {
         return m_num_skipped_frames;
       }
 
-      void dump_info();
+      void dump_info() const;
 
-      std::string get_nalu_type_name(int type);
+      std::string get_nalu_type_name(int type) const;
 
-      bool has_stream_default_duration() {
+      bool has_stream_default_duration() const {
         return -1 != m_stream_default_duration;
       }
+      int64_t get_stream_default_duration() const {
+        assert(-1 != m_stream_default_duration);
+        return m_stream_default_duration;
+      }
 
-      int64_t duration_for(slice_info_t const &si);
+      int64_t duration_for(slice_info_t const &si) const;
       int64_t get_most_often_used_duration() const;
+
+      bool has_par_been_found() const;
+      int64_rational_c const &get_par() const;
+      std::pair<int64_t, int64_t> const get_display_dimensions(int width = -1, int height = -1) const;
 
     protected:
       bool parse_slice(memory_cptr &buffer, slice_info_t &si);
@@ -342,7 +353,7 @@ namespace mpeg4 {
       bool flush_decision(slice_info_t &si, slice_info_t &ref);
       void flush_incomplete_frame();
       void flush_unhandled_nalus();
-      void write_nalu_size(unsigned char *buffer, size_t size, int this_nalu_size_length = -1);
+      void write_nalu_size(unsigned char *buffer, size_t size, int this_nalu_size_length = -1) const;
       memory_cptr create_nalu_with_size(const memory_cptr &src, bool add_extra_data = false);
       void init_nalu_names();
     };

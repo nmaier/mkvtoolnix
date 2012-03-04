@@ -24,6 +24,7 @@
 #include "merge/pr_generic.h"
 #include "common/error.h"
 #include "input/subtitles.h"
+#include "output/p_avc.h"
 
 typedef struct avi_demuxer_t {
   int m_ptzr;
@@ -73,9 +74,8 @@ private:
   std::vector<avi_subs_demuxer_t> m_subtitle_demuxers;
   double m_fps;
   unsigned int m_video_frames_read, m_max_video_frames, m_dropped_video_frames, m_act_wchar;
-  bool m_is_divx;
-  memory_cptr m_avc_extra_nalus;
   int m_avc_nal_size_size;
+  bool m_is_divx;
 
   uint64_t m_bytes_to_process, m_bytes_processed;
   bool m_video_track_ok;
@@ -103,7 +103,6 @@ protected:
   virtual file_status_e read_video();
   virtual file_status_e read_audio(avi_demuxer_t &demuxer);
   virtual file_status_e read_subtitles(avi_subs_demuxer_t &demuxer);
-  virtual memory_cptr extract_avcc();
 
   virtual generic_packetizer_c *create_aac_packetizer(int aid, avi_demuxer_t &demuxer);
   virtual generic_packetizer_c *create_dts_packetizer(int aid);
@@ -117,6 +116,8 @@ protected:
   virtual void create_mpeg4_p10_packetizer();
   virtual void create_vp8_packetizer();
   virtual void create_video_packetizer();
+
+  virtual void set_avc_nal_size_size(mpeg4_p10_es_video_packetizer_c *ptzr);
 
   void extended_identify_mpeg4_l2(std::vector<std::string> &extended_info);
 

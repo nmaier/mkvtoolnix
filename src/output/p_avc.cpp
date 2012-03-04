@@ -25,19 +25,13 @@ using namespace mpeg4::p10;
 
 mpeg4_p10_es_video_packetizer_c::
 mpeg4_p10_es_video_packetizer_c(generic_reader_c *p_reader,
-                                track_info_c &p_ti,
-                                memory_cptr avcc,
-                                int width,
-                                int height)
+                                track_info_c &p_ti)
   : generic_packetizer_c(p_reader, p_ti)
-  , m_avcc(avcc)
-  , m_width(width)
-  , m_height(height)
   , m_first_frame(true)
-  , m_debug_timecodes(   debugging_requested("mpeg4_p10_es") || debugging_requested("mpeg4_p10_es_timecodes"))
-  , m_debug_aspect_ratio(debugging_requested("mpeg4_p10_es") || debugging_requested("mpeg4_p10_es_aspect_ratio"))
+  , m_set_display_dimensions(false)
+  , m_debug_timecodes(   debugging_requested("mpeg4_p10_es|mpeg4_p10_es_timecodes"))
+  , m_debug_aspect_ratio(debugging_requested("mpeg4_p10_es|mpeg4_p10_es_aspect_ratio"))
 {
-
   m_relaxed_timecode_checking = true;
 
   if (0 != m_ti.m_nalu_size_length)
@@ -50,7 +44,6 @@ mpeg4_p10_es_video_packetizer_c(generic_reader_c *p_reader,
 
   set_codec_id(MKV_V_MPEG4_AVC);
 
-  set_codec_private(m_avcc->get_buffer(), m_avcc->get_size());
   m_parser.set_keep_ar_info(false);
 
   // If no external timecode file has been specified then mkvmerge
@@ -72,17 +65,6 @@ mpeg4_p10_es_video_packetizer_c(generic_reader_c *p_reader,
 
 void
 mpeg4_p10_es_video_packetizer_c::set_headers() {
-  m_avcc_parser.process(memory_c::clone(m_hcodec_private, m_hcodec_private_length));
-
-  handle_aspect_ratio();
-  handle_timing_info();
-
-  memory_cptr new_avcc = m_avcc_parser.get_avcc();
-  set_codec_private(new_avcc->get_buffer(), new_avcc->get_size());
-
-  set_video_pixel_width(m_width);
-  set_video_pixel_height(m_height);
-
   generic_packetizer_c::set_headers();
 
   m_track_entry->EnableLacing(false);
@@ -124,33 +106,35 @@ mpeg4_p10_es_video_packetizer_c::process(packet_cptr packet) {
 }
 
 void
-mpeg4_p10_es_video_packetizer_c::handle_aspect_ratio() {
-  mxdebug_if(m_debug_aspect_ratio, boost::format("already set? %1% has par been found? %2%\n") % display_dimensions_or_aspect_ratio_set() % m_avcc_parser.has_par_been_found());
+mpeg4_p10_es_video_packetizer_c::handle_delayed_headers() {
+  if (0 < m_parser.get_num_skipped_frames())
+    mxwarn_tid(m_ti.m_fname, m_ti.m_id, boost::format(Y("This AVC/h.264 track does not start with a key frame. The first %1% frames have been skipped.\n")) % m_parser.get_num_skipped_frames());
 
-  if (display_dimensions_or_aspect_ratio_set() || !m_avcc_parser.has_par_been_found())
+  memory_cptr new_avcc = m_parser.get_avcc();
+  set_codec_private(new_avcc->get_buffer(), new_avcc->get_size());
+
+  handle_aspect_ratio();
+  handle_actual_default_duration();
+
+  rerender_track_headers();
+}
+
+void
+mpeg4_p10_es_video_packetizer_c::handle_aspect_ratio() {
+  mxdebug_if(m_debug_aspect_ratio, boost::format("already set? %1% has par been found? %2%\n") % display_dimensions_or_aspect_ratio_set() % m_parser.has_par_been_found());
+
+  if (display_dimensions_or_aspect_ratio_set() || !m_parser.has_par_been_found())
     return;
 
-  double par = static_cast<double>(m_avcc_parser.get_par().numerator()) / m_avcc_parser.get_par().denominator();
-
-  set_video_display_dimensions(1 <= par ? irnd(m_width * par) : m_width,
-                               1 <= par ? m_height            : irnd(m_height / par),
-                               PARAMETER_SOURCE_BITSTREAM);
+  auto dimensions = m_parser.get_display_dimensions(m_hvideo_pixel_width, m_hvideo_pixel_height);
+  set_video_display_dimensions(dimensions.first, dimensions.second, PARAMETER_SOURCE_BITSTREAM);
 
   mxinfo_tid(m_ti.m_fname, m_ti.m_id,
              boost::format(Y("Extracted the aspect ratio information from the MPEG-4 layer 10 (AVC) video data "
                              "and set the display dimensions to %1%/%2%.\n")) % m_ti.m_display_width % m_ti.m_display_height);
 
   mxdebug_if(m_debug_aspect_ratio, boost::format("PAR %1% pixel_width/hgith %2%/%3% display_width/height %4%/%5%\n")
-             % par % m_hvideo_pixel_width % m_hvideo_pixel_height % m_ti.m_display_width % m_ti.m_display_height);
-}
-
-void
-mpeg4_p10_es_video_packetizer_c::handle_timing_info() {
-  mxdebug_if(m_debug_timecodes, boost::format("default duration forced? %1% timing info found? %2% default duration from AVCC %3%\n")
-             % m_default_duration_forced % m_avcc_parser.has_timing_info_been_found() % (m_avcc_parser.has_timing_info_been_found() ? m_avcc_parser.get_default_duration() : 0));
-
-  if (!m_default_duration_forced && m_avcc_parser.has_timing_info_been_found())
-    set_track_default_duration(m_avcc_parser.get_default_duration());
+             % boost::rational_cast<double>(m_parser.get_par()) % m_hvideo_pixel_width % m_hvideo_pixel_height % m_ti.m_display_width % m_ti.m_display_height);
 }
 
 void
@@ -160,10 +144,8 @@ mpeg4_p10_es_video_packetizer_c::handle_actual_default_duration() {
 
   if (   !m_default_duration_forced
       && (0 < actual_default_duration)
-      && (m_htrack_default_duration != actual_default_duration)) {
+      && (m_htrack_default_duration != actual_default_duration))
     set_track_default_duration(actual_default_duration);
-    rerender_track_headers();
-  }
 }
 
 void
@@ -177,17 +159,21 @@ void
 mpeg4_p10_es_video_packetizer_c::flush_frames() {
   while (m_parser.frame_available()) {
     if (m_first_frame) {
-      if (0 < m_parser.get_num_skipped_frames())
-        mxwarn_tid(m_ti.m_fname, m_ti.m_id, boost::format(Y("This AVC/h.264 track does not start with a key frame. The first %1% frames have been skipped.\n")) % m_parser.get_num_skipped_frames());
-      handle_actual_default_duration();
+      handle_delayed_headers();
+      m_first_frame = false;
     }
 
     avc_frame_t frame(m_parser.get_frame());
     add_packet(new packet_t(frame.m_data, frame.m_start,
                             frame.m_end > frame.m_start ? frame.m_end - frame.m_start : m_htrack_default_duration,
                             frame.m_keyframe            ? -1                          : frame.m_start + frame.m_ref1));
-    m_first_frame = false;
   }
+}
+
+unsigned int
+mpeg4_p10_es_video_packetizer_c::get_nalu_size_length()
+  const {
+  return m_parser.get_nalu_size_length();
 }
 
 void
@@ -215,9 +201,9 @@ mpeg4_p10_es_video_packetizer_c::can_connect_to(generic_packetizer_c *src,
   if (NULL == vsrc)
     return CAN_CONNECT_NO_FORMAT;
 
-  connect_check_v_width(m_width, vsrc->m_width);
-  connect_check_v_height(m_height, vsrc->m_height);
-  connect_check_codec_id(m_hcodec_id, vsrc->m_hcodec_id);
+  connect_check_v_width( m_hvideo_pixel_width,  vsrc->m_hvideo_pixel_width);
+  connect_check_v_height(m_hvideo_pixel_height, vsrc->m_hvideo_pixel_height);
+  connect_check_codec_id(m_hcodec_id,           vsrc->m_hcodec_id);
 
   if (((NULL == m_ti.m_private_data) && (NULL != vsrc->m_ti.m_private_data)) ||
       ((NULL != m_ti.m_private_data) && (NULL == vsrc->m_ti.m_private_data)) ||

@@ -24,18 +24,16 @@ using namespace mpeg4::p10;
 class mpeg4_p10_es_video_packetizer_c: public generic_packetizer_c {
 protected:
   avc_es_parser_c m_parser;
-  memory_cptr m_avcc;
-  int m_width, m_height;
-  bool m_first_frame, m_debug_timecodes, m_debug_aspect_ratio;
-  mpeg4::p10::avcc::parser_c m_avcc_parser;
+  bool m_first_frame, m_set_display_dimensions, m_debug_timecodes, m_debug_aspect_ratio;
 
 public:
-  mpeg4_p10_es_video_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, memory_cptr avcc, int width, int height);
+  mpeg4_p10_es_video_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti);
 
   virtual int process(packet_cptr packet);
   virtual void add_extra_data(memory_cptr data);
   virtual void set_headers();
   virtual void set_container_default_field_duration(int64_t default_duration);
+  virtual unsigned int get_nalu_size_length() const;
 
   virtual void flush();
   virtual void flush_frames();
@@ -48,8 +46,8 @@ public:
   virtual connection_result_e can_connect_to(generic_packetizer_c *src, std::string &error_message);
 
 protected:
+  virtual void handle_delayed_headers();
   virtual void handle_aspect_ratio();
-  virtual void handle_timing_info();
   virtual void handle_actual_default_duration();
 };
 

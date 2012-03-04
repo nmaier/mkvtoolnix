@@ -447,6 +447,13 @@ generic_packetizer_c::set_video_pixel_height(int height) {
 }
 
 void
+generic_packetizer_c::set_video_pixel_dimensions(int width,
+                                                 int height) {
+  set_video_pixel_width(width);
+  set_video_pixel_height(height);
+}
+
+void
 generic_packetizer_c::set_video_display_width(int width) {
   m_hvideo_display_width = width;
   if (NULL != m_track_entry)

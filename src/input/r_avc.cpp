@@ -91,11 +91,6 @@ avc_es_reader_c::read_headers() {
     avc_es_parser_c parser;
     parser.ignore_nalu_size_length_errors();
 
-    if (map_has_key(m_ti.m_nalu_size_lengths, 0))
-      parser.set_nalu_size_length(m_ti.m_nalu_size_lengths[0]);
-    else if (map_has_key(m_ti.m_nalu_size_lengths, -1))
-      parser.set_nalu_size_length(m_ti.m_nalu_size_lengths[-1]);
-
     int num_read, i;
 
     for (i = 0; MAX_PROBE_BUFFERS > i; ++i) {
@@ -110,7 +105,6 @@ avc_es_reader_c::read_headers() {
     if (parser.headers_parsed())
       parser.flush();
 
-    m_avcc   = parser.get_avcc();
     m_width  = parser.get_width();
     m_height = parser.get_height();
 
@@ -128,7 +122,8 @@ avc_es_reader_c::create_packetizer(int64_t) {
   if (!demuxing_requested('v', 0) || (NPTZR() != 0))
     return;
 
-  add_packetizer(new mpeg4_p10_es_video_packetizer_c(this, m_ti, m_avcc, m_width, m_height));
+  add_packetizer(new mpeg4_p10_es_video_packetizer_c(this, m_ti));
+  PTZR0->set_video_pixel_dimensions(m_width, m_height);
 
   show_packetizer_info(0, PTZR0);
 }

@@ -650,6 +650,7 @@ mpeg4::p10::avc_es_parser_c::avc_es_parser_c()
   , m_first_keyframe_found(false)
   , m_recovery_point_valid(false)
   , m_b_frames_since_keyframe(false)
+  , m_par_found(false)
   , m_max_timecode(0)
   , m_stream_position(0)
   , m_parsed_position(0)
@@ -781,7 +782,8 @@ mpeg4::p10::avc_es_parser_c::add_timecode(int64_t timecode) {
 void
 mpeg4::p10::avc_es_parser_c::write_nalu_size(unsigned char *buffer,
                                              size_t size,
-                                             int this_nalu_size_length) {
+                                             int this_nalu_size_length)
+  const {
   unsigned int nalu_size_length = -1 == this_nalu_size_length ? m_nalu_size_length : this_nalu_size_length;
 
   if (!m_ignore_nalu_size_length_errors && (size >= ((uint64_t)1 << (nalu_size_length * 8)))) {
@@ -949,11 +951,20 @@ mpeg4::p10::avc_es_parser_c::handle_sps_nalu(memory_cptr &nalu) {
   if (use_sps_info && m_debug_sps_info)
     sps_info.dump();
 
-  if (   use_sps_info
-      && !has_stream_default_duration()
+  if (!use_sps_info)
+    return;
+
+  if (   !has_stream_default_duration()
       && sps_info.timing_info_valid()) {
     m_stream_default_duration = sps_info.default_duration();
     mxdebug_if(m_debug_timecodes, boost::format("Stream default duration: %1%\n") % m_stream_default_duration);
+  }
+
+  if (   !m_par_found
+      && sps_info.ar_found
+      && (0 != sps_info.par_den)) {
+    m_par_found = true;
+    m_par       = int64_rational_c(sps_info.par_num, sps_info.par_den);
   }
 }
 
@@ -1156,7 +1167,8 @@ mpeg4::p10::avc_es_parser_c::parse_slice(memory_cptr &buffer,
 }
 
 int64_t
-mpeg4::p10::avc_es_parser_c::duration_for(slice_info_t const &si) {
+mpeg4::p10::avc_es_parser_c::duration_for(slice_info_t const &si)
+  const {
   int64_t duration = -1 != m_forced_default_duration                                                  ? m_forced_default_duration
                    : (m_sps_info_list.size() > si.sps) && m_sps_info_list[si.sps].timing_info_valid() ? m_sps_info_list[si.sps].default_duration()
                    : -1 != m_stream_default_duration                                                  ? m_stream_default_duration
@@ -1363,7 +1375,8 @@ mpeg4::p10::avc_es_parser_c::create_nalu_with_size(const memory_cptr &src,
 
 // TODO:DRY
 memory_cptr
-mpeg4::p10::avc_es_parser_c::get_avcc() {
+mpeg4::p10::avc_es_parser_c::get_avcc()
+  const {
   int final_size = 6 + 1;
   int offset     = 6;
 
@@ -1372,10 +1385,11 @@ mpeg4::p10::avc_es_parser_c::get_avcc() {
   for (auto &mem : m_pps_list)
     final_size += mem->get_size() + 2;
 
-  unsigned char *buffer = (unsigned char *)safemalloc(final_size);
+  memory_cptr destination = memory_c::alloc(final_size);
+  unsigned char *buffer   = destination->get_buffer();
 
   assert(!m_sps_list.empty());
-  sps_info_t &sps = *m_sps_info_list.begin();
+  sps_info_t const &sps = *m_sps_info_list.begin();
 
   buffer[0] = 1;
   buffer[1] = sps.profile_idc;
@@ -1403,11 +1417,41 @@ mpeg4::p10::avc_es_parser_c::get_avcc() {
     offset += 2 + size;
   }
 
-  return memory_cptr(new memory_c(buffer, final_size, true));
+  return destination;
+}
+
+bool
+mpeg4::p10::avc_es_parser_c::has_par_been_found()
+  const {
+  assert(m_avcc_ready);
+  return m_par_found;
+}
+
+int64_rational_c const &
+mpeg4::p10::avc_es_parser_c::get_par()
+  const {
+  assert(m_avcc_ready && m_par_found);
+  return m_par;
+}
+
+std::pair<int64_t, int64_t> const
+mpeg4::p10::avc_es_parser_c::get_display_dimensions(int width,
+                                                    int height)
+  const {
+  assert(m_avcc_ready && m_par_found);
+
+  if (0 >= width)
+    width = get_width();
+  if (0 >= height)
+    height = get_height();
+
+  return std::make_pair<int64_t, int64_t>(1 <= m_par ? irnd(width * boost::rational_cast<double>(m_par)) : width,
+                                          1 <= m_par ? height                                            : irnd(height / boost::rational_cast<double>(m_par)));
 }
 
 void
-mpeg4::p10::avc_es_parser_c::dump_info() {
+mpeg4::p10::avc_es_parser_c::dump_info()
+  const {
   mxinfo("Dumping m_frames_out:\n");
   for (auto &frame : m_frames_out) {
     mxinfo(boost::format("size %1% key %2% start %3% end %4% ref1 %5% adler32 0x%|6$08x|\n")
@@ -1421,12 +1465,10 @@ mpeg4::p10::avc_es_parser_c::dump_info() {
 }
 
 std::string
-mpeg4::p10::avc_es_parser_c::get_nalu_type_name(int type) {
-  std::string name = m_nalu_names_by_type[type];
-  if (name.empty())
-    return "unknown";
-
-  return name;
+mpeg4::p10::avc_es_parser_c::get_nalu_type_name(int type)
+  const {
+  auto name = m_nalu_names_by_type.find(type);
+  return (m_nalu_names_by_type.end() == name) ? "unknown" : name->second;
 }
 
 void
