@@ -87,6 +87,7 @@
 #include "input/r_hdsub.h"
 #include "input/r_ivf.h"
 #include "input/r_matroska.h"
+#include "input/r_microdvd.h"
 #include "input/r_mp3.h"
 #include "input/r_mpeg_es.h"
 #include "input/r_mpeg_ps.h"
@@ -463,6 +464,10 @@ get_file_type(filelist_t &file) {
       type = FILE_TYPE_COREPICTURE;
     else if (usf_reader_c::probe_file(text_io, size))
       type = FILE_TYPE_USF;
+
+    // Unsupported text subtitle formats
+    else if (microdvd_reader_c::probe_file(text_io, size))
+      type = FILE_TYPE_MICRODVD;
     else
       type = FILE_TYPE_IS_UNKNOWN;
 
