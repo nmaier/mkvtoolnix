@@ -358,69 +358,6 @@ namespace mpeg4 {
       void init_nalu_names();
     };
     typedef counted_ptr<avc_es_parser_c> avc_es_parser_cptr;
-
-    namespace avcc {
-      class exception: public mtx::exception {
-      public:
-        virtual const char *what() const throw() {
-          return "unspecified AVCC error";
-        }
-      };
-
-      class parser_error: public exception {
-      public:
-        virtual const char *what() const throw() {
-          return "error during AVCC parsing";
-        }
-      };
-
-      class state_error: public exception {
-      public:
-        virtual const char *what() const throw() {
-          return "wrong parser state: already parsed & trying again or not parsed yet & information requested";
-        }
-      };
-
-      class parser_c {
-      public:
-        typedef enum {
-          keep_par,
-          remove_par,
-          set_par
-        } par_mode;
-
-      private:
-        memory_cptr m_avcc_in, m_avcc_out;
-
-        par_mode m_par_mode;
-        bool m_par_found;
-        int64_rational_c m_par_in, m_par_out;
-
-        bool m_timing_info_found;
-        int64_rational_c m_timing_info_in;
-
-        bool m_debug;
-
-      public:
-        parser_c();
-
-        void process(memory_cptr const &avcc);
-        memory_cptr const &get_avcc() const;
-
-        void set_par_mode(par_mode mode, int64_rational_c const &par = int64_rational_c());
-        bool has_par_been_found() const;
-        int64_rational_c const &get_par() const;
-
-        bool has_timing_info_been_found() const;
-        int64_rational_c const &get_timing_info() const;
-        uint64_t get_default_duration() const;
-
-        bool has_been_parsed() const;
-
-      private:
-        void parse_sps(memory_cptr &nalu);
-      };
-    };
   };
 };
 
