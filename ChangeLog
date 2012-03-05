@@ -1,3 +1,9 @@
+2012-03-05  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Sometimes non-AC3 files were mistakenly for
+	AC3 after the re-write of the AC3 handling code on
+	2012-02-26. This has been rectified. Fix for bug 723.
+
 2012-03-04  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: enhancement: mkvmerge will keep the "enabled" track

@@ -367,6 +367,11 @@ ac3::parser_c::find_consecutive_frames(unsigned char const *buffer,
       if (!current_frame.decode_header(&buffer[offset], buffer_size - offset))
         break;
 
+      if (8 > current_frame.m_bytes) {
+        mxdebug_if(debug, boost::format("Current frame at %1% has invalid size %2%\n") % offset % current_frame.m_bytes);
+        break;
+      }
+
       if (   (current_frame.m_bs_id       != first_frame.m_bs_id)
           && (current_frame.m_channels    != first_frame.m_channels)
           && (current_frame.m_sample_rate != first_frame.m_sample_rate)) {
