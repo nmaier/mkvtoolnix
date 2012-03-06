@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: mkvtoolnix_uk\n"
 "Report-Msgid-Bugs-To: Moritz Bunkus <moritz@bunkus.org>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2012-02-22 11:29+0200\n"
+"PO-Revision-Date: 2012-03-06 13:05+0200\n"
 "Last-Translator: Andriy Bilous'ko <arestarh@ukr.net>\n"
 "Language-Team: Ukrainian <moritz@bunkus.org>\n"
 "Language: uk\n"
@@ -5752,9 +5752,8 @@ msgid "Sets the cropping parameters. Must be comma-separated list of four number
 msgstr "Встановлюються параметри обрізки. Має бути задано 4 числа, розділених комамами, для обрізки зліва, згори, справа і знизу відповідно."
 
 #: src/mmg/tabs/input_format.cpp:234
-#, fuzzy
 msgid "Sets the default duration or number of frames/fields per second for a track. This can either be a floating point number or a fraction. For AVC/h.264 tracks this must be the number of fields per second which is twice the number of frames per second."
-msgstr "Встановлюється типові тривалість і кількість кадрів в секунду для доріжки. Це можливо тільки для доріжок відео. Для AVC/H.264 елементарних потоків ця опція повинна бути задана. Може бути або числом з плаваючою комою або дробом."
+msgstr "Встановлюється типова тривалість або кількість кадрів/полів за секунду для доріжки. Може бути або числом з плаваючою комою, або дробом. Для доріжок AVC/h.264 має бути задано у вигляді числа полів за секунду, що є вдвічі більшим за число кадрів за секунду."
 
 #: src/mmg/tabs/input_format.cpp:222
 msgid "Sets the display aspect ratio of the track. The format can be either 'a/b' in which case both numbers must be integer (e.g. 16/9) or just a single floting point number 'f' (e.g. 2.35)."
@@ -9649,4 +9648,3 @@ msgstr "Так"
 
 #~ msgid "wrong usage: writing to read-only memory"
 #~ msgstr "wrong usage: запис тільки до \"пам'яті для читання\""
-
