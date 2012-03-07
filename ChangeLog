@@ -1,5 +1,10 @@
 2012-03-07  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge, mmg: enhancement: The "--default-duration" in mkvmerge
+	and the "FPS" drop down box in mmg now accept "p" or "i" as a unit
+	-- as in e.g. "25p" or "50i". Several commonly used values have
+	been added to mmg's "FPS" drop down box.
+
 	* mkvmerge: bug fix: When using an external timecode file with
 	AVC/h.264 video the default duration will be set to the most-often
 	used duration in the timecode file.
