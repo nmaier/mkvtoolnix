@@ -932,11 +932,11 @@ SBR，您可以将 \*(Aq:0\*(Aq 添加到轨道 ID。
 .PP
 \fB\-\-default\-duration\fR \fITID:x\fR
 .RS 4
-强制指定轨道的默认时长为指定数值。 将同时修改轨道的时间码以匹配该默认时长。 变量
+Forces the default duration of a given track to the specified value\&. Also modifies the track\*(Aqs timecodes to match the default duration\&. The argument
 \fIx\fR
-必须有 \*(Aqs\*(Aq, \*(Aqms\*(Aq, \*(Aqus\*(Aq, \*(Aqns\*(Aq 或 \*(Aqfps\*(Aq 后缀，分别说明默认时长的单位为秒、毫秒、微秒、纳秒以及帧每秒。 数字
+must be postfixed with \*(Aqs\*(Aq, \*(Aqms\*(Aq, \*(Aqus\*(Aq, \*(Aqns\*(Aq, \*(Aqfps\*(Aq, \*(Aqp\*(Aq or \*(Aqi\*(Aq to specify the default duration in seconds, milliseconds, microseconds, nanoseconds, \*(Aqframes per second\*(Aq, \*(Aqprogressive frames per second\*(Aq or \*(Aqinterlaced frames per second\*(Aq respectively\&. The number
 \fIx\fR
-本身可为浮点数或分数。
+itself can be a floating point number or a fraction\&.
 .sp
 如果未强定默认时长，mkvmerge 将尝试根据使用的容器和/或编解码器推定轨道的默认时长。 此选项有用的一种情况是当添加
 AVC/h\&.264

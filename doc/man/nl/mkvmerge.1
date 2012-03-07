@@ -945,11 +945,11 @@ externe tijd code bestanden\&.
 .PP
 \fB\-\-default\-duration\fR \fITID:x\fR
 .RS 4
-Forceert de standaard duur van een gegeven spoor naar de gegeven waarde\&. Tevens de spoor tijdcode aanpast zodat die overeenkomt met de standaard duur\&. Het argument
+Forces the default duration of a given track to the specified value\&. Also modifies the track\*(Aqs timecodes to match the default duration\&. The argument
 \fIx\fR
-moet zijn vastgezet met \*(Aqs\*(Aq, \*(Aqms\*(Aq, \*(Aqus\*(Aq, \*(Aqns\*(Aq of \*(Aqfps\*(Aq om te specificeren de standaard duur in seconden, milliseconden, microseconden, nanoseconden of respectievelijk de \*(Aq\*(Aqbeelden per seconde\*(Aq (fps)\&. Het aantal
+must be postfixed with \*(Aqs\*(Aq, \*(Aqms\*(Aq, \*(Aqus\*(Aq, \*(Aqns\*(Aq, \*(Aqfps\*(Aq, \*(Aqp\*(Aq or \*(Aqi\*(Aq to specify the default duration in seconds, milliseconds, microseconds, nanoseconds, \*(Aqframes per second\*(Aq, \*(Aqprogressive frames per second\*(Aq or \*(Aqinterlaced frames per second\*(Aq respectively\&. The number
 \fIx\fR
-kan zelf een veranderbaar nummer ziijn of een fractie\&.
+itself can be a floating point number or a fraction\&.
 .sp
 Als de standaard duur niet is geforceerd, dan zal mkvmerge proberen te achterhalen de standaard spoor duur van de houder en/of de gebruikte codec\&. E\('en geval waarin deze optie in gebruik is, is bij het toevoegen van
 AVC/h\&.264

@@ -419,15 +419,19 @@ identify(std::string &filename) {
 
    This function parsers a number that is postfixed with one of the
    four units 's', 'ms', 'us' or 'ns'. If the postfix is 'fps' then
-   this means 'frames per second'. It returns a number of nanoseconds.
+   this means 'frames per second'. If the postfix is 'p' or 'i' then
+   it is also interpreted as the number of 'progressive frames per
+   second' or 'interlaced frames per second'.
+
+   It returns a number of nanoseconds.
 */
 int64_t
 parse_number_with_unit(const std::string &s,
                        const std::string &subject,
                        const std::string &argument,
                        std::string display_s = "") {
-  boost::regex re1("(-?\\d+\\.?\\d*)(s|ms|us|ns|fps)?", boost::regex::perl | boost::regbase::icase);
-  boost::regex re2("(-?\\d+)/(-?\\d+)(s|ms|us|ns|fps)?", boost::regex::perl | boost::regbase::icase);
+  boost::regex re1("(-?\\d+\\.?\\d*)(s|ms|us|ns|fps|p|i)?",  boost::regex::perl | boost::regbase::icase);
+  boost::regex re2("(-?\\d+)/(-?\\d+)(s|ms|us|ns|fps|p|i)?", boost::regex::perl | boost::regbase::icase);
 
   std::string unit, s_n, s_d;
   int64_t n, d;
@@ -463,10 +467,14 @@ parse_number_with_unit(const std::string &s,
     multiplier = 1000;
   else if (unit == "ns")
     multiplier = 1;
-  else if (unit == "fps") {
+  else if ((unit == "fps") || (unit == "p") || (unit == "i")) {
     if (is_fraction)
-      return 1000000000ll * d / n;
-    else if (29.97 == d_value)
+      return 1000000000ll * d / n / (unit == "i" ? 2 : 1);
+
+    if (unit == "i")
+      d_value /= 2;
+
+    if (29.97 == d_value)
       return (int64_t)(100100000.0 / 3.0);
     else if (23.976 == d_value)
       return (int64_t)(1001000000.0 / 24.0);
@@ -1225,7 +1233,7 @@ parse_arg_append_mode(const std::string &s) {
 
    The argument must be a tuple consisting of a track ID and the default
    duration separated by a colon. The duration must be postfixed by 'ms',
-   'us', 'ns' or 'fps' (see \c parse_number_with_unit).
+   'us', 'ns', 'fps', 'p' or 'i' (see \c parse_number_with_unit).
 */
 static void
 parse_arg_default_duration(const std::string &s,

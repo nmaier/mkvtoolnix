@@ -1057,9 +1057,10 @@ $ mkvmerge -o out.mkv '(' file.mkv ')'</screen>
       <para>
        Forces the default duration of a given track to the specified value.  Also modifies the track's timecodes to match the default
        duration.  The argument <parameter>x</parameter> must be postfixed with '<literal>s</literal>', '<literal>ms</literal>',
-       '<literal>us</literal>', '<literal>ns</literal>' or '<literal>fps</literal>' to specify the default duration in seconds, milliseconds,
-       microseconds, nanoseconds or 'frames per second' respectively.  The number <parameter>x</parameter> itself can be a floating point
-       number or a fraction.
+       '<literal>us</literal>', '<literal>ns</literal>', '<literal>fps</literal>', '<literal>p</literal>' or '<literal>i</literal>' to
+       specify the default duration in seconds, milliseconds, microseconds, nanoseconds, 'frames per second', 'progressive frames per
+       second' or 'interlaced frames per second' respectively. The number <parameter>x</parameter> itself can be a floating point number or
+       a fraction.
       </para>
 
       <para>

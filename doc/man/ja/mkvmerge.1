@@ -634,7 +634,11 @@ AACファイルがSBR AACデータを含む場合に必要です。このスイ�
 .PP
 \fB\-\-default\-duration\fR \fITID:x\fR
 .RS 4
-指定したトラックの default duration を強制的に設定します。トラックのタイムコードも、 default duration に合うように変更されます。引数\fIx\fRは\*(Aqs\*(Aq、\*(Aqms\*(Aq、\*(Aqus\*(Aq、\*(Aqns\*(Aq、\*(Aqfps\*(Aqのうちどれか一つを後置されていなければなりません。それぞれ、 default duration は秒、ミリ秒、マイクロ秒、ナノ秒、\*(Aqfps\*(Aq単位で指定されます。\fIx\fRは小数または分数で指定できます。
+Forces the default duration of a given track to the specified value\&. Also modifies the track\*(Aqs timecodes to match the default duration\&. The argument
+\fIx\fR
+must be postfixed with \*(Aqs\*(Aq, \*(Aqms\*(Aq, \*(Aqus\*(Aq, \*(Aqns\*(Aq, \*(Aqfps\*(Aq, \*(Aqp\*(Aq or \*(Aqi\*(Aq to specify the default duration in seconds, milliseconds, microseconds, nanoseconds, \*(Aqframes per second\*(Aq, \*(Aqprogressive frames per second\*(Aq or \*(Aqinterlaced frames per second\*(Aq respectively\&. The number
+\fIx\fR
+itself can be a floating point number or a fraction\&.
 .sp
 default duration が強制的に指定されない場合、mkvmergeはトラックの default duration をコンテナ又は使用されているコーデックから取得して使用します。このオプションの使用例の一つとして、AVC/h\&.264エレメンタリストリームを追加する場合があげられます。なぜなら、これは、フレーム数やフレーム毎の default duration の情報を格納していないためです。このようなファイルに対しては、指定されないかぎり\fBmkvmerge\fR(1)は default duration を\*(Aq25fps\*(Aqと仮定します。
 .sp
