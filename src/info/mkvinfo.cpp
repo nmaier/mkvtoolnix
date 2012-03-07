@@ -1030,10 +1030,10 @@ handle_tracks(EbmlStream *&es,
         } else if (is_id(l3, KaxTrackDefaultDuration)) {
           KaxTrackDefaultDuration &def_duration = *static_cast<KaxTrackDefaultDuration *>(l3);
           show_element(l3, 3,
-                       boost::format(Y("Default duration: %|1$.3f|ms (%|2$.3f| fps for a video track)"))
+                       boost::format(Y("Default duration: %|1$.3f|ms (%|2$.3f| frames/fields per second for a video track)"))
                        % ((float)uint64(def_duration) / 1000000.0)
                        % (1000000000.0 / (float)uint64(def_duration)));
-          summary.push_back((boost::format(Y("default duration: %|1$.3f|ms (%|2$.3f| fps for a video track)"))
+          summary.push_back((boost::format(Y("default duration: %|1$.3f|ms (%|2$.3f| frames/fields per second for a video track)"))
                              % ((float)uint64(def_duration) / 1000000.0)
                              % (1000000000.0 / (float)uint64(def_duration))
                              ).str());
