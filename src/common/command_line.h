@@ -14,10 +14,7 @@
 #ifndef __MTX_COMMON_COMMAND_LINE_H
 #define __MTX_COMMON_COMMAND_LINE_H
 
-#include "common/os.h"
-
-#include <string>
-#include <vector>
+#include "common/common_pch.h"
 
 extern std::string usage_text, version_info;
 

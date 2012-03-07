@@ -14,9 +14,7 @@
 #ifndef __MTX_COMMON_STRING_FORMATTING_H
 #define __MTX_COMMON_STRING_FORMATTING_H
 
-#include "common/os.h"
-
-#include <string>
+#include "common/common_pch.h"
 
 #include "common/strings/editing.h"
 
@@ -38,18 +36,18 @@
 
 std::string format_timecode(int64_t timecode, unsigned int precision = 9);
 std::string format_paragraph(const std::string &text_to_wrap,
-                                         int indent_column                    = 0,
-                                         const std::string &indent_first_line = empty_string,
-                                         std::string indent_following_lines   = empty_string,
-                                         int wrap_column                      = WRAP_AT_TERMINAL_WIDTH,
-                                         const char *break_chars              = " ,.)/:");
+                             int indent_column                    = 0,
+                             const std::string &indent_first_line = empty_string,
+                             std::string indent_following_lines   = empty_string,
+                             int wrap_column                      = WRAP_AT_TERMINAL_WIDTH,
+                             const char *break_chars              = " ,.)/:");
 
 std::wstring format_paragraph(const std::wstring &text_to_wrap,
-                                          int indent_column                     = 0,
-                                          const std::wstring &indent_first_line = L" ",
-                                          std::wstring indent_following_lines   = L" ",
-                                          int wrap_column                       = WRAP_AT_TERMINAL_WIDTH,
-                                          const std::wstring &break_chars       = L" ,.)/:");
+                              int indent_column                     = 0,
+                              const std::wstring &indent_first_line = L" ",
+                              std::wstring indent_following_lines   = L" ",
+                              int wrap_column                       = WRAP_AT_TERMINAL_WIDTH,
+                              const std::wstring &break_chars       = L" ,.)/:");
 
 void fix_format(const char *fmt, std::string &new_fmt);
 

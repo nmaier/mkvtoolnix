@@ -11,10 +11,7 @@
 #ifndef __PROPEDIT_TARGET_H
 #define __PROPEDIT_TARGET_H
 
-#include "common/os.h"
-
-#include <string>
-#include <vector>
+#include "common/common_pch.h"
 
 #include <ebml/EbmlMaster.h>
 #include <matroska/KaxTags.h>

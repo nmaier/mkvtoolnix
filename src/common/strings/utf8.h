@@ -14,9 +14,7 @@
 #ifndef __MTX_COMMON_LOCALE_UTF8_H
 #define __MTX_COMMON_LOCALE_UTF8_H
 
-#include "common/os.h"
-
-#include <string>
+#include "common/common_pch.h"
 
 std::wstring to_wide(const std::string &source);
 std::string to_utf8(const std::wstring &source);

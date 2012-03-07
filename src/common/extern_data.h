@@ -14,9 +14,7 @@
 #ifndef __MTX_COMMON_EXTERN_DATA_H
 #define __MTX_COMMON_EXTERN_DATA_H
 
-#include "os.h"
-
-#include <string>
+#include "common/common_pch.h"
 
 typedef struct {
   const char *name, *extensions;

@@ -14,8 +14,6 @@
 #ifndef __MTX_COMMON_PGSSUP_H
 #define __MTX_COMMON_PGSSUP_H
 
-#include "common/os.h"
-
 #define PGSSUP_FILE_MAGIC           0x5047 // "PG" big endian
 #define PGSSUP_PALETTE_SEGMENT        0x14
 #define PGSSUP_PICTURE_SEGMENT        0x15

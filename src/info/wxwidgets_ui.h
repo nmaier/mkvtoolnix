@@ -14,7 +14,7 @@
 #ifndef __WXWIDGETS_UI_H
 #define __WXWIDGETS_UI_H
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
 #ifdef HAVE_WXWIDGETS
 

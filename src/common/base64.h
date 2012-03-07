@@ -13,9 +13,7 @@
 #ifndef __MTX_COMMON_BASE64_H
 #define __MTX_COMMON_BASE64_H
 
-#include "common/os.h"
-
-#include "common/error.h"
+#include "common/common_pch.h"
 
 namespace mtx {
   namespace base64 {

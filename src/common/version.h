@@ -14,7 +14,7 @@
 #ifndef __MTX_COMMON_VERSION_H
 #define __MTX_COMMON_VERSION_H
 
-#include <string>
+#include "common/common_pch.h"
 
 #define MTX_VERSION_CHECK_URL "http://mkvtoolnix-releases.bunkus.org/latest-release.xml"
 #define MTX_VERSION_INFO_URL  "http://mkvtoolnix-releases.bunkus.org/releases.xml"

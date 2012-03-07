@@ -14,10 +14,7 @@
 #ifndef __MTX_COMMON_TRANSLATION_H
 #define __MTX_COMMON_TRANSLATION_H
 
-#include "common/os.h"
-
-#include <string>
-#include <vector>
+#include "common/common_pch.h"
 
 class translation_c {
 public:

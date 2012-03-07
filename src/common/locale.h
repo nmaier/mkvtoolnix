@@ -14,7 +14,7 @@
 #ifndef __MTX_COMMON_LOCALE_H
 #define __MTX_COMMON_LOCALE_H
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
 #if defined(HAVE_ICONV_H)
 # include <iconv.h>
@@ -27,12 +27,6 @@
 #if !defined(HAVE_ICONV_H) && !defined(SYS_WINDOWS)
 # error Build requires either <iconv.h> or Windows APIs.
 #endif
-
-#include <map>
-#include <string>
-#include <vector>
-
-#include "common/smart_pointers.h"
 
 class charset_converter_c;
 typedef counted_ptr<charset_converter_c> charset_converter_cptr;

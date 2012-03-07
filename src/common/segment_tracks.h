@@ -14,9 +14,7 @@
 #ifndef __MTX_COMMON_SEGMENT_TRACKS_H
 #define __MTX_COMMON_SEGMENT_TRACKS_H
 
-#include "os.h"
-
-#include <ebml/EbmlElement.h>
+#include "common/common_pch.h"
 
 using namespace libebml;
 using namespace libmatroska;

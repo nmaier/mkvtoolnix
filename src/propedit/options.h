@@ -11,10 +11,7 @@
 #ifndef __PROPEDIT_OPTIONS_H
 #define __PROPEDIT_OPTIONS_H
 
-#include "common/os.h"
-
-#include <string>
-#include <vector>
+#include "common/common_pch.h"
 
 #include <ebml/EbmlMaster.h>
 

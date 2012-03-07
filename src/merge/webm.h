@@ -14,8 +14,6 @@
 #ifndef __MTX_MERGE_WEBM_H
 #define __MTX_MERGE_WEBM_H
 
-#include "common/os.h"
-
 enum output_compatibility_e {
   OC_MATROSKA,
   OC_WEBM,

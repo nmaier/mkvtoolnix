@@ -14,12 +14,11 @@
 #ifndef __MTX_COMMON_KAX_FILE_H
 #define __MTX_COMMON_KAX_FILE_H
 
-#include "common.h"
+#include "common/common_pch.h"
 
 #include <matroska/KaxSegment.h>
 #include <matroska/KaxCluster.h>
 
-#include "common/mm_io.h"
 #include "common/vint.h"
 
 using namespace libebml;

@@ -14,9 +14,7 @@
 #ifndef __MTX_COMMON_STRING_PARSING_H
 #define __MTX_COMMON_STRING_PARSING_H
 
-#include "common/os.h"
-
-#include <string>
+#include "common/common_pch.h"
 
 extern std::string timecode_parser_error;
 extern bool parse_timecode(const std::string &s, int64_t &timecode, bool allow_negative = false);

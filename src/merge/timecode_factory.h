@@ -14,16 +14,9 @@
 #ifndef __TIMECODE_FACTORY_H
 #define __TIMECODE_FACTORY_H
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
-#include <string>
-#include <vector>
-
-#include "common/smart_pointers.h"
 #include "merge/packet.h"
-
-
-class mm_io_c;
 
 enum timecode_factory_application_e {
   TFA_AUTOMATIC,

@@ -14,7 +14,7 @@
 #ifndef __MTX_COMMON_SAMPLES_TIMECODE_CONV_H
 #define __MTX_COMMON_SAMPLES_TIMECODE_CONV_H
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
 class samples_to_timecode_converter_c {
 protected:

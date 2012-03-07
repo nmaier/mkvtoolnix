@@ -1,5 +1,3 @@
-#include "common/os.h"
-
 #if defined(SYS_WINDOWS)
 
 # include <windows.h>

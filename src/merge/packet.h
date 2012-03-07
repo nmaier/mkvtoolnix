@@ -14,12 +14,7 @@
 #ifndef __PACKET_H
 #define __PACKET_H
 
-#include "common/os.h"
-
-#include <vector>
-
-#include "common/memory.h"
-#include "common/smart_pointers.h"
+#include "common/common_pch.h"
 
 namespace libmatroska {
   class KaxBlock;

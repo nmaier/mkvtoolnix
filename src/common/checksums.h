@@ -14,7 +14,7 @@
 #ifndef __MTX_COMMON_CHECKSUMS_H
 #define __MTX_COMMON_CHECKSUMS_H
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
 uint32_t calc_adler32(const unsigned char *buffer, int size);
 

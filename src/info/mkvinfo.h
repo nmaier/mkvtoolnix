@@ -14,10 +14,7 @@
 #ifndef __MKVINFO_H
 #define __MKVINFO_H
 
-#include "common/os.h"
-
-#include <string>
-#include <vector>
+#include "common/common_pch.h"
 
 #include "info/options.h"
 

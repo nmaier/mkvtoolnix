@@ -14,9 +14,7 @@
 #ifndef __MTX_COMMON_HACKS_H
 #define __MTX_COMMON_HACKS_H
 
-#include "common/os.h"
-
-#include <string>
+#include "common/common_pch.h"
 
 // Some hacks that are configurable via command line but which should ONLY!
 // be used by the author.

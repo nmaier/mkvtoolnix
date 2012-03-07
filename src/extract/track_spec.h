@@ -13,9 +13,7 @@
 #ifndef __EXTRACT_TRACK_SPEC_H
 #define __EXTRACT_TRACK_SPEC_H
 
-#include "common/os.h"
-
-#include <string>
+#include "common/common_pch.h"
 
 struct track_spec_t {
   enum target_mode_e {

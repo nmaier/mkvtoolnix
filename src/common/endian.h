@@ -14,7 +14,7 @@
 #ifndef __MTX_COMMON_ENDIAN_H
 #define __MTX_COMMON_ENDIAN_H
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
 #define get_fourcc(b) get_uint32_be(b)
 uint16_t get_uint16_le(const void *buf);

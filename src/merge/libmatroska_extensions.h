@@ -15,7 +15,7 @@
 #ifndef __LIBMATROSKA_EXTENSIONS
 #define __LIBMATROSKA_EXTENSIONS
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
 #include <ebml/EbmlVersion.h>
 #include <matroska/KaxBlock.h>

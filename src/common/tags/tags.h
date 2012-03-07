@@ -14,9 +14,7 @@
 #ifndef __MTX_COMMON_TAG_COMMON_H
 #define __MTX_COMMON_TAG_COMMON_H
 
-#include "common/os.h"
-
-#include <string>
+#include "common/common_pch.h"
 
 namespace libmatroska {
   class KaxTags;

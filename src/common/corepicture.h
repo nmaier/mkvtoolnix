@@ -14,9 +14,7 @@
 #ifndef __MTX_COMMON_COREPICTURE_H
 #define __MTX_COMMON_COREPICTURE_H
 
-#include "common/os.h"
-
-#include <string>
+#include "common/common_pch.h"
 
 enum corepicture_pic_type_e {
   COREPICTURE_TYPE_JPEG = 0,

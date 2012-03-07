@@ -15,9 +15,7 @@
 #ifndef __MTX_COMMON_MPEG4_P2_H
 #define __MTX_COMMON_MPEG4_P2_H
 
-#include "common/os.h"
-
-#include "common/memory.h"
+#include "common/common_pch.h"
 
 /** Start code for a MPEG-4 part 2 (?) video object plain */
 #define MPEGVIDEO_VOP_START_CODE                  0x000001b6

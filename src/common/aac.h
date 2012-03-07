@@ -14,10 +14,7 @@
 #ifndef __MTX_COMMON_AACCOMMON_H
 #define __MTX_COMMON_AACCOMMON_H
 
-#include "common/os.h"
-
-#include <string>
-
+#include "common/common_pch.h"
 
 #define AAC_ID_MPEG4 0
 #define AAC_ID_MPEG2 1

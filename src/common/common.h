@@ -78,9 +78,9 @@ namespace br  = boost::range;
 # endif
 #endif
 
+#include "common/smart_pointers.h"
 #include "common/debugging.h"
 #include "common/output.h"
-#include "common/smart_pointers.h"
 
 namespace libebml {
   class EbmlBinary;

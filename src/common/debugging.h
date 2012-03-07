@@ -14,9 +14,7 @@
 #ifndef __MTX_COMMON_DEBUGGING_H
 #define __MTX_COMMON_DEBUGGING_H
 
-#include "common/os.h"
-
-#include <string>
+#include "common/common_pch.h"
 
 bool debugging_requested(const char *option, std::string *arg = nullptr);
 bool debugging_requested(const std::string &option, std::string *arg = nullptr);

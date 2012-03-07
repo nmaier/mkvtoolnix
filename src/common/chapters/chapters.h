@@ -14,13 +14,9 @@
 #ifndef __MTX_COMMON_CHAPTERS_H
 #define __MTX_COMMON_CHAPTERS_H
 
-#include "common/os.h"
-
-#include <string>
+#include "common/common_pch.h"
 
 #include <ebml/EbmlElement.h>
-
-#include "common/error.h"
 
 namespace libebml {
   class EbmlMaster;

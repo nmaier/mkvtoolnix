@@ -21,8 +21,9 @@
  **/
 
 #ifndef __CIRC_BUFFER_H__
-
 #define __CIRC_BUFFER_H__
+
+#include "common/common_pch.h"
 
 #include "Types.h"
 

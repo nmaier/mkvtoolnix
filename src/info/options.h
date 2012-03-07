@@ -11,10 +11,7 @@
 #ifndef __INFO_OPTIONS_H
 #define __INFO_OPTIONS_H
 
-#include "common/os.h"
-
-#include <string>
-#include <vector>
+#include "common/common_pch.h"
 
 class options_c {
 public:

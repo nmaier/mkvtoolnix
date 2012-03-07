@@ -14,7 +14,7 @@
 #ifndef __MTX_COMMON_UNIQUE_NUMBERS_H
 #define __MTX_COMMON_UNIQUE_NUMBERS_H
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
 enum unique_id_category_e {
   UNIQUE_ALL_IDS        = -1,

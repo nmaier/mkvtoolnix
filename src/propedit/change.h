@@ -11,15 +11,10 @@
 #ifndef __PROPEDIT_CHANGE_H
 #define __PROPEDIT_CHANGE_H
 
-#include "common/os.h"
-
-#include <string>
-#include <vector>
+#include "common/common_pch.h"
 
 #include "common/bitvalue.h"
-#include "common/memory.h"
 #include "common/property_element.h"
-#include "common/smart_pointers.h"
 
 class change_c {
 public:

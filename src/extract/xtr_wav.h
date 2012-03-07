@@ -13,7 +13,7 @@
 #ifndef __XTR_WAV_H
 #define __XTR_WAV_H
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
 #include "extract/xtr_base.h"
 

@@ -23,9 +23,10 @@
 #ifndef __MPEGVIDEOBUFFER_H__
 #define __MPEGVIDEOBUFFER_H__
 
+#include "common/common_pch.h"
+
 #include "Types.h"
 #include "CircBuffer.h"
-#include <cassert>
 
 #define MPEG_VIDEO_PICTURE_START_CODE  0x00
 #define MPEG_VIDEO_SEQUENCE_START_CODE  0xb3

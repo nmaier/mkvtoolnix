@@ -15,11 +15,9 @@
 #ifndef __MTX_COMMON_VC1_COMMON_H
 #define __MTX_COMMON_VC1_COMMON_H
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
 #include <deque>
-
-#include "common/smart_pointers.h"
 
 #define VC1_PROFILE_SIMPLE    0x00000000
 #define VC1_PROFILE_MAIN      0x00000001

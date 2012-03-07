@@ -14,7 +14,7 @@
 #ifndef __MTX_COMMON_MP3_COMMON_H
 #define __MTX_COMMON_MP3_COMMON_H
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
 typedef struct {
   int version;

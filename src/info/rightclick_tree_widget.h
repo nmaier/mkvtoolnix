@@ -13,7 +13,7 @@
 #ifndef __RIGHTCLICK_TREE_WIDGET_H
 #define __RIGHTCLICK_TREE_WIDGET_H
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
 #include <QTreeWidget>
 

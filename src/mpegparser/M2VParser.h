@@ -23,6 +23,8 @@
 #ifndef __M2VPARSER_H__
 #define __M2VPARSER_H__
 
+#include "common/common_pch.h"
+
 #include "MPEGVideoBuffer.h"
 #include <stdio.h>
 #include <queue>

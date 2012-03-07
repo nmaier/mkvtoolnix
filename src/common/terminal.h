@@ -14,8 +14,6 @@
 #ifndef __MTX_COMMON_TERMINAL_H
 #define __MTX_COMMON_TERMINAL_H
 
-#include "common/os.h"
-
 int get_terminal_columns();
 
 #endif  // __MTX_COMMON_TERMINAL_H

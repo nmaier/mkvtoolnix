@@ -1,10 +1,7 @@
 #ifndef __ELEMENT_INFO
 #define __ELEMENT_INFO
 
-#include "common/os.h"
-
-#include <map>
-#include <string>
+#include "common/common_pch.h"
 
 extern std::map<uint32_t, std::string> g_element_names;
 extern std::map<uint32_t, bool> g_master_information;

@@ -13,7 +13,7 @@
 #ifndef __QT_UI_H
 #define __QT_UI_H
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
 #include <QFile>
 #include <QMainWindow>

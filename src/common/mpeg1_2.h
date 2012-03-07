@@ -15,9 +15,7 @@
 #ifndef __MTX_COMMON_MPEG1_2_H
 #define __MTX_COMMON_MPEG1_2_H
 
-#include "common/os.h"
-
-#include "common/memory.h"
+#include "common/common_pch.h"
 
 /** Start code for a MPEG-1/-2 group of pictures */
 #define MPEGVIDEO_GOP12_START_CODE                0x000001b8

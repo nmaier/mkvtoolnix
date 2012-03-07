@@ -14,9 +14,7 @@
 #ifndef __MTX_COMMON_XML_H
 #define __MTX_COMMON_XML_H
 
-#include "common/os.h"
-
-#include <string>
+#include "common/common_pch.h"
 
 std::string escape_xml(const std::string &src);
 std::string create_xml_node_name(const char *name, const char **atts);

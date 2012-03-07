@@ -14,7 +14,7 @@
 #ifndef __MTX_COMMON_BSWAP_H
 #define __MTX_COMMON_BSWAP_H
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
 inline uint16_t
 bswap_16(uint16_t x) {

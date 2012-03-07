@@ -15,9 +15,7 @@
 #ifndef __MTX_COMMON_DIRAC_COMMON_H
 #define __MTX_COMMON_DIRAC_COMMON_H
 
-#include "common/os.h"
-
-#include "common/smart_pointers.h"
+#include "common/common_pch.h"
 
 #define DIRAC_SYNC_WORD            0x42424344 // 'BBCD'
 #define DIRAC_UNIT_SEQUENCE_HEADER 0x00

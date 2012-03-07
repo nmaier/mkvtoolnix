@@ -14,8 +14,7 @@
 #ifndef __MTX_COMMON_FILE_TYPES_H
 #define __MTX_COMMON_FILE_TYPES_H
 
-#include <string>
-#include <vector>
+#include "common/common_pch.h"
 
 /* file types */
 enum file_type_e {

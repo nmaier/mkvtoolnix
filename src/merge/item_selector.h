@@ -14,9 +14,7 @@
 #ifndef __MERGE_ITEM_SELECTOR_H
 #define __MERGE_ITEM_SELECTOR_H
 
-#include "common/os.h"
-
-#include <map>
+#include "common/common_pch.h"
 
 template<typename T>
 class item_selector_c {

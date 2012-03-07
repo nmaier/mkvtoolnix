@@ -11,10 +11,7 @@
 #ifndef __EXTRACT_EXTRACT_CLI_PARSER_H
 #define __EXTRACT_EXTRACT_CLI_PARSER_H
 
-#include "common/os.h"
-
-#include <string>
-#include <vector>
+#include "common/common_pch.h"
 
 #include "common/cli_parser.h"
 #include "extract/mkvextract.h"

@@ -14,14 +14,12 @@
 #ifndef __MTX_COMMON_EBML_H
 #define __MTX_COMMON_EBML_H
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
 #include <ebml/EbmlMaster.h>
 #include <ebml/EbmlUnicodeString.h>
 
 #include <matroska/KaxTracks.h>
-
-#include "common/smart_pointers.h"
 
 using namespace libebml;
 using namespace libmatroska;
