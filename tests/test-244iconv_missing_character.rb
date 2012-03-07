@@ -6,7 +6,7 @@ class T_244iconv_missing_character < Test
   end
 
   def run
-    merge("--sub-charset -1:CP1255 data/textsubs/Madagascar.Hebrew.Encoding.srt")
+    merge("--sub-charset -1:CP1255 data/srt/Madagascar.Hebrew.Encoding.srt")
     return hash_tmp
   end
 end

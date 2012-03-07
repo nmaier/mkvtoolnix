@@ -6,7 +6,7 @@ class T_049ass < Test
   end
 
   def run
-    merge("--sub-charset 0:ISO-8859-1 data/textsubs/11.Magyar.ass")
+    merge("--sub-charset 0:ISO-8859-1 data/ssa-ass/11.Magyar.ass")
     return hash_tmp
   end
 end

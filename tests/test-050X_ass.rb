@@ -6,9 +6,9 @@ class T_050X_ass < Test
   end
 
   def run
-    my_hash = hash_file("data/textsubs/11.Magyar.ass")
+    my_hash = hash_file("data/ssa-ass/11.Magyar.ass")
     my_tmp = tmp
-    merge("--sub-charset 0:ISO-8859-1 data/textsubs/11.Magyar.ass")
+    merge("--sub-charset 0:ISO-8859-1 data/ssa-ass/11.Magyar.ass")
     @tmp = nil
     xtr_tracks(my_tmp, "-c ISO-8859-1 0:#{tmp}")
     File.unlink(my_tmp)

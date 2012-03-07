@@ -6,7 +6,7 @@ class T_212ssa_attachments < Test
   end
 
   def run
-    merge("data/textsubs/Embedded.ssa")
+    merge("data/ssa-ass/Embedded.ssa")
     sys("../src/mkvextract attachments #{tmp} 1:#{tmp}-1 2:#{tmp}-2 " +
          "3:#{tmp}-3")
     hashes = Array.new
@@ -17,7 +17,7 @@ class T_212ssa_attachments < Test
 
     h = hash_tmp + "-" + hashes.join("-")
 
-    merge("--no-attachments data/textsubs/Embedded.ssa")
+    merge("--no-attachments data/ssa-ass/Embedded.ssa")
 
     return h + "-" + hash_tmp
   end

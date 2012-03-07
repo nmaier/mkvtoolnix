@@ -8,13 +8,13 @@ class T_019attachments2 < Test
   def run
     merge(tmp + "-%03d", "data/avi/v.avi --split-max-files 2 --split 4m " +
            "--attachment-description dummy --attachment-mime-type " +
-           "text/plain --attach-file data/textsubs/vde.srt")
+           "text/plain --attach-file data/srt/vde.srt")
     hash = hash_file(tmp + "-001") + "-" + hash_file(tmp + "-002")
     File.unlink(tmp + "-001")
     File.unlink(tmp + "-002")
     merge(tmp + "-%03d", "data/avi/v.avi --split-max-files 2 --split 4m " +
            "--attachment-description dummy --attachment-mime-type " +
-           "text/plain --attach-file-once data/textsubs/vde.srt")
+           "text/plain --attach-file-once data/srt/vde.srt")
     hash += "-" + hash_file(tmp + "-001") + "-" + hash_file(tmp + "-002")
     File.unlink(tmp + "-001")
     File.unlink(tmp + "-002")
