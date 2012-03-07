@@ -1,5 +1,9 @@
 2012-03-07  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: When using an external timecode file with
+	AVC/h.264 video the default duration will be set to the most-often
+	used duration in the timecode file.
+
 	* mmg: enhancement: Added the values "50", "60" and "48000/1001"
 	to the list of commonly used values for the "FPS" input field.
 

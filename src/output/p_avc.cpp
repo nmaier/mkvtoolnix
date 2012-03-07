@@ -57,9 +57,16 @@ mpeg4_p10_es_video_packetizer_c(generic_reader_c *p_reader,
   if (4 == m_parser.get_nalu_size_length())
     set_default_compression_method(COMPRESSION_MPEG4_P10);
 
-  if (m_default_duration_forced && (-1 != m_htrack_default_duration)) {
+  int64_t factory_default_duration;
+  if (m_timecode_factory.is_set() && (-1 != (factory_default_duration = m_timecode_factory->get_default_duration(-1)))) {
+    m_parser.force_default_duration(factory_default_duration);
+    set_track_default_duration(factory_default_duration);
+    m_default_duration_forced = true;
+    mxdebug_if(m_debug_timecodes, boost::format("Forcing default duration due to timecode factory to %1%\n") % m_htrack_default_duration);
+
+  } else if (m_default_duration_forced && (-1 != m_htrack_default_duration)) {
     m_parser.force_default_duration(m_htrack_default_duration / 2);
-    mxdebug_if(m_debug_timecodes, boost::format("Forcing default duration to %1%\n") % m_htrack_default_duration);
+    mxdebug_if(m_debug_timecodes, boost::format("Forcing default duration due to --default-duration to %1%\n") % m_htrack_default_duration);
   }
 }
 
