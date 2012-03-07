@@ -1314,8 +1314,8 @@ tab_input::validate_settings() {
       str = t->fps;
       strip(str);
       if (str.length() > 0) {
-        wxRegEx re_fps1(wxT("^[[:digit:]]+\\.?[[:digit:]]*$"));
-        wxRegEx re_fps2(wxT("^[[:digit:]]+/[[:digit:]]+$"));
+        wxRegEx re_fps1(wxT("^[[:digit:]]+\\.?[[:digit:]]*[ip]?$"));
+        wxRegEx re_fps2(wxT("^[[:digit:]]+/[[:digit:]]+[ip]?$"));
         if (!re_fps1.Matches(str) && !re_fps2.Matches(str)) {
           wxString err;
           err.Printf(Z("The FPS setting for track nr. %s in file '%s' is invalid."), sid.c_str(), f->file_name.c_str());

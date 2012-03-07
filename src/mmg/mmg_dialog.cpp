@@ -990,7 +990,9 @@ mmg_dialog::update_command_line() {
 
       if (t->fps.Length() > 0) {
         clargs.Add(wxT("--default-duration"));
-        clargs.Add(sid + wxT(":") + t->fps + wxT("fps"));
+        wxString value = wxString::Format(wxT("%s:%s%s"), sid.c_str(), t->fps.c_str(),
+                                          wxString(wxU((t->fps.Right(1) == wxU("p")) || (t->fps.Right(1) == wxU("i")) ? "" : "fps")).c_str());
+        clargs.Add(value);
       }
 
       if (0 != t->nalu_size_length) {
