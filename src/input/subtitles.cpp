@@ -37,7 +37,8 @@ subtitles_c::process(generic_packetizer_c *p) {
 
 // ------------------------------------------------------------
 
-#define SRT_RE_TIMECODE      "\\s*(-?)\\s*(\\d+):\\s*(\\d+):\\s*(\\d+)[,\\.]\\s*(\\d+)?"
+#define SRT_RE_VALUE         "\\s*(-?)\\s*(\\d+)"
+#define SRT_RE_TIMECODE      SRT_RE_VALUE ":" SRT_RE_VALUE ":" SRT_RE_VALUE "[,\\.]" SRT_RE_VALUE
 #define SRT_RE_TIMECODE_LINE "^" SRT_RE_TIMECODE "\\s*-+>\\s*" SRT_RE_TIMECODE "\\s*"
 #define SRT_RE_COORDINATES   "([XY]\\d+:\\d+\\s*){4}\\s*$"
 
@@ -136,18 +137,28 @@ srt_parser_c::parse() {
 
       int s_h, s_min, s_sec, e_h, e_min, e_sec;
 
-      parse_int(matches[2].str(), s_h);
-      parse_int(matches[3].str(), s_min);
-      parse_int(matches[4].str(), s_sec);
-      parse_int(matches[7].str(), e_h);
-      parse_int(matches[8].str(), e_min);
-      parse_int(matches[9].str(), e_sec);
+      //        1         2       3      4        5     6             7    8
+      // "\\s*(-?)\\s*(\\d+):\\s(-?)*(\\d+):\\s*(-?)(\\d+)[,\\.]\\s*(-?)(\\d+)?"
 
-      std::string s_rest = matches[ 5].str();
-      std::string e_rest = matches[10].str();
+      parse_int(matches[ 2].str(), s_h);
+      parse_int(matches[ 4].str(), s_min);
+      parse_int(matches[ 6].str(), s_sec);
+      parse_int(matches[10].str(), e_h);
+      parse_int(matches[12].str(), e_min);
+      parse_int(matches[14].str(), e_sec);
 
-      int64_t s_neg      = matches[ 1].str() == "-" ? -1 : 1;
-      int64_t e_neg      = matches[ 6].str() == "-" ? -1 : 1;
+      std::string s_rest = matches[ 8].str();
+      std::string e_rest = matches[16].str();
+
+      auto neg_calculator = [&](size_t const start_idx) {
+        int64_t neg = 1;
+        for (size_t idx = start_idx; idx <= (start_idx + 6); idx += 2)
+          neg *= matches[idx].str() == "-" ? -1 : 1;
+        return neg;
+      };
+
+      int64_t s_neg = neg_calculator(1);
+      int64_t e_neg = neg_calculator(9);
 
       if (boost::regex_search(s, coordinates_re) && !m_coordinates_warning_shown) {
         mxwarn_tid(m_file_name, m_tid,
