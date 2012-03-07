@@ -65,7 +65,7 @@ lzo_compressor_c::lzo_compressor_c()
     mxerror(boost::format(Y("lzo_init() failed. Result: %1%\n")) % result);
 
   wrkmem = (lzo_bytep)lzo_malloc(LZO1X_999_MEM_COMPRESS);
-  if (NULL == wrkmem)
+  if (nullptr == wrkmem)
     mxerror(Y("lzo_malloc(LZO1X_999_MEM_COMPRESS) failed.\n"));
 }
 
@@ -126,7 +126,7 @@ zlib_compressor_c::decompress(memory_cptr &buffer) {
   d_stream.next_in   = (Bytef *)buffer->get_buffer();
   d_stream.avail_in  = buffer->get_size();
   int n              = 0;
-  unsigned char *dst = NULL;
+  unsigned char *dst = nullptr;
 
   do {
     n++;
@@ -163,7 +163,7 @@ zlib_compressor_c::compress(memory_cptr &buffer) {
   c_stream.next_in   = (Bytef *)buffer->get_buffer();
   c_stream.avail_in  = buffer->get_size();
   int n              = 0;
-  unsigned char *dst = NULL;
+  unsigned char *dst = nullptr;
 
   do {
     n++;
@@ -202,9 +202,9 @@ bzlib_compressor_c::decompress(memory_cptr &) {
 
   bz_stream d_stream;
 
-  d_stream.bzalloc = NULL;
-  d_stream.bzfree  = NULL;
-  d_stream.opaque  = NULL;
+  d_stream.bzalloc = nullptr;
+  d_stream.bzfree  = nullptr;
+  d_stream.opaque  = nullptr;
   int result       = BZ2_bzDecompressInit(&d_stream, 0, 0);
 
   if (BZ_OK != result)
@@ -220,9 +220,9 @@ bzlib_compressor_c::compress(memory_cptr &buffer) {
   int size           = buffer->get_size();
   unsigned char *dst = (unsigned char *)safemalloc(size * 2);
 
-  c_stream.bzalloc   = NULL;
-  c_stream.bzfree    = NULL;
-  c_stream.opaque    = NULL;
+  c_stream.bzalloc   = nullptr;
+  c_stream.bzfree    = nullptr;
+  c_stream.opaque    = nullptr;
 
   int result         = BZ2_bzCompressInit(&c_stream, 9, 0, 30);
   if (BZ_OK != result)
@@ -504,7 +504,7 @@ content_decoder_c::initialize(KaxTrackEntry &ktentry) {
   encodings.clear();
 
   KaxContentEncodings *kcencodings = FINDFIRST(&ktentry, KaxContentEncodings);
-  if (NULL == kcencodings)
+  if (nullptr == kcencodings)
     return true;
 
   int tid = kt_get_number(ktentry);
@@ -512,58 +512,58 @@ content_decoder_c::initialize(KaxTrackEntry &ktentry) {
   size_t kcenc_idx;
   for (kcenc_idx = 0; kcenc_idx < kcencodings->ListSize(); kcenc_idx++) {
     KaxContentEncoding *kcenc = dynamic_cast<KaxContentEncoding *>((*kcencodings)[kcenc_idx]);
-    if (NULL == kcenc)
+    if (nullptr == kcenc)
       continue;
 
     kax_content_encoding_t enc;
     memset(&enc, 0, sizeof(kax_content_encoding_t));
 
     KaxContentEncodingOrder *ce_order = FINDFIRST(kcenc, KaxContentEncodingOrder);
-    if (NULL != ce_order)
+    if (nullptr != ce_order)
       enc.order = uint32(*ce_order);
 
     KaxContentEncodingType *ce_type = FINDFIRST(kcenc, KaxContentEncodingType);
-    if (NULL != ce_type)
+    if (nullptr != ce_type)
       enc.type = uint32(*ce_type);
 
     KaxContentEncodingScope *ce_scope = FINDFIRST(kcenc, KaxContentEncodingScope);
-    enc.scope = NULL != ce_scope ? uint32(*ce_scope) : 1;
+    enc.scope = nullptr != ce_scope ? uint32(*ce_scope) : 1;
 
     KaxContentCompression *ce_comp = FINDFIRST(kcenc, KaxContentCompression);
-    if (NULL != ce_comp) {
+    if (nullptr != ce_comp) {
       KaxContentCompAlgo *cc_algo = FINDFIRST(ce_comp, KaxContentCompAlgo);
-      if (NULL != cc_algo)
+      if (nullptr != cc_algo)
         enc.comp_algo = uint32(*cc_algo);
 
       KaxContentCompSettings *cc_settings = FINDFIRST(ce_comp, KaxContentCompSettings);
-      if (NULL != cc_settings)
+      if (nullptr != cc_settings)
         enc.comp_settings = EBMLBIN_TO_COUNTEDMEM(cc_settings);
     }
 
     KaxContentEncryption *ce_enc = FINDFIRST(kcenc, KaxContentEncryption);
-    if (NULL != ce_enc) {
+    if (nullptr != ce_enc) {
       KaxContentEncAlgo *ce_ealgo = FINDFIRST(ce_enc, KaxContentEncAlgo);
-      if (NULL != ce_ealgo)
+      if (nullptr != ce_ealgo)
         enc.enc_algo = uint32(*ce_ealgo);
 
       KaxContentEncKeyID *ce_ekeyid = FINDFIRST(ce_enc, KaxContentEncKeyID);
-      if (NULL != ce_ekeyid)
+      if (nullptr != ce_ekeyid)
         enc.enc_keyid = EBMLBIN_TO_COUNTEDMEM(ce_ekeyid);
 
       KaxContentSigAlgo *ce_salgo = FINDFIRST(ce_enc, KaxContentSigAlgo);
-      if (NULL != ce_salgo)
+      if (nullptr != ce_salgo)
         enc.enc_algo = uint32(*ce_salgo);
 
       KaxContentSigHashAlgo *ce_shalgo = FINDFIRST(ce_enc, KaxContentSigHashAlgo);
-      if (NULL != ce_shalgo)
+      if (nullptr != ce_shalgo)
         enc.enc_algo = uint32(*ce_shalgo);
 
       KaxContentSigKeyID *ce_skeyid = FINDFIRST(ce_enc, KaxContentSigKeyID);
-      if (NULL != ce_skeyid)
+      if (nullptr != ce_skeyid)
         enc.sig_keyid = EBMLBIN_TO_COUNTEDMEM(ce_skeyid);
 
       KaxContentSignature *ce_signature = FINDFIRST(ce_enc, KaxContentSignature);
-      if (NULL != ce_signature)
+      if (nullptr != ce_signature)
         enc.signature = EBMLBIN_TO_COUNTEDMEM(ce_signature);
 
     }

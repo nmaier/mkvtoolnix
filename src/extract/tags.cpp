@@ -53,7 +53,7 @@ extract_tags(const std::string &file_name,
     return;
 
   KaxTags *tags = dynamic_cast<KaxTags *>(m.get_object());
-  assert(NULL != tags);
+  assert(nullptr != tags);
 
   g_mm_stdio->write_bom("UTF-8");
   g_mm_stdio->puts("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n"

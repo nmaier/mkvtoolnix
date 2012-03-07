@@ -121,7 +121,7 @@ const uint32_t *
 crc_get_table(crc_type_e crc_id){
   if (!s_crc_table[crc_id][256])
     if (crc_init(s_crc_table[crc_id], s_crc_table_params[crc_id].le, s_crc_table_params[crc_id].bits, s_crc_table_params[crc_id].poly, sizeof(s_crc_table[crc_id])) < 0)
-      return NULL;
+      return nullptr;
 
   return s_crc_table[crc_id];
 }

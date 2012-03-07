@@ -122,7 +122,7 @@ usf_reader_c::start_element_cb(const char *name,
   }
 
   if (node == "USFSubtitles.metadata.language") {
-    for (i = 0; (NULL != atts[i]) && (NULL != atts[i + 1]); i += 2)
+    for (i = 0; (nullptr != atts[i]) && (nullptr != atts[i + 1]); i += 2)
       if (!strcmp(atts[i], "code") && (0 != atts[i + 1][0])) {
         int index = map_to_iso639_2_code(atts[i + 1]);
         if (-1 != index)
@@ -153,7 +153,7 @@ usf_reader_c::start_element_cb(const char *name,
     m_tracks.push_back(new_track);
 
   } else if (node == "USFSubtitles.subtitles.language") {
-    for (i = 0; (NULL != atts[i]) && (NULL != atts[i + 1]); i += 2)
+    for (i = 0; (nullptr != atts[i]) && (nullptr != atts[i + 1]); i += 2)
       if (!strcmp(atts[i], "code") && (0 != atts[i + 1][0])) {
         int index = map_to_iso639_2_code(atts[i + 1]);
         if (-1 != index)
@@ -168,7 +168,7 @@ usf_reader_c::start_element_cb(const char *name,
     usf_entry_t entry;
     int64_t duration = -1;
 
-    for (i = 0; (NULL != atts[i]) && (NULL != atts[i + 1]); i += 2)
+    for (i = 0; (nullptr != atts[i]) && (nullptr != atts[i + 1]); i += 2)
       if (!strcmp(atts[i], "start"))
         entry.m_start = try_to_parse_timecode(atts[i + 1]);
       else if (!strcmp(atts[i], "stop"))
@@ -273,14 +273,14 @@ file_status_e
 usf_reader_c::read(generic_packetizer_c *ptzr,
                    bool) {
   size_t i;
-  usf_track_t *track = NULL;
+  usf_track_t *track = nullptr;
   for (i = 0; m_tracks.size() > i; ++i)
     if ((-1 != m_tracks[i].m_ptzr) && (PTZR(m_tracks[i].m_ptzr) == ptzr)) {
       track = &m_tracks[i];
       break;
     }
 
-  if (NULL == track)
+  if (nullptr == track)
     return FILE_STATUS_DONE;
 
   if (track->m_entries.end() == track->m_current_entry)

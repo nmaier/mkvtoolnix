@@ -37,7 +37,7 @@ mpeg4_p10_video_packetizer_c(generic_reader_c *p_reader,
 
   setup_nalu_size_len_change();
 
-  if ((NULL != m_ti.m_private_data) && (0 < m_ti.m_private_size))
+  if ((nullptr != m_ti.m_private_data) && (0 < m_ti.m_private_size))
     set_codec_private(m_ti.m_private_data, m_ti.m_private_size);
 
   if (4 == m_nalu_size_len_dst)
@@ -46,7 +46,7 @@ mpeg4_p10_video_packetizer_c(generic_reader_c *p_reader,
 
 void
 mpeg4_p10_video_packetizer_c::set_headers() {
-  if ((NULL != m_ti.m_private_data) && (0 < m_ti.m_private_size))
+  if ((nullptr != m_ti.m_private_data) && (0 < m_ti.m_private_size))
     extract_aspect_ratio();
 
   video_packetizer_c::set_headers();
@@ -92,14 +92,14 @@ connection_result_e
 mpeg4_p10_video_packetizer_c::can_connect_to(generic_packetizer_c *src,
                                              std::string &error_message) {
   mpeg4_p10_video_packetizer_c *vsrc = dynamic_cast<mpeg4_p10_video_packetizer_c *>(src);
-  if (NULL == vsrc)
+  if (nullptr == vsrc)
     return CAN_CONNECT_NO_FORMAT;
 
   connection_result_e result = video_packetizer_c::can_connect_to(src, error_message);
   if (CAN_CONNECT_YES != result)
     return result;
 
-  if ((NULL != m_ti.m_private_data) && memcmp(m_ti.m_private_data, vsrc->m_ti.m_private_data, m_ti.m_private_size)) {
+  if ((nullptr != m_ti.m_private_data) && memcmp(m_ti.m_private_data, vsrc->m_ti.m_private_data, m_ti.m_private_size)) {
     error_message = (boost::format(Y("The codec's private data does not match. Both have the same length (%1%) but different content.")) % m_ti.m_private_size).str();
     return CAN_CONNECT_MAYBE_CODECPRIVATE;
   }

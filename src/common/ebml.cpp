@@ -238,7 +238,7 @@ empty_ebml_master(EbmlElement *e) {
   EbmlMaster *m;
 
   m = dynamic_cast<EbmlMaster *>(e);
-  if (m == NULL)
+  if (m == nullptr)
     return e;
 
   while (m->ListSize() > 0) {
@@ -269,11 +269,11 @@ create_ebml_element(const EbmlCallbacks &callbacks,
       continue;
 
     e = create_ebml_element(EBML_CTX_IDX_INFO(context, i), id);
-    if (e != NULL)
+    if (e != nullptr)
       return e;
   }
 
-  return NULL;
+  return nullptr;
 }
 
 const EbmlCallbacks *
@@ -294,11 +294,11 @@ find_ebml_callbacks(const EbmlCallbacks &base,
     if (!(context != EBML_SEM_CONTEXT(EBML_CTX_IDX(context,i))))
       continue;
     result = find_ebml_callbacks(EBML_CTX_IDX_INFO(context, i), id);
-    if (NULL != result)
+    if (nullptr != result)
       return result;
   }
 
-  return NULL;
+  return nullptr;
 }
 
 const EbmlCallbacks *
@@ -319,11 +319,11 @@ find_ebml_callbacks(const EbmlCallbacks &base,
     if (!(context != EBML_SEM_CONTEXT(EBML_CTX_IDX(context,i))))
       continue;
     result = find_ebml_callbacks(EBML_CTX_IDX_INFO(context, i), debug_name);
-    if (NULL != result)
+    if (nullptr != result)
       return result;
   }
 
-  return NULL;
+  return nullptr;
 }
 
 const EbmlCallbacks *
@@ -341,11 +341,11 @@ find_ebml_parent_callbacks(const EbmlCallbacks &base,
     if (!(context != EBML_SEM_CONTEXT(EBML_CTX_IDX(context,i))))
       continue;
     result = find_ebml_parent_callbacks(EBML_CTX_IDX_INFO(context, i), id);
-    if (NULL != result)
+    if (nullptr != result)
       return result;
   }
 
-  return NULL;
+  return nullptr;
 }
 
 const EbmlSemantic *
@@ -363,26 +363,26 @@ find_ebml_semantic(const EbmlCallbacks &base,
     if (!(context != EBML_SEM_CONTEXT(EBML_CTX_IDX(context,i))))
       continue;
     result = find_ebml_semantic(EBML_CTX_IDX_INFO(context, i), id);
-    if (NULL != result)
+    if (nullptr != result)
       return result;
   }
 
-  return NULL;
+  return nullptr;
 }
 
 EbmlMaster *
 sort_ebml_master(EbmlMaster *m) {
-  if (m == NULL)
+  if (m == nullptr)
     return m;
 
   int first_element = -1;
   int first_master  = -1;
   size_t i;
   for (i = 0; i < m->ListSize(); i++) {
-    if ((dynamic_cast<EbmlMaster *>((*m)[i]) != NULL) &&
+    if ((dynamic_cast<EbmlMaster *>((*m)[i]) != nullptr) &&
         (first_master == -1))
       first_master = i;
-    else if ((dynamic_cast<EbmlMaster *>((*m)[i]) == NULL) &&
+    else if ((dynamic_cast<EbmlMaster *>((*m)[i]) == nullptr) &&
              (first_master != -1) && (first_element == -1))
       first_element = i;
     if ((first_master != -1) && (first_element != -1))
@@ -398,14 +398,14 @@ sort_ebml_master(EbmlMaster *m) {
     m->InsertElement(*e, first_master);
     first_master++;
     for (first_element++; first_element < static_cast<int>(m->ListSize()); first_element++)
-      if (dynamic_cast<EbmlMaster *>((*m)[first_element]) == NULL)
+      if (dynamic_cast<EbmlMaster *>((*m)[first_element]) == nullptr)
         break;
     if (first_element >= static_cast<int>(m->ListSize()))
       first_element = -1;
   }
 
   for (i = 0; i < m->ListSize(); i++)
-    if (dynamic_cast<EbmlMaster *>((*m)[i]) != NULL)
+    if (dynamic_cast<EbmlMaster *>((*m)[i]) != nullptr)
       sort_ebml_master(dynamic_cast<EbmlMaster *>((*m)[i]));
 
   return m;
@@ -418,7 +418,7 @@ kt_get_default_duration(KaxTrackEntry &track) {
   KaxTrackDefaultDuration *default_duration;
 
   default_duration = FINDFIRST(&track, KaxTrackDefaultDuration);
-  if (NULL == default_duration)
+  if (nullptr == default_duration)
     return 0;
   return uint64(*default_duration);
 }
@@ -428,7 +428,7 @@ kt_get_number(KaxTrackEntry &track) {
   KaxTrackNumber *number;
 
   number = FINDFIRST(&track, KaxTrackNumber);
-  if (NULL == number)
+  if (nullptr == number)
     return 0;
   return uint64(*number);
 }
@@ -438,7 +438,7 @@ kt_get_uid(KaxTrackEntry &track) {
   KaxTrackUID *uid;
 
   uid = FINDFIRST(&track, KaxTrackUID);
-  if (NULL == uid)
+  if (nullptr == uid)
     return 0;
   return uint64(*uid);
 }
@@ -448,7 +448,7 @@ kt_get_codec_id(KaxTrackEntry &track) {
   KaxCodecID *codec_id;
 
   codec_id = FINDFIRST(&track, KaxCodecID);
-  if (NULL == codec_id)
+  if (nullptr == codec_id)
     return "";
   return std::string(*codec_id);
 }
@@ -458,7 +458,7 @@ kt_get_language(KaxTrackEntry &track) {
   KaxTrackLanguage *language;
 
   language = FINDFIRST(&track, KaxTrackLanguage);
-  if (NULL == language)
+  if (nullptr == language)
     return "";
   return std::string(*language);
 }
@@ -468,7 +468,7 @@ kt_get_max_blockadd_id(KaxTrackEntry &track) {
   KaxMaxBlockAdditionID *max_blockadd_id;
 
   max_blockadd_id = FINDFIRST(&track, KaxMaxBlockAdditionID);
-  if (NULL == max_blockadd_id)
+  if (nullptr == max_blockadd_id)
     return 0;
   return uint32(*max_blockadd_id);
 }
@@ -479,11 +479,11 @@ kt_get_a_channels(KaxTrackEntry &track) {
   KaxAudioChannels *channels;
 
   audio = FINDFIRST(&track, KaxTrackAudio);
-  if (NULL == audio)
+  if (nullptr == audio)
     return 1;
 
   channels = FINDFIRST(audio, KaxAudioChannels);
-  if (NULL == channels)
+  if (nullptr == channels)
     return 1;
 
   return uint32(*channels);
@@ -495,11 +495,11 @@ kt_get_a_sfreq(KaxTrackEntry &track) {
   KaxAudioSamplingFreq *sfreq;
 
   audio = FINDFIRST(&track, KaxTrackAudio);
-  if (NULL == audio)
+  if (nullptr == audio)
     return 8000.0;
 
   sfreq = FINDFIRST(audio, KaxAudioSamplingFreq);
-  if (NULL == sfreq)
+  if (nullptr == sfreq)
     return 8000.0;
 
   return float(*sfreq);
@@ -511,11 +511,11 @@ kt_get_a_osfreq(KaxTrackEntry &track) {
   KaxAudioOutputSamplingFreq *osfreq;
 
   audio = FINDFIRST(&track, KaxTrackAudio);
-  if (NULL == audio)
+  if (nullptr == audio)
     return 8000.0;
 
   osfreq = FINDFIRST(audio, KaxAudioOutputSamplingFreq);
-  if (NULL == osfreq)
+  if (nullptr == osfreq)
     return 8000.0;
 
   return float(*osfreq);
@@ -527,11 +527,11 @@ kt_get_a_bps(KaxTrackEntry &track) {
   KaxAudioBitDepth *bps;
 
   audio = FINDFIRST(&track, KaxTrackAudio);
-  if (NULL == audio)
+  if (nullptr == audio)
     return -1;
 
   bps = FINDFIRST(audio, KaxAudioBitDepth);
-  if (NULL == bps)
+  if (nullptr == bps)
     return -1;
 
   return uint32(*bps);
@@ -543,11 +543,11 @@ kt_get_v_pixel_width(KaxTrackEntry &track) {
   KaxVideoPixelWidth *width;
 
   video = FINDFIRST(&track, KaxTrackVideo);
-  if (NULL == video)
+  if (nullptr == video)
     return 0;
 
   width = FINDFIRST(video, KaxVideoPixelWidth);
-  if (NULL == width)
+  if (nullptr == width)
     return 0;
 
   return uint32(*width);
@@ -559,11 +559,11 @@ kt_get_v_pixel_height(KaxTrackEntry &track) {
   KaxVideoPixelHeight *height;
 
   video = FINDFIRST(&track, KaxTrackVideo);
-  if (NULL == video)
+  if (nullptr == video)
     return 0;
 
   height = FINDFIRST(video, KaxVideoPixelHeight);
-  if (NULL == height)
+  if (nullptr == height)
     return 0;
 
   return uint32(*height);
@@ -577,34 +577,34 @@ find_ebml_element_by_id(EbmlMaster *master,
     if (EbmlId(*((*master)[i])) == id)
       return (*master)[i];
 
-  return NULL;
+  return nullptr;
 }
 
 void
 fix_mandatory_elements(EbmlElement *master) {
-  if (NULL != dynamic_cast<KaxInfo *>(master))
+  if (nullptr != dynamic_cast<KaxInfo *>(master))
     fix_mandatory_segmentinfo_elements(master);
 
-  else if (NULL != dynamic_cast<KaxTracks *>(master))
+  else if (nullptr != dynamic_cast<KaxTracks *>(master))
     fix_mandatory_segment_tracks_elements(master);
 
-  else if (NULL != dynamic_cast<KaxTags *>(master))
+  else if (nullptr != dynamic_cast<KaxTags *>(master))
     fix_mandatory_tag_elements(master);
 
-  else if (NULL != dynamic_cast<KaxChapters *>(master))
+  else if (nullptr != dynamic_cast<KaxChapters *>(master))
     fix_mandatory_chapter_elements(master);
 }
 
 void
 remove_voids_from_master(EbmlElement *element) {
   EbmlMaster *master = dynamic_cast<EbmlMaster *>(element);
-  if (NULL == master)
+  if (nullptr == master)
     return;
 
   size_t idx = 0;
   while (master->ListSize() > idx) {
     element = (*master)[idx];
-    if (NULL != dynamic_cast<EbmlVoid *>(element))
+    if (nullptr != dynamic_cast<EbmlVoid *>(element))
       master->Remove(idx);
 
     else {

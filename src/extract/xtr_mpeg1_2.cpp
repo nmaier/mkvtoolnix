@@ -31,7 +31,7 @@ xtr_mpeg1_2_video_c::create_file(xtr_base_c *master,
   xtr_base_c::create_file(master, track);
 
   KaxCodecPrivate *priv = FINDFIRST(&track, KaxCodecPrivate);
-  if (NULL != priv)
+  if (nullptr != priv)
     m_seq_hdr = decode_codec_private(priv);
 }
 

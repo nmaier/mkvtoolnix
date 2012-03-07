@@ -46,7 +46,7 @@ update_check_thread_c::Entry() {
 
   wxPostEvent(m_mdlg, event);
 
-  return NULL;
+  return nullptr;
 }
 
 // ------------------------------------------------------------

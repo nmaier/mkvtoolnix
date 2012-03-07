@@ -34,12 +34,12 @@ using namespace libebml;
 using namespace libmatroska;
 
 parser_data_t::parser_data_t()
-  : mapping(NULL)
+  : mapping(nullptr)
   , depth(0)
   , skip_depth(0)
   , done_reading(false)
   , data_allowed(false)
-  , root_element(NULL)
+  , root_element(nullptr)
 {
   memset(&parser, 0, sizeof(parser));
 }
@@ -49,7 +49,7 @@ xmlp_parent_name(parser_data_t *pdata,
                  EbmlElement *e) {
   int i;
 
-  for (i = 0; NULL != pdata->mapping[i].name; i++)
+  for (i = 0; nullptr != pdata->mapping[i].name; i++)
     if (pdata->mapping[i].id == EbmlId(*e))
       return pdata->mapping[i].name;
 
@@ -119,7 +119,7 @@ el_get_binary(parser_data_t *pdata,
               int min_length,
               int max_length) {
   int64_t length = 0;
-  binary *buffer = NULL;
+  binary *buffer = nullptr;
 
   strip(pdata->bin, true);
 
@@ -246,7 +246,7 @@ find_element_index(parser_data_t *pdata,
                    const char *name,
                    int parent_idx) {
   int elt_idx = parent_idx;
-  while (NULL != pdata->mapping[elt_idx].name) {
+  while (nullptr != pdata->mapping[elt_idx].name) {
     if (!strcmp(pdata->mapping[elt_idx].name, name))
       return elt_idx;
     elt_idx++;
@@ -267,7 +267,7 @@ add_new_element(parser_data_t *pdata,
     const EbmlCallbacks *callbacks = find_ebml_callbacks(EBML_INFO(KaxSegment), pdata->mapping[parent_idx].id);
     bool found                     = false;
 
-    if (NULL != callbacks) {
+    if (nullptr != callbacks) {
       const EbmlSemanticContext &context = EBML_INFO_CONTEXT(*callbacks);
       size_t i;
       for (i = 0; i < EBML_CTX_SIZE(context); i++)
@@ -281,9 +281,9 @@ add_new_element(parser_data_t *pdata,
       xmlp_error(pdata, boost::format(Y("<%1%> is not a valid child element of <%2%>.")) % name % pdata->mapping[parent_idx].name);
 
     const EbmlSemantic *semantic = find_ebml_semantic(EBML_INFO(KaxSegment), pdata->mapping[elt_idx].id);
-    if ((NULL != semantic) && EBML_SEM_UNIQUE(*semantic)) {
+    if ((nullptr != semantic) && EBML_SEM_UNIQUE(*semantic)) {
       EbmlMaster *m = dynamic_cast<EbmlMaster *>(xmlp_pelt);
-      assert(NULL != m);
+      assert(nullptr != m);
 
       size_t i;
       for (i = 0; i < m->ListSize(); i++)
@@ -293,23 +293,23 @@ add_new_element(parser_data_t *pdata,
   }
 
   EbmlElement *e = create_ebml_element(EBML_INFO(KaxSegment), pdata->mapping[elt_idx].id);
-  assert(NULL != e);
+  assert(nullptr != e);
 
   if (0 == pdata->depth) {
     EbmlMaster *m = dynamic_cast<EbmlMaster *>(e);
-    assert(NULL != m);
+    assert(nullptr != m);
     pdata->root_element = m;
 
   } else {
     EbmlMaster *m = dynamic_cast<EbmlMaster *>(xmlp_pelt);
-    assert(NULL != m);
+    assert(nullptr != m);
     m->PushElement(*e);
   }
 
   pdata->parents.push_back(e);
   pdata->parent_idxs.push_back(elt_idx);
 
-  if (NULL != pdata->mapping[elt_idx].start_hook)
+  if (nullptr != pdata->mapping[elt_idx].start_hook)
     pdata->mapping[elt_idx].start_hook(pdata);
 
   pdata->data_allowed = pdata->mapping[elt_idx].type != EBMLT_MASTER;
@@ -351,7 +351,7 @@ start_element(void *user_data,
   parent_idx = pdata->parent_idxs.back();
 
   int i;
-  for (i = 0; (atts[i] != NULL) && (atts[i + 1] != NULL); i += 2) {
+  for (i = 0; (atts[i] != nullptr) && (atts[i + 1] != nullptr); i += 2) {
     if (!strcasecmp(atts[i], "format"))
       pdata->format = atts[i + 1];
     else {
@@ -380,7 +380,7 @@ end_element(void *user_data,
   } else {
     int elt_idx;
     bool found = false;
-    for (elt_idx = 0; NULL != pdata->mapping[elt_idx].name; elt_idx++)
+    for (elt_idx = 0; nullptr != pdata->mapping[elt_idx].name; elt_idx++)
       if (!strcmp(pdata->mapping[elt_idx].name, name)) {
         found = true;
         break;
@@ -412,7 +412,7 @@ end_element(void *user_data,
         assert(0);
     }
 
-    if (NULL != pdata->mapping[elt_idx].end_hook)
+    if (nullptr != pdata->mapping[elt_idx].end_hook)
       pdata->mapping[elt_idx].end_hook(pdata);
   }
 
@@ -427,7 +427,7 @@ EbmlMaster *
 parse_xml_elements(const char *parser_name,
                    const parser_element_t *mapping,
                    mm_text_io_c *in) {
-  XML_Parser parser    = XML_ParserCreate(NULL);
+  XML_Parser parser    = XML_ParserCreate(nullptr);
 
   parser_data_cptr pdata(new parser_data_t);
   pdata->parser          = parser;
@@ -487,29 +487,29 @@ xml_parser_add_data_cb(void *user_data,
 xml_parser_c::xml_parser_c(mm_text_io_c *xml_source)
   : m_xml_parser_state(XMLP_STATE_INITIAL)
   , m_xml_source(xml_source)
-  , m_xml_parser(NULL)
+  , m_xml_parser(nullptr)
 {
 }
 
 xml_parser_c::xml_parser_c()
   : m_xml_parser_state(XMLP_STATE_INITIAL)
-  , m_xml_parser(NULL)
+  , m_xml_parser(nullptr)
 {
 }
 
 void
 xml_parser_c::setup_xml_parser() {
-  if (NULL != m_xml_parser)
+  if (nullptr != m_xml_parser)
     XML_ParserFree(m_xml_parser);
 
-  m_xml_parser = XML_ParserCreate(NULL);
+  m_xml_parser = XML_ParserCreate(nullptr);
   XML_SetUserData(m_xml_parser, this);
   XML_SetElementHandler(m_xml_parser, xml_parser_start_element_cb, xml_parser_end_element_cb);
   XML_SetCharacterDataHandler(m_xml_parser, xml_parser_add_data_cb);
 }
 
 xml_parser_c::~xml_parser_c() {
-  if (NULL != m_xml_parser)
+  if (nullptr != m_xml_parser)
     XML_ParserFree(m_xml_parser);
 }
 
@@ -525,7 +525,7 @@ bool
 xml_parser_c::parse_one_xml_line() {
   std::string line;
 
-  if (NULL == m_xml_parser)
+  if (nullptr == m_xml_parser)
     setup_xml_parser();
 
   if (!m_xml_source->getline2(line))

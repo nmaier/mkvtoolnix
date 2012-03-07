@@ -47,7 +47,7 @@ truehd_parser_c::decode_channel_map(int channel_map) {
 void
 truehd_parser_c::add_data(const unsigned char *new_data,
                           unsigned int new_size) {
-  if ((NULL == new_data) || (0 == new_size))
+  if ((nullptr == new_data) || (0 == new_size))
     return;
 
   m_buffer.add(new_data, new_size);
@@ -153,7 +153,7 @@ truehd_parser_c::frame_available() {
 truehd_frame_cptr
 truehd_parser_c::get_next_frame() {
   if (m_frames.empty())
-    return truehd_frame_cptr(NULL);
+    return truehd_frame_cptr(nullptr);
 
   truehd_frame_cptr frame = *m_frames.begin();
   m_frames.pop_front();

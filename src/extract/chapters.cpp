@@ -53,7 +53,7 @@ extract_chapters(const std::string &file_name,
     return;
 
   KaxChapters *chapters = dynamic_cast<KaxChapters *>(master.get_object());
-  assert(NULL != chapters);
+  assert(nullptr != chapters);
 
   if (!chapter_format_simple) {
     g_mm_stdio->write_bom("UTF-8");

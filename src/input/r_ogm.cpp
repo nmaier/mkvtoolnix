@@ -347,10 +347,10 @@ ogm_reader_c::find_demuxer(int serialno) {
     if (sdemuxers[i]->serialno == serialno) {
       if (sdemuxers[i]->in_use)
         return sdemuxers[i];
-      return ogm_demuxer_cptr(NULL);
+      return ogm_demuxer_cptr(nullptr);
     }
 
-  return ogm_demuxer_cptr(NULL);
+  return ogm_demuxer_cptr(nullptr);
 }
 
 /*
@@ -401,7 +401,7 @@ ogm_reader_c::create_packetizer(int64_t tid) {
   if (!dmx->in_use)
     return;
 
-  m_ti.m_private_data = NULL;
+  m_ti.m_private_data = nullptr;
   m_ti.m_private_size = 0;
   m_ti.m_id           = tid;
   m_ti.m_language     = dmx->language;
@@ -409,7 +409,7 @@ ogm_reader_c::create_packetizer(int64_t tid) {
 
   ptzr                = dmx->create_packetizer();
 
-  if (NULL != ptzr)
+  if (nullptr != ptzr)
     dmx->ptzr         = add_packetizer(ptzr);
 
   m_ti.m_language.clear();
@@ -470,7 +470,7 @@ ogm_reader_c::handle_new_stream(ogg_page *og) {
   ogg_stream_pagein(&os, og);
   ogg_stream_packetout(&os, &op);
 
-  ogm_demuxer_c *dmx = NULL;
+  ogm_demuxer_c *dmx = nullptr;
 
   /*
    * Check the contents for known stream headers. This one is the
@@ -523,7 +523,7 @@ ogm_reader_c::handle_new_stream(ogg_page *og) {
     } else if (!strncmp(sth->streamtype, "audio", 5)) {
       memcpy(buf, (char *)sth->subtype, 4);
 
-      uint32_t codec_id = strtol(buf, (char **)NULL, 16);
+      uint32_t codec_id = strtol(buf, (char **)nullptr, 16);
 
       if (0x0001 == codec_id)
         dmx = new ogm_a_pcm_demuxer_c(this);
@@ -726,7 +726,7 @@ ogm_reader_c::identify() {
     id_result_track(i, sdemuxers[i]->get_type(), sdemuxers[i]->get_codec(), verbose_info);
   }
 
-  if (NULL != m_chapters)
+  if (nullptr != m_chapters)
     id_result_chapters(count_chapter_atoms(*m_chapters));
 }
 
@@ -811,7 +811,7 @@ ogm_reader_c::handle_stream_comments() {
     bool chapters_set = false;
     if (!chapter_strings.empty() && !m_ti.m_no_chapters) {
       try {
-        counted_ptr<mm_mem_io_c> out(new mm_mem_io_c(NULL, 0, 1000));
+        counted_ptr<mm_mem_io_c> out(new mm_mem_io_c(nullptr, 0, 1000));
 
         out->write_bom("UTF-8");
         for (j = 0; j < chapter_strings.size(); j++)
@@ -1082,7 +1082,7 @@ ogm_s_text_demuxer_c::ogm_s_text_demuxer_c(ogm_reader_c *p_reader)
 
 generic_packetizer_c *
 ogm_s_text_demuxer_c::create_packetizer() {
-  generic_packetizer_c *ptzr_obj = new textsubs_packetizer_c(reader, m_ti, MKV_S_TEXTUTF8, NULL, 0, true, false);
+  generic_packetizer_c *ptzr_obj = new textsubs_packetizer_c(reader, m_ti, MKV_S_TEXTUTF8, nullptr, 0, true, false);
 
   show_packetizer_info(m_ti.m_id, ptzr_obj);
 
@@ -1125,7 +1125,7 @@ generic_packetizer_c *
 ogm_v_avc_demuxer_c::create_packetizer() {
   stream_header *sth          = (stream_header *)&packet_data[0]->get_buffer()[1];
 
-  m_ti.m_private_data         = NULL;
+  m_ti.m_private_data         = nullptr;
   m_ti.m_private_size         = 0;
   generic_packetizer_c *vptzr = new mpeg4_p10_es_video_packetizer_c(reader, m_ti);
 
@@ -1193,11 +1193,11 @@ ogm_v_mscomp_demuxer_c::create_packetizer() {
   if (mpeg4::p2::is_fourcc(sth->subtype))
     ptzr_obj = new mpeg4_p2_video_packetizer_c(reader, m_ti, fps, width, height, false);
   else
-    ptzr_obj = new video_packetizer_c(reader, m_ti, NULL, fps, width, height);
+    ptzr_obj = new video_packetizer_c(reader, m_ti, nullptr, fps, width, height);
 
   show_packetizer_info(m_ti.m_id, ptzr_obj);
 
-  m_ti.m_private_data = NULL;
+  m_ti.m_private_data = nullptr;
 
   return ptzr_obj;
 }
@@ -1284,7 +1284,7 @@ ogm_v_theora_demuxer_c::create_packetizer() {
 
   show_packetizer_info(m_ti.m_id, ptzr_obj);
 
-  m_ti.m_private_data = NULL;
+  m_ti.m_private_data = nullptr;
 
   return ptzr_obj;
 }
@@ -1453,7 +1453,7 @@ ogm_s_kate_demuxer_c::create_packetizer() {
 
   show_packetizer_info(m_ti.m_id, ptzr_obj);
 
-  m_ti.m_private_data = NULL;
+  m_ti.m_private_data = nullptr;
 
   return ptzr_obj;
 }

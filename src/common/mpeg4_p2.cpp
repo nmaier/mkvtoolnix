@@ -339,7 +339,7 @@ mpeg4::p2::find_frame_types(const unsigned char *buffer,
    \param data_pos This is set to the length of the configuration
      data inside the \c buffer if such data was found.
 
-   \return \c NULL if no configuration data was found and a pointer to
+   \return \c nullptr if no configuration data was found and a pointer to
      a memory_c object otherwise. This object has to be deleted manually.
 */
 memory_c *
@@ -347,7 +347,7 @@ mpeg4::p2::parse_config_data(const unsigned char *buffer,
                              int buffer_size,
                              mpeg4::p2::config_data_t &config_data) {
   if (5 > buffer_size)
-    return NULL;
+    return nullptr;
 
   mxverb(3, boost::format("\nmpeg4_config_data: start search in %1% bytes\n") % buffer_size);
 
@@ -378,7 +378,7 @@ mpeg4::p2::parse_config_data(const unsigned char *buffer,
   }
 
   if (0 == size)
-    return NULL;
+    return nullptr;
 
   if (-1 != vol_offset)
     try {
@@ -424,11 +424,11 @@ bool
 mpeg4::p2::is_fourcc(const void *fourcc) {
   static const char *mpeg4_p2_fourccs[] = {
     "MP42", "DIV2", "DIVX", "XVID", "DX50", "FMP4", "DXGM",
-    NULL
+    nullptr
   };
   int i;
 
-  for (i = 0; NULL != mpeg4_p2_fourccs[i]; ++i)
+  for (i = 0; nullptr != mpeg4_p2_fourccs[i]; ++i)
     if (!strncasecmp((const char *)fourcc, mpeg4_p2_fourccs[i], 4))
       return true;
   return false;
@@ -446,11 +446,11 @@ mpeg4::p2::is_v3_fourcc(const void *fourcc) {
   static const char *mpeg4_p2_v3_fourccs[] = {
     "DIV3", "MPG3", "MP43",
     "AP41", // Angel Potion
-    NULL
+    nullptr
   };
   int i;
 
-  for (i = 0; NULL != mpeg4_p2_v3_fourccs[i]; ++i)
+  for (i = 0; nullptr != mpeg4_p2_v3_fourccs[i]; ++i)
     if (!strncasecmp((const char *)fourcc, mpeg4_p2_v3_fourccs[i], 4))
       return true;
   return false;

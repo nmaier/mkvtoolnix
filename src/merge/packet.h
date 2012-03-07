@@ -69,9 +69,9 @@ struct packet_t {
   std::vector<packet_extension_cptr> extensions;
 
   packet_t()
-    : group(NULL)
-    , block(NULL)
-    , cluster(NULL)
+    : group(nullptr)
+    , block(nullptr)
+    , cluster(nullptr)
     , ref_priority(0)
     , time_factor(1)
     , timecode(0)
@@ -87,7 +87,7 @@ struct packet_t {
     , superseeded(false)
     , gap_following(false)
     , factory_applied(false)
-    , source(NULL)
+    , source(nullptr)
   {
   }
 
@@ -97,9 +97,9 @@ struct packet_t {
            int64_t p_bref     = -1,
            int64_t p_fref     = -1)
     : data(p_memory)
-    , group(NULL)
-    , block(NULL)
-    , cluster(NULL)
+    , group(nullptr)
+    , block(nullptr)
+    , cluster(nullptr)
     , ref_priority(0)
     , time_factor(1)
     , timecode(p_timecode)
@@ -115,7 +115,7 @@ struct packet_t {
     , superseeded(false)
     , gap_following(false)
     , factory_applied(false)
-    , source(NULL)
+    , source(nullptr)
   {
   }
 
@@ -125,9 +125,9 @@ struct packet_t {
            int64_t p_bref     = -1,
            int64_t p_fref     = -1)
     : data(memory_cptr(n_memory))
-    , group(NULL)
-    , block(NULL)
-    , cluster(NULL)
+    , group(nullptr)
+    , block(nullptr)
+    , cluster(nullptr)
     , ref_priority(0)
     , time_factor(1)
     , timecode(p_timecode)
@@ -143,7 +143,7 @@ struct packet_t {
     , superseeded(false)
     , gap_following(false)
     , factory_applied(false)
-    , source(NULL)
+    , source(nullptr)
   {
   }
 
@@ -182,7 +182,7 @@ struct packet_t {
       if (extension->get_type() == type)
         return extension.get_object();
 
-    return NULL;
+    return nullptr;
   }
 };
 typedef counted_ptr<packet_t> packet_cptr;

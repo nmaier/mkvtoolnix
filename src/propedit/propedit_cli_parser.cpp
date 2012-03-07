@@ -93,8 +93,8 @@ void
 propedit_cli_parser_c::list_property_names() {
   mxinfo(Y("All known property names and their meaning\n"));
 
-  list_property_names_for_table(property_element_c::get_table_for(KaxInfo::ClassInfos,   NULL, true), Y("Segment information"), "info");
-  list_property_names_for_table(property_element_c::get_table_for(KaxTracks::ClassInfos, NULL, true), Y("Track headers"),       "track:...");
+  list_property_names_for_table(property_element_c::get_table_for(KaxInfo::ClassInfos,   nullptr, true), Y("Segment information"), "info");
+  list_property_names_for_table(property_element_c::get_table_for(KaxTracks::ClassInfos, nullptr, true), Y("Track headers"),       "track:...");
 
   mxinfo("\n");
   mxinfo(Y("Element types:\n"));

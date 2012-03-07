@@ -46,7 +46,7 @@ public:
 public:
   change_c(change_type_e type, const std::string &name, const std::string &value);
 
-  void validate(std::vector<property_element_c> *property_table = NULL);
+  void validate(std::vector<property_element_c> *property_table = nullptr);
   void dump_info() const;
 
   bool lookup_property(std::vector<property_element_c> &table);

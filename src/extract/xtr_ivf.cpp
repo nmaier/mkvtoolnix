@@ -47,7 +47,7 @@ xtr_ivf_c::create_file(xtr_base_c *master,
       m_frame_rate_den = 1;
   }
 
-  if (NULL != master)
+  if (nullptr != master)
     mxerror(boost::format(Y("Cannot write track %1% with the CodecID '%2%' to the file '%3%' because "
                             "track %4% with the CodecID '%5%' is already being written to the same file.\n"))
             % m_tid % m_codec_id % m_file_name % master->m_tid % master->m_codec_id);

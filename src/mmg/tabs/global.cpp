@@ -86,7 +86,7 @@ tab_global::tab_global(wxWindow *parent):
   rb_split_by_size->Enable(false);
   siz_line2 = new wxBoxSizer(wxHORIZONTAL);
   siz_line2->Add(rb_split_by_size, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
-  cob_split_by_size = new wxMTX_COMBOBOX_TYPE(this, ID_CB_SPLITBYSIZE, wxEmptyString, wxDefaultPosition, wxSize(100, -1), 0, NULL, wxCB_DROPDOWN);
+  cob_split_by_size = new wxMTX_COMBOBOX_TYPE(this, ID_CB_SPLITBYSIZE, wxEmptyString, wxDefaultPosition, wxSize(100, -1), 0, nullptr, wxCB_DROPDOWN);
   cob_split_by_size->Append(wxEmptyString);
   cob_split_by_size->Append(wxT("350M"));
   cob_split_by_size->Append(wxT("650M"));
@@ -102,7 +102,7 @@ tab_global::tab_global(wxWindow *parent):
   rb_split_by_time = new wxRadioButton(this, ID_RB_SPLITBYTIME, wxEmptyString);
   rb_split_by_time->Enable(false);
   siz_line2->Add(rb_split_by_time, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
-  cob_split_by_time = new wxMTX_COMBOBOX_TYPE(this, ID_CB_SPLITBYTIME, wxEmptyString, wxDefaultPosition, wxSize(100, -1), 0, NULL, wxCB_DROPDOWN);
+  cob_split_by_time = new wxMTX_COMBOBOX_TYPE(this, ID_CB_SPLITBYTIME, wxEmptyString, wxDefaultPosition, wxSize(100, -1), 0, nullptr, wxCB_DROPDOWN);
   cob_split_by_time->Append(wxEmptyString);
   cob_split_by_time->Append(wxT("01:00:00"));
   cob_split_by_time->Append(wxT("1800s"));
@@ -178,7 +178,7 @@ tab_global::tab_global(wxWindow *parent):
 
   st_language = new wxStaticText(this, -1, wxEmptyString);
   siz_chap_l1_l2->Add(st_language, 0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 5);
-  cob_chap_language = new wxMTX_COMBOBOX_TYPE(this, ID_CB_CHAPTERLANGUAGE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY);
+  cob_chap_language = new wxMTX_COMBOBOX_TYPE(this, ID_CB_CHAPTERLANGUAGE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_READONLY);
   cob_chap_language->SetMinSize(wxSize(50, -1));
   cob_chap_language->Append(wxEmptyString);
   for (i = 0; i < sorted_iso_codes.Count(); i++)
@@ -189,7 +189,7 @@ tab_global::tab_global(wxWindow *parent):
   st_charset = new wxStaticText(this, -1, wxEmptyString);
   siz_chap_l2->Add(st_charset, 0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 10);
 
-  cob_chap_charset = new wxMTX_COMBOBOX_TYPE(this, ID_CB_CHAPTERCHARSET, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY);
+  cob_chap_charset = new wxMTX_COMBOBOX_TYPE(this, ID_CB_CHAPTERCHARSET, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_READONLY);
   cob_chap_charset->SetMinSize(wxSize(50, -1));
   cob_chap_charset->Append(wxEmptyString);
   for (i = 0; i < sorted_charsets.Count(); i++)
@@ -305,7 +305,7 @@ tab_global::translate_ui() {
 
 void
 tab_global::on_browse_global_tags(wxCommandEvent &) {
-  wxFileDialog dlg(NULL, Z("Choose the tags file"), last_open_dir, wxEmptyString, wxString::Format(Z("Tag files (*.xml)|*.xml|%s"), ALLFILES.c_str()), wxFD_OPEN);
+  wxFileDialog dlg(nullptr, Z("Choose the tags file"), last_open_dir, wxEmptyString, wxString::Format(Z("Tag files (*.xml)|*.xml|%s"), ALLFILES.c_str()), wxFD_OPEN);
   if(dlg.ShowModal() != wxID_OK)
     return;
 
@@ -315,7 +315,7 @@ tab_global::on_browse_global_tags(wxCommandEvent &) {
 
 void
 tab_global::on_browse_segmentinfo(wxCommandEvent &) {
-  wxFileDialog dlg(NULL, Z("Choose the segment info file"), last_open_dir, wxEmptyString, wxString::Format(Z("Segment info files (*.xml)|*.xml|%s"), ALLFILES.c_str()), wxFD_OPEN);
+  wxFileDialog dlg(nullptr, Z("Choose the segment info file"), last_open_dir, wxEmptyString, wxString::Format(Z("Segment info files (*.xml)|*.xml|%s"), ALLFILES.c_str()), wxFD_OPEN);
   if(dlg.ShowModal() != wxID_OK)
     return;
 
@@ -325,7 +325,7 @@ tab_global::on_browse_segmentinfo(wxCommandEvent &) {
 
 void
 tab_global::on_browse_chapters(wxCommandEvent &) {
-  wxFileDialog dlg(NULL, Z("Choose the chapter file"), last_open_dir, wxEmptyString,
+  wxFileDialog dlg(nullptr, Z("Choose the chapter file"), last_open_dir, wxEmptyString,
                    wxString::Format(Z("Chapter files (*.xml;*.txt;*.cue)|*.xml;*.txt;*.cue|%s"), ALLFILES.c_str()), wxFD_OPEN);
   if(dlg.ShowModal() != wxID_OK)
     return;

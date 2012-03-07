@@ -249,7 +249,7 @@ find_track(int tnum) {
 #define UTF2STR(s)                 UTFstring_to_cstrutf8(UTFstring(s))
 
 #define show_error(error)          ui_show_error(error)
-#define show_warning(l, f)         _show_element(NULL, NULL, false, l, f)
+#define show_warning(l, f)         _show_element(nullptr, nullptr, false, l, f)
 #define show_unknown_element(e, l) _show_unknown_element(es, e, l)
 #define show_element(e, l, s)      _show_element(e, es, false, l, s)
 
@@ -280,18 +280,18 @@ _show_element(EbmlElement *l,
     return;
 
   ui_show_element(level, info,
-                    NULL == l          ? -1
+                    nullptr == l          ? -1
                   :                      static_cast<int64_t>(l->GetElementPosition()),
-                    NULL == l          ? -1
+                    nullptr == l          ? -1
                   : !l->IsFiniteSize() ? -2
                   :                      static_cast<int64_t>(l->GetSizeLength() + EBML_ID_LENGTH(static_cast<const EbmlId &>(*l)) + l->GetSize()));
 
-  if ((NULL == l) || !skip)
+  if ((nullptr == l) || !skip)
     return;
 
   // Dump unknown elements recursively.
   EbmlMaster *m = dynamic_cast<EbmlMaster *>(l);
-  if (NULL != m) {
+  if (nullptr != m) {
     size_t i;
     for (i = 0; i < m->ListSize(); i++)
       show_unknown_element((*m)[i], level + 1);
@@ -508,11 +508,11 @@ handle_info(EbmlStream *&es,
 
   upper_lvl_el               = 0;
   EbmlMaster *m1             = static_cast<EbmlMaster *>(l1);
-  EbmlElement *element_found = NULL;
+  EbmlElement *element_found = nullptr;
   read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, element_found);
 
   KaxTimecodeScale *tc_scale = FINDFIRST(m1, KaxTimecodeScale);
-  if (NULL != tc_scale)
+  if (nullptr != tc_scale)
     s_tc_scale = uint64(*tc_scale);
 
   size_t i1;
@@ -545,8 +545,8 @@ handle_info(EbmlStream *&es,
       char buffer[40];
       KaxDateUTC &dateutc = *static_cast<KaxDateUTC *>(l2);
       temptime = dateutc.GetEpochDate();
-      if ((gmtime_r(&temptime, &tmutc) != NULL) &&
-          (asctime_r(&tmutc, buffer) != NULL)) {
+      if ((gmtime_r(&temptime, &tmutc) != nullptr) &&
+          (asctime_r(&tmutc, buffer) != nullptr)) {
         buffer[strlen(buffer) - 1] = 0;
         show_element(l2, 2, boost::format(Y("Date: %1% UTC")) % buffer);
       } else
@@ -635,7 +635,7 @@ handle_audio_track(EbmlStream *&es,
     } else if (!is_global(es, l4, 4))
       show_unknown_element(l4, 4);
 
-  } // while (l4 != NULL)
+  } // while (l4 != nullptr)
 }
 
 void
@@ -737,7 +737,7 @@ handle_video_track(EbmlStream *&es,
     } else if (!is_global(es, l4, 4))
       show_unknown_element(l4, 4);
 
-  } // while (l4 != NULL)
+  } // while (l4 != nullptr)
 }
 
 void
@@ -898,7 +898,7 @@ handle_tracks(EbmlStream *&es,
 
   upper_lvl_el               = 0;
   EbmlMaster *m1             = static_cast<EbmlMaster *>(l1);
-  EbmlElement *element_found = NULL;
+  EbmlElement *element_found = nullptr;
   read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, element_found);
 
   size_t i1, s_mkvmerge_track_id = 0;
@@ -932,7 +932,7 @@ handle_tracks(EbmlStream *&es,
 
           auto existing_track = find_track(track->tnum);
           size_t track_id     = s_mkvmerge_track_id;
-          if (NULL == existing_track) {
+          if (nullptr == existing_track) {
             track->mkvmerge_track_id = s_mkvmerge_track_id;
             ++s_mkvmerge_track_id;
             add_track(track);
@@ -1119,7 +1119,7 @@ handle_seek_head(EbmlStream *&es,
 
   upper_lvl_el               = 0;
   EbmlMaster *m1             = static_cast<EbmlMaster *>(l1);
-  EbmlElement *element_found = NULL;
+  EbmlElement *element_found = nullptr;
   read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, element_found);
 
   size_t i1;
@@ -1158,12 +1158,12 @@ handle_seek_head(EbmlStream *&es,
         } else if (!is_global(es, l3, 3))
           show_unknown_element(l3, 3);
 
-      } // while (l3 != NULL)
+      } // while (l3 != nullptr)
 
     } else if (!is_global(es, l2, 2))
       show_unknown_element(l2, 2);
 
-  } // while (l2 != NULL)
+  } // while (l2 != nullptr)
 
   l2 = element_found;
 }
@@ -1185,7 +1185,7 @@ handle_cues(EbmlStream *&es,
 
   upper_lvl_el               = 0;
   EbmlMaster *m1             = static_cast<EbmlMaster *>(l1);
-  EbmlElement *element_found = NULL;
+  EbmlElement *element_found = nullptr;
   read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, element_found);
 
   size_t i1;
@@ -1256,23 +1256,23 @@ handle_cues(EbmlStream *&es,
                 } else if (!is_global(es, l5, 5))
                   show_unknown_element(l5, 5);
 
-              } // while (l5 != NULL)
+              } // while (l5 != nullptr)
 #endif // MATROSKA_VERSION >= 2
 
             } else if (!is_global(es, l4, 4))
               show_unknown_element(l4, 4);
 
-          } // while (l4 != NULL)
+          } // while (l4 != nullptr)
 
         } else if (!is_global(es, l3, 3))
           show_unknown_element(l3, 3);
 
-      } // while (l3 != NULL)
+      } // while (l3 != nullptr)
 
     } else if (!is_global(es, l2, 2))
       show_unknown_element(l2, 2);
 
-  } // while (l2 != NULL)
+  } // while (l2 != nullptr)
 
   l2 = element_found;
 }
@@ -1287,7 +1287,7 @@ handle_attachments(EbmlStream *&es,
 
   upper_lvl_el               = 0;
   EbmlMaster *m1             = static_cast<EbmlMaster *>(l1);
-  EbmlElement *element_found = NULL;
+  EbmlElement *element_found = nullptr;
   read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, element_found);
 
   size_t i1;
@@ -1325,12 +1325,12 @@ handle_attachments(EbmlStream *&es,
         } else if (!is_global(es, l3, 3))
           show_unknown_element(l3, 3);
 
-      } // while (l3 != NULL)
+      } // while (l3 != nullptr)
 
     } else if (!is_global(es, l2, 2))
       show_unknown_element(l2, 2);
 
-  } // while (l2 != NULL)
+  } // while (l2 != nullptr)
 
   l2 = element_found;
 }
@@ -1411,7 +1411,7 @@ handle_block_group(EbmlStream *&es,
         if (g_options.m_show_hexdump)
           hex = create_hexdump(data.Buffer(), data.Size());
 
-        show_element(NULL, 4, BF_BLOCK_GROUP_BLOCK_FRAME % data.Size() % adler_str % hex);
+        show_element(nullptr, 4, BF_BLOCK_GROUP_BLOCK_FRAME % data.Size() % adler_str % hex);
 
         frame_sizes.push_back(data.Size());
         frame_adlers.push_back(adler);
@@ -1482,12 +1482,12 @@ handle_block_group(EbmlStream *&es,
             } else if (!is_global(es, l5, 5))
               show_unknown_element(l5, 5);
 
-          } // while (l5 != NULL)
+          } // while (l5 != nullptr)
 
         } else if (!is_global(es, l4, 4))
           show_unknown_element(l4, 4);
 
-      } // while (l4 != NULL)
+      } // while (l4 != nullptr)
 
     } else if (is_id(l3, KaxSlices)) {
       show_element(l3, 3, Y("Slices"));
@@ -1528,17 +1528,17 @@ handle_block_group(EbmlStream *&es,
             } else if (!is_global(es, l5, 5))
               show_unknown_element(l5, 5);
 
-          } // while (l5 != NULL)
+          } // while (l5 != nullptr)
 
         } else if (!is_global(es, l4, 4))
           show_unknown_element(l4, 4);
 
-      } // while (l4 != NULL)
+      } // while (l4 != nullptr)
 
     } else if (!is_global(es, l3, 3))
       show_unknown_element(l3, 3);
 
-  } // while (l3 != NULL)
+  } // while (l3 != nullptr)
 
   if (g_options.m_show_summary) {
     std::string position;
@@ -1574,7 +1574,7 @@ handle_block_group(EbmlStream *&es,
     }
 
   } else if (g_options.m_verbose > 2)
-    show_element(NULL, 2,
+    show_element(nullptr, 2,
                  BF_BLOCK_GROUP_SUMMARY_V2
                  % (bref_found && fref_found ? 'B' : bref_found ? 'P' : !fref_found ? 'I' : 'P')
                  % lf_tnum
@@ -1645,7 +1645,7 @@ handle_simple_block(EbmlStream *&es,
     if (g_options.m_show_hexdump)
       hex = create_hexdump(data.Buffer(), data.Size());
 
-    show_element(NULL, 3, BF_SIMPLE_BLOCK_FRAME % data.Size() % adler_str % hex);
+    show_element(nullptr, 3, BF_SIMPLE_BLOCK_FRAME % data.Size() % adler_str % hex);
 
     frame_sizes.push_back(data.Size());
     frame_adlers.push_back(adler);
@@ -1673,7 +1673,7 @@ handle_simple_block(EbmlStream *&es,
     }
 
   } else if (g_options.m_verbose > 2)
-    show_element(NULL, 2,
+    show_element(nullptr, 2,
                  BF_SIMPLE_BLOCK_SUMMARY_V2
                  % (block.IsKeyframe() ? 'I' : block.IsDiscardable() ? 'B' : 'P')
                  % block.TrackNum()
@@ -1707,11 +1707,11 @@ handle_cluster(EbmlStream *&es,
 
   upper_lvl_el               = 0;
   EbmlMaster *m1             = static_cast<EbmlMaster *>(l1);
-  EbmlElement *element_found = NULL;
+  EbmlElement *element_found = nullptr;
   read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, element_found);
 
   KaxClusterTimecode *cluster_tc = FINDFIRST(m1, KaxClusterTimecode);
-  cluster->InitTimecode(NULL == cluster_tc ? 0 : uint64(*cluster_tc), s_tc_scale);
+  cluster->InitTimecode(nullptr == cluster_tc ? 0 : uint64(*cluster_tc), s_tc_scale);
 
   size_t i1;
   for (i1 = 0; i1 < m1->ListSize(); i1++) {
@@ -1741,7 +1741,7 @@ handle_cluster(EbmlStream *&es,
     else if (!is_global(es, l2, 2))
       show_unknown_element(l2, 2);
 
-  } // while (l2 != NULL)
+  } // while (l2 != nullptr)
 
   l2 = element_found;
 }
@@ -1755,7 +1755,7 @@ handle_elements_rec(EbmlStream *es,
 
   bool found = false;
   int elt_idx;
-  for (elt_idx = 0; NULL != mapping[elt_idx].name; ++elt_idx)
+  for (elt_idx = 0; nullptr != mapping[elt_idx].name; ++elt_idx)
     if (EbmlId(*e) == mapping[elt_idx].id) {
       found = true;
       break;
@@ -1773,7 +1773,7 @@ handle_elements_rec(EbmlStream *es,
     case EBMLT_MASTER:
       show_element(e, level, elt_name);
       m = dynamic_cast<EbmlMaster *>(e);
-      assert(m != NULL);
+      assert(m != nullptr);
 
       size_t i;
       for (i = 0; m->ListSize() > i; ++i)
@@ -1815,7 +1815,7 @@ handle_chapters(EbmlStream *&es,
 
   upper_lvl_el               = 0;
   EbmlMaster *m1             = static_cast<EbmlMaster *>(l1);
-  EbmlElement *element_found = NULL;
+  EbmlElement *element_found = nullptr;
   read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, element_found);
 
   size_t i1;
@@ -1834,7 +1834,7 @@ handle_tags(EbmlStream *&es,
 
   upper_lvl_el               = 0;
   EbmlMaster *m1             = static_cast<EbmlMaster *>(l1);
-  EbmlElement *element_found = NULL;
+  EbmlElement *element_found = nullptr;
   read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, element_found);
 
   size_t i1;
@@ -1854,7 +1854,7 @@ handle_ebml_head(EbmlElement *l0,
     int upper_lvl_el = 0;
     EbmlElement *e   = es->FindNextElement(EBML_CONTEXT(l0), upper_lvl_el, 0xFFFFFFFFL, true);
 
-    if (NULL == e)
+    if (nullptr == e)
       return;
 
     e->ReadData(*in);
@@ -1919,7 +1919,7 @@ bool
 process_file(const std::string &file_name) {
   int upper_lvl_el;
   // Elements for different levels
-  EbmlElement *l0 = NULL, *l1 = NULL, *l2 = NULL, *l3 = NULL, *l4 = NULL, *l5 = NULL, *l6 = NULL;
+  EbmlElement *l0 = nullptr, *l1 = nullptr, *l2 = nullptr, *l3 = nullptr, *l4 = nullptr, *l5 = nullptr, *l6 = nullptr;
   KaxCluster *cluster;
 
   s_tc_scale = TIMECODE_SCALE;
@@ -1945,7 +1945,7 @@ process_file(const std::string &file_name) {
 
     // Find the EbmlHead element. Must be the first one.
     l0 = es->FindNextID(EBML_INFO(EbmlHead), 0xFFFFFFFFL);
-    if (NULL == l0) {
+    if (nullptr == l0) {
       show_error(Y("No EBML head found."));
       delete es;
 
@@ -1959,7 +1959,7 @@ process_file(const std::string &file_name) {
     while (1) {
       // NEXT element must be a segment
       l0 = es->FindNextID(EBML_INFO(KaxSegment), 0xFFFFFFFFFFFFFFFFLL);
-      if (NULL == l0) {
+      if (nullptr == l0) {
         show_error(Y("No segment/level 0 element found."));
         return false;
       }
@@ -1980,7 +1980,7 @@ process_file(const std::string &file_name) {
 
     kax_file_cptr kax_file = kax_file_cptr(new kax_file_c(in));
 
-    while (NULL != (l1 = kax_file->read_next_level1_element())) {
+    while (nullptr != (l1 = kax_file->read_next_level1_element())) {
       counted_ptr<EbmlElement> af_l1(l1);
 
       if (is_id(l1, KaxInfo))
@@ -2023,7 +2023,7 @@ process_file(const std::string &file_name) {
         break;
       if (!in_parent(l0))
         break;
-    } // while (l1 != NULL)
+    } // while (l1 != nullptr)
 
     delete l0;
     delete es;

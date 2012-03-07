@@ -51,7 +51,7 @@ theora_video_packetizer_c::process(packet_cptr packet) {
 
 void
 theora_video_packetizer_c::extract_aspect_ratio() {
-  if (display_dimensions_or_aspect_ratio_set() || (NULL == m_ti.m_private_data) || (0 == m_ti.m_private_size))
+  if (display_dimensions_or_aspect_ratio_set() || (nullptr == m_ti.m_private_data) || (0 == m_ti.m_private_size))
     return;
 
   memory_cptr private_data         = memory_cptr(new memory_c(m_ti.m_private_data, m_ti.m_private_size, false));

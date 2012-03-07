@@ -90,7 +90,7 @@ mi_frame::mi_frame(const wxString &title,
                    const wxPoint &pos,
                    const wxSize &size,
                    long style)
-  : wxFrame(NULL, -1, title, pos, size, style)
+  : wxFrame(nullptr, -1, title, pos, size, style)
   , dnd_load(new mi_dndfile)
   , show_all_elements(0 != g_options.m_verbose)
   , expand_important_elements(true)
@@ -279,7 +279,7 @@ mi_frame::on_file_savetext(wxCommandEvent &WXUNUSED(event)) {
   if (file_dialog.ShowModal() == wxID_OK) {
     last_dir = file_dialog.GetDirectory();
     FILE *f = fopen(wxMB(file_dialog.GetPath()), "w");
-    if (NULL == f) {
+    if (nullptr == f) {
       show_error(wxString::Format(Z("Could not create the file '%s'."), file_dialog.GetPath().c_str()));
       return;
     }

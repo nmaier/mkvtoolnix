@@ -196,7 +196,7 @@ struct qtmp4_demuxer_c {
     a_aac_output_sample_rate(0),
     a_aac_is_sbr(false),
     a_aac_config_parsed(false),
-    priv(NULL),
+    priv(nullptr),
     priv_size(0),
     warning_printed(false),
     ptzr(-1)
@@ -305,7 +305,7 @@ public:
 protected:
   virtual void parse_headers();
   virtual void calculate_timecodes();
-  virtual qt_atom_t read_atom(mm_io_c *read_from = NULL, bool exit_on_error = true);
+  virtual qt_atom_t read_atom(mm_io_c *read_from = nullptr, bool exit_on_error = true);
   virtual void parse_video_header_priv_atoms(qtmp4_demuxer_cptr &dmx, unsigned char *mem, size_t size, int level);
   virtual void parse_audio_header_priv_atoms(qtmp4_demuxer_cptr &dmx, unsigned char *mem, size_t size, int level);
   virtual bool parse_esds_atom(mm_mem_io_c &memio, qtmp4_demuxer_cptr &dmx, int level);
@@ -341,7 +341,7 @@ protected:
   virtual void handle_edts_atom(qtmp4_demuxer_cptr &new_dmx, qt_atom_t parent, int level);
   virtual void handle_elst_atom(qtmp4_demuxer_cptr &new_dmx, qt_atom_t parent, int level);
 
-  virtual memory_cptr create_bitmap_info_header(qtmp4_demuxer_cptr &dmx, const char *fourcc, size_t extra_size = 0, const void *extra_data = NULL);
+  virtual memory_cptr create_bitmap_info_header(qtmp4_demuxer_cptr &dmx, const char *fourcc, size_t extra_size = 0, const void *extra_data = nullptr);
 
   virtual void create_audio_packetizer_aac(qtmp4_demuxer_cptr &dmx);
   virtual bool create_audio_packetizer_ac3(qtmp4_demuxer_cptr &dmx);

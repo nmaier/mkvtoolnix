@@ -43,10 +43,10 @@ using namespace libmatroska;
 
    \param file_name The name of the text file to read from.
    \param exception_on_error If set to \c true then an exception is thrown
-     if an error occurs. Otherwise \c NULL will be returned.
+     if an error occurs. Otherwise \c nullptr will be returned.
 
    \return A segment element containing the elements parsed from the file or
-     \c NULL if an error occured.
+     \c nullptr if an error occured.
 */
 KaxInfo *
 parse_segmentinfo(const std::string &file_name,
@@ -60,7 +60,7 @@ parse_segmentinfo(const std::string &file_name,
     mxerror(e.error());
   }
 
-  return NULL;
+  return nullptr;
 }
 
 /** \brief Add missing mandatory elements
@@ -76,11 +76,11 @@ parse_segmentinfo(const std::string &file_name,
 */
 void
 fix_mandatory_segmentinfo_elements(EbmlElement *e) {
-  if (NULL == e)
+  if (nullptr == e)
     return;
 
   KaxInfo *info = dynamic_cast<KaxInfo *>(e);
-  if (NULL == info)
+  if (nullptr == info)
     return;
 
   GetChild<KaxTimecodeScale>(info);

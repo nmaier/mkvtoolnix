@@ -61,7 +61,7 @@ vobsub_packetizer_c::can_connect_to(generic_packetizer_c *src,
   vobsub_packetizer_c *vsrc;
 
   vsrc = dynamic_cast<vobsub_packetizer_c *>(src);
-  if (vsrc == NULL)
+  if (vsrc == nullptr)
     return CAN_CONNECT_NO_FORMAT;
   return CAN_CONNECT_YES;
 }

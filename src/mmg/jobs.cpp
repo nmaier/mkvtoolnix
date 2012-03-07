@@ -47,16 +47,16 @@
 
 job_run_dialog::job_run_dialog(wxWindow *,
                                std::vector<int> &n_jobs_to_start)
-  : wxDialog(NULL, -1, Z("mkvmerge is running"), wxDefaultPosition, wxSize(400, 700), wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxMINIMIZE_BOX | wxMAXIMIZE_BOX)
+  : wxDialog(nullptr, -1, Z("mkvmerge is running"), wxDefaultPosition, wxSize(400, 700), wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxMINIMIZE_BOX | wxMAXIMIZE_BOX)
   , t_update(new wxTimer(this, 1))
-  , out(NULL)
-  , process(NULL)
+  , out(nullptr)
+  , process(nullptr)
   , abort(false)
   , jobs_to_start(n_jobs_to_start)
   , current_job(-1)
   , m_progress(0)
 #if defined(SYS_WINDOWS)
-  , m_taskbar_progress(NULL)
+  , m_taskbar_progress(nullptr)
 #endif
 {
   wxBoxSizer *siz_all      = new wxBoxSizer(wxVERTICAL);
@@ -151,7 +151,7 @@ job_run_dialog::start_next_job() {
     st_remaining_time_total->SetLabel(wxT("---"));
 
 #if defined(SYS_WINDOWS)
-    if (NULL != m_taskbar_progress)
+    if (nullptr != m_taskbar_progress)
       m_taskbar_progress->set_state(TBPF_NOPROGRESS);
 #endif
 
@@ -163,7 +163,7 @@ job_run_dialog::start_next_job() {
   st_remaining_time->SetLabel(Z("is being estimated"));
 
 #if defined(SYS_WINDOWS)
-  if (NULL != m_taskbar_progress) {
+  if (nullptr != m_taskbar_progress) {
     m_taskbar_progress->set_state(TBPF_NORMAL);
     m_taskbar_progress->set_value(current_job * 100, jobs_to_start.size() * 100);
   }
@@ -185,9 +185,9 @@ job_run_dialog::start_next_job() {
                           opt_file_name.c_str(), errno, wxUCS(strerror(errno)));
     jobs[ndx].status = JOBS_FAILED;
     mdlg->save_job_queue();
-    if (NULL != process) {
+    if (nullptr != process) {
       delete process;
-      process = NULL;
+      process = nullptr;
     }
     start_next_job();
     return;
@@ -232,7 +232,7 @@ job_run_dialog::start_next_job() {
 
 void
 job_run_dialog::process_input() {
-  if (NULL == process)
+  if (nullptr == process)
     return;
 
   while (process->IsInputAvailable()) {
@@ -277,7 +277,7 @@ job_run_dialog::set_progress_value(long value) {
   g_jobs->SetValue(m_progress);
 
 #if defined(SYS_WINDOWS)
-  if (NULL != m_taskbar_progress)
+  if (nullptr != m_taskbar_progress)
     m_taskbar_progress->set_value(current_job * 100 + value, jobs_to_start.size() * 100);
 #endif
 }
@@ -324,7 +324,7 @@ job_run_dialog::on_abort(wxCommandEvent &) {
   abort = true;
 #if defined(SYS_WINDOWS)
   wxKill(pid, wxSIGKILL);
-  if (NULL != m_taskbar_progress)
+  if (nullptr != m_taskbar_progress)
     m_taskbar_progress->set_state(TBPF_ERROR);
 #else
   wxKill(pid, wxSIGTERM);
@@ -359,8 +359,8 @@ job_run_dialog::on_end_process(wxProcessEvent &evt) {
 
   mdlg->save_job_queue();
   delete process;
-  process = NULL;
-  out     = NULL;
+  process = nullptr;
+  out     = nullptr;
 
   wxRemoveFile(opt_file_name);
 
@@ -407,7 +407,7 @@ job_log_dialog::job_log_dialog(wxWindow *parent,
 
 void
 job_log_dialog::on_save(wxCommandEvent &) {
-  wxFileDialog dialog(NULL, Z("Choose an output file"), last_open_dir, wxEmptyString, wxString::Format(Z("Text files (*.txt)|*.txt|%s"), ALLFILES.c_str()), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+  wxFileDialog dialog(nullptr, Z("Choose an output file"), last_open_dir, wxEmptyString, wxString::Format(Z("Text files (*.txt)|*.txt|%s"), ALLFILES.c_str()), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
   if(dialog.ShowModal() != wxID_OK)
     return;
 

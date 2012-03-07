@@ -127,7 +127,7 @@ mtx_common_init() {
 
   atexit(mtx_common_cleanup);
 
-  srand(time(NULL));
+  srand(time(nullptr));
 
   init_debugging();
   init_hacks();

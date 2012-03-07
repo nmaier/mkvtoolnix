@@ -53,7 +53,7 @@ fix_mandatory_content_encoding_elements(KaxContentEncoding *encoding) {
   for (i = 0; encoding->ListSize() > i; ++i) {
     EbmlElement *e = (*encoding)[i];
 
-    if (dynamic_cast<KaxContentCompression *>(e) != NULL)
+    if (dynamic_cast<KaxContentCompression *>(e) != nullptr)
       fix_mandatory_content_compression_elements(static_cast<KaxContentCompression *>(e));
   }
 }
@@ -64,7 +64,7 @@ fix_mandatory_content_encodings_elements(KaxContentEncodings *encodings) {
   for (i = 0; encodings->ListSize() > i; ++i) {
     EbmlElement *e = (*encodings)[i];
 
-    if (dynamic_cast<KaxContentEncoding *>(e) != NULL)
+    if (dynamic_cast<KaxContentEncoding *>(e) != nullptr)
       fix_mandatory_content_encoding_elements(static_cast<KaxContentEncoding *>(e));
   }
 }
@@ -88,13 +88,13 @@ fix_mandatory_track_entry_elements(KaxTrackEntry *track_entry) {
   for (i = 0; track_entry->ListSize() > i; ++i) {
     EbmlElement *e = (*track_entry)[i];
 
-    if (dynamic_cast<KaxTrackVideo *>(e) != NULL)
+    if (dynamic_cast<KaxTrackVideo *>(e) != nullptr)
       fix_mandatory_track_video_elements(static_cast<KaxTrackVideo *>(e));
 
-    else if (dynamic_cast<KaxTrackAudio *>(e) != NULL)
+    else if (dynamic_cast<KaxTrackAudio *>(e) != nullptr)
       fix_mandatory_track_audio_elements(static_cast<KaxTrackAudio *>(e));
 
-    else if (dynamic_cast<KaxContentEncodings *>(e) != NULL)
+    else if (dynamic_cast<KaxContentEncodings *>(e) != nullptr)
       fix_mandatory_content_encodings_elements(static_cast<KaxContentEncodings *>(e));
   }
 }
@@ -112,18 +112,18 @@ fix_mandatory_track_entry_elements(KaxTrackEntry *track_entry) {
 */
 void
 fix_mandatory_segment_tracks_elements(EbmlElement *e) {
-  if (NULL == e)
+  if (nullptr == e)
     return;
 
   KaxTracks *tracks = dynamic_cast<KaxTracks *>(e);
-  if (NULL == tracks)
+  if (nullptr == tracks)
     return;
 
   size_t i;
   for (i = 0; tracks->ListSize() > i; ++i) {
     e = (*tracks)[i];
 
-    if (dynamic_cast<KaxTrackEntry *>(e) != NULL)
+    if (dynamic_cast<KaxTrackEntry *>(e) != nullptr)
       fix_mandatory_track_entry_elements(static_cast<KaxTrackEntry *>(e));
   }
 }

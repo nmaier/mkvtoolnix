@@ -28,7 +28,7 @@ debugging_requested(const char *option,
     std::map<std::string, std::string>::iterator option_ptr = s_debugging_options.find(current_option);
 
     if (s_debugging_options.end() != option_ptr) {
-      if (NULL != arg)
+      if (nullptr != arg)
         *arg = option_ptr->second;
       return true;
     }
@@ -64,11 +64,11 @@ clear_debugging_requests() {
 void
 init_debugging() {
   const char *value = getenv("MKVTOOLNIX_DEBUG");
-  if (NULL != value)
+  if (nullptr != value)
     request_debugging(value);
   else {
     value = getenv("MTX_DEBUG");
-    if (NULL != value)
+    if (nullptr != value)
       request_debugging(value);
   }
 }

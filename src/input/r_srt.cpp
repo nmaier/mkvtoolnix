@@ -57,7 +57,7 @@ srt_reader_c::create_packetizer(int64_t) {
     return;
 
   bool is_utf8 = m_text_in->get_byte_order() != BO_NONE;
-  add_packetizer(new textsubs_packetizer_c(this, m_ti, MKV_S_TEXTUTF8, NULL, 0, true, is_utf8));
+  add_packetizer(new textsubs_packetizer_c(this, m_ti, MKV_S_TEXTUTF8, nullptr, 0, true, is_utf8));
 
   show_packetizer_info(0, PTZR0);
 }

@@ -65,7 +65,7 @@ connection_result_e
 ra_packetizer_c::can_connect_to(generic_packetizer_c *src,
                                 std::string &error_message) {
   ra_packetizer_c *psrc = dynamic_cast<ra_packetizer_c *>(src);
-  if (NULL == psrc)
+  if (nullptr == psrc)
     return CAN_CONNECT_NO_FORMAT;
 
   connect_check_a_samplerate(m_samples_per_sec, psrc->m_samples_per_sec);

@@ -52,7 +52,7 @@ wxU(const EbmlString &s) {
 
 inline wxString
 wxU(EbmlString *s) {
-  if (NULL == s)
+  if (nullptr == s)
     return wxEmptyString;
   return wxU(static_cast<const std::string &>(*s));
 }

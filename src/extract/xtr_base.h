@@ -37,7 +37,7 @@ public:
   bool m_content_decoder_initialized;
 
 public:
-  xtr_base_c(const std::string &codec_id, int64_t tid, track_spec_t &tspec, const char *container_name = NULL);
+  xtr_base_c(const std::string &codec_id, int64_t tid, track_spec_t &tspec, const char *container_name = nullptr);
   virtual ~xtr_base_c();
 
   virtual void create_file(xtr_base_c *_master, KaxTrackEntry &track);

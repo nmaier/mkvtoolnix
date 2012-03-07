@@ -33,7 +33,7 @@ he_float_value_page_c::he_float_value_page_c(header_editor_frame_c *parent,
                                              const translatable_string_c &title,
                                              const translatable_string_c &description)
   : he_value_page_c(parent, toplevel_page, master, callbacks, vt_float, title, description)
-  , m_tc_text(NULL)
+  , m_tc_text(nullptr)
   , m_original_value(0)
 {
 }
@@ -43,7 +43,7 @@ he_float_value_page_c::~he_float_value_page_c() {
 
 wxControl *
 he_float_value_page_c::create_input_control() {
-  if (NULL != m_element)
+  if (nullptr != m_element)
     m_original_value = double(*static_cast<EbmlFloat *>(m_element));
 
   m_tc_text = new wxTextCtrl(this, wxID_ANY, get_original_value_as_string());
@@ -54,7 +54,7 @@ he_float_value_page_c::create_input_control() {
 
 wxString
 he_float_value_page_c::get_original_value_as_string() {
-  if (NULL == m_element)
+  if (nullptr == m_element)
     return wxEmptyString;
 
   wxString value = wxString::Format(wxT("%f"), m_original_value);

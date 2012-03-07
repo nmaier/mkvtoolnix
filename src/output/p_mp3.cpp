@@ -85,12 +85,12 @@ mp3_packetizer_c::get_mp3_packet(mp3_header_t *mp3header) {
     pos  = find_mp3_header(buf, size);
 
     if (0 > pos)
-      return NULL;
+      return nullptr;
 
     decode_mp3_header(&buf[pos], mp3header);
 
     if ((pos + mp3header->framesize) > size)
-      return NULL;
+      return nullptr;
 
     if (!mp3header->is_tag)
       break;
@@ -108,7 +108,7 @@ mp3_packetizer_c::get_mp3_packet(mp3_header_t *mp3header) {
   if (!m_valid_headers_found) {
     pos = find_consecutive_mp3_headers(m_byte_buffer.get_buffer(), m_byte_buffer.get_size(), 5);
     if (0 > pos)
-      return NULL;
+      return nullptr;
 
     // Great, we have found five consecutive identical headers. Be happy
     // with those!
@@ -152,7 +152,7 @@ mp3_packetizer_c::get_mp3_packet(mp3_header_t *mp3header) {
     rerender_track_headers();
 
   if (mp3header->framesize > m_byte_buffer.get_size())
-    return NULL;
+    return nullptr;
 
   buf = (unsigned char *)safememdup(m_byte_buffer.get_buffer(), mp3header->framesize);
 
@@ -179,7 +179,7 @@ mp3_packetizer_c::process(packet_cptr packet) {
   mp3_header_t mp3header;
 
   m_byte_buffer.add(packet->data->get_buffer(), packet->data->get_size());
-  while ((mp3_packet = get_mp3_packet(&mp3header)) != NULL) {
+  while ((mp3_packet = get_mp3_packet(&mp3header)) != nullptr) {
     bool timecode_valid =  (-1 != packet->timecode)
                         && (   (0 == m_packetno)
                             || (packet->timecode != m_previous_timecode));
@@ -206,7 +206,7 @@ connection_result_e
 mp3_packetizer_c::can_connect_to(generic_packetizer_c *src,
                                  std::string &error_message) {
   mp3_packetizer_c *msrc = dynamic_cast<mp3_packetizer_c *>(src);
-  if (NULL == msrc)
+  if (nullptr == msrc)
     return CAN_CONNECT_NO_FORMAT;
 
   connect_check_a_samplerate(m_samples_per_sec, msrc->m_samples_per_sec);

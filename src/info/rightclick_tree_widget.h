@@ -23,7 +23,7 @@ class rightclick_tree_widget: public QTreeWidget {
 public slots:
 
 public:
-  rightclick_tree_widget(QWidget *parent = NULL);
+  rightclick_tree_widget(QWidget *parent = nullptr);
 
 protected:
   virtual void mousePressEvent(QMouseEvent *event);

@@ -18,7 +18,7 @@
 
 using namespace libmatroska;
 
-main_window_c *g_main_window = NULL;
+main_window_c *g_main_window = nullptr;
 
 main_window_c::main_window_c()
   : m_previous_directory(Q("/home/mosu/prog/video/mkvtoolnix/data"))

@@ -39,7 +39,7 @@ read_args_from_file(std::vector<std::string> &args,
   std::string buffer;
   bool skip_next;
 
-  mm_io = NULL;
+  mm_io = nullptr;
   try {
     mm_io = new mm_text_io_c(new mm_file_io_c(filename));
   } catch (...) {
@@ -77,11 +77,11 @@ command_line_args_from_environment() {
   std::vector<std::string> args;
 
   char const *value = getenv("MKVTOOLNIX_OPTIONS");
-  if (NULL != value)
+  if (nullptr != value)
     args = split(value, " ");
   else {
     value = getenv("MTX_OPTIONS");
-    if (NULL != value)
+    if (nullptr != value)
       args = split(value, " ");
   }
 
@@ -121,7 +121,7 @@ command_line_utf8(int argc,
       if (!strcmp(argv[i], "--command-line-charset")) {
         if ((i + 1) == argc)
           mxerror(Y("'--command-line-charset' is missing its argument.\n"));
-        cc_command_line = charset_converter_c::init(argv[i + 1] == NULL ? "" : argv[i + 1]);
+        cc_command_line = charset_converter_c::init(argv[i + 1] == nullptr ? "" : argv[i + 1]);
         i++;
       } else
         args.push_back(cc_command_line->utf8(argv[i]));
@@ -141,7 +141,7 @@ command_line_utf8(int,
   int num_args     = 0;
   LPWSTR *arg_list = CommandLineToArgvW(GetCommandLineW(), &num_args);
 
-  if (NULL == arg_list)
+  if (nullptr == arg_list)
     return args;
 
   int i;

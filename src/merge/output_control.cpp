@@ -134,7 +134,7 @@ family_uids_c g_segfamily_uids;
 int64_t g_attachment_sizes_first            = 0;
 int64_t g_attachment_sizes_others           = 0;
 
-KaxInfo *g_kax_info_chap                    = NULL;
+KaxInfo *g_kax_info_chap                    = nullptr;
 
 // Variables set by the command line parser.
 std::string g_outfile;
@@ -143,7 +143,7 @@ int g_max_blocks_per_cluster                = 65535;
 int64_t g_max_ns_per_cluster                = 5000000000ll;
 bool g_write_cues                           = true;
 bool g_cue_writing_requested                = false;
-generic_packetizer_c *g_video_packetizer    = NULL;
+generic_packetizer_c *g_video_packetizer    = nullptr;
 bool g_write_meta_seek_for_clusters         = false;
 bool g_no_lacing                            = false;
 bool g_no_linking                           = true;
@@ -160,15 +160,15 @@ bool g_identifying                          = false;
 bool g_identify_verbose                     = false;
 bool g_identify_for_mmg                     = false;
 
-KaxSegment *g_kax_segment                   = NULL;
-KaxTracks *g_kax_tracks                     = NULL;
-KaxTrackEntry *g_kax_last_entry             = NULL;
-KaxCues *g_kax_cues                         = NULL;
-KaxSeekHead *g_kax_sh_main                  = NULL;
-KaxSeekHead *g_kax_sh_cues                  = NULL;
-KaxChapters *g_kax_chapters                 = NULL;
+KaxSegment *g_kax_segment                   = nullptr;
+KaxTracks *g_kax_tracks                     = nullptr;
+KaxTrackEntry *g_kax_last_entry             = nullptr;
+KaxCues *g_kax_cues                         = nullptr;
+KaxSeekHead *g_kax_sh_main                  = nullptr;
+KaxSeekHead *g_kax_sh_cues                  = nullptr;
+KaxChapters *g_kax_chapters                 = nullptr;
 
-KaxTags *g_tags_from_cue_chapters           = NULL;
+KaxTags *g_tags_from_cue_chapters           = nullptr;
 
 std::string g_chapter_file_name;
 std::string g_chapter_language;
@@ -195,18 +195,18 @@ bitvalue_cptr g_seguid_link_previous;
 bitvalue_cptr g_seguid_link_next;
 std::deque<bitvalue_cptr> g_forced_seguids;
 
-static KaxInfo *s_kax_infos                 = NULL;
-static KaxMyDuration *s_kax_duration        = NULL;
+static KaxInfo *s_kax_infos                 = nullptr;
+static KaxMyDuration *s_kax_duration        = nullptr;
 
-static KaxTags *s_kax_tags                  = NULL;
-static KaxChapters *s_chapters_in_this_file = NULL;
+static KaxTags *s_kax_tags                  = nullptr;
+static KaxChapters *s_chapters_in_this_file = nullptr;
 
-static KaxAttachments *s_kax_as             = NULL;
+static KaxAttachments *s_kax_as             = nullptr;
 
-static EbmlVoid *s_kax_sh_void              = NULL;
-static EbmlVoid *s_kax_chapters_void        = NULL;
+static EbmlVoid *s_kax_sh_void              = nullptr;
+static EbmlVoid *s_kax_chapters_void        = nullptr;
 static int64_t s_max_chapter_size           = 0;
-static EbmlVoid *s_void_after_track_headers = NULL;
+static EbmlVoid *s_void_after_track_headers = nullptr;
 
 static mm_io_cptr s_out;
 
@@ -214,9 +214,9 @@ static bitvalue_c s_seguid_prev(128), s_seguid_current(128), s_seguid_next(128);
 
 static int s_display_files_done           = 0;
 static int s_display_path_length          = 1;
-static generic_reader_c *s_display_reader = NULL;
+static generic_reader_c *s_display_reader = nullptr;
 
-static EbmlHead *s_head                   = NULL;
+static EbmlHead *s_head                   = nullptr;
 
 /** \brief Add a segment family UID to the list if it doesn't exist already.
 
@@ -325,7 +325,7 @@ open_input_file(filelist_t &file) {
 
   } catch (...) {
     mxerror(boost::format(Y("The source file '%1%' could not be opened successfully, or retrieving its size by seeking to the end did not work.\n")) % file.name);
-    return mm_io_cptr(NULL);
+    return mm_io_cptr(nullptr);
   }
 }
 
@@ -446,7 +446,7 @@ get_file_type(filelist_t &file) {
 
   if (FILE_TYPE_IS_UNKNOWN == type) {
     // All text file types (subtitles).
-    mm_text_io_c *text_io = NULL;
+    mm_text_io_c *text_io = nullptr;
     try {
       text_io = new mm_text_io_c(new mm_file_io_c(file.name));
       size    = text_io->get_size();
@@ -487,17 +487,17 @@ display_progress() {
   static int64_t s_previous_progress_on = 0;
   static int s_previous_percentage      = -1;
 
-  if (NULL == s_display_reader) {
+  if (nullptr == s_display_reader) {
     std::vector<filelist_t>::const_iterator i;
 
-    const filelist_t *winner = NULL;
+    const filelist_t *winner = nullptr;
     for (auto &current : g_files)
-      if (!current.appending && (0 != current.reader->get_num_packetizers()) && ((NULL == winner) || (current.size > winner->size)))
+      if (!current.appending && (0 != current.reader->get_num_packetizers()) && ((nullptr == winner) || (current.size > winner->size)))
         winner = &current;
 
-    if (NULL == winner) {
+    if (nullptr == winner) {
       for (auto &current : g_files)
-        if (!current.appending && ((NULL == winner) || (current.size > winner->size)))
+        if (!current.appending && ((nullptr == winner) || (current.size > winner->size)))
           winner = &current;
     }
 
@@ -529,7 +529,7 @@ add_tags(KaxTag *tags) {
   if (tags->ListSize() == 0)
     return;
 
-  if (NULL == s_kax_tags)
+  if (nullptr == s_kax_tags)
     s_kax_tags = new KaxTags;
 
   s_kax_tags->PushElement(*tags);
@@ -622,7 +622,7 @@ set_timecode_scale() {
 
 static void
 render_ebml_head(mm_io_c *out) {
-  if (NULL == s_head)
+  if (nullptr == s_head)
     s_head = new EbmlHead;
 
   unsigned int doc_type_read_version                     = hack_engaged(ENGAGE_NO_SIMPLE_BLOCKS) ? 1 : 2;
@@ -656,7 +656,7 @@ render_headers(mm_io_c *out) {
 
     s_kax_infos = &GetChild<KaxInfo>(*g_kax_segment);
 
-    if ((NULL == g_video_packetizer) || (TIMECODE_SCALE_MODE_AUTO == g_timecode_scale_mode))
+    if ((nullptr == g_video_packetizer) || (TIMECODE_SCALE_MODE_AUTO == g_timecode_scale_mode))
       s_kax_duration = new KaxMyDuration(EbmlFloat::FLOAT_64);
     else
       s_kax_duration = new KaxMyDuration(EbmlFloat::FLOAT_32);
@@ -668,7 +668,7 @@ render_headers(mm_io_c *out) {
       std::string muxing_app                                    = std::string("libebml v") + EbmlCodeVersion + std::string(" + libmatroska v") + KaxCodeVersion;
       GetChildAs<KaxMuxingApp, EbmlUnicodeString>(s_kax_infos)  = cstrutf8_to_UTFstring(muxing_app);
       GetChildAs<KaxWritingApp, EbmlUnicodeString>(s_kax_infos) = cstrutf8_to_UTFstring(get_version_info("mkvmerge", static_cast<version_info_flags_e>(vif_full | vif_untranslated)));
-      GetChild<KaxDateUTC>(*s_kax_infos).SetEpochDate(time(NULL));
+      GetChild<KaxDateUTC>(*s_kax_infos).SetEpochDate(time(nullptr));
 
     } else {
       GetChildAs<KaxMuxingApp, EbmlUnicodeString>(s_kax_infos)  = cstrutf8_to_UTFstring("no_variable_data");
@@ -721,10 +721,10 @@ render_headers(mm_io_c *out) {
       }
 
       // Set the chaptertranslate elements
-      if (NULL != g_kax_info_chap) {
+      if (nullptr != g_kax_info_chap) {
         // copy the KaxChapterTranslates in the current KaxInfo
         KaxChapterTranslate *chapter_translate = FINDFIRST(g_kax_info_chap, KaxChapterTranslate);
-        while (NULL != chapter_translate) {
+        while (nullptr != chapter_translate) {
           s_kax_infos->PushElement(*new KaxChapterTranslate(*chapter_translate));
           chapter_translate = FINDNEXT(g_kax_info_chap, KaxChapterTranslate, chapter_translate);
         }
@@ -760,7 +760,7 @@ render_headers(mm_io_c *out) {
       g_kax_sh_cues = new KaxSeekHead();
 
     if (first_file) {
-      g_kax_last_entry = NULL;
+      g_kax_last_entry = nullptr;
 
       size_t i;
       for (i = 0; i < g_track_order.size(); i++)
@@ -774,7 +774,7 @@ render_headers(mm_io_c *out) {
       set_timecode_scale();
 
       for (i = 0; i < g_packetizers.size(); i++)
-        if (NULL != g_packetizers[i].packetizer)
+        if (nullptr != g_packetizers[i].packetizer)
           g_packetizers[i].packetizer->fix_headers();
 
     } else
@@ -834,15 +834,15 @@ rerender_track_headers() {
 */
 static void
 render_attachments(IOCallback *out) {
-  if (NULL != s_kax_as)
+  if (nullptr != s_kax_as)
     delete s_kax_as;
 
   s_kax_as           = new KaxAttachments();
-  KaxAttached *kax_a = NULL;
+  KaxAttached *kax_a = nullptr;
 
   for (auto &attch : g_attachments) {
     if ((1 == g_file_num) || attch.to_all_files) {
-      kax_a = NULL == kax_a ? &GetChild<KaxAttached>(*s_kax_as) : &GetNextChild<KaxAttached>(*s_kax_as, *kax_a);
+      kax_a = nullptr == kax_a ? &GetChild<KaxAttached>(*s_kax_as) : &GetNextChild<KaxAttached>(*s_kax_as, *kax_a);
 
       if (attch.description != "")
         GetChildAs<KaxFileDescription, EbmlUnicodeString>(kax_a) = cstrutf8_to_UTFstring(attch.description);
@@ -873,7 +873,7 @@ render_attachments(IOCallback *out) {
   else {
     // Delete the kax_as pointer so that it won't be referenced in a seek head.
     delete s_kax_as;
-    s_kax_as = NULL;
+    s_kax_as = nullptr;
   }
 }
 
@@ -997,7 +997,7 @@ check_append_mapping() {
     int result;
 
     src_file = g_files.begin() + amap.src_file_id;
-    src_ptzr = NULL;
+    src_ptzr = nullptr;
     mxforeach(gptzr, src_file->reader->m_reader_packetizers)
       if ((*gptzr)->m_ti.m_id == amap.src_track_id) {
         src_ptzr = (*gptzr);
@@ -1005,15 +1005,15 @@ check_append_mapping() {
       }
 
     dst_file = g_files.begin() + amap.dst_file_id;
-    dst_ptzr = NULL;
+    dst_ptzr = nullptr;
     mxforeach(gptzr, dst_file->reader->m_reader_packetizers)
       if ((*gptzr)->m_ti.m_id == amap.dst_track_id) {
         dst_ptzr = (*gptzr);
         break;
       }
 
-    if ((NULL == src_ptzr) || (NULL == dst_ptzr))
-      mxerror(boost::format("((NULL == src_ptzr) || (NULL == dst_ptzr)). %1%\n") % BUGMSG);
+    if ((nullptr == src_ptzr) || (nullptr == dst_ptzr))
+      mxerror(boost::format("((nullptr == src_ptzr) || (nullptr == dst_ptzr)). %1%\n") % BUGMSG);
 
     // And now try to connect the packetizers.
     result = src_ptzr->can_connect_to(dst_ptzr, error_message);
@@ -1090,20 +1090,20 @@ calc_max_chapter_size() {
       continue;
 
     KaxChapters *chapters = file.reader->m_chapters;
-    if (NULL == chapters)
+    if (nullptr == chapters)
       continue;
 
-    if (NULL == g_kax_chapters)
+    if (nullptr == g_kax_chapters)
       g_kax_chapters = new KaxChapters;
 
     move_chapters_by_edition(*g_kax_chapters, *chapters);
     delete chapters;
-    file.reader->m_chapters = NULL;
+    file.reader->m_chapters = nullptr;
   }
 
   // Step 2: Fix the mandatory elements and count the size of all chapters.
   s_max_chapter_size = 0;
-  if (NULL != g_kax_chapters) {
+  if (nullptr != g_kax_chapters) {
     fix_mandatory_chapter_elements(g_kax_chapters);
     g_kax_chapters->UpdateSize(true);
     s_max_chapter_size += g_kax_chapters->ElementSize();
@@ -1111,7 +1111,7 @@ calc_max_chapter_size() {
 
   for (auto &file : g_files) {
     KaxChapters *chapters = file.reader->m_chapters;
-    if (NULL == chapters)
+    if (nullptr == chapters)
       continue;
 
     fix_mandatory_chapter_elements(chapters);
@@ -1324,7 +1324,7 @@ create_output_name() {
 
 void
 add_tags_from_cue_chapters() {
-  if ((NULL == g_tags_from_cue_chapters) || ptzrs_in_header_order.empty())
+  if ((nullptr == g_tags_from_cue_chapters) || ptzrs_in_header_order.empty())
     return;
 
   bool found = false;
@@ -1351,7 +1351,7 @@ add_tags_from_cue_chapters() {
   for (i = 0; g_tags_from_cue_chapters->ListSize() > i; ++i)
     GetChildAs<KaxTagTrackUID, EbmlUInteger>(GetChild<KaxTagTargets>(*static_cast<KaxTag *>((*g_tags_from_cue_chapters)[i]))) = tuid;
 
-  if (NULL == s_kax_tags)
+  if (nullptr == s_kax_tags)
     s_kax_tags = g_tags_from_cue_chapters;
   else {
     while (g_tags_from_cue_chapters->ListSize() > 0) {
@@ -1361,7 +1361,7 @@ add_tags_from_cue_chapters() {
     delete g_tags_from_cue_chapters;
   }
 
-  g_tags_from_cue_chapters = NULL;
+  g_tags_from_cue_chapters = nullptr;
 }
 
 /** \brief Render an EbmlVoid element as a placeholder for chapters
@@ -1383,7 +1383,7 @@ render_chapter_void_placeholder() {
     mxwarn(boost::format(Y("Chapters are not allowed in WebM compliant files. No chapters will be written into any output file.\n")));
 
     delete g_kax_chapters;
-    g_kax_chapters     = NULL;
+    g_kax_chapters     = nullptr;
     s_max_chapter_size = 0;
 
     return;
@@ -1405,14 +1405,14 @@ render_chapter_void_placeholder() {
  */
 static void
 prepare_tags_for_rendering() {
-  if (NULL == s_kax_tags)
+  if (nullptr == s_kax_tags)
     return;
 
   if (outputting_webm()) {
     mxwarn(boost::format(Y("Tags are not allowed in WebM compliant files. No tags will be written into any output file.\n")));
 
     delete s_kax_tags;
-    s_kax_tags  = NULL;
+    s_kax_tags  = nullptr;
     g_tags_size = 0;
 
     return;
@@ -1554,9 +1554,9 @@ finish_file(bool last_file) {
 
   // Select the chapters that lie in this file and render them in the space
   // that was resesrved at the beginning.
-  KaxChapters *chapters_here = NULL;
+  KaxChapters *chapters_here = nullptr;
 
-  if (NULL != g_kax_chapters) {
+  if (nullptr != g_kax_chapters) {
     int64_t offset = g_no_linking ? g_cluster_helper->get_first_timecode_in_file() : 0;
     int64_t start  = g_cluster_helper->get_first_timecode_in_file();
     int64_t end    = start + g_cluster_helper->get_duration();
@@ -1566,7 +1566,7 @@ finish_file(bool last_file) {
     if (g_cluster_helper->splitting())
       chapters_here = select_chapters_in_timeframe(chapters_here, start, end, offset);
 
-    if (NULL != chapters_here) {
+    if (nullptr != chapters_here) {
       merge_chapter_entries(*chapters_here);
       sort_ebml_master(chapters_here);
       s_kax_chapters_void->ReplaceWith(*chapters_here, *s_out, true, true);
@@ -1574,7 +1574,7 @@ finish_file(bool last_file) {
     }
 
     delete s_kax_chapters_void;
-    s_kax_chapters_void = NULL;
+    s_kax_chapters_void = nullptr;
 
   }
 
@@ -1586,15 +1586,15 @@ finish_file(bool last_file) {
   }
 
   // Render the tags if we have any.
-  KaxTags *tags_here = NULL;
-  if (NULL != s_kax_tags) {
-    if (NULL == s_chapters_in_this_file) {
+  KaxTags *tags_here = nullptr;
+  if (nullptr != s_kax_tags) {
+    if (nullptr == s_chapters_in_this_file) {
       KaxChapters temp_chapters;
       tags_here = select_tags_for_chapters(*s_kax_tags, temp_chapters);
     } else
       tags_here = select_tags_for_chapters(*s_kax_tags, *s_chapters_in_this_file);
 
-    if (NULL != tags_here) {
+    if (nullptr != tags_here) {
       fix_mandatory_tag_elements(tags_here);
       tags_here->UpdateSize();
       tags_here->Render(*s_out, true);
@@ -1606,29 +1606,29 @@ finish_file(bool last_file) {
   if (g_cue_writing_requested)
     g_kax_sh_main->IndexThis(*g_kax_cues, *g_kax_segment);
 
-  if (NULL != tags_here) {
+  if (nullptr != tags_here) {
     g_kax_sh_main->IndexThis(*tags_here, *g_kax_segment);
     delete tags_here;
   }
 
-  if (NULL != s_chapters_in_this_file) {
+  if (nullptr != s_chapters_in_this_file) {
     delete s_chapters_in_this_file;
-    s_chapters_in_this_file = NULL;
+    s_chapters_in_this_file = nullptr;
   }
 
-  if (NULL != chapters_here) {
+  if (nullptr != chapters_here) {
     if (!hack_engaged(ENGAGE_NO_CHAPTERS_IN_META_SEEK))
       g_kax_sh_main->IndexThis(*chapters_here, *g_kax_segment);
     delete chapters_here;
 
-  } else if (!g_cluster_helper->splitting() && (NULL != g_kax_chapters))
+  } else if (!g_cluster_helper->splitting() && (nullptr != g_kax_chapters))
     if (!hack_engaged(ENGAGE_NO_CHAPTERS_IN_META_SEEK))
       g_kax_sh_main->IndexThis(*g_kax_chapters, *g_kax_segment);
 
-  if (NULL != s_kax_as) {
+  if (nullptr != s_kax_as) {
     g_kax_sh_main->IndexThis(*s_kax_as, *g_kax_segment);
     delete s_kax_as;
-    s_kax_as = NULL;
+    s_kax_as = nullptr;
   }
 
   if ((g_kax_sh_main->ListSize() > 0) && !hack_engaged(ENGAGE_NO_META_SEEK)) {
@@ -1648,7 +1648,7 @@ finish_file(bool last_file) {
   // The tracks element must not be deleted.
   size_t i;
   for (i = 0; i < g_kax_segment->ListSize(); ++i)
-    if (NULL == dynamic_cast<KaxTracks *>((*g_kax_segment)[i]))
+    if (nullptr == dynamic_cast<KaxTracks *>((*g_kax_segment)[i]))
       delete (*g_kax_segment)[i];
   g_kax_segment->RemoveAll();
 
@@ -1657,11 +1657,11 @@ finish_file(bool last_file) {
   delete s_kax_sh_void;
   delete g_kax_sh_main;
   delete s_void_after_track_headers;
-  if (NULL != g_kax_sh_cues)
+  if (nullptr != g_kax_sh_cues)
     delete g_kax_sh_cues;
   delete s_head;
 
-  s_head = NULL;
+  s_head = nullptr;
 
   return final_file_size;
 }
@@ -1681,11 +1681,11 @@ static void establish_deferred_connections(filelist_t &file);
 void
 append_track(packetizer_t &ptzr,
              const append_spec_t &amap,
-             filelist_t *deferred_file = NULL) {
+             filelist_t *deferred_file = nullptr) {
   filelist_t &src_file = g_files[amap.src_file_id];
   filelist_t &dst_file = g_files[amap.dst_file_id];
 
-  if (NULL != deferred_file)
+  if (nullptr != deferred_file)
     src_file.deferred_max_timecode_seen = deferred_file->reader->m_max_timecode_seen;
 
   // Find the generic_packetizer_c that we will be appending to the one
@@ -1704,7 +1704,7 @@ append_track(packetizer_t &ptzr,
   if (   !dst_file.done
       && (   (APPEND_MODE_FILE_BASED     == g_append_mode)
           || ((*gptzr)->get_track_type() == track_subtitle)
-          || (NULL                       != src_file.reader->m_chapters))) {
+          || (nullptr                       != src_file.reader->m_chapters))) {
     dst_file.reader->read_all();
     dst_file.num_unfinished_packetizers     = 0;
     dst_file.old_num_unfinished_packetizers = 0;
@@ -1716,7 +1716,7 @@ append_track(packetizer_t &ptzr,
       && (track_subtitle == (*gptzr)->get_track_type())
       && (             0 == dst_file.reader->m_num_video_tracks)
       && (            -1 == src_file.deferred_max_timecode_seen)
-      && (          NULL != g_video_packetizer)) {
+      && (          nullptr != g_video_packetizer)) {
 
     for (auto &file : g_files) {
       if (file.done)
@@ -1778,7 +1778,7 @@ append_track(packetizer_t &ptzr,
     // Intentionally left empty.
     ;
 
-  else if (ptzr.deferred && (NULL != deferred_file))
+  else if (ptzr.deferred && (nullptr != deferred_file))
     timecode_adjustment = src_file.deferred_max_timecode_seen;
 
   else if (   (track_subtitle == ptzr.packetizer->get_track_type())
@@ -1786,11 +1786,11 @@ append_track(packetizer_t &ptzr,
     timecode_adjustment = src_file.deferred_max_timecode_seen;
 
   else if (   (ptzr.packetizer->get_track_type() == track_subtitle)
-           || (NULL != src_file.reader->m_chapters)) {
-    if (NULL == src_file.reader->m_ptzr_first_packet)
+           || (nullptr != src_file.reader->m_chapters)) {
+    if (nullptr == src_file.reader->m_ptzr_first_packet)
       ptzr.status = ptzr.packetizer->read();
 
-    if (NULL != src_file.reader->m_ptzr_first_packet) {
+    if (nullptr != src_file.reader->m_ptzr_first_packet) {
       std::vector<append_spec_t>::const_iterator cmp_amap;
       mxforeach(cmp_amap, g_append_mapping)
         if (   (cmp_amap->src_file_id  == amap.src_file_id)
@@ -1824,15 +1824,15 @@ append_track(packetizer_t &ptzr,
   // timecode seen in the previous file/the track that we've been searching
   // for above.
   KaxChapters *chapters = src_file.reader->m_chapters;
-  if (NULL != chapters) {
-    if (NULL == g_kax_chapters)
+  if (nullptr != chapters) {
+    if (nullptr == g_kax_chapters)
       g_kax_chapters = new KaxChapters;
     else
       align_chapter_edition_uids(*g_kax_chapters, *chapters);
     adjust_chapter_timecodes(*chapters, timecode_adjustment);
     move_chapters_by_edition(*g_kax_chapters, *chapters);
     delete chapters;
-    src_file.reader->m_chapters = NULL;
+    src_file.reader->m_chapters = nullptr;
   }
 
   ptzr.deferred = false;
@@ -1860,14 +1860,14 @@ append_tracks_maybe() {
     if (FILE_STATUS_DONE_AND_DRY != ptzr.status)
       continue;
 
-    append_spec_t *amap = NULL;
+    append_spec_t *amap = nullptr;
     for (auto &amap_idx : g_append_mapping)
       if ((amap_idx.dst_file_id == ptzr.file) && (amap_idx.dst_track_id == ptzr.packetizer->m_ti.m_id)) {
         amap = &amap_idx;
         break;
       }
 
-    if (NULL == amap)
+    if (nullptr == amap)
       continue;
 
     append_track(ptzr, *amap);
@@ -1957,10 +1957,10 @@ main_loop() {
 
     // Step 2: Pick the packet with the lowest timecode and
     // stuff it into the Matroska file.
-    packetizer_t * winner = NULL;
+    packetizer_t * winner = nullptr;
     for (auto &ptzr : g_packetizers) {
       if (ptzr.pack.is_set()) {
-        if ((NULL == winner) || !winner->pack.is_set())
+        if ((nullptr == winner) || !winner->pack.is_set())
           winner = &ptzr;
 
         else if (ptzr.pack.is_set() && (ptzr.pack->assigned_timecode < winner->pack->assigned_timecode))
@@ -1971,14 +1971,14 @@ main_loop() {
     // Append the next track if appending is wanted.
     bool appended_a_track = append_tracks_maybe();
 
-    if ((NULL != winner) && winner->pack.is_set()) {
+    if ((nullptr != winner) && winner->pack.is_set()) {
       packet_cptr pack = winner->pack;
 
       // Step 3: Add the winning packet to a cluster. Full clusters will be
       // rendered automatically.
       g_cluster_helper->add_packet(pack);
 
-      winner->pack = packet_cptr(NULL);
+      winner->pack = packet_cptr(nullptr);
 
       // display some progress information
       if (1 <= verbose)
@@ -1989,7 +1989,7 @@ main_loop() {
   }
 
   // Render all remaining packets (if there are any).
-  if ((NULL != g_cluster_helper) && (0 < g_cluster_helper->get_packet_count()))
+  if ((nullptr != g_cluster_helper) && (0 < g_cluster_helper->get_packet_count()))
     g_cluster_helper->render();
 
   if (1 <= verbose)
@@ -2016,29 +2016,29 @@ destroy_readers() {
 void
 cleanup() {
   delete g_cluster_helper;
-  g_cluster_helper = NULL;
+  g_cluster_helper = nullptr;
 
   destroy_readers();
   g_attachments.clear();
 
   delete s_kax_tags;
-  s_kax_tags = NULL;
+  s_kax_tags = nullptr;
 
   delete g_tags_from_cue_chapters;
-  g_tags_from_cue_chapters = NULL;
+  g_tags_from_cue_chapters = nullptr;
 
   delete g_kax_chapters;
-  g_kax_chapters = NULL;
+  g_kax_chapters = nullptr;
 
   delete s_kax_as;
-  s_kax_as = NULL;
+  s_kax_as = nullptr;
 
   delete g_kax_info_chap;
-  g_kax_info_chap = NULL;
+  g_kax_info_chap = nullptr;
 
   g_forced_seguids.clear();
 
   delete g_kax_tracks;
-  g_kax_tracks = NULL;
+  g_kax_tracks = nullptr;
 
 }

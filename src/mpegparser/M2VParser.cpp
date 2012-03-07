@@ -39,7 +39,7 @@ MPEGFrame::MPEGFrame(binary *n_data, uint32_t n_size, bool n_bCopy):
   invisible      = false;
   firstRef       = -1;
   secondRef      = -1;
-  seqHdrData     = NULL;
+  seqHdrData     = nullptr;
   seqHdrDataSize = 0;
 }
 
@@ -124,8 +124,8 @@ M2VParser::M2VParser(){
   gopPts = 0;
   highestPts = 0;
   usePictureFrames = false;
-  seqHdrChunk = NULL;
-  gopChunk = NULL;
+  seqHdrChunk = nullptr;
+  gopChunk = nullptr;
   keepSeqHdrsInBitstream = true;
   bFrameMissingReferenceWarning = false;
 }
@@ -311,13 +311,13 @@ int32_t M2VParser::PrepareFrame(MPEGChunk* chunk, MediaTime timecode, MPEG2Pictu
       memcpy(pData, seqHdrChunk->GetPointer(), seqHdrChunk->GetSize());
       pos += seqHdrChunk->GetSize();
       delete seqHdrChunk;
-      seqHdrChunk = NULL;
+      seqHdrChunk = nullptr;
     }
     if (gopChunk) {
       memcpy(pData + pos, gopChunk->GetPointer(), gopChunk->GetSize());
       pos += gopChunk->GetSize();
       delete gopChunk;
-      gopChunk = NULL;
+      gopChunk = nullptr;
     }
     memcpy(pData + pos, chunk->GetPointer(), chunk->GetSize());
   }
@@ -331,7 +331,7 @@ int32_t M2VParser::PrepareFrame(MPEGChunk* chunk, MediaTime timecode, MPEG2Pictu
     memcpy(outBuf->seqHdrData, seqHdrChunk->GetPointer(),
            outBuf->seqHdrDataSize);
     delete seqHdrChunk;
-    seqHdrChunk = NULL;
+    seqHdrChunk = nullptr;
   }
 
   if(picHdr.frameType == MPEG2_I_FRAME){
@@ -466,12 +466,12 @@ int32_t M2VParser::FillQueues(){
 }
 
 MPEGFrame* M2VParser::ReadFrame(){
-  //if(m_eos) return NULL;
+  //if(m_eos) return nullptr;
   if(GetState() != MPV_PARSER_STATE_FRAME){
-    return NULL;
+    return nullptr;
   }
   if(buffers.empty()){
-    return NULL; // OOPS!
+    return nullptr; // OOPS!
   }
   MPEGFrame* frame = buffers.front();
   buffers.pop();

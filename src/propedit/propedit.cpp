@@ -57,7 +57,7 @@ write_changes(options_cptr &options,
 
   for (auto &id_to_write : ids_to_write) {
     for (auto &target : options->m_targets) {
-      if (NULL == target->m_level1_element)
+      if (nullptr == target->m_level1_element)
         continue;
 
       EbmlMaster &l1_element = *target->m_level1_element;

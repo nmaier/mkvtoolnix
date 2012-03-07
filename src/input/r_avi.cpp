@@ -81,7 +81,7 @@ avi_reader_c::avi_reader_c(const track_info_c &ti,
                            const mm_io_cptr &in)
   : generic_reader_c(ti, in)
   , m_divx_type(DIVX_TYPE_NONE)
-  , m_avi(NULL)
+  , m_avi(nullptr)
   , m_vptzr(-1)
   , m_fps(1.0)
   , m_video_frames_read(0)
@@ -107,7 +107,7 @@ avi_reader_c::read_headers() {
 
   show_demuxer_info();
 
-  if (NULL == (m_avi = AVI_open_input_file(m_in.get_object(), 1)))
+  if (nullptr == (m_avi = AVI_open_input_file(m_in.get_object(), 1)))
     throw mtx::input::invalid_format_x();
 
   m_fps              = AVI_frame_rate(m_avi);
@@ -121,10 +121,10 @@ avi_reader_c::read_headers() {
 }
 
 avi_reader_c::~avi_reader_c() {
-  if (NULL != m_avi)
+  if (nullptr != m_avi)
     AVI_close(m_avi);
 
-  m_ti.m_private_data = NULL;
+  m_ti.m_private_data = nullptr;
 
   mxverb(2, boost::format("avi_reader_c: Dropped video frames: %1%\n") % m_dropped_video_frames);
 }
@@ -153,7 +153,7 @@ avi_reader_c::parse_subtitle_chunks() {
     if (AVI_text_chunks(m_avi) == 0)
       continue;
 
-    int chunk_size = AVI_read_text_chunk(m_avi, NULL);
+    int chunk_size = AVI_read_text_chunk(m_avi, nullptr);
     if (0 >= chunk_size)
       continue;
 
@@ -224,7 +224,7 @@ avi_reader_c::create_video_packetizer() {
   }
 
   m_ti.m_private_data = reinterpret_cast<unsigned char *>(m_avi->bitmap_info_header);
-  if (NULL != m_ti.m_private_data)
+  if (nullptr != m_ti.m_private_data)
     m_ti.m_private_size = get_uint32_le(&m_avi->bitmap_info_header->bi_size);
 
   mxverb(4, boost::format("track extra data size: %1%\n") % (m_ti.m_private_size - sizeof(alBITMAPINFOHEADER)));
@@ -308,11 +308,11 @@ avi_reader_c::create_mpeg1_2_packetizer() {
   int display_width      = ((0 >= seq_hdr.aspectRatio) || (1 == seq_hdr.aspectRatio)) ? seq_hdr.width : static_cast<int>(seq_hdr.height * seq_hdr.aspectRatio);
 
   MPEGChunk *raw_seq_hdr = m2v_parser->GetRealSequenceHeader();
-  if (NULL != raw_seq_hdr) {
+  if (nullptr != raw_seq_hdr) {
     m_ti.m_private_data  = raw_seq_hdr->GetPointer();
     m_ti.m_private_size  = raw_seq_hdr->GetSize();
   } else {
-    m_ti.m_private_data  = NULL;
+    m_ti.m_private_data  = nullptr;
     m_ti.m_private_size  = 0;
   }
 
@@ -358,7 +358,7 @@ avi_reader_c::create_mpeg4_p10_packetizer() {
 
 void
 avi_reader_c::create_vp8_packetizer() {
-  m_ti.m_private_data = NULL;
+  m_ti.m_private_data = nullptr;
   m_ti.m_private_size = 0;
   m_vptzr             = add_packetizer(new vp8_video_packetizer_c(this, m_ti));
 
@@ -371,7 +371,7 @@ avi_reader_c::create_vp8_packetizer() {
 
 void
 avi_reader_c::create_standard_video_packetizer() {
-  m_vptzr = add_packetizer(new video_packetizer_c(this, m_ti, NULL, m_fps, AVI_video_width(m_avi), AVI_video_height(m_avi)));
+  m_vptzr = add_packetizer(new video_packetizer_c(this, m_ti, nullptr, m_fps, AVI_video_width(m_avi), AVI_video_height(m_avi)));
 
   show_packetizer_info(0, PTZR(m_vptzr));
 }
@@ -416,7 +416,7 @@ avi_reader_c::create_srt_packetizer(int idx) {
   parser->parse();
 
   bool is_utf8   = demuxer.m_text_io->get_byte_order() != BO_NONE;
-  demuxer.m_ptzr = add_packetizer(new textsubs_packetizer_c(this, m_ti, MKV_S_TEXTUTF8, NULL, 0, true, is_utf8));
+  demuxer.m_ptzr = add_packetizer(new textsubs_packetizer_c(this, m_ti, MKV_S_TEXTUTF8, nullptr, 0, true, is_utf8));
 
   show_packetizer_info(id, PTZR(demuxer.m_ptzr));
 }
@@ -451,13 +451,13 @@ avi_reader_c::add_audio_demuxer(int aid) {
       return;
 
   AVI_set_audio_track(m_avi, aid);
-  if (AVI_read_audio_chunk(m_avi, NULL) < 0) {
+  if (AVI_read_audio_chunk(m_avi, nullptr) < 0) {
     mxwarn(boost::format(Y("Could not find an index for audio track %1% (avilib error message: %2%). Skipping track.\n")) % (aid + 1) % AVI_strerror());
     return;
   }
 
   avi_demuxer_t demuxer;
-  generic_packetizer_c *packetizer = NULL;
+  generic_packetizer_c *packetizer = nullptr;
   alWAVEFORMATEX *wfe              = m_avi->wave_format_ex[aid];
   uint32_t audio_format            = AVI_audio_format(m_avi);
 
@@ -482,7 +482,7 @@ avi_reader_c::add_audio_demuxer(int aid) {
     m_ti.m_private_data              = reinterpret_cast<unsigned char *>(wfe + 1);
     m_ti.m_private_size              = get_uint16_le(&wfe->cb_size);
   } else {
-    m_ti.m_private_data              = NULL;
+    m_ti.m_private_data              = nullptr;
     m_ti.m_private_size              = 0;
   }
 
@@ -577,7 +577,7 @@ avi_reader_c::create_aac_packetizer(int aid,
 
   if (aac_data_created) {
     m_ti.m_private_size = 0;
-    m_ti.m_private_data = NULL;
+    m_ti.m_private_data = nullptr;
   }
 
   return packetizer;
@@ -595,7 +595,7 @@ avi_reader_c::create_dts_packetizer(int aid) {
     dts_header_t dtsheader;
 
     while ((-1 == dts_position) && (10 > num_read)) {
-      int chunk_size = AVI_read_audio_chunk(m_avi, NULL);
+      int chunk_size = AVI_read_audio_chunk(m_avi, nullptr);
 
       if (0 > chunk_size) {
         memory_cptr chunk = memory_c::alloc(chunk_size);
@@ -619,7 +619,7 @@ avi_reader_c::create_dts_packetizer(int aid) {
 
   } catch (...) {
     mxerror_tid(m_ti.m_fname, aid + 1, Y("Could not find valid DTS headers in this track's first frames.\n"));
-    return NULL;
+    return nullptr;
   }
 }
 
@@ -661,7 +661,7 @@ avi_reader_c::create_vorbis_packetizer(int aid) {
     headers[2]        = &c[offset + header_sizes[0] + header_sizes[1]];
     header_sizes[2]   = laced_size - offset - header_sizes[0] - header_sizes[1];
 
-    m_ti.m_private_data = NULL;
+    m_ti.m_private_data = nullptr;
     m_ti.m_private_size = 0;
 
     return new vorbis_packetizer_c(this, m_ti, headers[0], header_sizes[0], headers[1], header_sizes[1], headers[2], header_sizes[2]);
@@ -670,7 +670,7 @@ avi_reader_c::create_vorbis_packetizer(int aid) {
     mxerror_tid(m_ti.m_fname, aid + 1, boost::format("%1%\n") % e.error());
 
     // Never reached, but make the compiler happy:
-    return NULL;
+    return nullptr;
   }
 }
 
@@ -740,7 +740,7 @@ avi_reader_c::read_video() {
       break;
 
     int dummy_key;
-    AVI_read_frame(m_avi, NULL, &dummy_key);
+    AVI_read_frame(m_avi, nullptr, &dummy_key);
     ++dropped_frames_here;
     ++m_video_frames_read;
   }
@@ -783,7 +783,7 @@ avi_reader_c::read_video() {
 file_status_e
 avi_reader_c::read_audio(avi_demuxer_t &demuxer) {
   AVI_set_audio_track(m_avi, demuxer.m_aid);
-  int size = AVI_read_audio_chunk(m_avi, NULL);
+  int size = AVI_read_audio_chunk(m_avi, nullptr);
 
   if (0 >= size)
     return flush_packetizer(demuxer.m_ptzr);
@@ -794,7 +794,7 @@ avi_reader_c::read_audio(avi_demuxer_t &demuxer) {
   if (0 >= size)
     return flush_packetizer(demuxer.m_ptzr);
 
-  bool need_more_data = 0 != AVI_read_audio_chunk(m_avi, NULL);
+  bool need_more_data = 0 != AVI_read_audio_chunk(m_avi, nullptr);
 
   PTZR(demuxer.m_ptzr)->add_avi_block_size(size);
   PTZR(demuxer.m_ptzr)->process(new packet_t(chunk));

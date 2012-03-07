@@ -18,8 +18,8 @@
 
 #include <string>
 
-bool debugging_requested(const char *option, std::string *arg = NULL);
-bool debugging_requested(const std::string &option, std::string *arg = NULL);
+bool debugging_requested(const char *option, std::string *arg = nullptr);
+bool debugging_requested(const std::string &option, std::string *arg = nullptr);
 void request_debugging(const std::string &options);
 void clear_debugging_requests();
 void init_debugging();

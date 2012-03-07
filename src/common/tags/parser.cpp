@@ -30,7 +30,7 @@ static int
 tet_index(const char *name) {
   int i;
 
-  for (i = 0; NULL != tag_elements[i].name; i++)
+  for (i = 0; nullptr != tag_elements[i].name; i++)
     if (!strcmp(name, tag_elements[i].name))
       return i;
 
@@ -42,16 +42,16 @@ tet_index(const char *name) {
 static void
 end_simple_tag(void *pdata) {
   KaxTagSimple *simple = dynamic_cast<KaxTagSimple *>(xmlp_pelt);
-  assert(NULL != simple);
+  assert(nullptr != simple);
 
-  if ((FINDFIRST(simple, KaxTagString) != NULL) && (FINDFIRST(simple, KaxTagBinary) != NULL))
+  if ((FINDFIRST(simple, KaxTagString) != nullptr) && (FINDFIRST(simple, KaxTagBinary) != nullptr))
     xmlp_error(CPDATA, Y("Only one of <String> and <Binary> may be used beneath <Simple> but not both at the same time."));
 }
 
 void
 parse_xml_tags(const std::string &name,
                KaxTags *tags) {
-  mm_text_io_c *in = NULL;
+  mm_text_io_c *in = nullptr;
   try {
     in = new mm_text_io_c(new mm_file_io_c(name));
   } catch(...) {
@@ -60,17 +60,17 @@ parse_xml_tags(const std::string &name,
 
   try {
     int i;
-    for (i = 0; NULL != tag_elements[i].name; ++i) {
-      tag_elements[i].start_hook = NULL;
-      tag_elements[i].end_hook   = NULL;
+    for (i = 0; nullptr != tag_elements[i].name; ++i) {
+      tag_elements[i].start_hook = nullptr;
+      tag_elements[i].end_hook   = nullptr;
     }
 
     tag_elements[tet_index("Simple")].end_hook = end_simple_tag;
 
     EbmlMaster *m = parse_xml_elements("Tag", tag_elements, in);
-    if (NULL != m) {
+    if (nullptr != m) {
       KaxTags *new_tags = dynamic_cast<KaxTags *>(sort_ebml_master(m));
-      assert(NULL != new_tags);
+      assert(nullptr != new_tags);
 
       while (new_tags->ListSize() > 0) {
         tags->PushElement(*(*new_tags)[0]);

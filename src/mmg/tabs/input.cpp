@@ -60,7 +60,7 @@ const wxChar *predefined_aspect_ratios[] = {
   wxT("2.00"),
   wxT("2.21"),
   wxT("2.35"),
-  NULL
+  nullptr
 };
 
 const wxChar *predefined_fourccs[] = {
@@ -70,7 +70,7 @@ const wxChar *predefined_fourccs[] = {
   wxT("DX50"),
   wxT("MP4V"),
   wxT("XVID"),
-  NULL
+  nullptr
 };
 
 class input_drop_target_c: public wxFileDropTarget {
@@ -165,7 +165,7 @@ tab_input::tab_input(wxWindow *parent):
 
   translate_ui();
 
-  set_track_mode(NULL);
+  set_track_mode(nullptr);
   selected_file  = -1;
   selected_track = -1;
 
@@ -261,7 +261,7 @@ tab_input::setup_file_type_filter() {
 
 void
 tab_input::select_file(bool append) {
-  wxFileDialog dlg(NULL, append ? Z("Choose an input file to append") : Z("Choose an input file to add"), last_open_dir, wxEmptyString, setup_file_type_filter(), wxFD_OPEN | wxFD_MULTIPLE);
+  wxFileDialog dlg(nullptr, append ? Z("Choose an input file to append") : Z("Choose an input file to add"), last_open_dir, wxEmptyString, setup_file_type_filter(), wxFD_OPEN | wxFD_MULTIPLE);
   if(dlg.ShowModal() != wxID_OK)
     return;
 
@@ -757,7 +757,7 @@ tab_input::on_remove_file(wxCommandEvent &) {
   b_track_down->Enable(-1 != selected_file);
 
   selected_track = clb_tracks->GetSelection();
-  set_track_mode(-1 == selected_track ? NULL : tracks[selected_track]);
+  set_track_mode(-1 == selected_track ? nullptr : tracks[selected_track]);
   if (tracks.empty()) {
     st_tracks->Enable(false);
     clb_tracks->Enable(false);
@@ -789,7 +789,7 @@ tab_input::on_remove_all_files(wxCommandEvent &) {
   b_track_up->Enable(false);
   b_track_down->Enable(false);
 
-  set_track_mode(NULL);
+  set_track_mode(nullptr);
 
   mdlg->remove_output_filename();
 
@@ -1056,7 +1056,7 @@ tab_input::load(wxConfigBase *cfg,
 
   clb_tracks->Clear();
   lb_input_files->Clear();
-  set_track_mode(NULL);
+  set_track_mode(nullptr);
   selected_file  = -1;
   selected_track = -1;
   b_remove_file->Enable(false);

@@ -106,7 +106,7 @@ random_c::generate_bytes(void *destination,
   if (!m_seeded) {
     struct timeval tv;
 
-    gettimeofday(&tv, NULL);
+    gettimeofday(&tv, nullptr);
     srand(tv.tv_usec + tv.tv_sec);
     m_seeded = true;
   }

@@ -26,20 +26,20 @@ using namespace libmatroska;
 
 static EbmlId no_id((uint32)0, 0);
 
-parser_element_t *chapter_elements     = NULL;
-parser_element_t *tag_elements         = NULL;
-parser_element_t *segmentinfo_elements = NULL;
+parser_element_t *chapter_elements     = nullptr;
+parser_element_t *tag_elements         = nullptr;
+parser_element_t *segmentinfo_elements = nullptr;
 
 static void
 init_mapping_table(parser_element_t *table) {
   int i;
-  for (i = 0; table[i].name != NULL; i++) {
+  for (i = 0; table[i].name != nullptr; i++) {
     if (EBMLT_SKIP == table[i].type)
       continue;
 
-    const char *debug_name      = table[i].debug_name != NULL ? table[i].debug_name : table[i].name;
+    const char *debug_name      = table[i].debug_name != nullptr ? table[i].debug_name : table[i].name;
     const EbmlCallbacks *result = find_ebml_callbacks(EBML_INFO(KaxSegment), debug_name);
-    if (NULL == result)
+    if (nullptr == result)
       mxerror(boost::format(Y("Error initializing the tables for the chapter, tag and segment info elements: "
                               "Could not find the element with the debug name '%1%'. %2%\n")) % debug_name % BUGMSG);
     table[i].id = EBML_INFO_ID(*result);
@@ -49,81 +49,81 @@ init_mapping_table(parser_element_t *table) {
 void
 xml_element_map_init() {
   static parser_element_t _chapter_elements[] = {
-    {"Chapters",              EBMLT_MASTER,  0,  0,            0, no_id,                NULL, NULL, NULL},
+    {"Chapters",              EBMLT_MASTER,  0,  0,            0, no_id,                nullptr, nullptr, nullptr},
 
-    {"EditionEntry",          EBMLT_MASTER,  1,  0,            0, no_id,                NULL, NULL, NULL},
-    {"EditionUID",            EBMLT_UINT,    2,  0, NO_MAX_VALUE, no_id,                NULL, NULL, NULL},
-    {"EditionFlagHidden",     EBMLT_BOOL,    2,  0,            0, no_id,                NULL, NULL, NULL},
-    {"EditionFlagOrdered",    EBMLT_BOOL,    2,  0,            0, no_id,                NULL, NULL, NULL},
-    {"EditionFlagDefault",    EBMLT_BOOL,    2,  0,            0, no_id,                NULL, NULL, NULL},
-    {"EditionProcessed",      EBMLT_SKIP,    2,  0,            0, no_id,                NULL, NULL, NULL},
+    {"EditionEntry",          EBMLT_MASTER,  1,  0,            0, no_id,                nullptr, nullptr, nullptr},
+    {"EditionUID",            EBMLT_UINT,    2,  0, NO_MAX_VALUE, no_id,                nullptr, nullptr, nullptr},
+    {"EditionFlagHidden",     EBMLT_BOOL,    2,  0,            0, no_id,                nullptr, nullptr, nullptr},
+    {"EditionFlagOrdered",    EBMLT_BOOL,    2,  0,            0, no_id,                nullptr, nullptr, nullptr},
+    {"EditionFlagDefault",    EBMLT_BOOL,    2,  0,            0, no_id,                nullptr, nullptr, nullptr},
+    {"EditionProcessed",      EBMLT_SKIP,    2,  0,            0, no_id,                nullptr, nullptr, nullptr},
 
-    {"ChapterAtom",           EBMLT_MASTER,  2,  0,            0, no_id,                NULL, NULL, NULL},
-    {"ChapterUID",            EBMLT_UINT,    3,  0, NO_MAX_VALUE, no_id,                NULL, NULL, NULL},
-    {"ChapterTimeStart",      EBMLT_TIME,    3,  0,            0, no_id,                NULL, NULL, NULL},
-    {"ChapterTimeEnd",        EBMLT_TIME,    3,  0,            0, no_id,                NULL, NULL, NULL},
-    {"ChapterFlagHidden",     EBMLT_BOOL,    3,  0,            0, no_id,                NULL, NULL, NULL},
-    {"ChapterFlagEnabled",    EBMLT_BOOL,    3,  0,            0, no_id,                NULL, NULL, NULL},
-    {"ChapterPhysicalEquiv",  EBMLT_UINT,    3,  0, NO_MAX_VALUE, no_id,                NULL, NULL, NULL},
-    {"ChapterSegmentUID",     EBMLT_BINARY,  3, 16,           16, no_id,                NULL, NULL, NULL},
+    {"ChapterAtom",           EBMLT_MASTER,  2,  0,            0, no_id,                nullptr, nullptr, nullptr},
+    {"ChapterUID",            EBMLT_UINT,    3,  0, NO_MAX_VALUE, no_id,                nullptr, nullptr, nullptr},
+    {"ChapterTimeStart",      EBMLT_TIME,    3,  0,            0, no_id,                nullptr, nullptr, nullptr},
+    {"ChapterTimeEnd",        EBMLT_TIME,    3,  0,            0, no_id,                nullptr, nullptr, nullptr},
+    {"ChapterFlagHidden",     EBMLT_BOOL,    3,  0,            0, no_id,                nullptr, nullptr, nullptr},
+    {"ChapterFlagEnabled",    EBMLT_BOOL,    3,  0,            0, no_id,                nullptr, nullptr, nullptr},
+    {"ChapterPhysicalEquiv",  EBMLT_UINT,    3,  0, NO_MAX_VALUE, no_id,                nullptr, nullptr, nullptr},
+    {"ChapterSegmentUID",     EBMLT_BINARY,  3, 16,           16, no_id,                nullptr, nullptr, nullptr},
 
-    {"ChapterProcess",        EBMLT_MASTER,  3,  0,            0, no_id,                NULL, NULL, NULL},
-    {"ChapterProcessCodecID", EBMLT_UINT,    4,  0, NO_MAX_VALUE, no_id,                NULL, NULL, NULL},
-    {"ChapterProcessPrivate", EBMLT_BINARY,  4,  0,            0, no_id,                NULL, NULL, NULL},
+    {"ChapterProcess",        EBMLT_MASTER,  3,  0,            0, no_id,                nullptr, nullptr, nullptr},
+    {"ChapterProcessCodecID", EBMLT_UINT,    4,  0, NO_MAX_VALUE, no_id,                nullptr, nullptr, nullptr},
+    {"ChapterProcessPrivate", EBMLT_BINARY,  4,  0,            0, no_id,                nullptr, nullptr, nullptr},
 
-    {"ChapterProcessCommand", EBMLT_MASTER,  4,  0,            0, no_id,                NULL, NULL, NULL},
-    {"ChapterProcessTime",    EBMLT_UINT,    5,  0,            0, no_id,                NULL, NULL, NULL},
-    {"ChapterProcessData",    EBMLT_BINARY,  5,  0,            0, no_id,                NULL, NULL, NULL},
+    {"ChapterProcessCommand", EBMLT_MASTER,  4,  0,            0, no_id,                nullptr, nullptr, nullptr},
+    {"ChapterProcessTime",    EBMLT_UINT,    5,  0,            0, no_id,                nullptr, nullptr, nullptr},
+    {"ChapterProcessData",    EBMLT_BINARY,  5,  0,            0, no_id,                nullptr, nullptr, nullptr},
 
-    {"ChapterTrack",          EBMLT_MASTER,  3,  0,            0, no_id,                NULL, NULL, NULL},
-    {"ChapterTrackNumber",    EBMLT_UINT,    4,  0, NO_MAX_VALUE, no_id,                NULL, NULL, NULL},
+    {"ChapterTrack",          EBMLT_MASTER,  3,  0,            0, no_id,                nullptr, nullptr, nullptr},
+    {"ChapterTrackNumber",    EBMLT_UINT,    4,  0, NO_MAX_VALUE, no_id,                nullptr, nullptr, nullptr},
 
-    {"ChapterDisplay",        EBMLT_MASTER,  3,  0,            0, no_id,                NULL, NULL, NULL},
-    {"ChapterString",         EBMLT_USTRING, 4,  0,            0, no_id,                NULL, NULL, NULL},
-    {"ChapterLanguage",       EBMLT_STRING,  4,  0,            0, no_id,                NULL, NULL, NULL},
-    {"ChapterCountry",        EBMLT_STRING,  4,  0,            0, no_id,                NULL, NULL, NULL},
+    {"ChapterDisplay",        EBMLT_MASTER,  3,  0,            0, no_id,                nullptr, nullptr, nullptr},
+    {"ChapterString",         EBMLT_USTRING, 4,  0,            0, no_id,                nullptr, nullptr, nullptr},
+    {"ChapterLanguage",       EBMLT_STRING,  4,  0,            0, no_id,                nullptr, nullptr, nullptr},
+    {"ChapterCountry",        EBMLT_STRING,  4,  0,            0, no_id,                nullptr, nullptr, nullptr},
 
-    {NULL,                    EBMLT_MASTER,  0,  0,            0, EbmlId((uint32)0, 0), NULL, NULL, NULL}
+    {nullptr,                    EBMLT_MASTER,  0,  0,            0, EbmlId((uint32)0, 0), nullptr, nullptr, nullptr}
   };
 
   static parser_element_t _tag_elements[] = {
-    {"Tags",            EBMLT_MASTER,  0, 0,            0, no_id,                NULL, NULL, NULL},
+    {"Tags",            EBMLT_MASTER,  0, 0,            0, no_id,                nullptr, nullptr, nullptr},
 
-    {"Tag",             EBMLT_MASTER,  1, 0,            0, no_id,                NULL, NULL, NULL},
+    {"Tag",             EBMLT_MASTER,  1, 0,            0, no_id,                nullptr, nullptr, nullptr},
 
-    {"Targets",         EBMLT_MASTER,  2, 0,            0, no_id,                NULL, NULL, "TagTargets"},
-    {"TrackUID",        EBMLT_UINT,    3, 0, NO_MAX_VALUE, no_id,                NULL, NULL, "TagTrackUID"},
-    {"EditionUID",      EBMLT_UINT,    3, 0, NO_MAX_VALUE, no_id,                NULL, NULL, "TagEditionUID"},
-    {"ChapterUID",      EBMLT_UINT,    3, 0, NO_MAX_VALUE, no_id,                NULL, NULL, "TagChapterUID"},
-    {"AttachmentUID",   EBMLT_UINT,    3, 0, NO_MAX_VALUE, no_id,                NULL, NULL, "TagAttachmentUID"},
-    {"TargetType",      EBMLT_STRING,  3, 0,            0, no_id,                NULL, NULL, "TagTargetType"},
-    {"TargetTypeValue", EBMLT_UINT,    3, 0, NO_MAX_VALUE, no_id,                NULL, NULL, "TagTargetTypeValue"},
+    {"Targets",         EBMLT_MASTER,  2, 0,            0, no_id,                nullptr, nullptr, "TagTargets"},
+    {"TrackUID",        EBMLT_UINT,    3, 0, NO_MAX_VALUE, no_id,                nullptr, nullptr, "TagTrackUID"},
+    {"EditionUID",      EBMLT_UINT,    3, 0, NO_MAX_VALUE, no_id,                nullptr, nullptr, "TagEditionUID"},
+    {"ChapterUID",      EBMLT_UINT,    3, 0, NO_MAX_VALUE, no_id,                nullptr, nullptr, "TagChapterUID"},
+    {"AttachmentUID",   EBMLT_UINT,    3, 0, NO_MAX_VALUE, no_id,                nullptr, nullptr, "TagAttachmentUID"},
+    {"TargetType",      EBMLT_STRING,  3, 0,            0, no_id,                nullptr, nullptr, "TagTargetType"},
+    {"TargetTypeValue", EBMLT_UINT,    3, 0, NO_MAX_VALUE, no_id,                nullptr, nullptr, "TagTargetTypeValue"},
 
-    {"Simple",          EBMLT_MASTER,  2, 0,            0, no_id,                NULL, NULL, "TagSimple"},
-    {"Name",            EBMLT_USTRING, 3, 0,            0, no_id,                NULL, NULL, "TagName"},
-    {"String",          EBMLT_USTRING, 3, 0,            0, no_id,                NULL, NULL, "TagString"},
-    {"Binary",          EBMLT_BINARY,  3, 0,            0, no_id,                NULL, NULL, "TagBinary"},
-    {"TagLanguage"    , EBMLT_STRING,  3, 0,            0, no_id,                NULL, NULL, "TagLanguage"},
-    {"DefaultLanguage", EBMLT_BOOL,    3, 0,            1, no_id,                NULL, NULL, "TagDefault"},
+    {"Simple",          EBMLT_MASTER,  2, 0,            0, no_id,                nullptr, nullptr, "TagSimple"},
+    {"Name",            EBMLT_USTRING, 3, 0,            0, no_id,                nullptr, nullptr, "TagName"},
+    {"String",          EBMLT_USTRING, 3, 0,            0, no_id,                nullptr, nullptr, "TagString"},
+    {"Binary",          EBMLT_BINARY,  3, 0,            0, no_id,                nullptr, nullptr, "TagBinary"},
+    {"TagLanguage"    , EBMLT_STRING,  3, 0,            0, no_id,                nullptr, nullptr, "TagLanguage"},
+    {"DefaultLanguage", EBMLT_BOOL,    3, 0,            1, no_id,                nullptr, nullptr, "TagDefault"},
 
-    {NULL,              EBMLT_MASTER,  0, 0,            0, EbmlId((uint32)0, 0), NULL, NULL, NULL}
+    {nullptr,              EBMLT_MASTER,  0, 0,            0, EbmlId((uint32)0, 0), nullptr, nullptr, nullptr}
   };
 
   static parser_element_t _segmentinfo_elements[] = {
-    {"Info",                       EBMLT_MASTER, 0,  0,            0, no_id,                NULL, NULL, NULL},
+    {"Info",                       EBMLT_MASTER, 0,  0,            0, no_id,                nullptr, nullptr, nullptr},
 
-    {"SegmentUID",                 EBMLT_BINARY, 1, 16,           16, no_id,                NULL, NULL, NULL},
-    {"NextSegmentUID",             EBMLT_BINARY, 1, 16,           16, no_id,                NULL, NULL, "NextUID"},
-    {"PreviousSegmentUID",         EBMLT_BINARY, 1, 16,           16, no_id,                NULL, NULL, "PrevUID"},
+    {"SegmentUID",                 EBMLT_BINARY, 1, 16,           16, no_id,                nullptr, nullptr, nullptr},
+    {"NextSegmentUID",             EBMLT_BINARY, 1, 16,           16, no_id,                nullptr, nullptr, "NextUID"},
+    {"PreviousSegmentUID",         EBMLT_BINARY, 1, 16,           16, no_id,                nullptr, nullptr, "PrevUID"},
 
-    {"SegmentFamily",              EBMLT_BINARY, 1,  0,            0, no_id,                NULL, NULL, NULL},
+    {"SegmentFamily",              EBMLT_BINARY, 1,  0,            0, no_id,                nullptr, nullptr, nullptr},
 
-    {"ChapterTranslate",           EBMLT_MASTER, 1,  0,            0, no_id,                NULL, NULL, NULL},
-    {"ChapterTranslateEditionUID", EBMLT_UINT,   2,  0, NO_MAX_VALUE, no_id,                NULL, NULL, NULL},
-    {"ChapterTranslateCodec",      EBMLT_UINT,   2,  0, NO_MAX_VALUE, no_id,                NULL, NULL, NULL},
-    {"ChapterTranslateID",         EBMLT_BINARY, 2,  0,            0, no_id,                NULL, NULL, NULL},
+    {"ChapterTranslate",           EBMLT_MASTER, 1,  0,            0, no_id,                nullptr, nullptr, nullptr},
+    {"ChapterTranslateEditionUID", EBMLT_UINT,   2,  0, NO_MAX_VALUE, no_id,                nullptr, nullptr, nullptr},
+    {"ChapterTranslateCodec",      EBMLT_UINT,   2,  0, NO_MAX_VALUE, no_id,                nullptr, nullptr, nullptr},
+    {"ChapterTranslateID",         EBMLT_BINARY, 2,  0,            0, no_id,                nullptr, nullptr, nullptr},
 
-    {NULL,                         EBMLT_MASTER, 0,  0,            0, EbmlId((uint32)0, 0), NULL, NULL, NULL}
+    {nullptr,                         EBMLT_MASTER, 0,  0,            0, EbmlId((uint32)0, 0), nullptr, nullptr, nullptr}
   };
 
   chapter_elements     = _chapter_elements;
@@ -138,7 +138,7 @@ int
 xml_element_map_index(const parser_element_t *element_map,
                       const char *name) {
   int i;
-  for (i = 0; element_map[i].name != NULL; i++)
+  for (i = 0; element_map[i].name != nullptr; i++)
     if (!strcmp(name, element_map[i].name))
       return i;
 

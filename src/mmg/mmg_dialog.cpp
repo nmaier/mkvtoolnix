@@ -71,13 +71,13 @@ std::map<wxString, wxString> capabilities;
 std::vector<job_t> jobs;
 
 mmg_dialog::mmg_dialog()
-  : wxFrame(NULL, wxID_ANY, wxEmptyString)
+  : wxFrame(nullptr, wxID_ANY, wxEmptyString)
 #if defined(SYS_WINDOWS)
   , m_taskbar_msg_received(false)
 #endif
 #if defined(HAVE_CURL_EASY_H)
   , m_checking_for_updates(false)
-  , m_update_check_dlg(NULL)
+  , m_update_check_dlg(nullptr)
 #endif  // defined(HAVE_CURL_EASY_H)
 {
   wxBoxSizer *bs_main;
@@ -181,7 +181,7 @@ mmg_dialog::mmg_dialog()
 
   SetIcon(wxIcon(mkvmergeGUI_xpm));
 
-  help = NULL;
+  help = nullptr;
 
   translate_ui();
 
@@ -345,7 +345,7 @@ mmg_dialog::translate_ui() {
 
 void
 mmg_dialog::on_browse_output(wxCommandEvent &) {
-  wxFileDialog dlg(NULL, Z("Choose an output file"), last_open_dir,
+  wxFileDialog dlg(nullptr, Z("Choose an output file"), last_open_dir,
                    tc_output->GetValue().AfterLast(PSEP),
                    wxString::Format(Z("Matroska A/V files (*.mka;*.mkv;*.mk3d)|*.mkv;*.mka;*.mk3d|%s"), ALLFILES.c_str()),
                    wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
@@ -395,7 +395,7 @@ mmg_dialog::on_file_new(wxCommandEvent &evt) {
 
 void
 mmg_dialog::on_file_load(wxCommandEvent &) {
-  wxFileDialog dlg(NULL, Z("Choose an input file"), last_open_dir, wxEmptyString, wxString::Format(Z("mkvmerge GUI settings (*.mmg)|*.mmg|%s"), ALLFILES.c_str()), wxFD_OPEN);
+  wxFileDialog dlg(nullptr, Z("Choose an input file"), last_open_dir, wxEmptyString, wxString::Format(Z("mkvmerge GUI settings (*.mmg)|*.mmg|%s"), ALLFILES.c_str()), wxFD_OPEN);
   if(dlg.ShowModal() != wxID_OK)
     return;
 
@@ -441,7 +441,7 @@ mmg_dialog::load(wxString file_name,
 
 void
 mmg_dialog::on_file_save(wxCommandEvent &) {
-  wxFileDialog dlg(NULL, Z("Choose an output file"), last_open_dir, wxEmptyString, wxString::Format(Z("mkvmerge GUI settings (*.mmg)|*.mmg|%s"), ALLFILES.c_str()), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+  wxFileDialog dlg(nullptr, Z("Choose an output file"), last_open_dir, wxEmptyString, wxString::Format(Z("mkvmerge GUI settings (*.mmg)|*.mmg|%s"), ALLFILES.c_str()), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
   if(dlg.ShowModal() != wxID_OK)
     return;
 
@@ -650,7 +650,7 @@ mmg_dialog::on_help(wxCommandEvent &) {
 
 void
 mmg_dialog::display_help(int id) {
-  if (help == NULL) {
+  if (help == nullptr) {
     wxDirDialog dlg(this, Z("Choose the location of the mkvmerge GUI help files"));
     std::vector<wxString> potential_help_paths;
 
@@ -749,7 +749,7 @@ void
 mmg_dialog::on_save_cmdline(wxCommandEvent &) {
   wxFile *file;
   wxString s;
-  wxFileDialog dlg(NULL, Z("Choose an output file"), last_open_dir, wxEmptyString, ALLFILES, wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+  wxFileDialog dlg(nullptr, Z("Choose an output file"), last_open_dir, wxEmptyString, ALLFILES, wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
   if(dlg.ShowModal() == wxID_OK) {
     update_command_line();
 
@@ -770,7 +770,7 @@ mmg_dialog::on_create_optionfile(wxCommandEvent &) {
   std::string arg_utf8;
   wxFile *file;
 
-  wxFileDialog dlg(NULL, Z("Choose an output file"), last_open_dir, wxEmptyString, ALLFILES, wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+  wxFileDialog dlg(nullptr, Z("Choose an output file"), last_open_dir, wxEmptyString, ALLFILES, wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
   if(dlg.ShowModal() == wxID_OK) {
     update_command_line();
 
@@ -1224,7 +1224,7 @@ mmg_dialog::update_file_menu() {
 
   for (i = ID_M_FILE_LOADLAST1; i <= ID_M_FILE_LOADLAST4; i++) {
     mi = file_menu->FindItem(i);
-    if (mi != NULL)
+    if (mi != nullptr)
       file_menu->Destroy(mi);
   }
 
@@ -1246,7 +1246,7 @@ mmg_dialog::update_chapter_menu() {
 
   for (i = ID_M_CHAPTERS_LOADLAST1; i <= ID_M_CHAPTERS_LOADLAST4; i++) {
     mi = chapter_menu->FindItem(i);
-    if (mi != NULL)
+    if (mi != nullptr)
       chapter_menu->Destroy(mi);
   }
 
@@ -1727,8 +1727,8 @@ mmg_dialog::on_update_check_state_changed(wxCommandEvent &evt) {
 
   if (UPDATE_CHECK_START == state) {
     if (m_interactive_update_check) {
-      if (NULL != m_update_check_dlg) {
-        wxLogMessage(wxT("m_update_check_dlg != NULL on start"));
+      if (nullptr != m_update_check_dlg) {
+        wxLogMessage(wxT("m_update_check_dlg != nullptr on start"));
         delete m_update_check_dlg;
       }
 
@@ -1760,7 +1760,7 @@ mmg_dialog::on_update_check_state_changed(wxCommandEvent &evt) {
     }
 
     if (show) {
-      if (NULL == m_update_check_dlg) {
+      if (nullptr == m_update_check_dlg) {
         m_update_check_dlg = new update_check_dlg_c(this);
         m_update_check_dlg->Show();
       }
@@ -1773,7 +1773,7 @@ mmg_dialog::on_update_check_state_changed(wxCommandEvent &evt) {
     } else
       m_checking_for_updates = false;
 
-    m_update_check_dlg = NULL;
+    m_update_check_dlg = nullptr;
 
     cfg->Flush();
   }

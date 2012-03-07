@@ -96,7 +96,7 @@ mpeg1_2_video_packetizer_c::put_sequence_headers_into_codec_state(packet_cptr pa
   pos            -= 4;
   size_t sh_size  = pos - start;
 
-  if (NULL == m_hcodec_private) {
+  if (nullptr == m_hcodec_private) {
     set_codec_private(&buf[start], sh_size);
     rerender_track_headers();
   }
@@ -147,10 +147,10 @@ mpeg1_2_video_packetizer_c::process(packet_cptr packet) {
     state = m_parser.GetState();
     while (MPV_PARSER_STATE_FRAME == state) {
       MPEGFrame *frame = m_parser.ReadFrame();
-      if (NULL == frame)
+      if (nullptr == frame)
         break;
 
-      if (NULL == m_hcodec_private)
+      if (nullptr == m_hcodec_private)
         create_private_data();
 
       packet_cptr new_packet   = packet_cptr(new packet_t(new memory_c(frame->data, frame->size, true), frame->timecode, frame->duration, frame->firstRef, frame->secondRef));
@@ -160,7 +160,7 @@ mpeg1_2_video_packetizer_c::process(packet_cptr packet) {
 
       video_packetizer_c::process(new_packet);
 
-      frame->data = NULL;
+      frame->data = nullptr;
       delete frame;
 
       state = m_parser.GetState();
@@ -212,7 +212,7 @@ mpeg1_2_video_packetizer_c::extract_aspect_ratio(const unsigned char *buffer,
 void
 mpeg1_2_video_packetizer_c::create_private_data() {
   MPEGChunk *raw_seq_hdr = m_parser.GetRealSequenceHeader();
-  if (NULL != raw_seq_hdr) {
+  if (nullptr != raw_seq_hdr) {
     set_codec_private(raw_seq_hdr->GetPointer(), raw_seq_hdr->GetSize());
     rerender_track_headers();
   }

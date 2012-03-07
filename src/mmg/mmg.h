@@ -147,7 +147,7 @@ struct mmg_attached_file_t {
     : enabled(true)
     , id(0)
     , size(0)
-    , source(NULL)
+    , source(nullptr)
   {
   }
 };

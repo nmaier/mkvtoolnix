@@ -34,7 +34,7 @@ using namespace libmatroska;
 
 static void
 end_edition_entry(void *pdata) {
-  KaxEditionUID *euid = NULL;
+  KaxEditionUID *euid = nullptr;
   EbmlMaster *m       = static_cast<EbmlMaster *>(xmlp_pelt);
   size_t num           = 0;
   size_t i;
@@ -50,7 +50,7 @@ end_edition_entry(void *pdata) {
   if (0 == num)
     xmlp_error(CPDATA, Y("At least one <ChapterAtom> element is needed."));
 
-  if (NULL == euid) {
+  if (nullptr == euid) {
     euid = new KaxEditionUID;
     *static_cast<EbmlUInteger *>(euid) = create_unique_uint32(UNIQUE_EDITION_IDS);
     m->PushElement(*euid);
@@ -81,10 +81,10 @@ static void
 end_chapter_atom(void *pdata) {
   EbmlMaster *m = static_cast<EbmlMaster *>(xmlp_pelt);
 
-  if (m->FindFirstElt(EBML_INFO(KaxChapterTimeStart), false) == NULL)
+  if (m->FindFirstElt(EBML_INFO(KaxChapterTimeStart), false) == nullptr)
     xmlp_error(CPDATA, Y("<ChapterAtom> is missing the <ChapterTimeStart> child."));
 
-  if (m->FindFirstElt(EBML_INFO(KaxChapterUID), false) == NULL) {
+  if (m->FindFirstElt(EBML_INFO(KaxChapterUID), false) == nullptr) {
     KaxChapterUID *cuid = new KaxChapterUID;
     *static_cast<EbmlUInteger *>(cuid) = create_unique_uint32(UNIQUE_CHAPTER_IDS);
     m->PushElement(*cuid);
@@ -95,7 +95,7 @@ static void
 end_chapter_track(void *pdata) {
   EbmlMaster *m = static_cast<EbmlMaster *>(xmlp_pelt);
 
-  if (m->FindFirstElt(EBML_INFO(KaxChapterTrackNumber), false) == NULL)
+  if (m->FindFirstElt(EBML_INFO(KaxChapterTrackNumber), false) == nullptr)
     xmlp_error(CPDATA, Y("<ChapterTrack> is missing the <ChapterTrackNumber> child."));
 }
 
@@ -103,10 +103,10 @@ static void
 end_chapter_display(void *pdata) {
   EbmlMaster *m = static_cast<EbmlMaster *>(xmlp_pelt);
 
-  if (m->FindFirstElt(EBML_INFO(KaxChapterString), false) == NULL)
+  if (m->FindFirstElt(EBML_INFO(KaxChapterString), false) == nullptr)
     xmlp_error(CPDATA, Y("<ChapterDisplay> is missing the <ChapterString> child."));
 
-  if (m->FindFirstElt(EBML_INFO(KaxChapterLanguage), false) == NULL) {
+  if (m->FindFirstElt(EBML_INFO(KaxChapterLanguage), false) == nullptr) {
     KaxChapterLanguage *cl         = new KaxChapterLanguage;
     *static_cast<EbmlString *>(cl) = "und";
     m->PushElement(*cl);
@@ -136,7 +136,7 @@ static int
 cet_index(const char *name) {
   int i;
 
-  for (i = 0; chapter_elements[i].name != NULL; i++)
+  for (i = 0; chapter_elements[i].name != nullptr; i++)
     if (!strcmp(name, chapter_elements[i].name))
       return i;
 
@@ -172,9 +172,9 @@ parse_xml_chapters(mm_text_io_c *in,
 
   try {
     int i;
-    for (i = 0; NULL != chapter_elements[i].name; ++i) {
-      chapter_elements[i].start_hook = NULL;
-      chapter_elements[i].end_hook   = NULL;
+    for (i = 0; nullptr != chapter_elements[i].name; ++i) {
+      chapter_elements[i].start_hook = nullptr;
+      chapter_elements[i].end_hook   = nullptr;
     }
 
     chapter_elements[cet_index("EditionEntry")].end_hook    = end_edition_entry;
@@ -188,7 +188,7 @@ parse_xml_chapters(mm_text_io_c *in,
 
     EbmlMaster *m = parse_xml_elements("Chapter", chapter_elements, in);
     chapters = dynamic_cast<KaxChapters *>(sort_ebml_master(m));
-    assert(NULL != chapters);
+    assert(nullptr != chapters);
     chapters = select_chapters_in_timeframe(chapters, min_tc, max_tc, offset);
 
   } catch (mtx::xml::parser_x &e) {

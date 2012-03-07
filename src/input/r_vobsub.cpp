@@ -32,7 +32,7 @@
                      : tolower(c) == 'd' ? 13        \
                      : tolower(c) == 'e' ? 14        \
                      :                     15)
-#define ishexdigit(s) (isdigit(s) || (strchr("abcdefABCDEF", s) != NULL))
+#define ishexdigit(s) (isdigit(s) || (strchr("abcdefABCDEF", s) != nullptr))
 
 const std::string vobsub_reader_c::id_string("# VobSub index file, v");
 
@@ -162,7 +162,7 @@ vobsub_reader_c::create_packetizers() {
 void
 vobsub_reader_c::parse_headers() {
   std::string language, line;
-  vobsub_track_c *track  = NULL;
+  vobsub_track_c *track  = nullptr;
   int64_t line_no        = 0;
   int64_t last_timestamp = 0;
   bool sort_required     = false;
@@ -193,7 +193,7 @@ vobsub_reader_c::parse_headers() {
       } else
         language = "";
 
-      if (NULL != track) {
+      if (nullptr != track) {
         if (track->entries.empty())
           delete track;
         else {
@@ -231,7 +231,7 @@ vobsub_reader_c::parse_headers() {
     }
 
     if ((7 == version) && ba::istarts_with(line, "timestamp:")) {
-      if (NULL == track)
+      if (nullptr == track)
         mxerror_fn(m_ti.m_fname, Y("The .idx file does not contain an 'id: ...' line to indicate the language.\n"));
 
       strip(line);
@@ -305,7 +305,7 @@ vobsub_reader_c::parse_headers() {
     idx_data += "\n";
   }
 
-  if (NULL != track) {
+  if (nullptr != track) {
     if (track->entries.size() == 0)
       delete track;
     else {
@@ -336,7 +336,7 @@ vobsub_reader_c::deliver_packet(unsigned char *buf,
                                 int64_t timecode,
                                 int64_t default_duration,
                                 generic_packetizer_c *ptzr) {
-  if ((NULL == buf) || (0 == size)) {
+  if ((nullptr == buf) || (0 == size)) {
     safefree(buf);
     return -1;
   }
@@ -429,7 +429,7 @@ vobsub_reader_c::extract_one_spu_packet(int64_t track_id) {
   uint64_t extraction_end_pos   = track->idx >= track->entries.size() - 1 ? m_sub_file->get_size() : track->entries[track->idx + 1].position;
 
   int64_t pts                   = 0;
-  unsigned char *dst_buf        = NULL;
+  unsigned char *dst_buf        = nullptr;
   uint32_t dst_size             = 0;
   uint32_t packet_size          = 0;
   unsigned int spu_len          = 0;
@@ -617,7 +617,7 @@ vobsub_reader_c::extract_one_spu_packet(int64_t track_id) {
 file_status_e
 vobsub_reader_c::read(generic_packetizer_c *ptzr,
                       bool) {
-  vobsub_track_c *track = NULL;
+  vobsub_track_c *track = nullptr;
   uint32_t id;
 
   for (id = 0; id < tracks.size(); ++id)

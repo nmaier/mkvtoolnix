@@ -33,7 +33,7 @@ dirac::frame_t::frame_t()
 
 void
 dirac::frame_t::init() {
-  data                     = memory_cptr(NULL);
+  data                     = memory_cptr(nullptr);
   timecode                 = -1;
   duration                 = 0;
   contains_sequence_header = false;
@@ -279,7 +279,7 @@ dirac::es_parser_c::add_bytes(unsigned char *buffer,
     m_unparsed_buffer = new_unparsed_buffer;
 
   } else
-    m_unparsed_buffer = memory_cptr(NULL);
+    m_unparsed_buffer = memory_cptr(nullptr);
 }
 
 void
@@ -290,7 +290,7 @@ dirac::es_parser_c::flush() {
       handle_unit(memory_c::clone(m_unparsed_buffer->get_buffer(), m_unparsed_buffer->get_size()));
   }
 
-  m_unparsed_buffer = memory_cptr(NULL);
+  m_unparsed_buffer = memory_cptr(nullptr);
 
   flush_frame();
 }
@@ -384,7 +384,7 @@ dirac::es_parser_c::flush_frame() {
 
   m_frames.push_back(m_current_frame);
 
-  m_current_frame = frame_cptr(NULL);
+  m_current_frame = frame_cptr(nullptr);
 }
 
 void

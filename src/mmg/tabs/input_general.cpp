@@ -55,20 +55,20 @@ tab_input_general::tab_input_general(wxWindow *parent,
   st_language->Enable(false);
   siz_fg->Add(st_language, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
-  cob_language = new wxMTX_COMBOBOX_TYPE(this, ID_CB_LANGUAGE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
+  cob_language = new wxMTX_COMBOBOX_TYPE(this, ID_CB_LANGUAGE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_DROPDOWN | wxCB_READONLY);
   siz_fg->Add(cob_language, 1, wxGROW | wxALL, STDSPACING);
   cob_language->SetSizeHints(0, -1);
 
   st_default = new wxStaticText(this, wxID_STATIC, wxEmptyString);
   siz_fg->Add(st_default, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
-  cob_default = new wxMTX_COMBOBOX_TYPE(this, ID_CB_MAKEDEFAULT, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
+  cob_default = new wxMTX_COMBOBOX_TYPE(this, ID_CB_MAKEDEFAULT, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_DROPDOWN | wxCB_READONLY);
   siz_fg->Add(cob_default, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
   st_forced = new wxStaticText(this, wxID_STATIC, wxEmptyString);
   siz_fg->Add(st_forced, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
-  cob_forced = new wxMTX_COMBOBOX_TYPE(this, ID_CB_FORCED_TRACK, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
+  cob_forced = new wxMTX_COMBOBOX_TYPE(this, ID_CB_FORCED_TRACK, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_DROPDOWN | wxCB_READONLY);
   siz_fg->Add(cob_forced, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
   st_tags = new wxStaticText(this, wxID_STATIC, wxEmptyString);
@@ -147,7 +147,7 @@ tab_input_general::setup_languages() {
   for (i = 0; i < mdlg->options.popular_languages.Count(); ++i)
     is_popular[ mdlg->options.popular_languages[i] ] = true;
 
-  for (i = 0; NULL != iso639_languages[i].english_name; ++i) {
+  for (i = 0; nullptr != iso639_languages[i].english_name; ++i) {
     wxString code = wxU(iso639_languages[i].iso639_2_code);
     if (!is_popular[code])
       continue;
@@ -159,7 +159,7 @@ tab_input_general::setup_languages() {
   sorted_iso_codes.Add(Z("---all---"));
 
   wxArrayString temp;
-  for (i = 0; iso639_languages[i].english_name != NULL; i++)
+  for (i = 0; iso639_languages[i].english_name != nullptr; i++)
     temp.Add(wxString::Format(wxT("%s (%s)"), wxUCS(iso639_languages[i].iso639_2_code), wxUCS(iso639_languages[i].english_name)));
   temp.Sort();
 
@@ -199,9 +199,9 @@ tab_input_general::translate_ui() {
 
 void
 tab_input_general::set_track_mode(mmg_track_t *t) {
-  bool normal_track    = (NULL != t) && (('a' == t->type) || ('s' == t->type) || ('v' == t->type));
-  bool enable          = (NULL != t) && !t->appending && normal_track;
-  bool enable_chapters = (NULL != t) && ('c' == t->type);
+  bool normal_track    = (nullptr != t) && (('a' == t->type) || ('s' == t->type) || ('v' == t->type));
+  bool enable          = (nullptr != t) && !t->appending && normal_track;
+  bool enable_chapters = (nullptr != t) && ('c' == t->type);
 
   st_language->Enable(enable || enable_chapters);
   cob_language->Enable(enable || enable_chapters);
@@ -218,7 +218,7 @@ tab_input_general::set_track_mode(mmg_track_t *t) {
   st_forced->Enable(enable);
   cob_forced->Enable(enable);
 
-  if (NULL != t)
+  if (nullptr != t)
     return;
 
   bool saved_dcvn             = input->dont_copy_values_now;
@@ -272,7 +272,7 @@ tab_input_general::on_browse_tags(wxCommandEvent &) {
   if (input->selected_track == -1)
     return;
 
-  wxFileDialog dlg(NULL, Z("Choose a tag file"), last_open_dir, wxEmptyString, wxString(Z("Tag files (*.xml;*.txt)|*.xml;*.txt|%s"), ALLFILES.c_str()), wxFD_OPEN);
+  wxFileDialog dlg(nullptr, Z("Choose a tag file"), last_open_dir, wxEmptyString, wxString(Z("Tag files (*.xml;*.txt)|*.xml;*.txt|%s"), ALLFILES.c_str()), wxFD_OPEN);
   if(dlg.ShowModal() != wxID_OK)
     return;
 
@@ -286,7 +286,7 @@ tab_input_general::on_browse_timecodes_clicked(wxCommandEvent &) {
   if (input->selected_track == -1)
     return;
 
-  wxFileDialog dlg(NULL, Z("Choose a timecodes file"), last_open_dir, wxEmptyString, wxString::Format(Z("Timecode files (*.tmc;*.txt)|*.tmc;*.txt|%s"), ALLFILES.c_str()), wxFD_OPEN);
+  wxFileDialog dlg(nullptr, Z("Choose a timecodes file"), last_open_dir, wxEmptyString, wxString::Format(Z("Timecode files (*.tmc;*.txt)|*.tmc;*.txt|%s"), ALLFILES.c_str()), wxFD_OPEN);
   if(dlg.ShowModal() != wxID_OK)
     return;
 

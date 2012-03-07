@@ -145,9 +145,9 @@ struct cue_parser_args_t {
     , min_tc(0)
     , max_tc(0)
     , offset(0)
-    , chapters(NULL)
-    , edition(NULL)
-    , atom(NULL)
+    , chapters(nullptr)
+    , edition(nullptr)
+    , atom(nullptr)
     , do_convert(false)
     , line_num(0)
   {
@@ -186,10 +186,10 @@ static void
 add_tag_for_cue_entry(cue_parser_args_t &a,
                       KaxTags **tags,
                       uint32_t cuid) {
-  if (NULL == tags)
+  if (nullptr == tags)
     return;
 
-  if (NULL == *tags)
+  if (nullptr == *tags)
     *tags = new KaxTags;
 
   KaxTag *tag            = new KaxTag;
@@ -213,7 +213,7 @@ add_tag_for_cue_entry(cue_parser_args_t &a,
   for (i = 0; i < a.comment.size(); i++)
     create_tag1(a.comment[i], "COMMENT");
 
-  if (FINDFIRST(tag, KaxTagSimple) != NULL)
+  if (FINDFIRST(tag, KaxTagSimple) != nullptr)
     (*tags)->PushElement(*tag);
   else
     delete tag;
@@ -222,10 +222,10 @@ add_tag_for_cue_entry(cue_parser_args_t &a,
 static void
 add_tag_for_global_cue_settings(cue_parser_args_t &a,
                                 KaxTags **tags) {
-  if (NULL == tags)
+  if (nullptr == tags)
     return;
 
-  if (NULL == *tags)
+  if (nullptr == *tags)
     *tags = new KaxTags;
 
   KaxTag *tag            = new KaxTag;
@@ -244,7 +244,7 @@ add_tag_for_global_cue_settings(cue_parser_args_t &a,
   for (i = 0; i < a.global_rem.size(); i++)
     create_tag1(a.global_rem[i], "COMMENT");
 
-  if (FINDFIRST(tag, KaxTagSimple) != NULL)
+  if (FINDFIRST(tag, KaxTagSimple) != nullptr)
     (*tags)->PushElement(*tag);
   else
     delete tag;
@@ -255,7 +255,7 @@ add_subchapters_for_index_entries(cue_parser_args_t &a) {
   if (a.start_indices.empty())
     return;
 
-  KaxChapterAtom *atom = NULL;
+  KaxChapterAtom *atom = nullptr;
   size_t offset        = a.index00_missing ? 1 : 0;
   size_t i;
   for (i = 0; i < a.start_indices.size(); i++) {
@@ -283,7 +283,7 @@ add_elements_for_cue_entry(cue_parser_args_t &a,
 
   cue_entries_to_chapter_name(a.performer, a.title, a.global_performer, a.global_title, a.name, a.num);
 
-  if (NULL == a.edition) {
+  if (nullptr == a.edition) {
     a.edition                                           = &GetChild<KaxEditionEntry>(*a.chapters);
     GetChildAs<KaxEditionUID, EbmlUInteger>(*a.edition) = create_unique_uint32(UNIQUE_EDITION_IDS);
   }
@@ -485,7 +485,7 @@ parse_cue_chapters(mm_text_io_c *in,
 
   if (0 == a.num) {
     delete a.chapters;
-    return NULL;
+    return nullptr;
   }
 
   return a.chapters;

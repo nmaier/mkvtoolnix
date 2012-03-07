@@ -81,7 +81,7 @@ public:
   bool has_changes() const;
   bool has_add_or_set_change() const;
 
-  void set_level1_element(ebml_element_cptr level1_element, ebml_element_cptr track_headers = ebml_element_cptr(NULL));
+  void set_level1_element(ebml_element_cptr level1_element, ebml_element_cptr track_headers = ebml_element_cptr(nullptr));
 
   void execute();
 

@@ -52,7 +52,7 @@ mux_dialog::mux_dialog(wxWindow *parent):
            wxDEFAULT_FRAME_STYLE)
 #if defined(SYS_WINDOWS)
   , pid(0)
-  , m_taskbar_progress(NULL)
+  , m_taskbar_progress(nullptr)
   , m_abort_button_changed(false)
 #endif  // SYS_WINDOWS
   , m_exit_code(0)
@@ -213,12 +213,12 @@ mux_dialog::mux_dialog(wxWindow *parent):
 
 mux_dialog::~mux_dialog() {
 #if defined(SYS_WINDOWS)
-  if (NULL != m_taskbar_progress)
+  if (nullptr != m_taskbar_progress)
     m_taskbar_progress->set_state(TBPF_NOPROGRESS);
   delete m_taskbar_progress;
 #endif  // SYS_WINDOWS
 
-  process->dlg = NULL;
+  process->dlg = nullptr;
   delete process;
   wxRemoveFile(opt_file_name);
 }
@@ -233,7 +233,7 @@ mux_dialog::update_gauge(long value) {
   m_progress = value;
   g_progress->SetValue(value);
 #if defined(SYS_WINDOWS)
-  if (NULL != m_taskbar_progress)
+  if (nullptr != m_taskbar_progress)
     m_taskbar_progress->set_value(value, 100);
 #endif  // SYS_WINDOWS
 }
@@ -261,7 +261,7 @@ void
 mux_dialog::on_save_log(wxCommandEvent &) {
   wxFile *file;
   wxString s;
-  wxFileDialog dlg(NULL, Z("Choose an output file"), last_open_dir, wxEmptyString, wxString::Format(Z("Log files (*.txt)|*.txt|%s"), ALLFILES.c_str()), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+  wxFileDialog dlg(nullptr, Z("Choose an output file"), last_open_dir, wxEmptyString, wxString::Format(Z("Log files (*.txt)|*.txt|%s"), ALLFILES.c_str()), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
   if(dlg.ShowModal() == wxID_OK) {
     last_open_dir = dlg.GetDirectory();
     file = new wxFile(dlg.GetPath(), wxFile::write);
@@ -313,7 +313,7 @@ mux_dialog::done(int status) {
 
 #if defined(SYS_WINDOWS)
   change_abort_button();
-  if (NULL != m_taskbar_progress)
+  if (nullptr != m_taskbar_progress)
     m_taskbar_progress->set_state(0 != status ? TBPF_ERROR : TBPF_NOPROGRESS);
 #else  // SYS_WINDOWS
   b_abort->Enable(false);
@@ -343,7 +343,7 @@ mux_process::mux_process(mux_dialog *mux_dlg):
 void
 mux_process::OnTerminate(int,
                          int status) {
-  if (NULL == dlg)
+  if (nullptr == dlg)
     return;
 
   dlg->set_exit_code(status);

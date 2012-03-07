@@ -44,7 +44,7 @@ connection_result_e
 passthrough_packetizer_c::can_connect_to(generic_packetizer_c *src,
                                          std::string &error_message) {
   passthrough_packetizer_c *psrc = dynamic_cast<passthrough_packetizer_c *>(src);
-  if (NULL == psrc)
+  if (nullptr == psrc)
     return CAN_CONNECT_NO_FORMAT;
 
   connect_check_codec_id(m_hcodec_id, psrc->m_hcodec_id);
@@ -52,11 +52,11 @@ passthrough_packetizer_c::can_connect_to(generic_packetizer_c *src,
   if (CMP(m_htrack_type) || CMP(m_hcodec_id))
     return CAN_CONNECT_NO_PARAMETERS;
 
-  if (   ((NULL == m_ti.m_private_data) && (NULL != psrc->m_ti.m_private_data))
-      || ((NULL != m_ti.m_private_data) && (NULL == psrc->m_ti.m_private_data))
+  if (   ((nullptr == m_ti.m_private_data) && (nullptr != psrc->m_ti.m_private_data))
+      || ((nullptr != m_ti.m_private_data) && (nullptr == psrc->m_ti.m_private_data))
       || (m_ti.m_private_size != psrc->m_ti.m_private_size)
-      || (   (NULL != m_ti.m_private_data)
-          && (NULL != psrc->m_ti.m_private_data)
+      || (   (nullptr != m_ti.m_private_data)
+          && (nullptr != psrc->m_ti.m_private_data)
           && (m_ti.m_private_size == psrc->m_ti.m_private_size)
           && memcmp(m_ti.m_private_data, psrc->m_ti.m_private_data, m_ti.m_private_size))) {
     error_message = (boost::format(Y("The codec's private data does not match (lengths: %1% and %2%).")) % m_ti.m_private_size % psrc->m_ti.m_private_size).str();

@@ -90,9 +90,9 @@ parse_double(const char *s,
              double &value) {
   std::string old_locale = setlocale(LC_NUMERIC, "C");
   bool ok                = true;
-  char *endptr           = NULL;
+  char *endptr           = nullptr;
   value                  = strtod(s, &endptr);
-  if (endptr != NULL) {
+  if (endptr != nullptr) {
     if ((value == 0.0) && (endptr == s))
       ok = false;
     else if (*endptr != 0)

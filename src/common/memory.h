@@ -47,7 +47,7 @@ namespace mtx {
 
 inline void
 safefree(void *p) {
-  if (NULL != p)
+  if (nullptr != p)
     free(p);
 }
 
@@ -88,10 +88,10 @@ class memory_c {
 public:
   typedef unsigned char X;
 
-  explicit memory_c(void *p = NULL,
+  explicit memory_c(void *p = nullptr,
                     size_t s = 0,
                     bool f = false) // allocate a new counter
-    : its_counter(NULL)
+    : its_counter(nullptr)
   {
     if (p)
       its_counter = new counter(static_cast<unsigned char *>(p), s, f);
@@ -119,7 +119,7 @@ public:
   }
 
   X *get_buffer() const throw() {
-    return its_counter ? its_counter->ptr + its_counter->offset : NULL;
+    return its_counter ? its_counter->ptr + its_counter->offset : nullptr;
   }
 
   size_t get_size() const throw() {
@@ -142,7 +142,7 @@ public:
   }
 
   bool is_allocated() const throw() {
-    return (NULL != its_counter) && (NULL != its_counter->ptr);
+    return (nullptr != its_counter) && (nullptr != its_counter->ptr);
   }
 
   memory_cptr clone() const {
@@ -175,19 +175,19 @@ public:
   }
 
   operator const unsigned char *() const {
-    return its_counter ? its_counter->ptr : NULL;
+    return its_counter ? its_counter->ptr : nullptr;
   }
 
   operator const void *() const {
-    return its_counter ? its_counter->ptr : NULL;
+    return its_counter ? its_counter->ptr : nullptr;
   }
 
   operator unsigned char *() const {
-    return its_counter ? its_counter->ptr : NULL;
+    return its_counter ? its_counter->ptr : nullptr;
   }
 
   operator void *() const {
-    return its_counter ? its_counter->ptr : NULL;
+    return its_counter ? its_counter->ptr : nullptr;
   }
 
 public:
@@ -210,7 +210,7 @@ private:
     unsigned count;
     size_t offset;
 
-    counter(X *p = NULL,
+    counter(X *p = nullptr,
             size_t s = 0,
             bool f = false,
             unsigned c = 1)

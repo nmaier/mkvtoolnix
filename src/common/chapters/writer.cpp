@@ -189,7 +189,7 @@ static int
 cet_index(const char *name) {
   int i;
 
-  for (i = 0; NULL != chapter_elements[i].name; i++)
+  for (i = 0; nullptr != chapter_elements[i].name; i++)
     if (!strcmp(name, chapter_elements[i].name))
       return i;
 
@@ -203,9 +203,9 @@ end_write_chapter_atom(void *data) {
   xml_writer_cb_t *cb  = static_cast<xml_writer_cb_t *>(data);
   KaxChapterAtom *atom = dynamic_cast<KaxChapterAtom *>(cb->e);
 
-  assert(NULL != atom);
+  assert(nullptr != atom);
 
-  if (FINDFIRST(atom, KaxChapterTimeStart) == NULL)
+  if (FINDFIRST(atom, KaxChapterTimeStart) == nullptr)
     pt(cb, "<ChapterTimeStart>00:00:00.000</ChapterTimeStart>\n");
 }
 
@@ -214,12 +214,12 @@ end_write_chapter_display(void *data) {
   xml_writer_cb_t *cb        = static_cast<xml_writer_cb_t *>(data);
   KaxChapterDisplay *display = dynamic_cast<KaxChapterDisplay *>(cb->e);
 
-  assert(NULL != display);
+  assert(nullptr != display);
 
-  if (FINDFIRST(display, KaxChapterString) == NULL)
+  if (FINDFIRST(display, KaxChapterString) == nullptr)
     pt(cb, "<ChapterString></ChapterString>\n");
 
-  if (FINDFIRST(display, KaxChapterLanguage) == NULL)
+  if (FINDFIRST(display, KaxChapterLanguage) == nullptr)
     pt(cb, "<ChapterLanguage>eng</ChapterLanguage>\n");
 }
 
@@ -228,9 +228,9 @@ write_chapters_xml(KaxChapters *chapters,
                    mm_io_c *out) {
   size_t i;
 
-  for (i = 0; NULL != chapter_elements[i].name; i++) {
-    chapter_elements[i].start_hook = NULL;
-    chapter_elements[i].end_hook   = NULL;
+  for (i = 0; nullptr != chapter_elements[i].name; i++) {
+    chapter_elements[i].start_hook = nullptr;
+    chapter_elements[i].end_hook   = nullptr;
   }
 
   chapter_elements[cet_index("ChapterAtom")].end_hook    = end_write_chapter_atom;

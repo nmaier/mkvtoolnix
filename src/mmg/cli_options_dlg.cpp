@@ -37,7 +37,7 @@ cli_options_dlg::cli_options_dlg(wxWindow *parent)
   siz_all->AddSpacer(5);
 
   wxBoxSizer *siz_line = new wxBoxSizer(wxHORIZONTAL);
-  cob_option           = new wxMTX_COMBOBOX_TYPE(this, ID_CLIOPTIONS_COB, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
+  cob_option           = new wxMTX_COMBOBOX_TYPE(this, ID_CLIOPTIONS_COB, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_DROPDOWN | wxCB_READONLY);
 
   size_t i;
   for (i = 0; i < all_cli_options.size(); i++)

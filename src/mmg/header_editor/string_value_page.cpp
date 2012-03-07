@@ -28,7 +28,7 @@ he_string_value_page_c::he_string_value_page_c(header_editor_frame_c *parent,
                                                const translatable_string_c &title,
                                                const translatable_string_c &description)
   : he_value_page_c(parent, toplevel_page, master, callbacks, vt_string, title, description)
-  , m_tc_text(NULL)
+  , m_tc_text(nullptr)
 {
 }
 
@@ -37,7 +37,7 @@ he_string_value_page_c::~he_string_value_page_c() {
 
 wxControl *
 he_string_value_page_c::create_input_control() {
-  if (NULL != m_element)
+  if (nullptr != m_element)
     m_original_value = UTFstring(*static_cast<EbmlUnicodeString *>(m_element)).c_str();
 
   m_tc_text = new wxTextCtrl(this, wxID_ANY, m_original_value);

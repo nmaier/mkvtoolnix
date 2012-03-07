@@ -124,11 +124,11 @@ flac_header_extractor_c::flac_header_extractor_c(const std::string &file_name,
   file    = new mm_file_io_c(file_name);
   decoder = FLAC__stream_decoder_new();
 
-  if (NULL == decoder)
+  if (nullptr == decoder)
     mxerror(Y("flac_header_extraction: FLAC__stream_decoder_new() failed.\n"));
   if (!FLAC__stream_decoder_set_metadata_respond_all(decoder))
     mxerror(Y("flac_header_extraction: Could not set metadata_respond_all.\n"));
-  if (FLAC__stream_decoder_init_stream(decoder, fhe_read_cb, NULL, NULL, NULL, NULL, fhe_write_cb, fhe_metadata_cb, fhe_error_cb, this) != FLAC__STREAM_DECODER_INIT_STATUS_OK)
+  if (FLAC__stream_decoder_init_stream(decoder, fhe_read_cb, nullptr, nullptr, nullptr, nullptr, fhe_write_cb, fhe_metadata_cb, fhe_error_cb, this) != FLAC__STREAM_DECODER_INIT_STATUS_OK)
     mxerror(Y("flac_header_extraction: Could not initialize the FLAC decoder.\n"));
 
   ogg_sync_init(&oy);

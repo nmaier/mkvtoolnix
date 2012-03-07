@@ -174,7 +174,7 @@ iconv_charset_converter_c::convert(iconv_t handle,
   char *destination = (char *)safemalloc(length + 1);
   memset(destination, 0, length + 1);
 
-  iconv(handle, NULL, 0, NULL, 0); // Reset the iconv state.
+  iconv(handle, nullptr, 0, nullptr, 0); // Reset the iconv state.
 
   size_t length_source      = length / 4;
   size_t length_destination = length;
@@ -182,7 +182,7 @@ iconv_charset_converter_c::convert(iconv_t handle,
   char *ptr_source          = source_copy;
   char *ptr_destination     = destination;
   iconv(handle, (ICONV_CONST char **)&ptr_source, &length_source, &ptr_destination, &length_destination);
-  iconv(handle, NULL, NULL, &ptr_destination, &length_destination);
+  iconv(handle, nullptr, nullptr, &ptr_destination, &length_destination);
 
   safefree(source_copy);
   std::string result = destination;
@@ -241,13 +241,13 @@ windows_charset_converter_c::convert(UINT source_code_page,
   if (source_code_page == destination_code_page)
     return source;
 
-  int num_wide_chars = MultiByteToWideChar(source_code_page, 0, source.c_str(), -1, NULL, 0);
+  int num_wide_chars = MultiByteToWideChar(source_code_page, 0, source.c_str(), -1, nullptr, 0);
   wchar_t *wbuffer   = new wchar_t[num_wide_chars];
   MultiByteToWideChar(source_code_page, 0, source.c_str(), -1, wbuffer, num_wide_chars);
 
-  int num_bytes = WideCharToMultiByte(destination_code_page, 0, wbuffer, -1, NULL, 0, NULL, NULL);
+  int num_bytes = WideCharToMultiByte(destination_code_page, 0, wbuffer, -1, nullptr, 0, nullptr, nullptr);
   char *buffer  = new char[num_bytes];
-  WideCharToMultiByte(destination_code_page, 0, wbuffer, -1, buffer, num_bytes, NULL, NULL);
+  WideCharToMultiByte(destination_code_page, 0, wbuffer, -1, buffer, num_bytes, nullptr, nullptr);
 
   std::string result = buffer;
 
@@ -328,7 +328,7 @@ Utf8ToUtf16(const char *utf8,
   unsigned ch;
 
   if (utf16len == 0) {
-    d = utf16 = NULL;
+    d = utf16 = nullptr;
     w = d - 1;
   }
 
@@ -400,19 +400,19 @@ Utf8ToUtf16(const char *utf8,
 
 char *
 win32_wide_to_multi(const wchar_t *wbuffer) {
-  int reqbuf = WideCharToMultiByte(CP_ACP, 0, wbuffer, -1, NULL, 0, NULL,
-                                   NULL);
+  int reqbuf = WideCharToMultiByte(CP_ACP, 0, wbuffer, -1, nullptr, 0, nullptr,
+                                   nullptr);
   char *buffer = new char[reqbuf];
-  WideCharToMultiByte(CP_ACP, 0, wbuffer, -1, buffer, reqbuf, NULL, NULL);
+  WideCharToMultiByte(CP_ACP, 0, wbuffer, -1, buffer, reqbuf, nullptr, nullptr);
 
   return buffer;
 }
 
 std::string
 win32_wide_to_multi_utf8(const wchar_t *wbuffer) {
-  int reqbuf   = WideCharToMultiByte(CP_UTF8, 0, wbuffer, -1, NULL, 0, NULL, NULL);
+  int reqbuf   = WideCharToMultiByte(CP_UTF8, 0, wbuffer, -1, nullptr, 0, nullptr, nullptr);
   char *buffer = new char[reqbuf];
-  WideCharToMultiByte(CP_UTF8, 0, wbuffer, -1, buffer, reqbuf, NULL, NULL);
+  WideCharToMultiByte(CP_UTF8, 0, wbuffer, -1, buffer, reqbuf, nullptr, nullptr);
 
   std::string retval = buffer;
 
@@ -423,7 +423,7 @@ win32_wide_to_multi_utf8(const wchar_t *wbuffer) {
 
 wchar_t *
 win32_utf8_to_utf16(const char *s) {
-  int wreqbuf = Utf8ToUtf16(s, -1, NULL, 0);
+  int wreqbuf = Utf8ToUtf16(s, -1, nullptr, 0);
   wchar_t *wbuffer = new wchar_t[wreqbuf];
 
   Utf8ToUtf16(s, -1, wbuffer, wreqbuf);

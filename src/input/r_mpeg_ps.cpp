@@ -609,7 +609,7 @@ mpeg_ps_reader_c::new_stream_v_mpeg_1_2(mpeg_ps_id_t id,
   track->v_dheight  = track->v_height;
 
   MPEGChunk *raw_seq_hdr = m2v_parser->GetRealSequenceHeader();
-  if (NULL != raw_seq_hdr) {
+  if (nullptr != raw_seq_hdr) {
     track->raw_seq_hdr      = (unsigned char *)safememdup(raw_seq_hdr->GetPointer(), raw_seq_hdr->GetSize());
     track->raw_seq_hdr_size = raw_seq_hdr->GetSize();
   }
@@ -1129,7 +1129,7 @@ mpeg_ps_reader_c::create_packetizer(int64_t id) {
       track->ptzr         = add_packetizer(m2vpacketizer);
       show_packetizer_info(id, PTZR(track->ptzr));
       m2vpacketizer->set_video_interlaced_flag(track->v_interlaced);
-      m_ti.m_private_data = NULL;
+      m_ti.m_private_data = nullptr;
       m_ti.m_private_size = 0;
 
     } else if (track->fourcc == FOURCC('A', 'V', 'C', '1')) {

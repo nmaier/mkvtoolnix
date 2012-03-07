@@ -79,7 +79,7 @@ public:
   virtual void initialize() {
   };
   virtual generic_packetizer_c *create_packetizer() {
-    return NULL;
+    return nullptr;
   };
   virtual void process_page(int64_t granulepos);
   virtual void process_header_page();

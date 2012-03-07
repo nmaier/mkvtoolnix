@@ -109,7 +109,7 @@ corepicture_reader_c::start_element_cb(const char *name,
   }
 
   if (node == "CorePanorama.Info") {
-    for (i = 0; (NULL != atts[i]) && (NULL != atts[i + 1]); i += 2)  {
+    for (i = 0; (nullptr != atts[i]) && (nullptr != atts[i + 1]); i += 2)  {
       if (!strcasecmp(atts[i], "width") && (0 != atts[i + 1][0])) {
         if (!parse_int(atts[i + 1], m_width))
           m_width = -1;
@@ -121,7 +121,7 @@ corepicture_reader_c::start_element_cb(const char *name,
 
   } else if (node == "CorePanorama.Picture") {
     corepicture_pic_t new_picture;
-    for (i = 0; (NULL != atts[i]) && (NULL != atts[i + 1]); i += 2) {
+    for (i = 0; (nullptr != atts[i]) && (nullptr != atts[i + 1]); i += 2) {
       if (!strcasecmp(atts[i], "time") && (0 != atts[i + 1][0]))
         new_picture.m_time = try_to_parse_timecode(atts[i + 1]);
 

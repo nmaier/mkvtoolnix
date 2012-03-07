@@ -23,9 +23,9 @@ write_tags_xml(KaxTags &tags,
                mm_io_c *out) {
   size_t i;
 
-  for (i = 0; NULL != tag_elements[i].name; i++) {
-    tag_elements[i].start_hook = NULL;
-    tag_elements[i].end_hook   = NULL;
+  for (i = 0; nullptr != tag_elements[i].name; i++) {
+    tag_elements[i].start_hook = nullptr;
+    tag_elements[i].end_hook   = nullptr;
   }
 
   for (i = 0; tags.ListSize() > i; i++)

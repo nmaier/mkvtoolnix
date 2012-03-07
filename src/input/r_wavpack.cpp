@@ -99,7 +99,7 @@ wavpack_reader_c::create_packetizer(int64_t) {
   m_ti.m_private_data = (unsigned char *)&version_le;
   m_ti.m_private_size = sizeof(uint16_t);
   add_packetizer(new wavpack_packetizer_c(this, m_ti, meta));
-  m_ti.m_private_data = NULL;
+  m_ti.m_private_data = nullptr;
 
   show_packetizer_info(0, PTZR0);
 }

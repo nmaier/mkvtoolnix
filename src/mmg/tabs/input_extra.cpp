@@ -51,7 +51,7 @@ tab_input_extra::tab_input_extra(wxWindow *parent,
   st_cues->Enable(false);
   siz_fg->Add(st_cues, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
-  cob_cues = new wxMTX_COMBOBOX_TYPE(this, ID_CB_CUES, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
+  cob_cues = new wxMTX_COMBOBOX_TYPE(this, ID_CB_CUES, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_DROPDOWN | wxCB_READONLY);
   cob_cues->SetSizeHints(0, -1);
   siz_fg->Add(cob_cues, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
@@ -59,7 +59,7 @@ tab_input_extra::tab_input_extra(wxWindow *parent,
   st_compression->Enable(false);
   siz_fg->Add(st_compression, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
-  cob_compression = new wxMTX_COMBOBOX_TYPE(this, ID_CB_COMPRESSION, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
+  cob_compression = new wxMTX_COMBOBOX_TYPE(this, ID_CB_COMPRESSION, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_DROPDOWN | wxCB_READONLY);
   cob_compression->SetSizeHints(0, -1);
   siz_fg->Add(cob_compression, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
@@ -140,8 +140,8 @@ tab_input_extra::translate_ui() {
 
 void
 tab_input_extra::set_track_mode(mmg_track_t *t) {
-  bool not_appending = (NULL != t) && !t->appending;
-  bool normal_track  = (NULL != t) && (('a' == t->type) || ('s' == t->type) || ('v' == t->type));
+  bool not_appending = (nullptr != t) && !t->appending;
+  bool normal_track  = (nullptr != t) && (('a' == t->type) || ('s' == t->type) || ('v' == t->type));
   wxString ctype     = t ? t->ctype.Lower() : wxT("");
 
   st_cues->Enable(not_appending && normal_track);
@@ -151,7 +151,7 @@ tab_input_extra::set_track_mode(mmg_track_t *t) {
   st_user_defined->Enable(normal_track);
   tc_user_defined->Enable(normal_track);
 
-  if (NULL != t)
+  if (nullptr != t)
     return;
 
   bool saved_dcvn             = input->dont_copy_values_now;

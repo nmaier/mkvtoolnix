@@ -26,7 +26,7 @@
 using namespace libebml;
 using namespace libmatroska;
 
-#define can_be_cast(c, e) (dynamic_cast<c *>(e) != NULL)
+#define can_be_cast(c, e) (dynamic_cast<c *>(e) != nullptr)
 
 bool is_valid_utf8_string(const std::string &c);
 UTFstring cstrutf8_to_UTFstring(const std::string &c);
@@ -115,7 +115,7 @@ GetEmptyChild(EbmlMaster &master) {
   EbmlMaster *m;
 
   e = master.FindFirstElt(EBML_INFO(type), true);
-  if ((m = dynamic_cast<EbmlMaster *>(e)) != NULL) {
+  if ((m = dynamic_cast<EbmlMaster *>(e)) != nullptr) {
     while (m->ListSize() > 0) {
       delete (*m)[0];
       m->Remove(0);
@@ -130,7 +130,7 @@ GetNextEmptyChild(EbmlMaster &master,
                   const type &past_elt) {
   EbmlMaster *m;
   EbmlElement *e = master.FindNextElt(past_elt, true);
-  if ((m = dynamic_cast<EbmlMaster *>(e)) != NULL) {
+  if ((m = dynamic_cast<EbmlMaster *>(e)) != nullptr) {
     while (m->ListSize() > 0) {
       delete (*m)[0];
       m->Remove(0);
@@ -144,7 +144,7 @@ template <typename type>type &
 AddEmptyChild(EbmlMaster &master) {
   EbmlMaster *m;
   EbmlElement *e = new type;
-  if ((m = dynamic_cast<EbmlMaster *>(e)) != NULL) {
+  if ((m = dynamic_cast<EbmlMaster *>(e)) != nullptr) {
     while (m->ListSize() > 0) {
       delete (*m)[0];
       m->Remove(0);
@@ -173,13 +173,13 @@ GetChildAs(EbmlMaster *m) {
 template <typename A>A &
 GetFirstOrNextChild(EbmlMaster &master,
                     A *previous_child) {
-  return NULL == previous_child ? GetChild<A>(master) : GetNextChild<A>(master, *previous_child);
+  return nullptr == previous_child ? GetChild<A>(master) : GetNextChild<A>(master, *previous_child);
 }
 
 template <typename A>A &
 GetFirstOrNextChild(EbmlMaster *master,
                     A *previous_child) {
-  return NULL == previous_child ? GetChild<A>(*master) : GetNextChild<A>(*master, *previous_child);
+  return nullptr == previous_child ? GetChild<A>(*master) : GetNextChild<A>(*master, *previous_child);
 }
 
 EbmlElement *empty_ebml_master(EbmlElement *e);

@@ -200,11 +200,11 @@ namespace vc1 {
       if (m_seqhdr_found)
         return memory_cptr(m_raw_seqhdr->clone());
       else
-        return memory_cptr(NULL);
+        return memory_cptr(nullptr);
     }
 
     virtual memory_cptr get_raw_entrypoint() {
-      return m_raw_entrypoint.is_set() ? m_raw_entrypoint->clone() : memory_cptr(NULL);
+      return m_raw_entrypoint.is_set() ? m_raw_entrypoint->clone() : memory_cptr(nullptr);
     }
 
     virtual void handle_packet(memory_cptr packet);

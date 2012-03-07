@@ -30,7 +30,7 @@ he_ascii_string_value_page_c::he_ascii_string_value_page_c(header_editor_frame_c
                                                            const translatable_string_c &title,
                                                            const translatable_string_c &description)
   : he_value_page_c(parent, toplevel_page, master, callbacks, vt_ascii_string, title, description)
-  , m_tc_text(NULL)
+  , m_tc_text(nullptr)
 {
 }
 
@@ -39,7 +39,7 @@ he_ascii_string_value_page_c::~he_ascii_string_value_page_c() {
 
 wxControl *
 he_ascii_string_value_page_c::create_input_control() {
-  if (NULL != m_element)
+  if (nullptr != m_element)
     m_original_value = wxU(dynamic_cast<EbmlString *>(m_element));
 
   static const wxString s_valid_chars = wxT(" !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~");

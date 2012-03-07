@@ -30,7 +30,7 @@
 #include <matroska/KaxSeekHead.h>
 
 cluster_helper_c::cluster_helper_c()
-  : m_cluster(NULL)
+  : m_cluster(nullptr)
   , m_cluster_content_size(0)
   , m_max_timecode_and_duration(0)
   , m_max_video_timecode_rendered(0)
@@ -39,13 +39,13 @@ cluster_helper_c::cluster_helper_c()
   , m_header_overhead(-1)
   , m_packet_num(0)
   , m_timecode_offset(0)
-  , m_previous_packets(NULL)
+  , m_previous_packets(nullptr)
   , m_bytes_in_file(0)
   , m_first_timecode_in_file(-1)
   , m_min_timecode_in_cluster(-1)
   , m_max_timecode_in_cluster(-1)
   , m_attachments_size(0)
-  , m_out(NULL)
+  , m_out(nullptr)
   , m_current_split_point(m_split_points.begin())
 {
 }
@@ -98,7 +98,7 @@ cluster_helper_c::add_packet(packet_cptr packet) {
       && (g_file_num <= g_split_max_num_files)
       && packet->is_key_frame()
       && (   (packet->source->get_track_type() == track_video)
-          || (NULL == g_video_packetizer))) {
+          || (nullptr == g_video_packetizer))) {
     bool split_now = false;
 
     // Maybe we want to start a new file now.
@@ -290,14 +290,14 @@ cluster_helper_c::render() {
     if (source->contains_gap())
       m_cluster->SetSilentTrackUsed();
 
-    render_groups_c *render_group = NULL;
+    render_groups_c *render_group = nullptr;
     for (auto &rg : render_groups)
       if (rg->m_source == source) {
         render_group = rg.get_object();
         break;
       }
 
-    if (NULL == render_group) {
+    if (nullptr == render_group) {
       render_groups.push_back(render_groups_cptr(new render_groups_c(source)));
       render_group = render_groups.back().get_object();
     }
@@ -309,7 +309,7 @@ cluster_helper_c::render() {
 
     KaxTrackEntry &track_entry             = static_cast<KaxTrackEntry &>(*source->get_track_entry());
 
-    kax_block_blob_c *previous_block_group = !render_group->m_groups.empty() ? render_group->m_groups.back().get_object() : NULL;
+    kax_block_blob_c *previous_block_group = !render_group->m_groups.empty() ? render_group->m_groups.back().get_object() : nullptr;
     kax_block_blob_c *new_block_group      = previous_block_group;
 
     if (!pack->is_key_frame() || has_codec_state)
@@ -360,7 +360,7 @@ cluster_helper_c::render() {
     render_group->m_durations.push_back(pack->has_duration() ? pack->unmodified_duration : 0);
     render_group->m_duration_mandatory |= pack->duration_mandatory;
 
-    if (NULL != new_block_group) {
+    if (nullptr != new_block_group) {
       // Set the reference priority if it was wanted.
       if ((0 < pack->ref_priority) && new_block_group->replace_simple_by_group())
         GetChildAs<KaxReferencePriority, EbmlUInteger>(*new_block_group) = pack->ref_priority;
@@ -381,7 +381,7 @@ cluster_helper_c::render() {
 
     elements_in_cluster++;
 
-    if (NULL == new_block_group)
+    if (nullptr == new_block_group)
       new_block_group = previous_block_group;
 
     else if (g_write_cues && (!added_to_cues || has_codec_state)) {
@@ -397,7 +397,7 @@ cluster_helper_c::render() {
           // last cue entry was created more than 2s ago.
           || (   (CUE_STRATEGY_SPARSE == source->get_cue_creation())
               && (track_audio         == source->get_track_type())
-              && (NULL                == g_video_packetizer)
+              && (nullptr                == g_video_packetizer)
               && (   (0 > source->get_last_cue_timecode())
                   || ((pack->assigned_timecode - source->get_last_cue_timecode()) >= 2000000000)))) {
 
@@ -427,7 +427,7 @@ cluster_helper_c::render() {
     m_cluster->Render(*m_out, *g_kax_cues);
     m_bytes_in_file += m_cluster->ElementSize();
 
-    if (NULL != g_kax_sh_cues)
+    if (nullptr != g_kax_sh_cues)
       g_kax_sh_cues->IndexThis(*m_cluster, *g_kax_segment);
 
     m_previous_cluster_tc = m_cluster->GlobalTimecode();
@@ -457,4 +457,4 @@ cluster_helper_c::add_split_point(const split_point_t &split_point) {
   m_current_split_point = m_split_points.begin();
 }
 
-cluster_helper_c *g_cluster_helper = NULL;
+cluster_helper_c *g_cluster_helper = nullptr;

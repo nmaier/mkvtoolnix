@@ -43,7 +43,7 @@ CreateFileUtf8(LPCSTR lpFileName,
 mm_file_io_c::mm_file_io_c(const std::string &path,
                            const open_mode mode)
   : m_file_name(path)
-  , m_file(NULL)
+  , m_file(nullptr)
   , m_eof(false)
 {
   DWORD access_mode, share_mode, disposition;
@@ -76,7 +76,7 @@ mm_file_io_c::mm_file_io_c(const std::string &path,
   if ((MODE_WRITE == mode) || (MODE_CREATE == mode))
     prepare_path(path);
 
-  m_file = (void *)CreateFileUtf8(path.c_str(), access_mode, share_mode, NULL, disposition, 0, NULL);
+  m_file = (void *)CreateFileUtf8(path.c_str(), access_mode, share_mode, nullptr, disposition, 0, nullptr);
   if ((HANDLE)m_file == (HANDLE)0xFFFFFFFF)
     throw mtx::mm_io::open_x();
 
@@ -85,9 +85,9 @@ mm_file_io_c::mm_file_io_c(const std::string &path,
 
 void
 mm_file_io_c::close() {
-  if (NULL != m_file) {
+  if (nullptr != m_file) {
     CloseHandle((HANDLE)m_file);
-    m_file = NULL;
+    m_file = nullptr;
   }
   m_file_name.clear();
 }
@@ -124,7 +124,7 @@ mm_file_io_c::_read(void *buffer,
                     size_t size) {
   DWORD bytes_read;
 
-  if (!ReadFile((HANDLE)m_file, buffer, size, &bytes_read, NULL)) {
+  if (!ReadFile((HANDLE)m_file, buffer, size, &bytes_read, nullptr)) {
     m_eof              = true;
     m_current_position = get_real_file_pointer();
 
@@ -144,17 +144,17 @@ mm_file_io_c::_write(const void *buffer,
                      size_t size) {
   DWORD bytes_written;
 
-  if (!WriteFile((HANDLE)m_file, buffer, size, &bytes_written, NULL))
+  if (!WriteFile((HANDLE)m_file, buffer, size, &bytes_written, nullptr))
     bytes_written = 0;
 
   if (bytes_written != size) {
     std::string error_msg_utf8;
 
     DWORD error     = GetLastError();
-    char *error_msg = NULL;
-    FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, NULL, error, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR)&error_msg, 0, NULL);
+    char *error_msg = nullptr;
+    FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, error, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR)&error_msg, 0, nullptr);
 
-    if (NULL != error_msg) {
+    if (nullptr != error_msg) {
       int idx = strlen(error_msg) - 1;
 
       while ((0 <= idx) && ((error_msg[idx] == '\n') || (error_msg[idx] == '\r'))) {
@@ -168,7 +168,7 @@ mm_file_io_c::_write(const void *buffer,
 
     mxerror(boost::format(Y("Could not write to the output file: %1% (%2%)\n")) % error % error_msg_utf8);
 
-    if (NULL != error_msg)
+    if (nullptr != error_msg)
       LocalFree(error_msg);
   }
 
@@ -222,7 +222,7 @@ mm_stdio_c::_write(const void *buffer,
     const std::wstring &w = to_wide(g_cc_stdio->utf8(std::string(static_cast<const char *>(buffer), size)));
     DWORD bytes_written   = 0;
 
-    WriteConsoleW(h_stdout, w.c_str(), w.length(), &bytes_written, NULL);
+    WriteConsoleW(h_stdout, w.c_str(), w.length(), &bytes_written, nullptr);
 
     return bytes_written;
   }

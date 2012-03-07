@@ -41,7 +41,7 @@ get_errno_msg() {
 mm_file_io_c::mm_file_io_c(const std::string &path,
                            const open_mode mode)
   : m_file_name(path)
-  , m_file(NULL)
+  , m_file(nullptr)
 {
   const char *cmode;
 
@@ -72,7 +72,7 @@ mm_file_io_c::mm_file_io_c(const std::string &path,
 
   m_file = (FILE *)fopen(local_path.c_str(), cmode);
 
-  if (NULL == m_file)
+  if (nullptr == m_file)
     throw mtx::mm_io::open_x();
 }
 
@@ -119,9 +119,9 @@ mm_file_io_c::_read(void *buffer,
 
 void
 mm_file_io_c::close() {
-  if (NULL != m_file) {
+  if (nullptr != m_file) {
     fclose((FILE *)m_file);
-    m_file = NULL;
+    m_file = nullptr;
   }
 }
 
@@ -545,10 +545,10 @@ mm_io_c::getch() {
 
 void
 mm_proxy_io_c::close() {
-  if ((NULL != m_proxy_io) && m_proxy_delete_io)
+  if ((nullptr != m_proxy_io) && m_proxy_delete_io)
     delete m_proxy_io;
 
-  m_proxy_io = NULL;
+  m_proxy_io = nullptr;
 }
 
 
@@ -618,13 +618,13 @@ mm_mem_io_c::mm_mem_io_c(unsigned char *mem,
   , m_allocated(mem_size)
   , m_increase(increase)
   , m_mem(mem)
-  , m_ro_mem(NULL)
+  , m_ro_mem(nullptr)
   , m_read_only(false)
 {
   if (0 >= m_increase)
     throw mtx::invalid_parameter_x();
 
-  if ((NULL == m_mem) && (0 < m_increase)) {
+  if ((nullptr == m_mem) && (0 < m_increase)) {
     if (0 == mem_size)
       m_allocated = increase;
 
@@ -641,12 +641,12 @@ mm_mem_io_c::mm_mem_io_c(const unsigned char *mem,
   , m_mem_size(mem_size)
   , m_allocated(mem_size)
   , m_increase(0)
-  , m_mem(NULL)
+  , m_mem(nullptr)
   , m_ro_mem(mem)
   , m_free_mem(false)
   , m_read_only(true)
 {
-  if (NULL == m_ro_mem)
+  if (nullptr == m_ro_mem)
     throw mtx::invalid_parameter_x();
 }
 
@@ -662,7 +662,7 @@ mm_mem_io_c::getFilePointer() {
 void
 mm_mem_io_c::setFilePointer(int64 offset,
                             seek_mode mode) {
-  if ((NULL == m_mem) && (NULL == m_ro_mem) && (0 == m_mem_size))
+  if ((nullptr == m_mem) && (nullptr == m_ro_mem) && (0 == m_mem_size))
     throw mtx::invalid_parameter_x();
 
   int64_t new_pos
@@ -723,8 +723,8 @@ void
 mm_mem_io_c::close() {
   if (m_free_mem)
     safefree(m_mem);
-  m_mem       = NULL;
-  m_ro_mem    = NULL;
+  m_mem       = nullptr;
+  m_ro_mem    = nullptr;
   m_read_only = true;
   m_free_mem  = false;
   m_mem_size  = 0;

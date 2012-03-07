@@ -41,7 +41,7 @@ static const struct {
   { ENGAGE_MERGE_TRUEHD_FRAMES,          "merge_truehd_frames"          },
   { ENGAGE_REMOVE_BITSTREAM_AR_INFO,     "remove_bitstream_ar_info"     },
   { ENGAGE_VOBSUB_SUBPIC_STOP_CMDS,      "vobsub_subpic_stop_cmds"      },
-  { 0,                                   NULL },
+  { 0,                                   nullptr },
 };
 static std::vector<bool> s_engaged_hacks(ENGAGE_MAX_IDX + 1, false);
 
@@ -58,7 +58,7 @@ engage_hacks(const std::string &hacks) {
   for (aidx = 0; engage_args.size() > aidx; aidx++)
     if (engage_args[aidx] == "list") {
       mxinfo(Y("Valid hacks are:\n"));
-      for (hidx = 0; NULL != s_available_hacks[hidx].name; ++hidx)
+      for (hidx = 0; nullptr != s_available_hacks[hidx].name; ++hidx)
         mxinfo(boost::format("%1%\n") % s_available_hacks[hidx].name);
       mxexit(0);
 
@@ -76,7 +76,7 @@ engage_hacks(const std::string &hacks) {
 
   for (aidx = 0; engage_args.size() > aidx; aidx++) {
     bool valid_hack = false;
-    for (hidx = 0; s_available_hacks[hidx].name != NULL; hidx++)
+    for (hidx = 0; s_available_hacks[hidx].name != nullptr; hidx++)
       if (engage_args[aidx] == s_available_hacks[hidx].name) {
         valid_hack = true;
         s_engaged_hacks[s_available_hacks[hidx].id] = true;
@@ -91,11 +91,11 @@ engage_hacks(const std::string &hacks) {
 void
 init_hacks() {
   char const *value = getenv("MKVTOOLNIX_ENGAGE");
-  if (NULL != value)
+  if (nullptr != value)
     engage_hacks(value);
   else {
     value = getenv("MTX_ENGAGE");
-    if (NULL != value)
+    if (nullptr != value)
       engage_hacks(value);
   }
 }

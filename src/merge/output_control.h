@@ -75,7 +75,7 @@ struct packetizer_t {
 
   packetizer_t():
     status(FILE_STATUS_MOREDATA), old_status(FILE_STATUS_MOREDATA),
-    packetizer(NULL), orig_packetizer(NULL),
+    packetizer(nullptr), orig_packetizer(nullptr),
     file(0), orig_file(0),
     deferred(false) { }
 };
@@ -105,8 +105,8 @@ struct filelist_t {
 
   filelist_t():
     size(0), type(FILE_TYPE_IS_UNKNOWN),
-    reader(NULL),
-    ti(NULL), appending(false), appended_to(false), done(false),
+    reader(nullptr),
+    ti(nullptr), appending(false), appended_to(false), done(false),
     num_unfinished_packetizers(0), old_num_unfinished_packetizers(0),
     deferred_max_timecode_seen(-1) {}
 };
@@ -129,7 +129,7 @@ struct attachment_t {
     id           = 0;
     ui_id        = 0;
     to_all_files = false;
-    data         = memory_cptr(NULL);
+    data         = memory_cptr(nullptr);
   }
 };
 

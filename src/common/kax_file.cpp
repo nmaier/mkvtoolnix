@@ -46,7 +46,7 @@ kax_file_c::read_next_level1_element(uint32_t wanted_id) {
   } catch (...) {
     mxinfo("READ X\n");
   }
-  return NULL;
+  return nullptr;
 }
 
 kax_file_c::~kax_file_c() {
@@ -78,7 +78,7 @@ kax_file_c::read_next_level1_element_internal(uint32_t wanted_id) {
                 && (   is_level1_element_id(actual_id)
                        || is_global_element_id(actual_id)))) {
     EbmlElement *l1 = read_one_element();
-    if (NULL != l1)
+    if (nullptr != l1)
       return l1;
   }
 
@@ -89,7 +89,7 @@ kax_file_c::read_next_level1_element_internal(uint32_t wanted_id) {
     m_in->setFilePointer(search_start_pos, seek_beginning);
     EbmlElement *l1 = read_one_element();
 
-    if (NULL != l1) {
+    if (nullptr != l1) {
       int64_t element_size = get_element_size(l1);
       bool ok              = (0 != element_size) && m_in->setFilePointer2(l1->GetElementPosition() + element_size, seek_beginning);
 
@@ -100,7 +100,7 @@ kax_file_c::read_next_level1_element_internal(uint32_t wanted_id) {
 
       delete l1;
 
-      return ok ? read_next_level1_element(wanted_id) : NULL;
+      return ok ? read_next_level1_element(wanted_id) : nullptr;
     }
   }
 
@@ -116,14 +116,14 @@ kax_file_c::read_one_element() {
   int upper_lvl_el = 0;
   EbmlElement *l1  = m_es->FindNextElement(EBML_CLASS_CONTEXT(KaxSegment), upper_lvl_el, 0xFFFFFFFFL, true);
 
-  if (NULL == l1)
-    return NULL;
+  if (nullptr == l1)
+    return nullptr;
 
   const EbmlCallbacks *callbacks = find_ebml_callbacks(EBML_INFO(KaxSegment), EbmlId(*l1));
-  if (NULL == callbacks)
+  if (nullptr == callbacks)
     callbacks = &EBML_CLASS_CALLBACK(KaxSegment);
 
-  EbmlElement *l2 = NULL;
+  EbmlElement *l2 = nullptr;
   try {
     l1->Read(*m_es.get_object(), EBML_INFO_CONTEXT(*callbacks), upper_lvl_el, l2, true);
 
@@ -131,7 +131,7 @@ kax_file_c::read_one_element() {
     mxdebug_if(m_debug_resync, boost::format("exception reading element data: %1% (%2%)\n") % e.what() % e.getError());
     m_in->setFilePointer(l1->GetElementPosition() + 1);
     delete l1;
-    return NULL;
+    return nullptr;
   }
 
   unsigned long element_size = get_element_size(l1);
@@ -166,7 +166,7 @@ kax_file_c::resync_to_level1_element(uint32_t wanted_id) {
   } catch (...) {
     if (m_debug_resync)
       mxinfo("kax_file::resync_to_level1_element(): exception\n");
-    return NULL;
+    return nullptr;
   }
 }
 
@@ -250,7 +250,7 @@ kax_file_c::resync_to_level1_element_internal(uint32_t wanted_id) {
 
   mxinfo(Y("Resync failed: no valid Matroska level 1 element found.\n"));
 
-  return NULL;
+  return nullptr;
 }
 
 KaxCluster *
@@ -277,7 +277,7 @@ unsigned long
 kax_file_c::get_element_size(EbmlElement *e) {
   EbmlMaster *m = dynamic_cast<EbmlMaster *>(e);
 
-  if ((NULL == m) || e->IsFiniteSize())
+  if ((nullptr == m) || e->IsFiniteSize())
     return e->GetSizeLength() + EBML_ID_LENGTH(static_cast<const EbmlId &>(*e)) + e->GetSize();
 
   unsigned long max_end_pos = e->GetElementPosition() + EBML_ID_LENGTH(static_cast<const EbmlId &>(*e));

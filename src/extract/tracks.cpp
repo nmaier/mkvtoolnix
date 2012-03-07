@@ -65,7 +65,7 @@ create_extractors(KaxTracks &kax_tracks,
       continue;
 
     // Is there more than one track with the same track number?
-    xtr_base_c *extractor = NULL;
+    xtr_base_c *extractor = nullptr;
     size_t k;
     for (k = 0; k < extractors.size(); k++)
       if (extractors[k]->m_track_num == tnum) {
@@ -73,17 +73,17 @@ create_extractors(KaxTracks &kax_tracks,
         extractor = extractors[k];
         break;
       }
-    if (NULL != extractor)
+    if (nullptr != extractor)
       continue;
 
     // Does the user want this track to be extracted?
-    track_spec_t *tspec = NULL;
+    track_spec_t *tspec = nullptr;
     for (k = 0; k < tracks.size(); k++)
       if (tracks[k].tid == track_id) {
         tspec = &tracks[k];
         break;
       }
-    if (NULL == tspec)
+    if (nullptr == tspec)
       continue;
 
     // Let's find the codec ID and create an extractor for it.
@@ -92,13 +92,13 @@ create_extractors(KaxTracks &kax_tracks,
       mxerror(boost::format(Y("The track ID %1% does not have a valid CodecID.\n")) % track_id);
 
     extractor = xtr_base_c::create_extractor(codec_id, track_id, *tspec);
-    if (NULL == extractor)
+    if (nullptr == extractor)
       mxerror(boost::format(Y("Extraction of track ID %1% with the CodecID '%2%' is not supported.\n")) % track_id % codec_id);
 
     extractor->m_track_num = tnum;
 
     // Has there another file been requested with the same name?
-    xtr_base_c *master = NULL;
+    xtr_base_c *master = nullptr;
     for (k = 0; k < extractors.size(); k++)
       if (extractors[k]->m_file_name == tspec->out_name) {
         master = extractors[k];
@@ -126,31 +126,31 @@ handle_blockgroup(KaxBlockGroup &blockgroup,
                   int64_t tc_scale) {
   // Only continue if this block group actually contains a block.
   KaxBlock *block = FINDFIRST(&blockgroup, KaxBlock);
-  if ((NULL == block) || (0 == block->NumberFrames()))
+  if ((nullptr == block) || (0 == block->NumberFrames()))
     return;
 
   block->SetParent(cluster);
 
   // Do we need this block group?
-  xtr_base_c *extractor = NULL;
+  xtr_base_c *extractor = nullptr;
   size_t i;
   for (i = 0; i < extractors.size(); i++)
     if (block->TrackNum() == extractors[i]->m_track_num) {
       extractor = extractors[i];
       break;
     }
-  if (NULL == extractor)
+  if (nullptr == extractor)
     return;
 
   // Next find the block duration if there is one.
   KaxBlockDuration *kduration   = FINDFIRST(&blockgroup, KaxBlockDuration);
-  int64_t duration              = NULL == kduration ? -1 : (int64_t)uint64(*kduration) * tc_scale;
+  int64_t duration              = nullptr == kduration ? -1 : (int64_t)uint64(*kduration) * tc_scale;
 
   // Now find backward and forward references.
   int64_t bref                  = 0;
   int64_t fref                  = 0;
   KaxReferenceBlock *kreference = FINDFIRST(&blockgroup, KaxReferenceBlock);
-  for (i = 0; (2 > i) && (NULL != kreference); i++) {
+  for (i = 0; (2 > i) && (nullptr != kreference); i++) {
     if (0 > int64(*kreference))
       bref = int64(*kreference);
     else
@@ -165,7 +165,7 @@ handle_blockgroup(KaxBlockGroup &blockgroup,
     duration = extractor->m_default_duration * block->NumberFrames();
 
   KaxCodecState *kcstate = FINDFIRST(&blockgroup, KaxCodecState);
-  if (NULL != kcstate) {
+  if (nullptr != kcstate) {
     memory_cptr codec_state(new memory_c(kcstate->GetBuffer(), kcstate->GetSize(), false));
     extractor->handle_codec_state(codec_state);
   }
@@ -197,7 +197,7 @@ handle_simpleblock(KaxSimpleBlock &simpleblock,
   simpleblock.SetParent(cluster);
 
   // Do we need this block group?
-  xtr_base_c *extractor = NULL;
+  xtr_base_c *extractor = nullptr;
   size_t i;
   for (i = 0; i < extractors.size(); i++)
     if (simpleblock.TrackNum() == extractors[i]->m_track_num) {
@@ -205,7 +205,7 @@ handle_simpleblock(KaxSimpleBlock &simpleblock,
       break;
     }
 
-  if (NULL == extractor)
+  if (nullptr == extractor)
     return;
 
   int64_t duration = extractor->m_default_duration * simpleblock.NumberFrames();
@@ -223,7 +223,7 @@ handle_simpleblock(KaxSimpleBlock &simpleblock,
 
     DataBuffer &data = simpleblock.GetBuffer(i);
     memory_cptr frame(new memory_c(data.Buffer(), data.Size(), false));
-    extractor->handle_frame(frame, NULL, this_timecode, this_duration, -1, -1, simpleblock.IsKeyframe(), simpleblock.IsDiscardable(), false);
+    extractor->handle_frame(frame, nullptr, this_timecode, this_duration, -1, -1, simpleblock.IsKeyframe(), simpleblock.IsDiscardable(), false);
   }
 }
 
@@ -235,11 +235,11 @@ close_extractors() {
     extractors[i]->finish_track();
 
   for (i = 0; i < extractors.size(); i++)
-    if (NULL != extractors[i]->m_master)
+    if (nullptr != extractors[i]->m_master)
       extractors[i]->finish_file();
 
   for (i = 0; i < extractors.size(); i++) {
-    if (NULL == extractors[i]->m_master)
+    if (nullptr == extractors[i]->m_master)
       extractors[i]->finish_file();
     delete extractors[i];
   }
@@ -294,7 +294,7 @@ find_and_verify_track_uids(KaxTracks &tracks,
 
   for (t = 0; t < tracks.ListSize(); t++) {
     KaxTrackEntry *track_entry = dynamic_cast<KaxTrackEntry *>(tracks[t]);
-    if (NULL == track_entry)
+    if (nullptr == track_entry)
       continue;
 
     ++track_id;
@@ -336,7 +336,7 @@ extract_tracks(const std::string &file_name,
 
     // Find the EbmlHead element. Must be the first one.
     EbmlElement *l0 = es->FindNextID(EBML_INFO(EbmlHead), 0xFFFFFFFFL);
-    if (NULL == l0) {
+    if (nullptr == l0) {
       show_error(Y("Error: No EBML head found."));
       delete es;
 
@@ -351,7 +351,7 @@ extract_tracks(const std::string &file_name,
       // Next element must be a segment
       l0 = es->FindNextID(EBML_INFO(KaxSegment), 0xFFFFFFFFFFFFFFFFLL);
 
-      if (NULL == l0) {
+      if (nullptr == l0) {
         show_error(Y("No segment/level 0 element found."));
         return false;
       }
@@ -366,19 +366,19 @@ extract_tracks(const std::string &file_name,
     }
 
     bool tracks_found = false;
-    EbmlElement *l1   = NULL;
+    EbmlElement *l1   = nullptr;
     uint64_t tc_scale = TIMECODE_SCALE;
 
     KaxChapters all_chapters;
     KaxTags all_tags;
 
-    while (NULL != (l1 = file->read_next_level1_element())) {
+    while (nullptr != (l1 = file->read_next_level1_element())) {
       if (EbmlId(*l1) == EBML_ID(KaxInfo)) {
         // General info about this Matroska file
         show_element(l1, 1, Y("Segment information"));
 
         KaxTimecodeScale *ktc_scale = FINDFIRST(l1, KaxTimecodeScale);
-        if (NULL != ktc_scale) {
+        if (nullptr != ktc_scale) {
           tc_scale = uint64(*ktc_scale);
           show_element(ktc_scale, 2, boost::format(Y("Timecode scale: %1%")) % tc_scale);
         }
@@ -401,7 +401,7 @@ extract_tracks(const std::string &file_name,
           mxinfo(boost::format(Y("Progress: %1%%%%2%")) % (int)(in->getFilePointer() * 100 / file_size) % "\r");
 
         KaxClusterTimecode *ctc = FINDFIRST(l1, KaxClusterTimecode);
-        if (NULL != ctc) {
+        if (nullptr != ctc) {
           uint64_t cluster_tc = uint64(*ctc);
           show_element(ctc, 2, boost::format(Y("Cluster timecode: %|1$.3f|s")) % ((float)cluster_tc * (float)tc_scale / 1000000000.0));
           cluster->InitTimecode(cluster_tc, tc_scale);
@@ -448,7 +448,7 @@ extract_tracks(const std::string &file_name,
 
       delete l1;
 
-    } // while (l1 != NULL)
+    } // while (l1 != nullptr)
 
     delete l0;
     delete es;

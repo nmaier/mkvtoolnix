@@ -52,7 +52,7 @@ wx_kax_analyzer_c::show_progress_running(int percentage) {
 void
 wx_kax_analyzer_c::show_progress_done() {
   delete m_prog_dlg;
-  m_prog_dlg = NULL;
+  m_prog_dlg = nullptr;
 }
 
 void

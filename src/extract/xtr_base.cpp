@@ -44,8 +44,8 @@ xtr_base_c::xtr_base_c(const std::string &codec_id,
                        const char *container_name)
   : m_codec_id(codec_id)
   , m_file_name(tspec.out_name)
-  , m_container_name(NULL == container_name ? Y("raw data") : container_name)
-  , m_master(NULL)
+  , m_container_name(nullptr == container_name ? Y("raw data") : container_name)
+  , m_master(nullptr)
   , m_tid(tid)
   , m_track_num(-1)
   , m_default_duration(0)
@@ -60,7 +60,7 @@ xtr_base_c::~xtr_base_c() {
 void
 xtr_base_c::create_file(xtr_base_c *master,
                         KaxTrackEntry &track) {
-  if (NULL != master)
+  if (nullptr != master)
     mxerror(boost::format(Y("Cannot write track %1% with the CodecID '%2%' to the file '%3%' because "
                             "track %4% with the CodecID '%5%' is already being written to the same file.\n"))
             % m_tid % m_codec_id % m_file_name % master->m_tid % master->m_codec_id);
@@ -189,7 +189,7 @@ xtr_base_c::create_extractor(const std::string &new_codec_id,
   else if (new_codec_id == MKV_S_HDMV_PGS)
     return new xtr_pgs_c(new_codec_id, new_tid, tspec);
 
-  return NULL;
+  return nullptr;
 }
 
 void
@@ -199,7 +199,7 @@ xtr_fullraw_c::create_file(xtr_base_c *master,
 
   KaxCodecPrivate *priv = FINDFIRST(&track, KaxCodecPrivate);
 
-  if ((NULL != priv) && (0 != priv->GetSize())) {
+  if ((nullptr != priv) && (0 != priv->GetSize())) {
     memory_cptr mem(new memory_c(priv->GetBuffer(), priv->GetSize(), false));
     m_content_decoder.reverse(mem, CONTENT_ENCODING_SCOPE_CODECPRIVATE);
     m_out->write(mem);

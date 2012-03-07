@@ -114,7 +114,7 @@ translation_c::get_default_ui_locale() {
     return env_var;
 
   char *data;
-  int len = GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SENGLANGUAGE, NULL, 0);
+  int len = GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SENGLANGUAGE, nullptr, 0);
   if (0 < len) {
     data = (char *)safemalloc(len);
     memset(data, 0, len);
@@ -129,15 +129,15 @@ translation_c::get_default_ui_locale() {
 
 # else  // SYS_WINDOWS
 
-  char *data = setlocale(LC_MESSAGES, NULL);
-  if (NULL != data) {
+  char *data = setlocale(LC_MESSAGES, nullptr);
+  if (nullptr != data) {
     std::string previous_locale = data;
     if (debugging_requested("locale"))
       mxinfo(boost::format("[get_default_ui_locale previous %1%]\n") % previous_locale);
     setlocale(LC_MESSAGES, "");
-    data = setlocale(LC_MESSAGES, NULL);
+    data = setlocale(LC_MESSAGES, nullptr);
 
-    if (NULL != data)
+    if (nullptr != data)
       locale = data;
 
     if (debugging_requested("locale"))
@@ -265,15 +265,15 @@ init_locales(std::string locale) {
     locale_string_c loc_default(default_locale);
     std::string loc_req_with_default_codeset(locale_string_c(locale).set_codeset_and_modifier(loc_default).str());
 
-    if (setlocale(LC_MESSAGES, loc_req_with_default_codeset.c_str()) != NULL)
+    if (setlocale(LC_MESSAGES, loc_req_with_default_codeset.c_str()) != nullptr)
       chosen_locale = loc_req_with_default_codeset;
 
-    else if (setlocale(LC_MESSAGES, locale.c_str()) != NULL)
+    else if (setlocale(LC_MESSAGES, locale.c_str()) != nullptr)
       chosen_locale = locale;
 
     else {
       std::string loc_req_with_utf8 = locale_string_c(locale).set_codeset_and_modifier(locale_string_c("dummy.UTF-8")).str();
-      if (setlocale(LC_MESSAGES, loc_req_with_utf8.c_str()) != NULL)
+      if (setlocale(LC_MESSAGES, loc_req_with_utf8.c_str()) != nullptr)
         chosen_locale = loc_req_with_utf8;
     }
 
@@ -288,7 +288,7 @@ init_locales(std::string locale) {
   // Hard fallback to "C" locale if no suitable locale was
   // selected. This can happen if the system has no locales for
   // "en_US" or "en_US.UTF-8" compiled.
-  if (chosen_locale.empty() && (setlocale(LC_MESSAGES, "C") != NULL))
+  if (chosen_locale.empty() && (setlocale(LC_MESSAGES, "C") != nullptr))
     chosen_locale = "C";
 
   if (chosen_locale.empty())

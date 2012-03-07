@@ -62,11 +62,11 @@ public:
 
 header_editor_frame_c::header_editor_frame_c(wxWindow *parent)
   : wxFrame(parent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(800, 600), wxDEFAULT_FRAME_STYLE | wxTAB_TRAVERSAL)
-  , m_file_menu(NULL)
+  , m_file_menu(nullptr)
   , m_file_menu_sep(false)
-  , m_page_panel(NULL)
-  , m_bs_main(NULL)
-  , m_bs_page(NULL)
+  , m_page_panel(nullptr)
+  , m_bs_main(nullptr)
+  , m_bs_page(nullptr)
   , m_ignore_tree_selection_changes(false)
 {
   wxPanel *frame_panel = new wxPanel(this);
@@ -258,7 +258,7 @@ header_editor_frame_c::open_file(wxFileName file_name) {
   }
 
   m_file_name = file_name;
-  m_file_name.GetTimes(NULL, &m_file_mtime, NULL);
+  m_file_name.GetTimes(nullptr, &m_file_mtime, nullptr);
 
   set_window_title();
 
@@ -346,23 +346,23 @@ header_editor_frame_c::handle_tracks(kax_analyzer_data_c *data) {
   if (!m_e_tracks)
     return;
 
-  he_track_type_page_c *last_track_page = NULL;
+  he_track_type_page_c *last_track_page = nullptr;
 
   KaxTracks *kax_tracks = static_cast<KaxTracks *>(m_e_tracks.get_object());
   int track_type        = -1;
   size_t i;
   for (i = 0; kax_tracks->ListSize() > i; ++i) {
     KaxTrackEntry *k_track_entry = dynamic_cast<KaxTrackEntry *>((*kax_tracks)[i]);
-    if (NULL == k_track_entry)
+    if (nullptr == k_track_entry)
       continue;
 
     KaxTrackType *k_track_type = dynamic_cast<KaxTrackType *>(FINDFIRST(k_track_entry, KaxTrackType));
-    if (NULL == k_track_type)
+    if (nullptr == k_track_type)
       continue;
 
     unsigned int track_number = 0;
     KaxTrackNumber *k_track_number = dynamic_cast<KaxTrackNumber *>(FINDFIRST(k_track_entry, KaxTrackNumber));
-    if (NULL != k_track_number)
+    if (nullptr != k_track_number)
       track_number = uint64(*k_track_number);
 
     wxString title;
@@ -504,14 +504,14 @@ header_editor_frame_c::handle_tracks(kax_analyzer_data_c *data) {
     // m_tc_tree->ExpandAllChildren(page->m_page_id);
   }
 
-  if (NULL != last_track_page)
+  if (nullptr != last_track_page)
     last_track_page->set_is_last_track(true);
 }
 
 void
 header_editor_frame_c::on_file_save(wxCommandEvent &) {
   wxDateTime curr_mtime;
-  m_file_name.GetTimes(NULL, &curr_mtime, NULL);
+  m_file_name.GetTimes(nullptr, &curr_mtime, nullptr);
 
   if (curr_mtime != m_file_mtime) {
     wxMessageBox(Z("The file has been changed by another program since it was read by the header editor. Therefore you have to re-load it. "
@@ -710,7 +710,7 @@ header_editor_frame_c::find_page_for_item(wxTreeItemId id) {
     if (page->m_page_id == id)
       return page.get_object();
 
-  return NULL;
+  return nullptr;
 }
 
 void

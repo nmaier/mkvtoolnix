@@ -127,7 +127,7 @@ namespace dirac {
       if (m_seqhdr_found)
         return memory_cptr(m_raw_seqhdr->clone());
       else
-        return memory_cptr(NULL);
+        return memory_cptr(nullptr);
     }
 
     virtual void handle_unit(memory_cptr packet);

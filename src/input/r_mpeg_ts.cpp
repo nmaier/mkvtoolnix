@@ -131,7 +131,7 @@ mpeg_ts_track_c::new_stream_v_mpeg_1_2() {
   v_dheight  = v_height;
 
   MPEGChunk *raw_seq_hdr_chunk = m_m2v_parser->GetRealSequenceHeader();
-  if (NULL != raw_seq_hdr_chunk) {
+  if (nullptr != raw_seq_hdr_chunk) {
     mxverb(3, boost::format("new_stream_v_mpeg_1_2: sequence header size: %1%\n") % raw_seq_hdr_chunk->GetSize());
     raw_seq_hdr = memory_c::clone(raw_seq_hdr_chunk->GetPointer(), raw_seq_hdr_chunk->GetSize());
   }
@@ -433,7 +433,7 @@ mpeg_ts_reader_c::identify() {
                        : FOURCC('P', 'G', 'S', ' ') == track->fourcc ? "HDMV PGS"
                        // : FOURCC('P', 'C', 'M', ' ') == track->fourcc ? "PCM"
                        // : FOURCC('L', 'P', 'C', 'M') == track->fourcc ? "LPCM"
-                       :                                               NULL;
+                       :                                               nullptr;
 
     if (!fourcc)
       continue;
@@ -454,7 +454,7 @@ mpeg_ts_reader_c::identify() {
 
 int
 mpeg_ts_reader_c::parse_pat(unsigned char *pat) {
-  if (pat == NULL) {
+  if (pat == nullptr) {
     mxdebug_if(m_debug_pat_pmt, "mpeg_ts:parse_pat: Invalid parameters!\n");
     return -1;
   }
@@ -534,7 +534,7 @@ mpeg_ts_reader_c::parse_pat(unsigned char *pat) {
 
 int
 mpeg_ts_reader_c::parse_pmt(unsigned char *pmt) {
-  if (pmt == NULL) {
+  if (pmt == nullptr) {
     mxdebug_if(m_debug_pat_pmt, "mpeg_ts:parse_pmt: Invalid parameters!\n");
     return -1;
   }
@@ -1058,7 +1058,7 @@ mpeg_ts_reader_c::create_mpeg1_2_video_packetizer(mpeg_ts_track_ptr &track) {
     m_ti.m_private_data = track->raw_seq_hdr->get_buffer();
     m_ti.m_private_size = track->raw_seq_hdr->get_size();
   } else {
-    m_ti.m_private_data = NULL;
+    m_ti.m_private_data = nullptr;
     m_ti.m_private_size = 0;
   }
 
@@ -1066,7 +1066,7 @@ mpeg_ts_reader_c::create_mpeg1_2_video_packetizer(mpeg_ts_track_ptr &track) {
                                                                        track->v_dwidth, track->v_dheight, false);
   track->ptzr                         = add_packetizer(m2vpacketizer);
   show_packetizer_info(m_ti.m_id, PTZR(track->ptzr));
-  m_ti.m_private_data                 = NULL;
+  m_ti.m_private_data                 = nullptr;
   m_ti.m_private_size                 = 0;
   m2vpacketizer->set_video_interlaced_flag(track->v_interlaced);
 }

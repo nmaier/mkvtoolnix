@@ -69,10 +69,10 @@ public:
   }
   void clear() throw() {
     release();
-    its_counter = NULL;
+    its_counter = nullptr;
   }
   bool is_set() const throw() {
-    return (NULL != its_counter) && (NULL != its_counter->ptr);
+    return (nullptr != its_counter) && (nullptr != its_counter->ptr);
   }
   operator bool() const throw() {
     return is_set();

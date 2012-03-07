@@ -26,8 +26,8 @@ extern "C" {
 #include "common/mm_io.h"
 #include "common/strings/editing.h"
 
-#ifndef NULL
-# define NULL 0
+#ifndef nullptr
+# define nullptr 0
 #endif
 
 #ifdef SYS_UNIX
@@ -969,7 +969,7 @@ const char *sub_charsets[] = {
   "WINSAMI2",
   "WS2",
   "YU",
-  NULL
+  nullptr
 };
 #elif defined(SYS_APPLE)
 const char *sub_charsets[] = {
@@ -1372,7 +1372,7 @@ const char *sub_charsets[] = {
   "X0201",
   "X0208",
   "X0212",
-  NULL
+  nullptr
 };
 #else
 const char *sub_charsets[] = {
@@ -1732,7 +1732,7 @@ const char *sub_charsets[] = {
   "X0201",
   "X0208",
   "X0212",
-  NULL
+  nullptr
 };
 #endif
 
@@ -2359,7 +2359,7 @@ const mime_type_t mime_types[] = {
   {"video/x-sgi-movie", "movie"},
   {"x-conference/x-cooltalk", "ice"},
   {"x-world/x-vrml", "vrm vrml wrl"},
-  {NULL, NULL}
+  {nullptr, nullptr}
 };
 
 const char *cctlds[] = {
@@ -2606,7 +2606,7 @@ const char *cctlds[] = {
   "za",
   "zm",
   "zw",
-  NULL
+  nullptr
 };
 
 static std::string
@@ -2620,7 +2620,7 @@ guess_mime_type_by_ext(std::string ext) {
     return "";
   ext.erase(0, i + 1);
 
-  for (i = 0; NULL != mime_types[i].name; i++) {
+  for (i = 0; nullptr != mime_types[i].name; i++) {
     if (0 == mime_types[i].extensions[0])
       continue;
 
@@ -2692,7 +2692,7 @@ guess_mime_type_internal(std::string ext,
   if (!m || (-1 == magic_load(m, magic_filename.c_str())))
     return guess_mime_type_by_ext(ext);
 # else  // defined(SYS_WINDOWS)
-  if (!m || (-1 == magic_load(m, NULL)))
+  if (!m || (-1 == magic_load(m, nullptr)))
     return guess_mime_type_by_ext(ext);
 # endif  // defined(SYS_WINDOWS)
 
@@ -2734,7 +2734,7 @@ bool
 is_valid_cctld(const std::string &s) {
   int i;
 
-  for (i = 0; NULL != cctlds[i]; ++i)
+  for (i = 0; nullptr != cctlds[i]; ++i)
     if (s == cctlds[i])
       return true;
 

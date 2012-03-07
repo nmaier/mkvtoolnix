@@ -66,11 +66,11 @@ get_registry_key_value(const std::string &key,
   bool ok        = false;
   DWORD data_len = 0;
   DWORD dwDisp;
-  if (ERROR_SUCCESS == RegQueryValueExA(hkey, value_name.c_str(), NULL, &dwDisp, NULL, &data_len)) {
+  if (ERROR_SUCCESS == RegQueryValueExA(hkey, value_name.c_str(), nullptr, &dwDisp, nullptr, &data_len)) {
     char *data = new char[data_len + 1];
     memset(data, 0, data_len + 1);
 
-    if (ERROR_SUCCESS == RegQueryValueExA(hkey, value_name.c_str(), NULL, &dwDisp, (BYTE *)data, &data_len)) {
+    if (ERROR_SUCCESS == RegQueryValueExA(hkey, value_name.c_str(), nullptr, &dwDisp, (BYTE *)data, &data_len)) {
       value = data;
       ok    = true;
     }
@@ -87,7 +87,7 @@ std::string
 get_current_exe_path() {
   char file_name[4000];
   memset(file_name, 0, sizeof(file_name));
-  if (!GetModuleFileNameA(NULL, file_name, 3999))
+  if (!GetModuleFileNameA(nullptr, file_name, 3999))
     return "";
 
   std::string path           = file_name;
@@ -141,7 +141,7 @@ std::string
 get_application_data_folder() {
   wchar_t szPath[MAX_PATH];
 
-  if (SUCCEEDED(SHGetFolderPathW(NULL, CSIDL_APPDATA | CSIDL_FLAG_CREATE, NULL, 0, szPath)))
+  if (SUCCEEDED(SHGetFolderPathW(nullptr, CSIDL_APPDATA | CSIDL_FLAG_CREATE, nullptr, 0, szPath)))
     return to_utf8(std::wstring(szPath)) + "\\mkvtoolnix";
 
   return "";
@@ -155,7 +155,7 @@ get_application_data_folder() {
 int64_t
 get_current_time_millis() {
   struct timeval tv;
-  if (0 != gettimeofday(&tv, NULL))
+  if (0 != gettimeofday(&tv, nullptr))
     return -1;
 
   return (int64_t)tv.tv_sec * 1000 + (int64_t)tv.tv_usec / 1000;
@@ -164,7 +164,7 @@ get_current_time_millis() {
 std::string
 get_application_data_folder() {
   const char *home = getenv("HOME");
-  if (NULL == home)
+  if (nullptr == home)
     return "";
 
   // If $HOME/.mkvtoolnix exists already then keep using it to avoid
@@ -175,7 +175,7 @@ get_application_data_folder() {
 
   // If XDG_CONFIG_HOME is set then use that folder.
   const char *xdg_config_home = getenv("XDG_CONFIG_HOME");
-  if (NULL != xdg_config_home)
+  if (nullptr != xdg_config_home)
     return std::string(xdg_config_home) + "/mkvtoolnix";
 
   // If all fails then use the XDG fallback folder for config files.

@@ -114,7 +114,7 @@ optdlg_mmg_tab::optdlg_mmg_tab(wxWindow *parent,
 
 #if defined(HAVE_LIBINTL_H)
   wxStaticText *st_ui_language = new wxStaticText(this, -1, Z("Interface language:"));
-  cob_ui_language = new wxMTX_COMBOBOX_TYPE(this, ID_COB_UI_LANGUAGE,  wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
+  cob_ui_language = new wxMTX_COMBOBOX_TYPE(this, ID_COB_UI_LANGUAGE,  wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_DROPDOWN | wxCB_READONLY);
 
   std::vector<translation_c>::iterator translation = translation_c::ms_available_translations.begin();
   wxString select_locale;

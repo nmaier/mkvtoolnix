@@ -119,7 +119,7 @@ struct kax_track_t {
     , a_formattag(0)
     , a_sfreq(8000.0)
     , a_osfreq(0.0)
-    , private_data(NULL)
+    , private_data(nullptr)
     , private_size(0)
     , default_track(true)
     , forced_track(boost::logic::indeterminate)
@@ -128,9 +128,9 @@ struct kax_track_t {
     , units_processed(0)
     , ok(false)
     , previous_timecode(0)
-    , tags(NULL)
+    , tags(nullptr)
     , ptzr(-1)
-    , ptzr_ptr(NULL)
+    , ptzr_ptr(nullptr)
     , headers_set(false)
     , ignore_duration_hack(false)
   {
@@ -141,7 +141,7 @@ struct kax_track_t {
 
   ~kax_track_t() {
     safefree(private_data);
-    if (NULL != tags)
+    if (nullptr != tags)
       delete tags;
   }
 
@@ -213,8 +213,8 @@ protected:
   virtual void init_passthrough_packetizer(kax_track_t *t);
   virtual void set_packetizer_headers(kax_track_t *t);
   virtual void read_first_frames(kax_track_t *t, unsigned num_wanted = 1);
-  virtual kax_track_t *find_track_by_num(uint64_t num, kax_track_t *c = NULL);
-  virtual kax_track_t *find_track_by_uid(uint64_t uid, kax_track_t *c = NULL);
+  virtual kax_track_t *find_track_by_num(uint64_t num, kax_track_t *c = nullptr);
+  virtual kax_track_t *find_track_by_uid(uint64_t uid, kax_track_t *c = nullptr);
 
   virtual bool verify_acm_audio_track(kax_track_t *t);
   virtual bool verify_flac_audio_track(kax_track_t *t);

@@ -114,7 +114,7 @@ parse_args(std::vector<std::string> &args) {
 
       if (arg->substr(0, 2) == "0x") {
         arg->erase(0, 2);
-        g_is_master[strtoll(arg->c_str(), NULL, 16)] = true;
+        g_is_master[strtoll(arg->c_str(), nullptr, 16)] = true;
 
       } else {
         uint32_t id = element_name_to_id(*arg);

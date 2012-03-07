@@ -25,9 +25,9 @@ timecode_factory_c::create(const std::string &file_name,
                            const std::string &source_name,
                            int64_t tid) {
   if (file_name.empty())
-    return timecode_factory_cptr(NULL);
+    return timecode_factory_cptr(nullptr);
 
-  mm_io_c *in = NULL;           // avoid gcc warning
+  mm_io_c *in = nullptr;           // avoid gcc warning
   try {
     in = new mm_text_io_c(new mm_file_io_c(file_name));
   } catch(...) {
@@ -40,7 +40,7 @@ timecode_factory_c::create(const std::string &file_name,
     mxerror(boost::format(Y("The timecode file '%1%' contains an unsupported/unrecognized format line. The very first line must look like '# timecode format v1'.\n"))
             % file_name);
 
-  timecode_factory_c *factory = NULL; // avoid gcc warning
+  timecode_factory_c *factory = nullptr; // avoid gcc warning
   if (1 == version)
     factory = new timecode_factory_v1_c(file_name, source_name, tid);
 
@@ -63,7 +63,7 @@ timecode_factory_cptr
 timecode_factory_c::create_fps_factory(int64_t default_duration,
                                        const std::string &source_name,
                                        int64_t tid) {
-  mm_text_io_c text_io(new mm_mem_io_c(NULL, 0, 1024));
+  mm_text_io_c text_io(new mm_mem_io_c(nullptr, 0, 1024));
   text_io.puts("# timecode format v1\n");
   text_io.puts(boost::format("assume %1%\n") % to_string(1000000000.0 / default_duration, 9));
   text_io.setFilePointer(0, seek_beginning);

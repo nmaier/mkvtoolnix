@@ -29,7 +29,7 @@ he_bool_value_page_c::he_bool_value_page_c(header_editor_frame_c *parent,
                                            const translatable_string_c &title,
                                            const translatable_string_c &description)
   : he_value_page_c(parent, toplevel_page, master, callbacks, vt_bool, title, description)
-  , m_cb_bool(NULL)
+  , m_cb_bool(nullptr)
   , m_original_value(false)
 {
 }
@@ -43,7 +43,7 @@ he_bool_value_page_c::translate_ui() {
   m_values.Add(Z("no"));
   m_values.Add(Z("yes"));
 
-  if (NULL != m_cb_bool) {
+  if (nullptr != m_cb_bool) {
     size_t i;
     int selection = m_cb_bool->GetSelection();
     for (i = 0; m_values.size() > i; ++i)
@@ -56,7 +56,7 @@ he_bool_value_page_c::translate_ui() {
 
 wxControl *
 he_bool_value_page_c::create_input_control() {
-  if (NULL != m_element)
+  if (nullptr != m_element)
     m_original_value = uint64(*static_cast<EbmlUInteger *>(m_element)) > 0;
 
   if (m_values.empty())
@@ -69,7 +69,7 @@ he_bool_value_page_c::create_input_control() {
 
 wxString
 he_bool_value_page_c::get_original_value_as_string() {
-  if (NULL != m_element)
+  if (nullptr != m_element)
     return m_values[m_original_value ? 1 : 0];
 
   return m_values[0];

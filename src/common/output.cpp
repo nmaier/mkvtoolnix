@@ -251,29 +251,29 @@ dump_ebml_elements(EbmlElement *element,
     indent_str += " ";
 
   if (with_values) {
-    if (NULL != dynamic_cast<EbmlUInteger *>(element))
+    if (nullptr != dynamic_cast<EbmlUInteger *>(element))
       value_str = to_string(uint64(*static_cast<EbmlUInteger *>(element)));
 
-    else if (NULL != dynamic_cast<EbmlSInteger *>(element))
+    else if (nullptr != dynamic_cast<EbmlSInteger *>(element))
       value_str = to_string(int64(*static_cast<EbmlSInteger *>(element)));
 
-    else if (NULL != dynamic_cast<EbmlFloat *>(element))
+    else if (nullptr != dynamic_cast<EbmlFloat *>(element))
       value_str = to_string(double(*static_cast<EbmlFloat *>(element)), 9);
 
-    else if (NULL != dynamic_cast<EbmlUnicodeString *>(element))
+    else if (nullptr != dynamic_cast<EbmlUnicodeString *>(element))
       value_str = UTFstring_to_cstrutf8(UTFstring(*static_cast<EbmlUnicodeString *>(element)));
 
-    else if (NULL != dynamic_cast<EbmlString *>(element))
+    else if (nullptr != dynamic_cast<EbmlString *>(element))
       value_str = std::string(*static_cast<EbmlString *>(element));
 
-    else if (NULL != dynamic_cast<EbmlDate *>(element))
+    else if (nullptr != dynamic_cast<EbmlDate *>(element))
       value_str = to_string(static_cast<EbmlDate *>(element)->GetEpochDate());
 
     else
       value_str = (boost::format("(type: %1%)") %
-                   (  NULL != dynamic_cast<EbmlBinary *>(element) ? "binary"
-                    : NULL != dynamic_cast<EbmlMaster *>(element) ? "master"
-                    : NULL != dynamic_cast<EbmlVoid *>(element)   ? "void"
+                   (  nullptr != dynamic_cast<EbmlBinary *>(element) ? "binary"
+                    : nullptr != dynamic_cast<EbmlMaster *>(element) ? "master"
+                    : nullptr != dynamic_cast<EbmlVoid *>(element)   ? "void"
                     :                                               "unknown")).str();
 
     value_str = " " + value_str;
@@ -282,7 +282,7 @@ dump_ebml_elements(EbmlElement *element,
   mxinfo(boost::format("%1%%2%%3%\n") % indent_str % EBML_NAME(element) % value_str);
 
   EbmlMaster *master = dynamic_cast<EbmlMaster *>(element);
-  if (NULL == master)
+  if (nullptr == master)
     return;
 
   for (i = 0; master->ListSize() > i; ++i)

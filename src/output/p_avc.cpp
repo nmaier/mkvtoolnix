@@ -201,7 +201,7 @@ mpeg4_p10_es_video_packetizer_c::connect(generic_packetizer_c *src,
     return;
 
   mpeg4_p10_es_video_packetizer_c *real_src = dynamic_cast<mpeg4_p10_es_video_packetizer_c *>(src);
-  assert(NULL != real_src);
+  assert(nullptr != real_src);
 
   m_htrack_default_duration = real_src->m_htrack_default_duration;
   m_default_duration_forced = real_src->m_default_duration_forced;
@@ -214,15 +214,15 @@ connection_result_e
 mpeg4_p10_es_video_packetizer_c::can_connect_to(generic_packetizer_c *src,
                                                 std::string &error_message) {
   mpeg4_p10_es_video_packetizer_c *vsrc = dynamic_cast<mpeg4_p10_es_video_packetizer_c *>(src);
-  if (NULL == vsrc)
+  if (nullptr == vsrc)
     return CAN_CONNECT_NO_FORMAT;
 
   connect_check_v_width( m_hvideo_pixel_width,  vsrc->m_hvideo_pixel_width);
   connect_check_v_height(m_hvideo_pixel_height, vsrc->m_hvideo_pixel_height);
   connect_check_codec_id(m_hcodec_id,           vsrc->m_hcodec_id);
 
-  if (((NULL == m_ti.m_private_data) && (NULL != vsrc->m_ti.m_private_data)) ||
-      ((NULL != m_ti.m_private_data) && (NULL == vsrc->m_ti.m_private_data)) ||
+  if (((nullptr == m_ti.m_private_data) && (nullptr != vsrc->m_ti.m_private_data)) ||
+      ((nullptr != m_ti.m_private_data) && (nullptr == vsrc->m_ti.m_private_data)) ||
       (m_ti.m_private_size != vsrc->m_ti.m_private_size)) {
     error_message = (boost::format(Y("The codec's private data does not match (lengths: %1% and %2%).")) % m_ti.m_private_size % vsrc->m_ti.m_private_size).str();
     return CAN_CONNECT_MAYBE_CODECPRIVATE;

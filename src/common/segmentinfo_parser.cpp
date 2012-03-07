@@ -37,10 +37,10 @@ end_segmentinfo_data(void *) {
   EbmlMaster *m;
 
   m = static_cast<EbmlMaster *>(xmlp_pelt);
-  if (m->FindFirstElt(EBML_INFO(KaxChapterString), false) == NULL)
+  if (m->FindFirstElt(EBML_INFO(KaxChapterString), false) == nullptr)
     xmlp_error(CPDATA, "<ChapterDisplay> is missing the <ChapterString> "
                "child.");
-  if (m->FindFirstElt(EBML_INFO(KaxChapterLanguage), false) == NULL) {
+  if (m->FindFirstElt(EBML_INFO(KaxChapterLanguage), false) == nullptr) {
     KaxChapterLanguage *cl;
 
     cl = new KaxChapterLanguage;
@@ -64,20 +64,20 @@ KaxInfo *
 parse_xml_segmentinfo(mm_text_io_c *in,
                       bool exception_on_error) {
   int i;
-  for (i = 0; segmentinfo_elements[i].name != NULL; i++) {
-    segmentinfo_elements[i].start_hook = NULL;
-    segmentinfo_elements[i].end_hook   = NULL;
+  for (i = 0; segmentinfo_elements[i].name != nullptr; i++) {
+    segmentinfo_elements[i].start_hook = nullptr;
+    segmentinfo_elements[i].end_hook   = nullptr;
   }
 
   segmentinfo_elements[chapter_element_map_index("Info")].end_hook      = end_segmentinfo_data;
   segmentinfo_elements[chapter_element_map_index("FamilyUID")].end_hook = end_segmentinfo_family;
   segmentinfo_elements[chapter_element_map_index("Links")].end_hook     = end_segmentinfo_links;
 
-  KaxInfo *info = NULL;
+  KaxInfo *info = nullptr;
   try {
     EbmlMaster *m = parse_xml_elements("Info", segmentinfo_elements, in);
     info          = dynamic_cast<KaxInfo *>(sort_ebml_master(m));
-    assert(NULL != info);
+    assert(nullptr != info);
 
   } catch (mtx::xml::parser_x &e) {
     if (!exception_on_error)

@@ -41,7 +41,7 @@ create_xml_node_name(const char *name,
                      const char **atts) {
   int i;
   std::string node_name = std::string("<") + name;
-  for (i = 0; (NULL != atts[i]) && (NULL != atts[i + 1]); i += 2)
+  for (i = 0; (nullptr != atts[i]) && (nullptr != atts[i + 1]); i += 2)
     node_name += std::string(" ") + atts[i] + "=\"" +
       escape_xml(atts[i + 1]) + "\"";
   node_name += ">";

@@ -31,7 +31,7 @@ xtr_tta_c::xtr_tta_c(const std::string &codec_id,
   , m_bps(0)
   , m_channels(0)
   , m_sfreq(0)
-  , m_temp_file_name((boost::format("mkvextract-%1%-temp-tta-%2%") % tid % time(NULL)).str())
+  , m_temp_file_name((boost::format("mkvextract-%1%-temp-tta-%2%") % tid % time(nullptr)).str())
 {
 }
 

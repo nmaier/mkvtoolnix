@@ -31,12 +31,12 @@ using namespace libmatroska;
 
 void
 fix_mandatory_tag_elements(EbmlElement *e) {
-  if (dynamic_cast<KaxTag *>(e) != NULL) {
+  if (dynamic_cast<KaxTag *>(e) != nullptr) {
     KaxTag &t = *static_cast<KaxTag *>(e);
     GetChild<KaxTagTargets>(t);
     GetChild<KaxTagSimple>(t);
 
-  } else if (dynamic_cast<KaxTagSimple *>(e) != NULL) {
+  } else if (dynamic_cast<KaxTagSimple *>(e) != nullptr) {
     KaxTagSimple &s                       = *static_cast<KaxTagSimple *>(e);
     KaxTagName &n                         = GetChild<KaxTagName>(s);
     *static_cast<EbmlUnicodeString *>(&n) = UTFstring(n);
@@ -45,7 +45,7 @@ fix_mandatory_tag_elements(EbmlElement *e) {
     KaxTagDefault &d                      = GetChild<KaxTagDefault>(s);
     *static_cast<EbmlUInteger *>(&d)      = uint64(d);
 
-  } else if (dynamic_cast<KaxTagTargets *>(e) != NULL) {
+  } else if (dynamic_cast<KaxTagTargets *>(e) != nullptr) {
     KaxTagTargets &t = *static_cast<KaxTagTargets *>(e);
     GetChild<KaxTagTargetTypeValue>(t);
     KaxTagTargetTypeValue &v         = GetChild<KaxTagTargetTypeValue>(t);
@@ -53,7 +53,7 @@ fix_mandatory_tag_elements(EbmlElement *e) {
 
   }
 
-  if (dynamic_cast<EbmlMaster *>(e) != NULL) {
+  if (dynamic_cast<EbmlMaster *>(e) != nullptr) {
     size_t i;
 
     EbmlMaster *m = static_cast<EbmlMaster *>(e);
@@ -65,26 +65,26 @@ fix_mandatory_tag_elements(EbmlElement *e) {
 KaxTags *
 select_tags_for_chapters(KaxTags &tags,
                          KaxChapters &chapters) {
-  KaxTags *new_tags = NULL;
+  KaxTags *new_tags = nullptr;
   size_t tags_idx;
   for (tags_idx = 0; tags_idx < tags.ListSize(); tags_idx++) {
-    if (dynamic_cast<KaxTag *>(tags[tags_idx]) == NULL)
+    if (dynamic_cast<KaxTag *>(tags[tags_idx]) == nullptr)
       continue;
 
     bool copy = true;
     KaxTagTargets *targets = FINDFIRST(static_cast<EbmlMaster *>(tags[tags_idx]), KaxTagTargets);
 
-    if (NULL != targets) {
+    if (nullptr != targets) {
       size_t targets_idx;
       for (targets_idx = 0; targets_idx < targets->ListSize(); targets_idx++) {
         KaxTagEditionUID *t_euid = dynamic_cast<KaxTagEditionUID *>((*targets)[targets_idx]);
-        if ((NULL != t_euid) && (find_edition_with_uid(chapters, uint64(*t_euid)) == NULL)) {
+        if ((nullptr != t_euid) && (find_edition_with_uid(chapters, uint64(*t_euid)) == nullptr)) {
           copy = false;
           break;
         }
 
         KaxTagChapterUID *t_cuid = dynamic_cast<KaxTagChapterUID *>((*targets)[targets_idx]);
-        if ((NULL != t_cuid) && (find_chapter_with_uid(chapters, uint64(*t_cuid)) == NULL)) {
+        if ((nullptr != t_cuid) && (find_chapter_with_uid(chapters, uint64(*t_cuid)) == nullptr)) {
           copy = false;
           break;
         }
@@ -92,7 +92,7 @@ select_tags_for_chapters(KaxTags &tags,
     }
 
     if (copy) {
-      if (NULL == new_tags)
+      if (nullptr == new_tags)
         new_tags = new KaxTags;
       new_tags->PushElement(*(tags[tags_idx]->Clone()));
     }
@@ -114,7 +114,7 @@ find_simple_tag(const UTFstring &name,
 
   if (EbmlId(m) == EBML_ID(KaxTagSimple)) {
     KaxTagName *tname = FINDFIRST(&m, KaxTagName);
-    if ((NULL != tname) && (name == UTFstring(*tname)))
+    if ((nullptr != tname) && (name == UTFstring(*tname)))
       return *static_cast<KaxTagSimple *>(&m);
   }
 
@@ -136,7 +136,7 @@ get_simple_tag_value(const std::string &name,
   try {
     KaxTagSimple &simple = find_simple_tag(name, m);
     KaxTagString *tvalue = FINDFIRST(&simple, KaxTagString);
-    if (NULL != tvalue)
+    if (nullptr != tvalue)
       return UTFstring_to_cstrutf8(UTFstring(*tvalue));
   } catch (...) {
   }
@@ -147,7 +147,7 @@ get_simple_tag_value(const std::string &name,
 std::string
 get_simple_tag_name(const KaxTagSimple &tag) {
   KaxTagName *tname = FINDFIRST(&tag, KaxTagName);
-  if (NULL == tname)
+  if (nullptr == tname)
     return "";
 
   return UTFstring_to_cstrutf8(UTFstring(*tname));
@@ -156,7 +156,7 @@ get_simple_tag_name(const KaxTagSimple &tag) {
 std::string
 get_simple_tag_value(const KaxTagSimple &tag) {
   KaxTagString *tstring = FINDFIRST(&tag, KaxTagString);
-  if (NULL == tstring)
+  if (nullptr == tstring)
     return "";
 
   return UTFstring_to_cstrutf8(UTFstring(*tstring));
@@ -185,11 +185,11 @@ set_simple_tag(KaxTagSimple &tag,
 int64_t
 get_tag_tuid(const KaxTag &tag) {
   KaxTagTargets *targets = FINDFIRST(&tag, KaxTagTargets);
-  if (NULL == targets)
+  if (nullptr == targets)
     return -1;
 
   KaxTagTrackUID *tuid = FINDFIRST(targets, KaxTagTrackUID);
-  if (NULL == tuid)
+  if (nullptr == tuid)
     return -1;
 
   return uint64(*tuid);
@@ -198,11 +198,11 @@ get_tag_tuid(const KaxTag &tag) {
 int64_t
 get_tag_cuid(const KaxTag &tag) {
   KaxTagTargets *targets = FINDFIRST(&tag, KaxTagTargets);
-  if (NULL == targets)
+  if (nullptr == targets)
     return -1;
 
   KaxTagChapterUID *cuid = FINDFIRST(targets, KaxTagChapterUID);
-  if (NULL == cuid)
+  if (nullptr == cuid)
     return -1;
 
   return uint64(*cuid);
@@ -255,7 +255,7 @@ convert_old_tags(KaxTags &tags) {
 
     if (has_level_type) {
       KaxTagTargets *targets = FINDFIRST(&tag, KaxTagTargets);
-      if (NULL != targets)
+      if (nullptr != targets)
         GetChildAs<KaxTagTargetTypeValue, EbmlUInteger>(*targets) = target_type_value;
     }
   }
@@ -270,7 +270,7 @@ count_simple_tags_recursively(EbmlMaster &master,
     if (is_id(master[master_idx], KaxTagSimple))
       ++count;
 
-    else if (dynamic_cast<EbmlMaster *>(master[master_idx]) != NULL)
+    else if (dynamic_cast<EbmlMaster *>(master[master_idx]) != nullptr)
       count = count_simple_tags_recursively(*static_cast<EbmlMaster *>(master[master_idx]), count);
 
   return count;

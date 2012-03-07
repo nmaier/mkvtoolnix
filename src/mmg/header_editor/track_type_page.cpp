@@ -58,7 +58,7 @@ he_track_type_page_c::translate_ui() {
   }
 
   m_title = translatable_string_c(wxMB(title));
-  if (NULL != m_st_title)
+  if (nullptr != m_st_title)
     m_st_title->SetLabel(title);
 
   he_top_level_page_c::translate_ui();

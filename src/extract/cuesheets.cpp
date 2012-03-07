@@ -64,7 +64,7 @@ find_tag_for_track(int idx,
       return static_cast<KaxTag *>(m[i]);
   }
 
-  return NULL;
+  return nullptr;
 }
 
 static std::string
@@ -72,7 +72,7 @@ get_global_tag(const char *name,
                int64_t tuid,
                KaxTags &tags) {
   KaxTag *tag = find_tag_for_track(-1, tuid, 0, tags);
-  if (NULL == tag)
+  if (nullptr == tag)
     return "";
 
   return get_simple_tag_value(name, *tag);
@@ -153,7 +153,7 @@ write_cuesheet(std::string file_name,
   print_if_global("DISCID",         "REM DISCID %1%\n");
 
   KaxTag *tag = find_tag_for_track(-1, tuid, 0, tags);
-  if (NULL != tag)
+  if (nullptr != tag)
     print_comments("", *tag, out);
 
   out.puts(boost::format("FILE \"%1%\" WAVE\n") % file_name);
@@ -164,7 +164,7 @@ write_cuesheet(std::string file_name,
 
     out.puts(boost::format("  TRACK %|1$02d| AUDIO\n") % (i + 1));
     tag = find_tag_for_track(i + 1, tuid, get_chapter_uid(atom), tags);
-    if (NULL == tag)
+    if (nullptr == tag)
       continue;
 
     print_if_available("TITLE",               "    TITLE \"%1%\"\n");
@@ -214,16 +214,16 @@ extract_cuesheet(const std::string &file_name,
   KaxChapters *chapters = dynamic_cast<KaxChapters *>(chapters_m.get_object());
   KaxTags *all_tags     = dynamic_cast<KaxTags *>(    tags_m.get_object());
 
-  if ((NULL != chapters) && (NULL != all_tags)) {
+  if ((nullptr != chapters) && (nullptr != all_tags)) {
     size_t i;
     for (i = 0; i < chapters->ListSize(); i++) {
-      if (dynamic_cast<KaxEditionEntry *>((*chapters)[i]) == NULL)
+      if (dynamic_cast<KaxEditionEntry *>((*chapters)[i]) == nullptr)
         continue;
 
       KaxEditionEntry *eentry = dynamic_cast<KaxEditionEntry *>((*chapters)[i]);
       size_t k;
       for (k = 0; k < eentry->ListSize(); k++)
-        if (dynamic_cast<KaxChapterAtom *>((*eentry)[k]) != NULL)
+        if (dynamic_cast<KaxChapterAtom *>((*eentry)[k]) != nullptr)
           all_chapters.PushElement(*(*eentry)[k]);
     }
 

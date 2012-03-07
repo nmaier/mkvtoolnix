@@ -316,7 +316,7 @@ create_track_number(generic_reader_c *reader,
   if (found) {
     found = false;
     for (i = 0; i < g_packetizers.size(); i++)
-      if ((g_packetizers[i].packetizer != NULL) &&
+      if ((g_packetizers[i].packetizer != nullptr) &&
           (g_packetizers[i].packetizer->get_track_num() == tnum)) {
         tnum = s_track_number;
         break;
@@ -346,21 +346,21 @@ static void
 handle_segmentinfo() {
   // segment families
   KaxSegmentFamily *family = FINDFIRST(g_kax_info_chap, KaxSegmentFamily);
-  while (NULL != family) {
+  while (nullptr != family) {
     g_segfamily_uids.add_family_uid(*family);
     family = FINDNEXT(g_kax_info_chap, KaxSegmentFamily, family);
   }
 
   EbmlBinary *uid = FINDFIRST(g_kax_info_chap, KaxSegmentUID);
-  if (NULL != uid)
+  if (nullptr != uid)
     g_forced_seguids.push_back(bitvalue_cptr(new bitvalue_c(*uid)));
 
   uid = FINDFIRST(g_kax_info_chap, KaxNextUID);
-  if (NULL != uid)
+  if (nullptr != uid)
     g_seguid_link_next = bitvalue_cptr(new bitvalue_c(*uid));
 
   uid = FINDFIRST(g_kax_info_chap, KaxPrevUID);
-  if (NULL != uid)
+  if (nullptr != uid)
     g_seguid_link_previous = bitvalue_cptr(new bitvalue_c(*uid));
 }
 
@@ -502,7 +502,7 @@ parse_and_add_tags(const std::string &file_name) {
 
   while (tags->ListSize() > 0) {
     KaxTag *tag = dynamic_cast<KaxTag *>((*tags)[0]);
-    if (NULL != tag) {
+    if (nullptr != tag) {
       fix_mandatory_tag_elements(tag);
       if (!tag->CheckMandatory())
         mxerror(boost::format(Y("Error parsing the tags in '%1%': some mandatory elements are missing.\n")) % file_name);
@@ -582,14 +582,14 @@ parse_arg_sync(std::string s,
     s.erase(idx);
     idx = linear.find('/');
     if (idx < 0) {
-      tcsync.numerator   = strtod(linear.c_str(), NULL);
+      tcsync.numerator   = strtod(linear.c_str(), nullptr);
       tcsync.denominator = 1.0;
 
     } else {
       std::string div = linear.substr(idx + 1);
       linear.erase(idx);
-      double d1  = strtod(linear.c_str(), NULL);
-      double d2  = strtod(div.c_str(), NULL);
+      double d1  = strtod(linear.c_str(), nullptr);
+      double d2  = strtod(div.c_str(), nullptr);
       if (0.0 == d2)
         mxerror(boost::format(Y("Invalid sync option specified in '%1% %2%'. The divisor is zero.\n")) % opt % orig);
 
@@ -634,7 +634,7 @@ parse_arg_aspect_ratio(const std::string &s,
   if (0 > idx)
     idx = parts[1].find(':');
   if (0 > idx) {
-    dprop.aspect_ratio          = strtod(parts[1].c_str(), NULL);
+    dprop.aspect_ratio          = strtod(parts[1].c_str(), nullptr);
     ti.m_display_properties[id] = dprop;
     return;
   }
@@ -647,8 +647,8 @@ parse_arg_aspect_ratio(const std::string &s,
   if (div.empty())
     mxerror(boost::format(Y("%1%: missing divisor in '%2% %3%'.\n")) % msg % opt % s);
 
-  double w = strtod(parts[1].c_str(), NULL);
-  double h = strtod(div.c_str(), NULL);
+  double w = strtod(parts[1].c_str(), nullptr);
+  double h = strtod(div.c_str(), nullptr);
   if (0.0 == h)
     mxerror(boost::format(Y("%1%: divisor is 0 in '%2% %3%'.\n")) % msg % opt % s);
 
@@ -1469,7 +1469,7 @@ parse_arg_chapters(const std::string &param,
   delete g_kax_chapters;
 
   g_chapter_file_name = arg;
-  g_kax_chapters      = parse_chapters(g_chapter_file_name, 0, -1, 0, g_chapter_language.c_str(), g_chapter_charset.c_str(), false, NULL, &g_tags_from_cue_chapters);
+  g_kax_chapters      = parse_chapters(g_chapter_file_name, 0, -1, 0, g_chapter_language.c_str(), g_chapter_charset.c_str(), false, nullptr, &g_tags_from_cue_chapters);
 }
 
 static void

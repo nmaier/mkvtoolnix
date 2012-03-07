@@ -54,9 +54,9 @@ tab_input_format::tab_input_format(wxWindow *parent,
   rb_aspect_ratio->SetValue(true);
   siz_fg->Add(rb_aspect_ratio, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
-  cob_aspect_ratio = new wxMTX_COMBOBOX_TYPE(this, ID_CB_ASPECTRATIO, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN);
+  cob_aspect_ratio = new wxMTX_COMBOBOX_TYPE(this, ID_CB_ASPECTRATIO, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_DROPDOWN);
 
-  for (i = 0; NULL != predefined_aspect_ratios[i]; ++i)
+  for (i = 0; nullptr != predefined_aspect_ratios[i]; ++i)
     cob_aspect_ratio->Append(predefined_aspect_ratios[i]);
 
   cob_aspect_ratio->SetSizeHints(0, -1);
@@ -84,7 +84,7 @@ tab_input_format::tab_input_format(wxWindow *parent,
   st_fourcc->Enable(false);
   siz_fg->Add(st_fourcc, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
-  cob_fourcc = new wxMTX_COMBOBOX_TYPE(this, ID_CB_FOURCC, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN);
+  cob_fourcc = new wxMTX_COMBOBOX_TYPE(this, ID_CB_FOURCC, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_DROPDOWN);
   cob_fourcc->SetSizeHints(0, -1);
   siz_fg->Add(cob_fourcc, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
@@ -92,7 +92,7 @@ tab_input_format::tab_input_format(wxWindow *parent,
   st_stereo_mode->Enable(false);
   siz_fg->Add(st_stereo_mode, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
-  cob_stereo_mode = new wxMTX_COMBOBOX_TYPE(this, ID_CB_STEREO_MODE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY);
+  cob_stereo_mode = new wxMTX_COMBOBOX_TYPE(this, ID_CB_STEREO_MODE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_READONLY);
   cob_stereo_mode->SetSizeHints(0, -1);
   siz_fg->Add(cob_stereo_mode, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
@@ -100,7 +100,7 @@ tab_input_format::tab_input_format(wxWindow *parent,
   st_fps->Enable(false);
   siz_fg->Add(st_fps, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
-  cob_fps = new wxMTX_COMBOBOX_TYPE(this, ID_CB_FPS, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN);
+  cob_fps = new wxMTX_COMBOBOX_TYPE(this, ID_CB_FPS, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_DROPDOWN);
   cob_fps->SetSizeHints(0, -1);
   siz_fg->Add(cob_fps, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
@@ -108,7 +108,7 @@ tab_input_format::tab_input_format(wxWindow *parent,
   st_nalu_size_length->Enable(false);
   siz_fg->Add(st_nalu_size_length, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
-  cob_nalu_size_length = new wxMTX_COMBOBOX_TYPE(this, ID_CB_NALU_SIZE_LENGTH, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY);
+  cob_nalu_size_length = new wxMTX_COMBOBOX_TYPE(this, ID_CB_NALU_SIZE_LENGTH, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_READONLY);
   cob_nalu_size_length->SetSizeHints(0, -1);
   siz_fg->Add(cob_nalu_size_length, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
@@ -132,7 +132,7 @@ tab_input_format::tab_input_format(wxWindow *parent,
   st_sub_charset->Enable(false);
   siz_fg->Add(st_sub_charset, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
-  cob_sub_charset = new wxMTX_COMBOBOX_TYPE(this, ID_CB_SUBTITLECHARSET, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
+  cob_sub_charset = new wxMTX_COMBOBOX_TYPE(this, ID_CB_SUBTITLECHARSET, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_DROPDOWN | wxCB_READONLY);
   cob_sub_charset->SetSizeHints(0, -1);
   siz_fg->Add(cob_sub_charset, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
@@ -163,7 +163,7 @@ tab_input_format::setup_control_contents() {
   size_t i;
   int selection;
   if (0 == cob_fourcc->GetCount())
-    for (i = 0; NULL != predefined_fourccs[i]; ++i)
+    for (i = 0; nullptr != predefined_fourccs[i]; ++i)
       cob_fourcc->Append(predefined_fourccs[i]);
 
   unsigned int num_stereo_modes = stereo_mode_c::max_index() + 1;
@@ -213,7 +213,7 @@ tab_input_format::setup_control_contents() {
   cob_nalu_size_length->SetSelection(selection);
 
   if (0 == sorted_charsets.Count()) {
-    for (i = 0; NULL != sub_charsets[i]; ++i)
+    for (i = 0; nullptr != sub_charsets[i]; ++i)
       sorted_charsets.Add(wxU(sub_charsets[i]));
     sorted_charsets.Sort();
   }
@@ -287,10 +287,10 @@ tab_input_format::set_track_mode(mmg_track_t *t) {
 
   ctype = ctype.Lower();
 
-  st_delay->Enable((NULL != t) && normal_track);
-  tc_delay->Enable((NULL != t) && normal_track);
-  st_stretch->Enable((NULL != t) && normal_track);
-  tc_stretch->Enable((NULL != t) && normal_track);
+  st_delay->Enable((nullptr != t) && normal_track);
+  tc_delay->Enable((nullptr != t) && normal_track);
+  st_stretch->Enable((nullptr != t) && normal_track);
+  tc_stretch->Enable((nullptr != t) && normal_track);
   st_sub_charset->Enable(chapters_app || (subs_app && (ctype.Find(wxT("vobsub")) < 0)));
   cob_sub_charset->Enable(chapters_app || (subs_app && (ctype.Find(wxT("vobsub")) < 0)));
   st_fourcc->Enable(video);
@@ -302,7 +302,7 @@ tab_input_format::set_track_mode(mmg_track_t *t) {
   st_nalu_size_length->Enable(avc || avc_es);
   cob_nalu_size_length->Enable(avc || avc_es);
 
-  bool ar_enabled = normal_track && (NULL != t) && !t->display_dimensions_selected;
+  bool ar_enabled = normal_track && (nullptr != t) && !t->display_dimensions_selected;
   rb_aspect_ratio->Enable(video);
   cob_aspect_ratio->Enable(video && ar_enabled);
   rb_display_dimensions->Enable(video);
@@ -317,7 +317,7 @@ tab_input_format::set_track_mode(mmg_track_t *t) {
 
   cb_aac_is_sbr->Enable(audio_app && ((ctype.Find(wxT("aac")) >= 0) || (ctype.Find(wxT("mp4a")) >= 0)));
 
-  if (NULL != t)
+  if (nullptr != t)
     return;
 
   bool saved_dcvn             = input->dont_copy_values_now;

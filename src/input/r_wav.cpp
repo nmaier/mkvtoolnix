@@ -43,7 +43,7 @@ wav_demuxer_c::wav_demuxer_c(wav_reader_c *reader,
                              wave_header *wheader)
   : m_reader(reader)
   , m_wheader(wheader)
-  , m_ptzr(NULL)
+  , m_ptzr(nullptr)
   , m_ti(reader->m_ti)
 {
 }

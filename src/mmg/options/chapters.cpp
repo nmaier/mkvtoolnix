@@ -41,8 +41,8 @@ optdlg_chapters_tab::optdlg_chapters_tab(wxWindow *parent,
 {
   // Create the controls.
 
-  cob_language = new wxMTX_COMBOBOX_TYPE(this, wxID_STATIC, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
-  cob_country  = new wxMTX_COMBOBOX_TYPE(this, wxID_STATIC, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
+  cob_language = new wxMTX_COMBOBOX_TYPE(this, wxID_STATIC, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_DROPDOWN | wxCB_READONLY);
+  cob_country  = new wxMTX_COMBOBOX_TYPE(this, wxID_STATIC, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_DROPDOWN | wxCB_READONLY);
 
   // Set the defaults.
 
@@ -58,7 +58,7 @@ optdlg_chapters_tab::optdlg_chapters_tab(wxWindow *parent,
   }
 
   cob_country->Append(wxEmptyString);
-  for (idx = 0; NULL != cctlds[idx]; ++idx)
+  for (idx = 0; nullptr != cctlds[idx]; ++idx)
     cob_country->Append(wxU(cctlds[idx]));
   set_combobox_selection(cob_country, wxU(g_default_chapter_country));
 

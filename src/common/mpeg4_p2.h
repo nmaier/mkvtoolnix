@@ -104,11 +104,11 @@ struct video_frame_t {
   bool is_coded;
 
   video_frame_t()
-    : data(NULL)
+    : data(nullptr)
     , size(0)
     , pos(0)
     , type(FRAME_TYPE_I)
-    , priv(NULL)
+    , priv(nullptr)
     , timecode(0)
     , duration(0)
     , bref(0)

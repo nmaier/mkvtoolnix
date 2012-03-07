@@ -61,7 +61,7 @@ void
 xtr_vobsub_c::create_file(xtr_base_c *master,
                           KaxTrackEntry &track) {
   KaxCodecPrivate *priv = FINDFIRST(&track, KaxCodecPrivate);
-  if (NULL == priv)
+  if (nullptr == priv)
     mxerror(boost::format(Y("Track %1% with the CodecID '%2%' is missing the \"codec private\" element and cannot be extracted.\n")) % m_tid % m_codec_id);
 
   init_content_decoder(track);
@@ -72,7 +72,7 @@ xtr_vobsub_c::create_file(xtr_base_c *master,
   m_master   = master;
   m_language = kt_get_language(track);
 
-  if (NULL == master) {
+  if (nullptr == master) {
     std::string sub_file_name = m_base_name + ".sub";
 
     try {
@@ -84,7 +84,7 @@ xtr_vobsub_c::create_file(xtr_base_c *master,
   } else {
     xtr_vobsub_c *vmaster = dynamic_cast<xtr_vobsub_c *>(m_master);
 
-    if (NULL == vmaster)
+    if (nullptr == vmaster)
       mxerror(boost::format(Y("Cannot extract tracks of different kinds to the same file. This was requested for the tracks %1% and %2%.\n"))
               % m_tid % m_master->m_tid);
 
@@ -110,7 +110,7 @@ xtr_vobsub_c::handle_frame(memory_cptr &frame,
                            bool) {
   static unsigned char padding_data[8] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
 
-  xtr_vobsub_c *vmaster = (NULL == m_master) ? this : static_cast<xtr_vobsub_c *>(m_master);
+  xtr_vobsub_c *vmaster = (nullptr == m_master) ? this : static_cast<xtr_vobsub_c *>(m_master);
 
   m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
 
@@ -154,7 +154,7 @@ xtr_vobsub_c::handle_frame(memory_cptr &frame,
   es.pts[2]    = ((uint8_t)(c >> 14) & 0xfe) | 0x01;
   es.pts[3]    = (uint8_t)(c >> 7);
   es.pts[4]    = (uint8_t)(c << 1) | 0x01;
-  es.lidx      = (NULL == m_master) ? 0x20 : m_stream_id;
+  es.lidx      = (nullptr == m_master) ? 0x20 : m_stream_id;
   if ((6 > padding) && (first == size)) {
     es.hlen += (uint8_t)padding;
     es.len[0]  = (uint8_t)((first + 9 + padding) >> 8);
@@ -209,7 +209,7 @@ xtr_vobsub_c::handle_frame(memory_cptr &frame,
 
 void
 xtr_vobsub_c::finish_file() {
-  if (NULL != m_master)
+  if (nullptr != m_master)
     return;
 
   try {
@@ -240,7 +240,7 @@ void
 xtr_vobsub_c::write_idx(mm_io_c &idx,
                         int index) {
   const char *iso639_1 = map_iso639_2_to_iso639_1(m_language.c_str());
-  idx.puts(boost::format("\nid: %1%, index: %2%\n") % (NULL == iso639_1 ? "en" : iso639_1) %index);
+  idx.puts(boost::format("\nid: %1%, index: %2%\n") % (nullptr == iso639_1 ? "en" : iso639_1) %index);
 
   size_t i;
   for (i = 0; i < m_positions.size(); i++) {

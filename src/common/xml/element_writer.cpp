@@ -93,7 +93,7 @@ write_xml_element_rec(int level,
 
   elt_idx = parent_idx;
   found = false;
-  while ((element_map[elt_idx].name != NULL) &&
+  while ((element_map[elt_idx].name != nullptr) &&
          (element_map[elt_idx].level >=
           element_map[parent_idx].level)) {
     if (element_map[elt_idx].id == EbmlId(*e)) {
@@ -116,11 +116,11 @@ write_xml_element_rec(int level,
     case EBMLT_MASTER:
       out->puts("\n");
       m = dynamic_cast<EbmlMaster *>(e);
-      assert(m != NULL);
+      assert(m != nullptr);
       for (i = 0; i < m->ListSize(); i++)
         write_xml_element_rec(level + 1, elt_idx, (*m)[i], out, element_map);
 
-      if (element_map[elt_idx].end_hook != NULL) {
+      if (element_map[elt_idx].end_hook != nullptr) {
         xml_writer_cb_t cb;
 
         cb.level = level;
@@ -167,7 +167,7 @@ write_xml_element_rec(int level,
 xml_formatter_c::xml_formatter_c(mm_io_c &out,
                                  const std::string &encoding)
   : m_out(out)
-  , m_temp_io(counted_ptr<mm_text_io_c>(new mm_text_io_c(new mm_mem_io_c(NULL, 100000, 4000))))
+  , m_temp_io(counted_ptr<mm_text_io_c>(new mm_text_io_c(new mm_mem_io_c(nullptr, 100000, 4000))))
   , m_encoding(encoding)
   , m_cc_utf8(charset_converter_c::init(m_encoding))
   , m_header_written(false)

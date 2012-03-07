@@ -131,7 +131,7 @@ connection_result_e
 vorbis_packetizer_c::can_connect_to(generic_packetizer_c *src,
                                     std::string &error_message) {
   vorbis_packetizer_c *vsrc = dynamic_cast<vorbis_packetizer_c *>(src);
-  if (NULL == vsrc)
+  if (nullptr == vsrc)
     return CAN_CONNECT_NO_FORMAT;
 
   connect_check_a_samplerate(m_vi.rate,   vsrc->m_vi.rate);

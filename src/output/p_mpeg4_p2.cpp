@@ -48,7 +48,7 @@ mpeg4_p2_video_packetizer_c(generic_reader_c *p_reader,
     set_codec_id(MKV_V_MPEG4_ASP);
     if (!m_input_is_native) {
       safefree(m_ti.m_private_data);
-      m_ti.m_private_data = NULL;
+      m_ti.m_private_data = nullptr;
       m_ti.m_private_size = 0;
     }
 
@@ -173,11 +173,11 @@ mpeg4_p2_video_packetizer_c::process_non_native(packet_cptr packet) {
 
 void
 mpeg4_p2_video_packetizer_c::extract_config_data(packet_cptr &packet) {
-  if (NULL != m_ti.m_private_data)
+  if (nullptr != m_ti.m_private_data)
     return;
 
   memory_c *config_data = mpeg4::p2::parse_config_data(packet->data->get_buffer(), packet->data->get_size(), m_config_data);
-  if (NULL == config_data)
+  if (nullptr == config_data)
     mxerror_tid(m_ti.m_fname, m_ti.m_id, Y("Could not find the codec configuration data in the first MPEG-4 part 2 video frame. This track cannot be stored in native mode.\n"));
 
   m_ti.m_private_data = (unsigned char *)safememdup(config_data->get_buffer(), config_data->get_size());
@@ -193,7 +193,7 @@ void
 mpeg4_p2_video_packetizer_c::fix_codec_string() {
   static const unsigned char start_code[4] = {0x00, 0x00, 0x01, 0xb2};
 
-  if ((NULL == m_ti.m_private_data) || (0 == m_ti.m_private_size))
+  if ((nullptr == m_ti.m_private_data) || (0 == m_ti.m_private_size))
     return;
 
   int size = m_ti.m_private_size;
@@ -211,7 +211,7 @@ mpeg4_p2_video_packetizer_c::fix_codec_string() {
       continue;
 
     unsigned char *end_pos = (unsigned char *)memchr(&m_ti.m_private_data[i], 0, size);
-    if (NULL == end_pos)
+    if (nullptr == end_pos)
       end_pos = &m_ti.m_private_data[i + size];
 
     --end_pos;

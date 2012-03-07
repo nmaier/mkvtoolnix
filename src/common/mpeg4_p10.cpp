@@ -249,7 +249,7 @@ mpeg4::p10::slice_info_t::dump()
 void
 mpeg4::p10::nalu_to_rbsp(memory_cptr &buffer) {
   int pos, size = buffer->get_size();
-  mm_mem_io_c d(NULL, size, 100);
+  mm_mem_io_c d(nullptr, size, 100);
   unsigned char *b = buffer->get_buffer();
 
   for (pos = 0; pos < size; ++pos) {
@@ -271,7 +271,7 @@ mpeg4::p10::nalu_to_rbsp(memory_cptr &buffer) {
 void
 mpeg4::p10::rbsp_to_nalu(memory_cptr &buffer) {
   int pos, size = buffer->get_size();
-  mm_mem_io_c d(NULL, size, 100);
+  mm_mem_io_c d(nullptr, size, 100);
   unsigned char *b = buffer->get_buffer();
 
   for (pos = 0; pos < size; ++pos) {
@@ -524,7 +524,7 @@ mpeg4::p10::extract_par(uint8_t *&buffer,
                         uint32_t &par_num,
                         uint32_t &par_den) {
   try {
-    mm_mem_io_c avcc(buffer, buffer_size), new_avcc(NULL, buffer_size, 1024);
+    mm_mem_io_c avcc(buffer, buffer_size), new_avcc(nullptr, buffer_size, 1024);
     memory_cptr nalu(new memory_c());
 
     par_num       = 1;
@@ -634,7 +634,7 @@ mpeg4::p10::avcc_to_nalus(const unsigned char *buffer,
   } catch (...) {
   }
 
-  return memory_cptr(NULL);
+  return memory_cptr(nullptr);
 }
 
 mpeg4::p10::avc_es_parser_c::avc_es_parser_c()
