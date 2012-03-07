@@ -1,5 +1,9 @@
 2012-03-07  Moritz Bunkus  <moritz@bunkus.org>
 
+	* build system: The C++ compiler must now support the C++11
+	keyword 'nullptr'. configure checks for it. For GCC this means at
+	least v4.6.0.
+
 	* mkvinfo: new feature: mkvinfo will output the track ID that
 	mkvmerge and mkvextract would use for a track. This information is
 	shown alongside the "track number" element in verbose mode and in
