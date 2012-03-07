@@ -231,8 +231,7 @@ tab_input_format::translate_ui() {
   cob_stereo_mode->SetToolTip(TIP("Sets the stereo mode of the video track to this value. If left empty then the track's original stereo mode will be kept or, if "
                                   "it didn't have one, none will be set at all."));
   st_fps->SetLabel(Z("FPS:"));
-  cob_fps->SetToolTip(TIP("Sets the default duration or number of frames/fields per second for a track. This can either be a floating point number or a fraction. "
-                          "For AVC/h.264 tracks this must be the number of fields per second which is twice the number of frames per second."));
+  cob_fps->SetToolTip(TIP("Sets the default duration or number of frames per second for a track. This can either be a floating point number or a fraction."));
   st_nalu_size_length->SetLabel(Z("NALU size length:"));
   cob_nalu_size_length->SetToolTip(TIP("Forces the NALU size length to a certain number of bytes. This parameter is only available for AVC/h.264 elementary "
                                        "streams read from AVC/h.264 ES files, AVIs or Matroska files created with '--engage allow_avc_in_vwf_mode'. "

@@ -1737,7 +1737,7 @@ msgstr "AAC（Advanced Audio Coding）"
 msgid "AAC files may contain HE-AAC / AAC+ / SBR AAC audio. This can NOT be detected automatically. Therefore you have to specifiy '--aac-is-sbr 0' manually for this input file if the file actually contains SBR AAC. The file will be muxed in the WRONG way otherwise. Also read mkvmerge's documentation.\n"
 msgstr "AACファイルは、HE-AAC/AAC+/SBR AACを含んでいる可能性があります。これは自動検知できません。そのため実際にファイルがこれらを含んでいる場合、'--aac-is-sbr 0'オプションを手動で指定しなければなりません。さもなければ、誤ったMUXがなされます。mkvmergeのドキュメントも読んでください。\n"
 
-#: src/mmg/tabs/input_format.cpp:253
+#: src/mmg/tabs/input_format.cpp:252
 msgid "AAC is SBR/HE-AAC/AAC+"
 msgstr "このAACはSBR/HE-AAC/AAC+です"
 
@@ -2392,7 +2392,7 @@ msgid "Charset for strings on the command line"
 msgstr "コマンドラインの文字列の文字セットを指定します"
 
 #: src/mmg/tabs/global.cpp:282
-#: src/mmg/tabs/input_format.cpp:248
+#: src/mmg/tabs/input_format.cpp:247
 msgid "Charset:"
 msgstr "文字セット："
 
@@ -2800,7 +2800,7 @@ msgstr "新しいチャプタファイルを作成します"
 msgid "Cropping parameters: not given in the form <TID>:<left>,<top>,<right>,<bottom> e.g. 0:10,5,10,5 (argument was '%1%').\n"
 msgstr "クロッピングのパラメータ：<TID>:<left>,<top>,<right>,<bottom>（例：0:10,5,10,5）の形で指定されていません（パラメータは'%1%'でした。）\n"
 
-#: src/mmg/tabs/input_format.cpp:251
+#: src/mmg/tabs/input_format.cpp:250
 msgid "Cropping:"
 msgstr "クロッピング："
 
@@ -2998,11 +2998,11 @@ msgstr "デフォルトフラグ：%1%"
 msgid "Default track flag:"
 msgstr "デフォルトトラックフラグ："
 
-#: src/mmg/tabs/input_format.cpp:241
+#: src/mmg/tabs/input_format.cpp:240
 msgid "Delay (in ms):"
 msgstr "ディレイ(ms単位)："
 
-#: src/mmg/tabs/input_format.cpp:242
+#: src/mmg/tabs/input_format.cpp:241
 msgid "Delay this track's timecodes by a couple of ms. Can be negative. Works with all track types, but negative delays should not be used with video tracks."
 msgstr "このトラックのタイムコードを数ミリ秒遅らせます。負の値を取ることもできます。全てのトラックタイプで機能しますが、ビデオトラックに負の値を使うべきではありません。"
 
@@ -3249,12 +3249,12 @@ msgstr "エラー"
 msgid "Error %1%\n"
 msgstr "エラー%1%\n"
 
-#: src/input/subtitles.cpp:133
+#: src/input/subtitles.cpp:134
 #, boost-format
 msgid "Error in line %1%: expected a SRT timecode line but found something else. Aborting this file.\n"
 msgstr "%1%行目でエラー発生：SRTタイムコードが見つかると予測される行で他の何かが見つかりました。このファイルを中断します。\n"
 
-#: src/input/subtitles.cpp:124
+#: src/input/subtitles.cpp:125
 #, boost-format
 msgid "Error in line %1%: expected subtitle number and found some text.\n"
 msgstr "%1%行目でエラー発生：サブタイトル番号が見つかると予測されるところで何かテキストが見つかりました。\n"
@@ -3615,7 +3615,7 @@ msgstr "ビデオトラックのFourCCをこの値に強制設定します。AVI
 msgid "Forces the Matroska reader to use the generic passthrough packetizer even for known and supported track types."
 msgstr "既知のサポートされたトラックタイプに対しても、Matroskaリーダが一般的なパススルーパケッタイザを使用するようにします。"
 
-#: src/mmg/tabs/input_format.cpp:237
+#: src/mmg/tabs/input_format.cpp:236
 msgid "Forces the NALU size length to a certain number of bytes. This parameter is only available for AVC/h.264 elementary streams read from AVC/h.264 ES files, AVIs or Matroska files created with '--engage allow_avc_in_vwf_mode'. It defaults to 4 bytes, but there are files which do not contain a frame or slice that is bigger than 65535 bytes. For such files you can use this parameter and decrease the size to 2."
 msgstr "NALUサイズ長を特定の値に強制設定します。このパラメータはAVC/h.264 ESファイルから読み込まれたAVC/h.264エレメンタリストリーム、AVIファイル、'--engage allow_avc_in_vwf_mode'オプションを指定して作成されたMatroskaファイルにのみ有効です。デフォルト値は4バイトですが、65535バイト以上のフレームやスライスが含まれていないファイルも存在します。そのようなファイルでは、このパラメータを使用してNALUサイズ長を2に減らすことができます。"
 
@@ -3855,12 +3855,12 @@ msgstr ""
 msgid "Ignoring an entry which starts after it ends (%1%).\n"
 msgstr "終端以降に始まるエントリ（%1%）を無視します。\n"
 
-#: src/input/subtitles.cpp:511
+#: src/input/subtitles.cpp:522
 #, boost-format
 msgid "Imported font from %1%"
 msgstr "%1%からフォントをインポートしました。"
 
-#: src/input/subtitles.cpp:511
+#: src/input/subtitles.cpp:522
 #, boost-format
 msgid "Imported picture from %1%"
 msgstr "%1%から画像をインポートしました。"
@@ -4348,7 +4348,7 @@ msgstr "タイムコードファイル'%2%'の%1%行目を解析することが�
 msgid "Line %1%, column %2%: %3%"
 msgstr "%1%行目、%2%列目：%3%"
 
-#: src/input/subtitles.cpp:187
+#: src/input/subtitles.cpp:198
 #, boost-format
 msgid "Line %1%: Negative timestamp encountered. The entry will be adjusted to start from 00:00:00.000.\n"
 msgstr "%1%行目：負の数のタイムスタンプに遭遇しました。このエントリは00:00:00.000から始まるよう調整されます。\n"
@@ -4468,9 +4468,9 @@ msgstr "無効な形式のAACコーデック初期化データが見つかりま
 msgid "Malformed codec id '%1%'.\n"
 msgstr "無効な形式のコーデックID '%1%'です。\n"
 
-#: src/input/subtitles.cpp:357
-#: src/input/subtitles.cpp:365
-#: src/input/subtitles.cpp:370
+#: src/input/subtitles.cpp:368
+#: src/input/subtitles.cpp:376
+#: src/input/subtitles.cpp:381
 #, boost-format
 msgid "Malformed line? (%1%)\n"
 msgstr "無効な形式の行？（%1%）\n"
@@ -4647,7 +4647,7 @@ msgstr "MUXが進行中です。"
 msgid "Muxing took %1%.\n"
 msgstr "MUXに%1%かかりました。\n"
 
-#: src/mmg/tabs/input_format.cpp:236
+#: src/mmg/tabs/input_format.cpp:235
 msgid "NALU size length:"
 msgstr "NALUサイズ長："
 
@@ -5653,7 +5653,7 @@ msgstr "適用する値を選択してください"
 msgid "Selects for which blocks mkvmerge will produce index entries ( = cue entries). \"default\" is a good choice for almost all situations."
 msgstr "mkvmergeがインデックスエントリ（＝キューエントリ）をどのブロックに生成するかを指定します。殆どの場合\"デフォルト\"がよいでしょう。"
 
-#: src/mmg/tabs/input_format.cpp:249
+#: src/mmg/tabs/input_format.cpp:248
 msgid "Selects the character set a subtitle file or chapter information was written with. Only needed for non-UTF encoded subtitle files or for files with chapter information (e.g. OGM, MP4) for which mkvmerge does not detect the encoding correctly."
 msgstr "字幕またはチャプタ情報が記録された文字セットを指定します。mkvmergeが文字セットを正しく検出できない、非UTFの字幕ファイルとチャプタ情報を持つファイル（例：OGM、MP4）にのみ必要です。"
 
@@ -5727,13 +5727,13 @@ msgstr "Matroskaパーサのモードを'fast'（デフォルト）もしくは'
 msgid "Sets the compression algorithm to be used for this track. If no option is selected mkvmerge will decide whether or not to compress and which algorithm to use based on the track type. Most track types are not compressed at all. "
 msgstr "このトラックに使用される圧縮方式を指定します。どのオプションも選択されなければ、mkvmergeが、圧縮するかどうかと、そのトラックタイプにどのアルゴリズムを使用するかを決定します。殆どのトラックタイプは全く圧縮されません。"
 
-#: src/mmg/tabs/input_format.cpp:252
+#: src/mmg/tabs/input_format.cpp:251
 msgid "Sets the cropping parameters. Must be comma-separated list of four numbers for the cropping to be used at the left, top, right and bottom."
 msgstr "クロッピングのパラメータを指定します。左、上、右、下で使われるクロッピングの4つの数字のコンマで区切られたリストでなければなりません。"
 
 #: src/mmg/tabs/input_format.cpp:234
 #, fuzzy
-msgid "Sets the default duration or number of frames/fields per second for a track. This can either be a floating point number or a fraction. For AVC/h.264 tracks this must be the number of fields per second which is twice the number of frames per second."
+msgid "Sets the default duration or number of frames per second for a track. This can either be a floating point number or a fraction."
 msgstr "トラックのデフォルトのフレーム持続期間もしくはフレームレートを指定します。これはビデオトラックでのみ指定できます。AVC/h.264エレメンタリストリームではこのオプションは必ず指定されなければなりません。この値は浮動小数点数または分数を取ることができます。"
 
 #: src/mmg/tabs/input_format.cpp:222
@@ -6051,11 +6051,11 @@ msgstr ""
 msgid "Stereoscopy:"
 msgstr "ステレオコピー："
 
-#: src/mmg/tabs/input_format.cpp:244
+#: src/mmg/tabs/input_format.cpp:243
 msgid "Stretch by:"
 msgstr "引き延ばし："
 
-#: src/mmg/tabs/input_format.cpp:245
+#: src/mmg/tabs/input_format.cpp:244
 msgid "Stretch this track's timecodes. This entry can have two formats. It is either a positive floating point number, or a fraction like e.g. 1200/1253. Works best on video and subtitle tracks."
 msgstr "このトラックのタイムコードを引き延ばします。このエントリは2つのフォーマットを取ることができます。正の浮動小数点数、もしくは1200/1253のような分数です。ビデオや字幕トラックで最も役立ちます。"
 
@@ -7222,7 +7222,7 @@ msgstr ""
 msgid "This file contains at least one frame with a negative timecode. All timecodes will be adjusted by %1% so that none is negative anymore.\n"
 msgstr "このファイルは少なくとも1つ負の値のタイムコードを持つフレームを含んでいます。負の値にならないよう全てのタイムコードは%1%だけズラされます。\n"
 
-#: src/input/subtitles.cpp:154
+#: src/input/subtitles.cpp:165
 msgid "This file contains coordinates in the timecode lines. Such coordinates are not supported by the Matroska SRT subtitle format. The coordinates will be removed automatically.\n"
 msgstr "このファイルはタイムコードの行に座標を含んでいます。そのような座標はMatroska SRT字幕フォーマットではサポートされていません。座標は自動的に除去されます。\n"
 
@@ -7279,7 +7279,7 @@ msgstr "これは本当に、本当に発生するべきではありません。
 msgid "This should not have happened. Please contact the author Moritz Bunkus <moritz@bunkus.org> with this error/warning message, a description of what you were trying to do, the command line used and which operating system you are using. Thank you."
 msgstr "これは発生するべきではありません。作者のMoritz Bunkus <moritz@bunkus.org>に、このエラー・警告メッセージ、何をしようとしたのかの説明、使用したコマンドライン、使用しているOSを連絡してください。ありがとうございます。"
 
-#: src/mmg/tabs/input_format.cpp:254
+#: src/mmg/tabs/input_format.cpp:253
 msgid "This track contains SBR AAC/HE-AAC/AAC+ data. Only needed for AAC input files, because SBR AAC cannot be detected automatically for these files. Not needed for AAC tracks read from MP4 or Matroska files."
 msgstr "このトラックがSBR AAC/HE-AAC/AAC+のデータを含んでいる場合にチェックします。これはAACの入力ファイルにのみ必要です。というのもこのファイルではSBR AACは自動で検知できないためです。MP4やMatroskaファイルから読み込まれたAACトラックには必要ではありません。"
 
@@ -7841,7 +7841,7 @@ msgstr "WAVPACK4"
 msgid "Warn about possible incorrect usage of mmg"
 msgstr "mmgの使い方が間違っていそうな場合に警告する"
 
-#: src/input/subtitles.cpp:199
+#: src/input/subtitles.cpp:210
 #, boost-format
 msgid "Warning in line %1%: The start timecode is smaller than that of the previous entry. All entries from this file will be sorted by their start time.\n"
 msgstr "%1%行目で警告：開始時間のタイムコードが前のエントリのタイムコードよりも小さいです。このファイルの全てのエントリは開始時間でソートされます。\n"
@@ -8825,12 +8825,12 @@ msgstr "サイドバイサイド方式（レフトファースト）"
 msgid "side by side (right first)"
 msgstr "サイドバイサイド方式（ライトファースト）"
 
-#: src/input/subtitles.cpp:589
+#: src/input/subtitles.cpp:600
 #, boost-format
 msgid "spu_extraction_duration: Encountered broken SPU packet (next_off < start_off) at timecode %1%. This packet might be displayed incorrectly or not at all.\n"
 msgstr "spu_extraction_duration：タイムコード%1%で壊れたSPUパケットに遭遇しました（next_off < start_off）。このパケットは正しく表示されないか、あるいは全く表示されないかもしれません。\n"
 
-#: src/input/subtitles.cpp:342
+#: src/input/subtitles.cpp:353
 msgid "ssa_reader: Invalid format. Could not find the \"Format\" line in the \"[Events]\" section."
 msgstr "ssa_reader：無効なフォーマットです。\"[Events]\"セクションで\"Format\"行を見つけることができませんでした。"
 

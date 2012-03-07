@@ -1748,7 +1748,7 @@ msgstr "AAC (Advanced Audio Coding)"
 msgid "AAC files may contain HE-AAC / AAC+ / SBR AAC audio. This can NOT be detected automatically. Therefore you have to specifiy '--aac-is-sbr 0' manually for this input file if the file actually contains SBR AAC. The file will be muxed in the WRONG way otherwise. Also read mkvmerge's documentation.\n"
 msgstr "I file AAC possono contenere audio HE-AAC / AAC+ / SBR AAC. Ciò non può essere rilevato automaticamente. Perciò devi specificare manualmente '--aac-is-sbr 0' per questo file sorgente se il file contiene attualmente SBR AAC. Altrimenti il file verrà muxato in modo ERRATO. Consultare inoltre la documentazione di mkvmerge.\n"
 
-#: src/mmg/tabs/input_format.cpp:253
+#: src/mmg/tabs/input_format.cpp:252
 msgid "AAC is SBR/HE-AAC/AAC+"
 msgstr "AAC è SBR/HE-AAC/AAC+"
 
@@ -2409,7 +2409,7 @@ msgid "Charset for strings on the command line"
 msgstr "Set caratteri stringhe nella linea di comando"
 
 #: src/mmg/tabs/global.cpp:282
-#: src/mmg/tabs/input_format.cpp:248
+#: src/mmg/tabs/input_format.cpp:247
 msgid "Charset:"
 msgstr "Set caratteri:"
 
@@ -2817,7 +2817,7 @@ msgstr "Crea un nuovo file capitolo"
 msgid "Cropping parameters: not given in the form <TID>:<left>,<top>,<right>,<bottom> e.g. 0:10,5,10,5 (argument was '%1%').\n"
 msgstr "Parametri ritaglio: non dati nella forma <TID>:<sinistro>,<alto>,<destro>,<basso> es. 0:10,5,10,5 (l'argomento era '%1%').\n"
 
-#: src/mmg/tabs/input_format.cpp:251
+#: src/mmg/tabs/input_format.cpp:250
 msgid "Cropping:"
 msgstr "Ritaglio:"
 
@@ -3015,11 +3015,11 @@ msgstr "Indicatore predefinito: %1%"
 msgid "Default track flag:"
 msgstr "Indicatore traccia predefinita:"
 
-#: src/mmg/tabs/input_format.cpp:241
+#: src/mmg/tabs/input_format.cpp:240
 msgid "Delay (in ms):"
 msgstr "Ritardo (in ms):"
 
-#: src/mmg/tabs/input_format.cpp:242
+#: src/mmg/tabs/input_format.cpp:241
 msgid "Delay this track's timecodes by a couple of ms. Can be negative. Works with all track types, but negative delays should not be used with video tracks."
 msgstr "Ritarda il timecode di questa traccia di un paio di ms. Può essere negativo. Funziona con tutti i tipi di traccia, ma un ritardo negativo non può essere usato con le tracce video"
 
@@ -3266,12 +3266,12 @@ msgstr "Errore"
 msgid "Error %1%\n"
 msgstr "Errore %1%\n"
 
-#: src/input/subtitles.cpp:133
+#: src/input/subtitles.cpp:134
 #, boost-format
 msgid "Error in line %1%: expected a SRT timecode line but found something else. Aborting this file.\n"
 msgstr "Errore nella linea %1%: atteso una linea timecode SRT ma invece trovato altro. File ignorato.\n"
 
-#: src/input/subtitles.cpp:124
+#: src/input/subtitles.cpp:125
 #, boost-format
 msgid "Error in line %1%: expected subtitle number and found some text.\n"
 msgstr "Errore nella linea %1%: atteso numero sottotitolo trovato altro testo.\n"
@@ -3632,7 +3632,7 @@ msgstr "Forza il FourCC della traccia video a questo valore. Nota che questo fun
 msgid "Forces the Matroska reader to use the generic passthrough packetizer even for known and supported track types."
 msgstr "Forza il lettore Matroska ad usare un pacchettizzatore generico diretto anche per tipi di traccia conosciuti e supportati."
 
-#: src/mmg/tabs/input_format.cpp:237
+#: src/mmg/tabs/input_format.cpp:236
 msgid "Forces the NALU size length to a certain number of bytes. This parameter is only available for AVC/h.264 elementary streams read from AVC/h.264 ES files, AVIs or Matroska files created with '--engage allow_avc_in_vwf_mode'. It defaults to 4 bytes, but there are files which do not contain a frame or slice that is bigger than 65535 bytes. For such files you can use this parameter and decrease the size to 2."
 msgstr "Forza la lunghezza della dimensione NALU a un certo numero di byte. Questo parametro è disponibile solo per flussi elementary AVC/h.264 letti da file AVC/h.264 ES, AVI o Matroska creati con  '--engage allow_avc_in_vwf_mode'. Predefinito è 4 byte, ma ci sono file che non contengono un frame o una fetta più grande di 65535 byte. Per alcuni file si può usare questo parametro e decrementare la dimensione a 2."
 
@@ -3870,12 +3870,12 @@ msgstr "Se si usa la divisione un file può essere aggiunto a tutti i file o sol
 msgid "Ignoring an entry which starts after it ends (%1%).\n"
 msgstr "Ignora un elemento che inizia dopo la sua fine (%1%).\n"
 
-#: src/input/subtitles.cpp:511
+#: src/input/subtitles.cpp:522
 #, boost-format
 msgid "Imported font from %1%"
 msgstr "Font importata da %1%"
 
-#: src/input/subtitles.cpp:511
+#: src/input/subtitles.cpp:522
 #, boost-format
 msgid "Imported picture from %1%"
 msgstr "Immagine importata da %1%"
@@ -4363,7 +4363,7 @@ msgstr "La linea %1% del file timecode '%2% non può essere analizzata.\n"
 msgid "Line %1%, column %2%: %3%"
 msgstr "Linea %1%, colonna %2%: %3%"
 
-#: src/input/subtitles.cpp:187
+#: src/input/subtitles.cpp:198
 #, boost-format
 msgid "Line %1%: Negative timestamp encountered. The entry will be adjusted to start from 00:00:00.000.\n"
 msgstr "Linea %1%: incontrato marcatore tempo negativo. L'elemento verrà impostato per un inizio da 00:00:00.000.\n"
@@ -4483,9 +4483,9 @@ msgstr "Rilevati dati errati inizializzazone codec AAC.\n"
 msgid "Malformed codec id '%1%'.\n"
 msgstr "ID errato codec '%1%'.\n"
 
-#: src/input/subtitles.cpp:357
-#: src/input/subtitles.cpp:365
-#: src/input/subtitles.cpp:370
+#: src/input/subtitles.cpp:368
+#: src/input/subtitles.cpp:376
+#: src/input/subtitles.cpp:381
 #, boost-format
 msgid "Malformed line? (%1%)\n"
 msgstr "Linea errata? (%1%)\n"
@@ -4662,7 +4662,7 @@ msgstr "Muxing in corso."
 msgid "Muxing took %1%.\n"
 msgstr "Il muxing ha richiesto %1%.\n"
 
-#: src/mmg/tabs/input_format.cpp:236
+#: src/mmg/tabs/input_format.cpp:235
 msgid "NALU size length:"
 msgstr "Dimensione NALU:"
 
@@ -5668,7 +5668,7 @@ msgstr "Seleziona i valori da applicare"
 msgid "Selects for which blocks mkvmerge will produce index entries ( = cue entries). \"default\" is a good choice for almost all situations."
 msgstr ""
 
-#: src/mmg/tabs/input_format.cpp:249
+#: src/mmg/tabs/input_format.cpp:248
 msgid "Selects the character set a subtitle file or chapter information was written with. Only needed for non-UTF encoded subtitle files or for files with chapter information (e.g. OGM, MP4) for which mkvmerge does not detect the encoding correctly."
 msgstr ""
 
@@ -5735,12 +5735,12 @@ msgstr ""
 msgid "Sets the compression algorithm to be used for this track. If no option is selected mkvmerge will decide whether or not to compress and which algorithm to use based on the track type. Most track types are not compressed at all. "
 msgstr ""
 
-#: src/mmg/tabs/input_format.cpp:252
+#: src/mmg/tabs/input_format.cpp:251
 msgid "Sets the cropping parameters. Must be comma-separated list of four numbers for the cropping to be used at the left, top, right and bottom."
 msgstr ""
 
 #: src/mmg/tabs/input_format.cpp:234
-msgid "Sets the default duration or number of frames/fields per second for a track. This can either be a floating point number or a fraction. For AVC/h.264 tracks this must be the number of fields per second which is twice the number of frames per second."
+msgid "Sets the default duration or number of frames per second for a track. This can either be a floating point number or a fraction."
 msgstr ""
 
 #: src/mmg/tabs/input_format.cpp:222
@@ -6053,11 +6053,11 @@ msgstr ""
 msgid "Stereoscopy:"
 msgstr "Stereoscopia:"
 
-#: src/mmg/tabs/input_format.cpp:244
+#: src/mmg/tabs/input_format.cpp:243
 msgid "Stretch by:"
 msgstr "Ridimensionato di:"
 
-#: src/mmg/tabs/input_format.cpp:245
+#: src/mmg/tabs/input_format.cpp:244
 msgid "Stretch this track's timecodes. This entry can have two formats. It is either a positive floating point number, or a fraction like e.g. 1200/1253. Works best on video and subtitle tracks."
 msgstr ""
 
@@ -7178,7 +7178,7 @@ msgstr ""
 msgid "This file contains at least one frame with a negative timecode. All timecodes will be adjusted by %1% so that none is negative anymore.\n"
 msgstr ""
 
-#: src/input/subtitles.cpp:154
+#: src/input/subtitles.cpp:165
 msgid "This file contains coordinates in the timecode lines. Such coordinates are not supported by the Matroska SRT subtitle format. The coordinates will be removed automatically.\n"
 msgstr ""
 
@@ -7235,7 +7235,7 @@ msgstr ""
 msgid "This should not have happened. Please contact the author Moritz Bunkus <moritz@bunkus.org> with this error/warning message, a description of what you were trying to do, the command line used and which operating system you are using. Thank you."
 msgstr ""
 
-#: src/mmg/tabs/input_format.cpp:254
+#: src/mmg/tabs/input_format.cpp:253
 msgid "This track contains SBR AAC/HE-AAC/AAC+ data. Only needed for AAC input files, because SBR AAC cannot be detected automatically for these files. Not needed for AAC tracks read from MP4 or Matroska files."
 msgstr ""
 
@@ -7795,7 +7795,7 @@ msgstr "WAVPACK4"
 msgid "Warn about possible incorrect usage of mmg"
 msgstr "Avviso su possibile uso non corretto di mmg"
 
-#: src/input/subtitles.cpp:199
+#: src/input/subtitles.cpp:210
 #, boost-format
 msgid "Warning in line %1%: The start timecode is smaller than that of the previous entry. All entries from this file will be sorted by their start time.\n"
 msgstr ""
@@ -8769,12 +8769,12 @@ msgstr ""
 msgid "side by side (right first)"
 msgstr ""
 
-#: src/input/subtitles.cpp:589
+#: src/input/subtitles.cpp:600
 #, boost-format
 msgid "spu_extraction_duration: Encountered broken SPU packet (next_off < start_off) at timecode %1%. This packet might be displayed incorrectly or not at all.\n"
 msgstr ""
 
-#: src/input/subtitles.cpp:342
+#: src/input/subtitles.cpp:353
 msgid "ssa_reader: Invalid format. Could not find the \"Format\" line in the \"[Events]\" section."
 msgstr ""
 
