@@ -1,5 +1,8 @@
 2012-03-07  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: enhancement: Added the values "50", "60" and "48000/1001"
+	to the list of commonly used values for the "FPS" input field.
+
 	* mkvmerge: bug fix: AVC/h.264 packetizer: The value given with
 	"--default-duration" is now again interpreted as the number of
 	"frames per second". The conversion to "fields per second" is done

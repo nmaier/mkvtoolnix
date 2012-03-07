@@ -181,9 +181,12 @@ tab_input_format::setup_control_contents() {
     cob_fps->Append(wxT("24"));
     cob_fps->Append(wxT("25"));
     cob_fps->Append(wxT("30"));
-    cob_fps->Append(wxT("60000/1001"));
-    cob_fps->Append(wxT("30000/1001"));
+    cob_fps->Append(wxT("50"));
+    cob_fps->Append(wxT("60"));
     cob_fps->Append(wxT("24000/1001"));
+    cob_fps->Append(wxT("30000/1001"));
+    cob_fps->Append(wxT("48000/1001"));
+    cob_fps->Append(wxT("60000/1001"));
   }
 
   if (0 == cob_nalu_size_length->GetCount())
