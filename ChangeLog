@@ -1,5 +1,10 @@
 2012-03-07  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: AVC/h.264 packetizer: The value given with
+	"--default-duration" is now again interpreted as the number of
+	"frames per second". The conversion to "fields per second" is done
+	internally; the user doesn't have to think about it, though.
+
 	* mkvmerge: bug fix: SRT subtitles: timecodes can contain the
 	minus sign before any digit, not just before the first one.
 

@@ -58,7 +58,7 @@ mpeg4_p10_es_video_packetizer_c(generic_reader_c *p_reader,
     set_default_compression_method(COMPRESSION_MPEG4_P10);
 
   if (m_default_duration_forced && (-1 != m_htrack_default_duration)) {
-    m_parser.force_default_duration(m_htrack_default_duration);
+    m_parser.force_default_duration(m_htrack_default_duration / 2);
     mxdebug_if(m_debug_timecodes, boost::format("Forcing default duration to %1%\n") % m_htrack_default_duration);
   }
 }
