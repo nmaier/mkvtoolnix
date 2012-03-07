@@ -89,6 +89,7 @@ struct kax_track_t {
   unsigned int tnum, tuid;
   char type;
   int64_t default_duration;
+  size_t mkvmerge_track_id;
 
   kax_track_t();
 };
@@ -106,6 +107,7 @@ kax_track_t::kax_track_t()
   , tuid(0)
   , type(' ')
   , default_duration(0)
+  , mkvmerge_track_id(0)
 {
 }
 typedef counted_ptr<kax_track_t> kax_track_cptr;
@@ -136,6 +138,7 @@ std::map<unsigned int, track_info_t> s_track_info;
 options_c g_options;
 static uint64_t s_tc_scale = TIMECODE_SCALE;
 std::vector<boost::format> g_common_boost_formats;
+size_t s_mkvmerge_track_id = 0;
 
 #define BF_DO(n)                             g_common_boost_formats[n]
 #define BF_ADD(s)                            g_common_boost_formats.push_back(boost::format(s))
@@ -898,7 +901,7 @@ handle_tracks(EbmlStream *&es,
   EbmlElement *element_found = NULL;
   read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, element_found);
 
-  size_t i1;
+  size_t i1, s_mkvmerge_track_id = 0;
   for (i1 = 0; i1 < m1->ListSize(); i1++) {
     l2 = (*m1)[i1];
 
@@ -927,9 +930,18 @@ handle_tracks(EbmlStream *&es,
           KaxTrackNumber &tnum = *static_cast<KaxTrackNumber *>(l3);
           track->tnum          = uint64(tnum);
 
-          show_element(l3, 3, boost::format(Y("Track number: %1%")) % track->tnum);
-          if (find_track(track->tnum) != NULL)
+          auto existing_track = find_track(track->tnum);
+          size_t track_id     = s_mkvmerge_track_id;
+          if (NULL == existing_track) {
+            track->mkvmerge_track_id = s_mkvmerge_track_id;
+            ++s_mkvmerge_track_id;
             add_track(track);
+
+          } else
+            track_id = existing_track->mkvmerge_track_id;
+
+          show_element(l3, 3, boost::format(Y("Track number: %1% (track ID for mkvmerge & mkvextract: %2%)")) % track->tnum % track_id);
+          summary.push_back((boost::format(Y("mkvmerge/mkvextract track ID: %1%")) % track_id).str());
 
         } else if (is_id(l3, KaxTrackUID)) {
           KaxTrackUID &tuid = *static_cast<KaxTrackUID *>(l3);

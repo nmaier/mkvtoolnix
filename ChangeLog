@@ -1,5 +1,10 @@
 2012-03-07  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvinfo: new feature: mkvinfo will output the track ID that
+	mkvmerge and mkvextract would use for a track. This information is
+	shown alongside the "track number" element in verbose mode and in
+	the track summary in summary mode.
+
 	* mkvmerge, mmg: enhancement: The "--default-duration" in mkvmerge
 	and the "FPS" drop down box in mmg now accept "p" or "i" as a unit
 	-- as in e.g. "25p" or "50i". Several commonly used values have
