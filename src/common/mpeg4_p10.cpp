@@ -668,8 +668,9 @@ mpeg4::p10::avc_es_parser_c::avc_es_parser_c()
 
 mpeg4::p10::avc_es_parser_c::~avc_es_parser_c() {
   mxdebug_if(debugging_requested("avc_statistics"),
-             boost::format("AVC statistics: #frames: out %1% discarded %2% #timecodes: in %3% generated %4% discarded %5%\n")
-             % m_stats.num_frames_out % m_stats.num_frames_discarded % m_stats.num_timecodes_in % m_stats.num_timecodes_generated % m_stats.num_timecodes_discarded);
+             boost::format("AVC statistics: #frames: out %1% discarded %2% #timecodes: in %3% generated %4% discarded %5% num_fields: %6% num_frames: %7%\n")
+             % m_stats.num_frames_out % m_stats.num_frames_discarded % m_stats.num_timecodes_in % m_stats.num_timecodes_generated % m_stats.num_timecodes_discarded
+             % m_stats.num_field_slices % m_stats.num_frame_slices);
 
   mxdebug_if(m_debug_timecodes, boost::format("stream_position %1% parsed_position %2%\n") % m_stream_position % m_parsed_position);
 
@@ -1339,6 +1340,11 @@ mpeg4::p10::avc_es_parser_c::cleanup() {
 
     previous_frame_itr = frame_itr;
     m_duration_frequency[frame_itr->m_end - frame_itr->m_start]++;
+
+    if (frame_itr->m_si.field_pic_flag)
+      ++m_stats.num_field_slices;
+    else
+      ++m_stats.num_field_slices;
   }
 
   m_stats.num_frames_out += m_frames.size();
@@ -1447,6 +1453,18 @@ mpeg4::p10::avc_es_parser_c::get_display_dimensions(int width,
 
   return std::make_pair<int64_t, int64_t>(1 <= m_par ? irnd(width * boost::rational_cast<double>(m_par)) : width,
                                           1 <= m_par ? height                                            : irnd(height / boost::rational_cast<double>(m_par)));
+}
+
+size_t
+mpeg4::p10::avc_es_parser_c::get_num_field_slices()
+  const {
+  return m_stats.num_field_slices;
+}
+
+size_t
+mpeg4::p10::avc_es_parser_c::get_num_frame_slices()
+  const {
+  return m_stats.num_frame_slices;
 }
 
 void

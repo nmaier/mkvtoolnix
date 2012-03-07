@@ -233,7 +233,7 @@ namespace mpeg4 {
 
       struct stats_t {
         std::vector<int> num_slices_by_type;
-        size_t num_frames_out, num_frames_discarded, num_timecodes_in, num_timecodes_generated, num_timecodes_discarded;
+        size_t num_frames_out, num_frames_discarded, num_timecodes_in, num_timecodes_generated, num_timecodes_discarded, num_field_slices, num_frame_slices;
 
         stats_t()
           : num_slices_by_type(11, 0)
@@ -242,6 +242,8 @@ namespace mpeg4 {
           , num_timecodes_in(0)
           , num_timecodes_generated(0)
           , num_timecodes_discarded(0)
+          , num_field_slices(0)
+          , num_frame_slices(0)
         {
         }
       } m_stats;
@@ -338,6 +340,9 @@ namespace mpeg4 {
 
       int64_t duration_for(slice_info_t const &si) const;
       int64_t get_most_often_used_duration() const;
+
+      size_t get_num_field_slices() const;
+      size_t get_num_frame_slices() const;
 
       bool has_par_been_found() const;
       int64_rational_c const &get_par() const;

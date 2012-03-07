@@ -27,6 +27,7 @@ mpeg4_p10_es_video_packetizer_c::
 mpeg4_p10_es_video_packetizer_c(generic_reader_c *p_reader,
                                 track_info_c &p_ti)
   : generic_packetizer_c(p_reader, p_ti)
+  , m_default_duration_for_interlaced_content(-1)
   , m_first_frame(true)
   , m_set_display_dimensions(false)
   , m_debug_timecodes(   debugging_requested("mpeg4_p10_es|mpeg4_p10_es_timecodes"))
@@ -65,7 +66,8 @@ mpeg4_p10_es_video_packetizer_c(generic_reader_c *p_reader,
     mxdebug_if(m_debug_timecodes, boost::format("Forcing default duration due to timecode factory to %1%\n") % m_htrack_default_duration);
 
   } else if (m_default_duration_forced && (-1 != m_htrack_default_duration)) {
-    m_parser.force_default_duration(m_htrack_default_duration / 2);
+    m_default_duration_for_interlaced_content = m_htrack_default_duration / 2;
+    m_parser.force_default_duration(m_default_duration_for_interlaced_content);
     mxdebug_if(m_debug_timecodes, boost::format("Forcing default duration due to --default-duration to %1%\n") % m_htrack_default_duration);
   }
 }
@@ -153,6 +155,13 @@ mpeg4_p10_es_video_packetizer_c::handle_actual_default_duration() {
       && (0 < actual_default_duration)
       && (m_htrack_default_duration != actual_default_duration))
     set_track_default_duration(actual_default_duration);
+
+  else if (   m_default_duration_forced
+           && (0 < m_default_duration_for_interlaced_content)
+           && (std::abs(actual_default_duration - m_default_duration_for_interlaced_content) <= 20000)) {
+    m_default_duration_forced = false;
+    set_track_default_duration(m_default_duration_for_interlaced_content);
+  }
 }
 
 void
