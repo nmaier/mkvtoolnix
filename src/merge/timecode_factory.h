@@ -125,7 +125,7 @@ class timecode_factory_v2_c: public timecode_factory_c {
 protected:
   std::vector<int64_t> m_timecodes, m_durations;
   int64_t m_frameno;
-  double m_default_fps;
+  double m_default_duration;
   bool m_warning_printed;
 
 public:
@@ -134,7 +134,7 @@ public:
                         int64_t tid, int version)
     : timecode_factory_c(file_name, source_name, tid, version)
     , m_frameno(0)
-    , m_default_fps(0.0)
+    , m_default_duration(0)
     , m_warning_printed(false)
   {
   }
@@ -144,7 +144,7 @@ public:
   virtual void parse(mm_io_c &in);
   virtual bool get_next(packet_cptr &packet);
   virtual double get_default_duration(double proposal) {
-    return m_default_fps != 0.0 ? static_cast<double>(1000000000.0) / m_default_fps : proposal;
+    return m_default_duration != 0 ? m_default_duration : proposal;
   }
 };
 

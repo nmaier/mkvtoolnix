@@ -257,7 +257,7 @@ timecode_factory_v2_c::parse(mm_io_c &in) {
   mxdebug_if(m_debug, boost::format("%|1$ 9lld| | %|2$ 9lld|\n") % dur_sum % dur_map[dur_sum]);
 
   if (0 < dur_sum)
-    m_default_fps = (double)1000000000.0 / dur_sum;
+    m_default_duration = dur_sum;
 
   m_durations.push_back(dur_sum);
 }
