@@ -1489,7 +1489,7 @@ parse_arg_timecode_scale(const std::string &arg) {
   if (TIMECODE_SCALE_MODE_NORMAL != g_timecode_scale_mode)
     mxerror(Y("'--timecode-scale' was used more than once.\n"));
 
-  int64_t temp =0 ;
+  int64_t temp = 0;
   if (!parse_int(arg, temp))
     mxerror(Y("The argument to '--timecode-scale' must be a number.\n"));
 
