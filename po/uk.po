@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: mkvtoolnix_uk\n"
 "Report-Msgid-Bugs-To: Moritz Bunkus <moritz@bunkus.org>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2012-03-06 13:05+0200\n"
+"PO-Revision-Date: 2012-03-08 12:34+0200\n"
 "Last-Translator: Andriy Bilous'ko <arestarh@ukr.net>\n"
 "Language-Team: Ukrainian <moritz@bunkus.org>\n"
 "Language: uk\n"
@@ -3006,9 +3006,9 @@ msgid "Default duration"
 msgstr "Типова тривалість"
 
 #: src/info/mkvinfo.cpp:1033
-#, fuzzy, boost-format
+#, boost-format
 msgid "Default duration: %|1$.3f|ms (%|2$.3f| frames/fields per second for a video track)"
-msgstr "Типова тривалість: %|1$.3f|мс (%|2$.3f| кадрів_за_с для відео доріжки)"
+msgstr "Типова тривалість: %|1$.3f|мс (%|2$.3f| кадрів/полів за секунду для доріжки відео)"
 
 #: src/info/mkvinfo.cpp:1048
 #, boost-format
@@ -5752,9 +5752,8 @@ msgid "Sets the cropping parameters. Must be comma-separated list of four number
 msgstr "Встановлюються параметри обрізки. Має бути задано 4 числа, розділених комамами, для обрізки зліва, згори, справа і знизу відповідно."
 
 #: src/mmg/tabs/input_format.cpp:237
-#, fuzzy
 msgid "Sets the default duration or number of frames per second for a track. This can either be a floating point number or a fraction."
-msgstr "Встановлюється типова тривалість або кількість кадрів/полів за секунду для доріжки. Може бути або числом з плаваючою комою, або дробом. Для доріжок AVC/h.264 має бути задано у вигляді числа полів за секунду, що є вдвічі більшим за число кадрів за секунду."
+msgstr "Встановлюється типова тривалість або кількість кадрів за секунду для доріжки. Може бути або числом з плаваючою комою, або дробом."
 
 #: src/mmg/tabs/input_format.cpp:225
 msgid "Sets the display aspect ratio of the track. The format can be either 'a/b' in which case both numbers must be integer (e.g. 16/9) or just a single floting point number 'f' (e.g. 2.35)."
@@ -8132,9 +8131,9 @@ msgid "default"
 msgstr "Типово"
 
 #: src/info/mkvinfo.cpp:1036
-#, fuzzy, boost-format
+#, boost-format
 msgid "default duration: %|1$.3f|ms (%|2$.3f| frames/fields per second for a video track)"
-msgstr "типова тривалість: %|1$.3f|мс (%|2$.3f| кадрів за секунду для доріжки відео)"
+msgstr "типова тривалість: %|1$.3f|мс (%|2$.3f| кадрів/полів за секунду для доріжки відео)"
 
 #: src/common/compression.cpp:161
 #, boost-format
@@ -9649,4 +9648,3 @@ msgstr "Так"
 
 #~ msgid "wrong usage: writing to read-only memory"
 #~ msgstr "wrong usage: запис тільки до \"пам'яті для читання\""
-
