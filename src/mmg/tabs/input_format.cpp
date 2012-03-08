@@ -178,26 +178,15 @@ tab_input_format::setup_control_contents() {
 
   if (0 == cob_fps->GetCount()) {
     cob_fps->Append(wxEmptyString);
-    cob_fps->Append(wxT("24"));
     cob_fps->Append(wxT("24p"));
-    cob_fps->Append(wxT("25"));
     cob_fps->Append(wxT("25p"));
-    cob_fps->Append(wxT("30"));
     cob_fps->Append(wxT("30p"));
-    cob_fps->Append(wxT("50"));
     cob_fps->Append(wxT("50i"));
     cob_fps->Append(wxT("50p"));
-    cob_fps->Append(wxT("60"));
     cob_fps->Append(wxT("60i"));
     cob_fps->Append(wxT("60p"));
-    cob_fps->Append(wxT("24000/1001"));
     cob_fps->Append(wxT("24000/1001p"));
-    cob_fps->Append(wxT("30000/1001"));
     cob_fps->Append(wxT("30000/1001p"));
-    cob_fps->Append(wxT("48000/1001"));
-    cob_fps->Append(wxT("48000/1001i"));
-    cob_fps->Append(wxT("48000/1001p"));
-    cob_fps->Append(wxT("60000/1001"));
     cob_fps->Append(wxT("60000/1001i"));
     cob_fps->Append(wxT("60000/1001p"));
   }
