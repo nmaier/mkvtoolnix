@@ -607,6 +607,15 @@ set_timecode_scale() {
       highest_sample_rate = std::max(static_cast<int64_t>(ptzr.packetizer->get_audio_sampling_freq()), highest_sample_rate);
     }
 
+  bool debug = debugging_requested("set_timecode_scale|timecode_scale");
+  mxdebug_if(debug,
+             boost::format("scale mode: %1% audio present: %2% video present: %3% highest sample rate: %4%\n")
+             % (  TIMECODE_SCALE_MODE_NORMAL == g_timecode_scale_mode ? "normal"
+                : TIMECODE_SCALE_MODE_FIXED  == g_timecode_scale_mode ? "fixed"
+                : TIMECODE_SCALE_MODE_AUTO   == g_timecode_scale_mode ? "auto"
+                :                                                       "unknown")
+             % audio_present % video_present % highest_sample_rate);
+
   if (   (TIMECODE_SCALE_MODE_FIXED != g_timecode_scale_mode)
       && audio_present
       && (0 < highest_sample_rate)
@@ -618,6 +627,8 @@ set_timecode_scale() {
   GetChildAs<KaxTimecodeScale, EbmlUInteger>(s_kax_infos) = (int64_t)g_timecode_scale;
 
   g_kax_cues->SetGlobalTimecodeScale((int64_t)g_timecode_scale);
+
+  mxdebug_if(debug, boost::format("timecode scale: %1% max ns per cluster: %2%\n") % g_timecode_scale % g_max_ns_per_cluster);
 }
 
 static void
