@@ -50,7 +50,7 @@ protected:
   std::string m_file_name, m_source_name;
   int64_t m_tid;
   int m_version;
-  bool m_preserve_duration;
+  bool m_preserve_duration, m_debug;
 
 public:
   timecode_factory_c(const std::string &file_name,
@@ -62,6 +62,7 @@ public:
     , m_tid(tid)
     , m_version(version)
     , m_preserve_duration(false)
+    , m_debug(debugging_requested("timecode_factory"))
   {
   }
   virtual ~timecode_factory_c() {
