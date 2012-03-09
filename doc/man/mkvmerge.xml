@@ -1064,10 +1064,8 @@ $ mkvmerge -o out.mkv '(' file.mkv ')'</screen>
       </para>
 
       <para>
-       If the default duration is not forced then mkvmerge will try to derive the track's default duration from the container and/or codec
-       used.  One case in which this option is of use is when adding <foreignphrase>AVC/h.264</foreignphrase> elementary streams because
-       these do not contain information about their number of frames or a default duration for each frame.  For such files &mkvmerge; will
-       assume a default duration of '<literal>25fps</literal>' unless overridden.
+       If the default duration is not forced then mkvmerge will try to derive the track's default duration from the container and/or the
+       encoded bitstream for certain track types, e.g. AVC/h.264 or MPEG-2.
       </para>
 
       <para>
