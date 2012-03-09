@@ -261,10 +261,12 @@ If you're sure you've found a bug - e.g. if one of my programs crashes
 with an obscur error message, or if the resulting file is missing part
 of the original data, then by all means submit a bug report.
 
-I use Bugzilla (https://www.bunkus.org/bugzilla/) as my bug
-database. You can submit your bug reports there. Please be as verbose
-as possible - e.g. include the command line, if you use Windows or
-Linux etc.pp. If at all possible please include sample files as well
-so that I can reproduce the issue. If they are larger than 1M then
-please upload them somewhere and post a link in the Bugzilla bug
-report.
+I use Trac (https://www.bunkus.org/trac/) as my bug database. You can
+submit your bug reports there. Please be as verbose as possible -
+e.g. include the command line, if you use Windows or Linux etc.pp.
+
+If at all possible please include sample files as well so that I can
+reproduce the issue. If they are larger than 1M then please upload
+them somewhere (e.g. to my FTP server: host name "ftp.bunkus.org",
+user name "upload", password "only" -- each without the quotes) and
+post a link or note in the bug report.
