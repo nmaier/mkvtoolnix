@@ -651,48 +651,48 @@ msgstr "  US: stringa Unicode\n"
 msgid "  X:  binary in hex\n"
 msgstr "  X:  binario in esadecimale\n"
 
-#: src/info/mkvinfo.cpp:331
+#: src/info/mkvinfo.cpp:334
 #, boost-format
 msgid " (FourCC: %1%%2%%3%%4%, 0x%|5$08x|)"
 msgstr " (FourCC: %1%%2%%3%%4%, 0x%|5$08x|)"
 
-#: src/info/mkvinfo.cpp:184
-#: src/info/mkvinfo.cpp:988
+#: src/info/mkvinfo.cpp:187
+#: src/info/mkvinfo.cpp:1000
 #, boost-format
 msgid " (adler: 0x%|1$08x|)"
 msgstr " (adler: 0x%|1$08x|)"
 
-#: src/info/mkvinfo.cpp:697
+#: src/info/mkvinfo.cpp:700
 msgid " (centimeters)"
 msgstr " (centimetri)"
 
-#: src/info/mkvinfo.cpp:723
+#: src/info/mkvinfo.cpp:726
 msgid " (fixed)"
 msgstr " (fisso)"
 
-#: src/info/mkvinfo.cpp:336
+#: src/info/mkvinfo.cpp:339
 #, boost-format
 msgid " (format tag: 0x%|1$04x|)"
 msgstr " (formato tag: 0x%|1$04x|)"
 
-#: src/info/mkvinfo.cpp:721
+#: src/info/mkvinfo.cpp:724
 msgid " (free resizing)"
 msgstr " (ridimensionamento libero)"
 
-#: src/info/mkvinfo.cpp:343
+#: src/info/mkvinfo.cpp:346
 #, boost-format
 msgid " (h.264 profile: %1% @L%2%.%3%)"
 msgstr " (Profilo h.264: %1% @L%2%.%3%)"
 
-#: src/info/mkvinfo.cpp:698
+#: src/info/mkvinfo.cpp:701
 msgid " (inches)"
 msgstr " (pollici)"
 
-#: src/info/mkvinfo.cpp:722
+#: src/info/mkvinfo.cpp:725
 msgid " (keep aspect ratio)"
 msgstr " (mantieni rapporto aspetto)"
 
-#: src/info/mkvinfo.cpp:696
+#: src/info/mkvinfo.cpp:699
 msgid " (pixels)"
 msgstr " (pixel)"
 
@@ -741,7 +741,7 @@ msgid " Segment info handling:\n"
 msgstr " Gestione info segmento:\n"
 
 #: src/extract/mkvextract.cpp:61
-#: src/info/mkvinfo.cpp:212
+#: src/info/mkvinfo.cpp:215
 #, boost-format
 msgid " at %1%"
 msgstr " in %1%"
@@ -753,12 +753,12 @@ msgstr " in %1%"
 msgid " done\n"
 msgstr " completato\n"
 
-#: src/info/mkvinfo.cpp:213
+#: src/info/mkvinfo.cpp:216
 #, boost-format
 msgid " size %1%"
 msgstr " dimensione %1%"
 
-#: src/info/mkvinfo.cpp:229
+#: src/info/mkvinfo.cpp:232
 msgid " size is unknown"
 msgstr " dimensione sconosciuta"
 
@@ -775,17 +775,17 @@ msgstr "### Controllo globale destinazione ###"
 msgid "%1% built on %2% %3%"
 msgstr "%1% compilato il %2% %3%"
 
-#: src/info/mkvinfo.cpp:201
+#: src/info/mkvinfo.cpp:204
 #, boost-format
 msgid "%1% frame, track %2%, timecode %3% (%4%), duration %|5$.3f|, size %6%, adler 0x%|7$08x|%8%%9%\n"
 msgstr "Frame %1%, traccia %2%, timecode %3% (%4%), durata %|5$.3f|, dimensione %6%, adler 0x%|7$08x|%8%%9%\n"
 
-#: src/info/mkvinfo.cpp:206
+#: src/info/mkvinfo.cpp:209
 #, boost-format
 msgid "%1% frame, track %2%, timecode %3% (%4%), size %5%, adler 0x%|6$08x|%7%\n"
 msgstr "Frame %1%, traccia %2%, timecode %3% (%4%), dimensione %5%, adler 0x%|6$08x|%7%\n"
 
-#: src/info/mkvinfo.cpp:202
+#: src/info/mkvinfo.cpp:205
 #, boost-format
 msgid "%1% frame, track %2%, timecode %3% (%4%), size %5%, adler 0x%|6$08x|%7%%8%\n"
 msgstr "Frame %1%, traccia %2%, timecode %3% (%4%), dimensione %5%, adler 0x%|6$08x|%7%%8%\n"
@@ -1512,7 +1512,7 @@ msgstr "Indicatore 'Visualizzazione forzata'"
 msgid "'Track enabled' flag"
 msgstr "Indicatore 'Traccia abilitata'"
 
-#: src/info/mkvinfo.cpp:181
+#: src/info/mkvinfo.cpp:184
 #, boost-format
 msgid "(Unknown element: %1%; ID: 0x%2% size: %3%)"
 msgstr "(Elemento sconosciuto: %1%; ID: 0x%2% Größe: %3%)"
@@ -1565,7 +1565,7 @@ msgstr ", nome file '%1%'"
 msgid ", finished on %s"
 msgstr ", completato il %s"
 
-#: src/info/mkvinfo.cpp:200
+#: src/info/mkvinfo.cpp:203
 #, boost-format
 msgid ", position %1%"
 msgstr ", posizione %1%"
@@ -1618,19 +1618,19 @@ msgstr "...dopo questa dimensione:"
 msgid "...after timecodes:"
 msgstr "...dopo i timecode:"
 
-#: src/info/mkvinfo.cpp:770
+#: src/info/mkvinfo.cpp:773
 msgid "1: all frames"
 msgstr "1: tutti i frame"
 
-#: src/mmg/tabs/input_format.cpp:198
+#: src/mmg/tabs/input_format.cpp:200
 msgid "2 bytes"
 msgstr "2 byte"
 
-#: src/info/mkvinfo.cpp:772
+#: src/info/mkvinfo.cpp:775
 msgid "2: codec private data"
 msgstr "2: dati privati codec"
 
-#: src/mmg/tabs/input_format.cpp:199
+#: src/mmg/tabs/input_format.cpp:201
 msgid "4 bytes"
 msgstr "4 byte"
 
@@ -1679,7 +1679,7 @@ msgstr "Una stringa leggibile che specifica il codec."
 msgid "A human-readable track name."
 msgstr "Un nome traccia leggibile."
 
-#: src/mmg/mmg_dialog.cpp:1415
+#: src/mmg/mmg_dialog.cpp:1417
 #, c-format, boost-format
 msgid "A job with the description '%s' already exists. Do you really want to add another one with the same description?"
 msgstr "Una attività con la descrizione '%s' esiste già. Aggiungerne un'altra con la stessa descrizione?"
@@ -1693,7 +1693,7 @@ msgstr ""
 "Una univoca ID generata automaticamente che identifica il\n"
 "segmento attuale tra molti altri (128 bit)."
 
-#: src/info/mkvinfo.cpp:907
+#: src/info/mkvinfo.cpp:910
 msgid "A track"
 msgstr "Una traccia"
 
@@ -1748,7 +1748,7 @@ msgstr "AAC (Advanced Audio Coding)"
 msgid "AAC files may contain HE-AAC / AAC+ / SBR AAC audio. This can NOT be detected automatically. Therefore you have to specifiy '--aac-is-sbr 0' manually for this input file if the file actually contains SBR AAC. The file will be muxed in the WRONG way otherwise. Also read mkvmerge's documentation.\n"
 msgstr "I file AAC possono contenere audio HE-AAC / AAC+ / SBR AAC. Ciò non può essere rilevato automaticamente. Perciò devi specificare manualmente '--aac-is-sbr 0' per questo file sorgente se il file contiene attualmente SBR AAC. Altrimenti il file verrà muxato in modo ERRATO. Consultare inoltre la documentazione di mkvmerge.\n"
 
-#: src/mmg/tabs/input_format.cpp:255
+#: src/mmg/tabs/input_format.cpp:257
 msgid "AAC is SBR/HE-AAC/AAC+"
 msgstr "AAC è SBR/HE-AAC/AAC+"
 
@@ -1770,7 +1770,7 @@ msgstr ""
 "dieresi ecc)"
 
 #: src/input/r_avc.h:32
-#: src/output/p_avc.h:42
+#: src/output/p_avc.h:43
 #: src/output/p_mpeg4_p10.h:34
 msgid "AVC/h.264"
 msgstr "AVC/h.264"
@@ -1857,12 +1857,12 @@ msgstr "Aggiungi sottocapitolo"
 msgid "Added on"
 msgstr "Aggiunto il"
 
-#: src/info/mkvinfo.cpp:193
+#: src/info/mkvinfo.cpp:196
 #, boost-format
 msgid "AdditionalID: %1%"
 msgstr "ID addizionale: %1%"
 
-#: src/info/mkvinfo.cpp:1447
+#: src/info/mkvinfo.cpp:1459
 msgid "Additions"
 msgstr "Aggiunte"
 
@@ -1886,7 +1886,7 @@ msgstr "Regola timecode"
 msgid "After loading a file expand the most important elements"
 msgstr "Dopo aver caricato un file espandi elementi importanti"
 
-#: src/info/mkvinfo.cpp:799
+#: src/info/mkvinfo.cpp:802
 #, boost-format
 msgid "Algorithm: %1% (%2%)"
 msgstr "Algoritmo: %1% (%2%)"
@@ -2005,7 +2005,7 @@ msgstr "E' in corso una altra operazione di muxing. Attendere la fine dell'opera
 msgid "Appending a track from a file to another track from the same file is not allowed. This is the case for tracks number %u and %u."
 msgstr "Non è permessa l'aggiunta di una traccia da un file ad un'altra traccia dello stesso file. Questo è il caso per la traccia numero %u e %u."
 
-#: src/merge/output_control.cpp:1744
+#: src/merge/output_control.cpp:1755
 #, boost-format
 msgid "Appending track %1% from file no. %2% ('%3%') to track %4% from file no. %5% ('%6%').\n"
 msgstr "Aggiunta traccia %1% dal file n. %2% ('%3%') alla traccia %4% dal file n. %5% ('%6%').\n"
@@ -2022,12 +2022,12 @@ msgstr "Rapporto aspetto"
 msgid "Aspect ratio factor"
 msgstr "Fattore rapporto aspetto"
 
-#: src/info/mkvinfo.cpp:719
+#: src/info/mkvinfo.cpp:722
 #, boost-format
 msgid "Aspect ratio type: %1%%2%"
 msgstr "Tipo rapporto aspetto: %1%%2%"
 
-#: src/mmg/tabs/input_format.cpp:224
+#: src/mmg/tabs/input_format.cpp:226
 msgid "Aspect ratio:"
 msgstr "Rapporto aspetto:"
 
@@ -2039,7 +2039,7 @@ msgstr "E' necessario almeno un elemento <ChapterAtom>."
 msgid "At least one <EditionEntry> element is needed."
 msgstr "E' necessario almeno un elemento <EditionEntry>."
 
-#: src/info/mkvinfo.cpp:1286
+#: src/info/mkvinfo.cpp:1298
 msgid "Attached"
 msgstr "Allegato"
 
@@ -2060,7 +2060,7 @@ msgstr "Estrazione allegati"
 msgid "Attachment style:"
 msgstr "Stile allegati:"
 
-#: src/info/mkvinfo.cpp:1274
+#: src/info/mkvinfo.cpp:1286
 #: src/mmg/mmg_dialog.cpp:320
 #: src/mmg/tabs/attachments.cpp:161
 msgid "Attachments"
@@ -2126,7 +2126,7 @@ msgstr "BZ2_bzCompressInit() fallito. Risultato: %1%\n"
 msgid "Binary (displayed as hex numbers)"
 msgstr "Binario (visualizzato come numeri esadecimali)"
 
-#: src/info/mkvinfo.cpp:629
+#: src/info/mkvinfo.cpp:632
 #, boost-format
 msgid "Bit depth: %1%"
 msgstr "Profondità bit: %1%"
@@ -2136,33 +2136,33 @@ msgstr "Profondità bit: %1%"
 msgid "Bits per sample, mostly used for PCM."
 msgstr "Bit per campione, molto usato per PCM."
 
-#: src/info/mkvinfo.cpp:185
+#: src/info/mkvinfo.cpp:188
 #, boost-format
 msgid "Block (track number %1%, %2% frame(s), timecode %|3$.3f|s = %4%)"
 msgstr "Blocco (numero traccia %1%, %2% frame, timecode %|3$.3f|s = %4%)"
 
-#: src/info/mkvinfo.cpp:199
+#: src/info/mkvinfo.cpp:202
 #, boost-format
 msgid "Block additional ID: %1%"
 msgstr "ID blocco addizionale: %1%"
 
-#: src/info/mkvinfo.cpp:194
+#: src/info/mkvinfo.cpp:197
 #, boost-format
 msgid "Block additional: %1%"
 msgstr "ID blocco addizionale: %1%"
 
-#: src/info/mkvinfo.cpp:187
+#: src/info/mkvinfo.cpp:190
 #, boost-format
 msgid "Block duration: %1%.%|2$06d|ms"
 msgstr "Durata blocco: %1%.%|2$06d|ms"
 
 #: src/extract/timecodes_v2.cpp:303
 #: src/extract/tracks.cpp:415
-#: src/info/mkvinfo.cpp:1353
+#: src/info/mkvinfo.cpp:1365
 msgid "Block group"
 msgstr "Gruppo blocco"
 
-#: src/info/mkvinfo.cpp:191
+#: src/info/mkvinfo.cpp:194
 #, boost-format
 msgid "Block virtual: %1%"
 msgstr "Blocco virtuale: %1%"
@@ -2243,7 +2243,7 @@ msgstr "La categoria non è terminata con un NUL"
 
 #: src/extract/timecodes_v2.cpp:382
 #: src/extract/tracks.cpp:465
-#: src/info/mkvinfo.cpp:2024
+#: src/info/mkvinfo.cpp:2036
 msgid "Caught exception"
 msgstr "Espressione catturata"
 
@@ -2279,12 +2279,12 @@ msgstr "Modifica preferenze e opzioni di mmg"
 msgid "Changes to this list do not take effect until mmg is restarted."
 msgstr "I cambiamenti all'elenco non avranno effetto fino a che mmg verrà riavviato."
 
-#: src/info/mkvinfo.cpp:624
+#: src/info/mkvinfo.cpp:627
 #, boost-format
 msgid "Channel positions: %1%"
 msgstr "Posizioni canale: %1%"
 
-#: src/info/mkvinfo.cpp:618
+#: src/info/mkvinfo.cpp:621
 #, boost-format
 msgid "Channels: %1%"
 msgstr "Canali: %1%"
@@ -2293,21 +2293,21 @@ msgstr "Canali: %1%"
 msgid "Chapter Editor"
 msgstr "Modifica capitoli"
 
-#: src/info/mkvinfo.cpp:475
+#: src/info/mkvinfo.cpp:478
 msgid "Chapter Translate"
 msgstr "Modello capitolo"
 
-#: src/info/mkvinfo.cpp:488
+#: src/info/mkvinfo.cpp:491
 #, boost-format
 msgid "Chapter Translate Codec: %1%"
 msgstr "Codec traduzione capitolo: %1%"
 
-#: src/info/mkvinfo.cpp:484
+#: src/info/mkvinfo.cpp:487
 #, boost-format
 msgid "Chapter Translate Edition UID: %1%"
 msgstr "UID edizione traduzione capitolo: %1%"
 
-#: src/info/mkvinfo.cpp:492
+#: src/info/mkvinfo.cpp:495
 #, boost-format
 msgid "Chapter Translate ID: %1%"
 msgstr "ID modello capitolo: %1%"
@@ -2370,7 +2370,7 @@ msgstr "Errore verifica capitolo"
 msgid "Chapter verification succeeded"
 msgstr "Verifica capitolo completata"
 
-#: src/info/mkvinfo.cpp:1802
+#: src/info/mkvinfo.cpp:1814
 #: src/mmg/options/chapters.cpp:131
 #: src/mmg/tabs/global.cpp:273
 #: src/propedit/options.cpp:173
@@ -2382,7 +2382,7 @@ msgstr "Capitoli"
 msgid "Chapters (%d entries) from %s"
 msgstr "Capitoli (%d elementi) da %s"
 
-#: src/merge/output_control.cpp:1383
+#: src/merge/output_control.cpp:1394
 msgid "Chapters are not allowed in WebM compliant files. No chapters will be written into any output file.\n"
 msgstr "I capitoli non sono permessi in un file compatibile WebM. Nessun capitolo verrà registrato nei file destinazione.\n"
 
@@ -2409,7 +2409,7 @@ msgid "Charset for strings on the command line"
 msgstr "Set caratteri stringhe nella linea di comando"
 
 #: src/mmg/tabs/global.cpp:282
-#: src/mmg/tabs/input_format.cpp:250
+#: src/mmg/tabs/input_format.cpp:252
 msgid "Charset:"
 msgstr "Set caratteri:"
 
@@ -2427,7 +2427,7 @@ msgstr "Verifica via internet disponibilità aggiornamenti programma."
 msgid "Check online whether or not a new release of MKVToolNix is available on the home page. Will only check when mmg starts and at most once a day. No information is transmitted to the server."
 msgstr "Verifica se è disponibile una nuova versione di MKVToolNix nel sito web. La verifica verrà effettuata all'avvio d mmg e almeno una volta al giorno. Nessuna informazione è trasmessa al server."
 
-#: src/mmg/mmg_dialog.cpp:1734
+#: src/mmg/mmg_dialog.cpp:1736
 msgid "Checking for updates online; please wait"
 msgstr "Verifica disponibilità aggiornamenti..."
 
@@ -2508,7 +2508,7 @@ msgstr "Chiudi il file corrente senza salvare"
 
 #: src/extract/timecodes_v2.cpp:284
 #: src/extract/tracks.cpp:397
-#: src/info/mkvinfo.cpp:1984
+#: src/info/mkvinfo.cpp:1996
 msgid "Cluster"
 msgstr "Segmenti"
 
@@ -2522,19 +2522,19 @@ msgstr "Lunghezza segmento '%1%' fuori limiti (0..65535).\n"
 msgid "Cluster length '%1%' out of range (100..32000).\n"
 msgstr "Lunghezza segmento '%1%' fuori limiti (0..32000).\n"
 
-#: src/info/mkvinfo.cpp:209
+#: src/info/mkvinfo.cpp:212
 #, boost-format
 msgid "Cluster position: %1%"
 msgstr "Posizione segmento: %1%"
 
-#: src/info/mkvinfo.cpp:210
+#: src/info/mkvinfo.cpp:213
 #, boost-format
 msgid "Cluster previous size: %1%"
 msgstr "Precedente dimensione segmento: %1%"
 
 #: src/extract/timecodes_v2.cpp:299
 #: src/extract/tracks.cpp:406
-#: src/info/mkvinfo.cpp:208
+#: src/info/mkvinfo.cpp:211
 #, boost-format
 msgid "Cluster timecode: %|1$.3f|s"
 msgstr "Timecode segmento: %|1$.3f|s"
@@ -2544,22 +2544,22 @@ msgstr "Timecode segmento: %|1$.3f|s"
 msgid "Codec ID"
 msgstr "ID codec"
 
-#: src/info/mkvinfo.cpp:981
+#: src/info/mkvinfo.cpp:993
 #, boost-format
 msgid "Codec ID: %1%"
 msgstr "ID codec: %1%"
 
-#: src/info/mkvinfo.cpp:1015
+#: src/info/mkvinfo.cpp:1027
 #, boost-format
 msgid "Codec decode all: %1%"
 msgstr "Codec decodifica tutto;: %1%"
 
-#: src/info/mkvinfo.cpp:1010
+#: src/info/mkvinfo.cpp:1022
 #, boost-format
 msgid "Codec download URL: %1%"
 msgstr "URL download codec: %1%"
 
-#: src/info/mkvinfo.cpp:1006
+#: src/info/mkvinfo.cpp:1018
 #, boost-format
 msgid "Codec info URL: %1%"
 msgstr "URL info codec: %1%"
@@ -2569,22 +2569,22 @@ msgstr "URL info codec: %1%"
 msgid "Codec name"
 msgstr "Nome codec"
 
-#: src/info/mkvinfo.cpp:997
+#: src/info/mkvinfo.cpp:1009
 #, boost-format
 msgid "Codec name: %1%"
 msgstr "Nome codec: %1%"
 
-#: src/info/mkvinfo.cpp:1002
+#: src/info/mkvinfo.cpp:1014
 #, boost-format
 msgid "Codec settings: %1%"
 msgstr "Impostazioni codec: %1%"
 
-#: src/info/mkvinfo.cpp:211
+#: src/info/mkvinfo.cpp:214
 #, boost-format
 msgid "Codec state: %1%"
 msgstr "Stato codec: %1%"
 
-#: src/info/mkvinfo.cpp:993
+#: src/info/mkvinfo.cpp:1005
 #, boost-format
 msgid "CodecPrivate, length %1%%2%"
 msgstr "CodecPrivato, lunghezza %1%%2%"
@@ -2593,7 +2593,7 @@ msgstr "CodecPrivato, lunghezza %1%%2%"
 msgid "Collapse all entries so that none of their sub-entries will be shown"
 msgstr "Minimizza tutti gli elementi in modo da visualizzare una delle sotto categorie"
 
-#: src/info/mkvinfo.cpp:728
+#: src/info/mkvinfo.cpp:731
 #, boost-format
 msgid "Colour space: %1%"
 msgstr "Spazio colore: %1%"
@@ -2640,19 +2640,19 @@ msgstr "Configurazione caricata."
 msgid "Configuration saved."
 msgstr "Configurazione salvata."
 
-#: src/info/mkvinfo.cpp:789
+#: src/info/mkvinfo.cpp:792
 msgid "Content compression"
 msgstr "Compressione contenuto"
 
-#: src/info/mkvinfo.cpp:754
+#: src/info/mkvinfo.cpp:757
 msgid "Content encoding"
 msgstr "Codifica contenuto"
 
-#: src/info/mkvinfo.cpp:746
+#: src/info/mkvinfo.cpp:749
 msgid "Content encodings"
 msgstr "Codifiche contenuto"
 
-#: src/info/mkvinfo.cpp:816
+#: src/info/mkvinfo.cpp:819
 msgid "Content encryption"
 msgstr "Criptazione contenuto"
 
@@ -2712,7 +2712,7 @@ msgstr "Impossibile estrarre la sequenza intestazione da questa traccia MPEG1-2.
 msgid "Could not find an index for audio track %1% (avilib error message: %2%). Skipping track.\n"
 msgstr "Impossibile trovare un indice per la traccia audio %1% (messaggio d'errore: %2%). Traccia ignorata.\n"
 
-#: src/merge/output_control.cpp:1699
+#: src/merge/output_control.cpp:1710
 #, boost-format
 msgid "Could not find gptzr when appending. %1%\n"
 msgstr "Impossibile trovare gptzr durante l'aggiunta. %1%\n"
@@ -2817,21 +2817,21 @@ msgstr "Crea un nuovo file capitolo"
 msgid "Cropping parameters: not given in the form <TID>:<left>,<top>,<right>,<bottom> e.g. 0:10,5,10,5 (argument was '%1%').\n"
 msgstr "Parametri ritaglio: non dati nella forma <TID>:<sinistro>,<alto>,<destro>,<basso> es. 0:10,5,10,5 (l'argomento era '%1%').\n"
 
-#: src/mmg/tabs/input_format.cpp:253
+#: src/mmg/tabs/input_format.cpp:255
 msgid "Cropping:"
 msgstr "Ritaglio:"
 
-#: src/info/mkvinfo.cpp:1213
+#: src/info/mkvinfo.cpp:1225
 #, boost-format
 msgid "Cue block number: %1%"
 msgstr "Numero blocco taglio: %1%"
 
-#: src/info/mkvinfo.cpp:1209
+#: src/info/mkvinfo.cpp:1221
 #, boost-format
 msgid "Cue cluster position: %1%"
 msgstr "Posizione cluster taglio: %1%"
 
-#: src/info/mkvinfo.cpp:1218
+#: src/info/mkvinfo.cpp:1230
 #, boost-format
 msgid "Cue codec state: %1%"
 msgstr "Stato codec taglio: %1%"
@@ -2840,31 +2840,31 @@ msgstr "Stato codec taglio: %1%"
 msgid "Cue name format:"
 msgstr "Formato nome taglio:"
 
-#: src/info/mkvinfo.cpp:1184
+#: src/info/mkvinfo.cpp:1196
 msgid "Cue point"
 msgstr "Punto taglio"
 
-#: src/info/mkvinfo.cpp:1234
+#: src/info/mkvinfo.cpp:1246
 #, boost-format
 msgid "Cue ref cluster: %1%"
 msgstr "Cluster cue ref: %1%"
 
-#: src/info/mkvinfo.cpp:1242
+#: src/info/mkvinfo.cpp:1254
 #, boost-format
 msgid "Cue ref codec state: %1%"
 msgstr "Stato codec cue ref: %1%"
 
-#: src/info/mkvinfo.cpp:1238
+#: src/info/mkvinfo.cpp:1250
 #, boost-format
 msgid "Cue ref number: %1%"
 msgstr "Numero cue ref: %1%"
 
-#: src/info/mkvinfo.cpp:1230
+#: src/info/mkvinfo.cpp:1242
 #, boost-format
 msgid "Cue ref time: %|1$.3f|s"
 msgstr "Tempo cue ref: %|1$.3f|s"
 
-#: src/info/mkvinfo.cpp:1221
+#: src/info/mkvinfo.cpp:1233
 msgid "Cue reference"
 msgstr "Riferimento cue"
 
@@ -2883,21 +2883,21 @@ msgstr "Analisi cue: numero INDICE non valido (ottenuto %1%, atteso %2%) alla li
 msgid "Cue sheet parser: No INDEX entry found for the previous TRACK entry (current line: %1%)\n"
 msgstr "Analisi cue: nessun elemento INDICE trovato per la TRACCIA precedente (linea attuale %1%)\n"
 
-#: src/info/mkvinfo.cpp:1193
+#: src/info/mkvinfo.cpp:1205
 #, boost-format
 msgid "Cue time: %|1$.3f|s"
 msgstr "Tempo cue: %|1$.3f|s"
 
-#: src/info/mkvinfo.cpp:1196
+#: src/info/mkvinfo.cpp:1208
 msgid "Cue track positions"
 msgstr "Posizione traccia cue"
 
-#: src/info/mkvinfo.cpp:1205
+#: src/info/mkvinfo.cpp:1217
 #, boost-format
 msgid "Cue track: %1%"
 msgstr "Traccia cue: %1%"
 
-#: src/info/mkvinfo.cpp:1168
+#: src/info/mkvinfo.cpp:1180
 msgid "Cues (subentries will be skipped)"
 msgstr "Cues (i sotto elementi verranno ignorati)"
 
@@ -2977,12 +2977,12 @@ msgstr "Problema Intestazione DTS: dati insufficienti per leggere l'intestazione
 msgid "Data is not allowed inside <%1%>."
 msgstr "Dati non permessi all'interno <%1%>."
 
-#: src/info/mkvinfo.cpp:550
+#: src/info/mkvinfo.cpp:553
 #, boost-format
 msgid "Date (invalid, value: %1%)"
 msgstr "Data (non valida, valore %1%)"
 
-#: src/info/mkvinfo.cpp:548
+#: src/info/mkvinfo.cpp:551
 #, boost-format
 msgid "Date: %1% UTC"
 msgstr "Data: %1% UTC"
@@ -2991,8 +2991,8 @@ msgstr "Data: %1% UTC"
 msgid "Debug> "
 msgstr "Debug >"
 
-#: src/mmg/tabs/input_format.cpp:197
-#: src/mmg/tabs/input_format.cpp:215
+#: src/mmg/tabs/input_format.cpp:199
+#: src/mmg/tabs/input_format.cpp:217
 msgid "Default"
 msgstr "Predefinito"
 
@@ -3001,12 +3001,12 @@ msgstr "Predefinito"
 msgid "Default duration"
 msgstr "Durata predefinita"
 
-#: src/info/mkvinfo.cpp:1033
+#: src/info/mkvinfo.cpp:1045
 #, boost-format
 msgid "Default duration: %|1$.3f|ms (%|2$.3f| frames/fields per second for a video track)"
 msgstr "Durata predefinita: %|1$.3f|ms (%|2$.3f| frame/campi per secondo per una traccia video)"
 
-#: src/info/mkvinfo.cpp:1048
+#: src/info/mkvinfo.cpp:1060
 #, boost-format
 msgid "Default flag: %1%"
 msgstr "Indicatore predefinito: %1%"
@@ -3015,15 +3015,15 @@ msgstr "Indicatore predefinito: %1%"
 msgid "Default track flag:"
 msgstr "Indicatore traccia predefinita:"
 
-#: src/mmg/tabs/input_format.cpp:243
+#: src/mmg/tabs/input_format.cpp:245
 msgid "Delay (in ms):"
 msgstr "Ritardo (in ms):"
 
-#: src/mmg/tabs/input_format.cpp:244
+#: src/mmg/tabs/input_format.cpp:246
 msgid "Delay this track's timecodes by a couple of ms. Can be negative. Works with all track types, but negative delays should not be used with video tracks."
 msgstr "Ritarda il timecode di questa traccia di un paio di ms. Può essere negativo. Funziona con tutti i tipi di traccia, ma un ritardo negativo non può essere usato con le tracce video"
 
-#: src/info/mkvinfo.cpp:197
+#: src/info/mkvinfo.cpp:200
 #, boost-format
 msgid "Delay: %|1$.3f|ms"
 msgstr "Ritardo: %|1$.3f|ms"
@@ -3040,7 +3040,7 @@ msgstr "Elimina le attività selezionate dalla coda attività"
 msgid "Description"
 msgstr "Descrizione"
 
-#: src/mmg/mmg_dialog.cpp:1416
+#: src/mmg/mmg_dialog.cpp:1418
 msgid "Description already exists"
 msgstr "La descrizione esiste già"
 
@@ -3078,12 +3078,12 @@ msgstr "Disabilita interlacciatura per tutte le tracce. Questo incrementerà la 
 msgid "Display dimensions: not given in the form <TID>:<width>x<height>, e.g. 1:640x480 (argument was '%1%').\n"
 msgstr "Dimensione visualizzazione: non permesso nella forma <TID>:<larghezza>x<altezza>, es. 1:640x480 (l'argomento era '%1%').\n"
 
-#: src/info/mkvinfo.cpp:667
+#: src/info/mkvinfo.cpp:670
 #, boost-format
 msgid "Display height: %1%"
 msgstr "Altezza visualizzazione: %1%"
 
-#: src/info/mkvinfo.cpp:694
+#: src/info/mkvinfo.cpp:697
 #, boost-format
 msgid "Display unit: %1%%2%"
 msgstr "Unità visualizzazione: %1%%2%"
@@ -3092,11 +3092,11 @@ msgstr "Unità visualizzazione: %1%%2%"
 msgid "Display usage information"
 msgstr "Visualizza informazione uso"
 
-#: src/mmg/tabs/input_format.cpp:227
+#: src/mmg/tabs/input_format.cpp:229
 msgid "Display width/height:"
 msgstr "Visualizza larghezza/altezza:"
 
-#: src/info/mkvinfo.cpp:662
+#: src/info/mkvinfo.cpp:665
 #, boost-format
 msgid "Display width: %1%"
 msgstr "Visualizza larghezza: %1%"
@@ -3109,17 +3109,17 @@ msgstr "Non aggiungere un elemento per i capitoli nell'elemento meta seek."
 msgid "Do not write meta seek elements at all."
 msgstr "Non scrivere elemento meta seek per tutti."
 
-#: src/info/mkvinfo.cpp:1869
+#: src/info/mkvinfo.cpp:1881
 #, boost-format
 msgid "Doc type read version: %1%"
 msgstr "Versione tipo documento letta: %1%"
 
-#: src/info/mkvinfo.cpp:1866
+#: src/info/mkvinfo.cpp:1878
 #, boost-format
 msgid "Doc type version: %1%"
 msgstr "Versione tipo documento: %1%"
 
-#: src/info/mkvinfo.cpp:1863
+#: src/info/mkvinfo.cpp:1875
 #, boost-format
 msgid "Doc type: %1%"
 msgstr "Tipo documento: %1%"
@@ -3136,12 +3136,12 @@ msgstr "Completato.\n"
 msgid "Download URL:"
 msgstr "URL download:"
 
-#: src/info/mkvinfo.cpp:198
+#: src/info/mkvinfo.cpp:201
 #, boost-format
 msgid "Duration: %|1$.3f|ms"
 msgstr "Durata: %|1$.3f|ms"
 
-#: src/info/mkvinfo.cpp:527
+#: src/info/mkvinfo.cpp:530
 #, boost-format
 msgid "Duration: %|1$.3f|s (%2%)"
 msgstr "Durata: %|1$.3f|s (%2%)"
@@ -3150,31 +3150,31 @@ msgstr "Durata: %|1$.3f|s (%2%)"
 msgid "E&xit\tCtrl-Q"
 msgstr "E&sci\tCtrl-Q"
 
-#: src/info/mkvinfo.cpp:1839
+#: src/info/mkvinfo.cpp:1851
 msgid "EBML head"
 msgstr "Intestazione EBML"
 
-#: src/info/mkvinfo.cpp:1857
+#: src/info/mkvinfo.cpp:1869
 #, boost-format
 msgid "EBML maximum ID length: %1%"
 msgstr "Lunghezza massima ID EBML: %1%"
 
-#: src/info/mkvinfo.cpp:1860
+#: src/info/mkvinfo.cpp:1872
 #, boost-format
 msgid "EBML maximum size length: %1%"
 msgstr "Dimensione massima lunghezza EBML: %1%"
 
-#: src/info/mkvinfo.cpp:1854
+#: src/info/mkvinfo.cpp:1866
 #, boost-format
 msgid "EBML read version: %1%"
 msgstr "Versione EBML letta: %1%"
 
-#: src/info/mkvinfo.cpp:1851
+#: src/info/mkvinfo.cpp:1863
 #, boost-format
 msgid "EBML version: %1%"
 msgstr "Versione EBML: %1%"
 
-#: src/merge/output_control.cpp:1224
+#: src/merge/output_control.cpp:1235
 #, boost-format
 msgid "EVIL internal bug! (unknown file type). %1%\n"
 msgstr "Errore interno! (tipo file sconosciuto). %1%\n"
@@ -3187,7 +3187,7 @@ msgstr "Ogni capitolo e ogni edizione hanno un identificatore univoco. Questo id
 msgid "Each edition must contain at least one chapter."
 msgstr "Ogni edizione deve contenere almeno un capitolo"
 
-#: src/info/mkvinfo.cpp:182
+#: src/info/mkvinfo.cpp:185
 #, boost-format
 msgid "EbmlVoid (size: %1%)"
 msgstr "EbmlVoid (dimensione: %1%)"
@@ -3229,7 +3229,7 @@ msgstr "Gli elementi nella categoria '%1%' ('--edit %2%'):\n"
 msgid "Enable splitting..."
 msgstr "Abilita suddivisione..."
 
-#: src/info/mkvinfo.cpp:970
+#: src/info/mkvinfo.cpp:982
 #, boost-format
 msgid "Enabled: %1%"
 msgstr "Abilitato: %1%"
@@ -3238,12 +3238,12 @@ msgstr "Abilitato: %1%"
 msgid "Enables splitting of the output into more than one file. You can split after a given size, after a given amount of time has passed in each file or after a list of timecodes."
 msgstr "Abilita suddivisione della destinazione in più file. Puoi suddividere dopo una certa dimensione, dopo un certo tempo trascorso per ogni file o dopo un elenco di timecode."
 
-#: src/info/mkvinfo.cpp:826
+#: src/info/mkvinfo.cpp:829
 #, boost-format
 msgid "Encryption algorithm: %1% (%2%)"
 msgstr "Algoritmo cifratura: %1% (%2%)"
 
-#: src/info/mkvinfo.cpp:838
+#: src/info/mkvinfo.cpp:841
 #, boost-format
 msgid "Encryption key ID: %1%"
 msgstr "ID chiave criptazione: %1%"
@@ -3334,7 +3334,7 @@ msgstr "Errore: "
 msgid "Error: %1% parser failed for '%2%', line %3%, column %4%: %5%\n"
 msgstr "Errore: analizzatore %1% fallito per '%2%', linea %3%, colonna %4%: %5%\n"
 
-#: src/info/mkvinfo.cpp:1923
+#: src/info/mkvinfo.cpp:1935
 #, boost-format
 msgid "Error: Couldn't open input file %1% (%2%).\n"
 msgstr "Errore: impossibile aprire file sorgente %1% (%2%).\n"
@@ -3408,7 +3408,7 @@ msgstr "Estrae i dati in un formato RAW includendo Codecprivate come intestazion
 msgid "Extract the data to a raw file."
 msgstr "Estrai i dati in file RAW."
 
-#: src/output/p_avc.cpp:140
+#: src/output/p_avc.cpp:142
 #: src/output/p_mpeg4_p10.cpp:68
 #, boost-format
 msgid "Extracted the aspect ratio information from the MPEG-4 layer 10 (AVC) video data and set the display dimensions to %1%/%2%.\n"
@@ -3443,7 +3443,7 @@ msgstr "FLAC"
 msgid "FLAC (Free Lossless Audio Codec)"
 msgstr "FLAC (Free Lossless Audio Codec)"
 
-#: src/mmg/tabs/input_format.cpp:236
+#: src/mmg/tabs/input_format.cpp:238
 msgid "FPS:"
 msgstr "FPS:"
 
@@ -3479,7 +3479,7 @@ msgstr "Imposssibile analizzare i dati privati codec USF per la traccia %1%: %2%
 msgid "Failed to parse the USF end tag for track %1%: %2%\n"
 msgstr "Impossibile analizzare tag fine USF per la traccia %1%: %2%\n"
 
-#: src/info/mkvinfo.cpp:558
+#: src/info/mkvinfo.cpp:561
 #, boost-format
 msgid "Family UID: %1%"
 msgstr "UID famiglia: %1%"
@@ -3499,7 +3499,7 @@ msgstr "File '%1%': contenitore: %2%"
 msgid "File '%1%': unsupported container: %2%\n"
 msgstr "File '%1%': contenitore non supportato: %2%\n"
 
-#: src/info/mkvinfo.cpp:1311
+#: src/info/mkvinfo.cpp:1323
 #, boost-format
 msgid "File UID: %1%"
 msgstr "UID file: %1%"
@@ -3516,12 +3516,12 @@ msgstr "Il file contiene meno frame di quelli previsti o è corrotto dopo il fra
 msgid "File creation failed"
 msgstr "Creazione file fallita"
 
-#: src/info/mkvinfo.cpp:1307
+#: src/info/mkvinfo.cpp:1319
 #, boost-format
 msgid "File data, size: %1%"
 msgstr "Dati file, dimensione: %1%"
 
-#: src/info/mkvinfo.cpp:1295
+#: src/info/mkvinfo.cpp:1307
 #, boost-format
 msgid "File description: %1%"
 msgstr "Descrizione file: %1%"
@@ -3549,7 +3549,7 @@ msgstr "Il file è già stato processato"
 msgid "File modified"
 msgstr "File modificato"
 
-#: src/info/mkvinfo.cpp:1299
+#: src/info/mkvinfo.cpp:1311
 #, boost-format
 msgid "File name: %1%"
 msgstr "Nome file:  %1%"
@@ -3576,7 +3576,7 @@ msgstr "Collegamento file/segmento"
 msgid "File/segment title:"
 msgstr "Titolo file/segmento:"
 
-#: src/merge/output_control.cpp:910
+#: src/merge/output_control.cpp:921
 msgid "Files cannot be appended to themselves. The argument for '--append-to' was invalid.\n"
 msgstr "Il file non può essere aggiunto a sè stesso. L'argomento per '--append-to' non è valido.\n"
 
@@ -3615,7 +3615,7 @@ msgstr "Forza collegamento stile Xiph."
 msgid "Force the translations for 'code' to be used."
 msgstr "Forza l'uso del 'codice' per la traduzione."
 
-#: src/info/mkvinfo.cpp:1052
+#: src/info/mkvinfo.cpp:1064
 #, boost-format
 msgid "Forced flag: %1%"
 msgstr "Indicatore forzato: %1%"
@@ -3624,7 +3624,7 @@ msgstr "Indicatore forzato: %1%"
 msgid "Forced track flag:"
 msgstr "Indicatore traccia forzata:"
 
-#: src/mmg/tabs/input_format.cpp:231
+#: src/mmg/tabs/input_format.cpp:233
 msgid "Forces the FourCC of the video track to this value. Note that this only works for video tracks that use the AVI compatibility mode or for QuickTime video tracks. This option CANNOT be used to change Matroska's CodecID."
 msgstr "Forza il FourCC della traccia video a questo valore. Nota che questo funzionerà solo per le traccie video che usano la modalità AVI compatibile o per le traccie video QuickTime. Questa opzione NON PUÒ essere usata per cambiare il CodecID Matroska."
 
@@ -3632,7 +3632,7 @@ msgstr "Forza il FourCC della traccia video a questo valore. Nota che questo fun
 msgid "Forces the Matroska reader to use the generic passthrough packetizer even for known and supported track types."
 msgstr "Forza il lettore Matroska ad usare un pacchettizzatore generico diretto anche per tipi di traccia conosciuti e supportati."
 
-#: src/mmg/tabs/input_format.cpp:239
+#: src/mmg/tabs/input_format.cpp:241
 msgid "Forces the NALU size length to a certain number of bytes. This parameter is only available for AVC/h.264 elementary streams read from AVC/h.264 ES files, AVIs or Matroska files created with '--engage allow_avc_in_vwf_mode'. It defaults to 4 bytes, but there are files which do not contain a frame or slice that is bigger than 65535 bytes. For such files you can use this parameter and decrease the size to 2."
 msgstr "Forza la lunghezza della dimensione NALU a un certo numero di byte. Questo parametro è disponibile solo per flussi elementary AVC/h.264 letti da file AVC/h.264 ES, AVI o Matroska creati con  '--engage allow_avc_in_vwf_mode'. Predefinito è 4 byte, ma ci sono file che non contengono un frame o una fetta più grande di 65535 byte. Per alcuni file si può usare questo parametro e decrementare la dimensione a 2."
 
@@ -3660,7 +3660,7 @@ msgstr "Trovati dati non codificati nè '@file' per leggere i dati binari da fil
 msgid "Found one or more B frames without second reference in the first GOP. You may want to fix the MPEG2 video stream or use smart reencode before attempting to multiplex it.\n"
 msgstr "Trovati uno o più frame B senza secondo riferimento nel primo GOP. E' necessario sistemare il flusso video MPEG2 o usare la ricodifica veloce prima di tentare il multiplexing.\n"
 
-#: src/mmg/tabs/input_format.cpp:230
+#: src/mmg/tabs/input_format.cpp:232
 msgid "FourCC:"
 msgstr "FourCC:"
 
@@ -3674,18 +3674,18 @@ msgstr "FourCC: ID traccia non valido in '%1% %2%'.\n"
 msgid "FourCC: Missing track ID in '%1% %2%'.\n"
 msgstr "FourCC: ID traccia mancante '%1% %2%'.\n"
 
-#: src/info/mkvinfo.cpp:196
+#: src/info/mkvinfo.cpp:199
 #, boost-format
 msgid "Frame number: %1%"
 msgstr "Numero frame: %1%"
 
-#: src/info/mkvinfo.cpp:732
+#: src/info/mkvinfo.cpp:735
 #, boost-format
 msgid "Frame rate: %1%"
 msgstr "Frequenza frame: %1%"
 
-#: src/info/mkvinfo.cpp:186
-#: src/info/mkvinfo.cpp:205
+#: src/info/mkvinfo.cpp:189
+#: src/info/mkvinfo.cpp:208
 #, boost-format
 msgid "Frame with size %1%%2%%3%"
 msgstr "Frame con dimensione %1%%2%%3%"
@@ -3694,7 +3694,7 @@ msgstr "Frame con dimensione %1%%2%%3%"
 msgid "Free-form edit field for user defined options for this track. What you input here is added after all the other options mmg adds so that you could overwrite any of mmg's options for this track. All occurences of the string \"<TID>\" will be replaced by the track's track ID."
 msgstr "Campo a modifica libera per opzione definita da utente per questa traccia. Quello inserito qui è aggiunto dopo tutte le altre opzioni mmg in modo da poter sovrascrivere qualsiasi opzione 'mmg' per questa traccia. Tutte le occorrenze della stringa  \"<TID>\" verranno sostituite dall'ID traccia."
 
-#: src/info/mkvinfo.cpp:703
+#: src/info/mkvinfo.cpp:706
 #, boost-format
 msgid "Gamma: %1%"
 msgstr "Gamma: %1%"
@@ -3885,7 +3885,7 @@ msgstr "Immagine importata da %1%"
 msgid "Impossible to use file '%1%': The file could not be opened for reading.\n"
 msgstr "Impossibile usare il file '%1%': il file non può essere aperto in lettura.\n"
 
-#: src/mmg/mmg_dialog.cpp:1876
+#: src/mmg/mmg_dialog.cpp:1878
 msgid "Incompatible mkvmerge version"
 msgstr "Versione mkvmerge incompatibile"
 
@@ -3928,7 +3928,7 @@ msgstr "Sorgente troppo lungo: %1% > %2%"
 msgid "Interface language:"
 msgstr "Lingua interfaccia:"
 
-#: src/info/mkvinfo.cpp:707
+#: src/info/mkvinfo.cpp:710
 #, boost-format
 msgid "Interlaced: %1%"
 msgstr "Interlacciato: %1%"
@@ -3948,7 +3948,7 @@ msgstr "Errore interno programma"
 msgid "Invalid %1% specified in '--%2% %3%'.\n"
 msgstr "%1% non valido specificato in '--%2% %3%'.\n"
 
-#: src/common/base64.h:32
+#: src/common/base64.h:30
 msgid "Invalid Base64 character encountered"
 msgstr "Incontrato carattere Base64 non valido"
 
@@ -4263,11 +4263,11 @@ msgstr "ID traccia non valido specificato in '--sub-charset %1%'.\n"
 msgid "Invalid track ID/file name specification in argument '%1%'.\n"
 msgstr "ID/nome file traccia non valido specificato nell'argomento '%1%'.\n"
 
-#: src/mmg/mmg_dialog.cpp:1452
+#: src/mmg/mmg_dialog.cpp:1454
 msgid "Job added to job queue"
 msgstr "Attività aggiunta alla coda lavori"
 
-#: src/mmg/mmg_dialog.cpp:1404
+#: src/mmg/mmg_dialog.cpp:1406
 msgid "Job description"
 msgstr "Descrizione attività"
 
@@ -4296,12 +4296,12 @@ msgstr "Mantieni solo BlockAdditions fino a questo livello (predefinito: mantien
 msgid "LZO compression failed. Result: %1%\n"
 msgstr "Compressione LZO fallita. Risultato: %1%\n"
 
-#: src/info/mkvinfo.cpp:195
+#: src/info/mkvinfo.cpp:198
 #, boost-format
 msgid "Lace number: %1%"
 msgstr "Numero collegamento: %1%"
 
-#: src/info/mkvinfo.cpp:1044
+#: src/info/mkvinfo.cpp:1056
 #, boost-format
 msgid "Lacing flag: %1%"
 msgstr "Indicatore collegamento: %1%"
@@ -4326,7 +4326,7 @@ msgstr "Lingua non è terminato da NULL"
 msgid "Language:"
 msgstr "Lingua:"
 
-#: src/info/mkvinfo.cpp:1056
+#: src/info/mkvinfo.cpp:1068
 #, boost-format
 msgid "Language: %1%"
 msgstr "Lingua: %1%"
@@ -4343,7 +4343,7 @@ msgstr "Lascia spazio aggiuntivo (EbmlVoid) nel file destinazione dopo questo ca
 msgid "Lets you add arbitrary options to the command line"
 msgstr "Aggiunge opzioni arbitrarie alla linea id comando"
 
-#: src/merge/timecode_factory.cpp:348
+#: src/merge/timecode_factory.cpp:356
 #, boost-format
 msgid "Line %1% of the timecode file '%2%' contains inconsistent data (e.g. the duration or the FPS are smaller than zero).\n"
 msgstr "La linea %1% del file timecode '%2%' contiene dati inconsistenti (es. durata o FPS minori di zero).\n"
@@ -4354,7 +4354,7 @@ msgid "Line %1% of the timecode file '%2%' contains inconsistent data (e.g. the 
 msgstr "La linea %1% del file timecode '%2%' contiene dati inconsistenti (es. numero frame iniziale maggiore del frame finale, o alcuni valori minori di zero).\n"
 
 #: src/merge/timecode_factory.cpp:114
-#: src/merge/timecode_factory.cpp:341
+#: src/merge/timecode_factory.cpp:349
 #, boost-format
 msgid "Line %1% of the timecode file '%2%' could not be parsed.\n"
 msgstr "La linea %1% del file timecode '%2% non può essere analizzata.\n"
@@ -4405,7 +4405,7 @@ msgstr "File registro: (*.txt)|*.txt|%s"
 msgid "Log output:"
 msgstr "Registro attività:"
 
-#: src/info/mkvinfo.cpp:856
+#: src/info/mkvinfo.cpp:859
 msgid "MD5"
 msgstr "MD5"
 
@@ -4521,12 +4521,12 @@ msgstr "File Matroska (*.mkv;*.mka;*.mks;*.mk3d)|*.mkv;*.mka;*.mks;*.mk3d|%s"
 msgid "Matroska files (*.mkv;*.mka;*.mks;*.mk3d)|*.mkv;*.mka;*.mks;*.mk3d|%s"
 msgstr "File Matroska (*.mkv;*.mka;*.mks;*.mk3d)|*.mkv;*.mka;*.mks;*.mk3d|%s"
 
-#: src/info/mkvinfo.cpp:1065
+#: src/info/mkvinfo.cpp:1077
 #, boost-format
 msgid "Max BlockAddition ID: %1%"
 msgstr "ID MaxBlocchiAggiunti: %1%"
 
-#: src/info/mkvinfo.cpp:1028
+#: src/info/mkvinfo.cpp:1040
 #, boost-format
 msgid "MaxCache: %1%"
 msgstr "CacheMax: %1%"
@@ -4545,12 +4545,12 @@ msgstr "Errore allocazione memoria: %1% (%2%).\n"
 msgid "Memory for a RealAudio/RealVideo frame could not be allocated.\n"
 msgstr "Memoria non allocabile per un frame RealAudio/RealVideo.\n"
 
-#: src/info/mkvinfo.cpp:1303
+#: src/info/mkvinfo.cpp:1315
 #, boost-format
 msgid "Mime type: %1%"
 msgstr "Tipo MIME: %1%"
 
-#: src/info/mkvinfo.cpp:1024
+#: src/info/mkvinfo.cpp:1036
 #, boost-format
 msgid "MinCache: %1%"
 msgstr "CacheMin: %1%"
@@ -4603,7 +4603,7 @@ msgstr "Nome file destinazione mancante nell'argomento  '%1%'.\n"
 msgid "Modification of properties in the section '%1%' was requested, but no corresponding level 1 element was found in the file. %2%\n"
 msgstr "E' stata richiesta la modifica delle proprietà nella sezione '%1%' ma nessun corrispondente elemento di livello 1 è stato rilevato nel file. %2%\n"
 
-#: src/info/mkvinfo.cpp:1455
+#: src/info/mkvinfo.cpp:1467
 msgid "More"
 msgstr "Altro"
 
@@ -4630,7 +4630,7 @@ msgstr "E' stato fornito più di un nome file per un singolo allegato. '%1%' ver
 msgid "More than one root element found."
 msgstr "Rilevato più di un elemento radice."
 
-#: src/merge/output_control.cpp:986
+#: src/merge/output_control.cpp:997
 #, boost-format
 msgid "More than one track is to be appended to the track %1% from file no. %2% ('%3%'). The argument for '--append-to' was invalid.\n"
 msgstr "Più di una traccia è stata appesa alla traccia %1% dal file no. %2% ('%3%'). L'argomento per  non è valido.\n"
@@ -4648,7 +4648,7 @@ msgstr "Sposta la/le attività in su"
 msgid "Move the selected job(s) up"
 msgstr "Sposta la/le attività in giù"
 
-#: src/info/mkvinfo.cpp:533
+#: src/info/mkvinfo.cpp:536
 #, boost-format
 msgid "Muxing application: %1%"
 msgstr "Applicazione muxing: %1%"
@@ -4662,7 +4662,7 @@ msgstr "Muxing in corso."
 msgid "Muxing took %1%.\n"
 msgstr "Il muxing ha richiesto %1%.\n"
 
-#: src/mmg/tabs/input_format.cpp:238
+#: src/mmg/tabs/input_format.cpp:240
 msgid "NALU size length:"
 msgstr "Dimensione NALU:"
 
@@ -4680,7 +4680,7 @@ msgstr "Nome per questa traccia es \"commenti del regista\"."
 msgid "Name:"
 msgstr "Nome:"
 
-#: src/info/mkvinfo.cpp:975
+#: src/info/mkvinfo.cpp:987
 #, boost-format
 msgid "Name: %1%"
 msgstr "Nome: %1%"
@@ -4698,12 +4698,12 @@ msgstr "Nuovo valore:"
 msgid "Next filename"
 msgstr "File successivo"
 
-#: src/info/mkvinfo.cpp:577
+#: src/info/mkvinfo.cpp:580
 #, boost-format
 msgid "Next filename: %1%"
 msgstr "File successivo: %1%"
 
-#: src/info/mkvinfo.cpp:1963
+#: src/info/mkvinfo.cpp:1975
 #, boost-format
 msgid "Next level 0 element is not a segment but %1%"
 msgstr "L'elemento successivo livello 0 non è un segmento ma %1%"
@@ -4712,7 +4712,7 @@ msgstr "L'elemento successivo livello 0 non è un segmento ma %1%"
 msgid "Next segment UID:"
 msgstr "UID segmento successivo:"
 
-#: src/info/mkvinfo.cpp:573
+#: src/info/mkvinfo.cpp:576
 #, boost-format
 msgid "Next segment UID: %1%"
 msgstr "UID segmento successivo: %1%"
@@ -4731,7 +4731,7 @@ msgstr "Nessun %1% specificato in '--%2% %3%'.\n"
 msgid "No AC3 header found in first frame; track will be skipped.\n"
 msgstr "Nessuna intestazione AC3 rilevata nel primo frame; la traccia verrà ignorata.\n"
 
-#: src/info/mkvinfo.cpp:1937
+#: src/info/mkvinfo.cpp:1949
 msgid "No EBML head found."
 msgstr "Nessuna intestazione EBML trovata."
 
@@ -4745,7 +4745,7 @@ msgstr "Non è stato selezionato nessun tipo MIME per l'allegato '%s'."
 msgid "No MIME type has been set for the attachment '%1%', and it could not be guessed.\n"
 msgstr "Non è stato impostato nessun tipo MME per l'allegato '%1%', e non può essere ospitato.\n"
 
-#: src/merge/output_control.cpp:945
+#: src/merge/output_control.cpp:956
 #, boost-format
 msgid "No append mapping was given for the file no. %1% ('%2%'). A default mapping of %3% will be used instead. Please keep that in mind if mkvmerge aborts with an error message regarding invalid '--append-to' options.\n"
 msgstr "Non è stato fornita nessuna mappa di aggiunta per il file no %1% ('%2%'). Verrà usata una mappa predefinita di %3%. Notare se mkvmerge si blocca con un errore rigaurdante opzioni non valide per '--append-to'.\n"
@@ -4778,7 +4778,7 @@ msgstr ""
 msgid "No file loaded"
 msgstr "Nessun file caricato"
 
-#: src/info/mkvinfo.cpp:2045
+#: src/info/mkvinfo.cpp:2057
 #: src/propedit/options.cpp:29
 msgid "No file name given.\n"
 msgstr "Nessun nome file specificato.\n"
@@ -4805,7 +4805,7 @@ msgstr "Nessun nome file destinazione specificato, verrà usato il nome dell'all
 
 #: src/extract/timecodes_v2.cpp:218
 #: src/extract/tracks.cpp:355
-#: src/info/mkvinfo.cpp:1951
+#: src/info/mkvinfo.cpp:1963
 msgid "No segment/level 0 element found."
 msgstr "Nessun elemento segmento/livello 0 trovato."
 
@@ -4926,7 +4926,7 @@ msgstr "E' permesso un solo file destinazione.\n"
 msgid "Only one segment info file allowed in '%1% %2%'.\n"
 msgstr "E' permesso solo un file info segmento in '%1% %2%'.\n"
 
-#: src/merge/output_control.cpp:926
+#: src/merge/output_control.cpp:937
 #, boost-format
 msgid "Only partial append mappings were given for the file no. %1% ('%2%'). Either don't specify any mapping (in which case the default mapping will be used) or specify a mapping for all tracks that are to be copied.\n"
 msgstr "E' stata fornita solo una mappa parziale di aggiunta per il file no. %1% ('%2%'). Non speicare nessuna mappa (in tal caso verrà usata la mapp predefinita) o specica una mappa per tutte le tracce da copiare.\n"
@@ -4978,7 +4978,7 @@ msgstr "Opzioni"
 msgid "Options meant ONLY for developpers. Do not use them. If something is considered to be an officially supported option then it's NOT in this list!"
 msgstr "Le opzioni sono utili SOLO per gli sviluppatori. Non usatele. Se qualcosa è considerata una opzione ufficialmente supportata non è in questo elenco!"
 
-#: src/info/mkvinfo.cpp:763
+#: src/info/mkvinfo.cpp:766
 #, boost-format
 msgid "Order: %1%"
 msgstr "Ordie: %1%"
@@ -5007,7 +5007,7 @@ msgstr "Messaggio di uscita nel set caratteri"
 msgid "Output of the selected jobs:"
 msgstr "Destinazione delle attività selezionate:"
 
-#: src/info/mkvinfo.cpp:613
+#: src/info/mkvinfo.cpp:616
 #, boost-format
 msgid "Output sampling frequency: %1%"
 msgstr "Frequenza campionamento destinazione: %1%"
@@ -5021,7 +5021,7 @@ msgid "Overwrite existing file(s)?"
 msgstr "Sovrascrivere file esistenti?"
 
 #: src/mmg/mmg_dialog.cpp:545
-#: src/mmg/mmg_dialog.cpp:1398
+#: src/mmg/mmg_dialog.cpp:1400
 msgid "Overwrite existing file?"
 msgstr "Sovrascrittura file esistenti"
 
@@ -5064,36 +5064,36 @@ msgstr "Analizza completamente il file e visualizza tutti gli elementi"
 msgid "Parse the whole file instead of relying on the index."
 msgstr "Analizza l'intero fileinvece del solo indice."
 
-#: src/info/mkvinfo.cpp:1694
+#: src/info/mkvinfo.cpp:1706
 msgid "Parsing file"
 msgstr "Analisi file"
 
-#: src/info/mkvinfo.cpp:687
+#: src/info/mkvinfo.cpp:690
 #, boost-format
 msgid "Pixel crop bottom: %1%"
 msgstr "Ritaglio pixel inferiore: %1%"
 
-#: src/info/mkvinfo.cpp:672
+#: src/info/mkvinfo.cpp:675
 #, boost-format
 msgid "Pixel crop left: %1%"
 msgstr "Ritaglio pixel a sinistra: %1%"
 
-#: src/info/mkvinfo.cpp:682
+#: src/info/mkvinfo.cpp:685
 #, boost-format
 msgid "Pixel crop right: %1%"
 msgstr "Ritaglio pixel a destra: %1%"
 
-#: src/info/mkvinfo.cpp:677
+#: src/info/mkvinfo.cpp:680
 #, boost-format
 msgid "Pixel crop top: %1%"
 msgstr "Ritaglio pixel superiore: %1%"
 
-#: src/info/mkvinfo.cpp:657
+#: src/info/mkvinfo.cpp:660
 #, boost-format
 msgid "Pixel height: %1%"
 msgstr "Altezza pixel: %1%"
 
-#: src/info/mkvinfo.cpp:652
+#: src/info/mkvinfo.cpp:655
 #, boost-format
 msgid "Pixel width: %1%"
 msgstr "Larghezza pixel: %1%"
@@ -5102,7 +5102,7 @@ msgstr "Larghezza pixel: %1%"
 msgid "Please do not select 'mmg' itself as the 'mkvmerge' executable."
 msgstr "Non selezionare 'mmg' come eseguibile 'mkvemrge'."
 
-#: src/mmg/mmg_dialog.cpp:1404
+#: src/mmg/mmg_dialog.cpp:1406
 msgid "Please enter a description for the new job:"
 msgstr "Inserire una descrizione per la nuova attività:"
 
@@ -5131,7 +5131,7 @@ msgstr ""
 msgid "Previous filename"
 msgstr "Nome file precedente"
 
-#: src/info/mkvinfo.cpp:569
+#: src/info/mkvinfo.cpp:572
 #, boost-format
 msgid "Previous filename: %1%"
 msgstr "Nome file precedente: %1%"
@@ -5140,7 +5140,7 @@ msgstr "Nome file precedente: %1%"
 msgid "Previous segment UID:"
 msgstr "UID segmento precedente:"
 
-#: src/info/mkvinfo.cpp:565
+#: src/info/mkvinfo.cpp:568
 #, boost-format
 msgid "Previous segment UID: %1%"
 msgstr "UID segmento precedente: %1%"
@@ -5180,7 +5180,7 @@ msgstr "Progresso: %1%%%%2%"
 msgid "Progress: 100%\n"
 msgstr "Progresso: 100%\n"
 
-#: src/merge/output_control.cpp:1996
+#: src/merge/output_control.cpp:2007
 #, boost-format
 msgid "Progress: 100%%%1%"
 msgstr "Progresso: 100%%%1%"
@@ -5190,7 +5190,7 @@ msgstr "Progresso: 100%%%1%"
 msgid "Progress: [%1%%2%] %3%%%"
 msgstr "Progresso: [%1%%2%] %3%%%"
 
-#: src/mmg/mmg_dialog.cpp:1819
+#: src/mmg/mmg_dialog.cpp:1821
 msgid "Querying mkvmerge's capabilities"
 msgstr "Richiesta capacità mkvmerge"
 
@@ -5343,7 +5343,7 @@ msgstr "Esci dall'editor intestazione"
 msgid "Quits mkvinfo"
 msgstr "Esci da mkvmerge"
 
-#: src/info/mkvinfo.cpp:846
+#: src/info/mkvinfo.cpp:849
 msgid "RSA"
 msgstr "RSA"
 
@@ -5389,22 +5389,22 @@ msgstr "I file RealMedia possono contenere audio HE-AAC / AAC+ / SBR AAC. In alc
 msgid "Redirects all messages into this file."
 msgstr "Ridireziona tutti i messaggi in questo file."
 
-#: src/info/mkvinfo.cpp:189
+#: src/info/mkvinfo.cpp:192
 #, boost-format
 msgid "Reference block: %1%.%|2$06d|ms"
 msgstr "Blocco riferimento: %1%.%|2$06d|ms"
 
-#: src/info/mkvinfo.cpp:188
+#: src/info/mkvinfo.cpp:191
 #, boost-format
 msgid "Reference block: -%1%.%|2$06d|ms"
 msgstr "Blocco riferimento: -%1%.%|2$06d|ms"
 
-#: src/info/mkvinfo.cpp:190
+#: src/info/mkvinfo.cpp:193
 #, boost-format
 msgid "Reference priority: %1%"
 msgstr "Priorità riferimento: %1%"
 
-#: src/info/mkvinfo.cpp:192
+#: src/info/mkvinfo.cpp:195
 #, boost-format
 msgid "Reference virtual: %1%"
 msgstr "Virtuale riferimento: %1%"
@@ -5460,7 +5460,7 @@ msgstr "&Visualizza linea di comando"
 msgid "S&tart selected"
 msgstr "Avvia seleziona&to"
 
-#: src/info/mkvinfo.cpp:855
+#: src/info/mkvinfo.cpp:858
 msgid "SHA1-160"
 msgstr "SHA1-160"
 
@@ -5493,7 +5493,7 @@ msgstr "Stessa cartella del primo file sorgente"
 msgid "Sampling frequency in Hz."
 msgstr "Frequenza di campionamento in Hz."
 
-#: src/info/mkvinfo.cpp:608
+#: src/info/mkvinfo.cpp:611
 #, boost-format
 msgid "Sampling frequency: %1%"
 msgstr "Frequenza di campionamento: %1%"
@@ -5546,29 +5546,29 @@ msgstr "Salva in un file &Matroska"
 msgid "Saves the information from the current file to a text file"
 msgstr "Salva le informazioni del file corrente in un file di testo"
 
-#: src/info/mkvinfo.cpp:777
+#: src/info/mkvinfo.cpp:780
 #, boost-format
 msgid "Scope: %1% (%2%)"
 msgstr "Scopo: %1% (%2%)"
 
-#: src/info/mkvinfo.cpp:1130
+#: src/info/mkvinfo.cpp:1142
 #, boost-format
 msgid "Seek ID: %1% (%2%)"
 msgstr "ID seek: %1% (%2%)"
 
-#: src/info/mkvinfo.cpp:1118
+#: src/info/mkvinfo.cpp:1130
 msgid "Seek entry"
 msgstr "Elemento seek"
 
-#: src/info/mkvinfo.cpp:1106
+#: src/info/mkvinfo.cpp:1118
 msgid "Seek head"
 msgstr "Intestazione seek"
 
-#: src/info/mkvinfo.cpp:1102
+#: src/info/mkvinfo.cpp:1114
 msgid "Seek head (subentries will be skipped)"
 msgstr "Intestazione seek (i sotto elementi verranno ignorati)"
 
-#: src/info/mkvinfo.cpp:1144
+#: src/info/mkvinfo.cpp:1156
 #, boost-format
 msgid "Seek position: %1%"
 msgstr "Posizione seek: %1%"
@@ -5580,7 +5580,7 @@ msgstr "Posizione seek: %1%"
 msgid "Segment"
 msgstr "Segmento"
 
-#: src/info/mkvinfo.cpp:554
+#: src/info/mkvinfo.cpp:557
 #, boost-format
 msgid "Segment UID: %1%"
 msgstr "UID segmento: %1%"
@@ -5594,7 +5594,7 @@ msgstr "UID segmento:"
 msgid "Segment filename"
 msgstr "Nome file segmento"
 
-#: src/info/mkvinfo.cpp:582
+#: src/info/mkvinfo.cpp:585
 #, boost-format
 msgid "Segment filename: %1%"
 msgstr "Nome file segmento:: %1%"
@@ -5610,7 +5610,7 @@ msgstr "File info segmento (*.xml)|*.xml|%s"
 
 #: src/extract/timecodes_v2.cpp:242
 #: src/extract/tracks.cpp:378
-#: src/info/mkvinfo.cpp:504
+#: src/info/mkvinfo.cpp:507
 #: src/info/qt_ui.cpp:178
 #: src/info/wxwidgets_ui.cpp:208
 #: src/mmg/header_editor/frame.cpp:310
@@ -5622,7 +5622,7 @@ msgstr "Informazione segmento"
 
 #: src/extract/timecodes_v2.cpp:276
 #: src/extract/tracks.cpp:390
-#: src/info/mkvinfo.cpp:894
+#: src/info/mkvinfo.cpp:897
 #: src/info/qt_ui.cpp:179
 #: src/info/wxwidgets_ui.cpp:208
 msgid "Segment tracks"
@@ -5633,12 +5633,12 @@ msgstr "Tracce segmento"
 msgid "Segment unique ID"
 msgstr "ID univoco segmento"
 
-#: src/info/mkvinfo.cpp:1959
+#: src/info/mkvinfo.cpp:1971
 #, boost-format
 msgid "Segment, size %1%"
 msgstr "Segmento, dimensione %1%"
 
-#: src/info/mkvinfo.cpp:1957
+#: src/info/mkvinfo.cpp:1969
 msgid "Segment, size unknown"
 msgstr "Segmento, dimensione sconosciuta"
 
@@ -5668,7 +5668,7 @@ msgstr "Seleziona i valori da applicare"
 msgid "Selects for which blocks mkvmerge will produce index entries ( = cue entries). \"default\" is a good choice for almost all situations."
 msgstr ""
 
-#: src/mmg/tabs/input_format.cpp:251
+#: src/mmg/tabs/input_format.cpp:253
 msgid "Selects the character set a subtitle file or chapter information was written with. Only needed for non-UTF encoded subtitle files or for files with chapter information (e.g. OGM, MP4) for which mkvmerge does not detect the encoding correctly."
 msgstr ""
 
@@ -5735,23 +5735,23 @@ msgstr ""
 msgid "Sets the compression algorithm to be used for this track. If no option is selected mkvmerge will decide whether or not to compress and which algorithm to use based on the track type. Most track types are not compressed at all. "
 msgstr ""
 
-#: src/mmg/tabs/input_format.cpp:254
+#: src/mmg/tabs/input_format.cpp:256
 msgid "Sets the cropping parameters. Must be comma-separated list of four numbers for the cropping to be used at the left, top, right and bottom."
 msgstr ""
 
-#: src/mmg/tabs/input_format.cpp:237
+#: src/mmg/tabs/input_format.cpp:239
 msgid "Sets the default duration or number of frames per second for a track. This can either be a floating point number or a fraction."
 msgstr ""
 
-#: src/mmg/tabs/input_format.cpp:225
+#: src/mmg/tabs/input_format.cpp:227
 msgid "Sets the display aspect ratio of the track. The format can be either 'a/b' in which case both numbers must be integer (e.g. 16/9) or just a single floting point number 'f' (e.g. 2.35)."
 msgstr ""
 
-#: src/mmg/tabs/input_format.cpp:229
+#: src/mmg/tabs/input_format.cpp:231
 msgid "Sets the display height of the track. The width must be set as well, or this field will be ignored."
 msgstr ""
 
-#: src/mmg/tabs/input_format.cpp:228
+#: src/mmg/tabs/input_format.cpp:230
 msgid "Sets the display width of the track. The height must be set as well, or this field will be ignored."
 msgstr ""
 
@@ -5766,11 +5766,11 @@ msgid ""
 "Each file created contains one segment, and each segment has one segment UID. If more segment UIDs are specified than segments are created then the surplus UIDs are ignored. If fewer UIDs are specified than segments are created then random UIDs will be created for them."
 msgstr ""
 
-#: src/mmg/tabs/input_format.cpp:234
+#: src/mmg/tabs/input_format.cpp:236
 msgid "Sets the stereo mode of the video track to this value. If left empty then the track's original stereo mode will be kept or, if it didn't have one, none will be set at all."
 msgstr ""
 
-#: src/info/mkvinfo.cpp:809
+#: src/info/mkvinfo.cpp:812
 #, boost-format
 msgid "Settings: %1%"
 msgstr "Impostazioni: %1%"
@@ -5853,22 +5853,22 @@ msgstr "Mostra informazioni di versione."
 msgid "Shows mmg's debug window in which debug messages will appear. This is only useful if you're helping the author debug a problem in mmg."
 msgstr "Visualizza finestra debug mmg nella quale appariranno i messaggi di debug. Questa è utile solo se sta aiutando l'autore a analizzare un problema in mmg."
 
-#: src/info/mkvinfo.cpp:843
+#: src/info/mkvinfo.cpp:846
 #, boost-format
 msgid "Signature algorithm: %1% (%2%)"
 msgstr "Algoritmo di firma: %1% (%2%)"
 
-#: src/info/mkvinfo.cpp:852
+#: src/info/mkvinfo.cpp:855
 #, boost-format
 msgid "Signature hash algorithm: %1% (%2%)"
 msgstr "Algoritmo di firma hash: %1% (%2%)"
 
-#: src/info/mkvinfo.cpp:861
+#: src/info/mkvinfo.cpp:864
 #, boost-format
 msgid "Signature key ID: %1%"
 msgstr "ID chiave firma: %1%"
 
-#: src/info/mkvinfo.cpp:865
+#: src/info/mkvinfo.cpp:868
 #, boost-format
 msgid "Signature: %1%"
 msgstr "Firma: %1%"
@@ -5877,7 +5877,7 @@ msgstr "Firma: %1%"
 msgid "Signed integer"
 msgstr "Intero con segno"
 
-#: src/info/mkvinfo.cpp:1339
+#: src/info/mkvinfo.cpp:1351
 #, boost-format
 msgid "Silent Track Number: %1%"
 msgstr "Numero traccia silente: %1%."
@@ -5895,7 +5895,7 @@ msgstr "Analisi semplice carattere: %1%\n"
 msgid "SimpleBlock"
 msgstr "BloccoSemplice"
 
-#: src/info/mkvinfo.cpp:204
+#: src/info/mkvinfo.cpp:207
 #, boost-format
 msgid "SimpleBlock (%1%track number %2%, %3% frame(s), timecode %|4$.3f|s = %5%)"
 msgstr ""
@@ -5919,7 +5919,7 @@ msgstr ""
 msgid "Skipping %1% bytes at the beginning (no valid MP3 header found).\n"
 msgstr ""
 
-#: src/info/mkvinfo.cpp:1481
+#: src/info/mkvinfo.cpp:1493
 msgid "Slices"
 msgstr "Fette"
 
@@ -5935,7 +5935,7 @@ msgstr ""
 msgid "Some header values have been modified. Do you really want to reload without saving the file?"
 msgstr ""
 
-#: src/merge/output_control.cpp:1424
+#: src/merge/output_control.cpp:1435
 #, boost-format
 msgid "Some tag elements are missing (this error should not have occured - another similar error should have occured earlier). %1%\n"
 msgstr ""
@@ -6008,7 +6008,7 @@ msgstr "Partito alle"
 msgid "Starting job ID %d (%s) on %s"
 msgstr "Avvia lavoro ID %d (%s) su %s"
 
-#: src/info/mkvinfo.cpp:1897
+#: src/info/mkvinfo.cpp:1909
 #, boost-format
 msgid "Statistics for track number %1%: number of blocks: %2%; size in bytes: %3%; duration in seconds: %4%; approximate bitrate in bits/second: %5%\n"
 msgstr ""
@@ -6032,7 +6032,7 @@ msgstr "Stato:"
 msgid "Stereo mode parameter: not given in the form <TID>:<n|keyword> where n is a number between 0 and %1% or one of these keywords: %2% (argument was '%3%').\n"
 msgstr ""
 
-#: src/info/mkvinfo.cpp:712
+#: src/info/mkvinfo.cpp:715
 #, boost-format
 msgid "Stereo mode: %1% (%2%)"
 msgstr "Modalità stereo: %1% (%2%)"
@@ -6049,15 +6049,15 @@ msgstr ""
 "Modo video stereo-3D (0: mono, 1:occhio destro),\n"
 "2: occhio sinistro, 3: entrambi gli occhi)."
 
-#: src/mmg/tabs/input_format.cpp:233
+#: src/mmg/tabs/input_format.cpp:235
 msgid "Stereoscopy:"
 msgstr "Stereoscopia:"
 
-#: src/mmg/tabs/input_format.cpp:246
+#: src/mmg/tabs/input_format.cpp:248
 msgid "Stretch by:"
 msgstr "Ridimensionato di:"
 
-#: src/mmg/tabs/input_format.cpp:247
+#: src/mmg/tabs/input_format.cpp:249
 msgid "Stretch this track's timecodes. This entry can have two formats. It is either a positive floating point number, or a fraction like e.g. 1200/1253. Works best on video and subtitle tracks."
 msgstr ""
 
@@ -6114,12 +6114,12 @@ msgstr "File tag  (*.xml;*.txt)|*.xml;*.txt|%s"
 msgid "Tag selectors"
 msgstr "Selettori tag"
 
-#: src/info/mkvinfo.cpp:1821
+#: src/info/mkvinfo.cpp:1833
 #: src/propedit/options.cpp:164
 msgid "Tags"
 msgstr "Tag"
 
-#: src/merge/output_control.cpp:1412
+#: src/merge/output_control.cpp:1423
 msgid "Tags are not allowed in WebM compliant files. No tags will be written into any output file.\n"
 msgstr "I marcatori non sono permessi nei file compatibili WebM. Nessun marcatore verra scritto nel file destinazione.\n"
 
@@ -6209,7 +6209,7 @@ msgstr ""
 msgid "The FourCC setting for track nr. %s in file '%s' is not excatly four characters long."
 msgstr ""
 
-#: src/mmg/mmg_dialog.cpp:1872
+#: src/mmg/mmg_dialog.cpp:1874
 #, boost-format
 msgid "The GUI is configured to use the mkvmerge executable from a different version (%1%) than the GUI itself (%2%). This is not supported but will not be prevented either. You should change the mkvmerge executable in the preferences dialog."
 msgstr ""
@@ -6340,7 +6340,7 @@ msgstr "Mancano le parentesi chiuse ')'.\n"
 msgid "The codec type '%1%' cannot be used in a WebM compliant file.\n"
 msgstr "Il tipo di codec '%1%' non può essere usato in un file WebM compatibile.\n"
 
-#: src/output/p_avc.cpp:218
+#: src/output/p_avc.cpp:227
 #: src/output/p_kate.cpp:112
 #: src/output/p_passthrough.cpp:62
 #: src/output/p_textsubs.cpp:101
@@ -6363,7 +6363,7 @@ msgstr "L'intestazione del file di correzione non è stata letta correttamente.\
 msgid "The country '%s' is not a valid ccTLD and cannot be selected."
 msgstr "La nazione '%s' non è un valido ccTLD e non può essere selezionata."
 
-#: src/merge/output_control.cpp:1487
+#: src/merge/output_control.cpp:1498
 msgid "The cue entries (the index) are being written..."
 msgstr "Scrittura dati cue (l'indice) in corso..."
 
@@ -6387,11 +6387,11 @@ msgstr "Il codice lingua predefinito '%1%' non è un codice lingua ISO639-2 vali
 msgid "The delay setting for track nr. %s in file '%s' is invalid."
 msgstr "Il ritardo impostato per la traccia nr. %s nel file '%s' non è valido."
 
-#: src/merge/output_control.cpp:1231
-#: src/merge/output_control.cpp:1234
-#: src/merge/output_control.cpp:1237
-#: src/merge/output_control.cpp:1240
-#: src/merge/output_control.cpp:1243
+#: src/merge/output_control.cpp:1242
+#: src/merge/output_control.cpp:1245
+#: src/merge/output_control.cpp:1248
+#: src/merge/output_control.cpp:1251
+#: src/merge/output_control.cpp:1254
 #, boost-format
 msgid ""
 "The demultiplexer for the file '%1%' failed to initialize:\n"
@@ -6482,7 +6482,7 @@ msgstr "Il file '%1%' non può essere aperto per la scrittura (%2%).\n"
 msgid "The file '%1%' could not be opened for writing (%2%, %3%).\n"
 msgstr "Il file '%1%' non può essere aperto per la scrittura (%2%, %3%).\n"
 
-#: src/merge/output_control.cpp:1452
+#: src/merge/output_control.cpp:1463
 #, boost-format
 msgid "The file '%1%' has been opened for writing.\n"
 msgstr "Il file '%1%' è stato aperto per la scrittura.\n"
@@ -6512,12 +6512,12 @@ msgstr "Il file '%s' non esiste."
 msgid "The file '%s' is already processed in combination with the file '%s'. It cannot be added a second time."
 msgstr ""
 
-#: src/merge/output_control.cpp:1237
+#: src/merge/output_control.cpp:1248
 msgid "The file content does not match its format type and was not recognized."
 msgstr "Il contenuto del file non corrisponde al suo formato e non è stato riconosciuto."
 
-#: src/merge/output_control.cpp:1231
-#: src/merge/output_control.cpp:1234
+#: src/merge/output_control.cpp:1242
+#: src/merge/output_control.cpp:1245
 msgid "The file could not be opened for reading, or there was not enough data to parse its headers."
 msgstr "Il file non può essere aperto per la lettura, o non c'erano abbastanza dati per analizzare le sue intestazioni."
 
@@ -6549,7 +6549,7 @@ msgstr "L'header del file è troppo corto.\n"
 msgid "The file header was not read correctly.\n"
 msgstr "L'header del file non è stato letto correttamente.\n"
 
-#: src/merge/output_control.cpp:1240
+#: src/merge/output_control.cpp:1251
 msgid "The file headers could not be parsed, e.g. because they're incomplete, invalid or damaged."
 msgstr "Le intestazioni del file non possono essere analizzate, ad esempio perchè sono incompleti, non validi o danneggiati."
 
@@ -6583,17 +6583,17 @@ msgstr "Il file è in fase di correzione, parte 4/4..."
 msgid "The file name for this segment."
 msgstr "Il nome file per questos egmento."
 
-#: src/merge/output_control.cpp:959
+#: src/merge/output_control.cpp:970
 #, boost-format
 msgid "The file no. %1% ('%2%') does not contain a track with the ID %3%, or that track is not to be copied. The argument for '--append-to' was invalid.\n"
 msgstr "Il file n. %1% ('%2%') non contiene una traccia con un ID %3%, o la traccia non può essere copiata. L'argomento per '--append-to' non era valido.\n"
 
-#: src/merge/output_control.cpp:965
+#: src/merge/output_control.cpp:976
 #, boost-format
 msgid "The file no. %1% ('%2%') does not contain a track with the ID %3%, or that track is not to be copied. Therefore no track can be appended to it. The argument for '--append-to' was invalid.\n"
 msgstr "Il file n. %1% ('%2%') non contiene una traccia con un ID %3%, o questa traccia non può essere copiata su di essa. L'argomento per '--append-to' non era valido.\n"
 
-#: src/merge/output_control.cpp:902
+#: src/merge/output_control.cpp:913
 #, boost-format
 msgid "The file no. %1% ('%2%') is not being appended. The argument for '--append-to' was invalid.\n"
 msgstr "Il file no. %1% ('%2%') non può essere aggiunto. L'argomento per '--append-to' non era valido.\n"
@@ -6635,7 +6635,7 @@ msgstr "Il formato della dimensione divisione non è valido (dimensione troppo p
 msgid "The format of the split timecode/duration is invalid."
 msgstr "Il formato della suddivisione timecode/durata non è valido."
 
-#: src/merge/output_control.cpp:1029
+#: src/merge/output_control.cpp:1040
 msgid "The formats do not match."
 msgstr "I formati non corrispondono."
 
@@ -6774,7 +6774,7 @@ msgstr ""
 msgid "The number of channels of the two audio tracks is different: %1% and %2%"
 msgstr ""
 
-#: src/merge/timecode_factory.cpp:261
+#: src/merge/timecode_factory.cpp:269
 #, boost-format
 msgid "The number of external timecodes %1% is smaller than the number of frames in this track. The remaining frames of this track might not be timestamped the way you intended them to be. mkvmerge might even crash.\n"
 msgstr ""
@@ -6819,13 +6819,13 @@ msgstr "L'opzione '--meta-seek-size' non è più supportata. Leggi la documentaz
 msgid "The order of the various options is not important."
 msgstr "L'ordine delle varie opzioni non è importante."
 
-#: src/merge/output_control.cpp:1448
+#: src/merge/output_control.cpp:1459
 #, boost-format
 msgid "The output file '%1%' could not be opened for writing (%2%).\n"
 msgstr "Il file destinazione '%1%' non può essere aperto in scrittura (%2%).\n"
 
 #: src/mmg/mmg_dialog.cpp:545
-#: src/mmg/mmg_dialog.cpp:1395
+#: src/mmg/mmg_dialog.cpp:1397
 #, c-format, boost-format
 msgid "The output file '%s' already exists. Do you want to overwrite it?"
 msgstr "Il file destinazione '%s' esiste già. Sovrasciverlo?"
@@ -6879,7 +6879,7 @@ msgstr ""
 msgid "The property value is not a valid unsigned integer in '%1%'. %2%\n"
 msgstr ""
 
-#: src/merge/output_control.cpp:1031
+#: src/merge/output_control.cpp:1042
 msgid "The reason is unknown."
 msgstr "Il motivo è sconosciuto."
 
@@ -6997,18 +6997,18 @@ msgstr ""
 #: src/merge/timecode_factory.cpp:87
 #: src/merge/timecode_factory.cpp:95
 #: src/merge/timecode_factory.cpp:101
-#: src/merge/timecode_factory.cpp:295
+#: src/merge/timecode_factory.cpp:303
 #, boost-format
 msgid "The timecode file '%1%' does not contain a valid 'Assume' line with the default number of frames per second.\n"
 msgstr ""
 
-#: src/merge/timecode_factory.cpp:330
+#: src/merge/timecode_factory.cpp:338
 #, boost-format
 msgid "The timecode file '%1%' does not contain a valid 'Gap' line with the duration of the gap.\n"
 msgstr ""
 
 #: src/merge/timecode_factory.cpp:240
-#: src/merge/timecode_factory.cpp:359
+#: src/merge/timecode_factory.cpp:367
 #, boost-format
 msgid "The timecode file '%1%' does not contain any valid entry.\n"
 msgstr ""
@@ -7034,7 +7034,7 @@ msgstr ""
 msgid "The title for the whole movie."
 msgstr ""
 
-#: src/merge/output_control.cpp:975
+#: src/merge/output_control.cpp:986
 #, boost-format
 msgid "The track %1% from file no. %2% ('%3%') is to be appended more than once. The argument for '--append-to' was invalid.\n"
 msgstr ""
@@ -7044,17 +7044,17 @@ msgstr ""
 msgid "The track ID %1% does not have a valid CodecID.\n"
 msgstr ""
 
-#: src/merge/output_control.cpp:803
+#: src/merge/output_control.cpp:814
 #, boost-format
 msgid "The track headers could not be rendered correctly. %1%\n"
 msgstr ""
 
-#: src/merge/output_control.cpp:1021
+#: src/merge/output_control.cpp:1032
 #, boost-format
 msgid "The track number %1% from the file '%2%' can probably not be appended correctly to the track number %3% from the file '%4%': %5% Please make sure that the resulting file plays correctly the whole time. The author of this program will probably not give support for playback issues with the resulting file.\n"
 msgstr ""
 
-#: src/merge/output_control.cpp:1032
+#: src/merge/output_control.cpp:1043
 #, boost-format
 msgid "The track number %1% from the file '%2%' cannot be appended to the track number %3% from the file '%4%'. %5%\n"
 msgstr ""
@@ -7064,7 +7064,7 @@ msgstr ""
 msgid "The track number as used in the Block Header."
 msgstr ""
 
-#: src/merge/output_control.cpp:1030
+#: src/merge/output_control.cpp:1041
 msgid "The track parameters do not match."
 msgstr ""
 
@@ -7081,12 +7081,12 @@ msgstr ""
 msgid "Theora"
 msgstr "Theora"
 
-#: src/mmg/mmg_dialog.cpp:1767
+#: src/mmg/mmg_dialog.cpp:1769
 msgid "There is a new version available online."
 msgstr "Una nuova versione è disponibile online."
 
-#: src/merge/output_control.cpp:896
-#: src/merge/output_control.cpp:906
+#: src/merge/output_control.cpp:907
+#: src/merge/output_control.cpp:917
 #, boost-format
 msgid "There is no file with the ID '%1%'. The argument for '--append-to' was invalid.\n"
 msgstr ""
@@ -7096,7 +7096,7 @@ msgstr ""
 msgid "There is no translation available for '%1%'.\n"
 msgstr "Nessuna traduzione disponibile per %1%'.\n"
 
-#: src/mmg/mmg_dialog.cpp:1768
+#: src/mmg/mmg_dialog.cpp:1770
 msgid "There was an error querying the update status."
 msgstr "Errore nella verifica disponibilità aggiornamenti"
 
@@ -7132,12 +7132,12 @@ msgstr ""
 msgid "This AC3 track contains %1% bytes of non-AC3 data which were skipped. The audio/video synchronization may have been lost.\n"
 msgstr ""
 
-#: src/output/p_avc.cpp:100
+#: src/output/p_avc.cpp:102
 #, boost-format
 msgid "This AVC/h.264 contains frames that are too big for the current maximum NALU size. You have to re-run mkvmerge and set the maximum NALU size to %1% for this track (command line parameter '--nalu-size-length %2%:%1%').\n"
 msgstr ""
 
-#: src/output/p_avc.cpp:118
+#: src/output/p_avc.cpp:120
 #, boost-format
 msgid "This AVC/h.264 track does not start with a key frame. The first %1% frames have been skipped.\n"
 msgstr ""
@@ -7230,7 +7230,7 @@ msgstr ""
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. %1%\n"
 msgstr ""
 
-#: src/merge/output_control.cpp:1637
+#: src/merge/output_control.cpp:1648
 #, boost-format
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. Size needed: %1%. %2%\n"
 msgstr ""
@@ -7239,7 +7239,7 @@ msgstr ""
 msgid "This should not have happened. Please contact the author Moritz Bunkus <moritz@bunkus.org> with this error/warning message, a description of what you were trying to do, the command line used and which operating system you are using. Thank you."
 msgstr ""
 
-#: src/mmg/tabs/input_format.cpp:256
+#: src/mmg/tabs/input_format.cpp:258
 msgid "This track contains SBR AAC/HE-AAC/AAC+ data. Only needed for AAC input files, because SBR AAC cannot be detected automatically for these files. Not needed for AAC tracks read from MP4 or Matroska files."
 msgstr ""
 
@@ -7247,7 +7247,7 @@ msgstr ""
 msgid "This track is not compatible with the WebM mode and cannot be enabled."
 msgstr ""
 
-#: src/info/mkvinfo.cpp:1489
+#: src/info/mkvinfo.cpp:1501
 msgid "Time slice"
 msgstr "Fetta temporale"
 
@@ -7262,8 +7262,8 @@ msgstr "File timecode (*.tmc;*.txt)|*.tmc;*.txt|%s"
 
 #: src/extract/timecodes_v2.cpp:251
 #: src/extract/tracks.cpp:383
-#: src/info/mkvinfo.cpp:522
-#: src/info/mkvinfo.cpp:1061
+#: src/info/mkvinfo.cpp:525
+#: src/info/mkvinfo.cpp:1073
 #, boost-format
 msgid "Timecode scale: %1%"
 msgstr "Scala timece:%1%"
@@ -7282,7 +7282,7 @@ msgstr "Timecode:"
 msgid "Title"
 msgstr "Titolo"
 
-#: src/info/mkvinfo.cpp:586
+#: src/info/mkvinfo.cpp:589
 #, boost-format
 msgid "Title: %1%"
 msgstr "Titolo: %1%"
@@ -7353,7 +7353,7 @@ msgstr ""
 msgid "Track %1% with the CodecID '%2%' is missing the \"default duration\" element and cannot be extracted.\n"
 msgstr ""
 
-#: src/info/mkvinfo.cpp:1076
+#: src/info/mkvinfo.cpp:1088
 #, boost-format
 msgid "Track %1%: %2%, codec ID: %3%%4%%5%%6%\n"
 msgstr ""
@@ -7394,7 +7394,7 @@ msgstr "ID traccia %1%: %2% (%3%)"
 msgid "Track UID"
 msgstr "UID traccia"
 
-#: src/info/mkvinfo.cpp:937
+#: src/info/mkvinfo.cpp:949
 #, boost-format
 msgid "Track UID: %1%"
 msgstr "UID traccia: %1%"
@@ -7423,17 +7423,17 @@ msgstr "Numero traccia"
 msgid "Track number %1% has been encrypted and decryption has not yet been implemented.\n"
 msgstr "La traccia numero %1% è stata criptata e la decriptazione non è stata ancora implementata.\n"
 
-#: src/info/mkvinfo.cpp:930
+#: src/info/mkvinfo.cpp:943
 #, boost-format
-msgid "Track number: %1%"
-msgstr "Numero traccia: %1%"
+msgid "Track number: %1% (track ID for mkvmerge & mkvextract: %2%)"
+msgstr ""
 
-#: src/info/mkvinfo.cpp:1019
+#: src/info/mkvinfo.cpp:1031
 #, boost-format
 msgid "Track overlay: %1%"
 msgstr "Sovrapposizione traccia: %1%"
 
-#: src/info/mkvinfo.cpp:960
+#: src/info/mkvinfo.cpp:972
 #, boost-format
 msgid "Track type: %1%"
 msgstr "Tipo traccia: %1%"
@@ -7471,7 +7471,7 @@ msgstr ""
 msgid "Type:"
 msgstr "Tipo:"
 
-#: src/info/mkvinfo.cpp:782
+#: src/info/mkvinfo.cpp:785
 #, boost-format
 msgid "Type: %1% (%2%)"
 msgstr "Tipo: %1% (%2%)"
@@ -7496,7 +7496,7 @@ msgstr ""
 msgid "Unexpected picture frame after single field frame. Fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr ""
 
-#: src/info/mkvinfo.cpp:357
+#: src/info/mkvinfo.cpp:360
 msgid "Unknown"
 msgstr "Sconosciuto"
 
@@ -7740,7 +7740,7 @@ msgstr "Larghezza pixel video"
 msgid "Video stereo mode"
 msgstr "Modo video stereo"
 
-#: src/info/mkvinfo.cpp:643
+#: src/info/mkvinfo.cpp:646
 msgid "Video track"
 msgstr "Traccia video"
 
@@ -7846,7 +7846,7 @@ msgstr "Scrittura della 'allegato con ID 'AID' in 'filedestinazione'."
 msgid "Write track with the ID TID to the file 'out'."
 msgstr "Scrittura traccia con ID TID nel file 'destinazione'."
 
-#: src/info/mkvinfo.cpp:537
+#: src/info/mkvinfo.cpp:540
 #, boost-format
 msgid "Writing application: %1%"
 msgstr "Scrittura in corso dell'applicazione: %1%"
@@ -7905,7 +7905,7 @@ msgstr "Stringa identificazione errata: '%|1$7s|' != 'kate\\0\\0\\0'"
 msgid "XML parser error at line %1%: %2%."
 msgstr "Errore analisi XML alla linea %1%: %2%."
 
-#: src/mmg/mmg_dialog.cpp:1766
+#: src/mmg/mmg_dialog.cpp:1768
 msgid "You are already running the latest version."
 msgstr "Stai già eseguendo la versione più recente."
 
@@ -7927,8 +7927,8 @@ msgstr ""
 msgid "Zlib decompression failed. Result: %1%\n"
 msgstr "Decompressione Zlib fallita. Risultato: %1%\n"
 
-#: src/info/mkvinfo.cpp:203
-#: src/info/mkvinfo.cpp:207
+#: src/info/mkvinfo.cpp:206
+#: src/info/mkvinfo.cpp:210
 #, boost-format
 msgid "[%1% frame for track %2%, timecode %3%]"
 msgstr "[%1% frame per la traccia %2%, timecode %3%]"
@@ -7960,13 +7960,13 @@ msgstr "anaglifi (verde/magenta)"
 msgid "append"
 msgstr "apponi"
 
-#: src/info/mkvinfo.cpp:1078
+#: src/info/mkvinfo.cpp:1090
 #: src/input/r_matroska.cpp:92
 #: src/mmg/mmg.cpp:63
 msgid "audio"
 msgstr "audio"
 
-#: src/info/mkvinfo.cpp:630
+#: src/info/mkvinfo.cpp:633
 #, boost-format
 msgid "bits per sample: %1%"
 msgstr "bit per campionamento: %1%"
@@ -7979,7 +7979,7 @@ msgstr ""
 msgid "both eyes laced in one block (right first)"
 msgstr ""
 
-#: src/info/mkvinfo.cpp:1081
+#: src/info/mkvinfo.cpp:1093
 #: src/input/r_matroska.cpp:93
 msgid "buttons"
 msgstr "pulsanti"
@@ -7999,7 +7999,7 @@ msgstr "bzlib_compressor_c::decompress() non implementato\n"
 msgid "cet_index: '%1%' not found\n"
 msgstr "cet_index: '%1%' non trovato\n"
 
-#: src/info/mkvinfo.cpp:619
+#: src/info/mkvinfo.cpp:622
 #, boost-format
 msgid "channels: %1%"
 msgstr "canali: %1%"
@@ -8028,7 +8028,7 @@ msgstr "completato OK"
 msgid "completed with warnings"
 msgstr "completato con avvisi"
 
-#: src/info/mkvinfo.cpp:784
+#: src/info/mkvinfo.cpp:787
 msgid "compression"
 msgstr "compressione"
 
@@ -8043,7 +8043,7 @@ msgstr "create_track_number: file_num non trovato. %1%\n"
 msgid "default"
 msgstr "predefinito"
 
-#: src/info/mkvinfo.cpp:1036
+#: src/info/mkvinfo.cpp:1048
 #, boost-format
 msgid "default duration: %|1$.3f|ms (%|2$.3f| frames/fields per second for a video track)"
 msgstr "Durata predefinita: %|1$.3f|ms (%|2$.3f| frame/campi per secondo per una traccia video)"
@@ -8057,16 +8057,16 @@ msgstr "deflateInit() fallito. Risultato: %1%\n"
 msgid "disable all"
 msgstr "Disabilita tutto"
 
-#: src/info/mkvinfo.cpp:1611
+#: src/info/mkvinfo.cpp:1623
 msgid "discardable, "
 msgstr "scartabile, "
 
-#: src/info/mkvinfo.cpp:668
+#: src/info/mkvinfo.cpp:671
 #, boost-format
 msgid "display height: %1%"
 msgstr "Altezza video: %1%"
 
-#: src/info/mkvinfo.cpp:663
+#: src/info/mkvinfo.cpp:666
 #, boost-format
 msgid "display width: %1%"
 msgstr "Larghezza video: %1%"
@@ -8092,7 +8092,7 @@ msgstr "abilita tutto"
 msgid "enabled"
 msgstr "abilitato"
 
-#: src/info/mkvinfo.cpp:785
+#: src/info/mkvinfo.cpp:788
 msgid "encryption"
 msgstr "crittografia"
 
@@ -8161,7 +8161,7 @@ msgstr "per tutti i frame"
 msgid "have an xcptn\n"
 msgstr "ha un xcptn\n"
 
-#: src/info/mkvinfo.cpp:804
+#: src/info/mkvinfo.cpp:807
 msgid "header removal"
 msgstr "rimozione inetstazione"
 
@@ -8189,16 +8189,16 @@ msgstr "inflateInit() fallita. Risultato: %1%\n"
 msgid "is being estimated"
 msgstr "stima in corso"
 
-#: src/info/mkvinfo.cpp:1609
+#: src/info/mkvinfo.cpp:1621
 msgid "key, "
 msgstr "chiave, "
 
-#: src/info/mkvinfo.cpp:1057
+#: src/info/mkvinfo.cpp:1069
 #, boost-format
 msgid "language: %1%"
 msgstr "lingua: %1%"
 
-#: src/info/mkvinfo.cpp:183
+#: src/info/mkvinfo.cpp:186
 #, boost-format
 msgid "length %1%, data: %2%"
 msgstr "lunghezza %1%, dati: %2%"
@@ -8376,18 +8376,18 @@ msgid "max. number of files:"
 msgstr "massimo numero di file:"
 
 #: src/common/memory.cpp:147
-#, boost-format
-msgid "memory.cpp/safemalloc() called from file %1%, line %2%: malloc() returned NULL for a size of %3% bytes.\n"
+#, fuzzy, boost-format
+msgid "memory.cpp/safemalloc() called from file %1%, line %2%: malloc() returned nullptr for a size of %3% bytes.\n"
 msgstr "memory.cpp/safemalloc() chiamato dal file %1%, linea %2%: malloc() ha ritornato NULL per una dimensione di %3% byte.\n"
 
 #: src/common/memory.cpp:135
-#, boost-format
-msgid "memory.cpp/safememdup() called from file %1%, line %2%: malloc() returned NULL for a size of %3% bytes.\n"
+#, fuzzy, boost-format
+msgid "memory.cpp/safememdup() called from file %1%, line %2%: malloc() returned nullptr for a size of %3% bytes.\n"
 msgstr "memory.cpp/safememdup() chiamato dal file %1%, linea %2%: malloc() ha ritornato NULL per uan dimensione di %3% byte.\n"
 
 #: src/common/memory.cpp:163
-#, boost-format
-msgid "memory.cpp/saferealloc() called from file %1%, line %2%: realloc() returned NULL for a size of %3% bytes.\n"
+#, fuzzy, boost-format
+msgid "memory.cpp/saferealloc() called from file %1%, line %2%: realloc() returned nullptr for a size of %3% bytes.\n"
 msgstr "memory.cpp/saferealloc() chiamato dal file %1%, linea %2%: realloc() ha ritornato NULL per una dimensione di %3% byte.\n"
 
 #: src/propedit/target.cpp:83
@@ -8518,7 +8518,7 @@ msgstr "mkvmerge può leggere i CUE sheets di un CD audio econvertirli  automati
 msgid "mkvmerge can read and use timecodes from an external text file. This feature is a very advanced feature. Almost all users should leave this entry empty."
 msgstr "mkvmerge può leggere e usare timecode da un file di testo estermo. Questa funzione è una funzione molto avanzata. La maggior parte degli utenti devono lasciare questo elemento vuoto."
 
-#: src/output/p_avc.cpp:107
+#: src/output/p_avc.cpp:109
 #, boost-format
 msgid ""
 "mkvmerge encountered broken or unparsable data in this AVC/h.264 video track. Either your file is damaged (which mkvmerge cannot cope with yet) or this is a bug in mkvmerge itself. The error message was:\n"
@@ -8576,6 +8576,11 @@ msgstr "mkvmerge supporta due formati capitolo: l'OGM tipo formato testo e il fo
 msgid "mkvmerge was interrupted by a SIGINT (Ctrl+C?)\n"
 msgstr "mkvmerge è stato interrotto con un SIGINT (Ctrl+C?)\n"
 
+#: src/info/mkvinfo.cpp:944
+#, boost-format
+msgid "mkvmerge/mkvextract track ID: %1%"
+msgstr ""
+
 #: src/propedit/propedit_cli_parser.cpp:145
 msgid "mkvpropedit [options] <file> <actions>"
 msgstr "mkvpropedit [opzioni] <file> <azioni>"
@@ -8620,7 +8625,7 @@ msgstr "mpeg_ps_reader: Non sarebbe dovuto succedere #2. %1%"
 msgid "no"
 msgstr "no"
 
-#: src/info/mkvinfo.cpp:828
+#: src/info/mkvinfo.cpp:831
 msgid "no encryption"
 msgstr "nessuna criptazione"
 
@@ -8632,15 +8637,15 @@ msgstr "nessun errore"
 msgid "no file loaded"
 msgstr "nessun file caricato"
 
-#: src/info/mkvinfo.cpp:845
+#: src/info/mkvinfo.cpp:848
 msgid "no signature algorithm"
 msgstr "nessun algoritmo di firma"
 
-#: src/info/mkvinfo.cpp:854
+#: src/info/mkvinfo.cpp:857
 msgid "no signature hash algorithm"
 msgstr "nessun algoritmo di firma hash"
 
-#: src/mmg/mmg_dialog.cpp:1008
+#: src/mmg/mmg_dialog.cpp:1010
 #: src/mmg/tabs/input_extra.cpp:88
 #: src/mmg/tabs/input_extra.cpp:116
 #: src/mmg/tabs/input_extra.cpp:119
@@ -8661,14 +8666,15 @@ msgid "ogg_sync_buffer failed\n"
 msgstr "ogg_sync_buffer fallito\n"
 
 #: src/mmg/tabs/chapters.cpp:1052
-msgid "on_entry_selected: display == NULL. Should not have happened."
+#, fuzzy
+msgid "on_entry_selected: display == nullptr. Should not have happened."
 msgstr "on_entry_selected: display == NULL. Non doveva succedere."
 
 #: src/mmg/tabs/input_extra.cpp:86
 msgid "only for I frames"
 msgstr "solo per I frames"
 
-#: src/info/mkvinfo.cpp:614
+#: src/info/mkvinfo.cpp:617
 #, boost-format
 msgid "output sampling freq: %1%"
 msgstr "freq. campionamento output: %1%"
@@ -8682,32 +8688,32 @@ msgstr "passthrough"
 msgid "pending"
 msgstr "in sospeso"
 
-#: src/info/mkvinfo.cpp:688
+#: src/info/mkvinfo.cpp:691
 #, boost-format
 msgid "pixel crop bottom: %1%"
 msgstr "ritaglio pixel basso: %1%"
 
-#: src/info/mkvinfo.cpp:673
+#: src/info/mkvinfo.cpp:676
 #, boost-format
 msgid "pixel crop left: %1%"
 msgstr "ritaglio pixel sinistra: %1%"
 
-#: src/info/mkvinfo.cpp:683
+#: src/info/mkvinfo.cpp:686
 #, boost-format
 msgid "pixel crop right: %1%"
 msgstr "ritaglio pixel destra: %1%"
 
-#: src/info/mkvinfo.cpp:678
+#: src/info/mkvinfo.cpp:681
 #, boost-format
 msgid "pixel crop top: %1%"
 msgstr "ritaglio pixel alto: %1%"
 
-#: src/info/mkvinfo.cpp:658
+#: src/info/mkvinfo.cpp:661
 #, boost-format
 msgid "pixel height: %1%"
 msgstr "altezza pixel: %1%"
 
-#: src/info/mkvinfo.cpp:653
+#: src/info/mkvinfo.cpp:656
 #, boost-format
 msgid "pixel width: %1%"
 msgstr "larghezza pixel: %1%"
@@ -8750,7 +8756,7 @@ msgstr "rimuovi"
 msgid "remove all"
 msgstr "rimuovi tutto"
 
-#: src/info/mkvinfo.cpp:774
+#: src/info/mkvinfo.cpp:777
 msgid "rest: unknown"
 msgstr "resto: sconsociuto"
 
@@ -8762,7 +8768,7 @@ msgstr "riga interlacciata (prima a sinistra)"
 msgid "row interleaved (right first)"
 msgstr "riga interlacciata (prima a destra)"
 
-#: src/info/mkvinfo.cpp:609
+#: src/info/mkvinfo.cpp:612
 #, boost-format
 msgid "sampling freq: %1%"
 msgstr "freq campionamento: %1%"
@@ -8792,7 +8798,7 @@ msgstr "start >= m->ListSize(). Questo non doveva accadere. Per favore segnala i
 msgid "subtitle"
 msgstr "sottotitolo"
 
-#: src/info/mkvinfo.cpp:1080
+#: src/info/mkvinfo.cpp:1092
 #: src/mmg/mmg.cpp:65
 msgid "subtitles"
 msgstr "sottotitoli"
@@ -8833,13 +8839,13 @@ msgstr "und (Non determinato)"
 
 #: src/common/mm_io_win.cpp:167
 #: src/common/stereo_mode.cpp:68
-#: src/info/mkvinfo.cpp:776
-#: src/info/mkvinfo.cpp:786
-#: src/info/mkvinfo.cpp:805
-#: src/info/mkvinfo.cpp:834
-#: src/info/mkvinfo.cpp:847
-#: src/info/mkvinfo.cpp:857
-#: src/info/mkvinfo.cpp:1082
+#: src/info/mkvinfo.cpp:779
+#: src/info/mkvinfo.cpp:789
+#: src/info/mkvinfo.cpp:808
+#: src/info/mkvinfo.cpp:837
+#: src/info/mkvinfo.cpp:850
+#: src/info/mkvinfo.cpp:860
+#: src/info/mkvinfo.cpp:1094
 #: src/input/r_matroska.cpp:91
 #: src/input/r_matroska.cpp:2317
 #: src/input/r_mpeg_ps.cpp:1312
@@ -8867,7 +8873,7 @@ msgstr "utf8_strlen(): Carattere UTF-8 non valido. Primo byte: 0x%|1$02x|"
 msgid "verify failed: chapters->CheckMandatory() is false. This should not have happened. Please file a bug report.\n"
 msgstr "verifica fallita: chapters->CheckMandatory() è falso. Questo non sarebbe dovuto succedere. Per favore compilare una segnalazione bug.\n"
 
-#: src/info/mkvinfo.cpp:1079
+#: src/info/mkvinfo.cpp:1091
 #: src/input/r_matroska.cpp:94
 #: src/mmg/mmg.cpp:64
 msgid "video"
@@ -8926,6 +8932,9 @@ msgstr "sì"
 
 #~ msgid "No FPS selected for AVC/h.264 track"
 #~ msgstr "Nessun FPS selezionato per la traccia AVC/H264"
+
+#~ msgid "Track number: %1%"
+#~ msgstr "Numero traccia: %1%"
 
 #~ msgid "Using the %1%AC3 output module.\n"
 #~ msgstr "Uso il modulo destinazione %1%AC3.\n"
@@ -9208,3 +9217,4 @@ msgstr "sì"
 
 #~ msgid "wavpack_reader: Could not open the file."
 #~ msgstr "wavpack_reader: Impossibile aprire il file."
+
