@@ -2,12 +2,12 @@
 .\"     Title: mkvmerge
 .\"    Author: Moritz Bunkus <moritz@bunkus.org>
 .\" Generator: DocBook XSL Stylesheets v1.75.2 <http://docbook.sf.net/>
-.\"      Date: 2012-02-09
+.\"      Date: 2012-03-10
 .\"    Manual: 用户命令
-.\"    Source: MKVToolNix 5.3.0
+.\"    Source: MKVToolNix 5.4.0
 .\"  Language: Chinese
 .\"
-.TH "MKVMERGE" "1" "2012\-02\-09" "MKVToolNix 5\&.3\&.0" "用户命令"
+.TH "MKVMERGE" "1" "2012\-03\-10" "MKVToolNix 5\&.4\&.0" "用户命令"
 .\" -----------------------------------------------------------------
 .\" * Define some portability stuff
 .\" -----------------------------------------------------------------
@@ -938,11 +938,7 @@ must be postfixed with \*(Aqs\*(Aq, \*(Aqms\*(Aq, \*(Aqus\*(Aq, \*(Aqns\*(Aq, \*
 \fIx\fR
 itself can be a floating point number or a fraction\&.
 .sp
-如果未强定默认时长，mkvmerge 将尝试根据使用的容器和/或编解码器推定轨道的默认时长。 此选项有用的一种情况是当添加
-AVC/h\&.264
-基本流时，因为此类流不含关于帧数及各帧默认时长的信息。 对此类文件
-\fBmkvmerge\fR(1)
-将假定默认时长为 \*(Aq25fps\*(Aq，除非被（用户设置）覆盖。
+If the default duration is not forced then mkvmerge will try to derive the track\*(Aqs default duration from the container and/or the encoded bitstream for certain track types, e\&.g\&. AVC/h\&.264 or MPEG\-2\&.
 .sp
 此选项也可用于在不使用外部时间码文件的情况下更改视频轨的
 FPS（帧率）。

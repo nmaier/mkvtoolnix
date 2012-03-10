@@ -2,12 +2,12 @@
 .\"     Title: mkvmerge
 .\"    Author: Moritz Bunkus <moritz@bunkus.org>
 .\" Generator: DocBook XSL Stylesheets v1.75.2 <http://docbook.sf.net/>
-.\"      Date: 2012-02-09
+.\"      Date: 2012-03-10
 .\"    Manual: User Commands
-.\"    Source: MKVToolNix 5.3.0
+.\"    Source: MKVToolNix 5.4.0
 .\"  Language: English
 .\"
-.TH "MKVMERGE" "1" "2012\-02\-09" "MKVToolNix 5\&.3\&.0" "User Commands"
+.TH "MKVMERGE" "1" "2012\-03\-10" "MKVToolNix 5\&.4\&.0" "User Commands"
 .\" -----------------------------------------------------------------
 .\" * Define some portability stuff
 .\" -----------------------------------------------------------------
@@ -951,11 +951,7 @@ must be postfixed with \*(Aqs\*(Aq, \*(Aqms\*(Aq, \*(Aqus\*(Aq, \*(Aqns\*(Aq, \*
 \fIx\fR
 itself can be a floating point number or a fraction\&.
 .sp
-If the default duration is not forced then mkvmerge will try to derive the track\*(Aqs default duration from the container and/or codec used\&. One case in which this option is of use is when adding
-AVC/h\&.264
-elementary streams because these do not contain information about their number of frames or a default duration for each frame\&. For such files
-\fBmkvmerge\fR(1)
-will assume a default duration of \*(Aq25fps\*(Aq unless overridden\&.
+If the default duration is not forced then mkvmerge will try to derive the track\*(Aqs default duration from the container and/or the encoded bitstream for certain track types, e\&.g\&. AVC/h\&.264 or MPEG\-2\&.
 .sp
 This option can also be used to change the
 FPS
