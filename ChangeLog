@@ -18,7 +18,7 @@
 	* mkvmerge, mmg: enhancement: The "--default-duration" in mkvmerge
 	and the "FPS" drop down box in mmg now accept "p" or "i" as a unit
 	-- as in e.g. "25p" or "50i". Several commonly used values have
-	been added to mmg's "FPS" drop down box.
+	been added to mmg's "FPS" drop down box and others removed.
 
 	* mkvmerge: bug fix: When using an external timecode file with
 	AVC/h.264 video the default duration will be set to the most-often
@@ -28,9 +28,9 @@
 	to the list of commonly used values for the "FPS" input field.
 
 	* mkvmerge: bug fix: AVC/h.264 packetizer: The value given with
-	"--default-duration" is now again interpreted as the number of
-	"frames per second". The conversion to "fields per second" is done
-	internally; the user doesn't have to think about it, though.
+	"--default-duration" (after internal conversion from the unit
+	given by the user to duration in nanoseconds) is now again
+	interpreted as the duration of a frame and not of a field.
 
 	* mkvmerge: bug fix: SRT subtitles: timecodes can contain the
 	minus sign before any digit, not just before the first one.
