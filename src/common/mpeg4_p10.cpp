@@ -1322,7 +1322,7 @@ mpeg4::p10::avc_es_parser_c::cleanup() {
   m_max_timecode = m_frames.back().m_end;
   m_provided_timecodes.erase(m_provided_timecodes.begin(), provided_timecode_itr);
 
-  mxdebug_if(m_debug_timecodes, boost::format("CLEANUP frames <pres_ord dec_ord has_prov_tc tc>: %1%\n")
+  mxdebug_if(m_debug_timecodes, boost::format("CLEANUP frames <pres_ord dec_ord has_prov_tc tc dur>: %1%\n")
              % boost::accumulate(m_frames, std::string(""), [](std::string const &accu, avc_frame_t const &frame) {
                  return accu + (boost::format(" <%1% %2% %3% %4% %5%>") % frame.m_presentation_order % frame.m_decode_order % frame.m_has_provided_timecode % frame.m_start % (frame.m_end - frame.m_start)).str();
                }));
