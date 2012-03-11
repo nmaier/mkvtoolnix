@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: it\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2012-03-09 14:46+0100\n"
+"PO-Revision-Date: 2012-03-11 07:54+0100\n"
 "Last-Translator: bovirus <bovirus@live.it>\n"
 "Language-Team: Italian <moritz@bunkus.org>\n"
 "Language: it\n"
@@ -7308,32 +7308,32 @@ msgstr "La traccia %1% è stata compressa con un algoritmo di compressione scono
 #: src/common/compression.cpp:588
 #, boost-format
 msgid "Track %1% was compressed with bzlib but mkvmerge has not been compiled with support for bzlib compression.\n"
-msgstr ""
+msgstr "La traccia %1% è stata compressa con bzlib ma mkvmerge non è stato compilato con il supporto per la compressione bzlib.\n"
 
 #: src/common/compression.cpp:596
 #, boost-format
 msgid "Track %1% was compressed with lzo1x but mkvmerge has not been compiled with support for lzo1x compression.\n"
-msgstr ""
+msgstr "La traccia %1% è stata compressa con lzo1x ma mkvmerge non è stato compilato con il supporto per la compressione lzo1x.\n"
 
 #: src/extract/xtr_aac.cpp:51
 #, boost-format
 msgid "Track %1% with the CodecID '%2%' contains invalid \"codec private\" data for AAC.\n"
-msgstr ""
+msgstr "La traccia %1% con IDCodec '%2%' contiene dati \"codec privato\" non validi per AAC.\n"
 
 #: src/extract/xtr_ogg.cpp:88
 #, boost-format
 msgid "Track %1% with the CodecID '%2%' does not contain valid headers.\n"
-msgstr ""
+msgstr "La traccia %1% con IDCodec '%2%' non contiene intestazioni valide.\n"
 
 #: src/extract/xtr_wav.cpp:41
 #, boost-format
 msgid "Track %1% with the CodecID '%2%' is missing the \"bits per second (bps)\" element and cannot be extracted.\n"
-msgstr ""
+msgstr "La traccia %1% con IDCodec '%2%' manca dell'elemento \"bit per secondo (bps)\" e non può essere estratta.\n"
 
 #: src/extract/xtr_textsubs.cpp:104
 #, boost-format
 msgid "Track %1% with the CodecID '%2%' is missing the \"codec private \" element and cannot be extracted.\n"
-msgstr ""
+msgstr "La traccia %1% con IDCodec '%2%' manca dell'elemento \"codec privato\" e non può essere estratta.\n"
 
 #: src/extract/xtr_aac.cpp:42
 #: src/extract/xtr_avc.cpp:54
@@ -7346,17 +7346,17 @@ msgstr ""
 #: src/extract/xtr_wav.cpp:95
 #, boost-format
 msgid "Track %1% with the CodecID '%2%' is missing the \"codec private\" element and cannot be extracted.\n"
-msgstr ""
+msgstr "La traccia %1% con IDCodec '%2%' manca dell'elemento \"codec privato\" e non può essere estratta.\n"
 
 #: src/extract/xtr_avi.cpp:42
 #, boost-format
 msgid "Track %1% with the CodecID '%2%' is missing the \"default duration\" element and cannot be extracted.\n"
-msgstr ""
+msgstr "La traccia %1% con IDCodec '%2%' manca dell'elemento \"durata predefinita\" e non può essere estratta.\n"
 
 #: src/info/mkvinfo.cpp:1088
 #, boost-format
 msgid "Track %1%: %2%, codec ID: %3%%4%%5%%6%\n"
-msgstr ""
+msgstr "Traccia %1%: %2%, ID codec: %3%%4%%5%%6%\n"
 
 #: src/input/r_qtmp4.cpp:440
 #, boost-format
@@ -7371,12 +7371,12 @@ msgstr "Traccia %1%: NAL troppo grande\n"
 #: src/extract/xtr_textsubs.cpp:54
 #, boost-format
 msgid "Track %1%: Subtitle entry number %2% is missing its duration. Assuming a duration of 1s.\n"
-msgstr ""
+msgstr "Traccia %1%: numero elemento sottotitolo %2% mancante nella durata. Impostata durata a 1s.\n"
 
 #: src/input/r_qtmp4.cpp:443
 #, boost-format
 msgid "Track %1%: The AAC information could not be parsed.\n"
-msgstr ""
+msgstr "Traccia %1%: impossibile analizzare informazione AAC.\n"
 
 #: src/extract/xtr_aac.cpp:62
 #: src/extract/xtr_aac.cpp:74
@@ -7426,7 +7426,7 @@ msgstr "La traccia numero %1% è stata criptata e la decriptazione non è stata 
 #: src/info/mkvinfo.cpp:943
 #, boost-format
 msgid "Track number: %1% (track ID for mkvmerge & mkvextract: %2%)"
-msgstr ""
+msgstr "Trccia numero: %1% (ID traccia permkvmerge e mkvextract: %2%)"
 
 #: src/info/mkvinfo.cpp:1031
 #, boost-format
@@ -7973,11 +7973,11 @@ msgstr "bit per campionamento: %1%"
 
 #: src/common/stereo_mode.cpp:61
 msgid "both eyes laced in one block (left first)"
-msgstr ""
+msgstr "entrambi gli occhi legati in un blocco (prima a sinistra)"
 
 #: src/common/stereo_mode.cpp:62
 msgid "both eyes laced in one block (right first)"
-msgstr ""
+msgstr "entrambi gli occhi legati in un blocco (prima a destra)"
 
 #: src/info/mkvinfo.cpp:1093
 #: src/input/r_matroska.cpp:93
@@ -8236,40 +8236,40 @@ msgstr "lzo_malloc(LZO1X_999_MEM_COMPRESS) fallito.\n"
 #: src/input/r_matroska.cpp:318
 #, boost-format
 msgid "matroska_reader: (MS compatibility mode for track %1%) Matroska says that there are %2% bits per sample, but the WAVEFORMATEX says that there are %3%.\n"
-msgstr ""
+msgstr "matroska_reader: (modo compatibilità MS per la traccia %1%) Matroska riporta che ci sono %2% bit per campione, ma WAVEFORMATEX riporta che ce ne sono %3%.\n"
 
 #: src/input/r_matroska.cpp:309
 #, boost-format
 msgid "matroska_reader: (MS compatibility mode for track %1%) Matroska says that there are %2% channels, but the WAVEFORMATEX says that there are %3%.\n"
-msgstr ""
+msgstr "matroska_reader: (modo compatibilità MS per la traccia %1%) Matroska riporta che ci sono %2% canali, ma WAVEFORMATEX riporta che ce ne sono %3%.\n"
 
 #: src/input/r_matroska.cpp:300
 #, boost-format
 msgid "matroska_reader: (MS compatibility mode for track %1%) Matroska says that there are %2% samples per second, but WAVEFORMATEX says that there are %3%.\n"
-msgstr ""
+msgstr "matroska_reader: (modo compatibilità MS per la traccia %1%) Matroska riporta che ci sono %2% campioni per secondo, ma WAVEFORMATEX riporta che ce ne sono %3%.\n"
 
 #: src/input/r_matroska.cpp:447
 #, boost-format
 msgid "matroska_reader: (MS compatibility mode, track %1%) Matroska says video height is %2%, but the BITMAPINFOHEADER says %3%.\n"
-msgstr ""
+msgstr "matroska_reader: (modo compatibilità MS per la traccia %1%) Matroska riporta che l'altezza video è %2%,ma BITMAPINFO riporta che è %3%.\n"
 
 #: src/input/r_matroska.cpp:438
 #, boost-format
 msgid "matroska_reader: (MS compatibility mode, track %1%) Matroska says video width is %2%, but the BITMAPINFOHEADER says %3%.\n"
-msgstr ""
+msgstr "matroska_reader: (modo compatibilità MS per la traccia %1%) Matroska riporta che la larghezza è %2%, ma BITMAPINFO riporta che è %3%.\n"
 
 #: src/input/r_matroska.cpp:1054
 msgid "matroska_reader: A track is missing its track UID.\n"
-msgstr ""
+msgstr "matroska_reader: manca in una traccia il suo UID traccia.\n"
 
 #: src/input/r_matroska.cpp:1042
 msgid "matroska_reader: A track is missing its track number.\n"
-msgstr ""
+msgstr "matroska_reader: in una traccia manca il suo numero traccia.\n"
 
 #: src/input/r_matroska.cpp:1433
 #, boost-format
 msgid "matroska_reader: Could not keep the track UID %1% because it is already allocated for the new file.\n"
-msgstr ""
+msgstr "matroska_reader: impossibile mantenere l'UID traccia %1% poichè è già allocato per il nuovo file.\n"
 
 #: src/input/r_matroska.cpp:1243
 #: src/input/r_matroska.cpp:1248
@@ -8376,19 +8376,19 @@ msgid "max. number of files:"
 msgstr "massimo numero di file:"
 
 #: src/common/memory.cpp:147
-#, fuzzy, boost-format
+#, boost-format
 msgid "memory.cpp/safemalloc() called from file %1%, line %2%: malloc() returned nullptr for a size of %3% bytes.\n"
-msgstr "memory.cpp/safemalloc() chiamato dal file %1%, linea %2%: malloc() ha ritornato NULL per una dimensione di %3% byte.\n"
+msgstr "memory.cpp/safemalloc() chiamato dal file %1%, linea %2%: malloc() ha ritornato nullptr per una dimensione di %3% byte.\n"
 
 #: src/common/memory.cpp:135
-#, fuzzy, boost-format
+#, boost-format
 msgid "memory.cpp/safememdup() called from file %1%, line %2%: malloc() returned nullptr for a size of %3% bytes.\n"
-msgstr "memory.cpp/safememdup() chiamato dal file %1%, linea %2%: malloc() ha ritornato NULL per uan dimensione di %3% byte.\n"
+msgstr "memory.cpp/safememdup() chiamato dal file %1%, linea %2%: malloc() ha ritornato nullptr per una dimensione di %3% byte.\n"
 
 #: src/common/memory.cpp:163
-#, fuzzy, boost-format
+#, boost-format
 msgid "memory.cpp/saferealloc() called from file %1%, line %2%: realloc() returned nullptr for a size of %3% bytes.\n"
-msgstr "memory.cpp/saferealloc() chiamato dal file %1%, linea %2%: realloc() ha ritornato NULL per una dimensione di %3% byte.\n"
+msgstr "memory.cpp/saferealloc() chiamato dal file %1%, linea %2%: realloc() ha ritornato nullptr per una dimensione di %3% byte.\n"
 
 #: src/propedit/target.cpp:83
 msgid "missing property name"
@@ -8579,7 +8579,7 @@ msgstr "mkvmerge è stato interrotto con un SIGINT (Ctrl+C?)\n"
 #: src/info/mkvinfo.cpp:944
 #, boost-format
 msgid "mkvmerge/mkvextract track ID: %1%"
-msgstr ""
+msgstr "mkvmerge/mkvextract ID traccia: %1%"
 
 #: src/propedit/propedit_cli_parser.cpp:145
 msgid "mkvpropedit [options] <file> <actions>"
@@ -8666,9 +8666,8 @@ msgid "ogg_sync_buffer failed\n"
 msgstr "ogg_sync_buffer fallito\n"
 
 #: src/mmg/tabs/chapters.cpp:1052
-#, fuzzy
 msgid "on_entry_selected: display == nullptr. Should not have happened."
-msgstr "on_entry_selected: display == NULL. Non doveva succedere."
+msgstr "on_entry_selected: display == nullptr. Non doveva succedere."
 
 #: src/mmg/tabs/input_extra.cpp:86
 msgid "only for I frames"
@@ -9217,4 +9216,3 @@ msgstr "sì"
 
 #~ msgid "wavpack_reader: Could not open the file."
 #~ msgstr "wavpack_reader: Impossibile aprire il file."
-
