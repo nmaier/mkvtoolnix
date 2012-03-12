@@ -139,8 +139,12 @@ ac3_packetizer_c::calculate_timecode(uint64_t stream_position) {
          && (stream_position >= itr->second))
     itr++;
 
-  if (m_available_timecodes.begin() == itr)
-    return m_packetno * m_s2tc;
+  if (m_available_timecodes.begin() == itr) {
+    m_last_timecode       = -1 == m_last_timecode ? 0 : m_last_timecode + 1 * m_s2tc;
+    m_num_packets_same_tc = 0;
+
+    return m_last_timecode;
+  }
 
   int64_t new_timecode = (itr - 1)->first;
   m_available_timecodes.erase(m_available_timecodes.begin(), itr);
