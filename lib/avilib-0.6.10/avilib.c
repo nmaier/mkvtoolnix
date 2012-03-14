@@ -350,6 +350,7 @@ static int avi_add_std_index(avi_t *AVI, void *idxtag, void *strtag,
     stdil->bIndexSubType = 0;
     stdil->bIndexType = AVI_INDEX_OF_CHUNKS;
     stdil->nEntriesInUse = 0;
+    stdil->dwReserved3 = 0;
 
     // cp 00db ChunkId
     memcpy(stdil->dwChunkId, strtag, 4);

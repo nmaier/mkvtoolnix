@@ -1,5 +1,9 @@
 2012-03-14  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvextract: bug fix: mkvextract sometimes wrote undefined values
+	to a single reserved header field when extracting into AVI
+	files. Patch by buguser128k. Fix for ticket 727.
+
 	* mkvmerge: bug fix: AVC/h.264 mkvmerge was wrongfully writing a
 	default duration of 60 frames/fields even if the source was
 	signalling 60000/1001 frames/fields. The frame timecodes have been
