@@ -224,7 +224,7 @@ XMLファイルからセグメント情報を読み取ります。このファ�
 .sp
 特殊な値\fB\-1\fRが指定された場合、たとえビデオトラックが存在していてもサンプリング音の精度を使用します。
 .RE
-.SS "File splitting, linking, appending and concatenation (more global options)"
+.SS "ファイルの分割と紐付け、追加結合、連結(グローバルオプションの続き):"
 .PP
 \fB\-\-split\fR \fIspecification\fR
 .RS 4
@@ -356,9 +356,7 @@ $ mkvmerge \-o full\&.mkv file1\&.mkv +file2\&.mkv
 .PP
 \fB=\fR
 .RS 4
-Normally
-\fBmkvmerge\fR(1)
-looks for files in the same directory as an input file that have the same base name and only differ in their running number (e\&.g\&. \*(AqVTS_01_1\&.VOB\*(Aq, \*(AqVTS_01_2\&.VOB\*(Aq, \*(AqVTS_01_3\&.VOB\*(Aq etc) and treats all of those files as if they were concatenated into a single big file\&. This option, a single \*(Aq=\*(Aq, causes mkvmerge not to look for those additional files\&.
+通常mkvmergeは、入力ファイルと同じディレクトリにあり、同じ基底名を持ち、通し番号だけが異なるファイル（例：\*(AqVTS_01_1\&.VOB\*(Aq, \*(AqVTS_01_2\&.VOB\*(Aq, \*(AqVTS_01_3\&.VOB\*(Aq etc）を検索し、それらのファイル全てを、まるで1つの大きなファイルへと連結されているかのように扱います。この\*(Aq=\*(Aq一文字のオプションを使うと、mkvmergeはそういった追加ファイルを検索しません。
 .sp
 \*(Aq=\*(Aqは次のファイル名の直前に置くこともできます。よって、次の2つのコマンドは等価です。
 .sp
@@ -376,14 +374,11 @@ $ mkvmerge \-o full\&.mkv =file1\&.mkv
 .PP
 \fB(\fR \fIfile1\fR \fIfile2\fR \fB)\fR
 .RS 4
-If multiple file names are contained in a pair of parenthesis then those files will be treated as if they were concatenated into a single big file consisting of the content of each of the files one after the other\&.
+複数のファイル名が括弧の中に含まれている場合、それらのファイルは、各ファイルの内容によって順々に構成される1つの大きなファイルへと連結されているかのように扱われます。
 .sp
-This can be used for e\&.g\&. VOB files coming from a DVD or MPEG transport streams\&. It cannot be used if each file contains its own set of headers which is usually the case with stand\-alone files like AVI or MP4\&.
+これは、例えばDVDのVOBファイルやMPEGトランスポートストリーム等のために使用することができます。通常AVIやMP4のようなスタンドアローンのファイルの場合ですが、各ファイルが自身のヘッダを一通り含んでいる場合には使用することができません。
 .sp
-Putting a file name into parenthesis also prevents
-\fBmkvmerge\fR(1)
-from looking for additional files with the same base name as described in
-option \fB=\fR\&. Therefore these two command lines are equivalent:
+ファイル名を括弧で括るのは、オプション\fB=\fRで説明されているように同じ基底名を持つファイルを\fBmkvmerge\fR(1)に検索させない効果もあります。 よって、これらの2つのコマンドラインは同値です：
 .sp
 .if n \{\
 .RS 4
@@ -396,7 +391,7 @@ $ mkvmerge \-o out\&.mkv \*(Aq(\*(Aq file\&.mkv \*(Aq)\*(Aq
 .RE
 .\}
 .sp
-Several things should be noted:
+いくつか注意事項があります：
 .sp
 .RS 4
 .ie n \{\
@@ -406,7 +401,7 @@ Several things should be noted:
 .sp -1
 .IP "  1." 4.2
 .\}
-There must be spaces both after the opening and before the closing parenthesis\&.
+開く括弧の後と閉じる括弧の前の両方に空白が必要です。
 .RE
 .sp
 .RS 4
@@ -417,7 +412,7 @@ There must be spaces both after the opening and before the closing parenthesis\&
 .sp -1
 .IP "  2." 4.2
 .\}
-Every parameter between parenthesis is interpreted as a file name\&. Therefore all options applying to this logical file must be listed before the opening parenthesis\&.
+括弧内の全てのパラメータはファイル名として解釈されます。よって、この論理上のファイルに適用される全てのオプションは、開く括弧の前に記述する必要があります。
 .RE
 .sp
 .RS 4
@@ -428,7 +423,7 @@ Every parameter between parenthesis is interpreted as a file name\&. Therefore a
 .sp -1
 .IP "  3." 4.2
 .\}
-Some shells treat parenthesis as special characters\&. Hence you must escape or quote them as shown in the example above\&.
+括弧を特殊文字として扱うシェルもあります。よって、上の例で示されているように括弧をエスケープするかクォーテーションで囲む必要があります。
 .RE
 .RE
 .SS "添付ファイルのサポート（グローバルオプションの続き）"
@@ -634,13 +629,9 @@ AACファイルがSBR AACデータを含む場合に必要です。このスイ�
 .PP
 \fB\-\-default\-duration\fR \fITID:x\fR
 .RS 4
-Forces the default duration of a given track to the specified value\&. Also modifies the track\*(Aqs timecodes to match the default duration\&. The argument
-\fIx\fR
-must be postfixed with \*(Aqs\*(Aq, \*(Aqms\*(Aq, \*(Aqus\*(Aq, \*(Aqns\*(Aq, \*(Aqfps\*(Aq, \*(Aqp\*(Aq or \*(Aqi\*(Aq to specify the default duration in seconds, milliseconds, microseconds, nanoseconds, \*(Aqframes per second\*(Aq, \*(Aqprogressive frames per second\*(Aq or \*(Aqinterlaced frames per second\*(Aq respectively\&. The number
-\fIx\fR
-itself can be a floating point number or a fraction\&.
+指定したトラックの default duration を強制的に設定します。トラックのトラックのタイムコードも、 default duration に合うように変更されます。引数\fIx\fRは\*(Aqs\*(Aq、\*(Aqms\*(Aq、\*(Aqus\*(Aq、\*(Aqns\*(Aq、\*(Aqfps\*(Aq、p\*(Aq。\*(Aqiのうちどれか一つを後置されていなければなりません。それぞれ、 default duration は秒、ミリ秒、マイクロ秒、ナノ秒、\*(Aqfps\*(Aq、1秒あたりのプログレッシブフレーム、1秒あたりのインターレスのフレーム数単位で指定されます。\fIx\fRは小数または分数で指定できます。
 .sp
-If the default duration is not forced then mkvmerge will try to derive the track\*(Aqs default duration from the container and/or the encoded bitstream for certain track types, e\&.g\&. AVC/h\&.264 or MPEG\-2\&.
+デフォルトのフレーム持続時間が指定されなかった場合は、mkvmergeはそのトラックのデフォルトのフレーム持続時間を、コンテナと、AVC/h\&.264やMPEG\-2のような特定のトラックタイプの場合はエンコードされたビットストリームから取得しようと試みます。
 .sp
 このオプションは、外部タイムコードファイルを使用せずにビデオトラックのFPSを変更するのにも使えます。
 .RE
@@ -768,21 +759,17 @@ Matroska(TM)ファイルは再生時の画像スケールを決定するため�
 .PP
 \fB\-\-debug\fR \fItopic\fR
 .RS 4
-Turn on debugging for a specific feature\&. This option is only useful for developers\&.
+特定の機能のデバッグをオンにします。このオプションは開発者にのみ有用です。
 .RE
 .PP
 \fB\-\-engage\fR \fIfeature\fR
 .RS 4
-Turn on experimental features\&. A list of available features can be requested with
-\fBmkvmerge \-\-engage list\fR\&. These features are not meant to be used in normal situations\&.
+実験的機能をオンにします。利用可能な機能のリストは\fBmkvmerge \-\-engage list\fRで得られます。これらの機能は通常の状況で使用されることは意図されていません。
 .RE
 .PP
 \fB@\fR\fIoptions\-file\fR
 .RS 4
-Reads additional command line arguments from the file
-\fIoptions\-file\fR\&. See the section about
-option files
-for further information\&.
+ファイル\fIoptions\-file\fRから追加のコマンドライン引数を読み込みます。詳細はオプションファイルのセクションを参照してください。
 .RE
 .PP
 \fB\-\-capabilities\fR
@@ -1321,15 +1308,13 @@ Windowsでは、\fBcmd\&.exe\fRWindowsシェルプログラムの実装方式の
 
 \fB\-\-output\-charset\fRはコンソールに出力される文字列の文字コード及び、\fB\-\-redirect\-output\fRオプションによりファイルに出力がリダイレクトされている場合、そのファイルの文字列の文字コードを指定します。
 .RE
-.SH "OPTION FILES"
+.SH "オプションファイル："
 .PP
-An option file is a file
-\fBmkvmerge\fR(1)
-can read additional command line arguments from\&. This can be used in order to circumvent certain limitations of the shell or the operating system when executing external programs like a limited command line length\&.
+オプションファイルとは、\fBmkvmerge\fR(1)が追加のコマンドラインの引数をそれから読み込むことができるものです。これは、コマンドラインの長さ制限等の、外部プログラムを実行する際のシェルやオペレーティングシステムの特定の制限を回避するために使用することができます。
 .PP
-There are several rules regarding option files\&. Lines whose first non\-whitespace character is a hash mark (\*(Aq#\*(Aq) are treated as comments and ignored\&. White spaces at the start and end of a line will be stripped\&. Each line must contain exactly one option\&.
+オプションファイルに関していくつか規則があります。行で最初の空白文字でない文字がハッシュマーク(\*(Aq#\*(Aq)である行はコメントとして扱われ、無視されます。行頭、及び行末の空白文字は取り除かれます。各行には一つずつしかオプションを指定できません。
 .PP
-A line not containing anything is also ignored\&. An empty argument is represented by the line \*(Aq#EMPTY#\*(Aq\&.
+何も書かれていない行も無視されます。空の引数は、\*(Aq#EMPTY#\*(Aqという行によって表すことができます。
 .PP
 エスケープすることのできる文字もあります。例えば、コメントではない行を\*(Aq#\*(Aqで始める必要のある場合です。そのルールは、エスケープ文字についてのセクションで説明されています。
 .PP
@@ -1362,12 +1347,8 @@ sound\&.ogg
 ルール：\*(Aq \*(Aq（半角スペース）は\*(Aq\es\*(Aqに、\*(Aq"\*(Aq（ダブルクォーテーション）は\*(Aq\e2\*(Aqに、\*(Aq:\*(Aqは\*(Aq\ec\*(Aqに、\*(Aq#\*(Aqは\*(Aq\eh\*(Aqに、そして\*(Aq\e\*(Aqそれ自体は\*(Aq\e\e\*(Aqになります。
 .SH "字幕"
 .PP
-There are several text and bitmap subtitle formats that can be embedded into
-Matroska(TM)\&. Text subtitles must be recoded to UTF\-8 so that they can be displayed correctly by a player (see the section about
-text files and character sets
-for an explanation how
-\fBmkvmerge\fR(1)
-converts between character sets)\&. Kate subtitles are already encoded in UTF\-8 and do not have to be re\-encoded\&.
+
+Matroska(TM)に埋め込むことのできるテキスト及びビットマップ字幕フォーマットがいくつかあります。テキスト字幕は、プレイヤーで正しく表示されるためにUTF\-8で保存されなればなりません(\fBmkvmerge\fR(1)の文字コード変換についてはテキストファイルと文字コードのセクションを参照してください)。Kate字幕は既にUTF\-8でエンコードされているので、再変換する必要はありません。
 .PP
 現在、次の字幕フォーマットがサポートされています。
 .sp
@@ -1401,7 +1382,7 @@ Substation Alpha (SSA) / Advanced Substation (ASS) 字幕
 .sp -1
 .IP \(bu 2.3
 .\}
-Universal Subtitle Format (USF) files
+Universal Subtitle Format (USF)ファイル
 .RE
 .sp
 .RS 4
@@ -1434,7 +1415,7 @@ VobSubビットマップ字幕
 .sp -1
 .IP \(bu 2.3
 .\}
-PGS bitmap subtitle files as found on BluRay discs
+ブルーレイディスクで見られるようなPGSビットマップ字幕ファイル
 .RE
 .SH "ファイル紐付け"
 .PP
@@ -1812,34 +1793,24 @@ gap, 10\&.050
 \fB2\fR
 \-\- この返り値は、エラーが発生し、エラーメッセージを出力した後に\fBmkvmerge\fR(1)が処理を中断したことを示します。エラーメッセージは不正なコマンドラインやファイルI/Oエラー、壊れたファイルなど様々です。
 .RE
-.SH "ENVIRONMENT VARIABLES"
+.SH "環境変数"
 .PP
 
-\fBmkvmerge\fR(1)
-uses the default variables that determine the system\*(Aqs locale (e\&.g\&.
-\fILANG\fR
-and the
-\fILC_*\fR
-family)\&. Additional variables:
+\fBmkvmerge\fR(1)はシステムのロケールを決めるデフォルトの変数（例：\fILANG\fRや\fILC_*\fR系）を使用します。追加の変数は以下の通りです：
 .PP
-\fIMKVTOOLNIX_DEBUG\fR and its short form \fIMTX_DEBUG\fR
+\fIMKVTOOLNIX_DEBUG\fRとその短縮形\fIMTX_DEBUG\fR
 .RS 4
-The content is treated as if it had been passed via the
-\fB\-\-debug\fR
-option\&.
+その内容は、あたかも\fB\-\-debug\fRオプション経由で渡されたかのように扱われます。
 .RE
 .PP
-\fIMKVTOOLNIX_ENGAGE\fR and its short form \fIMTX_ENGAGE\fR
+\fIMKVTOOLNIX_ENGAGE\fRとその短縮形\fIMTX_ENGAGE\fR
 .RS 4
-The content is treated as if it had been passed via the
-\fB\-\-engage\fR
-option\&.
+その内容は、あたかも\fB\-\-debug\fRオプション経由で渡されたかのように扱われます。
 .RE
 .PP
-\fIMKVTOOLNIX_OPTIONS\fR and its short form \fIMTX_OPTIONS\fR
+\fIMKVTOOLNIX_OPTIONS\fRとその短縮形\fIMTX_OPTIONS\fR
 .RS 4
-The content is split on white space\&. The resulting partial strings are treated as if it had been passed as command line options\&. If you need to pass special characters (e\&.g\&. spaces) then you have to escape them (see
-the section about escaping special characters in text)\&.
+その内容は空白で分割されます。得られた一部の文字列は、あたかもそれがコマンドラインオプションとして渡されたかのように扱われます。もし特殊な文字（例：空白）を渡す必要があるなら、それらをエスケープする必要があります（テキスト中の特殊文字のエスケープについてのセクションをご覧ください）。
 .RE
 .SH "関連項目"
 .PP

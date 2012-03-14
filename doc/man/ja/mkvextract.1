@@ -71,13 +71,13 @@ Matroska(TM)
 .PP
 \fB\-\-debug\fR \fItopic\fR
 .RS 4
-Turn on debugging for a specific feature\&. This option is only useful for developers\&.
+特定の機能のデバッグをオンにします。このオプションは開発者にのみ有用です。
 .RE
 .PP
 \fB\-\-engage\fR \fIfeature\fR
 .RS 4
-Turn on experimental features\&. A list of available features can be requested with
-\fBmkvextract \-\-engage list\fR\&. These features are not meant to be used in normal situations\&.
+実験的機能をオンにします。利用可能な機能のリストは
+\fBmkvextract \-\-engage list\fRで得られます。これらの機能は通常の状況で使用されることを意図されていません。
 .RE
 .PP
 \fB\-v\fR, \fB\-\-verbose\fR
@@ -444,34 +444,24 @@ Kate(TM)ストリームはOgg(TM)コンテナに格納されます。
 特殊文字をエスケープしなければならない、あるいはすべき場所が少しだけあります。エスケープのルールは単純です：エスケープする必要のある各文字を、バックスラッシュ（Windows上の日本語フォントでは\e記号）の後ろに違う文字が1つついたものと入れ替えます。
 .PP
 ルール：\*(Aq \*(Aq（半角スペース）は\*(Aq\es\*(Aqに、\*(Aq"\*(Aq（ダブルクォーテーション）は\*(Aq\e2\*(Aqに、\*(Aq:\*(Aqは\*(Aq\ec\*(Aqに、\*(Aq#\*(Aqは\*(Aq\eh\*(Aqに、そして\*(Aq\e\*(Aqそれ自体は\*(Aq\e\e\*(Aqになります。
-.SH "ENVIRONMENT VARIABLES"
+.SH "環境変数"
 .PP
 
-\fBmkvextract\fR(1)
-uses the default variables that determine the system\*(Aqs locale (e\&.g\&.
-\fILANG\fR
-and the
-\fILC_*\fR
-family)\&. Additional variables:
+\fBmkvextract\fR(1)はシステムのロケールを決めるデフォルトの変数（例：\fILANG\fRや\fILC_*\fR系）を使用します。追加の変数は以下の通りです：
 .PP
-\fIMKVTOOLNIX_DEBUG\fR and its short form \fIMTX_DEBUG\fR
+\fIMKVTOOLNIX_DEBUG\fRとその短縮形\fIMTX_DEBUG\fR
 .RS 4
-The content is treated as if it had been passed via the
-\fB\-\-debug\fR
-option\&.
+その内容は、あたかも\fB\-\-debug\fRオプション経由で渡されたかのように扱われます。
 .RE
 .PP
-\fIMKVTOOLNIX_ENGAGE\fR and its short form \fIMTX_ENGAGE\fR
+\fIMKVTOOLNIX_ENGAGE\fRとその短縮形\fIMTX_ENGAGE\fR
 .RS 4
-The content is treated as if it had been passed via the
-\fB\-\-engage\fR
-option\&.
+その内容は、あたかも\fB\-\-debug\fRオプション経由で渡されたかのように扱われます。
 .RE
 .PP
-\fIMKVTOOLNIX_OPTIONS\fR and its short form \fIMTX_OPTIONS\fR
+\fIMKVTOOLNIX_OPTIONS\fRとその短縮形\fIMTX_OPTIONS\fR
 .RS 4
-The content is split on white space\&. The resulting partial strings are treated as if it had been passed as command line options\&. If you need to pass special characters (e\&.g\&. spaces) then you have to escape them (see
-the section about escaping special characters in text)\&.
+内容は空白で分割されます。得られた一部の文字列は、あたかもそれがコマンドラインオプションとして渡されたかのように扱われます。もし特殊な文字（例：空白）を渡す必要があるなら、それらをエスケープする必要があります（テキスト中の特殊文字のエスケープについてのセクションをご覧ください）。
 .RE
 .SH "関連項目"
 .PP
