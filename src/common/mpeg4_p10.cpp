@@ -1197,22 +1197,27 @@ mpeg4::p10::avc_es_parser_c::get_most_often_used_duration()
     if (current->second > most_often->second)
       most_often = current;
 
-  int64_t best   = m_duration_frequency.end() == most_often ? -1 : most_often->first;
-  int64_t result = best;
+  // No duration at all!? No frame?
+  if (m_duration_frequency.end() == most_often) {
+    mxdebug_if(m_debug_timecodes, boost::format("Duration frequency: none found, using 25 FPS\n"));
+    return 1000000000ll / 25;
+  }
 
-  for (auto common_default_duration : s_common_default_durations)
-    if (std::abs(result - common_default_duration) < 20000) {
-      result = common_default_duration;
-      break;
-    }
+  auto best = std::make_pair(most_often->first, std::numeric_limits<uint64_t>::max());
 
-  mxdebug_if(m_debug_timecodes, boost::format("Duration frequency. Result: %1%. Best before adjustment: %2%. All: %3%\n")
-             % result % best
+  for (auto common_default_duration : s_common_default_durations) {
+    uint64_t diff = std::abs(most_often->first - common_default_duration);
+    if ((diff < 20000) && (diff < best.second))
+      best = std::make_pair(common_default_duration, diff);
+  }
+
+  mxdebug_if(m_debug_timecodes, boost::format("Duration frequency. Result: %1%, diff %2%. Best before adjustment: %3%. All: %4%\n")
+             % best.first % best.second % most_often->first
              % boost::accumulate(m_duration_frequency, std::string(""), [](std::string const &accu, std::pair<int64_t, int64_t> const &pair) {
                  return accu + (boost::format(" <%1% %2%>") % pair.first % pair.second).str();
                }));
 
-  return result;
+  return best.first;
 }
 
 void
