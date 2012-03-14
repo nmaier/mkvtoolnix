@@ -20,6 +20,11 @@ logger_c::logger_c(bfs::path const &file_name)
 {
   if (!m_file_name.is_absolute())
     m_file_name = bfs::temp_directory_path() / m_file_name;
+
+  if (bfs::exists(m_file_name)) {
+    boost::system::error_code ec;
+    bfs::remove(m_file_name, ec);
+  }
 }
 
 void
