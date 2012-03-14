@@ -2,14 +2,14 @@
 # Copyright (C) 2009 Moritz Bunkus
 # This file is distributed under the same license as the mkvtoolnix package.
 #
-# Hiroki Taniura <boiled.sugar@gmail.com> 2009-2011.
+# Hiroki Taniura <boiled.sugar@gmail.com> 2009-2012.
 # Katsuhiko Nishimra <kat841@hotmail.com> 2010.
 msgid ""
 msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2011-12-26 00:16+0900\n"
+"PO-Revision-Date: 2012-03-14 17:01+0900\n"
 "Last-Translator: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "Language-Team: Japanese <boiled.sugar@gmail.com>\n"
 "Language: ja\n"
@@ -36,11 +36,12 @@ msgstr ""
 "mkvmergeはSIGINTを受信しました（恐らくユーザーがCtrl+Cを押したためです）。出力ファイルを正しく閉じようとしています。もしこの処理中にmkvmergeがハングアップした場合、手動でプロセスを終了してください。\n"
 
 #: src/merge/mkvmerge.cpp:137
-#, fuzzy
 msgid ""
 "  ( <file1> <file2> )      Treat file1 and file2 as if they were concatenated\n"
 "                           into a single big file.\n"
-msgstr "  --attach-file <file>     Matroskaファイルにファイルを添付します。\n"
+msgstr ""
+"  ( <file1> <file2> )      file1とfile2を、あたかもそれらが一つの大きな\n"
+"                           ファイルに連結されているかのように扱います。\n"
 
 #: src/merge/mkvmerge.cpp:202
 msgid ""
@@ -57,7 +58,7 @@ msgid ""
 "                           appending files.\n"
 msgstr ""
 "  --append-mode <file|track>\n"
-"                           ファイル結合時のタイムコードの計算方法を指定します。\n"
+"                           ファイルを追加結合する際のタイムコードの計算方法を指定します。\n"
 
 #: src/merge/mkvmerge.cpp:124
 msgid ""
@@ -590,25 +591,24 @@ msgstr ""
 "                           oとpはどちらも浮動小数点数を取ることができます。\n"
 
 #: src/merge/mkvmerge.cpp:132
-#, fuzzy
 msgid "  <file1> + <file2>        Append file2 to file1.\n"
-msgstr "  --title <title>          この出力ファイルのタイトルを設定します。\n"
+msgstr "  <file1> + <file2>        file2をfile1に追加結合します。\n"
 
 #: src/merge/mkvmerge.cpp:133
-#, fuzzy
 msgid "  <file1> +<file2>         Same as \"<file1> + <file2>\".\n"
-msgstr "  --title <title>          この出力ファイルのタイトルを設定します。\n"
+msgstr "  <file1> +<file2>         \"<file1> + <file2>\"と同じです。\n"
 
 #: src/merge/mkvmerge.cpp:134
 msgid ""
 "  = <file>                 Don't look for and concatenate files with the same\n"
 "                           base name but with a different trailing number.\n"
 msgstr ""
+"  = <file>                 同じ基底名を持つが通し番号が違うファイルを\n"
+"                           探したり結合したりしません。\n"
 
 #: src/merge/mkvmerge.cpp:136
-#, fuzzy
 msgid "  =<file>                  Same as \"= <file>\".\n"
-msgstr "  --link                   分割ファイルをリンクします。\n"
+msgstr "  =<file>                  \"= <file>\".\n"
 
 #: src/merge/mkvmerge.cpp:257
 msgid ""
@@ -700,9 +700,8 @@ msgid " Chapter handling:\n"
 msgstr " チャプタ操作：\n"
 
 #: src/merge/mkvmerge.cpp:113
-#, fuzzy
 msgid " File splitting, linking, appending and concatenating (more global options):\n"
-msgstr " ファイルの分割とリンク（グローバルオプションの続き）：\n"
+msgstr " ファイルの分割とリンク、追加結合と連結（グローバルオプションの続き）：\n"
 
 #: src/merge/mkvmerge.cpp:98
 msgid " General output control (advanced global options):\n"
@@ -2985,9 +2984,9 @@ msgid "Default duration"
 msgstr "デフォルトのフレーム持続期間"
 
 #: src/info/mkvinfo.cpp:1045
-#, fuzzy, boost-format
+#, boost-format
 msgid "Default duration: %|1$.3f|ms (%|2$.3f| frames/fields per second for a video track)"
-msgstr "デフォルトのフレーム持続期間：%|1$.3f|ms (ビデオトラックの場合 %|2$.3f| fps)"
+msgstr "デフォルトのフレーム持続期間：%|1$.3f|ms（ビデオトラックの場合は毎秒%|2$.3f|フレーム/フィールド）"
 
 #: src/info/mkvinfo.cpp:1060
 #, boost-format
@@ -3413,9 +3412,9 @@ msgid "Extracting track %1% with the CodecID '%2%' to the file '%3%'. Container 
 msgstr "コーデックID '%2%'のトラック%1%をファイル'%3%'に抽出しています。コンテナフォーマット：%4%\n"
 
 #: src/extract/tracks.cpp:96
-#, fuzzy, boost-format
+#, boost-format
 msgid "Extraction of track ID %1% with the CodecID '%2%' is not supported.\n"
-msgstr "コーデックID '%2%'のトラック番号%1%の抽出はサポートされていません。\n"
+msgstr "コーデックID '%2%'のトラックID%1%の抽出はサポートされていません。\n"
 
 #: src/input/r_flac.h:52
 #: src/output/p_flac.h:39
@@ -5732,9 +5731,8 @@ msgid "Sets the cropping parameters. Must be comma-separated list of four number
 msgstr "クロッピングのパラメータを指定します。左、上、右、下で使われるクロッピングの4つの数字のコンマで区切られたリストでなければなりません。"
 
 #: src/mmg/tabs/input_format.cpp:239
-#, fuzzy
 msgid "Sets the default duration or number of frames per second for a track. This can either be a floating point number or a fraction."
-msgstr "トラックのデフォルトのフレーム持続期間もしくはフレームレートを指定します。これはビデオトラックでのみ指定できます。AVC/h.264エレメンタリストリームではこのオプションは必ず指定されなければなりません。この値は浮動小数点数または分数を取ることができます。"
+msgstr "トラックのデフォルトのフレーム持続期間もしくはフレームレートを指定します。この値は浮動小数点数または分数を取ることができます。"
 
 #: src/mmg/tabs/input_format.cpp:227
 msgid "Sets the display aspect ratio of the track. The format can be either 'a/b' in which case both numbers must be integer (e.g. 16/9) or just a single floting point number 'f' (e.g. 2.35)."
@@ -7074,9 +7072,9 @@ msgid "The track %1% from file no. %2% ('%3%') is to be appended more than once.
 msgstr "ファイル番号%2%（'%3%'）のトラック%1%を複数回追加結合しようとしました。'--append-to'のパラメータが無効です。\n"
 
 #: src/extract/tracks.cpp:92
-#, fuzzy, boost-format
+#, boost-format
 msgid "The track ID %1% does not have a valid CodecID.\n"
-msgstr "トラック番号%1%のコーデックIDが無効です。\n"
+msgstr "トラックID%1%のコーデックIDが無効です。\n"
 
 #: src/merge/output_control.cpp:814
 #, boost-format
@@ -7466,7 +7464,7 @@ msgstr "トラック%1%は暗号化されていますが暗号化解除はまだ
 #: src/info/mkvinfo.cpp:943
 #, boost-format
 msgid "Track number: %1% (track ID for mkvmerge & mkvextract: %2%)"
-msgstr ""
+msgstr "トラック番号：%1% （トラックID for mkvmerge & mkvextract: %2%)"
 
 #: src/info/mkvinfo.cpp:1031
 #, boost-format
@@ -8092,9 +8090,9 @@ msgid "default"
 msgstr "デフォルト"
 
 #: src/info/mkvinfo.cpp:1048
-#, fuzzy, boost-format
+#, boost-format
 msgid "default duration: %|1$.3f|ms (%|2$.3f| frames/fields per second for a video track)"
-msgstr "デフォルトのフレーム持続期間：%|1$.3f|ms (ビデオトラックの場合 %|2$.3f| fps)"
+msgstr "デフォルトのフレーム持続期間：%|1$.3f|ms（ビデオトラックの場合毎秒%|2$.3f|フレーム/フィールド）"
 
 #: src/common/compression.cpp:161
 #, boost-format
@@ -8426,19 +8424,19 @@ msgid "max. number of files:"
 msgstr "ファイルの最大分割数："
 
 #: src/common/memory.cpp:147
-#, fuzzy, boost-format
+#, boost-format
 msgid "memory.cpp/safemalloc() called from file %1%, line %2%: malloc() returned nullptr for a size of %3% bytes.\n"
-msgstr "memory.cpp/safemalloc() ファイル %1% から呼び出し、%2%行：malloc() が%3%バイトの要求に対しNULLを返しました。\n"
+msgstr "memory.cpp/safemalloc() ファイル %1% から呼び出し、%2%行：malloc() が%3%バイトの要求に対しnullptrを返しました。\n"
 
 #: src/common/memory.cpp:135
-#, fuzzy, boost-format
+#, boost-format
 msgid "memory.cpp/safememdup() called from file %1%, line %2%: malloc() returned nullptr for a size of %3% bytes.\n"
-msgstr "memory.cpp/safememdup() ファイル %1% から呼び出し、%2%行：malloc() が%3%バイトの要求に対しNULLを返しました。\n"
+msgstr "memory.cpp/safememdup() ファイル %1% から呼び出し、%2%行：malloc() が%3%バイトの要求に対しnullptrを返しました。\n"
 
 #: src/common/memory.cpp:163
-#, fuzzy, boost-format
+#, boost-format
 msgid "memory.cpp/saferealloc() called from file %1%, line %2%: realloc() returned nullptr for a size of %3% bytes.\n"
-msgstr "memory.cpp/saferealloc() ファイル %1% から呼び出し、%2%行：realloc() が%3%バイトの要求に対しNULLを返しました。\n"
+msgstr "memory.cpp/saferealloc() ファイル %1% から呼び出し、%2%行：realloc() が%3%バイトの要求に対しnullptrを返しました。\n"
 
 #: src/propedit/target.cpp:83
 msgid "missing property name"
@@ -8629,7 +8627,7 @@ msgstr "mkvmergeは割り込み信号（Ctrl+C？）によって中断されま�
 #: src/info/mkvinfo.cpp:944
 #, boost-format
 msgid "mkvmerge/mkvextract track ID: %1%"
-msgstr ""
+msgstr "mkvmerge/mkvextractのトラックID: %1%"
 
 #: src/propedit/propedit_cli_parser.cpp:145
 msgid "mkvpropedit [options] <file> <actions>"
@@ -8716,9 +8714,8 @@ msgid "ogg_sync_buffer failed\n"
 msgstr "ogg_sync_bufferが失敗しました\n"
 
 #: src/mmg/tabs/chapters.cpp:1052
-#, fuzzy
 msgid "on_entry_selected: display == nullptr. Should not have happened."
-msgstr "on_entry_selected：display == NULLです。発生するべきではありません。"
+msgstr "on_entry_selected：display == nullptrです。発生するべきではありません。"
 
 #: src/mmg/tabs/input_extra.cpp:86
 msgid "only for I frames"
@@ -9557,4 +9554,3 @@ msgstr "はい"
 
 #~ msgid "wrong usage: writing to read-only memory"
 #~ msgstr "間違った使用法：読み込み専用メモリへの書き込み"
-
