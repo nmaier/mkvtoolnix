@@ -80,7 +80,7 @@ class Target
 
   def png_icon(icon)
     icon_h      = FileList[icon].to_a.first.ext('h')
-    @file_deps += @file_deps.select { |pair| /\.cpp$/.match(pair.last) }.collect { |pair| [ pair.last, icon_h ] }
+    @file_deps = @file_deps.select { |pair| /\.cpp$/.match(pair.last) }.collect { |pair| [ pair.first, icon_h ] } + @file_deps
     self
   end
 
