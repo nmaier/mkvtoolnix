@@ -416,16 +416,24 @@ ui_show_progress(int percentage,
   frame->show_progress(percentage, wxU(text.c_str()));
 }
 
+#if defined(SYS_WINDOWS)
+int
+ui_run(int,
+       char **) {
+  FreeConsole();
+  wxEntry(GetModuleHandle(0), 0, 0, 0);
+  return 0;
+}
+
+#else  // defined(SYS_WINDOWS)
 int
 ui_run(int argc,
        char **argv) {
-#if defined(SYS_WINDOWS)
-  FreeConsole();
-#endif
-
   wxEntry(argc, argv);
   return 0;
 }
+
+#endif  // defined(SYS_WINDOWS)
 
 bool
 ui_graphical_available() {
