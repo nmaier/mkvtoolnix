@@ -43,7 +43,7 @@
 #include "mmg/header_editor/unsigned_integer_value_page.h"
 #include "mmg/mmg_dialog.h"
 #include "mmg/mmg.h"
-#include "share/icons/32x32/mkvmergeGUI.xpm"
+#include "share/icons/64x64/mkvmergeGUI.h"
 
 class header_editor_drop_target_c: public wxFileDropTarget {
 private:
@@ -124,7 +124,7 @@ header_editor_frame_c::header_editor_frame_c(wxWindow *parent)
 
   m_status_bar_timer.SetOwner(this, ID_T_HE_STATUS_BAR);
 
-  SetIcon(wxIcon(mkvmergeGUI_xpm));
+  SetIcon(wx_get_icon_from_memory(mkvmergeGUI_png));
   SetDropTarget(new header_editor_drop_target_c(this));
 
   set_status_bar(Z("Header editor ready."));

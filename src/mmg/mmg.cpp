@@ -164,6 +164,8 @@ mmg_app::OnInit() {
   TransformProcessType(&PSN, kProcessTransformToForegroundApplication);
 #endif
 
+  wxImage::AddHandler(new wxPNGHandler);
+
   mtx_common_init();
 
   wxConfigBase *cfg;

@@ -23,6 +23,11 @@
 # error wxWidgets was not compiled with Unicode support.
 #endif
 
+#include <wx/wx.h>
+#include <wx/bitmap.h>
+#include <wx/icon.h>
+#include <wx/mstream.h>
+
 using namespace libebml;
 
 inline wxString
@@ -95,5 +100,16 @@ wxU(const wxString &s) {
 
 # endif
 #endif
+
+#define wx_get_icon_from_memory(name) wx_get_icon_from_memory_impl(name ## _bin, sizeof(name ## _bin))
+
+inline wxIcon
+wx_get_icon_from_memory_impl(unsigned char const *data,
+                             unsigned int length) {
+  wxMemoryInputStream is(data, length);
+  wxIcon icon;
+  icon.CopyFromBitmap(wxBitmap(wxImage(is, wxBITMAP_TYPE_ANY, -1), -1));
+  return icon;
+}
 
 #endif /* __WXCOMMON_H */

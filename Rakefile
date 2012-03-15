@@ -169,6 +169,10 @@ rule '.o' => '.rc' do |t|
   runq " WINDRES #{t.source}", "#{c(:WINDRES)} #{$flags[:windres]} -Isrc/mmg -o #{t.name} #{t.sources.join(" ")}"
 end
 
+rule '.h' => '.png' do |t|
+  runq "   BIN2H #{t.source}", "#{c(:top_srcdir)}/rake.d/bin/bin2h.rb #{t.source} #{t.name}"
+end
+
 # Resources depend on the manifest.xml file for Windows builds.
 if c?(:MINGW)
   $programs.each do |program|
@@ -546,6 +550,7 @@ Application.new("src/mkvinfo").
   end_if.
   only_if(!c?(:USE_QT) && c?(:USE_WXWIDGETS)).
   sources("src/info/wxwidgets_ui.cpp").
+  png_icon("share/icons/64x64/mkvinfo.png").
   libraries(:wxwidgets).
   end_if.
   create
@@ -586,6 +591,7 @@ if c?(:USE_WXWIDGETS)
     aliases(:mmg).
     sources("src/mmg", "src/mmg/header_editor", "src/mmg/options", "src/mmg/tabs", :type => :dir).
     sources("src/mmg/resources.o", :if => c?(:MINGW)).
+    png_icon("share/icons/64x64/mkvmergeGUI.png").
     libraries(:mtxcommon, :magic, :matroska, :ebml, :avi, :rmff, :vorbis, :ogg, :z, :compression, :expat, :iconv, :intl, :wxwidgets, :curl,
                :boost_regex, :boost_filesystem, :boost_system).
     libraries(:ole32, :shell32, "-mwindows", :if => c?(:MINGW)).

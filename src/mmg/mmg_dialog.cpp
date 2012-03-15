@@ -59,7 +59,7 @@
 #if defined(HAVE_CURL_EASY_H)
 # include "mmg/update_checker.h"
 #endif  // defined(HAVE_CURL_EASY_H)
-#include "share/icons/32x32/mkvmergeGUI.xpm"
+#include "share/icons/64x64/mkvmergeGUI.h"
 
 mmg_dialog *mdlg;
 wxString last_open_dir;
@@ -179,7 +179,7 @@ mmg_dialog::mmg_dialog()
 
   load_job_queue();
 
-  SetIcon(wxIcon(mkvmergeGUI_xpm));
+  SetIcon(wx_get_icon_from_memory(mkvmergeGUI_png));
 
   help = nullptr;
 
