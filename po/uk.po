@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: mkvtoolnix_uk\n"
 "Report-Msgid-Bugs-To: Moritz Bunkus <moritz@bunkus.org>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2012-03-08 12:34+0200\n"
+"PO-Revision-Date: 2012-03-15 11:28+0200\n"
 "Last-Translator: Andriy Bilous'ko <arestarh@ukr.net>\n"
 "Language-Team: Ukrainian <moritz@bunkus.org>\n"
 "Language: uk\n"
@@ -7503,7 +7503,7 @@ msgstr "Доріжка номер %1% була зашифрована і роз�
 #: src/info/mkvinfo.cpp:943
 #, boost-format
 msgid "Track number: %1% (track ID for mkvmerge & mkvextract: %2%)"
-msgstr ""
+msgstr "Номер доріжки: %1% (ID доріжки для mkvmerge & mkvextract: %2%)"
 
 #: src/info/mkvinfo.cpp:1031
 #, boost-format
@@ -8463,19 +8463,19 @@ msgid "max. number of files:"
 msgstr "максимальне число файлів:"
 
 #: src/common/memory.cpp:147
-#, fuzzy, boost-format
+#, boost-format
 msgid "memory.cpp/safemalloc() called from file %1%, line %2%: malloc() returned nullptr for a size of %3% bytes.\n"
-msgstr "memory.cpp/safemalloc() викликано з файлу %1%, рядок %2%: malloc() повернуто NULL для розміру %3% байт.\n"
+msgstr "memory.cpp/safemalloc() викликано з файлу %1%, рядок %2%: malloc() повернуто nullptr для розміру %3% байт.\n"
 
 #: src/common/memory.cpp:135
-#, fuzzy, boost-format
+#, boost-format
 msgid "memory.cpp/safememdup() called from file %1%, line %2%: malloc() returned nullptr for a size of %3% bytes.\n"
-msgstr "memory.cpp/safememdup() викликано з файлу %1%, рядок %2%: malloc() повернуто NULL для розміру %3% байт.\n"
+msgstr "memory.cpp/safememdup() викликано з файлу %1%, рядок %2%: malloc() повернуто nullptr для розміру %3% байт.\n"
 
 #: src/common/memory.cpp:163
-#, fuzzy, boost-format
+#, boost-format
 msgid "memory.cpp/saferealloc() called from file %1%, line %2%: realloc() returned nullptr for a size of %3% bytes.\n"
-msgstr "memory.cpp/saferealloc() викликано з файлу %1%, рядок %2%: malloc() повернуто NULL для розміру %3% байт.\n"
+msgstr "memory.cpp/saferealloc() викликано з файлу %1%, рядок %2%: realloc() повернуто nullptr для розміру %3% байт.\n"
 
 #: src/propedit/target.cpp:83
 msgid "missing property name"
@@ -8666,7 +8666,7 @@ msgstr "Роботу mkvmerge було перервано через SIGINT (Ctr
 #: src/info/mkvinfo.cpp:944
 #, boost-format
 msgid "mkvmerge/mkvextract track ID: %1%"
-msgstr ""
+msgstr "ID доріжки mkvmerge/mkvextract: %1%"
 
 #: src/propedit/propedit_cli_parser.cpp:145
 msgid "mkvpropedit [options] <file> <actions>"
@@ -8753,9 +8753,8 @@ msgid "ogg_sync_buffer failed\n"
 msgstr "збій ogg_sync_buffer\n"
 
 #: src/mmg/tabs/chapters.cpp:1052
-#, fuzzy
 msgid "on_entry_selected: display == nullptr. Should not have happened."
-msgstr "on_entry_selected: display == NULL. Цього не повинно було трапитися."
+msgstr "on_entry_selected: display == nullptr. Цього не повинно було трапитися."
 
 #: src/mmg/tabs/input_extra.cpp:86
 msgid "only for I frames"
@@ -9657,4 +9656,3 @@ msgstr "Так"
 
 #~ msgid "wrong usage: writing to read-only memory"
 #~ msgstr "wrong usage: запис тільки до \"пам'яті для читання\""
-
