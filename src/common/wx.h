@@ -101,7 +101,15 @@ wxU(const wxString &s) {
 # endif
 #endif
 
-#define wx_get_icon_from_memory(name) wx_get_icon_from_memory_impl(name ## _bin, sizeof(name ## _bin))
+// PNG or icon loading
+
+#if defined(SYS_WINDOWS)
+
+# define wx_get_png_or_icon(X) wxIcon(wxT(#X))
+
+#else  // defined(SYS_WINDOWS)
+
+# define wx_get_png_or_icon(X) wx_get_icon_from_memory_impl(X ## _png_bin, sizeof(X ## _png_bin))
 
 inline wxIcon
 wx_get_icon_from_memory_impl(unsigned char const *data,
@@ -111,5 +119,7 @@ wx_get_icon_from_memory_impl(unsigned char const *data,
   icon.CopyFromBitmap(wxBitmap(wxImage(is, wxBITMAP_TYPE_ANY, -1), -1));
   return icon;
 }
+
+#endif  // defined(SYS_WINDOWS)
 
 #endif /* __WXCOMMON_H */

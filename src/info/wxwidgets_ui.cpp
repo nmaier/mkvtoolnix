@@ -28,7 +28,10 @@
 #include "common/wx.h"
 #include "info/wxwidgets_ui.h"
 #include "info/mkvinfo.h"
-#include "share/icons/64x64/mkvinfo.h"
+
+#if !defined(SYS_WINDOWS)
+# include "share/icons/64x64/mkvinfo.h"
+#endif
 
 using namespace libebml;
 using namespace libmatroska;
@@ -99,7 +102,7 @@ mi_frame::mi_frame(const wxString &title,
   , file_open(false)
   , tree(new wxTreeCtrl(this, 4254))
 {
-  SetIcon(wx_get_icon_from_memory(mkvinfo_png));
+  SetIcon(wx_get_png_or_icon(mkvinfo));
 
   menu_file           = new wxMenu();
   menu_options        = new wxMenu();
