@@ -354,7 +354,7 @@ parse_file(const std::string &file_name) {
 int
 main(int argc,
      char **argv) {
-  mtx_common_init();
+  mtx_common_init("ebml_validator");
 
   init_element_names();
   init_master_information();

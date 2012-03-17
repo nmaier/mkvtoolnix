@@ -2217,7 +2217,7 @@ init_globals() {
 */
 static void
 setup() {
-  mtx_common_init();
+  mtx_common_init("mkvmerge");
   g_kax_tracks = new KaxTracks();
 
 #if defined(SYS_UNIX) || defined(COMP_CYGWIN) || defined(SYS_APPLE)

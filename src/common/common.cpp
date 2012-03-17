@@ -59,6 +59,7 @@ fix_windows_errormode() {
 unsigned int verbose = 1;
 
 extern bool g_warning_issued;
+static std::string s_program_name;
 
 // Functions
 
@@ -118,7 +119,9 @@ mtx_common_cleanup() {
 }
 
 void
-mtx_common_init() {
+mtx_common_init(std::string const &program_name) {
+  s_program_name = program_name;
+
 #if defined(SYS_WINDOWS)
   fix_windows_errormode();
 #endif
@@ -143,3 +146,7 @@ mtx_common_init() {
   stereo_mode_c::init();
 }
 
+std::string const &
+get_program_name() {
+  return s_program_name;
+}

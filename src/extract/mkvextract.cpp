@@ -69,7 +69,7 @@ show_error(const std::string &error) {
 
 static void
 setup() {
-  mtx_common_init();
+  mtx_common_init("mkvextract");
 
   set_process_priority(-1);
 

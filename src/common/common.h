@@ -121,6 +121,7 @@ extern unsigned int verbose;
 #define mxfind2(it, value, cont) ((it = std::find((cont).begin(), (cont).end(), value)) != (cont).end())
 #define map_has_key(m, k)        ((m).end() != (m).find(k))
 
-void mtx_common_init();
+void mtx_common_init(std::string const &program_name);
+std::string const &get_program_name();
 
 #endif // __MTX_COMMON_COMMON_H

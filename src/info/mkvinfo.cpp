@@ -2040,7 +2040,7 @@ process_file(const std::string &file_name) {
 
 void
 setup(const std::string &locale) {
-  mtx_common_init();
+  mtx_common_init("mkvinfo");
 
   init_locales(locale);
 

@@ -221,7 +221,7 @@ parse_file(const std::string &file_name) {
 int
 main(int argc,
      char **argv) {
-  mtx_common_init();
+  mtx_common_init("diracparser");
 
   std::vector<std::string> args = command_line_utf8(argc, argv);
   std::string file_name    = parse_args(args);

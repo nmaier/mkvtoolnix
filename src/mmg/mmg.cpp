@@ -166,7 +166,7 @@ mmg_app::OnInit() {
 
   wxImage::AddHandler(new wxPNGHandler);
 
-  mtx_common_init();
+  mtx_common_init("mmg");
 
   wxConfigBase *cfg;
   uint32_t i;

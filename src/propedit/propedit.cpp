@@ -117,7 +117,7 @@ run(options_cptr &options) {
 
 static
 void setup() {
-  mtx_common_init();
+  mtx_common_init("mkvpropedit");
   clear_list_of_unique_uint32(UNIQUE_ALL_IDS);
   version_info = get_version_info("mkvpropedit", vif_full);
 }
