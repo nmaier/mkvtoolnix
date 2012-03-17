@@ -47,10 +47,10 @@ request_debugging(const std::string &options) {
 
   for (auto &one_option : all_options) {
     std::vector<std::string> parts = split(one_option, "=", 2);
-    if (1 == parts.size())
-      s_debugging_options[parts[0]] = "";
+    if (parts[0] == "!")
+      s_debugging_options.clear();
     else
-      s_debugging_options[parts[0]] = parts[1];
+      s_debugging_options[parts[0]] = 1 == parts.size() ? std::string("") : parts[1];
   }
 }
 
