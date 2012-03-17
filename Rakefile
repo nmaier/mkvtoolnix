@@ -518,6 +518,23 @@ end
     create
 end
 
+# libraries required for all programs via mtxcommon
+common_libs = [
+  :mtxcommon,
+  :magic,
+  :matroska,
+  :ebml,
+  :z,
+  :compression,
+  :expat,
+  :iconv,
+  :intl,
+  :curl,
+  :boost_regex,
+  :boost_filesystem,
+  :boost_system,
+]
+
 #
 # mkvmerge
 #
@@ -527,8 +544,7 @@ Application.new("src/mkvmerge").
   aliases(:mkvmerge).
   sources("src/merge", :type => :dir).
   sources("src/merge/resources.o", :if => c?(:MINGW)).
-  libraries(:mtxinput, :mtxoutput, :mtxcommon, :magic, :matroska, :ebml, :avi, :rmff, :mpegparser, :flac, :vorbis, :ogg, :z, :compression, :expat, :iconv, :intl, :curl,
-             :boost_regex, :boost_filesystem, :boost_system).
+  libraries(:mtxinput, :mtxoutput, common_libs, :avi, :rmff, :mpegparser, :flac, :vorbis, :ogg).
   create
 
 #
@@ -543,7 +559,7 @@ Application.new("src/mkvinfo").
   aliases(:mkvinfo).
   sources(FileList["src/info/*.cpp"].exclude("src/info/qt_ui.cpp", "src/info/wxwidgets_ui.cpp")).
   sources("src/info/resources.o", :if => c?(:MINGW)).
-  libraries(:mtxcommon, :magic, :matroska, :ebml, :expat, :intl, :iconv, :curl, :boost_regex, :boost_filesystem, :boost_system).
+  libraries(common_libs).
   only_if(c?(:USE_QT)).
   sources("src/info/qt_ui.cpp", "src/info/qt_ui.moc.cpp", "src/info/rightclick_tree_widget.moc.cpp", $mkvinfo_ui_files).
   libraries(:qt).
@@ -564,8 +580,7 @@ Application.new("src/mkvextract").
   aliases(:mkvextract).
   sources("src/extract", :type => :dir).
   sources("src/extract/resources.o", :if => c?(:MINGW)).
-  libraries(:mtxcommon, :magic, :matroska, :ebml, :avi, :rmff, :vorbis, :ogg, :z, :compression, :expat, :iconv, :intl, :curl,
-             :boost_regex, :boost_filesystem, :boost_system).
+  libraries(common_libs, :avi, :rmff, :vorbis, :ogg).
   create
 
 #
@@ -577,8 +592,7 @@ Application.new("src/mkvpropedit").
   aliases(:mkvpropedit).
   sources("src/propedit", :type => :dir).
   sources("src/propedit/resources.o", :if => c?(:MINGW)).
-  libraries(:mtxcommon, :magic, :matroska, :ebml, :avi, :rmff, :vorbis, :ogg, :z, :compression, :expat, :iconv, :intl, :curl,
-             :boost_regex, :boost_filesystem, :boost_system).
+  libraries(common_libs).
   create
 
 #
@@ -592,8 +606,7 @@ if c?(:USE_WXWIDGETS)
     sources("src/mmg", "src/mmg/header_editor", "src/mmg/options", "src/mmg/tabs", :type => :dir).
     sources("src/mmg/resources.o", :if => c?(:MINGW)).
     png_icon("share/icons/64x64/mkvmergeGUI.png").
-    libraries(:mtxcommon, :magic, :matroska, :ebml, :avi, :rmff, :vorbis, :ogg, :z, :compression, :expat, :iconv, :intl, :wxwidgets, :curl,
-               :boost_regex, :boost_filesystem, :boost_system).
+    libraries(common_libs, :wxwidgets).
     libraries(:ole32, :shell32, "-mwindows", :if => c?(:MINGW)).
     create
 end

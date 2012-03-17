@@ -89,6 +89,8 @@ class Target
 
     return self if !@only_if || (options.include?(:if) && !options[:if])
 
+    list.flatten!
+
     @dependencies += list.collect do |entry|
       case entry
       when :mtxcommon  then "src/common/libmtxcommon.a"
