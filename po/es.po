@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: Israel Lucas Torrijos <lukillas.ole@gmail.com>\n"
 "POT-Creation-Date: 2010-06-08 10:00+0200\n"
-"PO-Revision-Date: 2012-03-13 03:19+0100\n"
-"Last-Translator: Israel Lucas Torrijos <lukillas.ole@gmail.com>\n"
+"PO-Revision-Date: 2012-03-17 20:50+0100\n"
+"Last-Translator: Israel Lucas a.k.a Overdrive80 <lukillas.ole@gmail.com>\n"
 "Language-Team: Spanish <moritz@bunkus.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -8536,51 +8536,51 @@ msgstr "mkvextract <mode> <source-filename> [options] <extraction-spec>"
 
 #: src/extract/extract_cli_parser.cpp:92
 msgid "mkvextract attachments \"a movie.mkv\" 4:cover.jpg"
-msgstr "Adjuntos de mkvextract \"a movie.mkv\" 4:carátula.jpg"
+msgstr "mkvextract attachments \"a movie.mkv\" 4:carátula.jpg"
 
 #: src/extract/extract_cli_parser.cpp:47
 msgid "mkvextract attachments <inname> [options] [AID1:out1 [AID2:out2 ...]]"
-msgstr "Adjuntos de mkvextract <inname> [options] [AID1:out1 [AID2:out2 ...]]"
+msgstr "mkvextract attachments <inname> [options] [AID1:out1 [AID2:out2 ...]]"
 
 #: src/extract/extract_cli_parser.cpp:100
 msgid "mkvextract chapters \"a movie.mkv\" > movie_chapters.xml"
-msgstr "Capítulos mkvextract \"a movie.mkv\" > movie_chapters.xml"
+msgstr "mkvextract chapters \"a movie.mkv\" > movie_chapters.xml"
 
 #: src/extract/extract_cli_parser.cpp:48
 msgid "mkvextract chapters <inname> [options]"
-msgstr "Capítulos mkvextract <inname> [options]"
+msgstr "mkvextract chapters <inname> [options]"
 
 #: src/extract/extract_cli_parser.cpp:109
 msgid "mkvextract cuesheet \"audiofile.mka\" > audiofile.cue"
-msgstr "Hojas de distribución de pistas (CueSheet) mkvextract \"audiofile.mka\" > audiofile.cue"
+msgstr "mkvextract cuesheet \"audiofile.mka\" > audiofile.cue"
 
 #: src/extract/extract_cli_parser.cpp:49
 msgid "mkvextract cuesheet <inname> [options]"
-msgstr "Hojas de distribución de pistas (CueSheet) mkvextract <inname> [options]"
+msgstr "mkvextract cuesheet <inname> [options]"
 
 #: src/extract/extract_cli_parser.cpp:83
 msgid "mkvextract tags \"a movie.mkv\" > movie_tags.xml"
-msgstr "Etiquetas mkvextract \"a movie.mkv\" > movie_tags.xml"
+msgstr "mkvextract tags \"a movie.mkv\" > movie_tags.xml"
 
 #: src/extract/extract_cli_parser.cpp:46
 msgid "mkvextract tags <inname> [options]"
-msgstr "Etiquetas mkvextract <inname> [options]"
+msgstr "mkvextract tags <inname> [options]"
 
 #: src/extract/extract_cli_parser.cpp:117
 msgid "mkvextract timecodes_v2 \"a movie.mkv\" 1:timecodes_track1.txt"
-msgstr "mkvextract códigos de tiempo_v2 \"a movie.mkv\" 1:timecodes_track1.txt"
+msgstr "mkvextract timecodes_v2 \"a movie.mkv\" 1:timecodes_track1.txt"
 
 #: src/extract/extract_cli_parser.cpp:50
 msgid "mkvextract timecodes_v2 <inname> [TID1:out1 [TID2:out2 ...]]"
-msgstr "mkvextract códigos de tiempo_v2 <inname> [TID1:out1 [TID2:out2 ...]]"
+msgstr "mkvextract timecodes_v2 <inname> [TID1:out1 [TID2:out2 ...]]"
 
 #: src/extract/extract_cli_parser.cpp:75
 msgid "mkvextract tracks \"a movie.mkv\" 2:audio.ogg -c ISO8859-1 3:subs.srt"
-msgstr "Pistas mkvextract \"a movie.mkv\" 2:audio.ogg -c ISO8859-1 3:subs.srt"
+msgstr "mkvextract tracks \"a movie.mkv\" 2:audio.ogg -c ISO8859-1 3:subs.srt"
 
 #: src/extract/extract_cli_parser.cpp:45
 msgid "mkvextract tracks <inname> [options] [TID1:out1 [TID2:out2 ...]]"
-msgstr "Pistas mkvextract <inname> [options] [TID1:out1 [TID2:out2 ...]]"
+msgstr "mkvextract tracks <inname> [options] [TID1:out1 [TID2:out2 ...]]"
 
 #: src/extract/mkvextract.cpp:49
 #, boost-format
