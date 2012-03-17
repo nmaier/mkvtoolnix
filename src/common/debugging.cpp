@@ -56,11 +56,10 @@ request_debugging(const std::string &options) {
 
 void
 init_debugging() {
-  const char *value = getenv("MKVTOOLNIX_DEBUG");
-  if (nullptr != value)
-    request_debugging(value);
-  else {
-    value = getenv("MTX_DEBUG");
+  std::vector<std::string> env_vars = { "MKVTOOLNIX_DEBUG", "MTX_DEBUG", ba::to_upper_copy(get_program_name()) + "_DEBUG" };
+
+  for (auto &name : env_vars) {
+    auto value = getenv(name.c_str());
     if (nullptr != value)
       request_debugging(value);
   }

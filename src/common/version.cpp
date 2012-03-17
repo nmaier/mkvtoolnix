@@ -158,21 +158,23 @@ get_current_version() {
 #if defined(HAVE_CURL_EASY_H)
 mtx_release_version_t
 get_latest_release_version() {
-  if (debugging_requested("version_check"))
-    mxinfo(boost::format("Update check started with URL %1%\n") % MTX_VERSION_CHECK_URL);
+  bool debug = debugging_requested("version_check");
+
+  std::string url = MTX_VERSION_CHECK_URL;
+  debugging_requested("version_check_url", &url);
+
+  mxdebug_if(debug, boost::format("Update check started with URL %1%\n") % url);
 
   mtx_release_version_t release;
   std::string data;
-  CURLcode result = retrieve_via_curl(MTX_VERSION_CHECK_URL, data);
+  CURLcode result = retrieve_via_curl(url, data);
 
   if (0 != result) {
-    if (debugging_requested("version_check"))
-      mxinfo(boost::format("Update check CURL error: %1%\n") % static_cast<unsigned int>(result));
+    mxdebug_if(debug, boost::format("Update check CURL error: %1%\n") % static_cast<unsigned int>(result));
     return release;
   }
 
-  if (debugging_requested("version_check"))
-    mxinfo(boost::format("Update check OK; data length %1%\n") % data.length());
+  mxdebug_if(debug, boost::format("Update check OK; data length %1%\n") % data.length());
 
   try {
     std::stringstream data_in(data);
@@ -191,9 +193,7 @@ get_latest_release_version() {
     release.valid = false;
   }
 
-  if (debugging_requested("version_check"))
-    mxinfo(boost::format("update check: current %1% latest source %2% latest winpre %3%\n")
-           % release.current_version.to_string() % release.latest_source.to_string() % release.latest_windows_build.to_string());
+  mxdebug_if(debug, boost::format("update check: current %1% latest source %2% latest winpre %3%\n") % release.current_version.to_string() % release.latest_source.to_string() % release.latest_windows_build.to_string());
 
   return release;
 }
