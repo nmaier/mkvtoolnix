@@ -162,6 +162,9 @@ public:
   virtual int write_uint64_be(uint64_t value);
   virtual void skip(int64 numbytes);
   virtual size_t write(const void *buffer, size_t size);
+  virtual size_t write(std::string const &buffer) {
+    return write(buffer.c_str(), buffer.length());
+  }
   virtual size_t write(const memory_cptr &buffer, size_t size = UINT_MAX, size_t offset = 0);
   virtual bool eof() = 0;
   virtual void flush() {
