@@ -14,11 +14,10 @@
 #include "common/common_pch.h"
 
 #if defined(HAVE_CURL_EASY_H)
-# include <boost/property_tree/ptree.hpp>
-# include <boost/property_tree/xml_parser.hpp>
 # include <sstream>
 
 # include "common/curl.h"
+# include "pugixml.hpp"
 #endif  // defined(HAVE_CURL_EASY_H)
 
 #include "common/debugging.h"
@@ -177,19 +176,25 @@ get_latest_release_version() {
   mxdebug_if(debug, boost::format("Update check OK; data length %1%\n") % data.length());
 
   try {
-    std::stringstream data_in(data);
-    boost::property_tree::ptree pt;
-    boost::property_tree::read_xml(data_in, pt);
+    pugi::xml_document doc;
+    std::stringstream sdata(data);
+    auto result = doc.load(sdata);
 
-    release.latest_source              = version_number_t(pt.get("mkvtoolnix-releases.latest-source.version",      std::string("")));
-    release.latest_windows_build       = version_number_t(pt.get("mkvtoolnix-releases.latest-windows-pre.version", std::string(""))
-                                                          + " build " +
-                                                          pt.get("mkvtoolnix-releases.latest-windows-pre.build",   std::string("")));
-    release.source_download_url        =                  pt.get("mkvtoolnix-releases.latest-source.url",          std::string(""));
-    release.windows_build_download_url =                  pt.get("mkvtoolnix-releases.latest-windows-pre.url",     std::string(""));
+    if (!result) {
+      mxdebug_if(debug, boost::format("XML parsing failed: %1% at %2%\n") % result.description() % result.offset);
+      return release;
+    }
+
+    release.latest_source              = version_number_t(doc.select_single_node("/mkvtoolnix-releases/latest-source/version").node().child_value());
+    release.latest_windows_build       = version_number_t((boost::format("%1% build %2%")
+                                                           % doc.select_single_node("/mkvtoolnix-releases/latest-windows-pre/version").node().child_value()
+                                                           % doc.select_single_node("/mkvtoolnix-releases/latest-windows-pre/build").node().child_value()).str());
+    release.source_download_url        = doc.select_single_node("/mkvtoolnix-releases/latest-source/url").node().child_value();
+    release.windows_build_download_url = doc.select_single_node("/mkvtoolnix-releases/latest-windows-pre/url").node().child_value();
     release.valid                      = release.latest_source.valid;
 
-  } catch (boost::property_tree::ptree_error &error) {
+  } catch (pugi::xpath_exception &ex) {
+    mxdebug_if(debug, boost::format("XPath exception: %1% / %2%\n") % ex.what() % ex.result().description());
     release.valid = false;
   }
 
