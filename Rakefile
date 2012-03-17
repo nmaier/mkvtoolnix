@@ -46,8 +46,8 @@ def setup_globals
   $applications            =  $programs.collect { |name| "src/#{$application_subdirs[name]}#{name}" + c(:EXEEXT) }
   $manpages                =  $programs.collect { |name| "doc/man/#{name}.1" }
 
-  $system_includes         = "-I. -Ilib -Ilib/avilib-0.6.10 -Ilib/utf8-cpp/source -Isrc"
-  $system_libdirs          = "-Llib/avilib-0.6.10 -Llib/librmff -Lsrc/common -Lsrc/input -Lsrc/output -Lsrc/mpegparser"
+  $system_includes         = "-I. -Ilib -Ilib/avilib-0.6.10 -Ilib/utf8-cpp/source -Ilib/pugixml/src -Isrc"
+  $system_libdirs          = "-Llib/avilib-0.6.10 -Llib/librmff -Llib/pugixml/src -Lsrc/common -Lsrc/input -Lsrc/output -Lsrc/mpegparser"
 
   $source_directories      =  %w{lib/avilib-0.6.10 lib/librmff src src/input src/output src/common src/common/chapters src/common/strings src/common/tags src/common/xml
                                  src/mmg src/mmg/header_editor src/mmg/options src/mmg/tabs src/extract src/propedit src/merge src/info src/mpegparser}
@@ -458,6 +458,7 @@ task :clean do
       src/mmg/*/*.o #{$applications.join(" ")} #{tools}
       lib/libebml/src/*.o lib/libmatroska/src/*.o
       lib/libebml/src/lib*.a lib/libmatroska/src/lib*.a
+      lib/pugixml/src/*.o lib/pugixml/src/lib*.a
   SHELL
   run "rm -rf #{$dependency_dir}", :allow_failure => true
 end
@@ -503,6 +504,7 @@ end
 
 [ { :name => 'avi',        :dir => 'lib/avilib-0.6.10'                                                                                },
   { :name => 'rmff',       :dir => 'lib/librmff'                                                                                      },
+  { :name => 'pugixml',    :dir => 'lib/pugixml/src'                                                                                  },
   { :name => 'mpegparser', :dir => 'src/mpegparser'                                                                                   },
   { :name => 'mtxcommon',  :dir => [ 'src/common', 'src/common/chapters', 'src/common/strings', 'src/common/tags', 'src/common/xml' ] },
   { :name => 'mtxinput',   :dir => 'src/input'                                                                                        },
@@ -527,6 +529,7 @@ common_libs = [
   :z,
   :compression,
   :expat,
+  :pugixml,
   :iconv,
   :intl,
   :curl,

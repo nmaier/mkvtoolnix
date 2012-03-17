@@ -98,6 +98,7 @@ class Target
       when :mtxoutput  then "src/output/libmtxoutput.a"
       when :avi        then "lib/avilib-0.6.10/libavi.a"
       when :rmff       then "lib/librmff/librmff.a"
+      when :pugixml    then "lib/pugixml/src/libpugixml.a"
       when :mpegparser then "src/mpegparser/libmpegparser.a"
       when :ebml       then c?("EBML_MATROSKA_INTERNAL") ? "lib/libebml/src/libebml.a"         : nil
       when :matroska   then c?("EBML_MATROSKA_INTERNAL") ? "lib/libmatroska/src/libmatroska.a" : nil
