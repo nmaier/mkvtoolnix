@@ -15,8 +15,6 @@
 
 #include "common/strings/editing.h"
 
-static std::string s_debug_options;
-
 static std::map<std::string, std::string> s_debugging_options;
 
 bool
@@ -54,11 +52,6 @@ request_debugging(const std::string &options) {
     else
       s_debugging_options[parts[0]] = parts[1];
   }
-}
-
-void
-clear_debugging_requests() {
-  s_debugging_options.clear();
 }
 
 void
