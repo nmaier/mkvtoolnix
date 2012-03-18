@@ -13,8 +13,6 @@
 
 #include "common/common_pch.h"
 
-#include <sstream>
-
 #include <matroska/KaxChapters.h>
 
 #include "common/chapters/chapters.h"
@@ -174,19 +172,4 @@ write_chapters_simple(int &chapter_num,
   s_chapter_start_times.clear();
   s_chapter_names.clear();
   s_chapter_entries.clear();
-}
-
-void
-write_chapters_xml(KaxChapters *chapters,
-                   mm_io_c *out) {
-  mtx::xml::xml_document_cptr doc(new pugi::xml_document);
-
-  doc->append_child(pugi::node_comment).set_value(" <!DOCTYPE Chapters SYSTEM \"matroskachapters.dtd\"> ");
-
-  mtx::xml::ebml_chapters_converter_c converter;
-  converter.to_xml(chapters, doc);
-
-  std::stringstream out_stream;
-  doc->save(out_stream, "  ", pugi::format_default | pugi::format_write_bom);
-  out->puts(out_stream.str());
 }

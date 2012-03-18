@@ -13,6 +13,8 @@
 
 #include "common/common_pch.h"
 
+#include <sstream>
+
 #include "common/strings/formatting.h"
 #include "common/xml/ebml_chapters_converter.h"
 
@@ -47,6 +49,21 @@ ebml_chapters_converter_c::fix_xml(xml_document_cptr &doc)
   result = doc->select_nodes("//ChapterDisplay[not(ChapterLanguage)]");
   for (auto &atom : result)
     atom.node().append_child("ChapterLanguage").append_child(pugi::node_pcdata).set_value("eng");
+}
+
+void
+ebml_chapters_converter_c::write_xml(KaxChapters &chapters,
+                                     mm_io_c &out) {
+  xml_document_cptr doc(new pugi::xml_document);
+
+  doc->append_child(pugi::node_comment).set_value(" <!DOCTYPE Chapters SYSTEM \"matroskachapters.dtd\"> ");
+
+  ebml_chapters_converter_c converter;
+  converter.to_xml(&chapters, doc);
+
+  std::stringstream out_stream;
+  doc->save(out_stream, "  ", pugi::format_default | pugi::format_write_bom);
+  out.puts(out_stream.str());
 }
 
 }}

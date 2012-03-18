@@ -16,7 +16,11 @@
 
 #include "common/common_pch.h"
 
+#include <matroska/KaxChapters.h>
+
 #include "common/xml/ebml_converter.h"
+
+using namespace libmatroska;
 
 namespace mtx { namespace xml {
 
@@ -28,6 +32,9 @@ public:
 protected:
   virtual void fix_xml(xml_document_cptr &doc) const;
   void setup_maps();
+
+public:
+  static void write_xml(KaxChapters &chapters, mm_io_c &out);
 };
 
 }}

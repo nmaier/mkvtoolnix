@@ -16,9 +16,13 @@
 
 #include "common/common_pch.h"
 
+#include <matroska/KaxTags.h>
+
 #include "common/xml/ebml_converter.h"
 
-namespace mtx {namespace xml {
+using namespace libmatroska;
+
+namespace mtx { namespace xml {
 
 class ebml_tags_converter_c: public ebml_converter_c {
 public:
@@ -27,6 +31,9 @@ public:
 
 protected:
   void setup_maps();
+
+public:
+  static void write_xml(KaxTags &tags, mm_io_c &out);
 };
 
 }}

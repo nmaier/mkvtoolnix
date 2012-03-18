@@ -28,6 +28,7 @@
 #include "common/ebml.h"
 #include "common/mm_io.h"
 #include "common/kax_analyzer.h"
+#include "common/xml/ebml_chapters_converter.h"
 #include "extract/mkvextract.h"
 
 using namespace libmatroska;
@@ -56,7 +57,7 @@ extract_chapters(const std::string &file_name,
   assert(nullptr != chapters);
 
   if (!chapter_format_simple)
-    write_chapters_xml(chapters, g_mm_stdio.get_object());
+    mtx::xml::ebml_chapters_converter_c::write_xml(*chapters, *g_mm_stdio);
 
   else {
     int dummy = 1;
