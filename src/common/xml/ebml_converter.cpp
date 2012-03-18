@@ -81,13 +81,13 @@ ebml_converter_c::fix_xml(xml_document_cptr &)
 void
 ebml_converter_c::format_uint(pugi::xml_node &node,
                               EbmlElement &e) {
-  node.append_child(pugi::node_pcdata).set_value(std::to_string(uint64(static_cast<EbmlUInteger &>(e))).c_str());
+  node.append_child(pugi::node_pcdata).set_value(to_string(uint64(static_cast<EbmlUInteger &>(e))).c_str());
 }
 
 void
 ebml_converter_c::format_int(pugi::xml_node &node,
                              EbmlElement &e) {
-  node.append_child(pugi::node_pcdata).set_value(std::to_string(int64(static_cast<EbmlSInteger &>(e))).c_str());
+  node.append_child(pugi::node_pcdata).set_value(to_string(int64(static_cast<EbmlSInteger &>(e))).c_str());
 }
 
 void
