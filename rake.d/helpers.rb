@@ -69,8 +69,19 @@ def runq(msg, cmdline, options = {})
   run cmdline, options.clone.merge(:dont_echo => !verbose)
 end
 
+def create_dependency_dirs
+  [ $dependency_dir, $dependency_tmp_dir ].each do |dir|
+    File.unlink(dir) if  FileTest.exist?(dir) && !FileTest.directory?(dir)
+    Dir.mkdir(dir)   if !FileTest.exist?(dir)
+  end
+end
+
+def dependency_output_name_for file_name
+  $dependency_tmp_dir + "/" + file_name.gsub(/\//, '_').ext('d')
+end
+
 def handle_deps(target, exit_code, skip_abspath=false)
-  dep_file = target.ext 'd'
+  dep_file = dependency_output_name_for target
   get_out  = lambda do
     File.unlink(dep_file) if FileTest.exist?(dep_file)
     exit exit_code if 0 != exit_code
@@ -79,10 +90,9 @@ def handle_deps(target, exit_code, skip_abspath=false)
 
   FileTest.exist?(dep_file) || get_out.call
 
-  FileTest.exist?($dependency_dir) && !FileTest.directory?($dependency_dir) && File.unlink($dependency_dir)
-  FileTest.exist?($dependency_dir) || Dir.mkdir($dependency_dir)
+  create_dependency_dirs
 
-  File.open("#{$dependency_dir}/" + dep_file.gsub(/\//, '_').ext('rb'), "w") do |out|
+  File.open("#{$dependency_dir}/" + target.gsub(/\//, '_').ext('rb'), "w") do |out|
     line = IO.readlines(dep_file).collect { |line| line.chomp }.join(" ").gsub(/\\/, ' ').gsub(/\s+/, ' ')
     if /(.+?):\s*([^\s].*)/.match(line)
       target  = $1

@@ -56,7 +56,8 @@ def setup_globals
   $all_objects             =  $all_sources.collect { |file| file.ext('o') }
 
   $top_srcdir              = c(:top_srcdir)
-  $dependency_dir          = "#{$top_srcdir}/rake.d/dependecy.d"
+  $dependency_dir          = "#{$top_srcdir}/rake.d/dependency.d"
+  $dependency_tmp_dir      = "#{$dependency_dir}/tmp"
 
   $languages               =  {
     :applications          => c(:TRANSLATIONS).split(/\s+/),
@@ -144,11 +145,14 @@ end
 
 # Store compiler block for re-use
 cxx_compiler = lambda do |t|
+  create_dependency_dirs
+
   # t.sources is empty for a 'file' task (common_pch.h.o).
   sources = t.sources.empty? ? [ t.prerequisites.first ] : t.sources
+  dep     = dependency_output_name_for t.name
 
-  runq "     CXX #{sources.first}", "#{c(:CXX)} #{$flags[:cxxflags]} #{$system_includes} -c -MMD -o #{t.name} #{sources.join(" ")}", :allow_failure => true
-  handle_deps t.name, last_exit_code, skip_abspath=true
+  runq "     CXX #{sources.first}", "#{c(:CXX)} #{$flags[:cxxflags]} #{$system_includes} -c -MMD -MF #{dep} -o #{t.name} #{sources.join(" ")}", :allow_failure => true
+  handle_deps t.name, last_exit_code, true
 end
 
 # Precompiled headers
@@ -161,7 +165,10 @@ end
 rule '.o' => '.cpp', &cxx_compiler
 
 rule '.o' => '.c' do |t|
-  runq "      CC #{t.source}", "#{c(:CC)} #{$flags[:cflags]} #{$system_includes} -c -MMD -o #{t.name} #{t.sources.join(" ")}", :allow_failure => true
+  create_dependency_dirs
+  dep = dependency_output_name_for t.name
+
+  runq "      CC #{t.source}", "#{c(:CC)} #{$flags[:cflags]} #{$system_includes} -c -MMD -MF #{dep} -o #{t.name} #{t.sources.join(" ")}", :allow_failure => true
   handle_deps t.name, last_exit_code
 end
 

@@ -36,6 +36,7 @@
 #include "common/strings/parsing.h"
 #include "common/unique_numbers.h"
 #include "common/wx.h"
+#include "common/xml/ebml_chapters_converter.h"
 #include "mmg/mmg_dialog.h"
 #include "mmg/mmg.h"
 #include "mmg/tabs/chapters.h"
@@ -696,14 +697,7 @@ tab_chapters::save() {
 #if defined(SYS_WINDOWS)
   out->use_dos_style_newlines(true);
 #endif
-  out->write_bom("UTF-8");
-  out->puts("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-            "\n"
-            "<!-- <!DOCTYPE Tags SYSTEM \"matroskatags.dtd\"> -->\n"
-            "\n"
-            "<Chapters>\n");
-  write_chapters_xml(m_chapters, out.get_object());
-  out->puts("</Chapters>\n");
+  mtx::xml::ebml_chapters_converter_c::write_xml(*m_chapters, *out);
 
   source_is_kax_file = false;
   source_is_simple_format = false;

@@ -21,7 +21,6 @@
 #include "common/matroska.h"
 #include "common/mm_io.h"
 #include "common/strings/parsing.h"
-#include "common/tags/writer.h"
 #include "common/translation.h"
 #include "common/version.h"
 #include "common/xml/element_mapping.h"

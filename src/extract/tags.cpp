@@ -28,7 +28,7 @@
 #include "common/ebml.h"
 #include "common/kax_analyzer.h"
 #include "common/mm_io.h"
-#include "common/tags/writer.h"
+#include "common/xml/ebml_tags_converter.h"
 #include "extract/mkvextract.h"
 
 using namespace libmatroska;
@@ -55,10 +55,5 @@ extract_tags(const std::string &file_name,
   KaxTags *tags = dynamic_cast<KaxTags *>(m.get_object());
   assert(nullptr != tags);
 
-  g_mm_stdio->write_bom("UTF-8");
-  g_mm_stdio->puts("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n"
-                   "<!DOCTYPE Tags SYSTEM \"matroskatags.dtd\">\n\n"
-                   "<Tags>\n");
-  write_tags_xml(*tags, g_mm_stdio.get_object());
-  g_mm_stdio->puts("</Tags>\n");
+  mtx::xml::ebml_tags_converter_c::write_xml(*tags, *g_mm_stdio);
 }
