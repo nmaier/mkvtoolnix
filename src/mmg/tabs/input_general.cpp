@@ -272,7 +272,7 @@ tab_input_general::on_browse_tags(wxCommandEvent &) {
   if (input->selected_track == -1)
     return;
 
-  wxFileDialog dlg(nullptr, Z("Choose a tag file"), last_open_dir, wxEmptyString, wxString(Z("Tag files (*.xml;*.txt)|*.xml;*.txt|%s"), ALLFILES.c_str()), wxFD_OPEN);
+  wxFileDialog dlg(nullptr, Z("Choose a tag file"), last_open_dir, wxEmptyString, wxString::Format(Z("Tag files (*.xml;*.txt)|*.xml;*.txt|%s"), ALLFILES.c_str()), wxFD_OPEN);
   if(dlg.ShowModal() != wxID_OK)
     return;
 
