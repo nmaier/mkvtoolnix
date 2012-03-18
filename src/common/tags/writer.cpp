@@ -12,22 +12,25 @@
 
 #include "common/common_pch.h"
 
+#include <sstream>
+
 #include <matroska/KaxTags.h>
 
-#include "common/xml/element_writer.h"
+#include "common/xml/ebml_tags_xml_converter.h"
 
 using namespace libmatroska;
 
 void
 write_tags_xml(KaxTags &tags,
                mm_io_c *out) {
-  size_t i;
+  xml_document_cptr doc(new pugi::xml_document);
 
-  for (i = 0; nullptr != tag_elements[i].name; i++) {
-    tag_elements[i].start_hook = nullptr;
-    tag_elements[i].end_hook   = nullptr;
-  }
+  doc->append_child(pugi::node_comment).set_value(" <!DOCTYPE Tags SYSTEM \"matroskatags.dtd\"> ");
 
-  for (i = 0; tags.ListSize() > i; i++)
-    write_xml_element_rec(1, 0, tags[i], out, tag_elements);
+  ebml_tags_xml_converter_c converter;
+  converter.to_xml(&tags, doc);
+
+  std::stringstream out_stream;
+  doc->save(out_stream, "  ", pugi::format_default | pugi::format_write_bom);
+  out->puts(out_stream.str());
 }
