@@ -19,6 +19,15 @@
 std::wstring to_wide(const std::string &source);
 std::string to_utf8(const std::wstring &source);
 
+inline std::string
+to_utf8(std::string const &source) {
+  return source;
+}
+inline std::string
+to_utf8(boost::format const &source) {
+  return source.str();
+}
+
 size_t get_width_in_em(wchar_t c);
 size_t get_width_in_em(const std::wstring &s);
 

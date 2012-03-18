@@ -13,6 +13,8 @@
 
 #include "common/common_pch.h"
 
+#include "common/strings/utf8.h"
+
 class logger_c {
 private:
   bfs::path m_file_name;
@@ -31,7 +33,7 @@ template<typename T>
 logger_c &
 operator <<(logger_c &logger,
             T const &message) {
-  logger.log(message);
+  logger.log(to_utf8(message));
   return logger;
 }
 

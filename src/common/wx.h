@@ -28,6 +28,8 @@
 #include <wx/icon.h>
 #include <wx/mstream.h>
 
+#include "common/logger.h"
+
 using namespace libebml;
 
 inline wxString
@@ -65,6 +67,11 @@ wxU(EbmlString *s) {
 inline const wxString &
 wxU(const wxString &s) {
   return s;
+}
+
+inline std::string
+to_utf8(wxString const &source) {
+  return static_cast<char const *>(source.mb_str(wxConvUTF8));
 }
 
 #define wxUCS(s) wxU(s).c_str()
