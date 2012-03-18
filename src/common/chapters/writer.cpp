@@ -13,7 +13,7 @@
 
 #include "common/common_pch.h"
 
-#include <expat.h>
+#include <sstream>
 
 #include <matroska/KaxChapters.h>
 
@@ -21,7 +21,8 @@
 #include "common/ebml.h"
 #include "common/locale.h"
 #include "common/mm_io.h"
-#include "common/xml/element_writer.h"
+#include "common/strings/formatting.h"
+#include "common/xml/ebml_chapters_xml_converter.h"
 
 using namespace libmatroska;
 
@@ -175,67 +176,17 @@ write_chapters_simple(int &chapter_num,
   s_chapter_entries.clear();
 }
 
-static void
-pt(xml_writer_cb_t *cb,
-   const char *tag) {
-  int i;
-
-  for (i = 0; i < cb->level; i++)
-    cb->out->puts("  ");
-  cb->out->puts(tag);
-}
-
-static int
-cet_index(const char *name) {
-  int i;
-
-  for (i = 0; nullptr != chapter_elements[i].name; i++)
-    if (!strcmp(name, chapter_elements[i].name))
-      return i;
-
-  mxerror(boost::format(Y("cet_index: '%1%' not found\n")) % name);
-
-  return -1;
-}
-
-static void
-end_write_chapter_atom(void *data) {
-  xml_writer_cb_t *cb  = static_cast<xml_writer_cb_t *>(data);
-  KaxChapterAtom *atom = dynamic_cast<KaxChapterAtom *>(cb->e);
-
-  assert(nullptr != atom);
-
-  if (FINDFIRST(atom, KaxChapterTimeStart) == nullptr)
-    pt(cb, "<ChapterTimeStart>00:00:00.000</ChapterTimeStart>\n");
-}
-
-static void
-end_write_chapter_display(void *data) {
-  xml_writer_cb_t *cb        = static_cast<xml_writer_cb_t *>(data);
-  KaxChapterDisplay *display = dynamic_cast<KaxChapterDisplay *>(cb->e);
-
-  assert(nullptr != display);
-
-  if (FINDFIRST(display, KaxChapterString) == nullptr)
-    pt(cb, "<ChapterString></ChapterString>\n");
-
-  if (FINDFIRST(display, KaxChapterLanguage) == nullptr)
-    pt(cb, "<ChapterLanguage>eng</ChapterLanguage>\n");
-}
-
 void
 write_chapters_xml(KaxChapters *chapters,
                    mm_io_c *out) {
-  size_t i;
+  xml_document_cptr doc(new pugi::xml_document);
 
-  for (i = 0; nullptr != chapter_elements[i].name; i++) {
-    chapter_elements[i].start_hook = nullptr;
-    chapter_elements[i].end_hook   = nullptr;
-  }
+  doc->append_child(pugi::node_comment).set_value(" <!DOCTYPE Chapters SYSTEM \"matroskachapters.dtd\"> ");
 
-  chapter_elements[cet_index("ChapterAtom")].end_hook    = end_write_chapter_atom;
-  chapter_elements[cet_index("ChapterDisplay")].end_hook = end_write_chapter_display;
+  ebml_chapters_xml_converter_c converter;
+  converter.to_xml(chapters, doc);
 
-  for (i = 0; chapters->ListSize() > i; i++)
-    write_xml_element_rec(1, 0, (*chapters)[i], out, chapter_elements);
+  std::stringstream out_stream;
+  doc->save(out_stream, "  ", pugi::format_default | pugi::format_write_bom);
+  out->write(out_stream.str());
 }

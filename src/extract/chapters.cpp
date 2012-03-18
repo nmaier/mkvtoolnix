@@ -55,17 +55,10 @@ extract_chapters(const std::string &file_name,
   KaxChapters *chapters = dynamic_cast<KaxChapters *>(master.get_object());
   assert(nullptr != chapters);
 
-  if (!chapter_format_simple) {
-    g_mm_stdio->write_bom("UTF-8");
-    g_mm_stdio->puts("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-                     "\n"
-                     "<!-- <!DOCTYPE Tags SYSTEM \"matroskatags.dtd\"> -->\n"
-                     "\n"
-                     "<Chapters>\n");
+  if (!chapter_format_simple)
     write_chapters_xml(chapters, g_mm_stdio.get_object());
-    g_mm_stdio->puts("</Chapters>\n");
 
-  } else {
+  else {
     int dummy = 1;
     write_chapters_simple(dummy, chapters, g_mm_stdio.get_object());
   }
