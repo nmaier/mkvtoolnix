@@ -56,7 +56,7 @@ ebml_tags_converter_c::write_xml(KaxTags &tags,
   doc->append_child(pugi::node_comment).set_value(" <!DOCTYPE Tags SYSTEM \"matroskatags.dtd\"> ");
 
   ebml_tags_converter_c converter;
-  converter.to_xml(&tags, doc);
+  converter.to_xml(tags, doc);
 
   std::stringstream out_stream;
   doc->save(out_stream, "  ", pugi::format_default | pugi::format_write_bom);

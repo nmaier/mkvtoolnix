@@ -31,8 +31,8 @@ ebml_chapters_converter_c::~ebml_chapters_converter_c() {
 
 void
 ebml_chapters_converter_c::setup_maps() {
-  m_formatter_map["ChapterTimeStart"] = ebml_converter_c::format_timecode;
-  m_formatter_map["ChapterTimeEnd"]   = ebml_converter_c::format_timecode;
+  m_formatter_map["ChapterTimeStart"] = format_timecode;
+  m_formatter_map["ChapterTimeEnd"]   = format_timecode;
 }
 
 void
@@ -59,7 +59,7 @@ ebml_chapters_converter_c::write_xml(KaxChapters &chapters,
   doc->append_child(pugi::node_comment).set_value(" <!DOCTYPE Chapters SYSTEM \"matroskachapters.dtd\"> ");
 
   ebml_chapters_converter_c converter;
-  converter.to_xml(&chapters, doc);
+  converter.to_xml(chapters, doc);
 
   std::stringstream out_stream;
   doc->save(out_stream, "  ", pugi::format_default | pugi::format_write_bom);
