@@ -16,18 +16,18 @@
 
 #include <matroska/KaxTags.h>
 
-#include "common/xml/ebml_tags_xml_converter.h"
+#include "common/xml/ebml_tags_converter.h"
 
 using namespace libmatroska;
 
 void
 write_tags_xml(KaxTags &tags,
                mm_io_c *out) {
-  xml_document_cptr doc(new pugi::xml_document);
+  mtx::xml::xml_document_cptr doc(new pugi::xml_document);
 
   doc->append_child(pugi::node_comment).set_value(" <!DOCTYPE Tags SYSTEM \"matroskatags.dtd\"> ");
 
-  ebml_tags_xml_converter_c converter;
+  mtx::xml::ebml_tags_converter_c converter;
   converter.to_xml(&tags, doc);
 
   std::stringstream out_stream;

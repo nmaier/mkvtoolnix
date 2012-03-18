@@ -22,7 +22,7 @@
 #include "common/locale.h"
 #include "common/mm_io.h"
 #include "common/strings/formatting.h"
-#include "common/xml/ebml_chapters_xml_converter.h"
+#include "common/xml/ebml_chapters_converter.h"
 
 using namespace libmatroska;
 
@@ -179,11 +179,11 @@ write_chapters_simple(int &chapter_num,
 void
 write_chapters_xml(KaxChapters *chapters,
                    mm_io_c *out) {
-  xml_document_cptr doc(new pugi::xml_document);
+  mtx::xml::xml_document_cptr doc(new pugi::xml_document);
 
   doc->append_child(pugi::node_comment).set_value(" <!DOCTYPE Chapters SYSTEM \"matroskachapters.dtd\"> ");
 
-  ebml_chapters_xml_converter_c converter;
+  mtx::xml::ebml_chapters_converter_c converter;
   converter.to_xml(chapters, doc);
 
   std::stringstream out_stream;

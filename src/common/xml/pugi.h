@@ -18,6 +18,10 @@
 
 #include "pugixml.hpp"
 
-typedef counted_ptr<pugi::xml_document> xml_document_cptr;
+namespace mtx {
+  namespace xml {
+    typedef counted_ptr<pugi::xml_document> xml_document_cptr;
+  }
+}
 
 #endif // MTX_COMMON_XML_PUGI_H
