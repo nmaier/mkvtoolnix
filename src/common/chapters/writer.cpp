@@ -188,5 +188,5 @@ write_chapters_xml(KaxChapters *chapters,
 
   std::stringstream out_stream;
   doc->save(out_stream, "  ", pugi::format_default | pugi::format_write_bom);
-  out->write(out_stream.str());
+  out->puts(out_stream.str());
 }
