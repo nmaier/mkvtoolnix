@@ -430,8 +430,8 @@ parse_number_with_unit(const std::string &s,
                        const std::string &subject,
                        const std::string &argument,
                        std::string display_s = "") {
-  boost::regex re1("(-?\\d+\\.?\\d*)(s|ms|us|ns|fps|p|i)?",  boost::regex::perl | boost::regbase::icase);
-  boost::regex re2("(-?\\d+)/(-?\\d+)(s|ms|us|ns|fps|p|i)?", boost::regex::perl | boost::regbase::icase);
+  boost::regex re1("(-?\\d+\\.?\\d*)(s|ms|us|ns|fps|p|i)?",  boost::regex::perl | boost::regex::icase);
+  boost::regex re2("(-?\\d+)/(-?\\d+)(s|ms|us|ns|fps|p|i)?", boost::regex::perl | boost::regex::icase);
 
   std::string unit, s_n, s_d;
   int64_t n, d;
@@ -441,14 +441,14 @@ parse_number_with_unit(const std::string &s,
   if (display_s.empty())
     display_s = s;
 
-  boost::match_results<std::string::const_iterator> matches;
-  if (boost::regex_match(s, matches, re1, boost::match_default)) {
+  boost::smatch matches;
+  if (boost::regex_match(s, matches, re1)) {
     parse_double(matches[1], d_value);
     if (matches.size() > 2)
       unit = matches[2];
     d = 1;
 
-  } else if (boost::regex_match(s, matches, re2, boost::match_default)) {
+  } else if (boost::regex_match(s, matches, re2)) {
     parse_int(matches[1], n);
     parse_int(matches[2], d);
     if (matches.size() > 3)

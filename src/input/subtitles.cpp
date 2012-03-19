@@ -58,7 +58,7 @@ srt_parser_c::probe(mm_text_io_c *io) {
 
     s = io->getline();
     boost::regex timecode_re(SRT_RE_TIMECODE_LINE, boost::regex::perl);
-    boost::match_results<std::string::const_iterator> matches;
+    boost::smatch matches;
     if (!boost::regex_search(s, timecode_re))
       return false;
 
@@ -129,7 +129,7 @@ srt_parser_c::parse() {
       parse_uint(s, subtitle_number);
 
     } else if (STATE_TIME == state) {
-      boost::match_results<std::string::const_iterator> matches;
+      boost::smatch matches;
       if (!boost::regex_search(s, matches, timecode_re)) {
         mxwarn_tid(m_file_name, m_tid, boost::format(Y("Error in line %1%: expected a SRT timecode line but found something else. Aborting this file.\n")) % line_number);
         break;
@@ -245,8 +245,8 @@ srt_parser_c::parse() {
 
 bool
 ssa_parser_c::probe(mm_text_io_c *io) {
-  boost::regex script_info_re("^\\s*\\[script\\s+info\\]",   boost::regex::perl | boost::regbase::icase);
-  boost::regex styles_re(     "^\\s*\\[V4\\+?\\s+Styles\\]", boost::regex::perl | boost::regbase::icase);
+  boost::regex script_info_re("^\\s*\\[script\\s+info\\]",   boost::regex::perl | boost::regex::icase);
+  boost::regex styles_re(     "^\\s*\\[V4\\+?\\s+Styles\\]", boost::regex::perl | boost::regex::icase);
 
   try {
     int line_number = 0;
@@ -286,12 +286,12 @@ ssa_parser_c::ssa_parser_c(generic_reader_c *reader,
 
 void
 ssa_parser_c::parse() {
-  boost::regex sec_styles_ass_re("^\\s*\\[V4\\+\\s+Styles\\]", boost::regex::perl | boost::regbase::icase);
-  boost::regex sec_styles_re(    "^\\s*\\[V4\\s+Styles\\]",    boost::regex::perl | boost::regbase::icase);
-  boost::regex sec_info_re(      "^\\s*\\[Script\\s+Info\\]",  boost::regex::perl | boost::regbase::icase);
-  boost::regex sec_events_re(    "^\\s*\\[Events\\]",          boost::regex::perl | boost::regbase::icase);
-  boost::regex sec_graphics_re(  "^\\s*\\[Graphics\\]",        boost::regex::perl | boost::regbase::icase);
-  boost::regex sec_fonts_re(     "^\\s*\\[Fonts\\]",           boost::regex::perl | boost::regbase::icase);
+  boost::regex sec_styles_ass_re("^\\s*\\[V4\\+\\s+Styles\\]", boost::regex::perl | boost::regex::icase);
+  boost::regex sec_styles_re(    "^\\s*\\[V4\\s+Styles\\]",    boost::regex::perl | boost::regex::icase);
+  boost::regex sec_info_re(      "^\\s*\\[Script\\s+Info\\]",  boost::regex::perl | boost::regex::icase);
+  boost::regex sec_events_re(    "^\\s*\\[Events\\]",          boost::regex::perl | boost::regex::icase);
+  boost::regex sec_graphics_re(  "^\\s*\\[Graphics\\]",        boost::regex::perl | boost::regex::icase);
+  boost::regex sec_fonts_re(     "^\\s*\\[Fonts\\]",           boost::regex::perl | boost::regex::icase);
 
   int num                        = 0;
   ssa_section_e section          = SSA_SECTION_NONE;

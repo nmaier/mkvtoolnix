@@ -70,7 +70,7 @@ bool
 probe_simple_chapters(mm_text_io_c *in) {
   boost::regex timecode_line_re(SIMCHAP_RE_TIMECODE_LINE, boost::regex::perl);
   boost::regex name_line_re(    SIMCHAP_RE_NAME_LINE,     boost::regex::perl);
-  boost::match_results<std::string::const_iterator> matches;
+  boost::smatch matches;
 
   std::string line;
 
@@ -168,7 +168,7 @@ parse_simple_chapters(mm_text_io_c *in,
   boost::regex timecode_line_re(SIMCHAP_RE_TIMECODE_LINE, boost::regex::perl);
   boost::regex timecode_re(     SIMCHAP_RE_TIMECODE,      boost::regex::perl);
   boost::regex name_line_re(    SIMCHAP_RE_NAME_LINE,     boost::regex::perl);
-  boost::match_results<std::string::const_iterator> matches;
+  boost::smatch matches;
 
   try {
     std::string line, timecode_as_string;

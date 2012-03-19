@@ -62,7 +62,7 @@ version_number_t::version_number_t(const std::string &s)
                                           ")?",
                                           boost::regex::perl | boost::regex::mod_x);
 
-  boost::match_results<std::string::const_iterator> matches;
+  boost::smatch matches;
   if (!boost::regex_search(s, matches, s_version_number_re))
     return;
 

@@ -220,7 +220,7 @@ extract_cli_parser_c::add_extraction_spec() {
 
   boost::regex s_track_id_re("^(\\d+)(:(.+))?$", boost::regex::perl);
 
-  boost::match_results<std::string::const_iterator> matches;
+  boost::smatch matches;
   if (!boost::regex_search(m_current_arg, matches, s_track_id_re)) {
     if (options_c::em_attachments == m_options.m_extraction_mode)
       mxerror(boost::format(Y("Invalid attachment ID/file name specification in argument '%1%'.\n")) % m_current_arg);
