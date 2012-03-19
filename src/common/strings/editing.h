@@ -18,12 +18,13 @@
 
 #include <stdarg.h>
 
-std::vector<std::string> split(const char *src, const char *pattern = ",", int max_num = -1);
+std::vector<std::string> split(std::string const &text, boost::regex const &pattern, size_t max = 0, boost::match_flag_type match_flags = boost::match_default);
+
 inline std::vector<std::string>
-split(const std::string &src,
-      const std::string &pattern = std::string(","),
-      int max_num = -1) {
-  return split(src.c_str(), pattern.c_str(), max_num);
+split(std::string const &text,
+      std::string const &pattern = ",",
+      size_t max = 0) {
+  return split(text, boost::regex(std::string("\\Q") + pattern, boost::regex::perl), max);
 }
 
 std::string join(const char *pattern, const std::vector<std::string> &strings);

@@ -19,23 +19,28 @@
 const std::string empty_string("");
 
 std::vector<std::string>
-split(const char *src,
-      const char *pattern,
-      int max_num) {
-  std::vector<std::string> parts;
-  size_t pattern_len = strlen(pattern);
-  const char *hit    = strstr(src, pattern);
-  const char *end    = src + strlen(src);
+split(std::string const &text,
+      boost::regex const &pattern,
+      size_t max,
+      boost::match_flag_type match_flags) {
+  std::vector<std::string> results;
 
-  while (hit && ((0 >= max_num) || ((parts.size() + 1) < static_cast<size_t>(max_num)))) {
-    parts.push_back(std::string(src, hit - src));
-    src = hit + pattern_len;
-    hit = strstr(src, pattern);
+  auto match = boost::make_regex_iterator(text, pattern, match_flags);
+  boost::sregex_iterator end;
+  size_t previous_match_end = 0;
+
+  while (   (match != end)
+         && (   (0 == max)
+             || ((results.size() + 1) < max))) {
+    results.push_back(text.substr(previous_match_end, match->position(0ul) - previous_match_end));
+    previous_match_end = match->position(0ul) + match->length(0);
+    ++match;
   }
 
-  parts.push_back(std::string(src, end - src));
+  if (previous_match_end <= text.size())
+    results.push_back(text.substr(std::min(previous_match_end, std::max<size_t>(text.size(), 1) - 1), text.size() - previous_match_end));
 
-  return parts;
+  return results;
 }
 
 std::string
