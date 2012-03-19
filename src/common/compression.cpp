@@ -197,9 +197,7 @@ bzlib_compressor_c::~bzlib_compressor_c() {
 }
 
 void
-bzlib_compressor_c::decompress(memory_cptr &) {
-  mxerror(Y("bzlib_compressor_c::decompress() not implemented\n"));
-
+bzlib_compressor_c::decompress(memory_cptr &buffer) {
   bz_stream d_stream;
 
   d_stream.bzalloc = nullptr;
@@ -210,7 +208,33 @@ bzlib_compressor_c::decompress(memory_cptr &) {
   if (BZ_OK != result)
     mxerror(boost::format(Y("BZ2_bzCompressInit() failed. Result: %1%\n")) % result);
 
+  auto in_size             = buffer->get_size();
+  memory_cptr uncompressed = memory_c::alloc(in_size);
+  d_stream.next_in         = reinterpret_cast<char *>(buffer->get_buffer());
+  d_stream.avail_in        = in_size;
+
+  while (1) {
+    d_stream.next_out  = reinterpret_cast<char *>(uncompressed->get_buffer() + uncompressed->get_size() - in_size);
+    d_stream.avail_out = in_size;
+
+    do {
+      result = BZ2_bzDecompress(&d_stream);
+    } while ((BZ_OK == result) && (0 < d_stream.avail_out));
+
+    if (BZ_STREAM_END == result)
+      break;
+
+    if (0 == d_stream.avail_out) {
+      uncompressed->resize(uncompressed->get_size() + in_size);
+      continue;
+    }
+
+    throw mtx::compression_x(boost::format(Y("BZ2_bzDecompress() failed. Result: %1%\n")) % result);
+  }
+
   BZ2_bzDecompressEnd(&d_stream);
+
+  buffer = uncompressed;
 }
 
 void
