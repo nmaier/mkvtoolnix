@@ -36,7 +36,7 @@ ebml_chapters_converter_c::setup_maps() {
 }
 
 void
-ebml_chapters_converter_c::fix_xml(xml_document_cptr &doc)
+ebml_chapters_converter_c::fix_xml(document_cptr &doc)
   const {
   auto result = doc->select_nodes("//ChapterAtom[not(ChapterTimeStart)]");
   for (auto &atom : result)
@@ -54,7 +54,7 @@ ebml_chapters_converter_c::fix_xml(xml_document_cptr &doc)
 void
 ebml_chapters_converter_c::write_xml(KaxChapters &chapters,
                                      mm_io_c &out) {
-  xml_document_cptr doc(new pugi::xml_document);
+  document_cptr doc(new pugi::xml_document);
 
   doc->append_child(pugi::node_comment).set_value(" <!DOCTYPE Chapters SYSTEM \"matroskachapters.dtd\"> ");
 

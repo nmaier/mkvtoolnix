@@ -30,7 +30,7 @@ public:
   virtual ~ebml_chapters_converter_c();
 
 protected:
-  virtual void fix_xml(xml_document_cptr &doc) const;
+  virtual void fix_xml(document_cptr &doc) const;
   void setup_maps();
 
 public:

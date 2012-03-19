@@ -32,7 +32,7 @@ public:
   ebml_converter_c();
   virtual ~ebml_converter_c();
 
-  xml_document_cptr to_xml(EbmlElement &e, xml_document_cptr const &destination = xml_document_cptr(nullptr)) const;
+  document_cptr to_xml(EbmlElement &e, document_cptr const &destination = document_cptr(nullptr)) const;
 
 public:
   static void format_uint(pugi::xml_node &node, EbmlElement &e);
@@ -46,7 +46,7 @@ protected:
   void format_value(pugi::xml_node &node, EbmlElement &e, value_formatter_t default_formatter) const;
 
   void to_xml_recursively(pugi::xml_node &parent, EbmlElement &e) const;
-  virtual void fix_xml(xml_document_cptr &doc) const;
+  virtual void fix_xml(document_cptr &doc) const;
   std::string get_tag_name(EbmlElement &e) const;
   std::string get_debug_name(std::string const &tag_name) const;
 

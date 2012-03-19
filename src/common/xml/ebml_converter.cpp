@@ -28,11 +28,11 @@ ebml_converter_c::ebml_converter_c()
 ebml_converter_c::~ebml_converter_c() {
 }
 
-xml_document_cptr
+document_cptr
 ebml_converter_c::to_xml(EbmlElement &e,
-                         xml_document_cptr const &destination)
+                         document_cptr const &destination)
   const {
-  xml_document_cptr doc = destination ? destination : xml_document_cptr(new pugi::xml_document);
+  document_cptr doc = destination ? destination : document_cptr(new pugi::xml_document);
   to_xml_recursively(*doc, e);
   fix_xml(doc);
   return doc;
@@ -74,7 +74,7 @@ ebml_converter_c::reverse_debug_to_tag_name_map() {
 }
 
 void
-ebml_converter_c::fix_xml(xml_document_cptr &)
+ebml_converter_c::fix_xml(document_cptr &)
   const {
 }
 

@@ -51,7 +51,7 @@ ebml_tags_converter_c::setup_maps() {
 void
 ebml_tags_converter_c::write_xml(KaxTags &tags,
                                  mm_io_c &out) {
-  xml_document_cptr doc(new pugi::xml_document);
+  document_cptr doc(new pugi::xml_document);
 
   doc->append_child(pugi::node_comment).set_value(" <!DOCTYPE Tags SYSTEM \"matroskatags.dtd\"> ");
 
