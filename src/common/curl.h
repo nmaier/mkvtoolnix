@@ -24,7 +24,28 @@
 #  include <curl/curl.h>
 #  include <string>
 
-CURLcode retrieve_via_curl(const std::string &url, std::string &data, int connect_timeout = 10);
+class url_retriever_c {
+public:
+  typedef boost::function<void(int64_t, int64_t)> progress_cb_t;
+
+protected:
+  progress_cb_t m_progress_cb;
+  std::string *m_data;
+  int m_connect_timeout, m_download_timeout;
+  int64_t m_total_size;
+  bool m_debug;
+
+public:
+  url_retriever_c();
+
+  url_retriever_c &set_timeout(int connect_timeout = 10, int download_timeout = 0);
+  url_retriever_c &set_progress_cb(progress_cb_t const &progress_cb);
+
+  CURLcode retrieve(std::string const &url, std::string &data);
+
+  void add_data(std::string const &data);
+  void parse_header(std::string const &header);
+};
 
 # endif  // defined(HAVE_CURL_EASY_H)
 

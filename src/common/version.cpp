@@ -166,7 +166,8 @@ get_latest_release_version() {
 
   mtx_release_version_t release;
   std::string data;
-  CURLcode result = retrieve_via_curl(url, data);
+  url_retriever_c retriever;
+  CURLcode result = retriever.retrieve(url, data);
 
   if (0 != result) {
     mxdebug_if(debug, boost::format("Update check CURL error: %1%\n") % static_cast<unsigned int>(result));
