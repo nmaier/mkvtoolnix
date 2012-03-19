@@ -136,7 +136,7 @@ zlib_compressor_c::decompress(memory_cptr &buffer) {
     result             = inflate(&d_stream, Z_NO_FLUSH);
 
     if ((Z_OK != result) && (Z_STREAM_END != result))
-      mxerror(boost::format(Y("Zlib decompression failed. Result: %1%\n")) % result);
+      throw mtx::compression_x(boost::format(Y("Zlib decompression failed. Result: %1%\n")) % result);
 
   } while ((0 == d_stream.avail_out) && (0 != d_stream.avail_in) && (Z_STREAM_END != result));
 
