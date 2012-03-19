@@ -118,7 +118,7 @@ zlib_compressor_c::decompress(memory_cptr &buffer) {
   d_stream.zalloc = (alloc_func)0;
   d_stream.zfree  = (free_func)0;
   d_stream.opaque = (voidpf)0;
-  int result      = inflateInit(&d_stream);
+  int result      = inflateInit2(&d_stream, 15 + 32); // 15: window size; 32: look for zlib/gzip headers automatically
 
   if (Z_OK != result)
     mxerror(boost::format(Y("inflateInit() failed. Result: %1%\n")) % result);
