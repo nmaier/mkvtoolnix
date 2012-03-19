@@ -32,7 +32,7 @@ xml_document_cptr
 ebml_converter_c::to_xml(EbmlElement &e,
                          xml_document_cptr const &destination)
   const {
-  xml_document_cptr doc = destination.is_set() ? destination : xml_document_cptr(new pugi::xml_document);
+  xml_document_cptr doc = destination ? destination : xml_document_cptr(new pugi::xml_document);
   to_xml_recursively(*doc, e);
   fix_xml(doc);
   return doc;

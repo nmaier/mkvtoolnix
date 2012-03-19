@@ -959,7 +959,7 @@ kax_analyzer_c::read_all(const EbmlCallbacks &callbacks) {
     EbmlElement *l2 = nullptr;
     element->Read(*m_stream, EBML_INFO_CONTEXT(callbacks), upper_lvl_el, l2, true);
 
-    if (!master.is_set())
+    if (!master)
       master = ebml_master_cptr(static_cast<EbmlMaster *>(element));
     else {
       EbmlMaster *src = static_cast<EbmlMaster *>(element);
@@ -971,7 +971,7 @@ kax_analyzer_c::read_all(const EbmlCallbacks &callbacks) {
     }
   }
 
-  if (master.is_set() && (master->ListSize() == 0))
+  if (master && (master->ListSize() == 0))
     master.clear();
 
   return master;

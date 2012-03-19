@@ -704,7 +704,7 @@ mpeg4::p10::avc_es_parser_c::add_bytes(unsigned char *buffer,
   int previous_pos             = -1;
   uint64_t previous_parsed_pos = m_parsed_position;
 
-  if (m_unparsed_buffer.is_set() && (0 != m_unparsed_buffer->get_size()))
+  if (m_unparsed_buffer && (0 != m_unparsed_buffer->get_size()))
     cursor.add_slice(m_unparsed_buffer);
   cursor.add_slice(buffer, size);
 
@@ -758,7 +758,7 @@ mpeg4::p10::avc_es_parser_c::add_bytes(unsigned char *buffer,
 
 void
 mpeg4::p10::avc_es_parser_c::flush() {
-  if (m_unparsed_buffer.is_set() && (5 <= m_unparsed_buffer->get_size())) {
+  if (m_unparsed_buffer && (5 <= m_unparsed_buffer->get_size())) {
     m_parsed_position += m_unparsed_buffer->get_size();
     int marker_size = get_uint32_be(m_unparsed_buffer->get_buffer()) == NALU_START_CODE ? 4 : 3;
     handle_nalu(memory_c::clone(m_unparsed_buffer->get_buffer() + marker_size, m_unparsed_buffer->get_size() - marker_size));

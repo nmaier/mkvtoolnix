@@ -1340,7 +1340,7 @@ parse_arg_priority(const std::string &arg) {
 static void
 parse_arg_previous_segment_uid(const std::string &param,
                                const std::string &arg) {
-  if (g_seguid_link_previous.is_set())
+  if (g_seguid_link_previous)
     mxerror(boost::format(Y("The previous UID was already given in '%1% %2%'.\n")) % param % arg);
 
   try {
@@ -1353,7 +1353,7 @@ parse_arg_previous_segment_uid(const std::string &param,
 static void
 parse_arg_next_segment_uid(const std::string &param,
                            const std::string &arg) {
-  if (g_seguid_link_next.is_set())
+  if (g_seguid_link_next)
     mxerror(boost::format(Y("The next UID was already given in '%1% %2%'.\n")) % param % arg);
 
   try {

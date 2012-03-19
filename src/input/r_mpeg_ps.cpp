@@ -591,7 +591,7 @@ mpeg_ps_reader_c::new_stream_v_mpeg_1_2(mpeg_ps_id_t id,
 
   MPEG2SequenceHeader seq_hdr = m2v_parser->GetSequenceHeader();
   counted_ptr<MPEGFrame> frame(m2v_parser->ReadFrame());
-  if (!frame.is_set())
+  if (!frame)
     throw false;
 
   track->fourcc         = FOURCC('M', 'P', 'G', '0' + m2v_parser->GetMPEGVersion());

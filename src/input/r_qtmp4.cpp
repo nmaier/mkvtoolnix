@@ -873,7 +873,7 @@ qtmp4_reader_c::parse_itunsmpb(std::string data) {
 
 void
 qtmp4_reader_c::read_chapter_track() {
-  if (m_ti.m_no_chapters || (nullptr != m_chapters) || !m_chapter_dmx.is_set())
+  if (m_ti.m_no_chapters || (nullptr != m_chapters) || !m_chapter_dmx)
     return;
 
   m_chapter_dmx->update_tables(m_time_scale);
@@ -1649,7 +1649,7 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
       break;
     }
 
-  if (!dmx.is_set() || !dmx->ok || !demuxing_requested(dmx->type, dmx->id) || (-1 != dmx->ptzr))
+  if (!dmx || !dmx->ok || !demuxing_requested(dmx->type, dmx->id) || (-1 != dmx->ptzr))
     return;
 
   m_ti.m_id          = dmx->id;

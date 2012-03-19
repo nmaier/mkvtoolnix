@@ -302,7 +302,7 @@ avi_reader_c::create_mpeg1_2_packetizer() {
 
   MPEG2SequenceHeader seq_hdr = m2v_parser->GetSequenceHeader();
   counted_ptr<MPEGFrame> frame(m2v_parser->ReadFrame());
-  if (!frame.is_set())
+  if (!frame)
     mxerror_tid(m_ti.m_fname, 0, Y("Could not extract the sequence header from this MPEG-1/2 track.\n"));
 
   int display_width      = ((0 >= seq_hdr.aspectRatio) || (1 == seq_hdr.aspectRatio)) ? seq_hdr.width : static_cast<int>(seq_hdr.height * seq_hdr.aspectRatio);
@@ -343,7 +343,7 @@ avi_reader_c::create_mpeg4_p10_packetizer() {
     uint32_t extra_data_size = get_uint32_le(&m_avi->bitmap_info_header->bi_size) - sizeof(alBITMAPINFOHEADER);
     if (0 < extra_data_size) {
       memory_cptr avc_extra_nalus = mpeg4::p10::avcc_to_nalus(reinterpret_cast<unsigned char *>(m_avi->bitmap_info_header + 1), extra_data_size);
-      if (avc_extra_nalus.is_set())
+      if (avc_extra_nalus)
         ptzr->add_extra_data(avc_extra_nalus);
     }
 

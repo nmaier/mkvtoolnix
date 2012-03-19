@@ -160,7 +160,7 @@ wavpack_reader_c::read(generic_packetizer_c *,
   packet_cptr packet(new packet_t(new memory_c(chunk, data_size, true)));
 
   // find the if there is a correction file data corresponding
-  if (!m_in_correc.is_set()) {
+  if (!m_in_correc) {
     PTZR0->process(packet);
     return FILE_STATUS_MOREDATA;
   }

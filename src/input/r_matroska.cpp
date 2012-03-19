@@ -767,7 +767,7 @@ kax_reader_c::handle_tags(mm_io_c *io,
     }
 
     if (is_global) {
-      if (!m_tags.is_set())
+      if (!m_tags)
         m_tags = counted_ptr<KaxTags>(new KaxTags);
       m_tags->PushElement(*tag);
 
@@ -1349,7 +1349,7 @@ kax_reader_c::read_headers_internal() {
 
 void
 kax_reader_c::process_global_tags() {
-  if (!m_tags.is_set() || g_identifying)
+  if (!m_tags || g_identifying)
     return;
 
   size_t i;
@@ -2324,7 +2324,7 @@ kax_reader_c::identify() {
   if (nullptr != m_chapters)
     id_result_chapters(count_chapter_atoms(*m_chapters));
 
-  if (m_tags.is_set())
+  if (m_tags)
     id_result_tags(ID_RESULT_GLOBAL_TAGS_ID, count_simple_tags(*m_tags));
 
   for (auto &track : m_tracks)

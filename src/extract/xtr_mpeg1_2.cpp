@@ -52,7 +52,7 @@ xtr_mpeg1_2_video_c::handle_frame(memory_cptr &frame,
   if (references_valid)
     keyframe = (0 == bref);
 
-  if (keyframe && m_seq_hdr.is_set()) {
+  if (keyframe && m_seq_hdr) {
     bool seq_hdr_found = false;
     size_t size        = frame->get_size();
 

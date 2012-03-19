@@ -98,7 +98,7 @@ random_c::generate_bytes(void *destination,
       m_tried_dev_urandom = true;
       m_dev_urandom       = mm_file_io_c::open("/dev/urandom");
     }
-    if (m_dev_urandom.is_set() && (m_dev_urandom->read(destination, num_bytes) == num_bytes))
+    if (m_dev_urandom && (m_dev_urandom->read(destination, num_bytes) == num_bytes))
       return;
   } catch(...) {
   }

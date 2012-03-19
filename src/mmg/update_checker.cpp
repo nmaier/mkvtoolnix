@@ -41,6 +41,9 @@ update_check_thread_c::Entry() {
 
   else {
     m_mdlg->set_release_version(release);
+    // mtx::xml::xml_document_cptr relases_info = get_releases_info();
+    // if (releases_info) {
+      // m_mdlg->set_release_version();
     event.SetId(release.current_version < release.latest_source ? UPDATE_CHECK_DONE_NEW_RELEASE : UPDATE_CHECK_DONE_NO_NEW_RELEASE);
   }
 

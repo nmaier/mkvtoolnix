@@ -446,7 +446,7 @@ ogm_reader_c::handle_new_stream_and_packets(ogg_page *og) {
 
   handle_new_stream(og);
   dmx = find_demuxer(ogg_page_serialno(og));
-  if (dmx.is_set())
+  if (dmx)
     process_header_packets(dmx);
 }
 
@@ -581,7 +581,7 @@ ogm_reader_c::process_page(ogg_page *og) {
   int64_t granulepos;
 
   dmx = find_demuxer(ogg_page_serialno(og));
-  if (!dmx.is_set() || !dmx->in_use)
+  if (!dmx || !dmx->in_use)
     return;
 
   granulepos = ogg_page_granulepos(og);
@@ -604,7 +604,7 @@ ogm_reader_c::process_header_page(ogg_page *og) {
   ogm_demuxer_cptr dmx;
 
   dmx = find_demuxer(ogg_page_serialno(og));
-  if (!dmx.is_set() ||dmx->headers_read)
+  if (!dmx ||dmx->headers_read)
     return;
 
   ogg_stream_pagein(&dmx->os, og);

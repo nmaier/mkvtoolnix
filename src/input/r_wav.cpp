@@ -551,19 +551,19 @@ wav_reader_c::create_demuxer() {
       m_demuxer.clear();
   }
 
-  if (!m_demuxer.is_set()) {
+  if (!m_demuxer) {
     m_demuxer = wav_demuxer_cptr(new wav_dts_demuxer_c(this, &m_wheader));
     if (!m_demuxer->probe(m_in))
       m_demuxer.clear();
   }
 
-  if (!m_demuxer.is_set()) {
+  if (!m_demuxer) {
     m_demuxer = wav_demuxer_cptr(new wav_ac3wav_demuxer_c(this, &m_wheader));
     if (!m_demuxer->probe(m_in))
       m_demuxer.clear();
   }
 
-  if (!m_demuxer.is_set() && ((0x0001 == m_format_tag) || (0x0003 == m_format_tag)))
+  if (!m_demuxer && ((0x0001 == m_format_tag) || (0x0003 == m_format_tag)))
     m_demuxer = wav_demuxer_cptr(new wav_pcm_demuxer_c(this, &m_wheader, 0x00003 == m_format_tag));
 
   show_demuxer_info();
@@ -571,7 +571,7 @@ wav_reader_c::create_demuxer() {
 
 void
 wav_reader_c::create_packetizer(int64_t) {
-  if (!demuxing_requested('a', 0) || (NPTZR() != 0) || !m_demuxer.is_set())
+  if (!demuxing_requested('a', 0) || (NPTZR() != 0) || !m_demuxer)
     return;
 
   add_packetizer(m_demuxer->create_packetizer());
@@ -580,7 +580,7 @@ wav_reader_c::create_packetizer(int64_t) {
 file_status_e
 wav_reader_c::read(generic_packetizer_c *,
                    bool) {
-  if (!m_demuxer.is_set())
+  if (!m_demuxer)
     return FILE_STATUS_DONE;
 
   int64_t        requested_bytes = std::min(m_remaining_bytes_in_current_data_chunk, m_demuxer->get_preferred_input_size());
@@ -670,7 +670,7 @@ wav_reader_c::find_chunk(const char *id,
 
 void
 wav_reader_c::identify() {
-  if (m_demuxer.is_set()) {
+  if (m_demuxer) {
     id_result_container();
     id_result_track(0, ID_RESULT_TRACK_AUDIO, m_demuxer->get_codec());
 

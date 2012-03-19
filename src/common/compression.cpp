@@ -261,7 +261,7 @@ header_removal_compressor_c::header_removal_compressor_c()
 
 void
 header_removal_compressor_c::decompress(memory_cptr &buffer) {
-  if (!m_bytes.is_set() || (0 == m_bytes->get_size()))
+  if (!m_bytes || (0 == m_bytes->get_size()))
     return;
 
   memory_cptr new_buffer = memory_c::alloc(buffer->get_size() + m_bytes->get_size());
@@ -274,7 +274,7 @@ header_removal_compressor_c::decompress(memory_cptr &buffer) {
 
 void
 header_removal_compressor_c::compress(memory_cptr &buffer) {
-  if (!m_bytes.is_set() || (0 == m_bytes->get_size()))
+  if (!m_bytes || (0 == m_bytes->get_size()))
     return;
 
   size_t size = m_bytes->get_size();
@@ -323,7 +323,7 @@ analyze_header_removal_compressor_c::analyze_header_removal_compressor_c()
 }
 
 analyze_header_removal_compressor_c::~analyze_header_removal_compressor_c() {
-  if (!m_bytes.is_set())
+  if (!m_bytes)
     mxinfo("Analysis failed: no packet encountered\n");
 
   else if (m_bytes->get_size() == 0)
@@ -344,7 +344,7 @@ void
 analyze_header_removal_compressor_c::compress(memory_cptr &buffer) {
   ++m_packet_counter;
 
-  if (!m_bytes.is_set()) {
+  if (!m_bytes) {
     m_bytes = memory_cptr(buffer->clone());
     return;
   }

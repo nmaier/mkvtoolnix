@@ -300,7 +300,7 @@ vc1::es_parser_c::add_bytes(unsigned char *buffer,
   int previous_pos            = -1;
   int64_t previous_stream_pos = m_stream_pos;
 
-  if (m_unparsed_buffer.is_set() && (0 != m_unparsed_buffer->get_size()))
+  if (m_unparsed_buffer && (0 != m_unparsed_buffer->get_size()))
     cursor.add_slice(m_unparsed_buffer);
   cursor.add_slice(buffer, size);
 
@@ -345,7 +345,7 @@ vc1::es_parser_c::add_bytes(unsigned char *buffer,
 
 void
 vc1::es_parser_c::flush() {
-  if (m_unparsed_buffer.is_set() && (4 <= m_unparsed_buffer->get_size())) {
+  if (m_unparsed_buffer && (4 <= m_unparsed_buffer->get_size())) {
     uint32_t marker = get_uint32_be(m_unparsed_buffer->get_buffer());
     if (vc1::is_marker(marker))
       handle_packet(memory_c::clone(m_unparsed_buffer->get_buffer(), m_unparsed_buffer->get_size()));
@@ -400,7 +400,7 @@ vc1::es_parser_c::handle_entrypoint_packet(memory_cptr packet) {
   if (!postpone_processing(packet))
     add_pre_frame_extra_data(packet);
 
-  if (!m_raw_entrypoint.is_set())
+  if (!m_raw_entrypoint)
     m_raw_entrypoint = memory_cptr(packet->clone());
 }
 
@@ -477,7 +477,7 @@ vc1::es_parser_c::handle_unknown_packet(uint32_t,
 
 void
 vc1::es_parser_c::flush_frame() {
-  if (!m_current_frame.is_set())
+  if (!m_current_frame)
     return;
 
   if (!m_pre_frame_extra_data.empty() || !m_post_frame_extra_data.empty())
@@ -586,7 +586,7 @@ void
 vc1::es_parser_c::add_timecode(int64_t timecode,
                                int64_t position) {
   position += m_stream_pos;
-  if (m_unparsed_buffer.is_set())
+  if (m_unparsed_buffer)
     position += m_unparsed_buffer->get_size();
 
   m_timecodes.push_back(timecode);

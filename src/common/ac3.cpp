@@ -230,7 +230,7 @@ ac3::frame_c::to_string(bool verbose)
                         % m_sub_stream_id
                         % m_dependent_frames.size()
                         % frame_type
-                        % (m_data.is_set() ? m_data->get_size() : 0)
+                        % (m_data ? m_data->get_size() : 0)
                         % is_eac3()
                         ).str();
 

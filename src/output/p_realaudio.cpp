@@ -31,7 +31,7 @@ ra_packetizer_c::ra_packetizer_c(generic_reader_c *p_reader,
   , m_channels(channels)
   , m_bits_per_sample(bits_per_sample)
   , m_fourcc(fourcc)
-  , m_private_data(private_data.is_set() ? private_data->clone() : private_data)
+  , m_private_data(private_data ? private_data->clone() : private_data)
 {
   set_track_type(track_audio, TFA_SHORT_QUEUEING);
 }
@@ -47,7 +47,7 @@ ra_packetizer_c::set_headers() {
   set_audio_sampling_freq((float)m_samples_per_sec);
   set_audio_channels(m_channels);
   set_audio_bit_depth(m_bits_per_sample);
-  if (m_private_data.is_set())
+  if (m_private_data)
     set_codec_private(m_private_data->get_buffer(), m_private_data->get_size());
 
   generic_packetizer_c::set_headers();

@@ -50,7 +50,7 @@ pgs_packetizer_c::process(packet_cptr packet) {
     return FILE_STATUS_MOREDATA;
   }
 
-  if (!m_aggregated.is_set()) {
+  if (!m_aggregated) {
     m_aggregated = packet;
     m_aggregated->data->grab();
 

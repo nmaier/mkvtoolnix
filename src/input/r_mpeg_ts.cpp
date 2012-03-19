@@ -91,14 +91,14 @@ mpeg_ts_track_c::add_pes_payload(unsigned char *ts_payload,
 
 void
 mpeg_ts_track_c::add_pes_payload_to_probe_data() {
-  if (!m_probe_data.is_set())
+  if (!m_probe_data)
     m_probe_data = byte_buffer_cptr(new byte_buffer_c);
   m_probe_data->add(pes_payload->get_buffer(), pes_payload->get_size());
 }
 
 int
 mpeg_ts_track_c::new_stream_v_mpeg_1_2() {
-  if (!m_m2v_parser.is_set()) {
+  if (!m_m2v_parser) {
     m_m2v_parser = counted_ptr<M2VParser>(new M2VParser);
     m_m2v_parser->SetProbeMode();
   }
@@ -113,7 +113,7 @@ mpeg_ts_track_c::new_stream_v_mpeg_1_2() {
 
   MPEG2SequenceHeader seq_hdr = m_m2v_parser->GetSequenceHeader();
   counted_ptr<MPEGFrame> frame(m_m2v_parser->ReadFrame());
-  if (!frame.is_set())
+  if (!frame)
     return FILE_STATUS_MOREDATA;
 
   fourcc         = FOURCC('M', 'P', 'G', '0' + m_m2v_parser->GetMPEGVersion());
@@ -145,7 +145,7 @@ mpeg_ts_track_c::new_stream_v_mpeg_1_2() {
 
 int
 mpeg_ts_track_c::new_stream_v_avc() {
-  if (!m_avc_parser.is_set()) {
+  if (!m_avc_parser) {
     m_avc_parser = mpeg4::p10::avc_es_parser_cptr(new mpeg4::p10::avc_es_parser_c);
     m_avc_parser->ignore_nalu_size_length_errors();
 
@@ -250,7 +250,7 @@ mpeg_ts_track_c::new_stream_a_dts() {
 
 int
 mpeg_ts_track_c::new_stream_a_truehd() {
-  if (!m_truehd_parser.is_set())
+  if (!m_truehd_parser)
     m_truehd_parser = truehd_parser_cptr(new truehd_parser_c);
 
   static int added = 0;
@@ -781,7 +781,7 @@ mpeg_ts_reader_c::parse_packet(unsigned char *buf) {
   // called from this one will modify tracks.
   mpeg_ts_track_ptr track = tracks[tidx];
 
-  if (!track.is_set())
+  if (!track)
     return false;
 
   if (hdr->get_payload_unit_start_indicator()) {
@@ -1054,7 +1054,7 @@ mpeg_ts_reader_c::create_packetizer(int64_t id) {
 void
 mpeg_ts_reader_c::create_mpeg1_2_video_packetizer(mpeg_ts_track_ptr &track) {
 
-  if (track->raw_seq_hdr.is_set() && (0 < track->raw_seq_hdr->get_size())) {
+  if (track->raw_seq_hdr && (0 < track->raw_seq_hdr->get_size())) {
     m_ti.m_private_data = track->raw_seq_hdr->get_buffer();
     m_ti.m_private_size = track->raw_seq_hdr->get_size();
   } else {
@@ -1135,7 +1135,7 @@ mpeg_ts_reader_c::read(generic_packetizer_c *requested_ptzr,
   int64_t num_queued_bytes = get_queued_bytes();
   if (!force && (20 * 1024 * 1024 < num_queued_bytes)) {
     mpeg_ts_track_ptr requested_ptzr_track = m_ptzr_to_track_map[requested_ptzr];
-    if (!requested_ptzr_track.is_set() || ((ES_AUDIO_TYPE != requested_ptzr_track->type) && (ES_VIDEO_TYPE != requested_ptzr_track->type)) || (512 * 1024 * 1024 < num_queued_bytes))
+    if (!requested_ptzr_track || ((ES_AUDIO_TYPE != requested_ptzr_track->type) && (ES_VIDEO_TYPE != requested_ptzr_track->type)) || (512 * 1024 * 1024 < num_queued_bytes))
       return FILE_STATUS_HOLDING;
   }
 

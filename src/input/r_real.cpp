@@ -252,7 +252,7 @@ real_reader_c::parse_headers() {
 
 void
 real_reader_c::create_video_packetizer(real_demuxer_cptr dmx) {
-  if (dmx->private_data.is_set()) {
+  if (dmx->private_data) {
     m_ti.m_private_data = dmx->private_data->get_buffer();
     m_ti.m_private_size = dmx->private_data->get_size();
   }
@@ -284,7 +284,7 @@ real_reader_c::create_aac_audio_packetizer(real_demuxer_cptr dmx) {
   bool sbr               = false;
   bool extra_data_parsed = false;
 
-  if ((dmx->extra_data.is_set()) && (4 < dmx->extra_data->get_size())) {
+  if ((dmx->extra_data) && (4 < dmx->extra_data->get_size())) {
     const unsigned char *extra_data = dmx->extra_data->get_buffer();
     uint32_t extra_len              = get_uint32_be(extra_data);
     mxverb(2, boost::format("real_reader: extra_len: %1%\n") % extra_len);
@@ -372,7 +372,7 @@ void
 real_reader_c::create_packetizer(int64_t tid) {
 
   real_demuxer_cptr dmx = find_demuxer(tid);
-  if (!dmx.is_set())
+  if (!dmx)
     return;
 
   if (-1 != dmx->ptzr)
@@ -412,7 +412,7 @@ real_reader_c::finish() {
 
   for (i = 0; i < demuxers.size(); i++) {
     real_demuxer_cptr dmx = demuxers[i];
-    if (dmx.is_set() && (nullptr != dmx->track) && (dmx->track->type == RMFF_TRACK_TYPE_AUDIO) && !dmx->segments.empty())
+    if (dmx && (nullptr != dmx->track) && (dmx->track->type == RMFF_TRACK_TYPE_AUDIO) && !dmx->segments.empty())
       deliver_audio_frames(dmx, dmx->last_timecode / dmx->num_packets);
   }
 
@@ -446,7 +446,7 @@ real_reader_c::read(generic_packetizer_c *,
   int64_t timecode      = (int64_t)frame->timecode * 1000000ll;
   real_demuxer_cptr dmx = find_demuxer(frame->id);
 
-  if (!dmx.is_set() || (-1 == dmx->ptzr)) {
+  if (!dmx || (-1 == dmx->ptzr)) {
     rmff_release_frame(frame);
     return FILE_STATUS_MOREDATA;
   }
@@ -760,7 +760,7 @@ real_reader_c::get_information_from_data() {
     rmff_frame_t *frame   = rmff_read_next_frame(file, nullptr);
     real_demuxer_cptr dmx = find_demuxer(frame->id);
 
-    if (!dmx.is_set()) {
+    if (!dmx) {
       rmff_release_frame(frame);
       continue;
     }

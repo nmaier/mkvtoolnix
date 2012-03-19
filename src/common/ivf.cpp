@@ -29,5 +29,5 @@ ivf::frame_header_t::frame_header_t()
 
 bool
 ivf::is_keyframe(const memory_cptr &buffer) {
-  return buffer.is_set() && (0 < buffer->get_size()) && ((buffer->get_buffer()[0] & 0x01) == 0);
+  return buffer && (0 < buffer->get_size()) && ((buffer->get_buffer()[0] & 0x01) == 0);
 }

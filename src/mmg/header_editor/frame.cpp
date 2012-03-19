@@ -167,7 +167,7 @@ header_editor_frame_c::translate_ui() {
 
 void
 header_editor_frame_c::set_window_title() {
-  if (!m_analyzer.is_set())
+  if (!m_analyzer)
     SetTitle(Z("Header editor"));
   else
     SetTitle(wxString::Format(Z("Header editor: %s"), m_file_name.GetFullName().c_str()));

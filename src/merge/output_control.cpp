@@ -258,7 +258,7 @@ operator<<(std::ostream &str,
 #if defined(SYS_UNIX) || defined(COMP_CYGWIN) || defined(SYS_APPLE)
 void
 sighandler(int /* signum */) {
-  if (!s_out.is_set())
+  if (!s_out)
     mxerror(Y("mkvmerge was interrupted by a SIGINT (Ctrl+C?)\n"));
 
   mxwarn(Y("\nmkvmerge received a SIGINT (probably because the user pressed "
@@ -741,14 +741,14 @@ render_headers(mm_io_c *out) {
         }
       }
 
-      if (first_file && g_seguid_link_previous.is_set())
+      if (first_file && g_seguid_link_previous)
         GetChild<KaxPrevUID>(*s_kax_infos).CopyBuffer(g_seguid_link_previous->data(), 128 / 8);
 
       // The next segment UID is also set in finish_file(). This is not
       // redundant! It is set here as well in order to reserve enough space
       // for the KaxInfo structure in the file. If it is removed later then
       // an EbmlVoid element will be used for the freed space.
-      if (g_seguid_link_next.is_set())
+      if (g_seguid_link_next)
         GetChild<KaxNextUID>(*s_kax_infos).CopyBuffer(g_seguid_link_next->data(), 128 / 8);
 
       if (!g_no_linking && g_cluster_helper->splitting()) {
@@ -1521,7 +1521,7 @@ finish_file(bool last_file) {
   int64_t info_size = s_kax_infos->ElementSize();
   int changed       = 0;
 
-  if (last_file && g_seguid_link_next.is_set()) {
+  if (last_file && g_seguid_link_next) {
     GetChild<KaxNextUID>(*s_kax_infos).CopyBuffer(g_seguid_link_next->data(), 128 / 8);
     changed = 1;
 
@@ -1933,7 +1933,7 @@ main_loop() {
 
       ptzr.old_status = ptzr.status;
 
-      while (   !ptzr.pack.is_set()
+      while (   !ptzr.pack
              && (FILE_STATUS_MOREDATA == ptzr.status)
              && !ptzr.packetizer->packet_available())
         ptzr.status = ptzr.packetizer->read();
@@ -1942,10 +1942,10 @@ main_loop() {
           && (FILE_STATUS_MOREDATA == ptzr.old_status))
         ptzr.packetizer->force_duration_on_last_packet();
 
-      if (!ptzr.pack.is_set())
+      if (!ptzr.pack)
         ptzr.pack = ptzr.packetizer->get_packet();
 
-      if (!ptzr.pack.is_set() && (FILE_STATUS_DONE == ptzr.status))
+      if (!ptzr.pack && (FILE_STATUS_DONE == ptzr.status))
         ptzr.status = FILE_STATUS_DONE_AND_DRY;
 
       // Has this packetizer changed its status from "data available" to
@@ -1970,11 +1970,11 @@ main_loop() {
     // stuff it into the Matroska file.
     packetizer_t * winner = nullptr;
     for (auto &ptzr : g_packetizers) {
-      if (ptzr.pack.is_set()) {
-        if ((nullptr == winner) || !winner->pack.is_set())
+      if (ptzr.pack) {
+        if ((nullptr == winner) || !winner->pack)
           winner = &ptzr;
 
-        else if (ptzr.pack.is_set() && (ptzr.pack->assigned_timecode < winner->pack->assigned_timecode))
+        else if (ptzr.pack && (ptzr.pack->assigned_timecode < winner->pack->assigned_timecode))
           winner = &ptzr;
       }
     }
@@ -1982,7 +1982,7 @@ main_loop() {
     // Append the next track if appending is wanted.
     bool appended_a_track = append_tracks_maybe();
 
-    if ((nullptr != winner) && winner->pack.is_set()) {
+    if ((nullptr != winner) && winner->pack) {
       packet_cptr pack = winner->pack;
 
       // Step 3: Add the winning packet to a cluster. Full clusters will be

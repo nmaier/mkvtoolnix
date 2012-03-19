@@ -186,7 +186,7 @@ namespace vc1 {
     }
 
     virtual bool are_headers_available() {
-      return m_seqhdr_found && m_raw_entrypoint.is_set();
+      return m_seqhdr_found && m_raw_entrypoint;
     }
 
     virtual void get_sequence_header(sequence_header_t &seqhdr) {
@@ -202,7 +202,7 @@ namespace vc1 {
     }
 
     virtual memory_cptr get_raw_entrypoint() {
-      return m_raw_entrypoint.is_set() ? m_raw_entrypoint->clone() : memory_cptr(nullptr);
+      return m_raw_entrypoint ? m_raw_entrypoint->clone() : memory_cptr(nullptr);
     }
 
     virtual void handle_packet(memory_cptr packet);

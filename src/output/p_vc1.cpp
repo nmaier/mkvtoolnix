@@ -45,7 +45,7 @@ vc1_video_packetizer_c::vc1_video_packetizer_c(generic_reader_c *n_reader, track
 
 void
 vc1_video_packetizer_c::set_headers() {
-  int priv_size           = sizeof(alBITMAPINFOHEADER) + (m_raw_headers.is_set() ? m_raw_headers->get_size() + 1 : 0);
+  int priv_size           = sizeof(alBITMAPINFOHEADER) + (m_raw_headers ? m_raw_headers->get_size() + 1 : 0);
   memory_cptr buf         = memory_c::alloc(priv_size);
   alBITMAPINFOHEADER *bih = (alBITMAPINFOHEADER *)buf->get_buffer();
 
@@ -64,7 +64,7 @@ vc1_video_packetizer_c::set_headers() {
   set_video_pixel_width(m_seqhdr.pixel_width);
   set_video_pixel_height(m_seqhdr.pixel_height);
 
-  if (m_raw_headers.is_set()) {
+  if (m_raw_headers) {
     if (m_seqhdr.display_info_flag) {
       int display_width  = m_seqhdr.display_width;
       int display_height = m_seqhdr.display_height;
@@ -121,7 +121,7 @@ vc1_video_packetizer_c::process(packet_cptr packet) {
 
   m_parser.add_bytes(packet->data->get_buffer(), packet->data->get_size());
 
-  if (!m_raw_headers.is_set() && m_parser.are_headers_available())
+  if (!m_raw_headers && m_parser.are_headers_available())
     headers_found();
 
   flush_frames();

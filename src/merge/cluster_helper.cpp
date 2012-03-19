@@ -285,7 +285,7 @@ cluster_helper_c::render() {
 
   for (auto &pack : m_packets) {
     generic_packetizer_c *source = pack->source;
-    bool has_codec_state         = pack->codec_state.is_set();
+    bool has_codec_state         = pack->codec_state;
 
     if (source->contains_gap())
       m_cluster->SetSilentTrackUsed();

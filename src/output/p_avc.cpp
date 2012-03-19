@@ -59,7 +59,7 @@ mpeg4_p10_es_video_packetizer_c(generic_reader_c *p_reader,
     set_default_compression_method(COMPRESSION_MPEG4_P10);
 
   int64_t factory_default_duration;
-  if (m_timecode_factory.is_set() && (-1 != (factory_default_duration = m_timecode_factory->get_default_duration(-1)))) {
+  if (m_timecode_factory && (-1 != (factory_default_duration = m_timecode_factory->get_default_duration(-1)))) {
     m_parser.force_default_duration(factory_default_duration);
     set_track_default_duration(factory_default_duration);
     m_default_duration_forced = true;
