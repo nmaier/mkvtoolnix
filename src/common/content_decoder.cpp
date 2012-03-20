@@ -172,7 +172,7 @@ content_decoder_c::reverse(memory_cptr &memory,
 
   for (auto &ce : encodings)
     if (0 != (ce.scope & scope))
-      ce.compressor->decompress(memory);
+      memory = ce.compressor->decompress(memory);
 }
 
 std::string

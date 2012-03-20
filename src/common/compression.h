@@ -68,18 +68,31 @@ public:
 
   compression_method_e get_method() {
     return method;
-  };
+  }
 
-  virtual void decompress(memory_cptr &/* buffer */) {
-  };
 
-  virtual void compress(memory_cptr &/* buffer */) {
-  };
+  virtual memory_cptr compress(memory_cptr const &buffer) {
+    return do_compress(buffer);
+  }
+  virtual std::string compress(std::string const &buffer);
+
+  virtual memory_cptr decompress(memory_cptr const &buffer) {
+    return do_decompress(buffer);
+  }
+  virtual std::string decompress(std::string const &buffer);
 
   virtual void set_track_headers(KaxContentEncoding &c_encoding);
 
   static compressor_ptr create(compression_method_e method);
   static compressor_ptr create(const char *method);
+
+protected:
+  virtual memory_cptr do_compress(memory_cptr const &buffer) {
+    return buffer;
+  }
+  virtual memory_cptr do_decompress(memory_cptr const &buffer) {
+    return buffer;
+  }
 };
 
 #include "common/compression/bzlib.h"

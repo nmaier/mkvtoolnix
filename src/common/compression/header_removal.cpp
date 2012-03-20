@@ -24,23 +24,23 @@ header_removal_compressor_c::header_removal_compressor_c()
 {
 }
 
-void
-header_removal_compressor_c::decompress(memory_cptr &buffer) {
+memory_cptr
+header_removal_compressor_c::do_decompress(memory_cptr const &buffer) {
   if (!m_bytes || (0 == m_bytes->get_size()))
-    return;
+    return buffer;
 
   memory_cptr new_buffer = memory_c::alloc(buffer->get_size() + m_bytes->get_size());
 
   memcpy(new_buffer->get_buffer(),                       m_bytes->get_buffer(), m_bytes->get_size());
   memcpy(new_buffer->get_buffer() + m_bytes->get_size(), buffer->get_buffer(),  buffer->get_size());
 
-  buffer = new_buffer;
+  return new_buffer;
 }
 
-void
-header_removal_compressor_c::compress(memory_cptr &buffer) {
+memory_cptr
+header_removal_compressor_c::do_compress(memory_cptr const &buffer) {
   if (!m_bytes || (0 == m_bytes->get_size()))
-    return;
+    return buffer;
 
   size_t size = m_bytes->get_size();
   if (buffer->get_size() < size)
@@ -62,13 +62,7 @@ header_removal_compressor_c::compress(memory_cptr &buffer) {
                                              "Wanted bytes:%1%; found:%2%.")) % b_bytes % b_buffer);
   }
 
-  size_t new_size = buffer->get_size() - size;
-
-  if (buffer->is_free()) {
-    memmove(buffer_ptr, buffer_ptr + size, new_size);
-    buffer->set_size(new_size);
-  } else
-    buffer = memory_c::clone(buffer_ptr + size, new_size);
+  return memory_c::clone(buffer->get_buffer() + size, buffer->get_size() - size);
 }
 
 void
@@ -100,18 +94,19 @@ analyze_header_removal_compressor_c::~analyze_header_removal_compressor_c() {
   }
 }
 
-void
-analyze_header_removal_compressor_c::decompress(memory_cptr &) {
-  mxerror("analyze_header_removal_compressor_c::decompress(): not supported\n");
+memory_cptr
+analyze_header_removal_compressor_c::do_decompress(memory_cptr const &buffer) {
+  mxerror("analyze_header_removal_compressor_c::do_decompress(): not supported\n");
+  return buffer;
 }
 
-void
-analyze_header_removal_compressor_c::compress(memory_cptr &buffer) {
+memory_cptr
+analyze_header_removal_compressor_c::do_compress(memory_cptr const &buffer) {
   ++m_packet_counter;
 
   if (!m_bytes) {
-    m_bytes = memory_cptr(buffer->clone());
-    return;
+    m_bytes = buffer->clone();
+    return buffer;
   }
 
   unsigned char *current = buffer->get_buffer();
@@ -123,6 +118,8 @@ analyze_header_removal_compressor_c::compress(memory_cptr &buffer) {
       break;
 
   m_bytes->set_size(new_size);
+
+  return buffer;
 }
 
 void

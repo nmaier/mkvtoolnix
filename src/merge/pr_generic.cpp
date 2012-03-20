@@ -792,10 +792,10 @@ generic_packetizer_c::add_packet(packet_cptr pack) {
 
   if (m_compressor) {
     try {
-      m_compressor->compress(pack->data);
+      pack->data = m_compressor->compress(pack->data);
       size_t i;
       for (i = 0; pack->data_adds.size() > i; ++i)
-        m_compressor->compress(pack->data_adds[i]);
+        pack->data_adds[i] = m_compressor->compress(pack->data_adds[i]);
 
     } catch (mtx::compression_x &e) {
       mxerror_tid(m_ti.m_fname, m_ti.m_id, boost::format(Y("Compression failed: %1%\n")) % e.error());

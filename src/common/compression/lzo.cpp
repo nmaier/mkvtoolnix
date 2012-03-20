@@ -33,30 +33,31 @@ lzo_compressor_c::~lzo_compressor_c() {
   safefree(wrkmem);
 }
 
-void
-lzo_compressor_c::decompress(memory_cptr &) {
+memory_cptr
+lzo_compressor_c::do_decompress(memory_cptr const &buffer) {
   mxerror(Y("lzo_compressor_c::decompress() not implemented\n"));
+  return buffer;
 }
 
-void
-lzo_compressor_c::compress(memory_cptr &buffer) {
+memory_cptr
+lzo_compressor_c::do_compress(memory_cptr const &buffer) {
   int size             = buffer->get_size();
-  unsigned char *dst   = (unsigned char *)safemalloc(size * 2);
+  memory_cptr dst      = memory_c::alloc(size * 2);
   lzo_uint lzo_dstsize = size * 2;
 
   int result;
-  if ((result = lzo1x_999_compress(buffer->get_buffer(), buffer->get_size(), dst, &lzo_dstsize, wrkmem)) != LZO_E_OK)
+  if ((result = lzo1x_999_compress(buffer->get_buffer(), buffer->get_size(), dst->get_buffer(), &lzo_dstsize, wrkmem)) != LZO_E_OK)
     mxerror(boost::format(Y("LZO compression failed. Result: %1%\n")) % result);
 
-  int dstsize = lzo_dstsize;
+  dst->resize(lzo_dstsize);
 
-  mxverb(3, boost::format("lzo_compressor_c: Compression from %1% to %2%, %3%%%\n") % size % dstsize % (dstsize * 100 / size));
+  mxverb(3, boost::format("lzo_compressor_c: Compression from %1% to %2%, %3%%%\n") % size % dst->get_size() % (dst->get_size() * 100 / size));
 
   raw_size        += size;
-  compressed_size += dstsize;
+  compressed_size += dst->get_size();
   items++;
 
-  buffer = memory_cptr(new memory_c((unsigned char *)saferealloc(dst, dstsize), dstsize, true));
+  return dst;
 }
 
 #endif  // HAVE_LZO

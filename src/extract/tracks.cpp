@@ -461,6 +461,8 @@ extract_tracks(const std::string &file_name,
     close_extractors();
 
     return true;
+  } catch (std::exception &ex) {
+    mxerror(boost::format("ex: %1%\n") % ex.what());
   } catch (...) {
     show_error(Y("Caught exception"));
 

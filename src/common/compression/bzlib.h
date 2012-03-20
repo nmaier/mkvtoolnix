@@ -27,8 +27,8 @@ public:
   bzlib_compressor_c();
   virtual ~bzlib_compressor_c();
 
-  virtual void decompress(memory_cptr &buffer);
-  virtual void compress(memory_cptr &buffer);
+  virtual memory_cptr do_decompress(memory_cptr const &buffer);
+  virtual memory_cptr do_compress(memory_cptr const &buffer);
 };
 # endif // HAVE_BZLIB_H
 

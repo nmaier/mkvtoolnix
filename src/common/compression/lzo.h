@@ -35,8 +35,8 @@ public:
   lzo_compressor_c();
   virtual ~lzo_compressor_c();
 
-  virtual void decompress(memory_cptr &buffer);
-  virtual void compress(memory_cptr &buffer);
+  virtual memory_cptr do_decompress(memory_cptr const &buffer);
+  virtual memory_cptr do_compress(memory_cptr const &buffer);
 };
 
 #endif // HAVE_LZO

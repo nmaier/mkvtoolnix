@@ -108,3 +108,15 @@ compressor_c::create(const char *method) {
 
   return compressor_ptr();
 }
+
+std::string
+compressor_c::compress(std::string const &buffer) {
+  auto new_buffer = compress(memory_cptr(new memory_c(const_cast<char *>(&buffer[0]), buffer.length(), false)));
+  return std::string(reinterpret_cast<char const *>(new_buffer->get_buffer()), new_buffer->get_size());
+}
+
+std::string
+compressor_c::decompress(std::string const &buffer) {
+  auto new_buffer = decompress(memory_cptr(new memory_c(const_cast<char *>(&buffer[0]), buffer.length(), false)));
+  return std::string(reinterpret_cast<char const *>(new_buffer->get_buffer()), new_buffer->get_size());
+}

@@ -25,8 +25,8 @@ bzlib_compressor_c::bzlib_compressor_c()
 bzlib_compressor_c::~bzlib_compressor_c() {
 }
 
-void
-bzlib_compressor_c::decompress(memory_cptr &buffer) {
+memory_cptr
+bzlib_compressor_c::do_decompress(memory_cptr const &buffer) {
   bz_stream d_stream;
 
   d_stream.bzalloc = nullptr;
@@ -58,22 +58,22 @@ bzlib_compressor_c::decompress(memory_cptr &buffer) {
       continue;
     }
 
-    throw mtx::compression_x(boost::format(Y("BZ2_bzDecompress() failed. Result: %1%\n")) % result);
+    throw mtx::compression_x(boost::format(Y("BZ2_bzDo_Decompress() failed. Result: %1%\n")) % result);
   }
 
   uncompressed->resize(uncompressed->get_size() - d_stream.avail_out);
 
   BZ2_bzDecompressEnd(&d_stream);
 
-  buffer = uncompressed;
+  return uncompressed;
 }
 
-void
-bzlib_compressor_c::compress(memory_cptr &buffer) {
+memory_cptr
+bzlib_compressor_c::do_compress(memory_cptr const &buffer) {
   bz_stream c_stream;
 
   int size           = buffer->get_size();
-  unsigned char *dst = (unsigned char *)safemalloc(size * 2);
+  memory_cptr dst    = memory_c::alloc(size * 2);
 
   c_stream.bzalloc   = nullptr;
   c_stream.bzfree    = nullptr;
@@ -84,7 +84,7 @@ bzlib_compressor_c::compress(memory_cptr &buffer) {
     mxerror(boost::format(Y("BZ2_bzCompressInit() failed. Result: %1%\n")) % result);
 
   c_stream.next_in   = (char *)buffer->get_buffer();
-  c_stream.next_out  = (char *)dst;
+  c_stream.next_out  = reinterpret_cast<char *>(dst->get_buffer());
   c_stream.avail_in  = size;
   c_stream.avail_out = 2 * size;
   result             = BZ2_bzCompress(&c_stream, BZ_FINISH);
@@ -94,15 +94,15 @@ bzlib_compressor_c::compress(memory_cptr &buffer) {
 
   BZ2_bzCompressEnd(&c_stream);
 
-  int dstsize = 2 * size - c_stream.avail_out;
+  dst->resize(dst->get_size() - c_stream.avail_out);
 
-  mxverb(3, boost::format("bzlib_compressor_c: Compression from %1% to %2%, %3%%%\n") % size % dstsize % (dstsize * 100 / size));
+  mxverb(3, boost::format("bzlib_compressor_c: Compression from %1% to %2%, %3%%%\n") % size % dst->get_size() % (dst->get_size() * 100 / size));
 
   raw_size        += size;
-  compressed_size += dstsize;
+  compressed_size += dst->get_size();
   items++;
 
-  buffer = memory_cptr(new memory_c((unsigned char *)saferealloc(dst, dstsize), dstsize, true));
+  return dst;
 }
 
 #endif // HAVE_BZLIB_H

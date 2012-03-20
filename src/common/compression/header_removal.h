@@ -30,8 +30,8 @@ public:
     m_bytes->grab();
   }
 
-  virtual void decompress(memory_cptr &buffer);
-  virtual void compress(memory_cptr &buffer);
+  virtual memory_cptr do_decompress(memory_cptr const &buffer);
+  virtual memory_cptr do_compress(memory_cptr const &buffer);
 
   virtual void set_track_headers(KaxContentEncoding &c_encoding);
 };
@@ -45,8 +45,8 @@ public:
   analyze_header_removal_compressor_c();
   virtual ~analyze_header_removal_compressor_c();
 
-  virtual void decompress(memory_cptr &buffer);
-  virtual void compress(memory_cptr &buffer);
+  virtual memory_cptr do_decompress(memory_cptr const &buffer);
+  virtual memory_cptr do_compress(memory_cptr const &buffer);
 
   virtual void set_track_headers(KaxContentEncoding &c_encoding);
 };

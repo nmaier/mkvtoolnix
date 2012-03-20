@@ -23,8 +23,8 @@ zlib_compressor_c::zlib_compressor_c()
 zlib_compressor_c::~zlib_compressor_c() {
 }
 
-void
-zlib_compressor_c::decompress(memory_cptr &buffer) {
+memory_cptr
+zlib_compressor_c::do_decompress(memory_cptr const &buffer) {
   z_stream d_stream;
 
   d_stream.zalloc = (alloc_func)0;
@@ -35,15 +35,15 @@ zlib_compressor_c::decompress(memory_cptr &buffer) {
   if (Z_OK != result)
     mxerror(boost::format(Y("inflateInit() failed. Result: %1%\n")) % result);
 
-  d_stream.next_in   = (Bytef *)buffer->get_buffer();
+  d_stream.next_in   = reinterpret_cast<Bytef *>(buffer->get_buffer());
   d_stream.avail_in  = buffer->get_size();
   int n              = 0;
-  unsigned char *dst = nullptr;
+  memory_cptr dst    = memory_c::alloc(0);
 
   do {
     n++;
-    dst                = (unsigned char *)saferealloc(dst, n * 4000);
-    d_stream.next_out  = (Bytef *)&dst[(n - 1) * 4000];
+    dst->resize(n * 4000);
+    d_stream.next_out  = reinterpret_cast<Bytef *>(dst->get_buffer() + (n - 1) * 4000);
     d_stream.avail_out = 4000;
     result             = inflate(&d_stream, Z_NO_FLUSH);
 
@@ -52,16 +52,16 @@ zlib_compressor_c::decompress(memory_cptr &buffer) {
 
   } while ((0 == d_stream.avail_out) && (0 != d_stream.avail_in) && (Z_STREAM_END != result));
 
-  int dstsize = d_stream.total_out;
+  dst->resize(d_stream.total_out);
   inflateEnd(&d_stream);
 
-  mxverb(3, boost::format("zlib_compressor_c: Decompression from %1% to %2%, %3%%%\n") % buffer->get_size() % dstsize % (dstsize * 100 / buffer->get_size()));
+  mxverb(3, boost::format("zlib_compressor_c: Decompression from %1% to %2%, %3%%%\n") % buffer->get_size() % dst->get_size() % (dst->get_size() * 100 / buffer->get_size()));
 
-  buffer = memory_cptr(new memory_c((unsigned char *)saferealloc(dst, dstsize), dstsize, true));
+  return dst;
 }
 
-void
-zlib_compressor_c::compress(memory_cptr &buffer) {
+memory_cptr
+zlib_compressor_c::do_compress(memory_cptr const &buffer) {
   z_stream c_stream;
 
   c_stream.zalloc = (alloc_func)0;
@@ -75,12 +75,12 @@ zlib_compressor_c::compress(memory_cptr &buffer) {
   c_stream.next_in   = (Bytef *)buffer->get_buffer();
   c_stream.avail_in  = buffer->get_size();
   int n              = 0;
-  unsigned char *dst = nullptr;
+  memory_cptr dst    = memory_c::alloc(0);
 
   do {
     n++;
-    dst                = (unsigned char *)saferealloc(dst, n * 4000);
-    c_stream.next_out  = (Bytef *)&dst[(n - 1) * 4000];
+    dst->resize(n * 4000);
+    c_stream.next_out  = reinterpret_cast<Bytef *>(dst->get_buffer() + (n - 1) * 4000);
     c_stream.avail_out = 4000;
     result             = deflate(&c_stream, Z_FINISH);
 
@@ -89,10 +89,10 @@ zlib_compressor_c::compress(memory_cptr &buffer) {
 
   } while ((c_stream.avail_out == 0) && (result != Z_STREAM_END));
 
-  int dstsize = c_stream.total_out;
+  dst->resize(c_stream.total_out);
   deflateEnd(&c_stream);
 
-  mxverb(3, boost::format("zlib_compressor_c: Compression from %1% to %2%, %3%%%\n") % buffer->get_size() % dstsize % (dstsize * 100 / buffer->get_size()));
+  mxverb(3, boost::format("zlib_compressor_c: Compression from %1% to %2%, %3%%%\n") % buffer->get_size() % dst->get_size() % (dst->get_size() * 100 / buffer->get_size()));
 
-  buffer = memory_cptr(new memory_c((unsigned char *)saferealloc(dst, dstsize), dstsize, true));
+  return dst;
 }
