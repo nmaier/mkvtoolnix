@@ -79,7 +79,7 @@ def create_all_releases_xml changelog, releases_file_name
     builder.tag!('latest-windows-pre', node_to_hash.call("/mkvtoolnix-releases/latest-windows-pre"))
 
     changelog.each do |cl_release|
-      attributes = { :version => cl_release[0] }.merge node_to_hash.call("/mkvtoolnix-releases/release[version='#{cl_release[0]}']")
+      attributes = { "version" => cl_release[0]}.merge node_to_hash.call("/mkvtoolnix-releases/release[version='#{cl_release[0]}']")
 
       builder.release attributes do
         builder.changes do
