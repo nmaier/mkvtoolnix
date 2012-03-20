@@ -1771,7 +1771,7 @@ mmg_dialog::on_update_check_state_changed(wxCommandEvent &evt) {
       m_update_check_dlg->update_status(  UPDATE_CHECK_DONE_NO_NEW_RELEASE == state ? Z("You are already running the latest version.")
                                         : UPDATE_CHECK_DONE_NEW_RELEASE    == state ? Z("There is a new version available online.")
                                         :                                             Z("There was an error querying the update status."));
-      m_update_check_dlg->update_info(m_release_version);
+      m_update_check_dlg->update_info(m_release_version, m_releases_info);
 
     } else
       m_checking_for_updates = false;
@@ -1799,17 +1799,20 @@ mmg_dialog::check_for_updates(bool interactive) {
 }
 
 void
-mmg_dialog::set_release_version(mtx_release_version_t &release_version) {
+mmg_dialog::set_release_version(mtx_release_version_t const &release_version) {
   wxMutexLocker locker(m_update_check_mutex);
   m_release_version = release_version;
 }
 
+void
+mmg_dialog::set_releases_info(mtx::xml::document_cptr const &releases_info) {
+  wxMutexLocker locker(m_update_check_mutex);
+  m_releases_info = releases_info;
+}
+
 wxString
 mmg_dialog::version_key_for_config() {
-  wxString version = wxU(m_release_version.latest_source.to_string());
-  wxRegEx re(wxT("[^0-9]"));
-  re.Replace(&version, wxT("_"));
-  return wxString::Format(wxT("version_%s"), version.c_str());
+  return wxU(boost::format("version_%1%") % boost::regex_replace(m_release_version.latest_source.to_string(), boost::regex("[^\\d]+", boost::regex::perl), "_"));
 }
 #endif  // defined(HAVE_CURL_EASY_H)
 

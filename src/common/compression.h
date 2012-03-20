@@ -85,6 +85,7 @@ public:
 
   static compressor_ptr create(compression_method_e method);
   static compressor_ptr create(const char *method);
+  static compressor_ptr create_from_file_name(std::string const &file_name);
 
 protected:
   virtual memory_cptr do_compress(memory_cptr const &buffer) {

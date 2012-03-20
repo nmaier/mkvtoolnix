@@ -109,6 +109,27 @@ compressor_c::create(const char *method) {
   return compressor_ptr();
 }
 
+compressor_ptr
+compressor_c::create_from_file_name(std::string const &file_name) {
+  auto pos = file_name.rfind(".");
+  auto ext = ba::to_lower_copy(pos == std::string::npos ? file_name : file_name.substr(pos + 1));
+
+#if defined(HAVE_LZO)
+  if ((ext == "lz") || (ext == "lzo"))
+    return compressor_ptr(new lzo_compressor_c());
+#endif // HAVE_LZO
+
+#if defined(HAVE_BZLIB_H)
+  if ((ext == "bz2") || (ext == "bzip"))
+    return compressor_ptr(new bzlib_compressor_c());
+#endif // HAVE_BZLIB_H
+
+  if (ext == "gz")
+    return compressor_ptr(new zlib_compressor_c());
+
+  return compressor_ptr(new compressor_c(COMPRESSION_NONE));
+}
+
 std::string
 compressor_c::compress(std::string const &buffer) {
   auto new_buffer = compress(memory_cptr(new memory_c(const_cast<char *>(&buffer[0]), buffer.length(), false)));

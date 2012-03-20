@@ -16,8 +16,8 @@
 #if defined(HAVE_CURL_EASY_H)
 # include <sstream>
 
+# include "common/compression.h"
 # include "common/curl.h"
-# include "pugixml.hpp"
 #endif  // defined(HAVE_CURL_EASY_H)
 
 #include "common/debugging.h"
@@ -155,52 +155,83 @@ get_current_version() {
 }
 
 #if defined(HAVE_CURL_EASY_H)
+static mtx::xml::document_cptr
+retrieve_and_parse_xml(std::string const &url) {
+  bool debug = debugging_requested("version_check|releases_info|curl");
+
+  std::string data;
+  auto result = url_retriever_c().set_timeout(10, 20).retrieve(url, data);
+
+  if (0 != result) {
+    mxdebug_if(debug, boost::format("CURL error for %2%: %1%\n") % static_cast<unsigned int>(result) % url);
+    return mtx::xml::document_cptr();
+  }
+
+  try {
+    data = compressor_c::create_from_file_name(url)->decompress(data);
+
+    mtx::xml::document_cptr doc(new pugi::xml_document);
+    std::stringstream sdata(data);
+    auto xml_result = doc->load(sdata);
+
+    if (xml_result) {
+      mxdebug_if(debug, boost::format("Doc loaded fine from %1%\n") % url);
+      return doc;
+
+    } else
+      mxdebug_if(debug, boost::format("Doc load error for %1%: %1% at %2%\n") % url % xml_result.description() % xml_result.offset);
+
+  } catch (mtx::compression_x &ex) {
+    mxdebug_if(debug, boost::format("Decompression exception for %2%: %1%\n") % ex.what() % url);
+  }
+
+  return mtx::xml::document_cptr();
+}
+
 mtx_release_version_t
 get_latest_release_version() {
-  bool debug = debugging_requested("version_check");
-
+  bool debug      = debugging_requested("version_check|curl");
   std::string url = MTX_VERSION_CHECK_URL;
   debugging_requested("version_check_url", &url);
 
   mxdebug_if(debug, boost::format("Update check started with URL %1%\n") % url);
 
   mtx_release_version_t release;
-  std::string data;
-  url_retriever_c retriever;
-  CURLcode result = retriever.retrieve(url, data);
 
-  if (0 != result) {
-    mxdebug_if(debug, boost::format("Update check CURL error: %1%\n") % static_cast<unsigned int>(result));
+  auto doc = retrieve_and_parse_xml(url + ".gz");
+#if defined(HAVE_BZLIB_H)
+  if (!doc)
+    doc = retrieve_and_parse_xml(url + ".bz2");
+#endif  // HAVE_BZLIB_H
+  if (!doc)
+    doc = retrieve_and_parse_xml(url);
+  if (!doc)
     return release;
-  }
 
-  mxdebug_if(debug, boost::format("Update check OK; data length %1%\n") % data.length());
-
-  try {
-    pugi::xml_document doc;
-    std::stringstream sdata(data);
-    auto result = doc.load(sdata);
-
-    if (!result) {
-      mxdebug_if(debug, boost::format("XML parsing failed: %1% at %2%\n") % result.description() % result.offset);
-      return release;
-    }
-
-    release.latest_source              = version_number_t(doc.select_single_node("/mkvtoolnix-releases/latest-source/version").node().child_value());
-    release.latest_windows_build       = version_number_t((boost::format("%1% build %2%")
-                                                           % doc.select_single_node("/mkvtoolnix-releases/latest-windows-pre/version").node().child_value()
-                                                           % doc.select_single_node("/mkvtoolnix-releases/latest-windows-pre/build").node().child_value()).str());
-    release.source_download_url        = doc.select_single_node("/mkvtoolnix-releases/latest-source/url").node().child_value();
-    release.windows_build_download_url = doc.select_single_node("/mkvtoolnix-releases/latest-windows-pre/url").node().child_value();
-    release.valid                      = release.latest_source.valid;
-
-  } catch (pugi::xpath_exception &ex) {
-    mxdebug_if(debug, boost::format("XPath exception: %1% / %2%\n") % ex.what() % ex.result().description());
-    release.valid = false;
-  }
+  release.latest_source              = version_number_t(doc->select_single_node("/mkvtoolnix-releases/latest-source/version").node().child_value());
+  release.latest_windows_build       = version_number_t((boost::format("%1% build %2%")
+                                                         % doc->select_single_node("/mkvtoolnix-releases/latest-windows-pre/version").node().child_value()
+                                                         % doc->select_single_node("/mkvtoolnix-releases/latest-windows-pre/build").node().child_value()).str());
+  release.source_download_url        = doc->select_single_node("/mkvtoolnix-releases/latest-source/url").node().child_value();
+  release.windows_build_download_url = doc->select_single_node("/mkvtoolnix-releases/latest-windows-pre/url").node().child_value();
+  release.valid                      = release.latest_source.valid;
 
   mxdebug_if(debug, boost::format("update check: current %1% latest source %2% latest winpre %3%\n") % release.current_version.to_string() % release.latest_source.to_string() % release.latest_windows_build.to_string());
 
   return release;
+}
+
+mtx::xml::document_cptr
+get_releases_info() {
+  std::string url = MTX_RELEASES_INFO_URL;
+  debugging_requested("releases_info_url", &url);
+
+#if defined(HAVE_BZLIB_H)
+  auto doc = retrieve_and_parse_xml(url + ".bz2");
+  if (doc)
+    return doc;
+#endif  // HAVE_BZLIB_H
+
+  return retrieve_and_parse_xml(url + ".gz");
 }
 #endif  // defined(HAVE_CURL_EASY_H)

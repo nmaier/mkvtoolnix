@@ -11,13 +11,17 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_VERSION_H
-#define __MTX_COMMON_VERSION_H
+#ifndef MTX_COMMON_VERSION_H
+#define MTX_COMMON_VERSION_H
 
 #include "common/common_pch.h"
 
+#include "common/xml/pugi.h"
+
 #define MTX_VERSION_CHECK_URL "http://mkvtoolnix-releases.bunkus.org/latest-release.xml"
-#define MTX_VERSION_INFO_URL  "http://mkvtoolnix-releases.bunkus.org/releases.xml"
+#define MTX_RELEASES_INFO_URL "http://mkvtoolnix-releases.bunkus.org/releases.xml"
+#define MTX_DOWNLOAD_URL      "http://www.bunkus.org/videotools/mkvtoolnix/downloads.html"
+#define MTX_CHANGELOG_URL     "http://mkvtoolnix-releases.bunkus.org/doc/ChangeLog"
 
 struct version_number_t {
   unsigned int parts[5];
@@ -53,6 +57,7 @@ version_number_t get_current_version();
 
 # if defined(HAVE_CURL_EASY_H)
 mtx_release_version_t get_latest_release_version();
+mtx::xml::document_cptr get_releases_info();
 # endif  // defined(HAVE_CURL_EASY_H)
 
-#endif  // __MTX_COMMON_VERSION_H
+#endif  // MTX_COMMON_VERSION_H

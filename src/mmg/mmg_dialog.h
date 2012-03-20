@@ -23,6 +23,7 @@
 # include <wx/thread.h>
 
 # include "common/version.h"
+# include "common/xml/pugi.h"
 # include "mmg/update_checker.h"
 #endif  // defined(HAVE_CURL_EASY_H)
 
@@ -38,6 +39,7 @@
 #define ID_B_ADD_TO_JOBQUEUE              10008
 #define ID_HLC_DOWNLOAD_URL               10009
 #define ID_B_UPDATE_CHECK_CLOSE           10010
+#define ID_RE_CHANGELOG                   10011
 
 #define ID_M_FILE_NEW                     30000
 #define ID_M_FILE_LOAD                    30001
@@ -146,6 +148,7 @@ public:
   bool m_checking_for_updates, m_interactive_update_check;
   wxMutex m_update_check_mutex;
   mtx_release_version_t m_release_version;
+  mtx::xml::document_cptr m_releases_info;
   update_check_dlg_c *m_update_check_dlg;
 #endif  // defined(HAVE_CURL_EASY_H)
 
@@ -246,7 +249,8 @@ public:
 #if defined(HAVE_CURL_EASY_H)
   void maybe_check_for_updates();
   void check_for_updates(bool interactive);
-  void set_release_version(mtx_release_version_t &release_version);
+  void set_release_version(mtx_release_version_t const &release_version);
+  void set_releases_info(mtx::xml::document_cptr const &releases_info);
 
   void on_check_for_updates(wxCommandEvent &evt);
   void on_update_check_state_changed(wxCommandEvent &evt);

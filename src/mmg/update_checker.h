@@ -18,8 +18,10 @@
 
 # if defined(HAVE_CURL_EASY_H)
 
+#  include <wx/wx.h>
 #  include <wx/button.h>
 #  include <wx/hyperlink.h>
+#  include <wx/richtext/richtextctrl.h>
 #  include <wx/sizer.h>
 #  include <wx/thread.h>
 #  include "common/version.h"
@@ -43,16 +45,19 @@ private:
   wxHyperlinkCtrl *m_hlc_download_url;
   wxButton *m_b_close;
   wxBoxSizer *m_siz_all;
+  wxRichTextCtrl *m_changelog;
 
 public:
   update_check_dlg_c(wxWindow *parent);
   void update_status(const wxString &status);
-  void update_info(mtx_release_version_t &release);
+  void update_info(mtx_release_version_t const &version, mtx::xml::document_cptr const &releases_info);
   void on_close_pressed(wxCommandEvent &evt);
   void on_close(wxCloseEvent &evt);
+  void on_url_pressed(wxCommandEvent &evt);
 private:
-  void readjust();
   void close_dialog();
+  void setup_changelog_ctrl();
+  void write_changelog_title();
 };
 
 extern const wxEventType wxEVT_MTX_UPDATE_CHECK_STATE_CHANGED;
