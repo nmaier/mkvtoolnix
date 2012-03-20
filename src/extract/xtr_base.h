@@ -18,7 +18,7 @@
 #include <matroska/KaxBlock.h>
 #include <matroska/KaxTracks.h>
 
-#include "common/compression.h"
+#include "common/content_decoder.h"
 #include "extract/mkvextract.h"
 
 using namespace libmatroska;

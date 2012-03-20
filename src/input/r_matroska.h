@@ -17,7 +17,7 @@
 
 #include "common/common_pch.h"
 
-#include "common/compression.h"
+#include "common/content_decoder.h"
 #include "common/error.h"
 #include "common/kax_file.h"
 #include "common/mm_io.h"

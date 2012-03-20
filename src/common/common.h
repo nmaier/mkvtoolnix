@@ -83,10 +83,13 @@ namespace br  = boost::range;
 #include "common/output.h"
 
 namespace libebml {
-  class EbmlBinary;
+class EbmlBinary;
 };
 
+namespace libmatroska { };
+
 using namespace libebml;
+using namespace libmatroska;
 
 #define BUGMSG Y("This should not have happened. Please contact the author " \
                  "Moritz Bunkus <moritz@bunkus.org> with this error/warning " \
