@@ -51,6 +51,8 @@ public:
   update_check_dlg_c(wxWindow *parent);
   void update_status(const wxString &status);
   void update_info(mtx_release_version_t const &version, mtx::xml::document_cptr const &releases_info);
+  void update_changelog(mtx::xml::document_cptr const &releases_info);
+  void update_changelog_failed();
   void on_close_pressed(wxCommandEvent &evt);
   void on_close(wxCloseEvent &evt);
   void on_url_pressed(wxCommandEvent &evt);

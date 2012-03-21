@@ -120,11 +120,15 @@ update_check_dlg_c::setup_changelog_ctrl() {
   heading_char_style.SetFontSize(12);
   heading_char_style.SetFontStyle(wxBOLD);
   heading_char_style.SetAlignment(wxTEXT_ALIGNMENT_LEFT);
+  heading_char_style.SetParagraphSpacingBefore(30);
+  heading_char_style.SetParagraphSpacingAfter(30);
 
   wxRichTextAttr title_char_style;
   title_char_style.SetFontSize(14);
   title_char_style.SetFontWeight(wxBOLD);
   title_char_style.SetAlignment(wxTEXT_ALIGNMENT_LEFT);
+  title_char_style.SetParagraphSpacingBefore(20);
+  title_char_style.SetParagraphSpacingAfter(50);
 
   auto *style_sheet = new wxRichTextStyleSheet;
   auto add_char_style = [&](std::string const &name,
@@ -169,67 +173,81 @@ update_check_dlg_c::update_info(mtx_release_version_t const &version,
     m_hlc_download_url->SetLabel(wxU(version.source_download_url));
     m_hlc_download_url->SetURL(wxU(version.source_download_url));
 
-    if (releases_info) {
-      auto current_version = get_current_version();
-
-      m_changelog->Clear();
-      write_changelog_title();
-
-      auto releases = releases_info->select_nodes("/mkvtoolnix-releases/release[not(@version='HEAD')]");
-      releases.sort();
-
-      size_t num_releases_output = 0;
-      for (auto &release : releases) {
-        m_changelog->BeginStyle(m_changelog->GetStyleSheet()->FindCharacterStyle(wxU("heading"))->GetStyle());
-
-        std::string codename    = release.node().attribute("codename").value();
-        std::string version_str = release.node().attribute("version").value();
-        wxString heading;
-        if (!codename.empty())
-          heading.Printf(wxU("Version %s \"%s\""), wxU(version_str).c_str(), wxU(codename).c_str());
-        else
-          heading.Printf(wxU("Version %s"), wxU(version_str).c_str());
-        m_changelog->WriteText(heading);
-        m_changelog->Newline();
-        m_changelog->EndStyle();
-
-        boost::regex re_released("^released\\s+v?[\\d\\.]+", boost::regex::perl | boost::regex::icase);
-
-        for (auto change = release.node().child("changes").first_child() ; change ; change = change.next_sibling()) {
-          if (   (std::string(change.name()) != "change")
-              || boost::regex_search(change.child_value(), re_released))
-            continue;
-
-          m_changelog->BeginStandardBullet(wxU("standard/circle"), 50, 40);
-          m_changelog->WriteText(wxU(change.child_value()));
-          m_changelog->Newline();
-          m_changelog->EndStandardBullet();
-        }
-
-        num_releases_output++;
-        if ((10 < num_releases_output) && (version_number_t(version_str) < current_version))
-          break;
-      }
-
-      m_changelog->BeginURL(wxU(MTX_CHANGELOG_URL), wxU("url"));
-      m_changelog->WriteText(wxT("Read full ChangeLog online"));
-      m_changelog->EndURL();
-
-    } else {
-      m_changelog->Clear();
-      write_changelog_title();
-
-      m_changelog->WriteText(wxU(wxT("The ChangeLog could not be downloaded.")));
-      m_changelog->Newline();
-      m_changelog->Newline();
-
-      m_changelog->BeginURL(wxU(MTX_CHANGELOG_URL), wxU("url"));
-      m_changelog->WriteText(wxT("You can read it online."));
-      m_changelog->EndURL();
-    }
+    if (releases_info)
+      update_changelog(releases_info);
   }
 
   m_b_close->Enable(true);
+}
+
+void
+update_check_dlg_c::update_changelog(mtx::xml::document_cptr const &releases_info) {
+  auto current_version = get_current_version();
+
+  m_changelog->Freeze();
+
+  m_changelog->Clear();
+  write_changelog_title();
+
+  auto releases = releases_info->select_nodes("/mkvtoolnix-releases/release[not(@version='HEAD')]");
+  releases.sort();
+
+  size_t num_releases_output = 0;
+  for (auto &release : releases) {
+    m_changelog->BeginStyle(m_changelog->GetStyleSheet()->FindCharacterStyle(wxU("heading"))->GetStyle());
+
+    std::string codename    = release.node().attribute("codename").value();
+    std::string version_str = release.node().attribute("version").value();
+    wxString heading;
+    if (!codename.empty())
+      heading.Printf(wxU("Version %s \"%s\""), wxU(version_str).c_str(), wxU(codename).c_str());
+    else
+      heading.Printf(wxU("Version %s"), wxU(version_str).c_str());
+    m_changelog->WriteText(heading);
+    m_changelog->Newline();
+    m_changelog->EndStyle();
+
+    boost::regex re_released("^released\\s+v?[\\d\\.]+", boost::regex::perl | boost::regex::icase);
+
+    for (auto change = release.node().child("changes").first_child() ; change ; change = change.next_sibling()) {
+      if (   (std::string(change.name()) != "change")
+             || boost::regex_search(change.child_value(), re_released))
+        continue;
+
+      m_changelog->BeginStandardBullet(wxU("standard/circle"), 50, 40);
+      m_changelog->WriteText(wxU(change.child_value()));
+      m_changelog->Newline();
+      m_changelog->EndStandardBullet();
+    }
+
+    num_releases_output++;
+    if ((10 < num_releases_output) && (version_number_t(version_str) < current_version))
+      break;
+  }
+
+  m_changelog->BeginURL(wxU(MTX_CHANGELOG_URL), wxU("url"));
+  m_changelog->WriteText(wxT("Read full ChangeLog online"));
+  m_changelog->EndURL();
+
+  m_changelog->Thaw();
+}
+
+void
+update_check_dlg_c::update_changelog_failed() {
+  m_changelog->Freeze();
+
+  m_changelog->Clear();
+  write_changelog_title();
+
+  m_changelog->WriteText(wxU(wxT("The ChangeLog could not be downloaded.")));
+  m_changelog->Newline();
+  m_changelog->Newline();
+
+  m_changelog->BeginURL(wxU(MTX_CHANGELOG_URL), wxU("url"));
+  m_changelog->WriteText(wxT("You can read it online."));
+  m_changelog->EndURL();
+
+  m_changelog->Thaw();
 }
 
 void
