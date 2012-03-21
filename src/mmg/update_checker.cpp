@@ -108,47 +108,39 @@ update_check_dlg_c::update_check_dlg_c(wxWindow *parent)
 
 void
 update_check_dlg_c::setup_changelog_ctrl() {
-  auto *style_sheet = new wxRichTextStyleSheet;
-
-  // wxRichTextAttr default_para_style();
-  // default_para_style.standard/circle
+  wxRichTextAttr default_char_style;
+  default_char_style.SetFontSize(10);
 
   wxRichTextAttr url_char_style(wxColour(0, 0, 255));
   url_char_style.SetURL(wxU(MTX_CHANGELOG_URL));
   url_char_style.SetFontUnderlined(true);
   url_char_style.SetFlags(url_char_style.GetFlags() | wxTEXT_ATTR_TEXT_COLOUR);
-  auto *style_def = new wxRichTextCharacterStyleDefinition(wxU("url"));
-  style_def->SetStyle(url_char_style);
-  style_sheet->AddCharacterStyle(style_def);
-
-  wxRichTextAttr default_char_style;
-  default_char_style.SetFontSize(10);
-  default_char_style.SetAlignment(wxTEXT_ALIGNMENT_JUSTIFIED);
-  // default_char_style.SetBulletName(wxU("standard/circle"));
-  // default_char_style.SetBulletStyle(wxTEXT_ATTR_BULLET_STYLE_STANDARD);
-  style_def = new wxRichTextCharacterStyleDefinition(wxU("default"));
-  style_def->SetStyle(default_char_style);
-  style_sheet->AddCharacterStyle(style_def);
-
-  m_changelog->SetDefaultStyle(style_sheet->FindCharacterStyle(wxU("default"))->GetStyle());
 
   wxRichTextAttr heading_char_style;
   heading_char_style.SetFontSize(12);
   heading_char_style.SetFontStyle(wxBOLD);
   heading_char_style.SetAlignment(wxTEXT_ALIGNMENT_LEFT);
-  style_def = new wxRichTextCharacterStyleDefinition(wxU("heading"));
-  style_def->SetStyle(heading_char_style);
-  style_sheet->AddCharacterStyle(style_def);
 
   wxRichTextAttr title_char_style;
   title_char_style.SetFontSize(14);
   title_char_style.SetFontWeight(wxBOLD);
   title_char_style.SetAlignment(wxTEXT_ALIGNMENT_LEFT);
-  style_def = new wxRichTextCharacterStyleDefinition(wxU("title"));
-  style_def->SetStyle(title_char_style);
-  style_sheet->AddCharacterStyle(style_def);
+
+  auto *style_sheet = new wxRichTextStyleSheet;
+  auto add_char_style = [&](std::string const &name,
+                            wxRichTextAttr &style) {
+    auto style_def = new wxRichTextCharacterStyleDefinition(wxU(name));
+    style_def->SetStyle(style);
+    style_sheet->AddCharacterStyle(style_def);
+  };
+
+  add_char_style("default", default_char_style);
+  add_char_style("title",   title_char_style);
+  add_char_style("heading", heading_char_style);
+  add_char_style("url",     url_char_style);
 
   m_changelog->SetStyleSheet(style_sheet);
+  m_changelog->SetDefaultStyle(default_char_style);
 
   m_changelog->BeginSuppressUndo();
 
@@ -162,8 +154,6 @@ update_check_dlg_c::write_changelog_title() {
   m_changelog->WriteText(wxT("MKVToolNix ChangeLog"));
   m_changelog->Newline();
   m_changelog->EndStyle();
-
-  m_changelog->Newline();
 }
 
 void
@@ -203,11 +193,14 @@ update_check_dlg_c::update_info(mtx_release_version_t const &version,
         m_changelog->Newline();
         m_changelog->EndStyle();
 
+        boost::regex re_released("^released\\s+v?[\\d\\.]+", boost::regex::perl | boost::regex::icase);
+
         for (auto change = release.node().child("changes").first_child() ; change ; change = change.next_sibling()) {
-          if (std::string(change.name()) != "change")
+          if (   (std::string(change.name()) != "change")
+              || boost::regex_search(change.child_value(), re_released))
             continue;
 
-          m_changelog->BeginStandardBullet(wxU("standard/circle"), 100, 100); // wxT("standard/circle")); // wxTEXT_ATTR_BULLET_STYLE_STANDARD);
+          m_changelog->BeginStandardBullet(wxU("standard/circle"), 50, 40);
           m_changelog->WriteText(wxU(change.child_value()));
           m_changelog->Newline();
           m_changelog->EndStandardBullet();
@@ -220,7 +213,7 @@ update_check_dlg_c::update_info(mtx_release_version_t const &version,
 
       m_changelog->BeginURL(wxU(MTX_CHANGELOG_URL), wxU("url"));
       m_changelog->WriteText(wxT("Read full ChangeLog online"));
-      m_changelog->EndStyle();
+      m_changelog->EndURL();
 
     } else {
       m_changelog->Clear();
@@ -232,7 +225,7 @@ update_check_dlg_c::update_info(mtx_release_version_t const &version,
 
       m_changelog->BeginURL(wxU(MTX_CHANGELOG_URL), wxU("url"));
       m_changelog->WriteText(wxT("You can read it online."));
-      m_changelog->EndStyle();
+      m_changelog->EndURL();
     }
   }
 
