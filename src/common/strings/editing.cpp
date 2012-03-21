@@ -32,8 +32,8 @@ split(std::string const &text,
   while (   (match != end)
          && (   (0 == max)
              || ((results.size() + 1) < max))) {
-    results.push_back(text.substr(previous_match_end, match->position(0ul) - previous_match_end));
-    previous_match_end = match->position(0ul) + match->length(0);
+    results.push_back(text.substr(previous_match_end, match->position(static_cast<boost::sregex_iterator::value_type::size_type>(0)) - previous_match_end));
+    previous_match_end = match->position(static_cast<boost::sregex_iterator::value_type::size_type>(0)) + match->length(0);
     ++match;
   }
 
