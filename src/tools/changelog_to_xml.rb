@@ -6,13 +6,6 @@ require 'builder'
 require 'rexml/document'
 require 'trollop'
 
-class Array
-  def stable_sort_by &block
-    index = 0
-    sort_by { |e| index += 1; [ block.yield(e), index ] }
-  end
-end
-
 def parse_changelog file_name
   changelog    = []
   current_line = []
@@ -46,18 +39,7 @@ def parse_changelog file_name
     end
   end
 
-  changelog.
-  stable_sort_by { |e| e[:date] }.
-  reverse.
-  chunk   { |e| e[:version] }.
-  collect { |e| e }.
-  stable_sort_by do |e|
-    next [ 9, 9, 9, 9 ] if e[0] == 'HEAD'
-    v = e[0].split(/\./).collect(&:to_i)
-    v << 0 while v.length < 4
-    v
-  end.
-  reverse
+  changelog.chunk { |e| e[:version] }.collect { |e| e }
 end
 
 def create_all_releases_xml changelog, releases_file_name
@@ -79,6 +61,7 @@ def create_all_releases_xml changelog, releases_file_name
     builder.tag!('latest-windows-pre', node_to_hash.call("/mkvtoolnix-releases/latest-windows-pre"))
 
     changelog.each do |cl_release|
+      next if cl_release[0] != "4.8.0"
       attributes = { "version" => cl_release[0]}.merge node_to_hash.call("/mkvtoolnix-releases/release[version='#{cl_release[0]}']")
 
       builder.release attributes do
