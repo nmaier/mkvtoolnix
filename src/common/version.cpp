@@ -208,15 +208,25 @@ get_latest_release_version() {
   if (!doc)
     return release;
 
-  release.latest_source              = version_number_t(doc->select_single_node("/mkvtoolnix-releases/latest-source/version").node().child_value());
-  release.latest_windows_build       = version_number_t((boost::format("%1% build %2%")
-                                                         % doc->select_single_node("/mkvtoolnix-releases/latest-windows-pre/version").node().child_value()
-                                                         % doc->select_single_node("/mkvtoolnix-releases/latest-windows-pre/build").node().child_value()).str());
-  release.source_download_url        = doc->select_single_node("/mkvtoolnix-releases/latest-source/url").node().child_value();
-  release.windows_build_download_url = doc->select_single_node("/mkvtoolnix-releases/latest-windows-pre/url").node().child_value();
-  release.valid                      = release.latest_source.valid;
+  release.latest_source                   = version_number_t(doc->select_single_node("/mkvtoolnix-releases/latest-source/version").node().child_value());
+  release.latest_windows_build            = version_number_t((boost::format("%1% build %2%")
+                                                             % doc->select_single_node("/mkvtoolnix-releases/latest-windows-pre/version").node().child_value()
+                                                             % doc->select_single_node("/mkvtoolnix-releases/latest-windows-pre/build").node().child_value()).str());
+  release.urls["general"]                 = doc->select_single_node("/mkvtoolnix-releases/latest-source/url").node().child_value();
+  release.urls["source_code"]             = doc->select_single_node("/mkvtoolnix-releases/latest-source/source-code-url").node().child_value();
+  release.urls["windows_pre_build"]       = doc->select_single_node("/mkvtoolnix-releases/latest-windows-pre/url").node().child_value();
+  release.urls["windows_x86_installer"]   = doc->select_single_node("/mkvtoolnix-releases/latest-windows-binary/installer-url/x86").node().child_value();
+  release.urls["windows_amd64_installer"] = doc->select_single_node("/mkvtoolnix-releases/latest-windows-binary/installer-url/amd64").node().child_value();
+  release.urls["windows_x86_portable"]    = doc->select_single_node("/mkvtoolnix-releases/latest-windows-binary/portable-url/x86").node().child_value();
+  release.urls["windows_amd64_portable"]  = doc->select_single_node("/mkvtoolnix-releases/latest-windows-binary/portable-url/amd64").node().child_value();
+  release.valid                           = release.latest_source.valid;
 
-  mxdebug_if(debug, boost::format("update check: current %1% latest source %2% latest winpre %3%\n") % release.current_version.to_string() % release.latest_source.to_string() % release.latest_windows_build.to_string());
+  if (debug) {
+    std::stringstream urls;
+    brng::for_each(release.urls, [&](std::pair<std::string, std::string> const &kv) { urls << " " << kv.first << ":" << kv.second; });
+    mxdebug(boost::format("update check: current %1% latest source %2% latest winpre %3% URLs%4%\n")
+            % release.current_version.to_string() % release.latest_source.to_string() % release.latest_windows_build.to_string() % urls);
+  }
 
   return release;
 }

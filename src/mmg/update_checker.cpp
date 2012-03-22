@@ -173,8 +173,12 @@ update_check_dlg_c::update_info(mtx_release_version_t const &version,
                                 mtx::xml::document_cptr const &releases_info) {
   if (version.valid) {
     m_st_available_version->SetLabel(wxU(version.latest_source.to_string()));
-    m_hlc_download_url->SetLabel(wxU(version.source_download_url));
-    m_hlc_download_url->SetURL(wxU(version.source_download_url));
+
+    auto url = version.urls.find("general");
+    if ((url != version.urls.end()) && !url->second.empty()) {
+      m_hlc_download_url->SetLabel(wxU(url->second));
+      m_hlc_download_url->SetURL(wxU(url->second));
+    }
 
     if (releases_info)
       update_changelog(releases_info);
