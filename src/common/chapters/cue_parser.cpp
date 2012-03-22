@@ -57,7 +57,7 @@ probe_cue_chapters(mm_text_io_c *in) {
   if (!in->getline2(s))
     return false;
 
-  return (ba::istarts_with(s, "performer ") || ba::istarts_with(s, "title ") || ba::istarts_with(s, "file ") || ba::istarts_with(s, "catalog ") || ba::istarts_with(s, "rem "));
+  return (balg::istarts_with(s, "performer ") || balg::istarts_with(s, "title ") || balg::istarts_with(s, "file ") || balg::istarts_with(s, "catalog ") || balg::istarts_with(s, "rem "));
 }
 
 std::string g_cue_to_chapter_name_format;
@@ -370,25 +370,25 @@ parse_cue_chapters(mm_text_io_c *in,
       a.line_num++;
       strip(line);
 
-      if ((line.empty()) || ba::istarts_with(line, "file "))
+      if ((line.empty()) || balg::istarts_with(line, "file "))
         continue;
 
-      if (ba::istarts_with(line, "performer ")) {
+      if (balg::istarts_with(line, "performer ")) {
         if (0 == a.num)
           a.global_performer = get_quoted(line, 10);
         else
           a.performer        = get_quoted(line, 10);
 
-      } else if (ba::istarts_with(line, "catalog "))
+      } else if (balg::istarts_with(line, "catalog "))
         a.global_catalog = get_quoted(line, 8);
 
-      else if (ba::istarts_with(line, "title ")) {
+      else if (balg::istarts_with(line, "title ")) {
         if (0 == a.num)
           a.global_title = get_quoted(line, 6);
         else
           a.title        = get_quoted(line, 6);
 
-      } else if (ba::istarts_with(line, "index ")) {
+      } else if (balg::istarts_with(line, "index ")) {
         unsigned int index, min, sec, frames;
 
         line.erase(0, 6);
@@ -415,7 +415,7 @@ parse_cue_chapters(mm_text_io_c *in,
         if (!index_ok)
           mxerror(boost::format(Y("Cue sheet parser: Invalid INDEX number (got %1%, expected %2%) in line %3%,\n")) % index % a.start_indices.size() % a.line_num);
 
-      } else if (ba::istarts_with(line, "track ")) {
+      } else if (balg::istarts_with(line, "track ")) {
         if ((line.length() < 5) || strcasecmp(&line[line.length() - 5], "audio"))
           continue;
 
@@ -436,30 +436,30 @@ parse_cue_chapters(mm_text_io_c *in,
         a.start_indices.clear();
         a.comment.clear();
 
-      } else if (ba::istarts_with(line, "isrc "))
+      } else if (balg::istarts_with(line, "isrc "))
         a.isrc = get_quoted(line, 5);
 
-      else if (ba::istarts_with(line, "flags "))
+      else if (balg::istarts_with(line, "flags "))
         a.flags = get_quoted(line, 6);
 
-      else if (ba::istarts_with(line, "rem ")) {
+      else if (balg::istarts_with(line, "rem ")) {
         erase_colon(line, 4);
-        if (ba::istarts_with(line, "rem date ") || ba::istarts_with(line, "rem year ")) {
+        if (balg::istarts_with(line, "rem date ") || balg::istarts_with(line, "rem year ")) {
           if (0 == a.num)
             a.global_date = get_quoted(line, 9);
           else
             a.date        = get_quoted(line, 9);
 
-        } else if (ba::istarts_with(line, "rem genre ")) {
+        } else if (balg::istarts_with(line, "rem genre ")) {
           if (0 == a.num)
             a.global_genre = get_quoted(line, 10);
           else
             a.genre        = get_quoted(line, 10);
 
-        } else if (ba::istarts_with(line, "rem discid "))
+        } else if (balg::istarts_with(line, "rem discid "))
           a.global_disc_id = get_quoted(line, 11);
 
-        else if (ba::istarts_with(line, "rem comment ")) {
+        else if (balg::istarts_with(line, "rem comment ")) {
           if (0 == a.num)
             a.global_comment.push_back(get_quoted(line, 12));
           else

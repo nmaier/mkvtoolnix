@@ -124,7 +124,7 @@ optdlg_mmg_tab::optdlg_mmg_tab(wxWindow *parent,
     sorted_entries.push_back(locale_sorter_t(curr_entry, translation->get_locale()));
 
     if (   (select_locale.IsEmpty() && (translation->m_english_name == "English"))
-        || ba::iequals(app->m_ui_locale, translation->get_locale()))
+        || balg::iequals(app->m_ui_locale, translation->get_locale()))
       select_locale = curr_entry;
 
     ++translation;
@@ -303,7 +303,7 @@ optdlg_mmg_tab::save_options() {
 #if defined(HAVE_LIBINTL_H)
   std::string new_ui_locale = get_selected_ui_language();
 
-  if (!ba::iequals(new_ui_locale, app->m_ui_locale)) {
+  if (!balg::iequals(new_ui_locale, app->m_ui_locale)) {
     app->m_ui_locale  = new_ui_locale;
 
     wxConfigBase *cfg = wxConfigBase::Get();

@@ -83,9 +83,9 @@ translation_c::look_up_translation(const std::string &locale) {
     int idx                                = 0;
 
     while (i != ms_available_translations.end()) {
-      if (   ba::iequals(locale_country_lang, i->get_locale())
+      if (   balg::iequals(locale_country_lang, i->get_locale())
 #if defined(SYS_WINDOWS)
-          || ba::iequals(locale_country_lang, i->m_windows_locale_sysname)
+          || balg::iequals(locale_country_lang, i->m_windows_locale_sysname)
 #endif
            )
         return idx;

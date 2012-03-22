@@ -792,7 +792,7 @@ ogm_reader_c::handle_stream_comments() {
       } else if (comment[0] == "TITLE")
         title = comment[1];
 
-      else if (ba::starts_with(comment[0], "CHAPTER"))
+      else if (balg::starts_with(comment[0], "CHAPTER"))
         chapter_strings.push_back((*comments)[j]);
     }
 

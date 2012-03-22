@@ -90,7 +90,7 @@ vobsub_reader_c::read_headers() {
   len      = id_string.length();
 
   std::string line;
-  if (!m_idx_file->getline2(line) || !ba::istarts_with(line, id_string) || (line.length() < (len + 1)))
+  if (!m_idx_file->getline2(line) || !balg::istarts_with(line, id_string) || (line.length() < (len + 1)))
     mxerror_fn(m_ti.m_fname, Y("No version number found.\n"));
 
   version = line[len] - '0';
@@ -214,7 +214,7 @@ vobsub_reader_c::parse_headers() {
     if (!strncasecmp(sline, "alt:", 4) || !strncasecmp(sline, "langidx:", 8))
       continue;
 
-    if (ba::istarts_with(line, "delay:")) {
+    if (balg::istarts_with(line, "delay:")) {
       line.erase(0, 6);
       strip(line);
 
@@ -230,7 +230,7 @@ vobsub_reader_c::parse_headers() {
       delay += timestamp * factor;
     }
 
-    if ((7 == version) && ba::istarts_with(line, "timestamp:")) {
+    if ((7 == version) && balg::istarts_with(line, "timestamp:")) {
       if (nullptr == track)
         mxerror_fn(m_ti.m_fname, Y("The .idx file does not contain an 'id: ...' line to indicate the language.\n"));
 
@@ -238,7 +238,7 @@ vobsub_reader_c::parse_headers() {
       shrink_whitespace(line);
       std::vector<std::string> parts = split(line.c_str(), " ");
 
-      if ((4 != parts.size()) || (13 > parts[1].length()) || !ba::iequals(parts[2], "filepos:")) {
+      if ((4 != parts.size()) || (13 > parts[1].length()) || !balg::iequals(parts[2], "filepos:")) {
         mxwarn_fn(m_ti.m_fname, boost::format(Y("Line %1%: The line seems to be a subtitle entry but the format couldn't be recognized. This entry will be skipped.\n")) % line_no);
         continue;
       }

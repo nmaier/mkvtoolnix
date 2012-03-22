@@ -70,7 +70,7 @@ mxmsg(unsigned int level,
   if (level == MXMSG_ERROR) {
     if (s_saw_cr_after_nl)
       g_mm_stdio->puts("\n");
-    if (!ba::starts_with(message, Y("Error:")))
+    if (!balg::starts_with(message, Y("Error:")))
       g_mm_stdio->puts(g_cc_stdio->native(Y("Error: ")));
 
   } else if (level == MXMSG_WARNING)

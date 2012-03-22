@@ -335,7 +335,7 @@ ssa_parser_c::parse() {
       add_to_global = false;
 
     } else if (SSA_SECTION_EVENTS == section) {
-      if (ba::istarts_with(line, "Format: ")) {
+      if (balg::istarts_with(line, "Format: ")) {
         // Analyze the format string.
         m_format = split(&line.c_str()[strlen("Format: ")]);
         strip(m_format);
@@ -343,12 +343,12 @@ ssa_parser_c::parse() {
         // Let's see if "Actor" is used in the format instead of "Name".
         size_t i;
         for (i = 0; m_format.size() > i; ++i)
-          if (ba::iequals(m_format[i], "actor")) {
+          if (balg::iequals(m_format[i], "actor")) {
             name_field = "Actor";
             break;
           }
 
-      } else if (ba::istarts_with(line, "Dialogue: ")) {
+      } else if (balg::istarts_with(line, "Dialogue: ")) {
         if (m_format.empty())
           throw mtx::input::extended_x(Y("ssa_reader: Invalid format. Could not find the \"Format\" line in the \"[Events]\" section."));
 
@@ -405,7 +405,7 @@ ssa_parser_c::parse() {
       }
 
     } else if ((SSA_SECTION_FONTS == section) || (SSA_SECTION_GRAPHICS == section)) {
-      if (ba::istarts_with(line, "fontname:")) {
+      if (balg::istarts_with(line, "fontname:")) {
         add_attachment_maybe(attachment_name, attachment_data_uu, section);
 
         line.erase(0, strlen("fontname:"));

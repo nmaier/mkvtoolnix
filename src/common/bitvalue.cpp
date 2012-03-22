@@ -39,7 +39,7 @@ bitvalue_c::bitvalue_c(std::string s,
     throw mtx::invalid_parameter_x();
 
   unsigned int len = s.size();
-  ba::to_lower(s);
+  balg::to_lower(s);
   std::string s2;
 
   unsigned int i;

@@ -44,6 +44,8 @@
 #include <boost/logic/tribool.hpp>
 #include <boost/math/common_factor.hpp>
 #include <boost/range.hpp>
+#include <boost/range/adaptor/filtered.hpp>
+#include <boost/range/adaptor/map.hpp>
 #include <boost/range/algorithm_ext.hpp>
 #include <boost/range/algorithm.hpp>
 #include <boost/range/numeric.hpp>
@@ -51,9 +53,10 @@
 #include <boost/regex.hpp>
 #include <boost/system/error_code.hpp>
 
-namespace ba  = boost::algorithm;
-namespace bfs = boost::filesystem;
-namespace br  = boost::range;
+namespace balg  = boost::algorithm;
+namespace badap = boost::adaptors;
+namespace bfs   = boost::filesystem;
+namespace brng  = boost::range;
 
 #include "common/os.h"
 

@@ -459,7 +459,7 @@ parse_number_with_unit(const std::string &s,
     mxerror(boost::format(Y("'%1%' is not a valid %2% in '%3% %4%'.\n")) % s % subject % argument % display_s);
 
   int64_t multiplier = 1000000000;
-  ba::to_lower(unit);
+  balg::to_lower(unit);
 
   if (unit == "ms")
     multiplier = 1000000;
@@ -525,7 +525,7 @@ parse_arg_tracks(std::string s,
                  const std::string &opt) {
   tracks.clear();
 
-  if (ba::starts_with(s, "!")) {
+  if (balg::starts_with(s, "!")) {
     s.erase(0, 1);
     tracks.set_reversed();
   }
@@ -767,7 +767,7 @@ static void
 parse_arg_split_duration(const std::string &arg) {
   std::string s = arg;
 
-  if (ba::istarts_with(s, "duration:"))
+  if (balg::istarts_with(s, "duration:"))
     s.erase(0, strlen("duration:"));
 
   int64_t split_after;
@@ -786,7 +786,7 @@ static void
 parse_arg_split_timecodes(const std::string &arg) {
   std::string s = arg;
 
-  if (ba::istarts_with(s, "timecodes:"))
+  if (balg::istarts_with(s, "timecodes:"))
     s.erase(0, 10);
 
   std::vector<std::string> timecodes = split(s, ",");
@@ -808,7 +808,7 @@ parse_arg_split_size(const std::string &arg) {
   std::string s       = arg;
   std::string err_msg = Y("Invalid split size in '--split %1%'.\n");
 
-  if (ba::istarts_with(s, "size:"))
+  if (balg::istarts_with(s, "size:"))
     s.erase(0, strlen("size:"));
 
   if (s.empty())
@@ -860,13 +860,13 @@ parse_arg_split(const std::string &arg) {
   std::string s = arg;
 
   // HH:MM:SS
-  if (ba::istarts_with(s, "duration:"))
+  if (balg::istarts_with(s, "duration:"))
     parse_arg_split_duration(arg);
 
-  else if (ba::istarts_with(s, "size:"))
+  else if (balg::istarts_with(s, "size:"))
     parse_arg_split_size(arg);
 
-  else if (ba::istarts_with(s, "timecodes:"))
+  else if (balg::istarts_with(s, "timecodes:"))
     parse_arg_split_timecodes(arg);
 
   else if ((   (s.size() == 8)
@@ -1001,7 +1001,7 @@ parse_arg_compression(const std::string &s,
   available_compression_methods.push_back("analyze_header_removal");
 
   ti.m_compression_list[id] = COMPRESSION_UNSPECIFIED;
-  ba::to_lower(parts[1]);
+  balg::to_lower(parts[1]);
 
   if (parts[1] == "zlib")
     ti.m_compression_list[id] = COMPRESSION_ZLIB;
@@ -1518,7 +1518,7 @@ static void
 parse_arg_attachments(const std::string &param,
                       std::string arg,
                       track_info_c &ti) {
-  if (ba::starts_with(arg, "!")) {
+  if (balg::starts_with(arg, "!")) {
     arg.erase(0, 1);
     ti.m_attach_mode_list.set_reversed();
   }

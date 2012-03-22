@@ -1296,9 +1296,9 @@ mpeg4::p10::avc_es_parser_c::cleanup() {
   }
 
   if (!simple_picture_order)
-    br::sort(m_frames, [](const avc_frame_t &f1, const avc_frame_t &f2) { return f1.m_presentation_order < f2.m_presentation_order; });
+    brng::sort(m_frames, [](const avc_frame_t &f1, const avc_frame_t &f2) { return f1.m_presentation_order < f2.m_presentation_order; });
 
-  br::sort(m_provided_timecodes);
+  brng::sort(m_provided_timecodes);
 
   frames_begin               = m_frames.begin();
   frames_end                 = m_frames.end();
@@ -1334,7 +1334,7 @@ mpeg4::p10::avc_es_parser_c::cleanup() {
 
 
   if (!simple_picture_order)
-    br::sort(m_frames, [](const avc_frame_t &f1, const avc_frame_t &f2) { return f1.m_decode_order < f2.m_decode_order; });
+    brng::sort(m_frames, [](const avc_frame_t &f1, const avc_frame_t &f2) { return f1.m_decode_order < f2.m_decode_order; });
 
   frames_begin       = m_frames.begin();
   frames_end         = m_frames.end();

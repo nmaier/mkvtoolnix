@@ -2626,7 +2626,7 @@ guess_mime_type_by_ext(std::string ext) {
 
     extensions = split(mime_types[i].extensions, " ");
     for (j = 0; j < extensions.size(); j++)
-      if (ba::iequals(extensions[j], ext))
+      if (balg::iequals(extensions[j], ext))
         return mime_types[i].name;
   }
 

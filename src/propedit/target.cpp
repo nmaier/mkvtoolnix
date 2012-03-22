@@ -91,7 +91,7 @@ target_c::parse_target_spec(std::string spec) {
     return;
 
   m_spec = spec;
-  ba::to_lower(spec);
+  balg::to_lower(spec);
 
   if ((spec == "segment_info") || (spec == "segmentinfo") || (spec == "info")) {
     m_type = target_c::tt_segment_info;
@@ -99,7 +99,7 @@ target_c::parse_target_spec(std::string spec) {
   }
 
   std::string prefix("track:");
-  if (ba::istarts_with(spec, prefix)) {
+  if (balg::istarts_with(spec, prefix)) {
     m_type = target_c::tt_track;
     parse_track_spec(spec.substr(prefix.length()));
     return;
@@ -140,7 +140,7 @@ void
 target_c::parse_tags_spec(const std::string &spec) {
   m_spec                         = spec;
   std::vector<std::string> parts = split(spec, ":", 2);
-  ba::to_lower(parts[0]);
+  balg::to_lower(parts[0]);
 
   if (parts[0] == "all")
     m_tag_operation_mode = target_c::tom_all;
@@ -151,7 +151,7 @@ target_c::parse_tags_spec(const std::string &spec) {
   else if (parts[0] == "track") {
     m_tag_operation_mode = target_c::tom_track;
     parts                = split(parts[1], ":", 2);
-    parse_track_spec(ba::to_lower_copy(parts[0]));
+    parse_track_spec(balg::to_lower_copy(parts[0]));
 
   } else
     throw false;

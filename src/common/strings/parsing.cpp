@@ -275,7 +275,7 @@ parse_timecode(const std::string &src,
 */
 bool
 parse_bool(std::string value) {
-  ba::to_lower(value);
+  balg::to_lower(value);
 
   if ((value == "yes") || (value == "true") || (value == "1"))
     return true;

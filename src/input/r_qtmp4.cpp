@@ -1763,7 +1763,7 @@ qtmp4_reader_c::decode_and_verify_language(uint16_t coded_language) {
   for (i = 0; 3 > i; ++i)
     language += (char)(((coded_language >> ((2 - i) * 5)) & 0x1f) + 0x60);
 
-  ba::to_lower(language);
+  balg::to_lower(language);
 
   if (is_valid_iso639_2_code(language.c_str()))
     return language;

@@ -90,7 +90,7 @@ engage_hacks(const std::string &hacks) {
 
 void
 init_hacks() {
-  std::vector<std::string> env_vars = { "MKVTOOLNIX_ENGAGE", "MTX_ENGAGE", ba::to_upper_copy(get_program_name()) + "_ENGAGE" };
+  std::vector<std::string> env_vars = { "MKVTOOLNIX_ENGAGE", "MTX_ENGAGE", balg::to_upper_copy(get_program_name()) + "_ENGAGE" };
 
   for (auto &name : env_vars) {
     auto value = getenv(name.c_str());

@@ -73,7 +73,7 @@ avi_reader_c::probe_file(mm_io_c *in,
     return false;
   }
 
-  ba::to_lower(data);
+  balg::to_lower(data);
   return (data.substr(0, 4) == "riff") && (data.substr(8, 4) == "avi ");
 }
 
