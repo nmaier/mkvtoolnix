@@ -90,7 +90,10 @@ update_check_dlg_c::update_check_dlg_c(wxWindow *parent)
   siz_fg->Add(m_st_available_version);
 
   siz_fg->Add(st_download_url_label);
-  siz_fg->Add(m_hlc_download_url);
+  wxBoxSizer *siz_download_url = new wxBoxSizer(wxHORIZONTAL);
+  siz_download_url->Add(m_hlc_download_url);
+  siz_download_url->AddStretchSpacer();
+  siz_fg->Add(siz_download_url, 1, wxGROW);
 
   wxBoxSizer *siz_button = new wxBoxSizer(wxHORIZONTAL);
   siz_button->AddStretchSpacer();
@@ -175,6 +178,8 @@ update_check_dlg_c::update_info(mtx_release_version_t const &version,
 
     if (releases_info)
       update_changelog(releases_info);
+
+    Layout();
   }
 
   m_b_close->Enable(true);
