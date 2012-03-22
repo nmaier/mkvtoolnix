@@ -60,6 +60,11 @@ def create_all_releases_xml changelog
     builder.tag!('latest-source',      node_to_hash.call("/mkvtoolnix-releases/latest-source"))
     builder.tag!('latest-windows-pre', node_to_hash.call("/mkvtoolnix-releases/latest-windows-pre"))
 
+    builder.tag! 'latest-windows-binary' do
+      builder.tag! 'installer-url', node_to_hash.call("/mkvtoolnix-releases/latest-windows-binary/installer-url")
+      builder.tag! 'portable-url',  node_to_hash.call("/mkvtoolnix-releases/latest-windows-binary/portable-url")
+    end
+
     changelog.each do |cl_release|
       attributes = { "version" => cl_release[0]}.merge node_to_hash.call("/mkvtoolnix-releases/release[version='#{cl_release[0]}']")
 
