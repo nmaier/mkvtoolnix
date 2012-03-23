@@ -212,14 +212,13 @@ get_latest_release_version() {
   release.latest_windows_build            = version_number_t((boost::format("%1% build %2%")
                                                              % doc->select_single_node("/mkvtoolnix-releases/latest-windows-pre/version").node().child_value()
                                                              % doc->select_single_node("/mkvtoolnix-releases/latest-windows-pre/build").node().child_value()).str());
+  release.valid                           = release.latest_source.valid;
   release.urls["general"]                 = doc->select_single_node("/mkvtoolnix-releases/latest-source/url").node().child_value();
   release.urls["source_code"]             = doc->select_single_node("/mkvtoolnix-releases/latest-source/source-code-url").node().child_value();
   release.urls["windows_pre_build"]       = doc->select_single_node("/mkvtoolnix-releases/latest-windows-pre/url").node().child_value();
-  release.urls["windows_x86_installer"]   = doc->select_single_node("/mkvtoolnix-releases/latest-windows-binary/installer-url/x86").node().child_value();
-  release.urls["windows_amd64_installer"] = doc->select_single_node("/mkvtoolnix-releases/latest-windows-binary/installer-url/amd64").node().child_value();
-  release.urls["windows_x86_portable"]    = doc->select_single_node("/mkvtoolnix-releases/latest-windows-binary/portable-url/x86").node().child_value();
-  release.urls["windows_amd64_portable"]  = doc->select_single_node("/mkvtoolnix-releases/latest-windows-binary/portable-url/amd64").node().child_value();
-  release.valid                           = release.latest_source.valid;
+  for (auto arch : std::vector<std::string>{ "x86", "amd64" })
+    for (auto package : std::vector<std::string>{ "installer", "portable" })
+      release.urls[std::string{"windows_"} + arch + "_" + package] = doc->select_single_node((std::string{"/mkvtoolnix-releases/latest-windows-binary/"} + package + "-url/" + arch).c_str()).node().child_value();
 
   if (debug) {
     std::stringstream urls;
