@@ -49,7 +49,7 @@ def setup_globals
   $system_includes         = "-I. -Ilib -Ilib/avilib-0.6.10 -Ilib/utf8-cpp/source -Ilib/pugixml/src -Isrc"
   $system_libdirs          = "-Llib/avilib-0.6.10 -Llib/librmff -Llib/pugixml/src -Lsrc/common -Lsrc/input -Lsrc/output -Lsrc/mpegparser"
 
-  $source_directories      =  %w{lib/avilib-0.6.10 lib/librmff src src/input src/output src/common src/common/chapters src/common/strings src/common/tags src/common/xml
+  $source_directories      =  %w{lib/avilib-0.6.10 lib/librmff src src/input src/output src/common src/common/chapters src/common/compression src/common/strings src/common/tags src/common/xml
                                  src/mmg src/mmg/header_editor src/mmg/options src/mmg/tabs src/extract src/propedit src/merge src/info src/mpegparser}
   $all_sources             =  $source_directories.collect { |dir| FileList[ "#{dir}/*.c", "#{dir}/*.cpp" ].to_a }.flatten.sort
   $all_headers             =  $source_directories.collect { |dir| FileList[ "#{dir}/*.h",                ].to_a }.flatten.sort
