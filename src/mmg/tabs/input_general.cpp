@@ -147,20 +147,20 @@ tab_input_general::setup_languages() {
   for (i = 0; i < mdlg->options.popular_languages.Count(); ++i)
     is_popular[ mdlg->options.popular_languages[i] ] = true;
 
-  for (i = 0; nullptr != iso639_languages[i].english_name; ++i) {
-    wxString code = wxU(iso639_languages[i].iso639_2_code);
+  for (auto &lang : iso639_languages) {
+    wxString code = wxU(lang.iso639_2_code);
     if (!is_popular[code])
       continue;
 
-    sorted_iso_codes.Add(wxString::Format(wxT("%s (%s)"), wxUCS(iso639_languages[i].iso639_2_code), wxUCS(iso639_languages[i].english_name)));
+    sorted_iso_codes.Add(wxString::Format(wxT("%s (%s)"), code.c_str(), wxUCS(lang.english_name)));
     is_popular[code] = false;
   }
 
   sorted_iso_codes.Add(Z("---all---"));
 
   wxArrayString temp;
-  for (i = 0; iso639_languages[i].english_name != nullptr; i++)
-    temp.Add(wxString::Format(wxT("%s (%s)"), wxUCS(iso639_languages[i].iso639_2_code), wxUCS(iso639_languages[i].english_name)));
+  for (auto &lang : iso639_languages)
+    temp.Add(wxString::Format(wxT("%s (%s)"), wxUCS(lang.iso639_2_code), wxUCS(lang.english_name)));
   temp.Sort();
 
   for (i = 0; temp.Count() > i; ++i)

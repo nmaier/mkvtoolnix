@@ -239,8 +239,8 @@ xtr_vobsub_c::finish_file() {
 void
 xtr_vobsub_c::write_idx(mm_io_c &idx,
                         int index) {
-  const char *iso639_1 = map_iso639_2_to_iso639_1(m_language.c_str());
-  idx.puts(boost::format("\nid: %1%, index: %2%\n") % (nullptr == iso639_1 ? "en" : iso639_1) %index);
+  auto iso639_1 = map_iso639_2_to_iso639_1(m_language);
+  idx.puts(boost::format("\nid: %1%, index: %2%\n") % (iso639_1.empty() ? "en" : iso639_1) % index);
 
   size_t i;
   for (i = 0; i < m_positions.size(); i++) {

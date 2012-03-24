@@ -45,6 +45,7 @@
 #include <boost/math/common_factor.hpp>
 #include <boost/range.hpp>
 #include <boost/range/adaptor/filtered.hpp>
+#include <boost/range/adaptor/indexed.hpp>
 #include <boost/range/adaptor/map.hpp>
 #include <boost/range/algorithm_ext.hpp>
 #include <boost/range/algorithm.hpp>
