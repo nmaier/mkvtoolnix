@@ -636,7 +636,7 @@ if $build_tools
     description("Build the ac3parser executable").
     aliases("tools:ac3parser").
     sources("src/tools/ac3parser.cpp").
-    libraries(:mtxcommon, :magic, :matroska, :ebml, :expat, :iconv, :intl, :boost_regex, :boost_filesystem, :boost_system, :curl).
+    libraries(common_libs).
     create
 
   #
@@ -646,7 +646,7 @@ if $build_tools
     description("Build the base64tool executable").
     aliases("tools:base64tool").
     sources("src/tools/base64tool.cpp").
-    libraries(:mtxcommon, :magic, :matroska, :ebml, :expat, :iconv, :intl, :boost_regex, :boost_filesystem, :boost_system, :curl).
+    libraries(common_libs).
     create
 
   #
@@ -656,7 +656,7 @@ if $build_tools
     description("Build the diracparser executable").
     aliases("tools:diracparser").
     sources("src/tools/diracparser.cpp").
-    libraries(:mtxcommon, :magic, :matroska, :ebml, :expat, :iconv, :intl, :boost_regex, :boost_filesystem, :boost_system, :curl).
+    libraries(common_libs).
     create
 
   #
@@ -666,7 +666,7 @@ if $build_tools
     description("Build the ebml_validator executable").
     aliases("tools:ebml_validator").
     sources("src/tools/ebml_validator.cpp", "src/tools/element_info.cpp").
-    libraries(:mtxcommon, :magic, :matroska, :ebml, :expat, :iconv, :intl, :boost_regex, :boost_filesystem, :boost_system, :curl).
+    libraries(common_libs).
     create
 
   #
@@ -676,6 +676,6 @@ if $build_tools
     description("Build the vc1parser executable").
     aliases("tools:vc1parser").
     sources("src/tools/vc1parser.cpp").
-    libraries(:mtxcommon, :magic, :matroska, :ebml, :expat, :iconv, :intl, :boost_regex, :boost_filesystem, :boost_system, :curl).
+    libraries(common_libs).
     create
 end
