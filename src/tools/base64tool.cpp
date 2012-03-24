@@ -47,6 +47,8 @@ main(int argc,
   char mode;
   std::string s, line;
 
+  mtx_common_init("base64tool");
+
   set_usage();
 
   if (argc < 4)
