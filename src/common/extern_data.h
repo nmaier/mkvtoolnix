@@ -16,13 +16,13 @@
 
 #include "common/common_pch.h"
 
-typedef struct {
-  const char *name, *extensions;
-} mime_type_t;
+struct mime_type_t {
+  std::string const name;
+  std::vector<std::string> const extensions;
+};
 
-extern const char *sub_charsets[];
-extern const mime_type_t mime_types[];
-extern const char *cctlds[];
+extern std::vector<std::string> const sub_charsets, cctlds;
+extern std::vector<mime_type_t> const mime_types;
 
 std::string guess_mime_type(std::string ext, bool is_file);
 bool is_valid_cctld(const std::string &s);

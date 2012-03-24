@@ -131,8 +131,8 @@ chapter_values_dlg::chapter_values_dlg(wxWindow *parent)
     cob_language->Append(sorted_iso_codes[i]);
 
   cob_country->Append(wxEmptyString);
-  for (i = 0; cctlds[i] != nullptr; i++)
-    cob_country->Append(wxU(cctlds[i]));
+  for (auto &cctld : cctlds)
+    cob_country->Append(wxU(cctld));
 
   siz_buttons = new wxBoxSizer(wxHORIZONTAL);
   siz_buttons->AddStretchSpacer();
@@ -293,8 +293,8 @@ tab_chapters::tab_chapters(wxWindow *parent,
   siz_line->Add(st_country, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
   cob_country_code = new wxMTX_COMBOBOX_TYPE(this, ID_CB_CHAPTERSELECTCOUNTRYCODE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_DROPDOWN | wxCB_READONLY);
   cob_country_code->Append(wxEmptyString);
-  for (i = 0; cctlds[i] != nullptr; i++)
-    cob_country_code->Append(wxU(cctlds[i]));
+  for (auto &cctld : cctlds)
+    cob_country_code->Append(wxU(cctld));
   cob_country_code->SetValue(wxEmptyString);
   siz_line->Add(cob_country_code, 1, wxGROW, 0);
   siz_fg->Add(siz_line, 0, wxGROW, 0);

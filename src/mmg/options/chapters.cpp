@@ -58,8 +58,8 @@ optdlg_chapters_tab::optdlg_chapters_tab(wxWindow *parent,
   }
 
   cob_country->Append(wxEmptyString);
-  for (idx = 0; nullptr != cctlds[idx]; ++idx)
-    cob_country->Append(wxU(cctlds[idx]));
+  for (auto &cctld : cctlds)
+    cob_country->Append(wxU(cctld));
   set_combobox_selection(cob_country, wxU(g_default_chapter_country));
 
   // Create the layout.

@@ -201,11 +201,9 @@ tab_input_format::setup_control_contents() {
   cob_nalu_size_length->SetString(2, Z("4 bytes"));
   cob_nalu_size_length->SetSelection(selection);
 
-  if (0 == sorted_charsets.Count()) {
-    for (i = 0; nullptr != sub_charsets[i]; ++i)
-      sorted_charsets.Add(wxU(sub_charsets[i]));
-    sorted_charsets.Sort();
-  }
+  if (0 == sorted_charsets.Count())
+    for (auto &sub_charset : sub_charsets)
+      sorted_charsets.Add(wxU(sub_charset));
 
   if (0 == cob_sub_charset->GetCount()) {
     cob_sub_charset->Append(wxEmptyString);

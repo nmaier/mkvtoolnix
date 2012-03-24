@@ -82,9 +82,8 @@ tab_attachments::tab_attachments(wxWindow *parent):
   st_mimetype    = new wxStaticText(this, wxID_STATIC, wxEmptyString);
   cob_mimetype   = new wxMTX_COMBOBOX_TYPE(this, ID_CB_MIMETYPE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_DROPDOWN);
   cob_mimetype->Append(wxEmptyString);
-  int i;
-  for (i = 0; mime_types[i].name != nullptr; i++)
-    cob_mimetype->Append(wxU(mime_types[i].name));
+  for (auto &mime_type : mime_types)
+    cob_mimetype->Append(wxU(mime_type.name));
   cob_mimetype->SetSizeHints(0, -1);
 
   st_style  = new wxStaticText(this, wxID_STATIC, wxEmptyString);
