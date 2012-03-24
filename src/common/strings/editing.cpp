@@ -105,6 +105,14 @@ strip(std::vector<std::string> &v,
     strip(v[i], newlines);
 }
 
+std::string
+strip_copy(std::string const &s,
+           bool newlines) {
+  auto new_s = s;
+  strip(new_s, newlines);
+  return new_s;
+}
+
 std::string &
 shrink_whitespace(std::string &s) {
   size_t i                     = 0;
