@@ -26,10 +26,6 @@ extern "C" {
 #include "common/mm_io.h"
 #include "common/strings/editing.h"
 
-#ifndef nullptr
-# define nullptr 0
-#endif
-
 #ifdef SYS_UNIX
 const char *sub_charsets[] = {
   "437",
