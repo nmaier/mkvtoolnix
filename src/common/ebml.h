@@ -153,6 +153,11 @@ AddEmptyChild(EbmlMaster &master) {
   return *(static_cast<type *>(e));
 }
 
+template<typename A> A *
+FindChild(EbmlMaster *m) {
+  return FindChild<A>(*m);
+}
+
 template<typename A> A &
 GetChild(EbmlMaster *m) {
   return GetChild<A>(*m);
