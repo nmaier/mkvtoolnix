@@ -1146,7 +1146,6 @@ generic_reader_c::generic_reader_c(const track_info_c &ti,
   , m_size(in->get_size())
   , m_ptzr_first_packet(nullptr)
   , m_max_timecode_seen(0)
-  , m_chapters(nullptr)
   , m_appending(false)
   , m_num_video_tracks(0)
   , m_num_audio_tracks(0)
@@ -1178,8 +1177,6 @@ generic_reader_c::~generic_reader_c() {
 
   for (i = 0; i < m_reader_packetizers.size(); i++)
     delete m_reader_packetizers[i];
-
-  delete m_chapters;
 }
 
 void

@@ -341,7 +341,7 @@ erase_colon(std::string &s,
   return s;
 }
 
-KaxChapters *
+kax_chapters_cptr
 parse_cue_chapters(mm_text_io_c *in,
                    int64_t min_tc,
                    int64_t max_tc,
@@ -353,7 +353,8 @@ parse_cue_chapters(mm_text_io_c *in,
   std::string line;
 
   in->setFilePointer(0);
-  a.chapters = new KaxChapters;
+  kax_chapters_cptr chapters{new KaxChapters};
+  a.chapters = chapters.get();
 
   if (in->get_byte_order() == BO_NONE) {
     a.do_convert = true;
@@ -365,128 +366,116 @@ parse_cue_chapters(mm_text_io_c *in,
   a.max_tc   = max_tc;
   a.offset   = offset;
 
-  try {
-    while (in->getline2(line)) {
-      a.line_num++;
+  while (in->getline2(line)) {
+    a.line_num++;
+    strip(line);
+
+    if ((line.empty()) || balg::istarts_with(line, "file "))
+      continue;
+
+    if (balg::istarts_with(line, "performer ")) {
+      if (0 == a.num)
+        a.global_performer = get_quoted(line, 10);
+      else
+        a.performer        = get_quoted(line, 10);
+
+    } else if (balg::istarts_with(line, "catalog "))
+      a.global_catalog = get_quoted(line, 8);
+
+    else if (balg::istarts_with(line, "title ")) {
+      if (0 == a.num)
+        a.global_title = get_quoted(line, 6);
+      else
+        a.title        = get_quoted(line, 6);
+
+    } else if (balg::istarts_with(line, "index ")) {
+      unsigned int index, min, sec, frames;
+
+      line.erase(0, 6);
       strip(line);
+      if (sscanf(line.c_str(), "%u %u:%u:%u", &index, &min, &sec, &frames) < 4)
+        mxerror(boost::format(Y("Cue sheet parser: Invalid INDEX entry in line %1%.\n")) % a.line_num);
 
-      if ((line.empty()) || balg::istarts_with(line, "file "))
-        continue;
+      bool index_ok = false;
+      if (99 >= index) {
+        if ((a.start_indices.empty()) && (1 == index))
+          a.index00_missing = true;
 
-      if (balg::istarts_with(line, "performer ")) {
-        if (0 == a.num)
-          a.global_performer = get_quoted(line, 10);
-        else
-          a.performer        = get_quoted(line, 10);
+        if ((a.start_indices.size() == index) || ((a.start_indices.size() == (index - 1)) && a.index00_missing)) {
+          int64_t timestamp = min * 60 * 1000000000ll + sec * 1000000000ll + frames * 1000000000ll / 75;
+          a.start_indices.push_back(timestamp);
 
-      } else if (balg::istarts_with(line, "catalog "))
-        a.global_catalog = get_quoted(line, 8);
+          if ((1 == index) || (0 == index))
+            a.start_of_track = timestamp;
 
-      else if (balg::istarts_with(line, "title ")) {
-        if (0 == a.num)
-          a.global_title = get_quoted(line, 6);
-        else
-          a.title        = get_quoted(line, 6);
-
-      } else if (balg::istarts_with(line, "index ")) {
-        unsigned int index, min, sec, frames;
-
-        line.erase(0, 6);
-        strip(line);
-        if (sscanf(line.c_str(), "%u %u:%u:%u", &index, &min, &sec, &frames) < 4)
-          mxerror(boost::format(Y("Cue sheet parser: Invalid INDEX entry in line %1%.\n")) % a.line_num);
-
-        bool index_ok = false;
-        if (99 >= index) {
-          if ((a.start_indices.empty()) && (1 == index))
-            a.index00_missing = true;
-
-          if ((a.start_indices.size() == index) || ((a.start_indices.size() == (index - 1)) && a.index00_missing)) {
-            int64_t timestamp = min * 60 * 1000000000ll + sec * 1000000000ll + frames * 1000000000ll / 75;
-            a.start_indices.push_back(timestamp);
-
-            if ((1 == index) || (0 == index))
-              a.start_of_track = timestamp;
-
-            index_ok = true;
-          }
-        }
-
-        if (!index_ok)
-          mxerror(boost::format(Y("Cue sheet parser: Invalid INDEX number (got %1%, expected %2%) in line %3%,\n")) % index % a.start_indices.size() % a.line_num);
-
-      } else if (balg::istarts_with(line, "track ")) {
-        if ((line.length() < 5) || strcasecmp(&line[line.length() - 5], "audio"))
-          continue;
-
-        if (1 <= a.num)
-          add_elements_for_cue_entry(a, tags);
-        else
-          add_tag_for_global_cue_settings(a, tags);
-
-        a.num++;
-        a.start_of_track  = -1;
-        a.index00_missing = false;
-        a.performer       = "";
-        a.title           = "";
-        a.isrc            = "";
-        a.date            = "";
-        a.genre           = "";
-        a.flags           = "";
-        a.start_indices.clear();
-        a.comment.clear();
-
-      } else if (balg::istarts_with(line, "isrc "))
-        a.isrc = get_quoted(line, 5);
-
-      else if (balg::istarts_with(line, "flags "))
-        a.flags = get_quoted(line, 6);
-
-      else if (balg::istarts_with(line, "rem ")) {
-        erase_colon(line, 4);
-        if (balg::istarts_with(line, "rem date ") || balg::istarts_with(line, "rem year ")) {
-          if (0 == a.num)
-            a.global_date = get_quoted(line, 9);
-          else
-            a.date        = get_quoted(line, 9);
-
-        } else if (balg::istarts_with(line, "rem genre ")) {
-          if (0 == a.num)
-            a.global_genre = get_quoted(line, 10);
-          else
-            a.genre        = get_quoted(line, 10);
-
-        } else if (balg::istarts_with(line, "rem discid "))
-          a.global_disc_id = get_quoted(line, 11);
-
-        else if (balg::istarts_with(line, "rem comment ")) {
-          if (0 == a.num)
-            a.global_comment.push_back(get_quoted(line, 12));
-          else
-            a.comment.push_back(get_quoted(line, 12));
-
-        } else {
-          if (0 == a.num)
-            a.global_rem.push_back(get_quoted(line, 4));
-          else
-            a.comment.push_back(get_quoted(line, 4));
+          index_ok = true;
         }
       }
+
+      if (!index_ok)
+        mxerror(boost::format(Y("Cue sheet parser: Invalid INDEX number (got %1%, expected %2%) in line %3%,\n")) % index % a.start_indices.size() % a.line_num);
+
+    } else if (balg::istarts_with(line, "track ")) {
+      if ((line.length() < 5) || strcasecmp(&line[line.length() - 5], "audio"))
+        continue;
+
+      if (1 <= a.num)
+        add_elements_for_cue_entry(a, tags);
+      else
+        add_tag_for_global_cue_settings(a, tags);
+
+      a.num++;
+      a.start_of_track  = -1;
+      a.index00_missing = false;
+      a.performer       = "";
+      a.title           = "";
+      a.isrc            = "";
+      a.date            = "";
+      a.genre           = "";
+      a.flags           = "";
+      a.start_indices.clear();
+      a.comment.clear();
+
+    } else if (balg::istarts_with(line, "isrc "))
+      a.isrc = get_quoted(line, 5);
+
+    else if (balg::istarts_with(line, "flags "))
+      a.flags = get_quoted(line, 6);
+
+    else if (balg::istarts_with(line, "rem ")) {
+      erase_colon(line, 4);
+      if (balg::istarts_with(line, "rem date ") || balg::istarts_with(line, "rem year ")) {
+        if (0 == a.num)
+          a.global_date = get_quoted(line, 9);
+        else
+          a.date        = get_quoted(line, 9);
+
+      } else if (balg::istarts_with(line, "rem genre ")) {
+        if (0 == a.num)
+          a.global_genre = get_quoted(line, 10);
+        else
+          a.genre        = get_quoted(line, 10);
+
+      } else if (balg::istarts_with(line, "rem discid "))
+        a.global_disc_id = get_quoted(line, 11);
+
+      else if (balg::istarts_with(line, "rem comment ")) {
+        if (0 == a.num)
+          a.global_comment.push_back(get_quoted(line, 12));
+        else
+          a.comment.push_back(get_quoted(line, 12));
+
+      } else {
+        if (0 == a.num)
+          a.global_rem.push_back(get_quoted(line, 4));
+        else
+          a.comment.push_back(get_quoted(line, 4));
+      }
     }
-
-    if (1 <= a.num)
-      add_elements_for_cue_entry(a, tags);
-
-  } catch(mtx::exception &e) {
-
-    delete a.chapters;
-    throw;
   }
 
-  if (0 == a.num) {
-    delete a.chapters;
-    return nullptr;
-  }
+  if (1 <= a.num)
+    add_elements_for_cue_entry(a, tags);
 
-  return a.chapters;
+  return 0 == a.num ? kax_chapters_cptr{} : chapters;
 }

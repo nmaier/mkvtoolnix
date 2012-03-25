@@ -21,7 +21,6 @@
 namespace mtx { namespace xml {
 
 ebml_tags_converter_c::ebml_tags_converter_c()
-  : ebml_converter_c()
 {
   setup_maps();
 }

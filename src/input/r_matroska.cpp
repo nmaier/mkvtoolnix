@@ -696,7 +696,7 @@ kax_reader_c::handle_chapters(mm_io_c *io,
   tmp_chapters->Read(*m_es, EBML_CLASS_CONTEXT(KaxChapters), upper_lvl_el, l2, true);
 
   if (!m_chapters)
-    m_chapters = new KaxChapters;
+    m_chapters = kax_chapters_cptr{new KaxChapters};
 
   size_t i;
   for (i = 0; i < tmp_chapters->ListSize(); i++)

@@ -187,7 +187,7 @@ extern KaxTracks *g_kax_tracks;
 extern KaxTrackEntry *g_kax_last_entry;
 extern KaxCues *g_kax_cues;
 extern KaxSeekHead *g_kax_sh_main, *g_kax_sh_cues;
-extern KaxChapters *g_kax_chapters;
+extern kax_chapters_cptr g_kax_chapters;
 extern int64_t g_tags_size;
 extern std::string g_segment_title;
 extern bool g_segment_title_set;

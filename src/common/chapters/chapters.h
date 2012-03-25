@@ -50,28 +50,27 @@ namespace mtx {
 class mm_io_c;
 class mm_text_io_c;
 
-KaxChapters *
+typedef std::shared_ptr<KaxChapters> kax_chapters_cptr;
+
+kax_chapters_cptr
 parse_chapters(const std::string &file_name, int64_t min_tc = 0, int64_t max_tc = -1, int64_t offset = 0, const std::string &language = "", const std::string &charset = "",
                bool exception_on_error = false, bool *is_simple_format = nullptr, KaxTags **tags = nullptr);
 
-KaxChapters *
+kax_chapters_cptr
 parse_chapters(mm_text_io_c *io, int64_t min_tc = 0, int64_t max_tc = -1, int64_t offset = 0, const std::string &language = "", const std::string &charset = "",
                bool exception_on_error = false, bool *is_simple_format = nullptr, KaxTags **tags = nullptr);
 
-bool probe_xml_chapters(mm_text_io_c *in);
-KaxChapters *parse_xml_chapters(mm_text_io_c *in, int64_t min_tc, int64_t max_tc, int64_t offset, bool exception_on_error = false);
-
 bool probe_simple_chapters(mm_text_io_c *in);
-KaxChapters *parse_simple_chapters(mm_text_io_c *in, int64_t min_tc, int64_t max_tc, int64_t offset, const std::string &language, const std::string &charset);
+kax_chapters_cptr parse_simple_chapters(mm_text_io_c *in, int64_t min_tc, int64_t max_tc, int64_t offset, const std::string &language, const std::string &charset);
 
 extern std::string g_cue_to_chapter_name_format;
 bool probe_cue_chapters(mm_text_io_c *in);
-KaxChapters *parse_cue_chapters(mm_text_io_c *in, int64_t min_tc, int64_t max_tc, int64_t offset, const std::string &language, const std::string &charset, KaxTags **tags = nullptr);
+kax_chapters_cptr parse_cue_chapters(mm_text_io_c *in, int64_t min_tc, int64_t max_tc, int64_t offset, const std::string &language, const std::string &charset, KaxTags **tags = nullptr);
 
 void write_chapters_simple(int &chapter_num, KaxChapters *chapters, mm_io_c *out);
 
 #define copy_chapters(source) dynamic_cast<KaxChapters *>(source->Clone())
-KaxChapters *select_chapters_in_timeframe(KaxChapters *chapters, int64_t min_tc, int64_t max_tc, int64_t offset);
+bool select_chapters_in_timeframe(KaxChapters *chapters, int64_t min_tc, int64_t max_tc, int64_t offset);
 
 extern std::string g_default_chapter_language, g_default_chapter_country;
 

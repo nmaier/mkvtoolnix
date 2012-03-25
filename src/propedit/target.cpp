@@ -432,16 +432,12 @@ target_c::add_or_replace_track_tags(KaxTags *tags) {
 
 void
 target_c::add_or_replace_chapters() {
-  KaxChapters *new_chapters = nullptr;
+  kax_chapters_cptr new_chapters{};
 
-  if (!m_file_name.empty()) {
-    new_chapters = new KaxChapters;
+  if (!m_file_name.empty())
     new_chapters = parse_chapters(m_file_name);
-  }
 
-  add_or_replace_all_master_elements(new_chapters);
-
-  delete new_chapters;
+  add_or_replace_all_master_elements(new_chapters.get());
 
   if (m_level1_element->ListSize()) {
     fix_mandatory_chapter_elements(m_level1_element);

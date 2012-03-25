@@ -27,6 +27,7 @@
 #include "common/strings/editing.h"
 #include "common/strings/parsing.h"
 #include "common/unique_numbers.h"
+#include "common/xml/ebml_chapters_converter.h"
 
 using namespace libmatroska;
 
@@ -129,7 +130,7 @@ probe_simple_chapters(mm_text_io_c *in) {
 
    \return The chapters parsed from the file or \c nullptr if an error occured.
 */
-KaxChapters *
+kax_chapters_cptr
 parse_simple_chapters(mm_text_io_c *in,
                       int64_t min_tc,
                       int64_t max_tc,
@@ -140,7 +141,7 @@ parse_simple_chapters(mm_text_io_c *in,
 
   in->setFilePointer(0);
 
-  KaxChapters *chaps       = new KaxChapters;
+  kax_chapters_cptr chaps{new KaxChapters};
   KaxChapterAtom *atom     = nullptr;
   KaxEditionEntry *edition = nullptr;
   int mode                 = 0;
@@ -170,78 +171,68 @@ parse_simple_chapters(mm_text_io_c *in,
   boost::regex name_line_re(    SIMCHAP_RE_NAME_LINE,     boost::regex::perl);
   boost::smatch matches;
 
-  try {
-    std::string line, timecode_as_string;
+  std::string line, timecode_as_string;
 
-    while (in->getline2(line)) {
-      strip(line);
-      if (line.empty())
-        continue;
+  while (in->getline2(line)) {
+    strip(line);
+    if (line.empty())
+      continue;
 
-      if (0 == mode) {
-        if (!boost::regex_match(line, matches, timecode_line_re))
-          chapter_error(boost::format(Y("'%1%' is not a CHAPTERxx=... line.")) % line);
+    if (0 == mode) {
+      if (!boost::regex_match(line, matches, timecode_line_re))
+        chapter_error(boost::format(Y("'%1%' is not a CHAPTERxx=... line.")) % line);
 
-        int64_t hour, minute, second, msecs;
-        parse_int(matches[1].str(), hour);
-        parse_int(matches[2].str(), minute);
-        parse_int(matches[3].str(), second);
-        parse_int(matches[4].str(), msecs);
+      int64_t hour, minute, second, msecs;
+      parse_int(matches[1].str(), hour);
+      parse_int(matches[2].str(), minute);
+      parse_int(matches[3].str(), second);
+      parse_int(matches[4].str(), msecs);
 
-        if (59 < minute)
-          chapter_error(boost::format(Y("Invalid minute: %1%")) % minute);
-        if (59 < second)
-          chapter_error(boost::format(Y("Invalid second: %1%")) % second);
+      if (59 < minute)
+        chapter_error(boost::format(Y("Invalid minute: %1%")) % minute);
+      if (59 < second)
+        chapter_error(boost::format(Y("Invalid second: %1%")) % second);
 
-        start = msecs + second * 1000 + minute * 1000 * 60 + hour * 1000 * 60 * 60;
-        mode  = 1;
+      start = msecs + second * 1000 + minute * 1000 * 60 + hour * 1000 * 60 * 60;
+      mode  = 1;
 
-        if (!boost::regex_match(line, matches, timecode_re))
-          chapter_error(boost::format(Y("'%1%' is not a CHAPTERxx=... line.")) % line);
+      if (!boost::regex_match(line, matches, timecode_re))
+        chapter_error(boost::format(Y("'%1%' is not a CHAPTERxx=... line.")) % line);
 
-        timecode_as_string = matches[1].str();
+      timecode_as_string = matches[1].str();
 
-      } else {
-        if (!boost::regex_match(line, matches, name_line_re))
-          chapter_error(boost::format(Y("'%1%' is not a CHAPTERxxNAME=... line.")) % line);
+    } else {
+      if (!boost::regex_match(line, matches, name_line_re))
+        chapter_error(boost::format(Y("'%1%' is not a CHAPTERxxNAME=... line.")) % line);
 
-        std::string name = matches[1].str();
-        if (name.empty())
-          name = timecode_as_string;
+      std::string name = matches[1].str();
+      if (name.empty())
+        name = timecode_as_string;
 
-        mode = 0;
+      mode = 0;
 
-        if ((start >= min_tc) && ((start <= max_tc) || (max_tc == -1))) {
-          if (nullptr == edition)
-            edition = &GetChild<KaxEditionEntry>(*chaps);
+      if ((start >= min_tc) && ((start <= max_tc) || (max_tc == -1))) {
+        if (nullptr == edition)
+          edition = &GetChild<KaxEditionEntry>(*chaps);
 
-          atom                                                 = &GetFirstOrNextChild<KaxChapterAtom>(*edition, atom);
-          GetChildAs<KaxChapterUID, EbmlUInteger>(*atom)       = create_unique_uint32(UNIQUE_CHAPTER_IDS);
-          GetChildAs<KaxChapterTimeStart, EbmlUInteger>(*atom) = (start - offset) * 1000000;
+        atom                                                 = &GetFirstOrNextChild<KaxChapterAtom>(*edition, atom);
+        GetChildAs<KaxChapterUID, EbmlUInteger>(*atom)       = create_unique_uint32(UNIQUE_CHAPTER_IDS);
+        GetChildAs<KaxChapterTimeStart, EbmlUInteger>(*atom) = (start - offset) * 1000000;
 
-          KaxChapterDisplay *display = &GetChild<KaxChapterDisplay>(*atom);
+        KaxChapterDisplay *display = &GetChild<KaxChapterDisplay>(*atom);
 
-          GetChildAs<KaxChapterString,   EbmlUnicodeString>(*display) = cstrutf8_to_UTFstring(do_convert ? cc_utf8->utf8(name) : name);
-          GetChildAs<KaxChapterLanguage, EbmlString>(*display)        = use_language;
+        GetChildAs<KaxChapterString,   EbmlUnicodeString>(*display) = cstrutf8_to_UTFstring(do_convert ? cc_utf8->utf8(name) : name);
+        GetChildAs<KaxChapterLanguage, EbmlString>(*display)        = use_language;
 
-          if (!g_default_chapter_country.empty())
-            GetChildAs<KaxChapterCountry, EbmlString>(*display)       = g_default_chapter_country;
+        if (!g_default_chapter_country.empty())
+          GetChildAs<KaxChapterCountry, EbmlString>(*display)       = g_default_chapter_country;
 
-          ++num;
-        }
+        ++num;
       }
     }
-  } catch (mtx::chapter_parser_x &e) {
-    delete chaps;
-    throw;
   }
 
-  if (0 == num) {
-    delete chaps;
-    return nullptr;
-  }
-
-  return chaps;
+  return 0 == num ? kax_chapters_cptr{} : chaps;
 }
 
 /** \brief Probe a file for different chapter formats and parse the file.
@@ -278,7 +269,7 @@ parse_simple_chapters(mm_text_io_c *in,
 
    \see ::parse_chapters(mm_text_io_c *in,int64_t min_tc,int64_t max_tc, int64_t offset,const std::string &language,const std::string &charset,bool exception_on_error,bool *is_simple_format,KaxTags **tags)
 */
-KaxChapters *
+kax_chapters_cptr
 parse_chapters(const std::string &file_name,
                int64_t min_tc,
                int64_t max_tc,
@@ -304,7 +295,7 @@ parse_chapters(const std::string &file_name,
       mxerror(boost::format(Y("Could not open '%1%' for reading.\n")) % file_name);
   }
 
-  return nullptr;
+  return kax_chapters_cptr{};
 }
 
 /** \brief Probe a file for different chapter formats and parse the file.
@@ -341,7 +332,7 @@ parse_chapters(const std::string &file_name,
 
    \see ::parse_chapters(const std::string &file_name,int64_t min_tc,int64_t max_tc, int64_t offset,const std::string &language,const std::string &charset,bool exception_on_error,bool *is_simple_format,KaxTags **tags)
 */
-KaxChapters *
+kax_chapters_cptr
 parse_chapters(mm_text_io_c *in,
                int64_t min_tc,
                int64_t max_tc,
@@ -367,8 +358,10 @@ parse_chapters(mm_text_io_c *in,
     } else if (nullptr != is_simple_format)
       *is_simple_format = false;
 
-    if (probe_xml_chapters(in))
-      return parse_xml_chapters(in, min_tc, max_tc, offset, exception_on_error);
+    if (mtx::xml::ebml_chapters_converter_c::probe_file(in->get_file_name())) {
+      auto chapters = mtx::xml::ebml_chapters_converter_c::parse_file(in->get_file_name());
+      return select_chapters_in_timeframe(chapters.get(), min_tc, max_tc, offset) ? chapters : kax_chapters_cptr{};
+    }
 
     throw mtx::chapter_parser_x(boost::format(Y("Unknown chapter file format in '%1%'. It does not contain a supported chapter format.\n")) % in->get_file_name());
   } catch (mtx::chapter_parser_x &e) {
@@ -377,7 +370,7 @@ parse_chapters(mm_text_io_c *in,
     mxerror(e.error());
   }
 
-  return nullptr;
+  return kax_chapters_cptr{};
 }
 
 /** \brief Get the start timecode for a chapter atom.
@@ -782,16 +775,16 @@ merge_chapter_entries(EbmlMaster &master) {
      for each chapter after the decision whether or not to keep it has been
      made.
 
-   \return \a chapters if there are entries left and \c nullptr otherwise.
+   \return \c false if all chapters were discarded, \c true otherwise
 */
-KaxChapters *
+bool
 select_chapters_in_timeframe(KaxChapters *chapters,
                              int64_t min_tc,
                              int64_t max_tc,
                              int64_t offset) {
   // Check the parameters.
   if (nullptr == chapters)
-    return nullptr;
+    false;
 
   // Remove the atoms that are outside of the requested range.
   size_t master_idx;
@@ -824,13 +817,7 @@ select_chapters_in_timeframe(KaxChapters *chapters,
       master_idx++;
   }
 
-  // If we don't even have one edition then delete the chapters themselves.
-  if (chapters->ListSize() == 0) {
-    delete chapters;
-    chapters = nullptr;
-  }
-
-  return chapters;
+  return chapters->ListSize() > 0;
 }
 
 /** \brief Find an edition with a specific UID.

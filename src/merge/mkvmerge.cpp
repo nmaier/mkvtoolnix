@@ -1466,8 +1466,6 @@ parse_arg_chapters(const std::string &param,
   if (g_chapter_file_name != "")
     mxerror(boost::format(Y("Only one chapter file allowed in '%1% %2%'.\n")) % param % arg);
 
-  delete g_kax_chapters;
-
   g_chapter_file_name = arg;
   g_kax_chapters      = parse_chapters(g_chapter_file_name, 0, -1, 0, g_chapter_language.c_str(), g_chapter_charset.c_str(), false, nullptr, &g_tags_from_cue_chapters);
 }

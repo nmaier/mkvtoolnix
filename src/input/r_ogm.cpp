@@ -726,7 +726,7 @@ ogm_reader_c::identify() {
     id_result_track(i, sdemuxers[i]->get_type(), sdemuxers[i]->get_codec(), verbose_info);
   }
 
-  if (nullptr != m_chapters)
+  if (m_chapters.get())
     id_result_chapters(count_chapter_atoms(*m_chapters));
 }
 
@@ -823,7 +823,7 @@ ogm_reader_c::handle_stream_comments() {
         m_chapters   = parse_chapters(text_out.get(), 0, -1, 0, m_ti.m_chapter_language);
         chapters_set = true;
 
-        align_chapter_edition_uids(m_chapters);
+        align_chapter_edition_uids(m_chapters.get());
       } catch (...) {
       }
     }

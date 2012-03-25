@@ -166,7 +166,7 @@ KaxTrackEntry *g_kax_last_entry             = nullptr;
 KaxCues *g_kax_cues                         = nullptr;
 KaxSeekHead *g_kax_sh_main                  = nullptr;
 KaxSeekHead *g_kax_sh_cues                  = nullptr;
-KaxChapters *g_kax_chapters                 = nullptr;
+kax_chapters_cptr g_kax_chapters;
 
 KaxTags *g_tags_from_cue_chapters           = nullptr;
 
@@ -1100,28 +1100,26 @@ calc_max_chapter_size() {
     if (file.appending)
       continue;
 
-    KaxChapters *chapters = file.reader->m_chapters;
-    if (nullptr == chapters)
+    if (!file.reader->m_chapters)
       continue;
 
-    if (nullptr == g_kax_chapters)
-      g_kax_chapters = new KaxChapters;
+    if (!g_kax_chapters)
+      g_kax_chapters = kax_chapters_cptr{new KaxChapters};
 
-    move_chapters_by_edition(*g_kax_chapters, *chapters);
-    delete chapters;
-    file.reader->m_chapters = nullptr;
+    move_chapters_by_edition(*g_kax_chapters, *file.reader->m_chapters);
+    file.reader->m_chapters.reset();
   }
 
   // Step 2: Fix the mandatory elements and count the size of all chapters.
   s_max_chapter_size = 0;
-  if (nullptr != g_kax_chapters) {
-    fix_mandatory_chapter_elements(g_kax_chapters);
+  if (g_kax_chapters) {
+    fix_mandatory_chapter_elements(g_kax_chapters.get());
     g_kax_chapters->UpdateSize(true);
     s_max_chapter_size += g_kax_chapters->ElementSize();
   }
 
   for (auto &file : g_files) {
-    KaxChapters *chapters = file.reader->m_chapters;
+    KaxChapters *chapters = file.reader->m_chapters.get();
     if (nullptr == chapters)
       continue;
 
@@ -1393,8 +1391,7 @@ render_chapter_void_placeholder() {
   if (outputting_webm()) {
     mxwarn(boost::format(Y("Chapters are not allowed in WebM compliant files. No chapters will be written into any output file.\n")));
 
-    delete g_kax_chapters;
-    g_kax_chapters     = nullptr;
+    g_kax_chapters.reset();
     s_max_chapter_size = 0;
 
     return;
@@ -1575,7 +1572,10 @@ finish_file(bool last_file) {
     chapters_here  = copy_chapters(g_kax_chapters);
 
     if (g_cluster_helper->splitting())
-      chapters_here = select_chapters_in_timeframe(chapters_here, start, end, offset);
+      if (!select_chapters_in_timeframe(chapters_here, start, end, offset)) {
+        delete chapters_here;
+        chapters_here = nullptr;
+      }
 
     if (nullptr != chapters_here) {
       merge_chapter_entries(*chapters_here);
@@ -1834,16 +1834,15 @@ append_track(packetizer_t &ptzr,
   // Append some more chapters and adjust their timecodes by the highest
   // timecode seen in the previous file/the track that we've been searching
   // for above.
-  KaxChapters *chapters = src_file.reader->m_chapters;
+  KaxChapters *chapters = src_file.reader->m_chapters.get();
   if (nullptr != chapters) {
-    if (nullptr == g_kax_chapters)
-      g_kax_chapters = new KaxChapters;
+    if (!g_kax_chapters)
+      g_kax_chapters = kax_chapters_cptr{new KaxChapters};
     else
       align_chapter_edition_uids(*g_kax_chapters, *chapters);
     adjust_chapter_timecodes(*chapters, timecode_adjustment);
     move_chapters_by_edition(*g_kax_chapters, *chapters);
-    delete chapters;
-    src_file.reader->m_chapters = nullptr;
+    src_file.reader->m_chapters.reset();
   }
 
   ptzr.deferred = false;
@@ -2038,8 +2037,7 @@ cleanup() {
   delete g_tags_from_cue_chapters;
   g_tags_from_cue_chapters = nullptr;
 
-  delete g_kax_chapters;
-  g_kax_chapters = nullptr;
+  g_kax_chapters.reset();
 
   delete s_kax_as;
   s_kax_as = nullptr;
