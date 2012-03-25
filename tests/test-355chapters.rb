@@ -11,7 +11,7 @@ source = "data/srt/ven.srt"
 end
 
 # Invalid files:
-%w{chapters-invalid-timecode.xml chapters-invalid-sub-tag.xml chapters-invalid-root-tag.xml chapters-invalid-xml.xml chapters-invalid-range.xml}.each do |chapters|
+%w{timecode sub-tag root-tag xml range chaptercountry chapterlanguage chapter-track-no-chaptertracknumber no-atom no-chapterstring no-chaptertimestart}.each do |chapters|
   test chapters do
     merge "#{source} --chapters data/text/#{chapters}", :exit_code => 2
     :ok
