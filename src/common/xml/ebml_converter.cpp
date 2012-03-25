@@ -440,8 +440,9 @@ document_cptr
 ebml_converter_c::load_xml(std::string const &file_name) {
   mm_text_io_c in(new mm_file_io_c(file_name, MODE_READ));
   std::string content;
+  auto bytes_to_read = in.get_size() - in.get_byte_order_length();
 
-  if (in.read(content, in.get_size()) != in.get_size())
+  if (in.read(content, bytes_to_read) != bytes_to_read)
     throw mtx::mm_io::end_of_file_x{};
 
   if (BO_NONE == in.get_byte_order()) {

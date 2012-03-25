@@ -955,11 +955,6 @@ mm_text_io_c::getline() {
   }
 }
 
-byte_order_e
-mm_text_io_c::get_byte_order() {
-  return m_byte_order;
-}
-
 void
 mm_text_io_c::setFilePointer(int64 offset,
                              seek_mode mode) {

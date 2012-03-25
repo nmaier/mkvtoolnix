@@ -340,7 +340,12 @@ public:
   virtual void setFilePointer(int64 offset, seek_mode mode=seek_beginning);
   virtual std::string getline();
   virtual int read_next_char(char *buffer);
-  virtual byte_order_e get_byte_order();
+  virtual byte_order_e get_byte_order() const {
+    return m_byte_order;
+  }
+  virtual unsigned int get_byte_order_length() const {
+    return m_bom_len;
+  }
   virtual void set_byte_order(byte_order_e byte_order) {
     m_byte_order = byte_order;
   }
