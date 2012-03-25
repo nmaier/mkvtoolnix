@@ -232,7 +232,7 @@ private:
   void build_index_chunk_mode();
   void build_index_constant_sample_size_mode();
 };
-typedef counted_ptr<qtmp4_demuxer_c> qtmp4_demuxer_cptr;
+typedef std::shared_ptr<qtmp4_demuxer_c> qtmp4_demuxer_cptr;
 
 struct qt_atom_t {
   uint32_t fourcc;

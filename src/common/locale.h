@@ -29,7 +29,7 @@
 #endif
 
 class charset_converter_c;
-typedef counted_ptr<charset_converter_c> charset_converter_cptr;
+typedef std::shared_ptr<charset_converter_c> charset_converter_cptr;
 
 class charset_converter_c {
 protected:

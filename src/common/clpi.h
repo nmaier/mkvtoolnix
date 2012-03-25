@@ -19,8 +19,6 @@
 #include <vector>
 
 #include "common/bit_cursor.h"
-#include "common/memory.h"
-#include "common/smart_pointers.h"
 
 #define CLPI_FILE_MAGIC   FOURCC('H', 'D', 'M', 'V')
 #define CLPI_FILE_MAGIC2A FOURCC('0', '2', '0', '0')
@@ -41,7 +39,7 @@ namespace clpi {
 
     void dump();
   };
-  typedef counted_ptr<program_stream_t> program_stream_cptr;
+  typedef std::shared_ptr<program_stream_t> program_stream_cptr;
 
   struct program_t {
     uint32_t spn_program_sequence_start;
@@ -54,7 +52,7 @@ namespace clpi {
 
     void dump();
   };
-  typedef counted_ptr<program_t> program_cptr;
+  typedef std::shared_ptr<program_t> program_cptr;
 
   class parser_c {
   protected:
@@ -82,7 +80,7 @@ namespace clpi {
     virtual void parse_program_info(bit_cursor_cptr &bc);
     virtual void parse_program_stream(bit_cursor_cptr &bc, program_cptr &program);
   };
-  typedef counted_ptr<parser_c> parser_cptr;
+  typedef std::shared_ptr<parser_c> parser_cptr;
 
 };
 #endif // __MTX_COMMON_CLPI_COMMON_H

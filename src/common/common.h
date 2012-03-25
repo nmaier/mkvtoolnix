@@ -11,14 +11,15 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_COMMON_H
-#define __MTX_COMMON_COMMON_H
+#ifndef MTX_COMMON_COMMON_H
+#define MTX_COMMON_COMMON_H
 
 #undef min
 #undef max
 #undef __STRICT_ANSI__
 
 #include <algorithm>
+#include <memory>
 #include <stdexcept>
 #include <string>
 #include <vector>
@@ -82,8 +83,10 @@ namespace brng  = boost::range;
 # endif
 #endif
 
-#include "common/smart_pointers.h"
 #include "common/debugging.h"
+#include "common/error.h"
+#include "common/memory.h"
+#include "common/mm_io.h"
 #include "common/output.h"
 
 namespace libebml {
@@ -131,4 +134,4 @@ extern unsigned int verbose;
 void mtx_common_init(std::string const &program_name);
 std::string const &get_program_name();
 
-#endif // __MTX_COMMON_COMMON_H
+#endif // MTX_COMMON_COMMON_H

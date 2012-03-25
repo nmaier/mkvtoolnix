@@ -96,7 +96,7 @@ run(options_cptr &options) {
   if (!analyzer->process(options->m_parse_mode))
     mxerror(Y("This file could not be opened or parsed.\n"));
 
-  options->find_elements(analyzer.get_object());
+  options->find_elements(analyzer.get());
   options->validate();
 
   if (debugging_requested("dump_options")) {
@@ -108,7 +108,7 @@ run(options_cptr &options) {
 
   mxinfo(Y("The changes are written to the file.\n"));
 
-  write_changes(options, analyzer.get_object());
+  write_changes(options, analyzer.get());
 
   mxinfo(Y("Done.\n"));
 

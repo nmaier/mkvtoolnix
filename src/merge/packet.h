@@ -42,7 +42,7 @@ public:
 
   virtual packet_extension_type_e get_type() = 0;
 };
-typedef counted_ptr<packet_extension_c> packet_extension_cptr;
+typedef std::shared_ptr<packet_extension_c> packet_extension_cptr;
 
 struct packet_t {
   static int64_t sm_packet_number_counter;
@@ -175,11 +175,11 @@ struct packet_t {
   packet_extension_c *find_extension(packet_extension_c::packet_extension_type_e type) {
     for (auto &extension : extensions)
       if (extension->get_type() == type)
-        return extension.get_object();
+        return extension.get();
 
     return nullptr;
   }
 };
-typedef counted_ptr<packet_t> packet_cptr;
+typedef std::shared_ptr<packet_t> packet_cptr;
 
 #endif // __PACKET_H

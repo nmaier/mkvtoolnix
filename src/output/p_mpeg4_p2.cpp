@@ -58,7 +58,7 @@ mpeg4_p2_video_packetizer_c(generic_reader_c *p_reader,
     // packetizer because it takes care of handling the default
     // duration/FPS itself.
     if (m_ti.m_ext_timecodes.empty())
-      m_timecode_factory.clear();
+      m_timecode_factory.reset();
 
     if (m_default_duration_forced)
       m_fps = 1000000000.0 / m_htrack_default_duration;

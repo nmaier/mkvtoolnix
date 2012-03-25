@@ -17,9 +17,6 @@
 
 #include "common/common_pch.h"
 
-#include "common/mm_io.h"
-#include "common/smart_pointers.h"
-
 class bit_cursor_c {
 private:
   const unsigned char *m_end_of_data;
@@ -247,6 +244,6 @@ public:
     return pos;
   }
 };
-typedef counted_ptr<bit_cursor_c> bit_cursor_cptr;
+typedef std::shared_ptr<bit_cursor_c> bit_cursor_cptr;
 
 #endif // __MTX_COMMON_BIT_CURSOR_H

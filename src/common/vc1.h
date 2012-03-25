@@ -119,7 +119,7 @@ namespace vc1 {
     frame_t();
     void init();
   };
-  typedef counted_ptr<frame_t> frame_cptr;
+  typedef std::shared_ptr<frame_t> frame_cptr;
 
   inline bool is_marker(uint32_t value) {
     return (value & 0xffffff00) == 0x00000100;
@@ -195,14 +195,11 @@ namespace vc1 {
     }
 
     virtual memory_cptr get_raw_sequence_header() {
-      if (m_seqhdr_found)
-        return memory_cptr(m_raw_seqhdr->clone());
-      else
-        return memory_cptr(nullptr);
+      return m_seqhdr_found ? memory_cptr{m_raw_seqhdr->clone()} : memory_cptr{};
     }
 
     virtual memory_cptr get_raw_entrypoint() {
-      return m_raw_entrypoint ? m_raw_entrypoint->clone() : memory_cptr(nullptr);
+      return m_raw_entrypoint ? m_raw_entrypoint->clone() : memory_cptr{};
     }
 
     virtual void handle_packet(memory_cptr packet);

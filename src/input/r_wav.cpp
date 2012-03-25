@@ -454,7 +454,7 @@ wav_reader_c::wav_reader_c(const track_info_c &ti,
 
 void
 wav_reader_c::read_headers() {
-  if (!wav_reader_c::probe_file(m_in.get_object(), m_size))
+  if (!wav_reader_c::probe_file(m_in.get(), m_size))
     throw mtx::input::invalid_format_x();
 
   parse_file();
@@ -548,19 +548,19 @@ wav_reader_c::create_demuxer() {
   if (0x2000 == m_format_tag) {
     m_demuxer = wav_demuxer_cptr(new wav_ac3acm_demuxer_c(this, &m_wheader));
     if (!m_demuxer->probe(m_in))
-      m_demuxer.clear();
+      m_demuxer.reset();
   }
 
   if (!m_demuxer) {
     m_demuxer = wav_demuxer_cptr(new wav_dts_demuxer_c(this, &m_wheader));
     if (!m_demuxer->probe(m_in))
-      m_demuxer.clear();
+      m_demuxer.reset();
   }
 
   if (!m_demuxer) {
     m_demuxer = wav_demuxer_cptr(new wav_ac3wav_demuxer_c(this, &m_wheader));
     if (!m_demuxer->probe(m_in))
-      m_demuxer.clear();
+      m_demuxer.reset();
   }
 
   if (!m_demuxer && ((0x0001 == m_format_tag) || (0x0003 == m_format_tag)))

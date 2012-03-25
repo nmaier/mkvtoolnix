@@ -110,7 +110,7 @@ kax_track_t::kax_track_t()
   , mkvmerge_track_id(0)
 {
 }
-typedef counted_ptr<kax_track_t> kax_track_cptr;
+typedef std::shared_ptr<kax_track_t> kax_track_cptr;
 
 track_info_t::track_info_t()
   : m_size(0)
@@ -243,7 +243,7 @@ add_track(kax_track_cptr t) {
 
 kax_track_t *
 find_track(int tnum) {
-  return s_tracks_by_number[tnum].get_object();
+  return s_tracks_by_number[tnum].get();
 }
 
 #define UTF2STR(s)                 UTFstring_to_cstrutf8(UTFstring(s))
@@ -1981,7 +1981,7 @@ process_file(const std::string &file_name) {
     kax_file_cptr kax_file = kax_file_cptr(new kax_file_c(in));
 
     while (nullptr != (l1 = kax_file->read_next_level1_element())) {
-      counted_ptr<EbmlElement> af_l1(l1);
+      std::shared_ptr<EbmlElement> af_l1(l1);
 
       if (is_id(l1, KaxInfo))
         handle_info(es, upper_lvl_el, l1, l2, l3);

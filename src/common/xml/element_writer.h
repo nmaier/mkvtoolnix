@@ -57,7 +57,7 @@ void write_xml_element_rec(int level, int parent_idx, EbmlElement *e, mm_io_c *o
 class xml_formatter_c: public xml_parser_c {
 private:
   mm_io_c &m_out;
-  counted_ptr<mm_text_io_c> m_temp_io;
+  std::shared_ptr<mm_text_io_c> m_temp_io;
   std::string m_encoding, m_dtd, m_dtd_file, m_stylesheet_type, m_stylesheet_file;
   charset_converter_cptr m_cc_utf8;
   bool m_header_written;

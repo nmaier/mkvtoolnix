@@ -16,9 +16,6 @@
 
 #include "common/common_pch.h"
 
-#include "common/mm_io.h"
-#include "common/smart_pointers.h"
-
 class random_c {
 private:
   static bool m_seeded;

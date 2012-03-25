@@ -167,14 +167,14 @@ write_xml_element_rec(int level,
 xml_formatter_c::xml_formatter_c(mm_io_c &out,
                                  const std::string &encoding)
   : m_out(out)
-  , m_temp_io(counted_ptr<mm_text_io_c>(new mm_text_io_c(new mm_mem_io_c(nullptr, 100000, 4000))))
+  , m_temp_io(std::shared_ptr<mm_text_io_c>(new mm_text_io_c(new mm_mem_io_c(nullptr, 100000, 4000))))
   , m_encoding(encoding)
   , m_cc_utf8(charset_converter_c::init(m_encoding))
   , m_header_written(false)
   , m_depth(0)
   , m_state(XMLF_STATE_NONE)
 {
-  m_xml_source = m_temp_io.get_object();
+  m_xml_source = m_temp_io.get();
 }
 
 xml_formatter_c::~xml_formatter_c() {

@@ -19,8 +19,6 @@
 #include <deque>
 
 #include "common/byte_buffer.h"
-#include "common/memory.h"
-#include "common/smart_pointers.h"
 
 #define TRUEHD_SYNC_WORD 0xf8726fba
 #define MLP_SYNC_WORD    0xf8726fbb
@@ -70,7 +68,7 @@ struct truehd_frame_t {
     return ac3 == m_type;
   }
 };
-typedef counted_ptr<truehd_frame_t> truehd_frame_cptr;
+typedef std::shared_ptr<truehd_frame_t> truehd_frame_cptr;
 
 class truehd_parser_c {
 protected:
@@ -95,6 +93,6 @@ protected:
   virtual unsigned int resync(unsigned int offset);
   virtual int decode_channel_map(int channel_map);
 };
-typedef counted_ptr<truehd_parser_c> truehd_parser_cptr;
+typedef std::shared_ptr<truehd_parser_c> truehd_parser_cptr;
 
 #endif // __MTX_COMMON_TRUEHD_COMMON_H

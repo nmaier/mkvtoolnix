@@ -43,6 +43,6 @@ protected:
   virtual size_t _write(const void *buffer, size_t size);
   virtual void flush_buffer();
 };
-typedef counted_ptr<mm_write_buffer_io_c> mm_write_buffer_io_cptr;
+typedef std::shared_ptr<mm_write_buffer_io_c> mm_write_buffer_io_cptr;
 
 #endif // __MTX_COMMON_MM_BUFFERED_IO_H

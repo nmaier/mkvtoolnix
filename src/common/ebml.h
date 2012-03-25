@@ -213,7 +213,7 @@ provide_default_for_child(EbmlMaster *master,
   provide_default_for_child<A>(*master, default_value);
 }
 
-typedef counted_ptr<EbmlElement> ebml_element_cptr;
-typedef counted_ptr<EbmlMaster> ebml_master_cptr;
+typedef std::shared_ptr<EbmlElement> ebml_element_cptr;
+typedef std::shared_ptr<EbmlMaster> ebml_master_cptr;
 
 #endif // __MTX_COMMON_EBML_H

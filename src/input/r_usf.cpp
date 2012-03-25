@@ -72,7 +72,7 @@ usf_reader_c::usf_reader_c(const track_info_c &ti,
 void
 usf_reader_c::read_headers() {
   try {
-    mm_text_io_c text_in(new mm_text_io_c(m_in.get_object(), false));
+    mm_text_io_c text_in(new mm_text_io_c(m_in.get(), false));
     m_xml_source = &text_in;
 
     if (!usf_reader_c::probe_file(&text_in, 0))

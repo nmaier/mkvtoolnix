@@ -18,7 +18,6 @@
 #include "common/ebml.h"
 #include "common/iso639.h"
 #include "common/mm_write_buffer_io.h"
-#include "common/smart_pointers.h"
 #include "common/tta.h"
 #include "extract/xtr_vobsub.h"
 
@@ -217,7 +216,7 @@ xtr_vobsub_c::finish_file() {
 
     m_base_name += ".idx";
 
-    m_out.clear();
+    m_out.reset();
 
     mm_write_buffer_io_c idx(new mm_file_io_c(m_base_name, MODE_CREATE), 128 * 1024);
     mxinfo(boost::format(Y("Writing the VobSub index file '%1%'.\n")) % m_base_name);

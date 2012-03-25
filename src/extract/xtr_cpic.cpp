@@ -67,7 +67,7 @@ xtr_cpic_c::handle_frame(memory_cptr &frame,
 
   m_out = mm_file_io_c::open(frame_file_name, MODE_CREATE);
   m_out->write(&mybuffer[header_size], data_size - header_size);
-  m_out.clear();
+  m_out.reset();
 
   ++m_frame_counter;
 }

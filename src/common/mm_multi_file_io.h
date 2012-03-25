@@ -19,7 +19,7 @@
 #include "common/mm_io.h"
 
 class mm_multi_file_io_c;
-typedef counted_ptr<mm_multi_file_io_c> mm_multi_file_io_cptr;
+typedef std::shared_ptr<mm_multi_file_io_c> mm_multi_file_io_cptr;
 
 class mm_multi_file_io_c: public mm_io_c {
   struct file_t {

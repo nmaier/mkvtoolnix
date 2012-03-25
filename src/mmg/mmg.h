@@ -29,7 +29,6 @@
 #include <ebml/EbmlUnicodeString.h>
 
 #include "common/iso639.h"
-#include "common/smart_pointers.h"
 #include "common/wx.h"
 #include "mmg/translation_table.h"
 
@@ -133,7 +132,7 @@ struct mmg_track_t {
 
   bool is_webm_compatible();
 };
-typedef counted_ptr<mmg_track_t> mmg_track_cptr;
+typedef std::shared_ptr<mmg_track_t> mmg_track_cptr;
 
 struct mmg_file_t;
 
@@ -151,7 +150,7 @@ struct mmg_attached_file_t {
   {
   }
 };
-typedef counted_ptr<mmg_attached_file_t> mmg_attached_file_cptr;
+typedef std::shared_ptr<mmg_attached_file_t> mmg_attached_file_cptr;
 
 struct mmg_file_t {
   wxString file_name, title;
@@ -169,7 +168,7 @@ struct mmg_file_t {
   {
   }
 };
-typedef counted_ptr<mmg_file_t> mmg_file_cptr;
+typedef std::shared_ptr<mmg_file_t> mmg_file_cptr;
 
 struct mmg_attachment_t {
   wxString file_name, stored_name, description, mime_type;
@@ -180,7 +179,7 @@ struct mmg_attachment_t {
   {
   }
 };
-typedef counted_ptr<mmg_attachment_t> mmg_attachment_cptr;
+typedef std::shared_ptr<mmg_attachment_t> mmg_attachment_cptr;
 
 typedef enum {
   ODM_FROM_FIRST_INPUT_FILE = 0,

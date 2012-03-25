@@ -29,7 +29,7 @@ protected:
   mm_io_cptr m_in;
   bool m_resynced;
   uint64_t m_resync_start_pos, m_file_size;
-  counted_ptr<EbmlStream> m_es;
+  std::shared_ptr<EbmlStream> m_es;
 
   bool m_debug_read_next, m_debug_resync;
 
@@ -56,6 +56,6 @@ protected:
   virtual EbmlElement *read_next_level1_element_internal(uint32_t wanted_id = 0);
   virtual EbmlElement *resync_to_level1_element_internal(uint32_t wanted_id = 0);
 };
-typedef counted_ptr<kax_file_c> kax_file_cptr;
+typedef std::shared_ptr<kax_file_c> kax_file_cptr;
 
 #endif  // __MTX_COMMON_KAX_FILE_H

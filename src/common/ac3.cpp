@@ -40,7 +40,7 @@ ac3::frame_c::init() {
   m_stream_position = 0;
   m_garbage_size    = 0;
   m_valid           = false;
-  m_data.clear();
+  m_data.reset();
 }
 
 bool

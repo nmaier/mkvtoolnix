@@ -634,7 +634,7 @@ mpeg4::p10::avcc_to_nalus(const unsigned char *buffer,
   } catch (...) {
   }
 
-  return memory_cptr(nullptr);
+  return memory_cptr{};
 }
 
 mpeg4::p10::avc_es_parser_c::avc_es_parser_c()
@@ -753,7 +753,7 @@ mpeg4::p10::avc_es_parser_c::add_bytes(unsigned char *buffer,
     cursor.copy(m_unparsed_buffer->get_buffer(), previous_pos, new_size);
 
   } else
-    m_unparsed_buffer.clear();
+    m_unparsed_buffer.reset();
 }
 
 void
@@ -764,7 +764,7 @@ mpeg4::p10::avc_es_parser_c::flush() {
     handle_nalu(memory_c::clone(m_unparsed_buffer->get_buffer() + marker_size, m_unparsed_buffer->get_size() - marker_size));
   }
 
-  m_unparsed_buffer.clear();
+  m_unparsed_buffer.reset();
   if (m_have_incomplete_frame) {
     m_frames.push_back(m_incomplete_frame);
     m_have_incomplete_frame = false;
@@ -875,7 +875,7 @@ mpeg4::p10::avc_es_parser_c::handle_slice_nalu(memory_cptr &nalu) {
     flush_incomplete_frame();
 
   if (m_have_incomplete_frame) {
-    memory_c &mem = *(m_incomplete_frame.m_data.get_object());
+    memory_c &mem = *(m_incomplete_frame.m_data.get());
     int offset    = mem.get_size();
     mem.resize(offset + m_nalu_size_length + nalu->get_size());
     write_nalu_size(mem.get_buffer() + offset, nalu->get_size());

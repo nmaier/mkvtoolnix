@@ -78,7 +78,7 @@ public:
   bool has_changes() const;
   bool has_add_or_set_change() const;
 
-  void set_level1_element(ebml_element_cptr level1_element, ebml_element_cptr track_headers = ebml_element_cptr(nullptr));
+  void set_level1_element(ebml_element_cptr level1_element, ebml_element_cptr track_headers = ebml_element_cptr{});
 
   void execute();
 
@@ -93,6 +93,6 @@ protected:
   void parse_chapters_spec(const std::string &spec);
   void add_or_replace_chapters();
 };
-typedef counted_ptr<target_c> target_cptr;
+typedef std::shared_ptr<target_c> target_cptr;
 
 #endif // __PROPEDIT_TARGET_H

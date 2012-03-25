@@ -90,7 +90,7 @@ public:
   };
 };
 
-typedef counted_ptr<ogm_demuxer_c> ogm_demuxer_cptr;
+typedef std::shared_ptr<ogm_demuxer_c> ogm_demuxer_cptr;
 
 class ogm_reader_c: public generic_reader_c {
 private:

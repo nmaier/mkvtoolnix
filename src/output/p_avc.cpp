@@ -53,7 +53,7 @@ mpeg4_p10_es_video_packetizer_c(generic_reader_c *p_reader,
   // packetizer because it takes care of handling the default
   // duration/FPS itself.
   if (m_ti.m_ext_timecodes.empty())
-    m_timecode_factory.clear();
+    m_timecode_factory.reset();
 
   if (4 == m_parser.get_nalu_size_length())
     set_default_compression_method(COMPRESSION_MPEG4_P10);

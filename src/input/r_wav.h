@@ -50,7 +50,7 @@ public:
   virtual bool probe(mm_io_cptr &io) = 0;
 };
 
-typedef counted_ptr<wav_demuxer_c> wav_demuxer_cptr;
+typedef std::shared_ptr<wav_demuxer_c> wav_demuxer_cptr;
 
 struct wav_chunk_t {
   int64_t pos;

@@ -204,7 +204,7 @@ cluster_helper_c::set_duration(render_groups_c *rg) {
   if (rg->m_durations.empty())
     return;
 
-  kax_block_blob_c *group = rg->m_groups.back().get_object();
+  kax_block_blob_c *group = rg->m_groups.back().get();
   int64_t def_duration    = rg->m_source->get_track_default_duration();
   int64_t block_duration  = 0;
 
@@ -285,7 +285,7 @@ cluster_helper_c::render() {
 
   for (auto &pack : m_packets) {
     generic_packetizer_c *source = pack->source;
-    bool has_codec_state         = pack->codec_state;
+    bool has_codec_state         = !!pack->codec_state;
 
     if (source->contains_gap())
       m_cluster->SetSilentTrackUsed();
@@ -293,13 +293,13 @@ cluster_helper_c::render() {
     render_groups_c *render_group = nullptr;
     for (auto &rg : render_groups)
       if (rg->m_source == source) {
-        render_group = rg.get_object();
+        render_group = rg.get();
         break;
       }
 
     if (nullptr == render_group) {
       render_groups.push_back(render_groups_cptr(new render_groups_c(source)));
-      render_group = render_groups.back().get_object();
+      render_group = render_groups.back().get();
     }
 
     min_cl_timecode                        = std::min(pack->assigned_timecode, min_cl_timecode);
@@ -309,7 +309,7 @@ cluster_helper_c::render() {
 
     KaxTrackEntry &track_entry             = static_cast<KaxTrackEntry &>(*source->get_track_entry());
 
-    kax_block_blob_c *previous_block_group = !render_group->m_groups.empty() ? render_group->m_groups.back().get_object() : nullptr;
+    kax_block_blob_c *previous_block_group = !render_group->m_groups.empty() ? render_group->m_groups.back().get() : nullptr;
     kax_block_blob_c *new_block_group      = previous_block_group;
 
     if (!pack->is_key_frame() || has_codec_state)
@@ -330,7 +330,7 @@ cluster_helper_c::render() {
         this_block_blob_type = BLOCK_BLOB_NO_SIMPLE;
 
       render_group->m_groups.push_back(kax_block_blob_cptr(new kax_block_blob_c(this_block_blob_type)));
-      new_block_group = render_group->m_groups.back().get_object();
+      new_block_group = render_group->m_groups.back().get();
       m_cluster->AddBlockBlob(new_block_group);
       new_block_group->SetParent(*m_cluster);
 
@@ -418,7 +418,7 @@ cluster_helper_c::render() {
 
   if (0 < elements_in_cluster) {
     for (auto &rg : render_groups)
-      set_duration(rg.get_object());
+      set_duration(rg.get());
 
     m_cluster->SetPreviousTimecode(min_cl_timecode - m_timecode_offset - 1, (int64_t)g_timecode_scale);
     m_cluster->set_min_timecode(min_cl_timecode - m_timecode_offset);

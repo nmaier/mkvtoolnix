@@ -248,14 +248,14 @@ header_editor_frame_c::open_file(wxFileName file_name) {
     return false;
   }
 
-  m_e_segment_info.clear();
-  m_e_tracks.clear();
+  m_e_segment_info.reset();
+  m_e_tracks.reset();
 
   m_analyzer = wx_kax_analyzer_cptr(new wx_kax_analyzer_c(this, wxMB(file_name.GetFullPath())));
 
   if (!m_analyzer->process(kax_analyzer_c::parse_mode_fast)) {
     wxMessageBox(Z("This file could not be opened or parsed."), Z("File parsing failed"), wxOK | wxCENTER | wxICON_ERROR);
-    m_analyzer.clear();
+    m_analyzer.reset();
 
     return false;
   }
@@ -282,13 +282,13 @@ header_editor_frame_c::open_file(wxFileName file_name) {
 
   for (auto &data : m_analyzer->m_data)
     if (data->m_id == KaxInfo::ClassInfos.GlobalId) {
-      handle_segment_info(data.get_object());
+      handle_segment_info(data.get());
       break;
     }
 
   for (auto &data : m_analyzer->m_data)
     if (data->m_id == KaxTracks::ClassInfos.GlobalId) {
-      handle_tracks(data.get_object());
+      handle_tracks(data.get());
       break;
     }
 
@@ -313,7 +313,7 @@ header_editor_frame_c::handle_segment_info(kax_analyzer_data_c *data) {
   he_top_level_page_c *page = new he_top_level_page_c(this, YT("Segment information"), m_e_segment_info);
   page->init();
 
-  KaxInfo *info    = static_cast<KaxInfo *>(m_e_segment_info.get_object());
+  KaxInfo *info    = static_cast<KaxInfo *>(m_e_segment_info.get());
   he_value_page_c *child_page;
 
   child_page = new he_string_value_page_c(this, page, info, KaxTitle::ClassInfos, YT("Title"), YT("The title for the whole movie."));
@@ -351,7 +351,7 @@ header_editor_frame_c::handle_tracks(kax_analyzer_data_c *data) {
 
   he_track_type_page_c *last_track_page = nullptr;
 
-  KaxTracks *kax_tracks = static_cast<KaxTracks *>(m_e_tracks.get_object());
+  KaxTracks *kax_tracks = static_cast<KaxTracks *>(m_e_tracks.get());
   int track_type        = -1;
   size_t i;
   for (i = 0; kax_tracks->ListSize() > i; ++i) {
@@ -573,7 +573,7 @@ header_editor_frame_c::on_file_close(wxCommandEvent &) {
 
   clear_pages();
 
-  m_analyzer.clear();
+  m_analyzer.reset();
 
   m_file_name.Clear();
 
@@ -711,7 +711,7 @@ he_page_base_c *
 header_editor_frame_c::find_page_for_item(wxTreeItemId id) {
   for (auto &page : m_pages)
     if (page->m_page_id == id)
-      return page.get_object();
+      return page.get();
 
   return nullptr;
 }

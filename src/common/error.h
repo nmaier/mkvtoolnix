@@ -16,9 +16,6 @@
 
 #include "common/common_pch.h"
 
-#include <exception>
-#include <string>
-
 namespace mtx {
   class exception: public std::exception {
   public:

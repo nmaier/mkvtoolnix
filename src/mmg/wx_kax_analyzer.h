@@ -42,6 +42,6 @@ public:
 protected:
   virtual void _log_debug_message(const std::string &message);
 };
-typedef counted_ptr<wx_kax_analyzer_c> wx_kax_analyzer_cptr;
+typedef std::shared_ptr<wx_kax_analyzer_c> wx_kax_analyzer_cptr;
 
 #endif // __WX_KAX_ANALYZER_H

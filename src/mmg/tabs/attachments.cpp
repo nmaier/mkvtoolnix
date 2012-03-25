@@ -413,7 +413,7 @@ void
 tab_attachments::remove_attached_files_for(mmg_file_cptr &f) {
   int i;
   for (i = m_attached_files.size() - 1; 0 <= i; --i) {
-    if (m_attached_files[i]->source == f.get_object()) {
+    if (m_attached_files[i]->source == f.get()) {
       clb_attached_files->Delete(i);
       m_attached_files.erase(m_attached_files.begin() + i);
     }

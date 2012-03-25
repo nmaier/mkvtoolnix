@@ -26,7 +26,7 @@ using namespace libebml;
 extern bool g_suppress_info, g_suppress_warnings;
 extern std::string g_stdio_charset;
 extern charset_converter_cptr g_cc_stdio;
-extern counted_ptr<mm_io_c> g_mm_stdio;
+extern std::shared_ptr<mm_io_c> g_mm_stdio;
 
 void redirect_stdio(const mm_io_cptr &new_stdio);
 bool stdio_redirected();

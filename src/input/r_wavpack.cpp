@@ -183,7 +183,7 @@ wavpack_reader_c::read(generic_packetizer_c *,
 
     // no more correction to be found
     if (0 > data_size) {
-      m_in_correc.clear();
+      m_in_correc.reset();
       dummy_header_correc.block_samples = dummy_header.block_samples + 1;
       break;
     }
@@ -216,7 +216,7 @@ wavpack_reader_c::read(generic_packetizer_c *,
       databuffer += 4;
     }
     if (m_in_correc->read(databuffer, block_size) != static_cast<size_t>(block_size))
-      m_in_correc.clear();
+      m_in_correc.reset();
     databuffer += block_size;
   }
 

@@ -63,7 +63,7 @@ public:
     return current == entries.end();
   }
 };
-typedef counted_ptr<subtitles_c> subtitles_cptr;
+typedef std::shared_ptr<subtitles_c> subtitles_cptr;
 
 class srt_parser_c: public subtitles_c {
 public:
@@ -87,7 +87,7 @@ public:
 public:
   static bool probe(mm_text_io_c *io);
 };
-typedef counted_ptr<srt_parser_c> srt_parser_cptr;
+typedef std::shared_ptr<srt_parser_c> srt_parser_cptr;
 
 class ssa_parser_c: public subtitles_c {
 public:
@@ -144,7 +144,7 @@ protected:
   void add_attachment_maybe(std::string &name, std::string &data_uu, ssa_section_e section);
   void decode_chars(unsigned char c1, unsigned char c2, unsigned char c3, unsigned char c4, memory_cptr &buffer, size_t bytes_to_add, size_t &allocated);
 };
-typedef counted_ptr<ssa_parser_c> ssa_parser_cptr;
+typedef std::shared_ptr<ssa_parser_c> ssa_parser_cptr;
 
 int64_t spu_extract_duration(unsigned char *data, size_t buf_size, int64_t timecode);
 

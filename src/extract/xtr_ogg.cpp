@@ -200,7 +200,7 @@ xtr_oggbase_c::write_queued_frame(bool eos) {
   write_pages();
 
   m_queued_granulepos = -1;
-  m_queued_frame.clear();
+  m_queued_frame.reset();
 }
 
 // ------------------------------------------------------------------------

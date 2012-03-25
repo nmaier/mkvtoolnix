@@ -435,7 +435,7 @@ parse_xml_elements(const char *parser_name,
   pdata->parser_name     = parser_name;
   pdata->mapping         = mapping;
 
-  XML_SetUserData(parser, pdata.get_object());
+  XML_SetUserData(parser, pdata.get());
   XML_SetElementHandler(parser, start_element, end_element);
   XML_SetCharacterDataHandler(parser, add_data);
 

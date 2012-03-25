@@ -27,10 +27,6 @@
 #include <matroska/KaxTags.h>
 
 #include "common/compression.h"
-#include "common/error.h"
-#include "common/memory.h"
-#include "common/mm_io.h"
-#include "common/smart_pointers.h"
 #include "common/stereo_mode.h"
 #include "common/strings/editing.h"
 #include "merge/item_selector.h"

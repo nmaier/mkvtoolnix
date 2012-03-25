@@ -119,7 +119,7 @@ qtmp4_reader_c::qtmp4_reader_c(const track_info_c &ti,
 void
 qtmp4_reader_c::read_headers() {
   try {
-    if (!qtmp4_reader_c::probe_file(m_in.get_object(), m_size))
+    if (!qtmp4_reader_c::probe_file(m_in.get(), m_size))
       throw mtx::input::invalid_format_x();
 
     show_demuxer_info();
@@ -141,7 +141,7 @@ qtmp4_reader_c::read_atom(mm_io_c *read_from,
   qt_atom_t a;
 
   if (nullptr == read_from)
-    read_from = m_in.get_object();
+    read_from = m_in.get();
 
   a.pos    = read_from->getFilePointer();
   a.size   = read_from->read_uint32_be();

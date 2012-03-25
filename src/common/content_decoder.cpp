@@ -126,7 +126,7 @@ content_decoder_c::initialize(KaxTrackEntry &ktentry) {
     }
 
     if (0 == enc.comp_algo)
-      enc.compressor = counted_ptr<compressor_c>(new zlib_compressor_c());
+      enc.compressor = std::shared_ptr<compressor_c>(new zlib_compressor_c());
 
     else if (1 == enc.comp_algo) {
 #if !defined(HAVE_BZLIB_H)
@@ -134,7 +134,7 @@ content_decoder_c::initialize(KaxTrackEntry &ktentry) {
       ok = false;
       break;
 #else
-      enc.compressor = counted_ptr<compressor_c>(new bzlib_compressor_c());
+      enc.compressor = std::shared_ptr<compressor_c>(new bzlib_compressor_c());
 #endif
     } else if (enc.comp_algo == 2) {
 #if !defined(HAVE_LZO1X_H)
@@ -142,12 +142,12 @@ content_decoder_c::initialize(KaxTrackEntry &ktentry) {
       ok = false;
       break;
 #else
-      enc.compressor = counted_ptr<compressor_c>(new lzo_compressor_c());
+      enc.compressor = std::shared_ptr<compressor_c>(new lzo_compressor_c());
 #endif
     } else if (enc.comp_algo == 3) {
       header_removal_compressor_c *c = new header_removal_compressor_c();
       c->set_bytes(enc.comp_settings);
-      enc.compressor = counted_ptr<compressor_c>(c);
+      enc.compressor = std::shared_ptr<compressor_c>(c);
 
     } else {
       mxwarn(boost::format(Y("Track %1% has been compressed with an unknown/unsupported compression algorithm (%2%).\n")) % tid % enc.comp_algo);

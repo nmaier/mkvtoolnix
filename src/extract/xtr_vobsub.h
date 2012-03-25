@@ -15,7 +15,6 @@
 
 #include "common/common_pch.h"
 
-#include "common/smart_pointers.h"
 #include "extract/xtr_base.h"
 
 class xtr_vobsub_c: public xtr_base_c {

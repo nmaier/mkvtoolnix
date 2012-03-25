@@ -50,6 +50,6 @@ public:
   virtual void translate_ui() = 0;
   wxString get_title();
 };
-typedef counted_ptr<he_page_base_c> he_page_base_cptr;
+typedef std::shared_ptr<he_page_base_c> he_page_base_cptr;
 
 #endif // __HE_PAGE_BASE_H

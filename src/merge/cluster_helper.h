@@ -20,8 +20,6 @@
 #include <matroska/KaxCluster.h>
 
 #include "merge/libmatroska_extensions.h"
-#include "common/mm_io.h"
-#include "common/smart_pointers.h"
 #include "merge/pr_generic.h"
 
 
@@ -41,7 +39,7 @@ public:
   {
   }
 };
-typedef counted_ptr<render_groups_c> render_groups_cptr;
+typedef std::shared_ptr<render_groups_c> render_groups_cptr;
 
 struct split_point_t {
   enum split_point_type_e {

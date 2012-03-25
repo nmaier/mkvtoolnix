@@ -73,7 +73,7 @@ public:
 
   wx_kax_analyzer_cptr m_analyzer;
 
-  counted_ptr<EbmlElement> m_e_segment_info, m_e_tracks;
+  std::shared_ptr<EbmlElement> m_e_segment_info, m_e_tracks;
 
   bool m_ignore_tree_selection_changes;
 

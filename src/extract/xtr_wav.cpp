@@ -76,7 +76,6 @@ xtr_wavpack4_c::xtr_wavpack4_c(const std::string &codec_id,
   : xtr_base_c(codec_id, tid, tspec)
   , m_number_of_samples(0)
   , m_extract_blockadd_level(tspec.extract_blockadd_level)
-  , m_corr_out(nullptr)
 {
 }
 

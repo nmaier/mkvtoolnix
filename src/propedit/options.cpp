@@ -138,7 +138,7 @@ read_element(kax_analyzer_c *analyzer,
   if (-1 != index)
     e = analyzer->read_element(index);
 
-  if (require_existance && (!e || !dynamic_cast<T *>(e.get_object())))
+  if (require_existance && (!e || !dynamic_cast<T *>(e.get())))
     mxerror(boost::format(Y("Modification of properties in the section '%1%' was requested, but no corresponding level 1 element was found in the file. %2%\n")) % category % FILE_NOT_MODIFIED);
 
   return e;
@@ -198,7 +198,7 @@ options_c::merge_targets() {
     std::map<uint64_t, target_c *>::iterator existing_target_it = targets_by_track_uid.find(target->m_track_uid);
     if (targets_by_track_uid.end() == existing_target_it) {
       targets_to_keep.push_back(target);
-      targets_by_track_uid[target->m_track_uid] = target.get_object();
+      targets_by_track_uid[target->m_track_uid] = target.get();
       continue;
     }
 

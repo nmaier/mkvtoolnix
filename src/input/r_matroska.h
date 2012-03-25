@@ -152,7 +152,7 @@ struct kax_track_t {
   void handle_packetizer_default_duration();
   void fix_display_dimension_parameters();
 };
-typedef counted_ptr<kax_track_t> kax_track_cptr;
+typedef std::shared_ptr<kax_track_t> kax_track_cptr;
 
 class kax_reader_c: public generic_reader_c {
 private:
@@ -171,7 +171,7 @@ private:
 
   kax_file_cptr m_in_file;
 
-  counted_ptr<EbmlStream> m_es;
+  std::shared_ptr<EbmlStream> m_es;
 
   int64_t m_segment_duration, m_last_timecode, m_first_timecode;
   std::string m_title;
@@ -184,7 +184,7 @@ private:
 
   int64_t m_attachment_id;
 
-  counted_ptr<KaxTags> m_tags;
+  std::shared_ptr<KaxTags> m_tags;
 
   file_status_e m_file_status;
 

@@ -114,7 +114,7 @@ struct mpeg_ps_track_t {
   }
 };
 
-typedef counted_ptr<mpeg_ps_track_t> mpeg_ps_track_ptr;
+typedef std::shared_ptr<mpeg_ps_track_t> mpeg_ps_track_ptr;
 
 class mpeg_ps_reader_c: public generic_reader_c {
 private:

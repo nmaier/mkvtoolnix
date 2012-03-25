@@ -16,10 +16,7 @@
 
 #include "common/common_pch.h"
 
-#include <cassert>
 #include <deque>
-
-#include "common/error.h"
 
 namespace mtx {
   namespace mem {
@@ -81,7 +78,7 @@ _safestrdup(const char *s,
 unsigned char *_saferealloc(void *mem, size_t size, const char *file, int line);
 
 class memory_c;
-typedef counted_ptr<memory_c> memory_cptr;
+typedef std::shared_ptr<memory_c> memory_cptr;
 typedef std::vector<memory_cptr> memories_c;
 
 class memory_c {
@@ -285,7 +282,7 @@ class memory_slice_cursor_c {
   inline unsigned char get_char() {
     assert(m_pos < m_size);
 
-    memory_c &slice = *(*m_slice).get_object();
+    memory_c &slice = *m_slice->get();
     unsigned char c = *(slice.get_buffer() + m_pos_in_slice);
 
     ++m_pos_in_slice;

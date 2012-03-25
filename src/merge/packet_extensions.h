@@ -59,7 +59,7 @@ public:
   }
 };
 
-typedef counted_ptr<multiple_timecodes_packet_extension_c> multiple_timecodes_packet_extension_cptr;
+typedef std::shared_ptr<multiple_timecodes_packet_extension_c> multiple_timecodes_packet_extension_cptr;
 
 class subtitle_number_packet_extension_c: public packet_extension_c {
 private:
@@ -80,6 +80,6 @@ public:
   }
 };
 
-typedef counted_ptr<subtitle_number_packet_extension_c> subtitle_number_packet_extension_cptr;
+typedef std::shared_ptr<subtitle_number_packet_extension_c> subtitle_number_packet_extension_cptr;
 
 #endif  // __PACKET_EXTENSIONS_H

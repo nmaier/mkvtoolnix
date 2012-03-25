@@ -32,7 +32,7 @@ public:
   ebml_converter_c();
   virtual ~ebml_converter_c();
 
-  document_cptr to_xml(EbmlElement &e, document_cptr const &destination = document_cptr(nullptr)) const;
+  document_cptr to_xml(EbmlElement &e, document_cptr const &destination = document_cptr{}) const;
 
 public:
   static void format_uint(pugi::xml_node &node, EbmlElement &e);

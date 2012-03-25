@@ -82,6 +82,6 @@ public:
   void set_block_duration(uint64_t time_length);
   bool replace_simple_by_group();
 };
-typedef counted_ptr<kax_block_blob_c> kax_block_blob_cptr;
+typedef std::shared_ptr<kax_block_blob_c> kax_block_blob_cptr;
 
 #endif // __LIBMATROSKA_EXTENSIONS

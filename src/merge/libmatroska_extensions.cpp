@@ -140,7 +140,7 @@ kax_block_blob_c::set_block_duration(uint64_t time_length) {
     Block.group->SetBlockDuration(time_length);
 }
 
-// The kax_block_group_c objects are stored in counted_ptrs outside of
+// The kax_block_group_c objects are stored in std::shared_ptrs outside of
 // the cluster structure as well. KaxSimpleBlock objects are deleted
 // when they're replaced with kax_block_group_c. All other object
 // types must be deleted explicitely. This applies to

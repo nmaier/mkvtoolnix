@@ -86,7 +86,7 @@ private:
   };
 
   std::string m_sub_charset, m_codec_private, m_language;
-  counted_ptr<xml_formatter_c> m_formatter;
+  std::shared_ptr<xml_formatter_c> m_formatter;
   std::vector<usf_entry_t> m_entries;
 
 public:

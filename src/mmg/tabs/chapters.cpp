@@ -389,7 +389,7 @@ tab_chapters::on_new_chapters(wxCommandEvent &) {
   tc_chapters->DeleteAllItems();
   tid_root = tc_chapters->AddRoot(Z("(new chapter file)"));
   m_chapters_cp = ebml_element_cptr(new KaxChapters);
-  m_chapters    = static_cast<KaxChapters *>(m_chapters_cp.get_object());
+  m_chapters    = static_cast<KaxChapters *>(m_chapters_cp.get());
 
   m_chapters_menu->Enable(ID_M_CHAPTERS_SAVE, true);
   m_chapters_menu->Enable(ID_M_CHAPTERS_SAVEAS, true);
@@ -400,7 +400,7 @@ tab_chapters::on_new_chapters(wxCommandEvent &) {
   enable_inputs(false);
   source_is_kax_file = false;
   if (analyzer)
-    analyzer.clear();
+    analyzer.reset();
 
   clear_list_of_unique_uint32(UNIQUE_CHAPTER_IDS);
   clear_list_of_unique_uint32(UNIQUE_EDITION_IDS);
@@ -542,14 +542,14 @@ tab_chapters::load(wxString name) {
       file_name = name;
       if (!analyzer->process()) {
         wxMessageBox(Z("This file could not be opened or parsed."), Z("File parsing failed"), wxOK | wxCENTER | wxICON_ERROR);
-        analyzer.clear();
+        analyzer.reset();
 
         return false;
       }
       pos = analyzer->find(KaxChapters::ClassInfos.GlobalId);
       if (pos == -1) {
         wxMessageBox(Z("This file does not contain any chapters."), Z("No chapters found"), wxOK | wxCENTER | wxICON_INFORMATION);
-        analyzer.clear();
+        analyzer.reset();
 
         return false;
       }
@@ -567,7 +567,7 @@ tab_chapters::load(wxString name) {
       source_is_kax_file = false;
     }
   } catch (mtx::exception &) {
-    analyzer.clear();
+    analyzer.reset();
     s = Z("This file does not contain valid chapters.");
     break_line(s);
     while (s[s.Length() - 1] == wxT('\n'))
@@ -577,7 +577,7 @@ tab_chapters::load(wxString name) {
   }
 
   m_chapters_cp = new_chapters;
-  m_chapters    = static_cast<KaxChapters *>(m_chapters_cp.get_object());
+  m_chapters    = static_cast<KaxChapters *>(m_chapters_cp.get());
 
   tc_chapters->DeleteAllItems();
   m_chapters_menu->Enable(ID_M_CHAPTERS_SAVE, true);
@@ -642,7 +642,7 @@ tab_chapters::on_save_chapters_to_kax_file(wxCommandEvent &) {
 
   analyzer = wx_kax_analyzer_cptr(new wx_kax_analyzer_c(this, wxMB(file_name)));
   if (!analyzer->process()) {
-    analyzer.clear();
+    analyzer.reset();
     return;
   }
 

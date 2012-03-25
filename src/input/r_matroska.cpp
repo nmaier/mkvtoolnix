@@ -234,8 +234,8 @@ kax_track_t *
 kax_reader_c::find_track_by_num(uint64_t n,
                                 kax_track_t *c) {
   for (auto &track : m_tracks)
-    if ((track->track_number == n) && (track.get_object() != c))
-      return track.get_object();
+    if ((track->track_number == n) && (track.get() != c))
+      return track.get();
 
   return nullptr;
 }
@@ -244,8 +244,8 @@ kax_track_t *
 kax_reader_c::find_track_by_uid(uint64_t uid,
                                 kax_track_t *c) {
   for (auto &track : m_tracks)
-    if ((track->track_uid == uid) && (track.get_object() != c))
-      return track.get_object();
+    if ((track->track_uid == uid) && (track.get() != c))
+      return track.get();
 
   return nullptr;
 }
@@ -549,7 +549,7 @@ kax_reader_c::verify_tracks() {
   kax_track_t *t;
 
   for (tnum = 0; tnum < m_tracks.size(); tnum++) {
-    t = m_tracks[tnum].get_object();
+    t = m_tracks[tnum].get();
 
     t->ok = t->content_decoder.is_ok();
 
@@ -616,8 +616,8 @@ kax_reader_c::handle_attachments(mm_io_c *io,
   at_scope_exit_c restore([&]() { io->restore_pos(); });
 
   int upper_lvl_el = 0;
-  counted_ptr<EbmlElement> l1(m_es->FindNextElement(EBML_CONTEXT(l0), upper_lvl_el, 0xFFFFFFFFL, true));
-  KaxAttachments *atts = dynamic_cast<KaxAttachments *>(l1.get_object());
+  std::shared_ptr<EbmlElement> l1(m_es->FindNextElement(EBML_CONTEXT(l0), upper_lvl_el, 0xFFFFFFFFL, true));
+  KaxAttachments *atts = dynamic_cast<KaxAttachments *>(l1.get());
 
   if (!atts)
     return;
@@ -684,8 +684,8 @@ kax_reader_c::handle_chapters(mm_io_c *io,
   at_scope_exit_c restore([&]() { io->restore_pos(); });
 
   int upper_lvl_el = 0;
-  counted_ptr<EbmlElement> l1(m_es->FindNextElement(EBML_CONTEXT(l0), upper_lvl_el, 0xFFFFFFFFL, true));
-  KaxChapters *tmp_chapters = dynamic_cast<KaxChapters *>(l1.get_object());
+  std::shared_ptr<EbmlElement> l1(m_es->FindNextElement(EBML_CONTEXT(l0), upper_lvl_el, 0xFFFFFFFFL, true));
+  KaxChapters *tmp_chapters = dynamic_cast<KaxChapters *>(l1.get());
 
   if (!tmp_chapters)
     return;
@@ -715,8 +715,8 @@ kax_reader_c::handle_tags(mm_io_c *io,
   at_scope_exit_c restore([&]() { io->restore_pos(); });
 
   int upper_lvl_el = 0;
-  counted_ptr<EbmlElement> l1(m_es->FindNextElement(EBML_CONTEXT(l0), upper_lvl_el, 0xFFFFFFFFL, true));
-  KaxTags *tags = dynamic_cast<KaxTags *>(l1.get_object());
+  std::shared_ptr<EbmlElement> l1(m_es->FindNextElement(EBML_CONTEXT(l0), upper_lvl_el, 0xFFFFFFFFL, true));
+  KaxTags *tags = dynamic_cast<KaxTags *>(l1.get());
 
   if (!tags)
     return;
@@ -768,7 +768,7 @@ kax_reader_c::handle_tags(mm_io_c *io,
 
     if (is_global) {
       if (!m_tags)
-        m_tags = counted_ptr<KaxTags>(new KaxTags);
+        m_tags = std::shared_ptr<KaxTags>(new KaxTags);
       m_tags->PushElement(*tag);
 
     } else if (delete_tag)
@@ -1043,7 +1043,7 @@ kax_reader_c::read_headers_tracks(mm_io_c *io,
     mxverb(2, boost::format("matroska_reader: |  + Track number: %1%\n") % static_cast<unsigned int>(uint8(*ktnum)));
 
     track->track_number = uint8(*ktnum);
-    if (find_track_by_num(track->track_number, track.get_object()) != nullptr) {
+    if (find_track_by_num(track->track_number, track.get()) != nullptr) {
       mxverb(2, boost::format(Y("matroska_reader: |  + There's more than one track with the number %1%.\n")) % track->track_number);
       ktentry = FINDNEXT(l1, KaxTrackEntry, ktentry);
       continue;
@@ -1054,7 +1054,7 @@ kax_reader_c::read_headers_tracks(mm_io_c *io,
       mxerror(Y("matroska_reader: A track is missing its track UID.\n"));
     mxverb(2, boost::format("matroska_reader: |  + Track UID: %1%\n") % uint64(*ktuid));
     track->track_uid = uint64(*ktuid);
-    if ((find_track_by_uid(track->track_uid, track.get_object()) != nullptr) && (verbose > 1))
+    if ((find_track_by_uid(track->track_uid, track.get()) != nullptr) && (verbose > 1))
       mxwarn(boost::format(Y("matroska_reader: |  + There's more than one track with the UID %1%.\n")) % track->tnum);
 
     KaxTrackDefaultDuration *kdefdur = FINDFIRST(ktentry, KaxTrackDefaultDuration);
@@ -1076,11 +1076,11 @@ kax_reader_c::read_headers_tracks(mm_io_c *io,
 
     KaxTrackAudio *ktaudio = FINDFIRST(ktentry, KaxTrackAudio);
     if (nullptr != ktaudio)
-      read_headers_track_audio(track.get_object(), ktaudio);
+      read_headers_track_audio(track.get(), ktaudio);
 
     KaxTrackVideo *ktvideo = FINDFIRST(ktentry, KaxTrackVideo);
     if (nullptr != ktvideo)
-      read_headers_track_video(track.get_object(), ktvideo);
+      read_headers_track_video(track.get(), ktvideo);
 
     KaxCodecID *kcodecid = FINDFIRST(ktentry, KaxCodecID);
     if (nullptr != kcodecid) {
@@ -1220,7 +1220,7 @@ kax_reader_c::read_headers_internal() {
 
   KaxCluster *cluster = nullptr;
   try {
-    m_es        = counted_ptr<EbmlStream>(new EbmlStream(*m_in));
+    m_es        = std::shared_ptr<EbmlStream>(new EbmlStream(*m_in));
     m_in_file   = kax_file_cptr(new kax_file_c(m_in));
 
     // Find the EbmlHead element. Must be the first one.
@@ -1237,7 +1237,7 @@ kax_reader_c::read_headers_internal() {
 
     // Next element must be a segment
     l0 = m_es->FindNextID(EBML_INFO(KaxSegment), 0xFFFFFFFFFFFFFFFFLL);
-    counted_ptr<EbmlElement> l0_cptr(l0);
+    std::shared_ptr<EbmlElement> l0_cptr(l0);
     if (nullptr == l0) {
       if (verbose)
         mxwarn(Y("matroska_reader: No segment found.\n"));
@@ -1313,20 +1313,20 @@ kax_reader_c::read_headers_internal() {
     } // while (l1 != nullptr)
 
     for (auto position : m_deferred_l1_positions[dl1t_tracks])
-      read_headers_tracks(m_in.get_object(), l0, position);
+      read_headers_tracks(m_in.get(), l0, position);
 
     if (!m_ti.m_attach_mode_list.none()) {
       for (auto position : m_deferred_l1_positions[dl1t_attachments])
-        handle_attachments(m_in.get_object(), l0, position);
+        handle_attachments(m_in.get(), l0, position);
     }
 
     if (!m_ti.m_no_chapters) {
       for (auto position : m_deferred_l1_positions[dl1t_chapters])
-        handle_chapters(m_in.get_object(), l0, position);
+        handle_chapters(m_in.get(), l0, position);
     }
 
     for (auto position : m_deferred_l1_positions[dl1t_tags])
-      handle_tags(m_in.get_object(), l0, position);
+      handle_tags(m_in.get(), l0, position);
 
     if (!m_ti.m_no_global_tags)
       process_global_tags();
@@ -1737,7 +1737,7 @@ kax_reader_c::create_button_packetizer(kax_track_t *t,
 
 void
 kax_reader_c::create_packetizer(int64_t tid) {
-  kax_track_t *t = m_tracks[tid].get_object();
+  kax_track_t *t = m_tracks[tid].get();
 
   if ((-1 != t->ptzr) || !t->ok || !demuxing_requested(t->type, t->tnum))
     return;

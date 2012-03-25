@@ -26,7 +26,7 @@ using namespace libebml;
 using namespace libmatroska;
 
 class kax_analyzer_data_c;
-typedef counted_ptr<kax_analyzer_data_c> kax_analyzer_data_cptr;
+typedef std::shared_ptr<kax_analyzer_data_c> kax_analyzer_data_cptr;
 
 class kax_analyzer_data_c {
 public:
@@ -95,7 +95,7 @@ private:
   std::string m_file_name;
   mm_file_io_c *m_file;
   bool m_close_file;
-  counted_ptr<KaxSegment> m_segment;
+  std::shared_ptr<KaxSegment> m_segment;
   std::map<int64_t, bool> m_meta_seeks_by_position;
   EbmlStream *m_stream;
   bool m_debugging_requested;
@@ -110,14 +110,14 @@ public:
 
   virtual update_element_result_e update_element(EbmlElement *e, bool write_defaults = false);
   virtual update_element_result_e update_element(ebml_element_cptr e, bool write_defaults = false) {
-    return update_element(e.get_object(), write_defaults);
+    return update_element(e.get(), write_defaults);
   }
   virtual update_element_result_e remove_elements(EbmlId id);
   virtual ebml_master_cptr read_all(const EbmlCallbacks &callbacks);
 
   virtual ebml_element_cptr read_element(kax_analyzer_data_c *element_data);
   virtual ebml_element_cptr read_element(kax_analyzer_data_cptr element_data) {
-    return read_element(element_data.get_object());
+    return read_element(element_data.get());
   }
   virtual ebml_element_cptr read_element(unsigned int pos) {
     return read_element(m_data[pos]);
@@ -158,7 +158,7 @@ public:
 
   static placement_strategy_e get_placement_strategy_for(EbmlElement *e);
   static placement_strategy_e get_placement_strategy_for(ebml_element_cptr e) {
-    return get_placement_strategy_for(e.get_object());
+    return get_placement_strategy_for(e.get());
   }
 
 protected:
@@ -183,7 +183,7 @@ protected:
   virtual void read_meta_seek(uint64_t pos, std::map<int64_t, bool> &positions_found);
   virtual void fix_element_sizes(uint64_t file_size);
 };
-typedef counted_ptr<kax_analyzer_c> kax_analyzer_cptr;
+typedef std::shared_ptr<kax_analyzer_c> kax_analyzer_cptr;
 
 class console_kax_analyzer_c: public kax_analyzer_c {
 private:
@@ -202,6 +202,6 @@ public:
 
   virtual void debug_abort_process();
 };
-typedef counted_ptr<console_kax_analyzer_c> console_kax_analyzer_cptr;
+typedef std::shared_ptr<console_kax_analyzer_c> console_kax_analyzer_cptr;
 
 #endif  // __MTX_COMMON_KAX_ANALYZER_H

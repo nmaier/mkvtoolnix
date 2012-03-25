@@ -39,12 +39,12 @@ ssa_reader_c::read_headers() {
   mm_text_io_cptr text_in;
 
   try {
-    text_in = counted_ptr<mm_text_io_c>(new mm_text_io_c(m_in.get_object(), false));
+    text_in = std::shared_ptr<mm_text_io_c>(new mm_text_io_c(m_in.get(), false));
   } catch (...) {
     throw mtx::input::open_x();
   }
 
-  if (!ssa_reader_c::probe_file(text_in.get_object(), 0))
+  if (!ssa_reader_c::probe_file(text_in.get(), 0))
     throw mtx::input::invalid_format_x();
 
   charset_converter_cptr cc_utf8 = map_has_key(m_ti.m_sub_charsets,  0) ? charset_converter_c::init(m_ti.m_sub_charsets[ 0])
@@ -53,7 +53,7 @@ ssa_reader_c::read_headers() {
                                  :                                        g_cc_local_utf8;
 
   m_ti.m_id = 0;
-  m_subs    = ssa_parser_cptr(new ssa_parser_c(this, text_in.get_object(), m_ti.m_fname, 0));
+  m_subs    = ssa_parser_cptr(new ssa_parser_c(this, text_in.get(), m_ti.m_fname, 0));
 
   m_subs->set_charset_converter(cc_utf8);
   m_subs->parse();

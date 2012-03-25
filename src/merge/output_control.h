@@ -21,7 +21,6 @@
 
 #include "common/bitvalue.h"
 #include "common/file_types.h"
-#include "common/smart_pointers.h"
 #include "merge/mkvmerge.h"
 #include "merge/pr_generic.h"
 
@@ -129,7 +128,7 @@ struct attachment_t {
     id           = 0;
     ui_id        = 0;
     to_all_files = false;
-    data         = memory_cptr(nullptr);
+    data.reset();
   }
 };
 
@@ -165,7 +164,7 @@ extern std::string g_outfile;
 extern double g_timecode_scale;
 extern timecode_scale_mode_e g_timecode_scale_mode;
 
-typedef counted_ptr<bitvalue_c> g_bitvalue_cptr;
+typedef std::shared_ptr<bitvalue_c> g_bitvalue_cptr;
 
 extern bitvalue_cptr g_seguid_link_previous, g_seguid_link_next;
 extern std::deque<bitvalue_cptr> g_forced_seguids;

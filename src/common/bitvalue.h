@@ -60,6 +60,6 @@ public:
     return m_value->get_buffer();
   }
 };
-typedef counted_ptr<bitvalue_c> bitvalue_cptr;
+typedef std::shared_ptr<bitvalue_c> bitvalue_cptr;
 
 #endif  // __MTX_COMMON_MTX_BITVALUE_H

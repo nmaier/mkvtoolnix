@@ -47,7 +47,7 @@ vc1::frame_t::frame_t()
 void
 vc1::frame_t::init() {
   header.init();
-  data                     = memory_cptr(nullptr);
+  data.reset();
   timecode                 = -1;
   duration                 = 0;
   contains_sequence_header = false;
@@ -340,7 +340,7 @@ vc1::es_parser_c::add_bytes(unsigned char *buffer,
     m_unparsed_buffer = new_unparsed_buffer;
 
   } else
-    m_unparsed_buffer = memory_cptr(nullptr);
+    m_unparsed_buffer.reset();
 }
 
 void
@@ -351,7 +351,7 @@ vc1::es_parser_c::flush() {
       handle_packet(memory_c::clone(m_unparsed_buffer->get_buffer(), m_unparsed_buffer->get_size()));
   }
 
-  m_unparsed_buffer = memory_cptr(nullptr);
+  m_unparsed_buffer.reset();
 
   flush_frame();
 }
@@ -488,7 +488,7 @@ vc1::es_parser_c::flush_frame() {
 
   m_frames.push_back(m_current_frame);
 
-  m_current_frame = frame_cptr(nullptr);
+  m_current_frame.reset();
 }
 
 bool

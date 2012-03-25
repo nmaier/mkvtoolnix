@@ -124,7 +124,7 @@ real_reader_c::real_reader_c(const track_info_c &ti,
 
 void
 real_reader_c::read_headers() {
-  file = rmff_open_file_with_io(reinterpret_cast<const char *>(m_in.get_object()), RMFF_OPEN_MODE_READING, &mm_io_file_io);
+  file = rmff_open_file_with_io(reinterpret_cast<const char *>(m_in.get()), RMFF_OPEN_MODE_READING, &mm_io_file_io);
   if (nullptr == file) {
     if (RMFF_ERR_NOT_RMFF == rmff_last_error)
       throw mtx::input::invalid_format_x();
@@ -403,7 +403,7 @@ real_reader_c::find_demuxer(unsigned int id) {
     if (demuxers[i]->track->id == id)
       return demuxers[i];
 
-  return real_demuxer_cptr(nullptr);
+  return real_demuxer_cptr{};
 }
 
 file_status_e

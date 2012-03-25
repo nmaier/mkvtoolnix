@@ -70,9 +70,9 @@ corepicture_reader_c::corepicture_reader_c(const track_info_c &ti,
 void
 corepicture_reader_c::read_headers() {
   try {
-    m_xml_source = mm_text_io_cptr(new mm_text_io_c(m_in.get_object(), false));
+    m_xml_source = mm_text_io_cptr(new mm_text_io_c(m_in.get(), false));
 
-    if (!corepicture_reader_c::probe_file(m_xml_source.get_object(), 0))
+    if (!corepicture_reader_c::probe_file(m_xml_source.get(), 0))
       throw mtx::input::invalid_format_x();
 
     parse_xml_file();
@@ -209,7 +209,7 @@ corepicture_reader_c::read(generic_packetizer_c *,
 
   if (m_current_picture != m_pictures.end()) {
     try {
-      counted_ptr<mm_io_c> io(new mm_file_io_c(m_current_picture->m_url));
+      std::shared_ptr<mm_io_c> io(new mm_file_io_c(m_current_picture->m_url));
       uint64_t size         = io->get_size();
       memory_cptr mem       = memory_c::alloc(7 + size);
       unsigned char *buffer = mem->get_buffer();

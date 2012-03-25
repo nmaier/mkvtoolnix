@@ -49,6 +49,6 @@ protected:
   void remove_empty_targets();
   void merge_targets();
 };
-typedef counted_ptr<options_c> options_cptr;
+typedef std::shared_ptr<options_c> options_cptr;
 
 #endif // __PROPEDIT_OPTIONS_H

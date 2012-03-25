@@ -25,7 +25,7 @@ timecode_factory_c::create(const std::string &file_name,
                            const std::string &source_name,
                            int64_t tid) {
   if (file_name.empty())
-    return timecode_factory_cptr(nullptr);
+    return timecode_factory_cptr{};
 
   mm_io_c *in = nullptr;           // avoid gcc warning
   try {

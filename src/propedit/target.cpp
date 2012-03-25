@@ -227,7 +227,7 @@ void
 target_c::set_level1_element(ebml_element_cptr level1_element_cp,
                              ebml_element_cptr track_headers_cp) {
   m_level1_element_cp = level1_element_cp;
-  m_level1_element    = static_cast<EbmlMaster *>(m_level1_element_cp.get_object());
+  m_level1_element    = static_cast<EbmlMaster *>(m_level1_element_cp.get());
 
   m_track_headers_cp  = track_headers_cp;
 
@@ -250,7 +250,7 @@ target_c::set_level1_element(ebml_element_cptr level1_element_cp,
   if (!track_headers_cp)
     track_headers_cp = level1_element_cp;
 
-  EbmlMaster *track_headers = static_cast<EbmlMaster *>(track_headers_cp.get_object());
+  EbmlMaster *track_headers = static_cast<EbmlMaster *>(track_headers_cp.get());
 
   size_t i;
   for (i = 0; track_headers->ListSize() > i; ++i) {

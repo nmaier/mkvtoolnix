@@ -35,7 +35,7 @@ struct kax_content_encoding_t {
   uint32_t enc_algo, sig_algo, sig_hash_algo;
   memory_cptr enc_keyid, sig_keyid, signature;
 
-  counted_ptr<compressor_c> compressor;
+  std::shared_ptr<compressor_c> compressor;
 
   kax_content_encoding_t();
 };

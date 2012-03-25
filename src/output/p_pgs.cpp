@@ -60,7 +60,7 @@ pgs_packetizer_c::process(packet_cptr packet) {
   if (   (0                      != packet->data->get_size())
       && (PGSSUP_DISPLAY_SEGMENT == packet->data->get_buffer()[0])) {
     add_packet(m_aggregated);
-    m_aggregated.clear();
+    m_aggregated.reset();
   }
 
   return FILE_STATUS_MOREDATA;

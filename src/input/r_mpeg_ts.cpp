@@ -99,7 +99,7 @@ mpeg_ts_track_c::add_pes_payload_to_probe_data() {
 int
 mpeg_ts_track_c::new_stream_v_mpeg_1_2() {
   if (!m_m2v_parser) {
-    m_m2v_parser = counted_ptr<M2VParser>(new M2VParser);
+    m_m2v_parser = std::shared_ptr<M2VParser>(new M2VParser);
     m_m2v_parser->SetProbeMode();
   }
 
@@ -112,7 +112,7 @@ mpeg_ts_track_c::new_stream_v_mpeg_1_2() {
   }
 
   MPEG2SequenceHeader seq_hdr = m_m2v_parser->GetSequenceHeader();
-  counted_ptr<MPEGFrame> frame(m_m2v_parser->ReadFrame());
+  std::shared_ptr<MPEGFrame> frame(m_m2v_parser->ReadFrame());
   if (!frame)
     return FILE_STATUS_MOREDATA;
 
@@ -777,7 +777,7 @@ mpeg_ts_reader_c::parse_packet(unsigned char *buf) {
 
   unsigned char ts_payload_size = TS_PACKET_SIZE - (ts_payload - (unsigned char *)hdr);
 
-  // Copy the counted_ptr instead of referencing it because functions
+  // Copy the std::shared_ptr instead of referencing it because functions
   // called from this one will modify tracks.
   mpeg_ts_track_ptr track = tracks[tidx];
 

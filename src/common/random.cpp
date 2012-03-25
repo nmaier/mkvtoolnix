@@ -147,7 +147,7 @@ random_c::test() {
 
 #if !defined(SYS_WINDOWS)
   m_tried_dev_urandom = true;
-  m_dev_urandom.clear();
+  m_dev_urandom.reset();
 
   for (i = 0; 16 > i; i++)
     ranges[i] = 0;
@@ -177,6 +177,6 @@ random_c::test() {
 void
 random_c::cleanup() {
 #if !defined(SYS_WINDOWS)
-  m_dev_urandom.clear();
+  m_dev_urandom.reset();
 #endif
 }

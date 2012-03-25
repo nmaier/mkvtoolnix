@@ -211,8 +211,8 @@ extract_cuesheet(const std::string &file_name,
   KaxChapters all_chapters;
   ebml_master_cptr chapters_m(analyzer->read_all(EBML_INFO(KaxChapters)));
   ebml_master_cptr tags_m(    analyzer->read_all(EBML_INFO(KaxTags)));
-  KaxChapters *chapters = dynamic_cast<KaxChapters *>(chapters_m.get_object());
-  KaxTags *all_tags     = dynamic_cast<KaxTags *>(    tags_m.get_object());
+  KaxChapters *chapters = dynamic_cast<KaxChapters *>(chapters_m.get());
+  KaxTags *all_tags     = dynamic_cast<KaxTags *>(    tags_m.get());
 
   if ((nullptr != chapters) && (nullptr != all_tags)) {
     size_t i;

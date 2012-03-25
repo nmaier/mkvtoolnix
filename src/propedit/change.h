@@ -69,6 +69,6 @@ protected:
 
   const EbmlSemantic *get_semantic();
 };
-typedef counted_ptr<change_c> change_cptr;
+typedef std::shared_ptr<change_c> change_cptr;
 
 #endif // __PROPEDIT_CHANGE_H

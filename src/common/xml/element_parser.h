@@ -148,7 +148,7 @@ public:
 public:
   parser_data_t();
 };
-typedef counted_ptr<parser_data_t> parser_data_cptr;
+typedef std::shared_ptr<parser_data_t> parser_data_cptr;
 
 #define CPDATA static_cast<parser_data_t *>(pdata)
 

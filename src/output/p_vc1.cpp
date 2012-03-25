@@ -107,7 +107,7 @@ vc1_video_packetizer_c::add_timecodes_to_parser(packet_cptr &packet) {
     if (extension->get_type() != packet_extension_c::MULTIPLE_TIMECODES)
       continue;
 
-    multiple_timecodes_packet_extension_c *tc_extension = static_cast<multiple_timecodes_packet_extension_c *>(extension.get_object());
+    multiple_timecodes_packet_extension_c *tc_extension = static_cast<multiple_timecodes_packet_extension_c *>(extension.get());
     int64_t timecode, position;
 
     while (tc_extension->get_next(timecode, position))

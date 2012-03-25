@@ -299,7 +299,7 @@ public:
   byte_buffer_cptr m_probe_data;
   mpeg4::p10::avc_es_parser_cptr m_avc_parser;
   truehd_parser_cptr m_truehd_parser;
-  counted_ptr<M2VParser> m_m2v_parser;
+  std::shared_ptr<M2VParser> m_m2v_parser;
 
   bool m_debug_delivery;
 
@@ -351,7 +351,7 @@ public:
   void set_pid(uint16_t new_pid);
 };
 
-typedef counted_ptr<mpeg_ts_track_c> mpeg_ts_track_ptr;
+typedef std::shared_ptr<mpeg_ts_track_c> mpeg_ts_track_ptr;
 
 class mpeg_ts_reader_c: public generic_reader_c {
 protected:

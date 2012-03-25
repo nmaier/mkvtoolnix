@@ -153,7 +153,7 @@ truehd_parser_c::frame_available() {
 truehd_frame_cptr
 truehd_parser_c::get_next_frame() {
   if (m_frames.empty())
-    return truehd_frame_cptr(nullptr);
+    return truehd_frame_cptr{};
 
   truehd_frame_cptr frame = *m_frames.begin();
   m_frames.pop_front();

@@ -165,7 +165,7 @@ namespace mpeg4 {
         m_has_provided_timecode = false;
         m_presentation_order    = 0;
         m_decode_order          = 0;
-        m_data.clear();
+        m_data.reset();
 
         m_si.clear();
       }
@@ -362,7 +362,7 @@ namespace mpeg4 {
       memory_cptr create_nalu_with_size(const memory_cptr &src, bool add_extra_data = false);
       void init_nalu_names();
     };
-    typedef counted_ptr<avc_es_parser_c> avc_es_parser_cptr;
+    typedef std::shared_ptr<avc_es_parser_c> avc_es_parser_cptr;
   };
 };
 

@@ -325,7 +325,7 @@ open_input_file(filelist_t &file) {
 
   } catch (...) {
     mxerror(boost::format(Y("The source file '%1%' could not be opened successfully, or retrieving its size by seeking to the end did not work.\n")) % file.name);
-    return mm_io_cptr(nullptr);
+    return mm_io_cptr{};
   }
 }
 
@@ -337,7 +337,7 @@ open_input_file(filelist_t &file) {
 void
 get_file_type(filelist_t &file) {
   mm_io_cptr af_io = open_input_file(file);
-  mm_io_c *io      = af_io.get_object();
+  mm_io_c *io      = af_io.get();
   int64_t size     = std::min(io->get_size(), static_cast<int64_t>(1 << 25));
 
   file_type_e type = FILE_TYPE_IS_UNKNOWN;
@@ -1462,9 +1462,9 @@ create_next_output_file() {
   if (verbose)
     mxinfo(boost::format(Y("The file '%1%' has been opened for writing.\n")) % this_outfile);
 
-  g_cluster_helper->set_output(s_out.get_object());
-  render_headers(s_out.get_object());
-  render_attachments(s_out.get_object());
+  g_cluster_helper->set_output(s_out.get());
+  render_headers(s_out.get());
+  render_attachments(s_out.get());
   render_chapter_void_placeholder();
   add_tags_from_cue_chapters();
   prepare_tags_for_rendering();
@@ -1654,7 +1654,7 @@ finish_file(bool last_file) {
   if (g_kax_segment->ForceSize(final_file_size - g_kax_segment->GetElementPosition() - g_kax_segment->HeadSize()))
     g_kax_segment->OverwriteHead(*s_out);
 
-  s_out.clear();
+  s_out.reset();
 
   // The tracks element must not be deleted.
   size_t i;
@@ -1989,7 +1989,7 @@ main_loop() {
       // rendered automatically.
       g_cluster_helper->add_packet(pack);
 
-      winner->pack = packet_cptr(nullptr);
+      winner->pack.reset();
 
       // display some progress information
       if (1 <= verbose)

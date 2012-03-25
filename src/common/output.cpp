@@ -15,10 +15,7 @@
 
 #include "common/ebml.h"
 #include "common/endian.h"
-#include "common/mm_io.h"
 #include "common/locale.h"
-#include "common/output.h"
-#include "common/smart_pointers.h"
 #include "common/strings/formatting.h"
 #include "common/strings/utf8.h"
 
@@ -40,7 +37,7 @@ std::string g_stdio_charset;
 static bool s_mm_stdio_redirected = false;
 
 charset_converter_cptr g_cc_stdio = charset_converter_cptr(new charset_converter_c);
-counted_ptr<mm_io_c> g_mm_stdio   = counted_ptr<mm_io_c>(new mm_stdio_c);
+std::shared_ptr<mm_io_c> g_mm_stdio   = std::shared_ptr<mm_io_c>(new mm_stdio_c);
 
 void
 redirect_stdio(const mm_io_cptr &stdio) {

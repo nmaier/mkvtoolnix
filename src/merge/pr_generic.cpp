@@ -897,7 +897,7 @@ generic_packetizer_c::process_deferred_packets() {
 packet_cptr
 generic_packetizer_c::get_packet() {
   if (m_packet_queue.empty() || !m_packet_queue.front()->factory_applied)
-    return packet_cptr(nullptr);
+    return packet_cptr{};
 
   packet_cptr pack = m_packet_queue.front();
   m_packet_queue.pop_front();

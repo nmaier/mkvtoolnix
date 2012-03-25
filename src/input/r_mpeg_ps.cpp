@@ -76,7 +76,7 @@ mpeg_ps_reader_c::read_headers() {
   try {
     uint8_t byte;
 
-    m_in.clear();               // Close the source file first before opening it a second time.
+    m_in.reset();               // Close the source file first before opening it a second time.
     m_in            = mm_multi_file_io_c::open_multi(m_ti.m_fname, m_ti.m_disable_multi_file);
     m_size          = m_in->get_size();
     uint32_t header = m_in->read_uint32_be();
@@ -559,7 +559,7 @@ mpeg_ps_reader_c::new_stream_v_mpeg_1_2(mpeg_ps_id_t id,
                                         unsigned char *buf,
                                         unsigned int length,
                                         mpeg_ps_track_ptr &track) {
-  counted_ptr<M2VParser> m2v_parser(new M2VParser);
+  std::shared_ptr<M2VParser> m2v_parser(new M2VParser);
 
   m2v_parser->SetProbeMode();
   m2v_parser->WriteData(buf, length);
@@ -590,7 +590,7 @@ mpeg_ps_reader_c::new_stream_v_mpeg_1_2(mpeg_ps_id_t id,
   }
 
   MPEG2SequenceHeader seq_hdr = m2v_parser->GetSequenceHeader();
-  counted_ptr<MPEGFrame> frame(m2v_parser->ReadFrame());
+  std::shared_ptr<MPEGFrame> frame(m2v_parser->ReadFrame());
   if (!frame)
     throw false;
 
@@ -1198,7 +1198,7 @@ mpeg_ps_reader_c::read(generic_packetizer_c *requested_ptzr,
         continue;
       }
 
-      mpeg_ps_track_t *track = tracks[id2idx[new_id.idx()]].get_object();
+      mpeg_ps_track_t *track = tracks[id2idx[new_id.idx()]].get();
 
       mxverb(3,
              boost::format("mpeg_ps: packet for 0x%|1$02x|(%|2$02x|) length %3% at %4% timecode %5%\n")

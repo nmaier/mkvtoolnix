@@ -43,7 +43,7 @@ public:
 };
 
 class timecode_factory_c;
-typedef counted_ptr<timecode_factory_c> timecode_factory_cptr;
+typedef std::shared_ptr<timecode_factory_c> timecode_factory_cptr;
 
 class timecode_factory_c {
 protected:

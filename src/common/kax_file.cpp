@@ -125,7 +125,7 @@ kax_file_c::read_one_element() {
 
   EbmlElement *l2 = nullptr;
   try {
-    l1->Read(*m_es.get_object(), EBML_INFO_CONTEXT(*callbacks), upper_lvl_el, l2, true);
+    l1->Read(*m_es.get(), EBML_INFO_CONTEXT(*callbacks), upper_lvl_el, l2, true);
 
   } catch (libebml::CRTError &e) {
     mxdebug_if(m_debug_resync, boost::format("exception reading element data: %1% (%2%)\n") % e.what() % e.getError());

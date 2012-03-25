@@ -20,7 +20,7 @@
 
 namespace mtx {
   namespace xml {
-    typedef counted_ptr<pugi::xml_document> document_cptr;
+    typedef std::shared_ptr<pugi::xml_document> document_cptr;
   }
 }
 

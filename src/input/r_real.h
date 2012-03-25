@@ -28,7 +28,7 @@ typedef struct {
   uint64_t flags;
 } rv_segment_t;
 
-typedef counted_ptr<rv_segment_t> rv_segment_cptr;
+typedef std::shared_ptr<rv_segment_t> rv_segment_cptr;
 
 struct real_demuxer_t {
   int ptzr;
@@ -83,12 +83,12 @@ struct real_demuxer_t {
   };
 };
 
-typedef counted_ptr<real_demuxer_t> real_demuxer_cptr;
+typedef std::shared_ptr<real_demuxer_t> real_demuxer_cptr;
 
 class real_reader_c: public generic_reader_c {
 private:
   rmff_file_t *file;
-  std::vector<counted_ptr<real_demuxer_t> > demuxers;
+  std::vector<std::shared_ptr<real_demuxer_t> > demuxers;
   int64_t file_size;
   bool done;
 

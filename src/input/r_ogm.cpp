@@ -259,9 +259,9 @@ public:
 
 // ---------------------------------------------------------------------------------
 
-static counted_ptr<std::vector<std::string> >
+static std::shared_ptr<std::vector<std::string> >
 extract_vorbis_comments(const memory_cptr &mem) {
-  counted_ptr<std::vector<std::string> > comments(new std::vector<std::string>);
+  std::shared_ptr<std::vector<std::string> > comments(new std::vector<std::string>);
   mm_mem_io_c in(mem->get_buffer(), mem->get_size());
   uint32_t i, n, len;
 
@@ -323,7 +323,7 @@ ogm_reader_c::ogm_reader_c(const track_info_c &ti,
 
 void
 ogm_reader_c::read_headers() {
-  if (!ogm_reader_c::probe_file(m_in.get_object(), m_size))
+  if (!ogm_reader_c::probe_file(m_in.get(), m_size))
     throw mtx::input::invalid_format_x();
 
   ogg_sync_init(&oy);
@@ -347,10 +347,10 @@ ogm_reader_c::find_demuxer(int serialno) {
     if (sdemuxers[i]->serialno == serialno) {
       if (sdemuxers[i]->in_use)
         return sdemuxers[i];
-      return ogm_demuxer_cptr(nullptr);
+      return ogm_demuxer_cptr{};
     }
 
-  return ogm_demuxer_cptr(nullptr);
+  return ogm_demuxer_cptr{};
 }
 
 /*
@@ -732,7 +732,7 @@ ogm_reader_c::identify() {
 
 void
 ogm_reader_c::handle_stream_comments() {
-  counted_ptr<std::vector<std::string> > comments;
+  std::shared_ptr<std::vector<std::string> > comments;
   std::string title;
 
   bool charset_warning_printed = false;
@@ -811,16 +811,16 @@ ogm_reader_c::handle_stream_comments() {
     bool chapters_set = false;
     if (!chapter_strings.empty() && !m_ti.m_no_chapters) {
       try {
-        counted_ptr<mm_mem_io_c> out(new mm_mem_io_c(nullptr, 0, 1000));
+        std::shared_ptr<mm_mem_io_c> out(new mm_mem_io_c(nullptr, 0, 1000));
 
         out->write_bom("UTF-8");
         for (j = 0; j < chapter_strings.size(); j++)
           out->puts(cch->utf8(chapter_strings[j]) + std::string("\n"));
         out->set_file_name(m_ti.m_fname);
 
-        counted_ptr<mm_text_io_c> text_out(new mm_text_io_c(out.get_object(), false));
+        std::shared_ptr<mm_text_io_c> text_out(new mm_text_io_c(out.get(), false));
 
-        m_chapters   = parse_chapters(text_out.get_object(), 0, -1, 0, m_ti.m_chapter_language);
+        m_chapters   = parse_chapters(text_out.get(), 0, -1, 0, m_ti.m_chapter_language);
         chapters_set = true;
 
         align_chapter_edition_uids(m_chapters);

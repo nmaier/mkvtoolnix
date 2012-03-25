@@ -98,7 +98,7 @@ avi_reader_c::avi_reader_c(const track_info_c &ti,
 void
 avi_reader_c::read_headers() {
   try {
-    if (!avi_reader_c::probe_file(m_in.get_object(), m_size))
+    if (!avi_reader_c::probe_file(m_in.get(), m_size))
       throw mtx::input::invalid_format_x();
 
   } catch (mtx::mm_io::exception &) {
@@ -107,7 +107,7 @@ avi_reader_c::read_headers() {
 
   show_demuxer_info();
 
-  if (nullptr == (m_avi = AVI_open_input_file(m_in.get_object(), 1)))
+  if (nullptr == (m_avi = AVI_open_input_file(m_in.get(), 1)))
     throw mtx::input::invalid_format_x();
 
   m_fps              = AVI_frame_rate(m_avi);
@@ -266,7 +266,7 @@ avi_reader_c::create_video_packetizer() {
 
 void
 avi_reader_c::create_mpeg1_2_packetizer() {
-  counted_ptr<M2VParser> m2v_parser(new M2VParser);
+  std::shared_ptr<M2VParser> m2v_parser(new M2VParser);
 
   m2v_parser->SetProbeMode();
   if ((0 != m_ti.m_private_size) && (m_ti.m_private_size < sizeof(alBITMAPINFOHEADER)))
@@ -301,7 +301,7 @@ avi_reader_c::create_mpeg1_2_packetizer() {
     mxerror_tid(m_ti.m_fname, 0, Y("Could not extract the sequence header from this MPEG-1/2 track.\n"));
 
   MPEG2SequenceHeader seq_hdr = m2v_parser->GetSequenceHeader();
-  counted_ptr<MPEGFrame> frame(m2v_parser->ReadFrame());
+  std::shared_ptr<MPEGFrame> frame(m2v_parser->ReadFrame());
   if (!frame)
     mxerror_tid(m_ti.m_fname, 0, Y("Could not extract the sequence header from this MPEG-1/2 track.\n"));
 
@@ -410,7 +410,7 @@ avi_reader_c::create_srt_packetizer(int idx) {
   avi_subs_demuxer_t &demuxer = m_subtitle_demuxers[idx];
   int id                      = idx + 1 + AVI_audio_tracks(m_avi);
 
-  srt_parser_c *parser        = new srt_parser_c(demuxer.m_text_io.get_object(), m_ti.m_fname, id);
+  srt_parser_c *parser        = new srt_parser_c(demuxer.m_text_io.get(), m_ti.m_fname, id);
   demuxer.m_subs              = subtitles_cptr(parser);
 
   parser->parse();
@@ -426,7 +426,7 @@ avi_reader_c::create_ssa_packetizer(int idx) {
   avi_subs_demuxer_t &demuxer    = m_subtitle_demuxers[idx];
   int id                         = idx + 1 + AVI_audio_tracks(m_avi);
 
-  ssa_parser_c *parser           = new ssa_parser_c(this, demuxer.m_text_io.get_object(), m_ti.m_fname, id);
+  ssa_parser_c *parser           = new ssa_parser_c(this, demuxer.m_text_io.get(), m_ti.m_fname, id);
   demuxer.m_subs                 = subtitles_cptr(parser);
 
   charset_converter_cptr cc_utf8 = map_has_key(m_ti.m_sub_charsets, id)           ? charset_converter_c::init(m_ti.m_sub_charsets[id])

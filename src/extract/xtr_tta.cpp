@@ -70,7 +70,7 @@ xtr_tta_c::handle_frame(memory_cptr &frame,
 
 void
 xtr_tta_c::finish_file() {
-  m_out.clear();
+  m_out.reset();
 
   mm_io_cptr in;
   try {
@@ -122,6 +122,6 @@ xtr_tta_c::finish_file() {
     m_out->write(buffer, nread);
   } while (nread == 128000);
 
-  m_out.clear();
+  m_out.reset();
   unlink(m_temp_file_name.c_str());
 }

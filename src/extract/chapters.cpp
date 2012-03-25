@@ -53,7 +53,7 @@ extract_chapters(const std::string &file_name,
   if (!master)
     return;
 
-  KaxChapters *chapters = dynamic_cast<KaxChapters *>(master.get_object());
+  KaxChapters *chapters = dynamic_cast<KaxChapters *>(master.get());
   assert(nullptr != chapters);
 
   if (!chapter_format_simple)
@@ -61,6 +61,6 @@ extract_chapters(const std::string &file_name,
 
   else {
     int dummy = 1;
-    write_chapters_simple(dummy, chapters, g_mm_stdio.get_object());
+    write_chapters_simple(dummy, chapters, g_mm_stdio.get());
   }
 }
