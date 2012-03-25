@@ -189,6 +189,7 @@ EbmlElement *empty_ebml_master(EbmlElement *e);
 EbmlElement *create_ebml_element(const EbmlCallbacks &callbacks, const EbmlId &id);
 EbmlMaster *sort_ebml_master(EbmlMaster *e);
 void remove_voids_from_master(EbmlElement *element);
+void move_children(EbmlMaster &source, EbmlMaster &destination);
 
 const EbmlCallbacks *find_ebml_callbacks(const EbmlCallbacks &base, const EbmlId &id);
 const EbmlCallbacks *find_ebml_callbacks(const EbmlCallbacks &base, const char *debug_name);

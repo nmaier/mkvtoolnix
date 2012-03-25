@@ -24,8 +24,7 @@
 #include "common/output.h"
 #include "common/strings/editing.h"
 #include "common/strings/parsing.h"
-#include "common/tags/parser.h"
-#include "common/tags/tags.h"
+#include "common/xml/ebml_tags_converter.h"
 #include "propedit/propedit.h"
 #include "propedit/target.h"
 
@@ -328,26 +327,22 @@ target_c::execute() {
 
 void
 target_c::add_or_replace_tags() {
-  KaxTags *new_tags = nullptr;
+  kax_tags_cptr new_tags;
 
-  if (!m_file_name.empty()) {
-    new_tags = new KaxTags;
-    parse_xml_tags(m_file_name, new_tags);
-  }
+  if (!m_file_name.empty())
+    new_tags = mtx::xml::ebml_tags_converter_c::parse_file(m_file_name);
 
   if (target_c::tom_all == m_tag_operation_mode)
-    add_or_replace_all_master_elements(new_tags);
+    add_or_replace_all_master_elements(new_tags.get());
 
   else if (target_c::tom_global == m_tag_operation_mode)
-    add_or_replace_global_tags(new_tags);
+    add_or_replace_global_tags(new_tags.get());
 
   else if (target_c::tom_track == m_tag_operation_mode)
-    add_or_replace_track_tags(new_tags);
+    add_or_replace_track_tags(new_tags.get());
 
   else
     assert(false);
-
-  delete new_tags;
 
   if (m_level1_element->ListSize()) {
     fix_mandatory_tag_elements(m_level1_element);
@@ -445,4 +440,3 @@ target_c::add_or_replace_chapters() {
       mxerror(boost::format(Y("Error parsing the chapters in '%1%': some mandatory elements are missing.\n")) % m_file_name);
   }
 }
-

@@ -31,6 +31,8 @@ namespace libebml {
 using namespace libebml;
 using namespace libmatroska;
 
+typedef std::shared_ptr<KaxTags> kax_tags_cptr;
+
 void fix_mandatory_tag_elements(EbmlElement *e);
 void remove_track_uid_tag_targets(EbmlMaster *tag);
 

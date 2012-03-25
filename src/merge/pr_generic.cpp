@@ -30,9 +30,8 @@
 #include "common/hacks.h"
 #include "common/math.h"
 #include "common/strings/formatting.h"
-#include "common/tags/tags.h"
-#include "common/tags/parser.h"
 #include "common/unique_numbers.h"
+#include "common/xml/ebml_tags_converter.h"
 #include "merge/mkvmerge.h"
 #include "merge/output_control.h"
 #include "merge/pr_generic.h"
@@ -154,11 +153,8 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *reader,
     m_ti.m_tags_file_name = m_ti.m_all_tags[m_ti.m_id];
   else if (map_has_key(m_ti.m_all_tags, -1))
     m_ti.m_tags_file_name = m_ti.m_all_tags[-1];
-  if (m_ti.m_tags_file_name != "") {
-    delete m_ti.m_tags;
-    m_ti.m_tags = new KaxTags;
-    parse_xml_tags(m_ti.m_tags_file_name, m_ti.m_tags);
-  }
+  if (!m_ti.m_tags_file_name.empty())
+    m_ti.m_tags = mtx::xml::ebml_tags_converter_c::parse_file(m_ti.m_tags_file_name);
 
   // Let's see if the user has specified how this track should be compressed.
   if (map_has_key(m_ti.m_compression_list, m_ti.m_id))
@@ -259,7 +255,7 @@ generic_packetizer_c::~generic_packetizer_c() {
 
 void
 generic_packetizer_c::set_tag_track_uid() {
-  if (nullptr == m_ti.m_tags)
+  if (!m_ti.m_tags)
     return;
 
   convert_old_tags(*m_ti.m_tags);
@@ -759,7 +755,7 @@ generic_packetizer_c::set_headers() {
     m_track_entry->EnableLacing(false);
 
   set_tag_track_uid();
-  if (nullptr != m_ti.m_tags) {
+  if (m_ti.m_tags) {
     while (m_ti.m_tags->ListSize() != 0) {
       KaxTag *tag = (KaxTag *)(*m_ti.m_tags)[0];
       add_tags(tag);
@@ -1507,7 +1503,6 @@ track_info_c::track_info_c()
   , m_default_track(boost::logic::indeterminate)
   , m_forced_track(boost::logic::indeterminate)
   , m_enabled_track(boost::logic::indeterminate)
-  , m_tags(nullptr)
   , m_compression(COMPRESSION_UNSPECIFIED)
   , m_pixel_cropping_source(PARAMETER_SOURCE_NONE)
   , m_stereo_mode(stereo_mode_c::unspecified)
@@ -1530,7 +1525,6 @@ track_info_c::free_contents() {
     return;
 
   safefree(m_private_data);
-  delete m_tags;
 
   m_initialized = false;
 }
@@ -1587,7 +1581,7 @@ track_info_c::operator =(const track_info_c &src) {
 
   m_all_tags                   = src.m_all_tags;
   m_tags_file_name             = src.m_tags_file_name;
-  m_tags                       = nullptr != src.m_tags ? static_cast<KaxTags *>(src.m_tags->Clone()) : nullptr;
+  m_tags                       = src.m_tags ? kax_tags_cptr{ static_cast<KaxTags *>(src.m_tags->Clone()) } : kax_tags_cptr{};
 
   m_all_aac_is_sbr             = src.m_all_aac_is_sbr;
 
@@ -1655,4 +1649,3 @@ id_result_container_unsupported(const std::string &filename,
   } else
     mxerror(boost::format(Y("The file '%1%' is a non-supported file type (%2%).\n")) % filename % info);
 }
-

@@ -411,6 +411,13 @@ sort_ebml_master(EbmlMaster *m) {
   return m;
 }
 
+void
+move_children(EbmlMaster &source,
+              EbmlMaster &destination) {
+  for (auto child : source)
+    destination.PushElement(*child);
+}
+
 // ------------------------------------------------------------------------
 
 int64_t

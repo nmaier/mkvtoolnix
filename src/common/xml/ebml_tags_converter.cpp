@@ -62,4 +62,59 @@ ebml_tags_converter_c::write_xml(KaxTags &tags,
   out.puts(out_stream.str());
 }
 
+void
+ebml_tags_converter_c::fix_ebml(EbmlMaster &root)
+  const {
+  for (auto child : root)
+    if (dynamic_cast<KaxTag *>(child))
+      fix_tag(*static_cast<KaxTag *>(child));
+}
+
+void
+ebml_tags_converter_c::fix_tag(KaxTag &tag)
+  const {
+  for (auto child : tag)
+    if (dynamic_cast<KaxTag *>(child))
+      fix_tag(*static_cast<KaxTag *>(child));
+
+  auto simple = FindChild<KaxTagSimple>(tag);
+  if (!simple)
+    throw conversion_x{ Y("<Tag> is missing the <Simple> child.") };
+
+  auto string = FindChild<KaxTagString>(*simple);
+  auto binary = FindChild<KaxTagBinary>(*simple);
+  if (string && binary)
+    throw conversion_x{ Y("Only one of <String> and <Binary> may be used beneath <Simple> but not both at the same time.") };
+  if (!string && !binary)
+    throw conversion_x{ Y("<Simple> must contain either a <String> or a <Binary> child.") };
+}
+
+kax_tags_cptr
+ebml_tags_converter_c::parse_file(std::string const &file_name,
+                                      bool throw_on_error) {
+  auto parse = [&]() {
+    auto master = ebml_tags_converter_c{}.to_ebml(file_name, "Tags");
+    fix_mandatory_tag_elements(static_cast<KaxTags *>(master.get()));
+    return std::dynamic_pointer_cast<KaxTags>(master);
+  };
+
+  if (!throw_on_error)
+    return parse();
+
+  try {
+    return parse();
+
+  } catch (mtx::mm_io::exception &ex) {
+    mxerror(boost::format(Y("The XML tag file '%1%' could not be read.\n")) % file_name);
+
+  } catch (mtx::xml::xml_parser_x &ex) {
+    mxerror(boost::format(Y("The XML tag file '%1%' contains an error at position %3%: %2%\n")) % file_name % ex.result().description() % ex.result().offset);
+
+  } catch (mtx::xml::exception &ex) {
+    mxerror(boost::format(Y("The XML tag file '%1%' contains an error: %2%\n")) % file_name % ex.what());
+  }
+
+  return kax_tags_cptr{};
+}
+
 }}

@@ -54,11 +54,10 @@
 #include "common/segmentinfo.h"
 #include "common/strings/formatting.h"
 #include "common/strings/parsing.h"
-#include "common/tags/tags.h"
-#include "common/tags/parser.h"
 #include "common/unique_numbers.h"
 #include "common/version.h"
 #include "common/webm.h"
+#include "common/xml/ebml_tags_converter.h"
 #include "merge/cluster_helper.h"
 #include "merge/mkvmerge.h"
 #include "merge/output_control.h"
@@ -496,23 +495,18 @@ parse_number_with_unit(const std::string &s,
 */
 void
 parse_and_add_tags(const std::string &file_name) {
-  KaxTags *tags = new KaxTags;
+  auto tags = mtx::xml::ebml_tags_converter_c::parse_file(file_name);
 
-  parse_xml_tags(file_name, tags);
-
-  while (tags->ListSize() > 0) {
-    KaxTag *tag = dynamic_cast<KaxTag *>((*tags)[0]);
+  for (auto element : *tags) {
+    auto tag = dynamic_cast<KaxTag *>(element);
     if (nullptr != tag) {
-      fix_mandatory_tag_elements(tag);
       if (!tag->CheckMandatory())
         mxerror(boost::format(Y("Error parsing the tags in '%1%': some mandatory elements are missing.\n")) % file_name);
       add_tags(tag);
     }
-
-    tags->Remove(0);
   }
 
-  delete tags;
+  tags->RemoveAll();
 }
 
 /** \brief Parse the \c --xtracks arguments

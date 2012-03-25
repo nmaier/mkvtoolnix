@@ -19,7 +19,6 @@
 
 #include "common/chapters/chapters.h"
 #include "common/ebml.h"
-#include "common/tags/parser.h"
 #include "common/xml/element_mapping.h"
 
 using namespace libmatroska;

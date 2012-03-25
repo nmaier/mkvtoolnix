@@ -259,7 +259,7 @@ ebml_converter_c::parse_binary(parser_context_t &ctx) {
       throw malformed_data_x{ ctx.name, ctx.node.offset_debug(), Y("Invalid length of hexadecimal content: must be divisable by 2.") };
 
     content.clear();
-    content.reserve(hex_content.size() / 2);
+    content.resize(hex_content.size() / 2);
 
     for (auto idx = 0u; idx < hex_content.length(); idx += 2)
       content[idx / 2] = static_cast<char>(from_hex(hex_content.substr(idx, 2)));

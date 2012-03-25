@@ -18,6 +18,7 @@
 
 #include <matroska/KaxTags.h>
 
+#include "common/tags/tags.h"
 #include "common/xml/ebml_converter.h"
 
 using namespace libmatroska;
@@ -30,10 +31,14 @@ public:
   virtual ~ebml_tags_converter_c();
 
 protected:
+  virtual void fix_ebml(EbmlMaster &root) const;
+  virtual void fix_tag(KaxTag &tag) const;
+
   void setup_maps();
 
 public:
   static void write_xml(KaxTags &tags, mm_io_c &out);
+  static kax_tags_cptr parse_file(std::string const &file_name, bool throw_on_error = true);
 };
 
 }}
