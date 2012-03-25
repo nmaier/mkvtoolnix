@@ -784,7 +784,7 @@ select_chapters_in_timeframe(KaxChapters *chapters,
                              int64_t offset) {
   // Check the parameters.
   if (nullptr == chapters)
-    false;
+    return false;
 
   // Remove the atoms that are outside of the requested range.
   size_t master_idx;
