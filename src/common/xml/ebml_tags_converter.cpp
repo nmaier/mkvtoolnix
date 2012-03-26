@@ -44,6 +44,8 @@ ebml_tags_converter_c::setup_maps() {
   m_debug_to_tag_name_map["TagLanguage"]        = "TagLanguage";
   m_debug_to_tag_name_map["TagDefault"]         = "DefaultLanguage";
 
+  m_limits["TagDefault"]                        = limits_t{ true, true, 0, 1 };
+
   reverse_debug_to_tag_name_map();
 }
 
