@@ -11,10 +11,9 @@ source = "data/srt/ven.srt"
 end
 
 # Invalid files:
-%w{tags-invalid-string-and-binary.xml tags-invalid-sub-tag.xml tags-invalid-root-tag.xml tags-invalid-xml.xml tags-invalid-range.xml
-   tags-invalid-binary-format.xml tags-invalid-binary-base64.xml tags-invalid-binary-hex.xml}.each do |tags|
+%w{string-and-binary sub-tag root-tag xml range binary-format binary-base64 binary-hex binary-and-string no-binary-no-string no-name no-simple string-and-binary}.each do |tags|
   test tags do
-    merge "--tags 0:data/text/#{tags} #{source}", :exit_code => 2
-    :ok
+    messages = merge "--tags 0:data/text/tags-invalid-#{tags}.xml #{source}", :exit_code => 2
+    messages.detect { |line| /The\s+XML\s+tag\s+file.*contains\s+an\s+error/i.match line } ? :ok : :bad
   end
 end
