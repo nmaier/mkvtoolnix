@@ -107,7 +107,10 @@ def define_default_task
   targets << "apps:tools" if $build_tools
 
   # The tags file -- but only if it exists already
-  targets << "TAGS" if File.exist?("TAGS") && !c(:ETAGS).empty?
+  if File.exists?("TAGS")
+    targets << "TAGS"   if !c(:ETAGS).empty?
+    targets << "BROWSE" if !c(:EBROWSE).empty?
+  end
 
   # Build developer documentation?
   targets << "doc/development.html" if !c(:PANDOC).empty?
@@ -239,8 +242,15 @@ end
 desc "Create tags file for Emacs"
 task :tags => "TAGS"
 
+desc "Create browse file for Emacs"
+task :browse => "BROWSE"
+
 file "TAGS" => $all_sources do |t|
   runq '   ETAGS', "#{c(:ETAGS)} -o #{t.name} #{t.prerequisites.join(" ")}"
+end
+
+file "BROWSE" => ($all_sources + $all_headers) do |t|
+  runq ' EBROWSE', "#{c(:EBROWSE)} -o #{t.name} #{t.prerequisites.join(" ")}"
 end
 
 file "doc/development.html" => [ "doc/development.md", "doc/pandoc-template.html" ] do |t|
