@@ -354,15 +354,6 @@ private:
   memory_slice_cursor_c(const memory_slice_cursor_c &) { }
 };
 
-struct buffer_t {
-  unsigned char *m_buffer;
-  size_t m_size;
-
-  buffer_t();
-  buffer_t(unsigned char *buffer, size_t m_size);
-  ~buffer_t();
-};
-
 memory_cptr lace_memory_xiph(const std::vector<memory_cptr> &blocks);
 std::vector<memory_cptr> unlace_memory_xiph(memory_cptr &buffer);
 
