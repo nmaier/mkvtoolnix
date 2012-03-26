@@ -219,9 +219,16 @@ class SimpleTest
 
     command    = args.shift
     @commands << command
-    command   << " >/dev/null 2>/dev/null " unless />/.match(command)
+
+    if !/>/.match command
+      temp_file = Tempfile.new('mkvtoolnix-test-output')
+      temp_file.close
+      command  << " >#{temp_file.path} 2>&1 "
+    end
 
     self.error "system command failed: #{command} (#{$? >> 8})" if !system(command) && (options[:exit_code] != ($? >> 8))
+
+    return IO.readlines(temp_file.path) if temp_file
   end
 
   def error reason

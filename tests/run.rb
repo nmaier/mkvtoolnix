@@ -13,6 +13,7 @@ rescue Exception
 end
 
 require "pp"
+require "tempfile"
 
 require_relative "test.d/controller.rb"
 require_relative "test.d/results.rb"
