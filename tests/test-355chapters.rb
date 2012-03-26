@@ -11,9 +11,9 @@ source = "data/srt/ven.srt"
 end
 
 # Invalid files:
-%w{timecode sub-tag root-tag xml range chaptercountry chapterlanguage chapter-track-no-chaptertracknumber no-atom no-chapterstring no-chaptertimestart}.each do |chapters|
+Dir["data/text/chapters-invalid-*.xml"].sort.each do |chapters|
   test chapters do
-    messages = merge "#{source} --chapters data/text/chapters-invalid-#{chapters}.xml", :exit_code => 2
+    messages = merge "#{source} --chapters #{chapters}", :exit_code => 2
     messages.detect { |line| /The\s+XML\s+chapter\s+file.*contains\s+an\s+error/i.match line } ? :ok : :bad
   end
 end

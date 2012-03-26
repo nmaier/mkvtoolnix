@@ -152,14 +152,21 @@ public:
 };
 
 class ebml_converter_c {
+public:
+  struct limits_t {
+    bool has_min, has_max;
+    int64_t min, max;
+    limits_t();
+    limits_t(bool p_has_min, bool p_has_max, int64_t p_min, int64_t p_max);
+  };
+
   struct parser_context_t {
     std::string const &name;
     std::string const &content;
     EbmlElement &e;
     pugi::xml_node const &node;
     std::map<std::string, bool> &handled_attributes;
-    bool has_min, has_max;
-    int64_t min, max;
+    limits_t limits;
   };
 
   typedef std::function<void(pugi::xml_node &, EbmlElement &)> value_formatter_t;
@@ -169,6 +176,7 @@ protected:
   std::map<std::string, std::string> m_debug_to_tag_name_map, m_tag_to_debug_name_map;
   std::map<std::string, value_formatter_t> m_formatter_map;
   std::map<std::string, value_parser_t> m_parser_map;
+  std::map<std::string, limits_t> m_limits;
 
 public:
   ebml_converter_c();

@@ -33,11 +33,22 @@ ebml_chapters_converter_c::~ebml_chapters_converter_c() {
 
 void
 ebml_chapters_converter_c::setup_maps() {
-  m_formatter_map["ChapterTimeStart"] = format_timecode;
-  m_formatter_map["ChapterTimeEnd"]   = format_timecode;
+  m_formatter_map["ChapterTimeStart"]  = format_timecode;
+  m_formatter_map["ChapterTimeEnd"]    = format_timecode;
 
-  m_parser_map["ChapterTimeStart"]    = parse_timecode;
-  m_parser_map["ChapterTimeEnd"]      = parse_timecode;
+  m_parser_map["ChapterTimeStart"]     = parse_timecode;
+  m_parser_map["ChapterTimeEnd"]       = parse_timecode;
+
+  m_limits["EditionUID"]               = limits_t{ true, false, 1, 0 };
+  m_limits["EditionFlagHidden"]        = limits_t{ true, true,  0, 1 };
+  m_limits["EditionFlagDefault"]       = limits_t{ true, true,  0, 1 };
+  m_limits["EditionFlagOrdered"]       = limits_t{ true, true,  0, 1 };
+  m_limits["ChapterFlagHidden"]        = limits_t{ true, true,  0, 1 };
+  m_limits["ChapterFlagEnabled"]       = limits_t{ true, true,  0, 1 };
+  m_limits["ChapterUID"]               = limits_t{ true, false, 1, 0 };
+  m_limits["ChapterSegmentUID"]        = limits_t{ true, false, 1, 0 };
+  m_limits["ChapterSegmentEditionUID"] = limits_t{ true, false, 1, 0 };
+  m_limits["ChapterTrackNumber"]       = limits_t{ true, false, 1, 0 };
 }
 
 void

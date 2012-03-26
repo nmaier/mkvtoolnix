@@ -26,6 +26,25 @@
 
 namespace mtx { namespace xml {
 
+ebml_converter_c::limits_t::limits_t()
+  : has_min{false}
+  , has_max{false}
+  , min{0}
+  , max{0}
+{
+}
+
+ebml_converter_c::limits_t::limits_t(bool p_has_min,
+                                     bool p_has_max,
+                                     int64_t p_min,
+                                     int64_t p_max)
+  : has_min{p_has_min}
+  , has_max{p_has_max}
+  , min{p_min}
+  , max{p_max}
+{
+}
+
 ebml_converter_c::ebml_converter_c()
 {
 }
@@ -156,10 +175,10 @@ ebml_converter_c::parse_uint(parser_context_t &ctx) {
   if (!::parse_uint(strip_copy(ctx.content), value))
     throw malformed_data_x{ ctx.name, ctx.node.offset_debug(), Y("An unsigned integer was expected.") };
 
-  if (ctx.has_min && (value < static_cast<uint64_t>(ctx.min)))
-    throw out_of_range_x{ ctx.name, ctx.node.offset_debug(), (boost::format(Y("Minimum allowed value: %1%, actual value: %2%")) % ctx.min % value).str() };
-  if (ctx.has_max && (value > static_cast<uint64_t>(ctx.max)))
-    throw out_of_range_x{ ctx.name, ctx.node.offset_debug(), (boost::format(Y("Maximum allowed value: %1%, actual value: %2%")) % ctx.max % value).str() };
+  if (ctx.limits.has_min && (value < static_cast<uint64_t>(ctx.limits.min)))
+    throw out_of_range_x{ ctx.name, ctx.node.offset_debug(), (boost::format(Y("Minimum allowed value: %1%, actual value: %2%")) % ctx.limits.min % value).str() };
+  if (ctx.limits.has_max && (value > static_cast<uint64_t>(ctx.limits.max)))
+    throw out_of_range_x{ ctx.name, ctx.node.offset_debug(), (boost::format(Y("Maximum allowed value: %1%, actual value: %2%")) % ctx.limits.max % value).str() };
 
   static_cast<EbmlUInteger &>(ctx.e) = value;
 }
@@ -170,10 +189,10 @@ ebml_converter_c::parse_int(parser_context_t &ctx) {
   if (!::parse_int(strip_copy(ctx.content), value))
     throw malformed_data_x{ ctx.name, ctx.node.offset_debug() };
 
-  if (ctx.has_min && (value < ctx.min))
-    throw out_of_range_x{ ctx.name, ctx.node.offset_debug(), (boost::format(Y("Minimum allowed value: %1%, actual value: %2%")) % ctx.min % value).str() };
-  if (ctx.has_max && (value > ctx.max))
-    throw out_of_range_x{ ctx.name, ctx.node.offset_debug(), (boost::format(Y("Maximum allowed value: %1%, actual value: %2%")) % ctx.max % value).str() };
+  if (ctx.limits.has_min && (value < ctx.limits.min))
+    throw out_of_range_x{ ctx.name, ctx.node.offset_debug(), (boost::format(Y("Minimum allowed value: %1%, actual value: %2%")) % ctx.limits.min % value).str() };
+  if (ctx.limits.has_max && (value > ctx.limits.max))
+    throw out_of_range_x{ ctx.name, ctx.node.offset_debug(), (boost::format(Y("Maximum allowed value: %1%, actual value: %2%")) % ctx.limits.max % value).str() };
 
   static_cast<EbmlSInteger &>(ctx.e) = value;
 }
@@ -201,10 +220,10 @@ ebml_converter_c::parse_timecode(parser_context_t &ctx) {
     throw malformed_data_x{ ctx.name, ctx.node.offset_debug(), details };
   }
 
-  if (ctx.has_min && (value < ctx.min))
-    throw out_of_range_x{ ctx.name, ctx.node.offset_debug(), (boost::format(Y("Minimum allowed value: %1%, actual value: %2%")) % ctx.min % value).str() };
-  if (ctx.has_max && (value > ctx.max))
-    throw out_of_range_x{ ctx.name, ctx.node.offset_debug(), (boost::format(Y("Maximum allowed value: %1%, actual value: %2%")) % ctx.max % value).str() };
+  if (ctx.limits.has_min && (value < ctx.limits.min))
+    throw out_of_range_x{ ctx.name, ctx.node.offset_debug(), (boost::format(Y("Minimum allowed value: %1%, actual value: %2%")) % ctx.limits.min % value).str() };
+  if (ctx.limits.has_max && (value > ctx.limits.max))
+    throw out_of_range_x{ ctx.name, ctx.node.offset_debug(), (boost::format(Y("Maximum allowed value: %1%, actual value: %2%")) % ctx.limits.max % value).str() };
 
   static_cast<EbmlUInteger &>(ctx.e) = value;
 }
@@ -212,10 +231,10 @@ ebml_converter_c::parse_timecode(parser_context_t &ctx) {
 void
 ebml_converter_c::parse_binary(parser_context_t &ctx) {
   auto test_min_max = [&](std::string const &content) {
-    if (ctx.has_min && (content.length() < static_cast<size_t>(ctx.min)))
-      throw out_of_range_x{ ctx.name, ctx.node.offset_debug(), (boost::format(Y("Minimum allowed length: %1%, actual length: %2%")) % ctx.min % content.length()).str() };
-    if (ctx.has_max && (content.length() > static_cast<size_t>(ctx.max)))
-      throw out_of_range_x{ ctx.name, ctx.node.offset_debug(), (boost::format(Y("Maximum allowed length: %1%, actual length: %2%")) % ctx.max % content.length()).str() };
+    if (ctx.limits.has_min && (content.length() < static_cast<size_t>(ctx.limits.min)))
+      throw out_of_range_x{ ctx.name, ctx.node.offset_debug(), (boost::format(Y("Minimum allowed length: %1%, actual length: %2%")) % ctx.limits.min % content.length()).str() };
+    if (ctx.limits.has_max && (content.length() > static_cast<size_t>(ctx.limits.max)))
+      throw out_of_range_x{ ctx.name, ctx.node.offset_debug(), (boost::format(Y("Maximum allowed length: %1%, actual length: %2%")) % ctx.limits.max % content.length()).str() };
   };
 
   ctx.handled_attributes["format"] = true;
@@ -381,8 +400,9 @@ ebml_converter_c::convert_node_or_attribute_to_ebml(EbmlMaster &parent,
   std::string name  = attribute ? attribute.name()  : node.name();
   std::string value = attribute ? attribute.value() : node.child_value();
   auto new_element  = verify_and_create_element(parent, name, node);
+  auto limits       = m_limits.find(name);
 
-  parser_context_t ctx { name, value, *new_element, node, handled_attributes, false, false, 0, 0 };
+  parser_context_t ctx { name, value, *new_element, node, handled_attributes, limits == m_limits.end() ? limits_t{} : limits->second };
 
   if (dynamic_cast<EbmlUInteger *>(new_element))
     parse_value(ctx, parse_uint);
