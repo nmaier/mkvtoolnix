@@ -81,6 +81,9 @@ ebml_tags_converter_c::fix_tag(KaxTag &tag)
   if (!simple)
     throw conversion_x{ Y("<Tag> is missing the <Simple> child.") };
 
+  if (!FindChild<KaxTagName>(simple))
+    throw conversion_x{ Y("<Simple> is missing the <Name> child.") };
+
   auto string = FindChild<KaxTagString>(*simple);
   auto binary = FindChild<KaxTagBinary>(*simple);
   if (string && binary)
