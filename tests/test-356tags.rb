@@ -3,15 +3,16 @@
 # T_356tags
 describe "mkvmerge / XML tags"
 
-source = "data/srt/ven.srt"
+source  = "data/srt/ven.srt"
+invalid = Dir["data/text/tags-invalid-*.xml"]
 
 # Valid files:
-%w{tags-as-tags.xml tags-as-attributes.xml tags-iso-8859-15.xml tags-binary.xml}.each do |tags|
-  test_merge "--tags 0:data/text/#{tags} #{source}"
+(Dir["data/text/tags-*.xml"] - invalid).sort.each do |tags|
+  test_merge "--tags 0:#{tags} #{source}"
 end
 
 # Invalid files:
-Dir["data/text/tags-invalid-*.xml"].sort.each do |tags|
+invalid.sort.each do |tags|
   test tags do
     messages = merge "--tags 0:#{tags} #{source}", :exit_code => 2
     messages.detect { |line| /The\s+XML\s+tag\s+file.*contains\s+an\s+error/i.match line } ? :ok : :bad
