@@ -47,7 +47,7 @@ usf_reader_c::usf_reader_c(const track_info_c &ti,
 void
 usf_reader_c::read_headers() {
   try {
-    auto doc = mtx::xml::load_file(m_in->get_file_name());
+    auto doc = mtx::xml::load_file(m_in->get_file_name(), pugi::parse_default | pugi::parse_declaration | pugi::parse_doctype | pugi::parse_pi | pugi::parse_comments);
 
     parse_metadata(doc);
     parse_subtitles(doc);
