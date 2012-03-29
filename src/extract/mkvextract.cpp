@@ -23,7 +23,6 @@
 #include "common/strings/parsing.h"
 #include "common/translation.h"
 #include "common/version.h"
-#include "common/xml/element_mapping.h"
 #include "extract/extract_cli_parser.h"
 #include "extract/mkvextract.h"
 

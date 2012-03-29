@@ -33,7 +33,6 @@
 #include "common/strings/formatting.h"
 #include "common/translation.h"
 #include "common/wx.h"
-#include "common/xml/element_mapping.h"
 #include "mmg/header_editor/frame.h"
 #include "mmg/mmg_dialog.h"
 #include "mmg/mmg.h"

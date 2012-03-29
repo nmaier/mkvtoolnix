@@ -73,17 +73,17 @@ propedit_cli_parser_c::add_chapters() {
   }
 }
 
-std::map<ebml_type_e, const char *> &
+std::map<property_element_c::ebml_type_e, const char *> &
 propedit_cli_parser_c::get_ebml_type_abbrev_map() {
-  static std::map<ebml_type_e, const char *> s_ebml_type_abbrevs;
+  static std::map<property_element_c::ebml_type_e, const char *> s_ebml_type_abbrevs;
   if (s_ebml_type_abbrevs.empty()) {
-    s_ebml_type_abbrevs[EBMLT_INT]     = "SI";
-    s_ebml_type_abbrevs[EBMLT_UINT]    = "UI";
-    s_ebml_type_abbrevs[EBMLT_BOOL]    = "B";
-    s_ebml_type_abbrevs[EBMLT_STRING]  = "S";
-    s_ebml_type_abbrevs[EBMLT_USTRING] = "US";
-    s_ebml_type_abbrevs[EBMLT_BINARY]  = "X";
-    s_ebml_type_abbrevs[EBMLT_FLOAT]   = "FP";
+    s_ebml_type_abbrevs[property_element_c::EBMLT_INT]     = "SI";
+    s_ebml_type_abbrevs[property_element_c::EBMLT_UINT]    = "UI";
+    s_ebml_type_abbrevs[property_element_c::EBMLT_BOOL]    = "B";
+    s_ebml_type_abbrevs[property_element_c::EBMLT_STRING]  = "S";
+    s_ebml_type_abbrevs[property_element_c::EBMLT_USTRING] = "US";
+    s_ebml_type_abbrevs[property_element_c::EBMLT_BINARY]  = "X";
+    s_ebml_type_abbrevs[property_element_c::EBMLT_FLOAT]   = "FP";
   }
 
   return s_ebml_type_abbrevs;
@@ -113,7 +113,7 @@ void
 propedit_cli_parser_c::list_property_names_for_table(const std::vector<property_element_c> &table,
                                                      const std::string &title,
                                                      const std::string &edit_spec) {
-  std::map<ebml_type_e, const char *> &ebml_type_map = get_ebml_type_abbrev_map();
+  auto &ebml_type_map = get_ebml_type_abbrev_map();
 
   auto max_name_len = boost::accumulate(table, 0u, [](size_t a, const property_element_c &e) { return std::max(a, e.m_name.length()); });
 
@@ -199,4 +199,3 @@ propedit_cli_parser_c::run() {
 
   return m_options;
 }
-

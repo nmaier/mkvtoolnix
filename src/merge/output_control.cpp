@@ -70,7 +70,6 @@
 #include "common/translation.h"
 #include "common/unique_numbers.h"
 #include "common/version.h"
-#include "common/xml/element_mapping.h"
 #include "input/r_aac.h"
 #include "input/r_aac_adif.h"
 #include "input/r_ac3.h"

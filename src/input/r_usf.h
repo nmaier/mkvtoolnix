@@ -16,9 +16,6 @@
 
 #include "common/common_pch.h"
 
-#include <expat.h>
-
-#include "common/mm_io.h"
 #include "merge/pr_generic.h"
 
 struct usf_entry_t {

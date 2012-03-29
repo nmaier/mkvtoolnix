@@ -32,7 +32,6 @@
 #include "common/ebml.h"
 #include "common/property_element.h"
 #include "common/translation.h"
-#include "common/xml/element_mapping.h"
 
 std::map<uint32_t, std::vector<property_element_c> > property_element_c::s_properties;
 std::map<uint32_t, std::vector<property_element_c> > property_element_c::s_composed_properties;
@@ -76,7 +75,7 @@ property_element_c::derive_type() {
          : nullptr != dynamic_cast<EbmlString *>(e)        ? EBMLT_STRING
          : nullptr != dynamic_cast<EbmlUInteger *>(e)      ? EBMLT_UINT
          : nullptr != dynamic_cast<EbmlUnicodeString *>(e) ? EBMLT_USTRING
-         :                                                EBMLT_SKIP;
+         :                                                   EBMLT_SKIP;
 
   if (EBMLT_SKIP == m_type)
     mxerror(boost::format("property_element_c::derive_type(): programming error: unknown type for EBML ID %|1$08x|\n") % m_callbacks->GlobalId.Value);

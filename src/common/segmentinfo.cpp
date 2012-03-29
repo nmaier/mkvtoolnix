@@ -25,7 +25,6 @@
 #include "common/hacks.h"
 #include "common/segmentinfo.h"
 #include "common/version.h"
-#include "common/xml/element_parser.h"
 
 using namespace libmatroska;
 

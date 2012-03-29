@@ -39,7 +39,7 @@ protected:
   void list_property_names();
   void list_property_names_for_table(const std::vector<property_element_c> &table, const std::string &title, const std::string &edit_spec);
 
-  std::map<ebml_type_e, const char *> &get_ebml_type_abbrev_map();
+  std::map<property_element_c::ebml_type_e, const char *> &get_ebml_type_abbrev_map();
 };
 
 #endif // __PROPEDIT_PROPEDIT_CLI_PARSER_H

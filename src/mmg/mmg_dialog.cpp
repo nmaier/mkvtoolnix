@@ -42,7 +42,6 @@
 #include "common/translation.h"
 #include "common/version.h"
 #include "common/wx.h"
-#include "common/xml/element_mapping.h"
 #include "merge/mkvmerge.h"
 #include "mmg/cli_options_dlg.h"
 #include "mmg/header_editor/frame.h"

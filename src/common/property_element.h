@@ -30,12 +30,13 @@
 #include "common/common_pch.h"
 #include "common/ebml.h"
 #include "common/translation.h"
-#include "common/xml/element_mapping.h"
 
 #define NO_CONTAINER EbmlId(static_cast<uint32_t>(0), 0)
 
 class property_element_c {
 public:
+  enum ebml_type_e { EBMLT_SKIP, EBMLT_BOOL, EBMLT_BINARY, EBMLT_FLOAT, EBMLT_INT, EBMLT_UINT, EBMLT_STRING, EBMLT_USTRING };
+
   std::string m_name;
   translatable_string_c m_title, m_description;
 

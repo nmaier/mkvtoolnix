@@ -93,14 +93,14 @@ change_c::lookup_property(std::vector<property_element_c> &table) {
 void
 change_c::parse_value() {
   switch (m_property.m_type) {
-    case EBMLT_STRING:  parse_ascii_string();          break;
-    case EBMLT_USTRING: parse_unicode_string();        break;
-    case EBMLT_UINT:    parse_unsigned_integer();      break;
-    case EBMLT_INT:     parse_signed_integer();        break;
-    case EBMLT_BOOL:    parse_boolean();               break;
-    case EBMLT_BINARY:  parse_binary();                break;
-    case EBMLT_FLOAT:   parse_floating_point_number(); break;
-    default:            assert(false);
+    case property_element_c::EBMLT_STRING:  parse_ascii_string();          break;
+    case property_element_c::EBMLT_USTRING: parse_unicode_string();        break;
+    case property_element_c::EBMLT_UINT:    parse_unsigned_integer();      break;
+    case property_element_c::EBMLT_INT:     parse_signed_integer();        break;
+    case property_element_c::EBMLT_BOOL:    parse_boolean();               break;
+    case property_element_c::EBMLT_BINARY:  parse_binary();                break;
+    case property_element_c::EBMLT_FLOAT:   parse_floating_point_number(); break;
+    default:                                assert(false);
   }
 }
 
@@ -233,14 +233,14 @@ change_c::set_element_at(int idx) {
   EbmlElement *e = (*m_master)[idx];
 
   switch (m_property.m_type) {
-    case EBMLT_STRING:  *static_cast<EbmlString *>(e)        = m_s_value;                                  break;
-    case EBMLT_USTRING: *static_cast<EbmlUnicodeString *>(e) = cstrutf8_to_UTFstring(m_s_value);           break;
-    case EBMLT_UINT:    *static_cast<EbmlUInteger *>(e)      = m_ui_value;                                 break;
-    case EBMLT_INT:     *static_cast<EbmlSInteger *>(e)      = m_si_value;                                 break;
-    case EBMLT_BOOL:    *static_cast<EbmlUInteger *>(e)      = m_b_value ? 1 : 0;                          break;
-    case EBMLT_FLOAT:   *static_cast<EbmlFloat *>(e)         = m_fp_value;                                 break;
-    case EBMLT_BINARY:   static_cast<EbmlBinary *>(e)->CopyBuffer(m_x_value.data(), m_x_value.size() / 8); break;
-    default:            assert(false);
+    case property_element_c::EBMLT_STRING:  *static_cast<EbmlString *>(e)        = m_s_value;                                  break;
+    case property_element_c::EBMLT_USTRING: *static_cast<EbmlUnicodeString *>(e) = cstrutf8_to_UTFstring(m_s_value);           break;
+    case property_element_c::EBMLT_UINT:    *static_cast<EbmlUInteger *>(e)      = m_ui_value;                                 break;
+    case property_element_c::EBMLT_INT:     *static_cast<EbmlSInteger *>(e)      = m_si_value;                                 break;
+    case property_element_c::EBMLT_BOOL:    *static_cast<EbmlUInteger *>(e)      = m_b_value ? 1 : 0;                          break;
+    case property_element_c::EBMLT_FLOAT:   *static_cast<EbmlFloat *>(e)         = m_fp_value;                                 break;
+    case property_element_c::EBMLT_BINARY:   static_cast<EbmlBinary *>(e)->CopyBuffer(m_x_value.data(), m_x_value.size() / 8); break;
+    default:                                 assert(false);
   }
 }
 
