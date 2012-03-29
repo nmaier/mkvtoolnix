@@ -1,5 +1,11 @@
 2012-03-29  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge, mkvextract, mmg: Re-write of the whole XML handling
+	code. It now uses the "pugixml" C++ library instead of the "expat"
+	library. Therefore "expat" is not required for building MKVToolNix
+	anymore. And neither is Boost's "property tree" library. "pugixml"
+	itself is included and not an external requirement either.
+
 	* Build system: removed all files and documentation related to
 	building MKVToolNix with Microsoft's Visual Studio because even
 	the most recent version of Visual C++ does not support the C++11
