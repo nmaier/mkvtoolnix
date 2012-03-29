@@ -360,6 +360,9 @@ ebml_converter_c::to_ebml(std::string const &file_name,
 
   ebml_root->Remove(0);
 
+  if (debugging_requested("ebml_converter"))
+    dump_ebml_elements(master, true, 0);
+
   return ebml_master_cptr{master};
 }
 
