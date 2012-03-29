@@ -15,9 +15,8 @@
 
 #include "common/common_pch.h"
 
-#include "common/xml/element_writer.h"
+#include "common/xml/xml.h"
 #include "extract/xtr_base.h"
-
 
 class xtr_srt_c: public xtr_base_c {
 public:
@@ -85,8 +84,8 @@ private:
       m_text(text), m_start(start), m_end(end) { }
   };
 
-  std::string m_sub_charset, m_codec_private, m_language;
-  std::shared_ptr<xml_formatter_c> m_formatter;
+  std::string m_sub_charset, m_simplified_sub_charset, m_codec_private, m_language;
+  mtx::xml::document_cptr m_doc;
   std::vector<usf_entry_t> m_entries;
 
 public:

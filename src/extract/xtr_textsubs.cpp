@@ -12,7 +12,7 @@
 
 #include "common/common_pch.h"
 
-#include <algorithm>
+#include <sstream>
 
 #include "common/ebml.h"
 #include "common/matroska.h"
@@ -281,6 +281,8 @@ xtr_usf_c::xtr_usf_c(const std::string &codec_id,
 {
   if (m_sub_charset.empty())
     m_sub_charset = "UTF-8";
+
+  m_simplified_sub_charset = boost::regex_replace(balg::to_lower_copy(m_sub_charset), boost::regex("[^a-z0-9]+", boost::regex::perl), "");
 }
 
 void
@@ -313,30 +315,51 @@ xtr_usf_c::create_file(xtr_base_c *master,
                               "being written to the same file, and their CodecPrivate data (the USF styles etc) do not match.\n"))
               % m_tid % m_codec_id % m_file_name % master->m_tid % master->m_codec_id);
 
-    m_formatter = usf_master->m_formatter;
-    m_master    = usf_master;
+    m_doc    = usf_master->m_doc;
+    m_master = usf_master;
 
   } else {
     try {
-      std::string end_tag           = "</USFSubtitles>";
-      std::string codec_private_mod = m_codec_private;
-      int end_tag_pos               = codec_private_mod.find(end_tag);
-      if (0 <= end_tag_pos)
-        codec_private_mod.erase(end_tag_pos, end_tag.length());
+      m_out = mm_file_io_c::open(m_file_name, MODE_CREATE);
+      m_doc = std::make_shared<pugi::xml_document>();
 
-      m_out       = mm_file_io_c::open(m_file_name, MODE_WRITE);
-      m_formatter = std::make_shared<xml_formatter_c>(*m_out, m_sub_charset);
+      std::stringstream codec_private{m_codec_private};
+      auto result = m_doc->load(codec_private, pugi::parse_default | pugi::parse_declaration | pugi::parse_doctype | pugi::parse_pi | pugi::parse_comments);
+      if (!result)
+        throw mtx::xml::xml_parser_x{result};
 
-      m_formatter->set_doctype("USFSubtitles", "USFV100.dtd");
-      m_formatter->set_stylesheet("text/xsl", "USFV100.xsl");
-      m_formatter->write_header();
-      m_formatter->format(codec_private_mod + "\n");
+      pugi::xml_node doctype_node, declaration_node, stylesheet_node;
+      for (auto child : *m_doc)
+        if (child.type() == pugi::node_declaration)
+          declaration_node = child;
+
+        else if (child.type() == pugi::node_doctype)
+          doctype_node = child;
+
+        else if ((child.type() == pugi::node_pi) && (std::string{child.name()} == "xml-stylesheet"))
+          stylesheet_node = child;
+
+      if (!declaration_node)
+        declaration_node = m_doc->prepend_child(pugi::node_declaration);
+
+      if (!doctype_node)
+        doctype_node = m_doc->insert_child_after(pugi::node_doctype, declaration_node);
+
+      if (!stylesheet_node)
+        stylesheet_node = m_doc->insert_child_after(pugi::node_pi, declaration_node);
+
+      if (!balg::starts_with(m_simplified_sub_charset, "utf"))
+        declaration_node.append_attribute("encoding").set_value(m_sub_charset.c_str());
+      doctype_node.set_value("USFSubtitles SYSTEM \"USFV100.dtd\"");
+      stylesheet_node.set_name("xml-stylesheet");
+      stylesheet_node.append_attribute("type").set_value("text/xsl");
+      stylesheet_node.append_attribute("href").set_value("USFV100.xsl");
 
     } catch (mtx::mm_io::exception &) {
       mxerror(boost::format(Y("Failed to create the file '%1%': %2% (%3%)\n")) % m_file_name % errno % strerror(errno));
 
-    } catch (mtx::xml::formatter_x &error) {
-      mxerror(boost::format(Y("Failed to parse the USF codec private data for track %1%: %2%\n")) % m_tid % error.error());
+    } catch (mtx::xml::exception &ex) {
+      mxerror(boost::format(Y("Failed to parse the USF codec private data for track %1%: %2%\n")) % m_tid % ex.what());
     }
   }
 }
@@ -360,32 +383,58 @@ xtr_usf_c::handle_frame(memory_cptr &frame,
 
 void
 xtr_usf_c::finish_track() {
-  try {
-    m_formatter->format((boost::format("<subtitles>\n<language code=\"%1%\"/>\n") % m_language).str());
+  auto subtitles = m_doc->document_element().append_child("subtitles");
+  subtitles.append_child("language").append_attribute("code").set_value(m_language.c_str());
 
-    for (auto &entry : m_entries) {
-      std::string text = entry.m_text;
-      strip(text, true);
-      m_formatter->format((boost::format("<subtitle start=\"%1%\" stop=\"%2%\">")
-                           % format_timecode(entry.m_start * 1000000, 3) % format_timecode(entry.m_end * 1000000, 3)).str());
-      m_formatter->format_fixed(text);
-      m_formatter->format("</subtitle>\n");
+  for (auto &entry : m_entries) {
+    std::string text = std::string{"<subtitle>"} + entry.m_text + "</subtitle>";
+    strip(text, true);
+
+    std::stringstream text_in(text);
+    pugi::xml_document subtitle_doc;
+    if (!subtitle_doc.load(text_in, pugi::parse_default | pugi::parse_declaration | pugi::parse_doctype | pugi::parse_pi | pugi::parse_comments)) {
+      mxwarn(boost::format(Y("Track %1%: An USF subtitle entry starting at timecode %2% is not well-formed XML and will be skipped.\n")) % m_tid % format_timecode(entry.m_start * 1000000, 3));
+      continue;
     }
-    m_formatter->format("</subtitles>\n");
 
-  } catch (mtx::xml::formatter_x &error) {
-    mxerror(boost::format(Y("Failed to parse an USF subtitle entry for track %1%: %2%\n")) % m_tid % error.error());
+    auto subtitle = subtitles.append_child("subtitle");
+    subtitle.append_attribute("start").set_value(format_timecode(entry.m_start * 1000000, 3).c_str());
+    subtitle.append_attribute("stop"). set_value(format_timecode(entry.m_end   * 1000000, 3).c_str());
+
+    for (auto child : subtitle_doc.document_element())
+      subtitle.append_copy(child);
   }
 }
 
 void
 xtr_usf_c::finish_file() {
-  try {
-    if (nullptr == m_master) {
-      m_formatter->format("</USFSubtitles>");
-      m_out->puts("\n");
-    }
-  } catch (mtx::xml::formatter_x &error) {
-    mxerror(boost::format(Y("Failed to parse the USF end tag for track %1%: %2%\n")) % m_tid % error.error());
-  }
+  if (nullptr != m_master)
+    return;
+
+  auto is_utf   = true;
+  auto encoding = pugi::encoding_utf8;
+
+  if (m_simplified_sub_charset == "utf8")
+    ;
+  else if (m_simplified_sub_charset == "utf16le")
+    encoding = pugi::encoding_utf16_le;
+  else if (m_simplified_sub_charset == "utf16be")
+    encoding = pugi::encoding_utf16_be;
+  else if (m_simplified_sub_charset == "utf16")
+    encoding = pugi::encoding_utf16;
+
+  else if (m_simplified_sub_charset == "utf32le")
+    encoding = pugi::encoding_utf32_le;
+  else if (m_simplified_sub_charset == "utf32be")
+    encoding = pugi::encoding_utf32_be;
+  else if (m_simplified_sub_charset == "utf32")
+    encoding = pugi::encoding_utf32;
+
+  else
+    is_utf = false;
+
+  std::stringstream out;
+  m_doc->save(out, "  ", pugi::format_default | (is_utf ? pugi::format_write_bom : 0), encoding);
+
+  m_out->puts(is_utf ? out.str() : charset_converter_c::init(m_sub_charset)->native(out.str()));
 }
