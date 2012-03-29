@@ -129,41 +129,4 @@ private:
   void handle_xml_encoding(std::string &line);
 };
 
-struct parser_data_t {
-public:
-  XML_Parser parser;
-
-  std::string file_name, parser_name;
-  const parser_element_t *mapping;
-
-  int depth, skip_depth;
-  bool done_reading, data_allowed;
-
-  std::string bin, format;
-
-  std::vector<EbmlElement *> parents;
-  std::vector<int> parent_idxs;
-
-  EbmlMaster *root_element;
-public:
-  parser_data_t();
-};
-typedef std::shared_ptr<parser_data_t> parser_data_cptr;
-
-#define CPDATA static_cast<parser_data_t *>(pdata)
-
-#define xmlp_pelt  static_cast<parser_data_t *>(pdata)->parents.back()
-#define xmlp_pname xmlp_parent_name(static_cast<parser_data_t *>(pdata), xmlp_pelt)
-
-EbmlMaster * parse_xml_elements(const char *parser_name, const parser_element_t *mapping, mm_text_io_c *in);
-
-const char *xmlp_parent_name(parser_data_t *pdata, EbmlElement *e);
-
-void xmlp_error(parser_data_t *pdata, const std::string &message);
-inline void
-xmlp_error(parser_data_t *pdata,
-           const boost::format &format) {
-  xmlp_error(pdata, format.str());
-}
-
 #endif

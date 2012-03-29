@@ -79,7 +79,8 @@
 #include "common/strings/formatting.h"
 #include "common/translation.h"
 #include "common/version.h"
-#include "common/xml/element_mapping.h"
+#include "common/xml/ebml_chapters_converter.h"
+#include "common/xml/ebml_tags_converter.h"
 #include "info/mkvinfo.h"
 #include "info/info_cli_parser.h"
 
@@ -1750,60 +1751,38 @@ void
 handle_elements_rec(EbmlStream *es,
                     int level,
                     EbmlElement *e,
-                    const parser_element_t *mapping) {
+                    mtx::xml::ebml_converter_c const &converter) {
   static boost::format s_bf_handle_elements_rec("%1%: %2%");
+  static std::vector<std::string> const s_output_as_timecode{ "ChapterTimeStart", "ChapterTimeEnd" };
 
-  bool found = false;
-  int elt_idx;
-  for (elt_idx = 0; nullptr != mapping[elt_idx].name; ++elt_idx)
-    if (EbmlId(*e) == mapping[elt_idx].id) {
-      found = true;
-      break;
-    }
+  std::string elt_name = converter.get_tag_name(*e);
 
-  if (!found) {
-    show_unknown_element(e, level);
-    return;
-  }
+  if (dynamic_cast<EbmlMaster *>(e)) {
+    show_element(e, level, elt_name);
+    auto m = static_cast<EbmlMaster *>(e);
+    for (auto child : *m)
+      handle_elements_rec(es, level + 1, child, converter);
 
-  std::string elt_name = mapping[elt_idx].name;
-  EbmlMaster *m;
+  } else if (dynamic_cast<EbmlUInteger *>(e)) {
+    if (brng::find(s_output_as_timecode, elt_name) != s_output_as_timecode.end())
+      show_element(e, level, s_bf_handle_elements_rec % elt_name % format_timecode(uint64(*static_cast<EbmlUInteger *>(e))));
+    else
+      show_element(e, level, s_bf_handle_elements_rec % elt_name % uint64(*static_cast<EbmlUInteger *>(e)));
 
-  switch (mapping[elt_idx].type) {
-    case EBMLT_MASTER:
-      show_element(e, level, elt_name);
-      m = dynamic_cast<EbmlMaster *>(e);
-      assert(m != nullptr);
+  } else if (dynamic_cast<EbmlSInteger *>(e))
+    show_element(e, level, s_bf_handle_elements_rec % elt_name % int64(*static_cast<EbmlSInteger *>(e)));
 
-      size_t i;
-      for (i = 0; m->ListSize() > i; ++i)
-        handle_elements_rec(es, level + 1, (*m)[i], mapping);
-      break;
+  else if (dynamic_cast<EbmlString *>(e))
+    show_element(e, level, s_bf_handle_elements_rec % elt_name % std::string(*static_cast<EbmlString *>(e)));
 
-    case EBMLT_UINT:
-    case EBMLT_BOOL:
-      show_element(e, level, s_bf_handle_elements_rec % elt_name % uint64(*dynamic_cast<EbmlUInteger *>(e)));
-      break;
+  else if (dynamic_cast<EbmlUnicodeString *>(e))
+    show_element(e, level, s_bf_handle_elements_rec % elt_name % UTF2STR(UTFstring(*static_cast<EbmlUnicodeString *>(e)).c_str()));
 
-    case EBMLT_STRING:
-      show_element(e, level, s_bf_handle_elements_rec % elt_name % std::string(*dynamic_cast<EbmlString *>(e)));
-      break;
+  else if (dynamic_cast<EbmlBinary *>(e))
+    show_element(e, level, s_bf_handle_elements_rec % elt_name % format_binary(*static_cast<EbmlBinary *>(e)));
 
-    case EBMLT_USTRING:
-      show_element(e, level, s_bf_handle_elements_rec % elt_name % UTF2STR(UTFstring(*static_cast<EbmlUnicodeString *>(e)).c_str()));
-      break;
-
-    case EBMLT_TIME:
-      show_element(e, level, s_bf_handle_elements_rec % elt_name % format_timecode(uint64(*dynamic_cast<EbmlUInteger *>(e))));
-      break;
-
-    case EBMLT_BINARY:
-      show_element(e, level, s_bf_handle_elements_rec % elt_name % format_binary(*static_cast<EbmlBinary *>(e)));
-      break;
-
-    default:
-      assert(false);
-  }
+  else
+    assert(false);
 }
 
 void
@@ -1818,9 +1797,10 @@ handle_chapters(EbmlStream *&es,
   EbmlElement *element_found = nullptr;
   read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, element_found);
 
+  mtx::xml::ebml_chapters_converter_c converter;
   size_t i1;
   for (i1 = 0; i1 < m1->ListSize(); i1++)
-    handle_elements_rec(es, 2, (*m1)[i1], chapter_elements);
+    handle_elements_rec(es, 2, (*m1)[i1], converter);
 
   l2 = element_found;
 }
@@ -1837,9 +1817,10 @@ handle_tags(EbmlStream *&es,
   EbmlElement *element_found = nullptr;
   read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, element_found);
 
+  mtx::xml::ebml_tags_converter_c converter;
   size_t i1;
   for (i1 = 0; i1 < m1->ListSize(); i1++)
-    handle_elements_rec(es, 2, (*m1)[i1], tag_elements);
+    handle_elements_rec(es, 2, (*m1)[i1], converter);
 
   l2 = element_found;
 }

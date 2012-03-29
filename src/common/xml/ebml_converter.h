@@ -186,6 +186,9 @@ public:
   document_cptr to_xml(EbmlElement &e, document_cptr const &destination = document_cptr{}) const;
   ebml_master_cptr to_ebml(std::string const &file_name, std::string const &required_root_name);
 
+  std::string get_tag_name(EbmlElement &e) const;
+  std::string get_debug_name(std::string const &tag_name) const;
+
 public:
   static void format_uint(pugi::xml_node &node, EbmlElement &e);
   static void format_int(pugi::xml_node &node, EbmlElement &e);
@@ -215,9 +218,6 @@ protected:
 
   virtual void fix_xml(document_cptr &doc) const;
   virtual void fix_ebml(EbmlMaster &root) const;
-
-  std::string get_tag_name(EbmlElement &e) const;
-  std::string get_debug_name(std::string const &tag_name) const;
 
   void reverse_debug_to_tag_name_map();
 
