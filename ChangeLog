@@ -1,5 +1,10 @@
 2012-03-29  Moritz Bunkus  <moritz@bunkus.org>
 
+	* Build system: removed all files and documentation related to
+	building MKVToolNix with Microsoft's Visual Studio because even
+	the most recent version of Visual C++ does not support the C++11
+	features required for MKVToolNix.
+
 	* mkvmerge, mkvextract: removal: Removed support for the
 	CorePicture file format. It was mostly unused and relied on old
 	code that will be removed soon.
