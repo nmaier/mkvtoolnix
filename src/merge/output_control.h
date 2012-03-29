@@ -21,6 +21,7 @@
 
 #include "common/bitvalue.h"
 #include "common/file_types.h"
+#include "common/segmentinfo.h"
 #include "merge/mkvmerge.h"
 #include "merge/pr_generic.h"
 
@@ -170,7 +171,7 @@ extern bitvalue_cptr g_seguid_link_previous, g_seguid_link_next;
 extern std::deque<bitvalue_cptr> g_forced_seguids;
 extern family_uids_c g_segfamily_uids;
 
-extern KaxInfo *g_kax_info_chap;
+extern kax_info_cptr g_kax_info_chap;
 
 extern bool g_write_meta_seek_for_clusters;
 

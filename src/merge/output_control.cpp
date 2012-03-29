@@ -134,7 +134,7 @@ family_uids_c g_segfamily_uids;
 int64_t g_attachment_sizes_first            = 0;
 int64_t g_attachment_sizes_others           = 0;
 
-KaxInfo *g_kax_info_chap                    = nullptr;
+kax_info_cptr g_kax_info_chap;
 
 // Variables set by the command line parser.
 std::string g_outfile;
@@ -732,12 +732,12 @@ render_headers(mm_io_c *out) {
       }
 
       // Set the chaptertranslate elements
-      if (nullptr != g_kax_info_chap) {
+      if (g_kax_info_chap) {
         // copy the KaxChapterTranslates in the current KaxInfo
-        KaxChapterTranslate *chapter_translate = FINDFIRST(g_kax_info_chap, KaxChapterTranslate);
+        KaxChapterTranslate *chapter_translate = FINDFIRST(g_kax_info_chap.get(), KaxChapterTranslate);
         while (nullptr != chapter_translate) {
           s_kax_infos->PushElement(*new KaxChapterTranslate(*chapter_translate));
-          chapter_translate = FINDNEXT(g_kax_info_chap, KaxChapterTranslate, chapter_translate);
+          chapter_translate = FINDNEXT(g_kax_info_chap.get(), KaxChapterTranslate, chapter_translate);
         }
       }
 
@@ -2042,8 +2042,7 @@ cleanup() {
   delete s_kax_as;
   s_kax_as = nullptr;
 
-  delete g_kax_info_chap;
-  g_kax_info_chap = nullptr;
+  g_kax_info_chap.reset();
 
   g_forced_seguids.clear();
 

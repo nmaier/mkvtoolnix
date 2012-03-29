@@ -57,6 +57,7 @@
 #include "common/unique_numbers.h"
 #include "common/version.h"
 #include "common/webm.h"
+#include "common/xml/ebml_segmentinfo_converter.h"
 #include "common/xml/ebml_tags_converter.h"
 #include "merge/cluster_helper.h"
 #include "merge/mkvmerge.h"
@@ -344,21 +345,21 @@ guess_mime_type_and_report(std::string file_name) {
 static void
 handle_segmentinfo() {
   // segment families
-  KaxSegmentFamily *family = FINDFIRST(g_kax_info_chap, KaxSegmentFamily);
+  KaxSegmentFamily *family = FINDFIRST(g_kax_info_chap.get(), KaxSegmentFamily);
   while (nullptr != family) {
     g_segfamily_uids.add_family_uid(*family);
-    family = FINDNEXT(g_kax_info_chap, KaxSegmentFamily, family);
+    family = FINDNEXT(g_kax_info_chap.get(), KaxSegmentFamily, family);
   }
 
-  EbmlBinary *uid = FINDFIRST(g_kax_info_chap, KaxSegmentUID);
+  EbmlBinary *uid = FINDFIRST(g_kax_info_chap.get(), KaxSegmentUID);
   if (nullptr != uid)
     g_forced_seguids.push_back(bitvalue_cptr(new bitvalue_c(*uid)));
 
-  uid = FINDFIRST(g_kax_info_chap, KaxNextUID);
+  uid = FINDFIRST(g_kax_info_chap.get(), KaxNextUID);
   if (nullptr != uid)
     g_seguid_link_next = bitvalue_cptr(new bitvalue_c(*uid));
 
-  uid = FINDFIRST(g_kax_info_chap, KaxPrevUID);
+  uid = FINDFIRST(g_kax_info_chap.get(), KaxPrevUID);
   if (nullptr != uid)
     g_seguid_link_previous = bitvalue_cptr(new bitvalue_c(*uid));
 }
@@ -1471,7 +1472,7 @@ parse_arg_segmentinfo(const std::string &param,
     mxerror(boost::format(Y("Only one segment info file allowed in '%1% %2%'.\n")) % param % arg);
 
   g_segmentinfo_file_name = arg;
-  g_kax_info_chap         = parse_segmentinfo(arg, false);
+  g_kax_info_chap         = mtx::xml::ebml_segmentinfo_converter_c::parse_file(arg);
 
   handle_segmentinfo();
 }

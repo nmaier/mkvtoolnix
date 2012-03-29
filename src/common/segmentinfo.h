@@ -24,11 +24,8 @@
 using namespace libebml;
 using namespace libmatroska;
 
-KaxInfo *parse_segmentinfo(const std::string &file_name, bool exception_on_error = false);
-
-KaxInfo *parse_xml_segmentinfo(mm_text_io_c *in, bool exception_on_error = false);
+typedef std::shared_ptr<KaxInfo> kax_info_cptr;
 
 void fix_mandatory_segmentinfo_elements(EbmlElement *e);
 
 #endif // __MTX_COMMON_SEGMENTINFO_H
-
