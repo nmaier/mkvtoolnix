@@ -141,6 +141,10 @@
        <abbrev>UID</abbrev>, previous and next segment <abbrev>UID</abbrev> elements. An example file and a <abbrev>DTD</abbrev> are included
        in the MKVToolNix distribution.
       </para>
+
+      <para>
+       See the section about <link linkend="mkvmerge.segmentinfo">segment info XML files</link> below for details.
+      </para>
      </listitem>
     </varlistentry>
 
@@ -343,7 +347,7 @@
      </listitem>
     </varlistentry>
 
-    <varlistentry>
+    <varlistentry id="mkvmerge.description.timecode_scale">
      <term><option>--timecode-scale</option> <parameter>factor</parameter></term>
      <listitem>
       <para>
@@ -2005,7 +2009,7 @@ sound.ogg</programlisting>
    chapter format which supports all of &matroska;'s chapter functionality.
   </para>
 
-  <refsect2>
+  <refsect2 id="mkvmerge.chapters.simple">
    <title>The simple chapter format</title>
 
    <para>
@@ -2032,7 +2036,7 @@ CHAPTER03NAME=Baby rocks the house</screen>
    </para>
   </refsect2>
 
-  <refsect2>
+  <refsect2 id="mkvmerge.chapters.xml">
    <title>The &xml; based chapter format</title>
    <para>
     The &xml; based chapter format looks like this example:
@@ -2074,6 +2078,39 @@ CHAPTER03NAME=Baby rocks the house</screen>
    <para>
     The mkvtoolnix distribution contains some sample files in the <filename>doc</filename> subdirectory which can be used as a basis.
    </para>
+
+   <para>
+    The following lists the supported XML tags, their data types and, where appropriate, the valid range for their values:
+   </para>
+
+   <screen>Chapters (master)
+  EditionEntry (master)
+    EditionUID (unsigned integer, valid range: 1 &lt;= value)
+    EditionFlagHidden (unsigned integer, valid range: 0 &lt;= value &lt;= 1)
+    EditionFlagDefault (unsigned integer, valid range: 0 &lt;= value &lt;= 1)
+    EditionFlagOrdered (unsigned integer, valid range: 0 &lt;= value &lt;= 1)
+    ChapterAtom (master)
+      ChapterAtom (master)
+      ChapterUID (unsigned integer, valid range: 1 &lt;= value)
+      ChapterTimeStart (unsigned integer)
+      ChapterTimeEnd (unsigned integer)
+      ChapterFlagHidden (unsigned integer, valid range: 0 &lt;= value &lt;= 1)
+      ChapterFlagEnabled (unsigned integer, valid range: 0 &lt;= value &lt;= 1)
+      ChapterSegmentUID (binary, valid range: 1 &lt;= length in bytes)
+      ChapterSegmentEditionUID (unsigned integer, valid range: 1 &lt;= value)
+      ChapterPhysicalEquiv (unsigned integer)
+      ChapterTrack (master)
+        ChapterTrackNumber (unsigned integer, valid range: 1 &lt;= value)
+      ChapterDisplay (master)
+        ChapterString (UTF-8 string)
+        ChapterLanguage (UTF-8 string)
+        ChapterCountry (UTF-8 string)
+      ChapterProcess (master)
+        ChapterProcessCodecID (unsigned integer)
+        ChapterProcessPrivate (binary)
+        ChapterProcessCommand (master)
+          ChapterProcessTime (unsigned integer)
+          ChapterProcessData (binary)</screen>
   </refsect2>
 
   <refsect2>
@@ -2109,7 +2146,7 @@ CHAPTER03NAME=Baby rocks the house</screen>
    </para>
   </refsect2>
 
-  <refsect2>
+  <refsect2 id="mkvmerge.tags.scope">
    <title>Scope of the tags</title>
 
    <para>
@@ -2138,7 +2175,7 @@ CHAPTER03NAME=Baby rocks the house</screen>
    </para>
   </refsect2>
 
-  <refsect2>
+  <refsect2 id="mkvmerge.tags.example">
    <title>Example</title>
    <para>
     Let's say that you want to add tags to a video track read from an <abbrev>AVI</abbrev>. <command>mkvmerge --identify file.avi</command>
@@ -2149,7 +2186,7 @@ CHAPTER03NAME=Baby rocks the house</screen>
    <screen>$ mkvmerge -o file.mkv --tags 0:tags.xml file.avi</screen>
   </refsect2>
 
-  <refsect2>
+  <refsect2 id="mkvmerge.tags.file_format">
    <title>Tag file format</title>
    <para>
     &mkvmerge; supports a &xml; based tag file format. The format is very closely modeled after <ulink
@@ -2171,7 +2208,7 @@ CHAPTER03NAME=Baby rocks the house</screen>
    </itemizedlist>
   </refsect2>
 
-  <refsect2>
+  <refsect2 id="mkvmerge.tags.data_types">
    <title>Data types</title>
    <para>
     The new &matroska; tagging system only knows two data types, a UTF-8 string and a binary type. The first is used for the tag's name and
@@ -2195,6 +2232,69 @@ CHAPTER03NAME=Baby rocks the house</screen>
     support this system anymore these types aren't described here.
    </para>
   </refsect2>
+
+  <refsect2 id="mkvmerge.tags.xml">
+   <title>Known tags for the XML file format</title>
+
+   <para>
+    The following lists the supported XML tags, their data types and, where appropriate, the valid range for their values:
+   </para>
+
+   <screen>Tags (master)
+  Tag (master)
+    Targets (master)
+      TargetTypeValue (unsigned integer)
+      TargetType (UTF-8 string)
+      TrackUID (unsigned integer)
+      EditionUID (unsigned integer)
+      ChapterUID (unsigned integer)
+      AttachmentUID (unsigned integer)
+    Simple (master)
+      Simple (master)
+      Name (UTF-8 string)
+      TagLanguage (UTF-8 string)
+      DefaultLanguage (unsigned integer)
+      String (UTF-8 string)
+      Binary (binary)</screen>
+  </refsect2>
+ </refsect1>
+
+ <refsect1 id="mkvmerge.segmentinfo">
+  <title>The segment info XML files</title>
+
+  <para>
+   With a segment info XML file it is possible to set certain values in the &quot;segment information&quot; header field of a Matroska
+   file. All of these values cannot be set via other command line options.
+  </para>
+
+  <para>
+   Other &quot;segment information&quot; header fields can be set via command line options but not via the XML file. This includes e.g. the
+   <option><link linkend="mkvmerge.description.title">--title</link></option> and the <option><link
+   linkend="mkvmerge.description.timecode_scale">--timecode-scale</link></option> options.
+  </para>
+
+  <para>
+   There are other elements that can be set neither via command line options nor via the XML files. These include the following elements:
+   <varname>DateUTC</varname> (also known as the &quot;muxing date&quot;), <varname>MuxingApp</varname>, <varname>WritingApp</varname>
+   and <varname>Duration</varname>. They're always set by &mkvmerge; itself.
+  </para>
+
+   <para>
+    The following lists the supported XML tags, their data types and, where appropriate, the valid range for their values:
+   </para>
+
+   <screen>Info (master)
+  SegmentUID (binary, valid range: length in bytes == 16)
+  SegmentFilename (UTF-8 string)
+  PreviousSegmentUID (binary, valid range: length in bytes == 16)
+  PreviousSegmentFilename (UTF-8 string)
+  NextSegmentUID (binary, valid range: length in bytes == 16)
+  NextSegmentFilename (UTF-8 string)
+  SegmentFamily (binary, valid range: length in bytes == 16)
+  ChapterTranslate (master)
+    ChapterTranslateEditionUID (unsigned integer)
+    ChapterTranslateCodec (unsigned integer)
+    ChapterTranslateID (binary)</screen>
  </refsect1>
 
  <refsect1 id="mkvmerge.file_layout">

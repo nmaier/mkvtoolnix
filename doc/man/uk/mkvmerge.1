@@ -105,6 +105,10 @@ UID
 elements\&. An example file and a
 DTD
 are included in the MKVToolNix distribution\&.
+.sp
+See the section about
+segment info XML files
+below for details\&.
 .RE
 .PP
 \fB\-\-segment\-uid\fR \fISID1,SID2,\&.\&.\&.\fR
@@ -2192,6 +2196,45 @@ the language and country can be set\&.
 The mkvtoolnix distribution contains some sample files in the
 doc
 subdirectory which can be used as a basis\&.
+.PP
+The following lists the supported XML tags, their data types and, where appropriate, the valid range for their values:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+Chapters (master)
+  EditionEntry (master)
+    EditionUID (unsigned integer, valid range: 1 <= value)
+    EditionFlagHidden (unsigned integer, valid range: 0 <= value <= 1)
+    EditionFlagDefault (unsigned integer, valid range: 0 <= value <= 1)
+    EditionFlagOrdered (unsigned integer, valid range: 0 <= value <= 1)
+    ChapterAtom (master)
+      ChapterAtom (master)
+      ChapterUID (unsigned integer, valid range: 1 <= value)
+      ChapterTimeStart (unsigned integer)
+      ChapterTimeEnd (unsigned integer)
+      ChapterFlagHidden (unsigned integer, valid range: 0 <= value <= 1)
+      ChapterFlagEnabled (unsigned integer, valid range: 0 <= value <= 1)
+      ChapterSegmentUID (binary, valid range: 1 <= length in bytes)
+      ChapterSegmentEditionUID (unsigned integer, valid range: 1 <= value)
+      ChapterPhysicalEquiv (unsigned integer)
+      ChapterTrack (master)
+        ChapterTrackNumber (unsigned integer, valid range: 1 <= value)
+      ChapterDisplay (master)
+        ChapterString (UTF\-8 string)
+        ChapterLanguage (UTF\-8 string)
+        ChapterCountry (UTF\-8 string)
+      ChapterProcess (master)
+        ChapterProcessCodecID (unsigned integer)
+        ChapterProcessPrivate (binary)
+        ChapterProcessCommand (master)
+          ChapterProcessTime (unsigned integer)
+          ChapterProcessData (binary)
+.fi
+.if n \{\
+.RE
+.\}
 .SS "General notes"
 .PP
 When splitting files
@@ -2378,6 +2421,76 @@ Matroska(TM)
 tag specs\&. As
 \fBmkvmerge\fR(1)
 does not support this system anymore these types aren\*(Aqt described here\&.
+.SS "Known tags for the XML file format"
+.PP
+The following lists the supported XML tags, their data types and, where appropriate, the valid range for their values:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+Tags (master)
+  Tag (master)
+    Targets (master)
+      TargetTypeValue (unsigned integer)
+      TargetType (UTF\-8 string)
+      TrackUID (unsigned integer)
+      EditionUID (unsigned integer)
+      ChapterUID (unsigned integer)
+      AttachmentUID (unsigned integer)
+    Simple (master)
+      Simple (master)
+      Name (UTF\-8 string)
+      TagLanguage (UTF\-8 string)
+      DefaultLanguage (unsigned integer)
+      String (UTF\-8 string)
+      Binary (binary)
+.fi
+.if n \{\
+.RE
+.\}
+.SH "The segment info XML files"
+.PP
+With a segment info XML file it is possible to set certain values in the "segment information" header field of a Matroska file\&. All of these values cannot be set via other command line options\&.
+.PP
+Other "segment information" header fields can be set via command line options but not via the XML file\&. This includes e\&.g\&. the
+\fB\-\-title\fR
+and the
+\fB\-\-timecode\-scale\fR
+options\&.
+.PP
+There are other elements that can be set neither via command line options nor via the XML files\&. These include the following elements:
+\fIDateUTC\fR
+(also known as the "muxing date"),
+\fIMuxingApp\fR,
+\fIWritingApp\fR
+and
+\fIDuration\fR\&. They\*(Aqre always set by
+\fBmkvmerge\fR(1)
+itself\&.
+.PP
+The following lists the supported XML tags, their data types and, where appropriate, the valid range for their values:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+Info (master)
+  SegmentUID (binary, valid range: length in bytes == 16)
+  SegmentFilename (UTF\-8 string)
+  PreviousSegmentUID (binary, valid range: length in bytes == 16)
+  PreviousSegmentFilename (UTF\-8 string)
+  NextSegmentUID (binary, valid range: length in bytes == 16)
+  NextSegmentFilename (UTF\-8 string)
+  SegmentFamily (binary, valid range: length in bytes == 16)
+  ChapterTranslate (master)
+    ChapterTranslateEditionUID (unsigned integer)
+    ChapterTranslateCodec (unsigned integer)
+    ChapterTranslateID (binary)
+.fi
+.if n \{\
+.RE
+.\}
 .SH "Matroska(TM) file layout"
 .PP
 The
