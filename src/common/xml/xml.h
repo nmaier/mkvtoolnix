@@ -156,7 +156,7 @@ std::string create_node_name(const char *name, const char **atts);
 
 typedef std::shared_ptr<pugi::xml_document> document_cptr;
 
-document_cptr load_file(std::string const &file_name);
+document_cptr load_file(std::string const &file_name, unsigned int options = pugi::parse_default);
 
 }}
 #endif  // __MTX_COMMON_XML_H

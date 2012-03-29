@@ -55,7 +55,8 @@ create_node_name(const char *name,
 }
 
 document_cptr
-load_file(std::string const &file_name) {
+load_file(std::string const &file_name,
+          unsigned int options) {
   mm_text_io_c in(new mm_file_io_c(file_name, MODE_READ));
   std::string content;
   auto bytes_to_read = in.get_size() - in.get_byte_order_length();
@@ -76,8 +77,8 @@ load_file(std::string const &file_name) {
   }
 
   std::stringstream scontent(content);
-  document_cptr doc(new pugi::xml_document);
-  auto result = doc->load(scontent);
+  auto doc = std::make_shared<pugi::xml_document>();
+  auto result = doc->load(scontent, options);
   if (!result)
     throw xml_parser_x{result};
 
