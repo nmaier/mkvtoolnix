@@ -1,5 +1,9 @@
 2012-03-29  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge, mkvextract: removal: Removed support for the
+	CorePicture file format. It was mostly unused and relied on old
+	code that will be removed soon.
+
 	* documentation: enhancement: mkvmerge's man page has been updated
 	with a list of valid XML tags for the chapters, tags and segment
 	info XML file formats.

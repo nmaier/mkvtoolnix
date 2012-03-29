@@ -64,7 +64,6 @@
 #define MKV_V_REALV4      "V_REAL/RV40"
 #define MKV_V_QUICKTIME   "V_QUICKTIME"
 #define MKV_V_THEORA      "V_THEORA"
-#define MKV_V_COREPICTURE "V_CIPC"
 #define MKV_V_DIRAC       "V_DIRAC"
 #define MKV_V_VP8         "V_VP8"
 

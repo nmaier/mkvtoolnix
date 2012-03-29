@@ -78,7 +78,6 @@
 #include "input/r_avc.h"
 #include "input/r_avi.h"
 #include "input/r_cdxa.h"
-#include "input/r_corepicture.h"
 #include "input/r_dirac.h"
 #include "input/r_dts.h"
 #include "input/r_dv.h"
@@ -462,8 +461,6 @@ get_file_type(filelist_t &file) {
       type = FILE_TYPE_SSA;
     else if (vobsub_reader_c::probe_file(text_io, size))
       type = FILE_TYPE_VOBSUB;
-    else if (corepicture_reader_c::probe_file(text_io, size))
-      type = FILE_TYPE_COREPICTURE;
     else if (usf_reader_c::probe_file(text_io, size))
       type = FILE_TYPE_USF;
 
@@ -1225,9 +1222,6 @@ create_readers() {
           break;
         case FILE_TYPE_USF:
           file.reader = new usf_reader_c(*file.ti, input_file);
-          break;
-        case FILE_TYPE_COREPICTURE:
-          file.reader = new corepicture_reader_c(*file.ti, input_file);
           break;
         case FILE_TYPE_VC1:
           file.reader = new vc1_es_reader_c(*file.ti, input_file);
