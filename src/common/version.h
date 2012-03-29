@@ -16,7 +16,7 @@
 
 #include "common/common_pch.h"
 
-#include "common/xml/pugi.h"
+#include "common/xml/xml.h"
 
 #define MTX_VERSION_CHECK_URL "http://mkvtoolnix-releases.bunkus.org/latest-release.xml"
 #define MTX_RELEASES_INFO_URL "http://mkvtoolnix-releases.bunkus.org/releases.xml"

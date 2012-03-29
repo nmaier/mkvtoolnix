@@ -20,7 +20,7 @@
 # include <wx/thread.h>
 
 # include "common/version.h"
-# include "common/xml/pugi.h"
+# include "common/xml/xml.h"
 # include "mmg/mmg_dialog.h"
 # include "mmg/update_checker.h"
 

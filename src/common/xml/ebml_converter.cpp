@@ -13,8 +13,6 @@
 
 #include "common/common_pch.h"
 
-#include <sstream>
-
 #include <matroska/KaxSegment.h>
 
 #include "common/base64.h"
@@ -339,7 +337,7 @@ ebml_converter_c::to_xml_recursively(pugi::xml_node &parent,
 ebml_master_cptr
 ebml_converter_c::to_ebml(std::string const &file_name,
                           std::string const &root_name) {
-  auto doc = load_xml(file_name);
+  auto doc = load_file(file_name);
 
   auto root_node = doc->document_element();
   if (!root_node)
@@ -463,36 +461,6 @@ ebml_converter_c::verify_and_create_element(EbmlMaster &parent,
         throw duplicate_child_node_x{ name, get_tag_name(parent), node.offset_debug() };
 
   return create_ebml_element(EBML_INFO(KaxSegment), id);
-}
-
-document_cptr
-ebml_converter_c::load_xml(std::string const &file_name) {
-  mm_text_io_c in(new mm_file_io_c(file_name, MODE_READ));
-  std::string content;
-  auto bytes_to_read = in.get_size() - in.get_byte_order_length();
-
-  if (in.read(content, bytes_to_read) != bytes_to_read)
-    throw mtx::mm_io::end_of_file_x{};
-
-  if (BO_NONE == in.get_byte_order()) {
-    boost::regex encoding_re("^ \\s* "              // ignore leading whitespace
-                             "<\\?xml"              // XML declaration start
-                             "[^\\?]+"              // skip to encoding, but don't go beyond XML declaration
-                             "encoding \\s* = \\s*" // encoding attribute
-                             "\" ( [^\"]+ ) \"",    // attribute value
-                             boost::regex::perl | boost::regex::mod_x | boost::regex::icase);
-    boost::match_results<std::string::const_iterator> matches;
-    if (boost::regex_search(content, matches, encoding_re))
-      content = charset_converter_c::init(matches[1].str())->utf8(content);
-  }
-
-  std::stringstream scontent(content);
-  document_cptr doc(new pugi::xml_document);
-  auto result = doc->load(scontent);
-  if (!result)
-    throw xml_parser_x{result};
-
-  return doc;
 }
 
 void

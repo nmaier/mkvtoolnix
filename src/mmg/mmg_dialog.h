@@ -23,7 +23,7 @@
 # include <wx/thread.h>
 
 # include "common/version.h"
-# include "common/xml/pugi.h"
+# include "common/xml/xml.h"
 # include "mmg/update_checker.h"
 #endif  // defined(HAVE_CURL_EASY_H)
 

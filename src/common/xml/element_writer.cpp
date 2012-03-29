@@ -59,7 +59,7 @@ print_binary(int level,
 
   if (ascii_only) {
     s.append((const char *)p, size);
-    out->puts(boost::format("<%1% format=\"ascii\">%2%</%1%>\n") % name % escape_xml(s));
+    out->puts(boost::format("<%1% format=\"ascii\">%2%</%1%>\n") % name % mtx::xml::escape(s));
 
   } else {
     std::string prefix = (boost::format("<%1% format=\"hex\">") % name).str();
@@ -141,11 +141,11 @@ write_xml_element_rec(int level,
       break;
 
     case EBMLT_STRING:
-      out->puts(boost::format("%1%</%2%>\n") % escape_xml(std::string(*dynamic_cast<EbmlString *>(e))) % element_map[elt_idx].name);
+      out->puts(boost::format("%1%</%2%>\n") % mtx::xml::escape(std::string(*dynamic_cast<EbmlString *>(e))) % element_map[elt_idx].name);
       break;
 
     case EBMLT_USTRING:
-      s = escape_xml(UTFstring_to_cstrutf8(UTFstring(*static_cast<EbmlUnicodeString *>(e)).c_str()));
+      s = mtx::xml::escape(UTFstring_to_cstrutf8(UTFstring(*static_cast<EbmlUnicodeString *>(e)).c_str()));
       out->puts(boost::format("%1%</%2%>\n") % s % element_map[elt_idx].name);
       break;
 
@@ -209,11 +209,11 @@ xml_formatter_c::write_header() {
   m_out.use_dos_style_newlines(true);
 #endif
   m_out.write_bom(m_encoding);
-  m_out.puts(boost::format("<?xml version=\"1.0\" encoding=\"%1%\"?>\n") % escape_xml(m_encoding));
+  m_out.puts(boost::format("<?xml version=\"1.0\" encoding=\"%1%\"?>\n") % mtx::xml::escape(m_encoding));
   if ((m_dtd != "") && (m_dtd_file != ""))
-    m_out.puts(boost::format("\n<!-- DOCTYPE %1% SYSTEM \"%2%\" -->\n") % m_dtd % escape_xml(m_dtd_file));
+    m_out.puts(boost::format("\n<!-- DOCTYPE %1% SYSTEM \"%2%\" -->\n") % m_dtd % mtx::xml::escape(m_dtd_file));
   if ((m_stylesheet_type != "") && (m_stylesheet_file != ""))
-    m_out.puts(boost::format("\n<?xml-stylesheet type=\"%1%\" href=\"%2%\"?>\n") % escape_xml(m_stylesheet_type) % escape_xml(m_stylesheet_file));
+    m_out.puts(boost::format("\n<?xml-stylesheet type=\"%1%\" href=\"%2%\"?>\n") % mtx::xml::escape(m_stylesheet_type) % mtx::xml::escape(m_stylesheet_file));
 
   m_header_written = true;
 }
@@ -243,14 +243,14 @@ xml_formatter_c::start_element_cb(const char *name,
   std::string element;
 
   strip(m_data_buffer, true);
-  m_data_buffer = escape_xml(m_cc_utf8->native(m_data_buffer));
+  m_data_buffer = mtx::xml::escape(m_cc_utf8->native(m_data_buffer));
 
   if (XMLF_STATE_START == m_state)
     m_out.puts(">");
   else if (XMLF_STATE_DATA == m_state)
     m_out.puts(m_data_buffer);
 
-  element = create_xml_node_name(name, atts);
+  element = mtx::xml::create_node_name(name, atts);
   element.erase(element.length() - 1);
   m_out.puts(boost::format("\n%1%%2%") % space(m_depth * 2) % element);
 
@@ -262,7 +262,7 @@ xml_formatter_c::start_element_cb(const char *name,
 void
 xml_formatter_c::end_element_cb(const char *name) {
   strip(m_data_buffer, true);
-  m_data_buffer = escape_xml(m_cc_utf8->native(m_data_buffer));
+  m_data_buffer = mtx::xml::escape(m_cc_utf8->native(m_data_buffer));
 
   --m_depth;
 

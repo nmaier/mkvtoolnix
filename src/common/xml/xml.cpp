@@ -13,10 +13,15 @@
 
 #include "common/os.h"
 
+#include <sstream>
+
 #include "common/xml/xml.h"
 
+namespace mtx {
+namespace xml {
+
 std::string
-escape_xml(const std::string &source) {
+escape(const std::string &source) {
   std::string dst;
   std::string::const_iterator src = source.begin();
   while (src != source.end()) {
@@ -37,15 +42,46 @@ escape_xml(const std::string &source) {
 }
 
 std::string
-create_xml_node_name(const char *name,
-                     const char **atts) {
+create_node_name(const char *name,
+                 const char **atts) {
   int i;
   std::string node_name = std::string("<") + name;
   for (i = 0; (nullptr != atts[i]) && (nullptr != atts[i + 1]); i += 2)
     node_name += std::string(" ") + atts[i] + "=\"" +
-      escape_xml(atts[i + 1]) + "\"";
+      escape(atts[i + 1]) + "\"";
   node_name += ">";
 
   return node_name;
 }
 
+document_cptr
+load_file(std::string const &file_name) {
+  mm_text_io_c in(new mm_file_io_c(file_name, MODE_READ));
+  std::string content;
+  auto bytes_to_read = in.get_size() - in.get_byte_order_length();
+
+  if (in.read(content, bytes_to_read) != bytes_to_read)
+    throw mtx::mm_io::end_of_file_x{};
+
+  if (BO_NONE == in.get_byte_order()) {
+    boost::regex encoding_re("^ \\s* "              // ignore leading whitespace
+                             "<\\?xml"              // XML declaration start
+                             "[^\\?]+"              // skip to encoding, but don't go beyond XML declaration
+                             "encoding \\s* = \\s*" // encoding attribute
+                             "\" ( [^\"]+ ) \"",    // attribute value
+                             boost::regex::perl | boost::regex::mod_x | boost::regex::icase);
+    boost::match_results<std::string::const_iterator> matches;
+    if (boost::regex_search(content, matches, encoding_re))
+      content = charset_converter_c::init(matches[1].str())->utf8(content);
+  }
+
+  std::stringstream scontent(content);
+  document_cptr doc(new pugi::xml_document);
+  auto result = doc->load(scontent);
+  if (!result)
+    throw xml_parser_x{result};
+
+  return doc;
+}
+
+}}
