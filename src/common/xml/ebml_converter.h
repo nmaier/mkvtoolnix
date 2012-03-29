@@ -177,6 +177,7 @@ protected:
   std::map<std::string, value_formatter_t> m_formatter_map;
   std::map<std::string, value_parser_t> m_parser_map;
   std::map<std::string, limits_t> m_limits;
+  std::map<std::string, bool> m_invalid_elements_map;
 
 public:
   ebml_converter_c();

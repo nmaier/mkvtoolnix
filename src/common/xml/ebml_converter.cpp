@@ -434,6 +434,9 @@ ebml_converter_c::verify_and_create_element(EbmlMaster &parent,
                                             std::string const &name,
                                             pugi::xml_node const &node)
   const {
+  if (m_invalid_elements_map.find(name) != m_invalid_elements_map.end())
+    throw invalid_child_node_x{ name, get_tag_name(parent), node.offset_debug() };
+
   auto debug_name = get_debug_name(name);
   auto &context   = EBML_CONTEXT(&parent);
   bool found      = false;
@@ -511,18 +514,25 @@ ebml_converter_c::dump_semantics_recursively(int level,
                                              std::map<std::string, bool> &visited_masters)
   const {
   auto tag_name = get_tag_name(element);
-  auto limits   = m_limits.find(tag_name);
+
+  if (m_invalid_elements_map.find(tag_name) != m_invalid_elements_map.end())
+    return;
+
+  auto limits = m_limits.find(tag_name);
   std::string limits_str;
 
   if ((m_limits.end() != limits) && (limits->second.has_min || limits->second.has_max)) {
-    auto label = nullptr != dynamic_cast<EbmlBinary *>(&element) ? "length" : "value";
+    auto label = nullptr != dynamic_cast<EbmlBinary *>(&element) ? "length in bytes" : "value";
 
-    if (limits->second.has_min && limits->second.has_max)
-      limits_str = (boost::format("%1% <= %3% <= %2%") % limits->second.min % limits->second.max % label).str();
-    else if (limits->second.has_min)
-      limits_str = (boost::format("%1% <= %2%")        % limits->second.min                      % label).str();
+    if (limits->second.has_min && limits->second.has_max) {
+      if (limits->second.min == limits->second.max)
+        limits_str = (boost::format("%2% == %1%")        % limits->second.min                      % label).str();
+      else
+        limits_str = (boost::format("%1% <= %3% <= %2%") % limits->second.min % limits->second.max % label).str();
+    } else if (limits->second.has_min)
+      limits_str = (boost::format("%1% <= %2%")          % limits->second.min                      % label).str();
     else
-      limits_str = (boost::format("%2% <= %1%")                             % limits->second.max % label).str();
+      limits_str = (boost::format("%2% <= %1%")                               % limits->second.max % label).str();
 
     limits_str = std::string{", valid range: "} + limits_str;
   }
