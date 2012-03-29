@@ -1,5 +1,10 @@
 2012-03-29  Moritz Bunkus  <moritz@bunkus.org>
 
+	* all: Updated the DTD files with the newly supported elements.
+
+	* mkvmerge: enhancement: Chapter XML files: mkvmerge can handle
+	the "ChapterSegmentEditionUID" element.
+
 	* mkvmerge: enhancement: Segment info XML files: mkvmerge can
 	handle the "SegmentFilename", "PreviousSegmentFilename" and
 	"NextSegmentFilename" elements.
