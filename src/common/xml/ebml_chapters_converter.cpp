@@ -49,6 +49,11 @@ ebml_chapters_converter_c::setup_maps() {
   m_limits["ChapterSegmentUID"]        = limits_t{ true, false, 1, 0 };
   m_limits["ChapterSegmentEditionUID"] = limits_t{ true, false, 1, 0 };
   m_limits["ChapterTrackNumber"]       = limits_t{ true, false, 1, 0 };
+
+  reverse_debug_to_tag_name_map();
+
+  if (debugging_requested("ebml_converter_semantics"))
+    dump_semantics("Chapters");
 }
 
 void

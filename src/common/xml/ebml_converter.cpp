@@ -489,4 +489,66 @@ ebml_converter_c::load_xml(std::string const &file_name) {
   return doc;
 }
 
+void
+ebml_converter_c::dump_semantics(std::string const &top_element_name)
+  const {
+  auto &context   = EBML_CLASS_CONTEXT(KaxSegment);
+  auto debug_name = get_debug_name(top_element_name);
+  size_t i;
+
+  for (i = 0; i < EBML_CTX_SIZE(context); i++)
+    if (debug_name == EBML_CTX_IDX_INFO(context, i).DebugName) {
+      std::shared_ptr<EbmlElement> child{ &EBML_SEM_CREATE(EBML_CTX_IDX(context, i)) };
+      std::map<std::string, bool> visited_masters;
+      dump_semantics_recursively(0, *child, visited_masters);
+      return;
+    }
+}
+
+void
+ebml_converter_c::dump_semantics_recursively(int level,
+                                             EbmlElement &element,
+                                             std::map<std::string, bool> &visited_masters)
+  const {
+  auto tag_name = get_tag_name(element);
+  auto limits   = m_limits.find(tag_name);
+  std::string limits_str;
+
+  if ((m_limits.end() != limits) && (limits->second.has_min || limits->second.has_max)) {
+    auto label = nullptr != dynamic_cast<EbmlBinary *>(&element) ? "length" : "value";
+
+    if (limits->second.has_min && limits->second.has_max)
+      limits_str = (boost::format("%1% <= %3% <= %2%") % limits->second.min % limits->second.max % label).str();
+    else if (limits->second.has_min)
+      limits_str = (boost::format("%1% <= %2%")        % limits->second.min                      % label).str();
+    else
+      limits_str = (boost::format("%2% <= %1%")                             % limits->second.max % label).str();
+
+    limits_str = std::string{", valid range: "} + limits_str;
+  }
+
+  auto type = dynamic_cast<EbmlMaster *>(&element)        ? "master"
+            : dynamic_cast<EbmlUInteger *>(&element)      ? "unsigned integer"
+            : dynamic_cast<EbmlSInteger *>(&element)      ? "signed integer"
+            : dynamic_cast<EbmlString *>(&element)        ? "UTF-8 string"
+            : dynamic_cast<EbmlUnicodeString *>(&element) ? "UTF-8 string"
+            : dynamic_cast<EbmlBinary *>(&element)        ? "binary"
+            :                                               "unknown";
+
+  mxinfo(boost::format("%1%%2% (%3%%4%)\n") % std::string(level * 2, ' ') % tag_name % type % limits_str);
+
+  if (!dynamic_cast<EbmlMaster *>(&element) || visited_masters[tag_name])
+    return;
+
+  visited_masters[tag_name] = true;
+
+  auto &context = EBML_CONTEXT(&element);
+  size_t i;
+
+  for (i = 0; i < EBML_CTX_SIZE(context); i++) {
+    std::shared_ptr<EbmlElement> child{ &EBML_SEM_CREATE(EBML_CTX_IDX(context, i)) };
+    dump_semantics_recursively(level + 1, *child, visited_masters);
+  }
+}
+
 }}

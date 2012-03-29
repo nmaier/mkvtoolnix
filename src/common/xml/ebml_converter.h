@@ -219,6 +219,9 @@ protected:
   std::string get_debug_name(std::string const &tag_name) const;
 
   void reverse_debug_to_tag_name_map();
+
+  void dump_semantics(std::string const &top_element_name) const;
+  void dump_semantics_recursively(int level, EbmlElement &element, std::map<std::string, bool> &visited_masters) const;
 };
 
 }}
