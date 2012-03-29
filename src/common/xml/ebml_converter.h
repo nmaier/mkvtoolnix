@@ -208,9 +208,9 @@ protected:
 
   void to_xml_recursively(pugi::xml_node &parent, EbmlElement &e) const;
 
-  void to_ebml_recursively(EbmlMaster &parent, pugi::xml_node &node);
-  EbmlElement *convert_node_or_attribute_to_ebml(EbmlMaster &parent, pugi::xml_node const &node, pugi::xml_attribute const &attribute, std::map<std::string, bool> &handled_attributes);
-  EbmlElement *verify_and_create_element(EbmlMaster &parent, std::string const &name, pugi::xml_node const &node);
+  void to_ebml_recursively(EbmlMaster &parent, pugi::xml_node &node) const;
+  EbmlElement *convert_node_or_attribute_to_ebml(EbmlMaster &parent, pugi::xml_node const &node, pugi::xml_attribute const &attribute, std::map<std::string, bool> &handled_attributes) const;
+  EbmlElement *verify_and_create_element(EbmlMaster &parent, std::string const &name, pugi::xml_node const &node) const;
 
   virtual void fix_xml(document_cptr &doc) const;
   virtual void fix_ebml(EbmlMaster &root) const;

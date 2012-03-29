@@ -365,7 +365,8 @@ ebml_converter_c::to_ebml(std::string const &file_name,
 
 void
 ebml_converter_c::to_ebml_recursively(EbmlMaster &parent,
-                                      pugi::xml_node &node) {
+                                      pugi::xml_node &node)
+  const {
   std::map<std::string, bool> handled_attributes;
 
   auto converted_node   = convert_node_or_attribute_to_ebml(parent, node, pugi::xml_attribute{}, handled_attributes);
@@ -396,7 +397,8 @@ EbmlElement *
 ebml_converter_c::convert_node_or_attribute_to_ebml(EbmlMaster &parent,
                                                     pugi::xml_node const &node,
                                                     pugi::xml_attribute const &attribute,
-                                                    std::map<std::string, bool> &handled_attributes) {
+                                                    std::map<std::string, bool> &handled_attributes)
+  const {
   std::string name  = attribute ? attribute.name()  : node.name();
   std::string value = attribute ? attribute.value() : node.child_value();
   auto new_element  = verify_and_create_element(parent, name, node);
@@ -430,7 +432,8 @@ ebml_converter_c::convert_node_or_attribute_to_ebml(EbmlMaster &parent,
 EbmlElement *
 ebml_converter_c::verify_and_create_element(EbmlMaster &parent,
                                             std::string const &name,
-                                            pugi::xml_node const &node) {
+                                            pugi::xml_node const &node)
+  const {
   auto debug_name = get_debug_name(name);
   auto &context   = EBML_CONTEXT(&parent);
   bool found      = false;
