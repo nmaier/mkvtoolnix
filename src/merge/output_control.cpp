@@ -179,6 +179,8 @@ std::string g_segmentinfo_file_name;
 std::string g_segment_title;
 bool g_segment_title_set                    = false;
 
+std::string g_segment_filename, g_previous_segment_filename, g_next_segment_filename;
+
 int64_t g_tags_size                         = 0;
 
 int g_file_num = 1;
@@ -757,6 +759,19 @@ render_headers(mm_io_c *out) {
         if (!first_file)
           GetChild<KaxPrevUID>(*s_kax_infos).CopyBuffer(s_seguid_prev.data(), 128 / 8);
       }
+
+      if (!g_segment_filename.empty())
+        GetChildAs<KaxSegmentFilename, EbmlUnicodeString>(*s_kax_infos) = cstrutf8_to_UTFstring(g_segment_filename);
+
+      if (!g_next_segment_filename.empty())
+        GetChildAs<KaxNextFilename, EbmlUnicodeString>(*s_kax_infos)    = cstrutf8_to_UTFstring(g_next_segment_filename);
+
+      if (!g_previous_segment_filename.empty())
+        GetChildAs<KaxPrevFilename, EbmlUnicodeString>(*s_kax_infos)    = cstrutf8_to_UTFstring(g_previous_segment_filename);
+
+      g_segment_filename.clear();
+      g_next_segment_filename.clear();
+      g_previous_segment_filename.clear();
     }
 
     g_kax_segment->WriteHead(*out, 8);

@@ -192,6 +192,7 @@ extern kax_chapters_cptr g_kax_chapters;
 extern int64_t g_tags_size;
 extern std::string g_segment_title;
 extern bool g_segment_title_set;
+extern std::string g_segment_filename, g_previous_segment_filename, g_next_segment_filename;
 extern std::string g_default_language;
 
 extern float g_video_fps;

@@ -1,3 +1,9 @@
+2012-03-29  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: enhancement: Segment info XML files: mkvmerge can
+	handle the "SegmentFilename", "PreviousSegmentFilename" and
+	"NextSegmentFilename" elements.
+
 2012-03-19  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: enhancement: Added "mts" as yet another file extension for
@@ -6448,4 +6454,3 @@
 2003-04-30  Moritz Bunkus  <moritz@bunkus.org>
 
 	* First public release.
-

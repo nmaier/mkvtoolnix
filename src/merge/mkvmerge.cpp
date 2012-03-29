@@ -362,6 +362,18 @@ handle_segmentinfo() {
   uid = FINDFIRST(g_kax_info_chap.get(), KaxPrevUID);
   if (nullptr != uid)
     g_seguid_link_previous = bitvalue_cptr(new bitvalue_c(*uid));
+
+  auto segment_filename = FindChild<KaxSegmentFilename>(g_kax_info_chap.get());
+  if (segment_filename)
+    g_segment_filename = UTFstring_to_cstrutf8(*segment_filename);
+
+  auto next_segment_filename = FindChild<KaxNextFilename>(g_kax_info_chap.get());
+  if (next_segment_filename)
+    g_next_segment_filename = UTFstring_to_cstrutf8(*next_segment_filename);
+
+  auto previous_segment_filename = FindChild<KaxPrevFilename>(g_kax_info_chap.get());
+  if (previous_segment_filename)
+    g_previous_segment_filename = UTFstring_to_cstrutf8(*previous_segment_filename);
 }
 
 static void
