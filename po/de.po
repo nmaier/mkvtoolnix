@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2012-03-30 09:14+0200\n"
+"PO-Revision-Date: 2012-03-30 12:07+0200\n"
 "Last-Translator: Moritz Bunkus <moritz@bunkus.org>\n"
 "Language-Team: German <moritz@bunkus.org>\n"
 "Language: de\n"
@@ -933,7 +933,7 @@ msgstr "&Kapiteleditor\tAlt-4"
 msgid "&Check for updates"
 msgstr "Nach &Updates suchen"
 
-#: src/mmg/update_checker.cpp:75
+#: src/mmg/update_checker.cpp:78
 msgid "&Close"
 msgstr "S&chließen"
 
@@ -960,6 +960,10 @@ msgstr "&Deaktivieren"
 #: src/mmg/jobs.cpp:471
 msgid "&Down"
 msgstr "&Runter"
+
+#: src/mmg/update_checker.cpp:75
+msgid "&Download"
+msgstr "&Herunterladen"
 
 #: src/mmg/header_editor/frame.cpp:146
 msgid "&Expand all entries\tCtrl-E"

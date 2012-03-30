@@ -899,7 +899,7 @@ msgstr "章节编辑器(&C)\tAlt-4"
 msgid "&Check for updates"
 msgstr "检查更新(&C)"
 
-#: src/mmg/update_checker.cpp:75
+#: src/mmg/update_checker.cpp:78
 msgid "&Close"
 msgstr "关闭(&C)"
 
@@ -926,6 +926,11 @@ msgstr "禁用(&D)"
 #: src/mmg/jobs.cpp:471
 msgid "&Down"
 msgstr "下移(&D)"
+
+#: src/mmg/update_checker.cpp:75
+#, fuzzy
+msgid "&Download"
+msgstr "下载 URL:"
 
 #: src/mmg/header_editor/frame.cpp:146
 msgid "&Expand all entries\tCtrl-E"

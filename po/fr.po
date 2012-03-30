@@ -922,7 +922,7 @@ msgstr "&Éditeur de chapitres\tAlt-4"
 msgid "&Check for updates"
 msgstr "&Mise à jour"
 
-#: src/mmg/update_checker.cpp:75
+#: src/mmg/update_checker.cpp:78
 msgid "&Close"
 msgstr "&Fermer"
 
@@ -949,6 +949,11 @@ msgstr "&Désactiver"
 #: src/mmg/jobs.cpp:471
 msgid "&Down"
 msgstr "&Descendre"
+
+#: src/mmg/update_checker.cpp:75
+#, fuzzy
+msgid "&Download"
+msgstr "URL de téléchargement :"
 
 #: src/mmg/header_editor/frame.cpp:146
 msgid "&Expand all entries\tCtrl-E"

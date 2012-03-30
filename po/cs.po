@@ -917,7 +917,7 @@ msgstr "&Editor kapitol\tAlt-4"
 msgid "&Check for updates"
 msgstr "&Zkontrolovat aktualizace"
 
-#: src/mmg/update_checker.cpp:75
+#: src/mmg/update_checker.cpp:78
 msgid "&Close"
 msgstr "&Zavřít"
 
@@ -944,6 +944,11 @@ msgstr "&Zakázat"
 #: src/mmg/jobs.cpp:471
 msgid "&Down"
 msgstr "&Dolů"
+
+#: src/mmg/update_checker.cpp:75
+#, fuzzy
+msgid "&Download"
+msgstr "Adresa stažení:"
 
 #: src/mmg/header_editor/frame.cpp:146
 msgid "&Expand all entries\tCtrl-E"

@@ -912,7 +912,7 @@ msgstr "チャプタエディタ(&C)\tAlt-4"
 msgid "&Check for updates"
 msgstr "アップデートチェック(&C)"
 
-#: src/mmg/update_checker.cpp:75
+#: src/mmg/update_checker.cpp:78
 msgid "&Close"
 msgstr "閉じる(&C)"
 
@@ -939,6 +939,11 @@ msgstr "無効化(&D)"
 #: src/mmg/jobs.cpp:471
 msgid "&Down"
 msgstr "下へ(&D)"
+
+#: src/mmg/update_checker.cpp:75
+#, fuzzy
+msgid "&Download"
+msgstr "ダウンロードURL："
 
 #: src/mmg/header_editor/frame.cpp:146
 msgid "&Expand all entries\tCtrl-E"
