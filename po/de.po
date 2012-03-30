@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2012-03-07 15:45+0100\n"
+"PO-Revision-Date: 2012-03-30 09:05+0200\n"
 "Last-Translator: Moritz Bunkus <moritz@bunkus.org>\n"
 "Language-Team: German <moritz@bunkus.org>\n"
 "Language: de\n"
@@ -1645,9 +1645,8 @@ msgid "4 bytes"
 msgstr "4 Bytes"
 
 #: src/common/xml/xml.h:73
-#, fuzzy
 msgid "<%1%> is not a valid child element of <%2%> at position %3%."
-msgstr "<%1%> ist kein gültiges Unterelement von <%2%>."
+msgstr "<%1%> ist kein gültiges Unterelement von <%2%> an Position %3%."
 
 #: src/common/xml/ebml_chapters_converter.cpp:120
 msgid "<ChapterAtom> is missing the <ChapterTimeStart> child."
@@ -1662,18 +1661,16 @@ msgid "<ChapterTrack> is missing the <ChapterTrackNumber> child."
 msgstr "Dem Element <ChapterTrack> fehlt das Unterelement <ChapterTrackNumber>."
 
 #: src/common/xml/ebml_tags_converter.cpp:90
-#, fuzzy
 msgid "<Simple> is missing the <Name> child."
-msgstr "Dem Element <ChapterAtom> fehlt das Unterelement <ChapterTimeStart>."
+msgstr "Dem Element <Simple> fehlt das Unterelement <Name>."
 
 #: src/common/xml/ebml_tags_converter.cpp:97
 msgid "<Simple> must contain either a <String> or a <Binary> child."
-msgstr ""
+msgstr "<Simple> muss entweder ein <String>- oder ein <Binary>-Element enthalten."
 
 #: src/common/xml/ebml_tags_converter.cpp:87
-#, fuzzy
 msgid "<Tag> is missing the <Simple> child."
-msgstr "Dem Element <ChapterAtom> fehlt das Unterelement <ChapterTimeStart>."
+msgstr "Dem Element <Tag> fehlt das Unterelement <Simple>."
 
 #: src/input/r_matroska.cpp:2091
 #, boost-format
@@ -2004,9 +2001,8 @@ msgid "An unknown error occured. The file has been modified."
 msgstr "Ein unbekannter Fehler ist aufgetreten. Die Datei wurde verändert."
 
 #: src/common/xml/ebml_converter.cpp:174
-#, fuzzy
 msgid "An unsigned integer was expected."
-msgstr "Vorzeichenlose ganze Zahl"
+msgstr "Eine vorzeichenlose ganze Zahl wurde erwartet."
 
 #: src/mmg/wx_kax_analyzer.cpp:36
 msgid "Analysis is running"
@@ -3914,9 +3910,9 @@ msgid "Invalid %1% specified in '--%2% %3%'.\n"
 msgstr "Ungültige %1% in '--%2% %3%' angegeben.\n"
 
 #: src/common/xml/ebml_converter.cpp:297
-#, fuzzy, boost-format
+#, boost-format
 msgid "Invalid 'format' attribute '%1%'."
-msgstr "Ungültige Minute: %1%"
+msgstr "Ungültiger Wert '%1%' für 'format'-Attribut."
 
 #: src/common/base64.h:30
 msgid "Invalid Base64 character encountered"
@@ -3956,7 +3952,7 @@ msgstr "Ungültige Angabe für Dateianhangs-ID und Dateiname in Argument '%1%'.\
 
 #: src/common/xml/xml.h:54
 msgid "Invalid attribute '%1%' in node '%2%' at position %3%"
-msgstr ""
+msgstr "Ungültiges Attribut '%1%' in Tag '%2%' an Position '%3%'"
 
 #: src/merge/mkvmerge.cpp:921
 #, boost-format
@@ -4005,7 +4001,7 @@ msgstr "Ungültige Option für Cues. In '--cues %1%' wurde keine Track-ID angege
 #: src/common/xml/ebml_converter.cpp:289
 #: src/common/xml/ebml_converter.cpp:293
 msgid "Invalid data for Base64 encoding found."
-msgstr ""
+msgstr "Ungültige Daten für das Base64-Encoding gefunden."
 
 #: src/mmg/mmg_dialog.cpp:601
 msgid "Invalid file name"
@@ -4089,7 +4085,7 @@ msgstr "Ungültige Sprache ausgewählt"
 
 #: src/common/xml/ebml_converter.cpp:276
 msgid "Invalid length of hexadecimal content: must be divisable by 2."
-msgstr ""
+msgstr "Ungültige Länge für hexadezimalen Inhalt gefunden: Länge muss durch 2 teilbar sein."
 
 #: src/common/chapters/chapters.cpp:192
 #, boost-format
@@ -4499,14 +4495,14 @@ msgstr "MaxCache: %1%"
 #: src/common/xml/ebml_converter.cpp:235
 #, boost-format
 msgid "Maximum allowed length: %1%, actual length: %2%"
-msgstr ""
+msgstr "Maximal erlaubte Länge: %1%, tatsächliche Länge: %2%"
 
 #: src/common/xml/ebml_converter.cpp:179
 #: src/common/xml/ebml_converter.cpp:193
 #: src/common/xml/ebml_converter.cpp:224
 #, boost-format
 msgid "Maximum allowed value: %1%, actual value: %2%"
-msgstr ""
+msgstr "Höchster erlaubter Wert: %1%, tatsächlicher Wert: %2%"
 
 #: src/common/property_element.cpp:124
 #: src/mmg/header_editor/frame.cpp:406
@@ -4535,14 +4531,14 @@ msgstr "MinCache: %1%"
 #: src/common/xml/ebml_converter.cpp:233
 #, boost-format
 msgid "Minimum allowed length: %1%, actual length: %2%"
-msgstr ""
+msgstr "Minimale erlaubte Länge: %1%, tatsächliche Länge: %2%"
 
 #: src/common/xml/ebml_converter.cpp:177
 #: src/common/xml/ebml_converter.cpp:191
 #: src/common/xml/ebml_converter.cpp:222
 #, boost-format
 msgid "Minimum allowed value: %1%, actual value: %2%"
-msgstr ""
+msgstr "Kleinster erlaubter Wert: %1%, tatsächlicher Wert: %2%"
 
 #: src/common/property_element.cpp:122
 #: src/mmg/header_editor/frame.cpp:401
@@ -4819,7 +4815,7 @@ msgstr "Es wurde keine Versiosnummer gefunden.\n"
 
 #: src/common/xml/ebml_converter.cpp:273
 msgid "Non-hex digits encountered."
-msgstr ""
+msgstr "Zeichen gefunden, die keine hexadezimalen Ziffern sind"
 
 #: src/mmg/header_editor/frame.cpp:526
 msgid "None of the header fields has been modified. Nothing has been saved."
@@ -4894,9 +4890,8 @@ msgid "Only one input file is allowed.\n"
 msgstr "Es darf nur eine Quelldatei angegeben werden.\n"
 
 #: src/common/xml/xml.h:92
-#, fuzzy
 msgid "Only one instance of <%1%> is allowed beneath <%2%> at position %3%."
-msgstr "Unterhalb von <%2%> darf es nur eine Instanz von <%1%> geben."
+msgstr "Unterhalb von <%2%> darf es nur eine Instanz von <%1%> geben an Position %3%."
 
 #: src/common/xml/ebml_tags_converter.cpp:95
 msgid "Only one of <String> and <Binary> may be used beneath <Simple> but not both at the same time."
@@ -6261,54 +6256,53 @@ msgid "The Vorbis codebooks are different; such tracks cannot be concatenated wi
 msgstr "Die Vorbis-Codebücher unterscheiden sich; solche Tracks können nicht aneinandergehängt werden, ohne sie vorher mit identischen Parametern neu zu encodieren"
 
 #: src/common/xml/ebml_chapters_converter.cpp:218
-#, fuzzy, boost-format
+#, boost-format
 msgid "The XML chapter file '%1%' contains an error at position %3%: %2%\n"
-msgstr "Die Zeitstempeldatei '%1%' enthält ein nicht erkanntes oder nicht untersütztes Format (Version %2%).\n"
+msgstr "Die XML-Kapiteldatei '%1%' enthält einen Fehler an Position %3%: %2%.\n"
 
 #: src/common/xml/ebml_chapters_converter.cpp:221
-#, fuzzy, boost-format
+#, boost-format
 msgid "The XML chapter file '%1%' contains an error: %2%\n"
-msgstr "Datei '%1%': Container: %2%"
+msgstr "Die XML-Kapiteldatei '%1%' enthält einen Fehler: %2%"
 
 #: src/common/xml/ebml_chapters_converter.cpp:215
-#, fuzzy, boost-format
+#, boost-format
 msgid "The XML chapter file '%1%' could not be read.\n"
-msgstr "Der Dateianhang '%1%' konnte nicht gelesen werden.\n"
+msgstr "Die XML-Kapiteldatei '%1%' konnte nicht gelesen werden.\n"
 
 #: src/common/xml/ebml_converter.cpp:355
-#, fuzzy
 msgid "The XML root element is not a master element."
-msgstr "Das Wurzelelement muss <%1%> sein."
+msgstr "Das XML-Wurzelelement ist kein Master-Element."
 
 #: src/common/xml/ebml_segmentinfo_converter.cpp:90
-#, fuzzy, boost-format
+#, boost-format
 msgid "The XML segmentinfo file '%1%' contains an error at position %3%: %2%\n"
-msgstr "Die Zeitstempeldatei '%1%' enthält ein nicht erkanntes oder nicht untersütztes Format (Version %2%).\n"
+msgstr "Die XML-Segment-Info-Datei '%1%' enthält einen Fehler an Position %3%: %2%\n"
 
 #: src/common/xml/ebml_segmentinfo_converter.cpp:93
-#, fuzzy, boost-format
+#, boost-format
 msgid "The XML segmentinfo file '%1%' contains an error: %2%\n"
-msgstr "Datei '%1%': Container: %2%"
+msgstr "Die XML-Segment-Info-Datei '%1%' enthält einen Fehler: %2%\n"
 
 #: src/common/xml/ebml_segmentinfo_converter.cpp:87
-#, fuzzy, boost-format
+#, boost-format
 msgid "The XML segmentinfo file '%1%' could not be read.\n"
-msgstr "Der Dateianhang '%1%' konnte nicht gelesen werden.\n"
+msgstr "Die XML-Segment-Info-Datei '%1%' konnte nicht gelesen werden.\n"
 
 #: src/common/xml/ebml_tags_converter.cpp:119
-#, fuzzy, boost-format
+#, boost-format
 msgid "The XML tag file '%1%' contains an error at position %3%: %2%\n"
-msgstr "Die Zeitstempeldatei '%1%' enthält ein nicht erkanntes oder nicht untersütztes Format (Version %2%).\n"
+msgstr "Die XML-Tag-Datei '%1%' enthält einen Fehler an Position %3%: %2%.\n"
 
 #: src/common/xml/ebml_tags_converter.cpp:122
-#, fuzzy, boost-format
+#, boost-format
 msgid "The XML tag file '%1%' contains an error: %2%\n"
-msgstr "Datei '%1%': Container: %2%"
+msgstr "Die XML-Tag-Datei '%1%' enthält einen Fehler: %2%\n"
 
 #: src/common/xml/ebml_tags_converter.cpp:116
-#, fuzzy, boost-format
+#, boost-format
 msgid "The XML tag file '%1%' could not be read.\n"
-msgstr "Der Dateianhang '%1%' konnte nicht gelesen werden.\n"
+msgstr "Die XML-Tag-Datei '%1%' konnte nicht gelesen werden.\n"
 
 #: src/merge/mkvmerge.cpp:1545
 #, boost-format
@@ -7038,11 +7032,11 @@ msgstr "Die Zeichenketten 'info', 'segment_info' und 'segmentinfo' wählen das S
 
 #: src/common/xml/xml.h:130
 msgid "The tag or attribute '%1%' at position %2% contains data that is outside its allowed range."
-msgstr ""
+msgstr "Der Tag oder das Attribut '%1%' an Position %2% enthält Daten, die außerhalb des erlaubten Wertebereiches liegen."
 
 #: src/common/xml/xml.h:110
 msgid "The tag or attribute '%1%' at position %2% contains invalid or mal-formed data."
-msgstr ""
+msgstr "Der Tag oder das Attribut '%1%' an Posiiton %2% enthält ungültige oder falsch formatierte Daten."
 
 #: src/merge/pr_generic.cpp:273
 #, boost-format
@@ -7450,7 +7444,7 @@ msgstr "Track %1%: AAC-Audiotrack gefunden, aber die privaten Codec-Konfiguratio
 #: src/extract/xtr_textsubs.cpp:396
 #, boost-format
 msgid "Track %1%: An USF subtitle entry starting at timecode %2% is not well-formed XML and will be skipped.\n"
-msgstr ""
+msgstr "Track %1%: Ein USF-Untertiteleintrag, der an Zeitstempel %2% anfängt, enthält ungültig formatiertes XML und wird ausgelassen.\n"
 
 #: src/extract/xtr_avc.cpp:39
 #, boost-format
@@ -7515,7 +7509,7 @@ msgstr "Der Track Nummer %1% wurde verschlüsselt, und Entschlüsselung wurde in
 #: src/info/mkvinfo.cpp:944
 #, boost-format
 msgid "Track number: %1% (track ID for mkvmerge & mkvextract: %2%)"
-msgstr ""
+msgstr "Tracknummer: %1% (Track-ID für mkvmerge & mkvextract: %2%)"
 
 #: src/info/mkvinfo.cpp:1032
 #, boost-format
@@ -8475,19 +8469,19 @@ msgid "max. number of files:"
 msgstr "max. Anzahl von Dateien:"
 
 #: src/common/memory.cpp:147
-#, fuzzy, boost-format
+#, boost-format
 msgid "memory.cpp/safemalloc() called from file %1%, line %2%: malloc() returned nullptr for a size of %3% bytes.\n"
-msgstr "memory.cpp/safemalloc() aus Datei %1%, Zeile %2% aufgerufen: malloc() hat für eine Größe von %3% Byte(s) NULL zurückgegeben.\n"
+msgstr "memory.cpp/safemalloc() aus Datei %1%, Zeile %2% aufgerufen: malloc() hat für eine Größe von %3% Byte(s) nullptr zurückgegeben.\n"
 
 #: src/common/memory.cpp:135
-#, fuzzy, boost-format
+#, boost-format
 msgid "memory.cpp/safememdup() called from file %1%, line %2%: malloc() returned nullptr for a size of %3% bytes.\n"
-msgstr "memory.cpp/safememdup() aus Datei %1%, Zeile %2% aufgerufen: malloc() hat für eine Größe von %3% Byte(s) NULL zurückgegeben.\n"
+msgstr "memory.cpp/safememdup() aus Datei %1%, Zeile %2% aufgerufen: malloc() hat für eine Größe von %3% Byte(s) nullptr zurückgegeben.\n"
 
 #: src/common/memory.cpp:163
-#, fuzzy, boost-format
+#, boost-format
 msgid "memory.cpp/saferealloc() called from file %1%, line %2%: realloc() returned nullptr for a size of %3% bytes.\n"
-msgstr "memory.cpp/saferealloc() aus Datei %1%, Zeile %2% aufgerufen: realloc() hat für eine Größe von %3% Byte(s) NULL zurückgegeben.\n"
+msgstr "memory.cpp/saferealloc() aus Datei %1%, Zeile %2% aufgerufen: realloc() hat für eine Größe von %3% Byte(s) nullptr zurückgegeben.\n"
 
 #: src/propedit/target.cpp:82
 msgid "missing property name"
@@ -8678,7 +8672,7 @@ msgstr "mkvmerge wurde durch ein Signal unterbrochen (wurde Strg+C gedrückt?)\n
 #: src/info/mkvinfo.cpp:945
 #, boost-format
 msgid "mkvmerge/mkvextract track ID: %1%"
-msgstr ""
+msgstr "Track ID für mkvmerge/mkvextract: %1%"
 
 #: src/propedit/propedit_cli_parser.cpp:145
 msgid "mkvpropedit [options] <file> <actions>"
@@ -8765,9 +8759,8 @@ msgid "ogg_sync_buffer failed\n"
 msgstr "ogg_sync_buffer schlug fehl\n"
 
 #: src/mmg/tabs/chapters.cpp:1046
-#, fuzzy
 msgid "on_entry_selected: display == nullptr. Should not have happened."
-msgstr "on_entry_selected: display == NULL. Hätte nicht passieren sollen."
+msgstr "on_entry_selected: display == nullptr. Hätte nicht passieren sollen."
 
 #: src/mmg/tabs/input_extra.cpp:86
 msgid "only for I frames"
@@ -10112,4 +10105,3 @@ msgstr "ja"
 
 #~ msgid "wrong usage: writing to read-only memory"
 #~ msgstr "Falsche Benutzung: Schreibversuch im Nur-Lese-Modus"
-
