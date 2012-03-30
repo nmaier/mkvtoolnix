@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MMG_UPDATE_CHECKER_H
-# define __MMG_UPDATE_CHECKER_H
+#ifndef MTX_MMG_UPDATE_CHECKER_H
+# define MTX_MMG_UPDATE_CHECKER_H
 
 # include "common/os.h"
 
@@ -43,9 +43,10 @@ class update_check_dlg_c: public wxDialog {
 private:
   wxStaticText *m_st_status, *m_st_current_version, *m_st_available_version, *m_st_download_url_label;
   wxHyperlinkCtrl *m_hlc_download_url;
-  wxButton *m_b_close;
+  wxButton *m_b_close, *m_b_download;
   wxBoxSizer *m_siz_all;
   wxRichTextCtrl *m_changelog;
+  mtx_release_version_t m_version;
 
 public:
   update_check_dlg_c(wxWindow *parent);
@@ -53,6 +54,7 @@ public:
   void update_info(mtx_release_version_t const &version, mtx::xml::document_cptr const &releases_info);
   void update_changelog(mtx::xml::document_cptr const &releases_info);
   void update_changelog_failed();
+  void on_download_pressed(wxCommandEvent &evt);
   void on_close_pressed(wxCommandEvent &evt);
   void on_close(wxCloseEvent &evt);
   void on_url_pressed(wxCommandEvent &evt);
@@ -71,4 +73,4 @@ extern const wxEventType wxEVT_MTX_UPDATE_CHECK_STATE_CHANGED;
 #  define UPDATE_CHECK_DONE_DIALOG_DISMISSED 5
 
 # endif  // defined(HAVE_CURL_EASY_H)
-#endif // __MMG_UPDATE_CHECKER_H
+#endif // MTX_MMG_UPDATE_CHECKER_H

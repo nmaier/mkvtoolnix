@@ -72,6 +72,9 @@ update_check_dlg_c::update_check_dlg_c(wxWindow *parent)
 
   m_changelog                              = new wxRichTextCtrl(this, ID_RE_CHANGELOG, wxString(), wxDefaultPosition, wxDefaultSize, wxRE_MULTILINE | wxRE_READONLY);
 
+  m_b_download                             = new wxButton(this, ID_B_UPDATE_CHECK_DOWNLOAD, Z("&Download"));
+  m_b_download->Enable(false);
+
   m_b_close                                = new wxButton(this, ID_B_UPDATE_CHECK_CLOSE, Z("&Close"));
   m_b_close->Enable(false);
 
@@ -96,6 +99,7 @@ update_check_dlg_c::update_check_dlg_c(wxWindow *parent)
   siz_fg->Add(siz_download_url, 1, wxGROW);
 
   wxBoxSizer *siz_button = new wxBoxSizer(wxHORIZONTAL);
+  siz_button->Add(m_b_download);
   siz_button->AddStretchSpacer();
   siz_button->Add(m_b_close);
 
@@ -183,7 +187,11 @@ update_check_dlg_c::update_info(mtx_release_version_t const &version,
     if (releases_info)
       update_changelog(releases_info);
 
+    m_b_download->Enable(true);
+
     Layout();
+
+    m_version = version;
   }
 
   m_b_close->Enable(true);
@@ -270,6 +278,20 @@ update_check_dlg_c::on_close_pressed(wxCommandEvent &) {
 }
 
 void
+update_check_dlg_c::on_download_pressed(wxCommandEvent &) {
+  if (!m_version.valid)
+    return;
+
+#if defined(SYS_WINDOWS)
+  auto url = wxU(m_version.urls["windows_x86_installer"]);
+#else
+  auto url = wxU(m_version.urls["general"]);
+#endif  // SYS_WINDOWS
+
+  wxLaunchDefaultBrowser(url);
+}
+
+void
 update_check_dlg_c::on_url_pressed(wxCommandEvent &evt) {
   wxLaunchDefaultBrowser(evt.GetString());
 }
@@ -284,6 +306,7 @@ update_check_dlg_c::close_dialog() {
 IMPLEMENT_CLASS(update_check_dlg_c, wxDialog);
 BEGIN_EVENT_TABLE(update_check_dlg_c, wxDialog)
   EVT_BUTTON(ID_B_UPDATE_CHECK_CLOSE, update_check_dlg_c::on_close_pressed)
+  EVT_BUTTON(ID_B_UPDATE_CHECK_DOWNLOAD, update_check_dlg_c::on_download_pressed)
   EVT_CLOSE(update_check_dlg_c::on_close)
   EVT_COMMAND(ID_RE_CHANGELOG, wxEVT_COMMAND_TEXT_URL, update_check_dlg_c::on_url_pressed)
 END_EVENT_TABLE();

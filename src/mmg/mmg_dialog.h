@@ -40,6 +40,7 @@
 #define ID_HLC_DOWNLOAD_URL               10009
 #define ID_B_UPDATE_CHECK_CLOSE           10010
 #define ID_RE_CHANGELOG                   10011
+#define ID_B_UPDATE_CHECK_DOWNLOAD        10012
 
 #define ID_M_FILE_NEW                     30000
 #define ID_M_FILE_LOAD                    30001
