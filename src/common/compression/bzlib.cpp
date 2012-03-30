@@ -58,7 +58,7 @@ bzlib_compressor_c::do_decompress(memory_cptr const &buffer) {
       continue;
     }
 
-    throw mtx::compression_x(boost::format(Y("BZ2_bzDo_Decompress() failed. Result: %1%\n")) % result);
+    throw mtx::compression_x(boost::format(Y("BZ2_bzDecompress() failed. Result: %1%\n")) % result);
   }
 
   uncompressed->resize(uncompressed->get_size() - d_stream.avail_out);

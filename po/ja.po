@@ -2110,7 +2110,7 @@ msgstr "BZ2_bzCompressInit()が失敗しました。結果：%1%\n"
 
 #: src/common/compression/bzlib.cpp:61
 #, fuzzy, boost-format
-msgid "BZ2_bzDo_Decompress() failed. Result: %1%\n"
+msgid "BZ2_bzDecompress() failed. Result: %1%\n"
 msgstr "BZ2_bzCompressInit()が失敗しました。結果：%1%\n"
 
 #: src/mmg/header_editor/value_page.cpp:148
@@ -8386,17 +8386,17 @@ msgid "max. number of files:"
 msgstr "ファイルの最大分割数："
 
 #: src/common/memory.cpp:147
-#, boost-format
+#, fuzzy, boost-format
 msgid "memory.cpp/safemalloc() called from file %1%, line %2%: malloc() returned nullptr for a size of %3% bytes.\n"
 msgstr "memory.cpp/safemalloc() ファイル %1% から呼び出し、%2%行：malloc() が%3%バイトの要求に対しnullptrを返しました。\n"
 
 #: src/common/memory.cpp:135
-#, boost-format
+#, fuzzy, boost-format
 msgid "memory.cpp/safememdup() called from file %1%, line %2%: malloc() returned nullptr for a size of %3% bytes.\n"
 msgstr "memory.cpp/safememdup() ファイル %1% から呼び出し、%2%行：malloc() が%3%バイトの要求に対しnullptrを返しました。\n"
 
 #: src/common/memory.cpp:163
-#, boost-format
+#, fuzzy, boost-format
 msgid "memory.cpp/saferealloc() called from file %1%, line %2%: realloc() returned nullptr for a size of %3% bytes.\n"
 msgstr "memory.cpp/saferealloc() ファイル %1% から呼び出し、%2%行：realloc() が%3%バイトの要求に対しnullptrを返しました。\n"
 

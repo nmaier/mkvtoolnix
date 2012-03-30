@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2012-03-30 09:05+0200\n"
+"PO-Revision-Date: 2012-03-30 09:14+0200\n"
 "Last-Translator: Moritz Bunkus <moritz@bunkus.org>\n"
 "Language-Team: German <moritz@bunkus.org>\n"
 "Language: de\n"
@@ -2140,8 +2140,8 @@ msgid "BZ2_bzCompressInit() failed. Result: %1%\n"
 msgstr "BZ2_bzCompressInit() schlug fehl. Ergebnis: %1%\n"
 
 #: src/common/compression/bzlib.cpp:61
-#, fuzzy, boost-format
-msgid "BZ2_bzDo_Decompress() failed. Result: %1%\n"
+#, boost-format
+msgid "BZ2_bzDecompress() failed. Result: %1%\n"
 msgstr "BZ2_bzCompressInit() schlug fehl. Ergebnis: %1%\n"
 
 #: src/mmg/header_editor/value_page.cpp:148
@@ -6263,7 +6263,7 @@ msgstr "Die XML-Kapiteldatei '%1%' enthält einen Fehler an Position %3%: %2%.\n
 #: src/common/xml/ebml_chapters_converter.cpp:221
 #, boost-format
 msgid "The XML chapter file '%1%' contains an error: %2%\n"
-msgstr "Die XML-Kapiteldatei '%1%' enthält einen Fehler: %2%"
+msgstr "Die XML-Kapiteldatei '%1%' enthält einen Fehler: %2%\n"
 
 #: src/common/xml/ebml_chapters_converter.cpp:215
 #, boost-format
