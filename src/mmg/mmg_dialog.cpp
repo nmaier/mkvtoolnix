@@ -1572,6 +1572,7 @@ mmg_dialog::save_preferences() {
   cfg->Write(wxU("process_priority"),                options.priority);
   cfg->Write(wxU("autoset_output_filename"),         options.autoset_output_filename);
   cfg->Write(wxU("output_directory_mode"),           (long)options.output_directory_mode);
+  cfg->Write(wxU("clear_job_after_run_mode"),        static_cast<long>(options.clear_job_after_run_mode));
   cfg->Write(wxU("output_directory"),                options.output_directory);
   cfg->Write(wxU("ask_before_overwriting"),          options.ask_before_overwriting);
   cfg->Write(wxU("filenew_after_add_to_jobqueue"),   options.filenew_after_add_to_jobqueue);
@@ -1592,6 +1593,7 @@ mmg_dialog::load_preferences() {
   wxConfigBase *cfg = wxConfigBase::Get();
   wxString s;
   int window_pos_x, window_pos_y;
+  long value_long;
 
   cfg->SetPath(wxT("/GUI"));
 
@@ -1607,7 +1609,10 @@ mmg_dialog::load_preferences() {
   cfg->Read(wxU("mkvmerge_executable"),           &options.mkvmerge, wxU("mkvmerge"));
   cfg->Read(wxU("process_priority"),              &options.priority, wxU("normal"));
   cfg->Read(wxU("autoset_output_filename"),       &options.autoset_output_filename, true);
-  cfg->Read(wxU("output_directory_mode"),         (long *)&options.output_directory_mode, ODM_FROM_FIRST_INPUT_FILE);
+  cfg->Read(wxU("output_directory_mode"),         &value_long, ODM_FROM_FIRST_INPUT_FILE);
+  options.output_directory_mode = static_cast<output_directory_mode_e>(value_long);
+  cfg->Read(wxU("clear_job_after_run_mode"),      &value_long, CJAR_NEVER);
+  options.clear_job_after_run_mode = static_cast<clear_job_after_run_mode_e>(value_long);
   cfg->Read(wxU("output_directory"),              &options.output_directory, wxU(""));
   cfg->Read(wxU("ask_before_overwriting"),        &options.ask_before_overwriting, true);
   cfg->Read(wxU("filenew_after_add_to_jobqueue"), &options.filenew_after_add_to_jobqueue, false);

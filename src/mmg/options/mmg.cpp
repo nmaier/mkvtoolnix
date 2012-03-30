@@ -89,6 +89,14 @@ optdlg_mmg_tab::optdlg_mmg_tab(wxWindow *parent,
 
   cb_filenew_after_successful_mux  = new wxCheckBox(this, ID_CB_NEW_AFTER_SUCCESSFUL_MUX, Z("Clear inputs after a successful muxing run"));
 
+  wxString const clear_job_choices[] = {
+    Z("only if the run was successfull"),
+    Z("even if there were warnings"),
+    Z("always"),
+  };
+  cb_clear_job_after_run           = new wxCheckBox(this, ID_CB_CLEAR_JOB_AFTER_RUN, Z("Remove job from job queue after run:"));
+  cob_clear_job_after_run_mode     = new wxMTX_COMBOBOX_TYPE(this, ID_COB_CLEAR_JOB_AFTER_RUN_MODE, wxT("only if the run was successfull"), wxDefaultPosition, wxDefaultSize, 3, clear_job_choices, wxCB_READONLY);
+
   cb_on_top = new wxCheckBox(this, ID_CB_ON_TOP, Z("Always on top"));
 
   cb_warn_usage = new wxCheckBox(this, ID_CB_WARN_USAGE, Z("Warn about possible incorrect usage of mmg"));
@@ -159,6 +167,10 @@ optdlg_mmg_tab::optdlg_mmg_tab(wxWindow *parent,
   rb_odm_previous->SetValue(m_options.output_directory_mode == ODM_PREVIOUS);
   rb_odm_fixed->SetValue(m_options.output_directory_mode == ODM_FIXED);
 
+  cb_clear_job_after_run->SetValue(m_options.clear_job_after_run_mode != CJAR_NEVER);
+  set_combobox_selection(cob_clear_job_after_run_mode, std::max(static_cast<int>(m_options.clear_job_after_run_mode), 1) - 1);
+  cob_clear_job_after_run_mode->Enable(cb_clear_job_after_run->IsChecked());
+
 #if defined(HAVE_LIBINTL_H)
   set_combobox_selection(cob_ui_language, select_locale);
 #endif  // HAVE_LIBINTL_H
@@ -224,6 +236,13 @@ optdlg_mmg_tab::optdlg_mmg_tab(wxWindow *parent,
   siz_all->Add(cb_filenew_after_successful_mux, 0, wxLEFT, 5);
   siz_all->AddSpacer(5);
 
+  siz_line = new wxBoxSizer(wxHORIZONTAL);
+  siz_line->Add(cb_clear_job_after_run,       0, wxALIGN_CENTER_VERTICAL,                             0);
+  siz_line->Add(cob_clear_job_after_run_mode, 1, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT | wxGROW, 5);
+
+  siz_all->Add(siz_line, 0, wxLEFT | wxGROW, 5);
+  siz_all->AddSpacer(5);
+
 #if defined(SYS_WINDOWS)
   siz_all->Add(cb_on_top, 0, wxLEFT, 5);
   siz_all->AddSpacer(5);
@@ -262,6 +281,11 @@ optdlg_mmg_tab::on_autoset_output_filename_selected(wxCommandEvent &) {
 }
 
 void
+optdlg_mmg_tab::on_clear_job_after_run_pressed(wxCommandEvent &) {
+  cob_clear_job_after_run_mode->Enable(cb_clear_job_after_run->IsChecked());
+}
+
+void
 optdlg_mmg_tab::enable_output_filename_controls(bool enable) {
   bool odm_is_fixed = rb_odm_fixed->GetValue();
 
@@ -296,6 +320,7 @@ optdlg_mmg_tab::save_options() {
   m_options.output_directory_mode         = rb_odm_input_file->GetValue() ? ODM_FROM_FIRST_INPUT_FILE
                                           : rb_odm_previous->GetValue()   ? ODM_PREVIOUS
                                           :                                 ODM_FIXED;
+  m_options.clear_job_after_run_mode      = cb_clear_job_after_run->IsChecked() ? static_cast<clear_job_after_run_mode_e>(cob_clear_job_after_run_mode->GetSelection() + 1) : CJAR_NEVER;
 #if defined(HAVE_CURL_EASY_H)
   m_options.check_for_updates             = cb_check_for_updates->IsChecked();
 #endif  // defined(HAVE_CURL_EASY_H)
@@ -329,4 +354,5 @@ BEGIN_EVENT_TABLE(optdlg_mmg_tab, optdlg_base_tab)
   EVT_RADIOBUTTON(ID_RB_ODM_INPUT_FILE,       optdlg_mmg_tab::on_autoset_output_filename_selected)
   EVT_RADIOBUTTON(ID_RB_ODM_PREVIOUS,         optdlg_mmg_tab::on_autoset_output_filename_selected)
   EVT_RADIOBUTTON(ID_RB_ODM_FIXED,            optdlg_mmg_tab::on_autoset_output_filename_selected)
+  EVT_CHECKBOX(ID_CB_CLEAR_JOB_AFTER_RUN,     optdlg_mmg_tab::on_clear_job_after_run_pressed)
 END_EVENT_TABLE();

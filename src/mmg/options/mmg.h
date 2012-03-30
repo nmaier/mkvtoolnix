@@ -37,6 +37,8 @@
 #define ID_CB_NEW_AFTER_SUCCESSFUL_MUX  15117
 #define ID_CB_DISABLE_HRC               15118
 #define ID_CB_CHECK_FOR_UPDATES         15119
+#define ID_COB_CLEAR_JOB_AFTER_RUN_MODE 15120
+#define ID_CB_CLEAR_JOB_AFTER_RUN       15121
 
 class optdlg_mmg_tab: public optdlg_base_tab {
   DECLARE_CLASS(optdlg_mmg_tab);
@@ -55,6 +57,8 @@ public:
 #endif  // defined(HAVE_CURL_EASY_H)
   wxRadioButton *rb_odm_input_file, *rb_odm_previous, *rb_odm_fixed;
   wxButton *b_browse_output_directory;
+  wxCheckBox *cb_clear_job_after_run;
+  wxMTX_COMBOBOX_TYPE *cob_clear_job_after_run_mode;
 
 #if defined(HAVE_LIBINTL_H)
   wxMTX_COMBOBOX_TYPE *cob_ui_language;
@@ -71,6 +75,7 @@ public:
   void on_autoset_output_filename_selected(wxCommandEvent &evt);
   void on_ok(wxCommandEvent &evt);
   void on_output_directory_mode(wxCommandEvent &evt);
+  void on_clear_job_after_run_pressed(wxCommandEvent &evt);
 
   void enable_output_filename_controls(bool enable);
 

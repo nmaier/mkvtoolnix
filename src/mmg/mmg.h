@@ -181,17 +181,25 @@ struct mmg_attachment_t {
 };
 typedef std::shared_ptr<mmg_attachment_t> mmg_attachment_cptr;
 
-typedef enum {
+enum output_directory_mode_e {
   ODM_FROM_FIRST_INPUT_FILE = 0,
   ODM_PREVIOUS              = 1,
   ODM_FIXED                 = 2,
-} output_directory_mode_e;
+};
+
+enum clear_job_after_run_mode_e {
+  CJAR_NEVER      = 0,
+  CJAR_SUCCESSFULL = 1,
+  CJAR_WARNINGS    = 2,
+  CJAR_ALWAYS      = 3,
+};
 
 struct mmg_options_t {
   wxString mkvmerge;
   wxString output_directory;
   bool autoset_output_filename;
   output_directory_mode_e output_directory_mode;
+  clear_job_after_run_mode_e clear_job_after_run_mode;
   bool ask_before_overwriting;
   bool on_top;
   bool filenew_after_add_to_jobqueue;
@@ -207,6 +215,7 @@ struct mmg_options_t {
   mmg_options_t()
     : autoset_output_filename(false)
     , output_directory_mode(ODM_FROM_FIRST_INPUT_FILE)
+    , clear_job_after_run_mode(CJAR_NEVER)
     , ask_before_overwriting(false)
     , on_top(false)
     , filenew_after_add_to_jobqueue(false)
@@ -259,10 +268,25 @@ wxString create_append_mapping();
 
 int default_track_checked(char type);
 
-void set_combobox_selection(wxComboBox *cb, const wxString wanted);
-#if defined(USE_WXBITMAPCOMBOBOX)
-void set_combobox_selection(wxBitmapComboBox *cb, const wxString wanted);
-#endif  // USE_WXBITMAPCOMBOBOX
+template<class T> void
+set_combobox_selection(T *cb,
+                       wxString const &wanted) {
+  cb->SetValue(wanted);
+  auto count = cb->GetCount();
+  for (auto idx = 0u; count > idx; ++idx)
+    if (cb->GetString(idx) == wanted) {
+      cb->SetSelection(idx);
+      return;
+    }
+}
+
+template<class T> void
+set_combobox_selection(T *cb,
+                       int selection) {
+  cb->SetSelection(selection);
+  cb->SetValue(cb->GetString(selection));
+}
+
 void set_menu_item_strings(wxFrame *frame, int id, const wxString &title, const wxString &help_text);
 void set_menu_label(wxFrame *frame, int pos, const wxString &label);
 

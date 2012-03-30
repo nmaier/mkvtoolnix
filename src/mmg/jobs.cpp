@@ -335,27 +335,39 @@ void
 job_run_dialog::on_end_process(wxProcessEvent &evt) {
   process_input();
 
-  int ndx       = jobs_to_start[current_job];
-  int exit_code = evt.GetExitCode();
+  int ndx         = jobs_to_start[current_job];
+  int exit_code   = evt.GetExitCode();
+  bool remove_job;
   wxString status;
 
   if (abort) {
     jobs[ndx].status = JOBS_ABORTED;
     status           = Z("aborted");
+    remove_job       = false;
   } else if (0 == exit_code) {
     jobs[ndx].status = JOBS_DONE;
     status           = Z("completed OK");
+    remove_job       = CJAR_NEVER != mdlg->options.clear_job_after_run_mode;
   } else if (1 == exit_code) {
     jobs[ndx].status = JOBS_DONE_WARNINGS;
     status           = Z("completed with warnings");
+    remove_job       = (CJAR_ALWAYS == mdlg->options.clear_job_after_run_mode) || (CJAR_WARNINGS == mdlg->options.clear_job_after_run_mode);
   } else {
     jobs[ndx].status = JOBS_FAILED;
     status           = Z("failed");
+    remove_job        = CJAR_ALWAYS == mdlg->options.clear_job_after_run_mode;
   }
 
   jobs[ndx].finished_on = wxGetUTCTime();
 
   add_to_log(wxString::Format(Z("Finished job ID %d on %s: status '%s'"), jobs[ndx].id, format_date_time(jobs[ndx].finished_on).c_str(), status.c_str()));
+
+  if (remove_job) {
+    jobs.erase(jobs.begin() + ndx, jobs.begin() + ndx + 1);
+    for (auto idx = 0u; jobs_to_start.size() > idx; ++idx)
+      if (jobs_to_start[idx] >= ndx)
+        jobs_to_start[idx]--;
+  }
 
   mdlg->save_job_queue();
   delete process;

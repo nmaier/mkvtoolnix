@@ -1,3 +1,10 @@
+2012-03-30  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: new feature: Added an option in the preferences dialog
+	called "clear jobs from the job queue after they've been run". Can
+	be set to "only if run was successfull", "even if there were
+	warnings" and "even if there were errors". Defaults to off.
+
 2012-03-29  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge, mkvextract, mmg: Re-write of the whole XML handling
