@@ -47,7 +47,7 @@
 
 job_run_dialog::job_run_dialog(wxWindow *,
                                std::vector<int> &n_jobs_to_start)
-  : wxDialog(nullptr, -1, Z("mkvmerge is running"), wxDefaultPosition, wxSize(400, 700), wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxMINIMIZE_BOX | wxMAXIMIZE_BOX)
+  : wxDialog(nullptr, -1, Z("mkvmerge is running"), wxDefaultPosition, wxSize(700, 700), wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxMINIMIZE_BOX | wxMAXIMIZE_BOX)
   , t_update(new wxTimer(this, 1))
   , out(nullptr)
   , process(nullptr)
@@ -402,6 +402,8 @@ job_log_dialog::job_log_dialog(wxWindow *parent,
   siz_all->SetSizeHints(this);
   SetSizer(siz_all);
 
+  SetSize(wxSize(900, 500));
+
   ShowModal();
 }
 
@@ -510,6 +512,8 @@ job_dialog::job_dialog(wxWindow *parent):
   siz_all->Add(siz_b_bottom, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 10);
   siz_all->SetSizeHints(this);
   SetSizer(siz_all);
+
+  SetSize(wxSize(800, 500));
 
   enable_buttons(false);
 
