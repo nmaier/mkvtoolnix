@@ -943,11 +943,11 @@ msgstr "&Копіювати командний рядок до буферу об
 msgid "&Copy to clipboard"
 msgstr "&Скопіювати до буферу обміну"
 
-#: src/mmg/jobs.cpp:479
+#: src/mmg/jobs.cpp:493
 msgid "&Disable"
 msgstr "&Вимкнути"
 
-#: src/mmg/jobs.cpp:471
+#: src/mmg/jobs.cpp:485
 msgid "&Down"
 msgstr "&Вниз"
 
@@ -1018,8 +1018,8 @@ msgid "&New chapters"
 msgstr "&Нові розділи"
 
 #: src/mmg/jobs.cpp:101
-#: src/mmg/jobs.cpp:394
-#: src/mmg/jobs.cpp:498
+#: src/mmg/jobs.cpp:406
+#: src/mmg/jobs.cpp:512
 msgid "&Ok"
 msgstr "&OK"
 
@@ -1037,7 +1037,7 @@ msgstr "&Налаштування"
 msgid "&Quit\tCtrl-Q"
 msgstr "&Вихід\tCtrl-Q"
 
-#: src/mmg/jobs.cpp:476
+#: src/mmg/jobs.cpp:490
 msgid "&Re-enable"
 msgstr "&Повторно ввімкнути"
 
@@ -1049,7 +1049,7 @@ msgstr "&Перезавантажити\tCtrl-R"
 msgid "&Reset"
 msgstr "&Скинути"
 
-#: src/mmg/jobs.cpp:399
+#: src/mmg/jobs.cpp:411
 #: src/mmg/mmg_dialog.cpp:301
 msgid "&Save"
 msgstr "&Зберегти"
@@ -1066,11 +1066,11 @@ msgstr "&Зберегти інформацію як текст\tCtrl-S"
 msgid "&Save settings\tCtrl-S"
 msgstr "&Зберегти налаштування\tCtrl-S"
 
-#: src/mmg/jobs.cpp:503
+#: src/mmg/jobs.cpp:517
 msgid "&Start"
 msgstr "&Розпочати виконання"
 
-#: src/mmg/jobs.cpp:468
+#: src/mmg/jobs.cpp:482
 msgid "&Up"
 msgstr "&Вгору"
 
@@ -1082,7 +1082,7 @@ msgstr "&Затвердити\tCtrl-T"
 msgid "&Verify"
 msgstr "&Перевірити"
 
-#: src/mmg/jobs.cpp:489
+#: src/mmg/jobs.cpp:503
 msgid "&View log"
 msgstr "&Переглянути журнал"
 
@@ -1565,7 +1565,7 @@ msgstr ", опис '%1%'"
 msgid ", file name '%1%'"
 msgstr ", назва файлу '%1%'"
 
-#: src/mmg/jobs.cpp:743
+#: src/mmg/jobs.cpp:759
 #, c-format, boost-format
 msgid ", finished on %s"
 msgstr ", завершено %s"
@@ -1575,22 +1575,22 @@ msgstr ", завершено %s"
 msgid ", position %1%"
 msgstr ", позиція %1%"
 
-#: src/mmg/jobs.cpp:733
+#: src/mmg/jobs.cpp:749
 #, c-format, boost-format
 msgid ", started on %s"
 msgstr ", розпочато %s"
 
-#: src/mmg/jobs.cpp:731
+#: src/mmg/jobs.cpp:747
 #, c-format, boost-format
 msgid "--- BEGIN job %d (%s, added on %s)"
 msgstr "--- Завдання %d (%s, додано %s)"
 
-#: src/mmg/jobs.cpp:741
+#: src/mmg/jobs.cpp:757
 #, c-format, boost-format
 msgid "--- END job %d"
 msgstr "--- Завдання %d"
 
-#: src/mmg/jobs.cpp:736
+#: src/mmg/jobs.cpp:752
 msgid "--- No job output found.\n"
 msgstr "--- Не знайдено вихідних данних завдання.\n"
 
@@ -1865,7 +1865,7 @@ msgstr "Додати або замінити теги у файлі тими, щ
 msgid "Add subchapter"
 msgstr "Додати підрозділ"
 
-#: src/mmg/jobs.cpp:441
+#: src/mmg/jobs.cpp:455
 msgid "Added on"
 msgstr "Додано"
 
@@ -1953,7 +1953,7 @@ msgstr "Крім того, намагатися витягти CUE-лист з �
 msgid "Also using the correction file '%1%c'.\n"
 msgstr "Також з використанням файлу корекції '%1%c'.\n"
 
-#: src/mmg/options/mmg.cpp:92
+#: src/mmg/options/mmg.cpp:100
 msgid "Always on top"
 msgstr "Завжди поверх інших вікон"
 
@@ -2427,7 +2427,7 @@ msgid "Charset:"
 msgstr "Набір символів:"
 
 #: src/mmg/mmg_dialog.cpp:312
-#: src/mmg/options/mmg.cpp:105
+#: src/mmg/options/mmg.cpp:113
 msgid "Check online for the latest release"
 msgstr "Перевіряти наявність останньої версії онлайн"
 
@@ -2436,11 +2436,11 @@ msgstr "Перевіряти наявність останньої версії 
 msgid "Check online for the latest release."
 msgstr "Перевірити наявність останньої версії онлайн."
 
-#: src/mmg/options/mmg.cpp:106
+#: src/mmg/options/mmg.cpp:114
 msgid "Check online whether or not a new release of MKVToolNix is available on the home page. Will only check when mmg starts and at most once a day. No information is transmitted to the server."
 msgstr "Перевіряти наявність нової версії MKVToolNix на домашній веб-сторінці. Перевірка здійснюватиметься при старті mmg і не більше одного раза на день. Ніяка інформація не передається до сервера."
 
-#: src/mmg/mmg_dialog.cpp:1738
+#: src/mmg/mmg_dialog.cpp:1743
 msgid "Checking for updates online; please wait"
 msgstr "Йде перевірка наявності оновлень онлайн; будь ласка, зачекайте"
 
@@ -2472,7 +2472,7 @@ msgstr "Оберіть вхідний файл, щоб додати його"
 msgid "Choose an input file to append"
 msgstr "Оберіть вхідний файл, щоб приєднати його"
 
-#: src/mmg/jobs.cpp:410
+#: src/mmg/jobs.cpp:424
 #: src/mmg/mmg_dialog.cpp:350
 #: src/mmg/mmg_dialog.cpp:446
 #: src/mmg/mmg_dialog.cpp:754
@@ -2495,7 +2495,7 @@ msgstr "Оберіть розташування файлів допомоги mk
 msgid "Choose the mkvmerge executable"
 msgstr "Оберіть виконуваний файл mkvmerge"
 
-#: src/mmg/options/mmg.cpp:253
+#: src/mmg/options/mmg.cpp:272
 msgid "Choose the output directory"
 msgstr "Оберіть вихідну теку"
 
@@ -2900,7 +2900,7 @@ msgstr "Cues (дочірні записи будуть пропущені)"
 msgid "Cues:"
 msgstr "Cue-списки:"
 
-#: src/mmg/jobs.cpp:429
+#: src/mmg/jobs.cpp:443
 msgid "Current and past jobs:"
 msgstr "Поточні і виконані завдання:"
 
@@ -2925,7 +2925,7 @@ msgstr "Поточне значення:"
 msgid "Current version:"
 msgstr "Поточна версія:"
 
-#: src/mmg/jobs.cpp:484
+#: src/mmg/jobs.cpp:498
 msgid "D&elete"
 msgstr "&Видалити"
 
@@ -3021,11 +3021,11 @@ msgstr "Затримка: %|1$.3f|мс"
 msgid "Delete all occurences of a property"
 msgstr "Видалити всі входження параметру"
 
-#: src/mmg/jobs.cpp:485
+#: src/mmg/jobs.cpp:499
 msgid "Delete the selected job(s) from the job queue"
 msgstr "Видалити вибране(і) завдання з черги завдань"
 
-#: src/mmg/jobs.cpp:439
+#: src/mmg/jobs.cpp:453
 msgid "Description"
 msgstr "Опис"
 
@@ -3045,11 +3045,11 @@ msgstr "Опис:"
 msgid "Dirac"
 msgstr "Dirac"
 
-#: src/mmg/options/mmg.cpp:100
+#: src/mmg/options/mmg.cpp:108
 msgid "Disable header removal compression for audio and video tracks by default"
 msgstr "Типово вимкнути використання стиснення (з усуненням) заголовків для доріжок аудіо і відео"
 
-#: src/mmg/jobs.cpp:480
+#: src/mmg/jobs.cpp:494
 msgid "Disable the selected job(s) and sets their status to 'done'"
 msgstr "Вимкнути вибране(і) завдання та встановити їх статус як 'завершено'"
 
@@ -3545,12 +3545,12 @@ msgstr "Назва файла/сегмента:"
 msgid "Files cannot be appended to themselves. The argument for '--append-to' was invalid.\n"
 msgstr "Файли не можуть бути приєднані самі до себе. Аргумент '--append-to' був некорректним.\n"
 
-#: src/mmg/jobs.cpp:358
+#: src/mmg/jobs.cpp:363
 #, c-format, boost-format
 msgid "Finished job ID %d on %s: status '%s'"
 msgstr "Завершено виконання завдання з ID %d на %s: статус '%s'"
 
-#: src/mmg/jobs.cpp:445
+#: src/mmg/jobs.cpp:459
 msgid "Finished on"
 msgstr "Завершено"
 
@@ -3775,7 +3775,7 @@ msgstr ""
 msgid "Here you can set the values for the language and the country that you want to apply to all the chapters below and including the currently selected entry."
 msgstr "Тут ви можете задати значення для мови і країни, які ви хочете застосувати до всіх розділів, що йдуть після обраного, включаючи його."
 
-#: src/mmg/jobs.cpp:434
+#: src/mmg/jobs.cpp:448
 msgid "ID"
 msgstr "ID"
 
@@ -3811,11 +3811,11 @@ msgstr "Якщо вибрано, то mmg буде запитувати підт
 msgid "If checked mmg will automatically set the output filename if it hasn't been set already. This happens when you add the first file. If unset mmg will not touch the output filename."
 msgstr "Якщо вибрано, то mmg буде автоматично встановлювати назву вихідного файлу, якщо її не було встановлено раніше. Це відбувається при додаванні першого файлу. Якщо не вибрано, то mmg не буде змінювати назву файлу взагалі."
 
-#: src/mmg/options/mmg.cpp:101
+#: src/mmg/options/mmg.cpp:109
 msgid "If checked mmg will set the 'compression' drop down box to 'none' for all audio and video tracks by default. The user can still change the compression setting afterwards."
 msgstr "Якщо вибрано, то mmg типово буде задавати значення у випадаючому списку 'стиснення' як 'не використовувати' для доріжок аудіо і відео. Користувач все одно може змінювати опції стиснення після цього."
 
-#: src/mmg/options/mmg.cpp:95
+#: src/mmg/options/mmg.cpp:103
 msgid "If checked mmg will warn if it thinks that you're using it incorrectly. Such warnings are shown at least once even if you turn this feature off."
 msgstr "Якщо вибрано, то mmg буде попереджати, якщо вважатиме, що ви використовуєте програму невірно. Такі попередження відображаються щонайменше один раз, навіть якщо ви вимкнете цю опцію."
 
@@ -3842,7 +3842,7 @@ msgstr "Імпортовано шрифтів з %1%"
 msgid "Imported picture from %1%"
 msgstr "Імпортовано зображення з %1%"
 
-#: src/mmg/mmg_dialog.cpp:1883
+#: src/mmg/mmg_dialog.cpp:1888
 msgid "Incompatible mkvmerge version"
 msgstr "Несумісна версія mkvmerge"
 
@@ -3881,7 +3881,7 @@ msgstr "Вхідні файли:"
 msgid "Input too long: %1% > %2%"
 msgstr "Вхідні дані надто довгі: %1% > %2%"
 
-#: src/mmg/options/mmg.cpp:116
+#: src/mmg/options/mmg.cpp:124
 msgid "Interface language:"
 msgstr "Мова інтерфейсу:"
 
@@ -4232,11 +4232,11 @@ msgstr "Завдання додано до черги завдань"
 msgid "Job description"
 msgstr "Опис завдання"
 
-#: src/mmg/jobs.cpp:385
+#: src/mmg/jobs.cpp:397
 msgid "Job output"
 msgstr "Вихідна інформація щодо виконання завдань"
 
-#: src/mmg/jobs.cpp:426
+#: src/mmg/jobs.cpp:440
 msgid "Job queue management"
 msgstr "Керування чергою завдань"
 
@@ -4617,11 +4617,11 @@ msgstr "Більше ніж одна доріжка повинна бути до
 msgid "More than one track with the track number %1% found.\n"
 msgstr "Знайдено більш ніж одну доріжку з номером доріжки %1%.\n"
 
-#: src/mmg/jobs.cpp:472
+#: src/mmg/jobs.cpp:486
 msgid "Move the selected job(s) down"
 msgstr "Перемістити вибране(і) завдання вниз"
 
-#: src/mmg/jobs.cpp:469
+#: src/mmg/jobs.cpp:483
 msgid "Move the selected job(s) up"
 msgstr "Перемістити вибране(і) завдання вгору"
 
@@ -4980,7 +4980,7 @@ msgstr "Назва вихідного файла"
 msgid "Output messages in this charset"
 msgstr "Вихідні повідомлення з цим набором символів"
 
-#: src/mmg/jobs.cpp:389
+#: src/mmg/jobs.cpp:401
 msgid "Output of the selected jobs:"
 msgstr "Вихідна інформація щодо вибраних завдань:"
 
@@ -5167,7 +5167,7 @@ msgstr "Прогрес виконання: 100%%%1%"
 msgid "Progress: [%1%%2%] %3%%%"
 msgstr "Прогрес виконання: [%1%%2%] %3%%%"
 
-#: src/mmg/mmg_dialog.cpp:1826
+#: src/mmg/mmg_dialog.cpp:1831
 msgid "Querying mkvmerge's capabilities"
 msgstr "Запит можливостей mkvmerge"
 
@@ -5324,7 +5324,7 @@ msgstr "Закрити mkvinfo"
 msgid "RSA"
 msgstr "RSA"
 
-#: src/mmg/jobs.cpp:477
+#: src/mmg/jobs.cpp:491
 msgid "Re-enable the selected job(s)"
 msgstr "Повтороно ввімкнути обране(і) завдання"
 
@@ -5404,6 +5404,10 @@ msgstr "Видалити розділ"
 msgid "Remove element"
 msgstr "Видалити елемент"
 
+#: src/mmg/options/mmg.cpp:97
+msgid "Remove job from job queue after run:"
+msgstr ""
+
 #: src/mmg/tabs/chapters.cpp:348
 msgid "Remove name"
 msgstr "Видалити назву"
@@ -5429,7 +5433,7 @@ msgstr "Запустити редактор полів заголовків"
 msgid "S&how the command line"
 msgstr "&Показати командний рядок"
 
-#: src/mmg/jobs.cpp:507
+#: src/mmg/jobs.cpp:521
 msgid "S&tart selected"
 msgstr "&Розпочати виконання вибраного"
 
@@ -5792,7 +5796,7 @@ msgstr "Відображення всіх байтів кожного кадра
 msgid "Show element si&zes\tCtrl-Z"
 msgstr "&Показати розмір елементів\tCtrl-Z"
 
-#: src/mmg/options/mmg.cpp:111
+#: src/mmg/options/mmg.cpp:119
 msgid "Show mmg's debug window"
 msgstr "Показувати вікно налагодження mmg"
 
@@ -5832,7 +5836,7 @@ msgstr "Показати цю інформацію з допомогою."
 msgid "Show version information."
 msgstr "Показати інформацію про версію."
 
-#: src/mmg/options/mmg.cpp:112
+#: src/mmg/options/mmg.cpp:120
 msgid "Shows mmg's debug window in which debug messages will appear. This is only useful if you're helping the author debug a problem in mmg."
 msgstr "Показує вікно налагодження mmg, в якому будуть відображатися налагоджувальні повідомлення. Це  корисно, якщо ви допомагаєте автору виявити проблему в mmg."
 
@@ -5970,11 +5974,11 @@ msgstr "&Почати мультиплексування (запустити mkv
 msgid "Start the GUI (and open inname if it was given)."
 msgstr "mkvinfo [опції] inname"
 
-#: src/mmg/jobs.cpp:504
+#: src/mmg/jobs.cpp:518
 msgid "Start the jobs whose status is 'pending'"
 msgstr "Розпочати виконання завдання(нь) із статусом 'очікування'"
 
-#: src/mmg/jobs.cpp:508
+#: src/mmg/jobs.cpp:522
 msgid "Start the selected job(s) regardless of their status"
 msgstr "Розпочати виконання вибраного(их) завдання(нь) незалежно від їх статусу"
 
@@ -5986,7 +5990,7 @@ msgstr "Розпочати використання з незаданими оп
 msgid "Start:"
 msgstr "Початок:"
 
-#: src/mmg/jobs.cpp:443
+#: src/mmg/jobs.cpp:457
 msgid "Started on"
 msgstr "Розпочато"
 
@@ -6000,7 +6004,7 @@ msgstr "Розпочато виконання завдання з ID %d (%s) %s"
 msgid "Statistics for track number %1%: number of blocks: %2%; size in bytes: %3%; duration in seconds: %4%; approximate bitrate in bits/second: %5%\n"
 msgstr "Статистика для доріжки номер %1%: кількість блоків: %2%; розмір в байтах: %3%; тривалість в секундах: %4%; орієнтовний бітрейт в бітах/с: %5%\n"
 
-#: src/mmg/jobs.cpp:437
+#: src/mmg/jobs.cpp:451
 msgid "Status"
 msgstr "Статус"
 
@@ -6136,7 +6140,7 @@ msgstr "Повідомляє mkvmerge створити елемент мета �
 msgid "Text files (*.txt);;All files (*.*)"
 msgstr "Текстові файли (*.txt);;Всі файли (*.*)"
 
-#: src/mmg/jobs.cpp:410
+#: src/mmg/jobs.cpp:424
 #, c-format, boost-format
 msgid "Text files (*.txt)|*.txt|%s"
 msgstr "Текстові файли (*.txt)|*.txt|%s"
@@ -6196,7 +6200,7 @@ msgstr "FourCC повинен складатися рівно з чотирьо�
 msgid "The FourCC setting for track nr. %s in file '%s' is not excatly four characters long."
 msgstr "FourCC для доріжки номер %s у файлі '%s' не містить точно чотири символи."
 
-#: src/mmg/mmg_dialog.cpp:1879
+#: src/mmg/mmg_dialog.cpp:1884
 #, boost-format
 msgid "The GUI is configured to use the mkvmerge executable from a different version (%1%) than the GUI itself (%2%). This is not supported but will not be prevented either. You should change the mkvmerge executable in the preferences dialog."
 msgstr "GUI налаштований на використання виконуваного файла mkvmerge іншої версії (%1%), ніж сам GUI (%2%). Даний сценарій не підтримується, але не забороняється. Ви можете змінити шлях до виконуваного файла mkvmerge необхідної версії через діалог налаштувань."
@@ -7139,7 +7143,7 @@ msgstr "Ширина двох доріжок є різною: %1% i %2%"
 msgid "Theora"
 msgstr "Theora"
 
-#: src/mmg/mmg_dialog.cpp:1771
+#: src/mmg/mmg_dialog.cpp:1776
 msgid "There is a new version available online."
 msgstr "Онлайн доступна нова версія."
 
@@ -7154,7 +7158,7 @@ msgstr "Немає файлу з ID '%1%'. Аргумент для '--append-to'
 msgid "There is no translation available for '%1%'.\n"
 msgstr "Немає доступного перекладу для '%1%'.\n"
 
-#: src/mmg/mmg_dialog.cpp:1772
+#: src/mmg/mmg_dialog.cpp:1777
 msgid "There was an error querying the update status."
 msgstr "Сталася помилка при запиті статусу оновлення."
 
@@ -7810,7 +7814,7 @@ msgstr "Відеодоріжка"
 msgid "Video track %u"
 msgstr "Відеодоріжка %u"
 
-#: src/mmg/jobs.cpp:490
+#: src/mmg/jobs.cpp:504
 msgid "View the output that mkvmerge generated during the muxing process for the selected job(s)"
 msgstr "Показати вихідну інформацію, яку згенерувано mkvmerge під час мультиплексування для вибраного завдання(й)"
 
@@ -7856,7 +7860,7 @@ msgstr "Аудіо WAVPACK v4"
 msgid "WAVPACK4"
 msgstr "WAVPACK4"
 
-#: src/mmg/options/mmg.cpp:94
+#: src/mmg/options/mmg.cpp:102
 msgid "Warn about possible incorrect usage of mmg"
 msgstr "Попереджати про можливе невірне використання mmg"
 
@@ -7961,7 +7965,7 @@ msgstr "Неправильний рядок ідентифікації: '%|1$6s|
 msgid "Wrong identification string: '%|1$7s|' != 'kate\\0\\0\\0'"
 msgstr "Неправильний рядок ідентифікації: '%|1$7s|' != 'kate\\0\\0\\0'"
 
-#: src/mmg/mmg_dialog.cpp:1770
+#: src/mmg/mmg_dialog.cpp:1775
 msgid "You are already running the latest version."
 msgstr "Ви вже використовуєте останню версію."
 
@@ -7997,9 +8001,9 @@ msgstr "Zlib декомпресія пройшла невдало. Резуль�
 msgid "[%1% frame for track %2%, timecode %3%]"
 msgstr "[%1% кадр для доріжки %2%, тайм-код %3%]"
 
-#: src/mmg/jobs.cpp:344
-#: src/mmg/jobs.cpp:453
-#: src/mmg/jobs.cpp:531
+#: src/mmg/jobs.cpp:345
+#: src/mmg/jobs.cpp:467
+#: src/mmg/jobs.cpp:547
 msgid "aborted"
 msgstr "перервано"
 
@@ -8011,6 +8015,10 @@ msgstr "ac3_bs_packetizer::add_to_buffer(): Неперевірений код ('
 #: src/mmg/tabs/input.cpp:188
 msgid "add"
 msgstr "Додати"
+
+#: src/mmg/options/mmg.cpp:95
+msgid "always"
+msgstr ""
 
 #: src/common/stereo_mode.cpp:58
 msgid "anaglyph (cyan/red)"
@@ -8074,11 +8082,11 @@ msgstr "черезрядково з вертикальним роздільни�
 msgid "column interleaved (right first)"
 msgstr "черезрядково з вертикальним роздільником (правий спочатку)"
 
-#: src/mmg/jobs.cpp:347
+#: src/mmg/jobs.cpp:349
 msgid "completed OK"
 msgstr "Завершено без помилок і попереджень"
 
-#: src/mmg/jobs.cpp:350
+#: src/mmg/jobs.cpp:353
 msgid "completed with warnings"
 msgstr "Завершено з попередженнями"
 
@@ -8125,12 +8133,12 @@ msgstr "висота дисплея: %1%"
 msgid "display width: %1%"
 msgstr "ширина дисплея: %1%"
 
-#: src/mmg/jobs.cpp:529
-#: src/mmg/jobs.cpp:717
+#: src/mmg/jobs.cpp:545
+#: src/mmg/jobs.cpp:733
 msgid "done"
 msgstr "виконано"
 
-#: src/mmg/jobs.cpp:530
+#: src/mmg/jobs.cpp:546
 msgid "done/warnings"
 msgstr "виконано/є попередження"
 
@@ -8150,8 +8158,13 @@ msgstr "Задіяний"
 msgid "encryption"
 msgstr "Шифрування"
 
-#: src/mmg/jobs.cpp:353
-#: src/mmg/jobs.cpp:532
+#: src/mmg/options/mmg.cpp:94
+#, fuzzy
+msgid "even if there were warnings"
+msgstr "Виникли попередження"
+
+#: src/mmg/jobs.cpp:357
+#: src/mmg/jobs.cpp:548
 msgid "failed"
 msgstr "Не вдалося"
 
@@ -8643,7 +8656,7 @@ msgstr "mkvpropedit [опції] <файл> <дії>"
 msgid "mm_text_io_c: UTF32_* is not supported at the moment.\n"
 msgstr "mm_text_io_c: UTF32_* не підтримується в даний момент.\n"
 
-#: src/mmg/options/mmg.cpp:322
+#: src/mmg/options/mmg.cpp:347
 msgid "mmg"
 msgstr "mmg"
 
@@ -8651,7 +8664,7 @@ msgstr "mmg"
 msgid "mmg debug output"
 msgstr "вихідний потік налагодження mmg"
 
-#: src/mmg/options/mmg.cpp:177
+#: src/mmg/options/mmg.cpp:189
 msgid "mmg options"
 msgstr "опції mmg"
 
@@ -8727,6 +8740,10 @@ msgstr "on_entry_selected: display == nullptr. Цього не повинно б
 msgid "only for I frames"
 msgstr "тільки для I-кадрів"
 
+#: src/mmg/options/mmg.cpp:93
+msgid "only if the run was successfull"
+msgstr ""
+
 #: src/info/mkvinfo.cpp:618
 #, boost-format
 msgid "output sampling freq: %1%"
@@ -8736,8 +8753,8 @@ msgstr "частота дискретизації на виході: %1%"
 msgid "passthrough"
 msgstr "пропуск"
 
-#: src/mmg/jobs.cpp:528
-#: src/mmg/jobs.cpp:702
+#: src/mmg/jobs.cpp:544
+#: src/mmg/jobs.cpp:718
 msgid "pending"
 msgstr "очікування"
 

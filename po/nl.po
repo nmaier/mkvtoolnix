@@ -937,11 +937,11 @@ msgstr "&Kopieer commando regel naar klembord"
 msgid "&Copy to clipboard"
 msgstr "&Kopieer naar klembord"
 
-#: src/mmg/jobs.cpp:479
+#: src/mmg/jobs.cpp:493
 msgid "&Disable"
 msgstr "&Uitzetten"
 
-#: src/mmg/jobs.cpp:471
+#: src/mmg/jobs.cpp:485
 msgid "&Down"
 msgstr "&Omlaag"
 
@@ -1012,8 +1012,8 @@ msgid "&New chapters"
 msgstr "&Nieuw hoofdstuk"
 
 #: src/mmg/jobs.cpp:101
-#: src/mmg/jobs.cpp:394
-#: src/mmg/jobs.cpp:498
+#: src/mmg/jobs.cpp:406
+#: src/mmg/jobs.cpp:512
 msgid "&Ok"
 msgstr "&Ok"
 
@@ -1031,7 +1031,7 @@ msgstr "&Opties"
 msgid "&Quit\tCtrl-Q"
 msgstr "&Afsluiten\tCtrl-Q"
 
-#: src/mmg/jobs.cpp:476
+#: src/mmg/jobs.cpp:490
 msgid "&Re-enable"
 msgstr "&Herinstellen"
 
@@ -1043,7 +1043,7 @@ msgstr "&Opnieuw inladen\tCtrl-R"
 msgid "&Reset"
 msgstr "&Resetten"
 
-#: src/mmg/jobs.cpp:399
+#: src/mmg/jobs.cpp:411
 #: src/mmg/mmg_dialog.cpp:301
 msgid "&Save"
 msgstr "&Opslaan"
@@ -1060,11 +1060,11 @@ msgstr "&Info opslaan als tekst\tCtrl-S"
 msgid "&Save settings\tCtrl-S"
 msgstr "&Bewaar instellingen\tCtrl-S"
 
-#: src/mmg/jobs.cpp:503
+#: src/mmg/jobs.cpp:517
 msgid "&Start"
 msgstr "&Start"
 
-#: src/mmg/jobs.cpp:468
+#: src/mmg/jobs.cpp:482
 msgid "&Up"
 msgstr "&Omhoog"
 
@@ -1076,7 +1076,7 @@ msgstr "&Valideren\tCtrl-T"
 msgid "&Verify"
 msgstr "&Verifiëren"
 
-#: src/mmg/jobs.cpp:489
+#: src/mmg/jobs.cpp:503
 msgid "&View log"
 msgstr "&Toon log"
 
@@ -1559,7 +1559,7 @@ msgstr ", beschrijving '%1%'"
 msgid ", file name '%1%'"
 msgstr ", bestandsnaam '%1%'"
 
-#: src/mmg/jobs.cpp:743
+#: src/mmg/jobs.cpp:759
 #, c-format, boost-format
 msgid ", finished on %s"
 msgstr ", voltooid op %s"
@@ -1569,22 +1569,22 @@ msgstr ", voltooid op %s"
 msgid ", position %1%"
 msgstr ", positie %1%"
 
-#: src/mmg/jobs.cpp:733
+#: src/mmg/jobs.cpp:749
 #, c-format, boost-format
 msgid ", started on %s"
 msgstr ",gestart op %s"
 
-#: src/mmg/jobs.cpp:731
+#: src/mmg/jobs.cpp:747
 #, c-format, boost-format
 msgid "--- BEGIN job %d (%s, added on %s)"
 msgstr "--- BEGIN taak %d (%s, toegevoegd op %s)"
 
-#: src/mmg/jobs.cpp:741
+#: src/mmg/jobs.cpp:757
 #, c-format, boost-format
 msgid "--- END job %d"
 msgstr "--- EINDE taak %d"
 
-#: src/mmg/jobs.cpp:736
+#: src/mmg/jobs.cpp:752
 msgid "--- No job output found.\n"
 msgstr "--- Geen uitvoertaak gevonden.\n"
 
@@ -1859,7 +1859,7 @@ msgstr "Vervang of voeg toe markeeringen in het bestand met degene uit het besta
 msgid "Add subchapter"
 msgstr "Voeg sub hoofdstuk toe"
 
-#: src/mmg/jobs.cpp:441
+#: src/mmg/jobs.cpp:455
 msgid "Added on"
 msgstr "Toegevoegd op"
 
@@ -1947,7 +1947,7 @@ msgstr "Probeer ook  uit te pakken het volg document(en) (cue) van de hoofdstuk 
 msgid "Also using the correction file '%1%c'.\n"
 msgstr "Kon het corresponderende correctie bestand niet openen '%1%c'.\n"
 
-#: src/mmg/options/mmg.cpp:92
+#: src/mmg/options/mmg.cpp:100
 msgid "Always on top"
 msgstr "Altijd bovenaan"
 
@@ -2421,7 +2421,7 @@ msgid "Charset:"
 msgstr "Karakter set:"
 
 #: src/mmg/mmg_dialog.cpp:312
-#: src/mmg/options/mmg.cpp:105
+#: src/mmg/options/mmg.cpp:113
 msgid "Check online for the latest release"
 msgstr "Controleer online voor de laatste versie"
 
@@ -2430,11 +2430,11 @@ msgstr "Controleer online voor de laatste versie"
 msgid "Check online for the latest release."
 msgstr "Controleer online voor de laatste versie."
 
-#: src/mmg/options/mmg.cpp:106
+#: src/mmg/options/mmg.cpp:114
 msgid "Check online whether or not a new release of MKVToolNix is available on the home page. Will only check when mmg starts and at most once a day. No information is transmitted to the server."
 msgstr "Controleer online of er al dan niet een nieuwer versie van MKVToolNix op de thuispagina beschikbaar is. Wortdt leen gecontroleerd als  mmg start en maximaal één keer per dag. Er wordt géén informatie naar de server verzonden!"
 
-#: src/mmg/mmg_dialog.cpp:1738
+#: src/mmg/mmg_dialog.cpp:1743
 msgid "Checking for updates online; please wait"
 msgstr "Controleren op opwaarderingen,moment a.u.b."
 
@@ -2466,7 +2466,7 @@ msgstr "Kies een toe te voegen invoer bestand"
 msgid "Choose an input file to append"
 msgstr "Kies een invoer bestand om bij te voegen"
 
-#: src/mmg/jobs.cpp:410
+#: src/mmg/jobs.cpp:424
 #: src/mmg/mmg_dialog.cpp:350
 #: src/mmg/mmg_dialog.cpp:446
 #: src/mmg/mmg_dialog.cpp:754
@@ -2489,7 +2489,7 @@ msgstr "Kies de locatie van de mkvmerge GUI help bestanden"
 msgid "Choose the mkvmerge executable"
 msgstr "Kies het mkvmerge programma"
 
-#: src/mmg/options/mmg.cpp:253
+#: src/mmg/options/mmg.cpp:272
 msgid "Choose the output directory"
 msgstr "Kies uitvoer map"
 
@@ -2894,7 +2894,7 @@ msgstr "Volg document(en) (cue) (sub ingangen worden overgeslagen)"
 msgid "Cues:"
 msgstr "Volg document(en) (cue):"
 
-#: src/mmg/jobs.cpp:429
+#: src/mmg/jobs.cpp:443
 msgid "Current and past jobs:"
 msgstr "Huidige en verleden taken:"
 
@@ -2919,7 +2919,7 @@ msgstr "Huidige waarde:"
 msgid "Current version:"
 msgstr "Huidige versie:"
 
-#: src/mmg/jobs.cpp:484
+#: src/mmg/jobs.cpp:498
 msgid "D&elete"
 msgstr "V&erwijder"
 
@@ -3015,11 +3015,11 @@ msgstr "Vertraging: %|1$.3f|ms"
 msgid "Delete all occurences of a property"
 msgstr "Verwijder alle gebeurtenissen van een eigendom"
 
-#: src/mmg/jobs.cpp:485
+#: src/mmg/jobs.cpp:499
 msgid "Delete the selected job(s) from the job queue"
 msgstr "Verwijder geselecteerde taken uit taken wachtrij"
 
-#: src/mmg/jobs.cpp:439
+#: src/mmg/jobs.cpp:453
 msgid "Description"
 msgstr "Beschrijving"
 
@@ -3039,11 +3039,11 @@ msgstr "Beschrijving:"
 msgid "Dirac"
 msgstr "Dirac"
 
-#: src/mmg/options/mmg.cpp:100
+#: src/mmg/options/mmg.cpp:108
 msgid "Disable header removal compression for audio and video tracks by default"
 msgstr "Zet verwijder kop compressie uit voor audio en video sporen (standaard)"
 
-#: src/mmg/jobs.cpp:480
+#: src/mmg/jobs.cpp:494
 msgid "Disable the selected job(s) and sets their status to 'done'"
 msgstr "Zet geselecteerde taken uit en zet hun status op 'klaar'"
 
@@ -3539,12 +3539,12 @@ msgstr "Bestand/segment titel:"
 msgid "Files cannot be appended to themselves. The argument for '--append-to' was invalid.\n"
 msgstr "Bestanden kunnen niet aanzichzelf bijgevoegd worden. Het argument voor '--append-to' was ongeldig.\n"
 
-#: src/mmg/jobs.cpp:358
+#: src/mmg/jobs.cpp:363
 #, c-format, boost-format
 msgid "Finished job ID %d on %s: status '%s'"
 msgstr "Voltooid met taak ID %d op %s: status '%s'"
 
-#: src/mmg/jobs.cpp:445
+#: src/mmg/jobs.cpp:459
 msgid "Finished on"
 msgstr "Voltooid op"
 
@@ -3769,7 +3769,7 @@ msgstr ""
 msgid "Here you can set the values for the language and the country that you want to apply to all the chapters below and including the currently selected entry."
 msgstr "Hier kan je de waarde instellen van de taal en land die je wilt toekennen aan alle hoofdstukken hieronder incl. de huige geselecteerde."
 
-#: src/mmg/jobs.cpp:434
+#: src/mmg/jobs.cpp:448
 msgid "ID"
 msgstr "ID"
 
@@ -3806,11 +3806,11 @@ msgstr "Indien aangevinkt, zal mmg om een bevestiging vragen voor het overschrij
 msgid "If checked mmg will automatically set the output filename if it hasn't been set already. This happens when you add the first file. If unset mmg will not touch the output filename."
 msgstr "Indien aangevinkt, zal mmg automatisch de uitvoer bestandsnaam instellen als dat niet reeds gebeurd is. Dit gebeurt, wanneer je het eerste bestand toevoegt. Indien niet afgevinkt dan zal mmg de uitvoerbestandsnaam niet wijzigen."
 
-#: src/mmg/options/mmg.cpp:101
+#: src/mmg/options/mmg.cpp:109
 msgid "If checked mmg will set the 'compression' drop down box to 'none' for all audio and video tracks by default. The user can still change the compression setting afterwards."
 msgstr "Indien aangevinkt zet mmg de 'compressie' uitklapmenu naar 'geen' voor alle audio en video sporen (standaard). Achteraf is de compressie nog in te stellen."
 
-#: src/mmg/options/mmg.cpp:95
+#: src/mmg/options/mmg.cpp:103
 msgid "If checked mmg will warn if it thinks that you're using it incorrectly. Such warnings are shown at least once even if you turn this feature off."
 msgstr "Indien aangevinkt, zal mmg je waarschuwen als het denkt dat je het onjuist gebruikt. Die waarschuwingen worden tenminste éénmaal getoond zefls als deze mogelijkheid uitstaat."
 
@@ -3837,7 +3837,7 @@ msgstr "Geïmporteerde letter van %1%"
 msgid "Imported picture from %1%"
 msgstr "Geïmporteerd plaatje van %1%"
 
-#: src/mmg/mmg_dialog.cpp:1883
+#: src/mmg/mmg_dialog.cpp:1888
 msgid "Incompatible mkvmerge version"
 msgstr "Niet verenigbaar met deze mkvmerge versie"
 
@@ -3876,7 +3876,7 @@ msgstr "Invoer bestanden:"
 msgid "Input too long: %1% > %2%"
 msgstr "Invoer te lang: %1% > %2%"
 
-#: src/mmg/options/mmg.cpp:116
+#: src/mmg/options/mmg.cpp:124
 msgid "Interface language:"
 msgstr "Programma taal:"
 
@@ -4227,11 +4227,11 @@ msgstr "Taak toegevoegd aan taak wachtrij"
 msgid "Job description"
 msgstr "Taak beschrijving"
 
-#: src/mmg/jobs.cpp:385
+#: src/mmg/jobs.cpp:397
 msgid "Job output"
 msgstr "Taak uitvoer"
 
-#: src/mmg/jobs.cpp:426
+#: src/mmg/jobs.cpp:440
 msgid "Job queue management"
 msgstr "Taak rij beheren"
 
@@ -4614,11 +4614,11 @@ msgstr "Meer dan één spoor wordt bijgevoegd aan het spoor %1% van bestand nr. 
 msgid "More than one track with the track number %1% found.\n"
 msgstr "Meer dan één spoor met spoor nummer %1% gevonden.\n"
 
-#: src/mmg/jobs.cpp:472
+#: src/mmg/jobs.cpp:486
 msgid "Move the selected job(s) down"
 msgstr "Verplaats geselecteerde ta(a)k(en) omlaag"
 
-#: src/mmg/jobs.cpp:469
+#: src/mmg/jobs.cpp:483
 msgid "Move the selected job(s) up"
 msgstr "Verplaats geselecteerde ta(a)k(en) omhoog"
 
@@ -4977,7 +4977,7 @@ msgstr "Bestandsnaam uitvoer"
 msgid "Output messages in this charset"
 msgstr "Uitvoer bericht van deze karakterset"
 
-#: src/mmg/jobs.cpp:389
+#: src/mmg/jobs.cpp:401
 msgid "Output of the selected jobs:"
 msgstr "Uitvoer van geselecteerde taken:"
 
@@ -5164,7 +5164,7 @@ msgstr "Voortgang: 100%%%1%"
 msgid "Progress: [%1%%2%] %3%%%"
 msgstr "Voortgang: [%1%%2%] %3%%%"
 
-#: src/mmg/mmg_dialog.cpp:1826
+#: src/mmg/mmg_dialog.cpp:1831
 msgid "Querying mkvmerge's capabilities"
 msgstr "Opgevraagde mogelijkheden van mkvmerge"
 
@@ -5321,7 +5321,7 @@ msgstr "Verlaat mkvinfo"
 msgid "RSA"
 msgstr "RSA"
 
-#: src/mmg/jobs.cpp:477
+#: src/mmg/jobs.cpp:491
 msgid "Re-enable the selected job(s)"
 msgstr "Geselecteerde taken opnieuw aanzetten"
 
@@ -5402,6 +5402,10 @@ msgstr "Verwijder hoofdstuk"
 msgid "Remove element"
 msgstr "Verwijder element"
 
+#: src/mmg/options/mmg.cpp:97
+msgid "Remove job from job queue after run:"
+msgstr ""
+
 #: src/mmg/tabs/chapters.cpp:348
 msgid "Remove name"
 msgstr "Verwijder naam"
@@ -5427,7 +5431,7 @@ msgstr "Start de kopveld bewerker"
 msgid "S&how the command line"
 msgstr "T&oon de commando regel"
 
-#: src/mmg/jobs.cpp:507
+#: src/mmg/jobs.cpp:521
 msgid "S&tart selected"
 msgstr "S&tart selectie"
 
@@ -5794,7 +5798,7 @@ msgstr "Toon alle bytes van elk beeld als een hex dump."
 msgid "Show element si&zes\tCtrl-Z"
 msgstr "Toon element groo&tte\tCtrl-Z"
 
-#: src/mmg/options/mmg.cpp:111
+#: src/mmg/options/mmg.cpp:119
 msgid "Show mmg's debug window"
 msgstr "Toon mmg's debug scherm"
 
@@ -5834,7 +5838,7 @@ msgstr "Toon deze help."
 msgid "Show version information."
 msgstr "Toon versie informatie."
 
-#: src/mmg/options/mmg.cpp:112
+#: src/mmg/options/mmg.cpp:120
 msgid "Shows mmg's debug window in which debug messages will appear. This is only useful if you're helping the author debug a problem in mmg."
 msgstr "Toont mmg's fout code scherm, waarin de fout code's worden getoond. Dit is alleen zinvol om de autheur te helpen met een 'fout' probleem in mmg."
 
@@ -5972,11 +5976,11 @@ msgstr "Sta&rt samenvoegen (start mkvmerge)\tCtrl-R"
 msgid "Start the GUI (and open inname if it was given)."
 msgstr "Start de GUI (en open een inname indien ingegeven)."
 
-#: src/mmg/jobs.cpp:504
+#: src/mmg/jobs.cpp:518
 msgid "Start the jobs whose status is 'pending'"
 msgstr "Start de taken met de status 'wachtend'"
 
-#: src/mmg/jobs.cpp:508
+#: src/mmg/jobs.cpp:522
 msgid "Start the selected job(s) regardless of their status"
 msgstr "Start de geselecteerde ta(a)k(en) ongeacht hun status"
 
@@ -5988,7 +5992,7 @@ msgstr "Start met lege instellingen"
 msgid "Start:"
 msgstr "Start:"
 
-#: src/mmg/jobs.cpp:443
+#: src/mmg/jobs.cpp:457
 msgid "Started on"
 msgstr "Gestart op"
 
@@ -6002,7 +6006,7 @@ msgstr "Start taak ID %d (%s) op %s"
 msgid "Statistics for track number %1%: number of blocks: %2%; size in bytes: %3%; duration in seconds: %4%; approximate bitrate in bits/second: %5%\n"
 msgstr "Statistieken voor spoornummer %1%: aantal blokken: %2%; grootte in bytes: %3%; tijdsinconden%4%; verwachtte bitratte in bits/seconde: %5%\n"
 
-#: src/mmg/jobs.cpp:437
+#: src/mmg/jobs.cpp:451
 msgid "Status"
 msgstr "Status"
 
@@ -6138,7 +6142,7 @@ msgstr "Vertelt mkvmerge een meta zoek data elementen te creëren aan het eind v
 msgid "Text files (*.txt);;All files (*.*)"
 msgstr "Tekst bestanden (*.txt);;Alle bestanden (*.*)"
 
-#: src/mmg/jobs.cpp:410
+#: src/mmg/jobs.cpp:424
 #, c-format, boost-format
 msgid "Text files (*.txt)|*.txt|%s"
 msgstr "Tekst bestanden (*.txt)|*.txt|%s"
@@ -6198,7 +6202,7 @@ msgstr "De FourCC moeten excact vier karakters lang zijn in '%1% %2%'.\n"
 msgid "The FourCC setting for track nr. %s in file '%s' is not excatly four characters long."
 msgstr "De FourCC instellingen voor spoor nr. %s in bestand '%s' is niet precies vier karakters lang."
 
-#: src/mmg/mmg_dialog.cpp:1879
+#: src/mmg/mmg_dialog.cpp:1884
 #, boost-format
 msgid "The GUI is configured to use the mkvmerge executable from a different version (%1%) than the GUI itself (%2%). This is not supported but will not be prevented either. You should change the mkvmerge executable in the preferences dialog."
 msgstr "GUI is ingesteld om mkvmerge te gebruiken vanuit/af een andere versie (%1%) dan de GUI zelf (%2%). Dit is niet ondersteund maar zal ook niet worden voorkomen. Je zou het mkvmerge programma moeten veranderen in de voorkeur instellingen (Bestand >> Opties >> tab Mkvmerge)."
@@ -7143,7 +7147,7 @@ msgstr "De breedte van de twee sporen zijn verschillend: %1% en %2%"
 msgid "Theora"
 msgstr ""
 
-#: src/mmg/mmg_dialog.cpp:1771
+#: src/mmg/mmg_dialog.cpp:1776
 msgid "There is a new version available online."
 msgstr "Er is online een nieuwere versie beschikbaar."
 
@@ -7158,7 +7162,7 @@ msgstr "Er is geen bestand met ID '%1%'. Het argument voor, bijvoegen-aan, '--ap
 msgid "There is no translation available for '%1%'.\n"
 msgstr "Geen vertaling beschikbaar voor '%1%'.\n"
 
-#: src/mmg/mmg_dialog.cpp:1772
+#: src/mmg/mmg_dialog.cpp:1777
 msgid "There was an error querying the update status."
 msgstr "Er was een fout bij opvragen van de opwaardeer status."
 
@@ -7818,7 +7822,7 @@ msgstr "Video spoor"
 msgid "Video track %u"
 msgstr "Video spoor %u"
 
-#: src/mmg/jobs.cpp:490
+#: src/mmg/jobs.cpp:504
 msgid "View the output that mkvmerge generated during the muxing process for the selected job(s)"
 msgstr "Bekijk de uitvoer welke mkvmerge maakt gedurende het samenvoeg proces voor de geselecteerde ta(a)k(en)"
 
@@ -7867,7 +7871,7 @@ msgstr "WAVPACK v4 audio"
 msgid "WAVPACK4"
 msgstr "WAVPACK v4 audio"
 
-#: src/mmg/options/mmg.cpp:94
+#: src/mmg/options/mmg.cpp:102
 msgid "Warn about possible incorrect usage of mmg"
 msgstr "Waarschuw over mogelijk onjuist gebruik van MMG"
 
@@ -7972,7 +7976,7 @@ msgstr "Verkeerde identificatie reeks: '%|1$6s|' != 'theora'"
 msgid "Wrong identification string: '%|1$7s|' != 'kate\\0\\0\\0'"
 msgstr "Verkeerde identificatie reeks: '%|1$7s|' != 'kate\\0\\0\\0'"
 
-#: src/mmg/mmg_dialog.cpp:1770
+#: src/mmg/mmg_dialog.cpp:1775
 msgid "You are already running the latest version."
 msgstr "Je hebt reeds de laatste versie."
 
@@ -8008,9 +8012,9 @@ msgstr "Zlib decompressie gefaald. Resultaat: %1%\n"
 msgid "[%1% frame for track %2%, timecode %3%]"
 msgstr "[%1% beeld voor spoor %2%, tijd code %3%]"
 
-#: src/mmg/jobs.cpp:344
-#: src/mmg/jobs.cpp:453
-#: src/mmg/jobs.cpp:531
+#: src/mmg/jobs.cpp:345
+#: src/mmg/jobs.cpp:467
+#: src/mmg/jobs.cpp:547
 msgid "aborted"
 msgstr "afgebroken"
 
@@ -8022,6 +8026,10 @@ msgstr "ac3_bs_packetizer::add_to_buffer(): Niet geteste code ('grootte' is vree
 #: src/mmg/tabs/input.cpp:188
 msgid "add"
 msgstr "Toevoegen"
+
+#: src/mmg/options/mmg.cpp:95
+msgid "always"
+msgstr ""
 
 #: src/common/stereo_mode.cpp:58
 msgid "anaglyph (cyan/red)"
@@ -8085,11 +8093,11 @@ msgstr "kolom volgorde (links eerst)"
 msgid "column interleaved (right first)"
 msgstr "kolom volgorde (rechts eerst)"
 
-#: src/mmg/jobs.cpp:347
+#: src/mmg/jobs.cpp:349
 msgid "completed OK"
 msgstr "voltooid OK"
 
-#: src/mmg/jobs.cpp:350
+#: src/mmg/jobs.cpp:353
 msgid "completed with warnings"
 msgstr "voltooid met waarschuwingen"
 
@@ -8136,12 +8144,12 @@ msgstr "scherm hoogte: %1%"
 msgid "display width: %1%"
 msgstr "scherm breedte: %1%"
 
-#: src/mmg/jobs.cpp:529
-#: src/mmg/jobs.cpp:717
+#: src/mmg/jobs.cpp:545
+#: src/mmg/jobs.cpp:733
 msgid "done"
 msgstr "gedaan"
 
-#: src/mmg/jobs.cpp:530
+#: src/mmg/jobs.cpp:546
 msgid "done/warnings"
 msgstr "gedaan/waarschuwingen"
 
@@ -8161,8 +8169,13 @@ msgstr "aangezet"
 msgid "encryption"
 msgstr "versleuteling"
 
-#: src/mmg/jobs.cpp:353
-#: src/mmg/jobs.cpp:532
+#: src/mmg/options/mmg.cpp:94
+#, fuzzy
+msgid "even if there were warnings"
+msgstr "Er waren waarschuwingen"
+
+#: src/mmg/jobs.cpp:357
+#: src/mmg/jobs.cpp:548
 msgid "failed"
 msgstr "mislukt"
 
@@ -8654,7 +8667,7 @@ msgstr "mkvpropedit [opties] <bestand> <actie>"
 msgid "mm_text_io_c: UTF32_* is not supported at the moment.\n"
 msgstr "mm_text_io_c: UTF32_* wordt op het moment niet ondersteund.\n"
 
-#: src/mmg/options/mmg.cpp:322
+#: src/mmg/options/mmg.cpp:347
 msgid "mmg"
 msgstr "mmg"
 
@@ -8662,7 +8675,7 @@ msgstr "mmg"
 msgid "mmg debug output"
 msgstr "mmg debug uitvoer"
 
-#: src/mmg/options/mmg.cpp:177
+#: src/mmg/options/mmg.cpp:189
 msgid "mmg options"
 msgstr "mmg opties"
 
@@ -8739,6 +8752,10 @@ msgstr "on_entry_selected: toon == NULL. Had niet mogen gebeuren."
 msgid "only for I frames"
 msgstr "alleen voor I beelden"
 
+#: src/mmg/options/mmg.cpp:93
+msgid "only if the run was successfull"
+msgstr ""
+
 #: src/info/mkvinfo.cpp:618
 #, boost-format
 msgid "output sampling freq: %1%"
@@ -8748,8 +8765,8 @@ msgstr "uitvoer voorbeeld frequentie: %1%"
 msgid "passthrough"
 msgstr ""
 
-#: src/mmg/jobs.cpp:528
-#: src/mmg/jobs.cpp:702
+#: src/mmg/jobs.cpp:544
+#: src/mmg/jobs.cpp:718
 msgid "pending"
 msgstr "wachtend"
 

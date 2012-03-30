@@ -932,11 +932,11 @@ msgstr "コマンドラインをクリップボードにコピー(&C)"
 msgid "&Copy to clipboard"
 msgstr "クリップボードにコピー(&C)"
 
-#: src/mmg/jobs.cpp:479
+#: src/mmg/jobs.cpp:493
 msgid "&Disable"
 msgstr "無効化(&D)"
 
-#: src/mmg/jobs.cpp:471
+#: src/mmg/jobs.cpp:485
 msgid "&Down"
 msgstr "下へ(&D)"
 
@@ -1007,8 +1007,8 @@ msgid "&New chapters"
 msgstr "チャプタを新規作成(&N)"
 
 #: src/mmg/jobs.cpp:101
-#: src/mmg/jobs.cpp:394
-#: src/mmg/jobs.cpp:498
+#: src/mmg/jobs.cpp:406
+#: src/mmg/jobs.cpp:512
 msgid "&Ok"
 msgstr "&OK"
 
@@ -1026,7 +1026,7 @@ msgstr "オプション(&O)"
 msgid "&Quit\tCtrl-Q"
 msgstr "終了(&Q)\tCtrl-Q"
 
-#: src/mmg/jobs.cpp:476
+#: src/mmg/jobs.cpp:490
 msgid "&Re-enable"
 msgstr "&再有効化(&R)"
 
@@ -1038,7 +1038,7 @@ msgstr "&再読み込み(&R)\tCtrl-R"
 msgid "&Reset"
 msgstr "リセット(&R)"
 
-#: src/mmg/jobs.cpp:399
+#: src/mmg/jobs.cpp:411
 #: src/mmg/mmg_dialog.cpp:301
 msgid "&Save"
 msgstr "保存(&S)"
@@ -1055,11 +1055,11 @@ msgstr "情報をテキストとして保存(&S)\tCtrl-S"
 msgid "&Save settings\tCtrl-S"
 msgstr "設定を保存(&S)\tCtrl-S"
 
-#: src/mmg/jobs.cpp:503
+#: src/mmg/jobs.cpp:517
 msgid "&Start"
 msgstr "開始(&S)"
 
-#: src/mmg/jobs.cpp:468
+#: src/mmg/jobs.cpp:482
 msgid "&Up"
 msgstr "上へ(&U)"
 
@@ -1071,7 +1071,7 @@ msgstr "バリデーション(&V)\tCtrl-T"
 msgid "&Verify"
 msgstr "ベリファイ(&V)"
 
-#: src/mmg/jobs.cpp:489
+#: src/mmg/jobs.cpp:503
 msgid "&View log"
 msgstr "ログを見る(&V)"
 
@@ -1554,7 +1554,7 @@ msgstr ", 説明 '%1%'"
 msgid ", file name '%1%'"
 msgstr ", ファイル名 '%1%'"
 
-#: src/mmg/jobs.cpp:743
+#: src/mmg/jobs.cpp:759
 #, c-format, boost-format
 msgid ", finished on %s"
 msgstr ", 完了日時 %s"
@@ -1564,22 +1564,22 @@ msgstr ", 完了日時 %s"
 msgid ", position %1%"
 msgstr ", 位置：%1%"
 
-#: src/mmg/jobs.cpp:733
+#: src/mmg/jobs.cpp:749
 #, c-format, boost-format
 msgid ", started on %s"
 msgstr ",開始日時 %s"
 
-#: src/mmg/jobs.cpp:731
+#: src/mmg/jobs.cpp:747
 #, c-format, boost-format
 msgid "--- BEGIN job %d (%s, added on %s)"
 msgstr "--- ジョブ%dの開始（%s, 追加日時 %s）"
 
-#: src/mmg/jobs.cpp:741
+#: src/mmg/jobs.cpp:757
 #, c-format, boost-format
 msgid "--- END job %d"
 msgstr "--- ジョブ%dの終了"
 
-#: src/mmg/jobs.cpp:736
+#: src/mmg/jobs.cpp:752
 msgid "--- No job output found.\n"
 msgstr "--- ジョブ出力が見つかりませんでした。\n"
 
@@ -1847,7 +1847,7 @@ msgstr "'filename'からのタグを、このファイルのタグに追加、�
 msgid "Add subchapter"
 msgstr "サブチャプタを追加"
 
-#: src/mmg/jobs.cpp:441
+#: src/mmg/jobs.cpp:455
 msgid "Added on"
 msgstr "追加日時"
 
@@ -1935,7 +1935,7 @@ msgstr "このトラックのチャプタ情報とタグからCUEシートの抽
 msgid "Also using the correction file '%1%c'.\n"
 msgstr "訂正ファイル'%1%c'も使用しています。\n"
 
-#: src/mmg/options/mmg.cpp:92
+#: src/mmg/options/mmg.cpp:100
 msgid "Always on top"
 msgstr "常に手前に表示"
 
@@ -2405,7 +2405,7 @@ msgid "Charset:"
 msgstr "文字セット："
 
 #: src/mmg/mmg_dialog.cpp:312
-#: src/mmg/options/mmg.cpp:105
+#: src/mmg/options/mmg.cpp:113
 msgid "Check online for the latest release"
 msgstr "最新のリリースをオンラインでチェックする"
 
@@ -2414,11 +2414,11 @@ msgstr "最新のリリースをオンラインでチェックする"
 msgid "Check online for the latest release."
 msgstr "最新のリリースをオンラインでチェックします。"
 
-#: src/mmg/options/mmg.cpp:106
+#: src/mmg/options/mmg.cpp:114
 msgid "Check online whether or not a new release of MKVToolNix is available on the home page. Will only check when mmg starts and at most once a day. No information is transmitted to the server."
 msgstr "MKVToolNixの新しいリリースがホームページで入手可能かどうか、オンラインで確認します。MKVMerge GUIが起動されたときにのみ、最高で1日に1回確認します。サーバーには何の情報も送信されません。"
 
-#: src/mmg/mmg_dialog.cpp:1738
+#: src/mmg/mmg_dialog.cpp:1743
 msgid "Checking for updates online; please wait"
 msgstr "オンラインでアップデートを確認しています；しばらくお待ちください"
 
@@ -2450,7 +2450,7 @@ msgstr "追加する入力ファイルを選んでください"
 msgid "Choose an input file to append"
 msgstr "追加結合する入力ファイルを選んでください"
 
-#: src/mmg/jobs.cpp:410
+#: src/mmg/jobs.cpp:424
 #: src/mmg/mmg_dialog.cpp:350
 #: src/mmg/mmg_dialog.cpp:446
 #: src/mmg/mmg_dialog.cpp:754
@@ -2473,7 +2473,7 @@ msgstr "mkvmerge GUIのヘルプファイルがある場所を選んでくださ
 msgid "Choose the mkvmerge executable"
 msgstr "mkvmergeの実行ファイルを選んでください"
 
-#: src/mmg/options/mmg.cpp:253
+#: src/mmg/options/mmg.cpp:272
 msgid "Choose the output directory"
 msgstr "出力ディレクトリを選んでください"
 
@@ -2878,7 +2878,7 @@ msgstr "CUE (サブエントリはスキップされます)"
 msgid "Cues:"
 msgstr "キュー："
 
-#: src/mmg/jobs.cpp:429
+#: src/mmg/jobs.cpp:443
 msgid "Current and past jobs:"
 msgstr "現在のジョブと過去のジョブ:"
 
@@ -2903,7 +2903,7 @@ msgstr "現在の値："
 msgid "Current version:"
 msgstr "現在のバージョン："
 
-#: src/mmg/jobs.cpp:484
+#: src/mmg/jobs.cpp:498
 msgid "D&elete"
 msgstr "削除(&D)"
 
@@ -2999,11 +2999,11 @@ msgstr "遅延：%|1$.3f|ms"
 msgid "Delete all occurences of a property"
 msgstr "そのプロパティを全て削除します"
 
-#: src/mmg/jobs.cpp:485
+#: src/mmg/jobs.cpp:499
 msgid "Delete the selected job(s) from the job queue"
 msgstr "ジョブキューから選択したジョブを削除します"
 
-#: src/mmg/jobs.cpp:439
+#: src/mmg/jobs.cpp:453
 msgid "Description"
 msgstr "説明"
 
@@ -3023,11 +3023,11 @@ msgstr "説明："
 msgid "Dirac"
 msgstr "Dirac"
 
-#: src/mmg/options/mmg.cpp:100
+#: src/mmg/options/mmg.cpp:108
 msgid "Disable header removal compression for audio and video tracks by default"
 msgstr "オーディオとビデオのトラックのHeader removal compressionをデフォルトで無効にする"
 
-#: src/mmg/jobs.cpp:480
+#: src/mmg/jobs.cpp:494
 msgid "Disable the selected job(s) and sets their status to 'done'"
 msgstr "選択したジョブを無効化し、そのステータスを'終了'にします。"
 
@@ -3523,12 +3523,12 @@ msgstr "ファイル/セグメントタイトル:"
 msgid "Files cannot be appended to themselves. The argument for '--append-to' was invalid.\n"
 msgstr "ファイルをそのファイル自身に追加結合することはできません。'--append-to'のパラメータが無効です。\n"
 
-#: src/mmg/jobs.cpp:358
+#: src/mmg/jobs.cpp:363
 #, c-format, boost-format
 msgid "Finished job ID %d on %s: status '%s'"
 msgstr "ジョブID %d（%s）が終了しました：ステータス'%s'"
 
-#: src/mmg/jobs.cpp:445
+#: src/mmg/jobs.cpp:459
 msgid "Finished on"
 msgstr "完了日時"
 
@@ -3752,7 +3752,7 @@ msgstr ""
 msgid "Here you can set the values for the language and the country that you want to apply to all the chapters below and including the currently selected entry."
 msgstr "ここでは現在選択しているエントリ以下の全てのチャプタに対して言語と国の値を設定できます。"
 
-#: src/mmg/jobs.cpp:434
+#: src/mmg/jobs.cpp:448
 msgid "ID"
 msgstr "ID"
 
@@ -3788,11 +3788,11 @@ msgstr "チェックが入っていると、mmgは既に存在するファイル
 msgid "If checked mmg will automatically set the output filename if it hasn't been set already. This happens when you add the first file. If unset mmg will not touch the output filename."
 msgstr "チェックが入っていると、mmgは出力ファイル名がまだ設定されていない場合に自動で設定します。これは最初のファイルを追加した際に発生します。チェックが入っていない場合はmmgは出力ファイル名に手出しをしません。"
 
-#: src/mmg/options/mmg.cpp:101
+#: src/mmg/options/mmg.cpp:109
 msgid "If checked mmg will set the 'compression' drop down box to 'none' for all audio and video tracks by default. The user can still change the compression setting afterwards."
 msgstr "チェックが入っていると、mmgは全てのオーディオとビデオの'圧縮'ドロップダウンボックスをデフォルトで'無し'に設定します。その場合でも、ユーザーは後から圧縮の設定を変更することができます。"
 
-#: src/mmg/options/mmg.cpp:95
+#: src/mmg/options/mmg.cpp:103
 msgid "If checked mmg will warn if it thinks that you're using it incorrectly. Such warnings are shown at least once even if you turn this feature off."
 msgstr "チェックが入っていると、mmgは使い方が間違っていると考えられる場合に警告します。この機能をオフにしたとしても最低ひとつはそのような警告が表示されます。"
 
@@ -3821,7 +3821,7 @@ msgstr "%1%からフォントをインポートしました。"
 msgid "Imported picture from %1%"
 msgstr "%1%から画像をインポートしました。"
 
-#: src/mmg/mmg_dialog.cpp:1883
+#: src/mmg/mmg_dialog.cpp:1888
 msgid "Incompatible mkvmerge version"
 msgstr "互換性のないmkvmergeのバージョン"
 
@@ -3860,7 +3860,7 @@ msgstr "入力ファイル："
 msgid "Input too long: %1% > %2%"
 msgstr "入力が長すぎます：%1% > %2%"
 
-#: src/mmg/options/mmg.cpp:116
+#: src/mmg/options/mmg.cpp:124
 msgid "Interface language:"
 msgstr "インターフェース言語："
 
@@ -4211,11 +4211,11 @@ msgstr "ジョブはジョブキューに追加されました"
 msgid "Job description"
 msgstr "ジョブの説明"
 
-#: src/mmg/jobs.cpp:385
+#: src/mmg/jobs.cpp:397
 msgid "Job output"
 msgstr "ジョブの出力"
 
-#: src/mmg/jobs.cpp:426
+#: src/mmg/jobs.cpp:440
 msgid "Job queue management"
 msgstr "ジョブキューの管理"
 
@@ -4596,11 +4596,11 @@ msgstr "トラック%1%にファイル番号%2%のファイル（'%3%'）から�
 msgid "More than one track with the track number %1% found.\n"
 msgstr "トラック番号%1%のトラックが複数見つかりました。\n"
 
-#: src/mmg/jobs.cpp:472
+#: src/mmg/jobs.cpp:486
 msgid "Move the selected job(s) down"
 msgstr "選択したジョブを下に移動します"
 
-#: src/mmg/jobs.cpp:469
+#: src/mmg/jobs.cpp:483
 msgid "Move the selected job(s) up"
 msgstr "選択したジョブを上に移動します"
 
@@ -4959,7 +4959,7 @@ msgstr "出力ファイル名"
 msgid "Output messages in this charset"
 msgstr "この文字セットでメッセージを出力します"
 
-#: src/mmg/jobs.cpp:389
+#: src/mmg/jobs.cpp:401
 msgid "Output of the selected jobs:"
 msgstr "選択したジョブの出力"
 
@@ -5144,7 +5144,7 @@ msgstr "進行状況: 100%%%1%"
 msgid "Progress: [%1%%2%] %3%%%"
 msgstr "進行状況: [%1%%2%] %3%%%"
 
-#: src/mmg/mmg_dialog.cpp:1826
+#: src/mmg/mmg_dialog.cpp:1831
 msgid "Querying mkvmerge's capabilities"
 msgstr "mkvmergeの機能を調査しています"
 
@@ -5301,7 +5301,7 @@ msgstr "mkvinfoを終了します"
 msgid "RSA"
 msgstr "RSA"
 
-#: src/mmg/jobs.cpp:477
+#: src/mmg/jobs.cpp:491
 msgid "Re-enable the selected job(s)"
 msgstr "選択したジョブを再有効化します"
 
@@ -5381,6 +5381,10 @@ msgstr "チャプタを削除"
 msgid "Remove element"
 msgstr "要素を削除"
 
+#: src/mmg/options/mmg.cpp:97
+msgid "Remove job from job queue after run:"
+msgstr ""
+
 #: src/mmg/tabs/chapters.cpp:348
 msgid "Remove name"
 msgstr "名前を削除"
@@ -5406,7 +5410,7 @@ msgstr "ヘッダフィールドエディタを起動します"
 msgid "S&how the command line"
 msgstr "コマンドラインを表示(&S)"
 
-#: src/mmg/jobs.cpp:507
+#: src/mmg/jobs.cpp:521
 msgid "S&tart selected"
 msgstr "選択したジョブを開始(&T)"
 
@@ -5771,7 +5775,7 @@ msgstr "各フレームの全てのバイトを16進数のダンプとして表�
 msgid "Show element si&zes\tCtrl-Z"
 msgstr "要素のサイズを表示(&Z)\tCtrl-Z"
 
-#: src/mmg/options/mmg.cpp:111
+#: src/mmg/options/mmg.cpp:119
 msgid "Show mmg's debug window"
 msgstr "mmgのデバッグウィンドウを表示する"
 
@@ -5811,7 +5815,7 @@ msgstr "このヘルプを表示します。"
 msgid "Show version information."
 msgstr "プログラムのバージョン情報を表示します。"
 
-#: src/mmg/options/mmg.cpp:112
+#: src/mmg/options/mmg.cpp:120
 msgid "Shows mmg's debug window in which debug messages will appear. This is only useful if you're helping the author debug a problem in mmg."
 msgstr "デバッグメッセージが表示されるmmgのデバッグウィンドウを表示します。これは作者がmmgの問題をデバッグするのを手助けする場合にのみ有効です。"
 
@@ -5947,11 +5951,11 @@ msgstr "MUX開始（mkvmergeを実行）(&R)\tCtrl-R"
 msgid "Start the GUI (and open inname if it was given)."
 msgstr "GUIを起動します(入力ファイルが指定されていた場合は開きます)。入力ファイル名 ソースファイルを指定します。"
 
-#: src/mmg/jobs.cpp:504
+#: src/mmg/jobs.cpp:518
 msgid "Start the jobs whose status is 'pending'"
 msgstr "ステータスが'未処理'のジョブを開始します"
 
-#: src/mmg/jobs.cpp:508
+#: src/mmg/jobs.cpp:522
 msgid "Start the selected job(s) regardless of their status"
 msgstr "ステータスが何であろうと関係なく選択したジョブを開始します"
 
@@ -5963,7 +5967,7 @@ msgstr "設定を空にして新規作成します"
 msgid "Start:"
 msgstr "開始時間："
 
-#: src/mmg/jobs.cpp:443
+#: src/mmg/jobs.cpp:457
 msgid "Started on"
 msgstr "開始日時"
 
@@ -5977,7 +5981,7 @@ msgstr "ジョブID %d（%s）の処理を開始します　開始日時：%s"
 msgid "Statistics for track number %1%: number of blocks: %2%; size in bytes: %3%; duration in seconds: %4%; approximate bitrate in bits/second: %5%\n"
 msgstr "トラック番号%1%の統計情報: ブロックの数: %2%；サイズ（バイト）: %3%; 持続時間（秒）: %4%; おおよそのビットレート（ビット/秒）: %5%\n"
 
-#: src/mmg/jobs.cpp:437
+#: src/mmg/jobs.cpp:451
 msgid "Status"
 msgstr "ステータス"
 
@@ -6113,7 +6117,7 @@ msgstr "mkvmergeがファイルの終端で全てのクラスタを含むメタ�
 msgid "Text files (*.txt);;All files (*.*)"
 msgstr "テキストファイル (*.txt);;全てのファイル (*.*)"
 
-#: src/mmg/jobs.cpp:410
+#: src/mmg/jobs.cpp:424
 #, c-format, boost-format
 msgid "Text files (*.txt)|*.txt|%s"
 msgstr "テキストファイル (*.txt)|*.txt|%s"
@@ -6173,7 +6177,7 @@ msgstr "FourCCは4文字ちょうどでなければなりません（'%1% %2%'�
 msgid "The FourCC setting for track nr. %s in file '%s' is not excatly four characters long."
 msgstr "トラックID %s（ファイル'%s'）のFourCC指定が4文字ちょうどではありません。"
 
-#: src/mmg/mmg_dialog.cpp:1879
+#: src/mmg/mmg_dialog.cpp:1884
 #, boost-format
 msgid "The GUI is configured to use the mkvmerge executable from a different version (%1%) than the GUI itself (%2%). This is not supported but will not be prevented either. You should change the mkvmerge executable in the preferences dialog."
 msgstr "このGUIは、GUI自体（%2%）とは違うバージョン（%1%）のmkvmerge実行ファイルを使用するように設定されました。これはサポートされてはいませんが、妨げられることもありません。設定ダイアログでmkvmerge実行ファイルを変更するべきです。"
@@ -7103,7 +7107,7 @@ msgstr "2つのトラック間で横解像度が異なっています：%1%と%2
 msgid "Theora"
 msgstr "Theora"
 
-#: src/mmg/mmg_dialog.cpp:1771
+#: src/mmg/mmg_dialog.cpp:1776
 msgid "There is a new version available online."
 msgstr "新しいバージョンがオンラインで入手可能です。"
 
@@ -7118,7 +7122,7 @@ msgstr "ID'%1%'のファイルはありません。'--append-to'のパラメー�
 msgid "There is no translation available for '%1%'.\n"
 msgstr "'%1%'の翻訳は利用できません。\n"
 
-#: src/mmg/mmg_dialog.cpp:1772
+#: src/mmg/mmg_dialog.cpp:1777
 msgid "There was an error querying the update status."
 msgstr "アップデート状況の問い合わせ中にエラーが発生しました。"
 
@@ -7771,7 +7775,7 @@ msgstr "ビデオトラック"
 msgid "Video track %u"
 msgstr "ビデオトラック%u"
 
-#: src/mmg/jobs.cpp:490
+#: src/mmg/jobs.cpp:504
 msgid "View the output that mkvmerge generated during the muxing process for the selected job(s)"
 msgstr "選択したジョブをMUX処理中のmkvmergeの出力を見ます"
 
@@ -7817,7 +7821,7 @@ msgstr "WAVPACK v4オーディオ"
 msgid "WAVPACK4"
 msgstr "WAVPACK4"
 
-#: src/mmg/options/mmg.cpp:94
+#: src/mmg/options/mmg.cpp:102
 msgid "Warn about possible incorrect usage of mmg"
 msgstr "mmgの使い方が間違っていそうな場合に警告する"
 
@@ -7922,7 +7926,7 @@ msgstr "間違った識別文字列です：'%|1$6s|' != 'theora'"
 msgid "Wrong identification string: '%|1$7s|' != 'kate\\0\\0\\0'"
 msgstr "間違った識別文字列です：'%|1$7s|' != 'kate\\0\\0\\0'"
 
-#: src/mmg/mmg_dialog.cpp:1770
+#: src/mmg/mmg_dialog.cpp:1775
 msgid "You are already running the latest version."
 msgstr "既に最新のバージョンが実行されています。"
 
@@ -7956,9 +7960,9 @@ msgstr "Zlib展開が失敗しました。結果：%1%\n"
 msgid "[%1% frame for track %2%, timecode %3%]"
 msgstr "[トラック%2%の%1%フレーム、タイムコード %3%]"
 
-#: src/mmg/jobs.cpp:344
-#: src/mmg/jobs.cpp:453
-#: src/mmg/jobs.cpp:531
+#: src/mmg/jobs.cpp:345
+#: src/mmg/jobs.cpp:467
+#: src/mmg/jobs.cpp:547
 msgid "aborted"
 msgstr "中断"
 
@@ -7970,6 +7974,10 @@ msgstr "ac3_bs_packetizer::add_to_buffer(): テストされていないコード
 #: src/mmg/tabs/input.cpp:188
 msgid "add"
 msgstr "追加"
+
+#: src/mmg/options/mmg.cpp:95
+msgid "always"
+msgstr ""
 
 #: src/common/stereo_mode.cpp:58
 msgid "anaglyph (cyan/red)"
@@ -8033,11 +8041,11 @@ msgstr "垂直インターリーブ方式（レフトファースト）"
 msgid "column interleaved (right first)"
 msgstr "垂直インターリーブ方式（ライトファースト）"
 
-#: src/mmg/jobs.cpp:347
+#: src/mmg/jobs.cpp:349
 msgid "completed OK"
 msgstr "正常に完了しました"
 
-#: src/mmg/jobs.cpp:350
+#: src/mmg/jobs.cpp:353
 msgid "completed with warnings"
 msgstr "完了しましたが、警告があります"
 
@@ -8084,12 +8092,12 @@ msgstr "表示高さ：%1%"
 msgid "display width: %1%"
 msgstr "表示幅：%1%"
 
-#: src/mmg/jobs.cpp:529
-#: src/mmg/jobs.cpp:717
+#: src/mmg/jobs.cpp:545
+#: src/mmg/jobs.cpp:733
 msgid "done"
 msgstr "完了"
 
-#: src/mmg/jobs.cpp:530
+#: src/mmg/jobs.cpp:546
 msgid "done/warnings"
 msgstr "完了/警告有り"
 
@@ -8109,8 +8117,13 @@ msgstr "有効"
 msgid "encryption"
 msgstr "暗号化"
 
-#: src/mmg/jobs.cpp:353
-#: src/mmg/jobs.cpp:532
+#: src/mmg/options/mmg.cpp:94
+#, fuzzy
+msgid "even if there were warnings"
+msgstr "警告が発せられました"
+
+#: src/mmg/jobs.cpp:357
+#: src/mmg/jobs.cpp:548
 msgid "failed"
 msgstr "失敗"
 
@@ -8604,7 +8617,7 @@ msgstr "mkvpropedit [オプション] <ファイル> <アクション>"
 msgid "mm_text_io_c: UTF32_* is not supported at the moment.\n"
 msgstr "mm_text_io_c：UTF32_*は現在サポートされていません。\n"
 
-#: src/mmg/options/mmg.cpp:322
+#: src/mmg/options/mmg.cpp:347
 msgid "mmg"
 msgstr "mmg"
 
@@ -8612,7 +8625,7 @@ msgstr "mmg"
 msgid "mmg debug output"
 msgstr "mmgデバッグ出力"
 
-#: src/mmg/options/mmg.cpp:177
+#: src/mmg/options/mmg.cpp:189
 msgid "mmg options"
 msgstr "mmgのオプション"
 
@@ -8688,6 +8701,10 @@ msgstr "on_entry_selected：display == nullptrです。発生するべきでは�
 msgid "only for I frames"
 msgstr "Iフレームのみ"
 
+#: src/mmg/options/mmg.cpp:93
+msgid "only if the run was successfull"
+msgstr ""
+
 #: src/info/mkvinfo.cpp:618
 #, boost-format
 msgid "output sampling freq: %1%"
@@ -8697,8 +8714,8 @@ msgstr "出力サンプル周波数：%1%"
 msgid "passthrough"
 msgstr "パススルー"
 
-#: src/mmg/jobs.cpp:528
-#: src/mmg/jobs.cpp:702
+#: src/mmg/jobs.cpp:544
+#: src/mmg/jobs.cpp:718
 msgid "pending"
 msgstr "未処理"
 

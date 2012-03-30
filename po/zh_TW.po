@@ -924,11 +924,11 @@ msgstr "複製命令列至剪貼簿(&C)"
 msgid "&Copy to clipboard"
 msgstr "複製命令列(&C)"
 
-#: src/mmg/jobs.cpp:479
+#: src/mmg/jobs.cpp:493
 msgid "&Disable"
 msgstr "停用(&D)"
 
-#: src/mmg/jobs.cpp:471
+#: src/mmg/jobs.cpp:485
 msgid "&Down"
 msgstr "下移(&D)"
 
@@ -999,8 +999,8 @@ msgid "&New chapters"
 msgstr "新增章節(&N)"
 
 #: src/mmg/jobs.cpp:101
-#: src/mmg/jobs.cpp:394
-#: src/mmg/jobs.cpp:498
+#: src/mmg/jobs.cpp:406
+#: src/mmg/jobs.cpp:512
 msgid "&Ok"
 msgstr "確定(&O)"
 
@@ -1018,7 +1018,7 @@ msgstr "選項(&O)"
 msgid "&Quit\tCtrl-Q"
 msgstr "離開(&Q)\tCtrl-Q"
 
-#: src/mmg/jobs.cpp:476
+#: src/mmg/jobs.cpp:490
 msgid "&Re-enable"
 msgstr "重新啟用(&R)"
 
@@ -1030,7 +1030,7 @@ msgstr "重新載入(&R)\tCtrl-R"
 msgid "&Reset"
 msgstr "重置(&R)"
 
-#: src/mmg/jobs.cpp:399
+#: src/mmg/jobs.cpp:411
 #: src/mmg/mmg_dialog.cpp:301
 msgid "&Save"
 msgstr "儲存(&S)"
@@ -1047,11 +1047,11 @@ msgstr "另存資訊為純文字檔(&S)\tCtrl-S"
 msgid "&Save settings\tCtrl-S"
 msgstr "儲存設定檔(&S)\tCtrl-S"
 
-#: src/mmg/jobs.cpp:503
+#: src/mmg/jobs.cpp:517
 msgid "&Start"
 msgstr "開始(&S)"
 
-#: src/mmg/jobs.cpp:468
+#: src/mmg/jobs.cpp:482
 msgid "&Up"
 msgstr "上移(&U)"
 
@@ -1063,7 +1063,7 @@ msgstr "檢驗(&V)\tCtrl-T"
 msgid "&Verify"
 msgstr "驗證(&V)"
 
-#: src/mmg/jobs.cpp:489
+#: src/mmg/jobs.cpp:503
 msgid "&View log"
 msgstr "檢視日誌(&V)"
 
@@ -1546,7 +1546,7 @@ msgstr ", 描述 「%1%」"
 msgid ", file name '%1%'"
 msgstr ", 檔名「%1%」"
 
-#: src/mmg/jobs.cpp:743
+#: src/mmg/jobs.cpp:759
 #, c-format, boost-format
 msgid ", finished on %s"
 msgstr ", 完成於 %s"
@@ -1556,22 +1556,22 @@ msgstr ", 完成於 %s"
 msgid ", position %1%"
 msgstr ", 位置 %1%"
 
-#: src/mmg/jobs.cpp:733
+#: src/mmg/jobs.cpp:749
 #, c-format, boost-format
 msgid ", started on %s"
 msgstr ", 開始於 %s"
 
-#: src/mmg/jobs.cpp:731
+#: src/mmg/jobs.cpp:747
 #, c-format, boost-format
 msgid "--- BEGIN job %d (%s, added on %s)"
 msgstr "--- 任務 %d 開始 (%s, 添加於 %s)"
 
-#: src/mmg/jobs.cpp:741
+#: src/mmg/jobs.cpp:757
 #, c-format, boost-format
 msgid "--- END job %d"
 msgstr "--- 任務 %d 終止"
 
-#: src/mmg/jobs.cpp:736
+#: src/mmg/jobs.cpp:752
 msgid "--- No job output found.\n"
 msgstr "--- 無任務輸出。\n"
 
@@ -1840,7 +1840,7 @@ msgstr "從「檔案名稱」加入或取代檔案裡的標籤，如果「檔案
 msgid "Add subchapter"
 msgstr "加入子章節"
 
-#: src/mmg/jobs.cpp:441
+#: src/mmg/jobs.cpp:455
 msgid "Added on"
 msgstr "加入時間"
 
@@ -1928,7 +1928,7 @@ msgstr "也試著從這個軌道的章節資訊和標籤中提取 CUE 表單。"
 msgid "Also using the correction file '%1%c'.\n"
 msgstr "無法開啟一致性校正檔案「%1%c」。\n"
 
-#: src/mmg/options/mmg.cpp:92
+#: src/mmg/options/mmg.cpp:100
 msgid "Always on top"
 msgstr "總在最前面"
 
@@ -2398,7 +2398,7 @@ msgid "Charset:"
 msgstr "字元集:"
 
 #: src/mmg/mmg_dialog.cpp:312
-#: src/mmg/options/mmg.cpp:105
+#: src/mmg/options/mmg.cpp:113
 msgid "Check online for the latest release"
 msgstr "線上檢查最新版本"
 
@@ -2407,11 +2407,11 @@ msgstr "線上檢查最新版本"
 msgid "Check online for the latest release."
 msgstr "線上檢查最新發佈的版本。"
 
-#: src/mmg/options/mmg.cpp:106
+#: src/mmg/options/mmg.cpp:114
 msgid "Check online whether or not a new release of MKVToolNix is available on the home page. Will only check when mmg starts and at most once a day. No information is transmitted to the server."
 msgstr "線上檢查 MKVToolNix 首頁上是否有可更新的新版本。只有 mmg 啟動時會檢查且一天最多檢查一次。不會傳送任何資訊到伺服器。"
 
-#: src/mmg/mmg_dialog.cpp:1738
+#: src/mmg/mmg_dialog.cpp:1743
 msgid "Checking for updates online; please wait"
 msgstr "正在線上檢查更新; 請稍候"
 
@@ -2443,7 +2443,7 @@ msgstr "選擇要加入的檔案"
 msgid "Choose an input file to append"
 msgstr "選擇要添加的檔案"
 
-#: src/mmg/jobs.cpp:410
+#: src/mmg/jobs.cpp:424
 #: src/mmg/mmg_dialog.cpp:350
 #: src/mmg/mmg_dialog.cpp:446
 #: src/mmg/mmg_dialog.cpp:754
@@ -2466,7 +2466,7 @@ msgstr "選擇 mkvmerge GUI 説明檔的路徑"
 msgid "Choose the mkvmerge executable"
 msgstr "選擇 mkvmerge 可執行檔"
 
-#: src/mmg/options/mmg.cpp:253
+#: src/mmg/options/mmg.cpp:272
 msgid "Choose the output directory"
 msgstr "選擇輸出目錄"
 
@@ -2871,7 +2871,7 @@ msgstr "Cue 表單 (子項目將被跳過)"
 msgid "Cues:"
 msgstr "Cue:"
 
-#: src/mmg/jobs.cpp:429
+#: src/mmg/jobs.cpp:443
 msgid "Current and past jobs:"
 msgstr "目前和之前的任務:"
 
@@ -2896,7 +2896,7 @@ msgstr "目前值:"
 msgid "Current version:"
 msgstr "目前版本:"
 
-#: src/mmg/jobs.cpp:484
+#: src/mmg/jobs.cpp:498
 msgid "D&elete"
 msgstr "刪除(&E)"
 
@@ -2992,11 +2992,11 @@ msgstr "延遲: %|1$.3f|ms"
 msgid "Delete all occurences of a property"
 msgstr "刪除一個屬性的所有事件"
 
-#: src/mmg/jobs.cpp:485
+#: src/mmg/jobs.cpp:499
 msgid "Delete the selected job(s) from the job queue"
 msgstr "從任務佇列中刪除所選任務"
 
-#: src/mmg/jobs.cpp:439
+#: src/mmg/jobs.cpp:453
 msgid "Description"
 msgstr "描述"
 
@@ -3016,11 +3016,11 @@ msgstr "描述:"
 msgid "Dirac"
 msgstr "Dirac"
 
-#: src/mmg/options/mmg.cpp:100
+#: src/mmg/options/mmg.cpp:108
 msgid "Disable header removal compression for audio and video tracks by default"
 msgstr "預設情況下停用音軌和視訊軌的除頭壓縮"
 
-#: src/mmg/jobs.cpp:480
+#: src/mmg/jobs.cpp:494
 msgid "Disable the selected job(s) and sets their status to 'done'"
 msgstr "停用選中的任務並設定其狀態為“完成”"
 
@@ -3516,12 +3516,12 @@ msgstr "檔案/剪輯標題:"
 msgid "Files cannot be appended to themselves. The argument for '--append-to' was invalid.\n"
 msgstr "檔案不能被添加至自己上。「--append-to」的參數無效。\n"
 
-#: src/mmg/jobs.cpp:358
+#: src/mmg/jobs.cpp:363
 #, c-format, boost-format
 msgid "Finished job ID %d on %s: status '%s'"
 msgstr "任務 ID %d 完成於 %s: 狀態「%s」"
 
-#: src/mmg/jobs.cpp:445
+#: src/mmg/jobs.cpp:459
 msgid "Finished on"
 msgstr "完成時間"
 
@@ -3745,7 +3745,7 @@ msgstr ""
 msgid "Here you can set the values for the language and the country that you want to apply to all the chapters below and including the currently selected entry."
 msgstr "設定您希望應用至下面所有章節（含目前所選項目）的語言及國家值。"
 
-#: src/mmg/jobs.cpp:434
+#: src/mmg/jobs.cpp:448
 msgid "ID"
 msgstr "ID"
 
@@ -3782,11 +3782,11 @@ msgstr "如果選中該項，mmg 將在覆寫已存在的檔案或在新增一�
 msgid "If checked mmg will automatically set the output filename if it hasn't been set already. This happens when you add the first file. If unset mmg will not touch the output filename."
 msgstr "如果選中該項，且輸出檔案名尚未設定，mmg 將會自動設定。這只發生在您添加第一個檔案時。如果未選該項，mmg 不會修改輸出檔名。"
 
-#: src/mmg/options/mmg.cpp:101
+#: src/mmg/options/mmg.cpp:109
 msgid "If checked mmg will set the 'compression' drop down box to 'none' for all audio and video tracks by default. The user can still change the compression setting afterwards."
 msgstr "如果勾選 mmg 會將預設情況下所有音軌和視訊軌的「壓縮」下拉式選單設定為「無」。使用者以後仍然可以變更壓縮設定值。"
 
-#: src/mmg/options/mmg.cpp:95
+#: src/mmg/options/mmg.cpp:103
 msgid "If checked mmg will warn if it thinks that you're using it incorrectly. Such warnings are shown at least once even if you turn this feature off."
 msgstr "如果選中該項，mmg 將在它認為您用法不正確時發出警告。即使您將該功能關閉，此類警告也將至少出現一次。"
 
@@ -3813,7 +3813,7 @@ msgstr "匯入的字體，自 %1%"
 msgid "Imported picture from %1%"
 msgstr "匯入的圖片，自 %1%"
 
-#: src/mmg/mmg_dialog.cpp:1883
+#: src/mmg/mmg_dialog.cpp:1888
 msgid "Incompatible mkvmerge version"
 msgstr "不相容的 mkvmerge 版本"
 
@@ -3852,7 +3852,7 @@ msgstr "輸入檔:"
 msgid "Input too long: %1% > %2%"
 msgstr "輸入過長: %1% > %2%"
 
-#: src/mmg/options/mmg.cpp:116
+#: src/mmg/options/mmg.cpp:124
 msgid "Interface language:"
 msgstr "介面語言:"
 
@@ -4203,11 +4203,11 @@ msgstr "任務已添加至任務佇列"
 msgid "Job description"
 msgstr "任務描述"
 
-#: src/mmg/jobs.cpp:385
+#: src/mmg/jobs.cpp:397
 msgid "Job output"
 msgstr "任務輸出資訊"
 
-#: src/mmg/jobs.cpp:426
+#: src/mmg/jobs.cpp:440
 msgid "Job queue management"
 msgstr "任務佇列管理"
 
@@ -4590,11 +4590,11 @@ msgstr "被添加至軌道 %1%（自檔案 %2% (「%3%」)）的軌道多於一�
 msgid "More than one track with the track number %1% found.\n"
 msgstr "軌道編號為 %1% 的軌道多於一條。\n"
 
-#: src/mmg/jobs.cpp:472
+#: src/mmg/jobs.cpp:486
 msgid "Move the selected job(s) down"
 msgstr "將所選任務下移"
 
-#: src/mmg/jobs.cpp:469
+#: src/mmg/jobs.cpp:483
 msgid "Move the selected job(s) up"
 msgstr "將所選任務上移"
 
@@ -4953,7 +4953,7 @@ msgstr "輸出檔名"
 msgid "Output messages in this charset"
 msgstr "用這個字元集輸出訊息"
 
-#: src/mmg/jobs.cpp:389
+#: src/mmg/jobs.cpp:401
 msgid "Output of the selected jobs:"
 msgstr "所選任務的輸出資訊:"
 
@@ -5138,7 +5138,7 @@ msgstr "進度: 100%%%1%"
 msgid "Progress: [%1%%2%] %3%%%"
 msgstr "進度: [%1%%2%] %3%%%"
 
-#: src/mmg/mmg_dialog.cpp:1826
+#: src/mmg/mmg_dialog.cpp:1831
 msgid "Querying mkvmerge's capabilities"
 msgstr "正向 mkvmerge 查詢處理能力"
 
@@ -5295,7 +5295,7 @@ msgstr "離開 mkvinfo"
 msgid "RSA"
 msgstr "RSA"
 
-#: src/mmg/jobs.cpp:477
+#: src/mmg/jobs.cpp:491
 msgid "Re-enable the selected job(s)"
 msgstr "重新啟用所選任務"
 
@@ -5376,6 +5376,10 @@ msgstr "移除章節"
 msgid "Remove element"
 msgstr "移除元件"
 
+#: src/mmg/options/mmg.cpp:97
+msgid "Remove job from job queue after run:"
+msgstr ""
+
 #: src/mmg/tabs/chapters.cpp:348
 msgid "Remove name"
 msgstr "移除名稱"
@@ -5401,7 +5405,7 @@ msgstr "執行表頭欄位編輯器"
 msgid "S&how the command line"
 msgstr "顯示命令列(&H)"
 
-#: src/mmg/jobs.cpp:507
+#: src/mmg/jobs.cpp:521
 msgid "S&tart selected"
 msgstr "開始所選(&T)"
 
@@ -5768,7 +5772,7 @@ msgstr "以十六進位轉儲形式顯示每畫格的全部位元組。"
 msgid "Show element si&zes\tCtrl-Z"
 msgstr "顯示元件大小(&Z)\tCtrl-Z"
 
-#: src/mmg/options/mmg.cpp:111
+#: src/mmg/options/mmg.cpp:119
 msgid "Show mmg's debug window"
 msgstr "顯示 mmg 的除錯視窗"
 
@@ -5808,7 +5812,7 @@ msgstr "顯示這項說明。"
 msgid "Show version information."
 msgstr "顯示版本資訊。"
 
-#: src/mmg/options/mmg.cpp:112
+#: src/mmg/options/mmg.cpp:120
 msgid "Shows mmg's debug window in which debug messages will appear. This is only useful if you're helping the author debug a problem in mmg."
 msgstr "顯示 mmg 的除錯視窗，在該視窗中會出現除錯訊息。這只當您幫助作者除錯 mmg 的問題時有用。"
 
@@ -5944,11 +5948,11 @@ msgstr "開始合成(啟動 mkvmerge)(&R)\tCtrl-R"
 msgid "Start the GUI (and open inname if it was given)."
 msgstr "啟動 GUI (若是給定的檔案則開啟輸入檔名稱)。"
 
-#: src/mmg/jobs.cpp:504
+#: src/mmg/jobs.cpp:518
 msgid "Start the jobs whose status is 'pending'"
 msgstr "啟動狀態為“掛起”的任務"
 
-#: src/mmg/jobs.cpp:508
+#: src/mmg/jobs.cpp:522
 msgid "Start the selected job(s) regardless of their status"
 msgstr "啟動選擇的任務（不論其狀態如何）"
 
@@ -5960,7 +5964,7 @@ msgstr "清空所有設定並重新啟動"
 msgid "Start:"
 msgstr "開始時間:"
 
-#: src/mmg/jobs.cpp:443
+#: src/mmg/jobs.cpp:457
 msgid "Started on"
 msgstr "啟動時間"
 
@@ -5974,7 +5978,7 @@ msgstr "正在啟動任務 ID %d (%s) 於 %s"
 msgid "Statistics for track number %1%: number of blocks: %2%; size in bytes: %3%; duration in seconds: %4%; approximate bitrate in bits/second: %5%\n"
 msgstr "資料軌編號 %1% : 區塊編號: %2%的統計資料；大小: %3% 位元組；時間長度: %4% 秒；近似位元率: %5% 位元/秒\n"
 
-#: src/mmg/jobs.cpp:437
+#: src/mmg/jobs.cpp:451
 msgid "Status"
 msgstr "狀態"
 
@@ -6110,7 +6114,7 @@ msgstr "告訴 mkvmerge 要在檔案結尾部建立變換定位元件。"
 msgid "Text files (*.txt);;All files (*.*)"
 msgstr "純文字檔 (*.txt);;所有檔 (*.*)"
 
-#: src/mmg/jobs.cpp:410
+#: src/mmg/jobs.cpp:424
 #, c-format, boost-format
 msgid "Text files (*.txt)|*.txt|%s"
 msgstr "純文字檔 (*.txt)|*.txt|%s"
@@ -6170,7 +6174,7 @@ msgstr "FourCC 值必須為四個字元的長度，在「%1% %2%」。\n"
 msgid "The FourCC setting for track nr. %s in file '%s' is not excatly four characters long."
 msgstr "軌道 %s（自檔案「%s」）的 FourCC 設定非四字元長。"
 
-#: src/mmg/mmg_dialog.cpp:1879
+#: src/mmg/mmg_dialog.cpp:1884
 #, boost-format
 msgid "The GUI is configured to use the mkvmerge executable from a different version (%1%) than the GUI itself (%2%). This is not supported but will not be prevented either. You should change the mkvmerge executable in the preferences dialog."
 msgstr "此 GUI 設定成使用 mkvmerge 可執行檔版本 (%1%) 不同於 GUI 自己的版本 (%2%)。不支援這種情形，但也不會阻止。您應該在偏好設定對話窗裡變更 mkvmerge 可執行檔。"
@@ -7102,7 +7106,7 @@ msgstr "兩軌寬度不同: %1% 與 %2%"
 msgid "Theora"
 msgstr ""
 
-#: src/mmg/mmg_dialog.cpp:1771
+#: src/mmg/mmg_dialog.cpp:1776
 msgid "There is a new version available online."
 msgstr "線上有新版本可更新。"
 
@@ -7117,7 +7121,7 @@ msgstr "沒有檔案的 ID 為「%1%」。參數「--append-to」無效。\n"
 msgid "There is no translation available for '%1%'.\n"
 msgstr "尚無「%1%」的翻譯。\n"
 
-#: src/mmg/mmg_dialog.cpp:1772
+#: src/mmg/mmg_dialog.cpp:1777
 msgid "There was an error querying the update status."
 msgstr "查詢更新狀態時發生錯誤。"
 
@@ -7774,7 +7778,7 @@ msgstr "視訊軌"
 msgid "Video track %u"
 msgstr "視訊軌 %u"
 
-#: src/mmg/jobs.cpp:490
+#: src/mmg/jobs.cpp:504
 msgid "View the output that mkvmerge generated during the muxing process for the selected job(s)"
 msgstr "查看 mkvmerge 處理選中任務時的輸出資訊"
 
@@ -7823,7 +7827,7 @@ msgstr "WAVPACK v4 音訊"
 msgid "WAVPACK4"
 msgstr "WAVPACK v4 音訊"
 
-#: src/mmg/options/mmg.cpp:94
+#: src/mmg/options/mmg.cpp:102
 msgid "Warn about possible incorrect usage of mmg"
 msgstr "對 mmg 可能的錯誤用法發出警告"
 
@@ -7928,7 +7932,7 @@ msgstr "錯誤的識別字串:「%|1$6s|」!=「theora」"
 msgid "Wrong identification string: '%|1$7s|' != 'kate\\0\\0\\0'"
 msgstr "錯誤的識別字串:「%|1$7s|」!=「kate\\0\\0\\0」"
 
-#: src/mmg/mmg_dialog.cpp:1770
+#: src/mmg/mmg_dialog.cpp:1775
 msgid "You are already running the latest version."
 msgstr "已是最新版本。"
 
@@ -7962,9 +7966,9 @@ msgstr "Zlib 解壓失敗。結果: %1%\n"
 msgid "[%1% frame for track %2%, timecode %3%]"
 msgstr "[%1% 畫格，軌道 %2%, 時間碼 %3%]"
 
-#: src/mmg/jobs.cpp:344
-#: src/mmg/jobs.cpp:453
-#: src/mmg/jobs.cpp:531
+#: src/mmg/jobs.cpp:345
+#: src/mmg/jobs.cpp:467
+#: src/mmg/jobs.cpp:547
 msgid "aborted"
 msgstr "異常中止"
 
@@ -7976,6 +7980,10 @@ msgstr "ac3_bs_packetizer::add_to_buffer(): 未經測試的碼 (「size」很古
 #: src/mmg/tabs/input.cpp:188
 msgid "add"
 msgstr "加入"
+
+#: src/mmg/options/mmg.cpp:95
+msgid "always"
+msgstr ""
 
 #: src/common/stereo_mode.cpp:58
 msgid "anaglyph (cyan/red)"
@@ -8039,11 +8047,11 @@ msgstr "直欄交錯 (從左邊開始)"
 msgid "column interleaved (right first)"
 msgstr "直欄交錯 (從右邊開始)"
 
-#: src/mmg/jobs.cpp:347
+#: src/mmg/jobs.cpp:349
 msgid "completed OK"
 msgstr "完成，正常"
 
-#: src/mmg/jobs.cpp:350
+#: src/mmg/jobs.cpp:353
 msgid "completed with warnings"
 msgstr "完成，有警告"
 
@@ -8090,12 +8098,12 @@ msgstr "顯示高度: %1%"
 msgid "display width: %1%"
 msgstr "顯示寬度: %1%"
 
-#: src/mmg/jobs.cpp:529
-#: src/mmg/jobs.cpp:717
+#: src/mmg/jobs.cpp:545
+#: src/mmg/jobs.cpp:733
 msgid "done"
 msgstr "完成"
 
-#: src/mmg/jobs.cpp:530
+#: src/mmg/jobs.cpp:546
 msgid "done/warnings"
 msgstr "完成/有警告"
 
@@ -8115,8 +8123,13 @@ msgstr "啟用"
 msgid "encryption"
 msgstr "加密"
 
-#: src/mmg/jobs.cpp:353
-#: src/mmg/jobs.cpp:532
+#: src/mmg/options/mmg.cpp:94
+#, fuzzy
+msgid "even if there were warnings"
+msgstr "有警告資訊"
+
+#: src/mmg/jobs.cpp:357
+#: src/mmg/jobs.cpp:548
 msgid "failed"
 msgstr "失敗"
 
@@ -8608,7 +8621,7 @@ msgstr "mkvpropedit [選項] <檔案> <動作>"
 msgid "mm_text_io_c: UTF32_* is not supported at the moment.\n"
 msgstr "mm_text_io_c: 目前尚不支援 UTF32_*。\n"
 
-#: src/mmg/options/mmg.cpp:322
+#: src/mmg/options/mmg.cpp:347
 msgid "mmg"
 msgstr "mmg"
 
@@ -8616,7 +8629,7 @@ msgstr "mmg"
 msgid "mmg debug output"
 msgstr "mmg 除錯輸出"
 
-#: src/mmg/options/mmg.cpp:177
+#: src/mmg/options/mmg.cpp:189
 msgid "mmg options"
 msgstr "mmg 選項"
 
@@ -8693,6 +8706,10 @@ msgstr "on_entry_selected: display == NULL。不該出現。"
 msgid "only for I frames"
 msgstr "僅 I 畫格"
 
+#: src/mmg/options/mmg.cpp:93
+msgid "only if the run was successfull"
+msgstr ""
+
 #: src/info/mkvinfo.cpp:618
 #, boost-format
 msgid "output sampling freq: %1%"
@@ -8702,8 +8719,8 @@ msgstr "輸出取樣頻率: %1%"
 msgid "passthrough"
 msgstr ""
 
-#: src/mmg/jobs.cpp:528
-#: src/mmg/jobs.cpp:702
+#: src/mmg/jobs.cpp:544
+#: src/mmg/jobs.cpp:718
 msgid "pending"
 msgstr "未處理"
 

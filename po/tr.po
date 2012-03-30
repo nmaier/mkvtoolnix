@@ -935,11 +935,11 @@ msgstr "Komut satırını panoya &kopyala"
 msgid "&Copy to clipboard"
 msgstr "Panoya &kopyala"
 
-#: src/mmg/jobs.cpp:479
+#: src/mmg/jobs.cpp:493
 msgid "&Disable"
 msgstr "&Etkisiz"
 
-#: src/mmg/jobs.cpp:471
+#: src/mmg/jobs.cpp:485
 msgid "&Down"
 msgstr "&Aşağı"
 
@@ -1010,8 +1010,8 @@ msgid "&New chapters"
 msgstr "&Yeni bölümler"
 
 #: src/mmg/jobs.cpp:101
-#: src/mmg/jobs.cpp:394
-#: src/mmg/jobs.cpp:498
+#: src/mmg/jobs.cpp:406
+#: src/mmg/jobs.cpp:512
 msgid "&Ok"
 msgstr "&Tamam"
 
@@ -1029,7 +1029,7 @@ msgstr "&Seçenekler"
 msgid "&Quit\tCtrl-Q"
 msgstr "Çı&kış\tCtrl-Q"
 
-#: src/mmg/jobs.cpp:476
+#: src/mmg/jobs.cpp:490
 msgid "&Re-enable"
 msgstr "&Yen.etkinleştir"
 
@@ -1041,7 +1041,7 @@ msgstr "&Yeniden yükle\tCtrl-R"
 msgid "&Reset"
 msgstr "&Sıfırla"
 
-#: src/mmg/jobs.cpp:399
+#: src/mmg/jobs.cpp:411
 #: src/mmg/mmg_dialog.cpp:301
 msgid "&Save"
 msgstr "&Kaydet"
@@ -1058,11 +1058,11 @@ msgstr "Bilgiyi metin olarak &kaydet\tCtrl-S"
 msgid "&Save settings\tCtrl-S"
 msgstr "Ayarları &kaydet\tCtrl-S"
 
-#: src/mmg/jobs.cpp:503
+#: src/mmg/jobs.cpp:517
 msgid "&Start"
 msgstr "&Başlat"
 
-#: src/mmg/jobs.cpp:468
+#: src/mmg/jobs.cpp:482
 msgid "&Up"
 msgstr "&Yukarı"
 
@@ -1074,7 +1074,7 @@ msgstr "&Onayla\tCtrl-T"
 msgid "&Verify"
 msgstr "&Doğrula"
 
-#: src/mmg/jobs.cpp:489
+#: src/mmg/jobs.cpp:503
 msgid "&View log"
 msgstr "&Günlüğü göster"
 
@@ -1557,7 +1557,7 @@ msgstr ", tanımı '%1%'"
 msgid ", file name '%1%'"
 msgstr ", dosya adı '%1%'"
 
-#: src/mmg/jobs.cpp:743
+#: src/mmg/jobs.cpp:759
 #, c-format, boost-format
 msgid ", finished on %s"
 msgstr ", bitiş zamanı %s"
@@ -1567,22 +1567,22 @@ msgstr ", bitiş zamanı %s"
 msgid ", position %1%"
 msgstr ", konum %1%"
 
-#: src/mmg/jobs.cpp:733
+#: src/mmg/jobs.cpp:749
 #, c-format, boost-format
 msgid ", started on %s"
 msgstr ", başlama zamanı %s"
 
-#: src/mmg/jobs.cpp:731
+#: src/mmg/jobs.cpp:747
 #, c-format, boost-format
 msgid "--- BEGIN job %d (%s, added on %s)"
 msgstr "--- BEGIN iş %d (%s, eklenme%s)"
 
-#: src/mmg/jobs.cpp:741
+#: src/mmg/jobs.cpp:757
 #, c-format, boost-format
 msgid "--- END job %d"
 msgstr "--- END iş %d"
 
-#: src/mmg/jobs.cpp:736
+#: src/mmg/jobs.cpp:752
 msgid "--- No job output found.\n"
 msgstr "--- Bulunan iş çıktısı yok.\n"
 
@@ -1847,7 +1847,7 @@ msgstr ""
 msgid "Add subchapter"
 msgstr "Altbölüm ekle"
 
-#: src/mmg/jobs.cpp:441
+#: src/mmg/jobs.cpp:455
 msgid "Added on"
 msgstr "Eklenme"
 
@@ -1935,7 +1935,7 @@ msgstr ""
 msgid "Also using the correction file '%1%c'.\n"
 msgstr "Aynı zamanda düzeltme dosyası '%1%c' kullanılıyor.\n"
 
-#: src/mmg/options/mmg.cpp:92
+#: src/mmg/options/mmg.cpp:100
 msgid "Always on top"
 msgstr "Her zaman üstte"
 
@@ -2405,7 +2405,7 @@ msgid "Charset:"
 msgstr "Karakter grubu:"
 
 #: src/mmg/mmg_dialog.cpp:312
-#: src/mmg/options/mmg.cpp:105
+#: src/mmg/options/mmg.cpp:113
 msgid "Check online for the latest release"
 msgstr "En son yayımı çevrimiçi kontrol et"
 
@@ -2414,11 +2414,11 @@ msgstr "En son yayımı çevrimiçi kontrol et"
 msgid "Check online for the latest release."
 msgstr "En son yayımı çevrimiçi kontrol et."
 
-#: src/mmg/options/mmg.cpp:106
+#: src/mmg/options/mmg.cpp:114
 msgid "Check online whether or not a new release of MKVToolNix is available on the home page. Will only check when mmg starts and at most once a day. No information is transmitted to the server."
 msgstr ""
 
-#: src/mmg/mmg_dialog.cpp:1738
+#: src/mmg/mmg_dialog.cpp:1743
 msgid "Checking for updates online; please wait"
 msgstr "Güncellemeler çevrimiçi kontrol ediliyor; lütfen bekleyin"
 
@@ -2450,7 +2450,7 @@ msgstr "Eklemek için girdi dosyasını seçin"
 msgid "Choose an input file to append"
 msgstr "İlave etmek için girdi dosyasını seçin"
 
-#: src/mmg/jobs.cpp:410
+#: src/mmg/jobs.cpp:424
 #: src/mmg/mmg_dialog.cpp:350
 #: src/mmg/mmg_dialog.cpp:446
 #: src/mmg/mmg_dialog.cpp:754
@@ -2473,7 +2473,7 @@ msgstr "mkvmerge GKA yardım dosyalarının yerini seçin"
 msgid "Choose the mkvmerge executable"
 msgstr "mkvmerge çalıştırılabilir dosyasını seçin"
 
-#: src/mmg/options/mmg.cpp:253
+#: src/mmg/options/mmg.cpp:272
 msgid "Choose the output directory"
 msgstr "Çıktı dizinini seçin"
 
@@ -2878,7 +2878,7 @@ msgstr "Cue'lar (alt girdiler atlanacaktır)"
 msgid "Cues:"
 msgstr "Cue'lar:"
 
-#: src/mmg/jobs.cpp:429
+#: src/mmg/jobs.cpp:443
 msgid "Current and past jobs:"
 msgstr "Şu anki ve geçmiş işler:"
 
@@ -2903,7 +2903,7 @@ msgstr "Şu anki değer:"
 msgid "Current version:"
 msgstr "Şu anki sürüm:"
 
-#: src/mmg/jobs.cpp:484
+#: src/mmg/jobs.cpp:498
 msgid "D&elete"
 msgstr "&Sil"
 
@@ -2999,11 +2999,11 @@ msgstr "Gecikme: %|1$.3f|ms"
 msgid "Delete all occurences of a property"
 msgstr "Özelliğin tüm olaylarını sil"
 
-#: src/mmg/jobs.cpp:485
+#: src/mmg/jobs.cpp:499
 msgid "Delete the selected job(s) from the job queue"
 msgstr "Seçili işi(leri) iş kuyruğundan sil"
 
-#: src/mmg/jobs.cpp:439
+#: src/mmg/jobs.cpp:453
 msgid "Description"
 msgstr "Tanım"
 
@@ -3023,11 +3023,11 @@ msgstr "Tanım:"
 msgid "Dirac"
 msgstr "Dirac"
 
-#: src/mmg/options/mmg.cpp:100
+#: src/mmg/options/mmg.cpp:108
 msgid "Disable header removal compression for audio and video tracks by default"
 msgstr "Varsayılan olarak ses ve görüntü izleri için başlık kaldırılma sıkıştırmasını etkisizleştir"
 
-#: src/mmg/jobs.cpp:480
+#: src/mmg/jobs.cpp:494
 msgid "Disable the selected job(s) and sets their status to 'done'"
 msgstr "Seçili işi(leri) etkisizleştir ve durumlarını 'bitti' olarak ayarla"
 
@@ -3523,12 +3523,12 @@ msgstr "Dosya/parça başlığı:"
 msgid "Files cannot be appended to themselves. The argument for '--append-to' was invalid.\n"
 msgstr ""
 
-#: src/mmg/jobs.cpp:358
+#: src/mmg/jobs.cpp:363
 #, c-format, boost-format
 msgid "Finished job ID %d on %s: status '%s'"
 msgstr "Biten iş ID %d, %s: durum '%s'"
 
-#: src/mmg/jobs.cpp:445
+#: src/mmg/jobs.cpp:459
 msgid "Finished on"
 msgstr "Bitiş"
 
@@ -3753,7 +3753,7 @@ msgstr ""
 msgid "Here you can set the values for the language and the country that you want to apply to all the chapters below and including the currently selected entry."
 msgstr "Buradan şimdiki seçili giriş dahil aşağıdaki tüm bölümlere uygulamak istediğiniz dil ve ülke için değerleri ayarlayabilirsiniz."
 
-#: src/mmg/jobs.cpp:434
+#: src/mmg/jobs.cpp:448
 msgid "ID"
 msgstr "ID"
 
@@ -3789,11 +3789,11 @@ msgstr "Eğer işaretlenmişse mmg onaylama için mevcut dosyaların üzerine ya
 msgid "If checked mmg will automatically set the output filename if it hasn't been set already. This happens when you add the first file. If unset mmg will not touch the output filename."
 msgstr "Eğer işaretlenmişse mmg çıktı dosya adını, ayarlanmadıysa bile otomatik olarak ayarlayacak. İlk dosyayı eklediğinizde bu olur. Eğer ayarlanmazsa mmg çıktı dosya adına dokunmayacak."
 
-#: src/mmg/options/mmg.cpp:101
+#: src/mmg/options/mmg.cpp:109
 msgid "If checked mmg will set the 'compression' drop down box to 'none' for all audio and video tracks by default. The user can still change the compression setting afterwards."
 msgstr "Eğer işaretlenmişse mmg varsayılan olarak tüm ses ve görüntü izleri için 'sıkıştırma' aşağı açılır menü kutusunu 'yok' olarak ayarlayacak. Kullanıcı sonradan hala sıkıştırma ayarını değiştirebilir."
 
-#: src/mmg/options/mmg.cpp:95
+#: src/mmg/options/mmg.cpp:103
 msgid "If checked mmg will warn if it thinks that you're using it incorrectly. Such warnings are shown at least once even if you turn this feature off."
 msgstr "Eğer işaretlenmişse mmg yanlış olarak kullandığınızı düşünürse uyaracak. Böyle uyarılar eğer bu özelliği kapatsanız bile en az bir defa gösterilir."
 
@@ -3820,7 +3820,7 @@ msgstr "%1% dosyasından içe aktarılmış yazı tipi"
 msgid "Imported picture from %1%"
 msgstr "%1% dosyasından içe aktarılmış resim"
 
-#: src/mmg/mmg_dialog.cpp:1883
+#: src/mmg/mmg_dialog.cpp:1888
 msgid "Incompatible mkvmerge version"
 msgstr "Uyumsuz mkvmerge sürümü"
 
@@ -3859,7 +3859,7 @@ msgstr "Girdi dosyaları:"
 msgid "Input too long: %1% > %2%"
 msgstr "Girdi çok uzun: %1% > %2%"
 
-#: src/mmg/options/mmg.cpp:116
+#: src/mmg/options/mmg.cpp:124
 msgid "Interface language:"
 msgstr "Arabirim dili:"
 
@@ -4210,11 +4210,11 @@ msgstr "İş, iş kuyruğuna eklendi"
 msgid "Job description"
 msgstr "İş tanımı"
 
-#: src/mmg/jobs.cpp:385
+#: src/mmg/jobs.cpp:397
 msgid "Job output"
 msgstr "İş çıktısı"
 
-#: src/mmg/jobs.cpp:426
+#: src/mmg/jobs.cpp:440
 msgid "Job queue management"
 msgstr "İş kuyruğu yönetimi"
 
@@ -4595,11 +4595,11 @@ msgstr ""
 msgid "More than one track with the track number %1% found.\n"
 msgstr ""
 
-#: src/mmg/jobs.cpp:472
+#: src/mmg/jobs.cpp:486
 msgid "Move the selected job(s) down"
 msgstr "Seçili işi(leri) aşağı taşı"
 
-#: src/mmg/jobs.cpp:469
+#: src/mmg/jobs.cpp:483
 msgid "Move the selected job(s) up"
 msgstr "Seçili işi(leri) yukarı taşı"
 
@@ -4957,7 +4957,7 @@ msgstr "Çıktı dosya adı"
 msgid "Output messages in this charset"
 msgstr "Bu karakter grubundaki çıktı mesajları"
 
-#: src/mmg/jobs.cpp:389
+#: src/mmg/jobs.cpp:401
 msgid "Output of the selected jobs:"
 msgstr "Seçili işlerin çıktısı:"
 
@@ -5143,7 +5143,7 @@ msgstr "İlerleme: 100%%%1%"
 msgid "Progress: [%1%%2%] %3%%%"
 msgstr "İlerleme: [%1%%2%] %3%%%"
 
-#: src/mmg/mmg_dialog.cpp:1826
+#: src/mmg/mmg_dialog.cpp:1831
 msgid "Querying mkvmerge's capabilities"
 msgstr "mkvmerge'ün yetenekleri sorgulanıyor"
 
@@ -5300,7 +5300,7 @@ msgstr "mkvinfo'dan çık"
 msgid "RSA"
 msgstr "RSA"
 
-#: src/mmg/jobs.cpp:477
+#: src/mmg/jobs.cpp:491
 msgid "Re-enable the selected job(s)"
 msgstr "Seçili işi(leri) yeniden etkinleştir"
 
@@ -5380,6 +5380,10 @@ msgstr "Bölümü kaldır"
 msgid "Remove element"
 msgstr "Unsuru kaldır"
 
+#: src/mmg/options/mmg.cpp:97
+msgid "Remove job from job queue after run:"
+msgstr ""
+
 #: src/mmg/tabs/chapters.cpp:348
 msgid "Remove name"
 msgstr "Adı kaldır"
@@ -5405,7 +5409,7 @@ msgstr "Başlık alanı düzenleyicisini çalıştır"
 msgid "S&how the command line"
 msgstr "Komut satırını &göster"
 
-#: src/mmg/jobs.cpp:507
+#: src/mmg/jobs.cpp:521
 msgid "S&tart selected"
 msgstr "Seçil&eni başlat"
 
@@ -5769,7 +5773,7 @@ msgstr "Her bir karenin tüm baytlarını onaltılık döküm olarak göster."
 msgid "Show element si&zes\tCtrl-Z"
 msgstr "&Unsur boyutlarını göster\tCtrl-Z"
 
-#: src/mmg/options/mmg.cpp:111
+#: src/mmg/options/mmg.cpp:119
 msgid "Show mmg's debug window"
 msgstr "mmg'nin hata ayıklama penceresini göster"
 
@@ -5809,7 +5813,7 @@ msgstr "Bu yardımı göster."
 msgid "Show version information."
 msgstr "Sürüm bilgisini göster."
 
-#: src/mmg/options/mmg.cpp:112
+#: src/mmg/options/mmg.cpp:120
 msgid "Shows mmg's debug window in which debug messages will appear. This is only useful if you're helping the author debug a problem in mmg."
 msgstr "Hata ayıklama iletilerinin gözükeceği mmg'nin hata ayıklama penceresini göster. Bu sadece mmg içindeki sorunun hatasını ayıklayıp hazırlayana yardım ederseniz faydalıdır."
 
@@ -5945,11 +5949,11 @@ msgstr "Çoklamayı &başlat (mkvmerge'ü çalıştır)\tCtrl-R"
 msgid "Start the GUI (and open inname if it was given)."
 msgstr "GKA başlat (ve eğer verilmişse, ismen aç)."
 
-#: src/mmg/jobs.cpp:504
+#: src/mmg/jobs.cpp:518
 msgid "Start the jobs whose status is 'pending'"
 msgstr "Durumu 'beklemede' olan işleri başlat"
 
-#: src/mmg/jobs.cpp:508
+#: src/mmg/jobs.cpp:522
 msgid "Start the selected job(s) regardless of their status"
 msgstr "Durumlarına bakmadan seçili işi(leri) başlat"
 
@@ -5961,7 +5965,7 @@ msgstr "Boş ayarlarla başlat"
 msgid "Start:"
 msgstr "Başlangıç:"
 
-#: src/mmg/jobs.cpp:443
+#: src/mmg/jobs.cpp:457
 msgid "Started on"
 msgstr "Başlama"
 
@@ -5975,7 +5979,7 @@ msgstr "Başlayan iş ID'si %d (%s), dosya: %s"
 msgid "Statistics for track number %1%: number of blocks: %2%; size in bytes: %3%; duration in seconds: %4%; approximate bitrate in bits/second: %5%\n"
 msgstr "İz sayısı %1%: blok sayısı: %2%; bayt olarak boyut: %3%; saniye olarak süre: %4%; bit/saniye olarak yaklaşık bit oranı: %5% için istatistikler\n"
 
-#: src/mmg/jobs.cpp:437
+#: src/mmg/jobs.cpp:451
 msgid "Status"
 msgstr "Durum"
 
@@ -6111,7 +6115,7 @@ msgstr "mkvmerge'e dosyanın sonunda içerdiği tüm kümelerin meta arama öğe
 msgid "Text files (*.txt);;All files (*.*)"
 msgstr "Metin dosyaları (*.txt);;All files (*.*)"
 
-#: src/mmg/jobs.cpp:410
+#: src/mmg/jobs.cpp:424
 #, c-format, boost-format
 msgid "Text files (*.txt)|*.txt|%s"
 msgstr "Metin dosyaları (*.txt)|*.txt|%s"
@@ -6171,7 +6175,7 @@ msgstr ""
 msgid "The FourCC setting for track nr. %s in file '%s' is not excatly four characters long."
 msgstr ""
 
-#: src/mmg/mmg_dialog.cpp:1879
+#: src/mmg/mmg_dialog.cpp:1884
 #, boost-format
 msgid "The GUI is configured to use the mkvmerge executable from a different version (%1%) than the GUI itself (%2%). This is not supported but will not be prevented either. You should change the mkvmerge executable in the preferences dialog."
 msgstr ""
@@ -7066,7 +7070,7 @@ msgstr "İki izin genişlikleri farklı: %1% ve %2%"
 msgid "Theora"
 msgstr "Theora"
 
-#: src/mmg/mmg_dialog.cpp:1771
+#: src/mmg/mmg_dialog.cpp:1776
 msgid "There is a new version available online."
 msgstr "Çevrimiçi yeni sürüm mevcut."
 
@@ -7081,7 +7085,7 @@ msgstr ""
 msgid "There is no translation available for '%1%'.\n"
 msgstr "'%1%' için mevcut çeviri yok.\n"
 
-#: src/mmg/mmg_dialog.cpp:1772
+#: src/mmg/mmg_dialog.cpp:1777
 msgid "There was an error querying the update status."
 msgstr "Güncelleme durumunu sorgularken hata oldu."
 
@@ -7726,7 +7730,7 @@ msgstr "Görüntü izi"
 msgid "Video track %u"
 msgstr "Görüntü izi %u"
 
-#: src/mmg/jobs.cpp:490
+#: src/mmg/jobs.cpp:504
 msgid "View the output that mkvmerge generated during the muxing process for the selected job(s)"
 msgstr "Seçili iş(ler) için çoklama işlemi sırasında mkvmerge'ün oluşturduğu çıktıyı göster"
 
@@ -7772,7 +7776,7 @@ msgstr "WAVPACK v4 sesi"
 msgid "WAVPACK4"
 msgstr "WAVPACK4"
 
-#: src/mmg/options/mmg.cpp:94
+#: src/mmg/options/mmg.cpp:102
 msgid "Warn about possible incorrect usage of mmg"
 msgstr "mmg'nin olası yanlış kullanımı ile ilgili uyar"
 
@@ -7877,7 +7881,7 @@ msgstr "Yanlış tanımlama dizgisi: '%|1$6s|' != 'theora'"
 msgid "Wrong identification string: '%|1$7s|' != 'kate\\0\\0\\0'"
 msgstr "Yanlış tanımlama dizgisi: '%|1$7s|' != 'kate\\0\\0\\0'"
 
-#: src/mmg/mmg_dialog.cpp:1770
+#: src/mmg/mmg_dialog.cpp:1775
 msgid "You are already running the latest version."
 msgstr "Zaten en son sürümü çalıştırmaktasınız."
 
@@ -7912,9 +7916,9 @@ msgstr "Zlib çıkartması başarısız oldu. Sonuç: %1%\n"
 msgid "[%1% frame for track %2%, timecode %3%]"
 msgstr "[iz %2% için %1% kare, zaman kodu %3%]"
 
-#: src/mmg/jobs.cpp:344
-#: src/mmg/jobs.cpp:453
-#: src/mmg/jobs.cpp:531
+#: src/mmg/jobs.cpp:345
+#: src/mmg/jobs.cpp:467
+#: src/mmg/jobs.cpp:547
 msgid "aborted"
 msgstr "durduruldu"
 
@@ -7926,6 +7930,10 @@ msgstr ""
 #: src/mmg/tabs/input.cpp:188
 msgid "add"
 msgstr "ekle"
+
+#: src/mmg/options/mmg.cpp:95
+msgid "always"
+msgstr ""
 
 #: src/common/stereo_mode.cpp:58
 msgid "anaglyph (cyan/red)"
@@ -7989,11 +7997,11 @@ msgstr ""
 msgid "column interleaved (right first)"
 msgstr ""
 
-#: src/mmg/jobs.cpp:347
+#: src/mmg/jobs.cpp:349
 msgid "completed OK"
 msgstr "sorunsuz tamamlandı"
 
-#: src/mmg/jobs.cpp:350
+#: src/mmg/jobs.cpp:353
 msgid "completed with warnings"
 msgstr "uyarıyla tamamlandı"
 
@@ -8040,12 +8048,12 @@ msgstr "görüntüleme yüksekliği: %1%"
 msgid "display width: %1%"
 msgstr "görüntüleme genişliği: %1%"
 
-#: src/mmg/jobs.cpp:529
-#: src/mmg/jobs.cpp:717
+#: src/mmg/jobs.cpp:545
+#: src/mmg/jobs.cpp:733
 msgid "done"
 msgstr "bitti"
 
-#: src/mmg/jobs.cpp:530
+#: src/mmg/jobs.cpp:546
 msgid "done/warnings"
 msgstr "bitti/uyarılar"
 
@@ -8065,8 +8073,13 @@ msgstr "etkinleştirildi"
 msgid "encryption"
 msgstr "şifreleme"
 
-#: src/mmg/jobs.cpp:353
-#: src/mmg/jobs.cpp:532
+#: src/mmg/options/mmg.cpp:94
+#, fuzzy
+msgid "even if there were warnings"
+msgstr "Uyarılar vardı"
+
+#: src/mmg/jobs.cpp:357
+#: src/mmg/jobs.cpp:548
 msgid "failed"
 msgstr "başarısız"
 
@@ -8558,7 +8571,7 @@ msgstr "mkvpropedit [seçenekler] <dosya> <eylemler>"
 msgid "mm_text_io_c: UTF32_* is not supported at the moment.\n"
 msgstr "mm_text_io_c: UTF32_* şimdilik desteklenmiyor.\n"
 
-#: src/mmg/options/mmg.cpp:322
+#: src/mmg/options/mmg.cpp:347
 msgid "mmg"
 msgstr "mmg"
 
@@ -8566,7 +8579,7 @@ msgstr "mmg"
 msgid "mmg debug output"
 msgstr "mmg hata ayıklama çıktısı"
 
-#: src/mmg/options/mmg.cpp:177
+#: src/mmg/options/mmg.cpp:189
 msgid "mmg options"
 msgstr "mmg seçenekleri"
 
@@ -8643,6 +8656,10 @@ msgstr "avc_es_reader: Olmamalıydı."
 msgid "only for I frames"
 msgstr "sadece 1 kare için"
 
+#: src/mmg/options/mmg.cpp:93
+msgid "only if the run was successfull"
+msgstr ""
+
 #: src/info/mkvinfo.cpp:618
 #, boost-format
 msgid "output sampling freq: %1%"
@@ -8652,8 +8669,8 @@ msgstr "çıktı örnekleme aralığı: %1%"
 msgid "passthrough"
 msgstr "içinden geçen"
 
-#: src/mmg/jobs.cpp:528
-#: src/mmg/jobs.cpp:702
+#: src/mmg/jobs.cpp:544
+#: src/mmg/jobs.cpp:718
 msgid "pending"
 msgstr "beklemede"
 
