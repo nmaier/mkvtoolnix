@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2012-03-14 17:01+0900\n"
+"PO-Revision-Date: 2012-03-31 12:46+0900\n"
 "Last-Translator: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "Language-Team: Japanese <boiled.sugar@gmail.com>\n"
 "Language: ja\n"
@@ -941,9 +941,8 @@ msgid "&Down"
 msgstr "下へ(&D)"
 
 #: src/mmg/update_checker.cpp:75
-#, fuzzy
 msgid "&Download"
-msgstr "ダウンロードURL："
+msgstr "ダウンロード(&D)"
 
 #: src/mmg/header_editor/frame.cpp:146
 msgid "&Expand all entries\tCtrl-E"
@@ -1629,9 +1628,8 @@ msgid "4 bytes"
 msgstr "4バイト"
 
 #: src/common/xml/xml.h:73
-#, fuzzy
 msgid "<%1%> is not a valid child element of <%2%> at position %3%."
-msgstr "<%1%>は<%2%>の有効な子要素ではありません。"
+msgstr "位置%3%において、<%1%>は<%2%>の有効な子要素ではありません。"
 
 #: src/common/xml/ebml_chapters_converter.cpp:120
 msgid "<ChapterAtom> is missing the <ChapterTimeStart> child."
@@ -1646,18 +1644,16 @@ msgid "<ChapterTrack> is missing the <ChapterTrackNumber> child."
 msgstr "<ChapterTrack>に<ChapterTrackNumber>子要素がありません。"
 
 #: src/common/xml/ebml_tags_converter.cpp:90
-#, fuzzy
 msgid "<Simple> is missing the <Name> child."
-msgstr "<ChapterAtom>に<ChapterTimeStart>子要素がありません。"
+msgstr "<Simple>に<Name>子要素がありません。"
 
 #: src/common/xml/ebml_tags_converter.cpp:97
 msgid "<Simple> must contain either a <String> or a <Binary> child."
-msgstr ""
+msgstr "<Simple> は<String>か<Binary>のどちらかの子要素を含んでいなければなりません。"
 
 #: src/common/xml/ebml_tags_converter.cpp:87
-#, fuzzy
 msgid "<Tag> is missing the <Simple> child."
-msgstr "<ChapterAtom>に<ChapterTimeStart>子要素がありません。"
+msgstr "<Tag>に<Simple子要素がありません。"
 
 #: src/input/r_matroska.cpp:2091
 #, boost-format
@@ -1974,9 +1970,8 @@ msgid "An unknown error occured. The file has been modified."
 msgstr "未知のエラーが発生しました。ファイルは変更されました。"
 
 #: src/common/xml/ebml_converter.cpp:174
-#, fuzzy
 msgid "An unsigned integer was expected."
-msgstr "符号無し整数"
+msgstr "符号無し整数が期待されていました。"
 
 #: src/mmg/wx_kax_analyzer.cpp:36
 msgid "Analysis is running"
@@ -2114,9 +2109,9 @@ msgid "BZ2_bzCompressInit() failed. Result: %1%\n"
 msgstr "BZ2_bzCompressInit()が失敗しました。結果：%1%\n"
 
 #: src/common/compression/bzlib.cpp:61
-#, fuzzy, boost-format
+#, boost-format
 msgid "BZ2_bzDecompress() failed. Result: %1%\n"
-msgstr "BZ2_bzCompressInit()が失敗しました。結果：%1%\n"
+msgstr "BZ2_bzDecompress()が失敗しました。結果：%1%\n"
 
 #: src/mmg/header_editor/value_page.cpp:148
 msgid "Binary (displayed as hex numbers)"
@@ -3885,9 +3880,9 @@ msgid "Invalid %1% specified in '--%2% %3%'.\n"
 msgstr "'--%2% %3%'で無効な%1%が指定されました。\n"
 
 #: src/common/xml/ebml_converter.cpp:297
-#, fuzzy, boost-format
+#, boost-format
 msgid "Invalid 'format' attribute '%1%'."
-msgstr "無効な分（ふん）です：%1%"
+msgstr "無効な'format'属性：'%1%'"
 
 #: src/common/base64.h:30
 msgid "Invalid Base64 character encountered"
@@ -3927,7 +3922,7 @@ msgstr "引数'%1%'で指定されている添付ファイルID・ファイル�
 
 #: src/common/xml/xml.h:54
 msgid "Invalid attribute '%1%' in node '%2%' at position %3%"
-msgstr ""
+msgstr "位置'%3%'のノード'%2%'に無効な属性'%1%'があります"
 
 #: src/merge/mkvmerge.cpp:921
 #, boost-format
@@ -3976,7 +3971,7 @@ msgstr "無効なキューオプションです。'--cues %1%'でトラックID�
 #: src/common/xml/ebml_converter.cpp:289
 #: src/common/xml/ebml_converter.cpp:293
 msgid "Invalid data for Base64 encoding found."
-msgstr ""
+msgstr "Base64エンコーディングには無効なデータが見つかりました。"
 
 #: src/mmg/mmg_dialog.cpp:601
 msgid "Invalid file name"
@@ -4060,7 +4055,7 @@ msgstr "無効な言語が選択されました"
 
 #: src/common/xml/ebml_converter.cpp:276
 msgid "Invalid length of hexadecimal content: must be divisable by 2."
-msgstr ""
+msgstr "無効な16進数の中身です：2で割り切れる必要があります。"
 
 #: src/common/chapters/chapters.cpp:192
 #, boost-format
@@ -4470,14 +4465,14 @@ msgstr "最大キャッシュ：%1%"
 #: src/common/xml/ebml_converter.cpp:235
 #, boost-format
 msgid "Maximum allowed length: %1%, actual length: %2%"
-msgstr ""
+msgstr "許容される最大の長さ：%1%、実際の長さ：%2%"
 
 #: src/common/xml/ebml_converter.cpp:179
 #: src/common/xml/ebml_converter.cpp:193
 #: src/common/xml/ebml_converter.cpp:224
 #, boost-format
 msgid "Maximum allowed value: %1%, actual value: %2%"
-msgstr ""
+msgstr "許容される最大の値：%1%、実際の値：%2%"
 
 #: src/common/property_element.cpp:124
 #: src/mmg/header_editor/frame.cpp:406
@@ -4506,14 +4501,14 @@ msgstr "最小キャッシュ：%1%"
 #: src/common/xml/ebml_converter.cpp:233
 #, boost-format
 msgid "Minimum allowed length: %1%, actual length: %2%"
-msgstr ""
+msgstr "許容される最小の長さ：%1%、実際の長さ：%2%"
 
 #: src/common/xml/ebml_converter.cpp:177
 #: src/common/xml/ebml_converter.cpp:191
 #: src/common/xml/ebml_converter.cpp:222
 #, boost-format
 msgid "Minimum allowed value: %1%, actual value: %2%"
-msgstr ""
+msgstr "許容される最小の値：%1%、実際の値：%2%"
 
 #: src/common/property_element.cpp:122
 #: src/mmg/header_editor/frame.cpp:401
@@ -4790,7 +4785,7 @@ msgstr "バージョン番号が見つかりませんでした。\n"
 
 #: src/common/xml/ebml_converter.cpp:273
 msgid "Non-hex digits encountered."
-msgstr ""
+msgstr "16進数でない数字に遭遇しました。"
 
 #: src/mmg/header_editor/frame.cpp:526
 msgid "None of the header fields has been modified. Nothing has been saved."
@@ -4865,9 +4860,8 @@ msgid "Only one input file is allowed.\n"
 msgstr "入力ファイルは1つのみ指定することができます。\n"
 
 #: src/common/xml/xml.h:92
-#, fuzzy
 msgid "Only one instance of <%1%> is allowed beneath <%2%> at position %3%."
-msgstr "<%2%>の下には<%1%>は1度のみ許されます。"
+msgstr "位置%3%において、<%2%>の下には<%1%>は1度のみ許されます。"
 
 #: src/common/xml/ebml_tags_converter.cpp:95
 msgid "Only one of <String> and <Binary> may be used beneath <Simple> but not both at the same time."
@@ -5383,7 +5377,7 @@ msgstr "要素を削除"
 
 #: src/mmg/options/mmg.cpp:97
 msgid "Remove job from job queue after run:"
-msgstr ""
+msgstr "次の場合に実行後にジョブキューからジョブを消去する："
 
 #: src/mmg/tabs/chapters.cpp:348
 msgid "Remove name"
@@ -6226,54 +6220,53 @@ msgid "The Vorbis codebooks are different; such tracks cannot be concatenated wi
 msgstr "Vorbisコードブックが異なっています；そのようなトラックは再エンコードしないと連結することはできません。"
 
 #: src/common/xml/ebml_chapters_converter.cpp:218
-#, fuzzy, boost-format
+#, boost-format
 msgid "The XML chapter file '%1%' contains an error at position %3%: %2%\n"
-msgstr "タイムコードファイル'%1%'はサポートされていないもしくは認識されないフォーマット（バージョン%2%）を含んでいます。\n"
+msgstr "XMLチャプタファイル'%1%'は位置%3%でエラーを含んでいます：%2%\n"
 
 #: src/common/xml/ebml_chapters_converter.cpp:221
-#, fuzzy, boost-format
+#, boost-format
 msgid "The XML chapter file '%1%' contains an error: %2%\n"
-msgstr "ファイル'%1%'：コンテナ：%2%"
+msgstr "XMLチャプタファイル'%1%'はエラーを含んでいます：%2%\n"
 
 #: src/common/xml/ebml_chapters_converter.cpp:215
-#, fuzzy, boost-format
+#, boost-format
 msgid "The XML chapter file '%1%' could not be read.\n"
-msgstr "添付ファイル'%1%'を読み込むことができませんでした。\n"
+msgstr "XMLチャプタファイル'%1%'を読み込むことができませんでした。\n"
 
 #: src/common/xml/ebml_converter.cpp:355
-#, fuzzy
 msgid "The XML root element is not a master element."
-msgstr "ルート要素は<%1%>でなければなりません。"
+msgstr "そのXMLルート要素はマスター要素ではありません。"
 
 #: src/common/xml/ebml_segmentinfo_converter.cpp:90
-#, fuzzy, boost-format
+#, boost-format
 msgid "The XML segmentinfo file '%1%' contains an error at position %3%: %2%\n"
-msgstr "タイムコードファイル'%1%'はサポートされていないもしくは認識されないフォーマット（バージョン%2%）を含んでいます。\n"
+msgstr "XMLセグメント情報ファイル'%1%'は位置%3%でエラーを含んでいます：%2%\n"
 
 #: src/common/xml/ebml_segmentinfo_converter.cpp:93
-#, fuzzy, boost-format
+#, boost-format
 msgid "The XML segmentinfo file '%1%' contains an error: %2%\n"
-msgstr "ファイル'%1%'：コンテナ：%2%"
+msgstr "XMLセグメント情報ファイル'%1%'はエラーを含んでいます：%2%\n"
 
 #: src/common/xml/ebml_segmentinfo_converter.cpp:87
-#, fuzzy, boost-format
+#, boost-format
 msgid "The XML segmentinfo file '%1%' could not be read.\n"
-msgstr "添付ファイル'%1%'を読み込むことができませんでした。\n"
+msgstr "XMLセグメント情報ファイル'%1%'を読み込むことができませんでした。\n"
 
 #: src/common/xml/ebml_tags_converter.cpp:119
-#, fuzzy, boost-format
+#, boost-format
 msgid "The XML tag file '%1%' contains an error at position %3%: %2%\n"
-msgstr "タイムコードファイル'%1%'はサポートされていないもしくは認識されないフォーマット（バージョン%2%）を含んでいます。\n"
+msgstr "XMLタグァイル'%1%'は位置%3%でエラーを含んでいます：%2%\n"
 
 #: src/common/xml/ebml_tags_converter.cpp:122
-#, fuzzy, boost-format
+#, boost-format
 msgid "The XML tag file '%1%' contains an error: %2%\n"
-msgstr "ファイル'%1%'：コンテナ：%2%"
+msgstr "XMLタグァイル'%1%'はエラーを含んでいます：%2%\n"
 
 #: src/common/xml/ebml_tags_converter.cpp:116
-#, fuzzy, boost-format
+#, boost-format
 msgid "The XML tag file '%1%' could not be read.\n"
-msgstr "添付ファイル'%1%'を読み込むことができませんでした。\n"
+msgstr "XMLタグファイル'%1%'を読み込むことができませんでした。\n"
 
 #: src/merge/mkvmerge.cpp:1545
 #, boost-format
@@ -6982,11 +6975,11 @@ msgstr "文字列'info'、'segment_info'、'segmentinfo'はセグメント情報
 
 #: src/common/xml/xml.h:130
 msgid "The tag or attribute '%1%' at position %2% contains data that is outside its allowed range."
-msgstr ""
+msgstr "位置'%2%'のタグもしくは属性'%1%'は、許容される範囲外のデータを含んでいます。"
 
 #: src/common/xml/xml.h:110
 msgid "The tag or attribute '%1%' at position %2% contains invalid or mal-formed data."
-msgstr ""
+msgstr "位置'%2%'のタグもしくは属性'%1%'は、無効もしくは不正な形式のデータを含んでいます。"
 
 #: src/merge/pr_generic.cpp:273
 #, boost-format
@@ -7390,7 +7383,7 @@ msgstr "トラック%1%：AACが見つかりましたが、デコーダ設定デ
 #: src/extract/xtr_textsubs.cpp:396
 #, boost-format
 msgid "Track %1%: An USF subtitle entry starting at timecode %2% is not well-formed XML and will be skipped.\n"
-msgstr ""
+msgstr "トラック%1%：タイムコード%2%で始まるUSF字幕エントリは、正しい形式のXMLではないのでスキップされます。\n"
 
 #: src/extract/xtr_avc.cpp:39
 #, boost-format
@@ -7977,7 +7970,7 @@ msgstr "追加"
 
 #: src/mmg/options/mmg.cpp:95
 msgid "always"
-msgstr ""
+msgstr "いつでも"
 
 #: src/common/stereo_mode.cpp:58
 msgid "anaglyph (cyan/red)"
@@ -8118,9 +8111,8 @@ msgid "encryption"
 msgstr "暗号化"
 
 #: src/mmg/options/mmg.cpp:94
-#, fuzzy
 msgid "even if there were warnings"
-msgstr "警告が発せられました"
+msgstr "警告があった場合でも"
 
 #: src/mmg/jobs.cpp:357
 #: src/mmg/jobs.cpp:548
@@ -8404,19 +8396,19 @@ msgid "max. number of files:"
 msgstr "ファイルの最大分割数："
 
 #: src/common/memory.cpp:147
-#, fuzzy, boost-format
+#, boost-format
 msgid "memory.cpp/safemalloc() called from file %1%, line %2%: malloc() returned nullptr for a size of %3% bytes.\n"
-msgstr "memory.cpp/safemalloc() ファイル %1% から呼び出し、%2%行：malloc() が%3%バイトの要求に対しnullptrを返しました。\n"
+msgstr "memory.cpp/safemalloc() ファイル %1% から呼び出し、%2%行：malloc() が%3%バイトのサイズの要求に対しnullptrを返しました。\n"
 
 #: src/common/memory.cpp:135
-#, fuzzy, boost-format
+#, boost-format
 msgid "memory.cpp/safememdup() called from file %1%, line %2%: malloc() returned nullptr for a size of %3% bytes.\n"
-msgstr "memory.cpp/safememdup() ファイル %1% から呼び出し、%2%行：malloc() が%3%バイトの要求に対しnullptrを返しました。\n"
+msgstr "memory.cpp/safememdup() ファイル %1% から呼び出し、%2%行：malloc() が%3%バイトのサイズの要求に対しnullptrを返しました。\n"
 
 #: src/common/memory.cpp:163
-#, fuzzy, boost-format
+#, boost-format
 msgid "memory.cpp/saferealloc() called from file %1%, line %2%: realloc() returned nullptr for a size of %3% bytes.\n"
-msgstr "memory.cpp/saferealloc() ファイル %1% から呼び出し、%2%行：realloc() が%3%バイトの要求に対しnullptrを返しました。\n"
+msgstr "memory.cpp/saferealloc() ファイル %1% から呼び出し、%2%行：realloc() が%3%バイトのサイズの要求に対しnullptrを返しました。\n"
 
 #: src/propedit/target.cpp:82
 msgid "missing property name"
@@ -8703,7 +8695,7 @@ msgstr "Iフレームのみ"
 
 #: src/mmg/options/mmg.cpp:93
 msgid "only if the run was successfull"
-msgstr ""
+msgstr "実行が成功した場合のみ"
 
 #: src/info/mkvinfo.cpp:618
 #, boost-format
@@ -9644,4 +9636,3 @@ msgstr "はい"
 
 #~ msgid "wrong usage: writing to read-only memory"
 #~ msgstr "間違った使用法：読み込み専用メモリへの書き込み"
-

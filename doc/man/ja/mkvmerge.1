@@ -1,7 +1,7 @@
 '\" t
 .\"     Title: mkvmerge
 .\"    Author: Bunkus Moritz[FAMILY Given] <moritz@bunkus.org>
-.\" Generator: DocBook XSL Stylesheets v1.75.2 <http://docbook.sf.net/>
+.\" Generator: DocBook XSL Stylesheets v1.76.1 <http://docbook.sf.net/>
 .\"      Date: 2012-03-10
 .\"    Manual:  
 .\"    Source: MKVToolNix 5.4.0
@@ -44,7 +44,7 @@ mkvmerge \- マルチメディアストリームをMatroska(TM)ファイルに�
 .nr an-break-flag 1
 .br
 .ps +1
-\fB重要項目\fR
+\fB重要\fR
 .ps -1
 .br
 .PP
@@ -89,9 +89,7 @@ WebMの規格に準拠したファイルを作成します。mkvmergeは出力�
 
 XMLファイルからセグメント情報を読み取ります。このファイルは、セグメントファミリUID、セグメントUID、前、及び、後セグメントUIDエレメントを含むことができます。MKVToolNixは、サンプルファイルとDTDを含んで配布されています。
 .sp
-See the section about
-segment info XML files
-below for details\&.
+詳細は、下にあるセグメント情報XMLファイルのセクションを参照してください。
 .RE
 .PP
 \fB\-\-segment\-uid\fR \fISID1,SID2,\&.\&.\&.\fR
@@ -852,7 +850,7 @@ download_url)。
 .nr an-break-flag 1
 .br
 .ps +1
-\fB重要項目\fR
+\fB重要\fR
 .ps -1
 .br
 .PP
@@ -1565,7 +1563,7 @@ XMLチャプタフォーマットの例を以下に示します。
 .PP
 mkvtoolnixは、テンプレートとなるサンプルファイルと一緒に配布されています。サンプルファイルはdocサブディレクトリの中にあります。
 .PP
-The following lists the supported XML tags, their data types and, where appropriate, the valid range for their values:
+以下にサポートされているXMLタグ、そのデータタイプ、そして適切な場所では、その値の有効な範囲を挙げます：
 .sp
 .if n \{\
 .RS 4
@@ -1686,9 +1684,9 @@ $ mkvmerge \-o file\&.mkv \-\-tags 0:tags\&.xml file\&.avi
 もう一つの方法では、データはBase64エンコードされる必要があります。これは、バイナリデータをASCIIキャラクタの一部だけで表現するためのエンコードで、例えばEメールなどに使用されています。\fBmkvextract\fR(1)は、バイナリエレメントをBase64エンコードされたデータとして出力します。
 .PP
 古いタグシステムは、公式のMatroska(TM)の仕様に示されているように、もっと多くのデータタイプを認識していました。\fBmkvmerge\fR(1)はもはやこのシステムをサポートしないので、それらのタイプについてはここでは説明しません。
-.SS "Known tags for the XML file format"
+.SS "XMLファイルフォーマットで知られているタグ"
 .PP
-The following lists the supported XML tags, their data types and, where appropriate, the valid range for their values:
+以下にサポートされているXMLタグ、そのデータタイプ、そして適切な場所では、その値の有効な範囲を挙げます：
 .sp
 .if n \{\
 .RS 4
@@ -1714,27 +1712,17 @@ Tags (master)
 .if n \{\
 .RE
 .\}
-.SH "THE SEGMENT INFO XML FILES"
+.SH "セグメント情報XMLファイル"
 .PP
-With a segment info XML file it is possible to set certain values in the "segment information" header field of a Matroska file\&. All of these values cannot be set via other command line options\&.
+セグメント情報XMLファイルで、Matroskaファイルの"segment information"ヘッダフィールドの特定の値を設定することが可能です。これらの値の全てがコマンドラインオプション経由で設定可能というわけではありません。
 .PP
-Other "segment information" header fields can be set via command line options but not via the XML file\&. This includes e\&.g\&. the
-\fB\-\-title\fR
-and the
-\fB\-\-timecode\-scale\fR
-options\&.
+他の"segment information"ヘッダフィールドはコマンドラインオプション経由で設定できますが、XMLファイル経由では設定できません。 これはには例えば\fB\-\-title\fRや\fB\-\-timecode\-scale\fR
+オプションなどが含まれます。
 .PP
-There are other elements that can be set neither via command line options nor via the XML files\&. These include the following elements:
-\fIDateUTC\fR
-(also known as the "muxing date"),
-\fIMuxingApp\fR,
-\fIWritingApp\fR
-and
-\fIDuration\fR\&. They\*(Aqre always set by
-\fBmkvmerge\fR(1)
-itself\&.
+他にもコマンドラインオプション経由でもXMLファイル経由でも設定できない要素があります。これらには以下のものが含まれます：\fIDateUTC\fR
+（別名"muxing date"）、\fIMuxingApp\fR、\fIWritingApp\fR、そして\fIDuration\fRです。それらは常に\fBmkvmerge\fR(1)自身によって設定されます。
 .PP
-The following lists the supported XML tags, their data types and, where appropriate, the valid range for their values:
+以下にサポートされているXMLタグ、そのデータタイプ、そして適切な場所では、その値の有効な範囲を挙げます：
 .sp
 .if n \{\
 .RS 4
