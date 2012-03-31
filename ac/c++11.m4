@@ -189,6 +189,32 @@ AC_DEFUN([AX_CXX11_NULLPTR],[
   fi
 ])
 
+AC_DEFUN([AX_CXX11_TUPLES],[
+  AC_CACHE_CHECK([for support for C++11 feature "tuples"], [ax_cv_cxx11_tuples],[
+
+    CXXFLAGS_SAVED=$CXXFLAGS
+    CXXFLAGS="$CXXFLAGS $STD_CXX0X"
+    export CXXFLAGS
+
+    AC_LANG_PUSH(C++)
+    AC_TRY_COMPILE(
+      [#include <tuple>],
+      [
+  std::tuple<int, int, char> t = std::make_tuple(1, 2, 'c');
+  std::get<2>(t) += std::get<0>(t) * std::get<1>(t);
+],
+      [ax_cv_cxx11_tuples="yes"],
+      [ax_cv_cxx11_tuples="no"])
+    AC_LANG_POP
+
+    CXXFLAGS="$CXXFLAGS_SAVED"
+  ])
+
+  if ! test x"$ax_cv_cxx11_tuples" = xyes ; then
+    missing_cxx11_features="$missing_cxx11_features\n  * tuples"
+  fi
+])
+
 dnl AC_DEFUN([AX_CXX11_DEF_NAME],[
 dnl   AC_CACHE_CHECK([for support for C++11 feature "human"], [ax_cv_cxx11_def_name],[
 dnl
@@ -219,6 +245,7 @@ AX_CXX11_RIGHT_ANGLE_BRACKETS
 AX_CXX11_AUTO_KEYWORD
 AX_CXX11_LAMBDA_FUNCTIONS
 AX_CXX11_NULLPTR
+AX_CXX11_TUPLES
 
 if test x"$missing_cxx11_features" != x ; then
   printf "The following features of the C++11 standard are not supported by $CXX:$missing_cxx11_features\n"
