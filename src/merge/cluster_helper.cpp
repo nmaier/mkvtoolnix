@@ -60,14 +60,22 @@ cluster_helper_c::cluster_helper_c()
   , m_out(nullptr)
   , m_current_split_point(m_split_points.begin())
   , m_discarding(false)
-  , m_debug_splitting(debugging_requested("cluster_helper|splitting"))
-  , m_debug_packets(  debugging_requested("cluster_helper|cluster_helper_packets"))
-  , m_debug_duration( debugging_requested("cluster_helper|cluster_helper_duration"))
+  , m_debug_splitting(false)
+  , m_debug_packets(false)
+  , m_debug_duration(false)
 {
+  init_debugging();
 }
 
 cluster_helper_c::~cluster_helper_c() {
   delete m_cluster;
+}
+
+void
+cluster_helper_c::init_debugging() {
+  m_debug_splitting = debugging_requested("cluster_helper|splitting");
+  m_debug_packets   = debugging_requested("cluster_helper|cluster_helper_packets");
+  m_debug_duration  = debugging_requested("cluster_helper|cluster_helper_duration");
 }
 
 void

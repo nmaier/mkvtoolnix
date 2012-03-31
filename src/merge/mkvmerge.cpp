@@ -2301,6 +2301,8 @@ main(int argc,
 
   parse_args(command_line_utf8(argc, argv));
 
+  g_cluster_helper->init_debugging();
+
   int64_t start = get_current_time_millis();
 
   create_readers();
