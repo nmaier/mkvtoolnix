@@ -457,4 +457,22 @@ cluster_helper_c::add_split_point(const split_point_t &split_point) {
   m_current_split_point = m_split_points.begin();
 }
 
+void
+cluster_helper_c::dump_split_points()
+  const {
+  mxdebug_if(debugging_requested("splitting|splitting_parts"),
+             boost::format("Split points:%1%\n")
+             % boost::accumulate(m_split_points, std::string(""), [](std::string const &accu, split_point_t const &point) {
+                 return accu + (boost::format(" <%1% %2% %3% %4%>")
+                                % point.m_point
+                                % (  split_point_t::SPT_DURATION == point.m_type ? "duration"
+                                   : split_point_t::SPT_SIZE     == point.m_type ? "size"
+                                   : split_point_t::SPT_TIMECODE == point.m_type ? "timecode"
+                                   : split_point_t::SPT_CHAPTER  == point.m_type ? "chapter"
+                                   : split_point_t::SPT_PARTS    == point.m_type ? "part"
+                                   :                                               "unknown")
+                                % point.m_use_once % point.m_discard).str();
+               }));
+}
+
 cluster_helper_c *g_cluster_helper = nullptr;

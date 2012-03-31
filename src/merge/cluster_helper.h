@@ -46,15 +46,30 @@ struct split_point_t {
     SPT_DURATION,
     SPT_SIZE,
     SPT_TIMECODE,
-    SPT_CHAPTER
+    SPT_CHAPTER,
+    SPT_PARTS,
   };
 
   int64_t m_point;
   split_point_type_e m_type;
-  bool m_use_once;
+  bool m_use_once, m_discard;
 
-  split_point_t(int64_t point, split_point_type_e type, bool use_once):
-    m_point(point), m_type(type), m_use_once(use_once) { }
+  split_point_t(int64_t point,
+                split_point_type_e type,
+                bool use_once,
+                bool discard = false)
+    : m_point(point)
+    , m_type(type)
+    , m_use_once(use_once)
+    , m_discard(discard)
+  {
+  }
+
+  bool
+  operator <(split_point_t const &rhs)
+    const {
+    return m_point < rhs.m_point;
+  }
 };
 
 class cluster_helper_c {
@@ -95,6 +110,7 @@ public:
   }
 
   void add_split_point(const split_point_t &split_point);
+  void dump_split_points() const;
   bool splitting() {
     return !m_split_points.empty();
   }

@@ -805,6 +805,55 @@ parse_arg_split_timecodes(const std::string &arg) {
   }
 }
 
+static void
+parse_arg_split_parts(const std::string &arg) {
+  std::string s = arg;
+
+  if (balg::istarts_with(s, "parts:"))
+    s.erase(0, 6);
+
+  if (s.empty())
+      mxerror(boost::format(Y("Invalid missing start/end specifications for '--split' in '--split %1%'.\n")) % arg);
+
+  std::vector<std::pair<int64_t, int64_t> > split_points;
+  for (auto const &part_spec : split(s, ",")) {
+    auto pair = split(part_spec, "-");
+    if (pair.size() != 2)
+      mxerror(boost::format(Y("Invalid start/end specification for '--split' in '--split %1%' (curent part: %2%).\n")) % arg % part_spec);
+
+    int64_t start;
+    if (pair[0].empty())
+      start = split_points.empty() ? 0 : split_points.back().second;
+    else if (!parse_timecode(pair[0], start))
+      mxerror(boost::format(Y("Invalid start time for '--split' in '--split %1%' (current part: %2%). Additional error message: %3%.\n")) % arg % part_spec % timecode_parser_error);
+
+    int64_t end;
+    if (pair[1].empty())
+      end = std::numeric_limits<int64_t>::max();
+    else if (!parse_timecode(pair[1], end))
+      mxerror(boost::format(Y("Invalid end time for '--split' in '--split %1%' (current part: %2%). Additional error message: %3%.\n")) % arg % part_spec % timecode_parser_error);
+
+    if (end <= start)
+      mxerror(boost::format(Y("Invalid end time for '--split' in '--split %1%' (current part: %2%). The end time must be bigger than the start time.\n")) % arg % part_spec);
+
+    split_points.push_back(std::make_pair(start, end));
+  }
+
+  brng::sort(split_points);
+
+  int64_t previous_end = 0;
+
+  for (auto &split_point : split_points) {
+    if (previous_end < split_point.first)
+      g_cluster_helper->add_split_point(split_point_t{ previous_end, split_point_t::SPT_PARTS, true, true });
+    g_cluster_helper->add_split_point(split_point_t{ split_point.first, split_point_t::SPT_PARTS, true, false });
+    previous_end = split_point.second;
+  }
+
+  if (split_points.back().second < std::numeric_limits<int64_t>::max())
+    g_cluster_helper->add_split_point(split_point_t{ split_points.back().second, split_point_t::SPT_PARTS, true, true });
+}
+
 /** \brief Parse the size format to \c --split
 
   This function is called by ::parse_split if the format specifies
@@ -876,6 +925,9 @@ parse_arg_split(const std::string &arg) {
   else if (balg::istarts_with(s, "timecodes:"))
     parse_arg_split_timecodes(arg);
 
+  else if (balg::istarts_with(s, "parts:"))
+    parse_arg_split_parts(arg);
+
   else if ((   (s.size() == 8)
             || (s.size() == 12))
            && (':' == s[2]) && (':' == s[5])
@@ -896,6 +948,8 @@ parse_arg_split(const std::string &arg) {
     else
       mxerror(boost::format(err_msg) % arg);
   }
+
+  g_cluster_helper->dump_split_points();
 }
 
 /** \brief Parse the \c --default-track argument

@@ -833,6 +833,11 @@ render_headers(mm_io_c *out) {
 */
 void
 rerender_track_headers() {
+  if (!s_out) {
+    mxdebug("!s_out\n");
+    return;
+  }
+
   g_kax_tracks->UpdateSize(false);
 
   int64_t new_void_size = s_void_after_track_headers->GetElementPosition() + s_void_after_track_headers->GetSize()
@@ -1393,6 +1398,11 @@ add_tags_from_cue_chapters() {
  */
 static void
 render_chapter_void_placeholder() {
+  if (!s_out) {
+    mxdebug("!s_out\n");
+    return;
+  }
+
   if (0 >= s_max_chapter_size)
     return;
 
