@@ -70,6 +70,8 @@ struct split_point_t {
     const {
     return m_point < rhs.m_point;
   }
+
+  std::string str() const;
 };
 
 class cluster_helper_c {
@@ -87,6 +89,8 @@ private:
 
   std::vector<split_point_t> m_split_points;
   std::vector<split_point_t>::iterator m_current_split_point;
+
+  bool m_discarding, m_debug_splitting, m_debug_packets, m_debug_duration;
 
 public:
   cluster_helper_c();
@@ -111,11 +115,15 @@ public:
 
   void add_split_point(const split_point_t &split_point);
   void dump_split_points() const;
-  bool splitting() {
+  bool splitting() const {
     return !m_split_points.empty();
   }
 
-  int get_packet_count() {
+  bool discarding() const {
+    return splitting() && m_discarding;
+  }
+
+  int get_packet_count() const {
     return m_packets.size();
   }
 

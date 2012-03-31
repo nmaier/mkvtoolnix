@@ -833,11 +833,6 @@ render_headers(mm_io_c *out) {
 */
 void
 rerender_track_headers() {
-  if (!s_out) {
-    mxdebug("!s_out\n");
-    return;
-  }
-
   g_kax_tracks->UpdateSize(false);
 
   int64_t new_void_size = s_void_after_track_headers->GetElementPosition() + s_void_after_track_headers->GetSize()
@@ -1398,11 +1393,6 @@ add_tags_from_cue_chapters() {
  */
 static void
 render_chapter_void_placeholder() {
-  if (!s_out) {
-    mxdebug("!s_out\n");
-    return;
-  }
-
   if (0 >= s_max_chapter_size)
     return;
 
@@ -1461,6 +1451,8 @@ prepare_tags_for_rendering() {
 */
 void
 create_next_output_file() {
+  mxdebug_if(debugging_requested("splitting"), boost::format("Create next output file splitting? %1% discarding? %2%\n") % g_cluster_helper->splitting() % g_cluster_helper->discarding());
+
   std::string this_outfile = g_cluster_helper->splitting() ? create_output_name() : g_outfile;
 
   g_kax_segment       = new KaxSegment();
@@ -1469,12 +1461,12 @@ create_next_output_file() {
 
   // Open the output file.
   try {
-    s_out = mm_write_buffer_io_c::open(this_outfile, 20 * 1024 * 1024);
+    s_out = !g_cluster_helper->discarding() ? mm_write_buffer_io_c::open(this_outfile, 20 * 1024 * 1024) : mm_io_cptr{ new mm_null_io_c{this_outfile} };
   } catch (...) {
     mxerror(boost::format(Y("The output file '%1%' could not be opened for writing (%2%).\n")) % this_outfile % strerror(errno));
   }
 
-  if (verbose)
+  if (verbose && !g_cluster_helper->discarding())
     mxinfo(boost::format(Y("The file '%1%' has been opened for writing.\n")) % this_outfile);
 
   g_cluster_helper->set_output(s_out.get());
@@ -1484,7 +1476,8 @@ create_next_output_file() {
   add_tags_from_cue_chapters();
   prepare_tags_for_rendering();
 
-  g_file_num++;
+  if (!g_cluster_helper->discarding())
+    ++g_file_num;
 }
 
 /** \brief Finishes and closes the current file
@@ -1497,7 +1490,9 @@ create_next_output_file() {
 */
 int64_t
 finish_file(bool last_file) {
-  mxinfo("\n");
+  bool do_output = verbose && !g_cluster_helper->discarding();
+  if (do_output)
+    mxinfo("\n");
 
   // Render the track headers a second time if the user has requested that.
   if (hack_engaged(ENGAGE_WRITE_HEADERS_TWICE)) {
@@ -1509,11 +1504,9 @@ finish_file(bool last_file) {
 
   // Render the cues.
   if (g_write_cues && g_cue_writing_requested) {
-    if (1 <= verbose)
-      mxinfo(Y("The cue entries (the index) are being written..."));
+    if (do_output)
+      mxinfo(Y("The cue entries (the index) are being written...\n"));
     g_kax_cues->Render(*s_out);
-    if (1 <= verbose)
-      mxinfo("\n");
   }
 
   // Now re-render the s_kax_duration and fill in the biggest timecode

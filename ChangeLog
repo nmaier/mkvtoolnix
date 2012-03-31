@@ -1,3 +1,9 @@
+2012-03-31  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: new feature: Added support for discarding certain
+	parts of the output with a new format to "--split": "--split
+	parts:...". Implements parts of ticket #518.
+
 2012-03-30  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: new feature: Added an option in the preferences dialog

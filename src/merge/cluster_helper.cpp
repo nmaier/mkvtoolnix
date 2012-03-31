@@ -14,8 +14,6 @@
 
 #include "common/common_pch.h"
 
-#include <limits.h>
-
 #include "common/ebml.h"
 #include "common/hacks.h"
 #include "common/math.h"
@@ -28,6 +26,20 @@
 #include <matroska/KaxBlock.h>
 #include <matroska/KaxBlockData.h>
 #include <matroska/KaxSeekHead.h>
+
+std::string
+split_point_t::str()
+  const {
+  return (boost::format("<%1% %2% %3% %4%>")
+          % format_timecode(m_point)
+          % (  split_point_t::SPT_DURATION == m_type ? "duration"
+             : split_point_t::SPT_SIZE     == m_type ? "size"
+             : split_point_t::SPT_TIMECODE == m_type ? "timecode"
+             : split_point_t::SPT_CHAPTER  == m_type ? "chapter"
+             : split_point_t::SPT_PARTS    == m_type ? "part"
+             :                                         "unknown")
+          % m_use_once % m_discard).str();
+}
 
 cluster_helper_c::cluster_helper_c()
   : m_cluster(nullptr)
@@ -47,6 +59,10 @@ cluster_helper_c::cluster_helper_c()
   , m_attachments_size(0)
   , m_out(nullptr)
   , m_current_split_point(m_split_points.begin())
+  , m_discarding(false)
+  , m_debug_splitting(debugging_requested("cluster_helper|splitting"))
+  , m_debug_packets(  debugging_requested("cluster_helper|cluster_helper_packets"))
+  , m_debug_duration( debugging_requested("cluster_helper|cluster_helper_duration"))
 {
 }
 
@@ -78,14 +94,14 @@ cluster_helper_c::add_packet(packet_cptr packet) {
                              || (packet->assigned_timecode < m_min_timecode_in_cluster)) ? packet->assigned_timecode : m_min_timecode_in_cluster;
   timecode_delay          = (int64_t)(timecode_delay / g_timecode_scale);
 
-  mxverb(4,
-         boost::format("cluster_helper_c::add_packet(): new packet { source %1%/%2% "
-                       "timecode: %3% duration: %4% bref: %5% fref: %6% assigned_timecode: %7% timecode_delay: %8% }\n")
-         % packet->source->m_ti.m_id % packet->source->m_ti.m_fname % packet->timecode          % packet->duration
-         % packet->bref              % packet->fref                 % packet->assigned_timecode % format_timecode(timecode_delay));
+  mxdebug_if(m_debug_packets,
+             boost::format("cluster_helper_c::add_packet(): new packet { source %1%/%2% "
+                           "timecode: %3% duration: %4% bref: %5% fref: %6% assigned_timecode: %7% timecode_delay: %8% }\n")
+             % packet->source->m_ti.m_id % packet->source->m_ti.m_fname % packet->timecode          % packet->duration
+             % packet->bref              % packet->fref                 % packet->assigned_timecode % format_timecode(timecode_delay));
 
-  if (   (SHRT_MAX < timecode_delay)
-      || (SHRT_MIN > timecode_delay)
+  if (   (std::numeric_limits<int16_t>::max() < timecode_delay)
+      || (std::numeric_limits<int16_t>::min() > timecode_delay)
       || (packet->gap_following && !m_packets.empty())
       || ((packet->assigned_timecode - timecode) > g_max_ns_per_cluster)
       || ((packet->source == g_video_packetizer) && packet->is_key_frame())) {
@@ -111,9 +127,9 @@ cluster_helper_c::add_packet(packet_cptr packet) {
 
       additional_size += 18 * m_num_cue_elements;
 
-      mxverb(3,
-             boost::format("cluster_helper split decision: header_overhead: %1%, additional_size: %2%, bytes_in_file: %3%, sum: %4%\n")
-             % m_header_overhead % additional_size % m_bytes_in_file % (m_header_overhead + additional_size + m_bytes_in_file));
+      mxdebug_if(m_debug_splitting,
+                 boost::format("cluster_helper split decision: header_overhead: %1%, additional_size: %2%, bytes_in_file: %3%, sum: %4%\n")
+                 % m_header_overhead % additional_size % m_bytes_in_file % (m_header_overhead + additional_size + m_bytes_in_file));
       if ((m_header_overhead + additional_size + m_bytes_in_file) >= m_current_split_point->m_point)
         split_now = true;
 
@@ -122,7 +138,8 @@ cluster_helper_c::add_packet(packet_cptr packet) {
                && (packet->assigned_timecode - m_first_timecode_in_file) >= m_current_split_point->m_point)
       split_now = true;
 
-    else if (   (split_point_t::SPT_TIMECODE == m_current_split_point->m_type)
+    else if (   (   (split_point_t::SPT_TIMECODE == m_current_split_point->m_type)
+                 || (split_point_t::SPT_PARTS    == m_current_split_point->m_type))
              && (packet->assigned_timecode >= m_current_split_point->m_point))
       split_now = true;
 
@@ -132,8 +149,12 @@ cluster_helper_c::add_packet(packet_cptr packet) {
       m_num_cue_elements = 0;
 
       int64_t final_file_size = finish_file();
-      mxverb(2, boost::format("Splitting: Creating a new file before timecode %1% and after size %2%.\n")
-             % format_timecode(packet->assigned_timecode) % final_file_size);
+      mxdebug_if(m_debug_splitting, boost::format("Splitting: Creating a new file before timecode %1% and after size %2%.\n") % format_timecode(packet->assigned_timecode) % final_file_size);
+
+      if (m_current_split_point->m_use_once) {
+        ++m_current_split_point;
+        m_discarding = m_current_split_point->m_discard;
+      }
 
       create_next_output_file();
       if (g_no_linking)
@@ -144,9 +165,6 @@ cluster_helper_c::add_packet(packet_cptr packet) {
 
       if (g_no_linking)
         m_timecode_offset = g_video_packetizer ? m_max_video_timecode_rendered : packet->assigned_timecode;
-
-      if (m_current_split_point->m_use_once)
-        ++m_current_split_point;
 
       prepare_new_cluster();
     }
@@ -211,9 +229,9 @@ cluster_helper_c::set_duration(render_groups_c *rg) {
   size_t i;
   for (i = 0; rg->m_durations.size() > i; ++i)
     block_duration += rg->m_durations[i];
-  mxverb(3,
-         boost::format("cluster_helper::set_duration: block_duration %1% rounded duration %2% def_duration %3% use_durations %4% rg->m_duration_mandatory %5%\n")
-         % block_duration % RND_TIMECODE_SCALE(block_duration) % def_duration % (g_use_durations ? 1 : 0) % (rg->m_duration_mandatory ? 1 : 0));
+  mxdebug_if(m_debug_duration,
+             boost::format("cluster_helper::set_duration: block_duration %1% rounded duration %2% def_duration %3% use_durations %4% rg->m_duration_mandatory %5%\n")
+             % block_duration % RND_TIMECODE_SCALE(block_duration) % def_duration % (g_use_durations ? 1 : 0) % (rg->m_duration_mandatory ? 1 : 0));
 
   if (rg->m_duration_mandatory) {
     if (   (0 == block_duration)
@@ -444,9 +462,9 @@ cluster_helper_c::render() {
 
 int64_t
 cluster_helper_c::get_duration() {
-  mxverb(3,
-         boost::format("cluster_helper_c::get_duration(): %1% - %2% = %3%\n")
-         % m_max_timecode_and_duration % m_first_timecode_in_file % (m_max_timecode_and_duration - m_first_timecode_in_file));
+  mxdebug_if(m_debug_duration,
+             boost::format("cluster_helper_c::get_duration(): %1% - %2% = %3%\n")
+             % m_max_timecode_and_duration % m_first_timecode_in_file % (m_max_timecode_and_duration - m_first_timecode_in_file));
 
   return m_max_timecode_and_duration - m_first_timecode_in_file;
 }
@@ -455,24 +473,18 @@ void
 cluster_helper_c::add_split_point(const split_point_t &split_point) {
   m_split_points.push_back(split_point);
   m_current_split_point = m_split_points.begin();
+  m_discarding          = m_current_split_point->m_discard;
+
+  if (m_discarding && (0 == m_current_split_point->m_point))
+    ++m_current_split_point;
 }
 
 void
 cluster_helper_c::dump_split_points()
   const {
-  mxdebug_if(debugging_requested("splitting|splitting_parts"),
+  mxdebug_if(m_debug_splitting,
              boost::format("Split points:%1%\n")
-             % boost::accumulate(m_split_points, std::string(""), [](std::string const &accu, split_point_t const &point) {
-                 return accu + (boost::format(" <%1% %2% %3% %4%>")
-                                % point.m_point
-                                % (  split_point_t::SPT_DURATION == point.m_type ? "duration"
-                                   : split_point_t::SPT_SIZE     == point.m_type ? "size"
-                                   : split_point_t::SPT_TIMECODE == point.m_type ? "timecode"
-                                   : split_point_t::SPT_CHAPTER  == point.m_type ? "chapter"
-                                   : split_point_t::SPT_PARTS    == point.m_type ? "part"
-                                   :                                               "unknown")
-                                % point.m_use_once % point.m_discard).str();
-               }));
+             % boost::accumulate(m_split_points, std::string(""), [](std::string const &accu, split_point_t const &point) { return accu + " " + point.str(); }));
 }
 
 cluster_helper_c *g_cluster_helper = nullptr;
