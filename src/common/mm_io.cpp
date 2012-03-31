@@ -568,8 +568,9 @@ mm_proxy_io_c::_write(const void *buffer,
    Dummy class for output to /dev/null. Needed for two pass stuff.
 */
 
-mm_null_io_c::mm_null_io_c()
+mm_null_io_c::mm_null_io_c(std::string const &file_name)
   : m_pos(0)
+  , m_file_name(file_name)
 {
 }
 
@@ -605,6 +606,17 @@ mm_null_io_c::_write(const void *,
 
 void
 mm_null_io_c::close() {
+}
+
+bool
+mm_null_io_c::eof() {
+  return false;
+}
+
+std::string
+mm_null_io_c::get_file_name()
+  const {
+  return m_file_name;
 }
 
 /*

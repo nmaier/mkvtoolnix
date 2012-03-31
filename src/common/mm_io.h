@@ -278,13 +278,16 @@ typedef std::shared_ptr<mm_proxy_io_c> mm_proxy_io_cptr;
 class mm_null_io_c: public mm_io_c {
 protected:
   int64_t m_pos;
+  std::string m_file_name;
 
 public:
-  mm_null_io_c();
+  mm_null_io_c(std::string const &file_name);
 
   virtual uint64 getFilePointer();
   virtual void setFilePointer(int64 offset, seek_mode mode = seek_beginning);
   virtual void close();
+  virtual bool eof();
+  virtual std::string get_file_name() const;
 
 protected:
   virtual uint32 _read(void *buffer, size_t size);
