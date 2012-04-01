@@ -118,8 +118,9 @@ set_usage() {
                   "                           Create a new file after each timecode A, B\n"
                   "                           etc.\n");
   usage_text += Y("  --split parts:start1-end2[,[+]start2-end2,...]\n"
-                  "                           Keep ranges of timecodes start-end, either in separate\n"
-                  "                           files or append to previous range's file.\n");
+                  "                           Keep ranges of timecodes start-end, either in\n"
+                  "                           separate files or append to previous range's file\n"
+                  "                           if prefixed with '+'.\n");
   usage_text += Y("  --split-max-files <n>    Create at most n files.\n");
   usage_text += Y("  --link                   Link splitted files.\n");
   usage_text += Y("  --link-to-previous <SID> Link the first file to the given SID.\n");
@@ -816,7 +817,7 @@ parse_arg_split_parts(const std::string &arg) {
     s.erase(0, 6);
 
   if (s.empty())
-      mxerror(boost::format(Y("Invalid missing start/end specifications for '--split' in '--split %1%'.\n")) % arg);
+      mxerror(boost::format(Y("Missing start/end specifications for '--split' in '--split %1%'.\n")) % arg);
 
   std::vector<std::tuple<int64_t, int64_t, bool> > split_points;
   for (auto const &part_spec : split(s, ",")) {
@@ -847,7 +848,7 @@ parse_arg_split_parts(const std::string &arg) {
       mxerror(boost::format(Y("Invalid end time for '--split' in '--split %1%' (current part: %2%). The end time must be bigger than the start time.\n")) % arg % part_spec);
 
     if (!split_points.empty() && (start < std::get<1>(split_points.back())))
-      mxerror(boost::format(Y("Invalid start time for '--split' in '--split %1%' (current part: %2%). The start time must be bigger than or equal to the previous' part's end time.\n")) % arg % part_spec);
+      mxerror(boost::format(Y("Invalid start time for '--split' in '--split %1%' (current part: %2%). The start time must be bigger than or equal to the previous part's end time.\n")) % arg % part_spec);
 
     split_points.push_back(std::make_tuple(start, end, create_new_file));
   }
