@@ -158,7 +158,7 @@ cluster_helper_c::add_packet(packet_cptr packet) {
 
       m_num_cue_elements = 0;
 
-      bool create_new_file = (m_split_points.end() == (m_current_split_point + 1)) || m_current_split_point->m_create_new_file;
+      bool create_new_file = m_current_split_point->m_create_new_file;
 
       mxdebug_if(m_debug_splitting, boost::format("Splitting: splitpoint %1% reached before timecode %2%, create new? %3%.\n") % m_current_split_point->str() % format_timecode(packet->assigned_timecode) % create_new_file);
 
