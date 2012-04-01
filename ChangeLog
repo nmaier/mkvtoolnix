@@ -1,3 +1,8 @@
+2012-04-01  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Fixed a wrong assertion about minimum MPEG
+	1/2 video start code lengths. Fixes ticket 728.
+
 2012-03-31  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge, mmg: new feature: Added support for keeping only

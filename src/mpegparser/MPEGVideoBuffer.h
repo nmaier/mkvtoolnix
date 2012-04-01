@@ -92,7 +92,7 @@ public:
     data(n_data), size(n_size) {
 
     assert(data);
-    assert(size > 4);
+    assert(4 <= size);
 
     type = data[3];
   }
