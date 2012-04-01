@@ -213,7 +213,7 @@ add_tag_for_cue_entry(cue_parser_args_t &a,
   for (i = 0; i < a.comment.size(); i++)
     create_tag1(a.comment[i], "COMMENT");
 
-  if (FINDFIRST(tag, KaxTagSimple) != nullptr)
+  if (FindChild<KaxTagSimple>(tag) != nullptr)
     (*tags)->PushElement(*tag);
   else
     delete tag;
@@ -244,7 +244,7 @@ add_tag_for_global_cue_settings(cue_parser_args_t &a,
   for (i = 0; i < a.global_rem.size(); i++)
     create_tag1(a.global_rem[i], "COMMENT");
 
-  if (FINDFIRST(tag, KaxTagSimple) != nullptr)
+  if (FindChild<KaxTagSimple>(tag) != nullptr)
     (*tags)->PushElement(*tag);
   else
     delete tag;

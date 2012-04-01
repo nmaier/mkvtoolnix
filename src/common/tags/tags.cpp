@@ -72,7 +72,7 @@ select_tags_for_chapters(KaxTags &tags,
       continue;
 
     bool copy = true;
-    KaxTagTargets *targets = FINDFIRST(static_cast<EbmlMaster *>(tags[tags_idx]), KaxTagTargets);
+    KaxTagTargets *targets = FindChild<KaxTagTargets>(static_cast<EbmlMaster *>(tags[tags_idx]));
 
     if (nullptr != targets) {
       size_t targets_idx;
@@ -113,7 +113,7 @@ find_simple_tag(const UTFstring &name,
   std::string rvalue;
 
   if (EbmlId(m) == EBML_ID(KaxTagSimple)) {
-    KaxTagName *tname = FINDFIRST(&m, KaxTagName);
+    KaxTagName *tname = FindChild<KaxTagName>(&m);
     if ((nullptr != tname) && (name == UTFstring(*tname)))
       return *static_cast<KaxTagSimple *>(&m);
   }
@@ -135,7 +135,7 @@ get_simple_tag_value(const std::string &name,
                      EbmlMaster &m) {
   try {
     KaxTagSimple &simple = find_simple_tag(name, m);
-    KaxTagString *tvalue = FINDFIRST(&simple, KaxTagString);
+    KaxTagString *tvalue = FindChild<KaxTagString>(&simple);
     if (nullptr != tvalue)
       return UTFstring_to_cstrutf8(UTFstring(*tvalue));
   } catch (...) {
@@ -146,7 +146,7 @@ get_simple_tag_value(const std::string &name,
 
 std::string
 get_simple_tag_name(const KaxTagSimple &tag) {
-  KaxTagName *tname = FINDFIRST(&tag, KaxTagName);
+  KaxTagName *tname = FindChild<KaxTagName>(&tag);
   if (nullptr == tname)
     return "";
 
@@ -155,7 +155,7 @@ get_simple_tag_name(const KaxTagSimple &tag) {
 
 std::string
 get_simple_tag_value(const KaxTagSimple &tag) {
-  KaxTagString *tstring = FINDFIRST(&tag, KaxTagString);
+  KaxTagString *tstring = FindChild<KaxTagString>(&tag);
   if (nullptr == tstring)
     return "";
 
@@ -184,11 +184,11 @@ set_simple_tag(KaxTagSimple &tag,
 
 int64_t
 get_tag_tuid(const KaxTag &tag) {
-  KaxTagTargets *targets = FINDFIRST(&tag, KaxTagTargets);
+  KaxTagTargets *targets = FindChild<KaxTagTargets>(&tag);
   if (nullptr == targets)
     return -1;
 
-  KaxTagTrackUID *tuid = FINDFIRST(targets, KaxTagTrackUID);
+  KaxTagTrackUID *tuid = FindChild<KaxTagTrackUID>(targets);
   if (nullptr == tuid)
     return -1;
 
@@ -197,11 +197,11 @@ get_tag_tuid(const KaxTag &tag) {
 
 int64_t
 get_tag_cuid(const KaxTag &tag) {
-  KaxTagTargets *targets = FINDFIRST(&tag, KaxTagTargets);
+  KaxTagTargets *targets = FindChild<KaxTagTargets>(&tag);
   if (nullptr == targets)
     return -1;
 
-  KaxTagChapterUID *cuid = FINDFIRST(targets, KaxTagChapterUID);
+  KaxTagChapterUID *cuid = FindChild<KaxTagChapterUID>(targets);
   if (nullptr == cuid)
     return -1;
 
@@ -254,7 +254,7 @@ convert_old_tags(KaxTags &tags) {
     }
 
     if (has_level_type) {
-      KaxTagTargets *targets = FINDFIRST(&tag, KaxTagTargets);
+      KaxTagTargets *targets = FindChild<KaxTagTargets>(&tag);
       if (nullptr != targets)
         GetChildAs<KaxTagTargetTypeValue, EbmlUInteger>(*targets) = target_type_value;
     }

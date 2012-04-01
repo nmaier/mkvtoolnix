@@ -349,21 +349,21 @@ guess_mime_type_and_report(std::string file_name) {
 static void
 handle_segmentinfo() {
   // segment families
-  KaxSegmentFamily *family = FINDFIRST(g_kax_info_chap.get(), KaxSegmentFamily);
+  KaxSegmentFamily *family = FindChild<KaxSegmentFamily>(g_kax_info_chap.get());
   while (nullptr != family) {
     g_segfamily_uids.add_family_uid(*family);
-    family = FINDNEXT(g_kax_info_chap.get(), KaxSegmentFamily, family);
+    family = FindNextChild<KaxSegmentFamily>(g_kax_info_chap.get(), family);
   }
 
-  EbmlBinary *uid = FINDFIRST(g_kax_info_chap.get(), KaxSegmentUID);
+  EbmlBinary *uid = FindChild<KaxSegmentUID>(g_kax_info_chap.get());
   if (nullptr != uid)
     g_forced_seguids.push_back(bitvalue_cptr(new bitvalue_c(*uid)));
 
-  uid = FINDFIRST(g_kax_info_chap.get(), KaxNextUID);
+  uid = FindChild<KaxNextUID>(g_kax_info_chap.get());
   if (nullptr != uid)
     g_seguid_link_next = bitvalue_cptr(new bitvalue_c(*uid));
 
-  uid = FINDFIRST(g_kax_info_chap.get(), KaxPrevUID);
+  uid = FindChild<KaxPrevUID>(g_kax_info_chap.get());
   if (nullptr != uid)
     g_seguid_link_previous = bitvalue_cptr(new bitvalue_c(*uid));
 

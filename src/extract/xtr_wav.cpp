@@ -86,7 +86,7 @@ xtr_wavpack4_c::create_file(xtr_base_c *master,
 
   init_content_decoder(track);
 
-  KaxCodecPrivate *priv = FINDFIRST(&track, KaxCodecPrivate);
+  KaxCodecPrivate *priv = FindChild<KaxCodecPrivate>(&track);
   if (priv)
     mpriv = decode_codec_private(priv);
 
@@ -181,12 +181,12 @@ xtr_wavpack4_c::handle_frame(memory_cptr &frame,
 
   // support hybrid mode data
   if (m_corr_out && (nullptr != additions)) {
-    KaxBlockMore *block_more = FINDFIRST(additions, KaxBlockMore);
+    KaxBlockMore *block_more = FindChild<KaxBlockMore>(additions);
 
     if (nullptr == block_more)
       return;
 
-    KaxBlockAdditional *block_addition = FINDFIRST(block_more, KaxBlockAdditional);
+    KaxBlockAdditional *block_addition = FindChild<KaxBlockAdditional>(block_more);
     if (nullptr == block_addition)
       return;
 

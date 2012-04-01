@@ -732,10 +732,10 @@ render_headers(mm_io_c *out) {
       // Set the chaptertranslate elements
       if (g_kax_info_chap) {
         // copy the KaxChapterTranslates in the current KaxInfo
-        KaxChapterTranslate *chapter_translate = FINDFIRST(g_kax_info_chap.get(), KaxChapterTranslate);
+        KaxChapterTranslate *chapter_translate = FindChild<KaxChapterTranslate>(g_kax_info_chap.get());
         while (nullptr != chapter_translate) {
           s_kax_infos->PushElement(*new KaxChapterTranslate(*chapter_translate));
-          chapter_translate = FINDNEXT(g_kax_info_chap.get(), KaxChapterTranslate, chapter_translate);
+          chapter_translate = FindNextChild<KaxChapterTranslate>(g_kax_info_chap.get(), chapter_translate);
         }
       }
 

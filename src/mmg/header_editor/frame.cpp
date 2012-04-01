@@ -359,12 +359,12 @@ header_editor_frame_c::handle_tracks(kax_analyzer_data_c *data) {
     if (nullptr == k_track_entry)
       continue;
 
-    KaxTrackType *k_track_type = dynamic_cast<KaxTrackType *>(FINDFIRST(k_track_entry, KaxTrackType));
+    KaxTrackType *k_track_type = dynamic_cast<KaxTrackType *>(FindChild<KaxTrackType>(k_track_entry));
     if (nullptr == k_track_type)
       continue;
 
     unsigned int track_number = 0;
-    KaxTrackNumber *k_track_number = dynamic_cast<KaxTrackNumber *>(FINDFIRST(k_track_entry, KaxTrackNumber));
+    KaxTrackNumber *k_track_number = dynamic_cast<KaxTrackNumber *>(FindChild<KaxTrackNumber>(k_track_entry));
     if (nullptr != k_track_number)
       track_number = uint64(*k_track_number);
 

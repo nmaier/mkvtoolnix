@@ -140,7 +140,7 @@ handle_blockgroup(KaxBlockGroup &blockgroup,
                   KaxCluster &cluster,
                   int64_t tc_scale) {
   // Only continue if this block group actually contains a block.
-  KaxBlock *block = FINDFIRST(&blockgroup, KaxBlock);
+  KaxBlock *block = FindChild<KaxBlock>(&blockgroup);
   if (nullptr == block)
     return;
   block->SetParent(cluster);
@@ -151,7 +151,7 @@ handle_blockgroup(KaxBlockGroup &blockgroup,
     return;
 
   // Next find the block duration if there is one.
-  KaxBlockDuration *kduration = FINDFIRST(&blockgroup, KaxBlockDuration);
+  KaxBlockDuration *kduration = FindChild<KaxBlockDuration>(&blockgroup);
   int64_t duration            = nullptr == kduration ? extractor->m_default_duration * block->NumberFrames() : uint64(*kduration) * tc_scale;
 
   // Pass the block to the extractor.

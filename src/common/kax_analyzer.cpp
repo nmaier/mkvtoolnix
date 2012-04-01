@@ -1025,7 +1025,7 @@ kax_analyzer_c::read_meta_seek(uint64_t pos,
       continue;
 
     KaxSeek *seek      = static_cast<KaxSeek *>((*master)[i]);
-    KaxSeekID *seek_id = FINDFIRST(seek, KaxSeekID);
+    KaxSeekID *seek_id = FindChild<KaxSeekID>(seek);
     int64_t seek_pos   = seek->Location() + m_segment->GetElementPosition() + m_segment->HeadSize();
 
     if ((0 == pos) || (nullptr == seek_id))

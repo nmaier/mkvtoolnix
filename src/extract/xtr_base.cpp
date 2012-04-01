@@ -194,7 +194,7 @@ xtr_fullraw_c::create_file(xtr_base_c *master,
                            KaxTrackEntry &track) {
   xtr_base_c::create_file(master, track);
 
-  KaxCodecPrivate *priv = FINDFIRST(&track, KaxCodecPrivate);
+  KaxCodecPrivate *priv = FindChild<KaxCodecPrivate>(&track);
 
   if ((nullptr != priv) && (0 != priv->GetSize())) {
     memory_cptr mem(new memory_c(priv->GetBuffer(), priv->GetSize(), false));

@@ -512,7 +512,7 @@ handle_info(EbmlStream *&es,
   EbmlElement *element_found = nullptr;
   read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, element_found);
 
-  KaxTimecodeScale *tc_scale = FINDFIRST(m1, KaxTimecodeScale);
+  KaxTimecodeScale *tc_scale = FindChild<KaxTimecodeScale>(m1);
   if (nullptr != tc_scale)
     s_tc_scale = uint64(*tc_scale);
 
@@ -1711,7 +1711,7 @@ handle_cluster(EbmlStream *&es,
   EbmlElement *element_found = nullptr;
   read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, element_found);
 
-  KaxClusterTimecode *cluster_tc = FINDFIRST(m1, KaxClusterTimecode);
+  KaxClusterTimecode *cluster_tc = FindChild<KaxClusterTimecode>(m1);
   cluster->InitTimecode(nullptr == cluster_tc ? 0 : uint64(*cluster_tc), s_tc_scale);
 
   size_t i1;

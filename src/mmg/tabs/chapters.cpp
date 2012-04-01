@@ -1026,7 +1026,7 @@ tab_chapters::on_entry_selected(wxTreeEvent &evt) {
 
       st_uid->Enable(true);
       tc_uid->Enable(true);
-      euid = FINDFIRST(t->eentry, KaxEditionUID);
+      euid = FindChild<KaxEditionUID>(t->eentry);
       if (euid != nullptr)
         s.Printf(wxT("%u"), uint32(*euid));
       tc_uid->SetValue(s);
@@ -1041,7 +1041,7 @@ tab_chapters::on_entry_selected(wxTreeEvent &evt) {
 
   enable_inputs(true);
 
-  display = FINDFIRST(t->chapter, KaxChapterDisplay);
+  display = FindChild<KaxChapterDisplay>(t->chapter);
   if (display == nullptr)
     wxdie(Z("on_entry_selected: display == nullptr. Should not have happened."));
   first = true;
@@ -1058,26 +1058,26 @@ tab_chapters::on_entry_selected(wxTreeEvent &evt) {
       first = false;
     }
     lb_chapter_names->Append(label);
-    display = FINDNEXT(t->chapter, KaxChapterDisplay, display);
+    display = FindNextChild<KaxChapterDisplay>(t->chapter, display);
   }
 
   set_timecode_values(t->chapter);
 
-  fhidden = FINDFIRST(t->chapter, KaxChapterFlagHidden);
+  fhidden = FindChild<KaxChapterFlagHidden>(t->chapter);
   if (fhidden == nullptr)
     value = false;
   else
     value = uint8(*static_cast<EbmlUInteger *>(fhidden)) != 0;
   cb_flag_hidden->SetValue(value);
 
-  fenabled = FINDFIRST(t->chapter, KaxChapterFlagEnabled);
+  fenabled = FindChild<KaxChapterFlagEnabled>(t->chapter);
   if (fenabled == nullptr)
     value = true;
   else
     value = uint8(*static_cast<EbmlUInteger *>(fenabled)) != 0;
   cb_flag_enabled->SetValue(value);
 
-  cuid = FINDFIRST(t->chapter, KaxChapterUID);
+  cuid = FindChild<KaxChapterUID>(t->chapter);
   if (cuid == nullptr)
     label = wxEmptyString;
   else
@@ -1228,7 +1228,7 @@ tab_chapters::set_values_recursively(wxTreeItemId id,
 
   d = (chapter_node_data_c *)tc_chapters->GetItemData(id);
   if ((d != nullptr) && (d->is_atom)) {
-    display = FINDFIRST(d->chapter, KaxChapterDisplay);
+    display = FindChild<KaxChapterDisplay>(d->chapter);
     while (display != nullptr) {
       i = 0;
       while (i < display->ListSize()) {
@@ -1252,7 +1252,7 @@ tab_chapters::set_values_recursively(wxTreeItemId id,
         display->PushElement(*country);
       }
 
-      display = FINDNEXT(d->chapter, KaxChapterDisplay, display);
+      display = FindNextChild<KaxChapterDisplay>(d->chapter, display);
     }
     text = create_chapter_label(*d->chapter);
     tc_chapters->SetItemText(id, text);
@@ -1401,7 +1401,7 @@ tab_chapters::adjust_timecodes_recursively(wxTreeItemId id,
 
   d = (chapter_node_data_c *)tc_chapters->GetItemData(id);
   if ((d != nullptr) && (d->is_atom)) {
-    tstart = FINDFIRST(d->chapter, KaxChapterTimeStart);
+    tstart = FindChild<KaxChapterTimeStart>(d->chapter);
     if (tstart != nullptr) {
       t = uint64(*tstart);
       t += adjust_by;
@@ -1409,7 +1409,7 @@ tab_chapters::adjust_timecodes_recursively(wxTreeItemId id,
         t = 0;
       *static_cast<EbmlUInteger *>(tstart) = t;
     }
-    tend = FINDFIRST(d->chapter, KaxChapterTimeEnd);
+    tend = FindChild<KaxChapterTimeEnd>(d->chapter);
     if (tend != nullptr) {
       t = uint64(*tend);
       t += adjust_by;
@@ -1756,7 +1756,7 @@ tab_chapters::set_timecode_values(KaxChapterAtom *atom) {
 
   no_update = true;
 
-  tstart = FINDFIRST(atom, KaxChapterTimeStart);
+  tstart = FindChild<KaxChapterTimeStart>(atom);
   if (tstart != nullptr) {
     timestamp = uint64(*static_cast<EbmlUInteger *>(tstart));
     label.Printf(wxT(FMT_TIMECODEN), ARG_TIMECODEN(timestamp));
@@ -1764,7 +1764,7 @@ tab_chapters::set_timecode_values(KaxChapterAtom *atom) {
   } else
     tc_start_time->SetValue(wxEmptyString);
 
-  tend = FINDFIRST(atom, KaxChapterTimeEnd);
+  tend = FindChild<KaxChapterTimeEnd>(atom);
   if (tend != nullptr) {
     timestamp = uint64(*static_cast<EbmlUInteger *>(tend));
     label.Printf(wxT(FMT_TIMECODEN), ARG_TIMECODEN(timestamp));
@@ -1786,7 +1786,7 @@ tab_chapters::set_display_values(KaxChapterDisplay *display) {
 
   no_update = true;
 
-  cstring = FINDFIRST(display, KaxChapterString);
+  cstring = FindChild<KaxChapterString>(display);
   if (cstring != nullptr) {
     wxString tmp =
       UTFstring_to_wxString(*static_cast<EbmlUnicodeString *>(cstring));
@@ -1794,7 +1794,7 @@ tab_chapters::set_display_values(KaxChapterDisplay *display) {
   } else
     tc_chapter_name->SetValue(wxT("(unnamed)"));
 
-  clanguage = FINDFIRST(display, KaxChapterLanguage);
+  clanguage = FindChild<KaxChapterLanguage>(display);
   if (clanguage != nullptr)
     language = wxU(clanguage);
   else
@@ -1817,7 +1817,7 @@ tab_chapters::set_display_values(KaxChapterDisplay *display) {
   else
     cob_language_code->SetValue(language);
 
-  ccountry = FINDFIRST(display, KaxChapterCountry);
+  ccountry = FindChild<KaxChapterCountry>(display);
   if (ccountry != nullptr)
     cob_country_code->SetValue(wxU(ccountry));
   else

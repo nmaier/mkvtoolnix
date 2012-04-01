@@ -259,13 +259,13 @@ target_c::set_level1_element(ebml_element_cptr level1_element_cp,
     KaxTrackEntry *track = dynamic_cast<KaxTrackEntry *>((*track_headers)[i]);
     assert(nullptr != track);
 
-    KaxTrackType *kax_track_type     = dynamic_cast<KaxTrackType *>(FINDFIRST(track, KaxTrackType));
+    KaxTrackType *kax_track_type     = dynamic_cast<KaxTrackType *>(FindChild<KaxTrackType>(track));
     track_type this_track_type       = nullptr == kax_track_type ? track_video : static_cast<track_type>(uint8(*kax_track_type));
 
-    KaxTrackUID *kax_track_uid       = dynamic_cast<KaxTrackUID *>(FINDFIRST(track, KaxTrackUID));
+    KaxTrackUID *kax_track_uid       = dynamic_cast<KaxTrackUID *>(FindChild<KaxTrackUID>(track));
     uint64_t track_uid               = nullptr == kax_track_uid ? 0 : uint64(*kax_track_uid);
 
-    KaxTrackNumber *kax_track_number = dynamic_cast<KaxTrackNumber *>(FINDFIRST(track, KaxTrackNumber));
+    KaxTrackNumber *kax_track_number = dynamic_cast<KaxTrackNumber *>(FindChild<KaxTrackNumber>(track));
 
     ++num_tracks_total;
     ++num_tracks_by_type[this_track_type];
@@ -286,8 +286,8 @@ target_c::set_level1_element(ebml_element_cptr level1_element_cp,
     m_track_uid  = track_uid;
     m_track_type = this_track_type;
     m_master     = track;
-    m_sub_master = track_video == m_track_type ? dynamic_cast<EbmlMaster *>(FINDFIRST(track, KaxTrackVideo))
-                 : track_audio == m_track_type ? dynamic_cast<EbmlMaster *>(FINDFIRST(track, KaxTrackAudio))
+    m_sub_master = track_video == m_track_type ? dynamic_cast<EbmlMaster *>(FindChild<KaxTrackVideo>(track))
+                 : track_audio == m_track_type ? dynamic_cast<EbmlMaster *>(FindChild<KaxTrackAudio>(track))
                  :                               nullptr;
 
     if (   (nullptr == m_sub_master)

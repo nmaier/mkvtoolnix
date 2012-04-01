@@ -104,9 +104,6 @@ int kt_get_v_pixel_height(KaxTrackEntry &track);
 #define INVALID_FILEPOS_T 0
 #endif
 
-#define FINDFIRST(p, c)   (static_cast<c *>(((EbmlMaster *)p)->FindFirstElt(EBML_INFO(c), false)))
-#define FINDNEXT(p, c, e) (static_cast<c *>(((EbmlMaster *)p)->FindNextElt(*e, false)))
-
 template <typename type>type &
 GetEmptyChild(EbmlMaster &master) {
   EbmlElement *e;
@@ -153,9 +150,30 @@ AddEmptyChild(EbmlMaster &master) {
   return *(static_cast<type *>(e));
 }
 
-template<typename A> A *
-FindChild(EbmlMaster *m) {
-  return FindChild<A>(*m);
+template <typename A> A*
+FindChild(EbmlMaster const *m) {
+  return static_cast<A *>(m->FindFirstElt(EBML_INFO(A)));
+}
+
+template <typename A> A*
+FindChild(EbmlElement const *e) {
+  auto m = dynamic_cast<EbmlMaster const *>(e);
+  assert(nullptr != m);
+  return static_cast<A *>(m->FindFirstElt(EBML_INFO(A)));
+}
+
+template <typename A> A*
+FindNextChild(EbmlMaster const *m,
+              EbmlElement const *p) {
+  return static_cast<A *>(m->FindNextElt(*p));
+}
+
+template <typename A> A*
+FindNextChild(EbmlElement const *e,
+              EbmlElement const *p) {
+  auto m = dynamic_cast<EbmlMaster const *>(e);
+  assert(nullptr != m);
+  return static_cast<A *>(m->FindNextElt(*p));
 }
 
 template<typename A> A &

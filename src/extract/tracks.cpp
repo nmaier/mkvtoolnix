@@ -125,7 +125,7 @@ handle_blockgroup(KaxBlockGroup &blockgroup,
                   KaxCluster &cluster,
                   int64_t tc_scale) {
   // Only continue if this block group actually contains a block.
-  KaxBlock *block = FINDFIRST(&blockgroup, KaxBlock);
+  KaxBlock *block = FindChild<KaxBlock>(&blockgroup);
   if ((nullptr == block) || (0 == block->NumberFrames()))
     return;
 
@@ -143,28 +143,28 @@ handle_blockgroup(KaxBlockGroup &blockgroup,
     return;
 
   // Next find the block duration if there is one.
-  KaxBlockDuration *kduration   = FINDFIRST(&blockgroup, KaxBlockDuration);
+  KaxBlockDuration *kduration   = FindChild<KaxBlockDuration>(&blockgroup);
   int64_t duration              = nullptr == kduration ? -1 : (int64_t)uint64(*kduration) * tc_scale;
 
   // Now find backward and forward references.
   int64_t bref                  = 0;
   int64_t fref                  = 0;
-  KaxReferenceBlock *kreference = FINDFIRST(&blockgroup, KaxReferenceBlock);
+  KaxReferenceBlock *kreference = FindChild<KaxReferenceBlock>(&blockgroup);
   for (i = 0; (2 > i) && (nullptr != kreference); i++) {
     if (0 > int64(*kreference))
       bref = int64(*kreference);
     else
       fref = int64(*kreference);
-    kreference = FINDNEXT(&blockgroup, KaxReferenceBlock, kreference);
+    kreference = FindNextChild<KaxReferenceBlock>(&blockgroup, kreference);
   }
 
   // Any block additions present?
-  KaxBlockAdditions *kadditions = FINDFIRST(&blockgroup, KaxBlockAdditions);
+  KaxBlockAdditions *kadditions = FindChild<KaxBlockAdditions>(&blockgroup);
 
   if (0 > duration)
     duration = extractor->m_default_duration * block->NumberFrames();
 
-  KaxCodecState *kcstate = FINDFIRST(&blockgroup, KaxCodecState);
+  KaxCodecState *kcstate = FindChild<KaxCodecState>(&blockgroup);
   if (nullptr != kcstate) {
     memory_cptr codec_state(new memory_c(kcstate->GetBuffer(), kcstate->GetSize(), false));
     extractor->handle_codec_state(codec_state);
@@ -377,7 +377,7 @@ extract_tracks(const std::string &file_name,
         // General info about this Matroska file
         show_element(l1, 1, Y("Segment information"));
 
-        KaxTimecodeScale *ktc_scale = FINDFIRST(l1, KaxTimecodeScale);
+        KaxTimecodeScale *ktc_scale = FindChild<KaxTimecodeScale>(l1);
         if (nullptr != ktc_scale) {
           tc_scale = uint64(*ktc_scale);
           show_element(ktc_scale, 2, boost::format(Y("Timecode scale: %1%")) % tc_scale);
@@ -400,7 +400,7 @@ extract_tracks(const std::string &file_name,
         if (0 == verbose)
           mxinfo(boost::format(Y("Progress: %1%%%%2%")) % (int)(in->getFilePointer() * 100 / file_size) % "\r");
 
-        KaxClusterTimecode *ctc = FINDFIRST(l1, KaxClusterTimecode);
+        KaxClusterTimecode *ctc = FindChild<KaxClusterTimecode>(l1);
         if (nullptr != ctc) {
           uint64_t cluster_tc = uint64(*ctc);
           show_element(ctc, 2, boost::format(Y("Cluster timecode: %|1$.3f|s")) % ((float)cluster_tc * (float)tc_scale / 1000000000.0));

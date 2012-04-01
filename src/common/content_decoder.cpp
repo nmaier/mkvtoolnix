@@ -48,7 +48,7 @@ bool
 content_decoder_c::initialize(KaxTrackEntry &ktentry) {
   encodings.clear();
 
-  KaxContentEncodings *kcencodings = FINDFIRST(&ktentry, KaxContentEncodings);
+  KaxContentEncodings *kcencodings = FindChild<KaxContentEncodings>(&ktentry);
   if (nullptr == kcencodings)
     return true;
 
@@ -63,51 +63,51 @@ content_decoder_c::initialize(KaxTrackEntry &ktentry) {
     kax_content_encoding_t enc;
     memset(&enc, 0, sizeof(kax_content_encoding_t));
 
-    KaxContentEncodingOrder *ce_order = FINDFIRST(kcenc, KaxContentEncodingOrder);
+    KaxContentEncodingOrder *ce_order = FindChild<KaxContentEncodingOrder>(kcenc);
     if (nullptr != ce_order)
       enc.order = uint32(*ce_order);
 
-    KaxContentEncodingType *ce_type = FINDFIRST(kcenc, KaxContentEncodingType);
+    KaxContentEncodingType *ce_type = FindChild<KaxContentEncodingType>(kcenc);
     if (nullptr != ce_type)
       enc.type = uint32(*ce_type);
 
-    KaxContentEncodingScope *ce_scope = FINDFIRST(kcenc, KaxContentEncodingScope);
+    KaxContentEncodingScope *ce_scope = FindChild<KaxContentEncodingScope>(kcenc);
     enc.scope = nullptr != ce_scope ? uint32(*ce_scope) : 1;
 
-    KaxContentCompression *ce_comp = FINDFIRST(kcenc, KaxContentCompression);
+    KaxContentCompression *ce_comp = FindChild<KaxContentCompression>(kcenc);
     if (nullptr != ce_comp) {
-      KaxContentCompAlgo *cc_algo = FINDFIRST(ce_comp, KaxContentCompAlgo);
+      KaxContentCompAlgo *cc_algo = FindChild<KaxContentCompAlgo>(ce_comp);
       if (nullptr != cc_algo)
         enc.comp_algo = uint32(*cc_algo);
 
-      KaxContentCompSettings *cc_settings = FINDFIRST(ce_comp, KaxContentCompSettings);
+      KaxContentCompSettings *cc_settings = FindChild<KaxContentCompSettings>(ce_comp);
       if (nullptr != cc_settings)
         enc.comp_settings = EBMLBIN_TO_COUNTEDMEM(cc_settings);
     }
 
-    KaxContentEncryption *ce_enc = FINDFIRST(kcenc, KaxContentEncryption);
+    KaxContentEncryption *ce_enc = FindChild<KaxContentEncryption>(kcenc);
     if (nullptr != ce_enc) {
-      KaxContentEncAlgo *ce_ealgo = FINDFIRST(ce_enc, KaxContentEncAlgo);
+      KaxContentEncAlgo *ce_ealgo = FindChild<KaxContentEncAlgo>(ce_enc);
       if (nullptr != ce_ealgo)
         enc.enc_algo = uint32(*ce_ealgo);
 
-      KaxContentEncKeyID *ce_ekeyid = FINDFIRST(ce_enc, KaxContentEncKeyID);
+      KaxContentEncKeyID *ce_ekeyid = FindChild<KaxContentEncKeyID>(ce_enc);
       if (nullptr != ce_ekeyid)
         enc.enc_keyid = EBMLBIN_TO_COUNTEDMEM(ce_ekeyid);
 
-      KaxContentSigAlgo *ce_salgo = FINDFIRST(ce_enc, KaxContentSigAlgo);
+      KaxContentSigAlgo *ce_salgo = FindChild<KaxContentSigAlgo>(ce_enc);
       if (nullptr != ce_salgo)
         enc.enc_algo = uint32(*ce_salgo);
 
-      KaxContentSigHashAlgo *ce_shalgo = FINDFIRST(ce_enc, KaxContentSigHashAlgo);
+      KaxContentSigHashAlgo *ce_shalgo = FindChild<KaxContentSigHashAlgo>(ce_enc);
       if (nullptr != ce_shalgo)
         enc.enc_algo = uint32(*ce_shalgo);
 
-      KaxContentSigKeyID *ce_skeyid = FINDFIRST(ce_enc, KaxContentSigKeyID);
+      KaxContentSigKeyID *ce_skeyid = FindChild<KaxContentSigKeyID>(ce_enc);
       if (nullptr != ce_skeyid)
         enc.sig_keyid = EBMLBIN_TO_COUNTEDMEM(ce_skeyid);
 
-      KaxContentSignature *ce_signature = FINDFIRST(ce_enc, KaxContentSignature);
+      KaxContentSignature *ce_signature = FindChild<KaxContentSignature>(ce_enc);
       if (nullptr != ce_signature)
         enc.signature = EBMLBIN_TO_COUNTEDMEM(ce_signature);
 

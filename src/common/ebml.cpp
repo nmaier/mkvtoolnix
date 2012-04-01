@@ -424,7 +424,7 @@ int64_t
 kt_get_default_duration(KaxTrackEntry &track) {
   KaxTrackDefaultDuration *default_duration;
 
-  default_duration = FINDFIRST(&track, KaxTrackDefaultDuration);
+  default_duration = FindChild<KaxTrackDefaultDuration>(&track);
   if (nullptr == default_duration)
     return 0;
   return uint64(*default_duration);
@@ -434,7 +434,7 @@ int64_t
 kt_get_number(KaxTrackEntry &track) {
   KaxTrackNumber *number;
 
-  number = FINDFIRST(&track, KaxTrackNumber);
+  number = FindChild<KaxTrackNumber>(&track);
   if (nullptr == number)
     return 0;
   return uint64(*number);
@@ -444,7 +444,7 @@ int64_t
 kt_get_uid(KaxTrackEntry &track) {
   KaxTrackUID *uid;
 
-  uid = FINDFIRST(&track, KaxTrackUID);
+  uid = FindChild<KaxTrackUID>(&track);
   if (nullptr == uid)
     return 0;
   return uint64(*uid);
@@ -454,7 +454,7 @@ std::string
 kt_get_codec_id(KaxTrackEntry &track) {
   KaxCodecID *codec_id;
 
-  codec_id = FINDFIRST(&track, KaxCodecID);
+  codec_id = FindChild<KaxCodecID>(&track);
   if (nullptr == codec_id)
     return "";
   return std::string(*codec_id);
@@ -464,7 +464,7 @@ std::string
 kt_get_language(KaxTrackEntry &track) {
   KaxTrackLanguage *language;
 
-  language = FINDFIRST(&track, KaxTrackLanguage);
+  language = FindChild<KaxTrackLanguage>(&track);
   if (nullptr == language)
     return "";
   return std::string(*language);
@@ -474,7 +474,7 @@ int
 kt_get_max_blockadd_id(KaxTrackEntry &track) {
   KaxMaxBlockAdditionID *max_blockadd_id;
 
-  max_blockadd_id = FINDFIRST(&track, KaxMaxBlockAdditionID);
+  max_blockadd_id = FindChild<KaxMaxBlockAdditionID>(&track);
   if (nullptr == max_blockadd_id)
     return 0;
   return uint32(*max_blockadd_id);
@@ -485,11 +485,11 @@ kt_get_a_channels(KaxTrackEntry &track) {
   KaxTrackAudio *audio;
   KaxAudioChannels *channels;
 
-  audio = FINDFIRST(&track, KaxTrackAudio);
+  audio = FindChild<KaxTrackAudio>(&track);
   if (nullptr == audio)
     return 1;
 
-  channels = FINDFIRST(audio, KaxAudioChannels);
+  channels = FindChild<KaxAudioChannels>(audio);
   if (nullptr == channels)
     return 1;
 
@@ -501,11 +501,11 @@ kt_get_a_sfreq(KaxTrackEntry &track) {
   KaxTrackAudio *audio;
   KaxAudioSamplingFreq *sfreq;
 
-  audio = FINDFIRST(&track, KaxTrackAudio);
+  audio = FindChild<KaxTrackAudio>(&track);
   if (nullptr == audio)
     return 8000.0;
 
-  sfreq = FINDFIRST(audio, KaxAudioSamplingFreq);
+  sfreq = FindChild<KaxAudioSamplingFreq>(audio);
   if (nullptr == sfreq)
     return 8000.0;
 
@@ -517,11 +517,11 @@ kt_get_a_osfreq(KaxTrackEntry &track) {
   KaxTrackAudio *audio;
   KaxAudioOutputSamplingFreq *osfreq;
 
-  audio = FINDFIRST(&track, KaxTrackAudio);
+  audio = FindChild<KaxTrackAudio>(&track);
   if (nullptr == audio)
     return 8000.0;
 
-  osfreq = FINDFIRST(audio, KaxAudioOutputSamplingFreq);
+  osfreq = FindChild<KaxAudioOutputSamplingFreq>(audio);
   if (nullptr == osfreq)
     return 8000.0;
 
@@ -533,11 +533,11 @@ kt_get_a_bps(KaxTrackEntry &track) {
   KaxTrackAudio *audio;
   KaxAudioBitDepth *bps;
 
-  audio = FINDFIRST(&track, KaxTrackAudio);
+  audio = FindChild<KaxTrackAudio>(&track);
   if (nullptr == audio)
     return -1;
 
-  bps = FINDFIRST(audio, KaxAudioBitDepth);
+  bps = FindChild<KaxAudioBitDepth>(audio);
   if (nullptr == bps)
     return -1;
 
@@ -549,11 +549,11 @@ kt_get_v_pixel_width(KaxTrackEntry &track) {
   KaxTrackVideo *video;
   KaxVideoPixelWidth *width;
 
-  video = FINDFIRST(&track, KaxTrackVideo);
+  video = FindChild<KaxTrackVideo>(&track);
   if (nullptr == video)
     return 0;
 
-  width = FINDFIRST(video, KaxVideoPixelWidth);
+  width = FindChild<KaxVideoPixelWidth>(video);
   if (nullptr == width)
     return 0;
 
@@ -565,11 +565,11 @@ kt_get_v_pixel_height(KaxTrackEntry &track) {
   KaxTrackVideo *video;
   KaxVideoPixelHeight *height;
 
-  video = FINDFIRST(&track, KaxTrackVideo);
+  video = FindChild<KaxTrackVideo>(&track);
   if (nullptr == video)
     return 0;
 
-  height = FINDFIRST(video, KaxVideoPixelHeight);
+  height = FindChild<KaxVideoPixelHeight>(video);
   if (nullptr == height)
     return 0;
 
