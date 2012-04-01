@@ -385,7 +385,7 @@
       </para>
 
       <para>
-       At the moment &mkvmerge; supports three different modes.
+       At the moment &mkvmerge; supports four different modes.
       </para>
 
       <orderedlist>
@@ -463,7 +463,68 @@
          The '<literal>timecodes:</literal>' prefix must not be omitted.
         </para>
        </listitem>
+
+       <listitem>
+        <para>
+         Keeping specific parts by specifying timecode ranges while discarding others.
+        </para>
+
+        <para>
+         Syntax: <option>--split</option> <literal>parts:</literal><parameter>start1</parameter>-<parameter>end1</parameter><optional>,<optional>+</optional><parameter>start2</parameter>-<parameter>end2</parameter><optional>,<optional>+</optional><parameter>start3</parameter>-<parameter>end3</parameter>...</optional></optional>
+        </para>
+
+        <para>
+         Examples:
+         <orderedlist>
+          <listitem><code>--split parts:00:01:20-00:02:45,00:05:50-00:10:30</code></listitem>
+          <listitem><code>--split parts:00:01:20-00:02:45,+00:05:50-00:10:30</code></listitem>
+          <listitem><code>--split parts:-00:02:45,00:05:50-</code></listitem>
+         </orderedlist>
+        </para>
+
+        <para>
+         The <literal>parts</literal> mode tells &mkvmerge; to keep certain ranges of timecodes while discarding others. The ranges to keep
+         have to be listed after the <literal>parts:</literal> keyword and be separated by commas. A range itself consists of a start and an
+         end timecode in the same format the other variations of <parameter>--split</parameter> accept (e.g. both
+         <literal>00:01:20</literal> and <literal>80s</literal> refer to the same timecode).
+        </para>
+
+        <para>
+         If a start timecode is left out then it defaults to the previous' range's end timecode. If there was no previous range then it
+         defaults to the start of the file (see example 3).
+        </para>
+
+        <para>
+         If an end timecode is left out then it defaults to the end of the source files which basically tells mkvmerge to keep the rest (see
+         example 3).
+        </para>
+
+        <para>
+         Normally each range will be written to a new file. This can be changed so that consecutive ranges are written to the same file. For
+         that the user has to prefix the start timecode with a <literal>+</literal>. This tells mvkmerge not to create a new file and
+         instead append the range to the same file the previous range was written to. Timecodes will be adjusted so that there will be no
+         gap in the output file even if there was a gap in the two ranges in the input file.
+        </para>
+
+        <para>
+         In example 1 mkvmerge will create two files. The first will contain the content starting from <literal>00:01:20</literal> until
+         <literal>00:02:45</literal>. The second file will contain the content starting from <literal>00:05:50</literal> until
+         <literal>00:10:30</literal>.
+        </para>
+
+        <para>
+         In example 2 mkvmerge will create only one file. This file will contain both the content starting from <literal>00:01:20</literal>
+         until <literal>00:02:45</literal> and the content starting from <literal>00:05:50</literal> until <literal>00:10:30</literal>.
+        </para>
+
+        <para>
+         In example 3 mkvmerge will create two files. The first will contain the content from the start of the source files until
+         <literal>00:02:45</literal>. The second file will contain the content starting from <literal>00:05:50</literal> until the end of
+         the source files.
+        </para>
+       </listitem>
       </orderedlist>
+
       <para>
        For this splitting mode the output filename is treated differently than for the normal operation. It may contain a
        <function>printf</function> like expression '<code>%d</code>' including an optional field width,

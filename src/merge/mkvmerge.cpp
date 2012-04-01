@@ -117,6 +117,9 @@ set_usage() {
   usage_text += Y("  --split timecodes:A[,B...]\n"
                   "                           Create a new file after each timecode A, B\n"
                   "                           etc.\n");
+  usage_text += Y("  --split parts:start1-end2[,[+]start2-end2,...]\n"
+                  "                           Keep ranges of timecodes start-end, either in separate\n"
+                  "                           files or append to previous range's file.\n");
   usage_text += Y("  --split-max-files <n>    Create at most n files.\n");
   usage_text += Y("  --link                   Link splitted files.\n");
   usage_text += Y("  --link-to-previous <SID> Link the first file to the given SID.\n");

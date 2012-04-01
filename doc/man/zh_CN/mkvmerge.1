@@ -1,7 +1,7 @@
 '\" t
 .\"     Title: mkvmerge
 .\"    Author: Moritz Bunkus <moritz@bunkus.org>
-.\" Generator: DocBook XSL Stylesheets v1.76.1 <http://docbook.sf.net/>
+.\" Generator: DocBook XSL Stylesheets v1.75.2 <http://docbook.sf.net/>
 .\"      Date: 2012-03-10
 .\"    Manual: 用户命令
 .\"    Source: MKVToolNix 5.4.0
@@ -318,9 +318,9 @@ Matroska(TM) 文件规划
 在给定尺寸或时间之后切割输出文件。请注意，各轨道只能在关键帧之前的位置切割开。由于缓冲原因，\fBmkvmerge\fR(1)
 将在达到切割点后发现的首个关键帧前的位置切割。因此实际切割点可能比用户指定的稍稍靠后些。
 .sp
-目前
+At the moment
 \fBmkvmerge\fR(1)
-支持三种不同模式。
+supports four different modes\&.
 .sp
 .RS 4
 .ie n \{\
@@ -401,6 +401,96 @@ timecodes:\fIA\fR[,\fIB\fR[,\fIC\fR\&.\&.\&.]]
 等等的格式与按时长切割模式（见上文）所用的格式相同。时间码表以逗号分隔。 输入流达到当前切割点的时间码后将创建新的输出文件。然后将使用所给定的下一个切割点。
 .sp
 \*(Aqtimecodes:\*(Aq 前缀不得省略。
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 4.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  4." 4.2
+.\}
+Keeping specific parts by specifying timecode ranges while discarding others\&.
+.sp
+Syntax:
+\fB\-\-split\fR
+parts:\fIstart1\fR\-\fIend1\fR[,[+]\fIstart2\fR\-\fIend2\fR[,[+]\fIstart3\fR\-\fIend3\fR\&.\&.\&.]]
+.sp
+Examples:
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 1.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  1." 4.2
+.\}
+\-\-split parts:00:01:20\-00:02:45,00:05:50\-00:10:30.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 2.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  2." 4.2
+.\}
+\-\-split parts:00:01:20\-00:02:45,+00:05:50\-00:10:30.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 3.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  3." 4.2
+.\}
+\-\-split parts:\-00:02:45,00:05:50\-.RE
+.sp
+The
+parts
+mode tells
+\fBmkvmerge\fR(1)
+to keep certain ranges of timecodes while discarding others\&. The ranges to keep have to be listed after the
+parts:
+keyword and be separated by commas\&. A range itself consists of a start and an end timecode in the same format the other variations of
+\fI\-\-split\fR
+accept (e\&.g\&. both
+00:01:20
+and
+80s
+refer to the same timecode)\&.
+.sp
+If a start timecode is left out then it defaults to the previous\*(Aq range\*(Aqs end timecode\&. If there was no previous range then it defaults to the start of the file (see example 3)\&.
+.sp
+If an end timecode is left out then it defaults to the end of the source files which basically tells mkvmerge to keep the rest (see example 3)\&.
+.sp
+Normally each range will be written to a new file\&. This can be changed so that consecutive ranges are written to the same file\&. For that the user has to prefix the start timecode with a
++\&. This tells mvkmerge not to create a new file and instead append the range to the same file the previous range was written to\&. Timecodes will be adjusted so that there will be no gap in the output file even if there was a gap in the two ranges in the input file\&.
+.sp
+In example 1 mkvmerge will create two files\&. The first will contain the content starting from
+00:01:20
+until
+00:02:45\&. The second file will contain the content starting from
+00:05:50
+until
+00:10:30\&.
+.sp
+In example 2 mkvmerge will create only one file\&. This file will contain both the content starting from
+00:01:20
+until
+00:02:45
+and the content starting from
+00:05:50
+until
+00:10:30\&.
+.sp
+In example 3 mkvmerge will create two files\&. The first will contain the content from the start of the source files until
+00:02:45\&. The second file will contain the content starting from
+00:05:50
+until the end of the source files\&.
 .RE
 .sp
 For this splitting mode the output filename is treated differently than for the normal operation\&. It may contain a

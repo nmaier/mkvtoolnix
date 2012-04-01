@@ -232,7 +232,9 @@ XMLファイルからセグメント情報を読み取ります。このファ�
 .RS 4
 出力ファイルを指定したサイズ、又は時間で分割します。トラックはキーフレームの直後でしか分割できないことに注意してください。\fBmkvmerge\fR(1)はバッファリングを行うため、ファイルは分割すべき点の次にくるキーフレームの直前で分割されます。よって、分割点はユーザが指定した点よりも若干後ろになります。
 .sp
-現時点では、\fBmkvmerge\fR(1)は三つのモードをサポートしています。
+At the moment
+\fBmkvmerge\fR(1)
+supports four different modes\&.
 .sp
 .RS 4
 .ie n \{\
@@ -302,6 +304,96 @@ timecodes:\fIA\fR[,\fIB\fR[,\fIC\fR\&.\&.\&.]]
 パラメータ\fIA\fR、\fIB\fR、\fIC\fR\&...は、durationで使用されるものと同じフォーマットで指定しなければなりません(上記参照)。タイムコードのリストはコンマで区切られます。入力ストリームが現在の分割点に達すると次のファイルが作成され、このリストから次の分割点が使用されます。
 .sp
 \*(Aqtimecodes:\*(Aqという接頭辞は、互換性のために省略できるようになっています。
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 4.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  4." 4.2
+.\}
+Keeping specific parts by specifying timecode ranges while discarding others\&.
+.sp
+Syntax:
+\fB\-\-split\fR
+parts:\fIstart1\fR\-\fIend1\fR[,[+]\fIstart2\fR\-\fIend2\fR[,[+]\fIstart3\fR\-\fIend3\fR\&.\&.\&.]]
+.sp
+Examples:
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 1.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  1." 4.2
+.\}
+\-\-split parts:00:01:20\-00:02:45,00:05:50\-00:10:30.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 2.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  2." 4.2
+.\}
+\-\-split parts:00:01:20\-00:02:45,+00:05:50\-00:10:30.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 3.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  3." 4.2
+.\}
+\-\-split parts:\-00:02:45,00:05:50\-.RE
+.sp
+The
+parts
+mode tells
+\fBmkvmerge\fR(1)
+to keep certain ranges of timecodes while discarding others\&. The ranges to keep have to be listed after the
+parts:
+keyword and be separated by commas\&. A range itself consists of a start and an end timecode in the same format the other variations of
+\fI\-\-split\fR
+accept (e\&.g\&. both
+00:01:20
+and
+80s
+refer to the same timecode)\&.
+.sp
+If a start timecode is left out then it defaults to the previous\*(Aq range\*(Aqs end timecode\&. If there was no previous range then it defaults to the start of the file (see example 3)\&.
+.sp
+If an end timecode is left out then it defaults to the end of the source files which basically tells mkvmerge to keep the rest (see example 3)\&.
+.sp
+Normally each range will be written to a new file\&. This can be changed so that consecutive ranges are written to the same file\&. For that the user has to prefix the start timecode with a
++\&. This tells mvkmerge not to create a new file and instead append the range to the same file the previous range was written to\&. Timecodes will be adjusted so that there will be no gap in the output file even if there was a gap in the two ranges in the input file\&.
+.sp
+In example 1 mkvmerge will create two files\&. The first will contain the content starting from
+00:01:20
+until
+00:02:45\&. The second file will contain the content starting from
+00:05:50
+until
+00:10:30\&.
+.sp
+In example 2 mkvmerge will create only one file\&. This file will contain both the content starting from
+00:01:20
+until
+00:02:45
+and the content starting from
+00:05:50
+until
+00:10:30\&.
+.sp
+In example 3 mkvmerge will create two files\&. The first will contain the content from the start of the source files until
+00:02:45\&. The second file will contain the content starting from
+00:05:50
+until the end of the source files\&.
 .RE
 .sp
 この分割モードでは、出力ファイル名は通常の操作とは異なる扱いを受けます。このモードでは出力ファイル名は\fBprintf\fRのように\*(Aq%d\*(Aqというパターンを含むことができます。\*(Aq%02d\*(Aqのように幅指定を追加することもできます。出力ファイル名がこのパターンを含む場合、ファイル番号が適切なフォーマットで指定された位置に挿入されます。含まない場合、\*(Aq\-%03d\*(Aqというパターンがファイルの拡張子の直前に指定されたものとみなされ、例えば\*(Aq\-o output\&.mkv\*(Aqを指定した場合、\*(Aqoutput\-001\&.mkv\*(Aq等のファイル名に出力されます。拡張子が存在しない場合、\*(Aq\-%03d\*(Aqはファイル名の末尾に追加されます。
