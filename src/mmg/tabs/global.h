@@ -42,6 +42,8 @@
 #define ID_TC_SEGMENTINFO                 13023
 #define ID_B_BROWSESEGMENTINFO            13024
 #define ID_CB_WEBM_MODE                   13025
+#define ID_RB_SPLITBYPARTS                13026
+#define ID_TC_SPLITBYPARTS                13027
 
 class tab_global: public wxPanel {
   DECLARE_CLASS(tab_global);
@@ -50,10 +52,10 @@ public:
   wxTextCtrl *tc_chapters, *tc_global_tags, *tc_split_max_files, *tc_title;
   wxTextCtrl *tc_next_segment_uid, *tc_previous_segment_uid, *tc_segment_uid;
   wxTextCtrl *tc_split_bytes, *tc_split_time, *tc_cue_name_format;
-  wxTextCtrl *tc_split_chapters, *tc_split_after_timecodes, *tc_segmentinfo;
+  wxTextCtrl *tc_split_chapters, *tc_split_after_timecodes, *tc_split_by_parts, *tc_segmentinfo;
   wxCheckBox *cb_split, *cb_link;
   wxRadioButton *rb_split_by_size, *rb_split_by_time, *rb_split_each_chapter;
-  wxRadioButton *rb_split_chapters, *rb_split_after_timecodes;
+  wxRadioButton *rb_split_chapters, *rb_split_after_timecodes, *rb_split_by_parts;
   wxMTX_COMBOBOX_TYPE *cob_split_by_size, *cob_split_by_time, *cob_chap_language, *cob_chap_charset;
   wxStaticText *st_split_max_files, *st_file_segment_title, *st_segment_uid, *st_previous_segment_uid, *st_next_segment_uid, *st_chapter_file, *st_language, *st_charset;
   wxStaticText *st_cue_name_format, *st_tag_file, *st_segmentinfo_file;
@@ -71,6 +73,7 @@ public:
   void on_splitby_size_clicked(wxCommandEvent &evt);
   void on_splitby_time_clicked(wxCommandEvent &evt);
   void on_splitafter_timecodes_clicked(wxCommandEvent &evt);
+  void on_splitby_parts_clicked(wxCommandEvent &evt);
   void on_webm_mode_clicked(wxCommandEvent &evt);
 
   void save(wxConfigBase *cfg);

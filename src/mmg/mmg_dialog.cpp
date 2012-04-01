@@ -1128,8 +1128,10 @@ mmg_dialog::update_command_line() {
       clargs.Add(wxT("size:") + global_page->cob_split_by_size->GetValue());
     else if (global_page->rb_split_by_time->GetValue())
       clargs.Add(wxT("duration:") + global_page->cob_split_by_time->GetValue());
-    else
+    else if (global_page->rb_split_after_timecodes->GetValue())
       clargs.Add(wxT("timecodes:") + global_page->tc_split_after_timecodes->GetValue());
+    else if (global_page->rb_split_by_parts->GetValue())
+      clargs.Add(wxT("parts:") + global_page->tc_split_by_parts->GetValue());
 
     if (global_page->tc_split_max_files->GetValue().Length() > 0) {
       clargs.Add(wxT("--split-max-files"));

@@ -294,10 +294,11 @@ void wxdie(const wxString &errmsg);
 
 #if defined(SYS_WINDOWS)
 #define TIP(s) format_tooltip(Z(s))
-wxString format_tooltip(const wxString &s);
 #else
 #define TIP(s) Z(s)
 #endif
+
+wxString format_tooltip(const wxString &s);
 
 class mmg_app: public wxApp {
 public:

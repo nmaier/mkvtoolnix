@@ -32,7 +32,7 @@
 #include "mmg/tabs/global.h"
 
 tab_global::tab_global(wxWindow *parent):
-  wxPanel(parent, -1, wxDefaultPosition, wxSize(100, 400), wxTAB_TRAVERSAL) {
+  wxPanel(parent, -1, wxDefaultPosition, wxSize(100, 500), wxTAB_TRAVERSAL) {
   wxStaticBoxSizer *siz_fs_title, *siz_split, *siz_linking_box, *siz_chapters;
   wxFlexGridSizer *siz_linking, *siz_chap_l1_l2, *siz_fg;
   wxBoxSizer *siz_all, *siz_line, *siz_line2;
@@ -120,6 +120,14 @@ tab_global::tab_global(wxWindow *parent):
   tc_split_after_timecodes = new wxTextCtrl(this, ID_TC_SPLITAFTERTIMECODES, wxEmptyString);
   tc_split_after_timecodes->Enable(false);
   siz_line2->Add(tc_split_after_timecodes, 1, wxALIGN_CENTER_VERTICAL | wxGROW, 5);
+
+  rb_split_by_parts = new wxRadioButton(this, ID_RB_SPLITBYPARTS, wxEmptyString);
+  rb_split_by_parts->Enable(false);
+  siz_line2->Add(rb_split_by_parts, 0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 5);
+
+  tc_split_by_parts = new wxTextCtrl(this, ID_TC_SPLITBYPARTS, wxEmptyString);
+  tc_split_by_parts->Enable(false);
+  siz_line2->Add(tc_split_by_parts, 1, wxALIGN_CENTER_VERTICAL | wxGROW, 5);
 
   siz_col->Add(siz_line2, 0, wxBOTTOM | wxTOP | wxGROW, 5);
   siz_line->Add(siz_col, 1, wxALIGN_TOP | wxGROW | wxLEFT, 10);
@@ -252,6 +260,15 @@ tab_global::translate_ui() {
                                             "The formats can be mixed, too. "
                                             "Examples: 01:00:00,01:30:00 (after one hour and after one hour and thirty minutes) or 1800s,3000s,00:10:00 "
                                             "(after three, five and ten minutes)."));
+  rb_split_by_parts->SetLabel(Z("...by parts:"));
+  std::vector<std::string> help = {
+    Y("A comma-separated list of timecode ranges of content to keep."),
+    Y("Each range consists of a start and end timecode with a '-' in the middle, e.g. '00:01:15-00:03:20'."),
+    Y("If a start timecode is left out then the previous range's end timecode is used, or the start of the file if there was no previous range."),
+    Y("The timecodes can be given either in the form HH:MM:SS.nnnnnnnnn or as the number of seconds followed by 's'."),
+    Y("If a range's start timecode is prefixed with '+' then its content will be written to the same file as the previous range. Otherwise a new file will be created for this range."),
+  };
+  tc_split_by_parts-> SetToolTip(format_tooltip(wxU(join(" ", help))));
   cb_link->SetLabel(Z("link files"));
   cb_link->SetToolTip(TIP("Use 'segment linking' for the resulting files. For an in-depth explanation of this feature consult the mkvmerge documentation."));
   st_split_max_files->SetLabel(Z("max. number of files:"));
@@ -337,21 +354,22 @@ tab_global::on_browse_chapters(wxCommandEvent &) {
 void
 tab_global::on_split_clicked(wxCommandEvent &) {
   bool ec = cb_split->IsChecked();
-  bool es = rb_split_by_size->GetValue();
-  bool et = rb_split_by_time->GetValue();
 
   st_split_max_files->Enable(ec);
   cb_link->Enable(ec);
   tc_split_max_files->Enable(ec);
 
   rb_split_by_size->Enable(ec);
-  cob_split_by_size->Enable(ec && es);
+  cob_split_by_size->Enable(ec && rb_split_by_size->GetValue());
 
   rb_split_by_time->Enable(ec);
-  cob_split_by_time->Enable(ec && et);
+  cob_split_by_time->Enable(ec && rb_split_by_time->GetValue());
 
   rb_split_after_timecodes->Enable(ec);
-  tc_split_after_timecodes->Enable(ec && !es && !et);
+  tc_split_after_timecodes->Enable(ec && rb_split_after_timecodes->GetValue());
+
+  rb_split_by_parts->Enable(ec);
+  tc_split_by_parts->Enable(ec && rb_split_by_parts->GetValue());
 }
 
 void
@@ -364,10 +382,12 @@ tab_global::on_splitby_time_clicked(wxCommandEvent &) {
   cob_split_by_size->Enable(false);
   cob_split_by_time->Enable(true);
   tc_split_after_timecodes->Enable(false);
+  tc_split_by_parts->Enable(false);
 
   rb_split_by_size->SetValue(false);
   rb_split_by_time->SetValue(true);
   rb_split_after_timecodes->SetValue(false);
+  rb_split_by_parts->SetValue(false);
 }
 
 void
@@ -375,10 +395,12 @@ tab_global::on_splitby_size_clicked(wxCommandEvent &) {
   cob_split_by_size->Enable(true);
   cob_split_by_time->Enable(false);
   tc_split_after_timecodes->Enable(false);
+  tc_split_by_parts->Enable(false);
 
   rb_split_by_size->SetValue(true);
   rb_split_by_time->SetValue(false);
   rb_split_after_timecodes->SetValue(false);
+  rb_split_by_parts->SetValue(false);
 }
 
 void
@@ -386,10 +408,25 @@ tab_global::on_splitafter_timecodes_clicked(wxCommandEvent &) {
   cob_split_by_size->Enable(false);
   cob_split_by_time->Enable(false);
   tc_split_after_timecodes->Enable(true);
+  tc_split_by_parts->Enable(false);
 
   rb_split_by_size->SetValue(false);
   rb_split_by_time->SetValue(false);
   rb_split_after_timecodes->SetValue(true);
+  rb_split_by_parts->SetValue(false);
+}
+
+void
+tab_global::on_splitby_parts_clicked(wxCommandEvent &) {
+  cob_split_by_size->Enable(false);
+  cob_split_by_time->Enable(false);
+  tc_split_after_timecodes->Enable(false);
+  tc_split_by_parts->Enable(true);
+
+  rb_split_by_size->SetValue(false);
+  rb_split_by_time->SetValue(false);
+  rb_split_after_timecodes->SetValue(false);
+  rb_split_by_parts->SetValue(true);
 }
 
 void
@@ -411,6 +448,8 @@ tab_global::load(wxConfigBase *cfg,
   cob_split_by_time->Enable(false);
   rb_split_after_timecodes->Enable(ec);
   tc_split_after_timecodes->Enable(false);
+  rb_split_by_parts->Enable(ec);
+  tc_split_by_parts->Enable(false);
 
   cb_link->Enable(ec);
   st_split_max_files->Enable(ec);
@@ -436,6 +475,9 @@ tab_global::load(wxConfigBase *cfg,
     } else if (split_mode == wxT("timecodes")) {
       rb_split_after_timecodes->SetValue(true);
       tc_split_after_timecodes->Enable(true);
+    } else if (split_mode == wxT("parts")) {
+      rb_split_by_parts->SetValue(true);
+      tc_split_by_parts->Enable(true);
     } else {
       rb_split_by_size->SetValue(true);
       cob_split_by_size->Enable(true);
@@ -447,6 +489,8 @@ tab_global::load(wxConfigBase *cfg,
   set_combobox_selection(cob_split_by_time, s);
   cfg->Read(wxT("split_after_timecodes"), &s);
   tc_split_after_timecodes->SetValue(s);
+  cfg->Read(wxT("split_by_parts"), &s);
+  tc_split_by_parts->SetValue(s);
   cfg->Read(wxT("split_max_files"), &s);
   tc_split_max_files->SetValue(s);
 
@@ -497,11 +541,14 @@ tab_global::save(wxConfigBase *cfg) {
     cfg->Write(wxT("split_mode"), wxT("size"));
   else if (rb_split_by_time->GetValue())
     cfg->Write(wxT("split_mode"), wxT("duration"));
-  else
+  else if (rb_split_after_timecodes->GetValue())
     cfg->Write(wxT("split_mode"), wxT("timecodes"));
+  else
+    cfg->Write(wxT("split_mode"), wxT("parts"));
   cfg->Write(wxT("split_after_bytes"), cob_split_by_size->GetValue());
   cfg->Write(wxT("split_after_time"), cob_split_by_time->GetValue());
   cfg->Write(wxT("split_after_timecodes"), tc_split_after_timecodes->GetValue());
+  cfg->Write(wxT("split_by_parts"), tc_split_by_parts->GetValue());
   cfg->Write(wxT("split_max_files"), tc_split_max_files->GetValue());
   cfg->Write(wxT("link"), cb_link->IsChecked());
 
@@ -593,15 +640,13 @@ tab_global::validate_settings() {
   std::string s;
 
   if (cb_split->GetValue()) {
-    if (rb_split_by_size->GetValue()) {
-      if (!is_valid_split_size())
-        return false;
+    if (rb_split_by_size->GetValue() && !is_valid_split_size())
+      return false;
 
-    } else if (rb_split_by_time->GetValue()) {
-      if (!is_valid_split_timecode(cob_split_by_time->GetValue()))
-        return false;
+    else if (rb_split_by_time->GetValue() && !is_valid_split_timecode(cob_split_by_time->GetValue()))
+      return false;
 
-    } else if (!is_valid_split_timecode_list())
+    else if (rb_split_after_timecodes->GetValue() && !is_valid_split_timecode_list())
       return false;
 
     s = wxMB(tc_split_max_files->GetValue());
@@ -648,4 +693,5 @@ BEGIN_EVENT_TABLE(tab_global, wxPanel)
   EVT_RADIOBUTTON(ID_RB_SPLITBYSIZE,         tab_global::on_splitby_size_clicked)
   EVT_RADIOBUTTON(ID_RB_SPLITBYTIME,         tab_global::on_splitby_time_clicked)
   EVT_RADIOBUTTON(ID_RB_SPLITAFTERTIMECODES, tab_global::on_splitafter_timecodes_clicked)
+  EVT_RADIOBUTTON(ID_RB_SPLITBYPARTS,        tab_global::on_splitby_parts_clicked)
 END_EVENT_TABLE();
