@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2012-03-31 12:46+0900\n"
+"PO-Revision-Date: 2012-04-01 21:34+0900\n"
 "Last-Translator: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "Language-Team: Japanese <boiled.sugar@gmail.com>\n"
 "Language: ja\n"
@@ -370,15 +370,16 @@ msgstr ""
 "                           ファイルを分割します。\n"
 
 #: src/merge/mkvmerge.cpp:120
-#, fuzzy
 msgid ""
 "  --split parts:start1-end2[,[+]start2-end2,...]\n"
 "                           Keep ranges of timecodes start-end, either in\n"
 "                           separate files or append to previous range's file\n"
 "                           if prefixed with '+'.\n"
 msgstr ""
-"  --split timecodes:A[,B...]\n"
-"                           各タイムコード、A、B等の後にファイルを分割します。\n"
+"  --split parts:start1-end2[,[+]start2-end2,...]\n"
+"                           ファイルを分割するか、'+'の接頭辞が付いている場合は\n"
+"                           前の範囲のファイルに追加結合して、start-endの\n"
+"                           タイムコードの範囲を保持します。\n"
 
 #: src/merge/mkvmerge.cpp:117
 msgid ""
@@ -1624,7 +1625,7 @@ msgstr "タイムコードで分割:"
 
 #: src/mmg/tabs/global.cpp:263
 msgid "...by parts:"
-msgstr ""
+msgstr "部分で分割："
 
 #: src/info/mkvinfo.cpp:774
 msgid "1: all frames"
@@ -1683,7 +1684,7 @@ msgstr "トラック番号%2%のタイムスタンプ%1%でブロックが見つ
 
 #: src/mmg/tabs/global.cpp:265
 msgid "A comma-separated list of timecode ranges of content to keep."
-msgstr ""
+msgstr "保持する内容のタイムコードの範囲の、コンマで区切られたリストです。"
 
 #: src/common/property_element.cpp:132
 #: src/mmg/header_editor/frame.cpp:430
@@ -3170,7 +3171,7 @@ msgstr "各エディションは少なくとも1つのチャプタを含んで�
 
 #: src/mmg/tabs/global.cpp:266
 msgid "Each range consists of a start and end timecode with a '-' in the middle, e.g. '00:01:15-00:03:20'."
-msgstr ""
+msgstr "各範囲は、'-'を真ん中に置いた開始点と終了点のタイムコードで構成されます、例：'00:01:15-00:03:20'。"
 
 #: src/info/mkvinfo.cpp:186
 #, boost-format
@@ -3800,11 +3801,11 @@ msgstr "'有効'にチェックが入っていないと、プレーヤはファ�
 
 #: src/mmg/tabs/global.cpp:269
 msgid "If a range's start timecode is prefixed with '+' then its content will be written to the same file as the previous range. Otherwise a new file will be created for this range."
-msgstr ""
+msgstr "ある範囲の開始点のタイムコードに'+'の接頭辞がついていた場合、その内容はその前の範囲と同じファイルに書きこまれます。そうでなければ、この範囲のために新しいファイルが作成されます。"
 
 #: src/mmg/tabs/global.cpp:267
 msgid "If a start timecode is left out then the previous range's end timecode is used, or the start of the file if there was no previous range."
-msgstr ""
+msgstr "開始点のタイムコードがなかった場合は、その前の範囲の終了点のタイムコードが使われるか、もしくはその前の範囲がなかった場合はファイルの開始点が使われます。"
 
 #: src/mmg/options/mmg.cpp:75
 msgid "If checked mmg will ask for confirmation before overwriting existing files, or before adding a new job if there's an old job whose description matches the new one."
@@ -4005,14 +4006,14 @@ msgid "Invalid data for Base64 encoding found."
 msgstr "Base64エンコーディングには無効なデータが見つかりました。"
 
 #: src/merge/mkvmerge.cpp:845
-#, fuzzy, boost-format
+#, boost-format
 msgid "Invalid end time for '--split' in '--split %1%' (current part: %2%). Additional error message: %3%.\n"
-msgstr "'--split %1%'で'--split'には無効な時間が指定されました。追加エラーメッセージ：%2%。\n"
+msgstr "'--split %1%'（現在の部分：%2%）で'--split'としては無効な終了点の時間が見つかりました。追加のエラーメッセージ：%3%。\n"
 
 #: src/merge/mkvmerge.cpp:848
 #, boost-format
 msgid "Invalid end time for '--split' in '--split %1%' (current part: %2%). The end time must be bigger than the start time.\n"
-msgstr ""
+msgstr "'--split %1%'（現在の部分：%2%）で'--split'としては無効な終了点の時間が見つかりました。終了点の時間は開始点の時間より大きくなければなりません。\n"
 
 #: src/mmg/mmg_dialog.cpp:601
 msgid "Invalid file name"
@@ -4139,19 +4140,19 @@ msgid "Invalid start or stop timecode"
 msgstr "無効な開始時間または終了時間のタイムコードです"
 
 #: src/merge/mkvmerge.cpp:839
-#, fuzzy, boost-format
+#, boost-format
 msgid "Invalid start time for '--split' in '--split %1%' (current part: %2%). Additional error message: %3%.\n"
-msgstr "'--split %1%'で'--split'には無効な時間が指定されました。追加エラーメッセージ：%2%。\n"
+msgstr "'--split %1%'（現在の部分：%2%）で'--split'としては無効な開始点の時間が見つかりました。追加のエラーメッセージ：%3%。\n"
 
 #: src/merge/mkvmerge.cpp:851
-#, fuzzy, boost-format
+#, boost-format
 msgid "Invalid start time for '--split' in '--split %1%' (current part: %2%). The start time must be bigger than or equal to the previous part's end time.\n"
-msgstr "'--split %1%'で'--split'には無効な時間が指定されました。追加エラーメッセージ：%2%。\n"
+msgstr "'--split %1%'（現在の部分：%2%）で'--split'としては無効な終了点の時間が見つかりました。開始点の時間は前の部分の終了点の時間以上でなければなりません。。\n"
 
 #: src/merge/mkvmerge.cpp:826
-#, fuzzy, boost-format
+#, boost-format
 msgid "Invalid start/end specification for '--split' in '--split %1%' (curent part: %2%).\n"
-msgstr "'--split %1%'で無効な'--split'フォーマットが指定されました。\n"
+msgstr "'--split %1%'（現在の部分：%2%）で無効な'--split'の開始点/終了点が指定されました。\n"
 
 #: src/merge/mkvmerge.cpp:1162
 #, boost-format
@@ -4610,9 +4611,9 @@ msgid "Missing output file name in argument '%1%'.\n"
 msgstr "パラメータ'%1%'で出力ファイル名が指定されていません。\n"
 
 #: src/merge/mkvmerge.cpp:820
-#, fuzzy, boost-format
+#, boost-format
 msgid "Missing start/end specifications for '--split' in '--split %1%'.\n"
-msgstr "'--split %1%'で無効な'--split'フォーマットが指定されました。\n"
+msgstr "'--split %1%'で'--split'の開始点/終了点がありません。\n"
 
 #: src/propedit/options.cpp:142
 #, boost-format
@@ -6429,9 +6430,8 @@ msgid "The country '%s' is not a valid ccTLD and cannot be selected."
 msgstr "国'%s'は有効なccTLDコードではないので選択できません。"
 
 #: src/merge/output_control.cpp:1508
-#, fuzzy
 msgid "The cue entries (the index) are being written...\n"
-msgstr "キューエントリ（インデックス）が書き込まれました..."
+msgstr "キューエントリ（インデックス）が書き込まれています...\n"
 
 #: src/mmg/tabs/input.cpp:720
 #, c-format, boost-format
@@ -7108,7 +7108,7 @@ msgstr "ここで指定したタイムコードで出力ファイルが分割さ
 
 #: src/mmg/tabs/global.cpp:268
 msgid "The timecodes can be given either in the form HH:MM:SS.nnnnnnnnn or as the number of seconds followed by 's'."
-msgstr ""
+msgstr "タイムコードは、HH:MM:SS.nnnnnnnnnの形式か後ろに's'がついた秒数で与えることができます。"
 
 #: src/input/r_ogm.cpp:591
 msgid "The timecodes for this stream have been reset in the middle of the file. This is not supported. The current packet will be discarded.\n"
@@ -9702,4 +9702,3 @@ msgstr "はい"
 
 #~ msgid "wrong usage: writing to read-only memory"
 #~ msgstr "間違った使用法：読み込み専用メモリへの書き込み"
-
