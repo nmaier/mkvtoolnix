@@ -52,16 +52,18 @@ struct split_point_t {
 
   int64_t m_point;
   split_point_type_e m_type;
-  bool m_use_once, m_discard;
+  bool m_use_once, m_discard, m_create_new_file;
 
   split_point_t(int64_t point,
                 split_point_type_e type,
                 bool use_once,
-                bool discard = false)
+                bool discard = false,
+                bool create_new_file = true)
     : m_point(point)
     , m_type(type)
     , m_use_once(use_once)
     , m_discard(discard)
+    , m_create_new_file(create_new_file)
   {
   }
 
@@ -82,7 +84,7 @@ private:
   int64_t m_max_timecode_and_duration, m_max_video_timecode_rendered;
   int64_t m_previous_cluster_tc, m_num_cue_elements, m_header_overhead;
   int64_t m_packet_num, m_timecode_offset, *m_previous_packets;
-  int64_t m_bytes_in_file, m_first_timecode_in_file;
+  int64_t m_bytes_in_file, m_first_timecode_in_file, m_first_discarded_timecode, m_last_discarded_timecode;
   int64_t m_min_timecode_in_cluster, m_max_timecode_in_cluster;
   int64_t m_attachments_size;
   mm_io_c *m_out;

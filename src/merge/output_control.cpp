@@ -1490,7 +1490,7 @@ create_next_output_file() {
 */
 int64_t
 finish_file(bool last_file) {
-  bool do_output = verbose && !g_cluster_helper->discarding();
+  bool do_output = verbose && !dynamic_cast<mm_null_io_c *>(s_out.get());
   if (do_output)
     mxinfo("\n");
 
