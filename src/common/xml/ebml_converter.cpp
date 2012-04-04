@@ -150,21 +150,11 @@ ebml_converter_c::format_ustring(pugi::xml_node &node,
 void
 ebml_converter_c::format_binary(pugi::xml_node &node,
                                 EbmlElement &e) {
-  auto &binary    = static_cast<EbmlBinary &>(e);
-  bool pure_ascii = true;
-  std::string data(reinterpret_cast<char const *>(binary.GetBuffer()), binary.GetSize());
+  auto &binary = static_cast<EbmlBinary &>(e);
+  auto hex     = to_hex(std::string{ reinterpret_cast<char const *>(binary.GetBuffer()), static_cast<std::string::size_type>(binary.GetSize()) });
 
-  for (auto c : data)
-    if (('\n' != c) && ('\r' != c) && ((' ' > c) || (127 <= c))) {
-      pure_ascii = false;
-      break;
-    }
-
-  if (!pure_ascii)
-    data = to_hex(data);
-
-  node.append_child(pugi::node_pcdata).set_value(data.c_str());
-  node.append_attribute("format") = pure_ascii ? "ascii" : "hex";
+  node.append_child(pugi::node_pcdata).set_value(hex.c_str());
+  node.append_attribute("format") = "hex";
 }
 
 void
