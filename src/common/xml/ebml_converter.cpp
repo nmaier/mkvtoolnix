@@ -151,7 +151,7 @@ void
 ebml_converter_c::format_binary(pugi::xml_node &node,
                                 EbmlElement &e) {
   auto &binary = static_cast<EbmlBinary &>(e);
-  auto hex     = to_hex(std::string{ reinterpret_cast<char const *>(binary.GetBuffer()), static_cast<std::string::size_type>(binary.GetSize()) });
+  auto hex     = to_hex(std::string{ reinterpret_cast<char const *>(binary.GetBuffer()), static_cast<std::string::size_type>(binary.GetSize()) }, true);
 
   node.append_child(pugi::node_pcdata).set_value(hex.c_str());
   node.append_attribute("format") = "hex";
