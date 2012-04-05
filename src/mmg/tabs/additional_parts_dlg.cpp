@@ -19,6 +19,7 @@
 
 #include <wx/statline.h>
 
+#include "common/sorting.h"
 #include "common/strings/formatting.h"
 #include "mmg/mmg.h"
 #include "mmg/tabs/additional_parts_dlg.h"
@@ -27,6 +28,11 @@ bool
 operator <(wxFileName const &a,
            wxFileName const &b) {
   return a.GetFullPath() < b.GetFullPath();
+}
+
+inline std::wstring
+to_wide(wxFileName const &source) {
+  return source.GetFullPath().c_str();
 }
 
 additional_parts_dialog::additional_parts_dialog(wxWindow *parent,
@@ -156,12 +162,18 @@ additional_parts_dialog::on_add(wxCommandEvent &) {
   for (auto &file_name : m_files)
     exists[file_name] = true;
 
+  std::vector<wxFileName> file_names_to_add;
   for (size_t idx = 0; paths.GetCount() > idx; ++idx) {
     wxFileName file_name{ paths[idx] };
-    if (!exists[file_name]) {
-      m_files.push_back(file_name);
-      create_item(m_files.size() - 1);
-    }
+    if (!exists[file_name])
+      file_names_to_add.push_back(file_name);
+  }
+
+  mtx::sort::naturally(file_names_to_add);
+
+  for (auto &file_name : file_names_to_add) {
+    m_files.push_back(file_name);
+    create_item(m_files.size() - 1);
   }
 
   m_lv_files->Thaw();
@@ -231,6 +243,10 @@ additional_parts_dialog::on_down(wxCommandEvent &) {
 
 void
 additional_parts_dialog::on_sort(wxCommandEvent &) {
+  save_selection([&]() {
+      mtx::sort::naturally(m_files);
+      repopulate();
+    });
 }
 
 void
