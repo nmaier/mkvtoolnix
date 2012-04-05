@@ -801,6 +801,7 @@ tab_input::on_additional_parts(wxCommandEvent &) {
     return;
 
   additional_parts_dialog dlg{this, wxFileName{ files[selected_file]->file_name }, files[selected_file]->other_files};
+  files[selected_file]->other_files = dlg.get_file_names();
 }
 
 void
@@ -1104,9 +1105,10 @@ tab_input::load(wxConfigBase *cfg,
     cfg->Read(wxT("appending"), &fi->appending, false);
 
     cfg->Read(wxT("other_files"), &s, wxT(""));
-    std::vector<wxString> other_file_names = split(s, wxU(":::"));
-    for (auto &other_file_name : other_file_names)
-      fi->other_files.push_back(wxFileName(other_file_name));
+
+    if (!s.IsEmpty())
+      for (auto &other_file_name : split(s, wxU(":::")))
+        fi->other_files.push_back(wxFileName{ other_file_name });
 
     long tidx;
     for (tidx = 0; tidx < (long)num_tracks; tidx++) {

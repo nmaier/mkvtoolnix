@@ -50,9 +50,13 @@ public:
   void on_close(wxCommandEvent &evt);
   void on_item_selected(wxListEvent &evt);
 
-  std::vector<wxFileName> get_file_names();
+  std::vector<wxFileName> const &get_file_names();
 
   void enable_buttons();
+  void create_item(size_t idx);
+  void repopulate();
+
+  void save_selection(std::function<void()> worker);
 };
 
 #endif // MTX_MMG_TABS_ADDITIONAL_PARTS_DLG_H
