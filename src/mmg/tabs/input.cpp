@@ -42,6 +42,7 @@
 #include "mmg/message_dialog.h"
 #include "mmg/mmg.h"
 #include "mmg/mmg_dialog.h"
+#include "mmg/tabs/additional_parts_dlg.h"
 #include "mmg/tabs/attachments.h"
 #include "mmg/tabs/input.h"
 #include "mmg/tabs/global.h"
@@ -89,41 +90,44 @@ public:
   }
 };
 
-tab_input::tab_input(wxWindow *parent):
-  wxPanel(parent, -1, wxDefaultPosition, wxSize(100, 400),
-          wxTAB_TRAVERSAL) {
-  wxBoxSizer *siz_line, *siz_column, *siz_all;
-
-  siz_all = new wxBoxSizer(wxVERTICAL);
+tab_input::tab_input(wxWindow *parent)
+  : wxPanel(parent, -1, wxDefaultPosition, wxSize(100, 400), wxTAB_TRAVERSAL)
+  , selected_file{-1}
+  , selected_track{-1}
+{
+  wxBoxSizer *siz_all = new wxBoxSizer(wxVERTICAL);
   siz_all->AddSpacer(TOPBOTTOMSPACING);
 
-  st_input_files = new wxStaticText(this, wxID_STATIC, wxEmptyString);
-  siz_line       = new wxBoxSizer(wxHORIZONTAL);
+  st_input_files       = new wxStaticText(this, wxID_STATIC, wxEmptyString);
+  wxBoxSizer *siz_line = new wxBoxSizer(wxHORIZONTAL);
   siz_line->Add(st_input_files, 0, wxALL, STDSPACING);
   siz_all->Add(siz_line, 0, wxLEFT | wxRIGHT, LEFTRIGHTSPACING);
 
-  siz_line = new wxBoxSizer(wxHORIZONTAL);
   lb_input_files = new wxListBox(this, ID_LB_INPUTFILES);
-  siz_line->Add(lb_input_files, 1, wxGROW | wxALL, STDSPACING);
 
-  siz_column         = new wxBoxSizer(wxVERTICAL);
   b_add_file         = new wxButton(this, ID_B_ADDFILE,          wxEmptyString);
   b_remove_file      = new wxButton(this, ID_B_REMOVEFILE,       wxEmptyString);
   b_append_file      = new wxButton(this, ID_B_APPENDFILE,       wxEmptyString);
   b_remove_all_files = new wxButton(this, ID_B_REMOVE_ALL_FILES, wxEmptyString);
+  b_additional_parts = new wxButton(this, ID_B_ADDITIONAL_PARTS, wxEmptyString);
 
-  b_remove_file->Enable(false);
-  b_append_file->Enable(false);
-  b_remove_all_files->Enable(false);
+  wxBoxSizer *siz_buttons_all  = new wxBoxSizer(wxVERTICAL);
+  wxBoxSizer *siz_buttons_line = new wxBoxSizer(wxHORIZONTAL);
 
-  siz_column->Add(b_add_file, 0, wxGROW | wxALL, STDSPACING);
-  siz_column->Add(b_remove_file, 0, wxGROW | wxALL, STDSPACING);
-  siz_line->Add(siz_column);
+  siz_buttons_line->Add(b_add_file,    0, wxGROW | wxALL, STDSPACING);
+  siz_buttons_line->Add(b_append_file, 0, wxGROW | wxALL, STDSPACING);
+  siz_buttons_all->Add(siz_buttons_line);
 
-  siz_column = new wxBoxSizer(wxVERTICAL);
-  siz_column->Add(b_append_file, 0, wxGROW | wxALL, STDSPACING);
-  siz_column->Add(b_remove_all_files, 0, wxGROW | wxALL, STDSPACING);
-  siz_line->Add(siz_column);
+  siz_buttons_line = new wxBoxSizer(wxHORIZONTAL);
+  siz_buttons_line->Add(b_remove_file,      0, wxGROW | wxALL, STDSPACING);
+  siz_buttons_line->Add(b_remove_all_files, 0, wxGROW | wxALL, STDSPACING);
+  siz_buttons_all->Add(siz_buttons_line);
+
+  siz_buttons_all->Add(b_additional_parts, 0, wxGROW | wxALL, STDSPACING);
+
+  siz_line = new wxBoxSizer(wxHORIZONTAL);
+  siz_line->Add(lb_input_files, 1, wxGROW | wxALL, STDSPACING);
+  siz_line->Add(siz_buttons_all, 0, wxGROW | wxALL, STDSPACING);
 
   siz_all->Add(siz_line, 0, wxGROW | wxLEFT | wxRIGHT, LEFTRIGHTSPACING);
 
@@ -134,7 +138,7 @@ tab_input::tab_input(wxWindow *parent):
   siz_all->Add(siz_line, 0, wxLEFT | wxRIGHT, LEFTRIGHTSPACING);
 
   siz_line = new wxBoxSizer(wxHORIZONTAL);
-  siz_column = new wxBoxSizer(wxVERTICAL);
+  wxBoxSizer *siz_column = new wxBoxSizer(wxVERTICAL);
   clb_tracks = new wxCheckListBox(this, ID_CLB_TRACKS);
   clb_tracks->Enable(false);
   siz_line->Add(clb_tracks, 1, wxGROW | wxALIGN_TOP | wxALL, STDSPACING);
@@ -166,8 +170,7 @@ tab_input::tab_input(wxWindow *parent):
   translate_ui();
 
   set_track_mode(nullptr);
-  selected_file  = -1;
-  selected_track = -1;
+  enable_file_controls();
 
   dont_copy_values_now = false;
   value_copy_timer.SetOwner(this, ID_T_INPUTVALUES);
@@ -192,6 +195,7 @@ tab_input::translate_ui() {
   st_tracks->SetLabel(Z("Tracks, chapters and tags:"));
   b_track_up->SetLabel(Z("up"));
   b_track_down->SetLabel(Z("down"));
+  b_additional_parts->SetLabel(Z("additional parts"));
   nb_options->SetPageText(0, Z("General track options"));
   nb_options->SetPageText(1, Z("Format specific options"));
   nb_options->SetPageText(2, Z("Extra options"));
@@ -686,8 +690,7 @@ tab_input::add_file(const wxString &file_name,
 
   st_tracks->Enable(true);
   clb_tracks->Enable(true);
-  b_append_file->Enable(true);
-  b_remove_all_files->Enable(true);
+  enable_file_controls();
 
   if (!file->other_files.empty()) {
     std::vector<wxString> other_file_names;
@@ -750,9 +753,7 @@ tab_input::on_remove_file(wxCommandEvent &) {
   files.erase(files.begin() + selected_file);
   lb_input_files->Delete(selected_file);
   selected_file = lb_input_files->GetSelection();
-  b_remove_file->Enable(-1 != selected_file);
-  b_remove_all_files->Enable(!tracks.empty());
-  b_append_file->Enable(tracks.size() > 0);
+  enable_file_controls();
   b_track_up->Enable(-1 != selected_file);
   b_track_down->Enable(-1 != selected_file);
 
@@ -783,17 +784,23 @@ tab_input::on_remove_all_files(wxCommandEvent &) {
   selected_track = -1;
   st_tracks->Enable(false);
   clb_tracks->Enable(false);
-  b_remove_file->Enable(false);
-  b_remove_all_files->Enable(false);
-  b_append_file->Enable(false);
   b_track_up->Enable(false);
   b_track_down->Enable(false);
 
   set_track_mode(nullptr);
+  enable_file_controls();
 
   mdlg->remove_output_filename();
 
   dont_copy_values_now = false;
+}
+
+void
+tab_input::on_additional_parts(wxCommandEvent &) {
+  if (0 > selected_file)
+    return;
+
+  additional_parts_dialog dlg{this, wxFileName{ files[selected_file]->file_name }, files[selected_file]->other_files};
 }
 
 void
@@ -862,15 +869,8 @@ tab_input::on_move_track_down(wxCommandEvent &) {
 
 void
 tab_input::on_file_selected(wxCommandEvent &) {
-  selected_file = -1;
-  int new_sel   = lb_input_files->GetSelection();
-  if (0 > new_sel)
-    return;
-
-  b_remove_file->Enable(true);
-  b_append_file->Enable(true);
-
-  selected_file = new_sel;
+  selected_file = lb_input_files->GetSelection();
+  enable_file_controls();
 }
 
 void
@@ -955,10 +955,17 @@ tab_input::on_value_copy_timer(wxTimerEvent &) {
 
 void
 tab_input::on_file_new(wxCommandEvent &) {
-  b_append_file->Enable(false);
-  b_remove_file->Enable(false);
-  b_track_up->Enable(false);
-  b_track_down->Enable(false);
+  enable_file_controls();
+}
+
+void
+tab_input::enable_file_controls() {
+  bool enable = 0 <= selected_file;
+
+  b_remove_file->Enable(enable);
+  b_remove_all_files->Enable(!files.empty());
+  b_append_file->Enable(!tracks.empty());
+  b_additional_parts->Enable(enable);
 }
 
 void
@@ -1059,9 +1066,6 @@ tab_input::load(wxConfigBase *cfg,
   set_track_mode(nullptr);
   selected_file  = -1;
   selected_track = -1;
-  b_remove_file->Enable(false);
-  b_remove_all_files->Enable(false);
-  b_append_file->Enable(false);
 
   files.clear();
   tracks.clear();
@@ -1243,10 +1247,10 @@ tab_input::load(wxConfigBase *cfg,
   }
   st_tracks->Enable(!tracks.empty());
   clb_tracks->Enable(!tracks.empty());
-  b_append_file->Enable(!files.empty());
-  b_remove_all_files->Enable(!files.empty());
 
   dont_copy_values_now = false;
+
+  enable_file_controls();
 }
 
 bool
@@ -1391,6 +1395,7 @@ BEGIN_EVENT_TABLE(tab_input, wxPanel)
   EVT_BUTTON(ID_B_REMOVEFILE,       tab_input::on_remove_file)
   EVT_BUTTON(ID_B_REMOVE_ALL_FILES, tab_input::on_remove_all_files)
   EVT_BUTTON(ID_B_APPENDFILE,       tab_input::on_append_file)
+  EVT_BUTTON(ID_B_ADDITIONAL_PARTS, tab_input::on_additional_parts)
   EVT_BUTTON(ID_B_TRACKUP,          tab_input::on_move_track_up)
   EVT_BUTTON(ID_B_TRACKDOWN,        tab_input::on_move_track_down)
 

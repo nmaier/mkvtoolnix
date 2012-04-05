@@ -55,6 +55,7 @@
 #define ID_B_REMOVE_ALL_FILES             11036
 #define ID_CB_FORCED_TRACK                11037
 #define ID_TC_CROPPING                    11038
+#define ID_B_ADDITIONAL_PARTS             11039
 #define ID_NB_OPTIONS                     11999
 
 extern const wxChar *predefined_aspect_ratios[];
@@ -177,7 +178,7 @@ public:
 
   wxListBox *lb_input_files;
   wxButton *b_add_file, *b_remove_file, *b_remove_all_files;
-  wxButton *b_track_up, *b_track_down, *b_append_file;
+  wxButton *b_track_up, *b_track_down, *b_append_file, *b_additional_parts;
   wxCheckListBox *clb_tracks;
   wxStaticText *st_tracks, *st_input_files;
   wxNotebook *nb_options;
@@ -201,12 +202,14 @@ public:
   void on_file_selected(wxCommandEvent &evt);
   void on_move_track_up(wxCommandEvent &evt);
   void on_move_track_down(wxCommandEvent &evt);
+  void on_additional_parts(wxCommandEvent &evt);
   void on_track_selected(wxCommandEvent &evt);
   void on_track_enabled(wxCommandEvent &evt);
   void on_value_copy_timer(wxTimerEvent &evt);
   void on_file_new(wxCommandEvent &evt);
 
   void set_track_mode(mmg_track_t *t);
+  void enable_file_controls();
 
   void save(wxConfigBase *cfg);
   void load(wxConfigBase *cfg, int version);
