@@ -17,6 +17,16 @@
 #include "common/common_pch.h"
 
 std::wstring to_wide(const std::string &source);
+
+inline std::wstring
+to_wide(std::wstring const &source) {
+  return source;
+}
+inline std::wstring
+to_wide(boost::wformat const &source) {
+  return source.str();
+}
+
 std::string to_utf8(const std::wstring &source);
 
 inline std::string
