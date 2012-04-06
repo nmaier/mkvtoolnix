@@ -25,3 +25,23 @@ fi
 AX_BOOST_CHECK_HEADERS([boost/rational.hpp],,[
   AC_MSG_ERROR([Boost's rational library is required but wasn't found])
 ])
+
+AX_BOOST_CHECK_HEADERS([boost/logic/tribool.hpp],,[
+  AC_MSG_ERROR([Boost's Tribool library is required but wasn't found])
+])
+
+AX_BOOST_CHECK_HEADERS([boost/lexical_cast.hpp],,[
+  AC_MSG_ERROR([Boost's lexical_cast library is required but wasn't found])
+])
+
+AX_BOOST_CHECK_HEADERS([boost/type_traits/is_unsigned.hpp],,[
+  AC_MSG_ERROR([Boost's type traits library is required but wasn't found])
+])
+
+AX_BOOST_CHECK_HEADERS([boost/range.hpp],,[
+  AC_MSG_ERROR([Boost's Range library is required but wasn't found])
+])
+
+AX_BOOST_CHECK_HEADERS([boost/bind.hpp],,[
+  AC_MSG_ERROR([Boost's Bind library is required but wasn't found])
+])
