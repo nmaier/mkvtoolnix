@@ -135,7 +135,7 @@ srt_parser_c::parse() {
         break;
       }
 
-      int s_h, s_min, s_sec, e_h, e_min, e_sec;
+      int s_h = 0, s_min = 0, s_sec = 0, e_h = 0, e_min = 0, e_sec = 0;
 
       //        1         2       3      4        5     6             7    8
       // "\\s*(-?)\\s*(\\d+):\\s(-?)*(\\d+):\\s*(-?)(\\d+)[,\\.]\\s*(-?)(\\d+)?"

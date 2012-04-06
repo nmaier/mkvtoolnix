@@ -182,7 +182,7 @@ parse_simple_chapters(mm_text_io_c *in,
       if (!boost::regex_match(line, matches, timecode_line_re))
         chapter_error(boost::format(Y("'%1%' is not a CHAPTERxx=... line.")) % line);
 
-      int64_t hour, minute, second, msecs;
+      int64_t hour = 0, minute = 0, second = 0, msecs = 0;
       parse_number(matches[1].str(), hour);
       parse_number(matches[2].str(), minute);
       parse_number(matches[3].str(), second);

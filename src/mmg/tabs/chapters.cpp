@@ -1434,7 +1434,7 @@ tab_chapters::copy_values(wxTreeItemId id) {
   wxString label;
   KaxChapterAtom *chapter;
   EbmlElement *e;
-  int64_t ts_start, ts_end;
+  int64_t ts_start = 0, ts_end;
   std::vector<std::string> l_codes, c_codes;
   wxString s;
   uint32_t i;

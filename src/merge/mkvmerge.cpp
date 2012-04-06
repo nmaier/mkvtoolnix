@@ -450,7 +450,7 @@ parse_number_with_unit(const std::string &s,
   boost::regex re2("(-?\\d+)/(-?\\d+)(s|ms|us|ns|fps|p|i)?", boost::regex::perl | boost::regex::icase);
 
   std::string unit, s_n, s_d;
-  int64_t n, d;
+  int64_t n = 0, d = 0;
   double d_value = 0.0;
   bool is_fraction = false;
 
@@ -897,7 +897,7 @@ parse_arg_split_size(const std::string &arg) {
   if (1 != modifier)
     s.erase(s.size() - 1);
 
-  int64_t split_after;
+  int64_t split_after = 0;
   if (!parse_number(s, split_after))
     mxerror(boost::format(err_msg) % arg);
 
