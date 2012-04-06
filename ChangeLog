@@ -1,3 +1,9 @@
+2012-04-06  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: The handling of the "do not read other files"
+	options (e.g. "=file.vob" and "( file.vob )") was broken for MPEG
+	program stream files.
+
 2012-04-01  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Fixed a wrong assertion about minimum MPEG

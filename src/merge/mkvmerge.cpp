@@ -1643,6 +1643,8 @@ handle_file_name_arg(const std::string &this_arg,
     if (!end_found)
       mxerror(Y("The closing parenthesis ')' are missing.\n"));
 
+    ti->m_disable_multi_file = true;
+
   } else
     file_names.push_back(this_arg);
 

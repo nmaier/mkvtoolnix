@@ -336,6 +336,8 @@ public:
 #define show_packetizer_info(track_id, packetizer) \
   mxinfo_tid(m_ti.m_fname, track_id, boost::format(Y("Using the output module for the format '%1%'.\n")) % packetizer->get_format_name());
 
+class mm_multi_file_io_c;
+
 class generic_reader_c {
 public:
   track_info_c m_ti;
@@ -413,6 +415,7 @@ protected:
 
   virtual std::string id_escape_string(const std::string &s);
 
+  virtual mm_multi_file_io_c *get_underlying_input_as_multi_file_io() const;
 };
 
 void id_result_container_unsupported(const std::string &filename, const std::string &info);

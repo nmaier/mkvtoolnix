@@ -267,6 +267,9 @@ public:
   virtual std::string get_file_name() const {
     return m_proxy_io->get_file_name();
   }
+  virtual mm_io_c *get_proxied() const {
+    return m_proxy_io;
+  }
 
 protected:
   virtual uint32 _read(void *buffer, size_t size);

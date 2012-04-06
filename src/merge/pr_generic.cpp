@@ -29,6 +29,7 @@
 #include "common/ebml.h"
 #include "common/hacks.h"
 #include "common/math.h"
+#include "common/mm_multi_file_io.h"
 #include "common/strings/formatting.h"
 #include "common/unique_numbers.h"
 #include "common/xml/ebml_tags_converter.h"
@@ -1480,6 +1481,15 @@ generic_reader_c::add_available_track_id_range(int64_t start,
 int
 generic_reader_c::get_progress() {
   return 100 * m_in->getFilePointer() / m_size;
+}
+
+mm_multi_file_io_c *
+generic_reader_c::get_underlying_input_as_multi_file_io()
+  const {
+  mm_io_c *actual_in = m_in.get();
+  while (dynamic_cast<mm_proxy_io_c *>(actual_in))
+    actual_in = static_cast<mm_proxy_io_c *>(actual_in)->get_proxied();
+  return dynamic_cast<mm_multi_file_io_c *>(actual_in);
 }
 
 //

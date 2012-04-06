@@ -76,8 +76,11 @@ mpeg_ps_reader_c::read_headers() {
   try {
     uint8_t byte;
 
-    m_in.reset();               // Close the source file first before opening it a second time.
-    m_in            = mm_multi_file_io_c::open_multi(m_ti.m_fname, m_ti.m_disable_multi_file);
+    if (!m_ti.m_disable_multi_file) {
+      m_in.reset();               // Close the source file first before opening it a second time.
+      m_in = mm_multi_file_io_c::open_multi(m_ti.m_fname, false);
+    }
+
     m_size          = m_in->get_size();
     uint32_t header = m_in->read_uint32_be();
     bool done       = m_in->eof();
@@ -166,7 +169,9 @@ mpeg_ps_reader_c::read_headers() {
 
   if (verbose) {
     show_demuxer_info();
-    static_cast<mm_multi_file_io_c &>(*m_in).display_other_file_info();
+    auto multi_in = get_underlying_input_as_multi_file_io();
+    if (multi_in)
+      multi_in->display_other_file_info();
   }
 }
 
@@ -1278,7 +1283,9 @@ void
 mpeg_ps_reader_c::identify() {
   std::vector<std::string> verbose_info;
 
-  static_cast<mm_multi_file_io_c &>(*m_in).create_verbose_identification_info(verbose_info);
+  auto multi_in = get_underlying_input_as_multi_file_io();
+  if (multi_in)
+    multi_in->create_verbose_identification_info(verbose_info);
 
   id_result_container(verbose_info);
 
@@ -1313,4 +1320,3 @@ mpeg_ps_reader_c::identify() {
                     verbose_info);
   }
 }
-
