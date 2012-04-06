@@ -78,7 +78,7 @@ additional_parts_dialog::additional_parts_dialog(wxWindow *parent,
   m_lv_files->InsertColumn(1, column_item);
 
   auto dummy = m_lv_files->InsertItem(0, wxT("some long file name dummy.mkv"));
-  m_lv_files->SetItem(dummy, 1, Z("and the path is even longer but hey such is life"));
+  m_lv_files->SetItem(dummy, 1, wxT("and the path is even longer but hey such is life"));
   m_lv_files->SetColumnWidth(0, wxLIST_AUTOSIZE);
   m_lv_files->SetColumnWidth(1, wxLIST_AUTOSIZE);
   m_lv_files->DeleteItem(0);
