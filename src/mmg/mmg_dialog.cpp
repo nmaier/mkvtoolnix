@@ -1082,9 +1082,13 @@ mmg_dialog::update_command_line() {
       clargs.Add(wxT("--no-chapters"));
 
     if (f->appending)
-      clargs.Add(wxString(wxT("+")) + f->file_name);
-    else
-      clargs.Add(f->file_name);
+      clargs.Add(wxT("+"));
+
+    clargs.Add(wxT("("));
+    clargs.Add(f->file_name);
+    for (auto &other_file_name : f->other_files)
+      clargs.Add(other_file_name.GetFullPath());
+    clargs.Add(wxT(")"));
   }
 
   wxString track_order = create_track_order(false);
