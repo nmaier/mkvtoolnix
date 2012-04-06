@@ -69,7 +69,7 @@ version_number_t::version_number_t(const std::string &s)
   size_t idx;
   for (idx = 1; 5 >= idx; ++idx)
     if (!matches[idx].str().empty())
-      parse_uint(matches[idx].str(), parts[idx - 1]);
+      parse_number(matches[idx].str(), parts[idx - 1]);
 
   valid = true;
 

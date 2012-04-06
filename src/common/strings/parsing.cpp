@@ -13,98 +13,8 @@
 
 #include "common/common_pch.h"
 
-#include <errno.h>
-#include <locale.h>
-#include <stdarg.h>
-
 #include "common/strings/formatting.h"
 #include "common/strings/parsing.h"
-
-bool
-parse_int(const char *s,
-          int64_t &value) {
-  if (*s == 0)
-    return false;
-
-  int sign      = 1;
-  const char *p = s;
-  value         = 0;
-
-  if (*p == '-') {
-    sign = -1;
-    p++;
-  }
-  while (*p != 0) {
-    if (!isdigit(*p))
-      return false;
-    value *= 10;
-    value += *p - '0';
-    p++;
-  }
-  value *= sign;
-
-  return true;
-}
-
-bool
-parse_int(const char *s,
-          int &value) {
-  int64_t tmp = 0;
-  bool result = parse_int(s, tmp);
-  value       = tmp;
-
-  return result;
-}
-
-bool
-parse_uint(const char *s,
-           uint64_t &value) {
-  if (*s == 0)
-    return false;
-
-  value = 0;
-  const char *p = s;
-  while (*p != 0) {
-    if (!isdigit(*p))
-      return false;
-    value *= 10;
-    value += *p - '0';
-    p++;
-  }
-
-  return true;
-}
-
-bool
-parse_uint(const char *s,
-           uint32_t &value) {
-  uint64_t tmp = 0;
-  bool result  = parse_uint(s, tmp);
-  value        = tmp;
-
-  return result;
-}
-
-bool
-parse_double(const char *s,
-             double &value) {
-  std::string old_locale = setlocale(LC_NUMERIC, "C");
-  bool ok                = true;
-  char *endptr           = nullptr;
-  value                  = strtod(s, &endptr);
-  if (endptr != nullptr) {
-    if ((value == 0.0) && (endptr == s))
-      ok = false;
-    else if (*endptr != 0)
-      ok = false;
-  }
-  if (errno == ERANGE)
-    ok = false;
-
-  setlocale(LC_NUMERIC, old_locale.c_str());
-
-  return ok;
-}
 
 std::string timecode_parser_error;
 
@@ -169,7 +79,7 @@ parse_timecode(const std::string &src,
     if (src.length() < (unit_length + 1 + offset))
       throw false;
 
-    if (!parse_int(src.substr(offset, src.length() - unit_length - offset), value))
+    if (!parse_number(src.substr(offset, src.length() - unit_length - offset), value))
       throw false;
 
     timecode = value * multiplier * negative;

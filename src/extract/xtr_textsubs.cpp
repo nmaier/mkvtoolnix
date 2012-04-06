@@ -206,7 +206,7 @@ xtr_ssa_c::handle_frame(memory_cptr &frame,
 
   // Convert the ReadOrder entry so that we can re-order the entries later.
   int num;
-  if (!parse_int(fields[0], num)) {
+  if (!parse_number(fields[0], num)) {
     mxwarn(boost::format(Y("Invalid format for a SSA line ('%1%') at timecode %2%: The first field is not an integer. This entry will be skipped.\n"))
            % s % format_timecode(timecode * 1000000, 3));
     return;

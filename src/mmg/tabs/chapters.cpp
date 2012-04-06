@@ -1448,7 +1448,7 @@ tab_chapters::copy_values(wxTreeItemId id) {
 
   s = tc_uid->GetValue();
   if (s.Length() > 0) {
-    if (!parse_int(wxMB(s), ts_start))
+    if (!parse_number(wxMB(s), ts_start))
       wxMessageBox(Z("Invalid UID. A UID is simply a number."), Z("Input data error"), wxOK | wxCENTER | wxICON_ERROR);
     else {
       i = ts_start;
@@ -1846,7 +1846,7 @@ tab_chapters::parse_time(wxString s) {
     }
     c++;
   }
-  if (!parse_int(utf8s, nsecs))
+  if (!parse_number(utf8s, nsecs))
     return -1;
   return nsecs * 1000000000;
 }

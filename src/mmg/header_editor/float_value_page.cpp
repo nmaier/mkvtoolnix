@@ -83,12 +83,12 @@ he_float_value_page_c::reset_value() {
 bool
 he_float_value_page_c::validate_value() {
   double value;
-  return parse_double(wxMB(m_tc_text->GetValue()), value);
+  return parse_number(wxMB(m_tc_text->GetValue()), value);
 }
 
 void
 he_float_value_page_c::copy_value_to_element() {
   double value;
-  parse_double(wxMB(m_tc_text->GetValue()), value);
+  parse_number(wxMB(m_tc_text->GetValue()), value);
   *static_cast<EbmlFloat *>(m_element) = value;
 }

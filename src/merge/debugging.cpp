@@ -55,7 +55,7 @@ parse_debug_interval_arg(const std::string &option,
   if (!debugging_requested(option, &arg))
     return value;
 
-  if (arg.empty() || !parse_int(arg, value) || (0 >= value))
+  if (arg.empty() || !parse_number(arg, value) || (0 >= value))
     value = default_value;
 
   if (250 > value)

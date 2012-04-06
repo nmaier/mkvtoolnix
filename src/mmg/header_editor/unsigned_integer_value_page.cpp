@@ -71,12 +71,12 @@ he_unsigned_integer_value_page_c::reset_value() {
 bool
 he_unsigned_integer_value_page_c::validate_value() {
   uint64_t value;
-  return parse_uint(wxMB(m_tc_text->GetValue()), value);
+  return parse_number(wxMB(m_tc_text->GetValue()), value);
 }
 
 void
 he_unsigned_integer_value_page_c::copy_value_to_element() {
   uint64_t value;
-  parse_uint(wxMB(m_tc_text->GetValue()), value);
+  parse_number(wxMB(m_tc_text->GetValue()), value);
   *static_cast<EbmlUInteger *>(m_element) = value;
 }

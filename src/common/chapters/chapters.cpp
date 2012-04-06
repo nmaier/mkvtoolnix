@@ -183,10 +183,10 @@ parse_simple_chapters(mm_text_io_c *in,
         chapter_error(boost::format(Y("'%1%' is not a CHAPTERxx=... line.")) % line);
 
       int64_t hour, minute, second, msecs;
-      parse_int(matches[1].str(), hour);
-      parse_int(matches[2].str(), minute);
-      parse_int(matches[3].str(), second);
-      parse_int(matches[4].str(), msecs);
+      parse_number(matches[1].str(), hour);
+      parse_number(matches[2].str(), minute);
+      parse_number(matches[3].str(), second);
+      parse_number(matches[4].str(), msecs);
 
       if (59 < minute)
         chapter_error(boost::format(Y("Invalid minute: %1%")) % minute);

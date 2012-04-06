@@ -160,7 +160,7 @@ ebml_converter_c::format_binary(pugi::xml_node &node,
 void
 ebml_converter_c::parse_uint(parser_context_t &ctx) {
   uint64_t value;
-  if (!::parse_uint(strip_copy(ctx.content), value))
+  if (!::parse_number(strip_copy(ctx.content), value))
     throw malformed_data_x{ ctx.name, ctx.node.offset_debug(), Y("An unsigned integer was expected.") };
 
   if (ctx.limits.has_min && (value < static_cast<uint64_t>(ctx.limits.min)))
@@ -174,7 +174,7 @@ ebml_converter_c::parse_uint(parser_context_t &ctx) {
 void
 ebml_converter_c::parse_int(parser_context_t &ctx) {
   int64_t value;
-  if (!::parse_int(strip_copy(ctx.content), value))
+  if (!::parse_number(strip_copy(ctx.content), value))
     throw malformed_data_x{ ctx.name, ctx.node.offset_debug() };
 
   if (ctx.limits.has_min && (value < ctx.limits.min))
@@ -401,7 +401,7 @@ ebml_converter_c::convert_node_or_attribute_to_ebml(EbmlMaster &parent,
     parse_value(ctx, parse_uint);
 
   else if (dynamic_cast<EbmlSInteger *>(new_element))
-    parse_value(ctx, parse_uint);
+    parse_value(ctx, parse_int);
 
   else if (dynamic_cast<EbmlString *>(new_element))
     parse_value(ctx, parse_string);

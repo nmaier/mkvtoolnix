@@ -53,7 +53,7 @@ srt_parser_c::probe(mm_text_io_c *io) {
     } while (s.empty());
 
     int64_t dummy;
-    if (!parse_int(s, dummy))
+    if (!parse_number(s, dummy))
       return false;
 
     s = io->getline();
@@ -126,7 +126,7 @@ srt_parser_c::parse() {
         break;
       }
       state = STATE_TIME;
-      parse_uint(s, subtitle_number);
+      parse_number(s, subtitle_number);
 
     } else if (STATE_TIME == state) {
       boost::smatch matches;
@@ -140,12 +140,12 @@ srt_parser_c::parse() {
       //        1         2       3      4        5     6             7    8
       // "\\s*(-?)\\s*(\\d+):\\s(-?)*(\\d+):\\s*(-?)(\\d+)[,\\.]\\s*(-?)(\\d+)?"
 
-      parse_int(matches[ 2].str(), s_h);
-      parse_int(matches[ 4].str(), s_min);
-      parse_int(matches[ 6].str(), s_sec);
-      parse_int(matches[10].str(), e_h);
-      parse_int(matches[12].str(), e_min);
-      parse_int(matches[14].str(), e_sec);
+      parse_number(matches[ 2].str(), s_h);
+      parse_number(matches[ 4].str(), s_min);
+      parse_number(matches[ 6].str(), s_sec);
+      parse_number(matches[10].str(), e_h);
+      parse_number(matches[12].str(), e_min);
+      parse_number(matches[14].str(), e_sec);
 
       std::string s_rest = matches[ 8].str();
       std::string e_rest = matches[16].str();
@@ -224,7 +224,7 @@ srt_parser_c::parse() {
 
     } else if (boost::regex_match(s, number_re)) {
       state = STATE_TIME;
-      parse_uint(s, subtitle_number);
+      parse_number(s, subtitle_number);
 
     } else {
       if (!subtitles.empty())
@@ -455,7 +455,7 @@ ssa_parser_c::parse_time(std::string &stime) {
     return -1;
 
   std::string s = stime.substr(0, pos);
-  if (!parse_int(s, th))
+  if (!parse_number(s, th))
     return -1;
   stime.erase(0, pos + 1);
 
@@ -464,7 +464,7 @@ ssa_parser_c::parse_time(std::string &stime) {
     return -1;
 
   s = stime.substr(0, pos);
-  if (!parse_int(s, tm))
+  if (!parse_number(s, tm))
     return -1;
   stime.erase(0, pos + 1);
 
@@ -473,11 +473,11 @@ ssa_parser_c::parse_time(std::string &stime) {
     return -1;
 
   s = stime.substr(0, pos);
-  if (!parse_int(s, ts))
+  if (!parse_number(s, ts))
     return -1;
   stime.erase(0, pos + 1);
 
-  if (!parse_int(stime, tds))
+  if (!parse_number(stime, tds))
     return -1;
 
   return (tds * 10 + ts * 1000 + tm * 60 * 1000 + th * 60 * 60 * 1000) * 1000000;

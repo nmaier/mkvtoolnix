@@ -273,7 +273,7 @@ windows_charset_converter_c::extract_code_page(const std::string &charset) {
 
   std::string number_as_str = charset.substr(2, charset.length() - 2);
   uint64_t number           = 0;
-  if (!parse_uint(number_as_str.c_str(), number))
+  if (!parse_number(number_as_str.c_str(), number))
     return 0;
 
   return number;
@@ -294,7 +294,7 @@ get_local_charset() {
   int i;
 
   lc_charset = nl_langinfo(CODESET);
-  if (parse_int(lc_charset, i))
+  if (parse_number(lc_charset, i))
     lc_charset = std::string("ISO") + lc_charset + std::string("-US");
 #elif HAVE_NL_LANGINFO
   lc_charset = nl_langinfo(CODESET);

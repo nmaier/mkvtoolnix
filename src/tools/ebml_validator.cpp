@@ -99,12 +99,12 @@ parse_args(std::vector<std::string> &args) {
 
     else if ((*arg == "-s") || (*arg == "--start")) {
       ++arg;
-      if ((args.end() == arg) || !parse_int(*arg, g_start) || (0 >= g_start))
+      if ((args.end() == arg) || !parse_number(*arg, g_start) || (0 >= g_start))
         mxerror(Y("Missing/wrong arugment to --start\n"));
 
     } else if ((*arg == "-e") || (*arg == "--end")) {
       ++arg;
-      if ((args.end() == arg) || !parse_int(*arg, g_end) || (0 >= g_end))
+      if ((args.end() == arg) || !parse_number(*arg, g_end) || (0 >= g_end))
         mxerror(Y("Missing/wrong arugment to --end\n"));
 
     } else if ((*arg == "-m") || (*arg == "--master")) {

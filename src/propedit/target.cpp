@@ -116,7 +116,7 @@ target_c::parse_track_spec(const std::string &spec) {
     throw false;
 
   std::string prefix = matches[1].str();
-  parse_uint(matches[2].str(), m_selection_param);
+  parse_number(matches[2].str(), m_selection_param);
 
   m_selection_mode = prefix.empty() ? target_c::sm_by_position
                    : prefix == "="  ? target_c::sm_by_uid

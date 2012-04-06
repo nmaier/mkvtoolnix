@@ -878,7 +878,7 @@ kax_reader_c::read_headers_info_writing_app(KaxWritingApp *&km_writing_app) {
     for (idx = 0; idx < 4; idx++) {
       int num;
 
-      if (!parse_int(ver_parts[idx], num) || (0 > num) || (255 < num)) {
+      if (!parse_number(ver_parts[idx], num) || (0 > num) || (255 < num)) {
         failed = true;
         break;
       }

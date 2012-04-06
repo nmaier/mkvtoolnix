@@ -201,7 +201,7 @@ mm_multi_file_io_c::open_multi(const std::string &display_file_name,
   }
 
   int start_number = 1;
-  parse_int(matches[2].str(), start_number);
+  parse_number(matches[2].str(), start_number);
 
   base_name = balg::to_lower_copy(matches[1].str());
 
@@ -219,7 +219,7 @@ mm_multi_file_io_c::open_multi(const std::string &display_file_name,
 
     if (   !boost::regex_match(stem, matches, file_name_re)
         || !balg::iequals(matches[1].str(), base_name)
-        || !parse_int(matches[2].str(), current_number)
+        || !parse_number(matches[2].str(), current_number)
         || (current_number <= start_number))
       continue;
 

@@ -459,14 +459,14 @@ parse_number_with_unit(const std::string &s,
 
   boost::smatch matches;
   if (boost::regex_match(s, matches, re1)) {
-    parse_double(matches[1], d_value);
+    parse_number(matches[1], d_value);
     if (matches.size() > 2)
       unit = matches[2];
     d = 1;
 
   } else if (boost::regex_match(s, matches, re2)) {
-    parse_int(matches[1], n);
-    parse_int(matches[2], d);
+    parse_number(matches[1], n);
+    parse_number(matches[2], d);
     if (matches.size() > 3)
       unit = matches[3];
     is_fraction = true;
@@ -547,7 +547,7 @@ parse_arg_tracks(std::string s,
   size_t i;
   for (i = 0; i < elements.size(); i++) {
     int64_t tid;
-    if (!parse_int(elements[i], tid))
+    if (!parse_number(elements[i], tid))
       mxerror(boost::format(Y("Invalid track ID in '%1% %2%'.\n")) % opt % s);
     tracks.add(tid);
   }
@@ -574,7 +574,7 @@ parse_arg_sync(std::string s,
     mxerror(boost::format(Y("Invalid sync option. No track ID specified in '%1% %2%'.\n")) % opt % s);
 
   int64_t id = 0;
-  if (!parse_int(parts[0], id))
+  if (!parse_number(parts[0], id))
     mxerror(boost::format(Y("Invalid track ID specified in '%1% %2%'.\n")) % opt % s);
 
   s = parts[1];
@@ -635,7 +635,7 @@ parse_arg_aspect_ratio(const std::string &s,
     mxerror(boost::format(Y("%1%: missing track ID in '%2% %3%'.\n")) % msg % opt % s);
 
   int64_t id = 0;
-  if (!parse_int(parts[0], id))
+  if (!parse_number(parts[0], id))
     mxerror(boost::format(Y("%1%: invalid track ID in '%2% %3%'.\n")) % msg % opt % s);
 
   dprop.width  = -1;
@@ -684,7 +684,7 @@ parse_arg_display_dimensions(const std::string s,
   std::vector<std::string> dims = split(parts[1], "x", 2);
   int64_t id = 0;
   int w, h;
-  if ((dims.size() != 2) || !parse_int(parts[0], id) || !parse_int(dims[0], w) || !parse_int(dims[1], h) || (0 >= w) || (0 >= h))
+  if ((dims.size() != 2) || !parse_number(parts[0], id) || !parse_number(dims[0], w) || !parse_number(dims[1], h) || (0 >= w) || (0 >= h))
     mxerror(boost::format(Y("Display dimensions: not given in the form <TID>:<width>x<height>, e.g. 1:640x480 (argument was '%1%').\n")) % s);
 
   dprop.aspect_ratio          = -1.0;
@@ -711,14 +711,14 @@ parse_arg_cropping(const std::string &s,
     mxerror(boost::format(err_msg) % s);
 
   int64_t id = 0;
-  if (!parse_int(v[0], id))
+  if (!parse_number(v[0], id))
     mxerror(boost::format(err_msg) % s);
 
   v = split(v[1], ",");
   if (v.size() != 4)
     mxerror(boost::format(err_msg) % s);
 
-  if (!parse_int(v[0], crop.left) || !parse_int(v[1], crop.top) || !parse_int(v[2], crop.right) || !parse_int(v[3], crop.bottom))
+  if (!parse_number(v[0], crop.left) || !parse_number(v[1], crop.top) || !parse_number(v[2], crop.right) || !parse_number(v[3], crop.bottom))
     mxerror(boost::format(err_msg) % s);
 
   ti.m_pixel_crop_list[id] = crop;
@@ -753,7 +753,7 @@ parse_arg_stereo_mode(const std::string &s,
     mxerror(boost::format(errmsg) % stereo_mode_c::max_index() % stereo_mode_c::displayable_modes_list() % s);
 
   int64_t id = 0;
-  if (!parse_int(v[0], id))
+  if (!parse_number(v[0], id))
     mxerror(boost::format(errmsg) % stereo_mode_c::max_index() % stereo_mode_c::displayable_modes_list() % s);
 
   stereo_mode_c::mode mode = stereo_mode_c::parse_mode(v[1]);
@@ -763,7 +763,7 @@ parse_arg_stereo_mode(const std::string &s,
   }
 
   int index;
-  if (!parse_int(v[1], index) || !stereo_mode_c::valid_index(index))
+  if (!parse_number(v[1], index) || !stereo_mode_c::valid_index(index))
     mxerror(boost::format(errmsg) % stereo_mode_c::max_index() % stereo_mode_c::displayable_modes_list() % s);
 
   ti.m_stereo_mode_list[id] = static_cast<stereo_mode_c::mode>(index);
@@ -898,7 +898,7 @@ parse_arg_split_size(const std::string &arg) {
     s.erase(s.size() - 1);
 
   int64_t split_after;
-  if (!parse_int(s, split_after))
+  if (!parse_number(s, split_after))
     mxerror(boost::format(err_msg) % arg);
 
   g_cluster_helper->add_split_point(split_point_t(split_after * modifier, split_point_t::SPT_SIZE, false));
@@ -977,7 +977,7 @@ parse_arg_default_track(const std::string &s,
   int64_t id           = 0;
 
   strip(parts);
-  if (!parse_int(parts[0], id))
+  if (!parse_number(parts[0], id))
     mxerror(boost::format(Y("Invalid track ID specified in '--default-track %1%'.\n")) % s);
 
   try {
@@ -1003,7 +1003,7 @@ parse_arg_forced_track(const std::string &s,
   int64_t id                     = 0;
 
   strip(parts);
-  if (!parse_int(parts[0], id))
+  if (!parse_number(parts[0], id))
     mxerror(boost::format(Y("Invalid track ID specified in '--forced-track %1%'.\n")) % s);
 
   try {
@@ -1031,7 +1031,7 @@ parse_arg_cues(const std::string &s,
     mxerror(boost::format(Y("Invalid cues option. No track ID specified in '--cues %1%'.\n")) % s);
 
   int64_t id = 0;
-  if (!parse_int(parts[0], id))
+  if (!parse_number(parts[0], id))
     mxerror(boost::format(Y("Invalid track ID specified in '--cues %1%'.\n")) % s);
 
   if (parts[1].empty())
@@ -1061,7 +1061,7 @@ parse_arg_compression(const std::string &s,
     mxerror(boost::format(Y("Invalid compression option. No track ID specified in '--compression %1%'.\n")) % s);
 
   int64_t id = 0;
-  if (!parse_int(parts[0], id))
+  if (!parse_number(parts[0], id))
     mxerror(boost::format(Y("Invalid track ID specified in '--compression %1%'.\n")) % s);
 
   if (parts[1].size() == 0)
@@ -1130,7 +1130,7 @@ parse_arg_language(const std::string &s,
   }
 
   int64_t id = 0;
-  if (!parse_int(parts[0], id))
+  if (!parse_number(parts[0], id))
     mxerror(boost::format(Y("Invalid track ID specified in '--%1% %2%'.\n")) % opt % s);
 
   if (check) {
@@ -1162,7 +1162,7 @@ parse_arg_sub_charset(const std::string &s,
     mxerror(boost::format(Y("Invalid sub charset option. No track ID specified in '--sub-charset %1%'.\n")) % s);
 
   int64_t id = 0;
-  if (!parse_int(parts[0], id))
+  if (!parse_number(parts[0], id))
     mxerror(boost::format(Y("Invalid track ID specified in '--sub-charset %1%'.\n")) % s);
 
   if (parts[1].empty())
@@ -1186,7 +1186,7 @@ parse_arg_tags(const std::string &s,
     mxerror(boost::format(Y("Invalid tags option. No track ID specified in '%1% %2%'.\n")) % opt % s);
 
   int64_t id = 0;
-  if (!parse_int(parts[0], id))
+  if (!parse_number(parts[0], id))
     mxerror(boost::format(Y("Invalid track ID specified in '%1% %2%'.\n")) % opt % s);
 
   if (parts[1].empty())
@@ -1210,7 +1210,7 @@ parse_arg_fourcc(const std::string &s,
     mxerror(boost::format(Y("FourCC: Missing track ID in '%1% %2%'.\n")) % opt % orig);
 
   int64_t id = 0;
-  if (!parse_int(parts[0], id))
+  if (!parse_number(parts[0], id))
     mxerror(boost::format(Y("FourCC: Invalid track ID in '%1% %2%'.\n")) % opt % orig);
 
   if (parts[1].size() != 4)
@@ -1237,10 +1237,10 @@ parse_arg_track_order(const std::string &s) {
     if (pair.size() != 2)
       mxerror(boost::format(Y("'%1%' is not a valid pair of file ID and track ID in '--track-order %2%'.\n")) % parts[i] % s);
 
-    if (!parse_int(pair[0], to.file_id))
+    if (!parse_number(pair[0], to.file_id))
       mxerror(boost::format(Y("'%1%' is not a valid file ID in '--track-order %2%'.\n")) % pair[0] % s);
 
-    if (!parse_int(pair[1], to.track_id))
+    if (!parse_number(pair[1], to.track_id))
       mxerror(boost::format(Y("'%1%' is not a valid file ID in '--track-order %2%'.\n")) % pair[1] % s);
 
     g_track_order.push_back(to);
@@ -1276,10 +1276,10 @@ parse_arg_append_to(const std::string &s) {
     std::vector<std::string> parts = split(entry, ":");
 
     if (   (parts.size() != 4)
-        || !parse_int(parts[0], mapping.src_file_id)
-        || !parse_int(parts[1], mapping.src_track_id)
-        || !parse_int(parts[2], mapping.dst_file_id)
-        || !parse_int(parts[3], mapping.dst_track_id)
+        || !parse_number(parts[0], mapping.src_file_id)
+        || !parse_number(parts[1], mapping.src_track_id)
+        || !parse_number(parts[2], mapping.dst_file_id)
+        || !parse_number(parts[3], mapping.dst_track_id)
         || (0 > mapping.src_file_id)
         || (0 > mapping.src_track_id)
         || (0 > mapping.dst_file_id)
@@ -1316,7 +1316,7 @@ parse_arg_default_duration(const std::string &s,
     mxerror(boost::format(Y("'%1%' is not a valid tuple of track ID and default duration in '--default-duration %1%'.\n")) % s);
 
   int64_t id = 0;
-  if (!parse_int(parts[0], id))
+  if (!parse_number(parts[0], id))
     mxerror(boost::format(Y("'%1%' is not a valid track ID in '--default-duration %2%'.\n")) % parts[0] % s);
 
   ti.m_default_durations[id] = parse_number_with_unit(parts[1], "default duration", "--default-duration");
@@ -1337,11 +1337,11 @@ parse_arg_nalu_size_length(const std::string &s,
     mxerror(boost::format(Y("'%1%' is not a valid tuple of track ID and NALU size length in '--nalu-size-length %1%'.\n")) % s);
 
   int64_t id = 0;
-  if (!parse_int(parts[0], id))
+  if (!parse_number(parts[0], id))
     mxerror(boost::format(Y("'%1%' is not a valid track ID in '--nalu-size-length %2%'.\n")) % parts[0] % s);
 
   int64_t nalu_size_length;
-  if (!parse_int(parts[1], nalu_size_length) || (2 > nalu_size_length) || (4 < nalu_size_length))
+  if (!parse_number(parts[1], nalu_size_length) || (2 > nalu_size_length) || (4 < nalu_size_length))
     mxerror(boost::format(Y("The NALU size length must be a number between 2 and 4 inclusively in '--nalu-size-length %1%'.\n")) % s);
 
   if ((3 == nalu_size_length) && !s_nalu_size_length_3_warning_printed) {
@@ -1365,11 +1365,11 @@ parse_arg_max_blockadd_id(const std::string &s,
     mxerror(boost::format(Y("'%1%' is not a valid pair of track ID and block additional in '--blockadd %1%'.\n")) % s);
 
   int64_t id = 0;
-  if (!parse_int(parts[0], id))
+  if (!parse_number(parts[0], id))
     mxerror(boost::format(Y("'%1%' is not a valid track ID in '--blockadd %2%'.\n")) % parts[0] % s);
 
   int64_t max_blockadd_id = 0;
-  if (!parse_int(parts[1], max_blockadd_id) || (max_blockadd_id < 0))
+  if (!parse_number(parts[1], max_blockadd_id) || (max_blockadd_id < 0))
     mxerror(boost::format(Y("'%1%' is not a valid block additional max in '--blockadd %2%'.\n")) % parts[1] % s);
 
   ti.m_max_blockadd_ids[id] = max_blockadd_id;
@@ -1387,7 +1387,7 @@ parse_arg_aac_is_sbr(const std::string &s,
   std::vector<std::string> parts = split(s, ":", 2);
 
   int64_t id = 0;
-  if (!parse_int(parts[0], id) || (id < 0))
+  if (!parse_number(parts[0], id) || (id < 0))
     mxerror(boost::format(Y("Invalid track ID specified in '--aac-is-sbr %1%'.\n")) % s);
 
   if ((parts.size() == 2) && (parts[1] != "0") && (parts[1] != "1"))
@@ -1455,14 +1455,14 @@ parse_arg_cluster_length(std::string arg) {
   if (0 <= idx) {
     arg.erase(idx);
     int64_t max_ms_per_cluster;
-    if (!parse_int(arg, max_ms_per_cluster) || (100 > max_ms_per_cluster) || (32000 < max_ms_per_cluster))
+    if (!parse_number(arg, max_ms_per_cluster) || (100 > max_ms_per_cluster) || (32000 < max_ms_per_cluster))
       mxerror(boost::format(Y("Cluster length '%1%' out of range (100..32000).\n")) % arg);
 
     g_max_ns_per_cluster     = max_ms_per_cluster * 1000000;
     g_max_blocks_per_cluster = 65535;
 
   } else {
-    if (!parse_int(arg, g_max_blocks_per_cluster) || (0 > g_max_blocks_per_cluster) || (65535 < g_max_blocks_per_cluster))
+    if (!parse_number(arg, g_max_blocks_per_cluster) || (0 > g_max_blocks_per_cluster) || (65535 < g_max_blocks_per_cluster))
       mxerror(boost::format(Y("Cluster length '%1%' out of range (0..65535).\n")) % arg);
 
     g_max_ns_per_cluster = 32000000000ull;
@@ -1561,7 +1561,7 @@ parse_arg_timecode_scale(const std::string &arg) {
     mxerror(Y("'--timecode-scale' was used more than once.\n"));
 
   int64_t temp = 0;
-  if (!parse_int(arg, temp))
+  if (!parse_number(arg, temp))
     mxerror(Y("The argument to '--timecode-scale' must be a number.\n"));
 
   if (-1 == temp)
@@ -1607,7 +1607,7 @@ parse_arg_attachments(const std::string &param,
       mxerror(boost::format(Y("The argument '%1%' to '%2%' is invalid: too many colons in element '%3%'.\n")) % arg % param % elements[i]);
 
     int64_t id;
-    if (!parse_int(pair[0], id))
+    if (!parse_number(pair[0], id))
       mxerror(boost::format(Y("The argument '%1%' to '%2%' is invalid: '%3%' is not a valid track ID.\n")) % arg % param % pair[0]);
 
     if (pair[1] == "all")
@@ -1868,7 +1868,7 @@ parse_args(std::vector<std::string> args) {
       if ((no_next_arg) || (next_arg[0] == 0))
         mxerror(Y("'--split-max-files' lacks the number of files.\n"));
 
-      if (!parse_int(next_arg, g_split_max_num_files) || (2 > g_split_max_num_files))
+      if (!parse_number(next_arg, g_split_max_num_files) || (2 > g_split_max_num_files))
         mxerror(Y("Wrong argument to '--split-max-files'.\n"));
 
       sit++;

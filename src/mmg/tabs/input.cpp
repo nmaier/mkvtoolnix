@@ -422,7 +422,7 @@ tab_input::add_file(const wxString &file_name,
       else
         track->type = '?';
 
-      parse_int(wxMB(id), track->id);
+      parse_number(wxMB(id), track->id);
       track->ctype = exact;
 
       if ('a' == track->type)
@@ -449,7 +449,7 @@ tab_input::add_file(const wxString &file_name,
             int64_t width, height;
 
             std::vector<wxString> dims = split(pair[1], wxU("x"));
-            if ((dims.size() == 2) && parse_int(wxMB(dims[0]), width) && parse_int(wxMB(dims[1]), height)) {
+            if ((dims.size() == 2) && parse_number(wxMB(dims[0]), width) && parse_number(wxMB(dims[1]), height)) {
               std::string format;
               fix_format(LLD, format);
               track->dwidth.Printf(wxU(format), width);
@@ -467,7 +467,7 @@ tab_input::add_file(const wxString &file_name,
             }
 
           } else if (pair[0] == wxT("stereo_mode")) {
-            parse_int(wxMB(pair[1]), track->stereo_mode);
+            parse_number(wxMB(pair[1]), track->stereo_mode);
             track->stereo_mode += 1;
 
           } else if (pair[0] == wxT("aac_is_sbr"))
@@ -577,7 +577,7 @@ tab_input::add_file(const wxString &file_name,
 
     } else if (output[i].Find(wxT("Chapters")) == 0) {
       mmg_track_cptr track(new mmg_track_t);
-      parse_int(wxMB(output[i].AfterFirst(wxT(' ')).BeforeFirst(wxT(' '))), track->num_entries);
+      parse_number(wxMB(output[i].AfterFirst(wxT(' ')).BeforeFirst(wxT(' '))), track->num_entries);
       track->type = 'c';
       track->id   = TRACK_ID_CHAPTERS;
 
@@ -585,7 +585,7 @@ tab_input::add_file(const wxString &file_name,
 
     } else if (output[i].Find(wxT("Global tags")) == 0) {
       mmg_track_cptr track(new mmg_track_t);
-      parse_int(wxMB(output[i].AfterFirst(wxT(':')).AfterFirst(wxT(' ')).BeforeFirst(wxT(' '))), track->num_entries);
+      parse_number(wxMB(output[i].AfterFirst(wxT(':')).AfterFirst(wxT(' ')).BeforeFirst(wxT(' '))), track->num_entries);
       track->type = 't';
       track->id   = TRACK_ID_GLOBAL_TAGS;
 
@@ -593,8 +593,8 @@ tab_input::add_file(const wxString &file_name,
 
     } else if (output[i].Find(wxT("Tags")) == 0) {
       mmg_track_cptr track(new mmg_track_t);
-      parse_int(wxMB(output[i].BeforeFirst(wxT(':')).AfterLast(wxT(' '))), track->id);
-      parse_int(wxMB(output[i].AfterFirst(wxT(':')).AfterFirst(wxT(' ')).BeforeFirst(wxT(' '))), track->num_entries);
+      parse_number(wxMB(output[i].BeforeFirst(wxT(':')).AfterLast(wxT(' '))), track->id);
+      parse_number(wxMB(output[i].AfterFirst(wxT(':')).AfterFirst(wxT(' ')).BeforeFirst(wxT(' '))), track->num_entries);
       track->type  = 't';
       track->id   += TRACK_ID_TAGS_BASE;
 
@@ -1115,7 +1115,7 @@ tab_input::load(wxConfigBase *cfg,
       }
 
       tr->type = c.c_str()[0];
-      if (((tr->type != 'a') && (tr->type != 'v') && (tr->type != 's') && (tr->type != 'c') && (tr->type != 't')) || !parse_int(wxMB(id), tr->id)) {
+      if (((tr->type != 'a') && (tr->type != 'v') && (tr->type != 's') && (tr->type != 'c') && (tr->type != 't')) || !parse_number(wxMB(id), tr->id)) {
         cfg->SetPath(wxT(".."));
         continue;
       }
@@ -1279,7 +1279,7 @@ tab_input::validate_settings() {
       std::string s = wxMB(t->delay);
       strip(s);
       int dummy_i;
-      if ((s.length() > 0) && !parse_int(s, dummy_i)) {
+      if ((s.length() > 0) && !parse_number(s, dummy_i)) {
         wxString err;
         err.Printf(Z("The delay setting for track nr. %s in file '%s' is invalid."), sid.c_str(), f->file_name.c_str());
         wxMessageBox(err, Z("mkvmerge GUI: error"), wxOK | wxCENTER | wxICON_ERROR);

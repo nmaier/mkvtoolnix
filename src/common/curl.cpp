@@ -102,7 +102,7 @@ void
 url_retriever_c::parse_header(std::string const &header) {
   boost::smatch matches;
   if (boost::regex_search(header, matches, boost::regex("^content-length\\s*:\\s*(\\d+)", boost::regex::perl | boost::regex::icase)))
-    parse_int(matches[1].str(), m_total_size);
+    parse_number(matches[1].str(), m_total_size);
   mxdebug_if(m_debug, boost::format("Header received: %1% total size: %2%\n") % header % m_total_size);
 }
 

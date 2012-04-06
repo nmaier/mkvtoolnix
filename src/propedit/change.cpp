@@ -121,13 +121,13 @@ change_c::parse_unicode_string() {
 
 void
 change_c::parse_unsigned_integer() {
-  if (!parse_uint(m_value, m_ui_value))
+  if (!parse_number(m_value, m_ui_value))
     mxerror(boost::format(Y("The property value is not a valid unsigned integer in '%1%'. %2%\n")) % get_spec() % FILE_NOT_MODIFIED);
 }
 
 void
 change_c::parse_signed_integer() {
-  if (!parse_int(m_value, m_si_value))
+  if (!parse_number(m_value, m_si_value))
     mxerror(boost::format(Y("The property value is not a valid signed integer in '%1%'. %2%\n")) % get_spec() % FILE_NOT_MODIFIED);
 }
 
@@ -142,7 +142,7 @@ change_c::parse_boolean() {
 
 void
 change_c::parse_floating_point_number() {
-  if (!parse_double(m_value, m_fp_value))
+  if (!parse_number(m_value, m_fp_value))
     mxerror(boost::format(Y("The property value is not a valid floating point number in '%1%'. %2%\n")) % get_spec() % FILE_NOT_MODIFIED);
 }
 
