@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2012-04-01 11:01+0200\n"
+"PO-Revision-Date: 2012-04-06 15:35+0200\n"
 "Last-Translator: Moritz Bunkus <moritz@bunkus.org>\n"
 "Language-Team: German <moritz@bunkus.org>\n"
 "Language: de\n"
@@ -926,7 +926,7 @@ msgstr "Ü&ber\tF1"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:48
 msgid "&Add"
-msgstr ""
+msgstr "&Hinzufügen"
 
 #: src/mmg/mmg_dialog.cpp:296
 #: src/mmg/mmg_dialog.cpp:330
@@ -1073,9 +1073,8 @@ msgid "&Reload\tCtrl-R"
 msgstr "&Neu laden\tCtrl-R"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:49
-#, fuzzy
 msgid "&Remove"
-msgstr "entfernen"
+msgstr "&Entfernen"
 
 #: src/mmg/header_editor/value_page.cpp:140
 msgid "&Reset"
@@ -1100,7 +1099,7 @@ msgstr "Einstellungen &speichern\tCtrl-S"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:52
 msgid "&Sort"
-msgstr ""
+msgstr "&Sortieren"
 
 #: src/mmg/jobs.cpp:517
 msgid "&Start"
@@ -1920,7 +1919,7 @@ msgstr "Hinzugefügt am"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:41
 msgid "Additional source file parts"
-msgstr ""
+msgstr "Weitere Quelldateiteile"
 
 #: src/info/mkvinfo.cpp:197
 #, boost-format
@@ -3099,7 +3098,7 @@ msgstr "Dirac"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:77
 msgid "Directory"
-msgstr ""
+msgstr "Verzeichnis"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:57
 #, fuzzy
@@ -3248,7 +3247,7 @@ msgstr "EbmlVoid (Größe: %1%)"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:55
 msgid "Edit additional source file parts"
-msgstr ""
+msgstr "Liste der weiteren Quelldateiteile bearbeiten"
 
 #: src/propedit/propedit_cli_parser.cpp:170
 msgid "Edit selectors"
@@ -6778,7 +6777,7 @@ msgstr "Das erste Wort ist der Modus und teilt mkvextract mit, was extrahiert we
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:60
 msgid "The following parts are read after the primary file as if they were all part of one big file."
-msgstr ""
+msgstr "Die folgenden Teile werden, nachdem die primäre Datei gelesen wurde, so gelesen, als wären sie Bestandteil einer einzigen großen Datei."
 
 #: src/mmg/tabs/global.cpp:601
 msgid "The format of the split size is invalid (size too small)."
@@ -7684,7 +7683,7 @@ msgstr "Typ: %1% (%2%)"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:62
 msgid "Typical use cases include reading VOBs from a DVD (e.g. VTS_01_1.VOB, VTS_01_2.VOB, VTS_01_3.VOB) or MPEG transport streams from BluRay discs."
-msgstr ""
+msgstr "Typische Anwendungsfälle beinhalten VOBs von DVDs (z.B. VTS_01_1.VOB, VTS_01_2.VOB, VTS_01_3.VOB) oder MPEG-Transportströme von BluRay-Discs."
 
 #: src/mmg/tabs/chapters.cpp:338
 msgid "UID:"
@@ -10254,4 +10253,3 @@ msgstr "ja"
 
 #~ msgid "wrong usage: writing to read-only memory"
 #~ msgstr "Falsche Benutzung: Schreibversuch im Nur-Lese-Modus"
-
