@@ -1,5 +1,8 @@
 2012-04-06  Moritz Bunkus  <moritz@bunkus.org>
 
+	* Build system: Boost's "lexical_cast" and "type traits" libraries
+	are now required.
+
 	* mmg: new feature: Added GUI controls for mkvmerge's "file
 	concatenation" feature as "additional file parts". The user can
 	chose which individual files are treated as if they were a single
