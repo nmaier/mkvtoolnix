@@ -1725,12 +1725,17 @@ handle_file_name_arg(const std::string &this_arg,
    pass looks for '<tt>--output-file</tt>'. The fourth pass handles
    everything else.
 */
-static void
-parse_args(std::vector<std::string> args) {
+std::vector<std::string>
+parse_common_args(std::vector<std::string> args) {
   set_usage();
   while (handle_common_cli_args(args, ""))
     set_usage();
 
+  return args;
+}
+
+static void
+parse_args(std::vector<std::string> args) {
   // Check if only information about the file is wanted. In this mode only
   // two parameters are allowed: the --identify switch and the file.
   if ((   (2 == args.size())
@@ -2275,21 +2280,17 @@ parse_args(std::vector<std::string> args) {
     mxerror(Y("No input files were given. No output will be created.\n"));
 }
 
-/** \brief Initialize global variables
-*/
-static void
-init_globals() {
-  clear_list_of_unique_uint32(UNIQUE_ALL_IDS);
-}
-
 /** \brief Global program initialization
 
    Both platform dependant and independant initialization is done here.
    For Unix like systems a signal handler is installed. The locale's
    \c LC_MESSAGES is set.
 */
-static void
-setup() {
+static std::vector<std::string>
+setup(int argc,
+      char **argv) {
+  clear_list_of_unique_uint32(UNIQUE_ALL_IDS);
+
   mtx_common_init("mkvmerge");
   g_kax_tracks = new KaxTracks();
 
@@ -2298,7 +2299,11 @@ setup() {
   signal(SIGINT, sighandler);
 #endif
 
-  g_cluster_helper = new cluster_helper_c();
+  auto args = parse_common_args(command_line_utf8(argc, argv));
+
+  g_cluster_helper = new cluster_helper_c;
+
+  return args;
 }
 
 /** \brief Setup and high level program control
@@ -2310,12 +2315,9 @@ setup() {
 int
 main(int argc,
      char **argv) {
-  init_globals();
-  setup();
+  auto args = setup(argc, argv);
 
-  parse_args(command_line_utf8(argc, argv));
-
-  g_cluster_helper->init_debugging();
+  parse_args(args);
 
   int64_t start = get_current_time_millis();
 

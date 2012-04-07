@@ -98,8 +98,6 @@ public:
   cluster_helper_c();
   virtual ~cluster_helper_c();
 
-  void init_debugging();
-
   void set_output(mm_io_c *out);
   mm_io_c *get_output() {
     return m_out;
