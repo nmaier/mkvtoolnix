@@ -498,7 +498,7 @@ cluster_helper_c::add_split_point(const split_point_t &split_point) {
   m_current_split_point = m_split_points.begin();
   m_discarding          = m_current_split_point->m_discard;
 
-  if (m_discarding && (0 == m_current_split_point->m_point))
+  if (0 == m_current_split_point->m_point)
     ++m_current_split_point;
 }
 

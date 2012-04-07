@@ -12,7 +12,14 @@ end
 
 test "data/avi/v-h264-aac.avi one output file" do
   merge "--split parts:20s-30s,+40s-50s data/avi/v-h264-aac.avi", :output => "#{tmp}-%02d"
-  result = [ hash_file("#{tmp}-01"), File.exist?("#{tmp}-02") ? "bad" : "ok" ].join('+')
+  result = [ hash_file("#{tmp}-01"), File.exist?("#{tmp}-02") ? fail("second file should not exist") : "ok" ].join('+')
+  unlink_tmp_files
+  result
+end
+
+test "data/avi/v-h264-aac.avi one output file, starting at 00:00:00" do
+  merge "--split parts:-30s,+40s-50s data/avi/v-h264-aac.avi", :output => "#{tmp}-%02d"
+  result = [ hash_file("#{tmp}-01"), File.exist?("#{tmp}-02") ? fail("second file should not exist") : "ok" ].join('+')
   unlink_tmp_files
   result
 end
