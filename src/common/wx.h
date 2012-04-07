@@ -76,7 +76,7 @@ to_utf8(wxString const &source) {
 
 inline std::wstring
 to_wide(wxString const &source) {
-  return source.c_str();
+  return static_cast<wchar_t const *>(source.wc_str());
 }
 
 #define wxUCS(s) wxU(s).c_str()

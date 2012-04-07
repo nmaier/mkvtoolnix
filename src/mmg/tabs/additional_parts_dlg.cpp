@@ -32,7 +32,7 @@ operator <(wxFileName const &a,
 
 inline std::wstring
 to_wide(wxFileName const &source) {
-  return source.GetFullPath().c_str();
+  return to_wide(source.GetFullPath());
 }
 
 additional_parts_dialog::additional_parts_dialog(wxWindow *parent,
@@ -60,7 +60,7 @@ additional_parts_dialog::additional_parts_dialog(wxWindow *parent,
       wxString( Z("The following parts are read after the primary file as if they were all part of one big file.") )
     + wxT(" ")
     + Z("Typical use cases include reading VOBs from a DVD (e.g. VTS_01_1.VOB, VTS_01_2.VOB, VTS_01_3.VOB) or MPEG transport streams from BluRay discs.");
-  auto *st_additional_parts  = new wxStaticText(this, wxID_ANY, wxString{ format_paragraph(text.c_str(), 0, L"", L"", 80) }.Strip());
+  auto *st_additional_parts  = new wxStaticText(this, wxID_ANY, wxString{ format_paragraph(to_wide(text), 0, L"", L"", 80) }.Strip());
 
   auto *sl_title             = new wxStaticLine(this);
 
