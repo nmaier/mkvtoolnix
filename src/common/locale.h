@@ -20,10 +20,6 @@
 # include <iconv.h>
 #endif
 
-#if defined(SYS_WINDOWS)
-# include <windows.h>
-#endif
-
 #if !defined(HAVE_ICONV_H) && !defined(SYS_WINDOWS)
 # error Build requires either <iconv.h> or Windows APIs.
 #endif
@@ -81,7 +77,7 @@ private:                        // Static functions
 class windows_charset_converter_c: public charset_converter_c {
 private:
   bool m_is_utf8;
-  UINT m_code_page;
+  unsigned int m_code_page;
 
 public:
   windows_charset_converter_c(const std::string &charset);
@@ -94,8 +90,8 @@ public:                         // Static functions
   static bool is_available(const std::string &charset);
 
 private:                        // Static functions
-  static std::string convert(UINT source_code_page, UINT destination_code_page, const std::string &source);
-  static UINT extract_code_page(const std::string &charset);
+  static std::string convert(unsigned int source_code_page, unsigned int destination_code_page, const std::string &source);
+  static unsigned int extract_code_page(const std::string &charset);
 };
 
 unsigned Utf8ToUtf16(const char *utf8, int utf8len, wchar_t *utf16, unsigned utf16len);

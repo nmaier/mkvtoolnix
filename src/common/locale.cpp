@@ -235,8 +235,8 @@ windows_charset_converter_c::native(const std::string &source) {
 }
 
 std::string
-windows_charset_converter_c::convert(UINT source_code_page,
-                                     UINT destination_code_page,
+windows_charset_converter_c::convert(unsigned int source_code_page,
+                                     unsigned int destination_code_page,
                                      const std::string &source) {
   if (source_code_page == destination_code_page)
     return source;
@@ -259,14 +259,14 @@ windows_charset_converter_c::convert(UINT source_code_page,
 
 bool
 windows_charset_converter_c::is_available(const std::string &charset) {
-  UINT code_page = extract_code_page(charset);
+  unsigned int code_page = extract_code_page(charset);
   if (0 == code_page)
     return false;
 
   return IsValidCodePage(code_page);
 }
 
-UINT
+unsigned int
 windows_charset_converter_c::extract_code_page(const std::string &charset) {
   if (charset.substr(0, 2) != "CP")
     return 0;
