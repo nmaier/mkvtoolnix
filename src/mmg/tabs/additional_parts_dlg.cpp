@@ -11,12 +11,9 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
-
-#include <wx/wx.h>
-
 #include "common/common_pch.h"
 
+#include <wx/wx.h>
 #include <wx/statline.h>
 
 #include "common/sorting.h"

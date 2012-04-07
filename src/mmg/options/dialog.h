@@ -14,7 +14,7 @@
 #ifndef __MMG_OPTIONS_DIALOG_H
 #define __MMG_OPTIONS_DIALOG_H
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
 #include <vector>
 #include <wx/log.h>

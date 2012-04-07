@@ -11,9 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
-#include <algorithm>
 #include <wx/wx.h>
 #include <wx/aboutdlg.h>
 #include <wx/clipbrd.h>
@@ -29,7 +28,6 @@
 #include <wx/statline.h>
 #include <wx/strconv.h>
 
-#include "common/common_pch.h"
 #include "common/chapters/chapters.h"
 #include "common/command_line.h"
 #include "common/common_pch.h"

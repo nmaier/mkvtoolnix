@@ -15,7 +15,7 @@
 // * wxStaticText is not wrapping on Windows.
 // * Add "recent files" to the file menu.
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
 #include <wx/wx.h>
 #include <wx/dnd.h>

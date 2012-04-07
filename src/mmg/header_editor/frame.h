@@ -14,7 +14,7 @@
 #ifndef __HEADER_EDITOR_FRAME_H
 #define __HEADER_EDITOR_FRAME_H
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
 #include <wx/filename.h>
 #include <wx/frame.h>

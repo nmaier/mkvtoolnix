@@ -14,7 +14,7 @@
 #ifndef MTX_MMG_UPDATE_CHECKER_H
 # define MTX_MMG_UPDATE_CHECKER_H
 
-# include "common/os.h"
+# include "common/common_pch.h"
 
 # if defined(HAVE_CURL_EASY_H)
 

@@ -14,7 +14,7 @@
 #ifndef __MESSAGE_DIALOG_H
 #define __MESSAGE_DIALOG_H
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
 #include <wx/dialog.h>
 #include <wx/process.h>

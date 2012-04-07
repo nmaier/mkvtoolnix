@@ -14,7 +14,7 @@
 #ifndef __HE_BIT_VALUE_PAGE_H
 #define __HE_BIT_VALUE_PAGE_H
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
 #include <wx/textctrl.h>
 

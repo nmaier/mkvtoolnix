@@ -11,9 +11,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
-
-#include <wx/wxprec.h>
+#include "common/common_pch.h"
 
 #include <wx/wx.h>
 #include <wx/dnd.h>
@@ -23,7 +21,6 @@
 #include <wx/regex.h>
 #include <wx/statline.h>
 
-#include "common/common_pch.h"
 #include "common/extern_data.h"
 #include "common/iso639.h"
 #include "common/stereo_mode.h"

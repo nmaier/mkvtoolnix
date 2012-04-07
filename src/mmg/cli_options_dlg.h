@@ -14,13 +14,9 @@
 #ifndef __MMG_CLI_OPTIONS_DLG_H
 #define __MMG_CLI_OPTIONS_DLG_H
 
-#include "common/os.h"
-
-#include <vector>
-#include <wx/wx.h>
+#include "common/common_pch.h"
 
 #include "mmg/mmg.h"
-#include "common/wx.h"
 
 #define ID_CLIOPTIONS_COB 2000
 #define ID_CLIOPTIONS_ADD 2001

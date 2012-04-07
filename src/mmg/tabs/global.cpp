@@ -11,11 +11,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
-
-#include <ctype.h>
-
-#include <wx/wxprec.h>
+#include "common/common_pch.h"
 
 #include <wx/wx.h>
 #include <wx/notebook.h>
@@ -24,7 +20,6 @@
 #include <wx/config.h>
 #include <wx/regex.h>
 
-#include "common/common_pch.h"
 #include "common/strings/editing.h"
 #include "common/strings/parsing.h"
 #include "mmg/mmg.h"

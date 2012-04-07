@@ -11,6 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
+#include "common/common_pch.h"
+
 #include "mmg/translation_table.h"
 
 translation_table_c::translation_table_c()
@@ -53,4 +55,3 @@ translation_table_c::to_english(const wxString &translated) {
 
   return translated;
 }
-

@@ -14,9 +14,9 @@
 #ifndef __TAB_INPUT_H
 #define __TAB_INPUT_H
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
-#include <wx/config.h>
+#include <wx/wx.h>
 
 #define ID_LB_INPUTFILES                  11000
 #define ID_B_ADDFILE                      11001

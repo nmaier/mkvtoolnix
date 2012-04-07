@@ -11,13 +11,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
-
-#include <algorithm>
-#include <string>
-#include <vector>
-
-#include <wx/wxprec.h>
+#include "common/common_pch.h"
 
 #include <wx/wx.h>
 #include <wx/config.h>
@@ -26,7 +20,6 @@
 #include <wx/process.h>
 #include <wx/statline.h>
 
-#include "common/common_pch.h"
 #include "common/strings/editing.h"
 #include "common/translation.h"
 #include "common/wx.h"

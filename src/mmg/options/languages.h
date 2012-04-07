@@ -14,7 +14,7 @@
 #ifndef __MMG_OPTIONS_LANGUAGES_H
 #define __MMG_OPTIONS_LANGUAGES_H
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
 #include <wx/log.h>
 

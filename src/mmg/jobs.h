@@ -14,6 +14,8 @@
 #ifndef __JOBS_H
 #define __JOBS_H
 
+#include "common/common_pch.h"
+
 #include <wx/dialog.h>
 #include <wx/listctrl.h>
 #include <wx/process.h>

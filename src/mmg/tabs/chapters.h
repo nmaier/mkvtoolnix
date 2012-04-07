@@ -14,6 +14,8 @@
 #ifndef __TAB_CHAPTERS_H
 #define __TAB_CHAPTERS_H
 
+#include "common/common_pch.h"
+
 #include <wx/button.h>
 #include <wx/panel.h>
 #include <wx/treectrl.h>

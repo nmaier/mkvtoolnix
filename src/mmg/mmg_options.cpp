@@ -11,11 +11,10 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
 #include <wx/wx.h>
 
-#include "common/common_pch.h"
 #include "common/extern_data.h"
 #include "common/fs_sys_helpers.h"
 #include "common/wx.h"

@@ -14,10 +14,7 @@
 #ifndef __MMG_SHOW_TEXT_DLG_H
 #define __MMG_SHOW_TEXT_DLG_H
 
-#include "common/os.h"
-
-#include <vector>
-#include <wx/wx.h>
+#include "common/common_pch.h"
 
 #include "mmg/mmg.h"
 #include "common/wx.h"

@@ -11,9 +11,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
-
-#include <errno.h>
+#include "common/common_pch.h"
 
 #include <wx/wx.h>
 #include <wx/dnd.h>

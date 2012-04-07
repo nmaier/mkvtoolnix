@@ -11,7 +11,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
 #include <wx/wx.h>
 #include <wx/statline.h>
@@ -184,4 +184,3 @@ BEGIN_EVENT_TABLE(cli_options_dlg, wxDialog)
   EVT_COMBOBOX(ID_CLIOPTIONS_COB, cli_options_dlg::on_option_changed)
   EVT_BUTTON(ID_CLIOPTIONS_ADD,   cli_options_dlg::on_add_clicked)
 END_EVENT_TABLE();
-

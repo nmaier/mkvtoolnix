@@ -11,14 +11,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
-
-#include <errno.h>
-#ifdef HAVE_UNISTD_H
-#include <unistd.h>
-#endif
-
-#include <wx/wxprec.h>
+#include "common/common_pch.h"
 
 #include <wx/wx.h>
 #include <wx/clipbrd.h>
@@ -30,11 +23,6 @@
 #include <wx/statusbr.h>
 #include <wx/statline.h>
 
-#if defined(SYS_WINDOWS)
-#include <windows.h>
-#endif
-
-#include "common/common_pch.h"
 #include "common/fs_sys_helpers.h"
 #include "common/strings/editing.h"
 #include "common/strings/formatting.h"

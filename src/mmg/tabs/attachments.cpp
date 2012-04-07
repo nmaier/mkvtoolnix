@@ -11,14 +11,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-// This order is required. wx/wxprec.h includes wx's winundef.h which
-// cannot be included after windows.h has been included. But
-// mkvtoolnix' common.h includes windows.h.
-#undef __STRICT_ANSI__
-
-#include <wx/wxprec.h>
-
-#include "common/common.h"
+#include "common/common_pch.h"
 
 #include <wx/wx.h>
 #include <wx/dnd.h>

@@ -14,6 +14,8 @@
 #ifndef __TAB_GLOBAL_H
 #define __TAB_GLOBAL_H
 
+#include "common/common_pch.h"
+
 #include "common/wx.h"
 
 #define ID_B_BROWSEGLOBALTAGS             13000

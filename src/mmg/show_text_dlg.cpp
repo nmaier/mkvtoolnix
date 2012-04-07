@@ -11,7 +11,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
 #include <wx/wx.h>
 
@@ -48,4 +48,3 @@ show_text_dlg::show_text_dlg(wxWindow *parent,
 IMPLEMENT_CLASS(show_text_dlg, wxDialog);
 BEGIN_EVENT_TABLE(show_text_dlg, wxDialog)
 END_EVENT_TABLE();
-

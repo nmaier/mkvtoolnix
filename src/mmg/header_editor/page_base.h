@@ -14,9 +14,7 @@
 #ifndef __HE_PAGE_BASE_H
 #define __HE_PAGE_BASE_H
 
-#include "common/os.h"
-
-#include <vector>
+#include "common/common_pch.h"
 
 #include <wx/panel.h>
 #include <wx/treebase.h>

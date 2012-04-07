@@ -14,7 +14,7 @@
 #ifndef __HE_BOOL_VALUE_PAGE_H
 #define __HE_BOOL_VALUE_PAGE_H
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
 #include <wx/arrstr.h>
 

@@ -14,9 +14,7 @@
 #ifndef __TRANSLATION_TABLE_H
 #define __TRANSLATION_TABLE_H
 
-#include "common/os.h"
-
-#include <vector>
+#include "common/common_pch.h"
 
 #include <wx/string.h>
 

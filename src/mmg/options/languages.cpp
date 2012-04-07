@@ -11,18 +11,13 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
-
-#include <map>
-#include <string>
-#include <vector>
+#include "common/common_pch.h"
 
 #include <wx/wx.h>
 #include <wx/config.h>
 #include <wx/listbox.h>
 #include <wx/statline.h>
 
-#include "common/common_pch.h"
 #include "common/extern_data.h"
 #include "common/strings/editing.h"
 #include "common/translation.h"

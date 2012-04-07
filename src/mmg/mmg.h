@@ -14,11 +14,9 @@
 #ifndef __MMG_H
 #define __MMG_H
 
-#include <map>
-#include <vector>
+#include "common/common_pch.h"
 
-#include "common/os.h"
-
+#include <wx/wx.h>
 #include <wx/app.h>
 #include <wx/combobox.h>
 #include <wx/config.h>

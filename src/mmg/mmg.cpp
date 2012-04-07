@@ -11,7 +11,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
 #include <wx/wx.h>
 #include <wx/config.h>
@@ -22,7 +22,6 @@
 # include <ApplicationServices/ApplicationServices.h>
 #endif
 
-#include "common/common_pch.h"
 #include "common/chapters/chapters.h"
 #include "common/command_line.h"
 #include "common/common_pch.h"
