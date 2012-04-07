@@ -125,14 +125,14 @@ update_check_dlg_c::setup_changelog_ctrl() {
 
   wxRichTextAttr heading_char_style;
   heading_char_style.SetFontSize(12);
-  heading_char_style.SetFontStyle(wxBOLD);
+  heading_char_style.SetFontWeight(wxFONTWEIGHT_BOLD);
   heading_char_style.SetAlignment(wxTEXT_ALIGNMENT_LEFT);
   heading_char_style.SetParagraphSpacingBefore(30);
   heading_char_style.SetParagraphSpacingAfter(30);
 
   wxRichTextAttr title_char_style;
   title_char_style.SetFontSize(14);
-  title_char_style.SetFontWeight(wxBOLD);
+  title_char_style.SetFontWeight(wxFONTWEIGHT_BOLD);
   title_char_style.SetAlignment(wxTEXT_ALIGNMENT_LEFT);
   title_char_style.SetParagraphSpacingBefore(20);
   title_char_style.SetParagraphSpacingAfter(50);
