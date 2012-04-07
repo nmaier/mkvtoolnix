@@ -48,7 +48,7 @@ dnl
 
   if test x"$continue_wx_check" = x1 ; then
     WXWIDGETS_CFLAGS=`$WX_CONFIG --cxxflags`
-    WXWIDGETS_LIBS=`$WX_CONFIG --libs | \
+    WXWIDGETS_LIBS=`$WX_CONFIG --libs std,richtext | \
       sed -e 's/-Wl,--subsystem,windows//' -e 's/-mwindows//'`
     AC_CACHE_VAL(ac_cv_wx_compilation, [
       AC_LANG_PUSH(C++)
@@ -76,7 +76,7 @@ wxTreeItemId id;
 
   if test x"$continue_wx_check" = x1 ; then
     WXWIDGETS_CFLAGS=`$WX_CONFIG --cxxflags`
-    WXWIDGETS_LIBS=`$WX_CONFIG --libs | sed -e 's/-Wl,--subsystem,windows//' -e 's/-mwindows//'`
+    WXWIDGETS_LIBS=`$WX_CONFIG --libs std,richtext | sed -e 's/-Wl,--subsystem,windows//' -e 's/-mwindows//'`
     AC_CACHE_VAL(ac_cv_wx_unicode, [
       AC_LANG_PUSH(C++)
       ac_save_CXXFLAGS="$CXXFLAGS"
