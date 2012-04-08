@@ -132,6 +132,11 @@ public:
 private:
   void set_duration(render_groups_c *rg);
   bool must_duration_be_set(render_groups_c *rg, packet_cptr &new_packet);
+
+  void render_before_adding_if_necessary(packet_cptr &packet);
+  void render_after_adding_if_necessary(packet_cptr &packet);
+  void split_if_necessary(packet_cptr &packet);
+  void split(packet_cptr &packet);
 };
 
 extern cluster_helper_c *g_cluster_helper;

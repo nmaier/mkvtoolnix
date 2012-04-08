@@ -73,22 +73,7 @@ cluster_helper_c::~cluster_helper_c() {
 }
 
 void
-cluster_helper_c::add_packet(packet_cptr packet) {
-  if (!m_cluster)
-    prepare_new_cluster();
-
-  // Normalize the timecodes according to the timecode scale.
-  packet->unmodified_assigned_timecode = packet->assigned_timecode;
-  packet->unmodified_duration          = packet->duration;
-  packet->timecode                     = RND_TIMECODE_SCALE(packet->timecode);
-  packet->assigned_timecode            = RND_TIMECODE_SCALE(packet->assigned_timecode);
-  if (packet->has_duration())
-    packet->duration                   = RND_TIMECODE_SCALE(packet->duration);
-  if (packet->has_bref())
-    packet->bref                       = RND_TIMECODE_SCALE(packet->bref);
-  if (packet->has_fref())
-    packet->fref                       = RND_TIMECODE_SCALE(packet->fref);
-
+cluster_helper_c::render_before_adding_if_necessary(packet_cptr &packet) {
   int64_t timecode        = get_timecode();
   int64_t timecode_delay  = (   (packet->assigned_timecode > m_max_timecode_in_cluster)
                              || (-1 == m_max_timecode_in_cluster))                       ? packet->assigned_timecode : m_max_timecode_in_cluster;
@@ -110,78 +95,110 @@ cluster_helper_c::add_packet(packet_cptr packet) {
     render();
     prepare_new_cluster();
   }
+}
 
-  if (   splitting()
-      && (m_split_points.end() != m_current_split_point)
-      && (g_file_num <= g_split_max_num_files)
-      && packet->is_key_frame()
-      && (   (packet->source->get_track_type() == track_video)
-          || (nullptr == g_video_packetizer))) {
-    bool split_now = false;
-
-    // Maybe we want to start a new file now.
-    if (split_point_t::SPT_SIZE == m_current_split_point->m_type) {
-      int64_t additional_size = 0;
-
-      if (!m_packets.empty())
-        // Cluster + Cluster timecode: roughly 21 bytes. Add all frame sizes & their overheaders, too.
-        additional_size = 21 + boost::accumulate(m_packets, 0, [](size_t size, const packet_cptr &p) { return size + p->data->get_size() + (p->is_key_frame() ? 10 : p->is_p_frame() ? 13 : 16); });
-
-      additional_size += 18 * m_num_cue_elements;
-
-      mxdebug_if(m_debug_splitting,
-                 boost::format("cluster_helper split decision: header_overhead: %1%, additional_size: %2%, bytes_in_file: %3%, sum: %4%\n")
-                 % m_header_overhead % additional_size % m_bytes_in_file % (m_header_overhead + additional_size + m_bytes_in_file));
-      if ((m_header_overhead + additional_size + m_bytes_in_file) >= m_current_split_point->m_point)
-        split_now = true;
-
-    } else if (   (split_point_t::SPT_DURATION == m_current_split_point->m_type)
-               && (0 <= m_first_timecode_in_file)
-               && (packet->assigned_timecode - m_first_timecode_in_file) >= m_current_split_point->m_point)
-      split_now = true;
-
-    else if (   (   (split_point_t::SPT_TIMECODE == m_current_split_point->m_type)
-                 || (split_point_t::SPT_PARTS    == m_current_split_point->m_type))
-             && (packet->assigned_timecode >= m_current_split_point->m_point))
-      split_now = true;
-
-    if (split_now) {
-      render();
-
-      m_num_cue_elements = 0;
-
-      bool create_new_file = m_current_split_point->m_create_new_file;
-
-      mxdebug_if(m_debug_splitting, boost::format("Splitting: splitpoint %1% reached before timecode %2%, create new? %3%.\n") % m_current_split_point->str() % format_timecode(packet->assigned_timecode) % create_new_file);
-
-      if (create_new_file)
-        finish_file();
-
-      if (m_current_split_point->m_use_once) {
-        m_discarding = m_current_split_point->m_discard;
-        ++m_current_split_point;
-      }
-
-      if (create_new_file) {
-        create_next_output_file();
-        if (g_no_linking) {
-          m_previous_cluster_tc = 0;
-          m_timecode_offset = g_video_packetizer ? m_max_video_timecode_rendered : packet->assigned_timecode;
-        }
-
-        m_bytes_in_file          = 0;
-        m_first_timecode_in_file = -1;
-
-        m_first_discarded_timecode = -1;
-        m_last_discarded_timecode  =  0;
-        mxdebug_if(m_debug_splitting, boost::format("RESETTING discarded TC\n"));
-
-      } else
-        mxdebug_if(m_debug_splitting, boost::format("KEEPING discarded TC at %1% / %2%\n") % format_timecode(m_first_discarded_timecode) % format_timecode(m_last_discarded_timecode));
-
-      prepare_new_cluster();
-    }
+void
+cluster_helper_c::render_after_adding_if_necessary(packet_cptr &packet) {
+  // Render the cluster if it is full (according to my many criteria).
+  auto timecode = get_timecode();
+  if (   ((packet->assigned_timecode - timecode) > g_max_ns_per_cluster)
+      || (m_packets.size()                       > static_cast<size_t>(g_max_blocks_per_cluster))
+      || (get_cluster_content_size()             > 1500000)) {
+    render();
+    prepare_new_cluster();
   }
+}
+
+void
+cluster_helper_c::split_if_necessary(packet_cptr &packet) {
+  if (   !splitting()
+      || (m_split_points.end() == m_current_split_point)
+      || (g_file_num > g_split_max_num_files)
+      || !packet->is_key_frame()
+      || (   (packet->source->get_track_type() != track_video)
+          && (nullptr                          != g_video_packetizer)))
+    return;
+
+  bool split_now = false;
+
+  // Maybe we want to start a new file now.
+  if (split_point_t::SPT_SIZE == m_current_split_point->m_type) {
+    int64_t additional_size = 0;
+
+    if (!m_packets.empty())
+      // Cluster + Cluster timecode: roughly 21 bytes. Add all frame sizes & their overheaders, too.
+      additional_size = 21 + boost::accumulate(m_packets, 0, [](size_t size, const packet_cptr &p) { return size + p->data->get_size() + (p->is_key_frame() ? 10 : p->is_p_frame() ? 13 : 16); });
+
+    additional_size += 18 * m_num_cue_elements;
+
+    mxdebug_if(m_debug_splitting,
+               boost::format("cluster_helper split decision: header_overhead: %1%, additional_size: %2%, bytes_in_file: %3%, sum: %4%\n")
+               % m_header_overhead % additional_size % m_bytes_in_file % (m_header_overhead + additional_size + m_bytes_in_file));
+    if ((m_header_overhead + additional_size + m_bytes_in_file) >= m_current_split_point->m_point)
+      split_now = true;
+
+  } else if (   (split_point_t::SPT_DURATION == m_current_split_point->m_type)
+             && (0 <= m_first_timecode_in_file)
+             && (packet->assigned_timecode - m_first_timecode_in_file) >= m_current_split_point->m_point)
+    split_now = true;
+
+  else if (   (   (split_point_t::SPT_TIMECODE == m_current_split_point->m_type)
+               || (split_point_t::SPT_PARTS    == m_current_split_point->m_type))
+           && (packet->assigned_timecode >= m_current_split_point->m_point))
+    split_now = true;
+
+  if (!split_now)
+    return;
+
+  split(packet);
+}
+
+void
+cluster_helper_c::split(packet_cptr &packet) {
+  render();
+
+  m_num_cue_elements = 0;
+
+  bool create_new_file = m_current_split_point->m_create_new_file;
+
+  mxdebug_if(m_debug_splitting, boost::format("Splitting: splitpoint %1% reached before timecode %2%, create new? %3%.\n") % m_current_split_point->str() % format_timecode(packet->assigned_timecode) % create_new_file);
+
+  if (create_new_file)
+    finish_file();
+
+  if (m_current_split_point->m_use_once) {
+    m_discarding = m_current_split_point->m_discard;
+    ++m_current_split_point;
+  }
+
+  if (create_new_file) {
+    create_next_output_file();
+    if (g_no_linking) {
+      m_previous_cluster_tc = 0;
+      m_timecode_offset = g_video_packetizer ? m_max_video_timecode_rendered : packet->assigned_timecode;
+    }
+
+    m_bytes_in_file          = 0;
+    m_first_timecode_in_file = -1;
+
+    m_first_discarded_timecode = -1;
+    m_last_discarded_timecode  =  0;
+    mxdebug_if(m_debug_splitting, boost::format("RESETTING discarded TC\n"));
+
+  } else
+    mxdebug_if(m_debug_splitting, boost::format("KEEPING discarded TC at %1% / %2%\n") % format_timecode(m_first_discarded_timecode) % format_timecode(m_last_discarded_timecode));
+
+  prepare_new_cluster();
+}
+
+void
+cluster_helper_c::add_packet(packet_cptr packet) {
+  if (!m_cluster)
+    prepare_new_cluster();
+
+  packet->normalize_timecodes();
+  render_before_adding_if_necessary(packet);
+  split_if_necessary(packet);
 
   packet->packet_num = m_packet_num;
   m_packet_num++;
@@ -195,12 +212,7 @@ cluster_helper_c::add_packet(packet_cptr packet) {
   if ((-1 == m_min_timecode_in_cluster) || (packet->assigned_timecode < m_min_timecode_in_cluster))
     m_min_timecode_in_cluster = packet->assigned_timecode;
 
-  // Render the cluster if it is full (according to my many criteria).
-  timecode = get_timecode();
-  if (((packet->assigned_timecode - timecode) > g_max_ns_per_cluster) || (m_packets.size() > static_cast<size_t>(g_max_blocks_per_cluster)) || (get_cluster_content_size() > 1500000)) {
-    render();
-    prepare_new_cluster();
-  }
+  render_after_adding_if_necessary(packet);
 }
 
 int64_t
