@@ -629,7 +629,9 @@ mmg_dialog::on_run(wxCommandEvent &) {
 
   set_on_top(false);
   muxing_in_progress = true;
-  new mux_dialog(this);
+
+  mux_dialog dlg{this};
+  dlg.run();
 }
 
 void

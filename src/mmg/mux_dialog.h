@@ -28,24 +28,28 @@
 #define ID_B_MUX_SAVELOG                  18001
 #define ID_B_MUX_ABORT                    18002
 
-class mux_process;
+extern const wxEventType mux_thread_event;
+
+class mux_thread;
 
 class mux_dialog: public wxDialog {
   DECLARE_CLASS(mux_dialog);
   DECLARE_EVENT_TABLE();
 protected:
+  friend class mux_thread;
+
   long pid;
   wxStaticText *st_label, *st_remaining_time_label, *st_remaining_time;
   wxGauge *g_progress;
-  mux_process *process;
+  wxCriticalSection m_cs_thread;
+  mux_thread *m_thread;
   wxString log, opt_file_name;
   wxButton *b_ok, *b_save_log, *b_abort;
   wxTextCtrl *tc_output, *tc_warnings, *tc_errors;
-  wxWindowDisabler *m_window_disabler;
 #if defined(SYS_WINDOWS)
   taskbar_progress_c *m_taskbar_progress;
-  bool m_abort_button_changed;
 #endif  // SYS_WINDOWS
+  bool m_abort_button_changed;
 
   int m_exit_code, m_progress;
   int64_t m_next_remaining_time_update, m_start_time;
@@ -53,6 +57,8 @@ public:
 
   mux_dialog(wxWindow *parent);
   ~mux_dialog();
+
+  void run();
 
   void update_window(wxString text);
   void update_gauge(long value);
@@ -62,7 +68,9 @@ public:
   void on_save_log(wxCommandEvent &evt);
   void on_abort(wxCommandEvent &evt);
   void on_close(wxCloseEvent &evt);
-  void done(int status);
+  void on_output_available(wxCommandEvent &evt);
+  void on_process_terminated(wxCommandEvent &evt);
+  void done();
 
   void set_exit_code(int exit_code) {
     m_exit_code = exit_code;
@@ -73,12 +81,39 @@ public:
 #endif  // SYS_WINDOWS
 };
 
-class mux_process: public wxProcess {
-public:
-  mux_dialog *dlg;
+class mux_thread;
 
-  mux_process(mux_dialog *mdlg);
+class mux_process: public wxProcess {
+private:
+  mux_thread *m_thread;
+
+public:
+  mux_process(mux_thread *thread);
   virtual void OnTerminate(int terminated_pid, int status);
+};
+
+class mux_thread: public wxThread {
+public:
+  static wxEventType const event;
+  enum event_type_e {
+    output_available = 1,
+    process_terminated,
+  };
+
+private:
+  mux_dialog *m_dlg;
+  wxString m_command_line;
+  mux_process *m_process;
+  int m_pid;
+
+  friend class mux_dialog;
+
+public:
+  mux_thread(mux_dialog *dlg, wxString const &command_line);
+  virtual void *Entry();
+  void on_terminate(int status);
+  void kill_process();
+  void execute();
 };
 
 #endif // __MUX_DIALOG_H
