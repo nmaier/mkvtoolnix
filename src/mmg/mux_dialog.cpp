@@ -88,11 +88,7 @@ mux_dialog::mux_dialog(wxWindow *parent)
   siz_all->Add(siz_buttons, 0, wxGROW | wxALL, 10);
 
   SetSizerAndFit(siz_all);
-#ifdef SYS_WINDOWS
-  SetSize(wxSize(700, 560));
-#else
   SetSize(wxSize(720, 520));
-#endif
 }
 
 void
