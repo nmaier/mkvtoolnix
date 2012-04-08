@@ -1,6 +1,11 @@
 2012-04-08  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: The "--split parts:" functionality was
+	not taking dropped ranges into account when calculating the
+	segment duration for files that more than one range was written
+	to. Fixes ticket 738.
+
+	* mkvmerge: bug fix: The "--split parts:" functionality was
 	producing a small gap between the first part's last packet's
 	timecode and the second part's first packet's timecode if two
 	parts are written to the same file. Fixes ticket 742.

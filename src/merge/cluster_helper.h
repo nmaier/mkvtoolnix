@@ -114,6 +114,7 @@ public:
   int64_t get_first_timecode_in_file() {
     return m_first_timecode_in_file;
   }
+  int64_t get_discarded_duration() const;
 
   void add_split_point(const split_point_t &split_point);
   void dump_split_points() const;

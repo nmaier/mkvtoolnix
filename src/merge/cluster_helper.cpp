@@ -321,7 +321,7 @@ cluster_helper_c::render() {
   // Make sure that we don't have negative/wrapped around timecodes in the output file.
   // Can happend when we're splitting; so adjust timecode_offset accordingly.
   m_timecode_offset       = boost::accumulate(m_packets, m_timecode_offset, [](int64_t a, const packet_cptr &p) { return std::min(a, p->assigned_timecode); });
-  int64_t timecode_offset = m_timecode_offset + m_last_discarded_timecode_and_duration - std::max<int64_t>(m_first_discarded_timecode, 0);
+  int64_t timecode_offset = m_timecode_offset + get_discarded_duration();
 
   for (auto &pack : m_packets) {
     generic_packetizer_c *source = pack->source;
@@ -494,10 +494,16 @@ cluster_helper_c::render() {
 int64_t
 cluster_helper_c::get_duration() {
   mxdebug_if(m_debug_duration,
-             boost::format("cluster_helper_c::get_duration(): %1% - %2% = %3%\n")
-             % m_max_timecode_and_duration % m_first_timecode_in_file % (m_max_timecode_and_duration - m_first_timecode_in_file));
+             boost::format("cluster_helper_c::get_duration(): %1% - %2% - %4% = %3%\n")
+             % m_max_timecode_and_duration % m_first_timecode_in_file % (m_max_timecode_and_duration - m_first_timecode_in_file) % get_discarded_duration());
 
-  return m_max_timecode_and_duration - m_first_timecode_in_file;
+  return m_max_timecode_and_duration - m_first_timecode_in_file - get_discarded_duration();
+}
+
+int64_t
+cluster_helper_c::get_discarded_duration()
+  const {
+  return m_last_discarded_timecode_and_duration - std::max<int64_t>(m_first_discarded_timecode, 0);
 }
 
 void
