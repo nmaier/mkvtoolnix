@@ -35,7 +35,7 @@ mux_dialog::mux_dialog(wxWindow *parent):
 #ifdef SYS_WINDOWS
            wxSize(700, 560),
 #else
-           wxSize(700, 520),
+           wxSize(720, 520),
 #endif
            wxDEFAULT_FRAME_STYLE)
 #if defined(SYS_WINDOWS)
@@ -76,13 +76,13 @@ mux_dialog::mux_dialog(wxWindow *parent):
 
   siz_output = new wxStaticBoxSizer(new wxStaticBox(this, -1, Z("Output")), wxVERTICAL);
   siz_output->Add(new wxStaticText(this, -1, Z("mkvmerge output:")), 0, wxALIGN_LEFT | wxALL, 5);
-  tc_output = new wxTextCtrl(this, -1, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY | wxTE_BESTWRAP | wxTE_MULTILINE);
+  tc_output = new wxTextCtrl(this, -1, wxEmptyString, wxDefaultPosition, wxSize(-1, 100), wxTE_READONLY | wxTE_BESTWRAP | wxTE_MULTILINE);
   siz_output->Add(tc_output, 2, wxGROW | wxALL, 5);
   siz_output->Add(new wxStaticText(this, -1, Z("Warnings:")), 0, wxALIGN_LEFT | wxALL, 5);
-  tc_warnings = new wxTextCtrl(this, -1, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY | wxTE_BESTWRAP | wxTE_MULTILINE);
+  tc_warnings = new wxTextCtrl(this, -1, wxEmptyString, wxDefaultPosition, wxSize(-1, 50), wxTE_READONLY | wxTE_BESTWRAP | wxTE_MULTILINE);
   siz_output->Add(tc_warnings, 1, wxGROW | wxALL, 5);
   siz_output->Add(new wxStaticText(this, -1, Z("Errors:")), 0, wxALIGN_LEFT | wxALL, 5);
-  tc_errors = new wxTextCtrl(this, -1, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY | wxTE_BESTWRAP | wxTE_MULTILINE);
+  tc_errors = new wxTextCtrl(this, -1, wxEmptyString, wxDefaultPosition, wxSize(-1, 50), wxTE_READONLY | wxTE_BESTWRAP | wxTE_MULTILINE);
   siz_output->Add(tc_errors, 1, wxGROW | wxALL, 5);
 
   siz_buttons = new wxBoxSizer(wxHORIZONTAL);
@@ -103,6 +103,8 @@ mux_dialog::mux_dialog(wxWindow *parent):
   siz_all->Add(siz_output, 1, wxGROW | wxALL, 5);
   siz_all->Add(siz_buttons, 0, wxGROW | wxALL, 10);
   SetSizer(siz_all);
+
+  Layout();
 
   update_window(Z("Muxing in progress."));
   Show(true);
@@ -214,6 +216,7 @@ mux_dialog::~mux_dialog() {
 void
 mux_dialog::update_window(wxString text) {
   st_label->SetLabel(text);
+  Layout();
 }
 
 void
