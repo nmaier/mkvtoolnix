@@ -276,7 +276,7 @@ cluster_helper_c::must_duration_be_set(render_groups_c *rg,
 
   for (i = 0; rg->m_durations.size() > i; ++i)
     block_duration += rg->m_durations[i];
-  block_duration += new_packet->duration;
+  block_duration += new_packet->get_duration();
 
   if (rg->m_duration_mandatory || new_packet->duration_mandatory) {
     if (   (0 == block_duration)
@@ -328,7 +328,7 @@ cluster_helper_c::render() {
     bool has_codec_state         = !!pack->codec_state;
 
     if (g_video_packetizer == source)
-      m_max_video_timecode_rendered = std::max(pack->assigned_timecode + (pack->has_duration() ? pack->duration : 0), m_max_video_timecode_rendered);
+      m_max_video_timecode_rendered = std::max(pack->assigned_timecode + pack->get_duration(), m_max_video_timecode_rendered);
 
     if (discarding()) {
       if (-1 == m_first_discarded_timecode)
@@ -402,12 +402,12 @@ cluster_helper_c::render() {
     if (-1 == m_first_timecode_in_file)
       m_first_timecode_in_file = pack->assigned_timecode;
 
-    m_max_timecode_and_duration = std::max(pack->assigned_timecode + (pack->has_duration() ? pack->duration : 0), m_max_timecode_and_duration);
+    m_max_timecode_and_duration = std::max(pack->assigned_timecode + pack->get_duration(), m_max_timecode_and_duration);
 
     if (!pack->is_key_frame() || !track_entry.LacingEnabled())
       render_group->m_more_data = false;
 
-    render_group->m_durations.push_back(pack->has_duration() ? pack->unmodified_duration : 0);
+    render_group->m_durations.push_back(pack->get_unmodified_duration());
     render_group->m_duration_mandatory |= pack->duration_mandatory;
 
     if (nullptr != new_block_group) {

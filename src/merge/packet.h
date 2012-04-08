@@ -164,6 +164,18 @@ struct packet_t {
     return 0 <= duration;
   }
 
+  int64_t
+  get_duration()
+    const {
+    return has_duration() ? duration : 0;
+  }
+
+  int64_t
+  get_unmodified_duration()
+    const {
+    return has_duration() ? unmodified_duration : 0;
+  }
+
   bool
   is_key_frame()
     const {
