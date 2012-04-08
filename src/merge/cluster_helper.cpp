@@ -49,7 +49,6 @@ cluster_helper_c::cluster_helper_c()
   , m_previous_cluster_tc(0)
   , m_num_cue_elements(0)
   , m_header_overhead(-1)
-  , m_packet_num(0)
   , m_timecode_offset(0)
   , m_previous_packets(nullptr)
   , m_bytes_in_file(0)
@@ -199,9 +198,6 @@ cluster_helper_c::add_packet(packet_cptr packet) {
   packet->normalize_timecodes();
   render_before_adding_if_necessary(packet);
   split_if_necessary(packet);
-
-  packet->packet_num = m_packet_num;
-  m_packet_num++;
 
   m_packets.push_back(packet);
   m_cluster_content_size += packet->data->get_size();

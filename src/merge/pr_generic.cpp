@@ -48,12 +48,6 @@
     : map_has_key(container, -1)        ? -1        \
     :                                     -2
 
-
-int64_t packet_t::sm_packet_number_counter = 0;
-
-packet_t::~packet_t() {
-}
-
 // ---------------------------------------------------------------------
 
 std::vector<generic_packetizer_c *> ptzrs_in_header_order;

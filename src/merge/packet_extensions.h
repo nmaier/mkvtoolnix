@@ -32,7 +32,7 @@ public:
   virtual ~multiple_timecodes_packet_extension_c() {
   }
 
-  virtual packet_extension_type_e get_type() {
+  virtual packet_extension_type_e get_type() const {
     return MULTIPLE_TIMECODES;
   }
 
@@ -71,7 +71,7 @@ public:
   {
   }
 
-  virtual packet_extension_type_e get_type() {
+  virtual packet_extension_type_e get_type() const {
     return SUBTITLE_NUMBER;
   }
 

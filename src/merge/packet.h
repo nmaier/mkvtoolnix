@@ -40,13 +40,11 @@ public:
   virtual ~packet_extension_c() {
   }
 
-  virtual packet_extension_type_e get_type() = 0;
+  virtual packet_extension_type_e get_type() const = 0;
 };
 typedef std::shared_ptr<packet_extension_c> packet_extension_cptr;
 
 struct packet_t {
-  static int64_t sm_packet_number_counter;
-
   memory_cptr data;
   std::vector<memory_cptr> data_adds;
   memory_cptr codec_state;
@@ -55,7 +53,7 @@ struct packet_t {
   KaxBlock *block;
   KaxCluster *cluster;
   int ref_priority, time_factor;
-  int64_t timecode, bref, fref, duration, packet_num, assigned_timecode;
+  int64_t timecode, bref, fref, duration, assigned_timecode;
   int64_t timecode_before_factory;
   int64_t unmodified_assigned_timecode, unmodified_duration;
   bool duration_mandatory, superseeded, gap_following, factory_applied;
@@ -73,7 +71,6 @@ struct packet_t {
     , bref(0)
     , fref(0)
     , duration(-1)
-    , packet_num(sm_packet_number_counter++)
     , assigned_timecode(0)
     , timecode_before_factory(0)
     , unmodified_assigned_timecode(0)
@@ -101,7 +98,6 @@ struct packet_t {
     , bref(p_bref)
     , fref(p_fref)
     , duration(p_duration)
-    , packet_num(sm_packet_number_counter++)
     , assigned_timecode(0)
     , timecode_before_factory(0)
     , unmodified_assigned_timecode(0)
@@ -129,7 +125,6 @@ struct packet_t {
     , bref(p_bref)
     , fref(p_fref)
     , duration(p_duration)
-    , packet_num(sm_packet_number_counter++)
     , assigned_timecode(0)
     , timecode_before_factory(0)
     , unmodified_assigned_timecode(0)
@@ -142,37 +137,54 @@ struct packet_t {
   {
   }
 
-  ~packet_t();
+  ~packet_t() {
+  }
 
-  bool has_timecode() {
+  bool
+  has_timecode()
+    const {
     return 0 <= timecode;
   }
 
-  bool has_bref() {
+  bool
+  has_bref()
+    const {
     return 0 <= bref;
   }
 
-  bool has_fref() {
+  bool
+  has_fref()
+    const {
     return 0 <= fref;
   }
 
-  bool has_duration() {
+  bool
+  has_duration()
+    const {
     return 0 <= duration;
   }
 
-  bool is_key_frame() {
+  bool
+  is_key_frame()
+    const {
     return !has_bref() && !has_fref();
   }
 
-  bool is_p_frame() {
+  bool
+  is_p_frame()
+    const {
     return (has_bref() || has_fref()) && (has_bref() != has_fref());
   }
 
-  bool is_b_frame() {
+  bool
+  is_b_frame()
+    const {
     return has_bref() && has_fref();
   }
 
-  packet_extension_c *find_extension(packet_extension_c::packet_extension_type_e type) {
+  packet_extension_c *
+  find_extension(packet_extension_c::packet_extension_type_e type)
+    const {
     for (auto &extension : extensions)
       if (extension->get_type() == type)
         return extension.get();
