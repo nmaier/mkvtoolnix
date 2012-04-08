@@ -198,6 +198,7 @@ class SimpleTest
 
     output  = options[:output] || self.tmp
     output  = "> #{output}" unless /^[>\|]/.match(output)
+    output  = '' if options[:output] == :return
     command = "../src/mkvinfo --engage no_variable_data --ui-language en_US #{args.first} #{output}"
     self.sys command, :exit_code => options[:exit_code]
   end

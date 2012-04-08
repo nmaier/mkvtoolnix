@@ -54,7 +54,7 @@ cluster_helper_c::cluster_helper_c()
   , m_bytes_in_file(0)
   , m_first_timecode_in_file(-1)
   , m_first_discarded_timecode{-1}
-  , m_last_discarded_timecode{0}
+  , m_last_discarded_timecode_and_duration{0}
   , m_min_timecode_in_cluster(-1)
   , m_max_timecode_in_cluster(-1)
   , m_attachments_size(0)
@@ -177,15 +177,15 @@ cluster_helper_c::split(packet_cptr &packet) {
       m_timecode_offset = g_video_packetizer ? m_max_video_timecode_rendered : packet->assigned_timecode;
     }
 
-    m_bytes_in_file          = 0;
-    m_first_timecode_in_file = -1;
+    m_bytes_in_file                        = 0;
+    m_first_timecode_in_file               = -1;
 
-    m_first_discarded_timecode = -1;
-    m_last_discarded_timecode  =  0;
+    m_first_discarded_timecode             = -1;
+    m_last_discarded_timecode_and_duration =  0;
     mxdebug_if(m_debug_splitting, boost::format("RESETTING discarded TC\n"));
 
   } else
-    mxdebug_if(m_debug_splitting, boost::format("KEEPING discarded TC at %1% / %2%\n") % format_timecode(m_first_discarded_timecode) % format_timecode(m_last_discarded_timecode));
+    mxdebug_if(m_debug_splitting, boost::format("KEEPING discarded TC at %1% / %2%\n") % format_timecode(m_first_discarded_timecode) % format_timecode(m_last_discarded_timecode_and_duration));
 
   prepare_new_cluster();
 }
@@ -321,7 +321,7 @@ cluster_helper_c::render() {
   // Make sure that we don't have negative/wrapped around timecodes in the output file.
   // Can happend when we're splitting; so adjust timecode_offset accordingly.
   m_timecode_offset       = boost::accumulate(m_packets, m_timecode_offset, [](int64_t a, const packet_cptr &p) { return std::min(a, p->assigned_timecode); });
-  int64_t timecode_offset = m_timecode_offset + m_last_discarded_timecode - std::max<int64_t>(m_first_discarded_timecode, 0);
+  int64_t timecode_offset = m_timecode_offset + m_last_discarded_timecode_and_duration - std::max<int64_t>(m_first_discarded_timecode, 0);
 
   for (auto &pack : m_packets) {
     generic_packetizer_c *source = pack->source;
@@ -333,7 +333,7 @@ cluster_helper_c::render() {
     if (discarding()) {
       if (-1 == m_first_discarded_timecode)
         m_first_discarded_timecode = pack->assigned_timecode;
-      m_last_discarded_timecode = std::max(m_last_discarded_timecode, pack->assigned_timecode);
+      m_last_discarded_timecode_and_duration = std::max(m_last_discarded_timecode_and_duration, pack->assigned_timecode + pack->get_duration());
       continue;
     }
 

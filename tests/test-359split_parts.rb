@@ -23,3 +23,27 @@ test "data/avi/v-h264-aac.avi one output file, starting at 00:00:00" do
   unlink_tmp_files
   result
 end
+
+test "split timecodes + appending vs split parts" do
+  result = []
+  source = "data/mp4/10-DanseMacabreOp.40.m4a"
+
+  merge "--disable-lacing --split timecodes:01:21,01:52,03:07,03:51 #{source}", :output => "#{tmp}-%02d"
+  result += (1..5).collect { |idx| hash_file "#{tmp}-0#{idx}" }
+
+  merge "--disable-lacing #{tmp}-02 + #{tmp}-04", :output => "#{tmp}-appended"
+  result << hash_file("#{tmp}-appended")
+
+  output_appended = info "-s #{tmp}-appended", :output => :return
+
+  merge "--disable-lacing --split parts:01:21-01:52,+03:07-03:51 #{source}", :output => "#{tmp}-parts"
+  result << hash_file("#{tmp}-parts-001")
+
+  output_parts = info "-s #{tmp}-parts-001", :output => :return
+
+  fail "summary is different" if output_appended != output_parts
+
+  result << "ok"
+
+  result.join '-'
+end
