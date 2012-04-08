@@ -45,5 +45,21 @@ test "split timecodes + appending vs split parts" do
 
   result << "ok"
 
+  unlink_tmp_files
+
   result.join '-'
+end
+
+test "data/avi/v-h264-aac.avi three parts one output file, starting at 00:00:00" do
+  merge "--split parts:-10s,+20s-30s,+40s-50s data/avi/v-h264-aac.avi", :output => "#{tmp}-%02d"
+  result = [ hash_file("#{tmp}-01"), File.exist?("#{tmp}-02") ? fail("second file should not exist") : "ok" ].join('+')
+  unlink_tmp_files
+  result
+end
+
+test "data/avi/v-h264-aac.avi three parts one output file, starting at 00:00:10" do
+  merge "--split parts:10s-20s,+30s-40s,+50s-60s data/avi/v-h264-aac.avi", :output => "#{tmp}-%02d"
+  result = [ hash_file("#{tmp}-01"), File.exist?("#{tmp}-02") ? fail("second file should not exist") : "ok" ].join('+')
+  unlink_tmp_files
+  result
 end

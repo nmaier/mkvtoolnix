@@ -55,6 +55,7 @@ cluster_helper_c::cluster_helper_c()
   , m_first_timecode_in_file(-1)
   , m_first_discarded_timecode{-1}
   , m_last_discarded_timecode_and_duration{0}
+  , m_discarded_duration{0}
   , m_min_timecode_in_cluster(-1)
   , m_max_timecode_in_cluster(-1)
   , m_attachments_size(0)
@@ -158,7 +159,8 @@ cluster_helper_c::split(packet_cptr &packet) {
 
   m_num_cue_elements = 0;
 
-  bool create_new_file = m_current_split_point->m_create_new_file;
+  bool create_new_file       = m_current_split_point->m_create_new_file;
+  bool previously_discarding = m_discarding;
 
   mxdebug_if(m_debug_splitting, boost::format("Splitting: splitpoint %1% reached before timecode %2%, create new? %3%.\n") % m_current_split_point->str() % format_timecode(packet->assigned_timecode) % create_new_file);
 
@@ -179,13 +181,9 @@ cluster_helper_c::split(packet_cptr &packet) {
 
     m_bytes_in_file                        = 0;
     m_first_timecode_in_file               = -1;
+  }
 
-    m_first_discarded_timecode             = -1;
-    m_last_discarded_timecode_and_duration =  0;
-    mxdebug_if(m_debug_splitting, boost::format("RESETTING discarded TC\n"));
-
-  } else
-    mxdebug_if(m_debug_splitting, boost::format("KEEPING discarded TC at %1% / %2%\n") % format_timecode(m_first_discarded_timecode) % format_timecode(m_last_discarded_timecode_and_duration));
+  handle_discarded_duration(create_new_file, previously_discarding);
 
   prepare_new_cluster();
 }
@@ -503,7 +501,33 @@ cluster_helper_c::get_duration() {
 int64_t
 cluster_helper_c::get_discarded_duration()
   const {
-  return m_last_discarded_timecode_and_duration - std::max<int64_t>(m_first_discarded_timecode, 0);
+  return m_discarded_duration;
+}
+
+void
+cluster_helper_c::handle_discarded_duration(bool create_new_file,
+                                            bool previously_discarding) {
+  if (create_new_file) { // || (!previously_discarding && m_discarding)) {
+    mxdebug_if(m_debug_splitting,
+               boost::format("RESETTING discarded duration of %1%, create_new_file %2% previously_discarding %3% m_discarding %4%\n")
+               % format_timecode(m_discarded_duration) % create_new_file % previously_discarding % m_discarding);
+    m_discarded_duration = 0;
+
+  } else if (previously_discarding && !m_discarding) {
+    auto diff             = m_last_discarded_timecode_and_duration - std::max<int64_t>(m_first_discarded_timecode, 0);
+    m_discarded_duration += diff;
+
+    mxdebug_if(m_debug_splitting,
+               boost::format("ADDING to discarded duration TC at %1% / %2% diff %3% new total %4% create_new_file %5% previously_discarding %6% m_discarding %7%\n")
+               % format_timecode(m_first_discarded_timecode) % format_timecode(m_last_discarded_timecode_and_duration) % format_timecode(diff) % format_timecode(m_discarded_duration)
+               % create_new_file % previously_discarding % m_discarding);
+  } else
+    mxdebug_if(m_debug_splitting,
+               boost::format("KEEPING discarded duration at %1%, create_new_file %2% previously_discarding %3% m_discarding %4%\n")
+               % format_timecode(m_discarded_duration) % create_new_file % previously_discarding % m_discarding);
+
+  m_first_discarded_timecode             = -1;
+  m_last_discarded_timecode_and_duration =  0;
 }
 
 void

@@ -1,5 +1,9 @@
 2012-04-08  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: Writing more than two parts into the same
+	file with "--split parts:" resulted in the timecodes of the third
+	and all following parts to be wrong. Fixes ticket 740.
+
 	* mkvmerge: bug fix: The "--split parts:" functionality was
 	not taking dropped ranges into account when calculating the
 	segment duration for files that more than one range was written

@@ -84,7 +84,7 @@ private:
   int64_t m_max_timecode_and_duration, m_max_video_timecode_rendered;
   int64_t m_previous_cluster_tc, m_num_cue_elements, m_header_overhead;
   int64_t m_timecode_offset, *m_previous_packets;
-  int64_t m_bytes_in_file, m_first_timecode_in_file, m_first_discarded_timecode, m_last_discarded_timecode_and_duration;
+  int64_t m_bytes_in_file, m_first_timecode_in_file, m_first_discarded_timecode, m_last_discarded_timecode_and_duration, m_discarded_duration;
   int64_t m_min_timecode_in_cluster, m_max_timecode_in_cluster;
   int64_t m_attachments_size;
   mm_io_c *m_out;
@@ -115,6 +115,7 @@ public:
     return m_first_timecode_in_file;
   }
   int64_t get_discarded_duration() const;
+  void handle_discarded_duration(bool create_new_file, bool previously_discarding);
 
   void add_split_point(const split_point_t &split_point);
   void dump_split_points() const;
