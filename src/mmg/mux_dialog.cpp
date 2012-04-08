@@ -129,7 +129,7 @@ mux_dialog::run() {
   }
 #endif  // SYS_WINDOWS
 
-  update_window(Z("Muxing in progress."));
+  update_label(Z("Muxing in progress."));
 
   m_start_time                 = get_current_time_millis();
   m_next_remaining_time_update = m_start_time + 8000;
@@ -153,7 +153,7 @@ mux_dialog::~mux_dialog() {
 }
 
 void
-mux_dialog::update_window(wxString text) {
+mux_dialog::update_label(wxString const &text) {
   st_label->SetLabel(text);
   Layout();
 }
@@ -237,24 +237,6 @@ mux_dialog::on_close(wxCloseEvent &) {
   EndModal(0);
 }
 
-void
-mux_dialog::done() {
-  SetTitle(Z("mkvmerge has finished"));
-  st_remaining_time_label->SetLabel(wxEmptyString);
-  st_remaining_time->SetLabel(wxEmptyString);
-
-  b_ok->Enable(true);
-  b_ok->SetFocus();
-
-#if defined(SYS_WINDOWS)
-  change_abort_button();
-  if (nullptr != m_taskbar_progress)
-    m_taskbar_progress->set_state(0 != status ? TBPF_ERROR : TBPF_NOPROGRESS);
-#else  // SYS_WINDOWS
-  b_abort->Enable(false);
-#endif  // SYS_WINDOWS
-}
-
 #if defined(SYS_WINDOWS)
 void
 mux_dialog::change_abort_button() {
@@ -300,12 +282,10 @@ mux_dialog::on_output_available(wxCommandEvent &evt) {
 
 void
 mux_dialog::on_process_terminated(wxCommandEvent &evt) {
-  int status = evt.GetInt();
-
-  set_exit_code(status);
+  m_exit_code = evt.GetInt();
 
   wxString format;
-  if ((0 != status) && (1 != status))
+  if ((0 != m_exit_code) && (1 != m_exit_code))
     format = Z("mkvmerge FAILED with a return code of %d. %s");
   else
     format = Z("mkvmerge finished with a return code of %d. %s");
@@ -316,13 +296,27 @@ mux_dialog::on_process_terminated(wxCommandEvent &evt) {
   wxString status_1 = Z("There were warnings");
 #endif
 
-  wxString status_str = 0 == status ? wxString(Z("Everything went fine."))
-                      : 1 == status ? status_1
-                      : 2 == status ? wxString(Z("There were ERRORs."))
-                      :               wxString(wxT(""));
+  auto status_str = 0 == m_exit_code ? wxString(Z("Everything went fine."))
+                  : 1 == m_exit_code ? status_1
+                  : 2 == m_exit_code ? wxString(Z("There were ERRORs."))
+                  :                    wxString(wxT(""));
 
-  update_window(wxString::Format(format, status, status_str.c_str()));
-  done();
+  update_label(wxString::Format(format, m_exit_code, status_str.c_str()));
+
+  SetTitle(Z("mkvmerge has finished"));
+  st_remaining_time_label->SetLabel(wxEmptyString);
+  st_remaining_time->SetLabel(wxEmptyString);
+
+  b_ok->Enable(true);
+  b_ok->SetFocus();
+
+#if defined(SYS_WINDOWS)
+  change_abort_button();
+  if (nullptr != m_taskbar_progress)
+    m_taskbar_progress->set_state(0 != m_exit_code ? TBPF_ERROR : TBPF_NOPROGRESS);
+#else  // SYS_WINDOWS
+  b_abort->Enable(false);
+#endif  // SYS_WINDOWS
 }
 
 // ------------------------------------------------------------

@@ -60,7 +60,7 @@ public:
 
   void run();
 
-  void update_window(wxString text);
+  void update_label(wxString const &text);
   void update_gauge(long value);
   void update_remaining_time();
 
@@ -70,11 +70,6 @@ public:
   void on_close(wxCloseEvent &evt);
   void on_output_available(wxCommandEvent &evt);
   void on_process_terminated(wxCommandEvent &evt);
-  void done();
-
-  void set_exit_code(int exit_code) {
-    m_exit_code = exit_code;
-  }
 
 #if defined(SYS_WINDOWS)
   void change_abort_button();
