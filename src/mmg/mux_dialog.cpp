@@ -31,14 +31,8 @@
 #include "mmg/mmg_dialog.h"
 #include "mmg/mux_dialog.h"
 
-mux_dialog::mux_dialog(wxWindow *parent):
-  wxDialog(parent, -1, Z("mkvmerge is running"), wxDefaultPosition,
-#ifdef SYS_WINDOWS
-           wxSize(700, 560),
-#else
-           wxSize(720, 520),
-#endif
-           wxDEFAULT_FRAME_STYLE)
+mux_dialog::mux_dialog(wxWindow *parent)
+  : wxDialog(parent, -1, Z("mkvmerge is running"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE)
   , m_thread{nullptr}
 #if defined(SYS_WINDOWS)
   , m_taskbar_progress(nullptr)
@@ -92,7 +86,13 @@ mux_dialog::mux_dialog(wxWindow *parent):
   siz_all->Add(siz_status, 0, wxGROW | wxALL, 5);
   siz_all->Add(siz_output, 1, wxGROW | wxALL, 5);
   siz_all->Add(siz_buttons, 0, wxGROW | wxALL, 10);
-  SetSizer(siz_all);
+
+  SetSizerAndFit(siz_all);
+#ifdef SYS_WINDOWS
+  SetSize(wxSize(700, 560));
+#else
+  SetSize(wxSize(720, 520));
+#endif
 }
 
 void
