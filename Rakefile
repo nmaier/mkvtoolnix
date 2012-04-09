@@ -467,17 +467,26 @@ end
 # Cleaning tasks
 desc "Remove all compiled files"
 task :clean do
-  tools = $tools.collect { |name| "src/tools/#{name}" }.join " "
-  run <<-SHELL, :allow_failure => true
-    rm -f *.o */*.o */*/*.o */lib*.a */*/lib*.a */*/*.gch po/*.mo
-      */*.exe */*/*.exe */*/*.dll */*/*.dll.a doc/guide/*/*.hhk
-      src/info/ui/*.h src/info/*.moc.cpp src/common/*/*.o
-      src/mmg/*/*.o #{$applications.join(" ")} #{tools}
-      lib/libebml/src/*.o lib/libmatroska/src/*.o
-      lib/libebml/src/lib*.a lib/libmatroska/src/lib*.a
-      lib/pugixml/src/*.o lib/pugixml/src/lib*.a
-  SHELL
-  run "rm -rf #{$dependency_dir}", :allow_failure => true
+  puts "   CLEAN"
+
+  patterns = %w{
+    src/**/*.o lib/**/*.o src/**/lib*.a lib/**/lib*.a src/**/*.gch
+    src/**/*.exe src/**/*.dll src/**/*.dll.a
+    src/**/*.moc.cpp src/info/ui/*.h src/mmg-qt/forms/*.h
+    po/*.mo doc/guide/**/*.hhk
+  }
+  patterns += $applications + $tools.collect { |name| "src/tools/#{name}" }
+  verbose   = ENV['V'].to_bool
+
+  patterns.collect { |pattern| FileList[pattern].to_a }.flatten.select { |file_name| File.exists? file_name }.each do |file_name|
+    puts "      rm #{file_name}" if verbose
+    File.unlink file_name
+  end
+
+  if Dir.exists? $dependency_dir
+    puts "  rm -rf #{$dependency_dir}" if verbose
+    FileUtils.rm_rf $dependency_dir
+  end
 end
 
 namespace :clean do

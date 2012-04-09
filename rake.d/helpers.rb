@@ -1,5 +1,6 @@
 $use_tempfile_for_run = defined?(RUBY_PLATFORM) && /mingw/i.match(RUBY_PLATFORM)
 require "tempfile"
+require "fileutils"
 
 if defined? Mutex
   $message_mutex = Mutex.new
