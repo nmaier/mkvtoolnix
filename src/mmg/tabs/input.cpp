@@ -387,6 +387,8 @@ tab_input::parse_container_line(mmg_file_cptr file,
   if (info.IsEmpty())
     return;
 
+  std::string segment_uid, next_segment_uid, previous_segment_uid;
+
   for (auto &arg : split(info, wxU(" "))) {
     auto pair = split(arg, wxU(":"), 2);
 
@@ -397,6 +399,25 @@ tab_input::parse_container_line(mmg_file_cptr file,
 
     } else if ((pair.size() == 2) && (pair[0] == wxT("other_file")))
       file->other_files.push_back(wxFileName(unescape(pair[1])));
+
+    else if ((pair.size() == 2) && (pair[0] == wxT("segment_uid")))
+      segment_uid = unescape(to_utf8(pair[1]));
+
+    else if ((pair.size() == 2) && (pair[0] == wxT("next_segment_uid")))
+      next_segment_uid = unescape(to_utf8(pair[1]));
+
+    else if ((pair.size() == 2) && (pair[0] == wxT("previous_segment_uid")))
+      previous_segment_uid = unescape(to_utf8(pair[1]));
+  }
+
+  if (   (!next_segment_uid.empty() || !previous_segment_uid.empty())
+      && mdlg->global_page->tc_segment_uid->         GetValue().IsEmpty()
+      && mdlg->global_page->tc_next_segment_uid->    GetValue().IsEmpty()
+      && mdlg->global_page->tc_previous_segment_uid->GetValue().IsEmpty()) {
+
+    mdlg->global_page->tc_segment_uid->         SetValue(wxU(segment_uid));
+    mdlg->global_page->tc_next_segment_uid->    SetValue(wxU(next_segment_uid));
+    mdlg->global_page->tc_previous_segment_uid->SetValue(wxU(previous_segment_uid));
   }
 }
 
