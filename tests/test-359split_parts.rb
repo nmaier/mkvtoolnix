@@ -12,14 +12,14 @@ end
 
 test "data/avi/v-h264-aac.avi one output file" do
   merge "--split parts:20s-30s,+40s-50s data/avi/v-h264-aac.avi", :output => "#{tmp}-%02d"
-  result = [ hash_file("#{tmp}-01"), File.exist?("#{tmp}-02") ? fail("second file should not exist") : "ok" ].join('+')
+  result = [ hash_file("#{tmp}-%02d"), File.exist?("#{tmp}-02") ? fail("second file should not exist") : "ok" ].join('+')
   unlink_tmp_files
   result
 end
 
 test "data/avi/v-h264-aac.avi one output file, starting at 00:00:00" do
   merge "--split parts:-30s,+40s-50s data/avi/v-h264-aac.avi", :output => "#{tmp}-%02d"
-  result = [ hash_file("#{tmp}-01"), File.exist?("#{tmp}-02") ? fail("second file should not exist") : "ok" ].join('+')
+  result = [ hash_file("#{tmp}-%02d"), File.exist?("#{tmp}-02") ? fail("second file should not exist") : "ok" ].join('+')
   unlink_tmp_files
   result
 end
@@ -37,9 +37,9 @@ test "split timecodes + appending vs split parts" do
   output_appended = info "-s #{tmp}-appended", :output => :return
 
   merge "--disable-lacing --split parts:01:21-01:52,+03:07-03:51 #{source}", :output => "#{tmp}-parts"
-  result << hash_file("#{tmp}-parts-001")
+  result << hash_file("#{tmp}-parts")
 
-  output_parts = info "-s #{tmp}-parts-001", :output => :return
+  output_parts = info "-s #{tmp}-parts", :output => :return
 
   fail "summary is different" if output_appended != output_parts
 
@@ -52,14 +52,14 @@ end
 
 test "data/avi/v-h264-aac.avi three parts one output file, starting at 00:00:00" do
   merge "--split parts:-10s,+20s-30s,+40s-50s data/avi/v-h264-aac.avi", :output => "#{tmp}-%02d"
-  result = [ hash_file("#{tmp}-01"), File.exist?("#{tmp}-02") ? fail("second file should not exist") : "ok" ].join('+')
+  result = [ hash_file("#{tmp}-%02d"), File.exist?("#{tmp}-02") ? fail("second file should not exist") : "ok" ].join('+')
   unlink_tmp_files
   result
 end
 
 test "data/avi/v-h264-aac.avi three parts one output file, starting at 00:00:10" do
   merge "--split parts:10s-20s,+30s-40s,+50s-60s data/avi/v-h264-aac.avi", :output => "#{tmp}-%02d"
-  result = [ hash_file("#{tmp}-01"), File.exist?("#{tmp}-02") ? fail("second file should not exist") : "ok" ].join('+')
+  result = [ hash_file("#{tmp}-%02d"), File.exist?("#{tmp}-02") ? fail("second file should not exist") : "ok" ].join('+')
   unlink_tmp_files
   result
 end

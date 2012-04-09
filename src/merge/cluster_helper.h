@@ -122,6 +122,7 @@ public:
   bool splitting() const {
     return !m_split_points.empty();
   }
+  bool split_mode_produces_many_files() const;
 
   bool discarding() const {
     return splitting() && m_discarding;

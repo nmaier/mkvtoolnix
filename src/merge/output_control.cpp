@@ -1453,7 +1453,7 @@ void
 create_next_output_file() {
   mxdebug_if(debugging_requested("splitting"), boost::format("Create next output file splitting? %1% discarding? %2%\n") % g_cluster_helper->splitting() % g_cluster_helper->discarding());
 
-  std::string this_outfile = g_cluster_helper->splitting() ? create_output_name() : g_outfile;
+  auto this_outfile   = g_cluster_helper->split_mode_produces_many_files() ? create_output_name() : g_outfile;
 
   g_kax_segment       = new KaxSegment();
   g_kax_cues          = new KaxCues();

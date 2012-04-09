@@ -540,6 +540,26 @@ cluster_helper_c::add_split_point(const split_point_t &split_point) {
     ++m_current_split_point;
 }
 
+bool
+cluster_helper_c::split_mode_produces_many_files()
+  const {
+  if (!splitting())
+    return false;
+
+  if (m_split_points.front().m_type != split_point_t::SPT_PARTS)
+    return true;
+
+  bool first = true;
+  for (auto &split_point : m_split_points)
+    if (!split_point.m_discard && split_point.m_create_new_file) {
+      if (!first)
+        return true;
+      first = false;
+    }
+
+  return false;
+}
+
 void
 cluster_helper_c::dump_split_points()
   const {

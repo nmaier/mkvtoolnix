@@ -1,5 +1,10 @@
 2012-04-09  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: enhancement: In "--split parts:" mode mkvmerge will
+	use the output file name as it is instead of adding a running
+	number to it if all the ranges to be kept are to be written into a
+	single output file. Implements ticket 743.
+
 	* mkvextract: bug fix: mkvextract will no longer abort extracing
 	h.264 tracks if it encounters a NAL smaller than its size
 	field. Instead it will warn about it and drop the NAL.
