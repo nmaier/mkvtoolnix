@@ -64,6 +64,11 @@ to_hex(const std::string &buf,
        bool compact = false) {
   return to_hex(reinterpret_cast<const unsigned char *>(buf.c_str()), buf.length(), compact);
 }
+inline std::string
+to_hex(memory_cptr const &buf,
+       bool compact = false) {
+  return to_hex(buf->get_buffer(), buf->get_size(), compact);
+}
 
 std::string create_minutes_seconds_time_string(unsigned int seconds, bool omit_minutes_if_zero = false);
 
