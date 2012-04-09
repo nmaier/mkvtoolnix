@@ -39,4 +39,15 @@ to_wide(QString const &source) {
   return source.toStdWString();
 }
 
+inline void
+mxinfo(QString const &s) {
+  mxinfo(to_utf8(s));
+}
+
+inline void
+mxmsg(unsigned int level,
+      QString const &message) {
+  mxmsg(level, to_utf8(message));
+}
+
 #endif  // MTX_COMMON_QT_H

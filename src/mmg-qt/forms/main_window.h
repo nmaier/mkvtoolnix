@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'main_window.ui'
 **
-** Created: Mon Apr 9 17:38:31 2012
+** Created: Mon Apr 9 19:48:41 2012
 **      by: Qt User Interface Compiler version 4.7.4
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -57,28 +57,15 @@ public:
     QAction *action_Chapter_editor;
     QAction *action_Options;
     QWidget *centralWidget;
-    QVBoxLayout *verticalLayout_12;
+    QVBoxLayout *verticalLayout_2;
     QTabWidget *mainTab;
     QWidget *inputTab;
     QHBoxLayout *horizontalLayout_2;
-    QVBoxLayout *verticalLayout_3;
-    QLabel *label;
-    QHBoxLayout *horizontalLayout;
-    QTreeView *riles;
     QVBoxLayout *verticalLayout;
-    QPushButton *addFile;
-    QPushButton *appendFile;
-    QPushButton *removeFile;
-    QPushButton *removeAll;
-    QPushButton *multipleFileParts;
-    QSpacerItem *verticalSpacer;
+    QLabel *label;
+    QTreeView *files;
     QLabel *label_2;
-    QHBoxLayout *horizontalLayout_3;
     QTreeView *tracks;
-    QVBoxLayout *verticalLayout_2;
-    QPushButton *trackUp;
-    QPushButton *trackDown;
-    QSpacerItem *verticalSpacer_2;
     QVBoxLayout *verticalLayout_4;
     QLabel *label_3;
     QScrollArea *scrollArea;
@@ -212,11 +199,12 @@ public:
     QPushButton *addAttachment;
     QPushButton *removeAttachment;
     QSpacerItem *verticalSpacer_6;
-    QHBoxLayout *horizontalLayout_5;
+    QHBoxLayout *horizontalLayout;
     QSpacerItem *horizontalSpacer_2;
-    QPushButton *pbStartMuxing;
-    QPushButton *pbAddToJobQueue;
-    QPushButton *pbSaveSettings;
+    QPushButton *addFiles;
+    QPushButton *startMuxing;
+    QPushButton *addToJobQueue;
+    QPushButton *saveSettings;
     QSpacerItem *horizontalSpacer_3;
     QMenuBar *menuBar;
     QMenu *menuFile;
@@ -228,7 +216,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
-        MainWindow->resize(846, 571);
+        MainWindow->resize(780, 556);
         actionNew = new QAction(MainWindow);
         actionNew->setObjectName(QString::fromUtf8("actionNew"));
         actionSave_job_file = new QAction(MainWindow);
@@ -259,10 +247,10 @@ public:
         action_Options->setObjectName(QString::fromUtf8("action_Options"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
-        verticalLayout_12 = new QVBoxLayout(centralWidget);
-        verticalLayout_12->setSpacing(6);
-        verticalLayout_12->setContentsMargins(11, 11, 11, 11);
-        verticalLayout_12->setObjectName(QString::fromUtf8("verticalLayout_12"));
+        verticalLayout_2 = new QVBoxLayout(centralWidget);
+        verticalLayout_2->setSpacing(6);
+        verticalLayout_2->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
         mainTab = new QTabWidget(centralWidget);
         mainTab->setObjectName(QString::fromUtf8("mainTab"));
         mainTab->setTabPosition(QTabWidget::North);
@@ -272,98 +260,31 @@ public:
         horizontalLayout_2->setSpacing(6);
         horizontalLayout_2->setContentsMargins(11, 11, 11, 11);
         horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
-        verticalLayout_3 = new QVBoxLayout();
-        verticalLayout_3->setSpacing(6);
-        verticalLayout_3->setObjectName(QString::fromUtf8("verticalLayout_3"));
-        label = new QLabel(inputTab);
-        label->setObjectName(QString::fromUtf8("label"));
-
-        verticalLayout_3->addWidget(label);
-
-        horizontalLayout = new QHBoxLayout();
-        horizontalLayout->setSpacing(6);
-        horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
-        riles = new QTreeView(inputTab);
-        riles->setObjectName(QString::fromUtf8("riles"));
-
-        horizontalLayout->addWidget(riles);
-
         verticalLayout = new QVBoxLayout();
         verticalLayout->setSpacing(6);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
-        addFile = new QPushButton(inputTab);
-        addFile->setObjectName(QString::fromUtf8("addFile"));
+        label = new QLabel(inputTab);
+        label->setObjectName(QString::fromUtf8("label"));
 
-        verticalLayout->addWidget(addFile);
+        verticalLayout->addWidget(label);
 
-        appendFile = new QPushButton(inputTab);
-        appendFile->setObjectName(QString::fromUtf8("appendFile"));
+        files = new QTreeView(inputTab);
+        files->setObjectName(QString::fromUtf8("files"));
 
-        verticalLayout->addWidget(appendFile);
-
-        removeFile = new QPushButton(inputTab);
-        removeFile->setObjectName(QString::fromUtf8("removeFile"));
-
-        verticalLayout->addWidget(removeFile);
-
-        removeAll = new QPushButton(inputTab);
-        removeAll->setObjectName(QString::fromUtf8("removeAll"));
-
-        verticalLayout->addWidget(removeAll);
-
-        multipleFileParts = new QPushButton(inputTab);
-        multipleFileParts->setObjectName(QString::fromUtf8("multipleFileParts"));
-
-        verticalLayout->addWidget(multipleFileParts);
-
-        verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-
-        verticalLayout->addItem(verticalSpacer);
-
-
-        horizontalLayout->addLayout(verticalLayout);
-
-
-        verticalLayout_3->addLayout(horizontalLayout);
+        verticalLayout->addWidget(files);
 
         label_2 = new QLabel(inputTab);
         label_2->setObjectName(QString::fromUtf8("label_2"));
 
-        verticalLayout_3->addWidget(label_2);
+        verticalLayout->addWidget(label_2);
 
-        horizontalLayout_3 = new QHBoxLayout();
-        horizontalLayout_3->setSpacing(6);
-        horizontalLayout_3->setObjectName(QString::fromUtf8("horizontalLayout_3"));
         tracks = new QTreeView(inputTab);
         tracks->setObjectName(QString::fromUtf8("tracks"));
 
-        horizontalLayout_3->addWidget(tracks);
-
-        verticalLayout_2 = new QVBoxLayout();
-        verticalLayout_2->setSpacing(6);
-        verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
-        trackUp = new QPushButton(inputTab);
-        trackUp->setObjectName(QString::fromUtf8("trackUp"));
-
-        verticalLayout_2->addWidget(trackUp);
-
-        trackDown = new QPushButton(inputTab);
-        trackDown->setObjectName(QString::fromUtf8("trackDown"));
-
-        verticalLayout_2->addWidget(trackDown);
-
-        verticalSpacer_2 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-
-        verticalLayout_2->addItem(verticalSpacer_2);
+        verticalLayout->addWidget(tracks);
 
 
-        horizontalLayout_3->addLayout(verticalLayout_2);
-
-
-        verticalLayout_3->addLayout(horizontalLayout_3);
-
-
-        horizontalLayout_2->addLayout(verticalLayout_3);
+        horizontalLayout_2->addLayout(verticalLayout);
 
         verticalLayout_4 = new QVBoxLayout();
         verticalLayout_4->setSpacing(6);
@@ -380,7 +301,7 @@ public:
         scrollArea->setWidgetResizable(true);
         scrollAreaWidgetContents = new QWidget();
         scrollAreaWidgetContents->setObjectName(QString::fromUtf8("scrollAreaWidgetContents"));
-        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 388, 757));
+        scrollAreaWidgetContents->setGeometry(QRect(0, -366, 402, 757));
         verticalLayout_9 = new QVBoxLayout(scrollAreaWidgetContents);
         verticalLayout_9->setSpacing(6);
         verticalLayout_9->setContentsMargins(11, 11, 11, 11);
@@ -1080,41 +1001,46 @@ public:
 
         mainTab->addTab(attachmentsTab, QString());
 
-        verticalLayout_12->addWidget(mainTab);
+        verticalLayout_2->addWidget(mainTab);
 
-        horizontalLayout_5 = new QHBoxLayout();
-        horizontalLayout_5->setSpacing(6);
-        horizontalLayout_5->setObjectName(QString::fromUtf8("horizontalLayout_5"));
+        horizontalLayout = new QHBoxLayout();
+        horizontalLayout->setSpacing(6);
+        horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
         horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-        horizontalLayout_5->addItem(horizontalSpacer_2);
+        horizontalLayout->addItem(horizontalSpacer_2);
 
-        pbStartMuxing = new QPushButton(centralWidget);
-        pbStartMuxing->setObjectName(QString::fromUtf8("pbStartMuxing"));
+        addFiles = new QPushButton(centralWidget);
+        addFiles->setObjectName(QString::fromUtf8("addFiles"));
 
-        horizontalLayout_5->addWidget(pbStartMuxing);
+        horizontalLayout->addWidget(addFiles);
 
-        pbAddToJobQueue = new QPushButton(centralWidget);
-        pbAddToJobQueue->setObjectName(QString::fromUtf8("pbAddToJobQueue"));
+        startMuxing = new QPushButton(centralWidget);
+        startMuxing->setObjectName(QString::fromUtf8("startMuxing"));
 
-        horizontalLayout_5->addWidget(pbAddToJobQueue);
+        horizontalLayout->addWidget(startMuxing);
 
-        pbSaveSettings = new QPushButton(centralWidget);
-        pbSaveSettings->setObjectName(QString::fromUtf8("pbSaveSettings"));
+        addToJobQueue = new QPushButton(centralWidget);
+        addToJobQueue->setObjectName(QString::fromUtf8("addToJobQueue"));
 
-        horizontalLayout_5->addWidget(pbSaveSettings);
+        horizontalLayout->addWidget(addToJobQueue);
+
+        saveSettings = new QPushButton(centralWidget);
+        saveSettings->setObjectName(QString::fromUtf8("saveSettings"));
+
+        horizontalLayout->addWidget(saveSettings);
 
         horizontalSpacer_3 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-        horizontalLayout_5->addItem(horizontalSpacer_3);
+        horizontalLayout->addItem(horizontalSpacer_3);
 
 
-        verticalLayout_12->addLayout(horizontalLayout_5);
+        verticalLayout_2->addLayout(horizontalLayout);
 
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 846, 24));
+        menuBar->setGeometry(QRect(0, 0, 780, 24));
         menuFile = new QMenu(menuBar);
         menuFile->setObjectName(QString::fromUtf8("menuFile"));
         menuMuxing = new QMenu(menuBar);
@@ -1125,6 +1051,100 @@ public:
         statusBar = new QStatusBar(MainWindow);
         statusBar->setObjectName(QString::fromUtf8("statusBar"));
         MainWindow->setStatusBar(statusBar);
+#ifndef QT_NO_SHORTCUT
+        label->setBuddy(files);
+        label_2->setBuddy(tracks);
+        label_16->setBuddy(trackName);
+        label_17->setBuddy(trackLanguage);
+        label_18->setBuddy(defaultTrackFlag);
+        label_19->setBuddy(forcedTrackFlag);
+        label_31->setBuddy(compression);
+        label_20->setBuddy(trackTacks);
+        label_22->setBuddy(delay);
+        label_23->setBuddy(stretchBy);
+        label_24->setBuddy(defaultDuration);
+        label_21->setBuddy(timecodes);
+        label_26->setBuddy(stereoscopy);
+        label_27->setBuddy(cropping);
+        label_28->setBuddy(subtitleCharacterSet);
+        label_29->setBuddy(cues);
+        label_30->setBuddy(userDefinedTrackOptions);
+        label_5->setBuddy(title);
+        label_4->setBuddy(output);
+        label_6->setBuddy(globalTags);
+        label_7->setBuddy(segmentinfo);
+        label_34->setBuddy(splitMaxFiles);
+        label_9->setBuddy(segmentUIDs);
+        label_10->setBuddy(previousSegmentUID);
+        label_11->setBuddy(nextSegmentUID);
+        label_12->setBuddy(chapters);
+        label_13->setBuddy(chapterLanguage);
+        label_14->setBuddy(chapterCharacterSet);
+        label_15->setBuddy(cueNameFormat);
+        label_33->setBuddy(userDefinedOptions);
+#endif // QT_NO_SHORTCUT
+        QWidget::setTabOrder(mainTab, files);
+        QWidget::setTabOrder(files, tracks);
+        QWidget::setTabOrder(tracks, scrollArea);
+        QWidget::setTabOrder(scrollArea, trackName);
+        QWidget::setTabOrder(trackName, trackLanguage);
+        QWidget::setTabOrder(trackLanguage, defaultTrackFlag);
+        QWidget::setTabOrder(defaultTrackFlag, forcedTrackFlag);
+        QWidget::setTabOrder(forcedTrackFlag, compression);
+        QWidget::setTabOrder(compression, trackTacks);
+        QWidget::setTabOrder(trackTacks, browseTrackTags);
+        QWidget::setTabOrder(browseTrackTags, delay);
+        QWidget::setTabOrder(delay, stretchBy);
+        QWidget::setTabOrder(stretchBy, defaultDuration);
+        QWidget::setTabOrder(defaultDuration, timecodes);
+        QWidget::setTabOrder(timecodes, browseTimecodes);
+        QWidget::setTabOrder(browseTimecodes, setAspectRatio);
+        QWidget::setTabOrder(setAspectRatio, aspectRatio);
+        QWidget::setTabOrder(aspectRatio, setDisplayWidthHeight);
+        QWidget::setTabOrder(setDisplayWidthHeight, displayWidth);
+        QWidget::setTabOrder(displayWidth, displayHeight);
+        QWidget::setTabOrder(displayHeight, stereoscopy);
+        QWidget::setTabOrder(stereoscopy, cropping);
+        QWidget::setTabOrder(cropping, aacIsSBR);
+        QWidget::setTabOrder(aacIsSBR, subtitleCharacterSet);
+        QWidget::setTabOrder(subtitleCharacterSet, cues);
+        QWidget::setTabOrder(cues, userDefinedTrackOptions);
+        QWidget::setTabOrder(userDefinedTrackOptions, title);
+        QWidget::setTabOrder(title, output);
+        QWidget::setTabOrder(output, browseOutput);
+        QWidget::setTabOrder(browseOutput, globalTags);
+        QWidget::setTabOrder(globalTags, browseGlobalTags);
+        QWidget::setTabOrder(browseGlobalTags, segmentinfo);
+        QWidget::setTabOrder(segmentinfo, browseSegmentInfo);
+        QWidget::setTabOrder(browseSegmentInfo, doNotSplit);
+        QWidget::setTabOrder(doNotSplit, doSplitAfterSize);
+        QWidget::setTabOrder(doSplitAfterSize, splitSize);
+        QWidget::setTabOrder(splitSize, doSplitAfterDuration);
+        QWidget::setTabOrder(doSplitAfterDuration, splitDuration);
+        QWidget::setTabOrder(splitDuration, doSplitAfterTimecodes);
+        QWidget::setTabOrder(doSplitAfterTimecodes, splitTimecodes);
+        QWidget::setTabOrder(splitTimecodes, doSplitByParts);
+        QWidget::setTabOrder(doSplitByParts, splitParts);
+        QWidget::setTabOrder(splitParts, splitMaxFiles);
+        QWidget::setTabOrder(splitMaxFiles, linkFiles);
+        QWidget::setTabOrder(linkFiles, segmentUIDs);
+        QWidget::setTabOrder(segmentUIDs, previousSegmentUID);
+        QWidget::setTabOrder(previousSegmentUID, nextSegmentUID);
+        QWidget::setTabOrder(nextSegmentUID, chapters);
+        QWidget::setTabOrder(chapters, browseChapters);
+        QWidget::setTabOrder(browseChapters, chapterLanguage);
+        QWidget::setTabOrder(chapterLanguage, chapterCharacterSet);
+        QWidget::setTabOrder(chapterCharacterSet, cueNameFormat);
+        QWidget::setTabOrder(cueNameFormat, webmMode);
+        QWidget::setTabOrder(webmMode, userDefinedOptions);
+        QWidget::setTabOrder(userDefinedOptions, editUserDefinedOptions);
+        QWidget::setTabOrder(editUserDefinedOptions, attachments);
+        QWidget::setTabOrder(attachments, addAttachment);
+        QWidget::setTabOrder(addAttachment, removeAttachment);
+        QWidget::setTabOrder(removeAttachment, addFiles);
+        QWidget::setTabOrder(addFiles, startMuxing);
+        QWidget::setTabOrder(startMuxing, addToJobQueue);
+        QWidget::setTabOrder(addToJobQueue, saveSettings);
 
         menuBar->addAction(menuFile->menuAction());
         menuBar->addAction(menuMuxing->menuAction());
@@ -1149,9 +1169,12 @@ public:
         menuTools->addAction(action_Options);
 
         retranslateUi(MainWindow);
-        QObject::connect(pbStartMuxing, SIGNAL(clicked()), MainWindow, SLOT(startMuxingPressed()));
-        QObject::connect(pbAddToJobQueue, SIGNAL(clicked()), MainWindow, SLOT(onAddToJobQueue()));
-        QObject::connect(pbSaveSettings, SIGNAL(clicked()), MainWindow, SLOT(onSaveSettings()));
+        QObject::connect(startMuxing, SIGNAL(clicked()), MainWindow, SLOT(onStartMuxing()));
+        QObject::connect(addToJobQueue, SIGNAL(clicked()), MainWindow, SLOT(onAddToJobQueue()));
+        QObject::connect(saveSettings, SIGNAL(clicked()), MainWindow, SLOT(onSaveSettings()));
+        QObject::connect(addFiles, SIGNAL(clicked()), MainWindow, SLOT(onAddFiles()));
+        QObject::connect(actionAdd_to_job_queue, SIGNAL(triggered()), MainWindow, SLOT(onAddToJobQueue()));
+        QObject::connect(actionExit, SIGNAL(triggered()), MainWindow, SLOT(close()));
 
         mainTab->setCurrentIndex(0);
 
@@ -1177,14 +1200,7 @@ public:
         action_Chapter_editor->setText(QApplication::translate("MainWindow", "&Chapter editor", 0, QApplication::UnicodeUTF8));
         action_Options->setText(QApplication::translate("MainWindow", "&Options...", 0, QApplication::UnicodeUTF8));
         label->setText(QApplication::translate("MainWindow", "Files:", 0, QApplication::UnicodeUTF8));
-        addFile->setText(QApplication::translate("MainWindow", "Add", 0, QApplication::UnicodeUTF8));
-        appendFile->setText(QApplication::translate("MainWindow", "Append", 0, QApplication::UnicodeUTF8));
-        removeFile->setText(QApplication::translate("MainWindow", "Remove", 0, QApplication::UnicodeUTF8));
-        removeAll->setText(QApplication::translate("MainWindow", "Remove all", 0, QApplication::UnicodeUTF8));
-        multipleFileParts->setText(QApplication::translate("MainWindow", "Multiple Parts", 0, QApplication::UnicodeUTF8));
         label_2->setText(QApplication::translate("MainWindow", "Tracks, chapters, tags and attachments:", 0, QApplication::UnicodeUTF8));
-        trackUp->setText(QApplication::translate("MainWindow", "up", 0, QApplication::UnicodeUTF8));
-        trackDown->setText(QApplication::translate("MainWindow", "down", 0, QApplication::UnicodeUTF8));
         label_3->setText(QApplication::translate("MainWindow", "Properties:", 0, QApplication::UnicodeUTF8));
         groupBox_7->setTitle(QApplication::translate("MainWindow", "General options", 0, QApplication::UnicodeUTF8));
         label_16->setText(QApplication::translate("MainWindow", "Track name:", 0, QApplication::UnicodeUTF8));
@@ -1271,12 +1287,13 @@ public:
         addAttachment->setText(QApplication::translate("MainWindow", "Add", 0, QApplication::UnicodeUTF8));
         removeAttachment->setText(QApplication::translate("MainWindow", "Remove", 0, QApplication::UnicodeUTF8));
         mainTab->setTabText(mainTab->indexOf(attachmentsTab), QApplication::translate("MainWindow", "Attachments", 0, QApplication::UnicodeUTF8));
-        pbStartMuxing->setText(QApplication::translate("MainWindow", "Start muxing", 0, QApplication::UnicodeUTF8));
-        pbAddToJobQueue->setText(QApplication::translate("MainWindow", "Add to job queue", 0, QApplication::UnicodeUTF8));
-        pbSaveSettings->setText(QApplication::translate("MainWindow", "Save settings", 0, QApplication::UnicodeUTF8));
-        menuFile->setTitle(QApplication::translate("MainWindow", "File", 0, QApplication::UnicodeUTF8));
-        menuMuxing->setTitle(QApplication::translate("MainWindow", "Muxing", 0, QApplication::UnicodeUTF8));
-        menuTools->setTitle(QApplication::translate("MainWindow", "Tools", 0, QApplication::UnicodeUTF8));
+        addFiles->setText(QApplication::translate("MainWindow", "&Add files", 0, QApplication::UnicodeUTF8));
+        startMuxing->setText(QApplication::translate("MainWindow", "Sta&rt muxing", 0, QApplication::UnicodeUTF8));
+        addToJobQueue->setText(QApplication::translate("MainWindow", "Add to job &queue", 0, QApplication::UnicodeUTF8));
+        saveSettings->setText(QApplication::translate("MainWindow", "&Save settings", 0, QApplication::UnicodeUTF8));
+        menuFile->setTitle(QApplication::translate("MainWindow", "&File", 0, QApplication::UnicodeUTF8));
+        menuMuxing->setTitle(QApplication::translate("MainWindow", "&Muxing", 0, QApplication::UnicodeUTF8));
+        menuTools->setTitle(QApplication::translate("MainWindow", "&Tools", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

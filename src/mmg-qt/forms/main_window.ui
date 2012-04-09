@@ -6,15 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>846</width>
-    <height>571</height>
+    <width>780</width>
+    <height>556</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QVBoxLayout" name="verticalLayout_12">
+   <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
      <widget class="QTabWidget" name="mainTab">
       <property name="tabPosition">
@@ -29,117 +29,32 @@
        </attribute>
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_3">
+         <layout class="QVBoxLayout" name="verticalLayout">
           <item>
            <widget class="QLabel" name="label">
             <property name="text">
              <string>Files:</string>
             </property>
+            <property name="buddy">
+             <cstring>files</cstring>
+            </property>
            </widget>
           </item>
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout">
-            <item>
-             <widget class="QTreeView" name="riles"/>
-            </item>
-            <item>
-             <layout class="QVBoxLayout" name="verticalLayout">
-              <item>
-               <widget class="QPushButton" name="addFile">
-                <property name="text">
-                 <string>Add</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="appendFile">
-                <property name="text">
-                 <string>Append</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="removeFile">
-                <property name="text">
-                 <string>Remove</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="removeAll">
-                <property name="text">
-                 <string>Remove all</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="multipleFileParts">
-                <property name="text">
-                 <string>Multiple Parts</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <spacer name="verticalSpacer">
-                <property name="orientation">
-                 <enum>Qt::Vertical</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>20</width>
-                  <height>40</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-             </layout>
-            </item>
-           </layout>
+           <widget class="QTreeView" name="files"/>
           </item>
           <item>
            <widget class="QLabel" name="label_2">
             <property name="text">
              <string>Tracks, chapters, tags and attachments:</string>
             </property>
+            <property name="buddy">
+             <cstring>tracks</cstring>
+            </property>
            </widget>
           </item>
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_3">
-            <item>
-             <widget class="QTreeView" name="tracks"/>
-            </item>
-            <item>
-             <layout class="QVBoxLayout" name="verticalLayout_2">
-              <item>
-               <widget class="QPushButton" name="trackUp">
-                <property name="text">
-                 <string>up</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="trackDown">
-                <property name="text">
-                 <string>down</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <spacer name="verticalSpacer_2">
-                <property name="orientation">
-                 <enum>Qt::Vertical</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>20</width>
-                  <height>40</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-             </layout>
-            </item>
-           </layout>
+           <widget class="QTreeView" name="tracks"/>
           </item>
          </layout>
         </item>
@@ -167,8 +82,8 @@
              <property name="geometry">
               <rect>
                <x>0</x>
-               <y>0</y>
-               <width>388</width>
+               <y>-366</y>
+               <width>402</width>
                <height>757</height>
               </rect>
              </property>
@@ -184,6 +99,9 @@
                    <property name="text">
                     <string>Track name:</string>
                    </property>
+                   <property name="buddy">
+                    <cstring>trackName</cstring>
+                   </property>
                   </widget>
                  </item>
                  <item row="0" column="1">
@@ -194,6 +112,9 @@
                    <property name="text">
                     <string>Language:</string>
                    </property>
+                   <property name="buddy">
+                    <cstring>trackLanguage</cstring>
+                   </property>
                   </widget>
                  </item>
                  <item row="1" column="1">
@@ -203,6 +124,9 @@
                   <widget class="QLabel" name="label_18">
                    <property name="text">
                     <string>&quot;Default track&quot; flag:</string>
+                   </property>
+                   <property name="buddy">
+                    <cstring>defaultTrackFlag</cstring>
                    </property>
                   </widget>
                  </item>
@@ -230,6 +154,9 @@
                    <property name="text">
                     <string>&quot;Forced track&quot; flag:</string>
                    </property>
+                   <property name="buddy">
+                    <cstring>forcedTrackFlag</cstring>
+                   </property>
                   </widget>
                  </item>
                  <item row="3" column="1">
@@ -250,6 +177,9 @@
                   <widget class="QLabel" name="label_31">
                    <property name="text">
                     <string>Compression:</string>
+                   </property>
+                   <property name="buddy">
+                    <cstring>compression</cstring>
                    </property>
                   </widget>
                  </item>
@@ -276,6 +206,9 @@
                   <widget class="QLabel" name="label_20">
                    <property name="text">
                     <string>Tags:</string>
+                   </property>
+                   <property name="buddy">
+                    <cstring>trackTacks</cstring>
                    </property>
                   </widget>
                  </item>
@@ -307,6 +240,9 @@
                    <property name="text">
                     <string>Delay (in ms):</string>
                    </property>
+                   <property name="buddy">
+                    <cstring>delay</cstring>
+                   </property>
                   </widget>
                  </item>
                  <item row="0" column="1">
@@ -317,6 +253,9 @@
                    <property name="text">
                     <string>Stretch by:</string>
                    </property>
+                   <property name="buddy">
+                    <cstring>stretchBy</cstring>
+                   </property>
                   </widget>
                  </item>
                  <item row="1" column="1">
@@ -326,6 +265,9 @@
                   <widget class="QLabel" name="label_24">
                    <property name="text">
                     <string>Default duration/FPS:</string>
+                   </property>
+                   <property name="buddy">
+                    <cstring>defaultDuration</cstring>
                    </property>
                   </widget>
                  </item>
@@ -400,6 +342,9 @@
                   <widget class="QLabel" name="label_21">
                    <property name="text">
                     <string>Timecode file:</string>
+                   </property>
+                   <property name="buddy">
+                    <cstring>timecodes</cstring>
                    </property>
                   </widget>
                  </item>
@@ -504,6 +449,9 @@
                    <property name="text">
                     <string>Stereoscopy:</string>
                    </property>
+                   <property name="buddy">
+                    <cstring>stereoscopy</cstring>
+                   </property>
                   </widget>
                  </item>
                  <item row="2" column="1" rowspan="2">
@@ -513,6 +461,9 @@
                   <widget class="QLabel" name="label_27">
                    <property name="text">
                     <string>Cropping:</string>
+                   </property>
+                   <property name="buddy">
+                    <cstring>cropping</cstring>
                    </property>
                   </widget>
                  </item>
@@ -555,6 +506,9 @@
                    <property name="text">
                     <string>Character set:</string>
                    </property>
+                   <property name="buddy">
+                    <cstring>subtitleCharacterSet</cstring>
+                   </property>
                   </widget>
                  </item>
                  <item>
@@ -580,6 +534,9 @@
                   <widget class="QLabel" name="label_29">
                    <property name="text">
                     <string>Indexing (cues):</string>
+                   </property>
+                   <property name="buddy">
+                    <cstring>cues</cstring>
                    </property>
                   </widget>
                  </item>
@@ -611,6 +568,9 @@
                   <widget class="QLabel" name="label_30">
                    <property name="text">
                     <string>User defined options:</string>
+                   </property>
+                   <property name="buddy">
+                    <cstring>userDefinedTrackOptions</cstring>
                    </property>
                   </widget>
                  </item>
@@ -659,6 +619,9 @@
                <property name="text">
                 <string>File title:</string>
                </property>
+               <property name="buddy">
+                <cstring>title</cstring>
+               </property>
               </widget>
              </item>
              <item row="0" column="1">
@@ -668,6 +631,9 @@
               <widget class="QLabel" name="label_4">
                <property name="text">
                 <string>Destination:</string>
+               </property>
+               <property name="buddy">
+                <cstring>output</cstring>
                </property>
               </widget>
              </item>
@@ -690,6 +656,9 @@
                <property name="text">
                 <string>Global tags:</string>
                </property>
+               <property name="buddy">
+                <cstring>globalTags</cstring>
+               </property>
               </widget>
              </item>
              <item row="2" column="1">
@@ -710,6 +679,9 @@
               <widget class="QLabel" name="label_7">
                <property name="text">
                 <string>Segment info:</string>
+               </property>
+               <property name="buddy">
+                <cstring>segmentinfo</cstring>
                </property>
               </widget>
              </item>
@@ -858,6 +830,9 @@
                <property name="text">
                 <string>Maximum number of files:</string>
                </property>
+               <property name="buddy">
+                <cstring>splitMaxFiles</cstring>
+               </property>
               </widget>
              </item>
              <item row="6" column="1">
@@ -901,6 +876,9 @@
                <property name="text">
                 <string>Segment UIDs:</string>
                </property>
+               <property name="buddy">
+                <cstring>segmentUIDs</cstring>
+               </property>
               </widget>
              </item>
              <item row="0" column="1">
@@ -911,6 +889,9 @@
                <property name="text">
                 <string>Previous segment UID:</string>
                </property>
+               <property name="buddy">
+                <cstring>previousSegmentUID</cstring>
+               </property>
               </widget>
              </item>
              <item row="1" column="1">
@@ -920,6 +901,9 @@
               <widget class="QLabel" name="label_11">
                <property name="text">
                 <string>Next segment UID:</string>
+               </property>
+               <property name="buddy">
+                <cstring>nextSegmentUID</cstring>
                </property>
               </widget>
              </item>
@@ -939,6 +923,9 @@
               <widget class="QLabel" name="label_12">
                <property name="text">
                 <string>Chapter file:</string>
+               </property>
+               <property name="buddy">
+                <cstring>chapters</cstring>
                </property>
               </widget>
              </item>
@@ -961,6 +948,9 @@
                <property name="text">
                 <string>Language:</string>
                </property>
+               <property name="buddy">
+                <cstring>chapterLanguage</cstring>
+               </property>
               </widget>
              </item>
              <item row="1" column="1">
@@ -971,6 +961,9 @@
                <property name="text">
                 <string>Character set:</string>
                </property>
+               <property name="buddy">
+                <cstring>chapterCharacterSet</cstring>
+               </property>
               </widget>
              </item>
              <item row="2" column="1">
@@ -980,6 +973,9 @@
               <widget class="QLabel" name="label_15">
                <property name="text">
                 <string>Cue name format:</string>
+               </property>
+               <property name="buddy">
+                <cstring>cueNameFormat</cstring>
                </property>
               </widget>
              </item>
@@ -1008,6 +1004,9 @@
                 <widget class="QLabel" name="label_33">
                  <property name="text">
                   <string>User-defined options:</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>userDefinedOptions</cstring>
                  </property>
                 </widget>
                </item>
@@ -1098,7 +1097,7 @@
      </widget>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_5">
+     <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
        <spacer name="horizontalSpacer_2">
         <property name="orientation">
@@ -1113,23 +1112,30 @@
        </spacer>
       </item>
       <item>
-       <widget class="QPushButton" name="pbStartMuxing">
+       <widget class="QPushButton" name="addFiles">
         <property name="text">
-         <string>Start muxing</string>
+         <string>&amp;Add files</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pbAddToJobQueue">
+       <widget class="QPushButton" name="startMuxing">
         <property name="text">
-         <string>Add to job queue</string>
+         <string>Sta&amp;rt muxing</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pbSaveSettings">
+       <widget class="QPushButton" name="addToJobQueue">
         <property name="text">
-         <string>Save settings</string>
+         <string>Add to job &amp;queue</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="saveSettings">
+        <property name="text">
+         <string>&amp;Save settings</string>
         </property>
        </widget>
       </item>
@@ -1155,13 +1161,13 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>846</width>
+     <width>780</width>
      <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
     <property name="title">
-     <string>File</string>
+     <string>&amp;File</string>
     </property>
     <addaction name="actionNew"/>
     <addaction name="actionOpen_job_file"/>
@@ -1173,7 +1179,7 @@
    </widget>
    <widget class="QMenu" name="menuMuxing">
     <property name="title">
-     <string>Muxing</string>
+     <string>&amp;Muxing</string>
     </property>
     <addaction name="action_Start_muxing"/>
     <addaction name="separator"/>
@@ -1185,7 +1191,7 @@
    </widget>
    <widget class="QMenu" name="menuTools">
     <property name="title">
-     <string>Tools</string>
+     <string>&amp;Tools</string>
     </property>
     <addaction name="action_Header_editor"/>
     <addaction name="action_Chapter_editor"/>
@@ -1269,17 +1275,82 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <tabstops>
+  <tabstop>mainTab</tabstop>
+  <tabstop>files</tabstop>
+  <tabstop>tracks</tabstop>
+  <tabstop>scrollArea</tabstop>
+  <tabstop>trackName</tabstop>
+  <tabstop>trackLanguage</tabstop>
+  <tabstop>defaultTrackFlag</tabstop>
+  <tabstop>forcedTrackFlag</tabstop>
+  <tabstop>compression</tabstop>
+  <tabstop>trackTacks</tabstop>
+  <tabstop>browseTrackTags</tabstop>
+  <tabstop>delay</tabstop>
+  <tabstop>stretchBy</tabstop>
+  <tabstop>defaultDuration</tabstop>
+  <tabstop>timecodes</tabstop>
+  <tabstop>browseTimecodes</tabstop>
+  <tabstop>setAspectRatio</tabstop>
+  <tabstop>aspectRatio</tabstop>
+  <tabstop>setDisplayWidthHeight</tabstop>
+  <tabstop>displayWidth</tabstop>
+  <tabstop>displayHeight</tabstop>
+  <tabstop>stereoscopy</tabstop>
+  <tabstop>cropping</tabstop>
+  <tabstop>aacIsSBR</tabstop>
+  <tabstop>subtitleCharacterSet</tabstop>
+  <tabstop>cues</tabstop>
+  <tabstop>userDefinedTrackOptions</tabstop>
+  <tabstop>title</tabstop>
+  <tabstop>output</tabstop>
+  <tabstop>browseOutput</tabstop>
+  <tabstop>globalTags</tabstop>
+  <tabstop>browseGlobalTags</tabstop>
+  <tabstop>segmentinfo</tabstop>
+  <tabstop>browseSegmentInfo</tabstop>
+  <tabstop>doNotSplit</tabstop>
+  <tabstop>doSplitAfterSize</tabstop>
+  <tabstop>splitSize</tabstop>
+  <tabstop>doSplitAfterDuration</tabstop>
+  <tabstop>splitDuration</tabstop>
+  <tabstop>doSplitAfterTimecodes</tabstop>
+  <tabstop>splitTimecodes</tabstop>
+  <tabstop>doSplitByParts</tabstop>
+  <tabstop>splitParts</tabstop>
+  <tabstop>splitMaxFiles</tabstop>
+  <tabstop>linkFiles</tabstop>
+  <tabstop>segmentUIDs</tabstop>
+  <tabstop>previousSegmentUID</tabstop>
+  <tabstop>nextSegmentUID</tabstop>
+  <tabstop>chapters</tabstop>
+  <tabstop>browseChapters</tabstop>
+  <tabstop>chapterLanguage</tabstop>
+  <tabstop>chapterCharacterSet</tabstop>
+  <tabstop>cueNameFormat</tabstop>
+  <tabstop>webmMode</tabstop>
+  <tabstop>userDefinedOptions</tabstop>
+  <tabstop>editUserDefinedOptions</tabstop>
+  <tabstop>attachments</tabstop>
+  <tabstop>addAttachment</tabstop>
+  <tabstop>removeAttachment</tabstop>
+  <tabstop>addFiles</tabstop>
+  <tabstop>startMuxing</tabstop>
+  <tabstop>addToJobQueue</tabstop>
+  <tabstop>saveSettings</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
-   <sender>pbStartMuxing</sender>
+   <sender>startMuxing</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
-   <slot>startMuxingPressed()</slot>
+   <slot>onStartMuxing()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>320</x>
-     <y>527</y>
+     <x>374</x>
+     <y>526</y>
     </hint>
     <hint type="destinationlabel">
      <x>224</x>
@@ -1288,7 +1359,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>pbAddToJobQueue</sender>
+   <sender>addToJobQueue</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
    <slot>onAddToJobQueue()</slot>
@@ -1304,7 +1375,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>pbSaveSettings</sender>
+   <sender>saveSettings</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
    <slot>onSaveSettings()</slot>
@@ -1319,10 +1390,59 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>addFiles</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onAddFiles()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>251</x>
+     <y>505</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>141</x>
+     <y>507</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionAdd_to_job_queue</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onAddToJobQueue()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>389</x>
+     <y>277</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionExit</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>389</x>
+     <y>277</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>onStartMuxing()</slot>
   <slot>onAddToJobQueue()</slot>
   <slot>onSaveSettings()</slot>
+  <slot>onAddFiles()</slot>
  </slots>
 </ui>

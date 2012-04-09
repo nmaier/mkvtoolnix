@@ -11,7 +11,7 @@ Process::Process(QString const &command,
   : m_command(command)
   , m_args(args)
 {
-  connect(&m_process, SIGNAL(readyReadStandardOutput()), this, SLOT(data_available()));
+  connect(&m_process, SIGNAL(readyReadStandardOutput()), this, SLOT(dataAvailable()));
 }
 
 Process::~Process() {
