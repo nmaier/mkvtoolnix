@@ -1,3 +1,9 @@
+2012-04-09  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvextract: bug fix: mkvextract will no longer abort extracing
+	h.264 tracks if it encounters a NAL smaller than its size
+	field. Instead it will warn about it and drop the NAL.
+
 2012-04-08  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Writing more than two parts into the same
