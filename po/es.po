@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: Israel Lucas Torrijos <lukillas.ole@gmail.com>\n"
 "POT-Creation-Date: 2010-06-08 10:00+0200\n"
-"PO-Revision-Date: 2012-04-07 03:13+0100\n"
+"PO-Revision-Date: 2012-04-08 16:26+0100\n"
 "Last-Translator: Israel Lucas Torrijos <lukillas.ole@gmail.com>\n"
 "Language-Team: Spanish <moritz@bunkus.org>\n"
 "Language: es\n"
@@ -41,7 +41,7 @@ msgstr ""
 "  ( <archivo1> <archivo2> )\n"
 "                           Tratar a archivo1 y archivo2 como si \n"
 "                           estuvieran concatenados en un único archivo de\n"
-"                           gran tamaño único.\n"
+"                           gran tamaño.\n"
 
 #: src/merge/mkvmerge.cpp:206
 msgid ""
@@ -106,7 +106,8 @@ msgid ""
 "  --attach-file <file>     Creates a file attachment inside the\n"
 "                           Matroska file.\n"
 msgstr ""
-"  --attach-file <archivo>     Crea un archivo adjunto dentro del\n"
+"  --attach-file <archivo>\n"
+"                           Crea un archivo adjunto dentro del\n"
 "                           archivo Matroska.\n"
 
 #: src/merge/mkvmerge.cpp:153
@@ -172,7 +173,9 @@ msgstr ""
 
 #: src/merge/mkvmerge.cpp:84
 msgid "  --chapters <file>        Read chapter information from the file.\n"
-msgstr "  --chapters <archivo>        Lee la información del capítulo desde el archivo.\n"
+msgstr ""
+"  --chapters <archivo>        Lee la información del capítulo\n"
+"                           desde el archivo.\n"
 
 #: src/merge/mkvmerge.cpp:103
 msgid ""
@@ -208,8 +211,8 @@ msgid ""
 "                           specified track ('none' or 'zlib').\n"
 msgstr ""
 "  --compression <TID:method>\n"
-"                           Establece el método de compresión usado para la\n"
-"                           pista especificada ('none' or 'zlib').\n"
+"                           Establece el método de compresión usado\n"
+"                           para la pista especificada ('none' or 'zlib').\n"
 
 #: src/merge/mkvmerge.cpp:229
 msgid ""
@@ -217,7 +220,8 @@ msgid ""
 "                           Sets the cropping parameters.\n"
 msgstr ""
 "  --cropping <TID:left,top,right,bottom>\n"
-"                           Establece los parámetros del recorte (cropping).\n"
+"                           Establece los parámetros\n"
+"                           del recorte (cropping).\n"
 
 #: src/merge/mkvmerge.cpp:87
 msgid ""
@@ -237,8 +241,9 @@ msgid ""
 "                           None at all, only for I frames, for all.\n"
 msgstr ""
 "  --cues <TID:none|iframes|all>\n"
-"                           Crea los registros del cue (índice) para esta pista:\n"
-"                           No para todos, solo para los I frames, para todos.\n"
+"                           Crea los registros del cue (índice) para\n"
+"                           esta pista: Ninguno, solo para I frames,\n"
+"                           para todos.\n"
 
 #: src/merge/mkvmerge.cpp:259
 msgid "  --debug <topic>          Turns on debugging output for 'topic'.\n"
@@ -282,7 +287,8 @@ msgid ""
 "                           Explicitly set the display dimensions.\n"
 msgstr ""
 "  --display-dimensions <TID:width>x<height>\n"
-"                           Configura explícitamente las dimensiones de visualización.\n"
+"                           Configura explícitamente las dimensiones\n"
+"                           de visualización.\n"
 
 #: src/merge/mkvmerge.cpp:110
 msgid "  --enable-durations       Enable block durations for all blocks.\n"
@@ -302,11 +308,14 @@ msgid ""
 msgstr ""
 "  --forced-track <TID[:bool]>\n"
 "                           Establece como forzada esta pista o\n"
-"                           la obliga a no estar presente si la booleana es 0.\n"
+"                           la obliga a no estar presente si el\n"
+"                           booleano es 0.\n"
 
 #: src/merge/mkvmerge.cpp:81
 msgid "  --global-tags <file>     Read global tags from a XML file.\n"
-msgstr "  --global-tags <archivo>     Lee todas las etiquetas desde un archivo XML.\n"
+msgstr ""
+"  --global-tags <archivo>    Lee todas las etiquetas\n"
+"                           desde un archivo XML.\n"
 
 #: src/merge/mkvmerge.cpp:204
 msgid ""
@@ -348,7 +357,9 @@ msgstr ""
 
 #: src/merge/mkvmerge.cpp:184
 msgid "  --no-chapters            Don't keep chapters from the source file.\n"
-msgstr "  --no-chapters            No conserva los capítulos desde el archivo de origen.\n"
+msgstr ""
+"  --no-chapters            No conserva los capítulos desde el\n"
+"                           archivo de origen.\n"
 
 #: src/merge/mkvmerge.cpp:107
 msgid "  --no-cues                Do not write the cue data (the index).\n"
@@ -356,15 +367,21 @@ msgstr "  --no-cues                No escribe la información del índice (cue).
 
 #: src/merge/mkvmerge.cpp:183
 msgid "  --no-global-tags         Don't keep global tags from the source file.\n"
-msgstr "  --no-global-tags         No conservar las etiquetas generales del archivo origen.\n"
+msgstr ""
+"  --no-global-tags         No conservar las etiquetas generales del\n"
+"                           archivo origen.\n"
 
 #: src/merge/mkvmerge.cpp:256
 msgid "  --output-charset <cset>  Output messages in this charset\n"
-msgstr "  --output-charset <cset>  Mensajes creados en esta codificación de caracteres (charset)\n"
+msgstr ""
+"  --output-charset <cset>  Mensajes creados en esta\n"
+"                           codificación de caracteres (charset)\n"
 
 #: src/merge/mkvmerge.cpp:252
 msgid "  --priority <priority>    Set the priority mkvmerge runs with.\n"
-msgstr "  --priority <priority>    Establece la prioridad de procesamiento de mkvmerge.\n"
+msgstr ""
+"  --priority <priority>    Establece la prioridad de\n"
+"                           procesamiento de mkvmerge.\n"
 
 #: src/merge/mkvmerge.cpp:95
 msgid ""
@@ -372,11 +389,14 @@ msgid ""
 "                           Set the segment UIDs to SID1, SID2 etc.\n"
 msgstr ""
 "  --segment-uid <SID1,[SID2...]>\n"
-"                           Establece los UID de los segmentos a SID1, SID2, etc.\n"
+"                           Establece los UID de los segmentos\n"
+"                           a SID1, SID2, etc.\n"
 
 #: src/merge/mkvmerge.cpp:94
 msgid "  --segmentinfo <file>     Read segment information from the file.\n"
-msgstr "  --segmentinfo <archivo>     Leer la información del segmento del archivo.\n"
+msgstr ""
+"  --segmentinfo <archivo>     Leer la información del segmento\n"
+"                           del archivo.\n"
 
 #: src/merge/mkvmerge.cpp:114
 msgid ""
@@ -385,8 +405,9 @@ msgid ""
 "                           or after a specific time.\n"
 msgstr ""
 "  --split <d[K,M,G]|HH:MM:SS|s>\n"
-"                           Crea un archivo nuevo después de d bytes (kB, MB, GB...)\n"
-"                           o después de un tiempo específico.\n"
+"                           Crea un archivo nuevo después de d bytes\n"
+"                           (kB, MB, GB...) o después de un tiempo\n"
+"                           específico.\n"
 
 #: src/merge/mkvmerge.cpp:120
 msgid ""
@@ -396,9 +417,9 @@ msgid ""
 "                           if prefixed with '+'.\n"
 msgstr ""
 "  --split parts:inicial1-final2[,[+]inicial2-final2,...]\n"
-"                           Mantiene los rangos de los códigos de tiempo inicial-final\n"
-"                           en archivos separados o unidos al archivo del rango anterior\n"
-"                           si tiene el prefijo '+'.\n"
+"                           Mantiene los rangos de los códigos de tiempo\n"
+"                           inicial-final en archivos separados o unidos al\n"
+"                           archivo del rango anterior si tiene el prefijo '+'.\n"
 
 #: src/merge/mkvmerge.cpp:117
 msgid ""
@@ -447,8 +468,8 @@ msgstr ""
 #: src/merge/mkvmerge.cpp:208
 msgid "  --timecodes <TID:file>   Read the timecodes to be used from a file.\n"
 msgstr ""
-"  --timecodes <TID:archivo>   Lee los códigos de tiempo para ser usados\n"
-"                           desde un archivo.\n"
+"  --timecodes <TID:archivo>   Lee los códigos de tiempo para\n"
+"                           ser usados desde un archivo.\n"
 
 #: src/merge/mkvmerge.cpp:80
 msgid "  --title <title>          Title for this output file.\n"
@@ -456,7 +477,9 @@ msgstr "  --title <title>          Título para el archivo creado.\n"
 
 #: src/merge/mkvmerge.cpp:200
 msgid "  --track-name <TID:name>  Sets the name for a track.\n"
-msgstr "  --track-name <TID:name>  Establece el nombre para una pista.\n"
+msgstr ""
+"  --track-name <TID:name>  Establece el nombre para\n"
+"                           una pista.\n"
 
 #: src/merge/mkvmerge.cpp:99
 msgid ""
@@ -486,27 +509,33 @@ msgstr ""
 
 #: src/merge/mkvmerge.cpp:161
 msgid "  -A, --no-audio           Don't copy any audio track from this file.\n"
-msgstr "  -A, --no-audio           No copiar ninguna pista de audio de este archivo.\n"
+msgstr ""
+"  -A, --no-audio           No copia ninguna pista de audio de\n"
+"                           este archivo.\n"
 
 #: src/merge/mkvmerge.cpp:173
 msgid "  -B, --no-buttons         Don't copy any buttons track from this file.\n"
-msgstr "  -B, --no-buttons         No copiar ninguno de los botones de la pista de este archivo.\n"
+msgstr ""
+"  -B, --no-buttons         No copia ninguno de los botones de la pista\n"
+"                           de este archivo.\n"
 
 #: src/merge/mkvmerge.cpp:165
 msgid "  -D, --no-video           Don't copy any video track from this file.\n"
-msgstr "  -D, --no-video           No copiar ninguna pista de video de este archivo.\n"
+msgstr ""
+"  -D, --no-video           No copia ninguna pista de video de\n"
+"                           este archivo.\n"
 
 #: src/merge/mkvmerge.cpp:178
 msgid "  -M, --no-attachments     Don't copy attachments from a source file.\n"
-msgstr "  -M, --no-attachments     No copiar los adjuntos del archivo origen.\n"
+msgstr "  -M, --no-attachments     No copia los adjuntos del archivo origen.\n"
 
 #: src/merge/mkvmerge.cpp:169
 msgid "  -S, --no-subtitles       Don't copy any subtitle track from this file.\n"
-msgstr "  -S, --no-subtitles       No copiar ningún subtítulo de este archivo.\n"
+msgstr "  -S, --no-subtitles       No copia ningún subtítulo de este archivo.\n"
 
 #: src/merge/mkvmerge.cpp:182
 msgid "  -T, --no-track-tags      Don't copy tags for tracks from the source file.\n"
-msgstr "  -T, --no-track-tags      No copiar etiquetas para las pistas del archivo origen.\n"
+msgstr "  -T, --no-track-tags      No copia etiquetas para las pistas del archivo origen.\n"
 
 #: src/merge/mkvmerge.cpp:264
 msgid "  -V, --version            Show version information.\n"
@@ -559,7 +588,9 @@ msgstr "  -h, --help               Muestra esta ayuda.\n"
 
 #: src/merge/mkvmerge.cpp:247
 msgid "  -i, --identify <file>    Print information about the source file.\n"
-msgstr "  -i, --identify <archivo>    Imprime información sobre el archivo de origen.\n"
+msgstr ""
+"  -i, --identify <archivo>    Imprime información sobre el\n"
+"                           archivo de origen.\n"
 
 #: src/merge/mkvmerge.cpp:248
 msgid "  -l, --list-types         Lists supported input file types.\n"
@@ -609,7 +640,9 @@ msgstr ""
 
 #: src/merge/mkvmerge.cpp:179
 msgid "  -t, --tags <TID:file>    Read tags for the track from a XML file.\n"
-msgstr "  -t, --tags <TID:archivo>    Lee las etiquetas para la pista desde un archivo XML.\n"
+msgstr ""
+"  -t, --tags <TID:archivo>    Lee las etiquetas para la pista\n"
+"                           desde un archivo XML.\n"
 
 #: src/merge/mkvmerge.cpp:76
 msgid "  -v, --verbose            verbose status\n"
@@ -643,7 +676,9 @@ msgstr "  <archivo1> + <archivo2>  Unir archivo2 al archivo1.\n"
 
 #: src/merge/mkvmerge.cpp:137
 msgid "  <file1> +<file2>         Same as \"<file1> + <file2>\".\n"
-msgstr "  <archivo1> +<archivo2>   Lo mismo que \"<archivo1> + <archivo2>\".\n"
+msgstr ""
+"  <archivo1> +<archivo2> \n"
+"                           Lo mismo que \"<archivo1> + <archivo2>\".\n"
 
 #: src/merge/mkvmerge.cpp:138
 msgid ""
@@ -749,7 +784,7 @@ msgstr " Información acerca de la manipulación del capítulo:\n"
 
 #: src/merge/mkvmerge.cpp:113
 msgid " File splitting, linking, appending and concatenating (more global options):\n"
-msgstr "División, vinculación, unión y concatenación de archivos (mirar opciones generales):\n"
+msgstr " División, vinculación, unión y concatenación de archivos (mirar opciones generales):\n"
 
 #: src/merge/mkvmerge.cpp:98
 msgid " General output control (advanced global options):\n"
