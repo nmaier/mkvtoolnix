@@ -14,6 +14,8 @@
 #ifndef MTX_COMMON_QT_H
 #define MTX_COMMON_QT_H
 
+#include <QString>
+
 #define Q(s)  to_qs(s)
 #define QY(s) to_qs(Y(s))
 
@@ -29,7 +31,7 @@ to_qs(std::wstring const &source) {
 
 inline std::string
 to_utf8(QString const &source) {
-  return std::string{ source.toUtf8() };
+  return std::string{ source.toUtf8().data() };
 }
 
 inline std::wstring
