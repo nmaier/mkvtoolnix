@@ -1,11 +1,11 @@
-#ifndef __MMG_QT_H
-#define __MMG_QT_H
+#ifndef MTX_MMGQT_MMG_QT_H
+#define MTX_MMGQT_MMG_QT_H
 
-#include "config.h"
-
-#define NAME "mmg/Qt"
+#include "common/common_pch.h"
 
 #include <QString>
+
+#include "common/qt.h"
 
 struct mkvmerge_settings_t {
   enum process_priority_e {
@@ -22,4 +22,4 @@ struct mkvmerge_settings_t {
   mkvmerge_settings_t();
 };
 
-#endif  // __MMG_QT_H
+#endif  // MTX_MMGQT_MMG_QT_H

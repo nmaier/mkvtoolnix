@@ -1,11 +1,9 @@
-#include <QtCore>
-#include <QtGui>
+#include "common/common_pch.h"
 
-#include "qtcommon.h"
+#include <QApplication>
 
-#include "mmg_qt.h"
-
-#include "main_window.h"
+#include "mmg-qt/mmg_qt.h"
+#include "mmg-qt/main_window.h"
 
 mkvmerge_settings_t::mkvmerge_settings_t()
   : executable(Q("mkvmerge"))
@@ -22,8 +20,8 @@ main(int argc,
 
   QApplication app(argc, argv);
 
-  main_window_c main_window;
-  main_window.show();
+  MainWindow mainWindow;
+  mainWindow.show();
 
   return app.exec();
 }
