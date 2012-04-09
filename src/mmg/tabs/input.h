@@ -219,6 +219,17 @@ public:
 
   void translate_ui();
   void handle_webm_mode(bool enabled);
+
+  void parse_track_line(mmg_file_cptr file, wxString const &line, wxString const &delay_from_file_name, std::map<char, bool> &default_track_found_for);
+  void parse_container_line(mmg_file_cptr file, wxString const &line);
+  void parse_attachment_line(mmg_file_cptr file, wxString const &line);
+  void parse_chapters_line(mmg_file_cptr file, wxString const &line);
+  void parse_global_tags_line(mmg_file_cptr file, wxString const &line);
+  void parse_tags_line(mmg_file_cptr file, wxString const &line);
+  void parse_identification_output(mmg_file_cptr file, wxArrayString const &output);
+  bool run_mkvmerge_identification(wxString const &file_name, wxArrayString &output);
+  void insert_file_in_controls(mmg_file_cptr file, bool append);
+
 };
 
 #endif // __TAB_INPUT_H

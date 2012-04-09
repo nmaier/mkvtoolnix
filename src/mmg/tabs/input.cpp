@@ -276,59 +276,234 @@ tab_input::on_append_file(wxCommandEvent &) {
 }
 
 void
-tab_input::add_file(const wxString &file_name,
-                    bool append) {
-  wxString name, command, video_track_name, opt_file_name;
-  wxArrayString output, errors;
-  std::vector<wxString> args, pair;
-  int new_file_pos, result;
-  unsigned int i, k;
-  wxFile *opt_file;
-  std::string arg_utf8;
+tab_input::parse_track_line(mmg_file_cptr file,
+                            wxString const &line,
+                            wxString const &delay_from_file_name,
+                            std::map<char, bool> &default_track_found_for) {
+  auto track = std::make_shared<mmg_track_t>();
+  file->tracks.push_back(track);
 
-  wxFileName file_name_obj(file_name);
-  for (auto file : files)
-    for (auto &other_file_name : file->other_files)
-      if (file_name_obj == other_file_name) {
-        wxMessageBox(wxString::Format(Z("The file '%s' is already processed in combination with the file '%s'. It cannot be added a second time."),
-                                      file_name_obj.GetFullPath().c_str(), other_file_name.GetFullPath().c_str()),
-                     Z("File is already processed"), wxOK | wxCENTER | wxICON_ERROR);
-        return;
+  auto id          = line.AfterFirst(wxT(' ')).AfterFirst(wxT(' ')).BeforeFirst(wxT(':'));
+  auto type        = line.AfterFirst(wxT(':')).BeforeFirst(wxT('(')).Mid(1).RemoveLast();
+  track->ctype     = line.AfterFirst(wxT('(')).BeforeFirst(wxT(')'));
+  auto info        = line.AfterFirst(wxT('[')).BeforeLast(wxT(']'));
+
+  track->appending = file->appending;
+  track->type      = type == wxT("audio")     ? 'a'
+                   : type == wxT("video")     ? 'v'
+                   : type == wxT("subtitles") ? 's'
+                   :                            '?';
+
+  parse_number(to_utf8(id), track->id);
+
+  if (track->is_audio())
+    track->delay = delay_from_file_name;
+
+  if (   mdlg->options.disable_a_v_compression
+      && !track->appending
+      && (track->is_video() || track->is_audio()))
+    track->compression = wxU("none");
+
+  if (info.IsEmpty())
+    return;
+
+  for (auto &arg : split(info, wxU(" "))) {
+    auto pair = split(arg, wxU(":"), 2);
+    if (pair.size() != 2)
+      continue;
+
+    if (pair[0] == wxT("track_name")) {
+      track->track_name             = unescape(pair[1]);
+      track->track_name_was_present = true;
+
+    } else if (pair[0] == wxT("language"))
+      track->language = unescape(pair[1]);
+
+    else if (pair[0] == wxT("cropping"))
+      track->cropping = unescape(pair[1]);
+
+    else if (pair[0] == wxT("display_dimensions")) {
+      int64_t width, height;
+
+      std::vector<wxString> dims = split(pair[1], wxU("x"));
+      if ((dims.size() == 2) && parse_number(wxMB(dims[0]), width) && parse_number(wxMB(dims[1]), height)) {
+        std::string format;
+        fix_format(LLD, format);
+        track->dwidth.Printf(wxU(format), width);
+        track->dheight.Printf(wxU(format), height);
+        track->display_dimensions_selected = true;
       }
 
-  last_open_dir = file_name_obj.GetPath();
+    } else if (pair[0] == wxT("default_track")) {
+      if (pair[1] != wxT("1"))
+        track->default_track = 2; // A definitive 'no'.
 
-  opt_file_name.Printf(wxT("%smmg-mkvmerge-options-%d-%d"), get_temp_dir().c_str(), (int)wxGetProcessId(), (int)wxGetUTCTime());
+      else if ((track->is_audio() || track->is_video() || track->is_subtitles()) && !default_track_found_for[track->type]) {
+        track->default_track                 = 1; // A definitive 'yes'.
+        default_track_found_for[track->type] = true;
+      }
+
+    } else if (pair[0] == wxT("stereo_mode")) {
+      parse_number(wxMB(pair[1]), track->stereo_mode);
+      track->stereo_mode += 1;
+
+    } else if (pair[0] == wxT("aac_is_sbr"))
+      track->aac_is_sbr = track->aac_is_sbr_detected = pair[1] == wxT("true");
+
+    else if (pair[0] == wxT("forced_track"))
+      track->forced_track = pair[1] == wxT("1");
+
+    else if (pair[0] == wxT("packetizer"))
+      track->packetizer = pair[1];
+
+  }
+}
+
+void
+tab_input::parse_container_line(mmg_file_cptr file,
+                                wxString const &line) {
+  auto container  = line.Mid(11).BeforeFirst(wxT(' '));
+  auto info       = line.Mid(11).AfterFirst(wxT('[')).BeforeLast(wxT(']'));
+
+  file->container = container == wxT("AAC")                     ? FILE_TYPE_AAC
+                  : container == wxT("AC3")                     ? FILE_TYPE_AC3
+                  : container == wxT("AVC/h.264")               ? FILE_TYPE_AVC_ES
+                  : container == wxT("AVI")                     ? FILE_TYPE_AVI
+                  : container == wxT("Dirac elementary stream") ? FILE_TYPE_DIRAC
+                  : container == wxT("DTS")                     ? FILE_TYPE_DTS
+                  : container == wxT("IVF")                     ? FILE_TYPE_IVF
+                  : container == wxT("Matroska")                ? FILE_TYPE_MATROSKA
+                  : container == wxT("MP2/MP3")                 ? FILE_TYPE_MP3
+                  : container == wxT("Ogg/OGM")                 ? FILE_TYPE_OGM
+                  : container == wxT("Quicktime/MP4")           ? FILE_TYPE_QTMP4
+                  : container == wxT("RealMedia")               ? FILE_TYPE_REAL
+                  : container == wxT("SRT")                     ? FILE_TYPE_SRT
+                  : container == wxT("SSA/ASS")                 ? FILE_TYPE_SSA
+                  : container == wxT("VC1 elementary stream")   ? FILE_TYPE_VC1
+                  : container == wxT("VobSub")                  ? FILE_TYPE_VOBSUB
+                  : container == wxT("WAV")                     ? FILE_TYPE_WAV
+                  :                                               FILE_TYPE_IS_UNKNOWN;
+
+  if (info.IsEmpty())
+    return;
+
+  for (auto &arg : split(info, wxU(" "))) {
+    auto pair = split(arg, wxU(":"), 2);
+
+    if ((pair.size() == 2) && (pair[0] == wxT("title"))) {
+      file->title             = unescape(pair[1]);
+      file->title_was_present = true;
+      title_was_present       = true;
+
+    } else if ((pair.size() == 2) && (pair[0] == wxT("other_file")))
+      file->other_files.push_back(wxFileName(unescape(pair[1])));
+  }
+}
+
+void
+tab_input::parse_attachment_line(mmg_file_cptr file,
+                                 wxString const &line) {
+  auto a = std::make_shared<mmg_attached_file_t>();
+
+  wxRegEx re_att_base(       wxT("^Attachment *ID ([[:digit:]]+): *type *\"([^\"]+)\", *size *([[:digit:]]+)"), wxRE_ICASE);
+  wxRegEx re_att_description(wxT("description *\"([^\"]+)\""),                                                  wxRE_ICASE);
+  wxRegEx re_att_name(       wxT("name *\"([^\"]+)\""),                                                         wxRE_ICASE);
+
+  if (!re_att_base.Matches(line))
+    return;
+
+  re_att_base.GetMatch(line, 1).ToLong(&a->id);
+  re_att_base.GetMatch(line, 3).ToLong(&a->size);
+  a->mime_type = unescape(re_att_base.GetMatch(line, 2));
+
+  if (re_att_description.Matches(line))
+    a->description = unescape(re_att_description.GetMatch(line, 1));
+  if (re_att_name.Matches(line))
+    a->name = unescape(re_att_name.GetMatch(line, 1));
+
+  a->source = file.get();
+
+  file->attached_files.push_back(a);
+
+  wxLogMessage(wxT("Attached file ID %ld MIME type '%s' size %ld description '%s' name '%s'"),
+               a->id, a->mime_type.c_str(), a->size, a->description.c_str(), a->name.c_str());
+}
+
+void
+tab_input::parse_chapters_line(mmg_file_cptr file,
+                               wxString const &line) {
+  auto track = std::make_shared<mmg_track_t>();
+
+  parse_number(wxMB(line.AfterFirst(wxT(' ')).BeforeFirst(wxT(' '))), track->num_entries);
+  track->type = 'c';
+  track->id   = TRACK_ID_CHAPTERS;
+
+  file->tracks.push_back(track);
+}
+
+void
+tab_input::parse_global_tags_line(mmg_file_cptr file,
+                                  wxString const &line) {
+  auto track = std::make_shared<mmg_track_t>();
+
+  parse_number(wxMB(line.AfterFirst(wxT(':')).AfterFirst(wxT(' ')).BeforeFirst(wxT(' '))), track->num_entries);
+  track->type = 't';
+  track->id   = TRACK_ID_GLOBAL_TAGS;
+
+  file->tracks.push_back(track);
+}
+
+void
+tab_input::parse_tags_line(mmg_file_cptr file,
+                           wxString const &line) {
+  auto track = std::make_shared<mmg_track_t>();
+
+  parse_number(wxMB(line.BeforeFirst(wxT(':')).AfterLast(wxT(' '))), track->id);
+  parse_number(wxMB(line.AfterFirst(wxT(':')).AfterFirst(wxT(' ')).BeforeFirst(wxT(' '))), track->num_entries);
+  track->type  = 't';
+  track->id   += TRACK_ID_TAGS_BASE;
+
+  file->tracks.push_back(track);
+}
+
+bool
+tab_input::run_mkvmerge_identification(wxString const &file_name,
+                                       wxArrayString &output) {
+  auto opt_file_name = wxString::Format(wxT("%smmg-mkvmerge-options-%d-%d"), get_temp_dir().c_str(), (int)wxGetProcessId(), (int)wxGetUTCTime());
+
   try {
     const unsigned char utf8_bom[3] = {0xef, 0xbb, 0xbf};
-    opt_file = new wxFile(opt_file_name, wxFile::write);
-    opt_file->Write(utf8_bom, 3);
+    wxFile opt_file{opt_file_name, wxFile::write};
+    opt_file.Write(utf8_bom, 3);
+    opt_file.Write(wxT("--output-charset\nUTF-8\n--identify-for-mmg\n"));
+    auto arg_utf8 = escape(wxMB(file_name));
+    opt_file.Write(arg_utf8.c_str(), arg_utf8.length());
+    opt_file.Write(wxT("\n"));
+
   } catch (...) {
     wxString error;
     error.Printf(Z("Could not create a temporary file for mkvmerge's command line option called '%s' (error code %d, %s)."), opt_file_name.c_str(), errno, wxUCS(strerror(errno)));
     wxMessageBox(error, Z("File creation failed"), wxOK | wxCENTER | wxICON_ERROR);
-    return;
+    return false;
   }
 
-  opt_file->Write(wxT("--output-charset\nUTF-8\n--identify-for-mmg\n"));
-  arg_utf8 = escape(wxMB(file_name));
-  opt_file->Write(arg_utf8.c_str(), arg_utf8.length());
-  opt_file->Write(wxT("\n"));
-  delete opt_file;
-
-  command = wxT("\"") + mdlg->options.mkvmerge_exe() + wxT("\" \"@") + opt_file_name + wxT("\"");
+  wxString command = wxT("\"") + mdlg->options.mkvmerge_exe() + wxT("\" \"@") + opt_file_name + wxT("\"");
 
   wxLogMessage(wxT("identify 1: command: ``%s''"), command.c_str());
 
-  result = wxExecute(command, output, errors);
+  wxArrayString errors;
+  auto result = wxExecute(command, output, errors);
 
   wxLogMessage(wxT("identify 1: result: %d"), result);
-  for (i = 0; i < output.Count(); i++)
+  for (size_t i = 0; i < output.Count(); i++)
     wxLogMessage(wxT("identify 1: output[%d]: ``%s''"), i, output[i].c_str());
-  for (i = 0; i < errors.Count(); i++)
+  for (size_t i = 0; i < errors.Count(); i++)
     wxLogMessage(wxT("identify 1: errors[%d]: ``%s''"), i, errors[i].c_str());
 
   wxRemoveFile(opt_file_name);
+
+  if ((0 == result) || (1 == result))
+    return true;
 
   wxString error_message, error_heading;
 
@@ -344,13 +519,15 @@ tab_input::add_file(const wxString &file_name,
     break_line(info, 60);
 
     wxMessageBox(info, Z("Unsupported format"), wxOK | wxCENTER | wxICON_ERROR);
-    return;
+    return false;
+  }
 
-  } else if ((0 > result) || (1 < result)) {
-    for (i = 0; i < output.Count(); i++)
+
+  if ((0 > result) || (1 < result)) {
+    for (size_t i = 0; i < output.Count(); i++)
       error_message += output[i] + wxT("\n");
     error_message += wxT("\n");
-    for (i = 0; i < errors.Count(); i++)
+    for (size_t i = 0; i < errors.Count(); i++)
       error_message += errors[i] + wxT("\n");
 
     error_heading.Printf(Z("File identification failed for '%s'. Return code: %d"), file_name.c_str(), result);
@@ -361,243 +538,68 @@ tab_input::add_file(const wxString &file_name,
     error_heading = Z("File identification failed");
   }
 
-  if (!error_message.IsEmpty()) {
-    error_message =
-        Z("Command line used:")
-      + wxT("\n\n")
-      + wxString::Format(wxT("\"%s\" --output-charset UTF-8 --identify-for-mmg \"%s\""), mdlg->options.mkvmerge_exe().c_str(), file_name.c_str())
-      + wxT("\n\n")
-      + Z("Output:")
-      + wxT("\n\n")
-      + error_message;
+  if (error_message.IsEmpty())
+    return true;
 
-    message_dialog::show(this, Z("File identification failed"), error_heading, error_message);
+  error_message =
+      Z("Command line used:")
+    + wxT("\n\n")
+    + wxString::Format(wxT("\"%s\" --output-charset UTF-8 --identify-for-mmg \"%s\""), mdlg->options.mkvmerge_exe().c_str(), file_name.c_str())
+    + wxT("\n\n")
+    + Z("Output:")
+    + wxT("\n\n")
+    + error_message;
 
-    return;
-  }
+  message_dialog::show(this, Z("File identification failed"), error_heading, error_message);
 
+  return false;
+}
+
+void
+tab_input::parse_identification_output(mmg_file_cptr file,
+                                       wxArrayString const &output) {
   wxString delay_from_file_name;
   if (mdlg->options.set_delay_from_filename) {
     wxRegEx re_delay(wxT("delay[[:blank:]]+(-?[[:digit:]]+)"), wxRE_ICASE);
-    if (re_delay.Matches(file_name))
-      delay_from_file_name = re_delay.GetMatch(file_name, 1);
+    if (re_delay.Matches(file->file_name))
+      delay_from_file_name = re_delay.GetMatch(file->file_name, 1);
   }
-
-  mmg_file_cptr file           = mmg_file_cptr(new mmg_file_t);
 
   std::map<char, bool> default_track_found_for;
   default_track_found_for['a'] = -1 != default_track_checked('a');
   default_track_found_for['v'] = -1 != default_track_checked('v');
   default_track_found_for['s'] = -1 != default_track_checked('s');
 
-  for (i = 0; i < output.Count(); i++) {
+  for (size_t i = 0; i < output.Count(); i++) {
     int pos;
 
-    if (output[i].Find(wxT("Track")) == 0) {
-      mmg_track_cptr track(new mmg_track_t);
+    if (output[i].Find(wxT("Track")) == 0)
+      parse_track_line(file, output[i], delay_from_file_name, default_track_found_for);
 
-      wxString id    = output[i].AfterFirst(wxT(' ')).AfterFirst(wxT(' ')).BeforeFirst(wxT(':'));
-      wxString type  = output[i].AfterFirst(wxT(':')).BeforeFirst(wxT('(')).Mid(1).RemoveLast();
-      wxString exact = output[i].AfterFirst(wxT('(')).BeforeFirst(wxT(')'));
-      wxString info  = output[i].AfterFirst(wxT('[')).BeforeLast(wxT(']'));
+    else if ((pos = output[i].Find(wxT("container:"))) != wxNOT_FOUND)
+      parse_container_line(file, output[i].Mid(pos));
 
-      if (type == wxT("audio"))
-        track->type = 'a';
-      else if (type == wxT("video"))
-        track->type = 'v';
-      else if (type == wxT("subtitles"))
-        track->type = 's';
-      else
-        track->type = '?';
+    else if (output[i].Find(wxT("Attachment")) == 0)
+      parse_attachment_line(file, output[i]);
 
-      parse_number(wxMB(id), track->id);
-      track->ctype = exact;
+    else if (output[i].Find(wxT("Chapters")) == 0)
+      parse_chapters_line(file, output[i]);
 
-      if ('a' == track->type)
-        track->delay = delay_from_file_name;
+    else if (output[i].Find(wxT("Global tags")) == 0)
+      parse_global_tags_line(file, output[i]);
 
-      if (info.length() > 0) {
-        args = split(info, wxU(" "));
-        for (k = 0; k < args.size(); k++) {
-          pair = split(args[k], wxU(":"), 2);
-          if (pair.size() != 2)
-            continue;
-
-          if (pair[0] == wxT("track_name")) {
-            track->track_name             = unescape(pair[1]);
-            track->track_name_was_present = true;
-
-          } else if (pair[0] == wxT("language"))
-            track->language = unescape(pair[1]);
-
-          else if (pair[0] == wxT("cropping"))
-            track->cropping = unescape(pair[1]);
-
-          else if (pair[0] == wxT("display_dimensions")) {
-            int64_t width, height;
-
-            std::vector<wxString> dims = split(pair[1], wxU("x"));
-            if ((dims.size() == 2) && parse_number(wxMB(dims[0]), width) && parse_number(wxMB(dims[1]), height)) {
-              std::string format;
-              fix_format(LLD, format);
-              track->dwidth.Printf(wxU(format), width);
-              track->dheight.Printf(wxU(format), height);
-              track->display_dimensions_selected = true;
-            }
-
-          } else if (pair[0] == wxT("default_track")) {
-            if (pair[1] != wxT("1"))
-              track->default_track = 2; // A definitive 'no'.
-
-            else if ((('a' == track->type) || ('v' == track->type) || ('s' == track->type)) && !default_track_found_for[track->type]) {
-              track->default_track                 = 1; // A definitive 'yes'.
-              default_track_found_for[track->type] = true;
-            }
-
-          } else if (pair[0] == wxT("stereo_mode")) {
-            parse_number(wxMB(pair[1]), track->stereo_mode);
-            track->stereo_mode += 1;
-
-          } else if (pair[0] == wxT("aac_is_sbr"))
-            track->aac_is_sbr = track->aac_is_sbr_detected = pair[1] == wxT("true");
-
-          else if (pair[0] == wxT("forced_track"))
-            track->forced_track = pair[1] == wxT("1");
-
-          else if (pair[0] == wxT("packetizer"))
-            track->packetizer = pair[1];
-
-        }
-      }
-
-      if (('v' == track->type) && (track->track_name.Length() > 0))
-        video_track_name = track->track_name;
-
-      track->appending = append;
-
-      file->tracks.push_back(track);
-
-      if (   mdlg->options.disable_a_v_compression
-          && !track->appending
-          && (('v' == track->type) || ('a' == track->type)))
-        track->compression = wxU("none");
-
-    } else if ((pos = output[i].Find(wxT("container:"))) != wxNOT_FOUND) {
-      wxString container = output[i].Mid(pos + 11).BeforeFirst(wxT(' '));
-      wxString info      = output[i].Mid(pos + 11).AfterFirst(wxT('[')).BeforeLast(wxT(']'));
-
-      if (container == wxT("AAC"))
-        file->container = FILE_TYPE_AAC;
-      else if (container == wxT("AC3"))
-        file->container = FILE_TYPE_AC3;
-      else if (container == wxT("AVC/h.264"))
-        file->container = FILE_TYPE_AVC_ES;
-      else if (container == wxT("AVI"))
-        file->container = FILE_TYPE_AVI;
-      else if (container == wxT("Dirac elementary stream"))
-        file->container = FILE_TYPE_DIRAC;
-      else if (container == wxT("DTS"))
-        file->container = FILE_TYPE_DTS;
-      else if (container == wxT("IVF"))
-        file->container = FILE_TYPE_IVF;
-      else if (container == wxT("Matroska"))
-        file->container = FILE_TYPE_MATROSKA;
-      else if (container == wxT("MP2/MP3"))
-        file->container = FILE_TYPE_MP3;
-      else if (container == wxT("Ogg/OGM"))
-        file->container = FILE_TYPE_OGM;
-      else if (container == wxT("Quicktime/MP4"))
-        file->container = FILE_TYPE_QTMP4;
-      else if (container == wxT("RealMedia"))
-        file->container = FILE_TYPE_REAL;
-      else if (container == wxT("SRT"))
-        file->container = FILE_TYPE_SRT;
-      else if (container == wxT("SSA/ASS"))
-        file->container = FILE_TYPE_SSA;
-      else if (container == wxT("VC1 elementary stream"))
-        file->container = FILE_TYPE_VC1;
-      else if (container == wxT("VobSub"))
-        file->container = FILE_TYPE_VOBSUB;
-      else if (container == wxT("WAV"))
-        file->container = FILE_TYPE_WAV;
-      else
-        file->container = FILE_TYPE_IS_UNKNOWN;
-
-      if (info.length() > 0) {
-        args = split(info, wxU(" "));
-        for (k = 0; k < args.size(); k++) {
-          pair = split(args[k], wxU(":"), 2);
-          if ((pair.size() == 2) && (pair[0] == wxT("title"))) {
-            file->title = unescape(pair[1]);
-            file->title_was_present = true;
-            title_was_present = true;
-
-          } else if ((pair.size() == 2) && (pair[0] == wxT("other_file")))
-            file->other_files.push_back(wxFileName(unescape(pair[1])));
-
-        }
-      }
-
-    } else if (output[i].Find(wxT("Attachment")) == 0) {
-      mmg_attached_file_cptr a = mmg_attached_file_cptr(new mmg_attached_file_t);
-
-      wxRegEx re_att_base(       wxT("^Attachment *ID ([[:digit:]]+): *type *\"([^\"]+)\", *size *([[:digit:]]+)"), wxRE_ICASE);
-      wxRegEx re_att_description(wxT("description *\"([^\"]+)\""),                                                  wxRE_ICASE);
-      wxRegEx re_att_name(       wxT("name *\"([^\"]+)\""),                                                         wxRE_ICASE);
-
-      if (re_att_base.Matches(output[i])) {
-        re_att_base.GetMatch(output[i], 1).ToLong(&a->id);
-        re_att_base.GetMatch(output[i], 3).ToLong(&a->size);
-        a->mime_type = unescape(re_att_base.GetMatch(output[i], 2));
-
-        if (re_att_description.Matches(output[i]))
-          a->description = unescape(re_att_description.GetMatch(output[i], 1));
-        if (re_att_name.Matches(output[i]))
-          a->name = unescape(re_att_name.GetMatch(output[i], 1));
-
-        a->source = file.get();
-
-        file->attached_files.push_back(a);
-
-        wxLogMessage(wxT("Attached file ID %ld MIME type '%s' size %ld description '%s' name '%s'"),
-                     a->id, a->mime_type.c_str(), a->size, a->description.c_str(), a->name.c_str());
-      }
-
-    } else if (output[i].Find(wxT("Chapters")) == 0) {
-      mmg_track_cptr track(new mmg_track_t);
-      parse_number(wxMB(output[i].AfterFirst(wxT(' ')).BeforeFirst(wxT(' '))), track->num_entries);
-      track->type = 'c';
-      track->id   = TRACK_ID_CHAPTERS;
-
-      file->tracks.push_back(track);
-
-    } else if (output[i].Find(wxT("Global tags")) == 0) {
-      mmg_track_cptr track(new mmg_track_t);
-      parse_number(wxMB(output[i].AfterFirst(wxT(':')).AfterFirst(wxT(' ')).BeforeFirst(wxT(' '))), track->num_entries);
-      track->type = 't';
-      track->id   = TRACK_ID_GLOBAL_TAGS;
-
-      file->tracks.push_back(track);
-
-    } else if (output[i].Find(wxT("Tags")) == 0) {
-      mmg_track_cptr track(new mmg_track_t);
-      parse_number(wxMB(output[i].BeforeFirst(wxT(':')).AfterLast(wxT(' '))), track->id);
-      parse_number(wxMB(output[i].AfterFirst(wxT(':')).AfterFirst(wxT(' ')).BeforeFirst(wxT(' '))), track->num_entries);
-      track->type  = 't';
-      track->id   += TRACK_ID_TAGS_BASE;
-
-      file->tracks.push_back(track);
-    }
+    else if (output[i].Find(wxT("Tags")) == 0)
+      parse_tags_line(file, output[i]);
   }
+}
 
-  if (file->tracks.empty()) {
-    wxMessageBox(wxString::Format(Z("The input file '%s' does not contain any tracks."), file_name.c_str()), Z("No tracks found"));
-    return;
-  }
-
+void
+tab_input::insert_file_in_controls(mmg_file_cptr file,
+                                   bool append) {
   // Look for a place to insert the new file-> If the file is only "added",
   // then it will be added to the back of the list. If it is "appended",
   // then it should be inserted right after the currently selected file->
+  int new_file_pos;
   if (!append)
     new_file_pos = lb_input_files->GetCount();
   else {
@@ -611,31 +613,22 @@ tab_input::add_file(const wxString &file_name,
     }
   }
 
-  name.Printf(wxT("%s%s (%s)"), append ? wxT("++> ") : wxEmptyString, file_name.AfterLast(wxT(PSEP)).c_str(), file_name.BeforeLast(wxT(PSEP)).c_str());
-  lb_input_files->Insert(name, new_file_pos);
+  lb_input_files->Insert(wxString::Format(wxT("%s%s (%s)"), append ? wxT("++> ") : wxEmptyString, file->file_name.AfterLast(wxT(PSEP)).c_str(), file->file_name.BeforeLast(wxT(PSEP)).c_str()), new_file_pos);
 
-  file->file_name = file_name;
-  mdlg->set_title_maybe(file->title);
-  if ((file->container == FILE_TYPE_OGM) && (video_track_name.Length() > 0))
-    mdlg->set_title_maybe(video_track_name);
-  file->appending = append;
   files.insert(files.begin() + new_file_pos, file);
 
   // After inserting the file the "source" index is wrong for all files
   // after the insertion position.
-  for (i = 0; i < tracks.size(); i++)
-    if (tracks[i]->source >= new_file_pos)
-      ++tracks[i]->source;
+  for (auto &track : tracks)
+    if (track->source >= new_file_pos)
+      ++track->source;
 
-  if (name.StartsWith(wxT("++> ")))
-    name.Remove(0, 4);
-
-  for (i = 0; i < file->tracks.size(); i++) {
+  auto i = 0u;
+  for (auto &t : file->tracks) {
     int new_track_pos;
 
-    mmg_track_cptr &t = file->tracks[i];
-    t->enabled        = !mdlg->global_page->cb_webm_mode->IsChecked() || t->is_webm_compatible();
-    t->source         = new_file_pos;
+    t->enabled = !mdlg->global_page->cb_webm_mode->IsChecked() || t->is_webm_compatible();
+    t->source  = new_file_pos;
 
     // Look for a place to insert this new track. If the file is "added" then
     // the new track is simply appended to the list of existing tracks.
@@ -668,11 +661,53 @@ tab_input::add_file(const wxString &file_name,
     tracks.insert(tracks.begin() + new_track_pos, t.get());
     clb_tracks->Insert(t->create_label(), new_track_pos);
     clb_tracks->Check(new_track_pos, t->enabled);
+
+    ++i;
   }
 
-  if (!file->attached_files.empty())
-    for (i = 0; file->attached_files.size() > i; ++i)
-      mdlg->attachments_page->add_attached_file(file->attached_files[i]);
+  for (auto &attached_file : file->attached_files)
+    mdlg->attachments_page->add_attached_file(attached_file);
+}
+
+void
+tab_input::add_file(wxString const &file_name,
+                    bool append) {
+  wxFileName file_name_obj(file_name);
+  for (auto file : files)
+    for (auto &other_file_name : file->other_files)
+      if (file_name_obj == other_file_name) {
+        wxMessageBox(wxString::Format(Z("The file '%s' is already processed in combination with the file '%s'. It cannot be added a second time."),
+                                      file_name_obj.GetFullPath().c_str(), other_file_name.GetFullPath().c_str()),
+                     Z("File is already processed"), wxOK | wxCENTER | wxICON_ERROR);
+        return;
+      }
+
+  last_open_dir = file_name_obj.GetPath();
+
+  wxArrayString output;
+  if (!run_mkvmerge_identification(file_name, output))
+    return;
+
+  auto file       = std::make_shared<mmg_file_t>();
+  file->appending = append;
+  file->file_name = file_name;
+
+  parse_identification_output(file, output);
+
+  if (file->tracks.empty()) {
+    wxMessageBox(wxString::Format(Z("The input file '%s' does not contain any tracks."), file_name.c_str()), Z("No tracks found"));
+    return;
+  }
+
+  insert_file_in_controls(file, append);
+
+  mdlg->set_title_maybe(file->title);
+  if (file->container == FILE_TYPE_OGM)
+    for (auto &track : file->tracks)
+      if (track->is_video() && !track->track_name.IsEmpty()) {
+        mdlg->set_title_maybe(track->track_name);
+        break;
+      }
 
   mdlg->set_output_maybe(file->file_name);
 
