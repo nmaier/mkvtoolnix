@@ -182,6 +182,8 @@ private:
   std::string m_writing_app, m_muxing_app;
   int64_t m_writing_app_ver;
 
+  memory_cptr m_segment_uid, m_next_segment_uid, m_previous_segment_uid;
+
   int64_t m_attachment_id;
 
   std::shared_ptr<KaxTags> m_tags;

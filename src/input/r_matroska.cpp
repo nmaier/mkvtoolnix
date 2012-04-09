@@ -837,6 +837,10 @@ kax_reader_c::read_headers_info(EbmlElement *&l1,
     if (m_muxing_app == "DirectShow Matroska Muxer")
       m_reference_timecode_tolerance = 1000000;
   }
+
+  m_segment_uid          = find_and_clone_binary<KaxSegmentUID>(l1);
+  m_next_segment_uid     = find_and_clone_binary<KaxNextUID>(l1);
+  m_previous_segment_uid = find_and_clone_binary<KaxPrevUID>(l1);
 }
 
 void
@@ -2241,6 +2245,14 @@ kax_reader_c::identify() {
     verbose_info.push_back((boost::format("title:%1%") % escape(m_title)).str());
   if (0 != m_segment_duration)
     verbose_info.push_back((boost::format("duration:%1%") % m_segment_duration).str());
+
+  auto add_uid_info = [&](memory_cptr const &uid, std::string const &property) {
+    if (uid)
+      verbose_info.push_back((boost::format("%1%:%2%") % property % to_hex(uid, true)).str());
+  };
+  add_uid_info(m_segment_uid,          "segment_uid");
+  add_uid_info(m_next_segment_uid,     "next_segment_uid");
+  add_uid_info(m_previous_segment_uid, "previous_segment_uid");
 
   id_result_container(verbose_info);
 
