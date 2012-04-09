@@ -78,6 +78,7 @@ def setup_globals
   }
 
   $build_tools           ||=  c?(:TOOLS)
+  $build_mmg_qt            =  c?(:USE_QT) && c?(:BUILD_MMGQT)
 
   cflags_common            = "-Wall -Wno-comment #{c(:OPTIMIZATION_CFLAGS)} -D_FILE_OFFSET_BITS=64 #{c(:MATROSKA_CFLAGS)} #{c(:EBML_CFLAGS)} #{c(:EXTRA_CFLAGS)} #{c(:DEBUG_CFLAGS)} #{c(:PROFILING_CFLAGS)} #{c(:USER_CPPFLAGS)} -DPACKAGE=\\\"#{c(:PACKAGE)}\\\" -DVERSION=\\\"#{c(:VERSION)}\\\" -DMTX_LOCALE_DIR=\\\"#{c(:localedir)}\\\" -DMTX_PKG_DATA_DIR=\\\"#{c(:pkgdatadir)}\\\" -DMTX_DOC_DIR=\\\"#{c(:docdir)}\\\""
   ldflags_extra            = c?(:MINGW) ? '' : "-Wl,--enable-auto-import"
@@ -104,7 +105,8 @@ def define_default_task
   targets = $applications.clone
 
   # Build the stuff in the 'src/tools' directory only if requested
-  targets << "apps:tools" if $build_tools
+  targets << "apps:tools"  if $build_tools
+  targets << "apps:mmg-qt" if $build_mmg_qt
 
   # The tags file -- but only if it exists already
   if File.exists?("TAGS")
@@ -154,7 +156,7 @@ cxx_compiler = lambda do |t|
   sources = t.sources.empty? ? [ t.prerequisites.first ] : t.sources
   dep     = dependency_output_name_for t.name
 
-  runq "     CXX #{sources.first}", "#{c(:CXX)} #{$flags[:cxxflags]} #{$system_includes} -c -MMD -MF #{dep} -o #{t.name} #{sources.join(" ")}", :allow_failure => true
+  runq "     CXX #{sources.first}", "#{c(:CXX)} #{$flags[:cxxflags]} #{$system_includes} -c -MMD -MF #{dep} -o #{t.name} -x c++ #{sources.join(" ")}", :allow_failure => true
   handle_deps t.name, last_exit_code, true
 end
 
@@ -231,11 +233,12 @@ rule '.h' => '.ui' do |t|
   runq "     UIC #{t.source}", "#{c(:UIC)} #{t.sources.join(" ")} > #{t.name}"
 end
 
-# Rake does not support rules like '.moc.cpp' => '.h'. Therefore
-# Target creats 'file' entries for all .moc.cpp entries submitted via
-# Target#sources.
-$moc_compiler = lambda do |t|
-  runq "     MOC #{t.prerequisites.first}", "#{c(:MOC)} #{c(:QT_CFLAGS)} #{t.prerequisites.join(" ")} > #{t.name}"
+rule '.moc' => '.h' do |t|
+  runq "     MOC #{t.prerequisites.first}", "#{c(:MOC)} #{c(:QT_CFLAGS)} -nw #{t.prerequisites.join(" ")} > #{t.name}"
+end
+
+rule '.moco' => '.moc' do |t|
+  cxx_compiler.call t
 end
 
 # Tag files
@@ -472,7 +475,7 @@ task :clean do
   patterns = %w{
     src/**/*.o lib/**/*.o src/**/lib*.a lib/**/lib*.a src/**/*.gch
     src/**/*.exe src/**/*.dll src/**/*.dll.a
-    src/**/*.moc.cpp src/info/ui/*.h src/mmg-qt/forms/*.h
+    src/info/ui/*.h src/mmg-qt/forms/*.h src/**/*.moc src/**/*.moco
     po/*.mo doc/guide/**/*.hhk
   }
   patterns += $applications + $tools.collect { |name| "src/tools/#{name}" }
@@ -589,7 +592,7 @@ Application.new("src/mkvinfo").
   sources("src/info/resources.o", :if => c?(:MINGW)).
   libraries(common_libs).
   only_if(c?(:USE_QT)).
-  sources("src/info/qt_ui.cpp", "src/info/qt_ui.moc.cpp", "src/info/rightclick_tree_widget.moc.cpp", $mkvinfo_ui_files).
+  sources("src/info/qt_ui.cpp", "src/info/qt_ui.moc", "src/info/rightclick_tree_widget.moc", $mkvinfo_ui_files).
   libraries(:qt).
   end_if.
   only_if(!c?(:USE_QT) && c?(:USE_WXWIDGETS)).
@@ -636,6 +639,27 @@ if c?(:USE_WXWIDGETS)
     png_icon("share/icons/64x64/mkvmergeGUI.png").
     libraries(common_libs, :wxwidgets).
     libraries(:ole32, :shell32, "-mwindows", :if => c?(:MINGW)).
+    create
+end
+
+#
+# mmg-qt
+#
+
+if $build_mmg_qt
+  ui_files = FileList["src/mmg-qt/forms/**/*.ui"].to_a
+  ui_files.each do |ui|
+    file ui.ext('cpp').gsub(/forms\//, '') => ui.ext('h')
+  end
+
+  Application.new("src/mmg-qt/mmg-qt").
+    description("Build the mmg-qt executable").
+    aliases("mmg-qt").
+    sources(FileList["src/mmg-qt/**/*.cpp"], ui_files).
+    sources((FileList["src/mmg-qt/**/*.h"].to_a - ui_files.collect { |ui| ui.ext 'h' }).collect { |h| h.ext 'moc' }).
+    sources("src/mmg-qt/resources.o", :if => c?(:MINGW)).
+    libraries(common_libs, :qt).
+    png_icon("share/icons/64x64/mkvmergeGUI.png").
     create
 end
 

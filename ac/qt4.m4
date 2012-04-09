@@ -153,6 +153,9 @@ return 0;
       AC_MSG_RESULT(no: test program could not be compiled)
     fi
   fi
+
+  AC_ARG_WITH(mmg-qt,[AS_HELP_STRING([--with-mmg-qt],[build mmg-qt (not working yet, only for development)])],
+              [BUILD_MMGQT=yes],[BUILD_MMGQT=no])
 fi
 
 if test x"$have_qt" != "xyes" ; then
@@ -164,3 +167,4 @@ AC_SUBST(UIC)
 AC_SUBST(QT_CFLAGS)
 AC_SUBST(QT_LIBS)
 AC_SUBST(USE_QT)
+AC_SUBST(BUILD_MMGQT)
