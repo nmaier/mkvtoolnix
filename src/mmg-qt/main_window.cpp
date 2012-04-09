@@ -50,7 +50,5 @@ void
 MainWindow::addFile(QString const &fileName,
                     bool /*append*/) {
   FileIdentifier identifier{ this, fileName };
-  if (!identifier.identify())
-    return;
-
+  mxinfo(boost::format("res; %1%\n") % identifier.identify());
 }

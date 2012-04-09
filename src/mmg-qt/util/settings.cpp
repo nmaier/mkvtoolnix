@@ -7,6 +7,8 @@ Settings Settings::s_settings;
 Settings::Settings()
   : m_mkvmergeExe("mkvmerge")
   , m_priority(priority_normal)
+  , m_setAudioDelayFromFileName(true)
+  , m_disableAVCompression(true)
 {
 }
 

@@ -1,0 +1,68 @@
+#ifndef MTX_MMGQT_TRACK_H
+#define MTX_MMGQT_TRACK_H
+
+#include "common/common_pch.h"
+
+#include <QHash>
+#include <QObject>
+#include <QString>
+
+#include "common/qt.h"
+
+class SourceFile;
+
+class Track;
+typedef std::shared_ptr<Track> TrackPtr;
+
+class Track: public QObject {
+  Q_OBJECT;
+public:
+  enum Type {
+    Audio,
+    Video,
+    Subtitles,
+    Buttons,
+    Chapters,
+    GlobalTags,
+    Tags,
+    Attachment,
+  };
+
+  enum Compression {
+    CompDefault,
+    CompNone,
+    CompZlib,
+  };
+
+  QHash<QString, QString> m_properties;
+
+  SourceFile *m_file;
+
+  Type m_type;
+  int64_t m_id;
+
+  bool m_muxThis, m_setAspectRatio, m_aacIsSBR, m_defaultTrackFlagWasSet;
+  QString m_name, m_codec, m_language, m_tags, m_delay, m_strechBy, m_defaultDuration, m_timecodes, m_aspectRatio, m_displayWidth, m_displayHeight, m_cropping, m_characterSet, m_userDefinedOptions;
+  unsigned int m_defaultTrackFlag, m_forcedTrackFlag, m_stereoscopy, m_cues;
+  Compression m_compression;
+
+public:
+  explicit Track(Type type);
+  virtual ~Track();
+
+  virtual bool isType(Type type) const;
+  virtual bool isAudio() const;
+  virtual bool isVideo() const;
+  virtual bool isSubtitles() const;
+  virtual bool isButtons() const;
+  virtual bool isChapters() const;
+  virtual bool isGlobalTags() const;
+  virtual bool isTags() const;
+  virtual bool isAttachment() const;
+  virtual bool isAppended() const;
+
+  virtual void setDefaults();
+  virtual QString extractAudioDelayFromFileName() const;
+};
+
+#endif  // MTX_MMGQT_TRACK_H

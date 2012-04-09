@@ -82,9 +82,9 @@
              <property name="geometry">
               <rect>
                <x>0</x>
-               <y>-366</y>
+               <y>0</y>
                <width>402</width>
-               <height>757</height>
+               <height>784</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_9">
@@ -95,6 +95,27 @@
                 </property>
                 <layout class="QGridLayout" name="gridLayout_5">
                  <item row="0" column="0">
+                  <widget class="QLabel" name="label_35">
+                   <property name="text">
+                    <string>Mux this:</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="QComboBox" name="muxThis">
+                   <item>
+                    <property name="text">
+                     <string>yes</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>no</string>
+                    </property>
+                   </item>
+                  </widget>
+                 </item>
+                 <item row="1" column="0">
                   <widget class="QLabel" name="label_16">
                    <property name="text">
                     <string>Track name:</string>
@@ -104,10 +125,10 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="0" column="1">
+                 <item row="1" column="1">
                   <widget class="QLineEdit" name="trackName"/>
                  </item>
-                 <item row="1" column="0">
+                 <item row="2" column="0">
                   <widget class="QLabel" name="label_17">
                    <property name="text">
                     <string>Language:</string>
@@ -117,10 +138,10 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="1" column="1">
+                 <item row="2" column="1">
                   <widget class="QComboBox" name="trackLanguage"/>
                  </item>
-                 <item row="2" column="0">
+                 <item row="3" column="0">
                   <widget class="QLabel" name="label_18">
                    <property name="text">
                     <string>&quot;Default track&quot; flag:</string>
@@ -130,7 +151,7 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="2" column="1">
+                 <item row="3" column="1">
                   <widget class="QComboBox" name="defaultTrackFlag">
                    <item>
                     <property name="text">
@@ -149,7 +170,7 @@
                    </item>
                   </widget>
                  </item>
-                 <item row="3" column="0">
+                 <item row="4" column="0">
                   <widget class="QLabel" name="label_19">
                    <property name="text">
                     <string>&quot;Forced track&quot; flag:</string>
@@ -159,7 +180,7 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="3" column="1">
+                 <item row="4" column="1">
                   <widget class="QComboBox" name="forcedTrackFlag">
                    <item>
                     <property name="text">
@@ -173,7 +194,7 @@
                    </item>
                   </widget>
                  </item>
-                 <item row="4" column="0">
+                 <item row="5" column="0">
                   <widget class="QLabel" name="label_31">
                    <property name="text">
                     <string>Compression:</string>
@@ -183,7 +204,7 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="4" column="1">
+                 <item row="5" column="1">
                   <widget class="QComboBox" name="compression">
                    <item>
                     <property name="text">
@@ -202,7 +223,7 @@
                    </item>
                   </widget>
                  </item>
-                 <item row="5" column="0">
+                 <item row="6" column="0">
                   <widget class="QLabel" name="label_20">
                    <property name="text">
                     <string>Tags:</string>
@@ -212,7 +233,7 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="5" column="1">
+                 <item row="6" column="1">
                   <layout class="QHBoxLayout" name="horizontalLayout_11">
                    <item>
                     <widget class="QLineEdit" name="trackTacks"/>
@@ -383,6 +404,11 @@
                    <property name="editable">
                     <bool>true</bool>
                    </property>
+                   <item>
+                    <property name="text">
+                     <string/>
+                    </property>
+                   </item>
                    <item>
                     <property name="text">
                      <string notr="true">4/3</string>
@@ -1280,6 +1306,7 @@
   <tabstop>files</tabstop>
   <tabstop>tracks</tabstop>
   <tabstop>scrollArea</tabstop>
+  <tabstop>muxThis</tabstop>
   <tabstop>trackName</tabstop>
   <tabstop>trackLanguage</tabstop>
   <tabstop>defaultTrackFlag</tabstop>

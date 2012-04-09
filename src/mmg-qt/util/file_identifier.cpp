@@ -1,6 +1,7 @@
 #include "common/common_pch.h"
 
 #include "common/qt.h"
+#include "common/strings/editing.h"
 #include "mmg-qt/util/file_identifier.h"
 #include "mmg-qt/util/process.h"
 #include "mmg-qt/util/settings.h"
@@ -31,10 +32,8 @@ FileIdentifier::identify() {
   auto exitCode = process->process().exitCode();
   m_output      = process->output();
 
-  mxinfo(boost::format("oh yeah, code %2%: %1%\n") % to_utf8(m_output.join(":::")) % exitCode);
-
   if (0 == exitCode)
-    return true;
+    return parseOutput();
 
   if (3 == exitCode) {
     auto pos       = m_output.isEmpty() ? -1            : m_output[0].indexOf("container:");
@@ -71,4 +70,110 @@ QStringList const &
 FileIdentifier::output()
   const {
   return m_output;
+}
+
+SourceFilePtr const &
+FileIdentifier::file()
+  const {
+  return m_file;
+}
+
+bool
+FileIdentifier::parseOutput() {
+  m_file = std::make_shared<SourceFile>(m_fileName);
+
+  for (auto &line : m_output) {
+    if (line.startsWith("File"))
+      parseContainerLine(line);
+
+    else if (line.startsWith("Track"))
+      parseTrackLine(line);
+
+    else if (line.startsWith("Attachment"))
+      parseAttachmentLine(line);
+
+    else if (line.startsWith("Chapters"))
+      parseChaptersLine(line);
+
+    else if (line.startsWith("Global tags"))
+      parseGlobalTagsLine(line);
+
+    else if (line.startsWith("Track"))
+      parseTrackLine(line);
+  }
+
+  return m_file->isValid();
+}
+
+// Attachment ID 1: type 'cue', size 1844 bytes, description 'dummy', file name 'cuewithtags2.cue'
+void
+FileIdentifier::parseAttachmentLine(QString const &line) {
+}
+
+// Chapters: 27 entries
+void
+FileIdentifier::parseChaptersLine(QString const &line) {
+}
+
+// File 'complex.mkv': container: Matroska [duration:106752000000 segment_uid:00000000000000000000000000000000]
+void
+FileIdentifier::parseContainerLine(QString const &line) {
+  QRegExp re{"^File\\s.*container:\\s+([^\\[]+)"};
+
+  if (-1 == re.indexIn(line))
+    return;
+
+  m_file->setContainer(re.cap(1));
+  m_file->m_properties = parseProperties(line);
+}
+
+// Global tags: 3 entries
+void
+FileIdentifier::parseGlobalTagsLine(QString const &line) {
+}
+
+void
+FileIdentifier::parseTagsLine(QString const &line) {
+}
+
+// Track ID 0: video (V_MS/VFW/FOURCC, DIV3) [number:1 ...]
+// Track ID 7: audio (A_PCM/INT/LIT) [number:8 uid:289972206 codec_id:A_PCM/INT/LIT codec_private_length:0 language:und default_track:0 forced_track:0 enabled_track:1 default_duration:31250000 audio_sampling_frequency:48000 audio_channels:2]
+// Track ID 8: subtitles (S_TEXT/UTF8) [number:9 ...]
+void
+FileIdentifier::parseTrackLine(QString const &line) {
+  QRegExp re{"Track\\s+ID\\s+(\\d+):\\s+(audio|video|subtitles|buttons)\\s+\\(([^\\)]+)\\)", Qt::CaseInsensitive};
+  if (-1 == re.indexIn(line))
+    return;
+
+  auto type           = re.cap(2) == "audio"     ? Track::Audio
+                      : re.cap(2) == "video"     ? Track::Video
+                      : re.cap(2) == "subtitles" ? Track::Subtitles
+                      :                            Track::Buttons;
+  auto track          = std::make_shared<Track>(type);
+  track->m_file       = m_file.get();
+  track->m_id         = re.cap(1).toLongLong();
+  track->m_codec      = re.cap(3);
+  track->m_properties = parseProperties(line);
+
+  m_file->m_tracks << track;
+
+  track->setDefaults();
+}
+
+QHash<QString, QString>
+FileIdentifier::parseProperties(QString const &line)
+  const {
+  QHash<QString, QString> properties;
+
+  QRegExp re{"\\[(.+)\\]"};
+  if (-1 == re.indexIn(line))
+    return properties;
+
+  for (auto &pair : re.cap(1).split(QRegExp{"\\s+"}, QString::SkipEmptyParts)) {
+    QRegExp re{"(.+):(.+)"};
+    if (-1 != re.indexIn(pair))
+      properties[to_qs(unescape(to_utf8(re.cap(1))))] = to_qs(unescape(to_utf8(re.cap(2))));
+  }
+
+  return properties;
 }

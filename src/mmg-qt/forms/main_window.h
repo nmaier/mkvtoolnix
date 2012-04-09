@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'main_window.ui'
 **
-** Created: Mon Apr 9 19:48:41 2012
+** Created: Mon Apr 9 23:10:51 2012
 **      by: Qt User Interface Compiler version 4.7.4
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -73,6 +73,8 @@ public:
     QVBoxLayout *verticalLayout_9;
     QGroupBox *groupBox_7;
     QGridLayout *gridLayout_5;
+    QLabel *label_35;
+    QComboBox *muxThis;
     QLabel *label_16;
     QLineEdit *trackName;
     QLabel *label_17;
@@ -301,7 +303,7 @@ public:
         scrollArea->setWidgetResizable(true);
         scrollAreaWidgetContents = new QWidget();
         scrollAreaWidgetContents->setObjectName(QString::fromUtf8("scrollAreaWidgetContents"));
-        scrollAreaWidgetContents->setGeometry(QRect(0, -366, 402, 757));
+        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 402, 784));
         verticalLayout_9 = new QVBoxLayout(scrollAreaWidgetContents);
         verticalLayout_9->setSpacing(6);
         verticalLayout_9->setContentsMargins(11, 11, 11, 11);
@@ -312,50 +314,60 @@ public:
         gridLayout_5->setSpacing(6);
         gridLayout_5->setContentsMargins(11, 11, 11, 11);
         gridLayout_5->setObjectName(QString::fromUtf8("gridLayout_5"));
+        label_35 = new QLabel(groupBox_7);
+        label_35->setObjectName(QString::fromUtf8("label_35"));
+
+        gridLayout_5->addWidget(label_35, 0, 0, 1, 1);
+
+        muxThis = new QComboBox(groupBox_7);
+        muxThis->setObjectName(QString::fromUtf8("muxThis"));
+
+        gridLayout_5->addWidget(muxThis, 0, 1, 1, 1);
+
         label_16 = new QLabel(groupBox_7);
         label_16->setObjectName(QString::fromUtf8("label_16"));
 
-        gridLayout_5->addWidget(label_16, 0, 0, 1, 1);
+        gridLayout_5->addWidget(label_16, 1, 0, 1, 1);
 
         trackName = new QLineEdit(groupBox_7);
         trackName->setObjectName(QString::fromUtf8("trackName"));
 
-        gridLayout_5->addWidget(trackName, 0, 1, 1, 1);
+        gridLayout_5->addWidget(trackName, 1, 1, 1, 1);
 
         label_17 = new QLabel(groupBox_7);
         label_17->setObjectName(QString::fromUtf8("label_17"));
 
-        gridLayout_5->addWidget(label_17, 1, 0, 1, 1);
+        gridLayout_5->addWidget(label_17, 2, 0, 1, 1);
 
         trackLanguage = new QComboBox(groupBox_7);
         trackLanguage->setObjectName(QString::fromUtf8("trackLanguage"));
 
-        gridLayout_5->addWidget(trackLanguage, 1, 1, 1, 1);
+        gridLayout_5->addWidget(trackLanguage, 2, 1, 1, 1);
 
         label_18 = new QLabel(groupBox_7);
         label_18->setObjectName(QString::fromUtf8("label_18"));
 
-        gridLayout_5->addWidget(label_18, 2, 0, 1, 1);
+        gridLayout_5->addWidget(label_18, 3, 0, 1, 1);
 
         defaultTrackFlag = new QComboBox(groupBox_7);
         defaultTrackFlag->setObjectName(QString::fromUtf8("defaultTrackFlag"));
 
-        gridLayout_5->addWidget(defaultTrackFlag, 2, 1, 1, 1);
+        gridLayout_5->addWidget(defaultTrackFlag, 3, 1, 1, 1);
 
         label_19 = new QLabel(groupBox_7);
         label_19->setObjectName(QString::fromUtf8("label_19"));
 
-        gridLayout_5->addWidget(label_19, 3, 0, 1, 1);
+        gridLayout_5->addWidget(label_19, 4, 0, 1, 1);
 
         forcedTrackFlag = new QComboBox(groupBox_7);
         forcedTrackFlag->setObjectName(QString::fromUtf8("forcedTrackFlag"));
 
-        gridLayout_5->addWidget(forcedTrackFlag, 3, 1, 1, 1);
+        gridLayout_5->addWidget(forcedTrackFlag, 4, 1, 1, 1);
 
         label_31 = new QLabel(groupBox_7);
         label_31->setObjectName(QString::fromUtf8("label_31"));
 
-        gridLayout_5->addWidget(label_31, 4, 0, 1, 1);
+        gridLayout_5->addWidget(label_31, 5, 0, 1, 1);
 
         compression = new QComboBox(groupBox_7);
         compression->addItem(QString());
@@ -363,12 +375,12 @@ public:
         compression->addItem(QString::fromUtf8("ZLIB"));
         compression->setObjectName(QString::fromUtf8("compression"));
 
-        gridLayout_5->addWidget(compression, 4, 1, 1, 1);
+        gridLayout_5->addWidget(compression, 5, 1, 1, 1);
 
         label_20 = new QLabel(groupBox_7);
         label_20->setObjectName(QString::fromUtf8("label_20"));
 
-        gridLayout_5->addWidget(label_20, 5, 0, 1, 1);
+        gridLayout_5->addWidget(label_20, 6, 0, 1, 1);
 
         horizontalLayout_11 = new QHBoxLayout();
         horizontalLayout_11->setSpacing(6);
@@ -384,7 +396,7 @@ public:
         horizontalLayout_11->addWidget(browseTrackTags);
 
 
-        gridLayout_5->addLayout(horizontalLayout_11, 5, 1, 1, 1);
+        gridLayout_5->addLayout(horizontalLayout_11, 6, 1, 1, 1);
 
 
         verticalLayout_9->addWidget(groupBox_7);
@@ -476,15 +488,14 @@ public:
         gridLayout_7->addWidget(setAspectRatio, 0, 0, 1, 1);
 
         aspectRatio = new QComboBox(groupBox_9);
-        aspectRatio->insertItems(0, QStringList()
-         << QString::fromUtf8("4/3")
-         << QString::fromUtf8("1.66")
-         << QString::fromUtf8("16/9")
-         << QString::fromUtf8("1.85")
-         << QString::fromUtf8("2.00")
-         << QString::fromUtf8("2.21")
-         << QString::fromUtf8("2.35")
-        );
+        aspectRatio->addItem(QString());
+        aspectRatio->addItem(QString::fromUtf8("4/3"));
+        aspectRatio->addItem(QString::fromUtf8("1.66"));
+        aspectRatio->addItem(QString::fromUtf8("16/9"));
+        aspectRatio->addItem(QString::fromUtf8("1.85"));
+        aspectRatio->addItem(QString::fromUtf8("2.00"));
+        aspectRatio->addItem(QString::fromUtf8("2.21"));
+        aspectRatio->addItem(QString::fromUtf8("2.35"));
         aspectRatio->setObjectName(QString::fromUtf8("aspectRatio"));
         aspectRatio->setEditable(true);
 
@@ -1086,7 +1097,8 @@ public:
         QWidget::setTabOrder(mainTab, files);
         QWidget::setTabOrder(files, tracks);
         QWidget::setTabOrder(tracks, scrollArea);
-        QWidget::setTabOrder(scrollArea, trackName);
+        QWidget::setTabOrder(scrollArea, muxThis);
+        QWidget::setTabOrder(muxThis, trackName);
         QWidget::setTabOrder(trackName, trackLanguage);
         QWidget::setTabOrder(trackLanguage, defaultTrackFlag);
         QWidget::setTabOrder(defaultTrackFlag, forcedTrackFlag);
@@ -1203,6 +1215,12 @@ public:
         label_2->setText(QApplication::translate("MainWindow", "Tracks, chapters, tags and attachments:", 0, QApplication::UnicodeUTF8));
         label_3->setText(QApplication::translate("MainWindow", "Properties:", 0, QApplication::UnicodeUTF8));
         groupBox_7->setTitle(QApplication::translate("MainWindow", "General options", 0, QApplication::UnicodeUTF8));
+        label_35->setText(QApplication::translate("MainWindow", "Mux this:", 0, QApplication::UnicodeUTF8));
+        muxThis->clear();
+        muxThis->insertItems(0, QStringList()
+         << QApplication::translate("MainWindow", "yes", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "no", 0, QApplication::UnicodeUTF8)
+        );
         label_16->setText(QApplication::translate("MainWindow", "Track name:", 0, QApplication::UnicodeUTF8));
         label_17->setText(QApplication::translate("MainWindow", "Language:", 0, QApplication::UnicodeUTF8));
         label_18->setText(QApplication::translate("MainWindow", "\"Default track\" flag:", 0, QApplication::UnicodeUTF8));
@@ -1232,6 +1250,8 @@ public:
         browseTimecodes->setText(QApplication::translate("MainWindow", "Browse", 0, QApplication::UnicodeUTF8));
         groupBox_9->setTitle(QApplication::translate("MainWindow", "Picture properties", 0, QApplication::UnicodeUTF8));
         setAspectRatio->setText(QApplication::translate("MainWindow", "Set aspect ratio:", 0, QApplication::UnicodeUTF8));
+        aspectRatio->setItemText(0, QString());
+
         setDisplayWidthHeight->setText(QApplication::translate("MainWindow", "Display width/height:", 0, QApplication::UnicodeUTF8));
         label_25->setText(QApplication::translate("MainWindow", "x", 0, QApplication::UnicodeUTF8));
         label_26->setText(QApplication::translate("MainWindow", "Stereoscopy:", 0, QApplication::UnicodeUTF8));
