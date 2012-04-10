@@ -1,15 +1,15 @@
 #include "common/common_pch.h"
 
+#include "common/qt.h"
 #include "mkvtoolnix-gui/util/settings.h"
+
+#include <QSettings>
 
 Settings Settings::s_settings;
 
 Settings::Settings()
-  : m_mkvmergeExe("mkvmerge")
-  , m_priority(priority_normal)
-  , m_setAudioDelayFromFileName(true)
-  , m_disableAVCompression(true)
 {
+  load();
 }
 
 Settings &
@@ -19,8 +19,31 @@ Settings::get() {
 
 void
 Settings::load() {
+  QSettings reg;
+
+  reg.beginGroup("settings");
+  m_mkvmergeExe = reg.value("mkvmergeExe", "mkvmerge").toString();
+  m_priority    = static_cast<process_priority_e>(reg.value("priority", static_cast<int>(priority_normal)).toInt());
+  reg.endGroup();
+
+  reg.beginGroup("features");
+  m_setAudioDelayFromFileName = reg.value("setAudioDelayFromFileName", true).toBool();
+  m_disableAVCompression      = reg.value("disableAVCompression",      true).toBool();
+  reg.endGroup();
 }
 
 void
-Settings::save() {
+Settings::save()
+  const {
+  QSettings reg;
+
+  reg.beginGroup("settings");
+  reg.setValue("mkvmergeExe", m_mkvmergeExe);
+  reg.setValue("priority",    static_cast<int>(m_priority));
+  reg.endGroup();
+
+  reg.beginGroup("features");
+  reg.setValue("setAudioDelayFromFileName", m_setAudioDelayFromFileName);
+  reg.setValue("disableAVCompression",      m_disableAVCompression);
+  reg.endGroup();
 }

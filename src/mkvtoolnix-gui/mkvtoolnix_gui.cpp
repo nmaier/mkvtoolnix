@@ -2,7 +2,8 @@
 
 #include <QApplication>
 
-#include "mkvtoolnix-gui/mmg_qt.h"
+#include "mkvtoolnix-gui/app.h"
+#include "mkvtoolnix-gui/mkvtoolnix_gui.h"
 #include "mkvtoolnix-gui/main_window.h"
 
 int
@@ -12,7 +13,7 @@ main(int argc,
   QApplication::setStyle(Q("windows"));
 #endif
 
-  QApplication app(argc, argv);
+  App app(argc, argv);
 
   MainWindow mainWindow;
   mainWindow.show();

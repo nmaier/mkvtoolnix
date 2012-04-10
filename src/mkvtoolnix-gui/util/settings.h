@@ -10,7 +10,7 @@ class Settings: public QObject {
   Q_OBJECT;
 public:
   enum process_priority_e {
-    priority_lowest,
+    priority_lowest = 0,
     priority_low,
     priority_normal,
     priority_high,
@@ -25,7 +25,7 @@ public:
 public:
   Settings();
   void load();
-  void save();
+  void save() const;
 
 public:
   static Settings s_settings;
