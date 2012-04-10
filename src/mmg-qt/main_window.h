@@ -3,6 +3,8 @@
 
 #include "common/common_pch.h"
 
+#include "mmg-qt/mux_config.h"
+
 #include <QDir>
 #include <QMainWindow>
 
@@ -12,6 +14,9 @@ class MainWindow;
 
 class MainWindow : public QMainWindow {
   Q_OBJECT;
+
+protected:
+  MuxConfig m_config;
 
 public:
   explicit MainWindow(QWidget *parent = nullptr);
