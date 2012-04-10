@@ -3,7 +3,7 @@
 
 #include "common/common_pch.h"
 
-#include "mmg-qt/mux_config.h"
+#include "mkvtoolnix-gui/mux_config.h"
 
 #include <QDir>
 #include <QMainWindow>

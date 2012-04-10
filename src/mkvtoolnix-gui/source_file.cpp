@@ -1,7 +1,7 @@
 #include "common/common_pch.h"
 
 #include "common/qt.h"
-#include "mmg-qt/source_file.h"
+#include "mkvtoolnix-gui/source_file.h"
 
 SourceFile::SourceFile(QString const &fileName)
   : m_fileName(fileName)

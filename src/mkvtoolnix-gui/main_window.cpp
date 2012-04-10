@@ -1,12 +1,12 @@
 #include "common/common_pch.h"
 
 #include "common/qt.h"
-#include "mmg-qt/main_window.h"
-#include "mmg-qt/forms/main_window.h"
-#include "mmg-qt/util/file_identifier.h"
-#include "mmg-qt/util/file_type_filter.h"
-#include "mmg-qt/util/settings.h"
-#include "mmg-qt/util/util.h"
+#include "mkvtoolnix-gui/main_window.h"
+#include "mkvtoolnix-gui/forms/main_window.h"
+#include "mkvtoolnix-gui/util/file_identifier.h"
+#include "mkvtoolnix-gui/util/file_type_filter.h"
+#include "mkvtoolnix-gui/util/settings.h"
+#include "mkvtoolnix-gui/util/util.h"
 
 #include <QFileDialog>
 #include <QIcon>

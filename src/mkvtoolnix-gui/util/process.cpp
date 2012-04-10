@@ -4,7 +4,7 @@
 #include <QTemporaryFile>
 
 #include "common/qt.h"
-#include "mmg-qt/util/process.h"
+#include "mkvtoolnix-gui/util/process.h"
 
 Process::Process(QString const &command,
                  QStringList const &args)

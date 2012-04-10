@@ -5,7 +5,7 @@
 #include <QString>
 
 #include "common/qt.h"
-#include "mmg-qt/util/util.h"
+#include "mkvtoolnix-gui/util/util.h"
 
 QIcon
 Util::loadIcon(QString const &name,

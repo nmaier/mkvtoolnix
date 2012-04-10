@@ -11,7 +11,7 @@
 #include "common/file_types.h"
 #include "common/qt.h"
 
-#include "mmg-qt/track.h"
+#include "mkvtoolnix-gui/track.h"
 
 class SourceFile;
 typedef std::shared_ptr<SourceFile> SourceFilePtr;

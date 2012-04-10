@@ -1,9 +1,9 @@
 #include "common/common_pch.h"
 
 #include "common/iso639.h"
-#include "mmg-qt/source_file.h"
-#include "mmg-qt/track.h"
-#include "mmg-qt/util/settings.h"
+#include "mkvtoolnix-gui/source_file.h"
+#include "mkvtoolnix-gui/track.h"
+#include "mkvtoolnix-gui/util/settings.h"
 
 Track::Track(Track::Type type)
   : m_file(nullptr)

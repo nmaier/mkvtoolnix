@@ -188,12 +188,14 @@ return 0;
     fi
   fi
 
-  AC_ARG_WITH(mmg-qt,[AS_HELP_STRING([--with-mmg-qt],[build mmg-qt (not working yet, only for development)])],
-              [BUILD_MMGQT=yes],[BUILD_MMGQT=no])
+  AC_ARG_WITH(mkvtoolnix-gui,[AS_HELP_STRING([--with-mkvtoolnix-gui],[build mkvtoolnix-gui (not working yet, only for development)])],
+              [BUILD_MKVTOOLNIX_GUI=yes],[BUILD_MKVTOOLNIX_GUI=no])
 fi
 
 if test x"$have_qt" != "xyes" ; then
   opt_features_no="$opt_features_no\n   * GUIs (Qt version)"
+elif test x"$BUILD_MKVTOOLNIX_GUI" = "xyes" ; then
+  opt_features_yes="$opt_features_yes\n   * mkvtoolnix-gui"
 fi
 
 AC_SUBST(MOC)
@@ -201,4 +203,4 @@ AC_SUBST(UIC)
 AC_SUBST(QT_CFLAGS)
 AC_SUBST(QT_LIBS)
 AC_SUBST(USE_QT)
-AC_SUBST(BUILD_MMGQT)
+AC_SUBST(BUILD_MKVTOOLNIX_GUI)

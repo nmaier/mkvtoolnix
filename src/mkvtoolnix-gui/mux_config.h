@@ -3,9 +3,9 @@
 
 #include "common/common_pch.h"
 
-// #include "mmg-qt/attachment.h"
-#include "mmg-qt/source_file.h"
-#include "mmg-qt/track.h"
+// #include "mkvtoolnix-gui/attachment.h"
+#include "mkvtoolnix-gui/source_file.h"
+#include "mkvtoolnix-gui/track.h"
 
 #include <QObject>
 #include <QList>

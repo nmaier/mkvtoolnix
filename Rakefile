@@ -78,7 +78,7 @@ def setup_globals
   }
 
   $build_tools           ||=  c?(:TOOLS)
-  $build_mmg_qt          ||=  c?(:USE_QT) && c?(:BUILD_MMGQT)
+  $build_mkvtoolnix_gui  ||=  c?(:USE_QT) && c?(:BUILD_MKVTOOLNIX_GUI)
 
   cflags_common            = "-Wall -Wno-comment #{c(:OPTIMIZATION_CFLAGS)} -D_FILE_OFFSET_BITS=64 #{c(:MATROSKA_CFLAGS)} #{c(:EBML_CFLAGS)} #{c(:EXTRA_CFLAGS)} #{c(:DEBUG_CFLAGS)} #{c(:PROFILING_CFLAGS)} #{c(:USER_CPPFLAGS)} -DPACKAGE=\\\"#{c(:PACKAGE)}\\\" -DVERSION=\\\"#{c(:VERSION)}\\\" -DMTX_LOCALE_DIR=\\\"#{c(:localedir)}\\\" -DMTX_PKG_DATA_DIR=\\\"#{c(:pkgdatadir)}\\\" -DMTX_DOC_DIR=\\\"#{c(:docdir)}\\\""
   ldflags_extra            = c?(:MINGW) ? '' : "-Wl,--enable-auto-import"
@@ -105,8 +105,8 @@ def define_default_task
   targets = $applications.clone
 
   # Build the stuff in the 'src/tools' directory only if requested
-  targets << "apps:tools"  if $build_tools
-  targets << "apps:mmg-qt" if $build_mmg_qt
+  targets << "apps:tools"          if $build_tools
+  targets << "apps:mkvtoolnix-gui" if $build_mkvtoolnix_gui
 
   # The tags file -- but only if it exists already
   if File.exists?("TAGS")
@@ -479,7 +479,7 @@ task :clean do
   patterns = %w{
     src/**/*.o lib/**/*.o src/**/*.a lib/**/*.a src/**/*.gch
     src/**/*.exe src/**/*.dll src/**/*.dll.a
-    src/info/ui/*.h src/mmg-qt/forms/*.h src/**/*.moc src/**/*.moco src/mmg-qt/resources.cpp
+    src/info/ui/*.h src/mkvtoolnix-gui/forms/*.h src/**/*.moc src/**/*.moco src/mkvtoolnix-gui/qt_resources.cpp
     po/*.mo doc/guide/**/*.hhk
   }
   patterns += $applications + $tools.collect { |name| "src/tools/#{name}" }
@@ -647,21 +647,21 @@ if c?(:USE_WXWIDGETS)
 end
 
 #
-# mmg-qt
+# mkvtoolnix-gui
 #
 
-if $build_mmg_qt
-  ui_files = FileList["src/mmg-qt/forms/**/*.ui"].to_a
+if $build_mkvtoolnix_gui
+  ui_files = FileList["src/mkvtoolnix-gui/forms/**/*.ui"].to_a
   ui_files.each do |ui|
     file ui.ext('cpp').gsub(/forms\//, '') => ui.ext('h')
   end
 
-  Application.new("src/mmg-qt/mmg-qt").
-    description("Build the mmg-qt executable").
-    aliases("mmg-qt").
-    sources(FileList["src/mmg-qt/**/*.cpp"], ui_files, 'src/mmg-qt/resources.cpp').
-    sources((FileList["src/mmg-qt/**/*.h"].to_a - ui_files.collect { |ui| ui.ext 'h' }).collect { |h| h.ext 'moc' }).
-    sources("src/mmg-qt/resources.o", :if => c?(:MINGW)).
+  Application.new("src/mkvtoolnix-gui/mkvtoolnix-gui").
+    description("Build the mkvtoolnix-gui executable").
+    aliases("mkvtoolnix-gui").
+    sources(FileList["src/mkvtoolnix-gui/**/*.cpp"], ui_files, 'src/mkvtoolnix-gui/qt_resources.cpp').
+    sources((FileList["src/mkvtoolnix-gui/**/*.h"].to_a - ui_files.collect { |ui| ui.ext 'h' }).collect { |h| h.ext 'moc' }).
+    sources("src/mkvtoolnix-gui/resources.o", :if => c?(:MINGW)).
     libraries(common_libs, :qt).
     png_icon("share/icons/64x64/mkvmergeGUI.png").
     create

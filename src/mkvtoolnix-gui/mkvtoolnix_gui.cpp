@@ -2,8 +2,8 @@
 
 #include <QApplication>
 
-#include "mmg-qt/mmg_qt.h"
-#include "mmg-qt/main_window.h"
+#include "mkvtoolnix-gui/mmg_qt.h"
+#include "mkvtoolnix-gui/main_window.h"
 
 int
 main(int argc,

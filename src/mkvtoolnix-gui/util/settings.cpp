@@ -1,6 +1,6 @@
 #include "common/common_pch.h"
 
-#include "mmg-qt/util/settings.h"
+#include "mkvtoolnix-gui/util/settings.h"
 
 Settings Settings::s_settings;
 

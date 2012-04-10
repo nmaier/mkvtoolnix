@@ -6,7 +6,7 @@
 #include <QStringList>
 #include <QWidget>
 
-#include "mmg-qt/source_file.h"
+#include "mkvtoolnix-gui/source_file.h"
 
 class FileIdentifier: public QObject {
   Q_OBJECT;

@@ -2,9 +2,9 @@
 
 #include "common/qt.h"
 #include "common/strings/editing.h"
-#include "mmg-qt/util/file_identifier.h"
-#include "mmg-qt/util/process.h"
-#include "mmg-qt/util/settings.h"
+#include "mkvtoolnix-gui/util/file_identifier.h"
+#include "mkvtoolnix-gui/util/process.h"
+#include "mkvtoolnix-gui/util/settings.h"
 
 #include <QMessageBox>
 #include <QStringList>

@@ -2,7 +2,7 @@
 
 #include "common/file_types.h"
 #include "common/qt.h"
-#include "mmg-qt/util/file_type_filter.h"
+#include "mkvtoolnix-gui/util/file_type_filter.h"
 
 #include <QStringList>
 
