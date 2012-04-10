@@ -233,6 +233,10 @@ rule '.h' => '.ui' do |t|
   runq "     UIC #{t.source}", "#{c(:UIC)} #{t.sources.join(" ")} > #{t.name}"
 end
 
+rule '.cpp' => '.qrc' do |t|
+  runq "     RCC #{t.source}", "#{c(:RCC)} #{t.sources.join(" ")} > #{t.name}"
+end
+
 rule '.moc' => '.h' do |t|
   runq "     MOC #{t.prerequisites.first}", "#{c(:MOC)} #{c(:QT_CFLAGS)} -nw #{t.prerequisites.join(" ")} > #{t.name}"
 end
@@ -473,9 +477,9 @@ task :clean do
   puts "   CLEAN"
 
   patterns = %w{
-    src/**/*.o lib/**/*.o src/**/lib*.a lib/**/lib*.a src/**/*.gch
+    src/**/*.o lib/**/*.o src/**/*.a lib/**/*.a src/**/*.gch
     src/**/*.exe src/**/*.dll src/**/*.dll.a
-    src/info/ui/*.h src/mmg-qt/forms/*.h src/**/*.moc src/**/*.moco
+    src/info/ui/*.h src/mmg-qt/forms/*.h src/**/*.moc src/**/*.moco src/mmg-qt/resources.cpp
     po/*.mo doc/guide/**/*.hhk
   }
   patterns += $applications + $tools.collect { |name| "src/tools/#{name}" }
@@ -655,7 +659,7 @@ if $build_mmg_qt
   Application.new("src/mmg-qt/mmg-qt").
     description("Build the mmg-qt executable").
     aliases("mmg-qt").
-    sources(FileList["src/mmg-qt/**/*.cpp"], ui_files).
+    sources(FileList["src/mmg-qt/**/*.cpp"], ui_files, 'src/mmg-qt/resources.cpp').
     sources((FileList["src/mmg-qt/**/*.h"].to_a - ui_files.collect { |ui| ui.ext 'h' }).collect { |h| h.ext 'moc' }).
     sources("src/mmg-qt/resources.o", :if => c?(:MINGW)).
     libraries(common_libs, :qt).
