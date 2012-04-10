@@ -5,7 +5,7 @@ dnl
 AC_ARG_ENABLE([qt],
   AC_HELP_STRING([--enable-qt],[compile the Qt version of the GUIs (no)]))
 
-qt_min_ver=4.0.0
+qt_min_ver=4.7.0
 
 if test x"$enable_qt" = "xyes" -a \
   '(' x"$enable_gui" = x"yes" -o x"$enable_gui" = "x" ')'; then
@@ -32,8 +32,10 @@ if test x"$enable_qt" = "xyes" -a \
   moc_ver=`"$MOC" -v 2>&1 | sed -e 's:.*Qt ::' -e 's:[[^0-9\.]]::g'`
   if test -z "moc_ver"; then
     AC_MSG_RESULT(unknown; please contact the author)
+    exit 1
   elif ! check_version $qt_min_ver $moc_ver; then
     AC_MSG_RESULT(too old: $moc_ver)
+    exit 1
   else
     AC_MSG_RESULT($moc_ver)
     moc_found=1
@@ -43,32 +45,64 @@ if test x"$enable_qt" = "xyes" -a \
     AC_HELP_STRING([--with-uic=prog],[use prog instead of looking for uic]),
     [ UIC="$with_uic" ],)
 
-  if test x"$moc_found" = "x1"; then
-    if ! test -z "$UIC"; then
-      AC_MSG_CHECKING(for uic)
-      AC_MSG_RESULT(using supplied $UIC)
-    else
-      AC_PATH_PROG(UIC, uic-qt4,, $PATH)
-      if test -z "$UIC"; then
-        AC_PATH_PROG(UIC, uic,, $PATH)
-      fi
+  if ! test -z "$UIC"; then
+    AC_MSG_CHECKING(for uic)
+    AC_MSG_RESULT(using supplied $UIC)
+  else
+    AC_PATH_PROG(UIC, uic-qt4,, $PATH)
+    if test -z "$UIC"; then
+      AC_PATH_PROG(UIC, uic,, $PATH)
     fi
-    if test -z "$UIC" -o ! -x "$UIC"; then
-      echo "*** The 'uic' binary was not found or is not executable."
-      exit 1
-    fi
+  fi
+  if test -z "$UIC" -o ! -x "$UIC"; then
+    echo "*** The 'uic' binary was not found or is not executable."
+    exit 1
+  fi
 
-    dnl Check its version.
-    AC_MSG_CHECKING(for the Qt version $UIC uses)
-    uic_ver=`"$UIC" -v 2>&1 | sed -e 's:.*Qt ::' -e 's:[[^0-9\.]]::g'`
-    if test -z "uic_ver"; then
-      AC_MSG_RESULT(unknown; please contact the author)
-    elif ! check_version $qt_min_ver $uic_ver; then
-      AC_MSG_RESULT(too old: $uic_ver)
-    else
-      AC_MSG_RESULT($uic_ver)
-      uic_found=1
+  dnl Check its version.
+  AC_MSG_CHECKING(for the Qt version $UIC uses)
+  uic_ver=`"$UIC" -v 2>&1 | sed -e 's:.*Qt ::' -e 's:[[^0-9\.]]::g'`
+  if test -z "uic_ver"; then
+    AC_MSG_RESULT(unknown; please contact the author)
+    exit 1
+  elif ! check_version $qt_min_ver $uic_ver; then
+    AC_MSG_RESULT(too old: $uic_ver)
+    exit 1
+  else
+    AC_MSG_RESULT($uic_ver)
+    uic_found=1
+  fi
+
+  AC_ARG_WITH(rcc,
+    AC_HELP_STRING([--with-rcc=prog],[use prog instead of looking for rcc]),
+    [ RCC="$with_rcc" ],)
+
+  if ! test -z "$RCC"; then
+    AC_MSG_CHECKING(for rcc)
+    AC_MSG_RESULT(using supplied $RCC)
+  else
+    AC_PATH_PROG(RCC, rcc-qt4,, $PATH)
+    if test -z "$RCC"; then
+      AC_PATH_PROG(RCC, rcc,, $PATH)
     fi
+  fi
+  if test -z "$RCC" -o ! -x "$RCC"; then
+    echo "*** The 'rcc' binary was not found or is not executable."
+    exit 1
+  fi
+
+  dnl Check its version.
+  AC_MSG_CHECKING(for the Qt version $RCC uses)
+  rcc_ver=`"$RCC" -v 2>&1 | sed -e 's:.*Qt ::' -e 's:[[^0-9\.]]::g'`
+  if test -z "rcc_ver"; then
+    AC_MSG_RESULT(unknown; please contact the author)
+    exit 1
+  elif ! check_version $qt_min_ver $rcc_ver; then
+    AC_MSG_RESULT(too old: $rcc_ver)
+    exit 1
+  else
+    AC_MSG_RESULT($rcc_ver)
+    rcc_found=1
   fi
 
   AC_MSG_CHECKING(for Qt $qt_min_ver or newer)
