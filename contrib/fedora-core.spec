@@ -24,7 +24,10 @@ Matroska video utilities.
 %{_datadir}/man/zh_CN/man1/*
 %{_datadir}/applications/*.desktop
 %{_datadir}/icons/hicolor/32x32/apps/*.png
+%{_datadir}/icons/hicolor/48x48/apps/*.png
 %{_datadir}/icons/hicolor/64x64/apps/*.png
+%{_datadir}/icons/hicolor/128x128/apps/*.png
+%{_datadir}/icons/hicolor/256x256/apps/*.png
 %{_datadir}/mime/packages/*.xml
 %{_datadir}/locale/cs/LC_MESSAGES/mkvtoolnix.mo
 %{_datadir}/locale/de/LC_MESSAGES/mkvtoolnix.mo
