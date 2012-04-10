@@ -6,8 +6,12 @@
 #include "mmg-qt/util/file_identifier.h"
 #include "mmg-qt/util/file_type_filter.h"
 #include "mmg-qt/util/settings.h"
+#include "mmg-qt/util/util.h"
 
 #include <QFileDialog>
+#include <QIcon>
+#include <QList>
+#include <QString>
 
 MainWindow::MainWindow(QWidget *parent)
   : QMainWindow{parent}
@@ -15,9 +19,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
   ui->setupUi(this);
 
-  QIcon icon{":/icons/32x32/mkvmergeGUI.png"};
-  icon.addFile(":/icons/64x64/mkvmergeGUI.png");
-  setWindowIcon(icon);
+  setWindowIcon(Util::loadIcon(Q("mkvmergeGUI.png"), QList<int>{} << 32 << 48 << 64 << 128 << 256));
 }
 
 MainWindow::~MainWindow() {
