@@ -31,6 +31,7 @@
 extern const wxEventType mux_thread_event;
 
 class mux_thread;
+class mux_process;
 
 class mux_dialog: public wxDialog {
   DECLARE_CLASS(mux_dialog);
@@ -43,6 +44,8 @@ protected:
   wxGauge *g_progress;
   wxCriticalSection m_cs_thread;
   mux_thread *m_thread;
+  mux_process *m_process;
+  int m_pid;
   wxString log, opt_file_name;
   wxButton *b_ok, *b_save_log, *b_abort;
   wxTextCtrl *tc_output, *tc_warnings, *tc_errors;
@@ -76,14 +79,15 @@ public:
 #endif  // SYS_WINDOWS
 };
 
-class mux_thread;
-
 class mux_process: public wxProcess {
+  friend class mux_dialog;
+
 private:
-  mux_thread *m_thread;
+  mux_dialog *m_dialog;
+  wxCriticalSection m_cs_dialog;
 
 public:
-  mux_process(mux_thread *thread);
+  mux_process(mux_dialog *dialog);
   virtual void OnTerminate(int terminated_pid, int status);
 };
 
@@ -96,19 +100,12 @@ public:
   };
 
 private:
-  mux_dialog *m_dlg;
-  wxString m_command_line;
-  mux_process *m_process;
-  int m_pid;
-
-  friend class mux_dialog;
+  mux_dialog *m_dialog;
+  wxProcess *m_process;
 
 public:
-  mux_thread(mux_dialog *dlg, wxString const &command_line);
+  mux_thread(mux_dialog *dialog, wxProcess *process);
   virtual void *Entry();
-  void on_terminate(int status);
-  void kill_process();
-  void execute();
 };
 
 #endif // __MUX_DIALOG_H

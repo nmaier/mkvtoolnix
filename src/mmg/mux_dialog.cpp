@@ -34,6 +34,8 @@
 mux_dialog::mux_dialog(wxWindow *parent)
   : wxDialog(parent, -1, Z("mkvmerge is running"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE)
   , m_thread{nullptr}
+  , m_process{nullptr}
+  , m_pid{0}
 #if defined(SYS_WINDOWS)
   , m_taskbar_progress(nullptr)
 #endif  // SYS_WINDOWS
@@ -130,10 +132,19 @@ mux_dialog::run() {
   m_start_time                 = get_current_time_millis();
   m_next_remaining_time_update = m_start_time + 8000;
 
-  auto command_line = wxString::Format(wxT("\"%s\" \"@%s\""), arg_list[0].c_str(), opt_file_name.c_str());
-  m_thread          = new mux_thread{this, command_line};
-  m_thread->Create();
-  m_thread->execute();
+  m_process                    = new mux_process{this};
+  m_pid                        = wxExecute(wxString::Format(wxT("\"%s\" \"@%s\""), arg_list[0].c_str(), opt_file_name.c_str()), wxEXEC_ASYNC, m_process);
+
+  if (0 == m_pid) {
+    wxCommandEvent evt(mux_thread::event, mux_thread::process_terminated);
+    evt.SetInt(2);
+    wxPostEvent(this, evt);
+
+  } else {
+    m_thread = new mux_thread{this, m_process};
+    m_thread->Create();
+    m_thread->Run();
+  }
 
   ShowModal();
 }
@@ -146,6 +157,12 @@ mux_dialog::~mux_dialog() {
 #endif  // SYS_WINDOWS
 
   wxRemoveFile(opt_file_name);
+
+  if (nullptr != m_process) {
+    wxCriticalSectionLocker locker{m_process->m_cs_dialog};
+    m_process->m_dialog = nullptr;
+    m_process->Detach();
+  }
 }
 
 void
@@ -222,9 +239,11 @@ mux_dialog::on_abort(wxCommandEvent &) {
   b_ok->Enable(true);
   b_ok->SetFocus();
 
-  wxCriticalSectionLocker locker{m_cs_thread};
-  if (nullptr != m_thread)
-    m_thread->kill_process();
+#if defined(SYS_WINDOWS)
+  wxKill(m_pid, wxSIGKILL);
+#else
+  wxKill(m_pid, wxSIGTERM);
+#endif
 }
 
 void
@@ -313,38 +332,27 @@ mux_dialog::on_process_terminated(wxCommandEvent &evt) {
 #else  // SYS_WINDOWS
   b_abort->Enable(false);
 #endif  // SYS_WINDOWS
+
+  delete m_process;
+  m_process = nullptr;
 }
 
 // ------------------------------------------------------------
 
 wxEventType const mux_thread::event = wxNewEventType();
 
-mux_thread::mux_thread(mux_dialog *dlg,
-                       wxString const &command_line)
-  : m_dlg{dlg}
-  , m_command_line{command_line}
-  , m_process{new mux_process{this}}
-  , m_pid{0}
+mux_thread::mux_thread(mux_dialog *dialog,
+                       wxProcess *process)
+  : m_dialog{dialog}
+  , m_process{process}
 {
-}
-
-void
-mux_thread::execute() {
-  m_pid = wxExecute(m_command_line, wxEXEC_ASYNC, m_process);
-  if (0 == m_pid) {
-    wxCommandEvent evt(mux_thread::event, mux_thread::process_terminated);
-    evt.SetInt(2);
-    wxPostEvent(m_dlg, evt);
-
-  } else
-    Run();
 }
 
 void *
 mux_thread::Entry() {
   at_scope_exit_c unlink_thread{[&]() {
-      wxCriticalSectionLocker locker{m_dlg->m_cs_thread};
-      m_dlg->m_thread = nullptr;
+      wxCriticalSectionLocker locker{m_dialog->m_cs_thread};
+      m_dialog->m_thread = nullptr;
     }};
 
   auto out = m_process->GetInputStream();
@@ -360,11 +368,11 @@ mux_thread::Entry() {
     char c = !out->Eof() ? out->GetC() : '\n';
 
     if ((c == '\n') || (c == '\r') || out->Eof()) {
-      if (nullptr != m_dlg) {
+      if (nullptr != m_dialog) {
         // send line to dialog
         wxCommandEvent evt(mux_thread::event, mux_thread::output_available);
         evt.SetString(wxU(line));
-        wxPostEvent(m_dlg, evt);
+        wxPostEvent(m_dialog, evt);
       }
 
       line.clear();
@@ -379,33 +387,22 @@ mux_thread::Entry() {
   return nullptr;
 }
 
-void
-mux_thread::kill_process() {
-#if defined(SYS_WINDOWS)
-  wxKill(m_pid, wxSIGKILL);
-#else
-  wxKill(m_pid, wxSIGTERM);
-#endif
-}
-
-void
-mux_thread::on_terminate(int status) {
-  wxCommandEvent evt(mux_thread::event, mux_thread::process_terminated);
-  evt.SetInt(status);
-  wxPostEvent(m_dlg, evt);
-}
-
-mux_process::mux_process(mux_thread *thread)
+mux_process::mux_process(mux_dialog *dialog)
   : wxProcess(wxPROCESS_REDIRECT)
-  , m_thread(thread)
+  , m_dialog(dialog)
 {
 }
 
 void
 mux_process::OnTerminate(int,
                          int status) {
-  if (nullptr != m_thread)
-    m_thread->on_terminate(status);
+  wxCriticalSectionLocker locker{m_cs_dialog};
+  if (nullptr == m_dialog)
+    return;
+
+  wxCommandEvent evt(mux_thread::event, mux_thread::process_terminated);
+  evt.SetInt(status);
+  wxPostEvent(m_dialog, evt);
 }
 
 IMPLEMENT_CLASS(mux_dialog, wxDialog);
