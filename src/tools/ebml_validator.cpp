@@ -271,7 +271,7 @@ read_size(int64_t end_pos) {
 static void
 parse_content(int level,
               int64_t end_pos) {
-  while (g_in->getFilePointer() < end_pos) {
+  while (static_cast<int64_t>(g_in->getFilePointer()) < end_pos) {
     int64_t element_start_pos = g_in->getFilePointer();
 
     try {

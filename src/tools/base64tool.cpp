@@ -75,7 +75,7 @@ main(int argc,
   try {
     in = mm_io_cptr(new mm_file_io_c(argv[2]));
     if (mode != 'e')
-      intext = mm_io_cptr(new mm_text_io_c(in.get_object(), false));
+      intext = mm_io_cptr(new mm_text_io_c(in.get(), false));
   } catch(...) {
     mxerror(boost::format(Y("The file '%1%' could not be opened for reading (%2%, %3%).\n")) % argv[2] % errno % strerror(errno));
   }
