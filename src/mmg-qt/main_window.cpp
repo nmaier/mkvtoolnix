@@ -14,6 +14,10 @@ MainWindow::MainWindow(QWidget *parent)
   , ui{new Ui::MainWindow}
 {
   ui->setupUi(this);
+
+  QIcon icon{":/icons/32x32/mkvmergeGUI.png"};
+  icon.addFile(":/icons/64x64/mkvmergeGUI.png");
+  setWindowIcon(icon);
 }
 
 MainWindow::~MainWindow() {
