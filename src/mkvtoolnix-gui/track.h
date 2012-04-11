@@ -37,6 +37,8 @@ public:
   QHash<QString, QString> m_properties;
 
   SourceFile *m_file;
+  Track *m_appendedTo;
+  QList<Track *> m_appendedTracks;
 
   Type m_type;
   int64_t m_id;

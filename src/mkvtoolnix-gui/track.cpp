@@ -6,7 +6,10 @@
 #include "mkvtoolnix-gui/util/settings.h"
 
 Track::Track(Track::Type type)
-  : m_file(nullptr)
+  : m_properties()
+  , m_file(nullptr)
+  , m_appendedTo(nullptr)
+  , m_appendedTracks()
   , m_type(type)
   , m_id(-1)
   , m_muxThis(true)

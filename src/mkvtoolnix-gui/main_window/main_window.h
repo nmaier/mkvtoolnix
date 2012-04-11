@@ -5,6 +5,7 @@
 
 #include "mkvtoolnix-gui/mux_config.h"
 #include "mkvtoolnix-gui/source_file_model.h"
+#include "mkvtoolnix-gui/track_model.h"
 
 #include <QDir>
 #include <QMainWindow>
@@ -20,6 +21,7 @@ protected:
   // UI stuff:
   Ui::MainWindow *ui;
   SourceFileModel *m_filesModel;
+  TrackModel *m_tracksModel;
 
   // non-UI stuff:
   MuxConfig m_config;
@@ -31,6 +33,7 @@ public:
 public slots:
   virtual void onAddFiles();
   virtual void resizeFilesColumnsToContents() const;
+  virtual void resizeTracksColumnsToContents() const;
 
 protected:
   virtual QStringList selectFilesToAdd();

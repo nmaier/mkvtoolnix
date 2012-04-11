@@ -17,11 +17,15 @@ MainWindow::MainWindow(QWidget *parent)
   : QMainWindow{parent}
   , ui{new Ui::MainWindow}
   , m_filesModel{new SourceFileModel{this}}
+  , m_tracksModel{new TrackModel{this}}
 {
   ui->setupUi(this);
 
   ui->files->setModel(m_filesModel);
-  QObject::connect(ui->files, SIGNAL(expanded(QModelIndex const &)), this, SLOT(resizeFilesColumnsToContents()));
+  ui->tracks->setModel(m_tracksModel);
+
+  QObject::connect(ui->files,  SIGNAL(expanded(QModelIndex const &)), this, SLOT(resizeFilesColumnsToContents()));
+  QObject::connect(ui->tracks, SIGNAL(expanded(QModelIndex const &)), this, SLOT(resizeTracksColumnsToContents()));
 
   setWindowIcon(Util::loadIcon(Q("mkvmergeGUI.png"), QList<int>{} << 32 << 48 << 64 << 128 << 256));
 }
@@ -43,7 +47,9 @@ MainWindow::onAddFiles() {
 
   if (numFilesBefore != m_config.m_files.size()) {
     m_filesModel->setSourceFiles(m_config.m_files);
+    m_tracksModel->setTracks(m_config.m_tracks);
     resizeFilesColumnsToContents();
+    resizeTracksColumnsToContents();
   }
 }
 
@@ -67,8 +73,12 @@ void
 MainWindow::addFile(QString const &fileName,
                     bool /*append*/) {
   FileIdentifier identifier{ this, fileName };
-  if (identifier.identify())
-    m_config.m_files << identifier.file();
+  if (!identifier.identify())
+    return;
+
+  m_config.m_files << identifier.file();
+  for (auto &track : identifier.file()->m_tracks)
+    m_config.m_tracks << track.get();
 }
 
 void
@@ -77,4 +87,12 @@ MainWindow::resizeFilesColumnsToContents()
   auto columnCount = m_filesModel->columnCount(QModelIndex{});
   for (auto column = 0; columnCount > column; ++column)
     ui->files->resizeColumnToContents(column);
+}
+
+void
+MainWindow::resizeTracksColumnsToContents()
+  const {
+  auto columnCount = m_tracksModel->columnCount(QModelIndex{});
+  for (auto column = 0; columnCount > column; ++column)
+    ui->tracks->resizeColumnToContents(column);
 }

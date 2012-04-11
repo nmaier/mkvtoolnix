@@ -3,7 +3,7 @@
 #include "mkvtoolnix-gui/app.h"
 #include "mkvtoolnix-gui/util/settings.h"
 
-App::App(int argc,
+App::App(int &argc,
          char **argv)
   : QApplication{argc, argv}
 {

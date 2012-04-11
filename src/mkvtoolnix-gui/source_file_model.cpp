@@ -87,45 +87,58 @@ SourceFileModel::rowCount(QModelIndex const &parent)
 int
 SourceFileModel::columnCount(QModelIndex const &)
   const {
-  return 4;
+  return NumberOfColumns;
 }
 
+QVariant
+SourceFileModel::dataDecoration(QModelIndex const &index,
+                                SourceFile *sourceFile)
+  const {
+  return FileNameColumn != index.column() ? QVariant{}
+       : sourceFile->m_additionalPart     ? m_additionalPartIcon
+       : sourceFile->m_appended           ? m_addedIcon
+       :                                    m_normalIcon;
+}
+
+QVariant
+SourceFileModel::dataDisplay(QModelIndex const &index,
+                             SourceFile *sourceFile)
+  const {
+  QFileInfo info{sourceFile->m_fileName};
+  if (FileNameColumn == index.column())
+    return QFileInfo{sourceFile->m_fileName}.fileName();
+
+  else if (ContainerColumn == index.column())
+    return sourceFile->m_additionalPart ? QY("(additional part)") : sourceFile->m_container;
+
+  else if (SizeColumn == index.column())
+    return QFileInfo{sourceFile->m_fileName}.size();
+
+  else if (DirectoryColumn == index.column())
+    return QFileInfo{sourceFile->m_fileName}.filePath();
+
+  else
+    return QVariant{};
+}
 
 QVariant
 SourceFileModel::data(QModelIndex const &index,
                       int role)
   const {
   if (role == Qt::TextAlignmentRole)
-    return 2 == index.column() ? Qt::AlignRight : Qt::AlignLeft;
+    return SizeColumn == index.column() ? Qt::AlignRight : Qt::AlignLeft;
 
   auto sourceFile = sourceFileFromIndex(index);
-  if (role == Qt::DecorationRole)
-    return 0 != index.column()          ? QVariant{}
-         : sourceFile->m_additionalPart ? m_additionalPartIcon
-         : sourceFile->m_appended       ? m_addedIcon
-         :                                m_normalIcon;
-
-  if (role != Qt::DisplayRole)
-    return QVariant{};
-
   if (!sourceFile)
     return QVariant{};
 
-  QFileInfo info{sourceFile->m_fileName};
-  if (0 == index.column())
-    return QFileInfo{sourceFile->m_fileName}.fileName();
+  if (role == Qt::DecorationRole)
+    return dataDecoration(index, sourceFile);
 
-  else if (1 == index.column())
-    return sourceFile->m_additionalPart ? QY("(additional part)") : sourceFile->m_container;
+  if (role == Qt::DisplayRole)
+    return dataDisplay(index, sourceFile);
 
-  else if (2 == index.column())
-    return QFileInfo{sourceFile->m_fileName}.size();
-
-  else if (3 == index.column())
-    return QFileInfo{sourceFile->m_fileName}.filePath();
-
-  else
-    return QVariant{};
+  return QVariant{};
 }
 
 QVariant
@@ -137,14 +150,14 @@ SourceFileModel::headerData(int section,
     return QVariant{};
 
   if (Qt::DisplayRole == role)
-    return 0 == section ? QY("File name")
-         : 1 == section ? QY("Container")
-         : 2 == section ? QY("File size")
-         : 3 == section ? QY("Directory")
-         :                 Q("INTERNAL ERROR");
+    return FileNameColumn  == section ? QY("File name")
+         : ContainerColumn == section ? QY("Container")
+         : SizeColumn      == section ? QY("File size")
+         : DirectoryColumn == section ? QY("Directory")
+         :                               Q("INTERNAL ERROR");
 
   if (Qt::TextAlignmentRole == role)
-    return 2 == section ? Qt::AlignRight : Qt::AlignLeft;
+    return SizeColumn == section ? Qt::AlignRight : Qt::AlignLeft;
 
   return QVariant{};
 }
