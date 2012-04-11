@@ -31,7 +31,7 @@
         <item>
          <layout class="QVBoxLayout" name="verticalLayout">
           <item>
-           <widget class="QLabel" name="label">
+           <widget class="QLabel" name="filesLabel">
             <property name="text">
              <string>Files:</string>
             </property>
@@ -41,10 +41,20 @@
            </widget>
           </item>
           <item>
-           <widget class="QTreeView" name="files"/>
+           <widget class="QTreeView" name="files">
+            <property name="contextMenuPolicy">
+             <enum>Qt::CustomContextMenu</enum>
+            </property>
+            <property name="alternatingRowColors">
+             <bool>false</bool>
+            </property>
+            <property name="selectionMode">
+             <enum>QAbstractItemView::ExtendedSelection</enum>
+            </property>
+           </widget>
           </item>
           <item>
-           <widget class="QLabel" name="label_2">
+           <widget class="QLabel" name="tracksLabel">
             <property name="text">
              <string>Tracks, chapters, tags and attachments:</string>
             </property>
@@ -54,7 +64,14 @@
            </widget>
           </item>
           <item>
-           <widget class="QTreeView" name="tracks"/>
+           <widget class="QTreeView" name="tracks">
+            <property name="contextMenuPolicy">
+             <enum>Qt::CustomContextMenu</enum>
+            </property>
+            <property name="selectionMode">
+             <enum>QAbstractItemView::ExtendedSelection</enum>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>
@@ -107,13 +124,13 @@
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_9">
               <item>
-               <widget class="QGroupBox" name="groupBox_7">
+               <widget class="QGroupBox" name="generalOptionsBox">
                 <property name="title">
                  <string>General options</string>
                 </property>
                 <layout class="QGridLayout" name="gridLayout_5">
                  <item row="0" column="0">
-                  <widget class="QLabel" name="label_35">
+                  <widget class="QLabel" name="muxThisLabel">
                    <property name="text">
                     <string>Mux this:</string>
                    </property>
@@ -134,7 +151,7 @@
                   </widget>
                  </item>
                  <item row="1" column="0">
-                  <widget class="QLabel" name="label_16">
+                  <widget class="QLabel" name="trackNameLabel">
                    <property name="text">
                     <string>Track name:</string>
                    </property>
@@ -147,7 +164,7 @@
                   <widget class="QLineEdit" name="trackName"/>
                  </item>
                  <item row="2" column="0">
-                  <widget class="QLabel" name="label_17">
+                  <widget class="QLabel" name="trackLanguageLabel">
                    <property name="text">
                     <string>Language:</string>
                    </property>
@@ -160,7 +177,7 @@
                   <widget class="QComboBox" name="trackLanguage"/>
                  </item>
                  <item row="3" column="0">
-                  <widget class="QLabel" name="label_18">
+                  <widget class="QLabel" name="defaultTrackFlagLabel">
                    <property name="text">
                     <string>&quot;Default track&quot; flag:</string>
                    </property>
@@ -189,7 +206,7 @@
                   </widget>
                  </item>
                  <item row="4" column="0">
-                  <widget class="QLabel" name="label_19">
+                  <widget class="QLabel" name="forcedTrackFlagLabel">
                    <property name="text">
                     <string>&quot;Forced track&quot; flag:</string>
                    </property>
@@ -213,7 +230,7 @@
                   </widget>
                  </item>
                  <item row="5" column="0">
-                  <widget class="QLabel" name="label_31">
+                  <widget class="QLabel" name="compressionLabel">
                    <property name="text">
                     <string>Compression:</string>
                    </property>
@@ -242,7 +259,7 @@
                   </widget>
                  </item>
                  <item row="6" column="0">
-                  <widget class="QLabel" name="label_20">
+                  <widget class="QLabel" name="trackTagsLabel">
                    <property name="text">
                     <string>Tags:</string>
                    </property>
@@ -273,13 +290,13 @@
                </widget>
               </item>
               <item>
-               <widget class="QGroupBox" name="groupBox_8">
+               <widget class="QGroupBox" name="timecodesAndDefaultDurationBox">
                 <property name="title">
                  <string>Timecodes and default duration:</string>
                 </property>
                 <layout class="QGridLayout" name="gridLayout_6">
                  <item row="0" column="0">
-                  <widget class="QLabel" name="label_22">
+                  <widget class="QLabel" name="delayLabel">
                    <property name="text">
                     <string>Delay (in ms):</string>
                    </property>
@@ -292,7 +309,7 @@
                   <widget class="QLineEdit" name="delay"/>
                  </item>
                  <item row="1" column="0">
-                  <widget class="QLabel" name="label_23">
+                  <widget class="QLabel" name="stretchByLabel">
                    <property name="text">
                     <string>Stretch by:</string>
                    </property>
@@ -305,7 +322,7 @@
                   <widget class="QLineEdit" name="stretchBy"/>
                  </item>
                  <item row="2" column="0">
-                  <widget class="QLabel" name="label_24">
+                  <widget class="QLabel" name="defaultDurationLabel">
                    <property name="text">
                     <string>Default duration/FPS:</string>
                    </property>
@@ -382,7 +399,7 @@
                   </widget>
                  </item>
                  <item row="3" column="0">
-                  <widget class="QLabel" name="label_21">
+                  <widget class="QLabel" name="timecodesLabel">
                    <property name="text">
                     <string>Timecode file:</string>
                    </property>
@@ -413,7 +430,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QGroupBox" name="groupBox_9">
+               <widget class="QGroupBox" name="picturePropertiesBox">
                 <property name="title">
                  <string>Picture properties</string>
                 </property>
@@ -485,7 +502,7 @@
                     <widget class="QLineEdit" name="displayWidth"/>
                    </item>
                    <item>
-                    <widget class="QLabel" name="label_25">
+                    <widget class="QLabel" name="displayDimensionsXLabel">
                      <property name="text">
                       <string>x</string>
                      </property>
@@ -497,7 +514,7 @@
                   </layout>
                  </item>
                  <item row="2" column="0">
-                  <widget class="QLabel" name="label_26">
+                  <widget class="QLabel" name="stereoscopyLabel">
                    <property name="text">
                     <string>Stereoscopy:</string>
                    </property>
@@ -510,7 +527,7 @@
                   <widget class="QComboBox" name="stereoscopy"/>
                  </item>
                  <item row="3" column="0" rowspan="2">
-                  <widget class="QLabel" name="label_27">
+                  <widget class="QLabel" name="croppingLabel">
                    <property name="text">
                     <string>Cropping:</string>
                    </property>
@@ -526,7 +543,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QGroupBox" name="groupBox_10">
+               <widget class="QGroupBox" name="audioPropertiesBox">
                 <property name="title">
                  <string>Audio properties</string>
                 </property>
@@ -542,13 +559,13 @@
                </widget>
               </item>
               <item>
-               <widget class="QGroupBox" name="groupBox_11">
+               <widget class="QGroupBox" name="subtitleAndChapterPropertiesBox">
                 <property name="title">
                  <string>Subtitle and chapter properties</string>
                 </property>
                 <layout class="QHBoxLayout" name="horizontalLayout_16">
                  <item>
-                  <widget class="QLabel" name="label_28">
+                  <widget class="QLabel" name="characterSetLabel">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                      <horstretch>0</horstretch>
@@ -577,13 +594,13 @@
                </widget>
               </item>
               <item>
-               <widget class="QGroupBox" name="groupBox_12">
+               <widget class="QGroupBox" name="miscellaneousBox">
                 <property name="title">
                  <string>Miscellaneous</string>
                 </property>
                 <layout class="QGridLayout" name="gridLayout_9">
                  <item row="0" column="0">
-                  <widget class="QLabel" name="label_29">
+                  <widget class="QLabel" name="cuesLabel">
                    <property name="text">
                     <string>Indexing (cues):</string>
                    </property>
@@ -617,7 +634,7 @@
                   </widget>
                  </item>
                  <item row="1" column="0">
-                  <widget class="QLabel" name="label_30">
+                  <widget class="QLabel" name="userDefinedTrackOptionsLabel">
                    <property name="text">
                     <string>User defined options:</string>
                    </property>
@@ -661,13 +678,13 @@
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_7">
           <item>
-           <widget class="QGroupBox" name="groupBox">
+           <widget class="QGroupBox" name="generalBox">
             <property name="title">
              <string>General</string>
             </property>
             <layout class="QGridLayout" name="gridLayout">
              <item row="0" column="0">
-              <widget class="QLabel" name="label_5">
+              <widget class="QLabel" name="titleLael">
                <property name="text">
                 <string>File title:</string>
                </property>
@@ -680,7 +697,7 @@
               <widget class="QLineEdit" name="title"/>
              </item>
              <item row="1" column="0">
-              <widget class="QLabel" name="label_4">
+              <widget class="QLabel" name="outputLabel">
                <property name="text">
                 <string>Output file:</string>
                </property>
@@ -708,7 +725,7 @@
               </layout>
              </item>
              <item row="2" column="0">
-              <widget class="QLabel" name="label_6">
+              <widget class="QLabel" name="globalTagsLabel">
                <property name="text">
                 <string>Global tags:</string>
                </property>
@@ -736,7 +753,7 @@
               </layout>
              </item>
              <item row="3" column="0">
-              <widget class="QLabel" name="label_7">
+              <widget class="QLabel" name="segmentinfoLabel">
                <property name="text">
                 <string>Segment info:</string>
                </property>
@@ -767,7 +784,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QGroupBox" name="groupBox_2">
+           <widget class="QGroupBox" name="splittingBox">
             <property name="title">
              <string>Splitting</string>
             </property>
@@ -883,14 +900,14 @@
               <widget class="QLineEdit" name="splitParts"/>
              </item>
              <item row="5" column="0">
-              <widget class="QLabel" name="label_8">
+              <widget class="QLabel" name="splittingOptionsLabel">
                <property name="text">
                 <string>Options:</string>
                </property>
               </widget>
              </item>
              <item row="6" column="0">
-              <widget class="QLabel" name="label_34">
+              <widget class="QLabel" name="splitMaxFilesLabel">
                <property name="text">
                 <string>Maximum number of files:</string>
                </property>
@@ -930,13 +947,13 @@
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_8">
           <item>
-           <widget class="QGroupBox" name="groupBox_3">
+           <widget class="QGroupBox" name="fileSegmentLinkingBox">
             <property name="title">
              <string>File/Segment linking</string>
             </property>
             <layout class="QGridLayout" name="gridLayout_3">
              <item row="0" column="0">
-              <widget class="QLabel" name="label_9">
+              <widget class="QLabel" name="segmentUIDsLabel">
                <property name="text">
                 <string>Segment UIDs:</string>
                </property>
@@ -949,7 +966,7 @@
               <widget class="QLineEdit" name="segmentUIDs"/>
              </item>
              <item row="1" column="0">
-              <widget class="QLabel" name="label_10">
+              <widget class="QLabel" name="previousSegmentUIDLabel">
                <property name="text">
                 <string>Previous segment UID:</string>
                </property>
@@ -962,7 +979,7 @@
               <widget class="QLineEdit" name="previousSegmentUID"/>
              </item>
              <item row="2" column="0">
-              <widget class="QLabel" name="label_11">
+              <widget class="QLabel" name="nextSegmentUIDLabel">
                <property name="text">
                 <string>Next segment UID:</string>
                </property>
@@ -978,13 +995,13 @@
            </widget>
           </item>
           <item>
-           <widget class="QGroupBox" name="groupBox_4">
+           <widget class="QGroupBox" name="chaptersBox">
             <property name="title">
              <string>Chapters</string>
             </property>
             <layout class="QGridLayout" name="gridLayout_4">
              <item row="0" column="0">
-              <widget class="QLabel" name="label_12">
+              <widget class="QLabel" name="chaptersLabel">
                <property name="text">
                 <string>Chapter file:</string>
                </property>
@@ -1012,7 +1029,7 @@
               </layout>
              </item>
              <item row="1" column="0">
-              <widget class="QLabel" name="label_13">
+              <widget class="QLabel" name="chapterLanguageLabel">
                <property name="text">
                 <string>Language:</string>
                </property>
@@ -1025,7 +1042,7 @@
               <widget class="QComboBox" name="chapterLanguage"/>
              </item>
              <item row="2" column="0">
-              <widget class="QLabel" name="label_14">
+              <widget class="QLabel" name="chapterCharacterSetLabel">
                <property name="text">
                 <string>Character set:</string>
                </property>
@@ -1038,7 +1055,7 @@
               <widget class="QComboBox" name="chapterCharacterSet"/>
              </item>
              <item row="3" column="0">
-              <widget class="QLabel" name="label_15">
+              <widget class="QLabel" name="chapterCueNameFormatLabel">
                <property name="text">
                 <string>Cue name format:</string>
                </property>
@@ -1054,7 +1071,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QGroupBox" name="groupBox_5">
+           <widget class="QGroupBox" name="outputMischellaneousBox">
             <property name="title">
              <string>Miscellaneous</string>
             </property>
@@ -1069,7 +1086,7 @@
              <item>
               <layout class="QHBoxLayout" name="horizontalLayout_10">
                <item>
-                <widget class="QLabel" name="label_33">
+                <widget class="QLabel" name="userDefinedOptionsLabel">
                  <property name="text">
                   <string>User-defined options:</string>
                  </property>
@@ -1116,7 +1133,7 @@
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_11">
         <item>
-         <widget class="QLabel" name="label_32">
+         <widget class="QLabel" name="attachmentsLabel">
           <property name="text">
            <string>Attachments:</string>
           </property>
@@ -1578,6 +1595,38 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>tracks</sender>
+   <signal>customContextMenuRequested(QPoint)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onTracksContextMenu()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>39</x>
+     <y>457</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>41</x>
+     <y>508</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>files</sender>
+   <signal>customContextMenuRequested(QPoint)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onFilesContextMenu()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>129</x>
+     <y>194</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>300</x>
+     <y>27</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>onStartMuxing()</slot>
@@ -1587,5 +1636,7 @@
   <slot>onOpenConfig()</slot>
   <slot>onNew()</slot>
   <slot>onAddFiles()</slot>
+  <slot>onTracksContextMenu()</slot>
+  <slot>onFilesContextMenu()</slot>
  </slots>
 </ui>
