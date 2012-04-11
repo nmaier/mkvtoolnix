@@ -151,6 +151,9 @@ FileIdentifier::parseContainerLine(QString const &line) {
   m_file->setContainer(re.cap(1));
   m_file->m_properties = parseProperties(line);
 
+  if (m_file->m_properties["other_file"].isEmpty())
+    return;
+
   for (auto &fileName : m_file->m_properties["other_file"].split("\t")) {
     auto additionalPart              = std::make_shared<SourceFile>(fileName);
     additionalPart->m_additionalPart = true;
