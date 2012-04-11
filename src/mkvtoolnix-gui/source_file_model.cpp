@@ -8,6 +8,9 @@ SourceFileModel::SourceFileModel(QObject *parent)
   : QAbstractItemModel{parent}
   , m_sourceFiles{nullptr}
 {
+  m_additionalPartIcon.addFile(":/icons/16x16/distribute-horizontal-margin.png");
+  m_addedIcon.addFile(":/icons/16x16/distribute-horizontal-x.png");
+  m_normalIcon.addFile(":/icons/16x16/distribute-vertical-page.png");
 }
 
 SourceFileModel::~SourceFileModel() {
@@ -95,10 +98,16 @@ SourceFileModel::data(QModelIndex const &index,
   if (role == Qt::TextAlignmentRole)
     return 2 == index.column() ? Qt::AlignRight : Qt::AlignLeft;
 
+  auto sourceFile = sourceFileFromIndex(index);
+  if (role == Qt::DecorationRole)
+    return 0 != index.column()          ? QVariant{}
+         : sourceFile->m_additionalPart ? m_additionalPartIcon
+         : sourceFile->m_appended       ? m_addedIcon
+         :                                m_normalIcon;
+
   if (role != Qt::DisplayRole)
     return QVariant{};
 
-  auto sourceFile = sourceFileFromIndex(index);
   if (!sourceFile)
     return QVariant{};
 

@@ -6,6 +6,7 @@
 #include "mkvtoolnix-gui/source_file.h"
 
 #include <QAbstractItemModel>
+#include <QIcon>
 #include <QList>
 
 class SourceFileModel;
@@ -16,6 +17,7 @@ class SourceFileModel : public QAbstractItemModel {
 
 protected:
   QList<SourceFilePtr> *m_sourceFiles;
+  QIcon m_additionalPartIcon, m_addedIcon, m_normalIcon;
 
 public:
   SourceFileModel(QObject *parent);
