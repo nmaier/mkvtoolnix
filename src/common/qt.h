@@ -50,4 +50,18 @@ mxmsg(unsigned int level,
   mxmsg(level, to_utf8(message));
 }
 
+inline std::ostream &
+operator <<(std::ostream &out,
+            QString const &string) {
+  out << std::string{string.toUtf8().data()};
+  return out;
+}
+
+inline std::wostream &
+operator <<(std::wostream &out,
+            QString const &string) {
+  out << string.toStdWString();
+  return out;
+}
+
 #endif  // MTX_COMMON_QT_H
