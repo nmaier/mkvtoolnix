@@ -107,12 +107,12 @@ FileIdentifier::parseOutput() {
 
 // Attachment ID 1: type 'cue', size 1844 bytes, description 'dummy', file name 'cuewithtags2.cue'
 void
-FileIdentifier::parseAttachmentLine(QString const &line) {
+FileIdentifier::parseAttachmentLine(QString const &) {
 }
 
 // Chapters: 27 entries
 void
-FileIdentifier::parseChaptersLine(QString const &line) {
+FileIdentifier::parseChaptersLine(QString const &) {
 }
 
 // File 'complex.mkv': container: Matroska [duration:106752000000 segment_uid:00000000000000000000000000000000]
@@ -125,15 +125,22 @@ FileIdentifier::parseContainerLine(QString const &line) {
 
   m_file->setContainer(re.cap(1));
   m_file->m_properties = parseProperties(line);
+
+  for (auto &fileName : m_file->m_properties["other_file"].split("\t")) {
+    auto additionalPart              = std::make_shared<SourceFile>(fileName);
+    additionalPart->m_additionalPart = true;
+    additionalPart->m_appendedTo     = m_file.get();
+    m_file->m_additionalParts       << additionalPart;
+  }
 }
 
 // Global tags: 3 entries
 void
-FileIdentifier::parseGlobalTagsLine(QString const &line) {
+FileIdentifier::parseGlobalTagsLine(QString const &) {
 }
 
 void
-FileIdentifier::parseTagsLine(QString const &line) {
+FileIdentifier::parseTagsLine(QString const &) {
 }
 
 // Track ID 0: video (V_MS/VFW/FOURCC, DIV3) [number:1 ...]
@@ -171,8 +178,13 @@ FileIdentifier::parseProperties(QString const &line)
 
   for (auto &pair : re.cap(1).split(QRegExp{"\\s+"}, QString::SkipEmptyParts)) {
     QRegExp re{"(.+):(.+)"};
-    if (-1 != re.indexIn(pair))
-      properties[to_qs(unescape(to_utf8(re.cap(1))))] = to_qs(unescape(to_utf8(re.cap(2))));
+    if (-1 == re.indexIn(pair))
+      continue;
+
+    auto key = to_qs(unescape(to_utf8(re.cap(1))));
+    if (!properties[key].isEmpty())
+      properties[key] += Q("\t");
+    properties[key] += to_qs(unescape(to_utf8(re.cap(2))));
   }
 
   return properties;

@@ -4,9 +4,11 @@
 #include "mkvtoolnix-gui/source_file.h"
 
 SourceFile::SourceFile(QString const &fileName)
-  : m_fileName(fileName)
-  , m_type(FILE_TYPE_IS_UNKNOWN)
-  , m_appended(false)
+  : m_fileName{fileName}
+  , m_type{FILE_TYPE_IS_UNKNOWN}
+  , m_appended{false}
+  , m_additionalPart{false}
+  , m_appendedTo{nullptr}
 {
 }
 
@@ -16,7 +18,7 @@ SourceFile::~SourceFile() {
 bool
 SourceFile::isValid()
   const {
-  return !m_container.isEmpty();
+  return !m_container.isEmpty() || m_additionalPart;
 }
 
 void

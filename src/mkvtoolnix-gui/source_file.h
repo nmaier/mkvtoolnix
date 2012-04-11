@@ -22,9 +22,11 @@ public:
   QHash<QString, QString> m_properties;
   QString m_fileName, m_container;
   QList<TrackPtr> m_tracks;
+  QList<SourceFilePtr> m_additionalParts;
 
   file_type_e m_type;
-  bool m_appended;
+  bool m_appended, m_additionalPart;
+  SourceFile *m_appendedTo;
 
 public:
   explicit SourceFile(QString const &fileName);
