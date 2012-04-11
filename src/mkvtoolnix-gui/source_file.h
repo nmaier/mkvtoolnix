@@ -22,7 +22,7 @@ public:
   QHash<QString, QString> m_properties;
   QString m_fileName, m_container;
   QList<TrackPtr> m_tracks;
-  QList<SourceFilePtr> m_additionalParts;
+  QList<SourceFilePtr> m_additionalParts, m_appendedFiles;
 
   file_type_e m_type;
   bool m_appended, m_additionalPart;

@@ -4,6 +4,7 @@
 #include "common/common_pch.h"
 
 #include "mkvtoolnix-gui/mux_config.h"
+#include "mkvtoolnix-gui/source_file_model.h"
 
 #include <QDir>
 #include <QMainWindow>
@@ -16,6 +17,11 @@ class MainWindow : public QMainWindow {
   Q_OBJECT;
 
 protected:
+  // UI stuff:
+  Ui::MainWindow *ui;
+  SourceFileModel *m_filesModel;
+
+  // non-UI stuff:
   MuxConfig m_config;
 
 public:
@@ -24,13 +30,11 @@ public:
 
 public slots:
   virtual void onAddFiles();
+  virtual void resizeFilesColumnsToContents() const;
 
 protected:
   virtual QStringList selectFilesToAdd();
   virtual void addFile(QString const &fileName, bool append);
-
-private:
-  Ui::MainWindow *ui;
 };
 
 #endif // MTX_MMGQT_MAIN_WINDOW_H

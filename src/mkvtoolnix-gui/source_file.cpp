@@ -4,12 +4,18 @@
 #include "mkvtoolnix-gui/source_file.h"
 
 SourceFile::SourceFile(QString const &fileName)
-  : m_fileName{fileName}
+  : m_properties{}
+  , m_fileName{fileName}
+  , m_container{}
+  , m_tracks{}
+  , m_additionalParts{}
+  , m_appendedFiles{}
   , m_type{FILE_TYPE_IS_UNKNOWN}
   , m_appended{false}
   , m_additionalPart{false}
   , m_appendedTo{nullptr}
 {
+
 }
 
 SourceFile::~SourceFile() {
