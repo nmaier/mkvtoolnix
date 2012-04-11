@@ -75,6 +75,12 @@
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="minimumSize">
+             <size>
+              <width>370</width>
+              <height>0</height>
+             </size>
+            </property>
             <property name="maximumSize">
              <size>
               <width>370</width>
@@ -85,7 +91,7 @@
              <enum>Qt::ScrollBarAsNeeded</enum>
             </property>
             <property name="horizontalScrollBarPolicy">
-             <enum>Qt::ScrollBarAsNeeded</enum>
+             <enum>Qt::ScrollBarAlwaysOff</enum>
             </property>
             <property name="widgetResizable">
              <bool>true</bool>
@@ -96,7 +102,7 @@
                <x>0</x>
                <y>0</y>
                <width>350</width>
-               <height>784</height>
+               <height>788</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_9">
@@ -253,7 +259,11 @@
                    <item>
                     <widget class="QPushButton" name="browseTrackTags">
                      <property name="text">
-                      <string>Browse</string>
+                      <string/>
+                     </property>
+                     <property name="icon">
+                      <iconset resource="../qt_resources.qrc">
+                       <normaloff>:/icons/16x16/code-class.png</normaloff>:/icons/16x16/code-class.png</iconset>
                      </property>
                     </widget>
                    </item>
@@ -389,7 +399,11 @@
                    <item>
                     <widget class="QPushButton" name="browseTimecodes">
                      <property name="text">
-                      <string>Browse</string>
+                      <string/>
+                     </property>
+                     <property name="icon">
+                      <iconset resource="../qt_resources.qrc">
+                       <normaloff>:/icons/16x16/code-class.png</normaloff>:/icons/16x16/code-class.png</iconset>
                      </property>
                     </widget>
                    </item>
@@ -668,7 +682,7 @@
              <item row="1" column="0">
               <widget class="QLabel" name="label_4">
                <property name="text">
-                <string>Destination:</string>
+                <string>Output file:</string>
                </property>
                <property name="buddy">
                 <cstring>output</cstring>
@@ -683,7 +697,11 @@
                <item>
                 <widget class="QPushButton" name="browseOutput">
                  <property name="text">
-                  <string>Browse</string>
+                  <string/>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="../qt_resources.qrc">
+                   <normaloff>:/icons/16x16/code-class.png</normaloff>:/icons/16x16/code-class.png</iconset>
                  </property>
                 </widget>
                </item>
@@ -707,7 +725,11 @@
                <item>
                 <widget class="QPushButton" name="browseGlobalTags">
                  <property name="text">
-                  <string>Browse</string>
+                  <string/>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="../qt_resources.qrc">
+                   <normaloff>:/icons/16x16/code-class.png</normaloff>:/icons/16x16/code-class.png</iconset>
                  </property>
                 </widget>
                </item>
@@ -731,7 +753,11 @@
                <item>
                 <widget class="QPushButton" name="browseSegmentInfo">
                  <property name="text">
-                  <string>Browse</string>
+                  <string/>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="../qt_resources.qrc">
+                   <normaloff>:/icons/16x16/code-class.png</normaloff>:/icons/16x16/code-class.png</iconset>
                  </property>
                 </widget>
                </item>
@@ -975,7 +1001,11 @@
                <item>
                 <widget class="QPushButton" name="browseChapters">
                  <property name="text">
-                  <string>Browse</string>
+                  <string/>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="../qt_resources.qrc">
+                   <normaloff>:/icons/16x16/code-class.png</normaloff>:/icons/16x16/code-class.png</iconset>
                  </property>
                 </widget>
                </item>
@@ -1103,13 +1133,6 @@
              <widget class="QPushButton" name="addAttachment">
               <property name="text">
                <string>Add</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="removeAttachment">
-              <property name="text">
-               <string>Remove</string>
               </property>
              </widget>
             </item>
@@ -1243,7 +1266,7 @@
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionNew">
    <property name="icon">
-    <iconset>
+    <iconset resource="../qt_resources.qrc">
      <normaloff>:/icons/16x16/document-new.png</normaloff>:/icons/16x16/document-new.png</iconset>
    </property>
    <property name="text">
@@ -1255,7 +1278,7 @@
   </action>
   <action name="actionSave">
    <property name="icon">
-    <iconset>
+    <iconset resource="../qt_resources.qrc">
      <normaloff>:/icons/16x16/document-save.png</normaloff>:/icons/16x16/document-save.png</iconset>
    </property>
    <property name="text">
@@ -1267,7 +1290,7 @@
   </action>
   <action name="actionOpen">
    <property name="icon">
-    <iconset>
+    <iconset resource="../qt_resources.qrc">
      <normaloff>:/icons/16x16/document-open.png</normaloff>:/icons/16x16/document-open.png</iconset>
    </property>
    <property name="text">
@@ -1279,7 +1302,7 @@
   </action>
   <action name="actionSave_as">
    <property name="icon">
-    <iconset>
+    <iconset resource="../qt_resources.qrc">
      <normaloff>:/icons/16x16/document-save-as.png</normaloff>:/icons/16x16/document-save-as.png</iconset>
    </property>
    <property name="text">
@@ -1288,7 +1311,7 @@
   </action>
   <action name="actionExit">
    <property name="icon">
-    <iconset>
+    <iconset resource="../qt_resources.qrc">
      <normaloff>:/icons/16x16/application-exit.png</normaloff>:/icons/16x16/application-exit.png</iconset>
    </property>
    <property name="text">
@@ -1300,7 +1323,7 @@
   </action>
   <action name="action_Start_muxing">
    <property name="icon">
-    <iconset>
+    <iconset resource="../qt_resources.qrc">
      <normaloff>:/icons/16x16/media-playback-start.png</normaloff>:/icons/16x16/media-playback-start.png</iconset>
    </property>
    <property name="text">
@@ -1322,7 +1345,7 @@
   </action>
   <action name="actionCopy_command_line_to_clipboard">
    <property name="icon">
-    <iconset>
+    <iconset resource="../qt_resources.qrc">
      <normaloff>:/icons/16x16/edit-copy.png</normaloff>:/icons/16x16/edit-copy.png</iconset>
    </property>
    <property name="text">
@@ -1331,7 +1354,7 @@
   </action>
   <action name="actionAdd_to_job_queue">
    <property name="icon">
-    <iconset>
+    <iconset resource="../qt_resources.qrc">
      <normaloff>:/icons/16x16/task-delegate.png</normaloff>:/icons/16x16/task-delegate.png</iconset>
    </property>
    <property name="text">
@@ -1340,7 +1363,7 @@
   </action>
   <action name="action_Job_manager">
    <property name="icon">
-    <iconset>
+    <iconset resource="../qt_resources.qrc">
      <normaloff>:/icons/16x16/task-ongoing.png</normaloff>:/icons/16x16/task-ongoing.png</iconset>
    </property>
    <property name="text">
@@ -1362,7 +1385,7 @@
   </action>
   <action name="action_Options">
    <property name="icon">
-    <iconset>
+    <iconset resource="../qt_resources.qrc">
      <normaloff>:/icons/16x16/preferences-other.png</normaloff>:/icons/16x16/preferences-other.png</iconset>
    </property>
    <property name="text">
@@ -1434,13 +1457,14 @@
   <tabstop>editUserDefinedOptions</tabstop>
   <tabstop>attachments</tabstop>
   <tabstop>addAttachment</tabstop>
-  <tabstop>removeAttachment</tabstop>
   <tabstop>addFiles</tabstop>
   <tabstop>startMuxing</tabstop>
   <tabstop>addToJobQueue</tabstop>
   <tabstop>saveSettings</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="../qt_resources.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>startMuxing</sender>
