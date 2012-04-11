@@ -22,8 +22,11 @@ Settings::load() {
   QSettings reg;
 
   reg.beginGroup("settings");
-  m_mkvmergeExe = reg.value("mkvmergeExe", "mkvmerge").toString();
-  m_priority    = static_cast<process_priority_e>(reg.value("priority", static_cast<int>(priority_normal)).toInt());
+  m_mkvmergeExe   = reg.value("mkvmergeExe", "mkvmerge").toString();
+  m_priority      = static_cast<process_priority_e>(reg.value("priority", static_cast<int>(priority_normal)).toInt());
+  m_lastOpenDir   = QDir{reg.value("lastOpenDir").toString()};
+  m_lastOutputDir = QDir{reg.value("lastOutputDir").toString()};
+  m_lastConfigDir = QDir{reg.value("lastConfigDir").toString()};
   reg.endGroup();
 
   reg.beginGroup("features");
@@ -38,8 +41,11 @@ Settings::save()
   QSettings reg;
 
   reg.beginGroup("settings");
-  reg.setValue("mkvmergeExe", m_mkvmergeExe);
-  reg.setValue("priority",    static_cast<int>(m_priority));
+  reg.setValue("mkvmergeExe",   m_mkvmergeExe);
+  reg.setValue("priority",      static_cast<int>(m_priority));
+  reg.setValue("lastOpenDir",   m_lastOpenDir.path());
+  reg.setValue("lastOutputDir", m_lastOutputDir.path());
+  reg.setValue("lastConfigDir", m_lastConfigDir.path());
   reg.endGroup();
 
   reg.beginGroup("features");

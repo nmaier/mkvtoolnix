@@ -1,17 +1,18 @@
-#ifndef MTX_MMGQT_SOURCE_FILE_H
-#define MTX_MMGQT_SOURCE_FILE_H
+#ifndef MTX_MKVTOOLNIX_GUI_SOURCE_FILE_H
+#define MTX_MKVTOOLNIX_GUI_SOURCE_FILE_H
 
 #include "common/common_pch.h"
-
-#include <QHash>
-#include <QList>
-#include <QObject>
-#include <QString>
 
 #include "common/file_types.h"
 #include "common/qt.h"
 
 #include "mkvtoolnix-gui/track.h"
+
+#include <QHash>
+#include <QList>
+#include <QObject>
+#include <QSettings>
+#include <QString>
 
 class SourceFile;
 typedef std::shared_ptr<SourceFile> SourceFilePtr;
@@ -34,6 +35,8 @@ public:
 
   virtual void setContainer(QString const &container);
   virtual bool isValid() const;
+
+  virtual void saveSettings(QSettings &settings) const;
 };
 
-#endif  // MTX_MMGQT_SOURCE_FILE_H
+#endif  // MTX_MKVTOOLNIX_GUI_SOURCE_FILE_H

@@ -1,6 +1,7 @@
 #include "common/common_pch.h"
 
 #include "common/iso639.h"
+#include "mkvtoolnix-gui/mux_config.h"
 #include "mkvtoolnix-gui/source_file.h"
 #include "mkvtoolnix-gui/track.h"
 #include "mkvtoolnix-gui/util/settings.h"
@@ -123,4 +124,41 @@ Track::extractAudioDelayFromFileName()
   if (-1 == re.indexIn(m_file->m_fileName))
     return "";
   return re.cap(1);
+}
+
+void
+Track::saveSettings(QSettings &settings)
+  const {
+  MuxConfig::saveProperties(settings, m_properties);
+
+  settings.setValue("objectID",               static_cast<void const *>(this));
+  settings.setValue("file",                   static_cast<void const *>(m_file));
+  settings.setValue("appendedTo",             static_cast<void const *>(m_appendedTo));
+  settings.setValue("type",                   m_type);
+  settings.setValue("id",                     static_cast<qlonglong>(m_id));
+  settings.setValue("muxThis",                m_muxThis);
+  settings.setValue("setAspectRatio",         m_setAspectRatio);
+  settings.setValue("aacIsSBR",               m_aacIsSBR);
+  settings.setValue("defaultTrackFlagWasSet", m_defaultTrackFlagWasSet);
+  settings.setValue("name",                   m_name);
+  settings.setValue("codec",                  m_codec);
+  settings.setValue("language",               m_language);
+  settings.setValue("tags",                   m_tags);
+  settings.setValue("delay",                  m_delay);
+  settings.setValue("strechBy",               m_strechBy);
+  settings.setValue("defaultDuration",        m_defaultDuration);
+  settings.setValue("timecodes",              m_timecodes);
+  settings.setValue("aspectRatio",            m_aspectRatio);
+  settings.setValue("displayWidth",           m_displayWidth);
+  settings.setValue("displayHeight",          m_displayHeight);
+  settings.setValue("cropping",               m_cropping);
+  settings.setValue("characterSet",           m_characterSet);
+  settings.setValue("userDefinedOptions",     m_userDefinedOptions);
+  settings.setValue("defaultTrackFlag",       m_defaultTrackFlag);
+  settings.setValue("forcedTrackFlag",        m_forcedTrackFlag);
+  settings.setValue("stereoscopy",            m_stereoscopy);
+  settings.setValue("cues",                   m_cues);
+  settings.setValue("compression",            m_compression);
+  settings.setValue("size",                   static_cast<qlonglong>(m_size));
+  settings.setValue("attachmentDescription",  m_attachmentDescription);
 }

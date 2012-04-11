@@ -1,6 +1,7 @@
 #include "common/common_pch.h"
 
 #include "common/qt.h"
+#include "mkvtoolnix-gui/mux_config.h"
 #include "mkvtoolnix-gui/source_file.h"
 
 SourceFile::SourceFile(QString const &fileName)
@@ -58,4 +59,57 @@ SourceFile::setContainer(QString const &container) {
               : container == "WAV"                          ? FILE_TYPE_WAV
               : container == "WAVPACK"                      ? FILE_TYPE_WAVPACK4
               :                                               FILE_TYPE_IS_UNKNOWN;
+}
+
+void
+SourceFile::saveSettings(QSettings &settings)
+  const {
+  MuxConfig::saveProperties(settings, m_properties);
+
+  settings.beginGroup("tracks");
+  settings.setValue("numberOfTracks", m_tracks.size());
+
+  int idx = 0;
+  for (auto &track : m_tracks) {
+    settings.beginGroup(QString::number(idx));
+    track->saveSettings(settings);
+    settings.endGroup();
+    ++idx;
+  }
+
+  settings.endGroup();
+
+  settings.beginGroup("additionalParts");
+  settings.setValue("numberOfAdditionalParts", m_additionalParts.size());
+
+  idx = 0;
+  for (auto &additionalPart : m_additionalParts) {
+    settings.beginGroup(QString::number(idx));
+    additionalPart->saveSettings(settings);
+    settings.endGroup();
+    ++idx;
+  }
+
+  settings.endGroup();
+
+  settings.beginGroup("appendedFiles");
+  settings.setValue("numberOfAppendedFiles", m_appendedFiles.size());
+
+  idx = 0;
+  for (auto &appendedFile : m_appendedFiles) {
+    settings.beginGroup(QString::number(idx));
+    appendedFile->saveSettings(settings);
+    settings.endGroup();
+    ++idx;
+  }
+
+  settings.endGroup();
+
+  settings.setValue("objectID",       static_cast<void const *>(this));
+  settings.setValue("fileName",       m_fileName);
+  settings.setValue("container",      m_container);
+  settings.setValue("type",           m_type);
+  settings.setValue("appended",       m_appended);
+  settings.setValue("additionalPart", m_additionalPart);
+  settings.setValue("appendedTo",     static_cast<void const *>(this));
 }

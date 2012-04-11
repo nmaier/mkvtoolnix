@@ -1243,7 +1243,7 @@
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionNew">
    <property name="icon">
-    <iconset resource="../qt_resources.qrc">
+    <iconset>
      <normaloff>:/icons/16x16/document-new.png</normaloff>:/icons/16x16/document-new.png</iconset>
    </property>
    <property name="text">
@@ -1255,7 +1255,7 @@
   </action>
   <action name="actionSave">
    <property name="icon">
-    <iconset resource="../qt_resources.qrc">
+    <iconset>
      <normaloff>:/icons/16x16/document-save.png</normaloff>:/icons/16x16/document-save.png</iconset>
    </property>
    <property name="text">
@@ -1267,7 +1267,7 @@
   </action>
   <action name="actionOpen">
    <property name="icon">
-    <iconset resource="../qt_resources.qrc">
+    <iconset>
      <normaloff>:/icons/16x16/document-open.png</normaloff>:/icons/16x16/document-open.png</iconset>
    </property>
    <property name="text">
@@ -1279,7 +1279,7 @@
   </action>
   <action name="actionSave_as">
    <property name="icon">
-    <iconset resource="../qt_resources.qrc">
+    <iconset>
      <normaloff>:/icons/16x16/document-save-as.png</normaloff>:/icons/16x16/document-save-as.png</iconset>
    </property>
    <property name="text">
@@ -1288,7 +1288,7 @@
   </action>
   <action name="actionExit">
    <property name="icon">
-    <iconset resource="../qt_resources.qrc">
+    <iconset>
      <normaloff>:/icons/16x16/application-exit.png</normaloff>:/icons/16x16/application-exit.png</iconset>
    </property>
    <property name="text">
@@ -1300,7 +1300,7 @@
   </action>
   <action name="action_Start_muxing">
    <property name="icon">
-    <iconset resource="../qt_resources.qrc">
+    <iconset>
      <normaloff>:/icons/16x16/media-playback-start.png</normaloff>:/icons/16x16/media-playback-start.png</iconset>
    </property>
    <property name="text">
@@ -1322,7 +1322,7 @@
   </action>
   <action name="actionCopy_command_line_to_clipboard">
    <property name="icon">
-    <iconset resource="../qt_resources.qrc">
+    <iconset>
      <normaloff>:/icons/16x16/edit-copy.png</normaloff>:/icons/16x16/edit-copy.png</iconset>
    </property>
    <property name="text">
@@ -1331,7 +1331,7 @@
   </action>
   <action name="actionAdd_to_job_queue">
    <property name="icon">
-    <iconset resource="../qt_resources.qrc">
+    <iconset>
      <normaloff>:/icons/16x16/task-delegate.png</normaloff>:/icons/16x16/task-delegate.png</iconset>
    </property>
    <property name="text">
@@ -1340,7 +1340,7 @@
   </action>
   <action name="action_Job_manager">
    <property name="icon">
-    <iconset resource="../qt_resources.qrc">
+    <iconset>
      <normaloff>:/icons/16x16/task-ongoing.png</normaloff>:/icons/16x16/task-ongoing.png</iconset>
    </property>
    <property name="text">
@@ -1362,7 +1362,7 @@
   </action>
   <action name="action_Options">
    <property name="icon">
-    <iconset resource="../qt_resources.qrc">
+    <iconset>
      <normaloff>:/icons/16x16/preferences-other.png</normaloff>:/icons/16x16/preferences-other.png</iconset>
    </property>
    <property name="text">
@@ -1440,9 +1440,7 @@
   <tabstop>addToJobQueue</tabstop>
   <tabstop>saveSettings</tabstop>
  </tabstops>
- <resources>
-  <include location="../qt_resources.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>startMuxing</sender>
@@ -1480,10 +1478,10 @@
    <sender>saveSettings</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
-   <slot>onSaveSettings()</slot>
+   <slot>onSaveConfig()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>508</x>
+     <x>529</x>
      <y>526</y>
     </hint>
     <hint type="destinationlabel">
@@ -1540,11 +1538,30 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionSave</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onSaveConfig()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>411</x>
+     <y>277</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>onStartMuxing()</slot>
   <slot>onAddToJobQueue()</slot>
-  <slot>onSaveSettings()</slot>
+  <slot>onSaveConfig()</slot>
+  <slot>onSaveConfigAs()</slot>
+  <slot>onOpenConfig()</slot>
+  <slot>onNew()</slot>
   <slot>onAddFiles()</slot>
  </slots>
 </ui>

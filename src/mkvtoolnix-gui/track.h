@@ -1,13 +1,14 @@
-#ifndef MTX_MMGQT_TRACK_H
-#define MTX_MMGQT_TRACK_H
+#ifndef MTX_MKVTOOLNIX_GUI_TRACK_H
+#define MTX_MKVTOOLNIX_GUI_TRACK_H
 
 #include "common/common_pch.h"
 
+#include "common/qt.h"
+
 #include <QHash>
 #include <QObject>
+#include <QSettings>
 #include <QString>
-
-#include "common/qt.h"
 
 class SourceFile;
 
@@ -68,6 +69,8 @@ public:
 
   virtual void setDefaults();
   virtual QString extractAudioDelayFromFileName() const;
+
+  virtual void saveSettings(QSettings &settings) const;
 };
 
-#endif  // MTX_MMGQT_TRACK_H
+#endif  // MTX_MKVTOOLNIX_GUI_TRACK_H

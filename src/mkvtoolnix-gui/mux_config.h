@@ -7,8 +7,9 @@
 #include "mkvtoolnix-gui/source_file.h"
 #include "mkvtoolnix-gui/track.h"
 
-#include <QObject>
+#include <QHash>
 #include <QList>
+#include <QObject>
 #include <QSettings>
 #include <QString>
 
@@ -42,15 +43,18 @@ public:
 
 public:
   MuxConfig();
+  MuxConfig(MuxConfig const &other);
   virtual ~MuxConfig();
+  MuxConfig &operator =(MuxConfig const &other);
 
   virtual void load(QSettings const &settings);
   virtual void save(QSettings &settings) const;
-  virtual void save(QString const &fileName) const;
-  virtual void reset() const;
+  virtual void save(QString const &fileName = Q(""));
+  virtual void reset();
 
 public:
   static MuxConfigPtr load(QString const &fileName);
+  static void saveProperties(QSettings &settings, QHash<QString, QString> const &properties);
 };
 
 #endif  // MTX_MMGQT_MUX_CONFIG_H

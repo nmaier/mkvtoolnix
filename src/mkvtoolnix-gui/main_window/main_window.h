@@ -30,8 +30,17 @@ public:
   explicit MainWindow(QWidget *parent = nullptr);
   ~MainWindow();
 
+  virtual void setStatusBarMessage(QString const &message);
+
 public slots:
+  virtual void onSaveConfig();
+  virtual void onSaveConfigAs();
+  virtual void onOpenConfig();
+  virtual void onNew();
   virtual void onAddFiles();
+  virtual void onAddToJobQueue();
+  virtual void onStartMuxing();
+
   virtual void resizeFilesColumnsToContents() const;
   virtual void resizeTracksColumnsToContents() const;
 
