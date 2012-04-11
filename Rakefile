@@ -383,7 +383,7 @@ EOT
   end
 end
 
-# HTMLO generation for the man pages
+# HTML generation for the man pages
 targets = ([ 'en' ] + $languages[:manpages]).collect do |language|
   dir = language == 'en' ? '' : "/#{language}"
   FileList[ "doc/man#{dir}/*.xml" ].collect { |name| "man2html:#{language}:#{File.basename(name, '.xml')}" }
@@ -403,6 +403,43 @@ namespace :man2html do
           runq "XSLTPROC #{name}", "xsltproc --nonet -o #{name.ext('html')} /usr/share/xml/docbook/stylesheet/nwalsh/html/docbook.xsl #{name}"
         end
       end
+    end
+  end
+end
+
+# Developer helper tasks
+namespace :dev do
+  if $build_mkvtoolnix_gui
+    desc "Update Qt resource files"
+    task "update-qt-resources" do
+      require 'rexml/document'
+
+      qrc      = "src/mkvtoolnix-gui/qt_resources.qrc"
+      doc      = REXML::Document.new File.new(qrc)
+      existing = Hash.new
+
+      doc.elements.to_a("/RCC/qresource/file").each do |node|
+        if File.exists? "src/mkvtoolnix-gui/#{node.text}"
+          existing[node.text] = true
+        else
+          puts "Removing <file> for non-existing #{node.text}"
+          node.remove
+        end
+      end
+
+      parent = doc.elements.to_a("/RCC/qresource")[0]
+      FileList["share/icons/*/*.png"].select { |file| !existing["../../#{file}"] }.each do |file|
+        puts "Adding <file> for #{file}"
+        node                     = REXML::Element.new "file"
+        node.attributes["alias"] = file.gsub(/share\//, '')
+        node.text                = "../../#{file}"
+        parent << node
+      end
+
+      formatter         = REXML::Formatters::Pretty.new 1
+      formatter.compact = true
+      formatter.width   = 9999999
+      formatter.write doc, File.open(qrc, "w")
     end
   end
 end
