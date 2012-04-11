@@ -98,6 +98,9 @@ FileIdentifier::parseOutput() {
     else if (line.startsWith("Global tags"))
       parseGlobalTagsLine(line);
 
+    else if (line.startsWith("Tags"))
+      parseTagsLine(line);
+
     else if (line.startsWith("Track"))
       parseTrackLine(line);
   }
@@ -105,14 +108,36 @@ FileIdentifier::parseOutput() {
   return m_file->isValid();
 }
 
-// Attachment ID 1: type 'cue', size 1844 bytes, description 'dummy', file name 'cuewithtags2.cue'
+// Attachment ID 1: type "cue", size 1844 bytes, description "dummy", file name "cuewithtags2.cue"
 void
-FileIdentifier::parseAttachmentLine(QString const &) {
+FileIdentifier::parseAttachmentLine(QString const &line) {
+  QRegExp re{"^Attachment ID (\\d+): type \"(.*)\", size (\\d+) bytes, description \"(.*)\", file name \"(.*)\"$"};
+
+  if (-1 == re.indexIn(line))
+    return;
+
+  auto track                     = std::make_shared<Track>(Track::Attachment, m_file.get());
+  track->m_id                    = re.cap(1).toLongLong();
+  track->m_codec                 = re.cap(2);
+  track->m_size                  = re.cap(3).toLongLong();
+  track->m_attachmentDescription = re.cap(4);
+  track->m_name                  = re.cap(5);
+
+  m_file->m_tracks << track;
 }
 
 // Chapters: 27 entries
 void
-FileIdentifier::parseChaptersLine(QString const &) {
+FileIdentifier::parseChaptersLine(QString const &line) {
+  QRegExp re{"^Chapters: (\\d+) entries$"};
+
+  if (-1 == re.indexIn(line))
+    return;
+
+  auto track    = std::make_shared<Track>(Track::Chapters, m_file.get());
+  track->m_size = re.cap(1).toLongLong();
+
+  m_file->m_tracks << track;
 }
 
 // File 'complex.mkv': container: Matroska [duration:106752000000 segment_uid:00000000000000000000000000000000]
@@ -136,11 +161,31 @@ FileIdentifier::parseContainerLine(QString const &line) {
 
 // Global tags: 3 entries
 void
-FileIdentifier::parseGlobalTagsLine(QString const &) {
+FileIdentifier::parseGlobalTagsLine(QString const &line) {
+  QRegExp re{"^Global tags: (\\d+) entries$"};
+
+  if (-1 == re.indexIn(line))
+    return;
+
+  auto track    = std::make_shared<Track>(Track::GlobalTags, m_file.get());
+  track->m_size = re.cap(1).toLongLong();
+
+  m_file->m_tracks << track;
 }
 
+// Tags for track ID 1: 2 entries
 void
-FileIdentifier::parseTagsLine(QString const &) {
+FileIdentifier::parseTagsLine(QString const &line) {
+  QRegExp re{"^Tags for track ID (\\d+): (\\d+) entries$"};
+
+  if (-1 == re.indexIn(line))
+    return;
+
+  auto track    = std::make_shared<Track>(Track::Tags, m_file.get());
+  track->m_id   = re.cap(1).toLongLong();
+  track->m_size = re.cap(2).toLongLong();
+
+  m_file->m_tracks << track;
 }
 
 // Track ID 0: video (V_MS/VFW/FOURCC, DIV3) [number:1 ...]
@@ -156,8 +201,7 @@ FileIdentifier::parseTrackLine(QString const &line) {
                       : re.cap(2) == "video"     ? Track::Video
                       : re.cap(2) == "subtitles" ? Track::Subtitles
                       :                            Track::Buttons;
-  auto track          = std::make_shared<Track>(type);
-  track->m_file       = m_file.get();
+  auto track          = std::make_shared<Track>(type, m_file.get());
   track->m_id         = re.cap(1).toLongLong();
   track->m_codec      = re.cap(3);
   track->m_properties = parseProperties(line);

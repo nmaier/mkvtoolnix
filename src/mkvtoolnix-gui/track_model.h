@@ -20,8 +20,10 @@ protected:
   static int const TypeColumn       = 1;
   static int const MuxColumn        = 2;
   static int const LanguageColumn   = 3;
-  static int const SourceFileColumn = 4;
-  static int const NumberOfColumns  = 5;
+  static int const IDColumn         = 4;
+  static int const NameColumn       = 5;
+  static int const SourceFileColumn = 6;
+  static int const NumberOfColumns  = 7;
 
   QList<Track *> *m_tracks;
   QIcon m_audioIcon, m_videoIcon, m_subtitleIcon, m_attachmentIcon, m_chaptersIcon, m_tagsIcon, m_genericIcon, m_yesIcon, m_noIcon;
@@ -46,7 +48,7 @@ protected:
 
   QVariant dataDecoration(QModelIndex const &index, Track *track) const;
   QVariant dataDisplay(QModelIndex const &index, Track *track) const;
-
+  QVariant dataTextAlignment(QModelIndex const &index) const;
 };
 
 #endif  // MTX_MKVTOOLNIXGUI_TRACK_MODEL_H

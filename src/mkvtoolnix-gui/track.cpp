@@ -5,9 +5,10 @@
 #include "mkvtoolnix-gui/track.h"
 #include "mkvtoolnix-gui/util/settings.h"
 
-Track::Track(Track::Type type)
+Track::Track(Track::Type type,
+             SourceFile *file)
   : m_properties()
-  , m_file(nullptr)
+  , m_file(file)
   , m_appendedTo(nullptr)
   , m_appendedTracks()
   , m_type(type)
@@ -21,6 +22,7 @@ Track::Track(Track::Type type)
   , m_stereoscopy(0)
   , m_cues(0)
   , m_compression(CompDefault)
+  , m_size(0)
 {
 }
 

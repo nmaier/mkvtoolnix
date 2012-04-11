@@ -10,7 +10,7 @@ TrackModel::TrackModel(QObject *parent)
   , m_tracks(nullptr)
   , m_audioIcon(":/icons/16x16/knotify.png")
   , m_videoIcon(":/icons/16x16/tool-animator.png")
-  , m_subtitleIcon(":/icons/16x16/")
+  , m_subtitleIcon(":/icons/16x16/subtitles.png")
   , m_attachmentIcon(":/icons/16x16/mail-attachment.png")
   , m_chaptersIcon(":/icons/16x16/clock.png")
   , m_tagsIcon(":/icons/16x16/irc-join-channel.png")
@@ -95,6 +95,12 @@ TrackModel::columnCount(QModelIndex const &)
 }
 
 QVariant
+TrackModel::dataTextAlignment(QModelIndex const &index)
+  const {
+  return IDColumn == index.column() ? Qt::AlignRight : Qt::AlignLeft;
+}
+
+QVariant
 TrackModel::dataDecoration(QModelIndex const &index,
                            Track *track)
   const {
@@ -120,18 +126,19 @@ TrackModel::dataDisplay(QModelIndex const &index,
                         Track *track)
   const {
   if (CodecColumn == index.column())
-    return track->m_codec;
+    return track->isChapters() || track->isGlobalTags() || track->isTags() ? QString(QY("%1 entries")).arg(track->m_size)
+         :                                                                   track->m_codec;
 
   else if (TypeColumn == index.column())
-    return track->isAudio()       ? QY("audio")
-          : track->isVideo()      ? QY("video")
-          : track->isSubtitles()  ? QY("subtitles")
-          : track->isButtons()    ? QY("buttons")
-          : track->isAttachment() ? QY("attachment")
-          : track->isChapters()   ? QY("chapters")
-          : track->isTags()       ? QY("tags")
-          : track->isGlobalTags() ? QY("global tags")
-          :                          Q("INTERNAL ERROR");
+    return track->isAudio()      ? QY("audio")
+         : track->isVideo()      ? QY("video")
+         : track->isSubtitles()  ? QY("subtitles")
+         : track->isButtons()    ? QY("buttons")
+         : track->isAttachment() ? QY("attachment")
+         : track->isChapters()   ? QY("chapters")
+         : track->isTags()       ? QY("tags")
+         : track->isGlobalTags() ? QY("global tags")
+         :                          Q("INTERNAL ERROR");
 
   else if (MuxColumn == index.column())
     return track->m_muxThis ? QY("yes") : QY("no");
@@ -140,7 +147,13 @@ TrackModel::dataDisplay(QModelIndex const &index,
     return track->m_language;
 
   else if (SourceFileColumn == index.column())
-    return QFileInfo{ track->m_file->m_fileName }.fileName();
+    return  QFileInfo{ track->m_file->m_fileName }.fileName();
+
+  else if (NameColumn == index.column())
+    return track->m_name;
+
+  else if (IDColumn == index.column())
+    return -1 == track->m_id ? Q("") : QString::number(track->m_id);
 
   else
     return QVariant{};
@@ -153,6 +166,9 @@ TrackModel::data(QModelIndex const &index,
   auto track = trackFromIndex(index);
   if (!track)
     return QVariant{};
+
+  if (Qt::TextAlignmentRole == role)
+    return dataTextAlignment(index);
 
   if (Qt::DecorationRole == role)
     return dataDecoration(index, track);
@@ -177,6 +193,8 @@ TrackModel::headerData(int section,
          : LanguageColumn   == section ? QY("Language")
          : SourceFileColumn == section ? QY("Source file")
          : TypeColumn       == section ? QY("Type")
+         : NameColumn       == section ? QY("Name")
+         : IDColumn         == section ? QY("ID")
          :                                Q("INTERNAL ERROR");
 
   if (Qt::TextAlignmentRole == role)

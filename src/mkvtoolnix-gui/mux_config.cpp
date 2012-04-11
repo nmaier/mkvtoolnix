@@ -15,18 +15,18 @@ MuxConfig::~MuxConfig()
 }
 
 void
-MuxConfig::load(QSettings const &settings) {
+MuxConfig::load(QSettings const &) {
   // TODO
 }
 
 void
-MuxConfig::save(QSettings &settings)
+MuxConfig::save(QSettings &)
   const {
   // TODO
 }
 
 void
-MuxConfig::save(QString const &fileName)
+MuxConfig::save(QString const &)
   const {
   // TODO
 }

@@ -48,8 +48,11 @@ public:
   unsigned int m_defaultTrackFlag, m_forcedTrackFlag, m_stereoscopy, m_cues;
   Compression m_compression;
 
+  int64_t m_size;
+  QString m_attachmentDescription;
+
 public:
-  explicit Track(Type type);
+  explicit Track(Type type, SourceFile *file);
   virtual ~Track();
 
   virtual bool isType(Type type) const;
