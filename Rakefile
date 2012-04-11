@@ -429,9 +429,13 @@ namespace :install do
     install_data :desktopdir, FileList[ "#{$top_srcdir}/share/desktop/*.desktop" ]
     install_data :mimepackagesdir, FileList[ "#{$top_srcdir}/share/mime/*.xml" ]
 
-    FileList[ "#{$top_srcdir}/share/icons/*" ].collect { |dir| File.basename dir }.select { |dir| dir != "windows" }.each do |dir|
+    wanted_apps     = %w{mkvmerge mkvmergeGUI mkvinfo mkvextract mkvpropedit}.collect { |e| "#{e}.png" }.to_hash_by
+    wanted_dirs     = %w{32x32 48x48 64x64 128x128 256x256}.to_hash_by
+    dirs_to_install = FileList[ "#{$top_srcdir}/share/icons/*"   ].select { |dir|  wanted_dirs[ dir.gsub(/.*icons\//, '').gsub(/\/.*/, '') ] }.sort.uniq
+
+    dirs_to_install.each do |dir|
       install_dir "#{c(:icondir)}/#{dir}/apps"
-      install_data "#{c(:icondir)}/#{dir}/apps/", FileList[ "#{$top_srcdir}/share/icons/#{dir}/*.png" ]
+      install_data "#{c(:icondir)}/#{dir}/apps/", FileList[ "#{dir}/*" ].to_a.select { |file| wanted_apps[ file.gsub(/.*\//, '') ] }
     end
   end
 
