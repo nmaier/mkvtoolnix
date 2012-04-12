@@ -33,6 +33,8 @@ public:
     CompDefault,
     CompNone,
     CompZlib,
+    CompLzo,
+    CompBz2,
   };
 
   QHash<QString, QString> m_properties;
@@ -45,7 +47,7 @@ public:
   int64_t m_id;
 
   bool m_muxThis, m_setAspectRatio, m_aacIsSBR, m_defaultTrackFlagWasSet;
-  QString m_name, m_codec, m_language, m_tags, m_delay, m_strechBy, m_defaultDuration, m_timecodes, m_aspectRatio, m_displayWidth, m_displayHeight, m_cropping, m_characterSet, m_userDefinedOptions;
+  QString m_name, m_codec, m_language, m_tags, m_delay, m_stretchBy, m_defaultDuration, m_timecodes, m_aspectRatio, m_displayWidth, m_displayHeight, m_cropping, m_characterSet, m_userDefinedOptions;
   unsigned int m_defaultTrackFlag, m_forcedTrackFlag, m_stereoscopy, m_cues;
   Compression m_compression;
 

@@ -16,6 +16,7 @@ MainWindow::MainWindow(QWidget *parent)
   , ui{new Ui::MainWindow}
   , m_filesModel{new SourceFileModel{this}}
   , m_tracksModel{new TrackModel{this}}
+  , m_currentlySettingInputControlValues{false}
 {
   ui->setupUi(this);
 
@@ -28,6 +29,7 @@ MainWindow::MainWindow(QWidget *parent)
 
   setWindowIcon(Util::loadIcon(Q("mkvmergeGUI.png"), QList<int>{} << 32 << 48 << 64 << 128 << 256));
 
+  setupComboBoxContent();
   setupControlLists();
 
   enableInputControls(m_allInputControls, false);

@@ -106,7 +106,7 @@ Track::setDefaults() {
   m_cropping               = m_properties[Q("cropping")];
   // m_stereoscopy            = mapToStereoMode(m_properties[Q("stereo_mode")];
 
-  auto idx = map_to_iso639_2_code(to_utf8(m_language), true);
+  auto idx = map_to_iso639_2_code(to_utf8(m_properties[Q("language")]), true);
   if (0 <= idx)
     m_language = to_qs(iso639_languages[idx].iso639_2_code);
 
@@ -145,7 +145,7 @@ Track::saveSettings(QSettings &settings)
   settings.setValue("language",               m_language);
   settings.setValue("tags",                   m_tags);
   settings.setValue("delay",                  m_delay);
-  settings.setValue("strechBy",               m_strechBy);
+  settings.setValue("stretchBy",              m_stretchBy);
   settings.setValue("defaultDuration",        m_defaultDuration);
   settings.setValue("timecodes",              m_timecodes);
   settings.setValue("aspectRatio",            m_aspectRatio);

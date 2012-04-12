@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>823</width>
-    <height>556</height>
+    <height>562</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -253,7 +253,7 @@
                    </item>
                    <item>
                     <property name="text">
-                     <string notr="true">ZLIB</string>
+                     <string notr="true">zlib</string>
                     </property>
                    </item>
                   </widget>
@@ -1538,8 +1538,8 @@
    <slot>onAddFiles()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>251</x>
-     <y>505</y>
+     <x>310</x>
+     <y>532</y>
     </hint>
     <hint type="destinationlabel">
      <x>141</x>
@@ -1627,6 +1627,182 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>trackName</sender>
+   <signal>textEdited(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onTrackNameChanged(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>620</x>
+     <y>152</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>613</x>
+     <y>30</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>muxThis</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onMuxThisChanged(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>652</x>
+     <y>125</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>638</x>
+     <y>28</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>trackLanguage</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onTrackLanguageChanged(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>665</x>
+     <y>182</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>673</x>
+     <y>27</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>forcedTrackFlag</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onForcedTrackFlagChanged(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>679</x>
+     <y>235</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>818</x>
+     <y>43</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>defaultTrackFlag</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onDefaultTrackFlagChanged(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>692</x>
+     <y>202</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>658</x>
+     <y>28</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>compression</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onCompressionChanged(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>710</x>
+     <y>266</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>820</x>
+     <y>80</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>trackTacks</sender>
+   <signal>textEdited(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onTrackTagsChanged(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>645</x>
+     <y>295</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>820</x>
+     <y>124</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>delay</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onDelayChanged(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>583</x>
+     <y>364</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>819</x>
+     <y>158</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>stretchBy</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onStretchByChanged(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>593</x>
+     <y>389</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>815</x>
+     <y>192</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>defaultDuration</sender>
+   <signal>editTextChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onDefaultDurationChanged(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>611</x>
+     <y>418</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>818</x>
+     <y>228</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>timecodes</sender>
+   <signal>textEdited(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onTimecodesChanged(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>635</x>
+     <y>448</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>817</x>
+     <y>266</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>onStartMuxing()</slot>
@@ -1638,5 +1814,16 @@
   <slot>onAddFiles()</slot>
   <slot>onTracksContextMenu()</slot>
   <slot>onFilesContextMenu()</slot>
+  <slot>onTrackNameChanged(QString)</slot>
+  <slot>onMuxThisChanged(int)</slot>
+  <slot>onTrackLanguageChanged(int)</slot>
+  <slot>onDefaultTrackFlagChanged(int)</slot>
+  <slot>onForcedTrackFlagChanged(int)</slot>
+  <slot>onCompressionChanged(int)</slot>
+  <slot>onTrackTagsChanged(QString)</slot>
+  <slot>onDelayChanged(QString)</slot>
+  <slot>onStretchByChanged(QString)</slot>
+  <slot>onDefaultDurationChanged(QString)</slot>
+  <slot>onTimecodesChanged(QString)</slot>
  </slots>
 </ui>
