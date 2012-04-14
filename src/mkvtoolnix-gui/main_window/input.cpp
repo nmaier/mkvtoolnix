@@ -75,8 +75,7 @@ MainWindow::setupComboBoxContent() {
 
   // Set item data to index for distinguishing between empty values
   // added by "multiple selection mode".
-  auto controls = QList<QComboBox *>{} << ui->defaultTrackFlag << ui->forcedTrackFlag << ui->cues << ui->compression << ui->muxThis << ui->aacIsSBR;
-  for (auto control : controls)
+  for (auto control : std::vector<QComboBox *>{ui->defaultTrackFlag, ui->forcedTrackFlag, ui->cues, ui->compression, ui->muxThis, ui->aacIsSBR})
     for (idx = 0; control->count() > idx; ++idx)
       control->setItemData(idx, idx);
 }
@@ -145,8 +144,7 @@ MainWindow::clearInputControlValues() {
   ui->subtitleCharacterSet->setCurrentIndex(0);
   ui->aacIsSBR->setCurrentIndex(0);
 
-  auto textControls = QList<QLineEdit *>{} << ui->trackName << ui->trackTags << ui->delay << ui->stretchBy << ui->timecodes << ui->displayWidth << ui->displayHeight << ui->cropping << ui->userDefinedTrackOptions;
-  for (auto control : textControls)
+  for (auto control : std::vector<QLineEdit *>{ui->trackName, ui->trackTags, ui->delay, ui->stretchBy, ui->timecodes, ui->displayWidth, ui->displayHeight, ui->cropping, ui->userDefinedTrackOptions})
     control->setText(Q(""));
 
   ui->defaultDuration->setEditText(Q(""));
