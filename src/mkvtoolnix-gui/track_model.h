@@ -28,6 +28,8 @@ protected:
   QList<Track *> *m_tracks;
   QIcon m_audioIcon, m_videoIcon, m_subtitleIcon, m_attachmentIcon, m_chaptersIcon, m_tagsIcon, m_genericIcon, m_yesIcon, m_noIcon;
 
+  bool m_debug;
+
 public:
   TrackModel(QObject *parent);
   virtual ~TrackModel();
@@ -43,12 +45,16 @@ public:
   virtual QVariant data(QModelIndex const &index, int role) const;
   virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
+  virtual void trackUpdated(Track *track);
+
 protected:
   Track *trackFromIndex(QModelIndex const &index) const;
 
   QVariant dataDecoration(QModelIndex const &index, Track *track) const;
   QVariant dataDisplay(QModelIndex const &index, Track *track) const;
   QVariant dataTextAlignment(QModelIndex const &index) const;
+
+  static int rowForTrack(QList<Track *> const &tracks, Track *trackToLookFor);
 };
 
 #endif  // MTX_MKVTOOLNIXGUI_TRACK_MODEL_H

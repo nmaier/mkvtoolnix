@@ -3,6 +3,7 @@
 #include "common/extern_data.h"
 #include "common/iso639.h"
 #include "common/qt.h"
+#include "common/stereo_mode.h"
 #include "mkvtoolnix-gui/main_window/main_window.h"
 #include "mkvtoolnix-gui/forms/main_window.h"
 #include "mkvtoolnix-gui/util/file_identifier.h"
@@ -19,24 +20,24 @@ MainWindow::setupControlLists() {
   m_typeIndependantControls << ui->generalBox << ui->muxThisLabel << ui->muxThis << ui->miscellaneousBox << ui->userDefinedTrackOptionsLabel << ui->userDefinedTrackOptions;
 
   m_audioControls << ui->trackNameLabel << ui->trackName << ui->trackLanguageLabel << ui->trackLanguage << ui->defaultTrackFlagLabel << ui->defaultTrackFlag << ui->forcedTrackFlagLabel << ui->forcedTrackFlag
-                  << ui->compressionLabel << ui->compression << ui->trackTagsLabel << ui->trackTacks << ui->browseTrackTags << ui->timecodesAndDefaultDurationBox
+                  << ui->compressionLabel << ui->compression << ui->trackTagsLabel << ui->trackTags << ui->browseTrackTags << ui->timecodesAndDefaultDurationBox
                   << ui->delayLabel << ui->delay << ui->stretchByLabel << ui->stretchBy << ui->timecodesLabel << ui->timecodes << ui->browseTimecodes << ui->audioPropertiesBox << ui->aacIsSBR << ui->cuesLabel << ui->cues;
 
   m_videoControls << ui->trackNameLabel << ui->trackName << ui->trackLanguageLabel << ui->trackLanguage << ui->defaultTrackFlagLabel << ui->defaultTrackFlag
-                  << ui->forcedTrackFlagLabel << ui->forcedTrackFlag << ui->compressionLabel << ui->compression << ui->trackTagsLabel << ui->trackTacks << ui->browseTrackTags << ui->timecodesAndDefaultDurationBox
+                  << ui->forcedTrackFlagLabel << ui->forcedTrackFlag << ui->compressionLabel << ui->compression << ui->trackTagsLabel << ui->trackTags << ui->browseTrackTags << ui->timecodesAndDefaultDurationBox
                   << ui->delayLabel << ui->delay << ui->stretchByLabel << ui->stretchBy << ui->defaultDurationLabel << ui->defaultDuration << ui->timecodesLabel << ui->timecodes << ui->browseTimecodes
                   << ui->picturePropertiesBox << ui->setAspectRatio << ui->aspectRatio << ui->setDisplayWidthHeight << ui->displayWidth << ui->displayDimensionsXLabel << ui->displayHeight << ui->stereoscopyLabel
                   << ui->stereoscopy << ui->croppingLabel << ui->cropping << ui->cuesLabel << ui->cues;
 
   m_subtitleControls << ui->trackNameLabel << ui->trackName << ui->trackLanguageLabel << ui->trackLanguage << ui->defaultTrackFlagLabel << ui->defaultTrackFlag
-                     << ui->forcedTrackFlagLabel << ui->forcedTrackFlag << ui->compressionLabel << ui->compression << ui->trackTagsLabel << ui->trackTacks << ui->browseTrackTags << ui->timecodesAndDefaultDurationBox
+                     << ui->forcedTrackFlagLabel << ui->forcedTrackFlag << ui->compressionLabel << ui->compression << ui->trackTagsLabel << ui->trackTags << ui->browseTrackTags << ui->timecodesAndDefaultDurationBox
                      << ui->delayLabel << ui->delay << ui->stretchByLabel << ui->stretchBy << ui->timecodesLabel << ui->timecodes << ui->browseTimecodes
                      << ui->subtitleAndChapterPropertiesBox << ui->characterSetLabel << ui->subtitleCharacterSet << ui->cuesLabel << ui->cues;
 
   m_chapterControls << ui->subtitleAndChapterPropertiesBox << ui->characterSetLabel << ui->subtitleCharacterSet;
 
   m_allInputControls << ui->generalBox << ui->muxThisLabel << ui->muxThis << ui->trackNameLabel << ui->trackName << ui->trackLanguageLabel << ui->trackLanguage << ui->defaultTrackFlagLabel << ui->defaultTrackFlag
-                     << ui->forcedTrackFlagLabel << ui->forcedTrackFlag << ui->compressionLabel << ui->compression << ui->trackTagsLabel << ui->trackTacks << ui->browseTrackTags << ui->timecodesAndDefaultDurationBox
+                     << ui->forcedTrackFlagLabel << ui->forcedTrackFlag << ui->compressionLabel << ui->compression << ui->trackTagsLabel << ui->trackTags << ui->browseTrackTags << ui->timecodesAndDefaultDurationBox
                      << ui->delayLabel << ui->delay << ui->stretchByLabel << ui->stretchBy << ui->defaultDurationLabel << ui->defaultDuration << ui->timecodesLabel << ui->timecodes << ui->browseTimecodes
                      << ui->picturePropertiesBox << ui->setAspectRatio << ui->aspectRatio << ui->setDisplayWidthHeight << ui->displayWidth << ui->displayDimensionsXLabel << ui->displayHeight << ui->stereoscopyLabel
                      << ui->stereoscopy << ui->croppingLabel << ui->cropping << ui->audioPropertiesBox << ui->aacIsSBR << ui->subtitleAndChapterPropertiesBox << ui->characterSetLabel << ui->subtitleCharacterSet
@@ -65,6 +66,19 @@ MainWindow::setupComboBoxContent() {
 
   ui->subtitleCharacterSet->addItem(Q(""));
   ui->subtitleCharacterSet->addItems(characterSets);
+
+  // Stereoscopy
+  ui->stereoscopy->addItem(Q(""), -1);
+  int idx = 0;
+  for (auto &mode : stereo_mode_c::s_modes)
+    ui->stereoscopy->addItem(QString{"%1 (%2; %3)"}.arg(to_qs(stereo_mode_c::translate(idx))).arg(idx).arg(to_qs(mode)), idx);
+
+  // Set item data to index for distinguishing between empty values
+  // added by "multiple selection mode".
+  auto controls = QList<QComboBox *>{} << ui->defaultTrackFlag << ui->forcedTrackFlag << ui->cues << ui->compression << ui->muxThis << ui->aacIsSBR;
+  for (auto control : controls)
+    for (idx = 0; control->count() > idx; ++idx)
+      control->setItemData(idx, idx);
 }
 
 void
@@ -124,33 +138,64 @@ MainWindow::addOrRemoveEmptyComboBoxItem(bool add) {
 }
 
 void
+MainWindow::clearInputControlValues() {
+  for (auto comboBox : m_comboBoxControls)
+    comboBox->setCurrentIndex(0);
+  ui->stereoscopy->setCurrentIndex(0);
+  ui->subtitleCharacterSet->setCurrentIndex(0);
+  ui->aacIsSBR->setCurrentIndex(0);
+
+  auto textControls = QList<QLineEdit *>{} << ui->trackName << ui->trackTags << ui->delay << ui->stretchBy << ui->timecodes << ui->displayWidth << ui->displayHeight << ui->cropping << ui->userDefinedTrackOptions;
+  for (auto control : textControls)
+    control->setText(Q(""));
+
+  ui->defaultDuration->setEditText(Q(""));
+  ui->aspectRatio->setEditText(Q(""));
+
+  ui->setAspectRatio->setChecked(false);
+  ui->setDisplayWidthHeight->setChecked(false);
+}
+
+void
 MainWindow::setInputControlValues(Track *track) {
   m_currentlySettingInputControlValues = true;
 
   addOrRemoveEmptyComboBoxItem(nullptr == track);
 
   if (nullptr == track) {
-    for (auto &comboBox : m_comboBoxControls)
-      comboBox->setCurrentIndex(0);
-
-    ui->trackName->setText(Q(""));
-
+    clearInputControlValues();
     m_currentlySettingInputControlValues = false;
     return;
   }
 
   // TODO
-  ui->muxThis->setCurrentIndex(track->m_muxThis ? 0 : 1);
   ui->trackName->setText(track->m_name);
 
-  for (int idx = 0; ui->trackLanguage->count() > idx; ++idx)
-    if (ui->trackLanguage->itemData(idx).toString() == track->m_language) {
-      ui->trackLanguage->setCurrentIndex(idx);
-      break;
-    }
+  Util::setComboBoxIndexIf(ui->muxThis,              [&](QString const &,     QVariant const &data) { return data.isValid() && (data.toInt()    == (track->m_muxThis ? 0 : 1)); });
+  Util::setComboBoxIndexIf(ui->trackLanguage,        [&](QString const &,     QVariant const &data) { return data.isValid() && (data.toString() == track->m_language);          });
+  Util::setComboBoxIndexIf(ui->defaultTrackFlag,     [&](QString const &,     QVariant const &data) { return data.isValid() && (data.toUInt()   == track->m_defaultTrackFlag);  });
+  Util::setComboBoxIndexIf(ui->forcedTrackFlag,      [&](QString const &,     QVariant const &data) { return data.isValid() && (data.toUInt()   == track->m_forcedTrackFlag);   });
+  Util::setComboBoxIndexIf(ui->compression,          [&](QString const &,     QVariant const &data) { return data.isValid() && (data.toUInt()   == track->m_compression);       });
+  Util::setComboBoxIndexIf(ui->cues,                 [&](QString const &,     QVariant const &data) { return data.isValid() && (data.toUInt()   == track->m_cues);              });
+  Util::setComboBoxIndexIf(ui->stereoscopy,          [&](QString const &,     QVariant const &data) { return data.isValid() && (data.toUInt()   == track->m_stereoscopy);       });
+  Util::setComboBoxIndexIf(ui->aacIsSBR,             [&](QString const &,     QVariant const &data) { return data.isValid() && (data.toUInt()   == track->m_aacIsSBR);          });
+  Util::setComboBoxIndexIf(ui->subtitleCharacterSet, [&](QString const &text, QVariant const &)     { return                   (text            == track->m_characterSet);      });
 
-  // QRegExp re{"\\((.+)\\)$"};
-  // ui->
+  ui->trackName->setText(                track->m_name);
+  ui->trackTags->setText(                track->m_tags);
+  ui->delay->setText(                    track->m_delay);
+  ui->stretchBy->setText(                track->m_stretchBy);
+  ui->timecodes->setText(                track->m_timecodes);
+  ui->displayWidth->setText(             track->m_displayWidth);
+  ui->displayHeight->setText(            track->m_displayHeight);
+  ui->cropping->setText(                 track->m_cropping);
+  ui->userDefinedTrackOptions->setText(  track->m_userDefinedOptions);
+  ui->defaultDuration->setEditText(      track->m_defaultDuration);
+  ui->aspectRatio->setEditText(          track->m_aspectRatio);
+
+  ui->setAspectRatio->setChecked(        track->m_setAspectRatio);
+  ui->setDisplayWidthHeight->setChecked(!track->m_setAspectRatio);
+
   m_currentlySettingInputControlValues = false;
 }
 
@@ -187,79 +232,193 @@ MainWindow::withSelectedTracks(std::function<void(Track *)> code,
         || (track->isAudio()     && withAudio)
         || (track->isVideo()     && withVideo)
         || (track->isSubtitles() && withSubtitles)
-        || (track->isChapters()  && withChapters))
+        || (track->isChapters()  && withChapters)) {
       code(track);
+      m_tracksModel->trackUpdated(track);
+    }
   }
 }
 
 void
-MainWindow::onTrackNameChanged(QString newValue) {
+MainWindow::onTrackNameEdited(QString newValue) {
   withSelectedTracks([&](Track *track) { track->m_name = newValue; }, true);
 }
 
 void
 MainWindow::onMuxThisChanged(int newValue) {
-  mxinfo(boost::format("mux this changed\n"));  withSelectedTracks([&](Track *track) { mxinfo(boost::format("setting\n"));track->m_muxThis = 0 == newValue; });
+  auto data = ui->muxThis->itemData(newValue);
+  if (!data.isValid())
+    return;
+  newValue = data.toInt();
+
+  withSelectedTracks([&](Track *track) { track->m_muxThis = 0 == newValue; });
 }
 
 void
 MainWindow::onTrackLanguageChanged(int newValue) {
   auto code = ui->trackLanguage->itemData(newValue).toString();
-  mxinfo(boost::format("lang changed to %1%\n") % code);
   if (code.isEmpty())
     return;
-
-  if (code == Q("eng"))
-    mxinfo(boost::format("muh\n"));
 
   withSelectedTracks([&](Track *track) { track->m_language = code; }, true);
 }
 
 void
 MainWindow::onDefaultTrackFlagChanged(int newValue) {
+  auto data = ui->defaultTrackFlag->itemData(newValue);
+  if (!data.isValid())
+    return;
+  newValue = data.toInt();
+
   withSelectedTracks([&](Track *track) { track->m_defaultTrackFlag = newValue; }, true);
 }
 
 void
 MainWindow::onForcedTrackFlagChanged(int newValue) {
+  auto data = ui->forcedTrackFlag->itemData(newValue);
+  if (!data.isValid())
+    return;
+  newValue = data.toInt();
+
   withSelectedTracks([&](Track *track) { track->m_forcedTrackFlag = newValue; }, true);
 }
 
 void
 MainWindow::onCompressionChanged(int newValue) {
-  withSelectedTracks([&](Track *track) {
-      if (3 > newValue)
-        track->m_compression = 0 == newValue ? Track::CompDefault
-                             : 1 == newValue ? Track::CompNone
-                             :                 Track::CompZlib;
-      else
-        track->m_compression = ui->compression->currentText() == Q("lzo") ? Track::CompLzo : Track::CompBz2;
-    }, true);
+  auto data = ui->compression->itemData(newValue);
+  if (!data.isValid())
+    return;
+  newValue = data.toInt();
+
+  Track::Compression compression;
+  if (3 > newValue)
+    compression = 0 == newValue ? Track::CompDefault
+                : 1 == newValue ? Track::CompNone
+                :                 Track::CompZlib;
+  else
+    compression = ui->compression->currentText() == Q("lzo") ? Track::CompLzo : Track::CompBz2;
+
+  withSelectedTracks([&](Track *track) { track->m_compression = compression; }, true);
 }
 
 void
-MainWindow::onTrackTagsChanged(QString newValue) {
+MainWindow::onTrackTagsEdited(QString newValue) {
   withSelectedTracks([&](Track *track) { track->m_tags = newValue; }, true);
 }
 
 void
-MainWindow::onDelayChanged(QString newValue) {
+MainWindow::onDelayEdited(QString newValue) {
   withSelectedTracks([&](Track *track) { track->m_delay = newValue; });
 }
 
 void
-MainWindow::onStretchByChanged(QString newValue) {
+MainWindow::onStretchByEdited(QString newValue) {
   withSelectedTracks([&](Track *track) { track->m_stretchBy = newValue; });
 }
 
 void
-MainWindow::onDefaultDurationChanged(QString newValue) {
+MainWindow::onDefaultDurationEdited(QString newValue) {
   withSelectedTracks([&](Track *track) { track->m_defaultDuration = newValue; }, true);
 }
 
 void
-MainWindow::onTimecodesChanged(QString newValue) {
+MainWindow::onTimecodesEdited(QString newValue) {
   withSelectedTracks([&](Track *track) { track->m_timecodes = newValue; });
+}
+
+void
+MainWindow::onBrowseTimecodes() {
+  auto dir      = ui->timecodes->text().isEmpty() ? Settings::get().m_lastOpenDir.path() : QFileInfo{ ui->timecodes->text() }.path();
+  auto fileName = QFileDialog::getOpenFileName(this, QY("Select timecode file"), dir, QY("Text files (*.txt)") + Q(";;") + QY("All files (*)"));
+  if (fileName.isEmpty())
+    return;
+
+  Settings::get().m_lastOpenDir = QFileInfo{fileName}.path();
+  Settings::get().save();
+
+  ui->timecodes->setText(fileName);
+
+  withSelectedTracks([&](Track *track) { track->m_timecodes = fileName; });
+}
+
+void
+MainWindow::onBrowseTrackTags() {
+  auto dir      = ui->trackTags->text().isEmpty() ? Settings::get().m_lastOpenDir.path() : QFileInfo{ ui->trackTags->text() }.path();
+  auto fileName = QFileDialog::getOpenFileName(this, QY("Select tags file"), dir, QY("XML files (*.xml)") + Q(";;") + Q("All files (*)"));
+  if (fileName.isEmpty())
+    return;
+
+  Settings::get().m_lastOpenDir = QFileInfo{fileName}.path();
+  Settings::get().save();
+
+  ui->trackTags->setText(fileName);
+
+  withSelectedTracks([&](Track *track) { track->m_tags = fileName; }, true);
+}
+
+void
+MainWindow::onSetAspectRatio() {
+  withSelectedTracks([&](Track *track) { track->m_setAspectRatio = true; }, true);
+}
+
+void
+MainWindow::onSetDisplayDimensions() {
+  withSelectedTracks([&](Track *track) { track->m_setAspectRatio = false; }, true);
+}
+
+void
+MainWindow::onAspectRatioEdited(QString newValue) {
+  withSelectedTracks([&](Track *track) { track->m_aspectRatio = newValue; }, true);
+}
+
+void
+MainWindow::onDisplayWidthEdited(QString newValue) {
+  withSelectedTracks([&](Track *track) { track->m_displayWidth = newValue; }, true);
+}
+
+void
+MainWindow::onDisplayHeightEdited(QString newValue) {
+  withSelectedTracks([&](Track *track) { track->m_displayHeight = newValue; }, true);
+}
+
+void
+MainWindow::onStereoscopyChanged(int newValue) {
+  newValue = ui->stereoscopy->itemData(newValue).toInt();
+  withSelectedTracks([&](Track *track) { track->m_stereoscopy = newValue; }, true);
+}
+
+void
+MainWindow::onCroppingEdited(QString newValue) {
+  withSelectedTracks([&](Track *track) { track->m_cropping = newValue; }, true);
+}
+
+void
+MainWindow::onAacIsSBRChanged(int newValue) {
+  withSelectedTracks([&](Track *track) { track->m_aacIsSBR = newValue; }, true);
+}
+
+void
+MainWindow::onSubtitleCharacterSetChanged(int newValue) {
+  auto characterSet = ui->subtitleCharacterSet->itemData(newValue).toString();
+  if (characterSet.isEmpty())
+    return;
+
+  withSelectedTracks([&](Track *track) { track->m_characterSet = characterSet; }, true);
+}
+
+void
+MainWindow::onCuesChanged(int newValue) {
+  auto data = ui->cues->itemData(newValue);
+  if (!data.isValid())
+    return;
+  newValue = data.toInt();
+
+  withSelectedTracks([&](Track *track) { track->m_cues = newValue; }, true);
+}
+
+void
+MainWindow::onUserDefinedTrackOptionsEdited(QString newValue) {
+  withSelectedTracks([&](Track *track) { track->m_userDefinedOptions = newValue; }, true);
 }
 
 void
@@ -323,4 +482,14 @@ MainWindow::resizeTracksColumnsToContents()
   auto columnCount = m_tracksModel->columnCount(QModelIndex{});
   for (auto column = 0; columnCount > column; ++column)
     ui->tracks->resizeColumnToContents(column);
+}
+
+void
+MainWindow::onFilesContextMenu()
+  const {
+}
+
+void
+MainWindow::onTracksContextMenu()
+  const {
 }

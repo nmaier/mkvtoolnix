@@ -17,6 +17,7 @@ TrackModel::TrackModel(QObject *parent)
   , m_genericIcon(":/icons/16x16/application-octet-stream.png")
   , m_yesIcon(":/icons/16x16/dialog-ok-apply.png")
   , m_noIcon(":/icons/16x16/dialog-cancel.png")
+  , m_debug(debugging_requested("track_model"))
 {
 }
 
@@ -209,4 +210,37 @@ TrackModel::trackFromIndex(QModelIndex const &index)
   if (index.isValid())
     return static_cast<Track *>(index.internalPointer());
   return nullptr;
+}
+
+int
+TrackModel::rowForTrack(QList<Track *> const &tracks,
+                        Track *trackToLookFor) {
+  int idx = 0;
+  for (auto track : tracks) {
+    if (track == trackToLookFor)
+      return idx;
+
+    int result = rowForTrack(track->m_appendedTracks, trackToLookFor);
+    if (-1 != result)
+      return result;
+
+    ++idx;
+  }
+
+  return -1;
+}
+
+void
+TrackModel::trackUpdated(Track *track) {
+  if (nullptr == m_tracks) {
+    mxdebug_if(m_debug, boost::format("trackUpdated() called but m_tracks == nullptr!?\n"));
+    return;
+  }
+
+  int row = rowForTrack(*m_tracks, track);
+  mxdebug(boost::format("trackUpdated(): row is %1%\n") % row);
+  if (-1 == row)
+    return;
+
+  emit dataChanged(createIndex(row, 0, track), createIndex(row, NumberOfColumns - 1, track));
 }

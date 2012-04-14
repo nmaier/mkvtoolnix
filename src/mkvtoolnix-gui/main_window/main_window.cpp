@@ -56,7 +56,7 @@ MainWindow::onSaveConfig() {
 
 void
 MainWindow::onSaveConfigAs() {
-  auto fileName = QFileDialog::getSaveFileName(this, Q(""), Settings::get().m_lastConfigDir.path(), QY("MKVToolNix GUI config files (*.mtxcfg);;All files (*)"));
+  auto fileName = QFileDialog::getSaveFileName(this, Q(""), Settings::get().m_lastConfigDir.path(), QY("MKVToolNix GUI config files (*.mtxcfg)") + Q(";;") + QY("All files (*)"));
   if (fileName.isEmpty())
     return;
 

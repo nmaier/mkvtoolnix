@@ -16,12 +16,12 @@ Track::Track(Track::Type type,
   , m_id(-1)
   , m_muxThis(true)
   , m_setAspectRatio(true)
-  , m_aacIsSBR(false)
   , m_defaultTrackFlagWasSet(false)
   , m_defaultTrackFlag(0)
   , m_forcedTrackFlag(0)
   , m_stereoscopy(0)
   , m_cues(0)
+  , m_aacIsSBR(0)
   , m_compression(CompDefault)
   , m_size(0)
 {

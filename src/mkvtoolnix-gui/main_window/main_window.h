@@ -48,20 +48,36 @@ public slots:
 
   virtual void onTrackSelectionChanged();
 
-  virtual void onTrackNameChanged(QString newValue);
+  virtual void onTrackNameEdited(QString newValue);
   virtual void onMuxThisChanged(int newValue);
   virtual void onTrackLanguageChanged(int newValue);
   virtual void onDefaultTrackFlagChanged(int newValue);
   virtual void onForcedTrackFlagChanged(int newValue);
   virtual void onCompressionChanged(int newValue);
-  virtual void onTrackTagsChanged(QString newValue);
-  virtual void onDelayChanged(QString newValue);
-  virtual void onStretchByChanged(QString newValue);
-  virtual void onDefaultDurationChanged(QString newValue);
-  virtual void onTimecodesChanged(QString newValue);
+  virtual void onTrackTagsEdited(QString newValue);
+  virtual void onDelayEdited(QString newValue);
+  virtual void onStretchByEdited(QString newValue);
+  virtual void onDefaultDurationEdited(QString newValue);
+  virtual void onTimecodesEdited(QString newValue);
+  virtual void onBrowseTimecodes();
+  virtual void onBrowseTrackTags();
+  virtual void onSetAspectRatio();
+  virtual void onSetDisplayDimensions();
+  virtual void onAspectRatioEdited(QString newValue);
+  virtual void onDisplayWidthEdited(QString newValue);
+  virtual void onDisplayHeightEdited(QString newValue);
+  virtual void onStereoscopyChanged(int newValue);
+  virtual void onCroppingEdited(QString newValue);
+  virtual void onAacIsSBRChanged(int newValue);
+  virtual void onSubtitleCharacterSetChanged(int newValue);
+  virtual void onCuesChanged(int newValue);
+  virtual void onUserDefinedTrackOptionsEdited(QString newValue);
 
   virtual void resizeFilesColumnsToContents() const;
   virtual void resizeTracksColumnsToContents() const;
+
+  virtual void onFilesContextMenu() const;
+  virtual void onTracksContextMenu() const;
 
 protected:
   virtual QStringList selectFilesToAdd();
@@ -70,6 +86,7 @@ protected:
   virtual void setupControlLists();
   virtual void enableInputControls(QList<QWidget *> const &controls, bool enable);
   virtual void setInputControlValues(Track *track);
+  virtual void clearInputControlValues();
   virtual void withSelectedTracks(std::function<void(Track *)> code, bool notIfAppending = false, QWidget *widget = nullptr);
   virtual void addOrRemoveEmptyComboBoxItem(bool add);
 };

@@ -117,9 +117,9 @@
              <property name="geometry">
               <rect>
                <x>0</x>
-               <y>0</y>
+               <y>-372</y>
                <width>350</width>
-               <height>788</height>
+               <height>789</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_9">
@@ -264,14 +264,14 @@
                     <string>Tags:</string>
                    </property>
                    <property name="buddy">
-                    <cstring>trackTacks</cstring>
+                    <cstring>trackTags</cstring>
                    </property>
                   </widget>
                  </item>
                  <item row="6" column="1">
                   <layout class="QHBoxLayout" name="horizontalLayout_11">
                    <item>
-                    <widget class="QLineEdit" name="trackTacks"/>
+                    <widget class="QLineEdit" name="trackTags"/>
                    </item>
                    <item>
                     <widget class="QPushButton" name="browseTrackTags">
@@ -547,12 +547,37 @@
                 <property name="title">
                  <string>Audio properties</string>
                 </property>
-                <layout class="QHBoxLayout" name="horizontalLayout_15">
+                <layout class="QHBoxLayout" name="horizontalLayout_3">
                  <item>
-                  <widget class="QCheckBox" name="aacIsSBR">
+                  <widget class="QLabel" name="aacIsSBRLabel">
                    <property name="text">
-                    <string>AAC is SBR/HE-AAC/AAC+</string>
+                    <string>AAC is SBR/HE-AAC/AAC+:</string>
                    </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QComboBox" name="aacIsSBR">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <item>
+                    <property name="text">
+                     <string/>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>yes</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>no</string>
+                    </property>
+                   </item>
                   </widget>
                  </item>
                 </layout>
@@ -1425,7 +1450,7 @@
   <tabstop>defaultTrackFlag</tabstop>
   <tabstop>forcedTrackFlag</tabstop>
   <tabstop>compression</tabstop>
-  <tabstop>trackTacks</tabstop>
+  <tabstop>trackTags</tabstop>
   <tabstop>browseTrackTags</tabstop>
   <tabstop>delay</tabstop>
   <tabstop>stretchBy</tabstop>
@@ -1439,7 +1464,6 @@
   <tabstop>displayHeight</tabstop>
   <tabstop>stereoscopy</tabstop>
   <tabstop>cropping</tabstop>
-  <tabstop>aacIsSBR</tabstop>
   <tabstop>subtitleCharacterSet</tabstop>
   <tabstop>cues</tabstop>
   <tabstop>userDefinedTrackOptions</tabstop>
@@ -1631,11 +1655,11 @@
    <sender>trackName</sender>
    <signal>textEdited(QString)</signal>
    <receiver>MainWindow</receiver>
-   <slot>onTrackNameChanged(QString)</slot>
+   <slot>onTrackNameEdited(QString)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>620</x>
-     <y>152</y>
+     <y>-220</y>
     </hint>
     <hint type="destinationlabel">
      <x>613</x>
@@ -1651,7 +1675,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>652</x>
-     <y>125</y>
+     <y>-247</y>
     </hint>
     <hint type="destinationlabel">
      <x>638</x>
@@ -1667,7 +1691,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>665</x>
-     <y>182</y>
+     <y>-190</y>
     </hint>
     <hint type="destinationlabel">
      <x>673</x>
@@ -1683,7 +1707,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>679</x>
-     <y>235</y>
+     <y>-137</y>
     </hint>
     <hint type="destinationlabel">
      <x>818</x>
@@ -1699,7 +1723,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>692</x>
-     <y>202</y>
+     <y>-170</y>
     </hint>
     <hint type="destinationlabel">
      <x>658</x>
@@ -1715,7 +1739,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>710</x>
-     <y>266</y>
+     <y>-106</y>
     </hint>
     <hint type="destinationlabel">
      <x>820</x>
@@ -1724,14 +1748,14 @@
    </hints>
   </connection>
   <connection>
-   <sender>trackTacks</sender>
+   <sender>trackTags</sender>
    <signal>textEdited(QString)</signal>
    <receiver>MainWindow</receiver>
-   <slot>onTrackTagsChanged(QString)</slot>
+   <slot>onTrackTagsEdited(QString)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>645</x>
-     <y>295</y>
+     <y>-77</y>
     </hint>
     <hint type="destinationlabel">
      <x>820</x>
@@ -1743,11 +1767,11 @@
    <sender>delay</sender>
    <signal>textChanged(QString)</signal>
    <receiver>MainWindow</receiver>
-   <slot>onDelayChanged(QString)</slot>
+   <slot>onDelayEdited(QString)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>583</x>
-     <y>364</y>
+     <y>-8</y>
     </hint>
     <hint type="destinationlabel">
      <x>819</x>
@@ -1759,11 +1783,11 @@
    <sender>stretchBy</sender>
    <signal>textChanged(QString)</signal>
    <receiver>MainWindow</receiver>
-   <slot>onStretchByChanged(QString)</slot>
+   <slot>onStretchByEdited(QString)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>593</x>
-     <y>389</y>
+     <y>17</y>
     </hint>
     <hint type="destinationlabel">
      <x>815</x>
@@ -1775,11 +1799,11 @@
    <sender>defaultDuration</sender>
    <signal>editTextChanged(QString)</signal>
    <receiver>MainWindow</receiver>
-   <slot>onDefaultDurationChanged(QString)</slot>
+   <slot>onDefaultDurationEdited(QString)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>611</x>
-     <y>418</y>
+     <y>46</y>
     </hint>
     <hint type="destinationlabel">
      <x>818</x>
@@ -1791,15 +1815,255 @@
    <sender>timecodes</sender>
    <signal>textEdited(QString)</signal>
    <receiver>MainWindow</receiver>
-   <slot>onTimecodesChanged(QString)</slot>
+   <slot>onTimecodesEdited(QString)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>635</x>
-     <y>448</y>
+     <y>76</y>
     </hint>
     <hint type="destinationlabel">
      <x>817</x>
      <y>266</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>browseTrackTags</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onBrowseTrackTags()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>747</x>
+     <y>-77</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>411</x>
+     <y>280</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>browseTimecodes</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onBrowseTimecodes()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>747</x>
+     <y>79</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>411</x>
+     <y>280</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>setAspectRatio</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onSetAspectRatio()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>526</x>
+     <y>143</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>557</x>
+     <y>29</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>setDisplayWidthHeight</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onSetDisplayDimensions()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>547</x>
+     <y>178</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>534</x>
+     <y>24</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>aspectRatio</sender>
+   <signal>editTextChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onAspectRatioEdited(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>600</x>
+     <y>143</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>551</x>
+     <y>25</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>aspectRatio</sender>
+   <signal>currentIndexChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onAspectRatioEdited(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>677</x>
+     <y>150</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>411</x>
+     <y>280</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>defaultDuration</sender>
+   <signal>currentIndexChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onDefaultDurationEdited(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>665</x>
+     <y>48</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>411</x>
+     <y>280</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>displayWidth</sender>
+   <signal>textEdited(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onDisplayWidthEdited(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>630</x>
+     <y>178</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>411</x>
+     <y>280</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>displayHeight</sender>
+   <signal>textEdited(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onDisplayHeightEdited(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>724</x>
+     <y>178</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>411</x>
+     <y>280</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>stereoscopy</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onStereoscopyChanged(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>677</x>
+     <y>206</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>411</x>
+     <y>280</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cropping</sender>
+   <signal>textEdited(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onCroppingEdited(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>677</x>
+     <y>233</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>411</x>
+     <y>280</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>subtitleCharacterSet</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onSubtitleCharacterSetChanged(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>748</x>
+     <y>364</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>819</x>
+     <y>297</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cues</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onCuesChanged(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>746</x>
+     <y>434</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>818</x>
+     <y>330</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>userDefinedTrackOptions</sender>
+   <signal>textEdited(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onUserDefinedTrackOptionsEdited(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>749</x>
+     <y>463</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>819</x>
+     <y>365</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>aacIsSBR</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onAacIsSBRChanged(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>736</x>
+     <y>299</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>815</x>
+     <y>168</y>
     </hint>
    </hints>
   </connection>
@@ -1814,16 +2078,29 @@
   <slot>onAddFiles()</slot>
   <slot>onTracksContextMenu()</slot>
   <slot>onFilesContextMenu()</slot>
-  <slot>onTrackNameChanged(QString)</slot>
+  <slot>onTrackNameEdited(QString)</slot>
   <slot>onMuxThisChanged(int)</slot>
   <slot>onTrackLanguageChanged(int)</slot>
   <slot>onDefaultTrackFlagChanged(int)</slot>
   <slot>onForcedTrackFlagChanged(int)</slot>
   <slot>onCompressionChanged(int)</slot>
-  <slot>onTrackTagsChanged(QString)</slot>
-  <slot>onDelayChanged(QString)</slot>
-  <slot>onStretchByChanged(QString)</slot>
-  <slot>onDefaultDurationChanged(QString)</slot>
-  <slot>onTimecodesChanged(QString)</slot>
+  <slot>onTrackTagsEdited(QString)</slot>
+  <slot>onDelayEdited(QString)</slot>
+  <slot>onStretchByEdited(QString)</slot>
+  <slot>onDefaultDurationEdited(QString)</slot>
+  <slot>onTimecodesEdited(QString)</slot>
+  <slot>onBrowseTimecodes()</slot>
+  <slot>onBrowseTrackTags()</slot>
+  <slot>onSetAspectRatio()</slot>
+  <slot>onSetDisplayDimensions()</slot>
+  <slot>onAspectRatioEdited(QString)</slot>
+  <slot>onDisplayWidthEdited(QString)</slot>
+  <slot>onDisplayHeightEdited(QString)</slot>
+  <slot>onStereoscopyChanged(int)</slot>
+  <slot>onCroppingEdited(QString)</slot>
+  <slot>onAacIsSBRChanged(int)</slot>
+  <slot>onSubtitleCharacterSetChanged(int)</slot>
+  <slot>onCuesChanged(int)</slot>
+  <slot>onUserDefinedTrackOptionsEdited(QString)</slot>
  </slots>
 </ui>
