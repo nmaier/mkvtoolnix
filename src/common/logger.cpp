@@ -14,6 +14,8 @@
 #include "common/fs_sys_helpers.h"
 #include "common/strings/formatting.h"
 
+logger_cptr logger_c::s_default_logger;
+
 logger_c::logger_c(bfs::path const &file_name)
   : m_file_name(file_name)
   , m_log_start(get_current_time_millis())
@@ -35,4 +37,16 @@ logger_c::log(std::string const &message) {
     out.puts(to_string(get_current_time_millis() - m_log_start) + " " + message + "\n");
   } catch (mtx::mm_io::exception &ex) {
   }
+}
+
+logger_c &
+logger_c::get_default_logger() {
+  if (!s_default_logger)
+    s_default_logger = std::make_shared<logger_c>("mkvtoolnix-debug.log");
+  return *s_default_logger;
+}
+
+void
+logger_c::set_default_logger(logger_cptr logger) {
+  s_default_logger = logger;
 }

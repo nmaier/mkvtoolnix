@@ -15,6 +15,9 @@
 
 #include "common/strings/utf8.h"
 
+class logger_c;
+typedef std::shared_ptr<logger_c> logger_cptr;
+
 class logger_c {
 private:
   bfs::path m_file_name;
@@ -27,6 +30,12 @@ public:
   void log(boost::format const &message) {
     log(message.str());
   }
+
+private:
+  static logger_cptr s_default_logger;
+public:
+  static logger_c &get_default_logger();
+  static void set_default_logger(logger_cptr logger);
 };
 
 template<typename T>
@@ -36,5 +45,8 @@ operator <<(logger_c &logger,
   logger.log(to_utf8(message));
   return logger;
 }
+
+#define log_current_location(log_file) logger_c::get_default_logger() << (boost::format("Current file & line: %1%:%2%") % __FILE__ % __LINE__)
+#define log_it(arg)                    logger_c::get_default_logger() << arg
 
 #endif // MTX__COMMON_CLI_PARSER_H
