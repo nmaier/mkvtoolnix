@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: it\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2012-03-17 14:30+0100\n"
+"PO-Revision-Date: 2012-04-14 21:00+0100\n"
 "Last-Translator: Stefano Codari <l.stickell@yahoo.it>\n"
 "Language-Team: Italian <moritz@bunkus.org>\n"
 "Language: it\n"
@@ -374,16 +374,16 @@ msgstr ""
 "                           o dopo un certo tempo (OO:MM:SS).\n"
 
 #: src/merge/mkvmerge.cpp:120
-#, fuzzy
 msgid ""
 "  --split parts:start1-end2[,[+]start2-end2,...]\n"
 "                           Keep ranges of timecodes start-end, either in\n"
 "                           separate files or append to previous range's file\n"
 "                           if prefixed with '+'.\n"
 msgstr ""
-"  --split timecodes:A[,B...]\n"
-"                          Crea un nuovo file dopo ogni timecode A, B\n"
-"                           ecc.\n"
+"  --split parts:inizio1-fine2[,[+]inizio2-fine2,...]\n"
+"                           Mantiene gli intervalli di timecode inizio-fine, entrambi in\n"
+"                           file separati o apposti a file di precedenti intervalli\n"
+"                           se il prefisso è '+'.\n"
 
 #: src/merge/mkvmerge.cpp:117
 msgid ""
@@ -912,7 +912,7 @@ msgstr "&Info su\tF1"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:45
 msgid "&Add"
-msgstr ""
+msgstr "&Aggiungi"
 
 #: src/mmg/mmg_dialog.cpp:294
 #: src/mmg/mmg_dialog.cpp:328
@@ -966,9 +966,8 @@ msgid "&Down"
 msgstr "&Giù"
 
 #: src/mmg/update_checker.cpp:75
-#, fuzzy
 msgid "&Download"
-msgstr "URL download:"
+msgstr "&Download"
 
 #: src/mmg/header_editor/frame.cpp:146
 msgid "&Expand all entries\tCtrl-E"
@@ -1060,9 +1059,8 @@ msgid "&Reload\tCtrl-R"
 msgstr "&Ricarica\tCtrl-R"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:46
-#, fuzzy
 msgid "&Remove"
-msgstr "rimuovi"
+msgstr "&Rimuovi"
 
 #: src/mmg/header_editor/value_page.cpp:140
 msgid "&Reset"
@@ -1087,7 +1085,7 @@ msgstr "&Salva impostazioni\tCtrl-S"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:49
 msgid "&Sort"
-msgstr ""
+msgstr "&Ordina"
 
 #: src/mmg/jobs.cpp:510
 msgid "&Start"
@@ -1648,7 +1646,7 @@ msgstr "...dopo i timecode:"
 
 #: src/mmg/tabs/global.cpp:258
 msgid "...by parts:"
-msgstr ""
+msgstr "...per parti:"
 
 #: src/info/mkvinfo.cpp:774
 msgid "1: all frames"
@@ -1667,9 +1665,8 @@ msgid "4 bytes"
 msgstr "4 byte"
 
 #: src/common/xml/xml.h:73
-#, fuzzy
 msgid "<%1%> is not a valid child element of <%2%> at position %3%."
-msgstr "<%1%> non è un elemento valido figlio di <%2%>."
+msgstr "<%1%> non è un valido elemento figlio di <%2%> alla posizione %3%."
 
 #: src/common/xml/ebml_chapters_converter.cpp:120
 msgid "<ChapterAtom> is missing the <ChapterTimeStart> child."
@@ -1684,18 +1681,16 @@ msgid "<ChapterTrack> is missing the <ChapterTrackNumber> child."
 msgstr "<ChapterTrack> manca il processo dipendente <ChapterTrackNumber>."
 
 #: src/common/xml/ebml_tags_converter.cpp:90
-#, fuzzy
 msgid "<Simple> is missing the <Name> child."
-msgstr "<ChapterAtom> manca il processo dipendente <ChapterTimeStart>."
+msgstr "<Simple> manca del figlio <Name>."
 
 #: src/common/xml/ebml_tags_converter.cpp:97
 msgid "<Simple> must contain either a <String> or a <Binary> child."
-msgstr ""
+msgstr "<Simple> deve contenere un figlio <String> o <Binary>."
 
 #: src/common/xml/ebml_tags_converter.cpp:87
-#, fuzzy
 msgid "<Tag> is missing the <Simple> child."
-msgstr "<ChapterAtom> manca il processo dipendente <ChapterTimeStart>."
+msgstr "<Tag> manca del figlio <Simple>."
 
 #: src/input/r_matroska.cpp:2091
 #, boost-format
@@ -1710,7 +1705,7 @@ msgstr "Trovato un blocco alla posizione data %1% per la traccia numero %2%. Nes
 
 #: src/mmg/tabs/global.cpp:260
 msgid "A comma-separated list of timecode ranges of content to keep."
-msgstr ""
+msgstr "Una lista separata da virgole di intervalli timecode da mantenere."
 
 #: src/common/property_element.cpp:132
 #: src/mmg/header_editor/frame.cpp:430
@@ -1869,9 +1864,8 @@ msgid "Add &command line options"
 msgstr "Aggiungi opzioni linea di &comando"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:147
-#, fuzzy
 msgid "Add additional parts"
-msgstr "Aggiunte"
+msgstr "Aggiungi parti aggiuntive"
 
 #: src/mmg/tabs/chapters.cpp:326
 msgid "Add chapter"
@@ -1907,7 +1901,7 @@ msgstr "Aggiunto il"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:38
 msgid "Additional source file parts"
-msgstr ""
+msgstr "Parti aggiuntive file sorgente"
 
 #: src/info/mkvinfo.cpp:197
 #, boost-format
@@ -2036,9 +2030,8 @@ msgid "An unknown error occured. The file has been modified."
 msgstr "Si è verificato un errore sconosciuto. Il file è stato modificato."
 
 #: src/common/xml/ebml_converter.cpp:164
-#, fuzzy
 msgid "An unsigned integer was expected."
-msgstr "Intero senza segno"
+msgstr "Era atteso un intero senza segno."
 
 #: src/mmg/wx_kax_analyzer.cpp:36
 msgid "Analysis is running"
@@ -2176,9 +2169,9 @@ msgid "BZ2_bzCompressInit() failed. Result: %1%\n"
 msgstr "BZ2_bzCompressInit() fallito. Risultato: %1%\n"
 
 #: src/common/compression/bzlib.cpp:61
-#, fuzzy, boost-format
+#, boost-format
 msgid "BZ2_bzDecompress() failed. Result: %1%\n"
-msgstr "BZ2_bzCompressInit() fallito. Risultato: %1%\n"
+msgstr "BZ2_bzDecompress() fallito. Risultato: %1%\n"
 
 #: src/mmg/header_editor/value_page.cpp:148
 msgid "Binary (displayed as hex numbers)"
@@ -3087,12 +3080,11 @@ msgstr "Dirac"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:74
 msgid "Directory"
-msgstr ""
+msgstr "Cartella"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:54
-#, fuzzy
 msgid "Directory:"
-msgstr "Usa questa cartella:"
+msgstr "Cartella:"
 
 #: src/mmg/options/mmg.cpp:101
 msgid "Disable header removal compression for audio and video tracks by default"
@@ -3227,7 +3219,7 @@ msgstr "Ogni edizione deve contenere almeno un capitolo"
 
 #: src/mmg/tabs/global.cpp:261
 msgid "Each range consists of a start and end timecode with a '-' in the middle, e.g. '00:01:15-00:03:20'."
-msgstr ""
+msgstr "Ogni intervallo consiste in un timecode di inizio e uno di fine con un '-' nel mezzo, es. '00:01:15-00:03:20'."
 
 #: src/info/mkvinfo.cpp:186
 #, boost-format
@@ -3236,7 +3228,7 @@ msgstr "EbmlVoid (dimensione: %1%)"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:52
 msgid "Edit additional source file parts"
-msgstr ""
+msgstr "Modifica parti aggiuntive file sorgente"
 
 #: src/propedit/propedit_cli_parser.cpp:170
 msgid "Edit selectors"
@@ -3572,9 +3564,8 @@ msgid "File modified"
 msgstr "File modificato"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:72
-#, fuzzy
 msgid "File name"
-msgstr "Nome file:  %1%"
+msgstr "Nome file"
 
 #: src/info/mkvinfo.cpp:1312
 #, boost-format
@@ -3975,9 +3966,9 @@ msgid "Invalid %1% specified in '--%2% %3%'.\n"
 msgstr "%1% non valido specificato in '--%2% %3%'.\n"
 
 #: src/common/xml/ebml_converter.cpp:287
-#, fuzzy, boost-format
+#, boost-format
 msgid "Invalid 'format' attribute '%1%'."
-msgstr "Minuto non valido: %1%"
+msgstr "Attributo 'format' non valido '%1%'."
 
 #: src/common/base64.h:30
 msgid "Invalid Base64 character encountered"
@@ -4017,7 +4008,7 @@ msgstr "ID/nome file allegato non valido specificato nell'argomento '%1%'.\n"
 
 #: src/common/xml/xml.h:54
 msgid "Invalid attribute '%1%' in node '%2%' at position %3%"
-msgstr ""
+msgstr "Attributo '%1%' non valido nel nodo '%2%' alla posizione %3%"
 
 #: src/merge/mkvmerge.cpp:987
 #, boost-format
@@ -4066,17 +4057,17 @@ msgstr "Opzione tagli non valida. Nessun ID traccia specificato in '--cues %1%'.
 #: src/common/xml/ebml_converter.cpp:279
 #: src/common/xml/ebml_converter.cpp:283
 msgid "Invalid data for Base64 encoding found."
-msgstr ""
+msgstr "Trovati dati non valido per codifica Base64."
 
 #: src/merge/mkvmerge.cpp:845
-#, fuzzy, boost-format
+#, boost-format
 msgid "Invalid end time for '--split' in '--split %1%' (current part: %2%). Additional error message: %3%.\n"
-msgstr "Tempo non valido per  '--split' in '--split %1%'. Messaggio aggiuntivo errore: %2%.\n"
+msgstr "Tempo finale non valido per '--split' in '--split %1%' (parte attuale: %2%). Messaggio di errore aggiuntivo: %3%.\n"
 
 #: src/merge/mkvmerge.cpp:848
 #, boost-format
 msgid "Invalid end time for '--split' in '--split %1%' (current part: %2%). The end time must be bigger than the start time.\n"
-msgstr ""
+msgstr "Tempo finale non valido per '--split' in '--split %1%' (parte attuale: %2%) Il tempo finale deve essere maggiore del tempo iniziale.\n"
 
 #: src/mmg/mmg_dialog.cpp:599
 msgid "Invalid file name"
@@ -4160,7 +4151,7 @@ msgstr "Linguaggio selezionato non valido"
 
 #: src/common/xml/ebml_converter.cpp:266
 msgid "Invalid length of hexadecimal content: must be divisable by 2."
-msgstr ""
+msgstr "Lunghezza del contenuto esadecimale non valida: deve essere divisibile per 2."
 
 #: src/common/chapters/chapters.cpp:192
 #, boost-format
@@ -4203,19 +4194,19 @@ msgid "Invalid start or stop timecode"
 msgstr "Timecode inizio o fine non valido"
 
 #: src/merge/mkvmerge.cpp:839
-#, fuzzy, boost-format
+#, boost-format
 msgid "Invalid start time for '--split' in '--split %1%' (current part: %2%). Additional error message: %3%.\n"
-msgstr "Tempo non valido per  '--split' in '--split %1%'. Messaggio aggiuntivo errore: %2%.\n"
+msgstr "Tempo iniziale non valido per '--split' in '--split %1%' (parte attuale: %2%). Messaggio di errore aggiuntivo: %3%.\n"
 
 #: src/merge/mkvmerge.cpp:851
-#, fuzzy, boost-format
+#, boost-format
 msgid "Invalid start time for '--split' in '--split %1%' (current part: %2%). The start time must be bigger than or equal to the previous part's end time.\n"
-msgstr "Tempo non valido per  '--split' in '--split %1%'. Messaggio aggiuntivo errore: %2%.\n"
+msgstr "Tempo iniziale non valido per '--split' in '--split %1%' (parte attuale: %2%) Il tempo iniziale deve essere maggiore o uguale al tempo finale della parte precedente.\n"
 
 #: src/merge/mkvmerge.cpp:826
-#, fuzzy, boost-format
+#, boost-format
 msgid "Invalid start/end specification for '--split' in '--split %1%' (curent part: %2%).\n"
-msgstr "Formato non valido per '--split' in '--split %1%'.\n"
+msgstr "Specifica inizio/fine non valida per '--split' in '--split %1%' (parte attuale: %2%).\n"
 
 #: src/merge/mkvmerge.cpp:1162
 #, boost-format
@@ -4585,14 +4576,14 @@ msgstr "CacheMax: %1%"
 #: src/common/xml/ebml_converter.cpp:225
 #, boost-format
 msgid "Maximum allowed length: %1%, actual length: %2%"
-msgstr ""
+msgstr "Lunghezza massima permessa: %1%, lunghezza attuale: %2%"
 
 #: src/common/xml/ebml_converter.cpp:169
 #: src/common/xml/ebml_converter.cpp:183
 #: src/common/xml/ebml_converter.cpp:214
 #, boost-format
 msgid "Maximum allowed value: %1%, actual value: %2%"
-msgstr ""
+msgstr "Valore massimo permesso: %1%, valore attuale: %2%"
 
 #: src/common/property_element.cpp:124
 #: src/mmg/header_editor/frame.cpp:406
@@ -4621,14 +4612,14 @@ msgstr "CacheMin: %1%"
 #: src/common/xml/ebml_converter.cpp:223
 #, boost-format
 msgid "Minimum allowed length: %1%, actual length: %2%"
-msgstr ""
+msgstr "Lunghezza minima permessa: %1%, lunghezza attuale: %2%"
 
 #: src/common/xml/ebml_converter.cpp:167
 #: src/common/xml/ebml_converter.cpp:181
 #: src/common/xml/ebml_converter.cpp:212
 #, boost-format
 msgid "Minimum allowed value: %1%, actual value: %2%"
-msgstr ""
+msgstr "Valore minimo permesso: %1%, valore attuale: %2%"
 
 #: src/common/property_element.cpp:122
 #: src/mmg/header_editor/frame.cpp:401
@@ -4674,9 +4665,9 @@ msgid "Missing output file name in argument '%1%'.\n"
 msgstr "Nome file destinazione mancante nell'argomento  '%1%'.\n"
 
 #: src/merge/mkvmerge.cpp:820
-#, fuzzy, boost-format
+#, boost-format
 msgid "Missing start/end specifications for '--split' in '--split %1%'.\n"
-msgstr "Formato non valido per '--split' in '--split %1%'.\n"
+msgstr "Specifica inizio/fine mancante per '--split' in '--split %1%'.\n"
 
 #: src/propedit/options.cpp:142
 #, boost-format
@@ -4910,7 +4901,7 @@ msgstr "Nessun numero versione rilevato.\n"
 
 #: src/common/xml/ebml_converter.cpp:263
 msgid "Non-hex digits encountered."
-msgstr ""
+msgstr "Incontrate cifre non-hex."
 
 #: src/mmg/header_editor/frame.cpp:526
 msgid "None of the header fields has been modified. Nothing has been saved."
@@ -4981,9 +4972,8 @@ msgid "Only one input file is allowed.\n"
 msgstr "E' permesso solo un file sorgente.\n"
 
 #: src/common/xml/xml.h:92
-#, fuzzy
 msgid "Only one instance of <%1%> is allowed beneath <%2%> at position %3%."
-msgstr "E' permessa una sola istanza di <%1%> sotto <%2%>."
+msgstr "E' permessa una sola istanza di <%1%> sotto <%2%> alla posizione %3%."
 
 #: src/common/xml/ebml_tags_converter.cpp:95
 msgid "Only one of <String> and <Binary> may be used beneath <Simple> but not both at the same time."
@@ -5223,9 +5213,8 @@ msgid "Previous segment's unique ID"
 msgstr "ID unico segmento precedente"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:53
-#, fuzzy
 msgid "Primary file name:"
-msgstr "Nome file precedente"
+msgstr "Nome file primario:"
 
 #: src/mmg/options/mkvmerge.cpp:54
 msgid "Process priority:"
@@ -5506,7 +5495,7 @@ msgstr "Rimuovi elemento"
 
 #: src/mmg/options/mmg.cpp:90
 msgid "Remove job from job queue after run:"
-msgstr ""
+msgstr "Rimuovi lavoro dalla coda lavori dopo l'esecuzione:"
 
 #: src/mmg/tabs/chapters.cpp:346
 msgid "Remove name"
@@ -6334,52 +6323,51 @@ msgstr ""
 #: src/common/xml/ebml_chapters_converter.cpp:218
 #, boost-format
 msgid "The XML chapter file '%1%' contains an error at position %3%: %2%\n"
-msgstr ""
+msgstr "Il file capitolo XML '%1%' contiene un errore alla posizione %3%: %2%\n"
 
 #: src/common/xml/ebml_chapters_converter.cpp:221
-#, fuzzy, boost-format
+#, boost-format
 msgid "The XML chapter file '%1%' contains an error: %2%\n"
-msgstr "File '%1%': contenitore: %2%"
+msgstr "Il file capitolo XML '%1%' contiene un errore: %2%\n"
 
 #: src/common/xml/ebml_chapters_converter.cpp:215
-#, fuzzy, boost-format
+#, boost-format
 msgid "The XML chapter file '%1%' could not be read.\n"
-msgstr "L'allegato '%1%' non è leggibile.\n"
+msgstr "Il file capitolo XML '%1%' non può essere letto.\n"
 
 #: src/common/xml/ebml_converter.cpp:345
-#, fuzzy
 msgid "The XML root element is not a master element."
-msgstr "L'elemento radice deve essere <%1%>."
+msgstr "L'elemento radice XML non è un elemento principale."
 
 #: src/common/xml/ebml_segmentinfo_converter.cpp:90
 #, boost-format
 msgid "The XML segmentinfo file '%1%' contains an error at position %3%: %2%\n"
-msgstr ""
+msgstr "Il file segmentinfo XML '%1%' contiene un errore alla posizione %3%: %2%\n"
 
 #: src/common/xml/ebml_segmentinfo_converter.cpp:93
-#, fuzzy, boost-format
+#, boost-format
 msgid "The XML segmentinfo file '%1%' contains an error: %2%\n"
-msgstr "File '%1%': contenitore: %2%"
+msgstr "Il file segmentinfo XML '%1%' contiene un errore: %2%\n"
 
 #: src/common/xml/ebml_segmentinfo_converter.cpp:87
-#, fuzzy, boost-format
+#, boost-format
 msgid "The XML segmentinfo file '%1%' could not be read.\n"
-msgstr "L'allegato '%1%' non è leggibile.\n"
+msgstr "Il file segmentinfo XML '%1%' non può essere letto.\n"
 
 #: src/common/xml/ebml_tags_converter.cpp:119
 #, boost-format
 msgid "The XML tag file '%1%' contains an error at position %3%: %2%\n"
-msgstr ""
+msgstr "Il file tag XML '%1%' contiene un errore alla posizione %3%: %2%\n"
 
 #: src/common/xml/ebml_tags_converter.cpp:122
-#, fuzzy, boost-format
+#, boost-format
 msgid "The XML tag file '%1%' contains an error: %2%\n"
-msgstr "File '%1%': contenitore: %2%"
+msgstr "Il file tag XML '%1%' contiene un errore: %2%\n"
 
 #: src/common/xml/ebml_tags_converter.cpp:116
-#, fuzzy, boost-format
+#, boost-format
 msgid "The XML tag file '%1%' could not be read.\n"
-msgstr "L'allegato '%1%' non è leggibile.\n"
+msgstr "Il file tag XML '%1%' non può essere letto.\n"
 
 #: src/merge/mkvmerge.cpp:1611
 #, boost-format
@@ -6413,7 +6401,7 @@ msgstr ""
 #: src/merge/mkvmerge.cpp:1498
 #, boost-format
 msgid "The attachment '%1%' could not be read.\n"
-msgstr "L'allegato '%1%' non è leggibile.\n"
+msgstr "L'allegato '%1%' non può essere letto.\n"
 
 #: src/propedit/propedit.cpp:109
 msgid "The changes are written to the file.\n"
@@ -6476,9 +6464,8 @@ msgid "The country '%s' is not a valid ccTLD and cannot be selected."
 msgstr "La nazione '%s' non è un valido ccTLD e non può essere selezionata."
 
 #: src/merge/output_control.cpp:1508
-#, fuzzy
 msgid "The cue entries (the index) are being written...\n"
-msgstr "Scrittura dati cue (l'indice) in corso..."
+msgstr "Scrittura dati cue (l'indice) in corso...\n"
 
 #: src/mmg/tabs/input.cpp:701
 #, c-format, boost-format
@@ -7131,7 +7118,7 @@ msgstr ""
 
 #: src/mmg/tabs/global.cpp:263
 msgid "The timecodes can be given either in the form HH:MM:SS.nnnnnnnnn or as the number of seconds followed by 's'."
-msgstr ""
+msgstr "I timecode possono essere inseriti sia nel formato HH:MM:SS.nnnnnnnnn o dal numero di secondi seguito da 's'."
 
 #: src/input/r_ogm.cpp:591
 msgid "The timecodes for this stream have been reset in the middle of the file. This is not supported. The current packet will be discarded.\n"
@@ -7594,7 +7581,7 @@ msgstr "Tipo: %1% (%2%)"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:59
 msgid "Typical use cases include reading VOBs from a DVD (e.g. VTS_01_1.VOB, VTS_01_2.VOB, VTS_01_3.VOB) or MPEG transport streams from BluRay discs."
-msgstr ""
+msgstr "I tipici casi d'uso includono leggere VOB da un DVD (es. VTS_01_1.VOB, VTS_01_2.VOB, VTS_01_3.VOB) o MPEG transport stream da dischi BluRay."
 
 #: src/mmg/tabs/chapters.cpp:336
 msgid "UID:"
@@ -8067,13 +8054,12 @@ msgid "add"
 msgstr "aggiungi"
 
 #: src/mmg/tabs/input.cpp:186
-#, fuzzy
 msgid "additional parts"
-msgstr "Aggiunte"
+msgstr "parti aggiuntive"
 
 #: src/mmg/options/mmg.cpp:88
 msgid "always"
-msgstr ""
+msgstr "sempre"
 
 #: src/common/stereo_mode.cpp:58
 msgid "anaglyph (cyan/red)"
@@ -8163,7 +8149,7 @@ msgstr "predefinito"
 #: src/info/mkvinfo.cpp:1049
 #, boost-format
 msgid "default duration: %|1$.3f|ms (%|2$.3f| frames/fields per second for a video track)"
-msgstr "Durata predefinita: %|1$.3f|ms (%|2$.3f| frame/campi per secondo per una traccia video)"
+msgstr "durata predefinita: %|1$.3f|ms (%|2$.3f| frame/campi per secondo per una traccia video)"
 
 #: src/common/compression/zlib.cpp:73
 #, boost-format
@@ -8214,9 +8200,8 @@ msgid "encryption"
 msgstr "crittografia"
 
 #: src/mmg/options/mmg.cpp:87
-#, fuzzy
 msgid "even if there were warnings"
-msgstr "Ci sono stati avvisi"
+msgstr "anche se ci sono stati avvisi"
 
 #: src/mmg/jobs.cpp:350
 #: src/mmg/jobs.cpp:541
@@ -8797,7 +8782,7 @@ msgstr "solo per I frames"
 
 #: src/mmg/options/mmg.cpp:86
 msgid "only if the run was successfull"
-msgstr ""
+msgstr "solo se l'esecuzione ha avuto successo"
 
 #: src/info/mkvinfo.cpp:618
 #, boost-format
