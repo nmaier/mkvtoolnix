@@ -113,7 +113,7 @@ Track::setDefaults() {
   QRegExp re_displayDimensions{"^(\\d+)x(\\d+)$"};
   if (-1 != re_displayDimensions.indexIn(m_properties[Q("display_dimensions")])) {
     m_displayWidth  = re_displayDimensions.cap(1);
-    m_displayHeight = re_displayDimensions.cap(1);
+    m_displayHeight = re_displayDimensions.cap(2);
   }
 }
 
