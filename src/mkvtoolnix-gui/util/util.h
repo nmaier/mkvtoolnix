@@ -3,13 +3,15 @@
 
 #include "common/common_pch.h"
 
-class QIcon;
-class QString;
-template<typename T> class QList;
+#include <QComboBox>
+#include <QIcon>
+#include <QList>
+#include <QString>
 
 class Util {
 public:
   static QIcon loadIcon(QString const &name, QList<int> const &sizes);
+  static bool setComboBoxIndexIf(QComboBox *comboBox, std::function<bool(QString const &, QVariant const &)> test);
 };
 
 #endif  // MTX_MMGQT_UTIL_H

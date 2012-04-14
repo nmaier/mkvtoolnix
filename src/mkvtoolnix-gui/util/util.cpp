@@ -16,3 +16,16 @@ Util::loadIcon(QString const &name,
 
   return icon;
 }
+
+bool
+Util::setComboBoxIndexIf(QComboBox *comboBox,
+                         std::function<bool(QString const &, QVariant const &)> test) {
+  auto count = comboBox->count();
+  for (int idx = 0; count > idx; ++idx)
+    if (test(comboBox->itemText(idx), comboBox->itemData(idx))) {
+      comboBox->setCurrentIndex(idx);
+      return true;
+    }
+
+  return false;
+}
