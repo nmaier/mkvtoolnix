@@ -92,6 +92,8 @@ public:
 };
 
 class mux_thread: public wxThread {
+  friend class mux_dialog;
+
 public:
   static wxEventType const event;
   enum event_type_e {
@@ -102,10 +104,15 @@ public:
 private:
   mux_dialog *m_dialog;
   wxProcess *m_process;
+  wxInputStream *m_out;
+  wxCriticalSection m_cs_process;
+  std::deque<char> m_available_input;
 
 public:
   mux_thread(mux_dialog *dialog, wxProcess *process);
   virtual void *Entry();
+
+  bool read_input(char &c, bool &eof);
 };
 
 #endif // __MUX_DIALOG_H

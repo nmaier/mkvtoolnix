@@ -333,6 +333,12 @@ mux_dialog::on_process_terminated(wxCommandEvent &evt) {
   b_abort->Enable(false);
 #endif  // SYS_WINDOWS
 
+  wxCriticalSectionLocker thread_locker{m_cs_thread};
+  if (nullptr != m_thread) {
+    wxCriticalSectionLocker process_locker{m_thread->m_cs_process};
+    m_thread->m_out = nullptr;
+  }
+
   delete m_process;
   m_process = nullptr;
 }
@@ -345,29 +351,36 @@ mux_thread::mux_thread(mux_dialog *dialog,
                        wxProcess *process)
   : m_dialog{dialog}
   , m_process{process}
+  , m_out{nullptr}
 {
 }
 
 void *
 mux_thread::Entry() {
   at_scope_exit_c unlink_thread{[&]() {
+      if (nullptr == m_dialog)
+        return;
+
       wxCriticalSectionLocker locker{m_dialog->m_cs_thread};
       m_dialog->m_thread = nullptr;
     }};
 
-  auto out = m_process->GetInputStream();
+  m_out = m_process->GetInputStream();
 
   std::string line;
 
   while (1) {
-    if (!out->CanRead() && !out->Eof()) {
-      wxMilliSleep(5);
-      continue;
+    char c         = 0;
+    bool eof       = false;
+    bool char_read = false;
+
+    while (!char_read && !eof) {
+      if (TestDestroy())
+        return nullptr;
+      char_read = read_input(c, eof);
     }
 
-    char c = !out->Eof() ? out->GetC() : '\n';
-
-    if ((c == '\n') || (c == '\r') || out->Eof()) {
+    if ((c == '\n') || (c == '\r') || eof) {
       if (nullptr != m_dialog) {
         // send line to dialog
         wxCommandEvent evt(mux_thread::event, mux_thread::output_available);
@@ -377,14 +390,44 @@ mux_thread::Entry() {
 
       line.clear();
 
-    } else if ((unsigned char)c != 0xff)
+    } else if (char_read && (static_cast<unsigned char>(c) != 0xff))
       line += c;
 
-    if (out->Eof())
+    if (eof)
       break;
   }
 
   return nullptr;
+}
+
+bool
+mux_thread::read_input(char &c,
+                       bool &eof) {
+  eof = false;
+
+  if (!m_available_input.empty()) {
+    c = m_available_input.front();
+    m_available_input.pop_front();
+    return true;
+  }
+
+  wxCriticalSectionLocker locker{m_cs_process};
+
+  if ((nullptr == m_out) || (m_out->Eof())) {
+    eof = true;
+    return false;
+  }
+
+  while (m_out->CanRead())
+    m_available_input.push_back(m_out->GetC());
+
+  if (m_available_input.empty())
+    return false;
+
+  c = m_available_input.front();
+  m_available_input.pop_front();
+
+  return true;
 }
 
 mux_process::mux_process(mux_dialog *dialog)
