@@ -104,7 +104,8 @@ Track::setDefaults() {
   m_defaultTrackFlagWasSet = m_properties[Q("default_track")] == "1";
   m_name                   = m_properties[Q("track_name")];
   m_cropping               = m_properties[Q("cropping")];
-  // m_stereoscopy            = mapToStereoMode(m_properties[Q("stereo_mode")];
+  if (!m_properties[Q("stereo_mode")].isEmpty())
+    m_stereoscopy = m_properties[Q("stereo_mode")].toUInt() + 1;
 
   auto idx = map_to_iso639_2_code(to_utf8(m_properties[Q("language")]), true);
   if (0 <= idx)
