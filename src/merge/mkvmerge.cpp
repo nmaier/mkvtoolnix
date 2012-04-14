@@ -117,7 +117,7 @@ set_usage() {
   usage_text += Y("  --split timecodes:A[,B...]\n"
                   "                           Create a new file after each timecode A, B\n"
                   "                           etc.\n");
-  usage_text += Y("  --split parts:start1-end2[,[+]start2-end2,...]\n"
+  usage_text += Y("  --split parts:start1-end1[,[+]start2-end2,...]\n"
                   "                           Keep ranges of timecodes start-end, either in\n"
                   "                           separate files or append to previous range's file\n"
                   "                           if prefixed with '+'.\n");
