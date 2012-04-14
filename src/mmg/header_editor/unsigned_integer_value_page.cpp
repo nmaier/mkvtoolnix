@@ -76,7 +76,7 @@ he_unsigned_integer_value_page_c::validate_value() {
 
 void
 he_unsigned_integer_value_page_c::copy_value_to_element() {
-  uint64_t value;
+  uint64_t value = 0;
   parse_number(wxMB(m_tc_text->GetValue()), value);
   *static_cast<EbmlUInteger *>(m_element) = value;
 }
