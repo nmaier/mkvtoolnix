@@ -43,7 +43,7 @@ MainWindow::setupControlLists() {
                      << ui->stereoscopy << ui->croppingLabel << ui->cropping << ui->audioPropertiesBox << ui->aacIsSBR << ui->subtitleAndChapterPropertiesBox << ui->characterSetLabel << ui->subtitleCharacterSet
                      << ui->miscellaneousBox << ui->cuesLabel << ui->cues << ui->userDefinedTrackOptionsLabel << ui->userDefinedTrackOptions;
 
-  m_comboBoxControls << ui->muxThis << ui->trackLanguage << ui->defaultTrackFlag << ui->forcedTrackFlag << ui->compression << ui->cues;
+  m_comboBoxControls << ui->muxThis << ui->trackLanguage << ui->defaultTrackFlag << ui->forcedTrackFlag << ui->compression << ui->cues << ui->stereoscopy << ui->aacIsSBR << ui->subtitleCharacterSet;
 }
 
 void
@@ -60,23 +60,23 @@ MainWindow::setupComboBoxContent() {
 
   // Character set
   QStringList characterSets;
-  for (auto &sub_charset : sub_charsets)
-    characterSets << to_qs(sub_charset);
+  for (auto &subCharset : sub_charsets)
+    characterSets << to_qs(subCharset);
   characterSets.sort();
 
-  ui->subtitleCharacterSet->addItem(Q(""));
-  ui->subtitleCharacterSet->addItems(characterSets);
+  ui->subtitleCharacterSet->addItem(Q(""), Q(""));
+  for (auto &characterSet : characterSets)
+    ui->subtitleCharacterSet->addItem(characterSet, characterSet);
 
   // Stereoscopy
-  ui->stereoscopy->addItem(Q(""), -1);
-  int idx = 0;
-  for (auto &mode : stereo_mode_c::s_modes)
-    ui->stereoscopy->addItem(QString{"%1 (%2; %3)"}.arg(to_qs(stereo_mode_c::translate(idx))).arg(idx).arg(to_qs(mode)), idx);
+  ui->stereoscopy->addItem(Q(""), 0);
+  for (auto idx = 0u, end = stereo_mode_c::max_index(); idx <= end; ++idx)
+    ui->stereoscopy->addItem(QString{"%1 (%2; %3)"}.arg(to_qs(stereo_mode_c::translate(idx))).arg(idx).arg(to_qs(stereo_mode_c::s_modes[idx])), idx + 1);
 
   // Set item data to index for distinguishing between empty values
   // added by "multiple selection mode".
   for (auto control : std::vector<QComboBox *>{ui->defaultTrackFlag, ui->forcedTrackFlag, ui->cues, ui->compression, ui->muxThis, ui->aacIsSBR})
-    for (idx = 0; control->count() > idx; ++idx)
+    for (auto idx = 0; control->count() > idx; ++idx)
       control->setItemData(idx, idx);
 }
 
@@ -128,21 +128,17 @@ MainWindow::enableInputControls(QList<QWidget *> const &controls,
 
 void
 MainWindow::addOrRemoveEmptyComboBoxItem(bool add) {
-  for (auto &comboBox : m_comboBoxControls) {
-    if (add && (comboBox->itemText(0) != Q("")))
-      comboBox->insertItem(0, Q(""));
-    else if (!add && (comboBox->itemText(0) == Q("")))
+  for (auto &comboBox : m_comboBoxControls)
+    if (add && comboBox->itemData(0).isValid())
+      comboBox->insertItem(0, QY("<do not change>"));
+    else if (!add && !comboBox->itemData(0).isValid())
       comboBox->removeItem(0);
-  }
 }
 
 void
 MainWindow::clearInputControlValues() {
   for (auto comboBox : m_comboBoxControls)
     comboBox->setCurrentIndex(0);
-  ui->stereoscopy->setCurrentIndex(0);
-  ui->subtitleCharacterSet->setCurrentIndex(0);
-  ui->aacIsSBR->setCurrentIndex(0);
 
   for (auto control : std::vector<QLineEdit *>{ui->trackName, ui->trackTags, ui->delay, ui->stretchBy, ui->timecodes, ui->displayWidth, ui->displayHeight, ui->cropping, ui->userDefinedTrackOptions})
     control->setText(Q(""));
@@ -169,15 +165,15 @@ MainWindow::setInputControlValues(Track *track) {
   // TODO
   ui->trackName->setText(track->m_name);
 
-  Util::setComboBoxIndexIf(ui->muxThis,              [&](QString const &,     QVariant const &data) { return data.isValid() && (data.toInt()    == (track->m_muxThis ? 0 : 1)); });
-  Util::setComboBoxIndexIf(ui->trackLanguage,        [&](QString const &,     QVariant const &data) { return data.isValid() && (data.toString() == track->m_language);          });
-  Util::setComboBoxIndexIf(ui->defaultTrackFlag,     [&](QString const &,     QVariant const &data) { return data.isValid() && (data.toUInt()   == track->m_defaultTrackFlag);  });
-  Util::setComboBoxIndexIf(ui->forcedTrackFlag,      [&](QString const &,     QVariant const &data) { return data.isValid() && (data.toUInt()   == track->m_forcedTrackFlag);   });
-  Util::setComboBoxIndexIf(ui->compression,          [&](QString const &,     QVariant const &data) { return data.isValid() && (data.toUInt()   == track->m_compression);       });
-  Util::setComboBoxIndexIf(ui->cues,                 [&](QString const &,     QVariant const &data) { return data.isValid() && (data.toUInt()   == track->m_cues);              });
-  Util::setComboBoxIndexIf(ui->stereoscopy,          [&](QString const &,     QVariant const &data) { return data.isValid() && (data.toUInt()   == track->m_stereoscopy);       });
-  Util::setComboBoxIndexIf(ui->aacIsSBR,             [&](QString const &,     QVariant const &data) { return data.isValid() && (data.toUInt()   == track->m_aacIsSBR);          });
-  Util::setComboBoxIndexIf(ui->subtitleCharacterSet, [&](QString const &text, QVariant const &)     { return                   (text            == track->m_characterSet);      });
+  Util::setComboBoxIndexIf(ui->muxThis,              [&](QString const &, QVariant const &data) { return data.isValid() && (data.toInt()    == (track->m_muxThis ? 0 : 1)); });
+  Util::setComboBoxIndexIf(ui->trackLanguage,        [&](QString const &, QVariant const &data) { return data.isValid() && (data.toString() == track->m_language);          });
+  Util::setComboBoxIndexIf(ui->defaultTrackFlag,     [&](QString const &, QVariant const &data) { return data.isValid() && (data.toUInt()   == track->m_defaultTrackFlag);  });
+  Util::setComboBoxIndexIf(ui->forcedTrackFlag,      [&](QString const &, QVariant const &data) { return data.isValid() && (data.toUInt()   == track->m_forcedTrackFlag);   });
+  Util::setComboBoxIndexIf(ui->compression,          [&](QString const &, QVariant const &data) { return data.isValid() && (data.toUInt()   == track->m_compression);       });
+  Util::setComboBoxIndexIf(ui->cues,                 [&](QString const &, QVariant const &data) { return data.isValid() && (data.toUInt()   == track->m_cues);              });
+  Util::setComboBoxIndexIf(ui->stereoscopy,          [&](QString const &, QVariant const &data) { return data.isValid() && (data.toUInt()   == track->m_stereoscopy);       });
+  Util::setComboBoxIndexIf(ui->aacIsSBR,             [&](QString const &, QVariant const &data) { return data.isValid() && (data.toUInt()   == track->m_aacIsSBR);          });
+  Util::setComboBoxIndexIf(ui->subtitleCharacterSet, [&](QString const &, QVariant const &data) { return data.isValid() && (data.toString() == track->m_characterSet);      });
 
   ui->trackName->setText(                track->m_name);
   ui->trackTags->setText(                track->m_tags);
@@ -381,7 +377,11 @@ MainWindow::onDisplayHeightEdited(QString newValue) {
 
 void
 MainWindow::onStereoscopyChanged(int newValue) {
-  newValue = ui->stereoscopy->itemData(newValue).toInt();
+  auto data = ui->stereoscopy->itemData(newValue);
+  if (!data.isValid())
+    return;
+  newValue = data.toInt();
+
   withSelectedTracks([&](Track *track) { track->m_stereoscopy = newValue; }, true);
 }
 
@@ -392,6 +392,11 @@ MainWindow::onCroppingEdited(QString newValue) {
 
 void
 MainWindow::onAacIsSBRChanged(int newValue) {
+  auto data = ui->aacIsSBR->itemData(newValue);
+  if (!data.isValid())
+    return;
+  newValue = data.toInt();
+
   withSelectedTracks([&](Track *track) { track->m_aacIsSBR = newValue; }, true);
 }
 
