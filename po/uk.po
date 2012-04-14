@@ -378,7 +378,7 @@ msgstr ""
 #: src/merge/mkvmerge.cpp:120
 #, fuzzy
 msgid ""
-"  --split parts:start1-end2[,[+]start2-end2,...]\n"
+"  --split parts:start1-end1[,[+]start2-end2,...]\n"
 "                           Keep ranges of timecodes start-end, either in\n"
 "                           separate files or append to previous range's file\n"
 "                           if prefixed with '+'.\n"
@@ -1701,13 +1701,13 @@ msgstr ""
 msgid "<Tag> is missing the <Simple> child."
 msgstr "<ChapterAtom> пропускає складову <ChapterTimeStart>."
 
-#: src/input/r_matroska.cpp:2091
+#: src/input/r_matroska.cpp:2095
 #, boost-format
 msgid "A block group was found at position %1%, but no block element was found inside it. This might make mkvmerge crash.\n"
 msgstr "Група блоків знайдена на позиції %1%, але жодного елементу-блоку не було знайдено усередині. Це може призвести mkvmerge до аварійної ситуації .\n"
 
-#: src/input/r_matroska.cpp:1993
-#: src/input/r_matroska.cpp:2101
+#: src/input/r_matroska.cpp:1997
+#: src/input/r_matroska.cpp:2105
 #, boost-format
 msgid "A block was found at timestamp %1% for track number %2%. However, no headers where found for that track number. The block will be skipped.\n"
 msgstr "Блок був знайдений на позиції %1% для доріжки номер %2%. Тим не менше, заголовки не знайдені для цього номеру доріжки. Блок буде пропущено.\n"
@@ -1834,7 +1834,7 @@ msgstr "AVI"
 msgid "AVI (Audio/Video Interleaved)"
 msgstr "AVI (Audio/Video Interleaved)"
 
-#: src/mmg/mux_dialog.cpp:78
+#: src/mmg/mux_dialog.cpp:80
 msgid "Abort"
 msgstr "Перервати"
 
@@ -2061,7 +2061,7 @@ msgstr "Інша типова доріжка для %1% доріжок вже б
 msgid "Another muxing job in still in progress. Please wait until it has finished or abort it manually before starting a new one."
 msgstr "Інше завдання щодо мультиплексування ще триває. Будь ласка, почекайте, поки воно завершиться, або перервіть його вручну, перш ніж починати нове."
 
-#: src/mmg/tabs/input.cpp:1245
+#: src/mmg/tabs/input.cpp:1301
 #, c-format, boost-format
 msgid "Appending a track from a file to another track from the same file is not allowed. This is the case for tracks number %u and %u."
 msgstr "Додавання доріжки з файлу до іншої доріжки цього ж файлу не допускається. Це стосується доріжок номер %u і %u."
@@ -2521,7 +2521,7 @@ msgstr "Оберіть вхідний файл, щоб приєднати йог
 #: src/mmg/mmg_dialog.cpp:444
 #: src/mmg/mmg_dialog.cpp:754
 #: src/mmg/mmg_dialog.cpp:775
-#: src/mmg/mux_dialog.cpp:190
+#: src/mmg/mux_dialog.cpp:207
 #: src/mmg/tabs/chapters.cpp:624
 #: src/mmg/tabs/chapters.cpp:661
 msgid "Choose an output file"
@@ -2667,7 +2667,7 @@ msgstr "Параметри командного рядка:"
 msgid "Command line saved."
 msgstr "Командний рядок збережено."
 
-#: src/mmg/tabs/input.cpp:366
+#: src/mmg/tabs/input.cpp:566
 msgid "Command line used:"
 msgstr "Командний рядок, що використовується:"
 
@@ -2722,8 +2722,8 @@ msgid "Copy the command line to the clipboard"
 msgstr "Копіювати командний рядок до буферу обміну"
 
 #: src/mmg/jobs.cpp:177
-#: src/mmg/mux_dialog.cpp:115
-#: src/mmg/tabs/input.cpp:308
+#: src/mmg/mux_dialog.cpp:117
+#: src/mmg/tabs/input.cpp:506
 #, c-format, boost-format
 msgid "Could not create a temporary file for mkvmerge's command line option called '%s' (error code %d, %s)."
 msgstr "Не вдалося створити тимчасовий файл для опції  '%s' командного рядка mkvmerge (код помилки %d, %s)."
@@ -2765,7 +2765,7 @@ msgid "Could not find the next Ogg page. This indicates a damaged Ogg/Ogm file. 
 msgstr "Не вдалося знайти наступну сторінку Ogg. Це вказує на пошкоджений OGG/OGM файл. Спроба продовжити.\n"
 
 #: src/input/r_avi.cpp:621
-#: src/input/r_matroska.cpp:1574
+#: src/input/r_matroska.cpp:1578
 msgid "Could not find valid DTS headers in this track's first frames.\n"
 msgstr "Не вдалося знайти коректний заголовок DTS серед перших кадрів доріжки.\n"
 
@@ -3367,7 +3367,7 @@ msgid "Error writing Matroska file"
 msgstr "Помилка запису файла Matroska"
 
 #: src/common/output.cpp:70
-#: src/mmg/mux_dialog.cpp:260
+#: src/mmg/mux_dialog.cpp:279
 msgid "Error:"
 msgstr "Помилка:"
 
@@ -3397,11 +3397,11 @@ msgstr ""
 msgid "Error: vorbis_packetizer: Could not extract the stream's parameters from the first packets.\n"
 msgstr "Помилка: vorbis_packetizer: Неможливо витягнути параметри потоку з перших пакетів.\n"
 
-#: src/mmg/mux_dialog.cpp:68
+#: src/mmg/mux_dialog.cpp:70
 msgid "Errors:"
 msgstr "Помилки:"
 
-#: src/mmg/mux_dialog.cpp:295
+#: src/mmg/mux_dialog.cpp:314
 msgid "Everything went fine."
 msgstr "Все пройшло нормально."
 
@@ -3537,8 +3537,8 @@ msgid "File contains fewer frames than expected or is corrupt after frame %1%.\n
 msgstr "Файл містить меншу кількість кадрів, ніж очікувалося, або є пошкодженим після кадру %1%.\n"
 
 #: src/mmg/mmg_dialog.cpp:784
-#: src/mmg/mux_dialog.cpp:116
-#: src/mmg/tabs/input.cpp:309
+#: src/mmg/mux_dialog.cpp:118
+#: src/mmg/tabs/input.cpp:507
 msgid "File creation failed"
 msgstr "Помилка створення файлу"
 
@@ -3552,22 +3552,22 @@ msgstr "Файл даних, розмір: %1%"
 msgid "File description: %1%"
 msgstr "Опис файлу: %1%"
 
-#: src/mmg/tabs/input.cpp:361
-#: src/mmg/tabs/input.cpp:374
+#: src/mmg/tabs/input.cpp:559
+#: src/mmg/tabs/input.cpp:574
 msgid "File identification failed"
 msgstr "Ідентифікувати файл не вдалося"
 
-#: src/mmg/tabs/input.cpp:356
+#: src/mmg/tabs/input.cpp:554
 #, c-format, boost-format
 msgid "File identification failed for '%s'. Return code: %d"
 msgstr "Не вдалося ідентифікувати файл '%s'. Код повернення: %d"
 
-#: src/mmg/tabs/input.cpp:359
+#: src/mmg/tabs/input.cpp:557
 #, c-format, boost-format
 msgid "File identification failed. Return code: %d. Errno: %d (%s). Make sure that you've selected a mkvmerge executable in the settings dialog."
 msgstr "Ідентифікувати файл не вдалося. Код повернення: %d. Помилка: %d (%s). Переконайтеся, що ви вибрали саме виконуваний файл mkvmerge в діалозі налаштувань."
 
-#: src/mmg/tabs/input.cpp:295
+#: src/mmg/tabs/input.cpp:702
 msgid "File is already processed"
 msgstr "Файл вже оброблений"
 
@@ -3590,7 +3590,7 @@ msgstr "Назва файла: %1%"
 msgid "File parsing failed"
 msgstr "Не вдалося виконати обробку файлу"
 
-#: src/mmg/tabs/input.cpp:705
+#: src/mmg/tabs/input.cpp:761
 msgid "File removal not possible"
 msgstr "Видалення файла не є можливим"
 
@@ -3920,7 +3920,7 @@ msgstr "Імпортовано зображення з %1%"
 msgid "Incompatible mkvmerge version"
 msgstr "Несумісна версія mkvmerge"
 
-#: src/mmg/tabs/input.cpp:914
+#: src/mmg/tabs/input.cpp:970
 msgid "Incompatible track"
 msgstr "Несумісна доріжка"
 
@@ -4452,7 +4452,7 @@ msgstr "Завантажити файл розділу (простий/форм�
 msgid "Load muxing settings from a file"
 msgstr "Завантажити опції мультиплексування з файлу"
 
-#: src/mmg/mux_dialog.cpp:190
+#: src/mmg/mux_dialog.cpp:207
 #, c-format, boost-format
 msgid "Log files (*.txt)|*.txt|%s"
 msgstr "Файли журналу змін (*.txt)|*.txt|%s"
@@ -4529,12 +4529,12 @@ msgstr "MPEG-4"
 msgid "Make this track the default track for its type (audio, video, subtitles). Players should prefer tracks with the default track flag set."
 msgstr "Зробити дану доріжку типовою доріжкою для даного типу даних (аудіо, відео, субтитри). Плеєри повинні віддавати перевагу доріжкам із встановленим прапорцем типової доріжки."
 
-#: src/input/r_matroska.cpp:1509
-#: src/input/r_matroska.cpp:1524
+#: src/input/r_matroska.cpp:1513
+#: src/input/r_matroska.cpp:1528
 msgid "Malformed AAC codec initialization data found.\n"
 msgstr "Знайдені неправильні дані ініціалізації кодека AAC.\n"
 
-#: src/input/r_matroska.cpp:1517
+#: src/input/r_matroska.cpp:1521
 #, boost-format
 msgid "Malformed codec id '%1%'.\n"
 msgstr "Неправильно заданий ID кодека '%1%'.\n"
@@ -4550,7 +4550,7 @@ msgstr "Неправильно сформований рядок? (%1%)\n"
 msgid "Mark this track as 'forced'. Players must play this track."
 msgstr "Позначає цю доріжку як 'forced', тобто як ту, для якої задається примусове відтворення. Плеєри повинні відтворювати цю доріжку."
 
-#: src/input/r_matroska.h:196
+#: src/input/r_matroska.h:198
 msgid "Matroska"
 msgstr "Matroska"
 
@@ -4734,7 +4734,7 @@ msgstr "Перемістити вибране(і) завдання вгору"
 msgid "Muxing application: %1%"
 msgstr "Додаток, що виконував мультиплексування: %1%"
 
-#: src/mmg/mux_dialog.cpp:128
+#: src/mmg/mux_dialog.cpp:130
 msgid "Muxing in progress."
 msgstr "Мультиплексування в процесі."
 
@@ -4905,7 +4905,7 @@ msgstr "Не знайдено доріжки, що відповідає спец
 msgid "No track with the ID %1% was found in the source file.\n"
 msgstr "Доріжки з ID %1% не було знайдено у вхідному файлі.\n"
 
-#: src/mmg/tabs/input.cpp:594
+#: src/mmg/tabs/input.cpp:719
 msgid "No tracks found"
 msgstr "Доріжки не знайдені"
 
@@ -4964,7 +4964,7 @@ msgid "Ogg/OGM audio/video files"
 msgstr "Ogg/OGM аудіо/відео файли"
 
 #: src/mmg/message_dialog.cpp:31
-#: src/mmg/mux_dialog.cpp:74
+#: src/mmg/mux_dialog.cpp:76
 msgid "Ok"
 msgstr "OK"
 
@@ -5037,7 +5037,7 @@ msgstr "Відкрити файл Matroska"
 msgid "Open an existing Matroska file"
 msgstr "Відкрити існуючий файл Matroska"
 
-#: src/mmg/mux_dialog.cpp:242
+#: src/mmg/mux_dialog.cpp:261
 msgid "Open folder"
 msgstr "Відкрити папку"
 
@@ -5068,7 +5068,7 @@ msgstr "Початкове значення:"
 msgid "Other options"
 msgstr "Інші опції"
 
-#: src/mmg/mux_dialog.cpp:61
+#: src/mmg/mux_dialog.cpp:63
 msgid "Output"
 msgstr "Вихід"
 
@@ -5089,7 +5089,7 @@ msgstr "Вихідна інформація щодо вибраних завда
 msgid "Output sampling frequency: %1%"
 msgstr "Вихідна частота дискретизації: %1%"
 
-#: src/mmg/tabs/input.cpp:370
+#: src/mmg/tabs/input.cpp:570
 msgid "Output:"
 msgstr "Вихідна інформація:"
 
@@ -5246,7 +5246,7 @@ msgid "Processing job %d/%d"
 msgstr "Обробка завдання %d/%d"
 
 #: src/mmg/jobs.cpp:242
-#: src/mmg/mux_dialog.cpp:263
+#: src/mmg/mux_dialog.cpp:282
 msgid "Progress"
 msgstr "Прогрес виконання"
 
@@ -5497,7 +5497,7 @@ msgstr "Перезавантажити поточний файл без збер
 
 #: src/mmg/jobs.cpp:65
 #: src/mmg/jobs.cpp:67
-#: src/mmg/mux_dialog.cpp:49
+#: src/mmg/mux_dialog.cpp:51
 msgid "Remaining time:"
 msgstr "Час, що залишився:"
 
@@ -5588,7 +5588,7 @@ msgstr "&Зберегти як"
 msgid "Save information as"
 msgstr "Зберегти інформацію як"
 
-#: src/mmg/mux_dialog.cpp:81
+#: src/mmg/mux_dialog.cpp:83
 msgid "Save log"
 msgstr "Зберегти журнал"
 
@@ -6114,7 +6114,7 @@ msgid "Status"
 msgstr "Статус"
 
 #: src/mmg/jobs.cpp:56
-#: src/mmg/mux_dialog.cpp:47
+#: src/mmg/mux_dialog.cpp:49
 msgid "Status and progress"
 msgstr "Статус і прогрес виконання"
 
@@ -6290,7 +6290,7 @@ msgstr "Заголовки FLAC не можуть бути проаналізо�
 msgid "The FPS is 0.0 but the reader did not provide a timecode for a packet. %1%\n"
 msgstr "Значення кадрів за секунду є 0.0, але зчитувач не надав тайм-коду для пакета. %1%\n"
 
-#: src/mmg/tabs/input.cpp:1305
+#: src/mmg/tabs/input.cpp:1361
 #, c-format, boost-format
 msgid "The FPS setting for track nr. %s in file '%s' is invalid."
 msgstr "Значення кадрів за секунду для доріжки номер %s у файлі '%s' є невірним."
@@ -6300,7 +6300,7 @@ msgstr "Значення кадрів за секунду для доріжки 
 msgid "The FourCC must be exactly four characters long in '%1% %2%'.\n"
 msgstr "FourCC повинен складатися рівно з чотирьох символів в '%1% %2%'.\n"
 
-#: src/mmg/tabs/input.cpp:1293
+#: src/mmg/tabs/input.cpp:1349
 #, c-format, boost-format
 msgid "The FourCC setting for track nr. %s in file '%s' is not excatly four characters long."
 msgstr "FourCC для доріжки номер %s у файлі '%s' не містить точно чотири символи."
@@ -6422,7 +6422,7 @@ msgstr "Аргумент '%1%' у '%2%' некорректний: надто б�
 msgid "The argument to '--timecode-scale' must be a number.\n"
 msgstr "Аргумент '--timecode-scale' повинен бути числом.\n"
 
-#: src/mmg/tabs/input.cpp:1347
+#: src/mmg/tabs/input.cpp:1403
 #, c-format, boost-format
 msgid "The aspect ratio setting for track nr. %s in file '%s' is invalid."
 msgstr "Налаштування співвідношення сторін для доріжки номер %s у файлі '%s' є некорректними."
@@ -6507,7 +6507,7 @@ msgstr "Країна '%s' не є корректною з-поміж таких 
 msgid "The cue entries (the index) are being written...\n"
 msgstr "Елементи cue (індекс) в процесі запису..."
 
-#: src/mmg/tabs/input.cpp:701
+#: src/mmg/tabs/input.cpp:757
 #, c-format, boost-format
 msgid "The current file (number %d) cannot be removed. There are other files -- at least file number %d -- whose tracks are supposed to be appended to tracks from this file. Please remove those files first."
 msgstr "Не можливо видалити поточний файл (номер %d). Є й інші файли - принаймні файл номер %d -- чиї доріжки повинні бути приєднані до доріжок з цього файлу. Будь ласка, видаліть спочатку дані файли."
@@ -6522,7 +6522,7 @@ msgstr "Тайм-код поточного пакету є меншим ніж �
 msgid "The default language code '%1%' is not a valid ISO639-2 language code and will be ignored.\n"
 msgstr "Типовий код мови для '%1%' не є корректним кодом мови ISO639-2 і буде проігнорований.\n"
 
-#: src/mmg/tabs/input.cpp:1272
+#: src/mmg/tabs/input.cpp:1328
 #, c-format, boost-format
 msgid "The delay setting for track nr. %s in file '%s' is invalid."
 msgstr "Опції затримки для доріжки номер %s файлу '%s' є некорректними."
@@ -6644,7 +6644,7 @@ msgstr "Файл '%1%' має непідтримуваний тип (%2%).\n"
 msgid "The file '%s' does not exist."
 msgstr "Файл '%s' не існує."
 
-#: src/mmg/tabs/input.cpp:293
+#: src/mmg/tabs/input.cpp:700
 #, c-format, boost-format
 msgid "The file '%s' is already processed in combination with the file '%s'. It cannot be added a second time."
 msgstr "Файл '%s' вже оброблений у поєднанні з файлом '%s'. Він не може бути приєднаний вдруге."
@@ -6690,7 +6690,7 @@ msgstr "Заголовок файлу не був правильно прочи�
 msgid "The file headers could not be parsed, e.g. because they're incomplete, invalid or damaged."
 msgstr "Заголовки файлу не можуть бути проаналізовані, наприклад через те, що вони неповні, некоректні або пошкоджені."
 
-#: src/mmg/tabs/input.cpp:343
+#: src/mmg/tabs/input.cpp:539
 #, c-format, boost-format
 msgid "The file is an unsupported container format (%s)."
 msgstr "Файл є непідтримуваним форматом контейнера (%s)."
@@ -6792,12 +6792,12 @@ msgstr "Даний масштабний коефіцієнт тайм-коду �
 msgid "The height of the two tracks is different: %1% and %2%"
 msgstr "Висота кадру двох доріжок є різною: %1% i %2%"
 
-#: src/mmg/tabs/input.cpp:594
+#: src/mmg/tabs/input.cpp:719
 #, c-format, boost-format
 msgid "The input file '%s' does not contain any tracks."
 msgstr "Вхідний файл '%s' не містить ніяких доріжок."
 
-#: src/mmg/tabs/input.cpp:1196
+#: src/mmg/tabs/input.cpp:1252
 msgid ""
 "The job file could not have been parsed correctly.\n"
 "Either it is invalid / damaged, or you've just found\n"
@@ -6813,7 +6813,7 @@ msgstr ""
 "\n"
 "(Проблема виникла в tab_input::load(), #1)"
 
-#: src/mmg/tabs/input.cpp:1203
+#: src/mmg/tabs/input.cpp:1259
 msgid ""
 "The job file could not have been parsed correctly.\n"
 "Either it is invalid / damaged, or you've just found\n"
@@ -6829,7 +6829,7 @@ msgstr ""
 "\n"
 "(Проблема виникла в tab_input::load(), #2)"
 
-#: src/mmg/tabs/input.cpp:1216
+#: src/mmg/tabs/input.cpp:1272
 msgid ""
 "The job file could not have been parsed correctly.\n"
 "Either it is invalid / damaged, or you've just found\n"
@@ -7093,7 +7093,7 @@ msgstr "Розмір вкладення '%1%' є 0.\n"
 msgid "The source file '%1%' could not be opened successfully, or retrieving its size by seeking to the end did not work.\n"
 msgstr "Вхідний файл '%1%' не може бути відкритий успішно, або отримання його розміру шляхом переміщення до кінця не працює.\n"
 
-#: src/mmg/tabs/input.cpp:1283
+#: src/mmg/tabs/input.cpp:1339
 #, c-format, boost-format
 msgid "The stretch setting for track nr. %s in file '%s' is invalid."
 msgstr "Опції розтягнення для доріжки номер %s файлу '%s' є некорректними."
@@ -7276,7 +7276,7 @@ msgstr "Немає доступного перекладу для '%1%'.\n"
 msgid "There was an error querying the update status."
 msgstr "Сталася помилка при запиті статусу оновлення."
 
-#: src/mmg/mux_dialog.cpp:297
+#: src/mmg/mux_dialog.cpp:316
 msgid "There were ERRORs."
 msgstr "Виникли помилки."
 
@@ -7285,11 +7285,11 @@ msgstr "Виникли помилки."
 msgid "There were errors in the header values preventing the headers from being saved. The first error has been selected."
 msgstr "Були помічені помилки в значеннях заголовка, що перешкоджають його збереженню. Була обрана перша помилка."
 
-#: src/mmg/mux_dialog.cpp:292
+#: src/mmg/mux_dialog.cpp:311
 msgid "There were warnings"
 msgstr "Виникли попередження"
 
-#: src/mmg/mux_dialog.cpp:290
+#: src/mmg/mux_dialog.cpp:309
 msgid "There were warnings, or the process was terminated."
 msgstr "Виникли попередження, або процес був перерваний."
 
@@ -7428,7 +7428,7 @@ msgstr "Цього не повинно було статися. Будь лас�
 msgid "This track contains SBR AAC/HE-AAC/AAC+ data. Only needed for AAC input files, because SBR AAC cannot be detected automatically for these files. Not needed for AAC tracks read from MP4 or Matroska files."
 msgstr "Вибрати, якщо дана доріжка містить SBR AAC/HE-AAC/AAC+ дані. Це необхідно тільки для вхідних файлів AAC, тому що SBR в AAC не може бути виявлений автоматично для цих файлів. Не є необхідним при зчитуванні доріжок AAC з файлів MP4 або Matroska."
 
-#: src/mmg/tabs/input.cpp:914
+#: src/mmg/tabs/input.cpp:970
 msgid "This track is not compatible with the WebM mode and cannot be enabled."
 msgstr "Ця доріжка несумісна з режимом WebM і не може бути ввімкнена."
 
@@ -7767,11 +7767,11 @@ msgstr "Беззнаковое ціле число"
 msgid "Unsupported MPEG mpeg_version: 0x%|1$02x| in packet %2% for timecode %3%, assuming MPEG2. No further warnings will be printed for this track.\n"
 msgstr "Непідтримуваний MPEG mpeg_version: 0x%|1$02x| в пакеті %2% для тайм-коду %3%, можливо що MPEG2. Жодні подальші попередження не будуть відображатися для цієї доріжки.\n"
 
-#: src/mmg/tabs/input.cpp:346
+#: src/mmg/tabs/input.cpp:542
 msgid "Unsupported format"
 msgstr "Непідтримуваний формат"
 
-#: src/input/r_matroska.cpp:1782
+#: src/input/r_matroska.cpp:1786
 msgid "Unsupported track type for this track.\n"
 msgstr "Непідтримуваний тип для цієї доріжки.\n"
 
@@ -7817,7 +7817,7 @@ msgstr "Використання довжини поля розміру NALU у 
 msgid "Using the demultiplexer for the format '%1%'.\n"
 msgstr "Використання демультиплексора для формату '%1%'.\n"
 
-#: src/input/r_matroska.cpp:1367
+#: src/input/r_matroska.cpp:1371
 #, boost-format
 msgid "Using the generic output module for track type '%1%'.\n"
 msgstr "Використання вихідного модуля для доріжки типу '%1%'.\n"
@@ -7987,7 +7987,7 @@ msgstr "Попереджати про можливе невірне викори
 msgid "Warning in line %1%: The start timecode is smaller than that of the previous entry. All entries from this file will be sorted by their start time.\n"
 msgstr "Попередження для рядку %1%: початковий тайм-код менше, ніж для попереднього запису. Усі записи цього файлу будуть відсортовані за часом їх початку.\n"
 
-#: src/mmg/mux_dialog.cpp:257
+#: src/mmg/mux_dialog.cpp:276
 msgid "Warning:"
 msgstr "Попередження:"
 
@@ -7995,7 +7995,7 @@ msgstr "Попередження:"
 msgid "Warning: "
 msgstr "Попередження:"
 
-#: src/mmg/mux_dialog.cpp:65
+#: src/mmg/mux_dialog.cpp:67
 msgid "Warnings:"
 msgstr "Попередження:"
 
@@ -8375,7 +8375,7 @@ msgstr "збій inflateInit(). Результат: %1%\n"
 #: src/mmg/jobs.cpp:66
 #: src/mmg/jobs.cpp:68
 #: src/mmg/jobs.cpp:156
-#: src/mmg/mux_dialog.cpp:50
+#: src/mmg/mux_dialog.cpp:52
 msgid "is being estimated"
 msgstr "оцінка часу"
 
@@ -8448,29 +8448,29 @@ msgstr "matroska_reader: (в MS режимі сумісності для тре�
 msgid "matroska_reader: (MS compatibility mode, track %1%) Matroska says video width is %2%, but the BITMAPINFOHEADER says %3%.\n"
 msgstr "matroska_reader: (в MS режимі сумісності для треку %1%) на основі інформації структури Matroska можна сказати, що ширина відео становить %2%, але BITMAPINFOHEADER сповіщає, що ширина - %3%.\n"
 
-#: src/input/r_matroska.cpp:1054
+#: src/input/r_matroska.cpp:1058
 msgid "matroska_reader: A track is missing its track UID.\n"
 msgstr "matroska_reader: У доріжки відсутній її UID.\n"
 
-#: src/input/r_matroska.cpp:1042
+#: src/input/r_matroska.cpp:1046
 msgid "matroska_reader: A track is missing its track number.\n"
 msgstr "matroska_reader: У доріжки відсутній її номер.\n"
 
-#: src/input/r_matroska.cpp:1433
+#: src/input/r_matroska.cpp:1437
 #, boost-format
 msgid "matroska_reader: Could not keep the track UID %1% because it is already allocated for the new file.\n"
 msgstr "matroska_reader: Не вдалося зберегти UID доріжки %1%, оскільки він вже зарезервований для нового файлу.\n"
 
-#: src/input/r_matroska.cpp:1243
-#: src/input/r_matroska.cpp:1248
+#: src/input/r_matroska.cpp:1247
+#: src/input/r_matroska.cpp:1252
 msgid "matroska_reader: No segment found.\n"
 msgstr "matroska_reader: Не знайдено жодного сегмента.\n"
 
-#: src/input/r_matroska.cpp:942
+#: src/input/r_matroska.cpp:946
 msgid "matroska_reader: Pixel height is missing.\n"
 msgstr "matroska_reader: Відсутня висота пікселя.\n"
 
-#: src/input/r_matroska.cpp:935
+#: src/input/r_matroska.cpp:939
 msgid "matroska_reader: Pixel width is missing.\n"
 msgstr "matroska_reader: Відсутня ширина пікселя.\n"
 
@@ -8505,7 +8505,7 @@ msgstr "matroska_reader: CodecID для доріжки %1% - '%2%', але не 
 msgid "matroska_reader: The CodecID for track %1% is 'A_VORBIS', but there are no header packets present.\n"
 msgstr "matroska_reader: CodecID для доріжки %1% - 'A_VORBIS', але відсутні пакети заголовків.\n"
 
-#: src/input/r_matroska.cpp:1090
+#: src/input/r_matroska.cpp:1094
 msgid "matroska_reader: The CodecID is missing.\n"
 msgstr "matroska_reader: Відсутній CodecID.\n"
 
@@ -8524,7 +8524,7 @@ msgstr "matroska_reader: Ширина доріжки %1% не була зада�
 msgid "matroska_reader: Track %1% seems to be ok.\n"
 msgstr "matroska_reader: З доріжкою %1% все гаразд.\n"
 
-#: src/input/r_matroska.cpp:1069
+#: src/input/r_matroska.cpp:1073
 msgid "matroska_reader: Track type was not found.\n"
 msgstr "matroska_reader: Тип доріжки не знайдено.\n"
 
@@ -8532,8 +8532,8 @@ msgstr "matroska_reader: Тип доріжки не знайдено.\n"
 msgid "matroska_reader: Vorbis track does not contain valid headers.\n"
 msgstr "matroska_reader: доріжка Vorbis не містить корректних заголовків.\n"
 
-#: src/input/r_matroska.cpp:1335
-#: src/input/r_matroska.cpp:1973
+#: src/input/r_matroska.cpp:1339
+#: src/input/r_matroska.cpp:1977
 msgid "matroska_reader: caught exception\n"
 msgstr "matroska_reader: знайдено виключення\n"
 
@@ -8542,7 +8542,7 @@ msgstr "matroska_reader: знайдено виключення\n"
 msgid "matroska_reader: mkvmerge was not compiled with FLAC support. Ignoring track %1%.\n"
 msgstr "matroska_reader: mkvmerge не була скомпільована з підтримкою FLAC. Ігнорування доріжки %1%.\n"
 
-#: src/input/r_matroska.cpp:1229
+#: src/input/r_matroska.cpp:1233
 msgid "matroska_reader: no EBML head found.\n"
 msgstr "matroska_reader: не знайдено заголовку EBML.\n"
 
@@ -8551,12 +8551,12 @@ msgstr "matroska_reader: не знайдено заголовку EBML.\n"
 msgid "matroska_reader: unknown demuxer type for track %1%: '%2%'\n"
 msgstr "matroska_reader: невідомий тип демультиплексора для доріжки %1%: '%2%'\n"
 
-#: src/input/r_matroska.cpp:1058
+#: src/input/r_matroska.cpp:1062
 #, boost-format
 msgid "matroska_reader: |  + There's more than one track with the UID %1%.\n"
 msgstr "matroska_reader: |  + Присутня більше, ніж одна доріжка з UID %1%.\n"
 
-#: src/input/r_matroska.cpp:1047
+#: src/input/r_matroska.cpp:1051
 #, boost-format
 msgid "matroska_reader: |  + There's more than one track with the number %1%.\n"
 msgstr "matroska_reader: |  + Присутня більше, ніж одна доріжка з номером %1%.\n"
@@ -8665,7 +8665,7 @@ msgstr "mkvmerge"
 msgid "mkvmerge -o out [global options] [options1] <file1> [@optionsfile ...]\n"
 msgstr "mkvmerge -o out [глобальні параметри] [опціі1] <файл1> [@параметри файлу ...]\n"
 
-#: src/mmg/mux_dialog.cpp:285
+#: src/mmg/mux_dialog.cpp:304
 #, c-format, boost-format
 msgid "mkvmerge FAILED with a return code of %d. %s"
 msgstr "робота mkvmerge АВАРІЙНО завершена з кодом повернення %d. %s"
@@ -8690,12 +8690,12 @@ msgstr "mkvmerge GUI готовий"
 msgid "mkvmerge GUI settings (*.mmg)|*.mmg|%s"
 msgstr "налаштування mkvmerge GUI (*.mmg)|*.mmg|%s"
 
-#: src/mmg/tabs/input.cpp:1248
-#: src/mmg/tabs/input.cpp:1273
-#: src/mmg/tabs/input.cpp:1284
-#: src/mmg/tabs/input.cpp:1294
-#: src/mmg/tabs/input.cpp:1306
-#: src/mmg/tabs/input.cpp:1348
+#: src/mmg/tabs/input.cpp:1304
+#: src/mmg/tabs/input.cpp:1329
+#: src/mmg/tabs/input.cpp:1340
+#: src/mmg/tabs/input.cpp:1350
+#: src/mmg/tabs/input.cpp:1362
+#: src/mmg/tabs/input.cpp:1404
 msgid "mkvmerge GUI: error"
 msgstr "mkvmerge GUI: помилка"
 
@@ -8721,13 +8721,13 @@ msgstr ""
 msgid "mkvmerge executable"
 msgstr "шлях до mkvmerge.exe"
 
-#: src/mmg/mux_dialog.cpp:287
+#: src/mmg/mux_dialog.cpp:306
 #, c-format, boost-format
 msgid "mkvmerge finished with a return code of %d. %s"
 msgstr "Роботу mkvmerge завершено з кодом повернення %d. %s"
 
 #: src/mmg/jobs.cpp:141
-#: src/mmg/mux_dialog.cpp:302
+#: src/mmg/mux_dialog.cpp:321
 msgid "mkvmerge has finished"
 msgstr "Роботу mkvmerge завершено"
 
@@ -8744,7 +8744,7 @@ msgstr "mkvmerge працює"
 msgid "mkvmerge options"
 msgstr "опції mkvmerge"
 
-#: src/mmg/mux_dialog.cpp:62
+#: src/mmg/mux_dialog.cpp:64
 msgid "mkvmerge output:"
 msgstr "Вихідна інформація mkvmerge:"
 
@@ -9035,15 +9035,15 @@ msgstr "und (Невизначено)"
 #: src/info/mkvinfo.cpp:861
 #: src/info/mkvinfo.cpp:1095
 #: src/input/r_matroska.cpp:91
-#: src/input/r_matroska.cpp:2317
+#: src/input/r_matroska.cpp:2329
 #: src/input/r_mpeg_ps.cpp:1319
 #: src/mmg/header_editor/value_page.cpp:150
 #: src/mmg/mmg.cpp:64
-#: src/mmg/tabs/input.cpp:336
+#: src/mmg/tabs/input.cpp:532
 msgid "unknown"
 msgstr "невідомий"
 
-#: src/input/r_matroska.cpp:2310
+#: src/input/r_matroska.cpp:2322
 #, boost-format
 msgid "unknown, format tag 0x%|1$04x|"
 msgstr "невідомий, тег форматування 0x%|1$04x|"

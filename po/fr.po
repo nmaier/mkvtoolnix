@@ -372,7 +372,7 @@ msgstr ""
 #: src/merge/mkvmerge.cpp:120
 #, fuzzy
 msgid ""
-"  --split parts:start1-end2[,[+]start2-end2,...]\n"
+"  --split parts:start1-end1[,[+]start2-end2,...]\n"
 "                           Keep ranges of timecodes start-end, either in\n"
 "                           separate files or append to previous range's file\n"
 "                           if prefixed with '+'.\n"
@@ -1700,13 +1700,13 @@ msgstr ""
 msgid "<Tag> is missing the <Simple> child."
 msgstr "<ChapterTimeStart> manque à <ChapterAtom>."
 
-#: src/input/r_matroska.cpp:2091
+#: src/input/r_matroska.cpp:2095
 #, boost-format
 msgid "A block group was found at position %1%, but no block element was found inside it. This might make mkvmerge crash.\n"
 msgstr "Un groupe de blocs a été trouvé à la position %1% mais il ne contient aucun élément de bloc. Cela peut faire planter mkvmerge.\n"
 
-#: src/input/r_matroska.cpp:1993
-#: src/input/r_matroska.cpp:2101
+#: src/input/r_matroska.cpp:1997
+#: src/input/r_matroska.cpp:2105
 #, boost-format
 msgid "A block was found at timestamp %1% for track number %2%. However, no headers where found for that track number. The block will be skipped.\n"
 msgstr "Un bloc a été trouvé au code temporel %1% pour le numéro de piste %2%. Cependant, aucun en-tête n'a été trouvé pour ce numéro de piste. Le bloc sera passé.\n"
@@ -1828,7 +1828,7 @@ msgstr ""
 msgid "AVI (Audio/Video Interleaved)"
 msgstr "AVI (Audio/Video Interleaved)"
 
-#: src/mmg/mux_dialog.cpp:78
+#: src/mmg/mux_dialog.cpp:80
 msgid "Abort"
 msgstr "Interrompre"
 
@@ -2051,7 +2051,7 @@ msgstr "Une autre piste a déjà été prise comme piste par défaut pour %1%. L
 msgid "Another muxing job in still in progress. Please wait until it has finished or abort it manually before starting a new one."
 msgstr "Une autre tâche de multiplexage est déjà en cours. Veuillez attendre qu'elle soit terminée ou interrompez-la avant d'en démarrer une nouvelle."
 
-#: src/mmg/tabs/input.cpp:1245
+#: src/mmg/tabs/input.cpp:1301
 #, c-format, boost-format
 msgid "Appending a track from a file to another track from the same file is not allowed. This is the case for tracks number %u and %u."
 msgstr "La concaténation d'une piste d'un fichier à une autre piste du même fichier n'est pas autorisée. C'est le cas des pistes numéro %u et %u."
@@ -2511,7 +2511,7 @@ msgstr "Choisir un fichier à concaténer"
 #: src/mmg/mmg_dialog.cpp:444
 #: src/mmg/mmg_dialog.cpp:754
 #: src/mmg/mmg_dialog.cpp:775
-#: src/mmg/mux_dialog.cpp:190
+#: src/mmg/mux_dialog.cpp:207
 #: src/mmg/tabs/chapters.cpp:624
 #: src/mmg/tabs/chapters.cpp:661
 msgid "Choose an output file"
@@ -2657,7 +2657,7 @@ msgstr "Options ajoutées à la ligne de commande :"
 msgid "Command line saved."
 msgstr "Ligne de commande enregistrée."
 
-#: src/mmg/tabs/input.cpp:366
+#: src/mmg/tabs/input.cpp:566
 msgid "Command line used:"
 msgstr "Ligne de commande utilisée :"
 
@@ -2712,8 +2712,8 @@ msgid "Copy the command line to the clipboard"
 msgstr "Copier la ligne de commande dans le presse-papiers."
 
 #: src/mmg/jobs.cpp:177
-#: src/mmg/mux_dialog.cpp:115
-#: src/mmg/tabs/input.cpp:308
+#: src/mmg/mux_dialog.cpp:117
+#: src/mmg/tabs/input.cpp:506
 #, c-format, boost-format
 msgid "Could not create a temporary file for mkvmerge's command line option called '%s' (error code %d, %s)."
 msgstr "Impossible de créer un fichier temporaire pour l'option de commande de mkvmerge appelée '%s' (code d'erreur %d, %s)."
@@ -2755,7 +2755,7 @@ msgid "Could not find the next Ogg page. This indicates a damaged Ogg/Ogm file. 
 msgstr "Impossible de trouver la page Ogg suivante, ce qui indique un fichier Ogg/Ogm endommagé. Tentative de poursuite.\n"
 
 #: src/input/r_avi.cpp:621
-#: src/input/r_matroska.cpp:1574
+#: src/input/r_matroska.cpp:1578
 msgid "Could not find valid DTS headers in this track's first frames.\n"
 msgstr "Impossible de trouver des en-têtes DTS valables dans les premières images de cette piste.\n"
 
@@ -3357,7 +3357,7 @@ msgid "Error writing Matroska file"
 msgstr "Erreur à l'écriture du fichier Matroska"
 
 #: src/common/output.cpp:70
-#: src/mmg/mux_dialog.cpp:260
+#: src/mmg/mux_dialog.cpp:279
 msgid "Error:"
 msgstr "Erreur :"
 
@@ -3387,11 +3387,11 @@ msgstr ""
 msgid "Error: vorbis_packetizer: Could not extract the stream's parameters from the first packets.\n"
 msgstr "Erreur : vorbis_packetizer : impossible d'extraire les paramètres de flux des premiers paquets.\n"
 
-#: src/mmg/mux_dialog.cpp:68
+#: src/mmg/mux_dialog.cpp:70
 msgid "Errors:"
 msgstr "Erreurs :"
 
-#: src/mmg/mux_dialog.cpp:295
+#: src/mmg/mux_dialog.cpp:314
 msgid "Everything went fine."
 msgstr "Tout s'est bien déroulé."
 
@@ -3527,8 +3527,8 @@ msgid "File contains fewer frames than expected or is corrupt after frame %1%.\n
 msgstr "Le fichier contient moins d'images que prévu ou est défectueux après l'image %1%.\n"
 
 #: src/mmg/mmg_dialog.cpp:784
-#: src/mmg/mux_dialog.cpp:116
-#: src/mmg/tabs/input.cpp:309
+#: src/mmg/mux_dialog.cpp:118
+#: src/mmg/tabs/input.cpp:507
 msgid "File creation failed"
 msgstr "Échec de création du fichier"
 
@@ -3542,22 +3542,22 @@ msgstr "Données du fichier, taille : %1%"
 msgid "File description: %1%"
 msgstr "Description du fichier : %1%"
 
-#: src/mmg/tabs/input.cpp:361
-#: src/mmg/tabs/input.cpp:374
+#: src/mmg/tabs/input.cpp:559
+#: src/mmg/tabs/input.cpp:574
 msgid "File identification failed"
 msgstr "Échec d'identification du fichier"
 
-#: src/mmg/tabs/input.cpp:356
+#: src/mmg/tabs/input.cpp:554
 #, c-format, boost-format
 msgid "File identification failed for '%s'. Return code: %d"
 msgstr "L'identification du fichier a échoué pour '%s'. Code renvoyé : %d"
 
-#: src/mmg/tabs/input.cpp:359
+#: src/mmg/tabs/input.cpp:557
 #, c-format, boost-format
 msgid "File identification failed. Return code: %d. Errno: %d (%s). Make sure that you've selected a mkvmerge executable in the settings dialog."
 msgstr "L'identification du fichier a échoué. Code renvoyé : %d. Erreur : %d (%s). Vérifiez que vous avez bien configuré l'exécutable mkvmerge dans les options."
 
-#: src/mmg/tabs/input.cpp:295
+#: src/mmg/tabs/input.cpp:702
 msgid "File is already processed"
 msgstr "Fichier déjà traité"
 
@@ -3580,7 +3580,7 @@ msgstr "Nom du fichier : %1%"
 msgid "File parsing failed"
 msgstr "Échec d'analyse du fichier"
 
-#: src/mmg/tabs/input.cpp:705
+#: src/mmg/tabs/input.cpp:761
 msgid "File removal not possible"
 msgstr "Suppression du fichier impossible"
 
@@ -3909,7 +3909,7 @@ msgstr "Image importée de %1%"
 msgid "Incompatible mkvmerge version"
 msgstr "Version de mkvmerge incompatible"
 
-#: src/mmg/tabs/input.cpp:914
+#: src/mmg/tabs/input.cpp:970
 msgid "Incompatible track"
 msgstr "Piste incompatible"
 
@@ -4441,7 +4441,7 @@ msgstr "Charger un fichier de chapitres (format simple/OGM ou format XML)."
 msgid "Load muxing settings from a file"
 msgstr "Charger les paramètres de multiplexage depuis un fichier."
 
-#: src/mmg/mux_dialog.cpp:190
+#: src/mmg/mux_dialog.cpp:207
 #, c-format, boost-format
 msgid "Log files (*.txt)|*.txt|%s"
 msgstr "Fichiers journal (*.txt)|*.txt|%s"
@@ -4521,12 +4521,12 @@ msgstr ""
 msgid "Make this track the default track for its type (audio, video, subtitles). Players should prefer tracks with the default track flag set."
 msgstr "Faire de cette piste la piste par défaut de son type (audio, vidéo, sous-titres). Les lecteurs devraient préférer les pistes avec la marque de piste par défaut."
 
-#: src/input/r_matroska.cpp:1509
-#: src/input/r_matroska.cpp:1524
+#: src/input/r_matroska.cpp:1513
+#: src/input/r_matroska.cpp:1528
 msgid "Malformed AAC codec initialization data found.\n"
 msgstr "Données d'initialisation du codec AAC mal formées trouvées.\n"
 
-#: src/input/r_matroska.cpp:1517
+#: src/input/r_matroska.cpp:1521
 #, boost-format
 msgid "Malformed codec id '%1%'.\n"
 msgstr "ID de codec '%1%' mal formé.\n"
@@ -4542,7 +4542,7 @@ msgstr "Ligne mal formée ? (%1%)\n"
 msgid "Mark this track as 'forced'. Players must play this track."
 msgstr "Marquer cette piste 'obligatoire'. Les lecteurs devront la lire."
 
-#: src/input/r_matroska.h:196
+#: src/input/r_matroska.h:198
 msgid "Matroska"
 msgstr ""
 
@@ -4726,7 +4726,7 @@ msgstr "Déplacer les tâches sélectionnées vers le haut."
 msgid "Muxing application: %1%"
 msgstr "Application de multiplexage : %1%"
 
-#: src/mmg/mux_dialog.cpp:128
+#: src/mmg/mux_dialog.cpp:130
 msgid "Muxing in progress."
 msgstr "Le multiplexage est en cours."
 
@@ -4897,7 +4897,7 @@ msgstr "Aucune piste correspondant à l'édition '%1%' n'a été trouvée. %2%\n
 msgid "No track with the ID %1% was found in the source file.\n"
 msgstr "Aucune piste d'ID %1% n'a été trouvée dans le fichier source.\n"
 
-#: src/mmg/tabs/input.cpp:594
+#: src/mmg/tabs/input.cpp:719
 msgid "No tracks found"
 msgstr "Aucune piste trouvée"
 
@@ -4956,7 +4956,7 @@ msgid "Ogg/OGM audio/video files"
 msgstr "Fichiers audio/vidéo Ogg/OGM"
 
 #: src/mmg/message_dialog.cpp:31
-#: src/mmg/mux_dialog.cpp:74
+#: src/mmg/mux_dialog.cpp:76
 msgid "Ok"
 msgstr "OK"
 
@@ -5029,7 +5029,7 @@ msgstr "Ouvrir un fichier Matroska."
 msgid "Open an existing Matroska file"
 msgstr "Ouvrir un fichier Matroska existant."
 
-#: src/mmg/mux_dialog.cpp:242
+#: src/mmg/mux_dialog.cpp:261
 msgid "Open folder"
 msgstr "Ouvrir le dossier"
 
@@ -5060,7 +5060,7 @@ msgstr "Valeur d'origine :"
 msgid "Other options"
 msgstr "Autres options"
 
-#: src/mmg/mux_dialog.cpp:61
+#: src/mmg/mux_dialog.cpp:63
 msgid "Output"
 msgstr "Compte rendu"
 
@@ -5081,7 +5081,7 @@ msgstr "Rapport des tâches sélectionnées :"
 msgid "Output sampling frequency: %1%"
 msgstr "Fréquence d'échantillonnage en sortie : %1%"
 
-#: src/mmg/tabs/input.cpp:370
+#: src/mmg/tabs/input.cpp:570
 msgid "Output:"
 msgstr "Rapport :"
 
@@ -5236,7 +5236,7 @@ msgid "Processing job %d/%d"
 msgstr "Traitement de la tâche %d/%d"
 
 #: src/mmg/jobs.cpp:242
-#: src/mmg/mux_dialog.cpp:263
+#: src/mmg/mux_dialog.cpp:282
 msgid "Progress"
 msgstr "Progression"
 
@@ -5488,7 +5488,7 @@ msgstr "Recharger le fichier actuel sans enregistrer."
 
 #: src/mmg/jobs.cpp:65
 #: src/mmg/jobs.cpp:67
-#: src/mmg/mux_dialog.cpp:49
+#: src/mmg/mux_dialog.cpp:51
 msgid "Remaining time:"
 msgstr "Temps restant :"
 
@@ -5581,7 +5581,7 @@ msgstr "Enregistrer &sous"
 msgid "Save information as"
 msgstr "Enregistrer les informations sous"
 
-#: src/mmg/mux_dialog.cpp:81
+#: src/mmg/mux_dialog.cpp:83
 msgid "Save log"
 msgstr "Enregistrer le journal"
 
@@ -6107,7 +6107,7 @@ msgid "Status"
 msgstr "État"
 
 #: src/mmg/jobs.cpp:56
-#: src/mmg/mux_dialog.cpp:47
+#: src/mmg/mux_dialog.cpp:49
 msgid "Status and progress"
 msgstr "État et progression"
 
@@ -6283,7 +6283,7 @@ msgstr "Les en-têtes FLAC ne peuvent pas être analysés : la structure des inf
 msgid "The FPS is 0.0 but the reader did not provide a timecode for a packet. %1%\n"
 msgstr "Le nombre d'images par seconde est 0.0 mais le démultiplexeur n'a pas fourni de code temporel pour un paquet. %1%\n"
 
-#: src/mmg/tabs/input.cpp:1305
+#: src/mmg/tabs/input.cpp:1361
 #, c-format, boost-format
 msgid "The FPS setting for track nr. %s in file '%s' is invalid."
 msgstr "La valeur IPS de la piste n°%s du fichier '%s' est incorrecte."
@@ -6293,7 +6293,7 @@ msgstr "La valeur IPS de la piste n°%s du fichier '%s' est incorrecte."
 msgid "The FourCC must be exactly four characters long in '%1% %2%'.\n"
 msgstr "Le code FourCC dans '%1% %2% doit comporter exactement quatre caractères'.\n"
 
-#: src/mmg/tabs/input.cpp:1293
+#: src/mmg/tabs/input.cpp:1349
 #, c-format, boost-format
 msgid "The FourCC setting for track nr. %s in file '%s' is not excatly four characters long."
 msgstr "La valeur FourCC de la piste n°%s du fichier '%s' n'a pas exactement quatre caractères."
@@ -6415,7 +6415,7 @@ msgstr "L'argument '%1%\" pour '%2%' est incorrect : trop de deux-points dans l'
 msgid "The argument to '--timecode-scale' must be a number.\n"
 msgstr "L'argument pour '--timecode-scale' doit être un nombre.\n"
 
-#: src/mmg/tabs/input.cpp:1347
+#: src/mmg/tabs/input.cpp:1403
 #, c-format, boost-format
 msgid "The aspect ratio setting for track nr. %s in file '%s' is invalid."
 msgstr "La valeur de format d'image pour la piste n°%s du fichier '%s' est incorrecte."
@@ -6500,7 +6500,7 @@ msgstr "'%s' n'est pas un code ccTLD de pays valable et ne peut pas être sélec
 msgid "The cue entries (the index) are being written...\n"
 msgstr "Les entrées d'index sont créées..."
 
-#: src/mmg/tabs/input.cpp:701
+#: src/mmg/tabs/input.cpp:757
 #, c-format, boost-format
 msgid "The current file (number %d) cannot be removed. There are other files -- at least file number %d -- whose tracks are supposed to be appended to tracks from this file. Please remove those files first."
 msgstr "Le fichier actuel (numéro %d) ne peut pas être supprimé. D'autres fichiers (au moins le numéro %d) ont des pistes susceptibles d'être ajoutées aux siennes. Supprimez d'abord ces fichiers."
@@ -6515,7 +6515,7 @@ msgstr "Le code temporel du paquet actuel est inférieur à celui du précédent
 msgid "The default language code '%1%' is not a valid ISO639-2 language code and will be ignored.\n"
 msgstr "Le code de langue par défaut '%1%' n'est pas un code de langue ISO639-2 correct et sera ignoré.\n"
 
-#: src/mmg/tabs/input.cpp:1272
+#: src/mmg/tabs/input.cpp:1328
 #, c-format, boost-format
 msgid "The delay setting for track nr. %s in file '%s' is invalid."
 msgstr "La valeur de délai de la piste n°%s du fichier '%s' est incorrecte."
@@ -6637,7 +6637,7 @@ msgstr "Le fichier '%1%' est d'un type non supporté (%2%).\n"
 msgid "The file '%s' does not exist."
 msgstr "Le fichier '%s' n'existe pas."
 
-#: src/mmg/tabs/input.cpp:293
+#: src/mmg/tabs/input.cpp:700
 #, c-format, boost-format
 msgid "The file '%s' is already processed in combination with the file '%s'. It cannot be added a second time."
 msgstr "Le fichier '%s' est déjà traité avec le fichier '%s', il ne peut pas être ajouté une seconde fois."
@@ -6685,7 +6685,7 @@ msgstr "L'en-tête du fichier n'as pas été lu correctement.\n"
 msgid "The file headers could not be parsed, e.g. because they're incomplete, invalid or damaged."
 msgstr "Les en-têtes FLAC ne peuvent pas être analysés : la structure des informations du flux est introuvable.\n"
 
-#: src/mmg/tabs/input.cpp:343
+#: src/mmg/tabs/input.cpp:539
 #, c-format, boost-format
 msgid "The file is an unsupported container format (%s)."
 msgstr "Le fichier est d'un format conteneur non supporté (%s)."
@@ -6787,12 +6787,12 @@ msgstr "Le coefficient temporel indiqué ne situe pas dans le bon intervalle (1.
 msgid "The height of the two tracks is different: %1% and %2%"
 msgstr "Les hauteurs des deux pistes sont différentes : %1% et %2%."
 
-#: src/mmg/tabs/input.cpp:594
+#: src/mmg/tabs/input.cpp:719
 #, c-format, boost-format
 msgid "The input file '%s' does not contain any tracks."
 msgstr "Le fichier source '%s' ne contient aucune piste."
 
-#: src/mmg/tabs/input.cpp:1196
+#: src/mmg/tabs/input.cpp:1252
 msgid ""
 "The job file could not have been parsed correctly.\n"
 "Either it is invalid / damaged, or you've just found\n"
@@ -6808,7 +6808,7 @@ msgstr ""
 "\n"
 "(problème survenu dans tab_input::load(), #1)"
 
-#: src/mmg/tabs/input.cpp:1203
+#: src/mmg/tabs/input.cpp:1259
 msgid ""
 "The job file could not have been parsed correctly.\n"
 "Either it is invalid / damaged, or you've just found\n"
@@ -6824,7 +6824,7 @@ msgstr ""
 "\n"
 "(problème survenu dans tab_input::load(), #2)"
 
-#: src/mmg/tabs/input.cpp:1216
+#: src/mmg/tabs/input.cpp:1272
 msgid ""
 "The job file could not have been parsed correctly.\n"
 "Either it is invalid / damaged, or you've just found\n"
@@ -7089,7 +7089,7 @@ msgstr "La taille de la pièce jointe '%1%' est 0.\n"
 msgid "The source file '%1%' could not be opened successfully, or retrieving its size by seeking to the end did not work.\n"
 msgstr "Le fichier source '%1%' ne peut pas être ouvert ou la récupération de sa taille par recherche jusqu'à la fin ne fonctionne pas.\n"
 
-#: src/mmg/tabs/input.cpp:1283
+#: src/mmg/tabs/input.cpp:1339
 #, c-format, boost-format
 msgid "The stretch setting for track nr. %s in file '%s' is invalid."
 msgstr "La valeur d'étirement pour la piste n°%s du fichier '%s' est incorrecte."
@@ -7272,7 +7272,7 @@ msgstr "Aucune traduction n'est disponible pour '%1%'.\n"
 msgid "There was an error querying the update status."
 msgstr "Une erreur s'est produite lors de la recherche d'une mise à jour."
 
-#: src/mmg/mux_dialog.cpp:297
+#: src/mmg/mux_dialog.cpp:316
 msgid "There were ERRORs."
 msgstr "Des ERREURS se sont produites."
 
@@ -7281,11 +7281,11 @@ msgstr "Des ERREURS se sont produites."
 msgid "There were errors in the header values preventing the headers from being saved. The first error has been selected."
 msgstr "Les en-têtes sont erronés de sorte qu'il n'ont pas pu être enregistrés. La première erreur a été sélectionnée."
 
-#: src/mmg/mux_dialog.cpp:292
+#: src/mmg/mux_dialog.cpp:311
 msgid "There were warnings"
 msgstr "Des avertissements ont eu lieu."
 
-#: src/mmg/mux_dialog.cpp:290
+#: src/mmg/mux_dialog.cpp:309
 msgid "There were warnings, or the process was terminated."
 msgstr "Des avertissements ont eu lieu ou le processus a été interrompu."
 
@@ -7421,7 +7421,7 @@ msgstr "Cela ne devrait pas se produire. Contactez l'auteur Moritz Bunkus <morit
 msgid "This track contains SBR AAC/HE-AAC/AAC+ data. Only needed for AAC input files, because SBR AAC cannot be detected automatically for these files. Not needed for AAC tracks read from MP4 or Matroska files."
 msgstr "Cette piste contient des données AAC SBR/HE-AAC/AAC+. Nécessaire uniquement pour les fichiers sources AAC pour lesquels AAC SBR ne peut pas être détecté automatiquement. Pas nécessaire pour les pistes AAC lues dans les fichiers MP4 ou Matroska."
 
-#: src/mmg/tabs/input.cpp:914
+#: src/mmg/tabs/input.cpp:970
 msgid "This track is not compatible with the WebM mode and cannot be enabled."
 msgstr "Cette piste n'est pas compatible avec le mode WebM et ne peut pas être activée."
 
@@ -7762,11 +7762,11 @@ msgstr "Nombre entier sans signe"
 msgid "Unsupported MPEG mpeg_version: 0x%|1$02x| in packet %2% for timecode %3%, assuming MPEG2. No further warnings will be printed for this track.\n"
 msgstr "Version MPEG non prise en charge : 0x%|1$02x| dans le paquet %2% pour le code temporel %3%. Elle est supposée être MPEG-2.Aucun autre avertissement ne sera donné pour cette piste.\n"
 
-#: src/mmg/tabs/input.cpp:346
+#: src/mmg/tabs/input.cpp:542
 msgid "Unsupported format"
 msgstr "Format non supporté"
 
-#: src/input/r_matroska.cpp:1782
+#: src/input/r_matroska.cpp:1786
 msgid "Unsupported track type for this track.\n"
 msgstr "Type de piste non pris en charge.\n"
 
@@ -7813,7 +7813,7 @@ msgstr "L'utilisation d'une taille de NALU de 3 octets peut conduire à des pist
 msgid "Using the demultiplexer for the format '%1%'.\n"
 msgstr "utilisation du démultiplexeur AAC.\n"
 
-#: src/input/r_matroska.cpp:1367
+#: src/input/r_matroska.cpp:1371
 #, fuzzy, boost-format
 msgid "Using the generic output module for track type '%1%'.\n"
 msgstr "utilisation du module de sortie AAC (FourCC : %1%).\n"
@@ -7987,7 +7987,7 @@ msgstr "Avertir d'une utilisation potentiellement incorrecte de mmg"
 msgid "Warning in line %1%: The start timecode is smaller than that of the previous entry. All entries from this file will be sorted by their start time.\n"
 msgstr "Warnung in Zeile %1%: Der Start-Zeitstempel ist kleiner als der des vorhergehenden Eintrages. Alle Einträge aus dieser Datei werden nach ihrem Start-Zeitstempel sortiert.\n"
 
-#: src/mmg/mux_dialog.cpp:257
+#: src/mmg/mux_dialog.cpp:276
 msgid "Warning:"
 msgstr "Avertissement :"
 
@@ -7995,7 +7995,7 @@ msgstr "Avertissement :"
 msgid "Warning: "
 msgstr "Avertissement : "
 
-#: src/mmg/mux_dialog.cpp:65
+#: src/mmg/mux_dialog.cpp:67
 msgid "Warnings:"
 msgstr "Avertissements :"
 
@@ -8375,7 +8375,7 @@ msgstr "inflateInit() a échoué. Résultat : %1%\n"
 #: src/mmg/jobs.cpp:66
 #: src/mmg/jobs.cpp:68
 #: src/mmg/jobs.cpp:156
-#: src/mmg/mux_dialog.cpp:50
+#: src/mmg/mux_dialog.cpp:52
 msgid "is being estimated"
 msgstr "en cours d'estimation"
 
@@ -8448,29 +8448,29 @@ msgstr "matroska_reader : (mode de compatibilité MS, piste %1%) Matroska dit qu
 msgid "matroska_reader: (MS compatibility mode, track %1%) Matroska says video width is %2%, but the BITMAPINFOHEADER says %3%.\n"
 msgstr "matroska_reader : (mode de compatibilité MS, piste %1%) Matroska dit que la largeur vidéo est %2% mais BITMAPINFOHEADER dit %3%.\n"
 
-#: src/input/r_matroska.cpp:1054
+#: src/input/r_matroska.cpp:1058
 msgid "matroska_reader: A track is missing its track UID.\n"
 msgstr "matroska_reader : une piste n'a pas son UID de piste.\n"
 
-#: src/input/r_matroska.cpp:1042
+#: src/input/r_matroska.cpp:1046
 msgid "matroska_reader: A track is missing its track number.\n"
 msgstr "matroska_reader : une piste n'a pas son numéro de piste.\n"
 
-#: src/input/r_matroska.cpp:1433
+#: src/input/r_matroska.cpp:1437
 #, boost-format
 msgid "matroska_reader: Could not keep the track UID %1% because it is already allocated for the new file.\n"
 msgstr "matroska_reader : impossible de conserver l'UID de piste %1% car il est déjà alloué au nouveau fichier.\n"
 
-#: src/input/r_matroska.cpp:1243
-#: src/input/r_matroska.cpp:1248
+#: src/input/r_matroska.cpp:1247
+#: src/input/r_matroska.cpp:1252
 msgid "matroska_reader: No segment found.\n"
 msgstr "matroska_reader : aucun segment trouvé.\n"
 
-#: src/input/r_matroska.cpp:942
+#: src/input/r_matroska.cpp:946
 msgid "matroska_reader: Pixel height is missing.\n"
 msgstr "matroska_reader : la hauteur en pixels est absente.\n"
 
-#: src/input/r_matroska.cpp:935
+#: src/input/r_matroska.cpp:939
 msgid "matroska_reader: Pixel width is missing.\n"
 msgstr "matroska_reader : la largeur en pixels est absente.\n"
 
@@ -8505,7 +8505,7 @@ msgstr "matroska_reader : l'ID de codec de la piste %1% est '%2%' mais aucune do
 msgid "matroska_reader: The CodecID for track %1% is 'A_VORBIS', but there are no header packets present.\n"
 msgstr "matroska_reader : l'ID de codec de la piste %1% est 'A_VORBIS' mais il n'y a aucun paquet d'en-tête présent.\n"
 
-#: src/input/r_matroska.cpp:1090
+#: src/input/r_matroska.cpp:1094
 msgid "matroska_reader: The CodecID is missing.\n"
 msgstr "matroska_reader : l'ID de codec est absent.\n"
 
@@ -8524,7 +8524,7 @@ msgstr "matroska_reader : la largeur n'est pas définie pour la piste %1%.\n"
 msgid "matroska_reader: Track %1% seems to be ok.\n"
 msgstr "matroska_reader : la piste %1% semble être OK.\n"
 
-#: src/input/r_matroska.cpp:1069
+#: src/input/r_matroska.cpp:1073
 msgid "matroska_reader: Track type was not found.\n"
 msgstr "matroska_reader : type de piste introuvable.\n"
 
@@ -8532,8 +8532,8 @@ msgstr "matroska_reader : type de piste introuvable.\n"
 msgid "matroska_reader: Vorbis track does not contain valid headers.\n"
 msgstr "matroska_reader : la piste Vorbis ne contient pas des en-têtes corrects.\n"
 
-#: src/input/r_matroska.cpp:1335
-#: src/input/r_matroska.cpp:1973
+#: src/input/r_matroska.cpp:1339
+#: src/input/r_matroska.cpp:1977
 msgid "matroska_reader: caught exception\n"
 msgstr "matroska_reader : exception captée.\n"
 
@@ -8542,7 +8542,7 @@ msgstr "matroska_reader : exception captée.\n"
 msgid "matroska_reader: mkvmerge was not compiled with FLAC support. Ignoring track %1%.\n"
 msgstr "matroska_reader : mkvmerge n'a pas été compilé avec prise en charge de FLAC, piste %1% ignorée.\n"
 
-#: src/input/r_matroska.cpp:1229
+#: src/input/r_matroska.cpp:1233
 msgid "matroska_reader: no EBML head found.\n"
 msgstr "matroska_reader : aucun en-tête EBML trouvé.\n"
 
@@ -8551,12 +8551,12 @@ msgstr "matroska_reader : aucun en-tête EBML trouvé.\n"
 msgid "matroska_reader: unknown demuxer type for track %1%: '%2%'\n"
 msgstr "matroska_reader : type de démultiplexeur inconnu pour la piste %1% : '%2%'.\n"
 
-#: src/input/r_matroska.cpp:1058
+#: src/input/r_matroska.cpp:1062
 #, boost-format
 msgid "matroska_reader: |  + There's more than one track with the UID %1%.\n"
 msgstr "matroska_reader : |  + plus d'une piste avec l'UID %1%.\n"
 
-#: src/input/r_matroska.cpp:1047
+#: src/input/r_matroska.cpp:1051
 #, boost-format
 msgid "matroska_reader: |  + There's more than one track with the number %1%.\n"
 msgstr "matroska_reader : |  + plus d'une piste avec le numéro %1%.\n"
@@ -8665,7 +8665,7 @@ msgstr "mkvmerge"
 msgid "mkvmerge -o out [global options] [options1] <file1> [@optionsfile ...]\n"
 msgstr "mkvmerge -o cible [options globales] [options1] <fichier1> [@fichieroptions...]\n"
 
-#: src/mmg/mux_dialog.cpp:285
+#: src/mmg/mux_dialog.cpp:304
 #, c-format, boost-format
 msgid "mkvmerge FAILED with a return code of %d. %s"
 msgstr "mkvmerge a échoué et a renvoyé le code %d. %s"
@@ -8690,12 +8690,12 @@ msgstr "mkvmerge GUI prêt"
 msgid "mkvmerge GUI settings (*.mmg)|*.mmg|%s"
 msgstr "Fichiers de configuration de mkvmerge (*.mmg)|*.mmg|%s"
 
-#: src/mmg/tabs/input.cpp:1248
-#: src/mmg/tabs/input.cpp:1273
-#: src/mmg/tabs/input.cpp:1284
-#: src/mmg/tabs/input.cpp:1294
-#: src/mmg/tabs/input.cpp:1306
-#: src/mmg/tabs/input.cpp:1348
+#: src/mmg/tabs/input.cpp:1304
+#: src/mmg/tabs/input.cpp:1329
+#: src/mmg/tabs/input.cpp:1340
+#: src/mmg/tabs/input.cpp:1350
+#: src/mmg/tabs/input.cpp:1362
+#: src/mmg/tabs/input.cpp:1404
 msgid "mkvmerge GUI: error"
 msgstr "mkvmerge GUI : erreur"
 
@@ -8721,13 +8721,13 @@ msgstr ""
 msgid "mkvmerge executable"
 msgstr "Exécutable mkvmerge :"
 
-#: src/mmg/mux_dialog.cpp:287
+#: src/mmg/mux_dialog.cpp:306
 #, c-format, boost-format
 msgid "mkvmerge finished with a return code of %d. %s"
 msgstr "mkvmerge a terminé et a renvoyé le code %d. %s"
 
 #: src/mmg/jobs.cpp:141
-#: src/mmg/mux_dialog.cpp:302
+#: src/mmg/mux_dialog.cpp:321
 msgid "mkvmerge has finished"
 msgstr "mkvmerge terminé"
 
@@ -8744,7 +8744,7 @@ msgstr "mkvmerge en cours"
 msgid "mkvmerge options"
 msgstr "Options de mkvmerge"
 
-#: src/mmg/mux_dialog.cpp:62
+#: src/mmg/mux_dialog.cpp:64
 msgid "mkvmerge output:"
 msgstr "Rapport de mkvmerge :"
 
@@ -9037,15 +9037,15 @@ msgstr "und (indéterminée)"
 #: src/info/mkvinfo.cpp:861
 #: src/info/mkvinfo.cpp:1095
 #: src/input/r_matroska.cpp:91
-#: src/input/r_matroska.cpp:2317
+#: src/input/r_matroska.cpp:2329
 #: src/input/r_mpeg_ps.cpp:1319
 #: src/mmg/header_editor/value_page.cpp:150
 #: src/mmg/mmg.cpp:64
-#: src/mmg/tabs/input.cpp:336
+#: src/mmg/tabs/input.cpp:532
 msgid "unknown"
 msgstr "inconnu"
 
-#: src/input/r_matroska.cpp:2310
+#: src/input/r_matroska.cpp:2322
 #, boost-format
 msgid "unknown, format tag 0x%|1$04x|"
 msgstr "inconnu, étiquette de format 0x%|1$04x|"
