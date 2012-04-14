@@ -9,10 +9,6 @@
 int
 main(int argc,
      char **argv) {
-#ifdef SYS_WINDOWS
-  QApplication::setStyle(Q("windows"));
-#endif
-
   App app(argc, argv);
 
   MainWindow mainWindow;
