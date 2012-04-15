@@ -2,6 +2,7 @@
 
 #include "mkvtoolnix-gui/mux_config.h"
 
+#include <QFile>
 #include <QStringList>
 
 MuxConfig::MuxConfig()
@@ -121,7 +122,8 @@ MuxConfig::save(QString const &fileName) {
   if (m_configFileName.isEmpty())
     return;
 
-  QSettings settings{fileName, QSettings::IniFormat};
+  QFile::remove(m_configFileName);
+  QSettings settings{m_configFileName, QSettings::IniFormat};
   save(settings);
 }
 
