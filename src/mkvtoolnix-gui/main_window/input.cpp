@@ -17,7 +17,7 @@
 
 void
 MainWindow::setupControlLists() {
-  m_typeIndependantControls << ui->generalBox << ui->muxThisLabel << ui->muxThis << ui->miscellaneousBox << ui->userDefinedTrackOptionsLabel << ui->userDefinedTrackOptions;
+  m_typeIndependantControls << ui->muxThisLabel << ui->muxThis << ui->miscellaneousBox << ui->userDefinedTrackOptionsLabel << ui->userDefinedTrackOptions;
 
   m_audioControls << ui->trackNameLabel << ui->trackName << ui->trackLanguageLabel << ui->trackLanguage << ui->defaultTrackFlagLabel << ui->defaultTrackFlag << ui->forcedTrackFlagLabel << ui->forcedTrackFlag
                   << ui->compressionLabel << ui->compression << ui->trackTagsLabel << ui->trackTags << ui->browseTrackTags << ui->timecodesAndDefaultDurationBox
@@ -36,7 +36,7 @@ MainWindow::setupControlLists() {
 
   m_chapterControls << ui->subtitleAndChapterPropertiesBox << ui->characterSetLabel << ui->subtitleCharacterSet;
 
-  m_allInputControls << ui->generalBox << ui->muxThisLabel << ui->muxThis << ui->trackNameLabel << ui->trackName << ui->trackLanguageLabel << ui->trackLanguage << ui->defaultTrackFlagLabel << ui->defaultTrackFlag
+  m_allInputControls << ui->muxThisLabel << ui->muxThis << ui->trackNameLabel << ui->trackName << ui->trackLanguageLabel << ui->trackLanguage << ui->defaultTrackFlagLabel << ui->defaultTrackFlag
                      << ui->forcedTrackFlagLabel << ui->forcedTrackFlag << ui->compressionLabel << ui->compression << ui->trackTagsLabel << ui->trackTags << ui->browseTrackTags << ui->timecodesAndDefaultDurationBox
                      << ui->delayLabel << ui->delay << ui->stretchByLabel << ui->stretchBy << ui->defaultDurationLabel << ui->defaultDuration << ui->timecodesLabel << ui->timecodes << ui->browseTimecodes
                      << ui->picturePropertiesBox << ui->setAspectRatio << ui->aspectRatio << ui->setDisplayWidthHeight << ui->displayWidth << ui->displayDimensionsXLabel << ui->displayHeight << ui->stereoscopyLabel
@@ -48,25 +48,32 @@ MainWindow::setupControlLists() {
 
 void
 MainWindow::setupComboBoxContent() {
-  // Language
+  // Track & chapter language
   std::vector<std::pair<QString, QString> > languages;
   for (auto &language : iso639_languages)
     languages.push_back(std::make_pair(QString{"%1 (%2)"}.arg(to_qs(language.english_name)).arg(to_qs(language.iso639_2_code)), to_qs(language.iso639_2_code)));
 
   brng::sort(languages, [](std::pair<QString, QString> const &a, std::pair<QString, QString> const &b) { return a.first < b.first; });
 
-  for (auto &language: languages)
-    ui->trackLanguage->addItem(language.first, language.second);
+  ui->chapterLanguage->addItem(Q(""), Q(""));
 
-  // Character set
+  for (auto &language: languages) {
+    ui->trackLanguage->addItem(language.first, language.second);
+    ui->chapterLanguage->addItem(language.first, language.second);
+  }
+
+  // Track & chapter character set
   QStringList characterSets;
   for (auto &subCharset : sub_charsets)
     characterSets << to_qs(subCharset);
   characterSets.sort();
 
   ui->subtitleCharacterSet->addItem(Q(""), Q(""));
-  for (auto &characterSet : characterSets)
+  ui->chapterCharacterSet->addItem(Q(""), Q(""));
+  for (auto &characterSet : characterSets) {
     ui->subtitleCharacterSet->addItem(characterSet, characterSet);
+    ui->chapterCharacterSet->addItem(characterSet, characterSet);
+  }
 
   // Stereoscopy
   ui->stereoscopy->addItem(Q(""), 0);
@@ -322,32 +329,16 @@ MainWindow::onTimecodesEdited(QString newValue) {
 
 void
 MainWindow::onBrowseTimecodes() {
-  auto dir      = ui->timecodes->text().isEmpty() ? Settings::get().m_lastOpenDir.path() : QFileInfo{ ui->timecodes->text() }.path();
-  auto fileName = QFileDialog::getOpenFileName(this, QY("Select timecode file"), dir, QY("Text files (*.txt)") + Q(";;") + QY("All files (*)"));
-  if (fileName.isEmpty())
-    return;
-
-  Settings::get().m_lastOpenDir = QFileInfo{fileName}.path();
-  Settings::get().save();
-
-  ui->timecodes->setText(fileName);
-
-  withSelectedTracks([&](Track *track) { track->m_timecodes = fileName; });
+  auto fileName = getOpenFileName(QY("Select timecode file"), QY("Text files") + Q(" (*.txt)"), ui->timecodes);
+  if (!fileName.isEmpty())
+    withSelectedTracks([&](Track *track) { track->m_timecodes = fileName; });
 }
 
 void
 MainWindow::onBrowseTrackTags() {
-  auto dir      = ui->trackTags->text().isEmpty() ? Settings::get().m_lastOpenDir.path() : QFileInfo{ ui->trackTags->text() }.path();
-  auto fileName = QFileDialog::getOpenFileName(this, QY("Select tags file"), dir, QY("XML files (*.xml)") + Q(";;") + Q("All files (*)"));
-  if (fileName.isEmpty())
-    return;
-
-  Settings::get().m_lastOpenDir = QFileInfo{fileName}.path();
-  Settings::get().save();
-
-  ui->trackTags->setText(fileName);
-
-  withSelectedTracks([&](Track *track) { track->m_tags = fileName; }, true);
+  auto fileName = getOpenFileName(QY("Select tags file"), QY("XML files") + Q(" (*.xml)"), ui->trackTags);
+  if (!fileName.isEmpty())
+    withSelectedTracks([&](Track *track) { track->m_tags = fileName; }, true);
 }
 
 void

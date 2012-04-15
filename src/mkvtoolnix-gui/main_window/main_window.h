@@ -46,6 +46,7 @@ public slots:
   virtual void onAddToJobQueue();
   virtual void onStartMuxing();
 
+  // Input tab:
   virtual void onTrackSelectionChanged();
 
   virtual void onTrackNameEdited(QString newValue);
@@ -79,6 +80,37 @@ public slots:
   virtual void onFilesContextMenu() const;
   virtual void onTracksContextMenu() const;
 
+  // Output tab:
+  virtual void onTitleEdited(QString newValue);
+  virtual void onOutputEdited(QString newValue);
+  virtual void onBrowseOutput();
+  virtual void onGlobalTagsEdited(QString newValue);
+  virtual void onBrowseGlobalTags();
+  virtual void onSegmentinfoEdited(QString newValue);
+  virtual void onBrowseSegmentinfo();
+  virtual void onDoNotSplit();
+  virtual void onDoSplitAfterSize();
+  virtual void onDoSplitAfterDuration();
+  virtual void onDoSplitAfterTimecodes();
+  virtual void onDoSplitByParts();
+  virtual void onSplitSizeEdited(QString newValue);
+  virtual void onSplitDurationEdited(QString newValue);
+  virtual void onSplitTimecodesEdited(QString newValue);
+  virtual void onSplitPartsEdited(QString newValue);
+  virtual void onLinkFilesClicked(bool newValue);
+  virtual void onSplitMaxFilesChanged(int newValue);
+  virtual void onSegmentUIDsEdited(QString newValue);
+  virtual void onPreviousSegmentUIDEdited(QString newValue);
+  virtual void onNextSegmentUIDEdited(QString newValue);
+  virtual void onChaptersEdited(QString newValue);
+  virtual void onBrowseChapters();
+  virtual void onChapterLanguageChanged(int newValue);
+  virtual void onChapterCharacterSetChanged(QString newValue);
+  virtual void onChapterCueNameFormatChanged(QString newValue);
+  virtual void onWebmClicked(bool newValue);
+  virtual void onUserDefinedOptionsEdited(QString newValue);
+  virtual void onEditUserDefinedOptions();
+
 protected:
   virtual QStringList selectFilesToAdd();
   virtual void addFile(QString const &fileName, bool append);
@@ -89,6 +121,8 @@ protected:
   virtual void clearInputControlValues();
   virtual void withSelectedTracks(std::function<void(Track *)> code, bool notIfAppending = false, QWidget *widget = nullptr);
   virtual void addOrRemoveEmptyComboBoxItem(bool add);
+  virtual QString getOpenFileName(QString const &title, QString const &filter, QLineEdit *lineEdit);
+  virtual QString getSaveFileName(QString const &title, QString const &filter, QLineEdit *lineEdit);
 };
 
 #endif // MTX_MMGQT_MAIN_WINDOW_H
