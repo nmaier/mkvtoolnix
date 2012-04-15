@@ -105,18 +105,26 @@ if test x"$enable_qt" = "xyes" -a \
     rcc_found=1
   fi
 
+  ok=0
   AC_MSG_CHECKING(for Qt $qt_min_ver or newer)
   if test x"$moc_found" != "x1"; then
     AC_MSG_RESULT(no: moc not found)
   elif test x"$uic_found" != "x1"; then
     AC_MSG_RESULT(no: uic not found)
-  elif ! pkg-config QtGui --atleast-version=$qt_min_ver || \
-     ! pkg-config QtCore --atleast-version=$qt_min_ver ; then
-    AC_MSG_RESULT(no: pkg-config says "too old")
+  elif test x"$rcc_found" != "x1"; then
+    AC_MSG_RESULT(no: rcc not found)
   else
+    ok=1
+  fi
+
+  if test $ok = 1; then
+    PKG_CHECK_EXISTS([QtCore,QtGui],,[ok=0])
+  fi
+
+  if test $ok = 1; then
     dnl Try compiling and linking an application.
-    QT_CFLAGS="`pkg-config QtCore --cflags` `pkg-config QtGui --cflags`"
-    QT_LIBS="`pkg-config QtGui --libs`"
+    QT_CFLAGS="`$PKG_CONFIG QtCore --cflags` `pkg-config QtGui --cflags`"
+    QT_LIBS="`$PKG_CONFIG QtGui --libs`"
 
     AC_LANG_PUSH(C++)
     AC_CACHE_VAL(am_cv_qt_compilation, [
@@ -186,6 +194,8 @@ return 0;
     else
       AC_MSG_RESULT(no: test program could not be compiled)
     fi
+  else
+    AC_MSG_RESULT(no: not found by pkg-config)
   fi
 
   AC_ARG_WITH(mkvtoolnix-gui,[AS_HELP_STRING([--with-mkvtoolnix-gui],[build mkvtoolnix-gui (not working yet, only for development)])],
