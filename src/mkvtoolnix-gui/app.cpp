@@ -1,6 +1,7 @@
 #include "common/common_pch.h"
 
 #include "common/common.h"
+#include "common/qt.h"
 #include "mkvtoolnix-gui/app.h"
 #include "mkvtoolnix-gui/util/settings.h"
 

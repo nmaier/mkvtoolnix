@@ -175,6 +175,9 @@ item.SetItemLabel(wxEmptyString);
 
   else
     opt_features_no="$opt_features_no\n   * GUIs (wxWidgets version)"
+    unset XWIDGETS_CFLAGS
+    unset WXWIDGETS_INCLUDES
+    unset WXWIDGETS_LIBS
   fi
 
 AC_SUBST(WXWIDGETS_CFLAGS)
