@@ -91,6 +91,19 @@ MuxConfig::save(QSettings &settings)
 
   settings.endGroup();
 
+  settings.beginGroup("attachments");
+  settings.setValue("numberOfAttachments", m_attachments.size());
+
+  idx = 0;
+  for (auto &attachment : m_attachments) {
+    settings.beginGroup(QString::number(idx));
+    attachment->saveSettings(settings);
+    settings.endGroup();
+    ++idx;
+  }
+
+  settings.endGroup();
+
   settings.beginGroup("global");
   settings.setValue("title",                m_title);
   settings.setValue("destination",          m_destination);

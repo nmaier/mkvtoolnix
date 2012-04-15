@@ -3,7 +3,7 @@
 
 #include "common/common_pch.h"
 
-// #include "mkvtoolnix-gui/attachment.h"
+#include "mkvtoolnix-gui/attachment.h"
 #include "mkvtoolnix-gui/source_file.h"
 #include "mkvtoolnix-gui/track.h"
 
@@ -33,7 +33,7 @@ public:
 
   QList<SourceFilePtr> m_files;
   QList<Track *> m_tracks;
-  // QList<AttachmentPtr> m_attachments;
+  QList<AttachmentPtr> m_attachments;
 
   QString m_title, m_destination, m_globalTags, m_segmentinfo, m_splitAfterSize, m_splitAfterDuration, m_splitAfterTimecodes, m_splitByParts;
   QString m_segmentUIDs, m_previousSegmentUID, m_nextSegmentUID, m_chapters, m_chapterLanguage, m_chapterCharacterSet, m_chapterCueNameFormat, m_userDefinedOptions;

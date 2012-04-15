@@ -199,7 +199,7 @@ TrackModel::headerData(int section,
          :                                Q("INTERNAL ERROR");
 
   if (Qt::TextAlignmentRole == role)
-    return 2 == section ? Qt::AlignRight : Qt::AlignLeft;
+    return IDColumn == section ? Qt::AlignRight : Qt::AlignLeft;
 
   return QVariant{};
 }

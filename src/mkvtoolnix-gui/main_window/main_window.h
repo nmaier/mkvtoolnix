@@ -3,6 +3,7 @@
 
 #include "common/common_pch.h"
 
+#include "mkvtoolnix-gui/attachment_model.h"
 #include "mkvtoolnix-gui/mux_config.h"
 #include "mkvtoolnix-gui/source_file_model.h"
 #include "mkvtoolnix-gui/track_model.h"
@@ -10,6 +11,9 @@
 #include <QComboBox>
 #include <QList>
 #include <QMainWindow>
+#include <QMenu>
+
+class QTreeView;
 
 namespace Ui {
 class MainWindow;
@@ -23,10 +27,13 @@ protected:
   Ui::MainWindow *ui;
   SourceFileModel *m_filesModel;
   TrackModel *m_tracksModel;
+  AttachmentModel *m_attachmentsModel;
 
   QList<QWidget *> m_audioControls, m_videoControls, m_subtitleControls, m_chapterControls, m_typeIndependantControls, m_allInputControls;
   QList<QComboBox *> m_comboBoxControls;
   bool m_currentlySettingInputControlValues;
+
+  QAction *m_addAttachmentsAction, *m_removeAttachmentsAction;
 
   // non-UI stuff:
   MuxConfig m_config;
@@ -111,18 +118,36 @@ public slots:
   virtual void onUserDefinedOptionsEdited(QString newValue);
   virtual void onEditUserDefinedOptions();
 
+  // Attachments tab:
+  virtual void onAttachmentSelectionChanged();
+  virtual void onAttachmentNameEdited(QString newValue);
+  virtual void onAttachmentDescriptionEdited(QString newValue);
+  virtual void onAttachmentMIMETypeEdited(QString newValue);
+  virtual void onAttachmentStyleChanged(int newValue);
+  virtual void onAddAttachments();
+  virtual void onRemoveAttachments();
+
+  virtual void resizeAttachmentsColumnsToContents() const;
+
 protected:
   virtual QStringList selectFilesToAdd();
+  virtual QStringList selectAttachmentsToAdd();
   virtual void addFile(QString const &fileName, bool append);
-  virtual void setupComboBoxContent();
   virtual void setupControlLists();
+  virtual void setupInputControls();
+  virtual void setupAttachmentsControls();
   virtual void enableInputControls(QList<QWidget *> const &controls, bool enable);
+  virtual void enableAttachmentControls(bool enable);
   virtual void setInputControlValues(Track *track);
+  virtual void setAttachmentControlValues(Attachment *attachment);
   virtual void clearInputControlValues();
   virtual void withSelectedTracks(std::function<void(Track *)> code, bool notIfAppending = false, QWidget *widget = nullptr);
+  virtual void withSelectedAttachments(std::function<void(Attachment *)> code);
   virtual void addOrRemoveEmptyComboBoxItem(bool add);
   virtual QString getOpenFileName(QString const &title, QString const &filter, QLineEdit *lineEdit);
   virtual QString getSaveFileName(QString const &title, QString const &filter, QLineEdit *lineEdit);
+
+  virtual void resizeViewColumnsToContents(QTreeView *view) const;
 };
 
 #endif // MTX_MMGQT_MAIN_WINDOW_H

@@ -47,7 +47,12 @@ MainWindow::setupControlLists() {
 }
 
 void
-MainWindow::setupComboBoxContent() {
+MainWindow::setupInputControls() {
+  setupControlLists();
+
+  ui->files->setModel(m_filesModel);
+  ui->tracks->setModel(m_tracksModel);
+
   // Track & chapter language
   std::vector<std::pair<QString, QString> > languages;
   for (auto &language : iso639_languages)
@@ -85,6 +90,11 @@ MainWindow::setupComboBoxContent() {
   for (auto control : std::vector<QComboBox *>{ui->defaultTrackFlag, ui->forcedTrackFlag, ui->cues, ui->compression, ui->muxThis, ui->aacIsSBR})
     for (auto idx = 0; control->count() > idx; ++idx)
       control->setItemData(idx, idx);
+
+  // Connect signals & slots.
+  connect(ui->tracks->selectionModel(), SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)), this, SLOT(onTrackSelectionChanged()));
+
+  onTrackSelectionChanged();
 }
 
 void
@@ -168,9 +178,6 @@ MainWindow::setInputControlValues(Track *track) {
     m_currentlySettingInputControlValues = false;
     return;
   }
-
-  // TODO
-  ui->trackName->setText(track->m_name);
 
   Util::setComboBoxIndexIf(ui->muxThis,              [&](QString const &, QVariant const &data) { return data.isValid() && (data.toInt()    == (track->m_muxThis ? 0 : 1)); });
   Util::setComboBoxIndexIf(ui->trackLanguage,        [&](QString const &, QVariant const &data) { return data.isValid() && (data.toString() == track->m_language);          });
@@ -465,17 +472,13 @@ MainWindow::addFile(QString const &fileName,
 void
 MainWindow::resizeFilesColumnsToContents()
   const {
-  auto columnCount = m_filesModel->columnCount(QModelIndex{});
-  for (auto column = 0; columnCount > column; ++column)
-    ui->files->resizeColumnToContents(column);
+  resizeViewColumnsToContents(ui->files);
 }
 
 void
 MainWindow::resizeTracksColumnsToContents()
   const {
-  auto columnCount = m_tracksModel->columnCount(QModelIndex{});
-  for (auto column = 0; columnCount > column; ++column)
-    ui->tracks->resizeColumnToContents(column);
+  resizeViewColumnsToContents(ui->tracks);
 }
 
 void

@@ -16,28 +16,19 @@ MainWindow::MainWindow(QWidget *parent)
   , ui{new Ui::MainWindow}
   , m_filesModel{new SourceFileModel{this}}
   , m_tracksModel{new TrackModel{this}}
+  , m_attachmentsModel{new AttachmentModel{this}}
   , m_currentlySettingInputControlValues{false}
+  , m_addAttachmentsAction{nullptr}
+  , m_removeAttachmentsAction{nullptr}
 {
   // Setup UI controls.
   ui->setupUi(this);
 
-  ui->files->setModel(m_filesModel);
-  ui->tracks->setModel(m_tracksModel);
-
-  ui->splitMaxFiles->setMaximum(std::numeric_limits<int>::max());
-
-  setupComboBoxContent();
-  setupControlLists();
-
-  enableInputControls(m_allInputControls, false);
+  setupInputControls();
+  setupAttachmentsControls();
 
   // Setup window properties.
   setWindowIcon(Util::loadIcon(Q("mkvmergeGUI.png"), QList<int>{} << 32 << 48 << 64 << 128 << 256));
-
-  // Connect signals & slots.
-  QObject::connect(ui->files,  SIGNAL(expanded(QModelIndex const &)), this, SLOT(resizeFilesColumnsToContents()));
-  QObject::connect(ui->tracks, SIGNAL(expanded(QModelIndex const &)), this, SLOT(resizeTracksColumnsToContents()));
-  QObject::connect(ui->tracks->selectionModel(), SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)), this, SLOT(onTrackSelectionChanged()));
 }
 
 MainWindow::~MainWindow() {
@@ -134,4 +125,12 @@ MainWindow::getSaveFileName(QString const &title,
   lineEdit->setText(fileName);
 
   return fileName;
+}
+
+void
+MainWindow::resizeViewColumnsToContents(QTreeView *view)
+  const {
+  auto columnCount = view->model()->columnCount(QModelIndex{});
+  for (auto column = 0; columnCount > column; ++column)
+    view->resizeColumnToContents(column);
 }
