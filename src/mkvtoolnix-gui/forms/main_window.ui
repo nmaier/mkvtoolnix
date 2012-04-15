@@ -2605,6 +2605,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionSave_as</sender>
+   <signal>activated()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onSaveConfigAs()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>424</x>
+     <y>280</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>onStartMuxing()</slot>
