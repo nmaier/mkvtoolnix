@@ -45,7 +45,7 @@ MainWindow::onSegmentinfoEdited(QString newValue) {
 
 void
 MainWindow::onBrowseSegmentinfo() {
-  auto fileName = getOpenFileName(QY("Select segment info file"), QY("XML files") + Q(" (*.xml)"), ui->globalTags);
+  auto fileName = getOpenFileName(QY("Select segment info file"), QY("XML files") + Q(" (*.xml)"), ui->segmentinfo);
   if (!fileName.isEmpty())
     m_config.m_segmentinfo = fileName;
 }
