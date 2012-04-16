@@ -1,3 +1,9 @@
+2012-04-16  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvextract: bug fix: Extraction of AVC/h.264 was completely
+	broken after 2012-04-09 resulting in files with a length of 0
+	bytes.
+
 2012-04-09  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: new feature: When adding a Matroska file that has either

@@ -32,7 +32,7 @@ xtr_avc_c::write_nal(const binary *data,
   size_t i;
   size_t nal_size = 0;
 
-  if (write_nal_size_size < data_size)
+  if (write_nal_size_size > data_size)
     return false;
 
   for (i = 0; i < write_nal_size_size; ++i)
