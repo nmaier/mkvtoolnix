@@ -36,13 +36,16 @@ require_relative "rake.d/application"
 require_relative "rake.d/library"
 
 def setup_globals
+  $build_mkvtoolnix_gui  ||=  c?(:USE_QT) && c?(:BUILD_MKVTOOLNIX_GUI)
+
   $programs                =  %w{mkvmerge mkvinfo mkvextract mkvpropedit}
   $programs                << "mmg" if c?(:USE_WXWIDGETS)
+  $programs                << "mkvtoolnix-gui" if $build_mkvtoolnix_gui
   $tools                   =  %w{ac3parser base64tool diracparser ebml_validator vc1parser}
   $mmg_bin                 =  c(:MMG_BIN)
   $mmg_bin                 =  "mmg" if $mmg_bin.empty?
 
-  $application_subdirs     =  { "mmg" => "mmg/" }
+  $application_subdirs     =  { "mmg" => "mmg/", "mkvtoolnix-gui" => "mkvtoolnix-gui/" }
   $applications            =  $programs.collect { |name| "src/#{$application_subdirs[name]}#{name}" + c(:EXEEXT) }
   $manpages                =  $programs.collect { |name| "doc/man/#{name}.1" }
 
@@ -78,7 +81,6 @@ def setup_globals
   }
 
   $build_tools           ||=  c?(:TOOLS)
-  $build_mkvtoolnix_gui  ||=  c?(:USE_QT) && c?(:BUILD_MKVTOOLNIX_GUI)
 
   cflags_common            = "-Wall -Wno-comment #{c(:OPTIMIZATION_CFLAGS)} -D_FILE_OFFSET_BITS=64 #{c(:MATROSKA_CFLAGS)} #{c(:EBML_CFLAGS)} #{c(:EXTRA_CFLAGS)} #{c(:DEBUG_CFLAGS)} #{c(:PROFILING_CFLAGS)} #{c(:USER_CPPFLAGS)} -DPACKAGE=\\\"#{c(:PACKAGE)}\\\" -DVERSION=\\\"#{c(:VERSION)}\\\" -DMTX_LOCALE_DIR=\\\"#{c(:localedir)}\\\" -DMTX_PKG_DATA_DIR=\\\"#{c(:pkgdatadir)}\\\" -DMTX_DOC_DIR=\\\"#{c(:docdir)}\\\""
   ldflags_extra            = c?(:MINGW) ? '' : "-Wl,--enable-auto-import"
@@ -105,8 +107,7 @@ def define_default_task
   targets = $applications.clone
 
   # Build the stuff in the 'src/tools' directory only if requested
-  targets << "apps:tools"          if $build_tools
-  targets << "apps:mkvtoolnix-gui" if $build_mkvtoolnix_gui
+  targets << "apps:tools" if $build_tools
 
   # The tags file -- but only if it exists already
   if File.exists?("TAGS")
