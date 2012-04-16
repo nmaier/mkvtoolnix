@@ -1,5 +1,6 @@
 $use_tempfile_for_run = defined?(RUBY_PLATFORM) && /mingw/i.match(RUBY_PLATFORM)
 require "tempfile"
+require "fileutils"
 
 if defined? Mutex
   $message_mutex = Mutex.new
@@ -77,7 +78,7 @@ def create_dependency_dirs
 end
 
 def dependency_output_name_for file_name
-  $dependency_tmp_dir + "/" + file_name.gsub(/\//, '_').ext('d')
+  $dependency_tmp_dir + "/" + file_name.gsub(/[\/\.]/, '_') + '.d'
 end
 
 def handle_deps(target, exit_code, skip_abspath=false)
@@ -92,7 +93,7 @@ def handle_deps(target, exit_code, skip_abspath=false)
 
   create_dependency_dirs
 
-  File.open("#{$dependency_dir}/" + target.gsub(/\//, '_').ext('rb'), "w") do |out|
+  File.open("#{$dependency_dir}/" + target.gsub(/[\/\.]/, '_') + '.dep', "w") do |out|
     line = IO.readlines(dep_file).collect { |line| line.chomp }.join(" ").gsub(/\\/, ' ').gsub(/\s+/, ' ')
     if /(.+?):\s*([^\s].*)/.match(line)
       target  = $1
@@ -102,11 +103,7 @@ def handle_deps(target, exit_code, skip_abspath=false)
         sources.delete_if { |entry| entry.start_with? '/' }
       end
 
-      if sources.length == 1
-        out.puts "file '#{target}' => [ '#{sources[0]}' ]"
-      else
-        out.puts "file '#{target}' => [" + sources.collect { |entry| "\n  '#{entry}'" }.join(',') + " ]"
-      end
+      out.puts ([ target ] + sources).join("\n")
     end
   end
 
@@ -116,7 +113,12 @@ rescue Exception => e
 end
 
 def import_dependencies
-  Dir.glob("#{$dependency_dir}/*.rb").each { |file| import file } if FileTest.directory?($dependency_dir)
+  return unless FileTest.directory? $dependency_dir
+  Dir.glob("#{$dependency_dir}/*.dep").each do |file_name|
+    lines  = IO.readlines(file_name).collect &:chomp
+    target = lines.shift
+    file target => lines.select { |dep_name| File.exists? dep_name }
+  end
 end
 
 def arrayify(*args)

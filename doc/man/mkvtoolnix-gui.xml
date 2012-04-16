@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "/usr/share/xml/docbook/schema/dtd/4.5/docbookx.dtd"
+[
+<!ENTITY product "mkvtoolnix-gui">
+<!ENTITY version "5.5.0">
+<!ENTITY date "2012-04-06">
+
+<!ENTITY mkvmerge "<citerefentry><refentrytitle>mkvmerge</refentrytitle><manvolnum>1</manvolnum></citerefentry>">
+<!ENTITY mkvinfo "<citerefentry><refentrytitle>mkvinfo</refentrytitle><manvolnum>1</manvolnum></citerefentry>">
+<!ENTITY mkvextract "<citerefentry><refentrytitle>mkvextract</refentrytitle><manvolnum>1</manvolnum></citerefentry>">
+<!ENTITY mkvpropedit "<citerefentry><refentrytitle>mkvpropedit</refentrytitle><manvolnum>1</manvolnum></citerefentry>">
+<!ENTITY mkvtoolnix-gui "<citerefentry><refentrytitle>mkvtoolnix-gui</refentrytitle><manvolnum>1</manvolnum></citerefentry>">
+
+<!ENTITY matroska "<productname>Matroska</productname>">
+<!ENTITY oggvorbis "<productname>OggVorbis</productname>">
+<!ENTITY xml "<abbrev>XML</abbrev>">
+
+]>
+
+<refentry lang="en" id="mkvtoolnix-gui">
+ <refentryinfo>
+  <productname>&product;</productname>
+  <date>&date;</date>
+  <authorgroup>
+   <author>
+    <contrib>Developer</contrib>
+    <firstname>Moritz</firstname>
+    <surname>Bunkus</surname>
+    <email>moritz@bunkus.org</email>
+   </author>
+  </authorgroup>
+ </refentryinfo>
+ <refmeta>
+  <refentrytitle>&product;</refentrytitle>
+  <manvolnum>1</manvolnum>
+  <refmiscinfo class="version">&version;</refmiscinfo>
+  <refmiscinfo class="date">&date;</refmiscinfo>
+  <refmiscinfo class="source">MKVToolNix</refmiscinfo>
+  <refmiscinfo class="manual">User Commands</refmiscinfo>
+ </refmeta>
+
+ <refnamediv>
+  <refname>&product;</refname>
+  <refpurpose>a GUI for &mkvmerge; including a chapter and a header editor</refpurpose>
+ </refnamediv>
+
+ <refsynopsisdiv id="mkvtoolnix-gui.synopsis">
+  <title>Synopsis</title>
+  <cmdsynopsis>
+   <command>mkvtoolnix-gui</command>
+   <group>
+    <arg choice="opt">preferences-file.mtxcfg</arg>
+    <arg choice="opt">source-file.ext</arg>
+   </group>
+  </cmdsynopsis>
+ </refsynopsisdiv>
+
+ <refsect1 id="mkvtoolnix-gui.description">
+  <title>Description</title>
+  <para>
+   &mkvtoolnix-gui; is a <productname>Qt</productname> based <abbrev>GUI</abbrev> for &mkvmerge; (and will evolve to cover &mkvinfo; and
+   &mkvextract; as well). It offers easy access to most of &mkvmerge;'s options. All settings (e.g. source files, track options etc) can be
+   saved and restored.
+  </para>
+
+  <para>
+   &mkvtoolnix-gui; knows few options. At the moment it only supports a single file name. If that file name's extenion is
+   '<literal>.mtxcfg</literal>' then it will be treated as a settings file and &mkvtoolnix-gui; will load its setting when it
+   starts. Otherwise the name is interpreted as being the name of an input file which will be added.
+  </para>
+ </refsect1>
+
+ <refsect1 id="mkvtoolnix-gui.seealso">
+  <title>See also</title>
+  <para>
+   &mkvmerge;, &mkvextract;, &mkvinfo;, &mkvpropedit;
+  </para>
+ </refsect1>
+
+ <refsect1 id="mkvtoolnix-gui.www">
+  <title>WWW</title>
+  <para>
+   The latest version can always be found at <ulink url="http://www.bunkus.org/videotools/mkvtoolnix/">the MKVToolNix homepage</ulink>.
+  </para>
+ </refsect1>
+
+</refentry>

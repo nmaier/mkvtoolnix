@@ -45,6 +45,9 @@ void mxinfo(const std::string &info);
 inline void mxinfo(const boost::format &info) {
   mxinfo(info.str());
 }
+inline void mxinfo(char const *info) {
+  mxinfo(std::string{info});
+}
 void mxinfo(const std::wstring &info);
 void mxinfo(const boost::wformat &info);
 

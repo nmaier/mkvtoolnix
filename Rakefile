@@ -36,13 +36,16 @@ require_relative "rake.d/application"
 require_relative "rake.d/library"
 
 def setup_globals
+  $build_mkvtoolnix_gui  ||=  c?(:USE_QT) && c?(:BUILD_MKVTOOLNIX_GUI)
+
   $programs                =  %w{mkvmerge mkvinfo mkvextract mkvpropedit}
   $programs                << "mmg" if c?(:USE_WXWIDGETS)
+  $programs                << "mkvtoolnix-gui" if $build_mkvtoolnix_gui
   $tools                   =  %w{ac3parser base64tool diracparser ebml_validator vc1parser}
   $mmg_bin                 =  c(:MMG_BIN)
   $mmg_bin                 =  "mmg" if $mmg_bin.empty?
 
-  $application_subdirs     =  { "mmg" => "mmg/" }
+  $application_subdirs     =  { "mmg" => "mmg/", "mkvtoolnix-gui" => "mkvtoolnix-gui/" }
   $applications            =  $programs.collect { |name| "src/#{$application_subdirs[name]}#{name}" + c(:EXEEXT) }
   $manpages                =  $programs.collect { |name| "doc/man/#{name}.1" }
 
@@ -154,7 +157,7 @@ cxx_compiler = lambda do |t|
   sources = t.sources.empty? ? [ t.prerequisites.first ] : t.sources
   dep     = dependency_output_name_for t.name
 
-  runq "     CXX #{sources.first}", "#{c(:CXX)} #{$flags[:cxxflags]} #{$system_includes} -c -MMD -MF #{dep} -o #{t.name} #{sources.join(" ")}", :allow_failure => true
+  runq "     CXX #{sources.first}", "#{c(:CXX)} #{$flags[:cxxflags]} #{$system_includes} -c -MMD -MF #{dep} -o #{t.name} -x c++ #{sources.join(" ")}", :allow_failure => true
   handle_deps t.name, last_exit_code, true
 end
 
@@ -231,11 +234,16 @@ rule '.h' => '.ui' do |t|
   runq "     UIC #{t.source}", "#{c(:UIC)} #{t.sources.join(" ")} > #{t.name}"
 end
 
-# Rake does not support rules like '.moc.cpp' => '.h'. Therefore
-# Target creats 'file' entries for all .moc.cpp entries submitted via
-# Target#sources.
-$moc_compiler = lambda do |t|
-  runq "     MOC #{t.prerequisites.first}", "#{c(:MOC)} #{c(:QT_CFLAGS)} #{t.prerequisites.join(" ")} > #{t.name}"
+rule '.cpp' => '.qrc' do |t|
+  runq "     RCC #{t.source}", "#{c(:RCC)} #{t.sources.join(" ")} > #{t.name}"
+end
+
+rule '.moc' => '.h' do |t|
+  runq "     MOC #{t.prerequisites.first}", "#{c(:MOC)} #{c(:QT_CFLAGS)} -nw #{t.prerequisites.join(" ")} > #{t.name}"
+end
+
+rule '.moco' => '.moc' do |t|
+  cxx_compiler.call t
 end
 
 # Tag files
@@ -376,7 +384,7 @@ EOT
   end
 end
 
-# HTMLO generation for the man pages
+# HTML generation for the man pages
 targets = ([ 'en' ] + $languages[:manpages]).collect do |language|
   dir = language == 'en' ? '' : "/#{language}"
   FileList[ "doc/man#{dir}/*.xml" ].collect { |name| "man2html:#{language}:#{File.basename(name, '.xml')}" }
@@ -396,6 +404,43 @@ namespace :man2html do
           runq "XSLTPROC #{name}", "xsltproc --nonet -o #{name.ext('html')} /usr/share/xml/docbook/stylesheet/nwalsh/html/docbook.xsl #{name}"
         end
       end
+    end
+  end
+end
+
+# Developer helper tasks
+namespace :dev do
+  if $build_mkvtoolnix_gui
+    desc "Update Qt resource files"
+    task "update-qt-resources" do
+      require 'rexml/document'
+
+      qrc      = "src/mkvtoolnix-gui/qt_resources.qrc"
+      doc      = REXML::Document.new File.new(qrc)
+      existing = Hash.new
+
+      doc.elements.to_a("/RCC/qresource/file").each do |node|
+        if File.exists? "src/mkvtoolnix-gui/#{node.text}"
+          existing[node.text] = true
+        else
+          puts "Removing <file> for non-existing #{node.text}"
+          node.remove
+        end
+      end
+
+      parent = doc.elements.to_a("/RCC/qresource")[0]
+      FileList["share/icons/*/*.png"].select { |file| !existing["../../#{file}"] }.each do |file|
+        puts "Adding <file> for #{file}"
+        node                     = REXML::Element.new "file"
+        node.attributes["alias"] = file.gsub(/share\//, '')
+        node.text                = "../../#{file}"
+        parent << node
+      end
+
+      formatter         = REXML::Formatters::Pretty.new 1
+      formatter.compact = true
+      formatter.width   = 9999999
+      formatter.write doc, File.open(qrc, "w")
     end
   end
 end
@@ -422,9 +467,13 @@ namespace :install do
     install_data :desktopdir, FileList[ "#{$top_srcdir}/share/desktop/*.desktop" ]
     install_data :mimepackagesdir, FileList[ "#{$top_srcdir}/share/mime/*.xml" ]
 
-    FileList[ "#{$top_srcdir}/share/icons/*" ].collect { |dir| File.basename dir }.select { |dir| dir != "windows" }.each do |dir|
+    wanted_apps     = %w{mkvmerge mkvmergeGUI mkvinfo mkvextract mkvpropedit}.collect { |e| "#{e}.png" }.to_hash_by
+    wanted_dirs     = %w{32x32 48x48 64x64 128x128 256x256}.to_hash_by
+    dirs_to_install = FileList[ "#{$top_srcdir}/share/icons/*"   ].select { |dir|  wanted_dirs[ dir.gsub(/.*icons\//, '').gsub(/\/.*/, '') ] }.sort.uniq
+
+    dirs_to_install.each do |dir|
       install_dir "#{c(:icondir)}/#{dir}/apps"
-      install_data "#{c(:icondir)}/#{dir}/apps/", FileList[ "#{$top_srcdir}/share/icons/#{dir}/*.png" ]
+      install_data "#{c(:icondir)}/#{dir}/apps/", FileList[ "#{dir}/*" ].to_a.select { |file| wanted_apps[ file.gsub(/.*\//, '') ] }
     end
   end
 
@@ -467,17 +516,26 @@ end
 # Cleaning tasks
 desc "Remove all compiled files"
 task :clean do
-  tools = $tools.collect { |name| "src/tools/#{name}" }.join " "
-  run <<-SHELL, :allow_failure => true
-    rm -f *.o */*.o */*/*.o */lib*.a */*/lib*.a */*/*.gch po/*.mo
-      */*.exe */*/*.exe */*/*.dll */*/*.dll.a doc/guide/*/*.hhk
-      src/info/ui/*.h src/info/*.moc.cpp src/common/*/*.o
-      src/mmg/*/*.o #{$applications.join(" ")} #{tools}
-      lib/libebml/src/*.o lib/libmatroska/src/*.o
-      lib/libebml/src/lib*.a lib/libmatroska/src/lib*.a
-      lib/pugixml/src/*.o lib/pugixml/src/lib*.a
-  SHELL
-  run "rm -rf #{$dependency_dir}", :allow_failure => true
+  puts "   CLEAN"
+
+  patterns = %w{
+    src/**/*.o lib/**/*.o src/**/*.a lib/**/*.a src/**/*.gch
+    src/**/*.exe src/**/*.dll src/**/*.dll.a
+    src/info/ui/*.h src/mkvtoolnix-gui/forms/*.h src/**/*.moc src/**/*.moco src/mkvtoolnix-gui/qt_resources.cpp
+    po/*.mo doc/guide/**/*.hhk
+  }
+  patterns += $applications + $tools.collect { |name| "src/tools/#{name}" }
+  verbose   = ENV['V'].to_bool
+
+  patterns.collect { |pattern| FileList[pattern].to_a }.flatten.select { |file_name| File.exists? file_name }.each do |file_name|
+    puts "      rm #{file_name}" if verbose
+    File.unlink file_name
+  end
+
+  if Dir.exists? $dependency_dir
+    puts "  rm -rf #{$dependency_dir}" if verbose
+    FileUtils.rm_rf $dependency_dir
+  end
 end
 
 namespace :clean do
@@ -580,7 +638,7 @@ Application.new("src/mkvinfo").
   sources("src/info/resources.o", :if => c?(:MINGW)).
   libraries(common_libs).
   only_if(c?(:USE_QT)).
-  sources("src/info/qt_ui.cpp", "src/info/qt_ui.moc.cpp", "src/info/rightclick_tree_widget.moc.cpp", $mkvinfo_ui_files).
+  sources("src/info/qt_ui.cpp", "src/info/qt_ui.moc", "src/info/rightclick_tree_widget.moc", $mkvinfo_ui_files).
   libraries(:qt).
   end_if.
   only_if(!c?(:USE_QT) && c?(:USE_WXWIDGETS)).
@@ -627,6 +685,27 @@ if c?(:USE_WXWIDGETS)
     png_icon("share/icons/64x64/mkvmergeGUI.png").
     libraries(common_libs, :wxwidgets).
     libraries(:ole32, :shell32, "-mwindows", :if => c?(:MINGW)).
+    create
+end
+
+#
+# mkvtoolnix-gui
+#
+
+if $build_mkvtoolnix_gui
+  ui_files = FileList["src/mkvtoolnix-gui/forms/**/*.ui"].to_a
+  ui_files.each do |ui|
+    file ui.ext('cpp').gsub(/forms\/(.*)\.cpp$/, '\1/\1.cpp') => ui.ext('h')
+  end
+
+  Application.new("src/mkvtoolnix-gui/mkvtoolnix-gui").
+    description("Build the mkvtoolnix-gui executable").
+    aliases("mkvtoolnix-gui").
+    sources(FileList["src/mkvtoolnix-gui/**/*.cpp"], ui_files, 'src/mkvtoolnix-gui/qt_resources.cpp').
+    sources((FileList["src/mkvtoolnix-gui/**/*.h"].to_a - ui_files.collect { |ui| ui.ext 'h' }).collect { |h| h.ext 'moc' }).
+    sources("src/mkvtoolnix-gui/resources.o", :if => c?(:MINGW)).
+    libraries(common_libs, :qt).
+    png_icon("share/icons/64x64/mkvmergeGUI.png").
     create
 end
 
