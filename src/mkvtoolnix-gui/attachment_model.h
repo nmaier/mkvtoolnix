@@ -43,6 +43,7 @@ public:
   virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
   virtual void attachmentUpdated(Attachment *attachment);
+  virtual void removeAttachments(QList<Attachment *> const &toRemove);
 
 protected:
   Attachment *attachmentFromIndex(QModelIndex const &index) const;

@@ -143,3 +143,17 @@ AttachmentModel::attachmentUpdated(Attachment *attachment) {
   int row = std::distance(m_attachments->begin(), it);
   emit dataChanged(createIndex(row, 0, attachment), createIndex(row, NumberOfColumns - 1, attachment));
 }
+
+void
+AttachmentModel::removeAttachments(QList<Attachment *> const &toRemove) {
+  if ((nullptr == m_attachments) || toRemove.isEmpty())
+    return;
+
+  beginResetModel();
+
+  for (int idx = m_attachments->size() - 1; 0 <= idx; --idx)
+    if (toRemove.contains(m_attachments->at(idx).get()))
+      m_attachments->removeAt(idx);
+
+  endResetModel();
+}

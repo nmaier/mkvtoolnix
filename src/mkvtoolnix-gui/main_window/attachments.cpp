@@ -125,20 +125,18 @@ MainWindow::onRemoveAttachments() {
     return;
   }
 
-  QHash<Attachment *, bool> attachmentsToDelete;
+  QList<Attachment *> attachmentsToRemove;
 
   for (auto &range : selection)
     for (auto &index : range.indexes()) {
       auto attachment = static_cast<Attachment *>(index.internalPointer());
       if (nullptr != attachment)
-        attachmentsToDelete[attachment] = true;
+        attachmentsToRemove << attachment;
     }
 
-  for (int idx = m_config.m_attachments.size() - 1; 0 <= idx; --idx)
-    if (attachmentsToDelete[ m_config.m_attachments[idx].get() ]) {
-      m_attachmentsModel->removeRow(idx);
-      m_config.m_attachments.removeAt(idx);
-    }
+  m_attachmentsModel->removeAttachments(attachmentsToRemove);
+
+  onAttachmentSelectionChanged();
 }
 
 void
