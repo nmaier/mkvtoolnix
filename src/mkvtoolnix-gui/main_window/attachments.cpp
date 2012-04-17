@@ -89,15 +89,13 @@ MainWindow::onAddAttachments() {
   if (fileNames.empty())
     return;
 
+  QList<AttachmentPtr> attachmentsToAdd;
   for (auto &fileName : fileNames) {
-    m_config.m_attachments << std::make_shared<Attachment>(fileName);
-    m_config.m_attachments.back()->guessMIMEType();
+    attachmentsToAdd << std::make_shared<Attachment>(fileName);
+    attachmentsToAdd.back()->guessMIMEType();
   }
 
-  if (fileNames.isEmpty())
-    return;
-
-  m_attachmentsModel->setAttachments(m_config.m_attachments);
+  m_attachmentsModel->addAttachments(attachmentsToAdd);
   resizeAttachmentsColumnsToContents();
 }
 
@@ -119,22 +117,7 @@ MainWindow::selectAttachmentsToAdd() {
 
 void
 MainWindow::onRemoveAttachments() {
-  auto selection = ui->attachments->selectionModel()->selection();
-  if (selection.isEmpty()) {
-    enableAttachmentControls(false);
-    return;
-  }
-
-  QList<Attachment *> attachmentsToRemove;
-
-  for (auto &range : selection)
-    for (auto &index : range.indexes()) {
-      auto attachment = static_cast<Attachment *>(index.internalPointer());
-      if (nullptr != attachment)
-        attachmentsToRemove << attachment;
-    }
-
-  m_attachmentsModel->removeAttachments(attachmentsToRemove);
+  m_attachmentsModel->removeSelectedAttachments(ui->attachments->selectionModel()->selection());
 
   onAttachmentSelectionChanged();
 }

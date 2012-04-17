@@ -16,7 +16,7 @@ MainWindow::MainWindow(QWidget *parent)
   , ui{new Ui::MainWindow}
   , m_filesModel{new SourceFileModel{this}}
   , m_tracksModel{new TrackModel{this}}
-  , m_attachmentsModel{new AttachmentModel{this}}
+  , m_attachmentsModel{new AttachmentModel{this, m_config.m_attachments}}
   , m_currentlySettingInputControlValues{false}
   , m_addAttachmentsAction{nullptr}
   , m_removeAttachmentsAction{nullptr}

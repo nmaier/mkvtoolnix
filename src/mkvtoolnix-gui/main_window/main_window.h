@@ -23,6 +23,9 @@ class MainWindow : public QMainWindow {
   Q_OBJECT;
 
 protected:
+  // non-UI stuff:
+  MuxConfig m_config;
+
   // UI stuff:
   Ui::MainWindow *ui;
   SourceFileModel *m_filesModel;
@@ -34,9 +37,6 @@ protected:
   bool m_currentlySettingInputControlValues;
 
   QAction *m_addAttachmentsAction, *m_removeAttachmentsAction;
-
-  // non-UI stuff:
-  MuxConfig m_config;
 
 public:
   explicit MainWindow(QWidget *parent = nullptr);

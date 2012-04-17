@@ -6,7 +6,7 @@
 #include "mkvtoolnix-gui/attachment.h"
 
 #include <QAbstractItemModel>
-#include <QIcon>
+#include <QItemSelection>
 #include <QList>
 
 class AttachmentModel;
@@ -28,7 +28,7 @@ protected:
   bool m_debug;
 
 public:
-  AttachmentModel(QObject *parent);
+  AttachmentModel(QObject *parent, QList<AttachmentPtr> &attachments);
   virtual ~AttachmentModel();
 
   virtual void setAttachments(QList<AttachmentPtr> &attachments);
@@ -43,7 +43,11 @@ public:
   virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
   virtual void attachmentUpdated(Attachment *attachment);
-  virtual void removeAttachments(QList<Attachment *> const &toRemove);
+
+  virtual bool removeRows(int row, int count, QModelIndex const &parent = QModelIndex{});
+  virtual void removeSelectedAttachments(QItemSelection const &selection);
+
+  virtual void addAttachments(QList<AttachmentPtr> const &attachmentsToAdd);
 
 protected:
   Attachment *attachmentFromIndex(QModelIndex const &index) const;

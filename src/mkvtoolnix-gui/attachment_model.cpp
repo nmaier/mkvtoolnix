@@ -3,11 +3,13 @@
 #include "mkvtoolnix-gui/attachment_model.h"
 #include "mkvtoolnix-gui/util/util.h"
 
+#include <boost/range/adaptor/uniqued.hpp>
 #include <QFileInfo>
 
-AttachmentModel::AttachmentModel(QObject *parent)
+AttachmentModel::AttachmentModel(QObject *parent,
+                                 QList<AttachmentPtr> &attachments)
   : QAbstractItemModel(parent)
-  , m_attachments(nullptr)
+  , m_attachments(&attachments)
   , m_debug(debugging_requested("attachment_model"))
 {
 }
@@ -145,15 +147,47 @@ AttachmentModel::attachmentUpdated(Attachment *attachment) {
 }
 
 void
-AttachmentModel::removeAttachments(QList<Attachment *> const &toRemove) {
-  if ((nullptr == m_attachments) || toRemove.isEmpty())
+AttachmentModel::removeSelectedAttachments(QItemSelection const &selection) {
+  if (selection.isEmpty())
     return;
 
-  beginResetModel();
+  std::vector<int> rowsToRemove;
 
-  for (int idx = m_attachments->size() - 1; 0 <= idx; --idx)
-    if (toRemove.contains(m_attachments->at(idx).get()))
-      m_attachments->removeAt(idx);
+  for (auto &range : selection)
+    for (auto &index : range.indexes())
+      rowsToRemove.push_back(index.row());
 
-  endResetModel();
+  brng::sort(rowsToRemove, std::greater<int>());
+
+  for (auto row : rowsToRemove | badap::uniqued)
+    removeRow(row);
+}
+
+bool
+AttachmentModel::removeRows(int row,
+                            int count,
+                            QModelIndex const &parent) {
+  mxinfo(boost::format("remove rows row %1% count %2% m_att size %3%\n") % row % count % m_attachments->size());
+  if ((0 > row) || (0 >= count) || ((row + count) >= m_attachments->size()))
+    return false;
+
+  beginRemoveRows(parent, row, row + count);
+
+  m_attachments->erase(m_attachments->begin() + row, m_attachments->begin() + row + count);
+
+  endRemoveRows();
+
+  return true;
+}
+
+void
+AttachmentModel::addAttachments(QList<AttachmentPtr> const &attachmentsToAdd) {
+  if (attachmentsToAdd.isEmpty())
+    return;
+
+  beginInsertRows(QModelIndex{}, m_attachments->size(), m_attachments->size() + attachmentsToAdd.size() - 1);
+
+  *m_attachments << attachmentsToAdd;
+
+  endInsertRows();
 }
