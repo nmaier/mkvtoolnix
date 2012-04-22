@@ -14,7 +14,8 @@ SOURCES +=
 HEADERS  +=
 
 FORMS += \
-    ../forms/main_window.ui
+    ../forms/main_window.ui \
+    ../forms/merge_widget.ui
 
 RESOURCES += \
     ../qt_resources.qrc

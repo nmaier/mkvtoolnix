@@ -1,25 +1,25 @@
 #include "common/common_pch.h"
 
 #include "common/qt.h"
-#include "mkvtoolnix-gui/main_window/main_window.h"
-#include "mkvtoolnix-gui/forms/main_window.h"
+#include "mkvtoolnix-gui/merge_widget/merge_widget.h"
+#include "mkvtoolnix-gui/forms/merge_widget.h"
 #include "mkvtoolnix-gui/util/settings.h"
 #include "mkvtoolnix-gui/util/util.h"
 
 #include <QFileDialog>
 
 void
-MainWindow::onTitleEdited(QString newValue) {
+MergeWidget::onTitleEdited(QString newValue) {
   m_config.m_title = newValue;
 }
 
 void
-MainWindow::onOutputEdited(QString newValue) {
+MergeWidget::onOutputEdited(QString newValue) {
   m_config.m_destination = newValue;
 }
 
 void
-MainWindow::onBrowseOutput() {
+MergeWidget::onBrowseOutput() {
   auto filter   = m_config.m_webmMode ? QY("WebM files") + Q(" (*.webm)") : QY("Matroska files") + Q(" (*.mkv *.mka *.mks *.mk3d)");
   auto fileName = getSaveFileName(QY("Select output file name"), filter, ui->output);
   if (!fileName.isEmpty())
@@ -27,140 +27,140 @@ MainWindow::onBrowseOutput() {
 }
 
 void
-MainWindow::onGlobalTagsEdited(QString newValue) {
+MergeWidget::onGlobalTagsEdited(QString newValue) {
   m_config.m_globalTags = newValue;
 }
 
 void
-MainWindow::onBrowseGlobalTags() {
+MergeWidget::onBrowseGlobalTags() {
   auto fileName = getOpenFileName(QY("Select tags file"), QY("XML files") + Q(" (*.xml)"), ui->globalTags);
   if (!fileName.isEmpty())
     m_config.m_globalTags = fileName;
 }
 
 void
-MainWindow::onSegmentinfoEdited(QString newValue) {
+MergeWidget::onSegmentinfoEdited(QString newValue) {
   m_config.m_segmentinfo = newValue;
 }
 
 void
-MainWindow::onBrowseSegmentinfo() {
+MergeWidget::onBrowseSegmentinfo() {
   auto fileName = getOpenFileName(QY("Select segment info file"), QY("XML files") + Q(" (*.xml)"), ui->segmentinfo);
   if (!fileName.isEmpty())
     m_config.m_segmentinfo = fileName;
 }
 
 void
-MainWindow::onDoNotSplit() {
+MergeWidget::onDoNotSplit() {
   m_config.m_splitMode = MuxConfig::DoNotSplit;
 }
 
 void
-MainWindow::onDoSplitAfterSize() {
+MergeWidget::onDoSplitAfterSize() {
   m_config.m_splitMode = MuxConfig::SplitAfterSize;
 }
 
 void
-MainWindow::onDoSplitAfterDuration() {
+MergeWidget::onDoSplitAfterDuration() {
   m_config.m_splitMode = MuxConfig::SplitAfterDuration;
 }
 
 void
-MainWindow::onDoSplitAfterTimecodes() {
+MergeWidget::onDoSplitAfterTimecodes() {
   m_config.m_splitMode = MuxConfig::SplitAfterTimecodes;
 }
 
 void
-MainWindow::onDoSplitByParts() {
+MergeWidget::onDoSplitByParts() {
   m_config.m_splitMode = MuxConfig::SplitByParts;
 }
 
 void
-MainWindow::onSplitSizeEdited(QString newValue) {
+MergeWidget::onSplitSizeEdited(QString newValue) {
   m_config.m_splitAfterSize = newValue;
 }
 
 void
-MainWindow::onSplitDurationEdited(QString newValue) {
+MergeWidget::onSplitDurationEdited(QString newValue) {
   m_config.m_splitAfterDuration = newValue;
 }
 
 void
-MainWindow::onSplitTimecodesEdited(QString newValue) {
+MergeWidget::onSplitTimecodesEdited(QString newValue) {
   m_config.m_splitAfterTimecodes = newValue;
 }
 
 void
-MainWindow::onSplitPartsEdited(QString newValue) {
+MergeWidget::onSplitPartsEdited(QString newValue) {
   m_config.m_splitByParts = newValue;
 }
 
 void
-MainWindow::onLinkFilesClicked(bool newValue) {
+MergeWidget::onLinkFilesClicked(bool newValue) {
   m_config.m_linkFiles = newValue;
 }
 
 void
-MainWindow::onSplitMaxFilesChanged(int newValue) {
+MergeWidget::onSplitMaxFilesChanged(int newValue) {
   m_config.m_splitMaxFiles = newValue;
 }
 
 void
-MainWindow::onSegmentUIDsEdited(QString newValue) {
+MergeWidget::onSegmentUIDsEdited(QString newValue) {
   m_config.m_segmentUIDs = newValue;
 }
 
 void
-MainWindow::onPreviousSegmentUIDEdited(QString newValue) {
+MergeWidget::onPreviousSegmentUIDEdited(QString newValue) {
   m_config.m_previousSegmentUID = newValue;
 }
 
 void
-MainWindow::onNextSegmentUIDEdited(QString newValue) {
+MergeWidget::onNextSegmentUIDEdited(QString newValue) {
   m_config.m_nextSegmentUID = newValue;
 }
 
 void
-MainWindow::onChaptersEdited(QString newValue) {
+MergeWidget::onChaptersEdited(QString newValue) {
   m_config.m_chapters = newValue;
 }
 
 void
-MainWindow::onBrowseChapters() {
+MergeWidget::onBrowseChapters() {
   auto fileName = getOpenFileName(QY("Select chapter file"), QY("XML files") + Q(" (*.xml)"), ui->chapters);
   if (!fileName.isEmpty())
     m_config.m_chapters = fileName;
 }
 
 void
-MainWindow::onChapterLanguageChanged(int newValue) {
+MergeWidget::onChapterLanguageChanged(int newValue) {
   auto data = ui->chapterLanguage->itemData(newValue);
   if (data.isValid())
     m_config.m_chapterLanguage = data.toString();
 }
 
 void
-MainWindow::onChapterCharacterSetChanged(QString newValue) {
+MergeWidget::onChapterCharacterSetChanged(QString newValue) {
   m_config.m_chapterCharacterSet = newValue;
 }
 
 void
-MainWindow::onChapterCueNameFormatChanged(QString newValue) {
+MergeWidget::onChapterCueNameFormatChanged(QString newValue) {
   m_config.m_chapterCueNameFormat = newValue;
 }
 
 void
-MainWindow::onWebmClicked(bool newValue) {
+MergeWidget::onWebmClicked(bool newValue) {
   m_config.m_webmMode = newValue;
   // TODO: change output file extension
 }
 
 void
-MainWindow::onUserDefinedOptionsEdited(QString newValue) {
+MergeWidget::onUserDefinedOptionsEdited(QString newValue) {
   m_config.m_userDefinedOptions = newValue;
 }
 
 void
-MainWindow::onEditUserDefinedOptions() {
+MergeWidget::onEditUserDefinedOptions() {
   // TODO
 }

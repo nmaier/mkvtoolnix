@@ -695,7 +695,7 @@ end
 if $build_mkvtoolnix_gui
   ui_files = FileList["src/mkvtoolnix-gui/forms/**/*.ui"].to_a
   ui_files.each do |ui|
-    file ui.ext('cpp').gsub(/forms\/(.*)\.cpp$/, '\1/\1.cpp') => ui.ext('h')
+    file ui.gsub(/forms\/(.*)\.ui$/, '\1/\1.cpp') => ui.ext('h')
   end
 
   Application.new("src/mkvtoolnix-gui/mkvtoolnix-gui").

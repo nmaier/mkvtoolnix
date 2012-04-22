@@ -4,8 +4,8 @@
 #include "common/iso639.h"
 #include "common/qt.h"
 #include "common/stereo_mode.h"
-#include "mkvtoolnix-gui/main_window/main_window.h"
-#include "mkvtoolnix-gui/forms/main_window.h"
+#include "mkvtoolnix-gui/merge_widget/merge_widget.h"
+#include "mkvtoolnix-gui/forms/merge_widget.h"
 #include "mkvtoolnix-gui/util/file_identifier.h"
 #include "mkvtoolnix-gui/util/file_type_filter.h"
 #include "mkvtoolnix-gui/util/settings.h"
@@ -16,7 +16,7 @@
 #include <QString>
 
 void
-MainWindow::setupControlLists() {
+MergeWidget::setupControlLists() {
   m_typeIndependantControls << ui->muxThisLabel << ui->muxThis << ui->miscellaneousBox << ui->userDefinedTrackOptionsLabel << ui->userDefinedTrackOptions;
 
   m_audioControls << ui->trackNameLabel << ui->trackName << ui->trackLanguageLabel << ui->trackLanguage << ui->defaultTrackFlagLabel << ui->defaultTrackFlag << ui->forcedTrackFlagLabel << ui->forcedTrackFlag
@@ -47,7 +47,7 @@ MainWindow::setupControlLists() {
 }
 
 void
-MainWindow::setupInputControls() {
+MergeWidget::setupInputControls() {
   setupControlLists();
 
   ui->files->setModel(m_filesModel);
@@ -98,7 +98,7 @@ MainWindow::setupInputControls() {
 }
 
 void
-MainWindow::onTrackSelectionChanged() {
+MergeWidget::onTrackSelectionChanged() {
   enableInputControls(m_allInputControls, false);
 
   auto selection = ui->tracks->selectionModel()->selection();
@@ -137,14 +137,14 @@ MainWindow::onTrackSelectionChanged() {
 }
 
 void
-MainWindow::enableInputControls(QList<QWidget *> const &controls,
+MergeWidget::enableInputControls(QList<QWidget *> const &controls,
                                 bool enable) {
   for (auto &control : controls)
     control->setEnabled(enable);
 }
 
 void
-MainWindow::addOrRemoveEmptyComboBoxItem(bool add) {
+MergeWidget::addOrRemoveEmptyComboBoxItem(bool add) {
   for (auto &comboBox : m_comboBoxControls)
     if (add && comboBox->itemData(0).isValid())
       comboBox->insertItem(0, QY("<do not change>"));
@@ -153,7 +153,7 @@ MainWindow::addOrRemoveEmptyComboBoxItem(bool add) {
 }
 
 void
-MainWindow::clearInputControlValues() {
+MergeWidget::clearInputControlValues() {
   for (auto comboBox : m_comboBoxControls)
     comboBox->setCurrentIndex(0);
 
@@ -168,7 +168,7 @@ MainWindow::clearInputControlValues() {
 }
 
 void
-MainWindow::setInputControlValues(Track *track) {
+MergeWidget::setInputControlValues(Track *track) {
   m_currentlySettingInputControlValues = true;
 
   addOrRemoveEmptyComboBoxItem(nullptr == track);
@@ -208,7 +208,7 @@ MainWindow::setInputControlValues(Track *track) {
 }
 
 void
-MainWindow::withSelectedTracks(std::function<void(Track *)> code,
+MergeWidget::withSelectedTracks(std::function<void(Track *)> code,
                                bool notIfAppending,
                                QWidget *widget) {
   if (m_currentlySettingInputControlValues)
@@ -248,12 +248,12 @@ MainWindow::withSelectedTracks(std::function<void(Track *)> code,
 }
 
 void
-MainWindow::onTrackNameEdited(QString newValue) {
+MergeWidget::onTrackNameEdited(QString newValue) {
   withSelectedTracks([&](Track *track) { track->m_name = newValue; }, true);
 }
 
 void
-MainWindow::onMuxThisChanged(int newValue) {
+MergeWidget::onMuxThisChanged(int newValue) {
   auto data = ui->muxThis->itemData(newValue);
   if (!data.isValid())
     return;
@@ -263,7 +263,7 @@ MainWindow::onMuxThisChanged(int newValue) {
 }
 
 void
-MainWindow::onTrackLanguageChanged(int newValue) {
+MergeWidget::onTrackLanguageChanged(int newValue) {
   auto code = ui->trackLanguage->itemData(newValue).toString();
   if (code.isEmpty())
     return;
@@ -272,7 +272,7 @@ MainWindow::onTrackLanguageChanged(int newValue) {
 }
 
 void
-MainWindow::onDefaultTrackFlagChanged(int newValue) {
+MergeWidget::onDefaultTrackFlagChanged(int newValue) {
   auto data = ui->defaultTrackFlag->itemData(newValue);
   if (!data.isValid())
     return;
@@ -282,7 +282,7 @@ MainWindow::onDefaultTrackFlagChanged(int newValue) {
 }
 
 void
-MainWindow::onForcedTrackFlagChanged(int newValue) {
+MergeWidget::onForcedTrackFlagChanged(int newValue) {
   auto data = ui->forcedTrackFlag->itemData(newValue);
   if (!data.isValid())
     return;
@@ -292,7 +292,7 @@ MainWindow::onForcedTrackFlagChanged(int newValue) {
 }
 
 void
-MainWindow::onCompressionChanged(int newValue) {
+MergeWidget::onCompressionChanged(int newValue) {
   auto data = ui->compression->itemData(newValue);
   if (!data.isValid())
     return;
@@ -310,71 +310,71 @@ MainWindow::onCompressionChanged(int newValue) {
 }
 
 void
-MainWindow::onTrackTagsEdited(QString newValue) {
+MergeWidget::onTrackTagsEdited(QString newValue) {
   withSelectedTracks([&](Track *track) { track->m_tags = newValue; }, true);
 }
 
 void
-MainWindow::onDelayEdited(QString newValue) {
+MergeWidget::onDelayEdited(QString newValue) {
   withSelectedTracks([&](Track *track) { track->m_delay = newValue; });
 }
 
 void
-MainWindow::onStretchByEdited(QString newValue) {
+MergeWidget::onStretchByEdited(QString newValue) {
   withSelectedTracks([&](Track *track) { track->m_stretchBy = newValue; });
 }
 
 void
-MainWindow::onDefaultDurationEdited(QString newValue) {
+MergeWidget::onDefaultDurationEdited(QString newValue) {
   withSelectedTracks([&](Track *track) { track->m_defaultDuration = newValue; }, true);
 }
 
 void
-MainWindow::onTimecodesEdited(QString newValue) {
+MergeWidget::onTimecodesEdited(QString newValue) {
   withSelectedTracks([&](Track *track) { track->m_timecodes = newValue; });
 }
 
 void
-MainWindow::onBrowseTimecodes() {
+MergeWidget::onBrowseTimecodes() {
   auto fileName = getOpenFileName(QY("Select timecode file"), QY("Text files") + Q(" (*.txt)"), ui->timecodes);
   if (!fileName.isEmpty())
     withSelectedTracks([&](Track *track) { track->m_timecodes = fileName; });
 }
 
 void
-MainWindow::onBrowseTrackTags() {
+MergeWidget::onBrowseTrackTags() {
   auto fileName = getOpenFileName(QY("Select tags file"), QY("XML files") + Q(" (*.xml)"), ui->trackTags);
   if (!fileName.isEmpty())
     withSelectedTracks([&](Track *track) { track->m_tags = fileName; }, true);
 }
 
 void
-MainWindow::onSetAspectRatio() {
+MergeWidget::onSetAspectRatio() {
   withSelectedTracks([&](Track *track) { track->m_setAspectRatio = true; }, true);
 }
 
 void
-MainWindow::onSetDisplayDimensions() {
+MergeWidget::onSetDisplayDimensions() {
   withSelectedTracks([&](Track *track) { track->m_setAspectRatio = false; }, true);
 }
 
 void
-MainWindow::onAspectRatioEdited(QString newValue) {
+MergeWidget::onAspectRatioEdited(QString newValue) {
   withSelectedTracks([&](Track *track) { track->m_aspectRatio = newValue; }, true);
 }
 
 void
-MainWindow::onDisplayWidthEdited(QString newValue) {
+MergeWidget::onDisplayWidthEdited(QString newValue) {
   withSelectedTracks([&](Track *track) { track->m_displayWidth = newValue; }, true);
 }
 
 void
-MainWindow::onDisplayHeightEdited(QString newValue) {
+MergeWidget::onDisplayHeightEdited(QString newValue) {
   withSelectedTracks([&](Track *track) { track->m_displayHeight = newValue; }, true);
 }
 
 void
-MainWindow::onStereoscopyChanged(int newValue) {
+MergeWidget::onStereoscopyChanged(int newValue) {
   auto data = ui->stereoscopy->itemData(newValue);
   if (!data.isValid())
     return;
@@ -384,12 +384,12 @@ MainWindow::onStereoscopyChanged(int newValue) {
 }
 
 void
-MainWindow::onCroppingEdited(QString newValue) {
+MergeWidget::onCroppingEdited(QString newValue) {
   withSelectedTracks([&](Track *track) { track->m_cropping = newValue; }, true);
 }
 
 void
-MainWindow::onAacIsSBRChanged(int newValue) {
+MergeWidget::onAacIsSBRChanged(int newValue) {
   auto data = ui->aacIsSBR->itemData(newValue);
   if (!data.isValid())
     return;
@@ -399,7 +399,7 @@ MainWindow::onAacIsSBRChanged(int newValue) {
 }
 
 void
-MainWindow::onSubtitleCharacterSetChanged(int newValue) {
+MergeWidget::onSubtitleCharacterSetChanged(int newValue) {
   auto characterSet = ui->subtitleCharacterSet->itemData(newValue).toString();
   if (characterSet.isEmpty())
     return;
@@ -408,7 +408,7 @@ MainWindow::onSubtitleCharacterSetChanged(int newValue) {
 }
 
 void
-MainWindow::onCuesChanged(int newValue) {
+MergeWidget::onCuesChanged(int newValue) {
   auto data = ui->cues->itemData(newValue);
   if (!data.isValid())
     return;
@@ -418,12 +418,12 @@ MainWindow::onCuesChanged(int newValue) {
 }
 
 void
-MainWindow::onUserDefinedTrackOptionsEdited(QString newValue) {
+MergeWidget::onUserDefinedTrackOptionsEdited(QString newValue) {
   withSelectedTracks([&](Track *track) { track->m_userDefinedOptions = newValue; }, true);
 }
 
 void
-MainWindow::onAddFiles() {
+MergeWidget::onAddFiles() {
   auto fileNames = selectFilesToAdd();
   if (fileNames.empty())
     return;
@@ -442,7 +442,7 @@ MainWindow::onAddFiles() {
 }
 
 QStringList
-MainWindow::selectFilesToAdd() {
+MergeWidget::selectFilesToAdd() {
   QFileDialog dlg{this};
   dlg.setNameFilters(FileTypeFilter::get());
   dlg.setFileMode(QFileDialog::ExistingFiles);
@@ -458,7 +458,7 @@ MainWindow::selectFilesToAdd() {
 }
 
 void
-MainWindow::addFile(QString const &fileName,
+MergeWidget::addFile(QString const &fileName,
                     bool /*append*/) {
   FileIdentifier identifier{ this, fileName };
   if (!identifier.identify())
@@ -470,23 +470,23 @@ MainWindow::addFile(QString const &fileName,
 }
 
 void
-MainWindow::resizeFilesColumnsToContents()
+MergeWidget::resizeFilesColumnsToContents()
   const {
   resizeViewColumnsToContents(ui->files);
 }
 
 void
-MainWindow::resizeTracksColumnsToContents()
+MergeWidget::resizeTracksColumnsToContents()
   const {
   resizeViewColumnsToContents(ui->tracks);
 }
 
 void
-MainWindow::onFilesContextMenu()
+MergeWidget::onFilesContextMenu()
   const {
 }
 
 void
-MainWindow::onTracksContextMenu()
+MergeWidget::onTracksContextMenu()
   const {
 }

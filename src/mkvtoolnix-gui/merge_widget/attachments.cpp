@@ -2,15 +2,15 @@
 
 #include "common/extern_data.h"
 #include "common/qt.h"
-#include "mkvtoolnix-gui/main_window/main_window.h"
-#include "mkvtoolnix-gui/forms/main_window.h"
+#include "mkvtoolnix-gui/merge_widget/merge_widget.h"
+#include "mkvtoolnix-gui/forms/merge_widget.h"
 #include "mkvtoolnix-gui/util/settings.h"
 #include "mkvtoolnix-gui/util/util.h"
 
 #include <QFileDialog>
 
 void
-MainWindow::setupAttachmentsControls() {
+MergeWidget::setupAttachmentsControls() {
   ui->attachments->setModel(m_attachmentsModel);
   ui->splitMaxFiles->setMaximum(std::numeric_limits<int>::max());
 
@@ -37,7 +37,7 @@ MainWindow::setupAttachmentsControls() {
 }
 
 void
-MainWindow::withSelectedAttachments(std::function<void(Attachment *)> code) {
+MergeWidget::withSelectedAttachments(std::function<void(Attachment *)> code) {
   if (m_currentlySettingInputControlValues)
     return;
 
@@ -59,22 +59,22 @@ MainWindow::withSelectedAttachments(std::function<void(Attachment *)> code) {
 }
 
 void
-MainWindow::onAttachmentNameEdited(QString newValue) {
+MergeWidget::onAttachmentNameEdited(QString newValue) {
   withSelectedAttachments([&](Attachment *attachment) { attachment->m_name = newValue; });
 }
 
 void
-MainWindow::onAttachmentDescriptionEdited(QString newValue) {
+MergeWidget::onAttachmentDescriptionEdited(QString newValue) {
   withSelectedAttachments([&](Attachment *attachment) { attachment->m_description = newValue; });
 }
 
 void
-MainWindow::onAttachmentMIMETypeEdited(QString newValue) {
+MergeWidget::onAttachmentMIMETypeEdited(QString newValue) {
   withSelectedAttachments([&](Attachment *attachment) { attachment->m_MIMEType = newValue; });
 }
 
 void
-MainWindow::onAttachmentStyleChanged(int newValue) {
+MergeWidget::onAttachmentStyleChanged(int newValue) {
   auto data = ui->attachmentStyle->itemData(newValue);
   if (!data.isValid())
     return;
@@ -84,7 +84,7 @@ MainWindow::onAttachmentStyleChanged(int newValue) {
 }
 
 void
-MainWindow::onAddAttachments() {
+MergeWidget::onAddAttachments() {
   auto fileNames = selectAttachmentsToAdd();
   if (fileNames.empty())
     return;
@@ -100,7 +100,7 @@ MainWindow::onAddAttachments() {
 }
 
 QStringList
-MainWindow::selectAttachmentsToAdd() {
+MergeWidget::selectAttachmentsToAdd() {
   QFileDialog dlg{this};
   dlg.setNameFilter(QY("All files") + Q(" (*)"));
   dlg.setFileMode(QFileDialog::ExistingFiles);
@@ -116,20 +116,20 @@ MainWindow::selectAttachmentsToAdd() {
 }
 
 void
-MainWindow::onRemoveAttachments() {
+MergeWidget::onRemoveAttachments() {
   m_attachmentsModel->removeSelectedAttachments(ui->attachments->selectionModel()->selection());
 
   onAttachmentSelectionChanged();
 }
 
 void
-MainWindow::resizeAttachmentsColumnsToContents()
+MergeWidget::resizeAttachmentsColumnsToContents()
   const {
   resizeViewColumnsToContents(ui->attachments);
 }
 
 void
-MainWindow::onAttachmentSelectionChanged() {
+MergeWidget::onAttachmentSelectionChanged() {
   auto selection = ui->attachments->selectionModel()->selection();
   if (selection.isEmpty()) {
     enableAttachmentControls(false);
@@ -155,7 +155,7 @@ MainWindow::onAttachmentSelectionChanged() {
 }
 
 void
-MainWindow::enableAttachmentControls(bool enable) {
+MergeWidget::enableAttachmentControls(bool enable) {
   auto controls = std::vector<QWidget *>{ui->attachmentName,     ui->attachmentNameLabel,     ui->attachmentDescription, ui->attachmentDescriptionLabel,
                                          ui->attachmentMIMEType, ui->attachmentMIMETypeLabel, ui->attachmentStyle,       ui->attachmentStyleLabel,};
   for (auto &control : controls)
@@ -165,7 +165,7 @@ MainWindow::enableAttachmentControls(bool enable) {
 }
 
 void
-MainWindow::setAttachmentControlValues(Attachment *attachment) {
+MergeWidget::setAttachmentControlValues(Attachment *attachment) {
   m_currentlySettingInputControlValues = true;
 
   if ((nullptr == attachment) && ui->attachmentStyle->itemData(0).isValid())
