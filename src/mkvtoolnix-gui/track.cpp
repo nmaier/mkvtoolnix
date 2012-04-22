@@ -6,24 +6,26 @@
 #include "mkvtoolnix-gui/track.h"
 #include "mkvtoolnix-gui/util/settings.h"
 
-Track::Track(Track::Type type,
-             SourceFile *file)
-  : m_properties()
-  , m_file(file)
-  , m_appendedTo(nullptr)
-  , m_appendedTracks()
-  , m_type(type)
-  , m_id(-1)
-  , m_muxThis(true)
-  , m_setAspectRatio(true)
-  , m_defaultTrackFlagWasSet(false)
-  , m_defaultTrackFlag(0)
-  , m_forcedTrackFlag(0)
-  , m_stereoscopy(0)
-  , m_cues(0)
-  , m_aacIsSBR(0)
-  , m_compression(CompDefault)
-  , m_size(0)
+#include <QVariant>
+
+Track::Track(SourceFile *file,
+             Track::Type type)
+  : m_properties{}
+  , m_file{file}
+  , m_appendedTo{nullptr}
+  , m_appendedTracks{}
+  , m_type{type}
+  , m_id{-1}
+  , m_muxThis{true}
+  , m_setAspectRatio{true}
+  , m_defaultTrackFlagWasSet{false}
+  , m_defaultTrackFlag{0}
+  , m_forcedTrackFlag{0}
+  , m_stereoscopy{0}
+  , m_cues{0}
+  , m_aacIsSBR{0}
+  , m_compression{CompDefault}
+  , m_size{0}
 {
 }
 
@@ -132,9 +134,13 @@ Track::saveSettings(QSettings &settings)
   const {
   MuxConfig::saveProperties(settings, m_properties);
 
-  settings.setValue("objectID",               static_cast<void const *>(this));
-  settings.setValue("file",                   static_cast<void const *>(m_file));
-  settings.setValue("appendedTo",             static_cast<void const *>(m_appendedTo));
+  QStringList appendedTracks;
+  for (auto &track : m_appendedTracks)
+    appendedTracks << QString::number(reinterpret_cast<qlonglong>(track));
+
+  settings.setValue("objectID",               reinterpret_cast<qlonglong>(this));
+  settings.setValue("appendedTo",             reinterpret_cast<qlonglong>(m_appendedTo));
+  settings.setValue("appendedTracks",         appendedTracks);
   settings.setValue("type",                   m_type);
   settings.setValue("id",                     static_cast<qlonglong>(m_id));
   settings.setValue("muxThis",                m_muxThis);
@@ -162,4 +168,63 @@ Track::saveSettings(QSettings &settings)
   settings.setValue("compression",            m_compression);
   settings.setValue("size",                   static_cast<qlonglong>(m_size));
   settings.setValue("attachmentDescription",  m_attachmentDescription);
+}
+
+void
+Track::loadSettings(MuxConfig::Loader &l) {
+  MuxConfig::loadProperties(l.settings, m_properties);
+
+  auto objectID = l.settings.value("objectID").toLongLong();
+  if ((0 >= objectID) || l.objectIDToTrack.contains(objectID))
+    throw mtx::InvalidSettingsX{};
+
+  l.objectIDToTrack[objectID] = this;
+  m_type                      = static_cast<Type>(l.settings.value("type").toInt());
+  m_id                        = l.settings.value("id").toLongLong();
+  m_muxThis                   = l.settings.value("muxThis").toBool();
+  m_setAspectRatio            = l.settings.value("setAspectRatio").toBool();
+  m_defaultTrackFlagWasSet    = l.settings.value("defaultTrackFlagWasSet").toBool();
+  m_name                      = l.settings.value("name").toString();
+  m_codec                     = l.settings.value("codec").toString();
+  m_language                  = l.settings.value("language").toString();
+  m_tags                      = l.settings.value("tags").toString();
+  m_delay                     = l.settings.value("delay").toString();
+  m_stretchBy                 = l.settings.value("stretchBy").toString();
+  m_defaultDuration           = l.settings.value("defaultDuration").toString();
+  m_timecodes                 = l.settings.value("timecodes").toString();
+  m_aspectRatio               = l.settings.value("aspectRatio").toString();
+  m_displayWidth              = l.settings.value("displayWidth").toString();
+  m_displayHeight             = l.settings.value("displayHeight").toString();
+  m_cropping                  = l.settings.value("cropping").toString();
+  m_characterSet              = l.settings.value("characterSet").toString();
+  m_userDefinedOptions        = l.settings.value("userDefinedOptions").toString();
+  m_defaultTrackFlag          = l.settings.value("defaultTrackFlag").toInt();
+  m_forcedTrackFlag           = l.settings.value("forcedTrackFlag").toInt();
+  m_stereoscopy               = l.settings.value("stereoscopy").toInt();
+  m_cues                      = l.settings.value("cues").toInt();
+  m_aacIsSBR                  = l.settings.value("aacIsSBR").toInt();
+  m_compression               = static_cast<Compression>(l.settings.value("compression").toInt());
+  m_size                      = l.settings.value("size").toLongLong();
+  m_attachmentDescription     = l.settings.value("attachmentDescription").toString();
+
+  if (   (TypeMin > m_type)        || (TypeMax < m_type)
+      || (CompMin > m_compression) || (CompMax < m_compression))
+    throw mtx::InvalidSettingsX{};
+}
+
+void
+Track::fixAssociations(MuxConfig::Loader &l) {
+  if (isAppended()) {
+    auto appendedToID = l.settings.value("appendedTo").toLongLong();
+    if ((0 >= appendedToID) || !l.objectIDToTrack.contains(appendedToID))
+      throw mtx::InvalidSettingsX{};
+    m_appendedTo = l.objectIDToTrack.value(appendedToID);
+  }
+
+  m_appendedTracks.clear();
+  for (auto &appendedTrackID : l.settings.value("appendedTracks").toStringList()) {
+    if (!l.objectIDToTrack.contains(appendedTrackID.toLongLong()))
+      throw mtx::InvalidSettingsX{};
+    m_appendedTracks << l.objectIDToTrack.value(appendedTrackID.toLongLong());
+  }
 }

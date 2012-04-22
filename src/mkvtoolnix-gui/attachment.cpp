@@ -29,6 +29,18 @@ Attachment::saveSettings(QSettings &settings)
 }
 
 void
+Attachment::loadSettings(MuxConfig::Loader &l) {
+  m_fileName    = l.settings.value("fileName").toString();
+  m_name        = l.settings.value("name").toString();
+  m_description = l.settings.value("description").toString();
+  m_MIMEType    = l.settings.value("MIMEType").toString();
+  m_style       = static_cast<Style>(l.settings.value("style").toInt());
+
+  if ((StyleMin > m_style) || (StyleMax < m_style))
+    throw mtx::InvalidSettingsX{};
+}
+
+void
 Attachment::guessMIMEType() {
   m_MIMEType = to_qs(guess_mime_type(to_utf8(m_fileName), true));
 }

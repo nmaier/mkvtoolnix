@@ -4,6 +4,7 @@
 #include "common/common_pch.h"
 
 #include "common/qt.h"
+#include "mkvtoolnix-gui/mux_config.h"
 
 #include <QHash>
 #include <QObject>
@@ -19,7 +20,7 @@ class Track: public QObject {
   Q_OBJECT;
 public:
   enum Type {
-    Audio,
+    Audio = 0,
     Video,
     Subtitles,
     Buttons,
@@ -27,14 +28,18 @@ public:
     GlobalTags,
     Tags,
     Attachment,
+    TypeMin = Audio,
+    TypeMax = Attachment
   };
 
   enum Compression {
-    CompDefault,
+    CompDefault = 0,
     CompNone,
     CompZlib,
     CompLzo,
     CompBz2,
+    CompMin = CompDefault,
+    CompMax = CompBz2
   };
 
   QHash<QString, QString> m_properties;
@@ -55,7 +60,7 @@ public:
   QString m_attachmentDescription;
 
 public:
-  explicit Track(Type type, SourceFile *file);
+  explicit Track(SourceFile *file, Type = Audio);
   virtual ~Track();
 
   virtual bool isType(Type type) const;
@@ -73,6 +78,8 @@ public:
   virtual QString extractAudioDelayFromFileName() const;
 
   virtual void saveSettings(QSettings &settings) const;
+  virtual void loadSettings(MuxConfig::Loader &l);
+  virtual void fixAssociations(MuxConfig::Loader &l);
 };
 
 #endif  // MTX_MKVTOOLNIX_GUI_TRACK_H

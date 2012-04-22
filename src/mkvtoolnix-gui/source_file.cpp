@@ -4,6 +4,28 @@
 #include "mkvtoolnix-gui/mux_config.h"
 #include "mkvtoolnix-gui/source_file.h"
 
+namespace {
+
+template<typename T>
+void
+fixAssociationsFor(char const *group,
+                   QList<std::shared_ptr<T> > &container,
+                   MuxConfig::Loader &l) {
+  l.settings.beginGroup(group);
+
+  int idx = 0;
+  for (auto &entry : container) {
+    l.settings.beginGroup(QString::number(idx));
+    entry->fixAssociations(l);
+    l.settings.endGroup();
+    ++idx;
+  }
+
+  l.settings.endGroup();
+}
+
+}
+
 SourceFile::SourceFile(QString const &fileName)
   : m_properties{}
   , m_fileName{fileName}
@@ -66,50 +88,55 @@ SourceFile::saveSettings(QSettings &settings)
   const {
   MuxConfig::saveProperties(settings, m_properties);
 
-  settings.beginGroup("tracks");
-  settings.setValue("numberOfTracks", m_tracks.size());
+  saveSettingsGroup("tracks",          m_tracks,          settings);
+  saveSettingsGroup("additionalParts", m_additionalParts, settings);
+  saveSettingsGroup("appendedFiles",   m_appendedFiles,   settings);
 
-  int idx = 0;
-  for (auto &track : m_tracks) {
-    settings.beginGroup(QString::number(idx));
-    track->saveSettings(settings);
-    settings.endGroup();
-    ++idx;
-  }
-
-  settings.endGroup();
-
-  settings.beginGroup("additionalParts");
-  settings.setValue("numberOfAdditionalParts", m_additionalParts.size());
-
-  idx = 0;
-  for (auto &additionalPart : m_additionalParts) {
-    settings.beginGroup(QString::number(idx));
-    additionalPart->saveSettings(settings);
-    settings.endGroup();
-    ++idx;
-  }
-
-  settings.endGroup();
-
-  settings.beginGroup("appendedFiles");
-  settings.setValue("numberOfAppendedFiles", m_appendedFiles.size());
-
-  idx = 0;
-  for (auto &appendedFile : m_appendedFiles) {
-    settings.beginGroup(QString::number(idx));
-    appendedFile->saveSettings(settings);
-    settings.endGroup();
-    ++idx;
-  }
-
-  settings.endGroup();
-
-  settings.setValue("objectID",       static_cast<void const *>(this));
+  settings.setValue("objectID",       reinterpret_cast<qlonglong>(this));
   settings.setValue("fileName",       m_fileName);
   settings.setValue("container",      m_container);
   settings.setValue("type",           m_type);
   settings.setValue("appended",       m_appended);
   settings.setValue("additionalPart", m_additionalPart);
-  settings.setValue("appendedTo",     static_cast<void const *>(this));
+  settings.setValue("appendedTo",     reinterpret_cast<qlonglong>(m_appendedTo));
+}
+
+void
+SourceFile::loadSettings(MuxConfig::Loader &l) {
+  auto objectID = l.settings.value("objectID").toLongLong();
+  if ((0 >= objectID) || l.objectIDToSourceFile.contains(objectID))
+    throw mtx::InvalidSettingsX{};
+
+  l.objectIDToSourceFile[objectID] = this;
+  m_fileName                       = l.settings.value("fileName").toString();
+  m_container                      = l.settings.value("container").toString();
+  m_type                           = static_cast<file_type_e>(l.settings.value("type").toInt());
+  m_appended                       = l.settings.value("appended").toBool();
+  m_additionalPart                 = l.settings.value("additionalPart").toBool();
+  m_appendedTo                     = reinterpret_cast<SourceFile *>(l.settings.value("appendedTo").toLongLong());
+
+  if ((FILE_TYPE_IS_UNKNOWN > m_type) || (FILE_TYPE_MAX < m_type))
+    throw mtx::InvalidSettingsX{};
+
+  MuxConfig::loadProperties(l.settings, m_properties);
+
+  loadSettingsGroup<Track>     ("tracks",          m_tracks,          l, [](){ return std::make_shared<Track>(nullptr); });
+  loadSettingsGroup<SourceFile>("additionalParts", m_additionalParts, l);
+  loadSettingsGroup<SourceFile>("appendedFiles",   m_appendedFiles,   l);
+}
+
+void
+SourceFile::fixAssociations(MuxConfig::Loader &l) {
+  if (m_appended || m_additionalPart) {
+    auto appendedToID = reinterpret_cast<qlonglong>(m_appendedTo);
+    if ((0 >= appendedToID) || !l.objectIDToSourceFile.contains(appendedToID))
+      throw mtx::InvalidSettingsX{};
+    m_appendedTo = l.objectIDToSourceFile.value(appendedToID);
+
+  } else
+    m_appendedTo = nullptr;
+
+  fixAssociationsFor("tracks",          m_tracks,          l);
+  fixAssociationsFor("additionalParts", m_additionalParts, l);
+  fixAssociationsFor("appendedFiles",   m_appendedFiles,   l);
 }

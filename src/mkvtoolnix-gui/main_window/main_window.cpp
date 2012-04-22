@@ -9,6 +9,7 @@
 #include <QFileDialog>
 #include <QIcon>
 #include <QList>
+#include <QMessageBox>
 #include <QString>
 
 MainWindow::MainWindow(QWidget *parent)
@@ -65,7 +66,22 @@ MainWindow::onSaveConfigAs() {
 
 void
 MainWindow::onOpenConfig() {
-  // TODO
+  auto fileName = QFileDialog::getOpenFileName(this, Q(""), Settings::get().m_lastConfigDir.path(), QY("MKVToolNix GUI config files") + Q(" (*.mtxcfg);;") + QY("All files") + Q(" (*)"));
+  if (fileName.isEmpty())
+    return;
+
+  Settings::get().m_lastConfigDir = QFileInfo{fileName}.path();
+  Settings::get().save();
+
+  try {
+    m_config.load(fileName);
+    setStatusBarMessage(QY("The configuration has been loaded."));
+    m_config.save(fileName + "-resaved");
+
+  } catch (mtx::InvalidSettingsX &) {
+    m_config.reset();
+    QMessageBox::critical(this, QY("Error loading settings file"), QY("The settings file '%1' contains invalid settings and was not loaded.").arg(fileName));
+  }
 }
 
 void

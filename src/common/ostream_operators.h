@@ -42,11 +42,21 @@ operator <<(std::basic_ostream<CharT, TraitsT> &out,
   return out;
 }
 
-template<typename CharT, typename TraitsT, typename ElementT>
-std::basic_ostream<CharT, TraitsT> &
-operator <<(std::basic_ostream<CharT, TraitsT> &out,
+template<typename ElementT>
+std::ostream &
+operator <<(std::ostream &out,
             ElementT const &e) {
   return e.streamify(out);
+}
+
+template<typename ElementT>
+std::wostream &
+operator <<(std::wostream &out,
+            ElementT const &e) {
+  std::stringstream temp;
+  e.streamify(temp);
+  out << to_wide(temp.str());
+  return out;
 }
 
 }

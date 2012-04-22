@@ -2802,6 +2802,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionOpen</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onOpenConfig()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>424</x>
+     <y>280</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>onStartMuxing()</slot>

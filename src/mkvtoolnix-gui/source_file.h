@@ -5,7 +5,7 @@
 
 #include "common/file_types.h"
 #include "common/qt.h"
-
+#include "mkvtoolnix-gui/mux_config.h"
 #include "mkvtoolnix-gui/track.h"
 
 #include <QHash>
@@ -30,13 +30,15 @@ public:
   SourceFile *m_appendedTo;
 
 public:
-  explicit SourceFile(QString const &fileName);
+  explicit SourceFile(QString const &fileName = QString{""});
   virtual ~SourceFile();
 
   virtual void setContainer(QString const &container);
   virtual bool isValid() const;
 
   virtual void saveSettings(QSettings &settings) const;
+  virtual void loadSettings(MuxConfig::Loader &l);
+  virtual void fixAssociations(MuxConfig::Loader &l);
 };
 
 #endif  // MTX_MKVTOOLNIX_GUI_SOURCE_FILE_H

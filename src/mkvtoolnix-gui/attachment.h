@@ -4,6 +4,7 @@
 #include "common/common_pch.h"
 
 #include "common/qt.h"
+#include "mkvtoolnix-gui/mux_config.h"
 
 #include <QObject>
 #include <QSettings>
@@ -18,16 +19,19 @@ public:
   enum Style {
     ToAllFiles = 1,
     ToFirstFile,
+    StyleMax = ToFirstFile,
+    StyleMin = ToAllFiles
   };
 
   QString m_fileName, m_name, m_description, m_MIMEType;
   Style m_style;
 
 public:
-  explicit Attachment(QString const &fileName);
+  explicit Attachment(QString const &fileName = QString{""});
   virtual ~Attachment();
 
   virtual void saveSettings(QSettings &settings) const;
+  virtual void loadSettings(MuxConfig::Loader &l);
   virtual void guessMIMEType();
 };
 

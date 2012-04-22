@@ -116,7 +116,7 @@ FileIdentifier::parseAttachmentLine(QString const &line) {
   if (-1 == re.indexIn(line))
     return;
 
-  auto track                     = std::make_shared<Track>(Track::Attachment, m_file.get());
+  auto track                     = std::make_shared<Track>(m_file.get(), Track::Attachment);
   track->m_id                    = re.cap(1).toLongLong();
   track->m_codec                 = re.cap(2);
   track->m_size                  = re.cap(3).toLongLong();
@@ -134,7 +134,7 @@ FileIdentifier::parseChaptersLine(QString const &line) {
   if (-1 == re.indexIn(line))
     return;
 
-  auto track    = std::make_shared<Track>(Track::Chapters, m_file.get());
+  auto track    = std::make_shared<Track>(m_file.get(), Track::Chapters);
   track->m_size = re.cap(1).toLongLong();
 
   m_file->m_tracks << track;
@@ -170,7 +170,7 @@ FileIdentifier::parseGlobalTagsLine(QString const &line) {
   if (-1 == re.indexIn(line))
     return;
 
-  auto track    = std::make_shared<Track>(Track::GlobalTags, m_file.get());
+  auto track    = std::make_shared<Track>(m_file.get(), Track::GlobalTags);
   track->m_size = re.cap(1).toLongLong();
 
   m_file->m_tracks << track;
@@ -184,7 +184,7 @@ FileIdentifier::parseTagsLine(QString const &line) {
   if (-1 == re.indexIn(line))
     return;
 
-  auto track    = std::make_shared<Track>(Track::Tags, m_file.get());
+  auto track    = std::make_shared<Track>(m_file.get(), Track::Tags);
   track->m_id   = re.cap(1).toLongLong();
   track->m_size = re.cap(2).toLongLong();
 
@@ -204,7 +204,7 @@ FileIdentifier::parseTrackLine(QString const &line) {
                       : re.cap(2) == "video"     ? Track::Video
                       : re.cap(2) == "subtitles" ? Track::Subtitles
                       :                            Track::Buttons;
-  auto track          = std::make_shared<Track>(type, m_file.get());
+  auto track          = std::make_shared<Track>(m_file.get(), type);
   track->m_id         = re.cap(1).toLongLong();
   track->m_codec      = re.cap(3);
   track->m_properties = parseProperties(line);

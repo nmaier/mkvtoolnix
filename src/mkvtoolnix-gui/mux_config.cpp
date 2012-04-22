@@ -1,12 +1,16 @@
 #include "common/common_pch.h"
 
+#include "mkvtoolnix-gui/attachment.h"
 #include "mkvtoolnix-gui/mux_config.h"
+#include "mkvtoolnix-gui/source_file.h"
+#include "mkvtoolnix-gui/track.h"
 
 #include <QFile>
 #include <QStringList>
 
-MuxConfig::MuxConfig()
+MuxConfig::MuxConfig(QString const &fileName)
   : QObject{}
+  , m_configFileName{fileName}
   , m_splitMode{DoNotSplit}
   , m_splitMaxFiles{0}
   , m_linkFiles{false}
@@ -31,7 +35,7 @@ MuxConfig::operator =(MuxConfig const &other) {
   m_configFileName       = other.m_configFileName;
   m_files                = other.m_files;
   m_tracks               = other.m_tracks;
-  // m_attachments          = other.m_attachments;
+  m_attachments          = other.m_attachments;
   m_title                = other.m_title;
   m_destination          = other.m_destination;
   m_globalTags           = other.m_globalTags;
@@ -57,52 +61,93 @@ MuxConfig::operator =(MuxConfig const &other) {
 }
 
 void
-MuxConfig::load(QSettings const &) {
-  // TODO
+MuxConfig::loadProperties(QSettings &settings,
+                          QHash<QString, QString> &properties) {
+  properties.clear();
+
+  settings.beginGroup("properties");
+  for (auto &key : settings.childKeys())
+    properties[key] = settings.value(key).toString();
+  settings.endGroup();
+}
+
+void
+MuxConfig::load(QString const &fileName) {
+  reset();
+
+  if (!fileName.isEmpty())
+    m_configFileName = fileName;
+
+  if (m_configFileName.isEmpty())
+    throw mtx::InvalidSettingsX{};
+
+  QSettings settings{m_configFileName, QSettings::IniFormat};
+  load(settings);
+}
+
+void
+MuxConfig::load(QSettings &settings) {
+  reset();
+
+  // Check supported config file version
+  if (settings.value("version", std::numeric_limits<int>::max()).toInt() > MTXCFG_VERSION)
+    throw mtx::InvalidSettingsX{};
+
+  QHash<qlonglong, SourceFile *> objectIDToSourceFile;
+  QHash<qlonglong, Track *> objectIDToTrack;
+  Loader l{settings, objectIDToSourceFile, objectIDToTrack};
+
+  // Need to give different argument for last parameter even though
+  // it's the same as the default argument due to a bug in gcc 4.6.1.
+  loadSettingsGroup<SourceFile>("files",       m_files,       l, []() { return std::make_shared<SourceFile>(); });
+  loadSettingsGroup<Attachment>("attachments", m_attachments, l);
+
+  for (auto &file : m_files)
+    file->fixAssociations(l);
+
+  // Load global settings
+  settings.beginGroup("global");
+  m_title                = settings.value("title").toString();
+  m_destination          = settings.value("destination").toString();
+  m_globalTags           = settings.value("globalTags").toString();
+  m_segmentinfo          = settings.value("segmentinfo").toString();
+  m_splitAfterSize       = settings.value("splitAfterSize").toString();
+  m_splitAfterDuration   = settings.value("splitAfterDuration").toString();
+  m_splitAfterTimecodes  = settings.value("splitAfterTimecodes").toString();
+  m_splitByParts         = settings.value("splitByParts").toString();
+  m_segmentUIDs          = settings.value("segmentUIDs").toString();
+  m_previousSegmentUID   = settings.value("previousSegmentUID").toString();
+  m_nextSegmentUID       = settings.value("nextSegmentUID").toString();
+  m_chapters             = settings.value("chapters").toString();
+  m_chapterLanguage      = settings.value("chapterLanguage").toString();
+  m_chapterCharacterSet  = settings.value("chapterCharacterSet").toString();
+  m_chapterCueNameFormat = settings.value("chapterCueNameFormat").toString();
+  m_userDefinedOptions   = settings.value("userDefinedOptions").toString();
+  m_splitMode            = static_cast<SplitMode>(settings.value("splitMode").toInt());
+  m_splitMaxFiles        = settings.value("splitMaxFiles").toInt();
+  m_linkFiles            = settings.value("linkFiles").toBool();
+  m_webmMode             = settings.value("webmMode").toBool();
+  settings.endGroup();
 }
 
 void
 MuxConfig::saveProperties(QSettings &settings,
                           QHash<QString, QString> const &properties) {
-  QStringList propertyKeys;
-  for (auto key_value = properties.begin() ; properties.end() != key_value ; ++key_value)
-    propertyKeys << key_value.key();
-  settings.setValue("propertyKeys", propertyKeys.join("\t"));
-
+  QStringList keys{ properties.keys() };
+  keys.sort();
   settings.beginGroup("properties");
-  for (auto key_value = properties.begin() ; properties.end() != key_value ; ++key_value)
-    settings.setValue(key_value.key(), key_value.value());
+  for (auto &key : keys)
+    settings.setValue(key, properties.value(key));
   settings.endGroup();
 }
 
 void
 MuxConfig::save(QSettings &settings)
   const {
-  settings.beginGroup("files");
-  settings.setValue("numberOfFiles", m_files.size());
+  settings.setValue("version", MTXCFG_VERSION);
 
-  int idx = 0;
-  for (auto &file : m_files) {
-    settings.beginGroup(QString::number(idx));
-    file->saveSettings(settings);
-    settings.endGroup();
-    ++idx;
-  }
-
-  settings.endGroup();
-
-  settings.beginGroup("attachments");
-  settings.setValue("numberOfAttachments", m_attachments.size());
-
-  idx = 0;
-  for (auto &attachment : m_attachments) {
-    settings.beginGroup(QString::number(idx));
-    attachment->saveSettings(settings);
-    settings.endGroup();
-    ++idx;
-  }
-
-  settings.endGroup();
+  saveSettingsGroup("files",       m_files,       settings);
+  saveSettingsGroup("attachments", m_attachments, settings);
 
   settings.beginGroup("global");
   settings.setValue("title",                m_title);
@@ -146,9 +191,9 @@ MuxConfig::reset() {
 }
 
 MuxConfigPtr
-MuxConfig::load(QString const &fileName) {
-  auto config = std::make_shared<MuxConfig>();
-  config->load(QSettings{fileName, QSettings::IniFormat});
+MuxConfig::loadSettings(QString const &fileName) {
+  auto config = std::make_shared<MuxConfig>(fileName);
+  config->load();
 
   return config;
 }
