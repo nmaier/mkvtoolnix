@@ -7111,7 +7111,8 @@ msgid "The string 'global' works on the global tags."
 msgstr "De reeks 'global' werkt op de globale markeringen."
 
 #: src/propedit/propedit_cli_parser.cpp:176
-msgid "The string 'track:' followed by one of the chars 'a', 'b', 's' or 'v' followed by a number 'n' selects the nth audio, button, subtitle or video track (e.g. '--edit track:a2')."
+#, fuzzy
+msgid "The string 'track:' followed by one of the chars 'a', 'b', 's' or 'v' followed by a number 'n' selects the nth audio, button, subtitle or video track (e.g. '--edit track:a2'). Numbering starts at 1."
 msgstr "De reeks 'spoor:' gevolgd door één van de karakters 'a', 'b', 's' or 'v' gevolgd door een nummer 'n' selecteert de 'de audio, knop, ondertiteling of video spoor (b.v. '--edit track:a2')."
 
 #: src/propedit/propedit_cli_parser.cpp:178
@@ -7123,7 +7124,8 @@ msgid "The string 'track:@number' with 'number' being a number selects the track
 msgstr "De reeks 'spoor:@nummer' met 'nummer' zijnde een nummer selecteert het spoor waarvan 'spoor nummer' element gelijk is met 'nummer'."
 
 #: src/propedit/propedit_cli_parser.cpp:175
-msgid "The string 'track:n' with 'n' being a number selects the nth track."
+#, fuzzy
+msgid "The string 'track:n' with 'n' being a number selects the nth track. Numbering starts at 1."
 msgstr "De reeks 'spoor:n' met 'n' zijnde een nummer selecteert de n'de spoor."
 
 #: src/propedit/propedit_cli_parser.cpp:172

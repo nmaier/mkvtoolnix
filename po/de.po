@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2012-04-14 23:28+0200\n"
+"PO-Revision-Date: 2012-04-24 09:53+0200\n"
 "Last-Translator: Moritz Bunkus <moritz@bunkus.org>\n"
 "Language-Team: German <moritz@bunkus.org>\n"
 "Language: de\n"
@@ -7123,8 +7123,8 @@ msgid "The string 'global' works on the global tags."
 msgstr "Die Zeichenkette 'global' bearbeitet nur die globalen Tags."
 
 #: src/propedit/propedit_cli_parser.cpp:176
-msgid "The string 'track:' followed by one of the chars 'a', 'b', 's' or 'v' followed by a number 'n' selects the nth audio, button, subtitle or video track (e.g. '--edit track:a2')."
-msgstr "Die Zeichenkette 'track:' gefolgt von einem der Zeichen 'a', 'b', 's' oder 'v' gefolgt von einer Nummer 'n' wählt den n-ten Audio-, Button-, Untertitel- oder Videotrack aus (z.B. '--edit track:a2')."
+msgid "The string 'track:' followed by one of the chars 'a', 'b', 's' or 'v' followed by a number 'n' selects the nth audio, button, subtitle or video track (e.g. '--edit track:a2'). Numbering starts at 1."
+msgstr "Die Zeichenkette 'track:' gefolgt von einem der Zeichen 'a', 'b', 's' oder 'v' gefolgt von einer Nummer 'n' wählt den n-ten Audio-, Button-, Untertitel- oder Videotrack aus (z.B. '--edit track:a2'). Die Nummerierung beginnt bei 1."
 
 #: src/propedit/propedit_cli_parser.cpp:178
 msgid "The string 'track:=uid' with 'uid' being a number selects the track whose 'track UID' element equals 'uid'."
@@ -7135,8 +7135,8 @@ msgid "The string 'track:@number' with 'number' being a number selects the track
 msgstr "Die Zeichenkette 'track:@nummer' mit einer Zahl 'nummer' wählt denjenigen Track aus, dessen 'Tracknummer'-Element der Zahl 'nummer' gleicht."
 
 #: src/propedit/propedit_cli_parser.cpp:175
-msgid "The string 'track:n' with 'n' being a number selects the nth track."
-msgstr "Die Zeichenkette 'track:n' mit einer Zahl 'n' wählt den n-ten Track aus."
+msgid "The string 'track:n' with 'n' being a number selects the nth track. Numbering starts at 1."
+msgstr "Die Zeichenkette 'track:n' mit einer Zahl 'n' wählt den n-ten Track aus. Die Nummerierung beginnt bei 1."
 
 #: src/propedit/propedit_cli_parser.cpp:172
 msgid "The strings 'info', 'segment_info' or 'segmentinfo' select the segment information element. This is also the default until the first '--edit' option is found."

@@ -7092,7 +7092,8 @@ msgid "The string 'global' works on the global tags."
 msgstr "Строка 'global' работает на глобальных тэгах."
 
 #: src/propedit/propedit_cli_parser.cpp:176
-msgid "The string 'track:' followed by one of the chars 'a', 'b', 's' or 'v' followed by a number 'n' selects the nth audio, button, subtitle or video track (e.g. '--edit track:a2')."
+#, fuzzy
+msgid "The string 'track:' followed by one of the chars 'a', 'b', 's' or 'v' followed by a number 'n' selects the nth audio, button, subtitle or video track (e.g. '--edit track:a2'). Numbering starts at 1."
 msgstr "Строка 'track:' сопровождаемая одним из символов, 'b', 's' или 'v', за которым следует число 'n' выбирает n-ную дорожку аудио, кнопок, субтитров или видео (например '--edit track:a2')."
 
 #: src/propedit/propedit_cli_parser.cpp:178
@@ -7104,7 +7105,8 @@ msgid "The string 'track:@number' with 'number' being a number selects the track
 msgstr "Строка 'track:@number', где 'number' - число, выбирает дорожку, чей элемент 'номер дорожки' равен 'числу'."
 
 #: src/propedit/propedit_cli_parser.cpp:175
-msgid "The string 'track:n' with 'n' being a number selects the nth track."
+#, fuzzy
+msgid "The string 'track:n' with 'n' being a number selects the nth track. Numbering starts at 1."
 msgstr "Строка 'track:n', где 'n' - число, выбирает n-ную дорожку."
 
 #: src/propedit/propedit_cli_parser.cpp:172
@@ -9862,3 +9864,4 @@ msgstr "Да"
 
 #~ msgid "wrong usage: writing to read-only memory"
 #~ msgstr "неправильное использование: запись в память только для чтения"
+

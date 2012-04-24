@@ -7167,7 +7167,8 @@ msgid "The string 'global' works on the global tags."
 msgstr "La cadena de caracteres 'global' funciona en todas la etiqueta global."
 
 #: src/propedit/propedit_cli_parser.cpp:176
-msgid "The string 'track:' followed by one of the chars 'a', 'b', 's' or 'v' followed by a number 'n' selects the nth audio, button, subtitle or video track (e.g. '--edit track:a2')."
+#, fuzzy
+msgid "The string 'track:' followed by one of the chars 'a', 'b', 's' or 'v' followed by a number 'n' selects the nth audio, button, subtitle or video track (e.g. '--edit track:a2'). Numbering starts at 1."
 msgstr "La cadena de caracteres 'track:' seguida por uno de los caracteres a, b, s o v, y estos de un número n, selecciona el enésimo: audio, botón, subtítulo o pista de video (p. ej., '--edit track:a2')."
 
 #: src/propedit/propedit_cli_parser.cpp:178
@@ -7179,7 +7180,8 @@ msgid "The string 'track:@number' with 'number' being a number selects the track
 msgstr "La cadena de caracteres 'track:@number' con 'number' siendo un número de pista seleccionada cuyo 'track number' es igual al elemento 'number'."
 
 #: src/propedit/propedit_cli_parser.cpp:175
-msgid "The string 'track:n' with 'n' being a number selects the nth track."
+#, fuzzy
+msgid "The string 'track:n' with 'n' being a number selects the nth track. Numbering starts at 1."
 msgstr "La cadena de caracteres 'track:n' con n siendo un número que selecciona la enésima pista."
 
 #: src/propedit/propedit_cli_parser.cpp:172
@@ -9293,3 +9295,4 @@ msgstr "Sí"
 
 #~ msgid "tet_index: '%1%' not found\n"
 #~ msgstr "tet_index: '%1%' no encontrado\n"
+

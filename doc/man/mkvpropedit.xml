@@ -365,6 +365,10 @@ title=Comments</programlisting>
        If the parameter <parameter>n</parameter> is a number then the <parameter>n</parameter>th track will be selected. The track order is
        the same that &mkvmerge;'s <option>--identify</option> option outputs.
       </para>
+
+      <para>
+       Numbering starts at 1.
+      </para>
      </listitem>
     </varlistentry>
 
@@ -377,6 +381,10 @@ title=Comments</programlisting>
        one of these four characters: '<literal>a</literal>' for an audio track, '<literal>b</literal>' for a button track,
        '<literal>s</literal>' for a subtitle track and '<literal>v</literal>' for a video track. The track order is the same that
        &mkvmerge;'s <option>--identify</option> option outputs.
+      </para>
+
+      <para>
+       Numbering starts at 1.
       </para>
      </listitem>
     </varlistentry>

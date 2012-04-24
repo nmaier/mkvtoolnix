@@ -172,9 +172,9 @@ propedit_cli_parser_c::init_parser() {
   add_information(YT("The strings 'info', 'segment_info' or 'segmentinfo' select the segment information element. This is also the default until the first '--edit' option is found."), 2);
 
   add_section_header(YT("Track headers"), 1);
-  add_information(YT("The string 'track:n' with 'n' being a number selects the nth track."), 2);
+  add_information(YT("The string 'track:n' with 'n' being a number selects the nth track. Numbering starts at 1."), 2);
   add_information(YT("The string 'track:' followed by one of the chars 'a', 'b', 's' or 'v' followed by a number 'n' selects the nth audio, button, subtitle or video track "
-                     "(e.g. '--edit track:a2')."), 2);
+                     "(e.g. '--edit track:a2'). Numbering starts at 1."), 2);
   add_information(YT("The string 'track:=uid' with 'uid' being a number selects the track whose 'track UID' element equals 'uid'."), 2);
   add_information(YT("The string 'track:@number' with 'number' being a number selects the track whose 'track number' element equals 'number'."), 2);
 

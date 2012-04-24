@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 4.4.0\n"
-"POT-Creation-Date: 2012-04-01 10:48+0300\n"
+"POT-Creation-Date: 2012-04-24 09:52+0300\n"
 "PO-Revision-Date: 2011-12-14 22:25+0200\n"
 "Last-Translator: Andriy Bilous'ko <arestarh@ukr.net>\n"
 "Language-Team: uk <moritz@bunkus.org>\n"
@@ -35,7 +35,7 @@ msgstr "5.5.0"
 #: doc/man/mkvmerge.xml:7
 #: doc/man/mkvpropedit.xml:7
 #: doc/man/mmg.xml:7
-msgid "2012-03-10"
+msgid "2012-04-06"
 msgstr ""
 
 #. type: Content of the mkvmerge entity
@@ -928,7 +928,7 @@ msgstr "Тайм-коди спочатку сортуються і потім в
 #: doc/man/mkvextract.xml:621
 #: doc/man/mkvinfo.xml:304
 #: doc/man/mkvmerge.xml:2482
-#: doc/man/mkvpropedit.xml:460
+#: doc/man/mkvpropedit.xml:468
 msgid "Exit codes"
 msgstr "Коди завершення"
 
@@ -956,7 +956,7 @@ msgstr "<constant>2</constant> -- Цей код завершення викор�
 #: doc/man/mkvextract.xml:652
 #: doc/man/mkvinfo.xml:334
 #: doc/man/mkvmerge.xml:1918
-#: doc/man/mkvpropedit.xml:491
+#: doc/man/mkvpropedit.xml:499
 msgid "Escaping special chars in text"
 msgstr "Виокремлення спеціальних символів у тексті"
 
@@ -964,7 +964,7 @@ msgstr "Виокремлення спеціальних символів у те
 #: doc/man/mkvextract.xml:654
 #: doc/man/mkvinfo.xml:336
 #: doc/man/mkvmerge.xml:1920
-#: doc/man/mkvpropedit.xml:493
+#: doc/man/mkvpropedit.xml:501
 msgid "There are a few places in which special characters in text must or should be escaped. The rules for escaping are simple: each character that needs escaping is replaced with a backslash followed by another character."
 msgstr "Є декілька місць, де спеціальні символи у тексті мають або повинні бути виокремлені. Правила для виокремлювання прості: кожен символ, що потребує виокремлення, замінюється на зворотній слеш з деяким символом, що йде після нього."
 
@@ -972,7 +972,7 @@ msgstr "Є декілька місць, де спеціальні символи
 #: doc/man/mkvextract.xml:659
 #: doc/man/mkvinfo.xml:341
 #: doc/man/mkvmerge.xml:1925
-#: doc/man/mkvpropedit.xml:498
+#: doc/man/mkvpropedit.xml:506
 #, fuzzy
 #| msgid "The rules are: ' ' becomes '\\s', '&quot;' becomes '\\2', ':' becomes '\\c', '#' becomes '\\h' and '\\' itself becomes '\\\\'."
 msgid "The rules are: ' ' (a space) becomes '\\s', '&quot;' (double quotes) becomes '\\2', ':' becomes '\\c', '#' becomes '\\h' and '\\' (a single backslash) itself becomes '\\\\'."
@@ -982,7 +982,7 @@ msgstr "Правила такі: ' ' замінюється на '\\s', '&quot;'
 #: doc/man/mkvextract.xml:664
 #: doc/man/mkvinfo.xml:346
 #: doc/man/mkvmerge.xml:2513
-#: doc/man/mkvpropedit.xml:503
+#: doc/man/mkvpropedit.xml:511
 msgid "Environment variables"
 msgstr ""
 
@@ -995,7 +995,7 @@ msgstr ""
 #: doc/man/mkvextract.xml:673
 #: doc/man/mkvinfo.xml:355
 #: doc/man/mkvmerge.xml:2522
-#: doc/man/mkvpropedit.xml:512
+#: doc/man/mkvpropedit.xml:520
 msgid "<varname>MKVTOOLNIX_DEBUG</varname> and its short form <varname>MTX_DEBUG</varname>"
 msgstr ""
 
@@ -1010,7 +1010,7 @@ msgstr "Перенаправлення за допомогою &mkvextract; зд
 #: doc/man/mkvextract.xml:681
 #: doc/man/mkvinfo.xml:363
 #: doc/man/mkvmerge.xml:2530
-#: doc/man/mkvpropedit.xml:520
+#: doc/man/mkvpropedit.xml:528
 msgid "<varname>MKVTOOLNIX_ENGAGE</varname> and its short form <varname>MTX_ENGAGE</varname>"
 msgstr ""
 
@@ -1025,7 +1025,7 @@ msgstr "Перенаправлення за допомогою &mkvextract; зд
 #: doc/man/mkvextract.xml:689
 #: doc/man/mkvinfo.xml:371
 #: doc/man/mkvmerge.xml:2538
-#: doc/man/mkvpropedit.xml:528
+#: doc/man/mkvpropedit.xml:536
 msgid "<varname>MKVTOOLNIX_OPTIONS</varname> and its short form <varname>MTX_OPTIONS</varname>"
 msgstr ""
 
@@ -1038,7 +1038,7 @@ msgstr ""
 #: doc/man/mkvextract.xml:700
 #: doc/man/mkvinfo.xml:382
 #: doc/man/mkvmerge.xml:2549
-#: doc/man/mkvpropedit.xml:539
+#: doc/man/mkvpropedit.xml:547
 #: doc/man/mmg.xml:90
 msgid "See also"
 msgstr "Дивіться також"
@@ -1052,7 +1052,7 @@ msgstr "&mkvmerge;, &mkvinfo;, &mkvpropedit;, &mmg;"
 #: doc/man/mkvextract.xml:707
 #: doc/man/mkvinfo.xml:389
 #: doc/man/mkvmerge.xml:2556
-#: doc/man/mkvpropedit.xml:546
+#: doc/man/mkvpropedit.xml:554
 #: doc/man/mmg.xml:97
 msgid "WWW"
 msgstr "WWW"
@@ -1061,7 +1061,7 @@ msgstr "WWW"
 #: doc/man/mkvextract.xml:709
 #: doc/man/mkvinfo.xml:391
 #: doc/man/mkvmerge.xml:2558
-#: doc/man/mkvpropedit.xml:548
+#: doc/man/mkvpropedit.xml:556
 #: doc/man/mmg.xml:99
 msgid "The latest version can always be found at <ulink url=\"http://www.bunkus.org/videotools/mkvtoolnix/\">the MKVToolNix homepage</ulink>."
 msgstr "Остання версія завжди може бути знайдена на веб-сторінці <ulink url=\"http://www.bunkus.org/videotools/mkvtoolnix/\">the MKVToolNix homepage</ulink>."
@@ -2618,7 +2618,7 @@ msgstr ""
 
 #. type: Content of: <refentry><refsect1><title>
 #: doc/man/mkvmerge.xml:1574
-#: doc/man/mkvpropedit.xml:416
+#: doc/man/mkvpropedit.xml:424
 msgid "Examples"
 msgstr ""
 
@@ -3870,158 +3870,164 @@ msgstr ""
 msgid "If the parameter <parameter>n</parameter> is a number then the <parameter>n</parameter>th track will be selected. The track order is the same that &mkvmerge;'s <option>--identify</option> option outputs."
 msgstr ""
 
+#. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><para>
+#: doc/man/mkvpropedit.xml:370
+#: doc/man/mkvpropedit.xml:387
+msgid "Numbering starts at 1."
+msgstr ""
+
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><term>
-#: doc/man/mkvpropedit.xml:372
+#: doc/man/mkvpropedit.xml:376
 msgid "<option>track:</option><parameter>t</parameter><parameter>n</parameter>"
 msgstr ""
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvpropedit.xml:375
+#: doc/man/mkvpropedit.xml:379
 msgid "If the parameter starts with a single character <parameter>t</parameter> followed by a <parameter>n</parameter> then the <parameter>n</parameter>th track of a specific track type will be selected. The track type parameter <parameter>t</parameter> must be one of these four characters: '<literal>a</literal>' for an audio track, '<literal>b</literal>' for a button track, '<literal>s</literal>' for a subtitle track and '<literal>v</literal>' for a video track. The track order is the same that &mkvmerge;'s <option>--identify</option> option outputs."
 msgstr ""
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><term>
-#: doc/man/mkvpropedit.xml:385
+#: doc/man/mkvpropedit.xml:393
 msgid "<option>track:</option>=<parameter>uid</parameter>"
 msgstr ""
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvpropedit.xml:388
+#: doc/man/mkvpropedit.xml:396
 msgid "If the parameter starts with a '<literal>=</literal>' followed by a number <parameter>uid</parameter> then the track whose track <abbrev>UID</abbrev> element equals this <parameter>uid</parameter>. Track <abbrev>UIDs</abbrev> can be obtained with &mkvinfo;."
 msgstr ""
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><term>
-#: doc/man/mkvpropedit.xml:395
+#: doc/man/mkvpropedit.xml:403
 msgid "<option>track:</option>@<parameter>number</parameter>"
 msgstr ""
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvpropedit.xml:398
+#: doc/man/mkvpropedit.xml:406
 msgid "If the parameter starts with a '<literal>@</literal>' followed by a number <parameter>number</parameter> then the track whose track number element equals this <parameter>number</parameter>. Track number can be obtained with &mkvinfo;."
 msgstr ""
 
 #. type: Content of: <refentry><refsect1><refsect2><title>
-#: doc/man/mkvpropedit.xml:407
+#: doc/man/mkvpropedit.xml:415
 msgid "Notes"
 msgstr ""
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvpropedit.xml:409
+#: doc/man/mkvpropedit.xml:417
 msgid "Due to the nature of the track edit selectors it is possible that several selectors actually match the same track headers. In such cases all actions for those edit selectors will be combined and executed in the order in which they're given on the command line."
 msgstr ""
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvpropedit.xml:418
+#: doc/man/mkvpropedit.xml:426
 msgid "The following example edits a file called '<literal>movie.mkv</literal>'. It sets the segment title and modifies the language code of an audio and a subtitle track. Note that this example can be shortened by leaving out the first <link linkend=\"mkvpropedit.description.edit\"><option>--edit</option></link> option because editing the segment information element is the default for all options found before the first <link linkend=\"mkvpropedit.description.edit\"><option>--edit</option></link> option anyway."
-msgstr ""
-
-#. type: Content of: <refentry><refsect1><screen>
-#: doc/man/mkvpropedit.xml:424
-#, no-wrap
-msgid "$ mkvpropedit movie.mkv --edit info --set \"title=The movie\" --edit track:a1 --set language=fre --edit track:a2 --set language=ita"
-msgstr ""
-
-#. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvpropedit.xml:427
-msgid "The second example removes the 'default track flag' from the first subtitle track and sets it for the second one. Note that &mkvpropedit;, unlike &mkvmerge;, does not set the 'default track flag' of other tracks to '0' if it is set to '1' for a different track automatically."
 msgstr ""
 
 #. type: Content of: <refentry><refsect1><screen>
 #: doc/man/mkvpropedit.xml:432
 #, no-wrap
-msgid "$ mkvpropedit movie.mkv --edit track:s1 --set flag-default=0 --edit track:s2 --set flag-default=1"
+msgid "$ mkvpropedit movie.mkv --edit info --set \"title=The movie\" --edit track:a1 --set language=fre --edit track:a2 --set language=ita"
 msgstr ""
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvpropedit.xml:435
+msgid "The second example removes the 'default track flag' from the first subtitle track and sets it for the second one. Note that &mkvpropedit;, unlike &mkvmerge;, does not set the 'default track flag' of other tracks to '0' if it is set to '1' for a different track automatically."
+msgstr ""
+
+#. type: Content of: <refentry><refsect1><screen>
+#: doc/man/mkvpropedit.xml:440
+#, no-wrap
+msgid "$ mkvpropedit movie.mkv --edit track:s1 --set flag-default=0 --edit track:s2 --set flag-default=1"
+msgstr ""
+
+#. type: Content of: <refentry><refsect1><para>
+#: doc/man/mkvpropedit.xml:443
 msgid "Replacing the tags for the second subtitle track in a file looks like this:"
 msgstr ""
 
 #. type: Content of: <refentry><refsect1><screen>
-#: doc/man/mkvpropedit.xml:438
+#: doc/man/mkvpropedit.xml:446
 #, no-wrap
 msgid "$ mkvpropedit movie.mkv --tags track:s2:new-subtitle-tags.xml"
 msgstr ""
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvpropedit.xml:441
+#: doc/man/mkvpropedit.xml:449
 msgid "Removing all tags requires leaving out the file name:"
 msgstr ""
 
 #. type: Content of: <refentry><refsect1><screen>
-#: doc/man/mkvpropedit.xml:444
+#: doc/man/mkvpropedit.xml:452
 #, no-wrap
 msgid "$ mkvpropedit movie.mkv --tags all:"
 msgstr ""
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvpropedit.xml:447
+#: doc/man/mkvpropedit.xml:455
 msgid "Replacing the chapters in a file looks like this:"
 msgstr ""
 
 #. type: Content of: <refentry><refsect1><screen>
-#: doc/man/mkvpropedit.xml:450
+#: doc/man/mkvpropedit.xml:458
 #, no-wrap
 msgid "$ mkvpropedit movie.mkv --chapters new-chapters.xml"
 msgstr ""
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvpropedit.xml:453
+#: doc/man/mkvpropedit.xml:461
 msgid "Removing all chapters requires leaving out the file name:"
 msgstr ""
 
 #. type: Content of: <refentry><refsect1><screen>
-#: doc/man/mkvpropedit.xml:456
+#: doc/man/mkvpropedit.xml:464
 #, no-wrap
 msgid "$ mkvpropedit movie.mkv --chapters ''"
 msgstr ""
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvpropedit.xml:463
+#: doc/man/mkvpropedit.xml:471
 msgid "&mkvpropedit; exits with one of three exit codes:"
 msgstr ""
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvpropedit.xml:469
+#: doc/man/mkvpropedit.xml:477
 msgid "<constant>0</constant> -- This exit codes means that the modification has completed successfully."
 msgstr ""
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvpropedit.xml:475
+#: doc/man/mkvpropedit.xml:483
 msgid "<constant>1</constant> -- In this case &mkvpropedit; has output at least one warning, but the modification did continue.  A warning is prefixed with the text '<literal>Warning:</literal>'.  Depending on the issues involved the resulting files might be ok or not.  The user is urged to check both the warning and the resulting files."
 msgstr ""
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvpropedit.xml:483
+#: doc/man/mkvpropedit.xml:491
 msgid "<constant>2</constant> -- This exit code is used after an error occurred.  &mkvpropedit; aborts right after outputting the error message.  Error messages range from wrong command line arguments over read/write errors to broken files."
 msgstr ""
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvpropedit.xml:506
+#: doc/man/mkvpropedit.xml:514
 msgid "&mkvpropedit; uses the default variables that determine the system's locale (e.g. <varname>LANG</varname> and the <varname>LC_*</varname> family). Additional variables:"
 msgstr ""
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvpropedit.xml:514
+#: doc/man/mkvpropedit.xml:522
 #, fuzzy
 #| msgid "&mkvextract;'s own redirection is invoked with the <link linkend=\"mkvextract.description.common.redirect_output\"><option>--redirect-output</option></link> option. Example:"
 msgid "The content is treated as if it had been passed via the <link linkend=\"mkvpropedit.description.debug\"><option>--debug</option></link> option."
 msgstr "Перенаправлення за допомогою &mkvextract; здійснюється через опцію <link linkend=\"mkvextract.description.common.redirect_output\"><option>--redirect-output</option></link>. Наприклад:"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvpropedit.xml:522
+#: doc/man/mkvpropedit.xml:530
 #, fuzzy
 #| msgid "&mkvextract;'s own redirection is invoked with the <link linkend=\"mkvextract.description.common.redirect_output\"><option>--redirect-output</option></link> option. Example:"
 msgid "The content is treated as if it had been passed via the <link linkend=\"mkvpropedit.description.engage\"><option>--engage</option></link> option."
 msgstr "Перенаправлення за допомогою &mkvextract; здійснюється через опцію <link linkend=\"mkvextract.description.common.redirect_output\"><option>--redirect-output</option></link>. Наприклад:"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvpropedit.xml:530
+#: doc/man/mkvpropedit.xml:538
 msgid "The content is split on white space. The resulting partial strings are treated as if it had been passed as command line options. If you need to pass special characters (e.g. spaces) then you have to escape them (see <link linkend=\"mkvpropedit.escaping\">the section about escaping special characters in text</link>)."
 msgstr ""
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvpropedit.xml:541
+#: doc/man/mkvpropedit.xml:549
 msgid "&mkvmerge;, &mkvinfo;, &mkvextract;, &mmg;"
 msgstr ""
 
@@ -4078,5 +4084,4 @@ msgstr "&mkvmerge;, &mkvextract;, &mkvinfo;, &mkvpropedit;"
 
 #~ msgid "AID:outname"
 #~ msgstr "AID:outname"
-
 
