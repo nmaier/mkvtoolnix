@@ -123,8 +123,6 @@ class Target
       when :boost_system     then c(:BOOST_SYSTEM_LIB)
       when :qt               then c(:QT_LIBS)
       when :wxwidgets        then c(:WXWIDGETS_LIBS)
-      when :ebml             then c(:EBML_LIBS)
-      when :matroska         then c(:MATROSKA_LIBS)
       when String            then entry
       else                        "-l#{entry}"
       end
