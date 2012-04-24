@@ -7103,7 +7103,8 @@ msgid "The string 'global' works on the global tags."
 msgstr "La chaîne 'global' fonctionne sur les étiquettes globales."
 
 #: src/propedit/propedit_cli_parser.cpp:176
-msgid "The string 'track:' followed by one of the chars 'a', 'b', 's' or 'v' followed by a number 'n' selects the nth audio, button, subtitle or video track (e.g. '--edit track:a2')."
+#, fuzzy
+msgid "The string 'track:' followed by one of the chars 'a', 'b', 's' or 'v' followed by a number 'n' selects the nth audio, button, subtitle or video track (e.g. '--edit track:a2'). Numbering starts at 1."
 msgstr "La chaîne 'track:' suivie de l'un des caractères 'a', 'b', 's' ou 'v' puis d'un nombre 'n' sélectionne la nième piste audio, de boutons, de sous-titres ou vidéo (par exemple '--edit track:a2')."
 
 #: src/propedit/propedit_cli_parser.cpp:178
@@ -7115,7 +7116,8 @@ msgid "The string 'track:@number' with 'number' being a number selects the track
 msgstr "La chaîne 'track:@nombre' où 'nombre' est un nombre sélectionne la piste pour laquelle l'élément 'numéro de piste' est égal à 'nombre'."
 
 #: src/propedit/propedit_cli_parser.cpp:175
-msgid "The string 'track:n' with 'n' being a number selects the nth track."
+#, fuzzy
+msgid "The string 'track:n' with 'n' being a number selects the nth track. Numbering starts at 1."
 msgstr "La chaîne 'track:n' où 'n' est un nombre sélectionne la nième piste."
 
 #: src/propedit/propedit_cli_parser.cpp:172

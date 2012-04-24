@@ -7054,7 +7054,8 @@ msgid "The string 'global' works on the global tags."
 msgstr "字串 'global' 对全局标签起作用。"
 
 #: src/propedit/propedit_cli_parser.cpp:176
-msgid "The string 'track:' followed by one of the chars 'a', 'b', 's' or 'v' followed by a number 'n' selects the nth audio, button, subtitle or video track (e.g. '--edit track:a2')."
+#, fuzzy
+msgid "The string 'track:' followed by one of the chars 'a', 'b', 's' or 'v' followed by a number 'n' selects the nth audio, button, subtitle or video track (e.g. '--edit track:a2'). Numbering starts at 1."
 msgstr "字串 'track:' 后接的字符 'a', 'b', 's' 或 'v' 之一及其后接的数字 'n' 可选择第 n 个音频，按钮，字幕或视频轨 (如 '--edit track:a2')。"
 
 #: src/propedit/propedit_cli_parser.cpp:178
@@ -7066,7 +7067,8 @@ msgid "The string 'track:@number' with 'number' being a number selects the track
 msgstr "字串 'track:@number' 中的数字 'number' 可选择轨道号元素 'track number' 等于 'number' 的轨道。"
 
 #: src/propedit/propedit_cli_parser.cpp:175
-msgid "The string 'track:n' with 'n' being a number selects the nth track."
+#, fuzzy
+msgid "The string 'track:n' with 'n' being a number selects the nth track. Numbering starts at 1."
 msgstr "字串 'track:n' 中的数字 'n' 可选择第 n 条轨道。"
 
 #: src/propedit/propedit_cli_parser.cpp:172

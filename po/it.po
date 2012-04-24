@@ -7029,7 +7029,7 @@ msgid "The string 'global' works on the global tags."
 msgstr "La stringa 'global' funziona sui tag globali."
 
 #: src/propedit/propedit_cli_parser.cpp:176
-msgid "The string 'track:' followed by one of the chars 'a', 'b', 's' or 'v' followed by a number 'n' selects the nth audio, button, subtitle or video track (e.g. '--edit track:a2')."
+msgid "The string 'track:' followed by one of the chars 'a', 'b', 's' or 'v' followed by a number 'n' selects the nth audio, button, subtitle or video track (e.g. '--edit track:a2'). Numbering starts at 1."
 msgstr ""
 
 #: src/propedit/propedit_cli_parser.cpp:178
@@ -7041,7 +7041,7 @@ msgid "The string 'track:@number' with 'number' being a number selects the track
 msgstr ""
 
 #: src/propedit/propedit_cli_parser.cpp:175
-msgid "The string 'track:n' with 'n' being a number selects the nth track."
+msgid "The string 'track:n' with 'n' being a number selects the nth track. Numbering starts at 1."
 msgstr ""
 
 #: src/propedit/propedit_cli_parser.cpp:172
@@ -9439,3 +9439,4 @@ msgstr "sì"
 
 #~ msgid "wavpack_reader: Could not open the file."
 #~ msgstr "wavpack_reader: Impossibile aprire il file."
+
