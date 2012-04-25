@@ -177,7 +177,7 @@ MergeWidget::setControlValuesFromConfig() {
   resizeTracksColumnsToContents();
   resizeAttachmentsColumnsToContents();
 
-  setInputControlValues(nullptr);
+  onTrackSelectionChanged();
   setOutputControlValues();
-  setAttachmentControlValues(nullptr);
+  onAttachmentSelectionChanged();
 }
