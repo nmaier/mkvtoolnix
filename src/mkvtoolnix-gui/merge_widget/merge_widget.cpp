@@ -69,6 +69,7 @@ MergeWidget::onOpenConfig() {
 
   try {
     m_config.load(fileName);
+    setControlValuesFromConfig();
     MainWindow::get()->setStatusBarMessage(QY("The configuration has been loaded."));
 
   } catch (mtx::InvalidSettingsX &) {
@@ -79,7 +80,9 @@ MergeWidget::onOpenConfig() {
 
 void
 MergeWidget::onNew() {
-  // TODO
+  m_config.reset();
+  setControlValuesFromConfig();
+  MainWindow::get()->setStatusBarMessage(QY("The configuration has been reset."));
 }
 
 void
@@ -160,4 +163,19 @@ MergeWidget::setupMenu() {
   // connect(mwUi->action_Job_manager,                   SIGNAL(triggered()), this,              SLOT(onJobManager()));
   // connect(mwUi->actionShow_mkvmerge_command_line,     SIGNAL(triggered()), this,              SLOT(onShowCommandLine()));
   // connect(mwUi->actionCopy_command_line_to_clipboard, SIGNAL(triggered()), this,              SLOT(onCopyCommandLineToClipboard()));
+}
+
+void
+MergeWidget::setControlValuesFromConfig() {
+  m_filesModel->setSourceFiles(m_config.m_files);
+  m_tracksModel->setTracks(m_config.m_tracks);
+  m_attachmentsModel->setAttachments(m_config.m_attachments);
+
+  resizeFilesColumnsToContents();
+  resizeTracksColumnsToContents();
+  resizeAttachmentsColumnsToContents();
+
+  setInputControlValues(nullptr);
+  setOutputControlValues();
+  setAttachmentControlValues(nullptr);
 }

@@ -140,8 +140,10 @@ protected:
   virtual void enableInputControls(QList<QWidget *> const &controls, bool enable);
   virtual void enableAttachmentControls(bool enable);
   virtual void setInputControlValues(Track *track);
+  virtual void setOutputControlValues();
   virtual void setAttachmentControlValues(Attachment *attachment);
   virtual void clearInputControlValues();
+  virtual void setControlValuesFromConfig();
   virtual void withSelectedTracks(std::function<void(Track *)> code, bool notIfAppending = false, QWidget *widget = nullptr);
   virtual void withSelectedAttachments(std::function<void(Attachment *)> code);
   virtual void addOrRemoveEmptyComboBoxItem(bool add);

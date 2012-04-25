@@ -164,3 +164,34 @@ void
 MergeWidget::onEditUserDefinedOptions() {
   // TODO
 }
+
+void
+MergeWidget::setOutputControlValues() {
+  ui->title->setText(m_config.m_title);
+  ui->output->setText(m_config.m_destination);
+  ui->globalTags->setText(m_config.m_globalTags);
+  ui->segmentinfo->setText(m_config.m_segmentinfo);
+  ui->splitSize->setEditText(m_config.m_splitAfterSize);
+  ui->splitDuration->setEditText(m_config.m_splitAfterDuration);
+  ui->splitTimecodes->setText(m_config.m_splitAfterTimecodes);
+  ui->splitParts->setText(m_config.m_splitByParts);
+  ui->segmentUIDs->setText(m_config.m_segmentUIDs);
+  ui->previousSegmentUID->setText(m_config.m_previousSegmentUID);
+  ui->nextSegmentUID->setText(m_config.m_nextSegmentUID);
+  ui->chapters->setText(m_config.m_chapters);
+  ui->chapterCueNameFormat->setText(m_config.m_chapterCueNameFormat);
+  ui->userDefinedOptions->setText(m_config.m_userDefinedOptions);
+  ui->splitMaxFiles->setValue(m_config.m_splitMaxFiles);
+  ui->linkFiles->setChecked(m_config.m_linkFiles);
+  ui->webmMode->setChecked(m_config.m_webmMode);
+
+  Util::setComboBoxIndexIf(ui->chapterLanguage,     [&](QString const &, QVariant const &data) { return data.isValid() && (data.toString() == m_config.m_chapterLanguage);     });
+  Util::setComboBoxIndexIf(ui->chapterCharacterSet, [&](QString const &, QVariant const &data) { return data.isValid() && (data.toString() == m_config.m_chapterCharacterSet); });
+
+  auto control = MuxConfig::DoNotSplit          == m_config.m_splitMode ? ui->doNotSplit
+               : MuxConfig::SplitAfterSize      == m_config.m_splitMode ? ui->doSplitAfterSize
+               : MuxConfig::SplitAfterDuration  == m_config.m_splitMode ? ui->doSplitAfterDuration
+               : MuxConfig::SplitAfterTimecodes == m_config.m_splitMode ? ui->doSplitAfterTimecodes
+               :                                                          ui->doSplitByParts;
+  control->setChecked(true);
+}

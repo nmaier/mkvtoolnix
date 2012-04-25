@@ -295,7 +295,7 @@
                        <string/>
                       </property>
                       <property name="icon">
-                       <iconset resource="../qt_resources.qrc">
+                       <iconset>
                         <normaloff>:/icons/16x16/code-class.png</normaloff>:/icons/16x16/code-class.png</iconset>
                       </property>
                      </widget>
@@ -435,7 +435,7 @@
                        <string/>
                       </property>
                       <property name="icon">
-                       <iconset resource="../qt_resources.qrc">
+                       <iconset>
                         <normaloff>:/icons/16x16/code-class.png</normaloff>:/icons/16x16/code-class.png</iconset>
                       </property>
                      </widget>
@@ -768,7 +768,7 @@
                    <string/>
                   </property>
                   <property name="icon">
-                   <iconset resource="../qt_resources.qrc">
+                   <iconset>
                     <normaloff>:/icons/16x16/code-class.png</normaloff>:/icons/16x16/code-class.png</iconset>
                   </property>
                  </widget>
@@ -796,7 +796,7 @@
                    <string/>
                   </property>
                   <property name="icon">
-                   <iconset resource="../qt_resources.qrc">
+                   <iconset>
                     <normaloff>:/icons/16x16/code-class.png</normaloff>:/icons/16x16/code-class.png</iconset>
                   </property>
                  </widget>
@@ -824,7 +824,7 @@
                    <string/>
                   </property>
                   <property name="icon">
-                   <iconset resource="../qt_resources.qrc">
+                   <iconset>
                     <normaloff>:/icons/16x16/code-class.png</normaloff>:/icons/16x16/code-class.png</iconset>
                   </property>
                  </widget>
@@ -1088,7 +1088,7 @@
                    <string/>
                   </property>
                   <property name="icon">
-                   <iconset resource="../qt_resources.qrc">
+                   <iconset>
                     <normaloff>:/icons/16x16/code-class.png</normaloff>:/icons/16x16/code-class.png</iconset>
                   </property>
                  </widget>
@@ -1347,7 +1347,7 @@
   </layout>
   <action name="actionNew">
    <property name="icon">
-    <iconset resource="../qt_resources.qrc">
+    <iconset>
      <normaloff>:/icons/16x16/document-new.png</normaloff>:/icons/16x16/document-new.png</iconset>
    </property>
    <property name="text">
@@ -1359,7 +1359,7 @@
   </action>
   <action name="actionSave">
    <property name="icon">
-    <iconset resource="../qt_resources.qrc">
+    <iconset>
      <normaloff>:/icons/16x16/document-save.png</normaloff>:/icons/16x16/document-save.png</iconset>
    </property>
    <property name="text">
@@ -1371,7 +1371,7 @@
   </action>
   <action name="actionOpen">
    <property name="icon">
-    <iconset resource="../qt_resources.qrc">
+    <iconset>
      <normaloff>:/icons/16x16/document-open.png</normaloff>:/icons/16x16/document-open.png</iconset>
    </property>
    <property name="text">
@@ -1383,7 +1383,7 @@
   </action>
   <action name="actionSave_as">
    <property name="icon">
-    <iconset resource="../qt_resources.qrc">
+    <iconset>
      <normaloff>:/icons/16x16/document-save-as.png</normaloff>:/icons/16x16/document-save-as.png</iconset>
    </property>
    <property name="text">
@@ -1392,7 +1392,7 @@
   </action>
   <action name="actionExit">
    <property name="icon">
-    <iconset resource="../qt_resources.qrc">
+    <iconset>
      <normaloff>:/icons/16x16/application-exit.png</normaloff>:/icons/16x16/application-exit.png</iconset>
    </property>
    <property name="text">
@@ -1404,7 +1404,7 @@
   </action>
   <action name="action_Start_muxing">
    <property name="icon">
-    <iconset resource="../qt_resources.qrc">
+    <iconset>
      <normaloff>:/icons/16x16/media-playback-start.png</normaloff>:/icons/16x16/media-playback-start.png</iconset>
    </property>
    <property name="text">
@@ -1426,7 +1426,7 @@
   </action>
   <action name="actionCopy_command_line_to_clipboard">
    <property name="icon">
-    <iconset resource="../qt_resources.qrc">
+    <iconset>
      <normaloff>:/icons/16x16/edit-copy.png</normaloff>:/icons/16x16/edit-copy.png</iconset>
    </property>
    <property name="text">
@@ -1435,7 +1435,7 @@
   </action>
   <action name="actionAdd_to_job_queue">
    <property name="icon">
-    <iconset resource="../qt_resources.qrc">
+    <iconset>
      <normaloff>:/icons/16x16/task-delegate.png</normaloff>:/icons/16x16/task-delegate.png</iconset>
    </property>
    <property name="text">
@@ -1444,7 +1444,7 @@
   </action>
   <action name="action_Job_manager">
    <property name="icon">
-    <iconset resource="../qt_resources.qrc">
+    <iconset>
      <normaloff>:/icons/16x16/task-ongoing.png</normaloff>:/icons/16x16/task-ongoing.png</iconset>
    </property>
    <property name="text">
@@ -1466,7 +1466,7 @@
   </action>
   <action name="action_Options">
    <property name="icon">
-    <iconset resource="../qt_resources.qrc">
+    <iconset>
      <normaloff>:/icons/16x16/preferences-other.png</normaloff>:/icons/16x16/preferences-other.png</iconset>
    </property>
    <property name="text">
@@ -1549,9 +1549,7 @@
   <tabstop>addToJobQueue</tabstop>
   <tabstop>saveSettings</tabstop>
  </tabstops>
- <resources>
-  <include location="../qt_resources.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>startMuxing</sender>
@@ -1560,8 +1558,8 @@
    <slot>onStartMuxing()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>374</x>
-     <y>526</y>
+     <x>433</x>
+     <y>508</y>
     </hint>
     <hint type="destinationlabel">
      <x>224</x>
@@ -1576,8 +1574,8 @@
    <slot>onAddToJobQueue()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>513</x>
-     <y>532</y>
+     <x>537</x>
+     <y>508</y>
     </hint>
     <hint type="destinationlabel">
      <x>260</x>
@@ -1592,8 +1590,8 @@
    <slot>onSaveConfig()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>529</x>
-     <y>526</y>
+     <x>624</x>
+     <y>508</y>
     </hint>
     <hint type="destinationlabel">
      <x>510</x>
@@ -1656,8 +1654,8 @@
    <slot>onTrackNameEdited(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>640</x>
-     <y>164</y>
+     <x>840</x>
+     <y>140</y>
     </hint>
     <hint type="destinationlabel">
      <x>613</x>
@@ -1672,8 +1670,8 @@
    <slot>onMuxThisChanged(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>640</x>
-     <y>137</y>
+     <x>840</x>
+     <y>113</y>
     </hint>
     <hint type="destinationlabel">
      <x>638</x>
@@ -1688,8 +1686,8 @@
    <slot>onTrackLanguageChanged(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>640</x>
-     <y>191</y>
+     <x>840</x>
+     <y>167</y>
     </hint>
     <hint type="destinationlabel">
      <x>673</x>
@@ -1704,8 +1702,8 @@
    <slot>onForcedTrackFlagChanged(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>640</x>
-     <y>245</y>
+     <x>840</x>
+     <y>221</y>
     </hint>
     <hint type="destinationlabel">
      <x>818</x>
@@ -1720,8 +1718,8 @@
    <slot>onDefaultTrackFlagChanged(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>640</x>
-     <y>218</y>
+     <x>840</x>
+     <y>194</y>
     </hint>
     <hint type="destinationlabel">
      <x>658</x>
@@ -1736,8 +1734,8 @@
    <slot>onCompressionChanged(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>640</x>
-     <y>272</y>
+     <x>840</x>
+     <y>248</y>
     </hint>
     <hint type="destinationlabel">
      <x>820</x>
@@ -1752,8 +1750,8 @@
    <slot>onTrackTagsEdited(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>641</x>
-     <y>303</y>
+     <x>799</x>
+     <y>279</y>
     </hint>
     <hint type="destinationlabel">
      <x>820</x>
@@ -1768,8 +1766,8 @@
    <slot>onDelayEdited(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>647</x>
-     <y>374</y>
+     <x>840</x>
+     <y>350</y>
     </hint>
     <hint type="destinationlabel">
      <x>819</x>
@@ -1784,8 +1782,8 @@
    <slot>onStretchByEdited(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>647</x>
-     <y>401</y>
+     <x>840</x>
+     <y>377</y>
     </hint>
     <hint type="destinationlabel">
      <x>815</x>
@@ -1800,8 +1798,8 @@
    <slot>onDefaultDurationEdited(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>619</x>
-     <y>428</y>
+     <x>840</x>
+     <y>404</y>
     </hint>
     <hint type="destinationlabel">
      <x>818</x>
@@ -1816,8 +1814,8 @@
    <slot>onTimecodesEdited(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>648</x>
-     <y>459</y>
+     <x>799</x>
+     <y>435</y>
     </hint>
     <hint type="destinationlabel">
      <x>817</x>
@@ -1832,8 +1830,8 @@
    <slot>onBrowseTrackTags()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>791</x>
-     <y>306</y>
+     <x>839</x>
+     <y>282</y>
     </hint>
     <hint type="destinationlabel">
      <x>411</x>
@@ -1848,8 +1846,8 @@
    <slot>onBrowseTimecodes()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>791</x>
-     <y>462</y>
+     <x>839</x>
+     <y>438</y>
     </hint>
     <hint type="destinationlabel">
      <x>411</x>
@@ -1864,8 +1862,8 @@
    <slot>onSetAspectRatio()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>533</x>
-     <y>530</y>
+     <x>577</x>
+     <y>506</y>
     </hint>
     <hint type="destinationlabel">
      <x>557</x>
@@ -1880,8 +1878,8 @@
    <slot>onSetDisplayDimensions()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>533</x>
-     <y>558</y>
+     <x>577</x>
+     <y>534</y>
     </hint>
     <hint type="destinationlabel">
      <x>534</x>
@@ -1896,8 +1894,8 @@
    <slot>onAspectRatioEdited(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>643</x>
-     <y>530</y>
+     <x>840</x>
+     <y>506</y>
     </hint>
     <hint type="destinationlabel">
      <x>551</x>
@@ -1912,8 +1910,8 @@
    <slot>onAspectRatioEdited(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>643</x>
-     <y>530</y>
+     <x>840</x>
+     <y>506</y>
     </hint>
     <hint type="destinationlabel">
      <x>411</x>
@@ -1928,8 +1926,8 @@
    <slot>onDefaultDurationEdited(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>619</x>
-     <y>428</y>
+     <x>840</x>
+     <y>404</y>
     </hint>
     <hint type="destinationlabel">
      <x>411</x>
@@ -1944,8 +1942,8 @@
    <slot>onDisplayWidthEdited(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>668</x>
-     <y>558</y>
+     <x>703</x>
+     <y>534</y>
     </hint>
     <hint type="destinationlabel">
      <x>411</x>
@@ -1960,8 +1958,8 @@
    <slot>onDisplayHeightEdited(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>791</x>
-     <y>558</y>
+     <x>839</x>
+     <y>534</y>
     </hint>
     <hint type="destinationlabel">
      <x>411</x>
@@ -1976,8 +1974,8 @@
    <slot>onStereoscopyChanged(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>671</x>
-     <y>586</y>
+     <x>840</x>
+     <y>562</y>
     </hint>
     <hint type="destinationlabel">
      <x>411</x>
@@ -1992,8 +1990,8 @@
    <slot>onCroppingEdited(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>671</x>
-     <y>613</y>
+     <x>840</x>
+     <y>589</y>
     </hint>
     <hint type="destinationlabel">
      <x>411</x>
@@ -2008,8 +2006,8 @@
    <slot>onSubtitleCharacterSetChanged(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>610</x>
-     <y>747</y>
+     <x>840</x>
+     <y>723</y>
     </hint>
     <hint type="destinationlabel">
      <x>819</x>
@@ -2024,8 +2022,8 @@
    <slot>onCuesChanged(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>644</x>
-     <y>814</y>
+     <x>840</x>
+     <y>790</y>
     </hint>
     <hint type="destinationlabel">
      <x>818</x>
@@ -2040,8 +2038,8 @@
    <slot>onUserDefinedTrackOptionsEdited(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>644</x>
-     <y>841</y>
+     <x>840</x>
+     <y>817</y>
     </hint>
     <hint type="destinationlabel">
      <x>819</x>
@@ -2056,8 +2054,8 @@
    <slot>onAacIsSBRChanged(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>670</x>
-     <y>680</y>
+     <x>840</x>
+     <y>656</y>
     </hint>
     <hint type="destinationlabel">
      <x>815</x>
@@ -2072,8 +2070,8 @@
    <slot>onTitleEdited(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>119</x>
-     <y>93</y>
+     <x>216</x>
+     <y>85</y>
     </hint>
     <hint type="destinationlabel">
      <x>123</x>
@@ -2088,8 +2086,8 @@
    <slot>onOutputEdited(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>206</x>
-     <y>140</y>
+     <x>304</x>
+     <y>116</y>
     </hint>
     <hint type="destinationlabel">
      <x>107</x>
@@ -2104,8 +2102,8 @@
    <slot>onGlobalTagsEdited(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>206</x>
-     <y>174</y>
+     <x>304</x>
+     <y>150</y>
     </hint>
     <hint type="destinationlabel">
      <x>254</x>
@@ -2120,8 +2118,8 @@
    <slot>onSegmentinfoEdited(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>206</x>
-     <y>208</y>
+     <x>304</x>
+     <y>184</y>
     </hint>
     <hint type="destinationlabel">
      <x>5</x>
@@ -2136,8 +2134,8 @@
    <slot>onBrowseOutput()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>408</x>
-     <y>143</y>
+     <x>432</x>
+     <y>119</y>
     </hint>
     <hint type="destinationlabel">
      <x>4</x>
@@ -2152,8 +2150,8 @@
    <slot>onBrowseGlobalTags()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>408</x>
-     <y>177</y>
+     <x>432</x>
+     <y>153</y>
     </hint>
     <hint type="destinationlabel">
      <x>5</x>
@@ -2168,8 +2166,8 @@
    <slot>onBrowseSegmentinfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>408</x>
-     <y>211</y>
+     <x>432</x>
+     <y>187</y>
     </hint>
     <hint type="destinationlabel">
      <x>4</x>
@@ -2184,8 +2182,8 @@
    <slot>onDoNotSplit()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>80</x>
-     <y>279</y>
+     <x>103</x>
+     <y>255</y>
     </hint>
     <hint type="destinationlabel">
      <x>5</x>
@@ -2200,8 +2198,8 @@
    <slot>onDoSplitAfterSize()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>106</x>
-     <y>306</y>
+     <x>129</x>
+     <y>282</y>
     </hint>
     <hint type="destinationlabel">
      <x>4</x>
@@ -2216,8 +2214,8 @@
    <slot>onDoSplitAfterDuration()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>119</x>
-     <y>333</y>
+     <x>142</x>
+     <y>309</y>
     </hint>
     <hint type="destinationlabel">
      <x>5</x>
@@ -2232,8 +2230,8 @@
    <slot>onDoSplitAfterTimecodes()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>117</x>
-     <y>360</y>
+     <x>140</x>
+     <y>336</y>
     </hint>
     <hint type="destinationlabel">
      <x>7</x>
@@ -2248,8 +2246,8 @@
    <slot>onDoSplitByParts()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>77</x>
-     <y>387</y>
+     <x>100</x>
+     <y>363</y>
     </hint>
     <hint type="destinationlabel">
      <x>1</x>
@@ -2264,8 +2262,8 @@
    <slot>onSplitSizeEdited(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>273</x>
-     <y>306</y>
+     <x>433</x>
+     <y>282</y>
     </hint>
     <hint type="destinationlabel">
      <x>4</x>
@@ -2280,8 +2278,8 @@
    <slot>onSplitSizeEdited(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>273</x>
-     <y>306</y>
+     <x>433</x>
+     <y>282</y>
     </hint>
     <hint type="destinationlabel">
      <x>4</x>
@@ -2296,8 +2294,8 @@
    <slot>onSplitDurationEdited(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>273</x>
-     <y>333</y>
+     <x>433</x>
+     <y>309</y>
     </hint>
     <hint type="destinationlabel">
      <x>3</x>
@@ -2312,8 +2310,8 @@
    <slot>onSplitDurationEdited(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>273</x>
-     <y>333</y>
+     <x>433</x>
+     <y>309</y>
     </hint>
     <hint type="destinationlabel">
      <x>2</x>
@@ -2328,8 +2326,8 @@
    <slot>onSplitTimecodesEdited(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>301</x>
-     <y>360</y>
+     <x>433</x>
+     <y>336</y>
     </hint>
     <hint type="destinationlabel">
      <x>5</x>
@@ -2344,8 +2342,8 @@
    <slot>onSplitPartsEdited(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>301</x>
-     <y>387</y>
+     <x>433</x>
+     <y>363</y>
     </hint>
     <hint type="destinationlabel">
      <x>3</x>
@@ -2360,8 +2358,8 @@
    <slot>onSplitMaxFilesChanged(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>301</x>
-     <y>434</y>
+     <x>433</x>
+     <y>410</y>
     </hint>
     <hint type="destinationlabel">
      <x>5</x>
@@ -2376,8 +2374,8 @@
    <slot>onLinkFilesClicked(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>82</x>
-     <y>460</y>
+     <x>105</x>
+     <y>436</y>
     </hint>
     <hint type="destinationlabel">
      <x>4</x>
@@ -2392,8 +2390,8 @@
    <slot>onSegmentUIDsEdited(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>657</x>
-     <y>109</y>
+     <x>865</x>
+     <y>85</y>
     </hint>
     <hint type="destinationlabel">
      <x>768</x>
@@ -2408,8 +2406,8 @@
    <slot>onPreviousSegmentUIDEdited(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>657</x>
-     <y>136</y>
+     <x>865</x>
+     <y>112</y>
     </hint>
     <hint type="destinationlabel">
      <x>814</x>
@@ -2424,8 +2422,8 @@
    <slot>onNextSegmentUIDEdited(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>657</x>
-     <y>163</y>
+     <x>865</x>
+     <y>139</y>
     </hint>
     <hint type="destinationlabel">
      <x>818</x>
@@ -2440,8 +2438,8 @@
    <slot>onChaptersEdited(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>634</x>
-     <y>234</y>
+     <x>824</x>
+     <y>210</y>
     </hint>
     <hint type="destinationlabel">
      <x>819</x>
@@ -2456,8 +2454,8 @@
    <slot>onBrowseChapters()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>816</x>
-     <y>237</y>
+     <x>864</x>
+     <y>213</y>
     </hint>
     <hint type="destinationlabel">
      <x>817</x>
@@ -2472,8 +2470,8 @@
    <slot>onChapterLanguageChanged(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>633</x>
-     <y>265</y>
+     <x>865</x>
+     <y>241</y>
     </hint>
     <hint type="destinationlabel">
      <x>814</x>
@@ -2488,8 +2486,8 @@
    <slot>onChapterCharacterSetChanged(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>633</x>
-     <y>292</y>
+     <x>865</x>
+     <y>268</y>
     </hint>
     <hint type="destinationlabel">
      <x>817</x>
@@ -2504,8 +2502,8 @@
    <slot>onChapterCueNameFormatChanged(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>633</x>
-     <y>319</y>
+     <x>865</x>
+     <y>295</y>
     </hint>
     <hint type="destinationlabel">
      <x>818</x>
@@ -2520,8 +2518,8 @@
    <slot>onWebmClicked(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>539</x>
-     <y>385</y>
+     <x>865</x>
+     <y>361</y>
     </hint>
     <hint type="destinationlabel">
      <x>815</x>
@@ -2536,8 +2534,8 @@
    <slot>onUserDefinedOptionsEdited(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>653</x>
-     <y>414</y>
+     <x>779</x>
+     <y>390</y>
     </hint>
     <hint type="destinationlabel">
      <x>815</x>
@@ -2552,8 +2550,8 @@
    <slot>onEditUserDefinedOptions()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>816</x>
-     <y>416</y>
+     <x>864</x>
+     <y>392</y>
     </hint>
     <hint type="destinationlabel">
      <x>816</x>
@@ -2568,8 +2566,8 @@
    <slot>onAttachmentNameEdited(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>190</x>
-     <y>447</y>
+     <x>272</x>
+     <y>423</y>
     </hint>
     <hint type="destinationlabel">
      <x>112</x>
@@ -2584,8 +2582,8 @@
    <slot>onAttachmentMIMETypeEdited(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>185</x>
-     <y>474</y>
+     <x>267</x>
+     <y>450</y>
     </hint>
     <hint type="destinationlabel">
      <x>90</x>
@@ -2600,8 +2598,8 @@
    <slot>onAttachmentMIMETypeEdited(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>190</x>
-     <y>474</y>
+     <x>272</x>
+     <y>450</y>
     </hint>
     <hint type="destinationlabel">
      <x>52</x>
@@ -2616,8 +2614,8 @@
    <slot>onAttachmentDescriptionEdited(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>590</x>
-     <y>447</y>
+     <x>866</x>
+     <y>423</y>
     </hint>
     <hint type="destinationlabel">
      <x>518</x>
@@ -2632,8 +2630,8 @@
    <slot>onAttachmentStyleChanged(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>590</x>
-     <y>474</y>
+     <x>866</x>
+     <y>450</y>
     </hint>
     <hint type="destinationlabel">
      <x>611</x>
@@ -2686,6 +2684,22 @@
     <hint type="destinationlabel">
      <x>629</x>
      <y>529</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>addFiles</sender>
+   <signal>clicked()</signal>
+   <receiver>MergeWidget</receiver>
+   <slot>onAddFiles()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>297</x>
+     <y>497</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>255</x>
+     <y>481</y>
     </hint>
    </hints>
   </connection>
