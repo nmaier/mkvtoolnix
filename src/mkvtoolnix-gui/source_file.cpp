@@ -139,4 +139,7 @@ SourceFile::fixAssociations(MuxConfig::Loader &l) {
   fixAssociationsFor("tracks",          m_tracks,          l);
   fixAssociationsFor("additionalParts", m_additionalParts, l);
   fixAssociationsFor("appendedFiles",   m_appendedFiles,   l);
+
+  for (auto &track : m_tracks)
+    track->m_file = this;
 }

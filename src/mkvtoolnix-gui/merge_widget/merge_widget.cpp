@@ -69,13 +69,15 @@ MergeWidget::onOpenConfig() {
 
   try {
     m_config.load(fileName);
-    setControlValuesFromConfig();
+    m_config.save(fileName + "-resaved");
     MainWindow::get()->setStatusBarMessage(QY("The configuration has been loaded."));
 
   } catch (mtx::InvalidSettingsX &) {
     m_config.reset();
     QMessageBox::critical(this, QY("Error loading settings file"), QY("The settings file '%1' contains invalid settings and was not loaded.").arg(fileName));
   }
+
+  setControlValuesFromConfig();
 }
 
 void

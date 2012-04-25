@@ -93,6 +93,8 @@ MuxConfig::load(QSettings &settings) {
   if (settings.value("version", std::numeric_limits<int>::max()).toInt() > MTXCFG_VERSION)
     throw mtx::InvalidSettingsX{};
 
+  settings.beginGroup("input");
+
   QHash<qlonglong, SourceFile *> objectIDToSourceFile;
   QHash<qlonglong, Track *> objectIDToTrack;
   Loader l{settings, objectIDToSourceFile, objectIDToTrack};
@@ -104,6 +106,14 @@ MuxConfig::load(QSettings &settings) {
 
   for (auto &file : m_files)
     file->fixAssociations(l);
+
+  // Load track list.
+  for (auto trackID : settings.value("trackOrder").toList()) {
+    if (!objectIDToTrack.contains(trackID.toLongLong()))
+      throw mtx::InvalidSettingsX{};
+    m_tracks << objectIDToTrack.value(trackID.toLongLong());
+  }
+  settings.endGroup();
 
   // Load global settings
   settings.beginGroup("global");
@@ -146,8 +156,12 @@ MuxConfig::save(QSettings &settings)
   const {
   settings.setValue("version", MTXCFG_VERSION);
 
+  settings.beginGroup("input");
   saveSettingsGroup("files",       m_files,       settings);
   saveSettingsGroup("attachments", m_attachments, settings);
+
+  settings.setValue("trackOrder", std::accumulate(m_tracks.begin(), m_tracks.end(), QList<QVariant>{}, [](QList<QVariant> &accu, Track *track) { accu << QVariant{reinterpret_cast<qlonglong>(track)}; return accu; }));
+  settings.endGroup();
 
   settings.beginGroup("global");
   settings.setValue("title",                m_title);
