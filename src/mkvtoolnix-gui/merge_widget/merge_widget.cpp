@@ -29,6 +29,8 @@ MergeWidget::MergeWidget(QWidget *parent)
   setupMenu();
   setupInputControls();
   setupAttachmentsControls();
+
+  setControlValuesFromConfig();
 }
 
 MergeWidget::~MergeWidget() {
