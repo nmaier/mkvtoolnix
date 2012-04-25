@@ -527,7 +527,7 @@ task :clean do
   patterns += $applications + $tools.collect { |name| "src/tools/#{name}" }
   verbose   = ENV['V'].to_bool
 
-  patterns.collect { |pattern| FileList[pattern].to_a }.flatten.select { |file_name| File.exists? file_name }.each do |file_name|
+  patterns.collect { |pattern| FileList[pattern].to_a }.flatten.uniq.select { |file_name| File.exists? file_name }.each do |file_name|
     puts "      rm #{file_name}" if verbose
     File.unlink file_name
   end
