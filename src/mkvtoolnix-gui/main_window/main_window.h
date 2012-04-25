@@ -16,7 +16,6 @@ class MainWindow : public QMainWindow {
 protected:
   // UI stuff:
   Ui::MainWindow *ui;
-  QAction *mergeButton, *infoButton, *extractButton, *propeditButton;
 
 protected:                      // static
   static MainWindow *ms_mainWindow;
@@ -33,6 +32,7 @@ public:                         // static
 
 protected:
   virtual void setupToolSelector();
+  virtual QWidget *createNotImplementedWidget();
 };
 
 #endif // MTX_MKVTOOLNIX_GUI_MAIN_WINDOW_MAIN_WINDOW_H

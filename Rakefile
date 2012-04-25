@@ -698,6 +698,13 @@ if $build_mkvtoolnix_gui
     file ui.gsub(/forms\/(.*)\.ui$/, '\1/\1.cpp') => ui.ext('h')
   end
 
+  ui_static_deps = {
+    "main_window" => [ "merge_widget/merge_widget" ]
+  }
+  ui_static_deps.each do |ui_h, objects|
+    objects.each { |object| file "src/mkvtoolnix-gui/#{object}.o" => "src/mkvtoolnix-gui/forms/#{ui_h}.h" }
+  end
+
   Application.new("src/mkvtoolnix-gui/mkvtoolnix-gui").
     description("Build the mkvtoolnix-gui executable").
     aliases("mkvtoolnix-gui").

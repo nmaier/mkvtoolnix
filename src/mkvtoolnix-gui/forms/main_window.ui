@@ -15,11 +15,14 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
+    <property name="spacing">
+     <number>0</number>
+    </property>
     <property name="margin">
      <number>0</number>
     </property>
     <item>
-     <widget class="MergeWidget" name="toolArea" native="true"/>
+     <widget class="FancyTabWidget" name="tool" native="true"/>
     </item>
    </layout>
   </widget>
@@ -60,26 +63,6 @@
    <addaction name="menuMuxing"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
-  <widget class="MtxToolBar" name="toolSelector">
-   <property name="sizePolicy">
-    <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-     <horstretch>0</horstretch>
-     <verstretch>0</verstretch>
-    </sizepolicy>
-   </property>
-   <property name="windowTitle">
-    <string>toolBar</string>
-   </property>
-   <property name="movable">
-    <bool>false</bool>
-   </property>
-   <attribute name="toolBarArea">
-    <enum>LeftToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
-  </widget>
   <action name="actionNew">
    <property name="icon">
     <iconset resource="../qt_resources.qrc">
@@ -215,14 +198,9 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>MtxToolBar</class>
-   <extends>QToolBar</extends>
-   <header>mkvtoolnix-gui/main_window/mtx_tool_bar.h</header>
-  </customwidget>
-  <customwidget>
-   <class>MergeWidget</class>
+   <class>FancyTabWidget</class>
    <extends>QWidget</extends>
-   <header>mkvtoolnix-gui/merge_widget/merge_widget.h</header>
+   <header>mkvtoolnix-gui/util/fancy_tab_widget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
