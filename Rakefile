@@ -1,5 +1,4 @@
-#!/usr/bin/env rake
-# -*- mode: ruby; -*-
+#!/usr/bin/env ruby
 
 # Change to base directory before doing anything
 if FileUtils.pwd != File.dirname(__FILE__)
@@ -774,3 +773,7 @@ if $build_tools
     libraries(common_libs).
     create
 end
+
+# Local Variables:
+# mode: ruby
+# End:

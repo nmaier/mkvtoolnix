@@ -1,6 +1,7 @@
-#!/usr/bin/env rake
-# -*- mode: ruby; -*-
+#!/usr/bin/env ruby
 
-$build_mkvtoolnix_gui = true
+import ['..', '../..', '../../..'].collect { |subdir| FileList[File.dirname(__FILE__) + "/#{subdir}/build-config.in"].to_a }.flatten.compact.first.gsub(/build-config.in/, 'Rakefile')
 
-import File.dirname(__FILE__) + "/../../Rakefile"
+# Local Variables:
+# mode: ruby
+# End:
