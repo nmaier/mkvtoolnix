@@ -167,7 +167,6 @@ bool
 AttachmentModel::removeRows(int row,
                             int count,
                             QModelIndex const &parent) {
-  mxinfo(boost::format("remove rows row %1% count %2% m_att size %3%\n") % row % count % m_attachments->size());
   if ((0 > row) || (0 >= count) || ((row + count) >= m_attachments->size()))
     return false;
 
