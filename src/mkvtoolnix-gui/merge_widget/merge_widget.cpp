@@ -108,8 +108,8 @@ MergeWidget::onStartMuxing() {
 
 QString
 MergeWidget::getOpenFileName(QString const &title,
-                            QString const &filter,
-                            QLineEdit *lineEdit) {
+                             QString const &filter,
+                             QLineEdit *lineEdit) {
   auto fullFilter = filter;
   if (!fullFilter.isEmpty())
     fullFilter += Q(";;");
@@ -130,8 +130,8 @@ MergeWidget::getOpenFileName(QString const &title,
 
 QString
 MergeWidget::getSaveFileName(QString const &title,
-                            QString const &filter,
-                            QLineEdit *lineEdit) {
+                             QString const &filter,
+                             QLineEdit *lineEdit) {
   auto fullFilter = filter;
   if (!fullFilter.isEmpty())
     fullFilter += Q(";;");

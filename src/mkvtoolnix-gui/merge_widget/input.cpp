@@ -121,7 +121,7 @@ MergeWidget::onTrackSelectionChanged() {
   enableInputControls(m_allInputControls, false);
 
   auto selection = ui->tracks->selectionModel()->selection();
-  if (selection.isEmpty())
+  if (selection.isEmpty))
     return;
 
   if (1 < selection.size()) {
@@ -157,7 +157,7 @@ MergeWidget::onTrackSelectionChanged() {
 
 void
 MergeWidget::enableInputControls(QList<QWidget *> const &controls,
-                                bool enable) {
+                                 bool enable) {
   for (auto &control : controls)
     control->setEnabled(enable);
 }
@@ -228,8 +228,8 @@ MergeWidget::setInputControlValues(Track *track) {
 
 void
 MergeWidget::withSelectedTracks(std::function<void(Track *)> code,
-                               bool notIfAppending,
-                               QWidget *widget) {
+                                bool notIfAppending,
+                                QWidget *widget) {
   if (m_currentlySettingInputControlValues)
     return;
 
@@ -520,4 +520,8 @@ MergeWidget::retranslateInputUI() {
   m_addAdditionalPartsAction->setText(QY("Add files as a&dditional parts"));
   m_removeFilesAction->setText(QY("&Remove files"));
   m_removeAllFilesAction->setText(QY("Remove a&ll files"));
+
+  for (auto &comboBox : m_comboBoxControls)
+    if (!comboBox.isEmpty() !comboBox->itemData(0).isValid())
+      comboBox->setItemText(0, QY("<do not change>"));
 }
