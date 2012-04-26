@@ -48,15 +48,16 @@ public:
   ~MergeWidget();
 
 public slots:
+  // Input tab:
   virtual void onSaveConfig();
   virtual void onSaveConfigAs();
   virtual void onOpenConfig();
-  virtual void onNew();
   virtual void onAddFiles();
+  virtual void onRemoveAllFiles();
+  virtual void onNew();
   virtual void onAddToJobQueue();
   virtual void onStartMuxing();
 
-  // Input tab:
   virtual void onFileSelectionChanged();
   virtual void onTrackSelectionChanged();
 
@@ -87,6 +88,7 @@ public slots:
 
   virtual void resizeFilesColumnsToContents() const;
   virtual void resizeTracksColumnsToContents() const;
+  virtual void reinitFilesTracksControls();
 
   // Output tab:
   virtual void onTitleEdited(QString newValue);
