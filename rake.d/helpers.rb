@@ -103,7 +103,7 @@ def handle_deps(target, exit_code, skip_abspath=false)
         sources.delete_if { |entry| entry.start_with? '/' }
       end
 
-      out.puts ([ target ] + sources).join("\n")
+      out.puts(([ target ] + sources).join("\n"))
     end
   end
 
