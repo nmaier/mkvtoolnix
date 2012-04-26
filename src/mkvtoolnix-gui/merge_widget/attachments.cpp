@@ -23,8 +23,6 @@ MergeWidget::setupAttachmentsControls() {
   ui->attachmentStyle->setItemData(1, static_cast<int>(Attachment::ToFirstFile));
 
   // Context menu
-  m_addAttachmentsAction    = new QAction{QY("&Add"), this};
-  m_removeAttachmentsAction = new QAction{QY("&Remove"), this};
   ui->attachments->addAction(m_addAttachmentsAction);
   ui->attachments->addAction(m_removeAttachmentsAction);
 
@@ -189,4 +187,10 @@ MergeWidget::setAttachmentControlValues(Attachment *attachment) {
   }
 
   m_currentlySettingInputControlValues = false;
+}
+
+void
+MergeWidget::retranslateAttachmentsUI() {
+  m_addAttachmentsAction->setText(QY("&Add"));
+  m_removeAttachmentsAction->setText(QY("&Remove"));
 }

@@ -10,8 +10,8 @@
 
 #include <QComboBox>
 #include <QList>
-#include <QWidget>
 #include <QMenu>
+#include <QWidget>
 
 class QTreeView;
 
@@ -29,14 +29,18 @@ protected:
   // UI stuff:
   Ui::MergeWidget *ui;
 
+  // "Input" tab:
   SourceFileModel *m_filesModel;
   TrackModel *m_tracksModel;
-  AttachmentModel *m_attachmentsModel;
 
   QList<QWidget *> m_audioControls, m_videoControls, m_subtitleControls, m_chapterControls, m_typeIndependantControls, m_allInputControls;
   QList<QComboBox *> m_comboBoxControls;
   bool m_currentlySettingInputControlValues;
 
+  QAction *m_addFilesAction, *m_appendFilesAction, *m_addAdditionalPartsAction, *m_removeFilesAction, *m_removeAllFilesAction;
+
+  // "Attachments" tab:
+  AttachmentModel *m_attachmentsModel;
   QAction *m_addAttachmentsAction, *m_removeAttachmentsAction;
 
 public:
@@ -53,6 +57,7 @@ public slots:
   virtual void onStartMuxing();
 
   // Input tab:
+  virtual void onFileSelectionChanged();
   virtual void onTrackSelectionChanged();
 
   virtual void onTrackNameEdited(QString newValue);
@@ -82,9 +87,6 @@ public slots:
 
   virtual void resizeFilesColumnsToContents() const;
   virtual void resizeTracksColumnsToContents() const;
-
-  virtual void onFilesContextMenu() const;
-  virtual void onTracksContextMenu() const;
 
   // Output tab:
   virtual void onTitleEdited(QString newValue);
@@ -134,10 +136,15 @@ protected:
   virtual void setupInputControls();
   virtual void setupMenu();
 
+  virtual void retranslateUI();
+  virtual void retranslateInputUI();
+  virtual void retranslateAttachmentsUI();
+
   virtual QStringList selectFilesToAdd();
   virtual QStringList selectAttachmentsToAdd();
   virtual void addFile(QString const &fileName, bool append);
   virtual void enableInputControls(QList<QWidget *> const &controls, bool enable);
+  virtual void enableFilesActions();
   virtual void enableAttachmentControls(bool enable);
   virtual void setInputControlValues(Track *track);
   virtual void setOutputControlValues();

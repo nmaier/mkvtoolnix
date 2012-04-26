@@ -63,7 +63,7 @@
                </size>
               </property>
               <property name="contextMenuPolicy">
-               <enum>Qt::CustomContextMenu</enum>
+               <enum>Qt::ActionsContextMenu</enum>
               </property>
               <property name="alternatingRowColors">
                <bool>false</bool>
@@ -1612,38 +1612,6 @@
     <hint type="destinationlabel">
      <x>389</x>
      <y>277</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>tracks</sender>
-   <signal>customContextMenuRequested(QPoint)</signal>
-   <receiver>MergeWidget</receiver>
-   <slot>onTracksContextMenu()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>62</x>
-     <y>382</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>41</x>
-     <y>508</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>files</sender>
-   <signal>customContextMenuRequested(QPoint)</signal>
-   <receiver>MergeWidget</receiver>
-   <slot>onFilesContextMenu()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>140</x>
-     <y>93</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>300</x>
-     <y>27</y>
     </hint>
    </hints>
   </connection>

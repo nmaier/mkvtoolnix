@@ -92,9 +92,28 @@ MergeWidget::setupInputControls() {
       control->setItemData(idx, idx);
 
   // Connect signals & slots.
+  connect(ui->files->selectionModel(),  SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)), this, SLOT(onFileSelectionChanged()));
   connect(ui->tracks->selectionModel(), SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)), this, SLOT(onTrackSelectionChanged()));
 
+  // "files" context menu
+  ui->files->addAction(m_addFilesAction);
+  ui->files->addAction(m_appendFilesAction);
+  ui->files->addAction(m_addAdditionalPartsAction);
+  ui->files->addAction(m_removeFilesAction);
+  ui->files->addAction(m_removeAllFilesAction);
+
+  connect(m_addFilesAction,           SIGNAL(triggered()), this, SLOT(onAddFiles()));
+  // connect(m_appendFilesAction,        SIGNAL(triggered()), this, SLOT(onAppendFiles()));
+  // connect(m_addAdditionalPartsAction, SIGNAL(triggered()), this, SLOT(onAddAdditionalParts()));
+  // connect(m_removeFilesAction,        SIGNAL(triggered()), this, SLOT(onRemoveFiles()));
+  // connect(m_removeAllFilesAction,     SIGNAL(triggered()), this, SLOT(onRemoveAllFiles()));
+
   onTrackSelectionChanged();
+}
+
+void
+MergeWidget::onFileSelectionChanged() {
+  enableFilesActions();
 }
 
 void
@@ -433,12 +452,14 @@ MergeWidget::onAddFiles() {
   for (auto &fileName : fileNames)
     addFile(fileName, false);
 
-  if (numFilesBefore != m_config.m_files.size()) {
-    m_filesModel->setSourceFiles(m_config.m_files);
-    m_tracksModel->setTracks(m_config.m_tracks);
-    resizeFilesColumnsToContents();
-    resizeTracksColumnsToContents();
-  }
+  if (numFilesBefore == m_config.m_files.size())
+    return;
+
+  m_filesModel->setSourceFiles(m_config.m_files);
+  m_tracksModel->setTracks(m_config.m_tracks);
+  resizeFilesColumnsToContents();
+  resizeTracksColumnsToContents();
+  enableFilesActions();
 }
 
 QStringList
@@ -482,11 +503,21 @@ MergeWidget::resizeTracksColumnsToContents()
 }
 
 void
-MergeWidget::onFilesContextMenu()
-  const {
+MergeWidget::enableFilesActions() {
+  int numSelected = ui->files->selectionModel()->selection().size();
+
+  m_addFilesAction->setEnabled(true);
+  m_appendFilesAction->setEnabled(1 == numSelected);
+  m_addAdditionalPartsAction->setEnabled(1 == numSelected);
+  m_removeFilesAction->setEnabled(0 < numSelected);
+  m_removeAllFilesAction->setEnabled(!m_config.m_files.isEmpty());
 }
 
 void
-MergeWidget::onTracksContextMenu()
-  const {
+MergeWidget::retranslateInputUI() {
+  m_addFilesAction->setText(QY("&Add files"));
+  m_appendFilesAction->setText(QY("A&ppend files"));
+  m_addAdditionalPartsAction->setText(QY("Add files as a&dditional parts"));
+  m_removeFilesAction->setText(QY("&Remove files"));
+  m_removeAllFilesAction->setText(QY("Remove a&ll files"));
 }

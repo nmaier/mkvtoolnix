@@ -18,10 +18,15 @@ MergeWidget::MergeWidget(QWidget *parent)
   , ui{new Ui::MergeWidget}
   , m_filesModel{new SourceFileModel{this}}
   , m_tracksModel{new TrackModel{this}}
-  , m_attachmentsModel{new AttachmentModel{this, m_config.m_attachments}}
   , m_currentlySettingInputControlValues{false}
-  , m_addAttachmentsAction{nullptr}
-  , m_removeAttachmentsAction{nullptr}
+  , m_addFilesAction{new QAction{this}}
+  , m_appendFilesAction{new QAction{this}}
+  , m_addAdditionalPartsAction{new QAction{this}}
+  , m_removeFilesAction{new QAction{this}}
+  , m_removeAllFilesAction{new QAction{this}}
+  , m_attachmentsModel{new AttachmentModel{this, m_config.m_attachments}}
+  , m_addAttachmentsAction{new QAction{this}}
+  , m_removeAttachmentsAction{new QAction{this}}
 {
   // Setup UI controls.
   ui->setupUi(this);
@@ -29,6 +34,8 @@ MergeWidget::MergeWidget(QWidget *parent)
   setupMenu();
   setupInputControls();
   setupAttachmentsControls();
+
+  retranslateUI();
 
   setControlValuesFromConfig();
 }
@@ -179,7 +186,14 @@ MergeWidget::setControlValuesFromConfig() {
   resizeTracksColumnsToContents();
   resizeAttachmentsColumnsToContents();
 
+  onFileSelectionChanged();
   onTrackSelectionChanged();
   setOutputControlValues();
   onAttachmentSelectionChanged();
+}
+
+void
+MergeWidget::retranslateUI() {
+  retranslateInputUI();
+  retranslateAttachmentsUI();
 }
