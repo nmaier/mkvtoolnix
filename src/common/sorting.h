@@ -96,9 +96,10 @@ public:
   }
 };
 
-template<typename StrT>
+template<typename ContT>
 void
-naturally(std::vector<StrT> &strings) {
+naturally(ContT &strings) {
+  typedef typename ContT::value_type StrT;
   typedef std::pair<natural_string_c<StrT>, size_t> sorter_t;
 
   std::vector<sorter_t> to_sort;
