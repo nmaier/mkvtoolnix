@@ -53,6 +53,7 @@ public slots:
   virtual void onSaveConfigAs();
   virtual void onOpenConfig();
   virtual void onAddFiles();
+  virtual void onAddAdditionalParts();
   virtual void onRemoveAllFiles();
   virtual void onNew();
   virtual void onAddToJobQueue();
@@ -160,6 +161,8 @@ protected:
   virtual QString getSaveFileName(QString const &title, QString const &filter, QLineEdit *lineEdit);
 
   virtual void resizeViewColumnsToContents(QTreeView *view) const;
+
+  virtual QModelIndex selectedSourceFile() const;
 };
 
 #endif // MTX_MKVTOOLNIX_GUI_MERGE_WIDGET_MERGE_WIDGET_H

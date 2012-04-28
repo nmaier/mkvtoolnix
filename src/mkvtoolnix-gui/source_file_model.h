@@ -30,6 +30,7 @@ public:
   virtual ~SourceFileModel();
 
   virtual void setSourceFiles(QList<SourceFilePtr> &sourceFiles);
+  virtual void addAdditionalParts(QModelIndex fileToAddToIdx, QStringList fileNames);
 
   virtual QModelIndex index(int row, int column, QModelIndex const &parent) const;
   virtual QModelIndex parent(QModelIndex const &child) const;

@@ -104,7 +104,7 @@ MergeWidget::setupInputControls() {
 
   connect(m_addFilesAction,           SIGNAL(triggered()), this, SLOT(onAddFiles()));
   // connect(m_appendFilesAction,        SIGNAL(triggered()), this, SLOT(onAppendFiles()));
-  // connect(m_addAdditionalPartsAction, SIGNAL(triggered()), this, SLOT(onAddAdditionalParts()));
+  connect(m_addAdditionalPartsAction, SIGNAL(triggered()), this, SLOT(onAddAdditionalParts()));
   // connect(m_removeFilesAction,        SIGNAL(triggered()), this, SLOT(onRemoveFiles()));
   connect(m_removeAllFilesAction,     SIGNAL(triggered()), this, SLOT(onRemoveAllFiles()));
 
@@ -485,6 +485,11 @@ MergeWidget::addFile(QString const &fileName,
 }
 
 void
+MergeWidget::onAddAdditionalParts() {
+  m_filesModel->addAdditionalParts(selectedSourceFile(), selectFilesToAdd());
+}
+
+void
 MergeWidget::onRemoveAllFiles() {
   if (m_config.m_files.isEmpty())
     return;
@@ -540,4 +545,15 @@ MergeWidget::retranslateInputUI() {
   for (auto &comboBox : m_comboBoxControls)
     if (!((0 == comboBox->count()) || comboBox->itemData(0).isValid()))
       comboBox->setItemText(0, QY("<do not change>"));
+}
+
+QModelIndex
+MergeWidget::selectedSourceFile()
+  const {
+  auto selection = ui->files->selectionModel()->selection();
+  if (selection.isEmpty())
+    QModelIndex{};
+
+  auto idxs = selection.at(0).indexes();
+  return idxs.isEmpty() ? QModelIndex{} : idxs.at(0);
 }

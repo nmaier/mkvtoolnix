@@ -1,5 +1,6 @@
 #include "common/common_pch.h"
 
+#include "common/sorting.h"
 #include "mkvtoolnix-gui/source_file_model.h"
 
 #include <QFileInfo>
@@ -172,4 +173,46 @@ SourceFileModel::sourceFileFromIndex(QModelIndex const &index)
   if (index.isValid())
     return static_cast<SourceFile *>(index.internalPointer());
   return nullptr;
+}
+
+void
+SourceFileModel::addAdditionalParts(QModelIndex fileToAddToIdx,
+                                    QStringList fileNames) {
+  if (fileNames.isEmpty() || !fileToAddToIdx.isValid())
+    return;
+
+  if (sourceFileFromIndex(fileToAddToIdx)->m_additionalPart)
+    fileToAddToIdx = parent(fileToAddToIdx);
+
+  auto fileToAddTo = sourceFileFromIndex(fileToAddToIdx);
+  assert(fileToAddToIdx.isValid() && fileToAddTo);
+
+  fileNames.erase(std::remove_if(fileNames.begin(), fileNames.end(), [&](QString const &fileName) {
+        if (fileToAddTo->m_fileName == fileName)
+          return true;
+        for (auto additionalPart : fileToAddTo->m_additionalParts)
+          if (additionalPart->m_fileName == fileName)
+            return true;
+        return false;
+      }), fileNames.end());
+
+  if (fileNames.isEmpty())
+    return;
+
+  mtx::sort::naturally(fileNames);
+
+  auto startRow = fileToAddTo->m_additionalParts.size();
+  auto endRow   = startRow + fileNames.size() - 1;
+
+  beginInsertRows(fileToAddToIdx, startRow, endRow);
+
+  for (auto &fileName : fileNames) {
+    auto additionalPart              = std::make_shared<SourceFile>(fileName);
+    additionalPart->m_additionalPart = true;
+    additionalPart->m_appendedTo     = fileToAddTo;
+
+    fileToAddTo->m_additionalParts << additionalPart;
+  }
+
+  endInsertRows();
 }
