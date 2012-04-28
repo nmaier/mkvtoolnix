@@ -1041,7 +1041,7 @@ tab_chapters::on_entry_selected(wxTreeEvent &evt) {
 
   display = FindChild<KaxChapterDisplay>(t->chapter);
   if (!display)
-    wxdie(Z("on_entry_selected: !display. Should not have happened."));
+    wxdie(Z("on_entry_selected: display == nullptr. Should not have happened."));
   first = true;
   while (display) {
     cstring = FindChild<KaxChapterString>(*display);
