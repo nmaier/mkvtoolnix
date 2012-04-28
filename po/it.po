@@ -8483,27 +8483,27 @@ msgid "max. number of files:"
 msgstr "massimo numero di file:"
 
 #: src/common/memory.cpp:147
-#, fuzzy, boost-format
+#, boost-format
 msgid "memory.cpp/safemalloc() called from file %1%, line %2%: malloc() returned nullptr for a size of %3% bytes.\n"
 msgstr "memory.cpp/safemalloc() chiamato dal file %1%, linea %2%: malloc() ha ritornato nullptr per una dimensione di %3% byte.\n"
 
 #: src/common/memory.cpp:135
-#, fuzzy, boost-format
+#, boost-format
 msgid "memory.cpp/safememdup() called from file %1%, line %2%: malloc() returned nullptr for a size of %3% bytes.\n"
 msgstr "memory.cpp/safememdup() chiamato dal file %1%, linea %2%: malloc() ha ritornato nullptr per una dimensione di %3% byte.\n"
 
 #: src/common/memory.cpp:163
-#, fuzzy, boost-format
+#, boost-format
 msgid "memory.cpp/saferealloc() called from file %1%, line %2%: realloc() returned nullptr for a size of %3% bytes.\n"
 msgstr "memory.cpp/saferealloc() chiamato dal file %1%, linea %2%: realloc() ha ritornato nullptr per una dimensione di %3% byte.\n"
 
 #: src/propedit/target.cpp:82
 msgid "missing property name"
-msgstr "Nome proprietà mancante"
+msgstr "nome proprietà mancante"
 
 #: src/propedit/target.cpp:75
 msgid "missing value"
-msgstr "Valore mancante"
+msgstr "valore mancante"
 
 #: src/common/mm_io.h:86
 msgid "mkdir(%1%) failed; errno = %2% (%3%)"
