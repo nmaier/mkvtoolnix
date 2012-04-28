@@ -57,21 +57,17 @@ TrackModel::index(int row,
 QModelIndex
 TrackModel::parent(QModelIndex const &child)
   const {
+  if (0 != child.column())
+    return QModelIndex{};
+
   auto track = trackFromIndex(child);
-  if (!track)
+  if (!track || !track->m_appendedTo)
     return QModelIndex{};
 
-  auto parentTrack = track->m_appendedTo;
-  if (!parentTrack) {
-    for (int row = 0; m_tracks->size() > row; ++row)
-      if (m_tracks->at(row) == track)
-        return createIndex(row, 0, nullptr);
-    return QModelIndex{};
-  }
-
-  for (int row = 0; parentTrack->m_appendedTracks.size() > row; ++row)
-    if (parentTrack->m_appendedTracks[row] == track)
-      return createIndex(row, 0, parentTrack);
+  auto grandparentTrack = track->m_appendedTo->m_appendedTo;
+  int row               = (grandparentTrack ? grandparentTrack->m_appendedTracks : *m_tracks).indexOf(track->m_appendedTo);
+  if (-1 != row)
+    return createIndex(row, 0, track->m_appendedTo);
 
   return QModelIndex{};
 }

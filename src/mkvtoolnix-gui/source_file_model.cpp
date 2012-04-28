@@ -53,19 +53,23 @@ SourceFileModel::parent(QModelIndex const &child)
     return QModelIndex{};
 
   auto parentSourceFile = sourceFile->m_appendedTo;
-  if (!parentSourceFile) {
+  if (!parentSourceFile)
+    return QModelIndex{};
+
+  auto grandparentSourceFile = parentSourceFile->m_appendedTo;
+  if (!grandparentSourceFile) {
     for (int row = 0; m_sourceFiles->size() > row; ++row)
-      if (m_sourceFiles->at(row).get() == sourceFile)
-        return createIndex(row, 0, nullptr);
+      if (m_sourceFiles->at(row).get() == parentSourceFile)
+        return createIndex(row, 0, parentSourceFile);
     return QModelIndex{};
   }
 
-  for (int row = 0; parentSourceFile->m_additionalParts.size() > row; ++row)
-    if (parentSourceFile->m_additionalParts[row].get() == sourceFile)
+  for (int row = 0; grandparentSourceFile->m_additionalParts.size() > row; ++row)
+    if (grandparentSourceFile->m_additionalParts[row].get() == parentSourceFile)
       return createIndex(row, 0, parentSourceFile);
 
-  for (int row = 0; parentSourceFile->m_appendedFiles.size() > row; ++row)
-    if (parentSourceFile->m_appendedFiles[row].get() == sourceFile)
+  for (int row = 0; grandparentSourceFile->m_appendedFiles.size() > row; ++row)
+    if (grandparentSourceFile->m_appendedFiles[row].get() == parentSourceFile)
       return createIndex(row + parentSourceFile->m_additionalParts.size(), 0, parentSourceFile);
 
   return QModelIndex{};
