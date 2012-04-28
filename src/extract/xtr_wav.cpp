@@ -90,7 +90,7 @@ xtr_wavpack4_c::create_file(xtr_base_c *master,
   if (priv)
     mpriv = decode_codec_private(priv);
 
-  if ((nullptr == priv) || (2 > mpriv->get_size()))
+  if (!priv || (2 > mpriv->get_size()))
     mxerror(boost::format(Y("Track %1% with the CodecID '%2%' is missing the \"codec private\" element and cannot be extracted.\n")) % m_tid % m_codec_id);
   memcpy(m_version, mpriv->get_buffer(), 2);
 
@@ -180,14 +180,14 @@ xtr_wavpack4_c::handle_frame(memory_cptr &frame,
   }
 
   // support hybrid mode data
-  if (m_corr_out && (nullptr != additions)) {
+  if (m_corr_out && (additions)) {
     KaxBlockMore *block_more = FindChild<KaxBlockMore>(additions);
 
-    if (nullptr == block_more)
+    if (!block_more)
       return;
 
     KaxBlockAdditional *block_addition = FindChild<KaxBlockAdditional>(block_more);
-    if (nullptr == block_addition)
+    if (!block_addition)
       return;
 
     data_size = block_addition->GetSize();

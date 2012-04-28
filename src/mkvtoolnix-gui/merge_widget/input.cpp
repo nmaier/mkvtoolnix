@@ -190,9 +190,9 @@ void
 MergeWidget::setInputControlValues(Track *track) {
   m_currentlySettingInputControlValues = true;
 
-  addOrRemoveEmptyComboBoxItem(nullptr == track);
+  addOrRemoveEmptyComboBoxItem(!track);
 
-  if (nullptr == track) {
+  if (!track) {
     clearInputControlValues();
     m_currentlySettingInputControlValues = false;
     return;
@@ -237,7 +237,7 @@ MergeWidget::withSelectedTracks(std::function<void(Track *)> code,
   if (selection.isEmpty())
     return;
 
-  if (nullptr == widget)
+  if (!widget)
     widget = static_cast<QWidget *>(QObject::sender());
 
   bool withAudio     = m_audioControls.contains(widget);

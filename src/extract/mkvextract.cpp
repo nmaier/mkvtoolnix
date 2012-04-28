@@ -55,7 +55,7 @@ show_element(EbmlElement *l,
   level_buffer[level] = 0;
 
   mxinfo(boost::format("(%1%) %2%+ %3%") % NAME % level_buffer % info);
-  if (nullptr != l)
+  if (l)
     mxinfo(boost::format(Y(" at %1%")) % l->GetElementPosition());
   mxinfo("\n");
 }

@@ -53,7 +53,7 @@ extract_tags(const std::string &file_name,
     return;
 
   KaxTags *tags = dynamic_cast<KaxTags *>(m.get());
-  assert(nullptr != tags);
+  assert(tags);
 
   mtx::xml::ebml_tags_converter_c::write_xml(*tags, *g_mm_stdio);
 }

@@ -44,7 +44,7 @@ namespace mtx {
 
 inline void
 safefree(void *p) {
-  if (nullptr != p)
+  if (p)
     free(p);
 }
 
@@ -135,11 +135,11 @@ public:
   }
 
   bool is_unique() const throw() {
-    return (its_counter ? its_counter->count == 1 : true);
+    return its_counter ? its_counter->count == 1 : true;
   }
 
   bool is_allocated() const throw() {
-    return (nullptr != its_counter) && (nullptr != its_counter->ptr);
+    return its_counter && its_counter->ptr;
   }
 
   memory_cptr clone() const {

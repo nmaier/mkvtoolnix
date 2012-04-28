@@ -58,7 +58,7 @@ engage_hacks(const std::string &hacks) {
   for (aidx = 0; engage_args.size() > aidx; aidx++)
     if (engage_args[aidx] == "list") {
       mxinfo(Y("Valid hacks are:\n"));
-      for (hidx = 0; nullptr != s_available_hacks[hidx].name; ++hidx)
+      for (hidx = 0; s_available_hacks[hidx].name; ++hidx)
         mxinfo(boost::format("%1%\n") % s_available_hacks[hidx].name);
       mxexit(0);
 
@@ -76,7 +76,7 @@ engage_hacks(const std::string &hacks) {
 
   for (aidx = 0; engage_args.size() > aidx; aidx++) {
     bool valid_hack = false;
-    for (hidx = 0; s_available_hacks[hidx].name != nullptr; hidx++)
+    for (hidx = 0; s_available_hacks[hidx].name; hidx++)
       if (engage_args[aidx] == s_available_hacks[hidx].name) {
         valid_hack = true;
         s_engaged_hacks[s_available_hacks[hidx].id] = true;
@@ -94,7 +94,7 @@ init_hacks() {
 
   for (auto &name : env_vars) {
     auto value = getenv(name.c_str());
-    if (nullptr != value)
+    if (value)
       engage_hacks(value);
   }
 }

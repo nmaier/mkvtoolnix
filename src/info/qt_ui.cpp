@@ -237,7 +237,7 @@ rightclick_tree_widget::mousePressEvent(QMouseEvent *event) {
   }
 
   QTreeWidgetItem *item = itemAt(event->pos());
-  if (nullptr != item) {
+  if (item) {
 #if QT_VERSION >= 0x040200
     gui->expand_all_elements(item, !item->isExpanded());
 #else   // QT_VERSION >= 0x040200

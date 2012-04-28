@@ -89,7 +89,7 @@ Track::isAttachment()
 bool
 Track::isAppended()
   const {
-  return nullptr == m_file ? false : m_file->m_appended;
+  return !m_file ? false : m_file->m_appended;
 }
 
 void

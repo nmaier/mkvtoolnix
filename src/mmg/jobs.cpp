@@ -144,7 +144,7 @@ job_run_dialog::start_next_job() {
     st_remaining_time_total->SetLabel(wxT("---"));
 
 #if defined(SYS_WINDOWS)
-    if (nullptr != m_taskbar_progress)
+    if (m_taskbar_progress)
       m_taskbar_progress->set_state(TBPF_NOPROGRESS);
 #endif
 
@@ -156,7 +156,7 @@ job_run_dialog::start_next_job() {
   st_remaining_time->SetLabel(Z("is being estimated"));
 
 #if defined(SYS_WINDOWS)
-  if (nullptr != m_taskbar_progress) {
+  if (m_taskbar_progress) {
     m_taskbar_progress->set_state(TBPF_NORMAL);
     m_taskbar_progress->set_value(current_job * 100, jobs_to_start.size() * 100);
   }
@@ -178,7 +178,7 @@ job_run_dialog::start_next_job() {
                           opt_file_name.c_str(), errno, wxUCS(strerror(errno)));
     jobs[ndx].status = JOBS_FAILED;
     mdlg->save_job_queue();
-    if (nullptr != process) {
+    if (process) {
       delete process;
       process = nullptr;
     }
@@ -225,7 +225,7 @@ job_run_dialog::start_next_job() {
 
 void
 job_run_dialog::process_input() {
-  if (nullptr == process)
+  if (!process)
     return;
 
   while (process->IsInputAvailable()) {
@@ -270,7 +270,7 @@ job_run_dialog::set_progress_value(long value) {
   g_jobs->SetValue(m_progress);
 
 #if defined(SYS_WINDOWS)
-  if (nullptr != m_taskbar_progress)
+  if (m_taskbar_progress)
     m_taskbar_progress->set_value(current_job * 100 + value, jobs_to_start.size() * 100);
 #endif
 }
@@ -317,7 +317,7 @@ job_run_dialog::on_abort(wxCommandEvent &) {
   abort = true;
 #if defined(SYS_WINDOWS)
   wxKill(pid, wxSIGKILL);
-  if (nullptr != m_taskbar_progress)
+  if (m_taskbar_progress)
     m_taskbar_progress->set_state(TBPF_ERROR);
 #else
   wxKill(pid, wxSIGTERM);

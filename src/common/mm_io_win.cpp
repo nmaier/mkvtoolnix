@@ -85,7 +85,7 @@ mm_file_io_c::mm_file_io_c(const std::string &path,
 
 void
 mm_file_io_c::close() {
-  if (nullptr != m_file) {
+  if (m_file) {
     CloseHandle((HANDLE)m_file);
     m_file = nullptr;
   }
@@ -154,7 +154,7 @@ mm_file_io_c::_write(const void *buffer,
     char *error_msg = nullptr;
     FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, error, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR)&error_msg, 0, nullptr);
 
-    if (nullptr != error_msg) {
+    if (error_msg) {
       int idx = strlen(error_msg) - 1;
 
       while ((0 <= idx) && ((error_msg[idx] == '\n') || (error_msg[idx] == '\r'))) {
@@ -168,7 +168,7 @@ mm_file_io_c::_write(const void *buffer,
 
     mxerror(boost::format(Y("Could not write to the output file: %1% (%2%)\n")) % error % error_msg_utf8);
 
-    if (nullptr != error_msg)
+    if (error_msg)
       LocalFree(error_msg);
   }
 

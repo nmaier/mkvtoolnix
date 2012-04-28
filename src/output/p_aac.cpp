@@ -131,7 +131,7 @@ aac_packetizer_c::set_headers() {
   set_audio_sampling_freq((float)m_samples_per_sec);
   set_audio_channels(m_channels);
 
-  if ((nullptr != m_ti.m_private_data) && (0 < m_ti.m_private_size))
+  if (m_ti.m_private_data && (0 < m_ti.m_private_size))
     set_codec_private(m_ti.m_private_data, m_ti.m_private_size);
 
   else if (!hack_engaged(ENGAGE_OLD_AAC_CODECID)) {
@@ -183,7 +183,7 @@ aac_packetizer_c::process(packet_cptr packet) {
   aac_header_t aacheader;
 
   m_byte_buffer.add(packet->data->get_buffer(), packet->data->get_size());
-  while ((aac_packet = get_aac_packet(&aacheader)) != nullptr) {
+  while ((aac_packet = get_aac_packet(&aacheader))) {
     add_packet(new packet_t(new memory_c(aac_packet, aacheader.data_byte_size, true), -1 == packet->timecode ? m_packetno * m_s2tc : packet->timecode, m_single_packet_duration));
     m_packetno++;
   }
@@ -195,7 +195,7 @@ connection_result_e
 aac_packetizer_c::can_connect_to(generic_packetizer_c *src,
                                  std::string &error_message) {
   aac_packetizer_c *asrc = dynamic_cast<aac_packetizer_c *>(src);
-  if (nullptr == asrc)
+  if (!asrc)
     return CAN_CONNECT_NO_FORMAT;
 
   connect_check_a_samplerate(m_samples_per_sec, asrc->m_samples_per_sec);

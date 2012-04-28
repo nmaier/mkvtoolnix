@@ -116,7 +116,7 @@ cluster_helper_c::split_if_necessary(packet_cptr &packet) {
       || (g_file_num > g_split_max_num_files)
       || !packet->is_key_frame()
       || (   (packet->source->get_track_type() != track_video)
-          && (nullptr                          != g_video_packetizer)))
+          && g_video_packetizer))
     return;
 
   bool split_now = false;
@@ -345,7 +345,7 @@ cluster_helper_c::render() {
         break;
       }
 
-    if (nullptr == render_group) {
+    if (!render_group) {
       render_groups.push_back(render_groups_cptr(new render_groups_c(source)));
       render_group = render_groups.back().get();
     }
@@ -408,7 +408,7 @@ cluster_helper_c::render() {
     render_group->m_durations.push_back(pack->get_unmodified_duration());
     render_group->m_duration_mandatory |= pack->duration_mandatory;
 
-    if (nullptr != new_block_group) {
+    if (new_block_group) {
       // Set the reference priority if it was wanted.
       if ((0 < pack->ref_priority) && new_block_group->replace_simple_by_group())
         GetChildAs<KaxReferencePriority, EbmlUInteger>(*new_block_group) = pack->ref_priority;
@@ -429,7 +429,7 @@ cluster_helper_c::render() {
 
     elements_in_cluster++;
 
-    if (nullptr == new_block_group)
+    if (!new_block_group)
       new_block_group = previous_block_group;
 
     else if (g_write_cues && (!added_to_cues || has_codec_state)) {
@@ -445,7 +445,7 @@ cluster_helper_c::render() {
           // last cue entry was created more than 2s ago.
           || (   (CUE_STRATEGY_SPARSE == source->get_cue_creation())
               && (track_audio         == source->get_track_type())
-              && (nullptr                == g_video_packetizer)
+              && !g_video_packetizer
               && (   (0 > source->get_last_cue_timecode())
                   || ((pack->assigned_timecode - source->get_last_cue_timecode()) >= 2000000000)))) {
 
@@ -473,7 +473,7 @@ cluster_helper_c::render() {
       m_cluster->Render(*m_out, *g_kax_cues);
       m_bytes_in_file += m_cluster->ElementSize();
 
-      if (nullptr != g_kax_sh_cues)
+      if (g_kax_sh_cues)
         g_kax_sh_cues->IndexThis(*m_cluster, *g_kax_segment);
 
       m_previous_cluster_tc = m_cluster->GlobalTimecode();

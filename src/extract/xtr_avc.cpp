@@ -57,7 +57,7 @@ xtr_avc_c::create_file(xtr_base_c *master,
   xtr_base_c::create_file(master, track);
 
   KaxCodecPrivate *priv = FindChild<KaxCodecPrivate>(&track);
-  if (nullptr == priv)
+  if (!priv)
     mxerror(boost::format(Y("Track %1% with the CodecID '%2%' is missing the \"codec private\" element and cannot be extracted.\n")) % m_tid % m_codec_id);
 
   memory_cptr mpriv = decode_codec_private(priv);

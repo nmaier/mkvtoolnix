@@ -72,7 +72,7 @@ mm_file_io_c::mm_file_io_c(const std::string &path,
 
   m_file = (FILE *)fopen(local_path.c_str(), cmode);
 
-  if (nullptr == m_file)
+  if (!m_file)
     throw mtx::mm_io::open_x();
 }
 
@@ -119,7 +119,7 @@ mm_file_io_c::_read(void *buffer,
 
 void
 mm_file_io_c::close() {
-  if (nullptr != m_file) {
+  if (m_file) {
     fclose((FILE *)m_file);
     m_file = nullptr;
   }
@@ -545,7 +545,7 @@ mm_io_c::getch() {
 
 void
 mm_proxy_io_c::close() {
-  if ((nullptr != m_proxy_io) && m_proxy_delete_io)
+  if (m_proxy_delete_io)
     delete m_proxy_io;
 
   m_proxy_io = nullptr;
@@ -636,7 +636,7 @@ mm_mem_io_c::mm_mem_io_c(unsigned char *mem,
   if (0 >= m_increase)
     throw mtx::invalid_parameter_x();
 
-  if ((nullptr == m_mem) && (0 < m_increase)) {
+  if (!m_mem && (0 < m_increase)) {
     if (0 == mem_size)
       m_allocated = increase;
 
@@ -658,7 +658,7 @@ mm_mem_io_c::mm_mem_io_c(const unsigned char *mem,
   , m_free_mem(false)
   , m_read_only(true)
 {
-  if (nullptr == m_ro_mem)
+  if (!m_ro_mem)
     throw mtx::invalid_parameter_x();
 }
 
@@ -674,7 +674,7 @@ mm_mem_io_c::getFilePointer() {
 void
 mm_mem_io_c::setFilePointer(int64 offset,
                             seek_mode mode) {
-  if ((nullptr == m_mem) && (nullptr == m_ro_mem) && (0 == m_mem_size))
+  if (!m_mem && !m_ro_mem && (0 == m_mem_size))
     throw mtx::invalid_parameter_x();
 
   int64_t new_pos

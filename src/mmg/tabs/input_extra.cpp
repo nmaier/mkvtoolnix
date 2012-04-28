@@ -137,8 +137,8 @@ tab_input_extra::translate_ui() {
 
 void
 tab_input_extra::set_track_mode(mmg_track_t *t) {
-  bool not_appending = (nullptr != t) && !t->appending;
-  bool normal_track  = (nullptr != t) && (('a' == t->type) || ('s' == t->type) || ('v' == t->type));
+  bool not_appending = t && !t->appending;
+  bool normal_track  = t && (('a' == t->type) || ('s' == t->type) || ('v' == t->type));
   wxString ctype     = t ? t->ctype.Lower() : wxT("");
 
   st_cues->Enable(not_appending && normal_track);
@@ -148,7 +148,7 @@ tab_input_extra::set_track_mode(mmg_track_t *t) {
   st_user_defined->Enable(normal_track);
   tc_user_defined->Enable(normal_track);
 
-  if (nullptr != t)
+  if (t)
     return;
 
   bool saved_dcvn             = input->dont_copy_values_now;

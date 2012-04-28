@@ -186,10 +186,10 @@ static void
 add_tag_for_cue_entry(cue_parser_args_t &a,
                       KaxTags **tags,
                       uint32_t cuid) {
-  if (nullptr == tags)
+  if (!tags)
     return;
 
-  if (nullptr == *tags)
+  if (!*tags)
     *tags = new KaxTags;
 
   KaxTag *tag            = new KaxTag;
@@ -213,7 +213,7 @@ add_tag_for_cue_entry(cue_parser_args_t &a,
   for (i = 0; i < a.comment.size(); i++)
     create_tag1(a.comment[i], "COMMENT");
 
-  if (FindChild<KaxTagSimple>(tag) != nullptr)
+  if (FindChild<KaxTagSimple>(tag))
     (*tags)->PushElement(*tag);
   else
     delete tag;
@@ -222,10 +222,10 @@ add_tag_for_cue_entry(cue_parser_args_t &a,
 static void
 add_tag_for_global_cue_settings(cue_parser_args_t &a,
                                 KaxTags **tags) {
-  if (nullptr == tags)
+  if (!tags)
     return;
 
-  if (nullptr == *tags)
+  if (!*tags)
     *tags = new KaxTags;
 
   KaxTag *tag            = new KaxTag;
@@ -244,7 +244,7 @@ add_tag_for_global_cue_settings(cue_parser_args_t &a,
   for (i = 0; i < a.global_rem.size(); i++)
     create_tag1(a.global_rem[i], "COMMENT");
 
-  if (FindChild<KaxTagSimple>(tag) != nullptr)
+  if (FindChild<KaxTagSimple>(tag))
     (*tags)->PushElement(*tag);
   else
     delete tag;
@@ -283,7 +283,7 @@ add_elements_for_cue_entry(cue_parser_args_t &a,
 
   cue_entries_to_chapter_name(a.performer, a.title, a.global_performer, a.global_title, a.name, a.num);
 
-  if (nullptr == a.edition) {
+  if (!a.edition) {
     a.edition                                           = &GetChild<KaxEditionEntry>(*a.chapters);
     GetChildAs<KaxEditionUID, EbmlUInteger>(*a.edition) = create_unique_uint32(UNIQUE_EDITION_IDS);
   }

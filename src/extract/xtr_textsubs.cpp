@@ -100,7 +100,7 @@ void
 xtr_ssa_c::create_file(xtr_base_c *master,
                        KaxTrackEntry &track) {
   KaxCodecPrivate *priv = FindChild<KaxCodecPrivate>(&track);
-  if (nullptr == priv)
+  if (!priv)
     mxerror(boost::format(Y("Track %1% with the CodecID '%2%' is missing the \"codec private\" element and cannot be extracted.\n")) % m_tid % m_codec_id);
 
   xtr_base_c::create_file(master, track);
@@ -126,7 +126,7 @@ xtr_ssa_c::create_file(xtr_base_c *master,
   delete []s;
 
   const char *p1;
-  if (((p1 = strstr(sconv.c_str(), "[Events]")) == nullptr) || (strstr(p1, "Format:") == nullptr)) {
+  if (!(p1 = strstr(sconv.c_str(), "[Events]")) || !strstr(p1, "Format:")) {
     if (m_codec_id == MKV_S_TEXTSSA)
       sconv += "\n[Events]\nFormat: Marked, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text\n";
     else
@@ -244,7 +244,7 @@ xtr_ssa_c::handle_frame(memory_cptr &frame,
 
     else {
       int k;
-      for (k = 0; nullptr != ms_kax_ssa_fields[k]; ++k)
+      for (k = 0; ms_kax_ssa_fields[k]; ++k)
         if (format == ms_kax_ssa_fields[k]) {
           line += fields[k];
           break;
@@ -289,7 +289,7 @@ void
 xtr_usf_c::create_file(xtr_base_c *master,
                        KaxTrackEntry &track) {
   KaxCodecPrivate *priv = FindChild<KaxCodecPrivate>(&track);
-  if (nullptr == priv)
+  if (!priv)
     mxerror(boost::format(Y("Track %1% with the CodecID '%2%' is missing the \"codec private\" element and cannot be extracted.\n")) % m_tid % m_codec_id);
 
   init_content_decoder(track);
@@ -298,14 +298,14 @@ xtr_usf_c::create_file(xtr_base_c *master,
   m_codec_private.append((const char *)new_priv->get_buffer(), new_priv->get_size());
 
   KaxTrackLanguage *language = FindChild<KaxTrackLanguage>(&track);
-  if (nullptr == language)
+  if (!language)
     m_language = "eng";
   else
     m_language = std::string(*language);
 
-  if (nullptr != master) {
+  if (master) {
     xtr_usf_c *usf_master = dynamic_cast<xtr_usf_c *>(master);
-    if (nullptr == usf_master)
+    if (!usf_master)
       mxerror(boost::format(Y("Cannot write track %1% with the CodecID '%2%' to the file '%3%' because "
                               "track %4% with the CodecID '%5%' is already being written to the same file.\n"))
               % m_tid % m_codec_id % m_file_name % master->m_tid % master->m_codec_id);
@@ -408,7 +408,7 @@ xtr_usf_c::finish_track() {
 
 void
 xtr_usf_c::finish_file() {
-  if (nullptr != m_master)
+  if (m_master)
     return;
 
   auto is_utf   = true;

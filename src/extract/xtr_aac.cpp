@@ -38,7 +38,7 @@ xtr_aac_c::create_file(xtr_base_c *master,
 
   if (m_codec_id == MKV_A_AAC) {
     KaxCodecPrivate *priv = FindChild<KaxCodecPrivate>(&track);
-    if (nullptr == priv)
+    if (!priv)
       mxerror(boost::format(Y("Track %1% with the CodecID '%2%' is missing the \"codec private\" element and cannot be extracted.\n")) % m_tid % m_codec_id);
 
     int output_sfreq = 0;
@@ -64,7 +64,7 @@ xtr_aac_c::create_file(xtr_base_c *master,
     if (!strcmp(&m_codec_id[12], "MAIN"))
       m_profile = 0;
     else if (   !strcmp(&m_codec_id[12], "LC")
-             || (strstr(&m_codec_id[12], "SBR") != nullptr))
+             ||  strstr(&m_codec_id[12], "SBR"))
       m_profile = 1;
     else if (!strcmp(&m_codec_id[12], "SSR"))
       m_profile = 2;

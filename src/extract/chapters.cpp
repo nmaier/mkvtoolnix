@@ -54,7 +54,7 @@ extract_chapters(const std::string &file_name,
     return;
 
   KaxChapters *chapters = dynamic_cast<KaxChapters *>(master.get());
-  assert(nullptr != chapters);
+  assert(chapters);
 
   if (!chapter_format_simple)
     mtx::xml::ebml_chapters_converter_c::write_xml(*chapters, *g_mm_stdio);

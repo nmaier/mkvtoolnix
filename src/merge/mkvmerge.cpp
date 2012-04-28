@@ -320,8 +320,7 @@ create_track_number(generic_reader_c *reader,
   if (found) {
     found = false;
     for (i = 0; i < g_packetizers.size(); i++)
-      if ((g_packetizers[i].packetizer != nullptr) &&
-          (g_packetizers[i].packetizer->get_track_num() == tnum)) {
+      if (g_packetizers[i].packetizer && (g_packetizers[i].packetizer->get_track_num() == tnum)) {
         tnum = s_track_number;
         break;
       }
@@ -350,21 +349,21 @@ static void
 handle_segmentinfo() {
   // segment families
   KaxSegmentFamily *family = FindChild<KaxSegmentFamily>(g_kax_info_chap.get());
-  while (nullptr != family) {
+  while (family) {
     g_segfamily_uids.add_family_uid(*family);
     family = FindNextChild<KaxSegmentFamily>(g_kax_info_chap.get(), family);
   }
 
   EbmlBinary *uid = FindChild<KaxSegmentUID>(g_kax_info_chap.get());
-  if (nullptr != uid)
+  if (uid)
     g_forced_seguids.push_back(bitvalue_cptr(new bitvalue_c(*uid)));
 
   uid = FindChild<KaxNextUID>(g_kax_info_chap.get());
-  if (nullptr != uid)
+  if (uid)
     g_seguid_link_next = bitvalue_cptr(new bitvalue_c(*uid));
 
   uid = FindChild<KaxPrevUID>(g_kax_info_chap.get());
-  if (nullptr != uid)
+  if (uid)
     g_seguid_link_previous = bitvalue_cptr(new bitvalue_c(*uid));
 
   auto segment_filename = FindChild<KaxSegmentFilename>(g_kax_info_chap.get());
@@ -516,7 +515,7 @@ parse_and_add_tags(const std::string &file_name) {
 
   for (auto element : *tags) {
     auto tag = dynamic_cast<KaxTag *>(element);
-    if (nullptr != tag) {
+    if (tag) {
       if (!tag->CheckMandatory())
         mxerror(boost::format(Y("Error parsing the tags in '%1%': some mandatory elements are missing.\n")) % file_name);
       add_tags(tag);

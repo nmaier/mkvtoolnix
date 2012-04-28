@@ -202,7 +202,7 @@ extract_cli_parser_c::set_extraction_mode() {
   };
 
   int i;
-  for (i = 0; nullptr != s_mode_map[i].name; ++i)
+  for (i = 0; s_mode_map[i].name; ++i)
     if (m_current_arg == s_mode_map[i].name) {
       m_options.m_extraction_mode = s_mode_map[i].extraction_mode;
       return;

@@ -73,7 +73,7 @@ connection_result_e
 vobbtn_packetizer_c::can_connect_to(generic_packetizer_c *src,
                                     std::string &error_message) {
   vobbtn_packetizer_c *vsrc = dynamic_cast<vobbtn_packetizer_c *>(src);
-  if (nullptr == vsrc)
+  if (!vsrc)
     return CAN_CONNECT_NO_FORMAT;
 
   connect_check_v_width(m_width,   vsrc->m_width);

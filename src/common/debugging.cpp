@@ -26,7 +26,7 @@ debugging_requested(const char *option,
     std::map<std::string, std::string>::iterator option_ptr = s_debugging_options.find(current_option);
 
     if (s_debugging_options.end() != option_ptr) {
-      if (nullptr != arg)
+      if (arg)
         *arg = option_ptr->second;
       return true;
     }
@@ -60,7 +60,7 @@ init_debugging() {
 
   for (auto &name : env_vars) {
     auto value = getenv(name.c_str());
-    if (nullptr != value)
+    if (value)
       request_debugging(value);
   }
 }

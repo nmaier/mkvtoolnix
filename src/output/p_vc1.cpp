@@ -168,7 +168,7 @@ connection_result_e
 vc1_video_packetizer_c::can_connect_to(generic_packetizer_c *src,
                                        std::string &) {
   vc1_video_packetizer_c *vsrc = dynamic_cast<vc1_video_packetizer_c *>(src);
-  if (vsrc == nullptr)
+  if (!vsrc)
     return CAN_CONNECT_NO_FORMAT;
 
   return CAN_CONNECT_YES;

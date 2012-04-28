@@ -196,9 +196,9 @@ tab_input_general::translate_ui() {
 
 void
 tab_input_general::set_track_mode(mmg_track_t *t) {
-  bool normal_track    = (nullptr != t) && (('a' == t->type) || ('s' == t->type) || ('v' == t->type));
-  bool enable          = (nullptr != t) && !t->appending && normal_track;
-  bool enable_chapters = (nullptr != t) && ('c' == t->type);
+  bool normal_track    = t && (('a' == t->type) || ('s' == t->type) || ('v' == t->type));
+  bool enable          = t && !t->appending && normal_track;
+  bool enable_chapters = t && ('c' == t->type);
 
   st_language->Enable(enable || enable_chapters);
   cob_language->Enable(enable || enable_chapters);
@@ -215,7 +215,7 @@ tab_input_general::set_track_mode(mmg_track_t *t) {
   st_forced->Enable(enable);
   cob_forced->Enable(enable);
 
-  if (nullptr != t)
+  if (t)
     return;
 
   bool saved_dcvn             = input->dont_copy_values_now;

@@ -71,7 +71,7 @@ connection_result_e
 wavpack_packetizer_c::can_connect_to(generic_packetizer_c *src,
                                      std::string &error_message) {
   wavpack_packetizer_c *psrc = dynamic_cast<wavpack_packetizer_c *>(src);
-  if (nullptr == psrc)
+  if (!psrc)
     return CAN_CONNECT_NO_FORMAT;
 
   connect_check_a_samplerate(m_sample_rate,   psrc->m_sample_rate);

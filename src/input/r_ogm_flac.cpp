@@ -124,7 +124,7 @@ flac_header_extractor_c::flac_header_extractor_c(const std::string &file_name,
   file    = new mm_file_io_c(file_name);
   decoder = FLAC__stream_decoder_new();
 
-  if (nullptr == decoder)
+  if (!decoder)
     mxerror(Y("flac_header_extraction: FLAC__stream_decoder_new() failed.\n"));
   if (!FLAC__stream_decoder_set_metadata_respond_all(decoder))
     mxerror(Y("flac_header_extraction: Could not set metadata_respond_all.\n"));

@@ -34,7 +34,7 @@ void
 xtr_flac_c::create_file(xtr_base_c *_master,
                         KaxTrackEntry &track) {
   KaxCodecPrivate *priv = FindChild<KaxCodecPrivate>(&track);
-  if (nullptr == priv)
+  if (!priv)
     mxerror(boost::format(Y("Track %1% with the CodecID '%2%' is missing the \"codec private\" element and cannot be extracted.\n")) % m_tid % m_codec_id);
 
   xtr_base_c::create_file(_master, track);
@@ -69,7 +69,7 @@ void
 xtr_oggbase_c::create_standard_file(xtr_base_c *master,
                                     KaxTrackEntry &track) {
   KaxCodecPrivate *priv = FindChild<KaxCodecPrivate>(&track);
-  if (nullptr == priv)
+  if (!priv)
     mxerror(boost::format(Y("Track %1% with the CodecID '%2%' is missing the \"codec private\" element and cannot be extracted.\n")) % m_tid % m_codec_id);
 
   init_content_decoder(track);

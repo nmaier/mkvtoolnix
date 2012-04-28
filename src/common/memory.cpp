@@ -39,7 +39,7 @@ memory_c::resize(size_t new_size)
 void
 memory_c::add(unsigned char const *new_buffer,
               size_t new_size) {
-  if ((0 == new_size) || (nullptr == new_buffer))
+  if ((0 == new_size) || !new_buffer)
     return;
 
   size_t previous_size = get_size();
@@ -127,11 +127,11 @@ _safememdup(const void *s,
             size_t size,
             const char *file,
             int line) {
-  if (nullptr == s)
+  if (!s)
     return nullptr;
 
   unsigned char *copy = reinterpret_cast<unsigned char *>(malloc(size));
-  if (nullptr == copy)
+  if (!copy)
     mxerror(boost::format(Y("memory.cpp/safememdup() called from file %1%, line %2%: malloc() returned nullptr for a size of %3% bytes.\n")) % file % line % size);
   memcpy(copy, s, size);
 
@@ -143,7 +143,7 @@ _safemalloc(size_t size,
             const char *file,
             int line) {
   unsigned char *mem = reinterpret_cast<unsigned char *>(malloc(size));
-  if (nullptr == mem)
+  if (!mem)
     mxerror(boost::format(Y("memory.cpp/safemalloc() called from file %1%, line %2%: malloc() returned nullptr for a size of %3% bytes.\n")) % file % line % size);
 
   return mem;
@@ -159,7 +159,7 @@ _saferealloc(void *mem,
     size = 1;
 
   mem = realloc(mem, size);
-  if (nullptr == mem)
+  if (!mem)
     mxerror(boost::format(Y("memory.cpp/saferealloc() called from file %1%, line %2%: realloc() returned nullptr for a size of %3% bytes.\n")) % file % line % size);
 
   return reinterpret_cast<unsigned char *>(mem);

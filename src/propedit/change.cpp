@@ -42,7 +42,7 @@ change_c::change_c(change_c::change_type_e type,
 
 void
 change_c::validate(std::vector<property_element_c> *property_table) {
-  if (nullptr == property_table)
+  if (!property_table)
     return;
 
   for (auto &property : *property_table)
@@ -158,9 +158,9 @@ change_c::parse_binary() {
 void
 change_c::execute(EbmlMaster *master,
                   EbmlMaster *sub_master) {
-  m_master = nullptr == m_property.m_sub_master_callbacks ? master : sub_master;
+  m_master = !m_property.m_sub_master_callbacks ? master : sub_master;
 
-  if (nullptr == m_master)
+  if (!m_master)
     return;
 
   if (change_c::ct_delete == m_type)
@@ -213,7 +213,7 @@ change_c::execute_add_or_set() {
   }
 
   const EbmlSemantic *semantic = get_semantic();
-  if ((nullptr != semantic) && semantic->Unique)
+  if (semantic && semantic->Unique)
     mxerror(boost::format(Y("This property is unique. More instances cannot be added in '%1%'. %2%\n")) % get_spec() % FILE_NOT_MODIFIED);
 
   do_add_element();
@@ -247,7 +247,7 @@ change_c::set_element_at(int idx) {
 void
 change_c::validate_deletion_of_mandatory() {
   const EbmlSemantic *semantic = get_semantic();
-  if ((nullptr != semantic) && semantic->Mandatory)
+  if (semantic && semantic->Mandatory)
     mxerror(boost::format(Y("This property is mandatory and cannot be deleted in '%1%'. %2%\n")) % get_spec() % FILE_NOT_MODIFIED);
 }
 

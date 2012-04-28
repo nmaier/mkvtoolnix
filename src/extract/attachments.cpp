@@ -92,7 +92,7 @@ handle_attachments(KaxAttachments *atts,
   size_t i;
   for (i = 0; atts->ListSize() > i; ++i) {
     KaxAttached *att = dynamic_cast<KaxAttached *>((*atts)[i]);
-    assert(nullptr != att);
+    assert(att);
 
     attachment_t attachment = attachment_t::parse_new(*att);
     if (!attachment.valid)

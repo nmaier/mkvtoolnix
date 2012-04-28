@@ -77,11 +77,11 @@ command_line_args_from_environment() {
   std::vector<std::string> args;
 
   char const *value = getenv("MKVTOOLNIX_OPTIONS");
-  if (nullptr != value)
+  if (value)
     args = split(value, " ");
   else {
     value = getenv("MTX_OPTIONS");
-    if (nullptr != value)
+    if (value)
       args = split(value, " ");
   }
 
@@ -121,7 +121,7 @@ command_line_utf8(int argc,
       if (!strcmp(argv[i], "--command-line-charset")) {
         if ((i + 1) == argc)
           mxerror(Y("'--command-line-charset' is missing its argument.\n"));
-        cc_command_line = charset_converter_c::init(argv[i + 1] == nullptr ? "" : argv[i + 1]);
+        cc_command_line = charset_converter_c::init(!argv[i + 1] ? "" : argv[i + 1]);
         i++;
       } else
         args.push_back(cc_command_line->utf8(argv[i]));
@@ -141,7 +141,7 @@ command_line_utf8(int,
   int num_args     = 0;
   LPWSTR *arg_list = CommandLineToArgvW(GetCommandLineW(), &num_args);
 
-  if (nullptr == arg_list)
+  if (!arg_list)
     return args;
 
   int i;
@@ -316,4 +316,3 @@ usage(int exit_code) {
   mxinfo(boost::format("%1%\n") % usage_text);
   mxexit(exit_code);
 }
-

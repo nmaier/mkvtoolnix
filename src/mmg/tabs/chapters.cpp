@@ -419,22 +419,22 @@ tab_chapters::create_chapter_label(KaxChapterAtom &chapter) {
   label = Z("(unnamed chapter)");
   language = nullptr;
   display = FindChild<KaxChapterDisplay>(chapter);
-  if (display != nullptr) {
+  if (display) {
     cstring = FindChild<KaxChapterString>(*display);
-    if (cstring != nullptr)
+    if (cstring)
       label =
         UTFstring_to_wxString(*static_cast<EbmlUnicodeString *>(cstring));
     language = FindChild<KaxChapterLanguage>(*display);
   }
   label += wxT(" [");
   tstart = FindChild<KaxChapterTimeStart>(chapter);
-  if (tstart != nullptr) {
+  if (tstart) {
     timestamp = uint64(*static_cast<EbmlUInteger *>(tstart));
     s.Printf(wxT(FMT_TIMECODEN), ARG_TIMECODEN(timestamp));
     label += s;
 
     tend = FindChild<KaxChapterTimeEnd>(chapter);
-    if (tend != nullptr) {
+    if (tend) {
       timestamp = uint64(*static_cast<EbmlUInteger *>(tend));
       s.Printf(wxT(FMT_TIMECODEN), ARG_TIMECODEN(timestamp));
       label += wxT(" - ") + s;
@@ -442,7 +442,7 @@ tab_chapters::create_chapter_label(KaxChapterAtom &chapter) {
 
     label += wxT("; ");
   }
-  if (language != nullptr)
+  if (language)
     label += wxU(language);
   else
     label += wxT("eng");
@@ -494,21 +494,21 @@ tab_chapters::fix_missing_languages(EbmlMaster &master) {
   for (i = 0; i < master.ListSize(); i++) {
     e = master[i];
 
-    if (dynamic_cast<EbmlMaster *>(e) != nullptr)
+    if (dynamic_cast<EbmlMaster *>(e))
       fix_missing_languages(*dynamic_cast<EbmlMaster *>(e));
 
     if (EbmlId(*e) == KaxChapterAtom::ClassInfos.GlobalId) {
       m = static_cast<EbmlMaster *>(e);
       d = FindChild<KaxChapterDisplay>(*m);
-      if (d == nullptr)
+      if (!d)
         d = &GetChild<KaxChapterDisplay>(*m);
       l = FindChild<KaxChapterLanguage>(*d);
-      if (l == nullptr) {
+      if (!l) {
         l = &GetChild<KaxChapterLanguage>(*d);
         *static_cast<EbmlString *>(l) = "eng";
       }
       u = FindChild<KaxChapterUID>(*m);
-      if (u != nullptr)
+      if (u)
         add_unique_uint32(uint32(*static_cast<EbmlUInteger *>(u)),
                           UNIQUE_CHAPTER_IDS);
     }
@@ -721,13 +721,13 @@ tab_chapters::verify_atom_recursively(EbmlElement *e) {
   std::string lang;
   uint32_t i;
 
-  if (dynamic_cast<KaxEditionUID *>(e) != nullptr)
+  if (dynamic_cast<KaxEditionUID *>(e))
     return true;
   chapter = dynamic_cast<KaxChapterAtom *>(e);
-  if (chapter == nullptr)
+  if (!chapter)
     return false;
 
-  if (FindChild<KaxChapterUID>(*chapter) == nullptr) {
+  if (FindChild<KaxChapterUID>(*chapter)) {
     uid = &GetChild<KaxChapterUID>(*chapter);
     *static_cast<EbmlUInteger *>(uid) =
       create_unique_uint32(UNIQUE_CHAPTER_IDS);
@@ -735,10 +735,10 @@ tab_chapters::verify_atom_recursively(EbmlElement *e) {
 
   cs = nullptr;
   display = FindChild<KaxChapterDisplay>(*chapter);
-  if (display != nullptr)
+  if (display)
     cs = FindChild<KaxChapterString>(*display);
 
-  if ((display == nullptr) || (cs == nullptr)) {
+  if ((!display) || (!cs)) {
     wxMessageBox(Z("One of the chapters does not have a name."), Z("Chapter verification error"), wxCENTER | wxOK | wxICON_ERROR);
     return false;
   }
@@ -746,13 +746,13 @@ tab_chapters::verify_atom_recursively(EbmlElement *e) {
     UTFstring_to_wxString(UTFstring(*static_cast<EbmlUnicodeString *>(cs)));
 
   start = FindChild<KaxChapterTimeStart>(*chapter);
-  if (start == nullptr) {
+  if (!start) {
     wxMessageBox(wxString::Format(Z("The chapter '%s' is missing the start time."), label.c_str()), Z("Chapter verification error"), wxCENTER | wxOK | wxICON_ERROR);
     return false;
   }
 
   language = FindChild<KaxChapterLanguage>(*display);
-  if (language == nullptr) {
+  if (!language) {
     wxMessageBox(wxString::Format(Z("The chapter '%s' is missing its language."), label.c_str()), Z("Chapter verification error"), wxCENTER | wxOK | wxICON_ERROR);
     return false;
   }
@@ -765,7 +765,7 @@ tab_chapters::verify_atom_recursively(EbmlElement *e) {
   }
 
   for (i = 0; i < chapter->ListSize(); i++)
-    if (dynamic_cast<KaxChapterAtom *>((*chapter)[i]) != nullptr)
+    if (dynamic_cast<KaxChapterAtom *>((*chapter)[i]))
       if (!verify_atom_recursively((*chapter)[i]))
         return false;
 
@@ -793,7 +793,7 @@ tab_chapters::verify(bool called_interactively) {
     bool contains_atom      = false;
 
     for (cidx = 0; cidx < eentry->ListSize(); cidx++)
-      if (dynamic_cast<KaxChapterAtom *>((*eentry)[cidx]) != nullptr) {
+      if (dynamic_cast<KaxChapterAtom *>((*eentry)[cidx])) {
         contains_atom = true;
         break;
       }
@@ -809,7 +809,7 @@ tab_chapters::verify(bool called_interactively) {
   for (eidx = 0; eidx < m_chapters->ListSize(); eidx++) {
     KaxEditionEntry *eentry = static_cast<KaxEditionEntry *>((*m_chapters)[eidx]);
     for (cidx = 0; cidx < eentry->ListSize(); cidx++)
-      if ((dynamic_cast<KaxChapterAtom *>((*eentry)[cidx]) != nullptr) && !verify_atom_recursively((*eentry)[cidx]))
+      if (dynamic_cast<KaxChapterAtom *>((*eentry)[cidx]) && !verify_atom_recursively((*eentry)[cidx]))
         return false;
   }
 
@@ -964,7 +964,7 @@ tab_chapters::on_remove_chapter(wxCommandEvent &) {
     m = m_chapters;
   else {
     p_d = (chapter_node_data_c *)tc_chapters->GetItemData(p_id);
-    if (p_d == nullptr)
+    if (!p_d)
       return;
     if (p_d->is_atom)
       m = p_d->chapter;
@@ -972,7 +972,7 @@ tab_chapters::on_remove_chapter(wxCommandEvent &) {
       m = p_d->eentry;
   }
   d = (chapter_node_data_c *)tc_chapters->GetItemData(id);
-  if (d == nullptr)
+  if (!d)
     return;
   if (d->is_atom)
     del = d->chapter;
@@ -1012,20 +1012,20 @@ tab_chapters::on_entry_selected(wxTreeEvent &evt) {
   t = (chapter_node_data_c *)tc_chapters->GetItemData(evt.GetItem());
   lb_chapter_names->Clear();
 
-  if ((evt.GetItem() == tid_root) || (t == nullptr) || !t->is_atom) {
+  if ((evt.GetItem() == tid_root) || (!t) || !t->is_atom) {
     enable_inputs(false);
     no_update = true;
     tc_chapter_name->SetValue(wxEmptyString);
     tc_start_time->SetValue(wxEmptyString);
     tc_end_time->SetValue(wxEmptyString);
-    if ((evt.GetItem() != tid_root) && (t != nullptr) && !t->is_atom) {
+    if ((evt.GetItem() != tid_root) && t && !t->is_atom) {
       KaxEditionUID *euid;
       wxString s;
 
       st_uid->Enable(true);
       tc_uid->Enable(true);
       euid = FindChild<KaxEditionUID>(t->eentry);
-      if (euid != nullptr)
+      if (euid)
         s.Printf(wxT("%u"), uint32(*euid));
       tc_uid->SetValue(s);
     } else {
@@ -1040,12 +1040,12 @@ tab_chapters::on_entry_selected(wxTreeEvent &evt) {
   enable_inputs(true);
 
   display = FindChild<KaxChapterDisplay>(t->chapter);
-  if (display == nullptr)
-    wxdie(Z("on_entry_selected: display == nullptr. Should not have happened."));
+  if (!display)
+    wxdie(Z("on_entry_selected: !display. Should not have happened."));
   first = true;
-  while (display != nullptr) {
+  while (display) {
     cstring = FindChild<KaxChapterString>(*display);
-    if (cstring != nullptr)
+    if (cstring)
       label =
         UTFstring_to_wxString(*static_cast<EbmlUnicodeString *>(cstring));
     else
@@ -1062,21 +1062,21 @@ tab_chapters::on_entry_selected(wxTreeEvent &evt) {
   set_timecode_values(t->chapter);
 
   fhidden = FindChild<KaxChapterFlagHidden>(t->chapter);
-  if (fhidden == nullptr)
+  if (!fhidden)
     value = false;
   else
     value = uint8(*static_cast<EbmlUInteger *>(fhidden)) != 0;
   cb_flag_hidden->SetValue(value);
 
   fenabled = FindChild<KaxChapterFlagEnabled>(t->chapter);
-  if (fenabled == nullptr)
+  if (!fenabled)
     value = true;
   else
     value = uint8(*static_cast<EbmlUInteger *>(fenabled)) != 0;
   cb_flag_enabled->SetValue(value);
 
   cuid = FindChild<KaxChapterUID>(t->chapter);
-  if (cuid == nullptr)
+  if (!cuid)
     label = wxEmptyString;
   else
     label.Printf(wxT("%u"), uint32(*cuid));
@@ -1114,7 +1114,7 @@ tab_chapters::on_language_code_selected(wxCommandEvent &) {
         break;
       }
     }
-  if (cdisplay == nullptr)
+  if (!cdisplay)
     return;
 
   clanguage = &GetChild<KaxChapterLanguage>(*cdisplay);
@@ -1150,7 +1150,7 @@ tab_chapters::on_country_code_selected(wxCommandEvent &) {
         break;
       }
     }
-  if (cdisplay == nullptr)
+  if (!cdisplay)
     return;
 
   if (cob_country_code->GetStringSelection().Length() == 0) {
@@ -1197,7 +1197,7 @@ tab_chapters::on_chapter_name_changed(wxCommandEvent &) {
         break;
       }
     }
-  if (cdisplay == nullptr)
+  if (!cdisplay)
     return;
 
   GetChildAs<KaxChapterString, EbmlUnicodeString>(*cdisplay) = cstrutf8_to_UTFstring(wxMB(tc_chapter_name->GetValue()));
@@ -1225,15 +1225,13 @@ tab_chapters::set_values_recursively(wxTreeItemId id,
     return;
 
   d = (chapter_node_data_c *)tc_chapters->GetItemData(id);
-  if ((d != nullptr) && (d->is_atom)) {
+  if (d && d->is_atom) {
     display = FindChild<KaxChapterDisplay>(d->chapter);
-    while (display != nullptr) {
+    while (display) {
       i = 0;
       while (i < display->ListSize()) {
-        if ((set_language &&
-             (dynamic_cast<KaxChapterLanguage *>((*display)[i]) != nullptr)) ||
-            (!set_language &&
-             (dynamic_cast<KaxChapterCountry *>((*display)[i]) != nullptr))) {
+        if (   ( set_language && dynamic_cast<KaxChapterLanguage *>((*display)[i]))
+            || (!set_language && dynamic_cast<KaxChapterCountry * >((*display)[i]))) {
           delete (*display)[i];
           display->Remove(i);
         } else
@@ -1293,7 +1291,7 @@ tab_chapters::on_set_values(wxCommandEvent &) {
   }
 
   t = (chapter_node_data_c *)tc_chapters->GetItemData(id);
-  if ((t == nullptr) || !t->is_atom)
+  if ((!t) || !t->is_atom)
     return;
 
   cdisplay = nullptr;
@@ -1306,7 +1304,7 @@ tab_chapters::on_set_values(wxCommandEvent &) {
         break;
       }
     }
-  if (cdisplay == nullptr)
+  if (!cdisplay)
     return;
 
   set_display_values(cdisplay);
@@ -1362,7 +1360,7 @@ tab_chapters::on_adjust_timecodes(wxCommandEvent &) {
   adjust_timecodes_recursively(id, adjustment);
 
   t = (chapter_node_data_c *)tc_chapters->GetItemData(id);
-  if ((t == nullptr) || !t->is_atom)
+  if ((!t) || !t->is_atom)
     return;
 
   set_timecode_values(t->chapter);
@@ -1377,7 +1375,7 @@ tab_chapters::on_adjust_timecodes(wxCommandEvent &) {
         break;
       }
     }
-  if (cdisplay == nullptr)
+  if (!cdisplay)
     return;
 
   set_display_values(cdisplay);
@@ -1398,9 +1396,9 @@ tab_chapters::adjust_timecodes_recursively(wxTreeItemId id,
     return;
 
   d = (chapter_node_data_c *)tc_chapters->GetItemData(id);
-  if ((d != nullptr) && (d->is_atom)) {
+  if (d && (d->is_atom)) {
     tstart = FindChild<KaxChapterTimeStart>(d->chapter);
-    if (tstart != nullptr) {
+    if (tstart) {
       t = uint64(*tstart);
       t += adjust_by;
       if (t < 0)
@@ -1408,7 +1406,7 @@ tab_chapters::adjust_timecodes_recursively(wxTreeItemId id,
       *static_cast<EbmlUInteger *>(tstart) = t;
     }
     tend = FindChild<KaxChapterTimeEnd>(d->chapter);
-    if (tend != nullptr) {
+    if (tend) {
       t = uint64(*tend);
       t += adjust_by;
       if (t < 0)
@@ -1438,7 +1436,7 @@ tab_chapters::copy_values(wxTreeItemId id) {
   uint32_t i;
 
   data = (chapter_node_data_c *)tc_chapters->GetItemData(id);
-  if (data == nullptr)
+  if (!data)
     return true;
 
   label = tc_chapters->GetItemText(id);
@@ -1546,7 +1544,7 @@ tab_chapters::on_add_chapter_name(wxCommandEvent &) {
         break;
       }
     }
-  if (cdisplay == nullptr)
+  if (!cdisplay)
     return;
 
   cdisplay = new KaxChapterDisplay;
@@ -1598,7 +1596,7 @@ tab_chapters::on_remove_chapter_name(wxCommandEvent &) {
       }
     }
 
-  if (cdisplay == nullptr)
+  if (!cdisplay)
     return;
 
   t->chapter->Remove(i);
@@ -1623,7 +1621,7 @@ tab_chapters::on_remove_chapter_name(wxCommandEvent &) {
       }
     }
 
-  if (cdisplay != nullptr)
+  if (cdisplay)
     set_display_values(cdisplay);
   tc_chapter_name->SetFocus();
   b_remove_chapter_name->Enable(lb_chapter_names->GetCount() > 1);
@@ -1653,7 +1651,7 @@ tab_chapters::on_chapter_name_selected(wxCommandEvent &) {
         break;
       }
     }
-  if (cdisplay == nullptr)
+  if (!cdisplay)
     return;
 
   set_display_values(cdisplay);
@@ -1707,7 +1705,7 @@ tab_chapters::on_flag_hidden(wxCommandEvent &) {
   if (!selected.IsOk() || (selected == tid_root))
     return;
   t = (chapter_node_data_c *)tc_chapters->GetItemData(selected);
-  if ((t == nullptr) || !t->is_atom)
+  if ((!t) || !t->is_atom)
     return;
 
   if (cb_flag_hidden->IsChecked())
@@ -1731,7 +1729,7 @@ tab_chapters::on_flag_enabled(wxCommandEvent &) {
   if (!selected.IsOk() || (selected == tid_root))
     return;
   t = (chapter_node_data_c *)tc_chapters->GetItemData(selected);
-  if ((t == nullptr) || !t->is_atom)
+  if ((!t) || !t->is_atom)
     return;
 
   if (!cb_flag_enabled->IsChecked())
@@ -1755,7 +1753,7 @@ tab_chapters::set_timecode_values(KaxChapterAtom *atom) {
   no_update = true;
 
   tstart = FindChild<KaxChapterTimeStart>(atom);
-  if (tstart != nullptr) {
+  if (tstart) {
     timestamp = uint64(*static_cast<EbmlUInteger *>(tstart));
     label.Printf(wxT(FMT_TIMECODEN), ARG_TIMECODEN(timestamp));
     tc_start_time->SetValue(label);
@@ -1763,7 +1761,7 @@ tab_chapters::set_timecode_values(KaxChapterAtom *atom) {
     tc_start_time->SetValue(wxEmptyString);
 
   tend = FindChild<KaxChapterTimeEnd>(atom);
-  if (tend != nullptr) {
+  if (tend) {
     timestamp = uint64(*static_cast<EbmlUInteger *>(tend));
     label.Printf(wxT(FMT_TIMECODEN), ARG_TIMECODEN(timestamp));
     tc_end_time->SetValue(label);
@@ -1785,7 +1783,7 @@ tab_chapters::set_display_values(KaxChapterDisplay *display) {
   no_update = true;
 
   cstring = FindChild<KaxChapterString>(display);
-  if (cstring != nullptr) {
+  if (cstring) {
     wxString tmp =
       UTFstring_to_wxString(*static_cast<EbmlUnicodeString *>(cstring));
     tc_chapter_name->SetValue(tmp);
@@ -1793,7 +1791,7 @@ tab_chapters::set_display_values(KaxChapterDisplay *display) {
     tc_chapter_name->SetValue(wxT("(unnamed)"));
 
   clanguage = FindChild<KaxChapterLanguage>(display);
-  if (clanguage != nullptr)
+  if (clanguage)
     language = wxU(clanguage);
   else
     language = wxT("eng");
@@ -1816,7 +1814,7 @@ tab_chapters::set_display_values(KaxChapterDisplay *display) {
     cob_language_code->SetValue(language);
 
   ccountry = FindChild<KaxChapterCountry>(display);
-  if (ccountry != nullptr)
+  if (ccountry)
     cob_country_code->SetValue(wxU(ccountry));
   else
     cob_country_code->SetValue(wxEmptyString);

@@ -428,7 +428,7 @@ mpeg4::p2::is_fourcc(const void *fourcc) {
   };
   int i;
 
-  for (i = 0; nullptr != mpeg4_p2_fourccs[i]; ++i)
+  for (i = 0; mpeg4_p2_fourccs[i]; ++i)
     if (!strncasecmp((const char *)fourcc, mpeg4_p2_fourccs[i], 4))
       return true;
   return false;
@@ -450,7 +450,7 @@ mpeg4::p2::is_v3_fourcc(const void *fourcc) {
   };
   int i;
 
-  for (i = 0; nullptr != mpeg4_p2_v3_fourccs[i]; ++i)
+  for (i = 0; mpeg4_p2_v3_fourccs[i]; ++i)
     if (!strncasecmp((const char *)fourcc, mpeg4_p2_v3_fourccs[i], 4))
       return true;
   return false;

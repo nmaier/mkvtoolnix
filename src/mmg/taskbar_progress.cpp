@@ -27,7 +27,7 @@ taskbar_progress_c::set_value(ULONGLONG completed,
   m_completed = completed;
   m_total     = total;
 
-  if (nullptr != get_interface())
+  if (get_interface())
     m_interface->lpVtbl->SetProgressValue(m_interface, GetHwndOf(m_window), m_completed, m_total);
 }
 
@@ -35,13 +35,13 @@ void
 taskbar_progress_c::set_state(TBPFLAG state) {
   m_state = state;
 
-  if (nullptr != get_interface())
+  if (get_interface())
     m_interface->lpVtbl->SetProgressState(m_interface, GetHwndOf(m_window), m_state);
 }
 
 void
 taskbar_progress_c::release_interface() {
-  if (nullptr != m_interface)
+  if (m_interface)
     m_interface->lpVtbl->Release(m_interface);
 
   m_interface = nullptr;
@@ -49,7 +49,7 @@ taskbar_progress_c::release_interface() {
 
 ITaskbarList3 *
 taskbar_progress_c::get_interface() {
-  if (!mdlg->m_taskbar_msg_received || (nullptr != m_interface))
+  if (!mdlg->m_taskbar_msg_received || m_interface)
     return m_interface;
 
   ITaskbarList3 *iface;

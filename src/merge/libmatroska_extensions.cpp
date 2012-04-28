@@ -41,7 +41,7 @@ kax_block_group_c::add_frame(const KaxTrackEntry &track,
                              int64_t forw_block,
                              LacingType lacing) {
   KaxBlock & block = GetChild<KaxBlock>(*this);
-  assert(nullptr != ParentCluster);
+  assert(ParentCluster);
   block.SetParent(*ParentCluster);
 
   ParentTrack                     = &track;
@@ -50,7 +50,7 @@ kax_block_group_c::add_frame(const KaxTrackEntry &track,
 
   if (0 <= past_block) {
     past_ref = FindChild<kax_reference_block_c>(*this);
-    if (nullptr == past_ref) {
+    if (!past_ref) {
       past_ref = new kax_reference_block_c;
       PushElement(*past_ref);
     }
@@ -85,7 +85,7 @@ kax_block_blob_c::add_frame_auto(const KaxTrackEntry &track,
           && (-1 == past_block)
           && (-1 == forw_block))) {
     assert(true == bUseSimpleBlock);
-    if (nullptr == Block.simpleblock) {
+    if (!Block.simpleblock) {
       Block.simpleblock = new KaxSimpleBlock();
       Block.simpleblock->SetParent(*ParentCluster);
     }
@@ -118,15 +118,15 @@ kax_block_blob_c::replace_simple_by_group() {
     return false;
 
   if (!bUseSimpleBlock) {
-    if (nullptr == Block.group)
+    if (!Block.group)
       Block.group = new kax_block_group_c();
 
-  } else if (nullptr != Block.simpleblock)
+  } else if (Block.simpleblock)
     assert(false);
   else
     Block.group = new kax_block_group_c();
 
-  if (nullptr != ParentCluster)
+  if (ParentCluster)
     Block.group->SetParent(*ParentCluster);
 
   bUseSimpleBlock = false;
@@ -150,7 +150,7 @@ kax_cluster_c::delete_non_blocks() {
   unsigned idx;
   for (idx = 0; ListSize() > idx; ++idx) {
     EbmlElement *e = (*this)[idx];
-    if ((nullptr == dynamic_cast<kax_block_group_c *>(e)) && (nullptr == dynamic_cast<KaxSimpleBlock *>(e)))
+    if (!dynamic_cast<kax_block_group_c *>(e) && !dynamic_cast<KaxSimpleBlock *>(e))
       delete e;
   }
 

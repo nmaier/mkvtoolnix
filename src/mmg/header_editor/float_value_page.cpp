@@ -43,7 +43,7 @@ he_float_value_page_c::~he_float_value_page_c() {
 
 wxControl *
 he_float_value_page_c::create_input_control() {
-  if (nullptr != m_element)
+  if (m_element)
     m_original_value = double(*static_cast<EbmlFloat *>(m_element));
 
   m_tc_text = new wxTextCtrl(this, wxID_ANY, get_original_value_as_string());
@@ -54,7 +54,7 @@ he_float_value_page_c::create_input_control() {
 
 wxString
 he_float_value_page_c::get_original_value_as_string() {
-  if (nullptr == m_element)
+  if (!m_element)
     return wxEmptyString;
 
   wxString value = wxString::Format(wxT("%f"), m_original_value);

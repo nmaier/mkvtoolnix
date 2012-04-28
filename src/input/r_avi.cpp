@@ -107,7 +107,7 @@ avi_reader_c::read_headers() {
 
   show_demuxer_info();
 
-  if (nullptr == (m_avi = AVI_open_input_file(m_in.get(), 1)))
+  if (!(m_avi = AVI_open_input_file(m_in.get(), 1)))
     throw mtx::input::invalid_format_x();
 
   m_fps              = AVI_frame_rate(m_avi);
@@ -121,7 +121,7 @@ avi_reader_c::read_headers() {
 }
 
 avi_reader_c::~avi_reader_c() {
-  if (nullptr != m_avi)
+  if (m_avi)
     AVI_close(m_avi);
 
   m_ti.m_private_data = nullptr;
@@ -224,7 +224,7 @@ avi_reader_c::create_video_packetizer() {
   }
 
   m_ti.m_private_data = reinterpret_cast<unsigned char *>(m_avi->bitmap_info_header);
-  if (nullptr != m_ti.m_private_data)
+  if (m_ti.m_private_data)
     m_ti.m_private_size = get_uint32_le(&m_avi->bitmap_info_header->bi_size);
 
   mxverb(4, boost::format("track extra data size: %1%\n") % (m_ti.m_private_size - sizeof(alBITMAPINFOHEADER)));
@@ -308,7 +308,7 @@ avi_reader_c::create_mpeg1_2_packetizer() {
   int display_width      = ((0 >= seq_hdr.aspectRatio) || (1 == seq_hdr.aspectRatio)) ? seq_hdr.width : static_cast<int>(seq_hdr.height * seq_hdr.aspectRatio);
 
   MPEGChunk *raw_seq_hdr = m2v_parser->GetRealSequenceHeader();
-  if (nullptr != raw_seq_hdr) {
+  if (raw_seq_hdr) {
     m_ti.m_private_data  = raw_seq_hdr->GetPointer();
     m_ti.m_private_size  = raw_seq_hdr->GetSize();
   } else {

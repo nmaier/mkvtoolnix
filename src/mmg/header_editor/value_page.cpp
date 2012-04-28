@@ -80,14 +80,14 @@ he_value_page_c::init() {
 
   m_st_add_or_remove = new wxStaticText(this, wxID_ANY, wxEmptyString);
 
-  if (nullptr == m_element)
+  if (!m_element)
     m_present        = false;
 
   else {
     m_present        = true;
 
     const EbmlSemantic *semantic = find_ebml_semantic(KaxSegment::ClassInfos, m_callbacks.GlobalId);
-    if ((nullptr != semantic) && semantic->Mandatory)
+    if (semantic && semantic->Mandatory)
       m_cb_add_or_remove->Disable();
   }
 
@@ -122,7 +122,7 @@ he_value_page_c::init() {
 
   SetSizer(siz);
 
-  if (nullptr == m_toplevel_page)
+  if (!m_toplevel_page)
     m_parent->append_page(this);
   else
     m_parent->append_sub_page(this, m_toplevel_page->m_page_id);
@@ -134,7 +134,7 @@ he_value_page_c::init() {
 
 void
 he_value_page_c::translate_ui() {
-  if (nullptr == m_b_reset)
+  if (!m_b_reset)
     return;
 
   m_b_reset->SetLabel(Z("&Reset"));
@@ -156,7 +156,7 @@ he_value_page_c::translate_ui() {
     m_st_description->SetLabel(wxU(m_description.get_translated()));
   }
 
-  if (nullptr == m_element) {
+  if (!m_element) {
     m_st_add_or_remove->SetLabel(Z("This element is not currently present in the file.\nYou can let the header editor add the element\nto the file."));
     m_st_value_label->SetLabel(Z("New value:"));
     m_cb_add_or_remove->SetLabel(Z("Add element"));
@@ -167,7 +167,7 @@ he_value_page_c::translate_ui() {
     m_cb_add_or_remove->SetLabel(Z("Remove element"));
 
     const EbmlSemantic *semantic = find_ebml_semantic(KaxSegment::ClassInfos, m_callbacks.GlobalId);
-    if ((nullptr != semantic) && semantic->Mandatory)
+    if (semantic && semantic->Mandatory)
       m_st_add_or_remove->SetLabel(Z("This element is currently present in the file.\nIt cannot be removed because it is a\nmandatory header field."));
   }
 
@@ -207,16 +207,16 @@ he_value_page_c::modify_this() {
     return;
 
   EbmlMaster *actual_master = nullptr;
-  if (nullptr != m_sub_master_callbacks) {
+  if (m_sub_master_callbacks) {
     actual_master = static_cast<EbmlMaster *>(find_ebml_element_by_id(m_master, m_sub_master_callbacks->GlobalId));
 
-    if (nullptr == actual_master) {
+    if (!actual_master) {
       actual_master = static_cast<EbmlMaster *>(&m_sub_master_callbacks->Create());
       m_master->PushElement(*actual_master);
     }
   }
 
-  if (nullptr == actual_master)
+  if (!actual_master)
     actual_master = m_master;
 
   if (m_present && m_cb_add_or_remove->IsChecked()) {
@@ -249,7 +249,7 @@ he_value_page_c::set_sub_master_callbacks(const EbmlCallbacks &callbacks) {
   m_sub_master_callbacks = &callbacks;
 
   EbmlMaster *sub_master = static_cast<EbmlMaster *>(find_ebml_element_by_id(m_master, m_sub_master_callbacks->GlobalId));
-  if (nullptr != sub_master)
+  if (sub_master)
     m_element = find_ebml_element_by_id(sub_master, m_callbacks.GlobalId);
 }
 

@@ -353,7 +353,7 @@ set_menu_item_strings(wxFrame *frame,
                       const wxString &title,
                       const wxString &help_text) {
   wxMenuItem *item = frame->GetMenuBar()->FindItem(id);
-  if (nullptr != item) {
+  if (item) {
 #if defined(HAVE_WXMENUITEM_SETITEMLABEL)
     item->SetItemLabel(title);
 #else

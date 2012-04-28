@@ -45,11 +45,11 @@ std::string
 kax_analyzer_data_c::to_string() const {
   const EbmlCallbacks *callbacks = find_ebml_callbacks(EBML_INFO(KaxSegment), m_id);
 
-  if ((nullptr == callbacks) && (EBML_ID(EbmlVoid) == m_id))
+  if (!callbacks && (EBML_ID(EbmlVoid) == m_id))
     callbacks = &EBML_CLASS_CALLBACK(EbmlVoid);
 
   std::string name;
-  if (nullptr != callbacks)
+  if (callbacks)
     name = EBML_INFO_NAME(*callbacks);
 
   else {
@@ -95,7 +95,7 @@ kax_analyzer_c::close_file() {
 
 void
 kax_analyzer_c::reopen_file(const open_mode mode) {
-  if (nullptr != m_file)
+  if (m_file)
     return;
 
   m_file   = new mm_file_io_c(m_file_name, mode);
@@ -222,7 +222,7 @@ kax_analyzer_c::process(kax_analyzer_c::parse_mode_e parse_mode,
 
   // Find the EbmlHead element. Must be the first one.
   EbmlElement *l0 = m_stream->FindNextID(EBML_INFO(EbmlHead), 0xFFFFFFFFL);
-  if (nullptr == l0)
+  if (!l0)
     throw mtx::kax_analyzer_x(Y("Not a valid Matroska file (no EBML head found)"));
 
   // Don't verify its data for now.
@@ -232,7 +232,7 @@ kax_analyzer_c::process(kax_analyzer_c::parse_mode_e parse_mode,
   while (1) {
     // Next element must be a segment
     l0 = m_stream->FindNextID(EBML_INFO(KaxSegment), 0xFFFFFFFFFFFFFFFFLL);
-    if (nullptr == l0)
+    if (!l0)
       throw mtx::kax_analyzer_x(Y("Not a valid Matroska file (no segment/level 0 element found)"));
 
     if (EbmlId(*l0) == EBML_ID(KaxSegment))
@@ -250,7 +250,7 @@ kax_analyzer_c::process(kax_analyzer_c::parse_mode_e parse_mode,
 
   // We've got our segment, so let's find all level 1 elements.
   EbmlElement *l1 = m_stream->FindNextElement(EBML_CONTEXT(m_segment), upper_lvl_el, 0xFFFFFFFFFFFFFFFFLL, true, 1);
-  while ((nullptr != l1) && (0 >= upper_lvl_el)) {
+  while (l1 && (0 >= upper_lvl_el)) {
     m_data.push_back(kax_analyzer_data_c::create(EbmlId(*l1), l1->GetElementPosition(), l1->ElementSize(true)));
 
     cluster_found   |= is_id(l1, KaxCluster);
@@ -266,9 +266,9 @@ kax_analyzer_c::process(kax_analyzer_c::parse_mode_e parse_mode,
       break;
 
     l1 = m_stream->FindNextElement(EBML_CONTEXT(m_segment), upper_lvl_el, 0xFFFFFFFFL, true);
-  } // while (l1 != nullptr)
+  } // while (l1)
 
-  if (nullptr != l1)
+  if (l1)
     delete l1;
 
   if (!aborted && !parse_fully)
@@ -590,7 +590,7 @@ kax_analyzer_c::remove_from_meta_seeks(EbmlId id) {
     // EbmlVoid element can be constructed afterwards.
     ebml_element_cptr element = read_element(data_idx);
     KaxSeekHead *seek_head    = dynamic_cast<KaxSeekHead *>(element.get());
-    if (nullptr == seek_head)
+    if (!seek_head)
       throw uer_error_unknown;
 
     int64_t old_size = seek_head->ElementSize(true);
@@ -819,7 +819,7 @@ kax_analyzer_c::add_to_meta_seek(EbmlElement *e) {
     // Read the seek head, index the element and see how much space it needs.
     ebml_element_cptr element = read_element(data_idx);
     KaxSeekHead *seek_head    = dynamic_cast<KaxSeekHead *>(element.get());
-    if (nullptr == seek_head)
+    if (!seek_head)
       throw uer_error_unknown;
 
     if (-1 == first_seek_head_idx)
@@ -863,7 +863,7 @@ kax_analyzer_c::add_to_meta_seek(EbmlElement *e) {
     // Read the first seek head...
     ebml_element_cptr element = read_element(first_seek_head_idx);
     KaxSeekHead *seek_head    = dynamic_cast<KaxSeekHead *>(element.get());
-    if (nullptr == seek_head)
+    if (!seek_head)
       throw uer_error_unknown;
 
     // ...index our element...
@@ -948,7 +948,7 @@ kax_analyzer_c::read_all(const EbmlCallbacks &callbacks) {
     m_file->setFilePointer(data.m_pos);
     int upper_lvl_el     = 0;
     EbmlElement *element = es.FindNextElement(EBML_CLASS_CONTEXT(KaxSegment), upper_lvl_el, 0xFFFFFFFFL, true);
-    if (nullptr == element)
+    if (!element)
       continue;
 
     if (EbmlId(*element) != EBML_INFO_ID(callbacks)) {
@@ -1007,7 +1007,7 @@ kax_analyzer_c::read_meta_seek(uint64_t pos,
   int upper_lvl_el = 0;
   EbmlElement *l1  = m_stream->FindNextElement(EBML_CONTEXT(m_segment), upper_lvl_el, 0xFFFFFFFFL, true, 1);
 
-  if (nullptr == l1)
+  if (!l1)
     return;
 
   if (!is_id(l1, KaxSeekHead)) {
@@ -1028,7 +1028,7 @@ kax_analyzer_c::read_meta_seek(uint64_t pos,
     KaxSeekID *seek_id = FindChild<KaxSeekID>(seek);
     int64_t seek_pos   = seek->Location() + m_segment->GetElementPosition() + m_segment->HeadSize();
 
-    if ((0 == pos) || (nullptr == seek_id))
+    if ((0 == pos) || !seek_id)
       continue;
 
     if (positions_found[seek_pos])

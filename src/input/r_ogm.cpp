@@ -409,7 +409,7 @@ ogm_reader_c::create_packetizer(int64_t tid) {
 
   ptzr                = dmx->create_packetizer();
 
-  if (nullptr != ptzr)
+  if (ptzr)
     dmx->ptzr         = add_packetizer(ptzr);
 
   m_ti.m_language.clear();

@@ -53,7 +53,7 @@ tab_input_format::tab_input_format(wxWindow *parent,
 
   cob_aspect_ratio = new wxMTX_COMBOBOX_TYPE(this, ID_CB_ASPECTRATIO, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_DROPDOWN);
 
-  for (i = 0; nullptr != predefined_aspect_ratios[i]; ++i)
+  for (i = 0; predefined_aspect_ratios[i]; ++i)
     cob_aspect_ratio->Append(predefined_aspect_ratios[i]);
 
   cob_aspect_ratio->SetSizeHints(0, -1);
@@ -160,7 +160,7 @@ tab_input_format::setup_control_contents() {
   size_t i;
   int selection;
   if (0 == cob_fourcc->GetCount())
-    for (i = 0; nullptr != predefined_fourccs[i]; ++i)
+    for (i = 0; predefined_fourccs[i]; ++i)
       cob_fourcc->Append(predefined_fourccs[i]);
 
   unsigned int num_stereo_modes = stereo_mode_c::max_index() + 1;
@@ -271,10 +271,10 @@ tab_input_format::set_track_mode(mmg_track_t *t) {
 
   ctype = ctype.Lower();
 
-  st_delay->Enable((nullptr != t) && normal_track);
-  tc_delay->Enable((nullptr != t) && normal_track);
-  st_stretch->Enable((nullptr != t) && normal_track);
-  tc_stretch->Enable((nullptr != t) && normal_track);
+  st_delay->Enable(t && normal_track);
+  tc_delay->Enable(t && normal_track);
+  st_stretch->Enable(t && normal_track);
+  tc_stretch->Enable(t && normal_track);
   st_sub_charset->Enable(chapters_app || (subs_app && (ctype.Find(wxT("vobsub")) < 0)));
   cob_sub_charset->Enable(chapters_app || (subs_app && (ctype.Find(wxT("vobsub")) < 0)));
   st_fourcc->Enable(video);
@@ -286,7 +286,7 @@ tab_input_format::set_track_mode(mmg_track_t *t) {
   st_nalu_size_length->Enable(avc || avc_es);
   cob_nalu_size_length->Enable(avc || avc_es);
 
-  bool ar_enabled = normal_track && (nullptr != t) && !t->display_dimensions_selected;
+  bool ar_enabled = normal_track && t && !t->display_dimensions_selected;
   rb_aspect_ratio->Enable(video);
   cob_aspect_ratio->Enable(video && ar_enabled);
   rb_display_dimensions->Enable(video);
@@ -301,7 +301,7 @@ tab_input_format::set_track_mode(mmg_track_t *t) {
 
   cb_aac_is_sbr->Enable(audio_app && ((ctype.Find(wxT("aac")) >= 0) || (ctype.Find(wxT("mp4a")) >= 0)));
 
-  if (nullptr != t)
+  if (t)
     return;
 
   bool saved_dcvn             = input->dont_copy_values_now;

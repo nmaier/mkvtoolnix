@@ -43,7 +43,7 @@ xtr_base_c::xtr_base_c(const std::string &codec_id,
                        const char *container_name)
   : m_codec_id(codec_id)
   , m_file_name(tspec.out_name)
-  , m_container_name(nullptr == container_name ? Y("raw data") : container_name)
+  , m_container_name(!container_name ? Y("raw data") : container_name)
   , m_master(nullptr)
   , m_tid(tid)
   , m_track_num(-1)
@@ -59,7 +59,7 @@ xtr_base_c::~xtr_base_c() {
 void
 xtr_base_c::create_file(xtr_base_c *master,
                         KaxTrackEntry &track) {
-  if (nullptr != master)
+  if (master)
     mxerror(boost::format(Y("Cannot write track %1% with the CodecID '%2%' to the file '%3%' because "
                             "track %4% with the CodecID '%5%' is already being written to the same file.\n"))
             % m_tid % m_codec_id % m_file_name % master->m_tid % master->m_codec_id);
@@ -196,7 +196,7 @@ xtr_fullraw_c::create_file(xtr_base_c *master,
 
   KaxCodecPrivate *priv = FindChild<KaxCodecPrivate>(&track);
 
-  if ((nullptr != priv) && (0 != priv->GetSize())) {
+  if (priv && (0 != priv->GetSize())) {
     memory_cptr mem(new memory_c(priv->GetBuffer(), priv->GetSize(), false));
     m_content_decoder.reverse(mem, CONTENT_ENCODING_SCOPE_CODECPRIVATE);
     m_out->write(mem);

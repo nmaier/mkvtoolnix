@@ -228,8 +228,8 @@ TrackModel::rowForTrack(QList<Track *> const &tracks,
 
 void
 TrackModel::trackUpdated(Track *track) {
-  if (nullptr == m_tracks) {
-    mxdebug_if(m_debug, boost::format("trackUpdated() called but m_tracks == nullptr!?\n"));
+  if (!m_tracks) {
+    mxdebug_if(m_debug, boost::format("trackUpdated() called but !m_tracks!?\n"));
     return;
   }
 

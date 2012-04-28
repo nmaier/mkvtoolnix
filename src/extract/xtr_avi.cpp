@@ -34,7 +34,7 @@ xtr_avi_c::create_file(xtr_base_c *master,
   init_content_decoder(track);
 
   KaxCodecPrivate *priv = FindChild<KaxCodecPrivate>(&track);
-  if (nullptr == priv)
+  if (!priv)
     mxerror(boost::format(Y("Track %1% with the CodecID '%2%' is missing the \"codec private\" element and cannot be extracted.\n")) % m_tid % m_codec_id);
 
   m_default_duration = kt_get_default_duration(track);
@@ -43,7 +43,7 @@ xtr_avi_c::create_file(xtr_base_c *master,
 
   m_fps = (double)1000000000.0 / (double)m_default_duration;
 
-  if (nullptr != master)
+  if (master)
     mxerror(boost::format(Y("Cannot write track %1% with the CodecID '%2%' to the file '%3%' because "
                             "track %4% with the CodecID '%5%' is already being written to the same file.\n"))
             % m_tid % m_codec_id % m_file_name % master->m_tid % master->m_codec_id);
@@ -54,7 +54,7 @@ xtr_avi_c::create_file(xtr_base_c *master,
   } catch (mtx::mm_io::exception &) {
   }
 
-  if (nullptr == m_avi)
+  if (!m_avi)
     mxerror(boost::format(Y("The file '%1%' could not be opened for writing (%2%).\n")) % m_file_name % AVI_strerror());
 
   std::string writing_app = "mkvextract";

@@ -24,7 +24,7 @@
 using namespace libebml;
 using namespace libmatroska;
 
-#define can_be_cast(c, e) (dynamic_cast<c *>(e) != nullptr)
+#define can_be_cast(c, e) (dynamic_cast<c *>(e))
 
 bool is_valid_utf8_string(const std::string &c);
 UTFstring cstrutf8_to_UTFstring(const std::string &c);
@@ -110,7 +110,7 @@ GetEmptyChild(EbmlMaster &master) {
   EbmlMaster *m;
 
   e = master.FindFirstElt(EBML_INFO(type), true);
-  if ((m = dynamic_cast<EbmlMaster *>(e)) != nullptr) {
+  if ((m = dynamic_cast<EbmlMaster *>(e))) {
     while (m->ListSize() > 0) {
       delete (*m)[0];
       m->Remove(0);
@@ -125,7 +125,7 @@ GetNextEmptyChild(EbmlMaster &master,
                   const type &past_elt) {
   EbmlMaster *m;
   EbmlElement *e = master.FindNextElt(past_elt, true);
-  if ((m = dynamic_cast<EbmlMaster *>(e)) != nullptr) {
+  if ((m = dynamic_cast<EbmlMaster *>(e))) {
     while (m->ListSize() > 0) {
       delete (*m)[0];
       m->Remove(0);
@@ -139,7 +139,7 @@ template <typename type>type &
 AddEmptyChild(EbmlMaster &master) {
   EbmlMaster *m;
   EbmlElement *e = new type;
-  if ((m = dynamic_cast<EbmlMaster *>(e)) != nullptr) {
+  if ((m = dynamic_cast<EbmlMaster *>(e))) {
     while (m->ListSize() > 0) {
       delete (*m)[0];
       m->Remove(0);
@@ -158,7 +158,7 @@ FindChild(EbmlMaster const *m) {
 template <typename A> A*
 FindChild(EbmlElement const *e) {
   auto m = dynamic_cast<EbmlMaster const *>(e);
-  assert(nullptr != m);
+  assert(m);
   return static_cast<A *>(m->FindFirstElt(EBML_INFO(A)));
 }
 
@@ -172,7 +172,7 @@ template <typename A> A*
 FindNextChild(EbmlElement const *e,
               EbmlElement const *p) {
   auto m = dynamic_cast<EbmlMaster const *>(e);
-  assert(nullptr != m);
+  assert(m);
   return static_cast<A *>(m->FindNextElt(*p));
 }
 
@@ -194,13 +194,13 @@ GetChildAs(EbmlMaster *m) {
 template <typename A>A &
 GetFirstOrNextChild(EbmlMaster &master,
                     A *previous_child) {
-  return nullptr == previous_child ? GetChild<A>(master) : GetNextChild<A>(master, *previous_child);
+  return !previous_child ? GetChild<A>(master) : GetNextChild<A>(master, *previous_child);
 }
 
 template <typename A>A &
 GetFirstOrNextChild(EbmlMaster *master,
                     A *previous_child) {
-  return nullptr == previous_child ? GetChild<A>(*master) : GetNextChild<A>(*master, *previous_child);
+  return !previous_child ? GetChild<A>(*master) : GetNextChild<A>(*master, *previous_child);
 }
 
 template<typename T>

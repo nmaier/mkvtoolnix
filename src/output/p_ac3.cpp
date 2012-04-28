@@ -183,7 +183,7 @@ connection_result_e
 ac3_packetizer_c::can_connect_to(generic_packetizer_c *src,
                                  std::string &error_message) {
   ac3_packetizer_c *asrc = dynamic_cast<ac3_packetizer_c *>(src);
-  if (nullptr == asrc)
+  if (!asrc)
     return CAN_CONNECT_NO_FORMAT;
 
   connect_check_a_samplerate(m_first_ac3_header.m_sample_rate, asrc->m_first_ac3_header.m_sample_rate);

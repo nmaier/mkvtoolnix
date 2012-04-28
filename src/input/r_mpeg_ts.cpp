@@ -131,7 +131,7 @@ mpeg_ts_track_c::new_stream_v_mpeg_1_2() {
   v_dheight  = v_height;
 
   MPEGChunk *raw_seq_hdr_chunk = m_m2v_parser->GetRealSequenceHeader();
-  if (nullptr != raw_seq_hdr_chunk) {
+  if (raw_seq_hdr_chunk) {
     mxverb(3, boost::format("new_stream_v_mpeg_1_2: sequence header size: %1%\n") % raw_seq_hdr_chunk->GetSize());
     raw_seq_hdr = memory_c::clone(raw_seq_hdr_chunk->GetPointer(), raw_seq_hdr_chunk->GetSize());
   }
@@ -454,7 +454,7 @@ mpeg_ts_reader_c::identify() {
 
 int
 mpeg_ts_reader_c::parse_pat(unsigned char *pat) {
-  if (pat == nullptr) {
+  if (!pat) {
     mxdebug_if(m_debug_pat_pmt, "mpeg_ts:parse_pat: Invalid parameters!\n");
     return -1;
   }
@@ -534,7 +534,7 @@ mpeg_ts_reader_c::parse_pat(unsigned char *pat) {
 
 int
 mpeg_ts_reader_c::parse_pmt(unsigned char *pmt) {
-  if (pmt == nullptr) {
+  if (!pmt) {
     mxdebug_if(m_debug_pat_pmt, "mpeg_ts:parse_pmt: Invalid parameters!\n");
     return -1;
   }

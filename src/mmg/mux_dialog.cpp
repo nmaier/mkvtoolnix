@@ -151,14 +151,14 @@ mux_dialog::run() {
 
 mux_dialog::~mux_dialog() {
 #if defined(SYS_WINDOWS)
-  if (nullptr != m_taskbar_progress)
+  if (m_taskbar_progress)
     m_taskbar_progress->set_state(TBPF_NOPROGRESS);
   delete m_taskbar_progress;
 #endif  // SYS_WINDOWS
 
   wxRemoveFile(opt_file_name);
 
-  if (nullptr != m_process) {
+  if (m_process) {
     wxCriticalSectionLocker locker{m_process->m_cs_dialog};
     m_process->m_dialog = nullptr;
     m_process->Detach();
@@ -176,7 +176,7 @@ mux_dialog::update_gauge(long value) {
   m_progress = value;
   g_progress->SetValue(value);
 #if defined(SYS_WINDOWS)
-  if (nullptr != m_taskbar_progress)
+  if (m_taskbar_progress)
     m_taskbar_progress->set_value(value, 100);
 #endif  // SYS_WINDOWS
 }
@@ -327,14 +327,14 @@ mux_dialog::on_process_terminated(wxCommandEvent &evt) {
 
 #if defined(SYS_WINDOWS)
   change_abort_button();
-  if (nullptr != m_taskbar_progress)
+  if (m_taskbar_progress)
     m_taskbar_progress->set_state(0 != m_exit_code ? TBPF_ERROR : TBPF_NOPROGRESS);
 #else  // SYS_WINDOWS
   b_abort->Enable(false);
 #endif  // SYS_WINDOWS
 
   wxCriticalSectionLocker thread_locker{m_cs_thread};
-  if (nullptr != m_thread) {
+  if (m_thread) {
     wxCriticalSectionLocker process_locker{m_thread->m_cs_process};
     m_thread->m_out = nullptr;
   }
@@ -358,7 +358,7 @@ mux_thread::mux_thread(mux_dialog *dialog,
 void *
 mux_thread::Entry() {
   at_scope_exit_c unlink_thread{[&]() {
-      if (nullptr == m_dialog)
+      if (!m_dialog)
         return;
 
       wxCriticalSectionLocker locker{m_dialog->m_cs_thread};
@@ -381,7 +381,7 @@ mux_thread::Entry() {
     }
 
     if ((c == '\n') || (c == '\r') || eof) {
-      if (nullptr != m_dialog) {
+      if (m_dialog) {
         // send line to dialog
         wxCommandEvent evt(mux_thread::event, mux_thread::output_available);
         evt.SetString(wxU(line));
@@ -413,7 +413,7 @@ mux_thread::read_input(char &c,
 
   wxCriticalSectionLocker locker{m_cs_process};
 
-  if ((nullptr == m_out) || (m_out->Eof())) {
+  if (!m_out || m_out->Eof()) {
     eof = true;
     return false;
   }
@@ -440,7 +440,7 @@ void
 mux_process::OnTerminate(int,
                          int status) {
   wxCriticalSectionLocker locker{m_cs_dialog};
-  if (nullptr == m_dialog)
+  if (!m_dialog)
     return;
 
   wxCommandEvent evt(mux_thread::event, mux_thread::process_terminated);

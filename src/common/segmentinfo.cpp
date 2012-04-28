@@ -41,11 +41,11 @@ using namespace libmatroska;
 */
 void
 fix_mandatory_segmentinfo_elements(EbmlElement *e) {
-  if (nullptr == e)
+  if (!e)
     return;
 
   KaxInfo *info = dynamic_cast<KaxInfo *>(e);
-  if (nullptr == info)
+  if (!info)
     return;
 
   GetChild<KaxTimecodeScale>(info);

@@ -141,7 +141,7 @@ struct kax_track_t {
 
   ~kax_track_t() {
     safefree(private_data);
-    if (nullptr != tags)
+    if (tags)
       delete tags;
   }
 

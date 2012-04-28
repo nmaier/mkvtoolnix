@@ -69,7 +69,7 @@ int32_t MPEGVideoBuffer::FindStartCode(uint32_t startPos){
 }
 
 void MPEGVideoBuffer::UpdateState(){
-  assert(myBuffer != nullptr);
+  assert(myBuffer);
   int32_t test = 0;
   if(myBuffer->GetLength() == 0){
     state = MPEG2_BUFFER_STATE_EMPTY;

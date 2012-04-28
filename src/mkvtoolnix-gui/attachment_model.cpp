@@ -133,8 +133,8 @@ AttachmentModel::attachmentFromIndex(QModelIndex const &index)
 
 void
 AttachmentModel::attachmentUpdated(Attachment *attachment) {
-  if (nullptr == m_attachments) {
-    mxdebug_if(m_debug, boost::format("attachmentUpdated() called but m_attachments == nullptr!?\n"));
+  if (!m_attachments) {
+    mxdebug_if(m_debug, boost::format("attachmentUpdated() called but !m_attachments!?\n"));
     return;
   }
 

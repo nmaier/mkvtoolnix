@@ -118,7 +118,7 @@ connection_result_e
 dirac_video_packetizer_c::can_connect_to(generic_packetizer_c *src,
                                          std::string &) {
   dirac_video_packetizer_c *vsrc = dynamic_cast<dirac_video_packetizer_c *>(src);
-  if (vsrc == nullptr)
+  if (!vsrc)
     return CAN_CONNECT_NO_FORMAT;
 
   return CAN_CONNECT_YES;

@@ -126,7 +126,7 @@ dts_packetizer_c::process_available_packets(bool flushing) {
   dts_header_t dtsheader;
   unsigned char *dts_packet;
 
-  while ((dts_packet = get_dts_packet(dtsheader, flushing)) != nullptr) {
+  while ((dts_packet = get_dts_packet(dtsheader, flushing))) {
     int64_t new_timecode;
     if (!m_available_timecodes.empty()) {
       m_samples_written = 0;
@@ -152,7 +152,7 @@ connection_result_e
 dts_packetizer_c::can_connect_to(generic_packetizer_c *src,
                                  std::string &error_message) {
   dts_packetizer_c *dsrc = dynamic_cast<dts_packetizer_c *>(src);
-  if (nullptr == dsrc)
+  if (!dsrc)
     return CAN_CONNECT_NO_FORMAT;
 
   connect_check_a_samplerate(m_first_header.core_sampling_frequency, dsrc->m_first_header.core_sampling_frequency);

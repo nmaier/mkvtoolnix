@@ -41,7 +41,7 @@ he_unsigned_integer_value_page_c::~he_unsigned_integer_value_page_c() {
 
 wxControl *
 he_unsigned_integer_value_page_c::create_input_control() {
-  if (nullptr != m_element)
+  if (m_element)
     m_original_value = uint64(*static_cast<EbmlUInteger *>(m_element));
 
   m_tc_text = new wxTextCtrl(this, wxID_ANY, get_original_value_as_string());
@@ -52,7 +52,7 @@ he_unsigned_integer_value_page_c::create_input_control() {
 
 wxString
 he_unsigned_integer_value_page_c::get_original_value_as_string() {
-  if (nullptr != m_element)
+  if (m_element)
     return wxString::Format(wxU("%") + wxU(wxLongLongFmtSpec) + wxU("u"), m_original_value);
 
   return wxEmptyString;

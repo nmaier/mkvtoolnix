@@ -113,7 +113,7 @@ create_timecode_files(KaxTracks &kax_tracks,
       break;
     }
 
-    if (nullptr == track)
+    if (!track)
       continue;
 
     try {
@@ -141,7 +141,7 @@ handle_blockgroup(KaxBlockGroup &blockgroup,
                   int64_t tc_scale) {
   // Only continue if this block group actually contains a block.
   KaxBlock *block = FindChild<KaxBlock>(&blockgroup);
-  if (nullptr == block)
+  if (!block)
     return;
   block->SetParent(cluster);
 
@@ -152,7 +152,7 @@ handle_blockgroup(KaxBlockGroup &blockgroup,
 
   // Next find the block duration if there is one.
   KaxBlockDuration *kduration = FindChild<KaxBlockDuration>(&blockgroup);
-  int64_t duration            = nullptr == kduration ? extractor->m_default_duration * block->NumberFrames() : uint64(*kduration) * tc_scale;
+  int64_t duration            = !kduration ? extractor->m_default_duration * block->NumberFrames() : uint64(*kduration) * tc_scale;
 
   // Pass the block to the extractor.
   size_t i;
@@ -200,7 +200,7 @@ extract_timecodes(const std::string &file_name,
 
     // Find the EbmlHead element. Must be the first one.
     EbmlElement *l0 = es->FindNextID(EBML_INFO(EbmlHead), 0xFFFFFFFFL);
-    if (l0 == nullptr) {
+    if (!l0) {
       show_error(Y("Error: No EBML head found."));
       delete es;
 
@@ -214,7 +214,7 @@ extract_timecodes(const std::string &file_name,
     while (1) {
       // Next element must be a segment
       l0 = es->FindNextID(EBML_INFO(KaxSegment), 0xFFFFFFFFFFFFFFFFLL);
-      if (nullptr == l0) {
+      if (!l0) {
         show_error(Y("No segment/level 0 element found."));
         return;
       }
@@ -236,14 +236,14 @@ extract_timecodes(const std::string &file_name,
     EbmlElement *l2   = nullptr;
     EbmlElement *l3   = nullptr;
 
-    while ((nullptr != l1) && (0 >= upper_lvl_el)) {
+    while (l1 && (0 >= upper_lvl_el)) {
       if (EbmlId(*l1) == EBML_ID(KaxInfo)) {
         // General info about this Matroska file
         show_element(l1, 1, Y("Segment information"));
 
         upper_lvl_el = 0;
         l2           = es->FindNextElement(EBML_CONTEXT(l1), upper_lvl_el, 0xFFFFFFFFL, true, 1);
-        while ((nullptr != l2) && (0 >= upper_lvl_el)) {
+        while (l2 && (0 >= upper_lvl_el)) {
           if (EbmlId(*l2) == EBML_ID(KaxTimecodeScale)) {
             KaxTimecodeScale &ktc_scale = *static_cast<KaxTimecodeScale *>(l2);
             ktc_scale.ReadData(es->I_O());
@@ -290,7 +290,7 @@ extract_timecodes(const std::string &file_name,
 
         upper_lvl_el = 0;
         l2           = es->FindNextElement(EBML_CONTEXT(l1), upper_lvl_el, 0xFFFFFFFFL, true, 1);
-        while ((nullptr != l2) && (0 >= upper_lvl_el)) {
+        while (l2 && (0 >= upper_lvl_el)) {
 
           if (EbmlId(*l2) == EBML_ID(KaxClusterTimecode)) {
             KaxClusterTimecode &ctc = *static_cast<KaxClusterTimecode *>(l2);
@@ -338,7 +338,7 @@ extract_timecodes(const std::string &file_name,
           delete l2;
           l2 = es->FindNextElement(EBML_CONTEXT(l1), upper_lvl_el, 0xFFFFFFFFL, true);
 
-        } // while (l2 != nullptr)
+        } // while (l2)
 
       } else
         l1->SkipData(*es, EBML_CONTEXT(l1));
@@ -367,7 +367,7 @@ extract_timecodes(const std::string &file_name,
       delete l1;
       l1 = es->FindNextElement(EBML_CONTEXT(l0), upper_lvl_el, 0xFFFFFFFFL, true);
 
-    } // while (l1 != nullptr)
+    } // while (l1)
 
     delete l0;
     delete es;

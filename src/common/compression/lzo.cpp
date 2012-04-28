@@ -25,7 +25,7 @@ lzo_compressor_c::lzo_compressor_c()
     mxerror(boost::format(Y("lzo_init() failed. Result: %1%\n")) % result);
 
   wrkmem = (lzo_bytep)lzo_malloc(LZO1X_999_MEM_COMPRESS);
-  if (nullptr == wrkmem)
+  if (!wrkmem)
     mxerror(Y("lzo_malloc(LZO1X_999_MEM_COMPRESS) failed.\n"));
 }
 

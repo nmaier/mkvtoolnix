@@ -652,7 +652,7 @@ mmg_dialog::on_help(wxCommandEvent &) {
 
 void
 mmg_dialog::display_help(int id) {
-  if (help == nullptr) {
+  if (!help) {
     wxDirDialog dlg(this, Z("Choose the location of the mkvmerge GUI help files"));
     std::vector<wxString> potential_help_paths;
 
@@ -1232,7 +1232,7 @@ mmg_dialog::update_file_menu() {
 
   for (i = ID_M_FILE_LOADLAST1; i <= ID_M_FILE_LOADLAST4; i++) {
     mi = file_menu->FindItem(i);
-    if (mi != nullptr)
+    if (mi)
       file_menu->Destroy(mi);
   }
 
@@ -1254,7 +1254,7 @@ mmg_dialog::update_chapter_menu() {
 
   for (i = ID_M_CHAPTERS_LOADLAST1; i <= ID_M_CHAPTERS_LOADLAST4; i++) {
     mi = chapter_menu->FindItem(i);
-    if (mi != nullptr)
+    if (mi)
       chapter_menu->Destroy(mi);
   }
 
@@ -1740,8 +1740,8 @@ mmg_dialog::on_update_check_state_changed(wxCommandEvent &evt) {
 
   if (UPDATE_CHECK_START == state) {
     if (m_interactive_update_check) {
-      if (nullptr != m_update_check_dlg) {
-        wxLogMessage(wxT("m_update_check_dlg != nullptr on start"));
+      if (m_update_check_dlg) {
+        wxLogMessage(wxT("m_update_check_dlg on start"));
         delete m_update_check_dlg;
       }
 
@@ -1773,7 +1773,7 @@ mmg_dialog::on_update_check_state_changed(wxCommandEvent &evt) {
     }
 
     if (show) {
-      if (nullptr == m_update_check_dlg) {
+      if (!m_update_check_dlg) {
         m_update_check_dlg = new update_check_dlg_c(this);
         m_update_check_dlg->Show();
       }

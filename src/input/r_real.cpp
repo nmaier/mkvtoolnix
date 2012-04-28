@@ -51,14 +51,14 @@ mm_io_file_close(void *) {
 
 static int64_t
 mm_io_file_tell(void *file) {
-  return nullptr != file ? static_cast<mm_io_c *>(file)->getFilePointer() : -1;
+  return file ? static_cast<mm_io_c *>(file)->getFilePointer() : -1;
 }
 
 static int64_t
 mm_io_file_seek(void *file,
                 int64_t offset,
                 int whence) {
-  if (nullptr == file)
+  if (!file)
     return -1;
 
   seek_mode smode = SEEK_END == whence ? seek_end
@@ -71,14 +71,14 @@ static int64_t
 mm_io_file_read(void *file,
                 void *buffer,
                 int64_t bytes) {
-  return nullptr == file ? -1 : static_cast<mm_io_c *>(file)->read(buffer, bytes);
+  return !file ? -1 : static_cast<mm_io_c *>(file)->read(buffer, bytes);
 }
 
 static int64_t
 mm_io_file_write(void *file,
                  const void *buffer,
                  int64_t bytes) {
-  return nullptr == file ? -1 : static_cast<mm_io_c *>(file)->write(buffer, bytes);
+  return !file ? -1 : static_cast<mm_io_c *>(file)->write(buffer, bytes);
 }
 
 }
@@ -125,7 +125,7 @@ real_reader_c::real_reader_c(const track_info_c &ti,
 void
 real_reader_c::read_headers() {
   file = rmff_open_file_with_io(reinterpret_cast<const char *>(m_in.get()), RMFF_OPEN_MODE_READING, &mm_io_file_io);
-  if (nullptr == file) {
+  if (!file) {
     if (RMFF_ERR_NOT_RMFF == rmff_last_error)
       throw mtx::input::invalid_format_x();
     else
@@ -161,10 +161,9 @@ real_reader_c::parse_headers() {
       continue;
     if ((RMFF_TRACK_TYPE_AUDIO == track->type) && !demuxing_requested('a', track->id))
       continue;
-    if ((nullptr == track->mdpr_header.mime_type)
-        ||
-        (   strcmp(track->mdpr_header.mime_type, "audio/x-pn-realaudio")
-         && strcmp(track->mdpr_header.mime_type, "video/x-pn-realvideo")))
+    if (   !track->mdpr_header.mime_type
+        || (   strcmp(track->mdpr_header.mime_type, "audio/x-pn-realaudio")
+            && strcmp(track->mdpr_header.mime_type, "video/x-pn-realvideo")))
       continue;
 
     unsigned char *ts_data = track->mdpr_header.type_specific_data;
@@ -412,7 +411,7 @@ real_reader_c::finish() {
 
   for (i = 0; i < demuxers.size(); i++) {
     real_demuxer_cptr dmx = demuxers[i];
-    if (dmx && (nullptr != dmx->track) && (dmx->track->type == RMFF_TRACK_TYPE_AUDIO) && !dmx->segments.empty())
+    if (dmx && dmx->track && (dmx->track->type == RMFF_TRACK_TYPE_AUDIO) && !dmx->segments.empty())
       deliver_audio_frames(dmx, dmx->last_timecode / dmx->num_packets);
   }
 
@@ -437,7 +436,7 @@ real_reader_c::read(generic_packetizer_c *,
   memory_c mem(size);
   rmff_frame_t *frame = rmff_read_next_frame(file, mem.get_buffer());
 
-  if (nullptr == frame) {
+  if (!frame) {
     if (file->num_packets_read < file->num_packets_in_chunk)
       mxwarn_fn(m_ti.m_fname, boost::format(Y("File contains fewer frames than expected or is corrupt after frame %1%.\n")) % file->num_packets_read);
     return finish();
@@ -616,7 +615,7 @@ real_reader_c::assemble_video_packet(real_demuxer_cptr dmx,
   }
 
   rmff_frame_t *assembled = rmff_get_packed_video_frame(dmx->track);
-  while (nullptr != assembled) {
+  while (assembled) {
     if (!dmx->rv_dimensions)
       set_dimensions(dmx, assembled->data, assembled->size);
 

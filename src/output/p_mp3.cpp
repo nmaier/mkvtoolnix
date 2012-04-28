@@ -179,7 +179,7 @@ mp3_packetizer_c::process(packet_cptr packet) {
   mp3_header_t mp3header;
 
   m_byte_buffer.add(packet->data->get_buffer(), packet->data->get_size());
-  while ((mp3_packet = get_mp3_packet(&mp3header)) != nullptr) {
+  while ((mp3_packet = get_mp3_packet(&mp3header))) {
     bool timecode_valid =  (-1 != packet->timecode)
                         && (   (0 == m_packetno)
                             || (packet->timecode != m_previous_timecode));
@@ -206,7 +206,7 @@ connection_result_e
 mp3_packetizer_c::can_connect_to(generic_packetizer_c *src,
                                  std::string &error_message) {
   mp3_packetizer_c *msrc = dynamic_cast<mp3_packetizer_c *>(src);
-  if (nullptr == msrc)
+  if (!msrc)
     return CAN_CONNECT_NO_FORMAT;
 
   connect_check_a_samplerate(m_samples_per_sec, msrc->m_samples_per_sec);

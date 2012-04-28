@@ -193,7 +193,7 @@ flac_decode_headers(unsigned char *mem,
   int result, i;
   va_list ap;
 
-  if ((nullptr == mem) || (0 >= size))
+  if (!mem || (0 >= size))
     return -1;
 
   memset(&fhe, 0, sizeof(flac_header_extractor_t));
@@ -202,7 +202,7 @@ flac_decode_headers(unsigned char *mem,
 
   decoder  = FLAC__stream_decoder_new();
 
-  if (nullptr == decoder)
+  if (!decoder)
     mxerror(FPFX "FLAC__stream_decoder_new() failed.\n");
   if (!FLAC__stream_decoder_set_metadata_respond_all(decoder))
     mxerror(FPFX "Could not set metadata_respond_all.\n");

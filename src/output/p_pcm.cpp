@@ -112,7 +112,7 @@ connection_result_e
 pcm_packetizer_c::can_connect_to(generic_packetizer_c *src,
                                  std::string &error_message) {
   pcm_packetizer_c *psrc = dynamic_cast<pcm_packetizer_c *>(src);
-  if (nullptr == psrc)
+  if (!psrc)
     return CAN_CONNECT_NO_FORMAT;
 
   connect_check_a_samplerate(m_samples_per_sec, psrc->m_samples_per_sec);

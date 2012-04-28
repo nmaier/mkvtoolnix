@@ -39,7 +39,7 @@ he_ascii_string_value_page_c::~he_ascii_string_value_page_c() {
 
 wxControl *
 he_ascii_string_value_page_c::create_input_control() {
-  if (nullptr != m_element)
+  if (m_element)
     m_original_value = wxU(dynamic_cast<EbmlString *>(m_element));
 
   static const wxString s_valid_chars = wxT(" !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~");

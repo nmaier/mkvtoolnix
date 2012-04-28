@@ -62,20 +62,20 @@ bool
 property_element_c::is_valid()
   const
 {
-  return !m_name.empty() && (nullptr != m_callbacks) && (EBMLT_SKIP != m_type);
+  return !m_name.empty() && (m_callbacks) && (EBMLT_SKIP != m_type);
 }
 
 void
 property_element_c::derive_type() {
   EbmlElement *e = &m_callbacks->Create();
 
-  m_type = nullptr != dynamic_cast<EbmlBinary *>(e)        ? EBMLT_BINARY
-         : nullptr != dynamic_cast<EbmlFloat *>(e)         ? EBMLT_FLOAT
-         : nullptr != dynamic_cast<EbmlSInteger *>(e)      ? EBMLT_INT
-         : nullptr != dynamic_cast<EbmlString *>(e)        ? EBMLT_STRING
-         : nullptr != dynamic_cast<EbmlUInteger *>(e)      ? EBMLT_UINT
-         : nullptr != dynamic_cast<EbmlUnicodeString *>(e) ? EBMLT_USTRING
-         :                                                   EBMLT_SKIP;
+  m_type = dynamic_cast<EbmlBinary *>(e)        ? EBMLT_BINARY
+         : dynamic_cast<EbmlFloat *>(e)         ? EBMLT_FLOAT
+         : dynamic_cast<EbmlSInteger *>(e)      ? EBMLT_INT
+         : dynamic_cast<EbmlString *>(e)        ? EBMLT_STRING
+         : dynamic_cast<EbmlUInteger *>(e)      ? EBMLT_UINT
+         : dynamic_cast<EbmlUnicodeString *>(e) ? EBMLT_USTRING
+         :                                        EBMLT_SKIP;
 
   if (EBMLT_SKIP == m_type)
     mxerror(boost::format("property_element_c::derive_type(): programming error: unknown type for EBML ID %|1$08x|\n") % m_callbacks->GlobalId.Value);
@@ -169,7 +169,7 @@ property_element_c::get_table_for(const EbmlCallbacks &master_callbacks,
   if (full_table)
     return src_map_it->second;
 
-  uint32_t element_id = nullptr == sub_master_callbacks ? master_callbacks.GlobalId.Value : sub_master_callbacks->GlobalId.Value;
+  uint32_t element_id = !sub_master_callbacks ? master_callbacks.GlobalId.Value : sub_master_callbacks->GlobalId.Value;
   std::map<uint32_t, std::vector<property_element_c> >::iterator composed_map_it = s_composed_properties.find(element_id);
   if (s_composed_properties.end() != composed_map_it)
     return composed_map_it->second;
@@ -178,7 +178,7 @@ property_element_c::get_table_for(const EbmlCallbacks &master_callbacks,
   std::vector<property_element_c> &table = s_composed_properties[element_id];
 
   for (auto &property : src_map_it->second)
-    if ((nullptr == property.m_sub_master_callbacks) || ((nullptr != sub_master_callbacks) && (sub_master_callbacks->GlobalId == property.m_sub_master_callbacks->GlobalId)))
+    if (!property.m_sub_master_callbacks || (sub_master_callbacks && (sub_master_callbacks->GlobalId == property.m_sub_master_callbacks->GlobalId)))
       table.push_back(property);
 
   return table;

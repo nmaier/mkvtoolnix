@@ -164,7 +164,7 @@ get_current_time_millis() {
 std::string
 get_application_data_folder() {
   const char *home = getenv("HOME");
-  if (nullptr == home)
+  if (!home)
     return "";
 
   // If $HOME/.mkvtoolnix exists already then keep using it to avoid
@@ -175,7 +175,7 @@ get_application_data_folder() {
 
   // If XDG_CONFIG_HOME is set then use that folder.
   const char *xdg_config_home = getenv("XDG_CONFIG_HOME");
-  if (nullptr != xdg_config_home)
+  if (xdg_config_home)
     return std::string(xdg_config_home) + "/mkvtoolnix";
 
   // If all fails then use the XDG fallback folder for config files.

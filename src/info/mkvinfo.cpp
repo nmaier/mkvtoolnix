@@ -281,18 +281,18 @@ _show_element(EbmlElement *l,
     return;
 
   ui_show_element(level, info,
-                    nullptr == l          ? -1
+                    !l                 ? -1
                   :                      static_cast<int64_t>(l->GetElementPosition()),
-                    nullptr == l          ? -1
+                    !l                 ? -1
                   : !l->IsFiniteSize() ? -2
                   :                      static_cast<int64_t>(l->GetSizeLength() + EBML_ID_LENGTH(static_cast<const EbmlId &>(*l)) + l->GetSize()));
 
-  if ((nullptr == l) || !skip)
+  if (!l || !skip)
     return;
 
   // Dump unknown elements recursively.
   EbmlMaster *m = dynamic_cast<EbmlMaster *>(l);
-  if (nullptr != m) {
+  if (m) {
     size_t i;
     for (i = 0; i < m->ListSize(); i++)
       show_unknown_element((*m)[i], level + 1);
@@ -513,7 +513,7 @@ handle_info(EbmlStream *&es,
   read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, element_found);
 
   KaxTimecodeScale *tc_scale = FindChild<KaxTimecodeScale>(m1);
-  if (nullptr != tc_scale)
+  if (tc_scale)
     s_tc_scale = uint64(*tc_scale);
 
   size_t i1;
@@ -546,8 +546,7 @@ handle_info(EbmlStream *&es,
       char buffer[40];
       KaxDateUTC &dateutc = *static_cast<KaxDateUTC *>(l2);
       temptime = dateutc.GetEpochDate();
-      if ((gmtime_r(&temptime, &tmutc) != nullptr) &&
-          (asctime_r(&tmutc, buffer) != nullptr)) {
+      if (gmtime_r(&temptime, &tmutc) && asctime_r(&tmutc, buffer)) {
         buffer[strlen(buffer) - 1] = 0;
         show_element(l2, 2, boost::format(Y("Date: %1% UTC")) % buffer);
       } else
@@ -636,7 +635,7 @@ handle_audio_track(EbmlStream *&es,
     } else if (!is_global(es, l4, 4))
       show_unknown_element(l4, 4);
 
-  } // while (l4 != nullptr)
+  } // while (l4)
 }
 
 void
@@ -738,7 +737,7 @@ handle_video_track(EbmlStream *&es,
     } else if (!is_global(es, l4, 4))
       show_unknown_element(l4, 4);
 
-  } // while (l4 != nullptr)
+  } // while (l4)
 }
 
 void
@@ -933,7 +932,7 @@ handle_tracks(EbmlStream *&es,
 
           auto existing_track = find_track(track->tnum);
           size_t track_id     = s_mkvmerge_track_id;
-          if (nullptr == existing_track) {
+          if (!existing_track) {
             track->mkvmerge_track_id = s_mkvmerge_track_id;
             ++s_mkvmerge_track_id;
             add_track(track);
@@ -1159,12 +1158,12 @@ handle_seek_head(EbmlStream *&es,
         } else if (!is_global(es, l3, 3))
           show_unknown_element(l3, 3);
 
-      } // while (l3 != nullptr)
+      } // while (l3)
 
     } else if (!is_global(es, l2, 2))
       show_unknown_element(l2, 2);
 
-  } // while (l2 != nullptr)
+  } // while (l2)
 
   l2 = element_found;
 }
@@ -1257,23 +1256,23 @@ handle_cues(EbmlStream *&es,
                 } else if (!is_global(es, l5, 5))
                   show_unknown_element(l5, 5);
 
-              } // while (l5 != nullptr)
+              } // while (l5)
 #endif // MATROSKA_VERSION >= 2
 
             } else if (!is_global(es, l4, 4))
               show_unknown_element(l4, 4);
 
-          } // while (l4 != nullptr)
+          } // while (l4)
 
         } else if (!is_global(es, l3, 3))
           show_unknown_element(l3, 3);
 
-      } // while (l3 != nullptr)
+      } // while (l3)
 
     } else if (!is_global(es, l2, 2))
       show_unknown_element(l2, 2);
 
-  } // while (l2 != nullptr)
+  } // while (l2)
 
   l2 = element_found;
 }
@@ -1326,12 +1325,12 @@ handle_attachments(EbmlStream *&es,
         } else if (!is_global(es, l3, 3))
           show_unknown_element(l3, 3);
 
-      } // while (l3 != nullptr)
+      } // while (l3)
 
     } else if (!is_global(es, l2, 2))
       show_unknown_element(l2, 2);
 
-  } // while (l2 != nullptr)
+  } // while (l2)
 
   l2 = element_found;
 }
@@ -1483,12 +1482,12 @@ handle_block_group(EbmlStream *&es,
             } else if (!is_global(es, l5, 5))
               show_unknown_element(l5, 5);
 
-          } // while (l5 != nullptr)
+          } // while (l5)
 
         } else if (!is_global(es, l4, 4))
           show_unknown_element(l4, 4);
 
-      } // while (l4 != nullptr)
+      } // while (l4)
 
     } else if (is_id(l3, KaxSlices)) {
       show_element(l3, 3, Y("Slices"));
@@ -1529,17 +1528,17 @@ handle_block_group(EbmlStream *&es,
             } else if (!is_global(es, l5, 5))
               show_unknown_element(l5, 5);
 
-          } // while (l5 != nullptr)
+          } // while (l5)
 
         } else if (!is_global(es, l4, 4))
           show_unknown_element(l4, 4);
 
-      } // while (l4 != nullptr)
+      } // while (l4)
 
     } else if (!is_global(es, l3, 3))
       show_unknown_element(l3, 3);
 
-  } // while (l3 != nullptr)
+  } // while (l3)
 
   if (g_options.m_show_summary) {
     std::string position;
@@ -1712,7 +1711,7 @@ handle_cluster(EbmlStream *&es,
   read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, element_found);
 
   KaxClusterTimecode *cluster_tc = FindChild<KaxClusterTimecode>(m1);
-  cluster->InitTimecode(nullptr == cluster_tc ? 0 : uint64(*cluster_tc), s_tc_scale);
+  cluster->InitTimecode(!cluster_tc ? 0 : uint64(*cluster_tc), s_tc_scale);
 
   size_t i1;
   for (i1 = 0; i1 < m1->ListSize(); i1++) {
@@ -1742,7 +1741,7 @@ handle_cluster(EbmlStream *&es,
     else if (!is_global(es, l2, 2))
       show_unknown_element(l2, 2);
 
-  } // while (l2 != nullptr)
+  } // while (l2)
 
   l2 = element_found;
 }
@@ -1835,7 +1834,7 @@ handle_ebml_head(EbmlElement *l0,
     int upper_lvl_el = 0;
     EbmlElement *e   = es->FindNextElement(EBML_CONTEXT(l0), upper_lvl_el, 0xFFFFFFFFL, true);
 
-    if (nullptr == e)
+    if (!e)
       return;
 
     e->ReadData(*in);
@@ -1926,7 +1925,7 @@ process_file(const std::string &file_name) {
 
     // Find the EbmlHead element. Must be the first one.
     l0 = es->FindNextID(EBML_INFO(EbmlHead), 0xFFFFFFFFL);
-    if (nullptr == l0) {
+    if (!l0) {
       show_error(Y("No EBML head found."));
       delete es;
 
@@ -1940,7 +1939,7 @@ process_file(const std::string &file_name) {
     while (1) {
       // NEXT element must be a segment
       l0 = es->FindNextID(EBML_INFO(KaxSegment), 0xFFFFFFFFFFFFFFFFLL);
-      if (nullptr == l0) {
+      if (!l0) {
         show_error(Y("No segment/level 0 element found."));
         return false;
       }
@@ -1961,7 +1960,7 @@ process_file(const std::string &file_name) {
 
     kax_file_cptr kax_file = kax_file_cptr(new kax_file_c(in));
 
-    while (nullptr != (l1 = kax_file->read_next_level1_element())) {
+    while ((l1 = kax_file->read_next_level1_element())) {
       std::shared_ptr<EbmlElement> af_l1(l1);
 
       if (is_id(l1, KaxInfo))
@@ -2004,7 +2003,7 @@ process_file(const std::string &file_name) {
         break;
       if (!in_parent(l0))
         break;
-    } // while (l1 != nullptr)
+    } // while (l1)
 
     delete l0;
     delete es;

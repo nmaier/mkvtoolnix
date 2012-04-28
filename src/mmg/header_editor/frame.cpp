@@ -356,16 +356,16 @@ header_editor_frame_c::handle_tracks(kax_analyzer_data_c *data) {
   size_t i;
   for (i = 0; kax_tracks->ListSize() > i; ++i) {
     KaxTrackEntry *k_track_entry = dynamic_cast<KaxTrackEntry *>((*kax_tracks)[i]);
-    if (nullptr == k_track_entry)
+    if (!k_track_entry)
       continue;
 
     KaxTrackType *k_track_type = dynamic_cast<KaxTrackType *>(FindChild<KaxTrackType>(k_track_entry));
-    if (nullptr == k_track_type)
+    if (!k_track_type)
       continue;
 
     unsigned int track_number = 0;
     KaxTrackNumber *k_track_number = dynamic_cast<KaxTrackNumber *>(FindChild<KaxTrackNumber>(k_track_entry));
-    if (nullptr != k_track_number)
+    if (k_track_number)
       track_number = uint64(*k_track_number);
 
     wxString title;
@@ -507,7 +507,7 @@ header_editor_frame_c::handle_tracks(kax_analyzer_data_c *data) {
     // m_tc_tree->ExpandAllChildren(page->m_page_id);
   }
 
-  if (nullptr != last_track_page)
+  if (last_track_page)
     last_track_page->set_is_last_track(true);
 }
 

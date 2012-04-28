@@ -284,7 +284,7 @@ mi_frame::on_file_savetext(wxCommandEvent &WXUNUSED(event)) {
   if (file_dialog.ShowModal() == wxID_OK) {
     last_dir = file_dialog.GetDirectory();
     FILE *f = fopen(wxMB(file_dialog.GetPath()), "w");
-    if (nullptr == f) {
+    if (!f) {
       show_error(wxString::Format(Z("Could not create the file '%s'."), file_dialog.GetPath().c_str()));
       return;
     }

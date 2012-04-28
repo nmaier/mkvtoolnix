@@ -275,7 +275,7 @@ generic_packetizer_c::set_uid(uint32_t uid) {
   if (is_unique_uint32(uid, UNIQUE_TRACK_IDS)) {
     add_unique_uint32(uid, UNIQUE_TRACK_IDS);
     m_huid = uid;
-    if (nullptr != m_track_entry)
+    if (m_track_entry)
       GetChildAs<KaxTrackUID, EbmlUInteger>(m_track_entry) = m_huid;
 
     return 1;
@@ -297,7 +297,7 @@ generic_packetizer_c::set_track_type(int type,
 
   else if (track_video == type) {
     m_reader->m_num_video_tracks++;
-    if (nullptr == g_video_packetizer)
+    if (!g_video_packetizer)
       g_video_packetizer = this;
 
   } else
@@ -321,14 +321,14 @@ generic_packetizer_c::set_track_type(int type,
 void
 generic_packetizer_c::set_track_name(const std::string &name) {
   m_ti.m_track_name = name;
-  if ((nullptr != m_track_entry) && !name.empty())
+  if (m_track_entry && !name.empty())
     GetChildAs<KaxTrackName, EbmlUnicodeString>(m_track_entry) = cstrutf8_to_UTFstring(m_ti.m_track_name);
 }
 
 void
 generic_packetizer_c::set_codec_id(const std::string &id) {
   m_hcodec_id = id;
-  if ((nullptr != m_track_entry) && !id.empty())
+  if (m_track_entry && !id.empty())
     GetChildAs<KaxCodecID, EbmlString>(m_track_entry) = m_hcodec_id;
 }
 
@@ -337,7 +337,7 @@ generic_packetizer_c::set_codec_private(const unsigned char *cp,
                                         int length) {
   safefree(m_hcodec_private);
 
-  if (nullptr == cp) {
+  if (!cp) {
     m_hcodec_private        = nullptr;
     m_hcodec_private_length = 0;
     return;
@@ -346,21 +346,21 @@ generic_packetizer_c::set_codec_private(const unsigned char *cp,
   m_hcodec_private        = (unsigned char *)safememdup(cp, length);
   m_hcodec_private_length = length;
 
-  if (nullptr != m_track_entry)
+  if (m_track_entry)
     GetChild<KaxCodecPrivate>(*m_track_entry).CopyBuffer((binary *)m_hcodec_private, m_hcodec_private_length);
 }
 
 void
 generic_packetizer_c::set_track_min_cache(int min_cache) {
   m_htrack_min_cache = min_cache;
-  if (nullptr != m_track_entry)
+  if (m_track_entry)
     GetChildAs<KaxTrackMinCache, EbmlUInteger>(m_track_entry) = min_cache;
 }
 
 void
 generic_packetizer_c::set_track_max_cache(int max_cache) {
   m_htrack_max_cache = max_cache;
-  if (nullptr != m_track_entry)
+  if (m_track_entry)
     GetChildAs<KaxTrackMaxCache, EbmlUInteger>(m_track_entry) = max_cache;
 }
 
@@ -371,14 +371,14 @@ generic_packetizer_c::set_track_default_duration(int64_t def_dur) {
 
   m_htrack_default_duration = (int64_t)(def_dur * m_ti.m_tcsync.numerator / m_ti.m_tcsync.denominator);
 
-  if (nullptr != m_track_entry)
+  if (m_track_entry)
     GetChildAs<KaxTrackDefaultDuration, EbmlUInteger>(m_track_entry) = m_htrack_default_duration;
 }
 
 void
 generic_packetizer_c::set_track_max_additionals(int max_add_block_ids) {
   m_htrack_max_add_block_ids = max_add_block_ids;
-  if (nullptr != m_track_entry)
+  if (m_track_entry)
     GetChildAs<KaxMaxBlockAdditionID, EbmlUInteger>(m_track_entry) = max_add_block_ids;
 }
 
@@ -390,63 +390,63 @@ generic_packetizer_c::get_track_default_duration() {
 void
 generic_packetizer_c::set_track_forced_flag(bool forced_track) {
   m_ti.m_forced_track = forced_track;
-  if (nullptr != m_track_entry)
+  if (m_track_entry)
     GetChildAs<KaxTrackFlagForced, EbmlUInteger>(m_track_entry) = forced_track ? 1 : 0;
 }
 
 void
 generic_packetizer_c::set_track_enabled_flag(bool enabled_track) {
   m_ti.m_enabled_track = enabled_track;
-  if (nullptr != m_track_entry)
+  if (m_track_entry)
     GetChildAs<KaxTrackFlagEnabled, EbmlUInteger>(m_track_entry) = enabled_track ? 1 : 0;
 }
 
 void
 generic_packetizer_c::set_audio_sampling_freq(float freq) {
   m_haudio_sampling_freq = freq;
-  if (nullptr != m_track_entry)
+  if (m_track_entry)
     GetChildAs<KaxAudioSamplingFreq, EbmlFloat>(GetChild<KaxTrackAudio>(m_track_entry)) = m_haudio_sampling_freq;
 }
 
 void
 generic_packetizer_c::set_audio_output_sampling_freq(float freq) {
   m_haudio_output_sampling_freq = freq;
-  if (nullptr != m_track_entry)
+  if (m_track_entry)
     GetChildAs<KaxAudioOutputSamplingFreq, EbmlFloat>(GetChild<KaxTrackAudio>(m_track_entry)) = m_haudio_output_sampling_freq;
 }
 
 void
 generic_packetizer_c::set_audio_channels(int channels) {
   m_haudio_channels = channels;
-  if (nullptr != m_track_entry)
+  if (m_track_entry)
     GetChildAs<KaxAudioChannels, EbmlUInteger>(GetChild<KaxTrackAudio>(*m_track_entry)) = m_haudio_channels;
 }
 
 void
 generic_packetizer_c::set_audio_bit_depth(int bit_depth) {
   m_haudio_bit_depth = bit_depth;
-  if (nullptr != m_track_entry)
+  if (m_track_entry)
     GetChildAs<KaxAudioBitDepth, EbmlUInteger>(GetChild<KaxTrackAudio>(*m_track_entry)) = m_haudio_bit_depth;
 }
 
 void
 generic_packetizer_c::set_video_interlaced_flag(bool interlaced) {
   m_hvideo_interlaced_flag = interlaced ? 1 : 0;
-  if (nullptr != m_track_entry)
+  if (m_track_entry)
     GetChildAs<KaxVideoFlagInterlaced, EbmlUInteger>(GetChild<KaxTrackVideo>(*m_track_entry)) = m_hvideo_interlaced_flag;
 }
 
 void
 generic_packetizer_c::set_video_pixel_width(int width) {
   m_hvideo_pixel_width = width;
-  if (nullptr != m_track_entry)
+  if (m_track_entry)
     GetChildAs<KaxVideoPixelWidth, EbmlUInteger>(GetChild<KaxTrackVideo>(*m_track_entry)) = m_hvideo_pixel_width;
 }
 
 void
 generic_packetizer_c::set_video_pixel_height(int height) {
   m_hvideo_pixel_height = height;
-  if (nullptr != m_track_entry)
+  if (m_track_entry)
     GetChildAs<KaxVideoPixelHeight, EbmlUInteger>(GetChild<KaxTrackVideo>(*m_track_entry)) = m_hvideo_pixel_height;
 }
 
@@ -460,14 +460,14 @@ generic_packetizer_c::set_video_pixel_dimensions(int width,
 void
 generic_packetizer_c::set_video_display_width(int width) {
   m_hvideo_display_width = width;
-  if (nullptr != m_track_entry)
+  if (m_track_entry)
     GetChildAs<KaxVideoDisplayWidth, EbmlUInteger>(GetChild<KaxTrackVideo>(*m_track_entry)) = m_hvideo_display_width;
 }
 
 void
 generic_packetizer_c::set_video_display_height(int height) {
   m_hvideo_display_height = height;
-  if (nullptr != m_track_entry)
+  if (m_track_entry)
     GetChildAs<KaxVideoDisplayHeight, EbmlUInteger>(GetChild<KaxTrackVideo>(*m_track_entry)) = m_hvideo_display_height;
 }
 
@@ -522,7 +522,7 @@ generic_packetizer_c::set_as_default_track(int type,
 void
 generic_packetizer_c::set_language(const std::string &language) {
   m_ti.m_language = language;
-  if (nullptr != m_track_entry)
+  if (m_track_entry)
     GetChildAs<KaxTrackLanguage, EbmlString>(m_track_entry) = m_ti.m_language;
 }
 
@@ -541,7 +541,7 @@ generic_packetizer_c::set_video_pixel_cropping(int left,
   m_ti.m_pixel_cropping.bottom = bottom;
   m_ti.m_pixel_cropping_source = source;
 
-  if (nullptr != m_track_entry) {
+  if (m_track_entry) {
     KaxTrackVideo &video = GetChild<KaxTrackVideo>(m_track_entry);
 
     GetChildAs<KaxVideoPixelCropLeft,   EbmlUInteger>(video) = m_ti.m_pixel_cropping.left;
@@ -566,7 +566,7 @@ generic_packetizer_c::set_video_stereo_mode(stereo_mode_c::mode stereo_mode,
   m_ti.m_stereo_mode        = stereo_mode;
   m_ti.m_stereo_mode_source = source;
 
-  if ((nullptr != m_track_entry) && (stereo_mode_c::unspecified != stereo_mode))
+  if (m_track_entry && (stereo_mode_c::unspecified != stereo_mode))
     set_video_stereo_mode_impl(GetChild<KaxTrackVideo>(*m_track_entry), m_ti.m_stereo_mode);
 }
 
@@ -602,8 +602,8 @@ generic_packetizer_c::set_headers() {
   if (!found)
     ptzrs_in_header_order.push_back(this);
 
-  if (nullptr == m_track_entry) {
-    m_track_entry    = nullptr == g_kax_last_entry ? &GetChild<KaxTrackEntry>(g_kax_tracks) : &GetNextChild<KaxTrackEntry>(*g_kax_tracks, *g_kax_last_entry);
+  if (!m_track_entry) {
+    m_track_entry    = !g_kax_last_entry ? &GetChild<KaxTrackEntry>(g_kax_tracks) : &GetNextChild<KaxTrackEntry>(*g_kax_tracks, *g_kax_last_entry);
     g_kax_last_entry = m_track_entry;
     m_track_entry->SetGlobalTimecodeScale((int64_t)g_timecode_scale);
   }
@@ -621,7 +621,7 @@ generic_packetizer_c::set_headers() {
   if (!m_hcodec_id.empty())
     GetChildAs<KaxCodecID, EbmlString>(m_track_entry)     = m_hcodec_id;
 
-  if (nullptr != m_hcodec_private)
+  if (m_hcodec_private)
     GetChild<KaxCodecPrivate>(*m_track_entry).CopyBuffer((binary *)m_hcodec_private, m_hcodec_private_length);
 
   if (!outputting_webm()) {
@@ -773,7 +773,7 @@ generic_packetizer_c::add_packet(packet_cptr pack) {
 
   ++m_num_packets;
 
-  if (nullptr == m_reader->m_ptzr_first_packet)
+  if (!m_reader->m_ptzr_first_packet)
     m_reader->m_ptzr_first_packet = this;
 
   // strip elements to be removed
@@ -1190,7 +1190,7 @@ generic_reader_c::demuxing_requested(char type,
                                 : 'T' == type ? &m_ti.m_track_tags
                                 :               nullptr;
 
-  if (nullptr == tracks)
+  if (!tracks)
     mxerror(boost::format(Y("pr_generic.cpp/generic_reader_c::demuxing_requested(): Invalid track type %1%.")) % type);
 
   return tracks->selected(id);

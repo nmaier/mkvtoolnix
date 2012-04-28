@@ -140,7 +140,7 @@ qtmp4_reader_c::read_atom(mm_io_c *read_from,
                           bool exit_on_error) {
   qt_atom_t a;
 
-  if (nullptr == read_from)
+  if (!read_from)
     read_from = m_in.get();
 
   a.pos    = read_from->getFilePointer();
@@ -244,7 +244,7 @@ qtmp4_reader_c::parse_headers() {
         continue;
       }
 
-      if (IS_AAC_OBJECT_TYPE_ID(dmx->esds.object_type_id) && ((nullptr == dmx->esds.decoder_config) || !dmx->a_aac_config_parsed)) {
+      if (IS_AAC_OBJECT_TYPE_ID(dmx->esds.object_type_id) && (!dmx->esds.decoder_config || !dmx->a_aac_config_parsed)) {
         mxwarn(boost::format(Y("Quicktime/MP4 reader: The AAC track %1% is missing the esds atom/the decoder config. Skipping this track.\n")) % dmx->id);
         continue;
       }
@@ -276,14 +276,14 @@ qtmp4_reader_c::parse_headers() {
           memcpy(dmx->fourcc, "mpg1", 4);
         else {
           // This is MPEG4 video, and we need header data for it.
-          if (nullptr == dmx->esds.decoder_config) {
+          if (!dmx->esds.decoder_config) {
             mxwarn(boost::format(Y("Quicktime/MP4 reader: MPEG4 track %1% is missing the esds atom/the decoder config. Skipping this track.\n")) % dmx->id);
             continue;
           }
         }
 
       } else if (dmx->v_is_avc) {
-        if ((nullptr == dmx->priv) || (4 > dmx->priv_size)) {
+        if (!dmx->priv || (4 > dmx->priv_size)) {
           mxwarn(boost::format(Y("Quicktime/MP4 reader: MPEG4 part 10/AVC track %1% is missing its decoder config. Skipping this track.\n")) % dmx->id);
           continue;
         }
@@ -380,7 +380,7 @@ qtmp4_reader_c::parse_video_header_priv_atoms(qtmp4_demuxer_cptr &dmx,
 
       if ((FOURCC('e', 's', 'd', 's') == atom.fourcc) ||
           (FOURCC('a', 'v', 'c', 'C') == atom.fourcc)) {
-        if (nullptr == dmx->priv) {
+        if (!dmx->priv) {
           dmx->priv_size = atom.size - atom.hsize;
           dmx->priv      = (unsigned char *)safemalloc(dmx->priv_size);
 
@@ -754,7 +754,7 @@ qtmp4_reader_c::handle_udta_atom(qt_atom_t parent,
 void
 qtmp4_reader_c::handle_chpl_atom(qt_atom_t,
                                  int level) {
-  if (m_ti.m_no_chapters || (nullptr != m_chapters))
+  if (m_ti.m_no_chapters || m_chapters)
     return;
 
   m_in->skip(1 + 3 + 4);          // Version, flags, zero
@@ -873,7 +873,7 @@ qtmp4_reader_c::parse_itunsmpb(std::string data) {
 
 void
 qtmp4_reader_c::read_chapter_track() {
-  if (m_ti.m_no_chapters || (nullptr != m_chapters) || !m_chapter_dmx)
+  if (m_ti.m_no_chapters || m_chapters || !m_chapter_dmx)
     return;
 
   m_chapter_dmx->update_tables(m_time_scale);
@@ -1372,7 +1372,7 @@ qtmp4_reader_c::read(generic_packetizer_c *ptzr,
       && (0 == dmx->pos)
       && (!strncasecmp(dmx->fourcc, "mp4v", 4) || !strncasecmp(dmx->fourcc, "xvid", 4))
       && dmx->esds_parsed
-      && (nullptr != dmx->esds.decoder_config)) {
+      && (dmx->esds.decoder_config)) {
     buffer        = (unsigned char *)safemalloc(index.size + dmx->esds.decoder_config_len);
     buffer_offset = dmx->esds.decoder_config_len;
 
@@ -1743,7 +1743,7 @@ qtmp4_reader_c::identify() {
                     (boost::format("%|1$.4s|") %  dmx->fourcc).str(), verbose_info);
   }
 
-  if (nullptr != m_chapters)
+  if (m_chapters)
     id_result_chapters(count_chapter_atoms(*m_chapters));
 }
 

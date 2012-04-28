@@ -32,7 +32,7 @@
                      : tolower(c) == 'd' ? 13        \
                      : tolower(c) == 'e' ? 14        \
                      :                     15)
-#define ishexdigit(s) (isdigit(s) || (strchr("abcdefABCDEF", s) != nullptr))
+#define ishexdigit(s) (isdigit(s) || strchr("abcdefABCDEF", s))
 
 const std::string vobsub_reader_c::id_string("# VobSub index file, v");
 
@@ -193,7 +193,7 @@ vobsub_reader_c::parse_headers() {
       } else
         language = "";
 
-      if (nullptr != track) {
+      if (track) {
         if (track->entries.empty())
           delete track;
         else {
@@ -231,7 +231,7 @@ vobsub_reader_c::parse_headers() {
     }
 
     if ((7 == version) && balg::istarts_with(line, "timestamp:")) {
-      if (nullptr == track)
+      if (!track)
         mxerror_fn(m_ti.m_fname, Y("The .idx file does not contain an 'id: ...' line to indicate the language.\n"));
 
       strip(line);
@@ -305,7 +305,7 @@ vobsub_reader_c::parse_headers() {
     idx_data += "\n";
   }
 
-  if (nullptr != track) {
+  if (track) {
     if (track->entries.size() == 0)
       delete track;
     else {
@@ -336,7 +336,7 @@ vobsub_reader_c::deliver_packet(unsigned char *buf,
                                 int64_t timecode,
                                 int64_t default_duration,
                                 generic_packetizer_c *ptzr) {
-  if ((nullptr == buf) || (0 == size)) {
+  if (!buf || (0 == size)) {
     safefree(buf);
     return -1;
   }

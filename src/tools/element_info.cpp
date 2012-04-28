@@ -366,7 +366,7 @@ init_master_information() {
   };
 
   int i;
-  for (i = 0; nullptr != s_master_names[i]; ++i) {
+  for (i = 0; s_master_names[i]; ++i) {
     uint32_t id = element_name_to_id(s_master_names[i]);
     if (0 != id)
       g_master_information[id] = true;

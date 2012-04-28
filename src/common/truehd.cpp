@@ -47,7 +47,7 @@ truehd_parser_c::decode_channel_map(int channel_map) {
 void
 truehd_parser_c::add_data(const unsigned char *new_data,
                           unsigned int new_size) {
-  if ((nullptr == new_data) || (0 == new_size))
+  if (!new_data || (0 == new_size))
     return;
 
   m_buffer.add(new_data, new_size);

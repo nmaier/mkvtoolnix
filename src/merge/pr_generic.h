@@ -467,6 +467,13 @@ enum connection_result_e {
     error_message = (boost::format(Y("The CodecID of the two tracks is different: %1% and %2%")) % (a) % (b)).str(); \
     return CAN_CONNECT_NO_PARAMETERS;                                                                                \
   }
+#define connect_check_codec_private(b)                                                                                                                                \
+  if (   (!!this->m_ti.m_private_data != !!b->m_ti.m_private_data)                                                                                                    \
+      || (  this->m_ti.m_private_size !=   b->m_ti.m_private_size)                                                                                                    \
+      || (  this->m_ti.m_private_data &&   memcmp(this->m_ti.m_private_data, b->m_ti.m_private_data, this->m_ti.m_private_size))) {                                   \
+    error_message = (boost::format(Y("The codec's private data does not match (lengths: %1% and %2%).")) % this->m_ti.m_private_size % b->m_ti.m_private_size).str(); \
+    return CAN_CONNECT_MAYBE_CODECPRIVATE;                                                                                                                            \
+  }
 
 typedef std::deque<packet_cptr>::iterator packet_cptr_di;
 

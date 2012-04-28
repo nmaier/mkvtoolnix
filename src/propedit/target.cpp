@@ -51,12 +51,12 @@ target_c::validate() {
   assert(target_c::tt_undefined != m_type);
 
   std::vector<property_element_c> *property_table
-    = nullptr == m_level1_element ? nullptr
-    :                            &property_element_c::get_table_for(target_c::tt_segment_info == m_type ? KaxInfo::ClassInfos : KaxTracks::ClassInfos,
-                                                                      track_audio == m_track_type ? &KaxTrackAudio::ClassInfos
-                                                                    : track_video == m_track_type ? &KaxTrackVideo::ClassInfos
-                                                                    :                               nullptr,
-                                                                    false);
+    = !m_level1_element ? nullptr
+    :                   &property_element_c::get_table_for(target_c::tt_segment_info == m_type ? KaxInfo::ClassInfos : KaxTracks::ClassInfos,
+                                                             track_audio == m_track_type ? &KaxTrackAudio::ClassInfos
+                                                           : track_video == m_track_type ? &KaxTrackVideo::ClassInfos
+                                                           :                               nullptr,
+                                                           false);
 
   for (auto &change : m_changes)
     change->validate(property_table);
@@ -257,13 +257,13 @@ target_c::set_level1_element(ebml_element_cptr level1_element_cp,
       continue;
 
     KaxTrackEntry *track = dynamic_cast<KaxTrackEntry *>((*track_headers)[i]);
-    assert(nullptr != track);
+    assert(track);
 
     KaxTrackType *kax_track_type     = dynamic_cast<KaxTrackType *>(FindChild<KaxTrackType>(track));
-    track_type this_track_type       = nullptr == kax_track_type ? track_video : static_cast<track_type>(uint8(*kax_track_type));
+    track_type this_track_type       = !kax_track_type ? track_video : static_cast<track_type>(uint8(*kax_track_type));
 
     KaxTrackUID *kax_track_uid       = dynamic_cast<KaxTrackUID *>(FindChild<KaxTrackUID>(track));
-    uint64_t track_uid               = nullptr == kax_track_uid ? 0 : uint64(*kax_track_uid);
+    uint64_t track_uid               = !kax_track_uid ? 0 : uint64(*kax_track_uid);
 
     KaxTrackNumber *kax_track_number = dynamic_cast<KaxTrackNumber *>(FindChild<KaxTrackNumber>(track));
 
@@ -277,7 +277,7 @@ target_c::set_level1_element(ebml_element_cptr level1_element_cp,
 
     bool track_matches = target_c::sm_by_uid      == m_selection_mode ? m_selection_param == track_uid
                        : target_c::sm_by_position == m_selection_mode ? m_selection_param == num_tracks_total
-                       : target_c::sm_by_number   == m_selection_mode ? (nullptr            != kax_track_number)       && (m_selection_param == uint64(*kax_track_number))
+                       : target_c::sm_by_number   == m_selection_mode ? kax_track_number  && (m_selection_param == uint64(*kax_track_number))
                        :                                                (this_track_type == m_selection_track_type) && (m_selection_param == num_tracks_by_type[this_track_type]);
 
     if (!track_matches)
@@ -290,7 +290,7 @@ target_c::set_level1_element(ebml_element_cptr level1_element_cp,
                  : track_audio == m_track_type ? dynamic_cast<EbmlMaster *>(FindChild<KaxTrackAudio>(track))
                  :                               nullptr;
 
-    if (   (nullptr == m_sub_master)
+    if (   !m_sub_master
         && (   (track_video == m_track_type)
             || (track_audio == m_track_type))
         && has_add_or_set_change()) {
@@ -371,7 +371,7 @@ target_c::add_or_replace_global_tags(KaxTags *tags) {
   size_t idx = 0;
   while (m_level1_element->ListSize() > idx) {
     KaxTag *tag = dynamic_cast<KaxTag *>((*m_level1_element)[idx]);
-    if ((nullptr == tag) || (-1 != get_tag_tuid(*tag)))
+    if (!tag || (-1 != get_tag_tuid(*tag)))
       ++idx;
     else {
       delete tag;
@@ -383,7 +383,7 @@ target_c::add_or_replace_global_tags(KaxTags *tags) {
     idx = 0;
     while (tags->ListSize() > idx) {
       KaxTag *tag = dynamic_cast<KaxTag *>((*tags)[0]);
-      if ((nullptr == tag) || (-1 != get_tag_tuid(*tag)))
+      if (!tag || (-1 != get_tag_tuid(*tag)))
         ++idx;
       else {
         m_level1_element->PushElement(*tag);
@@ -400,7 +400,7 @@ target_c::add_or_replace_track_tags(KaxTags *tags) {
   size_t idx = 0;
   while (m_level1_element->ListSize() > idx) {
     KaxTag *tag = dynamic_cast<KaxTag *>((*m_level1_element)[idx]);
-    if ((nullptr == tag) || (track_uid != get_tag_tuid(*tag)))
+    if (!tag || (track_uid != get_tag_tuid(*tag)))
       ++idx;
     else {
       delete tag;
@@ -414,7 +414,7 @@ target_c::add_or_replace_track_tags(KaxTags *tags) {
     idx = 0;
     while (tags->ListSize() > idx) {
       KaxTag *tag = dynamic_cast<KaxTag *>((*tags)[0]);
-      if (nullptr == tag)
+      if (!tag)
         ++idx;
       else {
         GetChildAs<KaxTagTrackUID, EbmlUInteger>(GetChild<KaxTagTargets>(tag)) = track_uid;

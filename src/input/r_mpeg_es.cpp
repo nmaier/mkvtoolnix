@@ -149,7 +149,7 @@ mpeg_es_reader_c::read_headers() {
     dheight = height;
 
     MPEGChunk *raw_seq_hdr = parser.GetRealSequenceHeader();
-    if (nullptr != raw_seq_hdr) {
+    if (raw_seq_hdr) {
       m_ti.m_private_data = (unsigned char *)safememdup(raw_seq_hdr->GetPointer(), raw_seq_hdr->GetSize());
       m_ti.m_private_size = raw_seq_hdr->GetSize();
     }

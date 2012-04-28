@@ -47,7 +47,7 @@ video_packetizer_c::video_packetizer_c(generic_reader_c *p_reader,
 
   set_track_type(track_video);
 
-  if (nullptr != codec_id)
+  if (codec_id)
     set_codec_id(codec_id);
   else
     set_codec_id(MKV_V_MSCOMP);
@@ -59,7 +59,7 @@ video_packetizer_c::video_packetizer_c(generic_reader_c *p_reader,
 void
 video_packetizer_c::check_fourcc() {
   if (   (m_hcodec_id                != MKV_V_MSCOMP)
-      || (nullptr                       == m_ti.m_private_data)
+      || !m_ti.m_private_data
       || (sizeof(alBITMAPINFOHEADER) >  m_ti.m_private_size))
     return;
 
@@ -193,20 +193,13 @@ connection_result_e
 video_packetizer_c::can_connect_to(generic_packetizer_c *src,
                                    std::string &error_message) {
   video_packetizer_c *vsrc = dynamic_cast<video_packetizer_c *>(src);
-  if (nullptr == vsrc)
+  if (!vsrc)
     return CAN_CONNECT_NO_FORMAT;
 
   connect_check_v_width(m_width,      vsrc->m_width);
   connect_check_v_height(m_height,    vsrc->m_height);
   connect_check_codec_id(m_hcodec_id, vsrc->m_hcodec_id);
-
-  if (   ((nullptr == m_ti.m_private_data) && (nullptr != vsrc->m_ti.m_private_data))
-      || ((nullptr != m_ti.m_private_data) && (nullptr == vsrc->m_ti.m_private_data))
-      || (m_ti.m_private_size != vsrc->m_ti.m_private_size)) {
-    error_message = (boost::format(Y("The codec's private data does not match (lengths: %1% and %2%).")) % m_ti.m_private_size % vsrc->m_ti.m_private_size).str();
-    return CAN_CONNECT_MAYBE_CODECPRIVATE;
-  }
+  connect_check_codec_private(vsrc);
 
   return CAN_CONNECT_YES;
 }
-

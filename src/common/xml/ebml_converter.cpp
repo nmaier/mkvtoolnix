@@ -341,7 +341,7 @@ ebml_converter_c::to_ebml(std::string const &file_name,
   to_ebml_recursively(*ebml_root, root_node);
 
   auto master = dynamic_cast<EbmlMaster *>((*ebml_root)[0]);
-  if (nullptr == master)
+  if (!master)
     throw conversion_x{Y("The XML root element is not a master element.")};
 
   fix_ebml(*master);
@@ -445,7 +445,7 @@ ebml_converter_c::verify_and_create_element(EbmlMaster &parent,
     throw invalid_child_node_x{ name, get_tag_name(parent), node.offset_debug() };
 
   auto semantic = find_ebml_semantic(EBML_INFO(KaxSegment), id);
-  if ((nullptr != semantic) && EBML_SEM_UNIQUE(*semantic))
+  if (semantic && EBML_SEM_UNIQUE(*semantic))
     for (i = 0; i < parent.ListSize(); i++)
       if (EbmlId(*parent[i]) == id)
         throw duplicate_child_node_x{ name, get_tag_name(parent), node.offset_debug() };
@@ -483,7 +483,7 @@ ebml_converter_c::dump_semantics_recursively(int level,
   std::string limits_str;
 
   if ((m_limits.end() != limits) && (limits->second.has_min || limits->second.has_max)) {
-    auto label = nullptr != dynamic_cast<EbmlBinary *>(&element) ? "length in bytes" : "value";
+    auto label = dynamic_cast<EbmlBinary *>(&element) ? "length in bytes" : "value";
 
     if (limits->second.has_min && limits->second.has_max) {
       if (limits->second.min == limits->second.max)

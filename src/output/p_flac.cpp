@@ -87,7 +87,7 @@ connection_result_e
 flac_packetizer_c::can_connect_to(generic_packetizer_c *src,
                                   std::string &error_message) {
   flac_packetizer_c *fsrc = dynamic_cast<flac_packetizer_c *>(src);
-  if (nullptr == fsrc)
+  if (!fsrc)
     return CAN_CONNECT_NO_FORMAT;
 
   connect_check_a_samplerate(m_stream_info.sample_rate, fsrc->m_stream_info.sample_rate);

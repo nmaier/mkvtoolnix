@@ -166,7 +166,7 @@ flac_reader_c::parse_file() {
 
   mxinfo(Y("+-> Parsing the FLAC file. This can take a LONG time.\n"));
   decoder = FLAC__stream_decoder_new();
-  if (decoder == nullptr)
+  if (!decoder)
     mxerror(Y("flac_reader: FLAC__stream_decoder_new() failed.\n"));
   if (!FLAC__stream_decoder_set_metadata_respond_all(decoder))
     mxerror(Y("flac_reader: Could not set metadata_respond_all.\n"));

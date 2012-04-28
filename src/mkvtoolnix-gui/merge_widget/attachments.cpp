@@ -166,13 +166,13 @@ void
 MergeWidget::setAttachmentControlValues(Attachment *attachment) {
   m_currentlySettingInputControlValues = true;
 
-  if ((nullptr == attachment) && ui->attachmentStyle->itemData(0).isValid())
+  if (!attachment && ui->attachmentStyle->itemData(0).isValid())
     ui->attachmentStyle->insertItem(0, QY("<do not change>"));
 
-  else if ((nullptr != attachment) && !ui->attachmentStyle->itemData(0).isValid())
+  else if (attachment && !ui->attachmentStyle->itemData(0).isValid())
     ui->attachmentStyle->removeItem(0);
 
-  if (nullptr == attachment) {
+  if (!attachment) {
     ui->attachmentName->setText(Q(""));
     ui->attachmentDescription->setText(Q(""));
     ui->attachmentMIMEType->setEditText(Q(""));
