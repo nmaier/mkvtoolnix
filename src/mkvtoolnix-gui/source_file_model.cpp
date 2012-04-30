@@ -2,12 +2,14 @@
 
 #include "common/sorting.h"
 #include "mkvtoolnix-gui/source_file_model.h"
+#include "mkvtoolnix-gui/track_model.h"
 
 #include <QFileInfo>
 
 SourceFileModel::SourceFileModel(QObject *parent)
   : QAbstractItemModel{parent}
-  , m_sourceFiles{nullptr}
+  , m_sourceFiles{}
+  , m_tracksModel{}
 {
   m_additionalPartIcon.addFile(":/icons/16x16/distribute-horizontal-margin.png");
   m_addedIcon.addFile(":/icons/16x16/distribute-horizontal-x.png");
@@ -18,11 +20,15 @@ SourceFileModel::~SourceFileModel() {
 }
 
 void
+SourceFileModel::setTracksModel(TrackModel *tracksModel) {
+  m_tracksModel = tracksModel;
+}
+
+void
 SourceFileModel::setSourceFiles(QList<SourceFilePtr> &sourceFiles) {
   m_sourceFiles = &sourceFiles;
   reset();
 }
-
 
 QModelIndex
 SourceFileModel::index(int row,
@@ -215,4 +221,62 @@ SourceFileModel::addAdditionalParts(QModelIndex fileToAddToIdx,
   }
 
   endInsertRows();
+}
+
+void
+SourceFileModel::addOrAppendFilesAndTracks(QModelIndex fileToAddToIdx,
+                                           QList<SourceFilePtr> const &files,
+                                           bool append) {
+  assert(m_tracksModel);
+
+  if (files.isEmpty())
+    return;
+
+  if (append)
+    appendFilesAndTracks(fileToAddToIdx, files);
+  else
+    addFilesAndTracks(files);
+}
+
+void
+SourceFileModel::addFilesAndTracks(QList<SourceFilePtr> const &files) {
+  beginInsertRows(QModelIndex{}, m_sourceFiles->size(), m_sourceFiles->size() + files.size() - 1);
+  *m_sourceFiles << files;
+  endInsertRows();
+
+  m_tracksModel->addTracks(std::accumulate(files.begin(), files.end(), QList<TrackPtr>{}, [](QList<TrackPtr> &accu, SourceFilePtr const &file) { return accu << file->m_tracks; }));
+}
+
+void
+SourceFileModel::appendFilesAndTracks(QModelIndex fileToAddToIdx,
+                                      QList<SourceFilePtr> const &files) {
+  assert(false);
+  if (!fileToAddToIdx.isValid())
+    return;
+
+  // auto fileToAddTo = sourceFileFromIndex(fileToAddToIdx);
+    // if (fileToAddTo->isAdditionalPart() || fileToAddTo->isAppended())
+    //   fileToAddToIdx = parent(fileToAddToIdx);
+}
+
+//   if (append) {
+//   } else
+//     fileToAddToIdx
+
+//   fileToAddTo = sourceFileFromIndex(fileToAddToIdx);
+//   assert(fileToAddToIdx.isValid() && fileToAddTo);
+
+//   *m_sourceFiles << identifier.file();
+//   for (auto &track : identifier.file()->m_tracks)
+//     m_config.m_tracks << track.get();
+// }
+
+void
+SourceFileModel::clear() {
+  if (m_sourceFiles->isEmpty())
+    return;
+
+  beginResetModel();
+  m_sourceFiles->clear();
+  endResetModel();
 }

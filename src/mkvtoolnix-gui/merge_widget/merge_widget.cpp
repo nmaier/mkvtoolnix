@@ -31,6 +31,8 @@ MergeWidget::MergeWidget(QWidget *parent)
   // Setup UI controls.
   ui->setupUi(this);
 
+  m_filesModel->setTracksModel(m_tracksModel);
+
   setupMenu();
   setupInputControls();
   setupAttachmentsControls();

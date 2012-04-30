@@ -103,7 +103,7 @@ MergeWidget::setupInputControls() {
   ui->files->addAction(m_removeAllFilesAction);
 
   connect(m_addFilesAction,           SIGNAL(triggered()), this, SLOT(onAddFiles()));
-  // connect(m_appendFilesAction,        SIGNAL(triggered()), this, SLOT(onAppendFiles()));
+  connect(m_appendFilesAction,        SIGNAL(triggered()), this, SLOT(onAppendFiles()));
   connect(m_addAdditionalPartsAction, SIGNAL(triggered()), this, SLOT(onAddAdditionalParts()));
   // connect(m_removeFilesAction,        SIGNAL(triggered()), this, SLOT(onRemoveFiles()));
   connect(m_removeAllFilesAction,     SIGNAL(triggered()), this, SLOT(onRemoveAllFiles()));
@@ -443,26 +443,41 @@ MergeWidget::onUserDefinedTrackOptionsEdited(QString newValue) {
 
 void
 MergeWidget::onAddFiles() {
-  auto fileNames = selectFilesToAdd();
+  addOrAppendFiles(false);
+}
+
+void
+MergeWidget::onAppendFiles() {
+  addOrAppendFiles(true);
+}
+
+void
+MergeWidget::addOrAppendFiles(bool append) {
+  auto fileNames = selectFilesToAdd(append ? QY("Append media files") : QY("Add media files"));
   if (fileNames.empty())
     return;
 
-  auto numFilesBefore = m_config.m_files.size();
+  QList<SourceFilePtr> identifiedFiles;
+  for (auto &fileName : fileNames) {
+    FileIdentifier identifier{ this, fileName };
+    if (identifier.identify())
+      identifiedFiles << identifier.file();
+  }
 
-  for (auto &fileName : fileNames)
-    addFile(fileName, false);
+  if (identifiedFiles.isEmpty())
+    return;
 
-  if (numFilesBefore != m_config.m_files.size())
-    reinitFilesTracksControls();
+  m_filesModel->addOrAppendFilesAndTracks(selectedSourceFile(), identifiedFiles, append);
+  reinitFilesTracksControls();
 }
 
 QStringList
-MergeWidget::selectFilesToAdd() {
+MergeWidget::selectFilesToAdd(QString const &title) {
   QFileDialog dlg{this};
   dlg.setNameFilters(FileTypeFilter::get());
   dlg.setFileMode(QFileDialog::ExistingFiles);
   dlg.setDirectory(Settings::get().m_lastOpenDir);
-  dlg.setWindowTitle(QY("Add media files"));
+  dlg.setWindowTitle(title);
 
   if (!dlg.exec())
     return QStringList{};
@@ -473,20 +488,8 @@ MergeWidget::selectFilesToAdd() {
 }
 
 void
-MergeWidget::addFile(QString const &fileName,
-                     bool /*append*/) {
-  FileIdentifier identifier{ this, fileName };
-  if (!identifier.identify())
-    return;
-
-  m_config.m_files << identifier.file();
-  for (auto &track : identifier.file()->m_tracks)
-    m_config.m_tracks << track.get();
-}
-
-void
 MergeWidget::onAddAdditionalParts() {
-  m_filesModel->addAdditionalParts(selectedSourceFile(), selectFilesToAdd());
+  m_filesModel->addAdditionalParts(selectedSourceFile(), selectFilesToAdd(QY("Add media files as additional parts")));
 }
 
 void
@@ -494,16 +497,14 @@ MergeWidget::onRemoveAllFiles() {
   if (m_config.m_files.isEmpty())
     return;
 
-  m_config.m_tracks.clear();
-  m_config.m_files.clear();
+  m_filesModel->clear();
+  m_tracksModel->clear();
 
   reinitFilesTracksControls();
 }
 
 void
 MergeWidget::reinitFilesTracksControls() {
-  m_filesModel->setSourceFiles(m_config.m_files);
-  m_tracksModel->setTracks(m_config.m_tracks);
   resizeFilesColumnsToContents();
   resizeTracksColumnsToContents();
   onFileSelectionChanged();
@@ -552,7 +553,7 @@ MergeWidget::selectedSourceFile()
   const {
   auto selection = ui->files->selectionModel()->selection();
   if (selection.isEmpty())
-    QModelIndex{};
+    return QModelIndex{};
 
   auto idxs = selection.at(0).indexes();
   return idxs.isEmpty() ? QModelIndex{} : idxs.at(0);

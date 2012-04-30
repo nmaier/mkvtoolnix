@@ -35,6 +35,8 @@ public:
   virtual ~TrackModel();
 
   virtual void setTracks(QList<Track *> &tracks);
+  virtual void addTracks(QList<TrackPtr> tracks);
+  virtual void clear();
 
   virtual QModelIndex index(int row, int column, QModelIndex const &parent) const;
   virtual QModelIndex parent(QModelIndex const &child) const;

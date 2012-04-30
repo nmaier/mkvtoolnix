@@ -35,6 +35,9 @@ public:
 
   virtual void setContainer(QString const &container);
   virtual bool isValid() const;
+  virtual bool isRegular() const;
+  virtual bool isAppended() const;
+  virtual bool isAdditionalPart() const;
 
   virtual void saveSettings(QSettings &settings) const;
   virtual void loadSettings(MuxConfig::Loader &l);

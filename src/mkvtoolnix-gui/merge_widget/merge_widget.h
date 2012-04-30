@@ -54,6 +54,7 @@ public slots:
   virtual void onOpenConfig();
   virtual void onAddFiles();
   virtual void onAddAdditionalParts();
+  virtual void onAppendFiles();
   virtual void onRemoveAllFiles();
   virtual void onNew();
   virtual void onAddToJobQueue();
@@ -143,9 +144,9 @@ protected:
   virtual void retranslateInputUI();
   virtual void retranslateAttachmentsUI();
 
-  virtual QStringList selectFilesToAdd();
+  virtual QStringList selectFilesToAdd(QString const &title);
   virtual QStringList selectAttachmentsToAdd();
-  virtual void addFile(QString const &fileName, bool append);
+  virtual void addOrAppendFiles(bool append);
   virtual void enableInputControls(QList<QWidget *> const &controls, bool enable);
   virtual void enableFilesActions();
   virtual void enableAttachmentControls(bool enable);

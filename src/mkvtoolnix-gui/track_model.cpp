@@ -30,7 +30,6 @@ TrackModel::setTracks(QList<Track *> &tracks) {
   reset();
 }
 
-
 QModelIndex
 TrackModel::index(int row,
                   int column,
@@ -239,4 +238,25 @@ TrackModel::trackUpdated(Track *track) {
     return;
 
   emit dataChanged(createIndex(row, 0, track), createIndex(row, NumberOfColumns - 1, track));
+}
+
+void
+TrackModel::addTracks(QList<TrackPtr> tracks) {
+  if (tracks.isEmpty())
+    return;
+
+  beginInsertRows(QModelIndex{}, m_tracks->size(), m_tracks->size() + tracks.size() - 1);
+  for (auto &track : tracks)
+    *m_tracks << track.get();
+  endInsertRows();
+}
+
+void
+TrackModel::clear() {
+  if (m_tracks->isEmpty())
+    return;
+
+  beginResetModel();
+  m_tracks->clear();
+  endResetModel();
 }

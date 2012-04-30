@@ -12,6 +12,8 @@
 class SourceFileModel;
 typedef std::shared_ptr<SourceFileModel> SourceFileModelPtr;
 
+class TrackModel;
+
 class SourceFileModel : public QAbstractItemModel {
   Q_OBJECT;
 
@@ -24,13 +26,17 @@ protected:
 
   QList<SourceFilePtr> *m_sourceFiles;
   QIcon m_additionalPartIcon, m_addedIcon, m_normalIcon;
+  TrackModel *m_tracksModel;
 
 public:
   SourceFileModel(QObject *parent);
   virtual ~SourceFileModel();
 
   virtual void setSourceFiles(QList<SourceFilePtr> &sourceFiles);
+  virtual void setTracksModel(TrackModel *tracksModel);
+  virtual void addOrAppendFilesAndTracks(QModelIndex fileToAddToIdx, QList<SourceFilePtr> const &files, bool append);
   virtual void addAdditionalParts(QModelIndex fileToAddToIdx, QStringList fileNames);
+  virtual void clear();
 
   virtual QModelIndex index(int row, int column, QModelIndex const &parent) const;
   virtual QModelIndex parent(QModelIndex const &child) const;
@@ -46,6 +52,9 @@ protected:
 
   QVariant dataDecoration(QModelIndex const &index, SourceFile *sourceFile) const;
   QVariant dataDisplay(QModelIndex const &index, SourceFile *sourceFile) const;
+
+  virtual void addFilesAndTracks(QList<SourceFilePtr> const &files);
+  virtual void appendFilesAndTracks(QModelIndex fileToAddToIdx, QList<SourceFilePtr> const &files);
 };
 
 #endif  // MTX_MKVTOOLNIXGUI_SOURCE_FILE_MODEL_H

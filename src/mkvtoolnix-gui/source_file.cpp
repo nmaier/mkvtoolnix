@@ -50,6 +50,25 @@ SourceFile::isValid()
   return !m_container.isEmpty() || m_additionalPart;
 }
 
+
+bool
+SourceFile::isRegular()
+  const {
+  return !m_appended;
+}
+
+bool
+SourceFile::isAppended()
+  const {
+  return m_appended && m_additionalPart;
+}
+
+bool
+SourceFile::isAdditionalPart()
+  const {
+  return m_appended && !m_additionalPart;
+}
+
 void
 SourceFile::setContainer(QString const &container) {
   m_container = container;
