@@ -526,10 +526,13 @@ MergeWidget::resizeTracksColumnsToContents()
 
 void
 MergeWidget::enableFilesActions() {
-  int numSelected = ui->files->selectionModel()->selection().size();
+  int numSelected      = ui->files->selectionModel()->selection().size();
+  bool hasRegularTrack = false;
+  if (1 == numSelected)
+    hasRegularTrack = m_config.m_files.end() != brng::find_if(m_config.m_files, [](SourceFilePtr const &file) { return file->hasRegularTrack(); });
 
   m_addFilesAction->setEnabled(true);
-  m_appendFilesAction->setEnabled(1 == numSelected);
+  m_appendFilesAction->setEnabled((1 == numSelected) && hasRegularTrack);
   m_addAdditionalPartsAction->setEnabled(1 == numSelected);
   m_removeFilesAction->setEnabled(0 < numSelected);
   m_removeAllFilesAction->setEnabled(!m_config.m_files.isEmpty());

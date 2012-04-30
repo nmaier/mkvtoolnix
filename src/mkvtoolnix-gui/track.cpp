@@ -92,6 +92,12 @@ Track::isAppended()
   return !m_file ? false : m_file->m_appended;
 }
 
+bool
+Track::isRegular()
+  const {
+  return isAudio() || isVideo() || isSubtitles();
+}
+
 void
 Track::setDefaults() {
   auto &settings = Settings::get();

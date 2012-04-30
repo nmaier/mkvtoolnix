@@ -72,6 +72,7 @@ public:
   virtual bool isGlobalTags() const;
   virtual bool isTags() const;
   virtual bool isAttachment() const;
+  virtual bool isRegular() const;
   virtual bool isAppended() const;
 
   virtual void setDefaults();

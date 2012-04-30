@@ -69,6 +69,12 @@ SourceFile::isAdditionalPart()
   return m_appended && !m_additionalPart;
 }
 
+bool
+SourceFile::hasRegularTrack()
+  const {
+  return m_tracks.end() != brng::find_if(m_tracks, [](TrackPtr const &track) { return track->isRegular(); });
+}
+
 void
 SourceFile::setContainer(QString const &container) {
   m_container = container;

@@ -38,6 +38,7 @@ public:
   virtual bool isRegular() const;
   virtual bool isAppended() const;
   virtual bool isAdditionalPart() const;
+  virtual bool hasRegularTrack() const;
 
   virtual void saveSettings(QSettings &settings) const;
   virtual void loadSettings(MuxConfig::Loader &l);
