@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: mkvtoolnix\n"
 "Report-Msgid-Bugs-To: Dean Lee <xslidian@gmail.com>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2011-12-25 15:18+0100\n"
+"PO-Revision-Date: 2012-05-05 14:42+0800\n"
 "Last-Translator: Dean Lee <xslidian@gmail.com>\n"
 "Language-Team: Chinese Simplified <xslidian@gmail.com>\n"
 "Language: \n"
@@ -37,11 +37,12 @@ msgstr ""
 "mkvmerge 收到了一个 SIGINT（用户可能按了 Ctrl+C）。正在尝试恢复文件。如果 mkvmerge 在此过程中失去响应，您需要手动结束它。\n"
 
 #: src/merge/mkvmerge.cpp:141
-#, fuzzy
 msgid ""
 "  ( <file1> <file2> )      Treat file1 and file2 as if they were concatenated\n"
 "                           into a single big file.\n"
-msgstr "  --attach-file <file>     在此 Matroska 文件中创建一个文件附件。\n"
+msgstr ""
+"  ( <文件1> <文件2> )      将 文件1 与 文件2 合并成一个大文件\n"
+"                           对待。\n"
 
 #: src/merge/mkvmerge.cpp:206
 msgid ""
@@ -358,15 +359,16 @@ msgstr ""
 "                           创建新文件。\n"
 
 #: src/merge/mkvmerge.cpp:120
-#, fuzzy
 msgid ""
 "  --split parts:start1-end1[,[+]start2-end2,...]\n"
 "                           Keep ranges of timecodes start-end, either in\n"
 "                           separate files or append to previous range's file\n"
 "                           if prefixed with '+'.\n"
 msgstr ""
-"  --split timecodes:A[,B...]\n"
-"                           在 A, B 等每个时间码后创建一个新文件。\n"
+"  --split parts:start1-end1[,[+]start2-end2,...]\n"
+"                           保留 起始-终止 时间码指定的范围，\n"
+"                           可分别生成单独的文件，也可以加上 '+' 前缀\n"
+"                           追加到前一个文件中。\n"
 
 #: src/merge/mkvmerge.cpp:117
 msgid ""
@@ -587,25 +589,22 @@ msgstr ""
 "                           'o' 和 'p' 均可为浮点数。\n"
 
 #: src/merge/mkvmerge.cpp:136
-#, fuzzy
 msgid "  <file1> + <file2>        Append file2 to file1.\n"
-msgstr "  --title <title>          此输出文件的标题。\n"
+msgstr "  <文件1> + <文件2>        将 文件2 追加到 文件1 之后。\n"
 
 #: src/merge/mkvmerge.cpp:137
-#, fuzzy
 msgid "  <file1> +<file2>         Same as \"<file1> + <file2>\".\n"
-msgstr "  --title <title>          此输出文件的标题。\n"
+msgstr "  <文件1> +<文件2>         与“<文件1> + <文件2>”相同。\n"
 
 #: src/merge/mkvmerge.cpp:138
 msgid ""
 "  = <file>                 Don't look for and concatenate files with the same\n"
 "                           base name but with a different trailing number.\n"
-msgstr ""
+msgstr "  = <file>                 不要查找并合并基本名相同但尾数不同的文件。\n"
 
 #: src/merge/mkvmerge.cpp:140
-#, fuzzy
 msgid "  =<file>                  Same as \"= <file>\".\n"
-msgstr "  --link                   连接已切割的文件。\n"
+msgstr "  =<文件>                  与“= <文件>”相同。\n"
 
 #: src/merge/mkvmerge.cpp:261
 msgid ""
@@ -697,9 +696,8 @@ msgid " Chapter handling:\n"
 msgstr " 章节处理:\n"
 
 #: src/merge/mkvmerge.cpp:113
-#, fuzzy
 msgid " File splitting, linking, appending and concatenating (more global options):\n"
-msgstr " 文件切割与合并 (其他全局选项):\n"
+msgstr " 文件切割、连接、追加及合并 (其他全局选项):\n"
 
 #: src/merge/mkvmerge.cpp:98
 msgid " General output control (advanced global options):\n"
@@ -891,7 +889,7 @@ msgstr "关于(&A)\tF1"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:45
 msgid "&Add"
-msgstr ""
+msgstr "添加(&A)"
 
 #: src/mmg/mmg_dialog.cpp:294
 #: src/mmg/mmg_dialog.cpp:328
@@ -945,9 +943,8 @@ msgid "&Down"
 msgstr "下移(&D)"
 
 #: src/mmg/update_checker.cpp:75
-#, fuzzy
 msgid "&Download"
-msgstr "下载 URL:"
+msgstr "下载(&D)"
 
 #: src/mmg/header_editor/frame.cpp:146
 msgid "&Expand all entries\tCtrl-E"
@@ -1039,9 +1036,8 @@ msgid "&Reload\tCtrl-R"
 msgstr "重新加载(&R)\tCtrl-R"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:46
-#, fuzzy
 msgid "&Remove"
-msgstr "移除"
+msgstr "移除(&R)"
 
 #: src/mmg/header_editor/value_page.cpp:140
 msgid "&Reset"
@@ -1066,7 +1062,7 @@ msgstr "保存配置文件(&S)\tCtrl-S"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:49
 msgid "&Sort"
-msgstr ""
+msgstr "排序(&S)"
 
 #: src/mmg/jobs.cpp:510
 msgid "&Start"
@@ -1627,7 +1623,7 @@ msgstr "...按特定时间码:"
 
 #: src/mmg/tabs/global.cpp:258
 msgid "...by parts:"
-msgstr ""
+msgstr "...按分段:"
 
 #: src/info/mkvinfo.cpp:773
 msgid "1: all frames"
@@ -1646,9 +1642,8 @@ msgid "4 bytes"
 msgstr "4 字节"
 
 #: src/common/xml/xml.h:73
-#, fuzzy
 msgid "<%1%> is not a valid child element of <%2%> at position %3%."
-msgstr "<%1%> 不是 <%2%> 的有效子元素。"
+msgstr "<%1%> 不是 <%2%> 的有效子元素，位于 %3%。"
 
 #: src/common/xml/ebml_chapters_converter.cpp:120
 msgid "<ChapterAtom> is missing the <ChapterTimeStart> child."
@@ -1663,18 +1658,16 @@ msgid "<ChapterTrack> is missing the <ChapterTrackNumber> child."
 msgstr "<ChapterTrack> 缺 <ChapterTrackNumber> 子元素。"
 
 #: src/common/xml/ebml_tags_converter.cpp:90
-#, fuzzy
 msgid "<Simple> is missing the <Name> child."
-msgstr "<ChapterAtom> 缺 <ChapterTimeStart> 子元素。"
+msgstr "<Simple> 缺 <Name> 子元素。"
 
 #: src/common/xml/ebml_tags_converter.cpp:97
 msgid "<Simple> must contain either a <String> or a <Binary> child."
-msgstr ""
+msgstr "<Simple> 必须包含 <String> 或 <Binary> 子元素。"
 
 #: src/common/xml/ebml_tags_converter.cpp:87
-#, fuzzy
 msgid "<Tag> is missing the <Simple> child."
-msgstr "<ChapterAtom> 缺 <ChapterTimeStart> 子元素。"
+msgstr "<Tag> 缺 <Simple> 子元素。"
 
 #: src/input/r_matroska.cpp:2095
 #, boost-format
@@ -1689,7 +1682,7 @@ msgstr "在时间戳 %1% 处找到了轨道号为 %2% 的块。然而，没有�
 
 #: src/mmg/tabs/global.cpp:260
 msgid "A comma-separated list of timecode ranges of content to keep."
-msgstr ""
+msgstr "逗号分隔的列表，指定要保留内容的时间码范围。"
 
 #: src/common/property_element.cpp:132
 #: src/mmg/header_editor/frame.cpp:430
@@ -1842,9 +1835,8 @@ msgid "Add &command line options"
 msgstr "添加命令行选项(&C)"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:147
-#, fuzzy
 msgid "Add additional parts"
-msgstr "附加"
+msgstr "添加其余部分"
 
 #: src/mmg/tabs/chapters.cpp:326
 msgid "Add chapter"
@@ -1880,7 +1872,7 @@ msgstr "添加时间"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:38
 msgid "Additional source file parts"
-msgstr ""
+msgstr "多段源文件"
 
 #: src/info/mkvinfo.cpp:197
 #, boost-format
@@ -2005,9 +1997,8 @@ msgid "An unknown error occured. The file has been modified."
 msgstr "发生未知错误。文件已修改。"
 
 #: src/common/xml/ebml_converter.cpp:164
-#, fuzzy
 msgid "An unsigned integer was expected."
-msgstr "无符号整数"
+msgstr "应为无符号整数。"
 
 #: src/mmg/wx_kax_analyzer.cpp:36
 msgid "Analysis is running"
@@ -2145,9 +2136,9 @@ msgid "BZ2_bzCompressInit() failed. Result: %1%\n"
 msgstr "BZ2_bzCompressInit() 失败。结果: %1%\n"
 
 #: src/common/compression/bzlib.cpp:61
-#, fuzzy, boost-format
+#, boost-format
 msgid "BZ2_bzDecompress() failed. Result: %1%\n"
-msgstr "BZ2_bzCompressInit() 失败。结果: %1%\n"
+msgstr "BZ2_bzDecompress() 失败。结果: %1%\n"
 
 #: src/mmg/header_editor/value_page.cpp:148
 msgid "Binary (displayed as hex numbers)"
@@ -2879,7 +2870,7 @@ msgstr "Cue 表单解析器: 无效的 INDEX 索引，于行 %1%。\n"
 #: src/common/chapters/cue_parser.cpp:416
 #, boost-format
 msgid "Cue sheet parser: Invalid INDEX number (got %1%, expected %2%) in line %3%,\n"
-msgstr "Cue 表单解析器: 无效的 INDEX 索引数 (已得 %1%, 预期 %2%) 于行 %3%,\n"
+msgstr "Cue 表单解析器: 无效的 INDEX 索引数 (已得 %1%, 应为 %2%) 于行 %3%,\n"
 
 #: src/common/chapters/cue_parser.cpp:279
 #, boost-format
@@ -3000,9 +2991,9 @@ msgid "Default duration"
 msgstr "默认时长"
 
 #: src/info/mkvinfo.cpp:1045
-#, fuzzy, boost-format
+#, boost-format
 msgid "Default duration: %|1$.3f|ms (%|2$.3f| frames/fields per second for a video track)"
-msgstr "默认时长: %|1$.3f|ms (对于视频轨为 %|2$.3f| fps)"
+msgstr "默认时长: %|1$.3f|ms (对于视频轨为 %|2$.3f| 帧/场每秒)"
 
 #: src/info/mkvinfo.cpp:1060
 #, boost-format
@@ -3056,12 +3047,11 @@ msgstr "Dirac"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:74
 msgid "Directory"
-msgstr ""
+msgstr "目录"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:54
-#, fuzzy
 msgid "Directory:"
-msgstr "使用此目录:"
+msgstr "目录:"
 
 #: src/mmg/options/mmg.cpp:101
 msgid "Disable header removal compression for audio and video tracks by default"
@@ -3196,7 +3186,7 @@ msgstr "每个版本至少需含有一个章节。"
 
 #: src/mmg/tabs/global.cpp:261
 msgid "Each range consists of a start and end timecode with a '-' in the middle, e.g. '00:01:15-00:03:20'."
-msgstr ""
+msgstr "每段由起始与终止时间码组成，两个时间码之间用 '-' 隔开，如 '00:01:15-00:03:20'。"
 
 #: src/info/mkvinfo.cpp:186
 #, boost-format
@@ -3205,7 +3195,7 @@ msgstr "Ebml 空隙 (大小: %1%)"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:52
 msgid "Edit additional source file parts"
-msgstr ""
+msgstr "编辑多段源文件"
 
 #: src/propedit/propedit_cli_parser.cpp:170
 msgid "Edit selectors"
@@ -3284,12 +3274,12 @@ msgstr "错误 %1%\n"
 #: src/input/subtitles.cpp:134
 #, boost-format
 msgid "Error in line %1%: expected a SRT timecode line but found something else. Aborting this file.\n"
-msgstr "在行 %1% 处出错: 预期为 SRT 时间码行，但发现的是其他一些东西。放弃该文件。\n"
+msgstr "在行 %1% 处出错: 应为 SRT 时间码行，但发现的是其他一些东西。放弃该文件。\n"
 
 #: src/input/subtitles.cpp:125
 #, boost-format
 msgid "Error in line %1%: expected subtitle number and found some text.\n"
-msgstr "在行 %1% 处出错: 预期为字幕号码但发现一些文字。\n"
+msgstr "在行 %1% 处出错: 应为字幕号码但发现一些文字。\n"
 
 #: src/mmg/mmg.cpp:247
 #: src/mmg/mmg_dialog.cpp:403
@@ -3391,7 +3381,7 @@ msgstr "展开所有条目，这样它们的子条目都将被显示"
 #: src/common/xml/ebml_converter.cpp:202
 #, boost-format
 msgid "Expected a time in the following format: HH:MM:SS.nnn (HH = hour, MM = minute, SS = second, nnn = millisecond up to nanosecond. You may use up to nine digits for 'n' which would mean nanosecond precision). You may omit the hour as well. Found '%1%' instead. Additional error message: %2%"
-msgstr "预期为如下格式的时间: HH:MM:SS.nnn (HH = 时, MM = 分, SS = 秒, nnn = 毫秒到毫微秒。您可以使用多达九位的 'n' 以精确到毫微秒)。也可以省略时数。但发现的为 '%1%'。其他错误信息: %2%"
+msgstr "应为如下格式的时间: HH:MM:SS.nnn (HH = 时, MM = 分, SS = 秒, nnn = 毫秒到毫微秒。您可以使用多达九位的 'n' 以精确到毫微秒)。也可以省略时数。但发现的为 '%1%'。其他错误消息: %2%"
 
 #: src/extract/extract_cli_parser.cpp:96
 msgid "Exports the chapter infomartion in the simple format used in OGM tools (CHAPTER01=... CHAPTER01NAME=...)."
@@ -3431,9 +3421,9 @@ msgid "Extracting track %1% with the CodecID '%2%' to the file '%3%'. Container 
 msgstr "正在提取轨道 %1% （CodecID 为 '%2%'）到文件 '%3%'。容器格式: %4%\n"
 
 #: src/extract/tracks.cpp:96
-#, fuzzy, boost-format
+#, boost-format
 msgid "Extraction of track ID %1% with the CodecID '%2%' is not supported.\n"
-msgstr "不支持对轨道号 %1% （CodecID 为 '%2%'）的提取。\n"
+msgstr "不支持对轨道 ID %1%（CodecID 为 '%2%'）的提取。\n"
 
 #: src/input/r_flac.h:52
 #: src/output/p_flac.h:39
@@ -3541,9 +3531,8 @@ msgid "File modified"
 msgstr "文件已修改"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:72
-#, fuzzy
 msgid "File name"
-msgstr "文件名: %1%"
+msgstr "文件名"
 
 #: src/info/mkvinfo.cpp:1311
 #, boost-format
@@ -3835,11 +3824,11 @@ msgstr "如果一个章节没有被标记为“启用”，播放器将会跳过
 
 #: src/mmg/tabs/global.cpp:264
 msgid "If a range's start timecode is prefixed with '+' then its content will be written to the same file as the previous range. Otherwise a new file will be created for this range."
-msgstr ""
+msgstr "如果范围的起始时间码以 '+' 开头，则该段内容将写入与前一段相同的文件当中。否则将为该段创建新的文件。"
 
 #: src/mmg/tabs/global.cpp:262
 msgid "If a start timecode is left out then the previous range's end timecode is used, or the start of the file if there was no previous range."
-msgstr ""
+msgstr "若起始时间码处留空，则将使用前一段的终止时间码，或如果没有前一段，则以文件开头作为起始点。"
 
 #: src/mmg/options/mmg.cpp:68
 msgid "If checked mmg will ask for confirmation before overwriting existing files, or before adding a new job if there's an old job whose description matches the new one."
@@ -3944,9 +3933,9 @@ msgid "Invalid %1% specified in '--%2% %3%'.\n"
 msgstr "无效的 %1% 指定，在 '--%2% %3%'。\n"
 
 #: src/common/xml/ebml_converter.cpp:287
-#, fuzzy, boost-format
+#, boost-format
 msgid "Invalid 'format' attribute '%1%'."
-msgstr "无效分数: %1%"
+msgstr "属性 'format' 的值 '%1%' 无效。"
 
 #: src/common/base64.h:30
 msgid "Invalid Base64 character encountered"
@@ -3986,7 +3975,7 @@ msgstr "无效的附件 ID/文件名指定，在参数 '%1%' 中。\n"
 
 #: src/common/xml/xml.h:54
 msgid "Invalid attribute '%1%' in node '%2%' at position %3%"
-msgstr ""
+msgstr "节点 '%2%' 的属性 '%1%' 无效，位于 %3%"
 
 #: src/merge/mkvmerge.cpp:986
 #, boost-format
@@ -4035,17 +4024,17 @@ msgstr "无效的索引选项。未在 '--cues %1%' 指定轨道 ID。\n"
 #: src/common/xml/ebml_converter.cpp:279
 #: src/common/xml/ebml_converter.cpp:283
 msgid "Invalid data for Base64 encoding found."
-msgstr ""
+msgstr "用于 Base64 编码的数据无效。"
 
 #: src/merge/mkvmerge.cpp:844
-#, fuzzy, boost-format
+#, boost-format
 msgid "Invalid end time for '--split' in '--split %1%' (current part: %2%). Additional error message: %3%.\n"
-msgstr "'--split' 的时间无效，在 '--split %1%'。其他错误消息: %2%。\n"
+msgstr "'--split' 的终止时间无效，命令行参数为 '--split %1%' (当前分段号: %2%)。其他错误消息: %3%。\n"
 
 #: src/merge/mkvmerge.cpp:847
 #, boost-format
 msgid "Invalid end time for '--split' in '--split %1%' (current part: %2%). The end time must be bigger than the start time.\n"
-msgstr ""
+msgstr "'--split %1%' 中的 '--split' 终止时间无效 (当前分段号: %2%)。终止时间必须大于起始时间。\n"
 
 #: src/mmg/mmg_dialog.cpp:599
 msgid "Invalid file name"
@@ -4129,7 +4118,7 @@ msgstr "无效的语言选择"
 
 #: src/common/xml/ebml_converter.cpp:266
 msgid "Invalid length of hexadecimal content: must be divisable by 2."
-msgstr ""
+msgstr "十六进制内容长度无效: 必须能被 2 整除。"
 
 #: src/common/chapters/chapters.cpp:192
 #, boost-format
@@ -4172,19 +4161,19 @@ msgid "Invalid start or stop timecode"
 msgstr "无效的开始或终止时间码"
 
 #: src/merge/mkvmerge.cpp:838
-#, fuzzy, boost-format
+#, boost-format
 msgid "Invalid start time for '--split' in '--split %1%' (current part: %2%). Additional error message: %3%.\n"
-msgstr "'--split' 的时间无效，在 '--split %1%'。其他错误消息: %2%。\n"
+msgstr "'--split' 的起始时间无效，命令行参数为 '--split %1%' (当前分段号: %2%)。其他错误消息: %3%。\n"
 
 #: src/merge/mkvmerge.cpp:850
-#, fuzzy, boost-format
+#, boost-format
 msgid "Invalid start time for '--split' in '--split %1%' (current part: %2%). The start time must be bigger than or equal to the previous part's end time.\n"
-msgstr "'--split' 的时间无效，在 '--split %1%'。其他错误消息: %2%。\n"
+msgstr "'--split' 的起始时间无效，命令行参数为 '--split %1%' (当前分段号: %2%)。起始时间必须大于或等于前一段的终止时间。\n"
 
 #: src/merge/mkvmerge.cpp:825
-#, fuzzy, boost-format
+#, boost-format
 msgid "Invalid start/end specification for '--split' in '--split %1%' (curent part: %2%).\n"
-msgstr "'--split' 格式无效，在 '--split %1%' 中。\n"
+msgstr "'--split' 起始/终止指定无效，命令行参数为 '--split %1%' (当前分段号: %2%)。\n"
 
 #: src/merge/mkvmerge.cpp:1161
 #, boost-format
@@ -4554,14 +4543,14 @@ msgstr "最大缓存: %1%"
 #: src/common/xml/ebml_converter.cpp:225
 #, boost-format
 msgid "Maximum allowed length: %1%, actual length: %2%"
-msgstr ""
+msgstr "允许的最大长度: %1%, 实际长度: %2%"
 
 #: src/common/xml/ebml_converter.cpp:169
 #: src/common/xml/ebml_converter.cpp:183
 #: src/common/xml/ebml_converter.cpp:214
 #, boost-format
 msgid "Maximum allowed value: %1%, actual value: %2%"
-msgstr ""
+msgstr "允许的最大值: %1%, 实际值: %2%"
 
 #: src/common/property_element.cpp:124
 #: src/mmg/header_editor/frame.cpp:406
@@ -4590,14 +4579,14 @@ msgstr "最小缓存: %1%"
 #: src/common/xml/ebml_converter.cpp:223
 #, boost-format
 msgid "Minimum allowed length: %1%, actual length: %2%"
-msgstr ""
+msgstr "允许的最小长度: %1%, 实际长度: %2%"
 
 #: src/common/xml/ebml_converter.cpp:167
 #: src/common/xml/ebml_converter.cpp:181
 #: src/common/xml/ebml_converter.cpp:212
 #, boost-format
 msgid "Minimum allowed value: %1%, actual value: %2%"
-msgstr ""
+msgstr "允许的最小值: %1%, 实际值: %2%"
 
 #: src/common/property_element.cpp:122
 #: src/mmg/header_editor/frame.cpp:401
@@ -4643,9 +4632,9 @@ msgid "Missing output file name in argument '%1%'.\n"
 msgstr "参数 '%1%' 缺输出文件名。\n"
 
 #: src/merge/mkvmerge.cpp:819
-#, fuzzy, boost-format
+#, boost-format
 msgid "Missing start/end specifications for '--split' in '--split %1%'.\n"
-msgstr "'--split' 格式无效，在 '--split %1%' 中。\n"
+msgstr "'--split' 没有指定起始/终止时间，命令行参数为 '--split %1%'。\n"
 
 #: src/propedit/options.cpp:142
 #, boost-format
@@ -4879,7 +4868,7 @@ msgstr "未发现版本号。\n"
 
 #: src/common/xml/ebml_converter.cpp:263
 msgid "Non-hex digits encountered."
-msgstr ""
+msgstr "发现非十六进制数位。"
 
 #: src/mmg/header_editor/frame.cpp:526
 msgid "None of the header fields has been modified. Nothing has been saved."
@@ -4950,9 +4939,8 @@ msgid "Only one input file is allowed.\n"
 msgstr "仅允许有一个输入文件。\n"
 
 #: src/common/xml/xml.h:92
-#, fuzzy
 msgid "Only one instance of <%1%> is allowed beneath <%2%> at position %3%."
-msgstr "<%2%> 下只允许使用一个 <%1%> 实例。"
+msgstr "<%2%> 下只允许存在一个 <%1%> 实例，位于 %3%。"
 
 #: src/common/xml/ebml_tags_converter.cpp:95
 msgid "Only one of <String> and <Binary> may be used beneath <Simple> but not both at the same time."
@@ -5190,9 +5178,8 @@ msgid "Previous segment's unique ID"
 msgstr "上段唯一 ID"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:53
-#, fuzzy
 msgid "Primary file name:"
-msgstr "上一文件名"
+msgstr "主文件名:"
 
 #: src/mmg/options/mkvmerge.cpp:54
 msgid "Process priority:"
@@ -5473,7 +5460,7 @@ msgstr "移除元素"
 
 #: src/mmg/options/mmg.cpp:90
 msgid "Remove job from job queue after run:"
-msgstr ""
+msgstr "执行完成后从任务队列移除:"
 
 #: src/mmg/tabs/chapters.cpp:346
 msgid "Remove name"
@@ -5790,9 +5777,8 @@ msgid "Sets the cropping parameters. Must be comma-separated list of four number
 msgstr "设置裁减参数。必须为逗号分隔的四个数字，分别代表从视频画面左边、顶部、右边和底部移除的像素数。"
 
 #: src/mmg/tabs/input_format.cpp:234
-#, fuzzy
 msgid "Sets the default duration or number of frames per second for a track. This can either be a floating point number or a fraction."
-msgstr "设置轨道的默认时长或每秒帧数（帧率）。仅对视频轨有效。对于 AVC/h.264 基本流，必须设定此选项。既可以是浮点数，也可以是分数。"
+msgstr "设置轨道的默认时长或每秒帧数（帧率）。既可以是浮点数，也可以是分数。"
 
 #: src/mmg/tabs/input_format.cpp:222
 msgid "Sets the display aspect ratio of the track. The format can be either 'a/b' in which case both numbers must be integer (e.g. 16/9) or just a single floting point number 'f' (e.g. 2.35)."
@@ -6278,7 +6264,7 @@ msgstr "无法解析 Kate 识别头 (%1%)。\n"
 #: src/input/r_qtmp4.cpp:945
 #, boost-format
 msgid "The MP4 file '%1%' contains chapters whose format was not recognized. This is often the case if the chapters are not encoded in UTF-8. Use the '--chapter-charset' option in order to specify the charset to use.\n"
-msgstr ""
+msgstr "MP4 文件 '%1%' 包含的章节格式未能识别。通常是由于章节未以 UTF-8 编码。请使用 '--chapter-charset' 选项来指定要使用的字符集。\n"
 
 #: src/mmg/wx_kax_analyzer.cpp:36
 msgid "The Matroska file is analyzed."
@@ -6314,54 +6300,53 @@ msgid "The Vorbis codebooks are different; such tracks cannot be concatenated wi
 msgstr "Vorbis 码表不同; 这种轨道不能连接，除非重新编码"
 
 #: src/common/xml/ebml_chapters_converter.cpp:218
-#, fuzzy, boost-format
+#, boost-format
 msgid "The XML chapter file '%1%' contains an error at position %3%: %2%\n"
-msgstr "时间码文件 '%1%' 包含不支持的/无法识别的格式 (版本 %2%)。\n"
+msgstr "XML 章节文件 '%1%' 存在错误，位于 %3%: %2%\n"
 
 #: src/common/xml/ebml_chapters_converter.cpp:221
-#, fuzzy, boost-format
+#, boost-format
 msgid "The XML chapter file '%1%' contains an error: %2%\n"
-msgstr "文件 '%1%': 容器: %2%"
+msgstr "XML 章节文件 '%1%' 存在错误: %2%\n"
 
 #: src/common/xml/ebml_chapters_converter.cpp:215
-#, fuzzy, boost-format
+#, boost-format
 msgid "The XML chapter file '%1%' could not be read.\n"
-msgstr "附件 '%1%' 不可读。\n"
+msgstr "XML 章节文件 '%1%' 无法读取。\n"
 
 #: src/common/xml/ebml_converter.cpp:345
-#, fuzzy
 msgid "The XML root element is not a master element."
-msgstr "根元索必须为 <%1%>。"
+msgstr "XML 根元索不是主元素。"
 
 #: src/common/xml/ebml_segmentinfo_converter.cpp:90
-#, fuzzy, boost-format
+#, boost-format
 msgid "The XML segmentinfo file '%1%' contains an error at position %3%: %2%\n"
-msgstr "时间码文件 '%1%' 包含不支持的/无法识别的格式 (版本 %2%)。\n"
+msgstr "XML 剪辑信息文件 '%1%' 存在错误，位于 %3%: %2%\n"
 
 #: src/common/xml/ebml_segmentinfo_converter.cpp:93
-#, fuzzy, boost-format
+#, boost-format
 msgid "The XML segmentinfo file '%1%' contains an error: %2%\n"
-msgstr "文件 '%1%': 容器: %2%"
+msgstr "XML 剪辑信息文件 '%1%' 存在错误: %2%\n"
 
 #: src/common/xml/ebml_segmentinfo_converter.cpp:87
-#, fuzzy, boost-format
+#, boost-format
 msgid "The XML segmentinfo file '%1%' could not be read.\n"
-msgstr "附件 '%1%' 不可读。\n"
+msgstr "XML 剪辑信息文件 '%1%' 无法读取。\n"
 
 #: src/common/xml/ebml_tags_converter.cpp:119
-#, fuzzy, boost-format
+#, boost-format
 msgid "The XML tag file '%1%' contains an error at position %3%: %2%\n"
-msgstr "时间码文件 '%1%' 包含不支持的/无法识别的格式 (版本 %2%)。\n"
+msgstr "XML 标签文件 '%1%' 存在错误，位于 %3%: %2%\n"
 
 #: src/common/xml/ebml_tags_converter.cpp:122
-#, fuzzy, boost-format
+#, boost-format
 msgid "The XML tag file '%1%' contains an error: %2%\n"
-msgstr "文件 '%1%': 容器: %2%"
+msgstr "XML 标签文件 '%1%' 存在错误: %2%\n"
 
 #: src/common/xml/ebml_tags_converter.cpp:116
-#, fuzzy, boost-format
+#, boost-format
 msgid "The XML tag file '%1%' could not be read.\n"
-msgstr "附件 '%1%' 不可读。\n"
+msgstr "XML 标签文件 '%1%' 无法读取。\n"
 
 #: src/merge/mkvmerge.cpp:1610
 #, boost-format
@@ -6395,7 +6380,7 @@ msgstr "附件 #%1%, ID %2%, MIME 类型 %3%, 尺寸 %4%, 正被写入 '%5%'。\
 #: src/merge/mkvmerge.cpp:1497
 #, boost-format
 msgid "The attachment '%1%' could not be read.\n"
-msgstr "附件 '%1%' 不可读。\n"
+msgstr "附件 '%1%' 无法读取。\n"
 
 #: src/propedit/propedit.cpp:109
 msgid "The changes are written to the file.\n"
@@ -6458,9 +6443,8 @@ msgid "The country '%s' is not a valid ccTLD and cannot be selected."
 msgstr "国家 '%s' 不是有效的 ccTLD，不能选择。"
 
 #: src/merge/output_control.cpp:1508
-#, fuzzy
 msgid "The cue entries (the index) are being written...\n"
-msgstr "正在写入 cue 索引..."
+msgstr "正在写入 cue 条目 (索引)...\n"
 
 #: src/mmg/tabs/input.cpp:757
 #, c-format, boost-format
@@ -6544,7 +6528,7 @@ msgstr "第一个模式将尝试提取章节信息和标签并将其以 CUE 表�
 #: src/merge/mkvmerge.cpp:1478
 #, boost-format
 msgid "The file '%1%' cannot be attached because it does not exist or cannot be read.\n"
-msgstr "文件 '%1%' 无法附加，因为它不存在或不可读。\n"
+msgstr "文件 '%1%' 无法附加，因为它不存在或无法读取。\n"
 
 #: src/extract/attachments.cpp:141
 #: src/extract/chapters.cpp:48
@@ -6716,7 +6700,7 @@ msgstr "第一个单词告诉 mkvextract 要提取什么。第二个必须是源
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:57
 msgid "The following parts are read after the primary file as if they were all part of one big file."
-msgstr ""
+msgstr "下例分段将在主文件之后读取，就像全部属于一个大文件一样。"
 
 #: src/mmg/tabs/global.cpp:596
 msgid "The format of the split size is invalid (size too small)."
@@ -7049,9 +7033,8 @@ msgid "The string 'global' works on the global tags."
 msgstr "字串 'global' 对全局标签起作用。"
 
 #: src/propedit/propedit_cli_parser.cpp:176
-#, fuzzy
 msgid "The string 'track:' followed by one of the chars 'a', 'b', 's' or 'v' followed by a number 'n' selects the nth audio, button, subtitle or video track (e.g. '--edit track:a2'). Numbering starts at 1."
-msgstr "字串 'track:' 后接的字符 'a', 'b', 's' 或 'v' 之一及其后接的数字 'n' 可选择第 n 个音频，按钮，字幕或视频轨 (如 '--edit track:a2')。"
+msgstr "字串 'track:' 后接的字符 'a', 'b', 's' 或 'v' 之一及其后接数字 'n' 可选择第 n 个音频，按钮，字幕或视频轨 (如 '--edit track:a2')。编号从 1 开始。"
 
 #: src/propedit/propedit_cli_parser.cpp:178
 msgid "The string 'track:=uid' with 'uid' being a number selects the track whose 'track UID' element equals 'uid'."
@@ -7062,9 +7045,8 @@ msgid "The string 'track:@number' with 'number' being a number selects the track
 msgstr "字串 'track:@number' 中的数字 'number' 可选择轨道号元素 'track number' 等于 'number' 的轨道。"
 
 #: src/propedit/propedit_cli_parser.cpp:175
-#, fuzzy
 msgid "The string 'track:n' with 'n' being a number selects the nth track. Numbering starts at 1."
-msgstr "字串 'track:n' 中的数字 'n' 可选择第 n 条轨道。"
+msgstr "字串 'track:n' 中的数字 'n' 可选择第 n 条轨道。编号从 1 开始。"
 
 #: src/propedit/propedit_cli_parser.cpp:172
 msgid "The strings 'info', 'segment_info' or 'segmentinfo' select the segment information element. This is also the default until the first '--edit' option is found."
@@ -7072,11 +7054,11 @@ msgstr "字串 'info', 'segment_info' 或 'segmentinfo' 表示选择剪辑信息
 
 #: src/common/xml/xml.h:130
 msgid "The tag or attribute '%1%' at position %2% contains data that is outside its allowed range."
-msgstr ""
+msgstr "位于 %2% 的标签或属性 '%1%' 包含超出允许范围的数据。"
 
 #: src/common/xml/xml.h:110
 msgid "The tag or attribute '%1%' at position %2% contains invalid or mal-formed data."
-msgstr ""
+msgstr "位于 %2% 的标签或属性 '%1%' 包含无效或异常数据。"
 
 #: src/merge/pr_generic.cpp:268
 #, boost-format
@@ -7143,7 +7125,7 @@ msgstr "在这些时间码后开始创建新的输出文件。这些时间码以
 
 #: src/mmg/tabs/global.cpp:263
 msgid "The timecodes can be given either in the form HH:MM:SS.nnnnnnnnn or as the number of seconds followed by 's'."
-msgstr ""
+msgstr "时间码可以以 HH:MM:SS.nnnnnnnnn 或秒数后接 's' 的形式给出。"
 
 #: src/input/r_ogm.cpp:591
 msgid "The timecodes for this stream have been reset in the middle of the file. This is not supported. The current packet will be discarded.\n"
@@ -7160,9 +7142,9 @@ msgid "The track %1% from file no. %2% ('%3%') is to be appended more than once.
 msgstr "轨道 %1% （自文件 %2% ('%3%')）被超过一次追加合并。'--append-to' 的参数无效。\n"
 
 #: src/extract/tracks.cpp:92
-#, fuzzy, boost-format
+#, boost-format
 msgid "The track ID %1% does not have a valid CodecID.\n"
-msgstr "轨道号 %1% 无有效的 CodecID。\n"
+msgstr "轨道 ID %1% 没有有效的 CodecID。\n"
 
 #: src/merge/output_control.cpp:825
 #, boost-format
@@ -7371,7 +7353,7 @@ msgstr "此轨道包含 SBR AAC/HE-AAC/AAC+ 数据。本选项只对 AAC 输入�
 
 #: src/mmg/tabs/input.cpp:970
 msgid "This track is not compatible with the WebM mode and cannot be enabled."
-msgstr "此轨道与 WebM 模式不兼容，不可启用。"
+msgstr "此轨道与 WebM 模式不兼容，不能启用。"
 
 #: src/info/mkvinfo.cpp:1501
 msgid "Time slice"
@@ -7484,12 +7466,12 @@ msgstr "轨道 %1%: 已发现 AAC, 但解码器配置数据长为 %2%。\n"
 #: src/extract/xtr_textsubs.cpp:396
 #, boost-format
 msgid "Track %1%: An USF subtitle entry starting at timecode %2% is not well-formed XML and will be skipped.\n"
-msgstr ""
+msgstr "轨道 %1%: 开始于时间码 %2% 的 USF 字幕条目不是规范的 XML 格式，将被跳过处理。\n"
 
 #: src/extract/xtr_avc.cpp:42
 #, boost-format
 msgid "Track %1%: NAL too big. Size according to header field: %2%, available bytes in packet: %3%. This NAL is defect and will be skipped.\n"
-msgstr ""
+msgstr "轨道 %1%: NAL 太大。头部字段给出的尺寸: %2%，包中可用字节数: %3%。该 NAL 已损坏，将被跳过处理。\n"
 
 #: src/extract/xtr_textsubs.cpp:54
 #, boost-format
@@ -7549,7 +7531,7 @@ msgstr "轨道号 %1% 已被加密，且尚未实行解密。\n"
 #: src/info/mkvinfo.cpp:943
 #, boost-format
 msgid "Track number: %1% (track ID for mkvmerge & mkvextract: %2%)"
-msgstr ""
+msgstr "轨道号: %1% (mkvmerge & mkvextract 的轨道 ID: %2%)"
 
 #: src/info/mkvinfo.cpp:1031
 #, boost-format
@@ -7603,7 +7585,7 @@ msgstr "类型: %1% (%2%)"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:59
 msgid "Typical use cases include reading VOBs from a DVD (e.g. VTS_01_1.VOB, VTS_01_2.VOB, VTS_01_3.VOB) or MPEG transport streams from BluRay discs."
-msgstr ""
+msgstr "典型用例如从 DVD 读取 VOB 文件 (如 VTS_01_1.VOB、VTS_01_2.VOB、VTS_01_3.VOB) 或从 BluRay 光盘读取 MPEG 传输流。"
 
 #: src/mmg/tabs/chapters.cpp:336
 msgid "UID:"
@@ -8074,13 +8056,12 @@ msgid "add"
 msgstr "添加"
 
 #: src/mmg/tabs/input.cpp:186
-#, fuzzy
 msgid "additional parts"
-msgstr "附加"
+msgstr "添加其余部分"
 
 #: src/mmg/options/mmg.cpp:88
 msgid "always"
-msgstr ""
+msgstr "总是清除"
 
 #: src/common/stereo_mode.cpp:58
 msgid "anaglyph (cyan/red)"
@@ -8168,9 +8149,9 @@ msgid "default"
 msgstr "默认"
 
 #: src/info/mkvinfo.cpp:1048
-#, fuzzy, boost-format
+#, boost-format
 msgid "default duration: %|1$.3f|ms (%|2$.3f| frames/fields per second for a video track)"
-msgstr "默认时长: %|1$.3f|ms (对于视频轨为 %|2$.3f|)"
+msgstr "默认时长: %|1$.3f|ms (对于视频轨为 %|2$.3f| 帧/场每秒)"
 
 #: src/common/compression/zlib.cpp:73
 #, boost-format
@@ -8221,9 +8202,8 @@ msgid "encryption"
 msgstr "加密"
 
 #: src/mmg/options/mmg.cpp:87
-#, fuzzy
 msgid "even if there were warnings"
-msgstr "有警告信息"
+msgstr "成功执行或有警告信息时"
 
 #: src/mmg/jobs.cpp:350
 #: src/mmg/jobs.cpp:541
@@ -8505,19 +8485,19 @@ msgid "max. number of files:"
 msgstr "最大文件数:"
 
 #: src/common/memory.cpp:147
-#, fuzzy, boost-format
+#, boost-format
 msgid "memory.cpp/safemalloc() called from file %1%, line %2%: malloc() returned nullptr for a size of %3% bytes.\n"
-msgstr "memory.cpp/safemalloc() 由文件 %1%, 行 %2% 调用: malloc() 对 %3% 个字节返回 NULL。\n"
+msgstr "memory.cpp/safemalloc() 调用于文件 %1% 行 %2%: malloc() 对 %3% 字节的尺寸返回了 null 指针。\n"
 
 #: src/common/memory.cpp:135
-#, fuzzy, boost-format
+#, boost-format
 msgid "memory.cpp/safememdup() called from file %1%, line %2%: malloc() returned nullptr for a size of %3% bytes.\n"
-msgstr "memory.cpp/safememdup() 由文件 %1%, 行 %2% 调用: malloc() 对 %3% 个字节返回 NULL。\n"
+msgstr "memory.cpp/safememdup() 调用于文件 %1% 行 %2%: malloc() 对 %3% 字节的尺寸返回了 null 指针。\n"
 
 #: src/common/memory.cpp:163
-#, fuzzy, boost-format
+#, boost-format
 msgid "memory.cpp/saferealloc() called from file %1%, line %2%: realloc() returned nullptr for a size of %3% bytes.\n"
-msgstr "memory.cpp/saferealloc() 由文件 %1%, 行 %2% 调用: realloc() 对 %3% 个字节返回 NULL。\n"
+msgstr "memory.cpp/saferealloc() 调用于文件 %1% 行 %2%: realloc() 对 %3% 字节的尺寸返回了 null 指针。\n"
 
 #: src/propedit/target.cpp:82
 msgid "missing property name"
@@ -8708,7 +8688,7 @@ msgstr "mkvmerge 被 SIGINT 中断 (按了 Ctrl+C?)\n"
 #: src/info/mkvinfo.cpp:944
 #, boost-format
 msgid "mkvmerge/mkvextract track ID: %1%"
-msgstr ""
+msgstr "mkvmerge/mkvextract 轨道 ID: %1%"
 
 #: src/propedit/propedit_cli_parser.cpp:145
 msgid "mkvpropedit [options] <file> <actions>"
@@ -8795,9 +8775,8 @@ msgid "ogg_sync_buffer failed\n"
 msgstr "ogg_sync_buffer 失败\n"
 
 #: src/mmg/tabs/chapters.cpp:1044
-#, fuzzy
 msgid "on_entry_selected: display == nullptr. Should not have happened."
-msgstr "on_entry_selected: display == NULL。不该出现。"
+msgstr "on_entry_selected: display == nullptr。此情况不应出现。"
 
 #: src/mmg/tabs/input_extra.cpp:83
 msgid "only for I frames"
@@ -8805,7 +8784,7 @@ msgstr "仅 I 帧"
 
 #: src/mmg/options/mmg.cpp:86
 msgid "only if the run was successfull"
-msgstr ""
+msgstr "仅当成功执行时"
 
 #: src/info/mkvinfo.cpp:617
 #, boost-format
@@ -10081,4 +10060,3 @@ msgstr "是"
 
 #~ msgid "wrong usage: writing to read-only memory"
 #~ msgstr "错误用法: 写入到只读内存"
-
