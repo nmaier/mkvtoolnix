@@ -5,7 +5,7 @@ describe "mkvmerge / file concatenation, multi file I/O"
 
 files = (1..3).collect { |i| "data/vob/VTS_01_#{i}.VOB" }
 
-test_identify files[0], :verbose => true
+test_identify files[0], :verbose => true, :filter => lambda { |text| text.gsub(/other_file:[^ ]+\//, 'other_file:') }
 
 # These two must be equal.
 test_merge files[0],                     :exit_code => 1
