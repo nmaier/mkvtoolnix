@@ -123,6 +123,10 @@ class SimpleTest
       :name  => full_command_line,
       :block => lambda {
         sys "../src/mkvmerge #{full_command_line} > #{tmp}", :exit_code => options[:exit_code]
+        if options[:filter]
+          text = options[:filter].call(IO.readlines(tmp).join(''))
+          File.open(tmp, 'w') { |file| file.puts text }
+        end
         options[:keep_tmp] ? hash_file(tmp) : hash_tmp
       },
     }
