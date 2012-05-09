@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: mkvtoolnix_uk\n"
 "Report-Msgid-Bugs-To: Moritz Bunkus <moritz@bunkus.org>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2012-04-28 22:29+0200\n"
+"PO-Revision-Date: 2012-05-09 11:21+0200\n"
 "Last-Translator: Andriy Bilous'ko <arestarh@ukr.net>\n"
 "Language-Team: Ukrainian <moritz@bunkus.org>\n"
 "Language: uk\n"
@@ -916,7 +916,7 @@ msgstr "&Про програму\tF1"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:45
 msgid "&Add"
-msgstr ""
+msgstr "&Додати"
 
 #: src/mmg/mmg_dialog.cpp:294
 #: src/mmg/mmg_dialog.cpp:328
@@ -1063,9 +1063,8 @@ msgid "&Reload\tCtrl-R"
 msgstr "&Перезавантажити\tCtrl-R"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:46
-#, fuzzy
 msgid "&Remove"
-msgstr "Видалити"
+msgstr "&Видалити"
 
 #: src/mmg/header_editor/value_page.cpp:140
 msgid "&Reset"
@@ -1090,7 +1089,7 @@ msgstr "&Зберегти налаштування\tCtrl-S"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:49
 msgid "&Sort"
-msgstr ""
+msgstr "&Сортувати"
 
 #: src/mmg/jobs.cpp:510
 msgid "&Start"
@@ -1869,9 +1868,8 @@ msgid "Add &command line options"
 msgstr "&Додати параметри командного рядка"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:147
-#, fuzzy
 msgid "Add additional parts"
-msgstr "Додатки"
+msgstr "Додати додаткові частини"
 
 #: src/mmg/tabs/chapters.cpp:326
 msgid "Add chapter"
@@ -1907,7 +1905,7 @@ msgstr "Додано"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:38
 msgid "Additional source file parts"
-msgstr ""
+msgstr "Додаткові частини вхідного файла"
 
 #: src/info/mkvinfo.cpp:197
 #, boost-format
@@ -2270,7 +2268,7 @@ msgstr "Обчислення і відображення контрольних 
 
 #: src/output/p_mpeg4_p2.cpp:117
 msgid "Cannot convert non-native MPEG4 video frames into native ones if the source container provides neither timecodes nor a number of frames per second.\n"
-msgstr "Не має можливості перетворювати ненативні MPEG4 відео кадри у нативні, якщо вихідний контейнер не забезпечує підтримки ні тайм-кодів, ні кількості кадрів в секунду.\n"
+msgstr "Не має можливості перетворювати ненативні MPEG4 відео кадри у нативні, якщо вхідний контейнер не забезпечує підтримки ні тайм-кодів, ні кількості кадрів в секунду.\n"
 
 #: src/extract/xtr_vobsub.cpp:87
 #, boost-format
@@ -3086,12 +3084,11 @@ msgstr "Dirac"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:74
 msgid "Directory"
-msgstr ""
+msgstr "Тека"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:54
-#, fuzzy
 msgid "Directory:"
-msgstr "Використовувати обрану теку:"
+msgstr "Тека:"
 
 #: src/mmg/options/mmg.cpp:101
 msgid "Disable header removal compression for audio and video tracks by default"
@@ -3235,7 +3232,7 @@ msgstr "EbmlVoid (розмір: %1%)"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:52
 msgid "Edit additional source file parts"
-msgstr ""
+msgstr "Редагувати додаткові частини вхідного файла"
 
 #: src/propedit/propedit_cli_parser.cpp:170
 msgid "Edit selectors"
@@ -3571,9 +3568,8 @@ msgid "File modified"
 msgstr "Файл змінено"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:72
-#, fuzzy
 msgid "File name"
-msgstr "Назва файла: %1%"
+msgstr "Назва файла"
 
 #: src/info/mkvinfo.cpp:1311
 #, boost-format
@@ -5222,9 +5218,8 @@ msgid "Previous segment's unique ID"
 msgstr "Унікальний ID попереднього сегмента"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:53
-#, fuzzy
 msgid "Primary file name:"
-msgstr "Попередня назва файлу"
+msgstr "Назва основного файла:"
 
 #: src/mmg/options/mkvmerge.cpp:54
 msgid "Process priority:"
@@ -6748,7 +6743,7 @@ msgstr "Перший параметр повідомляє mkvextract, що не
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:57
 msgid "The following parts are read after the primary file as if they were all part of one big file."
-msgstr ""
+msgstr "Вказані частини зчитуються після основного файла так, ніби вони були частиною одного великого файла."
 
 #: src/mmg/tabs/global.cpp:596
 msgid "The format of the split size is invalid (size too small)."
@@ -7094,9 +7089,8 @@ msgid "The string 'global' works on the global tags."
 msgstr "Рядок 'global' опрацьовується для глобальних тегів."
 
 #: src/propedit/propedit_cli_parser.cpp:176
-#, fuzzy
 msgid "The string 'track:' followed by one of the chars 'a', 'b', 's' or 'v' followed by a number 'n' selects the nth audio, button, subtitle or video track (e.g. '--edit track:a2'). Numbering starts at 1."
-msgstr "Рядок 'track:' використовуючи один із символів 'a', 'b', 's' або 'v', супроводжуваний числом 'n', можна вибрати n-нні аудіо, маркер, субтитри або відеодоріжку (наприклад, '--edit track:a2')."
+msgstr "Рядок 'track:' використовуючи один із символів 'a', 'b', 's' або 'v', супроводжуваний числом 'n', можна вибрати n-нні аудіо, маркер, субтитри або відеодоріжку (наприклад, '--edit track:a2'). Перелік починається з 1."
 
 #: src/propedit/propedit_cli_parser.cpp:178
 msgid "The string 'track:=uid' with 'uid' being a number selects the track whose 'track UID' element equals 'uid'."
@@ -7107,9 +7101,8 @@ msgid "The string 'track:@number' with 'number' being a number selects the track
 msgstr "Використовуючи конcтрукцію 'track:@number' з 'number', що є числом, можна вибрати доріжку з елементом 'track number' рівним 'number'."
 
 #: src/propedit/propedit_cli_parser.cpp:175
-#, fuzzy
 msgid "The string 'track:n' with 'n' being a number selects the nth track. Numbering starts at 1."
-msgstr "Використовуючи конcтрукцію 'track:n' з 'n', що є числом, можна вибрати n-нну доріжку."
+msgstr "Використовуючи конcтрукцію 'track:n' з 'n', що є числом, можна вибрати n-нну доріжку. Перелік починається з 1."
 
 #: src/propedit/propedit_cli_parser.cpp:172
 msgid "The strings 'info', 'segment_info' or 'segmentinfo' select the segment information element. This is also the default until the first '--edit' option is found."
@@ -7537,7 +7530,7 @@ msgstr "Доріжка %1%: запис субтитрів USF, що почина
 #: src/extract/xtr_avc.cpp:42
 #, boost-format
 msgid "Track %1%: NAL too big. Size according to header field: %2%, available bytes in packet: %3%. This NAL is defect and will be skipped.\n"
-msgstr ""
+msgstr "Доріжка %1%: NAL надто великий. Розмір згідно поля заголовка: %2%, наявно байт в пакеті: %3%. Цей NAL є дефектним і буде пропущений.\n"
 
 #: src/extract/xtr_textsubs.cpp:54
 #, boost-format
@@ -7651,7 +7644,7 @@ msgstr "Тип: %1% (%2%)"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:59
 msgid "Typical use cases include reading VOBs from a DVD (e.g. VTS_01_1.VOB, VTS_01_2.VOB, VTS_01_3.VOB) or MPEG transport streams from BluRay discs."
-msgstr ""
+msgstr "Типові випадки використання включають зчитування VOBів з DVD (наприклад, VTS_01_1.VOB, VTS_01_2.VOB, VTS_01_3.VOB) або транспортних потоків MPEG з дисків BluRay."
 
 #: src/mmg/tabs/chapters.cpp:336
 msgid "UID:"
@@ -8124,9 +8117,8 @@ msgid "add"
 msgstr "Додати"
 
 #: src/mmg/tabs/input.cpp:186
-#, fuzzy
 msgid "additional parts"
-msgstr "Додатки"
+msgstr "додаткові частини"
 
 #: src/mmg/options/mmg.cpp:88
 msgid "always"
@@ -9863,4 +9855,3 @@ msgstr "Так"
 
 #~ msgid "wrong usage: writing to read-only memory"
 #~ msgstr "wrong usage: запис тільки до \"пам'яті для читання\""
-
