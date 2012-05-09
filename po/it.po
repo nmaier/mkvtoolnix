@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: it\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2012-05-09 12:03+0100\n"
-"Last-Translator: bovirus <bovirus@live.it>\n"
+"PO-Revision-Date: 2012-05-09 22:30+0100\n"
+"Last-Translator: Stefano Codari <l.stickell@yahoo.it>\n"
 "Language-Team: Italian <moritz@bunkus.org>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -318,7 +318,7 @@ msgid ""
 "  --list-languages         Lists all ISO639 languages and their\n"
 "                           ISO639-2 codes.\n"
 msgstr ""
-"  --list-languages         Elenca tutte le lingue ISO639  e relativi\n"
+"  --list-languages         Elenca tutte le lingue ISO639 e relativi\n"
 "                           codici ISO639-2.\n"
 
 #: src/merge/mkvmerge.cpp:212
@@ -345,11 +345,11 @@ msgstr "  --no-global-tags         Non mantiene i tag globali del file sorgente.
 
 #: src/merge/mkvmerge.cpp:256
 msgid "  --output-charset <cset>  Output messages in this charset\n"
-msgstr "  --output-charset <setcaratteri> Messaggi di output con questo set caratteri.\n"
+msgstr "  --output-charset <setcaratteri>  Messaggi di output con questo set caratteri.\n"
 
 #: src/merge/mkvmerge.cpp:252
 msgid "  --priority <priority>    Set the priority mkvmerge runs with.\n"
-msgstr "  --priority <priorità>   Imposta la priorità di esecuzione di mkvmerge.\n"
+msgstr "  --priority <priorità>    Imposta la priorità di esecuzione di mkvmerge.\n"
 
 #: src/merge/mkvmerge.cpp:95
 msgid ""
@@ -361,7 +361,7 @@ msgstr ""
 
 #: src/merge/mkvmerge.cpp:94
 msgid "  --segmentinfo <file>     Read segment information from the file.\n"
-msgstr "  --segmentinfo <file>    Legge informazione segmento dal file.\n"
+msgstr "  --segmentinfo <file>     Legge informazione segmento dal file.\n"
 
 #: src/merge/mkvmerge.cpp:114
 msgid ""
@@ -427,7 +427,7 @@ msgstr "  --timecode-scale <n>     Forza il rapporto di scala del timecode a n.\
 
 #: src/merge/mkvmerge.cpp:208
 msgid "  --timecodes <TID:file>   Read the timecodes to be used from a file.\n"
-msgstr "  --timecodes <TID:file>  Legge i timecode da usare da un file.\n"
+msgstr "  --timecodes <TID:file>   Legge i timecode da usare da un file.\n"
 
 #: src/merge/mkvmerge.cpp:80
 msgid "  --title <title>          Title for this output file.\n"
@@ -3486,7 +3486,7 @@ msgstr "Impossibile creare il file '%1%': %2% (%3%)\n"
 #: src/extract/xtr_tta.cpp:44
 #, boost-format
 msgid "Failed to create the temporary file '%1%': %2% (%3%)\n"
-msgstr "Impossibile creare il file temporaneo  '%1%': %2% (%3%)\n"
+msgstr "Impossibile creare il file temporaneo '%1%': %2% (%3%)\n"
 
 #: src/extract/xtr_textsubs.cpp:362
 #, boost-format
@@ -3652,11 +3652,11 @@ msgstr "Forza il lettore Matroska ad usare un pacchettizzatore generico diretto 
 
 #: src/mmg/tabs/input_format.cpp:236
 msgid "Forces the NALU size length to a certain number of bytes. This parameter is only available for AVC/h.264 elementary streams read from AVC/h.264 ES files, AVIs or Matroska files created with '--engage allow_avc_in_vwf_mode'. It defaults to 4 bytes, but there are files which do not contain a frame or slice that is bigger than 65535 bytes. For such files you can use this parameter and decrease the size to 2."
-msgstr "Forza la lunghezza della dimensione NALU a un certo numero di byte. Questo parametro è disponibile solo per flussi elementary AVC/h.264 letti da file AVC/h.264 ES, AVI o Matroska creati con  '--engage allow_avc_in_vwf_mode'. Predefinito è 4 byte, ma ci sono file che non contengono un frame o una fetta più grande di 65535 byte. Per alcuni file si può usare questo parametro e decrementare la dimensione a 2."
+msgstr "Forza la lunghezza della dimensione NALU a un certo numero di byte. Questo parametro è disponibile solo per flussi elementary AVC/h.264 letti da file AVC/h.264 ES, AVI o Matroska creati con '--engage allow_avc_in_vwf_mode'. Predefinito è 4 byte, ma ci sono file che non contengono un frame o una fetta più grande di 65535 byte. Per alcuni file si può usare questo parametro e decrementare la dimensione a 2."
 
 #: src/mmg/cli_options_dlg.cpp:104
 msgid "Forces the timecode scale factor to REPLACEME. You have to replace REPLACEME with a value between 1000 and 10000000 or with -1. Normally mkvmerge will use a value of 1000000 which means that timecodes and durations will have a precision of 1ms. For files that will not contain a video track but at least one audio track mkvmerge will automatically choose a timecode scale factor so that all timecodes and durations have a precision of one sample. This causes bigger overhead but allows precise seeking and extraction. If the magical value -1 is used then mkvmerge will use sample precision even if a video track is present."
-msgstr "Forza il fattore di scala timecode a SOSTITUISCIMI. E' necessario sostituire SOSTITUISCIMI con un valore tra 1000 e 10000000 or con -1. Normalmente mkvmerge usa un valore di 10000000 che significa che il timecode e la durata avranno una precisione di 1ms. Per file che non conterranno una traccia video ma almeno una traccia audio mkvmerge sceglierà automaticamente un fattore di scala timecode e durata che avranno la precisione di un campione. Questo causa un grande lavoro ma  permette una precisione nel posizionamento e nell'estrazione. Se è usato il valore -1 mkvmerge userà la precisione di un campione anche se è presente una traccia video.  "
+msgstr "Forza il fattore di scala timecode a SOSTITUISCIMI. E' necessario sostituire SOSTITUISCIMI con un valore tra 1000 e 10000000 or con -1. Normalmente mkvmerge usa un valore di 10000000 che significa che il timecode e la durata avranno una precisione di 1ms. Per file che non conterranno una traccia video ma almeno una traccia audio mkvmerge sceglierà automaticamente un fattore di scala timecode e durata che avranno la precisione di un campione. Questo causa un grande lavoro ma permette una precisione nel posizionamento e nell'estrazione. Se è usato il valore -1 mkvmerge userà la precisione di un campione anche se è presente una traccia video."
 
 #: src/mmg/tabs/input.cpp:188
 msgid "Format specific options"
@@ -3706,7 +3706,7 @@ msgstr "Frame con dimensione %1%%2%%3%"
 
 #: src/mmg/tabs/input_extra.cpp:130
 msgid "Free-form edit field for user defined options for this track. What you input here is added after all the other options mmg adds so that you could overwrite any of mmg's options for this track. All occurences of the string \"<TID>\" will be replaced by the track's track ID."
-msgstr "Campo a modifica libera per opzione definita da utente per questa traccia. Quello inserito qui è aggiunto dopo tutte le altre opzioni mmg in modo da poter sovrascrivere qualsiasi opzione 'mmg' per questa traccia. Tutte le occorrenze della stringa  \"<TID>\" verranno sostituite dall'ID traccia."
+msgstr "Campo a modifica libera per opzione definita da utente per questa traccia. Quello inserito qui è aggiunto dopo tutte le altre opzioni mmg in modo da poter sovrascrivere qualsiasi opzione 'mmg' per questa traccia. Tutte le occorrenze della stringa \"<TID>\" verranno sostituite dall'ID traccia."
 
 #: src/info/mkvinfo.cpp:706
 #, boost-format
@@ -3861,7 +3861,7 @@ msgstr "Se l'intervallo del timecode è prefissato da un '+' il suo contenuto ve
 
 #: src/mmg/tabs/global.cpp:262
 msgid "If a start timecode is left out then the previous range's end timecode is used, or the start of the file if there was no previous range."
-msgstr "Se è usato  il timecode iniziale è tralasciato rispetto al precedente intervallo fine timecode, o l'inizio del file non aveva un precedente intervallo."
+msgstr "Se è usato il timecode iniziale è tralasciato rispetto al precedente intervallo fine timecode, o l'inizio del file non aveva un precedente intervallo."
 
 #: src/mmg/options/mmg.cpp:68
 msgid "If checked mmg will ask for confirmation before overwriting existing files, or before adding a new job if there's an old job whose description matches the new one."
@@ -4023,7 +4023,7 @@ msgstr "Opzione booleana specificata non valida in '--forced-track %1%'.\n"
 #: src/merge/mkvmerge.cpp:1393
 #, boost-format
 msgid "Invalid boolean specified in '--aac-is-sbr %1%'.\n"
-msgstr "Booleano non valido specificato in  '--aac-is-sbr %1%'.\n"
+msgstr "Booleano non valido specificato in '--aac-is-sbr %1%'.\n"
 
 #: src/propedit/propedit_cli_parser.cpp:54
 #, boost-format
@@ -4033,7 +4033,7 @@ msgstr "Specifiche modificate (%3%) non valide in '%1% %2%'.\n"
 #: src/merge/mkvmerge.cpp:1067
 #, boost-format
 msgid "Invalid compression option specified in '--compression %1%'.\n"
-msgstr "Opzione compressione non valida specificata in  '--compression %1%'.\n"
+msgstr "Opzione compressione non valida specificata in '--compression %1%'.\n"
 
 #: src/merge/mkvmerge.cpp:1060
 #, boost-format
@@ -4165,12 +4165,12 @@ msgstr "Fornito numero max non valido per le suddivisioni."
 #: src/common/strings/parsing.cpp:170
 #, boost-format
 msgid "Invalid number of minutes: %1% > 59"
-msgstr "Numero non valido per i minuti:  %1% > 59"
+msgstr "Numero non valido per i minuti: %1% > 59"
 
 #: src/common/strings/parsing.cpp:172
 #, boost-format
 msgid "Invalid number of seconds: %1% > 59"
-msgstr "Numero non valido per i secondi:  %1% > 59"
+msgstr "Numero non valido per i secondi: %1% > 59"
 
 #: src/common/chapters/chapters.cpp:194
 #, boost-format
@@ -4251,28 +4251,28 @@ msgstr "Opzione tag non valida. Nessun ID traccia specificato in '%1% %2%'.\n"
 #: src/merge/mkvmerge.cpp:785
 #, boost-format
 msgid "Invalid time for '--split' in '--split %1%'. Additional error message: %2%\n"
-msgstr "Tempo non valido per  '--split' in '--split %1%'. Messaggio aggiuntivo errore: %2%\n"
+msgstr "Tempo non valido per '--split' in '--split %1%'. Messaggio aggiuntivo errore: %2%\n"
 
 #: src/merge/mkvmerge.cpp:806
 #, boost-format
 msgid "Invalid time for '--split' in '--split %1%'. Additional error message: %2%.\n"
-msgstr "Tempo non valido per  '--split' in '--split %1%'. Messaggio aggiuntivo errore: %2%.\n"
+msgstr "Tempo non valido per '--split' in '--split %1%'. Messaggio aggiuntivo errore: %2%.\n"
 
 #: src/merge/mkvmerge.cpp:550
 #, boost-format
 msgid "Invalid track ID in '%1% %2%'.\n"
-msgstr "ID traccia non valido in  '%1% %2%'.\n"
+msgstr "ID traccia non valido in '%1% %2%'.\n"
 
 #: src/merge/mkvmerge.cpp:577
 #: src/merge/mkvmerge.cpp:1189
 #, boost-format
 msgid "Invalid track ID specified in '%1% %2%'.\n"
-msgstr "ID traccia non valido specificato in  '%1% %2%'.\n"
+msgstr "ID traccia non valido specificato in '%1% %2%'.\n"
 
 #: src/merge/mkvmerge.cpp:1133
 #, boost-format
 msgid "Invalid track ID specified in '--%1% %2%'.\n"
-msgstr "ID traccia non valido specificato in  '--%1% %2%'.\n"
+msgstr "ID traccia non valido specificato in '--%1% %2%'.\n"
 
 #: src/merge/mkvmerge.cpp:1390
 #, boost-format
@@ -4645,7 +4645,7 @@ msgstr "Nome file mancante"
 
 #: src/mmg/mmg.cpp:238
 msgid "Missing file name after for the option '--edit-headers'."
-msgstr "Nome file mancante dopo l'opzione  '--edit-headers'."
+msgstr "Nome file mancante dopo l'opzione '--edit-headers'."
 
 #: src/input/r_ogm.cpp:927
 msgid "Missing header/comment packets for stream. This file is broken but should be muxed correctly. If not please contact the author Moritz Bunkus <moritz@bunkus.org>.\n"
@@ -4662,7 +4662,7 @@ msgstr "Un numero esadecimale mancante"
 #: src/extract/extract_cli_parser.cpp:243
 #, boost-format
 msgid "Missing output file name in argument '%1%'.\n"
-msgstr "Nome file destinazione mancante nell'argomento  '%1%'.\n"
+msgstr "Nome file destinazione mancante nell'argomento '%1%'.\n"
 
 #: src/merge/mkvmerge.cpp:819
 #, boost-format
@@ -4700,7 +4700,7 @@ msgstr "E' stato fornito più di un nome file per un singolo allegato. '%1%' ver
 #: src/merge/output_control.cpp:1008
 #, boost-format
 msgid "More than one track is to be appended to the track %1% from file no. %2% ('%3%'). The argument for '--append-to' was invalid.\n"
-msgstr "Più di una traccia è stata appesa alla traccia %1% dal file no. %2% ('%3%'). L'argomento per  non è valido.\n"
+msgstr "Più di una traccia è stata appesa alla traccia %1% dal file no. %2% ('%3%'). L'argomento per non è valido.\n"
 
 #: src/extract/tracks.cpp:72
 #, boost-format
@@ -6177,7 +6177,7 @@ msgstr "File tag (*.xml)|*.xml|%s"
 #: src/mmg/tabs/input_general.cpp:272
 #, c-format, boost-format
 msgid "Tag files (*.xml;*.txt)|*.xml;*.txt|%s"
-msgstr "File tag  (*.xml;*.txt)|*.xml;*.txt|%s"
+msgstr "File tag (*.xml;*.txt)|*.xml;*.txt|%s"
 
 #: src/propedit/propedit_cli_parser.cpp:181
 msgid "Tag selectors"
@@ -6221,11 +6221,11 @@ msgstr "File testuali (*.txt);;All files (*.*)"
 #: src/mmg/jobs.cpp:417
 #, c-format, boost-format
 msgid "Text files (*.txt)|*.txt|%s"
-msgstr "File testuali  (*.txt)|*.txt|%s"
+msgstr "File testuali (*.txt)|*.txt|%s"
 
 #: src/info/wxwidgets_ui.cpp:282
 msgid "Text files (*.txt)|*.txt|All files|*.*"
-msgstr "File testuali  (*.txt)|*.txt|All files|*.*"
+msgstr "File testuali (*.txt)|*.txt|All files|*.*"
 
 #: src/input/r_vobsub.cpp:235
 msgid "The .idx file does not contain an 'id: ...' line to indicate the language.\n"
@@ -6252,7 +6252,7 @@ msgstr "L'ID codec delle due tracce sono differenti: %1% e %2%"
 #: src/output/p_flac.cpp:101
 #, boost-format
 msgid "The FLAC header data is different for the two tracks (lengths: %1% and %2%)"
-msgstr "I dati dell'intestazione FLAC  sono differenti per le due tracce (durata: %1% e %2%)"
+msgstr "I dati dell'intestazione FLAC sono differenti per le due tracce (durata: %1% e %2%)"
 
 #: src/output/p_flac.cpp:48
 msgid "The FLAC headers could not be parsed: the stream info structure was not found.\n"
@@ -7814,7 +7814,7 @@ msgstr "Larghezza video"
 
 #: src/mpegparser/M2VParser.cpp:163
 msgid "Video ended with a shortened group of pictures. Some frames have been dropped. You may want to fix the MPEG2 video stream before attempting to multiplex it.\n"
-msgstr "Il video termina con un piccolo gruppo di immagini. Alcuni frame sono stati scartati. Potresti provare a sistemare il flusso video MPEG2  prima di effettuare il multiplexing.\n"
+msgstr "Il video termina con un piccolo gruppo di immagini. Alcuni frame sono stati scartati. Potresti provare a sistemare il flusso video MPEG2 prima di effettuare il multiplexing.\n"
 
 #: src/common/property_element.cpp:136
 msgid "Video interlaced flag"
@@ -8616,7 +8616,7 @@ msgstr "GUI mkvmerge: errore"
 
 #: src/mmg/tabs/global.cpp:299
 msgid "mkvmerge can read CUE sheets for audio CDs and automatically convert them to chapters. This option controls how the chapter names are created. The sequence '%p' is replaced by the track's PERFORMER, the sequence '%t' by the track's TITLE, '%n' by the track's number and '%N' by the track's number padded with a leading 0 for track numbers < 10. The rest is copied as is. If nothing is entered then '%p - %t' will be used."
-msgstr "mkvmerge può leggere i CUE sheet di un CD audio e convertirli  automaticamente in capitoli. Questa opzione controlla come vengono creati i nomi capitolo. La sequenza '%p' è sostituita dall'AUTORE traccia, la sequenza '%t' dal TITOLO traccia, '%n' dal numero traccia e '%N' dal numero traccia riempito con una sequenza di 0 per i numeri traccia < 10. Il resto è copiato così com'è. Se non viene inserito nulla verrà usato '%p - %t'."
+msgstr "mkvmerge può leggere i CUE sheet di un CD audio e convertirli automaticamente in capitoli. Questa opzione controlla come vengono creati i nomi capitolo. La sequenza '%p' è sostituita dall'AUTORE traccia, la sequenza '%t' dal TITOLO traccia, '%n' dal numero traccia e '%N' dal numero traccia riempito con una sequenza di 0 per i numeri traccia < 10. Il resto è copiato così com'è. Se non viene inserito nulla verrà usato '%p - %t'."
 
 #: src/mmg/tabs/input_general.cpp:187
 #: src/mmg/tabs/input_general.cpp:189
