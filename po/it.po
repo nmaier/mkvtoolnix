@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: it\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2012-04-14 23:29+0200\n"
-"Last-Translator: Stefano Codari <l.stickell@yahoo.it>\n"
+"PO-Revision-Date: 2012-05-09 12:03+0100\n"
+"Last-Translator: bovirus <bovirus@live.it>\n"
 "Language-Team: Italian <moritz@bunkus.org>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -3857,11 +3857,11 @@ msgstr "Se un capitolo non è marcato come 'abilitato' nel riproduttore potrebbe
 
 #: src/mmg/tabs/global.cpp:264
 msgid "If a range's start timecode is prefixed with '+' then its content will be written to the same file as the previous range. Otherwise a new file will be created for this range."
-msgstr ""
+msgstr "Se l'intervallo del timecode è prefissato da un '+' il suo contenuto verrà sovrascritto nello stesso file dal precedente intervallo. Altrimenti verrà creato un nuovo file per questo intervallo."
 
 #: src/mmg/tabs/global.cpp:262
 msgid "If a start timecode is left out then the previous range's end timecode is used, or the start of the file if there was no previous range."
-msgstr ""
+msgstr "Seè usato  il timecode iniziale è tralasciato rispetto al precedente intervallo fine timecode, o l'inzio del file non aveva unprecedente intervallo."
 
 #: src/mmg/options/mmg.cpp:68
 msgid "If checked mmg will ask for confirmation before overwriting existing files, or before adding a new job if there's an old job whose description matches the new one."
@@ -5732,11 +5732,11 @@ msgstr "Seleziona i valori da applicare"
 
 #: src/mmg/tabs/input_extra.cpp:124
 msgid "Selects for which blocks mkvmerge will produce index entries ( = cue entries). \"default\" is a good choice for almost all situations."
-msgstr ""
+msgstr "Seleziona per quale blocchi mkvmerge produrrà elementi indice (= elemnti taglio). \"default\" è una buona scelta per la maggior parte delle situazioni."
 
 #: src/mmg/tabs/input_format.cpp:248
 msgid "Selects the character set a subtitle file or chapter information was written with. Only needed for non-UTF encoded subtitle files or for files with chapter information (e.g. OGM, MP4) for which mkvmerge does not detect the encoding correctly."
-msgstr ""
+msgstr "Seleziona il set caratteri per un file sottotitoli o le informazioni capitolo che verranno scritte. Necessario solo per file sottotitoli codificati non-UTF o per file con informazione capitolo (es. OGM, MP4) per cui mkvmerge non rileva correttamente al codifica."
 
 #: src/mmg/mmg_dialog.cpp:285
 msgid "Set &output file"
@@ -5753,6 +5753,9 @@ msgid ""
 "be used if no language found matches the\n"
 "user preference."
 msgstr ""
+"Imposta se questa traccia (audio, video o sottotitoli)\n"
+"DOVREBBE essere usata se non viene trovato nessuna\n"
+"lingua che sodisfa le impostazioni utente."
 
 #: src/common/property_element.cpp:118
 #: src/mmg/header_editor/frame.cpp:396
@@ -5787,7 +5790,7 @@ msgstr "Imposta valori"
 
 #: src/propedit/propedit_cli_parser.cpp:156
 msgid "Sets a property to the value if it exists and add it otherwise"
-msgstr ""
+msgstr "Imposta una proprietà al valore se esiste e la aggiunge altrimenti"
 
 #: src/propedit/propedit_cli_parser.cpp:152
 msgid "Sets the Matroska file section that all following add/set/delete actions operate on (see below and man page for syntax)"
@@ -5795,11 +5798,11 @@ msgstr ""
 
 #: src/propedit/propedit_cli_parser.cpp:149
 msgid "Sets the Matroska parser mode to 'fast' (default) or 'full'"
-msgstr ""
+msgstr "Imposta il modo analisi Matroska a 'veloce' (predefinito) o a 'completo'"
 
 #: src/mmg/tabs/input_extra.cpp:126
 msgid "Sets the compression algorithm to be used for this track. If no option is selected mkvmerge will decide whether or not to compress and which algorithm to use based on the track type. Most track types are not compressed at all. "
-msgstr ""
+msgstr "Imposta l'algoritmo di compressione che verrà usato per questa traccia. Se non è selezionata nessuna opzione mkvmerge deciderà se comprimere o no e quale algoritmo verrà usato in base al tipo di traccia. La maggior parte delle tracce non saranbno compresse."
 
 #: src/mmg/tabs/input_format.cpp:251
 msgid "Sets the cropping parameters. Must be comma-separated list of four numbers for the cropping to be used at the left, top, right and bottom."
@@ -5843,7 +5846,7 @@ msgstr "Impostazioni: %1%"
 
 #: src/mmg/cli_options_dlg.cpp:86
 msgid "Several options that control the overall output that mkvmerge creates."
-msgstr ""
+msgstr "Numerosi opzioni che controllano il tipo di oggetto destinazioen creato da mkvmerge."
 
 #: src/input/r_real.cpp:557
 #, boost-format
@@ -6226,12 +6229,12 @@ msgstr "File testuali  (*.txt)|*.txt|All files|*.*"
 
 #: src/input/r_vobsub.cpp:235
 msgid "The .idx file does not contain an 'id: ...' line to indicate the language.\n"
-msgstr ""
+msgstr "Il file .idx non contiene una linea 'id: ...' che indica la lingua.\n"
 
 #: src/output/p_aac.cpp:204
 #, boost-format
 msgid "The AAC profiles are different: %1% and %2%"
-msgstr ""
+msgstr "I profili AAC sono differenti: %1% e %2%"
 
 #: src/input/r_qtmp4.cpp:1577
 msgid "The AVC video track is missing the 'CTTS' atom for frame timecode offsets. However, AVC/h.264 allows frames to have more than the traditional one (for P frames) or two (for B frames) references to other frames. The timecodes for such frames will be out-of-order, and the 'CTTS' atom is needed for getting the timecodes right. As it is missing the timecodes for this track might be wrong. You should watch the resulting file and make sure that it looks like you expected it to.\n"
@@ -6240,30 +6243,30 @@ msgstr ""
 #: src/extract/tracks.cpp:278
 #, boost-format
 msgid "The CUE sheet for track %1% will be written to '%2%'.\n"
-msgstr ""
+msgstr "Il CUE sheet per la traccia %1% verrà scritto in '%2%'.\n"
 
 #: src/merge/pr_generic.h:467
 msgid "The CodecID of the two tracks is different: %1% and %2%"
-msgstr ""
+msgstr "L'ID codec delle due tracce sono differenti: %1% e %2%"
 
 #: src/output/p_flac.cpp:101
 #, boost-format
 msgid "The FLAC header data is different for the two tracks (lengths: %1% and %2%)"
-msgstr ""
+msgstr "I dati dell'intestazione FLAC  sono differenti per le due tracce (durata: %1% e %2%)"
 
 #: src/output/p_flac.cpp:48
 msgid "The FLAC headers could not be parsed: the stream info structure was not found.\n"
-msgstr ""
+msgstr "L'intestazione FLAC non può essere analizzata: struttura info flusso non trovata.\n"
 
 #: src/output/p_video.cpp:106
 #, boost-format
 msgid "The FPS is 0.0 but the reader did not provide a timecode for a packet. %1%\n"
-msgstr ""
+msgstr "Il FPS è 0.0 ma il lettore non ha fornito un timecode per il pacchetto. %1%\n"
 
 #: src/mmg/tabs/input.cpp:1361
 #, c-format, boost-format
 msgid "The FPS setting for track nr. %s in file '%s' is invalid."
-msgstr ""
+msgstr "Le impostazioni FPS per la traccia n. %s nel file '%s' non sono valide."
 
 #: src/merge/mkvmerge.cpp:1216
 #, boost-format
@@ -9434,4 +9437,3 @@ msgstr "sì"
 
 #~ msgid "wavpack_reader: Could not open the file."
 #~ msgstr "wavpack_reader: Impossibile aprire il file."
-
