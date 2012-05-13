@@ -111,15 +111,16 @@ GUI
 将输出可用翻译的列表。
 .RE
 .PP
-\fB\-\-debug\fR \fItopic\fR
+\fB\-\-debug\fR \fI主题\fR
 .RS 4
-Turn on debugging for a specific feature\&. This option is only useful for developers\&.
+为特定功能开启调试。该选项仅对开发者有用。
 .RE
 .PP
-\fB\-\-engage\fR \fIfeature\fR
+\fB\-\-engage\fR \fI功能\fR
 .RS 4
-Turn on experimental features\&. A list of available features can be requested with
-\fBmkvinfo \-\-engage list\fR\&. These features are not meant to be used in normal situations\&.
+开启实验性功能。可用功能列表可通过
+\fBmkvinfo \-\-engage list\fR
+获取。通常情况下不应该使用这些功能。
 .RE
 .PP
 \fB\-v\fR, \fB\-\-verbose\fR
@@ -156,7 +157,7 @@ download_url）。
 此选项仅当程序附带 libcurl 支持编译时可用。
 .RE
 .PP
-\fB@\fR\fIoptions\-file\fR
+\fB@\fR\fI选项文件\fR
 .RS 4
 从文件
 \fI选项文件\fR
@@ -170,14 +171,14 @@ download_url）。
 .RS 4
 .\}
 .nf
-# Be more verbose
+# 更为详尽
 \-v
 \-v
-# Parse input\&.mkv
-input\&.mkv
-# and write the output to info\&.txt
+# 解析 输入\&.mkv
+输入\&.mkv
+# 并将输出信息写入 信息\&.txt
 \-\-redirect\-output
-info\&.txt
+信息\&.txt
 .fi
 .if n \{\
 .RE
@@ -266,35 +267,34 @@ Matroska(TM)
 .PP
 有时文本中的特殊字符必须或应该转义。转义规则很简单: 用反斜杠后接一字符替换需要转义的各字符。
 .PP
-The rules are: \*(Aq \*(Aq (a space) becomes \*(Aq\es\*(Aq, \*(Aq"\*(Aq (double quotes) becomes \*(Aq\e2\*(Aq, \*(Aq:\*(Aq becomes \*(Aq\ec\*(Aq, \*(Aq#\*(Aq becomes \*(Aq\eh\*(Aq and \*(Aq\e\*(Aq (a single backslash) itself becomes \*(Aq\e\e\*(Aq\&.
-.SH "ENVIRONMENT VARIABLES"
+规则为: \*(Aq \*(Aq (空格) 变为 \*(Aq\es\*(Aq、\*(Aq"\*(Aq (双引号) 变为 \*(Aq\e2\*(Aq、\*(Aq:\*(Aq 变为 \*(Aq\ec\*(Aq、\*(Aq#\*(Aq 变为 \*(Aq\eh\*(Aq，而 \*(Aq\e\*(Aq (单个反斜杠) 自己则变为 \*(Aq\e\e\*(Aq。
+.SH "环境变量"
 .PP
 
 \fBmkvinfo\fR(1)
-uses the default variables that determine the system\*(Aqs locale (e\&.g\&.
+会使用决定系统区域设置的默认变量 (如
 \fILANG\fR
-and the
+与
 \fILC_*\fR
-family)\&. Additional variables:
+族)。其他变量包括:
 .PP
-\fIMKVTOOLNIX_DEBUG\fR and its short form \fIMTX_DEBUG\fR
+\fIMKVTOOLNIX_DEBUG\fR 及其缩写形式 \fIMTX_DEBUG\fR
 .RS 4
-The content is treated as if it had been passed via the
+内容将被当作通过
 \fB\-\-debug\fR
-option\&.
+选项传递的参数对待。
 .RE
 .PP
-\fIMKVTOOLNIX_ENGAGE\fR and its short form \fIMTX_ENGAGE\fR
+\fIMKVTOOLNIX_ENGAGE\fR 及其缩写形式 \fIMTX_ENGAGE\fR
 .RS 4
-The content is treated as if it had been passed via the
+内容将被当作通过
 \fB\-\-engage\fR
-option\&.
+选项传递的参数对待。
 .RE
 .PP
-\fIMKVTOOLNIX_OPTIONS\fR and its short form \fIMTX_OPTIONS\fR
+\fIMKVTOOLNIX_OPTIONS\fR 及其缩写形式 \fIMTX_OPTIONS\fR
 .RS 4
-The content is split on white space\&. The resulting partial strings are treated as if it had been passed as command line options\&. If you need to pass special characters (e\&.g\&. spaces) then you have to escape them (see
-the section about escaping special characters in text)\&.
+内容将在空白处切割。最终得到的字符串部分将按命令行选项的格式处理。如果您需要传递特殊字符 (如空白) 则需要转义 (参见关于转义文本中特殊字符的段落)。
 .RE
 .SH "参阅"
 .PP
