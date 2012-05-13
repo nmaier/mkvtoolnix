@@ -87,12 +87,13 @@ private:
   int64_t m_bytes_in_file, m_first_timecode_in_file, m_first_discarded_timecode, m_last_discarded_timecode_and_duration, m_discarded_duration;
   int64_t m_min_timecode_in_cluster, m_max_timecode_in_cluster;
   int64_t m_attachments_size;
+  bool m_first_video_keyframe_seen;
   mm_io_c *m_out;
 
   std::vector<split_point_t> m_split_points;
   std::vector<split_point_t>::iterator m_current_split_point;
 
-  bool m_discarding, m_debug_splitting, m_debug_packets, m_debug_duration;
+  bool m_discarding, m_debug_splitting, m_debug_packets, m_debug_duration, m_debug_rendering;
 
 public:
   cluster_helper_c();

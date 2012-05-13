@@ -46,7 +46,7 @@ cluster_helper_c::cluster_helper_c()
   , m_cluster_content_size(0)
   , m_max_timecode_and_duration(0)
   , m_max_video_timecode_rendered(0)
-  , m_previous_cluster_tc(0)
+  , m_previous_cluster_tc{-1}
   , m_num_cue_elements(0)
   , m_header_overhead(-1)
   , m_timecode_offset(0)
@@ -59,12 +59,14 @@ cluster_helper_c::cluster_helper_c()
   , m_min_timecode_in_cluster(-1)
   , m_max_timecode_in_cluster(-1)
   , m_attachments_size(0)
+  , m_first_video_keyframe_seen{}
   , m_out(nullptr)
   , m_current_split_point(m_split_points.begin())
   , m_discarding{false}
   , m_debug_splitting{debugging_requested("cluster_helper|splitting")}
   , m_debug_packets{  debugging_requested("cluster_helper|cluster_helper_packets")}
   , m_debug_duration{ debugging_requested("cluster_helper|cluster_helper_duration")}
+  , m_debug_rendering{debugging_requested("cluster_helper|cluster_helper_rendering")}
 {
 }
 
@@ -87,14 +89,29 @@ cluster_helper_c::render_before_adding_if_necessary(packet_cptr &packet) {
              % packet->source->m_ti.m_id % packet->source->m_ti.m_fname % packet->timecode          % packet->duration
              % packet->bref              % packet->fref                 % packet->assigned_timecode % format_timecode(timecode_delay));
 
-  if (   (std::numeric_limits<int16_t>::max() < timecode_delay)
-      || (std::numeric_limits<int16_t>::min() > timecode_delay)
-      || (packet->gap_following && !m_packets.empty())
-      || ((packet->assigned_timecode - timecode) > g_max_ns_per_cluster)
-      || ((packet->source == g_video_packetizer) && packet->is_key_frame())) {
-    render();
-    prepare_new_cluster();
-  }
+  bool is_video_keyframe = (packet->source == g_video_packetizer) && packet->is_key_frame();
+  bool do_render         = (std::numeric_limits<int16_t>::max() < timecode_delay)
+                        || (std::numeric_limits<int16_t>::min() > timecode_delay)
+                        || (   (std::max<int64_t>(0, m_min_timecode_in_cluster) > m_previous_cluster_tc)
+                            && (packet->assigned_timecode                       > m_min_timecode_in_cluster)
+                            && (!g_video_packetizer || !is_video_keyframe || m_first_video_keyframe_seen)
+                            && (   (packet->gap_following && !m_packets.empty())
+                                || ((packet->assigned_timecode - timecode) > g_max_ns_per_cluster)
+                                || is_video_keyframe));
+
+  if (is_video_keyframe)
+    m_first_video_keyframe_seen = true;
+
+  mxdebug_if(m_debug_rendering,
+             boost::format("render check cur_tc %9% min_tc_ic %1% prev_cl_tc %2% test %3% is_vid_and_key %4% tc_delay %5% gap_following_and_not_empty %6% cur_tc>min_tc_ic %8% first_video_key_seen %10% do_render %7%\n")
+             % m_min_timecode_in_cluster % m_previous_cluster_tc % (std::max<int64_t>(0, m_min_timecode_in_cluster) > m_previous_cluster_tc) % is_video_keyframe
+             % timecode_delay % (packet->gap_following && !m_packets.empty()) % do_render % (packet->assigned_timecode > m_min_timecode_in_cluster) % packet->assigned_timecode % m_first_video_keyframe_seen);
+
+  if (!do_render)
+    return;
+
+  render();
+  prepare_new_cluster();
 }
 
 void
@@ -175,7 +192,7 @@ cluster_helper_c::split(packet_cptr &packet) {
   if (create_new_file) {
     create_next_output_file();
     if (g_no_linking) {
-      m_previous_cluster_tc = 0;
+      m_previous_cluster_tc = -1;
       m_timecode_offset = g_video_packetizer ? m_max_video_timecode_rendered : packet->assigned_timecode;
     }
 
@@ -223,7 +240,7 @@ cluster_helper_c::prepare_new_cluster() {
   m_packets.clear();
 
   m_cluster->SetParent(*g_kax_segment);
-  m_cluster->SetPreviousTimecode(m_previous_cluster_tc, (int64_t)g_timecode_scale);
+  m_cluster->SetPreviousTimecode(std::max<int64_t>(0, m_previous_cluster_tc), (int64_t)g_timecode_scale);
 }
 
 int
@@ -478,7 +495,7 @@ cluster_helper_c::render() {
 
       m_previous_cluster_tc = m_cluster->GlobalTimecode();
     } else
-      m_previous_cluster_tc = 0;
+      m_previous_cluster_tc = -1;
   }
 
   m_min_timecode_in_cluster = -1;
