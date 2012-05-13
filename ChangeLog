@@ -1,5 +1,9 @@
 2012-05-13  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: XML tag files with <Simple> tags that only
+	contained a name and nested <Simple> were wrongfully rejected as
+	invalid. Fixes issue 752.
+
 	* mkvmerge: enhancement: mkvmerge was optimizied to keep cluster
 	timecodes strictly increasing in most situations.
 

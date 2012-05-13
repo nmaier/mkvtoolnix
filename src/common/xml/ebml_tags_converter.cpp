@@ -93,7 +93,7 @@ ebml_tags_converter_c::fix_tag(KaxTag &tag)
   auto binary = FindChild<KaxTagBinary>(*simple);
   if (string && binary)
     throw conversion_x{ Y("Only one of <String> and <Binary> may be used beneath <Simple> but not both at the same time.") };
-  if (!string && !binary)
+  if (!string && !binary && !FindChild<KaxTagSimple>(*simple))
     throw conversion_x{ Y("<Simple> must contain either a <String> or a <Binary> child.") };
 }
 
