@@ -481,9 +481,21 @@ get_file_type(filelist_t &file) {
 /** \brief Selects a reader for displaying its progress information
 */
 static void
-display_progress() {
+display_progress(bool is_100percent = false) {
+  static boost::tribool s_no_progress{boost::logic::indeterminate};
   static int64_t s_previous_progress_on = 0;
   static int s_previous_percentage      = -1;
+
+  if (boost::logic::indeterminate(s_no_progress))
+    s_no_progress = debugging_requested("no_progress");
+
+  if (s_no_progress)
+    return;
+
+  if (is_100percent) {
+    mxinfo(boost::format(Y("Progress: 100%%%1%")) % "\r");
+    return;
+  }
 
   if (!s_display_reader) {
     std::vector<filelist_t>::const_iterator i;
@@ -2014,7 +2026,7 @@ main_loop() {
     g_cluster_helper->render();
 
   if (1 <= verbose)
-    mxinfo(boost::format(Y("Progress: 100%%%1%")) % "\r");
+    display_progress(true);
 }
 
 /** \brief Deletes the file readers and other associated objects
