@@ -1,3 +1,8 @@
+2012-05-20  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: SRT subtitle entries with colons as the
+	decimal separator are accepted. Fix for issue 754.
+
 2012-05-13  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: XML tag files with <Simple> tags that only
