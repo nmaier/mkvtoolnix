@@ -1,4 +1,4 @@
-Building mkvtoolnix 5.4.0 on Windows
+Building mkvtoolnix 5.5.0 on Windows
 ====================================
 
 There is currently only one supported way to build MKVToolNix for
@@ -41,7 +41,7 @@ mkvtoolnix contains a script that can download, compile and install
 all required libraries into the directory $HOME/mingw-cross-env.
 
 If the script does not work or you want to do everything yourself
-you'll find instructions for manual compilation in section 2.3.
+you'll find instructions for manual compilation in section 1.3.
 
 1.2.1. Script configuration
 
