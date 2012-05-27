@@ -34,7 +34,7 @@
 	* mmg: new feature: When adding a Matroska file that has either
 	the "previous segment UID" or the "next segment UID" set then mmg
 	will copy those two and the source file's segment UID into the
-	corresponding controls on the "globla" tab if they haven't been
+	corresponding controls on the "global" tab if they haven't been
 	set before. Implements ticket 733.
 
 	* mkvmerge: new feature: The verbose identification mode for
