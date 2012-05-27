@@ -16,8 +16,8 @@
 	contained a name and nested <Simple> were wrongfully rejected as
 	invalid. Fixes issue 752.
 
-	* mkvmerge: enhancement: mkvmerge was optimizied to keep cluster
-	timecodes strictly increasing in most situations.
+	* mkvmerge: enhancement: mkvmerge was optimized to keep cluster
+	time codes strictly increasing in most situations.
 
 2012-04-24  Moritz Bunkus  <moritz@bunkus.org>
 
@@ -46,14 +46,14 @@
 	number to it if all the ranges to be kept are to be written into a
 	single output file. Implements ticket 743.
 
-	* mkvextract: bug fix: mkvextract will no longer abort extracing
+	* mkvextract: bug fix: mkvextract will no longer abort extracting
 	h.264 tracks if it encounters a NAL smaller than its size
 	field. Instead it will warn about it and drop the NAL.
 
 2012-04-08  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Writing more than two parts into the same
-	file with "--split parts:" resulted in the timecodes of the third
+	file with "--split parts:" resulted in the time codes of the third
 	and all following parts to be wrong. Fixes ticket 740.
 
 	* mkvmerge: bug fix: The "--split parts:" functionality was
@@ -63,7 +63,7 @@
 
 	* mkvmerge: bug fix: The "--split parts:" functionality was
 	producing a small gap between the first part's last packet's
-	timecode and the second part's first packet's timecode if two
+	time code and the second part's first packet's time code if two
 	parts are written to the same file. Fixes ticket 742.
 
 2012-04-07  Moritz Bunkus  <moritz@bunkus.org>
@@ -100,14 +100,14 @@
 2012-03-31  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge, mmg: new feature: Added support for keeping only
-	certain timecode ranges from the source files with a new format to
+	certain time code ranges from the source files with a new format to
 	"--split": "--split parts:...". Implements ticket #518.
 
 2012-03-30  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: new feature: Added an option in the preferences dialog
 	called "clear jobs from the job queue after they've been run". Can
-	be set to "only if run was successfull", "even if there were
+	be set to "only if run was successful", "even if there were
 	warnings" and "even if there were errors". Defaults to off.
 
 2012-03-29  Moritz Bunkus  <moritz@bunkus.org>
@@ -164,14 +164,14 @@
 
 	* mkvmerge: bug fix: AVC/h.264 mkvmerge was wrongfully writing a
 	default duration of 60 frames/fields even if the source was
-	signalling 60000/1001 frames/fields. The frame timecodes have been
+	signalling 60000/1001 frames/fields. The frame time codes have been
 	correct already.
 
 2012-03-12  Moritz Bunkus  <moritz@bunkus.org>
 
-	* mkvmerge: bug fix: Fixed timecode calculation for (E)AC3 tracks
+	* mkvmerge: bug fix: Fixed time code calculation for (E)AC3 tracks
 	if the source container (e.g. MPEG transport streams) only
-	provided timecodes for some of the (E)AC3 packets itself.
+	provided time codes for some of the (E)AC3 packets itself.
 
 2012-03-10  Moritz Bunkus  <moritz@bunkus.org>
 
@@ -180,8 +180,8 @@
 2012-03-08  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Fixed wrong calculation of the maximum number
-	of ns per cluster in certain fringe cases if timecode scale was
-	set to "auto" mode ("--timecode-scale -1"). Fix for bug 707.
+	of ns per cluster in certain fringe cases if time code scale was
+	set to "auto" mode ("--time code-scale -1"). Fix for bug 707.
 
 2012-03-07  Moritz Bunkus  <moritz@bunkus.org>
 
@@ -199,9 +199,9 @@
 	-- as in e.g. "25p" or "50i". Several commonly used values have
 	been added to mmg's "FPS" drop down box and others removed.
 
-	* mkvmerge: bug fix: When using an external timecode file with
+	* mkvmerge: bug fix: When using an external time code file with
 	AVC/h.264 video the default duration will be set to the most-often
-	used duration in the timecode file.
+	used duration in the time code file.
 
 	* mmg: enhancement: Added the values "50", "60" and "48000/1001"
 	to the list of commonly used values for the "FPS" input field.
@@ -211,7 +211,7 @@
 	given by the user to duration in nanoseconds) is now again
 	interpreted as the duration of a frame and not of a field.
 
-	* mkvmerge: bug fix: SRT subtitles: timecodes can contain the
+	* mkvmerge: bug fix: SRT subtitles: time codes can contain the
 	minus sign before any digit, not just before the first one.
 
 2012-03-05  Moritz Bunkus  <moritz@bunkus.org>
@@ -232,7 +232,7 @@
 	* mmg: The warning that no default duration/FPS has been given for
 	AVC/h.264 tracks has been removed.
 
-	* mkvmerge: bug fix: Complete re-write of the timecode handling
+	* mkvmerge: bug fix: Complete re-write of the time code handling
 	code for AVC/h.264 tracks. Now handles several cases correctly:
 	interlaced video, video with multiple or changing SPS with
 	different timing information. The timing information is extracted
@@ -321,11 +321,11 @@
 
 2012-01-13  Moritz Bunkus  <moritz@bunkus.org>
 
-	* mkvextract: bug fix for the "timecodes_v2" mode: mkvextract will
-	write one more timecode than there are frames in the file. The
-	last timecode written will be the the sum of the last frame's
-	timecode and duration with the "last frame" being the one with the
-	highest timecode. Fix for bug 691.
+	* mkvextract: bug fix for the "time codes_v2" mode: mkvextract will
+	write one more time code than there are frames in the file. The
+	last time code written will be the the sum of the last frame's
+	time code and duration with the "last frame" being the one with the
+	highest time code. Fix for bug 691.
 
 2012-01-12  Moritz Bunkus  <moritz@bunkus.org>
 
@@ -356,7 +356,7 @@
 
 2012-01-05  Moritz Bunkus  <moritz@bunkus.org>
 
-	* mkvextract: bug fix: The track IDs used in the "timecodes_v2"
+	* mkvextract: bug fix: The track IDs used in the "time codes_v2"
 	extraction mode are consistent again with the IDs that mkvmerge's
 	identification reports and that mkvextract's "tracks" extraction
 	mode uses. Fix for bugs 689 and 694.
@@ -486,16 +486,16 @@
 
 	* Released v5.1.0.
 
-	* mkvmerge: bug fix: Fixed more timecode handling issues for video
+	* mkvmerge: bug fix: Fixed more time code handling issues for video
 	tracks in MPEG transport streams whose PES packets sometimes don't
-	have a timecode.
+	have a time code.
 
 	* mkvmerge: bug fix: mkvmerge will no longer create folders on
 	drives it shouldn't create them on on Windows.
 
 2011-11-26  Moritz Bunkus  <moritz@bunkus.org>
 
-	* mkvmerge: bug fix: Fixed bogus huge timecodes sometimes
+	* mkvmerge: bug fix: Fixed bogus huge time codes sometimes
 	occurring for AVC/h.264 video tracks read from MPEG transport
 	streams.
 
@@ -792,7 +792,7 @@
 
 2011-06-02  Moritz Bunkus  <moritz@bunkus.org>
 
-	* mkvinfo: bug fix: The timecode scale is retrieved first before
+	* mkvinfo: bug fix: The time code scale is retrieved first before
 	applying it to the segment duration.
 
 	* all: Added an Italian translation by Roberto Boriotti and
@@ -806,7 +806,7 @@
 2011-05-26  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: When a DTS track is read from a source file
-	that provides timecodes (e.g. Matroska files) then those timecodes
+	that provides time codes (e.g. Matroska files) then those time codes
 	will be preserved.
 
 2011-05-25  Moritz Bunkus  <moritz@bunkus.org>
@@ -888,7 +888,7 @@
 	build and link statically against the internal versions of libEBML
 	and libMatroska.
 
-	* mkvmerge: bug fix: Fixed appending timecode calculation for
+	* mkvmerge: bug fix: Fixed appending time code calculation for
 	appended subtitle tracks if the subtitle tracks are read from
 	complex containers (e.g. Matroska, MP4, AVI etc). Fix for bug 620.
 
@@ -1058,11 +1058,11 @@
 
 	* mkvextract: enhancement: mkvextract will exit with an error if
 	the user specifies track IDs that do not exist in the source
-	file. This works in the "tracks" and "timecodes_v2" extraction
+	file. This works in the "tracks" and "time codes_v2" extraction
 	modes. Fix for bug 583.
 
 	* docs: mkvextract's man page has been updated to match the
-	program's expected command line syntax for the "timecodes_v2"
+	program's expected command line syntax for the "time codes_v2"
 	mode. Fix for bug 583.
 
 2010-12-20  Moritz Bunkus  <moritz@bunkus.org>
@@ -1514,7 +1514,7 @@
 2010-05-24  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge, mkvinfo, mkvextract: bug fix: Fixed handling of
-	clusters missing a cluster timecode element.
+	clusters missing a cluster time code element.
 
 	* mkvinfo GUI: bug fix: Frames for simple blocks were shown at the
 	wrong place in the element tree.
@@ -1581,7 +1581,7 @@
 	nor tags are allowed. The DocType element is set to "webm".
 
 	* mkvinfo GUI: bug fix: Opening more than one file without
-	restarting mkvinfo GUI could result in wrong timecodes due to
+	restarting mkvinfo GUI could result in wrong time codes due to
 	variables not being reinitialized.
 
 2010-05-16  Moritz Bunkus  <moritz@bunkus.org>
@@ -1671,14 +1671,14 @@
 
 2010-03-19  Moritz Bunkus  <moritz@bunkus.org>
 
-	* mkvmerge: bug fix: Timecodes for MPEG-1/2 tracks are calculated
+	* mkvmerge: bug fix: Time Codes for MPEG-1/2 tracks are calculated
 	properly, especially for B frames. Patch by Xavier Duret (see
 	AUTHORS). Fix for bug 475.
 
 2010-03-18  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: enhancement: Added a message in verbosity level 2 to
-	the splitting code. It reports before which timecode and after
+	the splitting code. It reports before which time code and after
 	what file size a new file is started.
 
 	* All: A lot of changes preparing mkvtoolnix for use with the
@@ -1927,8 +1927,8 @@
 
 2009-12-26  Moritz Bunkus  <moritz@bunkus.org>
 
-	* mkvmerge: enhancement: SRT files with negative timecodes will
-	are not rejected anymore. Negative timecodes will be adjusted to
+	* mkvmerge: enhancement: SRT files with negative time codes will
+	are not rejected anymore. Negative time codes will be adjusted to
 	start at 00:00:00.000.
 
 2009-12-25  Moritz Bunkus  <moritz@bunkus.org>
@@ -2048,7 +2048,7 @@
 
 	* Released v2.9.8.
 
-	* mmg: bug fix: The inputs for timecode files and the language are
+	* mmg: bug fix: The inputs for time code files and the language are
 	deactivated if the user has selected a track that will be appended
 	to another track. Fix for bug 432.
 
@@ -2152,7 +2152,7 @@
 
 	* mkvmerge: bug fix: The handling of NVOPs in native MPEG4 part 2
 	video storage has been improved. NVOPs are dropped again both from
-	packed and non-packed bitstreams, and timecodes are adjusted to
+	packed and non-packed bitstreams, and time codes are adjusted to
 	match the number of dropped frames.
 
 2009-06-25  Moritz Bunkus  <moritz@bunkus.org>
@@ -2276,7 +2276,7 @@
 	bug 402.
 
 	* mkvmerge: bug fix: Improved the handling of consecutive AC3
-	packets with the same timecode (e.g. if AC3 is read from MP4
+	packets with the same time code (e.g. if AC3 is read from MP4
 	files). Fix for bug 403.
 
 2009-05-27  Moritz Bunkus  <moritz@bunkus.org>
@@ -2322,7 +2322,7 @@
 
 	* mkvmerge: bug fix: mkvmerge was not handling dropped frames well
 	when converting from VfW-mode MPEG-4 part 2 to native mode MPEG-4
-	part 2 (with '--engage native_mpeg4'). This resulted in timecodes
+	part 2 (with '--engage native_mpeg4'). This resulted in time codes
 	being to low which in turn resulted in the loss of audio/video
 	synchronization. Fix for bug 236.
 
@@ -2428,7 +2428,7 @@
 	* mkvmerge, mmg: enhancement: Made mmg's "FPS" input field
 	available for all video tracks. mkvmerge's corresponding option
 	"--default-duration" now not only modifies the track header field
-	but affects the frame timecodes as well.
+	but affects the frame time codes as well.
 
 2009-05-06  Moritz Bunkus  <moritz@bunkus.org>
 
@@ -2462,15 +2462,15 @@
 	no_simpleblocks" resulted in broken files: all frames were marked
 	as B frames. Fix for bug 371.
 
-	* mkvinfo: bug fix: Timecodes of SimpleBlock elements that were
+	* mkvinfo: bug fix: Time Codes of SimpleBlock elements that were
 	output formatted in summary mode were too small by a factor of
 	1000000.
 
 2009-04-15  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: The duration of subtitle frames was
-	overwritten with the difference between the next frame's timecode
-	and the current frame's timecode if a timecode file was used for
+	overwritten with the difference between the next frame's time code
+	and the current frame's time code if a time code file was used for
 	that track. Fix for bug 286.
 
 	* mmg: bug fix: Removed the option "always use simple blocks" from
@@ -2549,14 +2549,14 @@
 	job dialog wasn't updated if mmg was run with another language as
 	English.
 
-	* mmg: bug fix: The timecodes in the job queue editor were off by
+	* mmg: bug fix: The time codes in the job queue editor were off by
 	one month. The "added job on" was additionally off by an amount
 	depending on the user's time zone. Fix for bug 362.
 
 2009-03-24  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: The MPEG program stream (VOB/EVO) reader was
-	sometimes reading the timecodes wrong resulting in bad audio/video
+	sometimes reading the time codes wrong resulting in bad audio/video
 	synchronization. Fix for bug 337.
 
 	* Released v2.6.0.
@@ -2726,8 +2726,8 @@
 
 2009-01-18  Moritz Bunkus  <moritz@bunkus.org>
 
-	* mkvextract: bug fix: During timecode extraction mkvextract wrote
-	large timecodes in scientific notation.
+	* mkvextract: bug fix: During time code extraction mkvextract wrote
+	large time codes in scientific notation.
 
 2009-01-17  Moritz Bunkus  <moritz@bunkus.org>
 
@@ -2737,9 +2737,9 @@
 
 	* mkvmerge: bug fix: If subtitle files are appended to separate
 	video files (e.g. two AVI and two SRT files) then the subtitle
-	timecodes of the second and all following subtitle files were
-	based on the last timecode in the first subtitle file instead of
-	the last timecode in the first video file. Fix for bug 325.
+	time codes of the second and all following subtitle files were
+	based on the last time code in the first subtitle file instead of
+	the last time code in the first video file. Fix for bug 325.
 
 	* mkvmerge: bug fix: Due to uninitialized variables mkvmerge would
 	report OGM files as having arbitrary display dimensions. Fix for
@@ -2813,8 +2813,8 @@
 2008-12-02  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: mkvmerge recognizes SRT subtitle files with
-	timecodes that contain spaces between the colons and the digits
-	and timecodes whose numbers are not exactly two or three digits
+	time codes that contain spaces between the colons and the digits
+	and time codes whose numbers are not exactly two or three digits
 	long.
 
 2008-11-28  Moritz Bunkus  <moritz@bunkus.org>
@@ -2827,14 +2827,14 @@
 
 2008-11-04  Moritz Bunkus  <moritz@bunkus.org>
 
-	* mmg: bug fix: Split timecodes with more than three decimals were
+	* mmg: bug fix: Split time codes with more than three decimals were
 	not allowed even though the docs say that they are. They are now,
-	as mkvmerge supports such timecodes.
+	as mkvmerge supports such time codes.
 
 2008-11-03  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Changed the way mkvmerge calculates the
-	timecodes when appending files. Should result in better
+	time codes when appending files. Should result in better
 	audio/video synchronization.
 
 	* mkvmerge: new feature: Added support for reading SRT and SSA/ASS
@@ -2849,8 +2849,8 @@
 2008-10-29  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: SRT subtitle files are also handled correctly
-	if the timecode lines do not have spaces around the arrow between
-	the start and end timecodes.
+	if the time code lines do not have spaces around the arrow between
+	the start and end time codes.
 
 2008-10-13  Moritz Bunkus  <moritz@bunkus.org>
 
@@ -2889,7 +2889,7 @@
 
 2008-09-25  Moritz Bunkus  <moritz@bunkus.org>
 
-	* mkvmerge: enhancement: mkvmerge will use the timecodes provided
+	* mkvmerge: enhancement: mkvmerge will use the time codes provided
 	by the MPEG program stream source file for VC1 video tracks.
 
 2008-09-24  Moritz Bunkus  <moritz@bunkus.org>
@@ -2900,7 +2900,7 @@
 2008-09-22  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvextract: new feature: Added support for handling SimpleBlocks
-	for timecode extraction.
+	for time code extraction.
 
 2008-09-21  Moritz Bunkus  <moritz@bunkus.org>
 
@@ -2938,7 +2938,7 @@
 	* mkvmerge: bug fix: Revision 3831 (the change to the "--delay"
 	and "--sync" options) caused mkvmerge to no longer respect the
 	delay caused by garbage at the beginning of MP3 and AC3 audio
-	tracks in AVI files. The timecodes of such tracks are now delayed
+	tracks in AVI files. The time codes of such tracks are now delayed
 	appropriately again. Fix for bug 300.
 
 2008-09-12  Moritz Bunkus  <moritz@bunkus.org>
@@ -2965,12 +2965,12 @@
 
 2008-09-06  Moritz Bunkus  <moritz@bunkus.org>
 
-	* mkvmerge: bug fix: improved the timecode calculation for MP3
+	* mkvmerge: bug fix: improved the time code calculation for MP3
 	tracks read from MP4 files. Another part of the fix for bug 165.
 
 2008-09-03  Moritz Bunkus  <moritz@bunkus.org>
 
-	* mkvmerge: bug fix: mkvmerge honors the timecode offsets of all
+	* mkvmerge: bug fix: mkvmerge honors the time code offsets of all
 	streams in a MPEG program stream (e.g. VOB file) fixing
 	audio/video desynchronization. Fix for bug 295.
 
@@ -2993,7 +2993,7 @@
 
 2008-08-21  Moritz Bunkus  <moritz@bunkus.org>
 
-	* mkvmerge: bug fix: The fix to the timecode handling for AVC
+	* mkvmerge: bug fix: The fix to the time code handling for AVC
 	tracks in MP4 files from 2008-04-16 caused certain other MP4 files
 	to not be read correctly. The video tracks were found, but no
 	frames were read. Fix for bug 294.
@@ -3004,7 +3004,7 @@
 2008-08-20  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge, mmg: The option "--delay" was removed. The option
-	"--sync" now only modifies the timecodes of a given
+	"--sync" now only modifies the time codes of a given
 	track. mkvmerge does not pad audio tracks with silence. "--sync"
 	works with all track types now, but using a stretch factor other
 	than 1 with audio tracks might not work too well during
@@ -3054,7 +3054,7 @@
 
 2008-04-16  Moritz Bunkus  <moritz@bunkus.org>
 
-	* mkvmerge: bug fix: Fixed wrong timecodes for MP4 files that
+	* mkvmerge: bug fix: Fixed wrong time codes for MP4 files that
 	contain video tracks with B frames and edit lists. Fix for bug
 	277. Patch by Damiano Galassi (see AUTHORS).
 
@@ -3116,10 +3116,10 @@
 
 2007-12-31  Moritz Bunkus  <moritz@bunkus.org>
 
-	* mkvmerge: bug fix: Rewrote the timecode application
-	code. Additionally force the "previous cluster timecodes" that
-	libmatroska uses to the current timecode. This seems to get rid of
-	libmatroska's assertions about the local timecode being to
+	* mkvmerge: bug fix: Rewrote the time code application
+	code. Additionally force the "previous cluster time codes" that
+	libmatroska uses to the current time code. This seems to get rid of
+	libmatroska's assertions about the local time code being to
 	small/big to fit into an int16. It also seems to get rid of some
 	of mkvmerge's errors about the packet queue not being empty, and
 	it fixes a couple of crashes with file splitting.
@@ -3160,7 +3160,7 @@
 2007-08-19  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: enhancement: SRT files that contain coordinates in the
-	timecode line are supported. The coordinates are discarded
+	time code line are supported. The coordinates are discarded
 	automatically (as S_TEXT/SRT doesn't support them), and a warning
 	is shown.
 
@@ -3278,7 +3278,7 @@
 2007-04-19  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Fixed the VobSub reader so that "delay:"
-	lines with negative timecodes are accepted. Fix for bug 241.
+	lines with negative time codes are accepted. Fix for bug 241.
 
 2007-04-18  Moritz Bunkus  <moritz@bunkus.org>
 
@@ -3292,7 +3292,7 @@
 
 2007-03-22  Moritz Bunkus  <moritz@bunkus.org>
 
-	* mkvmerge: bug fix: Fixed an issue with negative/huge timecodes
+	* mkvmerge: bug fix: Fixed an issue with negative/huge time codes
 	after splitting AVC/h.264 video.
 
 2007-03-16  Moritz Bunkus  <moritz@bunkus.org>
@@ -3568,7 +3568,7 @@
 
 	* mkvmerge: bug fix: Quicktime/MP4 files with AVC video tracks and
 	missing CTTS atoms caused mkvmerge to crash after the recent
-	changes to the Quicktime/MP4 timecode handling.
+	changes to the Quicktime/MP4 time code handling.
 
 	* mkvmerge: bug fix: Fixed a segfault if the file specified with
 	"--attach-file" does not exist. Bugfix for Anthill bug 213 and
@@ -3606,7 +3606,7 @@
 2006-11-03  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: For MP4 files with certain CTTS contents
-	mkvmerge would use negative timecodes for a couple of
+	mkvmerge would use negative time codes for a couple of
 	frames. Those frames were dropped and mkvmerge often ended up
 	eating huge amounts of memory and crashing afterwards.
 
@@ -3633,7 +3633,7 @@
 
 2006-09-25  Moritz Bunkus  <moritz@bunkus.org>
 
-	* mkvmerge: bug fix: Made the checks for SRT timecodes a bit less
+	* mkvmerge: bug fix: Made the checks for SRT time codes a bit less
 	strict (e.g. allow fewer than three digits after the comma).
 
 2006-07-19  Moritz Bunkus  <moritz@bunkus.org>
@@ -3702,14 +3702,14 @@
 
 2006-03-17  Moritz Bunkus  <moritz@bunkus.org>
 
-	* mkvmerge: bug fix: The Theora timecode handling was broken, and
+	* mkvmerge: bug fix: The Theora time code handling was broken, and
 	Ogg/Theora files were not identified correctly (they showed up as
 	"unknown" in mmg).
 
 2006-02-27  Moritz Bunkus  <moritz@bunkus.org>
 
-	* mmg: enhancement: The 'adjust timecodes' function accepts
-	timecodes like 'XXXXXunit' with 'unit' being 'ms', 'us', 'ns' or
+	* mmg: enhancement: The 'adjust time codes' function accepts
+	time codes like 'XXXXXunit' with 'unit' being 'ms', 'us', 'ns' or
 	's'.
 
 	* mkvmerge: enhancement: mkvmerge will no longer refuse to
@@ -3731,7 +3731,7 @@
 2006-01-17  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: new feature: Added support for the "Delay:" feature
-	and for negative timecodes in VobSub IDX files.
+	and for negative time codes in VobSub IDX files.
 
 2005-12-14  Moritz Bunkus  <moritz@bunkus.org>
 
@@ -3777,11 +3777,11 @@
 	was checked against the list of ISO 639-1 codes and not against
 	the list of ccTLDs. Partial bugfix for Anthill bug #171.
 
-	* mkvmerge: bug fix: When appending tracks and using timecodes the
-	timecodes were only used for the first track in a chain of
+	* mkvmerge: bug fix: When appending tracks and using time codes the
+	time codes were only used for the first track in a chain of
 	tracks. This has been changed so that you must specify only one
-	timecode file in such cases (e.g. "mkvmerge ... --timecodes
-	0:my_timecodes.txt part1.avi +part2.avi"). mmg has already been
+	time code file in such cases (e.g. "mkvmerge ... --time codes
+	0:my_time codes.txt part1.avi +part2.avi"). mmg has already been
 	working like this. Fixes Anthill bug #162.
 
 2005-12-02  Moritz Bunkus  <moritz@bunkus.org>
@@ -3839,7 +3839,7 @@
 2005-11-12  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Fixed a crash If the granulepos (the
-	timecodes) reset in the middle of an Ogg/OGM file. Fixes Anthill
+	time codes) reset in the middle of an Ogg/OGM file. Fixes Anthill
 	bug #166.
 
 	* mkvmerge: bug fix: Fixed a division-by-zero error in the
@@ -3989,7 +3989,7 @@
 
 2005-08-28  Moritz Bunkus  <moritz@bunkus.org>
 
-	* mkvextract: bug fix: The extracted timecodes were wrong for
+	* mkvextract: bug fix: The extracted time codes were wrong for
 	blocks with laced frames.
 
 2005-08-25  Moritz Bunkus  <moritz@bunkus.org>
@@ -4005,7 +4005,7 @@
 2005-08-24  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Native MPEG-4 ASP storage was still bugged:
-	timecodes were assigned twice, frames referenced themselves.
+	time codes were assigned twice, frames referenced themselves.
 
 	* mkvmerge: bug fix: Embedded fonts and pictures in a SSA/ASS file
 	are not discarded any longer. They are converted to Matroska
@@ -4039,8 +4039,8 @@
 2005-08-03  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvextract: new feature: Added a new extraction mode for
-	outputting timecodes in a timecode v2 format file. It is called
-	"timecode_v2" and takes the same arguments as the "tracks"
+	outputting time codes in a time code v2 format file. It is called
+	"time code_v2" and takes the same arguments as the "tracks"
 	extraction mode.
 
 	* mkvinfo: new feature: Added a command line switch
@@ -4052,10 +4052,10 @@
 	redirecting the output to a file (for systems which re-interpret
 	stdout).
 
-	* mkvmerge: bug fix: The combination of using external timecode
+	* mkvmerge: bug fix: The combination of using external time code
 	files and video tracks with B frames was not working as
-	intended. The user had to order the timecodes in the timecode file
-	just like the frames were ordered (meaning the timecodes for a
+	intended. The user had to order the time codes in the time code file
+	just like the frames were ordered (meaning the time codes for a
 	IPBBP sequence with 25 FPS had to be "0", "120", "40,
 	"80"...). This has been fixed. They have to be ascending again and
 	mkvmerge will assign them properly.
@@ -4117,7 +4117,7 @@
 2005-06-24  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: new feature: Added an input box for mkvmerge's new "split
-	after these timecodes" feature.
+	after these time codes" feature.
 
 2005-06-16  Moritz Bunkus  <moritz@bunkus.org>
 
@@ -4135,13 +4135,13 @@
 
 	* mkvmerge: bug fix: If a OGM style chapter file contains empty
 	chapter names ('CHAPTER01NAME=' without something after the '=')
-	then this chapter's timecode is used as the name instead of
+	then this chapter's time code is used as the name instead of
 	aborting.
 
 2005-06-05  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: new feature: Added splitting after specific
-	timecodes.
+	time codes.
 
 2005-06-04  Moritz Bunkus  <moritz@bunkus.org>
 
@@ -4238,7 +4238,7 @@
 	Anthill bug 123.
 
 	* mkvmerge: bug fix: Appending files that were created with
-	mkvmerge's "--link" option was broken. The timecodes for both the
+	mkvmerge's "--link" option was broken. The time codes for both the
 	chapters and the actual media data blocks were not adjusted
 	correctly. Fixes Anthill bugs 115 and 116.
 
@@ -4253,7 +4253,7 @@
 	* mkvmerge: bug fix: If chapters were present and splitting was
 	enabled then mkvmerge would not treat chapters correctly that
 	spanned across several files. Now the spanning chapters are kept
-	in all files, and their start timecodes are adjusted accordingly.
+	in all files, and their start time codes are adjusted accordingly.
 	Fixes the first part of Anthill bug 122.
 
 2005-03-28  Moritz Bunkus  <moritz@bunkus.org>
@@ -4436,8 +4436,8 @@
 
 2005-01-15  Moritz Bunkus  <moritz@bunkus.org>
 
-	* mkvmerge: Changed the AVC/h.264 timecode handling to include the
-	timecode offsets from the CTTS atom.
+	* mkvmerge: Changed the AVC/h.264 time code handling to include the
+	time code offsets from the CTTS atom.
 
 2005-01-15  Moritz Bunkus  <moritz@bunkus.org>
 
@@ -4532,7 +4532,7 @@
 2004-11-26  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: The first packet of an AAC track read from
-	Real containers might not start at the timecode 0. This offset was
+	Real containers might not start at the time code 0. This offset was
 	ignored by mkvmerge.
 
 2004-11-22  Moritz Bunkus  <moritz@bunkus.org>
@@ -4585,7 +4585,7 @@
 
 2004-10-24  Moritz Bunkus  <moritz@bunkus.org>
 
-	* mkvmerge: bug fix: The handling of external timecode files was
+	* mkvmerge: bug fix: The handling of external time code files was
 	still not correct but should be OK now.
 
 2004-10-17  Moritz Bunkus  <moritz@bunkus.org>
@@ -4599,7 +4599,7 @@
 	* mkvmerge: bug fix: If LFE is on for DTS then the number of
 	channels is one more than what the DTS frame header says.
 
-	* mkvmerge: bug fix: Timecodes for Vorbis were wrong on rare
+	* mkvmerge: bug fix: Time Codes for Vorbis were wrong on rare
 	occasions (when reading laced Vorbis from a Matroska file and
 	changing the lacing, e.g. when splitting for the second and all
 	following files).
@@ -4622,9 +4622,9 @@
 
 	* mmg: enhancement: Made mmg's main window properly resizable.
 
-	* mkvmerge: Rewrote the code for the external timecode files. This
+	* mkvmerge: Rewrote the code for the external time code files. This
 	also fixes bug 99: The durations for the individual tracks were
-	not correct for those tracks for which --timecodes was used.
+	not correct for those tracks for which --time codes was used.
 
 2004-10-08  Moritz Bunkus  <moritz@bunkus.org>
 
@@ -4699,9 +4699,9 @@
 2004-09-26  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Some Matroska files that e.g. have had their
-	timecodes offset with the Matroska Stream Editor or other means
-	may contain timecodes that caused mkvmerge to print a warning
-	about "timecode < last_timecode". A new fix implements a
+	time codes offset with the Matroska Stream Editor or other means
+	may contain time codes that caused mkvmerge to print a warning
+	about "time code < last_time code". A new fix implements a
 	workaround and a warning message with a proper explanation for
 	this case.
 
@@ -4720,7 +4720,7 @@
 	* mkvmerge: bug fix: mkvmerge will show a nice warning if the
 	entries in a SRT have non-continuous timestamps. It'll also sort
 	the entries by their start timestamp instead of throwing the
-	generic "timecode < previous timecode" warning.
+	generic "time code < previous time code" warning.
 
 	* mmg: bug fix: The 'Matroska file analysis' window that occurs
 	when reading chapters from a Matroska file did not disappear if it
@@ -4747,7 +4747,7 @@
 2004-09-02  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: The Matroska reader was not handling very big
-	cluster timecodes correctly. Those can occur when the timecode
+	cluster time codes correctly. Those can occur when the time code
 	scale factor is very small.
 
 	* mkvmerge: bug fix: Empty clusters in Matroska files no longer
@@ -5095,8 +5095,8 @@
 2004-06-08  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Matroska tracks can use lacing (several
-	frames inside one Matroska block with only one timecode for the
-	whole block). mkvmerge did not recreate the timecodes for the
+	frames inside one Matroska block with only one time code for the
+	whole block). mkvmerge did not recreate the time codes for the
 	frames 1..n in the lacing correctly.
 
 2004-06-06  Moritz Bunkus  <moritz@bunkus.org>
@@ -5191,7 +5191,7 @@
 
 2004-04-30  Moritz Bunkus  <moritz@bunkus.org>
 
-	* all: Increased the precision for timecodes in chapter files to
+	* all: Increased the precision for time codes in chapter files to
 	nanoseconds (optionally, you can still use fewer digits after the
 	'.').
 
@@ -5371,7 +5371,7 @@
 2004-02-16  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: new feature: Added a function for adjusting the chapter
-	timecodes by a fixed amount.
+	time codes by a fixed amount.
 
 2004-02-15  Moritz Bunkus  <moritz@bunkus.org>
 
@@ -5438,7 +5438,7 @@
 
 2004-01-25  Moritz Bunkus  <moritz@bunkus.org>
 
-	* mkvmerge: bug fix: Segfault when using external timecode v1
+	* mkvmerge: bug fix: Segfault when using external time code v1
 	files.
 
 2004-01-24  Moritz Bunkus  <moritz@bunkus.org>
@@ -5453,7 +5453,7 @@
 
 2004-01-22  Moritz Bunkus  <moritz@bunkus.org>
 
-	* mkvmerge: Changed the complete timecode handling from ms
+	* mkvmerge: Changed the complete time code handling from ms
 	precision to ns precision. Expect some things to be broken by
 	this change.
 
@@ -5489,7 +5489,7 @@
 	track language without having to remux the file completely.
 
 	* mkvmerge: bug fix: If remuxing a file that contains frames with
-	a reference to the same timecode those references were lost
+	a reference to the same time code those references were lost
 	turning such P frames into I frames. This was the case for some
 	RealAudio stuff.
 
@@ -5525,7 +5525,7 @@
 	and 'enabled'.
 
 	* mkvmerge: new feature: Added a new format for the external
-	timecode files.
+	time code files.
 
 2004-01-09  Moritz Bunkus  <moritz@bunkus.org>
 
@@ -5717,7 +5717,7 @@
 
 2003-11-23  Moritz Bunkus  <moritz@bunkus.org>
 
-	* mmg: bug fix: Quotes were missing if the timecode file's name
+	* mmg: bug fix: Quotes were missing if the time code file's name
 	contained spaces.
 
 2003-11-18  Moritz Bunkus  <moritz@bunkus.org>
@@ -5756,7 +5756,7 @@
 
 2003-11-12  Moritz Bunkus  <moritz@bunkus.org>
 
-	* mmg: Added an input field for the 'timecodes' file to the track
+	* mmg: Added an input field for the 'time codes' file to the track
 	options.
 
 	* mkvmerge: bug fix: When reading MP3 audio tracks from a Matroska
@@ -5808,15 +5808,15 @@
 	* mkvmerge: bug fix: The VobSub .idx parser was dividing by 0 if
 	a track only contained one entry.
 
-	* mkvmerge: Fixed the timecode reader code and made it a bit more
+	* mkvmerge: Fixed the time code reader code and made it a bit more
 	flexible. Added more documentation for this feature along with an
-	example file (examples/example-timecodes.txt).
+	example file (examples/example-time codes.txt).
 
 	* mmg: bug fix: When 'default track' is selected then all other
 	tracks of the same type will have their 'default track' flag
 	cleared.
 
-	* mkvmerge: SPU packets belonging to the same timecode are grouped
+	* mkvmerge: SPU packets belonging to the same time code are grouped
 	together, and the duration is extracted directly from the SPU
 	stream.
 
@@ -5834,8 +5834,8 @@
 
 2003-10-27  Moritz Bunkus  <moritz@bunkus.org>
 
-	* mkvmerge: new feature: Added the ability to read timecodes from
-	text files which override the timecodes mkvmerge calculates
+	* mkvmerge: new feature: Added the ability to read time codes from
+	text files which override the time codes mkvmerge calculates
 	normally.
 
 2003-10-26  Moritz Bunkus  <moritz@bunkus.org>
@@ -5897,7 +5897,7 @@
 
 	* mkvmerge: bug fix: If 'no linking' and splitting was active
 	mkvmerge would abort on the start of the second output file due to
-	timecodes that were calculated incorrectly.
+	time codes that were calculated incorrectly.
 
 	* mkvmerge: Implemented some speedups for a couple of container
 	formats and track types (mainly AVI reader, MP3/AC3/AAC
@@ -5938,7 +5938,7 @@
 	NOT to write duration elements for all blocks, NOT to use time
 	slices and to USE lacing for most audio tracks. This will save
 	some space. The downside is that the laced frames 'lose' their
-	precise timecode information. Current demuxers don't care and will
+	precise time code information. Current demuxers don't care and will
 	work nevertheless. More sophisticated applications that make use
 	of these advanced information (duration elements, time slices) are
 	not available at the moment. All these options can be toggled by
@@ -6096,7 +6096,7 @@
 	in the source file are multiples of the frame rate, of course.
 
 	* mkvmerge: The MP3 packetizer did not start at 0 with its
-	timecodes. It does now. Reported by alexnoe.
+	time codes. It does now. Reported by alexnoe.
 
 	* mkvmerge: Proper support for dropped frames when reading AVI
 	files. Reported by alley_cat, Horváth István.
@@ -6530,7 +6530,7 @@
 
 2003-05-11  Moritz Bunkus  <moritz@bunkus.org>
 
-	* Fixed a bug with the AC3 timecode calculation (patch by Peter
+	* Fixed a bug with the AC3 time code calculation (patch by Peter
 	Niemayer <niemayer AT isg.de>).
 
 	* Support for reading DTS files & putting them into Matroska
