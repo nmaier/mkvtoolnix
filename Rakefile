@@ -471,8 +471,9 @@ namespace :install do
     dirs_to_install = FileList[ "#{$top_srcdir}/share/icons/*"   ].select { |dir|  wanted_dirs[ dir.gsub(/.*icons\//, '').gsub(/\/.*/, '') ] }.sort.uniq
 
     dirs_to_install.each do |dir|
-      install_dir "#{c(:icondir)}/#{dir}/apps"
-      install_data "#{c(:icondir)}/#{dir}/apps/", FileList[ "#{dir}/*" ].to_a.select { |file| wanted_apps[ file.gsub(/.*\//, '') ] }
+      dest_dir = "#{c(:icondir)}/#{dir.gsub(/.*icons\//, '')}/apps"
+      install_dir dest_dir
+      install_data "#{dest_dir}/", FileList[ "#{dir}/*" ].to_a.select { |file| wanted_apps[ file.gsub(/.*\//, '') ] }
     end
   end
 
