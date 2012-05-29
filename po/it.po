@@ -1118,8 +1118,8 @@ msgid "'%1%' can only be used with a file name. No further options are allowed i
 msgstr "'%1%'può essere usato solo con un nome file. Non sono previste altre opzioni se questa opzione viene usata.\n"
 
 #: src/merge/mkvmerge.cpp:500
-#, boost-format
-msgid "'%1%' does not contain a valid unit ('s', 'ms', 'us' or 'ns') in '%2% %3%'.\n"
+#, fuzzy, boost-format
+msgid "'%1%' does not contain a valid unit ('s', 'ms', 'us', 'ns', 'fps', 'p' or 'i') in '%2% %3%'.\n"
 msgstr "'%1%' non contiene una unità valida ('s', 'ms', 'us' o 'ns') in '%2% %3%'.\n"
 
 #: src/merge/mkvmerge.cpp:1105
@@ -2055,7 +2055,7 @@ msgstr "E' in corso una altra operazione di muxing. Attendere la fine dell'opera
 msgid "Appending a track from a file to another track from the same file is not allowed. This is the case for tracks number %u and %u."
 msgstr "Non è permessa l'aggiunta di una traccia da un file ad un'altra traccia dello stesso file. Questo è il caso per la traccia numero %u e %u."
 
-#: src/merge/output_control.cpp:1766
+#: src/merge/output_control.cpp:1778
 #, boost-format
 msgid "Appending track %1% from file no. %2% ('%3%') to track %4% from file no. %5% ('%6%').\n"
 msgstr "Aggiunta traccia %1% dal file n. %2% ('%3%') alla traccia %4% dal file n. %5% ('%6%').\n"
@@ -2428,7 +2428,7 @@ msgstr "Capitoli"
 msgid "Chapters (%d entries) from %s"
 msgstr "Capitoli (%d elementi) da %s"
 
-#: src/merge/output_control.cpp:1400
+#: src/merge/output_control.cpp:1412
 msgid "Chapters are not allowed in WebM compliant files. No chapters will be written into any output file.\n"
 msgstr "I capitoli non sono permessi in un file compatibile WebM. Nessun capitolo verrà registrato nei file destinazione.\n"
 
@@ -2740,7 +2740,7 @@ msgstr "Impossibile estrarre la sequenza intestazione da questa traccia MPEG1-2.
 msgid "Could not find an index for audio track %1% (avilib error message: %2%). Skipping track.\n"
 msgstr "Impossibile trovare un indice per la traccia audio %1% (messaggio d'errore: %2%). Traccia ignorata.\n"
 
-#: src/merge/output_control.cpp:1721
+#: src/merge/output_control.cpp:1733
 #, boost-format
 msgid "Could not find gptzr when appending. %1%\n"
 msgstr "Impossibile trovare gptzr durante l'aggiunta. %1%\n"
@@ -3204,7 +3204,7 @@ msgstr "Versione EBML letta: %1%"
 msgid "EBML version: %1%"
 msgstr "Versione EBML: %1%"
 
-#: src/merge/output_control.cpp:1241
+#: src/merge/output_control.cpp:1253
 #, boost-format
 msgid "EVIL internal bug! (unknown file type). %1%\n"
 msgstr "Errore interno! (tipo file sconosciuto). %1%\n"
@@ -3594,7 +3594,7 @@ msgstr "Collegamento file/segmento"
 msgid "File/segment title:"
 msgstr "Titolo file/segmento:"
 
-#: src/merge/output_control.cpp:932
+#: src/merge/output_control.cpp:944
 msgid "Files cannot be appended to themselves. The argument for '--append-to' was invalid.\n"
 msgstr "Il file non può essere aggiunto a sè stesso. L'argomento per '--append-to' non è valido.\n"
 
@@ -4697,7 +4697,7 @@ msgstr "E' stato fornito più di un nome file ('%1%' e '%2%').\n"
 msgid "More than one name was given for a single attachment. '%1%' will be discarded and '%2%' used instead.\n"
 msgstr "E' stato fornito più di un nome file per un singolo allegato. '%1%' verrà ignorato e usato '%2%' al suo posto.\n"
 
-#: src/merge/output_control.cpp:1008
+#: src/merge/output_control.cpp:1020
 #, boost-format
 msgid "More than one track is to be appended to the track %1% from file no. %2% ('%3%'). The argument for '--append-to' was invalid.\n"
 msgstr "Più di una traccia è stata appesa alla traccia %1% dal file no. %2% ('%3%'). L'argomento per non è valido.\n"
@@ -4812,7 +4812,7 @@ msgstr "Non è stato selezionato nessun tipo MIME per l'allegato '%s'."
 msgid "No MIME type has been set for the attachment '%1%', and it could not be guessed.\n"
 msgstr "Non è stato impostato nessun tipo MME per l'allegato '%1%', e non può essere ospitato.\n"
 
-#: src/merge/output_control.cpp:967
+#: src/merge/output_control.cpp:979
 #, boost-format
 msgid "No append mapping was given for the file no. %1% ('%2%'). A default mapping of %3% will be used instead. Please keep that in mind if mkvmerge aborts with an error message regarding invalid '--append-to' options.\n"
 msgstr "Non è stato fornita nessuna mappa di aggiunta per il file no %1% ('%2%'). Verrà usata una mappa predefinita di %3%. Notare se mkvmerge si blocca con un errore riguardante opzioni non valide per '--append-to'.\n"
@@ -4988,7 +4988,7 @@ msgstr "E' permesso un solo file destinazione.\n"
 msgid "Only one segment info file allowed in '%1% %2%'.\n"
 msgstr "E' permesso solo un file info segmento in '%1% %2%'.\n"
 
-#: src/merge/output_control.cpp:948
+#: src/merge/output_control.cpp:960
 #, boost-format
 msgid "Only partial append mappings were given for the file no. %1% ('%2%'). Either don't specify any mapping (in which case the default mapping will be used) or specify a mapping for all tracks that are to be copied.\n"
 msgstr "E' stata fornita solo una mappa parziale di aggiunta per il file no. %1% ('%2%'). Non specificare nessuna mappa (in tal caso verrà usata la mapp predefinita) o specifica una mappa per tutte le tracce da copiare.\n"
@@ -5236,7 +5236,7 @@ msgstr "Progresso"
 
 #: src/extract/timecodes_v2.cpp:289
 #: src/extract/tracks.cpp:401
-#: src/merge/output_control.cpp:517
+#: src/merge/output_control.cpp:529
 #, boost-format
 msgid "Progress: %1%%%%2%"
 msgstr "Progresso: %1%%%%2%"
@@ -5246,7 +5246,7 @@ msgstr "Progresso: %1%%%%2%"
 msgid "Progress: 100%\n"
 msgstr "Progresso: 100%\n"
 
-#: src/merge/output_control.cpp:2017
+#: src/merge/output_control.cpp:496
 #, boost-format
 msgid "Progress: 100%%%1%"
 msgstr "Progresso: 100%%%1%"
@@ -6004,7 +6004,7 @@ msgstr ""
 msgid "Some header values have been modified. Do you really want to reload without saving the file?"
 msgstr ""
 
-#: src/merge/output_control.cpp:1440
+#: src/merge/output_control.cpp:1452
 #, boost-format
 msgid "Some tag elements are missing (this error should not have occured - another similar error should have occured earlier). %1%\n"
 msgstr ""
@@ -6188,7 +6188,7 @@ msgstr "Selettori tag"
 msgid "Tags"
 msgstr "Tag"
 
-#: src/merge/output_control.cpp:1428
+#: src/merge/output_control.cpp:1440
 msgid "Tags are not allowed in WebM compliant files. No tags will be written into any output file.\n"
 msgstr "I marcatori non sono permessi nei file compatibili WebM. Nessun marcatore verrà scritto nel file destinazione.\n"
 
@@ -6461,7 +6461,7 @@ msgstr "L'intestazione del file di correzione non è stata letta correttamente.\
 msgid "The country '%s' is not a valid ccTLD and cannot be selected."
 msgstr "La nazione '%s' non è un valido ccTLD e non può essere selezionata."
 
-#: src/merge/output_control.cpp:1508
+#: src/merge/output_control.cpp:1520
 msgid "The cue entries (the index) are being written...\n"
 msgstr "Scrittura dati cue (l'indice) in corso...\n"
 
@@ -6485,11 +6485,11 @@ msgstr "Il codice lingua predefinito '%1%' non è un codice lingua ISO639-2 vali
 msgid "The delay setting for track nr. %s in file '%s' is invalid."
 msgstr "Il ritardo impostato per la traccia nr. %s nel file '%s' non è valido."
 
-#: src/merge/output_control.cpp:1248
-#: src/merge/output_control.cpp:1251
-#: src/merge/output_control.cpp:1254
-#: src/merge/output_control.cpp:1257
 #: src/merge/output_control.cpp:1260
+#: src/merge/output_control.cpp:1263
+#: src/merge/output_control.cpp:1266
+#: src/merge/output_control.cpp:1269
+#: src/merge/output_control.cpp:1272
 #, boost-format
 msgid ""
 "The demultiplexer for the file '%1%' failed to initialize:\n"
@@ -6580,7 +6580,7 @@ msgstr "Il file '%1%' non può essere aperto per la scrittura (%2%).\n"
 msgid "The file '%1%' could not be opened for writing (%2%, %3%).\n"
 msgstr "Il file '%1%' non può essere aperto per la scrittura (%2%, %3%).\n"
 
-#: src/merge/output_control.cpp:1470
+#: src/merge/output_control.cpp:1482
 #, boost-format
 msgid "The file '%1%' has been opened for writing.\n"
 msgstr "Il file '%1%' è stato aperto per la scrittura.\n"
@@ -6605,12 +6605,12 @@ msgstr "Il file '%s' non esiste."
 msgid "The file '%s' is already processed in combination with the file '%s'. It cannot be added a second time."
 msgstr ""
 
-#: src/merge/output_control.cpp:1254
+#: src/merge/output_control.cpp:1266
 msgid "The file content does not match its format type and was not recognized."
 msgstr "Il contenuto del file non corrisponde al suo formato e non è stato riconosciuto."
 
-#: src/merge/output_control.cpp:1248
-#: src/merge/output_control.cpp:1251
+#: src/merge/output_control.cpp:1260
+#: src/merge/output_control.cpp:1263
 msgid "The file could not be opened for reading, or there was not enough data to parse its headers."
 msgstr "Il file non può essere aperto per la lettura, o non c'erano abbastanza dati per analizzare le sue intestazioni."
 
@@ -6642,7 +6642,7 @@ msgstr "L'header del file è troppo corto.\n"
 msgid "The file header was not read correctly.\n"
 msgstr "L'header del file non è stato letto correttamente.\n"
 
-#: src/merge/output_control.cpp:1257
+#: src/merge/output_control.cpp:1269
 msgid "The file headers could not be parsed, e.g. because they're incomplete, invalid or damaged."
 msgstr "Le intestazioni del file non possono essere analizzate, ad esempio perché sono incompleti, non validi o danneggiati."
 
@@ -6676,17 +6676,17 @@ msgstr "Il file è in fase di correzione, parte 4/4..."
 msgid "The file name for this segment."
 msgstr "Il nome file per questo segmento."
 
-#: src/merge/output_control.cpp:981
+#: src/merge/output_control.cpp:993
 #, boost-format
 msgid "The file no. %1% ('%2%') does not contain a track with the ID %3%, or that track is not to be copied. The argument for '--append-to' was invalid.\n"
 msgstr "Il file n. %1% ('%2%') non contiene una traccia con un ID %3%, o la traccia non può essere copiata. L'argomento per '--append-to' non era valido.\n"
 
-#: src/merge/output_control.cpp:987
+#: src/merge/output_control.cpp:999
 #, boost-format
 msgid "The file no. %1% ('%2%') does not contain a track with the ID %3%, or that track is not to be copied. Therefore no track can be appended to it. The argument for '--append-to' was invalid.\n"
 msgstr "Il file n. %1% ('%2%') non contiene una traccia con un ID %3%, o questa traccia non può essere copiata su di essa. L'argomento per '--append-to' non era valido.\n"
 
-#: src/merge/output_control.cpp:924
+#: src/merge/output_control.cpp:936
 #, boost-format
 msgid "The file no. %1% ('%2%') is not being appended. The argument for '--append-to' was invalid.\n"
 msgstr "Il file n. %1% ('%2%') non può essere aggiunto. L'argomento per '--append-to' non era valido.\n"
@@ -6732,7 +6732,7 @@ msgstr "Il formato della dimensione divisione non è valido."
 msgid "The format of the split timecode/duration is invalid."
 msgstr "Il formato della suddivisione timecode/durata non è valido."
 
-#: src/merge/output_control.cpp:1051
+#: src/merge/output_control.cpp:1063
 msgid "The formats do not match."
 msgstr "I formati non corrispondono."
 
@@ -6910,7 +6910,7 @@ msgstr "L'opzione '--meta-seek-size' non è più supportata. Leggi la documentaz
 msgid "The order of the various options is not important."
 msgstr "L'ordine delle varie opzioni non è importante."
 
-#: src/merge/output_control.cpp:1466
+#: src/merge/output_control.cpp:1478
 #, boost-format
 msgid "The output file '%1%' could not be opened for writing (%2%).\n"
 msgstr "Il file destinazione '%1%' non può essere aperto in scrittura (%2%).\n"
@@ -6960,7 +6960,7 @@ msgstr ""
 msgid "The property value is not a valid unsigned integer in '%1%'. %2%\n"
 msgstr ""
 
-#: src/merge/output_control.cpp:1053
+#: src/merge/output_control.cpp:1065
 msgid "The reason is unknown."
 msgstr "Il motivo è sconosciuto."
 
@@ -7127,7 +7127,7 @@ msgstr ""
 msgid "The title for the whole movie."
 msgstr ""
 
-#: src/merge/output_control.cpp:997
+#: src/merge/output_control.cpp:1009
 #, boost-format
 msgid "The track %1% from file no. %2% ('%3%') is to be appended more than once. The argument for '--append-to' was invalid.\n"
 msgstr ""
@@ -7137,17 +7137,17 @@ msgstr ""
 msgid "The track ID %1% does not have a valid CodecID.\n"
 msgstr ""
 
-#: src/merge/output_control.cpp:825
+#: src/merge/output_control.cpp:837
 #, boost-format
 msgid "The track headers could not be rendered correctly. %1%\n"
 msgstr ""
 
-#: src/merge/output_control.cpp:1043
+#: src/merge/output_control.cpp:1055
 #, boost-format
 msgid "The track number %1% from the file '%2%' can probably not be appended correctly to the track number %3% from the file '%4%': %5% Please make sure that the resulting file plays correctly the whole time. The author of this program will probably not give support for playback issues with the resulting file.\n"
 msgstr ""
 
-#: src/merge/output_control.cpp:1054
+#: src/merge/output_control.cpp:1066
 #, boost-format
 msgid "The track number %1% from the file '%2%' cannot be appended to the track number %3% from the file '%4%'. %5%\n"
 msgstr ""
@@ -7157,7 +7157,7 @@ msgstr ""
 msgid "The track number as used in the Block Header."
 msgstr ""
 
-#: src/merge/output_control.cpp:1052
+#: src/merge/output_control.cpp:1064
 msgid "The track parameters do not match."
 msgstr ""
 
@@ -7178,8 +7178,8 @@ msgstr "Theora"
 msgid "There is a new version available online."
 msgstr "Una nuova versione è disponibile online."
 
-#: src/merge/output_control.cpp:918
-#: src/merge/output_control.cpp:928
+#: src/merge/output_control.cpp:930
+#: src/merge/output_control.cpp:940
 #, boost-format
 msgid "There is no file with the ID '%1%'. The argument for '--append-to' was invalid.\n"
 msgstr ""
@@ -7332,7 +7332,7 @@ msgstr "Questa proprietà è unica. Non possono essere aggiunte altre istanze in
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. %1%\n"
 msgstr "Questo VERAMENTE non doveva accadere. Lo spazio riservato per il primo elemento meta seek era troppo piccolo. %1%\n"
 
-#: src/merge/output_control.cpp:1659
+#: src/merge/output_control.cpp:1671
 #, boost-format
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. Size needed: %1%. %2%\n"
 msgstr "Questo VERAMENTE non doveva accadere. Lo spazio riservato per il primo elemento meta seek era troppo piccolo. Dimensione necessaria: %1%. %2%\n"
@@ -8206,7 +8206,7 @@ msgstr "anche se ci sono stati avvisi"
 msgid "failed"
 msgstr "fallito"
 
-#: src/merge/output_control.cpp:588
+#: src/merge/output_control.cpp:600
 #, boost-format
 msgid "filelist_t not found for generic_packetizer_c. %1%\n"
 msgstr "filelist_t non trovato per generic_packetizer_c. %1%\n"
@@ -9437,3 +9437,4 @@ msgstr "sì"
 
 #~ msgid "wavpack_reader: Could not open the file."
 #~ msgstr "wavpack_reader: Impossibile aprire il file."
+

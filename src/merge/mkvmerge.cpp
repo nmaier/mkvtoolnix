@@ -433,10 +433,10 @@ identify(std::string &filename) {
 /** \brief Parse a number postfixed with a time-based unit
 
    This function parsers a number that is postfixed with one of the
-   four units 's', 'ms', 'us' or 'ns'. If the postfix is 'fps' then
-   this means 'frames per second'. If the postfix is 'p' or 'i' then
-   it is also interpreted as the number of 'progressive frames per
-   second' or 'interlaced frames per second'.
+   units 's', 'ms', 'us', 'ns', 'fps', 'p' or 'i'. If the postfix is
+   'fps' then this means 'frames per second'. If the postfix is 'p' or
+   'i' then it is also interpreted as the number of 'progressive
+   frames per second' or 'interlaced frames per second'.
 
    It returns a number of nanoseconds.
 */
@@ -497,7 +497,7 @@ parse_number_with_unit(const std::string &s,
       return (int64_t)(1000000000.0 / d_value);
 
   } else if (unit != "s")
-    mxerror(boost::format(Y("'%1%' does not contain a valid unit ('s', 'ms', 'us' or 'ns') in '%2% %3%'.\n")) % s % argument % display_s);
+    mxerror(boost::format(Y("'%1%' does not contain a valid unit ('s', 'ms', 'us', 'ns', 'fps', 'p' or 'i') in '%2% %3%'.\n")) % s % argument % display_s);
 
   if (is_fraction)
     return multiplier * n / d;

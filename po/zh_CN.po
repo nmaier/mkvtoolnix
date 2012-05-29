@@ -1095,8 +1095,8 @@ msgid "'%1%' can only be used with a file name. No further options are allowed i
 msgstr "'%1%' 只能与文件名一同使用。只要使用本选项，就不允许使用其他选项。\n"
 
 #: src/merge/mkvmerge.cpp:500
-#, boost-format
-msgid "'%1%' does not contain a valid unit ('s', 'ms', 'us' or 'ns') in '%2% %3%'.\n"
+#, fuzzy, boost-format
+msgid "'%1%' does not contain a valid unit ('s', 'ms', 'us', 'ns', 'fps', 'p' or 'i') in '%2% %3%'.\n"
 msgstr "'%1%' 不包含有效单位 ('s', 'ms', 'us' 或 'ns') 在  '%2% %3%' 中。\n"
 
 #: src/merge/mkvmerge.cpp:1105
@@ -2022,7 +2022,7 @@ msgstr "另一个混流任务仍在处理中。要启动一项新任务，请等
 msgid "Appending a track from a file to another track from the same file is not allowed. This is the case for tracks number %u and %u."
 msgstr "不允许将一个文件的轨道追加合并到同一个文件的其他轨道。出现问题的轨道号为 %u 与 %u。"
 
-#: src/merge/output_control.cpp:1766
+#: src/merge/output_control.cpp:1778
 #, boost-format
 msgid "Appending track %1% from file no. %2% ('%3%') to track %4% from file no. %5% ('%6%').\n"
 msgstr "正在追加合并轨道 %1%（自文件 %2% ('%3%')）到轨道 %4%（自文件 %5% ('%6%')）。\n"
@@ -2395,7 +2395,7 @@ msgstr "章节"
 msgid "Chapters (%d entries) from %s"
 msgstr "章节 (%d 项) 自 %s"
 
-#: src/merge/output_control.cpp:1400
+#: src/merge/output_control.cpp:1412
 msgid "Chapters are not allowed in WebM compliant files. No chapters will be written into any output file.\n"
 msgstr "WebM 兼容文件中不允许有章节。输出文件中不会写入任何章节。\n"
 
@@ -2707,7 +2707,7 @@ msgstr "无法从该 MPEG-1/2 轨道提取序列头。\n"
 msgid "Could not find an index for audio track %1% (avilib error message: %2%). Skipping track.\n"
 msgstr "找不到音频轨 %1% 的索引 (avilib 错误消息: %2%)。正在跳过此轨。\n"
 
-#: src/merge/output_control.cpp:1721
+#: src/merge/output_control.cpp:1733
 #, boost-format
 msgid "Could not find gptzr when appending. %1%\n"
 msgstr "追加合并时找不到 gptzr。 %1%\n"
@@ -3171,7 +3171,7 @@ msgstr "EBML 读取版本: %1%"
 msgid "EBML version: %1%"
 msgstr "EBML 版本: %1%"
 
-#: src/merge/output_control.cpp:1241
+#: src/merge/output_control.cpp:1253
 #, boost-format
 msgid "EVIL internal bug! (unknown file type). %1%\n"
 msgstr "*罪恶的* 内部错误! (未知文件类型)。 %1%\n"
@@ -3561,7 +3561,7 @@ msgstr "文件/剪辑链接"
 msgid "File/segment title:"
 msgstr "文件/剪辑标题:"
 
-#: src/merge/output_control.cpp:932
+#: src/merge/output_control.cpp:944
 msgid "Files cannot be appended to themselves. The argument for '--append-to' was invalid.\n"
 msgstr "文件不能被追加合并到文件自己。'--append-to' 的参数无效。\n"
 
@@ -4664,7 +4664,7 @@ msgstr "给定了多个文件名 ('%1%' 与 '%2%')。\n"
 msgid "More than one name was given for a single attachment. '%1%' will be discarded and '%2%' used instead.\n"
 msgstr "单个附件被指定了多于一个名称。'%1%' 将被废弃，并用 '%2%' 代替。\n"
 
-#: src/merge/output_control.cpp:1008
+#: src/merge/output_control.cpp:1020
 #, boost-format
 msgid "More than one track is to be appended to the track %1% from file no. %2% ('%3%'). The argument for '--append-to' was invalid.\n"
 msgstr "被追加合并至轨道 %1%（自文件 %2% ('%3%')）的轨道多于一条。'--append-to' 的参数无效。\n"
@@ -4779,7 +4779,7 @@ msgstr "附件 '%s' 的 MIME 类型尚未选择。"
 msgid "No MIME type has been set for the attachment '%1%', and it could not be guessed.\n"
 msgstr "附件 '%1%' 的 MIME 类型尚未设定，且不可猜。\n"
 
-#: src/merge/output_control.cpp:967
+#: src/merge/output_control.cpp:979
 #, boost-format
 msgid "No append mapping was given for the file no. %1% ('%2%'). A default mapping of %3% will be used instead. Please keep that in mind if mkvmerge aborts with an error message regarding invalid '--append-to' options.\n"
 msgstr "没有为文件 %1% ('%2%') 指定追加映射。将使用默认映射 %3%。如果 mkvmerge 异常中止并输出关于无效的 '--append-to' 选项的错误消息，请留心。\n"
@@ -4955,7 +4955,7 @@ msgstr "仅允许有一个输出文件。\n"
 msgid "Only one segment info file allowed in '%1% %2%'.\n"
 msgstr "仅允许有一个剪辑文件，在 '%1% %2%'。\n"
 
-#: src/merge/output_control.cpp:948
+#: src/merge/output_control.cpp:960
 #, boost-format
 msgid "Only partial append mappings were given for the file no. %1% ('%2%'). Either don't specify any mapping (in which case the default mapping will be used) or specify a mapping for all tracks that are to be copied.\n"
 msgstr "只给出了文件 %1% ('%2%') 的部分追加映射。只有不指定任何映射 (此时将使用默认映射) 或为所有轨道指定映射时，才会复制所有轨道。\n"
@@ -5201,7 +5201,7 @@ msgstr "进度"
 
 #: src/extract/timecodes_v2.cpp:289
 #: src/extract/tracks.cpp:401
-#: src/merge/output_control.cpp:517
+#: src/merge/output_control.cpp:529
 #, boost-format
 msgid "Progress: %1%%%%2%"
 msgstr "进度: %1%%%%2%"
@@ -5211,7 +5211,7 @@ msgstr "进度: %1%%%%2%"
 msgid "Progress: 100%\n"
 msgstr "进度: 100%\n"
 
-#: src/merge/output_control.cpp:2017
+#: src/merge/output_control.cpp:496
 #, boost-format
 msgid "Progress: 100%%%1%"
 msgstr "进度: 100%%%1%"
@@ -5975,7 +5975,7 @@ msgstr "一些头部值已被修改。您确实要在不保存当前文件的情
 msgid "Some header values have been modified. Do you really want to reload without saving the file?"
 msgstr "一些头部值已被修改。您确实要在不保存文件的情况下重新载入?"
 
-#: src/merge/output_control.cpp:1440
+#: src/merge/output_control.cpp:1452
 #, boost-format
 msgid "Some tag elements are missing (this error should not have occured - another similar error should have occured earlier). %1%\n"
 msgstr "缺某些标签元素 (不该发生此错误 - 另一个类似的错误应该在早些时候发生过)。%1%\n"
@@ -6161,7 +6161,7 @@ msgstr "标签选择器"
 msgid "Tags"
 msgstr "标签"
 
-#: src/merge/output_control.cpp:1428
+#: src/merge/output_control.cpp:1440
 msgid "Tags are not allowed in WebM compliant files. No tags will be written into any output file.\n"
 msgstr "WebM 兼容文件中不允许有标签。输出文件中不会写入任何标签。\n"
 
@@ -6442,7 +6442,7 @@ msgstr "校正文件未能正常读取。\n"
 msgid "The country '%s' is not a valid ccTLD and cannot be selected."
 msgstr "国家 '%s' 不是有效的 ccTLD，不能选择。"
 
-#: src/merge/output_control.cpp:1508
+#: src/merge/output_control.cpp:1520
 msgid "The cue entries (the index) are being written...\n"
 msgstr "正在写入 cue 条目 (索引)...\n"
 
@@ -6466,11 +6466,11 @@ msgstr "默认语言码 '%1%' 不是有效的 ISO639-2 语言代码，将被忽�
 msgid "The delay setting for track nr. %s in file '%s' is invalid."
 msgstr "对文件 '%s' 的 %s 轨的延时设置无效。"
 
-#: src/merge/output_control.cpp:1248
-#: src/merge/output_control.cpp:1251
-#: src/merge/output_control.cpp:1254
-#: src/merge/output_control.cpp:1257
 #: src/merge/output_control.cpp:1260
+#: src/merge/output_control.cpp:1263
+#: src/merge/output_control.cpp:1266
+#: src/merge/output_control.cpp:1269
+#: src/merge/output_control.cpp:1272
 #, boost-format
 msgid ""
 "The demultiplexer for the file '%1%' failed to initialize:\n"
@@ -6563,7 +6563,7 @@ msgstr "文件 '%1%' 无法打开以写入 (%2%)。\n"
 msgid "The file '%1%' could not be opened for writing (%2%, %3%).\n"
 msgstr "文件 '%1%' 无法打开以写入 (%2%, %3%)。\n"
 
-#: src/merge/output_control.cpp:1470
+#: src/merge/output_control.cpp:1482
 #, boost-format
 msgid "The file '%1%' has been opened for writing.\n"
 msgstr "文件 '%1%' 已打开以写入。\n"
@@ -6588,12 +6588,12 @@ msgstr "文件 '%s' 不存在。"
 msgid "The file '%s' is already processed in combination with the file '%s'. It cannot be added a second time."
 msgstr "文件 '%s' 已经与文件 '%s' 作为组合处理。不能重复添加。"
 
-#: src/merge/output_control.cpp:1254
+#: src/merge/output_control.cpp:1266
 msgid "The file content does not match its format type and was not recognized."
 msgstr "文件内容与格式类型不相匹配，未能识别。"
 
-#: src/merge/output_control.cpp:1248
-#: src/merge/output_control.cpp:1251
+#: src/merge/output_control.cpp:1260
+#: src/merge/output_control.cpp:1263
 msgid "The file could not be opened for reading, or there was not enough data to parse its headers."
 msgstr "文件无法打开以读取，或没有足够的数据解析文件头部。"
 
@@ -6625,7 +6625,7 @@ msgstr "文件头太短。\n"
 msgid "The file header was not read correctly.\n"
 msgstr "文件头读取异常。\n"
 
-#: src/merge/output_control.cpp:1257
+#: src/merge/output_control.cpp:1269
 msgid "The file headers could not be parsed, e.g. because they're incomplete, invalid or damaged."
 msgstr "文件头部无法解析，可能是因为不完整、无效或损坏。"
 
@@ -6659,17 +6659,17 @@ msgstr "正在固定文件，第 4/4 步..."
 msgid "The file name for this segment."
 msgstr "此剪辑的文件名。"
 
-#: src/merge/output_control.cpp:981
+#: src/merge/output_control.cpp:993
 #, boost-format
 msgid "The file no. %1% ('%2%') does not contain a track with the ID %3%, or that track is not to be copied. The argument for '--append-to' was invalid.\n"
 msgstr "文件 %1% ('%2%') 不含 ID 为 %3% 的轨道，或者没选择复制该轨道。选项 '--append-to' 的参数无效。\n"
 
-#: src/merge/output_control.cpp:987
+#: src/merge/output_control.cpp:999
 #, boost-format
 msgid "The file no. %1% ('%2%') does not contain a track with the ID %3%, or that track is not to be copied. Therefore no track can be appended to it. The argument for '--append-to' was invalid.\n"
 msgstr "文件 %1% ('%2%') 不含 ID 为 %3% 的轨道，或者没选择复制该轨道。因此没有轨道可以追加给它。选项 '--append-to' 的参数无效。\n"
 
-#: src/merge/output_control.cpp:924
+#: src/merge/output_control.cpp:936
 #, boost-format
 msgid "The file no. %1% ('%2%') is not being appended. The argument for '--append-to' was invalid.\n"
 msgstr "文件 %1% ('%2%') 未被追加合并。选项 '--append-to' 的参数无效。\n"
@@ -6715,7 +6715,7 @@ msgstr "切割尺寸格式无效。"
 msgid "The format of the split timecode/duration is invalid."
 msgstr "切割时间码/时长格式无效。"
 
-#: src/merge/output_control.cpp:1051
+#: src/merge/output_control.cpp:1063
 msgid "The formats do not match."
 msgstr "格式不匹配。"
 
@@ -6914,7 +6914,7 @@ msgstr "选项 '--meta-seek-size' 不再受支持。请阅读 mkvmerge 的自述
 msgid "The order of the various options is not important."
 msgstr "不必在意各选项的顺序。"
 
-#: src/merge/output_control.cpp:1466
+#: src/merge/output_control.cpp:1478
 #, boost-format
 msgid "The output file '%1%' could not be opened for writing (%2%).\n"
 msgstr "即将输出的文件 '%1%' 无法打开写入(%2%)。\n"
@@ -6964,7 +6964,7 @@ msgstr "'%1%' 中的属性值不是有效的带符号整数。%2%\n"
 msgid "The property value is not a valid unsigned integer in '%1%'. %2%\n"
 msgstr "'%1%' 中的属性值不是有效的无符号整数。%2%\n"
 
-#: src/merge/output_control.cpp:1053
+#: src/merge/output_control.cpp:1065
 msgid "The reason is unknown."
 msgstr "原因未知。"
 
@@ -7136,7 +7136,7 @@ msgstr "此流的时间码在文件中途重置。这是不支持的。当前数
 msgid "The title for the whole movie."
 msgstr "整部影片的标题。"
 
-#: src/merge/output_control.cpp:997
+#: src/merge/output_control.cpp:1009
 #, boost-format
 msgid "The track %1% from file no. %2% ('%3%') is to be appended more than once. The argument for '--append-to' was invalid.\n"
 msgstr "轨道 %1% （自文件 %2% ('%3%')）被超过一次追加合并。'--append-to' 的参数无效。\n"
@@ -7146,17 +7146,17 @@ msgstr "轨道 %1% （自文件 %2% ('%3%')）被超过一次追加合并。'--a
 msgid "The track ID %1% does not have a valid CodecID.\n"
 msgstr "轨道 ID %1% 没有有效的 CodecID。\n"
 
-#: src/merge/output_control.cpp:825
+#: src/merge/output_control.cpp:837
 #, boost-format
 msgid "The track headers could not be rendered correctly. %1%\n"
 msgstr "轨道头无法正确呈递。%1%\n"
 
-#: src/merge/output_control.cpp:1043
+#: src/merge/output_control.cpp:1055
 #, boost-format
 msgid "The track number %1% from the file '%2%' can probably not be appended correctly to the track number %3% from the file '%4%': %5% Please make sure that the resulting file plays correctly the whole time. The author of this program will probably not give support for playback issues with the resulting file.\n"
 msgstr "轨道号 %1% （自文件 '%2%'）可能无法被正确追加到轨道号 %3% （自文件 '%4%'）: %5% 请证实生成的文件是否可以完整地正常播放。本程序的作者可能无法提供关于播放生成的文件的支持。\n"
 
-#: src/merge/output_control.cpp:1054
+#: src/merge/output_control.cpp:1066
 #, boost-format
 msgid "The track number %1% from the file '%2%' cannot be appended to the track number %3% from the file '%4%'. %5%\n"
 msgstr "轨道号 %1% （自文件 '%2%'）无法追加到轨道号 %3% （自文件 '%4%'）。%5%\n"
@@ -7166,7 +7166,7 @@ msgstr "轨道号 %1% （自文件 '%2%'）无法追加到轨道号 %3% （自�
 msgid "The track number as used in the Block Header."
 msgstr "块头部使用的轨道号。"
 
-#: src/merge/output_control.cpp:1052
+#: src/merge/output_control.cpp:1064
 msgid "The track parameters do not match."
 msgstr "轨道参数不匹配。"
 
@@ -7187,8 +7187,8 @@ msgstr "Theora"
 msgid "There is a new version available online."
 msgstr "有新版本可用。"
 
-#: src/merge/output_control.cpp:918
-#: src/merge/output_control.cpp:928
+#: src/merge/output_control.cpp:930
+#: src/merge/output_control.cpp:940
 #, boost-format
 msgid "There is no file with the ID '%1%'. The argument for '--append-to' was invalid.\n"
 msgstr "没有文件的 ID 为 '%1%'。参数 '--append-to' 无效。\n"
@@ -7338,7 +7338,7 @@ msgstr "此属性是唯一的。不能在 '%1%' 增加其他实例。%2%\n"
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. %1%\n"
 msgstr "这 *真的* 不该发生。为首个元定位元素预留的空间过小。%1%\n"
 
-#: src/merge/output_control.cpp:1659
+#: src/merge/output_control.cpp:1671
 #, boost-format
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. Size needed: %1%. %2%\n"
 msgstr "这 *真的* 不该发生。为首个元定位元素预留的空间过小。需要的尺寸: %1%. %2%\n"
@@ -8210,7 +8210,7 @@ msgstr "成功执行或有警告信息时"
 msgid "failed"
 msgstr "失败"
 
-#: src/merge/output_control.cpp:588
+#: src/merge/output_control.cpp:600
 #, boost-format
 msgid "filelist_t not found for generic_packetizer_c. %1%\n"
 msgstr "filelist_t 未找到以供给 generic_packetizer_c。 %1%\n"
@@ -10060,3 +10060,4 @@ msgstr "是"
 
 #~ msgid "wrong usage: writing to read-only memory"
 #~ msgstr "错误用法: 写入到只读内存"
+
