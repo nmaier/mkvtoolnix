@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2012-04-26 23:34+0900\n"
+"PO-Revision-Date: 2012-05-31 18:25+0900\n"
 "Last-Translator: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "Language-Team: Japanese <boiled.sugar@gmail.com>\n"
 "Language: ja\n"
@@ -1111,9 +1111,9 @@ msgid "'%1%' can only be used with a file name. No further options are allowed i
 msgstr "'%1%' はファイル名指定時のみ使用できます。このオプションの使用時は他のオプションは使用できません。\n"
 
 #: src/merge/mkvmerge.cpp:500
-#, fuzzy, boost-format
+#, boost-format
 msgid "'%1%' does not contain a valid unit ('s', 'ms', 'us', 'ns', 'fps', 'p' or 'i') in '%2% %3%'.\n"
-msgstr "'%2% %3%'の'%1%'は有効な単位（'s'、'ms'、'us'、'ns'）を含んでいません。\n"
+msgstr "'%2% %3%'の'%1%'は有効な単位（'s'、'ms'、'us'、'ns'、'fps'、'p'、'i'）を含んでいません。\n"
 
 #: src/merge/mkvmerge.cpp:1105
 #, boost-format
@@ -9753,4 +9753,3 @@ msgstr "はい"
 
 #~ msgid "wrong usage: writing to read-only memory"
 #~ msgstr "間違った使用法：読み込み専用メモリへの書き込み"
-
