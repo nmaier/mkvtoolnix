@@ -28,9 +28,12 @@ build each library. Luckily there's the "mingw-cross-env" project at
 http://mingw-cross-env.nongnu.org/ that provides an easy-to-use way of
 setting up everything we need.
 
-First, download a release or the current development version; see
-http://mingw-cross-env.nongnu.org/#latest-release to to retrieve
-them. Then unpack the release.
+Unfortunately current versions of mingw-cross-env use a compiler
+version that is known to cause issues upon runtime. Therefore the
+author maintains his own fork that is known to work. In order to
+retrieve that fork you need `git`. Then to the following:
+
+  git clone https://github.com/mbunkus/mxe $HOME/mingw-cross-env
 
 The rest of this guide assumes that you've unpacked mingw-cross-env
 into the directory $HOME/mingw-cross-env.
@@ -85,7 +88,8 @@ Next, build the required libraries:
 
 Append the installation directory to your PATH variable:
 
-  export PATH=$PATH:$HOME/mingw-cross-env/usr/i686-pc-mingw32/bin
+  export PATH=$PATH:$HOME/mingw-cross-env/usr/bin
+  hash -r
 
 Finally, configure mkvtoolnix:
 
@@ -93,7 +97,7 @@ Finally, configure mkvtoolnix:
   ./configure \
     --host=i686-pc-mingw32 \
     --with-boost=$HOME/mingw-cross-env/usr/i686-pc-mingw32 \
-    --with-wx-config=$HOME/mingw-cross-env/usr/i686-pc-mingw32/bin/i686-pc-mingw32-wx-config
+    --with-wx-config=$HOME/mingw-cross-env/usr/bin/i686-pc-mingw32-wx-config
 
 If everything works then build it:
 

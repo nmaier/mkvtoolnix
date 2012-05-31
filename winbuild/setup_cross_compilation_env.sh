@@ -28,7 +28,7 @@ LOGFILE=$(mktemp)
 function update_mingw_cross_env {
   if [[ ! -d $INSTALL_DIR ]]; then
     echo Retrieving the mingw-cross-env build scripts >> $LOGFILE
-    git clone https://github.com/mxe/mxe $INSTALL_DIR >> $LOGFILE 2>&1
+    git clone https://github.com/mbunkus/mxe $INSTALL_DIR >> $LOGFILE 2>&1
   else
     echo Updating the mingw-cross-env build scripts >> $LOGFILE
     cd $INSTALL_DIR
@@ -43,18 +43,23 @@ function create_run_configure_script {
   cat > run_configure.sh <<EOF
 #!/bin/bash
 
-export PATH=$PATH:${INSTALL_DIR}/usr/${TARGET}/bin
+export PATH=$PATH:${INSTALL_DIR}/usr/bin
 hash -r
 
 ./configure \\
   --host=${TARGET} \\
   --with-boost="${INSTALL_DIR}/usr/${TARGET}" \\
-  --with-wx-config="${INSTALL_DIR}/usr/${TARGET}/bin/${TARGET}-wx-config" \\
+  --with-wx-config="${INSTALL_DIR}/usr/bin/${TARGET}-wx-config" \\
   "\$@"
 
 exit \$?
 EOF
   chmod 755 run_configure.sh
+
+  if [[ ! -f configure ]]; then
+    echo Creating \'configure\'
+    ./autogen.sh
+  fi
 }
 
 function configure_mkvtoolnix {
@@ -68,7 +73,7 @@ function configure_mkvtoolnix {
   if [ $result -eq 0 ]; then
     echo 'Configuration went well. Congratulations. You can now run "drake"'
     echo 'after adding the mingw cross compiler installation directory to your PATH:'
-    echo '  export PATH=$PATH:'${INSTALL_DIR}'/usr/'${TARGET}'/bin'
+    echo '  export PATH=$PATH:'${INSTALL_DIR}'/usr/bin'
     echo '  hash -r'
     echo '  ./drake'
   else
