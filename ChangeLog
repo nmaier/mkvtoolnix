@@ -1,3 +1,9 @@
+2012-06-01  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Reading DTS from AVI files often resulted in
+	the error message that DTS headers could not be found in the first
+	frames. This has been fixed. Fixes issue 759.
+
 2012-05-27  Moritz Bunkus  <moritz@bunkus.org>
 
 	* Released v5.6.0.

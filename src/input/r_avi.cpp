@@ -597,7 +597,7 @@ avi_reader_c::create_dts_packetizer(int aid) {
     while ((-1 == dts_position) && (10 > num_read)) {
       int chunk_size = AVI_read_audio_chunk(m_avi, nullptr);
 
-      if (0 > chunk_size) {
+      if (0 < chunk_size) {
         memory_cptr chunk = memory_c::alloc(chunk_size);
         AVI_read_audio_chunk(m_avi, reinterpret_cast<char *>(chunk->get_buffer()));
 
