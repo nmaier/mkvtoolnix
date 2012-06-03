@@ -186,6 +186,7 @@ int g_file_num = 1;
 int g_split_max_num_files                   = 65535;
 
 append_mode_e g_append_mode                 = APPEND_MODE_FILE_BASED;
+bool s_appending_files                      = false;
 
 bool g_stereo_mode_used                     = false;
 
@@ -1278,6 +1279,9 @@ create_readers() {
     for (auto &file : g_files) {
       file.reader->m_appending = file.appending;
       file.reader->create_packetizers();
+
+      if (!s_appending_files)
+        s_appending_files = file.appending;
     }
     // Check if all track IDs given on the command line are actually
     // present.
@@ -2002,7 +2006,7 @@ main_loop() {
     }
 
     // Append the next track if appending is wanted.
-    bool appended_a_track = append_tracks_maybe();
+    bool appended_a_track = s_appending_files && append_tracks_maybe();
 
     if (winner && winner->pack) {
       packet_cptr pack = winner->pack;
