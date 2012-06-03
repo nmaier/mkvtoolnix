@@ -22,6 +22,7 @@
 #include <wx/listctrl.h>
 #include <wx/statusbr.h>
 #include <wx/statline.h>
+#include <wx/utils.h>
 
 #include "common/at_scope_exit.h"
 #include "common/fs_sys_helpers.h"
@@ -378,6 +379,8 @@ mux_thread::Entry() {
       if (TestDestroy())
         return nullptr;
       char_read = read_input(c, eof);
+      if (!char_read && !eof)
+        wxMilliSleep(100);
     }
 
     if ((c == '\n') || (c == '\r') || eof) {
