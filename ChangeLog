@@ -1,3 +1,10 @@
+2012-06-05  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Tracks in QuickTime/MP4 files with empty
+	chunk offset tables (STCO and CO64 atoms) are ignored. This fixes
+	one of the reasons for the "constant sample size and variable
+	duration not supported" error.
+
 2012-06-03  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: bug fix: Fixed mmg's excessive CPU usage during muxing.

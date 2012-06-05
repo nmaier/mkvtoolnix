@@ -300,9 +300,7 @@ qtmp4_reader_c::parse_headers() {
       continue;
     }
 
-    dmx->update_tables(m_time_scale);
-
-    dmx->ok = true;
+    dmx->ok = dmx->update_tables(m_time_scale);
   }
 
   detect_interleaving();
@@ -1978,9 +1976,12 @@ qtmp4_demuxer_c::adjust_timecodes(int64_t delta) {
   max_timecode += delta;
 }
 
-void
+bool
 qtmp4_demuxer_c::update_tables(int64_t global_m_time_scale) {
   uint64_t last = chunk_table.size();
+
+  if (!last)
+    return false;
 
   // process chunkmap:
   size_t j, i = chunkmap_table.size();
@@ -2023,7 +2024,7 @@ qtmp4_demuxer_c::update_tables(int64_t global_m_time_scale) {
     else
       mxerror(Y("Quicktime/MP4 reader: Constant samplesize & variable duration not yet supported. Contact the author if you have such a sample file.\n"));
 
-    return;
+    return true;
   }
 
   // calc pts:
@@ -2066,6 +2067,8 @@ qtmp4_demuxer_c::update_tables(int64_t global_m_time_scale) {
   }
 
   update_editlist_table(global_m_time_scale);
+
+  return true;
 }
 
 // Also taken from mplayer's demux_mov.c file.
