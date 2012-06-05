@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: mkvtoolnix_uk\n"
 "Report-Msgid-Bugs-To: Moritz Bunkus <moritz@bunkus.org>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2012-05-09 11:21+0200\n"
+"PO-Revision-Date: 2012-06-05 20:03+0200\n"
 "Last-Translator: Andriy Bilous'ko <arestarh@ukr.net>\n"
 "Language-Team: Ukrainian <moritz@bunkus.org>\n"
 "Language: uk\n"
@@ -1122,9 +1122,9 @@ msgid "'%1%' can only be used with a file name. No further options are allowed i
 msgstr "'%1%' може бути використано лише з ім'ям файлу. Жодні інші варіанти не допустимі, якщо цей параметр використовується.\n"
 
 #: src/merge/mkvmerge.cpp:500
-#, fuzzy, boost-format
+#, boost-format
 msgid "'%1%' does not contain a valid unit ('s', 'ms', 'us', 'ns', 'fps', 'p' or 'i') in '%2% %3%'.\n"
-msgstr "'%1%' не містить(містять) вірний блок ('s', 'ms', 'us' або 'ns') в '%2% %3%'.\n"
+msgstr "У '%1%' не вказано корректну одиницю виміру ('s', 'ms', 'us', 'ns', 'fps', 'p' або 'i') в '%2% %3%'.\n"
 
 #: src/merge/mkvmerge.cpp:1105
 #, boost-format
@@ -2282,7 +2282,7 @@ msgstr "Не вдається запустити другу роботу мул�
 #: src/extract/xtr_textsubs.cpp:314
 #, boost-format
 msgid "Cannot write track %1% with the CodecID '%2%' to the file '%3%' because track %4% with the CodecID '%5%' is already being written to the same file, and their CodecPrivate data (the USF styles etc) do not match.\n"
-msgstr "Неможливо записати доріжку %1% з CodecID '%2%' до файлу '%3%', тому що доріжка %4% з CodecID '%5%' вже записується в той же файл, і їх спицифічні дані CodecPrivate (USF-стилі і т.д.) не збігаються.\n"
+msgstr "Неможливо записати доріжку %1% з CodecID '%2%' до файлу '%3%', тому що доріжка %4% з CodecID '%5%' вже записується в той же файл, і їх специфічні дані CodecPrivate (USF-стилі і т.д.) не збігаються.\n"
 
 #: src/extract/xtr_avi.cpp:47
 #: src/extract/xtr_base.cpp:63
@@ -3664,7 +3664,7 @@ msgstr "Примусово встановлюється масштабний к�
 
 #: src/mmg/tabs/input.cpp:188
 msgid "Format specific options"
-msgstr "Опції, спицифічні щодо вибраного формату даних"
+msgstr "Опції, специфічні щодо вибраного формату даних"
 
 #: src/mpegparser/M2VParser.cpp:449
 msgid "Found B frame without second reference in a non closed GOP. Fix the MPEG2 video stream before attempting to multiplex it.\n"
@@ -6551,7 +6551,7 @@ msgstr "Тривалість, після якої починається нов�
 #: src/propedit/options.cpp:207
 #, boost-format
 msgid "The edit specifications '%1%' and '%2%' resolve to the same track with the UID %3%.\n"
-msgstr "Спицифікації редагування '%1%' і '%2%' відповідають тим же доріжкам з UID %3%.\n"
+msgstr "Специфікації редагування '%1%' і '%2%' відповідають тим же доріжкам з UID %3%.\n"
 
 #: src/mmg/header_editor/frame.cpp:670
 #: src/mmg/tabs/chapters.cpp:1867
@@ -9855,4 +9855,3 @@ msgstr "Так"
 
 #~ msgid "wrong usage: writing to read-only memory"
 #~ msgstr "wrong usage: запис тільки до \"пам'яті для читання\""
-
