@@ -2005,8 +2005,9 @@ qtmp4_demuxer_c::update_tables(int64_t global_m_time_scale) {
     s                      += chunk_table[j].size;
   }
 
-  // workaround for fixed-size video frames (dv and uncompressed)
-  if (sample_table.empty() && ('a' != type)) {
+  // workaround for fixed-size video frames (dv and uncompressed), but
+  // also for audio with constant sample size
+  if (sample_table.empty() && sample_size) {
     for (i = 0; i < s; ++i) {
       qt_sample_t sample;
 
@@ -2018,7 +2019,7 @@ qtmp4_demuxer_c::update_tables(int64_t global_m_time_scale) {
   }
 
   if (sample_table.empty()) {
-    // constant sampesize
+    // constant samplesize
     if ((1 == durmap_table.size()) || ((2 == durmap_table.size()) && (1 == durmap_table[1].number)))
       duration = durmap_table[0].duration;
     else

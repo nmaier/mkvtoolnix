@@ -1,5 +1,10 @@
 2012-06-05  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: Fixed handling of tracks in QuickTime/MP4
+	files with a constant sample size. This fixes the other reason for
+	the "constant sample size and variable duration not supported"
+	error. Fixes issue 764.
+
 	* mkvmerge: bug fix: Tracks in QuickTime/MP4 files with empty
 	chunk offset tables (STCO and CO64 atoms) are ignored. This fixes
 	one of the reasons for the "constant sample size and variable
