@@ -467,7 +467,7 @@ namespace :install do
     install_data :mimepackagesdir, FileList[ "#{$top_srcdir}/share/mime/*.xml" ]
 
     wanted_apps     = %w{mkvmerge mkvmergeGUI mkvinfo mkvextract mkvpropedit}.collect { |e| "#{e}.png" }.to_hash_by
-    wanted_dirs     = %w{32x32 48x48 64x64 128x128 256x256}.to_hash_by
+    wanted_dirs     = %w{16x16 24x24 32x32 48x48 64x64 96x96 128x128 256x256}.to_hash_by
     dirs_to_install = FileList[ "#{$top_srcdir}/share/icons/*"   ].select { |dir|  wanted_dirs[ dir.gsub(/.*icons\//, '').gsub(/\/.*/, '') ] }.sort.uniq
 
     dirs_to_install.each do |dir|
