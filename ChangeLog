@@ -1,3 +1,10 @@
+2012-06-29  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: The DTS and TrueHD packetizers were not
+	flushed correctly. In some rare circumstances this could lead to
+	mkvmerge aborting with an error message about the packet queue not
+	being empty at the end of the muxing process. Fixes #772.
+
 2012-06-17  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg, mkvinfo's GUI, all .exes: enhancement: Added new icons by

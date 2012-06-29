@@ -171,10 +171,9 @@ mpeg1_2_video_packetizer_c::process(packet_cptr packet) {
 }
 
 void
-mpeg1_2_video_packetizer_c::flush() {
+mpeg1_2_video_packetizer_c::flush_impl() {
   m_parser.SetEOS();
   generic_packetizer_c::process(new packet_t(new memory_c((unsigned char *)"", 0, false)));
-  video_packetizer_c::flush();
 }
 
 void

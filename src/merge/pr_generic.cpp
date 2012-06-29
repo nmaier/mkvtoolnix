@@ -1106,6 +1106,8 @@ generic_packetizer_c::contains_gap() {
 
 void
 generic_packetizer_c::flush() {
+  flush_impl();
+
   m_has_been_flushed = true;
   apply_factory();
 }

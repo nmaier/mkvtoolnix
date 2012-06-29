@@ -36,7 +36,6 @@ public:
   virtual void set_container_default_field_duration(int64_t default_duration);
   virtual unsigned int get_nalu_size_length() const;
 
-  virtual void flush();
   virtual void flush_frames();
 
   virtual const std::string get_format_name(bool translate = true) {
@@ -50,6 +49,7 @@ protected:
   virtual void handle_delayed_headers();
   virtual void handle_aspect_ratio();
   virtual void handle_actual_default_duration();
+  virtual void flush_impl();
 };
 
 #endif // __P_AVC_H

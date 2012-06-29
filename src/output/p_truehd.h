@@ -37,8 +37,6 @@ public:
   virtual int process(packet_cptr packet);
   virtual void handle_frames();
   virtual void set_headers();
-  virtual void flush();
-  virtual void flush_frames();
 
   virtual const std::string get_format_name(bool translate = true) {
     return translate ? Y("TrueHD") : "TrueHD";
@@ -49,6 +47,8 @@ public:
 protected:
   virtual void adjust_header_values(truehd_frame_cptr &frame);
 
+  virtual void flush_impl();
+  virtual void flush_frames();
   virtual void flush_frames_merged();
   virtual void flush_frames_separate();
 };

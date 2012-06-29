@@ -30,7 +30,6 @@ public:
   mpeg1_2_video_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, int version, double fps, int width, int height, int dwidth, int dheight, bool framed);
 
   virtual int process(packet_cptr packet);
-  virtual void flush();
 
   virtual const std::string get_format_name(bool translate = true) {
     return translate ? Y("MPEG-1/2") : "MPEG-1/2";
@@ -42,6 +41,7 @@ protected:
   virtual void create_private_data();
   virtual int process_framed(packet_cptr packet);
   virtual bool put_sequence_headers_into_codec_state(packet_cptr packet);
+  virtual void flush_impl();
 };
 
 #endif  // __P_MPEG1_2_H

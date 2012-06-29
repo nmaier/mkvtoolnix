@@ -310,9 +310,8 @@ mpeg4_p2_video_packetizer_c::flush_frames(bool end_of_file) {
 }
 
 void
-mpeg4_p2_video_packetizer_c::flush() {
+mpeg4_p2_video_packetizer_c::flush_impl() {
   flush_frames(true);
-  generic_packetizer_c::flush();
 }
 
 void

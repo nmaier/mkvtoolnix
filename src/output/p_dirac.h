@@ -34,8 +34,6 @@ public:
   virtual int process(packet_cptr packet);
   virtual void set_headers();
 
-  virtual void flush();
-
   virtual const std::string get_format_name(bool translate = true) {
     return translate ? Y("Dirac") : "Dirac";
   };
@@ -43,6 +41,7 @@ public:
   virtual connection_result_e can_connect_to(generic_packetizer_c *src, std::string &error_message);
 
 protected:
+  virtual void flush_impl();
   virtual void flush_frames();
   virtual void headers_found();
 };

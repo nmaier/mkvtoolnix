@@ -60,7 +60,6 @@ public:
   virtual ~mpeg4_p2_video_packetizer_c();
 
   virtual int process(packet_cptr packet);
-  virtual void flush();
 
   virtual const std::string get_format_name(bool translate = true) {
     return translate ? Y("MPEG-4") : "MPEG-4";
@@ -69,6 +68,7 @@ public:
 protected:
   virtual int process_native(packet_cptr packet);
   virtual int process_non_native(packet_cptr packet);
+  virtual void flush_impl();
   virtual void flush_frames(bool end_of_file);
   virtual void extract_aspect_ratio(const unsigned char *buffer, int size);
   virtual void extract_size(const unsigned char *buffer, int size);

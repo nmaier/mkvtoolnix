@@ -146,10 +146,9 @@ vc1_video_packetizer_c::headers_found() {
 }
 
 void
-vc1_video_packetizer_c::flush() {
+vc1_video_packetizer_c::flush_impl() {
   m_parser.flush();
   flush_frames();
-  generic_packetizer_c::flush();
 }
 
 void
@@ -173,4 +172,3 @@ vc1_video_packetizer_c::can_connect_to(generic_packetizer_c *src,
 
   return CAN_CONNECT_YES;
 }
-

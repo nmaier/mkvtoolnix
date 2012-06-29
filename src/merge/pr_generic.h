@@ -545,7 +545,7 @@ public:
   inline bool packet_available() {
     return !m_packet_queue.empty() && m_packet_queue.front()->factory_applied;
   }
-  virtual void flush();
+  void flush();
   virtual int64_t get_smallest_timecode() {
     return m_packet_queue.empty() ? 0x0FFFFFFF : m_packet_queue.front()->timecode;
   }
@@ -668,6 +668,10 @@ public:
   virtual bool display_dimensions_or_aspect_ratio_set();
 
   virtual bool is_compatible_with(output_compatibility_e compatibility);
+
+protected:
+  virtual void flush_impl() {
+  };
 };
 
 extern std::vector<generic_packetizer_c *> ptzrs_in_header_order;

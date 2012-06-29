@@ -116,7 +116,7 @@ truehd_packetizer_c::adjust_header_values(truehd_frame_cptr &frame) {
 }
 
 void
-truehd_packetizer_c::flush() {
+truehd_packetizer_c::flush_impl() {
   m_parser.parse(true);
   flush_frames();
 }
@@ -194,4 +194,3 @@ truehd_packetizer_c::can_connect_to(generic_packetizer_c *src,
 
   return CAN_CONNECT_YES;
 }
-

@@ -97,10 +97,9 @@ dirac_video_packetizer_c::headers_found() {
 }
 
 void
-dirac_video_packetizer_c::flush() {
+dirac_video_packetizer_c::flush_impl() {
   m_parser.flush();
   flush_frames();
-  generic_packetizer_c::flush();
 }
 
 void

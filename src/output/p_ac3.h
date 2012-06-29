@@ -35,7 +35,6 @@ public:
 
   virtual int process(packet_cptr packet);
   virtual void flush_packets();
-  virtual void flush();
   virtual void set_headers();
 
   virtual const std::string get_format_name(bool translate = true) {
@@ -49,6 +48,7 @@ protected:
   virtual void adjust_header_values(ac3::frame_c &ac3_header);
   virtual ac3::frame_c get_frame();
   virtual int64_t calculate_timecode(uint64_t stream_position);
+  virtual void flush_impl();
 };
 
 class ac3_bs_packetizer_c: public ac3_packetizer_c {

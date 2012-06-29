@@ -165,10 +165,9 @@ mpeg4_p10_es_video_packetizer_c::handle_actual_default_duration() {
 }
 
 void
-mpeg4_p10_es_video_packetizer_c::flush() {
+mpeg4_p10_es_video_packetizer_c::flush_impl() {
   m_parser.flush();
   flush_frames();
-  generic_packetizer_c::flush();
 }
 
 void

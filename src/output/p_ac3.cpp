@@ -113,10 +113,9 @@ ac3_packetizer_c::add_to_buffer(unsigned char *const buf,
 }
 
 void
-ac3_packetizer_c::flush() {
+ac3_packetizer_c::flush_impl() {
   m_parser.flush();
   flush_packets();
-  generic_packetizer_c::flush();
 }
 
 void

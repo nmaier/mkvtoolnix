@@ -144,7 +144,7 @@ dts_packetizer_c::process_available_packets(bool flushing) {
 }
 
 void
-dts_packetizer_c::flush() {
+dts_packetizer_c::flush_impl() {
   process_available_packets(true);
 }
 
