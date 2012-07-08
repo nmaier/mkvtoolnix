@@ -2288,7 +2288,7 @@ parse_args(std::vector<std::string> args) {
 static std::vector<std::string>
 setup(int argc,
       char **argv) {
-  clear_list_of_unique_uint32(UNIQUE_ALL_IDS);
+  clear_list_of_unique_numbers(UNIQUE_ALL_IDS);
 
   mtx_common_init("mkvmerge");
   g_kax_tracks = new KaxTracks();

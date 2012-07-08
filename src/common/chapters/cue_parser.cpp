@@ -185,7 +185,7 @@ create_simple_tag(cue_parser_args_t &a,
 static void
 add_tag_for_cue_entry(cue_parser_args_t &a,
                       KaxTags **tags,
-                      uint32_t cuid) {
+                      uint64_t cuid) {
   if (!tags)
     return;
 
@@ -261,7 +261,7 @@ add_subchapters_for_index_entries(cue_parser_args_t &a) {
   for (i = 0; i < a.start_indices.size(); i++) {
     atom                                                             = &GetFirstOrNextChild<KaxChapterAtom>(a.atom, atom);
 
-    GetChildAs<KaxChapterUID,           EbmlUInteger>(*atom)         = create_unique_uint32(UNIQUE_CHAPTER_IDS);
+    GetChildAs<KaxChapterUID,           EbmlUInteger>(*atom)         = create_unique_number(UNIQUE_CHAPTER_IDS);
     GetChildAs<KaxChapterTimeStart,     EbmlUInteger>(*atom)         = a.start_indices[i] - a.offset;
     GetChildAs<KaxChapterFlagHidden,    EbmlUInteger>(*atom)         = 1;
     GetChildAs<KaxChapterPhysicalEquiv, EbmlUInteger>(*atom)         = CHAPTER_PHYSEQUIV_INDEX;
@@ -285,12 +285,12 @@ add_elements_for_cue_entry(cue_parser_args_t &a,
 
   if (!a.edition) {
     a.edition                                           = &GetChild<KaxEditionEntry>(*a.chapters);
-    GetChildAs<KaxEditionUID, EbmlUInteger>(*a.edition) = create_unique_uint32(UNIQUE_EDITION_IDS);
+    GetChildAs<KaxEditionUID, EbmlUInteger>(*a.edition) = create_unique_number(UNIQUE_EDITION_IDS);
   }
 
   a.atom                                                      = &GetFirstOrNextChild<KaxChapterAtom>(*a.edition, a.atom);
   GetChildAs<KaxChapterPhysicalEquiv, EbmlUInteger>(*a.atom)  = CHAPTER_PHYSEQUIV_TRACK;
-  uint32_t cuid                                               = create_unique_uint32(UNIQUE_CHAPTER_IDS);
+  auto cuid                                                   = create_unique_number(UNIQUE_CHAPTER_IDS);
   GetChildAs<KaxChapterUID,           EbmlUInteger>(*a.atom)  = cuid;
   GetChildAs<KaxChapterTimeStart,     EbmlUInteger>(*a.atom)  = a.start_of_track - a.offset;
 

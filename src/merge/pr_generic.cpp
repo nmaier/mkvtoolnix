@@ -270,18 +270,17 @@ generic_packetizer_c::set_tag_track_uid() {
   }
 }
 
-int
-generic_packetizer_c::set_uid(uint32_t uid) {
-  if (is_unique_uint32(uid, UNIQUE_TRACK_IDS)) {
-    add_unique_uint32(uid, UNIQUE_TRACK_IDS);
-    m_huid = uid;
-    if (m_track_entry)
-      GetChildAs<KaxTrackUID, EbmlUInteger>(m_track_entry) = m_huid;
+bool
+generic_packetizer_c::set_uid(uint64_t uid) {
+  if (!is_unique_number(uid, UNIQUE_TRACK_IDS))
+    return false;
 
-    return 1;
-  }
+  add_unique_number(uid, UNIQUE_TRACK_IDS);
+  m_huid = uid;
+  if (m_track_entry)
+    GetChildAs<KaxTrackUID, EbmlUInteger>(m_track_entry) = m_huid;
 
-  return 0;
+  return true;
 }
 
 void
@@ -611,7 +610,7 @@ generic_packetizer_c::set_headers() {
   GetChildAs<KaxTrackNumber, EbmlUInteger>(m_track_entry) = m_hserialno;
 
   if (0 == m_huid)
-    m_huid = create_unique_uint32(UNIQUE_TRACK_IDS);
+    m_huid = create_unique_number(UNIQUE_TRACK_IDS);
 
   GetChildAs<KaxTrackUID, EbmlUInteger>(m_track_entry)    = m_huid;
 

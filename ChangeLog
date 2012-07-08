@@ -1,5 +1,11 @@
 2012-07-08  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: bug fix: mmg will no longer print false warnings about a
+	chapter UID not being unique. Fixes #760.
+
+	* mkvmerge, mkvpropedit, mmg: bug fix: All tools can now deal with
+	64bit UID values (chapter UIDs, edition UIDs etc).
+
 	* mkvmerge: new feature: If "splitting by parts" is active and the
 	last split part has a finite end point then mkvmerge will finish
 	muxing after the last part has been completed. Implements #768.

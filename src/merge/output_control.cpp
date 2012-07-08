@@ -566,11 +566,11 @@ add_attachment(attachment_t attachment) {
            && (ex_attachment.data->get_size() == attachment.data->get_size())))
         return attachment.id;
 
-    add_unique_uint32(attachment.id, UNIQUE_ATTACHMENT_IDS);
+    add_unique_number(attachment.id, UNIQUE_ATTACHMENT_IDS);
 
   } else
     // No ID yet. Let's assign one.
-    attachment.id = create_unique_uint32(UNIQUE_ATTACHMENT_IDS);
+    attachment.id = create_unique_number(UNIQUE_ATTACHMENT_IDS);
 
   g_attachments.push_back(attachment);
 

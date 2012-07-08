@@ -494,7 +494,7 @@ protected:
   int64_t m_htrack_default_duration;
   bool m_default_duration_forced;
   bool m_default_track_warning_printed;
-  uint32_t m_huid;
+  uint64_t m_huid;
   int m_htrack_max_add_block_ids;
 
   std::string m_hcodec_id;
@@ -591,8 +591,8 @@ public:
     return m_ti.m_id;
   }
 
-  virtual int set_uid(uint32_t uid);
-  virtual int get_uid() {
+  virtual bool set_uid(uint64_t uid);
+  virtual uint64_t get_uid() {
     return m_huid;
   }
   virtual void set_track_type(int type, timecode_factory_application_e tfa_mode = TFA_AUTOMATIC);

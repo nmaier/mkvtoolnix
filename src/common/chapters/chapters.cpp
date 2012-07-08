@@ -216,7 +216,7 @@ parse_simple_chapters(mm_text_io_c *in,
           edition = &GetChild<KaxEditionEntry>(*chaps);
 
         atom                                                 = &GetFirstOrNextChild<KaxChapterAtom>(*edition, atom);
-        GetChildAs<KaxChapterUID, EbmlUInteger>(*atom)       = create_unique_uint32(UNIQUE_CHAPTER_IDS);
+        GetChildAs<KaxChapterUID, EbmlUInteger>(*atom)       = create_unique_number(UNIQUE_CHAPTER_IDS);
         GetChildAs<KaxChapterTimeStart, EbmlUInteger>(*atom) = (start - offset) * 1000000;
 
         KaxChapterDisplay *display = &GetChild<KaxChapterDisplay>(*atom);
@@ -473,7 +473,7 @@ fix_mandatory_chapter_elements(EbmlElement *e) {
     GetChild<KaxEditionFlagHidden>(ee);
 
     if (!FindChild<KaxEditionUID>(&ee))
-      GetChildAs<KaxEditionUID, EbmlUInteger>(ee) = create_unique_uint32(UNIQUE_EDITION_IDS);
+      GetChildAs<KaxEditionUID, EbmlUInteger>(ee) = create_unique_number(UNIQUE_EDITION_IDS);
 
   } else if (dynamic_cast<KaxChapterAtom *>(e)) {
     KaxChapterAtom &a = *static_cast<KaxChapterAtom *>(e);
@@ -482,7 +482,7 @@ fix_mandatory_chapter_elements(EbmlElement *e) {
     GetChild<KaxChapterFlagEnabled>(a);
 
     if (!FindChild<KaxChapterUID>(&a))
-      GetChildAs<KaxChapterUID, EbmlUInteger>(a) = create_unique_uint32(UNIQUE_CHAPTER_IDS);
+      GetChildAs<KaxChapterUID, EbmlUInteger>(a) = create_unique_number(UNIQUE_CHAPTER_IDS);
 
     if (!FindChild<KaxChapterTimeStart>(&a))
       GetChildAs<KaxChapterTimeStart, EbmlUInteger>(a) = 0;
@@ -918,7 +918,7 @@ move_chapters_by_edition(KaxChapters &dst,
     KaxEditionEntry *ee_dst = nullptr;
     KaxEditionUID *euid_src = FindChild<KaxEditionUID>(m);
     if (euid_src)
-      ee_dst = find_edition_with_uid(dst, uint32(*euid_src));
+      ee_dst = find_edition_with_uid(dst, uint64(*euid_src));
 
     // No edition with the same UID found as the one we want to handle?
     // Then simply move the complete edition over.
@@ -1018,10 +1018,10 @@ align_chapter_edition_uids(KaxChapters *chapters) {
   if (!chapters)
     return;
 
-  static uint32_t s_shared_edition_uid = 0;
+  static uint64_t s_shared_edition_uid = 0;
 
   if (0 == s_shared_edition_uid)
-    s_shared_edition_uid = create_unique_uint32(UNIQUE_CHAPTER_IDS);
+    s_shared_edition_uid = create_unique_number(UNIQUE_CHAPTER_IDS);
 
   size_t idx;
   for (idx = 0; chapters->ListSize() > idx; ++idx) {

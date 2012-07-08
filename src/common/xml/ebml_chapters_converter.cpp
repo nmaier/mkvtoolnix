@@ -89,9 +89,9 @@ ebml_chapters_converter_c::fix_edition_entry(KaxEditionEntry &eentry)
   for (auto element : eentry)
     if (dynamic_cast<KaxEditionUID *>(element)) {
       euid = static_cast<KaxEditionUID *>(element);
-      if (!is_unique_uint32(uint32(*euid), UNIQUE_EDITION_IDS)) {
-        mxwarn(boost::format(Y("Chapter parser: The EditionUID %1% is not unique and could not be reused. A new one will be created.\n")) % uint32(*euid));
-        *static_cast<EbmlUInteger *>(euid) = create_unique_uint32(UNIQUE_EDITION_IDS);
+      if (!is_unique_number(uint64(*euid), UNIQUE_EDITION_IDS)) {
+        mxwarn(boost::format(Y("Chapter parser: The EditionUID %1% is not unique and could not be reused. A new one will be created.\n")) % uint64(*euid));
+        *static_cast<EbmlUInteger *>(euid) = create_unique_number(UNIQUE_EDITION_IDS);
       }
 
     } else if (dynamic_cast<KaxChapterAtom *>(element)) {
@@ -104,7 +104,7 @@ ebml_chapters_converter_c::fix_edition_entry(KaxEditionEntry &eentry)
 
   if (!euid) {
     euid                               = new KaxEditionUID;
-    *static_cast<EbmlUInteger *>(euid) = create_unique_uint32(UNIQUE_EDITION_IDS);
+    *static_cast<EbmlUInteger *>(euid) = create_unique_number(UNIQUE_EDITION_IDS);
     eentry.PushElement(*euid);
   }
 }
@@ -121,7 +121,7 @@ ebml_chapters_converter_c::fix_atom(KaxChapterAtom &atom)
 
   if (!FindChild<KaxChapterUID>(atom)) {
     KaxChapterUID *cuid                = new KaxChapterUID;
-    *static_cast<EbmlUInteger *>(cuid) = create_unique_uint32(UNIQUE_CHAPTER_IDS);
+    *static_cast<EbmlUInteger *>(cuid) = create_unique_number(UNIQUE_CHAPTER_IDS);
     atom.PushElement(*cuid);
   }
 

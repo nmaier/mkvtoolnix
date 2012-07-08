@@ -113,7 +113,7 @@ struct filelist_t {
 
 struct attachment_t {
   std::string name, stored_name, mime_type, description;
-  int64_t id;
+  uint64_t id;
   bool to_all_files;
   memory_cptr data;
   int64_t ui_id;

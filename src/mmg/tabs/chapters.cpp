@@ -400,8 +400,8 @@ tab_chapters::on_new_chapters(wxCommandEvent &) {
   if (analyzer)
     analyzer.reset();
 
-  clear_list_of_unique_uint32(UNIQUE_CHAPTER_IDS);
-  clear_list_of_unique_uint32(UNIQUE_EDITION_IDS);
+  clear_list_of_unique_numbers(UNIQUE_CHAPTER_IDS);
+  clear_list_of_unique_numbers(UNIQUE_EDITION_IDS);
 
   mdlg->set_status_bar(Z("New chapters created."));
 }
@@ -508,9 +508,8 @@ tab_chapters::fix_missing_languages(EbmlMaster &master) {
         *static_cast<EbmlString *>(l) = "eng";
       }
       u = FindChild<KaxChapterUID>(*m);
-      if (u)
-        add_unique_uint32(uint32(*static_cast<EbmlUInteger *>(u)),
-                          UNIQUE_CHAPTER_IDS);
+      if (u && is_unique_number(uint64(*static_cast<EbmlUInteger *>(u)), UNIQUE_CHAPTER_IDS))
+        add_unique_number(uint64(*static_cast<EbmlUInteger *>(u)), UNIQUE_CHAPTER_IDS);
     }
   }
 }
@@ -531,8 +530,8 @@ tab_chapters::load(wxString name) {
   wxString s;
   int pos;
 
-  clear_list_of_unique_uint32(UNIQUE_CHAPTER_IDS);
-  clear_list_of_unique_uint32(UNIQUE_EDITION_IDS);
+  clear_list_of_unique_numbers(UNIQUE_CHAPTER_IDS);
+  clear_list_of_unique_numbers(UNIQUE_EDITION_IDS);
 
   try {
     if (kax_analyzer_c::probe(wxMB(name))) {
@@ -585,8 +584,8 @@ tab_chapters::load(wxString name) {
   enable_buttons(true);
 
   file_name = name;
-  clear_list_of_unique_uint32(UNIQUE_CHAPTER_IDS);
-  clear_list_of_unique_uint32(UNIQUE_EDITION_IDS);
+  clear_list_of_unique_numbers(UNIQUE_CHAPTER_IDS);
+  clear_list_of_unique_numbers(UNIQUE_EDITION_IDS);
   fix_missing_languages(*m_chapters);
   tid_root = tc_chapters->AddRoot(file_name);
   add_recursively(tid_root, *m_chapters);
@@ -711,7 +710,6 @@ tab_chapters::on_verify_chapters(wxCommandEvent &) {
 
 bool
 tab_chapters::verify_atom_recursively(EbmlElement *e) {
-  KaxChapterUID *uid;
   KaxChapterAtom *chapter;
   KaxChapterTimeStart *start;
   KaxChapterDisplay *display;
@@ -727,10 +725,9 @@ tab_chapters::verify_atom_recursively(EbmlElement *e) {
   if (!chapter)
     return false;
 
-  if (FindChild<KaxChapterUID>(*chapter)) {
-    uid = &GetChild<KaxChapterUID>(*chapter);
-    *static_cast<EbmlUInteger *>(uid) =
-      create_unique_uint32(UNIQUE_CHAPTER_IDS);
+  if (!FindChild<KaxChapterUID>(*chapter)) {
+    auto uid = &GetChild<KaxChapterUID>(*chapter);
+    *static_cast<EbmlUInteger *>(uid) = create_unique_number(UNIQUE_CHAPTER_IDS);
   }
 
   cs = nullptr;
@@ -847,7 +844,7 @@ tab_chapters::on_add_chapter(wxCommandEvent &) {
     m_chapters->PushElement(*eentry);
     euid = new KaxEditionUID;
     *static_cast<EbmlUInteger *>(euid) =
-      create_unique_uint32(UNIQUE_EDITION_IDS);
+      create_unique_number(UNIQUE_EDITION_IDS);
     eentry->PushElement(*euid);
     d = new chapter_node_data_c(eentry);
     s.Printf(Z("EditionEntry %u"), (unsigned int)m_chapters->ListSize());
@@ -865,7 +862,7 @@ tab_chapters::on_add_chapter(wxCommandEvent &) {
     GetChildAs<KaxChapterLanguage, EbmlString>(display) = g_default_chapter_language.c_str();
   if (!g_default_chapter_country.empty())
     GetChildAs<KaxChapterCountry, EbmlString>(display) = g_default_chapter_country.c_str();
-  GetChildAs<KaxChapterUID, EbmlUInteger>(*chapter) = create_unique_uint32(UNIQUE_CHAPTER_IDS);
+  GetChildAs<KaxChapterUID, EbmlUInteger>(*chapter) = create_unique_number(UNIQUE_CHAPTER_IDS);
   s = create_chapter_label(*chapter);
 
   if (d->is_atom) {
@@ -1026,7 +1023,7 @@ tab_chapters::on_entry_selected(wxTreeEvent &evt) {
       tc_uid->Enable(true);
       euid = FindChild<KaxEditionUID>(t->eentry);
       if (euid)
-        s.Printf(wxT("%u"), uint32(*euid));
+        s = wxU(to_string(uint64(*euid)));
       tc_uid->SetValue(s);
     } else {
       tc_uid->Enable(true);
@@ -1079,7 +1076,7 @@ tab_chapters::on_entry_selected(wxTreeEvent &evt) {
   if (!cuid)
     label = wxEmptyString;
   else
-    label.Printf(wxT("%u"), uint32(*cuid));
+    label = wxU(to_string(uint64(*cuid)));
   tc_uid->SetValue(label);
 
   lb_chapter_names->SetSelection(0);
@@ -1444,36 +1441,32 @@ tab_chapters::copy_values(wxTreeItemId id) {
 
   s = tc_uid->GetValue();
   if (s.Length() > 0) {
-    if (!parse_number(wxMB(s), ts_start))
+    uint64_t entered_uid = 0;
+    if (!parse_number(wxMB(s), entered_uid))
       wxMessageBox(Z("Invalid UID. A UID is simply a number."), Z("Input data error"), wxOK | wxCENTER | wxICON_ERROR);
     else {
-      i = ts_start;
       if (data->is_atom) {
-        KaxChapterUID *cuid;
-
-        cuid = &GetChild<KaxChapterUID>(*data->chapter);
-        if (ts_start != uint32(*cuid)) {
-          if (!is_unique_uint32(i, UNIQUE_CHAPTER_IDS)) {
+        auto cuid = &GetChild<KaxChapterUID>(*data->chapter);
+        if (entered_uid != uint64(*cuid)) {
+          if (!is_unique_number(entered_uid, UNIQUE_CHAPTER_IDS)) {
             wxMessageBox(Z("Invalid UID. This chapter UID is already in use. The original UID has not been changed."), Z("Input data error"), wxOK | wxCENTER | wxICON_ERROR);
-            tc_uid->SetValue(wxString::Format(wxT("%u"), uint32(*cuid)));
+            tc_uid->SetValue(wxU(to_string(uint64(*cuid))));
           } else {
-            remove_unique_uint32(uint32(*cuid), UNIQUE_CHAPTER_IDS);
-            add_unique_uint32(ts_start, UNIQUE_CHAPTER_IDS);
-            *static_cast<EbmlUInteger *>(cuid) = ts_start;
+            remove_unique_number(uint64(*cuid), UNIQUE_CHAPTER_IDS);
+            add_unique_number(entered_uid, UNIQUE_CHAPTER_IDS);
+            *static_cast<EbmlUInteger *>(cuid) = entered_uid;
           }
         }
       } else {
-        KaxEditionUID *euid;
-
-        euid = &GetChild<KaxEditionUID>(*data->eentry);
-        if (ts_start != uint32(*euid)) {
-          if (!is_unique_uint32(i, UNIQUE_EDITION_IDS)) {
+        auto euid = &GetChild<KaxEditionUID>(*data->eentry);
+        if (entered_uid != uint64(*euid)) {
+          if (!is_unique_number(entered_uid, UNIQUE_EDITION_IDS)) {
             wxMessageBox(Z("Invalid UID. This edition UID is already in use. The original UID has not been changed."), Z("Input data error"), wxOK | wxCENTER | wxICON_ERROR);
-            tc_uid->SetValue(wxString::Format(wxT("%u"), uint32(*euid)));
+            tc_uid->SetValue(wxU(to_string(uint64(*euid))));
           } else {
-            remove_unique_uint32(uint32(*euid), UNIQUE_EDITION_IDS);
-            add_unique_uint32(ts_start, UNIQUE_EDITION_IDS);
-            *static_cast<EbmlUInteger *>(euid) = ts_start;
+            remove_unique_number(uint64(*euid), UNIQUE_EDITION_IDS);
+            add_unique_number(entered_uid, UNIQUE_EDITION_IDS);
+            *static_cast<EbmlUInteger *>(euid) = entered_uid;
           }
         }
       }
