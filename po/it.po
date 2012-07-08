@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: it\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2012-05-09 22:30+0100\n"
-"Last-Translator: Stefano Codari <l.stickell@yahoo.it>\n"
+"PO-Revision-Date: 2012-07-06 17:45+0100\n"
+"Last-Translator: bovirus <bovirus@live.it>\n"
 "Language-Team: Italian <moritz@bunkus.org>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -1118,9 +1118,9 @@ msgid "'%1%' can only be used with a file name. No further options are allowed i
 msgstr "'%1%'può essere usato solo con un nome file. Non sono previste altre opzioni se questa opzione viene usata.\n"
 
 #: src/merge/mkvmerge.cpp:500
-#, fuzzy, boost-format
+#, boost-format
 msgid "'%1%' does not contain a valid unit ('s', 'ms', 'us', 'ns', 'fps', 'p' or 'i') in '%2% %3%'.\n"
-msgstr "'%1%' non contiene una unità valida ('s', 'ms', 'us' o 'ns') in '%2% %3%'.\n"
+msgstr "'%1%' non contiene una unità valida ('s', 'ms', 'us', 'ns', 'fps', 'p' or 'i') in '%2% %3%'.\n"
 
 #: src/merge/mkvmerge.cpp:1105
 #, boost-format
@@ -5986,7 +5986,7 @@ msgstr ""
 #: src/input/r_mp3.cpp:57
 #, boost-format
 msgid "Skipping %1% bytes at the beginning (no valid MP3 header found).\n"
-msgstr ""
+msgstr "Ignoro %1% byte iniziali (nessuna intestazione MP3 valida).\n"
 
 #: src/info/mkvinfo.cpp:1493
 msgid "Slices"
@@ -6050,7 +6050,7 @@ msgstr "&Avvia muxing (esegui mkvmerge)\tCtrl-R"
 
 #: src/info/info_cli_parser.cpp:38
 msgid "Start the GUI (and open inname if it was given)."
-msgstr ""
+msgstr "Avvia la GUI (e apri inname se era stato fornito)."
 
 #: src/mmg/jobs.cpp:511
 msgid "Start the jobs whose status is 'pending'"
@@ -6080,7 +6080,7 @@ msgstr "Avvia lavoro ID %d (%s) su %s"
 #: src/info/mkvinfo.cpp:1889
 #, boost-format
 msgid "Statistics for track number %1%: number of blocks: %2%; size in bytes: %3%; duration in seconds: %4%; approximate bitrate in bits/second: %5%\n"
-msgstr ""
+msgstr "Statistiche traccia numero %1%: numero blocchi: %2%; dimensione in byte: %3%; durata in secondi: %4%; bitrate approssimativo in bit/secondo: %5%\n"
 
 #: src/mmg/jobs.cpp:444
 msgid "Status"
@@ -6099,7 +6099,7 @@ msgstr "Stato:"
 #: src/merge/mkvmerge.cpp:747
 #, boost-format
 msgid "Stereo mode parameter: not given in the form <TID>:<n|keyword> where n is a number between 0 and %1% or one of these keywords: %2% (argument was '%3%').\n"
-msgstr ""
+msgstr "Paramtero mdoo stereo: non fornito come <TID>:<n|keyword> dove n è un numero tra 0 e %1% o una di queste parole chiave: %2% (l'argomento era '%3%').\n"
 
 #: src/info/mkvinfo.cpp:715
 #, boost-format
@@ -6128,7 +6128,7 @@ msgstr "Ridimensionato di:"
 
 #: src/mmg/tabs/input_format.cpp:244
 msgid "Stretch this track's timecodes. This entry can have two formats. It is either a positive floating point number, or a fraction like e.g. 1200/1253. Works best on video and subtitle tracks."
-msgstr ""
+msgstr "Allunga questo timecode traccia. Questo elemento può avere due formati. Può essere un numero positivo a virgola mobile, o una frazione tipo 1200/1253. Funziona meglio con tracce video e sottotitoli."
 
 #: src/mmg/header_editor/value_page.cpp:144
 msgid "String"
@@ -6137,7 +6137,7 @@ msgstr "Stringa"
 #: src/extract/xtr_textsubs.cpp:179
 #, boost-format
 msgid "Subtitle track %1% is missing some duration elements. Please check the resulting SSA/ASS file for entries that have the same start and end time.\n"
-msgstr ""
+msgstr "Traccia sottotitolo %1% mancante in alcuni elementi durata. Verifica il file SSA/ASS risultante per gli elementi che hanno lo stesso punto di inizio e fine.\n"
 
 #: src/mmg/header_editor/track_type_page.cpp:56
 #, c-format, boost-format
@@ -6276,7 +6276,7 @@ msgstr ""
 #: src/mmg/tabs/input.cpp:1349
 #, c-format, boost-format
 msgid "The FourCC setting for track nr. %s in file '%s' is not excatly four characters long."
-msgstr ""
+msgstr "L'impostazione FourcCC per la traccia nr. %s nel file '%s' non è lunga quattro caratteri. "
 
 #: src/mmg/mmg_dialog.cpp:1890
 #, boost-format
@@ -6286,7 +6286,7 @@ msgstr ""
 #: src/input/r_ogm.cpp:1442
 #, boost-format
 msgid "The Kate identifaction header could not be parsed (%1%).\n"
-msgstr ""
+msgstr "L'intestazione identificazione Kate non può essere analizzata (%1%).\n"
 
 #: src/input/r_qtmp4.cpp:945
 #, boost-format
@@ -6943,7 +6943,7 @@ msgstr ""
 #: src/propedit/change.cpp:139
 #, boost-format
 msgid "The property value is not a valid boolean in '%1%'. %2%\n"
-msgstr ""
+msgstr "Il valore proprietà non è una valore booleano valido in  '%1%'. %2%\n"
 
 #: src/propedit/change.cpp:146
 #, boost-format
@@ -7044,44 +7044,44 @@ msgstr ""
 
 #: src/propedit/propedit_cli_parser.cpp:172
 msgid "The strings 'info', 'segment_info' or 'segmentinfo' select the segment information element. This is also the default until the first '--edit' option is found."
-msgstr ""
+msgstr "Le stringhe  'info', 'segment_info' o 'segmentinfo' selezionano gli elementi informativi segmento. Queste sono le opzioni predefinite fino a che viene trovata l'opzione '--edit'"
 
 #: src/common/xml/xml.h:130
 msgid "The tag or attribute '%1%' at position %2% contains data that is outside its allowed range."
-msgstr ""
+msgstr "Il marcatore o attributo '%1%' alla posizione %2% contiene dati che sono fuori dagli intervalli consentiti."
 
 #: src/common/xml/xml.h:110
 msgid "The tag or attribute '%1%' at position %2% contains invalid or mal-formed data."
-msgstr ""
+msgstr "Il marcatore o attributo '%1%' alla posizione %2% contiene dati non validi o mal formattati."
 
 #: src/merge/pr_generic.cpp:268
 #, boost-format
 msgid "The tags in '%1%' could not be parsed: some mandatory elements are missing.\n"
-msgstr ""
+msgstr "I marcatori in '%1%' non possono esssere analizzati. Alcuni elementi obbligatori sono mancanti.\n"
 
 #: src/extract/xtr_tta.cpp:79
 #, boost-format
 msgid "The temporary file '%1%' could not be opened for reading (%2%).\n"
-msgstr ""
+msgstr "Il file temporaneo '%1%' non può essere aperto in lettura (%2%).\n"
 
 #: src/extract/extract_cli_parser.cpp:87
 msgid "The third mode extracts attachments from the source file."
-msgstr ""
+msgstr "Il terzo modo estrae gli allegati dal file sorgente."
 
 #: src/merge/timecode_factory.cpp:54
 #, boost-format
 msgid "The timecode file '%1%' contains an unsupported/unrecognized format (version %2%).\n"
-msgstr ""
+msgstr "Il file timecode '%1%' contiene un formato sconosciuto/non supportato (versione %2%).\n"
 
 #: src/merge/timecode_factory.cpp:40
 #, boost-format
 msgid "The timecode file '%1%' contains an unsupported/unrecognized format line. The very first line must look like '# timecode format v1'.\n"
-msgstr ""
+msgstr "Il file timecode '%1%' contiene una linea sconosciuta/non supportata. La prima linea deve essere tipo '# timecode format v1'.\n"
 
 #: src/merge/timecode_factory.cpp:34
 #, boost-format
 msgid "The timecode file '%1%' could not be opened for reading.\n"
-msgstr ""
+msgstr "Il file timecode '%1%' non può essere aperto in lettura.\n"
 
 #: src/merge/timecode_factory.cpp:87
 #: src/merge/timecode_factory.cpp:95
@@ -7089,18 +7089,18 @@ msgstr ""
 #: src/merge/timecode_factory.cpp:303
 #, boost-format
 msgid "The timecode file '%1%' does not contain a valid 'Assume' line with the default number of frames per second.\n"
-msgstr ""
+msgstr "Il file timecode '%1%' non contiene una linea 'Assume' valida con il numero predefinito di frame per secondo.\n"
 
 #: src/merge/timecode_factory.cpp:338
 #, boost-format
 msgid "The timecode file '%1%' does not contain a valid 'Gap' line with the duration of the gap.\n"
-msgstr ""
+msgstr "Il file timecode '%1%' non contiene una linea 'Gap' valida con la durata del gap.\n"
 
 #: src/merge/timecode_factory.cpp:240
 #: src/merge/timecode_factory.cpp:367
 #, boost-format
 msgid "The timecode file '%1%' does not contain any valid entry.\n"
-msgstr ""
+msgstr "Il file timecode '%1%' non contiene nessun elemento valido.\n"
 
 #: src/merge/timecode_factory.cpp:216
 #, boost-format
@@ -7125,7 +7125,7 @@ msgstr ""
 #: src/common/property_element.cpp:101
 #: src/mmg/header_editor/frame.cpp:319
 msgid "The title for the whole movie."
-msgstr ""
+msgstr "Il titolo per l'intero filmato."
 
 #: src/merge/output_control.cpp:1009
 #, boost-format
@@ -7135,12 +7135,12 @@ msgstr ""
 #: src/extract/tracks.cpp:92
 #, boost-format
 msgid "The track ID %1% does not have a valid CodecID.\n"
-msgstr ""
+msgstr "L'ID traccia %1% non ha un CodecID valido.\n"
 
 #: src/merge/output_control.cpp:837
 #, boost-format
 msgid "The track headers could not be rendered correctly. %1%\n"
-msgstr ""
+msgstr "Le intestazioni traccia non possono essere renderizzate correttamente. %1%\n"
 
 #: src/merge/output_control.cpp:1055
 #, boost-format
@@ -7150,25 +7150,25 @@ msgstr ""
 #: src/merge/output_control.cpp:1066
 #, boost-format
 msgid "The track number %1% from the file '%2%' cannot be appended to the track number %3% from the file '%4%'. %5%\n"
-msgstr ""
+msgstr "La traccia numero %1% del file '%2%' non può essere aggiunta alla traccia numero %3% del file '%4%'. %5%\n"
 
 #: src/common/property_element.cpp:112
 #: src/mmg/header_editor/frame.cpp:381
 msgid "The track number as used in the Block Header."
-msgstr ""
+msgstr "Il numero traccia è usato nel blocco intestazione."
 
 #: src/merge/output_control.cpp:1064
 msgid "The track parameters do not match."
-msgstr ""
+msgstr "I parametri traccia non corrispondono."
 
 #: src/common/command_line.cpp:291
 #, boost-format
 msgid "The update information could not be retrieved from %1%.\n"
-msgstr ""
+msgstr "Le informazioni di aggiornamento non possono essere recuperate da %1%.\n"
 
 #: src/merge/pr_generic.h:447
 msgid "The width of the two tracks is different: %1% and %2%"
-msgstr ""
+msgstr "La larghezza delle tracce è differente: %1% e %2%."
 
 #: src/output/p_theora.h:28
 msgid "Theora"
@@ -7182,7 +7182,7 @@ msgstr "Una nuova versione è disponibile online."
 #: src/merge/output_control.cpp:940
 #, boost-format
 msgid "There is no file with the ID '%1%'. The argument for '--append-to' was invalid.\n"
-msgstr ""
+msgstr "Non ci sono file con ID '%1%'. L'argomento per '--append-to' non era valido.\n"
 
 #: src/common/command_line.cpp:257
 #, boost-format
@@ -7200,7 +7200,7 @@ msgstr "Si sono verificati degli ERRORI."
 #: src/mmg/header_editor/frame.cpp:534
 #: src/mmg/header_editor/frame.cpp:629
 msgid "There were errors in the header values preventing the headers from being saved. The first error has been selected."
-msgstr ""
+msgstr "Si sono verificati errori nei valori intestazione che ne hanno impedito il salvataggio. Il primo errore è stato selezionato."
 
 #: src/mmg/mux_dialog.cpp:311
 msgid "There were warnings"
@@ -7213,41 +7213,41 @@ msgstr "Ci sono stati avvisi, o il processo è stato terminato."
 #: src/input/r_avi.cpp:564
 #: src/input/r_real.cpp:294
 msgid "This AAC track does not contain valid headers. Could not parse the AAC information.\n"
-msgstr ""
+msgstr "Questa traccia AAC non contiene intestazioni valide. Impossibile analizzare le informazioni AAC.\n"
 
 #: src/output/p_ac3.cpp:62
 #, boost-format
 msgid "This AC3 track contains %1% bytes of non-AC3 data at the beginning. This corresponds to a delay of %2%ms. This delay will be used instead of the non-AC3 data.\n"
-msgstr ""
+msgstr "Questa traccia AC3 contiene all'inziio %1% byte di dati non AC3. Questo corrisponde ad un ritardo di %2% ms. Questo ritardo verra usato al posto dei dati non AC3.\n"
 
 #: src/output/p_ac3.cpp:74
 #, boost-format
 msgid "This AC3 track contains %1% bytes of non-AC3 data which were skipped. The audio/video synchronization may have been lost.\n"
-msgstr ""
+msgstr "Questa traccia contiene %1% byte di dati non AC3 che verranno ignorati. Non sarà garantita la sincronizzazione audio/video.\n"
 
 #: src/output/p_avc.cpp:102
 #, boost-format
 msgid "This AVC/h.264 contains frames that are too big for the current maximum NALU size. You have to re-run mkvmerge and set the maximum NALU size to %1% for this track (command line parameter '--nalu-size-length %2%:%1%').\n"
-msgstr ""
+msgstr "Questo AVC/H.264 contiene frame che sono troppo grandi per il valore massimo NALU attuale. Riesegui mkvmerge e imposta il valore massimo di NALU a %1% per questa traccia (parametro linea di comando: '--nalu-size-length %2%:%1%').\n"
 
 #: src/output/p_avc.cpp:120
 #, boost-format
 msgid "This AVC/h.264 track does not start with a key frame. The first %1% frames have been skipped.\n"
-msgstr ""
+msgstr "La traccia AVC/H.264 non parte con un frame chiave. I primi %1% frame verranno ignorati.\n"
 
 #: src/output/p_mp3.cpp:60
 #, boost-format
 msgid "This MPEG audio track contains %1% bytes of non-MP3 data at the beginning. This corresponds to a delay of %2%ms. This delay will be used instead of the garbage data.\n"
-msgstr ""
+msgstr "Questa traccia audio MPEG contiene all'inizio %1% byte di dati non MP3. Questo corrisponde ad un ritardo di %2% ms. Questo ritardo verrà usato invece dei dati spuri.\n"
 
 #: src/output/p_mp3.cpp:69
 #, boost-format
 msgid "This MPEG audio track contains %1% bytes of non-MP3 data which were skipped. The audio/video synchronization may have been lost.\n"
-msgstr ""
+msgstr "Questa traccia audio MPEG contiene %1% byte di dati non MP3 che verranno ignorati. Non sarà garantita la sincronizzazione audio/video.\n"
 
 #: src/input/r_ogm.cpp:835
 msgid "This Ogg/OGM file contains chapter or title information. Unfortunately the charset used to store this information in the file cannot be identified unambiguously. The program assumes that your system's current charset is appropriate. This can be overridden with the '--chapter-charset <charset>' switch.\n"
-msgstr ""
+msgstr "Il file OGG/OGM contiene informazioni titolo o capitolo. Sfortunaatamente il set caratteri usato per memorizzare questa informazione nel file non può essere identificato. Il programma assume che il set di caratteri di sistema è appropriato. Per altrios et di caratteri usa il comando '--chapter-charset <setcaratteri>'.\n"
 
 #: src/mmg/header_editor/value_page.cpp:171
 msgid ""
@@ -7460,12 +7460,12 @@ msgstr "Traccia %1%: trovato AAC, ma i dati configurazione del decoder hanno lun
 #: src/extract/xtr_textsubs.cpp:396
 #, boost-format
 msgid "Track %1%: An USF subtitle entry starting at timecode %2% is not well-formed XML and will be skipped.\n"
-msgstr ""
+msgstr "Traccia %1%: un elemento sottotitolo USF al timecode %2% non è correttamente formattato XML e verrà ignorato.\n"
 
 #: src/extract/xtr_avc.cpp:42
 #, boost-format
 msgid "Track %1%: NAL too big. Size according to header field: %2%, available bytes in packet: %3%. This NAL is defect and will be skipped.\n"
-msgstr ""
+msgstr "Traccia %1%: NAL troppo grande. Dimensione in accordo con il campo intestazione: %2%, byte disponibili nel pacchetto: %3%. Questo NAL è difettoso e verrà ignorato.\n"
 
 #: src/extract/xtr_textsubs.cpp:54
 #, boost-format
@@ -9437,4 +9437,3 @@ msgstr "sì"
 
 #~ msgid "wavpack_reader: Could not open the file."
 #~ msgstr "wavpack_reader: Impossibile aprire il file."
-
