@@ -1,3 +1,9 @@
+2012-07-08  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: new feature: If "splitting by parts" is active and the
+	last split part has a finite end point then mkvmerge will finish
+	muxing after the last part has been completed. Implements #768.
+
 2012-06-29  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: The DTS and TrueHD packetizers were not

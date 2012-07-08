@@ -1122,6 +1122,11 @@ generic_packetizer_c::is_compatible_with(output_compatibility_e compatibility) {
   return OC_MATROSKA == compatibility;
 }
 
+void
+generic_packetizer_c::discard_queued_packets() {
+  m_packet_queue.clear();
+}
+
 //--------------------------------------------------------------------
 
 #define add_all_requested_track_ids(type, container)                                                       \

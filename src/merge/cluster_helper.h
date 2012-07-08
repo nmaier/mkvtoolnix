@@ -93,7 +93,8 @@ private:
   std::vector<split_point_t> m_split_points;
   std::vector<split_point_t>::iterator m_current_split_point;
 
-  bool m_discarding, m_debug_splitting, m_debug_packets, m_debug_duration, m_debug_rendering;
+  bool m_discarding, m_splitting_and_processed_fully;
+  bool m_debug_splitting, m_debug_packets, m_debug_duration, m_debug_rendering;
 
 public:
   cluster_helper_c();
@@ -131,6 +132,11 @@ public:
 
   int get_packet_count() const {
     return m_packets.size();
+  }
+
+  void discard_queued_packets();
+  bool is_splitting_and_processed_fully() const {
+    return m_splitting_and_processed_fully;
   }
 
 private:

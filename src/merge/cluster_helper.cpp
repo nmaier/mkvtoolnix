@@ -63,6 +63,7 @@ cluster_helper_c::cluster_helper_c()
   , m_out(nullptr)
   , m_current_split_point(m_split_points.begin())
   , m_discarding{false}
+  , m_splitting_and_processed_fully{false}
   , m_debug_splitting{debugging_requested("cluster_helper|splitting")}
   , m_debug_packets{  debugging_requested("cluster_helper|cluster_helper_packets")}
   , m_debug_duration{ debugging_requested("cluster_helper|cluster_helper_duration")}
@@ -185,6 +186,13 @@ cluster_helper_c::split(packet_cptr &packet) {
     finish_file();
 
   if (m_current_split_point->m_use_once) {
+    if (   m_current_split_point->m_discard
+        && (split_point_t::SPT_PARTS == m_current_split_point->m_type)
+        && (m_split_points.end()     == (m_current_split_point + 1))) {
+      mxdebug_if(m_debug_splitting, boost::format("Splitting: Last part in 'parts:' splitting mode finished\n"));
+      m_splitting_and_processed_fully = true;
+    }
+
     m_discarding = m_current_split_point->m_discard;
     ++m_current_split_point;
   }
@@ -575,6 +583,11 @@ cluster_helper_c::split_mode_produces_many_files()
     }
 
   return false;
+}
+
+void
+cluster_helper_c::discard_queued_packets() {
+  m_packets.clear();
 }
 
 void

@@ -545,6 +545,7 @@ public:
   inline bool packet_available() {
     return !m_packet_queue.empty() && m_packet_queue.front()->factory_applied;
   }
+  void discard_queued_packets();
   void flush();
   virtual int64_t get_smallest_timecode() {
     return m_packet_queue.empty() ? 0x0FFFFFFF : m_packet_queue.front()->timecode;

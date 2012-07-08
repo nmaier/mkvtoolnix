@@ -1939,6 +1939,74 @@ establish_deferred_connections(filelist_t &file) {
   // \todo Select a new file that the subs will defer to.
 }
 
+static void
+pull_packetizers_for_packets() {
+  for (auto &ptzr : g_packetizers) {
+    if (FILE_STATUS_HOLDING == ptzr.status)
+      ptzr.status = FILE_STATUS_MOREDATA;
+
+    ptzr.old_status = ptzr.status;
+
+    while (   !ptzr.pack
+           && (FILE_STATUS_MOREDATA == ptzr.status)
+           && !ptzr.packetizer->packet_available())
+      ptzr.status = ptzr.packetizer->read();
+
+    if (   (FILE_STATUS_MOREDATA != ptzr.status)
+           && (FILE_STATUS_MOREDATA == ptzr.old_status))
+      ptzr.packetizer->force_duration_on_last_packet();
+
+    if (!ptzr.pack)
+      ptzr.pack = ptzr.packetizer->get_packet();
+
+    if (!ptzr.pack && (FILE_STATUS_DONE == ptzr.status))
+      ptzr.status = FILE_STATUS_DONE_AND_DRY;
+
+    // Has this packetizer changed its status from "data available" to
+    // "file done" during this loop? If so then decrease the number of
+    // unfinished packetizers in the corresponding file structure.
+    if (   (FILE_STATUS_DONE_AND_DRY == ptzr.status)
+        && (ptzr.old_status != ptzr.status)) {
+      filelist_t &file = g_files[ptzr.file];
+      file.num_unfinished_packetizers--;
+
+      // If all packetizers for a file have finished then establish the
+      // deferred connections.
+      if ((0 >= file.num_unfinished_packetizers) && (0 < file.old_num_unfinished_packetizers)) {
+        establish_deferred_connections(file);
+        file.done = true;
+      }
+      file.old_num_unfinished_packetizers = file.num_unfinished_packetizers;
+    }
+  }
+}
+
+static packetizer_t *
+select_winning_packetizer() {
+  packetizer_t *winner = nullptr;
+
+  for (auto &ptzr : g_packetizers) {
+    if (!ptzr.pack)
+      continue;
+
+    if (!winner || !winner->pack)
+      winner = &ptzr;
+
+    else if (ptzr.pack && (ptzr.pack->assigned_timecode < winner->pack->assigned_timecode))
+      winner = &ptzr;
+  }
+
+  return winner;
+}
+
+static void
+discard_queued_packets() {
+  for (auto &ptzr : g_packetizers)
+    ptzr.packetizer->discard_queued_packets();
+
+  g_cluster_helper->discard_queued_packets();
+}
+
 /** \brief Request packets and handle the next one
 
    Requests packets from each packetizer, selects the packet with the
@@ -1953,57 +2021,11 @@ main_loop() {
 
     // Step 1: Make sure a packet is available for each output
     // as long we haven't already processed the last one.
-    for (auto &ptzr : g_packetizers) {
-      if (FILE_STATUS_HOLDING == ptzr.status)
-        ptzr.status = FILE_STATUS_MOREDATA;
-
-      ptzr.old_status = ptzr.status;
-
-      while (   !ptzr.pack
-             && (FILE_STATUS_MOREDATA == ptzr.status)
-             && !ptzr.packetizer->packet_available())
-        ptzr.status = ptzr.packetizer->read();
-
-      if (   (FILE_STATUS_MOREDATA != ptzr.status)
-          && (FILE_STATUS_MOREDATA == ptzr.old_status))
-        ptzr.packetizer->force_duration_on_last_packet();
-
-      if (!ptzr.pack)
-        ptzr.pack = ptzr.packetizer->get_packet();
-
-      if (!ptzr.pack && (FILE_STATUS_DONE == ptzr.status))
-        ptzr.status = FILE_STATUS_DONE_AND_DRY;
-
-      // Has this packetizer changed its status from "data available" to
-      // "file done" during this loop? If so then decrease the number of
-      // unfinished packetizers in the corresponding file structure.
-      if (   (FILE_STATUS_DONE_AND_DRY == ptzr.status)
-          && (ptzr.old_status != ptzr.status)) {
-        filelist_t &file = g_files[ptzr.file];
-        file.num_unfinished_packetizers--;
-
-        // If all packetizers for a file have finished then establish the
-        // deferred connections.
-        if ((0 >= file.num_unfinished_packetizers) && (0 < file.old_num_unfinished_packetizers)) {
-          establish_deferred_connections(file);
-          file.done = true;
-        }
-        file.old_num_unfinished_packetizers = file.num_unfinished_packetizers;
-      }
-    }
+    pull_packetizers_for_packets();
 
     // Step 2: Pick the packet with the lowest timecode and
     // stuff it into the Matroska file.
-    packetizer_t * winner = nullptr;
-    for (auto &ptzr : g_packetizers) {
-      if (ptzr.pack) {
-        if (!winner || !winner->pack)
-          winner = &ptzr;
-
-        else if (ptzr.pack && (ptzr.pack->assigned_timecode < winner->pack->assigned_timecode))
-          winner = &ptzr;
-      }
-    }
+    auto winner = select_winning_packetizer();
 
     // Append the next track if appending is wanted.
     bool appended_a_track = s_appending_files && append_tracks_maybe();
@@ -2016,6 +2038,13 @@ main_loop() {
       g_cluster_helper->add_packet(pack);
 
       winner->pack.reset();
+
+      // If splitting by parts is active and the last part has been
+      // processed fully then we can finish up.
+      if (g_cluster_helper->is_splitting_and_processed_fully()) {
+        discard_queued_packets();
+        break;
+      }
 
       // display some progress information
       if (1 <= verbose)
