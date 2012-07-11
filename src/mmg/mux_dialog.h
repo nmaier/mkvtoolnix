@@ -27,23 +27,19 @@
 #define ID_B_MUX_OK                       18000
 #define ID_B_MUX_SAVELOG                  18001
 #define ID_B_MUX_ABORT                    18002
+#define ID_T_READ_INPUT                   18003
 
 extern const wxEventType mux_thread_event;
 
-class mux_thread;
 class mux_process;
 
 class mux_dialog: public wxDialog {
   DECLARE_CLASS(mux_dialog);
   DECLARE_EVENT_TABLE();
 protected:
-  friend class mux_thread;
-
   long pid;
   wxStaticText *st_label, *st_remaining_time_label, *st_remaining_time;
   wxGauge *g_progress;
-  wxCriticalSection m_cs_thread;
-  mux_thread *m_thread;
   mux_process *m_process;
   int m_pid;
   wxString log, opt_file_name;
@@ -56,6 +52,10 @@ protected:
 
   int m_exit_code, m_progress;
   int64_t m_next_remaining_time_update, m_start_time;
+
+  wxTimer m_read_input_timer;
+  std::string m_available_input;
+
 public:
 
   mux_dialog(wxWindow *parent);
@@ -73,6 +73,9 @@ public:
   void on_close(wxCloseEvent &evt);
   void on_output_available(wxCommandEvent &evt);
   void on_process_terminated(wxCommandEvent &evt);
+  void on_read_input(wxTimerEvent &evt);
+
+  void add_input(std::string const &input);
 
 #if defined(SYS_WINDOWS)
   void change_abort_button();
@@ -80,19 +83,8 @@ public:
 };
 
 class mux_process: public wxProcess {
-  friend class mux_dialog;
-
 private:
   mux_dialog *m_dialog;
-  wxCriticalSection m_cs_dialog;
-
-public:
-  mux_process(mux_dialog *dialog);
-  virtual void OnTerminate(int terminated_pid, int status);
-};
-
-class mux_thread: public wxThread {
-  friend class mux_dialog;
 
 public:
   static wxEventType const event;
@@ -101,18 +93,12 @@ public:
     process_terminated,
   };
 
-private:
-  mux_dialog *m_dialog;
-  wxProcess *m_process;
-  wxInputStream *m_out;
-  wxCriticalSection m_cs_process;
-  std::deque<char> m_available_input;
-
 public:
-  mux_thread(mux_dialog *dialog, wxProcess *process);
-  virtual void *Entry();
+  mux_process(mux_dialog *dialog);
+  virtual void OnTerminate(int terminated_pid, int status);
 
-  bool read_input(char &c, bool &eof);
+  void process_input(bool end_of_input = false);
+  void detach_from_dialog();
 };
 
 #endif // __MUX_DIALOG_H

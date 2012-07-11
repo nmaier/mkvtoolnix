@@ -18,13 +18,11 @@
 #include <wx/file.h>
 #include <wx/confbase.h>
 #include <wx/fileconf.h>
-#include <wx/notebook.h>
 #include <wx/listctrl.h>
 #include <wx/statusbr.h>
 #include <wx/statline.h>
 #include <wx/utils.h>
 
-#include "common/at_scope_exit.h"
 #include "common/fs_sys_helpers.h"
 #include "common/strings/editing.h"
 #include "common/strings/formatting.h"
@@ -34,7 +32,6 @@
 
 mux_dialog::mux_dialog(wxWindow *parent)
   : wxDialog(parent, -1, Z("mkvmerge is running"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE)
-  , m_thread{nullptr}
   , m_process{nullptr}
   , m_pid{0}
 #if defined(SYS_WINDOWS)
@@ -137,20 +134,21 @@ mux_dialog::run() {
   m_pid                        = wxExecute(wxString::Format(wxT("\"%s\" \"@%s\""), arg_list[0].c_str(), opt_file_name.c_str()), wxEXEC_ASYNC, m_process);
 
   if (0 == m_pid) {
-    wxCommandEvent evt(mux_thread::event, mux_thread::process_terminated);
+    wxCommandEvent evt(mux_process::event, mux_process::process_terminated);
     evt.SetInt(2);
     wxPostEvent(this, evt);
 
   } else {
-    m_thread = new mux_thread{this, m_process};
-    m_thread->Create();
-    m_thread->Run();
+    m_read_input_timer.SetOwner(this, ID_T_READ_INPUT);
+    m_read_input_timer.Start(100);
   }
 
   ShowModal();
 }
 
 mux_dialog::~mux_dialog() {
+  m_read_input_timer.Stop();
+
 #if defined(SYS_WINDOWS)
   if (m_taskbar_progress)
     m_taskbar_progress->set_state(TBPF_NOPROGRESS);
@@ -159,11 +157,8 @@ mux_dialog::~mux_dialog() {
 
   wxRemoveFile(opt_file_name);
 
-  if (m_process) {
-    wxCriticalSectionLocker locker{m_process->m_cs_dialog};
-    m_process->m_dialog = nullptr;
-    m_process->Detach();
-  }
+  if (m_process)
+    m_process->detach_from_dialog();
 }
 
 void
@@ -298,6 +293,8 @@ mux_dialog::on_output_available(wxCommandEvent &evt) {
 
 void
 mux_dialog::on_process_terminated(wxCommandEvent &evt) {
+  m_read_input_timer.Stop();
+
   m_exit_code = evt.GetInt();
 
   wxString format;
@@ -334,104 +331,32 @@ mux_dialog::on_process_terminated(wxCommandEvent &evt) {
   b_abort->Enable(false);
 #endif  // SYS_WINDOWS
 
-  wxCriticalSectionLocker thread_locker{m_cs_thread};
-  if (m_thread) {
-    wxCriticalSectionLocker process_locker{m_thread->m_cs_process};
-    m_thread->m_out = nullptr;
-  }
-
   delete m_process;
   m_process = nullptr;
 }
 
+void
+mux_dialog::add_input(std::string const &input) {
+  auto lines        = split(m_available_input + input, boost::regex("\r|\n"));
+  m_available_input = lines.back();
+  lines.pop_back();
+
+  for (auto const &line : lines) {
+    wxCommandEvent evt(mux_process::event, mux_process::output_available);
+    evt.SetString(wxU(line));
+    wxPostEvent(this, evt);
+  }
+}
+
+void
+mux_dialog::on_read_input(wxTimerEvent &) {
+  if (m_process)
+    m_process->process_input();
+}
+
 // ------------------------------------------------------------
 
-wxEventType const mux_thread::event = wxNewEventType();
-
-mux_thread::mux_thread(mux_dialog *dialog,
-                       wxProcess *process)
-  : m_dialog{dialog}
-  , m_process{process}
-  , m_out{nullptr}
-{
-}
-
-void *
-mux_thread::Entry() {
-  at_scope_exit_c unlink_thread{[&]() {
-      if (!m_dialog)
-        return;
-
-      wxCriticalSectionLocker locker{m_dialog->m_cs_thread};
-      m_dialog->m_thread = nullptr;
-    }};
-
-  m_out = m_process->GetInputStream();
-
-  std::string line;
-
-  while (1) {
-    char c         = 0;
-    bool eof       = false;
-    bool char_read = false;
-
-    while (!char_read && !eof) {
-      if (TestDestroy())
-        return nullptr;
-      char_read = read_input(c, eof);
-      if (!char_read && !eof)
-        wxMilliSleep(100);
-    }
-
-    if ((c == '\n') || (c == '\r') || eof) {
-      if (m_dialog) {
-        // send line to dialog
-        wxCommandEvent evt(mux_thread::event, mux_thread::output_available);
-        evt.SetString(wxU(line));
-        wxPostEvent(m_dialog, evt);
-      }
-
-      line.clear();
-
-    } else if (char_read && (static_cast<unsigned char>(c) != 0xff))
-      line += c;
-
-    if (eof)
-      break;
-  }
-
-  return nullptr;
-}
-
-bool
-mux_thread::read_input(char &c,
-                       bool &eof) {
-  eof = false;
-
-  if (!m_available_input.empty()) {
-    c = m_available_input.front();
-    m_available_input.pop_front();
-    return true;
-  }
-
-  wxCriticalSectionLocker locker{m_cs_process};
-
-  if (!m_out || m_out->Eof()) {
-    eof = true;
-    return false;
-  }
-
-  while (m_out->CanRead())
-    m_available_input.push_back(m_out->GetC());
-
-  if (m_available_input.empty())
-    return false;
-
-  c = m_available_input.front();
-  m_available_input.pop_front();
-
-  return true;
-}
+wxEventType const mux_process::event{wxNewEventType()};
 
 mux_process::mux_process(mux_dialog *dialog)
   : wxProcess(wxPROCESS_REDIRECT)
@@ -442,13 +367,38 @@ mux_process::mux_process(mux_dialog *dialog)
 void
 mux_process::OnTerminate(int,
                          int status) {
-  wxCriticalSectionLocker locker{m_cs_dialog};
+  process_input();
+
   if (!m_dialog)
     return;
 
-  wxCommandEvent evt(mux_thread::event, mux_thread::process_terminated);
+  wxCommandEvent evt(mux_process::event, mux_process::process_terminated);
   evt.SetInt(status);
   wxPostEvent(m_dialog, evt);
+}
+
+void
+mux_process::process_input(bool end_of_process) {
+  if (!m_dialog)
+    return;
+
+  std::string input;
+  auto in = GetInputStream();
+  if (in)
+    while (in->CanRead())
+      input += in->GetC();
+
+  if (end_of_process)
+    input += "\n";
+
+  if (!input.empty())
+    m_dialog->add_input(input);
+}
+
+void
+mux_process::detach_from_dialog() {
+  m_dialog = nullptr;
+  Detach();
 }
 
 IMPLEMENT_CLASS(mux_dialog, wxDialog);
@@ -456,7 +406,8 @@ BEGIN_EVENT_TABLE(mux_dialog, wxDialog)
   EVT_BUTTON(ID_B_MUX_OK,      mux_dialog::on_ok)
   EVT_BUTTON(ID_B_MUX_SAVELOG, mux_dialog::on_save_log)
   EVT_BUTTON(ID_B_MUX_ABORT,   mux_dialog::on_abort)
-  EVT_COMMAND(mux_thread::output_available,   mux_thread::event, mux_dialog::on_output_available)
-  EVT_COMMAND(mux_thread::process_terminated, mux_thread::event, mux_dialog::on_process_terminated)
+  EVT_TIMER(ID_T_READ_INPUT,   mux_dialog::on_read_input)
+  EVT_COMMAND(mux_process::output_available,   mux_process::event, mux_dialog::on_output_available)
+  EVT_COMMAND(mux_process::process_terminated, mux_process::event, mux_dialog::on_process_terminated)
   EVT_CLOSE(mux_dialog::on_close)
 END_EVENT_TABLE();
