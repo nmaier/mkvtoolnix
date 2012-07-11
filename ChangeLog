@@ -1,3 +1,10 @@
+2012-07-11  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: bug fix: Fixed mmg not reading the very last line of
+	mkvmerge's output. The result was that messages like "the cues are
+	being written" did not show up in mmg and that the progress bar
+	was not filled completely. Fixes #774.
+
 2012-07-08  Moritz Bunkus  <moritz@bunkus.org>
 
 	* Released v5.7.0.
