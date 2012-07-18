@@ -10,14 +10,10 @@
    \author Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __COMMON_PROPERTY_TABLE_H
-#define __COMMON_PROPERTY_TABLE_H
+#ifndef MTX_COMMON_PROPERTY_TABLE_H
+#define MTX_COMMON_PROPERTY_TABLE_H
 
-#include "common/os.h"
-
-#include <map>
-#include <string>
-#include <vector>
+#include "common/common_pch.h"
 
 #include <ebml/EbmlElement.h>
 #include <matroska/KaxInfo.h>
@@ -27,7 +23,6 @@
 #include <matroska/KaxTrackEntryData.h>
 #include <matroska/KaxTrackVideo.h>
 
-#include "common/common_pch.h"
 #include "common/ebml.h"
 #include "common/translation.h"
 
@@ -64,4 +59,4 @@ public:                         // static
 };
 typedef std::shared_ptr<property_element_c> property_element_cptr;
 
-#endif  // __COMMON_PROPERTY_TABLE_H
+#endif  // MTX_COMMON_PROPERTY_TABLE_H
