@@ -1,3 +1,12 @@
+2012-07-20  Moritz Bunkus  <moritz@bunkus.org>
+
+	* all: bug fix: The programs do not try to create directories with
+	empty names anymore. This happened if the output file name for
+	e.g. mkvmerge or mkvextract was only a file name without a
+	directory component. With Boost v1.50.0 the call to
+	"boost::filesystem::create_directory()" would result in an error
+	if the name was empty (it didn't in earlier versions of Boost).
+
 2012-07-11  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: bug fix: Fixed mmg not reading the very last line of

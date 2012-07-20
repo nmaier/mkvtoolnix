@@ -147,7 +147,7 @@ mm_file_io_c::setup() {
 void
 mm_file_io_c::prepare_path(const std::string &path) {
   boost::filesystem::path directory = boost::filesystem::path(path).parent_path();
-  if (boost::filesystem::exists(directory))
+  if (directory.empty() || boost::filesystem::exists(directory))
     return;
 
   boost::system::error_code error_code;
