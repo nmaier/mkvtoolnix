@@ -37,6 +37,71 @@ struct mpeg_ps_id_t {
   }
 };
 
+inline std::ostream &
+operator <<(std::ostream &out,
+            mpeg_ps_id_t const &id) {
+  out << (boost::format("%|1$02x|.%|2$02x|") % id.id % id.sub_id);
+
+  return out;
+}
+
+class mpeg_ps_packet_c {
+public:
+  mpeg_ps_id_t m_id;
+  int64_t m_pts, m_dts;
+  unsigned int m_length, m_full_length;
+  bool m_valid;
+  memory_cptr m_buffer;
+
+public:
+  mpeg_ps_packet_c(mpeg_ps_id_t id = mpeg_ps_id_t{})
+    : m_id{id}
+    , m_pts{-1}
+    , m_dts{-1}
+    , m_length{0}
+    , m_full_length{0}
+    , m_valid{false}
+  {
+  }
+
+  bool has_pts() const {
+    return -1 != m_pts;
+  }
+
+  bool has_dts() const {
+    return -1 != m_dts;
+  }
+
+  int64_t pts() const {
+    return has_pts() ? m_pts : std::numeric_limits<int64_t>::max();
+  }
+
+  int64_t dts() const {
+    return has_dts() ? m_dts : pts();
+  }
+
+  operator bool() const {
+    return m_valid;
+  }
+
+  bool has_been_read() const {
+    return m_valid && m_buffer;
+  }
+};
+
+inline std::ostream &
+operator <<(std::ostream &out,
+            mpeg_ps_packet_c const &p) {
+  out << (boost::format("[ID %1% PTS %2% DTS %3% length %4% full_length %5% valid? %6% read? %7%]")
+          % p.m_id
+          % (p.has_pts() ? format_timecode(p.pts()) : std::string{"none"})
+          % (p.has_dts() ? format_timecode(p.dts()) : std::string{"none"})
+          % p.m_length % p.m_full_length % p.m_valid
+          % (p.has_been_read() ? "yes, fully" : p.m_buffer ? "only partially" : "no"));
+
+  return out;
+}
+
 struct mpeg_ps_track_t {
   int ptzr;
 
@@ -69,7 +134,7 @@ struct mpeg_ps_track_t {
     sort_key(0),
     fourcc(0),
     provide_timecodes(false),
-    timecode_offset(-1),
+    timecode_offset(std::numeric_limits<int64_t>::max()),
     v_interlaced(false),
     v_version(0),
     v_width(0),
@@ -113,8 +178,13 @@ struct mpeg_ps_track_t {
     delete multiple_timecodes_packet_extension;
   }
 };
-
 typedef std::shared_ptr<mpeg_ps_track_t> mpeg_ps_track_ptr;
+
+inline bool
+operator <(mpeg_ps_track_ptr const &a,
+           mpeg_ps_track_ptr const &b) {
+  return a->sort_key < b->sort_key;
+}
 
 class mpeg_ps_reader_c: public generic_reader_c {
 private:
@@ -129,6 +199,8 @@ private:
 
   std::vector<mpeg_ps_track_ptr> tracks;
   std::map<generic_packetizer_c *, mpeg_ps_track_ptr> m_ptzr_to_track_map;
+
+  bool m_debug_timecodes;
 
 public:
   mpeg_ps_reader_c(const track_info_c &ti, const mm_io_cptr &in);
@@ -149,7 +221,7 @@ public:
 
   virtual bool read_timestamp(bit_cursor_c &bc, int64_t &timestamp);
   virtual bool read_timestamp(int c, int64_t &timestamp);
-  virtual bool parse_packet(mpeg_ps_id_t &id, int64_t &timestamp, unsigned int &length, unsigned int &full_length);
+  virtual mpeg_ps_packet_c parse_packet(mpeg_ps_id_t id, bool read_data = true);
   virtual bool find_next_packet(mpeg_ps_id_t &id, int64_t max_file_pos = -1);
   virtual bool find_next_packet_for_id(mpeg_ps_id_t id, int64_t max_file_pos = -1);
 
