@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: it\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2012-07-06 17:45+0100\n"
+"PO-Revision-Date: 2012-07-19 15:56+0100\n"
 "Last-Translator: bovirus <bovirus@live.it>\n"
 "Language-Team: Italian <moritz@bunkus.org>\n"
 "Language: it\n"
@@ -5766,6 +5766,11 @@ msgid ""
 "whose language matches the user preference or the\n"
 "default + forced track."
 msgstr ""
+"Imposta che questa traccia venga usata in riproduzione.\n"
+"Ci potrebbero essere diverse tracce forzate per un tipo\n"
+"(audio video o sottotitoli). Il riproduttore deve selezionare\n"
+"una la cui lingua corrisponda alle preferenze utente o al\n"
+"predefinito + tracce forzate."
 
 #: src/common/property_element.cpp:117
 #: src/mmg/header_editor/frame.cpp:392
@@ -5794,7 +5799,7 @@ msgstr "Imposta una proprietà al valore se esiste e la aggiunge altrimenti"
 
 #: src/propedit/propedit_cli_parser.cpp:152
 msgid "Sets the Matroska file section that all following add/set/delete actions operate on (see below and man page for syntax)"
-msgstr ""
+msgstr "Imposta la sezione del file Matroska su cui è possibile operare le seguenti azioni aggiunta/impostazioni/eliminazione (vedi sotto e pagina manuale epr sintassi)"
 
 #: src/propedit/propedit_cli_parser.cpp:149
 msgid "Sets the Matroska parser mode to 'fast' (default) or 'full'"
@@ -5806,23 +5811,23 @@ msgstr "Imposta l'algoritmo di compressione che verrà usato per questa traccia.
 
 #: src/mmg/tabs/input_format.cpp:251
 msgid "Sets the cropping parameters. Must be comma-separated list of four numbers for the cropping to be used at the left, top, right and bottom."
-msgstr ""
+msgstr "Imposta i parametri di ritaglio. Deve essere un elenco, separato da virgole, di quattro numeri per il ritaglio sinistra, alto, destra, basso."
 
 #: src/mmg/tabs/input_format.cpp:234
 msgid "Sets the default duration or number of frames per second for a track. This can either be a floating point number or a fraction."
-msgstr ""
+msgstr "Imposta la durata predefinita o il numero di frame per secondo di una traccia. Può essere un numero decimale o una frazione."
 
 #: src/mmg/tabs/input_format.cpp:222
 msgid "Sets the display aspect ratio of the track. The format can be either 'a/b' in which case both numbers must be integer (e.g. 16/9) or just a single floting point number 'f' (e.g. 2.35)."
-msgstr ""
+msgstr "Imposta il rapporto di visualizzazione di una traccia. Il formato può essere 'a/b' nel qual caso entrambi i numeri devonoe ssere interi (es. 16/9) o un numero decimale 'i' (es. 2.35)"
 
 #: src/mmg/tabs/input_format.cpp:226
 msgid "Sets the display height of the track. The width must be set as well, or this field will be ignored."
-msgstr ""
+msgstr "Imposta l'altezza di visualizzazione di una traccia. Va impostata anche la larghezza, o questo campo verra ignorato."
 
 #: src/mmg/tabs/input_format.cpp:225
 msgid "Sets the display width of the track. The height must be set as well, or this field will be ignored."
-msgstr ""
+msgstr "Imposta la larghezza di visualizzazione di una traccia. Va impostata anche l'altezza, o questo campo verra ignorato."
 
 #: src/mmg/options/mkvmerge.cpp:57
 msgid "Sets the priority that mkvmerge will run with."
@@ -5834,10 +5839,13 @@ msgid ""
 "\n"
 "Each file created contains one segment, and each segment has one segment UID. If more segment UIDs are specified than segments are created then the surplus UIDs are ignored. If fewer UIDs are specified than segments are created then random UIDs will be created for them."
 msgstr ""
+"Imposta l'UID segmento da usare. E' un elenco, separato da virgole, di 128 UID segmento nella usuale forma UID: numero esadecimale o senza il prefisso \"0x\", con o senza spazi, esattamente 32 digit.\n"
+"\n"
+"Ogni file creato contiene un segmento, e ogni segmento ha un UID segmento. Se sono specificati più UID segmento dei segmenti, gli UID segmento superflui saranno ignorati. Se sono specificati meno UID segmenti dei segmenti, verranno creati degli UID segmento casuali."
 
 #: src/mmg/tabs/input_format.cpp:231
 msgid "Sets the stereo mode of the video track to this value. If left empty then the track's original stereo mode will be kept or, if it didn't have one, none will be set at all."
-msgstr ""
+msgstr "Imposta il modo stereo per la traccia video a questo valore. Se lasciato vuoto verrà mantenuto il modo stereo originale o se non c'era verrà impostatato. "
 
 #: src/info/mkvinfo.cpp:812
 #, boost-format
@@ -5860,7 +5868,7 @@ msgstr "Pacchetto audio AAC corto (lunghezza: %1% < 2)\n"
 
 #: src/mpegparser/M2VParser.cpp:399
 msgid "Shortened GOP detected. Some frames have been dropped. You may want to fix the MPEG2 video stream before attempting to multiplex it.\n"
-msgstr ""
+msgstr "Rilevato GOP corto. Alcuni frame sono stati scartati. Puoi correggere il flusso video MPEG2 prima di effettuare il multiplex.\n"
 
 #: src/info/wxwidgets_ui.cpp:118
 msgid "Show &all elements\tCtrl-A"
@@ -5967,21 +5975,21 @@ msgstr "BloccoSemplice"
 #: src/info/mkvinfo.cpp:208
 #, boost-format
 msgid "SimpleBlock (%1%track number %2%, %3% frame(s), timecode %|4$.3f|s = %5%)"
-msgstr ""
+msgstr "SimpleBlock (traccia numero %1% %2%, %3% frame, timecode %|4$.3f|s = %5%)"
 
 #: src/mpegparser/M2VParser.cpp:396
 msgid "Single field frame before GOP header detected. Fix the MPEG2 video stream before attempting to multiplex it.\n"
-msgstr ""
+msgstr "Rilevato campo singolo prima dell'intestazione GOP. Puoi correggere il flusso video MPEG2 prima di effettuare il multiplex.\n"
 
 #: src/output/p_aac.cpp:71
 #, boost-format
 msgid "Skipping %1% bytes (no valid AAC header found). This might cause audio/video desynchronisation.\n"
-msgstr ""
+msgstr "Ignorati %1% byte (nessuna intestazione AAC). Ciò può causare desincronizzazione audio/video.\n"
 
 #: src/output/p_dts.cpp:87
 #, boost-format
 msgid "Skipping %1% bytes (no valid DTS header found). This might cause audio/video desynchronisation.\n"
-msgstr ""
+msgstr "Ignorati %1% byte (nessuna intestazione DTS). Ciò può causare desincronizzazione audio/video.\n"
 
 #: src/input/r_mp3.cpp:57
 #, boost-format
@@ -5994,20 +6002,20 @@ msgstr "Fette"
 
 #: src/mmg/header_editor/frame.cpp:571
 msgid "Some header values have been modified. Do you really want to close without saving the file?"
-msgstr ""
+msgstr "Alcuni valori dell'intestazione sono stati modificati. Confermi la chiusura senza salvare il file?"
 
 #: src/mmg/header_editor/frame.cpp:763
 msgid "Some header values have been modified. Do you really want to load a new file without saving the current one?"
-msgstr ""
+msgstr "Alcuni valori dell'intestazione sono stati modificati. Confermi l'apertura di un nuovo file senza salvare il file attuale?"
 
 #: src/mmg/header_editor/frame.cpp:562
 msgid "Some header values have been modified. Do you really want to reload without saving the file?"
-msgstr ""
+msgstr "Alcuni valori dell'intestazione sono stati modificati. Confermi di voler ricaricare il file e di non salvarlo?"
 
 #: src/merge/output_control.cpp:1452
 #, boost-format
 msgid "Some tag elements are missing (this error should not have occured - another similar error should have occured earlier). %1%\n"
-msgstr ""
+msgstr "Alcuni elementi marcatori sono mancanti (questo errore non doveva verificarsi - un errroe similare doveva verificarsi prima). %1%\n"
 
 #: src/common/property_element.cpp:130
 #: src/mmg/header_editor/frame.cpp:424
@@ -6015,6 +6023,8 @@ msgid ""
 "Specifies the language of the track in the\n"
 "Matroska languages form."
 msgstr ""
+"Specifica la lingua della traccia nel\n"
+"modulo lingua Matroska."
 
 #: src/common/property_element.cpp:146
 #: src/mmg/header_editor/frame.cpp:480
@@ -6022,6 +6032,8 @@ msgid ""
 "Specify the possible modifications to the aspect ratio\n"
 "(0: free resizing, 1: keep aspect ratio, 2: fixed)."
 msgstr ""
+"Specifica la possibile modifica del rapporto di aspetto\n"
+"(0: modifica libera, 1:mantieni rapporto: 2: fisso)"
 
 #: src/mmg/tabs/global.cpp:235
 msgid "Splitting"
@@ -6029,16 +6041,16 @@ msgstr "Suddivisione"
 
 #: src/mmg/tabs/global.cpp:574
 msgid "Splitting by size was selected, but no size has been given."
-msgstr ""
+msgstr "E' stata selezionata la divisione per dimensione, ma non è stata specificata la dimensione."
 
 #: src/mmg/tabs/global.cpp:607
 msgid "Splitting by timecode/duration was selected, but nothing was entered."
-msgstr ""
+msgstr "E' stata selezionata la divisione per timecode/durata, ma nessun valore è stato specificato."
 
 #: src/mmg/mmg_dialog.cpp:562
 #, c-format, boost-format
 msgid "Splitting is active, and at least one of the potential output files '%s%s*%s' already exists. Do you want to overwrite them?"
-msgstr ""
+msgstr "La divisione è attiva, ma almeno uno dei potenziali file destinazione '%s%s*%s'  esiste già. Sovrascrivere il file?"
 
 #: src/mmg/mmg_dialog.cpp:326
 msgid "Sta&rt muxing"
@@ -6208,11 +6220,11 @@ msgstr "Tag:"
 
 #: src/mmg/cli_options_dlg.cpp:94
 msgid "Tells mkvmerge not to create and write the cue data which can be compared to an index in an AVI. Matroska files can be played back without the cue data, but seeking will probably be imprecise and slower. Use this only for testing purposes."
-msgstr ""
+msgstr "Istruisce mkvmerge a non creare e scrivere i dati di taglio che verranno comparati con un indice in un AVI. I file Matroska possono essere riprodotti senza i dati di taglio, ma il posiizionamento probabilmente potrebbbe essere impreciso e più lento. Usa questo solo per scopi di test."
 
 #: src/mmg/cli_options_dlg.cpp:98
 msgid "Tells mkvmerge to create a meta seek element at the end of the file containing all clusters."
-msgstr ""
+msgstr "Istrusce mkvmerge a creare un elemento meta seek alla fine del file contenente tutti i cluster. "
 
 #: src/info/qt_ui.cpp:71
 msgid "Text files (*.txt);;All files (*.*)"
@@ -6238,7 +6250,7 @@ msgstr "I profili AAC sono differenti: %1% e %2%"
 
 #: src/input/r_qtmp4.cpp:1577
 msgid "The AVC video track is missing the 'CTTS' atom for frame timecode offsets. However, AVC/h.264 allows frames to have more than the traditional one (for P frames) or two (for B frames) references to other frames. The timecodes for such frames will be out-of-order, and the 'CTTS' atom is needed for getting the timecodes right. As it is missing the timecodes for this track might be wrong. You should watch the resulting file and make sure that it looks like you expected it to.\n"
-msgstr ""
+msgstr "Nella traccia video AVC è mancante l'atomo 'CTTS' per l'offset del timecode del frame. Cionostante, AVC/H.264 permette che i frame hanno possno avere più di uno (P frame) o due (B frame) riferimenti ad altri frame. Il timecode per questi frame sarà al di fuori, e l'atomo 'CTTS' è necessario per ottenere il corretto timecode. Se CTTS è mancante i timecode per questa traccia potrebbero essere errati. Devi controllare il file risultante e assicurarti che sia come ti aspetti.\n"
 
 #: src/extract/tracks.cpp:278
 #, boost-format
@@ -6271,7 +6283,7 @@ msgstr "Le impostazioni FPS per la traccia n. %s nel file '%s' non sono valide."
 #: src/merge/mkvmerge.cpp:1216
 #, boost-format
 msgid "The FourCC must be exactly four characters long in '%1% %2%'.\n"
-msgstr ""
+msgstr "FourCC deve essere esattamente lungo quattro caratteri in '%1% %2%'.\n"
 
 #: src/mmg/tabs/input.cpp:1349
 #, c-format, boost-format
@@ -6281,7 +6293,7 @@ msgstr "L'impostazione FourcCC per la traccia nr. %s nel file '%s' non è lunga 
 #: src/mmg/mmg_dialog.cpp:1890
 #, boost-format
 msgid "The GUI is configured to use the mkvmerge executable from a different version (%1%) than the GUI itself (%2%). This is not supported but will not be prevented either. You should change the mkvmerge executable in the preferences dialog."
-msgstr ""
+msgstr "La GUI è configurata per usare l'eseguibile mkvmerge di una differente versione (%1%) che quello della GUI stessa (%2%). Ciò non è supportato. E' necessario cambiare nelle preferenze l'impostazione dell'eseguibile mkvmerge. "
 
 #: src/input/r_ogm.cpp:1442
 #, boost-format
@@ -6291,7 +6303,7 @@ msgstr "L'intestazione identificazione Kate non può essere analizzata (%1%).\n"
 #: src/input/r_qtmp4.cpp:945
 #, boost-format
 msgid "The MP4 file '%1%' contains chapters whose format was not recognized. This is often the case if the chapters are not encoded in UTF-8. Use the '--chapter-charset' option in order to specify the charset to use.\n"
-msgstr ""
+msgstr "Il file MP4 '%1%' contiene capitoli in un formato non riconosciuto. Questo succede spesso nel caso i capitoli non siano codificati in UTF-8. Usa l'opzione '--chapter-charset' per specificare il set caratteri da usare.\n"
 
 #: src/mmg/wx_kax_analyzer.cpp:36
 msgid "The Matroska file is analyzed."
@@ -6300,7 +6312,7 @@ msgstr "Il file Matroska è analizzato."
 #: src/mmg/header_editor/frame.cpp:682
 #: src/propedit/propedit.cpp:39
 msgid "The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file."
-msgstr ""
+msgstr "Il file Matroska è stato modificato, ma l'elemento meta seek non è stato aggiornato. Questo significa che il player avrà difficoltà a trovare l'elemento. Usa il tuo player preferito per controllare questo file."
 
 #: src/mmg/tabs/chapters.cpp:1879
 msgid ""
@@ -6308,20 +6320,23 @@ msgid ""
 "\n"
 "The proper solution is to save these chapters into a XML file and then to remux the file with the chapters included."
 msgstr ""
+"Il file Matroska è stato modificato, ma l'elemento meta seek non è stato aggiornato. Questo significa che il player avrà difficoltà a trovare l'elemento. Usa il tuo player preferito per controllare questo file.\n"
+"\n"
+"La soluzione corretta è salvare questi capitoli in un file XML e quindi remuxare il file con i capitoli inclusi."
 
 #: src/merge/mkvmerge.cpp:1344
 #, boost-format
 msgid "The NALU size length must be a number between 2 and 4 inclusively in '--nalu-size-length %1%'.\n"
-msgstr ""
+msgstr "La dimensione NALU deve essere un numero tra 2 e 4 incluso in '--nalu-size-length %1%'.\n"
 
 #: src/input/r_ogm.cpp:1272
 #, boost-format
 msgid "The Theora identifaction header could not be parsed (%1%).\n"
-msgstr ""
+msgstr "L'intestazione identificazione Theora non può essere analizzato (%1%).\n"
 
 #: src/output/p_vorbis.cpp:141
 msgid "The Vorbis codebooks are different; such tracks cannot be concatenated without reencoding"
-msgstr ""
+msgstr "I codebook Vorbis sono differenti: alcune tracce non possono essere concatenate senza ricodifica."
 
 #: src/common/xml/ebml_chapters_converter.cpp:218
 #, boost-format
@@ -6394,12 +6409,12 @@ msgstr "L'argomento '--timecode-scale' deve essere un numero.\n"
 #: src/mmg/tabs/input.cpp:1403
 #, c-format, boost-format
 msgid "The aspect ratio setting for track nr. %s in file '%s' is invalid."
-msgstr ""
+msgstr "L'impostazione rapporto aspetto per la traccia nr. %s nel file '%s' non è valida."
 
 #: src/extract/attachments.cpp:115
 #, boost-format
 msgid "The attachment #%1%, ID %2%, MIME type %3%, size %4%, is written to '%5%'.\n"
-msgstr ""
+msgstr "L'allegato #%1%, ID %2%, Tipo MIME %3%, dimensione %4%, è stato salvato in '%5%'.\n"
 
 #: src/merge/mkvmerge.cpp:1497
 #, boost-format
@@ -6428,11 +6443,16 @@ msgid ""
 "\n"
 "Note: This warning can be deactivated in the 'options' dialog. Turn off the 'Warn about usage...' option."
 msgstr ""
+"L'editor capitoli è stato usato e contiene dati. Cionostante nessun capitolo è stato selezionato nella pagina globale. In mmg, l'editor capitoli è indipendente dal processo di muxing. I capitoli presenti nell'editor NON verranno muxati nel file destinazione. Sole le varie funzioni 'salva' nel menu dell'editor capitoli causeranno la scrittura del capitoli nel disco fisso.\n"
+"\n"
+"Continuare l'operazione di muxing?\n"
+"\n"
+"Nota: questa notifica può essere disattivata nella finestra 'opzioni'. Disabilita l'opzione 'Notifica sull'uso...'"
 
 #: src/output/p_mpeg4_p10.cpp:156
 #, boost-format
 msgid "The chosen NALU size length of %1% is too small. Try using '4'.\n"
-msgstr ""
+msgstr "La dimensione NALU scelta di %1% è troppo piccola. Prova a usare '4'.\n"
 
 #: src/merge/mkvmerge.cpp:1643
 msgid "The closing parenthesis ')' are missing.\n"
@@ -6468,7 +6488,7 @@ msgstr "Scrittura dati cue (l'indice) in corso...\n"
 #: src/mmg/tabs/input.cpp:757
 #, c-format, boost-format
 msgid "The current file (number %d) cannot be removed. There are other files -- at least file number %d -- whose tracks are supposed to be appended to tracks from this file. Please remove those files first."
-msgstr ""
+msgstr "Il file corrente (numero %d) non può essere rimosso. Ci sono altri file - almeno file numero %d - in cui le tracce devono essere appese a tracce di questo file. Rimuovi prima questi file."
 
 #: src/merge/pr_generic.cpp:854
 #, boost-format
@@ -6495,19 +6515,21 @@ msgid ""
 "The demultiplexer for the file '%1%' failed to initialize:\n"
 "%2%\n"
 msgstr ""
+"Il demultiplexre per il file '%1%' ha fallito l'inizializzazione:\n"
+"%2%\n"
 
 #: src/mmg/tabs/global.cpp:306
 #: src/mmg/tabs/global.cpp:310
 msgid "The difference between tags associated with a track and global tags is explained in mkvmerge's documentation. In short: global tags apply to the complete file while the tags you can add on the 'input' tab apply to only one track."
-msgstr ""
+msgstr "La differenza tra i marcatori associati ad una traccia e i marcatori globali è spiegata nella documentazione di mkvmerge. In sintesi: i marcatori globali si applicano al file completo mentre i marcatori possono aggiunti alla scheda 'sorgente' e si applicano solo a una traccia. "
 
 #: src/merge/pr_generic.h:462
 msgid "The display height of the two tracks is different: %1% and %2%"
-msgstr ""
+msgstr "L'altezza di visualizzazione delle due tracce è differente: %1% e %2%"
 
 #: src/merge/pr_generic.h:457
 msgid "The display width of the two tracks is different: %1% and %2%"
-msgstr ""
+msgstr "La larghezza di visualizzazione delle due tracce è differente: %1% e %2%"
 
 #: src/info/wxwidgets_ui.cpp:369
 #, c-format, boost-format
@@ -6520,32 +6542,32 @@ msgstr ""
 
 #: src/mmg/tabs/global.cpp:243
 msgid "The duration after which a new output file is started. The time can be given either in the form HH:MM:SS.nnnnnnnnn or as the number of seconds followed by 's'. You may omit the number of hours 'HH' and the number of nanoseconds 'nnnnnnnnn'. If given then you may use up to nine digits after the decimal point. Examples: 01:00:00 (after one hour) or 1800s (after 1800 seconds)."
-msgstr ""
+msgstr "La durata dopo la quale verrà creato un nuovo file destinazione. Il valore può essere indicato come OO:MM:SS.nnnnnnnnn o come numero di secondi seguito da 's'. E' possibile omettere il numero di ore 'OO' e il numero di nanosecondi 'nnnnnnnnn'. Se indicato si può usare fino a 9 digit dopo il punto decimale. Esempio   01:00:00 (dopo un'ora) o 1800s (dopo 1800 secondi)."
 
 #: src/propedit/options.cpp:207
 #, boost-format
 msgid "The edit specifications '%1%' and '%2%' resolve to the same track with the UID %3%.\n"
-msgstr ""
+msgstr "Le specifiche di modifica  '%1%' e '%2%' si riferiscono alla stessa traccia con UID %3%.\n"
 
 #: src/mmg/header_editor/frame.cpp:670
 #: src/mmg/tabs/chapters.cpp:1867
 #: src/propedit/propedit.cpp:31
 msgid "The element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
-msgstr ""
+msgstr "L'elemento è stato scritto alla fine del file, ma la dimensioen del segmento non può essere aggiornata. A causa di ciò l'elemento non sarà visbile. Il processo verrà interrotto. Il file è stato modificato!"
 
 #: src/output/p_mpeg4_p2.cpp:379
 #, boost-format
 msgid "The extracted values for video width and height from the MPEG4 layer 2 video data bitstream differ from what the values in the source container. The ones from the video data bitstream (%1%x%2%) will be used.\n"
-msgstr ""
+msgstr "I valori per la larghezza/altezza video estratti dai dati del flusso video MPEG4 Layer 2 sono differenti dai valori del contenitore sorgente. Verrà usato uno dei valori del flusso dati (%1%x%2%).\n"
 
 #: src/extract/extract_cli_parser.cpp:104
 msgid "The fifth mode tries to extract chapter information and tags and outputs them as a CUE sheet. This is the reverse of using a CUE sheet with mkvmerge's '--chapters' option."
-msgstr ""
+msgstr "Il quinto modo prova a estrarre l'informazione capitolo e i marcatori e li salva come CUE sheet. Questo è l'inverso dell'uso di un CUE sheet con l'opzione mkvmerge's '--chapters'."
 
 #: src/merge/mkvmerge.cpp:1478
 #, boost-format
 msgid "The file '%1%' cannot be attached because it does not exist or cannot be read.\n"
-msgstr ""
+msgstr "Il file '%1%' non può essere allegato pperchè none siste o non può essere letto.\n"
 
 #: src/extract/attachments.cpp:141
 #: src/extract/chapters.cpp:48
@@ -6564,7 +6586,7 @@ msgstr "Il file '%1%' non può essere aperto per la lettura (%2%).\n"
 #: src/common/command_line.cpp:46
 #, boost-format
 msgid "The file '%1%' could not be opened for reading command line arguments.\n"
-msgstr ""
+msgstr "Il file '%1%' non può essere aperto per la lettura degli argomenti della linea di comando.\n"
 
 #: src/extract/tracks.cpp:282
 #: src/extract/xtr_avi.cpp:58
@@ -6588,7 +6610,7 @@ msgstr "Il file '%1%' è stato aperto per la scrittura.\n"
 #: src/merge/mkvmerge.cpp:1699
 #, boost-format
 msgid "The file '%1%' has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n"
-msgstr ""
+msgstr "Il file '%1%' è di tipo sconosciuto. Controlla i file supportati ('mkvmerge --list-types') e contatta l'autore Moritz Bunkus <moritz@bunkus.org> se il tipo di file è supportato ma non riconsociuto correttamente.\n"
 
 #: src/merge/pr_generic.cpp:1654
 #, boost-format
@@ -6603,7 +6625,7 @@ msgstr "Il file '%s' non esiste."
 #: src/mmg/tabs/input.cpp:700
 #, c-format, boost-format
 msgid "The file '%s' is already processed in combination with the file '%s'. It cannot be added a second time."
-msgstr ""
+msgstr "Il file '%s' è già stato processato in combinazione con il file '%s'. Non può essere aggiunto una seconda volta."
 
 #: src/merge/output_control.cpp:1266
 msgid "The file content does not match its format type and was not recognized."
@@ -6845,30 +6867,30 @@ msgstr ""
 #: src/propedit/change.cpp:60
 #, boost-format
 msgid "The name '%1%' is not a valid property name for the current edit specification in '%2%'.\n"
-msgstr ""
+msgstr "Il nome '%1%' non un nome valido per l'attuale specifica di modifica in '%2%'.\n"
 
 #: src/merge/mkvmerge.cpp:1655
 #, boost-format
 msgid "The name of the output file '%1%' and of one of the input files is the same. This would cause mkvmerge to overwrite one of your input files. This is most likely not what you want.\n"
-msgstr ""
+msgstr "Il nome del file destinazione '%1%' e uno dei file sorgente sono identici. Questa causerà che mkvmerge sovrascriverà uno dei file sorgente. Questo è ciò che uno normalmente non si aspetta.\n"
 
 #: src/merge/mkvmerge.cpp:1429
 #, boost-format
 msgid "The next UID was already given in '%1% %2%'.\n"
-msgstr ""
+msgstr "L'UID successivo è gia stato fornito in '%1% %2%'.\n"
 
 #: src/merge/pr_generic.h:442
 msgid "The number of bits per sample of the two audio tracks is different: %1% and %2%"
-msgstr ""
+msgstr "Il numero di bit campione delle due tracce audio è differente: %1% e %2%"
 
 #: src/merge/pr_generic.h:437
 msgid "The number of channels of the two audio tracks is different: %1% and %2%"
-msgstr ""
+msgstr "Il numero dei canali delle due tracce audio è differente: %1% e %2%"
 
 #: src/merge/timecode_factory.cpp:269
 #, boost-format
 msgid "The number of external timecodes %1% is smaller than the number of frames in this track. The remaining frames of this track might not be timestamped the way you intended them to be. mkvmerge might even crash.\n"
-msgstr ""
+msgstr "Il numero dei timecode esterni %1% è più piccolo del numero dei frame in questa traccia. I frame rimanenti di questa traccia non verramo marchiati temporalmente come ci si aspetta. mkvmerge potrebbe anche bloccarsi.\n"
 
 #: src/common/property_element.cpp:145
 #: src/mmg/header_editor/frame.cpp:475
@@ -6876,6 +6898,8 @@ msgid ""
 "The number of video pixels to remove\n"
 "on the bottom of the image."
 msgstr ""
+"Il numero dei pixel video da rimuovere\n"
+"in fondo all'immagine."
 
 #: src/common/property_element.cpp:142
 #: src/mmg/header_editor/frame.cpp:460
@@ -6883,6 +6907,8 @@ msgid ""
 "The number of video pixels to remove\n"
 "on the left of the image."
 msgstr ""
+"Il numero dei pixel video da rimuovere\n"
+"sulla sinistra dell'immagine."
 
 #: src/common/property_element.cpp:144
 #: src/mmg/header_editor/frame.cpp:470
@@ -6938,7 +6964,7 @@ msgstr ""
 #: src/propedit/change.cpp:154
 #, boost-format
 msgid "The property value is not a valid binary spec or it is not exactly 128 bits long in '%1%'. %2%\n"
-msgstr ""
+msgstr "Il valore non è un valore binario valido o non è esattamente lungo 128 bit in '%1%'. %2%\n"
 
 #: src/propedit/change.cpp:139
 #, boost-format
@@ -6948,17 +6974,17 @@ msgstr "Il valore proprietà non è una valore booleano valido in  '%1%'. %2%\n"
 #: src/propedit/change.cpp:146
 #, boost-format
 msgid "The property value is not a valid floating point number in '%1%'. %2%\n"
-msgstr ""
+msgstr "Il valore non è un numero decimale valido in '%1%'. %2%\n"
 
 #: src/propedit/change.cpp:131
 #, boost-format
 msgid "The property value is not a valid signed integer in '%1%'. %2%\n"
-msgstr ""
+msgstr "Il valore non è un intero firmato valido in '%1%'. %2%\n"
 
 #: src/propedit/change.cpp:125
 #, boost-format
 msgid "The property value is not a valid unsigned integer in '%1%'. %2%\n"
-msgstr ""
+msgstr "Il valore non è un intero non firmato valido in '%1%'. %2%\n"
 
 #: src/merge/output_control.cpp:1065
 msgid "The reason is unknown."
@@ -6971,7 +6997,7 @@ msgstr "L'elemento radice deve essere <%1%>."
 
 #: src/merge/pr_generic.h:432
 msgid "The sample rate of the two audio tracks is different: %1% and %2%"
-msgstr ""
+msgstr "Il valore di campionamento delle due tracce audio è differente: %1% e %2%"
 
 #: src/common/property_element.cpp:127
 #: src/mmg/header_editor/frame.cpp:416
@@ -6987,7 +7013,7 @@ msgstr ""
 
 #: src/input/r_tta.cpp:85
 msgid "The seek table in this TTA file seems to be broken.\n"
-msgstr ""
+msgstr "La tabella di seek in questo file TTA sembra danneggiata.\n"
 
 #: src/mmg/tabs/chapters.cpp:761
 #, c-format, boost-format
