@@ -938,11 +938,11 @@ msgstr "&Itxi"
 
 #: src/mmg/header_editor/frame.cpp:144
 msgid "&Close\tCtrl-W"
-msgstr "&Itxi\tKtrl-W"
+msgstr "&Itxi\tCtrl-W"
 
 #: src/mmg/header_editor/frame.cpp:147
 msgid "&Collapse all entries\tCtrl-P"
-msgstr "&Bildu sarrera guztiak\tKtrl-P"
+msgstr "&Bildu sarrera guztiak\tCtrl-P"
 
 #: src/mmg/mmg_dialog.cpp:291
 msgid "&Copy command line to clipboard"
@@ -967,11 +967,11 @@ msgstr "&Jeitsi"
 
 #: src/mmg/header_editor/frame.cpp:146
 msgid "&Expand all entries\tCtrl-E"
-msgstr "&Hedatu sarrera guztiak\tKtrl-E"
+msgstr "&Hedatu sarrera guztiak\tCtrl-E"
 
 #: src/info/wxwidgets_ui.cpp:120
 msgid "&Expand important elements\tCtrl-E"
-msgstr "&Hedatu gai garrantzitsuak\tKtrl-E"
+msgstr "&Hedatu gai garrantzitsuak\tCtrl-E"
 
 #: src/info/wxwidgets_ui.cpp:128
 #: src/mmg/header_editor/frame.cpp:150
@@ -985,7 +985,7 @@ msgstr "&Aukera orokorrak\tAlt-3"
 
 #: src/mmg/mmg_dialog.cpp:287
 msgid "&Header editor\tCtrl-E"
-msgstr "I&dazburu editatzailea\tKtrl-E"
+msgstr "I&dazburu editatzailea\tCtrl-E"
 
 #: src/info/wxwidgets_ui.cpp:130
 #: src/mmg/header_editor/frame.cpp:152
@@ -1008,11 +1008,11 @@ msgstr "&Gertatu"
 
 #: src/mmg/mmg_dialog.cpp:283
 msgid "&Load settings\tCtrl-L"
-msgstr "&Gertatu ezarpenak\tKtrl-L"
+msgstr "&Gertatu ezarpenak\tCtrl-L"
 
 #: src/mmg/mmg_dialog.cpp:295
 msgid "&Manage jobs\tCtrl-J"
-msgstr "K&udeatu lanak\tKtrl-J"
+msgstr "K&udeatu lanak\tCtrl-J"
 
 #: src/mmg/mmg_dialog.cpp:314
 msgid "&Muxing"
@@ -1020,7 +1020,7 @@ msgstr "&Multiplexaketa"
 
 #: src/mmg/mmg_dialog.cpp:282
 msgid "&New\tCtrl-N"
-msgstr "&Berria\tKtrl-N"
+msgstr "&Berria\tCtrl-N"
 
 #: src/mmg/mmg_dialog.cpp:297
 msgid "&New chapters"
@@ -1035,7 +1035,7 @@ msgstr "&Ongi"
 #: src/info/wxwidgets_ui.cpp:112
 #: src/mmg/header_editor/frame.cpp:141
 msgid "&Open\tCtrl-O"
-msgstr "&Ireki\tKtrl-O"
+msgstr "&Ireki\tCtrl-O"
 
 #: src/info/wxwidgets_ui.cpp:129
 msgid "&Options"
@@ -1044,7 +1044,7 @@ msgstr "&Aukerak"
 #: src/mmg/header_editor/frame.cpp:145
 #: src/mmg/mmg_dialog.cpp:288
 msgid "&Quit\tCtrl-Q"
-msgstr "&Utzi\tKtrl-Q"
+msgstr "&Utzi\tCtrl-Q"
 
 #: src/mmg/jobs.cpp:483
 msgid "&Re-enable"
@@ -1052,7 +1052,7 @@ msgstr "&Birgaitu"
 
 #: src/mmg/header_editor/frame.cpp:143
 msgid "&Reload\tCtrl-R"
-msgstr "&Birgertatu\tKtrl-R"
+msgstr "&Birgertatu\tCtrl-R"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:46
 msgid "&Remove"
@@ -1069,15 +1069,15 @@ msgstr "G&orde"
 
 #: src/mmg/header_editor/frame.cpp:142
 msgid "&Save\tCtrl-S"
-msgstr "&Gorde\tKtrl-S"
+msgstr "&Gorde\tCtrl-S"
 
 #: src/info/wxwidgets_ui.cpp:113
 msgid "&Save info as text\tCtrl-S"
-msgstr "&Gorde argibideak idazki bezala\tKtrl-S"
+msgstr "&Gorde argibideak idazki bezala\tCtrl-S"
 
 #: src/mmg/mmg_dialog.cpp:284
 msgid "&Save settings\tCtrl-S"
-msgstr "Gorde &ezarpenak\tKtrl-S"
+msgstr "Gorde &ezarpenak\tCtrl-S"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:49
 msgid "&Sort"
@@ -1094,7 +1094,7 @@ msgstr "&Igo"
 
 #: src/mmg/header_editor/frame.cpp:148
 msgid "&Validate\tCtrl-T"
-msgstr "&Balioztatu\tKtrl-V"
+msgstr "&Balioztatu\tCtrl-V"
 
 #: src/mmg/mmg_dialog.cpp:302
 msgid "&Verify"
@@ -3172,7 +3172,7 @@ msgstr "Iraupena: %|1$.3f|s (%2%)"
 
 #: src/info/wxwidgets_ui.cpp:116
 msgid "E&xit\tCtrl-Q"
-msgstr "I&rten\tKtrl-Q"
+msgstr "I&rten\tCtrl-Q"
 
 #: src/info/mkvinfo.cpp:1831
 msgid "EBML head"
@@ -4998,7 +4998,7 @@ msgstr "v7 eta VobSub agiri berrienak bakarrik sostengatzen dira. Bertsio zaharr
 
 #: src/mmg/mmg_dialog.cpp:286
 msgid "Op&tions\tCtrl-P"
-msgstr "A&ukerak\tKtrl-P"
+msgstr "A&ukerak\tCtrl-P"
 
 #: src/info/qt_ui.cpp:64
 msgid "Open File"
@@ -5862,7 +5862,7 @@ msgstr "Laburtutako GOP atzeman da. Frame batzuk murriztu dira. Badaiteke zuk MP
 
 #: src/info/wxwidgets_ui.cpp:118
 msgid "Show &all elements\tCtrl-A"
-msgstr "Erakutsi &gai guztiak\tKtrl-A"
+msgstr "Erakutsi &gai guztiak\tCtrl-A"
 
 #: src/info/wxwidgets_ui.cpp:126
 msgid "Show about dialog"
@@ -5874,7 +5874,7 @@ msgstr "Erakutsi frame bakoitzaren byte guztiak hex iraulketa bezala."
 
 #: src/info/wxwidgets_ui.cpp:119
 msgid "Show element si&zes\tCtrl-Z"
-msgstr "Erakutsi gai &neurriak\tKtrl-Z"
+msgstr "Erakutsi gai &neurriak\tCtrl-Z"
 
 #: src/mmg/options/mmg.cpp:112
 msgid "Show mmg's debug window"
@@ -6048,7 +6048,7 @@ msgstr "&Hasi multiplexaketa"
 
 #: src/mmg/mmg_dialog.cpp:289
 msgid "Sta&rt muxing (run mkvmerge)\tCtrl-R"
-msgstr "&Hasi multiplexaketa (abiarazi mkvmerge)\tKtrl-R"
+msgstr "&Hasi multiplexaketa (abiarazi mkvmerge)\tCtrl-R"
 
 #: src/info/info_cli_parser.cpp:38
 msgid "Start the GUI (and open inname if it was given)."
