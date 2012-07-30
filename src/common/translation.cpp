@@ -60,6 +60,7 @@ translation_c::initialize_available_translations() {
   ms_available_translations.push_back(translation_c("cs_CZ", "cs",    "czech",      "Czech",               "Čeština",     false));
   ms_available_translations.push_back(translation_c("de_DE", "de",    "german",     "German",              "Deutsch",     false));
   ms_available_translations.push_back(translation_c("es_ES", "es",    "spanish",    "Spanish",             "Español",     false));
+  ms_available_translations.push_back(translation_c("eu_ES", "eu",    "basque",     "Basque",              "Euskara",     false));
   ms_available_translations.push_back(translation_c("fr_FR", "fr",    "french",     "French",              "Français",    false));
   ms_available_translations.push_back(translation_c("it_IT", "it",    "italian",    "Italian",             "Italiano",    false));
   ms_available_translations.push_back(translation_c("ja_JP", "ja",    "japanese",   "Japanese",            "日本語",      true));
