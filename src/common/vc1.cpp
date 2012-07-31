@@ -544,7 +544,9 @@ vc1::es_parser_c::combine_extra_data_with_packet() {
 
 int64_t
 vc1::es_parser_c::get_next_timecode() {
-  int64_t next_timecode = m_previous_timecode + (m_num_timecodes + m_num_repeated_fields) * m_default_duration - m_num_repeated_fields * m_default_duration / 2;
+  int64_t next_timecode = m_previous_timecode
+                        + (m_num_timecodes + m_num_repeated_fields) * m_default_duration
+                        - m_num_repeated_fields                     * m_default_duration / 2;
 
   if (is_timecode_available()) {
     mxverb(3,
@@ -568,8 +570,11 @@ vc1::es_parser_c::get_next_timecode() {
 }
 
 int64_t
-vc1::es_parser_c::peek_next_calculated_timecode() {
-  return m_previous_timecode + (m_num_timecodes + m_num_repeated_fields) * m_default_duration - m_num_repeated_fields * m_default_duration / 2;
+vc1::es_parser_c::peek_next_calculated_timecode()
+  const {
+  return m_previous_timecode
+    + (m_num_timecodes + m_num_repeated_fields) * m_default_duration
+    - m_num_repeated_fields                     * m_default_duration / 2;
 }
 
 void
@@ -594,6 +599,7 @@ vc1::es_parser_c::add_timecode(int64_t timecode,
 }
 
 bool
-vc1::es_parser_c::is_timecode_available() {
+vc1::es_parser_c::is_timecode_available()
+  const {
   return !m_timecodes.empty() && (m_timecode_positions.front() <= m_stream_pos);
 }

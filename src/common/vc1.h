@@ -178,34 +178,34 @@ public:
 
   virtual void flush();
 
-  virtual bool is_sequence_header_available() {
+  virtual bool is_sequence_header_available() const {
     return m_seqhdr_found;
   }
 
-  virtual bool has_sequence_header_changed() {
+  virtual bool has_sequence_header_changed() const {
     return m_seqhdr_changed;
   }
 
-  virtual bool are_headers_available() {
+  virtual bool are_headers_available() const {
     return m_seqhdr_found && m_raw_entrypoint;
   }
 
-  virtual void get_sequence_header(sequence_header_t &seqhdr) {
+  virtual void get_sequence_header(sequence_header_t &seqhdr) const {
     if (m_seqhdr_found)
       memcpy(&seqhdr, &m_seqhdr, sizeof(sequence_header_t));
   }
 
-  virtual memory_cptr get_raw_sequence_header() {
+  virtual memory_cptr get_raw_sequence_header() const {
     return m_seqhdr_found ? memory_cptr{m_raw_seqhdr->clone()} : memory_cptr{};
   }
 
-  virtual memory_cptr get_raw_entrypoint() {
+  virtual memory_cptr get_raw_entrypoint() const {
     return m_raw_entrypoint ? m_raw_entrypoint->clone() : memory_cptr{};
   }
 
   virtual void handle_packet(memory_cptr packet);
 
-  virtual bool is_frame_available() {
+  virtual bool is_frame_available() const {
     return !m_frames.empty();
   }
 
@@ -227,7 +227,7 @@ public:
     m_default_duration_forced = true;
   }
 
-  virtual int64_t get_default_duration() {
+  virtual int64_t get_default_duration() const {
     return m_default_duration;
   }
 
@@ -241,7 +241,7 @@ protected:
   virtual void handle_unknown_packet(uint32_t marker, memory_cptr packet);
 
   virtual int64_t get_next_timecode();
-  virtual int64_t peek_next_calculated_timecode();
+  virtual int64_t peek_next_calculated_timecode() const;
 
   virtual void add_pre_frame_extra_data(memory_cptr packet);
   virtual void add_post_frame_extra_data(memory_cptr packet);
@@ -252,7 +252,7 @@ protected:
 
   virtual void flush_frame();
 
-  virtual bool is_timecode_available();
+  virtual bool is_timecode_available() const;
 };
 
 };
