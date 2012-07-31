@@ -281,6 +281,7 @@ vc1::parse_frame_header(const unsigned char *buf,
 vc1::es_parser_c::es_parser_c()
   : m_stream_pos(0)
   , m_seqhdr_found(false)
+  , m_seqhdr_changed{false}
   , m_previous_timecode(0)
   , m_num_timecodes(0)
   , m_num_repeated_fields(0)
