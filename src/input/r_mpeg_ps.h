@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __R_MPEG_PS_H
-#define __R_MPEG_PS_H
+#ifndef MTX_INPUT_R_MPEG_PS_H
+#define MTX_INPUT_R_MPEG_PS_H
 
 #include "common/common_pch.h"
 
@@ -32,7 +32,7 @@ struct mpeg_ps_id_t {
     , sub_id(n_sub_id) {
   }
 
-  inline unsigned int idx() {
+  inline unsigned int idx() const {
     return ((id & 0xff) << 8) | (sub_id & 0xff);
   }
 };
@@ -244,4 +244,4 @@ private:
   void calculate_global_timecode_offset();
 };
 
-#endif // __R_MPEG_PS_H
+#endif // MTX_INPUT_R_MPEG_PS_H
