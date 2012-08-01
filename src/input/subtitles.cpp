@@ -39,7 +39,7 @@ subtitles_c::process(generic_packetizer_c *p) {
 
 #define SRT_RE_VALUE         "\\s*(-?)\\s*(\\d+)"
 #define SRT_RE_TIMECODE      SRT_RE_VALUE ":" SRT_RE_VALUE ":" SRT_RE_VALUE "[,\\.:]" SRT_RE_VALUE
-#define SRT_RE_TIMECODE_LINE "^" SRT_RE_TIMECODE "\\s*-+>\\s*" SRT_RE_TIMECODE "\\s*"
+#define SRT_RE_TIMECODE_LINE "^" SRT_RE_TIMECODE "\\s*[\\-\\s]+>\\s*" SRT_RE_TIMECODE "\\s*"
 #define SRT_RE_COORDINATES   "([XY]\\d+:\\d+\\s*){4}\\s*$"
 
 bool
