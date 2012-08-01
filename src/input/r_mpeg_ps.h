@@ -111,7 +111,7 @@ struct mpeg_ps_track_t {
   uint32_t fourcc;
 
   bool provide_timecodes;
-  int64_t timecode_offset;
+  int64_t timecode_offset, timecode_b_frame_offset;
 
   bool v_interlaced;
   int v_version, v_width, v_height, v_dwidth, v_dheight;
@@ -135,6 +135,7 @@ struct mpeg_ps_track_t {
     fourcc(0),
     provide_timecodes(false),
     timecode_offset(std::numeric_limits<int64_t>::max()),
+    timecode_b_frame_offset{0},
     v_interlaced(false),
     v_version(0),
     v_width(0),

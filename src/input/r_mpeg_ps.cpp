@@ -202,6 +202,9 @@ mpeg_ps_reader_c::calculate_global_timecode_offset() {
   if (tracks.empty())
     return;
 
+  for (auto &track : tracks)
+    track->timecode_offset -= track->timecode_b_frame_offset;
+
   auto const &track_min_offset = *brng::min_element(tracks, [](mpeg_ps_track_ptr const &a, mpeg_ps_track_ptr const &b) { return a->timecode_offset < b->timecode_offset; });
   global_timecode_offset       = std::numeric_limits<int64_t>::max() == track_min_offset->timecode_offset ? 0 : track_min_offset->timecode_offset;
 
@@ -573,8 +576,16 @@ mpeg_ps_reader_c::new_stream_v_mpeg_1_2(mpeg_ps_id_t id,
   m2v_parser->SetProbeMode();
   m2v_parser->WriteData(buf, length);
 
-  int state = m2v_parser->GetState();
-  while ((MPV_PARSER_STATE_FRAME != state) && (PS_PROBE_SIZE >= m_in->getFilePointer())) {
+  int num_leading_b_fields = 0;
+  int state                = m2v_parser->GetState();
+
+  bool found_i_frame       = false;
+  bool found_non_b_frame   = false;
+  MPEG2SequenceHeader seq_hdr;
+
+  while (   (MPV_PARSER_STATE_EOS   != state)
+         && (MPV_PARSER_STATE_ERROR != state)
+         && (PS_PROBE_SIZE >= m_in->getFilePointer())) {
     if (!find_next_packet_for_id(id, PS_PROBE_SIZE))
       break;
 
@@ -585,18 +596,39 @@ mpeg_ps_reader_c::new_stream_v_mpeg_1_2(mpeg_ps_id_t id,
     m2v_parser->WriteData(packet.m_buffer->get_buffer(), packet.m_length);
 
     state = m2v_parser->GetState();
+
+    while (true) {
+      std::shared_ptr<MPEGFrame> frame(m2v_parser->ReadFrame());
+      if (!frame)
+        break;
+
+      if (!found_i_frame) {
+        if ('I' != frame->frameType)
+          continue;
+
+        found_i_frame = true;
+        seq_hdr       = m2v_parser->GetSequenceHeader();
+
+        continue;
+      }
+
+      if ('B' != frame->frameType) {
+        found_non_b_frame = true;
+        break;
+      }
+
+      num_leading_b_fields += MPEG2_PICTURE_TYPE_FRAME == frame->pictureStructure ? 2 : 1;
+    }
+
+    if (found_i_frame && found_non_b_frame)
+      break;
   }
 
-  if (MPV_PARSER_STATE_FRAME != state) {
+  if ((MPV_PARSER_STATE_FRAME != state) || !found_i_frame) {
     mxverb(3, boost::format("MPEG PS: blacklisting id 0x%|1$02x|(%|2$02x|) for supposed type MPEG1/2\n") % id.id % id.sub_id);
     blacklisted_ids[id.idx()] = true;
     return;
   }
-
-  MPEG2SequenceHeader seq_hdr = m2v_parser->GetSequenceHeader();
-  std::shared_ptr<MPEGFrame> frame(m2v_parser->ReadFrame());
-  if (!frame)
-    throw false;
 
   track->fourcc         = FOURCC('M', 'P', 'G', '0' + m2v_parser->GetMPEGVersion());
   track->v_interlaced   = !seq_hdr.progressiveSequence;
@@ -605,6 +637,11 @@ mpeg_ps_reader_c::new_stream_v_mpeg_1_2(mpeg_ps_id_t id,
   track->v_height       = seq_hdr.height;
   track->v_frame_rate   = seq_hdr.progressiveSequence ? seq_hdr.frameOrFieldRate : seq_hdr.frameOrFieldRate * 2.0f;
   track->v_aspect_ratio = seq_hdr.aspectRatio;
+  track->timecode_b_frame_offset = 1000000000ll * num_leading_b_fields / seq_hdr.frameOrFieldRate / 2;
+
+  mxdebug_if(m_debug_timecodes,
+             boost::format("Leading B fields %1% rate %2% progressive? %3% calculated_offset %4% found_i? %5% found_non_b? %6%\n")
+             % num_leading_b_fields % seq_hdr.frameOrFieldRate % !!seq_hdr.progressiveSequence % track->timecode_b_frame_offset % found_i_frame % found_non_b_frame);
 
   if ((0 >= track->v_aspect_ratio) || (1 == track->v_aspect_ratio))
     track->v_dwidth = track->v_width;
@@ -827,9 +864,9 @@ mpeg_ps_reader_c::found_new_stream(mpeg_ps_id_t id) {
     }
 
     mxdebug_if(m_debug_timecodes && packet.has_pts(),
-               boost::format("Timecode for track %1%: %2% (DTS: %3%)\n")
-               % id % format_timecode(packet.pts())
-               % (packet.has_dts() ? format_timecode(packet.dts()) : std::string{"none"}));
+               boost::format("Timecode for track %1%: %2% [%3%] (DTS: %4%)\n")
+               % id % format_timecode(packet.pts()) % (packet.pts() * 90 / 1000000ll)
+               % (packet.has_dts() ? (boost::format("%1% [%2%]") % format_timecode(packet.dts()) % (packet.dts() * 90 / 1000000ll)).str() : std::string{"none"}));
 
     if (map_has_key(blacklisted_ids, id.idx()))
       return;
@@ -840,7 +877,7 @@ mpeg_ps_reader_c::found_new_stream(mpeg_ps_id_t id) {
 
     if (map_has_key(id2idx, id.idx())) {
       mpeg_ps_track_ptr &track = tracks[id2idx[id.idx()]];
-      if ((-1 != timecode_for_offset) && ((-1 == track->timecode_offset) || (timecode_for_offset < track->timecode_offset)))
+      if ((-1 != timecode_for_offset) && (-1 == track->timecode_offset))
         track->timecode_offset = timecode_for_offset;
       return;
     }

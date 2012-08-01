@@ -1,5 +1,9 @@
 2012-08-01  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: Fixed audio/video synchronisation when
+	reading MPEG program streams with MPEG-1/2 video with respect to B
+	frames. Fixes #579.
+
 	* mkvmerge: enhancement: SRT files can have spaces in their
 	timecode line's arrow (e.g. "-- >").
 
