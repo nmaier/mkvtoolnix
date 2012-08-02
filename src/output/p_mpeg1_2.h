@@ -25,9 +25,12 @@ protected:
   M2VParser m_parser;
   memory_cptr m_seq_hdr;
   bool m_framed, m_aspect_ratio_extracted;
+  int64_t m_num_removed_stuffing_bytes;
+  bool m_debug_stuffing_removal;
 
 public:
   mpeg1_2_video_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, int version, double fps, int width, int height, int dwidth, int dheight, bool framed);
+  virtual ~mpeg1_2_video_packetizer_c();
 
   virtual int process(packet_cptr packet);
 
@@ -42,6 +45,7 @@ protected:
   virtual int process_framed(packet_cptr packet);
   virtual int process_unframed(packet_cptr packet);
   virtual bool put_sequence_headers_into_codec_state(packet_cptr packet);
+  virtual void remove_stuffing_bytes(memory_cptr data);
   virtual void flush_impl();
 };
 
