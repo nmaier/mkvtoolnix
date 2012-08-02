@@ -71,13 +71,13 @@ mpeg1_2_video_packetizer_c::put_sequence_headers_into_codec_state(packet_cptr pa
   size_t  size        = packet->data->get_size();
   unsigned int marker = get_uint32_be(buf);
 
-  while ((pos < size) && (MPEGVIDEO_SEQUENCE_START_CODE != marker)) {
+  while ((pos < size) && (MPEGVIDEO_SEQUENCE_HEADER_START_CODE != marker)) {
     marker <<= 8;
     marker  |= buf[pos];
     ++pos;
   }
 
-  if ((MPEGVIDEO_SEQUENCE_START_CODE != marker) || ((pos + 4) >= size))
+  if ((MPEGVIDEO_SEQUENCE_HEADER_START_CODE != marker) || ((pos + 4) >= size))
     return false;
 
   size_t start  = pos - 4;
@@ -122,22 +122,24 @@ mpeg1_2_video_packetizer_c::process(packet_cptr packet) {
   if (!m_aspect_ratio_extracted)
     extract_aspect_ratio(packet->data->get_buffer(), packet->data->get_size());
 
-  if (m_framed)
-    return process_framed(packet);
+  return m_framed ? process_framed(packet) : process_unframed(packet);
+}
 
+int
+mpeg1_2_video_packetizer_c::process_unframed(packet_cptr packet) {
   int state = m_parser.GetState();
   if ((MPV_PARSER_STATE_EOS == state) || (MPV_PARSER_STATE_ERROR == state))
     return FILE_STATUS_DONE;
 
-  memory_cptr old_memory  = packet->data;
-  unsigned char *data_ptr = old_memory->get_buffer();
-  int new_bytes           = old_memory->get_size();
+  auto old_memory = packet->data;
+  auto data_ptr   = old_memory->get_buffer();
+  int new_bytes   = old_memory->get_size();
 
   if (packet->has_timecode())
     m_parser.AddTimecode(packet->timecode);
 
   do {
-    int bytes_to_add = (m_parser.GetFreeBufferSpace() < new_bytes) ? m_parser.GetFreeBufferSpace() : new_bytes;
+    int bytes_to_add = std::min<int>(m_parser.GetFreeBufferSpace(), new_bytes);
     if (0 < bytes_to_add) {
       m_parser.WriteData(data_ptr, bytes_to_add);
       data_ptr  += bytes_to_add;
@@ -146,14 +148,14 @@ mpeg1_2_video_packetizer_c::process(packet_cptr packet) {
 
     state = m_parser.GetState();
     while (MPV_PARSER_STATE_FRAME == state) {
-      MPEGFrame *frame = m_parser.ReadFrame();
+      auto frame = std::shared_ptr<MPEGFrame>(m_parser.ReadFrame());
       if (!frame)
         break;
 
       if (!m_hcodec_private)
         create_private_data();
 
-      packet_cptr new_packet   = packet_cptr(new packet_t(new memory_c(frame->data, frame->size, true), frame->timecode, frame->duration, frame->firstRef, frame->secondRef));
+      packet_cptr new_packet  = packet_cptr(new packet_t(new memory_c(frame->data, frame->size, true), frame->timecode, frame->duration, frame->firstRef, frame->secondRef));
       new_packet->time_factor = MPEG2_PICTURE_TYPE_FRAME == frame->pictureStructure ? 1 : 2;
 
       put_sequence_headers_into_codec_state(new_packet);
@@ -161,9 +163,7 @@ mpeg1_2_video_packetizer_c::process(packet_cptr packet) {
       video_packetizer_c::process(new_packet);
 
       frame->data = nullptr;
-      delete frame;
-
-      state = m_parser.GetState();
+      state       = m_parser.GetState();
     }
   } while (0 < new_bytes);
 

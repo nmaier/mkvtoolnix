@@ -39,33 +39,27 @@
 int
 mpeg1_2::extract_fps_idx(const unsigned char *buffer,
                          int buffer_size) {
-  uint32_t marker;
-  int idx;
-
   mxverb(3, boost::format("mpeg_video_fps: start search in %1% bytes\n") % buffer_size);
   if (buffer_size < 8) {
     mxverb(3, "mpeg_video_fps: sequence header too small\n");
     return -1;
   }
-  marker = get_uint32_be(buffer);
-  idx = 4;
-  while ((idx < buffer_size) && (marker != MPEGVIDEO_SEQUENCE_START_CODE)) {
+  auto marker = get_uint32_be(buffer);
+  int idx     = 4;
+  while ((idx < buffer_size) && (marker != MPEGVIDEO_SEQUENCE_HEADER_START_CODE)) {
     marker <<= 8;
     marker |= buffer[idx];
     idx++;
   }
-  if (idx >= buffer_size) {
-    mxverb(3, "mpeg_video_fps: no sequence header start code found\n");
+
+  if ((idx + 3) >= buffer_size) {
+    mxverb(3, "mpeg_video_fps: no full sequence header start code found\n");
     return -1;
   }
 
   mxverb(3, boost::format("mpeg_video_fps: found sequence header start code at %1%\n") % (idx - 4));
-  idx += 3;                     // width and height
-  if (idx >= buffer_size) {
-    mxverb(3, "mpeg_video_fps: sequence header too small\n");
-    return -1;
-  }
-  return buffer[idx] & 0x0f;
+
+  return buffer[idx + 3] & 0x0f;
 }
 
 /** \brief Extract the aspect ratio from a MPEG video sequence header
@@ -93,7 +87,7 @@ mpeg1_2::extract_ar(const unsigned char *buffer,
   }
   marker = get_uint32_be(buffer);
   idx = 4;
-  while ((idx < buffer_size) && (marker != MPEGVIDEO_SEQUENCE_START_CODE)) {
+  while ((idx < buffer_size) && (marker != MPEGVIDEO_SEQUENCE_HEADER_START_CODE)) {
     marker <<= 8;
     marker |= buffer[idx];
     idx++;
@@ -140,20 +134,13 @@ mpeg1_2::extract_ar(const unsigned char *buffer,
 */
 double
 mpeg1_2::get_fps(int idx) {
-  static const int fps[8] = {0, 24, 25, 0, 30, 50, 0, 60};
+  static const int s_fps[8] = {0, 24, 25, 0, 30, 50, 0, 60};
 
-  if ((idx < 1) || (idx > 8))
-    return -1.0;
-  switch (idx) {
-    case MPEGVIDEO_FPS_23_976:
-      return (double)24000.0 / 1001.0;
-    case MPEGVIDEO_FPS_29_97:
-      return (double)30000.0 / 1001.0;
-    case MPEGVIDEO_FPS_59_94:
-      return (double)60000.0 / 1001.0;
-    default:
-      return fps[idx - 1];
-  }
+  return ((idx < 1) || (idx > 8)) ?    -1.0
+    : MPEGVIDEO_FPS_23_976 == idx ? 24000.0 / 1001.0
+    : MPEGVIDEO_FPS_29_97  == idx ? 30000.0 / 1001.0
+    : MPEGVIDEO_FPS_59_94  == idx ? 60000.0 / 1001.0
+    :                               s_fps[idx - 1];
 }
 
 bool

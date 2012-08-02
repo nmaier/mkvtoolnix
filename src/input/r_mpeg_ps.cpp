@@ -533,7 +533,7 @@ mpeg_ps_reader_c::new_stream_v_avc_or_mpeg_1_2(mpeg_ps_id_t id,
         if (mpeg_is_start_code(marker)) {
           // MPEG-1 or -2
           switch (marker & 0xffffffff) {
-            case MPEGVIDEO_SEQUENCE_START_CODE:
+            case MPEGVIDEO_SEQUENCE_HEADER_START_CODE:
               mpeg_12_seqhdr_found  = true;
               break;
 

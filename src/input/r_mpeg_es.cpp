@@ -71,13 +71,13 @@ mpeg_es_reader_c::probe_file(mm_io_c *in,
       if (mpeg_is_start_code(value)) {
         mxverb(3, boost::format("mpeg_es_detection: start code found; fourth byte: 0x%|1$02x|\n") % (value & 0xff));
 
-        if (MPEGVIDEO_SEQUENCE_START_CODE == value)
+        if (MPEGVIDEO_SEQUENCE_HEADER_START_CODE == value)
           sequence_start_code_found = true;
 
         else if (MPEGVIDEO_PICTURE_START_CODE == value)
           picture_start_code_found  = true;
 
-        else if (MPEGVIDEO_GOP12_START_CODE   == value)
+        else if (MPEGVIDEO_GROUP_OF_PICTURES_START_CODE   == value)
           gop_start_code_found      = true;
 
         else if (MPEGVIDEO_EXT_START_CODE     == value)

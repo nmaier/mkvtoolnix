@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __P_MPEG1_2_H
-#define __P_MPEG1_2_H
+#ifndef MTX_OUTPUT_P_MPEG1_2_H
+#define MTX_OUTPUT_P_MPEG1_2_H
 
 #include "common/common_pch.h"
 
@@ -40,8 +40,9 @@ protected:
   virtual void extract_aspect_ratio(const unsigned char *buffer, int size);
   virtual void create_private_data();
   virtual int process_framed(packet_cptr packet);
+  virtual int process_unframed(packet_cptr packet);
   virtual bool put_sequence_headers_into_codec_state(packet_cptr packet);
   virtual void flush_impl();
 };
 
-#endif  // __P_MPEG1_2_H
+#endif  // MTX_OUTPUT_P_MPEG1_2_H

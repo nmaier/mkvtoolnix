@@ -58,7 +58,7 @@ xtr_mpeg1_2_video_c::handle_frame(memory_cptr &frame,
 
     if (4 <= size) {
       uint32_t marker = get_uint32_be(buf);
-      seq_hdr_found   = MPEGVIDEO_SEQUENCE_START_CODE == marker;
+      seq_hdr_found   = MPEGVIDEO_SEQUENCE_HEADER_START_CODE == marker;
 
       if (seq_hdr_found && (8 <= size)) {
         size_t end_pos = 7;
