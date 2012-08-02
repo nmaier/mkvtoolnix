@@ -568,6 +568,16 @@ namespace :clean do
   end
 end
 
+# Tests
+desc "Run all tests"
+task :tests => [ 'tests:products' ]
+namespace :tests do
+  desc "Run prodct tests from 'tests' sub-directory (requires data files to be present)"
+  task :products do
+    run "cd tests && ./run.rb"
+  end
+end
+
 #
 # avilib-0.6.10
 # librmff
