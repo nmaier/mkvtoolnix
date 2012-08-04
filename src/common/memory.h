@@ -187,6 +187,16 @@ public:
     return its_counter ? its_counter->ptr : nullptr;
   }
 
+  bool operator ==(memory_c const &cmp) const {
+    return (get_size() == cmp.get_size())
+        && ((get_buffer() && cmp.get_buffer()) || (!get_buffer() && !cmp.get_buffer()))
+        && (get_buffer() ? !::memcmp(get_buffer(), cmp.get_buffer(), get_size()) : true);
+  }
+
+  bool operator !=(memory_c const &cmp) const {
+    return !(*this == cmp);
+  }
+
 public:
   static memory_cptr
   alloc(size_t size) {
