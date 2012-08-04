@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: it\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2012-07-19 15:56+0100\n"
-"Last-Translator: bovirus <bovirus@live.it>\n"
+"PO-Revision-Date: 2012-08-02 12:15+0100\n"
+"Last-Translator: bovirus <bovirus@gmail.com>\n"
 "Language-Team: Italian <moritz@bunkus.org>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -6493,7 +6493,7 @@ msgstr "Il file corrente (numero %d) non può essere rimosso. Ci sono altri file
 #: src/merge/pr_generic.cpp:854
 #, boost-format
 msgid "The current packet's timecode is smaller than that of the previous packet. This usually means that the source file is a Matroska file that has not been created 100%% correctly. The timecodes of all packets will be adjusted by %1%ms in order not to lose any data. This may throw audio/video synchronization off, but that can be corrected with mkvmerge's \"--sync\" option. If you already use \"--sync\" and you still get this warning then do NOT worry -- this is normal. If this error happens more than once and you get this message more than once for a particular track then either is the source file badly mastered, or mkvmerge contains a bug. In this case you should contact the author Moritz Bunkus <moritz@bunkus.org>.\n"
-msgstr ""
+msgstr "Il timecode del pacchetto attuale è più piccolo del pacchetto precedente. Questo normalmente significa che il file sorgente è un file Matroska non creato correttamente al 100%%. I timecode di tutti i pacchetti verranno adattati di %1%ms per evitare qualsiasi perdita di dati. Questo potrebbe comportare una desincronizzazione audio/video, che può essere corretta con l'opzione \"--sync\" di mkvmerge. Se stai gia usando \"--sync\" e ottieni comuqnue la notifica NON ti preoccupare - questo è normale. Se questo errore si verifica spesso  per una traccia in particolare probabilmente il file è danneggiato, o mkvmerge ha un bug. In questo caso contatta l'autore Moritz Bunkus <moritz@bunkus.org>.\n"
 
 #: src/input/r_usf.cpp:87
 #, boost-format
@@ -6760,11 +6760,11 @@ msgstr "I formati non corrispondono."
 
 #: src/extract/extract_cli_parser.cpp:95
 msgid "The fourth mode extracts the chapters and converts them to XML. The output is written to the standard output. The output can be used as a source for mkvmerge."
-msgstr ""
+msgstr "Il quarto mode estrae i capitoli e li converte in XML. Il fiel destinazione verra diretto alla destinazione standard. Il file destinazione può essere usato come sorgente per mkvmerge."
 
 #: src/merge/mkvmerge.cpp:1570
 msgid "The given timecode scale factor is outside the valid range (1...10000000 or -1 for 'sample precision even if a video track is present').\n"
-msgstr ""
+msgstr "Il fattore di scala del timecode fornito è fuori dei valori validi (1...10000000 o -1 per 'campione di precisione anche se la traccia video è presente').\n"
 
 #: src/merge/pr_generic.h:452
 msgid "The height of the two tracks is different: %1% and %2%"
@@ -6784,6 +6784,11 @@ msgid ""
 "\n"
 "(Problem occured in tab_input::load(), #1)"
 msgstr ""
+"Il file non è stato analizzato correttamente.\n"
+"Potrebbee ssere danneggiato/non valido o\n"
+"hai trovato un bug in mmg. Segnalo all'autore\n"
+"\n"
+"(problema verificatosi in tab_input::load(), #1)"
 
 #: src/mmg/tabs/input.cpp:1259
 msgid ""
@@ -6794,6 +6799,11 @@ msgid ""
 "\n"
 "(Problem occured in tab_input::load(), #2)"
 msgstr ""
+"Il file non è stato analizzato correttamente.\n"
+"Potrebbee ssere danneggiato/non valido o\n"
+"hai trovato un bug in mmg. Segnalo all'autore\n"
+"\n"
+"(problema verificatosi intab_input::load(), #2)"
 
 #: src/mmg/tabs/input.cpp:1272
 msgid ""
@@ -6804,6 +6814,11 @@ msgid ""
 "\n"
 "(Problem occured in tab_input::load(), #3)"
 msgstr ""
+"Il file non è stato analizzato correttamente.\n"
+"Potrebbee ssere danneggiato/non valido o\n"
+"hai trovato un bug in mmg. Segnalo all'autore\n"
+"\n"
+"(problema verificatosi intab_input::load(), #3)"
 
 #: src/mmg/options/chapters.cpp:108
 #: src/mmg/tabs/chapters.cpp:1283
@@ -6814,20 +6829,20 @@ msgstr "La lingua '%s' non è una lingua valida e non può essere selezionata."
 #: src/input/r_usf.cpp:103
 #, boost-format
 msgid "The language code '%1%' is not a valid ISO639-2 language code and will be ignored.\n"
-msgstr ""
+msgstr "Il codice lingua '%1%' non un codice lingua SO639-2 valido e verrà ignorato.\n"
 
 #: src/merge/timecode_factory.cpp:213
 #, boost-format
 msgid "The line %1% of the timecode file '%2%' does not contain a valid floating point number.\n"
-msgstr ""
+msgstr "La linea %1% del timecode '%2%' non contiene un numero in virgola mobile valido.\n"
 
 #: src/common/translation.cpp:296
 msgid "The locale could not be set properly. Check the LANG, LC_ALL and LC_MESSAGES environment variables.\n"
-msgstr ""
+msgstr "La variabile locale non può essere impostata correttamente. Verifica le variabili ambiente  LANG, LC_ALL e LC_MESSAGES.\n"
 
 #: src/mmg/tabs/global.cpp:270
 msgid "The maximum number of files that will be created even if the last file might contain more bytes/time than wanted. Useful e.g. when you want exactly two files. If you leave this empty then there is no limit for the number of files mkvmerge might create."
-msgstr ""
+msgstr "E' il numero massimo di file che verranno creati anche se l'ultimo file potrebbe avere più byte/durata di quanto previsto. Utile ad esempio quando vuoi creare esattamente due file. Se lasci questo campo vuoto non ci sarà nessun limite al numero di file creati da mkvmerge."
 
 #: src/common/property_element.cpp:124
 #: src/mmg/header_editor/frame.cpp:407
@@ -6837,12 +6852,16 @@ msgid ""
 "If set to 0, the reference pseudo-cache system\n"
 "is not used."
 msgstr ""
+"Il numero massimo di frame che un riproduttore\n"
+"deve essere capace di mettere in cache durante\n"
+"la riproduzione. Se impostato a 0. il sistema\n"
+"di pseudo cache non verrà usato."
 
 #: src/mmg/header_editor/frame.cpp:676
 #: src/mmg/tabs/chapters.cpp:1873
 #: src/propedit/propedit.cpp:35
 msgid "The meta seek element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
-msgstr ""
+msgstr "L'elemento meta seek è stato scritto alla fine del file, ma la dimensione del segmento non è stata aggiornata. Quindi l'lelemnto non sarà visibile. Il processo è stato interrotto. Il file è stato modificato!"
 
 #: src/common/property_element.cpp:122
 #: src/mmg/header_editor/frame.cpp:402
@@ -6852,10 +6871,14 @@ msgid ""
 "If set to 0, the reference pseudo-cache system\n"
 "is not used."
 msgstr ""
+"Il numero minimo di frame che un riproduttore\n"
+"potrà mettere in cache durante la riproduzione.\n"
+"Se impostato a 0, il sistema di pseudo cache\n"
+"non verrà usato."
 
 #: src/mmg/mmg_dialog.cpp:710
 msgid "The mkvmerge GUI help file was not found in the path you've selected. Please try again, or abort by pressing the 'abort' button."
-msgstr ""
+msgstr "Il file della Guida della GUi di mkvmerge non è stato trovato nel percorso da te selezionato. Riprova o interrompi selezionando il pulsante 'Annulla'."
 
 #: src/mmg/mmg_dialog.cpp:703
 msgid ""
@@ -6863,6 +6886,9 @@ msgid ""
 "\n"
 "Please select the location of the 'mkvmerge-gui.hhp' file."
 msgstr ""
+"Il file della Guida della GUI di mkvmerge non è stato trovato. Questa indica che non è mai stato aperto precedentemente, o che è stato modificato il percorso di installazione.\n"
+"\n"
+"Seleziona la locazione del file 'mkvmerge-gui.hhp'."
 
 #: src/propedit/change.cpp:60
 #, boost-format
@@ -6959,7 +6985,7 @@ msgstr "Il precedente UID era già stato usato in '%1% %2%'.\n"
 #: src/propedit/change.cpp:112
 #, boost-format
 msgid "The property value contains non-ASCII characters, but the property is not a Unicode string in '%1%'. %2%\n"
-msgstr ""
+msgstr "Il valore proprietà contiene caratteri non ASCII, ma la proprietà non è una stringa Unicode in  '%1%'. %2%\n"
 
 #: src/propedit/change.cpp:154
 #, boost-format
@@ -7006,10 +7032,14 @@ msgid ""
 "speed in relation with other tracks (mostly used\n"
 "to adjust video speed when the audio length differs)."
 msgstr ""
+"La scala da applicare a questa traccia per lavorara\n"
+"a velocità normale in relazione con altre tracce (spesso\n"
+"usata per regolare la velocità video con lunghezza\n"
+"audio differente)."
 
 #: src/extract/extract_cli_parser.cpp:79
 msgid "The second mode extracts the tags and converts them to XML. The output is written to the standard output. The output can be used as a source for mkvmerge."
-msgstr ""
+msgstr "Il secondo modo estrae i marcatori e li converte in XML. Il file destinazione è scritto nella destinazione standard. Il file destinazione può essere usato come sorgente per mkvmerge.."
 
 #: src/input/r_tta.cpp:85
 msgid "The seek table in this TTA file seems to be broken.\n"
@@ -7018,15 +7048,15 @@ msgstr "La tabella di seek in questo file TTA sembra danneggiata.\n"
 #: src/mmg/tabs/chapters.cpp:761
 #, c-format, boost-format
 msgid "The selected language '%s' for the chapter '%s' is not a valid language code. Please select one of the predefined ones."
-msgstr ""
+msgstr "Il linguaggio selezionato '%s' per il capitolo '%s' non è un codice linguaggio valido. Selezionane uno di quelli predefiniti."
 
 #: src/extract/extract_cli_parser.cpp:113
 msgid "The sixth mode finds the timecodes of all blocks for a track and outputs a timecode v2 file with these timecodes."
-msgstr ""
+msgstr "Il sesto modo cerca i timecode di tutti blocchi e crea un file timecode v2 con tutti questi timecode."
 
 #: src/mmg/tabs/global.cpp:240
 msgid "The size after which a new output file is started. The letters 'G', 'M' and 'K' can be used to indicate giga/mega/kilo bytes respectively. All units are based on 1024 (G = 1024^3, M = 1024^2, K = 1024)."
-msgstr ""
+msgstr "la dimensione dopo che è stato avviato un nuovo output. Le lettere 'G', 'M', 'K' sono usate per indicare rispettivamente giga/mega/kilo byte. Tutte le unità sono basate sul sistema 1024 (G = 1024^3, M = 1024^2, K = 1024)."
 
 #: src/merge/mkvmerge.cpp:1491
 #, boost-format
@@ -7037,7 +7067,7 @@ msgstr "La dimensione dell'allegato '%1%' è 0.\n"
 #: src/merge/output_control.cpp:454
 #, boost-format
 msgid "The source file '%1%' could not be opened successfully, or retrieving its size by seeking to the end did not work.\n"
-msgstr ""
+msgstr "Il file sorgente '%1%' non può essere aperto correttamente, o il recupero della sua dimensione andando alla fine del file non ha funzionato.\n"
 
 #: src/mmg/tabs/input.cpp:1339
 #, c-format, boost-format
@@ -7054,19 +7084,19 @@ msgstr "La stringa 'global' funziona sui tag globali."
 
 #: src/propedit/propedit_cli_parser.cpp:176
 msgid "The string 'track:' followed by one of the chars 'a', 'b', 's' or 'v' followed by a number 'n' selects the nth audio, button, subtitle or video track (e.g. '--edit track:a2'). Numbering starts at 1."
-msgstr ""
+msgstr "La stringa 'tracck' seguita da uno dei caratteri  'a', 'b', 's' or 'v' seguiti da un numero 'n' seleziona l'n traccia audio, pulsante, sottototitolo o traccia video (es. '--edit track:a2'). La numerazione parte da 1."
 
 #: src/propedit/propedit_cli_parser.cpp:178
 msgid "The string 'track:=uid' with 'uid' being a number selects the track whose 'track UID' element equals 'uid'."
-msgstr ""
+msgstr "La stringa 'track=uid' con 'uid' uguale a un numero seleziona la traccia il cui elemento 'UID traccia' equivale a 'uid'."
 
 #: src/propedit/propedit_cli_parser.cpp:179
 msgid "The string 'track:@number' with 'number' being a number selects the track whose 'track number' element equals 'number'."
-msgstr ""
+msgstr "La stringa 'traccia:@numero' essendo 'numero' un numero seleziona la traccia il cui l'elemento 'numero traccia' equivale a 'numero'."
 
 #: src/propedit/propedit_cli_parser.cpp:175
 msgid "The string 'track:n' with 'n' being a number selects the nth track. Numbering starts at 1."
-msgstr ""
+msgstr "La stringa 'track:n' con n= numero seleziona la traccia n. La numerazione iniza da 1."
 
 #: src/propedit/propedit_cli_parser.cpp:172
 msgid "The strings 'info', 'segment_info' or 'segmentinfo' select the segment information element. This is also the default until the first '--edit' option is found."
@@ -7135,10 +7165,13 @@ msgid ""
 "\n"
 "If you really have to specify non-sorted timecodes then use the timecode format v4. It is identical to format v2 but allows non-sorted timecodes.\n"
 msgstr ""
+"Il file timecode v2 '%1%' contiene timecode non in ordine. Questo a causa di un bug di mkvmerge fino alla versione 1.5.0 (inclusa) questo era necessario se la traccia alla quale il timcode era applicato conteneva B frame. A iniziare da mkvmerge 1.5.1 ciò viene gestito correttamente, e i timecode nel file timecode devono essere ordinati normalmente. Per esempio, la sequenza frame 'IPBBP...' a 25 FPS richiede un file timecode con il primo timecode a '0', '40', '80', '120' ecc e non '0', '120', '40', '80' ecc.\n"
+"\n"
+"Se hai vuoi specificare dei timecdoe non ordinati usa il timecode formato v4. E' identico al formato v2 ma permette timecode non in ordine.\n"
 
 #: src/mmg/tabs/global.cpp:248
 msgid "The timecodes after which a new output file is started. The timecodes refer to the whole stream and not to each individual output file. The timecodes can be given either in the form HH:MM:SS.nnnnnnnnn or as the number of seconds followed by 's'. You may omit the number of hours 'HH'. You can specify up to nine digits for the number of nanoseconds 'nnnnnnnnn' or none at all. If given then you may use up to nine digits after the decimal point. If two or more timecodes are used then you have to separate them with commas. The formats can be mixed, too. Examples: 01:00:00,01:30:00 (after one hour and after one hour and thirty minutes) or 1800s,3000s,00:10:00 (after three, five and ten minutes)."
-msgstr ""
+msgstr "I timecode dopo che è stato avviato un nuovo output. I timecode si riferiscono all'intero flusso e non ad ogni singolo file destinazione. I timecode possono essere nella forma HH:MM:SS,nnnnnnnnn o come numero di secondi seguito da 's'. Puoi omettere il numero di ore \"HH'. Puoi specificare fino a 9 digit per il numero di nanosecondi  'nnnnnnnnn' o non indicare nulla. Se indicati puoi usare fino a 9 cifre dopo il punto decimale. Se sono usati due o più timecode, devono essere separati con la virgola. I formati possono anche essere misti. Esempio  01:00:00,01:30:00 (dopo un'ora e un'ora e trenta minuti) o 1800s,3000s,00:10:00 (dopo tre, cinque e dieci minuti)."
 
 #: src/mmg/tabs/global.cpp:263
 msgid "The timecodes can be given either in the form HH:MM:SS.nnnnnnnnn or as the number of seconds followed by 's'."
@@ -7146,7 +7179,7 @@ msgstr "I timecode possono essere inseriti sia nel formato HH:MM:SS.nnnnnnnnn o 
 
 #: src/input/r_ogm.cpp:591
 msgid "The timecodes for this stream have been reset in the middle of the file. This is not supported. The current packet will be discarded.\n"
-msgstr ""
+msgstr "I timecode per questi fliussi sono stati ripristinati nel mezzo del file. Questo non è supportato. Il pacchetto attuale verra scartato.\n"
 
 #: src/common/property_element.cpp:101
 #: src/mmg/header_editor/frame.cpp:319
@@ -7156,7 +7189,7 @@ msgstr "Il titolo per l'intero filmato."
 #: src/merge/output_control.cpp:1009
 #, boost-format
 msgid "The track %1% from file no. %2% ('%3%') is to be appended more than once. The argument for '--append-to' was invalid.\n"
-msgstr ""
+msgstr "La traccia %1% dal file no. %2% ('%3%') è stata appesa più di una volta. L'argomento per '--append-to' non era valido.\n"
 
 #: src/extract/tracks.cpp:92
 #, boost-format
@@ -7171,7 +7204,7 @@ msgstr "Le intestazioni traccia non possono essere renderizzate correttamente. %
 #: src/merge/output_control.cpp:1055
 #, boost-format
 msgid "The track number %1% from the file '%2%' can probably not be appended correctly to the track number %3% from the file '%4%': %5% Please make sure that the resulting file plays correctly the whole time. The author of this program will probably not give support for playback issues with the resulting file.\n"
-msgstr ""
+msgstr "La traccia numero %1% del file '%2%' potrebbe non essere stata aggiunta corerttamente alla traccia numero %3% del file '%4%': %5% Assicurati che il file risultante venga riprodotto correttamnente per intero. L'autore di questo programma probabilmente non potrà supportarti per i problemi di rirpoduzione del file risultante.\n"
 
 #: src/merge/output_control.cpp:1066
 #, boost-format
