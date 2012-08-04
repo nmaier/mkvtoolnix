@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __R_QTMP4_H
-#define __R_QTMP4_H
+#ifndef MTX_INPUT_R_QTMP4_H
+#define MTX_INPUT_R_QTMP4_H
 
 #include "common/common_pch.h"
 
@@ -148,20 +148,18 @@ struct qtmp4_demuxer_c {
   esds_t esds;
   bool esds_parsed;
 
-  memory_cptr v_stsd;
-  uint32_t v_stsd_size;
+  memory_cptr stsd;
+  unsigned int stsd_non_priv_struct_size;
   uint32_t v_width, v_height, v_bitdepth;
   std::deque<int64_t> references;
   bool v_is_avc, avc_use_bframes;
-  memory_cptr a_stsd;
   uint32_t a_channels, a_bitdepth;
   float a_samplerate;
   int a_aac_profile, a_aac_output_sample_rate;
   bool a_aac_is_sbr, a_aac_config_parsed;
   ac3::frame_c m_ac3_header;
 
-  unsigned char *priv;
-  uint32_t priv_size;
+  memory_cptr priv;
 
   bool warning_printed;
 
@@ -169,7 +167,7 @@ struct qtmp4_demuxer_c {
 
   std::string language;
 
-  bool m_debug_tables, m_debug_fps;
+  bool m_debug_tables, m_debug_fps, m_debug_headers;
 
   qtmp4_demuxer_c():
     ok(false),
@@ -184,6 +182,7 @@ struct qtmp4_demuxer_c {
     max_timecode(0),
     fps(0.0),
     esds_parsed(false),
+    stsd_non_priv_struct_size{},
     v_width(0),
     v_height(0),
     v_bitdepth(0),
@@ -196,21 +195,17 @@ struct qtmp4_demuxer_c {
     a_aac_output_sample_rate(0),
     a_aac_is_sbr(false),
     a_aac_config_parsed(false),
-    priv(nullptr),
-    priv_size(0),
     warning_printed(false),
     ptzr(-1)
-    , m_debug_tables(                                debugging_requested("qtmp4_full") || debugging_requested("qtmp4_tables"))
-    , m_debug_fps(   debugging_requested("qtmp4") || debugging_requested("qtmp4_full") || debugging_requested("qtmp4_fps"))
+    , m_debug_tables(                                 debugging_requested("qtmp4_full") || debugging_requested("qtmp4_tables"))
+    , m_debug_fps(    debugging_requested("qtmp4") || debugging_requested("qtmp4_full") || debugging_requested("qtmp4_fps"))
+    , m_debug_headers(debugging_requested("qtmp4") || debugging_requested("qtmp4_full") || debugging_requested("qtmp4_headers"))
   {
     memset(fourcc, 0, 4);
     memset(&esds, 0, sizeof(esds_t));
   }
 
   ~qtmp4_demuxer_c() {
-    safefree(priv);
-    safefree(esds.decoder_config);
-    safefree(esds.sl_config);
   }
 
   void calculate_fps();
@@ -228,9 +223,26 @@ struct qtmp4_demuxer_c {
   bool is_audio() const;
   bool is_video() const;
 
+  void handle_stsd_atom(uint64_t atom_size, int level);
+  void handle_audio_stsd_atom(uint64_t atom_size, int level);
+  void handle_video_stsd_atom(uint64_t atom_size, int level);
+
+  void parse_audio_header_priv_atoms(uint64_t atom_size, int level);
+  void parse_video_header_priv_atoms(uint64_t atom_size, int level);
+
+  bool verify_audio_parameters();
+  bool verify_mp4a_audio_parameters();
+
+  bool verify_video_parameters();
+  bool verify_avc_video_parameters();
+  bool verify_mp4v_video_parameters();
+
 private:
   void build_index_chunk_mode();
   void build_index_constant_sample_size_mode();
+
+  bool parse_esds_atom(mm_mem_io_c &memio, int level);
+  uint32_t read_esds_descr_len(mm_mem_io_c &memio);
 };
 typedef std::shared_ptr<qtmp4_demuxer_c> qtmp4_demuxer_cptr;
 
@@ -306,10 +318,6 @@ protected:
   virtual void parse_headers();
   virtual void calculate_timecodes();
   virtual qt_atom_t read_atom(mm_io_c *read_from = nullptr, bool exit_on_error = true);
-  virtual void parse_video_header_priv_atoms(qtmp4_demuxer_cptr &dmx, unsigned char *mem, size_t size, int level);
-  virtual void parse_audio_header_priv_atoms(qtmp4_demuxer_cptr &dmx, unsigned char *mem, size_t size, int level);
-  virtual bool parse_esds_atom(mm_mem_io_c &memio, qtmp4_demuxer_cptr &dmx, int level);
-  virtual uint32_t read_esds_descr_len(mm_mem_io_c &memio);
   virtual void parse_itunsmpb(std::string data);
 
   virtual void handle_cmov_atom(qt_atom_t parent, int level);
@@ -367,4 +375,4 @@ protected:
   virtual std::string read_string_atom(qt_atom_t atom, size_t num_skipped);
 };
 
-#endif  // __R_QTMP4_H
+#endif  // MTX_INPUT_R_QTMP4_H

@@ -65,6 +65,33 @@ space(int num) {
   return std::string(num, ' ');
 }
 
+static qt_atom_t
+read_qtmp4_atom(mm_io_c *read_from,
+                bool exit_on_error = true) {
+  qt_atom_t a;
+
+  a.pos    = read_from->getFilePointer();
+  a.size   = read_from->read_uint32_be();
+  a.fourcc = read_from->read_uint32_be();
+  a.hsize  = 8;
+
+  if (1 == a.size) {
+    a.size   = read_from->read_uint64_be();
+    a.hsize += 8;
+
+  } else if (0 == a.size)
+    a.size   = read_from->get_size() - read_from->getFilePointer() + 8;
+
+  if (a.size < a.hsize) {
+    if (exit_on_error)
+      mxerror(boost::format(Y("Quicktime/MP4 reader: Invalid chunk size %1% at %2%.\n")) % a.size % a.pos);
+    else
+      throw false;
+  }
+
+  return a;
+}
+
 int
 qtmp4_reader_c::probe_file(mm_io_c *in,
                            uint64_t) {
@@ -138,31 +165,7 @@ qtmp4_reader_c::~qtmp4_reader_c() {
 qt_atom_t
 qtmp4_reader_c::read_atom(mm_io_c *read_from,
                           bool exit_on_error) {
-  qt_atom_t a;
-
-  if (!read_from)
-    read_from = m_in.get();
-
-  a.pos    = read_from->getFilePointer();
-  a.size   = read_from->read_uint32_be();
-  a.fourcc = read_from->read_uint32_be();
-  a.hsize  = 8;
-
-  if (1 == a.size) {
-    a.size   = read_from->read_uint64_be();
-    a.hsize += 8;
-
-  } else if (0 == a.size)
-    a.size   = m_size - read_from->getFilePointer() + 8;
-
-  if (a.size < a.hsize) {
-    if (exit_on_error)
-      mxerror(boost::format(Y("Quicktime/MP4 reader: Invalid chunk size %1% at %2%.\n")) % a.size % a.pos);
-    else
-      throw false;
-  }
-
-  return a;
+  return read_qtmp4_atom(read_from ? read_from : m_in.get(), exit_on_error);
 }
 
 #define skip_atom() m_in->setFilePointer(atom.pos + atom.size)
@@ -215,87 +218,15 @@ qtmp4_reader_c::parse_headers() {
   m_in->setFilePointer(m_mdat_pos);
 
   for (auto &dmx : m_demuxers) {
-    if ((   ('v' == dmx->type)
-         && strncasecmp(dmx->fourcc, "SVQ", 3)
-         && strncasecmp(dmx->fourcc, "cvid", 4)
-         && strncasecmp(dmx->fourcc, "rle ", 4)
-         && strncasecmp(dmx->fourcc, "mp4v", 4)
-         && strncasecmp(dmx->fourcc, "xvid", 4)
-         && strncasecmp(dmx->fourcc, "avc1", 4))
-        ||
-        (   ('a' == dmx->type)
-         && strncasecmp(dmx->fourcc, "QDM", 3)
-         && strncasecmp(dmx->fourcc, "MP4A", 4)
-         && strncasecmp(dmx->fourcc, ".mp3", 4)
-         && strncasecmp(dmx->fourcc, "twos", 4)
-         && strncasecmp(dmx->fourcc, "sowt", 4)
-         && strncasecmp(dmx->fourcc, "ac-3", 4)
-         && strncasecmp(dmx->fourcc, "sac3", 4))) {
-      mxwarn(boost::format(Y("Quicktime/MP4 reader: Unknown/unsupported FourCC '%|1$.4s|' for track %2%.\n")) % dmx->fourcc % dmx->id);
-      continue;
-    }
-
-    if (('a' == dmx->type) && !strncasecmp(dmx->fourcc, "MP4A", 4)) {
-      if (   !IS_AAC_OBJECT_TYPE_ID(dmx->esds.object_type_id)
-          && (MP4OTI_MPEG2AudioPart3 != dmx->esds.object_type_id) // MP3...
-          && (MP4OTI_MPEG1Audio      != dmx->esds.object_type_id)) {
-        mxwarn(boost::format(Y("Quicktime/MP4 reader: The audio track %1% is using an unsupported 'object type id' of %2% in the 'esds' atom. Skipping this track.\n"))
-               % dmx->id % (int)dmx->esds.object_type_id);
+    if (dmx->is_audio()) {
+      if (!dmx->verify_audio_parameters())
         continue;
-      }
 
-      if (IS_AAC_OBJECT_TYPE_ID(dmx->esds.object_type_id) && (!dmx->esds.decoder_config || !dmx->a_aac_config_parsed)) {
-        mxwarn(boost::format(Y("Quicktime/MP4 reader: The AAC track %1% is missing the esds atom/the decoder config. Skipping this track.\n")) % dmx->id);
+    } else if (dmx->is_video()) {
+      if (!dmx->verify_video_parameters())
         continue;
-      }
-    }
 
-    if ('v' == dmx->type) {
-      if ((0 == dmx->v_width) || (0 == dmx->v_height) || (0 == get_uint32_le(dmx->fourcc))) {
-        mxwarn(boost::format(Y("Quicktime/MP4 reader: Track %1% is missing some data. Broken header atoms?\n")) % dmx->id);
-        continue;
-      }
-      if (!strncasecmp(dmx->fourcc, "mp4v", 4)) {
-        if (!dmx->esds_parsed) {
-          mxwarn(boost::format(Y("Quicktime/MP4 reader: The video track %1% is missing the ESDS atom. Skipping this track.\n")) % dmx->id);
-          continue;
-        }
-
-        // The MP4 container can also contain MPEG1 and MPEG2 encoded
-        // video. The object type ID in the ESDS tells the demuxer what
-        // it is. So let's check for those.
-        // If the FourCC is unmodified then MPEG4 is assumed.
-        if (   (MP4OTI_MPEG2VisualSimple  == dmx->esds.object_type_id)
-            || (MP4OTI_MPEG2VisualMain    == dmx->esds.object_type_id)
-            || (MP4OTI_MPEG2VisualSNR     == dmx->esds.object_type_id)
-            || (MP4OTI_MPEG2VisualSpatial == dmx->esds.object_type_id)
-            || (MP4OTI_MPEG2VisualHigh    == dmx->esds.object_type_id)
-            || (MP4OTI_MPEG2Visual422     == dmx->esds.object_type_id))
-          memcpy(dmx->fourcc, "mpg2", 4);
-        else if (MP4OTI_MPEG1Visual       == dmx->esds.object_type_id)
-          memcpy(dmx->fourcc, "mpg1", 4);
-        else {
-          // This is MPEG4 video, and we need header data for it.
-          if (!dmx->esds.decoder_config) {
-            mxwarn(boost::format(Y("Quicktime/MP4 reader: MPEG4 track %1% is missing the esds atom/the decoder config. Skipping this track.\n")) % dmx->id);
-            continue;
-          }
-        }
-
-      } else if (dmx->v_is_avc) {
-        if (!dmx->priv || (4 > dmx->priv_size)) {
-          mxwarn(boost::format(Y("Quicktime/MP4 reader: MPEG4 part 10/AVC track %1% is missing its decoder config. Skipping this track.\n")) % dmx->id);
-          continue;
-        }
-      }
-    }
-
-    if (('a' == dmx->type) && ((0 == dmx->a_channels) || (0.0 == dmx->a_samplerate))) {
-      mxwarn(boost::format(Y("Quicktime/MP4 reader: Track %1% is missing some data. Broken header atoms?\n")) % dmx->id);
-      continue;
-    }
-
-    if ('?' == dmx->type) {
+    } else if ('?' == dmx->type) {
       mxwarn(boost::format(Y("Quicktime/MP4 reader: Track %1% has an unknown type.\n")) % dmx->id);
       continue;
     }
@@ -348,117 +279,6 @@ qtmp4_reader_c::handle_audio_encoder_delay(qtmp4_demuxer_cptr &dmx) {
 
   PTZR(dmx->ptzr)->m_ti.m_tcsync.displacement -= (m_audio_encoder_delay_samples * 1000000000ll) / dmx->a_samplerate;
   m_audio_encoder_delay_samples                = 0;
-}
-
-void
-qtmp4_reader_c::parse_video_header_priv_atoms(qtmp4_demuxer_cptr &dmx,
-                                              unsigned char *mem,
-                                              size_t size,
-                                              int level) {
-  if (!dmx->v_is_avc && strncasecmp(dmx->fourcc, "mp4v", 4) && strncasecmp(dmx->fourcc, "xvid", 4) && (0 != size)) {
-    dmx->priv_size = size;
-    dmx->priv      = (unsigned char *)safememdup(mem, size);
-
-    return;
-  }
-
-  mm_mem_io_c mio(mem, size);
-
-  try {
-    while (!mio.eof() && (mio.getFilePointer() < size)) {
-      qt_atom_t atom;
-
-      try {
-        atom = read_atom(&mio);
-      } catch (...) {
-        return;
-      }
-
-      mxdebug_if(m_debug_headers, boost::format("%1%Video private data size: %2%, type: '%3%%4%%5%%6%'\n") % space((level + 1) * 2 + 1) % atom.size % BE2STR(atom.fourcc));
-
-      if ((FOURCC('e', 's', 'd', 's') == atom.fourcc) ||
-          (FOURCC('a', 'v', 'c', 'C') == atom.fourcc)) {
-        if (!dmx->priv) {
-          dmx->priv_size = atom.size - atom.hsize;
-          dmx->priv      = (unsigned char *)safemalloc(dmx->priv_size);
-
-          if (mio.read(dmx->priv, dmx->priv_size) != dmx->priv_size) {
-            safefree(dmx->priv);
-            dmx->priv      = nullptr;
-            dmx->priv_size = 0;
-            return;
-          }
-        }
-
-        if ((FOURCC('e', 's', 'd', 's') == atom.fourcc) && !dmx->esds_parsed) {
-          mm_mem_io_c memio(dmx->priv, dmx->priv_size);
-          dmx->esds_parsed = parse_esds_atom(memio, dmx, level + 1);
-        }
-      }
-
-      mio.setFilePointer(atom.pos + atom.size);
-    }
-  } catch(...) {
-  }
-}
-
-void
-qtmp4_reader_c::parse_audio_header_priv_atoms(qtmp4_demuxer_cptr &dmx,
-                                              unsigned char *mem,
-                                              size_t size,
-                                              int level) {
-  mm_mem_io_c mio(mem, size);
-
-  try {
-    while (!mio.eof() && (mio.getFilePointer() < (size - 8))) {
-      qt_atom_t atom;
-
-      try {
-        atom = read_atom(&mio, false);
-      } catch (...) {
-        return;
-      }
-
-      if (FOURCC('e', 's', 'd', 's') != atom.fourcc) {
-        mio.setFilePointer(atom.pos + 4);
-        continue;
-      }
-
-      mxdebug_if(m_debug_headers, boost::format("%1%Audio private data size: %2%, type: '%3%%4%%5%%6%'\n") % space((level + 1) * 2 + 1) % atom.size % BE2STR(atom.fourcc));
-
-      if (!dmx->esds_parsed) {
-        mm_mem_io_c memio(mem + atom.pos + atom.hsize, atom.size - atom.hsize);
-        dmx->esds_parsed = parse_esds_atom(memio, dmx, level + 1);
-
-        if (dmx->esds_parsed && !strncasecmp(dmx->fourcc, "MP4A", 4) && IS_AAC_OBJECT_TYPE_ID(dmx->esds.object_type_id)) {
-          int profile, sample_rate, channels, output_sample_rate;
-          bool aac_is_sbr;
-
-          if (dmx->esds.decoder_config_len < 2)
-            mxwarn(boost::format(Y("Track %1%: AAC found, but decoder config data has length %2%.\n")) % dmx->id % (int)dmx->esds.decoder_config_len);
-
-          else if (!parse_aac_data(dmx->esds.decoder_config, dmx->esds.decoder_config_len, profile, channels, sample_rate, output_sample_rate, aac_is_sbr))
-            mxwarn(boost::format(Y("Track %1%: The AAC information could not be parsed.\n")) % dmx->id);
-
-          else {
-            mxdebug_if(m_debug_headers, boost::format(" AAC: profile: %1%, sample_rate: %2%, channels: %3%, output_sample_rate: %4%, sbr: %5%\n") % profile % sample_rate % channels % output_sample_rate % aac_is_sbr);
-            if (aac_is_sbr)
-              profile = AAC_PROFILE_SBR;
-
-            dmx->a_channels               = channels;
-            dmx->a_samplerate             = sample_rate;
-            dmx->a_aac_profile            = profile;
-            dmx->a_aac_output_sample_rate = output_sample_rate;
-            dmx->a_aac_is_sbr             = aac_is_sbr;
-            dmx->a_aac_config_parsed      = true;
-          }
-        }
-      }
-
-      mio.setFilePointer(atom.pos + atom.size);
-    }
-  } catch(...) {
-  }
 }
 
 #define print_basic_atom_info() \
@@ -1042,7 +862,6 @@ void
 qtmp4_reader_c::handle_stsd_atom(qtmp4_demuxer_cptr &new_dmx,
                                  qt_atom_t,
                                  int level) {
-  uint32_t stsd_size = 0;
   m_in->skip(1 + 3);        // version & flags
   uint32_t count = m_in->read_uint32_be();
 
@@ -1054,126 +873,14 @@ qtmp4_reader_c::handle_stsd_atom(qtmp4_demuxer_cptr &new_dmx,
     if (4 > size)
       mxerror(boost::format(Y("Quicktime/MP4 reader: The 'size' field is too small in the stream description atom for track ID %1%.\n")) % new_dmx->id);
 
-    memory_cptr af_priv = memory_c::alloc(size);
-    unsigned char *priv = af_priv->get_buffer();
+    new_dmx->stsd = memory_c::alloc(size);
+    auto priv     = new_dmx->stsd->get_buffer();
 
     put_uint32_be(priv, size);
     if (m_in->read(priv + sizeof(uint32_t), size - sizeof(uint32_t)) != (size - sizeof(uint32_t)))
       mxerror(boost::format(Y("Quicktime/MP4 reader: Could not read the stream description atom for track ID %1%.\n")) % new_dmx->id);
 
-    if ('a' == new_dmx->type) {
-      new_dmx->a_stsd = memory_c::clone(priv, size);
-
-      if (sizeof(sound_v0_stsd_atom_t) > size)
-        mxerror(boost::format(Y("Quicktime/MP4 reader: Could not read the sound description atom for track ID %1%.\n")) % new_dmx->id);
-
-      sound_v1_stsd_atom_t sv1_stsd;
-      sound_v2_stsd_atom_t sv2_stsd;
-      memcpy(&sv1_stsd, priv, sizeof(sound_v0_stsd_atom_t));
-      memcpy(&sv2_stsd, priv, sizeof(sound_v0_stsd_atom_t));
-
-      if (0 != new_dmx->fourcc[0])
-        mxwarn(boost::format(Y("Quicktime/MP4 reader: Track ID %1% has more than one FourCC. Only using the first one (%|2$.4s|) and not this one (%|3$.4s|).\n"))
-               % new_dmx->id % new_dmx->fourcc % (const unsigned char *)sv1_stsd.v0.base.fourcc);
-      else
-        memcpy(new_dmx->fourcc, sv1_stsd.v0.base.fourcc, 4);
-
-      uint16_t version = get_uint16_be(&sv1_stsd.v0.version);
-
-      mxdebug_if(m_debug_headers, boost::format("%1%FourCC: %|2$.4s|, channels: %3%, sample size: %4%, compression id: %5%, sample rate: 0x%|6$08x|, version: %7%")
-                 % space(level * 2 + 1)
-                 % (const unsigned char *)sv1_stsd.v0.base.fourcc
-                 % get_uint16_be(&sv1_stsd.v0.channels)
-                 % get_uint16_be(&sv1_stsd.v0.sample_size)
-                 % get_uint16_be(&sv1_stsd.v0.compression_id)
-                 % get_uint32_be(&sv1_stsd.v0.sample_rate)
-                 % get_uint16_be(&sv1_stsd.v0.version));
-
-      if (1 == version) {
-        if (sizeof(sound_v1_stsd_atom_t) > size)
-          mxerror(boost::format(Y("Quicktime/MP4 reader: Could not read the extended sound description atom for track ID %1%.\n")) % new_dmx->id);
-
-        memcpy(&sv1_stsd, priv, sizeof(sound_v1_stsd_atom_t));
-
-        if (m_debug_headers)
-          mxinfo(boost::format(" samples per packet: %1% bytes per packet: %2% bytes per frame: %3% bytes_per_sample: %4%")
-                 % get_uint32_be(&sv1_stsd.v1.samples_per_packet)
-                 % get_uint32_be(&sv1_stsd.v1.bytes_per_packet)
-                 % get_uint32_be(&sv1_stsd.v1.bytes_per_frame)
-                 % get_uint32_be(&sv1_stsd.v1.bytes_per_sample));
-
-      } else if (2 == version) {
-        if (sizeof(sound_v2_stsd_atom_t) > size)
-          mxerror(boost::format(Y("Quicktime/MP4 reader: Could not read the extended sound description atom for track ID %1%.\n")) % new_dmx->id);
-
-        memcpy(&sv2_stsd, priv, sizeof(sound_v2_stsd_atom_t));
-
-        if (m_debug_headers)
-          mxinfo(boost::format(" struct size: %1% sample rate: %|2$016x| channels: %3% const1: 0x%|4$08x| bits per channel: %5% flags: %6% bytes per frame: %7% samples per frame: %8%")
-                 % get_uint32_be(&sv2_stsd.v2.v2_struct_size)
-                 % get_uint64_be(&sv2_stsd.v2.sample_rate)
-                 % get_uint32_be(&sv2_stsd.v2.channels)
-                 % get_uint32_be(&sv2_stsd.v2.const1)
-                 % get_uint32_be(&sv2_stsd.v2.bits_per_channel)
-                 % get_uint32_be(&sv2_stsd.v2.flags)
-                 % get_uint32_be(&sv2_stsd.v2.bytes_per_frame)
-                 % get_uint32_be(&sv2_stsd.v2.samples_per_frame));
-      }
-
-      if (m_debug_headers)
-        mxinfo("\n");
-
-      new_dmx->a_channels   = get_uint16_be(&sv1_stsd.v0.channels);
-      new_dmx->a_bitdepth   = get_uint16_be(&sv1_stsd.v0.sample_size);
-      uint32_t tmp          = get_uint32_be(&sv1_stsd.v0.sample_rate);
-      new_dmx->a_samplerate = (float)((tmp & 0xffff0000) >> 16) + (float)(tmp & 0x0000ffff) / 65536.0;
-
-      if (get_uint16_be(&sv1_stsd.v0.version) == 0)
-        stsd_size = sizeof(sound_v0_stsd_atom_t);
-
-      else if (get_uint16_be(&sv1_stsd.v0.version) == 1)
-        stsd_size = sizeof(sound_v1_stsd_atom_t);
-
-      else if (get_uint16_be(&sv1_stsd.v0.version) == 2)
-        stsd_size = sizeof(sound_v2_stsd_atom_t);
-
-    } else if ('v' == new_dmx->type) {
-      new_dmx->v_stsd = memory_c::clone(priv, size);
-
-      if (sizeof(video_stsd_atom_t) > size)
-        mxerror(boost::format(Y("Quicktime/MP4 reader: Could not read the video description atom for track ID %1%.\n")) % new_dmx->id);
-
-      video_stsd_atom_t v_stsd;
-      memcpy(&v_stsd, priv, sizeof(video_stsd_atom_t));
-
-      if (0 != new_dmx->fourcc[0])
-        mxwarn(boost::format(Y("Quicktime/MP4 reader: Track ID %1% has more than one FourCC. Only using the first one (%|2$.4s|) and not this one (%|3$.4s|).\n"))
-               % new_dmx->id % new_dmx->fourcc % (const unsigned char *)v_stsd.base.fourcc);
-
-      else {
-        memcpy(new_dmx->fourcc, v_stsd.base.fourcc, 4);
-        new_dmx->v_is_avc = !strncasecmp(new_dmx->fourcc, "avc1", 4);
-      }
-
-      mxdebug_if(m_debug_headers, boost::format("%1%FourCC: %|2$.4s|, width: %3%, height: %4%, depth: %5%\n")
-                 % space(level * 2 + 1)
-                 % (const unsigned char *)v_stsd.base.fourcc
-                 % get_uint16_be(&v_stsd.width)
-                 % get_uint16_be(&v_stsd.height)
-                 % get_uint16_be(&v_stsd.depth));
-
-      new_dmx->v_width    = get_uint16_be(&v_stsd.width);
-      new_dmx->v_height   = get_uint16_be(&v_stsd.height);
-      new_dmx->v_bitdepth = get_uint16_be(&v_stsd.depth);
-      stsd_size           = sizeof(video_stsd_atom_t);
-    }
-
-    if ((0 < stsd_size) && (stsd_size < size)) {
-      if ('v' == new_dmx->type)
-        parse_video_header_priv_atoms(new_dmx, priv + stsd_size, size - stsd_size, level);
-      else if ('a' == new_dmx->type)
-        parse_audio_header_priv_atoms(new_dmx, priv + stsd_size, size - stsd_size, level);
-    }
+    new_dmx->handle_stsd_atom(size, level);
 
     m_in->setFilePointer(pos + size);
   }
@@ -1371,10 +1078,10 @@ qtmp4_reader_c::read(generic_packetizer_c *ptzr,
       && (!strncasecmp(dmx->fourcc, "mp4v", 4) || !strncasecmp(dmx->fourcc, "xvid", 4))
       && dmx->esds_parsed
       && (dmx->esds.decoder_config)) {
-    buffer        = (unsigned char *)safemalloc(index.size + dmx->esds.decoder_config_len);
-    buffer_offset = dmx->esds.decoder_config_len;
+    buffer        = (unsigned char *)safemalloc(index.size + dmx->esds.decoder_config->get_size());
+    buffer_offset = dmx->esds.decoder_config->get_size();
 
-    memcpy(buffer, dmx->esds.decoder_config, dmx->esds.decoder_config_len);
+    memcpy(buffer, dmx->esds.decoder_config->get_buffer(), dmx->esds.decoder_config->get_size());
 
   } else {
     buffer = (unsigned char *)safemalloc(index.size);
@@ -1395,103 +1102,6 @@ qtmp4_reader_c::read(generic_packetizer_c *ptzr,
     return FILE_STATUS_MOREDATA;
 
   return flush_packetizers();
-}
-
-uint32_t
-qtmp4_reader_c::read_esds_descr_len(mm_mem_io_c &memio) {
-  uint32_t len           = 0;
-  unsigned int num_bytes = 0;
-  uint8_t byte;
-
-  do {
-    byte = memio.read_uint8();
-    len  = (len << 7) | (byte & 0x7f);
-    ++num_bytes;
-
-  } while (((byte & 0x80) == 0x80) && (4 > num_bytes));
-
-  return len;
-}
-
-bool
-qtmp4_reader_c::parse_esds_atom(mm_mem_io_c &memio,
-                                qtmp4_demuxer_cptr &dmx,
-                                int level) {
-  int lsp    = (level + 1) * 2;
-  esds_t *e  = &dmx->esds;
-  e->version = memio.read_uint8();
-  e->flags   = memio.read_uint24_be();
-  mxdebug_if(m_debug_headers, boost::format("%1%esds: version: %2%, flags: %3%\n") % space(lsp + 1) % (int)e->version % (int)e->flags);
-
-  uint8_t tag = memio.read_uint8();
-  if (MP4DT_ES == tag) {
-    uint32_t len       = read_esds_descr_len(memio);
-    e->esid            = memio.read_uint16_be();
-    e->stream_priority = memio.read_uint8();
-    mxdebug_if(m_debug_headers, boost::format("%1%esds: id: %2%, stream priority: %3%, len: %4%\n") % space(lsp + 1) % (int)e->esid % (int)e->stream_priority % len);
-
-  } else {
-    e->esid = memio.read_uint16_be();
-    mxdebug_if(m_debug_headers, boost::format("%1%esds: id: %2%\n") % space(lsp + 1) % (int)e->esid);
-  }
-
-  tag = memio.read_uint8();
-  if (MP4DT_DEC_CONFIG != tag) {
-    mxdebug_if(m_debug_headers, boost::format("%1%tag is not DEC_CONFIG (0x%|2$02x|) but 0x%|3$02x|.\n") % space(lsp + 1) % MP4DT_DEC_CONFIG % tag);
-    return false;
-  }
-
-  uint32_t len          = read_esds_descr_len(memio);
-
-  e->object_type_id     = memio.read_uint8();
-  e->stream_type        = memio.read_uint8();
-  e->buffer_size_db     = memio.read_uint24_be();
-  e->max_bitrate        = memio.read_uint32_be();
-  e->avg_bitrate        = memio.read_uint32_be();
-  e->decoder_config_len = 0;
-
-  mxdebug_if(m_debug_headers, boost::format("%1%esds: decoder config descriptor, len: %2%, object_type_id: %3%, "
-                                            "stream_type: 0x%|4$2x|, buffer_size_db: %5%, max_bitrate: %|6$.3f|kbit/s, avg_bitrate: %|7$.3f|kbit/s\n")
-             % space(lsp + 1)
-             % len
-             % (int)e->object_type_id
-             % (int)e->stream_type
-             % (int)e->buffer_size_db
-             % (e->max_bitrate / 1000.0)
-             % (e->avg_bitrate / 1000.0));
-
-  tag = memio.read_uint8();
-  if (MP4DT_DEC_SPECIFIC == tag) {
-    len                   = read_esds_descr_len(memio);
-    e->decoder_config_len = len;
-    e->decoder_config     = (uint8_t *)safemalloc(len);
-    if (memio.read(e->decoder_config, len) != len)
-      throw mtx::input::header_parsing_x();
-
-    tag = memio.read_uint8();
-
-    if (m_debug_headers) {
-      mxinfo(boost::format("%1%esds: decoder specific descriptor, len: %2%\n") % space(lsp + 1) % len);
-      mxinfo(boost::format("Quicktime/MP4 reader:%1%esds: dumping decoder specific descriptor\n") % space(lsp + 3));
-      mxhexdump(0, e->decoder_config, e->decoder_config_len, "Debug> ");
-    }
-
-  } else
-    mxdebug_if(m_debug_headers, boost::format("%1%tag is not DEC_SPECIFIC (0x%|2$02x|) but 0x%|3$02x|.\n") % space(lsp + 1) % MP4DT_DEC_SPECIFIC % tag);
-
-  if (MP4DT_SL_CONFIG == tag) {
-    len              = read_esds_descr_len(memio);
-    e->sl_config_len = len;
-    e->sl_config     = (uint8_t *)safemalloc(len);
-    if (memio.read(e->sl_config, len) != len)
-      throw mtx::input::header_parsing_x();
-
-    mxdebug_if(m_debug_headers, boost::format("%1%esds: sync layer config descriptor, len: %2%\n") % space(lsp + 1) % len);
-
-  } else
-    mxdebug_if(m_debug_headers, boost::format("%1%tag is not SL_CONFIG (0x%|2$02x|) but 0x%|3$02x|.\n") % space(lsp + 1) % MP4DT_SL_CONFIG % tag);
-
-  return true;
 }
 
 memory_cptr
@@ -1578,8 +1188,8 @@ qtmp4_reader_c::create_video_packetizer_mpeg4_p10(qtmp4_demuxer_cptr &dmx) {
                  "As it is missing the timecodes for this track might be wrong. "
                  "You should watch the resulting file and make sure that it looks like you expected it to.\n"));
 
-  m_ti.m_private_size = dmx->priv_size;
-  m_ti.m_private_data = dmx->priv;
+  m_ti.m_private_size = dmx->priv->get_size();
+  m_ti.m_private_data = dmx->priv->get_buffer();
   dmx->ptzr         = add_packetizer(new mpeg4_p10_video_packetizer_c(this, m_ti, dmx->fps, dmx->v_width, dmx->v_height));
   m_ti.m_private_data = nullptr;
 
@@ -1588,9 +1198,9 @@ qtmp4_reader_c::create_video_packetizer_mpeg4_p10(qtmp4_demuxer_cptr &dmx) {
 
 void
 qtmp4_reader_c::create_video_packetizer_standard(qtmp4_demuxer_cptr &dmx) {
-  m_ti.m_private_size = dmx->v_stsd->get_size();
-  m_ti.m_private_data = dmx->v_stsd->get_buffer();
-  dmx->ptzr         = add_packetizer(new video_packetizer_c(this, m_ti, MKV_V_QUICKTIME, 0.0, dmx->v_width, dmx->v_height));
+  m_ti.m_private_size = dmx->stsd->get_size();
+  m_ti.m_private_data = dmx->stsd->get_buffer();
+  dmx->ptzr           = add_packetizer(new video_packetizer_c(this, m_ti, MKV_V_QUICKTIME, 0.0, dmx->v_width, dmx->v_height));
   m_ti.m_private_data = nullptr;
 
   show_packetizer_info(dmx->id, PTZR(dmx->ptzr));
@@ -1598,9 +1208,12 @@ qtmp4_reader_c::create_video_packetizer_standard(qtmp4_demuxer_cptr &dmx) {
 
 void
 qtmp4_reader_c::create_audio_packetizer_aac(qtmp4_demuxer_cptr &dmx) {
-  m_ti.m_private_data = dmx->esds.decoder_config;
-  m_ti.m_private_size = dmx->esds.decoder_config_len;
-  dmx->ptzr         = add_packetizer(new aac_packetizer_c(this, m_ti, AAC_ID_MPEG4, dmx->a_aac_profile, (int)dmx->a_samplerate, dmx->a_channels, false, true));
+  if (dmx->esds.decoder_config) {
+    m_ti.m_private_data = dmx->esds.decoder_config->get_buffer();
+    m_ti.m_private_size = dmx->esds.decoder_config->get_size();
+  }
+
+  dmx->ptzr           = add_packetizer(new aac_packetizer_c(this, m_ti, AAC_ID_MPEG4, dmx->a_aac_profile, (int)dmx->a_samplerate, dmx->a_channels, false, true));
   m_ti.m_private_data = nullptr;
   m_ti.m_private_size = 0;
 
@@ -1629,7 +1242,7 @@ qtmp4_reader_c::create_audio_packetizer_passthrough(qtmp4_demuxer_cptr &dmx) {
 
   ptzr->set_track_type(track_audio);
   ptzr->set_codec_id(MKV_A_QUICKTIME);
-  ptzr->set_codec_private(dmx->a_stsd->get_buffer(), dmx->a_stsd->get_size());
+  ptzr->set_codec_private(dmx->stsd->get_buffer(), dmx->stsd->get_size());
   ptzr->set_audio_sampling_freq(dmx->a_samplerate);
   ptzr->set_audio_channels(dmx->a_channels);
 
@@ -2152,7 +1765,7 @@ qtmp4_demuxer_c::build_index_constant_sample_size_mode() {
       frame_size = chunk_table[frame_idx].size;
 
       if ('a' == type) {
-        sound_v1_stsd_atom_t *sound_stsd_atom = (sound_v1_stsd_atom_t *)a_stsd->get_buffer();
+        auto sound_stsd_atom = reinterpret_cast<sound_v1_stsd_atom_t *>(stsd->get_buffer());
         if (get_uint16_be(&sound_stsd_atom->v0.version) == 1) {
           frame_size *= get_uint32_be(&sound_stsd_atom->v1.bytes_per_frame);
           frame_size /= get_uint32_be(&sound_stsd_atom->v1.samples_per_packet);
@@ -2227,4 +1840,452 @@ bool
 qtmp4_demuxer_c::is_video()
   const {
   return 'v' == type;
+}
+
+void
+qtmp4_demuxer_c::handle_stsd_atom(uint64_t atom_size,
+                                  int level) {
+  if (is_audio()) {
+    handle_audio_stsd_atom(atom_size, level);
+    if ((0 < stsd_non_priv_struct_size) && (stsd_non_priv_struct_size < atom_size))
+      parse_audio_header_priv_atoms(atom_size, level);
+
+  } else if (is_video()) {
+    handle_video_stsd_atom(atom_size, level);
+
+    if ((0 < stsd_non_priv_struct_size) && (stsd_non_priv_struct_size < atom_size))
+      parse_video_header_priv_atoms(atom_size, level);
+  }
+}
+
+void
+qtmp4_demuxer_c::handle_audio_stsd_atom(uint64_t atom_size,
+                                        int level) {
+  auto priv = stsd->get_buffer();
+  auto size = stsd->get_size();
+
+  if (sizeof(sound_v0_stsd_atom_t) > atom_size)
+    mxerror(boost::format(Y("Quicktime/MP4 reader: Could not read the sound description atom for track ID %1%.\n")) % id);
+
+  sound_v1_stsd_atom_t sv1_stsd;
+  sound_v2_stsd_atom_t sv2_stsd;
+  memcpy(&sv1_stsd, priv, sizeof(sound_v0_stsd_atom_t));
+  memcpy(&sv2_stsd, priv, sizeof(sound_v0_stsd_atom_t));
+
+  if (0 != fourcc[0])
+    mxwarn(boost::format(Y("Quicktime/MP4 reader: Track ID %1% has more than one FourCC. Only using the first one (%|2$.4s|) and not this one (%|3$.4s|).\n"))
+           % id % fourcc % reinterpret_cast<const unsigned char *>(sv1_stsd.v0.base.fourcc));
+  else
+    memcpy(fourcc, sv1_stsd.v0.base.fourcc, 4);
+
+  auto version = get_uint16_be(&sv1_stsd.v0.version);
+
+  mxdebug_if(m_debug_headers, boost::format("%1%FourCC: %|2$.4s|, channels: %3%, sample size: %4%, compression id: %5%, sample rate: 0x%|6$08x|, version: %7%")
+             % space(level * 2 + 1)
+             % reinterpret_cast<const unsigned char *>(sv1_stsd.v0.base.fourcc)
+             % get_uint16_be(&sv1_stsd.v0.channels)
+             % get_uint16_be(&sv1_stsd.v0.sample_size)
+             % get_uint16_be(&sv1_stsd.v0.compression_id)
+             % get_uint32_be(&sv1_stsd.v0.sample_rate)
+             % get_uint16_be(&sv1_stsd.v0.version));
+
+  if (0 == version)
+    stsd_non_priv_struct_size = sizeof(sound_v0_stsd_atom_t);
+
+  else if (1 == version) {
+    if (sizeof(sound_v1_stsd_atom_t) > size)
+      mxerror(boost::format(Y("Quicktime/MP4 reader: Could not read the extended sound description atom for track ID %1%.\n")) % id);
+
+    stsd_non_priv_struct_size = sizeof(sound_v1_stsd_atom_t);
+    memcpy(&sv1_stsd, priv, stsd_non_priv_struct_size);
+
+    if (m_debug_headers)
+      mxinfo(boost::format(" samples per packet: %1% bytes per packet: %2% bytes per frame: %3% bytes_per_sample: %4%")
+             % get_uint32_be(&sv1_stsd.v1.samples_per_packet)
+             % get_uint32_be(&sv1_stsd.v1.bytes_per_packet)
+             % get_uint32_be(&sv1_stsd.v1.bytes_per_frame)
+             % get_uint32_be(&sv1_stsd.v1.bytes_per_sample));
+
+  } else if (2 == version) {
+    if (sizeof(sound_v2_stsd_atom_t) > size)
+      mxerror(boost::format(Y("Quicktime/MP4 reader: Could not read the extended sound description atom for track ID %1%.\n")) % id);
+
+    stsd_non_priv_struct_size = sizeof(sound_v2_stsd_atom_t);
+    memcpy(&sv2_stsd, priv, stsd_non_priv_struct_size);
+
+    if (m_debug_headers)
+      mxinfo(boost::format(" struct size: %1% sample rate: %|2$016x| channels: %3% const1: 0x%|4$08x| bits per channel: %5% flags: %6% bytes per frame: %7% samples per frame: %8%")
+             % get_uint32_be(&sv2_stsd.v2.v2_struct_size)
+             % get_uint64_be(&sv2_stsd.v2.sample_rate)
+             % get_uint32_be(&sv2_stsd.v2.channels)
+             % get_uint32_be(&sv2_stsd.v2.const1)
+             % get_uint32_be(&sv2_stsd.v2.bits_per_channel)
+             % get_uint32_be(&sv2_stsd.v2.flags)
+             % get_uint32_be(&sv2_stsd.v2.bytes_per_frame)
+             % get_uint32_be(&sv2_stsd.v2.samples_per_frame));
+  }
+
+  if (m_debug_headers)
+    mxinfo("\n");
+
+  a_channels   = get_uint16_be(&sv1_stsd.v0.channels);
+  a_bitdepth   = get_uint16_be(&sv1_stsd.v0.sample_size);
+  auto tmp     = get_uint32_be(&sv1_stsd.v0.sample_rate);
+  a_samplerate = (float)((tmp & 0xffff0000) >> 16) + (float)(tmp & 0x0000ffff) / 65536.0;
+}
+
+void
+qtmp4_demuxer_c::handle_video_stsd_atom(uint64_t atom_size,
+                                        int level) {
+  stsd_non_priv_struct_size = sizeof(video_stsd_atom_t);
+
+  if (sizeof(video_stsd_atom_t) > atom_size)
+    mxerror(boost::format(Y("Quicktime/MP4 reader: Could not read the video description atom for track ID %1%.\n")) % id);
+
+  video_stsd_atom_t v_stsd;
+  auto priv = stsd->get_buffer();
+  memcpy(&v_stsd, priv, sizeof(video_stsd_atom_t));
+
+  if (0 != fourcc[0])
+    mxwarn(boost::format(Y("Quicktime/MP4 reader: Track ID %1% has more than one FourCC. Only using the first one (%|2$.4s|) and not this one (%|3$.4s|).\n"))
+           % id % fourcc % reinterpret_cast<const unsigned char *>(v_stsd.base.fourcc));
+
+  else {
+    memcpy(fourcc, v_stsd.base.fourcc, 4);
+    v_is_avc = !strncasecmp(fourcc, "avc1", 4);
+  }
+
+  mxdebug_if(m_debug_headers, boost::format("%1%FourCC: %|2$.4s|, width: %3%, height: %4%, depth: %5%\n")
+             % space(level * 2 + 1)
+             % reinterpret_cast<const unsigned char *>(v_stsd.base.fourcc)
+             % get_uint16_be(&v_stsd.width)
+             % get_uint16_be(&v_stsd.height)
+             % get_uint16_be(&v_stsd.depth));
+
+  v_width    = get_uint16_be(&v_stsd.width);
+  v_height   = get_uint16_be(&v_stsd.height);
+  v_bitdepth = get_uint16_be(&v_stsd.depth);
+}
+
+void
+qtmp4_demuxer_c::parse_audio_header_priv_atoms(uint64_t atom_size,
+                                               int level) {
+  auto mem  = stsd->get_buffer() + stsd_non_priv_struct_size;
+  auto size = atom_size - stsd_non_priv_struct_size;
+
+  mm_mem_io_c mio(mem, size);
+
+  try {
+    while (!mio.eof() && (mio.getFilePointer() < (size - 8))) {
+      qt_atom_t atom;
+
+      try {
+        atom = read_qtmp4_atom(&mio, false);
+      } catch (...) {
+        return;
+      }
+
+      if (FOURCC('e', 's', 'd', 's') != atom.fourcc) {
+        mio.setFilePointer(atom.pos + 4);
+        continue;
+      }
+
+      mxdebug_if(m_debug_headers, boost::format("%1%Audio private data size: %2%, type: '%3%%4%%5%%6%'\n") % space((level + 1) * 2 + 1) % atom.size % BE2STR(atom.fourcc));
+
+      if (!esds_parsed) {
+        mm_mem_io_c memio(mem + atom.pos + atom.hsize, atom.size - atom.hsize);
+        esds_parsed = parse_esds_atom(memio, level + 1);
+
+        if (esds_parsed && !strncasecmp(fourcc, "MP4A", 4) && IS_AAC_OBJECT_TYPE_ID(esds.object_type_id)) {
+          int profile, sample_rate, channels, output_sample_rate;
+          bool aac_is_sbr;
+
+          if (!esds.decoder_config || (2 > esds.decoder_config->get_size()))
+            mxwarn(boost::format(Y("Track %1%: AAC found, but decoder config data has length %2%.\n")) % id % (esds.decoder_config ? esds.decoder_config->get_size() : 0));
+
+          else if (!parse_aac_data(esds.decoder_config->get_buffer(), esds.decoder_config->get_size(), profile, channels, sample_rate, output_sample_rate, aac_is_sbr))
+            mxwarn(boost::format(Y("Track %1%: The AAC information could not be parsed.\n")) % id);
+
+          else {
+            mxdebug_if(m_debug_headers, boost::format(" AAC: profile: %1%, sample_rate: %2%, channels: %3%, output_sample_rate: %4%, sbr: %5%\n") % profile % sample_rate % channels % output_sample_rate % aac_is_sbr);
+            if (aac_is_sbr)
+              profile = AAC_PROFILE_SBR;
+
+            a_channels               = channels;
+            a_samplerate             = sample_rate;
+            a_aac_profile            = profile;
+            a_aac_output_sample_rate = output_sample_rate;
+            a_aac_is_sbr             = aac_is_sbr;
+            a_aac_config_parsed      = true;
+          }
+        }
+      }
+
+      mio.setFilePointer(atom.pos + atom.size);
+    }
+  } catch(...) {
+  }
+}
+
+void
+qtmp4_demuxer_c::parse_video_header_priv_atoms(uint64_t atom_size,
+                                               int level) {
+  auto mem  = stsd->get_buffer() + stsd_non_priv_struct_size;
+  auto size = atom_size - stsd_non_priv_struct_size;
+
+  if (!v_is_avc && strncasecmp(fourcc, "mp4v", 4) && strncasecmp(fourcc, "xvid", 4) && (0 != size)) {
+    priv = memory_c::clone(mem, size);
+    return;
+  }
+
+  mm_mem_io_c mio(mem, size);
+
+  try {
+    while (!mio.eof() && (mio.getFilePointer() < size)) {
+      qt_atom_t atom;
+
+      try {
+        atom = read_qtmp4_atom(&mio);
+      } catch (...) {
+        return;
+      }
+
+      mxdebug_if(m_debug_headers, boost::format("%1%Video private data size: %2%, type: '%3%%4%%5%%6%'\n") % space((level + 1) * 2 + 1) % atom.size % BE2STR(atom.fourcc));
+
+      if ((FOURCC('e', 's', 'd', 's') == atom.fourcc) ||
+          (FOURCC('a', 'v', 'c', 'C') == atom.fourcc)) {
+        if (!priv) {
+          priv = memory_c::alloc(atom.size - atom.hsize);
+
+          if (mio.read(priv, priv->get_size()) != priv->get_size()) {
+            priv.reset();
+            return;
+          }
+        }
+
+        if ((FOURCC('e', 's', 'd', 's') == atom.fourcc) && !esds_parsed) {
+          mm_mem_io_c memio(priv->get_buffer(), priv->get_size());
+          esds_parsed = parse_esds_atom(memio, level + 1);
+        }
+      }
+
+      mio.setFilePointer(atom.pos + atom.size);
+    }
+  } catch(...) {
+  }
+}
+
+bool
+qtmp4_demuxer_c::parse_esds_atom(mm_mem_io_c &memio,
+                                 int level) {
+  int lsp      = (level + 1) * 2;
+  esds.version = memio.read_uint8();
+  esds.flags   = memio.read_uint24_be();
+  auto tag     = memio.read_uint8();
+
+  mxdebug_if(m_debug_headers, boost::format("%1%esds: version: %2%, flags: %3%\n") % space(lsp + 1) % (int)esds.version % (int)esds.flags);
+
+  if (MP4DT_ES == tag) {
+    auto len             = read_esds_descr_len(memio);
+    esds.esid            = memio.read_uint16_be();
+    esds.stream_priority = memio.read_uint8();
+    mxdebug_if(m_debug_headers, boost::format("%1%esds: id: %2%, stream priority: %3%, len: %4%\n") % space(lsp + 1) % (int)esds.esid % (int)esds.stream_priority % len);
+
+  } else {
+    esds.esid = memio.read_uint16_be();
+    mxdebug_if(m_debug_headers, boost::format("%1%esds: id: %2%\n") % space(lsp + 1) % (int)esds.esid);
+  }
+
+  tag = memio.read_uint8();
+  if (MP4DT_DEC_CONFIG != tag) {
+    mxdebug_if(m_debug_headers, boost::format("%1%tag is not DEC_CONFIG (0x%|2$02x|) but 0x%|3$02x|.\n") % space(lsp + 1) % MP4DT_DEC_CONFIG % tag);
+    return false;
+  }
+
+  auto len                = read_esds_descr_len(memio);
+
+  esds.object_type_id     = memio.read_uint8();
+  esds.stream_type        = memio.read_uint8();
+  esds.buffer_size_db     = memio.read_uint24_be();
+  esds.max_bitrate        = memio.read_uint32_be();
+  esds.avg_bitrate        = memio.read_uint32_be();
+  esds.decoder_config.reset();
+
+  mxdebug_if(m_debug_headers, boost::format("%1%esds: decoder config descriptor, len: %2%, object_type_id: %3%, "
+                                            "stream_type: 0x%|4$2x|, buffer_size_db: %5%, max_bitrate: %|6$.3f|kbit/s, avg_bitrate: %|7$.3f|kbit/s\n")
+             % space(lsp + 1)
+             % len
+             % (int)esds.object_type_id
+             % (int)esds.stream_type
+             % (int)esds.buffer_size_db
+             % (esds.max_bitrate / 1000.0)
+             % (esds.avg_bitrate / 1000.0));
+
+  tag = memio.read_uint8();
+  if (MP4DT_DEC_SPECIFIC == tag) {
+    len = read_esds_descr_len(memio);
+    if (!len)
+      throw mtx::input::header_parsing_x();
+
+    esds.decoder_config = memory_c::alloc(len);
+    if (memio.read(esds.decoder_config, len) != len) {
+      esds.decoder_config.reset();
+      throw mtx::input::header_parsing_x();
+    }
+
+    tag = memio.read_uint8();
+
+    if (m_debug_headers) {
+      mxdebug(boost::format("%1%esds: decoder specific descriptor, len: %2%\n") % space(lsp + 1) % len);
+      mxdebug(boost::format("%1%esds: dumping decoder specific descriptor\n") % space(lsp + 3));
+      mxhexdump(0, esds.decoder_config->get_buffer(), esds.decoder_config->get_size(), "Debug> ");
+    }
+
+  } else
+    mxdebug_if(m_debug_headers, boost::format("%1%tag is not DEC_SPECIFIC (0x%|2$02x|) but 0x%|3$02x|.\n") % space(lsp + 1) % MP4DT_DEC_SPECIFIC % tag);
+
+  if (MP4DT_SL_CONFIG == tag) {
+    len = read_esds_descr_len(memio);
+    if (!len)
+      throw mtx::input::header_parsing_x{};
+
+    esds.sl_config     = memory_c::alloc(len);
+    if (memio.read(esds.sl_config, len) != len) {
+      esds.sl_config.reset();
+      throw mtx::input::header_parsing_x();
+    }
+
+    mxdebug_if(m_debug_headers, boost::format("%1%esds: sync layer config descriptor, len: %2%\n") % space(lsp + 1) % len);
+
+  } else
+    mxdebug_if(m_debug_headers, boost::format("%1%tag is not SL_CONFIG (0x%|2$02x|) but 0x%|3$02x|.\n") % space(lsp + 1) % MP4DT_SL_CONFIG % tag);
+
+  return true;
+}
+
+uint32_t
+qtmp4_demuxer_c::read_esds_descr_len(mm_mem_io_c &memio) {
+  uint32_t len           = 0;
+  unsigned int num_bytes = 0;
+  uint8_t byte;
+
+  do {
+    byte = memio.read_uint8();
+    len  = (len << 7) | (byte & 0x7f);
+    ++num_bytes;
+
+  } while (((byte & 0x80) == 0x80) && (4 > num_bytes));
+
+  return len;
+}
+
+bool
+qtmp4_demuxer_c::verify_audio_parameters() {
+  if (   strncasecmp(fourcc, "QDM", 3)
+      && strncasecmp(fourcc, "MP4A", 4)
+      && strncasecmp(fourcc, ".mp3", 4)
+      && strncasecmp(fourcc, "twos", 4)
+      && strncasecmp(fourcc, "sowt", 4)
+      && strncasecmp(fourcc, "ac-3", 4)
+      && strncasecmp(fourcc, "sac3", 4)
+      ) {
+    mxwarn(boost::format(Y("Quicktime/MP4 reader: Unknown/unsupported FourCC '%|1$.4s|' for track %2%.\n")) % fourcc % id);
+    return false;
+  }
+
+  if ((0 == a_channels) || (0.0 == a_samplerate)) {
+    mxwarn(boost::format(Y("Quicktime/MP4 reader: Track %1% is missing some data. Broken header atoms?\n")) % id);
+    return false;
+  }
+
+  if (!strncasecmp(fourcc, "MP4A", 4))
+    return verify_mp4a_audio_parameters();
+
+  return true;
+}
+
+bool
+qtmp4_demuxer_c::verify_mp4a_audio_parameters() {
+  if (   !IS_AAC_OBJECT_TYPE_ID(esds.object_type_id)
+      && (MP4OTI_MPEG2AudioPart3 != esds.object_type_id) // MP3...
+      && (MP4OTI_MPEG1Audio      != esds.object_type_id)) {
+    mxwarn(boost::format(Y("Quicktime/MP4 reader: The audio track %1% is using an unsupported 'object type id' of %2% in the 'esds' atom. Skipping this track.\n")) % id % (int)esds.object_type_id);
+    return false;
+  }
+
+  if (IS_AAC_OBJECT_TYPE_ID(esds.object_type_id) && (!esds.decoder_config || !a_aac_config_parsed)) {
+    mxwarn(boost::format(Y("Quicktime/MP4 reader: The AAC track %1% is missing the esds atom/the decoder config. Skipping this track.\n")) % id);
+    return false;
+  }
+
+  return true;
+}
+
+bool
+qtmp4_demuxer_c::verify_video_parameters() {
+  if (   strncasecmp(fourcc, "SVQ", 3)
+      && strncasecmp(fourcc, "cvid", 4)
+      && strncasecmp(fourcc, "rle ", 4)
+      && strncasecmp(fourcc, "mp4v", 4)
+      && strncasecmp(fourcc, "xvid", 4)
+      && strncasecmp(fourcc, "avc1", 4)
+      ) {
+    mxwarn(boost::format(Y("Quicktime/MP4 reader: Unknown/unsupported FourCC '%|1$.4s|' for track %2%.\n")) % fourcc % id);
+    return false;
+  }
+
+
+  if ((0 == v_width) || (0 == v_height) || (0 == get_uint32_le(fourcc))) {
+    mxwarn(boost::format(Y("Quicktime/MP4 reader: Track %1% is missing some data. Broken header atoms?\n")) % id);
+    return false;
+  }
+
+  if (!strncasecmp(fourcc, "mp4v", 4))
+    return verify_mp4v_video_parameters();
+
+  if (v_is_avc)
+    return verify_avc_video_parameters();
+
+  return true;
+}
+
+bool
+qtmp4_demuxer_c::verify_avc_video_parameters() {
+  if (!priv || (4 > priv->get_size())) {
+    mxwarn(boost::format(Y("Quicktime/MP4 reader: MPEG4 part 10/AVC track %1% is missing its decoder config. Skipping this track.\n")) % id);
+    return false;
+  }
+
+  return true;
+}
+
+bool
+qtmp4_demuxer_c::verify_mp4v_video_parameters() {
+  if (!esds_parsed) {
+    mxwarn(boost::format(Y("Quicktime/MP4 reader: The video track %1% is missing the ESDS atom. Skipping this track.\n")) % id);
+    return false;
+  }
+
+  // The MP4 container can also contain MPEG1 and MPEG2 encoded
+  // video. The object type ID in the ESDS tells the demuxer what
+  // it is. So let's check for those.
+  // If the FourCC is unmodified then MPEG4 is assumed.
+  if (   (MP4OTI_MPEG2VisualSimple  == esds.object_type_id)
+      || (MP4OTI_MPEG2VisualMain    == esds.object_type_id)
+      || (MP4OTI_MPEG2VisualSNR     == esds.object_type_id)
+      || (MP4OTI_MPEG2VisualSpatial == esds.object_type_id)
+      || (MP4OTI_MPEG2VisualHigh    == esds.object_type_id)
+      || (MP4OTI_MPEG2Visual422     == esds.object_type_id))
+    memcpy(fourcc, "mpg2", 4);
+
+  else if (MP4OTI_MPEG1Visual       == esds.object_type_id)
+    memcpy(fourcc, "mpg1", 4);
+
+  else if (!esds.decoder_config) {
+    // This is MPEG4 video, and we need header data for it.
+    mxwarn(boost::format(Y("Quicktime/MP4 reader: MPEG4 track %1% is missing the esds atom/the decoder config. Skipping this track.\n")) % id);
+    return false;
+  }
+
+  return true;
 }
