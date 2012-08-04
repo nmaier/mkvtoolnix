@@ -44,8 +44,7 @@ protected:
   virtual void create_private_data();
   virtual int process_framed(packet_cptr packet);
   virtual int process_unframed(packet_cptr packet);
-  virtual bool put_sequence_headers_into_codec_state(packet_cptr packet);
-  virtual void remove_stuffing_bytes(memory_cptr data);
+  virtual void remove_stuffing_bytes_and_handle_sequence_headers(packet_cptr packet);
   virtual void flush_impl();
 };
 

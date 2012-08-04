@@ -65,73 +65,23 @@ mpeg1_2_video_packetizer_c::process_framed(packet_cptr packet) {
   if (4 > packet->data->get_size())
     return video_packetizer_c::process(packet);
 
-  put_sequence_headers_into_codec_state(packet);
-  remove_stuffing_bytes(packet->data);
+  remove_stuffing_bytes_and_handle_sequence_headers(packet);
 
   return video_packetizer_c::process(packet);
 }
 
-bool
-mpeg1_2_video_packetizer_c::put_sequence_headers_into_codec_state(packet_cptr packet) {
-  unsigned char *buf  = packet->data->get_buffer();
-  size_t  pos         = 4;
-  size_t  size        = packet->data->get_size();
-  unsigned int marker = get_uint32_be(buf);
-
-  while ((pos < size) && (MPEGVIDEO_SEQUENCE_HEADER_START_CODE != marker)) {
-    marker <<= 8;
-    marker  |= buf[pos];
-    ++pos;
-  }
-
-  if ((MPEGVIDEO_SEQUENCE_HEADER_START_CODE != marker) || ((pos + 4) >= size))
-    return false;
-
-  size_t start  = pos - 4;
-  marker        = get_uint32_be(&buf[pos]);
-  pos          += 4;
-
-  while ((pos < size) && ((MPEGVIDEO_EXT_START_CODE == marker) || (0x00000100 != (marker & 0xffffff00)))) {
-    marker <<= 8;
-    marker  |= buf[pos];
-    ++pos;
-  }
-
-  if (pos >= size)
-    return false;
-
-  pos            -= 4;
-  size_t sh_size  = pos - start;
-
-  if (!m_hcodec_private) {
-    set_codec_private(&buf[start], sh_size);
-    rerender_track_headers();
-  }
-
-  if (!m_seq_hdr || (sh_size != m_seq_hdr->get_size()) || memcmp(&buf[start], m_seq_hdr->get_buffer(), sh_size)) {
-    m_seq_hdr           = memory_c::clone(&buf[start], sh_size);
-    packet->codec_state = memory_c::clone(&buf[start], sh_size);
-  }
-
-  if (hack_engaged(ENGAGE_USE_CODEC_STATE_ONLY)) {
-    memmove(&buf[start], &buf[pos], size - pos);
-    packet->data->set_size(size - sh_size);
-  }
-
-  return true;
-}
-
 void
-mpeg1_2_video_packetizer_c::remove_stuffing_bytes(memory_cptr data) {
-  mxdebug_if(m_debug_stuffing_removal, boost::format("Starting stuff removal, frame size %1%\n") % data->get_size());
+mpeg1_2_video_packetizer_c::remove_stuffing_bytes_and_handle_sequence_headers(packet_cptr packet) {
+  mxdebug_if(m_debug_stuffing_removal, boost::format("Starting stuff removal, frame size %1%\n") % packet->data->get_size());
 
-  auto buf              = data->get_buffer();
-  auto size             = data->get_size();
+  auto buf              = packet->data->get_buffer();
+  auto size             = packet->data->get_size();
   size_t pos            = 4;
+  size_t start_code_pos = 0;
   size_t stuffing_start = 0;
   auto marker           = get_uint32_be(buf);
-  bool in_slice         = false;
-  auto num_keep         = 1;
+  uint32_t chunk_type   = 0;
+  bool seq_hdr_found    = false;
 
   auto mid_remover      = [&]() {
     if (!stuffing_start || (stuffing_start >= (pos - 4)))
@@ -148,28 +98,58 @@ mpeg1_2_video_packetizer_c::remove_stuffing_bytes(memory_cptr data) {
     mxdebug_if(m_debug_stuffing_removal, boost::format("    Stuffing in the middle: %1%\n") % num_stuffing_bytes);
   };
 
+  memory_cptr new_seq_hdr;
+  auto seq_hdr_copier = [&](bool at_end) {
+    if ((MPEGVIDEO_SEQUENCE_HEADER_START_CODE != chunk_type) && (MPEGVIDEO_EXT_START_CODE != chunk_type))
+      return;
+
+    if (MPEGVIDEO_SEQUENCE_HEADER_START_CODE == chunk_type)
+      seq_hdr_found = true;
+
+    else if (!seq_hdr_found)
+      return;
+
+    auto bytes_to_copy = at_end ? pos - start_code_pos : pos - 4 - start_code_pos;
+
+    if (!new_seq_hdr)
+      new_seq_hdr = memory_c::clone(&buf[start_code_pos], bytes_to_copy);
+
+    else
+      new_seq_hdr->add(&buf[start_code_pos], bytes_to_copy);
+
+    if (!hack_engaged(ENGAGE_USE_CODEC_STATE_ONLY))
+      return;
+
+    memmove(&buf[start_code_pos], &buf[pos - 4], size - pos + 4);
+    pos  -= bytes_to_copy;
+    size -= bytes_to_copy;
+  };
+
   while (pos < size) {
     if ((MPEGVIDEO_SLICE_START_CODE_LOWER <= marker) && (MPEGVIDEO_SLICE_START_CODE_UPPER >= marker)) {
       mxdebug_if(m_debug_stuffing_removal, boost::format("  Slice start code at %1%\n") % (pos - 4));
 
       mid_remover();
+      seq_hdr_copier(false);
 
-      in_slice       = true;
+      chunk_type     = MPEGVIDEO_SLICE_START_CODE_LOWER;
       stuffing_start = 0;
+      start_code_pos = pos - 4;
 
     } else if ((marker & 0xffffff00) == 0x00000100) {
       mxdebug_if(m_debug_stuffing_removal, boost::format("  Non-slice start code at %1%\n") % (pos - 4));
 
       mid_remover();
+      seq_hdr_copier(false);
 
-      in_slice       = false;
+      chunk_type     = marker;
       stuffing_start = 0;
+      start_code_pos = pos - 4;
 
-    } else if (in_slice && !stuffing_start && (marker == 0x00000000)) {
-      mxdebug_if(m_debug_stuffing_removal, boost::format("    Start at %1%\n") % (pos - 4 + num_keep));
+    } else if ((MPEGVIDEO_SLICE_START_CODE_LOWER == chunk_type) && !stuffing_start && (marker == 0x00000000)) {
+      mxdebug_if(m_debug_stuffing_removal, boost::format("    Start at %1%\n") % (pos - 3));
 
-      stuffing_start = pos - 4 + num_keep;
-
+      stuffing_start = pos - 3;
     }
 
     marker <<= 8;
@@ -177,17 +157,31 @@ mpeg1_2_video_packetizer_c::remove_stuffing_bytes(memory_cptr data) {
     ++pos;
   }
 
-  if ((marker & 0xffffff00) == 0x00000100)
+  if ((marker & 0xffffff00) == 0x00000100) {
+    seq_hdr_copier(false);
     mid_remover();
 
-  else if (stuffing_start && (stuffing_start < size)) {
-    mxdebug_if(m_debug_stuffing_removal, boost::format("    Stuffing at the end: in_slice %1% stuffing_start %2% stuffing_size %3%\n") % in_slice % stuffing_start % (stuffing_start ? size - stuffing_start : 0));
+  } else if (stuffing_start && (stuffing_start < size)) {
+    mxdebug_if(m_debug_stuffing_removal, boost::format("    Stuffing at the end: chunk_type 0x%|1$08x| stuffing_start %2% stuffing_size %3%\n") % chunk_type % stuffing_start % (stuffing_start ? size - stuffing_start : 0));
 
     m_num_removed_stuffing_bytes += size - stuffing_start;
     size                          = stuffing_start;
   }
 
-  data->set_size(size);
+  packet->data->set_size(size);
+
+  if (!new_seq_hdr)
+    return;
+
+  if (!m_hcodec_private) {
+    set_codec_private(new_seq_hdr->get_buffer(), new_seq_hdr->get_size());
+    rerender_track_headers();
+  }
+
+  if (!m_seq_hdr || (*new_seq_hdr != *m_seq_hdr)) {
+    m_seq_hdr           = new_seq_hdr;
+    packet->codec_state = new_seq_hdr->clone();
+  }
 }
 
 int
@@ -234,8 +228,7 @@ mpeg1_2_video_packetizer_c::process_unframed(packet_cptr packet) {
       packet_cptr new_packet  = packet_cptr(new packet_t(new memory_c(frame->data, frame->size, true), frame->timecode, frame->duration, frame->firstRef, frame->secondRef));
       new_packet->time_factor = MPEG2_PICTURE_TYPE_FRAME == frame->pictureStructure ? 1 : 2;
 
-      put_sequence_headers_into_codec_state(new_packet);
-      remove_stuffing_bytes(new_packet->data);
+      remove_stuffing_bytes_and_handle_sequence_headers(new_packet);
 
       video_packetizer_c::process(new_packet);
 
