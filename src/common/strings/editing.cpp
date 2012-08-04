@@ -202,6 +202,11 @@ get_displayable_string(const char *src,
   return result;
 }
 
+std::string
+get_displayable_string(std::string const &src) {
+  return get_displayable_string(src.c_str(), src.length());
+}
+
 size_t
 utf8_strlen(const std::string &s) {
   size_t length = 0;
