@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_STRINGS_H
-#define __MTX_COMMON_STRINGS_H
+#ifndef MTX_COMMON_STRINGS_EDITING_H
+#define MTX_COMMON_STRINGS_EDITING_H
 
 #include "common/common_pch.h"
 
@@ -48,4 +48,4 @@ int get_varg_len(const char *fmt, va_list ap);
 
 size_t utf8_strlen(const std::string &s);
 
-#endif  // __MTX_COMMON_STRINGS_H
+#endif  // MTX_COMMON_STRINGS_EDITING_H

@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_LOCALE_UTF8_H
-#define __MTX_COMMON_LOCALE_UTF8_H
+#ifndef MTX_COMMON_STRINGS_UTF8_H
+#define MTX_COMMON_STRINGS_UTF8_H
 
 #include "common/common_pch.h"
 
@@ -41,4 +41,4 @@ to_utf8(boost::format const &source) {
 size_t get_width_in_em(wchar_t c);
 size_t get_width_in_em(const std::wstring &s);
 
-#endif  // __MTX_COMMON_LOCALE_UTF8_H
+#endif  // MTX_COMMON_STRINGS_UTF8_H

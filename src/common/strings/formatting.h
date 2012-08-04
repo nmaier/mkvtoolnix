@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_STRING_FORMATTING_H
-#define __MTX_COMMON_STRING_FORMATTING_H
+#ifndef MTX_COMMON_STRINGS_FORMATTING_H
+#define MTX_COMMON_STRINGS_FORMATTING_H
 
 #include "common/common_pch.h"
 
@@ -72,4 +72,4 @@ to_hex(memory_cptr const &buf,
 
 std::string create_minutes_seconds_time_string(unsigned int seconds, bool omit_minutes_if_zero = false);
 
-#endif  // __MTX_COMMON_STRING_FORMATTING_H
+#endif  // MTX_COMMON_STRINGS_FORMATTING_H
