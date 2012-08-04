@@ -57,19 +57,6 @@ mpeg1_2_video_packetizer_c::~mpeg1_2_video_packetizer_c() {
   mxdebug_if(m_debug_stuffing_removal, boost::format("Total number of stuffing bytes removed: %1%\n") % m_num_removed_stuffing_bytes);
 }
 
-int
-mpeg1_2_video_packetizer_c::process_framed(packet_cptr packet) {
-  if (0 == packet->data->get_size())
-    return FILE_STATUS_MOREDATA;
-
-  if (4 > packet->data->get_size())
-    return video_packetizer_c::process(packet);
-
-  remove_stuffing_bytes_and_handle_sequence_headers(packet);
-
-  return video_packetizer_c::process(packet);
-}
-
 void
 mpeg1_2_video_packetizer_c::remove_stuffing_bytes_and_handle_sequence_headers(packet_cptr packet) {
   mxdebug_if(m_debug_stuffing_removal, boost::format("Starting stuff removal, frame size %1%\n") % packet->data->get_size());
@@ -193,6 +180,19 @@ mpeg1_2_video_packetizer_c::process(packet_cptr packet) {
     extract_aspect_ratio(packet->data->get_buffer(), packet->data->get_size());
 
   return m_framed ? process_framed(packet) : process_unframed(packet);
+}
+
+int
+mpeg1_2_video_packetizer_c::process_framed(packet_cptr packet) {
+  if (0 == packet->data->get_size())
+    return FILE_STATUS_MOREDATA;
+
+  if (4 > packet->data->get_size())
+    return video_packetizer_c::process(packet);
+
+  remove_stuffing_bytes_and_handle_sequence_headers(packet);
+
+  return video_packetizer_c::process(packet);
 }
 
 int
