@@ -378,6 +378,22 @@ mm_io_c::read_double() {
   return d2ui.d;
 }
 
+unsigned int
+mm_io_c::read_mp4_descriptor_len() {
+  unsigned int len       = 0;
+  unsigned int num_bytes = 0;
+  uint8_t byte;
+
+  do {
+    byte = read_uint8();
+    len  = (len << 7) | (byte & 0x7f);
+    ++num_bytes;
+
+  } while (((byte & 0x80) == 0x80) && (4 > num_bytes));
+
+  return len;
+}
+
 uint32_t
 mm_io_c::read(memory_cptr &buffer,
               size_t size,

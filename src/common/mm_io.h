@@ -150,6 +150,7 @@ public:
   virtual uint32_t read_uint32_be();
   virtual uint64_t read_uint64_be();
   virtual double read_double();
+  virtual unsigned int read_mp4_descriptor_len();
   virtual int write_uint8(unsigned char value);
   virtual int write_uint16_le(uint16_t value);
   virtual int write_uint32_le(uint32_t value);

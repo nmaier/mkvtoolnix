@@ -2086,7 +2086,7 @@ qtmp4_demuxer_c::parse_esds_atom(mm_mem_io_c &memio,
   mxdebug_if(m_debug_headers, boost::format("%1%esds: version: %2%, flags: %3%\n") % space(lsp + 1) % (int)esds.version % (int)esds.flags);
 
   if (MP4DT_ES == tag) {
-    auto len             = read_esds_descr_len(memio);
+    auto len             = memio.read_mp4_descriptor_len();
     esds.esid            = memio.read_uint16_be();
     esds.stream_priority = memio.read_uint8();
     mxdebug_if(m_debug_headers, boost::format("%1%esds: id: %2%, stream priority: %3%, len: %4%\n") % space(lsp + 1) % (int)esds.esid % (int)esds.stream_priority % len);
@@ -2102,7 +2102,7 @@ qtmp4_demuxer_c::parse_esds_atom(mm_mem_io_c &memio,
     return false;
   }
 
-  auto len                = read_esds_descr_len(memio);
+  auto len                = memio.read_mp4_descriptor_len();
 
   esds.object_type_id     = memio.read_uint8();
   esds.stream_type        = memio.read_uint8();
@@ -2123,7 +2123,7 @@ qtmp4_demuxer_c::parse_esds_atom(mm_mem_io_c &memio,
 
   tag = memio.read_uint8();
   if (MP4DT_DEC_SPECIFIC == tag) {
-    len = read_esds_descr_len(memio);
+    len = memio.read_mp4_descriptor_len();
     if (!len)
       throw mtx::input::header_parsing_x();
 
@@ -2145,7 +2145,7 @@ qtmp4_demuxer_c::parse_esds_atom(mm_mem_io_c &memio,
     mxdebug_if(m_debug_headers, boost::format("%1%tag is not DEC_SPECIFIC (0x%|2$02x|) but 0x%|3$02x|.\n") % space(lsp + 1) % MP4DT_DEC_SPECIFIC % tag);
 
   if (MP4DT_SL_CONFIG == tag) {
-    len = read_esds_descr_len(memio);
+    len = memio.read_mp4_descriptor_len();
     if (!len)
       throw mtx::input::header_parsing_x{};
 
@@ -2161,22 +2161,6 @@ qtmp4_demuxer_c::parse_esds_atom(mm_mem_io_c &memio,
     mxdebug_if(m_debug_headers, boost::format("%1%tag is not SL_CONFIG (0x%|2$02x|) but 0x%|3$02x|.\n") % space(lsp + 1) % MP4DT_SL_CONFIG % tag);
 
   return true;
-}
-
-uint32_t
-qtmp4_demuxer_c::read_esds_descr_len(mm_mem_io_c &memio) {
-  uint32_t len           = 0;
-  unsigned int num_bytes = 0;
-  uint8_t byte;
-
-  do {
-    byte = memio.read_uint8();
-    len  = (len << 7) | (byte & 0x7f);
-    ++num_bytes;
-
-  } while (((byte & 0x80) == 0x80) && (4 > num_bytes));
-
-  return len;
 }
 
 bool
