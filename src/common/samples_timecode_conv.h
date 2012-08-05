@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_SAMPLES_TIMECODE_CONV_H
-#define __MTX_COMMON_SAMPLES_TIMECODE_CONV_H
+#ifndef MTX_COMMON_SAMPLES_TIMECODE_CONV_H
+#define MTX_COMMON_SAMPLES_TIMECODE_CONV_H
 
 #include "common/common_pch.h"
 
@@ -56,4 +56,4 @@ operator *(int64_t v1,
   return v2.m_denominator ? v1 * v2.m_numerator / v2.m_denominator : v1;
 }
 
-#endif  // __MTX_COMMON_SAMPLES_TIMECODE_CONV_H
+#endif  // MTX_COMMON_SAMPLES_TIMECODE_CONV_H
