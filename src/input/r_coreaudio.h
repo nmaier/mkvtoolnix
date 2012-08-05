@@ -16,13 +16,11 @@
 
 #include "common/common_pch.h"
 
-#include <stdio.h>
-
 #include "common/mm_io.h"
 #include "common/error.h"
+#include "common/samples_timecode_conv.h"
 
 #include "merge/pr_generic.h"
-// #include "output/p_coreaudio.h"
 
 struct coreaudio_chunk_t {
   std::string m_type;
@@ -31,13 +29,12 @@ struct coreaudio_chunk_t {
 typedef std::vector<coreaudio_chunk_t>::iterator coreaudio_chunk_itr;
 
 struct coreaudio_packet_t {
-  uint64_t m_position, m_size, m_duration;
+  uint64_t m_position, m_size, m_duration, m_timecode;
 };
 typedef std::vector<coreaudio_packet_t>::iterator coreaudio_packet_itr;
 
 class coreaudio_reader_c: public generic_reader_c {
 private:
-  memory_c m_buffer;
   memory_cptr m_magic_cookie;
 
   std::vector<coreaudio_chunk_t> m_chunks;
@@ -50,6 +47,8 @@ private:
 
   double m_sample_rate;
   unsigned int m_flags, m_bytes_per_packet, m_frames_per_packet, m_channels, m_bites_per_sample;
+
+  samples_to_timecode_converter_c m_frames_to_timecode;
 
   bool m_debug_headers, m_debug_chunks, m_debug_packets;
 
@@ -86,6 +85,8 @@ protected:
   void parse_kuki_chunk();
 
   void handle_alac_magic_cookie(memory_cptr chunk);
+
+  generic_packetizer_c *create_alac_packetizer();
 
   void debug_error_and_throw(boost::format const &format) const;
   void dump_headers() const;

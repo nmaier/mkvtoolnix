@@ -17,19 +17,9 @@
 
 #include "common/alac.h"
 #include "common/endian.h"
-#include "common/error.h"
+#include "common/strings/formatting.h"
 #include "input/r_coreaudio.h"
-// #include "output/p_alac.h"
-
-#define CHUNK_READ_SIZE (256 * 1024)
-
-template<typename T>
-T
-with_default(T const &value,
-             T const &default_value = 0,
-             T const &value_if_default = std::numeric_limits<T>::max()) {
-  return value == default_value ? value_if_default : value;
-}
+#include "output/p_alac.h"
 
 int
 coreaudio_reader_c::probe_file(mm_io_c *in,
@@ -52,7 +42,6 @@ coreaudio_reader_c::probe_file(mm_io_c *in,
 coreaudio_reader_c::coreaudio_reader_c(const track_info_c &ti,
                                        const mm_io_cptr &in)
   : generic_reader_c{ti, in}
-  , m_buffer{CHUNK_READ_SIZE}
   , m_supported{}
   , m_sample_rate{}
   , m_flags{}
@@ -160,41 +149,40 @@ coreaudio_reader_c::create_packetizer(int64_t) {
   if (!demuxing_requested('a', 0) || (NPTZR() != 0) || ! m_supported)
     return;
 
-  // if (m_codec == "alac")
-    // add_packetizer(create_alac_packetizer());
+  if (m_codec == "ALAC")
+    add_packetizer(create_alac_packetizer());
+  else
+    assert(false);
+
+  show_packetizer_info(0, PTZR0);
+}
+
+generic_packetizer_c *
+coreaudio_reader_c::create_alac_packetizer() {
+  return new alac_packetizer_c(this, m_ti, m_magic_cookie, m_sample_rate, m_channels);
 }
 
 file_status_e
 coreaudio_reader_c::read(generic_packetizer_c *,
                          bool) {
-  // if (!m_demuxer)
+  if (!m_supported || (m_current_packet == m_packets.end()))
     return FILE_STATUS_DONE;
 
-  // int64_t        requested_bytes = std::min(m_remaining_bytes_in_current_data_chunk, m_demuxer->get_preferred_input_size());
-  // unsigned char *buffer          = m_demuxer->get_buffer();
-  // int64_t        num_read;
+  try {
+    m_in->setFilePointer(m_current_packet->m_position, seek_beginning);
+    auto mem = memory_c::alloc(m_current_packet->m_size);
+    if (m_in->read(mem, m_current_packet->m_size) != m_current_packet->m_size)
+      throw false;
 
-  // num_read = m_in->read(buffer, requested_bytes);
+    PTZR0->process(new packet_t(mem, m_current_packet->m_timecode * m_frames_to_timecode, m_current_packet->m_duration * m_frames_to_timecode));
 
-  // if (0 >= num_read)
-  //   return flush_packetizers();
+    ++m_current_packet;
 
-  // m_demuxer->process(num_read);
+  } catch (...) {
+    m_current_packet = m_packets.end();
+  }
 
-  // m_remaining_bytes_in_current_data_chunk -= num_read;
-
-  // if (!m_remaining_bytes_in_current_data_chunk) {
-  //   m_cur_data_chunk_idx = find_chunk("data", m_cur_data_chunk_idx + 1, false);
-
-  //   if (-1 == m_cur_data_chunk_idx)
-  //     return flush_packetizers();
-
-  //   m_in->setFilePointer(m_chunks[m_cur_data_chunk_idx].pos + sizeof(struct chunk_struct), seek_beginning);
-
-  //   m_remaining_bytes_in_current_data_chunk = m_chunks[m_cur_data_chunk_idx].len;
-  // }
-
-  // return FILE_STATUS_MOREDATA;
+  return m_current_packet == m_packets.end() ? FILE_STATUS_DONE : FILE_STATUS_MOREDATA;
 }
 
 void
@@ -209,7 +197,8 @@ coreaudio_reader_c::scan_chunks() {
       if (m_in->read(chunk.m_type, 4) != 4)
         return;
 
-      chunk.m_size          = std::min<uint64_t>(with_default(m_in->read_uint64_be()), file_size);
+      chunk.m_size          = m_in->read_uint64_be();
+      chunk.m_size          = std::min<uint64_t>(chunk.m_size ? chunk.m_size : std::numeric_limits<uint64_t>::max(), file_size);
       chunk.m_data_position = m_in->getFilePointer();
 
       mxdebug_if(m_debug_chunks,boost::format("scan_chunks() new chunk at %1% data position %4% type '%2%' size %3%\n") % chunk.m_position % get_displayable_string(chunk.m_type) % chunk.m_size % chunk.m_data_position);
@@ -280,6 +269,8 @@ coreaudio_reader_c::parse_desc_chunk() {
 
   try {
     m_sample_rate = chunk.read_double();
+    m_frames_to_timecode.set(1000000000, m_sample_rate);
+
     if (4 != chunk.read(m_codec, 4)) {
       m_codec.clear();
       throw mtx::mm_io::end_of_file_x{};
@@ -308,12 +299,13 @@ coreaudio_reader_c::parse_pakt_chunk() {
     auto chunk = read_chunk("pakt");
     mm_mem_io_c mem{*chunk};
 
-    auto num_packets = mem.read_uint64_be();
-    auto num_frames  = mem.read_uint64_be()  // valid frames
-                     + mem.read_uint32_be()  // priming frames
-                     + mem.read_uint32_be(); // remainder frames
-    auto data_chunk  = find_chunk("data");
-    auto position    = data_chunk->m_data_position;
+    auto num_packets  = mem.read_uint64_be();
+    auto num_frames   = mem.read_uint64_be()  // valid frames
+                      + mem.read_uint32_be()  // priming frames
+                      + mem.read_uint32_be(); // remainder frames
+    auto data_chunk   = find_chunk("data");
+    auto position     = data_chunk->m_data_position;
+    uint64_t timecode = 0;
 
     mxdebug_if(m_debug_headers, boost::format("Number of packets: %1%, number of frames: %2%\n") % num_packets % num_frames);
 
@@ -323,11 +315,16 @@ coreaudio_reader_c::parse_pakt_chunk() {
       packet.m_position  = position;
       packet.m_size      = m_bytes_per_packet  ? m_bytes_per_packet  : mem.read_mp4_descriptor_len();
       packet.m_duration  = m_frames_per_packet ? m_frames_per_packet : mem.read_mp4_descriptor_len();
+      packet.m_timecode  = timecode;
       position          += packet.m_size;
+      timecode          += packet.m_duration;
 
       m_packets.push_back(packet);
 
-      mxdebug_if(m_debug_packets, boost::format("  %4%) position %1% size %2% duration %3% position in 'pakt' %5%\n") % packet.m_position % packet.m_size % packet.m_duration % packet_num % mem.getFilePointer());
+      mxdebug_if(m_debug_packets,
+                 boost::format("  %4%) position %1% size %2% raw duration %3% raw timecode %6% duration %7% timecode %8% position in 'pakt' %5%\n")
+                 % packet.m_position % packet.m_size % packet.m_duration % packet_num % mem.getFilePointer() % packet.m_timecode
+                 % format_timecode(packet.m_duration * m_frames_to_timecode) % format_timecode(packet.m_timecode * m_frames_to_timecode));
     }
 
   } catch (mtx::mm_io::exception &ex) {
@@ -373,6 +370,7 @@ coreaudio_reader_c::handle_alac_magic_cookie(memory_cptr chunk) {
 
   } else
     m_magic_cookie = chunk;
+
 
   mxdebug_if(m_debug_headers, boost::format("Magic cookie size: %1%\n") % m_magic_cookie->get_size());
 }
