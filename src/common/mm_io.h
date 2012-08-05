@@ -149,6 +149,7 @@ public:
   virtual uint32_t read_uint24_be();
   virtual uint32_t read_uint32_be();
   virtual uint64_t read_uint64_be();
+  virtual double read_double();
   virtual int write_uint8(unsigned char value);
   virtual int write_uint16_le(uint16_t value);
   virtual int write_uint32_le(uint32_t value);
@@ -156,6 +157,7 @@ public:
   virtual int write_uint16_be(uint16_t value);
   virtual int write_uint32_be(uint32_t value);
   virtual int write_uint64_be(uint64_t value);
+  virtual int write_double(double value);
   virtual void skip(int64 numbytes);
   virtual size_t write(const void *buffer, size_t size);
   virtual size_t write(std::string const &buffer) {

@@ -32,6 +32,11 @@
 #include "common/strings/editing.h"
 #include "common/strings/parsing.h"
 
+union double_to_uint64_t {
+  uint64_t i;
+  double d;
+};
+
 #if !defined(SYS_WINDOWS)
 static std::string
 get_errno_msg() {
@@ -365,6 +370,14 @@ mm_io_c::read_uint64_be() {
   return get_uint64_be(buffer);
 }
 
+double
+mm_io_c::read_double() {
+  double_to_uint64_t d2ui;
+
+  d2ui.i = read_uint64_be();
+  return d2ui.d;
+}
+
 uint32_t
 mm_io_c::read(memory_cptr &buffer,
               size_t size,
@@ -434,6 +447,13 @@ mm_io_c::write_uint64_be(uint64_t value) {
 
   put_uint64_be(&buffer, value);
   return write(&buffer, sizeof(uint64_t));
+}
+
+int
+mm_io_c::write_double(double value) {
+  double_to_uint64_t d2ui;
+  d2ui.d = value;
+  return write_uint64_be(d2ui.i);
 }
 
 size_t
