@@ -6258,11 +6258,6 @@ msgstr ".idx agiriak ez du 'id: ...' lerroa hizkuntza adieraziz.\n"
 msgid "The AAC profiles are different: %1% and %2%"
 msgstr "AAC profilak ezberdinak dira: %1% eta %2%"
 
-#: src/output/p_alac.cpp:63
-#, fuzzy, boost-format
-msgid "The ALAC header data is different for the two tracks (lengths: %1% and %2%)"
-msgstr "FLAC idazburu datua ezberdina da bi bideentzat (luzerak: %1% eta %2%)"
-
 #: src/input/r_qtmp4.cpp:1196
 msgid "The AVC video track is missing the 'CTTS' atom for frame timecode offsets. However, AVC/h.264 allows frames to have more than the traditional one (for P frames) or two (for B frames) references to other frames. The timecodes for such frames will be out-of-order, and the 'CTTS' atom is needed for getting the timecodes right. As it is missing the timecodes for this track might be wrong. You should watch the resulting file and make sure that it looks like you expected it to.\n"
 msgstr "AVC bideo bideak ez du 'CTTS' atomoa framen denbora-kode orekatarako. Horrela ere, AVC/h.264-k ahalbidetzen ditu ohiko xehetasun frame bat (P frameak) edo bi (B frameak) baino gehiago beste frame batzuetara. Denbora-kodeak frame hauentzat ordenatu-gabeak izango dira, eta 'CTTS' atomoa beharrezkoa da denbora-kodeak zuzen lortzeko. Hau ez dagoenez bide honentzako denbora-kodeak okerrak izan daitezke. Emaitz agiria ikuskatu beharko zenuke eta zihurtatu itxaroten duzun bezala ikusten dela.\n"
@@ -6275,11 +6270,6 @@ msgstr "%1% bidearentzako CUE orriak '%2%'-ra idatziko dira.\n"
 #: src/merge/pr_generic.h:467
 msgid "The CodecID of the two tracks is different: %1% and %2%"
 msgstr "Bi bideen kodekaren ID-a ezberdina da: %1% eta %2%"
-
-#: src/output/p_flac.cpp:101
-#, boost-format
-msgid "The FLAC header data is different for the two tracks (lengths: %1% and %2%)"
-msgstr "FLAC idazburu datua ezberdina da bi bideentzat (luzerak: %1% eta %2%)"
 
 #: src/output/p_flac.cpp:48
 msgid "The FLAC headers could not be parsed: the stream info structure was not found.\n"
@@ -6478,7 +6468,9 @@ msgstr "Itxiera hitzartea ')' ez dago.\n"
 msgid "The codec type '%1%' cannot be used in a WebM compliant file.\n"
 msgstr "'%1%' kodek mota ezin da WebM agiri bateragarri batean erabili.\n"
 
+#: src/output/p_flac.cpp:101
 #: src/merge/pr_generic.h:474
+#, boost-format
 msgid "The codec's private data does not match (lengths: %1% and %2%)."
 msgstr "Kodekaren datu pribatuak ez datoz bat (luzerak: %1% eta %2%)."
 
@@ -9151,6 +9143,13 @@ msgstr "Bai"
 #~ msgid "Remember that special characters like &, <, > and \" must be escaped in the usual HTML way: &amp; for '&', &lt; for '<', &gt; for '>' and &quot; for '\"'."
 #~ msgstr "Recuerda que caracteres especiales como &, <, > and \" deben ser convertidos a la manera usual de HTML: &amp para &, &lt para <, &gt  para > y &quot para \"."
 
+#, fuzzy
+#~ msgid "The ALAC header data is different for the two tracks (lengths: %1% and %2%)"
+#~ msgstr "FLAC idazburu datua ezberdina da bi bideentzat (luzerak: %1% eta %2%)"
+
+#~ msgid "The FLAC header data is different for the two tracks (lengths: %1% and %2%)"
+#~ msgstr "FLAC idazburu datua ezberdina da bi bideentzat (luzerak: %1% eta %2%)"
+
 #~ msgid "The binary data must be at least %1% bytes long."
 #~ msgstr "Los datos binarios deben ser al menos de %1% bytes de extensión."
 
@@ -9224,3 +9223,4 @@ msgstr "Bai"
 
 #~ msgid "tet_index: '%1%' not found\n"
 #~ msgstr "tet_index: '%1%' no encontrado\n"
+

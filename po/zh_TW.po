@@ -6229,11 +6229,6 @@ msgstr "此 .idx 檔案不包含指明語言的第「id: ...」行。\n"
 msgid "The AAC profiles are different: %1% and %2%"
 msgstr "AAC profile 不同: %1% 與 %2%"
 
-#: src/output/p_alac.cpp:63
-#, fuzzy, boost-format
-msgid "The ALAC header data is different for the two tracks (lengths: %1% and %2%)"
-msgstr "兩軌的 FLAC 表頭資料不同 (長度: %1% 與 %2%)"
-
 #: src/input/r_qtmp4.cpp:1196
 msgid "The AVC video track is missing the 'CTTS' atom for frame timecode offsets. However, AVC/h.264 allows frames to have more than the traditional one (for P frames) or two (for B frames) references to other frames. The timecodes for such frames will be out-of-order, and the 'CTTS' atom is needed for getting the timecodes right. As it is missing the timecodes for this track might be wrong. You should watch the resulting file and make sure that it looks like you expected it to.\n"
 msgstr "此 AVC 視訊軌缺少「CTTS」畫格時間碼偏移單元。然而，AVC/h.264 允許畫格有超過通常的一次 (對於 P 畫格) 或兩次 (對於 B 畫格) 畫格參考。此類畫格的時間碼會變得無序，需要「CTTS」單元來修正。由於缺少時間碼，此軌可能發生錯誤。請查看生成的檔案，確認它是不是您預期的樣子。\n"
@@ -6246,11 +6241,6 @@ msgstr "軌道 %1% 的 CUE 表單會寫入到 「%2%」。\n"
 #: src/merge/pr_generic.h:467
 msgid "The CodecID of the two tracks is different: %1% and %2%"
 msgstr "兩軌的 CodecID 不同: %1% 與 %2%"
-
-#: src/output/p_flac.cpp:101
-#, boost-format
-msgid "The FLAC header data is different for the two tracks (lengths: %1% and %2%)"
-msgstr "兩軌的 FLAC 表頭資料不同 (長度: %1% 與 %2%)"
 
 #: src/output/p_flac.cpp:48
 msgid "The FLAC headers could not be parsed: the stream info structure was not found.\n"
@@ -6449,7 +6439,9 @@ msgstr "缺少表示關閉的括號「)」。\n"
 msgid "The codec type '%1%' cannot be used in a WebM compliant file.\n"
 msgstr "此編解碼器類型「%1%」無法用在 WebM 遵循檔。\n"
 
+#: src/output/p_flac.cpp:101
 #: src/merge/pr_generic.h:474
+#, boost-format
 msgid "The codec's private data does not match (lengths: %1% and %2%)."
 msgstr "編解碼器專有資料不符 (長度: %1% 與 %2%)。"
 
@@ -9350,6 +9342,13 @@ msgstr "是"
 
 #~ msgid "TTA lossless audio"
 #~ msgstr "TTA 無損音訊"
+
+#, fuzzy
+#~ msgid "The ALAC header data is different for the two tracks (lengths: %1% and %2%)"
+#~ msgstr "兩軌的 FLAC 表頭資料不同 (長度: %1% 與 %2%)"
+
+#~ msgid "The FLAC header data is different for the two tracks (lengths: %1% and %2%)"
+#~ msgstr "兩軌的 FLAC 表頭資料不同 (長度: %1% 與 %2%)"
 
 #~ msgid "The MPEG-4 part 2 compression only works with native MPEG-4. However, native MPEG-4 mode has not been selected with '--engage native_mpeg4'.\n"
 #~ msgstr "MPEG-4 part 2 壓縮僅適用於原生 MPEG-4。然而，您未使用「--engage native_mpeg4」選擇原生 MPEG-4 模式。\n"

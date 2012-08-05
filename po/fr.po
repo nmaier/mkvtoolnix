@@ -6253,11 +6253,6 @@ msgstr "Le fichier .idx ne contient pas de ligne 'id: ...' indiquant la langue.\
 msgid "The AAC profiles are different: %1% and %2%"
 msgstr "Les profils AAC sont différents : %1% et %2%."
 
-#: src/output/p_alac.cpp:63
-#, fuzzy, boost-format
-msgid "The ALAC header data is different for the two tracks (lengths: %1% and %2%)"
-msgstr "Les données d'en-tête FLAC des deux pistes sont différentes (longueur : %1% et %2%)."
-
 #: src/input/r_qtmp4.cpp:1196
 msgid "The AVC video track is missing the 'CTTS' atom for frame timecode offsets. However, AVC/h.264 allows frames to have more than the traditional one (for P frames) or two (for B frames) references to other frames. The timecodes for such frames will be out-of-order, and the 'CTTS' atom is needed for getting the timecodes right. As it is missing the timecodes for this track might be wrong. You should watch the resulting file and make sure that it looks like you expected it to.\n"
 msgstr "Il manque l'atome 'CTTS' avec les décalages temporels à la piste vidéo AVC, il se peut que les codes temporels de cette piste soient faux. AVC/h.264 autorise les images avec plus que le nombre habituel de références aux autres images (une pour les images P et deux pour les images B). Les codes temporels de telles images sont faux et l'atome 'CTTS' est nécessaire pour les rétablir correctement. Vous devriez examiner le fichier obtenu pour voir s'il est conforme à ce que vous attendiez.\n"
@@ -6270,11 +6265,6 @@ msgstr "La feuille de montage CUE pour la piste %1% sera écrite dans le fichier
 #: src/merge/pr_generic.h:467
 msgid "The CodecID of the two tracks is different: %1% and %2%"
 msgstr "Les identifiants de codec des deux pistes sont différents : %1% et %2%."
-
-#: src/output/p_flac.cpp:101
-#, boost-format
-msgid "The FLAC header data is different for the two tracks (lengths: %1% and %2%)"
-msgstr "Les données d'en-tête FLAC des deux pistes sont différentes (longueur : %1% et %2%)."
 
 #: src/output/p_flac.cpp:48
 msgid "The FLAC headers could not be parsed: the stream info structure was not found.\n"
@@ -6473,7 +6463,9 @@ msgstr "Les parenthèses de fermeture ')' sont absentes.\n"
 msgid "The codec type '%1%' cannot be used in a WebM compliant file.\n"
 msgstr "Le type de codec '%1%' ne peut pas être utilisé dans un fichier conforme à WebM.\n"
 
+#: src/output/p_flac.cpp:101
 #: src/merge/pr_generic.h:474
+#, boost-format
 msgid "The codec's private data does not match (lengths: %1% and %2%)."
 msgstr "Les données privées du codec ne correspondent pas (longueur : %1% et %2%)."
 
@@ -9185,6 +9177,13 @@ msgstr "oui"
 
 #~ msgid "Remember that special characters like &, <, > and \" must be escaped in the usual HTML way: &amp; for '&', &lt; for '<', &gt; for '>' and &quot; for '\"'."
 #~ msgstr "Faire attention à ce que les caractères spéciaux comme &, <, > et \" soient donnés sous la forme HTML habituelle : &amp; pour '&', &lt; pour '<', &gt; pour '>' et &quot; pour '\"'."
+
+#, fuzzy
+#~ msgid "The ALAC header data is different for the two tracks (lengths: %1% and %2%)"
+#~ msgstr "Les données d'en-tête FLAC des deux pistes sont différentes (longueur : %1% et %2%)."
+
+#~ msgid "The FLAC header data is different for the two tracks (lengths: %1% and %2%)"
+#~ msgstr "Les données d'en-tête FLAC des deux pistes sont différentes (longueur : %1% et %2%)."
 
 #~ msgid "The binary data must be at least %1% bytes long."
 #~ msgstr "Les données binaires doivent avoir une longueur d'au moins %1% octets."

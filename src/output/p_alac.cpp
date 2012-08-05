@@ -58,13 +58,7 @@ alac_packetizer_c::can_connect_to(generic_packetizer_c *src,
 
   connect_check_a_samplerate(m_sample_rate, alac_src->m_sample_rate);
   connect_check_a_channels(  m_channels,    alac_src->m_channels);
-
-  if (!m_magic_cookie || !alac_src->m_magic_cookie || (*m_magic_cookie != *alac_src->m_magic_cookie)) {
-    error_message = (boost::format(Y("The ALAC header data is different for the two tracks (lengths: %1% and %2%)"))
-                     % (          m_magic_cookie ?           m_magic_cookie->get_size() : 0)
-                     % (alac_src->m_magic_cookie ? alac_src->m_magic_cookie->get_size() : 0)).str();
-    return CAN_CONNECT_MAYBE_CODECPRIVATE;
-  }
+  connect_check_codec_private(alac_src);
 
   return CAN_CONNECT_YES;
 }

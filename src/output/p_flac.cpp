@@ -98,7 +98,7 @@ flac_packetizer_c::can_connect_to(generic_packetizer_c *src,
       || !m_header
       || !fsrc->m_header
       || memcmp(m_header->get_buffer(), fsrc->m_header->get_buffer(), m_header->get_size())) {
-    error_message = (boost::format(Y("The FLAC header data is different for the two tracks (lengths: %1% and %2%)")) % m_header->get_size() % fsrc->m_header->get_size()).str();
+    error_message = (boost::format(Y("The codec's private data does not match (lengths: %1% and %2%).")) % m_header->get_size() % fsrc->m_header->get_size()).str();
     return CAN_CONNECT_MAYBE_CODECPRIVATE;
   }
 
