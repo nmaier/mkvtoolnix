@@ -55,6 +55,9 @@ coreaudio_reader_c::coreaudio_reader_c(const track_info_c &ti,
 {
 }
 
+coreaudio_reader_c::~coreaudio_reader_c() {
+}
+
 void
 coreaudio_reader_c::identify() {
   if (m_supported) {
@@ -70,15 +73,6 @@ coreaudio_reader_c::read_headers() {
   if (!coreaudio_reader_c::probe_file(m_in.get(), m_size))
     throw mtx::input::invalid_format_x();
 
-  parse_file();
-  // create_demuxer();
-}
-
-coreaudio_reader_c::~coreaudio_reader_c() {
-}
-
-void
-coreaudio_reader_c::parse_file() {
   // Skip "caff" magic, version and flags
   m_in->setFilePointer(8);
 

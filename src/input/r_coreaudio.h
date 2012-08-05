@@ -78,8 +78,6 @@ protected:
 
   memory_cptr read_chunk(std::string const &type, bool throw_on_error = true);
 
-  void parse_file();
-
   void parse_desc_chunk();
   void parse_pakt_chunk();
   void parse_kuki_chunk();
