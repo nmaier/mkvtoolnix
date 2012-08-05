@@ -1,3 +1,9 @@
+2012-08-05  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: new feature: Added support for reading ALAC (Apple
+	Lossless Audio Codec) from CAF (CoreAudio), MP4 and Matroska
+	files. Implements #753.
+
 2012-08-02  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: new feature: mkvmerge will remove stuffing bytes from
