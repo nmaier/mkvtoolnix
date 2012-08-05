@@ -40,6 +40,7 @@
 #include <matroska/KaxTrackAudio.h>
 #include <matroska/KaxTrackVideo.h>
 
+#include "common/alac.h"
 #include "common/at_scope_exit.h"
 #include "common/chapters/chapters.h"
 #include "common/ebml.h"
@@ -57,6 +58,7 @@
 #include "merge/pr_generic.h"
 #include "output/p_aac.h"
 #include "output/p_ac3.h"
+#include "output/p_alac.h"
 #include "output/p_avc.h"
 #include "output/p_dirac.h"
 #include "output/p_dts.h"
@@ -325,6 +327,19 @@ kax_reader_c::verify_acm_audio_track(kax_track_t *t) {
 }
 
 bool
+kax_reader_c::verify_alac_audio_track(kax_track_t *t) {
+  t->a_formattag = FOURCC('A', 'L', 'A', 'C');
+
+  if (t->private_data && (sizeof(alac::codec_config_t) <= t->private_size))
+    return true;
+
+  if (verbose)
+    mxwarn(boost::format(Y("matroska_reader: The CodecID for track %1% is '%2%', but there was no codec private headers.\n")) % t->tnum % MKV_A_ALAC);
+
+  return false;
+}
+
+bool
 kax_reader_c::verify_flac_audio_track(kax_track_t *t) {
 #if defined(HAVE_FLAC_FORMAT_H)
   t->a_formattag = FOURCC('f', 'L', 'a', 'C');
@@ -378,6 +393,8 @@ kax_reader_c::verify_audio_track(kax_track_t *t) {
     t->a_formattag = 0x0055;
   else if (balg::starts_with(t->codec_id, MKV_A_AC3) || (t->codec_id == MKV_A_EAC3))
     t->a_formattag = 0x2000;
+  else if (t->codec_id == MKV_A_ALAC)
+    is_ok = verify_alac_audio_track(t);
   else if (t->codec_id == MKV_A_DTS)
     t->a_formattag = 0x2001;
   else if (t->codec_id == MKV_A_PCM)
@@ -1556,6 +1573,13 @@ kax_reader_c::create_ac3_audio_packetizer(kax_track_t *t,
 }
 
 void
+kax_reader_c::create_alac_audio_packetizer(kax_track_t *t,
+                                          track_info_c &nti) {
+  set_track_packetizer(t, new alac_packetizer_c(this, nti, memory_c::clone(t->private_data, t->private_size), t->a_sfreq, t->a_channels));
+  show_packetizer_info(t->tnum, t->ptzr_ptr);
+}
+
+void
 kax_reader_c::create_dts_audio_packetizer(kax_track_t *t,
                                           track_info_c &nti) {
   try {
@@ -1669,6 +1693,9 @@ kax_reader_c::create_audio_packetizer(kax_track_t *t,
 
   else if (0xFFFE == t->a_formattag)
     create_vorbis_audio_packetizer(t, nti);
+
+  else if (FOURCC('A', 'L', 'A', 'C') == t->a_formattag)
+    create_alac_audio_packetizer(t, nti);
 
   else if ((FOURCC('M', 'P', '4', 'A') == t->a_formattag) || (0x00ff == t->a_formattag))
     create_aac_audio_packetizer(t, nti);

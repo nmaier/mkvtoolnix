@@ -219,6 +219,7 @@ protected:
   virtual kax_track_t *find_track_by_uid(uint64_t uid, kax_track_t *c = nullptr);
 
   virtual bool verify_acm_audio_track(kax_track_t *t);
+  virtual bool verify_alac_audio_track(kax_track_t *t);
   virtual bool verify_flac_audio_track(kax_track_t *t);
   virtual bool verify_vorbis_audio_track(kax_track_t *t);
   virtual void verify_audio_track(kax_track_t *t);
@@ -246,6 +247,7 @@ protected:
 
   virtual void create_aac_audio_packetizer(kax_track_t *t, track_info_c &nti);
   virtual void create_ac3_audio_packetizer(kax_track_t *t, track_info_c &nti);
+  virtual void create_alac_audio_packetizer(kax_track_t *t, track_info_c &nti);
   virtual void create_dts_audio_packetizer(kax_track_t *t, track_info_c &nti);
 #if defined(HAVE_FLAC_FORMAT_H)
   virtual void create_flac_audio_packetizer(kax_track_t *t, track_info_c &nti);
