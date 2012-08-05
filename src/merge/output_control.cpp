@@ -77,6 +77,7 @@
 #include "input/r_avc.h"
 #include "input/r_avi.h"
 #include "input/r_cdxa.h"
+#include "input/r_coreaudio.h"
 #include "input/r_dirac.h"
 #include "input/r_dts.h"
 #include "input/r_dv.h"
@@ -378,6 +379,8 @@ get_file_type(filelist_t &file) {
     type = FILE_TYPE_WAVPACK4;
   else if (ivf_reader_c::probe_file(io, size))
     type = FILE_TYPE_IVF;
+  else if (coreaudio_reader_c::probe_file(io, size))
+    type = FILE_TYPE_COREAUDIO;
   else if (dirac_es_reader_c::probe_file(io, size))
     type = FILE_TYPE_DIRAC;
   // File types that are misdetected sometimes and that aren't supported
@@ -1178,6 +1181,9 @@ create_readers() {
           break;
         case FILE_TYPE_AVI:
           file.reader = new avi_reader_c(*file.ti, input_file);
+          break;
+        case FILE_TYPE_COREAUDIO:
+          file.reader = new coreaudio_reader_c(*file.ti, input_file);
           break;
         case FILE_TYPE_DIRAC:
           file.reader = new dirac_es_reader_c(*file.ti, input_file);

@@ -26,6 +26,7 @@ file_type_t::get_supported() {
   s_supported_file_types.push_back(file_type_t(Y("AAC (Advanced Audio Coding)"),         "aac m4a mp4"));
   s_supported_file_types.push_back(file_type_t(Y("AVC/h.264 elementary streams"),        "264 avc h264 x264"));
   s_supported_file_types.push_back(file_type_t(Y("AVI (Audio/Video Interleaved)"),       "avi"));
+  s_supported_file_types.push_back(file_type_t(Y("ALAC (Apple Lossless Audio Codec)"),   "caf m4a mp4"));
   s_supported_file_types.push_back(file_type_t(Y("Dirac"),                               "drc"));
   s_supported_file_types.push_back(file_type_t(Y("Dolby TrueHD"),                        "thd thd+ac3 truehd true-hd"));
   s_supported_file_types.push_back(file_type_t(Y("DTS/DTS-HD (Digital Theater System)"), "dts dtshd dts-hd"));
