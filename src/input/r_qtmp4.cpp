@@ -23,6 +23,7 @@
 #include <avilib.h>
 
 #include "common/aac.h"
+#include "common/alac.h"
 #include "common/chapters/chapters.h"
 #include "common/endian.h"
 #include "common/hacks.h"
@@ -34,6 +35,7 @@
 #include "merge/output_control.h"
 #include "output/p_aac.h"
 #include "output/p_ac3.h"
+#include "output/p_alac.h"
 #include "output/p_mp3.h"
 #include "output/p_mpeg1_2.h"
 #include "output/p_mpeg4_p2.h"
@@ -1145,6 +1147,15 @@ qtmp4_reader_c::create_audio_packetizer_ac3(qtmp4_demuxer_cptr &dmx) {
   return true;
 }
 
+bool
+qtmp4_reader_c::create_audio_packetizer_alac(qtmp4_demuxer_cptr &dmx) {
+  auto magic_cookie = memory_c::clone(dmx->stsd->get_buffer() + dmx->stsd_non_priv_struct_size + 12, dmx->stsd->get_size() - dmx->stsd_non_priv_struct_size - 12);
+  dmx->ptzr         = add_packetizer(new alac_packetizer_c(this, m_ti, magic_cookie, dmx->a_samplerate, dmx->a_channels));
+  show_packetizer_info(dmx->id, PTZR(dmx->ptzr));
+
+  return true;
+}
+
 void
 qtmp4_reader_c::create_video_packetizer_svq1(qtmp4_demuxer_cptr &dmx) {
   memory_cptr bih(create_bitmap_info_header(dmx, "SVQ1"));
@@ -1300,6 +1311,9 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
 
     else if (!strncasecmp(dmx->fourcc, "ac-3", 4) || !strncasecmp(dmx->fourcc, "sac3", 4))
       packetizer_ok = create_audio_packetizer_ac3(dmx);
+
+    else if (!strncasecmp(dmx->fourcc, "alac", 4))
+      packetizer_ok = create_audio_packetizer_alac(dmx);
 
     else
       create_audio_packetizer_passthrough(dmx);
@@ -2172,6 +2186,7 @@ qtmp4_demuxer_c::verify_audio_parameters() {
       && strncasecmp(fourcc, "sowt", 4)
       && strncasecmp(fourcc, "ac-3", 4)
       && strncasecmp(fourcc, "sac3", 4)
+      && strncasecmp(fourcc, "alac", 4)
       ) {
     mxwarn(boost::format(Y("Quicktime/MP4 reader: Unknown/unsupported FourCC '%|1$.4s|' for track %2%.\n")) % fourcc % id);
     return false;
@@ -2184,6 +2199,18 @@ qtmp4_demuxer_c::verify_audio_parameters() {
 
   if (!strncasecmp(fourcc, "MP4A", 4))
     return verify_mp4a_audio_parameters();
+  if (!strncasecmp(fourcc, "alac", 4))
+    return verify_alac_audio_parameters();
+
+  return true;
+}
+
+bool
+qtmp4_demuxer_c::verify_alac_audio_parameters() {
+  if (!stsd || (stsd->get_size() < (stsd_non_priv_struct_size + 12 + sizeof(alac::codec_config_t)))) {
+    mxwarn(boost::format(Y("Quicktime/MP4 reader: Track %1% is missing some data. Broken header atoms?\n")) % id);
+    return false;
+  }
 
   return true;
 }

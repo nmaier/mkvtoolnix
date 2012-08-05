@@ -231,6 +231,7 @@ struct qtmp4_demuxer_c {
   void parse_video_header_priv_atoms(uint64_t atom_size, int level);
 
   bool verify_audio_parameters();
+  bool verify_alac_audio_parameters();
   bool verify_mp4a_audio_parameters();
 
   bool verify_video_parameters();
@@ -353,6 +354,7 @@ protected:
 
   virtual void create_audio_packetizer_aac(qtmp4_demuxer_cptr &dmx);
   virtual bool create_audio_packetizer_ac3(qtmp4_demuxer_cptr &dmx);
+  virtual bool create_audio_packetizer_alac(qtmp4_demuxer_cptr &dmx);
   virtual void create_audio_packetizer_mp3(qtmp4_demuxer_cptr &dmx);
   virtual void create_audio_packetizer_passthrough(qtmp4_demuxer_cptr &dmx);
   virtual void create_audio_packetizer_pcm(qtmp4_demuxer_cptr &dmx);
