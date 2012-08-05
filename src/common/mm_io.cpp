@@ -682,6 +682,20 @@ mm_mem_io_c::mm_mem_io_c(const unsigned char *mem,
     throw mtx::invalid_parameter_x();
 }
 
+mm_mem_io_c::mm_mem_io_c(memory_c const &mem)
+  : m_pos{}
+  , m_mem_size{mem.get_size()}
+  , m_allocated{mem.get_size()}
+  , m_increase{}
+  , m_mem{}
+  , m_ro_mem{mem.get_buffer()}
+  , m_free_mem{}
+  , m_read_only{true}
+{
+  if (!m_ro_mem)
+    throw mtx::invalid_parameter_x{};
+}
+
 mm_mem_io_c::~mm_mem_io_c() {
   close();
 }

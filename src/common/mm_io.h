@@ -312,6 +312,7 @@ protected:
 public:
   mm_mem_io_c(unsigned char *mem, uint64_t mem_size, int increase);
   mm_mem_io_c(const unsigned char *mem, uint64_t mem_size);
+  mm_mem_io_c(memory_c const &mem);
   ~mm_mem_io_c();
 
   virtual uint64 getFilePointer();
