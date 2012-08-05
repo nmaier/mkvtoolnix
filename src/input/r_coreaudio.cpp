@@ -298,7 +298,7 @@ coreaudio_reader_c::parse_pakt_chunk() {
                       + mem.read_uint32_be()  // priming frames
                       + mem.read_uint32_be(); // remainder frames
     auto data_chunk   = find_chunk("data");
-    auto position     = data_chunk->m_data_position;
+    auto position     = data_chunk->m_data_position + 4; // skip the "edit count" field
     uint64_t timecode = 0;
 
     mxdebug_if(m_debug_headers, boost::format("Number of packets: %1%, number of frames: %2%\n") % num_packets % num_frames);
@@ -320,6 +320,8 @@ coreaudio_reader_c::parse_pakt_chunk() {
                  % packet.m_position % packet.m_size % packet.m_duration % packet_num % mem.getFilePointer() % packet.m_timecode
                  % format_timecode(packet.m_duration * m_frames_to_timecode) % format_timecode(packet.m_timecode * m_frames_to_timecode));
     }
+
+    mxdebug_if(m_debug_headers, boost::format("Final value for 'position': %1% data chunk end: %2%\n") % position % (data_chunk->m_position + 12 + data_chunk->m_size));
 
   } catch (mtx::mm_io::exception &ex) {
     debug_error_and_throw(boost::format("I/O exception during 'pakt' parsing: %1%") % ex.what());
