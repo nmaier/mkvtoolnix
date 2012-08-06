@@ -1,3 +1,11 @@
+2012-08-06  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: MP2/MP3 audio tracks in MPEG program streams
+	that contained garbage at the start of the very first packet
+	caused mkvmerge to use uninitialized/random values for certain
+	parameters (sample rate, number of channels, and therefore also
+	during timecode calculation).
+
 2012-08-05  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: new feature: Added support for reading ALAC (Apple

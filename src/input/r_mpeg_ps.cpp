@@ -739,10 +739,9 @@ mpeg_ps_reader_c::new_stream_a_mpeg(mpeg_ps_id_t,
                                     mpeg_ps_track_ptr &track) {
   mp3_header_t header;
 
-  if (-1 == find_mp3_header(buf, length))
+  if (-1 == find_consecutive_mp3_headers(buf, length, 1, &header))
     throw false;
 
-  decode_mp3_header(buf, &header);
   track->a_channels    = header.channels;
   track->a_sample_rate = header.sampling_frequency;
   track->fourcc        = FOURCC('M', 'P', '0' + std::max(2, std::min(3, header.layer)), ' ');

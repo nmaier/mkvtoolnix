@@ -32,7 +32,7 @@ typedef struct {
 } mp3_header_t;
 
 int find_mp3_header(const unsigned char *buf, int size);
-int find_consecutive_mp3_headers(const unsigned char *buf, int size, int num);
+int find_consecutive_mp3_headers(const unsigned char *buf, int size, int num, mp3_header_t *header_found = nullptr);
 
 bool decode_mp3_header(const unsigned char *buf, mp3_header_t *h);
 

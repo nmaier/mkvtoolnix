@@ -238,7 +238,8 @@ decode_mp3_header(const unsigned char *buf,
 int
 find_consecutive_mp3_headers(const unsigned char *buf,
                              int size,
-                             int num) {
+                             int num,
+                             mp3_header_t *header_found) {
   int i, pos, base, offset;
   mp3_header_t mp3header, new_header;
 
@@ -254,8 +255,11 @@ find_consecutive_mp3_headers(const unsigned char *buf,
     base += pos + 1;
   } while (true);
 
-  if (num == 1)
+  if (num == 1) {
+    if (header_found)
+      memcpy(header_found, &mp3header, sizeof(mp3_header_t));
     return pos;
+  }
   base += pos;
 
   do {
@@ -278,8 +282,11 @@ find_consecutive_mp3_headers(const unsigned char *buf,
       } else
         break;
     }
-    if (i == (num - 1))
+    if (i == (num - 1)) {
+      if (header_found)
+        memcpy(header_found, &mp3header, sizeof(mp3_header_t));
       return base;
+    }
     base++;
     offset = 0;
     pos    = find_mp3_header(&buf[base], size - base);
