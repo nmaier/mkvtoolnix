@@ -16,7 +16,10 @@
 
 #include "common/common_pch.h"
 
+#include <ostream>
+
 #include "common/strings/editing.h"
+#include "common/timecode.h"
 
 #define FMT_TIMECODE "%02d:%02d:%02d.%03d"
 #define ARG_TIMECODEINT(t) (int32_t)( (t) / 60 /   60 / 1000),         \
@@ -35,6 +38,25 @@
 #define WRAP_AT_TERMINAL_WIDTH -1
 
 std::string format_timecode(int64_t timecode, unsigned int precision = 9);
+
+template<typename T>
+std::string
+format_timecode(basic_timecode_c<T> const &timecode,
+                unsigned int precision = 9) {
+  return format_timecode(timecode.to_ns(), precision);
+}
+
+template<typename T>
+std::ostream &
+operator <<(std::ostream &out,
+            basic_timecode_c<T> const &timecode) {
+  if (timecode.valid())
+    out << format_timecode(timecode);
+  else
+    out << "<InvTC>";
+  return out;
+}
+
 std::string format_paragraph(const std::string &text_to_wrap,
                              int indent_column                    = 0,
                              const std::string &indent_first_line = empty_string,
@@ -57,6 +79,13 @@ std::string to_string(int64_t value);
 std::string to_string(uint64_t value);
 std::string to_string(double value, unsigned int precision);
 std::string to_string(int64_t numerator, int64_t denominator, unsigned int precision);
+
+template<typename T>
+std::string
+to_string(basic_timecode_c<T> const &timecode) {
+  return format_timecode(timecode.to_ns());
+}
+
 
 std::string to_hex(const unsigned char *buf, size_t size, bool compact = false);
 inline std::string
