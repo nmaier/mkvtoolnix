@@ -21,13 +21,19 @@
 std::string
 format_timecode(int64_t timecode,
                 unsigned int precision) {
-  static boost::format s_bf_format("%|1$02d|:%|2$02d|:%|3$02d|");
+  static boost::format s_bf_format("%4%%|1$02d|:%|2$02d|:%|3$02d|");
   static boost::format s_bf_decimals(".%|1$09d|");
 
+
+  bool negative = 0 > timecode;
+  if (negative)
+    timecode *= -1;
+
   std::string result = (s_bf_format
-                        % (int)( timecode / 60 / 60 / 1000000000)
-                        % (int)((timecode      / 60 / 1000000000) % 60)
-                        % (int)((timecode           / 1000000000) % 60)).str();
+                        % static_cast<int>( timecode / 60 / 60 / 1000000000)
+                        % static_cast<int>((timecode      / 60 / 1000000000) % 60)
+                        % static_cast<int>((timecode           / 1000000000) % 60)
+                        % (negative ? "-" : "")).str();
 
   if (9 < precision)
     precision = 9;
