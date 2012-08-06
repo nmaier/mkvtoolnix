@@ -50,27 +50,25 @@ int mpeg_ts_reader_c::potential_packet_sizes[] = { 188, 192, 204, 0 };
 
 void
 mpeg_ts_track_c::send_to_packetizer() {
-  int64_t timecode_to_use = (-1 == timecode)                                              ? -1
-                          : reader.m_dont_use_audio_pts && (ES_AUDIO_TYPE == type)        ? -1
-                          : m_apply_dts_timecode_fix && (m_previous_timecode == timecode) ? -1
-                          : (timecode  < reader.m_global_timecode_offset)                 ?  0
-                          :                                                                  (timecode - reader.m_global_timecode_offset) * 100000ll / 9;
-
-  mxverb(3, boost::format("mpeg_ts: PTS in nanoseconds: %1%\n") % timecode_to_use);
+  auto timecode_to_use = !m_timecode.valid()                                             ? timecode_c{}
+                       : reader.m_dont_use_audio_pts && (ES_AUDIO_TYPE == type)          ? timecode_c{}
+                       : m_apply_dts_timecode_fix && (m_previous_timecode == m_timecode) ? timecode_c{}
+                       : (m_timecode  < reader.m_global_timecode_offset)                 ? timecode_c::ns(0)
+                       :                                                                   m_timecode - reader.m_global_timecode_offset;
 
   mxdebug_if(m_debug_delivery, boost::format("send_to_packetizer() PID %1% expected %2% actual %3% timecode_to_use %4% m_previous_timecode %5%\n")
-             % pid % pes_payload_size % pes_payload->get_size() % format_timecode(timecode_to_use) % (-1 == m_previous_timecode ? std::string("-1") : format_timecode(m_previous_timecode)));
+             % pid % pes_payload_size % pes_payload->get_size() % timecode_to_use % m_previous_timecode);
 
   if (ptzr != -1)
-    reader.m_reader_packetizers[ptzr]->process(new packet_t(memory_c::clone(pes_payload->get_buffer(), pes_payload->get_size()), timecode_to_use));
+    reader.m_reader_packetizers[ptzr]->process(new packet_t(memory_c::clone(pes_payload->get_buffer(), pes_payload->get_size()), timecode_to_use.to_ns(-1)));
 
   pes_payload->remove(pes_payload->get_size());
   processed                          = false;
   data_ready                         = false;
   pes_payload_size                   = 0;
-  m_previous_timecode                = timecode;
-  timecode                           = -1;
   reader.m_packet_sent_to_packetizer = true;
+  m_previous_timecode                = m_timecode;
+  m_timecode.reset();
 }
 
 void
@@ -340,7 +338,7 @@ mpeg_ts_reader_c::mpeg_ts_reader_c(const track_info_c &ti,
   , PMT_found(false)
   , PMT_pid(-1)
   , es_to_process(0)
-  , m_global_timecode_offset(-1)
+  , m_global_timecode_offset{}
   , input_status(INPUT_PROBE)
   , track_buffer_ready(-1)
   , file_done(false)
@@ -736,13 +734,13 @@ mpeg_ts_reader_c::parse_pmt(unsigned char *pmt) {
   return 0;
 }
 
-int64_t
-mpeg_ts_reader_c::read_timestamp(unsigned char *p) {
-  int64_t pts  =  static_cast<int64_t>(             ( p[0]   >> 1) & 0x07) << 30;
-  pts         |= (static_cast<int64_t>(get_uint16_be(&p[1])) >> 1)         << 15;
-  pts         |=  static_cast<int64_t>(get_uint16_be(&p[3]))               >>  1;
+timecode_c
+mpeg_ts_reader_c::read_timecode(unsigned char *p) {
+  int64_t mpeg_timecode  =  static_cast<int64_t>(             ( p[0]   >> 1) & 0x07) << 30;
+  mpeg_timecode         |= (static_cast<int64_t>(get_uint16_be(&p[1])) >> 1)         << 15;
+  mpeg_timecode         |=  static_cast<int64_t>(get_uint16_be(&p[3]))               >>  1;
 
-  return pts;
+  return std::move(timecode_c::mpeg(mpeg_timecode));
 }
 
 bool
@@ -939,26 +937,23 @@ mpeg_ts_reader_c::parse_start_unit_packet(mpeg_ts_track_ptr &track,
 
     ts_payload_size = ((unsigned char *)ts_packet_header + TS_PACKET_SIZE) - (unsigned char *) ts_payload;
 
-    int64_t pts = -1, dts = -1;
+    timecode_c pts, dts;
     if ((pes_data->get_pts_dts_flags() & 0x02) == 0x02) { // 10 and 11 mean PTS is present
-      pts = read_timestamp(&pes_data->pts_dts);
+      pts = read_timecode(&pes_data->pts_dts);
       dts = pts;
     }
 
-    if ((pes_data->get_pts_dts_flags() & 0x01) == 0x01) { // 01 and 11 mean DTS is present
-      dts = read_timestamp(&pes_data->pts_dts + 5);
-    }
+    if ((pes_data->get_pts_dts_flags() & 0x01) == 0x01)   // 01 and 11 mean DTS is present
+      dts = read_timecode(&pes_data->pts_dts + 5);
 
     if (!track->m_use_dts)
       dts = pts;
 
-    if (-1 != pts) {
-      if ((-1 == m_global_timecode_offset) || (dts < m_global_timecode_offset)) {
-        mxverb(3, boost::format("new global_timecode_offset %1%\n") % dts);
+    if (pts.valid()) {
+      if (!m_global_timecode_offset.valid() || (dts < m_global_timecode_offset))
         m_global_timecode_offset = dts;
-      }
 
-      if (pts == track->timecode) {
+      if (pts == track->m_timecode) {
         mxverb(3, boost::format("     Adding PES with same PTS as previous !!\n"));
         track->add_pes_payload(ts_payload, ts_payload_size);
 
@@ -970,9 +965,9 @@ mpeg_ts_reader_c::parse_start_unit_packet(mpeg_ts_track_ptr &track,
       } else if ((0 != track->pes_payload->get_size()) && (INPUT_READ == input_status))
         track->send_to_packetizer();
 
-      track->timecode = dts;
+      track->m_timecode = dts;
 
-      mxverb(3, boost::format("     PTS/DTS found: %1%\n") % track->timecode);
+      mxverb(3, boost::format("     PTS/DTS found: %1%\n") % track->m_timecode);
     }
 
     // this condition is for ES probing when there is still not enough data for detection

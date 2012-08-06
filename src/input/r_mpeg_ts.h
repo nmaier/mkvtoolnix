@@ -277,7 +277,7 @@ public:
   bool probed_ok;
   int ptzr;                         // the actual packetizer instance
 
-  int64_t timecode, m_previous_timecode;
+  timecode_c m_timecode, m_previous_timecode;
 
   // video related parameters
   bool v_interlaced;
@@ -315,8 +315,8 @@ public:
     , continuity_counter(0)
     , probed_ok(false)
     , ptzr(-1)
-    , timecode(-1)
-    , m_previous_timecode(-1)
+    , m_timecode{}
+    , m_previous_timecode{}
     , v_interlaced(false)
     , v_version(0)
     , v_width(0)
@@ -358,7 +358,7 @@ protected:
   bool PAT_found, PMT_found;
   int16_t PMT_pid;
   int es_to_process;
-  int64_t m_global_timecode_offset;
+  timecode_c m_global_timecode_offset;
 
   mpeg_ts_input_type_e input_status; // can be INPUT_PROBE, INPUT_READ
   int track_buffer_ready;
@@ -394,7 +394,7 @@ public:
 
   virtual bool parse_packet(unsigned char *buf);
 
-  static int64_t read_timestamp(unsigned char *p);
+  static timecode_c read_timecode(unsigned char *p);
   static int detect_packet_size(mm_io_c &in, uint64_t size);
 
 private:
