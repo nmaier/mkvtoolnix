@@ -283,6 +283,50 @@ mpeg_ts_track_c::set_pid(uint16_t new_pid) {
   m_debug_delivery = debugging_requested("mpeg_ts")
                   || (   debugging_requested("mpeg_ts_delivery", &arg)
                       && (arg.empty() || (arg == to_string(pid))));
+
+  m_debug_timecode_wrapping = debugging_requested("mpeg_ts")
+                           || (   debugging_requested("mpeg_ts_timecode_wrapping", &arg)
+                               && (arg.empty() || (arg == to_string(pid))));
+}
+
+bool
+mpeg_ts_track_c::detect_timecode_wrap(timecode_c &timecode) {
+  static auto const s_wrap_limit = timecode_c::mpeg(1 << 30);
+
+  if (!timecode.valid() || !m_previous_valid_timecode.valid() || ((timecode - m_previous_valid_timecode).abs() < s_wrap_limit))
+    return false;
+  return true;
+}
+
+void
+mpeg_ts_track_c::handle_timecode_wrap(timecode_c &pts,
+                                      timecode_c &dts) {
+  static auto const s_wrap_add    = timecode_c::mpeg(1ll << 33);
+  static auto const s_wrap_limit  = timecode_c::mpeg(1ll << 30);
+  static auto const s_reset_limit = timecode_c::h(1);
+
+  if (!m_timecodes_wrapped) {
+    m_timecodes_wrapped = detect_timecode_wrap(pts) || detect_timecode_wrap(dts);
+    if (m_timecodes_wrapped) {
+      m_timecode_wrap_add += s_wrap_add;
+      mxdebug_if(m_debug_timecode_wrapping,
+                 boost::format("Timecode wrapping detected for PID %1% pts %2% dts %3% previous_valid %4% global_offset %5% new wrap_add %6%\n")
+                 % pid % pts % dts % m_previous_valid_timecode % reader.m_global_timecode_offset % m_timecode_wrap_add);
+
+    }
+
+  } else if (pts.valid() && (pts < s_wrap_limit) && (pts > s_reset_limit)) {
+    m_timecodes_wrapped = false;
+    mxdebug_if(m_debug_timecode_wrapping,
+               boost::format("Timecode wrapping reset for PID %1% pts %2% dts %3% previous_valid %4% global_offset %5% current wrap_add %6%\n")
+               % pid % pts % dts % m_previous_valid_timecode % reader.m_global_timecode_offset % m_timecode_wrap_add);
+  }
+
+  if (pts.valid() && (pts < s_wrap_limit))
+    pts += m_timecode_wrap_add;
+
+  if (dts.valid() && (dts < s_wrap_limit))
+    dts += m_timecode_wrap_add;
 }
 
 // ------------------------------------------------------------
@@ -347,6 +391,7 @@ mpeg_ts_reader_c::mpeg_ts_reader_c(const track_info_c &ti,
   , m_debug_resync(debugging_requested("mpeg_ts_resync") || debugging_requested("mpeg_ts"))
   , m_debug_pat_pmt(debugging_requested("mpeg_ts_pat") || debugging_requested("mpeg_ts_pmt") || debugging_requested("mpeg_ts"))
   , m_debug_aac(debugging_requested("mpeg_aac") || debugging_requested("mpeg_ts"))
+  , m_debug_timecode_wrapping{debugging_requested("mpeg_ts|mpeg_ts_timecode_wrapping")}
   , m_detected_packet_size(0)
 {
 }
@@ -949,7 +994,11 @@ mpeg_ts_reader_c::parse_start_unit_packet(mpeg_ts_track_ptr &track,
     if (!track->m_use_dts)
       dts = pts;
 
+    track->handle_timecode_wrap(pts, dts);
+
     if (pts.valid()) {
+      track->m_previous_valid_timecode = pts;
+
       if (!m_global_timecode_offset.valid() || (dts < m_global_timecode_offset))
         m_global_timecode_offset = dts;
 

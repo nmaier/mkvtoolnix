@@ -1,3 +1,8 @@
+2012-08-07  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: MPEG transport streams whose timecodes wrap
+	around/overflow are handled correctly. Fixes #777.
+
 2012-08-06  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: MP2/MP3 audio tracks in MPEG program streams

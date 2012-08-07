@@ -277,7 +277,7 @@ public:
   bool probed_ok;
   int ptzr;                         // the actual packetizer instance
 
-  timecode_c m_timecode, m_previous_timecode;
+  timecode_c m_timecode, m_previous_timecode, m_previous_valid_timecode, m_timecode_wrap_add;
 
   // video related parameters
   bool v_interlaced;
@@ -290,7 +290,7 @@ public:
   dts_header_t a_dts_header;
   aac_header_t m_aac_header;
 
-  bool m_apply_dts_timecode_fix, m_use_dts;
+  bool m_apply_dts_timecode_fix, m_use_dts, m_timecodes_wrapped;
 
   // general track parameters
   std::string language;
@@ -301,7 +301,7 @@ public:
   truehd_parser_cptr m_truehd_parser;
   std::shared_ptr<M2VParser> m_m2v_parser;
 
-  bool m_debug_delivery;
+  bool m_debug_delivery, m_debug_timecode_wrapping;
 
   mpeg_ts_track_c(mpeg_ts_reader_c &p_reader)
     : reader(p_reader)
@@ -315,8 +315,7 @@ public:
     , continuity_counter(0)
     , probed_ok(false)
     , ptzr(-1)
-    , m_timecode{}
-    , m_previous_timecode{}
+    , m_timecode_wrap_add{timecode_c::ns(0)}
     , v_interlaced(false)
     , v_version(0)
     , v_width(0)
@@ -331,7 +330,9 @@ public:
     , a_bsid(0)
     , m_apply_dts_timecode_fix(false)
     , m_use_dts(false)
+    , m_timecodes_wrapped{false}
     , m_debug_delivery(false)
+    , m_debug_timecode_wrapping{}
   {
   }
 
@@ -349,6 +350,9 @@ public:
   int new_stream_a_truehd();
 
   void set_pid(uint16_t new_pid);
+
+  void handle_timecode_wrap(timecode_c &pts, timecode_c &dts);
+  bool detect_timecode_wrap(timecode_c &timecode);
 };
 
 typedef std::shared_ptr<mpeg_ts_track_c> mpeg_ts_track_ptr;
@@ -368,7 +372,7 @@ protected:
   std::vector<mpeg_ts_track_ptr> tracks;
   std::map<generic_packetizer_c *, mpeg_ts_track_ptr> m_ptzr_to_track_map;
 
-  bool m_dont_use_audio_pts, m_debug_resync, m_debug_pat_pmt, m_debug_aac;
+  bool m_dont_use_audio_pts, m_debug_resync, m_debug_pat_pmt, m_debug_aac, m_debug_timecode_wrapping;
 
   int m_detected_packet_size;
 
