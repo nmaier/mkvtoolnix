@@ -11,6 +11,7 @@ Table of contents
 2.3. Building libmatroska and libebml
 2.4. Building MKVtoolNix
 2.5. Notes for compilation on (Open)Solaris
+2.6. Unit tests
 3. Examples
 4. Reporting bugs
 
@@ -200,6 +201,29 @@ additional options for "configure":
   --with-extra-includes=/where/i/put/libebml\;/where/i/put/libmatroska \
   --with-extra-libs=/where/i/put/libebml/make/linux\;/where/i/put/libmatroska/make/linux
 
+2.6. Unit tests
+
+Building and running unit tests is completely optional. If you want to
+do this then you have to follow these steps:
+
+a) Download the "googletest" framework from
+   http://code.google.com/p/googletest/ (at the time of writing the
+   file to download was "gtest-1.6.0.zip")
+
+b.1) Either extract the framework inside the "lib" sub-folder and
+     rename the resulting folder "gtest-1.6.0" to "gtest"
+
+  OR...
+
+b.2) extract the archive somewhere and create a symbolic link to it
+     inside the "lib" folder called or create a symbolic link called
+     "gtest".
+
+c) Configure MKVToolNix normally.
+
+d) Build the unit test executable and run it with
+
+./drake tests:unit
 
 
 

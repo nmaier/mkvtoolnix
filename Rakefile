@@ -27,12 +27,16 @@ end
 
 require "pp"
 
+$build_system_modules = {}
+$have_gtest           = Dir.exists? 'lib/gtest'
+
 require_relative "rake.d/extensions"
 require_relative "rake.d/config"
 require_relative "rake.d/helpers"
 require_relative "rake.d/target"
 require_relative "rake.d/application"
 require_relative "rake.d/library"
+require_relative 'rake.d/gtest' if $have_gtest
 
 def setup_globals
   $build_mkvtoolnix_gui  ||=  c?(:USE_QT) && c?(:BUILD_MKVTOOLNIX_GUI)
@@ -80,8 +84,10 @@ def setup_globals
   }
 
   $build_tools           ||=  c?(:TOOLS)
+  $build_unit_tests      ||=  c?(:UNIT_TESTS)
 
-  cflags_common            = "-Wall -Wno-comment #{c(:OPTIMIZATION_CFLAGS)} -D_FILE_OFFSET_BITS=64 #{c(:MATROSKA_CFLAGS)} #{c(:EBML_CFLAGS)} #{c(:EXTRA_CFLAGS)} #{c(:DEBUG_CFLAGS)} #{c(:PROFILING_CFLAGS)} #{c(:USER_CPPFLAGS)} -DPACKAGE=\\\"#{c(:PACKAGE)}\\\" -DVERSION=\\\"#{c(:VERSION)}\\\" -DMTX_LOCALE_DIR=\\\"#{c(:localedir)}\\\" -DMTX_PKG_DATA_DIR=\\\"#{c(:pkgdatadir)}\\\" -DMTX_DOC_DIR=\\\"#{c(:docdir)}\\\""
+  cflags_common            = "-Wall -Wno-comment #{c(:OPTIMIZATION_CFLAGS)} -D_FILE_OFFSET_BITS=64 #{c(:MATROSKA_CFLAGS)} #{c(:EBML_CFLAGS)} #{c(:EXTRA_CFLAGS)} #{c(:DEBUG_CFLAGS)} #{c(:PROFILING_CFLAGS)} #{c(:USER_CPPFLAGS)} "
+  cflags_common           += "-DPACKAGE=\\\"#{c(:PACKAGE)}\\\" -DVERSION=\\\"#{c(:VERSION)}\\\" -DMTX_LOCALE_DIR=\\\"#{c(:localedir)}\\\" -DMTX_PKG_DATA_DIR=\\\"#{c(:pkgdatadir)}\\\" -DMTX_DOC_DIR=\\\"#{c(:docdir)}\\\""
   ldflags_extra            = c?(:MINGW) ? '' : "-Wl,--enable-auto-import"
   $flags                   = {
     :cflags                => "#{cflags_common} #{c(:USER_CFLAGS)}",
@@ -90,6 +96,8 @@ def setup_globals
     :ldflags               => "#{c(:EBML_LDFLAGS)} #{c(:MATROSKA_LDFLAGS)} #{c(:EXTRA_LDFLAGS)} #{c(:PROFILING_LIBS)} #{c(:USER_LDFLAGS)} #{c(:LDFLAGS_RPATHS)} #{c(:BOOST_LDFLAGS)}",
     :windres               => c?(:USE_WXWIDGETS) ? c(:WXWIDGETS_INCLUDES) : '-DNOWXWIDGETS',
   }
+
+  $build_system_modules.values.each { |bsm| bsm[:setup].call if bsm[:setup] }
 end
 
 def setup_overrides
@@ -107,6 +115,9 @@ def define_default_task
 
   # Build the stuff in the 'src/tools' directory only if requested
   targets << "apps:tools" if $build_tools
+
+  # Build the unit tests only if requested
+  targets << "tests:unit" if $have_gtest && $build_unit_tests
 
   # The tags file -- but only if it exists already
   if File.exists?("TAGS")
@@ -168,6 +179,7 @@ end
 
 # Pattern rules
 rule '.o' => '.cpp', &cxx_compiler
+rule '.o' => '.cc',  &cxx_compiler
 
 rule '.o' => '.c' do |t|
   create_dependency_dirs
@@ -522,6 +534,7 @@ task :clean do
     src/**/*.o lib/**/*.o src/**/*.a lib/**/*.a src/**/*.gch
     src/**/*.exe src/**/*.dll src/**/*.dll.a
     src/info/ui/*.h src/mkvtoolnix-gui/forms/*.h src/**/*.moc src/**/*.moco src/mkvtoolnix-gui/qt_resources.cpp
+    tests/unit/*.o tests/unit/all
     po/*.mo doc/guide/**/*.hhk
   }
   patterns += $applications + $tools.collect { |name| "src/tools/#{name}" }
@@ -606,7 +619,7 @@ end
 end
 
 # libraries required for all programs via mtxcommon
-common_libs = [
+$common_libs = [
   :mtxcommon,
   :magic,
   :matroska,
@@ -631,7 +644,7 @@ Application.new("src/mkvmerge").
   aliases(:mkvmerge).
   sources("src/merge", :type => :dir).
   sources("src/merge/resources.o", :if => c?(:MINGW)).
-  libraries(:mtxinput, :mtxoutput, common_libs, :avi, :rmff, :mpegparser, :flac, :vorbis, :ogg).
+  libraries(:mtxinput, :mtxoutput, $common_libs, :avi, :rmff, :mpegparser, :flac, :vorbis, :ogg).
   create
 
 #
@@ -646,7 +659,7 @@ Application.new("src/mkvinfo").
   aliases(:mkvinfo).
   sources(FileList["src/info/*.cpp"].exclude("src/info/qt_ui.cpp", "src/info/wxwidgets_ui.cpp")).
   sources("src/info/resources.o", :if => c?(:MINGW)).
-  libraries(common_libs).
+  libraries($common_libs).
   only_if(c?(:USE_QT)).
   sources("src/info/qt_ui.cpp", "src/info/qt_ui.moc", "src/info/rightclick_tree_widget.moc", $mkvinfo_ui_files).
   libraries(:qt).
@@ -667,7 +680,7 @@ Application.new("src/mkvextract").
   aliases(:mkvextract).
   sources("src/extract", :type => :dir).
   sources("src/extract/resources.o", :if => c?(:MINGW)).
-  libraries(common_libs, :avi, :rmff, :vorbis, :ogg).
+  libraries($common_libs, :avi, :rmff, :vorbis, :ogg).
   create
 
 #
@@ -679,7 +692,7 @@ Application.new("src/mkvpropedit").
   aliases(:mkvpropedit).
   sources("src/propedit", :type => :dir).
   sources("src/propedit/resources.o", :if => c?(:MINGW)).
-  libraries(common_libs).
+  libraries($common_libs).
   create
 
 #
@@ -693,7 +706,7 @@ if c?(:USE_WXWIDGETS)
     sources("src/mmg", "src/mmg/header_editor", "src/mmg/options", "src/mmg/tabs", :type => :dir).
     sources("src/mmg/resources.o", :if => c?(:MINGW)).
     png_icon("share/icons/64x64/mkvmergeGUI.png").
-    libraries(common_libs, :wxwidgets).
+    libraries($common_libs, :wxwidgets).
     libraries(:ole32, :shell32, "-mwindows", :if => c?(:MINGW)).
     create
 end
@@ -721,7 +734,7 @@ if $build_mkvtoolnix_gui
     sources(FileList["src/mkvtoolnix-gui/**/*.cpp"], ui_files, 'src/mkvtoolnix-gui/qt_resources.cpp').
     sources((FileList["src/mkvtoolnix-gui/**/*.h"].to_a - ui_files.collect { |ui| ui.ext 'h' }).collect { |h| h.ext 'moc' }).
     sources("src/mkvtoolnix-gui/resources.o", :if => c?(:MINGW)).
-    libraries(common_libs, :qt).
+    libraries($common_libs, :qt).
     png_icon("share/icons/64x64/mkvmergeGUI.png").
     create
 end
@@ -741,7 +754,7 @@ if $build_tools
     description("Build the ac3parser executable").
     aliases("tools:ac3parser").
     sources("src/tools/ac3parser.cpp").
-    libraries(common_libs).
+    libraries($common_libs).
     create
 
   #
@@ -751,7 +764,7 @@ if $build_tools
     description("Build the base64tool executable").
     aliases("tools:base64tool").
     sources("src/tools/base64tool.cpp").
-    libraries(common_libs).
+    libraries($common_libs).
     create
 
   #
@@ -761,7 +774,7 @@ if $build_tools
     description("Build the diracparser executable").
     aliases("tools:diracparser").
     sources("src/tools/diracparser.cpp").
-    libraries(common_libs).
+    libraries($common_libs).
     create
 
   #
@@ -771,7 +784,7 @@ if $build_tools
     description("Build the ebml_validator executable").
     aliases("tools:ebml_validator").
     sources("src/tools/ebml_validator.cpp", "src/tools/element_info.cpp").
-    libraries(common_libs).
+    libraries($common_libs).
     create
 
   #
@@ -781,9 +794,11 @@ if $build_tools
     description("Build the vc1parser executable").
     aliases("tools:vc1parser").
     sources("src/tools/vc1parser.cpp").
-    libraries(common_libs).
+    libraries($common_libs).
     create
 end
+
+$build_system_modules.values.each { |bsm| bsm[:define_tasks].call if bsm[:define_tasks] }
 
 # Local Variables:
 # mode: ruby
