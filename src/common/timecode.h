@@ -17,6 +17,7 @@
 #include "common/common_pch.h"
 
 #include <boost/operators.hpp>
+#include <stdexcept>
 
 template<typename T>
 class basic_timecode_c
@@ -54,11 +55,13 @@ public:
 
   void reset() {
     m_valid    = false;
-    m_timecode = 0;
+    m_timecode = std::numeric_limits<T>::min();
   }
 
   // deconstruction
   T to_ns() const {
+    if (!m_valid)
+      throw std::domain_error{"invalid timecode"};
     return m_timecode;
   }
 
@@ -67,18 +70,38 @@ public:
   }
 
   T to_us() const {
+    if (!m_valid)
+      throw std::domain_error{"invalid timecode"};
     return m_timecode / 1000;
   }
 
   T to_ms() const {
+    if (!m_valid)
+      throw std::domain_error{"invalid timecode"};
     return m_timecode / 1000000;
   }
 
   T to_s() const {
+    if (!m_valid)
+      throw std::domain_error{"invalid timecode"};
     return m_timecode / 1000000000;
   }
 
+  T to_m() const {
+    if (!m_valid)
+      throw std::domain_error{"invalid timecode"};
+    return m_timecode / 60000000000ll;
+  }
+
+  T to_h() const {
+    if (!m_valid)
+      throw std::domain_error{"invalid timecode"};
+    return m_timecode / 3600000000000ll;
+  }
+
   T to_mpeg() const {
+    if (!m_valid)
+      throw std::domain_error{"invalid timecode"};
     return m_timecode * 9 / 100000;
   }
 
@@ -148,7 +171,7 @@ public:
     return basic_timecode_c<T>{value * 1000000000};
   }
 
-  static basic_timecode_c<T> min(T value) {
+  static basic_timecode_c<T> m(T value) {
     return basic_timecode_c<T>{value * 60 * 1000000000};
   }
 
