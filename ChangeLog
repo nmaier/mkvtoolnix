@@ -1,3 +1,8 @@
+2012-08-08  Moritz Bunkus  <moritz@bunkus.org>
+
+	* Build system: Boost's "bind" library is not required
+	anymore. The C++11 features from "functional" are used instead.
+
 2012-08-07  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: MPEG transport streams whose timecodes wrap

@@ -41,7 +41,3 @@ AX_BOOST_CHECK_HEADERS([boost/type_traits/is_unsigned.hpp],,[
 AX_BOOST_CHECK_HEADERS([boost/range.hpp],,[
   AC_MSG_ERROR([Boost's Range library is required but wasn't found])
 ])
-
-AX_BOOST_CHECK_HEADERS([boost/bind.hpp],,[
-  AC_MSG_ERROR([Boost's Bind library is required but wasn't found])
-])

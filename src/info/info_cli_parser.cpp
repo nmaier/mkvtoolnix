@@ -26,7 +26,7 @@ info_cli_parser_c::info_cli_parser_c(const std::vector<std::string> &args)
   verbose = 0;
 }
 
-#define OPT(spec, func, description) add_option(spec, boost::bind(&info_cli_parser_c::func, this), description)
+#define OPT(spec, func, description) add_option(spec, std::bind(&info_cli_parser_c::func, this), description)
 
 void
 info_cli_parser_c::init_parser() {
@@ -47,7 +47,7 @@ info_cli_parser_c::init_parser() {
 
   add_common_options();
 
-  add_hook(cli_parser_c::ht_unknown_option, boost::bind(&info_cli_parser_c::set_file_name, this));
+  add_hook(cli_parser_c::ht_unknown_option, std::bind(&info_cli_parser_c::set_file_name, this));
 }
 
 #undef OPT
@@ -119,4 +119,3 @@ info_cli_parser_c::run() {
 
   return m_options;
 }
-

@@ -19,6 +19,7 @@
 #undef __STRICT_ANSI__
 
 #include <algorithm>
+#include <functional>
 #include <memory>
 #include <stdexcept>
 #include <string>
@@ -38,7 +39,6 @@
 #endif // HAVE_INTTYPES_H
 
 #include <boost/algorithm/string.hpp>
-#include <boost/bind.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/format.hpp>
 #include <boost/function.hpp>

@@ -138,7 +138,7 @@ propedit_cli_parser_c::set_file_name() {
   m_options->set_file_name(m_current_arg);
 }
 
-#define OPT(spec, func, description) add_option(spec, boost::bind(&propedit_cli_parser_c::func, this), description)
+#define OPT(spec, func, description) add_option(spec, std::bind(&propedit_cli_parser_c::func, this), description)
 
 void
 propedit_cli_parser_c::init_parser() {
@@ -183,7 +183,7 @@ propedit_cli_parser_c::init_parser() {
   add_information(YT("The string 'global' works on the global tags."), 1);
   add_information(YT("All other strings work just like the track header selectors (see above)."), 1);
 
-  add_hook(cli_parser_c::ht_unknown_option, boost::bind(&propedit_cli_parser_c::set_file_name, this));
+  add_hook(cli_parser_c::ht_unknown_option, std::bind(&propedit_cli_parser_c::set_file_name, this));
 }
 
 #undef OPT

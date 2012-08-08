@@ -35,7 +35,7 @@ extract_cli_parser_c::set_default_values() {
   m_target_mode            = track_spec_t::tm_normal;
 }
 
-#define OPT(spec, func, description) add_option(spec, boost::bind(&extract_cli_parser_c::func, this), description)
+#define OPT(spec, func, description) add_option(spec, std::bind(&extract_cli_parser_c::func, this), description)
 
 void
 extract_cli_parser_c::init_parser() {
@@ -116,7 +116,7 @@ extract_cli_parser_c::init_parser() {
 
   add_information(YT("mkvextract timecodes_v2 \"a movie.mkv\" 1:timecodes_track1.txt"));
 
-  add_hook(cli_parser_c::ht_unknown_option, boost::bind(&extract_cli_parser_c::set_mode_or_extraction_spec, this));
+  add_hook(cli_parser_c::ht_unknown_option, std::bind(&extract_cli_parser_c::set_mode_or_extraction_spec, this));
 }
 
 #undef OPT
@@ -261,4 +261,3 @@ extract_cli_parser_c::run() {
 
   return m_options;
 }
-

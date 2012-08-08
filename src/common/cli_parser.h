@@ -17,7 +17,7 @@
 
 #define INDENT_DEFAULT -1
 
-typedef boost::function<void(void)> cli_parser_cb_t;
+typedef std::function<void(void)> cli_parser_cb_t;
 
 class cli_parser_c {
 protected:
