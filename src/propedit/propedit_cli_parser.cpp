@@ -73,6 +73,35 @@ propedit_cli_parser_c::add_chapters() {
   }
 }
 
+void
+propedit_cli_parser_c::set_attachment_name() {
+  m_attachment.m_name = std::make_pair(m_next_arg, true);
+}
+
+void
+propedit_cli_parser_c::set_attachment_description() {
+  m_attachment.m_description = std::make_pair(m_next_arg, true);
+}
+
+void
+propedit_cli_parser_c::set_attachment_mime_type() {
+  m_attachment.m_mime_type = std::make_pair(m_next_arg, true);
+}
+
+void
+propedit_cli_parser_c::add_attachment() {
+  m_attachment = attachment_options_t();
+}
+
+void
+propedit_cli_parser_c::delete_attachment() {
+}
+
+void
+propedit_cli_parser_c::replace_attachment() {
+  m_attachment = attachment_options_t();
+}
+
 std::map<property_element_c::ebml_type_e, const char *> &
 propedit_cli_parser_c::get_ebml_type_abbrev_map() {
   static std::map<property_element_c::ebml_type_e, const char *> s_ebml_type_abbrevs;
@@ -148,18 +177,28 @@ propedit_cli_parser_c::init_parser() {
   OPT("l|list-property-names",      list_property_names, YT("List all valid property names and exit"));
   OPT("p|parse-mode=<mode>",        set_parse_mode,      YT("Sets the Matroska parser mode to 'fast' (default) or 'full'"));
 
-  add_section_header(YT("Actions"));
+  add_section_header(YT("Actions for handling properties"));
   OPT("e|edit=<selector>",          add_target,          YT("Sets the Matroska file section that all following add/set/delete "
                                                             "actions operate on (see below and man page for syntax)"));
   OPT("a|add=<name=value>",         add_change,          YT("Adds a property with the value even if such a property already "
                                                             "exists"));
   OPT("s|set=<name=value>",         add_change,          YT("Sets a property to the value if it exists and add it otherwise"));
   OPT("d|delete=<name>",            add_change,          YT("Delete all occurences of a property"));
+
+  add_section_header(YT("Actions for handling tags and chapters"));
   OPT("t|tags=<selector:filename>", add_tags,            YT("Add or replace tags in the file with the ones from 'filename' "
                                                             "or remove them if 'filename' is empty "
                                                             "(see below and man page for syntax)"));
   OPT("c|chapters=<filename>",      add_chapters,        YT("Add or replace chapters in the file with the ones from 'filename' "
                                                             "or remove them if 'filename' is empty"));
+
+  add_section_header(YT("Actions for handling attachments"));
+  OPT("add-attachment=<filename>",                 add_attachment,             YT("Add the file 'filename' as a new attachment"));
+  OPT("replace-attachment=<id-selector:filename>", replace_attachment,         YT("Replace an attachment with the file 'filename'"));
+  OPT("delete-attachment=<extended-selector>",     delete_attachment,          YT("Delete one or more attachments"));
+  OPT("attachment-name=<name>",                    set_attachment_name,        YT("Set the name to use for the following '--add-attachment' or '--replace-attachment' option"));
+  OPT("attachment-description=<description>",      set_attachment_description, YT("Set the description to use for the following '--add-attachment' or '--replace-attachment' option"));
+  OPT("attachment-mime-type=<mime-type>",          set_attachment_mime_type,   YT("Set the MIME type to use for the following '--add-attachment' or '--replace-attachment' option"));
 
   add_section_header(YT("Other options"));
   add_common_options();
@@ -167,7 +206,7 @@ propedit_cli_parser_c::init_parser() {
   add_separator();
   add_information(YT("The order of the various options is not important."));
 
-  add_section_header(YT("Edit selectors"), 0);
+  add_section_header(YT("Edit selectors for properties"), 0);
   add_section_header(YT("Segment information"), 1);
   add_information(YT("The strings 'info', 'segment_info' or 'segmentinfo' select the segment information element. This is also the default until the first '--edit' option is found."), 2);
 
@@ -183,16 +222,31 @@ propedit_cli_parser_c::init_parser() {
   add_information(YT("The string 'global' works on the global tags."), 1);
   add_information(YT("All other strings work just like the track header selectors (see above)."), 1);
 
+  add_section_header(YT("Attachment selectors"), 0);
+  add_information(YT("There are two types of selectors: <id-selector> and <extended-selector>."), 1);
+  add_information(YT("The <id-selector> can be either just a number 'n' or a number 'n' prefixed with '=' (e.g. '=12345')."), 1);
+  add_information(YT("Without the prefix '=' the number 'n' is interepreted as the attachment ID as listed by 'mkvmerge --identify-verbose'. These are usually simply numbered starting from 0."), 2);
+  add_information(YT("With the prefix '=' the number 'n' is interepreted as the attachment's unique ID (UID) as listed by 'mkvmerge --identify-verbose'. These are usually random-looking numbers."), 2);
+  add_information(YT("The <extended-selector> can be either an <id-selector> like above or have the form '<type>:<value>'."), 1);
+  add_information(YT("The '<type>' can be either 'name' or 'mime-type' selecting all attachments whose name or MIME type equals the user supplied '<value>'."), 2);
+
   add_hook(cli_parser_c::ht_unknown_option, std::bind(&propedit_cli_parser_c::set_file_name, this));
 }
 
 #undef OPT
+
+void
+propedit_cli_parser_c::validate() {
+  if (m_attachment.m_name.second || m_attachment.m_description.second || m_attachment.m_mime_type.second)
+    mxerror(Y("One of the options '--attachment-name', '--attachment-description' or '--attachment-mime-type' has been used without a following '--add-attachment' or '--replace-attachment' option.\n"));
+}
 
 options_cptr
 propedit_cli_parser_c::run() {
   init_parser();
 
   parse_args();
+  validate();
 
   m_options->options_parsed();
   m_options->validate();
