@@ -1346,7 +1346,7 @@ tab_input::validate_settings() {
       strip(s);
       if ((s.length() > 0) && (s.length() != 4)) {
         wxString err;
-        err.Printf(Z("The FourCC setting for track nr. %s in file '%s' is not excatly four characters long."), sid.c_str(), f->file_name.c_str());
+        err.Printf(Z("The FourCC setting for track nr. %s in file '%s' is not exactly four characters long."), sid.c_str(), f->file_name.c_str());
         wxMessageBox(err, Z("mkvmerge GUI: error"), wxOK | wxCENTER | wxICON_ERROR);
         return false;
       }

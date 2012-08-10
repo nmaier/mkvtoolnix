@@ -1439,7 +1439,7 @@ ogm_s_kate_demuxer_c::initialize() {
     kate_parse_identification_header(mem->get_buffer(), mem->get_size(), kate);
     num_header_packets = kate.nheaders;
   } catch (mtx::kate::header_parsing_x &e) {
-    mxerror_tid(reader->m_ti.m_fname, track_id, boost::format(Y("The Kate identifaction header could not be parsed (%1%).\n")) % e.error());
+    mxerror_tid(reader->m_ti.m_fname, track_id, boost::format(Y("The Kate identification header could not be parsed (%1%).\n")) % e.error());
   }
 }
 
