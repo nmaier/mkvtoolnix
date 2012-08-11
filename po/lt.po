@@ -667,7 +667,7 @@ msgstr ""
 msgid "%1% frame, track %2%, timecode %3% (%4%), size %5%, adler 0x%|6$08x|%7%%8%\n"
 msgstr ""
 
-#: src/common/strings/formatting.cpp:270
+#: src/common/strings/formatting.cpp:276
 #, boost-format
 msgid "%1% minute"
 msgid_plural "%1% minutes"
@@ -675,7 +675,7 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: src/common/strings/formatting.cpp:264
+#: src/common/strings/formatting.cpp:270
 #, boost-format
 msgid "%1% second"
 msgid_plural "%1% seconds"
@@ -3192,7 +3192,7 @@ msgstr "Klaida įkeliant nuostatas"
 msgid "Error opening file"
 msgstr "Klaida atveriant rinkmeną"
 
-#: src/input/r_mpeg_ps.cpp:992
+#: src/input/r_mpeg_ps.cpp:991
 msgid "Error parsing a MPEG PS packet during the header reading phase. This stream seems to be badly damaged.\n"
 msgstr ""
 
@@ -4346,7 +4346,7 @@ msgstr ""
 msgid "MPEG program streams"
 msgstr ""
 
-#: src/input/r_mpeg_ts.h:385
+#: src/input/r_mpeg_ts.h:389
 msgid "MPEG transport stream"
 msgstr ""
 
@@ -6122,7 +6122,7 @@ msgstr ""
 
 #: src/mmg/tabs/input.cpp:1349
 #, c-format, boost-format
-msgid "The FourCC setting for track nr. %s in file '%s' is not excatly four characters long."
+msgid "The FourCC setting for track nr. %s in file '%s' is not exactly four characters long."
 msgstr ""
 
 #: src/mmg/mmg_dialog.cpp:1890
@@ -6132,7 +6132,7 @@ msgstr ""
 
 #: src/input/r_ogm.cpp:1442
 #, boost-format
-msgid "The Kate identifaction header could not be parsed (%1%).\n"
+msgid "The Kate identification header could not be parsed (%1%).\n"
 msgstr ""
 
 #: src/input/r_qtmp4.cpp:765
@@ -8542,12 +8542,12 @@ msgstr ""
 msgid "mono"
 msgstr ""
 
-#: src/input/r_mpeg_ps.cpp:1136
+#: src/input/r_mpeg_ps.cpp:1135
 #, boost-format
 msgid "mpeg_ps_reader: Should not have happened #1. %1%"
 msgstr ""
 
-#: src/input/r_mpeg_ps.cpp:1163
+#: src/input/r_mpeg_ps.cpp:1162
 #, boost-format
 msgid "mpeg_ps_reader: Should not have happened #2. %1%"
 msgstr ""
@@ -8780,7 +8780,7 @@ msgstr "und (nenurodyta)"
 #: src/info/mkvinfo.cpp:1094
 #: src/input/r_matroska.cpp:93
 #: src/input/r_matroska.cpp:2356
-#: src/input/r_mpeg_ps.cpp:1327
+#: src/input/r_mpeg_ps.cpp:1326
 #: src/mmg/header_editor/value_page.cpp:150
 #: src/mmg/mmg.cpp:64
 #: src/mmg/tabs/input.cpp:532

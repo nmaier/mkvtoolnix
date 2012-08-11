@@ -781,14 +781,14 @@ msgstr "%1% 畫格, 軌道 %2%, 時間碼 %3% (%4%), 大小 %5%, adler 0x%|6$08x
 msgid "%1% frame, track %2%, timecode %3% (%4%), size %5%, adler 0x%|6$08x|%7%%8%\n"
 msgstr "%1% 畫格, 軌道 %2%, 時間碼 %3% (%4%), 大小 %5%, adler 0x%|6$08x|%7%%8%\n"
 
-#: src/common/strings/formatting.cpp:270
+#: src/common/strings/formatting.cpp:276
 #, boost-format
 msgid "%1% minute"
 msgid_plural "%1% minutes"
 msgstr[0] "%1% 分鐘"
 msgstr[1] "%1% 分鐘"
 
-#: src/common/strings/formatting.cpp:264
+#: src/common/strings/formatting.cpp:270
 #, boost-format
 msgid "%1% second"
 msgid_plural "%1% seconds"
@@ -3307,7 +3307,7 @@ msgstr "載入設定發生錯誤"
 msgid "Error opening file"
 msgstr "開啟檔案時發生錯誤"
 
-#: src/input/r_mpeg_ps.cpp:992
+#: src/input/r_mpeg_ps.cpp:991
 msgid "Error parsing a MPEG PS packet during the header reading phase. This stream seems to be badly damaged.\n"
 msgstr "在表頭讀取階段解析 MPEG PS 套件時發生錯誤。媒體流似乎已被嚴重損壞。\n"
 
@@ -4470,7 +4470,7 @@ msgstr "MPEG PS 節目流"
 msgid "MPEG program streams"
 msgstr "MPEG PS 節目串流"
 
-#: src/input/r_mpeg_ts.h:385
+#: src/input/r_mpeg_ts.h:389
 msgid "MPEG transport stream"
 msgstr "MPEG 傳輸串流"
 
@@ -6262,8 +6262,8 @@ msgid "The FourCC must be exactly four characters long in '%1% %2%'.\n"
 msgstr "FourCC 值必須為四個字元的長度，在「%1% %2%」。\n"
 
 #: src/mmg/tabs/input.cpp:1349
-#, c-format, boost-format
-msgid "The FourCC setting for track nr. %s in file '%s' is not excatly four characters long."
+#, fuzzy, c-format, boost-format
+msgid "The FourCC setting for track nr. %s in file '%s' is not exactly four characters long."
 msgstr "軌道 %s（自檔案「%s」）的 FourCC 設定非四字元長。"
 
 #: src/mmg/mmg_dialog.cpp:1890
@@ -6272,8 +6272,8 @@ msgid "The GUI is configured to use the mkvmerge executable from a different ver
 msgstr "此 GUI 設定成使用 mkvmerge 可執行檔版本 (%1%) 不同於 GUI 自己的版本 (%2%)。不支援這種情形，但也不會阻止。您應該在偏好設定對話窗裡變更 mkvmerge 可執行檔。"
 
 #: src/input/r_ogm.cpp:1442
-#, boost-format
-msgid "The Kate identifaction header could not be parsed (%1%).\n"
+#, fuzzy, boost-format
+msgid "The Kate identification header could not be parsed (%1%).\n"
 msgstr "無法解析 Kate 識別表頭 (%1%)。\n"
 
 #: src/input/r_qtmp4.cpp:765
@@ -8736,12 +8736,12 @@ msgstr "如果沒有選擇任何項目 mmg 將會重設為預設值。"
 msgid "mono"
 msgstr "單視角"
 
-#: src/input/r_mpeg_ps.cpp:1136
+#: src/input/r_mpeg_ps.cpp:1135
 #, boost-format
 msgid "mpeg_ps_reader: Should not have happened #1. %1%"
 msgstr "mpeg_ps_reader: 不該發生 #1。 %1%"
 
-#: src/input/r_mpeg_ps.cpp:1163
+#: src/input/r_mpeg_ps.cpp:1162
 #, boost-format
 msgid "mpeg_ps_reader: Should not have happened #2. %1%"
 msgstr "mpeg_ps_reader: 不該發生 #2。 %1%"
@@ -8973,7 +8973,7 @@ msgstr "und (未定)"
 #: src/info/mkvinfo.cpp:1094
 #: src/input/r_matroska.cpp:93
 #: src/input/r_matroska.cpp:2356
-#: src/input/r_mpeg_ps.cpp:1327
+#: src/input/r_mpeg_ps.cpp:1326
 #: src/mmg/header_editor/value_page.cpp:150
 #: src/mmg/mmg.cpp:64
 #: src/mmg/tabs/input.cpp:532

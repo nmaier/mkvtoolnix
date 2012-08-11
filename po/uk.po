@@ -804,7 +804,7 @@ msgstr "%1% кадр, доріжка %2%, тайм-код %3% (%4%), розмі�
 msgid "%1% frame, track %2%, timecode %3% (%4%), size %5%, adler 0x%|6$08x|%7%%8%\n"
 msgstr "%1% кадр, доріжка %2%, тайм-код %3% (%4%), розмір %5%, хеш 0x%|6$08x|%7%%8%\n"
 
-#: src/common/strings/formatting.cpp:270
+#: src/common/strings/formatting.cpp:276
 #, boost-format
 msgid "%1% minute"
 msgid_plural "%1% minutes"
@@ -812,7 +812,7 @@ msgstr[0] "%1% хвилина"
 msgstr[1] "%1% хвилин"
 msgstr[2] "%1% хвилини"
 
-#: src/common/strings/formatting.cpp:264
+#: src/common/strings/formatting.cpp:270
 #, boost-format
 msgid "%1% second"
 msgid_plural "%1% seconds"
@@ -3342,7 +3342,7 @@ msgstr "Помилка завантаження налаштувань"
 msgid "Error opening file"
 msgstr "Помилка при відкритті файлу"
 
-#: src/input/r_mpeg_ps.cpp:992
+#: src/input/r_mpeg_ps.cpp:991
 msgid "Error parsing a MPEG PS packet during the header reading phase. This stream seems to be badly damaged.\n"
 msgstr "Помилка при обробці пакетів MPEG PS під час фази читання заголовків. Цей потік, здається, серйозно пошкоджено.\n"
 
@@ -4506,7 +4506,7 @@ msgstr "MPEG програмний потік"
 msgid "MPEG program streams"
 msgstr "MPEG програмні потоки"
 
-#: src/input/r_mpeg_ts.h:385
+#: src/input/r_mpeg_ts.h:389
 msgid "MPEG transport stream"
 msgstr "транспортний потік MPEG"
 
@@ -6301,8 +6301,8 @@ msgid "The FourCC must be exactly four characters long in '%1% %2%'.\n"
 msgstr "FourCC повинен складатися рівно з чотирьох символів в '%1% %2%'.\n"
 
 #: src/mmg/tabs/input.cpp:1349
-#, c-format, boost-format
-msgid "The FourCC setting for track nr. %s in file '%s' is not excatly four characters long."
+#, fuzzy, c-format, boost-format
+msgid "The FourCC setting for track nr. %s in file '%s' is not exactly four characters long."
 msgstr "FourCC для доріжки номер %s у файлі '%s' не містить точно чотири символи."
 
 #: src/mmg/mmg_dialog.cpp:1890
@@ -6311,8 +6311,8 @@ msgid "The GUI is configured to use the mkvmerge executable from a different ver
 msgstr "GUI налаштований на використання виконуваного файла mkvmerge іншої версії (%1%), ніж сам GUI (%2%). Даний сценарій не підтримується, але не забороняється. Ви можете змінити шлях до виконуваного файла mkvmerge необхідної версії через діалог налаштувань."
 
 #: src/input/r_ogm.cpp:1442
-#, boost-format
-msgid "The Kate identifaction header could not be parsed (%1%).\n"
+#, fuzzy, boost-format
+msgid "The Kate identification header could not be parsed (%1%).\n"
 msgstr "Заголовок ідентифікації Kate не може бути оброблений (%1%).\n"
 
 #: src/input/r_qtmp4.cpp:765
@@ -8793,12 +8793,12 @@ msgstr "mmg буде використовувати типовий список,
 msgid "mono"
 msgstr "моно"
 
-#: src/input/r_mpeg_ps.cpp:1136
+#: src/input/r_mpeg_ps.cpp:1135
 #, boost-format
 msgid "mpeg_ps_reader: Should not have happened #1. %1%"
 msgstr "mpeg_ps_reader: Цього не повинно було трапитися #1. %1%"
 
-#: src/input/r_mpeg_ps.cpp:1163
+#: src/input/r_mpeg_ps.cpp:1162
 #, boost-format
 msgid "mpeg_ps_reader: Should not have happened #2. %1%"
 msgstr "mpeg_ps_reader: Цього не повинно було трапитися #2. %1%"
@@ -9030,7 +9030,7 @@ msgstr "und (Невизначено)"
 #: src/info/mkvinfo.cpp:1094
 #: src/input/r_matroska.cpp:93
 #: src/input/r_matroska.cpp:2356
-#: src/input/r_mpeg_ps.cpp:1327
+#: src/input/r_mpeg_ps.cpp:1326
 #: src/mmg/header_editor/value_page.cpp:150
 #: src/mmg/mmg.cpp:64
 #: src/mmg/tabs/input.cpp:532

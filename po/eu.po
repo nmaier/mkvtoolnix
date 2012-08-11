@@ -802,14 +802,14 @@ msgstr "%1% frame, bidea %2%, denborakodea %3% (%4%), neurria %5%, adler 0x%|6$0
 msgid "%1% frame, track %2%, timecode %3% (%4%), size %5%, adler 0x%|6$08x|%7%%8%\n"
 msgstr "%1% framea, bidea %2%, denbora-kodea %3% (%4%), neurria %5%, adler 0x%|6$08x|%7%%8%\n"
 
-#: src/common/strings/formatting.cpp:270
+#: src/common/strings/formatting.cpp:276
 #, fuzzy, boost-format
 msgid "%1% minute"
 msgid_plural "%1% minutes"
 msgstr[0] "%1% minutu"
 msgstr[1] "%1% minutu"
 
-#: src/common/strings/formatting.cpp:264
+#: src/common/strings/formatting.cpp:270
 #, fuzzy, boost-format
 msgid "%1% second"
 msgid_plural "%1% seconds"
@@ -3336,7 +3336,7 @@ msgstr "Akatsa ezarpenak gordetzerakoan"
 msgid "Error opening file"
 msgstr "Akatsa agiria irekitzerakoan"
 
-#: src/input/r_mpeg_ps.cpp:992
+#: src/input/r_mpeg_ps.cpp:991
 msgid "Error parsing a MPEG PS packet during the header reading phase. This stream seems to be badly damaged.\n"
 msgstr "Akatsa MPEG PS pakete bat aztertzerakoan idazburu irakurketa aldian. Jario honek oso hondatua dirudi.\n"
 
@@ -4498,7 +4498,7 @@ msgstr "MPEG programa jarioa"
 msgid "MPEG program streams"
 msgstr "MPEG programa jarioak"
 
-#: src/input/r_mpeg_ts.h:385
+#: src/input/r_mpeg_ts.h:389
 msgid "MPEG transport stream"
 msgstr "MPEG garraio jarioa"
 
@@ -6291,8 +6291,8 @@ msgid "The FourCC must be exactly four characters long in '%1% %2%'.\n"
 msgstr "FourCC-k lau hizkiko luzera zehatza izan behar du hemen: '%1% %2%'.\n"
 
 #: src/mmg/tabs/input.cpp:1349
-#, c-format, boost-format
-msgid "The FourCC setting for track nr. %s in file '%s' is not excatly four characters long."
+#, fuzzy, c-format, boost-format
+msgid "The FourCC setting for track nr. %s in file '%s' is not exactly four characters long."
 msgstr "nr bidearentzatko FourCC ezarpena. %s '%s' agirian ez da zehazki lau hizkiko luzerakoa."
 
 #: src/mmg/mmg_dialog.cpp:1890
@@ -6301,8 +6301,8 @@ msgid "The GUI is configured to use the mkvmerge executable from a different ver
 msgstr "Erabiltzaile Interfaze Grafika, EIG (%2%) beraren ezberdina den mkvmerge exekutagarri bertsio (%1%) batetik erabiltzeko itxuraturik dago. Hau ez dago sostengaturik baina ez da saihestuko ere. mkvmerge exekutagarria aldatu behar duzu hobespenen elkarrizketan."
 
 #: src/input/r_ogm.cpp:1442
-#, boost-format
-msgid "The Kate identifaction header could not be parsed (%1%).\n"
+#, fuzzy, boost-format
+msgid "The Kate identification header could not be parsed (%1%).\n"
 msgstr "KATE ezagutarazle idazburua ezin da aztertu (%1%).\n"
 
 #: src/input/r_qtmp4.cpp:765
@@ -8782,12 +8782,12 @@ msgstr "mmg-k berezko zerrenda berrezarriko du ez bada sarrerarik hautatzen."
 msgid "mono"
 msgstr "monoa"
 
-#: src/input/r_mpeg_ps.cpp:1136
+#: src/input/r_mpeg_ps.cpp:1135
 #, boost-format
 msgid "mpeg_ps_reader: Should not have happened #1. %1%"
 msgstr "mpeg_ps_reader: Hau ez litzake gertatu behar #1. %1%"
 
-#: src/input/r_mpeg_ps.cpp:1163
+#: src/input/r_mpeg_ps.cpp:1162
 #, boost-format
 msgid "mpeg_ps_reader: Should not have happened #2. %1%"
 msgstr "mpeg_ps_reader: Hau ez litzake gertatu behar #2. %1%"
@@ -9019,7 +9019,7 @@ msgstr "zehgab (Zehaztugabea)"
 #: src/info/mkvinfo.cpp:1094
 #: src/input/r_matroska.cpp:93
 #: src/input/r_matroska.cpp:2356
-#: src/input/r_mpeg_ps.cpp:1327
+#: src/input/r_mpeg_ps.cpp:1326
 #: src/mmg/header_editor/value_page.cpp:150
 #: src/mmg/mmg.cpp:64
 #: src/mmg/tabs/input.cpp:532

@@ -781,13 +781,13 @@ msgstr "%1% 帧, 轨道 %2%, 时间码 %3% (%4%), 尺寸 %5%, adler 0x%|6$08x|%7
 msgid "%1% frame, track %2%, timecode %3% (%4%), size %5%, adler 0x%|6$08x|%7%%8%\n"
 msgstr "%1% 帧, 轨道 %2%, 时间码 %3% (%4%), 尺寸 %5%, adler 0x%|6$08x|%7%%8%\n"
 
-#: src/common/strings/formatting.cpp:270
+#: src/common/strings/formatting.cpp:276
 #, boost-format
 msgid "%1% minute"
 msgid_plural "%1% minutes"
 msgstr[0] "%1% 分钟"
 
-#: src/common/strings/formatting.cpp:264
+#: src/common/strings/formatting.cpp:270
 #, boost-format
 msgid "%1% second"
 msgid_plural "%1% seconds"
@@ -3305,7 +3305,7 @@ msgstr "载入配置出错"
 msgid "Error opening file"
 msgstr "打开文件出错"
 
-#: src/input/r_mpeg_ps.cpp:992
+#: src/input/r_mpeg_ps.cpp:991
 msgid "Error parsing a MPEG PS packet during the header reading phase. This stream seems to be badly damaged.\n"
 msgstr "在头部读取阶段解析 MPEG PS 持续流包时出错。流似乎已被严重损坏。\n"
 
@@ -4468,7 +4468,7 @@ msgstr "MPEG PS 程序流"
 msgid "MPEG program streams"
 msgstr "MPEG PS 程序流"
 
-#: src/input/r_mpeg_ts.h:385
+#: src/input/r_mpeg_ts.h:389
 msgid "MPEG transport stream"
 msgstr "MPEG 传输流"
 
@@ -6258,8 +6258,8 @@ msgid "The FourCC must be exactly four characters long in '%1% %2%'.\n"
 msgstr "FourCC 值必须为四个字符的长度，在 '%1% %2%'。\n"
 
 #: src/mmg/tabs/input.cpp:1349
-#, c-format, boost-format
-msgid "The FourCC setting for track nr. %s in file '%s' is not excatly four characters long."
+#, fuzzy, c-format, boost-format
+msgid "The FourCC setting for track nr. %s in file '%s' is not exactly four characters long."
 msgstr "轨道 %s（自文件 '%s'）的 FourCC 设置非四字符长。"
 
 #: src/mmg/mmg_dialog.cpp:1890
@@ -6268,8 +6268,8 @@ msgid "The GUI is configured to use the mkvmerge executable from a different ver
 msgstr "为本 GUI 配置的 mkvmerge 可执行程序的版本 (%1%) 与 GUI 自身的版本 (%2%) 不同。这不受支持，但也不会被阻止。您应当在“选项”对话框中更改 mkvmerge 可执行程序。"
 
 #: src/input/r_ogm.cpp:1442
-#, boost-format
-msgid "The Kate identifaction header could not be parsed (%1%).\n"
+#, fuzzy, boost-format
+msgid "The Kate identification header could not be parsed (%1%).\n"
 msgstr "无法解析 Kate 识别头 (%1%)。\n"
 
 #: src/input/r_qtmp4.cpp:765
@@ -8732,12 +8732,12 @@ msgstr "若没有选中任何项，mmg 将重置为默认列表。"
 msgid "mono"
 msgstr "单视角"
 
-#: src/input/r_mpeg_ps.cpp:1136
+#: src/input/r_mpeg_ps.cpp:1135
 #, boost-format
 msgid "mpeg_ps_reader: Should not have happened #1. %1%"
 msgstr "mpeg_ps_reader: 不该发生 #1。 %1%"
 
-#: src/input/r_mpeg_ps.cpp:1163
+#: src/input/r_mpeg_ps.cpp:1162
 #, boost-format
 msgid "mpeg_ps_reader: Should not have happened #2. %1%"
 msgstr "mpeg_ps_reader: 不该发生 #2。 %1%"
@@ -8969,7 +8969,7 @@ msgstr "und (未定)"
 #: src/info/mkvinfo.cpp:1094
 #: src/input/r_matroska.cpp:93
 #: src/input/r_matroska.cpp:2356
-#: src/input/r_mpeg_ps.cpp:1327
+#: src/input/r_mpeg_ps.cpp:1326
 #: src/mmg/header_editor/value_page.cpp:150
 #: src/mmg/mmg.cpp:64
 #: src/mmg/tabs/input.cpp:532

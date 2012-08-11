@@ -802,14 +802,14 @@ msgstr "Frame %1%, traccia %2%, timecode %3% (%4%), dimensione %5%, adler 0x%|6$
 msgid "%1% frame, track %2%, timecode %3% (%4%), size %5%, adler 0x%|6$08x|%7%%8%\n"
 msgstr "Frame %1%, traccia %2%, timecode %3% (%4%), dimensione %5%, adler 0x%|6$08x|%7%%8%\n"
 
-#: src/common/strings/formatting.cpp:270
+#: src/common/strings/formatting.cpp:276
 #, boost-format
 msgid "%1% minute"
 msgid_plural "%1% minutes"
 msgstr[0] "%1% minuto"
 msgstr[1] "%1% minuti"
 
-#: src/common/strings/formatting.cpp:264
+#: src/common/strings/formatting.cpp:270
 #, boost-format
 msgid "%1% second"
 msgid_plural "%1% seconds"
@@ -3336,7 +3336,7 @@ msgstr "Errore nel caricamento impostazioni"
 msgid "Error opening file"
 msgstr "Errore nell'apertura del file"
 
-#: src/input/r_mpeg_ps.cpp:992
+#: src/input/r_mpeg_ps.cpp:991
 msgid "Error parsing a MPEG PS packet during the header reading phase. This stream seems to be badly damaged.\n"
 msgstr "Errore nell'analisi di un pacchetto MPEG PS durante la fase di lettura intestazione. Questo flusso sembra danneggiato.\n"
 
@@ -4499,7 +4499,7 @@ msgstr "Flusso programma MPEG"
 msgid "MPEG program streams"
 msgstr "Flussi programma MPEG"
 
-#: src/input/r_mpeg_ts.h:385
+#: src/input/r_mpeg_ts.h:389
 msgid "MPEG transport stream"
 msgstr "Flusso trasporto MPEG"
 
@@ -6295,8 +6295,8 @@ msgid "The FourCC must be exactly four characters long in '%1% %2%'.\n"
 msgstr "FourCC deve essere esattamente lungo quattro caratteri in '%1% %2%'.\n"
 
 #: src/mmg/tabs/input.cpp:1349
-#, c-format, boost-format
-msgid "The FourCC setting for track nr. %s in file '%s' is not excatly four characters long."
+#, fuzzy, c-format, boost-format
+msgid "The FourCC setting for track nr. %s in file '%s' is not exactly four characters long."
 msgstr "L'impostazione FourCC per la traccia nr. %s nel file '%s' non è lunga quattro caratteri. "
 
 #: src/mmg/mmg_dialog.cpp:1890
@@ -6305,8 +6305,8 @@ msgid "The GUI is configured to use the mkvmerge executable from a different ver
 msgstr "La GUI è configurata per usare l'eseguibile mkvmerge di una differente versione (%1%) che quello della GUI stessa (%2%). Ciò non è supportato. E' necessario cambiare nelle preferenze l'impostazione dell'eseguibile mkvmerge. "
 
 #: src/input/r_ogm.cpp:1442
-#, boost-format
-msgid "The Kate identifaction header could not be parsed (%1%).\n"
+#, fuzzy, boost-format
+msgid "The Kate identification header could not be parsed (%1%).\n"
 msgstr "L'intestazione identificazione Kate non può essere analizzata (%1%).\n"
 
 #: src/input/r_qtmp4.cpp:765
@@ -8785,12 +8785,12 @@ msgstr "mmg ripristinerà l'elenco predefinito se nessun elemento verrà selezio
 msgid "mono"
 msgstr "mono"
 
-#: src/input/r_mpeg_ps.cpp:1136
+#: src/input/r_mpeg_ps.cpp:1135
 #, boost-format
 msgid "mpeg_ps_reader: Should not have happened #1. %1%"
 msgstr "mpeg_ps_reader: Non sarebbe dovuto succedere #1. %1%"
 
-#: src/input/r_mpeg_ps.cpp:1163
+#: src/input/r_mpeg_ps.cpp:1162
 #, boost-format
 msgid "mpeg_ps_reader: Should not have happened #2. %1%"
 msgstr "mpeg_ps_reader: Non sarebbe dovuto succedere #2. %1%"
@@ -9022,7 +9022,7 @@ msgstr "und (Non determinato)"
 #: src/info/mkvinfo.cpp:1094
 #: src/input/r_matroska.cpp:93
 #: src/input/r_matroska.cpp:2356
-#: src/input/r_mpeg_ps.cpp:1327
+#: src/input/r_mpeg_ps.cpp:1326
 #: src/mmg/header_editor/value_page.cpp:150
 #: src/mmg/mmg.cpp:64
 #: src/mmg/tabs/input.cpp:532
