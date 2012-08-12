@@ -21,7 +21,7 @@
 propedit_cli_parser_c::propedit_cli_parser_c(const std::vector<std::string> &args)
   : cli_parser_c(args)
   , m_options(options_cptr(new options_c))
-  , m_target(m_options->add_target(target_c::tt_segment_info))
+  , m_target(m_options->add_track_or_segmentinfo_target("segment_info"))
 {
 }
 
@@ -37,7 +37,7 @@ propedit_cli_parser_c::set_parse_mode() {
 void
 propedit_cli_parser_c::add_target() {
   try {
-    m_target = m_options->add_target(m_next_arg);
+    m_target = m_options->add_track_or_segmentinfo_target(m_next_arg);
   } catch (...) {
     mxerror(boost::format(Y("Invalid selector in '%1% %2%'.\n")) % m_current_arg % m_next_arg);
   }

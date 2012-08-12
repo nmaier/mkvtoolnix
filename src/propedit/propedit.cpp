@@ -57,10 +57,10 @@ write_changes(options_cptr &options,
 
   for (auto &id_to_write : ids_to_write) {
     for (auto &target : options->m_targets) {
-      if (!target->m_level1_element)
+      if (!target->get_level1_element())
         continue;
 
-      EbmlMaster &l1_element = *target->m_level1_element;
+      EbmlMaster &l1_element = *target->get_level1_element();
 
       if (id_to_write != l1_element.Generic().GlobalId)
         continue;

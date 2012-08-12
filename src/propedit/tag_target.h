@@ -13,16 +13,13 @@
 
 #include "common/common_pch.h"
 
-#include <ebml/EbmlMaster.h>
-#include <matroska/KaxTags.h>
-
 #include "common/tags/tags.h"
 #include "propedit/change.h"
-#include "propedit/target.h"
+#include "propedit/track_target.h"
 
 using namespace libebml;
 
-class tag_target_c: public target_c {
+class tag_target_c: public track_target_c {
 public:
   enum tag_operation_mode_e {
     tom_undefined,
@@ -31,7 +28,7 @@ public:
     tom_track,
   };
 
-  tag_operation_mode_e m_tag_operation_mode;
+  tag_operation_mode_e m_operation_mode;
   kax_tags_cptr m_new_tags;
 
 public:
@@ -40,6 +37,7 @@ public:
 
   virtual void validate();
 
+  virtual bool operator ==(target_c const &cmp) const;
   virtual void parse_tags_spec(const std::string &spec);
   virtual void dump_info() const;
 
@@ -52,7 +50,8 @@ protected:
   virtual void add_or_replace_track_tags(KaxTags *tags);
 
   virtual bool non_track_target() const;
-  virtual bool track_target_with_sub_master() const;
+  virtual bool sub_master_is_track() const;
+  virtual bool requires_sub_master() const;
 };
 
 #endif // MTX_PROPEDIT_TAG_TARGET_H

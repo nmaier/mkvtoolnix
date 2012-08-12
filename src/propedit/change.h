@@ -16,6 +16,9 @@
 #include "common/bitvalue.h"
 #include "common/property_element.h"
 
+class change_c;
+typedef std::shared_ptr<change_c> change_cptr;
+
 class change_c {
 public:
   enum change_type_e {
@@ -50,6 +53,9 @@ public:
 
   void execute(EbmlMaster *master, EbmlMaster *sub_master);
 
+public:
+  static change_cptr parse_spec(change_type_e type, std::string const &spec);
+
 protected:
   void parse_ascii_string();
   void parse_binary();
@@ -69,6 +75,5 @@ protected:
 
   const EbmlSemantic *get_semantic();
 };
-typedef std::shared_ptr<change_c> change_cptr;
 
 #endif // __PROPEDIT_CHANGE_H

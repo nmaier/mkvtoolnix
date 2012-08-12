@@ -17,66 +17,47 @@
 
 #include "propedit/change.h"
 
+#define INVALID_TRACK_TYPE static_cast<track_type>(0)
+
 using namespace libebml;
 
 class target_c {
-public:
-  enum target_type_e {
-    tt_undefined,
-    tt_segment_info,
-    tt_track,
-  };
-
-  enum selection_mode_e {
-    sm_undefined,
-    sm_by_number,
-    sm_by_uid,
-    sm_by_position,
-    sm_by_type_and_position,
-  };
-
-  target_type_e m_type;
+protected:
   std::string m_spec;
-  selection_mode_e m_selection_mode;
-  uint64_t m_selection_param;
-  track_type m_selection_track_type;
 
   ebml_element_cptr m_level1_element_cp, m_track_headers_cp;
   EbmlMaster *m_level1_element, *m_master, *m_sub_master;
+
   uint64_t m_track_uid;
   track_type m_track_type;
-
-  std::vector<change_cptr> m_changes;
 
   std::string m_file_name;
 
 public:
-  target_c(target_type_e type);
+  target_c();
   virtual ~target_c();
 
-  virtual void validate();
+  virtual void validate() = 0;
+
+  virtual void dump_info() const = 0;
 
   virtual void add_change(change_c::change_type_e type, const std::string &spec);
-  virtual void parse_target_spec(std::string spec);
-  virtual void dump_info() const;
 
-  virtual bool operator ==(const target_c &cmp) const;
-  virtual bool operator !=(const target_c &cmp) const;
-
-  virtual bool has_changes() const;
-  virtual bool has_add_or_set_change() const;
+  virtual bool operator ==(target_c const &cmp) const = 0;
+  virtual bool operator !=(target_c const &cmp) const;
 
   virtual void set_level1_element(ebml_element_cptr level1_element, ebml_element_cptr track_headers = ebml_element_cptr{});
 
-  virtual void execute();
+  virtual bool has_changes() const = 0;
+
+  virtual void execute() = 0;
+
+  virtual std::string const &get_spec() const;
+  virtual uint64_t get_track_uid() const;
+  virtual EbmlMaster *get_level1_element() const;
 
 protected:
   virtual void add_or_replace_all_master_elements(EbmlMaster *source);
-
-  virtual void parse_track_spec(const std::string &spec);
-
-  virtual bool non_track_target() const;
-  virtual bool track_target_with_sub_master() const;
 };
 typedef std::shared_ptr<target_c> target_cptr;
 

@@ -21,6 +21,7 @@
 #include "common/common_pch.h"
 #include "common/ebml.h"
 #include "common/output.h"
+#include "common/strings/editing.h"
 #include "common/strings/parsing.h"
 #include "propedit/change.h"
 #include "propedit/propedit.h"
@@ -254,4 +255,26 @@ change_c::validate_deletion_of_mandatory() {
 const EbmlSemantic *
 change_c::get_semantic() {
   return find_ebml_semantic(KaxSegment::ClassInfos, m_property.m_callbacks->GlobalId);
+}
+
+change_cptr
+change_c::parse_spec(change_c::change_type_e type,
+                     const std::string &spec) {
+  std::string name, value;
+  if (ct_delete == type)
+    name = spec;
+
+  else {
+    auto parts = split(spec, "=", 2);
+    if (2 != parts.size())
+      throw std::runtime_error(Y("missing value"));
+
+    name  = parts[0];
+    value = parts[1];
+  }
+
+  if (name.empty())
+    throw std::runtime_error(Y("missing property name"));
+
+  return std::make_shared<change_c>(type, name, value);
 }

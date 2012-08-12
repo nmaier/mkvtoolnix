@@ -18,11 +18,17 @@
 using namespace libmatroska;
 
 chapter_target_c::chapter_target_c()
-  : target_c{tt_undefined}
+  : target_c{}
 {
 }
 
 chapter_target_c::~chapter_target_c() {
+}
+
+bool
+chapter_target_c::operator ==(target_c const &cmp)
+  const {
+  return dynamic_cast<chapter_target_c const *>(&cmp);
 }
 
 void
@@ -33,8 +39,7 @@ chapter_target_c::validate() {
 
 void
 chapter_target_c::dump_info()
-  const
-{
+  const {
   mxinfo(boost::format("  chapter target:\n"
                        "    file_name: %1%\n")
          % m_file_name);
@@ -42,8 +47,7 @@ chapter_target_c::dump_info()
 
 bool
 chapter_target_c::has_changes()
-  const
-{
+  const {
   return true;
 }
 
@@ -62,10 +66,4 @@ chapter_target_c::execute() {
   fix_mandatory_chapter_elements(m_level1_element);
   if (!m_level1_element->CheckMandatory())
     mxerror(boost::format(Y("Error parsing the chapters in '%1%': some mandatory elements are missing.\n")) % m_file_name);
-}
-
-bool
-chapter_target_c::non_track_target()
-  const {
-  return true;
 }

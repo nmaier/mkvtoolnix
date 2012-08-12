@@ -23,12 +23,24 @@
 using namespace libmatroska;
 
 tag_target_c::tag_target_c()
-  : target_c{tt_undefined}
-  , m_tag_operation_mode(tag_target_c::tom_undefined)
+  : track_target_c{""}
+  , m_operation_mode{tom_undefined}
 {
 }
 
 tag_target_c::~tag_target_c() {
+}
+
+bool
+tag_target_c::operator ==(target_c const &cmp)
+  const {
+  auto other_tag = dynamic_cast<tag_target_c const *>(&cmp);
+
+  return other_tag
+    && (m_operation_mode   == other_tag->m_operation_mode)
+    && (m_selection_mode       == other_tag->m_selection_mode)
+    && (m_selection_param      == other_tag->m_selection_param)
+    && (m_selection_track_type == other_tag->m_selection_track_type);
 }
 
 void
@@ -44,15 +56,15 @@ tag_target_c::parse_tags_spec(const std::string &spec) {
   balg::to_lower(parts[0]);
 
   if (parts[0] == "all")
-    m_tag_operation_mode = tom_all;
+    m_operation_mode = tom_all;
 
   else if (parts[0] == "global")
-    m_tag_operation_mode = tom_global;
+    m_operation_mode = tom_global;
 
   else if (parts[0] == "track") {
-    m_tag_operation_mode = tom_track;
+    m_operation_mode = tom_track;
     parts                = split(parts[1], ":", 2);
-    parse_track_spec(balg::to_lower_copy(parts[0]));
+    parse_spec(balg::to_lower_copy(parts[0]));
 
   } else
     throw false;
@@ -65,13 +77,13 @@ tag_target_c::dump_info()
   const
 {
   mxinfo(boost::format("  tag_target:\n"
-                       "    type:                 %1%\n"
+                       "    operation_mode:       %1%\n"
                        "    selection_mode:       %2%\n"
                        "    selection_param:      %3%\n"
                        "    selection_track_type: %4%\n"
                        "    track_uid:            %5%\n"
                        "    file_name:            %6%\n")
-         % static_cast<int>(m_type)
+         % static_cast<int>(m_operation_mode)
          % static_cast<int>(m_selection_mode)
          % m_selection_param
          % m_selection_track_type
@@ -91,25 +103,31 @@ tag_target_c::has_changes()
 bool
 tag_target_c::non_track_target()
   const {
-  return (tag_target_c::tom_all    == m_tag_operation_mode)
-      || (tag_target_c::tom_global == m_tag_operation_mode);
+  return (tom_all    == m_operation_mode)
+      || (tom_global == m_operation_mode);
 }
 
 bool
-tag_target_c::track_target_with_sub_master()
+tag_target_c::sub_master_is_track()
   const {
   return true;
 }
 
+bool
+tag_target_c::requires_sub_master()
+  const {
+  return false;
+}
+
 void
 tag_target_c::execute() {
-  if (tag_target_c::tom_all == m_tag_operation_mode)
+  if (tom_all == m_operation_mode)
     add_or_replace_all_master_elements(m_new_tags.get());
 
-  else if (tag_target_c::tom_global == m_tag_operation_mode)
+  else if (tom_global == m_operation_mode)
     add_or_replace_global_tags(m_new_tags.get());
 
-  else if (tag_target_c::tom_track == m_tag_operation_mode)
+  else if (tom_track == m_operation_mode)
     add_or_replace_track_tags(m_new_tags.get());
 
   else

@@ -31,8 +31,7 @@ public:
   void validate();
   void options_parsed();
 
-  target_cptr add_target(target_c::target_type_e type);
-  target_cptr add_target(const std::string &spec);
+  target_cptr add_track_or_segmentinfo_target(std::string const &spec);
   void add_tags(const std::string &spec);
   void add_chapters(const std::string &spec);
   void set_file_name(const std::string &file_name);
@@ -45,7 +44,6 @@ public:
   void execute();
 
 protected:
-  target_cptr add_target(target_c::target_type_e type, const std::string &spec);
   void remove_empty_targets();
   void merge_targets();
 };

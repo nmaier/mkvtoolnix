@@ -17,7 +17,9 @@
 #include "propedit/chapter_target.h"
 #include "propedit/options.h"
 #include "propedit/propedit.h"
+#include "propedit/segment_info_target.h"
 #include "propedit/tag_target.h"
+#include "propedit/track_target.h"
 
 options_c::options_c()
   : m_show_progress(false)
@@ -44,10 +46,22 @@ options_c::execute() {
 }
 
 target_cptr
-options_c::add_target(target_c::target_type_e type,
-                      const std::string &spec) {
-  target_cptr target(new target_c(type));
-  target->parse_target_spec(spec);
+options_c::add_track_or_segmentinfo_target(std::string const &spec) {
+  static std::string const track_prefix("track:");
+
+  auto spec_lower = balg::to_lower_copy(spec);
+  target_cptr target;
+
+  if ((spec_lower == "segment_info") || (spec_lower == "segmentinfo") || (spec_lower == "info"))
+    target = target_cptr{new segment_info_target_c()};
+
+  else if (balg::istarts_with(spec_lower, track_prefix)) {
+    auto spec_short = spec_lower.substr(track_prefix.length());
+    target          = target_cptr{new track_target_c(spec_short)};
+    static_cast<track_target_c *>(target.get())->parse_spec(spec_short);
+
+  } else
+    assert(false);
 
   for (auto &existing_target : m_targets)
     if (*existing_target == *target)
@@ -58,19 +72,9 @@ options_c::add_target(target_c::target_type_e type,
   return target;
 }
 
-target_cptr
-options_c::add_target(target_c::target_type_e type) {
-  return add_target(type, "");
-}
-
-target_cptr
-options_c::add_target(const std::string &spec) {
-  return add_target(target_c::tt_undefined, spec);
-}
-
 void
-options_c::add_tags(const std::string &spec) {
-  target_cptr target(new tag_target_c());
+options_c::add_tags(std::string const &spec) {
+  target_cptr target{new tag_target_c{}};
   static_cast<tag_target_c *>(target.get())->parse_tags_spec(spec);
   m_targets.push_back(target);
 }
@@ -153,13 +157,10 @@ options_c::find_elements(kax_analyzer_c *analyzer) {
 
   for (auto &target_ptr : m_targets) {
     target_c &target = *target_ptr;
-    if (target_c::tt_segment_info == target.m_type) {
+    if (dynamic_cast<segment_info_target_c *>(&target)) {
       if (!info)
         info = read_element<KaxInfo>(analyzer, Y("Segment information"));
       target.set_level1_element(info);
-
-    } else if (target_c::tt_track == target.m_type) {
-      target.set_level1_element(tracks);
 
     } else if (dynamic_cast<tag_target_c *>(&target)) {
       if (!tags) {
@@ -179,7 +180,10 @@ options_c::find_elements(kax_analyzer_c *analyzer) {
 
       target.set_level1_element(chapters, tracks);
 
-    } else
+    } else if (dynamic_cast<track_target_c *>(&target))
+      target.set_level1_element(tracks);
+
+    else
       assert(false);
   }
 
@@ -188,29 +192,31 @@ options_c::find_elements(kax_analyzer_c *analyzer) {
 
 void
 options_c::merge_targets() {
-  std::map<uint64_t, target_c *> targets_by_track_uid;
+  std::map<uint64_t, track_target_c *> targets_by_track_uid;
   std::vector<target_cptr> targets_to_keep;
 
   for (auto &target : m_targets) {
-    if (target_c::tt_segment_info == target->m_type) {
+    auto track_target = dynamic_cast<track_target_c *>(target.get());
+    if (!track_target || dynamic_cast<segment_info_target_c *>(target.get())) {
       targets_to_keep.push_back(target);
       continue;
     }
 
-    std::map<uint64_t, target_c *>::iterator existing_target_it = targets_by_track_uid.find(target->m_track_uid);
+    auto existing_target_it = targets_by_track_uid.find(track_target->get_track_uid());
+    auto track_uid          = target->get_track_uid();
     if (targets_by_track_uid.end() == existing_target_it) {
       targets_to_keep.push_back(target);
-      targets_by_track_uid[target->m_track_uid] = target.get();
+      targets_by_track_uid[track_uid] = track_target;
       continue;
     }
 
-    existing_target_it->second->m_changes.insert(existing_target_it->second->m_changes.end(), target->m_changes.begin(), target->m_changes.end());
+    existing_target_it->second->merge_changes(*track_target);
 
     mxwarn(boost::format(Y("The edit specifications '%1%' and '%2%' resolve to the same track with the UID %3%.\n"))
-           % existing_target_it->second->m_spec % target->m_spec % target->m_track_uid);
+           % existing_target_it->second->get_spec() % track_target->get_spec() % track_uid);
   }
 
-  m_targets = targets_to_keep;
+  m_targets.swap(targets_to_keep);
 }
 
 void
