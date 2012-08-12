@@ -14,7 +14,6 @@
 #include "common/common_pch.h"
 
 #include <ebml/EbmlMaster.h>
-#include <matroska/KaxTags.h>
 
 #include "propedit/change.h"
 
@@ -26,7 +25,6 @@ public:
     tt_undefined,
     tt_segment_info,
     tt_track,
-    tt_tags,
   };
 
   enum selection_mode_e {
@@ -37,17 +35,9 @@ public:
     sm_by_type_and_position,
   };
 
-  enum tag_operation_mode_e {
-    tom_undefined,
-    tom_all,
-    tom_global,
-    tom_track,
-  };
-
   target_type_e m_type;
   std::string m_spec;
   selection_mode_e m_selection_mode;
-  tag_operation_mode_e m_tag_operation_mode;
   uint64_t m_selection_param;
   track_type m_selection_track_type;
 
@@ -68,7 +58,6 @@ public:
 
   virtual void add_change(change_c::change_type_e type, const std::string &spec);
   virtual void parse_target_spec(std::string spec);
-  virtual void parse_tags_spec(const std::string &spec);
   virtual void dump_info() const;
 
   virtual bool operator ==(const target_c &cmp) const;
@@ -85,9 +74,9 @@ protected:
   virtual void add_or_replace_all_master_elements(EbmlMaster *source);
 
   virtual void parse_track_spec(const std::string &spec);
-  virtual void add_or_replace_tags();
-  virtual void add_or_replace_global_tags(KaxTags *tags);
-  virtual void add_or_replace_track_tags(KaxTags *tags);
+
+  virtual bool non_track_target() const;
+  virtual bool track_target_with_sub_master() const;
 };
 typedef std::shared_ptr<target_c> target_cptr;
 

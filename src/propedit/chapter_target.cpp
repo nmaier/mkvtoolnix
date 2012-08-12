@@ -48,16 +48,6 @@ chapter_target_c::has_changes()
 }
 
 void
-chapter_target_c::set_level1_element(ebml_element_cptr level1_element_cp,
-                                     ebml_element_cptr track_headers_cp) {
-  m_level1_element_cp = level1_element_cp;
-  m_level1_element    = static_cast<EbmlMaster *>(m_level1_element_cp.get());
-
-  m_track_headers_cp  = track_headers_cp;
-  m_master            = m_level1_element;
-}
-
-void
 chapter_target_c::parse_chapter_spec(std::string const &spec) {
   m_file_name = spec;
 }
@@ -72,4 +62,10 @@ chapter_target_c::execute() {
   fix_mandatory_chapter_elements(m_level1_element);
   if (!m_level1_element->CheckMandatory())
     mxerror(boost::format(Y("Error parsing the chapters in '%1%': some mandatory elements are missing.\n")) % m_file_name);
+}
+
+bool
+chapter_target_c::non_track_target()
+  const {
+  return true;
 }

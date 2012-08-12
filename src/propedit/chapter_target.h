@@ -35,9 +35,10 @@ public:
 
   virtual bool has_changes() const;
 
-  virtual void set_level1_element(ebml_element_cptr level1_element, ebml_element_cptr track_headers = ebml_element_cptr{});
-
   virtual void execute();
+
+protected:
+  virtual bool non_track_target() const;
 };
 
 #endif // MTX_PROPEDIT_CHAPTER_TARGET_H

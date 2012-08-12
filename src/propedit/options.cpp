@@ -17,6 +17,7 @@
 #include "propedit/chapter_target.h"
 #include "propedit/options.h"
 #include "propedit/propedit.h"
+#include "propedit/tag_target.h"
 
 options_c::options_c()
   : m_show_progress(false)
@@ -69,8 +70,8 @@ options_c::add_target(const std::string &spec) {
 
 void
 options_c::add_tags(const std::string &spec) {
-  target_cptr target(new target_c(target_c::tt_tags));
-  target->parse_tags_spec(spec);
+  target_cptr target(new tag_target_c());
+  static_cast<tag_target_c *>(target.get())->parse_tags_spec(spec);
   m_targets.push_back(target);
 }
 
@@ -160,7 +161,7 @@ options_c::find_elements(kax_analyzer_c *analyzer) {
     } else if (target_c::tt_track == target.m_type) {
       target.set_level1_element(tracks);
 
-    } else if (target_c::tt_tags == target.m_type) {
+    } else if (dynamic_cast<tag_target_c *>(&target)) {
       if (!tags) {
         tags = read_element<KaxTags>(analyzer, Y("Tags"), false);
         if (!tags)
