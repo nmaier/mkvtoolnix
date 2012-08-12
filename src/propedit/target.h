@@ -8,8 +8,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __PROPEDIT_TARGET_H
-#define __PROPEDIT_TARGET_H
+#ifndef MTX_PROPEDIT_TARGET_H
+#define MTX_PROPEDIT_TARGET_H
 
 #include "common/common_pch.h"
 
@@ -27,7 +27,6 @@ public:
     tt_segment_info,
     tt_track,
     tt_tags,
-    tt_chapters,
   };
 
   enum selection_mode_e {
@@ -63,36 +62,33 @@ public:
 
 public:
   target_c(target_type_e type);
+  virtual ~target_c();
 
-  void validate();
+  virtual void validate();
 
-  void add_change(change_c::change_type_e type, const std::string &spec);
-  void parse_target_spec(std::string spec);
-  void parse_tags_spec(const std::string &spec);
-  void parse_chapter_spec(const std::string &spec);
-  void dump_info() const;
+  virtual void add_change(change_c::change_type_e type, const std::string &spec);
+  virtual void parse_target_spec(std::string spec);
+  virtual void parse_tags_spec(const std::string &spec);
+  virtual void dump_info() const;
 
-  bool operator ==(const target_c &cmp) const;
-  bool operator !=(const target_c &cmp) const;
+  virtual bool operator ==(const target_c &cmp) const;
+  virtual bool operator !=(const target_c &cmp) const;
 
-  bool has_changes() const;
-  bool has_add_or_set_change() const;
+  virtual bool has_changes() const;
+  virtual bool has_add_or_set_change() const;
 
-  void set_level1_element(ebml_element_cptr level1_element, ebml_element_cptr track_headers = ebml_element_cptr{});
+  virtual void set_level1_element(ebml_element_cptr level1_element, ebml_element_cptr track_headers = ebml_element_cptr{});
 
-  void execute();
+  virtual void execute();
 
 protected:
-  void add_or_replace_all_master_elements(EbmlMaster *source);
+  virtual void add_or_replace_all_master_elements(EbmlMaster *source);
 
-  void parse_track_spec(const std::string &spec);
-  void add_or_replace_tags();
-  void add_or_replace_global_tags(KaxTags *tags);
-  void add_or_replace_track_tags(KaxTags *tags);
-
-  void parse_chapters_spec(const std::string &spec);
-  void add_or_replace_chapters();
+  virtual void parse_track_spec(const std::string &spec);
+  virtual void add_or_replace_tags();
+  virtual void add_or_replace_global_tags(KaxTags *tags);
+  virtual void add_or_replace_track_tags(KaxTags *tags);
 };
 typedef std::shared_ptr<target_c> target_cptr;
 
-#endif // __PROPEDIT_TARGET_H
+#endif // MTX_PROPEDIT_TARGET_H

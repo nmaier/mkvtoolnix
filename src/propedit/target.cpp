@@ -10,7 +10,6 @@
 
 #include "common/common_pch.h"
 
-#include <matroska/KaxChapters.h>
 #include <matroska/KaxInfo.h>
 #include <matroska/KaxInfoData.h>
 #include <matroska/KaxTag.h>
@@ -20,7 +19,6 @@
 #include <matroska/KaxTrackEntryData.h>
 #include <matroska/KaxTrackVideo.h>
 
-#include "common/chapters/chapters.h"
 #include "common/output.h"
 #include "common/strings/editing.h"
 #include "common/strings/parsing.h"
@@ -46,17 +44,20 @@ target_c::target_c(target_c::target_type_e type)
 {
 }
 
+target_c::~target_c() {
+}
+
 void
 target_c::validate() {
   assert(target_c::tt_undefined != m_type);
 
   std::vector<property_element_c> *property_table
     = !m_level1_element ? nullptr
-    :                   &property_element_c::get_table_for(target_c::tt_segment_info == m_type ? KaxInfo::ClassInfos : KaxTracks::ClassInfos,
-                                                             track_audio == m_track_type ? &KaxTrackAudio::ClassInfos
-                                                           : track_video == m_track_type ? &KaxTrackVideo::ClassInfos
-                                                           :                               nullptr,
-                                                           false);
+    :                     &property_element_c::get_table_for(target_c::tt_segment_info == m_type ? KaxInfo::ClassInfos : KaxTracks::ClassInfos,
+                                                               track_audio == m_track_type ? &KaxTrackAudio::ClassInfos
+                                                             : track_video == m_track_type ? &KaxTrackVideo::ClassInfos
+                                                             :                               nullptr,
+                                                             false);
 
   for (auto &change : m_changes)
     change->validate(property_table);
@@ -159,11 +160,6 @@ target_c::parse_tags_spec(const std::string &spec) {
 }
 
 void
-target_c::parse_chapter_spec(const std::string &spec) {
-  m_file_name = spec;
-}
-
-void
 target_c::dump_info()
   const
 {
@@ -189,7 +185,8 @@ bool
 target_c::operator ==(const target_c &cmp)
   const
 {
-  return (m_type                 == cmp.m_type)
+  return (typeid(*this)          == typeid(cmp))
+      && (m_type                 == cmp.m_type)
       && (m_selection_mode       == cmp.m_selection_mode)
       && (m_selection_param      == cmp.m_selection_param)
       && (m_selection_track_type == cmp.m_selection_track_type);
@@ -207,8 +204,7 @@ target_c::has_changes()
   const
 {
   return !m_changes.empty()
-       || (target_c::tt_tags     == m_type)
-       || (target_c::tt_chapters == m_type);
+    || (target_c::tt_tags     == m_type);
 }
 
 bool
@@ -231,7 +227,6 @@ target_c::set_level1_element(ebml_element_cptr level1_element_cp,
   m_track_headers_cp  = track_headers_cp;
 
   if (   (target_c::tt_segment_info == m_type)
-      || (target_c::tt_chapters     == m_type)
       || (   (target_c::tt_tags == m_type)
           && (   (target_c::tom_all    == m_tag_operation_mode)
               || (target_c::tom_global == m_tag_operation_mode)))) {
@@ -313,11 +308,6 @@ void
 target_c::execute() {
   if (target_c::tt_tags == m_type) {
     add_or_replace_tags();
-    return;
-  }
-
-  if (target_c::tt_chapters == m_type) {
-    add_or_replace_chapters();
     return;
   }
 
@@ -422,21 +412,5 @@ target_c::add_or_replace_track_tags(KaxTags *tags) {
         tags->Remove(idx);
       }
     }
-  }
-}
-
-void
-target_c::add_or_replace_chapters() {
-  kax_chapters_cptr new_chapters{};
-
-  if (!m_file_name.empty())
-    new_chapters = parse_chapters(m_file_name);
-
-  add_or_replace_all_master_elements(new_chapters.get());
-
-  if (m_level1_element->ListSize()) {
-    fix_mandatory_chapter_elements(m_level1_element);
-    if (!m_level1_element->CheckMandatory())
-      mxerror(boost::format(Y("Error parsing the chapters in '%1%': some mandatory elements are missing.\n")) % m_file_name);
   }
 }

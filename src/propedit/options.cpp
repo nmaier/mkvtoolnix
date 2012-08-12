@@ -14,6 +14,7 @@
 #include <matroska/KaxTag.h>
 #include <matroska/KaxTags.h>
 
+#include "propedit/chapter_target.h"
 #include "propedit/options.h"
 #include "propedit/propedit.h"
 
@@ -75,8 +76,8 @@ options_c::add_tags(const std::string &spec) {
 
 void
 options_c::add_chapters(const std::string &spec) {
-  target_cptr target(new target_c(target_c::tt_chapters));
-  target->parse_chapter_spec(spec);
+  target_cptr target{new chapter_target_c{}};
+  static_cast<chapter_target_c *>(target.get())->parse_chapter_spec(spec);
   m_targets.push_back(target);
 }
 
@@ -168,7 +169,7 @@ options_c::find_elements(kax_analyzer_c *analyzer) {
 
       target.set_level1_element(tags, tracks);
 
-    } else if (target_c::tt_chapters == target.m_type) {
+    } else if (dynamic_cast<chapter_target_c *>(&target)) {
       if (!chapters) {
         chapters = read_element<KaxChapters>(analyzer, Y("Chapters"), false);
         if (!chapters)
