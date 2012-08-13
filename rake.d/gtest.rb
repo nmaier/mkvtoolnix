@@ -1,9 +1,14 @@
 #!/usr/bin/env ruby
 
+gtest_apps = %w{common}
+gtest_libs = {
+  'common' => [],
+}
+
 namespace :tests do
   desc "Build and run the unit tests"
-  task :unit => [ 'tests/unit/all' ] do
-    run './tests/unit/all'
+  task :unit => gtest_apps.collect { |app| "tests/unit/#{app}/#{app}" } do
+    gtest_apps.each { |app| run "./tests/unit/#{app}/#{app}" }
   end
 end
 
@@ -22,12 +27,14 @@ $build_system_modules[:gtest] = {
       sources([ 'lib/gtest/src' ], :type => :dir).
       create
 
-    Application.
-      new('tests/unit/all').
-      description("Build the unit tests executable").
-      aliases('unit_tests').
-      sources([ 'tests/unit' ], :type => :dir).
-      libraries($common_libs, :gtest, :pthread).
-      create
+    gtest_apps.each do |app|
+      Application.
+        new("tests/unit/#{app}/#{app}").
+        description("Build the unit tests executable for '#{app}'").
+        aliases("unit_tests_#{app}").
+        sources([ "tests/unit/#{app}" ], :type => :dir).
+        libraries($common_libs, gtest_libs[app], :gtest, :pthread).
+        create
+    end
   end,
 }
