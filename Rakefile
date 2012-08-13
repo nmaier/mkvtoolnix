@@ -27,10 +27,13 @@ end
 
 require "pp"
 
+# Extensions have to be loaded before certain functions that don't
+# exist in Ruby 1.8.x are used, e.g. Dir.exists?
+require_relative "rake.d/extensions"
+
 $build_system_modules = {}
 $have_gtest           = Dir.exists? 'lib/gtest'
 
-require_relative "rake.d/extensions"
 require_relative "rake.d/config"
 require_relative "rake.d/helpers"
 require_relative "rake.d/target"
