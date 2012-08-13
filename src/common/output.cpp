@@ -39,6 +39,8 @@ static bool s_mm_stdio_redirected = false;
 charset_converter_cptr g_cc_stdio = charset_converter_cptr(new charset_converter_c);
 std::shared_ptr<mm_io_c> g_mm_stdio   = std::shared_ptr<mm_io_c>(new mm_stdio_c);
 
+static mxmsg_handler_t s_mxmsg_info_handler, s_mxmsg_warning_handler, s_mxmsg_error_handler;
+
 void
 redirect_stdio(const mm_io_cptr &stdio) {
   g_mm_stdio            = stdio;
@@ -48,6 +50,19 @@ redirect_stdio(const mm_io_cptr &stdio) {
 bool
 stdio_redirected() {
   return s_mm_stdio_redirected;
+}
+
+void
+set_mxmsg_handler(unsigned int level,
+                  mxmsg_handler_t const &handler) {
+  if (MXMSG_INFO == level)
+    s_mxmsg_info_handler = handler;
+  else if (MXMSG_WARNING == level)
+    s_mxmsg_warning_handler = handler;
+  else if (MXMSG_ERROR == level)
+    s_mxmsg_error_handler = handler;
+  else
+    assert(false);
 }
 
 void
@@ -88,23 +103,30 @@ mxmsg(unsigned int level,
   g_mm_stdio->flush();
 }
 
-void
-mxinfo(const std::string &info) {
+static void
+default_mxinfo(unsigned int,
+               std::string const &info) {
   mxmsg(MXMSG_INFO, info);
 }
 
 void
+mxinfo(std::string const &info) {
+  s_mxmsg_info_handler(MXMSG_INFO, info);
+}
+
+void
 mxinfo(const std::wstring &info) {
-  mxmsg(MXMSG_INFO, to_utf8(info));
+  mxinfo(to_utf8(info));
 }
 
 void
 mxinfo(const boost::wformat &info) {
-  mxmsg(MXMSG_INFO, to_utf8(info.str()));
+  mxinfo(to_utf8(info.str()));
 }
 
-void
-mxwarn(const std::string &warning) {
+static void
+default_mxwarn(unsigned int,
+               std::string const &warning) {
   if (g_suppress_warnings)
     return;
 
@@ -114,22 +136,33 @@ mxwarn(const std::string &warning) {
 }
 
 void
-mxerror(const std::string &error) {
+mxwarn(std::string const &warning) {
+  s_mxmsg_warning_handler(MXMSG_WARNING, warning);
+}
+
+static void
+default_mxerror(unsigned int,
+                std::string const &error) {
   mxmsg(MXMSG_ERROR, error);
   mxexit(2);
 }
 
 void
+mxerror(std::string const &error) {
+  s_mxmsg_error_handler(MXMSG_ERROR, error);
+}
+
+void
 mxinfo_fn(const std::string &file_name,
           const std::string &info) {
-  mxmsg(MXMSG_INFO, (boost::format(Y("'%1%': %2%")) % file_name % info).str());
+  mxinfo((boost::format(Y("'%1%': %2%")) % file_name % info).str());
 }
 
 void
 mxinfo_tid(const std::string &file_name,
            int64_t track_id,
            const std::string &info) {
-  mxmsg(MXMSG_INFO, (boost::format(Y("'%1%' track %2%: %3%")) % file_name % track_id % info).str());
+  mxinfo((boost::format(Y("'%1%' track %2%: %3%")) % file_name % track_id % info).str());
 }
 
 void
@@ -165,7 +198,7 @@ mxverb_fn(unsigned int level,
   if (verbose < level)
     return;
 
-  mxmsg(MXMSG_INFO, (boost::format(Y("'%1%': %2%")) % file_name % message).str());
+  mxinfo((boost::format(Y("'%1%': %2%")) % file_name % message).str());
 }
 
 void
@@ -176,12 +209,15 @@ mxverb_tid(unsigned int level,
   if (verbose < level)
     return;
 
-  mxmsg(MXMSG_INFO, (boost::format(Y("'%1%' track %2%: %3%")) % file_name % track_id % message).str());
+  mxinfo((boost::format(Y("'%1%' track %2%: %3%")) % file_name % track_id % message).str());
 }
 
 void
-init_cc_stdio() {
+init_common_output() {
   set_cc_stdio(get_local_console_charset());
+  set_mxmsg_handler(MXMSG_INFO,    default_mxinfo);
+  set_mxmsg_handler(MXMSG_WARNING, default_mxwarn);
+  set_mxmsg_handler(MXMSG_ERROR,   default_mxerror);
 }
 
 void

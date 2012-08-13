@@ -16,12 +16,17 @@
 
 #include "common/os.h"
 
+#include <functional>
+
 #include <ebml/EbmlElement.h>
 
 #include "common/locale.h"
 #include "common/mm_io.h"
 
 using namespace libebml;
+
+typedef std::function<void(unsigned int level, std::string const &)> mxmsg_handler_t;
+void set_mxmsg_handler(unsigned int level, mxmsg_handler_t const &handler);
 
 extern bool g_suppress_info, g_suppress_warnings;
 extern std::string g_stdio_charset;
@@ -31,7 +36,7 @@ extern std::shared_ptr<mm_io_c> g_mm_stdio;
 void redirect_stdio(const mm_io_cptr &new_stdio);
 bool stdio_redirected();
 
-void init_cc_stdio();
+void init_common_output();
 void set_cc_stdio(const std::string &charset);
 
 void mxmsg(unsigned int level, std::string message);
@@ -65,7 +70,7 @@ mxerror(const boost::format &error) {
 
 #define mxverb(level, message)        \
   if (verbose >= level)               \
-    mxmsg(MXMSG_INFO, message);
+    mxinfo(message);
 
 
 #define mxdebug(msg) \

@@ -137,7 +137,7 @@ mtx_common_init(std::string const &program_name) {
 
   mm_file_io_c::setup();
   g_cc_local_utf8 = charset_converter_c::init("");
-  init_cc_stdio();
+  init_common_output();
 
   stereo_mode_c::init();
 }
