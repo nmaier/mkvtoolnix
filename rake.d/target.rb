@@ -67,7 +67,8 @@ class Target
 
     list           = list.collect { |e| e.respond_to?(:to_a) ? e.to_a : e }.flatten
     file_mode      = (options[:type] || :file) == :file
-    new_sources    = list.collect { |entry| file_mode ? (entry.respond_to?(:to_a) ? entry.to_a : entry) : FileList["#{entry}/*.c", "#{entry}/*.cpp", "#{entry}/*.cc"].to_a }.flatten
+    except         = !file_mode && options[:except].is_a?(Array) ? options[:except].collect { |file| list.collect { |dir| "#{dir}/#{file}" } }.flatten.to_hash_by : {}
+    new_sources    = list.collect { |entry| file_mode ? (entry.respond_to?(:to_a) ? entry.to_a : entry) : FileList["#{entry}/*.c", "#{entry}/*.cpp", "#{entry}/*.cc"].to_a }.flatten.select { |file| !except[file] }
     new_deps       = new_sources.collect { |file| [ file.ext(ext_map[ file.pathmap('%x') ] || 'o'), file ] }
     @sources       = ( @sources      + new_sources                                                          ).uniq
     @objects       = ( @objects      + new_deps.collect { |a| a.first }.select { |file| obj_re.match file } ).uniq
@@ -96,17 +97,21 @@ class Target
 
     @dependencies += list.collect do |entry|
       case entry
-      when :mtxcommon  then "src/common/libmtxcommon.a"
-      when :mtxinput   then "src/input/libmtxinput.a"
-      when :mtxoutput  then "src/output/libmtxoutput.a"
-      when :avi        then "lib/avilib-0.6.10/libavi.a"
-      when :rmff       then "lib/librmff/librmff.a"
-      when :pugixml    then "lib/pugixml/src/libpugixml.a"
-      when :mpegparser then "src/mpegparser/libmpegparser.a"
-      when :ebml       then c?("EBML_MATROSKA_INTERNAL") ? "lib/libebml/src/libebml.a"         : nil
-      when :matroska   then c?("EBML_MATROSKA_INTERNAL") ? "lib/libmatroska/src/libmatroska.a" : nil
-      when :gtest      then "lib/gtest/src/libgtest.a"
-      else                  nil
+      when :mtxcommon   then "src/common/libmtxcommon.a"
+      when :mtxinput    then "src/input/libmtxinput.a"
+      when :mtxoutput   then "src/output/libmtxoutput.a"
+      when :mtxmerge    then "src/merge/libmtxmerge.a"
+      when :mtxinfo     then "src/info/libmtxinfo.a"
+      when :mtxextract  then "src/extract/libmtxextract.a"
+      when :mtxpropedit then "src/propedit/libmtxpropedit.a"
+      when :avi         then "lib/avilib-0.6.10/libavi.a"
+      when :rmff        then "lib/librmff/librmff.a"
+      when :pugixml     then "lib/pugixml/src/libpugixml.a"
+      when :mpegparser  then "src/mpegparser/libmpegparser.a"
+      when :ebml        then c?("EBML_MATROSKA_INTERNAL") ? "lib/libebml/src/libebml.a"         : nil
+      when :matroska    then c?("EBML_MATROSKA_INTERNAL") ? "lib/libmatroska/src/libmatroska.a" : nil
+      when :gtest       then "lib/gtest/src/libgtest.a"
+      else                   nil
       end
     end.compact
 

@@ -56,7 +56,7 @@ def setup_globals
   $manpages                =  $programs.collect { |name| "doc/man/#{name}.1" }
 
   $system_includes         = "-I. -Ilib -Ilib/avilib-0.6.10 -Ilib/utf8-cpp/source -Ilib/pugixml/src -Isrc"
-  $system_libdirs          = "-Llib/avilib-0.6.10 -Llib/librmff -Llib/pugixml/src -Lsrc/common -Lsrc/input -Lsrc/output -Lsrc/mpegparser"
+  $system_libdirs          = "-Llib/avilib-0.6.10 -Llib/librmff -Llib/pugixml/src -Lsrc/common -Lsrc/input -Lsrc/output -Lsrc/mpegparser -Lsrc/merge -Lsrc/info -Lsrc/extract -Lsrc/propedit"
 
   $source_directories      =  %w{lib/avilib-0.6.10 lib/librmff src src/input src/output src/common src/common/chapters src/common/compression src/common/strings src/common/tags src/common/xml
                                  src/mmg src/mmg/header_editor src/mmg/options src/mmg/tabs src/extract src/propedit src/merge src/info src/mpegparser}
@@ -603,19 +603,23 @@ end
 # src/output
 #
 
-[ { :name => 'avi',        :dir => 'lib/avilib-0.6.10'                                                                             },
-  { :name => 'rmff',       :dir => 'lib/librmff'                                                                                   },
-  { :name => 'pugixml',    :dir => 'lib/pugixml/src'                                                                               },
-  { :name => 'mpegparser', :dir => 'src/mpegparser'                                                                                },
-  { :name => 'mtxcommon',  :dir => [ 'src/common' ] + %w{chapters compression strings tags xml }.collect { |e| "src/common/#{e}" } },
-  { :name => 'mtxinput',   :dir => 'src/input'                                                                                     },
-  { :name => 'mtxoutput',  :dir => 'src/output'                                                                                    },
-  { :name => 'ebml',       :dir => 'lib/libebml/src'                                                                               },
-  { :name => 'matroska',   :dir => 'lib/libmatroska/src'                                                                           },
+[ { :name => 'avi',         :dir => 'lib/avilib-0.6.10'                                                                             },
+  { :name => 'rmff',        :dir => 'lib/librmff'                                                                                   },
+  { :name => 'pugixml',     :dir => 'lib/pugixml/src'                                                                               },
+  { :name => 'mpegparser',  :dir => 'src/mpegparser'                                                                                },
+  { :name => 'mtxcommon',   :dir => [ 'src/common' ] + %w{chapters compression strings tags xml }.collect { |e| "src/common/#{e}" } },
+  { :name => 'mtxinput',    :dir => 'src/input'                                                                                     },
+  { :name => 'mtxoutput',   :dir => 'src/output'                                                                                    },
+  { :name => 'mtxmerge',    :dir => 'src/merge',    :except => [ 'mkvmerge.cpp' ],                                                  },
+  { :name => 'mtxinfo',     :dir => 'src/info',     :except => %w{qt_ui.cpp wxwidgets_ui.cpp mkvinfo.cpp},                          },
+  { :name => 'mtxextract',  :dir => 'src/extract',  :except => [ 'mkvextract.cpp' ],                                                },
+  { :name => 'mtxpropedit', :dir => 'src/propedit', :except => [ 'mkvpropedit.cpp' ],                                               },
+  { :name => 'ebml',        :dir => 'lib/libebml/src'                                                                               },
+  { :name => 'matroska',    :dir => 'lib/libmatroska/src'                                                                           },
 ].each do |lib|
   Library.
     new("#{[ lib[:dir] ].flatten.first}/lib#{lib[:name]}").
-    sources([ lib[:dir] ].flatten, :type => :dir).
+    sources([ lib[:dir] ].flatten, :type => :dir, :except => lib[:except]).
     build_dll(lib[:name] == 'mtxcommon').
     libraries(:iconv, :z, :compression, :matroska, :ebml, :rpcrt4).
     create
@@ -645,9 +649,9 @@ $common_libs = [
 Application.new("src/mkvmerge").
   description("Build the mkvmerge executable").
   aliases(:mkvmerge).
-  sources("src/merge", :type => :dir).
+  sources("src/merge/mkvmerge.cpp").
   sources("src/merge/resources.o", :if => c?(:MINGW)).
-  libraries(:mtxinput, :mtxoutput, $common_libs, :avi, :rmff, :mpegparser, :flac, :vorbis, :ogg).
+  libraries(:mtxmerge, :mtxinput, :mtxoutput, $common_libs, :avi, :rmff, :mpegparser, :flac, :vorbis, :ogg).
   create
 
 #
@@ -660,9 +664,9 @@ file "src/info/qt_ui.o" => $mkvinfo_ui_files.collect { |file| file.ext('h') }
 Application.new("src/mkvinfo").
   description("Build the mkvinfo executable").
   aliases(:mkvinfo).
-  sources(FileList["src/info/*.cpp"].exclude("src/info/qt_ui.cpp", "src/info/wxwidgets_ui.cpp")).
+  sources("src/info/mkvinfo.cpp").
   sources("src/info/resources.o", :if => c?(:MINGW)).
-  libraries($common_libs).
+  libraries(:mtxinfo, $common_libs).
   only_if(c?(:USE_QT)).
   sources("src/info/qt_ui.cpp", "src/info/qt_ui.moc", "src/info/rightclick_tree_widget.moc", $mkvinfo_ui_files).
   libraries(:qt).
@@ -681,9 +685,9 @@ Application.new("src/mkvinfo").
 Application.new("src/mkvextract").
   description("Build the mkvextract executable").
   aliases(:mkvextract).
-  sources("src/extract", :type => :dir).
+  sources("src/extract/mkvextract.cpp").
   sources("src/extract/resources.o", :if => c?(:MINGW)).
-  libraries($common_libs, :avi, :rmff, :vorbis, :ogg).
+  libraries(:mtxextract, $common_libs, :avi, :rmff, :vorbis, :ogg).
   create
 
 #
@@ -693,9 +697,9 @@ Application.new("src/mkvextract").
 Application.new("src/mkvpropedit").
   description("Build the mkvpropedit executable").
   aliases(:mkvpropedit).
-  sources("src/propedit", :type => :dir).
+  sources("src/propedit/propedit.cpp").
   sources("src/propedit/resources.o", :if => c?(:MINGW)).
-  libraries($common_libs).
+  libraries(:mtxpropedit, $common_libs).
   create
 
 #
