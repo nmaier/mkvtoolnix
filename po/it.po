@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: it\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2012-08-02 12:15+0100\n"
-"Last-Translator: bovirus <bovirus@gmail.com>\n"
+"PO-Revision-Date: 2012-08-12 19:08+0100\n"
+"Last-Translator: bovirus <bovirus@live.it>\n"
 "Language-Team: Italian <moritz@bunkus.org>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -6295,9 +6295,9 @@ msgid "The FourCC must be exactly four characters long in '%1% %2%'.\n"
 msgstr "FourCC deve essere esattamente lungo quattro caratteri in '%1% %2%'.\n"
 
 #: src/mmg/tabs/input.cpp:1349
-#, fuzzy, c-format, boost-format
+#, c-format, boost-format
 msgid "The FourCC setting for track nr. %s in file '%s' is not exactly four characters long."
-msgstr "L'impostazione FourCC per la traccia nr. %s nel file '%s' non è lunga quattro caratteri. "
+msgstr "L'impostazione FourCC per la traccia nr. %s nel file '%s' non è lunga esattamente quattro caratteri. "
 
 #: src/mmg/mmg_dialog.cpp:1890
 #, boost-format
@@ -6305,7 +6305,7 @@ msgid "The GUI is configured to use the mkvmerge executable from a different ver
 msgstr "La GUI è configurata per usare l'eseguibile mkvmerge di una differente versione (%1%) che quello della GUI stessa (%2%). Ciò non è supportato. E' necessario cambiare nelle preferenze l'impostazione dell'eseguibile mkvmerge. "
 
 #: src/input/r_ogm.cpp:1442
-#, fuzzy, boost-format
+#, boost-format
 msgid "The Kate identification header could not be parsed (%1%).\n"
 msgstr "L'intestazione identificazione Kate non può essere analizzata (%1%).\n"
 
@@ -9515,4 +9515,3 @@ msgstr "sì"
 
 #~ msgid "wavpack_reader: Could not open the file."
 #~ msgstr "wavpack_reader: Impossibile aprire il file."
-
