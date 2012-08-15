@@ -104,6 +104,7 @@ class Target
       when :mtxinfo     then "src/info/libmtxinfo.a"
       when :mtxextract  then "src/extract/libmtxextract.a"
       when :mtxpropedit then "src/propedit/libmtxpropedit.a"
+      when :mtxunittest then "tests/unit/libmtxunittest.a"
       when :avi         then "lib/avilib-0.6.10/libavi.a"
       when :rmff        then "lib/librmff/librmff.a"
       when :pugixml     then "lib/pugixml/src/libpugixml.a"
@@ -129,6 +130,14 @@ class Target
       when :boost_system     then c(:BOOST_SYSTEM_LIB)
       when :qt               then c(:QT_LIBS)
       when :wxwidgets        then c(:WXWIDGETS_LIBS)
+      when :mpegparser       then [ '-Lsrc/mpegparser', '-lmpegparser'  ]
+      when :mtxinput         then [ '-Lsrc/input',      '-lmtxinput'    ]
+      when :mtxoutput        then [ '-Lsrc/output',     '-lmtxoutput'   ]
+      when :mtxmerge         then [ '-Lsrc/merge',      '-lmtxmerge'    ]
+      when :mtxinfo          then [ '-Lsrc/info',       '-lmtxinfo'     ]
+      when :mtxextract       then [ '-Lsrc/extract',    '-lmtxextract'  ]
+      when :mtxpropedit      then [ '-Lsrc/propedit',   '-lmtxpropedit' ]
+      when :mtxunittest      then [ '-Ltests/unit',     '-lmtxunittest' ]
       when String            then entry
       else                        "-l#{entry}"
       end

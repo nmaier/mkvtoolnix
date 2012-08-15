@@ -1,9 +1,6 @@
 #!/usr/bin/env ruby
 
-gtest_apps = %w{common}
-gtest_libs = {
-  'common' => [],
-}
+gtest_apps = %w{common propedit}
 
 namespace :tests do
   desc "Build and run the unit tests"
@@ -19,6 +16,11 @@ $build_system_modules[:gtest] = {
   end,
 
   :define_tasks => lambda do
+    gtest_libs = {
+      'common'   => [],
+      'propedit' => [ :mtxpropedit ],
+    }
+
     #
     # Google Test framework
     #
@@ -27,13 +29,18 @@ $build_system_modules[:gtest] = {
       sources([ 'lib/gtest/src' ], :type => :dir).
       create
 
+    Library.
+      new('tests/unit/libmtxunittest').
+      sources('tests/unit', :type => :dir).
+      create
+
     gtest_apps.each do |app|
       Application.
         new("tests/unit/#{app}/#{app}").
         description("Build the unit tests executable for '#{app}'").
         aliases("unit_tests_#{app}").
         sources([ "tests/unit/#{app}" ], :type => :dir).
-        libraries($common_libs, gtest_libs[app], :gtest, :pthread).
+        libraries(gtest_libs[app], :mtxunittest, $common_libs, :gtest, :pthread).
         create
     end
   end,
