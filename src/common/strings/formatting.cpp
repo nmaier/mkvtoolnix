@@ -50,28 +50,6 @@ format_timecode(int64_t timecode,
   return result;
 }
 
-static boost::format s_bf_single_value("%1%");
-
-std::string
-to_string(int64_t value) {
-  return (s_bf_single_value % value).str();
-}
-
-std::string
-to_string(int value) {
-  return (s_bf_single_value % value).str();
-}
-
-std::string
-to_string(uint64_t value) {
-  return (s_bf_single_value % value).str();
-}
-
-std::string
-to_string(unsigned int value) {
-  return (s_bf_single_value % value).str();
-}
-
 std::string
 to_string(double value,
           unsigned int precision) {
@@ -79,30 +57,31 @@ to_string(double value,
   for (size_t i = 0; i < precision; ++i)
     scale *= 10;
 
-  return to_string((int64_t)(value * scale), scale, precision);
+  return to_string(static_cast<int64_t>(value * scale), scale, precision);
 }
 
 std::string
 to_string(int64_t numerator,
           int64_t denominator,
           unsigned int precision) {
-  std::string output      = (s_bf_single_value % (numerator / denominator)).str();
+  std::string output      = to_string(numerator / denominator);
   int64_t fractional_part = numerator % denominator;
 
-  if (0 != fractional_part) {
-    static boost::format s_bf_precision_format_format(".%%0%1%d");
+  if (0 == fractional_part)
+    return output;
 
-    std::string format         = (s_bf_precision_format_format % precision).str();
-    output                    += (boost::format(format) % fractional_part).str();
-    std::string::iterator end  = output.end() - 1;
+  static boost::format s_bf_precision_format_format(".%%0%1%d");
 
-    while (*end == '0')
-      --end;
-    if (*end == '.')
-      --end;
+  std::string format         = (s_bf_precision_format_format % precision).str();
+  output                    += (boost::format(format) % fractional_part).str();
+  std::string::iterator end  = output.end() - 1;
 
-    output.erase(end + 1, output.end());
-  }
+  while (*end == '0')
+    --end;
+  if (*end == '.')
+    --end;
+
+  output.erase(end + 1, output.end());
 
   return output;
 }

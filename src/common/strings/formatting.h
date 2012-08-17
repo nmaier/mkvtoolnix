@@ -17,6 +17,7 @@
 #include "common/common_pch.h"
 
 #include <ostream>
+#include <sstream>
 
 #include "common/strings/editing.h"
 #include "common/timecode.h"
@@ -73,10 +74,11 @@ std::wstring format_paragraph(const std::wstring &text_to_wrap,
 
 void fix_format(const char *fmt, std::string &new_fmt);
 
-std::string to_string(int value);
-std::string to_string(unsigned int value);
-std::string to_string(int64_t value);
-std::string to_string(uint64_t value);
+inline std::string
+to_string(std::string const &value) {
+  return value;
+}
+
 std::string to_string(double value, unsigned int precision);
 std::string to_string(int64_t numerator, int64_t denominator, unsigned int precision);
 
@@ -86,6 +88,14 @@ to_string(basic_timecode_c<T> const &timecode) {
   return format_timecode(timecode.to_ns());
 }
 
+
+template<typename T>
+std::string
+to_string(T const &value) {
+  std::stringstream ss;
+  ss << value;
+  return ss.str();
+}
 
 std::string to_hex(const unsigned char *buf, size_t size, bool compact = false);
 inline std::string
