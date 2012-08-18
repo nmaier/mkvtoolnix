@@ -1,6 +1,9 @@
 # boost's headers must be present.
 AX_BOOST_BASE([1.46.0])
 
+# boost::system must be present.
+AX_BOOST_SYSTEM()
+
 # boost::filesystem must be present.
 AX_BOOST_FILESYSTEM()
 
@@ -14,9 +17,6 @@ AX_BOOST_REGEX()
 if test x"$ax_cv_boost_regex" != "xyes"; then
   AC_MSG_ERROR(The Boost Regex Library was not found.)
 fi
-
-# boost::system must be present.
-AX_BOOST_SYSTEM()
 
 if test x"$ax_cv_boost_system" != "xyes"; then
   AC_MSG_ERROR(The Boost System Library was not found.)
