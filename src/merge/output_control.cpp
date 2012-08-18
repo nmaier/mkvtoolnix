@@ -635,7 +635,7 @@ set_timecode_scale() {
       && (0 < highest_sample_rate)
       && (   !video_present
           || (TIMECODE_SCALE_MODE_AUTO == g_timecode_scale_mode)))
-    g_timecode_scale = static_cast<int64_t>(1000000000.0d / highest_sample_rate - 1.0);
+    g_timecode_scale = static_cast<int64_t>(1000000000.0 / highest_sample_rate - 1.0);
 
   g_max_ns_per_cluster                                    = std::min((int64_t)(32700 * g_timecode_scale), g_max_ns_per_cluster);
   GetChildAs<KaxTimecodeScale, EbmlUInteger>(s_kax_infos) = (int64_t)g_timecode_scale;
