@@ -44,9 +44,9 @@ public:
 class invalid_attribute_x: public exception {
 protected:
   std::string m_message, m_node, m_attribute;
-  size_t m_position;
+  ptrdiff_t m_position;
 public:
-  invalid_attribute_x(std::string const &node, std::string const &attribute, size_t position)
+  invalid_attribute_x(std::string const &node, std::string const &attribute, ptrdiff_t position)
     : m_node(node)
     , m_attribute(attribute)
     , m_position(position)
@@ -63,9 +63,9 @@ public:
 class invalid_child_node_x: public exception {
 protected:
   std::string m_message, m_node, m_parent;
-  size_t m_position;
+  ptrdiff_t m_position;
 public:
-  invalid_child_node_x(std::string const &node, std::string const &parent, size_t position)
+  invalid_child_node_x(std::string const &node, std::string const &parent, ptrdiff_t position)
     : m_node(node)
     , m_parent(parent)
     , m_position(position)
@@ -82,9 +82,9 @@ public:
 class duplicate_child_node_x: public exception {
 protected:
   std::string m_message, m_node, m_parent;
-  size_t m_position;
+  ptrdiff_t m_position;
 public:
-  duplicate_child_node_x(std::string const &node, std::string const &parent, size_t position)
+  duplicate_child_node_x(std::string const &node, std::string const &parent, ptrdiff_t position)
     : m_node(node)
     , m_parent(parent)
     , m_position(position)
@@ -101,9 +101,9 @@ public:
 class malformed_data_x: public exception {
 protected:
   std::string m_message, m_node;
-  size_t m_position;
+  ptrdiff_t m_position;
 public:
-  malformed_data_x(std::string const &node, size_t position, std::string const &details = std::string{})
+  malformed_data_x(std::string const &node, ptrdiff_t position, std::string const &details = std::string{})
     : m_node(node)
     , m_position(position)
   {
@@ -121,9 +121,9 @@ public:
 class out_of_range_x: public exception {
 protected:
   std::string m_message, m_node;
-  size_t m_position;
+  ptrdiff_t m_position;
 public:
-  out_of_range_x(std::string const &node, size_t position, std::string const &details = std::string{})
+  out_of_range_x(std::string const &node, ptrdiff_t position, std::string const &details = std::string{})
     : m_node(node)
     , m_position(position)
   {
