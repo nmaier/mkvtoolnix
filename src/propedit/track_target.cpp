@@ -18,7 +18,7 @@
 using namespace libmatroska;
 
 track_target_c::track_target_c(std::string const &spec)
-  : target_c{}
+  : target_c()
   , m_selection_mode{track_target_c::sm_undefined}
   , m_selection_param{}
   , m_selection_track_type{INVALID_TRACK_TYPE}

@@ -18,7 +18,7 @@
 using namespace libmatroska;
 
 chapter_target_c::chapter_target_c()
-  : target_c{}
+  : target_c()
 {
 }
 
