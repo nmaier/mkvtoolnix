@@ -19,6 +19,12 @@
 struct mime_type_t {
   std::string const name;
   std::vector<std::string> const extensions;
+
+  mime_type_t(std::string const &p_name, std::vector<std::string> const p_extensions)
+    : name{p_name}
+    , extensions{p_extensions}
+  {
+  }
 };
 
 extern std::vector<std::string> const sub_charsets, cctlds;
