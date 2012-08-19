@@ -90,7 +90,8 @@ def setup_globals
   $build_unit_tests      ||=  c?(:UNIT_TESTS)
 
   cflags_common            = "-Wall -Wno-comment #{c(:OPTIMIZATION_CFLAGS)} -D_FILE_OFFSET_BITS=64 #{c(:MATROSKA_CFLAGS)} #{c(:EBML_CFLAGS)} #{c(:EXTRA_CFLAGS)} #{c(:DEBUG_CFLAGS)} #{c(:PROFILING_CFLAGS)} #{c(:USER_CPPFLAGS)} "
-  cflags_common           += "-DPACKAGE=\\\"#{c(:PACKAGE)}\\\" -DVERSION=\\\"#{c(:VERSION)}\\\" -DMTX_LOCALE_DIR=\\\"#{c(:localedir)}\\\" -DMTX_PKG_DATA_DIR=\\\"#{c(:pkgdatadir)}\\\" -DMTX_DOC_DIR=\\\"#{c(:docdir)}\\\""
+  cflags_common           += "-DPACKAGE=\\\"#{c(:PACKAGE)}\\\" -DVERSION=\\\"#{c(:VERSION)}\\\" -DMTX_LOCALE_DIR=\\\"#{c(:localedir)}\\\" -DMTX_PKG_DATA_DIR=\\\"#{c(:pkgdatadir)}\\\" -DMTX_DOC_DIR=\\\"#{c(:docdir)}\\\" "
+  cflags_common           += "#{c(:QUNUSED_ARGUMENTS)}"
   ldflags_extra            = c?(:MINGW) ? '' : "-Wl,--enable-auto-import"
   $flags                   = {
     :cflags                => "#{cflags_common} #{c(:USER_CFLAGS)}",
