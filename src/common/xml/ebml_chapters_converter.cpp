@@ -198,7 +198,7 @@ ebml_chapters_converter_c::probe_file(std::string const &file_name) {
 kax_chapters_cptr
 ebml_chapters_converter_c::parse_file(std::string const &file_name,
                                       bool throw_on_error) {
-  auto parse = [&]() {
+  auto parse = [&]() -> std::shared_ptr<KaxChapters> {
     auto master = ebml_chapters_converter_c{}.to_ebml(file_name, "Chapters");
     sort_ebml_master(master.get());
     fix_mandatory_chapter_elements(static_cast<KaxChapters *>(master.get()));

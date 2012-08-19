@@ -1467,7 +1467,7 @@ qtmp4_demuxer_c::calculate_fps() {
   } else if (!sample_table.empty()) {
     std::map<int64_t, int> duration_map;
 
-    std::accumulate(sample_table.begin() + 1, sample_table.end(), sample_table[0], [&](qt_sample_t &previous_sample, qt_sample_t &current_sample) {
+    std::accumulate(sample_table.begin() + 1, sample_table.end(), sample_table[0], [&](qt_sample_t &previous_sample, qt_sample_t &current_sample) -> qt_sample_t {
       duration_map[current_sample.pts - previous_sample.pts]++;
       return current_sample;
     });

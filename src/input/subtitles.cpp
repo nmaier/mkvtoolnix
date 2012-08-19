@@ -150,7 +150,7 @@ srt_parser_c::parse() {
       std::string s_rest = matches[ 8].str();
       std::string e_rest = matches[16].str();
 
-      auto neg_calculator = [&](size_t const start_idx) {
+      auto neg_calculator = [&](size_t const start_idx) -> int64_t {
         int64_t neg = 1;
         for (size_t idx = start_idx; idx <= (start_idx + 6); idx += 2)
           neg *= matches[idx].str() == "-" ? -1 : 1;
