@@ -1627,7 +1627,7 @@ rmff_write_packed_video_frame(rmff_track_t *track,
   return RMFF_ERR_OK;
 }
 
-inline uint16_t
+static inline uint16_t
 data_get_uint16_be(unsigned char **data,
                    int *len) {
   (*data) += 2;
@@ -1635,7 +1635,7 @@ data_get_uint16_be(unsigned char **data,
   return rmff_get_uint16_be((*data) - 2);
 }
 
-inline unsigned char
+static inline unsigned char
 data_get_uint8(unsigned char **data,
                int *len) {
   (*data)++;
