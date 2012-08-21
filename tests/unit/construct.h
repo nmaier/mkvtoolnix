@@ -16,6 +16,9 @@
 
 #include "common/common_pch.h"
 
+#include <type_traits>
+#include <boost/type_traits.hpp>
+
 #include <ebml/EbmlDate.h>
 #include <ebml/EbmlFloat.h>
 #include <ebml/EbmlSInteger.h>
@@ -30,66 +33,64 @@ using namespace libebml;
 
 template<typename Tobject,
          typename Tvalue>
-typename boost::enable_if< boost::is_base_of<EbmlUInteger, Tobject> >::type
+typename boost::enable_if< std::is_base_of<EbmlUInteger, Tobject> >::type
 cons_impl(EbmlMaster *master,
           Tobject *object,
-          Tvalue &&value) {
+          Tvalue const &value) {
   *static_cast<EbmlUInteger *>(object) = value;
   master->PushElement(*object);
 }
 
 template<typename Tobject,
          typename Tvalue>
-typename boost::enable_if< boost::is_base_of<EbmlSInteger, Tobject> >::type
+typename boost::enable_if< std::is_base_of<EbmlSInteger, Tobject> >::type
 cons_impl(EbmlMaster *master,
           Tobject *object,
-          Tvalue &&value) {
+          Tvalue const &value) {
   *static_cast<EbmlSInteger *>(object) = value;
   master->PushElement(*object);
 }
 
 template<typename Tobject,
          typename Tvalue>
-typename boost::enable_if< boost::is_base_of<EbmlFloat, Tobject> >::type
+typename boost::enable_if< std::is_base_of<EbmlFloat, Tobject> >::type
 cons_impl(EbmlMaster *master,
           Tobject *object,
-          Tvalue &&value) {
+          Tvalue const &value) {
   *static_cast<EbmlFloat *>(object) = value;
   master->PushElement(*object);
 }
 
 template<typename Tobject,
          typename Tvalue>
-typename boost::enable_if< boost::is_base_of<EbmlString, Tobject> >::type
+typename boost::enable_if< std::is_base_of<EbmlString, Tobject> >::type
 cons_impl(EbmlMaster *master,
           Tobject *object,
-          Tvalue &&value) {
+          Tvalue const &value) {
   *static_cast<EbmlString *>(object) = value;
   master->PushElement(*object);
 }
 
 template<typename Tobject,
          typename Tvalue>
-typename boost::enable_if< boost::is_base_of<EbmlUnicodeString, Tobject> >::type
+typename boost::enable_if< std::is_base_of<EbmlUnicodeString, Tobject> >::type
 cons_impl(EbmlMaster *master,
           Tobject *object,
-          Tvalue &&value) {
+          Tvalue const &value) {
   *static_cast<EbmlUnicodeString *>(object) = value;
   master->PushElement(*object);
 }
 
-template<typename Tsub_master>
-typename boost::enable_if< boost::is_base_of<EbmlMaster, Tsub_master> >::type
+void
 cons_impl(EbmlMaster *master,
-          Tsub_master *sub_master) {
+          EbmlMaster *sub_master) {
   master->PushElement(*sub_master);
 }
 
-template<typename Tsub_master,
-         typename... Targs>
-typename boost::enable_if< boost::is_base_of<EbmlMaster, Tsub_master> >::type
+template<typename... Targs>
+void
 cons_impl(EbmlMaster *master,
-          Tsub_master *sub_master,
+          EbmlMaster *sub_master,
           Targs... args) {
   master->PushElement(*sub_master);
   cons_impl(master, args...);
@@ -98,22 +99,29 @@ cons_impl(EbmlMaster *master,
 template<typename Tobject,
          typename Tvalue,
          typename... Targs>
-void
+typename boost::disable_if< std::is_convertible<Tobject *, EbmlMaster *> >::type
 cons_impl(EbmlMaster *master,
           Tobject *object,
-          Tvalue &&value,
+          Tvalue const &value,
           Targs... args) {
   cons_impl(master, object, value);
   cons_impl(master, args...);
 }
 
-template<typename Tmaster,
-         typename... Targs>
-Tmaster *
-cons(Targs... args) {
+template<typename Tmaster>
+EbmlMaster *
+cons() {
   auto master = new Tmaster;
   master->RemoveAll();
 
+  return master;
+}
+
+template<typename Tmaster,
+         typename... Targs>
+EbmlMaster *
+cons(Targs... args) {
+  auto master = cons<Tmaster>();
   cons_impl(master, args...);
 
   return master;
