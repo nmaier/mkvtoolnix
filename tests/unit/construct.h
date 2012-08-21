@@ -33,6 +33,16 @@ using namespace libebml;
 
 template<typename Tobject,
          typename Tvalue>
+typename boost::enable_if< std::is_base_of<EbmlDate, Tobject> >::type
+cons_impl(EbmlMaster *master,
+          Tobject *object,
+          Tvalue const &value) {
+  static_cast<EbmlDate *>(object)->SetEpochDate(value);
+  master->PushElement(*object);
+}
+
+template<typename Tobject,
+         typename Tvalue>
 typename boost::enable_if< std::is_base_of<EbmlUInteger, Tobject> >::type
 cons_impl(EbmlMaster *master,
           Tobject *object,

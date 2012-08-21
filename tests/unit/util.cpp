@@ -137,6 +137,7 @@ ebml_equals_c::compare_impl(EbmlElement &a,
   EbmlString *str_a;
   EbmlUnicodeString *ustr_a;
   EbmlMaster *m_a;
+  EbmlDate *d_a;
 
   if ((ui_a = dynamic_cast<EbmlUInteger *>(&a))) {
     auto val_b = uint64(*dynamic_cast<EbmlUInteger *>(&b));
@@ -145,6 +146,11 @@ ebml_equals_c::compare_impl(EbmlElement &a,
   } else if ((si_a = dynamic_cast<EbmlSInteger *>(&a))) {
     auto val_b = int64(*dynamic_cast<EbmlSInteger *>(&b));
     return int64(*si_a) == val_b ? true : set_error(boost::format("SInteger values differ: %1% vs %2%") % int64(*si_a) % val_b, &a);
+
+  } else if ((d_a = dynamic_cast<EbmlDate *>(&a))) {
+    auto val_a = d_a->GetEpochDate();
+    auto val_b = dynamic_cast<EbmlDate *>(&b)->GetEpochDate();
+    return val_a == val_b ? true : set_error(boost::format("Date values differ: %1% vs %2%") % val_a % val_b, &a);
 
   } else if ((f_a = dynamic_cast<EbmlFloat *>(&a))) {
     auto val_b = double(*dynamic_cast<EbmlFloat *>(&b));
