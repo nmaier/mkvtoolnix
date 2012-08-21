@@ -19,6 +19,7 @@
 #include <type_traits>
 #include <boost/type_traits.hpp>
 
+#include <ebml/EbmlBinary.h>
 #include <ebml/EbmlDate.h>
 #include <ebml/EbmlFloat.h>
 #include <ebml/EbmlSInteger.h>
@@ -88,6 +89,16 @@ cons_impl(EbmlMaster *master,
           Tobject *object,
           Tvalue const &value) {
   *static_cast<EbmlUnicodeString *>(object) = value;
+  master->PushElement(*object);
+}
+
+template<typename Tobject,
+         typename Tvalue>
+typename boost::enable_if< std::is_base_of<EbmlBinary, Tobject> >::type
+cons_impl(EbmlMaster *master,
+          Tobject *object,
+          Tvalue const &value) {
+  static_cast<EbmlBinary *>(object)->CopyBuffer(static_cast<binary *>(value->get_buffer()), value->get_size());
   master->PushElement(*object);
 }
 

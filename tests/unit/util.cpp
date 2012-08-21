@@ -138,6 +138,7 @@ ebml_equals_c::compare_impl(EbmlElement &a,
   EbmlUnicodeString *ustr_a;
   EbmlMaster *m_a;
   EbmlDate *d_a;
+  EbmlBinary *b_a;
 
   if ((ui_a = dynamic_cast<EbmlUInteger *>(&a))) {
     auto val_b = uint64(*dynamic_cast<EbmlUInteger *>(&b));
@@ -164,6 +165,10 @@ ebml_equals_c::compare_impl(EbmlElement &a,
     auto val_a = UTFstring(*dynamic_cast<EbmlUnicodeString *>(&a)).GetUTF8();
     auto val_b = UTFstring(*dynamic_cast<EbmlUnicodeString *>(&b)).GetUTF8();
     return val_a == val_b ? true : set_error(boost::format("UnicodeString values differ: %1% vs %2%") % val_a % val_b, &a);
+
+  } else if ((b_a = dynamic_cast<EbmlBinary *>(&a))) {
+    auto b_b = dynamic_cast<EbmlBinary *>(&b);
+    return *b_a == *b_b ? true : set_error(boost::format("Binary values differ; sizes %1% vs %2%") % b_a->GetSize() % b_b->GetSize(), &a);
 
   } else if ((m_a = dynamic_cast<EbmlMaster *>(&a))) {
     m_path.push_back(EBML_NAME(&a));
