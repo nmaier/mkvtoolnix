@@ -90,16 +90,31 @@ propedit_cli_parser_c::set_attachment_mime_type() {
 
 void
 propedit_cli_parser_c::add_attachment() {
-  m_attachment = attachment_options_t();
+  try {
+    m_options->add_attachment_command(attachment_target_c::ac_add, m_next_arg, m_attachment);
+    m_attachment = attachment_target_c::options_t();
+  } catch (...) {
+    mxerror(boost::format(Y("Invalid selector in '%1% %2%'.\n")) % m_current_arg % m_next_arg);
+  }
 }
 
 void
 propedit_cli_parser_c::delete_attachment() {
+  try {
+    m_options->add_attachment_command(attachment_target_c::ac_delete, m_next_arg, m_attachment);
+  } catch (...) {
+    mxerror(boost::format(Y("Invalid selector in '%1% %2%'.\n")) % m_current_arg % m_next_arg);
+  }
 }
 
 void
 propedit_cli_parser_c::replace_attachment() {
-  m_attachment = attachment_options_t();
+  try {
+    m_options->add_attachment_command(attachment_target_c::ac_replace, m_next_arg, m_attachment);
+    m_attachment = attachment_target_c::options_t();
+  } catch (...) {
+    mxerror(boost::format(Y("Invalid selector in '%1% %2%'.\n")) % m_current_arg % m_next_arg);
+  }
 }
 
 std::map<property_element_c::ebml_type_e, const char *> &
@@ -193,12 +208,12 @@ propedit_cli_parser_c::init_parser() {
                                                             "or remove them if 'filename' is empty"));
 
   add_section_header(YT("Actions for handling attachments"));
-  OPT("add-attachment=<filename>",                 add_attachment,             YT("Add the file 'filename' as a new attachment"));
-  OPT("replace-attachment=<id-selector:filename>", replace_attachment,         YT("Replace an attachment with the file 'filename'"));
-  OPT("delete-attachment=<extended-selector>",     delete_attachment,          YT("Delete one or more attachments"));
-  OPT("attachment-name=<name>",                    set_attachment_name,        YT("Set the name to use for the following '--add-attachment' or '--replace-attachment' option"));
-  OPT("attachment-description=<description>",      set_attachment_description, YT("Set the description to use for the following '--add-attachment' or '--replace-attachment' option"));
-  OPT("attachment-mime-type=<mime-type>",          set_attachment_mime_type,   YT("Set the MIME type to use for the following '--add-attachment' or '--replace-attachment' option"));
+  OPT("add-attachment=<filename>",                         add_attachment,             YT("Add the file 'filename' as a new attachment"));
+  OPT("replace-attachment=<attachment-selector:filename>", replace_attachment,         YT("Replace an attachment with the file 'filename'"));
+  OPT("delete-attachment=<attachment-selector>",           delete_attachment,          YT("Delete one or more attachments"));
+  OPT("attachment-name=<name>",                            set_attachment_name,        YT("Set the name to use for the following '--add-attachment' or '--replace-attachment' option"));
+  OPT("attachment-description=<description>",              set_attachment_description, YT("Set the description to use for the following '--add-attachment' or '--replace-attachment' option"));
+  OPT("attachment-mime-type=<mime-type>",                  set_attachment_mime_type,   YT("Set the MIME type to use for the following '--add-attachment' or '--replace-attachment' option"));
 
   add_section_header(YT("Other options"));
   add_common_options();
@@ -223,12 +238,10 @@ propedit_cli_parser_c::init_parser() {
   add_information(YT("All other strings work just like the track header selectors (see above)."), 1);
 
   add_section_header(YT("Attachment selectors"), 0);
-  add_information(YT("There are two types of selectors: <id-selector> and <extended-selector>."), 1);
-  add_information(YT("The <id-selector> can be either just a number 'n' or a number 'n' prefixed with '=' (e.g. '=12345')."), 1);
-  add_information(YT("Without the prefix '=' the number 'n' is interepreted as the attachment ID as listed by 'mkvmerge --identify-verbose'. These are usually simply numbered starting from 0."), 2);
-  add_information(YT("With the prefix '=' the number 'n' is interepreted as the attachment's unique ID (UID) as listed by 'mkvmerge --identify-verbose'. These are usually random-looking numbers."), 2);
-  add_information(YT("The <extended-selector> can be either an <id-selector> like above or have the form '<type>:<value>'."), 1);
-  add_information(YT("The '<type>' can be either 'name' or 'mime-type' selecting all attachments whose name or MIME type equals the user supplied '<value>'."), 2);
+  add_information(YT("An <attachment-selector> can have three forms:"), 1);
+  add_information(YT("1. A number which will be interepreted as an attachment ID as listed by 'mkvmerge --identify-verbose'. These are usually simply numbered starting from 0 (e.g. '2')."), 2);
+  add_information(YT("2. A number with the prefix '=' which will be interepreted as the attachment's unique ID (UID) as listed by 'mkvmerge --identify-verbose'. These are usually random-looking numbers (e.g. '128975986723')."), 2);
+  add_information(YT("3. Either 'name:<value>' or 'mime-type:<value>' in which case the selector applies to all attachments whose name or MIME type respectively equals <value>."), 2);
 
   add_hook(cli_parser_c::ht_unknown_option, std::bind(&propedit_cli_parser_c::set_file_name, this));
 }

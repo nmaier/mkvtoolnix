@@ -14,17 +14,14 @@
 #include "common/common_pch.h"
 
 #include "common/cli_parser.h"
+#include "propedit/attachment_target.h"
 #include "propedit/options.h"
-
-struct attachment_options_t {
-  std::pair<std::string, bool> m_name, m_description, m_mime_type;
-};
 
 class propedit_cli_parser_c: public cli_parser_c {
 protected:
   options_cptr m_options;
   target_cptr m_target;
-  attachment_options_t m_attachment;
+  attachment_target_c::options_t m_attachment;
 
 public:
   propedit_cli_parser_c(const std::vector<std::string> &args);

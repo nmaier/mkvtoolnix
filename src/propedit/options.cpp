@@ -87,6 +87,15 @@ options_c::add_chapters(const std::string &spec) {
 }
 
 void
+options_c::add_attachment_command(attachment_target_c::command_e command,
+                                  const std::string &spec,
+                                  attachment_target_c::options_t const &options) {
+  target_cptr target{new attachment_target_c};
+  static_cast<attachment_target_c *>(target.get())->parse_spec(command, spec, options);
+  m_targets.push_back(target);
+}
+
+void
 options_c::set_file_name(const std::string &file_name) {
   if (!m_file_name.empty())
     mxerror(boost::format(Y("More than one file name has been given ('%1%' and '%2%').\n")) % m_file_name % file_name);
