@@ -88,7 +88,7 @@ typename boost::enable_if< std::is_base_of<EbmlUnicodeString, Tobject> >::type
 cons_impl(EbmlMaster *master,
           Tobject *object,
           Tvalue const &value) {
-  *static_cast<EbmlUnicodeString *>(object) = value;
+  *static_cast<EbmlUnicodeString *>(object) = std::wstring{value}.c_str();
   master->PushElement(*object);
 }
 
