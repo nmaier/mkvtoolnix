@@ -34,7 +34,7 @@ using namespace libebml;
 
 template<typename Tobject,
          typename Tvalue>
-typename boost::enable_if< std::is_base_of<EbmlDate, Tobject> >::type
+inline typename boost::enable_if< std::is_base_of<EbmlDate, Tobject> >::type
 cons_impl(EbmlMaster *master,
           Tobject *object,
           Tvalue const &value) {
@@ -44,7 +44,7 @@ cons_impl(EbmlMaster *master,
 
 template<typename Tobject,
          typename Tvalue>
-typename boost::enable_if< std::is_base_of<EbmlUInteger, Tobject> >::type
+inline typename boost::enable_if< std::is_base_of<EbmlUInteger, Tobject> >::type
 cons_impl(EbmlMaster *master,
           Tobject *object,
           Tvalue const &value) {
@@ -54,7 +54,7 @@ cons_impl(EbmlMaster *master,
 
 template<typename Tobject,
          typename Tvalue>
-typename boost::enable_if< std::is_base_of<EbmlSInteger, Tobject> >::type
+inline typename boost::enable_if< std::is_base_of<EbmlSInteger, Tobject> >::type
 cons_impl(EbmlMaster *master,
           Tobject *object,
           Tvalue const &value) {
@@ -64,7 +64,7 @@ cons_impl(EbmlMaster *master,
 
 template<typename Tobject,
          typename Tvalue>
-typename boost::enable_if< std::is_base_of<EbmlFloat, Tobject> >::type
+inline typename boost::enable_if< std::is_base_of<EbmlFloat, Tobject> >::type
 cons_impl(EbmlMaster *master,
           Tobject *object,
           Tvalue const &value) {
@@ -74,7 +74,7 @@ cons_impl(EbmlMaster *master,
 
 template<typename Tobject,
          typename Tvalue>
-typename boost::enable_if< std::is_base_of<EbmlString, Tobject> >::type
+inline typename boost::enable_if< std::is_base_of<EbmlString, Tobject> >::type
 cons_impl(EbmlMaster *master,
           Tobject *object,
           Tvalue const &value) {
@@ -84,7 +84,7 @@ cons_impl(EbmlMaster *master,
 
 template<typename Tobject,
          typename Tvalue>
-typename boost::enable_if< std::is_base_of<EbmlUnicodeString, Tobject> >::type
+inline typename boost::enable_if< std::is_base_of<EbmlUnicodeString, Tobject> >::type
 cons_impl(EbmlMaster *master,
           Tobject *object,
           Tvalue const &value) {
@@ -94,7 +94,7 @@ cons_impl(EbmlMaster *master,
 
 template<typename Tobject,
          typename Tvalue>
-typename boost::enable_if< std::is_base_of<EbmlBinary, Tobject> >::type
+inline typename boost::enable_if< std::is_base_of<EbmlBinary, Tobject> >::type
 cons_impl(EbmlMaster *master,
           Tobject *object,
           Tvalue const &value) {
@@ -102,14 +102,14 @@ cons_impl(EbmlMaster *master,
   master->PushElement(*object);
 }
 
-void
+inline void
 cons_impl(EbmlMaster *master,
           EbmlMaster *sub_master) {
   master->PushElement(*sub_master);
 }
 
 template<typename... Targs>
-void
+inline void
 cons_impl(EbmlMaster *master,
           EbmlMaster *sub_master,
           Targs... args) {
@@ -120,7 +120,7 @@ cons_impl(EbmlMaster *master,
 template<typename Tobject,
          typename Tvalue,
          typename... Targs>
-typename boost::disable_if< std::is_convertible<Tobject *, EbmlMaster *> >::type
+inline typename boost::disable_if< std::is_convertible<Tobject *, EbmlMaster *> >::type
 cons_impl(EbmlMaster *master,
           Tobject *object,
           Tvalue const &value,
@@ -130,7 +130,7 @@ cons_impl(EbmlMaster *master,
 }
 
 template<typename Tmaster>
-EbmlMaster *
+inline EbmlMaster *
 cons() {
   auto master = new Tmaster;
   master->RemoveAll();
@@ -140,7 +140,7 @@ cons() {
 
 template<typename Tmaster,
          typename... Targs>
-EbmlMaster *
+inline EbmlMaster *
 cons(Targs... args) {
   auto master = cons<Tmaster>();
   cons_impl(master, args...);
