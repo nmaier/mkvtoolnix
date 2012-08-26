@@ -3,6 +3,7 @@
 #include "propedit/attachment_target.h"
 
 #include "gtest/gtest.h"
+#include "tests/unit/init.h"
 #include "tests/unit/util.h"
 
 namespace {
@@ -104,6 +105,37 @@ TEST(AttachmentTarget, ParsingInvalidArgumentsForReplace) {
   EXPECT_THROW(at.parse_spec(attachment_target_c::ac_replace, "mime-type:chunky/bacon:", no_opt), std::invalid_argument);
 
   EXPECT_THROW(at.parse_spec(attachment_target_c::ac_replace, "gonzo:peter:wuff",        no_opt), std::invalid_argument);
+}
+
+TEST(AttachmentTarget, ValidateOk) {
+  attachment_target_c at;
+  attachment_target_c::options_t no_opt;
+
+  ASSERT_NO_THROW(at.parse_spec(attachment_target_c::ac_delete, "1", no_opt));
+  ASSERT_NO_THROW(at.validate());
+
+  at = attachment_target_c{};
+
+  ASSERT_NO_THROW(at.parse_spec(attachment_target_c::ac_add, "tests/unit/data/text/chunky_bacon.txt", no_opt));
+  ASSERT_NO_THROW(at.validate());
+
+  at = attachment_target_c{};
+
+  ASSERT_NO_THROW(at.parse_spec(attachment_target_c::ac_replace, "1:tests/unit/data/text/chunky_bacon.txt", no_opt));
+  ASSERT_NO_THROW(at.validate());
+}
+
+TEST(AttachmentTarget, ValidateFailure) {
+  attachment_target_c at;
+  attachment_target_c::options_t no_opt;
+
+  ASSERT_NO_THROW(at.parse_spec(attachment_target_c::ac_add, "doesnotexist", no_opt));
+  ASSERT_THROW(at.validate(), mtxut::mxerror_x);
+
+  at = attachment_target_c{};
+
+  ASSERT_NO_THROW(at.parse_spec(attachment_target_c::ac_replace, "1:doesnotexist", no_opt));
+  ASSERT_THROW(at.validate(), mtxut::mxerror_x);
 }
 
 }
