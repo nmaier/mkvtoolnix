@@ -131,6 +131,8 @@ template<typename Tmaster>
 inline EbmlMaster *
 cons() {
   auto master = new Tmaster;
+  for (auto element : *master)
+    delete element;
   master->RemoveAll();
 
   return master;
