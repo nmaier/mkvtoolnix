@@ -117,11 +117,14 @@ charset_converter_c::handle_string_with_bom(const std::string &source,
 
 // ------------------------------------------------------------
 #if defined(HAVE_ICONV_H)
+
+static iconv_t const s_iconv_t_error_value = reinterpret_cast<iconv_t>(-1);
+
 iconv_charset_converter_c::iconv_charset_converter_c(const std::string &charset)
   : charset_converter_c(charset)
   , m_is_utf8(false)
-  , m_to_utf8_handle(reinterpret_cast<iconv_t>(-1))
-  , m_from_utf8_handle(reinterpret_cast<iconv_t>(-1))
+  , m_to_utf8_handle(s_iconv_t_error_value)
+  , m_from_utf8_handle(s_iconv_t_error_value)
 {
   if (is_utf8_charset_name(charset)) {
     m_is_utf8 = true;
@@ -129,24 +132,24 @@ iconv_charset_converter_c::iconv_charset_converter_c(const std::string &charset)
   }
 
   m_to_utf8_handle = iconv_open("UTF-8", charset.c_str());
-  if (reinterpret_cast<iconv_t>(-1) == m_to_utf8_handle)
+  if (s_iconv_t_error_value == m_to_utf8_handle)
     mxwarn(boost::format(Y("Could not initialize the iconv library for the conversion from %1% to UFT-8. "
                            "Some strings will not be converted to UTF-8 and the resulting Matroska file "
                            "might not comply with the Matroska specs (error: %2%, %3%).\n"))
            % charset % errno % strerror(errno));
 
   m_from_utf8_handle = iconv_open(charset.c_str(), "UTF-8");
-  if (reinterpret_cast<iconv_t>(-1) == m_from_utf8_handle)
+  if (s_iconv_t_error_value == m_from_utf8_handle)
     mxwarn(boost::format(Y("Could not initialize the iconv library for the conversion from UFT-8 to %1%. "
                            "Some strings cannot be converted from UTF-8 and might be displayed incorrectly (error: %2%, %3%).\n"))
            % charset % errno % strerror(errno));
 }
 
 iconv_charset_converter_c::~iconv_charset_converter_c() {
-  if (reinterpret_cast<iconv_t>(-1) != m_to_utf8_handle)
+  if (s_iconv_t_error_value != m_to_utf8_handle)
     iconv_close(m_to_utf8_handle);
 
-  if (reinterpret_cast<iconv_t>(-1) != m_from_utf8_handle)
+  if (s_iconv_t_error_value != m_from_utf8_handle)
     iconv_close(m_from_utf8_handle);
 }
 
@@ -167,7 +170,7 @@ iconv_charset_converter_c::native(const std::string &source) {
 std::string
 iconv_charset_converter_c::convert(iconv_t handle,
                                    const std::string &source) {
-  if (reinterpret_cast<iconv_t>(-1) == handle)
+  if (s_iconv_t_error_value == handle)
     return source;
 
   int length        = source.length() * 4;
@@ -197,7 +200,7 @@ iconv_charset_converter_c::is_available(const std::string &charset) {
     return true;
 
   iconv_t handle = iconv_open("UTF-8", charset.c_str());
-  if (reinterpret_cast<iconv_t>(-1) == handle)
+  if (s_iconv_t_error_value == handle)
     return false;
 
   iconv_close(handle);
