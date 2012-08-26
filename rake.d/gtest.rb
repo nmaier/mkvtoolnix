@@ -3,8 +3,11 @@
 gtest_apps = %w{common propedit}
 
 namespace :tests do
+  desc "Build the unit tests"
+  task :unit => gtest_apps.collect { |app| "tests/unit/#{app}/#{app}" }
+
   desc "Build and run the unit tests"
-  task :unit => gtest_apps.collect { |app| "tests/unit/#{app}/#{app}" } do
+  task :run_unit => 'tests:unit' do
     gtest_apps.each { |app| run "./tests/unit/#{app}/#{app}" }
   end
 end
