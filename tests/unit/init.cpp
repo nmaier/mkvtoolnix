@@ -15,7 +15,8 @@
 
 #include "tests/unit/init.h"
 
-#include "src/common/unique_numbers.h"
+#include "common/hacks.h"
+#include "common/unique_numbers.h"
 
 namespace {
 
@@ -39,6 +40,8 @@ mtxut::init_suite() {
   set_mxmsg_handler(MXMSG_INFO,    mxmsg_handler);
   set_mxmsg_handler(MXMSG_WARNING, mxmsg_handler);
   set_mxmsg_handler(MXMSG_ERROR,   mxmsg_handler);
+
+  engage_hack(ENGAGE_NO_VARIABLE_DATA);
 }
 
 void
