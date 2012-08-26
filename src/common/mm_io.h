@@ -216,6 +216,7 @@ public:
   virtual ~mm_file_io_c();
 
   static void prepare_path(const std::string &path);
+  static memory_cptr slurp(std::string const &file_name);
 
   virtual uint64 getFilePointer();
 #if defined(SYS_WINDOWS)

@@ -161,6 +161,16 @@ mm_file_io_c::prepare_path(const std::string &path) {
     throw mtx::mm_io::create_directory_x(path, strerror(error_code.value()), error_code.value());
 }
 
+memory_cptr
+mm_file_io_c::slurp(std::string const &file_name) {
+  mm_file_io_c in(file_name, MODE_READ);
+  auto content = memory_c::alloc(in.get_size());
+  if (in.get_size() != in.read(content, in.get_size()))
+    throw mtx::mm_io::end_of_file_x{};
+
+  return content;
+}
+
 uint64
 mm_file_io_c::getFilePointer() {
   return m_current_position;

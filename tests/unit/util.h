@@ -51,4 +51,10 @@ public:
 
 }
 
+inline bool
+operator ==(memory_c const &a,
+            std::string const &b) {
+  return (a.get_size() == b.length()) && !memcmp(a.get_buffer(), b.c_str(), b.length());
+}
+
 #endif // MTX_TESTS_UNIT_UTIL_H
