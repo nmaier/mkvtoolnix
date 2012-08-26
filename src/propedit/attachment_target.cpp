@@ -12,7 +12,11 @@
 
 #include <matroska/KaxAttachments.h>
 
+#include "common/construct.h"
+#include "common/extern_data.h"
 #include "common/strings/parsing.h"
+#include "common/strings/utf8.h"
+#include "common/unique_numbers.h"
 #include "propedit/attachment_target.h"
 
 using namespace libmatroska;
@@ -125,15 +129,25 @@ attachment_target_c::parse_spec(command_e command,
 
 void
 attachment_target_c::execute() {
-  // TODO: execute()
-  assert(false);
+  if (ac_add == m_command)
+    execute_add();
 
-  // add_or_replace_all_master_elements(m_new_attachments.get());
+  else
+    // TODO: execute()
+    assert(false);
+}
 
-  // if (!m_level1_element->ListSize())
-  //   return;
+void
+attachment_target_c::execute_add() {
+  auto mime_type    = m_options.m_mime_type.second ? m_options.m_mime_type.first : guess_mime_type(m_file_name, true);
+  auto file_name    = m_options.m_name.second      ? m_options.m_name.first      : bfs::path{m_file_name}.filename().native();
+  auto &description = m_options.m_description.first;
 
-  // fix_mandatory_attachment_elements(m_level1_element);
-  // if (!m_level1_element->CheckMandatory())
-  //   mxerror(boost::format(Y("Error parsing the attachments in '%1%': some mandatory elements are missing.\n")) % m_file_name);
+  auto att          = mtx::construct::cons<KaxAttached>(new KaxFileName,                                         to_wide(file_name),
+                                                        !description.empty() ? new KaxFileDescription : nullptr, to_wide(description),
+                                                        new KaxMimeType,                                         mime_type,
+                                                        new KaxFileUID,                                          create_unique_number(UNIQUE_ATTACHMENT_IDS),
+                                                        new KaxFileData,                                         m_file_content);
+
+  m_level1_element->PushElement(*att);
 }

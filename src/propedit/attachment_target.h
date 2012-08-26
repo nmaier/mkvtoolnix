@@ -21,6 +21,24 @@ class attachment_target_c: public target_c {
 public:
   struct options_t {
     std::pair<std::string, bool> m_name, m_description, m_mime_type;
+
+    options_t &
+    name(std::string const &p_name) {
+      m_name = {p_name, true};
+      return *this;
+    }
+
+    options_t &
+    description(std::string const &p_description) {
+      m_description = {p_description, true};
+      return *this;
+    }
+
+    options_t &
+    mime_type(std::string const &p_mime_type) {
+      m_mime_type = {p_mime_type, true};
+      return *this;
+    }
   };
 
   enum command_e {
@@ -58,6 +76,9 @@ public:
   virtual bool has_changes() const;
 
   virtual void execute();
+
+protected:
+  virtual void execute_add();
 };
 
 inline bool
