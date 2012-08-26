@@ -3,7 +3,6 @@
 #include "propedit/attachment_target.h"
 
 #include "gtest/gtest.h"
-#include "tests/unit/construct.h"
 #include "tests/unit/util.h"
 
 namespace {

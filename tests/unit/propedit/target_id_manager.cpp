@@ -3,15 +3,15 @@
 #include <matroska/KaxAttached.h>
 #include <matroska/KaxAttachments.h>
 
+#include "common/construct.h"
 #include "common/strings/utf8.h"
 #include "propedit/target_id_manager.h"
 
 #include "gtest/gtest.h"
-#include "tests/unit/construct.h"
 #include "tests/unit/util.h"
 
 using namespace libmatroska;
-using namespace mtxut::construct;
+using namespace mtx::construct;
 
 namespace {
 
