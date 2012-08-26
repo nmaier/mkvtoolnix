@@ -1,9 +1,9 @@
 #include "common/common_pch.h"
 
 #include "gtest/gtest.h"
+#include "common/construct.h"
 #include "common/ebml.h"
 
-#include "tests/unit/construct.h"
 #include "tests/unit/util.h"
 
 #include <matroska/KaxTracks.h>
@@ -13,7 +13,7 @@
 namespace {
 
 using namespace mtxut;
-using namespace mtxut::construct;
+using namespace mtx::construct;
 using namespace libmatroska;
 
 template<typename T>

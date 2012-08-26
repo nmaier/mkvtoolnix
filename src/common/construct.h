@@ -6,13 +6,11 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   definitions for helper functions for unit tests
-
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef MTX_TESTS_UNIT_CONSTRUCT_H
-#define MTX_TESTS_UNIT_CONSTRUCT_H
+#ifndef MTX_COMMON_CONSTRUCT_H
+#define MTX_COMMON_CONSTRUCT_H
 
 #include "common/common_pch.h"
 
@@ -27,7 +25,7 @@
 #include <ebml/EbmlUInteger.h>
 #include <ebml/EbmlUnicodeString.h>
 
-namespace mtxut {
+namespace mtx {
 namespace construct {
 
 using namespace libebml;
@@ -150,4 +148,4 @@ cons(Targs... args) {
 
 }}
 
-#endif // MTX_TESTS_UNIT_CONSTRUCT_H
+#endif // MTX_COMMON_CONSTRUCT_H
