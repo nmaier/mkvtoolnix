@@ -51,6 +51,12 @@ hack_engaged(unsigned int id) {
 }
 
 void
+engage_hack(unsigned int id) {
+  if (s_engaged_hacks.size() > id)
+    s_engaged_hacks[id] = true;
+}
+
+void
 engage_hacks(const std::string &hacks) {
   std::vector<std::string> engage_args = split(hacks, ",");
   size_t aidx, hidx;

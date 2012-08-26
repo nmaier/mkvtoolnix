@@ -39,6 +39,7 @@
 #define ENGAGE_MAX_IDX                      ENGAGE_VOBSUB_SUBPIC_STOP_CMDS
 
 void engage_hacks(const std::string &hacks);
+void engage_hack(unsigned int id);
 bool hack_engaged(unsigned int id);
 void init_hacks();
 
