@@ -36,6 +36,8 @@ inline typename boost::enable_if< std::is_base_of<EbmlDate, Tobject> >::type
 cons_impl(EbmlMaster *master,
           Tobject *object,
           Tvalue const &value) {
+  if (!object)
+    return;
   static_cast<EbmlDate *>(object)->SetEpochDate(value);
   master->PushElement(*object);
 }
@@ -46,6 +48,8 @@ inline typename boost::enable_if< std::is_base_of<EbmlUInteger, Tobject> >::type
 cons_impl(EbmlMaster *master,
           Tobject *object,
           Tvalue const &value) {
+  if (!object)
+    return;
   *static_cast<EbmlUInteger *>(object) = value;
   master->PushElement(*object);
 }
@@ -56,6 +60,8 @@ inline typename boost::enable_if< std::is_base_of<EbmlSInteger, Tobject> >::type
 cons_impl(EbmlMaster *master,
           Tobject *object,
           Tvalue const &value) {
+  if (!object)
+    return;
   *static_cast<EbmlSInteger *>(object) = value;
   master->PushElement(*object);
 }
@@ -66,6 +72,8 @@ inline typename boost::enable_if< std::is_base_of<EbmlFloat, Tobject> >::type
 cons_impl(EbmlMaster *master,
           Tobject *object,
           Tvalue const &value) {
+  if (!object)
+    return;
   *static_cast<EbmlFloat *>(object) = value;
   master->PushElement(*object);
 }
@@ -76,6 +84,8 @@ inline typename boost::enable_if< std::is_base_of<EbmlString, Tobject> >::type
 cons_impl(EbmlMaster *master,
           Tobject *object,
           Tvalue const &value) {
+  if (!object)
+    return;
   *static_cast<EbmlString *>(object) = value;
   master->PushElement(*object);
 }
@@ -86,6 +96,8 @@ inline typename boost::enable_if< std::is_base_of<EbmlUnicodeString, Tobject> >:
 cons_impl(EbmlMaster *master,
           Tobject *object,
           Tvalue const &value) {
+  if (!object)
+    return;
   *static_cast<EbmlUnicodeString *>(object) = std::wstring{value}.c_str();
   master->PushElement(*object);
 }
@@ -96,6 +108,8 @@ inline typename boost::enable_if< std::is_base_of<EbmlBinary, Tobject> >::type
 cons_impl(EbmlMaster *master,
           Tobject *object,
           Tvalue const &value) {
+  if (!object)
+    return;
   static_cast<EbmlBinary *>(object)->CopyBuffer(static_cast<binary *>(value->get_buffer()), value->get_size());
   master->PushElement(*object);
 }
@@ -103,6 +117,8 @@ cons_impl(EbmlMaster *master,
 inline void
 cons_impl(EbmlMaster *master,
           EbmlMaster *sub_master) {
+  if (!sub_master)
+    return;
   master->PushElement(*sub_master);
 }
 
@@ -111,7 +127,8 @@ inline void
 cons_impl(EbmlMaster *master,
           EbmlMaster *sub_master,
           Targs... args) {
-  master->PushElement(*sub_master);
+  if (sub_master)
+    master->PushElement(*sub_master);
   cons_impl(master, args...);
 }
 
@@ -123,19 +140,25 @@ cons_impl(EbmlMaster *master,
           Tobject *object,
           Tvalue const &value,
           Targs... args) {
-  cons_impl(master, object, value);
+  if (object)
+    cons_impl(master, object, value);
   cons_impl(master, args...);
+}
+
+template<typename T>
+EbmlMaster *
+master() {
+  T *master = new T;
+  for (auto element : *master)
+    delete element;
+  master->RemoveAll();
+  return master;
 }
 
 template<typename Tmaster>
 inline EbmlMaster *
 cons() {
-  auto master = new Tmaster;
-  for (auto element : *master)
-    delete element;
-  master->RemoveAll();
-
-  return master;
+  return master<Tmaster>();
 }
 
 template<typename Tmaster,

@@ -16,14 +16,6 @@ using namespace mtxut;
 using namespace mtx::construct;
 using namespace libmatroska;
 
-template<typename T>
-EbmlMaster *
-master() {
-  T *master = new T;
-  master->RemoveAll();
-  return master;
-}
-
 TEST(ConstructAndEquality, EmptyMaster) {
   auto a = ebml_master_cptr{ cons<KaxTracks>() };
   auto b = ebml_master_cptr{ master<KaxTracks>() };
@@ -136,6 +128,33 @@ TEST(ConstructAndEquality, Binary) {
   b->PushElement(*new KaxCodecPrivate);
   static_cast<EbmlBinary *>((*b)[0])->CopyBuffer(reinterpret_cast<binary const *>("Stuff"), 5);
   EXPECT_EBML_EQ(*a, *b);
+}
+
+TEST(ConstructAndEquality, ConditionalConstruction) {
+  bool hmm = false;
+  auto a = ebml_master_cptr{ cons<KaxTracks>(cons<KaxTrackEntry>(new KaxCodecID,                      "Stuff",
+                                                                 hmm ? new KaxTrackNumber : nullptr,  4254,
+                                                                 new KaxTrackOffset,                   -22))
+  };
+
+  auto b = ebml_master_cptr{ cons<KaxTracks>(cons<KaxTrackEntry>(new KaxCodecID,                      "Stuff",
+                                                                 new KaxTrackOffset,                   -22))
+  };
+
+  EXPECT_EBML_EQ(*a, *b);
+
+  hmm = true;
+  auto c = ebml_master_cptr{ cons<KaxTracks>(cons<KaxTrackEntry>(new KaxCodecID,                      "Stuff",
+                                                                 hmm ? new KaxTrackNumber : nullptr,  4254,
+                                                                 new KaxTrackOffset,                   -22))
+  };
+
+  auto d = ebml_master_cptr{ cons<KaxTracks>(cons<KaxTrackEntry>(new KaxCodecID,                      "Stuff",
+                                                                 new KaxTrackNumber,                  4254,
+                                                                 new KaxTrackOffset,                   -22))
+  };
+
+  EXPECT_EBML_EQ(*c, *d);
 }
 
 }
