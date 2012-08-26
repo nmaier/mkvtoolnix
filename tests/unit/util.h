@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef MTX_TESTS_UNIT_INIT_H
-#define MTX_TESTS_UNIT_INIT_H
+#ifndef MTX_TESTS_UNIT_UTIL_H
+#define MTX_TESTS_UNIT_UTIL_H
 
 #include "common/common_pch.h"
 
