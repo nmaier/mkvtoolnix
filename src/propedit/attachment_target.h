@@ -100,4 +100,16 @@ operator ==(attachment_target_c::options_t const &a,
       && (a.m_mime_type   == b.m_mime_type);
 }
 
+inline std::ostream &
+operator <<(std::ostream &out,
+            attachment_target_c::options_t const &opt) {
+  auto format = [](std::string const &name, std::pair<std::string, bool> const &value) -> std::string {
+    return value.second ? name + ":yes(" + value.first + ")" : name + ":no";
+  };
+
+  out << "{" << format("name", opt.m_name) << " " << format("description", opt.m_description) << " " << format("MIME type", opt.m_mime_type) << "}";
+
+  return out;
+}
+
 #endif // MTX_PROPEDIT_ATTACHMENT_TARGET_H

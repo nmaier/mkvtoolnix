@@ -61,11 +61,27 @@ attachment_target_c::validate() {
 void
 attachment_target_c::dump_info()
   const {
-  // TODO: dump_info()
-  assert(false);
   mxinfo(boost::format("  attachment target:\n"
-                       "    file_name: %1%\n")
-         % m_file_name);
+                       "    file_name: %1%\n"
+                       "    command: %2% (%3%)\n"
+                       "    options: %4%\n"
+                       "    selector_type: %5% (%6%)\n"
+                       "    selector_num_arg: %7%\n"
+                       "    selector_string_arg: %8%\n")
+         % m_file_name
+         % m_command
+         % (  ac_add     == m_command ? "add"
+            : ac_delete  == m_command ? "delete"
+            : ac_replace == m_command ? "replace"
+            :                           "unknown")
+         % m_options
+         % m_selector_type
+         % (  st_id        == m_selector_type ? "ID"
+            : st_uid       == m_selector_type ? "UID"
+            : st_name      == m_selector_type ? "name"
+            : st_mime_type == m_selector_type ? "MIME type"
+            :                                   "unknown")
+         % m_selector_num_arg % m_selector_string_arg);
 }
 
 bool
