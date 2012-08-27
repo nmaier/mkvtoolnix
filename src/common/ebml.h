@@ -204,6 +204,24 @@ GetFirstOrNextChild(EbmlMaster *master,
 }
 
 template<typename T>
+EbmlMaster *
+DeleteChildren(EbmlMaster *master) {
+  for (auto idx = master->ListSize(); 0 < idx; --idx)
+    if (dynamic_cast<T *>((*master)[idx - 1])) {
+      delete (*master)[idx - 1];
+      master->Remove(idx - 1);
+    }
+
+  return master;
+}
+
+template<typename T>
+EbmlMaster &
+DeleteChildren(EbmlMaster &master) {
+  return *DeleteChildren<T>(&master);
+}
+
+template<typename T>
 memory_cptr
 find_and_clone_binary(EbmlElement &parent) {
   auto child = FindChild<T>(static_cast<EbmlMaster &>(parent));
