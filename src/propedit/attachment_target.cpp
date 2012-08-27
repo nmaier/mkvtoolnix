@@ -14,6 +14,7 @@
 
 #include "common/construct.h"
 #include "common/extern_data.h"
+#include "common/strings/editing.h"
 #include "common/strings/parsing.h"
 #include "common/strings/utf8.h"
 #include "common/unique_numbers.h"
@@ -136,7 +137,7 @@ attachment_target_c::parse_spec(command_e command,
   } else {
     // Second case: by name/MIME type
     if (ac_replace == m_command)
-      m_file_name         = matches[6].str();
+      m_file_name         = unescape(matches[6].str());
     m_selector_type       = balg::to_lower_copy(matches[3 + offset].str()) == "name" ? st_name : st_mime_type;
     m_selector_string_arg = matches[4 + offset].str();
   }
@@ -153,15 +154,17 @@ attachment_target_c::execute() {
   else if (ac_delete == m_command)
     execute_delete();
 
+  else if (ac_replace == m_command)
+    execute_replace();
+
   else
-    // TODO: execute()
     assert(false);
 }
 
 void
 attachment_target_c::execute_add() {
-  auto mime_type    = m_options.m_mime_type.second ? m_options.m_mime_type.first : guess_mime_type(m_file_name, true);
-  auto file_name    = m_options.m_name.second      ? m_options.m_name.first      : bfs::path{m_file_name}.filename().native();
+  auto mime_type    = m_options.m_mime_type.second                               ? m_options.m_mime_type.first : guess_mime_type(m_file_name, true);
+  auto file_name    = m_options.m_name.second && !m_options.m_name.first.empty() ? m_options.m_name.first      : bfs::path{m_file_name}.filename().native();
   auto &description = m_options.m_description.first;
 
   auto att          = mtx::construct::cons<KaxAttached>(new KaxFileName,                                         to_wide(file_name),
@@ -178,6 +181,14 @@ attachment_target_c::execute_delete() {
   bool deleted_something = st_id == m_selector_type ? delete_by_id() : delete_by_uid_name_mime_type();
 
   if (!deleted_something)
+    mxwarn(boost::format(Y("No attachment matched the spec '%1%'.\n")) % m_spec);
+}
+
+void
+attachment_target_c::execute_replace() {
+  bool replaced_something = st_id == m_selector_type ? replace_by_id() : replace_by_uid_name_mime_type();
+
+  if (!replaced_something)
     mxwarn(boost::format(Y("No attachment matched the spec '%1%'.\n")) % m_spec);
 }
 
@@ -238,4 +249,46 @@ attachment_target_c::delete_by_uid_name_mime_type() {
   }
 
   return deleted_something;
+}
+
+bool
+attachment_target_c::replace_by_id() {
+  auto attached = m_id_manager->get(m_selector_num_arg);
+  if (!attached)
+    return false;
+
+  if (m_level1_element->end() == std::find(m_level1_element->begin(), m_level1_element->end(), attached))
+    return false;
+
+  replace_attachment_values(*attached);
+
+  return true;
+}
+
+bool
+attachment_target_c::replace_by_uid_name_mime_type() {
+  // TODO: replace_by_uid_name_mime_type()
+  return false;
+}
+
+void
+attachment_target_c::replace_attachment_values(KaxAttached &att) {
+  if (m_options.m_name.second) {
+    auto file_name = !m_options.m_name.first.empty() ? m_options.m_name.first : bfs::path{m_file_name}.filename().native();
+    UTFstring(GetChild<KaxFileName>(att)).SetUTF8(file_name);
+  }
+
+  if (m_options.m_mime_type.second) {
+    auto mime_type                           = m_options.m_mime_type.first.empty() ? guess_mime_type(m_file_name, true) : m_options.m_mime_type.first;
+    GetChildAs<KaxMimeType, EbmlString>(att) = mime_type;
+  }
+
+  if (m_options.m_description.second) {
+    if (m_options.m_description.first.empty())
+      DeleteChildren<KaxFileDescription>(att);
+    else
+      UTFstring(GetChild<KaxFileDescription>(att)).SetUTF8(m_options.m_description.first);
+  }
+
+  GetChild<KaxFileData>(att).CopyBuffer(m_file_content->get_buffer(), m_file_content->get_size());
 }

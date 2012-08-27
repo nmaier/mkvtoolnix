@@ -13,10 +13,13 @@
 
 #include "common/common_pch.h"
 
+#include <matroska/KaxAttached.h>
+
 #include "propedit/target.h"
 #include "propedit/target_id_manager.h"
 
 using namespace libebml;
+using namespace libmatroska;
 
 typedef target_id_manager_c<KaxAttached> attachment_id_manager_c;
 typedef std::shared_ptr<attachment_id_manager_c> attachment_id_manager_cptr;
@@ -86,10 +89,14 @@ public:
 protected:
   virtual void execute_add();
   virtual void execute_delete();
+  virtual void execute_replace();
 
   virtual bool delete_by_id();
   virtual bool delete_by_uid_name_mime_type();
 
+  virtual bool replace_by_id();
+  virtual bool replace_by_uid_name_mime_type();
+  virtual void replace_attachment_values(KaxAttached &att);
 };
 
 inline bool

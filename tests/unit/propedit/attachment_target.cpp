@@ -256,11 +256,6 @@ TEST(AttachmentTarget, DeleteById) {
   test_delete("5", { }, true);
 }
 
-  // return cons<KaxAttachments>(cons_att("Hello World\nThis is fun.\nChunky Bacon!!",        "Dummy File.txt",       "text/plain",                47110815, "Some funky description"),
-  //                             cons_att("<html><body><h1>Chunky Bacon!</h2></body></html>", "chunky bacon.html",    "text/html",                 123454321),
-  //                             cons_att("198273498725987195610824371289567129357",          "filename:with:colons", "application/otctet-stream", 99887766),
-  //                             cons_att("<html><body><h1>Chunky Bacon!</h2></body></html>", "chunky bacon.html",    "text/html",                 918273645));
-
 TEST(AttachmentTarget, DeleteByUid) {
   test_delete("=47110815",  { 0 }, false);
   test_delete("=918273645", { 3 }, false);
@@ -282,6 +277,66 @@ TEST(AttachmentTarget, DeleteByMimeType) {
   test_delete("Mime-Type:text/html",  { 1, 3 }, false);
 
   test_delete("mime-type:doesnotexist", { }, true);
+}
+
+void
+test_replace(std::string const &spec,
+             std::vector<int> expected_replacements,
+             bool expect_warning,
+             std::function<void(EbmlMaster &b, attachment_target_c::options_t &opt)> local_setup = [](EbmlMaster &, attachment_target_c::options_t &) { }) {
+  g_warning_issued = false;
+
+  auto l1_a = ebml_element_cptr{cons_default_atts()};
+  auto l1_b = ebml_master_cptr{cons_default_atts()};
+
+  attachment_target_c at{ std::make_shared<attachment_id_manager_c>(static_cast<EbmlMaster *>(l1_a.get()), 1) };
+  at.set_level1_element(l1_a);
+
+  static std::string const expected_content{"Chunky Bacon\n"};
+
+  for (auto idx : expected_replacements) {
+    auto data = FindChild<KaxFileData>((*l1_b)[idx]);
+    if (data)
+      data->CopyBuffer(reinterpret_cast<binary const *>(expected_content.c_str()), expected_content.length());
+  }
+
+  attachment_target_c::options_t opt;
+  local_setup(*l1_b, opt);
+
+  ASSERT_NO_THROW(at.parse_spec(attachment_target_c::ac_replace, spec + ":tests/unit/data/text/chunky_bacon.txt", opt));
+  ASSERT_NO_THROW(at.validate());
+  ASSERT_NO_THROW(at.execute());
+  EXPECT_EBML_EQ(*l1_a, *l1_b);
+  EXPECT_EQ(g_warning_issued, expect_warning);
+}
+
+  // return cons<KaxAttachments>(cons_att("Hello World\nThis is fun.\nChunky Bacon!!",        "Dummy File.txt",       "text/plain",                47110815, "Some funky description"),
+  //                             cons_att("<html><body><h1>Chunky Bacon!</h2></body></html>", "chunky bacon.html",    "text/html",                 123454321),
+  //                             cons_att("198273498725987195610824371289567129357",          "filename:with:colons", "application/otctet-stream", 99887766),
+  //                             cons_att("<html><body><h1>Chunky Bacon!</h2></body></html>", "chunky bacon.html",    "text/html",                 918273645));
+
+TEST(AttachmentTarget, ReplaceById) {
+  test_replace("3", { 2 }, false);
+
+  test_replace("3", { 2 }, false, [](EbmlMaster &b, attachment_target_c::options_t &opt) {
+      auto att = static_cast<EbmlMaster *>(b[2]);
+
+      opt.description("").name("").mime_type("");
+
+      DeleteChildren<KaxFileDescription>(att);
+      UTFstring(GetChildAs<KaxFileName, EbmlUnicodeString>(att)).SetUTF8("chunky_bacon.txt");
+      GetChildAs<KaxMimeType, EbmlString>(att) = "text/plain";
+    });
+
+  test_replace("3", { 2 }, false, [](EbmlMaster &b, attachment_target_c::options_t &opt) {
+      auto att = static_cast<EbmlMaster *>(b[2]);
+
+      opt.description("Moocow").name("miau&wuff.html").mime_type("bacon/chunky");
+
+      UTFstring(GetChildAs<KaxFileDescription, EbmlUnicodeString>(att)).SetUTF8("Moocow");
+      UTFstring(GetChildAs<KaxFileName, EbmlUnicodeString>(att)).SetUTF8("miau&wuff.html");
+      GetChildAs<KaxMimeType, EbmlString>(att) = "bacon/chunky";
+    });
 }
 
 }
