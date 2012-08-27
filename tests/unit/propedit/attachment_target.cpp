@@ -1,5 +1,7 @@
 #include "common/common_pch.h"
 
+#include <boost/range/adaptors.hpp>
+
 #include "common/construct.h"
 #include "common/strings/utf8.h"
 #include "common/unique_numbers.h"
@@ -217,6 +219,69 @@ TEST(AttachmentTarget, AddProvideAll) {
       opt.mime_type("empty/rooms").description("where we learn to live").name("stuffy.h");
       l1_b->PushElement(*cons_att("Chunky Bacon\n", "stuffy.h", "empty/rooms", 1, "where we learn to live"));
     });
+}
+
+void
+test_delete(std::string const &spec,
+            std::vector<int> expected_deletions,
+            bool expect_warning) {
+  g_warning_issued = false;
+
+  auto l1_a = ebml_element_cptr{cons_default_atts()};
+  auto l1_b = ebml_master_cptr{cons_default_atts()};
+
+  attachment_target_c at{ std::make_shared<attachment_id_manager_c>(static_cast<EbmlMaster *>(l1_a.get()), 1) };
+  at.set_level1_element(l1_a);
+
+  attachment_target_c::options_t opt;
+
+  brng::sort(expected_deletions);
+  for (auto idx : expected_deletions | badap::reversed) {
+    delete (*l1_b)[idx];
+    l1_b->Remove(idx);
+  }
+
+  ASSERT_NO_THROW(at.parse_spec(attachment_target_c::ac_delete, spec, opt));
+  ASSERT_NO_THROW(at.validate());
+  ASSERT_NO_THROW(at.execute());
+  EXPECT_EBML_EQ(*l1_a, *l1_b);
+  EXPECT_EQ(g_warning_issued, expect_warning);
+}
+
+TEST(AttachmentTarget, DeleteById) {
+  test_delete("1", { 0 }, false);
+  test_delete("4", { 3 }, false);
+
+  test_delete("0", { }, true);
+  test_delete("5", { }, true);
+}
+
+  // return cons<KaxAttachments>(cons_att("Hello World\nThis is fun.\nChunky Bacon!!",        "Dummy File.txt",       "text/plain",                47110815, "Some funky description"),
+  //                             cons_att("<html><body><h1>Chunky Bacon!</h2></body></html>", "chunky bacon.html",    "text/html",                 123454321),
+  //                             cons_att("198273498725987195610824371289567129357",          "filename:with:colons", "application/otctet-stream", 99887766),
+  //                             cons_att("<html><body><h1>Chunky Bacon!</h2></body></html>", "chunky bacon.html",    "text/html",                 918273645));
+
+TEST(AttachmentTarget, DeleteByUid) {
+  test_delete("=47110815",  { 0 }, false);
+  test_delete("=918273645", { 3 }, false);
+
+  test_delete("=888888888", { }, true);
+  test_delete("=0",         { }, true);
+}
+
+TEST(AttachmentTarget, DeleteByName) {
+  test_delete("name:Dummy File.txt",       { 0    }, false);
+  test_delete("NaMe:filename:with:colons", { 2    }, false);
+  test_delete("NAME:chunky bacon.html",    { 1, 3 }, false);
+
+  test_delete("name:doesnotexist", { }, true);
+}
+
+TEST(AttachmentTarget, DeleteByMimeType) {
+  test_delete("mime-type:text/plain", { 0    }, false);
+  test_delete("Mime-Type:text/html",  { 1, 3 }, false);
+
+  test_delete("mime-type:doesnotexist", { }, true);
 }
 
 }

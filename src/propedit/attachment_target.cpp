@@ -21,11 +21,12 @@
 
 using namespace libmatroska;
 
-attachment_target_c::attachment_target_c()
+attachment_target_c::attachment_target_c(attachment_id_manager_cptr const &id_manager)
   : target_c()
   , m_command{ac_add}
   , m_selector_type{st_id}
   , m_selector_num_arg{}
+  , m_id_manager{id_manager}
 {
 }
 
@@ -77,6 +78,7 @@ void
 attachment_target_c::parse_spec(command_e command,
                                 const std::string &spec,
                                 options_t const &options) {
+  m_spec    = spec;
   m_command = command;
   m_options = options;
 
@@ -132,6 +134,9 @@ attachment_target_c::execute() {
   if (ac_add == m_command)
     execute_add();
 
+  else if (ac_delete == m_command)
+    execute_delete();
+
   else
     // TODO: execute()
     assert(false);
@@ -150,4 +155,71 @@ attachment_target_c::execute_add() {
                                                         new KaxFileData,                                         m_file_content);
 
   m_level1_element->PushElement(*att);
+}
+
+void
+attachment_target_c::execute_delete() {
+  bool deleted_something = st_id == m_selector_type ? delete_by_id() : delete_by_uid_name_mime_type();
+
+  if (!deleted_something)
+    mxwarn(boost::format(Y("No attachment matched the spec '%1%'.\n")) % m_spec);
+}
+
+bool
+attachment_target_c::delete_by_id() {
+  auto attached = m_id_manager->get(m_selector_num_arg);
+  if (!attached)
+    return false;
+
+  m_id_manager->remove(m_selector_num_arg);
+
+  auto itr = std::find(m_level1_element->begin(), m_level1_element->end(), attached);
+  if (m_level1_element->end() == itr)
+    return false;
+
+  delete *itr;
+  m_level1_element->Remove(itr);
+
+  return true;
+}
+
+bool
+attachment_target_c::delete_by_uid_name_mime_type() {
+  bool deleted_something = false;
+
+  for (auto counter = m_level1_element->ListSize(); 0 < counter; --counter) {
+    auto idx = counter - 1;
+    auto ele = (*m_level1_element)[idx];
+    auto att = dynamic_cast<KaxAttached *>(ele);
+    if (!att)
+      continue;
+
+    bool delete_this = false;
+
+    if (st_uid == m_selector_type) {
+      auto file_uid = FindChild<KaxFileUID>(*att);
+      delete_this   = file_uid && (uint64{*file_uid} == m_selector_num_arg);
+
+    } else if (st_name == m_selector_type) {
+      auto file_name = FindChild<KaxFileName>(*att);
+      delete_this    = file_name && (UTFstring(*file_name).GetUTF8() == m_selector_string_arg);
+
+    } else if (st_mime_type == m_selector_type) {
+      auto mime_type = FindChild<KaxMimeType>(*att);
+      delete_this    = mime_type && (std::string(*mime_type) == m_selector_string_arg);
+
+    } else
+      assert(false);
+
+    if (!delete_this)
+      continue;
+
+    m_level1_element->Remove(idx);
+    m_id_manager->remove(att);
+    delete att;
+
+    deleted_something = true;
+  }
+
+  return deleted_something;
 }

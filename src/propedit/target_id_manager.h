@@ -27,6 +27,7 @@ public:
   T *get(int id) const;
   bool has(int id) const;
   void remove(int id);
+  void remove(T *target);
 
 private:
   bool id_ok(int id) const;
@@ -73,6 +74,14 @@ void
 target_id_manager_c<T>::remove(int id) {
   if (id_ok(id))
     m_targets[id - m_offset] = nullptr;
+}
+
+template<typename T>
+void
+target_id_manager_c<T>::remove(T *target) {
+  auto itr = brng::find(m_targets, target);
+  if (m_targets.end() != itr)
+    m_targets[std::distance(m_targets.begin(), itr)] = nullptr;
 }
 
 #endif  // MTX_PROPEDIT_TARGET_ID_MANAGER_H

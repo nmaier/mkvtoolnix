@@ -14,8 +14,12 @@
 #include "common/common_pch.h"
 
 #include "propedit/target.h"
+#include "propedit/target_id_manager.h"
 
 using namespace libebml;
+
+typedef target_id_manager_c<KaxAttached> attachment_id_manager_c;
+typedef std::shared_ptr<attachment_id_manager_c> attachment_id_manager_cptr;
 
 class attachment_target_c: public target_c {
 public:
@@ -55,15 +59,17 @@ public:
   };
 
 protected:
+  std::string m_spec;
   command_e m_command;
   options_t m_options;
   selector_type_e m_selector_type;
   uint64_t m_selector_num_arg;
   std::string m_selector_string_arg;
   memory_cptr m_file_content;
+  attachment_id_manager_cptr m_id_manager;
 
 public:
-  attachment_target_c();
+  attachment_target_c(attachment_id_manager_cptr const &id_manager = attachment_id_manager_cptr{});
   virtual ~attachment_target_c();
 
   virtual void validate();
@@ -79,6 +85,11 @@ public:
 
 protected:
   virtual void execute_add();
+  virtual void execute_delete();
+
+  virtual bool delete_by_id();
+  virtual bool delete_by_uid_name_mime_type();
+
 };
 
 inline bool
