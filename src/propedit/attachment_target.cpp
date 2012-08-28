@@ -137,9 +137,12 @@ attachment_target_c::parse_spec(command_e command,
   } else {
     // Second case: by name/MIME type
     if (ac_replace == m_command)
-      m_file_name         = unescape(matches[6].str());
+      m_file_name         = matches[6].str();
     m_selector_type       = balg::to_lower_copy(matches[3 + offset].str()) == "name" ? st_name : st_mime_type;
     m_selector_string_arg = matches[4 + offset].str();
+
+    if (ac_replace == m_command)
+      m_selector_string_arg = unescape(m_selector_string_arg);
   }
 
   if ((ac_replace == m_command) && m_file_name.empty())
@@ -211,6 +214,26 @@ attachment_target_c::delete_by_id() {
 }
 
 bool
+attachment_target_c::matches_by_uid_name_or_mime_type(KaxAttached &att) {
+  if (st_uid == m_selector_type) {
+    auto file_uid = FindChild<KaxFileUID>(att);
+    return file_uid && (uint64(*file_uid) == m_selector_num_arg);
+  }
+
+  if (st_name == m_selector_type) {
+    auto file_name = FindChild<KaxFileName>(att);
+    return file_name && (UTFstring(*file_name).GetUTF8() == m_selector_string_arg);
+  }
+
+  if (st_mime_type == m_selector_type) {
+    auto mime_type = FindChild<KaxMimeType>(att);
+    return mime_type && (std::string(*mime_type) == m_selector_string_arg);
+  }
+
+  assert(false);
+}
+
+bool
 attachment_target_c::delete_by_uid_name_mime_type() {
   bool deleted_something = false;
 
@@ -218,27 +241,8 @@ attachment_target_c::delete_by_uid_name_mime_type() {
     auto idx = counter - 1;
     auto ele = (*m_level1_element)[idx];
     auto att = dynamic_cast<KaxAttached *>(ele);
-    if (!att)
-      continue;
 
-    bool delete_this = false;
-
-    if (st_uid == m_selector_type) {
-      auto file_uid = FindChild<KaxFileUID>(*att);
-      delete_this   = file_uid && (uint64{*file_uid} == m_selector_num_arg);
-
-    } else if (st_name == m_selector_type) {
-      auto file_name = FindChild<KaxFileName>(*att);
-      delete_this    = file_name && (UTFstring(*file_name).GetUTF8() == m_selector_string_arg);
-
-    } else if (st_mime_type == m_selector_type) {
-      auto mime_type = FindChild<KaxMimeType>(*att);
-      delete_this    = mime_type && (std::string(*mime_type) == m_selector_string_arg);
-
-    } else
-      assert(false);
-
-    if (!delete_this)
+    if (!att || !matches_by_uid_name_or_mime_type(*att))
       continue;
 
     m_level1_element->Remove(idx);
@@ -267,8 +271,19 @@ attachment_target_c::replace_by_id() {
 
 bool
 attachment_target_c::replace_by_uid_name_mime_type() {
-  // TODO: replace_by_uid_name_mime_type()
-  return false;
+  bool replaced_something = false;
+
+  for (auto idx = m_level1_element->ListSize(); 0 < idx; --idx) {
+    auto attached = dynamic_cast<KaxAttached *>((*m_level1_element)[idx - 1]);
+
+    if (!attached || !matches_by_uid_name_or_mime_type(*attached))
+      continue;
+
+    replace_attachment_values(*attached);
+    replaced_something = true;
+  }
+
+  return replaced_something;
 }
 
 void

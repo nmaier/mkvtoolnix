@@ -97,6 +97,8 @@ protected:
   virtual bool replace_by_id();
   virtual bool replace_by_uid_name_mime_type();
   virtual void replace_attachment_values(KaxAttached &att);
+
+  virtual bool matches_by_uid_name_or_mime_type(KaxAttached &att);
 };
 
 inline bool
