@@ -72,8 +72,10 @@ protected:
   attachment_id_manager_cptr m_id_manager;
 
 public:
-  attachment_target_c(attachment_id_manager_cptr const &id_manager = attachment_id_manager_cptr{});
+  attachment_target_c();
   virtual ~attachment_target_c();
+
+  virtual void set_id_manager(attachment_id_manager_cptr const &id_manager);
 
   virtual void validate();
 

@@ -233,7 +233,8 @@ test_delete(std::string const &spec,
   auto l1_a = ebml_element_cptr{cons_default_atts()};
   auto l1_b = ebml_master_cptr{cons_default_atts()};
 
-  attachment_target_c at{ std::make_shared<attachment_id_manager_c>(static_cast<EbmlMaster *>(l1_a.get()), 1) };
+  attachment_target_c at;
+  at.set_id_manager(std::make_shared<attachment_id_manager_c>(static_cast<EbmlMaster *>(l1_a.get()), 1));
   at.set_level1_element(l1_a);
 
   attachment_target_c::options_t opt;
@@ -293,7 +294,8 @@ test_replace(std::string const &custom_message,
   auto l1_a = ebml_element_cptr{cons_default_atts()};
   auto l1_b = ebml_master_cptr{cons_default_atts()};
 
-  attachment_target_c at{ std::make_shared<attachment_id_manager_c>(static_cast<EbmlMaster *>(l1_a.get()), 1) };
+  attachment_target_c at;
+  at.set_id_manager(std::make_shared<attachment_id_manager_c>(static_cast<EbmlMaster *>(l1_a.get()), 1));
   at.set_level1_element(l1_a);
 
   static std::string const expected_content{"Chunky Bacon\n"};

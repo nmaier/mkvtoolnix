@@ -54,6 +54,7 @@ write_changes(options_cptr &options,
   ids_to_write.push_back(KaxTracks::ClassInfos.GlobalId);
   ids_to_write.push_back(KaxTags::ClassInfos.GlobalId);
   ids_to_write.push_back(KaxChapters::ClassInfos.GlobalId);
+  ids_to_write.push_back(KaxAttachments::ClassInfos.GlobalId);
 
   for (auto &id_to_write : ids_to_write) {
     for (auto &target : options->m_targets) {

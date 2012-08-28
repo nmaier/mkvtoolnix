@@ -162,7 +162,8 @@ read_element(kax_analyzer_c *analyzer,
 void
 options_c::find_elements(kax_analyzer_c *analyzer) {
   ebml_element_cptr tracks(read_element<KaxTracks>(analyzer, Y("Track headers")));
-  ebml_element_cptr info, tags, chapters;
+  ebml_element_cptr info, tags, chapters, attachments;
+  attachment_id_manager_cptr attachment_id_manager;
 
   for (auto &target_ptr : m_targets) {
     target_c &target = *target_ptr;
@@ -188,6 +189,18 @@ options_c::find_elements(kax_analyzer_c *analyzer) {
       }
 
       target.set_level1_element(chapters, tracks);
+
+    } else if (dynamic_cast<attachment_target_c *>(&target)) {
+      if (!attachments) {
+        attachments = read_element<KaxAttachments>(analyzer, Y("Attachments"), false);
+        if (!attachments)
+          attachments = ebml_element_cptr(new KaxAttachments);
+
+        attachment_id_manager = std::make_shared<attachment_id_manager_c>(static_cast<EbmlMaster *>(attachments.get()), 1);
+      }
+
+      static_cast<attachment_target_c &>(target).set_id_manager(attachment_id_manager);
+      target.set_level1_element(attachments);
 
     } else if (dynamic_cast<track_target_c *>(&target))
       target.set_level1_element(tracks);

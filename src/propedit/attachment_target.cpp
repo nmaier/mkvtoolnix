@@ -22,16 +22,20 @@
 
 using namespace libmatroska;
 
-attachment_target_c::attachment_target_c(attachment_id_manager_cptr const &id_manager)
+attachment_target_c::attachment_target_c()
   : target_c()
   , m_command{ac_add}
   , m_selector_type{st_id}
   , m_selector_num_arg{}
-  , m_id_manager{id_manager}
 {
 }
 
 attachment_target_c::~attachment_target_c() {
+}
+
+void
+attachment_target_c::set_id_manager(attachment_id_manager_cptr const &id_manager) {
+  m_id_manager = id_manager;
 }
 
 bool
