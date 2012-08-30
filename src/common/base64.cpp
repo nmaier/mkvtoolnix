@@ -102,7 +102,7 @@ base64_decode(const std::string &src,
   unsigned int dst_pos = 0;
   unsigned int pad     = 0;
   while (pos < src.size()) {
-    unsigned char in[3];
+    unsigned char in[4];
     unsigned int in_pos = 0;
 
     while ((src.size() > pos) && (4 > in_pos)) {
