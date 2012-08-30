@@ -1,0 +1,1106 @@
+<html>
+ <head>
+  <title>mkvmerge EIG Gida</title>
+ </head>
+ <body>
+  <h1>mkvmerge EIG Gida (mmg)</h1>
+
+  <i>Gidaren Egilea: Moritz Bunkus</i>
+  <br>
+  <i>Euskarazko Itzulpena: Xabier Aramendi</i>
+  <hr>
+
+  <h2>Eduki Taula</h2>
+
+  <p>
+   <ol>
+    <li>
+     <a href="mkvmerge-gui.html#introduction">Sarrera</a>
+     <br>
+     <ol>
+      <li>
+       <a href="mkvmerge-gui.html#whatismatroska">Zer da Matroska?</a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#whatismkvmerge">Zer da mkvmerge?
+        Zer da mkvmerge EIG?
+       </a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#latestversion">Azken bertsioa lortu
+       </a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#scope">Gida honen irismena</a>
+      </li>
+     </ol>
+    </li>
+    <li>
+     <a href="mkvmerge-gui.html#setup">mkvmerge EIG ezarpena</a>
+    </li>
+    <li>
+     <a href="mkvmerge-gui.html#muxing">Matroska agiriak sortzea</a>
+     <br>
+     <ol>
+      <li>
+       <a href="mkvmerge-gui.html#basics">Ohinarrizkoak</a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#fileoptions">Sarrera agiri aukerak
+       </a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#trackoptions">Bide bakoitzaren aukerak
+       </a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#attachments">Eranskinak</a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#globaloptions">Aukera orokorrak</a>
+       <br>
+       <ol>
+        <li>
+         <a href="mkvmerge-gui.html#global_title">Agiri/zati izenburua</a>
+        </li>
+        <li>
+         <a href="mkvmerge-gui.html#global_split">Berezgaitasunezko
+          bananketa eta agiri loturak</a>
+        </li>
+        <li>
+         <a href="mkvmerge-gui.html#global_link">Eskuzko
+          agiri/zati loturak</a>
+        </li>
+        <li>
+         <a href="mkvmerge-gui.html#global_chapters">Atalak</a>
+        </li>
+        <li>
+         <a href="mkvmerge-gui.html#global_tags">Etiketa orokorrak</a>
+        </li>
+       </ol>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#doit">Batze garapenaren hasiera
+       </a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#saveload">Multiplexaketa ezarpenak
+        gordetzea eta gertatzea
+       </a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#jobqueue">Lan ugari lerrokatzea</a>
+      </li>
+     </ol>
+    </li>
+    <li>
+     <a href="mkvmerge-gui.html#chaptereditor">Atal editatzailea</a>
+     <br>
+     <ol>
+      <li>
+       <a href="mkvmerge-gui.html#chapterconcept">Matroskaren
+        atal adigaia
+       </a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#chapterexamples">Adibideak</a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#chapterformats">mkvmergek sostengaturiko
+        atal heuskarriak
+       </a>
+       <br>
+       <ol>
+        <li>
+         <a href="mkvmerge-gui.html#cfsimple">Estilo Arrunta/OGM
+          atal agiriak
+         </a>
+        </li>
+        <li>
+         <a href="mkvmerge-gui.html#cfxml">Ezaugarri-guztiko XML
+          estilo atal agiriak
+         </a>
+        </li>
+        <li>
+         <a href="mkvmerge-gui.html#cfkax">Matroska agirietan
+          aurkituriko atalak
+         </a>
+        </li>
+       </ol>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#creatingchapters">Atal agiriak
+        sortzea
+       </a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#editingchapters">Badauden atalak editatzea
+       </a>
+      </li>
+     </ol>
+    </li>
+    <li>
+     <a href="mkvmerge-gui.html#headereditor">Idazburu editatzailea</a>
+     <br>
+     <ol>
+      <li>
+       <a href="mkvmerge-gui.html#he_addingremovingheaderfields">Idazburu
+        eremuak gehitzea eta kentzea</a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#he_analyzingthefile">Badagoen agiri bat irekitzea</a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#he_editingthefile">Idazburu eremuak editatzea</a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#he_validation">Balioztapena</a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#he_saving">Agiria gordetzea</a>
+      </li>
+     </ol>
+    </li>
+   </ol>
+  </p>
+
+  <hr>
+
+  <a name="wxhh_introduction"></a>
+  <h2><a name="introduction">1. Sarrera</a></h2>
+
+  <h3><a name="whatismatroska">1.1. Zer da Matroska?</a></h3>
+
+  <p>(<i>Oharra: <a href="http://www.matroska.org/">
+     www.matroska.org</a>.</i>-tik kopiatuta)</p>
+
+  <p><b>Matroska</b>-k helburu bezala Multimedia Edukiontzi Heuskarri
+   Estandarra bihurtzea du. MCF izeneko egitasmotik eratorria da, baina,
+   berarengandik oso bereizita ere bai EBML-an (Extensible Binary Meta Language)
+   ohinarriturik dagoelako, XML-tik eratorritako binario bat. EBML-k
+   Matroska Garapen Taldeari aurrerapen garrantzitsuak irabaztea ahalbidetzen dio
+   etorkizuneko heuskarri hedapen arloan, agiri sostengua aztertzaile zaharretan hautsi gabe.</p>
+
+  <p>Argibide gehiago behar baduzu mesedez zuzendu zaitez hona:
+   <a href="http://www.matroska.org/">Matroska-ren webgunea</a>.</p>
+
+  <h3><a name="whatismkvmerge">1.2. Zer da mkvmerge? Zer da mkvmerge
+    EIG?</a></h3>
+
+  <p><i>mkvmerge</i> eta <i>mkvmerge EIG</i> (edo <i>mmg</i> bakarrik)
+   <a href="mailto:moritz@bunkus.org">Moritz Bunkus</a>-ek sorturiko
+   bi programa dira. Hauek <i>mkvtoolnix</i> paketearen atal dira. <i>mkvmerge</i>-k
+   multimedia agiri pilo bat irakurri eta bere edukiak Matroska agiri barnean jarri ditzake.
+   Zorigaitzez hau agindu lerro programa bat da, eta denak ez dira eroso sentitzen agindu
+   lerroarekin lan egin beharrarekin. Hemen sartzen da jokoan <i>mkvmerge EIG</i>.
+   Hau EIG bat da erabiltzaileari <i>mkvmerge</i>-rako
+   ikusizko baina indartsua den interfaze bat eskaintzen diona.</p>
+
+  <p>Bi programak daude eskuragarri bai Windows eta bai GNU/Linux eta
+   beste Unix eratorrientzat. Programak GPL baimena du, hortaz
+   iturburu kodea eskuragarri dago interesaturik dagoen edonorentzat.</p>
+
+  <h3><a name="latestversion">1.3. Azken bertsioa lortzea</a></h3>
+
+  <p>Betik aurkitu ahal duzu <i>mkvtoolnix</i>-ren azken bertsioa hemen:
+   <a href="http://www.bunkus.org/videotools/mkvtoolnix/">Moritz
+    Bunkus-en webgunea</a>. Windows erabiltzaileek jeitsi beharko dituzte
+   DLL runtime eta <i>mkvtoolnix</i> binarioak. Linux/Unix erabiltzaileek
+   zihurrenik iturburuak jeitsi eta <i>mkvtoolnix</i> beraiek bilduko dute.</p>
+
+  <h3><a name="scope">1.4. Gida honen irismena</a></h3>
+
+  <p>Gida hau tresna honen EIG atalari buruzkoa da bakarrik.
+  Agindu lerro aukera guztiak xehetasunez azaltzen dira
+   <i>mkvmerge</i>-ren orrialde nagusian/HTML orrialdean.</p>
+
+  <hr>
+
+  <a name="wxhh_setup"></a>
+  <h2><a name="setup">2. mkvmerge EIG ezarpena</a></h2>
+
+  <p>(<i>Oharra: Atal honek ez du bilketa eta ezarpena barne hartzen.
+  <i>mkvmerge</i>-ren agiritza eta
+    <code>IRAKURRI</code> agiriak daude
+    <i>mkvtoolnix</i> paketean.</i>)</p>
+
+  <div align="center">
+   <p>
+    <img src="images/selectmkvmergeexecutable.gif"
+         alt="selecting the mkvmerge executable">
+    <br>
+    <font size="-1">1 Irudia: Erabili botoi hau <i>mkvmerge</i>
+	programaren helburua hautatzeko.</font>
+   </p>
+  </div>
+
+  <p> <i>mmg</i>-ek jakitea behar duen gauza bakarra
+   <i>mkvmerge</i> binarioaren helbidea da. Egoera arrunt batean
+   berezgaitasunez aurkituko du. Baina bestela zeuk hautatu dezakezu
+   erabiltzeko binarioa <i>Ezarpenak</i> hegatsean.</p>
+
+  <hr>
+
+  <a name="wxhh_muxing"></a>
+  <h2><a name="muxing">3. Matroska agiriak sortzea</a></h2>
+
+  <h3><a name="basics">3.1. Ohinarrizkoak</a></h3>
+
+  <p><i>mkvmerge</i>-k bereizketa zorrotza egiten du <i>agiri</i> eta
+   <i>bide</i> artean. Sarrera <i>agiri</i> batek arrunt
+   <i>bide</i> bat edo gehiago izaten ditu. <i>mkvmerge</i>-k gutxienez
+   behar ditu sarrera agiri bat eta sortu behar duen Matroska agiriaren
+   agiri izena edozein lan egin ahal izan aurretik. Gutxiengo ezarpen
+   aukera hauekin hasita erabiltzaileak ahal du, sarrera agiri gehiago gehitu,
+   bide bakoitzarentzako aukera aurreratuak hautatu, aukera orokor gehiago ezarri, etab.</p>
+
+  <p>Ohiko ohinarrizko urratsak dira:<br>
+   <ol>
+    <li>hautatu sarrera <i>agiri</i> bat,</li>
+    <li>ezarri <i>bide</i> hizkuntza aukerak,</li>
+    <li>ezarri filma/agiri izenburua,</li>
+    <li>hautatu idazteko agiria eta</li>
+    <li>hasi multiplexaketa garapena.</li>
+   </ol>
+  </p>
+
+  <div align="center">
+   <p>
+    <img src="images/addremovefiles.gif"
+         alt="adding and removing files">
+    <br>
+    <font size="-1">2 Irudia: Erabili botoi hauek agiriak
+	gehitzeko eta kentzeko.</font>
+   </p>
+  </div>
+
+  <p><i>mmg</i> abiarazten denean lehen eta zihurrenik garrantzitsuena
+  den hegatsa erakusten du: <i>sarrera hegatsa</i>. Hemen lau gai ezberdin
+  ikusi ditzakezu. Goreneko sarrera kutxak sarrera <i>agiri</i> guztiak
+  zerrendatzen ditu. Kutxa honen azpian unean hautaturiko sarrera
+  <i>agiria</i>-ri ezartzeko aukerak daude.</p>
+
+  <p>2 Irudiak hiru botoi erakusten ditu goiko zerrenda kutxaren eskuinean,
+  hauek erabili daitezke agiriak gehietzeko <i>gehitu</i> eta <i>erantsi</i>
+  botiak erabiliz eta hautaturiko sarrera kentzeko <i>kendu</i> botoiarekin.</p>
+
+  <p>Ezberdintasun bat dago <i>gehitu</i> eta <i>erantsi</i> agiri bat artean.
+   Arrunt, <i>gehitutako</i> agiri guztien bideak Matroska emaitz agiriaren
+   barne kideturik jartzen dira. Hau erabilgarria da baduzu, adibidez,
+   bideo bide bat, audio bide bat edo gehiago eta azpidatzi bide bat edo gehiago.
+   Guztiak dute denbora-kode bera aldiberean irakurriak izateko.</p>
+
+  <p><i>Erantsi</i> agiri bat beste aldean eragingo du bigarren agiriko bide
+   guztiak aurretik <i>gehitutako</i> agiriari erantsiko zaizkiola.
+   Honela bide hauetako edukia bata bestearen ondoren irakurriko da.
+   Mota berekoak diren bideak bakarrik kateaduratu ditzakezu
+   (bideoa bideo bideetara, etab.), kodek bera dutenak
+   (adib. MP3 MP3-ra baina ez MP3 AC3-ra) eta parametro berdinak
+   (adib. lagin neurria berdina izan behar da).</p>
+
+  <p><i>gehitutako</i> agiri bat <i>erantsitako</i>
+  batetik bere izenaz bereiztu dezakezu.
+  <i>Gehitutako</i> agiriak eta bideak &quot;<code>++&gt;</code>&quot;-rekin hasten dira.</p>
+
+  <div align="center">
+   <p>
+    <img src="images/trackselection.gif"
+         alt="selecting specific tracks">
+    <br>
+    <font size="-1">3 Irudia: Gaitutako bi bide eta ezgaitutako bat.
+	Ezgaitutako bidea ez da irteera agirian kopiatuko.</font>
+   </p>
+  </div>
+
+  <p>Erabiltzaileak gutxienez sarrera <i>agiri</i> bat gehitzen duenean 
+  goiko zerrenda kutxan bigarren zerrenda kutxak eskuragarri dauden <i>bide</i> guztiak
+  erakutsiko ditu. Bide bakoitza berez gaitzen da eta emaitz agirian multiplexatuko dira.
+  Horrela ere, hau aldatu dezakezu klik arrunt bat eginez eskuineko hauta kutxatilan
+  bidearen izenaren aurretik dagoena bigarren zerrenda kutxan. Hau 3 irudian erakusten da.</p>
+
+  <p>Bide hauetako bakoitzarentzat erabiltzaileak bide aukera bereiziak hautatu ditzake
+  bide zerrenda azpiko sarrera kutxekin eta hauta kutxatilekin.
+  Aukera hauek hurrengo ataletan azaltzen dira.</p>
+
+  <p>Bide zerrendaren eskuinean bi botoi daude, hauekin irteera agirian
+   bideek izango duten hurrenkera agindu dezakezu. <i>igo</i> eta <i>jeitsi</i>
+   sakatuz hautaturiko bidea norabide egokian mugitzen da. Muga gehiago daude
+   <i>erantsitako</i> bideak mugitzerakoan (&quot;<code>++&gt;</code>&quot;-rekin hasten direnak)
+   <i>erantsitako</i> bide bat bezala ezin da lehen bidea izan, etab.</p>
+
+  <h3><a name="fileoptions">3.2. Sarrera agiri aukerak</a></h3>
+
+  <p>Behin erabiltzaileak sarrera agiri bat gehitu eta hautatutakoan
+   agiri bereizi honi ezartzeko aukerak ezarri ditzake. Oraingoz hiru aukera daude,
+   eta hauek Matroska agirientzat bakarrik daude eskuragarri:
+   <code>Atalik ez</code>, <code>Eranskinik ez</code> eta <code>Etiketarik ez</code>.
+   Aukera hauek <i>mkvmerge</i>-ri esaten diote ez kopiatzeko
+   atalik / eranskinik / etiketarik uneko iturburu agiritik.</p>
+
+  <p>Atalei buruzko argibide gehiago aurkitu daiteke agiri honetako
+   <a href="mkvmerge-gui.html#chaptereditor">atal editatzailea</a> zatian
+   eta <i>mkvmerge</i>-ren agiritzan.</p>
+
+  <h3><a name="trackoptions">3.3. Bide bakoitzarentzako aukerak</a></h3>
+
+  <p>Hautaturiko bide motaren arabera (audioa, bideoa, azpidatzia) eta
+   baita bidearen edukien arabera bidearen aukera bereizi azpiezarpen
+   bakarra dago eskuragarri. Aukera hauek bi azpi-orrialdeetan hedatzen dira.
+   Daude <em>Bidearen aukera orokorrak</em> eta <em>heuskarri aukera bereiziak</em>.</p>
+
+  <div align="center">
+   <p>
+    <img src="images/generaltrackoptions.gif"
+         alt="typical options for a video track">
+    <br>
+    <font size="-1">4 Irudia: Bide mota guztientzako aukerak</font>
+   </p>
+  </div>
+
+  <p><b>Oharra:</b> Erabiltzaileak ezeztatzen ez badu <i>mkvmergek</i>
+  bide ezarpenak sarrera agiritik kopiatuko ditu iturburu heuskarriak
+  argibide horiek sostengatzen baditu, edo berezko balio sentikorrak erabiliko ditu.</p>
+
+  <p>Aukera orokor eskuragarriak dira:</p>
+
+  <ul>
+   <li><code>Bide izena:</code> Erabiltzaileak bidearen izena ezarri dezake.
+    Izen hau modu-askeko katea da. Ariketa adibideak izan daitezke
+	'zuzendariaren aipamenak' edo 'ikuskizun handia Donostian'.
+	Ohartu izen hauek ez direla filmaren izenburua jartzeko!</li>
+
+   <li><code>Hizkuntza:</code> Erabiltzaileak bide bakoitzaren hizkuntza hautatu
+    dezake zer motakoa den axola gabe. Hizkuntza izen hau ISO639-2 hizkuntza kodean
+	kodeatua dago. Hedagarri kutxak ISO639-2 kode guztiak ditu hortaz erabiltzailea
+	ez kezkatu behar kode okerra hautzearekin.</li>
+
+   <li><code>Cue-ak:</code> <i>cue-ak</i> Matroskarentzat aurkibideak AVI agirientzat direna dira.
+    Hauek giltza framerako loturak dituzte. Arrunt aukera hau 'berez' balioan utzi behar da.
+	<i>mkvmergek</i> berezgaitasunez hautatuko du emandako bide motarentzat hoberena den metodoa.
+	Bideen azalpen osoa <i>mkvmerge</i>-ren agiritzan aurkitu daiteke.</li>
+
+   <li><code>Egin berezko bidea:</code> Matroskak ezagutzen du irakurketan zehar irakurgailuari
+    bide bereizi bat hobetsi behar dela esaten dion ikurra erabiltzaileak ez badu ezer hautatzen.
+	Noski bide <i>mota</i> bakoitzak bere berezko bidea du - adib. berezko audio bidea Ingelerazko
+	bat da, eta berezko azpidatzi bidea Frantzierazko bat da. Ez bada biderik ezartzen berezko
+	bidea izateko <i>mkvmergek</i> aurkitzen duen mota bakoitzeko lehen bidea sustatuko du
+	berezko bidea izateko. Hau egonkorra da multimedia irakurgailu askoren jokabidearekin.</li>
+
+   <li><code>Etiketak:</code> Bide bakoitzarentzako XML etiketa agiri bat sortu dezakezu.
+    Etiketa guztien azalpen oso baterako mesedez jo adibide agirira eta 
+	<ahref="mkvmerge.html"><i>mkvmerge</i>-ren agiritzara</a>. Kasu guztien %99-an
+	aukera HAU erabiltzea eta bide bereizi bati etiketak elkartzea nahiko duzu.
+	Hegats orokorreko etiketa aukera zihurrenik ez duzu beharko.</li>
+
+   <li><code>Denbora-kodeak:</code> Arrunt <i>mkvmerge</i>-k frame bakoitzarentzako
+   denbora-kodeak iturburu agirik eratorri ditzake, baina baita ere irakurri eta
+   erabili ditzake denbora-kodeak kanpoko idazki agiri batetik, honen izena hemen
+   adierazi dezakezu. Ezaugarri hau ezaugarri oso aurreratu bat da.
+   Erabiltzaile gehienek sarrera hau hutsik utzi behar dute..</li>
+  </ul>
+
+  <div align="center">
+   <p>
+    <img src="images/videotrackoptions.gif"
+         alt="typical options for a video track">
+    <br>
+    <font size="-1">5 Irudia: Ohiko aukerak bideo bide batentzat</font>
+   </p>
+  </div>
+
+  <p>Heuskarri aukerak bereiziak dira:</p>
+
+  <ul>
+   <li><code>Ikuspegi maila:</code> Aukera honekin erabiltzaileak irakurketan
+    erabili behar den ikuspegi maila ezarri dezake. Berezko filma kodeatu zen
+	ikuspegi maila da baina aldatu daiteke, adib. kodeaketa anamorfikoentzat.
+	EIG-k itxaroten duen heuskarria zenbaki hamarren bat (adib. '2.33')
+	edo zaitiki bat da (adib. '16/9').
+    <br>
+    Beste aukera bat erakuspen zabalera eta garaiera balioak eskuz ezartzea da.
+	Hau ongi etorri daiteke paremetroak bereizmen bereizi batera zehaztea nahi badituzu.
+	Ikuspegi maila bat adierazten baduzu <i>mkvmergek</i> erakuspen neurriak kalkulatuko
+	ditu bideo bidearen neurrietan ohinarrituta.
+    <br>
+    Aukera hau bideo bideentzat bakarrik dago eskuragarri.</li>
+
+   <li><code>FourCC:</code> Matroskak arrunt ez du biltegiratzen Four-CC,
+    erabilitako kodeka ezagutzeko beste edukiontzi batzuek erabiltzen dutena.
+	Matroskak bere heuskarria du, <i>CodecID</i> deitua, baina honek
+	AVI bateragarritasun modua ere badu. Modu honetan FourCC ere biltegiratzen da.
+	Aukera honekin FourCC behartu daiteke balio ezberdin batera. Horrela ere, ezin duzu
+    <i>mkvmerge</i>-k erabilitako <i>CodecID</i>-a aldatu.
+    <br>
+    Aukera hau bideo bideentzat bakarrik dago eskuragarri.</li>
+
+   <li><code>Estereo modua:</code> Hau sasi hiru neurriko irudiak eskaintzen
+   dituen teknologia bat aldiberean kokapen apur bat ezberdinetik filmatu
+   diren bi bide irakurketarekin. Begi bakoitzak bide hauetako bat bakarrik
+   ikusten du. Honi <i>estereo modua</i> deitzen zaio.
+   Erabiltzaile gehienek hutsik utzi behar dute.
+    <br>
+    Aukera hau bideo bideentzat bakarrik dago eskuragarri.</li>
+
+   <li><code>FS-ko:</code> <i>frame segunduko</i> zenbatekoa
+    AVC/h.264 bideo bideentzat. AVC/h.264 ohinarrizko jario bat gehitzen duzunean
+    <i>mkvmerge</i>-ri esan behar zaio bideo hau zenbat frame segunduko neurriarekin
+	grabatu zen, zeren argibide atal hau ez dago eskuragarri ohinarrizko jarioetan.
+	Ez baduzu ezer hautatzen <i>mkvmerge</i>-k berez 25-en jarriko du.
+	Zenbaki hamarren bat ere sartu dezakezu (adib. 29.97) edo zatiki bat
+    (adib. 30000/1001).
+    <br>
+    Aukera hau eskuragarria da bakarrik AVC/h.264 ohinarrizko jarioetatik
+	irakurritako AVC/h.264 bideo bideentzat.
+     .</li>
+
+  </ul>
+
+  <div align="center">
+   <p>
+    <img src="images/audiotrackoptions.gif"
+         alt="typical options for an audio track">
+    <br>
+    <font size="-1">6 Irudia: Ohiko aukerak audio bide batentzat</font>
+   </p>
+  </div>
+
+  <ul>
+   <li><code>Atzerapena (sm-tan):</code> Batzuetan audioa eta bideoa ez daude egoki aldiberetuta.
+    Aukera honekin erabiltzaileak edozein bideren denbora-kodeak orekatu ditzake emaniko
+	zenbateko batean, aurreratuz edo atzeratuz. Hemen sartzen duzun zenbatekoa denbora-kode
+	bakoitzari <code>Luzera</code> ezaugarria ezarri ondoren gehitzen zaion
+	segundumilaen zenbatekoa da (ikusi behean).
+    <br>
+    Aukera hau bide mota guztientzat dago eskuragarri. Horrela ere, denbora-kode zehaztapenak
+	hobeto egiten du lan bideo eta azpdidatzi bideetan irakurketan zehar.</li>
+
+   <li><code>Luzera:</code> Batzuetan audioa eta bideoa apurka hurrundu egiten dira
+    irakurketan zehar. Hau zuzendu daiteke ezaugarri bat emanez <i>mkvmergek</i>
+	denbora-kodeak zenbat luzatu behar dituen esanez. Ez bada ezer sartzen '1.0' hartzen da,
+    honek ez dituelarik denbora-kodeak aldatzen.
+    <br>
+    Sartu dezakezun balioa izan daiteke zenbaki hamarren bat edo zatiki bat, adib.
+	&quot;1/2&quot;. Ezaugarria <code>Atzerapena</code> gehitu aurretik ezartzen da
+	(ikusi goian).
+    <br>
+    Aukera hau bide mota guztientzat dago eskuragarri. Horrela ere, denbora-kode zehaztapenak
+	hobeto egiten du lan bideo eta azpdidatzi bideetan irakurketan zehar.</li>
+
+	<li><code>AAC da SBR/HE-AAC/AAC+:</code> 'eraginkoratasun handiko AAC' deituriko
+	teknologia berriak alde txar batzuk ditu <code>.AAC</code>
+	agirietan biltegiratua denean: ezinezkoa da agiri hauen HE-AAC atala atzematea.
+	Hortaz erabiltzaileak eskuz hautatu behar du aukera hau ezartzen bada.
+	Mesedez ohartu arazo hau ez dela gertatzen <code>.MP4</code> agirietan
+	biltegiratutako HE-AAC-rekin.</li>
+  </ul>
+
+  <div align="center">
+   <p>
+    <img src="images/textsubtitlestrackoptions.gif"
+         alt="typical options for a text subtitle track">
+    <br>
+    <font size="-1">7 Irudia: Ohiko aukerak idazki azpidatzi bide batentzat</font>
+   </p>
+  </div>
+
+  <ul>
+   <li><code>Konpresioa:</code> Matroskak erabide indartsu bat du bideak galera
+    gabeko konpresio algoritmoekin konprimitzeko. Konpresio hauek emaniko edozein
+	bideri ezarri ahal zaizkio, baina irakurgailu batzuk bakarrik sostengatzen dute
+	hau VobSub bideentzat. Hemen da hau erabilgarrien. Beste bideak, audio eta bideo
+	bideak bereziki, jadanik konprimiturik daude hortaz konpresio gehigarri batek
+	ez du inolako emaitzik izango. VobSub-erako %30 inguruko irabazi gehigarri bat
+	lortu dezakezu zlib konpresioa gaitzen baduzu. Honegaitik da berezkoa VobSub bideetan.
+    <br>
+    Ezarpen hau <i>hutsik</i> utzi behar duzu.</li>
+
+   <li><code>Azpidatzi hizkikodea:</code> Idazki azpidatzi batzuk ez dute gordetzen
+    zein hizkikoderekin sortuak izan diren. Hau garrantzitsua da zeren idazki azpidatziak
+	berezgaitasunez bihurtzen dira UTF-8 hizkikodera multiplexaketan zehar. <i>mkvmergek</i>
+	arrunt hartzen du sistemaren uneko hizkikodea azpidatzia idatzi zenekoaren berdina dela.
+	Baina hau horrela ez bada erabiltzaileak hizkikode zuzena hautatu dezake.
+    <br>
+    Aukera hau idazki azpidatzi bideentzat bakarrik dago eskuragarri.</li>
+  </ul>
+
+  <h3><a name="attachments">3.4. Eranskinak</a></h3>
+
+  <p>Matroska agiriek beste agiri batzuk ere izan ditzake barne, eranskinak deituak.
+   Honek ohinarrian zure post@ programa gogokoenak bezala egiten du lan.
+   Ideia da agiriari buruzko argibide gehigarriak eskaintzea. Adibide batzuk izan
+   daitezke CD rip batentzako azal argazkia, barreneko idazki erako argibide gehigarriak
+   filmari buruz edo baita azpidatzientzako hizki konprimituak.</p>
+
+  <p>Eranskin bakoitzak bi gauza behar ditu: agiri izena (argi dago) eta MIME mota
+   agiriarekin elkartuta. Erabilpena oso erraza eta <i>sarrera</i> hegatsean
+   agiriak eranstearen antzekoa da.</p>
+
+  <div align="center">
+   <p>
+    <img src="images/addingremovingattachments.gif"
+         alt="adding and removing attachments">
+    <br>
+    <font size="-1">8 Irudia: Gehitu eta kendu eranskinak botoi hauekin.</font>
+   </p>
+  </div>
+
+  <p>EIG-ren bigarren hegatsean <i>eranskinak</i> hegatsa, agiri bat gehitu dezakezu
+    <i>+</i> botoia erabiliz eta hautaturiko eranskina kendu <i>-</i> botoiarekin.
+	Eranskin bat hautatzen denean hegats honetako beste aginteak eskuragarriak izango dira.
+	MIME mota bat hautatu behar duzu eranskin bakoitzarentzt, baina azalpena aukerazkoa da
+	- baina ideia hona da betik jartzea azalpen bat. Honek errazagoa egiten die besteei
+	jakitea zer erantsi duzun Matroska agiri honetan.</p>
+
+  <div align="center">
+   <p>
+    <img src="images/attachmentoptions.gif"
+         alt="typical options for an attachment">
+    <br>
+    <font size="-1">9 Irudia: Ohiko aukerak eranskin batentzat</font>
+   </p>
+  </div>
+
+  <p>Azken aukera, <code>eranskin estiloa</code>, irteera agiria agiri askontan
+   banantzen duzunean bakarrik aztertzen da.
+   (bananketa orokorrean hurrengo atalean azaltzen da
+   <code>Agiri guztientzat</code> aukera hatutazen bada oraingo agiria sortutako
+   irteera agiri guztiei eransten zaio. <code>Lehenean bakarrik</code> hautatzen bada
+   agiria sortutako lehen irteera agiri eransten zaio.</p>
+
+  <h3><a name="globaloptions">3.5. Aukera orokorrak</a></h3>
+
+  <p>Hirugarren hegatsa, <i>Orokorra</i>, aukera pakete oso bat da
+  agiri guztiari ezartzeko eta ez bide bat edo gehiagori.</p>
+
+  <h4><a name="global_title">3.5.1. Agiri/zati izenburua</a></h4>
+
+  <div align="center">
+   <p>
+    <img src="images/movietitle.gif"
+         alt="selecting a movie title">
+    <br>
+    <font size="-1">10 Irudia: Filmarentzako izenburua hautatzea</font>
+   </p>
+  </div>
+
+  <p><code>Agiri/zati izenburua:</code> Hau da oraingo filmak erabiltzen duen
+  izenburua, adib. 'IZENBURU NAGUSIA'.</p>
+
+  <h4><a name="global_split">3.5.2. Berezgaitasunezko bananketa eta agiri
+    lotura </a></h4>
+
+  <p><code>Bananketa</code> atalak irteera agira nola agiri txikiago
+   ugaritan banantzen den kudeatzen du. Bananketa ez bada hautatzen
+   agiri handi bakar bat sortzen da. Bananketa gaitzen bada
+   <i>mkvmerge</i>-ri esan ahal diozu irteera agiri berri bat hasteko oraingo
+   agirian adierazitako datu kopuru bat idatzia izan denean edo adierazitako
+   denbora-kode bat erdietsitakoan. Onartzen diren heuskarriak dira:
+   <br>
+   <ul>
+    <li>Neurriarentzat: Aukerazko zenbaki bat 'K', 'M'
+     edo 'G'-z jarraitua kilobyteak adieraziz (1024 byte), megabyteak (1024 * 1024
+     byte) edo gigabyteak (1024 * 1024 * 1024 byte). Adibideak: '700M' edo
+     '100000K'.</li>
+
+    <li>Denborarentzat: Heuskarria izan daiteke <code>OO:MM:SS.nnn</code>
+     bederatzi zenbakirekin nanosegundu zehaztasunerako edo zenbaki bat
+     's' hizkiaz jarraiturik segundu zenbatekoa adieraziz.
+	 Denbora-kode ugari sartu daitezke kakotxaz bananduta.<br>
+
+     Mesedez ohartu denbora-kodeak banandugabeko irteera jarioarentzat direla.
+	 Hortaz '00:10:00,00:20:00' sartuz emaitza hiru agiri izango dira
+     non bi lehenak hamar minutuko inguruko luzera izango duten.
+     Hirugarren zatiak gainontzeko sarrera jarioa izango du.
+	 Hau askea da 'loturatu agiriak' ezaugarriarekiko.<br>
+
+     Adibideak: '01:20:00' (banadu 1 ordu eta 20 minutu ondoren) edo
+     '1800s' (banandu 1800 segundu = 30 minutu ondoren).</li>
+   </ul>
+  </p>
+
+  <div align="center">
+   <p>
+    <img src="images/splitting.gif"
+         alt="typical options for splitting">
+    <br>
+    <font size="-1">11 Irudia: Ohiko aukerak bananketarako. Sortu bi agiri
+     gutx-gorab. 1000 MB-ko handitasuna edo iraupen zehatz bat izango dutenak.</font>
+   </p>
+  </div>
+
+  <p><code>Ez loturatu:</code> Aukera honek agintzen du nola <i>mkvmerge</i>-k
+   kudeatuko duen bananketa. Azalpen txiki bat ezaugarri honetaz:</p>
+
+  <p>Matroskak agiri loturatzea sostengatzen du, honek esanahi du adierazitako
+   agiri bat oraingo agiriaren aurrekoa edo ondorengoa dela. Zehatza izateko,
+   egitan ez dira agiriak loturatzen baizik Matroska zatiak.
+   Agiri gehienek zihurrenik Matroska zati bakar bat izango dutenez bakarrik diot
+   'agiri loturatzea' esan beharrean 'zati loturatzea' egokiagoa litzakeena.</p>
+
+  <p>Zati bakoitza 128 bit zabalerako zati UID batez ezagutarazten da.
+   UID hau berezgaitasunez sortzen du <i>mkvmerge</i>-k. Loturatzea lehenik zati UID-ak
+   aurreko/hurrengo agiriaren zati idazburu argibideen barnean jarriz egiten da.
+   <i>mkvinfo</i>-k UID hauek irarkitzen ditu aurkitzen baditu.</p>
+
+  <p>Agiri bat txikiago ugaritan banantzen bada eta loturatzea erabiltzen bada
+   denbora kodeak ez dira 0-ean hasiko berriro baizik eta azken agiriak
+   amaitutako tokian jarraituko du. Honela orotarako denborari heusten zaio
+   aurreko agiria eskuragarri ez egonda ere (adib. jariotzerakoan). Loturatu gabe
+   erabiltzen bada denbora kodeak 0-ean hasi beharko du agiri bakoitzean. Berez
+   <i>mkvmerge</i>-k ez dut agiri loturatzerik erabiltzen irakurgailu batzuek oraindik
+   ez dutelako loturaturiko agiriak egoki kudeazen. Loturatzea nahi baduzu
+   <code>loturatu agiriak</code> hauta kutxan gaituz egin dezakezu.</p>
+
+  <h4><a name="global_link">3.5.3. Eskuzko agiri/zati lotura</a></h4>
+
+  <p>Bananketa eraginda egon edo ez erabiltzaileak <i>mkvmerge</i>-ri
+   esan ahal dio loturatzeko sortutako agiria adierazitako UID-tara.
+   Hau egiten da zati UID baliozko bat sartuz bi sarrera kutxatan,
+   <code>Aurreko zati UID-a</code> eta <code>Hurrengo zati UID-a</code>.
+   Aukera honek zati UID bat <i>mkvinfo</i> irteera heuskarrian onartzen du:
+   16 zenbaki hexadezimal 0x00 eta 0xff artean bakoitza '0x'-rekin
+   aurrezenbakitua eta tartez bananduta, adib. <code>0x41 0xda 0x73
+   0x66 0xd9 0xcf 0xb2 0x1e 0xae 0x78 0xeb 0xb4 0x5e 0xca 0xb3
+    0x93</code>. Aukeran forma laburrago bat erabili daiteke: 16
+   zenbaki hexadezimal 0x00 eta 0xff artean '0x' aurrezenbaki gabe
+   eta tarte gabe, adib. <code>41da7366d9cfb21eae78ebb45ecab393</code>.</p>
+
+  <p>Bananketa erabiltzen bada lehen agiria sarrera kutxan emaniko
+   <code>Aurreko zati UID-a</code>-rekin loturatzen da, eta azken agiria
+   sarrera kutxan emaniko <code>Hurrengo zatia UID-a</code>-rekin loturatzen da.
+   Bananketa ez bada erabiltzen irteera agiri bat loturatuko da bi UID-tara.</p>
+
+  <h4><a name="global_chapters">3.5.4. Atalak</a></h4>
+
+  <p>Bilatu botoiarekin irteera agirira gehitzeko agiriak hautatu ditzakezu.
+   Atalei buruzko azalpen osoa bat aurkitu daiteke hemen:
+   <a href="mkvmerge-gui.html#chaptereditor"> Atal editatzaile atala.</a>.</p>
+
+  <h4><a name="global_tags">3.5.5. Etiketa orokorrak</a></h4>
+
+  <p>Sarrera kutxan bide bakoitzarentzat hautatu ditzakezun etiketekin ez bezala
+   hemen hautaturiko etiketek bide UID-ak eduki behar dituzte. Etiketa hauek ez dira
+   berezgaitasunez bide bati esleitzen. Kasu guztien %99-an hau EZ da
+   erabiltzea nahi duzun aukera!</p>
+
+  <p>Azalpen oso bat aurkitu daiteke mkvmergeren agiritzan.</p>
+
+  <h3><a name="doit">3.6. Batze garapenaren hasiera</a></h3>
+
+  <p>Behin gauza guztiak ezarrita multiplexaketa garapena hasi daiteke.
+   Egin behar den azken gauza nora multiplexatu adierazi da.
+   <code>bilatu</code> botoiarekin irteera agiria hautatu dezakezu. Hau eginda gero
+   sakatu <code>Hasi multiplexaketa</code> botoia edo hautatu sarrera berdina
+   <code>Multiplexaketa</code> menutik.</p>
+
+  <p>Dena zuzen ezarri bada <i>mmg</i>-k multiplexaketa elkarrizketa erakutsiko du.
+   Garapena goiko aldean erakusten da, orokorrean <i>mkvmerge</i> une horretan
+   egiten ari denaren azalpen bat da.</p>
+
+  <div align="center">
+   <p>
+    <img src="images/muxingwindow.gif"
+         alt="the muxing window">
+    <br>
+    <font size="-1">12 Irudia: Multiplexaketa leihoa</font>
+   </p>
+  </div>
+
+  <p><i>mkvmerge</i>-k hiru 'larritasun maila' ezagutzen ditu bere mezuetan:
+   egoera jakinarazpenak, kontuz oharrak, eta akatsak. Egoera jakinarazpen mezu guztiak
+   leihoaren goiko aldean erakusten dira. Honek barneratzen ditu aurkitutako bide motak
+   eta beste gauza interesgarri batzuk.</p>
+
+  <p>Kontuz oharrak erdiko leihoan erakusten dira. <i>mkvmerge</i>-k ez du garapena uzten
+   kontuz ohar batekin, baina bidea multiplexatzea gelditu dezake oharra irarkitzeko.
+   Harreta handia jarri behar diezu kontuz ohar guztiei.</p>
+
+  <p>Akatsak beheko leihoan erakusten dira. Akatsak betik dira larriak, eta
+   <i>mkvmerge</i>-k multiplexaketa geldituko du akats mezua irarkitu ondoren.
+   Mezua izan daiteke diska gogorra beteta dagoela edo iturburu agiria hondatuta
+   eta ezin daitekeela jarraitu.</p>
+
+  <p><code>Utzi</code> botiak <i>mkvmerge</i>-ri multiplexaketa gelditzeko
+   seinalea bidaltzen dio. <i>mkvmerge</i> amaiera gabeko bigiztaren batean
+   katiaturik gelditu ez bada botoia sakatu eta laister geldituko da.
+   <code>Gorde oharra</code>-rekin <i>mkvmerge</i>-tiko irteera osoa gorde
+   dezakezu idazki agiri batean gehiago aztertzeko edo matxuara bat aurkitu
+   eta niri bildatzea nahi baduzu argibide gehigarri bezala.</p>
+
+  <h3><a name="saveload">3.7. Multiplexaketa ezarpenak gorde eta gertatu</a></h3>
+
+  <p>Zure aukera ezarpen lan gogorra ez dago zergaitik galdu programatik irtetzen zarenean.
+   Zure multiplexaketa ezarpen guztiak gorde ditzakezu idazkian ohinarrituriko
+   itxurapen agirietan <code>Gorde ezarpenak</code> aukerarekin
+   <code>Agiria</code> menuan dagoena eta gero leheneratu <code>Gertatu ezarpenak
+   </code> aukera erabiliz. Berezko hedapena <code>.mmg</code> da eta arrunt
+   beste programek ez dute erabiltzen. Hedapen hau elkartu dezakezu ere
+   <i>mmg</i>-rekin horrela berezgaitasunez gertatzen ditu ezarpenak deitua
+   bada ezarpen agiriak duen izen berarekin.</p>
+
+  <h3><a name="jobqueue">3.8. Lan ugari lerrokatu</a></h3>
+
+  <p>Agiri asko badituzu multiplexatzea nahi dituzunak ez duzu lehen agiria gertatu behar,
+   itxaron honek multiplexaketa amaitu arte, gertatu bigarrena, itxaron honek multiplexaketa
+   amaitu arte, etab. <i>mkvmerge EIG</i>-k lan kudeatzaile bat du lan osoak lerrokatu ditzakeenak
+   eta bata bestearen ondoren abiarazi zure beharren arabera.
+   Lan kudeatzailea erabiltzeko ohinarrizko urratsak dira:</p>
+
+  <p>
+   <ol>
+    <li>Gehitu agiri guztiak, ezarri aukera guztiak, ezarri irteera agiriaren izena.</li>
+    <li>Sakatu <code>Gehitu lan lerrora</code> botoia eta hautatu lan honek izango duen izena.</li>
+    <li>Berregin nahi beste aldiz.</li>
+    <li>Ireki lan kudeatzaile leihoa <code>Kudeatu lanak</code> hautatuz 
+	<code>Multiplexaketa</code> menuan.</li>
+    <li>Sakatu <code>Hasi</code> botoia.</li>
+    <li>Hartu edateko zerbait, zoaz erosketak egitera edo bikotearekin hitz egitera.</li>
+   </ol>
+  </p>
+
+  <div align="center">
+   <p>
+    <img src="images/jobmanager.gif" alt="the job management dialog">
+    <br>
+    <font size="-1">13 Irudia: Lanen kudeaketa elkarrizketa</font>
+   </p>
+  </div>
+
+  <p>Lan bakoitzak sei ezaugarri ditu: ID bat berezgaitasunez hautatzen duena
+   <i>mkvmerge EIG</i>-k; egoera (<code>egiteke</code> - oraindik multiplexatu ez bada,
+   <code>eginda</code> - multiplexaketa ongi osatu bada,
+   <code>eginda kontuz oharrekin</code> - multiplexaketa ongi osatu da baina
+   oharrak egon dira, <code>hutsegitea</code> - multiplexaketa garapenak huts egin du); 
+   aurretik sartu duzun izena; ordua eta eguna lana lan lerrora gehitua izan denekoa; 
+   multiplexaketa lan hau hasi den ordua eta eguna eta multiplexaketaren amaiera ordua eta eguna.</p>
+
+  <p>Aginte orokorrak beheren kokaturik daude. <code>Hasi</code>
+   botoiak multiplexaketa garapena hasiko du beren egoera <code>egiteke</code> duten lan guztientzat.
+   <code>Hasi hautapena</code> botoiak multiplexaketa garapena hasiko du hautaturik dauden
+   lan guztientzat beren egoera kontuan izan gabe.</p>
+
+  <p>Eskuineko botoiek hautaturiko lan guztiak maneiatzen dituzte.
+   <code>Igo</code> eta <code>Jeitsi</code>-k hautaturiko lana gora eta behera
+   mugitzen dute zerrendan. <code>Birgaitu</code> botoiak lanaren egoera
+   <code>egiteke</code> moduan ezartzen du, hortaz abiarazia izango da
+   <code>Hasi</code> botoia sakatzen den hurrengoan. <code>Ezgaitu</code> botoiak
+   lanaren egoera <code>eginda</code>-n ezartzen du.</p>
+
+  <p>Multiplexaketa garapenean zehar <i>mkvmerge</i>-ren irteera ez da erakutsiko baina bai gorde.
+   Lanen irteera ikustea nahi baduzu <code>Ikusi oharra</code> botoia sakatu dezakezu. 
+   Hau erabilgarria da kontuz oharrekin osatutako lan baterako edo erabat huts egiten badu.</p>
+
+  <hr>
+
+  <a name="wxhh_chaptereditor"></a>
+  <h2><a name="chaptereditor">4. Atal editatzailea</a></h2>
+
+  <p><i>mmg</i>-ren ezaugarri berrietako bat ezagugarri-osoko atal editatzailea da. 
+   Idazki ohinarriko atal agiriak irakurri ditzake, atalak inportatu Matroska agirietatik,
+   idazki ohinarriko atal agiriak idatzi hautatu daitezkeenak hegats orokorrean 
+   eta atalak zuzenan idatzi Matroska agirietan.</p>
+
+  <h3><a name="chapterconcept">4.1. Matroskaren atal adigaia</a></h3>
+
+  <p>Beste sistema askok ez bezala Matroskak <i>nested</i> atalak sostengatzen ditu.
+   Honek ohinarrian esanahi du atalentzako azpi atalak zehaztu ditzakezula.</p>
+
+  <p>Atal bat Matroskan gutxienez lau gaitan biltzen da: Bide UID-a
+   ezartzen dena, atal izenburu/izenean, hau hasiera denbora eta 
+   berari elkarturik dagoen hizkuntza kodea da. Gai gehigarriak aukerazkoak dira eta
+   barneratzen dute amaiera denbora, hizkuntza kode eta herrialde kode gehiago. Arrunt
+   erabiltzaileak nahitaezko gaiak bakarrik beharko ditu. Hauetan bakarrik adierazi dezake
+   izena, hasiera denbora eta hizkuntza kodea. <i>mkvmerge</i>-k berezgaitasunez
+   esleituko dizkio atal guztiak agiri osoari.</p>
+
+  <h3><a name="chapterexamples">4.2. Adibideak</a></h3>
+
+  <p>Lehen adibidea arrunta da. Filmak lau atal ditu: Hasierako irekiera, 
+   lehen agerraldia, bigarren agerraldia, eta kreditoak. 
+   Ohartu amaierako denbora-irarketak aukerzakoak direla.</p>
+
+  <p><code>Irekiera (hasiera 00:00:00, hizkuntza Basque)
+    <br>
+    Ager 1 (hasiera 00:01:00, hizkuntza Basque)
+    <br>
+    Ager 2 (hasiera 00:05:30, hizkuntza Basque)
+    <br>
+    Kreditoak (hasiera 00:12:20 amaiera 00;12:55, hizkuntza Basque)</code></p>
+
+  <p>Adibide zailago bat azpi atalekin. Honek hartzen du Ludwig van
+   Beethoven-ren Fidelio abes-antzerkia. Laburbiltzeagaitik 
+   bi agerraldiren lehen hiru piezak bakarrik sartzen ditut.</p>
+
+  <p>Lehen agerraldiak du:
+   <ol>
+    <li>Irekiera (6:24 luzera),</li>
+    <li>Aria: 'Orain, maitea, bakarrik gaude' (4:46
+     luzera) eta</li>
+    <li>Elkarrizketa: 'Jakino gaxoa' (0:10 luzera).</li>
+   </ol>
+   Bigarren agerraldiak du:
+   <ol>
+    <li>Irekiera eta Aria: 'Jainkoa! zer ilun dagoen hau!' (10:46
+     luzera),</li>
+    <li>Melodrama eta Duetoa: 'Zer hotza egiten duen' (5:21 luzera) eta</li>
+    <li>Elkarrizketa: 'Iratzartzen ari da!' (0:59 luzera).</li>
+   </ol>
+  </p>
+
+  <p>Lehen agerraldia, gure lehen atala izango dena, 
+   11:20-ko luzera du. Gure bigarren agerraldiak 17:060-ko luzera du. 
+   Atal hau horrela ikusiko da:</p>
+
+  <p><code>Lehen Agerraldia (hasiera 00:00:00 amaiera 00:11:20, hizkuntza Basque,
+    herrialdea Basque Country)
+    <br>
+    &nbsp;&nbsp;&nbsp; Irekiera (hasiera 00:00:00 amaiera 00:06:24, hizkuntza
+    Basque, herrialdea Basque Country)
+    <br>
+    &nbsp;&nbsp;&nbsp; Aria: 'Orain, maitea, bakarrik gaude'
+    (hasiera 00:06:24 amaiera 00:11:10, hizkuntza Basque, herrialdea Basque Country)<br>
+    &nbsp;&nbsp;&nbsp; Elkarrizketa: 'Jakino gaxoa' (hasiera 00:11:10 amaiera 00:11:20,
+    hizkuntza Basque, herrialdea Basque Country)
+    <br>
+
+    Bigarren Agerraldia (hasiera 00:11:20 amaiera 00:28:26, hizkuntza Basque,
+    herrialdea Basque Country)
+    <br>
+    &nbsp;&nbsp;&nbsp; Irekiera eta Aria: 'Jainkoa! zer ilun dagoen hau!'
+    (hasiera 00:11:20 amaiera 00:22:06, hizkuntza Basque, herrialdea Basque Country)
+    <br>
+    &nbsp;&nbsp;&nbsp; Melodrama eta Duetoa: 'Zer hotza egiten duen' (hasiera 00:22:06
+    amaiera 00:27:27, hizkuntza Basque, herrialdea Basque Country)
+    <br>
+    &nbsp;&nbsp;&nbsp; Elkarrizketa: 'Iratzartzen ari da!' (hasiera 00:27:27 amaiera 00:28:26,
+    hizkuntza Basque, herrialdea Basque Country)
+   </code>
+  </p>
+
+  <h3><a name="chapterformats">4.3. mkvmergek sostengaturiko atal heuskarriak
+  </a></h3>
+
+  <p><i>mkvmerge</i>-k eta <i>mmg</i>-ren atal editzaileak biak sostengatzen 
+  dituzte heuskarri ezberdinak atal agirentzat.</p>
+
+  <h4><a name="cfsimple">4.3.1. Arrunta/OGM estiloko atal agiriak</a></h4>
+
+  <p>Heuskarri ohinarrizkoenetako bat OGM agirietan erabiltzen dena da. 
+   Hau idazki ohinarriko heuskarria da. Atal sarrera bakoitzak bi lerro ditu, 
+   lehenak hasiera denbora du, bigarrenak atalaren izenburua/izena. 
+   Lerro guztiak zenbakiturik daude.</p>
+
+  <p>Goikoaren lehen adibidea heuskarri honetan adierazten da:<br>
+   <code>CHAPTER01=00:00:00.000<br>
+    CHAPTER01NAME=Irekiera<br>
+    CHAPTER02=00:01:00.000<br>
+    CHAPTER02NAME=Ager 1<br>
+    CHAPTER03=00:05:30.000<br>
+    CHAPTER03NAME=Ager 2<br>
+    CHAPTER04=00:12:20.000<br>
+    CHAPTER04NAME=Kreditoak
+   </code>
+  </p>
+
+  <p>Bigarren adibidea ezin da heuskarri honetan adierazi ez dituelako sostengatzen 
+   ez hizkuntza bereizitasunak ez amaiera denborak edo nested atalak. Aurrerapena da
+   agiri hauek sortzeko oso errazak direla eta tresna ugari daudela eskuragarri 
+   bietarako Windows-erako eta Unix/Linux-erako agiri hauek zuzenean DVD-tatik sortzeko</p>
+
+  <p>Bere mugak dituelako <i>mmg</i>-k ezin ditu atalak heuskarri honetan atera.</p>
+
+  <h4><a name="cfxml">4.3.2. Ezaugarri-guztiko XML estiloko atal agiriak</a></h4>
+
+  <p>XML ohinarriko atal heuskarri bat sortu dut Matroskak erabiltzen duen 
+   sistemaren oso hurbilekoa. Heuskarri honekin osoki agindu dezakezu ezaugarri guztietan. 
+   Ez dut xehetasunez azaltzerik nahi heuskarri hau hemen. Mesedez bota begirada bat
+   <i>mkvtoolnix</i>-rekin datozen XML atal agiri adibideei.</p>
+
+  <h4><a name="cfkax">4.3.3. Matroska agirietan aurkituriko atalak</a></h4>
+
+  <p>Atal editatzaileak zuzenean irakuri ditzake atalak Matroska agirietatik.
+   Hauek XML atal agirietan idatzi daitezke edo Matroska agiri berdinean berriro
+   edo beste Matroska agiri batean. Ezaugarri guztiak daude sostengaturik</p>
+
+  <h3><a name="creatingchapters">4.4. Atal agiriak sortzea</a></h3>
+
+  <p>Atal editatzaileak hiru alde ditu: atal guztien zuhaitz ikuspegia, 
+   atal sarrerak gehitzeko edo kentzeko erabiltzen diren lau botoiak,
+   eta atal sarreren datuak ezartzeko erabiltzen diren sarrera kutxak.</p>
+
+  <div align="center">
+   <p>
+    <img src="images/chaptereditor.gif"
+         alt="the chapter editor">
+    <br>
+    <font size="-1">14 Irudia: Atal editatzailea gaineko adibidea erakusten</font>
+   </p>
+  </div>
+
+  <p>Matroska agirietan atal bat zehazten da hasiera denbora, 
+   izen bat eta izenarekin elkartzen den hizkuntza batez. Izen ugari izan ditzakezu
+   atal batentzat eta bakoitza hizkuntza ezberdin batekin elkarturik. 
+   Amaiera denbora bat ere gehitu dezakezu, baina ez da nahitaezkoa.</p>
+
+  <p>Atal agiri berri bat <code>Berria</code> aukerarekin abiarazten da
+   <code>Atal editatzailea</code> menutik. Atal berri bat gehitu dezakezu
+   <code>Gehitu atala</code> edo <code>Gehitu azpiatala</code> botoiekin. 
+   Bi botoi hauen arteko aldea da <code>Gehitu atala</code> hautatzen denean 
+   atal berria zuzenean hautaturiko atalaren ondoren gehitzen duela maila berean, 
+   eta <code>Gehitu azpiatala</code> aukerak atal berri bat gehitzen du 
+   hautaturiko atalaren azken tokian.</p>
+
+  <p><code>Kendu atala</code> kontuz erabili behar da. Azpizuhaitz osoa kentzen du 
+   baieztapenik galdetu gabe, eta ez dago desegin aukerarik eskuragarri oraingoz.</p>
+
+  <p>Atal sarrera hautatu ondoren bere datuak aldatu ditzakezu. 
+   Hasiera eta amaiera denbora heuskarria izan daiteke <code>OO:MM:SS.mmm</code> 
+   edo <code>OO:MM:SS</code> bakarrik. Atal baten izena jadanik gehitutakoan.
+   Hau editatu dezakezu eta zein hizkuntzatan ematen den hautatu. 
+   Honela izenak hizkuntza anitzetan eman ditzakezu, adib. 'The hero arrives' 
+   'eng' hizkuntza bezala duela eta 'Hurena badator' 'baq' hizkuntza bezala duela. 
+   Besterik gabe sakatu <code>Gehitu izena</code> botoia sarrera gehiago behar badituzu 
+   eta <code>Kendu izena</code> bat kentzea nahi baduzu.</p>
+
+  <p>Atal asko sortzea eta betik hizkuntza aldatzea lan handia izan daiteke. 
+   Hortaz <i>mmg</i>-k berez gehitu behar duen hizkuntza eta herrialde etiketa hautatu ditzakezu
+   <code>Ezarri berezko balioak</code> menu sarrerarekin <code>Atalak</code> menuan. 
+   <code>Ezarri balioak</code> botaiak antzeko zerbait egiten du. Honekin hizkuntza bat 
+   eta/edo herrialde bat ezarri dezakezu unean hautaturiko sarreran eta bere mendeko denentzat.</p>
+
+  <p>Atalak XML agirietan gordetzea <code>Gorde</code> edo <code>Gorde honela</code>-rekin egin daiteke. 
+   <code>Gorde honela</code> ezin da erabili atalak idazteko badagoen Matroska agiri batean 
+   - horretarako <code>Gorde Matroska agirian</code> erabili behar duzu.</p>
+
+  <h3><a name="editingchapters">4.5. Badauden atalak editatzea</a></h3>
+
+  <p>Badauden atal agiriak edo atalak Matroska agirietatik gertatu ditzakezu 
+   <code>Gertatu</code> aukera hautatuz <code>Atal editatzailea</code>
+   menuan. <i>mmg</i>-k berezgaitasunez atzemango du erabilitako agiri mota eta atalak irakurriko ditu.</p>
+
+   <hr>
+   
+  <a name="wxhh_headereditor"></a>
+  <h2><a name="headereditor">5. Idazburu editatzailea</a></h2>
+
+  <p>
+   mmg ezaugarri editatzaile bat Matroska agirietako idazburu eremuentzat.
+   Abirarazi daiteke mmg-ren &quot;Agiria&quot; menutik &quot;Idazburu editatzailea&quot; hautatuz.
+  </p>
+
+  <p>
+   Idazburu editatzaileak erabiltzaileari ahalbidetzen dio editatzea
+   bide bakoitzaren zati argibide idazburu eremuetako batzuk eta
+   idazburuak agiria berriro multiplexatu behar izan gabe.
+   Bere erabilpena arrunta da: gertatu agiri bat, hautatu aldatzea 
+   nahi dituzun idazburu eremuak, aldatu beren balioak eta gorde agiria.
+  </p>
+
+  <h3><a name="he_addingremovingheaderfields">5.1. Idazburu eremuak gehitzea edo kentzea</a></h3>
+
+  <p>
+   Matroska agiri heuskarriak ahalbidetzen du idazburu eremu gehienak
+   egotea edo ez egotea. mmg-ren idazburu editatzaileak sostengaturiko
+   idazburu eremu guztien sarrerak erakutsiko ditu baita unean
+   agirian ez badaude ere. Erabiltzaileari ahalbidetzen dio unean agirian 
+   ez dauden eremuak gehitzea agirira eta unean agirian dauden eremuak kentzea.
+  </p>
+
+  <h3><a name="he_analyzingthefile">5.2. Badagoen agiri bat irekitzea</a></h3>
+  
+  <p>
+   Erabiltzailea agiri bat editatzen hasi daiteke &quot;Irei&quot; hautatuz
+   &quot;Agiria&quot; menutik. Agiri egokia hautatu ondoren idazburu editatzaileak 
+   agiria mihatuko du osagai garrantzitsu guztien bila. Honek denbora apur bat 
+   hartu dezake agiriaren neurriaren arabera. 
+   Hau beharrezkoa da Matroskaren agiri egitura malgua delako.
+  </p>
+  
+  <div align="center">
+   <p>
+    <img src="images/headereditor.gif"
+         alt="the header editor">
+    <br>
+    <font size="-1">15 Irudia: Idazburu editatzailea</font>
+   </p>
+  </div>
+
+  <h3><a name="he_editingthefile">5.3. Idazburu eremuak editatzea</a></h3>
+
+  <p>
+   Agiria ireki ondoren ezkerreko panelak gai bat erakutsiko du 
+   zati idazburuentzat eta gai bat agirian aurkitu den bide bakoitzeko. 
+   Zuhaitzeko elkargune bakoitzak azpigai zenbateko bat du oraingo 
+   idazburu balioa adierazten duena. Erabiltzaileak azpigai bat hautatzen 
+   duenean eskuineko panela eguneratu egiten da gaiari buruzko 
+   gertaera zenbait erakusteko.
+  </p>
+
+  <p>
+   <ul>
+    <li>mota da (zenbaki bat, kate bat, etab.),</li>
+    <li>izena da,</li>
+    <li>edukiei buruzko azalpen labur bat,</li>
+    <li>unean gaia agiriaren dagoen edo ez kentzeko aukera barne duela 
+	 badago eta gehitzeko ez badago,</li>
+    <li>gaiaren jatorrizko balioa agiria irekitzerakoan bazegoen eta</li>
+    <li>aginte bat edukia aldatzeko.</li>
+   </ul>
+  </p>
+
+  <p>
+   Balio mota gehienak bere azalpena dira: zenbakiak, kateak, etab.
+   Horrela ere binario mota zenbaki hex. sekuentzia bat bezala erakusten dira. 
+   Onarturiko heuskarriak mkvmerge-ren zati UID-ak adierazteko aukera 
+   ugarien berdinak dira: izan daiteke zenbaki hex. sekuentzia arrunt bat
+   (adib. 1857a7fe7d...) edo zenbaki hex. bat &quot;0x&quot;-rekin aurrezenbakiturik 
+   pare bakoitzaren aurretik (adib. 0x18 0x57 0xa7 0xfe 0x7d...).
+  </p>
+
+  <h3><a name="he_validation">5.4. Balioztapena</a></h3>
+
+  <p>
+   Erabiltzaileak bere aldaketak balioztatu ditzake &quot;Balioztapena&quot;
+   hautatuz &quot;Idazburuak&quot; menutik. Balioztapena berezgaitasunez ere 
+   abiarazten da erabiltzaileak agiriak gordetzea nahi dituen bakoitzean. 
+   Balioztapenak zihurtatzen du erabiltzaileak ordeztu dituen balioak 
+   bere gaian biltegiratu direla. 
+   Adibidez zenbaki gai batek ez ditu hizkiak izan behar.
+  </p>
+
+  <p>
+   Balioztapeank huts egiten badu balioztapenean huts egin duen 
+   lehen gai hautatzen da erabiltzaileak akatsa zuzendu ahal izan dezan.
+  </p>
+
+  <h3><a name="he_saving">5.5. Agiri bat gordetzea</a></h3>
+
+  <p>
+   Erabiltzaileak aldaketak gorde ditzake &quot;Gorde&quot; hautatuz 
+   &quot;Agiria&quot; menutik. Ez bada aldaketarik egin mmg-k esango du 
+   eta ez du agiria aldatuko.
+  </p>
+
+  <p>
+   Agiria aldatu aurretik mmg-k egiaztatuko du agiria beste aplikazioren 
+   batek aldatu duen ireki zen unetik. Horrela izan bada mmg-k erabiltzailea 
+   ohartaraziko du, aldaketa guztiak baztertu eta agiria birgertatuko du 
+   zihurtatzeko agiria ez dela hondatuko.
+  </p>
+
+  <p>
+   mmg gogor saiatzen da aldatutako idazburuak idazteko tokiak bilatzen.
+   Dauden idazburu gaiak gainidatziko ditu beren jatorrizko tokian, 
+   EbmlVoid gaiak eta aurkitzen dituen beste idazburu eskabide guztiak bezala. 
+   Meta bilaketa buruak ere eguneratuko ditu beste aplikazioek idazburuak 
+   erraz aurkitu ahal izateko agiria irakurriz.
+  </p>
+
+  <p>
+   Agiria gorde ondoren idazburu editatzaileak berezgaitasunez birgertatuko 
+   eta aztertuko du berriro. Hau egiten da zihurtatzeko ez dela agiri hondatzerik gertatu. 
+   Honek agiria gordetzea nabarmen moteltzen duenez segurtasun ezaugarri hau mmg-ren etorkizuneko 
+   argitalpenetan kendu egingo da nahikoa azterketa eginda dagoenean.
+  </p>
+ </body>
+</html>

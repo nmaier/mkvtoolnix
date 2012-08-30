@@ -1,3 +1,11 @@
+2012-08-30  Moritz Bunkus  <moritz@bunkus.org>
+
+	* documentation: Added a Basque translation of mmg's guide by
+	Xabier Aramendi (see AUTHORS).
+
+	* all: bug fix: Fixed a buffer overflow in the Base64 decoder
+	routine.
+
 2012-08-19  Moritz Bunkus  <moritz@bunkus.org>
 
 	* source: Various fixes for building with g++ 4.7.x and clang 3.1.
