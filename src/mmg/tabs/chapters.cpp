@@ -204,6 +204,8 @@ tab_chapters::tab_chapters(wxWindow *parent,
   siz_column->Add(b_adjust_timecodes, 0, wxGROW | wxBOTTOM, 3);
   siz_fg->Add(siz_column, 0, wxLEFT | wxBOTTOM, 5);
 
+  siz_all->Add(siz_fg, 10, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 10);
+
   // Start of flex grid sizer
   siz_upper_fg = new wxFlexGridSizer(4, 5, 5);
   siz_upper_fg->AddGrowableCol(1, 1);
@@ -255,12 +257,9 @@ tab_chapters::tab_chapters(wxWindow *parent,
   tc_segment_edition_uid = new wxTextCtrl(this, ID_TC_SEGMENT_EDITION_UID, wxEmptyString);
   siz_upper_fg->Add(tc_segment_edition_uid, 1, wxGROW | wxALIGN_CENTER_VERTICAL);
 
-  siz_fg->Add(siz_upper_fg, 1, wxGROW | wxRIGHT, 5);
+  siz_all->Add(siz_upper_fg, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 10);
   // End of flex grid sizer
 
-  siz_fg->Add(1, 0, 0, 0, 0);
-
-  siz_all->Add(siz_fg, 1, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 10);
 
   sb_names = new wxStaticBox(this, wxID_STATIC, wxEmptyString);
   siz_sb = new wxStaticBoxSizer(sb_names, wxVERTICAL);
