@@ -44,8 +44,32 @@
 #define ID_CB_FLAGENABLEDDEFAULT          16018
 #define ID_TC_UID                         16019
 #define ID_CB_FLAGORDERED                 16020
+#define ID_TC_SEGMENT_UID                 16021
+#define ID_TC_SEGMENT_EDITION_UID         16022
 
 using namespace libmatroska;
+
+class chapter_node_data_c: public wxTreeItemData {
+public:
+  bool is_atom;
+  KaxChapterAtom *chapter;
+  KaxEditionEntry *eentry;
+
+public:
+  chapter_node_data_c(KaxChapterAtom *p_chapter)
+    : is_atom{true}
+    , chapter{p_chapter}
+    , eentry{}
+  {
+  };
+
+  chapter_node_data_c(KaxEditionEntry *p_eentry)
+    : is_atom{false}
+    , chapter{}
+    , eentry{p_eentry}
+  {
+  };
+};
 
 class tab_chapters: public wxPanel {
   DECLARE_CLASS(tab_chapters);
@@ -58,14 +82,14 @@ public:
   wxMenu *m_chapters_menu;
 
   wxTextCtrl *tc_chapter_name, *tc_start_time, *tc_end_time;
-  wxTextCtrl *tc_uid;
+  wxTextCtrl *tc_uid, *tc_segment_uid, *tc_segment_edition_uid;
   wxMTX_COMBOBOX_TYPE *cob_language_code, *cob_country_code;
   wxListBox *lb_chapter_names;
   wxButton *b_add_chapter_name, *b_remove_chapter_name;
   wxCheckBox *cb_flag_hidden, *cb_flag_enabled_default, *cb_flag_ordered;
   bool inputs_enabled, no_update;
 
-  wxStaticText *st_start, *st_end, *st_uid, *st_name, *st_language, *st_flags;
+  wxStaticText *st_start, *st_end, *st_uid, *st_name, *st_language, *st_flags, *st_segment_uid, *st_segment_edition_uid;
   wxStaticText *st_country, *st_chapters;
   wxStaticBox *sb_names;
 
@@ -129,6 +153,8 @@ protected:
 
   void root_or_edition_selected(wxTreeEvent &evt);
   void set_flag_enabled_default_texts(wxTreeItemId id);
+  bool copy_segment_uid(chapter_node_data_c *data);
+  bool copy_segment_edition_uid(chapter_node_data_c *data);
 };
 
 #endif // __TAB_CHAPTERS_H
