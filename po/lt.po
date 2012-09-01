@@ -667,7 +667,7 @@ msgstr ""
 msgid "%1% frame, track %2%, timecode %3% (%4%), size %5%, adler 0x%|6$08x|%7%%8%\n"
 msgstr ""
 
-#: src/common/strings/formatting.cpp:276
+#: src/common/strings/formatting.cpp:255
 #, boost-format
 msgid "%1% minute"
 msgid_plural "%1% minutes"
@@ -675,7 +675,7 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: src/common/strings/formatting.cpp:270
+#: src/common/strings/formatting.cpp:249
 #, boost-format
 msgid "%1% second"
 msgid_plural "%1% seconds"
@@ -1163,18 +1163,18 @@ msgstr ""
 msgid "'%1%' lacks the track number(s).\n"
 msgstr ""
 
-#: src/common/output.cpp:132
-#: src/common/output.cpp:145
-#: src/common/output.cpp:158
-#: src/common/output.cpp:179
+#: src/common/output.cpp:165
+#: src/common/output.cpp:178
+#: src/common/output.cpp:191
+#: src/common/output.cpp:212
 #, boost-format
 msgid "'%1%' track %2%: %3%"
 msgstr ""
 
-#: src/common/output.cpp:125
-#: src/common/output.cpp:138
-#: src/common/output.cpp:151
-#: src/common/output.cpp:168
+#: src/common/output.cpp:158
+#: src/common/output.cpp:171
+#: src/common/output.cpp:184
+#: src/common/output.cpp:201
 #, boost-format
 msgid "'%1%': %2%"
 msgstr ""
@@ -1416,19 +1416,19 @@ msgstr ""
 msgid "(Unknown element: %1%; ID: 0x%2% size: %3%)"
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:388
+#: src/mmg/tabs/chapters.cpp:438
 msgid "(new chapter file)"
 msgstr "(nauja skyriaus rinkmena)"
 
-#: src/mmg/tabs/chapters.cpp:419
+#: src/mmg/tabs/chapters.cpp:469
 msgid "(unnamed chapter)"
 msgstr "(nepavadintas skyrius)"
 
-#: src/mmg/tabs/chapters.cpp:860
-#: src/mmg/tabs/chapters.cpp:935
-#: src/mmg/tabs/chapters.cpp:1049
-#: src/mmg/tabs/chapters.cpp:1544
-#: src/mmg/tabs/chapters.cpp:1557
+#: src/mmg/tabs/chapters.cpp:910
+#: src/mmg/tabs/chapters.cpp:985
+#: src/mmg/tabs/chapters.cpp:1122
+#: src/mmg/tabs/chapters.cpp:1661
+#: src/mmg/tabs/chapters.cpp:1674
 msgid "(unnamed)"
 msgstr "(nepavadintas)"
 
@@ -1598,6 +1598,10 @@ msgid ""
 "segment between many others (128 bits)."
 msgstr ""
 
+#: src/mmg/tabs/chapters.cpp:354
+msgid "A segment to play in place of this chapter. The edition set via the segment edition UID should be used for this segment, otherwise no edition is used. This is a 128bit segment UID in the usual UID form: hex numbers with or without the \"0x\" prefix, with or without spaces, exactly 32 digits.\n"
+msgstr ""
+
 #: src/info/mkvinfo.cpp:910
 msgid "A track"
 msgstr "Takelis"
@@ -1733,7 +1737,7 @@ msgstr "&Pridėti komandinės eilutės parinkčių"
 msgid "Add additional parts"
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:326
+#: src/mmg/tabs/chapters.cpp:340
 msgid "Add chapter"
 msgstr "Pridėti skyrių"
 
@@ -1745,7 +1749,7 @@ msgstr "Pridėti komandinės eilutės parinkčių"
 msgid "Add element"
 msgstr "Pridėti elementą"
 
-#: src/mmg/tabs/chapters.cpp:345
+#: src/mmg/tabs/chapters.cpp:371
 msgid "Add name"
 msgstr "Pridėti pavadinimą"
 
@@ -1757,7 +1761,7 @@ msgstr ""
 msgid "Add or replace tags in the file with the ones from 'filename' or remove them if 'filename' is empty (see below and man page for syntax)"
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:327
+#: src/mmg/tabs/chapters.cpp:341
 msgid "Add subchapter"
 msgstr "Pridėti poskyrį"
 
@@ -1786,11 +1790,11 @@ msgstr ""
 msgid "Adds the current settings as a new job entry to the job queue"
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:1332
+#: src/mmg/tabs/chapters.cpp:1411
 msgid "Adjust chapter timecodes"
 msgstr "Derinti skyriaus laiko kodus"
 
-#: src/mmg/tabs/chapters.cpp:332
+#: src/mmg/tabs/chapters.cpp:346
 msgid "Adjust timecodes"
 msgstr "Derinti laiko kodus"
 
@@ -1811,7 +1815,7 @@ msgstr "Visos rinkmenos (*)|*"
 msgid "All Files (*.*)|*.*"
 msgstr "Visos rinkmenos (*.*)|*.*"
 
-#: src/mmg/tabs/chapters.cpp:818
+#: src/mmg/tabs/chapters.cpp:868
 msgid "All chapter entries are valid."
 msgstr "Visi skyrių įrašai tvarkingi."
 
@@ -1886,7 +1890,7 @@ msgid ""
 msgstr ""
 
 #: src/mmg/header_editor/frame.cpp:688
-#: src/mmg/tabs/chapters.cpp:1879
+#: src/mmg/tabs/chapters.cpp:2010
 #: src/propedit/propedit.cpp:43
 msgid "An unknown error occured. The file has been modified."
 msgstr "Nežinoma klaida. Rinkmena buvo pakeista."
@@ -2164,22 +2168,22 @@ msgstr ""
 msgid "Causes mkvmerge to add 'stop display' commands to VobSub subtitle packets that do not contain a duration field."
 msgstr ""
 
-#: src/propedit/change.cpp:205
+#: src/propedit/change.cpp:206
 #, boost-format
 msgid "Change for '%1%' executed. No property of this type found. One entry added.\n"
 msgstr ""
 
-#: src/propedit/change.cpp:185
+#: src/propedit/change.cpp:186
 #, boost-format
 msgid "Change for '%1%' executed. Number of entries deleted: %2%\n"
 msgstr ""
 
-#: src/propedit/change.cpp:211
+#: src/propedit/change.cpp:212
 #, boost-format
 msgid "Change for '%1%' executed. Number of entries set: %2%.\n"
 msgstr ""
 
-#: src/propedit/change.cpp:222
+#: src/propedit/change.cpp:223
 #, boost-format
 msgid "Change for '%1%' executed. One entry added.\n"
 msgstr ""
@@ -2237,7 +2241,7 @@ msgstr ""
 msgid "Chapter file:"
 msgstr "Skyrių rinkmena:"
 
-#: src/mmg/tabs/chapters.cpp:661
+#: src/mmg/tabs/chapters.cpp:711
 #, c-format, boost-format
 msgid "Chapter files (*.xml)|*.xml|%s"
 msgstr "Skyrių rinkmenos (*.xml)*.xml|%s"
@@ -2247,12 +2251,12 @@ msgstr "Skyrių rinkmenos (*.xml)*.xml|%s"
 msgid "Chapter files (*.xml;*.txt;*.cue)|*.xml;*.txt;*.cue|%s"
 msgstr "Skyrių rinkmenos (*.xml;*.txt;*.cue)|*.xml;*.txt;*.cue|%s"
 
-#: src/mmg/tabs/chapters.cpp:520
+#: src/mmg/tabs/chapters.cpp:570
 #, c-format, boost-format
 msgid "Chapter files (*.xml;*.txt;*.mka;*.mkv;*.mk3d;*.cue)|*.xml;*.txt;*.mka;*.mkv;*.mk3d;*.cue|%s"
 msgstr "Skyrių rinkmenos (*.xml;*.txt;*.mka;*.mkv;*.mk3d;*.cue)|*.xml;*.txt;*.mka;*.mkv;*.mk3d;*.cue|%s"
 
-#: src/mmg/tabs/chapters.cpp:344
+#: src/mmg/tabs/chapters.cpp:370
 msgid "Chapter names and languages"
 msgstr "Skyrių pavadinimai ir kalbos"
 
@@ -2265,23 +2269,23 @@ msgstr "Skyrių parinktys"
 msgid "Chapter parser: The EditionUID %1% is not unique and could not be reused. A new one will be created.\n"
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:739
-#: src/mmg/tabs/chapters.cpp:747
-#: src/mmg/tabs/chapters.cpp:753
-#: src/mmg/tabs/chapters.cpp:760
-#: src/mmg/tabs/chapters.cpp:777
-#: src/mmg/tabs/chapters.cpp:799
+#: src/mmg/tabs/chapters.cpp:789
+#: src/mmg/tabs/chapters.cpp:797
+#: src/mmg/tabs/chapters.cpp:803
+#: src/mmg/tabs/chapters.cpp:810
+#: src/mmg/tabs/chapters.cpp:827
+#: src/mmg/tabs/chapters.cpp:849
 msgid "Chapter verification error"
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:818
+#: src/mmg/tabs/chapters.cpp:868
 msgid "Chapter verification succeeded"
 msgstr ""
 
 #: src/info/mkvinfo.cpp:1792
 #: src/mmg/options/chapters.cpp:125
 #: src/mmg/tabs/global.cpp:285
-#: src/propedit/options.cpp:173
+#: src/propedit/options.cpp:176
 msgid "Chapters"
 msgstr "Skyriai"
 
@@ -2294,16 +2298,16 @@ msgstr "Skyriai (įrašų: %d) iš %s"
 msgid "Chapters are not allowed in WebM compliant files. No chapters will be written into any output file.\n"
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:597
+#: src/mmg/tabs/chapters.cpp:647
 msgid "Chapters loaded."
 msgstr "Skyriai įkelti."
 
-#: src/mmg/tabs/chapters.cpp:703
-#: src/mmg/tabs/chapters.cpp:1856
+#: src/mmg/tabs/chapters.cpp:753
+#: src/mmg/tabs/chapters.cpp:1987
 msgid "Chapters written."
 msgstr "Skyriai įrašyti."
 
-#: src/mmg/tabs/chapters.cpp:325
+#: src/mmg/tabs/chapters.cpp:339
 msgid "Chapters:"
 msgstr "Skyriai:"
 
@@ -2339,7 +2343,7 @@ msgstr ""
 msgid "Checking for updates online; please wait"
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:519
+#: src/mmg/tabs/chapters.cpp:569
 msgid "Choose a chapter file"
 msgstr "Pasirinkite skyriaus rinkmeną"
 
@@ -2373,8 +2377,8 @@ msgstr "Pasirinkite prijungtiną įvedimo rinkmeną (nuosekliai prijungiant prie
 #: src/mmg/mmg_dialog.cpp:754
 #: src/mmg/mmg_dialog.cpp:775
 #: src/mmg/mux_dialog.cpp:203
-#: src/mmg/tabs/chapters.cpp:623
-#: src/mmg/tabs/chapters.cpp:660
+#: src/mmg/tabs/chapters.cpp:673
+#: src/mmg/tabs/chapters.cpp:710
 msgid "Choose an output file"
 msgstr "Pasirinkite išvedimo rinkmeną"
 
@@ -2625,12 +2629,12 @@ msgstr ""
 msgid "Could not find valid DTS headers in this track's first frames.\n"
 msgstr ""
 
-#: src/common/locale.cpp:133
+#: src/common/locale.cpp:136
 #, boost-format
 msgid "Could not initialize the iconv library for the conversion from %1% to UFT-8. Some strings will not be converted to UTF-8 and the resulting Matroska file might not comply with the Matroska specs (error: %2%, %3%).\n"
 msgstr ""
 
-#: src/common/locale.cpp:140
+#: src/common/locale.cpp:143
 #, boost-format
 msgid "Could not initialize the iconv library for the conversion from UFT-8 to %1%. Some strings cannot be converted from UTF-8 and might be displayed incorrectly (error: %2%, %3%).\n"
 msgstr ""
@@ -2650,7 +2654,7 @@ msgstr "Nepavyksta atverti iškarpinės."
 msgid "Could not open the corresponding correction file '%1%c'.\n"
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:690
+#: src/mmg/tabs/chapters.cpp:740
 #, c-format, boost-format
 msgid "Could not open the destination file '%s' for writing. Error code: %d (%s)."
 msgstr ""
@@ -2686,7 +2690,7 @@ msgid "Could not write to the output file: %1% (%2%)\n"
 msgstr ""
 
 #: src/mmg/options/chapters.cpp:84
-#: src/mmg/tabs/chapters.cpp:349
+#: src/mmg/tabs/chapters.cpp:375
 msgid "Country:"
 msgstr "Šalis:"
 
@@ -2876,7 +2880,7 @@ msgstr "Data (klaidinga, reikšmė: %1%)"
 msgid "Date: %1% UTC"
 msgstr "Data: %1% UTC"
 
-#: src/common/output.cpp:77
+#: src/common/output.cpp:92
 msgid "Debug> "
 msgstr "Derinimas> "
 
@@ -3077,11 +3081,11 @@ msgstr ""
 msgid "EVIL internal bug! (unknown file type). %1%\n"
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:337
+#: src/mmg/tabs/chapters.cpp:351
 msgid "Each chapter and each edition has a unique identifier. This identifier is normally assigned automatically by the programs, but it can be changed manually if it is really needed."
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:799
+#: src/mmg/tabs/chapters.cpp:849
 msgid "Each edition must contain at least one chapter."
 msgstr ""
 
@@ -3102,13 +3106,13 @@ msgstr ""
 msgid "Edit selectors"
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:468
+#: src/mmg/tabs/chapters.cpp:518
 #, c-format, boost-format
 msgid "Edition %d"
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:850
-#: src/mmg/tabs/chapters.cpp:922
+#: src/mmg/tabs/chapters.cpp:900
+#: src/mmg/tabs/chapters.cpp:972
 #, c-format, boost-format
 msgid "EditionEntry %u"
 msgstr ""
@@ -3154,7 +3158,7 @@ msgstr ""
 msgid "Encryption key ID: %1%"
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:335
+#: src/mmg/tabs/chapters.cpp:349
 msgid "End:"
 msgstr "Pabaiga:"
 
@@ -3188,7 +3192,7 @@ msgstr ""
 msgid "Error loading settings"
 msgstr "Klaida įkeliant nuostatas"
 
-#: src/mmg/tabs/chapters.cpp:690
+#: src/mmg/tabs/chapters.cpp:740
 msgid "Error opening file"
 msgstr "Klaida atveriant rinkmeną"
 
@@ -3196,17 +3200,17 @@ msgstr "Klaida atveriant rinkmeną"
 msgid "Error parsing a MPEG PS packet during the header reading phase. This stream seems to be badly damaged.\n"
 msgstr ""
 
-#: src/propedit/target.cpp:440
+#: src/propedit/chapter_target.cpp:68
 #, boost-format
 msgid "Error parsing the chapters in '%1%': some mandatory elements are missing.\n"
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:572
+#: src/mmg/tabs/chapters.cpp:622
 msgid "Error parsing the file"
 msgstr ""
 
 #: src/merge/mkvmerge.cpp:520
-#: src/propedit/target.cpp:350
+#: src/propedit/tag_target.cpp:139
 #, boost-format
 msgid "Error parsing the tags in '%1%': some mandatory elements are missing.\n"
 msgstr ""
@@ -3217,17 +3221,17 @@ msgstr "Klaida įrašant informaciją"
 
 #: src/mmg/header_editor/frame.cpp:672
 #: src/mmg/header_editor/frame.cpp:678
-#: src/mmg/tabs/chapters.cpp:1862
-#: src/mmg/tabs/chapters.cpp:1868
+#: src/mmg/tabs/chapters.cpp:1993
+#: src/mmg/tabs/chapters.cpp:1999
 msgid "Error writing Matroska file"
 msgstr "Klaida įrašant Matroska rinkmeną"
 
-#: src/common/output.cpp:70
+#: src/common/output.cpp:85
 #: src/mmg/mux_dialog.cpp:275
 msgid "Error:"
 msgstr "Klaida:"
 
-#: src/common/output.cpp:71
+#: src/common/output.cpp:86
 msgid "Error: "
 msgstr "Klaida: "
 
@@ -3440,7 +3444,7 @@ msgid "File name: %1%"
 msgstr "Rinkmenos vardas: %1%"
 
 #: src/mmg/header_editor/frame.cpp:257
-#: src/mmg/tabs/chapters.cpp:541
+#: src/mmg/tabs/chapters.cpp:591
 msgid "File parsing failed"
 msgstr ""
 
@@ -3449,7 +3453,7 @@ msgid "File removal not possible"
 msgstr ""
 
 #: src/mmg/header_editor/frame.cpp:684
-#: src/mmg/tabs/chapters.cpp:1875
+#: src/mmg/tabs/chapters.cpp:2006
 msgid "File structure warning"
 msgstr ""
 
@@ -3478,6 +3482,11 @@ msgstr "Baigta:"
 #, c-format, boost-format
 msgid "Finished processing on %s"
 msgstr ""
+
+#: src/mmg/tabs/chapters.cpp:358
+#, fuzzy
+msgid "Flags:"
+msgstr "Gairės:"
 
 #: src/mmg/header_editor/value_page.cpp:147
 msgid "Floating point number"
@@ -3670,7 +3679,7 @@ msgid ""
 "down box and pressing the 'add' button."
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:333
+#: src/mmg/tabs/chapters.cpp:347
 msgid "Here you can adjust all the timecodes of the selected chapter and of all its sub-chapters by a specific amount either increasing or decreasing them."
 msgstr ""
 
@@ -3682,7 +3691,7 @@ msgid ""
 "saved when you exit mmg."
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:330
+#: src/mmg/tabs/chapters.cpp:344
 msgid "Here you can set the values for the language and the country that you want to apply to all the chapters below and including the currently selected entry."
 msgstr ""
 
@@ -3706,12 +3715,16 @@ msgstr ""
 msgid "IVF with VP8 video files"
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:340
+#: src/mmg/tabs/chapters.cpp:360
 msgid "If a chapter is marked 'hidden' then the player should not show this chapter entry to the user. Such entries could still be used by the menu system."
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:343
+#: src/mmg/tabs/chapters.cpp:388
 msgid "If a chapter is not marked 'enabled' then the player should skip the part of the file that this chapter occupies."
+msgstr ""
+
+#: src/mmg/tabs/chapters.cpp:368
+msgid "If a chapter or an edition is marked 'hidden' then the player should not show this chapter entry (or all of this edition's entries) to the user. Such entries could still be used by the menu system."
 msgstr ""
 
 #: src/mmg/tabs/global.cpp:264
@@ -3720,6 +3733,14 @@ msgstr ""
 
 #: src/mmg/tabs/global.cpp:262
 msgid "If a start timecode is left out then the previous range's end timecode is used, or the start of the file if there was no previous range."
+msgstr ""
+
+#: src/mmg/tabs/chapters.cpp:363
+msgid "If an edition is marked 'ordered' then the chapters can be defined multiple times and the order to play them is enforced."
+msgstr ""
+
+#: src/mmg/tabs/chapters.cpp:391
+msgid "If an edition is marked as 'default' then it should be used as the default edition."
 msgstr ""
 
 #: src/mmg/options/mmg.cpp:68
@@ -3782,12 +3803,12 @@ msgstr ""
 msgid "Input"
 msgstr "Įvedimas"
 
-#: src/mmg/tabs/chapters.cpp:1352
-#: src/mmg/tabs/chapters.cpp:1446
-#: src/mmg/tabs/chapters.cpp:1452
-#: src/mmg/tabs/chapters.cpp:1464
-#: src/mmg/tabs/chapters.cpp:1480
-#: src/mmg/tabs/chapters.cpp:1488
+#: src/mmg/tabs/chapters.cpp:1431
+#: src/mmg/tabs/chapters.cpp:1525
+#: src/mmg/tabs/chapters.cpp:1531
+#: src/mmg/tabs/chapters.cpp:1543
+#: src/mmg/tabs/chapters.cpp:1559
+#: src/mmg/tabs/chapters.cpp:1567
 msgid "Input data error"
 msgstr ""
 
@@ -3815,7 +3836,7 @@ msgid "Internal bug: tracks.cpp SSA #1. %1%"
 msgstr ""
 
 #: src/mmg/header_editor/frame.cpp:688
-#: src/mmg/tabs/chapters.cpp:1879
+#: src/mmg/tabs/chapters.cpp:2010
 msgid "Internal program error"
 msgstr ""
 
@@ -3838,15 +3859,15 @@ msgstr ""
 msgid "Invalid BlockAddition level in argument '%1%'.\n"
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:1446
+#: src/mmg/tabs/chapters.cpp:1525
 msgid "Invalid UID. A UID is simply a number."
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:1452
+#: src/mmg/tabs/chapters.cpp:1531
 msgid "Invalid UID. This chapter UID is already in use. The original UID has not been changed."
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:1464
+#: src/mmg/tabs/chapters.cpp:1543
 msgid "Invalid UID. This edition UID is already in use. The original UID has not been changed."
 msgstr ""
 
@@ -3947,16 +3968,24 @@ msgstr ""
 msgid "Invalid format for a SSA line ('%1%') at timecode %2%: Too many fields found (%3% instead of 9). This entry will be skipped.\n"
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:1352
+#: src/mmg/tabs/chapters.cpp:1431
 msgid "Invalid format used for the adjustment."
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:1488
+#: src/mmg/tabs/chapters.cpp:1567
 #, c-format, boost-format
 msgid "Invalid format used for the end time for '%s'. Setting value to 0."
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:1480
+#: src/mmg/tabs/chapters.cpp:1610
+msgid "Invalid format used for the segment UID. Not using the value."
+msgstr ""
+
+#: src/mmg/tabs/chapters.cpp:1628
+msgid "Invalid format used for the segment edition UID. Not using the value."
+msgstr ""
+
+#: src/mmg/tabs/chapters.cpp:1559
 #, c-format, boost-format
 msgid "Invalid format used for the start time for '%s'. Setting value to 0."
 msgstr ""
@@ -4004,7 +4033,7 @@ msgid "Invalid header length: %1% (total length: %2%, idx: %3%, dataidx: %4%)\n"
 msgstr ""
 
 #: src/mmg/options/chapters.cpp:109
-#: src/mmg/tabs/chapters.cpp:1280
+#: src/mmg/tabs/chapters.cpp:1359
 msgid "Invalid language selected"
 msgstr ""
 
@@ -4225,7 +4254,7 @@ msgid "Language is not NUL terminated"
 msgstr ""
 
 #: src/mmg/options/chapters.cpp:81
-#: src/mmg/tabs/chapters.cpp:348
+#: src/mmg/tabs/chapters.cpp:374
 #: src/mmg/tabs/global.cpp:290
 #: src/mmg/tabs/input_general.cpp:178
 msgid "Language:"
@@ -4412,7 +4441,7 @@ msgstr "Matroska garso/vaizdo rinkmenos"
 msgid "Matroska files (*.mkv *.mka *.mks *.mk3d);;All files (*.*)"
 msgstr "Matroska rinkmenos (*.mkv *.mka *.mks *.mk3d);;Visos rinkmenos (*.*)"
 
-#: src/mmg/tabs/chapters.cpp:624
+#: src/mmg/tabs/chapters.cpp:674
 #, c-format, boost-format
 msgid "Matroska files (*.mkv;*.mka;*.mk3d)|*.mkv;*.mka;*.mk3d|%s"
 msgstr "Matroska rinkmenos (*mka;*.mkv;*.mk3d)|*.mkv;*.mka;*.mk3d|%s"
@@ -4528,7 +4557,7 @@ msgstr ""
 msgid "Missing start/end specifications for '--split' in '--split %1%'.\n"
 msgstr ""
 
-#: src/propedit/options.cpp:142
+#: src/propedit/options.cpp:148
 #, boost-format
 msgid "Modification of properties in the section '%1%' was requested, but no corresponding level 1 element was found in the file. %2%\n"
 msgstr ""
@@ -4546,7 +4575,7 @@ msgstr ""
 msgid "More than one description was given for a single attachment.\n"
 msgstr ""
 
-#: src/propedit/options.cpp:86
+#: src/propedit/options.cpp:92
 #, boost-format
 msgid "More than one file name has been given ('%1%' and '%2%').\n"
 msgstr ""
@@ -4602,7 +4631,7 @@ msgid "Name for this track, e.g. \"director's comments\"."
 msgstr ""
 
 #: src/mmg/tabs/attachments.cpp:156
-#: src/mmg/tabs/chapters.cpp:347
+#: src/mmg/tabs/chapters.cpp:373
 msgid "Name:"
 msgstr "Pavadinimas:"
 
@@ -4611,7 +4640,7 @@ msgstr "Pavadinimas:"
 msgid "Name: %1%"
 msgstr "Pavadinimas: %1%"
 
-#: src/mmg/tabs/chapters.cpp:406
+#: src/mmg/tabs/chapters.cpp:456
 msgid "New chapters created."
 msgstr "Sukurtas naujas skyrius."
 
@@ -4676,11 +4705,11 @@ msgstr ""
 msgid "No append mapping was given for the file no. %1% ('%2%'). A default mapping of %3% will be used instead. Please keep that in mind if mkvmerge aborts with an error message regarding invalid '--append-to' options.\n"
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:777
+#: src/mmg/tabs/chapters.cpp:827
 msgid "No chapter entries have been create yet."
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:548
+#: src/mmg/tabs/chapters.cpp:598
 msgid "No chapters found"
 msgstr "Skyrių nerasta"
 
@@ -4699,7 +4728,7 @@ msgid "No file loaded"
 msgstr "Neįkelta jokia rinkmena"
 
 #: src/info/mkvinfo.cpp:2037
-#: src/propedit/options.cpp:29
+#: src/propedit/options.cpp:33
 msgid "No file name given.\n"
 msgstr "Nepateiktas rinkmenos vardas.\n"
 
@@ -4738,7 +4767,7 @@ msgstr ""
 msgid "No track ID specified in '--%1% %2%'.\n"
 msgstr ""
 
-#: src/propedit/target.cpp:309
+#: src/propedit/track_target.cpp:176
 #, boost-format
 msgid "No track corresponding to the edit specification '%1%' was found. %2%\n"
 msgstr ""
@@ -4784,7 +4813,7 @@ msgstr ""
 #: src/extract/attachments.cpp:131
 #: src/extract/timecodes_v2.cpp:186
 #: src/extract/tracks.cpp:319
-#: src/propedit/options.cpp:32
+#: src/propedit/options.cpp:36
 msgid "Nothing to do.\n"
 msgstr ""
 
@@ -4811,7 +4840,7 @@ msgstr "Ogg/OGM garso/vaizdo rinkmenos"
 msgid "Ok"
 msgstr "Gerai"
 
-#: src/mmg/tabs/chapters.cpp:739
+#: src/mmg/tabs/chapters.cpp:789
 msgid "One of the chapters does not have a name."
 msgstr ""
 
@@ -5025,7 +5054,7 @@ msgstr ""
 msgid "Please enter a description for the new job:"
 msgstr "Aprašykite naują darbą:"
 
-#: src/mmg/tabs/chapters.cpp:102
+#: src/mmg/tabs/chapters.cpp:85
 msgid ""
 "Please enter the values for the language and the\n"
 "country that you want to apply to all the chapters\n"
@@ -5340,7 +5369,7 @@ msgstr ""
 msgid "Remaining time:"
 msgstr "Likęs laikas:"
 
-#: src/mmg/tabs/chapters.cpp:328
+#: src/mmg/tabs/chapters.cpp:342
 msgid "Remove chapter"
 msgstr "Pašalinti skyrių"
 
@@ -5352,7 +5381,7 @@ msgstr "Pašalinti elementą"
 msgid "Remove job from job queue after run:"
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:346
+#: src/mmg/tabs/chapters.cpp:372
 msgid "Remove name"
 msgstr "Pašalinti pavadinimą"
 
@@ -5503,6 +5532,11 @@ msgstr ""
 msgid "Segment"
 msgstr ""
 
+#: src/mmg/tabs/chapters.cpp:353
+#, fuzzy
+msgid "Segment UID:"
+msgstr "Kodeko ID: %1%"
+
 #: src/info/mkvinfo.cpp:557
 #, fuzzy, boost-format
 msgid "Segment UID: %1%"
@@ -5511,6 +5545,11 @@ msgstr "Kodeko ID: %1%"
 #: src/mmg/tabs/global.cpp:274
 msgid "Segment UIDs:"
 msgstr ""
+
+#: src/mmg/tabs/chapters.cpp:356
+#, fuzzy
+msgid "Segment edition UID:"
+msgstr "Kodeko ID: %1%"
 
 #: src/common/property_element.cpp:102
 #: src/mmg/header_editor/frame.cpp:322
@@ -5537,7 +5576,7 @@ msgstr ""
 #: src/info/qt_ui.cpp:178
 #: src/info/wxwidgets_ui.cpp:213
 #: src/mmg/header_editor/frame.cpp:313
-#: src/propedit/options.cpp:156
+#: src/propedit/options.cpp:162
 #: src/propedit/propedit_cli_parser.cpp:96
 #: src/propedit/propedit_cli_parser.cpp:171
 msgid "Segment information"
@@ -5583,7 +5622,7 @@ msgid ""
 "of language drop down boxes."
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:100
+#: src/mmg/tabs/chapters.cpp:83
 msgid "Select values to be applied"
 msgstr ""
 
@@ -5599,7 +5638,7 @@ msgstr ""
 msgid "Set &output file"
 msgstr "Nurodyti &išvedimo rinkmeną"
 
-#: src/mmg/tabs/chapters.cpp:117
+#: src/mmg/tabs/chapters.cpp:100
 msgid "Set country to:"
 msgstr "Nurodykite šalį:"
 
@@ -5630,7 +5669,7 @@ msgstr ""
 msgid "Set if the video is interlaced."
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:110
+#: src/mmg/tabs/chapters.cpp:93
 msgid "Set language to:"
 msgstr "Nurodykite kalbą:"
 
@@ -5638,7 +5677,7 @@ msgstr "Nurodykite kalbą:"
 msgid "Set the delay input field from the file name"
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:329
+#: src/mmg/tabs/chapters.cpp:343
 msgid "Set values"
 msgstr "Nustatyti reikšmes"
 
@@ -5918,7 +5957,7 @@ msgstr ""
 msgid "Start with empty settings"
 msgstr "Pradėti nuo nulio"
 
-#: src/mmg/tabs/chapters.cpp:334
+#: src/mmg/tabs/chapters.cpp:348
 msgid "Start:"
 msgstr "Pradžia:"
 
@@ -6036,7 +6075,7 @@ msgid "Tag selectors"
 msgstr ""
 
 #: src/info/mkvinfo.cpp:1812
-#: src/propedit/options.cpp:164
+#: src/propedit/options.cpp:167
 msgid "Tags"
 msgstr "Gairės"
 
@@ -6149,7 +6188,7 @@ msgstr ""
 msgid "The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file."
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:1872
+#: src/mmg/tabs/chapters.cpp:2003
 msgid ""
 "The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file.\n"
 "\n"
@@ -6257,12 +6296,12 @@ msgstr ""
 msgid "The changes are written to the file.\n"
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:753
+#: src/mmg/tabs/chapters.cpp:803
 #, c-format, boost-format
 msgid "The chapter '%s' is missing its language."
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:747
+#: src/mmg/tabs/chapters.cpp:797
 #, c-format, boost-format
 msgid "The chapter '%s' is missing the start time."
 msgstr ""
@@ -6369,13 +6408,17 @@ msgstr ""
 msgid "The duration after which a new output file is started. The time can be given either in the form HH:MM:SS.nnnnnnnnn or as the number of seconds followed by 's'. You may omit the number of hours 'HH' and the number of nanoseconds 'nnnnnnnnn'. If given then you may use up to nine digits after the decimal point. Examples: 01:00:00 (after one hour) or 1800s (after 1800 seconds)."
 msgstr ""
 
-#: src/propedit/options.cpp:207
+#: src/propedit/options.cpp:215
 #, boost-format
 msgid "The edit specifications '%1%' and '%2%' resolve to the same track with the UID %3%.\n"
 msgstr ""
 
+#: src/mmg/tabs/chapters.cpp:357
+msgid "The edition UID to play from the segment linked in the chapter's segment UID. This is simply a number."
+msgstr ""
+
 #: src/mmg/header_editor/frame.cpp:670
-#: src/mmg/tabs/chapters.cpp:1860
+#: src/mmg/tabs/chapters.cpp:1991
 #: src/propedit/propedit.cpp:31
 msgid "The element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
 msgstr ""
@@ -6542,11 +6585,11 @@ msgstr ""
 msgid "The file you tried to open is not a Matroska file."
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:629
+#: src/mmg/tabs/chapters.cpp:679
 msgid "The file you tried to save to is NOT a Matroska file."
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:666
+#: src/mmg/tabs/chapters.cpp:716
 msgid "The file you tried to save to is a Matroska file. For this to work you have to use the 'Save to Matroska file' menu option."
 msgstr ""
 
@@ -6631,7 +6674,7 @@ msgid ""
 msgstr ""
 
 #: src/mmg/options/chapters.cpp:108
-#: src/mmg/tabs/chapters.cpp:1280
+#: src/mmg/tabs/chapters.cpp:1359
 #, c-format, boost-format
 msgid "The language '%s' is not a valid language and cannot be selected."
 msgstr ""
@@ -6664,7 +6707,7 @@ msgid ""
 msgstr ""
 
 #: src/mmg/header_editor/frame.cpp:676
-#: src/mmg/tabs/chapters.cpp:1866
+#: src/mmg/tabs/chapters.cpp:1997
 #: src/propedit/propedit.cpp:35
 msgid "The meta seek element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
 msgstr ""
@@ -6692,7 +6735,7 @@ msgstr ""
 "\n"
 "Nurodykite „mkvmerge-gui.hhp“ rinkmenos buvimo vietą."
 
-#: src/propedit/change.cpp:60
+#: src/propedit/change.cpp:61
 #, boost-format
 msgid "The name '%1%' is not a valid property name for the current edit specification in '%2%'.\n"
 msgstr ""
@@ -6776,32 +6819,32 @@ msgstr ""
 msgid "The previous UID was already given in '%1% %2%'.\n"
 msgstr ""
 
-#: src/propedit/change.cpp:112
+#: src/propedit/change.cpp:113
 #, boost-format
 msgid "The property value contains non-ASCII characters, but the property is not a Unicode string in '%1%'. %2%\n"
 msgstr ""
 
-#: src/propedit/change.cpp:154
+#: src/propedit/change.cpp:155
 #, boost-format
 msgid "The property value is not a valid binary spec or it is not exactly 128 bits long in '%1%'. %2%\n"
 msgstr ""
 
-#: src/propedit/change.cpp:139
+#: src/propedit/change.cpp:140
 #, boost-format
 msgid "The property value is not a valid boolean in '%1%'. %2%\n"
 msgstr ""
 
-#: src/propedit/change.cpp:146
+#: src/propedit/change.cpp:147
 #, boost-format
 msgid "The property value is not a valid floating point number in '%1%'. %2%\n"
 msgstr ""
 
-#: src/propedit/change.cpp:131
+#: src/propedit/change.cpp:132
 #, boost-format
 msgid "The property value is not a valid signed integer in '%1%'. %2%\n"
 msgstr ""
 
-#: src/propedit/change.cpp:125
+#: src/propedit/change.cpp:126
 #, boost-format
 msgid "The property value is not a valid unsigned integer in '%1%'. %2%\n"
 msgstr ""
@@ -6835,7 +6878,7 @@ msgstr ""
 msgid "The seek table in this TTA file seems to be broken.\n"
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:758
+#: src/mmg/tabs/chapters.cpp:808
 #, c-format, boost-format
 msgid "The selected language '%s' for the chapter '%s' is not a valid language code. Please select one of the predefined ones."
 msgstr ""
@@ -7126,7 +7169,7 @@ msgid "This file contains coordinates in the timecode lines. Such coordinates ar
 msgstr ""
 
 #: src/mmg/header_editor/frame.cpp:257
-#: src/mmg/tabs/chapters.cpp:541
+#: src/mmg/tabs/chapters.cpp:591
 msgid "This file could not be opened or parsed."
 msgstr ""
 
@@ -7134,11 +7177,11 @@ msgstr ""
 msgid "This file could not be opened or parsed.\n"
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:548
+#: src/mmg/tabs/chapters.cpp:598
 msgid "This file does not contain any chapters."
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:568
+#: src/mmg/tabs/chapters.cpp:618
 msgid "This file does not contain valid chapters."
 msgstr ""
 
@@ -7154,12 +7197,12 @@ msgstr ""
 msgid "This option needs an additional argument 'n'. Tells mkvmerge to put at most 'n' data blocks into each cluster. If the number is postfixed with 'ms' then put at most 'n' milliseconds of data into each cluster. The maximum length for a cluster that mkvmerge accepts is 60000 blocks and 32000ms; the minimum length is 100ms. Programs will only be able to seek to clusters, so creating larger clusters may lead to imprecise or slow seeking."
 msgstr ""
 
-#: src/propedit/change.cpp:251
+#: src/propedit/change.cpp:252
 #, boost-format
 msgid "This property is mandatory and cannot be deleted in '%1%'. %2%\n"
 msgstr ""
 
-#: src/propedit/change.cpp:217
+#: src/propedit/change.cpp:218
 #, boost-format
 msgid "This property is unique. More instances cannot be added in '%1%'. %2%\n"
 msgstr ""
@@ -7339,7 +7382,7 @@ msgstr "Takelio UID: %1%"
 msgid "Track extraction"
 msgstr ""
 
-#: src/propedit/options.cpp:149
+#: src/propedit/options.cpp:155
 #: src/propedit/propedit_cli_parser.cpp:97
 #: src/propedit/propedit_cli_parser.cpp:174
 msgid "Track headers"
@@ -7416,7 +7459,7 @@ msgstr "Tipas: %1% (%2%)"
 msgid "Typical use cases include reading VOBs from a DVD (e.g. VTS_01_1.VOB, VTS_01_2.VOB, VTS_01_3.VOB) or MPEG transport streams from BluRay discs."
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:336
+#: src/mmg/tabs/chapters.cpp:350
 msgid "UID:"
 msgstr "UID:"
 
@@ -7744,7 +7787,7 @@ msgstr ""
 msgid "Warning:"
 msgstr "Įspėjimas:"
 
-#: src/common/output.cpp:74
+#: src/common/output.cpp:89
 msgid "Warning: "
 msgstr "Įspėjimas: "
 
@@ -7815,8 +7858,8 @@ msgid "Wrong file chosen"
 msgstr "Pasirinkta bloga rinkmena"
 
 #: src/mmg/header_editor/frame.cpp:247
-#: src/mmg/tabs/chapters.cpp:629
-#: src/mmg/tabs/chapters.cpp:667
+#: src/mmg/tabs/chapters.cpp:679
+#: src/mmg/tabs/chapters.cpp:717
 msgid "Wrong file selected"
 msgstr "Pasirinkta bloga rinkmena"
 
@@ -7840,7 +7883,7 @@ msgstr ""
 msgid "You are already running the latest version."
 msgstr "Naudojate naujausią versiją."
 
-#: src/mmg/tabs/chapters.cpp:1324
+#: src/mmg/tabs/chapters.cpp:1403
 msgid ""
 "You can use this function for adjusting the timecodes\n"
 "of the selected chapter and all its children by a fixed amount.\n"
@@ -7966,6 +8009,7 @@ msgstr "glaudinimas"
 msgid "create_track_number: file_num not found. %1%\n"
 msgstr ""
 
+#: src/mmg/tabs/chapters.cpp:390
 #: src/mmg/tabs/input_extra.cpp:82
 #: src/mmg/tabs/input_extra.cpp:157
 #: src/mmg/tabs/input_general.cpp:103
@@ -8017,7 +8061,7 @@ msgstr "žemyn"
 msgid "enable all"
 msgstr "įgalinti visus"
 
-#: src/mmg/tabs/chapters.cpp:342
+#: src/mmg/tabs/chapters.cpp:387
 msgid "enabled"
 msgstr "įgalinta"
 
@@ -8099,7 +8143,8 @@ msgstr ""
 msgid "header removal"
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:339
+#: src/mmg/tabs/chapters.cpp:359
+#: src/mmg/tabs/chapters.cpp:367
 msgid "hidden"
 msgstr "paslėpta"
 
@@ -8325,11 +8370,11 @@ msgstr ""
 msgid "memory.cpp/saferealloc() called from file %1%, line %2%: realloc() returned nullptr for a size of %3% bytes.\n"
 msgstr ""
 
-#: src/propedit/target.cpp:82
+#: src/propedit/change.cpp:277
 msgid "missing property name"
 msgstr ""
 
-#: src/propedit/target.cpp:75
+#: src/propedit/change.cpp:270
 msgid "missing value"
 msgstr ""
 
@@ -8598,7 +8643,7 @@ msgstr ""
 msgid "ogg_sync_buffer failed\n"
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:1041
+#: src/mmg/tabs/chapters.cpp:1114
 msgid "on_entry_selected: display == nullptr. Should not have happened."
 msgstr ""
 
@@ -8608,6 +8653,10 @@ msgstr ""
 
 #: src/mmg/options/mmg.cpp:86
 msgid "only if the run was successfull"
+msgstr ""
+
+#: src/mmg/tabs/chapters.cpp:362
+msgid "ordered"
 msgstr ""
 
 #: src/info/mkvinfo.cpp:617
@@ -8726,7 +8775,7 @@ msgstr ""
 msgid "ssa_reader: Invalid format. Could not find the \"Format\" line in the \"[Events]\" section."
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:885
+#: src/mmg/tabs/chapters.cpp:935
 msgid "start >= m->ListSize(). This should not have happened. Please file a bug report. Thanks."
 msgstr ""
 
@@ -8801,7 +8850,7 @@ msgstr "aukštyn"
 msgid "utf8_strlen(): Invalid UTF-8 char. First byte: 0x%|1$02x|"
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:814
+#: src/mmg/tabs/chapters.cpp:864
 msgid "verify failed: chapters->CheckMandatory() is false. This should not have happened. Please file a bug report.\n"
 msgstr ""
 
