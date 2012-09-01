@@ -58,7 +58,7 @@ class vobsub_reader_c: public generic_reader_c {
 private:
   mm_text_io_cptr m_idx_file;
   mm_file_io_cptr m_sub_file;
-  int version, ifo_data_size;
+  int version;
   int64_t num_indices, indices_processed, delay;
   std::string idx_data;
 

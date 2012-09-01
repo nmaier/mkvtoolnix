@@ -189,7 +189,7 @@ operator <(mpeg_ps_track_ptr const &a,
 
 class mpeg_ps_reader_c: public generic_reader_c {
 private:
-  int64_t duration, global_timecode_offset;
+  int64_t global_timecode_offset;
 
   std::map<int, int> id2idx;
   std::map<int, bool> blacklisted_ids;

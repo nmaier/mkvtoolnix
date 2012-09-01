@@ -41,7 +41,6 @@ ivf_reader_c::probe_file(mm_io_c *io,
 ivf_reader_c::ivf_reader_c(const track_info_c &ti,
                            const mm_io_cptr &in)
   : generic_reader_c(ti, in)
-  , m_previous_timestamp(0)
 {
 }
 

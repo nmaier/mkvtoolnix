@@ -1631,7 +1631,7 @@ kax_reader_c::create_mp3_audio_packetizer(kax_track_t *t,
 void
 kax_reader_c::create_pcm_audio_packetizer(kax_track_t *t,
                                           track_info_c &nti) {
-  set_track_packetizer(t, new pcm_packetizer_c(this, nti, t->a_sfreq, t->a_channels, t->a_bps, false, 0x0003 == t->a_formattag));
+  set_track_packetizer(t, new pcm_packetizer_c(this, nti, t->a_sfreq, t->a_channels, t->a_bps, 0x0003 == t->a_formattag));
   show_packetizer_info(t->tnum, t->ptzr_ptr);
 }
 

@@ -25,17 +25,13 @@ pcm_packetizer_c::pcm_packetizer_c(generic_reader_c *p_reader,
                                    int samples_per_sec,
                                    int channels,
                                    int bits_per_sample,
-                                   bool big_endian,
                                    bool ieee_float)
   : generic_packetizer_c(p_reader, p_ti)
-  , m_packetno(0)
-  , m_bytes_per_second(channels * bits_per_sample * samples_per_sec / 8)
   , m_samples_per_sec(samples_per_sec)
   , m_channels(channels)
   , m_bits_per_sample(bits_per_sample)
   , m_packet_size(0)
   , m_samples_output(0)
-  , m_big_endian(big_endian)
   , m_ieee_float(ieee_float)
   , m_s2tc(1000000000ll, m_samples_per_sec)
 {

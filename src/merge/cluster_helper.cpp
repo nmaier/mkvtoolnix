@@ -50,7 +50,6 @@ cluster_helper_c::cluster_helper_c()
   , m_num_cue_elements(0)
   , m_header_overhead(-1)
   , m_timecode_offset(0)
-  , m_previous_packets(nullptr)
   , m_bytes_in_file(0)
   , m_first_timecode_in_file(-1)
   , m_first_discarded_timecode{-1}
@@ -58,7 +57,6 @@ cluster_helper_c::cluster_helper_c()
   , m_discarded_duration{0}
   , m_min_timecode_in_cluster(-1)
   , m_max_timecode_in_cluster(-1)
-  , m_attachments_size(0)
   , m_first_video_keyframe_seen{}
   , m_out(nullptr)
   , m_current_split_point(m_split_points.begin())

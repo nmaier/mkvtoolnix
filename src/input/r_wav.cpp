@@ -403,7 +403,7 @@ wav_pcm_demuxer_c::create_packetizer() {
                                 get_uint32_le(&m_wheader->common.dwSamplesPerSec),
                                 get_uint16_le(&m_wheader->common.wChannels),
                                 get_uint16_le(&m_wheader->common.wBitsPerSample),
-                                false, ieee_float);
+                                ieee_float);
 
   show_packetizer_info(0, m_ptzr);
 

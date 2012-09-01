@@ -1242,7 +1242,7 @@ qtmp4_reader_c::create_audio_packetizer_mp3(qtmp4_demuxer_cptr &dmx) {
 
 void
 qtmp4_reader_c::create_audio_packetizer_pcm(qtmp4_demuxer_cptr &dmx) {
-  dmx->ptzr = add_packetizer(new pcm_packetizer_c(this, m_ti, (int32_t)dmx->a_samplerate, dmx->a_channels, dmx->a_bitdepth, (8 < dmx->a_bitdepth) && ('t' == dmx->fourcc[0])));
+  dmx->ptzr = add_packetizer(new pcm_packetizer_c(this, m_ti, (int32_t)dmx->a_samplerate, dmx->a_channels, dmx->a_bitdepth));
   show_packetizer_info(dmx->id, PTZR(dmx->ptzr));
 }
 
