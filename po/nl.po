@@ -800,14 +800,14 @@ msgstr "%1% beeld, spoor %2%, tiijdcode %3% (%4%), grootte %5%, adler 0x%|6$08x|
 msgid "%1% frame, track %2%, timecode %3% (%4%), size %5%, adler 0x%|6$08x|%7%%8%\n"
 msgstr "%1% beeld, spoor %2%, tijd code %3% (%4%), grootte %5%, adler 0x%|6$08x|%7%%8%\n"
 
-#: src/common/strings/formatting.cpp:276
+#: src/common/strings/formatting.cpp:255
 #, boost-format
 msgid "%1% minute"
 msgid_plural "%1% minutes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/common/strings/formatting.cpp:270
+#: src/common/strings/formatting.cpp:249
 #, boost-format
 msgid "%1% second"
 msgid_plural "%1% seconds"
@@ -1294,18 +1294,18 @@ msgstr "'%1%' mist het spoor ID.\n"
 msgid "'%1%' lacks the track number(s).\n"
 msgstr "'%1%' mist het spoor nummer(s).\n"
 
-#: src/common/output.cpp:132
-#: src/common/output.cpp:145
-#: src/common/output.cpp:158
-#: src/common/output.cpp:179
+#: src/common/output.cpp:165
+#: src/common/output.cpp:178
+#: src/common/output.cpp:191
+#: src/common/output.cpp:212
 #, boost-format
 msgid "'%1%' track %2%: %3%"
 msgstr "'%1%' spoor %2%: %3%"
 
-#: src/common/output.cpp:125
-#: src/common/output.cpp:138
-#: src/common/output.cpp:151
-#: src/common/output.cpp:168
+#: src/common/output.cpp:158
+#: src/common/output.cpp:171
+#: src/common/output.cpp:184
+#: src/common/output.cpp:201
 #, boost-format
 msgid "'%1%': %2%"
 msgstr "'%1%': %2%"
@@ -1547,19 +1547,19 @@ msgstr "'Track enabled' Spoor aan, markering"
 msgid "(Unknown element: %1%; ID: 0x%2% size: %3%)"
 msgstr "(Unknown element: Onbekend element in:, %1%; ID: 0x%2% grootte: %3%)"
 
-#: src/mmg/tabs/chapters.cpp:388
+#: src/mmg/tabs/chapters.cpp:438
 msgid "(new chapter file)"
 msgstr "(nieuw hoofdstuk bestand)"
 
-#: src/mmg/tabs/chapters.cpp:419
+#: src/mmg/tabs/chapters.cpp:469
 msgid "(unnamed chapter)"
 msgstr "(niet benoemd hoofdstuk)"
 
-#: src/mmg/tabs/chapters.cpp:860
-#: src/mmg/tabs/chapters.cpp:935
-#: src/mmg/tabs/chapters.cpp:1049
-#: src/mmg/tabs/chapters.cpp:1544
-#: src/mmg/tabs/chapters.cpp:1557
+#: src/mmg/tabs/chapters.cpp:910
+#: src/mmg/tabs/chapters.cpp:985
+#: src/mmg/tabs/chapters.cpp:1122
+#: src/mmg/tabs/chapters.cpp:1661
+#: src/mmg/tabs/chapters.cpp:1674
 msgid "(unnamed)"
 msgstr "(niet benoemd)"
 
@@ -1734,6 +1734,10 @@ msgstr ""
 "Een willekeurig gegenereerd ID om het huidige segment\n"
 "te identificeren tussen vele anderen (128 bits)."
 
+#: src/mmg/tabs/chapters.cpp:354
+msgid "A segment to play in place of this chapter. The edition set via the segment edition UID should be used for this segment, otherwise no edition is used. This is a 128bit segment UID in the usual UID form: hex numbers with or without the \"0x\" prefix, with or without spaces, exactly 32 digits.\n"
+msgstr ""
+
 #: src/info/mkvinfo.cpp:910
 msgid "A track"
 msgstr "Een spoor"
@@ -1880,7 +1884,7 @@ msgstr "Voeg &commando regel opties toe"
 msgid "Add additional parts"
 msgstr "Toevoegingen"
 
-#: src/mmg/tabs/chapters.cpp:326
+#: src/mmg/tabs/chapters.cpp:340
 msgid "Add chapter"
 msgstr "Voeg hoofdstuk toe"
 
@@ -1892,7 +1896,7 @@ msgstr "Commando regel toevoeg opties"
 msgid "Add element"
 msgstr "Voeg element toe"
 
-#: src/mmg/tabs/chapters.cpp:345
+#: src/mmg/tabs/chapters.cpp:371
 msgid "Add name"
 msgstr "Voeg naam toe"
 
@@ -1904,7 +1908,7 @@ msgstr "Vervang of voeg toe hoofgdstukken in het bestand met degene uit het best
 msgid "Add or replace tags in the file with the ones from 'filename' or remove them if 'filename' is empty (see below and man page for syntax)"
 msgstr "Vervang of voeg toe markeeringen in het bestand met degene uit het bestand 'filename' of verwijdert hen wanneer 'filename' leeg is  (zie hier en op hoofdpagina voor ingave)"
 
-#: src/mmg/tabs/chapters.cpp:327
+#: src/mmg/tabs/chapters.cpp:341
 msgid "Add subchapter"
 msgstr "Voeg sub hoofdstuk toe"
 
@@ -1933,11 +1937,11 @@ msgstr "Maakt een eigendom met een waarde ook als die al bestaat"
 msgid "Adds the current settings as a new job entry to the job queue"
 msgstr "Voegt de huidige instellingen toe aan een nieuwe taak in de taak wachtrij"
 
-#: src/mmg/tabs/chapters.cpp:1332
+#: src/mmg/tabs/chapters.cpp:1411
 msgid "Adjust chapter timecodes"
 msgstr "Hoofstuk tijd codes bijwerken"
 
-#: src/mmg/tabs/chapters.cpp:332
+#: src/mmg/tabs/chapters.cpp:346
 msgid "Adjust timecodes"
 msgstr "Bijwerken tijd codes"
 
@@ -1958,7 +1962,7 @@ msgstr "Alle bestanden (*)|*"
 msgid "All Files (*.*)|*.*"
 msgstr "Alle bestanden (*.*)|*.*"
 
-#: src/mmg/tabs/chapters.cpp:818
+#: src/mmg/tabs/chapters.cpp:868
 msgid "All chapter entries are valid."
 msgstr "Alle hoofdstuk ingangen zijn geldig."
 
@@ -2037,7 +2041,7 @@ msgstr ""
 "het vorige segment."
 
 #: src/mmg/header_editor/frame.cpp:688
-#: src/mmg/tabs/chapters.cpp:1879
+#: src/mmg/tabs/chapters.cpp:2010
 #: src/propedit/propedit.cpp:43
 msgid "An unknown error occured. The file has been modified."
 msgstr "Een onbekende fout. Het bestand is veranderd."
@@ -2316,22 +2320,22 @@ msgstr "Uitzondering ontdekt"
 msgid "Causes mkvmerge to add 'stop display' commands to VobSub subtitle packets that do not contain a duration field."
 msgstr "Veroorzaak dat mkvmerge toevoegt 'stop scherm' commando's naar VobSub ondertiteling paketten bevatten geen duur veld."
 
-#: src/propedit/change.cpp:205
+#: src/propedit/change.cpp:206
 #, boost-format
 msgid "Change for '%1%' executed. No property of this type found. One entry added.\n"
 msgstr "Veranderingen voor '%1%' uitgevoerd. Geen eigendommen voor dit type gevonden. Eén ingang toegevoegd.\n"
 
-#: src/propedit/change.cpp:185
+#: src/propedit/change.cpp:186
 #, boost-format
 msgid "Change for '%1%' executed. Number of entries deleted: %2%\n"
 msgstr "Veranderingen voor '%1%' uitgevoerd. Aantal ingangen verwijderd: %2%\n"
 
-#: src/propedit/change.cpp:211
+#: src/propedit/change.cpp:212
 #, boost-format
 msgid "Change for '%1%' executed. Number of entries set: %2%.\n"
 msgstr "Veranderingen voor '%1%' uitgevoerd. Aantal ingangen ingesteld: %2%.\n"
 
-#: src/propedit/change.cpp:222
+#: src/propedit/change.cpp:223
 #, boost-format
 msgid "Change for '%1%' executed. One entry added.\n"
 msgstr "Veranderingen voor '%1%' uitgevoerd. Eén ingang toegevoegd.\n"
@@ -2389,7 +2393,7 @@ msgstr "Hoofstuk extractie"
 msgid "Chapter file:"
 msgstr "Hoofdstuk bestand:"
 
-#: src/mmg/tabs/chapters.cpp:661
+#: src/mmg/tabs/chapters.cpp:711
 #, c-format, boost-format
 msgid "Chapter files (*.xml)|*.xml|%s"
 msgstr "Hoofstuk bestanden (*.xml)|*.xml|%s"
@@ -2399,12 +2403,12 @@ msgstr "Hoofstuk bestanden (*.xml)|*.xml|%s"
 msgid "Chapter files (*.xml;*.txt;*.cue)|*.xml;*.txt;*.cue|%s"
 msgstr "Hoofstuk bestanden (*.xml;*.txt;*.cue)|*.xml;*.txt;*.cue|%s"
 
-#: src/mmg/tabs/chapters.cpp:520
+#: src/mmg/tabs/chapters.cpp:570
 #, c-format, boost-format
 msgid "Chapter files (*.xml;*.txt;*.mka;*.mkv;*.mk3d;*.cue)|*.xml;*.txt;*.mka;*.mkv;*.mk3d;*.cue|%s"
 msgstr "Hoofstuk bestanden (*.xml;*.txt;*.mka;*.mkv;*.mk3d;*.cue)|*.xml;*.txt;*.mka;*.mkv;*.mk3d;*.cue|%s"
 
-#: src/mmg/tabs/chapters.cpp:344
+#: src/mmg/tabs/chapters.cpp:370
 msgid "Chapter names and languages"
 msgstr "Hoofdstuk talen en namen"
 
@@ -2417,23 +2421,23 @@ msgstr "Hoofdstuk opties"
 msgid "Chapter parser: The EditionUID %1% is not unique and could not be reused. A new one will be created.\n"
 msgstr "Hoofdstuk ontleder: De EditieUID %1% is niet uniek en kan niet hergebruikt worden. Een nieuwe wordt aangemaakt.\n"
 
-#: src/mmg/tabs/chapters.cpp:739
-#: src/mmg/tabs/chapters.cpp:747
-#: src/mmg/tabs/chapters.cpp:753
-#: src/mmg/tabs/chapters.cpp:760
-#: src/mmg/tabs/chapters.cpp:777
-#: src/mmg/tabs/chapters.cpp:799
+#: src/mmg/tabs/chapters.cpp:789
+#: src/mmg/tabs/chapters.cpp:797
+#: src/mmg/tabs/chapters.cpp:803
+#: src/mmg/tabs/chapters.cpp:810
+#: src/mmg/tabs/chapters.cpp:827
+#: src/mmg/tabs/chapters.cpp:849
 msgid "Chapter verification error"
 msgstr "Hoofdstuk verificatie fout"
 
-#: src/mmg/tabs/chapters.cpp:818
+#: src/mmg/tabs/chapters.cpp:868
 msgid "Chapter verification succeeded"
 msgstr "Hoofdstuk verificatie succesvol"
 
 #: src/info/mkvinfo.cpp:1792
 #: src/mmg/options/chapters.cpp:125
 #: src/mmg/tabs/global.cpp:285
-#: src/propedit/options.cpp:173
+#: src/propedit/options.cpp:176
 msgid "Chapters"
 msgstr "Hoofdstukken"
 
@@ -2446,16 +2450,16 @@ msgstr "Hoofstukken (%d ingangen) van%s"
 msgid "Chapters are not allowed in WebM compliant files. No chapters will be written into any output file.\n"
 msgstr "Hoofdstukken zijn niet toegestaan in WebM herkenbare bestanden. Er worden geen hoofdstukken geschreven in enig uitvoer bestand.\n"
 
-#: src/mmg/tabs/chapters.cpp:597
+#: src/mmg/tabs/chapters.cpp:647
 msgid "Chapters loaded."
 msgstr "Hoofdstukken geladen."
 
-#: src/mmg/tabs/chapters.cpp:703
-#: src/mmg/tabs/chapters.cpp:1856
+#: src/mmg/tabs/chapters.cpp:753
+#: src/mmg/tabs/chapters.cpp:1987
 msgid "Chapters written."
 msgstr "Hoofdstuk geschreven."
 
-#: src/mmg/tabs/chapters.cpp:325
+#: src/mmg/tabs/chapters.cpp:339
 msgid "Chapters:"
 msgstr "Hoofdstukken:"
 
@@ -2491,7 +2495,7 @@ msgstr "Controleer online of er al dan niet een nieuwer versie van MKVToolNix op
 msgid "Checking for updates online; please wait"
 msgstr "Controleren op opwaarderingen,moment a.u.b."
 
-#: src/mmg/tabs/chapters.cpp:519
+#: src/mmg/tabs/chapters.cpp:569
 msgid "Choose a chapter file"
 msgstr "Kies een hoofdstuk bestand"
 
@@ -2525,8 +2529,8 @@ msgstr "Kies een invoer bestand om bij te voegen"
 #: src/mmg/mmg_dialog.cpp:754
 #: src/mmg/mmg_dialog.cpp:775
 #: src/mmg/mux_dialog.cpp:203
-#: src/mmg/tabs/chapters.cpp:623
-#: src/mmg/tabs/chapters.cpp:660
+#: src/mmg/tabs/chapters.cpp:673
+#: src/mmg/tabs/chapters.cpp:710
 msgid "Choose an output file"
 msgstr "Kies een uitvoer bestand"
 
@@ -2777,12 +2781,12 @@ msgstr "Kan de volgende Ogg pagina niet vinden. Dit geeft een beschadigde Ogg/Og
 msgid "Could not find valid DTS headers in this track's first frames.\n"
 msgstr "Kon geen geldig DTS kopstuk vinden in dit spoor, eerste beeld.\n"
 
-#: src/common/locale.cpp:133
+#: src/common/locale.cpp:136
 #, boost-format
 msgid "Could not initialize the iconv library for the conversion from %1% to UFT-8. Some strings will not be converted to UTF-8 and the resulting Matroska file might not comply with the Matroska specs (error: %2%, %3%).\n"
 msgstr "Kon de iconv bibliotheek niet starten voor conversie van %1% naar UTF-8. Sommige reeksen worden niet geconverteerd naar UTF-8 en het uiteindelijke Matroska bestand, zou niet kunnen voldoen aan de Matroska specificaties (fout: %2%, %3%).\n"
 
-#: src/common/locale.cpp:140
+#: src/common/locale.cpp:143
 #, boost-format
 msgid "Could not initialize the iconv library for the conversion from UFT-8 to %1%. Some strings cannot be converted from UTF-8 and might be displayed incorrectly (error: %2%, %3%).\n"
 msgstr "Kon de iconv bibliotheek niet starten voor conversie van UTF-8 naar %1%. Sommige reeksen kunnen niet geconverteerd worden vanuit UTF-8 en zouden verkeerd weergeven kunnen worden (fout: %2%, %3%).\n"
@@ -2802,7 +2806,7 @@ msgstr "Kon het klembord niet openen."
 msgid "Could not open the corresponding correction file '%1%c'.\n"
 msgstr "Kon het corresponderende correctie bestand niet openen '%1%c'.\n"
 
-#: src/mmg/tabs/chapters.cpp:690
+#: src/mmg/tabs/chapters.cpp:740
 #, c-format, boost-format
 msgid "Could not open the destination file '%s' for writing. Error code: %d (%s)."
 msgstr "Kon het bestemming bestand niet openen '%s' voor schrijven. Fout code: %d (%s)."
@@ -2838,7 +2842,7 @@ msgid "Could not write to the output file: %1% (%2%)\n"
 msgstr "Kon niet schrijven naar het uitvoer bestand: %1% (%2%)\n"
 
 #: src/mmg/options/chapters.cpp:84
-#: src/mmg/tabs/chapters.cpp:349
+#: src/mmg/tabs/chapters.cpp:375
 msgid "Country:"
 msgstr "Land:"
 
@@ -3028,7 +3032,7 @@ msgstr "Datum (ongelding, waarde: %1%)"
 msgid "Date: %1% UTC"
 msgstr "Datum: %1% UTC"
 
-#: src/common/output.cpp:77
+#: src/common/output.cpp:92
 msgid "Debug> "
 msgstr "Debug> "
 
@@ -3229,11 +3233,11 @@ msgstr "EBML versie: %1%"
 msgid "EVIL internal bug! (unknown file type). %1%\n"
 msgstr "Kwalijke interne bug! (onbekend bestandstype). %1%\n"
 
-#: src/mmg/tabs/chapters.cpp:337
+#: src/mmg/tabs/chapters.cpp:351
 msgid "Each chapter and each edition has a unique identifier. This identifier is normally assigned automatically by the programs, but it can be changed manually if it is really needed."
 msgstr "Elk hoofdstuk en elke editie heeft een uniek herkenningsteken. Dit teken wordt normaal automatisch toegekend door het programma, maar kan handmatig worden toegekend indien dat echt nodig is."
 
-#: src/mmg/tabs/chapters.cpp:799
+#: src/mmg/tabs/chapters.cpp:849
 msgid "Each edition must contain at least one chapter."
 msgstr "Elke editie dient minimaall één hoofdstuk bevatten."
 
@@ -3254,13 +3258,13 @@ msgstr ""
 msgid "Edit selectors"
 msgstr "Bewerk selectie mogelijkheden"
 
-#: src/mmg/tabs/chapters.cpp:468
+#: src/mmg/tabs/chapters.cpp:518
 #, c-format, boost-format
 msgid "Edition %d"
 msgstr "Editie %d"
 
-#: src/mmg/tabs/chapters.cpp:850
-#: src/mmg/tabs/chapters.cpp:922
+#: src/mmg/tabs/chapters.cpp:900
+#: src/mmg/tabs/chapters.cpp:972
 #, c-format, boost-format
 msgid "EditionEntry %u"
 msgstr "EditieIngang %u"
@@ -3306,7 +3310,7 @@ msgstr "Encryptie algoritme: %1% (%2%)"
 msgid "Encryption key ID: %1%"
 msgstr "Encryptie sleutel ID: %1%"
 
-#: src/mmg/tabs/chapters.cpp:335
+#: src/mmg/tabs/chapters.cpp:349
 msgid "End:"
 msgstr "Einde:"
 
@@ -3340,7 +3344,7 @@ msgstr "Fout in regel %1%: verwachtte een ondertitel nummer maar vond een tekst.
 msgid "Error loading settings"
 msgstr "Instellingen laad fout"
 
-#: src/mmg/tabs/chapters.cpp:690
+#: src/mmg/tabs/chapters.cpp:740
 msgid "Error opening file"
 msgstr "Fout bij openen bestand"
 
@@ -3348,17 +3352,17 @@ msgstr "Fout bij openen bestand"
 msgid "Error parsing a MPEG PS packet during the header reading phase. This stream seems to be badly damaged.\n"
 msgstr "Fout bij ontleden van een MPEG PS pakket tijden het lezen van de kopinfo fase. Deze stroom lijkt ernstig beschadigd.\n"
 
-#: src/propedit/target.cpp:440
+#: src/propedit/chapter_target.cpp:68
 #, boost-format
 msgid "Error parsing the chapters in '%1%': some mandatory elements are missing.\n"
 msgstr "Fout bij ontleden van hoofdstukken '%1%': sommige verplichte elementen ontbreken.\n"
 
-#: src/mmg/tabs/chapters.cpp:572
+#: src/mmg/tabs/chapters.cpp:622
 msgid "Error parsing the file"
 msgstr "Fout bij ontleden van bestand"
 
 #: src/merge/mkvmerge.cpp:520
-#: src/propedit/target.cpp:350
+#: src/propedit/tag_target.cpp:139
 #, boost-format
 msgid "Error parsing the tags in '%1%': some mandatory elements are missing.\n"
 msgstr "Fout bij ontleden van markeringen '%1%': sommige verplichte elementen ontbreken.\n"
@@ -3369,17 +3373,17 @@ msgstr "Fout bij informatie opslaan"
 
 #: src/mmg/header_editor/frame.cpp:672
 #: src/mmg/header_editor/frame.cpp:678
-#: src/mmg/tabs/chapters.cpp:1862
-#: src/mmg/tabs/chapters.cpp:1868
+#: src/mmg/tabs/chapters.cpp:1993
+#: src/mmg/tabs/chapters.cpp:1999
 msgid "Error writing Matroska file"
 msgstr "Fout bij schrijven MATROSKA bestand"
 
-#: src/common/output.cpp:70
+#: src/common/output.cpp:85
 #: src/mmg/mux_dialog.cpp:275
 msgid "Error:"
 msgstr "Fout:"
 
-#: src/common/output.cpp:71
+#: src/common/output.cpp:86
 msgid "Error: "
 msgstr "Fout:"
 
@@ -3594,7 +3598,7 @@ msgid "File name: %1%"
 msgstr "Bestand naam: %1%"
 
 #: src/mmg/header_editor/frame.cpp:257
-#: src/mmg/tabs/chapters.cpp:541
+#: src/mmg/tabs/chapters.cpp:591
 msgid "File parsing failed"
 msgstr "Bestand ontcijferen niet gelukt"
 
@@ -3603,7 +3607,7 @@ msgid "File removal not possible"
 msgstr "Bestand verwijderen niet mogelijk"
 
 #: src/mmg/header_editor/frame.cpp:684
-#: src/mmg/tabs/chapters.cpp:1875
+#: src/mmg/tabs/chapters.cpp:2006
 msgid "File structure warning"
 msgstr "Bestand structuur waarschuwing"
 
@@ -3632,6 +3636,11 @@ msgstr "Voltooid op"
 #, c-format, boost-format
 msgid "Finished processing on %s"
 msgstr "Voltooide uitvoer op %s"
+
+#: src/mmg/tabs/chapters.cpp:358
+#, fuzzy
+msgid "Flags:"
+msgstr "Markeringen:"
 
 #: src/mmg/header_editor/value_page.cpp:147
 msgid "Floating point number"
@@ -3829,7 +3838,7 @@ msgstr ""
 "door ze hieronder in te geven of door ze te kiezen in de\n"
 "uitklaplijst en de  'voeg toe' knop te gebruiken."
 
-#: src/mmg/tabs/chapters.cpp:333
+#: src/mmg/tabs/chapters.cpp:347
 msgid "Here you can adjust all the timecodes of the selected chapter and of all its sub-chapters by a specific amount either increasing or decreasing them."
 msgstr "Hier kan je de tijd codes bijstellen met een bepaalde hoeveelheid (verhogen of verlagen) van de geselecteerde hoofdstukken (en de bijbehorende)."
 
@@ -3845,7 +3854,7 @@ msgstr ""
 "veranderd worden indien nodig. De standaard waarde zal\n"
 "worden bewaard als je MMG afsluit."
 
-#: src/mmg/tabs/chapters.cpp:330
+#: src/mmg/tabs/chapters.cpp:344
 msgid "Here you can set the values for the language and the country that you want to apply to all the chapters below and including the currently selected entry."
 msgstr "Hier kan je de waarde instellen van de taal en land die je wilt toekennen aan alle hoofdstukken hieronder incl. de huige geselecteerde."
 
@@ -3870,13 +3879,18 @@ msgstr "IVF met VP8"
 msgid "IVF with VP8 video files"
 msgstr "IVF met VP8 video bestanden"
 
-#: src/mmg/tabs/chapters.cpp:340
+#: src/mmg/tabs/chapters.cpp:360
 msgid "If a chapter is marked 'hidden' then the player should not show this chapter entry to the user. Such entries could still be used by the menu system."
 msgstr "Als een hoofdstuk is gemarkeerd als 'verborgen' dan zou de afspeler deze niet moeten tonen aan de gebruiker. Dergelijke ingangen kunnen nog wel gebruikt worden in het menu systeem."
 
-#: src/mmg/tabs/chapters.cpp:343
+#: src/mmg/tabs/chapters.cpp:388
 msgid "If a chapter is not marked 'enabled' then the player should skip the part of the file that this chapter occupies."
 msgstr "Als een hoofstuk niet is gemarkerd als 'aan' dan zou de afspeler dat deel moeten overslaan wat dat hoofdstuk bevat."
+
+#: src/mmg/tabs/chapters.cpp:368
+#, fuzzy
+msgid "If a chapter or an edition is marked 'hidden' then the player should not show this chapter entry (or all of this edition's entries) to the user. Such entries could still be used by the menu system."
+msgstr "Als een hoofdstuk is gemarkeerd als 'verborgen' dan zou de afspeler deze niet moeten tonen aan de gebruiker. Dergelijke ingangen kunnen nog wel gebruikt worden in het menu systeem."
 
 #: src/mmg/tabs/global.cpp:264
 msgid "If a range's start timecode is prefixed with '+' then its content will be written to the same file as the previous range. Otherwise a new file will be created for this range."
@@ -3884,6 +3898,14 @@ msgstr ""
 
 #: src/mmg/tabs/global.cpp:262
 msgid "If a start timecode is left out then the previous range's end timecode is used, or the start of the file if there was no previous range."
+msgstr ""
+
+#: src/mmg/tabs/chapters.cpp:363
+msgid "If an edition is marked 'ordered' then the chapters can be defined multiple times and the order to play them is enforced."
+msgstr ""
+
+#: src/mmg/tabs/chapters.cpp:391
+msgid "If an edition is marked as 'default' then it should be used as the default edition."
 msgstr ""
 
 #: src/mmg/options/mmg.cpp:68
@@ -3946,12 +3968,12 @@ msgstr "Verhoog uitgebreide  info voor mkvmerge."
 msgid "Input"
 msgstr "Invoer"
 
-#: src/mmg/tabs/chapters.cpp:1352
-#: src/mmg/tabs/chapters.cpp:1446
-#: src/mmg/tabs/chapters.cpp:1452
-#: src/mmg/tabs/chapters.cpp:1464
-#: src/mmg/tabs/chapters.cpp:1480
-#: src/mmg/tabs/chapters.cpp:1488
+#: src/mmg/tabs/chapters.cpp:1431
+#: src/mmg/tabs/chapters.cpp:1525
+#: src/mmg/tabs/chapters.cpp:1531
+#: src/mmg/tabs/chapters.cpp:1543
+#: src/mmg/tabs/chapters.cpp:1559
+#: src/mmg/tabs/chapters.cpp:1567
 msgid "Input data error"
 msgstr "Invoer data fout"
 
@@ -3979,7 +4001,7 @@ msgid "Internal bug: tracks.cpp SSA #1. %1%"
 msgstr "Interne bug: tracks.cpp SSA #1. %1%"
 
 #: src/mmg/header_editor/frame.cpp:688
-#: src/mmg/tabs/chapters.cpp:1879
+#: src/mmg/tabs/chapters.cpp:2010
 msgid "Internal program error"
 msgstr "Interne programma fout"
 
@@ -4002,15 +4024,15 @@ msgstr "Ongeldige Base64 karakter tegengekomen"
 msgid "Invalid BlockAddition level in argument '%1%'.\n"
 msgstr "Ongeldig BlockAddition niveau in argument '%1%'.\n"
 
-#: src/mmg/tabs/chapters.cpp:1446
+#: src/mmg/tabs/chapters.cpp:1525
 msgid "Invalid UID. A UID is simply a number."
 msgstr "Ongeldig UID. Een UID is een simpel nummer."
 
-#: src/mmg/tabs/chapters.cpp:1452
+#: src/mmg/tabs/chapters.cpp:1531
 msgid "Invalid UID. This chapter UID is already in use. The original UID has not been changed."
 msgstr "Ongeldig UID. Dit hoofdstuk UID is reeds in gebruik. Het originele UID is niet veranderd."
 
-#: src/mmg/tabs/chapters.cpp:1464
+#: src/mmg/tabs/chapters.cpp:1543
 msgid "Invalid UID. This edition UID is already in use. The original UID has not been changed."
 msgstr "Ongeldig UID. Deze editie UID is al in gebruik. het orginele UID is niet veranderd."
 
@@ -4111,16 +4133,26 @@ msgstr "Ongeldig formaat voor SSA regel ('%1%') bij tijd code %2%: Het eerste ve
 msgid "Invalid format for a SSA line ('%1%') at timecode %2%: Too many fields found (%3% instead of 9). This entry will be skipped.\n"
 msgstr "Ongeldig formaat voor een SSA regel ('%1%') bij tijd code %2%: Te veel velden gevonden (%3% i.p.v. 9). Deze ingang wordt overgeslagen.\n"
 
-#: src/mmg/tabs/chapters.cpp:1352
+#: src/mmg/tabs/chapters.cpp:1431
 msgid "Invalid format used for the adjustment."
 msgstr "Ongeldig formaat gebruikt voor bijstelling."
 
-#: src/mmg/tabs/chapters.cpp:1488
+#: src/mmg/tabs/chapters.cpp:1567
 #, c-format, boost-format
 msgid "Invalid format used for the end time for '%s'. Setting value to 0."
 msgstr "Ongeldig formaat voor eindtijd gebruikt voor '%s'. Zet waarde naar 0."
 
-#: src/mmg/tabs/chapters.cpp:1480
+#: src/mmg/tabs/chapters.cpp:1610
+#, fuzzy
+msgid "Invalid format used for the segment UID. Not using the value."
+msgstr "Ongeldig formaat voor eindtijd gebruikt voor '%s'. Zet waarde naar 0."
+
+#: src/mmg/tabs/chapters.cpp:1628
+#, fuzzy
+msgid "Invalid format used for the segment edition UID. Not using the value."
+msgstr "Ongeldig formaat voor eindtijd gebruikt voor '%s'. Zet waarde naar 0."
+
+#: src/mmg/tabs/chapters.cpp:1559
 #, c-format, boost-format
 msgid "Invalid format used for the start time for '%s'. Setting value to 0."
 msgstr "Ongeldige starttijd gebruikt voor '%s'. Zet waarde naar 0."
@@ -4168,7 +4200,7 @@ msgid "Invalid header length: %1% (total length: %2%, idx: %3%, dataidx: %4%)\n"
 msgstr "Ongeldige kop lengte: %1% (totale lengte: %2%, idx: %3%, dataidx: %4%)\n"
 
 #: src/mmg/options/chapters.cpp:109
-#: src/mmg/tabs/chapters.cpp:1280
+#: src/mmg/tabs/chapters.cpp:1359
 msgid "Invalid language selected"
 msgstr "Ongeldige taal geselecteerd"
 
@@ -4389,7 +4421,7 @@ msgid "Language is not NUL terminated"
 msgstr "Taal is niet op NUL afgesloten"
 
 #: src/mmg/options/chapters.cpp:81
-#: src/mmg/tabs/chapters.cpp:348
+#: src/mmg/tabs/chapters.cpp:374
 #: src/mmg/tabs/global.cpp:290
 #: src/mmg/tabs/input_general.cpp:178
 msgid "Language:"
@@ -4578,7 +4610,7 @@ msgstr "Matroska audio/video bestanden"
 msgid "Matroska files (*.mkv *.mka *.mks *.mk3d);;All files (*.*)"
 msgstr "Matroska files (*.mkv *.mka *.mks *.mk3d);;Alle bestanden (*.*)"
 
-#: src/mmg/tabs/chapters.cpp:624
+#: src/mmg/tabs/chapters.cpp:674
 #, c-format, boost-format
 msgid "Matroska files (*.mkv;*.mka;*.mk3d)|*.mkv;*.mka;*.mk3d|%s"
 msgstr "Matroska bestanden (*.mkv;*.mka;*.mks;*.mk3d)|*.mkv;*.mka;*.mks;*.mk3d|%s"
@@ -4694,7 +4726,7 @@ msgstr "Ontbrekend de uitvoer bestandsnaam in argument '%1%'.\n"
 msgid "Missing start/end specifications for '--split' in '--split %1%'.\n"
 msgstr "Ongeldig formaat voor '--split' in '--split %1%'.\n"
 
-#: src/propedit/options.cpp:142
+#: src/propedit/options.cpp:148
 #, boost-format
 msgid "Modification of properties in the section '%1%' was requested, but no corresponding level 1 element was found in the file. %2%\n"
 msgstr "Veranderen van eigenschappen in de sectie '%1%' was gevraagd, maar géén corresponderend niveau 1 element is gevonden in het bestand. %2%\n"
@@ -4712,7 +4744,7 @@ msgstr "Meer dan één MIME type is opgegeven voor een enkele bijlage. '%1%' wor
 msgid "More than one description was given for a single attachment.\n"
 msgstr "Meer dan één beschrijving is opgegeven voor een enkele bijlage.\n"
 
-#: src/propedit/options.cpp:86
+#: src/propedit/options.cpp:92
 #, boost-format
 msgid "More than one file name has been given ('%1%' and '%2%').\n"
 msgstr "Meer dan één bestandsnaam is opgegeven.  ('%1%' and '%2%').\n"
@@ -4768,7 +4800,7 @@ msgid "Name for this track, e.g. \"director's comments\"."
 msgstr "Naam voor dit spoor, b.v. \"commentaar regieseur\"."
 
 #: src/mmg/tabs/attachments.cpp:156
-#: src/mmg/tabs/chapters.cpp:347
+#: src/mmg/tabs/chapters.cpp:373
 msgid "Name:"
 msgstr "Naam:"
 
@@ -4777,7 +4809,7 @@ msgstr "Naam:"
 msgid "Name: %1%"
 msgstr "Naam: %1%"
 
-#: src/mmg/tabs/chapters.cpp:406
+#: src/mmg/tabs/chapters.cpp:456
 msgid "New chapters created."
 msgstr "Nieuwe hoofdstukken aangemaakt."
 
@@ -4842,11 +4874,11 @@ msgstr "Geen MIME type is ingesteld voor de bijlage '%1%', en het kon niet gegok
 msgid "No append mapping was given for the file no. %1% ('%2%'). A default mapping of %3% will be used instead. Please keep that in mind if mkvmerge aborts with an error message regarding invalid '--append-to' options.\n"
 msgstr "Geen bijvoeg indeling ingegeven voor bestand nr. %1% ('%2%'). En standaard indeling van %3% wordt daarvoor in de plaats gebruikt. Hou in gedachten, dat als mkvmerge afbreekt met een fout bericht aangaande een ongeldig, bijgevoegd aan, '--append to' optie.\n"
 
-#: src/mmg/tabs/chapters.cpp:777
+#: src/mmg/tabs/chapters.cpp:827
 msgid "No chapter entries have been create yet."
 msgstr "Er zijn nog geen hoofdstuk ingangen gecreëerd."
 
-#: src/mmg/tabs/chapters.cpp:548
+#: src/mmg/tabs/chapters.cpp:598
 msgid "No chapters found"
 msgstr "Geen hoofdstukken gevonden"
 
@@ -4867,7 +4899,7 @@ msgid "No file loaded"
 msgstr "Geen bestand geladen"
 
 #: src/info/mkvinfo.cpp:2037
-#: src/propedit/options.cpp:29
+#: src/propedit/options.cpp:33
 msgid "No file name given.\n"
 msgstr "Geen bestandsnaam gegeven.\n"
 
@@ -4906,7 +4938,7 @@ msgstr "Geen stromen voor uitvoer gevonden. Afbreken.\n"
 msgid "No track ID specified in '--%1% %2%'.\n"
 msgstr "Geen spoor ID opgegeven in '--%1% %2%'.\n"
 
-#: src/propedit/target.cpp:309
+#: src/propedit/track_target.cpp:176
 #, boost-format
 msgid "No track corresponding to the edit specification '%1%' was found. %2%\n"
 msgstr "Geen spoor dat beantwoordt aan te bewerken specificaties '%1%' is gevonden. %2%\n"
@@ -4952,7 +4984,7 @@ msgstr " (geen segment/niveaul 0 element gevonden)"
 #: src/extract/attachments.cpp:131
 #: src/extract/timecodes_v2.cpp:186
 #: src/extract/tracks.cpp:319
-#: src/propedit/options.cpp:32
+#: src/propedit/options.cpp:36
 msgid "Nothing to do.\n"
 msgstr "Niets te doen.\n"
 
@@ -4979,7 +5011,7 @@ msgstr "Ogg/OGM audio/video bestanden"
 msgid "Ok"
 msgstr "Ok"
 
-#: src/mmg/tabs/chapters.cpp:739
+#: src/mmg/tabs/chapters.cpp:789
 msgid "One of the chapters does not have a name."
 msgstr "Eén van de hoofdstukken heeft geen naam."
 
@@ -5194,7 +5226,7 @@ msgstr "Gebruik 'mmg' zelf niet als het 'mkvmerge' programma."
 msgid "Please enter a description for the new job:"
 msgstr "Geef a.u.b een beschrijving voor de nieuwe taak:"
 
-#: src/mmg/tabs/chapters.cpp:102
+#: src/mmg/tabs/chapters.cpp:85
 msgid ""
 "Please enter the values for the language and the\n"
 "country that you want to apply to all the chapters\n"
@@ -5515,7 +5547,7 @@ msgstr "Herlaad het huidige bestand zonder bewaren"
 msgid "Remaining time:"
 msgstr "Resterende tijd:"
 
-#: src/mmg/tabs/chapters.cpp:328
+#: src/mmg/tabs/chapters.cpp:342
 msgid "Remove chapter"
 msgstr "Verwijder hoofdstuk"
 
@@ -5527,7 +5559,7 @@ msgstr "Verwijder element"
 msgid "Remove job from job queue after run:"
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:346
+#: src/mmg/tabs/chapters.cpp:372
 msgid "Remove name"
 msgstr "Verwijder naam"
 
@@ -5678,6 +5710,11 @@ msgstr "Zoek positie: %1%"
 msgid "Segment"
 msgstr "Segment"
 
+#: src/mmg/tabs/chapters.cpp:353
+#, fuzzy
+msgid "Segment UID:"
+msgstr "Segment UIDs:"
+
 #: src/info/mkvinfo.cpp:557
 #, boost-format
 msgid "Segment UID: %1%"
@@ -5685,6 +5722,11 @@ msgstr "Segment UID: %1%"
 
 #: src/mmg/tabs/global.cpp:274
 msgid "Segment UIDs:"
+msgstr "Segment UIDs:"
+
+#: src/mmg/tabs/chapters.cpp:356
+#, fuzzy
+msgid "Segment edition UID:"
 msgstr "Segment UIDs:"
 
 #: src/common/property_element.cpp:102
@@ -5712,7 +5754,7 @@ msgstr "Segment info bestanden (*.xml)|*.xml|%s"
 #: src/info/qt_ui.cpp:178
 #: src/info/wxwidgets_ui.cpp:213
 #: src/mmg/header_editor/frame.cpp:313
-#: src/propedit/options.cpp:156
+#: src/propedit/options.cpp:162
 #: src/propedit/propedit_cli_parser.cpp:96
 #: src/propedit/propedit_cli_parser.cpp:171
 msgid "Segment information"
@@ -5758,7 +5800,7 @@ msgid ""
 "of language drop down boxes."
 msgstr "Selecteer de talen die bovenaan moeten staan van de uitklaplijst."
 
-#: src/mmg/tabs/chapters.cpp:100
+#: src/mmg/tabs/chapters.cpp:83
 msgid "Select values to be applied"
 msgstr "Selecteer de bij te voegen waarde"
 
@@ -5774,7 +5816,7 @@ msgstr "Selecteer de karakterset waarin het ondertitel bestand of hoofdstuk info
 msgid "Set &output file"
 msgstr "Maak &bestandsnaam"
 
-#: src/mmg/tabs/chapters.cpp:117
+#: src/mmg/tabs/chapters.cpp:100
 msgid "Set country to:"
 msgstr "Stel land in op"
 
@@ -5813,7 +5855,7 @@ msgstr "Stel in als spoor gebruikt wordt."
 msgid "Set if the video is interlaced."
 msgstr "Zet wanneer de vidieo 'interlaced' is."
 
-#: src/mmg/tabs/chapters.cpp:110
+#: src/mmg/tabs/chapters.cpp:93
 msgid "Set language to:"
 msgstr "Stel taal in op:"
 
@@ -5821,7 +5863,7 @@ msgstr "Stel taal in op:"
 msgid "Set the delay input field from the file name"
 msgstr "Haal de vertraging uit het bestand en plaats die op het invul veld"
 
-#: src/mmg/tabs/chapters.cpp:329
+#: src/mmg/tabs/chapters.cpp:343
 msgid "Set values"
 msgstr "Zet waarden"
 
@@ -6109,7 +6151,7 @@ msgstr "Start de geselecteerde ta(a)k(en) ongeacht hun status"
 msgid "Start with empty settings"
 msgstr "Start met lege instellingen"
 
-#: src/mmg/tabs/chapters.cpp:334
+#: src/mmg/tabs/chapters.cpp:348
 msgid "Start:"
 msgstr "Start:"
 
@@ -6229,7 +6271,7 @@ msgid "Tag selectors"
 msgstr "Markeer selectie's"
 
 #: src/info/mkvinfo.cpp:1812
-#: src/propedit/options.cpp:164
+#: src/propedit/options.cpp:167
 msgid "Tags"
 msgstr "Markeringen"
 
@@ -6342,7 +6384,7 @@ msgstr "Het Matroska bestand wordt geanalyseerd."
 msgid "The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file."
 msgstr "Het Matroska bestand is veranderd, maar de meta zoek data kon niet opgewaardeerd worden. Dit betekend, dat afspelers moeite kunnen hebben dit element te vinden. Gebruik je favoriete afspeler en controleer dit bestand."
 
-#: src/mmg/tabs/chapters.cpp:1872
+#: src/mmg/tabs/chapters.cpp:2003
 msgid ""
 "The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file.\n"
 "\n"
@@ -6454,12 +6496,12 @@ msgstr "De bijlage '%1%' kon niet worden gelezen.\n"
 msgid "The changes are written to the file.\n"
 msgstr "De veranderingen worden geschreven naar het bestand.\n"
 
-#: src/mmg/tabs/chapters.cpp:753
+#: src/mmg/tabs/chapters.cpp:803
 #, c-format, boost-format
 msgid "The chapter '%s' is missing its language."
 msgstr "Het hoofdstuk '%s' mist zijn taal."
 
-#: src/mmg/tabs/chapters.cpp:747
+#: src/mmg/tabs/chapters.cpp:797
 #, c-format, boost-format
 msgid "The chapter '%s' is missing the start time."
 msgstr "Het hoofdstuk '%s' mist de start tijd."
@@ -6576,13 +6618,17 @@ msgstr ""
 msgid "The duration after which a new output file is started. The time can be given either in the form HH:MM:SS.nnnnnnnnn or as the number of seconds followed by 's'. You may omit the number of hours 'HH' and the number of nanoseconds 'nnnnnnnnn'. If given then you may use up to nine digits after the decimal point. Examples: 01:00:00 (after one hour) or 1800s (after 1800 seconds)."
 msgstr "De duur waarna een nieuw uitvoer bestand moet worden gestart. De tijd kan in één van beiden de vormen worden gegeven HH:MM:SS.nnnnnnnnn of  als een aantal seconden gevolgd door een 's'. Je mag de hoeveelheid uren overslaan 'HH' en de hoeveelheid aan nanoseconden 'nnnnnnnnn'. Indien ingegeven, mag je tot aan negen nummers gebruiken na de decimale punt. Bijvoorbeeld: 01:00:00 (na één uur) of 1800s (na 1800 seconden)."
 
-#: src/propedit/options.cpp:207
+#: src/propedit/options.cpp:215
 #, boost-format
 msgid "The edit specifications '%1%' and '%2%' resolve to the same track with the UID %3%.\n"
 msgstr "De bewerk specificaties '%1%' en '%2%' herleiden naar hetzelfde spoor met het UID %3%.\n"
 
+#: src/mmg/tabs/chapters.cpp:357
+msgid "The edition UID to play from the segment linked in the chapter's segment UID. This is simply a number."
+msgstr ""
+
 #: src/mmg/header_editor/frame.cpp:670
-#: src/mmg/tabs/chapters.cpp:1860
+#: src/mmg/tabs/chapters.cpp:1991
 #: src/propedit/propedit.cpp:31
 msgid "The element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
 msgstr "Het element is geschreven aan het einde van het bestand, maar de segment waarde kon niet opgewaardeerd worden. Daarom is dit element niet zichtbaar. Het proces word afgebroken. Het bestand is veranderd!"
@@ -6751,11 +6797,11 @@ msgstr "Het bestand nr. %1% ('%2%') wordt niet toegevoegd. Het argument voor, bi
 msgid "The file you tried to open is not a Matroska file."
 msgstr "het bestand wat je probeerde te openen is geen Matroska bestand."
 
-#: src/mmg/tabs/chapters.cpp:629
+#: src/mmg/tabs/chapters.cpp:679
 msgid "The file you tried to save to is NOT a Matroska file."
 msgstr "het bestand wat je probeerde te bewaren is geen Matroska bestand."
 
-#: src/mmg/tabs/chapters.cpp:666
+#: src/mmg/tabs/chapters.cpp:716
 msgid "The file you tried to save to is a Matroska file. For this to work you have to use the 'Save to Matroska file' menu option."
 msgstr "Het bestand dat je probeerde te bewaren naar... is een Matroska bestand. Voordat dit werkt dien je gebruiken het 'Bewaar naar Matroska bestand' in menu optie."
 
@@ -6858,7 +6904,7 @@ msgstr ""
 "(Problem occured in tab_input::load(), #3)"
 
 #: src/mmg/options/chapters.cpp:108
-#: src/mmg/tabs/chapters.cpp:1280
+#: src/mmg/tabs/chapters.cpp:1359
 #, c-format, boost-format
 msgid "The language '%s' is not a valid language and cannot be selected."
 msgstr "De taal '%s' is geen geldige taal en kan niet geselecteerd worden."
@@ -6895,7 +6941,7 @@ msgstr ""
 "niet in gebruik."
 
 #: src/mmg/header_editor/frame.cpp:676
-#: src/mmg/tabs/chapters.cpp:1866
+#: src/mmg/tabs/chapters.cpp:1997
 #: src/propedit/propedit.cpp:35
 msgid "The meta seek element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
 msgstr "Het meta zoek element is geschreven aan het einde van het bestand, maar de segment grootte kon niet opgewaardeerd worden. Daarom is het element niet zichtbaar. Het proces wordt afgebroken. Het bestand is veranderd!"
@@ -6927,7 +6973,7 @@ msgstr ""
 "\n"
 "Selecteer a.u.b de lokatie van het 'mkvmerge-gui.hhp' bestand."
 
-#: src/propedit/change.cpp:60
+#: src/propedit/change.cpp:61
 #, boost-format
 msgid "The name '%1%' is not a valid property name for the current edit specification in '%2%'.\n"
 msgstr "De naam '%1%' is geen geldige eigendom naam voor de huidige bewerk specificatie in '%2%'.\n"
@@ -7019,32 +7065,32 @@ msgstr "De uitvoer bestand naam is ongeldig, b.v. het kan een ongeldig karakter 
 msgid "The previous UID was already given in '%1% %2%'.\n"
 msgstr "Het vorige UID was al opgegeven in '%1% %2%'.\n"
 
-#: src/propedit/change.cpp:112
+#: src/propedit/change.cpp:113
 #, boost-format
 msgid "The property value contains non-ASCII characters, but the property is not a Unicode string in '%1%'. %2%\n"
 msgstr "De eigendomswaarde bevat niet-ASCII karakters, maar het eigendom is geen Unicode reeks in '%1%'. %2%\n"
 
-#: src/propedit/change.cpp:154
+#: src/propedit/change.cpp:155
 #, boost-format
 msgid "The property value is not a valid binary spec or it is not exactly 128 bits long in '%1%'. %2%\n"
 msgstr "De eigendomswaarde is geen geldig binaire spec of is niet precies 128 bits lang in '%1%'. %2%\n"
 
-#: src/propedit/change.cpp:139
+#: src/propedit/change.cpp:140
 #, boost-format
 msgid "The property value is not a valid boolean in '%1%'. %2%\n"
 msgstr "De eigendomswaarde is geen geldige variabele in '%1%'. %2%\n"
 
-#: src/propedit/change.cpp:146
+#: src/propedit/change.cpp:147
 #, boost-format
 msgid "The property value is not a valid floating point number in '%1%'. %2%\n"
 msgstr "De eigendomswaarde is geen geldig veranderbaar nummer in '%1%'. %2%\n"
 
-#: src/propedit/change.cpp:131
+#: src/propedit/change.cpp:132
 #, boost-format
 msgid "The property value is not a valid signed integer in '%1%'. %2%\n"
 msgstr "De eigendomswaarde is geen geldig getekende geheel in '%1%'. %2%\n"
 
-#: src/propedit/change.cpp:125
+#: src/propedit/change.cpp:126
 #, boost-format
 msgid "The property value is not a valid unsigned integer in '%1%'. %2%\n"
 msgstr "De eigendomswaarde is geen geldig ongetekend geheel in '%1%'. %2%\n"
@@ -7081,7 +7127,7 @@ msgstr "De tweede mode, extraheert de markeringen en converteeert hen naar XML. 
 msgid "The seek table in this TTA file seems to be broken.\n"
 msgstr "De zoek tabel in dit TTA lijkt te zijn gebroken.\n"
 
-#: src/mmg/tabs/chapters.cpp:758
+#: src/mmg/tabs/chapters.cpp:808
 #, c-format, boost-format
 msgid "The selected language '%s' for the chapter '%s' is not a valid language code. Please select one of the predefined ones."
 msgstr "De geselecteerd taal '%s' voor hoofdstuk '%s' is geen geldige taal code. Selecteer a.u.b een vooraf opgeven taal."
@@ -7386,7 +7432,7 @@ msgid "This file contains coordinates in the timecode lines. Such coordinates ar
 msgstr "Dit bestand bevat coördinaten in de tijd code regels. Zulke coördinaten worden niet ondersteund door het Matroska SRT ondertitel formaat. De coördinaten worden automatisch verwijderd.\n"
 
 #: src/mmg/header_editor/frame.cpp:257
-#: src/mmg/tabs/chapters.cpp:541
+#: src/mmg/tabs/chapters.cpp:591
 msgid "This file could not be opened or parsed."
 msgstr "Dit bestand kon niet geopend of ontleed worden."
 
@@ -7394,11 +7440,11 @@ msgstr "Dit bestand kon niet geopend of ontleed worden."
 msgid "This file could not be opened or parsed.\n"
 msgstr "Dit bestand kon niet geopend of ontleed worden.\n"
 
-#: src/mmg/tabs/chapters.cpp:548
+#: src/mmg/tabs/chapters.cpp:598
 msgid "This file does not contain any chapters."
 msgstr "Dirt bestand bevat geen hoofdstukken."
 
-#: src/mmg/tabs/chapters.cpp:568
+#: src/mmg/tabs/chapters.cpp:618
 msgid "This file does not contain valid chapters."
 msgstr "Dit bestand bevat geen geldige hoofdstukken."
 
@@ -7414,12 +7460,12 @@ msgstr "Dit is de titlel die afspelers zouden kunen tonen als 'hoofd titel' voor
 msgid "This option needs an additional argument 'n'. Tells mkvmerge to put at most 'n' data blocks into each cluster. If the number is postfixed with 'ms' then put at most 'n' milliseconds of data into each cluster. The maximum length for a cluster that mkvmerge accepts is 60000 blocks and 32000ms; the minimum length is 100ms. Programs will only be able to seek to clusters, so creating larger clusters may lead to imprecise or slow seeking."
 msgstr "Deze optie heeft een extra argument nodig 'n'. Vertelt mkvmerge plaats de meeste 'n' data blokken en elke clusterr. Is het nummer vastgezet met 'ms' plaats dan de meeste 'n' milliseconden aan data in elke cluster. De maximum lengte aan clusters die mkvmerge accepteerd is 60000 blokken en 32000ms; de minimum lengte is 100ms. Programma's kunnen alleen zoeken in clusters dus grote clusters creëren, kan leiden tot onnauwkeurigheid of trager zoeken."
 
-#: src/propedit/change.cpp:251
+#: src/propedit/change.cpp:252
 #, boost-format
 msgid "This property is mandatory and cannot be deleted in '%1%'. %2%\n"
 msgstr "Dit eigendom is verplicht en kan niet worden verwijderd in '%1%'. %2%\n"
 
-#: src/propedit/change.cpp:217
+#: src/propedit/change.cpp:218
 #, boost-format
 msgid "This property is unique. More instances cannot be added in '%1%'. %2%\n"
 msgstr "Dit eigendom is uniek. Meer zaken kunnen niet toegevoegd worden in '%1%'. %2%\n"
@@ -7599,7 +7645,7 @@ msgstr "Spoor UID: %1%"
 msgid "Track extraction"
 msgstr "Sppor extractie"
 
-#: src/propedit/options.cpp:149
+#: src/propedit/options.cpp:155
 #: src/propedit/propedit_cli_parser.cpp:97
 #: src/propedit/propedit_cli_parser.cpp:174
 msgid "Track headers"
@@ -7679,7 +7725,7 @@ msgstr "Type: %1% (%2%)"
 msgid "Typical use cases include reading VOBs from a DVD (e.g. VTS_01_1.VOB, VTS_01_2.VOB, VTS_01_3.VOB) or MPEG transport streams from BluRay discs."
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:336
+#: src/mmg/tabs/chapters.cpp:350
 msgid "UID:"
 msgstr "UID:"
 
@@ -8012,7 +8058,7 @@ msgstr "Waarschuwing in regel %1%: De start tijdcode is kleiner dan de vorige in
 msgid "Warning:"
 msgstr "Waarschuwing:"
 
-#: src/common/output.cpp:74
+#: src/common/output.cpp:89
 msgid "Warning: "
 msgstr "Waarschuwing: "
 
@@ -8083,8 +8129,8 @@ msgid "Wrong file chosen"
 msgstr "Verkeerd bestand gekozen"
 
 #: src/mmg/header_editor/frame.cpp:247
-#: src/mmg/tabs/chapters.cpp:629
-#: src/mmg/tabs/chapters.cpp:667
+#: src/mmg/tabs/chapters.cpp:679
+#: src/mmg/tabs/chapters.cpp:717
 msgid "Wrong file selected"
 msgstr "Verkeerd bestand geselecteerd"
 
@@ -8108,7 +8154,7 @@ msgstr "Verkeerde identificatie reeks: '%|1$7s|' != 'kate\\0\\0\\0'"
 msgid "You are already running the latest version."
 msgstr "Je hebt reeds de laatste versie."
 
-#: src/mmg/tabs/chapters.cpp:1324
+#: src/mmg/tabs/chapters.cpp:1403
 msgid ""
 "You can use this function for adjusting the timecodes\n"
 "of the selected chapter and all its children by a fixed amount.\n"
@@ -8243,6 +8289,7 @@ msgstr "compressie"
 msgid "create_track_number: file_num not found. %1%\n"
 msgstr "create_track_number: file_num niet gevonden. %1%\n"
 
+#: src/mmg/tabs/chapters.cpp:390
 #: src/mmg/tabs/input_extra.cpp:82
 #: src/mmg/tabs/input_extra.cpp:157
 #: src/mmg/tabs/input_general.cpp:103
@@ -8294,7 +8341,7 @@ msgstr "Omlaag"
 msgid "enable all"
 msgstr "vink alles aan"
 
-#: src/mmg/tabs/chapters.cpp:342
+#: src/mmg/tabs/chapters.cpp:387
 msgid "enabled"
 msgstr "aangezet"
 
@@ -8376,7 +8423,8 @@ msgstr "heb een xcptn\n"
 msgid "header removal"
 msgstr "kop verwijdering"
 
-#: src/mmg/tabs/chapters.cpp:339
+#: src/mmg/tabs/chapters.cpp:359
+#: src/mmg/tabs/chapters.cpp:367
 msgid "hidden"
 msgstr "verborgen"
 
@@ -8602,11 +8650,11 @@ msgstr "memory.cpp/safememdup() opgeroepen van bestand %1%, regel %2%: malloc() 
 msgid "memory.cpp/saferealloc() called from file %1%, line %2%: realloc() returned nullptr for a size of %3% bytes.\n"
 msgstr "memory.cpp/saferealloc() opgeroepen van bestand %1%, regel %2%: realloc() returned NULL voor de grootte van %3% bytes.\n"
 
-#: src/propedit/target.cpp:82
+#: src/propedit/change.cpp:277
 msgid "missing property name"
 msgstr "eigendomsnaam ontbrekend"
 
-#: src/propedit/target.cpp:75
+#: src/propedit/change.cpp:270
 msgid "missing value"
 msgstr "ontbrekende waarde"
 
@@ -8877,7 +8925,7 @@ msgstr "ogg_stream_init voor stroom nummerr %1% gefaaid. Zal proberen door te ga
 msgid "ogg_sync_buffer failed\n"
 msgstr "ogg_sync_buffer gefaald\n"
 
-#: src/mmg/tabs/chapters.cpp:1041
+#: src/mmg/tabs/chapters.cpp:1114
 #, fuzzy
 msgid "on_entry_selected: display == nullptr. Should not have happened."
 msgstr "on_entry_selected: toon == NULL. Had niet mogen gebeuren."
@@ -8888,6 +8936,10 @@ msgstr "alleen voor I beelden"
 
 #: src/mmg/options/mmg.cpp:86
 msgid "only if the run was successfull"
+msgstr ""
+
+#: src/mmg/tabs/chapters.cpp:362
+msgid "ordered"
 msgstr ""
 
 #: src/info/mkvinfo.cpp:617
@@ -9006,7 +9058,7 @@ msgstr "spu_extractie_duur: Een gebroken SPU pakket tegengekomen (next_off < sta
 msgid "ssa_reader: Invalid format. Could not find the \"Format\" line in the \"[Events]\" section."
 msgstr "ssa_lezer: Ongeldig formaat. Kon niet vinden \"Format\" regel in de \"[Events]\" sectie."
 
-#: src/mmg/tabs/chapters.cpp:885
+#: src/mmg/tabs/chapters.cpp:935
 msgid "start >= m->ListSize(). This should not have happened. Please file a bug report. Thanks."
 msgstr "start >= m->ListSize(). Dit mocht niet gebeuren. Vul a.u.b. een 'bug' rapport in. Bedankt."
 
@@ -9081,7 +9133,7 @@ msgstr "Omhoog"
 msgid "utf8_strlen(): Invalid UTF-8 char. First byte: 0x%|1$02x|"
 msgstr "utf8_strlen(): Ongeldig UTF-8 karakter. Eerste byte: 0x%|1$02x|"
 
-#: src/mmg/tabs/chapters.cpp:814
+#: src/mmg/tabs/chapters.cpp:864
 msgid "verify failed: chapters->CheckMandatory() is false. This should not have happened. Please file a bug report.\n"
 msgstr "verifiëren gefaald: chapters->CheckMandatory() is fout. Dit had niet mogen gebeuren. Vul a.u.b. een fout (bug) rapport in.\n"
 

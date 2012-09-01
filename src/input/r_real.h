@@ -89,7 +89,6 @@ class real_reader_c: public generic_reader_c {
 private:
   rmff_file_t *file;
   std::vector<std::shared_ptr<real_demuxer_t> > demuxers;
-  int64_t file_size;
   bool done;
 
 public:

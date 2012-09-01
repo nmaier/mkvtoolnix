@@ -26,7 +26,6 @@ mp3_packetizer_c::mp3_packetizer_c(generic_reader_c *p_reader,
                                    int channels,
                                    bool source_is_good)
   : generic_packetizer_c(p_reader, p_ti)
-  , m_bytes_output(0)
   , m_packetno(0)
   , m_bytes_skipped(0)
   , m_samples_per_sec(samples_per_sec)

@@ -682,7 +682,7 @@ parse_arg_display_dimensions(const std::string s,
 
   std::vector<std::string> dims = split(parts[1], "x", 2);
   int64_t id = 0;
-  int w, h;
+  int w = 0, h = 0;
   if ((dims.size() != 2) || !parse_number(parts[0], id) || !parse_number(dims[0], w) || !parse_number(dims[1], h) || (0 >= w) || (0 >= h))
     mxerror(boost::format(Y("Display dimensions: not given in the form <TID>:<width>x<height>, e.g. 1:640x480 (argument was '%1%').\n")) % s);
 

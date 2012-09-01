@@ -29,7 +29,6 @@ aac_packetizer_c::aac_packetizer_c(generic_reader_c *p_reader,
                                    bool emphasis_present,
                                    bool headerless)
   : generic_packetizer_c(p_reader, p_ti)
-  , m_bytes_output(0)
   , m_packetno(0)
   , m_last_timecode(-1)
   , m_num_packets_same_tc(0)

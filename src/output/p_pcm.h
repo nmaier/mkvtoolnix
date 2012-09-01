@@ -22,14 +22,14 @@
 
 class pcm_packetizer_c: public generic_packetizer_c {
 private:
-  int m_packetno, m_bytes_per_second, m_samples_per_sec, m_channels, m_bits_per_sample, m_samples_per_packet;
+  int m_samples_per_sec, m_channels, m_bits_per_sample, m_samples_per_packet;
   size_t m_packet_size, m_samples_output;
-  bool m_big_endian, m_ieee_float;
+  bool m_ieee_float;
   byte_buffer_c m_buffer;
   samples_to_timecode_converter_c m_s2tc;
 
 public:
-  pcm_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, int p_samples_per_sec, int channels, int bits_per_sample, bool big_endian = false, bool ieee_float = false);
+  pcm_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, int p_samples_per_sec, int channels, int bits_per_sample, bool ieee_float = false);
   virtual ~pcm_packetizer_c();
 
   virtual int process(packet_cptr packet);

@@ -1029,8 +1029,7 @@ ogm_a_pcm_demuxer_c::ogm_a_pcm_demuxer_c(ogm_reader_c *p_reader)
 generic_packetizer_c *
 ogm_a_pcm_demuxer_c::create_packetizer() {
   stream_header        *sth      = (stream_header *)(packet_data[0]->get_buffer() + 1);
-  generic_packetizer_c *ptzr_obj = new pcm_packetizer_c(reader, m_ti, get_uint64_le(&sth->samples_per_unit), get_uint16_le(&sth->sh.audio.channels),
-                                                        get_uint16_le(&sth->bits_per_sample));
+  generic_packetizer_c *ptzr_obj = new pcm_packetizer_c(reader, m_ti, get_uint64_le(&sth->samples_per_unit), get_uint16_le(&sth->sh.audio.channels), get_uint16_le(&sth->bits_per_sample));
 
   show_packetizer_info(m_ti.m_id, ptzr_obj);
 

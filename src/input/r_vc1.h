@@ -22,7 +22,6 @@
 class vc1_es_reader_c: public generic_reader_c {
 private:
   memory_cptr m_raw_seqhdr;
-  int m_width, m_height;
 
   memory_cptr m_buffer;
 

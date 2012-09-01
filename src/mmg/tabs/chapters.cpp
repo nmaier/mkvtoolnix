@@ -21,7 +21,7 @@
 
 #include <ebml/EbmlStream.h>
 
-#include "common/common_pch.h"
+#include "common/bitvalue.h"
 #include "common/chapters/chapters.h"
 #include "common/common_pch.h"
 #include "common/ebml.h"
@@ -54,23 +54,6 @@ public:
 
     return true;
   }
-};
-
-class chapter_node_data_c: public wxTreeItemData {
-public:
-  bool is_atom;
-  KaxChapterAtom *chapter;
-  KaxEditionEntry *eentry;
-
-  chapter_node_data_c(KaxChapterAtom *nchapter):
-    is_atom(true),
-    chapter(nchapter) {
-  };
-
-  chapter_node_data_c(KaxEditionEntry *neentry):
-    is_atom(false),
-    eentry(neentry) {
-  };
 };
 
 #define ID_CVD_CB_LANGUAGE 12000
@@ -183,7 +166,7 @@ tab_chapters::tab_chapters(wxWindow *parent,
 {
   wxBoxSizer *siz_all, *siz_line, *siz_column;
   wxStaticBoxSizer *siz_sb;
-  wxFlexGridSizer *siz_fg;
+  wxFlexGridSizer *siz_fg, *siz_upper_fg;
   uint32_t i;
 
   m_chapters_menu = chapters_menu;
@@ -221,37 +204,62 @@ tab_chapters::tab_chapters(wxWindow *parent,
   siz_column->Add(b_adjust_timecodes, 0, wxGROW | wxBOTTOM, 3);
   siz_fg->Add(siz_column, 0, wxLEFT | wxBOTTOM, 5);
 
-  siz_line = new wxBoxSizer(wxHORIZONTAL);
+  siz_all->Add(siz_fg, 10, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 10);
+
+  // Start of flex grid sizer
+  siz_upper_fg = new wxFlexGridSizer(4, 5, 5);
+  siz_upper_fg->AddGrowableCol(1, 1);
+  siz_upper_fg->AddGrowableCol(3, 1);
+
+  // Line 1 columns 1 & 2
   st_start = new wxStaticText(this, wxID_STATIC, wxEmptyString);
-  siz_line->Add(st_start, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
+  siz_upper_fg->Add(st_start, 0, wxALIGN_CENTER_VERTICAL);
   tc_start_time = new wxTextCtrl(this, ID_TC_CHAPTERSTART, wxEmptyString);
-  siz_line->Add(tc_start_time, 1, wxGROW | wxRIGHT, 10);
+  siz_upper_fg->Add(tc_start_time, 1, wxGROW);
 
+  // Line 1 columns 3 & 4
+  st_uid = new wxStaticText(this, wxID_STATIC, wxEmptyString);
+  siz_upper_fg->Add(st_uid, 0, wxALIGN_CENTER_VERTICAL);
+  tc_uid = new wxTextCtrl(this, ID_TC_UID, wxEmptyString);
+  siz_upper_fg->Add(tc_uid, 1, wxGROW | wxALIGN_CENTER_VERTICAL);
+
+  // Line 2 columns 1 & 2
   st_end = new wxStaticText(this, wxID_STATIC, wxEmptyString);
-  siz_line->Add(st_end, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
+  siz_upper_fg->Add(st_end, 0, wxALIGN_CENTER_VERTICAL);
   tc_end_time = new wxTextCtrl(this, ID_TC_CHAPTEREND, wxEmptyString);
-  siz_line->Add(tc_end_time, 1, wxGROW, 0);
+  siz_upper_fg->Add(tc_end_time, 1, wxGROW);
 
-  siz_fg->Add(siz_line, 0, wxGROW | wxRIGHT, 5);
-  siz_fg->Add(1, 0, 0, 0, 0);
+  // Line 2 columns 3 & 4
+  st_segment_uid = new wxStaticText(this, wxID_STATIC, wxEmptyString);
+  siz_upper_fg->Add(st_segment_uid, 0, wxALIGN_CENTER_VERTICAL);
+  tc_segment_uid = new wxTextCtrl(this, ID_TC_SEGMENT_UID, wxEmptyString);
+  siz_upper_fg->Add(tc_segment_uid, 1, wxGROW | wxALIGN_CENTER_VERTICAL);
 
-  siz_fg->AddSpacer(5);
-  siz_fg->AddSpacer(5);
+  // Line 3 columns 1 & 2
+  st_flags = new wxStaticText(this, wxID_STATIC, wxEmptyString);
+  siz_upper_fg->Add(st_flags, 0, wxALIGN_CENTER_VERTICAL);
 
   siz_line = new wxBoxSizer(wxHORIZONTAL);
-  st_uid = new wxStaticText(this, wxID_STATIC, wxEmptyString);
-  siz_line->Add(st_uid, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
-  tc_uid = new wxTextCtrl(this, ID_TC_UID, wxEmptyString);
-  siz_line->Add(tc_uid, 1, wxGROW | wxRIGHT | wxALIGN_CENTER_VERTICAL, 10);
-  cb_flag_hidden = new wxCheckBox(this, ID_CB_CHAPTERHIDDEN, wxEmptyString);
+  cb_flag_hidden = new wxCheckBox(this, ID_CB_FLAGHIDDEN, wxEmptyString);
   siz_line->Add(cb_flag_hidden, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 10);
-  cb_flag_enabled = new wxCheckBox(this, ID_CB_CHAPTERENABLED, wxEmptyString);
-  siz_line->Add(cb_flag_enabled, 0, wxALIGN_CENTER_VERTICAL, 0);
 
-  siz_fg->Add(siz_line, 0, wxGROW | wxRIGHT, 5);
-  siz_fg->Add(1, 0, 0, 0, 0);
+  cb_flag_enabled_default = new wxCheckBox(this, ID_CB_FLAGENABLEDDEFAULT, wxEmptyString);
+  siz_line->Add(cb_flag_enabled_default, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 10);
 
-  siz_all->Add(siz_fg, 1, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 10);
+  cb_flag_ordered = new wxCheckBox(this, ID_CB_FLAGORDERED, wxEmptyString);
+  siz_line->Add(cb_flag_ordered, 0, wxALIGN_CENTER_VERTICAL, 0);
+
+  siz_upper_fg->Add(siz_line, 1, wxGROW | wxALIGN_CENTER_VERTICAL);
+
+  // Line 3 columns 3 & 4
+  st_segment_edition_uid = new wxStaticText(this, wxID_STATIC, wxEmptyString);
+  siz_upper_fg->Add(st_segment_edition_uid, 0, wxALIGN_CENTER_VERTICAL);
+  tc_segment_edition_uid = new wxTextCtrl(this, ID_TC_SEGMENT_EDITION_UID, wxEmptyString);
+  siz_upper_fg->Add(tc_segment_edition_uid, 1, wxGROW | wxALIGN_CENTER_VERTICAL);
+
+  siz_all->Add(siz_upper_fg, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 10);
+  // End of flex grid sizer
+
 
   sb_names = new wxStaticBox(this, wxID_STATIC, wxEmptyString);
   siz_sb = new wxStaticBoxSizer(sb_names, wxVERTICAL);
@@ -300,6 +308,11 @@ tab_chapters::tab_chapters(wxWindow *parent,
   siz_sb->Add(siz_fg,  0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 10);
   siz_all->Add(siz_sb, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 10);
 
+  // Fix tab order
+  tc_uid->MoveAfterInTabOrder(cb_flag_ordered);
+  tc_segment_uid->MoveAfterInTabOrder(tc_uid);
+  tc_segment_edition_uid->MoveAfterInTabOrder(tc_segment_uid);
+
   enable_inputs(false);
 
   m_chapters_menu->Enable(ID_M_CHAPTERS_SAVE,      false);
@@ -336,11 +349,23 @@ tab_chapters::translate_ui() {
   st_uid->SetLabel(Z("UID:"));
   tc_uid->SetToolTip(TIP("Each chapter and each edition has a unique identifier. This identifier is normally assigned "
                           "automatically by the programs, but it can be changed manually if it is really needed."));
+  st_segment_uid->SetLabel(Z("Segment UID:"));
+  tc_segment_uid->SetToolTip(TIP("A segment to play in place of this chapter. The edition set via the segment edition UID should be used for this segment, otherwise no edition is used. "
+                                 "This is a 128bit segment UID in the usual UID form: hex numbers with or without the \"0x\" prefix, with or without spaces, exactly 32 digits.\n"));
+  st_segment_edition_uid->SetLabel(Z("Segment edition UID:"));
+  tc_segment_edition_uid->SetToolTip(TIP("The edition UID to play from the segment linked in the chapter's segment UID. This is simply a number."));
+  st_flags->SetLabel(Z("Flags:"));
   cb_flag_hidden->SetLabel(Z("hidden"));
   cb_flag_hidden->SetToolTip(TIP("If a chapter is marked 'hidden' then the player should not show this chapter entry "
                                  "to the user. Such entries could still be used by the menu system."));
-  cb_flag_enabled->SetLabel(Z("enabled"));
-  cb_flag_enabled->SetToolTip(TIP("If a chapter is not marked 'enabled' then the player should skip the part of the file that this chapter occupies."));
+  cb_flag_ordered->SetLabel(Z("ordered"));
+  cb_flag_ordered->SetToolTip(TIP("If an edition is marked 'ordered' then the chapters can be defined multiple times and the order to play them is enforced."));
+
+  set_flag_enabled_default_texts(tc_chapters->GetSelection());
+
+  cb_flag_hidden->SetLabel(Z("hidden"));
+  cb_flag_hidden->SetToolTip(TIP("If a chapter or an edition is marked 'hidden' then the player should not show this chapter entry (or all of this edition's entries) "
+                                 "to the user. Such entries could still be used by the menu system."));
   sb_names->SetLabel(Z("Chapter names and languages"));
   b_add_chapter_name->SetLabel(Z("Add name"));
   b_remove_chapter_name->SetLabel(Z("Remove name"));
@@ -350,25 +375,49 @@ tab_chapters::translate_ui() {
 }
 
 void
-tab_chapters::enable_inputs(bool enable) {
+tab_chapters::set_flag_enabled_default_texts(wxTreeItemId id) {
+  bool is_atom = true;
+  if (id.IsOk() && (id != tid_root)) {
+    auto t  = static_cast<chapter_node_data_c *>(tc_chapters->GetItemData(id));
+    is_atom = !t || t->is_atom;
+  }
+
+  if (is_atom) {
+    cb_flag_enabled_default->SetLabel(Z("enabled"));
+    cb_flag_enabled_default->SetToolTip(TIP("If a chapter is not marked 'enabled' then the player should skip the part of the file that this chapter occupies."));
+  } else {
+    cb_flag_enabled_default->SetLabel(Z("default"));
+    cb_flag_enabled_default->SetToolTip(TIP("If an edition is marked as 'default' then it should be used as the default edition."));
+  }
+}
+
+void
+tab_chapters::enable_inputs(bool enable,
+                            bool is_edition) {
   tc_chapter_name->Enable(enable);
   tc_start_time->Enable(enable);
   tc_end_time->Enable(enable);
-  tc_uid->Enable(enable);
   cob_language_code->Enable(enable);
   cob_country_code->Enable(enable);
   lb_chapter_names->Enable(enable);
   b_add_chapter_name->Enable(enable);
   b_remove_chapter_name->Enable(enable);
-  cb_flag_hidden->Enable(enable);
-  cb_flag_enabled->Enable(enable);
+  cb_flag_hidden->Enable(enable || is_edition);
+  cb_flag_enabled_default->Enable(enable || is_edition);
+  cb_flag_ordered->Enable(is_edition);
   st_start->Enable(enable);
   st_end->Enable(enable);
-  st_uid->Enable(enable);
+  st_uid->Enable(enable || is_edition);
+  tc_uid->Enable(enable || is_edition);
+  st_segment_uid->Enable(enable);
+  tc_segment_uid->Enable(enable);
+  st_segment_edition_uid->Enable(enable);
+  tc_segment_edition_uid->Enable(enable);
   st_name->Enable(enable);
   st_language->Enable(enable);
   st_country->Enable(enable);
   sb_names->Enable(enable);
+  st_flags->Enable(enable);
   inputs_enabled = enable;
 }
 
@@ -989,6 +1038,47 @@ tab_chapters::on_remove_chapter(wxCommandEvent &) {
 }
 
 void
+tab_chapters::root_or_edition_selected(wxTreeEvent &evt) {
+  auto t = static_cast<chapter_node_data_c *>(tc_chapters->GetItemData(evt.GetItem()));
+  if (!t)
+    return;
+
+  bool is_edition = (evt.GetItem() != tid_root) && !t->is_atom;
+
+  enable_inputs(false, is_edition);
+  no_update = true;
+
+  tc_chapter_name->SetValue(wxEmptyString);
+  tc_start_time->SetValue(wxEmptyString);
+  tc_end_time->SetValue(wxEmptyString);
+  tc_segment_uid->SetValue(wxEmptyString);
+  tc_segment_edition_uid->SetValue(wxEmptyString);
+
+  if (is_edition) {
+    auto euid = FindChild<KaxEditionUID>(t->eentry);
+    tc_uid->SetValue(euid ? wxU(to_string(uint64(*euid))) : wxU(L""));
+
+    auto flag_hidden = FindChild<KaxEditionFlagHidden>(t->eentry);
+    cb_flag_hidden->SetValue(flag_hidden ? uint64(*flag_hidden) != 0 : false);
+
+    auto flag_default = FindChild<KaxEditionFlagDefault>(t->eentry);
+    cb_flag_enabled_default->SetValue(flag_default ? uint64(*flag_default) != 0 : false);
+
+    set_flag_enabled_default_texts(evt.GetItem());
+
+    auto flag_ordered = FindChild<KaxEditionFlagOrdered>(t->eentry);
+    cb_flag_ordered->SetValue(flag_ordered ? uint64(*flag_ordered) != 0 : false);
+
+  } else {
+    tc_uid->Enable(true);
+    tc_uid->SetValue(wxEmptyString);
+    tc_uid->Enable(false);
+  }
+
+  no_update = false;
+}
+
+void
 tab_chapters::on_entry_selected(wxTreeEvent &evt) {
   chapter_node_data_c *t;
   KaxChapterUID *cuid;
@@ -1010,31 +1100,13 @@ tab_chapters::on_entry_selected(wxTreeEvent &evt) {
   lb_chapter_names->Clear();
 
   if ((evt.GetItem() == tid_root) || (!t) || !t->is_atom) {
-    enable_inputs(false);
-    no_update = true;
-    tc_chapter_name->SetValue(wxEmptyString);
-    tc_start_time->SetValue(wxEmptyString);
-    tc_end_time->SetValue(wxEmptyString);
-    if ((evt.GetItem() != tid_root) && t && !t->is_atom) {
-      KaxEditionUID *euid;
-      wxString s;
-
-      st_uid->Enable(true);
-      tc_uid->Enable(true);
-      euid = FindChild<KaxEditionUID>(t->eentry);
-      if (euid)
-        s = wxU(to_string(uint64(*euid)));
-      tc_uid->SetValue(s);
-    } else {
-      tc_uid->Enable(true);
-      tc_uid->SetValue(wxEmptyString);
-      tc_uid->Enable(false);
-    }
-    no_update = false;
+    root_or_edition_selected(evt);
     return;
   }
 
   enable_inputs(true);
+
+  set_flag_enabled_default_texts(evt.GetItem());
 
   display = FindChild<KaxChapterDisplay>(t->chapter);
   if (!display)
@@ -1070,7 +1142,7 @@ tab_chapters::on_entry_selected(wxTreeEvent &evt) {
     value = true;
   else
     value = uint8(*static_cast<EbmlUInteger *>(fenabled)) != 0;
-  cb_flag_enabled->SetValue(value);
+  cb_flag_enabled_default->SetValue(value);
 
   cuid = FindChild<KaxChapterUID>(t->chapter);
   if (!cuid)
@@ -1078,6 +1150,12 @@ tab_chapters::on_entry_selected(wxTreeEvent &evt) {
   else
     label = wxU(to_string(uint64(*cuid)));
   tc_uid->SetValue(label);
+
+  auto segment_uid = FindChild<KaxChapterSegmentUID>(t->chapter);
+  tc_segment_uid->SetValue(segment_uid ? wxU(to_hex(segment_uid->GetBuffer(), segment_uid->GetSize(), true)) : wxU(L""));
+
+  auto segment_edition_uid = FindChild<KaxChapterSegmentEditionUID>(t->chapter);
+  tc_segment_edition_uid->SetValue(segment_edition_uid ? wxU(to_string(uint64(*segment_edition_uid))) : wxU(L""));
 
   lb_chapter_names->SetSelection(0);
   b_remove_chapter_name->Enable(lb_chapter_names->GetCount() > 1);
@@ -1489,6 +1567,9 @@ tab_chapters::copy_values(wxTreeItemId id) {
       ts_end = 0;
     }
 
+    copy_segment_uid(data);
+    copy_segment_edition_uid(data);
+
     i = 0;
     while (i < chapter->ListSize()) {
       e = (*chapter)[i];
@@ -1510,6 +1591,41 @@ tab_chapters::copy_values(wxTreeItemId id) {
   }
 
   return true;
+}
+
+bool
+tab_chapters::copy_segment_uid(chapter_node_data_c *data) {
+  if (tc_segment_uid->GetValue().IsEmpty()) {
+    DeleteChildren<KaxChapterSegmentUID>(data->chapter);
+    return true;
+  }
+
+  try {
+    bitvalue_c bit_value(to_utf8(tc_segment_uid->GetValue()), 128);
+    GetChild<KaxChapterSegmentUID>(data->chapter).CopyBuffer(bit_value.data(), 16);
+    return true;
+
+  } catch (mtx::bitvalue_parser_x &) {
+    wxMessageBox(Z("Invalid format used for the segment UID. Not using the value."));
+    return false;
+  }
+}
+
+bool
+tab_chapters::copy_segment_edition_uid(chapter_node_data_c *data) {
+  if (tc_segment_edition_uid->GetValue().IsEmpty()) {
+    DeleteChildren<KaxChapterSegmentEditionUID>(data->chapter);
+    return true;
+  }
+
+  uint64_t segment_edition_uid;
+  if (parse_number(to_utf8(tc_segment_edition_uid->GetValue()), segment_edition_uid)) {
+    static_cast<EbmlUInteger &>(GetChild<KaxChapterSegmentEditionUID>(data->chapter)) = segment_edition_uid;
+    return true;
+  }
+
+  wxMessageBox(Z("Invalid format used for the segment edition UID. Not using the value."));
+  return false;
 }
 
 void
@@ -1690,50 +1806,64 @@ tab_chapters::on_chapter_name_enter(wxCommandEvent &) {
 
 void
 tab_chapters::on_flag_hidden(wxCommandEvent &) {
-  wxTreeItemId selected;
-  chapter_node_data_c *t;
-  size_t i;
-
-  selected = tc_chapters->GetSelection();
+  auto selected = tc_chapters->GetSelection();
   if (!selected.IsOk() || (selected == tid_root))
     return;
-  t = (chapter_node_data_c *)tc_chapters->GetItemData(selected);
-  if ((!t) || !t->is_atom)
+  auto t = static_cast<chapter_node_data_c *>(tc_chapters->GetItemData(selected));
+  if (!t)
     return;
 
+  if (!t->is_atom) {
+    if (cb_flag_hidden->IsChecked())
+      GetChildAs<KaxEditionFlagHidden, EbmlUInteger>(*t->eentry) = 1;
+    else
+      DeleteChildren<KaxEditionFlagHidden>(t->eentry);
+    return;
+  }
+
   if (cb_flag_hidden->IsChecked())
-    *static_cast<EbmlUInteger *>
-      (&GetChild<KaxChapterFlagHidden>(*t->chapter)) = 1;
+    GetChildAs<KaxChapterFlagHidden, EbmlUInteger>(*t->chapter) = 1;
   else
-    for (i = 0; i < t->chapter->ListSize(); i++)
-      if (is_id((*t->chapter)[i], KaxChapterFlagHidden)) {
-        t->chapter->Remove(i);
-        return;
-      }
+    DeleteChildren<KaxChapterFlagHidden>(t->chapter);
 }
 
 void
-tab_chapters::on_flag_enabled(wxCommandEvent &) {
-  wxTreeItemId selected;
-  chapter_node_data_c *t;
-  size_t i;
-
-  selected = tc_chapters->GetSelection();
+tab_chapters::on_flag_enabled_default(wxCommandEvent &) {
+  auto selected = tc_chapters->GetSelection();
   if (!selected.IsOk() || (selected == tid_root))
     return;
-  t = (chapter_node_data_c *)tc_chapters->GetItemData(selected);
-  if ((!t) || !t->is_atom)
+
+  auto t = static_cast<chapter_node_data_c *>(tc_chapters->GetItemData(selected));
+  if (!t)
     return;
 
-  if (!cb_flag_enabled->IsChecked())
-    *static_cast<EbmlUInteger *>
-      (&GetChild<KaxChapterFlagEnabled>(*t->chapter)) = 0;
+  if (!t->is_atom) {
+    if (cb_flag_enabled_default->IsChecked())
+      GetChildAs<KaxEditionFlagDefault, EbmlUInteger>(*t->eentry) = 1;
+    else
+      DeleteChildren<KaxEditionFlagDefault>(t->eentry);
+    return;
+  }
+
+  if (!cb_flag_enabled_default->IsChecked())
+    GetChildAs<KaxChapterFlagEnabled, EbmlUInteger>(*t->chapter) = 0;
   else
-    for (i = 0; i < t->chapter->ListSize(); i++)
-      if (is_id((*t->chapter)[i], KaxChapterFlagEnabled)) {
-        t->chapter->Remove(i);
-        return;
-      }
+    DeleteChildren<KaxChapterFlagEnabled>(t->chapter);
+}
+
+void
+tab_chapters::on_flag_ordered(wxCommandEvent &) {
+  auto selected = tc_chapters->GetSelection();
+  if (!selected.IsOk() || (selected == tid_root))
+    return;
+  auto t = static_cast<chapter_node_data_c *>(tc_chapters->GetItemData(selected));
+  if (!t || t->is_atom)
+    return;
+
+  if (cb_flag_ordered->IsChecked())
+    GetChildAs<KaxEditionFlagOrdered, EbmlUInteger>(*t->eentry) = 1;
+  else
+    DeleteChildren<KaxEditionFlagOrdered>(t->eentry);
 }
 
 void
@@ -1900,7 +2030,8 @@ BEGIN_EVENT_TABLE(tab_chapters, wxPanel)
   EVT_COMBOBOX(ID_CB_CHAPTERSELECTCOUNTRYCODE,  tab_chapters::on_country_code_selected)
   EVT_LISTBOX(ID_LB_CHAPTERNAMES,               tab_chapters::on_chapter_name_selected)
   EVT_TEXT(ID_TC_CHAPTERNAME,                   tab_chapters::on_chapter_name_changed)
-  EVT_CHECKBOX(ID_CB_CHAPTERHIDDEN,             tab_chapters::on_flag_hidden)
-  EVT_CHECKBOX(ID_CB_CHAPTERENABLED,            tab_chapters::on_flag_enabled)
+  EVT_CHECKBOX(ID_CB_FLAGHIDDEN,                tab_chapters::on_flag_hidden)
+  EVT_CHECKBOX(ID_CB_FLAGENABLEDDEFAULT,        tab_chapters::on_flag_enabled_default)
+  EVT_CHECKBOX(ID_CB_FLAGORDERED,               tab_chapters::on_flag_ordered)
   EVT_TEXT_ENTER(ID_TC_CHAPTERNAME,             tab_chapters::on_chapter_name_enter)
 END_EVENT_TABLE();

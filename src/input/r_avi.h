@@ -73,9 +73,8 @@ private:
   std::vector<avi_demuxer_t> m_audio_demuxers;
   std::vector<avi_subs_demuxer_t> m_subtitle_demuxers;
   double m_fps;
-  unsigned int m_video_frames_read, m_max_video_frames, m_dropped_video_frames, m_act_wchar;
+  unsigned int m_video_frames_read, m_max_video_frames, m_dropped_video_frames;
   int m_avc_nal_size_size;
-  bool m_is_divx;
 
   uint64_t m_bytes_to_process, m_bytes_processed;
   bool m_video_track_ok;

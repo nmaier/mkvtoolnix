@@ -23,7 +23,6 @@ class ivf_reader_c: public generic_reader_c {
 private:
   uint16_t m_width, m_height;
   uint64_t m_frame_rate_num, m_frame_rate_den;
-  int64_t m_previous_timestamp;
 
 public:
   ivf_reader_c(const track_info_c &ti, const mm_io_cptr &in);

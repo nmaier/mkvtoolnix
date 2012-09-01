@@ -87,7 +87,6 @@ avi_reader_c::avi_reader_c(const track_info_c &ti,
   , m_video_frames_read(0)
   , m_max_video_frames(0)
   , m_dropped_video_frames(0)
-  , m_act_wchar(0)
   , m_avc_nal_size_size(-1)
   , m_bytes_to_process(0)
   , m_bytes_processed(0)
@@ -489,7 +488,7 @@ avi_reader_c::add_audio_demuxer(int aid) {
   switch(audio_format) {
     case 0x0001:                // raw PCM audio
     case 0x0003:                // raw PCM audio (float)
-      packetizer = new pcm_packetizer_c(this, m_ti, demuxer.m_samples_per_second, demuxer.m_channels, demuxer.m_bits_per_sample, false, audio_format == 0x0003);
+      packetizer = new pcm_packetizer_c(this, m_ti, demuxer.m_samples_per_second, demuxer.m_channels, demuxer.m_bits_per_sample, audio_format == 0x0003);
       break;
 
     case 0x0050:                // MP2

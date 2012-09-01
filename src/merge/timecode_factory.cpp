@@ -35,7 +35,7 @@ timecode_factory_c::create(const std::string &file_name,
   }
 
   std::string line;
-  int version;
+  int version = -1;
   if (!in->getline2(line) || !balg::istarts_with(line, "# timecode format v") || !parse_number(&line[strlen("# timecode format v")], version))
     mxerror(boost::format(Y("The timecode file '%1%' contains an unsupported/unrecognized format line. The very first line must look like '# timecode format v1'.\n"))
             % file_name);
