@@ -183,7 +183,7 @@ tab_chapters::tab_chapters(wxWindow *parent,
 {
   wxBoxSizer *siz_all, *siz_line, *siz_column;
   wxStaticBoxSizer *siz_sb;
-  wxFlexGridSizer *siz_fg;
+  wxFlexGridSizer *siz_fg, *siz_upper_fg;
   uint32_t i;
 
   m_chapters_menu = chapters_menu;
@@ -221,36 +221,48 @@ tab_chapters::tab_chapters(wxWindow *parent,
   siz_column->Add(b_adjust_timecodes, 0, wxGROW | wxBOTTOM, 3);
   siz_fg->Add(siz_column, 0, wxLEFT | wxBOTTOM, 5);
 
-  siz_line = new wxBoxSizer(wxHORIZONTAL);
+  // Start of flex grid sizer
+  siz_upper_fg = new wxFlexGridSizer(4, 5, 5);
+  siz_upper_fg->AddGrowableCol(1, 1);
+  siz_upper_fg->AddGrowableCol(3, 1);
+
+  // Line 1 columns 1 & 2
   st_start = new wxStaticText(this, wxID_STATIC, wxEmptyString);
-  siz_line->Add(st_start, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
+  siz_upper_fg->Add(st_start, 0, wxALIGN_CENTER_VERTICAL);
   tc_start_time = new wxTextCtrl(this, ID_TC_CHAPTERSTART, wxEmptyString);
-  siz_line->Add(tc_start_time, 1, wxGROW | wxRIGHT, 10);
+  siz_upper_fg->Add(tc_start_time, 1, wxGROW);
 
+  // Line 1 columns 3 & 4
   st_end = new wxStaticText(this, wxID_STATIC, wxEmptyString);
-  siz_line->Add(st_end, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
+  siz_upper_fg->Add(st_end, 0, wxALIGN_CENTER_VERTICAL);
   tc_end_time = new wxTextCtrl(this, ID_TC_CHAPTEREND, wxEmptyString);
-  siz_line->Add(tc_end_time, 1, wxGROW, 0);
+  siz_upper_fg->Add(tc_end_time, 1, wxGROW);
 
-  siz_fg->Add(siz_line, 0, wxGROW | wxRIGHT, 5);
-  siz_fg->Add(1, 0, 0, 0, 0);
-
-  siz_fg->AddSpacer(5);
-  siz_fg->AddSpacer(5);
-
-  siz_line = new wxBoxSizer(wxHORIZONTAL);
+  // Line 2 columns 1 & 2
   st_uid = new wxStaticText(this, wxID_STATIC, wxEmptyString);
-  siz_line->Add(st_uid, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
+  siz_upper_fg->Add(st_uid, 0, wxALIGN_CENTER_VERTICAL);
   tc_uid = new wxTextCtrl(this, ID_TC_UID, wxEmptyString);
-  siz_line->Add(tc_uid, 1, wxGROW | wxRIGHT | wxALIGN_CENTER_VERTICAL, 10);
+  siz_upper_fg->Add(tc_uid, 1, wxGROW | wxALIGN_CENTER_VERTICAL);
+
+  // Line 2 column 3
+  st_flags = new wxStaticText(this, wxID_STATIC, wxEmptyString);
+  siz_upper_fg->Add(st_flags, 0, wxALIGN_CENTER_VERTICAL);
+
+  // Line 2 column 4
+  siz_line = new wxBoxSizer(wxHORIZONTAL);
   cb_flag_hidden = new wxCheckBox(this, ID_CB_FLAGHIDDEN, wxEmptyString);
   siz_line->Add(cb_flag_hidden, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 10);
+
   cb_flag_enabled_default = new wxCheckBox(this, ID_CB_FLAGENABLEDDEFAULT, wxEmptyString);
   siz_line->Add(cb_flag_enabled_default, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 10);
+
   cb_flag_ordered = new wxCheckBox(this, ID_CB_FLAGORDERED, wxEmptyString);
   siz_line->Add(cb_flag_ordered, 0, wxALIGN_CENTER_VERTICAL, 0);
 
-  siz_fg->Add(siz_line, 0, wxGROW | wxRIGHT, 5);
+  // End of flex grid sizer
+  siz_upper_fg->Add(siz_line, 1, wxGROW | wxALIGN_CENTER_VERTICAL);
+
+  siz_fg->Add(siz_upper_fg, 1, wxGROW | wxRIGHT, 5);
   siz_fg->Add(1, 0, 0, 0, 0);
 
   siz_all->Add(siz_fg, 1, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 10);
@@ -338,6 +350,7 @@ tab_chapters::translate_ui() {
   st_uid->SetLabel(Z("UID:"));
   tc_uid->SetToolTip(TIP("Each chapter and each edition has a unique identifier. This identifier is normally assigned "
                           "automatically by the programs, but it can be changed manually if it is really needed."));
+  st_flags->SetLabel(Z("Flags:"));
   cb_flag_hidden->SetLabel(Z("hidden"));
   cb_flag_hidden->SetToolTip(TIP("If a chapter is marked 'hidden' then the player should not show this chapter entry "
                                  "to the user. Such entries could still be used by the menu system."));

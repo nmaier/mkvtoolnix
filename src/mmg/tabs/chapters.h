@@ -65,7 +65,7 @@ public:
   wxCheckBox *cb_flag_hidden, *cb_flag_enabled_default, *cb_flag_ordered;
   bool inputs_enabled, no_update;
 
-  wxStaticText *st_start, *st_end, *st_uid, *st_name, *st_language;
+  wxStaticText *st_start, *st_end, *st_uid, *st_name, *st_language, *st_flags;
   wxStaticText *st_country, *st_chapters;
   wxStaticBox *sb_names;
 
