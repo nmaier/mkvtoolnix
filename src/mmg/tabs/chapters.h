@@ -40,9 +40,10 @@
 #define ID_B_ADD_CHAPTERNAME              16014
 #define ID_B_REMOVE_CHAPTERNAME           16015
 #define ID_B_ADJUSTTIMECODES              16016
-#define ID_CB_CHAPTERHIDDEN               16017
-#define ID_CB_CHAPTERENABLED              16018
+#define ID_CB_FLAGHIDDEN                  16017
+#define ID_CB_FLAGENABLEDDEFAULT          16018
 #define ID_TC_UID                         16019
+#define ID_CB_FLAGORDERED                 16020
 
 using namespace libmatroska;
 
@@ -61,7 +62,7 @@ public:
   wxMTX_COMBOBOX_TYPE *cob_language_code, *cob_country_code;
   wxListBox *lb_chapter_names;
   wxButton *b_add_chapter_name, *b_remove_chapter_name;
-  wxCheckBox *cb_flag_hidden, *cb_flag_enabled;
+  wxCheckBox *cb_flag_hidden, *cb_flag_enabled_default, *cb_flag_ordered;
   bool inputs_enabled, no_update;
 
   wxStaticText *st_start, *st_end, *st_uid, *st_name, *st_language;
@@ -100,7 +101,8 @@ public:
   void on_set_values(wxCommandEvent &evt);
   void on_adjust_timecodes(wxCommandEvent &evt);
   void on_flag_hidden(wxCommandEvent &evt);
-  void on_flag_enabled(wxCommandEvent &evt);
+  void on_flag_enabled_default(wxCommandEvent &evt);
+  void on_flag_ordered(wxCommandEvent &evt);
   void set_values_recursively(wxTreeItemId id, const wxString &language,
                               bool set_language);
   void set_display_values(KaxChapterDisplay *display);
@@ -114,7 +116,7 @@ public:
   void add_recursively(wxTreeItemId &parent, EbmlMaster &master);
   wxString create_chapter_label(KaxChapterAtom &chapter);
   void fix_missing_languages(EbmlMaster &master);
-  void enable_inputs(bool enable);
+  void enable_inputs(bool enable, bool is_edition = false);
   void enable_buttons(bool enable);
   bool select_file_name();
   bool load(wxString name);
@@ -124,6 +126,9 @@ public:
 
 protected:
   void write_chapters_to_matroska_file();
+
+  void root_or_edition_selected(wxTreeEvent &evt);
+  void set_flag_enabled_default_texts(wxTreeItemId id);
 };
 
 #endif // __TAB_CHAPTERS_H

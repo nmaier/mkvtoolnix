@@ -243,10 +243,12 @@ tab_chapters::tab_chapters(wxWindow *parent,
   siz_line->Add(st_uid, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
   tc_uid = new wxTextCtrl(this, ID_TC_UID, wxEmptyString);
   siz_line->Add(tc_uid, 1, wxGROW | wxRIGHT | wxALIGN_CENTER_VERTICAL, 10);
-  cb_flag_hidden = new wxCheckBox(this, ID_CB_CHAPTERHIDDEN, wxEmptyString);
+  cb_flag_hidden = new wxCheckBox(this, ID_CB_FLAGHIDDEN, wxEmptyString);
   siz_line->Add(cb_flag_hidden, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 10);
-  cb_flag_enabled = new wxCheckBox(this, ID_CB_CHAPTERENABLED, wxEmptyString);
-  siz_line->Add(cb_flag_enabled, 0, wxALIGN_CENTER_VERTICAL, 0);
+  cb_flag_enabled_default = new wxCheckBox(this, ID_CB_FLAGENABLEDDEFAULT, wxEmptyString);
+  siz_line->Add(cb_flag_enabled_default, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 10);
+  cb_flag_ordered = new wxCheckBox(this, ID_CB_FLAGORDERED, wxEmptyString);
+  siz_line->Add(cb_flag_ordered, 0, wxALIGN_CENTER_VERTICAL, 0);
 
   siz_fg->Add(siz_line, 0, wxGROW | wxRIGHT, 5);
   siz_fg->Add(1, 0, 0, 0, 0);
@@ -339,8 +341,14 @@ tab_chapters::translate_ui() {
   cb_flag_hidden->SetLabel(Z("hidden"));
   cb_flag_hidden->SetToolTip(TIP("If a chapter is marked 'hidden' then the player should not show this chapter entry "
                                  "to the user. Such entries could still be used by the menu system."));
-  cb_flag_enabled->SetLabel(Z("enabled"));
-  cb_flag_enabled->SetToolTip(TIP("If a chapter is not marked 'enabled' then the player should skip the part of the file that this chapter occupies."));
+  cb_flag_ordered->SetLabel(Z("ordered"));
+  cb_flag_ordered->SetToolTip(TIP("If an edition is marked 'ordered' then the chapters can be defined multiple times and the order to play them is enforced."));
+
+  set_flag_enabled_default_texts(tc_chapters->GetSelection());
+
+  cb_flag_hidden->SetLabel(Z("hidden"));
+  cb_flag_hidden->SetToolTip(TIP("If a chapter or an edition is marked 'hidden' then the player should not show this chapter entry (or all of this edition's entries) "
+                                 "to the user. Such entries could still be used by the menu system."));
   sb_names->SetLabel(Z("Chapter names and languages"));
   b_add_chapter_name->SetLabel(Z("Add name"));
   b_remove_chapter_name->SetLabel(Z("Remove name"));
@@ -350,21 +358,40 @@ tab_chapters::translate_ui() {
 }
 
 void
-tab_chapters::enable_inputs(bool enable) {
+tab_chapters::set_flag_enabled_default_texts(wxTreeItemId id) {
+  bool is_atom = true;
+  if (id.IsOk() && (id != tid_root)) {
+    auto t  = static_cast<chapter_node_data_c *>(tc_chapters->GetItemData(id));
+    is_atom = !t || t->is_atom;
+  }
+
+  if (is_atom) {
+    cb_flag_enabled_default->SetLabel(Z("enabled"));
+    cb_flag_enabled_default->SetToolTip(TIP("If a chapter is not marked 'enabled' then the player should skip the part of the file that this chapter occupies."));
+  } else {
+    cb_flag_enabled_default->SetLabel(Z("default"));
+    cb_flag_enabled_default->SetToolTip(TIP("If an edition is marked as 'default' then it should be used as the default edition."));
+  }
+}
+
+void
+tab_chapters::enable_inputs(bool enable,
+                            bool is_edition) {
   tc_chapter_name->Enable(enable);
   tc_start_time->Enable(enable);
   tc_end_time->Enable(enable);
-  tc_uid->Enable(enable);
+  tc_uid->Enable(enable || is_edition);
   cob_language_code->Enable(enable);
   cob_country_code->Enable(enable);
   lb_chapter_names->Enable(enable);
   b_add_chapter_name->Enable(enable);
   b_remove_chapter_name->Enable(enable);
-  cb_flag_hidden->Enable(enable);
-  cb_flag_enabled->Enable(enable);
+  cb_flag_hidden->Enable(enable || is_edition);
+  cb_flag_enabled_default->Enable(enable || is_edition);
+  cb_flag_ordered->Enable(is_edition);
   st_start->Enable(enable);
   st_end->Enable(enable);
-  st_uid->Enable(enable);
+  st_uid->Enable(enable || is_edition);
   st_name->Enable(enable);
   st_language->Enable(enable);
   st_country->Enable(enable);
@@ -989,6 +1016,45 @@ tab_chapters::on_remove_chapter(wxCommandEvent &) {
 }
 
 void
+tab_chapters::root_or_edition_selected(wxTreeEvent &evt) {
+  auto t = static_cast<chapter_node_data_c *>(tc_chapters->GetItemData(evt.GetItem()));
+  if (!t)
+    return;
+
+  bool is_edition = (evt.GetItem() != tid_root) && !t->is_atom;
+
+  enable_inputs(false, is_edition);
+  no_update = true;
+
+  tc_chapter_name->SetValue(wxEmptyString);
+  tc_start_time->SetValue(wxEmptyString);
+  tc_end_time->SetValue(wxEmptyString);
+
+  if (is_edition) {
+    auto euid = FindChild<KaxEditionUID>(t->eentry);
+    tc_uid->SetValue(euid ? wxU(to_string(uint64(*euid))) : wxU(L""));
+
+    auto flag_hidden = FindChild<KaxEditionFlagHidden>(t->eentry);
+    cb_flag_hidden->SetValue(flag_hidden ? uint64(*flag_hidden) != 0 : false);
+
+    auto flag_default = FindChild<KaxEditionFlagDefault>(t->eentry);
+    cb_flag_enabled_default->SetValue(flag_default ? uint64(*flag_default) != 0 : false);
+
+    set_flag_enabled_default_texts(evt.GetItem());
+
+    auto flag_ordered = FindChild<KaxEditionFlagOrdered>(t->eentry);
+    cb_flag_ordered->SetValue(flag_ordered ? uint64(*flag_ordered) != 0 : false);
+
+  } else {
+    tc_uid->Enable(true);
+    tc_uid->SetValue(wxEmptyString);
+    tc_uid->Enable(false);
+  }
+
+  no_update = false;
+}
+
+void
 tab_chapters::on_entry_selected(wxTreeEvent &evt) {
   chapter_node_data_c *t;
   KaxChapterUID *cuid;
@@ -1010,31 +1076,13 @@ tab_chapters::on_entry_selected(wxTreeEvent &evt) {
   lb_chapter_names->Clear();
 
   if ((evt.GetItem() == tid_root) || (!t) || !t->is_atom) {
-    enable_inputs(false);
-    no_update = true;
-    tc_chapter_name->SetValue(wxEmptyString);
-    tc_start_time->SetValue(wxEmptyString);
-    tc_end_time->SetValue(wxEmptyString);
-    if ((evt.GetItem() != tid_root) && t && !t->is_atom) {
-      KaxEditionUID *euid;
-      wxString s;
-
-      st_uid->Enable(true);
-      tc_uid->Enable(true);
-      euid = FindChild<KaxEditionUID>(t->eentry);
-      if (euid)
-        s = wxU(to_string(uint64(*euid)));
-      tc_uid->SetValue(s);
-    } else {
-      tc_uid->Enable(true);
-      tc_uid->SetValue(wxEmptyString);
-      tc_uid->Enable(false);
-    }
-    no_update = false;
+    root_or_edition_selected(evt);
     return;
   }
 
   enable_inputs(true);
+
+  set_flag_enabled_default_texts(evt.GetItem());
 
   display = FindChild<KaxChapterDisplay>(t->chapter);
   if (!display)
@@ -1070,7 +1118,7 @@ tab_chapters::on_entry_selected(wxTreeEvent &evt) {
     value = true;
   else
     value = uint8(*static_cast<EbmlUInteger *>(fenabled)) != 0;
-  cb_flag_enabled->SetValue(value);
+  cb_flag_enabled_default->SetValue(value);
 
   cuid = FindChild<KaxChapterUID>(t->chapter);
   if (!cuid)
@@ -1690,50 +1738,64 @@ tab_chapters::on_chapter_name_enter(wxCommandEvent &) {
 
 void
 tab_chapters::on_flag_hidden(wxCommandEvent &) {
-  wxTreeItemId selected;
-  chapter_node_data_c *t;
-  size_t i;
-
-  selected = tc_chapters->GetSelection();
+  auto selected = tc_chapters->GetSelection();
   if (!selected.IsOk() || (selected == tid_root))
     return;
-  t = (chapter_node_data_c *)tc_chapters->GetItemData(selected);
-  if ((!t) || !t->is_atom)
+  auto t = static_cast<chapter_node_data_c *>(tc_chapters->GetItemData(selected));
+  if (!t)
     return;
 
+  if (!t->is_atom) {
+    if (cb_flag_hidden->IsChecked())
+      GetChildAs<KaxEditionFlagHidden, EbmlUInteger>(*t->eentry) = 1;
+    else
+      DeleteChildren<KaxEditionFlagHidden>(t->eentry);
+    return;
+  }
+
   if (cb_flag_hidden->IsChecked())
-    *static_cast<EbmlUInteger *>
-      (&GetChild<KaxChapterFlagHidden>(*t->chapter)) = 1;
+    GetChildAs<KaxChapterFlagHidden, EbmlUInteger>(*t->chapter) = 1;
   else
-    for (i = 0; i < t->chapter->ListSize(); i++)
-      if (is_id((*t->chapter)[i], KaxChapterFlagHidden)) {
-        t->chapter->Remove(i);
-        return;
-      }
+    DeleteChildren<KaxChapterFlagHidden>(t->chapter);
 }
 
 void
-tab_chapters::on_flag_enabled(wxCommandEvent &) {
-  wxTreeItemId selected;
-  chapter_node_data_c *t;
-  size_t i;
-
-  selected = tc_chapters->GetSelection();
+tab_chapters::on_flag_enabled_default(wxCommandEvent &) {
+  auto selected = tc_chapters->GetSelection();
   if (!selected.IsOk() || (selected == tid_root))
     return;
-  t = (chapter_node_data_c *)tc_chapters->GetItemData(selected);
-  if ((!t) || !t->is_atom)
+
+  auto t = static_cast<chapter_node_data_c *>(tc_chapters->GetItemData(selected));
+  if (!t)
     return;
 
-  if (!cb_flag_enabled->IsChecked())
-    *static_cast<EbmlUInteger *>
-      (&GetChild<KaxChapterFlagEnabled>(*t->chapter)) = 0;
+  if (!t->is_atom) {
+    if (cb_flag_enabled_default->IsChecked())
+      GetChildAs<KaxEditionFlagDefault, EbmlUInteger>(*t->eentry) = 1;
+    else
+      DeleteChildren<KaxEditionFlagDefault>(t->eentry);
+    return;
+  }
+
+  if (!cb_flag_enabled_default->IsChecked())
+    GetChildAs<KaxChapterFlagEnabled, EbmlUInteger>(*t->chapter) = 0;
   else
-    for (i = 0; i < t->chapter->ListSize(); i++)
-      if (is_id((*t->chapter)[i], KaxChapterFlagEnabled)) {
-        t->chapter->Remove(i);
-        return;
-      }
+    DeleteChildren<KaxChapterFlagEnabled>(t->chapter);
+}
+
+void
+tab_chapters::on_flag_ordered(wxCommandEvent &) {
+  auto selected = tc_chapters->GetSelection();
+  if (!selected.IsOk() || (selected == tid_root))
+    return;
+  auto t = static_cast<chapter_node_data_c *>(tc_chapters->GetItemData(selected));
+  if (!t || t->is_atom)
+    return;
+
+  if (cb_flag_ordered->IsChecked())
+    GetChildAs<KaxEditionFlagOrdered, EbmlUInteger>(*t->eentry) = 1;
+  else
+    DeleteChildren<KaxEditionFlagOrdered>(t->eentry);
 }
 
 void
@@ -1900,7 +1962,8 @@ BEGIN_EVENT_TABLE(tab_chapters, wxPanel)
   EVT_COMBOBOX(ID_CB_CHAPTERSELECTCOUNTRYCODE,  tab_chapters::on_country_code_selected)
   EVT_LISTBOX(ID_LB_CHAPTERNAMES,               tab_chapters::on_chapter_name_selected)
   EVT_TEXT(ID_TC_CHAPTERNAME,                   tab_chapters::on_chapter_name_changed)
-  EVT_CHECKBOX(ID_CB_CHAPTERHIDDEN,             tab_chapters::on_flag_hidden)
-  EVT_CHECKBOX(ID_CB_CHAPTERENABLED,            tab_chapters::on_flag_enabled)
+  EVT_CHECKBOX(ID_CB_FLAGHIDDEN,                tab_chapters::on_flag_hidden)
+  EVT_CHECKBOX(ID_CB_FLAGENABLEDDEFAULT,        tab_chapters::on_flag_enabled_default)
+  EVT_CHECKBOX(ID_CB_FLAGORDERED,               tab_chapters::on_flag_ordered)
   EVT_TEXT_ENTER(ID_TC_CHAPTERNAME,             tab_chapters::on_chapter_name_enter)
 END_EVENT_TABLE();
