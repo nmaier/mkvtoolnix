@@ -196,6 +196,16 @@ class SimpleTest
     self.sys command, :exit_code => options[:exit_code]
   end
 
+  def identify *args
+    options = args.extract_options!
+    fail ArgumentError if args.empty?
+
+    verbose = options[:verbose].nil? ? true : options[:verbose]
+    verbose = verbose ? "-verbose" : ""
+    command = "../src/mkvmerge --identify#{verbose} --engage no_variable_data #{args.first}"
+    self.sys command, :exit_code => options[:exit_code]
+  end
+
   def info *args
     options = args.extract_options!
     fail ArgumentError if args.empty?
@@ -214,6 +224,14 @@ class SimpleTest
     mode     = options[:mode] || :tracks
     command  = "../src/mkvextract --engage no_variable_data #{mode} #{args.first} " + options.keys.select { |key| key.is_a?(Numeric) }.sort.collect { |key| "#{key}:#{options[key]}" }.join(' ')
 
+    self.sys command, :exit_code => options[:exit_code]
+  end
+
+  def propedit *args
+    options = args.extract_options!
+    fail ArgumentError if args.empty?
+
+    command  = "../src/mkvpropedit --engage no_variable_data #{args.first}"
     self.sys command, :exit_code => options[:exit_code]
   end
 
