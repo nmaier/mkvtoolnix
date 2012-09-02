@@ -171,7 +171,7 @@ attachment_target_c::execute() {
 void
 attachment_target_c::execute_add() {
   auto mime_type    = m_options.m_mime_type.second                               ? m_options.m_mime_type.first : guess_mime_type(m_file_name, true);
-  auto file_name    = m_options.m_name.second && !m_options.m_name.first.empty() ? m_options.m_name.first      : bfs::path{m_file_name}.filename().native();
+  auto file_name    = m_options.m_name.second && !m_options.m_name.first.empty() ? m_options.m_name.first      : to_utf8(bfs::path{m_file_name}.filename().native());
   auto &description = m_options.m_description.first;
 
   auto att          = mtx::construct::cons<KaxAttached>(new KaxFileName,                                         to_wide(file_name),
@@ -293,7 +293,7 @@ attachment_target_c::replace_by_uid_name_mime_type() {
 void
 attachment_target_c::replace_attachment_values(KaxAttached &att) {
   if (m_options.m_name.second) {
-    auto file_name = !m_options.m_name.first.empty() ? m_options.m_name.first : bfs::path{m_file_name}.filename().native();
+    auto file_name = !m_options.m_name.first.empty() ? m_options.m_name.first : to_utf8(bfs::path{m_file_name}.filename().native());
     GetChildAs<KaxFileName, EbmlUnicodeString>(att) = cstrutf8_to_UTFstring(file_name);
   }
 
