@@ -9,12 +9,12 @@
 ** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
 ** version 2.1 of the License, or (at your option) any later version.
-** 
+**
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 ** Lesser General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU Lesser General Public
 ** License along with this library; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
@@ -74,7 +74,7 @@ class MATROSKA_DLL_API DataBuffer {
 				if (myBuffer == NULL)
 					bValidValue = false;
 				else
-					memcpy(myBuffer, aBuffer, mySize); 
+					memcpy(myBuffer, aBuffer, mySize);
 			}
 			else
 				myBuffer = aBuffer;
@@ -184,7 +184,7 @@ DECLARE_MKX_MASTER(KaxBlockGroup)
 		uint16 TrackNumber() const;
 
 		uint64 ClusterPosition() const;
-		
+
 		/*!
 			\return the number of references to other frames
 		*/
@@ -225,13 +225,13 @@ class KaxInternalBlock : public EbmlBinary {
 		*/
 		filepos_t UpdateSize(bool bSaveDefault = false, bool bForceRender = false);
 		filepos_t ReadData(IOCallback & input, ScopeMode ReadFully = SCOPE_ALL_DATA);
-		
+
 		/*!
 			\brief Only read the head of the Block (not internal data)
 			\note convenient when you are parsing the file quickly
 		*/
 		uint64 ReadInternalHead(IOCallback & input);
-		
+
 		unsigned int NumberFrames() const { return SizeList.size();}
 		DataBuffer & GetBuffer(unsigned int iIndex) {return *myBuffers[iIndex];}
 
@@ -262,7 +262,7 @@ class KaxInternalBlock : public EbmlBinary {
 			\note return -1 if the position doesn't exist
 		*/
 		int64 GetFrameSize(size_t FrameNumber = 0);
-		
+
 		bool IsInvisible() const { return mInvisible; }
 
 		uint64 ClusterPosition() const;
@@ -305,7 +305,6 @@ class MATROSKA_DLL_API KaxSimpleBlock : public KaxInternalBlock {
 		bool IsKeyframe() const    { return bIsKeyframe; }
 		bool IsDiscardable() const { return bIsDiscardable; }
 
-		operator KaxInternalBlock &() { return *this; }
 		void SetParent(KaxCluster & aParentCluster);
 
         EBML_CONCRETE_CLASS(KaxSimpleBlock)
@@ -372,7 +371,7 @@ DECLARE_MKX_BINARY_CONS(KaxBlockVirtual)
 		void SetParent(const KaxCluster & aParentCluster) {ParentCluster = &aParentCluster;}
 
         filepos_t RenderData(IOCallback & output, bool bForceRender, bool bSaveDefault);
-        
+
         filepos_t ReadData(IOCallback & input, ScopeMode ReadFully = SCOPE_ALL_DATA);
 
 	protected:
