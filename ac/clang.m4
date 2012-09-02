@@ -1,3 +1,13 @@
+AC_DEFUN([AX_COMPILER_IS_CLANG],[
+  AC_CACHE_CHECK([compiler is clang], [ac_cv_compiler_is_clang], [
+    if $CXX --version | grep -q -i 'clang.*llvm' ; then
+      ac_cv_compiler_is_clang=yes
+    else
+      ac_cv_compiler_is_clang=no
+    fi
+  ])
+])
+
 AC_DEFUN([AX_QUNUSED_ARGUMENTS_FLAG],[
   AC_CACHE_CHECK([for the compiler flag "-Qunused-arguments"], [ax_cv_qunused_arguments_flag],[
 
@@ -24,3 +34,4 @@ AC_DEFUN([AX_QUNUSED_ARGUMENTS_FLAG],[
 ])
 
 AX_QUNUSED_ARGUMENTS_FLAG
+AX_COMPILER_IS_CLANG
