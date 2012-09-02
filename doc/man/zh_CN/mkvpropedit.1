@@ -1,7 +1,7 @@
 '\" t
 .\"     Title: mkvpropedit
 .\"    Author: Moritz Bunkus <moritz@bunkus.org>
-.\" Generator: DocBook XSL Stylesheets v1.75.2 <http://docbook.sf.net/>
+.\" Generator: DocBook XSL Stylesheets v1.76.1 <http://docbook.sf.net/>
 .\"      Date: 2012-07-08
 .\"    Manual: 用户命令
 .\"    Source: MKVToolNix 5.7.0
@@ -52,7 +52,7 @@ Matroska(TM)
 设置解析模式。参数 \*(Aq\fI模式\fR\*(Aq 可以为 \*(Aqfast（快速）\*(Aq（此项为默认值）或 \*(Aqfull（完整）\*(Aq。\*(Aqfast（快速）\*(Aq模式不解析整个文件，而是使用元定位元素确定源文件中所需元素的位置。99% 的情况下这就足够了。但如果碰到不含元定位元素或者元定位元素损坏的文件，用户可能得考虑 \*(Aqfull（完整）\*(Aq 解析模式。完整扫描文件可能要花费几分钟，而快速扫描只需要几秒钟。
 .RE
 .PP
-操作:
+Actions that deal with track and segment info properties:
 .PP
 \fB\-e\fR, \fB\-\-edit\fR \fI选择器\fR
 .RS 4
@@ -94,6 +94,8 @@ Matroska(TM)
 \fI名称\fR
 的属性。注意部分属性是必需的，不能删除。
 .RE
+.PP
+Actions that deal with tags and chapters:
 .PP
 \fB\-t\fR, \fB\-\-tags\fR \fI选择器\fR:\fI文件名\fR
 .RS 4
@@ -139,6 +141,96 @@ Matroska(TM)
 读取的 XML 及简单章节格式与
 \fBmkvmerge\fR(1)
 所读取的相同。
+.RE
+.PP
+Actions for handling attachments:
+.PP
+\fB\-\-add\-attachment\fR \fIfilename\fR
+.RS 4
+Adds a new attachment from
+\fIfilename\fR\&.
+.sp
+If the option
+\fB\-\-attachment\-name\fR
+has been used prior to this option then its value is used as the new attachment\*(Aqs name\&. Otherwise it is derived from
+\fIfilename\fR\&.
+.sp
+If the option
+\fB\-\-attachment\-mime\-type\fR
+has been used prior to this option then its value is used as the new attachment\*(Aqs MIME type\&. Otherwise it is auto\-detected from the content of
+\fIfilename\fR\&.
+.sp
+If the option
+\fB\-\-attachment\-description\fR
+has been used prior to this option then its value is used as the new attachment\*(Aqs description\&. Otherwise no description will be set\&.
+.RE
+.PP
+\fB\-\-replace\-attachment\fR \fIselector\fR:\fIfilename\fR
+.RS 4
+Replaces one or more attachments that match
+\fIselector\fR
+with the file
+\fIfilename\fR\&. If more than one existing attachment matches
+\fIselector\fR
+then all of their contents will be replaced by the content of
+\fIfilename\fR\&.
+.sp
+The
+\fIselector\fR
+can have one of four forms\&. They\*(Aqre exlained below in the section
+attachment selectors\&.
+.sp
+If the option
+\fB\-\-attachment\-name\fR
+has been used prior to this option then its value is used as the replaced attachment\*(Aqs name\&. Otherwise the name is not changed\&.
+.sp
+If the option
+\fB\-\-attachment\-mime\-type\fR
+has been used prior to this option then its value is used as the replaced attachment\*(Aqs MIME type\&. Otherwise the MIME type is not changed\&.
+.sp
+If the option
+\fB\-\-attachment\-description\fR
+has been used prior to this option then its value is used as the replaced attachment\*(Aqs description\&. Otherwise no description is not changed\&.
+.RE
+.PP
+\fB\-\-delete\-attachment\fR \fIselector\fR
+.RS 4
+Deletes one or more attachments that match
+\fIselector\fR\&.
+.sp
+The
+\fIselector\fR
+can have one of four forms\&. They\*(Aqre exlained below in the section
+attachment selectors\&.
+.RE
+.PP
+Options for attachment actions:
+.PP
+\fB\-\-attachment\-name\fR \fI名称\fR
+.RS 4
+Sets the name to use for the following
+\fB\-\-add\-attachment\fR
+or
+\fB\-\-replace\-attachment\fR
+operation\&.
+.RE
+.PP
+\fB\-\-attachment\-mime\-type\fR \fImime\-type\fR
+.RS 4
+Sets the MIME type to use for the following
+\fB\-\-add\-attachment\fR
+or
+\fB\-\-replace\-attachment\fR
+operation\&.
+.RE
+.PP
+\fB\-\-attachment\-description\fR \fI描述\fR
+.RS 4
+Sets the description to use for the following
+\fB\-\-add\-attachment\fR
+or
+\fB\-\-replace\-attachment\fR
+operation\&.
 .RE
 .PP
 其他选项：
@@ -338,6 +430,70 @@ UID
 .SS "注"
 .PP
 由于轨道编辑选择器的特性，一些选择器所匹配的轨道头部可能是相同的。在此情况下，这些编辑选择器的所有操作将被按照在命令行给出的顺序合并运行。
+.SH "ATTACHMENT SELECTORS"
+.PP
+An attachment selector is used with the two actions
+\fB\-\-replace\-attachment\fR
+and
+\fB\-\-delete\-attachment\fR\&. It can have one of the following four forms:
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 1.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  1." 4.2
+.\}
+Selection by attachment ID\&. In this form the selector is simply a number, the attachment\*(Aqs ID as output by
+\fBmkvmerge\fR(1)\*(Aqs identification command\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 2.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  2." 4.2
+.\}
+Selection by attachment UID (unique ID)\&. In this form the selector is the equal sign
+=
+followed by a number, the attachment\*(Aqs unique ID as output by
+\fBmkvmerge\fR(1)\*(Aqs verbose identification command\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 3.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  3." 4.2
+.\}
+Selection by attachment name\&. In this form the selector is the literal word
+name:
+followed by the existing attachment\*(Aqs name\&. If this selector is used with
+\fB\-\-replace\-attachment\fR
+then colons within the name to match must be escaped as
+\ec\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 4.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  4." 4.2
+.\}
+Selection by MIME type\&. In this form the selector is the literal word
+mime\-type:
+followed by the existing attachment\*(Aqs MIME type\&. If this selector is used with
+\fB\-\-replace\-attachment\fR
+then colons within the MIME type to match must be escaped as
+\ec\&.
+.RE
 .SH "示例"
 .PP
 下面的示例将编辑一个名为 \*(Aq电影\&.mkv\*(Aq 的文件。示例中将设置剪辑标题并修改一条音频轨和一条字幕轨的语言代码。附注，本示例可以简写，即省去
@@ -415,6 +571,66 @@ $ mkvpropedit 影片\&.mkv \-\-chapters 新章节\&.xml
 .\}
 .nf
 $ mkvpropedit 影片\&.mkv \-\-chapters \*(Aq\*(Aq
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+Adding a font file (Arial\&.ttf) as an attachment:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvpropedit movie\&.mkv \-\-add\-attachment Arial\&.ttf
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+Adding a font file (89719823\&.ttf) as an attachment and providing some information as it really is just Arial:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvpropedit movie\&.mkv \-\-attachment\-name Arial\&.ttf \-\-attachment\-description \*(AqThe Arial font as a TrueType font\*(Aq \-\-attachment\-mime\-type application/x\-truetype\-font \-\-add\-attachment 89719823\&.ttf
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+Replacing one attached font (Comit\&.ttf) file with another one (Arial\&.ttf):
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvpropedit movie\&.mkv \-\-attachment\-name Arial\&.ttf \-\-attachment\-description \*(AqThe Arial font as a TrueType font\*(Aq \-\-replace\-attachment name:Comic\&.ttf:Arial\&.ttf
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+Deleting the second attached file, whatever it may be:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvpropedit movie\&.mkv \-\-delete\-attachment 2
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+Deleting all attached fonts by MIME type:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvpropedit movie\&.mkv \-\-delete\-attachment mime\-type:application/x\-truetype\-font
 .fi
 .if n \{\
 .RE

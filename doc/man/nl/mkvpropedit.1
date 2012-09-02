@@ -1,7 +1,7 @@
 '\" t
 .\"     Title: mkvpropedit
 .\"    Author: Moritz Bunkus <moritz@bunkus.org>
-.\" Generator: DocBook XSL Stylesheets v1.75.2 <http://docbook.sf.net/>
+.\" Generator: DocBook XSL Stylesheets v1.76.1 <http://docbook.sf.net/>
 .\"      Date: 2012-07-08
 .\"    Manual: Gebruiker commando\*(Aqs
 .\"    Source: MKVToolNix 5.7.0
@@ -27,7 +27,7 @@
 .\" -----------------------------------------------------------------
 .\" * MAIN CONTENT STARTS HERE *
 .\" -----------------------------------------------------------------
-.SH "REFERENTIENAAM"
+.SH "NAME"
 mkvpropedit \- Modificeren van eigenschappen van een bestaande Matroska(TM) bestanden zonder een volledige samenvoeging
 .SH "BEKNOPTE INHOUDSBESCHRIJVING"
 .HP \w'\fBmkvpropedit\fR\ 'u
@@ -52,7 +52,7 @@ niet te worden ingegeven\&.
 Stelt de ontleedt mode in\&. De parameter \*(Aq\fImode\fR\*(Aq kan zijn of \*(Aqfast\*(Aq (wat ook standaard is) of \*(Aqfull\*(Aq\&. De \*(Aqfast\*(Aq mode ontleedt niet het gehele bestand, maar gebruikt de meta zoek elementen voor lokaliseren van de benodigde elementen van een bron bestand\&. In 99% van alle gevallen is dat voldoende\&. Maar voor bestanden die geen meta zoek element bevatten of zij die beschadigd zijn, zou de gebruiker moeten opgeven de \*(Aqfull\*(Aq ontleedt mode\&. Een volledige scan kan enige minuten duren terwijl een snelle scan slechts enkele seconden duurt\&.
 .RE
 .PP
-Akties:
+Actions that deal with track and segment info properties:
 .PP
 \fB\-e\fR, \fB\-\-edit\fR \fIselector\fR
 .RS 4
@@ -95,6 +95,8 @@ naar de waarde
 Verwijdert alle voorgekomen eigenschappen
 \fIname\fR\&. Opmerking: sommige eigenschappen zijn vereist en kunnen niet worden verwijderd\&.
 .RE
+.PP
+Actions that deal with tags and chapters:
 .PP
 \fB\-t\fR, \fB\-\-tags\fR \fIselector\fR:\fIfilename\fR
 .RS 4
@@ -143,6 +145,96 @@ is empty\&.
 reads the same XML and simple chapter formats that
 \fBmkvmerge\fR(1)
 reads as well\&.
+.RE
+.PP
+Actions for handling attachments:
+.PP
+\fB\-\-add\-attachment\fR \fIfilename\fR
+.RS 4
+Adds a new attachment from
+\fIfilename\fR\&.
+.sp
+If the option
+\fB\-\-attachment\-name\fR
+has been used prior to this option then its value is used as the new attachment\*(Aqs name\&. Otherwise it is derived from
+\fIfilename\fR\&.
+.sp
+If the option
+\fB\-\-attachment\-mime\-type\fR
+has been used prior to this option then its value is used as the new attachment\*(Aqs MIME type\&. Otherwise it is auto\-detected from the content of
+\fIfilename\fR\&.
+.sp
+If the option
+\fB\-\-attachment\-description\fR
+has been used prior to this option then its value is used as the new attachment\*(Aqs description\&. Otherwise no description will be set\&.
+.RE
+.PP
+\fB\-\-replace\-attachment\fR \fIselector\fR:\fIfilename\fR
+.RS 4
+Replaces one or more attachments that match
+\fIselector\fR
+with the file
+\fIfilename\fR\&. If more than one existing attachment matches
+\fIselector\fR
+then all of their contents will be replaced by the content of
+\fIfilename\fR\&.
+.sp
+The
+\fIselector\fR
+can have one of four forms\&. They\*(Aqre exlained below in the section
+attachment selectors\&.
+.sp
+If the option
+\fB\-\-attachment\-name\fR
+has been used prior to this option then its value is used as the replaced attachment\*(Aqs name\&. Otherwise the name is not changed\&.
+.sp
+If the option
+\fB\-\-attachment\-mime\-type\fR
+has been used prior to this option then its value is used as the replaced attachment\*(Aqs MIME type\&. Otherwise the MIME type is not changed\&.
+.sp
+If the option
+\fB\-\-attachment\-description\fR
+has been used prior to this option then its value is used as the replaced attachment\*(Aqs description\&. Otherwise no description is not changed\&.
+.RE
+.PP
+\fB\-\-delete\-attachment\fR \fIselector\fR
+.RS 4
+Deletes one or more attachments that match
+\fIselector\fR\&.
+.sp
+The
+\fIselector\fR
+can have one of four forms\&. They\*(Aqre exlained below in the section
+attachment selectors\&.
+.RE
+.PP
+Options for attachment actions:
+.PP
+\fB\-\-attachment\-name\fR \fIname\fR
+.RS 4
+Sets the name to use for the following
+\fB\-\-add\-attachment\fR
+or
+\fB\-\-replace\-attachment\fR
+operation\&.
+.RE
+.PP
+\fB\-\-attachment\-mime\-type\fR \fImime\-type\fR
+.RS 4
+Sets the MIME type to use for the following
+\fB\-\-add\-attachment\fR
+or
+\fB\-\-replace\-attachment\fR
+operation\&.
+.RE
+.PP
+\fB\-\-attachment\-description\fR \fIdescription\fR
+.RS 4
+Sets the description to use for the following
+\fB\-\-add\-attachment\fR
+or
+\fB\-\-replace\-attachment\fR
+operation\&.
 .RE
 .PP
 Andere opties:
@@ -333,6 +425,70 @@ dan het spoor het van wie het spoornummer element gelijk is met
 .SS "Opmerkingen"
 .PP
 Door de aard van de spoor bewerk selecteur/kiezer, is het mogelijk dat verschillende selecteurs/kiezers eigenlijk overeenkomen met dezelfde spoor koppen\&. In zulke gevallen, zullen alle acties voor die bewerk selecteurs/kiezers in die volgorde worden gecombineerd en uitgevoerd worden in de volgorde waarin ze zijn opgegeven op de commandoregel\&.
+.SH "ATTACHMENT SELECTORS"
+.PP
+An attachment selector is used with the two actions
+\fB\-\-replace\-attachment\fR
+and
+\fB\-\-delete\-attachment\fR\&. It can have one of the following four forms:
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 1.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  1." 4.2
+.\}
+Selection by attachment ID\&. In this form the selector is simply a number, the attachment\*(Aqs ID as output by
+\fBmkvmerge\fR(1)\*(Aqs identification command\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 2.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  2." 4.2
+.\}
+Selection by attachment UID (unique ID)\&. In this form the selector is the equal sign
+=
+followed by a number, the attachment\*(Aqs unique ID as output by
+\fBmkvmerge\fR(1)\*(Aqs verbose identification command\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 3.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  3." 4.2
+.\}
+Selection by attachment name\&. In this form the selector is the literal word
+name:
+followed by the existing attachment\*(Aqs name\&. If this selector is used with
+\fB\-\-replace\-attachment\fR
+then colons within the name to match must be escaped as
+\ec\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 4.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  4." 4.2
+.\}
+Selection by MIME type\&. In this form the selector is the literal word
+mime\-type:
+followed by the existing attachment\*(Aqs MIME type\&. If this selector is used with
+\fB\-\-replace\-attachment\fR
+then colons within the MIME type to match must be escaped as
+\ec\&.
+.RE
 .SH "VOORBEELDEN"
 .PP
 Het volgende voorbeeld bewerkt een bestand genaamd \*(Aqfilm\&.mkv\*(Aq\&. Het zet het segment titel en modificeert de taal code van een audio en ondertitel spoor\&. Opmerking: Ddat dit voorbeeld kan worden verkort door het weglaten van de eerste optie
@@ -408,6 +564,66 @@ Removing all chapters requires leaving out the file name:
 .\}
 .nf
 $ mkvpropedit movie\&.mkv \-\-chapters \*(Aq\*(Aq
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+Adding a font file (Arial\&.ttf) as an attachment:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvpropedit movie\&.mkv \-\-add\-attachment Arial\&.ttf
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+Adding a font file (89719823\&.ttf) as an attachment and providing some information as it really is just Arial:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvpropedit movie\&.mkv \-\-attachment\-name Arial\&.ttf \-\-attachment\-description \*(AqThe Arial font as a TrueType font\*(Aq \-\-attachment\-mime\-type application/x\-truetype\-font \-\-add\-attachment 89719823\&.ttf
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+Replacing one attached font (Comit\&.ttf) file with another one (Arial\&.ttf):
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvpropedit movie\&.mkv \-\-attachment\-name Arial\&.ttf \-\-attachment\-description \*(AqThe Arial font as a TrueType font\*(Aq \-\-replace\-attachment name:Comic\&.ttf:Arial\&.ttf
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+Deleting the second attached file, whatever it may be:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvpropedit movie\&.mkv \-\-delete\-attachment 2
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+Deleting all attached fonts by MIME type:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvpropedit movie\&.mkv \-\-delete\-attachment mime\-type:application/x\-truetype\-font
 .fi
 .if n \{\
 .RE
@@ -512,7 +728,7 @@ thuis basis\&.
 .RS 4
 Ontwikkelaar
 .RE
-.SH "NOTEN"
+.SH "OPMERKINGEN"
 .IP " 1." 4
 MKVToolNix
 .RS 4
