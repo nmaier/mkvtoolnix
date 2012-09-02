@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 5.0.1\n"
-"POT-Creation-Date: 2012-04-24 09:52+0300\n"
+"POT-Creation-Date: 2012-09-02 12:58+0300\n"
 "PO-Revision-Date: 2012-03-31 12:28+0900\n"
 "Last-Translator: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "Language-Team: none\n"
@@ -32,7 +32,7 @@ msgstr "5.7.0"
 #. type: Content of the date entity
 #: doc/man/mkvextract.xml:7 doc/man/mkvinfo.xml:7 doc/man/mkvmerge.xml:7
 #: doc/man/mkvpropedit.xml:7 doc/man/mmg.xml:7
-msgid "2012-04-06"
+msgid "2012-07-08"
 msgstr ""
 
 #. type: Content of the mkvmerge entity
@@ -206,31 +206,31 @@ msgstr "解析モードを'full'に設定します。デフォルトのモード
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:91 doc/man/mkvinfo.xml:129 doc/man/mkvmerge.xml:1366
-#: doc/man/mkvpropedit.xml:189
+#: doc/man/mkvpropedit.xml:303
 msgid "<option>--command-line-charset</option> <parameter>character-set</parameter>"
 msgstr "<option>--command-line-charset</option> <parameter>character-set</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:94 doc/man/mkvinfo.xml:132
-#: doc/man/mkvpropedit.xml:192
+#: doc/man/mkvpropedit.xml:306
 msgid "Sets the character set to convert strings given on the command line from. It defaults to the character set given by system's current locale."
 msgstr "コマンドライン文字列の文字コードを指定します。デフォルトは、システムの現在のロケールの文字コードになります。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:101 doc/man/mkvinfo.xml:139
-#: doc/man/mkvmerge.xml:1379 doc/man/mkvpropedit.xml:199
+#: doc/man/mkvmerge.xml:1379 doc/man/mkvpropedit.xml:313
 msgid "<option>--output-charset</option> <parameter>character-set</parameter>"
 msgstr "<option>--output-charset</option> <parameter>character-set</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:104 doc/man/mkvinfo.xml:142
-#: doc/man/mkvmerge.xml:1382 doc/man/mkvpropedit.xml:202
+#: doc/man/mkvmerge.xml:1382 doc/man/mkvpropedit.xml:316
 msgid "Sets the character set to which strings are converted that are to be output.  It defaults to the character set given by system's current locale."
 msgstr "出力する文字コードを指定します。デフォルトは、システムの現在のロケールの文字コードになります。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:111 doc/man/mkvinfo.xml:149
-#: doc/man/mkvmerge.xml:1389 doc/man/mkvpropedit.xml:209
+#: doc/man/mkvmerge.xml:1389 doc/man/mkvpropedit.xml:323
 msgid "<option>-r</option>, <option>--redirect-output</option> <parameter>file-name</parameter>"
 msgstr "<option>-r</option>, <option>--redirect-output</option> <parameter>file-name</parameter>"
 
@@ -241,30 +241,30 @@ msgstr "全てのメッセージを、コンソールではなく<parameter>file
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:123 doc/man/mkvinfo.xml:161
-#: doc/man/mkvmerge.xml:1400 doc/man/mkvpropedit.xml:221
+#: doc/man/mkvmerge.xml:1400 doc/man/mkvpropedit.xml:335
 msgid "<option>--ui-language</option> <parameter>code</parameter>"
 msgstr "<option>--ui-language</option> <parameter>code</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:126 doc/man/mkvpropedit.xml:224
+#: doc/man/mkvextract.xml:126 doc/man/mkvpropedit.xml:338
 msgid "Forces the translations for the language <parameter>code</parameter> to be used (e.g.  '<literal>de_DE</literal>' for the German translations). It is preferable to use the environment variables <varname>LANG</varname>, <varname>LC_MESSAGES</varname> and <varname>LC_ALL</varname> though. Entering '<literal>list</literal>' as the <parameter>code</parameter> will cause &mkvextract; to output a list of available translations."
 msgstr "指定した<parameter>code</parameter>を強制的に言語コード(例: 日本語ならば'<literal>ja_JP</literal>')として使用します。しかし、環境変数<varname>LANG</varname>や<varname>LC_MESSAGES</varname>、<varname>LC_ALL</varname>を使用したほうが好ましいでしょう。<parameter>code</parameter>に<literal>list</literal>と指定すると、指定できる言語コードの一覧を出力します。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:135 doc/man/mkvinfo.xml:173
-#: doc/man/mkvmerge.xml:1412 doc/man/mkvpropedit.xml:233
+#: doc/man/mkvmerge.xml:1412 doc/man/mkvpropedit.xml:347
 msgid "<option>--debug</option> <parameter>topic</parameter>"
 msgstr "<option>--debug</option> <parameter>topic</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:138 doc/man/mkvinfo.xml:176
-#: doc/man/mkvmerge.xml:1415 doc/man/mkvpropedit.xml:236
+#: doc/man/mkvmerge.xml:1415 doc/man/mkvpropedit.xml:350
 msgid "Turn on debugging for a specific feature. This option is only useful for developers."
 msgstr "特定の機能のデバッグをオンにします。このオプションは開発者にのみ有用です。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:144 doc/man/mkvinfo.xml:182
-#: doc/man/mkvmerge.xml:1421 doc/man/mkvpropedit.xml:242
+#: doc/man/mkvmerge.xml:1421 doc/man/mkvpropedit.xml:356
 msgid "<option>--engage</option> <parameter>feature</parameter>"
 msgstr "<option>--engage</option> <parameter>feature</parameter>"
 
@@ -275,72 +275,72 @@ msgstr "実験的機能をオンにします。利用可能な機能のリスト
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:154 doc/man/mkvinfo.xml:192 doc/man/mkvmerge.xml:83
-#: doc/man/mkvpropedit.xml:252
+#: doc/man/mkvpropedit.xml:366
 msgid "<option>-v</option>, <option>--verbose</option>"
 msgstr "<option>-v</option>, <option>--verbose</option>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:157 doc/man/mkvpropedit.xml:255
+#: doc/man/mkvextract.xml:157 doc/man/mkvpropedit.xml:369
 msgid "Be verbose and show all the important &matroska; elements as they're read."
 msgstr "出力が冗長になり、&matroska;のエレメントにとって重要なこと全てを、読み込まれるつどに表示していきます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:163 doc/man/mkvinfo.xml:202
-#: doc/man/mkvmerge.xml:1475 doc/man/mkvpropedit.xml:261
+#: doc/man/mkvmerge.xml:1475 doc/man/mkvpropedit.xml:375
 msgid "<option>-h</option>, <option>--help</option>"
 msgstr "<option>-h</option>, <option>--help</option>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:166 doc/man/mkvinfo.xml:205
-#: doc/man/mkvmerge.xml:1478 doc/man/mkvpropedit.xml:264
+#: doc/man/mkvmerge.xml:1478 doc/man/mkvpropedit.xml:378
 msgid "Show usage information and exit."
 msgstr "コマンド書式情報を出力して終了します。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:172 doc/man/mkvinfo.xml:211
-#: doc/man/mkvmerge.xml:1484 doc/man/mkvpropedit.xml:270
+#: doc/man/mkvmerge.xml:1484 doc/man/mkvpropedit.xml:384
 msgid "<option>-V</option>, <option>--version</option>"
 msgstr "<option>-V</option>, <option>--version</option>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:175 doc/man/mkvinfo.xml:214
-#: doc/man/mkvmerge.xml:1487 doc/man/mkvpropedit.xml:273
+#: doc/man/mkvmerge.xml:1487 doc/man/mkvpropedit.xml:387
 msgid "Show version information and exit."
 msgstr "バージョン情報を出力して終了します。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:181 doc/man/mkvinfo.xml:220
-#: doc/man/mkvmerge.xml:1493 doc/man/mkvpropedit.xml:279
+#: doc/man/mkvmerge.xml:1493 doc/man/mkvpropedit.xml:393
 msgid "<option>--check-for-updates</option>"
 msgstr "<option>--check-for-updates</option>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:184 doc/man/mkvinfo.xml:223
-#: doc/man/mkvmerge.xml:1496 doc/man/mkvpropedit.xml:282
+#: doc/man/mkvmerge.xml:1496 doc/man/mkvpropedit.xml:396
 msgid "Checks online for new releases by downloading the URL <uri>http://mkvtoolnix-releases.bunkus.org/latest-release.xml</uri>. Four lines will be output in <literal>key=value</literal> style: the URL from where the information was retrieved (key <literal>version_check_url</literal>), the currently running version (key <literal>running_version</literal>), the latest release's version (key <literal>available_version</literal>) and the download URL (key <literal>download_url</literal>)."
 msgstr "<uri>http://mkvtoolnix-releases.bunkus.org/latest-release.xml</uri>をダウンロードすることで、新しいリリースがないかオンラインでチェックします。<literal>key=value</literal>という書式で、4行が出力されます：どこから情報を取得したか (key <literal>version_check_url</literal>)、現在実行中のバージョン (key <literal>running_version</literal>)、最新のリリースのバージョン (key <literal>available_version</literal>) 及びそのダウンロードURL (key <literal>download_url</literal>)。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:191 doc/man/mkvinfo.xml:230
-#: doc/man/mkvmerge.xml:1503 doc/man/mkvpropedit.xml:289
+#: doc/man/mkvmerge.xml:1503 doc/man/mkvpropedit.xml:403
 msgid "Afterwards the program exists with an exit code of 0 if no newer release is available, with 1 if a newer release is available and with 2 if an error occured (e.g. if the update information could not be retrieved)."
 msgstr "その後プログラムは、新しいリリースが入手可能ではなかった場合は終了コード0で、新しいリリースが入手可能であった場合は終了コード1で、エラーが発生した場合（例：アップデート情報を取得できなかった場合）は終了コード2で、それぞれ終了します。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:196 doc/man/mkvinfo.xml:235
-#: doc/man/mkvmerge.xml:1508 doc/man/mkvpropedit.xml:294
+#: doc/man/mkvmerge.xml:1508 doc/man/mkvpropedit.xml:408
 msgid "This option is only available if the program was built with support for libcurl."
 msgstr "このオプションは、プログラムがlibcurlのサポートつきでビルドされた場合のみ使用できます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:202 doc/man/mkvinfo.xml:241
-#: doc/man/mkvmerge.xml:1431 doc/man/mkvpropedit.xml:300
+#: doc/man/mkvmerge.xml:1431 doc/man/mkvpropedit.xml:414
 msgid "<option>@</option><parameter>options-file</parameter>"
 msgstr "<option>@</option><parameter>options-file</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:205 doc/man/mkvinfo.xml:244
-#: doc/man/mkvpropedit.xml:303
+#: doc/man/mkvpropedit.xml:417
 msgid "Reads additional command line arguments from the file <parameter>options-file</parameter>.  Lines whose first non-whitespace character is a hash mark ('<literal>#</literal>') are treated as comments and ignored. White spaces at the start and end of a line will be stripped. Each line must contain exactly one option."
 msgstr "<parameter>options-file</parameter>で指定されたファイルから追加のコマンドラインオプションを読み込みます。行で最初の空白文字でない文字がハッシュマーク('<literal>#</literal>')である行はコメントとして扱われ、無視されます。行頭、及び行末の空白文字は取り除かれます。各行には一つずつしかオプションを指定できません。"
 
@@ -773,7 +773,7 @@ msgstr "タイムコードはまず整列された後に、&mkvmerge;で読み�
 
 #. type: Content of: <refentry><refsect1><title>
 #: doc/man/mkvextract.xml:621 doc/man/mkvinfo.xml:304
-#: doc/man/mkvmerge.xml:2482 doc/man/mkvpropedit.xml:468
+#: doc/man/mkvmerge.xml:2482 doc/man/mkvpropedit.xml:655
 msgid "Exit codes"
 msgstr "返り値"
 
@@ -799,25 +799,25 @@ msgstr "<constant>2</constant> -- この返り値は、エラーが発生し、�
 
 #. type: Content of: <refentry><refsect1><title>
 #: doc/man/mkvextract.xml:652 doc/man/mkvinfo.xml:334
-#: doc/man/mkvmerge.xml:1918 doc/man/mkvpropedit.xml:499
+#: doc/man/mkvmerge.xml:1918 doc/man/mkvpropedit.xml:686
 msgid "Escaping special chars in text"
 msgstr "テキスト中の特殊文字をエスケープする"
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvextract.xml:654 doc/man/mkvinfo.xml:336
-#: doc/man/mkvmerge.xml:1920 doc/man/mkvpropedit.xml:501
+#: doc/man/mkvmerge.xml:1920 doc/man/mkvpropedit.xml:688
 msgid "There are a few places in which special characters in text must or should be escaped. The rules for escaping are simple: each character that needs escaping is replaced with a backslash followed by another character."
 msgstr "特殊文字をエスケープしなければならない、あるいはすべき場所が少しだけあります。エスケープのルールは単純です：エスケープする必要のある各文字を、バックスラッシュ（Windows上の日本語フォントでは\\記号）の後ろに違う文字が1つついたものと入れ替えます。"
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvextract.xml:659 doc/man/mkvinfo.xml:341
-#: doc/man/mkvmerge.xml:1925 doc/man/mkvpropedit.xml:506
+#: doc/man/mkvmerge.xml:1925 doc/man/mkvpropedit.xml:693
 msgid "The rules are: ' ' (a space) becomes '\\s', '&quot;' (double quotes) becomes '\\2', ':' becomes '\\c', '#' becomes '\\h' and '\\' (a single backslash) itself becomes '\\\\'."
 msgstr "ルール：' '（半角スペース）は'\\s'に、'&quot;'（ダブルクォーテーション）は'\\2'に、':'は'\\c'に、'#'は'\\h'に、そして'\\'それ自体は'\\\\'になります。"
 
 #. type: Content of: <refentry><refsect1><title>
 #: doc/man/mkvextract.xml:664 doc/man/mkvinfo.xml:346
-#: doc/man/mkvmerge.xml:2513 doc/man/mkvpropedit.xml:511
+#: doc/man/mkvmerge.xml:2513 doc/man/mkvpropedit.xml:698
 msgid "Environment variables"
 msgstr "環境変数"
 
@@ -828,7 +828,7 @@ msgstr "&mkvextract;はシステムのロケールを決めるデフォルトの
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:673 doc/man/mkvinfo.xml:355
-#: doc/man/mkvmerge.xml:2522 doc/man/mkvpropedit.xml:520
+#: doc/man/mkvmerge.xml:2522 doc/man/mkvpropedit.xml:707
 msgid "<varname>MKVTOOLNIX_DEBUG</varname> and its short form <varname>MTX_DEBUG</varname>"
 msgstr "<varname>MKVTOOLNIX_DEBUG</varname>とその短縮形<varname>MTX_DEBUG</varname>"
 
@@ -839,7 +839,7 @@ msgstr "その内容は、あたかも<link linkend=\"mkvextract.description.deb
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:681 doc/man/mkvinfo.xml:363
-#: doc/man/mkvmerge.xml:2530 doc/man/mkvpropedit.xml:528
+#: doc/man/mkvmerge.xml:2530 doc/man/mkvpropedit.xml:715
 msgid "<varname>MKVTOOLNIX_ENGAGE</varname> and its short form <varname>MTX_ENGAGE</varname>"
 msgstr "<varname>MKVTOOLNIX_ENGAGE</varname>とその短縮形<varname>MTX_ENGAGE</varname>"
 
@@ -850,7 +850,7 @@ msgstr "その内容は、あたかも<link linkend=\"mkvextract.description.eng
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:689 doc/man/mkvinfo.xml:371
-#: doc/man/mkvmerge.xml:2538 doc/man/mkvpropedit.xml:536
+#: doc/man/mkvmerge.xml:2538 doc/man/mkvpropedit.xml:723
 msgid "<varname>MKVTOOLNIX_OPTIONS</varname> and its short form <varname>MTX_OPTIONS</varname>"
 msgstr "<varname>MKVTOOLNIX_OPTIONS</varname>とその短縮形<varname>MTX_OPTIONS</varname>"
 
@@ -861,7 +861,7 @@ msgstr "内容は空白で分割されます。得られた一部の文字列は
 
 #. type: Content of: <refentry><refsect1><title>
 #: doc/man/mkvextract.xml:700 doc/man/mkvinfo.xml:382
-#: doc/man/mkvmerge.xml:2549 doc/man/mkvpropedit.xml:547 doc/man/mmg.xml:90
+#: doc/man/mkvmerge.xml:2549 doc/man/mkvpropedit.xml:734 doc/man/mmg.xml:90
 msgid "See also"
 msgstr "関連項目"
 
@@ -872,13 +872,13 @@ msgstr "&mkvmerge;, &mkvinfo;, &mkvpropedit;, &mmg;"
 
 #. type: Content of: <refentry><refsect1><title>
 #: doc/man/mkvextract.xml:707 doc/man/mkvinfo.xml:389
-#: doc/man/mkvmerge.xml:2556 doc/man/mkvpropedit.xml:554 doc/man/mmg.xml:97
+#: doc/man/mkvmerge.xml:2556 doc/man/mkvpropedit.xml:741 doc/man/mmg.xml:97
 msgid "WWW"
 msgstr "ウェブ"
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvextract.xml:709 doc/man/mkvinfo.xml:391
-#: doc/man/mkvmerge.xml:2558 doc/man/mkvpropedit.xml:556 doc/man/mmg.xml:99
+#: doc/man/mkvmerge.xml:2558 doc/man/mkvpropedit.xml:743 doc/man/mmg.xml:99
 msgid "The latest version can always be found at <ulink url=\"http://www.bunkus.org/videotools/mkvtoolnix/\">the MKVToolNix homepage</ulink>."
 msgstr "最新のバージョンは、常時<ulink url=\"http://www.bunkus.org/videotools/mkvtoolnix/\">MKVToolNixのホームページ</ulink>から取得できます。"
 
@@ -1758,8 +1758,8 @@ msgstr "括弧を特殊文字として扱うシェルもあります。よって
 msgid "Attachment support (more global options)"
 msgstr "添付ファイルのサポート（グローバルオプションの続き）"
 
-#. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:703
+#. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
+#: doc/man/mkvmerge.xml:703 doc/man/mkvpropedit.xml:288
 msgid "<option>--attachment-description</option> <parameter>description</parameter>"
 msgstr "<option>--attachment-description</option> <parameter>description</parameter>"
 
@@ -1778,8 +1778,8 @@ msgstr "<option>--attachment-mime-type</option> <parameter>MIME type</parameter>
 msgid "<abbrev >MIME</abbrev> type of the following attachment. Applies to the next <link linkend=\"mkvmerge.description.attach_file\"><option>--attach-file</option></link> or <link linkend=\"mkvmerge.description.attach_file\"><option>--attach-file-once</option></link> option.  A list of officially recognized <abbrev>MIME</abbrev> types can be found e.g. at <ulink url=\"http://www.iana.org/assignments/media-types/\">the IANA homepage</ulink>. The <abbrev>MIME</abbrev> type is mandatory for an attachment."
 msgstr "次の添付ファイルの<abbrev >MIME</abbrev>タイプを指定します。<link linkend=\"mkvmerge.description.attach_file\"><option>--attach-file</option></link>及び<link linkend=\"mkvmerge.description.attach_file\"><option>--attach-file-once</option></link>オプションに適用されます。公式に認知されている<abbrev>MIME</abbrev>タイプは例えば<ulink url=\"http://www.iana.org/assignments/media-types/\">IANAのホームページ</ulink>に掲載されています。<abbrev>MIME</abbrev>タイプは添付ファイルに必須です。"
 
-#. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:727
+#. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
+#: doc/man/mkvmerge.xml:727 doc/man/mkvpropedit.xml:270
 msgid "<option>--attachment-name</option> <parameter>name</parameter>"
 msgstr "<option>--attachment-name</option> <parameter>name</parameter>"
 
@@ -2414,7 +2414,7 @@ msgid "$ mkvmerge -o output.mkv --language 0:fre français.ogg --language 0:deu 
 msgstr "$ mkvmerge -o output.mkv --language 0:fre français.ogg --language 0:deu deutsch.ogg"
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvmerge.xml:1574 doc/man/mkvpropedit.xml:424
+#: doc/man/mkvmerge.xml:1574 doc/man/mkvpropedit.xml:581
 msgid "Examples"
 msgstr "例"
 
@@ -3613,8 +3613,8 @@ msgstr "解析モードを設定します。'<parameter>mode</parameter>'パラ�
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvpropedit.xml:96
-msgid "Actions:"
-msgstr "アクション:"
+msgid "Actions that deal with track and segment info properties:"
+msgstr ""
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvpropedit.xml:101
@@ -3627,7 +3627,7 @@ msgid "Sets the &matroska; file section (segment information or a certain track'
 msgstr "このオプション以降の<link linkend=\"mkvpropedit.description.add\">add</link>、<link linkend=\"mkvpropedit.description.set\">set</link>、<link linkend=\"mkvpropedit.description.delete\">delete</link>アクションが適用される&matroska;ファイルセクション(セグメント情報または特定のトラックのヘッダ)を指定します。このオプションは、複数のエレメントを修正するために、複数回指定することができます。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvpropedit.xml:111 doc/man/mkvpropedit.xml:342
+#: doc/man/mkvpropedit.xml:111 doc/man/mkvpropedit.xml:456
 msgid "By default &mkvpropedit; will edit the segment information section."
 msgstr "デフォルトでは、&mkvpropedit;はセグメント情報のセクションを編集します。"
 
@@ -3666,64 +3666,183 @@ msgstr "<option>-d</option>, <option>--delete</option> <parameter>name</paramete
 msgid "Deletes all occurrences of the property <parameter>name</parameter>. Note that some properties are required and cannot be deleted."
 msgstr "見付けた全ての、プロパティ名が<parameter>name</parameter>であるプロパティを削除します。いくつかのプロパティは必須で、削除できないことに注意してください。"
 
+#. type: Content of: <refentry><refsect1><para>
+#: doc/man/mkvpropedit.xml:151
+msgid "Actions that deal with tags and chapters:"
+msgstr ""
+
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvpropedit.xml:150
+#: doc/man/mkvpropedit.xml:156
 msgid "<option>-t</option>, <option>--tags</option> <parameter>selector</parameter>:<parameter>filename</parameter>"
 msgstr "<option>-t</option>, <option>--tags</option> <parameter>selector</parameter>:<parameter>filename</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvpropedit.xml:153
+#: doc/man/mkvpropedit.xml:159
 msgid "Add or replace tags in the file with the ones from <filename>filename</filename> or remove them if <filename>filename</filename> is empty. &mkvpropedit; reads the same XML tag format that &mkvmerge; reads as well."
 msgstr "<filename>ファイル名</filename>からのタグを、このファイル中のタグに追加、あるいは置換します。もし<filename>ファイル名</filename>が空白なら、タグを削除します。&mkvpropedit;は、&mkvmerge;が読み込むのと同じXMLタグフォーマットを読み込みます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvpropedit.xml:158
+#: doc/man/mkvpropedit.xml:164
 msgid "The <parameter>selector</parameter> must be one of the words <constant>all</constant>, <constant>global</constant> or <constant>track</constant>. For <constant>all</constant> &mkvpropedit; will replace or remove all tags in a file. With <constant>global</constant> only global tags will be replaced or removed."
 msgstr "<parameter>セレクタ</parameter>は、<constant>all</constant>、<constant>global</constant>、または<constant>track</constant>のうちどれか一つを指定してください。<constant>all</constant>を指定すると、&mkvpropedit;はファイル中の全てのタグを置換あるいは削除します。<constant>global</constant>を指定すると、グローバルタグだけが置換あるいは削除されます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvpropedit.xml:164
+#: doc/man/mkvpropedit.xml:170
 msgid "With <constant>track</constant> &mkvpropedit; will replace tags for a specific track. Additionally the tags read from <filename>filename</filename> will be assigned to the same track. The track is specified in the same way <link linkend=\"mkvpropedit.edit_selectors\">edit selectors</link> are specified (see below), e.g. <code>--tags track:a1:new-audio-tags.xml</code>."
 msgstr "<constant>track</constant>を指定すると、&mkvpropedit;は特定のトラックのタグを置換します。また、<filename>filename</filename>から読み込まれたタグは、同じトラックに割り当てられます。<link linkend=\"mkvpropedit.edit_selectors\">edit selectors</link>が指定されるのと同じ様に（下を参照してください）、トラックは指定されます。(see below), e.g. <code>--tags track:a1:new-audio-tags.xml</code>."
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvpropedit.xml:173
+#: doc/man/mkvpropedit.xml:179
 msgid "<option>-c</option>, <option>--chapters</option> <parameter>filename</parameter>"
 msgstr "<option>-c</option>, <option>--chapters</option> <parameter>filename</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvpropedit.xml:176
+#: doc/man/mkvpropedit.xml:182
 msgid "Add or replace chapters in the file with the ones from <filename>filename</filename> or remove them if <filename>filename</filename> is empty. &mkvpropedit; reads the same XML and simple chapter formats that &mkvmerge; reads as well."
 msgstr "<filename>ファイル名</filename>からのチャプタを、このファイル中のタグに追加、あるいは置換します。もし<filename>ファイル名</filename>が空白なら、チャプタを削除します。&mkvpropedit;は、&mkvmerge;が読み込むのと同じXMLまたはシンプルチャプタフォーマットを読み込みます。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvpropedit.xml:184
+#: doc/man/mkvpropedit.xml:190
+msgid "Actions for handling attachments:"
+msgstr ""
+
+#. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
+#: doc/man/mkvpropedit.xml:195
+#, fuzzy
+#| msgid "<option>--attachment-name</option> <parameter>name</parameter>"
+msgid "<option>--add-attachment</option> <parameter>filename</parameter>"
+msgstr "<option>--attachment-name</option> <parameter>name</parameter>"
+
+#. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: doc/man/mkvpropedit.xml:198
+#, fuzzy
+#| msgid "<option>--attachment-name</option> <parameter>name</parameter>"
+msgid "Adds a new attachment from <parameter>filename</parameter>."
+msgstr "<option>--attachment-name</option> <parameter>name</parameter>"
+
+#. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: doc/man/mkvpropedit.xml:202
+msgid "If the option <option>--attachment-name</option> has been used prior to this option then its value is used as the new attachment's name. Otherwise it is derived from <parameter>filename</parameter>."
+msgstr ""
+
+#. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: doc/man/mkvpropedit.xml:207
+msgid "If the option <option>--attachment-mime-type</option> has been used prior to this option then its value is used as the new attachment's MIME type. Otherwise it is auto-detected from the content of <parameter>filename</parameter>."
+msgstr ""
+
+#. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: doc/man/mkvpropedit.xml:212
+msgid "If the option <option>--attachment-description</option> has been used prior to this option then its value is used as the new attachment's description. Otherwise no description will be set."
+msgstr ""
+
+#. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
+#: doc/man/mkvpropedit.xml:219
+#, fuzzy
+#| msgid "<option>-t</option>, <option>--tags</option> <parameter>selector</parameter>:<parameter>filename</parameter>"
+msgid "<option>--replace-attachment</option> <parameter>selector</parameter><literal>:</literal><parameter>filename</parameter>"
+msgstr "<option>-t</option>, <option>--tags</option> <parameter>selector</parameter>:<parameter>filename</parameter>"
+
+#. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: doc/man/mkvpropedit.xml:222
+msgid "Replaces one or more attachments that match <parameter>selector</parameter> with the file <parameter>filename</parameter>. If more than one existing attachment matches <parameter>selector</parameter> then all of their contents will be replaced by the content of <parameter>filename</parameter>."
+msgstr ""
+
+#. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: doc/man/mkvpropedit.xml:228 doc/man/mkvpropedit.xml:257
+msgid "The <parameter>selector</parameter> can have one of four forms. They're exlained below in the section <link linkend=\"mkvpropedit.attachment_selectors\">attachment selectors</link>."
+msgstr ""
+
+#. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: doc/man/mkvpropedit.xml:233
+msgid "If the option <option>--attachment-name</option> has been used prior to this option then its value is used as the replaced attachment's name. Otherwise the name is not changed."
+msgstr ""
+
+#. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: doc/man/mkvpropedit.xml:238
+msgid "If the option <option>--attachment-mime-type</option> has been used prior to this option then its value is used as the replaced attachment's MIME type. Otherwise the MIME type is not changed."
+msgstr ""
+
+#. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: doc/man/mkvpropedit.xml:243
+msgid "If the option <option>--attachment-description</option> has been used prior to this option then its value is used as the replaced attachment's description. Otherwise no description is not changed."
+msgstr ""
+
+#. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
+#: doc/man/mkvpropedit.xml:250
+#, fuzzy
+#| msgid "<option>--attachment-name</option> <parameter>name</parameter>"
+msgid "<option>--delete-attachment</option> <parameter>selector</parameter>"
+msgstr "<option>--attachment-name</option> <parameter>name</parameter>"
+
+#. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: doc/man/mkvpropedit.xml:253
+msgid "Deletes one or more attachments that match <parameter>selector</parameter>."
+msgstr ""
+
+#. type: Content of: <refentry><refsect1><para>
+#: doc/man/mkvpropedit.xml:265
+msgid "Options for attachment actions:"
+msgstr ""
+
+#. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: doc/man/mkvpropedit.xml:273
+msgid "Sets the name to use for the following <option>--add-attachment</option> or <option>--replace-attachment</option> operation."
+msgstr ""
+
+#. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
+#: doc/man/mkvpropedit.xml:279
+#, fuzzy
+#| msgid "<option>--attachment-mime-type</option> <parameter>MIME type</parameter>"
+msgid "<option>--attachment-mime-type</option> <parameter>mime-type</parameter>"
+msgstr "<option>--attachment-mime-type</option> <parameter>MIME type</parameter>"
+
+#. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: doc/man/mkvpropedit.xml:282
+msgid "Sets the MIME type to use for the following <option>--add-attachment</option> or <option>--replace-attachment</option> operation."
+msgstr ""
+
+#. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: doc/man/mkvpropedit.xml:291
+msgid "Sets the description to use for the following <option>--add-attachment</option> or <option>--replace-attachment</option> operation."
+msgstr ""
+
+#. type: Content of: <refentry><refsect1><para>
+#: doc/man/mkvpropedit.xml:298
 msgid "Other options:"
 msgstr "その他のオプション:"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvpropedit.xml:212
+#: doc/man/mkvpropedit.xml:326
 msgid "Writes all messages to the file <parameter>file-name</parameter> instead of to the console.  While this can be done easily with output redirection there are cases in which this option is needed: when the terminal reinterprets the output before writing it to a file.  The character set set with <link linkend=\"mkvpropedit.description.output_charset\"><option>--output-charset</option></link> is honored."
 msgstr "全てのメッセージをコンソールではなく<parameter>file-name</parameter>で指定したファイルに書き出します。出力リダイレクトによっても同じことが簡単にできますが、このオプションが必要な場合もあります。ターミナルがファイルに書き込む前に出力を処理してしまう場合などです。<link linkend=\"mkvpropedit.description.output_charset\"><option>--output-charset</option></link>によって指定された文字コードは尊重されます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvpropedit.xml:245
+#: doc/man/mkvpropedit.xml:359
 msgid "Turn on experimental features. A list of available features can be requested with <command>mkvpropedit --engage list</command>. These features are not meant to be used in normal situations."
 msgstr "実験的機能をオンにします。利用可能な機能のリストは<command>mkvpropedit --engage list</command>で得られます。これらの機能は通常の状況で利用されることは意図されていません。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvpropedit.xml:309
+#: doc/man/mkvpropedit.xml:423
 msgid "Several chars can be escaped, e.g. if you need to start a non-comment line with '#'. The rules are described in <link linkend=\"mkvpropedit.escaping\">the section about escaping text</link>."
 msgstr "エスケープすることのできる文字もあります。例えば、コメントではない行を'#'で始める必要のある場合です。そのルールは、<link linkend=\"mkvpropedit.escaping\">エスケープ文字についてのセクション</link>で説明されています。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvpropedit.xml:314
+#: doc/man/mkvpropedit.xml:428
 msgid "The command line '<command>mkvpropedit source.mkv --edit track:a2 --set name=Comments</command>' could be converted into the following option file:"
 msgstr "'<command>mkvpropedit source.mkv --edit trach:a2 --set name=Comments</command>'というコマンドラインと同じことは、次のようなオプションファイルによって指定できます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><programlisting>
-#: doc/man/mkvpropedit.xml:318
-#, no-wrap
+#: doc/man/mkvpropedit.xml:432
+#, fuzzy, no-wrap
+#| msgid ""
+#| "# Modify source.mkv\n"
+#| "source.mkv\n"
+#| "# Edit the second audio track\n"
+#| "--edit\n"
+#| "track:a2\n"
+#| "# and set the title to 'Comments'\n"
+#| "--set\n"
+#| "title=Comments"
 msgid ""
 "# Modify source.mkv\n"
 "source.mkv\n"
@@ -3732,7 +3851,7 @@ msgid ""
 "track:a2\n"
 "# and set the title to 'Comments'\n"
 "--set\n"
-"title=Comments"
+"name=Comments"
 msgstr ""
 "# source.mkvを修正する\n"
 "source.mkv\n"
@@ -3744,198 +3863,289 @@ msgstr ""
 "title=Comments     "
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvpropedit.xml:332
+#: doc/man/mkvpropedit.xml:446
 msgid "Edit selectors"
 msgstr "エディットセレクタ"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvpropedit.xml:334
+#: doc/man/mkvpropedit.xml:448
 msgid "The <link linkend=\"mkvpropedit.description.edit\"><option>--edit</option></link> option sets the &matroska; file section (segment information or a certain track's headers) that all following <link linkend=\"mkvpropedit.description.add\">add</link>, <link linkend=\"mkvpropedit.description.set\">set</link> and <link linkend=\"mkvpropedit.description.delete\">delete</link> actions operate on. This stays valid until the next <link linkend=\"mkvpropedit.description.edit\"><option>--edit</option></link> option is found. The argument to this option is called the edit selector."
 msgstr "<link linkend=\"mkvpropedit.description.edit\"><option>--edit</option></link>オプションは、以降の<link linkend=\"mkvpropedit.description.add\">add</link>、<link linkend=\"mkvpropedit.description.set\">set</link>及び<link linkend=\"mkvpropedit.description.delete\">delete</link>アクションが適用される&matroska;ファイルセクション(セグメント情報または特定のトラックヘッダ)を設定します。これは次の<link linkend=\"mkvpropedit.description.edit\"><option>--edit</option></link>オプションが見付かるまでずっと有効です。このオプションへの引数はエディットセレクタと呼ばれます。"
 
 #. type: Content of: <refentry><refsect1><refsect2><title>
-#: doc/man/mkvpropedit.xml:346
+#: doc/man/mkvpropedit.xml:460
 msgid "Segment information"
 msgstr "セグメント情報"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvpropedit.xml:348
+#: doc/man/mkvpropedit.xml:462
 msgid "The segment information can be selected with one of these three words: '<literal>info</literal>', '<literal>segment_info</literal>' or '<literal>segmentinfo</literal>'. It contains properties like the segment title or the segment <abbrev>UID</abbrev>."
 msgstr "セグメント情報は次の3つの単語によって選択されます。'<literal>info</literal>'、'<literal>segment_info</literal>'または'<literal>segmentinfo</literal>'です。これはセグメントタイトルやセグメント<abbrev>UID</abbrev>などのプロパティを格納しています。"
 
 #. type: Content of: <refentry><refsect1><refsect2><title>
-#: doc/man/mkvpropedit.xml:354
+#: doc/man/mkvpropedit.xml:468
 msgid "Track headers"
 msgstr "トラックヘッダ"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvpropedit.xml:356
+#: doc/man/mkvpropedit.xml:470
 msgid "Track headers can be selected with a slightly more complex selector. All variations start with '<literal>track:</literal>'. The track header properties include elements like the language code, 'default track' flag or the track's name."
 msgstr "トラックヘッダはもうちょっとだけ複雑なセレクタで選択されます。全ての場合でセレクタは'<literal>track:</literal>'で始まります。トラックヘッダプロパティには、言語コード、'デフォルトトラック'フラグやトラック名のようなエレメントがあります。"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><term>
-#: doc/man/mkvpropedit.xml:362
+#: doc/man/mkvpropedit.xml:476
 msgid "<option>track:</option><parameter>n</parameter>"
 msgstr "<option>track:</option><parameter>n</parameter>"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvpropedit.xml:365
+#: doc/man/mkvpropedit.xml:479
 msgid "If the parameter <parameter>n</parameter> is a number then the <parameter>n</parameter>th track will be selected. The track order is the same that &mkvmerge;'s <option>--identify</option> option outputs."
 msgstr "パラメータ<parameter>n</parameter>が数字であれば、<parameter>n</parameter>番目のトラックが選択されます。トラックの順番は、&mkvmerge;に<option>--identify</option>オプションを指定すると出力されるものと同じです。"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvpropedit.xml:370 doc/man/mkvpropedit.xml:387
+#: doc/man/mkvpropedit.xml:484 doc/man/mkvpropedit.xml:501
 msgid "Numbering starts at 1."
 msgstr ""
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><term>
-#: doc/man/mkvpropedit.xml:376
+#: doc/man/mkvpropedit.xml:490
 msgid "<option>track:</option><parameter>t</parameter><parameter>n</parameter>"
 msgstr "<option>track:</option><parameter>t</parameter><parameter>n</parameter>"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvpropedit.xml:379
+#: doc/man/mkvpropedit.xml:493
 msgid "If the parameter starts with a single character <parameter>t</parameter> followed by a <parameter>n</parameter> then the <parameter>n</parameter>th track of a specific track type will be selected. The track type parameter <parameter>t</parameter> must be one of these four characters: '<literal>a</literal>' for an audio track, '<literal>b</literal>' for a button track, '<literal>s</literal>' for a subtitle track and '<literal>v</literal>' for a video track. The track order is the same that &mkvmerge;'s <option>--identify</option> option outputs."
 msgstr "パラメータが一文字の英字<parameter>t</parameter>で始まり、次に<parameter>n</parameter>が続く場合、あるトラックタイプで<parameter>n</parameter>番目のトラックが選択されます。トラックタイプパラメータ<parameter>t</parameter>は、オーディオトラックを示す'<literal>a</literal>'、ボタントラックを示す'<literal>b</literal>'、字幕トラックを示す'<literal>s</literal>'、ビデオトラックを示す'<literal>v</literal>'の四つのうちの一つでなければなりません。トラックの順番は&mkvmerge;の<option>--identify</option>オプションで出力される順番と同じです。"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><term>
-#: doc/man/mkvpropedit.xml:393
+#: doc/man/mkvpropedit.xml:507
 msgid "<option>track:</option>=<parameter>uid</parameter>"
 msgstr "<option>track:</option>=<parameter>uid</parameter>"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvpropedit.xml:396
+#: doc/man/mkvpropedit.xml:510
 msgid "If the parameter starts with a '<literal>=</literal>' followed by a number <parameter>uid</parameter> then the track whose track <abbrev>UID</abbrev> element equals this <parameter>uid</parameter>. Track <abbrev>UIDs</abbrev> can be obtained with &mkvinfo;."
 msgstr "パラメータが'<literal>=</literal>'で始まり、次に<parameter>uid</parameter>が続く場合は、トラック<abbrev>UID</abbrev>エレメントが<parameter>uid</parameter>のトラックが選択されます。トラック<abbrev>UID</abbrev>は&mkvinfo;で取得できます。"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><term>
-#: doc/man/mkvpropedit.xml:403
+#: doc/man/mkvpropedit.xml:517
 msgid "<option>track:</option>@<parameter>number</parameter>"
 msgstr "<option>track:</option>@<parameter>number</parameter>"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvpropedit.xml:406
+#: doc/man/mkvpropedit.xml:520
 msgid "If the parameter starts with a '<literal>@</literal>' followed by a number <parameter>number</parameter> then the track whose track number element equals this <parameter>number</parameter>. Track number can be obtained with &mkvinfo;."
 msgstr "パラメータが'<literal>@</literal>'で始まり、次に<parameter>number</parameter>が続く場合は、トラックナンバーエレメントが<parameter>number</parameter>と等しいトラックが選択されます。トラックナンバーは&mkvinfo;で取得できます。"
 
 #. type: Content of: <refentry><refsect1><refsect2><title>
-#: doc/man/mkvpropedit.xml:415
+#: doc/man/mkvpropedit.xml:529
 msgid "Notes"
 msgstr "注意"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvpropedit.xml:417
+#: doc/man/mkvpropedit.xml:531
 msgid "Due to the nature of the track edit selectors it is possible that several selectors actually match the same track headers. In such cases all actions for those edit selectors will be combined and executed in the order in which they're given on the command line."
 msgstr "トラックエディットセレクタの性質から、いくつかのセレクタが同じトラックヘッダにマッチすることがあります。このような場合、それらのエディットセレクタへの全てのアクションは一つにまとめられ、コマンドラインに指定された順番に実行されます。"
 
+#. type: Content of: <refentry><refsect1><title>
+#: doc/man/mkvpropedit.xml:538
+#, fuzzy
+#| msgid "Attachments"
+msgid "Attachment selectors"
+msgstr "添付ファイル"
+
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvpropedit.xml:426
+#: doc/man/mkvpropedit.xml:541
+#, fuzzy
+#| msgid "Another way to specify the values is to use the <link linkend=\"mkvmerge.description.aspect_ratio\"><option>--aspect-ratio</option></link> or the <link linkend=\"mkvmerge.description.aspect_ratio_factor\"><option>--aspect-ratio-factor</option></link> option (see below).  These options are mutually exclusive."
+msgid "An attachment selector is used with the two actions <link linkend=\"mkvpropedit.description.replace_attachment\"><option>--replace-attachment</option></link> and <link linkend=\"mkvpropedit.description.delete_attachment\"><option>--delete-attachment</option></link>. It can have one of the following four forms:"
+msgstr "これらの値を設定する別の方法として、<link linkend=\"mkvmerge.description.aspect_ratio\"><option>--aspect-ratio</option></link>又は<link linkend=\"mkvmerge.description.aspect_ratio_factor\"><option>--aspect-ratio-factor</option></link>オプションが使用できます(下記参照)。これらのオプションは互いに排他的です。"
+
+#. type: Content of: <refentry><refsect1><orderedlist><listitem><para>
+#: doc/man/mkvpropedit.xml:550
+msgid "Selection by attachment ID. In this form the selector is simply a number, the attachment's ID as output by &mkvmerge;'s identification command."
+msgstr ""
+
+#. type: Content of: <refentry><refsect1><orderedlist><listitem><para>
+#: doc/man/mkvpropedit.xml:557
+msgid "Selection by attachment UID (unique ID). In this form the selector is the equal sign <literal>=</literal> followed by a number, the attachment's unique ID as output by &mkvmerge;'s verbose identification command."
+msgstr ""
+
+#. type: Content of: <refentry><refsect1><orderedlist><listitem><para>
+#: doc/man/mkvpropedit.xml:564
+msgid "Selection by attachment name. In this form the selector is the literal word <literal>name:</literal> followed by the existing attachment's name. If this selector is used with <option>--replace-attachment</option> then colons within the name to match must be escaped as <literal>\\c</literal>."
+msgstr ""
+
+#. type: Content of: <refentry><refsect1><orderedlist><listitem><para>
+#: doc/man/mkvpropedit.xml:572
+msgid "Selection by MIME type. In this form the selector is the literal word <literal>mime-type:</literal> followed by the existing attachment's MIME type. If this selector is used with <option>--replace-attachment</option> then colons within the MIME type to match must be escaped as <literal>\\c</literal>."
+msgstr ""
+
+#. type: Content of: <refentry><refsect1><para>
+#: doc/man/mkvpropedit.xml:583
 msgid "The following example edits a file called '<literal>movie.mkv</literal>'. It sets the segment title and modifies the language code of an audio and a subtitle track. Note that this example can be shortened by leaving out the first <link linkend=\"mkvpropedit.description.edit\"><option>--edit</option></link> option because editing the segment information element is the default for all options found before the first <link linkend=\"mkvpropedit.description.edit\"><option>--edit</option></link> option anyway."
 msgstr "下に'<literal>movie.mkv</literal>'というファイルを編集する例を示します。この例では、セグメントタイトルを設定し、オーディオトラックと字幕トラックの言語コードを修正します。この例は、最初の<link linkend=\"mkvpropedit.description.edit\"><option>--edit</option></link>オプションが見付かる前の全てのオプションはデフォルトで結局セグメント情報エレメントを編集するので、最初の<link linkend=\"mkvpropedit.description.edit\"><option>--edit</option></link>オプションを省略して短縮できることに注意してください。"
 
 #. type: Content of: <refentry><refsect1><screen>
-#: doc/man/mkvpropedit.xml:432
+#: doc/man/mkvpropedit.xml:589
 #, no-wrap
 msgid "$ mkvpropedit movie.mkv --edit info --set \"title=The movie\" --edit track:a1 --set language=fre --edit track:a2 --set language=ita"
 msgstr "$ mkvpropedit movie.mkv --edit info --set \"title=The movie\" --edit track:a1 --set language=fre --edit track:a2 --set language=ita"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvpropedit.xml:435
+#: doc/man/mkvpropedit.xml:592
 msgid "The second example removes the 'default track flag' from the first subtitle track and sets it for the second one. Note that &mkvpropedit;, unlike &mkvmerge;, does not set the 'default track flag' of other tracks to '0' if it is set to '1' for a different track automatically."
 msgstr "二番目の例は、最初の字幕トラックから'デフォルトトラックフラグ'を削除し二番目の字幕トラックに設定します。&mkvpropedit;は&mkvmerge;とは違い、'デフォルトトラックフラグ'が違うトラックで'1'に設定されているからといって自動的に他のトラックの'デフォルトトラックフラグ'を'0'に設定はしない、という点に注意してください。"
 
 #. type: Content of: <refentry><refsect1><screen>
-#: doc/man/mkvpropedit.xml:440
+#: doc/man/mkvpropedit.xml:597
 #, no-wrap
 msgid "$ mkvpropedit movie.mkv --edit track:s1 --set flag-default=0 --edit track:s2 --set flag-default=1"
 msgstr "$ mkvpropedit movie.mkv --edit track:s1 --set flag-default=0 --edit track:s2 --set flag-default=1"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvpropedit.xml:443
+#: doc/man/mkvpropedit.xml:600
 msgid "Replacing the tags for the second subtitle track in a file looks like this:"
 msgstr "ファイル中で2番目の字幕トラックのタグを置換するには、以下のようにします："
 
 #. type: Content of: <refentry><refsect1><screen>
-#: doc/man/mkvpropedit.xml:446
+#: doc/man/mkvpropedit.xml:603
 #, no-wrap
 msgid "$ mkvpropedit movie.mkv --tags track:s2:new-subtitle-tags.xml"
 msgstr "$ mkvpropedit movie.mkv --tags track:s2:new-subtitle-tags.xml"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvpropedit.xml:449
+#: doc/man/mkvpropedit.xml:606
 msgid "Removing all tags requires leaving out the file name:"
 msgstr "タグを削除するには、ファイル名を空白にします"
 
 #. type: Content of: <refentry><refsect1><screen>
-#: doc/man/mkvpropedit.xml:452
+#: doc/man/mkvpropedit.xml:609
 #, no-wrap
 msgid "$ mkvpropedit movie.mkv --tags all:"
 msgstr "$ mkvpropedit movie.mkv --tags all:"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvpropedit.xml:455
+#: doc/man/mkvpropedit.xml:612
 msgid "Replacing the chapters in a file looks like this:"
 msgstr "ファイル中のチャプタを置換するには、以下のようにします："
 
 #. type: Content of: <refentry><refsect1><screen>
-#: doc/man/mkvpropedit.xml:458
+#: doc/man/mkvpropedit.xml:615
 #, no-wrap
 msgid "$ mkvpropedit movie.mkv --chapters new-chapters.xml"
 msgstr "$ mkvpropedit movie.mkv --chapters new-chapters.xml"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvpropedit.xml:461
+#: doc/man/mkvpropedit.xml:618
 msgid "Removing all chapters requires leaving out the file name:"
 msgstr "全てのチャプタを削除するには、ファイル名を空白にします"
 
 #. type: Content of: <refentry><refsect1><screen>
-#: doc/man/mkvpropedit.xml:464
+#: doc/man/mkvpropedit.xml:621
 #, no-wrap
 msgid "$ mkvpropedit movie.mkv --chapters ''"
 msgstr "$ mkvpropedit movie.mkv --chapters ''"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvpropedit.xml:471
+#: doc/man/mkvpropedit.xml:624
+msgid "Adding a font file (<literal>Arial.ttf</literal>) as an attachment:"
+msgstr ""
+
+#. type: Content of: <refentry><refsect1><screen>
+#: doc/man/mkvpropedit.xml:627
+#, fuzzy, no-wrap
+#| msgid "$ mkvpropedit movie.mkv --tags all:"
+msgid "$ mkvpropedit movie.mkv --add-attachment Arial.ttf"
+msgstr "$ mkvpropedit movie.mkv --tags all:"
+
+#. type: Content of: <refentry><refsect1><para>
+#: doc/man/mkvpropedit.xml:630
+msgid "Adding a font file (<literal>89719823.ttf</literal>) as an attachment and providing some information as it really is just Arial:"
+msgstr ""
+
+#. type: Content of: <refentry><refsect1><screen>
+#: doc/man/mkvpropedit.xml:633
+#, no-wrap
+msgid "$ mkvpropedit movie.mkv --attachment-name Arial.ttf --attachment-description 'The Arial font as a TrueType font' --attachment-mime-type application/x-truetype-font --add-attachment 89719823.ttf"
+msgstr ""
+
+#. type: Content of: <refentry><refsect1><para>
+#: doc/man/mkvpropedit.xml:636
+msgid "Replacing one attached font (<literal>Comit.ttf</literal>) file with another one (<literal>Arial.ttf</literal>):"
+msgstr ""
+
+#. type: Content of: <refentry><refsect1><screen>
+#: doc/man/mkvpropedit.xml:639
+#, no-wrap
+msgid "$ mkvpropedit movie.mkv --attachment-name Arial.ttf --attachment-description 'The Arial font as a TrueType font' --replace-attachment name:Comic.ttf:Arial.ttf"
+msgstr ""
+
+#. type: Content of: <refentry><refsect1><para>
+#: doc/man/mkvpropedit.xml:642
+msgid "Deleting the second attached file, whatever it may be:"
+msgstr ""
+
+#. type: Content of: <refentry><refsect1><screen>
+#: doc/man/mkvpropedit.xml:645
+#, fuzzy, no-wrap
+#| msgid "$ mkvpropedit movie.mkv --chapters ''"
+msgid "$ mkvpropedit movie.mkv --delete-attachment 2"
+msgstr "$ mkvpropedit movie.mkv --chapters ''"
+
+#. type: Content of: <refentry><refsect1><para>
+#: doc/man/mkvpropedit.xml:648
+msgid "Deleting all attached fonts by MIME type:"
+msgstr ""
+
+#. type: Content of: <refentry><refsect1><screen>
+#: doc/man/mkvpropedit.xml:651
+#, no-wrap
+msgid "$ mkvpropedit movie.mkv --delete-attachment mime-type:application/x-truetype-font"
+msgstr ""
+
+#. type: Content of: <refentry><refsect1><para>
+#: doc/man/mkvpropedit.xml:658
 msgid "&mkvpropedit; exits with one of three exit codes:"
 msgstr "&mkvpropedit;は下の3つの返り値を返します。"
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvpropedit.xml:477
+#: doc/man/mkvpropedit.xml:664
 msgid "<constant>0</constant> -- This exit codes means that the modification has completed successfully."
 msgstr "<constant>0</constant> -- この返り値は変更が成功したことを示します。"
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvpropedit.xml:483
+#: doc/man/mkvpropedit.xml:670
 msgid "<constant>1</constant> -- In this case &mkvpropedit; has output at least one warning, but the modification did continue.  A warning is prefixed with the text '<literal>Warning:</literal>'.  Depending on the issues involved the resulting files might be ok or not.  The user is urged to check both the warning and the resulting files."
 msgstr "<constant>1</constant> -- この返り値は、一つ以上の警告が出力されましたが、抽出が続行されたことを意味します。警告は '<literal>警告:</literal>' という文字列を先頭につけて出力されます。出力ファイルが無事であるかどうかは、場合によります。出力ファイルを確認することを強く推奨します。"
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvpropedit.xml:491
+#: doc/man/mkvpropedit.xml:678
 msgid "<constant>2</constant> -- This exit code is used after an error occurred.  &mkvpropedit; aborts right after outputting the error message.  Error messages range from wrong command line arguments over read/write errors to broken files."
 msgstr "この返り値は、エラーが発生し、エラーメッセージを表示した直後に&mkvpropedit;が終了したことを示します。エラーメッセージは不正なコマンドラインやファイルI/Oエラー、壊れたファイルなど様々です。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvpropedit.xml:514
+#: doc/man/mkvpropedit.xml:701
 msgid "&mkvpropedit; uses the default variables that determine the system's locale (e.g. <varname>LANG</varname> and the <varname>LC_*</varname> family). Additional variables:"
 msgstr "&mkvpropedit;はシステムのロケールを決めるデフォルトの変数（例：<varname>LANG</varname>や<varname>LC_*</varname>系）を使用します。追加の変数は以下の通りです："
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvpropedit.xml:522
+#: doc/man/mkvpropedit.xml:709
 msgid "The content is treated as if it had been passed via the <link linkend=\"mkvpropedit.description.debug\"><option>--debug</option></link> option."
 msgstr "その内容は、あたかも<link linkend=\"mkvpropedit.description.debug\"><option>--debug</option></link>オプション経由で渡されたかのように扱われます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvpropedit.xml:530
+#: doc/man/mkvpropedit.xml:717
 msgid "The content is treated as if it had been passed via the <link linkend=\"mkvpropedit.description.engage\"><option>--engage</option></link> option."
 msgstr "その内容は、あたかも<link linkend=\"mkvpropedit.description.engage\"><option>--debug</option></link>オプション経由で渡されたかのように扱われます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvpropedit.xml:538
+#: doc/man/mkvpropedit.xml:725
 msgid "The content is split on white space. The resulting partial strings are treated as if it had been passed as command line options. If you need to pass special characters (e.g. spaces) then you have to escape them (see <link linkend=\"mkvpropedit.escaping\">the section about escaping special characters in text</link>)."
 msgstr "その内容は空白で分割されます。得られた一部の文字列は、あたかもそれがコマンドラインオプションとして渡されたかのように扱われます。もし特殊な文字（例：空白）を渡す必要があるなら、それらをエスケープする必要があります（<link linkend=\"mkvpropedit.escaping\">テキスト中の特殊文字のエスケープについてのセクション</link>をご覧ください）。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvpropedit.xml:549
+#: doc/man/mkvpropedit.xml:736
 msgid "&mkvmerge;, &mkvinfo;, &mkvextract;, &mmg;"
 msgstr "&mkvmerge;, &mkvinfo;, &mkvextract;, &mmg;"
 
@@ -3978,6 +4188,9 @@ msgstr "完全なドキュメントは、HTML形式で存在します。(<filena
 #: doc/man/mmg.xml:92
 msgid "&mkvmerge;, &mkvextract;, &mkvinfo;, &mkvpropedit;"
 msgstr "&mkvmerge; &mkvextract;, &mkvinfo;, &mkvpropedit;"
+
+#~ msgid "Actions:"
+#~ msgstr "アクション:"
 
 #~ msgid "If the default duration is not forced then mkvmerge will try to derive the track's default duration from the container and/or codec used.  One case in which this option is of use is when adding <foreignphrase>AVC/h.264</foreignphrase> elementary streams because these do not contain information about their number of frames or a default duration for each frame.  For such files &mkvmerge; will assume a default duration of '<literal>25fps</literal>' unless overridden."
 #~ msgstr "default duration が強制的に指定されない場合、mkvmergeはトラックの default duration をコンテナ又は使用されているコーデックから取得して使用します。このオプションの使用例の一つとして、<foreignphrase>AVC/h.264</foreignphrase>エレメンタリストリームを追加する場合があげられます。なぜなら、これは、フレーム数やフレーム毎の default duration の情報を格納していないためです。このようなファイルに対しては、指定されないかぎり&mkvmerge;は default duration を'<literal>25fps</literal>'と仮定します。"
