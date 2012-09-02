@@ -294,7 +294,7 @@ void
 attachment_target_c::replace_attachment_values(KaxAttached &att) {
   if (m_options.m_name.second) {
     auto file_name = !m_options.m_name.first.empty() ? m_options.m_name.first : bfs::path{m_file_name}.filename().native();
-    UTFstring(GetChild<KaxFileName>(att)).SetUTF8(file_name);
+    GetChildAs<KaxFileName, EbmlUnicodeString>(att) = cstrutf8_to_UTFstring(file_name);
   }
 
   if (m_options.m_mime_type.second) {
@@ -306,8 +306,8 @@ attachment_target_c::replace_attachment_values(KaxAttached &att) {
     if (m_options.m_description.first.empty())
       DeleteChildren<KaxFileDescription>(att);
     else
-      UTFstring(GetChild<KaxFileDescription>(att)).SetUTF8(m_options.m_description.first);
-  }
+      GetChildAs<KaxFileDescription, EbmlUnicodeString>(att) = cstrutf8_to_UTFstring(m_options.m_description.first);
+}
 
   GetChild<KaxFileData>(att).CopyBuffer(m_file_content->get_buffer(), m_file_content->get_size());
 }
