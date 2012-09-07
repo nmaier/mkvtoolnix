@@ -87,24 +87,15 @@ cons_impl(EbmlMaster *master,
   master->PushElement(object->SetValue(value));
 }
 
-template<typename Tobject>
+template<typename Tobject,
+         typename Tvalue>
 inline typename boost::enable_if< std::is_base_of<EbmlUnicodeString, Tobject> >::type
 cons_impl(EbmlMaster *master,
           Tobject *object,
-          std::wstring const &value) {
+          Tvalue const &value) {
   if (!object)
     return;
-  master->PushElement(object->SetValue(value));
-}
-
-template<typename Tobject>
-inline typename boost::enable_if< std::is_base_of<EbmlUnicodeString, Tobject> >::type
-cons_impl(EbmlMaster *master,
-          Tobject *object,
-          std::string const &value) {
-  if (!object)
-    return;
-  master->PushElement(object->SetValueUTF8(value));
+  master->PushElement(object->SetValue(to_wide(value).c_str()));
 }
 
 template<typename Tobject,
