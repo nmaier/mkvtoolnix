@@ -127,7 +127,7 @@ write_chapter_atom_simple(KaxChapterAtom *atom,
     EbmlElement *e = (*atom)[i];
 
     if (is_id(e, KaxChapterTimeStart))
-      handle_start_time(level, uint64(*static_cast<EbmlUInteger *>(e)) / 1000000);
+      handle_start_time(level, static_cast<EbmlUInteger *>(e)->GetValue() / 1000000);
 
     else if (is_id(e, KaxChapterTrack))
       write_chapter_track_simple(static_cast<KaxChapterTrack *>(e), level + 1);

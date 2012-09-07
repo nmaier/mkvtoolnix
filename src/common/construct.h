@@ -25,6 +25,8 @@
 #include <ebml/EbmlUInteger.h>
 #include <ebml/EbmlUnicodeString.h>
 
+#include "common/strings/utf8.h"
+
 namespace mtx {
 namespace construct {
 
@@ -38,8 +40,7 @@ cons_impl(EbmlMaster *master,
           Tvalue const &value) {
   if (!object)
     return;
-  static_cast<EbmlDate *>(object)->SetEpochDate(value);
-  master->PushElement(*object);
+  master->PushElement(object->SetValue(value));
 }
 
 template<typename Tobject,
@@ -50,8 +51,7 @@ cons_impl(EbmlMaster *master,
           Tvalue const &value) {
   if (!object)
     return;
-  *static_cast<EbmlUInteger *>(object) = value;
-  master->PushElement(*object);
+  master->PushElement(object->SetValue(value));
 }
 
 template<typename Tobject,
@@ -62,8 +62,7 @@ cons_impl(EbmlMaster *master,
           Tvalue const &value) {
   if (!object)
     return;
-  *static_cast<EbmlSInteger *>(object) = value;
-  master->PushElement(*object);
+  master->PushElement(object->SetValue(value));
 }
 
 template<typename Tobject,
@@ -74,8 +73,7 @@ cons_impl(EbmlMaster *master,
           Tvalue const &value) {
   if (!object)
     return;
-  *static_cast<EbmlFloat *>(object) = value;
-  master->PushElement(*object);
+  master->PushElement(object->SetValue(value));
 }
 
 template<typename Tobject,
@@ -86,20 +84,27 @@ cons_impl(EbmlMaster *master,
           Tvalue const &value) {
   if (!object)
     return;
-  *static_cast<EbmlString *>(object) = value;
-  master->PushElement(*object);
+  master->PushElement(object->SetValue(value));
 }
 
-template<typename Tobject,
-         typename Tvalue>
+template<typename Tobject>
 inline typename boost::enable_if< std::is_base_of<EbmlUnicodeString, Tobject> >::type
 cons_impl(EbmlMaster *master,
           Tobject *object,
-          Tvalue const &value) {
+          std::wstring const &value) {
   if (!object)
     return;
-  *static_cast<EbmlUnicodeString *>(object) = std::wstring{value}.c_str();
-  master->PushElement(*object);
+  master->PushElement(object->SetValue(value));
+}
+
+template<typename Tobject>
+inline typename boost::enable_if< std::is_base_of<EbmlUnicodeString, Tobject> >::type
+cons_impl(EbmlMaster *master,
+          Tobject *object,
+          std::string const &value) {
+  if (!object)
+    return;
+  master->PushElement(object->SetValueUTF8(value));
 }
 
 template<typename Tobject,
@@ -110,7 +115,7 @@ cons_impl(EbmlMaster *master,
           Tvalue const &value) {
   if (!object)
     return;
-  static_cast<EbmlBinary *>(object)->CopyBuffer(static_cast<binary *>(value->get_buffer()), value->get_size());
+  object->CopyBuffer(static_cast<binary *>(value->get_buffer()), value->get_size());
   master->PushElement(*object);
 }
 

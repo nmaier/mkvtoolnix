@@ -780,7 +780,7 @@ handle_content_encodings(EbmlStream *&es,
           show_element(l5, 5, boost::format(Y("Scope: %1% (%2%)")) % uint64(ce_scope) % join(", ", scope));
 
         } else if (is_id(l5,  KaxContentEncodingType)) {
-          uint64_t ce_type = uint64(*static_cast<KaxContentEncodingType *>(l5));
+          uint64_t ce_type = static_cast<KaxContentEncodingType *>(l5)->GetValue();
           show_element(l5, 5,
                        boost::format(Y("Type: %1% (%2%)"))
                        % ce_type
@@ -797,7 +797,7 @@ handle_content_encodings(EbmlStream *&es,
             l6 = (*m5)[i5];
 
             if (is_id(l6, KaxContentCompAlgo)) {
-              uint64_t c_algo = uint64(*static_cast<KaxContentCompAlgo *>(l6));
+              uint64_t c_algo = static_cast<KaxContentCompAlgo *>(l6)->GetValue();
               show_element(l6, 6,
                            boost::format(Y("Algorithm: %1% (%2%)"))
                            % c_algo
@@ -824,7 +824,7 @@ handle_content_encodings(EbmlStream *&es,
             l6 = (*m5)[i5];
 
             if (is_id(l6, KaxContentEncAlgo)) {
-              uint64_t e_algo = uint64(*static_cast<KaxContentEncAlgo *>(l6));
+              uint64_t e_algo = static_cast<KaxContentEncAlgo *>(l6)->GetValue();
               show_element(l6, 6,
                            boost::format(Y("Encryption algorithm: %1% (%2%)"))
                            % e_algo
@@ -841,7 +841,7 @@ handle_content_encodings(EbmlStream *&es,
               show_element(l6, 6, boost::format(Y("Encryption key ID: %1%")) % format_binary(e_keyid));
 
             } else if (is_id(l6, KaxContentSigAlgo)) {
-              uint64_t s_algo = uint64(*static_cast<KaxContentSigAlgo *>(l6));
+              uint64_t s_algo = static_cast<KaxContentSigAlgo *>(l6)->GetValue();
               show_element(l6, 6,
                            boost::format(Y("Signature algorithm: %1% (%2%)"))
                            % s_algo
@@ -850,7 +850,7 @@ handle_content_encodings(EbmlStream *&es,
                               :               Y("unknown")));
 
             } else if (is_id(l6, KaxContentSigHashAlgo)) {
-              uint64_t s_halgo = uint64(*static_cast<KaxContentSigHashAlgo *>(l6));
+              uint64_t s_halgo = static_cast<KaxContentSigHashAlgo *>(l6)->GetValue();
               show_element(l6, 6,
                            boost::format(Y("Signature hash algorithm: %1% (%2%)"))
                            % s_halgo

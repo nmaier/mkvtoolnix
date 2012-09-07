@@ -222,6 +222,30 @@ DeleteChildren(EbmlMaster &master) {
 }
 
 template<typename T>
+void
+FixMandatoryElement(EbmlMaster &master) {
+  auto &element = GetChild<T>(master);
+  element.SetValue(element.GetValue());
+}
+
+template<typename Tfirst,
+         typename Tsecond,
+         typename... Trest>
+void
+FixMandatoryElement(EbmlMaster &master) {
+  FixMandatoryElement<Tfirst>(master);
+  FixMandatoryElement<Tsecond, Trest...>(master);
+}
+
+template<typename... Trest>
+void
+FixMandatoryElement(EbmlMaster *master) {
+  if (!master)
+    return;
+  FixMandatoryElement<Trest...>(*master);
+}
+
+template<typename T>
 memory_cptr
 find_and_clone_binary(EbmlElement &parent) {
   auto child = FindChild<T>(static_cast<EbmlMaster &>(parent));

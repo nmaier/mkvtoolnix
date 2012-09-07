@@ -64,16 +64,16 @@ attachment_t::parse(KaxAttached &att) {
     EbmlElement *e = att[k];
 
     if (EbmlId(*e) == EBML_ID(KaxFileName))
-      name = UTFstring_to_cstrutf8(UTFstring(*static_cast<KaxFileName *>(e)));
+      name = static_cast<KaxFileName *>(e)->GetValueUTF8();
 
     else if (EbmlId(*e) == EBML_ID(KaxMimeType))
-      type = std::string(*static_cast<KaxMimeType *>(e));
+      type = static_cast<KaxMimeType *>(e)->GetValue();
 
     else if (EbmlId(*e) == EBML_ID(KaxFileUID))
-      id = uint32(*static_cast<KaxFileUID *>(e));
+      id = static_cast<KaxFileUID *>(e)->GetValue();
 
     else if (EbmlId(*e) == EBML_ID(KaxFileData)) {
-      fdata = (KaxFileData *)e;
+      fdata = static_cast<KaxFileData *>(e);
       size  = fdata->GetSize();
     }
   }

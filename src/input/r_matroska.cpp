@@ -666,7 +666,7 @@ kax_reader_c::handle_attachments(mm_io_c *io,
         matt.mime_type = std::string(static_cast<KaxMimeType &>(*l2));
 
       else if (EbmlId(*l2) == EBML_ID(KaxFileUID))
-        matt.id = uint64(static_cast<KaxFileUID &>(*l2));
+        matt.id = static_cast<KaxFileUID &>(*l2).GetValue();
 
       else if (EbmlId(*l2) == EBML_ID(KaxFileData)) {
         KaxFileData &fdata = static_cast<KaxFileData &>(*l2);
@@ -1219,7 +1219,7 @@ kax_reader_c::read_headers_seek_head(EbmlElement *l0,
           :                                    dl1t_unknown;
 
       } else if (EbmlId(*seek[k]) == EBML_ID(KaxSeekPosition))
-        pos = uint64(*static_cast<KaxSeekPosition *>(seek[k]));
+        pos = static_cast<KaxSeekPosition *>(seek[k])->GetValue();
 
     if ((-1 != pos) && (dl1t_unknown != type)) {
       pos = static_cast<KaxSegment *>(l0)->GetGlobalPosition(pos);

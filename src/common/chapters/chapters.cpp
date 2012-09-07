@@ -389,7 +389,7 @@ get_chapter_start(KaxChapterAtom &atom,
                   int64_t value_if_not_found) {
   KaxChapterTimeStart *start = FindChild<KaxChapterTimeStart>(&atom);
 
-  return !start ? value_if_not_found : int64_t(uint64(*start));
+  return !start ? value_if_not_found : static_cast<int64_t>(start->GetValue());
 }
 
 /** \brief Get the end timecode for a chapter atom.
@@ -408,7 +408,7 @@ get_chapter_end(KaxChapterAtom &atom,
                 int64_t value_if_not_found) {
   KaxChapterTimeEnd *end = FindChild<KaxChapterTimeEnd>(&atom);
 
-  return !end ? value_if_not_found : int64_t(uint64(*end));
+  return !end ? value_if_not_found : static_cast<int64_t>(end->GetValue());
 }
 
 /** \brief Get the name for a chapter atom.
@@ -446,7 +446,7 @@ int64_t
 get_chapter_uid(KaxChapterAtom &atom) {
   KaxChapterUID *uid = FindChild<KaxChapterUID>(&atom);
 
-  return !uid ? -1 : int64_t(uint64(*uid));
+  return !uid ? -1 : static_cast<int64_t>(uid->GetValue());
 }
 
 /** \brief Add missing mandatory elements
@@ -580,12 +580,12 @@ remove_entries(int64_t min_tc,
     KaxChapterTimeStart *cts = static_cast<KaxChapterTimeStart *>(atom->FindFirstElt(EBML_INFO(KaxChapterTimeStart), false));
 
     if (cts)
-      entries[i].start = uint64(*cts);
+      entries[i].start = cts->GetValue();
 
     KaxChapterTimeEnd *cte = static_cast<KaxChapterTimeEnd *>(atom->FindFirstElt(EBML_INFO(KaxChapterTimeEnd), false));
 
     if (cte)
-      entries[i].end = uint64(*cte);
+      entries[i].end = cte->GetValue();
   }
 
   // We can return if we don't have a single atom to work with.
@@ -634,18 +634,18 @@ remove_entries(int64_t min_tc,
     KaxChapterTimeEnd *cte   = static_cast<KaxChapterTimeEnd *>(atom->FindFirstElt(EBML_INFO(KaxChapterTimeEnd), false));
 
     if (entries[i].spans)
-      *static_cast<EbmlUInteger *>(cts) = min_tc;
+      cts->SetValue(min_tc);
 
-    *static_cast<EbmlUInteger *>(cts) = uint64(*cts) - offset;
+    cts->SetValue(cts->GetValue() - offset);
 
     if (cte) {
-      int64_t end_tc =  uint64(*cte);
+      int64_t end_tc = cte->GetValue();
 
       if ((max_tc >= 0) && (end_tc > max_tc))
         end_tc = max_tc;
       end_tc -= offset;
 
-      *static_cast<EbmlUInteger *>(cte) = end_tc;
+      cte->SetValue(end_tc);
     }
 
     EbmlMaster *m2 = dynamic_cast<EbmlMaster *>(m[i]);
@@ -843,7 +843,7 @@ find_edition_with_uid(KaxChapters &chapters,
       continue;
 
     KaxEditionUID *euid = FindChild<KaxEditionUID>(eentry);
-    if ((euid) && (uint64(*euid) == uid))
+    if (euid && (euid->GetValue() == uid))
       return eentry;
   }
 
@@ -883,7 +883,7 @@ find_chapter_with_uid(KaxChapters &chapters,
         continue;
 
       KaxChapterUID *cuid = FindChild<KaxChapterUID>(atom);
-      if ((cuid) && (uint64(*cuid) == uid))
+      if (cuid && (cuid->GetValue() == uid))
         return atom;
     }
   }
@@ -918,7 +918,7 @@ move_chapters_by_edition(KaxChapters &dst,
     KaxEditionEntry *ee_dst = nullptr;
     KaxEditionUID *euid_src = FindChild<KaxEditionUID>(m);
     if (euid_src)
-      ee_dst = find_edition_with_uid(dst, uint64(*euid_src));
+      ee_dst = find_edition_with_uid(dst, euid_src->GetValue());
 
     // No edition with the same UID found as the one we want to handle?
     // Then simply move the complete edition over.
@@ -967,10 +967,10 @@ adjust_chapter_timecodes(EbmlMaster &master,
     KaxChapterTimeEnd *end     = FindChild<KaxChapterTimeEnd>(atom);
 
     if (start)
-      *static_cast<EbmlUInteger *>(start) = std::max(int64_t(uint64(*start)) + offset, int64_t(0));
+      start->SetValue(std::max<int64_t>(static_cast<int64_t>(start->GetValue()) + offset, 0));
 
     if (end)
-      *static_cast<EbmlUInteger *>(end) = std::max(int64_t(uint64(*end)) + offset, int64_t(0));
+      end->SetValue(std::max<int64_t>(static_cast<int64_t>(end->GetValue()) + offset, 0));
   }
 
   for (master_idx = 0; master.ListSize() > master_idx; master_idx++) {
