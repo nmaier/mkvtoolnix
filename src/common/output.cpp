@@ -285,19 +285,19 @@ dump_ebml_elements(EbmlElement *element,
 
   if (with_values) {
     if (dynamic_cast<EbmlUInteger *>(element))
-      value_str = to_string(uint64(*static_cast<EbmlUInteger *>(element)));
+      value_str = to_string(static_cast<EbmlUInteger *>(element)->GetValue());
 
     else if (dynamic_cast<EbmlSInteger *>(element))
-      value_str = to_string(int64(*static_cast<EbmlSInteger *>(element)));
+      value_str = to_string(static_cast<EbmlSInteger *>(element)->GetValue());
 
     else if (dynamic_cast<EbmlFloat *>(element))
-      value_str = to_string(double(*static_cast<EbmlFloat *>(element)), 9);
+      value_str = to_string(static_cast<EbmlFloat *>(element)->GetValue(), 9);
 
     else if (dynamic_cast<EbmlUnicodeString *>(element))
-      value_str = UTFstring_to_cstrutf8(UTFstring(*static_cast<EbmlUnicodeString *>(element)));
+      value_str = static_cast<EbmlUnicodeString *>(element)->GetValueUTF8();
 
     else if (dynamic_cast<EbmlString *>(element))
-      value_str = std::string(*static_cast<EbmlString *>(element));
+      value_str = static_cast<EbmlString *>(element)->GetValue();
 
     else if (dynamic_cast<EbmlDate *>(element))
       value_str = to_string(static_cast<EbmlDate *>(element)->GetEpochDate());

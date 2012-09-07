@@ -420,167 +420,76 @@ move_children(EbmlMaster &source,
 
 int64_t
 kt_get_default_duration(KaxTrackEntry &track) {
-  KaxTrackDefaultDuration *default_duration;
-
-  default_duration = FindChild<KaxTrackDefaultDuration>(&track);
-  if (!default_duration)
-    return 0;
-  return uint64(*default_duration);
+  return FindChildValue<KaxTrackDefaultDuration>(track);
 }
 
 int64_t
 kt_get_number(KaxTrackEntry &track) {
-  KaxTrackNumber *number;
-
-  number = FindChild<KaxTrackNumber>(&track);
-  if (!number)
-    return 0;
-  return uint64(*number);
+  return FindChildValue<KaxTrackNumber>(track);
 }
 
 int64_t
 kt_get_uid(KaxTrackEntry &track) {
-  KaxTrackUID *uid;
-
-  uid = FindChild<KaxTrackUID>(&track);
-  if (!uid)
-    return 0;
-  return uint64(*uid);
+  return FindChildValue<KaxTrackUID>(track);
 }
 
 std::string
 kt_get_codec_id(KaxTrackEntry &track) {
-  KaxCodecID *codec_id;
-
-  codec_id = FindChild<KaxCodecID>(&track);
-  if (!codec_id)
-    return "";
-  return std::string(*codec_id);
+  return FindChildValue<KaxCodecID>(track);
 }
 
 std::string
 kt_get_language(KaxTrackEntry &track) {
-  KaxTrackLanguage *language;
-
-  language = FindChild<KaxTrackLanguage>(&track);
-  if (!language)
-    return "";
-  return std::string(*language);
+  return FindChildValue<KaxTrackLanguage>(track);
 }
 
 int
 kt_get_max_blockadd_id(KaxTrackEntry &track) {
-  KaxMaxBlockAdditionID *max_blockadd_id;
-
-  max_blockadd_id = FindChild<KaxMaxBlockAdditionID>(&track);
-  if (!max_blockadd_id)
-    return 0;
-  return uint32(*max_blockadd_id);
+  return FindChildValue<KaxMaxBlockAdditionID>(track);
 }
 
 int
 kt_get_a_channels(KaxTrackEntry &track) {
-  KaxTrackAudio *audio;
-  KaxAudioChannels *channels;
-
-  audio = FindChild<KaxTrackAudio>(&track);
-  if (!audio)
-    return 1;
-
-  channels = FindChild<KaxAudioChannels>(audio);
-  if (!channels)
-    return 1;
-
-  return uint32(*channels);
+  auto audio = FindChild<KaxTrackAudio>(track);
+  return audio ? FindChildValue<KaxAudioChannels>(audio, 1u) : 1;
 }
 
-float
+double
 kt_get_a_sfreq(KaxTrackEntry &track) {
-  KaxTrackAudio *audio;
-  KaxAudioSamplingFreq *sfreq;
-
-  audio = FindChild<KaxTrackAudio>(&track);
-  if (!audio)
-    return 8000.0;
-
-  sfreq = FindChild<KaxAudioSamplingFreq>(audio);
-  if (!sfreq)
-    return 8000.0;
-
-  return float(*sfreq);
+  auto audio = FindChild<KaxTrackAudio>(track);
+  return audio ? FindChildValue<KaxAudioSamplingFreq>(audio, 8000.0) : 8000.0;
 }
 
-float
+double
 kt_get_a_osfreq(KaxTrackEntry &track) {
-  KaxTrackAudio *audio;
-  KaxAudioOutputSamplingFreq *osfreq;
-
-  audio = FindChild<KaxTrackAudio>(&track);
-  if (!audio)
-    return 8000.0;
-
-  osfreq = FindChild<KaxAudioOutputSamplingFreq>(audio);
-  if (!osfreq)
-    return 8000.0;
-
-  return float(*osfreq);
+  auto audio = FindChild<KaxTrackAudio>(track);
+  return audio ? FindChildValue<KaxAudioOutputSamplingFreq>(audio, 8000.0) : 8000.0;
 }
 
 int
 kt_get_a_bps(KaxTrackEntry &track) {
-  KaxTrackAudio *audio;
-  KaxAudioBitDepth *bps;
-
-  audio = FindChild<KaxTrackAudio>(&track);
-  if (!audio)
-    return -1;
-
-  bps = FindChild<KaxAudioBitDepth>(audio);
-  if (!bps)
-    return -1;
-
-  return uint32(*bps);
+  auto audio = FindChild<KaxTrackAudio>(track);
+  return audio ? FindChildValue<KaxAudioBitDepth, int>(audio, -1) : -1;
 }
 
 int
 kt_get_v_pixel_width(KaxTrackEntry &track) {
-  KaxTrackVideo *video;
-  KaxVideoPixelWidth *width;
-
-  video = FindChild<KaxTrackVideo>(&track);
-  if (!video)
-    return 0;
-
-  width = FindChild<KaxVideoPixelWidth>(video);
-  if (!width)
-    return 0;
-
-  return uint32(*width);
+  auto video = FindChild<KaxTrackVideo>(track);
+  return video ? FindChildValue<KaxVideoPixelWidth>(video) : 0;
 }
 
 int
 kt_get_v_pixel_height(KaxTrackEntry &track) {
-  KaxTrackVideo *video;
-  KaxVideoPixelHeight *height;
-
-  video = FindChild<KaxTrackVideo>(&track);
-  if (!video)
-    return 0;
-
-  height = FindChild<KaxVideoPixelHeight>(video);
-  if (!height)
-    return 0;
-
-  return uint32(*height);
+  auto video = FindChild<KaxTrackVideo>(track);
+  return video ? FindChildValue<KaxVideoPixelHeight>(video) : 0;
 }
 
 EbmlElement *
 find_ebml_element_by_id(EbmlMaster *master,
                         const EbmlId &id) {
-  size_t i;
-  for (i = 0; master->ListSize() > i; ++i)
-    if (EbmlId(*((*master)[i])) == id)
-      return (*master)[i];
+  for (auto child : master->GetElementList())
+    if (EbmlId(*child) == id)
+      return child;
 
   return nullptr;
 }
@@ -602,19 +511,7 @@ fix_mandatory_elements(EbmlElement *master) {
 
 void
 remove_voids_from_master(EbmlElement *element) {
-  EbmlMaster *master = dynamic_cast<EbmlMaster *>(element);
-  if (!master)
-    return;
-
-  size_t idx = 0;
-  while (master->ListSize() > idx) {
-    element = (*master)[idx];
-    if (dynamic_cast<EbmlVoid *>(element))
-      master->Remove(idx);
-
-    else {
-      remove_voids_from_master(element);
-      ++idx;
-    }
-  }
+  auto master = dynamic_cast<EbmlMaster *>(element);
+  if (master)
+    DeleteChildren<EbmlVoid>(master);
 }

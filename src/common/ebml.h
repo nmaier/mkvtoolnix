@@ -38,8 +38,8 @@ int kt_get_max_blockadd_id(KaxTrackEntry &track);
 std::string kt_get_language(KaxTrackEntry &track);
 
 int kt_get_a_channels(KaxTrackEntry &track);
-float kt_get_a_sfreq(KaxTrackEntry &track);
-float kt_get_a_osfreq(KaxTrackEntry &track);
+double kt_get_a_sfreq(KaxTrackEntry &track);
+double kt_get_a_osfreq(KaxTrackEntry &track);
 int kt_get_a_bps(KaxTrackEntry &track);
 
 int kt_get_v_pixel_width(KaxTrackEntry &track);
@@ -150,6 +150,19 @@ AddEmptyChild(EbmlMaster &master) {
   return *(static_cast<type *>(e));
 }
 
+template <typename T>
+T *
+FindChild(EbmlMaster const &m) {
+  return static_cast<T *>(m.FindFirstElt(EBML_INFO(T)));
+}
+
+template <typename T>
+T *
+FindChild(EbmlElement const &e) {
+  auto &m = dynamic_cast<EbmlMaster const &>(e);
+  return static_cast<T *>(m.FindFirstElt(EBML_INFO(T)));
+}
+
 template <typename A> A*
 FindChild(EbmlMaster const *m) {
   return static_cast<A *>(m->FindFirstElt(EBML_INFO(A)));
@@ -243,6 +256,54 @@ FixMandatoryElement(EbmlMaster *master) {
   if (!master)
     return;
   FixMandatoryElement<Trest...>(*master);
+}
+
+template<typename Telement,
+         typename Tvalue = decltype(Telement().GetValue())>
+decltype(Telement().GetValue())
+FindChildValue(EbmlMaster &master,
+               Tvalue const &default_value = Tvalue{}) {
+  auto child = FindChild<Telement>(master);
+  return child ? child->GetValue() : default_value;
+}
+
+template<typename Telement,
+         typename Tvalue = decltype(Telement().GetValue())>
+decltype(Telement().GetValue())
+FindChildValue(EbmlMaster *master,
+               Tvalue const &default_value = Tvalue{}) {
+  return FindChildValue<Telement>(*master, default_value);
+}
+
+template<typename T>
+memory_cptr
+FindChildValue(EbmlMaster &master,
+               bool clone = true,
+               typename std::enable_if< std::is_base_of<EbmlBinary, T>::value >::type * = nullptr) {
+  auto child = FindChild<T>(master);
+  return !child ? memory_cptr()
+       : clone  ? memory_c::clone(child->GetBuffer(), child->GetSize())
+       :          memory_cptr(new memory_c(child->GetBuffer(), child->GetSize(), false));
+}
+
+template<typename T>
+memory_cptr
+FindChildValue(EbmlMaster *master,
+               bool clone = true,
+               typename std::enable_if< std::is_base_of<EbmlBinary, T>::value >::type * = nullptr) {
+  return FindChildValue<T>(*master, clone);
+}
+
+template<typename Telement>
+decltype(Telement().GetValue())
+GetChildValue(EbmlMaster &master) {
+  return GetChild<Telement>(master).GetValue();
+}
+
+template<typename Telement>
+decltype(Telement().GetValue())
+GetChildValue(EbmlMaster *master) {
+  return GetChild<Telement>(master).GetValue();
 }
 
 template<typename T>

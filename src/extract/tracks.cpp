@@ -144,17 +144,17 @@ handle_blockgroup(KaxBlockGroup &blockgroup,
 
   // Next find the block duration if there is one.
   KaxBlockDuration *kduration   = FindChild<KaxBlockDuration>(&blockgroup);
-  int64_t duration              = !kduration ? -1 : (int64_t)uint64(*kduration) * tc_scale;
+  int64_t duration              = !kduration ? -1 : static_cast<int64_t>(kduration->GetValue() * tc_scale);
 
   // Now find backward and forward references.
-  int64_t bref                  = 0;
-  int64_t fref                  = 0;
-  KaxReferenceBlock *kreference = FindChild<KaxReferenceBlock>(&blockgroup);
+  int64_t bref    = 0;
+  int64_t fref    = 0;
+  auto kreference = FindChild<KaxReferenceBlock>(&blockgroup);
   for (i = 0; (2 > i) && kreference; i++) {
-    if (0 > int64(*kreference))
-      bref = int64(*kreference);
+    if (0 > kreference->GetValue())
+      bref = kreference->GetValue();
     else
-      fref = int64(*kreference);
+      fref = kreference->GetValue();
     kreference = FindNextChild<KaxReferenceBlock>(&blockgroup, kreference);
   }
 
@@ -377,9 +377,9 @@ extract_tracks(const std::string &file_name,
         // General info about this Matroska file
         show_element(l1, 1, Y("Segment information"));
 
-        KaxTimecodeScale *ktc_scale = FindChild<KaxTimecodeScale>(l1);
+        auto ktc_scale = FindChild<KaxTimecodeScale>(l1);
         if (ktc_scale) {
-          tc_scale = uint64(*ktc_scale);
+          tc_scale = ktc_scale->GetValue();
           show_element(ktc_scale, 2, boost::format(Y("Timecode scale: %1%")) % tc_scale);
         }
 
@@ -402,7 +402,7 @@ extract_tracks(const std::string &file_name,
 
         KaxClusterTimecode *ctc = FindChild<KaxClusterTimecode>(l1);
         if (ctc) {
-          uint64_t cluster_tc = uint64(*ctc);
+          uint64_t cluster_tc = ctc->GetValue();
           show_element(ctc, 2, boost::format(Y("Cluster timecode: %|1$.3f|s")) % ((float)cluster_tc * (float)tc_scale / 1000000000.0));
           cluster->InitTimecode(cluster_tc, tc_scale);
         } else

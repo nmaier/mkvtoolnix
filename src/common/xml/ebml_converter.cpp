@@ -120,31 +120,31 @@ ebml_converter_c::fix_ebml(EbmlMaster &)
 void
 ebml_converter_c::format_uint(pugi::xml_node &node,
                               EbmlElement &e) {
-  node.append_child(pugi::node_pcdata).set_value(to_string(uint64(static_cast<EbmlUInteger &>(e))).c_str());
+  node.append_child(pugi::node_pcdata).set_value(to_string(static_cast<EbmlUInteger &>(e).GetValue()).c_str());
 }
 
 void
 ebml_converter_c::format_int(pugi::xml_node &node,
                              EbmlElement &e) {
-  node.append_child(pugi::node_pcdata).set_value(to_string(int64(static_cast<EbmlSInteger &>(e))).c_str());
+  node.append_child(pugi::node_pcdata).set_value(to_string(static_cast<EbmlSInteger &>(e).GetValue()).c_str());
 }
 
 void
 ebml_converter_c::format_timecode(pugi::xml_node &node,
                                   EbmlElement &e) {
-  node.append_child(pugi::node_pcdata).set_value(::format_timecode(uint64(static_cast<EbmlUInteger &>(e))).c_str());
+  node.append_child(pugi::node_pcdata).set_value(::format_timecode(static_cast<EbmlUInteger &>(e).GetValue()).c_str());
 }
 
 void
 ebml_converter_c::format_string(pugi::xml_node &node,
                                 EbmlElement &e) {
-  node.append_child(pugi::node_pcdata).set_value(std::string(static_cast<EbmlString &>(e)).c_str());
+  node.append_child(pugi::node_pcdata).set_value(static_cast<EbmlString &>(e).GetValue().c_str());
 }
 
 void
 ebml_converter_c::format_ustring(pugi::xml_node &node,
                                  EbmlElement &e) {
-  node.append_child(pugi::node_pcdata).set_value(UTFstring_to_cstrutf8(UTFstring(static_cast<EbmlUnicodeString &>(e))).c_str());
+  node.append_child(pugi::node_pcdata).set_value(static_cast<EbmlUnicodeString &>(e).GetValueUTF8().c_str());
 }
 
 void
@@ -182,17 +182,17 @@ ebml_converter_c::parse_int(parser_context_t &ctx) {
   if (ctx.limits.has_max && (value > ctx.limits.max))
     throw out_of_range_x{ ctx.name, ctx.node.offset_debug(), (boost::format(Y("Maximum allowed value: %1%, actual value: %2%")) % ctx.limits.max % value).str() };
 
-  static_cast<EbmlSInteger &>(ctx.e) = value;
+  static_cast<EbmlSInteger &>(ctx.e).SetValue(value);
 }
 
 void
 ebml_converter_c::parse_string(parser_context_t &ctx) {
-  static_cast<EbmlString &>(ctx.e) = ctx.content;
+  static_cast<EbmlString &>(ctx.e).SetValue(ctx.content);
 }
 
 void
 ebml_converter_c::parse_ustring(parser_context_t &ctx) {
-  static_cast<EbmlUnicodeString &>(ctx.e) = UTFstring{to_wide(ctx.content).c_str()};
+  static_cast<EbmlUnicodeString &>(ctx.e).SetValueUTF8(ctx.content);
 }
 
 void
@@ -253,7 +253,7 @@ ebml_converter_c::parse_binary(parser_context_t &ctx) {
     return;
   }
 
-  std::string format = balg::to_lower_copy(std::string{ctx.node.attribute("format").value()});
+  auto format = balg::to_lower_copy(std::string{ctx.node.attribute("format").value()});
   if (format.empty())
     format = "base64";
 
@@ -295,15 +295,14 @@ void
 ebml_converter_c::to_xml_recursively(pugi::xml_node &parent,
                                      EbmlElement &e)
   const {
-  std::string name = get_tag_name(e);
-  auto new_node    = parent.append_child(name.c_str());
+  auto name     = get_tag_name(e);
+  auto new_node = parent.append_child(name.c_str());
 
-  if (dynamic_cast<EbmlMaster *>(&e)) {
-    auto &master = static_cast<EbmlMaster &>(e);
-    for (auto idx = 0u; master.ListSize() > idx; ++idx)
-      to_xml_recursively(new_node, *master[idx]);
+  if (dynamic_cast<EbmlMaster *>(&e))
+    for (auto child : static_cast<EbmlMaster &>(e).GetElementList())
+      to_xml_recursively(new_node, *child);
 
-  } else if (dynamic_cast<EbmlUInteger *>(&e))
+  else if (dynamic_cast<EbmlUInteger *>(&e))
     format_value(new_node, e, format_uint);
 
   else if (dynamic_cast<EbmlSInteger *>(&e))
@@ -327,8 +326,7 @@ ebml_converter_c::to_xml_recursively(pugi::xml_node &parent,
 ebml_master_cptr
 ebml_converter_c::to_ebml(std::string const &file_name,
                           std::string const &root_name) {
-  auto doc = load_file(file_name);
-
+  auto doc       = load_file(file_name);
   auto root_node = doc->document_element();
   if (!root_node)
     return ebml_master_cptr();
@@ -446,8 +444,8 @@ ebml_converter_c::verify_and_create_element(EbmlMaster &parent,
 
   auto semantic = find_ebml_semantic(EBML_INFO(KaxSegment), id);
   if (semantic && EBML_SEM_UNIQUE(*semantic))
-    for (i = 0; i < parent.ListSize(); i++)
-      if (EbmlId(*parent[i]) == id)
+    for (auto child : parent.GetElementList())
+      if (EbmlId(*child) == id)
         throw duplicate_child_node_x{ name, get_tag_name(parent), node.offset_debug() };
 
   return create_ebml_element(EBML_INFO(KaxSegment), id);
@@ -498,12 +496,12 @@ ebml_converter_c::dump_semantics_recursively(int level,
     limits_str = std::string{", valid range: "} + limits_str;
   }
 
-  auto type = dynamic_cast<EbmlMaster *>(&element)        ? "master"
-            : dynamic_cast<EbmlUInteger *>(&element)      ? "unsigned integer"
-            : dynamic_cast<EbmlSInteger *>(&element)      ? "signed integer"
-            : dynamic_cast<EbmlString *>(&element)        ? "UTF-8 string"
-            : dynamic_cast<EbmlUnicodeString *>(&element) ? "UTF-8 string"
-            : dynamic_cast<EbmlBinary *>(&element)        ? "binary"
+  auto type = dynamic_cast<EbmlMaster        *>(&element) ? "master"
+            : dynamic_cast<EbmlUInteger      *>(&element) ? "unsigned integer"
+            : dynamic_cast<EbmlSInteger      *>(&element) ? "signed integer"
+            : dynamic_cast<EbmlString        *>(&element) ? "UTF-8 string"
+            : dynamic_cast<EbmlUnicodeString *>(&element) ? "Unicode string"
+            : dynamic_cast<EbmlBinary        *>(&element) ? "binary"
             :                                               "unknown";
 
   mxinfo(boost::format("%1%%2% (%3%%4%)\n") % std::string(level * 2, ' ') % tag_name % type % limits_str);

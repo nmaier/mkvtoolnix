@@ -152,7 +152,7 @@ handle_blockgroup(KaxBlockGroup &blockgroup,
 
   // Next find the block duration if there is one.
   KaxBlockDuration *kduration = FindChild<KaxBlockDuration>(&blockgroup);
-  int64_t duration            = !kduration ? extractor->m_default_duration * block->NumberFrames() : uint64(*kduration) * tc_scale;
+  int64_t duration            = !kduration ? extractor->m_default_duration * block->NumberFrames() : kduration->GetValue() * tc_scale;
 
   // Pass the block to the extractor.
   size_t i;
@@ -247,7 +247,7 @@ extract_timecodes(const std::string &file_name,
           if (EbmlId(*l2) == EBML_ID(KaxTimecodeScale)) {
             KaxTimecodeScale &ktc_scale = *static_cast<KaxTimecodeScale *>(l2);
             ktc_scale.ReadData(es->I_O());
-            tc_scale = uint64(ktc_scale);
+            tc_scale = ktc_scale.GetValue();
             show_element(l2, 2, boost::format(Y("Timecode scale: %1%")) % tc_scale);
           } else
             l2->SkipData(*es, EBML_CONTEXT(l2));
@@ -295,7 +295,7 @@ extract_timecodes(const std::string &file_name,
           if (EbmlId(*l2) == EBML_ID(KaxClusterTimecode)) {
             KaxClusterTimecode &ctc = *static_cast<KaxClusterTimecode *>(l2);
             ctc.ReadData(es->I_O());
-            cluster_tc = uint64(ctc);
+            cluster_tc = ctc.GetValue();
             show_element(l2, 2, boost::format(Y("Cluster timecode: %|1$.3f|s")) % ((float)cluster_tc * (float)tc_scale / 1000000000.0));
             cluster->InitTimecode(cluster_tc, tc_scale);
 

@@ -108,6 +108,16 @@ to_hex(memory_cptr const &buf,
        bool compact = false) {
   return to_hex(buf->get_buffer(), buf->get_size(), compact);
 }
+inline std::string
+to_hex(EbmlBinary *bin,
+       bool compact = false) {
+  return to_hex(bin->GetBuffer(), bin->GetSize(), compact);
+}
+inline std::string
+to_hex(EbmlBinary &bin,
+       bool compact = false) {
+  return to_hex(bin.GetBuffer(), bin.GetSize(), compact);
+}
 
 std::string create_minutes_seconds_time_string(unsigned int seconds, bool omit_minutes_if_zero = false);
 

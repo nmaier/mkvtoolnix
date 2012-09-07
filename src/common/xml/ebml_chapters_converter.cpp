@@ -89,9 +89,9 @@ ebml_chapters_converter_c::fix_edition_entry(KaxEditionEntry &eentry)
   for (auto element : eentry)
     if (dynamic_cast<KaxEditionUID *>(element)) {
       euid = static_cast<KaxEditionUID *>(element);
-      if (!is_unique_number(uint64(*euid), UNIQUE_EDITION_IDS)) {
-        mxwarn(boost::format(Y("Chapter parser: The EditionUID %1% is not unique and could not be reused. A new one will be created.\n")) % uint64(*euid));
-        *static_cast<EbmlUInteger *>(euid) = create_unique_number(UNIQUE_EDITION_IDS);
+      if (!is_unique_number(euid->GetValue(), UNIQUE_EDITION_IDS)) {
+        mxwarn(boost::format(Y("Chapter parser: The EditionUID %1% is not unique and could not be reused. A new one will be created.\n")) % euid->GetValue());
+        euid->SetValue(create_unique_number(UNIQUE_EDITION_IDS));
       }
 
     } else if (dynamic_cast<KaxChapterAtom *>(element)) {
@@ -102,11 +102,8 @@ ebml_chapters_converter_c::fix_edition_entry(KaxEditionEntry &eentry)
   if (!atom_found)
     throw conversion_x{Y("At least one <ChapterAtom> element is needed.")};
 
-  if (!euid) {
-    euid                               = new KaxEditionUID;
-    *static_cast<EbmlUInteger *>(euid) = create_unique_number(UNIQUE_EDITION_IDS);
-    eentry.PushElement(*euid);
-  }
+  if (!euid)
+    eentry.PushElement((new KaxEditionUID)->SetValue(create_unique_number(UNIQUE_EDITION_IDS)));
 }
 
 void
@@ -119,17 +116,14 @@ ebml_chapters_converter_c::fix_atom(KaxChapterAtom &atom)
   if (!FindChild<KaxChapterTimeStart>(atom))
     throw conversion_x{Y("<ChapterAtom> is missing the <ChapterTimeStart> child.")};
 
-  if (!FindChild<KaxChapterUID>(atom)) {
-    KaxChapterUID *cuid                = new KaxChapterUID;
-    *static_cast<EbmlUInteger *>(cuid) = create_unique_number(UNIQUE_CHAPTER_IDS);
-    atom.PushElement(*cuid);
-  }
+  if (!FindChild<KaxChapterUID>(atom))
+    atom.PushElement((new KaxChapterUID)->SetValue(create_unique_number(UNIQUE_CHAPTER_IDS)));
 
-  KaxChapterTrack *ctrack = FindChild<KaxChapterTrack>(atom);
+  auto ctrack = FindChild<KaxChapterTrack>(atom);
   if (ctrack && !FindChild<KaxChapterTrackNumber>(ctrack))
     throw conversion_x{Y("<ChapterTrack> is missing the <ChapterTrackNumber> child.")};
 
-  KaxChapterDisplay *cdisplay = FindChild<KaxChapterDisplay>(atom);
+  auto cdisplay = FindChild<KaxChapterDisplay>(atom);
   if (cdisplay)
     fix_display(*cdisplay);
 }
@@ -140,13 +134,11 @@ ebml_chapters_converter_c::fix_display(KaxChapterDisplay &display)
   if (!FindChild<KaxChapterString>(display))
     throw conversion_x{Y("<ChapterDisplay> is missing the <ChapterString> child.")};
 
-  KaxChapterLanguage *clanguage = FindChild<KaxChapterLanguage>(display);
-  if (!clanguage) {
-    clanguage                             = new KaxChapterLanguage;
-    *static_cast<EbmlString *>(clanguage) = "und";
-    display.PushElement(*clanguage);
+  auto clanguage = FindChild<KaxChapterLanguage>(display);
+  if (!clanguage)
+    display.PushElement((new KaxChapterLanguage)->SetValue("und"));
 
-  } else {
+  else {
     int index = map_to_iso639_2_code(std::string(*clanguage));
 
     if (-1 == index)
@@ -154,7 +146,7 @@ ebml_chapters_converter_c::fix_display(KaxChapterDisplay &display)
 
   }
 
-  KaxChapterCountry *ccountry = FindChild<KaxChapterCountry>(display);
+  auto ccountry = FindChild<KaxChapterCountry>(display);
   if (ccountry && !is_valid_cctld(std::string(*ccountry)))
     throw conversion_x{boost::format(Y("'%1%' is not a valid ccTLD country code.")) % std::string(*ccountry)};
 }
