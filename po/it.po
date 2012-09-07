@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: it\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2012-08-12 19:08+0100\n"
-"Last-Translator: bovirus <bovirus@live.it>\n"
+"PO-Revision-Date: 2012-09-06 10:43+0100\n"
+"Last-Translator: bovirus <bovirus@gmail.com>\n"
 "Language-Team: Italian <moritz@bunkus.org>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -1733,7 +1733,7 @@ msgstr ""
 
 #: src/mmg/tabs/chapters.cpp:354
 msgid "A segment to play in place of this chapter. The edition set via the segment edition UID should be used for this segment, otherwise no edition is used. This is a 128bit segment UID in the usual UID form: hex numbers with or without the \"0x\" prefix, with or without spaces, exactly 32 digits.\n"
-msgstr ""
+msgstr "Un segmento da riprodurre in luogo di questo capitolo. L'edizione impostata attraverso l'UID edizione segmento dovrebbe essere usata per questo segmento, altrimenti nessuna edizione verrà usata. Questo è un UID segmento a 128bit nell'usale forma UID: numeri esadecimali con o senza il prefisso  \"0x\", con o senza spaxi, esattamente 32 digit.\n"
 
 #: src/info/mkvinfo.cpp:910
 msgid "A track"
@@ -3629,9 +3629,8 @@ msgid "Finished processing on %s"
 msgstr "Elaborazione completata il %s"
 
 #: src/mmg/tabs/chapters.cpp:358
-#, fuzzy
 msgid "Flags:"
-msgstr "Tag:"
+msgstr "Flag:"
 
 #: src/mmg/header_editor/value_page.cpp:147
 msgid "Floating point number"
@@ -3877,9 +3876,8 @@ msgid "If a chapter is not marked 'enabled' then the player should skip the part
 msgstr "Se un capitolo non è marcato come 'abilitato' nel riproduttore potrebbe ignorare la parte del file che questo capitolo occupa."
 
 #: src/mmg/tabs/chapters.cpp:368
-#, fuzzy
 msgid "If a chapter or an edition is marked 'hidden' then the player should not show this chapter entry (or all of this edition's entries) to the user. Such entries could still be used by the menu system."
-msgstr "Se un capitolo è segnato come 'nascosto' il riproduttore non dovrebbe visualizzare questo capitolo all'utente. Alcuni elementi potrebbero essere ancora usati dal menu sistema."
+msgstr "Se un capitolo o una edizione sono marcati come 'nascosto' il riproduttore non dovrebbe visualizzare questo capitolo (o tutti gli elemti dell'edizione). Alcuni elementi potrebbero essere ancora usati dal menu Sistema."
 
 #: src/mmg/tabs/global.cpp:264
 msgid "If a range's start timecode is prefixed with '+' then its content will be written to the same file as the previous range. Otherwise a new file will be created for this range."
@@ -3891,11 +3889,11 @@ msgstr "Se è usato il timecode iniziale è tralasciato rispetto al precedente i
 
 #: src/mmg/tabs/chapters.cpp:363
 msgid "If an edition is marked 'ordered' then the chapters can be defined multiple times and the order to play them is enforced."
-msgstr ""
+msgstr "Se una edizione è marcata come 'ordinata' i capitoli possono essere definiti più volte e l'ordine di riproduzione è forzato."
 
 #: src/mmg/tabs/chapters.cpp:391
 msgid "If an edition is marked as 'default' then it should be used as the default edition."
-msgstr ""
+msgstr "Se una edizione è marcata come 'predfinita' dovrebbe essere usata come edizione predfinita."
 
 #: src/mmg/options/mmg.cpp:68
 msgid "If checked mmg will ask for confirmation before overwriting existing files, or before adding a new job if there's an old job whose description matches the new one."
@@ -4132,14 +4130,12 @@ msgid "Invalid format used for the end time for '%s'. Setting value to 0."
 msgstr "Formato non valido usato per il tempo finale per '%s'. Impostato valore a 0."
 
 #: src/mmg/tabs/chapters.cpp:1610
-#, fuzzy
 msgid "Invalid format used for the segment UID. Not using the value."
-msgstr "Formato non valido usato per il tempo finale per '%s'. Impostato valore a 0."
+msgstr "Formato non valido usato per l'UID segmento. Valore non usato."
 
 #: src/mmg/tabs/chapters.cpp:1628
-#, fuzzy
 msgid "Invalid format used for the segment edition UID. Not using the value."
-msgstr "Formato non valido usato per il tempo finale per '%s'. Impostato valore a 0."
+msgstr "Formato non valido usato per l'UID edizione segmento. Valore non usato."
 
 #: src/mmg/tabs/chapters.cpp:1559
 #, c-format, boost-format
@@ -5693,7 +5689,6 @@ msgid "Segment"
 msgstr "Segmento"
 
 #: src/mmg/tabs/chapters.cpp:353
-#, fuzzy
 msgid "Segment UID:"
 msgstr "UID segmento:"
 
@@ -5707,9 +5702,8 @@ msgid "Segment UIDs:"
 msgstr "UID segmento:"
 
 #: src/mmg/tabs/chapters.cpp:356
-#, fuzzy
 msgid "Segment edition UID:"
-msgstr "UID segmento:"
+msgstr "UID edizione segmento:"
 
 #: src/common/property_element.cpp:102
 #: src/mmg/header_editor/frame.cpp:322
@@ -6604,7 +6598,7 @@ msgstr "Le specifiche di modifica '%1%' e '%2%' si riferiscono alla stessa tracc
 
 #: src/mmg/tabs/chapters.cpp:357
 msgid "The edition UID to play from the segment linked in the chapter's segment UID. This is simply a number."
-msgstr ""
+msgstr "L'UID edizione da riprodurre dal segmento collegato nell'UID segmento capitolo. E' semplicemente un numero."
 
 #: src/mmg/header_editor/frame.cpp:670
 #: src/mmg/tabs/chapters.cpp:1991
@@ -8903,7 +8897,7 @@ msgstr "solo se l'esecuzione ha avuto successo"
 
 #: src/mmg/tabs/chapters.cpp:362
 msgid "ordered"
-msgstr ""
+msgstr "ordinato"
 
 #: src/info/mkvinfo.cpp:617
 #, boost-format
@@ -9567,4 +9561,3 @@ msgstr "sì"
 
 #~ msgid "wavpack_reader: Could not open the file."
 #~ msgstr "wavpack_reader: Impossibile aprire il file."
-
