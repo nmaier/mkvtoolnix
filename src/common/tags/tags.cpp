@@ -47,7 +47,7 @@ fix_mandatory_tag_elements(EbmlElement *e) {
   }
 
   if (dynamic_cast<EbmlMaster *>(e))
-    for (auto child : static_cast<EbmlMaster *>(e)->GetElementList())
+    for (auto child : *static_cast<EbmlMaster *>(e))
       fix_mandatory_tag_elements(child);
 }
 
@@ -56,7 +56,7 @@ select_tags_for_chapters(KaxTags &tags,
                          KaxChapters &chapters) {
   KaxTags *new_tags = nullptr;
 
-  for (auto tag_child : tags.GetElementList()) {
+  for (auto tag_child : tags) {
     auto tag = dynamic_cast<KaxTag *>(tag_child);
     if (!tag)
       continue;
@@ -65,7 +65,7 @@ select_tags_for_chapters(KaxTags &tags,
     KaxTagTargets *targets = FindChild<KaxTagTargets>(tag);
 
     if (targets) {
-      for (auto child : targets->GetElementList()) {
+      for (auto child : *targets) {
         auto t_euid = dynamic_cast<KaxTagEditionUID *>(child);
         if (t_euid && !find_edition_with_uid(chapters, t_euid->GetValue())) {
           copy = false;
@@ -246,7 +246,7 @@ int
 count_simple_tags(EbmlMaster &master) {
   int count = 0;
 
-  for (auto child : master.GetElementList())
+  for (auto child : master)
     if (is_id(child, KaxTagSimple))
       ++count;
 
@@ -258,7 +258,7 @@ count_simple_tags(EbmlMaster &master) {
 
 void
 remove_track_uid_tag_targets(EbmlMaster *tag) {
-  for (auto el : tag->GetElementList()) {
+  for (auto el : *tag) {
     if (!is_id(el, KaxTagTargets))
       continue;
 

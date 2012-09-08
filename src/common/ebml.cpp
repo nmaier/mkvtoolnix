@@ -487,7 +487,7 @@ kt_get_v_pixel_height(KaxTrackEntry &track) {
 EbmlElement *
 find_ebml_element_by_id(EbmlMaster *master,
                         const EbmlId &id) {
-  for (auto child : master->GetElementList())
+  for (auto child : *master)
     if (EbmlId(*child) == id)
       return child;
 

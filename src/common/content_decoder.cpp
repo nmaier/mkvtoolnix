@@ -52,7 +52,7 @@ content_decoder_c::initialize(KaxTrackEntry &ktentry) {
 
   int tid = kt_get_number(ktentry);
 
-  for (auto kcenc_el : kcencodings->GetElementList()) {
+  for (auto kcenc_el : *kcencodings) {
     auto kcenc = dynamic_cast<KaxContentEncoding *>(kcenc_el);
     if (!kcenc)
       continue;

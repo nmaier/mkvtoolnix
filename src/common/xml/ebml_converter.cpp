@@ -299,7 +299,7 @@ ebml_converter_c::to_xml_recursively(pugi::xml_node &parent,
   auto new_node = parent.append_child(name.c_str());
 
   if (dynamic_cast<EbmlMaster *>(&e))
-    for (auto child : static_cast<EbmlMaster &>(e).GetElementList())
+    for (auto child : static_cast<EbmlMaster &>(e))
       to_xml_recursively(new_node, *child);
 
   else if (dynamic_cast<EbmlUInteger *>(&e))
@@ -444,7 +444,7 @@ ebml_converter_c::verify_and_create_element(EbmlMaster &parent,
 
   auto semantic = find_ebml_semantic(EBML_INFO(KaxSegment), id);
   if (semantic && EBML_SEM_UNIQUE(*semantic))
-    for (auto child : parent.GetElementList())
+    for (auto child : parent)
       if (EbmlId(*child) == id)
         throw duplicate_child_node_x{ name, get_tag_name(parent), node.offset_debug() };
 
