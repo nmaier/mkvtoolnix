@@ -289,12 +289,10 @@ _show_element(EbmlElement *l,
     return;
 
   // Dump unknown elements recursively.
-  EbmlMaster *m = dynamic_cast<EbmlMaster *>(l);
-  if (m) {
-    size_t i;
-    for (i = 0; i < m->ListSize(); i++)
-      show_unknown_element((*m)[i], level + 1);
-  }
+  auto *m = dynamic_cast<EbmlMaster *>(l);
+  if (m)
+    for (auto child : *m)
+      show_unknown_element(child, level + 1);
 
   l->SkipData(*es, EBML_CONTEXT(l));
 }
@@ -408,36 +406,6 @@ asctime_r(const struct tm *tm,
 }
 #endif
 
-struct master_sorter_t {
-  int m_index;
-  int64_t m_pos;
-
-  inline master_sorter_t(int index, int64_t pos):
-    m_index(index), m_pos(pos) { }
-
-  inline bool operator <(const master_sorter_t &cmp) const {
-    return m_pos < cmp.m_pos;
-  }
-};
-
-void
-sort_master(EbmlMaster &m) {
-  size_t i;
-  std::vector<EbmlElement *> tmp;
-  std::vector<master_sorter_t> sort_me;
-
-  for (i = 0; m.ListSize() > i; ++i)
-    sort_me.push_back(master_sorter_t(i, m[i]->GetElementPosition()));
-  std::sort(sort_me.begin(), sort_me.end());
-
-  for (i = 0; sort_me.size() > i; ++i)
-    tmp.push_back(m[sort_me[i].m_index]);
-  m.RemoveAll();
-
-  for (i = 0; tmp.size() > i; ++i)
-    m.PushElement(*tmp[i]);
-}
-
 void
 read_master(EbmlMaster *m,
             EbmlStream *es,
@@ -449,7 +417,7 @@ read_master(EbmlMaster *m,
   if (m->ListSize() == 0)
     return;
 
-  sort_master(*m);
+  brng::sort(m->GetElementList(), [](EbmlElement const *a, EbmlElement const *b) { return a->GetElementPosition() < b->GetElementPosition(); });
 }
 
 std::string
@@ -470,48 +438,43 @@ format_binary(EbmlBinary &bin,
   return result;
 }
 
+inline std::string
+format_binary(EbmlBinary *bin,
+              size_t max_len = 10) {
+  return format_binary(*bin, max_len);
+}
+
 void
 handle_chaptertranslate(EbmlStream *&es,
-                        EbmlElement *&l2,
-                        EbmlElement *&l3) {
+                        EbmlElement *&l2) {
   show_element(l2, 2, Y("Chapter Translate"));
 
-  size_t i2;
-  EbmlMaster *m2 = static_cast<EbmlMaster *>(l2);
-  for (i2 = 0; i2 < m2->ListSize(); i2++) {
-    l3 = (*m2)[i2];
-
+  for (auto l3 : *static_cast<EbmlMaster *>(l2))
     if (is_id(l3, KaxChapterTranslateEditionUID))
       show_element(l3, 3, boost::format(Y("Chapter Translate Edition UID: %1%")) % static_cast<KaxChapterTranslateEditionUID *>(l3)->GetValue());
 
     else if (is_id(l3, KaxChapterTranslateCodec))
-      show_element(l3, 3, boost::format(Y("Chapter Translate Codec: %1%")) % static_cast<KaxChapterTranslateCodec *>(l3)->GetValue());
+      show_element(l3, 3, boost::format(Y("Chapter Translate Codec: %1%"))       % static_cast<KaxChapterTranslateCodec *>(l3)->GetValue());
 
     else if (is_id(l3, KaxChapterTranslateID))
-      show_element(l3, 3, boost::format(Y("Chapter Translate ID: %1%")) % format_binary(*static_cast<EbmlBinary *>(l3)));
-  }
+      show_element(l3, 3, boost::format(Y("Chapter Translate ID: %1%"))          % format_binary(static_cast<EbmlBinary *>(l3)));
 }
 
 void
 handle_info(EbmlStream *&es,
             int &upper_lvl_el,
-            EbmlElement *&l1,
-            EbmlElement *&l2,
-            EbmlElement *&l3) {
+            EbmlElement *&l1) {
   // General info about this Matroska file
   show_element(l1, 1, Y("Segment information"));
 
   upper_lvl_el               = 0;
-  EbmlMaster *m1             = static_cast<EbmlMaster *>(l1);
   EbmlElement *element_found = nullptr;
+  auto m1                    = static_cast<EbmlMaster *>(l1);
   read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, element_found);
 
   s_tc_scale = FindChildValue<KaxTimecodeScale>(m1, TIMECODE_SCALE);
 
-  size_t i1;
-  for (i1 = 0; i1 < m1->ListSize(); i1++) {
-    l2 = (*m1)[i1];
-
+  for (auto l2 : *m1)
     if (is_id(l2, KaxTimecodeScale)) {
       s_tc_scale = static_cast<KaxTimecodeScale *>(l2)->GetValue();
       show_element(l2, 2, boost::format(Y("Timecode scale: %1%")) % s_tc_scale);
@@ -546,7 +509,7 @@ handle_info(EbmlStream *&es,
       show_element(l2, 2, boost::format(Y("Family UID: %1%"))              % to_hex(static_cast<KaxSegmentFamily *>(l2)));
 
     else if (is_id(l2, KaxChapterTranslate))
-      handle_chaptertranslate(es, l2, l3);
+      handle_chaptertranslate(es, l2);
 
     else if (is_id(l2, KaxPrevUID))
       show_element(l2, 2, boost::format(Y("Previous segment UID: %1%"))    % to_hex(static_cast<KaxPrevUID *>(l2)));
@@ -565,37 +528,29 @@ handle_info(EbmlStream *&es,
 
     else if (is_id(l2, KaxTitle))
       show_element(l2, 2, boost::format(Y("Title: %1%"))                   % static_cast<KaxTitle *>(l2)->GetValueUTF8());
-  }
-
-  l2 = element_found;
 }
 
 void
 handle_audio_track(EbmlStream *&es,
                    EbmlElement *&l3,
-                   EbmlElement *&l4,
                    std::vector<std::string> &summary) {
   show_element(l3, 3, "Audio track");
 
-  size_t i3;
-  EbmlMaster *m3 = static_cast<EbmlMaster *>(l3);
-  for (i3 = 0; i3 < m3->ListSize(); i3++) {
-    l4 = (*m3)[i3];
-
+  for (auto l4 : *static_cast<EbmlMaster *>(l3))
     if (is_id(l4, KaxAudioSamplingFreq)) {
       KaxAudioSamplingFreq &freq = *static_cast<KaxAudioSamplingFreq *>(l4);
-      show_element(l4, 4, boost::format(Y("Sampling frequency: %1%")) % float(freq));
-      summary.push_back((boost::format(Y("sampling freq: %1%")) % float(freq)).str());
+      show_element(l4, 4, boost::format(Y("Sampling frequency: %1%")) % freq.GetValue());
+      summary.push_back((boost::format(Y("sampling freq: %1%")) % freq.GetValue()).str());
 
     } else if (is_id(l4, KaxAudioOutputSamplingFreq)) {
       KaxAudioOutputSamplingFreq &ofreq = *static_cast<KaxAudioOutputSamplingFreq *>(l4);
-      show_element(l4, 4, boost::format(Y("Output sampling frequency: %1%")) % float(ofreq));
-      summary.push_back((boost::format(Y("output sampling freq: %1%")) % float(ofreq)).str());
+      show_element(l4, 4, boost::format(Y("Output sampling frequency: %1%")) % ofreq.GetValue());
+      summary.push_back((boost::format(Y("output sampling freq: %1%")) % ofreq.GetValue()).str());
 
     } else if (is_id(l4, KaxAudioChannels)) {
       KaxAudioChannels &channels = *static_cast<KaxAudioChannels *>(l4);
-      show_element(l4, 4, boost::format(Y("Channels: %1%")) % uint64(channels));
-      summary.push_back((boost::format(Y("channels: %1%")) % uint64(channels)).str());
+      show_element(l4, 4, boost::format(Y("Channels: %1%")) % channels.GetValue());
+      summary.push_back((boost::format(Y("channels: %1%")) % channels.GetValue()).str());
 
 #if MATROSKA_VERSION >= 2
     } else if (is_id(l4, KaxAudioPosition)) {
@@ -605,158 +560,133 @@ handle_audio_track(EbmlStream *&es,
 
     } else if (is_id(l4, KaxAudioBitDepth)) {
       KaxAudioBitDepth &bps = *static_cast<KaxAudioBitDepth *>(l4);
-      show_element(l4, 4, boost::format(Y("Bit depth: %1%")) % uint64(bps));
-      summary.push_back((boost::format(Y("bits per sample: %1%")) % uint64(bps)).str());
+      show_element(l4, 4, boost::format(Y("Bit depth: %1%")) % bps.GetValue());
+      summary.push_back((boost::format(Y("bits per sample: %1%")) % bps.GetValue()).str());
 
     } else if (!is_global(es, l4, 4))
       show_unknown_element(l4, 4);
-
-  } // while (l4)
 }
 
 void
 handle_video_track(EbmlStream *&es,
                    EbmlElement *&l3,
-                   EbmlElement *&l4,
                    std::vector<std::string> &summary) {
   show_element(l3, 3, Y("Video track"));
 
-  EbmlMaster *m3 = static_cast<EbmlMaster *>(l3);
-  size_t i3;
-  for (i3 = 0; i3 < m3->ListSize(); i3++) {
-    l4 = (*m3)[i3];
-
+  for (auto l4 : *static_cast<EbmlMaster *>(l3))
     if (is_id(l4, KaxVideoPixelWidth)) {
       KaxVideoPixelWidth &width = *static_cast<KaxVideoPixelWidth *>(l4);
-      show_element(l4, 4, boost::format(Y("Pixel width: %1%")) % uint64(width));
-      summary.push_back((boost::format(Y("pixel width: %1%")) % uint64(width)).str());
+      show_element(l4, 4, boost::format(Y("Pixel width: %1%")) % width.GetValue());
+      summary.push_back((boost::format(Y("pixel width: %1%")) % width.GetValue()).str());
 
     } else if (is_id(l4, KaxVideoPixelHeight)) {
       KaxVideoPixelHeight &height = *static_cast<KaxVideoPixelHeight *>(l4);
-      show_element(l4, 4, boost::format(Y("Pixel height: %1%")) % uint64(height));
-      summary.push_back((boost::format(Y("pixel height: %1%")) % uint64(height)).str());
+      show_element(l4, 4, boost::format(Y("Pixel height: %1%")) % height.GetValue());
+      summary.push_back((boost::format(Y("pixel height: %1%")) % height.GetValue()).str());
 
     } else if (is_id(l4, KaxVideoDisplayWidth)) {
       KaxVideoDisplayWidth &width = *static_cast<KaxVideoDisplayWidth *>(l4);
-      show_element(l4, 4, boost::format(Y("Display width: %1%")) % uint64(width));
-      summary.push_back((boost::format(Y("display width: %1%")) % uint64(width)).str());
+      show_element(l4, 4, boost::format(Y("Display width: %1%")) % width.GetValue());
+      summary.push_back((boost::format(Y("display width: %1%")) % width.GetValue()).str());
 
     } else if (is_id(l4, KaxVideoDisplayHeight)) {
       KaxVideoDisplayHeight &height = *static_cast<KaxVideoDisplayHeight *>(l4);
-      show_element(l4, 4, boost::format(Y("Display height: %1%")) % uint64(height));
-      summary.push_back((boost::format(Y("display height: %1%")) % uint64(height)).str());
+      show_element(l4, 4, boost::format(Y("Display height: %1%")) % height.GetValue());
+      summary.push_back((boost::format(Y("display height: %1%")) % height.GetValue()).str());
 
     } else if (is_id(l4, KaxVideoPixelCropLeft)) {
       KaxVideoPixelCropLeft &left = *static_cast<KaxVideoPixelCropLeft *>(l4);
-      show_element(l4, 4, boost::format(Y("Pixel crop left: %1%")) % uint64(left));
-      summary.push_back((boost::format(Y("pixel crop left: %1%")) % uint64(left)).str());
+      show_element(l4, 4, boost::format(Y("Pixel crop left: %1%")) % left.GetValue());
+      summary.push_back((boost::format(Y("pixel crop left: %1%")) % left.GetValue()).str());
 
     } else if (is_id(l4, KaxVideoPixelCropTop)) {
       KaxVideoPixelCropTop &top = *static_cast<KaxVideoPixelCropTop *>(l4);
-      show_element(l4, 4, boost::format(Y("Pixel crop top: %1%")) % uint64(top));
-      summary.push_back((boost::format(Y("pixel crop top: %1%")) % uint64(top)).str());
+      show_element(l4, 4, boost::format(Y("Pixel crop top: %1%")) % top.GetValue());
+      summary.push_back((boost::format(Y("pixel crop top: %1%")) % top.GetValue()).str());
 
     } else if (is_id(l4, KaxVideoPixelCropRight)) {
       KaxVideoPixelCropRight &right = *static_cast<KaxVideoPixelCropRight *>(l4);
-      show_element(l4, 4, boost::format(Y("Pixel crop right: %1%")) % uint64(right));
-      summary.push_back((boost::format(Y("pixel crop right: %1%")) % uint64(right)).str());
+      show_element(l4, 4, boost::format(Y("Pixel crop right: %1%")) % right.GetValue());
+      summary.push_back((boost::format(Y("pixel crop right: %1%")) % right.GetValue()).str());
 
     } else if (is_id(l4, KaxVideoPixelCropBottom)) {
       KaxVideoPixelCropBottom &bottom = *static_cast<KaxVideoPixelCropBottom *>(l4);
-      show_element(l4, 4, boost::format(Y("Pixel crop bottom: %1%")) % uint64(bottom));
-      summary.push_back((boost::format(Y("pixel crop bottom: %1%")) % uint64(bottom)).str());
+      show_element(l4, 4, boost::format(Y("Pixel crop bottom: %1%")) % bottom.GetValue());
+      summary.push_back((boost::format(Y("pixel crop bottom: %1%")) % bottom.GetValue()).str());
 
 #if MATROSKA_VERSION >= 2
     } else if (is_id(l4, KaxVideoDisplayUnit)) {
-      KaxVideoDisplayUnit &unit = *static_cast<KaxVideoDisplayUnit *>(l4);
+      auto unit = static_cast<KaxVideoDisplayUnit *>(l4)->GetValue();
       show_element(l4, 4,
                    boost::format(Y("Display unit: %1%%2%"))
-                   % uint64(unit)
-                   % (  uint16(unit) == 0 ? Y(" (pixels)")
-                      : uint16(unit) == 1 ? Y(" (centimeters)")
-                      : uint16(unit) == 2 ? Y(" (inches)")
-                      :                     ""));
+                   % unit
+                   % (  0 == unit ? Y(" (pixels)")
+                      : 1 == unit ? Y(" (centimeters)")
+                      : 2 == unit ? Y(" (inches)")
+                      :               ""));
 
-    } else if (is_id(l4, KaxVideoGamma)) {
-      KaxVideoGamma &gamma = *static_cast<KaxVideoGamma *>(l4);
-      show_element(l4, 4, boost::format(Y("Gamma: %1%")) % float(gamma));
+    } else if (is_id(l4, KaxVideoGamma))
+      show_element(l4, 4, boost::format(Y("Gamma: %1%")) % static_cast<KaxVideoGamma *>(l4)->GetValue());
 
-    } else if (is_id(l4, KaxVideoFlagInterlaced)) {
-      KaxVideoFlagInterlaced &f_interlaced = *static_cast<KaxVideoFlagInterlaced *>(l4);
-      show_element(l4, 4, boost::format(Y("Interlaced: %1%")) % uint64(f_interlaced));
+    else if (is_id(l4, KaxVideoFlagInterlaced))
+      show_element(l4, 4, boost::format(Y("Interlaced: %1%")) % static_cast<KaxVideoFlagInterlaced *>(l4)->GetValue());
 
-    } else if (is_id(l4, KaxVideoStereoMode)) {
-      KaxVideoStereoMode &stereo = *static_cast<KaxVideoStereoMode *>(l4);
+    else if (is_id(l4, KaxVideoStereoMode)) {
+      auto stereo_mode = static_cast<KaxVideoStereoMode *>(l4)->GetValue();
       show_element(l4, 4,
                    boost::format(Y("Stereo mode: %1% (%2%)"))
-                   % uint64(stereo)
-                   % stereo_mode_c::translate(static_cast<stereo_mode_c::mode>(uint64(stereo))));
+                   % stereo_mode
+                   % stereo_mode_c::translate(static_cast<stereo_mode_c::mode>(stereo_mode)));
 
     } else if (is_id(l4, KaxVideoAspectRatio)) {
-      KaxVideoAspectRatio &ar_type = *static_cast<KaxVideoAspectRatio *>(l4);
+      auto ar_type = static_cast<KaxVideoAspectRatio *>(l4)->GetValue();
       show_element(l4, 4,
                    boost::format(Y("Aspect ratio type: %1%%2%"))
-                   % uint64(ar_type)
-                   % (  uint8(ar_type) == 0 ? Y(" (free resizing)")
-                      : uint8(ar_type) == 1 ? Y(" (keep aspect ratio)")
-                      : uint8(ar_type) == 2 ? Y(" (fixed)")
-                      :                       ""));
+                   % ar_type
+                   % (  0 == ar_type ? Y(" (free resizing)")
+                      : 1 == ar_type ? Y(" (keep aspect ratio)")
+                      : 2 == ar_type ? Y(" (fixed)")
+                      :                  ""));
 #endif
-    } else if (is_id(l4, KaxVideoColourSpace)) {
-      KaxVideoColourSpace &cspace = *static_cast<KaxVideoColourSpace *>(l4);
-      show_element(l4, 4, boost::format(Y("Colour space: %1%")) % format_binary(cspace));
+    } else if (is_id(l4, KaxVideoColourSpace))
+      show_element(l4, 4, boost::format(Y("Colour space: %1%")) % format_binary(static_cast<KaxVideoColourSpace *>(l4)));
 
-    } else if (is_id(l4, KaxVideoFrameRate)) {
-      KaxVideoFrameRate &framerate = *static_cast<KaxVideoFrameRate *>(l4);
-      show_element(l4, 4, boost::format(Y("Frame rate: %1%")) % float(framerate));
+    else if (is_id(l4, KaxVideoFrameRate))
+      show_element(l4, 4, boost::format(Y("Frame rate: %1%")) % static_cast<KaxVideoFrameRate *>(l4)->GetValue());
 
-    } else if (!is_global(es, l4, 4))
+    else if (!is_global(es, l4, 4))
       show_unknown_element(l4, 4);
-
-  } // while (l4)
 }
 
 void
 handle_content_encodings(EbmlStream *&es,
-                         EbmlElement *&l3,
-                         EbmlElement *&l4,
-                         EbmlElement *&l5,
-                         EbmlElement *&l6) {
+                         EbmlElement *&l3) {
   show_element(l3, 3, Y("Content encodings"));
 
-  EbmlMaster *m3 = static_cast<EbmlMaster *>(l3);
-  size_t i3;
-  for (i3 = 0; i3 < m3->ListSize(); i3++) {
-    l4 = (*m3)[i3];
-
+  for (auto l4 : *static_cast<EbmlMaster *>(l3))
     if (is_id(l4, KaxContentEncoding)) {
       show_element(l4, 4, Y("Content encoding"));
 
-      EbmlMaster *m4 = static_cast<EbmlMaster *>(l4);
-      size_t i4;
-      for (i4 = 0; i4 < m4->ListSize(); i4++) {
-        l5 = (*m4)[i4];
+      for (auto l5 : *static_cast<EbmlMaster *>(l4))
+        if (is_id(l5, KaxContentEncodingOrder))
+          show_element(l5, 5, boost::format(Y("Order: %1%")) % static_cast<KaxContentEncodingOrder *>(l5)->GetValue());
 
-        if (is_id(l5, KaxContentEncodingOrder)) {
-          KaxContentEncodingOrder &ce_order = *static_cast<KaxContentEncodingOrder *>(l5);
-          show_element(l5, 5, boost::format(Y("Order: %1%")) % uint64(ce_order));
-
-        } else if (is_id(l5,  KaxContentEncodingScope)) {
+        else if (is_id(l5,  KaxContentEncodingScope)) {
           std::vector<std::string> scope;
-          KaxContentEncodingScope &ce_scope = *static_cast<KaxContentEncodingScope *>(l5);
+          auto ce_scope = static_cast<KaxContentEncodingScope *>(l5)->GetValue();
 
-          if ((uint32(ce_scope) & 0x01) == 0x01)
+          if ((ce_scope & 0x01) == 0x01)
             scope.push_back(Y("1: all frames"));
-          if ((uint32(ce_scope) & 0x02) == 0x02)
+          if ((ce_scope & 0x02) == 0x02)
             scope.push_back(Y("2: codec private data"));
-          if ((uint32(ce_scope) & 0xfc) != 0x00)
+          if ((ce_scope & 0xfc) != 0x00)
             scope.push_back(Y("rest: unknown"));
           if (scope.empty())
             scope.push_back(Y("unknown"));
-          show_element(l5, 5, boost::format(Y("Scope: %1% (%2%)")) % uint64(ce_scope) % join(", ", scope));
+          show_element(l5, 5, boost::format(Y("Scope: %1% (%2%)")) % ce_scope % join(", ", scope));
 
         } else if (is_id(l5,  KaxContentEncodingType)) {
-          uint64_t ce_type = static_cast<KaxContentEncodingType *>(l5)->GetValue();
+          auto ce_type = static_cast<KaxContentEncodingType *>(l5)->GetValue();
           show_element(l5, 5,
                        boost::format(Y("Type: %1% (%2%)"))
                        % ce_type
@@ -767,13 +697,9 @@ handle_content_encodings(EbmlStream *&es,
         } else if (is_id(l5, KaxContentCompression)) {
           show_element(l5, 5, Y("Content compression"));
 
-          EbmlMaster *m5 = static_cast<EbmlMaster *>(l5);
-          size_t i5;
-          for (i5 = 0; i5 < m5->ListSize(); i5++) {
-            l6 = (*m5)[i5];
-
+          for (auto l6 : *static_cast<EbmlMaster *>(l5))
             if (is_id(l6, KaxContentCompAlgo)) {
-              uint64_t c_algo = static_cast<KaxContentCompAlgo *>(l6)->GetValue();
+              auto c_algo = static_cast<KaxContentCompAlgo *>(l6)->GetValue();
               show_element(l6, 6,
                            boost::format(Y("Algorithm: %1% (%2%)"))
                            % c_algo
@@ -783,24 +709,17 @@ handle_content_encodings(EbmlStream *&es,
                               : 3 == c_algo ? Y("header removal")
                               :               Y("unknown")));
 
-            } else if (is_id(l6, KaxContentCompSettings)) {
-              KaxContentCompSettings &c_settings = *static_cast<KaxContentCompSettings *>(l6);
-              show_element(l6, 6, boost::format(Y("Settings: %1%")) % format_binary(c_settings));
+            } else if (is_id(l6, KaxContentCompSettings))
+              show_element(l6, 6, boost::format(Y("Settings: %1%")) % format_binary(static_cast<KaxContentCompSettings *>(l6)));
 
-            } else if (!is_global(es, l6, 6))
+            else if (!is_global(es, l6, 6))
               show_unknown_element(l6, 6);
-          }
-
         } else if (is_id(l5, KaxContentEncryption)) {
           show_element(l5, 5, Y("Content encryption"));
 
-          EbmlMaster *m5 = static_cast<EbmlMaster *>(l5);
-          size_t i5;
-          for (i5 = 0; i5 < m5->ListSize(); i5++) {
-            l6 = (*m5)[i5];
-
+          for (auto l6 : *static_cast<EbmlMaster *>(l5))
             if (is_id(l6, KaxContentEncAlgo)) {
-              uint64_t e_algo = static_cast<KaxContentEncAlgo *>(l6)->GetValue();
+              auto e_algo = static_cast<KaxContentEncAlgo *>(l6)->GetValue();
               show_element(l6, 6,
                            boost::format(Y("Encryption algorithm: %1% (%2%)"))
                            % e_algo
@@ -812,12 +731,11 @@ handle_content_encodings(EbmlStream *&es,
                               : 5 == e_algo ?   "AES"
                               :               Y("unknown")));
 
-            } else if (is_id(l6, KaxContentEncKeyID)) {
-              KaxContentEncKeyID &e_keyid = *static_cast<KaxContentEncKeyID *>(l6);
-              show_element(l6, 6, boost::format(Y("Encryption key ID: %1%")) % format_binary(e_keyid));
+            } else if (is_id(l6, KaxContentEncKeyID))
+              show_element(l6, 6, boost::format(Y("Encryption key ID: %1%")) % format_binary(static_cast<KaxContentEncKeyID *>(l6)));
 
-            } else if (is_id(l6, KaxContentSigAlgo)) {
-              uint64_t s_algo = static_cast<KaxContentSigAlgo *>(l6)->GetValue();
+            else if (is_id(l6, KaxContentSigAlgo)) {
+              auto s_algo = static_cast<KaxContentSigAlgo *>(l6)->GetValue();
               show_element(l6, 6,
                            boost::format(Y("Signature algorithm: %1% (%2%)"))
                            % s_algo
@@ -826,7 +744,7 @@ handle_content_encodings(EbmlStream *&es,
                               :               Y("unknown")));
 
             } else if (is_id(l6, KaxContentSigHashAlgo)) {
-              uint64_t s_halgo = static_cast<KaxContentSigHashAlgo *>(l6)->GetValue();
+              auto s_halgo = static_cast<KaxContentSigHashAlgo *>(l6)->GetValue();
               show_element(l6, 6,
                            boost::format(Y("Signature hash algorithm: %1% (%2%)"))
                            % s_halgo
@@ -835,76 +753,55 @@ handle_content_encodings(EbmlStream *&es,
                               : 2 == s_halgo ? Y("MD5")
                               :                Y("unknown")));
 
-            } else if (is_id(l6, KaxContentSigKeyID)) {
-              KaxContentSigKeyID &s_keyid = *static_cast<KaxContentSigKeyID *>(l6);
-              show_element(l6, 6, boost::format(Y("Signature key ID: %1%")) % format_binary(s_keyid));
+            } else if (is_id(l6, KaxContentSigKeyID))
+              show_element(l6, 6, boost::format(Y("Signature key ID: %1%")) % format_binary(static_cast<KaxContentSigKeyID *>(l6)));
 
-            } else if (is_id(l6, KaxContentSignature)) {
-              KaxContentSignature &sig = *static_cast<KaxContentSignature *>(l6);
-              show_element(l6, 6, boost::format(Y("Signature: %1%")) % format_binary(sig));
+            else if (is_id(l6, KaxContentSignature))
+              show_element(l6, 6, boost::format(Y("Signature: %1%")) % format_binary(static_cast<KaxContentSignature *>(l6)));
 
-            } else if (!is_global(es, l6, 6))
+            else if (!is_global(es, l6, 6))
               show_unknown_element(l6, 6);
-
-          }
 
         } else if (!is_global(es, l5, 5))
           show_unknown_element(l5, 5);
 
-      }
-
     } else if (!is_global(es, l4, 4))
       show_unknown_element(l4, 4);
-
-  }
 }
 
 void
 handle_tracks(EbmlStream *&es,
               int &upper_lvl_el,
-              EbmlElement *&l1,
-              EbmlElement *&l2,
-              EbmlElement *&l3,
-              EbmlElement *&l4,
-              EbmlElement *&l5,
-              EbmlElement *&l6) {
+              EbmlElement *&l1) {
   // Yep, we've found our KaxTracks element. Now find all tracks
   // contained in this segment.
   show_element(l1, 1, Y("Segment tracks"));
 
+  size_t s_mkvmerge_track_id = 0;
   upper_lvl_el               = 0;
-  EbmlMaster *m1             = static_cast<EbmlMaster *>(l1);
   EbmlElement *element_found = nullptr;
+  auto m1                    = static_cast<EbmlMaster *>(l1);
   read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, element_found);
 
-  size_t i1, s_mkvmerge_track_id = 0;
-  for (i1 = 0; i1 < m1->ListSize(); i1++) {
-    l2 = (*m1)[i1];
-
+  for (auto l2 : *m1)
     if (is_id(l2, KaxTrackEntry)) {
       // We actually found a track entry :) We're happy now.
       show_element(l2, 2, Y("A track"));
 
       std::vector<std::string> summary;
-      EbmlMaster *m2 = static_cast<EbmlMaster *>(l2);
-      std::string kax_codec_id;
-      std::string fourcc_buffer;
-      size_t i2;
-      kax_track_cptr track(new kax_track_t);
+      std::string kax_codec_id, fourcc_buffer;
+      auto track = std::make_shared<kax_track_t>();
 
-      for (i2 = 0; i2 < m2->ListSize(); i2++) {
-        l3 = (*m2)[i2];
-
+      for (auto l3 : *static_cast<EbmlMaster *>(l2))
         // Now evaluate the data belonging to this track
         if (is_id(l3, KaxTrackAudio))
-          handle_audio_track(es, l3, l4, summary);
+          handle_audio_track(es, l3, summary);
 
         else if (is_id(l3, KaxTrackVideo))
-          handle_video_track(es, l3, l4, summary);
+          handle_video_track(es, l3, summary);
 
         else if (is_id(l3, KaxTrackNumber)) {
-          KaxTrackNumber &tnum = *static_cast<KaxTrackNumber *>(l3);
-          track->tnum          = uint64(tnum);
+          track->tnum = static_cast<KaxTrackNumber *>(l3)->GetValue();
 
           auto existing_track = find_track(track->tnum);
           size_t track_id     = s_mkvmerge_track_id;
@@ -917,33 +814,19 @@ handle_tracks(EbmlStream *&es,
             track_id = existing_track->mkvmerge_track_id;
 
           show_element(l3, 3, boost::format(Y("Track number: %1% (track ID for mkvmerge & mkvextract: %2%)")) % track->tnum % track_id);
-          summary.push_back((boost::format(Y("mkvmerge/mkvextract track ID: %1%")) % track_id).str());
+          summary.push_back((boost::format(Y("mkvmerge/mkvextract track ID: %1%"))                            % track_id).str());
 
         } else if (is_id(l3, KaxTrackUID)) {
-          KaxTrackUID &tuid = *static_cast<KaxTrackUID *>(l3);
-          track->tuid       = uint64(tuid);
-          show_element(l3, 3, boost::format(Y("Track UID: %1%")) % track->tuid);
+          track->tuid = static_cast<KaxTrackUID *>(l3)->GetValue();
+          show_element(l3, 3, boost::format(Y("Track UID: %1%"))                                              % track->tuid);
 
         } else if (is_id(l3, KaxTrackType)) {
-          KaxTrackType &ttype = *static_cast<KaxTrackType *>(l3);
-
-          switch (uint8(ttype)) {
-            case track_audio:
-              track->type = 'a';
-              break;
-            case track_video:
-              track->type = 'v';
-              break;
-            case track_subtitle:
-              track->type = 's';
-              break;
-            case track_buttons:
-              track->type = 'b';
-              break;
-            default:
-              track->type = '?';
-              break;
-          }
+          auto ttype  = static_cast<KaxTrackType *>(l3)->GetValue();
+          track->type = track_audio    == ttype ? 'a'
+                      : track_video    == ttype ? 'v'
+                      : track_subtitle == ttype ? 's'
+                      : track_buttons  == ttype ? 'b'
+                      :                           '?';
           show_element(l3, 3,
                        boost::format(Y("Track type: %1%"))
                        % (  'a' == track->type ? "audio"
@@ -953,112 +836,91 @@ handle_tracks(EbmlStream *&es,
                           :                      "unknown"));
 
 #if MATROSKA_VERSION >= 2
-        } else if (is_id(l3, KaxTrackFlagEnabled)) {
-          KaxTrackFlagEnabled &fenabled = *static_cast<KaxTrackFlagEnabled *>(l3);
-          show_element(l3, 3, boost::format(Y("Enabled: %1%")) % uint64(fenabled));
+        } else if (is_id(l3, KaxTrackFlagEnabled))
+          show_element(l3, 3, boost::format(Y("Enabled: %1%"))                % static_cast<KaxTrackFlagEnabled *>(l3)->GetValue());
 #endif
 
-        } else if (is_id(l3, KaxTrackName)) {
-          KaxTrackName &name = *static_cast<KaxTrackName *>(l3);
-          show_element(l3, 3, boost::format(Y("Name: %1%")) % name.GetValueUTF8());
+        else if (is_id(l3, KaxTrackName))
+          show_element(l3, 3, boost::format(Y("Name: %1%"))                   % static_cast<KaxTrackName *>(l3)->GetValueUTF8());
 
-        } else if (is_id(l3, KaxCodecID)) {
-          KaxCodecID &codec_id = *static_cast<KaxCodecID *>(l3);
-          kax_codec_id         = std::string(codec_id);
-
-          show_element(l3, 3, boost::format(Y("Codec ID: %1%")) % kax_codec_id);
+        else if (is_id(l3, KaxCodecID)) {
+          kax_codec_id = static_cast<KaxCodecID *>(l3)->GetValue();
+          show_element(l3, 3, boost::format(Y("Codec ID: %1%"))               % kax_codec_id);
 
         } else if (is_id(l3, KaxCodecPrivate)) {
           KaxCodecPrivate &c_priv = *static_cast<KaxCodecPrivate *>(l3);
           fourcc_buffer = create_codec_dependent_private_info(c_priv, track->type, kax_codec_id);
 
           if (g_options.m_calc_checksums && !g_options.m_show_summary)
-            fourcc_buffer += (boost::format(Y(" (adler: 0x%|1$08x|)")) % calc_adler32(c_priv.GetBuffer(), c_priv.GetSize())).str();
+            fourcc_buffer += (boost::format(Y(" (adler: 0x%|1$08x|)"))        % calc_adler32(c_priv.GetBuffer(), c_priv.GetSize())).str();
 
           if (g_options.m_show_hexdump)
             fourcc_buffer += create_hexdump(c_priv.GetBuffer(), c_priv.GetSize());
 
           show_element(l3, 3, boost::format(Y("CodecPrivate, length %1%%2%")) % c_priv.GetSize() % fourcc_buffer);
 
-        } else if (is_id(l3, KaxCodecName)) {
-          KaxCodecName &c_name = *static_cast<KaxCodecName *>(l3);
-          show_element(l3, 3, boost::format(Y("Codec name: %1%")) % c_name.GetValueUTF8());
+        } else if (is_id(l3, KaxCodecName))
+          show_element(l3, 3, boost::format(Y("Codec name: %1%"))             % static_cast<KaxCodecName *>(l3)->GetValueUTF8());
 
 #if MATROSKA_VERSION >= 2
-        } else if (is_id(l3, KaxCodecSettings)) {
-          KaxCodecSettings &c_sets = *static_cast<KaxCodecSettings *>(l3);
-          show_element(l3, 3, boost::format(Y("Codec settings: %1%")) % c_sets.GetValueUTF8());
+        else if (is_id(l3, KaxCodecSettings))
+          show_element(l3, 3, boost::format(Y("Codec settings: %1%"))         % static_cast<KaxCodecSettings *>(l3)->GetValueUTF8());
 
-        } else if (is_id(l3, KaxCodecInfoURL)) {
-          KaxCodecInfoURL &c_infourl = *static_cast<KaxCodecInfoURL *>(l3);
-          show_element(l3, 3, boost::format(Y("Codec info URL: %1%")) % std::string(c_infourl));
+        else if (is_id(l3, KaxCodecInfoURL))
+          show_element(l3, 3, boost::format(Y("Codec info URL: %1%"))         % static_cast<KaxCodecInfoURL *>(l3)->GetValue());
 
-        } else if (is_id(l3, KaxCodecDownloadURL)) {
-          KaxCodecDownloadURL &c_downloadurl = *static_cast<KaxCodecDownloadURL *>(l3);
-          show_element(l3, 3, boost::format(Y("Codec download URL: %1%")) % std::string(c_downloadurl));
+        else if (is_id(l3, KaxCodecDownloadURL))
+          show_element(l3, 3, boost::format(Y("Codec download URL: %1%"))     % static_cast<KaxCodecDownloadURL *>(l3)->GetValue());
 
-        } else if (is_id(l3, KaxCodecDecodeAll)) {
-          KaxCodecDecodeAll &c_decodeall =
-            *static_cast<KaxCodecDecodeAll *>(l3);
-          show_element(l3, 3, boost::format(Y("Codec decode all: %1%"))% uint64(c_decodeall));
+        else if (is_id(l3, KaxCodecDecodeAll))
+          show_element(l3, 3, boost::format(Y("Codec decode all: %1%"))       % static_cast<KaxCodecDecodeAll *>(l3)->GetValue());
 
-        } else if (is_id(l3, KaxTrackOverlay)) {
-          KaxTrackOverlay &overlay = *static_cast<KaxTrackOverlay *>(l3);
-          show_element(l3, 3, boost::format(Y("Track overlay: %1%")) % uint64(overlay));
+        else if (is_id(l3, KaxTrackOverlay))
+          show_element(l3, 3, boost::format(Y("Track overlay: %1%"))          % static_cast<KaxTrackOverlay *>(l3)->GetValue());
 #endif // MATROSKA_VERSION >= 2
 
-        } else if (is_id(l3, KaxTrackMinCache)) {
-          KaxTrackMinCache &min_cache = *static_cast<KaxTrackMinCache *>(l3);
-          show_element(l3, 3, boost::format(Y("MinCache: %1%")) % uint64(min_cache));
+        else if (is_id(l3, KaxTrackMinCache))
+          show_element(l3, 3, boost::format(Y("MinCache: %1%"))               % static_cast<KaxTrackMinCache *>(l3)->GetValue());
 
-        } else if (is_id(l3, KaxTrackMaxCache)) {
-          KaxTrackMaxCache &max_cache = *static_cast<KaxTrackMaxCache *>(l3);
-          show_element(l3, 3, boost::format(Y("MaxCache: %1%")) % uint64(max_cache));
+        else if (is_id(l3, KaxTrackMaxCache))
+          show_element(l3, 3, boost::format(Y("MaxCache: %1%"))               % static_cast<KaxTrackMaxCache *>(l3)->GetValue());
 
-        } else if (is_id(l3, KaxTrackDefaultDuration)) {
-          KaxTrackDefaultDuration &def_duration = *static_cast<KaxTrackDefaultDuration *>(l3);
+        else if (is_id(l3, KaxTrackDefaultDuration)) {
+          track->default_duration = static_cast<KaxTrackDefaultDuration *>(l3)->GetValue();
           show_element(l3, 3,
                        boost::format(Y("Default duration: %|1$.3f|ms (%|2$.3f| frames/fields per second for a video track)"))
-                       % ((float)uint64(def_duration) / 1000000.0)
-                       % (1000000000.0 / (float)uint64(def_duration)));
+                       % (static_cast<double>(track->default_duration) / 1000000.0)
+                       % (1000000000.0 / static_cast<double>(track->default_duration)));
           summary.push_back((boost::format(Y("default duration: %|1$.3f|ms (%|2$.3f| frames/fields per second for a video track)"))
-                             % ((float)uint64(def_duration) / 1000000.0)
-                             % (1000000000.0 / (float)uint64(def_duration))
+                             % (static_cast<double>(track->default_duration) / 1000000.0)
+                             % (1000000000.0 / static_cast<double>(track->default_duration))
                              ).str());
-          track->default_duration = uint64(def_duration);
 
-        } else if (is_id(l3, KaxTrackFlagLacing)) {
-          KaxTrackFlagLacing &f_lacing = *static_cast<KaxTrackFlagLacing *>(l3);
-          show_element(l3, 3, boost::format(Y("Lacing flag: %1%")) % uint64(f_lacing));
+        } else if (is_id(l3, KaxTrackFlagLacing))
+          show_element(l3, 3, boost::format(Y("Lacing flag: %1%"))          % static_cast<KaxTrackFlagLacing *>(l3)->GetValue());
 
-        } else if (is_id(l3, KaxTrackFlagDefault)) {
-          KaxTrackFlagDefault &f_default = *static_cast<KaxTrackFlagDefault *>(l3);
-          show_element(l3, 3, boost::format(Y("Default flag: %1%")) % uint64(f_default));
+        else if (is_id(l3, KaxTrackFlagDefault))
+          show_element(l3, 3, boost::format(Y("Default flag: %1%"))         % static_cast<KaxTrackFlagDefault *>(l3)->GetValue());
 
-        } else if (is_id(l3, KaxTrackFlagForced)) {
-          KaxTrackFlagForced &f_forced = *static_cast<KaxTrackFlagForced *>(l3);
-          show_element(l3, 3, boost::format(Y("Forced flag: %1%")) % uint64(f_forced));
+        else if (is_id(l3, KaxTrackFlagForced))
+          show_element(l3, 3, boost::format(Y("Forced flag: %1%"))          % static_cast<KaxTrackFlagForced *>(l3)->GetValue());
 
-        } else if (is_id(l3, KaxTrackLanguage)) {
-          KaxTrackLanguage &language = *static_cast<KaxTrackLanguage *>(l3);
-          show_element(l3, 3, boost::format(Y("Language: %1%")) % std::string(language));
-          summary.push_back((boost::format(Y("language: %1%")) % std::string(language)).str());
+        else if (is_id(l3, KaxTrackLanguage)) {
+          auto language = static_cast<KaxTrackLanguage *>(l3)->GetValue();
+          show_element(l3, 3, boost::format(Y("Language: %1%"))             % language);
+          summary.push_back((boost::format(Y("language: %1%"))              % language).str());
 
-        } else if (is_id(l3, KaxTrackTimecodeScale)) {
-          KaxTrackTimecodeScale &ttc_scale = *static_cast<KaxTrackTimecodeScale *>(l3);
-          show_element(l3, 3, boost::format(Y("Timecode scale: %1%")) % float(ttc_scale));
+        } else if (is_id(l3, KaxTrackTimecodeScale))
+          show_element(l3, 3, boost::format(Y("Timecode scale: %1%"))       % static_cast<KaxTrackTimecodeScale *>(l3)->GetValue());
 
-        } else if (is_id(l3, KaxMaxBlockAdditionID)) {
-          KaxMaxBlockAdditionID &max_block_add_id = *static_cast<KaxMaxBlockAdditionID *>(l3);
-          show_element(l3, 3, boost::format(Y("Max BlockAddition ID: %1%")) % uint64(max_block_add_id));
+        else if (is_id(l3, KaxMaxBlockAdditionID))
+          show_element(l3, 3, boost::format(Y("Max BlockAddition ID: %1%")) % static_cast<KaxMaxBlockAdditionID *>(l3)->GetValue());
 
-        } else if (is_id(l3, KaxContentEncodings))
-          handle_content_encodings(es, l3, l4, l5, l6);
+        else if (is_id(l3, KaxContentEncodings))
+          handle_content_encodings(es, l3);
 
         else if (!is_global(es, l3, 3))
           show_unknown_element(l3, 3);
-
-      }
 
       if (g_options.m_show_summary)
         mxinfo(boost::format(Y("Track %1%: %2%, codec ID: %3%%4%%5%%6%\n"))
@@ -1075,17 +937,12 @@ handle_tracks(EbmlStream *&es,
 
     } else if (!is_global(es, l2, 2))
       show_unknown_element(l2, 2);
-  }
-
-  l2 = element_found;
 }
 
 void
 handle_seek_head(EbmlStream *&es,
                  int &upper_lvl_el,
-                 EbmlElement *&l1,
-                 EbmlElement *&l2,
-                 EbmlElement *&l3) {
+                 EbmlElement *&l1) {
   if ((g_options.m_verbose < 2) && !g_options.m_use_gui) {
     show_element(l1, 1, Y("Seek head (subentries will be skipped)"));
     return;
@@ -1094,29 +951,22 @@ handle_seek_head(EbmlStream *&es,
   show_element(l1, 1, Y("Seek head"));
 
   upper_lvl_el               = 0;
-  EbmlMaster *m1             = static_cast<EbmlMaster *>(l1);
   EbmlElement *element_found = nullptr;
+  auto m1                    = static_cast<EbmlMaster *>(l1);
   read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, element_found);
 
-  size_t i1;
-  for (i1 = 0; i1 < m1->ListSize(); i1++) {
-    l2 = (*m1)[i1];
-
+  for (auto l2 : *m1)
     if (is_id(l2, KaxSeek)) {
       show_element(l2, 2, Y("Seek entry"));
 
-      EbmlMaster *m2 = static_cast<EbmlMaster *>(l2);
-      size_t i2;
-      for (i2 = 0; i2 < m2->ListSize(); i2++) {
-        l3 = (*m2)[i2];
-
+      for (auto l3 : *static_cast<EbmlMaster *>(l2))
         if (is_id(l3, KaxSeekID)) {
           KaxSeekID &seek_id = static_cast<KaxSeekID &>(*l3);
           EbmlId id(seek_id.GetBuffer(), seek_id.GetSize());
 
           show_element(l3, 3,
                        boost::format(Y("Seek ID: %1% (%2%)"))
-                       % to_hex(seek_id.GetBuffer(), seek_id.GetSize())
+                       % to_hex(seek_id)
                        % (  EBML_ID(KaxInfo)        == id ? "KaxInfo"
                           : EBML_ID(KaxCluster)     == id ? "KaxCluster"
                           : EBML_ID(KaxTracks)      == id ? "KaxTracks"
@@ -1127,31 +977,20 @@ handle_seek_head(EbmlStream *&es,
                           : EBML_ID(KaxSeekHead)    == id ? "KaxSeekHead"
                           :                                 "unknown"));
 
-        } else if (is_id(l3, KaxSeekPosition)) {
-          KaxSeekPosition &seek_pos = static_cast<KaxSeekPosition &>(*l3);
-          show_element(l3, 3, boost::format(Y("Seek position: %1%")) % uint64(seek_pos));
+        } else if (is_id(l3, KaxSeekPosition))
+          show_element(l3, 3, boost::format(Y("Seek position: %1%")) % static_cast<KaxSeekPosition *>(l3)->GetValue());
 
-        } else if (!is_global(es, l3, 3))
+        else if (!is_global(es, l3, 3))
           show_unknown_element(l3, 3);
-
-      } // while (l3)
 
     } else if (!is_global(es, l2, 2))
       show_unknown_element(l2, 2);
-
-  } // while (l2)
-
-  l2 = element_found;
 }
 
 void
 handle_cues(EbmlStream *&es,
             int &upper_lvl_el,
-            EbmlElement *&l1,
-            EbmlElement *&l2,
-            EbmlElement *&l3,
-            EbmlElement *&l4,
-            EbmlElement *&l5) {
+            EbmlElement *&l1) {
   if (g_options.m_verbose < 2) {
     show_element(l1, 1, Y("Cues (subentries will be skipped)"));
     return;
@@ -1160,183 +999,120 @@ handle_cues(EbmlStream *&es,
   show_element(l1, 1, "Cues");
 
   upper_lvl_el               = 0;
-  EbmlMaster *m1             = static_cast<EbmlMaster *>(l1);
   EbmlElement *element_found = nullptr;
+  auto m1                    = static_cast<EbmlMaster *>(l1);
   read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, element_found);
 
-  size_t i1;
-  for (i1 = 0; i1 < m1->ListSize(); i1++) {
-    l2 = (*m1)[i1];
-
+  for (auto l2 : *m1)
     if (is_id(l2, KaxCuePoint)) {
       show_element(l2, 2, Y("Cue point"));
 
-      EbmlMaster *m2 = static_cast<EbmlMaster *>(l2);
-      size_t i2;
-      for (i2 = 0; i2 < m2->ListSize(); i2++) {
-        l3 = (*m2)[i2];
+      for (auto l3 : *static_cast<EbmlMaster *>(l2))
+        if (is_id(l3, KaxCueTime))
+          show_element(l3, 3, boost::format(Y("Cue time: %|1$.3f|s")) % (s_tc_scale * static_cast<double>(static_cast<KaxCueTime *>(l3)->GetValue()) / 1000000000.0));
 
-        if (is_id(l3, KaxCueTime)) {
-          KaxCueTime &cue_time = *static_cast<KaxCueTime *>(l3);
-          show_element(l3, 3, boost::format(Y("Cue time: %|1$.3f|s")) % (s_tc_scale * ((float)uint64(cue_time)) / 1000000000.0));
-
-        } else if (is_id(l3, KaxCueTrackPositions)) {
+        else if (is_id(l3, KaxCueTrackPositions)) {
           show_element(l3, 3, Y("Cue track positions"));
 
-          EbmlMaster *m3 = static_cast<EbmlMaster *>(l3);
-          size_t i3;
-          for (i3 = 0; i3 < m3->ListSize(); i3++) {
-            l4 = (*m3)[i3];
+          for (auto l4 : *static_cast<EbmlMaster *>(l3))
+            if (is_id(l4, KaxCueTrack))
+              show_element(l4, 4, boost::format(Y("Cue track: %1%"))            % static_cast<KaxCueTrack *>(l4)->GetValue());
 
-            if (is_id(l4, KaxCueTrack)) {
-              KaxCueTrack &cue_track = *static_cast<KaxCueTrack *>(l4);
-              show_element(l4, 4, boost::format(Y("Cue track: %1%")) % uint64(cue_track));
+            else if (is_id(l4, KaxCueClusterPosition))
+              show_element(l4, 4, boost::format(Y("Cue cluster position: %1%")) % static_cast<KaxCueClusterPosition *>(l4)->GetValue());
 
-            } else if (is_id(l4, KaxCueClusterPosition)) {
-              KaxCueClusterPosition &cue_cp = *static_cast<KaxCueClusterPosition *>(l4);
-              show_element(l4, 4, boost::format(Y("Cue cluster position: %1%")) % uint64(cue_cp));
-
-            } else if (is_id(l4, KaxCueBlockNumber)) {
-              KaxCueBlockNumber &cue_bn = *static_cast<KaxCueBlockNumber *>(l4);
-              show_element(l4, 4, boost::format(Y("Cue block number: %1%")) % uint64(cue_bn));
+            else if (is_id(l4, KaxCueBlockNumber))
+              show_element(l4, 4, boost::format(Y("Cue block number: %1%"))     % static_cast<KaxCueBlockNumber *>(l4)->GetValue());
 
 #if MATROSKA_VERSION >= 2
-            } else if (is_id(l4, KaxCueCodecState)) {
-              KaxCueCodecState &cue_cs = *static_cast<KaxCueCodecState *>(l4);
-              show_element(l4, 4, boost::format(Y("Cue codec state: %1%")) % uint64(cue_cs));
+            else if (is_id(l4, KaxCueCodecState))
+              show_element(l4, 4, boost::format(Y("Cue codec state: %1%"))      % static_cast<KaxCueCodecState *>(l4)->GetValue());
 
-            } else if (is_id(l4, KaxCueReference)) {
+            else if (is_id(l4, KaxCueReference)) {
               show_element(l4, 4, Y("Cue reference"));
 
-              EbmlMaster *m4 = static_cast<EbmlMaster *>(l4);
-              size_t i4;
-              for (i4 = 0; i4 < m4->ListSize(); i4++) {
-                l5 = (*m4)[i4];
+              for (auto l5 : *static_cast<EbmlMaster *>(l4))
+                if (is_id(l5, KaxCueRefTime))
+                  show_element(l5, 5, boost::format(Y("Cue ref time: %|1$.3f|s"))  % s_tc_scale % (static_cast<KaxCueRefTime *>(l5)->GetValue() / 1000000000.0));
 
-                if (is_id(l5, KaxCueRefTime)) {
-                  KaxCueRefTime &cue_rt = *static_cast<KaxCueRefTime *>(l5);
-                  show_element(l5, 5, boost::format(Y("Cue ref time: %|1$.3f|s")) % s_tc_scale % (((float)uint64(cue_rt)) / 1000000000.0));
+                else if (is_id(l5, KaxCueRefCluster))
+                  show_element(l5, 5, boost::format(Y("Cue ref cluster: %1%"))     % static_cast<KaxCueRefCluster *>(l5)->GetValue());
 
-                } else if (is_id(l5, KaxCueRefCluster)) {
-                  KaxCueRefCluster &cue_rc = *static_cast<KaxCueRefCluster *>(l5);
-                  show_element(l5, 5, boost::format(Y("Cue ref cluster: %1%")) % uint64(cue_rc));
+                else if (is_id(l5, KaxCueRefNumber))
+                  show_element(l5, 5, boost::format(Y("Cue ref number: %1%"))      % static_cast<KaxCueRefNumber *>(l5)->GetValue());
 
-                } else if (is_id(l5, KaxCueRefNumber)) {
-                  KaxCueRefNumber &cue_rn = *static_cast<KaxCueRefNumber *>(l5);
-                  show_element(l5, 5, boost::format(Y("Cue ref number: %1%")) % uint64(cue_rn));
+                else if (is_id(l5, KaxCueRefCodecState))
+                  show_element(l5, 5, boost::format(Y("Cue ref codec state: %1%")) % static_cast<KaxCueRefCodecState *>(l5)->GetValue());
 
-                } else if (is_id(l5, KaxCueRefCodecState)) {
-                  KaxCueRefCodecState &cue_rcs = *static_cast<KaxCueRefCodecState *>(l5);
-                  show_element(l5, 5, boost::format(Y("Cue ref codec state: %1%")) % uint64(cue_rcs));
-
-                } else if (!is_global(es, l5, 5))
+                else if (!is_global(es, l5, 5))
                   show_unknown_element(l5, 5);
 
-              } // while (l5)
 #endif // MATROSKA_VERSION >= 2
 
             } else if (!is_global(es, l4, 4))
               show_unknown_element(l4, 4);
 
-          } // while (l4)
-
         } else if (!is_global(es, l3, 3))
           show_unknown_element(l3, 3);
 
-      } // while (l3)
-
     } else if (!is_global(es, l2, 2))
       show_unknown_element(l2, 2);
-
-  } // while (l2)
-
-  l2 = element_found;
 }
 
 void
 handle_attachments(EbmlStream *&es,
                    int &upper_lvl_el,
-                   EbmlElement *&l1,
-                   EbmlElement *&l2,
-                   EbmlElement *&l3) {
+                   EbmlElement *&l1) {
   show_element(l1, 1, Y("Attachments"));
 
   upper_lvl_el               = 0;
-  EbmlMaster *m1             = static_cast<EbmlMaster *>(l1);
   EbmlElement *element_found = nullptr;
+  auto m1                    = static_cast<EbmlMaster *>(l1);
   read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, element_found);
 
-  size_t i1;
-  for (i1 = 0; i1 < m1->ListSize(); i1++) {
-    l2 = (*m1)[i1];
-
+  for (auto l2 : *m1)
     if (is_id(l2, KaxAttached)) {
       show_element(l2, 2, Y("Attached"));
 
-      EbmlMaster *m2 = static_cast<EbmlMaster *>(l2);
-      size_t i2;
-      for (i2 = 0; i2 < m2->ListSize(); i2++) {
-        l3 = (*m2)[i2];
+      for (auto l3 : *static_cast<EbmlMaster *>(l2))
+        if (is_id(l3, KaxFileDescription))
+          show_element(l3, 3, boost::format(Y("File description: %1%")) % static_cast<KaxFileDescription *>(l3)->GetValueUTF8());
 
-        if (is_id(l3, KaxFileDescription)) {
-          KaxFileDescription &f_desc = *static_cast<KaxFileDescription *>(l3);
-          show_element(l3, 3, boost::format(Y("File description: %1%")) % f_desc.GetValueUTF8());
+         else if (is_id(l3, KaxFileName))
+          show_element(l3, 3, boost::format(Y("File name: %1%"))        % static_cast<KaxFileName *>(l3)->GetValueUTF8());
 
-        } else if (is_id(l3, KaxFileName)) {
-          KaxFileName &f_name = *static_cast<KaxFileName *>(l3);
-          show_element(l3, 3, boost::format(Y("File name: %1%")) % f_name.GetValueUTF8());
+         else if (is_id(l3, KaxMimeType))
+           show_element(l3, 3, boost::format(Y("Mime type: %1%"))       % static_cast<KaxMimeType *>(l3)->GetValue());
 
-        } else if (is_id(l3, KaxMimeType)) {
-          KaxMimeType &mime_type = *static_cast<KaxMimeType *>(l3);
-          show_element(l3, 3, boost::format(Y("Mime type: %1%")) % std::string(mime_type));
+         else if (is_id(l3, KaxFileData))
+          show_element(l3, 3, boost::format(Y("File data, size: %1%"))  % static_cast<KaxFileData *>(l3)->GetSize());
 
-        } else if (is_id(l3, KaxFileData)) {
-          KaxFileData &f_data = *static_cast<KaxFileData *>(l3);
-          show_element(l3, 3, boost::format(Y("File data, size: %1%")) % f_data.GetSize());
+         else if (is_id(l3, KaxFileUID))
+           show_element(l3, 3, boost::format(Y("File UID: %1%"))        % static_cast<KaxFileUID *>(l3)->GetValue());
 
-        } else if (is_id(l3, KaxFileUID)) {
-          KaxFileUID &f_uid = *static_cast<KaxFileUID *>(l3);
-          show_element(l3, 3, boost::format(Y("File UID: %1%")) % uint64(f_uid));
-
-        } else if (!is_global(es, l3, 3))
+         else if (!is_global(es, l3, 3))
           show_unknown_element(l3, 3);
-
-      } // while (l3)
 
     } else if (!is_global(es, l2, 2))
       show_unknown_element(l2, 2);
-
-  } // while (l2)
-
-  l2 = element_found;
 }
 
 void
 handle_silent_track(EbmlStream *&es,
-                    EbmlElement *&l2,
-                    EbmlElement *&l3) {
+                    EbmlElement *&l2) {
   show_element(l2, 2, "Silent Tracks");
-  EbmlMaster *m2 = static_cast<EbmlMaster *>(l2);
 
-  size_t i2;
-  for (i2 = 0; i2 < m2->ListSize(); i2++) {
-    l3 = (*m2)[i2];
+  for (auto l3 : *static_cast<EbmlMaster *>(l2))
+    if (is_id(l3, KaxClusterSilentTrackNumber))
+      show_element(l3, 3, boost::format(Y("Silent Track Number: %1%")) % static_cast<KaxClusterSilentTrackNumber *>(l3)->GetValue());
 
-    if (is_id(l3, KaxClusterSilentTrackNumber)) {
-      KaxClusterSilentTrackNumber &c_silent = *static_cast<KaxClusterSilentTrackNumber *>(l3);
-      show_element(l3, 3, boost::format(Y("Silent Track Number: %1%")) % uint64(c_silent));
-
-    } else if (!is_global(es, l3, 3))
+    else if (!is_global(es, l3, 3))
       show_unknown_element(l3, 3);
-  }
 }
 
 void
 handle_block_group(EbmlStream *&es,
                    EbmlElement *&l2,
-                   EbmlElement *&l3,
-                   EbmlElement *&l4,
-                   EbmlElement *&l5,
                    KaxCluster *&cluster) {
   show_element(l2, 2, Y("Block group"));
 
@@ -1353,12 +1129,7 @@ handle_block_group(EbmlStream *&es,
 
   float bduration     = -1.0;
 
-  EbmlMaster *m2      = static_cast<EbmlMaster *>(l2);
-
-  size_t i2;
-  for (i2 = 0; i2 < m2->ListSize(); i2++) {
-    l3 = (*m2)[i2];
-
+  for (auto l3 : *static_cast<EbmlMaster *>(l2))
     if (is_id(l3, KaxBlock)) {
       KaxBlock &block = *static_cast<KaxBlock *>(l3);
       block.SetParent(*cluster);
@@ -1366,7 +1137,7 @@ handle_block_group(EbmlStream *&es,
                    BF_BLOCK_GROUP_BLOCK_BASICS
                    % block.TrackNum()
                    % block.NumberFrames()
-                   % ((float)block.GlobalTimecode() / 1000000000.0)
+                   % (static_cast<double>(block.GlobalTimecode()) / 1000000000.0)
                    % format_timecode(block.GlobalTimecode(), 3));
 
       lf_timecode = block.GlobalTimecode();
@@ -1374,10 +1145,9 @@ handle_block_group(EbmlStream *&es,
       bduration   = -1.0;
       frame_pos   = block.GetElementPosition() + block.ElementSize();
 
-      int i;
-      for (i = 0; i < (int)block.NumberFrames(); i++) {
-        DataBuffer &data = block.GetBuffer(i);
-        uint32_t adler   = calc_adler32(data.Buffer(), data.Size());
+      for (size_t i = 0; i < block.NumberFrames(); ++i) {
+        auto &data = block.GetBuffer(i);
+        auto adler = calc_adler32(data.Buffer(), data.Size());
 
         std::string adler_str;
         if (g_options.m_calc_checksums)
@@ -1396,13 +1166,12 @@ handle_block_group(EbmlStream *&es,
       }
 
     } else if (is_id(l3, KaxBlockDuration)) {
-      KaxBlockDuration &duration = *static_cast<KaxBlockDuration *>(l3);
-      bduration = ((float)uint64(duration)) * s_tc_scale / 1000000.0;
-      show_element(l3, 3, BF_BLOCK_GROUP_DURATION % (uint64(duration) * s_tc_scale / 1000000) % (uint64(duration) * s_tc_scale % 1000000));
+      auto duration = static_cast<KaxBlockDuration *>(l3)->GetValue();
+      bduration     = static_cast<double>(duration) * s_tc_scale / 1000000.0;
+      show_element(l3, 3, BF_BLOCK_GROUP_DURATION % (duration * s_tc_scale / 1000000) % (duration * s_tc_scale % 1000000));
 
     } else if (is_id(l3, KaxReferenceBlock)) {
-      KaxReferenceBlock &k_reference = *static_cast<KaxReferenceBlock *>(l3);
-      int reference                  = int64(k_reference) * s_tc_scale;
+      int64_t reference = static_cast<KaxReferenceBlock *>(l3)->GetValue() & s_tc_scale;
 
       if (0 >= reference) {
         bref_found  = true;
@@ -1414,107 +1183,71 @@ handle_block_group(EbmlStream *&es,
         show_element(l3, 3, BF_BLOCK_GROUP_REFERENCE_2 % (reference / 1000000) % (reference % 1000000));
       }
 
-    } else if (is_id(l3, KaxReferencePriority)) {
-      KaxReferencePriority &priority = *static_cast<KaxReferencePriority *>(l3);
-      show_element(l3, 3, BF_BLOCK_GROUP_REFERENCE_PRIORITY % uint64(priority));
+    } else if (is_id(l3, KaxReferencePriority))
+      show_element(l3, 3, BF_BLOCK_GROUP_REFERENCE_PRIORITY % static_cast<KaxReferencePriority *>(l3)->GetValue());
 
 #if MATROSKA_VERSION >= 2
-    } else if (is_id(l3, KaxBlockVirtual)) {
-      KaxBlockVirtual &bvirt = *static_cast<KaxBlockVirtual *>(l3);
-      show_element(l3, 3, BF_BLOCK_GROUP_VIRTUAL % format_binary(bvirt));
+    else if (is_id(l3, KaxBlockVirtual))
+      show_element(l3, 3, BF_BLOCK_GROUP_VIRTUAL            % format_binary(static_cast<KaxBlockVirtual *>(l3)));
 
-    } else if (is_id(l3, KaxReferenceVirtual)) {
-      KaxReferenceVirtual &ref_virt = *static_cast<KaxReferenceVirtual *>(l3);
-      show_element(l3, 3, BF_BLOCK_GROUP_REFERENCE_VIRTUAL % int64(ref_virt));
+    else if (is_id(l3, KaxReferenceVirtual))
+      show_element(l3, 3, BF_BLOCK_GROUP_REFERENCE_VIRTUAL  % static_cast<KaxReferenceVirtual *>(l3)->GetValue());
 
-    } else if (is_id(l3, KaxCodecState)) {
-      show_element(l3, 3, BF_CODEC_STATE % format_binary(*static_cast<KaxCodecState *>(l3)));
+    else if (is_id(l3, KaxCodecState))
+      show_element(l3, 3, BF_CODEC_STATE                    % format_binary(static_cast<KaxCodecState *>(l3)));
 
 #endif // MATROSKA_VERSION >= 2
-    } else if (is_id(l3, KaxBlockAdditions)) {
+    else if (is_id(l3, KaxBlockAdditions)) {
       show_element(l3, 3, Y("Additions"));
 
-      EbmlMaster *m3 = static_cast<EbmlMaster *>(l3);
-      size_t i3;
-      for (i3 = 0; i3 < m3->ListSize(); i3++) {
-        l4 = (*m3)[i3];
-
+      for (auto l4 : *static_cast<EbmlMaster *>(l3))
         if (is_id(l4, KaxBlockMore)) {
           show_element(l4, 4, Y("More"));
 
-          EbmlMaster *m4 = static_cast<EbmlMaster *>(l4);
-          size_t i4;
-          for (i4 = 0; i4 < m4->ListSize(); i4++) {
-            l5 = (*m4)[i4];
+          for (auto l5 : *static_cast<EbmlMaster *>(l4))
+            if (is_id(l5, KaxBlockAddID))
+              show_element(l5, 5, BF_BLOCK_GROUP_ADD_ID     % static_cast<KaxBlockAddID *>(l5)->GetValue());
 
-            if (is_id(l5, KaxBlockAddID)) {
-              KaxBlockAddID &add_id = *static_cast<KaxBlockAddID *>(l5);
-              show_element(l5, 5, BF_BLOCK_GROUP_ADD_ID % uint64(add_id));
+            else if (is_id(l5, KaxBlockAdditional))
+              show_element(l5, 5, BF_BLOCK_GROUP_ADDITIONAL % format_binary(static_cast<KaxBlockAdditional *>(l5)));
 
-            } else if (is_id(l5, KaxBlockAdditional)) {
-              KaxBlockAdditional &block = *static_cast<KaxBlockAdditional *>(l5);
-              show_element(l5, 5, BF_BLOCK_GROUP_ADDITIONAL % format_binary(block));
-
-            } else if (!is_global(es, l5, 5))
+            else if (!is_global(es, l5, 5))
               show_unknown_element(l5, 5);
-
-          } // while (l5)
 
         } else if (!is_global(es, l4, 4))
           show_unknown_element(l4, 4);
-
-      } // while (l4)
 
     } else if (is_id(l3, KaxSlices)) {
       show_element(l3, 3, Y("Slices"));
 
-      EbmlMaster *m3 = static_cast<EbmlMaster *>(l3);
-      size_t i3;
-      for (i3 = 0; i3 < m3->ListSize(); i3++) {
-        l4 = (*m3)[i3];
-
+      for (auto l4 : *static_cast<EbmlMaster *>(l3))
         if (is_id(l4, KaxTimeSlice)) {
           show_element(l4, 4, Y("Time slice"));
 
-          EbmlMaster *m4 = static_cast<EbmlMaster *>(l4);
-          size_t i4;
-          for (i4 = 0; i4 < m4->ListSize(); i4++) {
-            l5 = (*m4)[i4];
+          for (auto l5 : *static_cast<EbmlMaster *>(l4))
+            if (is_id(l5, KaxSliceLaceNumber))
+              show_element(l5, 5, BF_BLOCK_GROUP_SLICE_LACE     % static_cast<KaxSliceLaceNumber *>(l5)->GetValue());
 
-            if (is_id(l5, KaxSliceLaceNumber)) {
-              KaxSliceLaceNumber &slace_number = *static_cast<KaxSliceLaceNumber *>(l5);
-              show_element(l5, 5, BF_BLOCK_GROUP_SLICE_LACE % uint64(slace_number));
+            else if (is_id(l5, KaxSliceFrameNumber))
+              show_element(l5, 5, BF_BLOCK_GROUP_SLICE_FRAME    % static_cast<KaxSliceFrameNumber *>(l5)->GetValue());
 
-            } else if (is_id(l5, KaxSliceFrameNumber)) {
-              KaxSliceFrameNumber &sframe_number = *static_cast<KaxSliceFrameNumber *>(l5);
-              show_element(l5, 5, BF_BLOCK_GROUP_SLICE_FRAME % uint64(sframe_number));
+            else if (is_id(l5, KaxSliceDelay))
+              show_element(l5, 5, BF_BLOCK_GROUP_SLICE_DELAY    % (static_cast<double>(static_cast<KaxSliceDelay *>(l5)->GetValue()) * s_tc_scale / 1000000.0));
 
-            } else if (is_id(l5, KaxSliceDelay)) {
-              KaxSliceDelay &sdelay = *static_cast<KaxSliceDelay *>(l5);
-              show_element(l5, 5, BF_BLOCK_GROUP_SLICE_DELAY % (((float)uint64(sdelay)) * s_tc_scale / 1000000.0));
+            else if (is_id(l5, KaxSliceDuration))
+              show_element(l5, 5, BF_BLOCK_GROUP_SLICE_DURATION % (static_cast<double>(static_cast<KaxSliceDuration *>(l5)->GetValue()) * s_tc_scale / 1000000.0));
 
-            } else if (is_id(l5, KaxSliceDuration)) {
-              KaxSliceDuration &sduration = *static_cast<KaxSliceDuration *>(l5);
-              show_element(l5, 5, BF_BLOCK_GROUP_SLICE_DURATION % (((float)uint64(sduration)) * s_tc_scale / 1000000.0));
+            else if (is_id(l5, KaxSliceBlockAddID))
+              show_element(l5, 5, BF_BLOCK_GROUP_SLICE_ADD_ID   % static_cast<KaxSliceBlockAddID *>(l5)->GetValue());
 
-            } else if (is_id(l5, KaxSliceBlockAddID)) {
-              KaxSliceBlockAddID &sbaid = *static_cast<KaxSliceBlockAddID *>(l5);
-              show_element(l5, 5, BF_BLOCK_GROUP_SLICE_ADD_ID % uint64(sbaid));
-
-            } else if (!is_global(es, l5, 5))
+            else if (!is_global(es, l5, 5))
               show_unknown_element(l5, 5);
-
-          } // while (l5)
 
         } else if (!is_global(es, l4, 4))
           show_unknown_element(l4, 4);
 
-      } // while (l4)
-
     } else if (!is_global(es, l3, 3))
       show_unknown_element(l3, 3);
-
-  } // while (l3)
 
   if (g_options.m_show_summary) {
     std::string position;
@@ -1561,21 +1294,19 @@ handle_block_group(EbmlStream *&es,
   tinfo.m_blocks                                                                                 += frame_sizes.size();
   tinfo.m_blocks_by_ref_num[bref_found && fref_found ? 2 : bref_found ? 1 : !fref_found ? 0 : 1] += frame_sizes.size();
   tinfo.m_min_timecode                                                                             = std::min(tinfo.m_min_timecode, lf_timecode);
+  tinfo.m_size                                                                                    += boost::accumulate(frame_sizes, 0);
 
-  if (tinfo.max_timecode_unset() || (tinfo.m_max_timecode < lf_timecode)) {
-    tinfo.m_max_timecode = lf_timecode;
+  if (!tinfo.max_timecode_unset() && (tinfo.m_max_timecode >= lf_timecode))
+    return;
 
-    if (-1 == bduration)
-      tinfo.m_add_duration_for_n_packets  = frame_sizes.size();
-    else {
-      tinfo.m_max_timecode               += bduration * 1000000.0;
-      tinfo.m_add_duration_for_n_packets  = 0;
-    }
+  tinfo.m_max_timecode = lf_timecode;
+
+  if (-1 == bduration)
+    tinfo.m_add_duration_for_n_packets  = frame_sizes.size();
+  else {
+    tinfo.m_max_timecode               += bduration * 1000000.0;
+    tinfo.m_add_duration_for_n_packets  = 0;
   }
-
-  size_t fidx;
-  for (fidx = 0; fidx < frame_sizes.size(); fidx++)
-    tinfo.m_size += frame_sizes[fidx];
 }
 
 void
@@ -1660,66 +1391,47 @@ handle_simple_block(EbmlStream *&es,
   tinfo.m_min_timecode                                                                = std::min(tinfo.m_min_timecode, static_cast<int64_t>(block.GlobalTimecode()));
   tinfo.m_max_timecode                                                                = std::max(tinfo.m_min_timecode, static_cast<int64_t>(block.GlobalTimecode()));
   tinfo.m_add_duration_for_n_packets                                                  = block.NumberFrames();
-
-  size_t fidx;
-  for (fidx = 0; fidx < frame_sizes.size(); fidx++)
-    tinfo.m_size += frame_sizes[fidx];
+  tinfo.m_size                                                                       += boost::accumulate(frame_sizes, 0);
 }
 
 void
 handle_cluster(EbmlStream *&es,
                int &upper_lvl_el,
                EbmlElement *&l1,
-               EbmlElement *&l2,
-               EbmlElement *&l3,
-               EbmlElement *&l4,
-               EbmlElement *&l5,
-               KaxCluster *&cluster,
                int64_t file_size) {
-  cluster = (KaxCluster *)l1;
+  auto cluster = static_cast<KaxCluster *>(l1);
 
   if (g_options.m_use_gui)
     ui_show_progress(100 * cluster->GetElementPosition() / file_size, Y("Parsing file"));
 
   upper_lvl_el               = 0;
-  EbmlMaster *m1             = static_cast<EbmlMaster *>(l1);
   EbmlElement *element_found = nullptr;
+  auto m1                    = static_cast<EbmlMaster *>(l1);
   read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, element_found);
 
-  KaxClusterTimecode *cluster_tc = FindChild<KaxClusterTimecode>(m1);
-  cluster->InitTimecode(!cluster_tc ? 0 : uint64(*cluster_tc), s_tc_scale);
+  cluster->InitTimecode(FindChildValue<KaxClusterTimecode>(m1), s_tc_scale);
 
-  size_t i1;
-  for (i1 = 0; i1 < m1->ListSize(); i1++) {
-    l2 = (*m1)[i1];
+  for (auto l2 : *m1)
+    if (is_id(l2, KaxClusterTimecode))
+      show_element(l2, 2, BF_CLUSTER_TIMECODE      % (static_cast<double>(static_cast<KaxClusterTimecode *>(l2)->GetValue()) * s_tc_scale / 1000000000.0));
 
-    if (is_id(l2, KaxClusterTimecode)) {
-      KaxClusterTimecode &ctc = *static_cast<KaxClusterTimecode *>(l2);
-      show_element(l2, 2, BF_CLUSTER_TIMECODE % ((float)uint64(ctc) * (float)s_tc_scale / 1000000000.0));
+    else if (is_id(l2, KaxClusterPosition))
+      show_element(l2, 2, BF_CLUSTER_POSITION      % static_cast<KaxClusterPosition *>(l2)->GetValue());
 
-    } else if (is_id(l2, KaxClusterPosition)) {
-      KaxClusterPosition &c_pos = *static_cast<KaxClusterPosition *>(l2);
-      show_element(l2, 2, BF_CLUSTER_POSITION % uint64(c_pos));
+    else if (is_id(l2, KaxClusterPrevSize))
+      show_element(l2, 2, BF_CLUSTER_PREVIOUS_SIZE % static_cast<KaxClusterPrevSize *>(l2)->GetValue());
 
-    } else if (is_id(l2, KaxClusterPrevSize)) {
-      KaxClusterPrevSize &c_psize = *static_cast<KaxClusterPrevSize *>(l2);
-      show_element(l2, 2, BF_CLUSTER_PREVIOUS_SIZE % uint64(c_psize));
-
-    } else if (is_id(l2, KaxClusterSilentTracks))
-      handle_silent_track(es, l2, l3);
+    else if (is_id(l2, KaxClusterSilentTracks))
+      handle_silent_track(es, l2);
 
     else if (is_id(l2, KaxBlockGroup))
-      handle_block_group(es, l2, l3, l4, l5, cluster);
+      handle_block_group(es, l2, cluster);
 
     else if (is_id(l2, KaxSimpleBlock))
       handle_simple_block(es, l2, cluster);
 
     else if (!is_global(es, l2, 2))
       show_unknown_element(l2, 2);
-
-  } // while (l2)
-
-  l2 = element_found;
 }
 
 void
@@ -1734,8 +1446,7 @@ handle_elements_rec(EbmlStream *es,
 
   if (dynamic_cast<EbmlMaster *>(e)) {
     show_element(e, level, elt_name);
-    auto m = static_cast<EbmlMaster *>(e);
-    for (auto child : *m)
+    for (auto child : *static_cast<EbmlMaster *>(e))
       handle_elements_rec(es, level + 1, child, converter);
 
   } else if (dynamic_cast<EbmlUInteger *>(e)) {
@@ -1745,16 +1456,16 @@ handle_elements_rec(EbmlStream *es,
       show_element(e, level, s_bf_handle_elements_rec % elt_name % static_cast<EbmlUInteger *>(e)->GetValue());
 
   } else if (dynamic_cast<EbmlSInteger *>(e))
-    show_element(e, level, s_bf_handle_elements_rec % elt_name % static_cast<EbmlSInteger *>(e)->GetValue());
+    show_element(e, level, s_bf_handle_elements_rec   % elt_name % static_cast<EbmlSInteger *>(e)->GetValue());
 
   else if (dynamic_cast<EbmlString *>(e))
-    show_element(e, level, s_bf_handle_elements_rec % elt_name % static_cast<EbmlString *>(e)->GetValue());
+    show_element(e, level, s_bf_handle_elements_rec   % elt_name % static_cast<EbmlString *>(e)->GetValue());
 
   else if (dynamic_cast<EbmlUnicodeString *>(e))
-    show_element(e, level, s_bf_handle_elements_rec % elt_name % static_cast<EbmlUnicodeString *>(e)->GetValueUTF8());
+    show_element(e, level, s_bf_handle_elements_rec   % elt_name % static_cast<EbmlUnicodeString *>(e)->GetValueUTF8());
 
   else if (dynamic_cast<EbmlBinary *>(e))
-    show_element(e, level, s_bf_handle_elements_rec % elt_name % format_binary(*static_cast<EbmlBinary *>(e)));
+    show_element(e, level, s_bf_handle_elements_rec   % elt_name % format_binary(static_cast<EbmlBinary *>(e)));
 
   else
     assert(false);
@@ -1763,8 +1474,7 @@ handle_elements_rec(EbmlStream *es,
 void
 handle_chapters(EbmlStream *&es,
                 int &upper_lvl_el,
-                EbmlElement *&l1,
-                EbmlElement *&l2) {
+                EbmlElement *&l1) {
   show_element(l1, 1, Y("Chapters"));
 
   upper_lvl_el               = 0;
@@ -1773,18 +1483,14 @@ handle_chapters(EbmlStream *&es,
   read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, element_found);
 
   mtx::xml::ebml_chapters_converter_c converter;
-  size_t i1;
-  for (i1 = 0; i1 < m1->ListSize(); i1++)
-    handle_elements_rec(es, 2, (*m1)[i1], converter);
-
-  l2 = element_found;
+  for (auto l2 : *static_cast<EbmlMaster *>(l1))
+    handle_elements_rec(es, 2, l2, converter);
 }
 
 void
 handle_tags(EbmlStream *&es,
             int &upper_lvl_el,
-            EbmlElement *&l1,
-            EbmlElement *&l2) {
+            EbmlElement *&l1) {
   show_element(l1, 1, Y("Tags"));
 
   upper_lvl_el               = 0;
@@ -1793,11 +1499,8 @@ handle_tags(EbmlStream *&es,
   read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, element_found);
 
   mtx::xml::ebml_tags_converter_c converter;
-  size_t i1;
-  for (i1 = 0; i1 < m1->ListSize(); i1++)
-    handle_elements_rec(es, 2, (*m1)[i1], converter);
-
-  l2 = element_found;
+  for (auto l2 : *static_cast<EbmlMaster *>(l1))
+    handle_elements_rec(es, 2, l2, converter);
 }
 
 void
@@ -1816,25 +1519,25 @@ handle_ebml_head(EbmlElement *l0,
     e->ReadData(*in);
 
     if (is_id(e, EVersion))
-      show_element(e, 1, boost::format(Y("EBML version: %1%")) % uint64(*static_cast<EbmlUInteger *>(e)));
+      show_element(e, 1, boost::format(Y("EBML version: %1%"))             % static_cast<EbmlUInteger *>(e)->GetValue());
 
     else if (is_id(e, EReadVersion))
-      show_element(e, 1, boost::format(Y("EBML read version: %1%")) % uint64(*static_cast<EbmlUInteger *>(e)));
+      show_element(e, 1, boost::format(Y("EBML read version: %1%"))        % static_cast<EbmlUInteger *>(e)->GetValue());
 
     else if (is_id(e, EMaxIdLength))
-      show_element(e, 1, boost::format(Y("EBML maximum ID length: %1%")) % uint64(*static_cast<EbmlUInteger *>(e)));
+      show_element(e, 1, boost::format(Y("EBML maximum ID length: %1%"))   % static_cast<EbmlUInteger *>(e)->GetValue());
 
     else if (is_id(e, EMaxSizeLength))
-      show_element(e, 1, boost::format(Y("EBML maximum size length: %1%")) % uint64(*static_cast<EbmlUInteger *>(e)));
+      show_element(e, 1, boost::format(Y("EBML maximum size length: %1%")) % static_cast<EbmlUInteger *>(e)->GetValue());
 
     else if (is_id(e, EDocType))
-      show_element(e, 1, boost::format(Y("Doc type: %1%")) % std::string(*static_cast<EbmlString *>(e)));
+      show_element(e, 1, boost::format(Y("Doc type: %1%"))                 % std::string(*static_cast<EbmlString *>(e)));
 
     else if (is_id(e, EDocTypeVersion))
-      show_element(e, 1, boost::format(Y("Doc type version: %1%")) % uint64(*static_cast<EbmlUInteger *>(e)));
+      show_element(e, 1, boost::format(Y("Doc type version: %1%"))         % static_cast<EbmlUInteger *>(e)->GetValue());
 
     else if (is_id(e, EDocTypeReadVersion))
-      show_element(e, 1, boost::format(Y("Doc type read version: %1%")) % uint64(*static_cast<EbmlUInteger *>(e)));
+      show_element(e, 1, boost::format(Y("Doc type read version: %1%"))    % static_cast<EbmlUInteger *>(e)->GetValue());
 
     else
       show_unknown_element(e, 1);
@@ -1849,9 +1552,7 @@ display_track_info() {
   if (!g_options.m_show_track_info)
     return;
 
-  size_t idx;
-  for (idx = 0; s_tracks.size() > idx; ++idx) {
-    kax_track_cptr track = s_tracks[idx];
+  for (auto &track : s_tracks) {
     track_info_t &tinfo  = s_track_info[track->tnum];
 
     if (tinfo.min_timecode_unset())
@@ -1875,8 +1576,7 @@ bool
 process_file(const std::string &file_name) {
   int upper_lvl_el;
   // Elements for different levels
-  EbmlElement *l0 = nullptr, *l1 = nullptr, *l2 = nullptr, *l3 = nullptr, *l4 = nullptr, *l5 = nullptr, *l6 = nullptr;
-  KaxCluster *cluster;
+  EbmlElement *l0 = nullptr, *l1 = nullptr;
 
   s_tc_scale = TIMECODE_SCALE;
   s_tracks.clear();
@@ -1940,13 +1640,13 @@ process_file(const std::string &file_name) {
       std::shared_ptr<EbmlElement> af_l1(l1);
 
       if (is_id(l1, KaxInfo))
-        handle_info(es, upper_lvl_el, l1, l2, l3);
+        handle_info(es, upper_lvl_el, l1);
 
       else if (is_id(l1, KaxTracks))
-        handle_tracks(es, upper_lvl_el, l1, l2, l3, l4, l5, l6);
+        handle_tracks(es, upper_lvl_el, l1);
 
       else if (is_id(l1, KaxSeekHead))
-        handle_seek_head(es, upper_lvl_el, l1, l2, l3);
+        handle_seek_head(es, upper_lvl_el, l1);
 
       else if (is_id(l1, KaxCluster)) {
         show_element(l1, 1, Y("Cluster"));
@@ -1956,21 +1656,21 @@ process_file(const std::string &file_name) {
 
           return true;
         }
-        handle_cluster(es, upper_lvl_el, l1, l2, l3, l4, l5, cluster, file_size);
+        handle_cluster(es, upper_lvl_el, l1, file_size);
 
       } else if (is_id(l1, KaxCues))
-        handle_cues(es, upper_lvl_el, l1, l2, l3, l4, l5);
+        handle_cues(es, upper_lvl_el, l1);
 
         // Weee! Attachments!
       else if (is_id(l1, KaxAttachments))
-        handle_attachments(es, upper_lvl_el, l1, l2, l3);
+        handle_attachments(es, upper_lvl_el, l1);
 
       else if (is_id(l1, KaxChapters))
-        handle_chapters(es, upper_lvl_el, l1, l2);
+        handle_chapters(es, upper_lvl_el, l1);
 
         // Let's handle some TAGS.
       else if (is_id(l1, KaxTags))
-        handle_tags(es, upper_lvl_el, l1, l2);
+        handle_tags(es, upper_lvl_el, l1);
 
       else if (!is_global(es, l1, 1))
         show_unknown_element(l1, 1);
