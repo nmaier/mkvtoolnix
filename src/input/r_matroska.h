@@ -52,13 +52,13 @@ struct kax_track_t {
   unsigned int v_display_unit;
   uint64_t v_pcleft, v_pctop, v_pcright, v_pcbottom;
   stereo_mode_c::mode v_stereo_mode;
-  float v_frate;
+  double v_frate;
   char v_fourcc[5];
   bool v_bframes;
 
   // Parameters for audio tracks
   uint64_t a_channels, a_bps, a_formattag;
-  float a_sfreq, a_osfreq;
+  double a_sfreq, a_osfreq;
 
   void *private_data;
   unsigned int private_size;
@@ -232,7 +232,7 @@ protected:
   virtual void verify_button_track(kax_track_t *t);
   virtual void verify_tracks();
 
-  virtual int packets_available();
+  virtual bool packets_available();
   virtual void handle_attachments(mm_io_c *io, EbmlElement *l0, int64_t pos);
   virtual void handle_chapters(mm_io_c *io, EbmlElement *l0, int64_t pos);
   virtual void handle_tags(mm_io_c *io, EbmlElement *l0, int64_t pos);

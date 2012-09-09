@@ -52,6 +52,7 @@
 #include "common/mm_io.h"
 #include "common/strings/formatting.h"
 #include "common/strings/parsing.h"
+#include "common/strings/utf8.h"
 #include "common/tags/tags.h"
 #include "input/r_matroska.h"
 #include "merge/output_control.h"
@@ -109,10 +110,8 @@ kax_track_t::handle_packetizer_display_dimensions() {
   // source file provides display width/height paramaters then use
   // these and signal the packetizer not to extract the dimensions
   // from the bitstream.
-  if ((0 == v_dwidth) || (0 == v_dheight))
-    return;
-
-  ptzr_ptr->set_video_display_dimensions(v_dwidth, v_dheight, PARAMETER_SOURCE_CONTAINER);
+  if ((0 != v_dwidth) && (0 != v_dheight))
+    ptzr_ptr->set_video_display_dimensions(v_dwidth, v_dheight, PARAMETER_SOURCE_CONTAINER);
 }
 
 void
@@ -152,22 +151,21 @@ kax_track_t::handle_packetizer_default_duration() {
  */
 void
 kax_track_t::fix_display_dimension_parameters() {
-  if (0 != v_display_unit)
+  if ((0 != v_display_unit) || ((8 * v_dwidth) > v_width) || ((8 * v_dheight) > v_height))
     return;
 
-  if (((8 * v_dwidth) > v_width) || ((8 * v_dheight) > v_height))
+  if (boost::math::gcd(v_dwidth, v_dheight) != 1)
     return;
 
-  if (boost::math::gcd(v_dwidth, v_dheight) == 1) { // max shrinking was applied, ie x264 style
-    if (v_dwidth > v_dheight) {
-      if (((v_height * v_dwidth) % v_dheight) == 0) { // only if we get get an exact count of pixels
-        v_dwidth  = v_height * v_dwidth / v_dheight;
-        v_dheight = v_height;
-      }
-    } else if (((v_width * v_dheight) % v_dwidth) == 0) {
-      v_dwidth  = v_width;
-      v_dheight = v_width * v_dheight / v_dwidth;
+  // max shrinking was applied, ie x264 style
+  if (v_dwidth > v_dheight) {
+    if (((v_height * v_dwidth) % v_dheight) == 0) { // only if we get get an exact count of pixels
+      v_dwidth  = v_height * v_dwidth / v_dheight;
+      v_dheight = v_height;
     }
+  } else if (((v_width * v_dheight) % v_dwidth) == 0) {
+    v_dwidth  = v_width;
+    v_dheight = v_width * v_dheight / v_dwidth;
   }
 }
 
@@ -220,36 +218,27 @@ kax_reader_c::init_l1_position_storage(deferred_positions_t &storage) {
   storage[dl1t_tracks]      = std::vector<int64_t>();
 }
 
-int
+bool
 kax_reader_c::packets_available() {
-  if (m_tracks.empty())
-    return 0;
-
   for (auto &track : m_tracks)
     if ((-1 != track->ptzr) && !PTZR(track->ptzr)->packet_available())
-      return 0;
+      return false;
 
-  return 1;
+  return !m_tracks.empty();
 }
 
 kax_track_t *
 kax_reader_c::find_track_by_num(uint64_t n,
                                 kax_track_t *c) {
-  for (auto &track : m_tracks)
-    if ((track->track_number == n) && (track.get() != c))
-      return track.get();
-
-  return nullptr;
+  auto itr = brng::find_if(m_tracks, [&](kax_track_cptr &track) { return (track->track_number == n) && (track.get() != c); });
+  return itr == m_tracks.end() ? nullptr : itr->get();
 }
 
 kax_track_t *
 kax_reader_c::find_track_by_uid(uint64_t uid,
                                 kax_track_t *c) {
-  for (auto &track : m_tracks)
-    if ((track->track_uid == uid) && (track.get() != c))
-      return track.get();
-
-  return nullptr;
+  auto itr = brng::find_if(m_tracks, [&](kax_track_cptr &track) { return (track->track_uid == uid) && (track.get() != c); });
+  return itr == m_tracks.end() ? nullptr : itr->get();
 }
 
 bool
@@ -302,7 +291,7 @@ kax_reader_c::verify_acm_audio_track(kax_track_t *t) {
       mxwarn(boost::format(Y("matroska_reader: (MS compatibility mode for track %1%) Matroska says that there are %2% samples per second, "
                              "but WAVEFORMATEX says that there are %3%.\n")) % t->tnum % static_cast<int>(t->a_sfreq) % u);
     if (0.0 == t->a_sfreq)
-      t->a_sfreq = static_cast<float>(u);
+      t->a_sfreq = static_cast<double>(u);
   }
 
   u = get_uint16_le(&wfe->n_channels);
@@ -583,21 +572,10 @@ kax_reader_c::verify_tracks() {
     }
 
     switch (t->type) {
-      case 'v':                 // video track
-        verify_video_track(t);
-        break;
-
-      case 'a':                 // audio track
-        verify_audio_track(t);
-        break;
-
-      case 's':
-        verify_subtitle_track(t);
-        break;
-
-      case 'b':
-        verify_button_track(t);
-        break;
+      case 'v': verify_video_track(t);    break;
+      case 'a': verify_audio_track(t);    break;
+      case 's': verify_subtitle_track(t); break;
+      case 'b': verify_button_track(t);   break;
 
       default:                  // unknown track type!? error in demuxer...
         if (verbose)
@@ -639,40 +617,25 @@ kax_reader_c::handle_attachments(mm_io_c *io,
   if (!atts)
     return;
 
-  EbmlElement *l2 = nullptr;
-  upper_lvl_el    = 0;
+  EbmlElement *element_found = nullptr;
+  upper_lvl_el               = 0;
 
-  atts->Read(*m_es, EBML_CLASS_CONTEXT(KaxAttachments), upper_lvl_el, l2, true);
+  atts->Read(*m_es, EBML_CLASS_CONTEXT(KaxAttachments), upper_lvl_el, element_found, true);
 
-  size_t i;
-  for (i = 0; i < atts->ListSize(); i++) {
-    KaxAttached *att = dynamic_cast<KaxAttached *>((*atts)[i]);
+  for (auto l1_att : *atts) {
+    auto att = dynamic_cast<KaxAttached *>(l1_att);
     if (!att)
       continue;
 
     attachment_t matt;
-    size_t k;
+    matt.name        = to_utf8(FindChildValue<KaxFileName>(att));
+    matt.description = to_utf8(FindChildValue<KaxFileDescription>(att));
+    matt.mime_type   = FindChildValue<KaxMimeType>(att);
+    matt.id          = FindChildValue<KaxFileUID>(att);
 
-    for (k = 0; k < att->ListSize(); k++) {
-      l2 = (*att)[k];
-
-      if (EbmlId(*l2) == EBML_ID(KaxFileName))
-        matt.name = UTFstring_to_cstrutf8(UTFstring(static_cast<KaxFileName &>(*l2)));
-
-      else if (EbmlId(*l2) == EBML_ID(KaxFileDescription))
-        matt.description = UTFstring_to_cstrutf8(UTFstring(static_cast<KaxFileDescription &>(*l2)));
-
-      else if (EbmlId(*l2) == EBML_ID(KaxMimeType))
-        matt.mime_type = std::string(static_cast<KaxMimeType &>(*l2));
-
-      else if (EbmlId(*l2) == EBML_ID(KaxFileUID))
-        matt.id = static_cast<KaxFileUID &>(*l2).GetValue();
-
-      else if (EbmlId(*l2) == EBML_ID(KaxFileData)) {
-        KaxFileData &fdata = static_cast<KaxFileData &>(*l2);
-        matt.data          = memory_c::clone(static_cast<unsigned char *>(fdata.GetBuffer()), fdata.GetSize());
-      }
-    }
+    auto fdata       = FindChild<KaxFileData>(att);
+    if (fdata)
+      matt.data = memory_c::clone(static_cast<unsigned char *>(fdata->GetBuffer()), fdata->GetSize());
 
     ++m_attachment_id;
     attach_mode_e attach_mode;
@@ -715,9 +678,7 @@ kax_reader_c::handle_chapters(mm_io_c *io,
   if (!m_chapters)
     m_chapters = kax_chapters_cptr{new KaxChapters};
 
-  size_t i;
-  for (i = 0; i < tmp_chapters->ListSize(); i++)
-    m_chapters->PushElement(*(*tmp_chapters)[i]);
+  m_chapters->GetElementList().insert(m_chapters->begin(), tmp_chapters->begin(), tmp_chapters->end());
   tmp_chapters->RemoveAll();
 }
 
@@ -760,7 +721,7 @@ kax_reader_c::handle_tags(mm_io_c *io,
 
       if (tuid) {
         is_global          = false;
-        kax_track_t *track = find_track_by_uid(uint64(*tuid));
+        kax_track_t *track = find_track_by_uid(tuid->GetValue());
 
         if (track) {
           bool contains_tag = false;
@@ -800,29 +761,16 @@ kax_reader_c::read_headers_info(EbmlElement *&l1,
                                 EbmlElement *&l2,
                                 int &upper_lvl_el) {
   // General info about this Matroska file
-  mxverb(2, "matroska_reader: |+ segment information...\n");
 
-  l1->Read(*m_es, EBML_CLASS_CONTEXT(KaxInfo), upper_lvl_el, l2, true);
+  auto m1 = dynamic_cast<EbmlMaster *>(l1);
+  if (!m1)
+    return;
 
-  KaxTimecodeScale *ktc_scale = FindChild<KaxTimecodeScale>(l1);
-  if (ktc_scale) {
-    m_tc_scale = uint64(*ktc_scale);
-    mxverb(2, boost::format("matroska_reader: | + timecode scale: %1%\n") % m_tc_scale);
+  m1->Read(*m_es, EBML_CLASS_CONTEXT(KaxInfo), upper_lvl_el, l2, true);
 
-  } else
-    m_tc_scale = 1000000;
-
-  KaxDuration *kduration = FindChild<KaxDuration>(l1);
-  if (kduration) {
-    m_segment_duration = irnd(double(*kduration) * m_tc_scale);
-    mxverb(2, boost::format("matroska_reader: | + duration: %|1$.3f|s\n") % (m_segment_duration / 1000000000.0));
-  }
-
-  KaxTitle *ktitle = FindChild<KaxTitle>(l1);
-  if (ktitle) {
-    m_title = UTFstring_to_cstrutf8(UTFstring(*ktitle));
-    mxverb(2, boost::format("matroska_reader: | + title: %1%\n") % m_title);
-  }
+  m_tc_scale         = FindChildValue<KaxTimecodeScale>(m1, 1000000);
+  m_segment_duration = irnd(FindChildValue<KaxDuration>(m1) * m_tc_scale);
+  m_title            = to_utf8(FindChildValue<KaxTitle>(m1));
 
   // Let's try to parse the "writing application" string. This usually
   // contains the name and version number of the application used for
@@ -838,14 +786,13 @@ kax_reader_c::read_headers_info(EbmlElement *&l1,
   // spaces into at most three parts. If the result is at least two parts
   // long then try to parse the version number from the second and
   // store a lower case version of the first as the application's name.
-  KaxWritingApp *km_writing_app = FindChild<KaxWritingApp>(l1);
+  auto km_writing_app = FindChild<KaxWritingApp>(m1);
   if (km_writing_app)
     read_headers_info_writing_app(km_writing_app);
 
-  KaxMuxingApp *km_muxing_app = FindChild<KaxMuxingApp>(l1);
+  auto km_muxing_app = FindChild<KaxMuxingApp>(m1);
   if (km_muxing_app) {
-    m_muxing_app = UTFstring_to_cstrutf8(UTFstring(*km_muxing_app));
-    mxverb(3, boost::format("matroska_reader: |   (m_muxing_app '%1%')\n") % m_muxing_app);
+    m_muxing_app = km_muxing_app->GetValueUTF8();
 
     // DirectShow Muxer workaround: Gabest's DirectShow muxer
     // writes wrong references (off by 1ms). So let the cluster
@@ -855,18 +802,17 @@ kax_reader_c::read_headers_info(EbmlElement *&l1,
       m_reference_timecode_tolerance = 1000000;
   }
 
-  m_segment_uid          = find_and_clone_binary<KaxSegmentUID>(l1);
-  m_next_segment_uid     = find_and_clone_binary<KaxNextUID>(l1);
-  m_previous_segment_uid = find_and_clone_binary<KaxPrevUID>(l1);
+  m_segment_uid          = FindChildValue<KaxSegmentUID>(m1);
+  m_next_segment_uid     = FindChildValue<KaxNextUID>(m1);
+  m_previous_segment_uid = FindChildValue<KaxPrevUID>(m1);
 }
 
 void
 kax_reader_c::read_headers_info_writing_app(KaxWritingApp *&km_writing_app) {
   size_t idx;
 
-  std::string s = UTFstring_to_cstrutf8(UTFstring(*km_writing_app));
+  std::string s = km_writing_app->GetValueUTF8();
   strip(s);
-  mxverb(2, boost::format("matroska_reader: | + writing app: %1%\n") % s);
 
   if (balg::istarts_with(s, "avi-mux gui"))
     s.replace(0, strlen("avi-mux gui"), "avimuxgui");
@@ -909,119 +855,45 @@ kax_reader_c::read_headers_info_writing_app(KaxWritingApp *&km_writing_app) {
     if (failed)
       m_writing_app_ver = -1;
   }
-
-  mxverb(3, boost::format("matroska_reader: |   (m_writing_app '%1%', m_writing_app_ver 0x%|2$08x|)\n") % m_writing_app % static_cast<unsigned int>(m_writing_app_ver));
 }
 
 void
 kax_reader_c::read_headers_track_audio(kax_track_t *track,
                                        KaxTrackAudio *ktaudio) {
-  mxverb(2, "matroska_reader: |  + Audio track\n");
-
-  KaxAudioSamplingFreq *ka_sfreq = FindChild<KaxAudioSamplingFreq>(ktaudio);
-  if (ka_sfreq) {
-    track->a_sfreq = float(*ka_sfreq);
-    mxverb(2, boost::format("matroska_reader: |   + Sampling frequency: %1%\n") % track->a_sfreq);
-  } else
-    track->a_sfreq = 8000.0;
-
-  KaxAudioOutputSamplingFreq *ka_osfreq = FindChild<KaxAudioOutputSamplingFreq>(ktaudio);
-  if (ka_osfreq) {
-    track->a_osfreq = float(*ka_osfreq);
-    mxverb(2, boost::format("matroska_reader: |   + Output sampling frequency: %1%\n") % track->a_osfreq);
-  }
-
-  KaxAudioChannels *ka_channels = FindChild<KaxAudioChannels>(ktaudio);
-  if (ka_channels) {
-    track->a_channels = uint8(*ka_channels);
-    mxverb(2, boost::format("matroska_reader: |   + Channels: %1%\n") % track->a_channels);
-  } else
-    track->a_channels = 1;
-
-  KaxAudioBitDepth *ka_bitdepth = FindChild<KaxAudioBitDepth>(ktaudio);
-  if (ka_bitdepth) {
-    track->a_bps = uint8(*ka_bitdepth);
-    mxverb(2, boost::format("matroska_reader: |   + Bit depth: %1%\n") % track->a_bps);
-  }
+  track->a_sfreq    = FindChildValue<KaxAudioSamplingFreq>(ktaudio, 8000.0);
+  track->a_osfreq   = FindChildValue<KaxAudioOutputSamplingFreq>(ktaudio);
+  track->a_channels = FindChildValue<KaxAudioChannels>(ktaudio, 1);
+  track->a_bps      = FindChildValue<KaxAudioBitDepth>(ktaudio);
 }
 
 void
 kax_reader_c::read_headers_track_video(kax_track_t *track,
                                        KaxTrackVideo *ktvideo) {
-  KaxVideoPixelWidth *kv_pwidth = FindChild<KaxVideoPixelWidth>(ktvideo);
-  if (kv_pwidth) {
-    track->v_width = uint64(*kv_pwidth);
-    mxverb(2, boost::format("matroska_reader: |   + Pixel width: %1%\n") % track->v_width);
-  } else
-    mxerror(Y("matroska_reader: Pixel width is missing.\n"));
+  track->v_width        = FindChildValue<KaxVideoPixelWidth>(ktvideo);
+  track->v_height       = FindChildValue<KaxVideoPixelHeight>(ktvideo);
+  track->v_dwidth       = FindChildValue<KaxVideoDisplayWidth>(ktvideo,  track->v_width);
+  track->v_dheight      = FindChildValue<KaxVideoDisplayHeight>(ktvideo, track->v_height);
 
-  KaxVideoPixelHeight *kv_pheight = FindChild<KaxVideoPixelHeight>(ktvideo);
-  if (kv_pheight) {
-    track->v_height = uint64(*kv_pheight);
-    mxverb(2, boost::format("matroska_reader: |   + Pixel height: %1%\n") % track->v_height);
-  } else
-    mxerror(Y("matroska_reader: Pixel height is missing.\n"));
+  track->v_pcleft       = FindChildValue<KaxVideoPixelCropLeft>(ktvideo);
+  track->v_pcright      = FindChildValue<KaxVideoPixelCropRight>(ktvideo);
+  track->v_pctop        = FindChildValue<KaxVideoPixelCropTop>(ktvideo);
+  track->v_pcbottom     = FindChildValue<KaxVideoPixelCropBottom>(ktvideo);
 
-  KaxVideoDisplayWidth *kv_dwidth = FindChild<KaxVideoDisplayWidth>(ktvideo);
-  if (kv_dwidth) {
-    track->v_dwidth = uint64(*kv_dwidth);
-    mxverb(2, boost::format("matroska_reader: |   + Display width: %1%\n") % track->v_dwidth);
-  } else
-    track->v_dwidth = track->v_width;
-
-  KaxVideoDisplayHeight *kv_dheight = FindChild<KaxVideoDisplayHeight>(ktvideo);
-  if (kv_dheight) {
-    track->v_dheight = uint64(*kv_dheight);
-    mxverb(2, boost::format("matroska_reader: |   + Display height: %1%\n") % track->v_dheight);
-  } else
-    track->v_dheight = track->v_height;
-
-#if MATROSKA_VERSION >= 2
-  KaxVideoDisplayUnit *kv_dunit = FindChild<KaxVideoDisplayUnit>(ktvideo);
-  if (kv_dunit) {
-    track->v_display_unit = uint64(*kv_dunit);
-    mxverb(2, boost::format("matroska_reader: |   + Display unit: %1%\n") % track->v_display_unit);
-  }
-#endif
-
-  track->fix_display_dimension_parameters();
+  track->v_stereo_mode  = static_cast<stereo_mode_c::mode>(FindChildValue<KaxVideoStereoMode>(ktvideo, stereo_mode_c::unspecified));
 
   // For older files.
-  KaxVideoFrameRate *kv_frate = FindChild<KaxVideoFrameRate>(ktvideo);
-  if (kv_frate) {
-    track->v_frate = float(*kv_frate);
-    mxverb(2, boost::format("matroska_reader: |   + Frame rate: %1%\n") % track->v_frate);
-  }
+  track->v_frate        = FindChildValue<KaxVideoFrameRate>(ktvideo, track->v_frate);
 
-  KaxVideoPixelCropLeft *kv_pcleft = FindChild<KaxVideoPixelCropLeft>(ktvideo);
-  if (kv_pcleft) {
-    track->v_pcleft = uint64(*kv_pcleft);
-    mxverb(2, boost::format("matroska_reader: |   + Pixel crop left: %1%\n") % track->v_pcleft);
-  }
+#if MATROSKA_VERSION >= 2
+  track->v_display_unit = FindChildValue<KaxVideoDisplayUnit>(ktvideo);
+#endif
 
-  KaxVideoPixelCropTop *kv_pctop = FindChild<KaxVideoPixelCropTop>(ktvideo);
-  if (kv_pctop) {
-    track->v_pctop = uint64(*kv_pctop);
-    mxverb(2, boost::format("matroska_reader: |   + Pixel crop top: %1%\n") % track->v_pctop);
-  }
+  if (!track->v_width)
+    mxerror(Y("matroska_reader: Pixel width is missing.\n"));
+  if (!track->v_height)
+    mxerror(Y("matroska_reader: Pixel height is missing.\n"));
 
-  KaxVideoPixelCropRight *kv_pcright = FindChild<KaxVideoPixelCropRight>(ktvideo);
-  if (kv_pcright) {
-    track->v_pcright = uint64(*kv_pcright);
-    mxverb(2, boost::format("matroska_reader: |   + Pixel crop right: %1%\n") % track->v_pcright);
-  }
-
-  KaxVideoPixelCropBottom *kv_pcbottom = FindChild<KaxVideoPixelCropBottom>(ktvideo);
-  if (kv_pcbottom) {
-    track->v_pcbottom = uint64(*kv_pcbottom);
-    mxverb(2, boost::format("matroska_reader: |   + Pixel crop bottom: %1%\n") % track->v_pcbottom);
-  }
-
-  KaxVideoStereoMode *kv_stereo_mode = FindChild<KaxVideoStereoMode>(ktvideo);
-  if (kv_stereo_mode) {
-    track->v_stereo_mode = static_cast<stereo_mode_c::mode>(uint64(*kv_stereo_mode));
-    mxverb(2, boost::format("matroska_reader: |   + Stereo mode: %1%\n") % static_cast<int>(track->v_stereo_mode));
-  }
+  track->fix_display_dimension_parameters();
 }
 
 void
@@ -1032,8 +904,6 @@ kax_reader_c::read_headers_tracks(mm_io_c *io,
   // contained in this segment.
   if (has_deferred_element_been_processed(dl1t_tracks, position))
     return;
-
-  mxverb(2, "matroska_reader: |+ segment m_tracks...\n");
 
   int upper_lvl_el = 0;
   io->save_pos(position);
@@ -1053,130 +923,72 @@ kax_reader_c::read_headers_tracks(mm_io_c *io,
   KaxTrackEntry *ktentry = FindChild<KaxTrackEntry>(l1);
   while (ktentry) {
     // We actually found a track entry :) We're happy now.
-    mxverb(2, "matroska_reader: | + a track...\n");
-
-    kax_track_cptr track(new kax_track_t);
+    auto track = std::make_shared<kax_track_t>();
     track->tnum = m_tracks.size();
 
-    KaxTrackNumber *ktnum = FindChild<KaxTrackNumber>(ktentry);
+    auto ktnum = FindChild<KaxTrackNumber>(ktentry);
     if (!ktnum)
       mxerror(Y("matroska_reader: A track is missing its track number.\n"));
-    mxverb(2, boost::format("matroska_reader: |  + Track number: %1%\n") % static_cast<unsigned int>(uint8(*ktnum)));
 
-    track->track_number = uint8(*ktnum);
+    track->track_number = ktnum->GetValue();
     if (find_track_by_num(track->track_number, track.get())) {
-      mxverb(2, boost::format(Y("matroska_reader: |  + There's more than one track with the number %1%.\n")) % track->track_number);
       ktentry = FindNextChild<KaxTrackEntry>(l1, ktentry);
       continue;
     }
 
-    KaxTrackUID *ktuid = FindChild<KaxTrackUID>(ktentry);
+    auto ktuid = FindChild<KaxTrackUID>(ktentry);
     if (!ktuid)
       mxerror(Y("matroska_reader: A track is missing its track UID.\n"));
-    mxverb(2, boost::format("matroska_reader: |  + Track UID: %1%\n") % uint64(*ktuid));
-    track->track_uid = uint64(*ktuid);
-    if (find_track_by_uid(track->track_uid, track.get()) && (1 < verbose))
-      mxwarn(boost::format(Y("matroska_reader: |  + There's more than one track with the UID %1%.\n")) % track->tnum);
+    track->track_uid = ktuid->GetValue();
 
-    KaxTrackDefaultDuration *kdefdur = FindChild<KaxTrackDefaultDuration>(ktentry);
-    if (kdefdur) {
-      track->v_frate          = 1000000000.0 / static_cast<float>(uint64(*kdefdur));
-      track->default_duration = uint64(*kdefdur);
-      mxverb(2, boost::format("matroska_reader: |  + Default duration: %|1$.3f|ms ( = %|2$.3f| fps)\n") % (uint64(*kdefdur) / 1000000.0) % track->v_frate);
-    }
-
-    KaxTrackType *kttype = FindChild<KaxTrackType>(ktentry);
+    auto kttype = FindChild<KaxTrackType>(ktentry);
     if (!kttype)
       mxerror(Y("matroska_reader: Track type was not found.\n"));
-    unsigned char track_type = uint8(*kttype);
+    unsigned char track_type = kttype->GetValue();
     track->type              = track_type == track_audio    ? 'a'
                              : track_type == track_video    ? 'v'
                              : track_type == track_subtitle ? 's'
                              :                                '?';
-    mxverb(2, boost::format("matroska_reader: |  + Track type: %1%\n") % MAP_TRACK_TYPE_STRING(track->type));
 
-    KaxTrackAudio *ktaudio = FindChild<KaxTrackAudio>(ktentry);
+    auto ktaudio = FindChild<KaxTrackAudio>(ktentry);
     if (ktaudio)
       read_headers_track_audio(track.get(), ktaudio);
 
-    KaxTrackVideo *ktvideo = FindChild<KaxTrackVideo>(ktentry);
+    auto ktvideo = FindChild<KaxTrackVideo>(ktentry);
     if (ktvideo)
       read_headers_track_video(track.get(), ktvideo);
 
-    KaxCodecID *kcodecid = FindChild<KaxCodecID>(ktentry);
-    if (kcodecid) {
-      mxverb(2, boost::format("matroska_reader: |  + Codec ID: %1%\n") % std::string(*kcodecid));
-      track->codec_id = std::string(*kcodecid);
-    } else
-      mxerror(Y("matroska_reader: The CodecID is missing.\n"));
-
-    KaxCodecPrivate *kcodecpriv = FindChild<KaxCodecPrivate>(ktentry);
+    auto kcodecpriv = FindChild<KaxCodecPrivate>(ktentry);
     if (kcodecpriv) {
-      mxverb(2, boost::format("matroska_reader: |  + CodecPrivate, length %1%\n") % kcodecpriv->GetSize());
       track->private_size = kcodecpriv->GetSize();
       if (0 < track->private_size)
         track->private_data = safememdup(kcodecpriv->GetBuffer(), track->private_size);
     }
 
-    KaxTrackMinCache *ktmincache = FindChild<KaxTrackMinCache>(ktentry);
-    if (ktmincache) {
-      mxverb(2, boost::format("matroska_reader: |  + MinCache: %1%\n") % uint64(*ktmincache));
-      if (1 < uint64(*ktmincache))
-        track->v_bframes = true;
-      track->min_cache = uint64(*ktmincache);
-    }
+    track->codec_id         = FindChildValue<KaxCodecID>(ktentry);
+    track->track_name       = to_utf8(FindChildValue<KaxTrackName>(ktentry));
+    track->language         = FindChildValue<KaxTrackLanguage>(ktentry, "eng");
+    track->default_duration = FindChildValue<KaxTrackDefaultDuration>(ktentry, track->default_duration);
+    track->default_track    = FindChildValue<KaxTrackFlagDefault, bool>(ktentry, true);
+    track->forced_track     = FindChildValue<KaxTrackFlagForced>(ktentry);
+    track->enabled_track    = FindChildValue<KaxTrackFlagEnabled, bool>(ktentry, true);
+    track->lacing_flag      = FindChildValue<KaxTrackFlagLacing>(ktentry);
+    track->max_blockadd_id  = FindChildValue<KaxMaxBlockAdditionID>(ktentry);
+    track->min_cache        = FindChildValue<KaxTrackMinCache>(ktentry);
+    track->max_cache        = FindChildValue<KaxTrackMaxCache>(ktentry);
+    track->v_bframes        = 1 < track->min_cache;
 
-    KaxTrackMaxCache *ktmaxcache = FindChild<KaxTrackMaxCache>(ktentry);
-    if (ktmaxcache) {
-      mxverb(2, boost::format("matroska_reader: |  + MaxCache: %1%\n") % uint64(*ktmaxcache));
-      track->max_cache = uint64(*ktmaxcache);
-    }
+    if (track->codec_id.empty())
+      mxerror(Y("matroska_reader: The CodecID is missing.\n"));
 
-    KaxTrackFlagDefault *ktfdefault = FindChild<KaxTrackFlagDefault>(ktentry);
-    if (ktfdefault) {
-      mxverb(2, boost::format("matroska_reader: |  + Default flag: %1%\n") % uint64(*ktfdefault));
-      track->default_track = uint64(*ktfdefault);
-    }
-
-    KaxTrackFlagForced *ktfforced = FindChild<KaxTrackFlagForced>(ktentry);
-    if (ktfforced) {
-      mxverb(2, boost::format("matroska_reader: |  + Forced flag: %1%\n") % uint64(*ktfforced));
-      track->forced_track = uint64(*ktfforced);
-    }
-
-    KaxTrackFlagEnabled *ktfenabled = FindChild<KaxTrackFlagEnabled>(ktentry);
-    if (ktfenabled) {
-      mxverb(2, boost::format("matroska_reader: |  + Enabled flag: %1%\n") % uint64(*ktfenabled));
-      track->enabled_track = uint64(*ktfenabled);
-    }
-
-    KaxTrackFlagLacing *ktflacing = FindChild<KaxTrackFlagLacing>(ktentry);
-    if (ktflacing) {
-      mxverb(2, boost::format("matroska_reader: |  + Lacing flag: %1%\n") % uint64(*ktflacing));
-      track->lacing_flag = uint64(*ktflacing);
-    }
-
-    KaxMaxBlockAdditionID *ktmax_blockadd_id = FindChild<KaxMaxBlockAdditionID>(ktentry);
-    if (ktmax_blockadd_id) {
-      mxverb(2, boost::format("matroska_reader: |  + Max Block Addition ID: %1%\n") % uint64(*ktmax_blockadd_id));
-      track->max_blockadd_id = uint64(*ktmax_blockadd_id);
-    } else
-      track->max_blockadd_id = 0;
-
-    KaxTrackLanguage *ktlanguage = FindChild<KaxTrackLanguage>(ktentry);
-    if (ktlanguage) {
-      mxverb(2, boost::format("matroska_reader: |  + Language: %1%\n") % std::string(*ktlanguage));
-      track->language = std::string(*ktlanguage);
-      int index       = map_to_iso639_2_code(track->language.c_str());
+    if (!track->language.empty()) {
+      int index = map_to_iso639_2_code(track->language.c_str());
       if (-1 != index)
         track->language = iso639_languages[index].iso639_2_code;
     }
 
-    KaxTrackName *ktname = FindChild<KaxTrackName>(ktentry);
-    if (ktname) {
-      track->track_name = UTFstring_to_cstrutf8(UTFstring(*ktname));
-      mxverb(2, boost::format("matroska_reader: |  + Name: %1%\n") % track->track_name);
-    }
+    if (0 != track->default_duration)
+      track->v_frate = 1000000000.0 / track->default_duration;
 
     track->content_decoder.initialize(*ktentry);
     m_tracks.push_back(track);
@@ -1198,18 +1010,17 @@ kax_reader_c::read_headers_seek_head(EbmlElement *l0,
   int i = 0;
   seek_head.Read(*m_es, EBML_CLASS_CONTEXT(KaxSeekHead), i, el, true);
 
-  for (i = 0; i < static_cast<int>(seek_head.ListSize()); i++) {
-    if (EbmlId(*seek_head[i]) != EBML_ID(KaxSeek))
+  for (auto l2 : seek_head) {
+    if (EbmlId(*l2) != EBML_ID(KaxSeek))
       continue;
 
-    KaxSeek &seek           = *static_cast<KaxSeek *>(seek_head[i]);
+    KaxSeek &seek           = *static_cast<KaxSeek *>(l2);
     int64_t pos             = -1;
     deferred_l1_type_e type = dl1t_unknown;
-    size_t k;
 
-    for (k = 0; k < seek.ListSize(); k++)
-      if (EbmlId(*seek[k]) == EBML_ID(KaxSeekID)) {
-        KaxSeekID &sid = *static_cast<KaxSeekID *>(seek[k]);
+    for (auto l3 : seek)
+      if (EbmlId(*l3) == EBML_ID(KaxSeekID)) {
+        auto &sid = *static_cast<KaxSeekID *>(l3);
         EbmlId id(sid.GetBuffer(), sid.GetSize());
 
         type = id == EBML_ID(KaxAttachments) ? dl1t_attachments
@@ -1218,8 +1029,8 @@ kax_reader_c::read_headers_seek_head(EbmlElement *l0,
           :    id == EBML_ID(KaxTracks)      ? dl1t_tracks
           :                                    dl1t_unknown;
 
-      } else if (EbmlId(*seek[k]) == EBML_ID(KaxSeekPosition))
-        pos = static_cast<KaxSeekPosition *>(seek[k])->GetValue();
+      } else if (EbmlId(*l3) == EBML_ID(KaxSeekPosition))
+        pos = static_cast<KaxSeekPosition *>(l3)->GetValue();
 
     if ((-1 != pos) && (dl1t_unknown != type)) {
       pos = static_cast<KaxSegment *>(l0)->GetGlobalPosition(pos);
@@ -1254,7 +1065,6 @@ kax_reader_c::read_headers_internal() {
     // Don't verify its data for now.
     l0->SkipData(*m_es, EBML_CONTEXT(l0));
     delete l0;
-    mxverb(2, "matroska_reader: Found the head...\n");
 
     // Next element must be a segment
     l0 = m_es->FindNextID(EBML_INFO(KaxSegment), 0xFFFFFFFFFFFFFFFFLL);
@@ -1269,7 +1079,6 @@ kax_reader_c::read_headers_internal() {
         mxwarn(Y("matroska_reader: No segment found.\n"));
       return false;
     }
-    mxverb(2, "matroska_reader: + a segment...\n");
 
     // We've got our segment, so let's find the m_tracks
     int upper_lvl_el = 0;
@@ -1297,11 +1106,10 @@ kax_reader_c::read_headers_internal() {
       else if (EbmlId(*l1) == EBML_ID(KaxSeekHead))
         read_headers_seek_head(l0, l1);
 
-      else if (EbmlId(*l1) == EBML_ID(KaxCluster)) {
-        mxverb(2, "matroska_reader: |+ found cluster, headers are parsed completely\n");
+      else if (EbmlId(*l1) == EBML_ID(KaxCluster))
         cluster = static_cast<KaxCluster *>(l1);
 
-      } else
+      else
         l1->SkipData(*m_es, EBML_CONTEXT(l1));
 
       if (cluster)              // we've found the first cluster, so get out
@@ -1373,9 +1181,8 @@ kax_reader_c::process_global_tags() {
   if (!m_tags || g_identifying)
     return;
 
-  size_t i;
-  for (i = 0; m_tags->ListSize() > i; ++i)
-    add_tags(static_cast<KaxTag *>((*m_tags)[i]));
+  for (auto tag : *m_tags)
+    add_tags(static_cast<KaxTag *>(tag));
 
   m_tags->RemoveAll();
 }
@@ -1534,7 +1341,7 @@ kax_reader_c::create_aac_audio_packetizer(kax_track_t *t,
       if (sbr)
         profile        = AAC_PROFILE_SBR;
 
-    } else if (!parse_aac_codec_id(std::string(t->codec_id), id, profile))
+    } else if (!parse_aac_codec_id(t->codec_id, id, profile))
       mxerror_tid(m_ti.m_fname, t->tnum, boost::format(Y("Malformed codec id '%1%'.\n")) % t->codec_id);
 
   } else {
@@ -1700,10 +1507,10 @@ kax_reader_c::create_audio_packetizer(kax_track_t *t,
   else if ((FOURCC('M', 'P', '4', 'A') == t->a_formattag) || (0x00ff == t->a_formattag))
     create_aac_audio_packetizer(t, nti);
 
- #if defined(HAVE_FLAC_FORMAT_H)
+#if defined(HAVE_FLAC_FORMAT_H)
   else if ((FOURCC('f', 'L', 'a', 'C') == t->a_formattag) || (0xf1ac == t->a_formattag))
     create_flac_audio_packetizer(t, nti);
- #endif
+#endif
 
   else if (FOURCC('T', 'T', 'A', '1') == t->a_formattag)
     create_tta_audio_packetizer(t, nti);
@@ -1889,7 +1696,7 @@ kax_reader_c::read_first_frames(kax_track_t *t,
 
       KaxClusterTimecode *ctc = static_cast<KaxClusterTimecode *> (cluster->FindFirstElt(EBML_INFO(KaxClusterTimecode), false));
       if (ctc)
-        cluster->InitTimecode(uint64(*ctc), m_tc_scale);
+        cluster->InitTimecode(ctc->GetValue(), m_tc_scale);
 
       size_t bgidx;
       for (bgidx = 0; bgidx < cluster->ListSize(); bgidx++) {
@@ -1974,8 +1781,7 @@ kax_reader_c::read(generic_packetizer_c *requested_ptzr,
       return FILE_STATUS_DONE;
     }
 
-    KaxClusterTimecode *ctc = static_cast<KaxClusterTimecode *>(cluster->FindFirstElt(EBML_INFO(KaxClusterTimecode), false));
-    uint64_t cluster_tc = ctc ? uint64(*ctc) : 0;
+    auto cluster_tc = FindChildValue<KaxClusterTimecode>(cluster);
     cluster->InitTimecode(cluster_tc, m_tc_scale);
 
     if (-1 == m_first_timecode) {
@@ -2105,11 +1911,11 @@ kax_reader_c::process_block_group(KaxCluster *cluster,
   KaxReferenceBlock *ref_block = static_cast<KaxReferenceBlock *>(block_group->FindFirstElt(EBML_INFO(KaxReferenceBlock), false));
 
   while (ref_block) {
-    if (0 >= int64(*ref_block)) {
-      block_bref = int64(*ref_block) * m_tc_scale;
+    if (0 >= ref_block->GetValue()) {
+      block_bref = ref_block->GetValue() * m_tc_scale;
       bref_found = true;
     } else {
-      block_fref = int64(*ref_block) * m_tc_scale;
+      block_fref = ref_block->GetValue() * m_tc_scale;
       fref_found = true;
     }
 
@@ -2138,7 +1944,7 @@ kax_reader_c::process_block_group(KaxCluster *cluster,
   KaxBlockDuration *duration  = static_cast<KaxBlockDuration *>(block_group->FindFirstElt(EBML_INFO(KaxBlockDuration), false));
 
   if (duration)
-    block_duration = uint64(*duration) * m_tc_scale / block->NumberFrames();
+    block_duration = duration->GetValue() * m_tc_scale / block->NumberFrames();
   else if (0 != block_track->v_frate)
     block_duration = 1000000000.0 / block_track->v_frate;
   int64_t frame_duration = (block_duration == -1) ? 0 : block_duration;
@@ -2216,7 +2022,7 @@ kax_reader_c::process_block_group(KaxCluster *cluster,
       } else {
         packet_cptr packet(new packet_t(data, m_last_timecode + i * frame_duration, block_duration, block_bref, block_fref));
 
-        if ((duration) && (0 == uint64(*duration)))
+        if ((duration) && (0 == duration->GetValue()))
           packet->duration_mandatory = true;
 
         if (codec_state)
