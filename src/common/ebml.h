@@ -306,21 +306,6 @@ GetChildValue(EbmlMaster *master) {
   return GetChild<Telement>(master).GetValue();
 }
 
-template<typename T>
-memory_cptr
-find_and_clone_binary(EbmlElement &parent) {
-  auto child = FindChild<T>(static_cast<EbmlMaster &>(parent));
-  if (child)
-    return memory_c::clone(child->GetBuffer(), child->GetSize());
-  return memory_cptr{};
-}
-
-template<typename T>
-memory_cptr
-find_and_clone_binary(EbmlElement *parent) {
-  return find_and_clone_binary<T>(*parent);
-}
-
 EbmlElement *empty_ebml_master(EbmlElement *e);
 EbmlElement *create_ebml_element(const EbmlCallbacks &callbacks, const EbmlId &id);
 EbmlMaster *sort_ebml_master(EbmlMaster *e);
