@@ -879,7 +879,7 @@ kax_reader_c::read_headers_track_video(kax_track_t *track,
   track->v_pctop        = FindChildValue<KaxVideoPixelCropTop>(ktvideo);
   track->v_pcbottom     = FindChildValue<KaxVideoPixelCropBottom>(ktvideo);
 
-  track->v_stereo_mode  = static_cast<stereo_mode_c::mode>(FindChildValue<KaxVideoStereoMode>(ktvideo, stereo_mode_c::unspecified));
+  track->v_stereo_mode  = FindChildValue<KaxVideoStereoMode, stereo_mode_c::mode>(ktvideo, stereo_mode_c::unspecified);
 
   // For older files.
   track->v_frate        = FindChildValue<KaxVideoFrameRate>(ktvideo, track->v_frate);
@@ -967,7 +967,7 @@ kax_reader_c::read_headers_tracks(mm_io_c *io,
 
     track->codec_id         = FindChildValue<KaxCodecID>(ktentry);
     track->track_name       = to_utf8(FindChildValue<KaxTrackName>(ktentry));
-    track->language         = FindChildValue<KaxTrackLanguage>(ktentry, "eng");
+    track->language         = FindChildValue<KaxTrackLanguage, std::string>(ktentry, "eng");
     track->default_duration = FindChildValue<KaxTrackDefaultDuration>(ktentry, track->default_duration);
     track->default_track    = FindChildValue<KaxTrackFlagDefault, bool>(ktentry, true);
     track->forced_track     = FindChildValue<KaxTrackFlagForced>(ktentry);

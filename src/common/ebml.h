@@ -260,16 +260,16 @@ FixMandatoryElement(EbmlMaster *master) {
 
 template<typename Telement,
          typename Tvalue = decltype(Telement().GetValue())>
-decltype(Telement().GetValue())
+Tvalue
 FindChildValue(EbmlMaster &master,
                Tvalue const &default_value = Tvalue{}) {
   auto child = FindChild<Telement>(master);
-  return child ? child->GetValue() : default_value;
+  return child ? static_cast<Tvalue>(child->GetValue()) : default_value;
 }
 
 template<typename Telement,
          typename Tvalue = decltype(Telement().GetValue())>
-decltype(Telement().GetValue())
+Tvalue
 FindChildValue(EbmlMaster *master,
                Tvalue const &default_value = Tvalue{}) {
   return FindChildValue<Telement>(*master, default_value);
