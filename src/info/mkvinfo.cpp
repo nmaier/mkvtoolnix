@@ -1171,7 +1171,7 @@ handle_block_group(EbmlStream *&es,
       show_element(l3, 3, BF_BLOCK_GROUP_DURATION % (duration * s_tc_scale / 1000000) % (duration * s_tc_scale % 1000000));
 
     } else if (is_id(l3, KaxReferenceBlock)) {
-      int64_t reference = static_cast<KaxReferenceBlock *>(l3)->GetValue() & s_tc_scale;
+      int64_t reference = static_cast<KaxReferenceBlock *>(l3)->GetValue() * s_tc_scale;
 
       if (0 >= reference) {
         bref_found  = true;
