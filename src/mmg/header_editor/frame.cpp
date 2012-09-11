@@ -362,14 +362,9 @@ header_editor_frame_c::handle_tracks(kax_analyzer_data_c *data) {
     KaxTrackType *k_track_type = dynamic_cast<KaxTrackType *>(FindChild<KaxTrackType>(k_track_entry));
     if (!k_track_type)
       continue;
+    track_type = k_track_type->GetValue();
 
-    unsigned int track_number = 0;
-    KaxTrackNumber *k_track_number = dynamic_cast<KaxTrackNumber *>(FindChild<KaxTrackNumber>(k_track_entry));
-    if (k_track_number)
-      track_number = uint64(*k_track_number);
-
-    wxString title;
-    track_type = uint64(*k_track_type);
+    unsigned int track_number = FindChildValue<KaxTrackNumber>(k_track_entry);
 
     he_track_type_page_c *page = new he_track_type_page_c(this, track_type, track_number, m_e_tracks, *k_track_entry);
     last_track_page            = page;

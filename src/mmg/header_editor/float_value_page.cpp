@@ -44,7 +44,7 @@ he_float_value_page_c::~he_float_value_page_c() {
 wxControl *
 he_float_value_page_c::create_input_control() {
   if (m_element)
-    m_original_value = double(*static_cast<EbmlFloat *>(m_element));
+    m_original_value = static_cast<EbmlFloat *>(m_element)->GetValue();
 
   m_tc_text = new wxTextCtrl(this, wxID_ANY, get_original_value_as_string());
   m_tc_text->SetValidator(wxTextValidator(wxFILTER_NUMERIC));
@@ -90,5 +90,5 @@ void
 he_float_value_page_c::copy_value_to_element() {
   double value;
   parse_number(wxMB(m_tc_text->GetValue()), value);
-  *static_cast<EbmlFloat *>(m_element) = value;
+  static_cast<EbmlFloat *>(m_element)->SetValue(value);
 }

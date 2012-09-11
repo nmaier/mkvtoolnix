@@ -80,5 +80,5 @@ he_ascii_string_value_page_c::validate_value() {
 
 void
 he_ascii_string_value_page_c::copy_value_to_element() {
-  *static_cast<EbmlString *>(m_element) = std::string(wxMB(m_tc_text->GetValue()));
+  static_cast<EbmlString *>(m_element)->SetValue(wxMB(m_tc_text->GetValue()));
 }

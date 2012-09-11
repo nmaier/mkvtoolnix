@@ -100,5 +100,5 @@ he_language_value_page_c::validate_value() {
 
 void
 he_language_value_page_c::copy_value_to_element() {
-  *static_cast<EbmlString *>(m_element) = std::string(wxMB(get_current_value_as_string()));
+  static_cast<EbmlString *>(m_element)->SetValue(wxMB(get_current_value_as_string()));
 }

@@ -57,7 +57,7 @@ he_bool_value_page_c::translate_ui() {
 wxControl *
 he_bool_value_page_c::create_input_control() {
   if (m_element)
-    m_original_value = uint64(*static_cast<EbmlUInteger *>(m_element)) > 0;
+    m_original_value = static_cast<EbmlUInteger *>(m_element)->GetValue() > 0;
 
   if (m_values.empty())
     translate_ui();
@@ -92,5 +92,5 @@ he_bool_value_page_c::validate_value() {
 
 void
 he_bool_value_page_c::copy_value_to_element() {
-  *static_cast<EbmlUInteger *>(m_element) = m_cb_bool->GetValue() == m_values[1];
+  static_cast<EbmlUInteger *>(m_element)->SetValue(m_cb_bool->GetValue() == m_values[1]);
 }
