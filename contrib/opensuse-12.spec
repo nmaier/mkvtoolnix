@@ -3,7 +3,7 @@
 # works with openSUSE 11.4 and newer
 #
 
-BuildRequires: flac flac-devel gcc-c++ gtk2 gtk2-devel libogg libogg-devel libstdc++-devel libvorbis libvorbis-devel lzo lzo-devel pkgconfig boost-devel file-devel ruby libcurl-devel
+BuildRequires: flac flac-devel gcc-c++ gtk2 gtk2-devel libogg0 libogg-devel libstdc++-devel libvorbis libvorbis-devel lzo lzo-devel pkgconfig boost-devel file-devel ruby libcurl-devel
 BuildRequires: wxWidgets-devel make gettext-tools
 
 Name:         mkvtoolnix
