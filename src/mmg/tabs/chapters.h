@@ -69,6 +69,11 @@ public:
     , eentry{p_eentry}
   {
   };
+
+  EbmlMaster *
+  get() const {
+    return is_atom ? static_cast<EbmlMaster *>(chapter) : static_cast<EbmlMaster *>(eentry);
+  }
 };
 
 class tab_chapters: public wxPanel {
@@ -127,8 +132,7 @@ public:
   void on_flag_hidden(wxCommandEvent &evt);
   void on_flag_enabled_default(wxCommandEvent &evt);
   void on_flag_ordered(wxCommandEvent &evt);
-  void set_values_recursively(wxTreeItemId id, const wxString &language,
-                              bool set_language);
+  void set_values_recursively(wxTreeItemId id, wxString const &value, bool set_language);
   void set_display_values(KaxChapterDisplay *display);
   void set_timecode_values(KaxChapterAtom *atom);
   void adjust_timecodes_recursively(wxTreeItemId id, int64_t adjust_by);
@@ -155,6 +159,8 @@ protected:
   void set_flag_enabled_default_texts(wxTreeItemId id);
   bool copy_segment_uid(chapter_node_data_c *data);
   bool copy_segment_edition_uid(chapter_node_data_c *data);
+
+  KaxChapterDisplay * get_selected_chapter_display();
 };
 
 #endif // __TAB_CHAPTERS_H
