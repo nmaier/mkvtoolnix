@@ -16,11 +16,45 @@
 
 #include "common/common_pch.h"
 
+#include <type_traits>
+
 #include <boost/lexical_cast.hpp>
 
 #include "common/strings/utf8.h"
 
 namespace mtx { namespace sort {
+
+// --------------- sort by
+
+template<  typename Titer
+         , typename Tcriterion_maker
+         , typename Tcriterion = typename std::result_of< Tcriterion_maker(typename std::iterator_traits<Titer>::value_type) >::type
+         , typename Tcomparator = std::less<Tcriterion>
+         >
+void
+by(Titer first,
+   Titer last,
+   Tcriterion_maker criterion_maker,
+   Tcomparator comparator = Tcomparator{}) {
+  typedef typename std::iterator_traits<Titer>::value_type value_type;
+  typedef decltype( criterion_maker(*first) ) criterion_type;
+  typedef std::pair<value_type, criterion_type> pair_type;
+
+  if (first == last)
+    return;
+
+  std::vector<pair_type> to_sort;
+  to_sort.reserve(std::distance(first, last));
+
+  for (auto idx = first; idx < last; ++idx)
+    to_sort.push_back(std::make_pair(std::move(*idx), criterion_maker(*idx)));
+
+  brng::sort(to_sort, [&comparator](pair_type const &a, pair_type const &b) { return comparator(a.second, b.second); });
+
+  std::transform(to_sort.begin(), to_sort.end(), first, [](pair_type &pair) -> value_type && { return std::move(pair.first); });
+}
+
+// --------------- sort naturally
 
 template<typename StrT>
 class natural_element_c {
@@ -69,8 +103,9 @@ public:
   natural_string_c(StrT const &original)
     : m_original{original}
   {
+    static boost::wregex re(L"\\d+", boost::regex::icase | boost::regex::perl);
+
     std::wstring wide = to_wide(m_original);
-    boost::wregex re(L"\\d+", boost::regex::icase | boost::regex::perl);
     boost::wsregex_token_iterator it(wide.begin(), wide.end(), re, std::vector<int>{ -1, 0 });
     boost::wsregex_token_iterator end;
     while (it != end)
@@ -96,19 +131,12 @@ public:
   }
 };
 
-template<typename ContT>
+template<typename IterT>
 void
-naturally(ContT &strings) {
-  typedef typename ContT::value_type StrT;
-  typedef std::pair<natural_string_c<StrT>, size_t> sorter_t;
-
-  std::vector<sorter_t> to_sort;
-  for (auto &string : strings)
-    to_sort.push_back(std::make_pair(natural_string_c<StrT>{string}, to_sort.size()));
-
-  brng::sort(to_sort, [&](sorter_t const &a, sorter_t const &b) { return a.first < b.first; });
-
-  brng::transform(to_sort, strings.begin(), [](sorter_t const &e) { return e.first.get_original(); });
+naturally(IterT first,
+          IterT last) {
+  typedef typename std::iterator_traits<IterT>::value_type StrT;
+  by(first, last, [](StrT const &string) { return natural_string_c<StrT>{string}; });
 }
 
 }}

@@ -166,7 +166,7 @@ additional_parts_dialog::on_add(wxCommandEvent &) {
       file_names_to_add.push_back(file_name);
   }
 
-  mtx::sort::naturally(file_names_to_add);
+  mtx::sort::naturally(file_names_to_add.begin(), file_names_to_add.end());
 
   for (auto &file_name : file_names_to_add) {
     m_files.push_back(file_name);
@@ -241,7 +241,7 @@ additional_parts_dialog::on_down(wxCommandEvent &) {
 void
 additional_parts_dialog::on_sort(wxCommandEvent &) {
   save_selection([&]() {
-      mtx::sort::naturally(m_files);
+      mtx::sort::naturally(m_files.begin(), m_files.end());
       repopulate();
     });
 }

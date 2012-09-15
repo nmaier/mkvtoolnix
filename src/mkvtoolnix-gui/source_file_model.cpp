@@ -205,7 +205,7 @@ SourceFileModel::addAdditionalParts(QModelIndex fileToAddToIdx,
   if (fileNames.isEmpty())
     return;
 
-  mtx::sort::naturally(fileNames);
+  mtx::sort::naturally(fileNames.begin(), fileNames.end());
 
   auto startRow = fileToAddTo->m_additionalParts.size();
   auto endRow   = startRow + fileNames.size() - 1;
