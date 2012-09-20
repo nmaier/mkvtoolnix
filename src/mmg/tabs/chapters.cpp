@@ -163,13 +163,12 @@ expand_subtree(wxTreeCtrl &tree,
 tab_chapters::tab_chapters(wxWindow *parent,
                            wxMenu *chapters_menu)
   : wxPanel(parent, -1, wxDefaultPosition, wxSize(100, 400), wxTAB_TRAVERSAL)
-  , m_chapters(nullptr)
+  , m_chapters_menu{chapters_menu}
+  , m_chapters{}
 {
-  m_chapters_menu  = chapters_menu;
+  st_chapters  = new wxStaticText(this, wxID_STATIC, wxEmptyString);
 
-  auto siz_all     = new wxBoxSizer(wxVERTICAL);
-
-  auto st_chapters = new wxStaticText(this, wxID_STATIC, wxEmptyString);
+  auto siz_all = new wxBoxSizer(wxVERTICAL);
   siz_all->AddSpacer(5);
   siz_all->Add(st_chapters, 0, wxLEFT, 10);
   siz_all->AddSpacer(5);
@@ -414,7 +413,7 @@ tab_chapters::enable_inputs(bool enable,
   st_language->Enable(enable);
   st_country->Enable(enable);
   sb_names->Enable(enable);
-  st_flags->Enable(enable);
+  st_flags->Enable(enable || is_edition);
   inputs_enabled = enable;
 }
 
@@ -1027,9 +1026,10 @@ tab_chapters::get_selected_chapter_display() {
   size_t nth_chapter_display = 0;
   auto &elements             = data->get()->GetElementList();
   auto cdisplay_itr          = brng::find_if(elements, [&](EbmlElement *child) -> bool {
+      if (EbmlId(*child) != KaxChapterDisplay::ClassInfos.GlobalId)
+        return false;
       ++nth_chapter_display;
-      return (nth_chapter_display == static_cast<size_t>(lb_chapter_names->GetSelection() + 1))
-          && (EbmlId(*child) == KaxChapterDisplay::ClassInfos.GlobalId);
+      return (nth_chapter_display == static_cast<size_t>(lb_chapter_names->GetSelection() + 1));
     });
 
   return elements.end() == cdisplay_itr ? nullptr : static_cast<KaxChapterDisplay *>(*cdisplay_itr);
