@@ -63,6 +63,17 @@ using namespace libmatroska;
   ])
 
   if test x"${ac_cv_matroska_found}" = "xinternal" -o x"${ac_cv_ebml_found}" = "xinternal" ; then
+    if ! test -f lib/libmatroska/matroska/KaxVersion.h ; then
+      echo '*** The internal version of the libMatroska library is supposed to be used,'
+      echo '*** but it was not found in "lib/libmatroska". If this is a clone from the'
+      echo '*** git repository then submodules have to be initialized with the'
+      echo '*** following two commands:'
+      echo '***'
+      echo '*** git submodule init'
+      echo '*** git submodule update'
+      exit 1
+    fi
+
     EBML_CFLAGS="-Ilib/libebml"
     EBML_LDFLAGS="-Llib/libebml/src"
     MATROSKA_CFLAGS="-Ilib/libmatroska"

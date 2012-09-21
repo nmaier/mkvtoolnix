@@ -56,6 +56,17 @@ using namespace libebml;
   ])
 
   if test x"${ac_cv_ebml_found}" = "xinternal" ; then
+    if ! test -f lib/libebml/ebml/EbmlVersion.h ; then
+      echo '*** The internal version of the libEBML library is supposed to be used,'
+      echo '*** but it was not found in "lib/libebml". If this is a clone from the'
+      echo '*** git repository then submodules have to be initialized with the'
+      echo '*** following two commands:'
+      echo '***'
+      echo '*** git submodule init'
+      echo '*** git submodule update'
+      exit 1
+    fi
+
     EBML_CFLAGS="-Ilib/libebml"
     EBML_LDFLAGS="-Llib/libebml/src"
 
