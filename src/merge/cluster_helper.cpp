@@ -455,31 +455,8 @@ cluster_helper_c::render() {
     if (!new_block_group)
       new_block_group = previous_block_group;
 
-    else if (g_write_cues && (!added_to_cues || has_codec_state)) {
-      // Update the cues (index table) either if cue entries for
-      // I frames were requested and this is an I frame...
-      if ((   (CUE_STRATEGY_IFRAMES == source->get_cue_creation())
-           && pack->is_key_frame())
-          // ... or if a codec state change is present ...
-          || has_codec_state
-          // ... or if the user requested entries for all frames ...
-          || (CUE_STRATEGY_ALL == source->get_cue_creation())
-          // ... or if this is an audio track, there is no video track and the
-          // last cue entry was created more than 2s ago.
-          || (   (CUE_STRATEGY_SPARSE == source->get_cue_creation())
-              && (track_audio         == source->get_track_type())
-              && !g_video_packetizer
-              && (   (0 > source->get_last_cue_timecode())
-                  || ((pack->assigned_timecode - source->get_last_cue_timecode()) >= 2000000000)))) {
-
-        g_kax_cues->AddBlockBlob(*new_block_group);
-        source->set_last_cue_timecode(pack->assigned_timecode);
-
-        m_num_cue_elements++;
-        g_cue_writing_requested = 1;
-        added_to_cues           = true;
-      }
-    }
+    else if (g_write_cues && (!added_to_cues || has_codec_state))
+      added_to_cues = add_to_cues_maybe(pack, *new_block_group);
 
     pack->group = new_block_group;
   }
@@ -510,6 +487,41 @@ cluster_helper_c::render() {
   m_cluster->delete_non_blocks();
 
   return 1;
+}
+
+bool
+cluster_helper_c::add_to_cues_maybe(packet_cptr &pack,
+                                    kax_block_blob_c &block_group) {
+  auto &source  = *pack->source;
+  auto strategy = source.get_cue_creation();
+
+  // Update the cues (index table) either if cue entries for I frames were requested and this is an I frame...
+  bool add = (CUE_STRATEGY_IFRAMES == strategy) && pack->is_key_frame();
+
+  // ... or if a codec state change is present ...
+  add = add || !!pack->codec_state;
+
+  // ... or if the user requested entries for all frames ...
+  add = add || (CUE_STRATEGY_ALL == strategy);
+
+  // ... or if this is an audio track, there is no video track and the
+  // last cue entry was created more than 2s ago.
+  add = add || (   (CUE_STRATEGY_SPARSE == strategy)
+                && (track_audio         == source.get_track_type())
+                && !g_video_packetizer
+                && (   (0 > source.get_last_cue_timecode())
+                    || ((pack->assigned_timecode - source.get_last_cue_timecode()) >= 2000000000)));
+
+  if (!add)
+    return false;
+
+  g_kax_cues->AddBlockBlob(block_group);
+  source.set_last_cue_timecode(pack->assigned_timecode);
+
+  ++m_num_cue_elements;
+  g_cue_writing_requested = 1;
+
+  return true;
 }
 
 int64_t

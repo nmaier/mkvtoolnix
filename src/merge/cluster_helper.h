@@ -146,6 +146,8 @@ private:
   void render_after_adding_if_necessary(packet_cptr &packet);
   void split_if_necessary(packet_cptr &packet);
   void split(packet_cptr &packet);
+
+  bool add_to_cues_maybe(packet_cptr &pack, kax_block_blob_c &block_group);
 };
 
 extern cluster_helper_c *g_cluster_helper;
