@@ -437,7 +437,7 @@ cluster_helper_c::render() {
     render_group->m_durations.push_back(pack->get_unmodified_duration());
     render_group->m_duration_mandatory |= pack->duration_mandatory;
 
-    m_id_timecode_duration_map[ { source->get_track_num(), pack->assigned_timecode - timecode_offset } ] = pack->get_duration();
+    m_id_timecode_duration_map[ id_timecode_t{ source->get_track_num(), pack->assigned_timecode - timecode_offset } ] = pack->get_duration();
 
     if (new_block_group) {
       // Set the reference priority if it was wanted.
@@ -544,7 +544,7 @@ cluster_helper_c::calculate_block_positions()
     auto simple_block = dynamic_cast<KaxSimpleBlock *>(child);
     if (simple_block) {
       simple_block->SetParent(*m_cluster);
-      positions[ { simple_block->TrackNum(), simple_block->GlobalTimecode() } ] = simple_block->GetElementPosition();
+      positions[ id_timecode_t{ simple_block->TrackNum(), simple_block->GlobalTimecode() } ] = simple_block->GetElementPosition();
       continue;
     }
 
@@ -557,7 +557,7 @@ cluster_helper_c::calculate_block_positions()
       continue;
 
     block->SetParent(*m_cluster);
-    positions[ { block->TrackNum(), block->GlobalTimecode() } ] = block->GetElementPosition();
+    positions[ id_timecode_t{ block->TrackNum(), block->GlobalTimecode() } ] = block->GetElementPosition();
   }
 
   return std::move(positions);
