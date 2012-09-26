@@ -1733,7 +1733,7 @@ msgstr ""
 
 #: src/mmg/tabs/chapters.cpp:354
 msgid "A segment to play in place of this chapter. The edition set via the segment edition UID should be used for this segment, otherwise no edition is used. This is a 128bit segment UID in the usual UID form: hex numbers with or without the \"0x\" prefix, with or without spaces, exactly 32 digits.\n"
-msgstr "Un segmento da riprodurre in luogo di questo capitolo. L'edizione impostata attraverso l'UID edizione segmento dovrebbe essere usata per questo segmento, altrimenti nessuna edizione verrà usata. Questo è un UID segmento a 128bit nell'usale forma UID: numeri esadecimali con o senza il prefisso  \"0x\", con o senza spaxi, esattamente 32 digit.\n"
+msgstr "Un segmento da riprodurre in luogo di questo capitolo. L'edizione impostata attraverso l'UID edizione segmento dovrebbe essere usata per questo segmento, altrimenti nessuna edizione verrà usata. Questo è un UID segmento a 128bit nella consueta forma UID: numeri esadecimali con o senza il prefisso \"0x\", con o senza spazzi, esattamente 32 cifre.\n"
 
 #: src/info/mkvinfo.cpp:910
 msgid "A track"
@@ -3877,7 +3877,7 @@ msgstr "Se un capitolo non è marcato come 'abilitato' nel riproduttore potrebbe
 
 #: src/mmg/tabs/chapters.cpp:368
 msgid "If a chapter or an edition is marked 'hidden' then the player should not show this chapter entry (or all of this edition's entries) to the user. Such entries could still be used by the menu system."
-msgstr "Se un capitolo o una edizione sono marcati come 'nascosto' il riproduttore non dovrebbe visualizzare questo capitolo (o tutti gli elemti dell'edizione). Alcuni elementi potrebbero essere ancora usati dal menu Sistema."
+msgstr "Se un capitolo o una edizione sono marcati come 'nascosto' il riproduttore non dovrebbe visualizzare questo capitolo (o tutti gli elementi dell'edizione). Tali elementi potrebbero essere ancora usati dal menu Sistema."
 
 #: src/mmg/tabs/global.cpp:264
 msgid "If a range's start timecode is prefixed with '+' then its content will be written to the same file as the previous range. Otherwise a new file will be created for this range."
@@ -3893,7 +3893,7 @@ msgstr "Se una edizione è marcata come 'ordinata' i capitoli possono essere def
 
 #: src/mmg/tabs/chapters.cpp:391
 msgid "If an edition is marked as 'default' then it should be used as the default edition."
-msgstr "Se una edizione è marcata come 'predfinita' dovrebbe essere usata come edizione predfinita."
+msgstr "Se una edizione è marcata come 'predefinita' dovrebbe essere usata come edizione predefinita."
 
 #: src/mmg/options/mmg.cpp:68
 msgid "If checked mmg will ask for confirmation before overwriting existing files, or before adding a new job if there's an old job whose description matches the new one."
@@ -4144,50 +4144,50 @@ msgstr "Formato non valido usato per il tempo iniziale per '%s'. Impostato valor
 
 #: src/common/strings/parsing.cpp:131
 msgid "Invalid format: At least minutes and seconds have to be given, but no colon was found"
-msgstr "Formato non valido. Devono essere indicati minuti e secondi., ma nessuna colonna è stata trovata."
+msgstr "Formato non valido: Devono essere indicati almeno minuti e secondi, ma nessun due punti è stato trovato."
 
 #: src/common/strings/parsing.cpp:117
 msgid "Invalid format: Colon inside nano-second part"
-msgstr "Formato non valido. Virgola nella parte nano secondi"
+msgstr "Formato non valido: Due punti nella parte nano secondi"
 
 #: src/common/strings/parsing.cpp:100
 msgid "Invalid format: More than nine nano-second digits"
-msgstr "Formato non valido. Più di nove numeri nano secondi"
+msgstr "Formato non valido: Più di nove cifre nano secondi"
 
 #: src/common/strings/parsing.cpp:119
 msgid "Invalid format: More than two colons"
-msgstr "Formato non valido. Più di due virgole"
+msgstr "Formato non valido: Più di due due punti"
 
 #: src/common/strings/parsing.cpp:121
 msgid "Invalid format: No digits before colon"
-msgstr "Formato non valido, Nessun numero prima della virgola"
+msgstr "Formato non valido: Nessuna cifra prima dei due punti"
 
 #: src/common/strings/parsing.cpp:110
 msgid "Invalid format: No digits before decimal point"
-msgstr "Formato non valido. Nessun numero prima del punto decimale."
+msgstr "Formato non valido: Nessuna cifra prima del punto decimale"
 
 #: src/common/strings/parsing.cpp:107
 msgid "Invalid format: Second decimal point after first decimal point"
-msgstr "Formato non valido. Secondo punto decimale dopo il primo punto decimale."
+msgstr "Formato non valido: Secondo punto decimale dopo il primo punto decimale"
 
 #: src/common/strings/parsing.cpp:134
 msgid "Invalid format: The last character is a colon or a decimal point instead of a digit"
-msgstr "Formato non valido. L'ultimo carattere è una virgola o un punto decimale invece di un numero."
+msgstr "Formato non valido: L'ultimo carattere è un due punti o un punto decimale invece di una cifra"
 
 #: src/common/strings/parsing.cpp:127
 #, boost-format
 msgid "Invalid format: unknown character '%1%' found"
-msgstr "Formato non valido. Trovato carattere sconosciuto '%1%'"
+msgstr "Formato non valido: trovato carattere sconosciuto '%1%'"
 
 #: src/input/r_vobsub.cpp:530
 #, boost-format
 msgid "Invalid header length: %1% (total length: %2%, idx: %3%, dataidx: %4%)\n"
-msgstr "Lunghezza non valida intestazione. %1% (lunghezza totale: %2%, idx: %3%, idx dati: %4%)\n"
+msgstr "Lunghezza non valida intestazione: %1% (lunghezza totale: %2%, idx: %3%, idx dati: %4%)\n"
 
 #: src/mmg/options/chapters.cpp:109
 #: src/mmg/tabs/chapters.cpp:1359
 msgid "Invalid language selected"
-msgstr "Linguaggio selezionato non valido"
+msgstr "Lingua selezionata non valida"
 
 #: src/common/xml/ebml_converter.cpp:266
 msgid "Invalid length of hexadecimal content: must be divisable by 2."
@@ -4205,12 +4205,12 @@ msgstr "Fornito numero max non valido per le suddivisioni."
 #: src/common/strings/parsing.cpp:170
 #, boost-format
 msgid "Invalid number of minutes: %1% > 59"
-msgstr "Numero non valido per i minuti: %1% > 59"
+msgstr "Numero di minuti non valido: %1% > 59"
 
 #: src/common/strings/parsing.cpp:172
 #, boost-format
 msgid "Invalid number of seconds: %1% > 59"
-msgstr "Numero non valido per i secondi: %1% > 59"
+msgstr "Numero di secondi non valido: %1% > 59"
 
 #: src/common/chapters/chapters.cpp:194
 #, boost-format
