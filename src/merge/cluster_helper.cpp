@@ -560,7 +560,7 @@ cluster_helper_c::calculate_block_positions()
     positions[ id_timecode_t{ block->TrackNum(), block->GlobalTimecode() } ] = block->GetElementPosition();
   }
 
-  return std::move(positions);
+  return positions;
 }
 
 void
