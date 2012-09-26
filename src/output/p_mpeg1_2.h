@@ -34,7 +34,7 @@ public:
 
   virtual int process(packet_cptr packet);
 
-  virtual const std::string get_format_name(bool translate = true) {
+  virtual const std::string get_format_name(bool translate = true) const {
     return translate ? Y("MPEG-1/2") : "MPEG-1/2";
   }
 

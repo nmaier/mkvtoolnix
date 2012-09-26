@@ -362,7 +362,7 @@ public:
   generic_reader_c(const track_info_c &ti, const mm_io_cptr &in);
   virtual ~generic_reader_c();
 
-  virtual const std::string get_format_name(bool translate = true) = 0;
+  virtual const std::string get_format_name(bool translate = true) const = 0;
 
   virtual void read_headers() = 0;
   virtual file_status_e read(generic_packetizer_c *ptzr, bool force = false) = 0;
@@ -389,7 +389,7 @@ public:
     add_available_track_id_range(0, num - 1);
   }
 
-  virtual int64_t get_queued_bytes();
+  virtual int64_t get_queued_bytes() const;
   virtual bool is_simple_subtitle_container() {
     return false;
   }
@@ -547,10 +547,10 @@ public:
   }
   void discard_queued_packets();
   void flush();
-  virtual int64_t get_smallest_timecode() {
+  virtual int64_t get_smallest_timecode() const {
     return m_packet_queue.empty() ? 0x0FFFFFFF : m_packet_queue.front()->timecode;
   }
-  inline int64_t get_queued_bytes() {
+  inline int64_t get_queued_bytes() const {
     return m_enqueued_bytes;
   }
 
@@ -558,7 +558,7 @@ public:
     m_free_refs      = m_next_free_refs;
     m_next_free_refs = free_refs;
   }
-  inline int64_t get_free_refs() {
+  inline int64_t get_free_refs() const {
     return m_free_refs;
   }
   virtual void set_headers();
@@ -571,32 +571,32 @@ public:
   virtual void set_cue_creation(cue_strategy_e create_cue_data) {
     m_ti.m_cues = create_cue_data;
   }
-  virtual cue_strategy_e get_cue_creation() {
+  virtual cue_strategy_e get_cue_creation() const {
     return m_ti.m_cues;
   }
-  virtual int64_t get_last_cue_timecode() {
+  virtual int64_t get_last_cue_timecode() const {
     return m_last_cue_timecode;
   }
   virtual void set_last_cue_timecode(int64_t timecode) {
     m_last_cue_timecode = timecode;
   }
 
-  virtual KaxTrackEntry *get_track_entry() {
+  virtual KaxTrackEntry *get_track_entry() const {
     return m_track_entry;
   }
-  virtual int get_track_num() {
+  virtual int get_track_num() const {
     return m_hserialno;
   }
-  virtual int64_t get_source_track_num() {
+  virtual int64_t get_source_track_num() const {
     return m_ti.m_id;
   }
 
   virtual bool set_uid(uint64_t uid);
-  virtual uint64_t get_uid() {
+  virtual uint64_t get_uid() const {
     return m_huid;
   }
   virtual void set_track_type(int type, timecode_factory_application_e tfa_mode = TFA_AUTOMATIC);
-  virtual int get_track_type() {
+  virtual int get_track_type() const {
     return m_htrack_type;
   }
   virtual void set_language(const std::string &language);
@@ -608,12 +608,12 @@ public:
   virtual void set_track_max_cache(int max_cache);
   virtual void set_track_default_duration(int64_t default_duration);
   virtual void set_track_max_additionals(int max_add_block_ids);
-  virtual int64_t get_track_default_duration();
+  virtual int64_t get_track_default_duration() const;
   virtual void set_track_forced_flag(bool forced_track);
   virtual void set_track_enabled_flag(bool enabled_track);
 
   virtual void set_audio_sampling_freq(float freq);
-  virtual float get_audio_sampling_freq() {
+  virtual float get_audio_sampling_freq() const {
     return m_haudio_sampling_freq;
   }
   virtual void set_audio_output_sampling_freq(float freq);
@@ -646,7 +646,7 @@ public:
 
   virtual void force_duration_on_last_packet();
 
-  virtual const std::string get_format_name(bool translate = true) = 0;
+  virtual const std::string get_format_name(bool translate = true) const = 0;
   virtual connection_result_e can_connect_to(generic_packetizer_c *src, std::string &error_message) = 0;
   virtual void connect(generic_packetizer_c *src, int64_t append_timecode_offset = -1);
 

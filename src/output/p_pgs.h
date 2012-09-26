@@ -34,7 +34,7 @@ public:
     m_aggregate_packets = aggregate_packets;
   }
 
-  virtual const std::string get_format_name(bool translate = true) {
+  virtual const std::string get_format_name(bool translate = true) const {
     return translate ? Y("PGS") : "PGS";
   }
   virtual connection_result_e can_connect_to(generic_packetizer_c *src, std::string &error_message);

@@ -38,7 +38,7 @@ public:
   virtual void handle_frames();
   virtual void set_headers();
 
-  virtual const std::string get_format_name(bool translate = true) {
+  virtual const std::string get_format_name(bool translate = true) const {
     return translate ? Y("TrueHD") : "TrueHD";
   }
 

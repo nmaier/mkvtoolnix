@@ -37,7 +37,7 @@ public:
   virtual void flush_packets();
   virtual void set_headers();
 
-  virtual const std::string get_format_name(bool translate = true) {
+  virtual const std::string get_format_name(bool translate = true) const {
     return translate ? Y("AC3") : "AC3";
   }
 

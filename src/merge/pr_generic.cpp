@@ -384,7 +384,8 @@ generic_packetizer_c::set_track_max_additionals(int max_add_block_ids) {
 }
 
 int64_t
-generic_packetizer_c::get_track_default_duration() {
+generic_packetizer_c::get_track_default_duration()
+  const {
   return m_htrack_default_duration;
 }
 
@@ -1303,7 +1304,8 @@ generic_reader_c::add_requested_track_id(int64_t id) {
 }
 
 int64_t
-generic_reader_c::get_queued_bytes() {
+generic_reader_c::get_queued_bytes()
+  const {
   int64_t bytes = 0;
 
   for (auto ptzr : m_reader_packetizers)

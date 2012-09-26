@@ -41,7 +41,7 @@ public:
   virtual void set_skipping_is_normal(bool skipping_is_normal) {
     m_skipping_is_normal = skipping_is_normal;
   }
-  virtual const std::string get_format_name(bool translate = true) {
+  virtual const std::string get_format_name(bool translate = true) const {
     return translate ? Y("DTS") : "DTS";
   }
 

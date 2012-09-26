@@ -48,7 +48,7 @@ public:
   flac_reader_c(const track_info_c &ti, const mm_io_cptr &in);
   virtual ~flac_reader_c();
 
-  virtual const std::string get_format_name(bool translate = true) {
+  virtual const std::string get_format_name(bool translate = true) const {
     return translate ? Y("FLAC") : "FLAC";
   }
 

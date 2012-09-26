@@ -38,7 +38,7 @@ public:
 
   virtual void flush_frames();
 
-  virtual const std::string get_format_name(bool translate = true) {
+  virtual const std::string get_format_name(bool translate = true) const {
     return translate ? Y("AVC/h.264") : "AVC/h.264";
   };
 
