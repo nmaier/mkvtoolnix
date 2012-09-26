@@ -18,6 +18,7 @@
 #include "common/common_pch.h"
 
 #include <deque>
+#include <unordered_map>
 
 #include "common/bitvalue.h"
 #include "common/file_types.h"
@@ -159,6 +160,7 @@ extern std::vector<filelist_t> g_files;
 extern std::vector<attachment_t> g_attachments;
 extern std::vector<track_order_t> g_track_order;
 extern std::vector<append_spec_t> g_append_mapping;
+extern std::unordered_map<int64_t, generic_packetizer_c *> g_packetizers_by_track_num;
 
 extern std::string g_outfile;
 

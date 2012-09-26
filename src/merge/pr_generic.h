@@ -574,6 +574,7 @@ public:
   virtual cue_strategy_e get_cue_creation() const {
     return m_ti.m_cues;
   }
+  virtual bool wants_cue_duration() const;
   virtual int64_t get_last_cue_timecode() const {
     return m_last_cue_timecode;
   }

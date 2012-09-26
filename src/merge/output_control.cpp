@@ -128,6 +128,7 @@ std::vector<filelist_t> g_files;
 std::vector<attachment_t> g_attachments;
 std::vector<track_order_t> g_track_order;
 std::vector<append_spec_t> g_append_mapping;
+std::unordered_map<int64_t, generic_packetizer_c *> g_packetizers_by_track_num;
 family_uids_c g_segfamily_uids;
 
 int64_t g_attachment_sizes_first            = 0;

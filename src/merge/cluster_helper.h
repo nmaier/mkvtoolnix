@@ -76,6 +76,8 @@ struct split_point_t {
   std::string str() const;
 };
 
+typedef std::pair<int64_t, int64_t> id_timecode_t;
+
 class cluster_helper_c {
 private:
   kax_cluster_c *m_cluster;
@@ -92,8 +94,11 @@ private:
   std::vector<split_point_t> m_split_points;
   std::vector<split_point_t>::iterator m_current_split_point;
 
+  std::map<id_timecode_t, int64_t> m_id_timecode_duration_map;
+  size_t m_num_cue_points_postprocessed;
+
   bool m_discarding, m_splitting_and_processed_fully;
-  bool m_debug_splitting, m_debug_packets, m_debug_duration, m_debug_rendering;
+  bool m_debug_splitting, m_debug_packets, m_debug_duration, m_debug_rendering, m_debug_cue_duration;
 
 public:
   cluster_helper_c();
@@ -148,6 +153,7 @@ private:
   void split(packet_cptr &packet);
 
   bool add_to_cues_maybe(packet_cptr &pack, kax_block_blob_c &block_group);
+  void postprocess_cues();
 };
 
 extern cluster_helper_c *g_cluster_helper;

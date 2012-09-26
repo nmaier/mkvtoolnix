@@ -25,6 +25,7 @@
 
 #include <matroska/KaxBlock.h>
 #include <matroska/KaxBlockData.h>
+#include <matroska/KaxCuesData.h>
 #include <matroska/KaxSeekHead.h>
 
 std::string
@@ -60,12 +61,14 @@ cluster_helper_c::cluster_helper_c()
   , m_first_video_keyframe_seen{}
   , m_out(nullptr)
   , m_current_split_point(m_split_points.begin())
+  , m_num_cue_points_postprocessed{}
   , m_discarding{false}
   , m_splitting_and_processed_fully{false}
   , m_debug_splitting{debugging_requested("cluster_helper|splitting")}
   , m_debug_packets{  debugging_requested("cluster_helper|cluster_helper_packets")}
   , m_debug_duration{ debugging_requested("cluster_helper|cluster_helper_duration")}
   , m_debug_rendering{debugging_requested("cluster_helper|cluster_helper_rendering")}
+  , m_debug_cue_duration{debugging_requested("cluster_helper|cluster_helper_cue_duration")}
 {
 }
 
@@ -325,6 +328,8 @@ int
 cluster_helper_c::render() {
   std::vector<render_groups_cptr> render_groups;
 
+  m_id_timecode_duration_map.clear();
+
   bool use_simpleblock    = !hack_engaged(ENGAGE_NO_SIMPLE_BLOCKS);
 
   LacingType lacing_type  = hack_engaged(ENGAGE_LACING_XIPH) ? LACING_XIPH : hack_engaged(ENGAGE_LACING_EBML) ? LACING_EBML : LACING_AUTO;
@@ -431,6 +436,8 @@ cluster_helper_c::render() {
     render_group->m_durations.push_back(pack->get_unmodified_duration());
     render_group->m_duration_mandatory |= pack->duration_mandatory;
 
+    m_id_timecode_duration_map[ { source->get_track_num(), pack->assigned_timecode - timecode_offset } ] = pack->get_duration();
+
     if (new_block_group) {
       // Set the reference priority if it was wanted.
       if ((0 < pack->ref_priority) && new_block_group->replace_simple_by_group())
@@ -477,6 +484,8 @@ cluster_helper_c::render() {
         g_kax_sh_cues->IndexThis(*m_cluster, *g_kax_segment);
 
       m_previous_cluster_tc = m_cluster->GlobalTimecode();
+
+      postprocess_cues();
     } else
       m_previous_cluster_tc = -1;
   }
@@ -522,6 +531,39 @@ cluster_helper_c::add_to_cues_maybe(packet_cptr &pack,
   g_cue_writing_requested = 1;
 
   return true;
+}
+
+void
+cluster_helper_c::postprocess_cues() {
+  if (!g_kax_cues)
+    return;
+
+  auto &children = g_kax_cues->GetElementList();
+  for (auto size = children.size(); m_num_cue_points_postprocessed < size; ++m_num_cue_points_postprocessed) {
+    auto point = dynamic_cast<KaxCuePoint *>(children[m_num_cue_points_postprocessed]);
+    if (!point)
+      continue;
+
+    auto time = static_cast<int64_t>(GetChild<KaxCueTime>(point).GetValue() * g_timecode_scale);
+
+    for (auto child : *point) {
+      auto positions = dynamic_cast<KaxCueTrackPositions *>(child);
+      if (!positions)
+        continue;
+
+      auto track_num    = GetChild<KaxCueTrack>(positions).GetValue();
+      auto duration_itr = m_id_timecode_duration_map.find({ track_num, time });
+      auto ptzr         = g_packetizers_by_track_num[track_num];
+
+      if (!ptzr || !ptzr->wants_cue_duration())
+        continue;
+
+      if ((m_id_timecode_duration_map.end() != duration_itr) && (0 < duration_itr->second))
+        GetChild<KaxCueDuration>(positions).SetValue(RND_TIMECODE_SCALE(duration_itr->second) / g_timecode_scale);
+
+      mxdebug_if(m_debug_cue_duration, boost::format("cue_duration: looking for <%1%:%2%>: %3%\n") % track_num % time % (duration_itr == m_id_timecode_duration_map.end() ? static_cast<int64_t>(-1) : duration_itr->second));
+    }
+  }
 }
 
 int64_t

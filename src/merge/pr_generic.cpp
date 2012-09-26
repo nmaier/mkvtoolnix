@@ -230,8 +230,10 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *reader,
     m_hcompression = m_ti.m_compression;
 
   // Set default header values to 'unset'.
-  if (!m_reader->m_appending)
-    m_hserialno = create_track_number(m_reader, m_ti.m_id);
+  if (!m_reader->m_appending) {
+    m_hserialno                             = create_track_number(m_reader, m_ti.m_id);
+    g_packetizers_by_track_num[m_hserialno] = this;
+  }
 
   m_timecode_factory = timecode_factory_c::create(m_ti.m_ext_timecodes, m_ti.m_fname, m_ti.m_id);
 
@@ -1128,6 +1130,12 @@ generic_packetizer_c::is_compatible_with(output_compatibility_e compatibility) {
 void
 generic_packetizer_c::discard_queued_packets() {
   m_packet_queue.clear();
+}
+
+bool
+generic_packetizer_c::wants_cue_duration()
+  const {
+  return get_track_type() == track_subtitle;
 }
 
 //--------------------------------------------------------------------
