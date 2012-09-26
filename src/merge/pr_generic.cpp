@@ -291,6 +291,7 @@ generic_packetizer_c::set_track_type(int type,
   if (CUE_STRATEGY_UNSPECIFIED == get_cue_creation())
     m_ti.m_cues = track_audio    == type ? CUE_STRATEGY_SPARSE
                 : track_video    == type ? CUE_STRATEGY_IFRAMES
+                : track_subtitle == type ? CUE_STRATEGY_IFRAMES
                 :                          CUE_STRATEGY_UNSPECIFIED;
 
   if (track_audio == type)
