@@ -288,8 +288,10 @@ generic_packetizer_c::set_track_type(int type,
                                      timecode_factory_application_e tfa_mode) {
   m_htrack_type = type;
 
-  if ((track_audio == type) && (CUE_STRATEGY_UNSPECIFIED == m_ti.m_cues))
-    m_ti.m_cues = CUE_STRATEGY_SPARSE;
+  if (CUE_STRATEGY_UNSPECIFIED == get_cue_creation())
+    m_ti.m_cues = track_audio    == type ? CUE_STRATEGY_SPARSE
+                : track_video    == type ? CUE_STRATEGY_IFRAMES
+                :                          CUE_STRATEGY_UNSPECIFIED;
 
   if (track_audio == type)
     m_reader->m_num_audio_tracks++;

@@ -38,9 +38,6 @@ mpeg4_p10_es_video_packetizer_c(generic_reader_c *p_reader,
   if (0 != m_ti.m_nalu_size_length)
     m_parser.set_nalu_size_length(m_ti.m_nalu_size_length);
 
-  if (get_cue_creation() == CUE_STRATEGY_UNSPECIFIED)
-    set_cue_creation(CUE_STRATEGY_IFRAMES);
-
   set_track_type(track_video);
 
   set_codec_id(MKV_V_MPEG4_AVC);

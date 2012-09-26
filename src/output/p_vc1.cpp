@@ -32,9 +32,6 @@ vc1_video_packetizer_c::vc1_video_packetizer_c(generic_reader_c *n_reader, track
 {
   m_relaxed_timecode_checking = true;
 
-  if (get_cue_creation() == CUE_STRATEGY_UNSPECIFIED)
-    set_cue_creation(CUE_STRATEGY_IFRAMES);
-
   set_track_type(track_video);
   set_codec_id(MKV_V_MSCOMP);
 

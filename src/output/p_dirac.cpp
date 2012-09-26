@@ -27,9 +27,6 @@ dirac_video_packetizer_c::dirac_video_packetizer_c(generic_reader_c *p_reader, t
   , m_headers_found(false)
   , m_previous_timecode(-1)
 {
-  if (get_cue_creation() == CUE_STRATEGY_UNSPECIFIED)
-    set_cue_creation(CUE_STRATEGY_IFRAMES);
-
   set_track_type(track_video);
   set_codec_id(MKV_V_DIRAC);
   set_default_compression_method(COMPRESSION_DIRAC);
@@ -122,4 +119,3 @@ dirac_video_packetizer_c::can_connect_to(generic_packetizer_c *src,
 
   return CAN_CONNECT_YES;
 }
-

@@ -42,9 +42,6 @@ video_packetizer_c::video_packetizer_c(generic_reader_c *p_reader,
   , m_rederive_frame_types(debugging_requested("rederive_frame_types"))
   , m_codec_type(video_packetizer_c::ct_unknown)
 {
-  if (get_cue_creation() == CUE_STRATEGY_UNSPECIFIED)
-    set_cue_creation(CUE_STRATEGY_IFRAMES);
-
   set_track_type(track_video);
 
   if (codec_id)
