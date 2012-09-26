@@ -748,7 +748,7 @@ void
 kax_analyzer_c::write_element(EbmlElement *e,
                               bool write_defaults,
                               placement_strategy_e strategy) {
-  e->UpdateSize(write_defaults);
+  e->UpdateSize(write_defaults, true);
   int64_t element_size = e->ElementSize(write_defaults);
 
   size_t data_idx;
@@ -763,7 +763,7 @@ kax_analyzer_c::write_element(EbmlElement *e,
 
     // We've found our element. Overwrite it.
     m_file->setFilePointer(m_data[data_idx]->m_pos);
-    e->Render(*m_file, write_defaults);
+    e->Render(*m_file, write_defaults, false, true);
 
     // Update the internal records.
     m_data[data_idx]->m_id   = EbmlId(*e);
@@ -779,7 +779,7 @@ kax_analyzer_c::write_element(EbmlElement *e,
   // We haven't found a suitable place. So store the element at the end of the m_file
   // and update the internal records.
   m_file->setFilePointer(0, seek_end);
-  e->Render(*m_file, write_defaults);
+  e->Render(*m_file, write_defaults, false, true);
   m_data.push_back(kax_analyzer_data_c::create(EbmlId(*e), m_file->getFilePointer() - e->ElementSize(write_defaults), e->ElementSize(write_defaults)));
 
   // Adjust the m_segment's size.
