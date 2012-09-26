@@ -98,7 +98,7 @@ private:
   size_t m_num_cue_points_postprocessed;
 
   bool m_discarding, m_splitting_and_processed_fully;
-  bool m_debug_splitting, m_debug_packets, m_debug_duration, m_debug_rendering, m_debug_cue_duration;
+  bool m_debug_splitting, m_debug_packets, m_debug_duration, m_debug_rendering, m_debug_cue_duration, m_debug_cue_relative_position;
 
 public:
   cluster_helper_c();
@@ -154,6 +154,7 @@ private:
 
   bool add_to_cues_maybe(packet_cptr &pack, kax_block_blob_c &block_group);
   void postprocess_cues();
+  std::map<id_timecode_t, int64_t> calculate_block_positions() const;
 };
 
 extern cluster_helper_c *g_cluster_helper;

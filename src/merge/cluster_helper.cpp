@@ -69,6 +69,7 @@ cluster_helper_c::cluster_helper_c()
   , m_debug_duration{ debugging_requested("cluster_helper|cluster_helper_duration")}
   , m_debug_rendering{debugging_requested("cluster_helper|cluster_helper_rendering")}
   , m_debug_cue_duration{debugging_requested("cluster_helper|cluster_helper_cue_duration")}
+  , m_debug_cue_relative_position{debugging_requested("cluster_helper|cluster_helper_cue_relative_position")}
 {
 }
 
@@ -533,10 +534,42 @@ cluster_helper_c::add_to_cues_maybe(packet_cptr &pack,
   return true;
 }
 
+std::map<id_timecode_t, int64_t>
+cluster_helper_c::calculate_block_positions()
+  const {
+
+  std::map<id_timecode_t, int64_t> positions;
+
+  for (auto child : *m_cluster) {
+    auto simple_block = dynamic_cast<KaxSimpleBlock *>(child);
+    if (simple_block) {
+      simple_block->SetParent(*m_cluster);
+      positions[ { simple_block->TrackNum(), simple_block->GlobalTimecode() } ] = simple_block->GetElementPosition();
+      continue;
+    }
+
+    auto block_group = dynamic_cast<KaxBlockGroup *>(child);
+    if (!block_group)
+      continue;
+
+    auto block = FindChild<KaxBlock>(block_group);
+    if (!block)
+      continue;
+
+    block->SetParent(*m_cluster);
+    positions[ { block->TrackNum(), block->GlobalTimecode() } ] = block->GetElementPosition();
+  }
+
+  return std::move(positions);
+}
+
 void
 cluster_helper_c::postprocess_cues() {
   if (!g_kax_cues)
     return;
+
+  auto cluster_data_start_pos = m_cluster->GetElementPosition() + m_cluster->HeadSize();
+  auto block_positions        = calculate_block_positions();
 
   auto &children = g_kax_cues->GetElementList();
   for (auto size = children.size(); m_num_cue_points_postprocessed < size; ++m_num_cue_points_postprocessed) {
@@ -551,7 +584,18 @@ cluster_helper_c::postprocess_cues() {
       if (!positions)
         continue;
 
+      // Set CueRelativePosition for all cues.
       auto track_num    = GetChild<KaxCueTrack>(positions).GetValue();
+      auto position_itr = block_positions.find({ track_num, time });
+      auto position     = block_positions.end() != position_itr ? std::max<int64_t>(position_itr->second, cluster_data_start_pos) : 0ll;
+      if (position)
+        GetChild<KaxCueRelativePosition>(positions).SetValue(position - cluster_data_start_pos);
+
+      mxdebug_if(m_debug_cue_relative_position,
+                 boost::format("cue_relative_position: looking for <%1%:%2%>: cluster_data_start_pos %3% position %4%\n")
+                 % track_num % time % cluster_data_start_pos % position);
+
+      // Set CueDuration if the packetizer wants them.
       auto duration_itr = m_id_timecode_duration_map.find({ track_num, time });
       auto ptzr         = g_packetizers_by_track_num[track_num];
 
