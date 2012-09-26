@@ -71,6 +71,9 @@ fix_mandatory_content_encodings_elements(KaxContentEncodings *encodings) {
 
 static void
 fix_mandatory_track_entry_elements(KaxTrackEntry *track_entry) {
+  // Deprecated element that must not be rendered anymore
+  DeleteChildren<KaxTrackTimecodeScale>(track_entry);
+
   GetChild<KaxTrackNumber>(track_entry);
   GetChild<KaxTrackUID>(track_entry);
   GetChild<KaxTrackType>(track_entry);
@@ -79,7 +82,6 @@ fix_mandatory_track_entry_elements(KaxTrackEntry *track_entry) {
   GetChild<KaxTrackFlagForced>(track_entry);
   GetChild<KaxTrackFlagLacing>(track_entry);
   GetChild<KaxTrackMinCache>(track_entry);
-  GetChild<KaxTrackTimecodeScale>(track_entry);
   GetChild<KaxMaxBlockAdditionID>(track_entry);
   GetChild<KaxCodecID>(track_entry);
   GetChild<KaxCodecDecodeAll>(track_entry);
@@ -114,6 +116,11 @@ void
 fix_mandatory_segment_tracks_elements(EbmlElement *e) {
   if (!e)
     return;
+
+  if (dynamic_cast<KaxTrackEntry *>(e)) {
+    fix_mandatory_track_entry_elements(static_cast<KaxTrackEntry *>(e));
+    return;
+  }
 
   KaxTracks *tracks = dynamic_cast<KaxTracks *>(e);
   if (!tracks)

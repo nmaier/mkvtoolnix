@@ -10,7 +10,7 @@
 
 #include "common/common_pch.h"
 
-#include "common/output.h"
+#include "common/segment_tracks.h"
 #include "common/strings/parsing.h"
 #include "propedit/propedit.h"
 #include "propedit/track_target.h"
@@ -100,6 +100,8 @@ void
 track_target_c::execute() {
   for (auto &change : m_changes)
     change->execute(m_master, m_sub_master);
+
+  fix_mandatory_segment_tracks_elements(m_master);
 }
 
 void
