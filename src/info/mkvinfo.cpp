@@ -1024,6 +1024,9 @@ handle_cues(EbmlStream *&es,
             else if (is_id(l4, KaxCueClusterPosition))
               show_element(l4, 4, boost::format(Y("Cue cluster position: %1%")) % static_cast<KaxCueClusterPosition *>(l4)->GetValue());
 
+            else if (is_id(l4, KaxCueDuration))
+              show_element(l4, 4, boost::format(Y("Cue duration: %1%"))         % format_timecode(static_cast<KaxCueDuration *>(l4)->GetValue() * s_tc_scale));
+
             else if (is_id(l4, KaxCueBlockNumber))
               show_element(l4, 4, boost::format(Y("Cue block number: %1%"))     % static_cast<KaxCueBlockNumber *>(l4)->GetValue());
 
