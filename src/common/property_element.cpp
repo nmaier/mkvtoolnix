@@ -124,8 +124,6 @@ property_element_c::init_tables() {
   ELE("max-cache",            KaxTrackMaxCache::ClassInfos,        Y("Maximum cache"),         Y("The maximum number of frames a player\nshould be able to cache during playback.\n"
                                                                                                  "If set to 0, the reference pseudo-cache system\nis not used."));
   ELE("default-duration",     KaxTrackDefaultDuration::ClassInfos, Y("Default duration"),      Y("Number of nanoseconds (not scaled) per frame."));
-  ELE("track-timecode-scale", KaxTrackTimecodeScale::ClassInfos,   Y("Timecode scaling"),      Y("The scale to apply on this track to work at normal\nspeed in relation with other tracks "
-                                                                                                 "(mostly used\nto adjust video speed when the audio length differs)."));
   ELE("name",                 KaxTrackName::ClassInfos,            Y("Name"),                  Y("A human-readable track name."));
   ELE("language",             KaxTrackLanguage::ClassInfos,        Y("Language"),              Y("Specifies the language of the track in the\nMatroska languages form."));
   ELE("codec-id",             KaxCodecID::ClassInfos,              Y("Codec ID"),              Y("An ID corresponding to the codec."));

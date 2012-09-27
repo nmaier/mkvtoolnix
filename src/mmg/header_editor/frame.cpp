@@ -407,11 +407,6 @@ header_editor_frame_c::handle_tracks(kax_analyzer_data_c *data) {
                                                       YT("Number of nanoseconds (not scaled) per frame."));
     child_page->init();
 
-    child_page = new he_float_value_page_c(this, page, k_track_entry, KaxTrackTimecodeScale::ClassInfos, YT("Timecode scaling"),
-                                           YT("The scale to apply on this track to work at normal\nspeed in relation with other tracks "
-                                             "(mostly used\nto adjust video speed when the audio length differs)."));
-    child_page->init();
-
     child_page = new he_string_value_page_c(this, page, k_track_entry, KaxTrackName::ClassInfos, YT("Name"), YT("A human-readable track name."));
     child_page->init();
 
