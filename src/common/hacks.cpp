@@ -41,6 +41,8 @@ static const struct {
   { ENGAGE_MERGE_TRUEHD_FRAMES,          "merge_truehd_frames"          },
   { ENGAGE_REMOVE_BITSTREAM_AR_INFO,     "remove_bitstream_ar_info"     },
   { ENGAGE_VOBSUB_SUBPIC_STOP_CMDS,      "vobsub_subpic_stop_cmds"      },
+  { ENGAGE_NO_CUE_DURATION,              "no_cue_duration"              },
+  { ENGAGE_NO_CUE_RELATIVE_POSITION,     "no_cue_relative_position"     },
   { 0,                                   nullptr },
 };
 static std::vector<bool> s_engaged_hacks(ENGAGE_MAX_IDX + 1, false);

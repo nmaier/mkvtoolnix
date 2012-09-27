@@ -98,6 +98,9 @@ private:
   size_t m_num_cue_points_postprocessed;
 
   bool m_discarding, m_splitting_and_processed_fully;
+
+  bool m_no_cue_duration, m_no_cue_relative_position;
+
   bool m_debug_splitting, m_debug_packets, m_debug_duration, m_debug_rendering, m_debug_cue_duration, m_debug_cue_relative_position;
 
 public:

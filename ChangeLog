@@ -1,5 +1,10 @@
 2012-09-27  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge, mmg: enhancement: Added options for turning off
+	writing "CueDuration" elements ("--engage no_cue_duration") and
+	"CueRelativePosition" elements ("--engage
+	no_cue_relative_positions").
+
 	* mkvmerge: new feature: The element "CueRelativePosition" is
 	written for all cue entries.
 
