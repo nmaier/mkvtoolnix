@@ -300,15 +300,14 @@ Matroska(TM)
 .PP
 \fB\-\-check\-for\-updates\fR
 .RS 4
-联机下载 URL
-http://mkvtoolnix\-releases\&.bunkus\&.org/latest\-release\&.xml
-检查新版本。将以
-键=值
-的样式输出四行: 检索信息的 URL（键
-version_check_url），当前运行的版本（键
-running_version），最新版本（键
-available_version）及其下载 URL（键
-download_url）。
+Checks online for new releases by downloading the URL
+\m[blue]\fBhttp://mkvtoolnix\-releases\&.bunkus\&.org/latest\-release\&.xml\fR\m[]\&. Four lines will be output in
+key=value
+style: the URL from where the information was retrieved (key
+version_check_url), the currently running version (key
+running_version), the latest release\*(Aqs version (key
+available_version) and the download URL (key
+download_url)\&.
 .sp
 若无更新版本可用，程序将以退出码 0 退出，若有更新版本可用，退出码为 1，若出现错误（如无法检索更新信息），退出码则为 2。
 .sp

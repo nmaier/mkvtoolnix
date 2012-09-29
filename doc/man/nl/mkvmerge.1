@@ -445,7 +445,8 @@ Examples:
 .sp -1
 .IP "  1." 4.2
 .\}
-\-\-split parts:00:01:20\-00:02:45,00:05:50\-00:10:30.RE
+\-\-split parts:00:01:20\-00:02:45,00:05:50\-00:10:30
+.RE
 .sp
 .RS 4
 .ie n \{\
@@ -455,7 +456,8 @@ Examples:
 .sp -1
 .IP "  2." 4.2
 .\}
-\-\-split parts:00:01:20\-00:02:45,+00:05:50\-00:10:30.RE
+\-\-split parts:00:01:20\-00:02:45,+00:05:50\-00:10:30
+.RE
 .sp
 .RS 4
 .ie n \{\
@@ -465,7 +467,8 @@ Examples:
 .sp -1
 .IP "  3." 4.2
 .\}
-\-\-split parts:\-00:02:45,00:05:50\-.RE
+\-\-split parts:\-00:02:45,00:05:50\-
+.RE
 .sp
 The
 parts
@@ -1332,14 +1335,13 @@ Toon versie informatie en sluit af\&.
 .PP
 \fB\-\-check\-for\-updates\fR
 .RS 4
-Controleert online op nieuwere versie\*(Aqs via ophalen op adres
-http://mkvtoolnix\-releases\&.bunkus\&.org/latest\-release\&.xml\&. Vier regels worden uitgevoerd in
+Checks online for new releases by downloading the URL
+\m[blue]\fBhttp://mkvtoolnix\-releases\&.bunkus\&.org/latest\-release\&.xml\fR\m[]\&. Four lines will be output in
 key=value
-stijl: het adres van waar de informatie wordt verkregen (key
-version_check_url), de huidig uitgevoerde versie (key
-running_version), laatst uitgebrachte versie (key
-available_version
-en het ophaal adres (key
+style: the URL from where the information was retrieved (key
+version_check_url), the currently running version (key
+running_version), the latest release\*(Aqs version (key
+available_version) and the download URL (key
 download_url)\&.
 .sp
 Nadien sluit het programma af met een afsluitwaarde van 0 als er geen nieuwere versie beschikbaar is, met een 1 als er een nieuwere beschikbaar is en 2 indien er een fout ontstond (b\&.v\&. als de opwaardeer info niet verkregen kon worden)\&.

@@ -476,9 +476,9 @@
         <para>
          Examples:
          <orderedlist>
-          <listitem><code>--split parts:00:01:20-00:02:45,00:05:50-00:10:30</code></listitem>
-          <listitem><code>--split parts:00:01:20-00:02:45,+00:05:50-00:10:30</code></listitem>
-          <listitem><code>--split parts:-00:02:45,00:05:50-</code></listitem>
+          <listitem><para><code>--split parts:00:01:20-00:02:45,00:05:50-00:10:30</code></para></listitem>
+          <listitem><para><code>--split parts:00:01:20-00:02:45,+00:05:50-00:10:30</code></para></listitem>
+          <listitem><para><code>--split parts:-00:02:45,00:05:50-</code></para></listitem>
          </orderedlist>
         </para>
 
@@ -643,7 +643,6 @@ $ mkvmerge -o full.mkv file1.mkv +file2.mkv</screen>
 $ mkvmerge -o full.mkv =file1.mkv</screen>
      </listitem>
     </varlistentry>
-   </variablelist>
 
     <varlistentry id="mkvmerge.description.concatenation">
      <term><option>(</option> <parameter>file1</parameter> <parameter>file2</parameter> <option>)</option></term>
@@ -692,6 +691,7 @@ $ mkvmerge -o out.mkv '(' file.mkv ')'</screen>
       </orderedlist>
      </listitem>
     </varlistentry>
+   </variablelist>
 
   </refsect2>
 
@@ -1493,8 +1493,9 @@ $ mkvmerge -o out.mkv '(' file.mkv ')'</screen>
      <term><option>--check-for-updates</option></term>
      <listitem>
       <para>
-       Checks online for new releases by downloading the URL <uri>http://mkvtoolnix-releases.bunkus.org/latest-release.xml</uri>. Four lines
-       will be output in <literal>key=value</literal> style: the URL from where the information was retrieved (key
+       Checks online for new releases by downloading the URL <ulink
+       url="http://mkvtoolnix-releases.bunkus.org/latest-release.xml">http://mkvtoolnix-releases.bunkus.org/latest-release.xml</ulink>. Four
+       lines will be output in <literal>key=value</literal> style: the URL from where the information was retrieved (key
        <literal>version_check_url</literal>), the currently running version (key <literal>running_version</literal>), the latest release's
        version (key <literal>available_version</literal>) and the download URL (key <literal>download_url</literal>).
       </para>

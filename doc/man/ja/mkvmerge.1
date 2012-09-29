@@ -330,7 +330,8 @@ Examples:
 .sp -1
 .IP "  1." 4.2
 .\}
-\-\-split parts:00:01:20\-00:02:45,00:05:50\-00:10:30.RE
+\-\-split parts:00:01:20\-00:02:45,00:05:50\-00:10:30
+.RE
 .sp
 .RS 4
 .ie n \{\
@@ -340,7 +341,8 @@ Examples:
 .sp -1
 .IP "  2." 4.2
 .\}
-\-\-split parts:00:01:20\-00:02:45,+00:05:50\-00:10:30.RE
+\-\-split parts:00:01:20\-00:02:45,+00:05:50\-00:10:30
+.RE
 .sp
 .RS 4
 .ie n \{\
@@ -350,7 +352,8 @@ Examples:
 .sp -1
 .IP "  3." 4.2
 .\}
-\-\-split parts:\-00:02:45,00:05:50\-.RE
+\-\-split parts:\-00:02:45,00:05:50\-
+.RE
 .sp
 The
 parts
@@ -919,12 +922,14 @@ Ogg(TM)、Matroska(TM)など)に格納されたFLACトラックの処理。
 .PP
 \fB\-\-check\-for\-updates\fR
 .RS 4
-
-http://mkvtoolnix\-releases\&.bunkus\&.org/latest\-release\&.xmlをダウンロードすることで、新しいリリースがないかオンラインでチェックします。key=valueという書式で、4行が出力されます：どこから情報を取得したか (key
-version_check_url)、現在実行中のバージョン (key
-running_version)、最新のリリースのバージョン (key
-available_version) 及びそのダウンロードURL (key
-download_url)。
+Checks online for new releases by downloading the URL
+\m[blue]\fBhttp://mkvtoolnix\-releases\&.bunkus\&.org/latest\-release\&.xml\fR\m[]\&. Four lines will be output in
+key=value
+style: the URL from where the information was retrieved (key
+version_check_url), the currently running version (key
+running_version), the latest release\*(Aqs version (key
+available_version) and the download URL (key
+download_url)\&.
 .sp
 その後プログラムは、新しいリリースが入手可能ではなかった場合は終了コード0で、新しいリリースが入手可能であった場合は終了コード1で、エラーが発生した場合（例：アップデート情報を取得できなかった場合）は終了コード2で、それぞれ終了します。
 .sp

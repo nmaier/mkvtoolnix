@@ -444,7 +444,8 @@ Examples:
 .sp -1
 .IP "  1." 4.2
 .\}
-\-\-split parts:00:01:20\-00:02:45,00:05:50\-00:10:30.RE
+\-\-split parts:00:01:20\-00:02:45,00:05:50\-00:10:30
+.RE
 .sp
 .RS 4
 .ie n \{\
@@ -454,7 +455,8 @@ Examples:
 .sp -1
 .IP "  2." 4.2
 .\}
-\-\-split parts:00:01:20\-00:02:45,+00:05:50\-00:10:30.RE
+\-\-split parts:00:01:20\-00:02:45,+00:05:50\-00:10:30
+.RE
 .sp
 .RS 4
 .ie n \{\
@@ -464,7 +466,8 @@ Examples:
 .sp -1
 .IP "  3." 4.2
 .\}
-\-\-split parts:\-00:02:45,00:05:50\-.RE
+\-\-split parts:\-00:02:45,00:05:50\-
+.RE
 .sp
 The
 parts
@@ -1333,13 +1336,13 @@ Matroska(TM)\&.
 .PP
 \fB\-\-check\-for\-updates\fR
 .RS 4
-Відбувається перевірка на наявність нової версії шляхом завантаження з URL
-http://mkvtoolnix\-releases\&.bunkus\&.org/latest\-release\&.xml\&. Буде відображено чотири рядка у
+Checks online for new releases by downloading the URL
+\m[blue]\fBhttp://mkvtoolnix\-releases\&.bunkus\&.org/latest\-release\&.xml\fR\m[]\&. Four lines will be output in
 key=value
-стилі: URL, звідки отримана інформація (key
-version_check_url), поточна запущена версія (key
-running_version), остання випущена версія (key
-available_version) і URL для завантаження (key
+style: the URL from where the information was retrieved (key
+version_check_url), the currently running version (key
+running_version), the latest release\*(Aqs version (key
+available_version) and the download URL (key
 download_url)\&.
 .sp
 Після чого додаток завершує роботу з кодом повернення 0, якщо немає нової версії, і з кодом 2, якщо виникла помилка (наприклад, коли не було отримано інформації про оновлення взагалі)\&.
