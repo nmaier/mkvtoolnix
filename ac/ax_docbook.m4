@@ -1,9 +1,9 @@
 # It's just rude to go over the net to build
 XSLTPROC_FLAGS=--nonet
 DOCBOOK_ROOT=
-for i in /usr/share/xml/docbook/stylesheet/xsl/nwalsh/manpages /usr/share/xml/docbook/stylesheet/nwalsh/manpages /usr/share/xml/docbook/xsl-stylesheets/manpages; do
-  if test -d "$i"; then
-    DOCBOOK_ROOT=$i
+for i in /usr/share/xml/docbook/stylesheet/xsl/nwalsh /usr/share/xml/docbook/stylesheet/nwalsh `ls -d /usr/share/xml/docbook/xsl-stylesheets* 2> /dev/null`; do
+  if test -d "$i" && test -d "$i/manpages"; then
+    DOCBOOK_ROOT="$i/manpages"
   fi
 done
 
