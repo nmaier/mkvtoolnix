@@ -234,14 +234,14 @@ change_c::set_element_at(int idx) {
   EbmlElement *e = (*m_master)[idx];
 
   switch (m_property.m_type) {
-    case property_element_c::EBMLT_STRING:  *static_cast<EbmlString *>(e)        = m_s_value;                                  break;
-    case property_element_c::EBMLT_USTRING: *static_cast<EbmlUnicodeString *>(e) = cstrutf8_to_UTFstring(m_s_value);           break;
-    case property_element_c::EBMLT_UINT:    *static_cast<EbmlUInteger *>(e)      = m_ui_value;                                 break;
-    case property_element_c::EBMLT_INT:     *static_cast<EbmlSInteger *>(e)      = m_si_value;                                 break;
-    case property_element_c::EBMLT_BOOL:    *static_cast<EbmlUInteger *>(e)      = m_b_value ? 1 : 0;                          break;
-    case property_element_c::EBMLT_FLOAT:   *static_cast<EbmlFloat *>(e)         = m_fp_value;                                 break;
-    case property_element_c::EBMLT_BINARY:   static_cast<EbmlBinary *>(e)->CopyBuffer(m_x_value.data(), m_x_value.size() / 8); break;
-    default:                                 assert(false);
+    case property_element_c::EBMLT_STRING:  static_cast<EbmlString        *>(e)->SetValue(m_s_value);                                break;
+    case property_element_c::EBMLT_USTRING: static_cast<EbmlUnicodeString *>(e)->SetValue(cstrutf8_to_UTFstring(m_s_value));         break;
+    case property_element_c::EBMLT_UINT:    static_cast<EbmlUInteger      *>(e)->SetValue(m_ui_value);                               break;
+    case property_element_c::EBMLT_INT:     static_cast<EbmlSInteger      *>(e)->SetValue(m_si_value);                               break;
+    case property_element_c::EBMLT_BOOL:    static_cast<EbmlUInteger      *>(e)->SetValue(m_b_value ? 1 : 0);                        break;
+    case property_element_c::EBMLT_FLOAT:   static_cast<EbmlFloat         *>(e)->SetValue(m_fp_value);                               break;
+    case property_element_c::EBMLT_BINARY:  static_cast<EbmlBinary        *>(e)->CopyBuffer(m_x_value.data(), m_x_value.size() / 8); break;
+    default:                                assert(false);
   }
 }
 

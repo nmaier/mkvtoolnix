@@ -168,7 +168,7 @@ ebml_converter_c::parse_uint(parser_context_t &ctx) {
   if (ctx.limits.has_max && (value > static_cast<uint64_t>(ctx.limits.max)))
     throw out_of_range_x{ ctx.name, ctx.node.offset_debug(), (boost::format(Y("Maximum allowed value: %1%, actual value: %2%")) % ctx.limits.max % value).str() };
 
-  static_cast<EbmlUInteger &>(ctx.e) = value;
+  static_cast<EbmlUInteger &>(ctx.e).SetValue(value);
 }
 
 void
@@ -213,7 +213,7 @@ ebml_converter_c::parse_timecode(parser_context_t &ctx) {
   if (ctx.limits.has_max && (value > ctx.limits.max))
     throw out_of_range_x{ ctx.name, ctx.node.offset_debug(), (boost::format(Y("Maximum allowed value: %1%, actual value: %2%")) % ctx.limits.max % value).str() };
 
-  static_cast<EbmlUInteger &>(ctx.e) = value;
+  static_cast<EbmlUInteger &>(ctx.e).SetValue(value);
 }
 
 void

@@ -278,7 +278,7 @@ sighandler(int /* signum */) {
   // Now re-render the kax_duration and fill in the biggest timecode
   // as the file's duration.
   s_out->save_pos(s_kax_duration->GetElementPosition());
-  *(static_cast<EbmlFloat *>(s_kax_duration)) = irnd((double)g_cluster_helper->get_duration() / (double)((int64_t)g_timecode_scale));
+  s_kax_duration->SetValue(irnd(static_cast<double>(g_cluster_helper->get_duration()) / static_cast<double>(g_timecode_scale)));
   s_kax_duration->Render(*s_out);
   s_out->restore_pos();
   mxinfo(Y(" done\n"));
@@ -689,7 +689,7 @@ render_headers(mm_io_c *out) {
     else
       s_kax_duration = new KaxMyDuration(EbmlFloat::FLOAT_32);
 
-    *(static_cast<EbmlFloat *>(s_kax_duration)) = 0.0;
+    s_kax_duration->SetValue(0.0);
     s_kax_infos->PushElement(*s_kax_duration);
 
     if (!hack_engaged(ENGAGE_NO_VARIABLE_DATA)) {
@@ -1538,7 +1538,7 @@ finish_file(bool last_file) {
          % g_cluster_helper->get_duration() % g_timecode_scale
          % irnd((double)g_cluster_helper->get_duration() / (double)((int64_t)g_timecode_scale)));
 
-  *(static_cast<EbmlFloat *>(s_kax_duration)) = irnd((double)g_cluster_helper->get_duration() / (double)((int64_t)g_timecode_scale));
+  s_kax_duration->SetValue(irnd(static_cast<double>(g_cluster_helper->get_duration()) / static_cast<double>(g_timecode_scale)));
   s_kax_duration->Render(*s_out);
 
   // If splitting is active and this is the last part then handle the

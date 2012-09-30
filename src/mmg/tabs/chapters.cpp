@@ -1346,7 +1346,7 @@ tab_chapters::copy_segment_edition_uid(chapter_node_data_c *data) {
 
   uint64_t segment_edition_uid;
   if (parse_number(to_utf8(tc_segment_edition_uid->GetValue()), segment_edition_uid)) {
-    static_cast<EbmlUInteger &>(GetChild<KaxChapterSegmentEditionUID>(data->chapter)) = segment_edition_uid;
+    GetChild<KaxChapterSegmentEditionUID>(data->chapter).SetValue(segment_edition_uid);
     return true;
   }
 

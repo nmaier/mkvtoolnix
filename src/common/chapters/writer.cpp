@@ -96,7 +96,7 @@ write_chapter_display_simple(KaxChapterDisplay *display,
   for (i = 0; i < display->ListSize(); i++) {
     EbmlElement *e = (*display)[i];
     if (is_id(e, KaxChapterString))
-      handle_name(level - 1, UTFstring_to_cstrutf8(UTFstring(*static_cast<EbmlUnicodeString *>(e)).c_str()));
+      handle_name(level - 1, static_cast<EbmlUnicodeString *>(e)->GetValueUTF8().c_str());
 
     else if (is_id(e, KaxChapterAtom))
       write_chapter_atom_simple((KaxChapterAtom *)e, level + 1);
