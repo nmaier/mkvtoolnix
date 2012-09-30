@@ -115,13 +115,6 @@ RequestExecutionLevel none
 Function .onInit
   !insertmacro MUI_LANGDLL_DISPLAY
 
-  # Check if we're running on a Unicode capable Windows.
-  # If not, abort.
-  ${IfNot} ${AtLeastWinNT4}
-    MessageBox MB_OK|MB_ICONSTOP "$(STRING_WINDOWS_TOO_OLD)"
-    Quit
-  ${EndIf}
-
   InitPluginsDir
   File /oname=$PLUGINSDIR\external_links.ini "external_links.ini"
 FunctionEnd
