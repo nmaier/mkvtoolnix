@@ -194,16 +194,6 @@ GetChild(EbmlMaster *m) {
   return GetChild<A>(*m);
 }
 
-template<typename A, typename B> B &
-GetChildAs(EbmlMaster &m) {
-  return GetChild<A>(m);
-}
-
-template<typename A, typename B> B &
-GetChildAs(EbmlMaster *m) {
-  return GetChild<A>(*m);
-}
-
 template <typename A>A &
 GetFirstOrNextChild(EbmlMaster &master,
                     A *previous_child) {
@@ -324,9 +314,9 @@ void fix_mandatory_elements(EbmlElement *master);
 template<typename A> void
 provide_default_for_child(EbmlMaster &master,
                           const UTFstring &default_value) {
-  EbmlUnicodeString &value = GetChildAs<A, EbmlUnicodeString>(master);
-  if (!static_cast<const UTFstring &>(value).length())
-    value = default_value;
+  A &value = GetChild<A>(master);
+  if (!value.GetValue().length())
+    value.SetValue(default_value);
 }
 
 template<typename A> void

@@ -638,10 +638,10 @@ set_timecode_scale() {
           || (TIMECODE_SCALE_MODE_AUTO == g_timecode_scale_mode)))
     g_timecode_scale = static_cast<int64_t>(1000000000.0 / highest_sample_rate - 1.0);
 
-  g_max_ns_per_cluster                                    = std::min((int64_t)(32700 * g_timecode_scale), g_max_ns_per_cluster);
-  GetChildAs<KaxTimecodeScale, EbmlUInteger>(s_kax_infos) = (int64_t)g_timecode_scale;
+  g_max_ns_per_cluster = std::min<int64_t>(32700 * g_timecode_scale, g_max_ns_per_cluster);
+  GetChild<KaxTimecodeScale>(s_kax_infos).SetValue(g_timecode_scale);
 
-  g_kax_cues->SetGlobalTimecodeScale((int64_t)g_timecode_scale);
+  g_kax_cues->SetGlobalTimecodeScale(g_timecode_scale);
 
   mxdebug_if(debug, boost::format("timecode scale: %1% max ns per cluster: %2%\n") % g_timecode_scale % g_max_ns_per_cluster);
 }
@@ -651,14 +651,13 @@ render_ebml_head(mm_io_c *out) {
   if (!s_head)
     s_head = new EbmlHead;
 
-  bool v4_features                                       = !hack_engaged(ENGAGE_NO_CUE_DURATION) || !hack_engaged(ENGAGE_NO_CUE_RELATIVE_POSITION);
-  bool v3_features                                       = g_stereo_mode_used;
-  bool v2_features                                       = !hack_engaged(ENGAGE_NO_SIMPLE_BLOCKS);
+  bool v4_features = !hack_engaged(ENGAGE_NO_CUE_DURATION) || !hack_engaged(ENGAGE_NO_CUE_RELATIVE_POSITION);
+  bool v3_features = g_stereo_mode_used;
+  bool v2_features = !hack_engaged(ENGAGE_NO_SIMPLE_BLOCKS);
 
-  GetChildAs<EDocType, EbmlString>(*s_head)              = outputting_webm() ? "webm" : "matroska";
-
-  GetChildAs<EDocTypeVersion,     EbmlUInteger>(*s_head) = v4_features ? 4 : v3_features ? 3 : v2_features ? 2 : 1;
-  GetChildAs<EDocTypeReadVersion, EbmlUInteger>(*s_head) = v2_features ? 2 : 1;
+  GetChild<EDocType           >(*s_head).SetValue(outputting_webm() ? "webm" : "matroska");
+  GetChild<EDocTypeVersion    >(*s_head).SetValue(v4_features ? 4 : v3_features ? 3 : v2_features ? 2 : 1);
+  GetChild<EDocTypeReadVersion>(*s_head).SetValue(v2_features ? 2 : 1);
 
   s_head->Render(*out, true);
 }
@@ -694,19 +693,18 @@ render_headers(mm_io_c *out) {
     s_kax_infos->PushElement(*s_kax_duration);
 
     if (!hack_engaged(ENGAGE_NO_VARIABLE_DATA)) {
-      std::string muxing_app                                    = std::string("libebml v") + EbmlCodeVersion + std::string(" + libmatroska v") + KaxCodeVersion;
-      GetChildAs<KaxMuxingApp, EbmlUnicodeString>(s_kax_infos)  = cstrutf8_to_UTFstring(muxing_app);
-      GetChildAs<KaxWritingApp, EbmlUnicodeString>(s_kax_infos) = cstrutf8_to_UTFstring(get_version_info("mkvmerge", static_cast<version_info_flags_e>(vif_full | vif_untranslated)));
-      GetChild<KaxDateUTC>(*s_kax_infos).SetEpochDate(time(nullptr));
+      GetChild<KaxMuxingApp >(s_kax_infos).SetValue(cstrutf8_to_UTFstring(std::string("libebml v") + EbmlCodeVersion + std::string(" + libmatroska v") + KaxCodeVersion));
+      GetChild<KaxWritingApp>(s_kax_infos).SetValue(cstrutf8_to_UTFstring(get_version_info("mkvmerge", static_cast<version_info_flags_e>(vif_full | vif_untranslated))));
+      GetChild<KaxDateUTC   >(s_kax_infos).SetEpochDate(time(nullptr));
 
     } else {
-      GetChildAs<KaxMuxingApp, EbmlUnicodeString>(s_kax_infos)  = cstrutf8_to_UTFstring("no_variable_data");
-      GetChildAs<KaxWritingApp, EbmlUnicodeString>(s_kax_infos) = cstrutf8_to_UTFstring("no_variable_data");
-      GetChild<KaxDateUTC>(*s_kax_infos).SetEpochDate(0);
+      GetChild<KaxMuxingApp >(s_kax_infos).SetValue(cstrutf8_to_UTFstring("no_variable_data"));
+      GetChild<KaxWritingApp>(s_kax_infos).SetValue(cstrutf8_to_UTFstring("no_variable_data"));
+      GetChild<KaxDateUTC   >(s_kax_infos).SetEpochDate(0);
     }
 
     if (!g_segment_title.empty())
-      GetChildAs<KaxTitle, EbmlUnicodeString>(s_kax_infos)      = cstrutf8_to_UTFstring(g_segment_title.c_str());
+      GetChild<KaxTitle>(s_kax_infos).SetValue(cstrutf8_to_UTFstring(g_segment_title.c_str()));
 
     bool first_file = (1 == g_file_num);
 
@@ -777,13 +775,13 @@ render_headers(mm_io_c *out) {
       }
 
       if (!g_segment_filename.empty())
-        GetChildAs<KaxSegmentFilename, EbmlUnicodeString>(*s_kax_infos) = cstrutf8_to_UTFstring(g_segment_filename);
+        GetChild<KaxSegmentFilename>(*s_kax_infos).SetValue(cstrutf8_to_UTFstring(g_segment_filename));
 
       if (!g_next_segment_filename.empty())
-        GetChildAs<KaxNextFilename, EbmlUnicodeString>(*s_kax_infos)    = cstrutf8_to_UTFstring(g_next_segment_filename);
+        GetChild<KaxNextFilename>(*s_kax_infos).SetValue(cstrutf8_to_UTFstring(g_next_segment_filename));
 
       if (!g_previous_segment_filename.empty())
-        GetChildAs<KaxPrevFilename, EbmlUnicodeString>(*s_kax_infos)    = cstrutf8_to_UTFstring(g_previous_segment_filename);
+        GetChild<KaxPrevFilename>(*s_kax_infos).SetValue(cstrutf8_to_UTFstring(g_previous_segment_filename));
 
       g_segment_filename.clear();
       g_next_segment_filename.clear();
@@ -887,24 +885,21 @@ render_attachments(IOCallback *out) {
       kax_a = !kax_a ? &GetChild<KaxAttached>(*s_kax_as) : &GetNextChild<KaxAttached>(*s_kax_as, *kax_a);
 
       if (attch.description != "")
-        GetChildAs<KaxFileDescription, EbmlUnicodeString>(kax_a) = cstrutf8_to_UTFstring(attch.description);
+        GetChild<KaxFileDescription>(kax_a).SetValue(cstrutf8_to_UTFstring(attch.description));
 
       if (attch.mime_type != "")
-        GetChildAs<KaxMimeType, EbmlString>(kax_a)               = attch.mime_type;
+        GetChild<KaxMimeType>(kax_a).SetValue(attch.mime_type);
 
       std::string name;
       if (attch.stored_name == "") {
         int path_sep_idx = attch.name.rfind(PATHSEP);
-        if (-1 != path_sep_idx)
-          name = attch.name.substr(path_sep_idx + 1);
-        else
-          name = attch.name;
+        name             = -1 != path_sep_idx ? attch.name.substr(path_sep_idx + 1) : attch.name;
 
       } else
         name = attch.stored_name;
 
-      GetChildAs<KaxFileName, EbmlUnicodeString>(kax_a) = cstrutf8_to_UTFstring(name);
-      GetChildAs<KaxFileUID, EbmlUInteger>(kax_a)       = attch.id;
+      GetChild<KaxFileName>(kax_a).SetValue(cstrutf8_to_UTFstring(name));
+      GetChild<KaxFileUID >(kax_a).SetValue(attch.id);
 
       GetChild<KaxFileData>(*kax_a).CopyBuffer(attch.data->get_buffer(), attch.data->get_size());
     }
@@ -1391,8 +1386,8 @@ add_tags_from_cue_chapters() {
   if (!found)
     tuid = ptzrs_in_header_order[0]->get_uid();
 
-  for (i = 0; g_tags_from_cue_chapters->ListSize() > i; ++i)
-    GetChildAs<KaxTagTrackUID, EbmlUInteger>(GetChild<KaxTagTargets>(*static_cast<KaxTag *>((*g_tags_from_cue_chapters)[i]))) = tuid;
+  for (auto tag : *g_tags_from_cue_chapters)
+    GetChild<KaxTagTrackUID>(GetChild<KaxTagTargets>(*static_cast<KaxTag *>(tag))).SetValue(tuid);
 
   if (!s_kax_tags)
     s_kax_tags = g_tags_from_cue_chapters;

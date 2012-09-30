@@ -1496,14 +1496,14 @@ tab_chapters::on_flag_hidden(wxCommandEvent &) {
 
   if (!t->is_atom) {
     if (cb_flag_hidden->IsChecked())
-      GetChildAs<KaxEditionFlagHidden, EbmlUInteger>(*t->eentry) = 1;
+      GetChild<KaxEditionFlagHidden>(*t->eentry).SetValue(1);
     else
       DeleteChildren<KaxEditionFlagHidden>(t->eentry);
     return;
   }
 
   if (cb_flag_hidden->IsChecked())
-    GetChildAs<KaxChapterFlagHidden, EbmlUInteger>(*t->chapter) = 1;
+    GetChild<KaxChapterFlagHidden>(*t->chapter).SetValue(1);
   else
     DeleteChildren<KaxChapterFlagHidden>(t->chapter);
 }
@@ -1520,14 +1520,14 @@ tab_chapters::on_flag_enabled_default(wxCommandEvent &) {
 
   if (!t->is_atom) {
     if (cb_flag_enabled_default->IsChecked())
-      GetChildAs<KaxEditionFlagDefault, EbmlUInteger>(*t->eentry) = 1;
+      GetChild<KaxEditionFlagDefault>(*t->eentry).SetValue(1);
     else
       DeleteChildren<KaxEditionFlagDefault>(t->eentry);
     return;
   }
 
   if (!cb_flag_enabled_default->IsChecked())
-    GetChildAs<KaxChapterFlagEnabled, EbmlUInteger>(*t->chapter) = 0;
+    GetChild<KaxChapterFlagEnabled>(*t->chapter).SetValue(0);
   else
     DeleteChildren<KaxChapterFlagEnabled>(t->chapter);
 }
@@ -1542,7 +1542,7 @@ tab_chapters::on_flag_ordered(wxCommandEvent &) {
     return;
 
   if (cb_flag_ordered->IsChecked())
-    GetChildAs<KaxEditionFlagOrdered, EbmlUInteger>(*t->eentry) = 1;
+    GetChild<KaxEditionFlagOrdered>(*t->eentry).SetValue(1);
   else
     DeleteChildren<KaxEditionFlagOrdered>(t->eentry);
 }

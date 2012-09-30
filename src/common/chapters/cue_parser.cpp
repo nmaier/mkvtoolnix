@@ -169,8 +169,8 @@ create_simple_tag(cue_parser_args_t &a,
                   const std::string &value) {
   KaxTagSimple *simple = new KaxTagSimple;
 
-  GetChildAs<KaxTagName,   EbmlUnicodeString>(*simple) = cue_str_internal_to_utf(a, name);
-  GetChildAs<KaxTagString, EbmlUnicodeString>(*simple) = cue_str_internal_to_utf(a, value);
+  GetChild<KaxTagName>(*simple).SetValue(cue_str_internal_to_utf(a, name));
+  GetChild<KaxTagString>(*simple).SetValue(cue_str_internal_to_utf(a, value));
 
   return simple;
 }
@@ -194,9 +194,9 @@ add_tag_for_cue_entry(cue_parser_args_t &a,
 
   KaxTag *tag            = new KaxTag;
   KaxTagTargets *targets = &GetChild<KaxTagTargets>(*tag);
-  GetChildAs<KaxTagChapterUID,      EbmlUInteger>(*targets) = cuid;
-  GetChildAs<KaxTagTargetTypeValue, EbmlUInteger>(*targets) = TAG_TARGETTYPE_TRACK;
-  GetChildAs<KaxTagTargetType,      EbmlString>(*targets)   = "track";
+  GetChild<KaxTagChapterUID>(*targets).SetValue(cuid);
+  GetChild<KaxTagTargetTypeValue>(*targets).SetValue(TAG_TARGETTYPE_TRACK);
+  GetChild<KaxTagTargetType>(*targets).SetValue("track");
 
   create_tag1(a.title, "TITLE");
   tag->PushElement(*create_simple_tag(a, "PART_NUMBER", to_string(a.num)));
@@ -231,8 +231,8 @@ add_tag_for_global_cue_settings(cue_parser_args_t &a,
   KaxTag *tag            = new KaxTag;
   KaxTagTargets *targets = &GetChild<KaxTagTargets>(*tag);
 
-  GetChildAs<KaxTagTargetTypeValue, EbmlUInteger>(*targets) = TAG_TARGETTYPE_ALBUM;
-  GetChildAs<KaxTagTargetType, EbmlString>(*targets)        = "album";
+  GetChild<KaxTagTargetTypeValue>(*targets).SetValue(TAG_TARGETTYPE_ALBUM);
+  GetChild<KaxTagTargetType>(*targets).SetValue("album");
 
   create_tag1(a.global_performer, "ARTIST");
   create_tag1(a.global_title,     "TITLE");
@@ -259,16 +259,16 @@ add_subchapters_for_index_entries(cue_parser_args_t &a) {
   size_t offset        = a.index00_missing ? 1 : 0;
   size_t i;
   for (i = 0; i < a.start_indices.size(); i++) {
-    atom                                                             = &GetFirstOrNextChild<KaxChapterAtom>(a.atom, atom);
+    atom = &GetFirstOrNextChild<KaxChapterAtom>(a.atom, atom);
 
-    GetChildAs<KaxChapterUID,           EbmlUInteger>(*atom)         = create_unique_number(UNIQUE_CHAPTER_IDS);
-    GetChildAs<KaxChapterTimeStart,     EbmlUInteger>(*atom)         = a.start_indices[i] - a.offset;
-    GetChildAs<KaxChapterFlagHidden,    EbmlUInteger>(*atom)         = 1;
-    GetChildAs<KaxChapterPhysicalEquiv, EbmlUInteger>(*atom)         = CHAPTER_PHYSEQUIV_INDEX;
+    GetChild<KaxChapterUID>(*atom).SetValue(create_unique_number(UNIQUE_CHAPTER_IDS));
+    GetChild<KaxChapterTimeStart>(*atom).SetValue(a.start_indices[i] - a.offset);
+    GetChild<KaxChapterFlagHidden>(*atom).SetValue(1);
+    GetChild<KaxChapterPhysicalEquiv>(*atom).SetValue(CHAPTER_PHYSEQUIV_INDEX);
 
-    KaxChapterDisplay *display                                       = &GetChild<KaxChapterDisplay>(*atom);
-    GetChildAs<KaxChapterString,        EbmlUnicodeString>(*display) = cstrutf8_to_UTFstring((boost::format("INDEX %|1$02d|") % (i + offset)).str().c_str());
-    GetChildAs<KaxChapterLanguage,      EbmlString>(*display)        = "eng";
+    auto &display = GetChild<KaxChapterDisplay>(*atom);
+    GetChild<KaxChapterString>(display).SetValue(cstrutf8_to_UTFstring((boost::format("INDEX %|1$02d|") % (i + offset)).str().c_str()));
+    GetChild<KaxChapterLanguage>(display).SetValue("eng");
   }
 }
 
@@ -284,19 +284,20 @@ add_elements_for_cue_entry(cue_parser_args_t &a,
   cue_entries_to_chapter_name(a.performer, a.title, a.global_performer, a.global_title, a.name, a.num);
 
   if (!a.edition) {
-    a.edition                                           = &GetChild<KaxEditionEntry>(*a.chapters);
-    GetChildAs<KaxEditionUID, EbmlUInteger>(*a.edition) = create_unique_number(UNIQUE_EDITION_IDS);
+    a.edition = &GetChild<KaxEditionEntry>(*a.chapters);
+    GetChild<KaxEditionUID>(*a.edition).SetValue(create_unique_number(UNIQUE_EDITION_IDS));
   }
 
-  a.atom                                                      = &GetFirstOrNextChild<KaxChapterAtom>(*a.edition, a.atom);
-  GetChildAs<KaxChapterPhysicalEquiv, EbmlUInteger>(*a.atom)  = CHAPTER_PHYSEQUIV_TRACK;
-  auto cuid                                                   = create_unique_number(UNIQUE_CHAPTER_IDS);
-  GetChildAs<KaxChapterUID,           EbmlUInteger>(*a.atom)  = cuid;
-  GetChildAs<KaxChapterTimeStart,     EbmlUInteger>(*a.atom)  = a.start_of_track - a.offset;
+  a.atom = &GetFirstOrNextChild<KaxChapterAtom>(*a.edition, a.atom);
+  GetChild<KaxChapterPhysicalEquiv>(*a.atom).SetValue(CHAPTER_PHYSEQUIV_TRACK);
 
-  KaxChapterDisplay *display                                  = &GetChild<KaxChapterDisplay>(*a.atom);
-  GetChildAs<KaxChapterString,   EbmlUnicodeString>(*display) = cue_str_internal_to_utf(a, a.name);
-  GetChildAs<KaxChapterLanguage, EbmlString>(*display)        = a.language;
+  auto cuid = create_unique_number(UNIQUE_CHAPTER_IDS);
+  GetChild<KaxChapterUID>(*a.atom).SetValue(cuid);
+  GetChild<KaxChapterTimeStart>(*a.atom).SetValue(a.start_of_track - a.offset);
+
+  auto &display = GetChild<KaxChapterDisplay>(*a.atom);
+  GetChild<KaxChapterString>(display).SetValue(cue_str_internal_to_utf(a, a.name));
+  GetChild<KaxChapterLanguage>(display).SetValue(a.language);
 
   add_subchapters_for_index_entries(a);
 

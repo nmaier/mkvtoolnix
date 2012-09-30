@@ -726,13 +726,13 @@ real_reader_c::set_dimensions(real_demuxer_cptr dmx,
 
     }
 
-    KaxTrackVideo &video                                     = GetChild<KaxTrackVideo>(*PTZR(dmx->ptzr)->get_track_entry());
-    GetChildAs<KaxVideoPixelWidth,  EbmlUInteger>(video)     = width;
-    GetChildAs<KaxVideoPixelHeight, EbmlUInteger>(video)     = height;
+    auto video = GetChild<KaxTrackVideo>(*PTZR(dmx->ptzr)->get_track_entry());
+    GetChild<KaxVideoPixelWidth>(video).SetValue(width);
+    GetChild<KaxVideoPixelHeight>(video).SetValue(height);
 
     if ((0 != disp_width) && (0 != disp_height)) {
-      GetChildAs<KaxVideoDisplayWidth,  EbmlUInteger>(video) = disp_width;
-      GetChildAs<KaxVideoDisplayHeight, EbmlUInteger>(video) = disp_height;
+      GetChild<KaxVideoDisplayWidth>(video).SetValue(disp_width);
+      GetChild<KaxVideoDisplayHeight>(video).SetValue(disp_height);
     }
 
     rerender_track_headers();

@@ -332,8 +332,8 @@ TEST(AttachmentTarget, ReplaceById) {
       opt.description("").name("").mime_type("");
 
       DeleteChildren<KaxFileDescription>(att);
-      GetChildAs<KaxFileName, EbmlUnicodeString>(att) = cstrutf8_to_UTFstring("chunky_bacon.txt");
-      GetChildAs<KaxMimeType, EbmlString>(att) = "text/plain";
+      GetChild<KaxFileName>(att).SetValue(cstrutf8_to_UTFstring("chunky_bacon.txt"));
+      GetChild<KaxMimeType>(att).SetValue("text/plain");
     });
 
   test_replace("ID #3", "3", { 2 }, false, [](EbmlMaster &b, attachment_target_c::options_t &opt) {
@@ -341,9 +341,9 @@ TEST(AttachmentTarget, ReplaceById) {
 
       opt.description("Moocow").name("miau&wuff.html").mime_type("bacon/chunky");
 
-      GetChildAs<KaxFileDescription, EbmlUnicodeString>(att) = cstrutf8_to_UTFstring("Moocow");
-      GetChildAs<KaxFileName, EbmlUnicodeString>(att) = cstrutf8_to_UTFstring("miau&wuff.html");
-      GetChildAs<KaxMimeType, EbmlString>(att) = "bacon/chunky";
+      GetChild<KaxFileDescription>(att).SetValue(cstrutf8_to_UTFstring("Moocow"));
+      GetChild<KaxFileName>(att).SetValue(cstrutf8_to_UTFstring("miau&wuff.html"));
+      GetChild<KaxMimeType>(att).SetValue("bacon/chunky");
     });
 
   test_replace("ID #4", "3", { 2 }, false, [](EbmlMaster &b, attachment_target_c::options_t &opt) {
@@ -351,7 +351,7 @@ TEST(AttachmentTarget, ReplaceById) {
 
       opt.description("Moocow");
 
-      GetChildAs<KaxFileDescription, EbmlUnicodeString>(att) = cstrutf8_to_UTFstring("Moocow");
+      GetChild<KaxFileDescription>(att).SetValue(cstrutf8_to_UTFstring("Moocow"));
     });
 }
 
@@ -364,8 +364,8 @@ TEST(AttachmentTarget, ReplaceByUid) {
       opt.description("").name("").mime_type("");
 
       DeleteChildren<KaxFileDescription>(att);
-      GetChildAs<KaxFileName, EbmlUnicodeString>(att) = cstrutf8_to_UTFstring("chunky_bacon.txt");
-      GetChildAs<KaxMimeType, EbmlString>(att) = "text/plain";
+      GetChild<KaxFileName>(att).SetValue(cstrutf8_to_UTFstring("chunky_bacon.txt"));
+      GetChild<KaxMimeType>(att).SetValue("text/plain");
     });
 
   test_replace("UID #3", "=99887766", { 2 }, false, [](EbmlMaster &b, attachment_target_c::options_t &opt) {
@@ -373,9 +373,9 @@ TEST(AttachmentTarget, ReplaceByUid) {
 
       opt.description("Moocow").name("miau&wuff.html").mime_type("bacon/chunky");
 
-      GetChildAs<KaxFileDescription, EbmlUnicodeString>(att) = cstrutf8_to_UTFstring("Moocow");
-      GetChildAs<KaxFileName, EbmlUnicodeString>(att) = cstrutf8_to_UTFstring("miau&wuff.html");
-      GetChildAs<KaxMimeType, EbmlString>(att) = "bacon/chunky";
+      GetChild<KaxFileDescription>(att).SetValue(cstrutf8_to_UTFstring("Moocow"));
+      GetChild<KaxFileName>(att).SetValue(cstrutf8_to_UTFstring("miau&wuff.html"));
+      GetChild<KaxMimeType>(att).SetValue("bacon/chunky");
     });
 }
 
@@ -387,50 +387,50 @@ TEST(AttachmentTarget, ReplaceByName) {
 
       auto att = static_cast<EbmlMaster *>(b[1]);
       DeleteChildren<KaxFileDescription>(att);
-      GetChildAs<KaxFileName, EbmlUnicodeString>(att) = cstrutf8_to_UTFstring("chunky_bacon.txt");
-      GetChildAs<KaxMimeType, EbmlString>(att) = "text/plain";
+      GetChild<KaxFileName>(att).SetValue(cstrutf8_to_UTFstring("chunky_bacon.txt"));
+      GetChild<KaxMimeType>(att).SetValue("text/plain");
 
       att = static_cast<EbmlMaster *>(b[3]);
       DeleteChildren<KaxFileDescription>(att);
-      GetChildAs<KaxFileName, EbmlUnicodeString>(att) = cstrutf8_to_UTFstring("chunky_bacon.txt");
-      GetChildAs<KaxMimeType, EbmlString>(att) = "text/plain";
+      GetChild<KaxFileName>(att).SetValue(cstrutf8_to_UTFstring("chunky_bacon.txt"));
+      GetChild<KaxMimeType>(att).SetValue("text/plain");
     });
 
   test_replace("name #3", "name:chunky bacon.html", { 1, 3 }, false, [](EbmlMaster &b, attachment_target_c::options_t &opt) {
       opt.description("Moocow").name("miau&wuff.html").mime_type("bacon/chunky");
 
       auto att = static_cast<EbmlMaster *>(b[1]);
-      GetChildAs<KaxFileDescription, EbmlUnicodeString>(att) = cstrutf8_to_UTFstring("Moocow");
-      GetChildAs<KaxFileName, EbmlUnicodeString>(att) = cstrutf8_to_UTFstring("miau&wuff.html");
-      GetChildAs<KaxMimeType, EbmlString>(att) = "bacon/chunky";
+      GetChild<KaxFileDescription>(att).SetValue(cstrutf8_to_UTFstring("Moocow"));
+      GetChild<KaxFileName>(att).SetValue(cstrutf8_to_UTFstring("miau&wuff.html"));
+      GetChild<KaxMimeType>(att).SetValue("bacon/chunky");
 
       att = static_cast<EbmlMaster *>(b[3]);
-      GetChildAs<KaxFileDescription, EbmlUnicodeString>(att) = cstrutf8_to_UTFstring("Moocow");
-      GetChildAs<KaxFileName, EbmlUnicodeString>(att) = cstrutf8_to_UTFstring("miau&wuff.html");
-      GetChildAs<KaxMimeType, EbmlString>(att) = "bacon/chunky";
+      GetChild<KaxFileDescription>(att).SetValue(cstrutf8_to_UTFstring("Moocow"));
+      GetChild<KaxFileName>(att).SetValue(cstrutf8_to_UTFstring("miau&wuff.html"));
+      GetChild<KaxMimeType>(att).SetValue("bacon/chunky");
     });
 
   test_replace("name #4", "naME:chunky bacon.html", { 1, 3 }, false, [](EbmlMaster &b, attachment_target_c::options_t &opt) {
       opt.description("Moocow").name("miau&wuff.html").mime_type("bacon/chunky");
 
       auto att = static_cast<EbmlMaster *>(b[1]);
-      GetChildAs<KaxFileDescription, EbmlUnicodeString>(att) = cstrutf8_to_UTFstring("Moocow");
-      GetChildAs<KaxFileName, EbmlUnicodeString>(att) = cstrutf8_to_UTFstring("miau&wuff.html");
-      GetChildAs<KaxMimeType, EbmlString>(att) = "bacon/chunky";
+      GetChild<KaxFileDescription>(att).SetValue(cstrutf8_to_UTFstring("Moocow"));
+      GetChild<KaxFileName>(att).SetValue(cstrutf8_to_UTFstring("miau&wuff.html"));
+      GetChild<KaxMimeType>(att).SetValue("bacon/chunky");
 
       att = static_cast<EbmlMaster *>(b[3]);
-      GetChildAs<KaxFileDescription, EbmlUnicodeString>(att) = cstrutf8_to_UTFstring("Moocow");
-      GetChildAs<KaxFileName, EbmlUnicodeString>(att) = cstrutf8_to_UTFstring("miau&wuff.html");
-      GetChildAs<KaxMimeType, EbmlString>(att) = "bacon/chunky";
+      GetChild<KaxFileDescription>(att).SetValue(cstrutf8_to_UTFstring("Moocow"));
+      GetChild<KaxFileName>(att).SetValue(cstrutf8_to_UTFstring("miau&wuff.html"));
+      GetChild<KaxMimeType>(att).SetValue("bacon/chunky");
     });
 
   test_replace("name #5", "naME:filename\\cwith\\ccolons", { 2 }, false, [](EbmlMaster &b, attachment_target_c::options_t &opt) {
       opt.description("Moocow").name("miau&wuff.html").mime_type("bacon/chunky");
 
       auto att = static_cast<EbmlMaster *>(b[2]);
-      GetChildAs<KaxFileDescription, EbmlUnicodeString>(att) = cstrutf8_to_UTFstring("Moocow");
-      GetChildAs<KaxFileName, EbmlUnicodeString>(att) = cstrutf8_to_UTFstring("miau&wuff.html");
-      GetChildAs<KaxMimeType, EbmlString>(att) = "bacon/chunky";
+      GetChild<KaxFileDescription>(att).SetValue(cstrutf8_to_UTFstring("Moocow"));
+      GetChild<KaxFileName>(att).SetValue(cstrutf8_to_UTFstring("miau&wuff.html"));
+      GetChild<KaxMimeType>(att).SetValue("bacon/chunky");
     });
 }
 
@@ -442,41 +442,41 @@ TEST(AttachmentTarget, ReplaceByMimeType) {
 
       auto att = static_cast<EbmlMaster *>(b[1]);
       DeleteChildren<KaxFileDescription>(att);
-      GetChildAs<KaxFileName, EbmlUnicodeString>(att) = cstrutf8_to_UTFstring("chunky_bacon.txt");
-      GetChildAs<KaxMimeType, EbmlString>(att) = "text/plain";
+      GetChild<KaxFileName>(att).SetValue(cstrutf8_to_UTFstring("chunky_bacon.txt"));
+      GetChild<KaxMimeType>(att).SetValue("text/plain");
 
       att = static_cast<EbmlMaster *>(b[3]);
       DeleteChildren<KaxFileDescription>(att);
-      GetChildAs<KaxFileName, EbmlUnicodeString>(att) = cstrutf8_to_UTFstring("chunky_bacon.txt");
-      GetChildAs<KaxMimeType, EbmlString>(att) = "text/plain";
+      GetChild<KaxFileName>(att).SetValue(cstrutf8_to_UTFstring("chunky_bacon.txt"));
+      GetChild<KaxMimeType>(att).SetValue("text/plain");
     });
 
   test_replace("MIME type #3", "mime-type:text/html", { 1, 3 }, false, [](EbmlMaster &b, attachment_target_c::options_t &opt) {
       opt.description("Moocow").name("miau&wuff.html").mime_type("bacon/chunky");
 
       auto att = static_cast<EbmlMaster *>(b[1]);
-      GetChildAs<KaxFileDescription, EbmlUnicodeString>(att) = cstrutf8_to_UTFstring("Moocow");
-      GetChildAs<KaxFileName, EbmlUnicodeString>(att) = cstrutf8_to_UTFstring("miau&wuff.html");
-      GetChildAs<KaxMimeType, EbmlString>(att) = "bacon/chunky";
+      GetChild<KaxFileDescription>(att).SetValue(cstrutf8_to_UTFstring("Moocow"));
+      GetChild<KaxFileName>(att).SetValue(cstrutf8_to_UTFstring("miau&wuff.html"));
+      GetChild<KaxMimeType>(att).SetValue("bacon/chunky");
 
       att = static_cast<EbmlMaster *>(b[3]);
-      GetChildAs<KaxFileDescription, EbmlUnicodeString>(att) = cstrutf8_to_UTFstring("Moocow");
-      GetChildAs<KaxFileName, EbmlUnicodeString>(att) = cstrutf8_to_UTFstring("miau&wuff.html");
-      GetChildAs<KaxMimeType, EbmlString>(att) = "bacon/chunky";
+      GetChild<KaxFileDescription>(att).SetValue(cstrutf8_to_UTFstring("Moocow"));
+      GetChild<KaxFileName>(att).SetValue(cstrutf8_to_UTFstring("miau&wuff.html"));
+      GetChild<KaxMimeType>(att).SetValue("bacon/chunky");
     });
 
   test_replace("MIME type #4", "miMe-TYPE:text/html", { 1, 3 }, false, [](EbmlMaster &b, attachment_target_c::options_t &opt) {
       opt.description("Moocow").name("miau&wuff.html").mime_type("bacon/chunky");
 
       auto att = static_cast<EbmlMaster *>(b[1]);
-      GetChildAs<KaxFileDescription, EbmlUnicodeString>(att) = cstrutf8_to_UTFstring("Moocow");
-      GetChildAs<KaxFileName, EbmlUnicodeString>(att) = cstrutf8_to_UTFstring("miau&wuff.html");
-      GetChildAs<KaxMimeType, EbmlString>(att) = "bacon/chunky";
+      GetChild<KaxFileDescription>(att).SetValue(cstrutf8_to_UTFstring("Moocow"));
+      GetChild<KaxFileName>(att).SetValue(cstrutf8_to_UTFstring("miau&wuff.html"));
+      GetChild<KaxMimeType>(att).SetValue("bacon/chunky");
 
       att = static_cast<EbmlMaster *>(b[3]);
-      GetChildAs<KaxFileDescription, EbmlUnicodeString>(att) = cstrutf8_to_UTFstring("Moocow");
-      GetChildAs<KaxFileName, EbmlUnicodeString>(att) = cstrutf8_to_UTFstring("miau&wuff.html");
-      GetChildAs<KaxMimeType, EbmlString>(att) = "bacon/chunky";
+      GetChild<KaxFileDescription>(att).SetValue(cstrutf8_to_UTFstring("Moocow"));
+      GetChild<KaxFileName>(att).SetValue(cstrutf8_to_UTFstring("miau&wuff.html"));
+      GetChild<KaxMimeType>(att).SetValue("bacon/chunky");
     });
 }
 

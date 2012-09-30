@@ -262,7 +262,7 @@ generic_packetizer_c::set_tag_track_uid() {
 
     remove_track_uid_tag_targets(tag);
 
-    GetChildAs<KaxTagTrackUID, EbmlUInteger>(GetChild<KaxTagTargets>(tag)) = m_huid;
+    GetChild<KaxTagTrackUID>(GetChild<KaxTagTargets>(tag)).SetValue(m_huid);
 
     fix_mandatory_tag_elements(tag);
 
@@ -280,7 +280,7 @@ generic_packetizer_c::set_uid(uint64_t uid) {
   add_unique_number(uid, UNIQUE_TRACK_IDS);
   m_huid = uid;
   if (m_track_entry)
-    GetChildAs<KaxTrackUID, EbmlUInteger>(m_track_entry) = m_huid;
+    GetChild<KaxTrackUID>(m_track_entry).SetValue(m_huid);
 
   return true;
 }
@@ -326,14 +326,14 @@ void
 generic_packetizer_c::set_track_name(const std::string &name) {
   m_ti.m_track_name = name;
   if (m_track_entry && !name.empty())
-    GetChildAs<KaxTrackName, EbmlUnicodeString>(m_track_entry) = cstrutf8_to_UTFstring(m_ti.m_track_name);
+    GetChild<KaxTrackName>(m_track_entry).SetValue(cstrutf8_to_UTFstring(m_ti.m_track_name));
 }
 
 void
 generic_packetizer_c::set_codec_id(const std::string &id) {
   m_hcodec_id = id;
   if (m_track_entry && !id.empty())
-    GetChildAs<KaxCodecID, EbmlString>(m_track_entry) = m_hcodec_id;
+    GetChild<KaxCodecID>(m_track_entry).SetValue(m_hcodec_id);
 }
 
 void
@@ -358,14 +358,14 @@ void
 generic_packetizer_c::set_track_min_cache(int min_cache) {
   m_htrack_min_cache = min_cache;
   if (m_track_entry)
-    GetChildAs<KaxTrackMinCache, EbmlUInteger>(m_track_entry) = min_cache;
+    GetChild<KaxTrackMinCache>(m_track_entry).SetValue(min_cache);
 }
 
 void
 generic_packetizer_c::set_track_max_cache(int max_cache) {
   m_htrack_max_cache = max_cache;
   if (m_track_entry)
-    GetChildAs<KaxTrackMaxCache, EbmlUInteger>(m_track_entry) = max_cache;
+    GetChild<KaxTrackMaxCache>(m_track_entry).SetValue(max_cache);
 }
 
 void
@@ -376,14 +376,14 @@ generic_packetizer_c::set_track_default_duration(int64_t def_dur) {
   m_htrack_default_duration = (int64_t)(def_dur * m_ti.m_tcsync.numerator / m_ti.m_tcsync.denominator);
 
   if (m_track_entry)
-    GetChildAs<KaxTrackDefaultDuration, EbmlUInteger>(m_track_entry) = m_htrack_default_duration;
+    GetChild<KaxTrackDefaultDuration>(m_track_entry).SetValue(m_htrack_default_duration);
 }
 
 void
 generic_packetizer_c::set_track_max_additionals(int max_add_block_ids) {
   m_htrack_max_add_block_ids = max_add_block_ids;
   if (m_track_entry)
-    GetChildAs<KaxMaxBlockAdditionID, EbmlUInteger>(m_track_entry) = max_add_block_ids;
+    GetChild<KaxMaxBlockAdditionID>(m_track_entry).SetValue(max_add_block_ids);
 }
 
 int64_t
@@ -396,63 +396,63 @@ void
 generic_packetizer_c::set_track_forced_flag(bool forced_track) {
   m_ti.m_forced_track = forced_track;
   if (m_track_entry)
-    GetChildAs<KaxTrackFlagForced, EbmlUInteger>(m_track_entry) = forced_track ? 1 : 0;
+    GetChild<KaxTrackFlagForced>(m_track_entry).SetValue(forced_track ? 1 : 0);
 }
 
 void
 generic_packetizer_c::set_track_enabled_flag(bool enabled_track) {
   m_ti.m_enabled_track = enabled_track;
   if (m_track_entry)
-    GetChildAs<KaxTrackFlagEnabled, EbmlUInteger>(m_track_entry) = enabled_track ? 1 : 0;
+    GetChild<KaxTrackFlagEnabled>(m_track_entry).SetValue(enabled_track ? 1 : 0);
 }
 
 void
 generic_packetizer_c::set_audio_sampling_freq(float freq) {
   m_haudio_sampling_freq = freq;
   if (m_track_entry)
-    GetChildAs<KaxAudioSamplingFreq, EbmlFloat>(GetChild<KaxTrackAudio>(m_track_entry)) = m_haudio_sampling_freq;
+    GetChild<KaxAudioSamplingFreq>(GetChild<KaxTrackAudio>(m_track_entry)).SetValue(m_haudio_sampling_freq);
 }
 
 void
 generic_packetizer_c::set_audio_output_sampling_freq(float freq) {
   m_haudio_output_sampling_freq = freq;
   if (m_track_entry)
-    GetChildAs<KaxAudioOutputSamplingFreq, EbmlFloat>(GetChild<KaxTrackAudio>(m_track_entry)) = m_haudio_output_sampling_freq;
+    GetChild<KaxAudioOutputSamplingFreq>(GetChild<KaxTrackAudio>(m_track_entry)).SetValue(m_haudio_output_sampling_freq);
 }
 
 void
 generic_packetizer_c::set_audio_channels(int channels) {
   m_haudio_channels = channels;
   if (m_track_entry)
-    GetChildAs<KaxAudioChannels, EbmlUInteger>(GetChild<KaxTrackAudio>(*m_track_entry)) = m_haudio_channels;
+    GetChild<KaxAudioChannels>(GetChild<KaxTrackAudio>(*m_track_entry)).SetValue(m_haudio_channels);
 }
 
 void
 generic_packetizer_c::set_audio_bit_depth(int bit_depth) {
   m_haudio_bit_depth = bit_depth;
   if (m_track_entry)
-    GetChildAs<KaxAudioBitDepth, EbmlUInteger>(GetChild<KaxTrackAudio>(*m_track_entry)) = m_haudio_bit_depth;
+    GetChild<KaxAudioBitDepth>(GetChild<KaxTrackAudio>(*m_track_entry)).SetValue(m_haudio_bit_depth);
 }
 
 void
 generic_packetizer_c::set_video_interlaced_flag(bool interlaced) {
   m_hvideo_interlaced_flag = interlaced ? 1 : 0;
   if (m_track_entry)
-    GetChildAs<KaxVideoFlagInterlaced, EbmlUInteger>(GetChild<KaxTrackVideo>(*m_track_entry)) = m_hvideo_interlaced_flag;
+    GetChild<KaxVideoFlagInterlaced>(GetChild<KaxTrackVideo>(*m_track_entry)).SetValue(m_hvideo_interlaced_flag);
 }
 
 void
 generic_packetizer_c::set_video_pixel_width(int width) {
   m_hvideo_pixel_width = width;
   if (m_track_entry)
-    GetChildAs<KaxVideoPixelWidth, EbmlUInteger>(GetChild<KaxTrackVideo>(*m_track_entry)) = m_hvideo_pixel_width;
+    GetChild<KaxVideoPixelWidth>(GetChild<KaxTrackVideo>(*m_track_entry)).SetValue(m_hvideo_pixel_width);
 }
 
 void
 generic_packetizer_c::set_video_pixel_height(int height) {
   m_hvideo_pixel_height = height;
   if (m_track_entry)
-    GetChildAs<KaxVideoPixelHeight, EbmlUInteger>(GetChild<KaxTrackVideo>(*m_track_entry)) = m_hvideo_pixel_height;
+    GetChild<KaxVideoPixelHeight>(GetChild<KaxTrackVideo>(*m_track_entry)).SetValue(m_hvideo_pixel_height);
 }
 
 void
@@ -466,14 +466,14 @@ void
 generic_packetizer_c::set_video_display_width(int width) {
   m_hvideo_display_width = width;
   if (m_track_entry)
-    GetChildAs<KaxVideoDisplayWidth, EbmlUInteger>(GetChild<KaxTrackVideo>(*m_track_entry)) = m_hvideo_display_width;
+    GetChild<KaxVideoDisplayWidth>(GetChild<KaxTrackVideo>(*m_track_entry)).SetValue(m_hvideo_display_width);
 }
 
 void
 generic_packetizer_c::set_video_display_height(int height) {
   m_hvideo_display_height = height;
   if (m_track_entry)
-    GetChildAs<KaxVideoDisplayHeight, EbmlUInteger>(GetChild<KaxTrackVideo>(*m_track_entry)) = m_hvideo_display_height;
+    GetChild<KaxVideoDisplayHeight>(GetChild<KaxTrackVideo>(*m_track_entry)).SetValue(m_hvideo_display_height);
 }
 
 void
@@ -528,7 +528,7 @@ void
 generic_packetizer_c::set_language(const std::string &language) {
   m_ti.m_language = language;
   if (m_track_entry)
-    GetChildAs<KaxTrackLanguage, EbmlString>(m_track_entry) = m_ti.m_language;
+    GetChild<KaxTrackLanguage>(m_track_entry).SetValue(m_ti.m_language);
 }
 
 void
@@ -549,10 +549,10 @@ generic_packetizer_c::set_video_pixel_cropping(int left,
   if (m_track_entry) {
     KaxTrackVideo &video = GetChild<KaxTrackVideo>(m_track_entry);
 
-    GetChildAs<KaxVideoPixelCropLeft,   EbmlUInteger>(video) = m_ti.m_pixel_cropping.left;
-    GetChildAs<KaxVideoPixelCropTop,    EbmlUInteger>(video) = m_ti.m_pixel_cropping.top;
-    GetChildAs<KaxVideoPixelCropRight,  EbmlUInteger>(video) = m_ti.m_pixel_cropping.right;
-    GetChildAs<KaxVideoPixelCropBottom, EbmlUInteger>(video) = m_ti.m_pixel_cropping.bottom;
+    GetChild<KaxVideoPixelCropLeft  >(video).SetValue(m_ti.m_pixel_cropping.left);
+    GetChild<KaxVideoPixelCropTop   >(video).SetValue(m_ti.m_pixel_cropping.top);
+    GetChild<KaxVideoPixelCropRight >(video).SetValue(m_ti.m_pixel_cropping.right);
+    GetChild<KaxVideoPixelCropBottom>(video).SetValue(m_ti.m_pixel_cropping.bottom);
   }
 }
 
@@ -578,8 +578,8 @@ generic_packetizer_c::set_video_stereo_mode(stereo_mode_c::mode stereo_mode,
 void
 generic_packetizer_c::set_video_stereo_mode_impl(EbmlMaster &video,
                                                  stereo_mode_c::mode stereo_mode) {
-  GetChildAs<KaxVideoStereoMode, EbmlUInteger>(video) = stereo_mode;
-  bool previous_stereo_mode                           = g_stereo_mode_used;
+  GetChild<KaxVideoStereoMode>(video).SetValue(stereo_mode);
+  bool previous_stereo_mode = g_stereo_mode_used;
 
   if (   (stereo_mode_c::mono        != stereo_mode)
       && (stereo_mode_c::unspecified != stereo_mode))
@@ -613,37 +613,37 @@ generic_packetizer_c::set_headers() {
     m_track_entry->SetGlobalTimecodeScale((int64_t)g_timecode_scale);
   }
 
-  GetChildAs<KaxTrackNumber, EbmlUInteger>(m_track_entry) = m_hserialno;
+  GetChild<KaxTrackNumber>(m_track_entry).SetValue(m_hserialno);
 
   if (0 == m_huid)
     m_huid = create_unique_number(UNIQUE_TRACK_IDS);
 
-  GetChildAs<KaxTrackUID, EbmlUInteger>(m_track_entry)    = m_huid;
+  GetChild<KaxTrackUID>(m_track_entry).SetValue(m_huid);
 
   if (-1 != m_htrack_type)
-    GetChildAs<KaxTrackType, EbmlUInteger>(m_track_entry) = m_htrack_type;
+    GetChild<KaxTrackType>(m_track_entry).SetValue(m_htrack_type);
 
   if (!m_hcodec_id.empty())
-    GetChildAs<KaxCodecID, EbmlString>(m_track_entry)     = m_hcodec_id;
+    GetChild<KaxCodecID>(m_track_entry).SetValue(m_hcodec_id);
 
   if (m_hcodec_private)
     GetChild<KaxCodecPrivate>(*m_track_entry).CopyBuffer((binary *)m_hcodec_private, m_hcodec_private_length);
 
   if (!outputting_webm()) {
     if (-1 != m_htrack_min_cache)
-      GetChildAs<KaxTrackMinCache, EbmlUInteger>(m_track_entry)      = m_htrack_min_cache;
+      GetChild<KaxTrackMinCache>(m_track_entry).SetValue(m_htrack_min_cache);
 
     if (-1 != m_htrack_max_cache)
-      GetChildAs<KaxTrackMaxCache, EbmlUInteger>(m_track_entry)      = m_htrack_max_cache;
+      GetChild<KaxTrackMaxCache>(m_track_entry).SetValue(m_htrack_max_cache);
 
     if (-1 != m_htrack_max_add_block_ids)
-      GetChildAs<KaxMaxBlockAdditionID, EbmlUInteger>(m_track_entry) = m_htrack_max_add_block_ids;
+      GetChild<KaxMaxBlockAdditionID>(m_track_entry).SetValue(m_htrack_max_add_block_ids);
   }
 
   if (m_timecode_factory)
     m_htrack_default_duration = (int64_t)m_timecode_factory->get_default_duration(m_htrack_default_duration);
   if (-1.0 != m_htrack_default_duration)
-    GetChildAs<KaxTrackDefaultDuration, EbmlUInteger>(m_track_entry) = m_htrack_default_duration;
+    GetChild<KaxTrackDefaultDuration>(m_track_entry).SetValue(m_htrack_default_duration);
 
   idx = TRACK_TYPE_TO_DEFTRACK_TYPE(m_htrack_type);
 
@@ -654,22 +654,22 @@ generic_packetizer_c::set_headers() {
   else if (g_default_tracks[idx] == m_hserialno)
     g_default_tracks[idx] = 0;
 
-  GetChildAs<KaxTrackLanguage, EbmlString>(m_track_entry) = m_ti.m_language != "" ? m_ti.m_language : g_default_language.c_str();
+  GetChild<KaxTrackLanguage>(m_track_entry).SetValue(m_ti.m_language != "" ? m_ti.m_language : g_default_language.c_str());
 
   if (!m_ti.m_track_name.empty())
-    GetChildAs<KaxTrackName, EbmlUnicodeString>(m_track_entry) = cstrutf8_to_UTFstring(m_ti.m_track_name);
+    GetChild<KaxTrackName>(m_track_entry).SetValue(cstrutf8_to_UTFstring(m_ti.m_track_name));
 
   if (!boost::logic::indeterminate(m_ti.m_forced_track))
-    GetChildAs<KaxTrackFlagForced, EbmlUInteger>(m_track_entry) = m_ti.m_forced_track ? 1 : 0;
+    GetChild<KaxTrackFlagForced>(m_track_entry).SetValue(m_ti.m_forced_track ? 1 : 0);
 
   if (!boost::logic::indeterminate(m_ti.m_enabled_track))
-    GetChildAs<KaxTrackFlagEnabled, EbmlUInteger>(m_track_entry) = m_ti.m_enabled_track ? 1 : 0;
+    GetChild<KaxTrackFlagEnabled>(m_track_entry).SetValue(m_ti.m_enabled_track ? 1 : 0);
 
   if (track_video == m_htrack_type) {
     KaxTrackVideo &video = GetChild<KaxTrackVideo>(m_track_entry);
 
     if (-1 != m_hvideo_interlaced_flag)
-      GetChildAs<KaxVideoFlagInterlaced, EbmlUInteger>(GetChild<KaxTrackVideo>(*m_track_entry)) = m_hvideo_interlaced_flag;
+      GetChild<KaxVideoFlagInterlaced>(GetChild<KaxTrackVideo>(*m_track_entry)).SetValue(m_hvideo_interlaced_flag);
 
     if ((-1 != m_hvideo_pixel_height) && (-1 != m_hvideo_pixel_width)) {
       if ((-1 == m_hvideo_display_width) || (-1 == m_hvideo_display_height) || m_ti.m_aspect_ratio_given || m_ti.m_display_dimensions_given) {
@@ -695,20 +695,20 @@ generic_packetizer_c::set_headers() {
         }
       }
 
-      GetChildAs<KaxVideoPixelWidth,    EbmlUInteger>(video) = m_hvideo_pixel_width;
-      GetChildAs<KaxVideoPixelHeight,   EbmlUInteger>(video) = m_hvideo_pixel_height;
+      GetChild<KaxVideoPixelWidth   >(video).SetValue(m_hvideo_pixel_width);
+      GetChild<KaxVideoPixelHeight  >(video).SetValue(m_hvideo_pixel_height);
 
-      GetChildAs<KaxVideoDisplayWidth,  EbmlUInteger>(video) = m_hvideo_display_width;
-      GetChildAs<KaxVideoDisplayHeight, EbmlUInteger>(video) = m_hvideo_display_height;
+      GetChild<KaxVideoDisplayWidth >(video).SetValue(m_hvideo_display_width);
+      GetChild<KaxVideoDisplayHeight>(video).SetValue(m_hvideo_display_height);
 
-      GetChild<KaxVideoDisplayWidth>(video).SetDefaultSize(4);
+      GetChild<KaxVideoDisplayWidth >(video).SetDefaultSize(4);
       GetChild<KaxVideoDisplayHeight>(video).SetDefaultSize(4);
 
       if (PARAMETER_SOURCE_NONE != m_ti.m_pixel_cropping_source) {
-        GetChildAs<KaxVideoPixelCropLeft,   EbmlUInteger>(video) = m_ti.m_pixel_cropping.left;
-        GetChildAs<KaxVideoPixelCropTop,    EbmlUInteger>(video) = m_ti.m_pixel_cropping.top;
-        GetChildAs<KaxVideoPixelCropRight,  EbmlUInteger>(video) = m_ti.m_pixel_cropping.right;
-        GetChildAs<KaxVideoPixelCropBottom, EbmlUInteger>(video) = m_ti.m_pixel_cropping.bottom;
+        GetChild<KaxVideoPixelCropLeft  >(video).SetValue(m_ti.m_pixel_cropping.left);
+        GetChild<KaxVideoPixelCropTop   >(video).SetValue(m_ti.m_pixel_cropping.top);
+        GetChild<KaxVideoPixelCropRight >(video).SetValue(m_ti.m_pixel_cropping.right);
+        GetChild<KaxVideoPixelCropBottom>(video).SetValue(m_ti.m_pixel_cropping.bottom);
       }
 
       if ((PARAMETER_SOURCE_NONE != m_ti.m_stereo_mode_source) && (stereo_mode_c::unspecified != m_ti.m_stereo_mode))
@@ -719,23 +719,23 @@ generic_packetizer_c::set_headers() {
     KaxTrackAudio &audio = GetChild<KaxTrackAudio>(m_track_entry);
 
     if (-1   != m_haudio_sampling_freq)
-      GetChildAs<KaxAudioSamplingFreq, EbmlFloat>(audio)       = m_haudio_sampling_freq;
+      GetChild<KaxAudioSamplingFreq>(audio).SetValue(m_haudio_sampling_freq);
 
     if (-1.0 != m_haudio_output_sampling_freq)
-      GetChildAs<KaxAudioOutputSamplingFreq, EbmlFloat>(audio) = m_haudio_output_sampling_freq;
+      GetChild<KaxAudioOutputSamplingFreq>(audio).SetValue(m_haudio_output_sampling_freq);
 
     if (-1   != m_haudio_channels)
-      GetChildAs<KaxAudioChannels, EbmlUInteger>(audio)        = m_haudio_channels;
+      GetChild<KaxAudioChannels>(audio).SetValue(m_haudio_channels);
 
     if (-1   != m_haudio_bit_depth)
-      GetChildAs<KaxAudioBitDepth, EbmlUInteger>(audio)        = m_haudio_bit_depth;
+      GetChild<KaxAudioBitDepth>(audio).SetValue(m_haudio_bit_depth);
 
   } else if (track_buttons == m_htrack_type) {
     if ((-1 != m_hvideo_pixel_height) && (-1 != m_hvideo_pixel_width)) {
       KaxTrackVideo &video = GetChild<KaxTrackVideo>(m_track_entry);
 
-      GetChildAs<KaxVideoPixelWidth,  EbmlUInteger>(video) = m_hvideo_pixel_width;
-      GetChildAs<KaxVideoPixelHeight, EbmlUInteger>(video) = m_hvideo_pixel_height;
+      GetChild<KaxVideoPixelWidth >(video).SetValue(m_hvideo_pixel_width);
+      GetChild<KaxVideoPixelHeight>(video).SetValue(m_hvideo_pixel_height);
     }
 
   }
@@ -743,9 +743,9 @@ generic_packetizer_c::set_headers() {
   if ((COMPRESSION_UNSPECIFIED != m_hcompression) && (COMPRESSION_NONE != m_hcompression)) {
     KaxContentEncoding &c_encoding = GetChild<KaxContentEncoding>(GetChild<KaxContentEncodings>(m_track_entry));
 
-    GetChildAs<KaxContentEncodingOrder, EbmlUInteger>(c_encoding) = 0; // First modification.
-    GetChildAs<KaxContentEncodingType,  EbmlUInteger>(c_encoding) = 0; // It's a compression.
-    GetChildAs<KaxContentEncodingScope, EbmlUInteger>(c_encoding) = 1; // Only the frame contents have been compresed.
+    GetChild<KaxContentEncodingOrder>(c_encoding).SetValue(0); // First modification.
+    GetChild<KaxContentEncodingType >(c_encoding).SetValue(0); // It's a compression.
+    GetChild<KaxContentEncodingScope>(c_encoding).SetValue(1); // Only the frame contents have been compresed.
 
     m_compressor = compressor_c::create(m_hcompression);
     m_compressor->set_track_headers(c_encoding);
@@ -766,7 +766,7 @@ generic_packetizer_c::set_headers() {
 
 void
 generic_packetizer_c::fix_headers() {
-  GetChildAs<KaxTrackFlagDefault, EbmlUInteger>(m_track_entry) = g_default_tracks[TRACK_TYPE_TO_DEFTRACK_TYPE(m_htrack_type)] == m_hserialno ? 1 : 0;
+  GetChild<KaxTrackFlagDefault>(m_track_entry).SetValue(g_default_tracks[TRACK_TYPE_TO_DEFTRACK_TYPE(m_htrack_type)] == m_hserialno ? 1 : 0);
 
   m_track_entry->SetGlobalTimecodeScale((int64_t)g_timecode_scale);
 }

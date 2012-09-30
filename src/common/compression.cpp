@@ -54,9 +54,8 @@ compressor_c::~compressor_c() {
 
 void
 compressor_c::set_track_headers(KaxContentEncoding &c_encoding) {
-  KaxContentCompression *c_comp = &GetChild<KaxContentCompression>(c_encoding);
   // Set compression method.
-  GetChildAs<KaxContentCompAlgo, EbmlUInteger>(*c_comp) = compression_method_map[method];
+  GetChild<KaxContentCompAlgo>(GetChild<KaxContentCompression>(c_encoding)).SetValue(compression_method_map[method]);
 }
 
 compressor_ptr

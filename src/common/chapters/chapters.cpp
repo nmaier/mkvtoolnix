@@ -215,17 +215,17 @@ parse_simple_chapters(mm_text_io_c *in,
         if (!edition)
           edition = &GetChild<KaxEditionEntry>(*chaps);
 
-        atom                                                 = &GetFirstOrNextChild<KaxChapterAtom>(*edition, atom);
-        GetChildAs<KaxChapterUID, EbmlUInteger>(*atom)       = create_unique_number(UNIQUE_CHAPTER_IDS);
-        GetChildAs<KaxChapterTimeStart, EbmlUInteger>(*atom) = (start - offset) * 1000000;
+        atom = &GetFirstOrNextChild<KaxChapterAtom>(*edition, atom);
+        GetChild<KaxChapterUID>(*atom).SetValue(create_unique_number(UNIQUE_CHAPTER_IDS));
+        GetChild<KaxChapterTimeStart>(*atom).SetValue((start - offset) * 1000000);
 
-        KaxChapterDisplay *display = &GetChild<KaxChapterDisplay>(*atom);
+        auto &display = GetChild<KaxChapterDisplay>(*atom);
 
-        GetChildAs<KaxChapterString,   EbmlUnicodeString>(*display) = cstrutf8_to_UTFstring(do_convert ? cc_utf8->utf8(name) : name);
-        GetChildAs<KaxChapterLanguage, EbmlString>(*display)        = use_language;
+        GetChild<KaxChapterString>(display).SetValue(cstrutf8_to_UTFstring(do_convert ? cc_utf8->utf8(name) : name));
+        GetChild<KaxChapterLanguage>(display).SetValue(use_language);
 
         if (!g_default_chapter_country.empty())
-          GetChildAs<KaxChapterCountry, EbmlString>(*display)       = g_default_chapter_country;
+          GetChild<KaxChapterCountry>(display).SetValue(g_default_chapter_country);
 
         ++num;
       }
@@ -473,7 +473,7 @@ fix_mandatory_chapter_elements(EbmlElement *e) {
     GetChild<KaxEditionFlagHidden>(ee);
 
     if (!FindChild<KaxEditionUID>(&ee))
-      GetChildAs<KaxEditionUID, EbmlUInteger>(ee) = create_unique_number(UNIQUE_EDITION_IDS);
+      GetChild<KaxEditionUID>(ee).SetValue(create_unique_number(UNIQUE_EDITION_IDS));
 
   } else if (dynamic_cast<KaxChapterAtom *>(e)) {
     KaxChapterAtom &a = *static_cast<KaxChapterAtom *>(e);
@@ -482,25 +482,25 @@ fix_mandatory_chapter_elements(EbmlElement *e) {
     GetChild<KaxChapterFlagEnabled>(a);
 
     if (!FindChild<KaxChapterUID>(&a))
-      GetChildAs<KaxChapterUID, EbmlUInteger>(a) = create_unique_number(UNIQUE_CHAPTER_IDS);
+      GetChild<KaxChapterUID>(a).SetValue(create_unique_number(UNIQUE_CHAPTER_IDS));
 
     if (!FindChild<KaxChapterTimeStart>(&a))
-      GetChildAs<KaxChapterTimeStart, EbmlUInteger>(a) = 0;
+      GetChild<KaxChapterTimeStart>(a).SetValue(0);
 
   } else if (dynamic_cast<KaxChapterTrack *>(e)) {
     KaxChapterTrack &t = *static_cast<KaxChapterTrack *>(e);
 
     if (!FindChild<KaxChapterTrackNumber>(&t))
-      GetChildAs<KaxChapterTrackNumber, EbmlUInteger>(t) = 0;
+      GetChild<KaxChapterTrackNumber>(t).SetValue(0);
 
   } else if (dynamic_cast<KaxChapterDisplay *>(e)) {
     KaxChapterDisplay &d = *static_cast<KaxChapterDisplay *>(e);
 
     if (!FindChild<KaxChapterString>(&d))
-      GetChildAs<KaxChapterString, EbmlUnicodeString>(d) = L"";
+      GetChild<KaxChapterString>(d).SetValue(L"");
 
     if (!FindChild<KaxChapterLanguage>(&d))
-      GetChildAs<KaxChapterLanguage, EbmlString>(d) = "eng";
+      GetChild<KaxChapterLanguage>(d).SetValue("eng");
 
   } else if (dynamic_cast<KaxChapterProcess *>(e)) {
     KaxChapterProcess &p = *static_cast<KaxChapterProcess *>(e);
@@ -740,9 +740,9 @@ merge_chapter_entries(EbmlMaster &master) {
     // Assign the start and end timecode to the chapter. Only assign an
     // end timecode if one was present in at least one of the merged
     // chapter atoms.
-    GetChildAs<KaxChapterTimeStart, EbmlUInteger>(*atom) = start_tc;
+    GetChild<KaxChapterTimeStart>(*atom).SetValue(start_tc);
     if (-1 != end_tc)
-      GetChildAs<KaxChapterTimeEnd, EbmlUInteger>(*atom) = end_tc;
+      GetChild<KaxChapterTimeEnd>(*atom).SetValue(end_tc);
   }
 
   // Recusively merge atoms.
@@ -1029,7 +1029,7 @@ align_chapter_edition_uids(KaxChapters *chapters) {
     if (!edition_entry)
       continue;
 
-    GetChildAs<KaxEditionUID, EbmlUInteger>(*edition_entry) = s_shared_edition_uid;
+    GetChild<KaxEditionUID>(*edition_entry).SetValue(s_shared_edition_uid);
   }
 }
 
@@ -1053,7 +1053,7 @@ align_chapter_edition_uids(KaxChapters &reference,
     if (!ee_modify)
       return;
 
-    GetChildAs<KaxEditionUID, EbmlUInteger>(*ee_modify) = GetChildAs<KaxEditionUID, EbmlUInteger>(*ee_reference);
+    GetChild<KaxEditionUID>(*ee_modify).SetValue(GetChild<KaxEditionUID>(*ee_reference).GetValue());
     ++reference_idx;
     ++modify_idx;
   }

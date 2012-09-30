@@ -234,11 +234,12 @@ convert_old_tags(KaxTags &tags) {
       }
     }
 
-    if (has_level_type) {
-      KaxTagTargets *targets = FindChild<KaxTagTargets>(&tag);
-      if (targets)
-        GetChildAs<KaxTagTargetTypeValue, EbmlUInteger>(*targets) = target_type_value;
-    }
+    if (!has_level_type)
+      continue;
+
+    auto targets = FindChild<KaxTagTargets>(&tag);
+    if (targets)
+      GetChild<KaxTagTargetTypeValue>(*targets).SetValue(target_type_value);
   }
 }
 

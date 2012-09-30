@@ -444,7 +444,7 @@ cluster_helper_c::render() {
     if (new_block_group) {
       // Set the reference priority if it was wanted.
       if ((0 < pack->ref_priority) && new_block_group->replace_simple_by_group())
-        GetChildAs<KaxReferencePriority, EbmlUInteger>(*new_block_group) = pack->ref_priority;
+        GetChild<KaxReferencePriority>(*new_block_group).SetValue(pack->ref_priority);
 
       // Handle BlockAdditions if needed
       if (!pack->data_adds.empty() && new_block_group->ReplaceSimpleByGroup()) {
@@ -452,9 +452,8 @@ cluster_helper_c::render() {
 
         size_t data_add_idx;
         for (data_add_idx = 0; pack->data_adds.size() > data_add_idx; ++data_add_idx) {
-          KaxBlockMore &block_more                                           = AddEmptyChild<KaxBlockMore>(additions);
-          GetChildAs<KaxBlockAddID, EbmlUInteger>(block_more) = data_add_idx + 1;
-
+          auto &block_more = AddEmptyChild<KaxBlockMore>(additions);
+          GetChild<KaxBlockAddID     >(block_more).SetValue(data_add_idx + 1);
           GetChild<KaxBlockAdditional>(block_more).CopyBuffer((binary *)pack->data_adds[data_add_idx]->get_buffer(), pack->data_adds[data_add_idx]->get_size());
         }
       }

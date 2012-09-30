@@ -169,7 +169,7 @@ tag_target_c::add_or_replace_global_tags(KaxTags *tags) {
 
 void
 tag_target_c::add_or_replace_track_tags(KaxTags *tags) {
-  int64_t track_uid = static_cast<uint64>(GetChildAs<KaxTrackUID, EbmlUInteger>(m_sub_master));
+  int64_t track_uid = GetChild<KaxTrackUID>(m_sub_master).GetValue();
 
   size_t idx = 0;
   while (m_level1_element->ListSize() > idx) {
@@ -191,7 +191,7 @@ tag_target_c::add_or_replace_track_tags(KaxTags *tags) {
       if (!tag)
         ++idx;
       else {
-        GetChildAs<KaxTagTrackUID, EbmlUInteger>(GetChild<KaxTagTargets>(tag)) = track_uid;
+        GetChild<KaxTagTrackUID>(GetChild<KaxTagTargets>(tag)).SetValue(track_uid);
         m_level1_element->PushElement(*tag);
         tags->Remove(idx);
       }
