@@ -13,6 +13,8 @@
 
 #include "common/common_pch.h"
 
+#include <boost/optional.hpp>
+
 #include <matroska/KaxAttached.h>
 
 #include "propedit/target.h"
@@ -27,23 +29,23 @@ typedef std::shared_ptr<attachment_id_manager_c> attachment_id_manager_cptr;
 class attachment_target_c: public target_c {
 public:
   struct options_t {
-    std::pair<std::string, bool> m_name, m_description, m_mime_type;
+    boost::optional<std::string> m_name, m_description, m_mime_type;
 
     options_t &
     name(std::string const &p_name) {
-      m_name = {p_name, true};
+      m_name.reset(p_name);
       return *this;
     }
 
     options_t &
     description(std::string const &p_description) {
-      m_description = {p_description, true};
+      m_description.reset(p_description);
       return *this;
     }
 
     options_t &
     mime_type(std::string const &p_mime_type) {
-      m_mime_type = {p_mime_type, true};
+      m_mime_type.reset(p_mime_type);
       return *this;
     }
   };
@@ -114,8 +116,8 @@ operator ==(attachment_target_c::options_t const &a,
 inline std::ostream &
 operator <<(std::ostream &out,
             attachment_target_c::options_t const &opt) {
-  auto format = [](std::string const &name, std::pair<std::string, bool> const &value) -> std::string {
-    return value.second ? name + ":yes(" + value.first + ")" : name + ":no";
+  auto format = [](std::string const &name, boost::optional<std::string> const &value) -> std::string {
+    return value ? name + ":yes(" + *value + ")" : name + ":no";
   };
 
   out << "{" << format("name", opt.m_name) << " " << format("description", opt.m_description) << " " << format("MIME type", opt.m_mime_type) << "}";

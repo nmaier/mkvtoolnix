@@ -170,9 +170,9 @@ attachment_target_c::execute() {
 
 void
 attachment_target_c::execute_add() {
-  auto mime_type    = m_options.m_mime_type.second                               ? m_options.m_mime_type.first : guess_mime_type(m_file_name, true);
-  auto file_name    = m_options.m_name.second && !m_options.m_name.first.empty() ? m_options.m_name.first      : to_utf8(bfs::path{m_file_name}.filename().native());
-  auto &description = m_options.m_description.first;
+  auto mime_type   = m_options.m_mime_type                          ? *m_options.m_mime_type   : guess_mime_type(m_file_name, true);
+  auto file_name   = m_options.m_name && !m_options.m_name->empty() ? *m_options.m_name        : to_utf8(bfs::path{m_file_name}.filename().native());
+  auto description = m_options.m_description                        ? *m_options.m_description : std::string{""};
 
   auto att          = mtx::construct::cons<KaxAttached>(new KaxFileName,                                         to_wide(file_name),
                                                         !description.empty() ? new KaxFileDescription : nullptr, to_wide(description),
@@ -292,21 +292,21 @@ attachment_target_c::replace_by_uid_name_mime_type() {
 
 void
 attachment_target_c::replace_attachment_values(KaxAttached &att) {
-  if (m_options.m_name.second) {
-    auto file_name = !m_options.m_name.first.empty() ? m_options.m_name.first : to_utf8(bfs::path{m_file_name}.filename().native());
+  if (m_options.m_name) {
+    auto file_name = !m_options.m_name->empty() ? *m_options.m_name : to_utf8(bfs::path{m_file_name}.filename().native());
     GetChild<KaxFileName>(att).SetValue(cstrutf8_to_UTFstring(file_name));
   }
 
-  if (m_options.m_mime_type.second) {
-    auto mime_type = m_options.m_mime_type.first.empty() ? guess_mime_type(m_file_name, true) : m_options.m_mime_type.first;
+  if (m_options.m_mime_type) {
+    auto mime_type = m_options.m_mime_type->empty() ? guess_mime_type(m_file_name, true) : *m_options.m_mime_type;
     GetChild<KaxMimeType>(att).SetValue(mime_type);
   }
 
-  if (m_options.m_description.second) {
-    if (m_options.m_description.first.empty())
+  if (m_options.m_description) {
+    if (m_options.m_description->empty())
       DeleteChildren<KaxFileDescription>(att);
     else
-      GetChild<KaxFileDescription>(att).SetValue(cstrutf8_to_UTFstring(m_options.m_description.first));
+      GetChild<KaxFileDescription>(att).SetValue(cstrutf8_to_UTFstring(*m_options.m_description));
 }
 
   GetChild<KaxFileData>(att).CopyBuffer(m_file_content->get_buffer(), m_file_content->get_size());

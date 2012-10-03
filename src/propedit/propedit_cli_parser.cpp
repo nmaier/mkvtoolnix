@@ -75,17 +75,17 @@ propedit_cli_parser_c::add_chapters() {
 
 void
 propedit_cli_parser_c::set_attachment_name() {
-  m_attachment.m_name = std::make_pair(m_next_arg, true);
+  m_attachment.m_name.reset(m_next_arg);
 }
 
 void
 propedit_cli_parser_c::set_attachment_description() {
-  m_attachment.m_description = std::make_pair(m_next_arg, true);
+  m_attachment.m_description.reset(m_next_arg);
 }
 
 void
 propedit_cli_parser_c::set_attachment_mime_type() {
-  m_attachment.m_mime_type = std::make_pair(m_next_arg, true);
+  m_attachment.m_mime_type.reset(m_next_arg);
 }
 
 void
@@ -250,7 +250,7 @@ propedit_cli_parser_c::init_parser() {
 
 void
 propedit_cli_parser_c::validate() {
-  if (m_attachment.m_name.second || m_attachment.m_description.second || m_attachment.m_mime_type.second)
+  if (m_attachment.m_name || m_attachment.m_description || m_attachment.m_mime_type)
     mxerror(Y("One of the options '--attachment-name', '--attachment-description' or '--attachment-mime-type' has been used without a following '--add-attachment' or '--replace-attachment' option.\n"));
 }
 
