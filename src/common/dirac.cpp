@@ -20,6 +20,8 @@
 #include "common/dirac.h"
 #include "common/endian.h"
 
+#define MAX_STANDARD_VIDEO_FORMAT 23
+
 dirac::sequence_header_t::sequence_header_t() {
   memset(this, 0, sizeof(dirac::sequence_header_t));
 }
@@ -72,7 +74,7 @@ dirac::parse_sequence_header(const unsigned char *buf,
     unsigned int top_offset;
   };
 
-  static const standard_video_format standard_video_formats[17] = {
+  static const standard_video_format standard_video_formats[MAX_STANDARD_VIDEO_FORMAT] = {
     {  640,  480, false, false, 24000, 1001,  1,  1,  640,  480, 0, 0, },
     {  176,  120, false, false, 15000, 1001, 10, 11,  176,  120, 0, 0, },
     {  176,  144, false,  true,    25,    2, 12, 11,  176,  144, 0, 0, },
@@ -90,6 +92,12 @@ dirac::parse_sequence_header(const unsigned char *buf,
     { 1920, 1080, false,  true,    50,    1,  1,  1, 1920, 1080, 0, 0, },
     { 2048, 1080, false,  true,    24,    1,  1,  1, 2048, 1080, 0, 0, },
     { 4096, 2160, false,  true,    24,    1,  1,  1, 2048, 1536, 0, 0, },
+    { 3840, 2160, false,  true, 60000, 1001,  1,  1, 3840, 2160, 0, 0, },
+    { 3840, 2160, false,  true,    50,    1,  1,  1, 3840, 2160, 0, 0, },
+    { 7680, 4320, false,  true, 60000, 1001,  1,  1, 7680, 4320, 0, 0, },
+    { 7680, 4320, false,  true,    50,    1,  1,  1, 7680, 4320, 0, 0, },
+    { 1920, 1080, false,  true, 24000, 1001,  1,  1, 1920, 1080, 0, 0, },
+    {  720,  486,  true, false, 30000, 1001, 10, 11,  720,  486, 0, 0, },
   };
 
   static const struct { int numerator, denominator; } standard_frame_rates[11] = {
@@ -128,7 +136,7 @@ dirac::parse_sequence_header(const unsigned char *buf,
     hdr.level             = read_uint(bc);
 
     hdr.base_video_format = read_uint(bc);
-    if (17 < hdr.base_video_format)
+    if (MAX_STANDARD_VIDEO_FORMAT < hdr.base_video_format)
       hdr.base_video_format = 0;
 
     const standard_video_format &svf = standard_video_formats[hdr.base_video_format];
@@ -448,4 +456,3 @@ void
 dirac::es_parser_c::add_post_frame_extra_data(memory_cptr packet) {
   m_post_frame_extra_data.push_back(memory_cptr(packet->clone()));
 }
-
