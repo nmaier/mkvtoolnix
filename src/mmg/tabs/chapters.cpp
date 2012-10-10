@@ -1096,7 +1096,7 @@ tab_chapters::on_chapter_name_changed(wxCommandEvent &) {
     return;
 
   auto cdisplay = get_selected_chapter_display();
-  GetChild<KaxChapterString>(*cdisplay).SetValue(tc_chapter_name->GetValue().c_str());
+  GetChild<KaxChapterString>(*cdisplay).SetValue(to_wide(tc_chapter_name->GetValue()));
 
   tc_chapters->SetItemText(id, create_chapter_label(*data->chapter));
   lb_chapter_names->SetString(lb_chapter_names->GetSelection(), tc_chapter_name->GetValue());

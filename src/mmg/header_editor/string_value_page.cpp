@@ -17,6 +17,7 @@
 
 #include <ebml/EbmlUnicodeString.h>
 
+#include "common/wx.h"
 #include "mmg/header_editor/string_value_page.h"
 
 using namespace libebml;
@@ -66,5 +67,5 @@ he_string_value_page_c::validate_value() {
 
 void
 he_string_value_page_c::copy_value_to_element() {
-  static_cast<EbmlUnicodeString *>(m_element)->SetValue(m_tc_text->GetValue().c_str());
+  static_cast<EbmlUnicodeString *>(m_element)->SetValue(to_wide(m_tc_text->GetValue()));
 }
