@@ -61,7 +61,7 @@ options_c::add_track_or_segmentinfo_target(std::string const &spec) {
     static_cast<track_target_c *>(target.get())->parse_spec(spec_short);
 
   } else
-    assert(false);
+    throw std::invalid_argument{"invalid track/segment info target spec"};
 
   for (auto &existing_target : m_targets)
     if (*existing_target == *target)
