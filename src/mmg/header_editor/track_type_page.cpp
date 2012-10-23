@@ -72,7 +72,7 @@ he_track_type_page_c::do_modifications() {
     return;
 
   fix_mandatory_segment_tracks_elements(m_l1_element.get());
-  m_l1_element->UpdateSize(true);
+  m_l1_element->UpdateSize(true, true);
 }
 
 void
