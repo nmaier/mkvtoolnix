@@ -178,6 +178,7 @@ mmg_app::OnInit() {
 #else
   cfg = new wxFileConfig(wxT("mkvmergeGUI"), wxEmptyString, get_config_file_name());
 #endif
+  cfg->SetExpandEnvVars(false);
   wxConfigBase::Set(cfg);
 
   init_ui_locale();

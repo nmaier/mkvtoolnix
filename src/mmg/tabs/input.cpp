@@ -634,7 +634,8 @@ tab_input::insert_file_in_controls(mmg_file_cptr file,
     }
   }
 
-  lb_input_files->Insert(wxString::Format(wxT("%s%s (%s)"), append ? wxT("++> ") : wxEmptyString, file->file_name.AfterLast(wxT(PSEP)).c_str(), file->file_name.BeforeLast(wxT(PSEP)).c_str()), new_file_pos);
+  wxFileName fn{file->file_name};
+  lb_input_files->Insert(wxString::Format(wxT("%s%s (%s)"), append ? wxT("++> ") : wxEmptyString, fn.GetFullName().c_str(), fn.GetPath().c_str()), new_file_pos);
 
   files.insert(files.begin() + new_file_pos, file);
 
@@ -1230,9 +1231,8 @@ tab_input::load(wxConfigBase *cfg,
     }
 
     if (!fi->tracks.empty()) {
-      s = fi->file_name.BeforeLast(PSEP);
-      c = fi->file_name.AfterLast(PSEP);
-      lb_input_files->Append(wxString::Format(wxT("%s%s (%s)"), fi->appending ? wxT("++> ") : wxEmptyString, c.c_str(), s.c_str()));
+      wxFileName fn{fi->file_name};
+      lb_input_files->Append(wxString::Format(wxT("%s%s (%s)"), fi->appending ? wxT("++> ") : wxEmptyString, fn.GetFullName().c_str(), fn.GetPath().c_str()));
       files.push_back(fi);
     }
 

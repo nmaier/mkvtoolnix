@@ -1,3 +1,9 @@
+2012-11-13  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: bug fix: Fixed reading file names containing a '%' from a
+	.mmg settings file (both normally saved files and the job queue
+	files). Fixes #795.
+
 2012-10-08  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: enhancement: Dirac video code: Added four more

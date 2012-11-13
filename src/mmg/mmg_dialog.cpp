@@ -380,6 +380,8 @@ mmg_dialog::on_file_new(wxCommandEvent &evt) {
 
   tmp_name.Printf(wxT("%stempsettings-%d.mmg"), get_temp_dir().c_str(), (int)wxGetProcessId());
   wxFileConfig cfg(wxT("mkvmerge GUI"), wxT("Moritz Bunkus"), tmp_name);
+  cfg.SetExpandEnvVars(false);
+
   tc_output->SetValue(wxEmptyString);
 
   input_page->load(&cfg, MMG_CONFIG_FILE_VERSION_MAX);
@@ -415,6 +417,8 @@ mmg_dialog::load(wxString file_name,
   int version;
 
   wxFileConfig cfg(wxT("mkvmerge GUI"), wxT("Moritz Bunkus"), file_name);
+  cfg.SetExpandEnvVars(false);
+
   cfg.SetPath(wxT("/mkvmergeGUI"));
   if (!cfg.Read(wxT("file_version"), &version) || (1 > version) || (MMG_CONFIG_FILE_VERSION_MAX < version)) {
     if (used_for_jobs)
@@ -454,20 +458,18 @@ mmg_dialog::on_file_save(wxCommandEvent &) {
 void
 mmg_dialog::save(wxString file_name,
                  bool used_for_jobs) {
-  wxFileConfig *cfg;
+  wxFileConfig cfg{wxT("mkvmerge GUI"), wxT("Moritz Bunkus"), file_name};
+  cfg.SetExpandEnvVars(false);
 
-  cfg = new wxFileConfig(wxT("mkvmerge GUI"), wxT("Moritz Bunkus"), file_name);
-  cfg->SetPath(wxT("/mkvmergeGUI"));
-  cfg->Write(wxT("file_version"), MMG_CONFIG_FILE_VERSION_MAX);
-  cfg->Write(wxT("gui_version"), wxT(VERSION));
-  cfg->Write(wxT("output_file_name"), tc_output->GetValue());
-  cfg->Write(wxT("cli_options"), cli_options);
+  cfg.SetPath(wxT("/mkvmergeGUI"));
+  cfg.Write(wxT("file_version"), MMG_CONFIG_FILE_VERSION_MAX);
+  cfg.Write(wxT("gui_version"), wxT(VERSION));
+  cfg.Write(wxT("output_file_name"), tc_output->GetValue());
+  cfg.Write(wxT("cli_options"), cli_options);
 
-  input_page->save(cfg);
-  attachments_page->save(cfg);
-  global_page->save(cfg);
-
-  delete cfg;
+  input_page->save(&cfg);
+  attachments_page->save(&cfg);
+  global_page->save(&cfg);
 
   if (!used_for_jobs) {
     set_status_bar(Z("Configuration saved."));
