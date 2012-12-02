@@ -13,6 +13,7 @@
 
 #include "common/common_pch.h"
 
+#include <ebml/EbmlVoid.h>
 #include <matroska/KaxSegment.h>
 
 #include "common/base64.h"
@@ -295,6 +296,10 @@ void
 ebml_converter_c::to_xml_recursively(pugi::xml_node &parent,
                                      EbmlElement &e)
   const {
+  // Don't write EBML void elements.
+  if (dynamic_cast<EbmlVoid *>(&e))
+    return;
+
   auto name     = get_tag_name(e);
   auto new_node = parent.append_child(name.c_str());
 

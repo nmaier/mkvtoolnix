@@ -1,5 +1,8 @@
 2012-12-02  Moritz Bunkus  <moritz@bunkus.org>
 
+	* all: bug fix: EBML void elements will be skipped when saving
+	structures to XML (e.g. chapters). Fixes #801.
+
 	* mkvmerge: bug fix: Fixed reading linked seek heads in Matroska
 	files.
 
