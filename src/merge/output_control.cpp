@@ -682,7 +682,6 @@ render_headers(mm_io_c *out) {
     render_ebml_head(out);
 
     s_kax_infos = &GetChild<KaxInfo>(*g_kax_segment);
-    DeleteChildren<KaxTimecodeScaleDenominator>(s_kax_infos);
 
     if (!g_video_packetizer || (TIMECODE_SCALE_MODE_AUTO == g_timecode_scale_mode))
       s_kax_duration = new KaxMyDuration(EbmlFloat::FLOAT_64);
@@ -820,7 +819,7 @@ render_headers(mm_io_c *out) {
     } else
       set_timecode_scale();
 
-    s_kax_infos->Render(*out, true, false, true);
+    s_kax_infos->Render(*out, true);
     g_kax_sh_main->IndexThis(*s_kax_infos, *g_kax_segment);
 
     if (!g_packetizers.empty()) {
@@ -1546,7 +1545,7 @@ finish_file(bool last_file) {
   // Otherwise remove an existing one (e.g. from file linking during
   // splitting).
 
-  s_kax_infos->UpdateSize(true, true);
+  s_kax_infos->UpdateSize(true);
   int64_t info_size = s_kax_infos->ElementSize();
   int changed       = 0;
 
@@ -1567,9 +1566,9 @@ finish_file(bool last_file) {
 
   if (0 != changed) {
     s_out->setFilePointer(s_kax_infos->GetElementPosition());
-    s_kax_infos->UpdateSize(true, true);
+    s_kax_infos->UpdateSize(true);
     info_size -= s_kax_infos->ElementSize();
-    s_kax_infos->Render(*s_out, true, false, true);
+    s_kax_infos->Render(*s_out, true);
     if (2 == changed) {
       if (2 < info_size) {
         EbmlVoid void_after_infos;
@@ -1588,7 +1587,7 @@ finish_file(bool last_file) {
 
   // Render the segment info a second time if the user has requested that.
   if (hack_engaged(ENGAGE_WRITE_HEADERS_TWICE)) {
-    s_kax_infos->Render(*s_out, false, false, true);
+    s_kax_infos->Render(*s_out);
     g_kax_sh_main->IndexThis(*s_kax_infos, *g_kax_segment);
   }
 
