@@ -12,8 +12,8 @@
    Modified by Steve Lhomme <s.lhomme@free.fr>.
 */
 
-#ifndef __R_MATROSKA_H
-#define __R_MATROSKA_H
+#ifndef MTX_INPUT_R_MATROSKA_H
+#define MTX_INPUT_R_MATROSKA_H
 
 #include "common/common_pch.h"
 
@@ -162,6 +162,7 @@ private:
     dl1t_chapters,
     dl1t_tags,
     dl1t_tracks,
+    dl1t_seek_head,
   };
 
   std::vector<kax_track_cptr> m_tracks;
@@ -235,6 +236,7 @@ protected:
   virtual bool packets_available();
   virtual void handle_attachments(mm_io_c *io, EbmlElement *l0, int64_t pos);
   virtual void handle_chapters(mm_io_c *io, EbmlElement *l0, int64_t pos);
+  virtual void handle_seek_head(mm_io_c *io, EbmlElement *l0, int64_t pos);
   virtual void handle_tags(mm_io_c *io, EbmlElement *l0, int64_t pos);
   virtual void process_global_tags();
 
@@ -267,7 +269,6 @@ protected:
   virtual void read_headers_track_audio(kax_track_t *track, KaxTrackAudio *ktaudio);
   virtual void read_headers_track_video(kax_track_t *track, KaxTrackVideo *ktvideo);
   virtual void read_headers_tracks(mm_io_c *io, EbmlElement *l0, int64_t position);
-  virtual void read_headers_seek_head(EbmlElement *l0, EbmlElement *l1);
   virtual bool read_headers_internal();
 
   virtual void process_simple_block(KaxCluster *cluster, KaxSimpleBlock *block_simple);
@@ -277,4 +278,4 @@ protected:
   virtual bool has_deferred_element_been_processed(deferred_l1_type_e type, int64_t position);
 };
 
-#endif  // __R_MATROSKA_H
+#endif  // MTX_INPUT_R_MATROSKA_H

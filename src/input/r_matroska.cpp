@@ -216,6 +216,7 @@ kax_reader_c::init_l1_position_storage(deferred_positions_t &storage) {
   storage[dl1t_chapters]    = std::vector<int64_t>();
   storage[dl1t_tags]        = std::vector<int64_t>();
   storage[dl1t_tracks]      = std::vector<int64_t>();
+  storage[dl1t_seek_head]   = std::vector<int64_t>();
 }
 
 bool
@@ -1001,42 +1002,70 @@ kax_reader_c::read_headers_tracks(mm_io_c *io,
 }
 
 void
-kax_reader_c::read_headers_seek_head(EbmlElement *l0,
-                                     EbmlElement *l1) {
-  EbmlElement *el;
+kax_reader_c::handle_seek_head(mm_io_c *io,
+                               EbmlElement *l0,
+                               int64_t pos) {
+  if (has_deferred_element_been_processed(dl1t_seek_head, pos))
+    return;
 
-  KaxSeekHead &seek_head = *static_cast<KaxSeekHead *>(l1);
+  std::vector<int64_t> next_seek_head_positions;
+  at_scope_exit_c restore([&]() { io->restore_pos(); });
 
-  int i = 0;
-  seek_head.Read(*m_es, EBML_CLASS_CONTEXT(KaxSeekHead), i, el, true);
+  try {
+    io->save_pos(pos);
 
-  for (auto l2 : seek_head) {
-    if (EbmlId(*l2) != EBML_ID(KaxSeek))
-      continue;
+    int upper_lvl_el = 0;
+    std::shared_ptr<EbmlElement> l1(m_es->FindNextElement(EBML_CONTEXT(l0), upper_lvl_el, 0xFFFFFFFFL, true));
+    auto *seek_head = dynamic_cast<KaxSeekHead *>(l1.get());
 
-    KaxSeek &seek           = *static_cast<KaxSeek *>(l2);
-    int64_t pos             = -1;
-    deferred_l1_type_e type = dl1t_unknown;
+    if (!seek_head)
+      return;
 
-    for (auto l3 : seek)
-      if (EbmlId(*l3) == EBML_ID(KaxSeekID)) {
-        auto &sid = *static_cast<KaxSeekID *>(l3);
-        EbmlId id(sid.GetBuffer(), sid.GetSize());
+    EbmlElement *l2 = nullptr;
+    upper_lvl_el    = 0;
 
-        type = id == EBML_ID(KaxAttachments) ? dl1t_attachments
-          :    id == EBML_ID(KaxChapters)    ? dl1t_chapters
-          :    id == EBML_ID(KaxTags)        ? dl1t_tags
-          :    id == EBML_ID(KaxTracks)      ? dl1t_tracks
-          :                                    dl1t_unknown;
+    seek_head->Read(*m_es, EBML_CLASS_CONTEXT(KaxSeekHead), upper_lvl_el, l2, true);
 
-      } else if (EbmlId(*l3) == EBML_ID(KaxSeekPosition))
-        pos = static_cast<KaxSeekPosition *>(l3)->GetValue();
+    for (auto l2 : *seek_head) {
+      if (EbmlId(*l2) != EBML_ID(KaxSeek))
+        continue;
 
-    if ((-1 != pos) && (dl1t_unknown != type)) {
+      KaxSeek &seek = *static_cast<KaxSeek *>(l2);
+      int64_t pos   = FindChildValue<KaxSeekPosition>(seek, -1);
+
+      if (-1 == pos)
+        continue;
+
+      auto *k_id = FindChild<KaxSeekID>(seek);
+      if (!k_id)
+        continue;
+
+      EbmlId id(k_id->GetBuffer(), k_id->GetSize());
+
+      deferred_l1_type_e type = id == EBML_ID(KaxAttachments) ? dl1t_attachments
+        :                       id == EBML_ID(KaxChapters)    ? dl1t_chapters
+        :                       id == EBML_ID(KaxTags)        ? dl1t_tags
+        :                       id == EBML_ID(KaxTracks)      ? dl1t_tracks
+        :                       id == EBML_ID(KaxSeekHead)    ? dl1t_seek_head
+        :                                                       dl1t_unknown;
+
+      if (dl1t_unknown == type)
+        continue;
+
       pos = static_cast<KaxSegment *>(l0)->GetGlobalPosition(pos);
-      m_deferred_l1_positions[type].push_back(pos);
+
+      if (dl1t_seek_head == type)
+        next_seek_head_positions.push_back(pos);
+      else
+        m_deferred_l1_positions[type].push_back(pos);
     }
+
+  } catch (...) {
+    return;
   }
+
+  for (auto pos : next_seek_head_positions)
+    handle_seek_head(io, l0, pos);
 }
 
 void
@@ -1104,7 +1133,7 @@ kax_reader_c::read_headers_internal() {
         m_deferred_l1_positions[dl1t_tags].push_back(l1->GetElementPosition());
 
       else if (EbmlId(*l1) == EBML_ID(KaxSeekHead))
-        read_headers_seek_head(l0, l1);
+        handle_seek_head(m_in.get(), l0, l1->GetElementPosition());
 
       else if (EbmlId(*l1) == EBML_ID(KaxCluster))
         cluster = static_cast<KaxCluster *>(l1);
