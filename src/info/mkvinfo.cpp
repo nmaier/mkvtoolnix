@@ -479,10 +479,7 @@ handle_info(EbmlStream *&es,
       s_tc_scale = static_cast<KaxTimecodeScale *>(l2)->GetValue();
       show_element(l2, 2, boost::format(Y("Timecode scale: %1%")) % s_tc_scale);
 
-    } else if (is_id(l2, KaxTimecodeScaleDenominator))
-      show_element(l2, 2, boost::format(Y("Timecode scale denominator: %1%")) % static_cast<KaxTimecodeScaleDenominator *>(l2)->GetValue());
-
-    else if (is_id(l2, KaxDuration)) {
+    } else if (is_id(l2, KaxDuration)) {
       KaxDuration &duration = *static_cast<KaxDuration *>(l2);
       show_element(l2, 2,
                    boost::format(Y("Duration: %|1$.3f|s (%2%)"))
