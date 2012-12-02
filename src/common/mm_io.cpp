@@ -815,6 +815,17 @@ mm_mem_io_c::get_and_lock_buffer() {
   return m_mem;
 }
 
+std::string
+mm_mem_io_c::get_content()
+  const {
+  char const *source = m_read_only ? reinterpret_cast<char const *>(m_ro_mem) : reinterpret_cast<char const *>(m_mem);
+
+  if (!source || !m_mem_size)
+    return std::string{};
+
+  return std::string(source, m_mem_size);
+}
+
 /*
    Class for handling UTF-8/UTF-16/UTF-32 text files.
 */

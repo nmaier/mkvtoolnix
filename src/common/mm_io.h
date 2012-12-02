@@ -329,6 +329,7 @@ public:
   }
 
   virtual unsigned char *get_and_lock_buffer();
+  virtual std::string get_content() const;
 
 protected:
   virtual uint32 _read(void *buffer, size_t size);
