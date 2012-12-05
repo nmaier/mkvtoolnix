@@ -99,7 +99,7 @@ ebml_tags_converter_c::fix_tag(KaxTag &tag)
 
 kax_tags_cptr
 ebml_tags_converter_c::parse_file(std::string const &file_name,
-                                      bool throw_on_error) {
+                                  bool throw_on_error) {
   auto parse = [&]() -> std::shared_ptr<KaxTags> {
     auto master = ebml_tags_converter_c{}.to_ebml(file_name, "Tags");
     fix_mandatory_tag_elements(static_cast<KaxTags *>(master.get()));
