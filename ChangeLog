@@ -1,3 +1,8 @@
+2012-12-05  Moritz Bunkus  <moritz@bunkus.org>
+
+	* all: bug fix: EBML void elements will be skipped when reading
+	structures from XML (e.g. chapters). Fixes #802.
+
 2012-12-02  Moritz Bunkus  <moritz@bunkus.org>
 
 	* all: bug fix: EBML void elements will be skipped when saving

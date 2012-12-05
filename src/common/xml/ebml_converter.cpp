@@ -361,6 +361,10 @@ void
 ebml_converter_c::to_ebml_recursively(EbmlMaster &parent,
                                       pugi::xml_node &node)
   const {
+  // Skip <EBMLVoid> elements.
+  if (std::string(node.name()) == "EBMLVoid")
+    return;
+
   std::map<std::string, bool> handled_attributes;
 
   auto converted_node   = convert_node_or_attribute_to_ebml(parent, node, pugi::xml_attribute{}, handled_attributes);
