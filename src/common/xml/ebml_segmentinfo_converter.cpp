@@ -77,7 +77,7 @@ ebml_segmentinfo_converter_c::parse_file(std::string const &file_name,
     return std::dynamic_pointer_cast<KaxInfo>(master);
   };
 
-  if (!throw_on_error)
+  if (throw_on_error)
     return parse();
 
   try {
