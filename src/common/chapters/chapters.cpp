@@ -344,6 +344,8 @@ parse_chapters(mm_text_io_c *in,
                KaxTags **tags) {
   assert(in);
 
+  std::string error;
+
   try {
     if (probe_simple_chapters(in)) {
       if (is_simple_format)
@@ -363,11 +365,17 @@ parse_chapters(mm_text_io_c *in,
       return select_chapters_in_timeframe(chapters.get(), min_tc, max_tc, offset) ? chapters : kax_chapters_cptr{};
     }
 
-    throw mtx::chapter_parser_x(boost::format(Y("Unknown chapter file format in '%1%'. It does not contain a supported chapter format.\n")) % in->get_file_name());
+    error = (boost::format(Y("Unknown chapter file format in '%1%'. It does not contain a supported chapter format.\n")) % in->get_file_name()).str();
   } catch (mtx::chapter_parser_x &e) {
+    error = e.error();
+  } catch (mtx::xml::exception &e) {
+    error = std::string(e.what()) + "\n";
+  }
+
+  if (!error.empty()) {
     if (exception_on_error)
-      throw;
-    mxerror(e.error());
+      throw mtx::chapter_parser_x(error);
+    mxerror(error);
   }
 
   return kax_chapters_cptr{};
