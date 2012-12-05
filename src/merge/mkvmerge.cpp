@@ -511,7 +511,7 @@ parse_number_with_unit(const std::string &s,
 */
 void
 parse_and_add_tags(const std::string &file_name) {
-  auto tags = mtx::xml::ebml_tags_converter_c::parse_file(file_name);
+  auto tags = mtx::xml::ebml_tags_converter_c::parse_file(file_name, false);
 
   for (auto element : *tags) {
     auto tag = dynamic_cast<KaxTag *>(element);
@@ -1549,7 +1549,7 @@ parse_arg_segmentinfo(const std::string &param,
     mxerror(boost::format(Y("Only one segment info file allowed in '%1% %2%'.\n")) % param % arg);
 
   g_segmentinfo_file_name = arg;
-  g_kax_info_chap         = mtx::xml::ebml_segmentinfo_converter_c::parse_file(arg);
+  g_kax_info_chap         = mtx::xml::ebml_segmentinfo_converter_c::parse_file(arg, false);
 
   handle_segmentinfo();
 }

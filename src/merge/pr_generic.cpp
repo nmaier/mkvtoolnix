@@ -149,7 +149,7 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *reader,
   else if (map_has_key(m_ti.m_all_tags, -1))
     m_ti.m_tags_file_name = m_ti.m_all_tags[-1];
   if (!m_ti.m_tags_file_name.empty())
-    m_ti.m_tags = mtx::xml::ebml_tags_converter_c::parse_file(m_ti.m_tags_file_name);
+    m_ti.m_tags = mtx::xml::ebml_tags_converter_c::parse_file(m_ti.m_tags_file_name, false);
 
   // Let's see if the user has specified how this track should be compressed.
   if (map_has_key(m_ti.m_compression_list, m_ti.m_id))

@@ -368,8 +368,12 @@ parse_chapters(mm_text_io_c *in,
     error = (boost::format(Y("Unknown chapter file format in '%1%'. It does not contain a supported chapter format.\n")) % in->get_file_name()).str();
   } catch (mtx::chapter_parser_x &e) {
     error = e.error();
-  } catch (mtx::xml::exception &e) {
-    error = std::string(e.what()) + "\n";
+  } catch (mtx::mm_io::exception &ex) {
+    error = (boost::format(Y("The XML chapter file '%1%' could not be read.\n")) % in->get_file_name()).str();
+  } catch (mtx::xml::xml_parser_x &ex) {
+    error = (boost::format(Y("The XML chapter file '%1%' contains an error at position %3%: %2%\n")) % in->get_file_name() % ex.result().description() % ex.result().offset).str();
+  } catch (mtx::xml::exception &ex) {
+    error = (boost::format(Y("The XML chapter file '%1%' contains an error: %2%\n")) % in->get_file_name() % ex.what()).str();
   }
 
   if (!error.empty()) {
