@@ -59,6 +59,7 @@
 #include <matroska/KaxVersion.h>
 
 #include "common/chapters/chapters.h"
+#include "common/debugging.h"
 #include "common/ebml.h"
 #include "common/fs_sys_helpers.h"
 #include "common/hacks.h"
@@ -189,6 +190,7 @@ int g_split_max_num_files                   = 65535;
 
 append_mode_e g_append_mode                 = APPEND_MODE_FILE_BASED;
 bool s_appending_files                      = false;
+bool s_debug_appending                      = false;
 
 bool g_stereo_mode_used                     = false;
 
@@ -624,7 +626,7 @@ set_timecode_scale() {
 
   bool debug = debugging_requested("set_timecode_scale|timecode_scale");
   mxdebug_if(debug,
-             boost::format("scale mode: %1% audio present: %2% video present: %3% highest sample rate: %4%\n")
+             boost::format("timecode_scale: %1% audio present: %2% video present: %3% highest sample rate: %4%\n")
              % (  TIMECODE_SCALE_MODE_NORMAL == g_timecode_scale_mode ? "normal"
                 : TIMECODE_SCALE_MODE_FIXED  == g_timecode_scale_mode ? "fixed"
                 : TIMECODE_SCALE_MODE_AUTO   == g_timecode_scale_mode ? "auto"
@@ -643,7 +645,7 @@ set_timecode_scale() {
 
   g_kax_cues->SetGlobalTimecodeScale(g_timecode_scale);
 
-  mxdebug_if(debug, boost::format("timecode scale: %1% max ns per cluster: %2%\n") % g_timecode_scale % g_max_ns_per_cluster);
+  mxdebug_if(debug, boost::format("timecode_scale: %1% max ns per cluster: %2%\n") % g_timecode_scale % g_max_ns_per_cluster);
 }
 
 static void
@@ -1471,7 +1473,7 @@ prepare_tags_for_rendering() {
 */
 void
 create_next_output_file() {
-  mxdebug_if(debugging_requested("splitting"), boost::format("Create next output file splitting? %1% discarding? %2%\n") % g_cluster_helper->splitting() % g_cluster_helper->discarding());
+  mxdebug_if(debugging_requested("splitting"), boost::format("splitting: Create next output file; splitting? %1% discarding? %2%\n") % g_cluster_helper->splitting() % g_cluster_helper->discarding());
 
   auto this_outfile   = g_cluster_helper->split_mode_produces_many_files() ? create_output_name() : g_outfile;
 
@@ -1783,6 +1785,13 @@ append_track(packetizer_t &ptzr,
     }
   }
 
+  if (s_debug_appending) {
+    mxdebug(boost::format("appending: reader m_max_timecode_seen %1% and ptzr to append is %2% ptzr appended to is %3% src_file.appending %4% src_file.appended_to %5% dst_file.appending %6% dst_file.appended_to %7%\n")
+            % dst_file.reader->m_max_timecode_seen % static_cast<void *>(*gptzr) % static_cast<void *>(ptzr.packetizer) % src_file.appending % src_file.appended_to % dst_file.appending % dst_file.appended_to);
+    for (auto &rep_ptzr : dst_file.reader->m_reader_packetizers)
+      mxdebug(boost::format("  ptzr @ %1% connected_to %2% max_timecode_seen %3%\n") % static_cast<void *>(rep_ptzr) % rep_ptzr->m_connected_to % rep_ptzr->m_max_timecode_seen);
+  }
+
   mxinfo(boost::format(Y("Appending track %1% from file no. %2% ('%3%') to track %4% from file no. %5% ('%6%').\n"))
          % (*gptzr)->m_ti.m_id % amap.src_file_id % (*gptzr)->m_ti.m_fname % ptzr.packetizer->m_ti.m_id % amap.dst_file_id % ptzr.packetizer->m_ti.m_fname);
 
@@ -1850,14 +1859,12 @@ append_track(packetizer_t &ptzr,
   }
 
   if ((APPEND_MODE_FILE_BASED == g_append_mode) || (ptzr.packetizer->get_track_type() == track_subtitle)) {
-    mxverb(2, boost::format("append_track: new timecode_adjustment for append_mode == FILE_BASED or subtitle track: %1% for %2%\n")
-           % format_timecode(timecode_adjustment) % ptzr.packetizer->m_ti.m_id);
+    mxdebug_if(s_debug_appending, boost::format("appending: new timecode_adjustment for append_mode == FILE_BASED or subtitle track: %1% for %2%\n") % format_timecode(timecode_adjustment) % ptzr.packetizer->m_ti.m_id);
     // The actual connection.
     ptzr.packetizer->connect(old_packetizer, timecode_adjustment);
 
   } else {
-    mxverb(2, boost::format("append_track: new timecode_adjustment for append_mode == TRACK_BASED and NON subtitle track: %1% for %2%\n")
-           % format_timecode(timecode_adjustment) % ptzr.packetizer->m_ti.m_id);
+    mxdebug_if(s_debug_appending, boost::format("appending: new timecode_adjustment for append_mode == TRACK_BASED and NON subtitle track: %1% for %2%\n") % format_timecode(timecode_adjustment) % ptzr.packetizer->m_ti.m_id);
     // The actual connection.
     ptzr.packetizer->connect(old_packetizer);
   }
@@ -2019,6 +2026,8 @@ discard_queued_packets() {
 */
 void
 main_loop() {
+  s_debug_appending = debugging_requested("append|appending");
+
   // Let's go!
   while (1) {
     debug_run_main_loop_hooks();
