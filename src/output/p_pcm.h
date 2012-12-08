@@ -41,6 +41,7 @@ public:
   virtual connection_result_e can_connect_to(generic_packetizer_c *src, std::string &error_message);
 
 protected:
+  virtual int process_packaged(packet_cptr packet);
   virtual void flush_impl();
 };
 

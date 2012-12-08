@@ -47,13 +47,24 @@ public:
     return v1 * *this;
   }
 
+  inline int64_t operator /(int64_t v1) {
+    return v1 / *this;
+  }
+
   friend int64_t operator *(int64_t v1, const samples_to_timecode_converter_c &v2);
+  friend int64_t operator /(int64_t v1, const samples_to_timecode_converter_c &v2);
 };
 
 inline int64_t
 operator *(int64_t v1,
            const samples_to_timecode_converter_c &v2) {
   return v2.m_denominator ? v1 * v2.m_numerator / v2.m_denominator : v1;
+}
+
+inline int64_t
+operator /(int64_t v1,
+           const samples_to_timecode_converter_c &v2) {
+  return v2.m_numerator ? v1 * v2.m_denominator / v2.m_numerator : v1;
 }
 
 #endif  // MTX_COMMON_SAMPLES_TIMECODE_CONV_H

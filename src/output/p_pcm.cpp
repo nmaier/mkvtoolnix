@@ -78,6 +78,9 @@ pcm_packetizer_c::set_headers() {
 
 int
 pcm_packetizer_c::process(packet_cptr packet) {
+  if (packet->has_timecode())
+    return process_packaged(packet);
+
   m_buffer.add(packet->data->get_buffer(), packet->data->get_size());
 
   while (m_buffer.get_size() >= m_packet_size) {
@@ -86,6 +89,16 @@ pcm_packetizer_c::process(packet_cptr packet) {
     m_buffer.remove(m_packet_size);
     m_samples_output += m_samples_per_packet;
   }
+
+  return FILE_STATUS_MOREDATA;
+}
+
+int
+pcm_packetizer_c::process_packaged(packet_cptr packet) {
+  int64_t samples_here = m_buffer.get_size() * 8 / m_channels / m_bits_per_sample;
+  m_samples_output     = packet->timecode / m_s2tc + samples_here;
+
+  add_packet(new packet_t(packet->data, packet->timecode, samples_here * m_s2tc));
 
   return FILE_STATUS_MOREDATA;
 }

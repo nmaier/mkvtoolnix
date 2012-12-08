@@ -1,3 +1,8 @@
+2012-12-08  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: mkvmerge will now keep timecodes of PCM
+	tracks from source files if they're available. Fixes #804.
+
 2012-12-05  Moritz Bunkus  <moritz@bunkus.org>
 
 	* all: bug fix: EBML void elements will be skipped when reading
