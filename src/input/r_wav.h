@@ -12,8 +12,8 @@
    Modified by Peter Niemayer <niemayer@isg.de>.
 */
 
-#ifndef __R_WAV_H
-#define __R_WAV_H
+#ifndef MTX_R_WAV_H
+#define MTX_R_WAV_H
 
 #include "common/common_pch.h"
 
@@ -95,4 +95,4 @@ protected:
   void create_demuxer();
 };
 
-#endif // __R_WAV_H
+#endif // MTX_R_WAV_H

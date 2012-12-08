@@ -12,8 +12,8 @@
    Modifications by Nils Maier <maierman@web.de>
 */
 
-#ifndef __MTX_COMMON_MM_BUFFERED_IO_H
-#define __MTX_COMMON_MM_BUFFERED_IO_H
+#ifndef MTX_COMMON_MM_BUFFERED_IO_H
+#define MTX_COMMON_MM_BUFFERED_IO_H
 
 #include "common/common_pch.h"
 
@@ -45,4 +45,4 @@ protected:
 };
 typedef std::shared_ptr<mm_write_buffer_io_c> mm_write_buffer_io_cptr;
 
-#endif // __MTX_COMMON_MM_BUFFERED_IO_H
+#endif // MTX_COMMON_MM_BUFFERED_IO_H

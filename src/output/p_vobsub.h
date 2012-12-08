@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __P_VOBSUB_H
-#define __P_VOBSUB_H
+#ifndef MTX_P_VOBSUB_H
+#define MTX_P_VOBSUB_H
 
 #include "common/common_pch.h"
 
@@ -37,4 +37,4 @@ public:
                                              std::string &error_message);
 };
 
-#endif // __P_VOBSUB_H
+#endif // MTX_P_VOBSUB_H

@@ -10,8 +10,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __XTR_IVF_H
-#define __XTR_IVF_H
+#ifndef MTX_XTR_IVF_H
+#define MTX_XTR_IVF_H
 
 #include "common/common_pch.h"
 

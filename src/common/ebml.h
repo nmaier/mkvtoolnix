@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_EBML_H
-#define __MTX_COMMON_EBML_H
+#ifndef MTX_COMMON_EBML_H
+#define MTX_COMMON_EBML_H
 
 #include "common/common_pch.h"
 
@@ -328,4 +328,4 @@ provide_default_for_child(EbmlMaster *master,
 typedef std::shared_ptr<EbmlElement> ebml_element_cptr;
 typedef std::shared_ptr<EbmlMaster> ebml_master_cptr;
 
-#endif // __MTX_COMMON_EBML_H
+#endif // MTX_COMMON_EBML_H

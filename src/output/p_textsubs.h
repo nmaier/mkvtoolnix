@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __P_TEXTSUBS_H
-#define __P_TEXTSUBS_H
+#ifndef MTX_P_TEXTSUBS_H
+#define MTX_P_TEXTSUBS_H
 
 #include "common/common_pch.h"
 
@@ -42,4 +42,4 @@ private:
   static boost::regex s_re_remove_cr, s_re_translate_nl, s_re_remove_trailing_nl;
 };
 
-#endif  // __P_TEXTSUBS_H
+#endif  // MTX_P_TEXTSUBS_H

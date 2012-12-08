@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_ID3_COMMON_H
-#define __MTX_COMMON_ID3_COMMON_H
+#ifndef MTX_COMMON_ID3_COMMON_H
+#define MTX_COMMON_ID3_COMMON_H
 
 #include "common/common_pch.h"
 

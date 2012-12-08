@@ -1,5 +1,5 @@
-#ifndef __ELEMENT_INFO
-#define __ELEMENT_INFO
+#ifndef MTX_ELEMENT_INFO
+#define MTX_ELEMENT_INFO
 
 #include "common/common_pch.h"
 
@@ -10,4 +10,4 @@ void init_element_names();
 void init_master_information();
 uint32_t element_name_to_id(const std::string &name);
 
-#endif  // __ELEMENT_INFO
+#endif  // MTX_ELEMENT_INFO

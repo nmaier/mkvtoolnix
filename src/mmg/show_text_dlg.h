@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MMG_SHOW_TEXT_DLG_H
-#define __MMG_SHOW_TEXT_DLG_H
+#ifndef MTX_MMG_SHOW_TEXT_DLG_H
+#define MTX_MMG_SHOW_TEXT_DLG_H
 
 #include "common/common_pch.h"
 
@@ -26,4 +26,4 @@ public:
   show_text_dlg(wxWindow *parent, const wxString &title, const wxString &text);
 };
 
-#endif  // __MMG_SHOW_TEXT_DLG_H
+#endif  // MTX_MMG_SHOW_TEXT_DLG_H

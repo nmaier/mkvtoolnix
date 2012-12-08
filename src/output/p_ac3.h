@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __P_AC3_H
-#define __P_AC3_H
+#ifndef MTX_P_AC3_H
+#define MTX_P_AC3_H
 
 #include "common/common_pch.h"
 
@@ -63,4 +63,4 @@ protected:
   virtual void add_to_buffer(unsigned char *const buf, int size);
 };
 
-#endif // __P_AC3_H
+#endif // MTX_P_AC3_H

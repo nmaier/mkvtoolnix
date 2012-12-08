@@ -12,8 +12,8 @@
    Modified by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __R_DTS_H
-#define __R_DTS_H
+#ifndef MTX_R_DTS_H
+#define MTX_R_DTS_H
 
 #include "common/common_pch.h"
 
@@ -51,4 +51,4 @@ protected:
   virtual int decode_buffer(size_t length);
 };
 
-#endif // __R_DTS_H
+#endif // MTX_R_DTS_H

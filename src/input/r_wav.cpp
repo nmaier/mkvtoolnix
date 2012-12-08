@@ -20,7 +20,7 @@
 #if defined(COMP_CYGWIN)
 #include <sys/unistd.h>         // Needed for swab()
 #elif __GNUC__ == 2
-#define __USE_XOPEN
+#define MTX_USE_XOPEN
 #include <unistd.h>
 #elif defined(HAVE_UNISTD_H)
 #include <unistd.h>

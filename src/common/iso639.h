@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_ISO639_H
-#define __MTX_COMMON_ISO639_H
+#ifndef MTX_COMMON_ISO639_H
+#define MTX_COMMON_ISO639_H
 
 #include "common/common_pch.h"
 
@@ -29,4 +29,4 @@ void list_iso639_languages();
 bool is_popular_language(std::string const &lang);
 bool is_popular_language_code(std::string const &code);
 
-#endif // __MTX_COMMON_ISO639_H
+#endif // MTX_COMMON_ISO639_H

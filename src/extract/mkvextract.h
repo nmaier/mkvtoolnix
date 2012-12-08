@@ -10,8 +10,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MKVEXTRACT_H
-#define __MKVEXTRACT_H
+#ifndef MTX_MKVEXTRACT_H
+#define MTX_MKVEXTRACT_H
 
 #include "common/common_pch.h"
 
@@ -61,4 +61,4 @@ void extract_cuesheet(const std::string &file_name, kax_analyzer_c::parse_mode_e
 void write_cuesheet(std::string file_name, KaxChapters &chapters, KaxTags &tags, int64_t tuid, mm_io_c &out);
 void extract_timecodes(const std::string &file_name, std::vector<track_spec_t> &tspecs, int version);
 
-#endif // __MKVEXTRACT_H
+#endif // MTX_MKVEXTRACT_H

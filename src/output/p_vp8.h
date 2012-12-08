@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __OUTPUT_P_VP8_H
-#define __OUTPUT_P_VP8_H
+#ifndef MTX_OUTPUT_P_VP8_H
+#define MTX_OUTPUT_P_VP8_H
 
 #include "common/common_pch.h"
 
@@ -36,4 +36,4 @@ public:
   virtual bool is_compatible_with(output_compatibility_e compatibility);
 };
 
-#endif // __OUTPUT_P_VP8_H
+#endif // MTX_OUTPUT_P_VP8_H

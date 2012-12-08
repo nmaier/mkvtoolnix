@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __TAB_GLOBAL_H
-#define __TAB_GLOBAL_H
+#ifndef MTX_TAB_GLOBAL_H
+#define MTX_TAB_GLOBAL_H
 
 #include "common/common_pch.h"
 
@@ -90,4 +90,4 @@ public:
   void handle_webm_mode(bool enabled);
 };
 
-#endif // __TAB_GLOBAL_H
+#endif // MTX_TAB_GLOBAL_H

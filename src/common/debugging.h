@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_DEBUGGING_H
-#define __MTX_COMMON_DEBUGGING_H
+#ifndef MTX_COMMON_DEBUGGING_H
+#define MTX_COMMON_DEBUGGING_H
 
 #include "common/common_pch.h"
 
@@ -23,4 +23,4 @@ void init_debugging();
 
 int parse_debug_interval_arg(const std::string &option, int default_value = 1000, int invalid_value = -1);
 
-#endif  // __MTX_COMMON_DEBUGGING_H
+#endif  // MTX_COMMON_DEBUGGING_H

@@ -8,8 +8,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __COMMON_CLI_PARSER_H
-#define __COMMON_CLI_PARSER_H
+#ifndef MTX_COMMON_CLI_PARSER_H
+#define MTX_COMMON_CLI_PARSER_H
 
 #include "common/common_pch.h"
 
@@ -76,4 +76,4 @@ protected:
   bool run_hooks(hook_type_e hook_type);
 };
 
-#endif // __COMMON_CLI_PARSER_H
+#endif // MTX_COMMON_CLI_PARSER_H

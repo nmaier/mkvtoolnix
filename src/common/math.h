@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_MATH_H
-#define __MTX_COMMON_MATH_H
+#ifndef MTX_COMMON_MATH_H
+#define MTX_COMMON_MATH_H
 
 #include "common/common_pch.h"
 
@@ -25,4 +25,4 @@ int int_log2(uint32_t value);
 
 typedef boost::rational<int64_t> int64_rational_c;
 
-#endif  // __MTX_COMMON_MATH_H
+#endif  // MTX_COMMON_MATH_H

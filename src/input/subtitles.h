@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __SUBTITLES_H
-#define __SUBTITLES_H
+#ifndef MTX_SUBTITLES_H
+#define MTX_SUBTITLES_H
 
 #include "common/common_pch.h"
 
@@ -148,4 +148,4 @@ typedef std::shared_ptr<ssa_parser_c> ssa_parser_cptr;
 
 int64_t spu_extract_duration(unsigned char *data, size_t buf_size, int64_t timecode);
 
-#endif // __SUBTITLES_H
+#endif // MTX_SUBTITLES_H

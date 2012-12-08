@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MESSAGE_DIALOG_H
-#define __MESSAGE_DIALOG_H
+#ifndef MTX_MESSAGE_DIALOG_H
+#define MTX_MESSAGE_DIALOG_H
 
 #include "common/common_pch.h"
 
@@ -32,4 +32,4 @@ public:
   static int show(wxWindow *parent, const wxString &title, const wxString &heading, const wxString &message);
 };
 
-#endif // __MESSAGE_DIALOG_H
+#endif // MTX_MESSAGE_DIALOG_H

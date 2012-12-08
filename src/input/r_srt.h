@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __R_SRT_H
-#define __R_SRT_H
+#ifndef MTX_R_SRT_H
+#define MTX_R_SRT_H
 
 #include "common/common_pch.h"
 
@@ -45,4 +45,4 @@ public:
   static int probe_file(mm_text_io_c *in, uint64_t size);
 };
 
-#endif  // __R_SRT_H
+#endif  // MTX_R_SRT_H

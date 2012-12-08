@@ -20,8 +20,8 @@
 
  **/
 
-#ifndef __M2VPARSER_H__
-#define __M2VPARSER_H__
+#ifndef MTX_M2VPARSER_H
+#define MTX_M2VPARSER_H
 
 #include "common/common_pch.h"
 
@@ -150,4 +150,4 @@ public:
 };
 
 
-#endif //__M2VPARSER_H__
+#endif //MTX_M2VPARSER_H

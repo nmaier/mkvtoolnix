@@ -11,8 +11,8 @@
    This code was taken from the ffmpeg project, files "libavutil/bswap.h".
 */
 
-#ifndef __MTX_COMMON_BSWAP_H
-#define __MTX_COMMON_BSWAP_H
+#ifndef MTX_COMMON_BSWAP_H
+#define MTX_COMMON_BSWAP_H
 
 #include "common/common_pch.h"
 
@@ -43,4 +43,4 @@ bswap_64(uint64_t x) {
   return r.ll;
 }
 
-#endif  // __MTX_COMMON_BSWAP_H
+#endif  // MTX_COMMON_BSWAP_H

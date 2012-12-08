@@ -10,8 +10,8 @@
    Written by Matt Rice <topquark@sluggy.net>.
 */
 
-#ifndef __XTR_AVC_H
-#define __XTR_AVC_H
+#ifndef MTX_XTR_AVC_H
+#define MTX_XTR_AVC_H
 
 #include "common/common_pch.h"
 

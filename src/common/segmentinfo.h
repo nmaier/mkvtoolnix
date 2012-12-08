@@ -12,8 +12,8 @@
    Steve Lhomme <steve.lhomme@free.fr>.
 */
 
-#ifndef __MTX_COMMON_SEGMENTINFO_H
-#define __MTX_COMMON_SEGMENTINFO_H
+#ifndef MTX_COMMON_SEGMENTINFO_H
+#define MTX_COMMON_SEGMENTINFO_H
 
 #include "common/common_pch.h"
 
@@ -28,4 +28,4 @@ typedef std::shared_ptr<KaxInfo> kax_info_cptr;
 
 void fix_mandatory_segmentinfo_elements(EbmlElement *e);
 
-#endif // __MTX_COMMON_SEGMENTINFO_H
+#endif // MTX_COMMON_SEGMENTINFO_H

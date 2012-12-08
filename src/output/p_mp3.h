@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __P_MP3_H
-#define __P_MP3_H
+#ifndef MTX_P_MP3_H
+#define MTX_P_MP3_H
 
 #include "common/common_pch.h"
 
@@ -49,4 +49,4 @@ private:
   virtual void handle_garbage(int64_t bytes);
 };
 
-#endif // __P_MP3_H
+#endif // MTX_P_MP3_H

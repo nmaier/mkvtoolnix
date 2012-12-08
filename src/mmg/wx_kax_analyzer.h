@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __WX_KAX_ANALYZER_H
-#define __WX_KAX_ANALYZER_H
+#ifndef MTX_WX_KAX_ANALYZER_H
+#define MTX_WX_KAX_ANALYZER_H
 
 #include "common/common_pch.h"
 
@@ -43,4 +43,4 @@ protected:
 };
 typedef std::shared_ptr<wx_kax_analyzer_c> wx_kax_analyzer_cptr;
 
-#endif // __WX_KAX_ANALYZER_H
+#endif // MTX_WX_KAX_ANALYZER_H

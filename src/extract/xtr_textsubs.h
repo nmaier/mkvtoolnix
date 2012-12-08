@@ -10,8 +10,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __XTR_TEXTSUBS_H
-#define __XTR_TEXTSUBS_H
+#ifndef MTX_XTR_TEXTSUBS_H
+#define MTX_XTR_TEXTSUBS_H
 
 #include "common/common_pch.h"
 

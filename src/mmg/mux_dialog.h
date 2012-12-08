@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MUX_DIALOG_H
-#define __MUX_DIALOG_H
+#ifndef MTX_MUX_DIALOG_H
+#define MTX_MUX_DIALOG_H
 
 #include "common/common_pch.h"
 
@@ -101,4 +101,4 @@ public:
   void detach_from_dialog();
 };
 
-#endif // __MUX_DIALOG_H
+#endif // MTX_MUX_DIALOG_H

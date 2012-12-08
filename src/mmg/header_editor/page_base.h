@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __HE_PAGE_BASE_H
-#define __HE_PAGE_BASE_H
+#ifndef MTX_HE_PAGE_BASE_H
+#define MTX_HE_PAGE_BASE_H
 
 #include "common/common_pch.h"
 
@@ -50,4 +50,4 @@ public:
 };
 typedef std::shared_ptr<he_page_base_c> he_page_base_cptr;
 
-#endif // __HE_PAGE_BASE_H
+#endif // MTX_HE_PAGE_BASE_H

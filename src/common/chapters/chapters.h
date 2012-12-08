@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_CHAPTERS_H
-#define __MTX_COMMON_CHAPTERS_H
+#ifndef MTX_COMMON_CHAPTERS_H
+#define MTX_COMMON_CHAPTERS_H
 
 #include "common/common_pch.h"
 
@@ -91,4 +91,4 @@ int count_chapter_atoms(EbmlMaster &master);
 void align_chapter_edition_uids(KaxChapters *chapters);
 void align_chapter_edition_uids(KaxChapters &reference, KaxChapters &modify);
 
-#endif // __MTX_COMMON_CHAPTERS_H
+#endif // MTX_COMMON_CHAPTERS_H

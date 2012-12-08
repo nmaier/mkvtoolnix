@@ -10,8 +10,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __XTR_WAV_H
-#define __XTR_WAV_H
+#ifndef MTX_XTR_WAV_H
+#define MTX_XTR_WAV_H
 
 #include "common/common_pch.h"
 

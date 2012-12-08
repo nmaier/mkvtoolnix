@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_MM_IO_H
-#define __MTX_COMMON_MM_IO_H
+#ifndef MTX_COMMON_MM_IO_H
+#define MTX_COMMON_MM_IO_H
 
 #include "common/common_pch.h"
 
@@ -394,4 +394,4 @@ protected:
 
 typedef std::shared_ptr<mm_stdio_c> mm_stdio_cptr;
 
-#endif // __MTX_COMMON_MM_IO_H
+#endif // MTX_COMMON_MM_IO_H

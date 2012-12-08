@@ -12,8 +12,8 @@
    Modified by Steve Lhomme <steve.lhomme@free.fr>.
 */
 
-#ifndef __OUTPUT_CONTROL_H
-#define __OUTPUT_CONTROL_H
+#ifndef MTX_OUTPUT_CONTROL_H
+#define MTX_OUTPUT_CONTROL_H
 
 #include "common/common_pch.h"
 
@@ -239,4 +239,4 @@ int64_t add_attachment(attachment_t attachment);
 void sighandler(int signum);
 #endif
 
-#endif // __OUTPUT_CONTROL_H
+#endif // MTX_OUTPUT_CONTROL_H

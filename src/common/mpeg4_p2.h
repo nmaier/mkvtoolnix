@@ -12,8 +12,8 @@
    \author Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_MPEG4_P2_H
-#define __MTX_COMMON_MPEG4_P2_H
+#ifndef MTX_COMMON_MPEG4_P2_H
+#define MTX_COMMON_MPEG4_P2_H
 
 #include "common/common_pch.h"
 
@@ -136,4 +136,4 @@ namespace mpeg4 {
   };
 };
 
-#endif  // __MTX_COMMON_MPEG4_P2_H
+#endif  // MTX_COMMON_MPEG4_P2_H

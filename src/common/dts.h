@@ -12,8 +12,8 @@
    Modified by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_DTSCOMMON_H
-#define __MTX_COMMON_DTSCOMMON_H
+#ifndef MTX_COMMON_DTSCOMMON_H
+#define MTX_COMMON_DTSCOMMON_H
 
 #define DTS_HEADER_MAGIC    0x7ffe8001
 #define DTS_HD_HEADER_MAGIC 0x64582025
@@ -183,4 +183,4 @@ bool detect_dts(const void *src_buf, int len, bool &dts14_to_16, bool &swap_byte
 
 bool operator!=(const dts_header_t &l, const dts_header_t &r);
 
-#endif // __MTX_COMMON_DTSCOMMON_H
+#endif // MTX_COMMON_DTSCOMMON_H

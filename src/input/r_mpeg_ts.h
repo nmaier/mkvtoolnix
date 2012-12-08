@@ -12,8 +12,8 @@
    and Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __R_MPEG_TS_H
-#define __R_MPEG_TS_H
+#ifndef MTX_R_MPEG_TS_H
+#define MTX_R_MPEG_TS_H
 
 #include "common/common_pch.h"
 
@@ -422,4 +422,4 @@ private:
   friend class mpeg_ts_track_c;
 };
 
-#endif  // __R_MPEG_TS_H
+#endif  // MTX_R_MPEG_TS_H

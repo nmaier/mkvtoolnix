@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MMG_H
-#define __MMG_H
+#ifndef MTX_MMG_H
+#define MTX_MMG_H
 
 #include "common/common_pch.h"
 
@@ -314,4 +314,4 @@ public:
 
 extern mmg_app *app;
 
-#endif // __MMG_H
+#endif // MTX_MMG_H

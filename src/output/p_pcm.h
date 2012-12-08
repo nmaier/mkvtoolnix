@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __P_PCM_H
-#define __P_PCM_H
+#ifndef MTX_P_PCM_H
+#define MTX_P_PCM_H
 
 #include "common/common_pch.h"
 
@@ -45,4 +45,4 @@ protected:
   virtual void flush_impl();
 };
 
-#endif // __P_PCM_H
+#endif // MTX_P_PCM_H

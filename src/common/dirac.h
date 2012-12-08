@@ -12,8 +12,8 @@
    \author Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_DIRAC_COMMON_H
-#define __MTX_COMMON_DIRAC_COMMON_H
+#ifndef MTX_COMMON_DIRAC_COMMON_H
+#define MTX_COMMON_DIRAC_COMMON_H
 
 #include "common/common_pch.h"
 
@@ -174,4 +174,4 @@ namespace dirac {
   };
 };
 
-#endif  // __MTX_COMMON_DIRAC_COMMON_H
+#endif  // MTX_COMMON_DIRAC_COMMON_H

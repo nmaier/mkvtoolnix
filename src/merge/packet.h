@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __PACKET_H
-#define __PACKET_H
+#ifndef MTX_PACKET_H
+#define MTX_PACKET_H
 
 #include "common/common_pch.h"
 
@@ -208,4 +208,4 @@ struct packet_t {
 };
 typedef std::shared_ptr<packet_t> packet_cptr;
 
-#endif // __PACKET_H
+#endif // MTX_PACKET_H

@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_PGSSUP_H
-#define __MTX_COMMON_PGSSUP_H
+#ifndef MTX_COMMON_PGSSUP_H
+#define MTX_COMMON_PGSSUP_H
 
 #define PGSSUP_FILE_MAGIC           0x5047 // "PG" big endian
 #define PGSSUP_PALETTE_SEGMENT        0x14
@@ -21,5 +21,5 @@
 #define PGSSUP_WINDOW_SEGMENT         0x17
 #define PGSSUP_DISPLAY_SEGMENT        0x80
 
-#endif  // __MTX_COMMON_PGSSUP_H
+#endif  // MTX_COMMON_PGSSUP_H
 

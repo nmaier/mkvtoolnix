@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __P_MPEG4_P10_H
-#define __P_MPEG4_P10_H
+#ifndef MTX_P_MPEG4_P10_H
+#define MTX_P_MPEG4_P10_H
 
 #include "common/common_pch.h"
 
@@ -40,4 +40,4 @@ protected:
   virtual void change_nalu_size_len(packet_cptr packet);
 };
 
-#endif  // __P_MPEG4_P10_H
+#endif  // MTX_P_MPEG4_P10_H

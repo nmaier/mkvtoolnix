@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_SEGMENT_TRACKS_H
-#define __MTX_COMMON_SEGMENT_TRACKS_H
+#ifndef MTX_COMMON_SEGMENT_TRACKS_H
+#define MTX_COMMON_SEGMENT_TRACKS_H
 
 #include "common/common_pch.h"
 
@@ -21,5 +21,5 @@ using namespace libmatroska;
 
 void fix_mandatory_segment_tracks_elements(EbmlElement *e);
 
-#endif // __MTX_COMMON_SEGMENT_TRACKS_H
+#endif // MTX_COMMON_SEGMENT_TRACKS_H
 

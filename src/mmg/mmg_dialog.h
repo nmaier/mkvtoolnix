@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MMG_DIALOG_H
-#define __MMG_DIALOG_H
+#ifndef MTX_MMG_DIALOG_H
+#define MTX_MMG_DIALOG_H
 
 #include "common/common_pch.h"
 
@@ -276,4 +276,4 @@ protected:
 
 extern mmg_dialog *mdlg;
 
-#endif // __MMG_DIALOG_H
+#endif // MTX_MMG_DIALOG_H

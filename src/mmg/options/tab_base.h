@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MMG_OPTIONS_TAB_BASE_H
-#define __MMG_OPTIONS_TAB_BASE_H
+#ifndef MTX_MMG_OPTIONS_TAB_BASE_H
+#define MTX_MMG_OPTIONS_TAB_BASE_H
 
 #include "common/common_pch.h"
 
@@ -32,4 +32,4 @@ public:
   virtual wxString get_title() = 0;
 };
 
-#endif // __MMG_OPTIONS_TAB_BASE_H
+#endif // MTX_MMG_OPTIONS_TAB_BASE_H

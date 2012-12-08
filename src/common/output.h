@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_OUTPUT_H
-#define __MTX_COMMON_OUTPUT_H
+#ifndef MTX_COMMON_OUTPUT_H
+#define MTX_COMMON_OUTPUT_H
 
 #include "common/os.h"
 
@@ -152,4 +152,4 @@ void dump_ebml_elements(EbmlElement *element, bool with_values = false, unsigned
 
 std::string fourcc_to_string(uint32_t fourcc);
 
-#endif  // __MTX_COMMON_OUTPUT_H
+#endif  // MTX_COMMON_OUTPUT_H

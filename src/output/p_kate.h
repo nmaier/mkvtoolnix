@@ -12,8 +12,8 @@
    Adapted from code by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __P_KATE_H
-#define __P_KATE_H
+#ifndef MTX_P_KATE_H
+#define MTX_P_KATE_H
 
 #include "common/common_pch.h"
 
@@ -42,4 +42,4 @@ public:
   virtual connection_result_e can_connect_to(generic_packetizer_c *src, std::string &error_message);
 };
 
-#endif  // __P_KATE_H
+#endif  // MTX_P_KATE_H

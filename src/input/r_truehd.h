@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __R_TRUEHD_H
-#define __R_TRUEHD_H
+#ifndef MTX_R_TRUEHD_H
+#define MTX_R_TRUEHD_H
 
 #include "common/common_pch.h"
 
@@ -47,4 +47,4 @@ protected:
   static bool find_valid_headers(mm_io_c &in, int64_t probe_range, int num_headers);
 };
 
-#endif // __R_TRUEHD_H
+#endif // MTX_R_TRUEHD_H

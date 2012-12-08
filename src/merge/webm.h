@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_MERGE_WEBM_H
-#define __MTX_MERGE_WEBM_H
+#ifndef MTX_MERGE_WEBM_H
+#define MTX_MERGE_WEBM_H
 
 enum output_compatibility_e {
   OC_MATROSKA,
@@ -23,4 +23,4 @@ bool outputting_webm();
 void set_output_compatibility(output_compatibility_e compatibility);
 output_compatibility_e get_output_compatbility();
 
-#endif // __MTX_MERGE_WEBM_H
+#endif // MTX_MERGE_WEBM_H

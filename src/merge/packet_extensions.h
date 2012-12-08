@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __PACKET_EXTENSIONS_H
-#define __PACKET_EXTENSIONS_H
+#ifndef MTX_PACKET_EXTENSIONS_H
+#define MTX_PACKET_EXTENSIONS_H
 
 #include "common/common_pch.h"
 
@@ -82,4 +82,4 @@ public:
 
 typedef std::shared_ptr<subtitle_number_packet_extension_c> subtitle_number_packet_extension_cptr;
 
-#endif  // __PACKET_EXTENSIONS_H
+#endif  // MTX_PACKET_EXTENSIONS_H

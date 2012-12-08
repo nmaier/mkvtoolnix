@@ -8,8 +8,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __PROPEDIT_PROPEDIT_CLI_PARSER_H
-#define __PROPEDIT_PROPEDIT_CLI_PARSER_H
+#ifndef MTX_PROPEDIT_PROPEDIT_CLI_PARSER_H
+#define MTX_PROPEDIT_PROPEDIT_CLI_PARSER_H
 
 #include "common/common_pch.h"
 
@@ -52,4 +52,4 @@ protected:
   std::map<property_element_c::ebml_type_e, const char *> &get_ebml_type_abbrev_map();
 };
 
-#endif // __PROPEDIT_PROPEDIT_CLI_PARSER_H
+#endif // MTX_PROPEDIT_PROPEDIT_CLI_PARSER_H

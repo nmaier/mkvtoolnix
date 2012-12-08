@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_KAX_ANALYZER_H
-#define __MTX_COMMON_KAX_ANALYZER_H
+#ifndef MTX_COMMON_KAX_ANALYZER_H
+#define MTX_COMMON_KAX_ANALYZER_H
 
 #include "common/common_pch.h"
 
@@ -204,4 +204,4 @@ public:
 };
 typedef std::shared_ptr<console_kax_analyzer_c> console_kax_analyzer_cptr;
 
-#endif  // __MTX_COMMON_KAX_ANALYZER_H
+#endif  // MTX_COMMON_KAX_ANALYZER_H

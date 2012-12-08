@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __P_THEORA_H
-#define __P_THEORA_H
+#ifndef MTX_P_THEORA_H
+#define MTX_P_THEORA_H
 
 #include "common/common_pch.h"
 
@@ -32,4 +32,4 @@ protected:
   virtual void extract_aspect_ratio();
 };
 
-#endif  // __P_THEORA_H
+#endif  // MTX_P_THEORA_H

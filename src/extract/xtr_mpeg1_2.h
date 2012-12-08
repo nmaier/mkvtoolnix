@@ -10,8 +10,8 @@
    Written by Matt Rice <topquark@sluggy.net>.
 */
 
-#ifndef __XTR_MPEG1_2_H
-#define __XTR_MPEG1_2_H
+#ifndef MTX_XTR_MPEG1_2_H
+#define MTX_XTR_MPEG1_2_H
 
 #include "common/common_pch.h"
 

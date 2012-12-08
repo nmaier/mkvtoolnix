@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __TAB_ATTACHMENTS_H
-#define __TAB_ATTACHMENTS_H
+#ifndef MTX_TAB_ATTACHMENTS_H
+#define MTX_TAB_ATTACHMENTS_H
 
 #include "common/common_pch.h"
 
@@ -79,4 +79,4 @@ public:
   void translate_ui();
 };
 
-#endif // __TAB_ATTACHMENTS_H
+#endif // MTX_TAB_ATTACHMENTS_H

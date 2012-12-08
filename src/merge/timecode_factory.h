@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __TIMECODE_FACTORY_H
-#define __TIMECODE_FACTORY_H
+#ifndef MTX_TIMECODE_FACTORY_H
+#define MTX_TIMECODE_FACTORY_H
 
 #include "common/common_pch.h"
 
@@ -174,4 +174,4 @@ public:
   }
 };
 
-#endif // __TIMECODE_FACTORY_H
+#endif // MTX_TIMECODE_FACTORY_H

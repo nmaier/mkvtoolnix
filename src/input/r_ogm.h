@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __R_OGM_H
-#define __R_OGM_H
+#ifndef MTX_R_OGM_H
+#define MTX_R_OGM_H
 
 #include "common/common_pch.h"
 
@@ -128,4 +128,4 @@ private:
   virtual void handle_stream_comments();
 };
 
-#endif  // __R_OGM_H
+#endif  // MTX_R_OGM_H

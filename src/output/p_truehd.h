@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __P_TRUEHD_H
-#define __P_TRUEHD_H
+#ifndef MTX_P_TRUEHD_H
+#define MTX_P_TRUEHD_H
 
 #include "common/common_pch.h"
 
@@ -53,4 +53,4 @@ protected:
   virtual void flush_frames_separate();
 };
 
-#endif // __P_TRUEHD_H
+#endif // MTX_P_TRUEHD_H

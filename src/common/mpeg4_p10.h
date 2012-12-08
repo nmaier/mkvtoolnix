@@ -12,8 +12,8 @@
    \author Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_MPEG4_P10_H
-#define __MTX_COMMON_MPEG4_P10_H
+#ifndef MTX_COMMON_MPEG4_P10_H
+#define MTX_COMMON_MPEG4_P10_H
 
 #include "common/common_pch.h"
 
@@ -368,4 +368,4 @@ typedef std::shared_ptr<avc_es_parser_c> avc_es_parser_cptr;
 };
 };
 
-#endif  // __MTX_COMMON_MPEG4_P10_H
+#endif  // MTX_COMMON_MPEG4_P10_H

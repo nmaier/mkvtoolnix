@@ -10,8 +10,8 @@
    Written by Moritz Bunkus and Mike Chen.
 */
 
-#ifndef __XTR_PGS_H
-#define __XTR_PGS_H
+#ifndef MTX_XTR_PGS_H
+#define MTX_XTR_PGS_H
 
 #include "common/common_pch.h"
 

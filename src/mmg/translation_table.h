@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __TRANSLATION_TABLE_H
-#define __TRANSLATION_TABLE_H
+#ifndef MTX_TRANSLATION_TABLE_H
+#define MTX_TRANSLATION_TABLE_H
 
 #include "common/common_pch.h"
 
@@ -41,4 +41,4 @@ public:
   wxString to_english(const wxString &translated);
 };
 
-#endif  // __TRANSLATION_TABLE_H
+#endif  // MTX_TRANSLATION_TABLE_H

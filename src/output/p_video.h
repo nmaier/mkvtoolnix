@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __P_VIDEO_H
-#define __P_VIDEO_H
+#ifndef MTX_P_VIDEO_H
+#define MTX_P_VIDEO_H
 
 #include "common/common_pch.h"
 
@@ -53,4 +53,4 @@ protected:
   virtual void rederive_frame_type_mpeg4_p2(packet_cptr &packet);
 };
 
-#endif // __P_VIDEO_H
+#endif // MTX_P_VIDEO_H

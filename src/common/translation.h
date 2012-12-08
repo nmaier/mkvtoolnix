@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_TRANSLATION_H
-#define __MTX_COMMON_TRANSLATION_H
+#ifndef MTX_COMMON_TRANSLATION_H
+#define MTX_COMMON_TRANSLATION_H
 
 #include "common/common_pch.h"
 
@@ -58,4 +58,4 @@ public:
 
 void init_locales(std::string locale = "");
 
-#endif  // __MTX_COMMON_TRANSLATION_H
+#endif  // MTX_COMMON_TRANSLATION_H

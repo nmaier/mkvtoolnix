@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_MM_MULTI_FILE_IO_H
-#define __MTX_COMMON_MM_MULTI_FILE_IO_H
+#ifndef MTX_COMMON_MM_MULTI_FILE_IO_H
+#define MTX_COMMON_MM_MULTI_FILE_IO_H
 
 #include "common/common_pch.h"
 
@@ -60,4 +60,4 @@ protected:
   virtual size_t _write(const void *buffer, size_t size);
 };
 
-#endif  // __MTX_COMMON_MM_MULTI_FILE_IO_H
+#endif  // MTX_COMMON_MM_MULTI_FILE_IO_H

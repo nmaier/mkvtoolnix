@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __TAB_CHAPTERS_H
-#define __TAB_CHAPTERS_H
+#ifndef MTX_TAB_CHAPTERS_H
+#define MTX_TAB_CHAPTERS_H
 
 #include "common/common_pch.h"
 
@@ -163,4 +163,4 @@ protected:
   KaxChapterDisplay * get_selected_chapter_display();
 };
 
-#endif // __TAB_CHAPTERS_H
+#endif // MTX_TAB_CHAPTERS_H

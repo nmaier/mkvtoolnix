@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __P_FLAC_H
-#define __P_FLAC_H
+#ifndef MTX_P_FLAC_H
+#define MTX_P_FLAC_H
 
 #include "common/common_pch.h"
 
@@ -43,4 +43,4 @@ public:
 };
 
 #endif  // HAVE_FLAC_STREAM_DECODER_H
-#endif  // __P_FLAC_H
+#endif  // MTX_P_FLAC_H

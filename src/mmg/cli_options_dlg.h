@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MMG_CLI_OPTIONS_DLG_H
-#define __MMG_CLI_OPTIONS_DLG_H
+#ifndef MTX_MMG_CLI_OPTIONS_DLG_H
+#define MTX_MMG_CLI_OPTIONS_DLG_H
 
 #include "common/common_pch.h"
 
@@ -52,4 +52,4 @@ public:
   static void clear_cli_option_list();
 };
 
-#endif  // __MMG_CLI_OPTIONS_DLG_H
+#endif  // MTX_MMG_CLI_OPTIONS_DLG_H

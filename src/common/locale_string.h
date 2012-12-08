@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_LOCALE_STRING_H
-#define __MTX_COMMON_LOCALE_STRING_H
+#ifndef MTX_COMMON_LOCALE_STRING_H
+#define MTX_COMMON_LOCALE_STRING_H
 
 #include "common/common_pch.h"
 
@@ -55,4 +55,4 @@ public:
   std::string str(eval_type_e type = full);
 };
 
-#endif  // __MTX_COMMON_LOCALE_STRING_H
+#endif  // MTX_COMMON_LOCALE_STRING_H

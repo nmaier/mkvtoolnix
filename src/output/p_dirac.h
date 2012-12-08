@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __P_DIRAC_H
-#define __P_DIRAC_H
+#ifndef MTX_P_DIRAC_H
+#define MTX_P_DIRAC_H
 
 #include "common/common_pch.h"
 
@@ -46,4 +46,4 @@ protected:
   virtual void headers_found();
 };
 
-#endif // __P_DIRAC_H
+#endif // MTX_P_DIRAC_H

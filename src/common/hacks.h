@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_HACKS_H
-#define __MTX_COMMON_HACKS_H
+#ifndef MTX_COMMON_HACKS_H
+#define MTX_COMMON_HACKS_H
 
 #include "common/common_pch.h"
 
@@ -45,4 +45,4 @@ void engage_hack(unsigned int id);
 bool hack_engaged(unsigned int id);
 void init_hacks();
 
-#endif // __MTX_COMMON_HACKS_H
+#endif // MTX_COMMON_HACKS_H

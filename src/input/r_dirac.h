@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __R_DIRAC_H
-#define __R_DIRAC_H
+#ifndef MTX_R_DIRAC_H
+#define MTX_R_DIRAC_H
 
 #include "common/common_pch.h"
 
@@ -41,4 +41,4 @@ public:
   static int probe_file(mm_io_c *in, uint64_t size);
 };
 
-#endif // __R_DIRAC_H
+#endif // MTX_R_DIRAC_H

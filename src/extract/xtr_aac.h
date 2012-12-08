@@ -10,8 +10,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __XTR_AAC_H
-#define __XTR_AAC_H
+#ifndef MTX_XTR_AAC_H
+#define MTX_XTR_AAC_H
 
 #include "common/common_pch.h"
 

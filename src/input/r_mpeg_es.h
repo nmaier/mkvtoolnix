@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __R_MPEG_ES_H
-#define __R_MPEG_ES_H
+#ifndef MTX_R_MPEG_ES_H
+#define MTX_R_MPEG_ES_H
 
 #include "common/common_pch.h"
 
@@ -44,4 +44,4 @@ public:
   static int probe_file(mm_io_c *in, uint64_t size);
 };
 
-#endif // __R_MPEG_ES_H
+#endif // MTX_R_MPEG_ES_H

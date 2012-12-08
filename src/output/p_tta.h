@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __P_TTA_H
-#define __P_TTA_H
+#ifndef MTX_P_TTA_H
+#define MTX_P_TTA_H
 
 #include "common/common_pch.h"
 
@@ -36,4 +36,4 @@ public:
   virtual connection_result_e can_connect_to(generic_packetizer_c *src, std::string &error_message);
 };
 
-#endif // __P_TTA_H
+#endif // MTX_P_TTA_H

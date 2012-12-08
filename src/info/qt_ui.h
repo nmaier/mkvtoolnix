@@ -10,8 +10,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __QT_UI_H
-#define __QT_UI_H
+#ifndef MTX_QT_UI_H
+#define MTX_QT_UI_H
 
 #include "common/common_pch.h"
 
@@ -57,4 +57,4 @@ public:
   void parse_file(const QString &file_name);
 };
 
-#endif  // __QT_UI_H
+#endif  // MTX_QT_UI_H

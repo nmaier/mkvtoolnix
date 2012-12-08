@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __HEADER_EDITOR_FRAME_H
-#define __HEADER_EDITOR_FRAME_H
+#ifndef MTX_HEADER_EDITOR_FRAME_H
+#define MTX_HEADER_EDITOR_FRAME_H
 
 #include "common/common_pch.h"
 
@@ -136,4 +136,4 @@ protected:
   void set_window_title();
 };
 
-#endif // __HEADER_EDITOR_FRAME_H
+#endif // MTX_HEADER_EDITOR_FRAME_H

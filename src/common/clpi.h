@@ -11,8 +11,8 @@
   Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_CLPI_COMMON_H
-#define __MTX_COMMON_CLPI_COMMON_H
+#ifndef MTX_COMMON_CLPI_COMMON_H
+#define MTX_COMMON_CLPI_COMMON_H
 
 #include "common/common_pch.h"
 
@@ -83,4 +83,4 @@ namespace clpi {
   typedef std::shared_ptr<parser_c> parser_cptr;
 
 };
-#endif // __MTX_COMMON_CLPI_COMMON_H
+#endif // MTX_COMMON_CLPI_COMMON_H

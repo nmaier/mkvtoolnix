@@ -20,8 +20,8 @@
 
  **/
 
-#ifndef __MPEGVIDEOBUFFER_H__
-#define __MPEGVIDEOBUFFER_H__
+#ifndef MTX_MPEGVIDEOBUFFER_H
+#define MTX_MPEGVIDEOBUFFER_H
 
 #include "common/common_pch.h"
 
@@ -162,4 +162,4 @@ public:
   int32_t Feed(binary* data, uint32_t numBytes);
 };
 
-#endif //__MPEGVIDEOBUFFER_H__
+#endif //MTX_MPEGVIDEOBUFFER_H

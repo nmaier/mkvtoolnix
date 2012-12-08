@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_KAX_FILE_H
-#define __MTX_COMMON_KAX_FILE_H
+#ifndef MTX_COMMON_KAX_FILE_H
+#define MTX_COMMON_KAX_FILE_H
 
 #include "common/common_pch.h"
 
@@ -58,4 +58,4 @@ protected:
 };
 typedef std::shared_ptr<kax_file_c> kax_file_cptr;
 
-#endif  // __MTX_COMMON_KAX_FILE_H
+#endif  // MTX_COMMON_KAX_FILE_H

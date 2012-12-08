@@ -11,8 +11,8 @@
    Written by Steve Lhomme <steve.lhomme@free.fr>.
 */
 
-#ifndef __P_WAVPACK_H
-#define __P_WAVPACK_H
+#ifndef MTX_P_WAVPACK_H
+#define MTX_P_WAVPACK_H
 
 #include "common/common_pch.h"
 
@@ -38,4 +38,4 @@ public:
   virtual connection_result_e can_connect_to(generic_packetizer_c *src, std::string &error_message);
 };
 
-#endif // __P_WAVPACK_H
+#endif // MTX_P_WAVPACK_H

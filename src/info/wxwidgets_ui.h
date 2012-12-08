@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __WXWIDGETS_UI_H
-#define __WXWIDGETS_UI_H
+#ifndef MTX_WXWIDGETS_UI_H
+#define MTX_WXWIDGETS_UI_H
 
 #include "common/common_pch.h"
 
@@ -81,4 +81,4 @@ private:
 
 #endif // HAVE_WXWIDGETS
 
-#endif  // __WXWIDGETS_UI_H
+#endif  // MTX_WXWIDGETS_UI_H

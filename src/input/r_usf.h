@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __R_USF_H
-#define __R_USF_H
+#ifndef MTX_R_USF_H
+#define MTX_R_USF_H
 
 #include "common/common_pch.h"
 
@@ -90,4 +90,4 @@ protected:
 
 };
 
-#endif  // __R_USF_H
+#endif  // MTX_R_USF_H

@@ -10,8 +10,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __XTR_OGG_H
-#define __XTR_OGG_H
+#ifndef MTX_XTR_OGG_H
+#define MTX_XTR_OGG_H
 
 #include "common/common_pch.h"
 

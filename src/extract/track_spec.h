@@ -10,8 +10,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __EXTRACT_TRACK_SPEC_H
-#define __EXTRACT_TRACK_SPEC_H
+#ifndef MTX_EXTRACT_TRACK_SPEC_H
+#define MTX_EXTRACT_TRACK_SPEC_H
 
 #include "common/common_pch.h"
 
@@ -36,4 +36,4 @@ struct track_spec_t {
   track_spec_t();
 };
 
-#endif // __EXTRACT_TRACK_SPEC_H
+#endif // MTX_EXTRACT_TRACK_SPEC_H

@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __JOBS_H
-#define __JOBS_H
+#ifndef MTX_JOBS_H
+#define MTX_JOBS_H
 
 #include "common/common_pch.h"
 
@@ -143,4 +143,4 @@ public:
   void start_jobs(std::vector<int> &jobs_to_start);
 };
 
-#endif // __JOBS_H
+#endif // MTX_JOBS_H

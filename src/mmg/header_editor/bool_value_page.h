@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __HE_BOOL_VALUE_PAGE_H
-#define __HE_BOOL_VALUE_PAGE_H
+#ifndef MTX_HE_BOOL_VALUE_PAGE_H
+#define MTX_HE_BOOL_VALUE_PAGE_H
 
 #include "common/common_pch.h"
 
@@ -41,4 +41,4 @@ public:
   virtual void translate_ui();
 };
 
-#endif // __HE_BOOL_VALUE_PAGE_H
+#endif // MTX_HE_BOOL_VALUE_PAGE_H

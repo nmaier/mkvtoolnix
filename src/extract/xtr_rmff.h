@@ -10,8 +10,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __XTR_RMFF_H
-#define __XTR_RMFF_H
+#ifndef MTX_XTR_RMFF_H
+#define MTX_XTR_RMFF_H
 
 #include "common/common_pch.h"
 

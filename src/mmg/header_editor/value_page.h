@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __HE_VALUE_PAGE_H
-#define __HE_VALUE_PAGE_H
+#ifndef MTX_HE_VALUE_PAGE_H
+#define MTX_HE_VALUE_PAGE_H
 
 #include "common/common_pch.h"
 
@@ -78,4 +78,4 @@ public:
   virtual void set_sub_master_callbacks(const EbmlCallbacks &callbacks);
 };
 
-#endif // __HE_VALUE_PAGE_H
+#endif // MTX_HE_VALUE_PAGE_H

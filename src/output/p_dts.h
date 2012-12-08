@@ -12,8 +12,8 @@
    Modified by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __P_DTS_H
-#define __P_DTS_H
+#ifndef MTX_P_DTS_H
+#define MTX_P_DTS_H
 
 #include "common/common_pch.h"
 
@@ -55,4 +55,4 @@ private:
   virtual void process_available_packets(bool flushing);
 };
 
-#endif // __P_DTS_H
+#endif // MTX_P_DTS_H

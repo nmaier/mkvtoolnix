@@ -8,8 +8,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __PROPEDIT_CHANGE_H
-#define __PROPEDIT_CHANGE_H
+#ifndef MTX_PROPEDIT_CHANGE_H
+#define MTX_PROPEDIT_CHANGE_H
 
 #include "common/common_pch.h"
 
@@ -76,4 +76,4 @@ protected:
   const EbmlSemantic *get_semantic();
 };
 
-#endif // __PROPEDIT_CHANGE_H
+#endif // MTX_PROPEDIT_CHANGE_H

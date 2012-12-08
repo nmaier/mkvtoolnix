@@ -12,8 +12,8 @@
      <niemayer@isg.de> and modified by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_BIT_CURSOR_H
-#define __MTX_COMMON_BIT_CURSOR_H
+#ifndef MTX_COMMON_BIT_CURSOR_H
+#define MTX_COMMON_BIT_CURSOR_H
 
 #include "common/common_pch.h"
 
@@ -246,4 +246,4 @@ public:
 };
 typedef std::shared_ptr<bit_cursor_c> bit_cursor_cptr;
 
-#endif // __MTX_COMMON_BIT_CURSOR_H
+#endif // MTX_COMMON_BIT_CURSOR_H

@@ -11,11 +11,11 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MKVMERGE_H
-#define __MKVMERGE_H
+#ifndef MTX_MKVMERGE_H
+#define MTX_MKVMERGE_H
 
 #include "merge/pr_generic.h"
 
 int64_t create_track_number(generic_reader_c *reader, int64_t tid);
 
-#endif // __MKVMERGE_H
+#endif // MTX_MKVMERGE_H

@@ -11,9 +11,9 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_MERGE_DEBUGGING_H
-#define __MTX_MERGE_DEBUGGING_H
+#ifndef MTX_MERGE_DEBUGGING_H
+#define MTX_MERGE_DEBUGGING_H
 
 void debug_run_main_loop_hooks();
 
-#endif // __MTX_MERGE_DEBUGGING_H
+#endif // MTX_MERGE_DEBUGGING_H

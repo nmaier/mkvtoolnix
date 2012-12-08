@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __P_MPEG4_P2_H
-#define __P_MPEG4_P2_H
+#ifndef MTX_P_MPEG4_P2_H
+#define MTX_P_MPEG4_P2_H
 
 #include "common/common_pch.h"
 
@@ -78,4 +78,4 @@ protected:
   virtual void get_next_timecode_and_duration(int64_t &timecode, int64_t &duration);
 };
 
-#endif  // __P_MPEG4_P2_H
+#endif  // MTX_P_MPEG4_P2_H

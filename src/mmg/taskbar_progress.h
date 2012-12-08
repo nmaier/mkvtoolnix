@@ -1,5 +1,5 @@
-#ifndef __MMG_TASKBAR_PROGRESS_H
-#define __MMG_TASKBAR_PROGRESS_H
+#ifndef MTX_MMG_TASKBAR_PROGRESS_H
+#define MTX_MMG_TASKBAR_PROGRESS_H
 
 #include "common/os.h"
 
@@ -38,4 +38,4 @@ protected:
 
 #endif  // defined(SYS_WINDOWS)
 
-#endif  // __MMG_TASKBAR_PROGRESS_H
+#endif  // MTX_MMG_TASKBAR_PROGRESS_H

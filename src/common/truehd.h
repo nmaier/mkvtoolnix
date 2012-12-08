@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_TRUEHD_COMMON_H
-#define __MTX_COMMON_TRUEHD_COMMON_H
+#ifndef MTX_COMMON_TRUEHD_COMMON_H
+#define MTX_COMMON_TRUEHD_COMMON_H
 
 #include "common/common_pch.h"
 
@@ -95,4 +95,4 @@ protected:
 };
 typedef std::shared_ptr<truehd_parser_c> truehd_parser_cptr;
 
-#endif // __MTX_COMMON_TRUEHD_COMMON_H
+#endif // MTX_COMMON_TRUEHD_COMMON_H

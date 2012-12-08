@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __P_AVC_H
-#define __P_AVC_H
+#ifndef MTX_P_AVC_H
+#define MTX_P_AVC_H
 
 #include "common/common_pch.h"
 
@@ -52,4 +52,4 @@ protected:
   virtual void flush_impl();
 };
 
-#endif // __P_AVC_H
+#endif // MTX_P_AVC_H

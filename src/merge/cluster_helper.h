@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __CLUSTER_HELPER_C
-#define __CLUSTER_HELPER_C
+#ifndef MTX_CLUSTER_HELPER_C
+#define MTX_CLUSTER_HELPER_C
 
 #include "common/common_pch.h"
 
@@ -162,4 +162,4 @@ private:
 
 extern cluster_helper_c *g_cluster_helper;
 
-#endif // __CLUSTER_HELPER_C
+#endif // MTX_CLUSTER_HELPER_C

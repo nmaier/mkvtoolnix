@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_EXTERN_DATA_H
-#define __MTX_COMMON_EXTERN_DATA_H
+#ifndef MTX_COMMON_EXTERN_DATA_H
+#define MTX_COMMON_EXTERN_DATA_H
 
 #include "common/common_pch.h"
 
@@ -33,4 +33,4 @@ extern std::vector<mime_type_t> const mime_types;
 std::string guess_mime_type(std::string ext, bool is_file);
 bool is_valid_cctld(const std::string &s);
 
-#endif // __MTX_COMMON_EXTERN_DATA_H
+#endif // MTX_COMMON_EXTERN_DATA_H

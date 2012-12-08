@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __R_AAC_H
-#define __R_AAC_H
+#ifndef MTX_R_AAC_H
+#define MTX_R_AAC_H
 
 #include "common/common_pch.h"
 
@@ -49,4 +49,4 @@ protected:
   static int find_valid_headers(mm_io_c &in, int64_t probe_range, int num_headers);
 };
 
-#endif // __R_AAC_H
+#endif // MTX_R_AAC_H

@@ -12,8 +12,8 @@
    Modified by Steve Lhomme <steve.lhomme@free.fr>.
 */
 
-#ifndef __PR_GENERIC_H
-#define __PR_GENERIC_H
+#ifndef MTX_PR_GENERIC_H
+#define MTX_PR_GENERIC_H
 
 #include "common/common_pch.h"
 
@@ -678,4 +678,4 @@ protected:
 
 extern std::vector<generic_packetizer_c *> ptzrs_in_header_order;
 
-#endif  // __PR_GENERIC_H
+#endif  // MTX_PR_GENERIC_H

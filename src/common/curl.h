@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_CURL_H
-# define __MTX_COMMON_CURL_H
+#ifndef MTX_COMMON_CURL_H
+# define MTX_COMMON_CURL_H
 
 # include "common/common_pch.h"
 
@@ -49,4 +49,4 @@ public:
 
 # endif  // defined(HAVE_CURL_EASY_H)
 
-#endif  // __MTX_COMMON_CURL_H
+#endif  // MTX_COMMON_CURL_H

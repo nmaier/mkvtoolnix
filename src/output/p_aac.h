@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __P_AAC_H
-#define __P_AAC_H
+#ifndef MTX_P_AAC_H
+#define MTX_P_AAC_H
 
 #include "common/common_pch.h"
 
@@ -49,4 +49,4 @@ private:
   virtual int process_headerless(packet_cptr packet);
 };
 
-#endif // __P_AAC_H
+#endif // MTX_P_AAC_H

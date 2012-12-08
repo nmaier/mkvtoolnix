@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_MTX_BITVALUE_H
-#define __MTX_COMMON_MTX_BITVALUE_H
+#ifndef MTX_COMMON_MTX_BITVALUE_H
+#define MTX_COMMON_MTX_BITVALUE_H
 
 #include "common/common_pch.h"
 
@@ -62,4 +62,4 @@ public:
 };
 typedef std::shared_ptr<bitvalue_c> bitvalue_cptr;
 
-#endif  // __MTX_COMMON_MTX_BITVALUE_H
+#endif  // MTX_COMMON_MTX_BITVALUE_H

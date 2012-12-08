@@ -8,8 +8,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __PROPEDIT_PROPEDIT_H
-#define __PROPEDIT_PROPEDIT_H
+#ifndef MTX_PROPEDIT_PROPEDIT_H
+#define MTX_PROPEDIT_PROPEDIT_H
 
 #include "common/os.h"
 
@@ -17,4 +17,4 @@
 
 #define FILE_NOT_MODIFIED Y("The file has not been modified.")
 
-#endif // __PROPEDIT_PROPEDIT_H
+#endif // MTX_PROPEDIT_PROPEDIT_H

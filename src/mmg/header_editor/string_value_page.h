@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __HE_STRING_VALUE_PAGE_H
-#define __HE_STRING_VALUE_PAGE_H
+#ifndef MTX_HE_STRING_VALUE_PAGE_H
+#define MTX_HE_STRING_VALUE_PAGE_H
 
 #include "common/common_pch.h"
 
@@ -39,4 +39,4 @@ public:
   virtual void copy_value_to_element();
 };
 
-#endif // __HE_STRING_VALUE_PAGE_H
+#endif // MTX_HE_STRING_VALUE_PAGE_H

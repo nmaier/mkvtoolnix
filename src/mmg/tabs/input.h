@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __TAB_INPUT_H
-#define __TAB_INPUT_H
+#ifndef MTX_TAB_INPUT_H
+#define MTX_TAB_INPUT_H
 
 #include "common/common_pch.h"
 
@@ -232,4 +232,4 @@ public:
 
 };
 
-#endif // __TAB_INPUT_H
+#endif // MTX_TAB_INPUT_H

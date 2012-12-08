@@ -12,8 +12,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __LIBMATROSKA_EXTENSIONS
-#define __LIBMATROSKA_EXTENSIONS
+#ifndef MTX_LIBMATROSKA_EXTENSIONS
+#define MTX_LIBMATROSKA_EXTENSIONS
 
 #include "common/common_pch.h"
 
@@ -84,4 +84,4 @@ public:
 };
 typedef std::shared_ptr<kax_block_blob_c> kax_block_blob_cptr;
 
-#endif // __LIBMATROSKA_EXTENSIONS
+#endif // MTX_LIBMATROSKA_EXTENSIONS
