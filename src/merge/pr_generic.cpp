@@ -1190,12 +1190,9 @@ generic_reader_c::~generic_reader_c() {
 
 void
 generic_reader_c::read_all() {
-  size_t i;
-
-  for (i = 0; m_reader_packetizers.size() > i; ++i) {
-    while (read(m_reader_packetizers[i], true) != 0)
+  for (auto &packetizer : m_reader_packetizers)
+    while (read(packetizer, true) != FILE_STATUS_DONE)
       ;
-  }
 }
 
 bool
