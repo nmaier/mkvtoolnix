@@ -1792,6 +1792,32 @@ append_track(packetizer_t &ptzr,
       mxdebug(boost::format("  ptzr @ %1% connected_to %2% max_timecode_seen %3%\n") % static_cast<void *>(rep_ptzr) % rep_ptzr->m_connected_to % rep_ptzr->m_max_timecode_seen);
   }
 
+  // In rare cases (e.g. empty tracks) a whole file could be skipped
+  // without having gotten a single packet through to the timecoding
+  // code. Therefore the reader's m_max_timecode_seen field would
+  // still be 0. Therefore we must ensure that each packetizer from a
+  // file we're trying to use m_max_timecode_seen from has already
+  // been connected fully. The very first file in a chain (meaning
+  // files that are not in "appending to other file mode",
+  // filelist_t.appending == false) would be OK as well.
+  if (dst_file.appending) {
+    std::list<generic_packetizer_c *> not_connected_ptzrs;
+    for (auto &check_ptzr : dst_file.reader->m_reader_packetizers)
+      if ((check_ptzr != ptzr.packetizer) && (2 != check_ptzr->m_connected_to))
+        not_connected_ptzrs.push_back(check_ptzr);
+
+    if (s_debug_appending) {
+      std::string result;
+      for (auto &out_ptzr : not_connected_ptzrs)
+        result += (boost::format(" %1%") % static_cast<void *>(out_ptzr)).str();
+
+      mxdebug(boost::format("appending: check for connection on dst file's packetizers; these are not connected: %1%\n") % result);
+    }
+
+    if (!not_connected_ptzrs.empty())
+      return;
+  }
+
   mxinfo(boost::format(Y("Appending track %1% from file no. %2% ('%3%') to track %4% from file no. %5% ('%6%').\n"))
          % (*gptzr)->m_ti.m_id % amap.src_file_id % (*gptzr)->m_ti.m_fname % ptzr.packetizer->m_ti.m_id % amap.dst_file_id % ptzr.packetizer->m_ti.m_fname);
 
