@@ -1031,7 +1031,7 @@ kax_reader_c::handle_seek_head(mm_io_c *io,
         continue;
 
       KaxSeek &seek = *static_cast<KaxSeek *>(l2);
-      int64_t pos   = FindChildValue<KaxSeekPosition>(seek, -1);
+      int64_t pos   = FindChildValue<KaxSeekPosition, int64_t>(seek, -1);
 
       if (-1 == pos)
         continue;

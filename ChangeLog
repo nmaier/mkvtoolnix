@@ -2,6 +2,9 @@
 
 	* Released v5.9.0.
 
+	* mkvmerge: bug fix: Fixed reading seek position values bigger
+	than 2 GB. Fixes #805.
+
 2012-12-08  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Fixed appending non-empty tracks to empty
