@@ -25,7 +25,7 @@
 #include "common/strings/parsing.h"
 #include "common/version.h"
 
-#define VERSIONNAME "No Sleep / Pillow"
+#define VERSIONNAME "On The Loose"
 
 version_number_t::version_number_t()
   : valid(false)
