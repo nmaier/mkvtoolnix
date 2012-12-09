@@ -769,7 +769,7 @@ kax_reader_c::read_headers_info(EbmlElement *&l1,
 
   m1->Read(*m_es, EBML_CLASS_CONTEXT(KaxInfo), upper_lvl_el, l2, true);
 
-  m_tc_scale         = FindChildValue<KaxTimecodeScale>(m1, 1000000);
+  m_tc_scale         = FindChildValue<KaxTimecodeScale, uint64_t>(m1, 1000000);
   m_segment_duration = irnd(FindChildValue<KaxDuration>(m1) * m_tc_scale);
   m_title            = to_utf8(FindChildValue<KaxTitle>(m1));
 

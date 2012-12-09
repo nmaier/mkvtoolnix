@@ -472,7 +472,7 @@ handle_info(EbmlStream *&es,
   auto m1                    = static_cast<EbmlMaster *>(l1);
   read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, element_found);
 
-  s_tc_scale = FindChildValue<KaxTimecodeScale>(m1, TIMECODE_SCALE);
+  s_tc_scale = FindChildValue<KaxTimecodeScale, uint64_t>(m1, TIMECODE_SCALE);
 
   for (auto l2 : *m1)
     if (is_id(l2, KaxTimecodeScale)) {
