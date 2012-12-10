@@ -361,7 +361,7 @@ parse_chapters(mm_text_io_c *in,
       *is_simple_format = false;
 
     if (mtx::xml::ebml_chapters_converter_c::probe_file(in->get_file_name())) {
-      auto chapters = mtx::xml::ebml_chapters_converter_c::parse_file(in->get_file_name());
+      auto chapters = mtx::xml::ebml_chapters_converter_c::parse_file(in->get_file_name(), true);
       return select_chapters_in_timeframe(chapters.get(), min_tc, max_tc, offset) ? chapters : kax_chapters_cptr{};
     }
 
