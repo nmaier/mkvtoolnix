@@ -46,7 +46,7 @@ tag_target_c::operator ==(target_c const &cmp)
 void
 tag_target_c::validate() {
   if (!m_file_name.empty() && !m_new_tags)
-    m_new_tags = mtx::xml::ebml_tags_converter_c::parse_file(m_file_name);
+    m_new_tags = mtx::xml::ebml_tags_converter_c::parse_file(m_file_name, false);
 }
 
 void
