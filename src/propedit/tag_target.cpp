@@ -37,7 +37,7 @@ tag_target_c::operator ==(target_c const &cmp)
   auto other_tag = dynamic_cast<tag_target_c const *>(&cmp);
 
   return other_tag
-    && (m_operation_mode   == other_tag->m_operation_mode)
+    && (m_operation_mode       == other_tag->m_operation_mode)
     && (m_selection_mode       == other_tag->m_selection_mode)
     && (m_selection_param      == other_tag->m_selection_param)
     && (m_selection_track_type == other_tag->m_selection_track_type);
