@@ -60,9 +60,7 @@
 	tracks by default now.
 
 	* mkvinfo: new feature: added support for the new elements
-	CueDuration, CueRelativePosition and TimecodeScaleDenimonator. The
-	denominator's value is only shown so far but not taken into
-	account when calculating any timecode.
+	CueDuration and CueRelativePosition.
 
 	* mkvpropedit, mmg, mkvmerge: removal: removed support for the
 	deprecated element TrackTimecodeScale.
