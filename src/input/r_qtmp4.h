@@ -27,9 +27,10 @@ struct qt_durmap_t {
   uint32_t number;
   uint32_t duration;
 
-  qt_durmap_t():
-    number(0),
-    duration(0) {
+  qt_durmap_t()
+    : number{}
+    , duration{}
+  {
   }
 };
 
@@ -39,11 +40,12 @@ struct qt_chunk_t {
   uint32_t desc;
   uint64_t pos;
 
-  qt_chunk_t():
-    samples(0),
-    size(0),
-    desc(0),
-    pos(0) {
+  qt_chunk_t()
+    : samples{}
+    , size{}
+    , desc{}
+    , pos{}
+  {
   }
 };
 
@@ -52,42 +54,45 @@ struct qt_chunkmap_t {
   uint32_t samples_per_chunk;
   uint32_t sample_description_id;
 
-  qt_chunkmap_t():
-    first_chunk(0),
-    samples_per_chunk(0),
-    sample_description_id(0) {
+  qt_chunkmap_t()
+    : first_chunk{}
+    , samples_per_chunk{}
+    , sample_description_id{}
+  {
   }
 };
 
 struct qt_editlist_t {
-  uint64_t duration;
-  uint64_t pos;
+  int64_t  duration;
+  int64_t  pos;
   uint32_t speed;
   uint32_t frames;
-  uint64_t start_sample;
-  uint64_t start_frame;
+  int64_t  start_sample;
+  int64_t  start_frame;
   int64_t  pts_offset;
 
-  qt_editlist_t():
-    duration(0),
-    pos(0),
-    speed(0),
-    frames(0),
-    start_sample(0),
-    start_frame(0),
-    pts_offset(0) {
+  qt_editlist_t()
+    : duration{}
+    , pos{}
+    , speed{}
+    , frames{}
+    , start_sample{}
+    , start_frame{}
+    , pts_offset{}
+  {
   }
 };
 
 struct qt_sample_t {
-  uint64_t pts;
+  int64_t  pts;
   uint32_t size;
-  uint64_t pos;
+  int64_t  pos;
 
-  qt_sample_t():
-    pts(0),
-    size(0),
-    pos(0) {
+  qt_sample_t()
+    : pts{}
+    , size{}
+    , pos{}
+  {
   }
 };
 
@@ -95,9 +100,10 @@ struct qt_frame_offset_t {
   uint32_t count;
   uint32_t offset;
 
-  qt_frame_offset_t():
-    count(0),
-    offset(0) {
+  qt_frame_offset_t()
+    : count{}
+    , offset{}
+  {
   }
 };
 
@@ -106,13 +112,23 @@ struct qt_index_t {
   int64_t timecode, duration;
   bool    is_keyframe;
 
-  qt_index_t(int64_t file_pos_, int64_t size_, int64_t timecode_, int64_t duration_, bool is_keyframe_):
-    file_pos(file_pos_),
-    size(size_),
-    timecode(timecode_),
-    duration(duration_),
-    is_keyframe(is_keyframe_) {
+  qt_index_t()
+    : file_pos{}
+    , size{}
+    , timecode{}
+    , duration{}
+    , is_keyframe{}
+  {
   };
+
+  qt_index_t(int64_t p_file_pos, int64_t p_size, int64_t p_timecode, int64_t p_duration, bool p_is_keyframe)
+    : file_pos{p_file_pos}
+    , size{p_size}
+    , timecode{p_timecode}
+    , duration{p_duration}
+    , is_keyframe{p_is_keyframe}
+  {
+  }
 };
 
 struct qtmp4_demuxer_c {
@@ -123,11 +139,10 @@ struct qtmp4_demuxer_c {
   char fourcc[4];
   uint32_t pos;
 
-  uint32_t time_scale;
-  uint64_t global_duration;
+  int64_t time_scale, global_duration;
   uint32_t sample_size;
 
-  uint64_t duration;
+  int64_t duration;
 
   std::vector<qt_sample_t> sample_table;
   std::vector<qt_chunk_t> chunk_table;
@@ -167,39 +182,40 @@ struct qtmp4_demuxer_c {
 
   std::string language;
 
-  bool m_debug_tables, m_debug_fps, m_debug_headers;
+  bool m_debug_tables, m_debug_fps, m_debug_headers, m_debug_editlists;
 
-  qtmp4_demuxer_c():
-    ok(false),
-    type('?'),
-    id(0),
-    pos(0),
-    time_scale(1),
-    global_duration(0), //avg_duration(0),
-    sample_size(0),
-    duration(0),
-    min_timecode(0),
-    max_timecode(0),
-    fps(0.0),
-    esds_parsed(false),
-    stsd_non_priv_struct_size{},
-    v_width(0),
-    v_height(0),
-    v_bitdepth(0),
-    v_is_avc(false),
-    avc_use_bframes(false),
-    a_channels(0),
-    a_bitdepth(0),
-    a_samplerate(0.0),
-    a_aac_profile(0),
-    a_aac_output_sample_rate(0),
-    a_aac_is_sbr(false),
-    a_aac_config_parsed(false),
-    warning_printed(false),
-    ptzr(-1)
-    , m_debug_tables(                                 debugging_requested("qtmp4_full") || debugging_requested("qtmp4_tables"))
-    , m_debug_fps(    debugging_requested("qtmp4") || debugging_requested("qtmp4_full") || debugging_requested("qtmp4_fps"))
-    , m_debug_headers(debugging_requested("qtmp4") || debugging_requested("qtmp4_full") || debugging_requested("qtmp4_headers"))
+  qtmp4_demuxer_c()
+    : ok{false}
+    , type{'?'}
+    , id{0}
+    , pos{0}
+    , time_scale{1}
+    , global_duration{0}
+    , sample_size{0}
+    , duration{0}
+    , min_timecode{0}
+    , max_timecode{0}
+    , fps{0.0}
+    , esds_parsed{false}
+    , stsd_non_priv_struct_size{}
+    , v_width{0}
+    , v_height{0}
+    , v_bitdepth{0}
+    , v_is_avc{false}
+    , avc_use_bframes{false}
+    , a_channels{0}
+    , a_bitdepth{0}
+    , a_samplerate{0.0}
+    , a_aac_profile{0}
+    , a_aac_output_sample_rate{0}
+    , a_aac_is_sbr{false}
+    , a_aac_config_parsed{false}
+    , warning_printed{false}
+    , ptzr{-1}
+    , m_debug_tables{   debugging_requested(      "qtmp4_full|qtmp4_tables")}
+    , m_debug_fps{      debugging_requested("qtmp4|qtmp4_full|qtmp4_fps")}
+    , m_debug_headers{  debugging_requested("qtmp4|qtmp4_full|qtmp4_headers")}
+    , m_debug_editlists{debugging_requested("qtmp4|qtmp4_full|qtmp4_editlists")}
   {
     memset(fourcc, 0, 4);
     memset(&esds, 0, sizeof(esds_t));
@@ -242,6 +258,9 @@ private:
   void build_index_chunk_mode();
   void build_index_constant_sample_size_mode();
 
+  void calculate_timecodes_constant_sample_size();
+  void calculate_timecodes_variable_sample_size();
+
   bool parse_esds_atom(mm_mem_io_c &memio, int level);
   uint32_t read_esds_descr_len(mm_mem_io_c &memio);
 };
@@ -253,11 +272,13 @@ struct qt_atom_t {
   uint64_t pos;
   uint32_t hsize;
 
-  qt_atom_t():
-    fourcc(0),
-    size(0),
-    pos(0),
-    hsize(0) {}
+  qt_atom_t()
+    : fourcc{}
+    , size{}
+    , pos{}
+    , hsize{}
+  {
+  }
 
   qt_atom_t to_parent() {
     qt_atom_t parent;
@@ -273,10 +294,15 @@ struct qtmp4_chapter_entry_t {
   std::string m_name;
   int64_t m_timecode;
 
+  qtmp4_chapter_entry_t()
+    : m_timecode{}
+  {
+  }
+
   qtmp4_chapter_entry_t(const std::string &name,
                         int64_t timecode)
-    : m_name(name)
-    , m_timecode(timecode)
+    : m_name{name}
+    , m_timecode{timecode}
   {
   }
 

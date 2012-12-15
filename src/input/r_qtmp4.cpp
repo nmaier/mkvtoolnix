@@ -989,16 +989,22 @@ void
 qtmp4_reader_c::handle_elst_atom(qtmp4_demuxer_cptr &new_dmx,
                                  qt_atom_t,
                                  int level) {
-  m_in->skip(1 + 3);        // version & flags
-  uint32_t count = m_in->read_uint32_be();
+  uint8_t version = m_in->read_uint8();
+  m_in->skip(3);                // flags
+  uint32_t count  = m_in->read_uint32_be();
   new_dmx->editlist_table.resize(count);
 
   size_t i;
   for (i = 0; i < count; ++i) {
     qt_editlist_t &editlist = new_dmx->editlist_table[i];
 
-    editlist.duration = m_in->read_uint32_be();
-    editlist.pos      = m_in->read_uint32_be();
+    if (1 == version) {
+      editlist.duration = m_in->read_uint64_be();
+      editlist.pos      = static_cast<int64_t>(m_in->read_uint64_be());
+    } else {
+      editlist.duration = m_in->read_uint32_be();
+      editlist.pos      = static_cast<int32_t>(m_in->read_uint32_be());
+    }
     editlist.speed    = m_in->read_uint32_be();
   }
 
@@ -1437,16 +1443,16 @@ qtmp4_reader_c::detect_interleaving() {
 
   auto cmp = [](const qt_sample_t &s1, const qt_sample_t &s2) -> uint64_t { return s1.pos < s2.pos; };
 
-  std::list<float> gradients;
+  std::list<double> gradients;
   for (auto &dmx : demuxers_to_read) {
     uint64_t min = boost::min_element(dmx->sample_table, cmp)->pos;
     uint64_t max = boost::max_element(dmx->sample_table, cmp)->pos;
-    gradients.push_back(static_cast<float>(max - min) / m_in->get_size());
+    gradients.push_back(static_cast<double>(max - min) / m_in->get_size());
 
     mxdebug_if(m_debug_interleaving, boost::format("Interleaving: Track id %1% min %2% max %3% gradient %4%\n") % dmx->id % min % max % gradients.back());
   }
 
-  float badness = *boost::max_element(gradients) - *boost::min_element(gradients);
+  double badness = *boost::max_element(gradients) - *boost::min_element(gradients);
   mxdebug_if(m_debug_interleaving, boost::format("Interleaving: Badness: %1% (%2%)\n") % badness % (MAX_INTERLEAVING_BADNESS < badness ? "badly interleaved" : "ok"));
 
   if (MAX_INTERLEAVING_BADNESS < badness)
@@ -1497,80 +1503,66 @@ qtmp4_demuxer_c::to_nsecs(int64_t value) {
 }
 
 void
-qtmp4_demuxer_c::calculate_timecodes() {
-  unsigned int frame;
-
-  if (0 != sample_size) {
-    for (frame = 0; chunk_table.size() > frame; ++frame) {
-      timecodes.push_back(to_nsecs((uint64_t)chunk_table[frame].samples * (uint64_t)duration));
-      durations.push_back(to_nsecs((uint64_t)chunk_table[frame].size    * (uint64_t)duration));
-      frame_indices.push_back(frame);
-    }
-
-    if (!timecodes.empty())
-      min_timecode = max_timecode = timecodes[0];
-
-    return;
+qtmp4_demuxer_c::calculate_timecodes_constant_sample_size() {
+  auto frame = 0u;
+  for (auto &chunk : chunk_table) {
+    timecodes.push_back(to_nsecs(static_cast<uint64_t>(chunk.samples) * duration));
+    durations.push_back(to_nsecs(static_cast<uint64_t>(chunk.size)    * duration));
+    frame_indices.push_back(frame++);
   }
 
-  int64_t v_dts_offset = 0;
+  if (!timecodes.empty())
+    min_timecode = max_timecode = timecodes[0];
+}
+
+void
+qtmp4_demuxer_c::calculate_timecodes_variable_sample_size() {
+  auto const num_edits         = editlist_table.size();
+  auto const num_frame_offsets = frame_offset_table.size();
+  bool is_avc                  = ('v' == type) && v_is_avc;
+  int64_t v_dts_offset         = is_avc && num_frame_offsets ? to_nsecs(frame_offset_table[0]) : 0;
+
   std::vector<int64_t> timecodes_before_offsets;
 
-  if (('v' == type) && v_is_avc && !frame_offset_table.empty())
-    v_dts_offset = to_nsecs(frame_offset_table[0]);
+  for (unsigned int frame = 0, num_samples = sample_table.size(); num_samples > frame; ++frame) {
+    int64_t pts_offset = 0;
+    auto real_frame    = frame;
 
-  for (frame = 0; sample_table.size() > frame; ++frame) {
-    int64_t timecode;
+    if (0 < num_edits) {
+      auto editlist_pos = 0u;
 
-    if (!editlist_table.empty()) {
-      unsigned int editlist_pos = 0;
-      unsigned int real_frame   = frame;
-
-      while (((editlist_table.size() - 1) > editlist_pos) && (frame >= editlist_table[editlist_pos + 1].start_frame))
+      while (((num_edits - 1) > editlist_pos) && (frame >= editlist_table[editlist_pos + 1].start_frame))
         ++editlist_pos;
 
-      if ((editlist_table[editlist_pos].start_frame + editlist_table[editlist_pos].frames) <= frame) {
-        // EOF
-        // calc pts:
-        timecode = to_nsecs(sample_table[real_frame].pts);
-
-      } else {
-        // calc real frame index:
-        real_frame -= editlist_table[editlist_pos].start_frame;
-        real_frame += editlist_table[editlist_pos].start_sample;
-
-        // calc pts:
-        timecode = to_nsecs(sample_table[real_frame].pts + editlist_table[editlist_pos].pts_offset);
+      auto &edit = editlist_table[editlist_pos];
+      if ((edit.start_frame + edit.frames) > frame) {
+        // calc real frame index & assign pts_offset:
+        real_frame = real_frame - edit.start_frame + edit.start_sample;
+        pts_offset = edit.pts_offset;
       }
-
-      frame_indices.push_back(real_frame);
-
-      timecodes_before_offsets.push_back(timecode);
-
-      if (('v' == type) && (frame_offset_table.size() > real_frame) && v_is_avc)
-         timecode += to_nsecs(frame_offset_table[real_frame]) - v_dts_offset;
-
-    } else {
-      timecode = to_nsecs(sample_table[frame].pts);
-      frame_indices.push_back(frame);
-
-      timecodes_before_offsets.push_back(timecode);
-
-      if (('v' == type) && (frame_offset_table.size() > frame) && v_is_avc)
-         timecode += to_nsecs(frame_offset_table[frame]) - v_dts_offset;
     }
 
-    timecodes.push_back(timecode);
+    int64_t timecode = to_nsecs(sample_table[real_frame].pts + pts_offset);
 
-    if (timecode > max_timecode)
-      max_timecode = timecode;
-    if (timecode < min_timecode)
-      min_timecode = timecode;
+    frame_indices.push_back(real_frame);
+
+    timecodes_before_offsets.push_back(timecode);
+
+    if (is_avc && (num_frame_offsets > real_frame))
+       timecode += to_nsecs(frame_offset_table[real_frame]) - v_dts_offset;
+
+    timecodes.push_back(timecode);
+  }
+
+  if (!timecodes.empty()) {
+    auto min_max = std::minmax_element(timecodes.begin(), timecodes.end());
+    min_timecode = *min_max.first;
+    max_timecode = *min_max.second;
   }
 
   int64_t avg_duration = 0, num_good_frames = 0;
 
-  for (frame = 0; timecodes_before_offsets.size() > (frame + 1); ++frame) {
+  for (unsigned int frame = 0, num_timecodes_before_offsets = timecodes_before_offsets.size(); num_timecodes_before_offsets > (frame + 1); ++frame) {
     int64_t diff = timecodes_before_offsets[frame + 1] - timecodes_before_offsets[frame];
 
     if (0 >= diff)
@@ -1586,10 +1578,18 @@ qtmp4_demuxer_c::calculate_timecodes() {
 
   if (num_good_frames) {
     avg_duration /= num_good_frames;
-    for (frame = 0; durations.size() > frame; ++frame)
-      if (!durations[frame])
-        durations[frame] = avg_duration;
+    for (auto &duration : durations)
+      if (!duration)
+        duration = avg_duration;
   }
+}
+
+void
+qtmp4_demuxer_c::calculate_timecodes() {
+  if (0 != sample_size)
+    calculate_timecodes_constant_sample_size();
+  else
+    calculate_timecodes_variable_sample_size();
 }
 
 void
@@ -1705,13 +1705,43 @@ qtmp4_demuxer_c::update_editlist_table(int64_t global_time_scale) {
   if (editlist_table.empty())
     return;
 
-  size_t frame = 0, e_pts = 0, i;
+  int editlist_type       = 0;
+  int64_t offset_to_apply = 0;
+
+  if ((editlist_table.size() == 1) && (0 == editlist_table[0].pos)) {
+    mxdebug_if(m_debug_editlists, boost::format("Edit list analysis: type 1: one entry, zero time\n"));
+    editlist_type = 1;
+
+  } else if ((editlist_table.size() == 1) && (0 < editlist_table[0].pos)) {
+    mxdebug_if(m_debug_editlists, boost::format("Edit list analysis: type 2: one entry, positive time\n"));
+    editlist_type   = 2;
+    offset_to_apply = -editlist_table[0].pos;
+
+  } else if ((editlist_table.size() == 2) && (-1 == editlist_table[0].pos) && (0 == editlist_table[1].pos)) {
+    mxdebug_if(m_debug_editlists, boost::format("Edit list analysis: type 3: two entries; first with time == -1, second zero time\n"));
+    editlist_type   = 3;
+    offset_to_apply = editlist_table[0].duration;
+
+  } else if (m_debug_editlists) {
+    std::stringstream output;
+    for (auto &edit : editlist_table)
+      output << " <d:" << edit.duration << " t:" << edit.pos << ">";
+    mxdebug(boost::format("Edit list analysis: type 3: %1% entries:%2%\n") % editlist_table.size() % output.str());
+  }
+
+  // if (0 != editlist_type) {
+  //   if (offset_to_apply)
+  //     for (auto &
+  // }
+
+  size_t frame = 0, i;
 
   int64_t min_editlist_pts = editlist_table.front().pos;
+  int64_t e_pts            = 0;
   for (i = 1; editlist_table.size() > i; ++i)
     min_editlist_pts = std::min(static_cast<int64_t>(editlist_table[i].pos), min_editlist_pts);
 
-  uint64_t pts_offset = 0;
+  int64_t pts_offset = 0;
   if (('v' == type) && v_is_avc && !frame_offset_table.empty() && (frame_offset_table[0] <= min_editlist_pts))
     pts_offset = frame_offset_table[0];
 
@@ -1719,7 +1749,7 @@ qtmp4_demuxer_c::update_editlist_table(int64_t global_time_scale) {
 
   for (i = 0; editlist_table.size() > i; ++i) {
     qt_editlist_t &el = editlist_table[i];
-    uint64_t pts      = el.pos;
+    int64_t pts       = el.pos;
 
     if (pts < pts_offset) {
       // skip!
@@ -1739,8 +1769,8 @@ qtmp4_demuxer_c::update_editlist_table(int64_t global_time_scale) {
         break;
 
     el.start_sample  = sample;
-    el.pts_offset    = ((int64_t)e_pts       * (int64_t)time_scale) / (int64_t)global_time_scale - (int64_t)sample_table[sample].pts;
-    pts             += ((int64_t)el.duration * (int64_t)time_scale) / (int64_t)global_time_scale;
+    el.pts_offset    = (e_pts       * time_scale) / global_time_scale - sample_table[sample].pts;
+    pts             += (el.duration * time_scale) / global_time_scale;
     e_pts           += el.duration;
 
     // find end sample
@@ -1751,7 +1781,7 @@ qtmp4_demuxer_c::update_editlist_table(int64_t global_time_scale) {
     el.frames  = sample - el.start_sample;
     frame     += el.frames;
 
-    mxdebug_if(m_debug_tables, boost::format("  %1%: pts: %2%  1st_sample: %3%  frames: %4% (%|5$5.3f|s)  pts_offset: %6%\n") % i % el.pos % el.start_sample % el.frames % ((float)(el.duration) / (float)time_scale) % el.pts_offset);
+    mxdebug_if(m_debug_tables, boost::format("  %1%: pts: %2%  1st_sample: %3%  frames: %4% (%|5$5.3f|s)  pts_offset: %6%\n") % i % el.pos % el.start_sample % el.frames % (static_cast<double>(el.duration) / time_scale) % el.pts_offset);
   }
 }
 
@@ -1945,7 +1975,7 @@ qtmp4_demuxer_c::handle_audio_stsd_atom(uint64_t atom_size,
   a_channels   = get_uint16_be(&sv1_stsd.v0.channels);
   a_bitdepth   = get_uint16_be(&sv1_stsd.v0.sample_size);
   auto tmp     = get_uint32_be(&sv1_stsd.v0.sample_rate);
-  a_samplerate = (float)((tmp & 0xffff0000) >> 16) + (float)(tmp & 0x0000ffff) / 65536.0;
+  a_samplerate = ((tmp & 0xffff0000) >> 16) + (tmp & 0x0000ffff) / 65536.0;
 }
 
 void
