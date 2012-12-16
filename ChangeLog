@@ -1,5 +1,9 @@
 2012-12-16  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: MP3 parser code: Fixed skipping ID3 tags so
+	that the header directly behind the ID3 tag is recognized
+	properly. Fixes #747.
+
 	* mkvmerge: bug fix: MP4 reader: Fixed handling of edit lists if
 	the edit list is used to adjust the track's timecodes by a fixed
 	amount (either positive or negative). Fixes #780.
