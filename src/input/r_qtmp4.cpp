@@ -253,22 +253,12 @@ qtmp4_reader_c::calculate_timecodes() {
   for (auto &dmx : m_demuxers) {
     dmx->calculate_fps();
     dmx->calculate_timecodes();
-    if (dmx->min_timecode < min_timecode)
-      min_timecode = dmx->min_timecode;
+    min_timecode = std::min(min_timecode, dmx->min_timecode());
   }
 
-  if (0 > min_timecode) {
-    min_timecode *= -1;
+  if (0 > min_timecode)
     for (auto &dmx : m_demuxers)
-      dmx->adjust_timecodes(min_timecode);
-
-    mxwarn_fn(m_ti.m_fname,
-              boost::format(Y("This file contains at least one frame with a negative timecode. "
-                              "All timecodes will be adjusted by %1% so that none is negative anymore.\n"))
-              % format_timecode(min_timecode, 3));
-
-  } else
-    min_timecode = 0;
+      dmx->adjust_timecodes(-min_timecode);
 
   for (auto &dmx : m_demuxers)
     dmx->build_index();
@@ -1506,13 +1496,10 @@ void
 qtmp4_demuxer_c::calculate_timecodes_constant_sample_size() {
   auto frame = 0u;
   for (auto &chunk : chunk_table) {
-    timecodes.push_back(to_nsecs(static_cast<uint64_t>(chunk.samples) * duration));
+    timecodes.push_back(to_nsecs(static_cast<uint64_t>(chunk.samples) * duration) + constant_editlist_offset_ns);
     durations.push_back(to_nsecs(static_cast<uint64_t>(chunk.size)    * duration));
     frame_indices.push_back(frame++);
   }
-
-  if (!timecodes.empty())
-    min_timecode = max_timecode = timecodes[0];
 }
 
 void
@@ -1551,13 +1538,7 @@ qtmp4_demuxer_c::calculate_timecodes_variable_sample_size() {
     if (is_avc && (num_frame_offsets > real_frame))
        timecode += to_nsecs(frame_offset_table[real_frame]) - v_dts_offset;
 
-    timecodes.push_back(timecode);
-  }
-
-  if (!timecodes.empty()) {
-    auto min_max = std::minmax_element(timecodes.begin(), timecodes.end());
-    min_timecode = *min_max.first;
-    max_timecode = *min_max.second;
+    timecodes.push_back(timecode + constant_editlist_offset_ns);
   }
 
   int64_t avg_duration = 0, num_good_frames = 0;
@@ -1594,13 +1575,14 @@ qtmp4_demuxer_c::calculate_timecodes() {
 
 void
 qtmp4_demuxer_c::adjust_timecodes(int64_t delta) {
-  size_t i;
+  for (auto &timecode : timecodes)
+    timecode += delta;
+}
 
-  for (i = 0; timecodes.size() > i; ++i)
-    timecodes[i] += delta;
-
-  min_timecode += delta;
-  max_timecode += delta;
+int64_t
+qtmp4_demuxer_c::min_timecode()
+  const {
+  return timecodes.empty() ? 0 : *brng::min_element(timecodes);
 }
 
 bool
@@ -1699,69 +1681,63 @@ qtmp4_demuxer_c::update_tables(int64_t global_m_time_scale) {
   return true;
 }
 
-// Also taken from mplayer's demux_mov.c file.
 void
 qtmp4_demuxer_c::update_editlist_table(int64_t global_time_scale) {
   if (editlist_table.empty())
     return;
 
-  int editlist_type       = 0;
-  int64_t offset_to_apply = 0;
+  int simple_editlist_type = 0;
+  int64_t offset_to_apply  = 0;
 
   if ((editlist_table.size() == 1) && (0 == editlist_table[0].pos)) {
-    mxdebug_if(m_debug_editlists, boost::format("Edit list analysis: type 1: one entry, zero time\n"));
-    editlist_type = 1;
+    mxdebug_if(m_debug_editlists, boost::format("Track ID %1%: Edit list analysis: type 1: one entry, zero time\n") % id);
+    simple_editlist_type = 1;
 
   } else if ((editlist_table.size() == 1) && (0 < editlist_table[0].pos)) {
-    mxdebug_if(m_debug_editlists, boost::format("Edit list analysis: type 2: one entry, positive time\n"));
-    editlist_type   = 2;
-    offset_to_apply = -editlist_table[0].pos;
+    mxdebug_if(m_debug_editlists,
+               boost::format("Track ID %1%: Edit list analysis: type 2: one entry, positive time, %2%\n")
+               % id % (frame_offset_table.empty() ? "no frame offset table" : frame_offset_table[0] == editlist_table[0].pos ? "same as first frame offset" : "different from first frame offset"));
+    simple_editlist_type = 2;
+    offset_to_apply      = -editlist_table[0].pos + (frame_offset_table.empty() ? 0 : frame_offset_table[0]);
 
   } else if ((editlist_table.size() == 2) && (-1 == editlist_table[0].pos) && (0 == editlist_table[1].pos)) {
-    mxdebug_if(m_debug_editlists, boost::format("Edit list analysis: type 3: two entries; first with time == -1, second zero time\n"));
-    editlist_type   = 3;
-    offset_to_apply = editlist_table[0].duration;
+    mxdebug_if(m_debug_editlists, boost::format("Track ID %1%: Edit list analysis: type 3: two entries; first with time == -1, second zero time\n") % id);
+    simple_editlist_type = 3;
+    offset_to_apply      = editlist_table[0].duration - (frame_offset_table.empty() ? 0 : frame_offset_table[0]);
 
   } else if (m_debug_editlists) {
     std::stringstream output;
     for (auto &edit : editlist_table)
       output << " <d:" << edit.duration << " t:" << edit.pos << ">";
-    mxdebug(boost::format("Edit list analysis: type 3: %1% entries:%2%\n") % editlist_table.size() % output.str());
+    mxdebug(boost::format("Track ID %1%: Edit list analysis: type 0; %2% entries:%3%\n") % id % editlist_table.size() % output.str());
   }
 
-  // if (0 != editlist_type) {
-  //   if (offset_to_apply)
-  //     for (auto &
-  // }
+  if (simple_editlist_type) {
+    constant_editlist_offset_ns = offset_to_apply * 1000000000ll / time_scale;
+    editlist_table.clear();
+
+    mxdebug_if(m_debug_editlists,
+               boost::format("Track ID %1%: Simple edit list type detected. Offset in track's time scale: %2%; as a timecode: %3%; track scale %4%\n")
+               % id % offset_to_apply % format_timecode(constant_editlist_offset_ns) % time_scale);
+
+    return;
+  }
 
   size_t frame = 0, i;
 
-  int64_t min_editlist_pts = editlist_table.front().pos;
   int64_t e_pts            = 0;
-  for (i = 1; editlist_table.size() > i; ++i)
-    min_editlist_pts = std::min(static_cast<int64_t>(editlist_table[i].pos), min_editlist_pts);
+  auto num_frame_offsets   = frame_offset_table.size();
+  // int64_t pts_offset       = frame_offset_table.empty() ? 0 : frame_offset_table[0];
+  // if (('v' == type) && v_is_avc && !frame_offset_table.empty())
+  //   pts_offset = frame_offset_table[0];
 
-  int64_t pts_offset = 0;
-  if (('v' == type) && v_is_avc && !frame_offset_table.empty() && (frame_offset_table[0] <= min_editlist_pts))
-    pts_offset = frame_offset_table[0];
-
-  mxdebug_if(m_debug_tables, boost::format("Updating edit list table for track %1%; pts_offset = %2%\n") % id % pts_offset);
+  mxdebug_if(m_debug_tables, boost::format("Updating edit list table for track %1%\n") % id);
 
   for (i = 0; editlist_table.size() > i; ++i) {
     qt_editlist_t &el = editlist_table[i];
-    int64_t pts       = el.pos;
-
-    if (pts < pts_offset) {
-      // skip!
-      el.frames  = 0;
-      e_pts     += el.duration;
-      continue;
-    }
-
-    unsigned int sample = 0;
-
-    pts                -= pts_offset;
-    el.start_frame      = frame;
+    int64_t pts       = el.pos - (i < num_frame_offsets ? frame_offset_table[i] : 0);
+    auto sample       = 0u;
+    el.start_frame    = frame;
 
     // find start sample
     for (; sample_table.size() > sample; ++sample)

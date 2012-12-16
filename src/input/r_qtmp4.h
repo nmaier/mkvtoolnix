@@ -139,10 +139,8 @@ struct qtmp4_demuxer_c {
   char fourcc[4];
   uint32_t pos;
 
-  int64_t time_scale, global_duration;
+  int64_t time_scale, duration, global_duration, constant_editlist_offset_ns;
   uint32_t sample_size;
-
-  int64_t duration;
 
   std::vector<qt_sample_t> sample_table;
   std::vector<qt_chunk_t> chunk_table;
@@ -157,7 +155,6 @@ struct qtmp4_demuxer_c {
 
   std::vector<qt_index_t> m_index;
 
-  int64_t min_timecode, max_timecode;
   double fps;
 
   esds_t esds;
@@ -190,11 +187,10 @@ struct qtmp4_demuxer_c {
     , id{0}
     , pos{0}
     , time_scale{1}
-    , global_duration{0}
-    , sample_size{0}
     , duration{0}
-    , min_timecode{0}
-    , max_timecode{0}
+    , global_duration{0}
+    , constant_editlist_offset_ns{0}
+    , sample_size{0}
     , fps{0.0}
     , esds_parsed{false}
     , stsd_non_priv_struct_size{}
@@ -253,6 +249,8 @@ struct qtmp4_demuxer_c {
   bool verify_video_parameters();
   bool verify_avc_video_parameters();
   bool verify_mp4v_video_parameters();
+
+  int64_t min_timecode() const;
 
 private:
   void build_index_chunk_mode();
