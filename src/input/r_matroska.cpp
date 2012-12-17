@@ -758,20 +758,31 @@ kax_reader_c::handle_tags(mm_io_c *io,
 }
 
 void
-kax_reader_c::read_headers_info(EbmlElement *&l1,
-                                EbmlElement *&l2,
-                                int &upper_lvl_el) {
+kax_reader_c::read_headers_info(mm_io_c *io,
+                                EbmlElement *l0,
+                                int64_t pos) {
   // General info about this Matroska file
-
-  auto m1 = dynamic_cast<EbmlMaster *>(l1);
-  if (!m1)
+  if (has_deferred_element_been_processed(dl1t_info, pos))
     return;
 
-  m1->Read(*m_es, EBML_CLASS_CONTEXT(KaxInfo), upper_lvl_el, l2, true);
+  io->save_pos(pos);
+  at_scope_exit_c restore([&]() { io->restore_pos(); });
 
-  m_tc_scale         = FindChildValue<KaxTimecodeScale, uint64_t>(m1, 1000000);
-  m_segment_duration = irnd(FindChildValue<KaxDuration>(m1) * m_tc_scale);
-  m_title            = to_utf8(FindChildValue<KaxTitle>(m1));
+  int upper_lvl_el = 0;
+  std::shared_ptr<EbmlElement> l1(m_es->FindNextElement(EBML_CONTEXT(l0), upper_lvl_el, 0xFFFFFFFFL, true));
+  KaxInfo *info = dynamic_cast<KaxInfo *>(l1.get());
+
+  if (!info)
+    return;
+
+  EbmlElement *l2 = nullptr;
+  upper_lvl_el    = 0;
+
+  info->Read(*m_es, EBML_CLASS_CONTEXT(KaxInfo), upper_lvl_el, l2, true);
+
+  m_tc_scale         = FindChildValue<KaxTimecodeScale, uint64_t>(info, 1000000);
+  m_segment_duration = irnd(FindChildValue<KaxDuration>(info) * m_tc_scale);
+  m_title            = to_utf8(FindChildValue<KaxTitle>(info));
 
   // Let's try to parse the "writing application" string. This usually
   // contains the name and version number of the application used for
@@ -787,11 +798,11 @@ kax_reader_c::read_headers_info(EbmlElement *&l1,
   // spaces into at most three parts. If the result is at least two parts
   // long then try to parse the version number from the second and
   // store a lower case version of the first as the application's name.
-  auto km_writing_app = FindChild<KaxWritingApp>(m1);
+  auto km_writing_app = FindChild<KaxWritingApp>(info);
   if (km_writing_app)
     read_headers_info_writing_app(km_writing_app);
 
-  auto km_muxing_app = FindChild<KaxMuxingApp>(m1);
+  auto km_muxing_app = FindChild<KaxMuxingApp>(info);
   if (km_muxing_app) {
     m_muxing_app = km_muxing_app->GetValueUTF8();
 
@@ -803,9 +814,9 @@ kax_reader_c::read_headers_info(EbmlElement *&l1,
       m_reference_timecode_tolerance = 1000000;
   }
 
-  m_segment_uid          = FindChildValue<KaxSegmentUID>(m1);
-  m_next_segment_uid     = FindChildValue<KaxNextUID>(m1);
-  m_previous_segment_uid = FindChildValue<KaxPrevUID>(m1);
+  m_segment_uid          = FindChildValue<KaxSegmentUID>(info);
+  m_next_segment_uid     = FindChildValue<KaxNextUID>(info);
+  m_previous_segment_uid = FindChildValue<KaxPrevUID>(info);
 }
 
 void
@@ -1047,6 +1058,7 @@ kax_reader_c::handle_seek_head(mm_io_c *io,
         :                       id == EBML_ID(KaxTags)        ? dl1t_tags
         :                       id == EBML_ID(KaxTracks)      ? dl1t_tracks
         :                       id == EBML_ID(KaxSeekHead)    ? dl1t_seek_head
+        :                       id == EBML_ID(KaxInfo)        ? dl1t_info
         :                                                       dl1t_unknown;
 
       if (dl1t_unknown == type)
@@ -1115,10 +1127,8 @@ kax_reader_c::read_headers_internal() {
     EbmlElement *l1  = m_es->FindNextElement(EBML_CONTEXT(l0), upper_lvl_el, 0xFFFFFFFFL, true, 1);
 
     while (l1 && (0 >= upper_lvl_el)) {
-      EbmlElement *l2;
-
       if (EbmlId(*l1) == EBML_ID(KaxInfo))
-        read_headers_info(l1, l2, upper_lvl_el);
+        m_deferred_l1_positions[dl1t_info].push_back(l1->GetElementPosition());
 
       else if (EbmlId(*l1) == EBML_ID(KaxTracks))
         m_deferred_l1_positions[dl1t_tracks].push_back(l1->GetElementPosition());
@@ -1154,7 +1164,7 @@ kax_reader_c::read_headers_internal() {
         if (upper_lvl_el > 0)
           break;
         delete l1;
-        l1 = l2;
+        l1 = nullptr;
         continue;
 
       } else if (upper_lvl_el < 0) {
@@ -1169,6 +1179,9 @@ kax_reader_c::read_headers_internal() {
       l1 = m_es->FindNextElement(EBML_CONTEXT(l0), upper_lvl_el, 0xFFFFFFFFL, true);
 
     } // while (l1)
+
+    for (auto position : m_deferred_l1_positions[dl1t_info])
+      read_headers_info(m_in.get(), l0, position);
 
     for (auto position : m_deferred_l1_positions[dl1t_tracks])
       read_headers_tracks(m_in.get(), l0, position);

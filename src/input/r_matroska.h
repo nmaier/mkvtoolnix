@@ -163,6 +163,7 @@ private:
     dl1t_tags,
     dl1t_tracks,
     dl1t_seek_head,
+    dl1t_info,
   };
 
   std::vector<kax_track_cptr> m_tracks;
@@ -264,7 +265,7 @@ protected:
   virtual void create_mpeg4_p10_video_packetizer(kax_track_t *t, track_info_c &nti);
   virtual void create_mpeg4_p10_es_video_packetizer(kax_track_t *t, track_info_c &nti);
 
-  virtual void read_headers_info(EbmlElement *&l1, EbmlElement *&l2, int &upper_lvl_el);
+  virtual void read_headers_info(mm_io_c *io, EbmlElement *l0, int64_t position);
   virtual void read_headers_info_writing_app(KaxWritingApp *&kwriting_app);
   virtual void read_headers_track_audio(kax_track_t *track, KaxTrackAudio *ktaudio);
   virtual void read_headers_track_video(kax_track_t *track, KaxTrackVideo *ktvideo);
