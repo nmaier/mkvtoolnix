@@ -997,6 +997,8 @@ kax_reader_c::read_headers_tracks(mm_io_c *io,
       int index = map_to_iso639_2_code(track->language.c_str());
       if (-1 != index)
         track->language = iso639_languages[index].iso639_2_code;
+      else
+        track->language.clear();
     }
 
     if (0 != track->default_duration)

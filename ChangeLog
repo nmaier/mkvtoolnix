@@ -1,5 +1,9 @@
 2012-12-17  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: ISO 639-2 language handling: The deprecated
+	language codes "scr", "scc" and "mol" are replaced by their
+	respective successors "hrv", "srp" and "rum". Fixes #803.
+
 	* mkvmerge: bug fix: Matroska reader: Fixed finding the "segment
 	info" element if it is located behind the clusters.
 

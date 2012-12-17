@@ -13,6 +13,8 @@
 
 #include "common/common_pch.h"
 
+#include <unordered_map>
+
 #include "common/iso639.h"
 #include "common/strings/editing.h"
 #include "common/strings/utf8.h"
@@ -504,6 +506,12 @@ std::vector<iso639_language_t> const iso639_languages{
   { "Zuni",                                                                             "zun", std::string{}, std::string{}  },
 };
 
+std::unordered_map<std::string, std::string> s_deprecated_2_codes{
+  { "scr", "hrv" },
+  { "scc", "srp" },
+  { "mol", "rum" },
+};
+
 bool
 is_valid_iso639_2_code(std::string const &iso639_2_code) {
   return brng::find_if(iso639_languages, [&](iso639_language_t const &lang) { return lang.iso639_2_code == iso639_2_code; }) != iso639_languages.end();
@@ -568,6 +576,13 @@ is_popular_language_code(std::string const &code) {
 int
 map_to_iso639_2_code(std::string const &s,
                      bool allow_short_english_name) {
+  auto deprecated_code = s_deprecated_2_codes.find(s);
+  if (deprecated_code != s_deprecated_2_codes.end()) {
+    auto lang = brng::find_if(iso639_languages, [&](iso639_language_t const &lang) { return lang.iso639_2_code == deprecated_code->second; });
+    if (lang != iso639_languages.end())
+      return std::distance(iso639_languages.begin(), lang);
+  }
+
   auto lang = brng::find_if(iso639_languages, [&](iso639_language_t const &lang) { return (lang.iso639_2_code == s) || (lang.terminology_abbrev == s) || (lang.iso639_1_code == s); });
   if (lang != iso639_languages.end())
     return std::distance(iso639_languages.begin(), lang);
@@ -593,4 +608,3 @@ map_to_iso639_2_code(std::string const &s,
 
   return -1;
 }
-
