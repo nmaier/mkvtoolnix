@@ -17,6 +17,7 @@
 
 #include "common/alac.h"
 #include "common/endian.h"
+#include "common/mm_io_x.h"
 #include "common/strings/formatting.h"
 #include "input/r_coreaudio.h"
 #include "output/p_alac.h"

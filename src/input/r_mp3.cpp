@@ -15,6 +15,7 @@
 
 #include "common/error.h"
 #include "common/hacks.h"
+#include "common/mm_io_x.h"
 #include "input/r_mp3.h"
 #include "output/p_mp3.h"
 

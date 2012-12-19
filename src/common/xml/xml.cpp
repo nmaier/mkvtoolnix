@@ -15,6 +15,7 @@
 
 #include <sstream>
 
+#include "common/mm_io_x.h"
 #include "common/xml/xml.h"
 
 namespace mtx {

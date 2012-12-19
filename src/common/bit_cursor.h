@@ -17,6 +17,8 @@
 
 #include "common/common_pch.h"
 
+#include "common/mm_io_x.h"
+
 class bit_cursor_c {
 private:
   const unsigned char *m_end_of_data;

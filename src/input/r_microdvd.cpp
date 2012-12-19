@@ -13,6 +13,7 @@
 
 #include "common/common_pch.h"
 
+#include "common/mm_io_x.h"
 #include "input/r_microdvd.h"
 
 int

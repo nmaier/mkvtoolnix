@@ -14,6 +14,7 @@
 
 #include "common/common_pch.h"
 
+#include "common/mm_io_x.h"
 #include "common/mm_write_buffer_io.h"
 
 mm_write_buffer_io_c::mm_write_buffer_io_c(mm_io_c *out,

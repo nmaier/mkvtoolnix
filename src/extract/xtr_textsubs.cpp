@@ -16,6 +16,7 @@
 
 #include "common/ebml.h"
 #include "common/matroska.h"
+#include "common/mm_io_x.h"
 #include "common/strings/editing.h"
 #include "common/strings/formatting.h"
 #include "common/strings/parsing.h"

@@ -17,6 +17,7 @@
 
 #include "common/endian.h"
 #include "common/error.h"
+#include "common/mm_io_x.h"
 #include "common/mpeg4_p2.h"
 #include "input/r_mpeg_es.h"
 #include "merge/output_control.h"

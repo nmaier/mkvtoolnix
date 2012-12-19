@@ -15,6 +15,7 @@
 
 #include <sstream>
 
+#include "common/mm_io_x.h"
 #include "common/strings/formatting.h"
 #include "common/xml/ebml_tags_converter.h"
 

@@ -15,6 +15,7 @@
 
 #include <sstream>
 
+#include "common/mm_io_x.h"
 #include "common/mm_multi_file_io.h"
 #include "common/output.h"
 #include "common/strings/editing.h"

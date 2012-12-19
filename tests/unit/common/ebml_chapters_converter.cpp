@@ -6,6 +6,7 @@
 #include "tests/unit/init.h"
 #include "tests/unit/util.h"
 
+#include "common/mm_io_x.h"
 #include "common/xml/ebml_chapters_converter.h"
 
 namespace {

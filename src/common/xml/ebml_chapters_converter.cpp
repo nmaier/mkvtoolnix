@@ -17,6 +17,7 @@
 
 #include "common/extern_data.h"
 #include "common/iso639.h"
+#include "common/mm_io_x.h"
 #include "common/strings/formatting.h"
 #include "common/unique_numbers.h"
 #include "common/xml/ebml_chapters_converter.h"

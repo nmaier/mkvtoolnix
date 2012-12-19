@@ -3,6 +3,8 @@
 #include "gtest/gtest.h"
 #include "tests/unit/util.h"
 
+#include "common/mm_io_x.h"
+
 namespace {
 
 TEST(MmIo, Slurp) {

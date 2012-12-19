@@ -12,6 +12,7 @@
 
 #include "common/logger.h"
 #include "common/fs_sys_helpers.h"
+#include "common/mm_io_x.h"
 #include "common/strings/formatting.h"
 
 logger_cptr logger_c::s_default_logger;

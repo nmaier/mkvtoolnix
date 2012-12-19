@@ -35,6 +35,7 @@
 #include "common/ebml.h"
 #include "common/kax_file.h"
 #include "common/matroska.h"
+#include "common/mm_io_x.h"
 #include "common/mm_write_buffer_io.h"
 #include "extract/mkvextract.h"
 #include "extract/xtr_base.h"
