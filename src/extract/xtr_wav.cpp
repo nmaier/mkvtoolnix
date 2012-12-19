@@ -17,6 +17,7 @@
 
 #include "common/ebml.h"
 #include "common/endian.h"
+#include "common/mm_io_x.h"
 #include "common/mm_write_buffer_io.h"
 #include "extract/xtr_wav.h"
 
@@ -108,8 +109,8 @@ xtr_wavpack4_c::create_file(xtr_base_c *master,
 
     try {
       m_corr_out = mm_write_buffer_io_c::open(corr_name, 5 * 1024 * 1024);
-    } catch (...) {
-      mxerror(boost::format(Y("The file '%1%' could not be opened for writing (%2%).\n")) % corr_name % strerror(errno));
+    } catch (mtx::mm_io::exception &ex) {
+      mxerror(boost::format(Y("The file '%1%' could not be opened for writing (%2%).\n")) % corr_name % ex.message());
     }
   }
 }

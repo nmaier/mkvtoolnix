@@ -34,6 +34,7 @@
 #include "common/math.h"
 #include "common/matroska.h"
 #include "common/mm_io.h"
+#include "common/mm_io_x.h"
 #include "common/strings/formatting.h"
 #include "common/tags/tags.h"
 #include "extract/mkvextract.h"
@@ -203,8 +204,8 @@ extract_cuesheet(const std::string &file_name,
     analyzer = kax_analyzer_cptr(new kax_analyzer_c(file_name));
     if (!analyzer->process(parse_mode, MODE_READ))
       throw false;
-  } catch (...) {
-    show_error(boost::format(Y("The file '%1%' could not be opened for reading (%2%).")) % file_name % strerror(errno));
+  } catch (mtx::mm_io::exception &ex) {
+    show_error(boost::format(Y("The file '%1%' could not be opened for reading (%2%).")) % file_name % ex.message());
     return;
   }
 

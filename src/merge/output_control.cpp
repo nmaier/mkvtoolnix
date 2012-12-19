@@ -64,6 +64,7 @@
 #include "common/fs_sys_helpers.h"
 #include "common/hacks.h"
 #include "common/math.h"
+#include "common/mm_io_x.h"
 #include "common/mm_read_buffer_io.h"
 #include "common/mm_write_buffer_io.h"
 #include "common/strings/formatting.h"
@@ -328,6 +329,10 @@ open_input_file(filelist_t &file) {
       return mm_io_cptr(new mm_read_buffer_io_c(new mm_multi_file_io_c(paths, file.name), 1 << 17));
     }
 
+  } catch (mtx::mm_io::exception &ex) {
+    mxerror(boost::format(Y("The file '%1%' could not be opened for reading: %2%.\n")) % file.name % ex.message());
+    return mm_io_cptr{};
+
   } catch (...) {
     mxerror(boost::format(Y("The source file '%1%' could not be opened successfully, or retrieving its size by seeking to the end did not work.\n")) % file.name);
     return mm_io_cptr{};
@@ -457,6 +462,9 @@ get_file_type(filelist_t &file) {
     try {
       text_io = new mm_text_io_c(new mm_file_io_c(file.name));
       size    = text_io->get_size();
+    } catch (mtx::mm_io::exception &ex) {
+      mxerror(boost::format(Y("The file '%1%' could not be opened for reading: %2%.\n")) % file.name % ex.message());
+
     } catch (...) {
       mxerror(boost::format(Y("The source file '%1%' could not be opened successfully, or retrieving its size by seeking to the end did not work.\n")) % file.name);
     }
@@ -1484,8 +1492,8 @@ create_next_output_file() {
   // Open the output file.
   try {
     s_out = !g_cluster_helper->discarding() ? mm_write_buffer_io_c::open(this_outfile, 20 * 1024 * 1024) : mm_io_cptr{ new mm_null_io_c{this_outfile} };
-  } catch (...) {
-    mxerror(boost::format(Y("The output file '%1%' could not be opened for writing (%2%).\n")) % this_outfile % strerror(errno));
+  } catch (mtx::mm_io::exception &ex) {
+    mxerror(boost::format(Y("The output file '%1%' could not be opened for writing: %2%.\n")) % this_outfile % ex.message());
   }
 
   if (verbose && !g_cluster_helper->discarding())

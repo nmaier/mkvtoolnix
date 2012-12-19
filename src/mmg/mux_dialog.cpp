@@ -24,6 +24,7 @@
 #include <wx/utils.h>
 
 #include "common/fs_sys_helpers.h"
+#include "common/mm_io_x.h"
 #include "common/strings/editing.h"
 #include "common/strings/formatting.h"
 #include "mmg/mmg.h"
@@ -110,9 +111,9 @@ mux_dialog::run() {
       }
       opt_file.Write(wxT("\n"));
     }
-  } catch (...) {
+  } catch (mtx::mm_io::exception &ex) {
     wxString error;
-    error.Printf(Z("Could not create a temporary file for mkvmerge's command line option called '%s' (error code %d, %s)."), opt_file_name.c_str(), errno, wxUCS(strerror(errno)));
+    error.Printf(Z("Could not create a temporary file for mkvmerge's command line option called '%s' (error code %d, %s)."), opt_file_name.c_str(), errno, wxUCS(ex.message()));
     wxMessageBox(error, Z("File creation failed"), wxOK | wxCENTER | wxICON_ERROR);
     throw 0;
   }

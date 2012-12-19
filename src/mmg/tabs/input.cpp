@@ -24,6 +24,7 @@
 #include "common/extern_data.h"
 #include "common/file_types.h"
 #include "common/iso639.h"
+#include "common/mm_io_x.h"
 #include "common/strings/editing.h"
 #include "common/strings/formatting.h"
 #include "common/strings/parsing.h"
@@ -501,9 +502,9 @@ tab_input::run_mkvmerge_identification(wxString const &file_name,
     opt_file.Write(arg_utf8.c_str(), arg_utf8.length());
     opt_file.Write(wxT("\n"));
 
-  } catch (...) {
+  } catch (mtx::mm_io::exception &ex) {
     wxString error;
-    error.Printf(Z("Could not create a temporary file for mkvmerge's command line option called '%s' (error code %d, %s)."), opt_file_name.c_str(), errno, wxUCS(strerror(errno)));
+    error.Printf(Z("Could not create a temporary file for mkvmerge's command line option called '%s' (error code %d, %s)."), opt_file_name.c_str(), errno, wxUCS(ex.message()));
     wxMessageBox(error, Z("File creation failed"), wxOK | wxCENTER | wxICON_ERROR);
     return false;
   }

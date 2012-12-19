@@ -17,6 +17,7 @@
 #include "common/checksums.h"
 #include "common/ebml.h"
 #include "common/iso639.h"
+#include "common/mm_io_x.h"
 #include "common/mm_write_buffer_io.h"
 #include "common/tta.h"
 #include "extract/xtr_vobsub.h"
@@ -76,8 +77,8 @@ xtr_vobsub_c::create_file(xtr_base_c *master,
 
     try {
       m_out = mm_write_buffer_io_c::open(sub_file_name, 128 * 1024);
-    } catch (...) {
-      mxerror(boost::format(Y("Failed to create the VobSub data file '%1%': %2% (%3%)\n")) % sub_file_name % errno % strerror(errno));
+    } catch (mtx::mm_io::exception &ex) {
+      mxerror(boost::format(Y("Failed to create the VobSub data file '%1%': %2%\n")) % sub_file_name % ex.message());
     }
 
   } else {
@@ -230,8 +231,8 @@ xtr_vobsub_c::finish_file() {
     for (slave = 0; slave < m_slaves.size(); slave++)
       m_slaves[slave]->write_idx(idx, slave + 1);
 
-  } catch (...) {
-    mxerror(boost::format(Y("Failed to create the file '%1%': %2% (%3%)\n")) % m_base_name % errno % strerror(errno));
+  } catch (mtx::mm_io::exception &ex) {
+    mxerror(boost::format(Y("Failed to create the file '%1%': %2%\n")) % m_base_name % ex.message());
   }
 }
 

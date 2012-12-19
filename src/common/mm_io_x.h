@@ -40,6 +40,8 @@ public:
   std::error_code const &code() const {
     return m_error_code;
   }
+
+  virtual std::string message() const;
 };
 
 class end_of_file_x: public exception {
@@ -60,6 +62,15 @@ public:
   }
 };
 
+class read_write_x: public exception {
+public:
+  read_write_x(std::error_code const &error_code = std::error_code()) : exception(error_code) {}
+
+  virtual const char *what() const throw() {
+    return "reading from/writing to the file error";
+  }
+};
+
 class open_x: public exception {
 public:
   open_x(std::error_code const &error_code = std::error_code()) : exception(error_code) {}
@@ -67,8 +78,6 @@ public:
   virtual const char *what() const throw() {
     return "open file error";
   }
-
-  virtual std::string message() const;
 };
 
 class wrong_read_write_access_x: public exception {

@@ -78,7 +78,7 @@ mm_file_io_c::mm_file_io_c(const std::string &path,
 
   m_file = (void *)CreateFileUtf8(path.c_str(), access_mode, share_mode, nullptr, disposition, 0, nullptr);
   if ((HANDLE)m_file == (HANDLE)0xFFFFFFFF)
-    throw mtx::mm_io::open_x();
+    throw mtx::mm_io::open_x{mtx::mm_io::make_error_code()};
 
   m_dos_style_newlines = true;
 }
@@ -114,7 +114,7 @@ mm_file_io_c::setFilePointer(int64 offset,
   DWORD low    = SetFilePointer((HANDLE)m_file, (LONG)(offset & 0xffffffff), &high, method);
 
   if ((INVALID_SET_FILE_POINTER == low) && (GetLastError() != NO_ERROR))
-    throw mtx::mm_io::seek_x();
+    throw mtx::mm_io::seek_x{mtx::mm_io::make_error_code()};
 
   m_current_position = (int64_t)low + ((int64_t)high << 32);
 }

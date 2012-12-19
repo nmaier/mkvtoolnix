@@ -39,11 +39,6 @@ union double_to_uint64_t {
 };
 
 #if !defined(SYS_WINDOWS)
-static std::string
-get_errno_msg() {
-  return g_cc_local_utf8->utf8(strerror(errno));
-}
-
 mm_file_io_c::mm_file_io_c(const std::string &path,
                            const open_mode mode)
   : m_file_name(path)
@@ -74,12 +69,12 @@ mm_file_io_c::mm_file_io_c(const std::string &path,
 
   struct stat st;
   if ((0 == stat(local_path.c_str(), &st)) && S_ISDIR(st.st_mode))
-    throw mtx::mm_io::open_x();
+    throw mtx::mm_io::open_x{mtx::mm_io::make_error_code()};
 
   m_file = (FILE *)fopen(local_path.c_str(), cmode);
 
   if (!m_file)
-    throw mtx::mm_io::open_x();
+    throw mtx::mm_io::open_x{mtx::mm_io::make_error_code()};
 }
 
 void
@@ -90,7 +85,7 @@ mm_file_io_c::setFilePointer(int64 offset,
              :                          SEEK_CUR;
 
   if (fseeko((FILE *)m_file, offset, whence) != 0)
-    throw mtx::mm_io::seek_x();
+    throw mtx::mm_io::seek_x{mtx::mm_io::make_error_code()};
 
   if (mode == seek_beginning)
     m_current_position = offset;
@@ -105,7 +100,7 @@ mm_file_io_c::_write(const void *buffer,
                      size_t size) {
   size_t bwritten = fwrite(buffer, 1, size, (FILE *)m_file);
   if (ferror((FILE *)m_file) != 0)
-    mxerror(boost::format(Y("Could not write to the output file: %1% (%2%)\n")) % errno % get_errno_msg());
+    throw mtx::mm_io::read_write_x{mtx::mm_io::make_error_code()};
 
   m_current_position += bwritten;
   m_cached_size       = -1;
@@ -167,7 +162,7 @@ mm_file_io_c::slurp(std::string const &file_name) {
   mm_file_io_c in(file_name, MODE_READ);
   auto content = memory_c::alloc(in.get_size());
   if (in.get_size() != in.read(content, in.get_size()))
-    throw mtx::mm_io::end_of_file_x{};
+    throw mtx::mm_io::end_of_file_x{mtx::mm_io::make_error_code()};
 
   return content;
 }
@@ -202,7 +197,7 @@ mm_io_c::getline() {
   std::string s;
 
   if (eof())
-    throw mtx::mm_io::end_of_file_x();
+    throw mtx::mm_io::end_of_file_x{mtx::mm_io::make_error_code()};
 
   while (read(&c, 1) == 1) {
     if (c == '\r')
@@ -296,7 +291,7 @@ mm_io_c::read_uint8() {
   unsigned char value;
 
   if (read(&value, 1) != 1)
-    throw mtx::mm_io::end_of_file_x();
+    throw mtx::mm_io::end_of_file_x{mtx::mm_io::make_error_code()};
 
   return value;
 }
@@ -306,7 +301,7 @@ mm_io_c::read_uint16_le() {
   unsigned char buffer[2];
 
   if (read(buffer, 2) != 2)
-    throw mtx::mm_io::end_of_file_x();
+    throw mtx::mm_io::end_of_file_x{mtx::mm_io::make_error_code()};
 
   return get_uint16_le(buffer);
 }
@@ -316,7 +311,7 @@ mm_io_c::read_uint24_le() {
   unsigned char buffer[3];
 
   if (read(buffer, 3) != 3)
-    throw mtx::mm_io::end_of_file_x();
+    throw mtx::mm_io::end_of_file_x{mtx::mm_io::make_error_code()};
 
   return get_uint24_le(buffer);
 }
@@ -326,7 +321,7 @@ mm_io_c::read_uint32_le() {
   unsigned char buffer[4];
 
   if (read(buffer, 4) != 4)
-    throw mtx::mm_io::end_of_file_x();
+    throw mtx::mm_io::end_of_file_x{mtx::mm_io::make_error_code()};
 
   return get_uint32_le(buffer);
 }
@@ -336,7 +331,7 @@ mm_io_c::read_uint64_le() {
   unsigned char buffer[8];
 
   if (read(buffer, 8) != 8)
-    throw mtx::mm_io::end_of_file_x();
+    throw mtx::mm_io::end_of_file_x{mtx::mm_io::make_error_code()};
 
   return get_uint64_le(buffer);
 }
@@ -346,7 +341,7 @@ mm_io_c::read_uint16_be() {
   unsigned char buffer[2];
 
   if (read(buffer, 2) != 2)
-    throw mtx::mm_io::end_of_file_x();
+    throw mtx::mm_io::end_of_file_x{mtx::mm_io::make_error_code()};
 
   return get_uint16_be(buffer);
 }
@@ -356,7 +351,7 @@ mm_io_c::read_uint24_be() {
   unsigned char buffer[3];
 
   if (read(buffer, 3) != 3)
-    throw mtx::mm_io::end_of_file_x();
+    throw mtx::mm_io::end_of_file_x{mtx::mm_io::make_error_code()};
 
   return get_uint24_be(buffer);
 }
@@ -366,7 +361,7 @@ mm_io_c::read_uint32_be() {
   unsigned char buffer[4];
 
   if (read(buffer, 4) != 4)
-    throw mtx::mm_io::end_of_file_x();
+    throw mtx::mm_io::end_of_file_x{mtx::mm_io::make_error_code()};
 
   return get_uint32_be(buffer);
 }
@@ -376,7 +371,7 @@ mm_io_c::read_uint64_be() {
   unsigned char buffer[8];
 
   if (read(buffer, 8) != 8)
-    throw mtx::mm_io::end_of_file_x();
+    throw mtx::mm_io::end_of_file_x{mtx::mm_io::make_error_code()};
 
   return get_uint64_be(buffer);
 }
@@ -416,7 +411,7 @@ mm_io_c::read(memory_cptr &buffer,
     buffer->resize(size + offset);
 
   if (read(buffer->get_buffer() + offset, size) != size)
-    throw mtx::mm_io::end_of_file_x();
+    throw mtx::mm_io::end_of_file_x{mtx::mm_io::make_error_code()};
 
   buffer->set_size(size + offset);
 
@@ -496,7 +491,7 @@ mm_io_c::write(const memory_cptr &buffer,
   size = std::min(buffer->get_size() - offset, size);
 
   if (write(buffer->get_buffer() + offset, size) != size)
-    throw mtx::mm_io::end_of_file_x();
+    throw mtx::mm_io::end_of_file_x{mtx::mm_io::make_error_code()};
   return size;
 }
 
@@ -505,7 +500,7 @@ mm_io_c::skip(int64 num_bytes) {
   uint64_t pos = getFilePointer();
   setFilePointer(pos + num_bytes);
   if ((pos + num_bytes) != getFilePointer())
-    throw mtx::mm_io::end_of_file_x();
+    throw mtx::mm_io::end_of_file_x{mtx::mm_io::make_error_code()};
 }
 
 void
@@ -746,7 +741,7 @@ mm_mem_io_c::setFilePointer(int64 offset,
   if ((0 <= new_pos) && (static_cast<int64_t>(m_mem_size) >= new_pos))
     m_pos = new_pos;
   else
-    throw mtx::mm_io::seek_x();
+    throw mtx::mm_io::seek_x{mtx::mm_io::make_error_code()};
 }
 
 uint32
@@ -1000,7 +995,7 @@ mm_text_io_c::read_next_char(char *buffer) {
 std::string
 mm_text_io_c::getline() {
   if (eof())
-    throw mtx::mm_io::end_of_file_x();
+    throw mtx::mm_io::end_of_file_x{mtx::mm_io::make_error_code()};
 
   if (!m_eol_style_detected)
     detect_eol_style();

@@ -33,6 +33,7 @@
 
 #include "common/ebml.h"
 #include "common/matroska.h"
+#include "common/mm_io_x.h"
 #include "common/mm_write_buffer_io.h"
 #include "common/strings/formatting.h"
 #include "extract/mkvextract.h"
@@ -121,9 +122,9 @@ create_timecode_files(KaxTracks &kax_tracks,
       timecode_extractors.push_back(timecode_extractor_t(tspec.tid, kt_get_number(*track), file, std::max(kt_get_default_duration(*track), static_cast<int64_t>(0))));
       file->puts(boost::format("# timecode format v%1%\n") % version);
 
-    } catch(...) {
+    } catch(mtx::mm_io::exception &ex) {
       close_timecode_files();
-      mxerror(boost::format(Y("Could not open the timecode file '%1%' for writing (%2%).\n")) % tspec.out_name % strerror(errno));
+      mxerror(boost::format(Y("Could not open the timecode file '%1%' for writing (%2%).\n")) % tspec.out_name % ex.message());
     }
   }
 }
@@ -189,8 +190,8 @@ extract_timecodes(const std::string &file_name,
   mm_io_c *in;
   try {
     in = new mm_file_io_c(file_name, MODE_READ);
-  } catch (...) {
-    show_error(boost::format(Y("The file '%1%' could not be opened for reading (%2%).\n")) % file_name % strerror(errno));
+  } catch (mtx::mm_io::exception &ex) {
+    show_error(boost::format(Y("The file '%1%' could not be opened for reading (%2%).\n")) % file_name % ex.message());
     return;
   }
 

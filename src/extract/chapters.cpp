@@ -27,6 +27,7 @@
 #include "common/chapters/chapters.h"
 #include "common/ebml.h"
 #include "common/mm_io.h"
+#include "common/mm_io_x.h"
 #include "common/kax_analyzer.h"
 #include "common/xml/ebml_chapters_converter.h"
 #include "extract/mkvextract.h"
@@ -44,8 +45,8 @@ extract_chapters(const std::string &file_name,
     analyzer = kax_analyzer_cptr(new kax_analyzer_c(file_name));
     if (!analyzer->process(parse_mode, MODE_READ))
       throw false;
-  } catch (...) {
-    show_error(boost::format(Y("The file '%1%' could not be opened for reading (%2%).")) % file_name % strerror(errno));
+  } catch (mtx::mm_io::exception &ex) {
+    show_error(boost::format(Y("The file '%1%' could not be opened for reading (%2%).")) % file_name % ex.message());
     return;
   }
 

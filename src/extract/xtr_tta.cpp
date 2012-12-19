@@ -17,6 +17,7 @@
 #include "common/checksums.h"
 #include "common/ebml.h"
 #include "common/endian.h"
+#include "common/mm_io_x.h"
 #include "common/mm_write_buffer_io.h"
 #include "common/tta.h"
 #include "extract/xtr_tta.h"
@@ -40,8 +41,8 @@ xtr_tta_c::create_file(xtr_base_c *,
                        KaxTrackEntry &track) {
   try {
     m_out = mm_write_buffer_io_c::open(m_temp_file_name, 5 * 1024 * 1024);
-  } catch (...) {
-    mxerror(boost::format(Y("Failed to create the temporary file '%1%': %2% (%3%)\n")) % m_temp_file_name % errno % strerror(errno));
+  } catch (mtx::mm_io::exception &ex) {
+    mxerror(boost::format(Y("Failed to create the temporary file '%1%': %2%\n")) % m_temp_file_name % ex.message());
   }
 
   m_bps      = kt_get_a_bps(track);
@@ -75,14 +76,14 @@ xtr_tta_c::finish_file() {
   mm_io_cptr in;
   try {
     in = mm_file_io_c::open(m_temp_file_name);
-  } catch (...) {
-    mxerror(boost::format(Y("The temporary file '%1%' could not be opened for reading (%2%).\n")) % m_temp_file_name % strerror(errno));
+  } catch (mtx::mm_io::exception &ex) {
+    mxerror(boost::format(Y("The temporary file '%1%' could not be opened for reading (%2%).\n")) % m_temp_file_name % ex.message());
   }
 
   try {
     m_out = mm_write_buffer_io_c::open(m_file_name, 5 * 1024 * 1024);
-  } catch (...) {
-    mxerror(boost::format(Y("The file '%1%' could not be opened for writing (%2%).\n")) % m_file_name % strerror(errno));
+  } catch (mtx::mm_io::exception &ex) {
+    mxerror(boost::format(Y("The file '%1%' could not be opened for writing (%2%).\n")) % m_file_name % ex.message());
   }
 
   tta_file_header_t tta_header;

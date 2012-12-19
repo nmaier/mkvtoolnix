@@ -74,6 +74,7 @@
 #include "common/kax_file.h"
 #include "common/matroska.h"
 #include "common/mm_io.h"
+#include "common/mm_io_x.h"
 #include "common/stereo_mode.h"
 #include "common/strings/editing.h"
 #include "common/strings/formatting.h"
@@ -1593,8 +1594,8 @@ process_file(const std::string &file_name) {
   mm_io_cptr in;
   try {
     in = mm_file_io_c::open(file_name);
-  } catch (...) {
-    show_error((boost::format(Y("Error: Couldn't open input file %1% (%2%).\n")) % file_name % strerror(errno)).str());
+  } catch (mtx::mm_io::exception &ex) {
+    show_error((boost::format(Y("Error: Couldn't open input file %1% (%2%).\n")) % file_name % ex.message()).str());
     return false;
   }
 

@@ -20,6 +20,7 @@
 #include "common/base64.h"
 #include "common/command_line.h"
 #include "common/common_pch.h"
+#include "common/mm_io_x.h"
 #include "common/mm_write_buffer_io.h"
 #include "common/strings/editing.h"
 #include "common/strings/parsing.h"
@@ -76,15 +77,15 @@ main(int argc,
     in = mm_io_cptr(new mm_file_io_c(argv[2]));
     if (mode != 'e')
       intext = mm_io_cptr(new mm_text_io_c(in.get(), false));
-  } catch(...) {
-    mxerror(boost::format(Y("The file '%1%' could not be opened for reading (%2%, %3%).\n")) % argv[2] % errno % strerror(errno));
+  } catch (mtx::mm_io::exception &ex) {
+    mxerror(boost::format(Y("The file '%1%' could not be opened for reading: %2%.\n")) % argv[2] % ex.message());
   }
 
   mm_io_cptr out;
   try {
     out = mm_write_buffer_io_c::open(argv[3], 128 * 1024);
-  } catch(...) {
-    mxerror(boost::format(Y("The file '%1%' could not be opened for writing (%2%, %3%).\n")) % argv[3] % errno % strerror(errno));
+  } catch (mtx::mm_io::exception &ex) {
+    mxerror(boost::format(Y("The file '%1%' could not be opened for writing: %2%.\n")) % argv[3] % ex.message());
   }
 
   in->save_pos();

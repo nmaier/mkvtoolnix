@@ -33,11 +33,11 @@ make_error_code() {
 }
 
 std::string
-open_x::message()
+exception::message()
   const {
-  return std::errc::no_such_file_or_directory == code() ? Y("The file or directory was not found.")
-       : std::errc::no_space_on_device        == code() ? Y("No space left to write to.")
-       : std::errc::permission_denied         == code() ? Y("No permission to read from, to write to or to create.")
+  return std::errc::no_such_file_or_directory == code() ? Y("The file or directory was not found")
+       : std::errc::no_space_on_device        == code() ? Y("No space left to write to")
+       : std::errc::permission_denied         == code() ? Y("No permission to read from, to write to or to create")
        :                                                  code().message();
 }
 
