@@ -203,12 +203,15 @@ kax_analyzer_c::probe(std::string file_name) {
 
 bool
 kax_analyzer_c::process(kax_analyzer_c::parse_mode_e parse_mode,
-                        const open_mode mode) {
+                        const open_mode mode,
+                        bool throw_on_error) {
   bool parse_fully = parse_mode_full == parse_mode;
 
   try {
     reopen_file(mode);
   } catch (...) {
+    if (throw_on_error)
+      throw;
     return false;
   }
 

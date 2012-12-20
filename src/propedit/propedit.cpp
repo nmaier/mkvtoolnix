@@ -16,6 +16,7 @@
 #include <matroska/KaxTracks.h>
 
 #include "common/command_line.h"
+#include "common/mm_io_x.h"
 #include "common/unique_numbers.h"
 #include "common/version.h"
 #include "propedit/propedit_cli_parser.h"
@@ -86,15 +87,23 @@ run(options_cptr &options) {
       mxerror(boost::format("The file '%1%' is not a Matroska file or it could not be found.\n") % options->m_file_name);
 
     analyzer = console_kax_analyzer_cptr(new console_kax_analyzer_c(options->m_file_name));
-  } catch (...) {
-    mxerror(boost::format("The file '%1%' could not be opened for read/write access.\n") % options->m_file_name);
+  } catch (mtx::mm_io::exception &ex) {
+    mxerror(boost::format("The file '%1%' could not be opened for reading and writing: %1.\n") % options->m_file_name % ex.message());
   }
 
   mxinfo(Y("The file is analyzed.\n"));
 
   analyzer->set_show_progress(options->m_show_progress);
 
-  if (!analyzer->process(options->m_parse_mode))
+  bool ok = false;
+  try {
+    ok = analyzer->process(options->m_parse_mode, MODE_WRITE, true);
+  } catch (mtx::mm_io::exception &ex) {
+    mxerror(boost::format(Y("The file '%1%' could not be opened for reading and writing, or a read/write operation on it failed: %2%.\n")) % options->m_file_name % ex.message());
+  } catch (...) {
+  }
+
+  if (!ok)
     mxerror(Y("This file could not be opened or parsed.\n"));
 
   options->find_elements(analyzer.get());

@@ -133,7 +133,7 @@ public:
     return -1;
   }
 
-  virtual bool process(parse_mode_e parse_mode = parse_mode_full, const open_mode mode = MODE_WRITE);
+  virtual bool process(parse_mode_e parse_mode = parse_mode_full, const open_mode mode = MODE_WRITE, bool throw_on_error = false);
 
   virtual void show_progress_start(int64_t /* size */) {
   }
