@@ -60,7 +60,7 @@ attachment_target_c::validate() {
   try {
     m_file_content = mm_file_io_c::slurp(m_file_name);
   } catch (mtx::mm_io::exception &ex) {
-    mxerror(boost::format(Y("The file '%1%' could not be opened for reading (%2%).\n")) % m_file_name % ex.what());
+    mxerror(boost::format(Y("The file '%1%' could not be opened for reading: %2%.\n")) % m_file_name % ex.what());
   }
 }
 

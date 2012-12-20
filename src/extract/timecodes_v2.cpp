@@ -191,7 +191,7 @@ extract_timecodes(const std::string &file_name,
   try {
     in = new mm_file_io_c(file_name, MODE_READ);
   } catch (mtx::mm_io::exception &ex) {
-    show_error(boost::format(Y("The file '%1%' could not be opened for reading (%2%).\n")) % file_name % ex.message());
+    show_error(boost::format(Y("The file '%1%' could not be opened for reading: %2%.\n")) % file_name % ex.message());
     return;
   }
 

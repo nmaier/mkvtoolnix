@@ -37,7 +37,7 @@ xtr_rmff_c::create_file(xtr_base_c *master,
   if (!m_master) {
     m_file = rmff_open_file(m_file_name.c_str(), RMFF_OPEN_MODE_WRITING);
     if (!m_file)
-      mxerror(boost::format(Y("The file '%1%' could not be opened for writing (%2%, %3%).\n")) % m_file_name % errno % strerror(errno));
+      mxerror(boost::format(Y("The file '%1%' could not be opened for writing: %2%.\n")) % m_file_name % strerror(errno));
 
   } else
     m_file = static_cast<xtr_rmff_c *>(m_master)->m_file;

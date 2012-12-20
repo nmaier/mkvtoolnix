@@ -77,13 +77,13 @@ xtr_tta_c::finish_file() {
   try {
     in = mm_file_io_c::open(m_temp_file_name);
   } catch (mtx::mm_io::exception &ex) {
-    mxerror(boost::format(Y("The temporary file '%1%' could not be opened for reading (%2%).\n")) % m_temp_file_name % ex.message());
+    mxerror(boost::format(Y("The temporary file '%1%' could not be opened for reading: %2%.\n")) % m_temp_file_name % ex.message());
   }
 
   try {
     m_out = mm_write_buffer_io_c::open(m_file_name, 5 * 1024 * 1024);
   } catch (mtx::mm_io::exception &ex) {
-    mxerror(boost::format(Y("The file '%1%' could not be opened for writing (%2%).\n")) % m_file_name % ex.message());
+    mxerror(boost::format(Y("The file '%1%' could not be opened for writing: %2%.\n")) % m_file_name % ex.message());
   }
 
   tta_file_header_t tta_header;

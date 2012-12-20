@@ -110,7 +110,7 @@ xtr_wavpack4_c::create_file(xtr_base_c *master,
     try {
       m_corr_out = mm_write_buffer_io_c::open(corr_name, 5 * 1024 * 1024);
     } catch (mtx::mm_io::exception &ex) {
-      mxerror(boost::format(Y("The file '%1%' could not be opened for writing (%2%).\n")) % corr_name % ex.message());
+      mxerror(boost::format(Y("The file '%1%' could not be opened for writing: %2%.\n")) % corr_name % ex.message());
     }
   }
 }
