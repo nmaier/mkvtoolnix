@@ -27,6 +27,7 @@
 #include "common/error.h"
 #include "common/fs_sys_helpers.h"
 #include "common/mm_io.h"
+#include "common/mm_io_x.h"
 #include "common/strings/editing.h"
 #include "common/strings/parsing.h"
 #include "common/strings/utf8.h"
