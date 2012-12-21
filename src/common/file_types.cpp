@@ -33,6 +33,7 @@ file_type_t::get_supported() {
 #if defined(HAVE_FLAC_FORMAT_H)
   s_supported_file_types.push_back(file_type_t(Y("FLAC (Free Lossless Audio Codec)"),    "flac ogg"));
 #endif
+  s_supported_file_types.push_back(file_type_t(Y("FLV (Macromedia Flash Video)"),        "flv"));
   s_supported_file_types.push_back(file_type_t(Y("IVF with VP8 video files"),            "ivf"));
   s_supported_file_types.push_back(file_type_t(Y("MP4 audio/video files"),               "mp4 m4v"));
   s_supported_file_types.push_back(file_type_t(Y("MPEG audio files"),                    "mp2 mp3"));

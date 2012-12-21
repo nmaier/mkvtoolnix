@@ -1204,6 +1204,9 @@ create_readers() {
           file.reader = new flac_reader_c(*file.ti, input_file);
           break;
 #endif
+        case FILE_TYPE_FLV:
+          file.reader = new flv_reader_c(*file.ti, input_file);
+          break;
         case FILE_TYPE_IVF:
           file.reader = new ivf_reader_c(*file.ti, input_file);
           break;

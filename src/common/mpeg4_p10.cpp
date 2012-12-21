@@ -19,6 +19,8 @@
 
 #include "common/common_pch.h"
 
+#include <unordered_map>
+
 #include "common/bit_cursor.h"
 #include "common/byte_buffer.h"
 #include "common/checksums.h"
@@ -296,6 +298,10 @@ bool
 mpeg4::p10::parse_sps(memory_cptr &buffer,
                       sps_info_t &sps,
                       bool keep_ar_info) {
+  std::unordered_map<unsigned int, bool> s_high_level_profile_ids{
+    {  44, true }, {  83, true }, {  86, true }, { 100, true }, { 110, true }, { 118, true }, { 122, true }, { 128, true }, { 244, true }
+  };
+
   int size              = buffer->get_size();
   unsigned char *newsps = (unsigned char *)safemalloc(size + 100);
   memory_cptr mcptr_newsps(new memory_c(newsps, size, true));
@@ -318,7 +324,7 @@ mpeg4::p10::parse_sps(memory_cptr &buffer,
   sps.profile_compat = w.copy_bits(8, r); // constraints
   sps.level_idc      = w.copy_bits(8, r); // level_idc
   sps.id             = gecopy(r, w);      // sps id
-  if (sps.profile_idc >= 100) {           // high profile
+  if (s_high_level_profile_ids[sps.profile_idc]) {   // high profile
     if ((sps.chroma_format_idc = gecopy(r, w)) == 3) // chroma_format_idc
       w.copy_bits(1, r);                  // separate_colour_plane_flag
     gecopy(r, w);                         // bit_depth_luma_minus8
