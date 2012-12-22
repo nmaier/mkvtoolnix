@@ -78,14 +78,14 @@ main(int argc,
     if (mode != 'e')
       intext = mm_io_cptr(new mm_text_io_c(in.get(), false));
   } catch (mtx::mm_io::exception &ex) {
-    mxerror(boost::format(Y("The file '%1%' could not be opened for reading: %2%.\n")) % argv[2] % ex.message());
+    mxerror(boost::format(Y("The file '%1%' could not be opened for reading: %2%.\n")) % argv[2] % ex);
   }
 
   mm_io_cptr out;
   try {
     out = mm_write_buffer_io_c::open(argv[3], 128 * 1024);
   } catch (mtx::mm_io::exception &ex) {
-    mxerror(boost::format(Y("The file '%1%' could not be opened for writing: %2%.\n")) % argv[3] % ex.message());
+    mxerror(boost::format(Y("The file '%1%' could not be opened for writing: %2%.\n")) % argv[3] % ex);
   }
 
   in->save_pos();

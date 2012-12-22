@@ -88,7 +88,7 @@ run(options_cptr &options) {
 
     analyzer = console_kax_analyzer_cptr(new console_kax_analyzer_c(options->m_file_name));
   } catch (mtx::mm_io::exception &ex) {
-    mxerror(boost::format("The file '%1%' could not be opened for reading and writing: %1.\n") % options->m_file_name % ex.message());
+    mxerror(boost::format("The file '%1%' could not be opened for reading and writing: %1.\n") % options->m_file_name % ex);
   }
 
   mxinfo(Y("The file is analyzed.\n"));
@@ -99,7 +99,7 @@ run(options_cptr &options) {
   try {
     ok = analyzer->process(options->m_parse_mode, MODE_WRITE, true);
   } catch (mtx::mm_io::exception &ex) {
-    mxerror(boost::format(Y("The file '%1%' could not be opened for reading and writing, or a read/write operation on it failed: %2%.\n")) % options->m_file_name % ex.message());
+    mxerror(boost::format(Y("The file '%1%' could not be opened for reading and writing, or a read/write operation on it failed: %2%.\n")) % options->m_file_name % ex);
   } catch (...) {
   }
 

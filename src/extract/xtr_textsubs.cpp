@@ -357,7 +357,7 @@ xtr_usf_c::create_file(xtr_base_c *master,
       stylesheet_node.append_attribute("href").set_value("USFV100.xsl");
 
     } catch (mtx::mm_io::exception &ex) {
-      mxerror(boost::format(Y("Failed to create the file '%1%': %2%\n")) % m_file_name % ex.message());
+      mxerror(boost::format(Y("Failed to create the file '%1%': %2%\n")) % m_file_name % ex);
 
     } catch (mtx::xml::exception &ex) {
       mxerror(boost::format(Y("Failed to parse the USF codec private data for track %1%: %2%\n")) % m_tid % ex.what());

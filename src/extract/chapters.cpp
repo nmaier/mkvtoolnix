@@ -46,7 +46,7 @@ extract_chapters(const std::string &file_name,
     if (!analyzer->process(parse_mode, MODE_READ))
       throw false;
   } catch (mtx::mm_io::exception &ex) {
-    show_error(boost::format(Y("The file '%1%' could not be opened for reading: %2%.\n")) % file_name % ex.message());
+    show_error(boost::format(Y("The file '%1%' could not be opened for reading: %2%.\n")) % file_name % ex);
     return;
   }
 

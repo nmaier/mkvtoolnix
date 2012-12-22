@@ -41,14 +41,14 @@ public:
     return m_error_code;
   }
 
-  virtual std::string message() const;
+  virtual std::string error() const throw();
 };
 
 class end_of_file_x: public exception {
 public:
   end_of_file_x(std::error_code const &error_code = std::error_code()) : exception(error_code) {}
 
-  virtual const char *what() const throw() {
+  virtual char const *what() const throw() {
     return "end of file error";
   }
 };
@@ -57,7 +57,7 @@ class seek_x: public exception {
 public:
   seek_x(std::error_code const &error_code = std::error_code()) : exception(error_code) {}
 
-  virtual const char *what() const throw() {
+  virtual char const *what() const throw() {
     return "seek in file error";
   }
 };
@@ -66,7 +66,7 @@ class read_write_x: public exception {
 public:
   read_write_x(std::error_code const &error_code = std::error_code()) : exception(error_code) {}
 
-  virtual const char *what() const throw() {
+  virtual char const *what() const throw() {
     return "reading from/writing to the file error";
   }
 };
@@ -75,7 +75,7 @@ class open_x: public exception {
 public:
   open_x(std::error_code const &error_code = std::error_code()) : exception(error_code) {}
 
-  virtual const char *what() const throw() {
+  virtual char const *what() const throw() {
     return "open file error";
   }
 };
@@ -84,7 +84,7 @@ class wrong_read_write_access_x: public exception {
 public:
   wrong_read_write_access_x(std::error_code const &error_code = std::error_code()) : exception(error_code) {}
 
-  virtual const char *what() const throw() {
+  virtual char const *what() const throw() {
     return "write operation to read-only file or vice versa";
   }
 };
@@ -93,7 +93,7 @@ class insufficient_space_x: public exception {
 public:
   insufficient_space_x(std::error_code const &error_code = std::error_code()) : exception(error_code) {}
 
-  virtual const char *what() const throw() {
+  virtual char const *what() const throw() {
     return "insufficient space for write operation";
   }
 };
@@ -111,7 +111,7 @@ public:
 
   virtual ~create_directory_x() throw() { }
 
-  virtual const char *what() const throw() {
+  virtual char const *what() const throw() {
     return "create_directory() failed";
   }
   virtual std::string error() const throw() {
@@ -124,7 +124,7 @@ class exception: public mtx::mm_io::exception {
 public:
   exception(std::error_code const &error_code = std::error_code()) : mtx::mm_io::exception(error_code) {}
 
-  virtual const char *what() const throw() {
+  virtual char const *what() const throw() {
     return "unspecified text I/O error";
   }
 };
@@ -139,7 +139,7 @@ public:
   {
   }
 
-  virtual const char *what() const throw() {
+  virtual char const *what() const throw() {
     return "invalid UTF-8 char";
   }
 
@@ -147,6 +147,13 @@ public:
     return (boost::format(Y("Invalid UTF-8 char. First byte: 0x%|1$02x|")) % static_cast<unsigned int>(m_first_char)).str();
   }
 };
+
+inline std::ostream &
+operator <<(std::ostream &out,
+            exception const &ex) {
+  out << ex.error();
+  return out;
+}
 
 }}}
 

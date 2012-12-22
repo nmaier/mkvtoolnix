@@ -113,7 +113,7 @@ mux_dialog::run() {
     }
   } catch (mtx::mm_io::exception &ex) {
     wxString error;
-    error.Printf(Z("Could not create a temporary file for mkvmerge's command line option called '%s' (error code %d, %s)."), opt_file_name.c_str(), errno, wxUCS(ex.message()));
+    error.Printf(Z("Could not create a temporary file for mkvmerge's command line option called '%s' (error code %d, %s)."), opt_file_name.c_str(), errno, wxUCS(ex.error()));
     wxMessageBox(error, Z("File creation failed"), wxOK | wxCENTER | wxICON_ERROR);
     throw 0;
   }

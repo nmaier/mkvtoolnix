@@ -44,7 +44,7 @@ read_args_from_file(std::vector<std::string> &args,
   try {
     mm_io = new mm_text_io_c(new mm_file_io_c(filename));
   } catch (mtx::mm_io::exception &ex) {
-    mxerror(boost::format(Y("The file '%1%' could not be opened for reading: %2%.\n")) % filename % ex.message());
+    mxerror(boost::format(Y("The file '%1%' could not be opened for reading: %2%.\n")) % filename % ex);
   }
 
   skip_next = false;

@@ -689,7 +689,7 @@ tab_chapters::save() {
   try {
     out = mm_io_cptr(mm_write_buffer_io_c::open(wxMB(file_name), 128 * 1024));
   } catch (mtx::mm_io::exception &ex) {
-    wxMessageBox(wxString::Format(Z("Could not open the destination file '%s' for writing. Error code: %d (%s)."), file_name.c_str(), errno, wxUCS(ex.message())), Z("Error opening file"), wxCENTER | wxOK | wxICON_ERROR);
+    wxMessageBox(wxString::Format(Z("Could not open the destination file '%s' for writing. Error code: %d (%s)."), file_name.c_str(), errno, wxUCS(ex.error())), Z("Error opening file"), wxCENTER | wxOK | wxICON_ERROR);
     return;
   }
 
