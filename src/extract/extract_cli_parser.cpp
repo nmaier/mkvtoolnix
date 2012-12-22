@@ -93,7 +93,7 @@ extract_cli_parser_c::init_parser() {
 
   add_section_header(YT("Chapter extraction"));
   add_information(YT("The fourth mode extracts the chapters and converts them to XML. The output is written to the standard output. The output can be used as a source for mkvmerge."));
-  OPT("s|simple", set_simple, YT("Exports the chapter infomartion in the simple format used in OGM tools (CHAPTER01=... CHAPTER01NAME=...)."));
+  OPT("s|simple", set_simple, YT("Exports the chapter information in the simple format used in OGM tools (CHAPTER01=... CHAPTER01NAME=...)."));
 
   add_section_header(YT("Example"));
 

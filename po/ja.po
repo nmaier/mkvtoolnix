@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2012-05-31 18:25+0900\n"
+"PO-Revision-Date: 2012-12-22 12:45+0100\n"
 "Last-Translator: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "Language-Team: Japanese <boiled.sugar@gmail.com>\n"
 "Language: ja\n"
@@ -2855,7 +2855,7 @@ msgstr "'%1%'のチャプタを解析することができませんでした：%
 msgid "Could not read the FLAC header packets.\n"
 msgstr "FLACのヘッダパケットを読み取ることができませんでした。\n"
 
-#: src/common/mm_io_win.cpp:169
+#: src/common/mm_io_win.cpp:170
 #, boost-format
 msgid "Could not write to the output file: %1% (%2%)\n"
 msgstr "出力ファイルに書き込むことができませんでした：%1%（%2%）\n"
@@ -3478,7 +3478,7 @@ msgid "Expected a time in the following format: HH:MM:SS.nnn (HH = hour, MM = mi
 msgstr "時間は次のフォーマットで指定されなければなりません：HH:MM:SS.nnn（HH＝時間、MM＝分、SS＝秒、nnn＝ミリ秒からナノ秒です。'n'はナノ秒単位の精度を意味する9桁まで使用することができます）。同様に時間を省略することもできます。代わりに'%1%'が見つかりました。追加エラーメッセージ：%2%"
 
 #: src/extract/extract_cli_parser.cpp:96
-msgid "Exports the chapter infomartion in the simple format used in OGM tools (CHAPTER01=... CHAPTER01NAME=...)."
+msgid "Exports the chapter information in the simple format used in OGM tools (CHAPTER01=... CHAPTER01NAME=...)."
 msgstr "チャプタ情報をOGM toolsで使用されるシンプルフォーマット（CHAPTER01=... CHAPTER01NAME=...）でエクスポートします。"
 
 #: src/mmg/tabs/input.cpp:190
@@ -9096,7 +9096,7 @@ msgstr "tta_reader：c'tor内でtag_sizeが負になりました。 %1%\n"
 msgid "und (Undetermined)"
 msgstr "und (Undetermined)"
 
-#: src/common/mm_io_win.cpp:167
+#: src/common/mm_io_win.cpp:168
 #: src/common/stereo_mode.cpp:68
 #: src/info/mkvinfo.cpp:686
 #: src/info/mkvinfo.cpp:696
@@ -9948,4 +9948,3 @@ msgstr "はい"
 
 #~ msgid "wrong usage: writing to read-only memory"
 #~ msgstr "間違った使用法：読み込み専用メモリへの書き込み"
-

@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: Moritz Bunkus <moritz@bunkus.org>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2012-05-13 20:05+0400\n"
+"PO-Revision-Date: 2012-12-22 12:46+0100\n"
 "Last-Translator: EuGENIUS <Eugenius_V@mail.ru>\n"
 "Language-Team: Russian <moritz@bunkus.org>\n"
 "Language: ru\n"
@@ -2876,7 +2876,7 @@ msgstr "Не удалось разобрать главы в '%1%': %2%\n"
 msgid "Could not read the FLAC header packets.\n"
 msgstr "Не удалось прочитать заголовчные пакеты FLAC.\n"
 
-#: src/common/mm_io_win.cpp:169
+#: src/common/mm_io_win.cpp:170
 #, boost-format
 msgid "Could not write to the output file: %1% (%2%)\n"
 msgstr "Запись в выходной файл невозможна: %1% (%2%)\n"
@@ -3499,7 +3499,7 @@ msgid "Expected a time in the following format: HH:MM:SS.nnn (HH = hour, MM = mi
 msgstr "Ожидалось время в следующем формате: HH:MM:SS.nnn (HH = часы, MM = минуты, SS = секунды, nnn = доли секунды от миллисекунды до наносекунды. Вы можете использовать до девяти цифр для 'n', что будет соответствовать наносекундной точности). Час можно не указывать. Вместо этого получено '%1%'. Дополнительное сообщение об ошибке: %2%"
 
 #: src/extract/extract_cli_parser.cpp:96
-msgid "Exports the chapter infomartion in the simple format used in OGM tools (CHAPTER01=... CHAPTER01NAME=...)."
+msgid "Exports the chapter information in the simple format used in OGM tools (CHAPTER01=... CHAPTER01NAME=...)."
 msgstr "Экспорт главы информации в простой формат, используемый в OGM tools (Глава01=... Глава01Имя=...)."
 
 #: src/mmg/tabs/input.cpp:190
@@ -9138,7 +9138,7 @@ msgstr "tta_reader: tag_size < 0 в конструкторе. %1%\n"
 msgid "und (Undetermined)"
 msgstr "und (Неопределённый)"
 
-#: src/common/mm_io_win.cpp:167
+#: src/common/mm_io_win.cpp:168
 #: src/common/stereo_mode.cpp:68
 #: src/info/mkvinfo.cpp:686
 #: src/info/mkvinfo.cpp:696
@@ -10056,4 +10056,3 @@ msgstr "да"
 
 #~ msgid "wrong usage: writing to read-only memory"
 #~ msgstr "неправильное использование: запись в память только для чтения"
-

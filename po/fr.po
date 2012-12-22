@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-07-30 19:00+0100\n"
-"PO-Revision-Date: 2012-05-18 14:34+0100\n"
+"PO-Revision-Date: 2012-12-22 12:45+0100\n"
 "Last-Translator: DenB <denb10@free.fr>\n"
 "Language-Team: DenB <denb10@free.fr>\n"
 "Language: fr\n"
@@ -2866,7 +2866,7 @@ msgstr "Impossible d'analyser les chapitres dans '%1%' : %2%.\n"
 msgid "Could not read the FLAC header packets.\n"
 msgstr "Impossible de lire les paquets d'en-têtes FLAC.\n"
 
-#: src/common/mm_io_win.cpp:169
+#: src/common/mm_io_win.cpp:170
 #, boost-format
 msgid "Could not write to the output file: %1% (%2%)\n"
 msgstr "Impossible d'écrire dans le fichier cible : %1% (%2%).\n"
@@ -3489,7 +3489,7 @@ msgid "Expected a time in the following format: HH:MM:SS.nnn (HH = hour, MM = mi
 msgstr "Il était attendu un temps au format HH:MM:SS.nnn (HH = heures, MM = minutes, SS = secondes, nnn = millisecondes jusque nanosecondes. Vous pouvez utiliser jusqu'à neuf chiffres pour 'n', soit une précision à la nanoseconde. Vous pouvez omettre les heures. Il a été trouvé '%1%' à la place. Message d'erreur supplémentaire : %2%"
 
 #: src/extract/extract_cli_parser.cpp:96
-msgid "Exports the chapter infomartion in the simple format used in OGM tools (CHAPTER01=... CHAPTER01NAME=...)."
+msgid "Exports the chapter information in the simple format used in OGM tools (CHAPTER01=... CHAPTER01NAME=...)."
 msgstr "Exporter les informations de chapitre au format simple utilisé par les outils OGM (CHAPTER01=... CHAPTER01NAME=...)."
 
 #: src/mmg/tabs/input.cpp:190
@@ -9118,7 +9118,7 @@ msgstr "tta_reader : tag_size < 0 dans le constructeur. %1%\n"
 msgid "und (Undetermined)"
 msgstr "und (indéterminée)"
 
-#: src/common/mm_io_win.cpp:167
+#: src/common/mm_io_win.cpp:168
 #: src/common/stereo_mode.cpp:68
 #: src/info/mkvinfo.cpp:686
 #: src/info/mkvinfo.cpp:696
@@ -9804,4 +9804,3 @@ msgstr "oui"
 
 #~ msgid "wrong usage: writing to read-only memory"
 #~ msgstr "Utilisation incorrecte : écriture en mémoire lecture seule."
-

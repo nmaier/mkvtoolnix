@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: Israel Lucas Torrijos <lukillas.ole@gmail.com>\n"
 "POT-Creation-Date: 2010-06-08 10:00+0200\n"
-"PO-Revision-Date: 2012-11-27 20:40+0100\n"
+"PO-Revision-Date: 2012-12-22 12:45+0100\n"
 "Last-Translator: Israel Lucas a.k.a Overdrive80 <lukillas.ole@gmail.com>\n"
 "Language-Team: Spanish <moritz@bunkus.org>\n"
 "Language: es\n"
@@ -2939,7 +2939,7 @@ msgstr "No se pudo analizar los capítulos en '%1%': %2%\n"
 msgid "Could not read the FLAC header packets.\n"
 msgstr "No se pudo leer los paquetes de encabezado FLAC.\n"
 
-#: src/common/mm_io_win.cpp:169
+#: src/common/mm_io_win.cpp:170
 #, boost-format
 msgid "Could not write to the output file: %1% (%2%)\n"
 msgstr "No se pudo escribir el archivo creado: %1% (%2%)\n"
@@ -3561,7 +3561,7 @@ msgid "Expected a time in the following format: HH:MM:SS.nnn (HH = hour, MM = mi
 msgstr "Se esperaba un tiempo en el siguiente formato: HH:MM:SS.nnn (HH = horas, MM = minutos, SS = segundos, nnn = milisegundos hasta nanosegundos. Debes usar un máximo de nueve dígitos para «n», lo que significaría una precisión de nanosegundos). Se puede omitir la hora de esa manera. Se ha encontrado '%1%' en su lugar. Mensaje de error adicional: %2%"
 
 #: src/extract/extract_cli_parser.cpp:96
-msgid "Exports the chapter infomartion in the simple format used in OGM tools (CHAPTER01=... CHAPTER01NAME=...)."
+msgid "Exports the chapter information in the simple format used in OGM tools (CHAPTER01=... CHAPTER01NAME=...)."
 msgstr "Exporta la información del capítulo en un formato simple usado en las herramientas ODM (CHAPTER01=... CHAPTER01NAME=...)."
 
 #: src/mmg/tabs/input.cpp:190
@@ -9200,7 +9200,7 @@ msgstr "tta_reader: tamaño_etiqueta < 0 en el c'tor. %1%\n"
 msgid "und (Undetermined)"
 msgstr "und (Indeterminado)"
 
-#: src/common/mm_io_win.cpp:167
+#: src/common/mm_io_win.cpp:168
 #: src/common/stereo_mode.cpp:68
 #: src/info/mkvinfo.cpp:686
 #: src/info/mkvinfo.cpp:696
@@ -9471,4 +9471,3 @@ msgstr "Sí"
 
 #~ msgid "tet_index: '%1%' not found\n"
 #~ msgstr "tet_index: '%1%' no encontrado\n"
-

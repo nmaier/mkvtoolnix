@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2012-12-20 15:27+0100\n"
+"PO-Revision-Date: 2012-12-22 12:44+0100\n"
 "Last-Translator: Moritz Bunkus <moritz@bunkus.org>\n"
 "Language-Team: German <moritz@bunkus.org>\n"
 "Language: de\n"
@@ -2887,7 +2887,7 @@ msgstr "Die Kapitel in '%1%' konnten nicht geparst werden: %2%\n"
 msgid "Could not read the FLAC header packets.\n"
 msgstr "Die Pakete mit den FLAC-Kopfdaten konnten nicht gelesen werden.\n"
 
-#: src/common/mm_io_win.cpp:169
+#: src/common/mm_io_win.cpp:170
 #, boost-format
 msgid "Could not write to the output file: %1% (%2%)\n"
 msgstr "In die Ausgabedatei konnte nicht geschrieben werden: %1% (%2%)\n"
@@ -3509,7 +3509,7 @@ msgid "Expected a time in the following format: HH:MM:SS.nnn (HH = hour, MM = mi
 msgstr "Es wurde ein Zeitstempel im folgenden Format erwartet: HH:MM:SS.nnn (HH = Stunden, MM = Minuten, SS = Sekunden, nnn = Millisekunden bis hin zu Nanosekunden. Sie können bis zu neun Ziffern für 'n' angeben, was einer Genauigkeit von einer Nanosekunde entspricht). Sie können die Stunden auch weglassen. Statt dessen wurde '%1%' gefunden. Zusätzliche Fehlermeldung: %2%"
 
 #: src/extract/extract_cli_parser.cpp:96
-msgid "Exports the chapter infomartion in the simple format used in OGM tools (CHAPTER01=... CHAPTER01NAME=...)."
+msgid "Exports the chapter information in the simple format used in OGM tools (CHAPTER01=... CHAPTER01NAME=...)."
 msgstr "Extrahiert Kapitelinformationen im einfachen Format, das auch in verschiedenen OGM-Tools verwendet wird (CHAPTER01=... CHAPTER01NAME=...)."
 
 #: src/mmg/tabs/input.cpp:190
@@ -9170,7 +9170,7 @@ msgstr "tta_reader: tag_size < 0 im Konstruktor. %1%\n"
 msgid "und (Undetermined)"
 msgstr "und (nicht festgelegt)"
 
-#: src/common/mm_io_win.cpp:167
+#: src/common/mm_io_win.cpp:168
 #: src/common/stereo_mode.cpp:68
 #: src/info/mkvinfo.cpp:686
 #: src/info/mkvinfo.cpp:696

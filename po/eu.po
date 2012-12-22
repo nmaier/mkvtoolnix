@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: eu\n"
 "Report-Msgid-Bugs-To: Xabier Aramendi <azpidatziak@gmail.com>\n"
 "POT-Creation-Date: 2010-06-08 10:00+0200\n"
-"PO-Revision-Date: 2012-12-15 13:39+0100\n"
+"PO-Revision-Date: 2012-12-22 12:45+0100\n"
 "Last-Translator: Xabier Aramendi (Azpidatziak) <azpidatziak@gmail.com>\n"
 "Language-Team: (EUS_Xabier Aramendi) <azpidatziak@gmail.com>\n"
 "Language: Basque (Euskara)\n"
@@ -2868,7 +2868,7 @@ msgstr "Ezin izan dira atalak aztertu: '%1%': %2%\n"
 msgid "Could not read the FLAC header packets.\n"
 msgstr "Ezin dira FLAC idazburu paketeak irakurri.\n"
 
-#: src/common/mm_io_win.cpp:169
+#: src/common/mm_io_win.cpp:170
 #, boost-format
 msgid "Could not write to the output file: %1% (%2%)\n"
 msgstr "Ezin da idatzi irteera agirira: %1% (%2%)\n"
@@ -3490,7 +3490,7 @@ msgid "Expected a time in the following format: HH:MM:SS.nnn (HH = hour, MM = mi
 msgstr "Heuskarri honetako denbora itxaroten zen: HH:MM:SS.nnn (HH = orduak, MM = minutuak, SS = segunduak, nnn = segundumilaenak nanosegundura arte. Gehienez bederatzi zenbaki erabili behar dituzu 'n'-rentzat, honek nanosegundu zehaztasuna esanahi du). Ordua kendu dezakezu honela. Aurkitu da '%1%' ordez. Akats mezu gehigarria: %2%"
 
 #: src/extract/extract_cli_parser.cpp:96
-msgid "Exports the chapter infomartion in the simple format used in OGM tools (CHAPTER01=... CHAPTER01NAME=...)."
+msgid "Exports the chapter information in the simple format used in OGM tools (CHAPTER01=... CHAPTER01NAME=...)."
 msgstr "Atal argibideak esportatzen ditu OGM tresnatan erabilitako heuskarri arrunt batean (CHAPTER01=... CHAPTER01NAME=...)."
 
 #: src/mmg/tabs/input.cpp:190
@@ -9113,7 +9113,7 @@ msgstr "tta_reader: neurria_etiketa < 0 c'tor. %1%\n"
 msgid "und (Undetermined)"
 msgstr "zehgab (Zehaztugabea)"
 
-#: src/common/mm_io_win.cpp:167
+#: src/common/mm_io_win.cpp:168
 #: src/common/stereo_mode.cpp:68
 #: src/info/mkvinfo.cpp:686
 #: src/info/mkvinfo.cpp:696
@@ -9228,4 +9228,3 @@ msgstr "Bai"
 
 #~ msgid "on_entry_selected: display == nullptr. Should not have happened."
 #~ msgstr "on_entry_selected: display == nullptr. Hau ez litzake gertatu behar."
-

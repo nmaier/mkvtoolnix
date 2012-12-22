@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: mkvtoolnix\n"
 "Report-Msgid-Bugs-To: Dean Lee <xslidian@gmail.com>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2012-05-05 14:42+0800\n"
+"PO-Revision-Date: 2012-12-22 12:46+0100\n"
 "Last-Translator: Dean Lee <xslidian@gmail.com>\n"
 "Language-Team: Chinese Simplified <xslidian@gmail.com>\n"
 "Language: \n"
@@ -2840,7 +2840,7 @@ msgstr "无法解析章节自 '%1%': %2%\n"
 msgid "Could not read the FLAC header packets.\n"
 msgstr "无法读取 FLAC 头部包。\n"
 
-#: src/common/mm_io_win.cpp:169
+#: src/common/mm_io_win.cpp:170
 #, boost-format
 msgid "Could not write to the output file: %1% (%2%)\n"
 msgstr "无法写入输出文件: %1% (%2%)\n"
@@ -3463,7 +3463,7 @@ msgid "Expected a time in the following format: HH:MM:SS.nnn (HH = hour, MM = mi
 msgstr "应为如下格式的时间: HH:MM:SS.nnn (HH = 时, MM = 分, SS = 秒, nnn = 毫秒到毫微秒。您可以使用多达九位的 'n' 以精确到毫微秒)。也可以省略时数。但发现的为 '%1%'。其他错误消息: %2%"
 
 #: src/extract/extract_cli_parser.cpp:96
-msgid "Exports the chapter infomartion in the simple format used in OGM tools (CHAPTER01=... CHAPTER01NAME=...)."
+msgid "Exports the chapter information in the simple format used in OGM tools (CHAPTER01=... CHAPTER01NAME=...)."
 msgstr "将章节信息以 OGM tools 所用的简单格式 (CHAPTER01=... CHAPTER01NAME=...) 导出。"
 
 #: src/mmg/tabs/input.cpp:190
@@ -9076,7 +9076,7 @@ msgstr "tta_reader: c'tor 中 tag_size < 0。 %1%\n"
 msgid "und (Undetermined)"
 msgstr "und (未定)"
 
-#: src/common/mm_io_win.cpp:167
+#: src/common/mm_io_win.cpp:168
 #: src/common/stereo_mode.cpp:68
 #: src/info/mkvinfo.cpp:686
 #: src/info/mkvinfo.cpp:696
@@ -10255,4 +10255,3 @@ msgstr "是"
 
 #~ msgid "wrong usage: writing to read-only memory"
 #~ msgstr "错误用法: 写入到只读内存"
-

@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: cs\n"
 "Report-Msgid-Bugs-To: Moritz Bunkus <moritz@bunkus.org>\n"
 "POT-Creation-Date: 2011-12-14 20:08+0100\n"
-"PO-Revision-Date: 2012-03-04 18:16+0100\n"
+"PO-Revision-Date: 2012-12-22 12:44+0100\n"
 "Last-Translator: Trottel <trottel09@gmail.com>\n"
 "Language-Team: Czech <trottel09@gmail.com>\n"
 "Language: cs\n"
@@ -2878,7 +2878,7 @@ msgstr "Nelze analyzovat kapitoly v '%1%': %2%\n"
 msgid "Could not read the FLAC header packets.\n"
 msgstr "Nelze číst pakety hlavičky FLAC.\n"
 
-#: src/common/mm_io_win.cpp:169
+#: src/common/mm_io_win.cpp:170
 #, boost-format
 msgid "Could not write to the output file: %1% (%2%)\n"
 msgstr "Nelze zapisovat do výstupního souboru: %1% (%2%)\n"
@@ -3502,7 +3502,7 @@ msgid "Expected a time in the following format: HH:MM:SS.nnn (HH = hour, MM = mi
 msgstr "Očekáván čas v následujícím formátu: HH:MM:SS.nnn (HH = hodiny, MM = minuty, SS = sekundy, nnn = milisekundy až po nanosekundy. Můžete použít až devět číslic pro 'n', což by znamenalo přesnost na nanosekundy). Také můžete vynechat hodiny. Místo toho nalezeno '%1%'. Dodatečná chybová zpráva: %2%"
 
 #: src/extract/extract_cli_parser.cpp:96
-msgid "Exports the chapter infomartion in the simple format used in OGM tools (CHAPTER01=... CHAPTER01NAME=...)."
+msgid "Exports the chapter information in the simple format used in OGM tools (CHAPTER01=... CHAPTER01NAME=...)."
 msgstr "Exportuje informace o kapitole v jednoduchém formátu použitém v nástrojích OGM (CHAPTER01=... CHAPTER01NAME=...)."
 
 #: src/mmg/tabs/input.cpp:190
@@ -9065,7 +9065,7 @@ msgstr ""
 msgid "und (Undetermined)"
 msgstr "und (Neurčeno)"
 
-#: src/common/mm_io_win.cpp:167
+#: src/common/mm_io_win.cpp:168
 #: src/common/stereo_mode.cpp:68
 #: src/info/mkvinfo.cpp:686
 #: src/info/mkvinfo.cpp:696
@@ -9216,4 +9216,3 @@ msgstr "ano"
 
 #~ msgid "tet_index: '%1%' not found\n"
 #~ msgstr "tet_index: '%1%' nebyl nalezen\n"
-
