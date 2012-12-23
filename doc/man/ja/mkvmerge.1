@@ -399,6 +399,51 @@ In example 3 mkvmerge will create two files\&. The first will contain the conten
 until the end of the source files\&.
 .RE
 .sp
+.RS 4
+.ie n \{\
+\h'-04' 5.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  5." 4.2
+.\}
+Splitting after specific frames/fields\&.
+.sp
+Syntax:
+\fB\-\-split\fR
+frames:\fIA\fR[,\fIB\fR[,\fIC\fR\&.\&.\&.]]
+.sp
+Example:
+\-\-split frames:120,237,891
+.sp
+The parameters
+\fIA\fR,
+\fIB\fR,
+\fIC\fR
+etc must all be positive integers\&. Numbering starts at 1\&. The list of frame/field numbers is separated by commas\&. After the input stream has reached the current split point\*(Aqs frame/field number a new file is created\&. Then the next split point given in this list is used\&.
+.sp
+The \*(Aqframes:\*(Aq prefix must not be omitted\&.
+.sp
+This mode considers only the first video track that is output\&. If no video track is output no splitting will occur\&.
+.if n \{\
+.sp
+.\}
+.RS 4
+.it 1 an-trap
+.nr an-no-space-flag 1
+.nr an-break-flag 1
+.br
+.ps +1
+\fB注記\fR
+.ps -1
+.br
+The numbers given with this argument are interpreted based on the number of Matroska blocks that are output\&. A single Matroska block contains either a full frame (for progressive content) or a single field (for interlaced content)\&. mkvmerge does not distinguish between those two and simply counts the number of blocks\&. For example: If one wanted to split after the 25th full frame with interlaced content one would have to use
+50
+(two fields per full frame) as the split point\&.
+.sp .5v
+.RE
+.RE
+.sp
 この分割モードでは、出力ファイル名は通常の操作とは異なる扱いを受けます。このモードでは出力ファイル名は\fBprintf\fRのように\*(Aq%d\*(Aqというパターンを含むことができます。\*(Aq%02d\*(Aqのように幅指定を追加することもできます。出力ファイル名がこのパターンを含む場合、ファイル番号が適切なフォーマットで指定された位置に挿入されます。含まない場合、\*(Aq\-%03d\*(Aqというパターンがファイルの拡張子の直前に指定されたものとみなされ、例えば\*(Aq\-o output\&.mkv\*(Aqを指定した場合、\*(Aqoutput\-001\&.mkv\*(Aq等のファイル名に出力されます。拡張子が存在しない場合、\*(Aq\-%03d\*(Aqはファイル名の末尾に追加されます。
 .RE
 .PP

@@ -2,12 +2,12 @@
 .\"     Title: mkvmerge
 .\"    Author: Moritz Bunkus <moritz@bunkus.org>
 .\" Generator: DocBook XSL Stylesheets v1.77.1 <http://docbook.sf.net/>
-.\"      Date: 2012-09-02
+.\"      Date: 2012-12-09
 .\"    Manual: 用户命令
-.\"    Source: MKVToolNix 5.8.0
+.\"    Source: MKVToolNix 5.9.0
 .\"  Language: Chinese
 .\"
-.TH "MKVMERGE" "1" "2012\-09\-02" "MKVToolNix 5\&.8\&.0" "用户命令"
+.TH "MKVMERGE" "1" "2012\-12\-09" "MKVToolNix 5\&.9\&.0" "用户命令"
 .\" -----------------------------------------------------------------
 .\" * Define some portability stuff
 .\" -----------------------------------------------------------------
@@ -499,6 +499,51 @@ parts:
 的内容。第二个文件将包含源文件
 00:05:50
 到结尾之间的内容。
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 5.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  5." 4.2
+.\}
+Splitting after specific frames/fields\&.
+.sp
+Syntax:
+\fB\-\-split\fR
+frames:\fIA\fR[,\fIB\fR[,\fIC\fR\&.\&.\&.]]
+.sp
+Example:
+\-\-split frames:120,237,891
+.sp
+The parameters
+\fIA\fR,
+\fIB\fR,
+\fIC\fR
+etc must all be positive integers\&. Numbering starts at 1\&. The list of frame/field numbers is separated by commas\&. After the input stream has reached the current split point\*(Aqs frame/field number a new file is created\&. Then the next split point given in this list is used\&.
+.sp
+The \*(Aqframes:\*(Aq prefix must not be omitted\&.
+.sp
+This mode considers only the first video track that is output\&. If no video track is output no splitting will occur\&.
+.if n \{\
+.sp
+.\}
+.RS 4
+.it 1 an-trap
+.nr an-no-space-flag 1
+.nr an-break-flag 1
+.br
+.ps +1
+\fB注意\fR
+.ps -1
+.br
+The numbers given with this argument are interpreted based on the number of Matroska blocks that are output\&. A single Matroska block contains either a full frame (for progressive content) or a single field (for interlaced content)\&. mkvmerge does not distinguish between those two and simply counts the number of blocks\&. For example: If one wanted to split after the 25th full frame with interlaced content one would have to use
+50
+(two fields per full frame) as the split point\&.
+.sp .5v
+.RE
 .RE
 .sp
 此切割模式下输出文件名将以不同于常用操作的方式对待。可能会含有类似

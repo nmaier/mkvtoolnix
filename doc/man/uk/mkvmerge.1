@@ -513,6 +513,51 @@ In example 3 mkvmerge will create two files\&. The first will contain the conten
 until the end of the source files\&.
 .RE
 .sp
+.RS 4
+.ie n \{\
+\h'-04' 5.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  5." 4.2
+.\}
+Splitting after specific frames/fields\&.
+.sp
+Syntax:
+\fB\-\-split\fR
+frames:\fIA\fR[,\fIB\fR[,\fIC\fR\&.\&.\&.]]
+.sp
+Example:
+\-\-split frames:120,237,891
+.sp
+The parameters
+\fIA\fR,
+\fIB\fR,
+\fIC\fR
+etc must all be positive integers\&. Numbering starts at 1\&. The list of frame/field numbers is separated by commas\&. After the input stream has reached the current split point\*(Aqs frame/field number a new file is created\&. Then the next split point given in this list is used\&.
+.sp
+The \*(Aqframes:\*(Aq prefix must not be omitted\&.
+.sp
+This mode considers only the first video track that is output\&. If no video track is output no splitting will occur\&.
+.if n \{\
+.sp
+.\}
+.RS 4
+.it 1 an-trap
+.nr an-no-space-flag 1
+.nr an-break-flag 1
+.br
+.ps +1
+\fBПримітка\fR
+.ps -1
+.br
+The numbers given with this argument are interpreted based on the number of Matroska blocks that are output\&. A single Matroska block contains either a full frame (for progressive content) or a single field (for interlaced content)\&. mkvmerge does not distinguish between those two and simply counts the number of blocks\&. For example: If one wanted to split after the 25th full frame with interlaced content one would have to use
+50
+(two fields per full frame) as the split point\&.
+.sp .5v
+.RE
+.RE
+.sp
 For this splitting mode the output filename is treated differently than for the normal operation\&. It may contain a
 \fBprintf\fR
 like expression \*(Aq%d\*(Aq including an optional field width, e\&.g\&. \*(Aq%02d\*(Aq\&. If it does then the current file number will be formatted appropriately and inserted at that point in the filename\&. If there is no such pattern then a pattern of \*(Aq\-%03d\*(Aq is assumed right before the file\*(Aqs extension: \*(Aq\-o output\&.mkv\*(Aq would result in \*(Aqoutput\-001\&.mkv\*(Aq and so on\&. If there\*(Aqs no extension then \*(Aq\-%03d\*(Aq will be appended to the name\&.
