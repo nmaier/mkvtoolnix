@@ -1,4 +1,3 @@
-# translation of mkvtoolnix.pot to Italian
 # Copyright (C) 2008-2011 Moritz Bunkus
 # This file is distributed under the same license as the mkvtoolnix package.
 #
@@ -10,7 +9,7 @@ msgstr ""
 "Project-Id-Version: it\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2012-12-22 12:45+0100\n"
+"PO-Revision-Date: 2012-12-23 10:33+0100\n"
 "Last-Translator: bovirus <bovirus@gmail.com>\n"
 "Language-Team: Italian <moritz@bunkus.org>\n"
 "Language: it\n"
@@ -2899,7 +2898,7 @@ msgstr "Crea un nuovo file capitolo"
 
 #: src/common/mm_io_x.h:118
 msgid "Creating directory '%1%' failed: %2%"
-msgstr ""
+msgstr "Creazione cartella '%1%' fallita: %2%"
 
 #: src/merge/mkvmerge.cpp:706
 #, boost-format
@@ -3548,15 +3547,15 @@ msgid "FPS:"
 msgstr "FPS:"
 
 #: src/extract/xtr_vobsub.cpp:81
-#, fuzzy, boost-format
+#, boost-format
 msgid "Failed to create the VobSub data file '%1%': %2%\n"
-msgstr "Impossibile creare il file dati VobSub '%1%': %2% (%3%)\n"
+msgstr "Impossibile creare il file dati VobSub '%1%': %2%\n"
 
 #: src/extract/xtr_textsubs.cpp:360
 #: src/extract/xtr_vobsub.cpp:235
-#, fuzzy, boost-format
+#, boost-format
 msgid "Failed to create the file '%1%': %2%\n"
-msgstr "Impossibile creare il file '%1%': %2% (%3%)\n"
+msgstr "Impossibile creare il file '%1%': %2%\n"
 
 #: src/extract/xtr_base.cpp:72
 #, boost-format
@@ -3564,9 +3563,9 @@ msgid "Failed to create the file '%1%': %2% (%3%)\n"
 msgstr "Impossibile creare il file '%1%': %2% (%3%)\n"
 
 #: src/extract/xtr_tta.cpp:45
-#, fuzzy, boost-format
+#, boost-format
 msgid "Failed to create the temporary file '%1%': %2%\n"
-msgstr "Impossibile creare il file temporaneo '%1%': %2% (%3%)\n"
+msgstr "Impossibile creare il file temporaneo '%1%': %2%\n"
 
 #: src/extract/xtr_textsubs.cpp:363
 #, boost-format
@@ -4981,7 +4980,7 @@ msgstr "Nessun nome file destinazione specificato, verrà usato il nome dell'all
 
 #: src/common/mm_io_x.cpp:40
 msgid "No permission to read from, to write to or to create"
-msgstr ""
+msgstr "Nessun permesso di lettura, scrittura o modifica"
 
 #: src/extract/timecodes_v2.cpp:219
 #: src/extract/tracks.cpp:356
@@ -4991,7 +4990,7 @@ msgstr "Nessun elemento segmento/livello 0 trovato."
 
 #: src/common/mm_io_x.cpp:39
 msgid "No space left to write to"
-msgstr ""
+msgstr "Nessuno spazio in cui scrivere"
 
 #: src/merge/mkvmerge.cpp:2326
 msgid "No streams to output were found. Aborting.\n"
@@ -6725,9 +6724,9 @@ msgid "The file '%1%' cannot be attached because it does not exist or cannot be 
 msgstr "Il file '%1%' non può essere allegato perchè none esiste o non può essere letto.\n"
 
 #: src/propedit/propedit.cpp:102
-#, fuzzy, boost-format
+#, boost-format
 msgid "The file '%1%' could not be opened for reading and writing, or a read/write operation on it failed: %2%.\n"
-msgstr "Il file '%1%' non può essere aperto per la lettura degli argomenti della linea di comando.\n"
+msgstr "Il file '%1%' non può essere aperto per la lettura e scrittura, o l'operazione di lettura/scrittura è fallita: %2%.\n"
 
 #: src/common/command_line.cpp:47
 #: src/extract/attachments.cpp:142
@@ -6739,9 +6738,9 @@ msgstr "Il file '%1%' non può essere aperto per la lettura degli argomenti dell
 #: src/merge/output_control.cpp:333
 #: src/merge/output_control.cpp:466
 #: src/propedit/attachment_target.cpp:63
-#, fuzzy, boost-format
+#, boost-format
 msgid "The file '%1%' could not be opened for reading: %2%.\n"
-msgstr "Il file '%1%' non può essere aperto per la lettura (%2%).\n"
+msgstr "Il file '%1%' non può essere aperto per la lettura: %2%.\n"
 
 #: src/extract/attachments.cpp:122
 #: src/extract/tracks.cpp:283
@@ -6751,9 +6750,9 @@ msgstr "Il file '%1%' non può essere aperto per la lettura (%2%).\n"
 #: src/extract/xtr_tta.cpp:86
 #: src/extract/xtr_wav.cpp:113
 #: src/merge/output_control.cpp:1496
-#, fuzzy, boost-format
+#, boost-format
 msgid "The file '%1%' could not be opened for writing: %2%.\n"
-msgstr "Il file '%1%' non può essere aperto per la scrittura (%2%).\n"
+msgstr "Il file '%1%' non può essere aperto per la scrittura: %2%.\n"
 
 #: src/merge/output_control.cpp:1500
 #, boost-format
@@ -6868,7 +6867,7 @@ msgstr "Il file n. %1% ('%2%') non può essere aggiunto. L'argomento per '--appe
 
 #: src/common/mm_io_x.cpp:38
 msgid "The file or directory was not found"
-msgstr ""
+msgstr "Il file o la cartella non sono stati trovati"
 
 #: src/mmg/header_editor/frame.cpp:247
 msgid "The file you tried to open is not a Matroska file."
@@ -7256,9 +7255,9 @@ msgid "The tags in '%1%' could not be parsed: some mandatory elements are missin
 msgstr "I marcatori in '%1%' non possono esssere analizzati: alcuni elementi obbligatori sono mancanti.\n"
 
 #: src/extract/xtr_tta.cpp:80
-#, fuzzy, boost-format
+#, boost-format
 msgid "The temporary file '%1%' could not be opened for reading: %2%.\n"
-msgstr "Il file temporaneo '%1%' non può essere aperto in lettura (%2%).\n"
+msgstr "Il file temporaneo '%1%' non può essere aperto in lettura: %2%.\n"
 
 #: src/extract/extract_cli_parser.cpp:87
 msgid "The third mode extracts attachments from the source file."
@@ -9679,3 +9678,4 @@ msgstr "sì"
 
 #~ msgid "wavpack_reader: Could not open the file."
 #~ msgstr "wavpack_reader: Impossibile aprire il file."
+
