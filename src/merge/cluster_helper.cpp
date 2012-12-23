@@ -58,6 +58,7 @@ cluster_helper_c::cluster_helper_c()
   , m_discarded_duration{0}
   , m_min_timecode_in_cluster(-1)
   , m_max_timecode_in_cluster(-1)
+  , m_frame_field_number{}
   , m_first_video_keyframe_seen{}
   , m_out(nullptr)
   , m_current_split_point(m_split_points.begin())
@@ -169,6 +170,10 @@ cluster_helper_c::split_if_necessary(packet_cptr &packet) {
            && (packet->assigned_timecode >= m_current_split_point->m_point))
     split_now = true;
 
+  else if (   (split_point_t::SPT_FRAME_FIELD == m_current_split_point->m_type)
+           && (m_frame_field_number >= m_current_split_point->m_point))
+    split_now = true;
+
   if (!split_now)
     return;
 
@@ -236,6 +241,9 @@ cluster_helper_c::add_packet(packet_cptr packet) {
     m_min_timecode_in_cluster = packet->assigned_timecode;
 
   render_after_adding_if_necessary(packet);
+
+  if (g_video_packetizer == packet->source)
+    ++m_frame_field_number;
 }
 
 int64_t

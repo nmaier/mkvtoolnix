@@ -523,6 +523,43 @@
          the source files.
         </para>
        </listitem>
+
+       <listitem>
+        <para>
+         Splitting after specific frames/fields.
+        </para>
+
+        <para>
+         Syntax: <option>--split</option> <literal>frames:</literal><parameter>A</parameter><optional>,<parameter>B</parameter><optional>,<parameter>C</parameter>...</optional></optional>
+        </para>
+
+        <para>
+         Example: <code>--split frames:120,237,891</code>
+        </para>
+
+        <para>
+         The parameters <parameter>A</parameter>, <parameter>B</parameter>, <parameter>C</parameter> etc must all be positive integers.
+         Numbering starts at 1.  The list of frame/field numbers is separated by commas.  After the input stream has reached the current
+         split point's frame/field number a new file is created.  Then the next split point given in this list is used.
+        </para>
+
+        <para>
+         The '<literal>frames:</literal>' prefix must not be omitted.
+        </para>
+
+        <para>
+          This mode considers only the first video track that is output.  If no video track is output no splitting will occur.
+        </para>
+
+        <note>
+          <para>
+            The numbers given with this argument are interpreted based on the number of Matroska blocks that are output.  A single Matroska
+            block contains either a full frame (for progressive content) or a single field (for interlaced content).  mkvmerge does not
+            distinguish between those two and simply counts the number of blocks.  For example: If one wanted to split after the 25th full
+            frame with interlaced content one would have to use <literal>50</literal> (two fields per full frame) as the split point.
+          </para>
+        </note>
+       </listitem>
       </orderedlist>
 
       <para>

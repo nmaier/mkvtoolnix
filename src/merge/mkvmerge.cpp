@@ -121,6 +121,9 @@ set_usage() {
                   "                           Keep ranges of timecodes start-end, either in\n"
                   "                           separate files or append to previous range's file\n"
                   "                           if prefixed with '+'.\n");
+  usage_text += Y("  --split frames:A[,B...]\n"
+                  "                           Create a new file after each frame/field A, B\n"
+                  "                           etc.\n");
   usage_text += Y("  --split-max-files <n>    Create at most n files.\n");
   usage_text += Y("  --link                   Link splitted files.\n");
   usage_text += Y("  --link-to-previous <SID> Link the first file to the given SID.\n");
@@ -790,7 +793,7 @@ parse_arg_split_duration(const std::string &arg) {
 /** \brief Parse the timecode format to \c --split
 
   This function is called by ::parse_split if the format specifies
-  a timecodes after which a new file should be started.
+  timecodes after which a new file should be started.
 */
 static void
 parse_arg_split_timecodes(const std::string &arg) {
@@ -805,6 +808,27 @@ parse_arg_split_timecodes(const std::string &arg) {
     if (!parse_timecode(timecode, split_after))
       mxerror(boost::format(Y("Invalid time for '--split' in '--split %1%'. Additional error message: %2%.\n")) % arg % timecode_parser_error);
     g_cluster_helper->add_split_point(split_point_t(split_after, split_point_t::SPT_TIMECODE, true));
+  }
+}
+
+/** \brief Parse the frames format to \c --split
+
+  This function is called by ::parse_split if the format specifies
+  frames after which a new file should be started.
+*/
+static void
+parse_arg_split_frames(std::string const &arg) {
+  std::string s = arg;
+
+  if (balg::istarts_with(s, "frames:"))
+    s.erase(0, 7);
+
+  std::vector<std::string> frames = split(s, ",");
+  for (auto &frame : frames) {
+    uint64_t split_after;
+    if (!parse_number(frame, split_after) || (0 == split_after))
+      mxerror(boost::format(Y("Invalid frame for '--split' in '--split %1%'.\n")) % arg);
+    g_cluster_helper->add_split_point(split_point_t(split_after, split_point_t::SPT_FRAME_FIELD, true));
   }
 }
 
@@ -938,6 +962,9 @@ parse_arg_split(const std::string &arg) {
 
   else if (balg::istarts_with(s, "parts:"))
     parse_arg_split_parts(arg);
+
+  else if (balg::istarts_with(s, "frames:"))
+    parse_arg_split_frames(arg);
 
   else if ((   (s.size() == 8)
             || (s.size() == 12))

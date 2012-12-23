@@ -48,6 +48,7 @@ struct split_point_t {
     SPT_TIMECODE,
     SPT_CHAPTER,
     SPT_PARTS,
+    SPT_FRAME_FIELD,
   };
 
   int64_t m_point;
@@ -87,7 +88,7 @@ private:
   int64_t m_previous_cluster_tc, m_num_cue_elements, m_header_overhead;
   int64_t m_timecode_offset;
   int64_t m_bytes_in_file, m_first_timecode_in_file, m_first_discarded_timecode, m_last_discarded_timecode_and_duration, m_discarded_duration;
-  int64_t m_min_timecode_in_cluster, m_max_timecode_in_cluster;
+  int64_t m_min_timecode_in_cluster, m_max_timecode_in_cluster, m_frame_field_number;
   bool m_first_video_keyframe_seen;
   mm_io_c *m_out;
 
