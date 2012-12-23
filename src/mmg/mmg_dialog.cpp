@@ -542,7 +542,7 @@ mmg_dialog::check_before_overwriting() {
 
   dir = file_name.GetPath(wxPATH_GET_VOLUME | wxPATH_GET_SEPARATOR);
 
-  if (!global_page->cb_split->GetValue()) {
+  if (0 == global_page->cob_split_mode->GetSelection()) {
     if (wxFile::Exists(tc_output->GetValue()) &&
         (wxMessageBox(wxString::Format(Z("The output file '%s' already exists. Do you want to overwrite it?"), tc_output->GetValue().c_str()), Z("Overwrite existing file?"), wxYES_NO) != wxYES))
       return false;
@@ -1128,16 +1128,15 @@ mmg_dialog::update_command_line() {
     clargs.Add(global_page->tc_title->GetValue());
   }
 
-  if (global_page->cb_split->IsChecked()) {
+  auto idx = global_page->cob_split_mode->GetSelection();
+  if (0 != idx) {
+    wxString mode = 1 == idx ? wxT("size:")
+                  : 2 == idx ? wxT("duration:")
+                  : 3 == idx ? wxT("timecodes:")
+                  :            wxT("parts:");
+
     clargs.Add(wxT("--split"));
-    if (global_page->rb_split_by_size->GetValue())
-      clargs.Add(wxT("size:") + global_page->cob_split_by_size->GetValue());
-    else if (global_page->rb_split_by_time->GetValue())
-      clargs.Add(wxT("duration:") + global_page->cob_split_by_time->GetValue());
-    else if (global_page->rb_split_after_timecodes->GetValue())
-      clargs.Add(wxT("timecodes:") + global_page->tc_split_after_timecodes->GetValue());
-    else if (global_page->rb_split_by_parts->GetValue())
-      clargs.Add(wxT("parts:") + global_page->tc_split_by_parts->GetValue());
+    clargs.Add(mode + global_page->cob_split_args->GetValue());
 
     if (global_page->tc_split_max_files->GetValue().Length() > 0) {
       clargs.Add(wxT("--split-max-files"));

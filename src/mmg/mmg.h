@@ -57,8 +57,10 @@
 // Version 3: Added after v2.4.2:
 //   The per-file boolean "no attachments" was removed and replaced by
 //   the handling of individual attached files.
+// Version 4: Added after v5.9.0:
+//   The "enable_splitting" setting has been folded into "split_mode" as "none".
 
-#define MMG_CONFIG_FILE_VERSION_MAX 3
+#define MMG_CONFIG_FILE_VERSION_MAX 4
 
 using namespace libebml;
 
