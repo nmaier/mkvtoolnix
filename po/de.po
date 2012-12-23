@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2012-12-23 13:57+0100\n"
+"PO-Revision-Date: 2012-12-23 18:20+0100\n"
 "Last-Translator: Moritz Bunkus <moritz@bunkus.org>\n"
 "Language-Team: German <moritz@bunkus.org>\n"
 "Language: de\n"
@@ -22,7 +22,9 @@ msgstr ""
 msgid ""
 "\n"
 "The temporary TTA file for track ID %1% is being copied into the final TTA file. This may take some time.\n"
-msgstr "\nDie temporäre TTA-Datei für Track ID %1% wird in die endgültige TTA-Datei kopiert. Das kann eine Weile dauern.\n"
+msgstr ""
+"\n"
+"Die temporäre TTA-Datei für Track ID %1% wird in die endgültige TTA-Datei kopiert. Das kann eine Weile dauern.\n"
 
 #: src/merge/output_control.cpp:270
 msgid ""
@@ -3558,8 +3560,8 @@ msgid "FLAC (Free Lossless Audio Codec)"
 msgstr "FLAC (Free Lossless Audio Codec)"
 
 #: src/common/file_types.cpp:36
-msgid "FLV (Macromedia Flash Video)"
-msgstr "FLV (Macromedia Flash Video)"
+msgid "FLV (Flash Video)"
+msgstr "FLV (Flash Video)"
 
 #: src/mmg/tabs/input_format.cpp:233
 msgid "FPS:"
@@ -3713,6 +3715,10 @@ msgstr "Verarbeitung am %s fertiggestellt"
 #: src/mmg/tabs/chapters.cpp:354
 msgid "Flags:"
 msgstr "Markierungen:"
+
+#: src/input/r_flv.cpp:212
+msgid "Flash Video"
+msgstr "Flash Video"
 
 #: src/mmg/header_editor/value_page.cpp:147
 msgid "Floating point number"
@@ -4636,10 +4642,6 @@ msgstr "MPEG-1/2"
 #: src/output/p_mpeg4_p2.h:65
 msgid "MPEG-4"
 msgstr "MPEG-4"
-
-#: src/input/r_flv.cpp:212
-msgid "Macromedia Flash Video"
-msgstr "Macromedia Flash Video"
 
 #: src/mmg/tabs/input_general.cpp:181
 msgid "Make this track the default track for its type (audio, video, subtitles). Players should prefer tracks with the default track flag set."

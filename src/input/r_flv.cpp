@@ -6,7 +6,7 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   Macromedia Flash Video (FLV) demultiplexer module
+   Flash Video (FLV) demultiplexer module
 
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
@@ -209,7 +209,7 @@ flv_reader_c::flv_reader_c(track_info_c const &ti,
 std::string const
 flv_reader_c::get_format_name(bool translate)
   const {
-  return translate ? Y("Macromedia Flash Video") : "Macromedia Flash Video";
+  return translate ? Y("Flash Video") : "Flash Video";
 }
 
 unsigned int

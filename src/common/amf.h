@@ -6,7 +6,7 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   helper functions for AMF (Adobe Macromedia Flash) data
+   helper functions for AMF (Action Message Format) data
 
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */

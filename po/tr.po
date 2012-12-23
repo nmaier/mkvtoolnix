@@ -3541,7 +3541,7 @@ msgid "FLAC (Free Lossless Audio Codec)"
 msgstr "FLAC (Ücretsiz Kayıpsız Ses Kodeki)"
 
 #: src/common/file_types.cpp:36
-msgid "FLV (Macromedia Flash Video)"
+msgid "FLV (Flash Video)"
 msgstr ""
 
 #: src/mmg/tabs/input_format.cpp:233
@@ -3697,6 +3697,10 @@ msgstr "İşlemin bitme zamanı %s"
 #, fuzzy
 msgid "Flags:"
 msgstr "Etiketler:"
+
+#: src/input/r_flv.cpp:212
+msgid "Flash Video"
+msgstr ""
 
 #: src/mmg/header_editor/value_page.cpp:147
 msgid "Floating point number"
@@ -4625,10 +4629,6 @@ msgstr "MPEG-1/2"
 #: src/output/p_mpeg4_p2.h:65
 msgid "MPEG-4"
 msgstr "MPEG-4"
-
-#: src/input/r_flv.cpp:212
-msgid "Macromedia Flash Video"
-msgstr ""
 
 #: src/mmg/tabs/input_general.cpp:181
 msgid "Make this track the default track for its type (audio, video, subtitles). Players should prefer tracks with the default track flag set."
