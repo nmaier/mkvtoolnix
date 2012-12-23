@@ -2102,7 +2102,7 @@ msgstr "Een ander samenvoeg proces loopt nog. Wacht totdat die klaar is of breek
 msgid "Appending a track from a file to another track from the same file is not allowed. This is the case for tracks number %u and %u."
 msgstr "Een spoor bijvoegen van een bestand naar een ander spoor van hetzelfde bestand is niet toegestaan. Dit is het geval voor spoor nummers %u en %u."
 
-#: src/merge/output_control.cpp:1829
+#: src/merge/output_control.cpp:1832
 #, boost-format
 msgid "Appending track %1% from file no. %2% ('%3%') to track %4% from file no. %5% ('%6%').\n"
 msgstr "Bijvoegen %1% van bestand nr. %2% ('%3%') naar spoor %4% van bestand nr. %5% ('%6%').\n"
@@ -2489,7 +2489,7 @@ msgstr "Hoofdstukken"
 msgid "Chapters (%d entries) from %s"
 msgstr "Hoofstukken (%d ingangen) van%s"
 
-#: src/merge/output_control.cpp:1430
+#: src/merge/output_control.cpp:1433
 msgid "Chapters are not allowed in WebM compliant files. No chapters will be written into any output file.\n"
 msgstr "Hoofdstukken zijn niet toegestaan in WebM herkenbare bestanden. Er worden geen hoofdstukken geschreven in enig uitvoer bestand.\n"
 
@@ -2806,7 +2806,7 @@ msgstr "Kon geen uitreksel maken van de opeenvolgende koppen van dit MPEG-1/2 sp
 msgid "Could not find an index for audio track %1% (avilib error message: %2%). Skipping track.\n"
 msgstr "Kan geen index vinden voor audio spoor %1% (fout code: %2%). Sla spoor over.\n"
 
-#: src/merge/output_control.cpp:1751
+#: src/merge/output_control.cpp:1754
 #, boost-format
 msgid "Could not find gptzr when appending. %1%\n"
 msgstr "Kon gptzr niet vinden tijdens bijvoegen. %1%\n"
@@ -3288,7 +3288,7 @@ msgstr "EBML lees versie: %1%"
 msgid "EBML version: %1%"
 msgstr "EBML versie: %1%"
 
-#: src/merge/output_control.cpp:1268
+#: src/merge/output_control.cpp:1271
 #, boost-format
 msgid "EVIL internal bug! (unknown file type). %1%\n"
 msgstr "Kwalijke interne bug! (onbekend bestandstype). %1%\n"
@@ -3551,6 +3551,10 @@ msgstr ""
 #: src/common/file_types.cpp:34
 msgid "FLAC (Free Lossless Audio Codec)"
 msgstr "FLAC (verlies vrije audio Audio Codec)"
+
+#: src/common/file_types.cpp:36
+msgid "FLV (Macromedia Flash Video)"
+msgstr ""
 
 #: src/mmg/tabs/input_format.cpp:233
 msgid "FPS:"
@@ -3940,7 +3944,7 @@ msgstr "ISO639-2 code"
 msgid "IVF (VP8)"
 msgstr "IVF met VP8"
 
-#: src/common/file_types.cpp:36
+#: src/common/file_types.cpp:37
 msgid "IVF with VP8 video files"
 msgstr "IVF met VP8 video bestanden"
 
@@ -4594,11 +4598,11 @@ msgstr ""
 msgid "MP3"
 msgstr ""
 
-#: src/common/file_types.cpp:37
+#: src/common/file_types.cpp:38
 msgid "MP4 audio/video files"
 msgstr "MP4 audio/video bestanden"
 
-#: src/common/file_types.cpp:38
+#: src/common/file_types.cpp:39
 msgid "MPEG audio files"
 msgstr "MPEG audio bestanden"
 
@@ -4606,7 +4610,7 @@ msgstr "MPEG audio bestanden"
 msgid "MPEG program stream"
 msgstr "MPEG programma stroom"
 
-#: src/common/file_types.cpp:39
+#: src/common/file_types.cpp:40
 msgid "MPEG program streams"
 msgstr "MPEG programma stromen"
 
@@ -4615,7 +4619,7 @@ msgstr "MPEG programma stromen"
 msgid "MPEG transport stream"
 msgstr "MPEG verzend stromen"
 
-#: src/common/file_types.cpp:40
+#: src/common/file_types.cpp:41
 msgid "MPEG transport streams"
 msgstr "MPEG verzend stromen"
 
@@ -4624,7 +4628,7 @@ msgstr "MPEG verzend stromen"
 msgid "MPEG video elementary stream"
 msgstr "MPEG video basis stromen"
 
-#: src/common/file_types.cpp:41
+#: src/common/file_types.cpp:42
 msgid "MPEG video elementary streams"
 msgstr "MPEG video basis stromen"
 
@@ -4634,6 +4638,10 @@ msgstr ""
 
 #: src/output/p_mpeg4_p2.h:65
 msgid "MPEG-4"
+msgstr ""
+
+#: src/input/r_flv.cpp:212
+msgid "Macromedia Flash Video"
 msgstr ""
 
 #: src/mmg/tabs/input_general.cpp:181
@@ -4670,7 +4678,7 @@ msgstr ""
 msgid "Matroska A/V files (*.mka;*.mkv;*.mk3d)|*.mkv;*.mka;*.mk3d|%s"
 msgstr "Matroska bestanden (*.mkv;*.mka;*.mks;*.mk3d)|*.mkv;*.mka;*.mks;*.mk3d|%s"
 
-#: src/common/file_types.cpp:42
+#: src/common/file_types.cpp:43
 msgid "Matroska audio/video files"
 msgstr "Matroska audio/video bestanden"
 
@@ -5084,7 +5092,7 @@ msgstr "Aantal kanalen in het spoor."
 msgid "Ogg/OGM"
 msgstr ""
 
-#: src/common/file_types.cpp:45
+#: src/common/file_types.cpp:46
 msgid "Ogg/OGM audio/video files"
 msgstr "Ogg/OGM audio/video bestanden"
 
@@ -5239,7 +5247,7 @@ msgstr ""
 msgid "PGS"
 msgstr ""
 
-#: src/common/file_types.cpp:43
+#: src/common/file_types.cpp:44
 msgid "PGS/SUP subtitles"
 msgstr "PGS/SUPondertitels"
 
@@ -5405,7 +5413,7 @@ msgstr "Voortgang: [%1%%2%] %3%%%"
 msgid "Querying mkvmerge's capabilities"
 msgstr "Opgevraagde mogelijkheden van mkvmerge"
 
-#: src/common/file_types.cpp:44
+#: src/common/file_types.cpp:45
 msgid "QuickTime audio/video files"
 msgstr "QuickTime audio/video bestanden"
 
@@ -5590,7 +5598,7 @@ msgstr "audio"
 msgid "RealMedia"
 msgstr ""
 
-#: src/common/file_types.cpp:46
+#: src/common/file_types.cpp:47
 msgid "RealMedia audio/video files"
 msgstr "RealMedia audio/video bestanden"
 
@@ -5688,7 +5696,7 @@ msgstr "SHA1-160"
 msgid "SRT subtitles"
 msgstr "SRT tekst ondertiteling"
 
-#: src/common/file_types.cpp:47
+#: src/common/file_types.cpp:48
 msgid "SRT text subtitles"
 msgstr "SRT tekst ondertiteling"
 
@@ -5697,7 +5705,7 @@ msgstr "SRT tekst ondertiteling"
 msgid "SSA/ASS subtitles"
 msgstr "SSA/ASS tekst ondertiteling"
 
-#: src/common/file_types.cpp:48
+#: src/common/file_types.cpp:49
 msgid "SSA/ASS text subtitles"
 msgstr "SSA/ASS tekst ondertiteling"
 
@@ -6190,7 +6198,7 @@ msgstr "Sommige kop waarden zijn veranderd. Wil je echt een nieuw bestand laden 
 msgid "Some header values have been modified. Do you really want to reload without saving the file?"
 msgstr "Sommige kop waarden zijn veranderd. Wil je echt herladen zonder het bestand te bewaren?"
 
-#: src/merge/output_control.cpp:1470
+#: src/merge/output_control.cpp:1473
 #, boost-format
 msgid "Some tag elements are missing (this error should not have occured - another similar error should have occured earlier). %1%\n"
 msgstr "Sommige markeer elementen ontbreken (deze fout had niet mogen gebeuren - een soortgelijke fout had eerder moeten gebeuren). %1%\n"
@@ -6347,7 +6355,7 @@ msgstr "Onderdrukt status uitvoer."
 msgid "TTA"
 msgstr ""
 
-#: src/common/file_types.cpp:49
+#: src/common/file_types.cpp:50
 msgid "TTA (The lossless True Audio codec)"
 msgstr "TTA (The lossless True Audio codec)"
 
@@ -6378,7 +6386,7 @@ msgstr "Markeer selectie's"
 msgid "Tags"
 msgstr "Markeringen"
 
-#: src/merge/output_control.cpp:1458
+#: src/merge/output_control.cpp:1461
 msgid "Tags are not allowed in WebM compliant files. No tags will be written into any output file.\n"
 msgstr "Markeringen zijn niet toegstaan in WebM herkenbare bestanden. Er worden geen markeringen geschreven naar het uitvoer bestand.\n"
 
@@ -6660,7 +6668,7 @@ msgstr "Het correctie bestandskop is niet correct gelezen.\n"
 msgid "The country '%s' is not a valid ccTLD and cannot be selected."
 msgstr "Het land '%s' is geen geldig ccTLD en kan niet geselecteerd worden."
 
-#: src/merge/output_control.cpp:1538
+#: src/merge/output_control.cpp:1541
 #, fuzzy
 msgid "The cue entries (the index) are being written...\n"
 msgstr "De volg document(en) (cue) ingangen (de index) worden geschreven..."
@@ -6685,11 +6693,11 @@ msgstr "De standaar taal code '%1%' is geen geldige ISO639-2 taal code en wordt 
 msgid "The delay setting for track nr. %s in file '%s' is invalid."
 msgstr "De vertraag instellingen voor spoor nr. %s in bestand '%s' zijn ongeldig."
 
-#: src/merge/output_control.cpp:1275
 #: src/merge/output_control.cpp:1278
 #: src/merge/output_control.cpp:1281
 #: src/merge/output_control.cpp:1284
 #: src/merge/output_control.cpp:1287
+#: src/merge/output_control.cpp:1290
 #, boost-format
 msgid ""
 "The demultiplexer for the file '%1%' failed to initialize:\n"
@@ -6779,12 +6787,12 @@ msgstr "Het bestand '%1%' kon voor lezen niet geopend worden (%2%).\n"
 #: src/extract/xtr_rmff.cpp:40
 #: src/extract/xtr_tta.cpp:86
 #: src/extract/xtr_wav.cpp:113
-#: src/merge/output_control.cpp:1496
+#: src/merge/output_control.cpp:1499
 #, fuzzy, boost-format
 msgid "The file '%1%' could not be opened for writing: %2%.\n"
 msgstr "Het bestand '%1%' kon voor schrijven niet geopend worden (%2%).\n"
 
-#: src/merge/output_control.cpp:1500
+#: src/merge/output_control.cpp:1503
 #, boost-format
 msgid "The file '%1%' has been opened for writing.\n"
 msgstr "Het bestand '%1%' is voor schrijven aangemaakt.\n"
@@ -6809,12 +6817,12 @@ msgstr "Het bestand '%s' bestaat niet."
 msgid "The file '%s' is already processed in combination with the file '%s'. It cannot be added a second time."
 msgstr "Het bestand '%s' wordt al uitgevoerd in combinatie met bestand '%s'. Het kan géén tweede keer worden toegevoegd."
 
-#: src/merge/output_control.cpp:1281
+#: src/merge/output_control.cpp:1284
 msgid "The file content does not match its format type and was not recognized."
 msgstr ""
 
-#: src/merge/output_control.cpp:1275
 #: src/merge/output_control.cpp:1278
+#: src/merge/output_control.cpp:1281
 #, fuzzy
 msgid "The file could not be opened for reading, or there was not enough data to parse its headers."
 msgstr "Het bestand '%1%' kon niet geopend worden voor het lezen van commando regel argumenten.\n"
@@ -6847,7 +6855,7 @@ msgstr "De bestandskop is te kort.\n"
 msgid "The file header was not read correctly.\n"
 msgstr "De bestandskop is niet correct ingelezen.\n"
 
-#: src/merge/output_control.cpp:1284
+#: src/merge/output_control.cpp:1287
 #, fuzzy
 msgid "The file headers could not be parsed, e.g. because they're incomplete, invalid or damaged."
 msgstr "De FLAC koppen konden niet ontleed worden: de stroom informatie structuur is niet gevonden.\n"
@@ -7562,7 +7570,7 @@ msgstr "Dit eigendom is uniek. Meer zaken kunnen niet toegevoegd worden in '%1%'
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. %1%\n"
 msgstr "Dit zou ECHT niet mogen gebeuren. De gereserveerde ruimte voor het eerste meta zoek element is te klein. %1%\n"
 
-#: src/merge/output_control.cpp:1689
+#: src/merge/output_control.cpp:1692
 #, boost-format
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. Size needed: %1%. %2%\n"
 msgstr "Dit zou ECHT niet mogen gebeuren. De gereserveerde ruimte voor het eerste meta zoek element is te klein. Heb nodig: %1%. %2%\n"
@@ -7816,7 +7824,7 @@ msgstr "UID:"
 msgid "USF subtitles"
 msgstr "USF tekst ondertiteling"
 
-#: src/common/file_types.cpp:50
+#: src/common/file_types.cpp:51
 msgid "USF text subtitles"
 msgstr "USF tekst ondertiteling"
 
@@ -7977,7 +7985,7 @@ msgstr "Gebruikmakend van de AAC uitvoer module (FourCC: %1%).\n"
 msgid "VC1"
 msgstr ""
 
-#: src/common/file_types.cpp:51
+#: src/common/file_types.cpp:52
 msgid "VC1 elementary streams"
 msgstr "VC1 basis stromen"
 
@@ -8088,7 +8096,7 @@ msgstr "Bekijk de uitvoer welke mkvmerge maakt gedurende het samenvoeg proces vo
 msgid "VobBtn"
 msgstr "VobKnoppen"
 
-#: src/common/file_types.cpp:52
+#: src/common/file_types.cpp:53
 msgid "VobButtons"
 msgstr "VobKnoppen"
 
@@ -8097,7 +8105,7 @@ msgstr "VobKnoppen"
 msgid "VobSub"
 msgstr ""
 
-#: src/common/file_types.cpp:53
+#: src/common/file_types.cpp:54
 msgid "VobSub subtitles"
 msgstr "VobSub ondertitels"
 
@@ -8109,7 +8117,7 @@ msgstr ""
 msgid "WAV"
 msgstr ""
 
-#: src/common/file_types.cpp:54
+#: src/common/file_types.cpp:55
 msgid "WAVE (uncompressed PCM audio)"
 msgstr "WAVE (ongecomprimeerd PCM audio)"
 
@@ -8118,7 +8126,7 @@ msgstr "WAVE (ongecomprimeerd PCM audio)"
 msgid "WAVPACK"
 msgstr "WAVPACK v4 audio"
 
-#: src/common/file_types.cpp:55
+#: src/common/file_types.cpp:56
 msgid "WAVPACK v4 audio"
 msgstr "WAVPACK v4 audio"
 
@@ -8148,7 +8156,7 @@ msgstr "Waarschuwing: "
 msgid "Warnings:"
 msgstr "Waarschuwingen:"
 
-#: src/common/file_types.cpp:56
+#: src/common/file_types.cpp:57
 msgid "WebM audio/video files"
 msgstr "WebM audio/video bestanden"
 
@@ -8913,7 +8921,7 @@ msgstr ""
 msgid "mkvpropedit [options] <file> <actions>"
 msgstr "mkvpropedit [opties] <bestand> <actie>"
 
-#: src/common/mm_io.cpp:990
+#: src/common/mm_io.cpp:999
 msgid "mm_text_io_c: UTF32_* is not supported at the moment.\n"
 msgstr "mm_text_io_c: UTF32_* wordt op het moment niet ondersteund.\n"
 
@@ -10057,3 +10065,4 @@ msgstr "ja"
 
 #~ msgid "wrong usage: writing to read-only memory"
 #~ msgstr "verkeerd gebruik: schrijven naar alleen lezen geheugen"
+

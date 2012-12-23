@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2012-12-22 12:44+0100\n"
+"PO-Revision-Date: 2012-12-23 13:57+0100\n"
 "Last-Translator: Moritz Bunkus <moritz@bunkus.org>\n"
 "Language-Team: German <moritz@bunkus.org>\n"
 "Language: de\n"
@@ -22,9 +22,7 @@ msgstr ""
 msgid ""
 "\n"
 "The temporary TTA file for track ID %1% is being copied into the final TTA file. This may take some time.\n"
-msgstr ""
-"\n"
-"Die temporäre TTA-Datei für Track ID %1% wird in die endgültige TTA-Datei kopiert. Das kann eine Weile dauern.\n"
+msgstr "\nDie temporäre TTA-Datei für Track ID %1% wird in die endgültige TTA-Datei kopiert. Das kann eine Weile dauern.\n"
 
 #: src/merge/output_control.cpp:270
 msgid ""
@@ -2113,7 +2111,7 @@ msgstr "Es wird momentan ein anderer Job ausgeführt. Bitte warten Sie, bis er b
 msgid "Appending a track from a file to another track from the same file is not allowed. This is the case for tracks number %u and %u."
 msgstr "Das Anhängen eines Tracks aus einer Datei an einen anderen Track aus derselben Datei ist nicht zulässig. Dieses ist für die Tracks Nummer %u und %u der Fall."
 
-#: src/merge/output_control.cpp:1829
+#: src/merge/output_control.cpp:1832
 #, boost-format
 msgid "Appending track %1% from file no. %2% ('%3%') to track %4% from file no. %5% ('%6%').\n"
 msgstr "Track %1% aus Datei Nummer %2% ('%3%') wird an Track %4% aus Datei Nummer %5% ('%6%') angefügt.\n"
@@ -2499,7 +2497,7 @@ msgstr "Kapitel"
 msgid "Chapters (%d entries) from %s"
 msgstr "Kapitel (%d Einträge) aus %s"
 
-#: src/merge/output_control.cpp:1430
+#: src/merge/output_control.cpp:1433
 msgid "Chapters are not allowed in WebM compliant files. No chapters will be written into any output file.\n"
 msgstr "Kapitel sind in WebM-konformen Dateien nicht zulässig. In keine der Ausgabedateien werden Kapitel geschrieben.\n"
 
@@ -2815,7 +2813,7 @@ msgstr "Der Sequenzkopf konnte nicht aus diesem MPEG-1/2-Track extrahiert werden
 msgid "Could not find an index for audio track %1% (avilib error message: %2%). Skipping track.\n"
 msgstr "Für Audio-Track %1% konnte kein Index gefunden werden (Fehlermeldung der avilib: %2%). Der Track wird ausgelassen.\n"
 
-#: src/merge/output_control.cpp:1751
+#: src/merge/output_control.cpp:1754
 #, boost-format
 msgid "Could not find gptzr when appending. %1%\n"
 msgstr "gptzr konnte beim Anhängen nicht gefunden werden. %1%\n"
@@ -3296,7 +3294,7 @@ msgstr "EBML Leseversion: %1%"
 msgid "EBML version: %1%"
 msgstr "EBML-Version: %1%"
 
-#: src/merge/output_control.cpp:1268
+#: src/merge/output_control.cpp:1271
 #, boost-format
 msgid "EVIL internal bug! (unknown file type). %1%\n"
 msgstr "Böser interner Fehler! (Unbekannter Dateityp). %1%\n"
@@ -3558,6 +3556,10 @@ msgstr "FLAC"
 #: src/common/file_types.cpp:34
 msgid "FLAC (Free Lossless Audio Codec)"
 msgstr "FLAC (Free Lossless Audio Codec)"
+
+#: src/common/file_types.cpp:36
+msgid "FLV (Macromedia Flash Video)"
+msgstr "FLV (Macromedia Flash Video)"
 
 #: src/mmg/tabs/input_format.cpp:233
 msgid "FPS:"
@@ -3944,7 +3946,7 @@ msgstr "ISO639-2-Code"
 msgid "IVF (VP8)"
 msgstr "IVF (VP8)"
 
-#: src/common/file_types.cpp:36
+#: src/common/file_types.cpp:37
 msgid "IVF with VP8 video files"
 msgstr "IVF mit VP8-Video-Tracks"
 
@@ -4595,11 +4597,11 @@ msgstr "MP2/MP3"
 msgid "MP3"
 msgstr "MP3"
 
-#: src/common/file_types.cpp:37
+#: src/common/file_types.cpp:38
 msgid "MP4 audio/video files"
 msgstr "MP4 Audio/Video-Dateien"
 
-#: src/common/file_types.cpp:38
+#: src/common/file_types.cpp:39
 msgid "MPEG audio files"
 msgstr "MPEG Audiodateien"
 
@@ -4607,7 +4609,7 @@ msgstr "MPEG Audiodateien"
 msgid "MPEG program stream"
 msgstr "MPEG program stream"
 
-#: src/common/file_types.cpp:39
+#: src/common/file_types.cpp:40
 msgid "MPEG program streams"
 msgstr "MPEG program streams"
 
@@ -4615,7 +4617,7 @@ msgstr "MPEG program streams"
 msgid "MPEG transport stream"
 msgstr "MPEG-Transportstrom"
 
-#: src/common/file_types.cpp:40
+#: src/common/file_types.cpp:41
 msgid "MPEG transport streams"
 msgstr "MPEG transport streams"
 
@@ -4623,7 +4625,7 @@ msgstr "MPEG transport streams"
 msgid "MPEG video elementary stream"
 msgstr "MPEG-Video-Elementarstrom"
 
-#: src/common/file_types.cpp:41
+#: src/common/file_types.cpp:42
 msgid "MPEG video elementary streams"
 msgstr "MPEG Video elementary streams"
 
@@ -4634,6 +4636,10 @@ msgstr "MPEG-1/2"
 #: src/output/p_mpeg4_p2.h:65
 msgid "MPEG-4"
 msgstr "MPEG-4"
+
+#: src/input/r_flv.cpp:212
+msgid "Macromedia Flash Video"
+msgstr "Macromedia Flash Video"
 
 #: src/mmg/tabs/input_general.cpp:181
 msgid "Make this track the default track for its type (audio, video, subtitles). Players should prefer tracks with the default track flag set."
@@ -4669,7 +4675,7 @@ msgstr "Matroska"
 msgid "Matroska A/V files (*.mka;*.mkv;*.mk3d)|*.mkv;*.mka;*.mk3d|%s"
 msgstr "Matroska-Dateien (*.mkv;*.mka;*.mks;*.mk3d)|*.mkv;*.mka;*.mks;*.mk3d|%s"
 
-#: src/common/file_types.cpp:42
+#: src/common/file_types.cpp:43
 msgid "Matroska audio/video files"
 msgstr "Matroska Audio/Videodateien"
 
@@ -5083,7 +5089,7 @@ msgstr "Anzahl Kanäle in diesem Track."
 msgid "Ogg/OGM"
 msgstr "Ogg/OGM"
 
-#: src/common/file_types.cpp:45
+#: src/common/file_types.cpp:46
 msgid "Ogg/OGM audio/video files"
 msgstr "Ogg/OGM Audio/Video-Dateien"
 
@@ -5237,7 +5243,7 @@ msgstr "PCM"
 msgid "PGS"
 msgstr "PGS"
 
-#: src/common/file_types.cpp:43
+#: src/common/file_types.cpp:44
 msgid "PGS/SUP subtitles"
 msgstr "PGS/SUP-Untertitel"
 
@@ -5402,7 +5408,7 @@ msgstr "Fortschritt: [%1%%2%] %3%%%"
 msgid "Querying mkvmerge's capabilities"
 msgstr "Abfrage der von mkvmerge unterstützten Features"
 
-#: src/common/file_types.cpp:44
+#: src/common/file_types.cpp:45
 msgid "QuickTime audio/video files"
 msgstr "QuickTime Audio/Video-Dateien"
 
@@ -5586,7 +5592,7 @@ msgstr "RealAudio"
 msgid "RealMedia"
 msgstr "RealMedia"
 
-#: src/common/file_types.cpp:46
+#: src/common/file_types.cpp:47
 msgid "RealMedia audio/video files"
 msgstr "RealMedia Audio/Video-Dateien"
 
@@ -5682,7 +5688,7 @@ msgstr "SHA1-160"
 msgid "SRT subtitles"
 msgstr "SRT-Textuntertitel"
 
-#: src/common/file_types.cpp:47
+#: src/common/file_types.cpp:48
 msgid "SRT text subtitles"
 msgstr "SRT-Textuntertitel"
 
@@ -5690,7 +5696,7 @@ msgstr "SRT-Textuntertitel"
 msgid "SSA/ASS subtitles"
 msgstr "SSA-/ASS-Textuntertitel"
 
-#: src/common/file_types.cpp:48
+#: src/common/file_types.cpp:49
 msgid "SSA/ASS text subtitles"
 msgstr "SSA-/ASS-Textuntertitel"
 
@@ -6186,7 +6192,7 @@ msgstr "Einige Kopfdaten wurden verändert. Wollen Sie die Änderungen wirklich 
 msgid "Some header values have been modified. Do you really want to reload without saving the file?"
 msgstr "Einige Kopfdaten wurden verändert. Wollen Sie die Änderungen wirklich verwerfen und die Datei neu laden?"
 
-#: src/merge/output_control.cpp:1470
+#: src/merge/output_control.cpp:1473
 #, boost-format
 msgid "Some tag elements are missing (this error should not have occured - another similar error should have occured earlier). %1%\n"
 msgstr "Einie Tag-Elemente fehlen (dieser Fehler hätte nicht auftreten sollen, sondern früher ein ähnlicher). %1%\n"
@@ -6344,7 +6350,7 @@ msgstr "Statusausgaben unterdrücken."
 msgid "TTA"
 msgstr "TTA"
 
-#: src/common/file_types.cpp:49
+#: src/common/file_types.cpp:50
 msgid "TTA (The lossless True Audio codec)"
 msgstr "TTA (The lossless True Audio codec)"
 
@@ -6375,7 +6381,7 @@ msgstr "Tagbearbeitungsziele"
 msgid "Tags"
 msgstr "Tags"
 
-#: src/merge/output_control.cpp:1458
+#: src/merge/output_control.cpp:1461
 msgid "Tags are not allowed in WebM compliant files. No tags will be written into any output file.\n"
 msgstr "Tags sind in WebM-konformen Dateien nicht zulässig. In keine der Ausgabedateien werden Tags geschrieben.\n"
 
@@ -6656,7 +6662,7 @@ msgstr "Der Dateikopf der Korrekturdatei konnte nicht gelesen werden.\n"
 msgid "The country '%s' is not a valid ccTLD and cannot be selected."
 msgstr "Das Land '%s' ist kein gültiger ccTLD-Code und kann nicht ausgewählt werden."
 
-#: src/merge/output_control.cpp:1538
+#: src/merge/output_control.cpp:1541
 msgid "The cue entries (the index) are being written...\n"
 msgstr "Die Cueeinträge (der Index) werden geschrieben...\n"
 
@@ -6680,11 +6686,11 @@ msgstr "Das Standardsprachkürzel '%1%' ist kein gültiger ISO639-2-Code und wir
 msgid "The delay setting for track nr. %s in file '%s' is invalid."
 msgstr "Der Wert für die Verzögerung für Track Nummer %s in Quelldatei '%s' ist ungültig."
 
-#: src/merge/output_control.cpp:1275
 #: src/merge/output_control.cpp:1278
 #: src/merge/output_control.cpp:1281
 #: src/merge/output_control.cpp:1284
 #: src/merge/output_control.cpp:1287
+#: src/merge/output_control.cpp:1290
 #, boost-format
 msgid ""
 "The demultiplexer for the file '%1%' failed to initialize:\n"
@@ -6778,12 +6784,12 @@ msgstr "Die Datei '%1%' konnte nicht zum Lesen geöffnet werden: %2%.\n"
 #: src/extract/xtr_rmff.cpp:40
 #: src/extract/xtr_tta.cpp:86
 #: src/extract/xtr_wav.cpp:113
-#: src/merge/output_control.cpp:1496
+#: src/merge/output_control.cpp:1499
 #, boost-format
 msgid "The file '%1%' could not be opened for writing: %2%.\n"
 msgstr "Die Datei '%1%' konnte nicht zum Schreiben geöffnet werden: %2%.\n"
 
-#: src/merge/output_control.cpp:1500
+#: src/merge/output_control.cpp:1503
 #, boost-format
 msgid "The file '%1%' has been opened for writing.\n"
 msgstr "Die Datei '%1%' wurde zum Schreiben geöffnet.\n"
@@ -6808,12 +6814,12 @@ msgstr "Die Datei '%s' existiert nicht."
 msgid "The file '%s' is already processed in combination with the file '%s'. It cannot be added a second time."
 msgstr "Die Datei '%s' wird bereits zusammen mit der Datei '%s' verarbeitet. Sie kann nicht ein zweites Mal hinzugefügt werden."
 
-#: src/merge/output_control.cpp:1281
+#: src/merge/output_control.cpp:1284
 msgid "The file content does not match its format type and was not recognized."
 msgstr "Der Dateiinhalt entspricht nicht dem Dateiformat und wurde nicht erkannt."
 
-#: src/merge/output_control.cpp:1275
 #: src/merge/output_control.cpp:1278
+#: src/merge/output_control.cpp:1281
 msgid "The file could not be opened for reading, or there was not enough data to parse its headers."
 msgstr "Die Datei konnte nicht zum Lesen geöffnet werden, oder sie enthielt nicht genug Inhalt zur Analyse der Kopfdaten."
 
@@ -6845,7 +6851,7 @@ msgstr "Der Dateikopf ist zu kurz.\n"
 msgid "The file header was not read correctly.\n"
 msgstr "Der Dateikopf konnte nicht vollständig gelesen werden.\n"
 
-#: src/merge/output_control.cpp:1284
+#: src/merge/output_control.cpp:1287
 msgid "The file headers could not be parsed, e.g. because they're incomplete, invalid or damaged."
 msgstr "Die Kopfpakete konnten nicht geparst werden, z.B. weil sie unvollständig, ungültig oder beschädigt sind."
 
@@ -7558,7 +7564,7 @@ msgstr "Dieses Merkmal ist einzigartig. Es können keine weiteren Instanzen davo
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. %1%\n"
 msgstr "Das hätte WIRKLICH nicht passieren dürfen. Der für das erste Meta-Seek-Element reservierte Platz war zu klein. %1%\n"
 
-#: src/merge/output_control.cpp:1689
+#: src/merge/output_control.cpp:1692
 #, boost-format
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. Size needed: %1%. %2%\n"
 msgstr "Das hätte WIRKLICH nicht passieren dürfen. Der für das erste Meta-Seek-Element reservierte Platz war zu klein. Benötigter Platz: %1%. %2%\n"
@@ -7810,7 +7816,7 @@ msgstr "UID:"
 msgid "USF subtitles"
 msgstr "USF-Textuntertitel"
 
-#: src/common/file_types.cpp:50
+#: src/common/file_types.cpp:51
 msgid "USF text subtitles"
 msgstr "USF-Textuntertitel"
 
@@ -7977,7 +7983,7 @@ msgstr "Das Ausgabemodul für das folgende Format wird benutzt: '%1%'.\n"
 msgid "VC1"
 msgstr "VC1"
 
-#: src/common/file_types.cpp:51
+#: src/common/file_types.cpp:52
 msgid "VC1 elementary streams"
 msgstr "VC1 elementary streams"
 
@@ -8093,7 +8099,7 @@ msgstr "Die Ausgabe ansehen, die mkvmerge während des Muxprozesses der ausgewä
 msgid "VobBtn"
 msgstr "VobBtn"
 
-#: src/common/file_types.cpp:52
+#: src/common/file_types.cpp:53
 msgid "VobButtons"
 msgstr "VobButtons"
 
@@ -8102,7 +8108,7 @@ msgstr "VobButtons"
 msgid "VobSub"
 msgstr "VobSub"
 
-#: src/common/file_types.cpp:53
+#: src/common/file_types.cpp:54
 msgid "VobSub subtitles"
 msgstr "VobSub-Untertitel"
 
@@ -8114,7 +8120,7 @@ msgstr "Vorbis"
 msgid "WAV"
 msgstr "WAV"
 
-#: src/common/file_types.cpp:54
+#: src/common/file_types.cpp:55
 msgid "WAVE (uncompressed PCM audio)"
 msgstr "WAVE (unkomprimiertes PCM)"
 
@@ -8122,7 +8128,7 @@ msgstr "WAVE (unkomprimiertes PCM)"
 msgid "WAVPACK"
 msgstr "WAVPACK"
 
-#: src/common/file_types.cpp:55
+#: src/common/file_types.cpp:56
 msgid "WAVPACK v4 audio"
 msgstr "WAVPACK v4 Audio"
 
@@ -8151,7 +8157,7 @@ msgstr "Warnung: "
 msgid "Warnings:"
 msgstr "Warnungen: "
 
-#: src/common/file_types.cpp:56
+#: src/common/file_types.cpp:57
 msgid "WebM audio/video files"
 msgstr "WebM Audio/Video-Dateien"
 
@@ -8920,7 +8926,7 @@ msgstr "Track ID für mkvmerge/mkvextract: %1%"
 msgid "mkvpropedit [options] <file> <actions>"
 msgstr "mkvpropedit [Optionen] <Dateiname> <Aktionen>"
 
-#: src/common/mm_io.cpp:990
+#: src/common/mm_io.cpp:999
 msgid "mm_text_io_c: UTF32_* is not supported at the moment.\n"
 msgstr "mm_text_io_c: UTF32_* wird momentan nicht unterstützt.\n"
 

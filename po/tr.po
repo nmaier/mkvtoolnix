@@ -2092,7 +2092,7 @@ msgstr "Başka bir çoklama işi hala sürüyor. Lütfen bitene kadar bekleyin y
 msgid "Appending a track from a file to another track from the same file is not allowed. This is the case for tracks number %u and %u."
 msgstr "Dosyadan bir izi aynı dosyadan başka bir ize eklemeye izin verilmez. İz numaraları %u ve %u için durum böyledir."
 
-#: src/merge/output_control.cpp:1829
+#: src/merge/output_control.cpp:1832
 #, boost-format
 msgid "Appending track %1% from file no. %2% ('%3%') to track %4% from file no. %5% ('%6%').\n"
 msgstr "%5% ('%6%') nolu dosyadan %4%. ize eklenen, %2% ('%3%') nolu dosyadan %1%. iz.\n"
@@ -2479,7 +2479,7 @@ msgstr "Bölümler"
 msgid "Chapters (%d entries) from %s"
 msgstr "Bölümler (%d girdi), dosya: %s"
 
-#: src/merge/output_control.cpp:1430
+#: src/merge/output_control.cpp:1433
 msgid "Chapters are not allowed in WebM compliant files. No chapters will be written into any output file.\n"
 msgstr ""
 
@@ -2795,7 +2795,7 @@ msgstr "Bu MPEG-1/2 izinden sıralı başlık çıkartılamadı.\n"
 msgid "Could not find an index for audio track %1% (avilib error message: %2%). Skipping track.\n"
 msgstr "Ses izi %1% için bir indeks bulunamadı (avilib hata mesajı: %2%). İz atlanıyor.\n"
 
-#: src/merge/output_control.cpp:1751
+#: src/merge/output_control.cpp:1754
 #, boost-format
 msgid "Could not find gptzr when appending. %1%\n"
 msgstr "Eklenirken gptzr bulunamadı. %1%\n"
@@ -3276,7 +3276,7 @@ msgstr "EBML okuma sürümü: %1%"
 msgid "EBML version: %1%"
 msgstr "EBML sürümü: %1%"
 
-#: src/merge/output_control.cpp:1268
+#: src/merge/output_control.cpp:1271
 #, boost-format
 msgid "EVIL internal bug! (unknown file type). %1%\n"
 msgstr "KÖTÜ dahili hata! (bilinmeyen dosya türü). %1%\n"
@@ -3539,6 +3539,10 @@ msgstr "FLAC"
 #: src/common/file_types.cpp:34
 msgid "FLAC (Free Lossless Audio Codec)"
 msgstr "FLAC (Ücretsiz Kayıpsız Ses Kodeki)"
+
+#: src/common/file_types.cpp:36
+msgid "FLV (Macromedia Flash Video)"
+msgstr ""
 
 #: src/mmg/tabs/input_format.cpp:233
 msgid "FPS:"
@@ -3926,7 +3930,7 @@ msgstr "ISO639-2 kodu"
 msgid "IVF (VP8)"
 msgstr "IVF (VP8)"
 
-#: src/common/file_types.cpp:36
+#: src/common/file_types.cpp:37
 msgid "IVF with VP8 video files"
 msgstr "VP8 görüntü dosyalarıyla IVF"
 
@@ -4582,11 +4586,11 @@ msgstr "MP2/MP3"
 msgid "MP3"
 msgstr "MP3"
 
-#: src/common/file_types.cpp:37
+#: src/common/file_types.cpp:38
 msgid "MP4 audio/video files"
 msgstr "MP4 ses/görüntü dosyaları"
 
-#: src/common/file_types.cpp:38
+#: src/common/file_types.cpp:39
 msgid "MPEG audio files"
 msgstr "MPEG ses dosyaları"
 
@@ -4594,7 +4598,7 @@ msgstr "MPEG ses dosyaları"
 msgid "MPEG program stream"
 msgstr "MPEG program akışı"
 
-#: src/common/file_types.cpp:39
+#: src/common/file_types.cpp:40
 msgid "MPEG program streams"
 msgstr "MPEG program akışları"
 
@@ -4602,7 +4606,7 @@ msgstr "MPEG program akışları"
 msgid "MPEG transport stream"
 msgstr "MPEG taşıma akışı"
 
-#: src/common/file_types.cpp:40
+#: src/common/file_types.cpp:41
 msgid "MPEG transport streams"
 msgstr "MPEG taşıma akışları"
 
@@ -4610,7 +4614,7 @@ msgstr "MPEG taşıma akışları"
 msgid "MPEG video elementary stream"
 msgstr "MPEG görüntü temel akışı"
 
-#: src/common/file_types.cpp:41
+#: src/common/file_types.cpp:42
 msgid "MPEG video elementary streams"
 msgstr "MPEG görüntü temel akışları"
 
@@ -4621,6 +4625,10 @@ msgstr "MPEG-1/2"
 #: src/output/p_mpeg4_p2.h:65
 msgid "MPEG-4"
 msgstr "MPEG-4"
+
+#: src/input/r_flv.cpp:212
+msgid "Macromedia Flash Video"
+msgstr ""
 
 #: src/mmg/tabs/input_general.cpp:181
 msgid "Make this track the default track for its type (audio, video, subtitles). Players should prefer tracks with the default track flag set."
@@ -4656,7 +4664,7 @@ msgstr "Matroska"
 msgid "Matroska A/V files (*.mka;*.mkv;*.mk3d)|*.mkv;*.mka;*.mk3d|%s"
 msgstr "Matroska S/G dosyaları (*.mka;*.mkv;*.mk3d)|*.mkv;*.mka;*.mk3d|%s"
 
-#: src/common/file_types.cpp:42
+#: src/common/file_types.cpp:43
 msgid "Matroska audio/video files"
 msgstr "Matroska ses/görüntü dosyaları"
 
@@ -5070,7 +5078,7 @@ msgstr "İzdeki kanal sayısı."
 msgid "Ogg/OGM"
 msgstr "Ogg/OGM"
 
-#: src/common/file_types.cpp:45
+#: src/common/file_types.cpp:46
 msgid "Ogg/OGM audio/video files"
 msgstr "Ogg/OGM ses/görüntü dosyaları"
 
@@ -5224,7 +5232,7 @@ msgstr "PCM"
 msgid "PGS"
 msgstr "PGS"
 
-#: src/common/file_types.cpp:43
+#: src/common/file_types.cpp:44
 msgid "PGS/SUP subtitles"
 msgstr "PGS/SUP altyazıları"
 
@@ -5388,7 +5396,7 @@ msgstr "İlerleme: [%1%%2%] %3%%%"
 msgid "Querying mkvmerge's capabilities"
 msgstr "mkvmerge'ün yetenekleri sorgulanıyor"
 
-#: src/common/file_types.cpp:44
+#: src/common/file_types.cpp:45
 msgid "QuickTime audio/video files"
 msgstr "QuickTime ses/görüntü dosyaları"
 
@@ -5572,7 +5580,7 @@ msgstr "RealAudio"
 msgid "RealMedia"
 msgstr "RealMedia"
 
-#: src/common/file_types.cpp:46
+#: src/common/file_types.cpp:47
 msgid "RealMedia audio/video files"
 msgstr "RealMedia ses/görüntü dosyası"
 
@@ -5668,7 +5676,7 @@ msgstr "SHA1-160"
 msgid "SRT subtitles"
 msgstr "SRT altyazıları"
 
-#: src/common/file_types.cpp:47
+#: src/common/file_types.cpp:48
 msgid "SRT text subtitles"
 msgstr "SRT metni altyazıları"
 
@@ -5676,7 +5684,7 @@ msgstr "SRT metni altyazıları"
 msgid "SSA/ASS subtitles"
 msgstr "SSA/ASS altyazıları"
 
-#: src/common/file_types.cpp:48
+#: src/common/file_types.cpp:49
 msgid "SSA/ASS text subtitles"
 msgstr "SSA/ASS metni altyazıları"
 
@@ -6167,7 +6175,7 @@ msgstr "Bazı başlık değerleri değiştirilmiş. Şu ankini kaydetmeden yeni 
 msgid "Some header values have been modified. Do you really want to reload without saving the file?"
 msgstr "Bazı başlık değerleri değiştirilmiş. Dosyayı kaydetmeden yeniden yüklemek istiyor musunuz?"
 
-#: src/merge/output_control.cpp:1470
+#: src/merge/output_control.cpp:1473
 #, boost-format
 msgid "Some tag elements are missing (this error should not have occured - another similar error should have occured earlier). %1%\n"
 msgstr "Bazı etiket öğeleri eksik (bu hata meydana gelmemeliydi - başka bir benzer hata önceden meydana gelmişti). %1%\n"
@@ -6322,7 +6330,7 @@ msgstr "Durdurma durumu çıktısı."
 msgid "TTA"
 msgstr "TTA"
 
-#: src/common/file_types.cpp:49
+#: src/common/file_types.cpp:50
 msgid "TTA (The lossless True Audio codec)"
 msgstr "TTA (Kayıpsız Gerçek Ses kodeki)"
 
@@ -6353,7 +6361,7 @@ msgstr "Etiket seçicileri"
 msgid "Tags"
 msgstr "Etiketler"
 
-#: src/merge/output_control.cpp:1458
+#: src/merge/output_control.cpp:1461
 msgid "Tags are not allowed in WebM compliant files. No tags will be written into any output file.\n"
 msgstr "WebM uyumlu dosyalarda etiketlere izin verilmez. Herhangi bir çıktı dosyasına hiç etiket yazılmadı.\n"
 
@@ -6629,7 +6637,7 @@ msgstr "Düzeltme dosya başlığı doğru olarak okunmadı.\n"
 msgid "The country '%s' is not a valid ccTLD and cannot be selected."
 msgstr "'%s' ülkesi geçerli bir ccTLD değil ve seçilemiyor."
 
-#: src/merge/output_control.cpp:1538
+#: src/merge/output_control.cpp:1541
 msgid "The cue entries (the index) are being written...\n"
 msgstr "Cue girdileri (indeks) yazılıyor...\n"
 
@@ -6653,11 +6661,11 @@ msgstr "Varsayılan dil kodu '%1%' geçerli bir ISO639-2 dil kodu değil ve yoks
 msgid "The delay setting for track nr. %s in file '%s' is invalid."
 msgstr "İz numarası %s için '%s' dosyası içindeki gecikme ayarı geçersiz."
 
-#: src/merge/output_control.cpp:1275
 #: src/merge/output_control.cpp:1278
 #: src/merge/output_control.cpp:1281
 #: src/merge/output_control.cpp:1284
 #: src/merge/output_control.cpp:1287
+#: src/merge/output_control.cpp:1290
 #, boost-format
 msgid ""
 "The demultiplexer for the file '%1%' failed to initialize:\n"
@@ -6747,12 +6755,12 @@ msgstr "'%1%' dosyası okumak için açılamadı (%2%).\n"
 #: src/extract/xtr_rmff.cpp:40
 #: src/extract/xtr_tta.cpp:86
 #: src/extract/xtr_wav.cpp:113
-#: src/merge/output_control.cpp:1496
+#: src/merge/output_control.cpp:1499
 #, fuzzy, boost-format
 msgid "The file '%1%' could not be opened for writing: %2%.\n"
 msgstr "'%1%' dosyası yazmak için açılamadı (%2%).\n"
 
-#: src/merge/output_control.cpp:1500
+#: src/merge/output_control.cpp:1503
 #, boost-format
 msgid "The file '%1%' has been opened for writing.\n"
 msgstr "'%1%' dosyası yazmak için açıldı.\n"
@@ -6777,12 +6785,12 @@ msgstr "Dosya '%s' mevcut değil."
 msgid "The file '%s' is already processed in combination with the file '%s'. It cannot be added a second time."
 msgstr "Dosya '%s' zaten '%s' dosyasının birleştirilmesiyle işleniyor. İkinci bir kez eklenemez."
 
-#: src/merge/output_control.cpp:1281
+#: src/merge/output_control.cpp:1284
 msgid "The file content does not match its format type and was not recognized."
 msgstr "Dosya içeriği biçim türüyle eşleşmiyor ve tanınmadı."
 
-#: src/merge/output_control.cpp:1275
 #: src/merge/output_control.cpp:1278
+#: src/merge/output_control.cpp:1281
 msgid "The file could not be opened for reading, or there was not enough data to parse its headers."
 msgstr "Dosya okumak için açılamadı ya da başlığını ayrıştırmak için yeterli veri yoktu."
 
@@ -6814,7 +6822,7 @@ msgstr "Dosya başlığı çok kısa.\n"
 msgid "The file header was not read correctly.\n"
 msgstr "Dosya başlığı doğru olarak okunmadı.\n"
 
-#: src/merge/output_control.cpp:1284
+#: src/merge/output_control.cpp:1287
 msgid "The file headers could not be parsed, e.g. because they're incomplete, invalid or damaged."
 msgstr "Dosya başlığı ayrıştırılamadı, örn. çünkü tamamlanmadı, geçersiz ya da hasarlı."
 
@@ -7506,7 +7514,7 @@ msgstr ""
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. %1%\n"
 msgstr ""
 
-#: src/merge/output_control.cpp:1689
+#: src/merge/output_control.cpp:1692
 #, boost-format
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. Size needed: %1%. %2%\n"
 msgstr ""
@@ -7756,7 +7764,7 @@ msgstr "UID:"
 msgid "USF subtitles"
 msgstr "USF altyazıları"
 
-#: src/common/file_types.cpp:50
+#: src/common/file_types.cpp:51
 msgid "USF text subtitles"
 msgstr "USF metni altyazıları"
 
@@ -7915,7 +7923,7 @@ msgstr "'%1%' biçimi için çıktı modülü kullanılıyor.\n"
 msgid "VC1"
 msgstr "VC1"
 
-#: src/common/file_types.cpp:51
+#: src/common/file_types.cpp:52
 msgid "VC1 elementary streams"
 msgstr "VC1 temel akışları"
 
@@ -8025,7 +8033,7 @@ msgstr "Seçili iş(ler) için çoklama işlemi sırasında mkvmerge'ün oluştu
 msgid "VobBtn"
 msgstr "VobBtn"
 
-#: src/common/file_types.cpp:52
+#: src/common/file_types.cpp:53
 msgid "VobButtons"
 msgstr "VobButtons"
 
@@ -8034,7 +8042,7 @@ msgstr "VobButtons"
 msgid "VobSub"
 msgstr "VobSub"
 
-#: src/common/file_types.cpp:53
+#: src/common/file_types.cpp:54
 msgid "VobSub subtitles"
 msgstr "VobSub altyazıları"
 
@@ -8046,7 +8054,7 @@ msgstr "Vorbis"
 msgid "WAV"
 msgstr "WAV"
 
-#: src/common/file_types.cpp:54
+#: src/common/file_types.cpp:55
 msgid "WAVE (uncompressed PCM audio)"
 msgstr "WAVE (sıkıştırılmamış PCM sesi)"
 
@@ -8054,7 +8062,7 @@ msgstr "WAVE (sıkıştırılmamış PCM sesi)"
 msgid "WAVPACK"
 msgstr "WAVPACK"
 
-#: src/common/file_types.cpp:55
+#: src/common/file_types.cpp:56
 msgid "WAVPACK v4 audio"
 msgstr "WAVPACK v4 sesi"
 
@@ -8083,7 +8091,7 @@ msgstr "Uyarı:"
 msgid "Warnings:"
 msgstr "Uyarılar:"
 
-#: src/common/file_types.cpp:56
+#: src/common/file_types.cpp:57
 msgid "WebM audio/video files"
 msgstr "WebM ses/görüntü dosyaları"
 
@@ -8845,7 +8853,7 @@ msgstr "mkvmerge/mkvextract iz ID: %1%"
 msgid "mkvpropedit [options] <file> <actions>"
 msgstr "mkvpropedit [seçenekler] <dosya> <eylemler>"
 
-#: src/common/mm_io.cpp:990
+#: src/common/mm_io.cpp:999
 msgid "mm_text_io_c: UTF32_* is not supported at the moment.\n"
 msgstr "mm_text_io_c: UTF32_* şimdilik desteklenmiyor.\n"
 

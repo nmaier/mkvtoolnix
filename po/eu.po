@@ -2094,7 +2094,7 @@ msgstr "Oraindik beste lan multiplexaketa bat dago garatzen. Mesedez itxaron har
 msgid "Appending a track from a file to another track from the same file is not allowed. This is the case for tracks number %u and %u."
 msgstr "Agiri batekik bide bat gehitzea agiri bereko beste bide batera ez dago ahalbideturik. Hau da %u eta %u zenbakiko bideen kasua."
 
-#: src/merge/output_control.cpp:1829
+#: src/merge/output_control.cpp:1832
 #, boost-format
 msgid "Appending track %1% from file no. %2% ('%3%') to track %4% from file no. %5% ('%6%').\n"
 msgstr "%2% zenbakiko agiritiko ('%3%') %1% bidea gehitzea %5% zenbakiko agiritiko %4% bidera ('%6%').\n"
@@ -2480,7 +2480,7 @@ msgstr "Atalak"
 msgid "Chapters (%d entries) from %s"
 msgstr "Atalak (%d sarrera) -> %s"
 
-#: src/merge/output_control.cpp:1430
+#: src/merge/output_control.cpp:1433
 msgid "Chapters are not allowed in WebM compliant files. No chapters will be written into any output file.\n"
 msgstr "Atalak ez daude ahalbideturik WebM bateragarritasun agirietan. Ez da atalik idatziko irteera agirietan.\n"
 
@@ -2796,7 +2796,7 @@ msgstr "Ezin izan da atera sekuentzia idazburua MPEG-1/2 bide honetatik.\n"
 msgid "Could not find an index for audio track %1% (avilib error message: %2%). Skipping track.\n"
 msgstr "Ezin izan da aurkitu aurkibide bat %1% audio bidearentzat (avilib akats mezua: %2%). Bide jauzketa.\n"
 
-#: src/merge/output_control.cpp:1751
+#: src/merge/output_control.cpp:1754
 #, boost-format
 msgid "Could not find gptzr when appending. %1%\n"
 msgstr "Ezin izan da aurkitu gptzr erantsterakoan. %1%\n"
@@ -3277,7 +3277,7 @@ msgstr "EBLM irakurketa bertsioa: %1%"
 msgid "EBML version: %1%"
 msgstr "EBML bertsioa: %1%"
 
-#: src/merge/output_control.cpp:1268
+#: src/merge/output_control.cpp:1271
 #, boost-format
 msgid "EVIL internal bug! (unknown file type). %1%\n"
 msgstr "ARRAIOAK barne akatsa! (agiri mota ezezaguna). %1%\n"
@@ -3539,6 +3539,10 @@ msgstr "FLAC"
 #: src/common/file_types.cpp:34
 msgid "FLAC (Free Lossless Audio Codec)"
 msgstr "FLAC (Galeragabeko Audio Kodek Askea)"
+
+#: src/common/file_types.cpp:36
+msgid "FLV (Macromedia Flash Video)"
+msgstr ""
 
 #: src/mmg/tabs/input_format.cpp:233
 msgid "FPS:"
@@ -3923,7 +3927,7 @@ msgstr "ISO639-2 kodea"
 msgid "IVF (VP8)"
 msgstr "IVF (VP8)"
 
-#: src/common/file_types.cpp:36
+#: src/common/file_types.cpp:37
 msgid "IVF with VP8 video files"
 msgstr "IVF VP8 bideo agiriekin"
 
@@ -4574,11 +4578,11 @@ msgstr "MP2/MP3"
 msgid "MP3"
 msgstr "MP3"
 
-#: src/common/file_types.cpp:37
+#: src/common/file_types.cpp:38
 msgid "MP4 audio/video files"
 msgstr "MP4 audio/bideo agiriak"
 
-#: src/common/file_types.cpp:38
+#: src/common/file_types.cpp:39
 msgid "MPEG audio files"
 msgstr "MPEG audio agiriak"
 
@@ -4586,7 +4590,7 @@ msgstr "MPEG audio agiriak"
 msgid "MPEG program stream"
 msgstr "MPEG programa jarioa"
 
-#: src/common/file_types.cpp:39
+#: src/common/file_types.cpp:40
 msgid "MPEG program streams"
 msgstr "MPEG programa jarioak"
 
@@ -4594,7 +4598,7 @@ msgstr "MPEG programa jarioak"
 msgid "MPEG transport stream"
 msgstr "MPEG garraio jarioa"
 
-#: src/common/file_types.cpp:40
+#: src/common/file_types.cpp:41
 msgid "MPEG transport streams"
 msgstr "MPEG garraio jarioak"
 
@@ -4602,7 +4606,7 @@ msgstr "MPEG garraio jarioak"
 msgid "MPEG video elementary stream"
 msgstr "MPEG bideo ohinarrizko jarioa "
 
-#: src/common/file_types.cpp:41
+#: src/common/file_types.cpp:42
 msgid "MPEG video elementary streams"
 msgstr "MPEG bideo ohinarrizko jarioak"
 
@@ -4613,6 +4617,10 @@ msgstr "MPEG-1/2"
 #: src/output/p_mpeg4_p2.h:65
 msgid "MPEG-4"
 msgstr "MPEG-4"
+
+#: src/input/r_flv.cpp:212
+msgid "Macromedia Flash Video"
+msgstr ""
 
 #: src/mmg/tabs/input_general.cpp:181
 msgid "Make this track the default track for its type (audio, video, subtitles). Players should prefer tracks with the default track flag set."
@@ -4648,7 +4656,7 @@ msgstr "Matroska"
 msgid "Matroska A/V files (*.mka;*.mkv;*.mk3d)|*.mkv;*.mka;*.mk3d|%s"
 msgstr "Matroska A/B agiriak (*.mka;*.mkv;*.mk3d)|*.mkv;*.mka;*.mk3d|%s"
 
-#: src/common/file_types.cpp:42
+#: src/common/file_types.cpp:43
 msgid "Matroska audio/video files"
 msgstr "Matroska audio/bideo agiriak"
 
@@ -5060,7 +5068,7 @@ msgstr "Bideko kanal zenbatekoa"
 msgid "Ogg/OGM"
 msgstr "Ogg/OGM"
 
-#: src/common/file_types.cpp:45
+#: src/common/file_types.cpp:46
 msgid "Ogg/OGM audio/video files"
 msgstr "ogg/OGM audio/bideo agiriak"
 
@@ -5214,7 +5222,7 @@ msgstr "PCM"
 msgid "PGS"
 msgstr "PGS"
 
-#: src/common/file_types.cpp:43
+#: src/common/file_types.cpp:44
 msgid "PGS/SUP subtitles"
 msgstr "PGS/SUP azpidatziak"
 
@@ -5379,7 +5387,7 @@ msgstr "Garapena: [%1%%2%] %3%%%"
 msgid "Querying mkvmerge's capabilities"
 msgstr "Ikusi mkvmergeren gaitasunak"
 
-#: src/common/file_types.cpp:44
+#: src/common/file_types.cpp:45
 msgid "QuickTime audio/video files"
 msgstr "QuickTime audio/bideo agiriak"
 
@@ -5563,7 +5571,7 @@ msgstr "RealAudio"
 msgid "RealMedia"
 msgstr "RealMedia"
 
-#: src/common/file_types.cpp:46
+#: src/common/file_types.cpp:47
 msgid "RealMedia audio/video files"
 msgstr "RealMedia audio/bideo agiriak"
 
@@ -5659,7 +5667,7 @@ msgstr "SHA1-160"
 msgid "SRT subtitles"
 msgstr "SRT azpidatziak"
 
-#: src/common/file_types.cpp:47
+#: src/common/file_types.cpp:48
 msgid "SRT text subtitles"
 msgstr "SRT idazki azpidatziak"
 
@@ -5667,7 +5675,7 @@ msgstr "SRT idazki azpidatziak"
 msgid "SSA/ASS subtitles"
 msgstr "SSA/ASS azpidatziak"
 
-#: src/common/file_types.cpp:48
+#: src/common/file_types.cpp:49
 msgid "SSA/ASS text subtitles"
 msgstr "SSA/ASS idazki azpidatziak"
 
@@ -6156,7 +6164,7 @@ msgstr "Idazburu balio batzuk aldatu egin dira. Egitan nahi duzu agiri berri bat
 msgid "Some header values have been modified. Do you really want to reload without saving the file?"
 msgstr "Idazburu balio batzuk aldatu egin dira. Egitan nahi duzu birgertatzea agiria gorde gabe?"
 
-#: src/merge/output_control.cpp:1470
+#: src/merge/output_control.cpp:1473
 #, boost-format
 msgid "Some tag elements are missing (this error should not have occured - another similar error should have occured earlier). %1%\n"
 msgstr "Ez dago zenbait etiketa osagai (akats hau ez litzake gertatu behar - antzeko beste akats bat gertatu da duela gutxi). %1%\n"
@@ -6313,7 +6321,7 @@ msgstr "Ezeztatu egoera irteera."
 msgid "TTA"
 msgstr "TTA"
 
-#: src/common/file_types.cpp:49
+#: src/common/file_types.cpp:50
 msgid "TTA (The lossless True Audio codec)"
 msgstr "TTA (Galeragabeko True Audio kodeka)"
 
@@ -6344,7 +6352,7 @@ msgstr "Etiketa hautatzaileak"
 msgid "Tags"
 msgstr "Etiketak"
 
-#: src/merge/output_control.cpp:1458
+#: src/merge/output_control.cpp:1461
 msgid "Tags are not allowed in WebM compliant files. No tags will be written into any output file.\n"
 msgstr "Etiketak ez daude ahalbideturik WebM bateragarritasun agirietan. Etiketak ez dira idatziko irteera agirietan.\n"
 
@@ -6625,7 +6633,7 @@ msgstr "Zuzenketa agiri idazburua ez da zuzen irakurri.\n"
 msgid "The country '%s' is not a valid ccTLD and cannot be selected."
 msgstr "'%s' herrialdea ez da ccTLD baliozko bat eta ezin da hautatu."
 
-#: src/merge/output_control.cpp:1538
+#: src/merge/output_control.cpp:1541
 msgid "The cue entries (the index) are being written...\n"
 msgstr "Cue sarrerak (aurkibidea) idazten ari dira...\n"
 
@@ -6649,11 +6657,11 @@ msgstr "'%1%' berezko hizkuntza kodea ez da ISO639-2 hizkuntza kode baliozko bat
 msgid "The delay setting for track nr. %s in file '%s' is invalid."
 msgstr "nr bidearentzako atzerapen ezarpena. %s '%s' agirian baliogabea da."
 
-#: src/merge/output_control.cpp:1275
 #: src/merge/output_control.cpp:1278
 #: src/merge/output_control.cpp:1281
 #: src/merge/output_control.cpp:1284
 #: src/merge/output_control.cpp:1287
+#: src/merge/output_control.cpp:1290
 #, boost-format
 msgid ""
 "The demultiplexer for the file '%1%' failed to initialize:\n"
@@ -6743,12 +6751,12 @@ msgstr "%1% agiria ezin da irakurtzeko ireki (%2%).\n"
 #: src/extract/xtr_rmff.cpp:40
 #: src/extract/xtr_tta.cpp:86
 #: src/extract/xtr_wav.cpp:113
-#: src/merge/output_control.cpp:1496
+#: src/merge/output_control.cpp:1499
 #, fuzzy, boost-format
 msgid "The file '%1%' could not be opened for writing: %2%.\n"
 msgstr "%1% agiria ezin da idazteko ireki (%2%).\n"
 
-#: src/merge/output_control.cpp:1500
+#: src/merge/output_control.cpp:1503
 #, boost-format
 msgid "The file '%1%' has been opened for writing.\n"
 msgstr "%1% agiria idazteko ireki da.\n"
@@ -6773,12 +6781,12 @@ msgstr "'%s' agiria ez dago."
 msgid "The file '%s' is already processed in combination with the file '%s'. It cannot be added a second time."
 msgstr "'%s' agiria jadanik prozesatu da '%s' agiriarekin batera. Ezin da bigarren aldiz gehitu."
 
-#: src/merge/output_control.cpp:1281
+#: src/merge/output_control.cpp:1284
 msgid "The file content does not match its format type and was not recognized."
 msgstr "Agiriaren edukia ez dator bat heuskarri motarekin eta ez da ezagutzen."
 
-#: src/merge/output_control.cpp:1275
 #: src/merge/output_control.cpp:1278
+#: src/merge/output_control.cpp:1281
 msgid "The file could not be opened for reading, or there was not enough data to parse its headers."
 msgstr "Agiria ezin da irakurtzeko ireki, edo ez du nahikoa datu bere idazburuak aztertzeko."
 
@@ -6810,7 +6818,7 @@ msgstr "Agiri idazburua laburregia da.\n"
 msgid "The file header was not read correctly.\n"
 msgstr "Agiri idazburua ezin da zuzen irakurri.\n"
 
-#: src/merge/output_control.cpp:1284
+#: src/merge/output_control.cpp:1287
 msgid "The file headers could not be parsed, e.g. because they're incomplete, invalid or damaged."
 msgstr "Agiri idazburuak ezin dira aztertu, adib. osatugabeak, baliogabeak edo hondatuta daudelako."
 
@@ -7522,7 +7530,7 @@ msgstr "Ezaugarri hau bakarra da. Ezin dira eskabide gehiago gehitu hemen: '%1%'
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. %1%\n"
 msgstr "Hau EGITAN ez litzake gertatu behar. Lehen meta bilaketa gaiarentzat gordetako tartea txikiegia da. %1%\n"
 
-#: src/merge/output_control.cpp:1689
+#: src/merge/output_control.cpp:1692
 #, boost-format
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. Size needed: %1%. %2%\n"
 msgstr "Hau EGITAN ez litzake gertatu behar. Lehen meta bilaketa gaiarentzat gordetako tartea txikiegia da. Beharrezko neurria: %1%. %2%\n"
@@ -7774,7 +7782,7 @@ msgstr "UID-a:"
 msgid "USF subtitles"
 msgstr "USF azpidatziak"
 
-#: src/common/file_types.cpp:50
+#: src/common/file_types.cpp:51
 msgid "USF text subtitles"
 msgstr "USF idazki azpidatziak"
 
@@ -7933,7 +7941,7 @@ msgstr "Irteera moduloa erabiltzen '%1%' heuskarrirako.\n"
 msgid "VC1"
 msgstr "VC1"
 
-#: src/common/file_types.cpp:51
+#: src/common/file_types.cpp:52
 msgid "VC1 elementary streams"
 msgstr "VC1 ohinarrizko jarioak"
 
@@ -8043,7 +8051,7 @@ msgstr "Ikusi mkvmergek multiplexaketa garapenean zehar hautaturiko lanentzat so
 msgid "VobBtn"
 msgstr "VobBtn"
 
-#: src/common/file_types.cpp:52
+#: src/common/file_types.cpp:53
 msgid "VobButtons"
 msgstr "Vob-Botoiak"
 
@@ -8052,7 +8060,7 @@ msgstr "Vob-Botoiak"
 msgid "VobSub"
 msgstr "VobSub"
 
-#: src/common/file_types.cpp:53
+#: src/common/file_types.cpp:54
 msgid "VobSub subtitles"
 msgstr "VobSub azpidatziak"
 
@@ -8064,7 +8072,7 @@ msgstr "Vorbis"
 msgid "WAV"
 msgstr "WAV"
 
-#: src/common/file_types.cpp:54
+#: src/common/file_types.cpp:55
 msgid "WAVE (uncompressed PCM audio)"
 msgstr "WAVE (konprimitu gabeko PCM audioa)"
 
@@ -8072,7 +8080,7 @@ msgstr "WAVE (konprimitu gabeko PCM audioa)"
 msgid "WAVPACK"
 msgstr "WAVPACK"
 
-#: src/common/file_types.cpp:55
+#: src/common/file_types.cpp:56
 msgid "WAVPACK v4 audio"
 msgstr "WAVPACK v4 audioa"
 
@@ -8101,7 +8109,7 @@ msgstr "Kontuz:"
 msgid "Warnings:"
 msgstr "Kontuz oharrak:"
 
-#: src/common/file_types.cpp:56
+#: src/common/file_types.cpp:57
 msgid "WebM audio/video files"
 msgstr "WebM audio/bideo agiriak"
 
@@ -8863,7 +8871,7 @@ msgstr "mkvmerge/mkvextract bide ID-a: %1%"
 msgid "mkvpropedit [options] <file> <actions>"
 msgstr "mkvpropedit [aukerak] <agira> <ekintzak>"
 
-#: src/common/mm_io.cpp:990
+#: src/common/mm_io.cpp:999
 msgid "mm_text_io_c: UTF32_* is not supported at the moment.\n"
 msgstr "mm_text_io_c: UTF32_* ez dago sostengaturik oraingoz.\n"
 
@@ -9228,3 +9236,4 @@ msgstr "Bai"
 
 #~ msgid "on_entry_selected: display == nullptr. Should not have happened."
 #~ msgstr "on_entry_selected: display == nullptr. Hau ez litzake gertatu behar."
+
