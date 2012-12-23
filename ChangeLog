@@ -1,5 +1,8 @@
 2012-12-23  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: bug fix: Fixed consistency checks when appending files and
+	at least one track is disabled.
+
 	* mkvmerge: new feature: Implemented a reader for the Macromedia
 	Flash Video format (.flv). Implements #735.
 

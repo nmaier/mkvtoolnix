@@ -1294,18 +1294,25 @@ bool
 tab_input::validate_settings() {
   // Appending a file to itself is not allowed.
   unsigned int tidx;
-  for (tidx = 2; tidx < tracks.size(); tidx++)
-    if (tracks[tidx - 1]->appending && tracks[tidx]->appending &&
-        (tracks[tidx - 1]->source == tracks[tidx]->source)) {
+  for (tidx = 2; tidx < tracks.size(); tidx++) {
+    if (!tracks[tidx]->enabled || !tracks[tidx]->appending)
+      continue;
+
+    auto to_idx = tidx - 1;
+    while ((0 < to_idx) && !tracks[to_idx]->enabled)
+      --to_idx;
+
+    if (tracks[to_idx]->appending && tracks[to_idx]->enabled && (tracks[to_idx]->source == tracks[tidx]->source)) {
       wxString err;
 
       err.Printf(Z("Appending a track from a file to another track from the same file is not allowed. "
                    "This is the case for tracks number %u and %u."),
-                 tidx, tidx + 1);
+                 to_idx + 1, tidx + 1);
       wxMessageBox(err, Z("mkvmerge GUI: error"), wxOK | wxCENTER | wxICON_ERROR);
 
       return false;
     }
+  }
 
   unsigned int fidx;
   for (fidx = 0; fidx < files.size(); fidx++) {

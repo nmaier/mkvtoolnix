@@ -324,7 +324,12 @@ create_append_mapping() {
 
     if (!result.IsEmpty())
       result += wxT(",");
-    result += wxString::Format(format, tracks[i]->source, tracks[i]->id, tracks[i - 1]->source, tracks[i - 1]->id);
+
+    auto to = i - 1;
+    while ((0 < to) && !tracks[to]->enabled)
+      --to;
+
+    result += wxString::Format(format, tracks[i]->source, tracks[i]->id, tracks[to]->source, tracks[to]->id);
   }
 
   return result;
