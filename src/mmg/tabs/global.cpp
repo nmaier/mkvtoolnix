@@ -246,6 +246,19 @@ tab_global::translate_split_args() {
       Y("If a range's start timecode is prefixed with '+' then its content will be written to the same file as the previous range. Otherwise a new file will be created for this range."),
     };
     new_tool_tip = format_tooltip(wxU(join(" ", help)));
+
+  } else if (5 == mode) {
+    st_split_args->SetLabel(Z("Frames/fields:"));
+    std::vector<std::string> help = {
+      Y("A comma-separated list of frame/field numbers after which to split."),
+      Y("The numbering starts at 1."),
+      Y("This mode considers only the first video track that is output."),
+      Y("If no video track is output no splitting will occur."),
+      Y("The numbers given with this argument are interpreted based on the number of Matroska blocks that are output."),
+      Y("A single Matroska block contains either a full frame (for progressive content) or a single field (for interlaced content)."),
+      Y("mkvmerge does not distinguish between those two and simply counts the number of blocks."),
+    };
+    new_tool_tip = format_tooltip(wxU(join(" ", help)));
   }
 
   auto tool_tip = cob_split_args->GetToolTip();
@@ -275,6 +288,7 @@ tab_global::translate_ui() {
   cob_split_mode->Append(Z("split after duration"));
   cob_split_mode->Append(Z("split after timecodes"));
   cob_split_mode->Append(Z("split by parts"));
+  cob_split_mode->Append(Z("split after frame/field numbers"));
   cob_split_mode->SetSelection(split_mode);
 
   cb_link->SetLabel(Z("link files"));
@@ -416,6 +430,7 @@ tab_global::load(wxConfigBase *cfg,
                      : split_mode == wxT("duration")  ? 2
                      : split_mode == wxT("timecodes") ? 3
                      : split_mode == wxT("parts")     ? 4
+                     : split_mode == wxT("frames")    ? 5
                      :                                  0;
     }
   }
@@ -487,6 +502,7 @@ tab_global::save(wxConfigBase *cfg) {
                       : 2 == split_mode_idx ? wxT("duration")
                       : 3 == split_mode_idx ? wxT("timecodes")
                       : 4 == split_mode_idx ? wxT("parts")
+                      : 5 == split_mode_idx ? wxT("frames")
                       :                       wxT("none");
   cfg->Write(wxT("split_mode"), value);
   cfg->Write(wxT("split_args"), cob_split_args->GetValue());
@@ -576,12 +592,24 @@ tab_global::is_valid_split_timecode_list() {
 }
 
 bool
+tab_global::is_valid_split_frame_list() {
+  uint64_t value;
+  std::vector<wxString> parts = split(cob_split_args->GetValue(), wxString(wxT(",")));
+  for (auto &part : parts)
+    if (!parse_number(wxMB(part), value) || !value)
+      return false;
+
+  return true;
+}
+
+bool
 tab_global::validate_settings() {
   auto idx = cob_split_mode->GetSelection();
 
   if (   ((1 == idx) && !is_valid_split_size())
       || ((2 == idx) && !is_valid_split_timecode(cob_split_args->GetValue()))
-      || ((3 == idx) && !is_valid_split_timecode_list()))
+      || ((3 == idx) && !is_valid_split_timecode_list())
+      || ((5 == idx) && !is_valid_split_frame_list()))
     return false;
 
   int64_t dummy_i;

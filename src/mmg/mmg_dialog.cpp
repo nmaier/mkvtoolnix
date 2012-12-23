@@ -1133,7 +1133,8 @@ mmg_dialog::update_command_line() {
     wxString mode = 1 == idx ? wxT("size:")
                   : 2 == idx ? wxT("duration:")
                   : 3 == idx ? wxT("timecodes:")
-                  :            wxT("parts:");
+                  : 4 == idx ? wxT("parts:")
+                  :            wxT("frames:");
 
     clargs.Add(wxT("--split"));
     clargs.Add(mode + global_page->cob_split_args->GetValue());

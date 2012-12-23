@@ -68,6 +68,7 @@ public:
   bool is_valid_split_size();
   bool is_valid_split_timecode(wxString s);
   bool is_valid_split_timecode_list();
+  bool is_valid_split_frame_list();
   void enable_split_controls();
 
   void translate_ui();
