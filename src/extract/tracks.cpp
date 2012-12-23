@@ -280,7 +280,7 @@ write_all_cuesheets(KaxChapters &chapters,
         write_cuesheet(file_name, chapters, tags, tspecs[i].tuid, *out);
 
       } catch(mtx::mm_io::open_x &ex) {
-        mxerror(boost::format(Y("The file '%1%' could not be opened for writing: %2%.\n")) % cue_file_name % ex.message());
+        mxerror(boost::format(Y("The file '%1%' could not be opened for writing: %2%.\n")) % cue_file_name % ex);
       }
     }
   }
@@ -326,7 +326,7 @@ extract_tracks(const std::string &file_name,
     in   = mm_file_io_c::open(file_name);
     file = kax_file_cptr(new kax_file_c(in));
   } catch (mtx::mm_io::exception &ex) {
-    show_error(boost::format(Y("The file '%1%' could not be opened for reading: %2%.\n")) % file_name % ex.message());
+    show_error(boost::format(Y("The file '%1%' could not be opened for reading: %2%.\n")) % file_name % ex);
     return false;
   }
 

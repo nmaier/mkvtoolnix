@@ -330,7 +330,7 @@ open_input_file(filelist_t &file) {
     }
 
   } catch (mtx::mm_io::exception &ex) {
-    mxerror(boost::format(Y("The file '%1%' could not be opened for reading: %2%.\n")) % file.name % ex.message());
+    mxerror(boost::format(Y("The file '%1%' could not be opened for reading: %2%.\n")) % file.name % ex);
     return mm_io_cptr{};
 
   } catch (...) {
@@ -463,7 +463,7 @@ get_file_type(filelist_t &file) {
       text_io = new mm_text_io_c(new mm_file_io_c(file.name));
       size    = text_io->get_size();
     } catch (mtx::mm_io::exception &ex) {
-      mxerror(boost::format(Y("The file '%1%' could not be opened for reading: %2%.\n")) % file.name % ex.message());
+      mxerror(boost::format(Y("The file '%1%' could not be opened for reading: %2%.\n")) % file.name % ex);
 
     } catch (...) {
       mxerror(boost::format(Y("The source file '%1%' could not be opened successfully, or retrieving its size by seeking to the end did not work.\n")) % file.name);
@@ -1204,6 +1204,9 @@ create_readers() {
           file.reader = new flac_reader_c(*file.ti, input_file);
           break;
 #endif
+        case FILE_TYPE_FLV:
+          file.reader = new flv_reader_c(*file.ti, input_file);
+          break;
         case FILE_TYPE_IVF:
           file.reader = new ivf_reader_c(*file.ti, input_file);
           break;
@@ -1493,7 +1496,7 @@ create_next_output_file() {
   try {
     s_out = !g_cluster_helper->discarding() ? mm_write_buffer_io_c::open(this_outfile, 20 * 1024 * 1024) : mm_io_cptr{ new mm_null_io_c{this_outfile} };
   } catch (mtx::mm_io::exception &ex) {
-    mxerror(boost::format(Y("The file '%1%' could not be opened for writing: %2%.\n")) % this_outfile % ex.message());
+    mxerror(boost::format(Y("The file '%1%' could not be opened for writing: %2%.\n")) % this_outfile % ex);
   }
 
   if (verbose && !g_cluster_helper->discarding())

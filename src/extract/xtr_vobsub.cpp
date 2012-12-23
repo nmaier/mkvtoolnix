@@ -78,7 +78,7 @@ xtr_vobsub_c::create_file(xtr_base_c *master,
     try {
       m_out = mm_write_buffer_io_c::open(sub_file_name, 128 * 1024);
     } catch (mtx::mm_io::exception &ex) {
-      mxerror(boost::format(Y("Failed to create the VobSub data file '%1%': %2%\n")) % sub_file_name % ex.message());
+      mxerror(boost::format(Y("Failed to create the VobSub data file '%1%': %2%\n")) % sub_file_name % ex);
     }
 
   } else {
@@ -232,7 +232,7 @@ xtr_vobsub_c::finish_file() {
       m_slaves[slave]->write_idx(idx, slave + 1);
 
   } catch (mtx::mm_io::exception &ex) {
-    mxerror(boost::format(Y("Failed to create the file '%1%': %2%\n")) % m_base_name % ex.message());
+    mxerror(boost::format(Y("Failed to create the file '%1%': %2%\n")) % m_base_name % ex);
   }
 }
 

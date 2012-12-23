@@ -1,3 +1,12 @@
+2012-12-23  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: new feature: Implemented a reader for the Macromedia
+	Flash Video format (.flv). Implements #735.
+
+2012-12-22  Moritz Bunkus  <moritz@bunkus.org>
+
+	* Build system: Boost's "variant" library is now required.
+
 2012-12-17  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: ISO 639-2 language handling: The deprecated

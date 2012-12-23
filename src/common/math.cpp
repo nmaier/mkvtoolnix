@@ -41,3 +41,9 @@ int_log2(uint32_t value) {
   return highest;
 }
 
+double
+int_to_double(int64_t value) {
+  if (static_cast<uint64_t>(value + value) > (0xffeull << 52))
+    return NAN;
+  return ldexp(((value & ((1ll << 52) - 1)) + (1ll << 52)) * (value >> 63 | 1), (value >> 52 & 0x7ff) - 1075);
+}

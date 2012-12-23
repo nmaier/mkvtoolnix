@@ -85,6 +85,11 @@ public:
       trim();
   }
 
+  void clear() {
+    if (m_filled)
+      remove(m_filled);
+  }
+
   unsigned char *get_buffer() {
     return &m_data[m_offset];
   }

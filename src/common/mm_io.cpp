@@ -265,6 +265,15 @@ mm_io_c::puts(const std::string &s) {
   return num_written;
 }
 
+memory_cptr
+mm_io_c::read(size_t size) {
+  auto buffer = memory_c::alloc(size);
+  if (read(buffer, size) != size)
+    throw mtx::mm_io::end_of_file_x{};
+
+  return buffer;
+}
+
 uint32_t
 mm_io_c::read(void *buffer,
               size_t size) {
