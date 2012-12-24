@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: it\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2012-12-23 10:33+0100\n"
+"PO-Revision-Date: 2012-12-24 11:01+0100\n"
 "Last-Translator: bovirus <bovirus@gmail.com>\n"
 "Language-Team: Italian <moritz@bunkus.org>\n"
 "Language: it\n"
@@ -374,14 +374,13 @@ msgstr ""
 "                           o dopo un certo tempo (OO:MM:SS).\n"
 
 #: src/merge/mkvmerge.cpp:124
-#, fuzzy
 msgid ""
 "  --split frames:A[,B...]\n"
 "                           Create a new file after each frame/field A, B\n"
 "                           etc.\n"
 msgstr ""
-"  --split timecodes:A[,B...]\n"
-"                          Crea un nuovo file dopo ogni timecode A, B\n"
+"  --split frames:A[,B...]\n"
+"                           Crea un nuovo file dopo ogni frame/campo A, B\n"
 "                           ecc.\n"
 
 #: src/merge/mkvmerge.cpp:120
@@ -1712,9 +1711,8 @@ msgid "A block was found at timestamp %1% for track number %2%. However, no head
 msgstr "Trovato un blocco alla posizione data %1% per la traccia numero %2%. Nessuna intestazione trovata per la traccia. Il blocco verrà ignorato.\n"
 
 #: src/mmg/tabs/global.cpp:253
-#, fuzzy
 msgid "A comma-separated list of frame/field numbers after which to split."
-msgstr "Una lista separata da virgole di intervalli timecode da mantenere."
+msgstr "Un elenco di numeri. separato da virgole. di frame/campi dopo cui suddividere."
 
 #: src/mmg/tabs/global.cpp:242
 msgid "A comma-separated list of timecode ranges of content to keep."
@@ -1750,7 +1748,7 @@ msgstr "Un segmento da riprodurre in luogo di questo capitolo. L'edizione impost
 
 #: src/mmg/tabs/global.cpp:258
 msgid "A single Matroska block contains either a full frame (for progressive content) or a single field (for interlaced content)."
-msgstr ""
+msgstr "Un singolo blocco Matroska contiene un frame pieno (per i contenuti progressivi) o un singolo campo (per i contenuti interrlacciati)."
 
 #: src/info/mkvinfo.cpp:790
 msgid "A track"
@@ -3246,9 +3244,8 @@ msgid "Download URL:"
 msgstr "URL download:"
 
 #: src/mmg/tabs/global.cpp:215
-#, fuzzy
 msgid "Duration:"
-msgstr "Descrizione:"
+msgstr "Durata:"
 
 #: src/info/mkvinfo.cpp:203
 #, boost-format
@@ -3549,7 +3546,7 @@ msgstr "FLAC (Free Lossless Audio Codec)"
 
 #: src/common/file_types.cpp:36
 msgid "FLV (Flash Video)"
-msgstr ""
+msgstr "FLV (video flash)"
 
 #: src/mmg/tabs/input_format.cpp:233
 msgid "FPS:"
@@ -3706,7 +3703,7 @@ msgstr "Flag:"
 
 #: src/input/r_flv.cpp:212
 msgid "Flash Video"
-msgstr ""
+msgstr "Video flash"
 
 #: src/mmg/header_editor/value_page.cpp:147
 msgid "Floating point number"
@@ -3802,7 +3799,7 @@ msgstr "Frame con dimensione %1%%2%%3%"
 
 #: src/mmg/tabs/global.cpp:251
 msgid "Frames/fields:"
-msgstr ""
+msgstr "Frame/campi:"
 
 #: src/mmg/tabs/input_extra.cpp:130
 msgid "Free-form edit field for user defined options for this track. What you input here is added after all the other options mmg adds so that you could overwrite any of mmg's options for this track. All occurences of the string \"<TID>\" will be replaced by the track's track ID."
@@ -3997,7 +3994,7 @@ msgstr "Se lasciato vuoto mmg imposterà il file nella stessa cartella del primo
 
 #: src/mmg/tabs/global.cpp:256
 msgid "If no video track is output no splitting will occur."
-msgstr ""
+msgstr "Se non c'è traccia video destinazione non ci sarà suddivisione."
 
 #: src/mmg/tabs/attachments.cpp:166
 msgid "If splitting is a file can be attached either to all files created or only to the first file. Has no effect if no splitting is used."
@@ -4264,9 +4261,9 @@ msgid "Invalid format: unknown character '%1%' found"
 msgstr "Formato non valido: trovato carattere sconosciuto '%1%'"
 
 #: src/merge/mkvmerge.cpp:830
-#, fuzzy, boost-format
+#, boost-format
 msgid "Invalid frame for '--split' in '--split %1%'.\n"
-msgstr "Formato non valido per '--split' in '--split %1%'.\n"
+msgstr "Frame non valido per '--split' in '--split %1%'.\n"
 
 #: src/input/r_vobsub.cpp:530
 #, boost-format
@@ -4701,9 +4698,8 @@ msgid "Max BlockAddition ID: %1%"
 msgstr "ID MaxBlocchiAggiunti: %1%"
 
 #: src/mmg/tabs/global.cpp:296
-#, fuzzy
 msgid "Max. number of files:"
-msgstr "massimo numero di file:"
+msgstr "Max. numero di file:"
 
 #: src/info/mkvinfo.cpp:887
 #, boost-format
@@ -5287,7 +5283,7 @@ msgstr "Analisi file"
 
 #: src/mmg/tabs/global.cpp:240
 msgid "Parts:"
-msgstr ""
+msgstr "Parti:"
 
 #: src/info/mkvinfo.cpp:615
 #, boost-format
@@ -6169,7 +6165,7 @@ msgstr "Rilevato campo singolo prima dell'intestazione GOP. Puoi correggere il f
 #: src/mmg/tabs/global.cpp:197
 #: src/mmg/tabs/global.cpp:200
 msgid "Size:"
-msgstr ""
+msgstr "Dimensione:"
 
 #: src/output/p_aac.cpp:70
 #, boost-format
@@ -6227,7 +6223,7 @@ msgstr ""
 
 #: src/mmg/tabs/global.cpp:280
 msgid "Split mode:"
-msgstr ""
+msgstr "Modo suddivisione:"
 
 #: src/mmg/tabs/global.cpp:279
 msgid "Splitting"
@@ -7156,11 +7152,11 @@ msgstr ""
 
 #: src/mmg/tabs/global.cpp:254
 msgid "The numbering starts at 1."
-msgstr ""
+msgstr "La numerazione deve partire da 1."
 
 #: src/mmg/tabs/global.cpp:257
 msgid "The numbers given with this argument are interpreted based on the number of Matroska blocks that are output."
-msgstr ""
+msgstr "Il numero fornito con questo argomento è interpretato sulla base dei blocchi Matroska destinazione."
 
 #: src/merge/mkvmerge.cpp:2056
 msgid "The option '--meta-seek-size' is no longer supported. Please read mkvmerge's documentation, especially the section about the MATROSKA FILE LAYOUT.\n"
@@ -7560,7 +7556,7 @@ msgstr "Questo è il titolo che i lettori potrebbero visualizzare come 'titolo p
 
 #: src/mmg/tabs/global.cpp:255
 msgid "This mode considers only the first video track that is output."
-msgstr ""
+msgstr "Questo modo considera solo la prima traccia video destinazione."
 
 #: src/mmg/cli_options_dlg.cpp:88
 msgid "This option needs an additional argument 'n'. Tells mkvmerge to put at most 'n' data blocks into each cluster. If the number is postfixed with 'ms' then put at most 'n' milliseconds of data into each cluster. The maximum length for a cluster that mkvmerge accepts is 60000 blocks and 32000ms; the minimum length is 100ms. Programs will only be able to seek to clusters, so creating larger clusters may lead to imprecise or slow seeking."
@@ -8855,7 +8851,7 @@ msgstr "mkvmerge può leggere e usare timecode da un file di testo esterno. Ques
 
 #: src/mmg/tabs/global.cpp:259
 msgid "mkvmerge does not distinguish between those two and simply counts the number of blocks."
-msgstr ""
+msgstr "mkvmerge non distingue tra questi due semplici contatori il numero di blocchi."
 
 #: src/output/p_avc.cpp:106
 #, boost-format
@@ -8985,9 +8981,8 @@ msgid "no signature hash algorithm"
 msgstr "nessun algoritmo di firma hash"
 
 #: src/mmg/tabs/global.cpp:286
-#, fuzzy
 msgid "no splitting"
-msgstr "Suddivisione"
+msgstr "nessuna suddivisione"
 
 #: src/mmg/mmg_dialog.cpp:1014
 #: src/mmg/tabs/input_extra.cpp:85
@@ -9129,28 +9124,24 @@ msgid "side by side (right first)"
 msgstr "side by side (prima a destra)"
 
 #: src/mmg/tabs/global.cpp:288
-#, fuzzy
 msgid "split after duration"
-msgstr "...dopo questa durata:"
+msgstr "dividi per durata"
 
 #: src/mmg/tabs/global.cpp:291
 msgid "split after frame/field numbers"
-msgstr ""
+msgstr "dividi dopo numeri frame/campi"
 
 #: src/mmg/tabs/global.cpp:287
-#, fuzzy
 msgid "split after size"
-msgstr "'--split' - dimensione non specificata.\n"
+msgstr "dividi per dimensione"
 
 #: src/mmg/tabs/global.cpp:289
-#, fuzzy
 msgid "split after timecodes"
-msgstr "Regola timecode capitolo"
+msgstr "dividi dopo timecode"
 
 #: src/mmg/tabs/global.cpp:290
-#, fuzzy
 msgid "split by parts"
-msgstr "...per parti:"
+msgstr "dividi in parti"
 
 #: src/input/subtitles.cpp:600
 #, boost-format
