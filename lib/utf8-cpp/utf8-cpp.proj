@@ -1,9 +1,0 @@
-GROUP utf8-cpp
-{
-  INCLUDE source
-  EXPINCLUDE source
-  HEADER source/utf8/checked.h
-  HEADER source/utf8/core.h
-  HEADER source/utf8/unchecked.h
-  SOURCE source/utf8.h
-}
