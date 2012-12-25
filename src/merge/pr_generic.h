@@ -31,6 +31,7 @@
 #include "common/stereo_mode.h"
 #include "common/strings/editing.h"
 #include "common/tags/tags.h"
+#include "common/translation.h"
 #include "merge/item_selector.h"
 #include "merge/packet.h"
 #include "merge/timecode_factory.h"
@@ -362,7 +363,7 @@ public:
   generic_reader_c(const track_info_c &ti, const mm_io_cptr &in);
   virtual ~generic_reader_c();
 
-  virtual const std::string get_format_name(bool translate = true) const = 0;
+  virtual translatable_string_c get_format_name() const = 0;
 
   virtual void read_headers() = 0;
   virtual file_status_e read(generic_packetizer_c *ptzr, bool force = false) = 0;
@@ -647,7 +648,7 @@ public:
 
   virtual void force_duration_on_last_packet();
 
-  virtual const std::string get_format_name(bool translate = true) const = 0;
+  virtual translatable_string_c get_format_name() const = 0;
   virtual connection_result_e can_connect_to(generic_packetizer_c *src, std::string &error_message) = 0;
   virtual void connect(generic_packetizer_c *src, int64_t append_timecode_offset = -1);
 

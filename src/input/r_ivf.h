@@ -28,8 +28,8 @@ public:
   ivf_reader_c(const track_info_c &ti, const mm_io_cptr &in);
   virtual ~ivf_reader_c();
 
-  virtual const std::string get_format_name(bool translate = true) const {
-    return translate ? Y("IVF (VP8)") : "IVF (VP8)";
+  virtual translatable_string_c get_format_name() const {
+    return YT("IVF (VP8)");
   }
 
   virtual void read_headers();

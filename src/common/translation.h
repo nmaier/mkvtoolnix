@@ -16,6 +16,8 @@
 
 #include "common/common_pch.h"
 
+#include <ostream>
+
 class translation_c {
 public:
   static std::vector<translation_c> ms_available_translations;
@@ -55,6 +57,13 @@ public:
 };
 
 #define YT(s) translatable_string_c(s)
+
+inline std::ostream &
+operator <<(std::ostream &out,
+            translatable_string_c const &s) {
+  out << s.get_translated();
+  return out;
+}
 
 void init_locales(std::string locale = "");
 

@@ -385,8 +385,8 @@ public:
 
   static bool probe_file(mm_io_c *in, uint64_t size);
 
-  virtual const std::string get_format_name(bool translate = true) const {
-    return translate ? Y("MPEG transport stream") : "MPEG transport stream";
+  virtual translatable_string_c get_format_name() const {
+    return YT("MPEG transport stream");
   }
 
   virtual void read_headers();

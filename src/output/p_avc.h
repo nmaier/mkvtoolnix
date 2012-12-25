@@ -38,8 +38,8 @@ public:
 
   virtual void flush_frames();
 
-  virtual const std::string get_format_name(bool translate = true) const {
-    return translate ? Y("AVC/h.264") : "AVC/h.264";
+  virtual translatable_string_c get_format_name() const {
+    return YT("AVC/h.264");
   };
 
   virtual void connect(generic_packetizer_c *src, int64_t p_append_timecode_offset = -1);

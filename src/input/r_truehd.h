@@ -32,8 +32,8 @@ public:
   truehd_reader_c(const track_info_c &ti, const mm_io_cptr &in);
   virtual ~truehd_reader_c();
 
-  virtual const std::string get_format_name(bool translate = true) const {
-    return translate ? Y("TrueHD") : "TrueHD";
+  virtual translatable_string_c get_format_name() const {
+    return YT("TrueHD");
   }
 
   virtual void read_headers();

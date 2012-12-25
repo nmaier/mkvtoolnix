@@ -37,8 +37,8 @@ public:
   virtual void flush_packets();
   virtual void set_headers();
 
-  virtual const std::string get_format_name(bool translate = true) const {
-    return translate ? Y("AC3") : "AC3";
+  virtual translatable_string_c get_format_name() const {
+    return YT("AC3");
   }
 
   virtual connection_result_e can_connect_to(generic_packetizer_c *src, std::string &error_message);

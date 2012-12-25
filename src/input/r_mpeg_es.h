@@ -30,8 +30,8 @@ public:
   mpeg_es_reader_c(const track_info_c &ti, const mm_io_cptr &in);
   virtual ~mpeg_es_reader_c();
 
-  virtual const std::string get_format_name(bool translate = true) const {
-    return translate ? Y("MPEG video elementary stream") : "MPEG video elementary stream";
+  virtual translatable_string_c get_format_name() const {
+    return YT("MPEG video elementary stream");
   }
 
   virtual void read_headers();

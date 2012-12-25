@@ -41,8 +41,8 @@ public:
   virtual void set_skipping_is_normal(bool skipping_is_normal) {
     m_skipping_is_normal = skipping_is_normal;
   }
-  virtual const std::string get_format_name(bool translate = true) const {
-    return translate ? Y("DTS") : "DTS";
+  virtual translatable_string_c get_format_name() const {
+    return YT("DTS");
   }
 
   virtual connection_result_e can_connect_to(generic_packetizer_c *src, std::string &error_message);

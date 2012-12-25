@@ -206,10 +206,10 @@ flv_reader_c::flv_reader_c(track_info_c const &ti,
 {
 }
 
-std::string const
-flv_reader_c::get_format_name(bool translate)
+translatable_string_c
+flv_reader_c::get_format_name()
   const {
-  return translate ? Y("Flash Video") : "Flash Video";
+  return YT("Flash Video");
 }
 
 unsigned int

@@ -31,8 +31,8 @@ public:
   virtual int process(packet_cptr packet);
   virtual void set_headers();
 
-  virtual const std::string get_format_name(bool translate = true) const {
-    return translate ? Y("RealAudio") : "RealAudio";
+  virtual translatable_string_c get_format_name() const {
+    return YT("RealAudio");
   }
   virtual connection_result_e can_connect_to(generic_packetizer_c *src, std::string &error_message);
 };

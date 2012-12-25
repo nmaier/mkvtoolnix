@@ -149,7 +149,7 @@ public:
 
   static int probe_file(mm_io_c *io, uint64_t size);
 
-  virtual std::string const get_format_name(bool translate = true) const;
+  virtual translatable_string_c get_format_name() const;
 
 protected:
   bool process_tag(bool skip_payload = false);

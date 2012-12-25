@@ -56,8 +56,8 @@ public:
   coreaudio_reader_c(const track_info_c &ti, const mm_io_cptr &in);
   virtual ~coreaudio_reader_c();
 
-  virtual std::string const get_format_name(bool translate = true) const {
-    return translate ? Y("CoreAudio") : "CoreAudio";
+  virtual translatable_string_c get_format_name() const {
+    return YT("CoreAudio");
   }
 
   virtual void read_headers();
