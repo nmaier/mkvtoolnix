@@ -23,6 +23,7 @@
 #include "common/mm_write_buffer_io.h"
 #include "common/strings/editing.h"
 #include "extract/xtr_aac.h"
+#include "extract/xtr_alac.h"
 #include "extract/xtr_avc.h"
 #include "extract/xtr_avi.h"
 #include "extract/xtr_base.h"
@@ -144,6 +145,8 @@ xtr_base_c::create_extractor(const std::string &new_codec_id,
     return new xtr_wav_c(new_codec_id, new_tid, tspec);
   else if (new_codec_id == MKV_A_FLAC)
     return new xtr_flac_c(new_codec_id, new_tid, tspec);
+  else if (new_codec_id == MKV_A_ALAC)
+    return new xtr_alac_c(new_codec_id, new_tid, tspec);
   else if (new_codec_id == MKV_A_VORBIS)
     return new xtr_oggvorbis_c(new_codec_id, new_tid, tspec);
   else if (balg::istarts_with(new_codec_id, "A_AAC"))

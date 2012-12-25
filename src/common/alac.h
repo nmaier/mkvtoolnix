@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef MTX_COMMON_ALAC_COMMON_H
-#define MTX_COMMON_ALAC_COMMON_H
+#ifndef MTX_COMMON_ALAC_H
+#define MTX_COMMON_ALAC_H
 
 #include "common/common_pch.h"
 
@@ -36,19 +36,10 @@ struct PACKED_STRUCTURE codec_config_t {
   uint32_t sample_rate;
 };
 
-struct PACKED_STRUCTURE channel_layout_info_t {
-  uint32_t channel_layout_info_size;
-  uint32_t channel_layout_info_i_d;
-  uint32_t version_flags;
-  uint32_t channel_layout_tag;
-  uint32_t reserved1;
-  uint32_t reserved2;
-};
-
 #if defined(COMP_MSC)
 #pragma pack(pop)
 #endif
 
 }
 
-#endif // MTX_COMMON_ALAC_COMMON_H
+#endif // MTX_COMMON_ALAC_H
