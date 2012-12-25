@@ -89,7 +89,6 @@ private:
   uint8_t mpegVersion;
   MPEG2ParserState_e parserState;
   MPEGVideoBuffer * mpgBuf;
-  bool bFrameMissingReferenceWarning;
   std::list<int64_t> m_timecodes;
 
   int32_t InitParser();

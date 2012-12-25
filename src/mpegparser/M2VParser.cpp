@@ -127,7 +127,6 @@ M2VParser::M2VParser(){
   seqHdrChunk = nullptr;
   gopChunk = nullptr;
   keepSeqHdrsInBitstream = true;
-  bFrameMissingReferenceWarning = false;
 }
 
 int32_t M2VParser::InitParser(){
@@ -159,9 +158,6 @@ int32_t M2VParser::InitParser(){
 
 M2VParser::~M2VParser(){
   DumpQueues();
-  if (!probing && !waitQueue.empty()) {
-    mxwarn(Y("Video ended with a shortened group of pictures. Some frames have been dropped. You may want to fix the MPEG2 video stream before attempting to multiplex it.\n"));
-  }
   FlushWaitQueue();
   delete seqHdrChunk;
   delete gopChunk;
@@ -395,13 +391,6 @@ int32_t M2VParser::FillQueues(){
         if(waitSecondField){
           mxerror(Y("Single field frame before GOP header detected. Fix the MPEG2 video stream before attempting to multiplex it.\n"));
         }
-        if(!waitQueue.empty()){
-          mxwarn(Y("Shortened GOP detected. Some frames have been dropped. You may want to fix the MPEG2 video stream before attempting to multiplex it.\n"));
-          FlushWaitQueue();
-        }
-        if(m_gopHdr.brokenLink){
-          mxinfo(Y("Found group of picture with broken link. You may want use smart reencode before attempting to multiplex it.\n"));
-        }
         // There are too many broken videos to do the following so ReferenceBlock will be wrong for broken videos.
         /*
         if(m_gopHdr.closedGOP){
@@ -444,14 +433,8 @@ int32_t M2VParser::FillQueues(){
         break;
       default: //B-frames
         if(firstRef == -1 || secondRef == -1){
-          if(!m_gopHdr.closedGOP && !m_gopHdr.brokenLink){
-            if(gopNum > 0){
-              mxerror(Y("Found B frame without second reference in a non closed GOP. Fix the MPEG2 video stream before attempting to multiplex it.\n"));
-            } else if (!probing && !bFrameMissingReferenceWarning){
-              mxwarn(Y("Found one or more B frames without second reference in the first GOP. You may want to fix the MPEG2 video stream or use smart reencode before attempting to multiplex it.\n"));
-              bFrameMissingReferenceWarning = true;
-            }
-          }
+          if(!m_gopHdr.closedGOP && !m_gopHdr.brokenLink && (0 < gopNum))
+            mxerror(Y("Found B frame without second reference in a non closed GOP. Fix the MPEG2 video stream before attempting to multiplex it.\n"));
           invisible = true;
         }
         PrepareFrame(chunk, myTime, picHdr);
