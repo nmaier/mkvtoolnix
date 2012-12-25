@@ -1830,6 +1830,10 @@ msgstr "ALAC"
 msgid "ALAC (Apple Lossless Audio Codec)"
 msgstr "ALAC (Apple Lossless Audio Codec)"
 
+#: src/extract/xtr_alac.cpp:52
+msgid "ALAC private data size mismatch\n"
+msgstr ""
+
 #: src/mmg/header_editor/value_page.cpp:143
 msgid ""
 "ASCII string (no special chars like\n"
@@ -2334,7 +2338,7 @@ msgid "Cannot write track %1% with the CodecID '%2%' to the file '%3%' because t
 msgstr "Неможливо записати доріжку %1% з CodecID '%2%' до файлу '%3%', тому що доріжка %4% з CodecID '%5%' вже записується в той же файл, і їх специфічні дані CodecPrivate (USF-стилі і т.д.) не збігаються.\n"
 
 #: src/extract/xtr_avi.cpp:48
-#: src/extract/xtr_base.cpp:64
+#: src/extract/xtr_base.cpp:65
 #: src/extract/xtr_ivf.cpp:51
 #: src/extract/xtr_textsubs.cpp:310
 #, boost-format
@@ -3570,7 +3574,7 @@ msgstr "Не вдалося створити файл даних VobSub '%1%': %
 msgid "Failed to create the file '%1%': %2%\n"
 msgstr "Не вдалося створити файл '%1%': %2% (%3%)\n"
 
-#: src/extract/xtr_base.cpp:72
+#: src/extract/xtr_base.cpp:73
 #, boost-format
 msgid "Failed to create the file '%1%': %2% (%3%)\n"
 msgstr "Не вдалося створити файл '%1%': %2% (%3%)\n"
@@ -3762,17 +3766,9 @@ msgstr "Примусово встановлюється масштабний к�
 msgid "Format specific options"
 msgstr "Опції, специфічні щодо вибраного формату даних"
 
-#: src/mpegparser/M2VParser.cpp:449
+#: src/mpegparser/M2VParser.cpp:437
 msgid "Found B frame without second reference in a non closed GOP. Fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr "Знайдено B-кадр в не закритій GOP (групі зображень) без другого посилання. Необхідно виправити відео потік MPEG2 перш ніж намагатися мультиплексувати.\n"
-
-#: src/mpegparser/M2VParser.cpp:403
-msgid "Found group of picture with broken link. You may want use smart reencode before attempting to multiplex it.\n"
-msgstr "Знайдена група зображень із зіпсованим посиланням. Ви можете використати \"розумне\" перекодування, перш ніж намагатися мультиплексувати.\n"
-
-#: src/mpegparser/M2VParser.cpp:451
-msgid "Found one or more B frames without second reference in the first GOP. You may want to fix the MPEG2 video stream or use smart reencode before attempting to multiplex it.\n"
-msgstr "Знайдено один або більше B-кадрів без другого посилання в першій GOP (групі зображень). Ви можете виправити MPEG2 потік відео або використати \"розумне\" перекодування, перш ніж намагатися  мультиплексувати.\n"
 
 #: src/mmg/tabs/input_format.cpp:227
 msgid "FourCC:"
@@ -6056,10 +6052,6 @@ msgstr "Короткий AAC аудіопакет (довжина: %1% < %2%)\n"
 msgid "Short AAC audio packet (length: %1% < 2)\n"
 msgstr "Короткий AAC аудіопакет (довжина: %1% < 2)\n"
 
-#: src/mpegparser/M2VParser.cpp:399
-msgid "Shortened GOP detected. Some frames have been dropped. You may want to fix the MPEG2 video stream before attempting to multiplex it.\n"
-msgstr "Виявлено скорочену GOP. Деякі кадри були пропущені. Ви можете виправити MPEG2 відеопотік перед мультиплексуванням як таким.\n"
-
 #: src/info/wxwidgets_ui.cpp:118
 msgid "Show &all elements\tCtrl-A"
 msgstr "&Показати всі елементи\tCtrl-A"
@@ -6167,7 +6159,7 @@ msgstr "ПростийБлок"
 msgid "SimpleBlock (%1%track number %2%, %3% frame(s), timecode %|4$.3f|s = %5%)"
 msgstr "ПростийБлок (%1% доріжка номер %2%, %3% кадри(ів), тайм-код %|4$.3f|с = %5%)"
 
-#: src/mpegparser/M2VParser.cpp:396
+#: src/mpegparser/M2VParser.cpp:392
 msgid "Single field frame before GOP header detected. Fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr "Виявлено кадр з одним полем перед заголовком GOP. Виправте MPEG2 відеопотік перед мультиплексуванням як таким.\n"
 
@@ -6456,7 +6448,7 @@ msgstr "Для доріжки AVC відео відсутній елемент '
 msgid "The CUE sheet for track %1% will be written to '%2%'.\n"
 msgstr "Трек-лист CUE для доріжки %1% буде записаний до '%2%'.\n"
 
-#: src/merge/pr_generic.h:467
+#: src/merge/pr_generic.h:468
 msgid "The CodecID of the two tracks is different: %1% and %2%"
 msgstr "CodecID двох доріжок різні: %1% i %2%"
 
@@ -6661,7 +6653,7 @@ msgid "The codec type '%1%' cannot be used in a WebM compliant file.\n"
 msgstr "Кодек типу '%1%' не може використовуватися в сумісному WebM файлі.\n"
 
 #: src/output/p_flac.cpp:101
-#: src/merge/pr_generic.h:474
+#: src/merge/pr_generic.h:475
 #, boost-format
 msgid "The codec's private data does not match (lengths: %1% and %2%)."
 msgstr "Специфічні дані кодеків не співпадають (довжини: %1% i %2%)."
@@ -6722,11 +6714,11 @@ msgstr ""
 msgid "The difference between tags associated with a track and global tags is explained in mkvmerge's documentation. In short: global tags apply to the complete file while the tags you can add on the 'input' tab apply to only one track."
 msgstr "Різниця між тегами, що пов'язані з доріжками, і глобальними тегами пояснюється в документації mkvmerge. Якщо коротко, то: глобальні теги застосовуються до всього файлу, в той час, як звичайні теги можна додати на вкладці 'На вході' і вони будуть застосовуватись лише до однієї вибраної доріжки."
 
-#: src/merge/pr_generic.h:462
+#: src/merge/pr_generic.h:463
 msgid "The display height of the two tracks is different: %1% and %2%"
 msgstr "Висота дисплея двох доріжок є різною: %1% i %2%"
 
-#: src/merge/pr_generic.h:457
+#: src/merge/pr_generic.h:458
 msgid "The display width of the two tracks is different: %1% and %2%"
 msgstr "Ширина дисплея двох доріжок є різною: %1% i %2%"
 
@@ -6971,7 +6963,7 @@ msgstr "Четвертий режим дозволяє витягувати ро
 msgid "The given timecode scale factor is outside the valid range (1...10000000 or -1 for 'sample precision even if a video track is present').\n"
 msgstr "Даний масштабний коефіцієнт тайм-коду знаходиться за межами допустимого діапазону (1 ... 10000000 або -1 для 'точності до семплу, навіть якщо доріжка відео присутня').\n"
 
-#: src/merge/pr_generic.h:452
+#: src/merge/pr_generic.h:453
 msgid "The height of the two tracks is different: %1% and %2%"
 msgstr "Висота кадру двох доріжок є різною: %1% i %2%"
 
@@ -7113,11 +7105,11 @@ msgstr "Назва вихідного файлу '%1%' і одного з вхі
 msgid "The next UID was already given in '%1% %2%'.\n"
 msgstr "Наступний UID вже заданий в '%1% %2%'.\n"
 
-#: src/merge/pr_generic.h:442
+#: src/merge/pr_generic.h:443
 msgid "The number of bits per sample of the two audio tracks is different: %1% and %2%"
 msgstr "Кількість біт на семпл двох звукових доріжок є різною: %1% i %2%"
 
-#: src/merge/pr_generic.h:437
+#: src/merge/pr_generic.h:438
 msgid "The number of channels of the two audio tracks is different: %1% and %2%"
 msgstr "Число каналів двох звукових доріжок є різною: %1% i %2%"
 
@@ -7232,7 +7224,7 @@ msgstr "Причини цього поки невідомі."
 msgid "The root element must be <%1%>."
 msgstr "Кореневий елемент повинен бути <%1%>."
 
-#: src/merge/pr_generic.h:432
+#: src/merge/pr_generic.h:433
 msgid "The sample rate of the two audio tracks is different: %1% and %2%"
 msgstr "Частота дискретизації двох звукових доріжок є різною: %1% i %2%"
 
@@ -7424,7 +7416,7 @@ msgstr "Параметри доріжок не співпадають."
 msgid "The update information could not be retrieved from %1%.\n"
 msgstr "Інформацію про оновлення не вдається отримати від %1%.\n"
 
-#: src/merge/pr_generic.h:447
+#: src/merge/pr_generic.h:448
 msgid "The width of the two tracks is different: %1% and %2%"
 msgstr "Ширина двох доріжок є різною: %1% i %2%"
 
@@ -7682,6 +7674,7 @@ msgid "Track %1% with the CodecID '%2%' is missing the \"bits per second (bps)\"
 msgstr "Для доріжки %1% з CodecID '%2%' відсутній елемент \"bits per second (bps)\" і вона не може бути витягнута.\n"
 
 #: src/extract/xtr_aac.cpp:42
+#: src/extract/xtr_alac.cpp:48
 #: src/extract/xtr_avc.cpp:61
 #: src/extract/xtr_avi.cpp:39
 #: src/extract/xtr_ogg.cpp:38
@@ -7790,7 +7783,7 @@ msgstr "Оверлей доріжки: %1%"
 msgid "Track type: %1%"
 msgstr "Тип доріжки: %1%"
 
-#: src/extract/xtr_base.cpp:119
+#: src/extract/xtr_base.cpp:120
 msgid "Tracks with unsupported content encoding schemes (compression or encryption) cannot be extracted.\n"
 msgstr "Доріжки з непідтримуваними схемами кодування контенту (стиснення або шифрування) не можуть бути витягнені.\n"
 
@@ -7851,7 +7844,7 @@ msgstr "USF текстові субтитри"
 msgid "UTFstring_to_cstrutf8: Invalid wide character. Please contact moritz@bunkus.org if you think that this is not true."
 msgstr "UTFstring_to_cstrutf8: Невірний символ. Будь ласка, зв'яжіться з moritz@bunkus.org якщо ви думаєте, що це не так."
 
-#: src/mpegparser/M2VParser.cpp:244
+#: src/mpegparser/M2VParser.cpp:240
 msgid "Unexpected picture frame after single field frame. Fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr "Неочікуваний кадр зображення після кадру з одним полем. Виправте відеопотік MPEG2 перш ніж спробувати мультиплексувати.\n"
 
@@ -7984,7 +7977,7 @@ msgstr "Задані користувачем опції:"
 msgid "Using a NALU size length of 3 bytes might result in tracks that won't be decodable with certain AVC/h.264 codecs.\n"
 msgstr "Використання довжини поля розміру NALU у 3 байти може призвести до того, що отримані доріжки не будуть призначені для декодування деякими AVC/H.264 кодеками.\n"
 
-#: src/merge/pr_generic.h:335
+#: src/merge/pr_generic.h:336
 msgid "Using the demultiplexer for the format '%1%'.\n"
 msgstr "Використання демультиплексора для формату '%1%'.\n"
 
@@ -7993,7 +7986,7 @@ msgstr "Використання демультиплексора для фор�
 msgid "Using the generic output module for track type '%1%'.\n"
 msgstr "Використання вихідного модуля для доріжки типу '%1%'.\n"
 
-#: src/merge/pr_generic.h:337
+#: src/merge/pr_generic.h:338
 msgid "Using the output module for the format '%1%'.\n"
 msgstr "Використання вихідного модуля для формату '%1%'.\n"
 
@@ -8065,10 +8058,6 @@ msgstr "Одиниці відображення відео"
 #: src/mmg/header_editor/frame.cpp:435
 msgid "Video display width"
 msgstr "Ширина відображення відео"
-
-#: src/mpegparser/M2VParser.cpp:163
-msgid "Video ended with a shortened group of pictures. Some frames have been dropped. You may want to fix the MPEG2 video stream before attempting to multiplex it.\n"
-msgstr "Файл відео наприкінці містить скорочену групу зображень. Деякі кадри були пропущені. Можливо, краще перед мультиплексуванням виправити помилки у файлі MPEG2.\n"
 
 #: src/common/property_element.cpp:134
 msgid "Video interlaced flag"
@@ -9084,7 +9073,7 @@ msgstr "pr_generic.cpp/generic_packetizer_c::add_packet(): тайм-код < о�
 msgid "pr_generic.cpp/generic_reader_c::demuxing_requested(): Invalid track type %1%."
 msgstr "pr_generic.cpp/generic_reader_c::demuxing_requested(): Невірний тип доріжки %1%."
 
-#: src/extract/xtr_base.cpp:47
+#: src/extract/xtr_base.cpp:48
 msgid "raw data"
 msgstr "необроблені (сирі) дані"
 
@@ -9413,8 +9402,14 @@ msgstr "Так"
 #~ msgid "File/segment title"
 #~ msgstr "Файл/сегмент назву"
 
+#~ msgid "Found group of picture with broken link. You may want use smart reencode before attempting to multiplex it.\n"
+#~ msgstr "Знайдена група зображень із зіпсованим посиланням. Ви можете використати \"розумне\" перекодування, перш ніж намагатися мультиплексувати.\n"
+
 #~ msgid "Found no encoded data nor '@file' to read binary data from."
 #~ msgstr "Не знайдено ані жодних закодованих даних, ані '@file' для зчитування двійкових даних."
+
+#~ msgid "Found one or more B frames without second reference in the first GOP. You may want to fix the MPEG2 video stream or use smart reencode before attempting to multiplex it.\n"
+#~ msgstr "Знайдено один або більше B-кадрів без другого посилання в першій GOP (групі зображень). Ви можете виправити MPEG2 потік відео або використати \"розумне\" перекодування, перш ніж намагатися  мультиплексувати.\n"
 
 #~ msgid "Impossible to use file '%1%': The file could not be opened for reading.\n"
 #~ msgstr "Неможливо використовувати файл '%1%': файл не може бути відкритий для читання.\n"
@@ -9505,6 +9500,9 @@ msgstr "Так"
 
 #~ msgid "Sets the compression used for VobSub subtitles. If nothing is chosen then the VobSubs will be automatically compressed with zlib. 'none' results is files that are a lot larger."
 #~ msgstr "Встановлює стиск, що використовується для субтитрів VobSub. Якщо нічого не вибрали, то VobSubs будуть автоматично стискати з zlib. Результати це файли, які багато більше."
+
+#~ msgid "Shortened GOP detected. Some frames have been dropped. You may want to fix the MPEG2 video stream before attempting to multiplex it.\n"
+#~ msgstr "Виявлено скорочену GOP. Деякі кадри були пропущені. Ви можете виправити MPEG2 відеопотік перед мультиплексуванням як таким.\n"
 
 #~ msgid "TTA lossless audio"
 #~ msgstr "TTA аудіо без втрат"
@@ -9848,6 +9846,9 @@ msgstr "Так"
 
 #~ msgid "VC1 video elementary stream"
 #~ msgstr "VC1 відео елементарний потік"
+
+#~ msgid "Video ended with a shortened group of pictures. Some frames have been dropped. You may want to fix the MPEG2 video stream before attempting to multiplex it.\n"
+#~ msgstr "Файл відео наприкінці містить скорочену групу зображень. Деякі кадри були пропущені. Можливо, краще перед мультиплексуванням виправити помилки у файлі MPEG2.\n"
 
 #~ msgid "VobBtn buttons"
 #~ msgstr "VobBtn кнопки"

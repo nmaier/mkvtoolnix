@@ -1831,6 +1831,10 @@ msgstr ""
 msgid "ALAC (Apple Lossless Audio Codec)"
 msgstr "FLAC (verlies vrije audio Audio Codec)"
 
+#: src/extract/xtr_alac.cpp:52
+msgid "ALAC private data size mismatch\n"
+msgstr ""
+
 #: src/mmg/header_editor/value_page.cpp:143
 msgid ""
 "ASCII string (no special chars like\n"
@@ -2337,7 +2341,7 @@ msgid "Cannot write track %1% with the CodecID '%2%' to the file '%3%' because t
 msgstr "Kan spoor niet schrijven %1% met het CodecID '%2%' naar het bestand '%3%' omdat spoor %4% met het CodecID '%5%' al wordt geschreven naar hetzelfde bestand, en hun CodecPrivé data (de USF stijlen etc) niet overeenkomen.\n"
 
 #: src/extract/xtr_avi.cpp:48
-#: src/extract/xtr_base.cpp:64
+#: src/extract/xtr_base.cpp:65
 #: src/extract/xtr_ivf.cpp:51
 #: src/extract/xtr_textsubs.cpp:310
 #, boost-format
@@ -3575,7 +3579,7 @@ msgstr "Gefaald te creëren VobSub data bestand '%1%': %2% (%3%)\n"
 msgid "Failed to create the file '%1%': %2%\n"
 msgstr "Gefaald bestand te creëren '%1%': %2% (%3%)\n"
 
-#: src/extract/xtr_base.cpp:72
+#: src/extract/xtr_base.cpp:73
 #, boost-format
 msgid "Failed to create the file '%1%': %2% (%3%)\n"
 msgstr "Gefaald bestand te creëren '%1%': %2% (%3%)\n"
@@ -3769,17 +3773,9 @@ msgstr "Forceert de tijdschaal factor naar VERVANGMIJ. Je dient de VERVANGMIJ te
 msgid "Format specific options"
 msgstr "Specifieke formaat opties"
 
-#: src/mpegparser/M2VParser.cpp:449
+#: src/mpegparser/M2VParser.cpp:437
 msgid "Found B frame without second reference in a non closed GOP. Fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr "Gevonden B beeldje zonder tweede referentie in een niet gesloten GOP. Herstel de MPEG2 video stroom voordat je een poging doet het te vermenigvuldigen.\n"
-
-#: src/mpegparser/M2VParser.cpp:403
-msgid "Found group of picture with broken link. You may want use smart reencode before attempting to multiplex it.\n"
-msgstr "Gevonden een groep van beelden met een onjuiste verwijzing. Je zou kunnen gebruiken de slimme re-encode voordat je een poging doet het te vermenigvuldigen.\n"
-
-#: src/mpegparser/M2VParser.cpp:451
-msgid "Found one or more B frames without second reference in the first GOP. You may want to fix the MPEG2 video stream or use smart reencode before attempting to multiplex it.\n"
-msgstr "Vond één of meer B beelden zonder een tweede referentie in het eerste GOP. Misschien wil je de MPEG2 video stroom herstellen of gebruik de slimme her-coderen voordat je een poging doet het te vermenigvuldigen.\n"
 
 #: src/mmg/tabs/input_format.cpp:227
 msgid "FourCC:"
@@ -6078,10 +6074,6 @@ msgstr "Korte AAC audio pakket (lengte: %1% < %2%)\n"
 msgid "Short AAC audio packet (length: %1% < 2)\n"
 msgstr "Kort AAC audio pakket (lengte: %1% < 2)\n"
 
-#: src/mpegparser/M2VParser.cpp:399
-msgid "Shortened GOP detected. Some frames have been dropped. You may want to fix the MPEG2 video stream before attempting to multiplex it.\n"
-msgstr "Verkort GOP gedetecteerd. Sommige beelden zijn vervallen. Misschien wil je de MPEG2 video stroom herstellen voordat je een poging doet het te vermenigvuldigen.\n"
-
 #: src/info/wxwidgets_ui.cpp:118
 msgid "Show &all elements\tCtrl-A"
 msgstr "Toon &alle elementen\tCtrl-A"
@@ -6189,7 +6181,7 @@ msgstr "SimpelBlok"
 msgid "SimpleBlock (%1%track number %2%, %3% frame(s), timecode %|4$.3f|s = %5%)"
 msgstr "SimpleBlok (%1% spoor nummer %2%, %3% be(e)ld(en), tijd code %|4$.3f|s = %5%)"
 
-#: src/mpegparser/M2VParser.cpp:396
+#: src/mpegparser/M2VParser.cpp:392
 msgid "Single field frame before GOP header detected. Fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr "Enkele veld beeld GOP kop ontdekt. Herstel de MPEG2 video stroom voor je een poging het te vermenigvuldigen.\n"
 
@@ -6478,7 +6470,7 @@ msgstr "Het AVC video spoor ontbreekt het 'CTTS' deel voor beeld tijdcode compen
 msgid "The CUE sheet for track %1% will be written to '%2%'.\n"
 msgstr "De volg document(en) (cue) voor spoor %1% wordt geschreven naar '%2%'.\n"
 
-#: src/merge/pr_generic.h:467
+#: src/merge/pr_generic.h:468
 msgid "The CodecID of the two tracks is different: %1% and %2%"
 msgstr "Het CodecID van de twee sporen zijn verschillend: %1% en %2%"
 
@@ -6684,7 +6676,7 @@ msgid "The codec type '%1%' cannot be used in a WebM compliant file.\n"
 msgstr "Het codec type '%1%' kan niet gebruikt worden in een WebM herkenbaar bestand.\n"
 
 #: src/output/p_flac.cpp:101
-#: src/merge/pr_generic.h:474
+#: src/merge/pr_generic.h:475
 #, boost-format
 msgid "The codec's private data does not match (lengths: %1% and %2%)."
 msgstr "De codec's privé data komen niet overeen (lengte: %1% en %2%)."
@@ -6746,11 +6738,11 @@ msgstr ""
 msgid "The difference between tags associated with a track and global tags is explained in mkvmerge's documentation. In short: global tags apply to the complete file while the tags you can add on the 'input' tab apply to only one track."
 msgstr "Het verschil tussen een markering gekoppeld aan een spoor en globale markeringen worden uitgelegd in mkvmerge's documentatie. In het kort: globale markeringen gaan over het gehele bestand terwijl de markeringen die jij kunt toevoegen aan de 'invoer' tab alléén gaan over één spoor."
 
-#: src/merge/pr_generic.h:462
+#: src/merge/pr_generic.h:463
 msgid "The display height of the two tracks is different: %1% and %2%"
 msgstr "De scherm hoogte van de twee sporen zijn verschillend: %1% en %2%"
 
-#: src/merge/pr_generic.h:457
+#: src/merge/pr_generic.h:458
 msgid "The display width of the two tracks is different: %1% and %2%"
 msgstr "De scherm  breedte van de twee sporen zijn verschillend: %1% en %2%"
 
@@ -6997,7 +6989,7 @@ msgstr "De vierde mode extraheert de hoofdstukken en zet ze om naar een XML form
 msgid "The given timecode scale factor is outside the valid range (1...10000000 or -1 for 'sample precision even if a video track is present').\n"
 msgstr "De gegeven tijd code schaal fator valt buiten een geldig bereik (1...10000000 of-1 voor 'voorbeeld precisie zelfs als een video spoor aanwezig is').\n"
 
-#: src/merge/pr_generic.h:452
+#: src/merge/pr_generic.h:453
 msgid "The height of the two tracks is different: %1% and %2%"
 msgstr "De hoogte van de twee sporen verschillen: %1% en %2%"
 
@@ -7139,11 +7131,11 @@ msgstr "De naam van het uitvoer bestand '%1%' en één van de invoer bestanden z
 msgid "The next UID was already given in '%1% %2%'.\n"
 msgstr "Het volgende UID is reeds ingegeven in '%1% %2%'.\n"
 
-#: src/merge/pr_generic.h:442
+#: src/merge/pr_generic.h:443
 msgid "The number of bits per sample of the two audio tracks is different: %1% and %2%"
 msgstr "Het aantal bits per voorbeeld van de twee audio sporen zijn verschillend: %1% en %2%"
 
-#: src/merge/pr_generic.h:437
+#: src/merge/pr_generic.h:438
 msgid "The number of channels of the two audio tracks is different: %1% and %2%"
 msgstr "Het aantal kanalen van de twee audio sporen zijn verschillend: %1% and %2%"
 
@@ -7258,7 +7250,7 @@ msgstr "De reden is onbekend."
 msgid "The root element must be <%1%>."
 msgstr "Het root element moet zijn <%1%>."
 
-#: src/merge/pr_generic.h:432
+#: src/merge/pr_generic.h:433
 msgid "The sample rate of the two audio tracks is different: %1% and %2%"
 msgstr "De voorbeel verhouding van de twee audio sporen zijn verschillend: %1% en %2%"
 
@@ -7452,7 +7444,7 @@ msgstr "De spoor parameters komen niet overeen."
 msgid "The update information could not be retrieved from %1%.\n"
 msgstr "Het opwaardeer bestand kon niet verkregen worden van (%1%).\n"
 
-#: src/merge/pr_generic.h:447
+#: src/merge/pr_generic.h:448
 msgid "The width of the two tracks is different: %1% and %2%"
 msgstr "De breedte van de twee sporen zijn verschillend: %1% en %2%"
 
@@ -7710,6 +7702,7 @@ msgid "Track %1% with the CodecID '%2%' is missing the \"bits per second (bps)\"
 msgstr "Spoor %1% met het CodecID '%2%' ontbreken de \"bits per seconde (bps)\" element en kan niet uitgepakt worden.\n"
 
 #: src/extract/xtr_aac.cpp:42
+#: src/extract/xtr_alac.cpp:48
 #: src/extract/xtr_avc.cpp:61
 #: src/extract/xtr_avi.cpp:39
 #: src/extract/xtr_ogg.cpp:38
@@ -7818,7 +7811,7 @@ msgstr "Spoor overlay: %1%"
 msgid "Track type: %1%"
 msgstr "Spoor type: %1%"
 
-#: src/extract/xtr_base.cpp:119
+#: src/extract/xtr_base.cpp:120
 msgid "Tracks with unsupported content encoding schemes (compression or encryption) cannot be extracted.\n"
 msgstr "Sporen met niet ondersteunde codeer schema's (compressie of vesleuteling) kunnen niet uitgepakt worden.\n"
 
@@ -7880,7 +7873,7 @@ msgstr "USF tekst ondertiteling"
 msgid "UTFstring_to_cstrutf8: Invalid wide character. Please contact moritz@bunkus.org if you think that this is not true."
 msgstr "UTFstring_to_cstrutf8: Ongeldig breed karakter. neem a.u.b. kontak op met moritz@bunkus.org als je denkt dat dit niet juist is."
 
-#: src/mpegparser/M2VParser.cpp:244
+#: src/mpegparser/M2VParser.cpp:240
 msgid "Unexpected picture frame after single field frame. Fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr "Onverwacht beeld plaatje na een enkel beeld veld. Herstel het MPEG2 video spoor voorje een poging doet het te vermenigvuldigen.\n"
 
@@ -8013,7 +8006,7 @@ msgstr "Gebruiker gedefinieerde opties:"
 msgid "Using a NALU size length of 3 bytes might result in tracks that won't be decodable with certain AVC/h.264 codecs.\n"
 msgstr "Gebruikmakend van een NALU lengte grootte van 3 bytes kan resulteren in sporen die niet decodeerbaar zijn met bepaalde AVC/h.264 codecs.\n"
 
-#: src/merge/pr_generic.h:335
+#: src/merge/pr_generic.h:336
 #, fuzzy
 msgid "Using the demultiplexer for the format '%1%'.\n"
 msgstr "Gebruikmakend van de AAC splitser.\n"
@@ -8023,7 +8016,7 @@ msgstr "Gebruikmakend van de AAC splitser.\n"
 msgid "Using the generic output module for track type '%1%'.\n"
 msgstr "Gebruikmakend van de AAC uitvoer module (FourCC: %1%).\n"
 
-#: src/merge/pr_generic.h:337
+#: src/merge/pr_generic.h:338
 #, fuzzy
 msgid "Using the output module for the format '%1%'.\n"
 msgstr "Gebruikmakend van de AAC uitvoer module (FourCC: %1%).\n"
@@ -8096,10 +8089,6 @@ msgstr "Video scherm unit"
 #: src/mmg/header_editor/frame.cpp:435
 msgid "Video display width"
 msgstr "Video scherm breedte"
-
-#: src/mpegparser/M2VParser.cpp:163
-msgid "Video ended with a shortened group of pictures. Some frames have been dropped. You may want to fix the MPEG2 video stream before attempting to multiplex it.\n"
-msgstr "De Video is geeïndigd met een te kort aan  plaatjes beeld groepen. Sommige beelden zijn vervallen. Misschien wil je de MPEG2 video stroom herstellen voordat je een poging doet het te vermenigvuldigen.\n"
 
 #: src/common/property_element.cpp:134
 msgid "Video interlaced flag"
@@ -9120,7 +9109,7 @@ msgstr "pr_algemeen.cpp/generic_packetizer_c::add_packet(): timecode < laatste_t
 msgid "pr_generic.cpp/generic_reader_c::demuxing_requested(): Invalid track type %1%."
 msgstr "pr_algemeen.cpp/generic_lezer_c::demuxing_requested(): Ongeldig spoor type %1%."
 
-#: src/extract/xtr_base.cpp:47
+#: src/extract/xtr_base.cpp:48
 msgid "raw data"
 msgstr "raw data"
 
@@ -9440,8 +9429,14 @@ msgstr "ja"
 #~ msgid "Failed to parse the USF end tag for track %1%: %2%\n"
 #~ msgstr "Gefaald het USF eind markering te ontleden voor spoor %1%: %2%\n"
 
+#~ msgid "Found group of picture with broken link. You may want use smart reencode before attempting to multiplex it.\n"
+#~ msgstr "Gevonden een groep van beelden met een onjuiste verwijzing. Je zou kunnen gebruiken de slimme re-encode voordat je een poging doet het te vermenigvuldigen.\n"
+
 #~ msgid "Found no encoded data nor '@file' to read binary data from."
 #~ msgstr "Vond geen gecodeerde gegevens noch '@bestand'om binaire data van te lezen."
+
+#~ msgid "Found one or more B frames without second reference in the first GOP. You may want to fix the MPEG2 video stream or use smart reencode before attempting to multiplex it.\n"
+#~ msgstr "Vond één of meer B beelden zonder een tweede referentie in het eerste GOP. Misschien wil je de MPEG2 video stroom herstellen of gebruik de slimme her-coderen voordat je een poging doet het te vermenigvuldigen.\n"
 
 #~ msgid "Impossible to use file '%1%': The file could not be opened for reading.\n"
 #~ msgstr "Onmogelijk bestand '%1%' te gebruiken: Het bestand kon voor lezen niet geopend worden.\n"
@@ -9526,6 +9521,9 @@ msgstr "ja"
 
 #~ msgid "Sets the compression used for VobSub subtitles. If nothing is chosen then the VobSubs will be automatically compressed with zlib. 'none' results is files that are a lot larger."
 #~ msgstr "Stelt de gebruikte compressie in voor VobSub ondertitels. Als er niets is geselecteerd, dan zal de VobSubs automatisch worden gecomprimeerd met zlib. 'geen' zal resuleeren in bestanden die aanmerkelijk groter zijn."
+
+#~ msgid "Shortened GOP detected. Some frames have been dropped. You may want to fix the MPEG2 video stream before attempting to multiplex it.\n"
+#~ msgstr "Verkort GOP gedetecteerd. Sommige beelden zijn vervallen. Misschien wil je de MPEG2 video stroom herstellen voordat je een poging doet het te vermenigvuldigen.\n"
 
 #~ msgid "TTA lossless audio"
 #~ msgstr "TTA verlies vrije audio"
@@ -9866,6 +9864,9 @@ msgstr "ja"
 
 #~ msgid "VC1 video elementary stream"
 #~ msgstr "VC1 video basis stroom"
+
+#~ msgid "Video ended with a shortened group of pictures. Some frames have been dropped. You may want to fix the MPEG2 video stream before attempting to multiplex it.\n"
+#~ msgstr "De Video is geeïndigd met een te kort aan  plaatjes beeld groepen. Sommige beelden zijn vervallen. Misschien wil je de MPEG2 video stroom herstellen voordat je een poging doet het te vermenigvuldigen.\n"
 
 #~ msgid "VobBtn buttons"
 #~ msgstr "VobBtn knoppen"

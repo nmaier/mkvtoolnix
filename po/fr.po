@@ -1826,6 +1826,10 @@ msgstr ""
 msgid "ALAC (Apple Lossless Audio Codec)"
 msgstr "FLAC (Free Lossless Audio Codec)"
 
+#: src/extract/xtr_alac.cpp:52
+msgid "ALAC private data size mismatch\n"
+msgstr ""
+
 #: src/mmg/header_editor/value_page.cpp:143
 msgid ""
 "ASCII string (no special chars like\n"
@@ -2326,7 +2330,7 @@ msgid "Cannot write track %1% with the CodecID '%2%' to the file '%3%' because t
 msgstr "Impossible d'écrire la piste %1% avec l'identifiant de codec '%2%' dans le fichier '%3%' parce que la piste %4% avec l'identifiant de codec '%5%' est déjà dans ce fichier avec des données de codec privées (les styles TSF par exemple) qui ne correspondent pas.\n"
 
 #: src/extract/xtr_avi.cpp:48
-#: src/extract/xtr_base.cpp:64
+#: src/extract/xtr_base.cpp:65
 #: src/extract/xtr_ivf.cpp:51
 #: src/extract/xtr_textsubs.cpp:310
 #, boost-format
@@ -3563,7 +3567,7 @@ msgstr "La création du fichier de données VobSub '%1%' a échoué : %2% (%3%)\
 msgid "Failed to create the file '%1%': %2%\n"
 msgstr "La création du fichier '%1%' a échoué : %2% (%3%)\n"
 
-#: src/extract/xtr_base.cpp:72
+#: src/extract/xtr_base.cpp:73
 #, boost-format
 msgid "Failed to create the file '%1%': %2% (%3%)\n"
 msgstr "La création du fichier '%1%' a échoué : %2% (%3%)\n"
@@ -3756,17 +3760,9 @@ msgstr "Contraindre le coefficient temporel à REMPLACEZMOI. Vous devez remplace
 msgid "Format specific options"
 msgstr "Options spécifiques au format"
 
-#: src/mpegparser/M2VParser.cpp:449
+#: src/mpegparser/M2VParser.cpp:437
 msgid "Found B frame without second reference in a non closed GOP. Fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr "Une image B a été trouvée sans deuxième référence dans un groupe d'images non fermé. Corrigez le flux vidéo MPEG-2 avant d'essayer de le multiplexer.\n"
-
-#: src/mpegparser/M2VParser.cpp:403
-msgid "Found group of picture with broken link. You may want use smart reencode before attempting to multiplex it.\n"
-msgstr "Un groupe d'images a été trouvé avec un lien défectueux. Essayez d'utiliser le réencodage intelligent avant de tenter de le multiplexer.\n"
-
-#: src/mpegparser/M2VParser.cpp:451
-msgid "Found one or more B frames without second reference in the first GOP. You may want to fix the MPEG2 video stream or use smart reencode before attempting to multiplex it.\n"
-msgstr "Une ou plusieurs images B ont été trouvées sans deuxième référence dans le premier groupe d'images. Essayez de corriger le flux vidéo MPEG-2 ou utilisez le réencodage intelligent avant de tenter de le multiplexer.\n"
 
 #: src/mmg/tabs/input_format.cpp:227
 msgid "FourCC:"
@@ -6053,10 +6049,6 @@ msgstr "Paquet audio AAC court (longueur : %1% < %2%).\n"
 msgid "Short AAC audio packet (length: %1% < 2)\n"
 msgstr "Paquet audio AAC court (longueur : %1% < 2).\n"
 
-#: src/mpegparser/M2VParser.cpp:399
-msgid "Shortened GOP detected. Some frames have been dropped. You may want to fix the MPEG2 video stream before attempting to multiplex it.\n"
-msgstr "Groupe d'images écourté trouvé. Certaines images ont été éliminées. Vous devriez corriger le flux vidéo MPEG-2 avant de tenter de le multiplexer.\n"
-
 #: src/info/wxwidgets_ui.cpp:118
 msgid "Show &all elements\tCtrl-A"
 msgstr "&Afficher tous les éléments\tCtrl-A"
@@ -6164,7 +6156,7 @@ msgstr "Bloc simple"
 msgid "SimpleBlock (%1%track number %2%, %3% frame(s), timecode %|4$.3f|s = %5%)"
 msgstr "Bloc simple (%1%numéro de piste %2%, %3% images,code temporel %|4$.3f|s = %5%)"
 
-#: src/mpegparser/M2VParser.cpp:396
+#: src/mpegparser/M2VParser.cpp:392
 msgid "Single field frame before GOP header detected. Fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr "Image à champ unique trouvée avant un en-tête de groupe d'images. Corrigez le flux vidéo MPEG-2 avant de tenter de le multiplexer.\n"
 
@@ -6451,7 +6443,7 @@ msgstr "Il manque l'atome 'CTTS' avec les décalages temporels à la piste vidé
 msgid "The CUE sheet for track %1% will be written to '%2%'.\n"
 msgstr "La feuille de montage CUE pour la piste %1% sera écrite dans le fichier '%2%'.\n"
 
-#: src/merge/pr_generic.h:467
+#: src/merge/pr_generic.h:468
 msgid "The CodecID of the two tracks is different: %1% and %2%"
 msgstr "Les identifiants de codec des deux pistes sont différents : %1% et %2%."
 
@@ -6656,7 +6648,7 @@ msgid "The codec type '%1%' cannot be used in a WebM compliant file.\n"
 msgstr "Le type de codec '%1%' ne peut pas être utilisé dans un fichier conforme à WebM.\n"
 
 #: src/output/p_flac.cpp:101
-#: src/merge/pr_generic.h:474
+#: src/merge/pr_generic.h:475
 #, boost-format
 msgid "The codec's private data does not match (lengths: %1% and %2%)."
 msgstr "Les données privées du codec ne correspondent pas (longueur : %1% et %2%)."
@@ -6717,11 +6709,11 @@ msgstr ""
 msgid "The difference between tags associated with a track and global tags is explained in mkvmerge's documentation. In short: global tags apply to the complete file while the tags you can add on the 'input' tab apply to only one track."
 msgstr "La différence entre les étiquettes globales et celles associées à une piste est expliquée dans la documentation de mkvmerge. Pour résumer, les étiquettes globales s'appliquent au fichier entier alors que celles définies à l'onglet 'Sources' ne s'appliquent qu'à une seule piste."
 
-#: src/merge/pr_generic.h:462
+#: src/merge/pr_generic.h:463
 msgid "The display height of the two tracks is different: %1% and %2%"
 msgstr "Les hauteurs à l'écran des deux pistes sont différentes : %1% et %2%."
 
-#: src/merge/pr_generic.h:457
+#: src/merge/pr_generic.h:458
 msgid "The display width of the two tracks is different: %1% and %2%"
 msgstr "Les largeurs à l'écran des deux pistes sont différentes : %1% et %2%."
 
@@ -6966,7 +6958,7 @@ msgstr "Le quatrième mode extrait les chapitres et les convertit en XML. Le rap
 msgid "The given timecode scale factor is outside the valid range (1...10000000 or -1 for 'sample precision even if a video track is present').\n"
 msgstr "Le coefficient temporel indiqué ne situe pas dans le bon intervalle (1...10000000 ou -1 pour 'précision d'échantillon même si une piste vidéo est présente').\n"
 
-#: src/merge/pr_generic.h:452
+#: src/merge/pr_generic.h:453
 msgid "The height of the two tracks is different: %1% and %2%"
 msgstr "Les hauteurs des deux pistes sont différentes : %1% et %2%."
 
@@ -7108,11 +7100,11 @@ msgstr "Le nom du fichier cible '%1%' est identique à celui de l'un des fichier
 msgid "The next UID was already given in '%1% %2%'.\n"
 msgstr "L'UID suivant a déjà été donné dans '%1% %2%'.\n"
 
-#: src/merge/pr_generic.h:442
+#: src/merge/pr_generic.h:443
 msgid "The number of bits per sample of the two audio tracks is different: %1% and %2%"
 msgstr "Les nombres de bits par échantillon des deux pistes audio sont différents : %1% et %2%."
 
-#: src/merge/pr_generic.h:437
+#: src/merge/pr_generic.h:438
 msgid "The number of channels of the two audio tracks is different: %1% and %2%"
 msgstr "Les nombres de canaux des deux pistes audio sont différents : %1% et %2%."
 
@@ -7227,7 +7219,7 @@ msgstr "La raison est inconnue."
 msgid "The root element must be <%1%>."
 msgstr "L'élément racine doit être <%1%>."
 
-#: src/merge/pr_generic.h:432
+#: src/merge/pr_generic.h:433
 msgid "The sample rate of the two audio tracks is different: %1% and %2%"
 msgstr "Les fréquences d'échantillonnage des deux pistes audio sont différentes : %1% et %2%."
 
@@ -7419,7 +7411,7 @@ msgstr "Les paramètres de piste ne correspondent pas."
 msgid "The update information could not be retrieved from %1%.\n"
 msgstr "Les informations de mise à jour ne peuvent pas être récupérées de %1%.\n"
 
-#: src/merge/pr_generic.h:447
+#: src/merge/pr_generic.h:448
 msgid "The width of the two tracks is different: %1% and %2%"
 msgstr "Les largeurs des deux pistes sont différentes : %1% et %2%."
 
@@ -7674,6 +7666,7 @@ msgid "Track %1% with the CodecID '%2%' is missing the \"bits per second (bps)\"
 msgstr "Il manque l'élément \"bits par seconde (bps)\" à la piste %1% dont l'identifiant de codec est '%2%', cette piste ne peut pas être extraite.\n"
 
 #: src/extract/xtr_aac.cpp:42
+#: src/extract/xtr_alac.cpp:48
 #: src/extract/xtr_avc.cpp:61
 #: src/extract/xtr_avi.cpp:39
 #: src/extract/xtr_ogg.cpp:38
@@ -7782,7 +7775,7 @@ msgstr "Superposition de piste : %1%"
 msgid "Track type: %1%"
 msgstr "Type de piste : %1%"
 
-#: src/extract/xtr_base.cpp:119
+#: src/extract/xtr_base.cpp:120
 msgid "Tracks with unsupported content encoding schemes (compression or encryption) cannot be extracted.\n"
 msgstr "Les pistes avec schémas d'encodage des données non supportés (compression ou chiffrement) ne peuvent pas être extraites.\n"
 
@@ -7843,7 +7836,7 @@ msgstr "Sous-titres texte USF"
 msgid "UTFstring_to_cstrutf8: Invalid wide character. Please contact moritz@bunkus.org if you think that this is not true."
 msgstr "UTFstring_to_cstrutf8 : caractère étendu incorrect. Contactez moritz@bunkus.org si vous pensez que ce n'est pas vrai."
 
-#: src/mpegparser/M2VParser.cpp:244
+#: src/mpegparser/M2VParser.cpp:240
 msgid "Unexpected picture frame after single field frame. Fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr "Image inattendue de type \"image entière\" après une image unique de type \"champ\". Corrigez le flux vidéo MPEG-2 avant d'essayer de le multiplexer.\n"
 
@@ -7976,7 +7969,7 @@ msgstr "Options personnelles :"
 msgid "Using a NALU size length of 3 bytes might result in tracks that won't be decodable with certain AVC/h.264 codecs.\n"
 msgstr "L'utilisation d'une taille de NALU de 3 octets peut conduire à des pistes illisibles avec certains codecs AVC/h.264.\n"
 
-#: src/merge/pr_generic.h:335
+#: src/merge/pr_generic.h:336
 msgid "Using the demultiplexer for the format '%1%'.\n"
 msgstr "utilisation du démultiplexeur pour le format '%1%'.\n"
 
@@ -7985,7 +7978,7 @@ msgstr "utilisation du démultiplexeur pour le format '%1%'.\n"
 msgid "Using the generic output module for track type '%1%'.\n"
 msgstr "utilisation du module de sortie générique pour le type de piste '%1%'.\n"
 
-#: src/merge/pr_generic.h:337
+#: src/merge/pr_generic.h:338
 msgid "Using the output module for the format '%1%'.\n"
 msgstr "utilisation du module de sortie pour le format '%1%'.\n"
 
@@ -8057,10 +8050,6 @@ msgstr "Unité d'affichage vidéo"
 #: src/mmg/header_editor/frame.cpp:435
 msgid "Video display width"
 msgstr "Largeur d'affichage vidéo"
-
-#: src/mpegparser/M2VParser.cpp:163
-msgid "Video ended with a shortened group of pictures. Some frames have been dropped. You may want to fix the MPEG2 video stream before attempting to multiplex it.\n"
-msgstr "La vidéo se termine par un groupe d'images raccourci. Certaines images ont été éliminées. Corrigez la vidéo MPEG-2 avant d'essayer de le multiplexer.\n"
 
 #: src/common/property_element.cpp:134
 msgid "Video interlaced flag"
@@ -9076,7 +9065,7 @@ msgstr "pr_generic.cpp/generic_packetizer_c::add_packet() : timecode < last_time
 msgid "pr_generic.cpp/generic_reader_c::demuxing_requested(): Invalid track type %1%."
 msgstr "pr_generic.cpp/generic_reader_c::demuxing_requested() : type de piste %1% incorrect."
 
-#: src/extract/xtr_base.cpp:47
+#: src/extract/xtr_base.cpp:48
 msgid "raw data"
 msgstr "données brutes"
 
@@ -9350,8 +9339,14 @@ msgstr "oui"
 #~ msgid "Failed to parse the USF end tag for track %1%: %2%\n"
 #~ msgstr "L'analyse de l'étiquette de fin USF pour la piste %1% a échoué : %2%\n"
 
+#~ msgid "Found group of picture with broken link. You may want use smart reencode before attempting to multiplex it.\n"
+#~ msgstr "Un groupe d'images a été trouvé avec un lien défectueux. Essayez d'utiliser le réencodage intelligent avant de tenter de le multiplexer.\n"
+
 #~ msgid "Found no encoded data nor '@file' to read binary data from."
 #~ msgstr "Aucune donnée encodée trouvée ni de '@fichier' indiquant les données binaires."
+
+#~ msgid "Found one or more B frames without second reference in the first GOP. You may want to fix the MPEG2 video stream or use smart reencode before attempting to multiplex it.\n"
+#~ msgstr "Une ou plusieurs images B ont été trouvées sans deuxième référence dans le premier groupe d'images. Essayez de corriger le flux vidéo MPEG-2 ou utilisez le réencodage intelligent avant de tenter de le multiplexer.\n"
 
 #~ msgid "Impossible to use file '%1%': The file could not be opened for reading.\n"
 #~ msgstr "Impossible d'utiliser le fichier '%1%' : il ne peut pas être ouvert en lecture.\n"
@@ -9391,6 +9386,9 @@ msgstr "oui"
 
 #~ msgid "Remember that special characters like &, <, > and \" must be escaped in the usual HTML way: &amp; for '&', &lt; for '<', &gt; for '>' and &quot; for '\"'."
 #~ msgstr "Faire attention à ce que les caractères spéciaux comme &, <, > et \" soient donnés sous la forme HTML habituelle : &amp; pour '&', &lt; pour '<', &gt; pour '>' et &quot; pour '\"'."
+
+#~ msgid "Shortened GOP detected. Some frames have been dropped. You may want to fix the MPEG2 video stream before attempting to multiplex it.\n"
+#~ msgstr "Groupe d'images écourté trouvé. Certaines images ont été éliminées. Vous devriez corriger le flux vidéo MPEG-2 avant de tenter de le multiplexer.\n"
 
 #, fuzzy
 #~ msgid "The ALAC header data is different for the two tracks (lengths: %1% and %2%)"
@@ -9675,6 +9673,9 @@ msgstr "oui"
 
 #~ msgid "Using the video output module.\n"
 #~ msgstr "utilisation du module de sortie vidéo.\n"
+
+#~ msgid "Video ended with a shortened group of pictures. Some frames have been dropped. You may want to fix the MPEG2 video stream before attempting to multiplex it.\n"
+#~ msgstr "La vidéo se termine par un groupe d'images raccourci. Certaines images ont été éliminées. Corrigez la vidéo MPEG-2 avant d'essayer de le multiplexer.\n"
 
 #~ msgid "Warning: There's more than one track with the UID %1%."
 #~ msgstr "Avertissement : il y a plus d'une piste avec l'UID %1%."

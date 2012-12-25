@@ -1816,6 +1816,10 @@ msgstr ""
 msgid "ALAC (Apple Lossless Audio Codec)"
 msgstr "FLAC（Free Lossless Audio Codec）"
 
+#: src/extract/xtr_alac.cpp:52
+msgid "ALAC private data size mismatch\n"
+msgstr ""
+
 #: src/mmg/header_editor/value_page.cpp:143
 msgid ""
 "ASCII string (no special chars like\n"
@@ -2314,7 +2318,7 @@ msgid "Cannot write track %1% with the CodecID '%2%' to the file '%3%' because t
 msgstr "CodecID '%5%'のトラック%4%が既に同じファイルに記録中で、そのCodecPrivateデータ（USFスタイル等）が一致しないため、CodecID '%2%'のトラック%1%をファイル%3%に記録することはできません。\n"
 
 #: src/extract/xtr_avi.cpp:48
-#: src/extract/xtr_base.cpp:64
+#: src/extract/xtr_base.cpp:65
 #: src/extract/xtr_ivf.cpp:51
 #: src/extract/xtr_textsubs.cpp:310
 #, boost-format
@@ -3551,7 +3555,7 @@ msgstr "Vobsubデータファイル'%1%'の作成に失敗しました：%2% (%3
 msgid "Failed to create the file '%1%': %2%\n"
 msgstr "ファイル'%1%'の作成に失敗しました：%2% (%3%)\n"
 
-#: src/extract/xtr_base.cpp:72
+#: src/extract/xtr_base.cpp:73
 #, boost-format
 msgid "Failed to create the file '%1%': %2% (%3%)\n"
 msgstr "ファイル'%1%'の作成に失敗しました：%2% (%3%)\n"
@@ -3744,17 +3748,9 @@ msgstr "タイムコードスケールの係数をこの値に強制設定しま
 msgid "Format specific options"
 msgstr "フォーマット詳細オプション"
 
-#: src/mpegparser/M2VParser.cpp:449
+#: src/mpegparser/M2VParser.cpp:437
 msgid "Found B frame without second reference in a non closed GOP. Fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr "非クローズドGOPで二つめの参照先がないBフレームが見つかりました。MUXしようとする前にこのMPEG2ビデオストリームを修復してください。\n"
-
-#: src/mpegparser/M2VParser.cpp:403
-msgid "Found group of picture with broken link. You may want use smart reencode before attempting to multiplex it.\n"
-msgstr "broken linkフラグのあるGOPが見つかりました。MUXしようとする前にsmart reencodeを使ってください。\n"
-
-#: src/mpegparser/M2VParser.cpp:451
-msgid "Found one or more B frames without second reference in the first GOP. You may want to fix the MPEG2 video stream or use smart reencode before attempting to multiplex it.\n"
-msgstr "最初のGOPで二つめの参照先がないBフレームが1つ以上見つかりました。MUXしようとする前にこのMPEG2ビデオストリームを修復もしくはsmart reencodeを使ってください。\n"
 
 #: src/mmg/tabs/input_format.cpp:227
 msgid "FourCC:"
@@ -6044,10 +6040,6 @@ msgstr "短いAACオーディオパケットです（長さ：%1% < %2%）\n"
 msgid "Short AAC audio packet (length: %1% < 2)\n"
 msgstr "短いAACオーディオパケットです（長さ：%1% < 2）\n"
 
-#: src/mpegparser/M2VParser.cpp:399
-msgid "Shortened GOP detected. Some frames have been dropped. You may want to fix the MPEG2 video stream before attempting to multiplex it.\n"
-msgstr "短くカットされたGOPが検出されました。ドロップされたフレームがあります。MUXしようとする前にこのMPEG2ビデオストリームを修復してください。\n"
-
 #: src/info/wxwidgets_ui.cpp:118
 msgid "Show &all elements\tCtrl-A"
 msgstr "全ての要素を表示(&A)\tCtrl-A"
@@ -6155,7 +6147,7 @@ msgstr "シンプルブロック"
 msgid "SimpleBlock (%1%track number %2%, %3% frame(s), timecode %|4$.3f|s = %5%)"
 msgstr "シンプルブロック (%1%トラック番号 %2%、%3% フレーム、タイムコード %|4$.3f|s = %5%)"
 
-#: src/mpegparser/M2VParser.cpp:396
+#: src/mpegparser/M2VParser.cpp:392
 msgid "Single field frame before GOP header detected. Fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr "GOPヘッダの前に片フィールドのフレームが検出されました。MUXしようとする前にこのMPEG2ビデオストリームを修復してください。\n"
 
@@ -6442,7 +6434,7 @@ msgstr "このAVCビデオトラックにはフレームタイムコードを補
 msgid "The CUE sheet for track %1% will be written to '%2%'.\n"
 msgstr "トラック%1%のCUEシートは'%2%'に書き込まれました。\n"
 
-#: src/merge/pr_generic.h:467
+#: src/merge/pr_generic.h:468
 msgid "The CodecID of the two tracks is different: %1% and %2%"
 msgstr "2つのトラック間でコーデックIDが異なっています：%1%と%2%"
 
@@ -6647,7 +6639,7 @@ msgid "The codec type '%1%' cannot be used in a WebM compliant file.\n"
 msgstr "コーデックタイプ'%1%'はWebMの規格に準拠したファイルでは使用することができません。\n"
 
 #: src/output/p_flac.cpp:101
-#: src/merge/pr_generic.h:474
+#: src/merge/pr_generic.h:475
 #, boost-format
 msgid "The codec's private data does not match (lengths: %1% and %2%)."
 msgstr "コーデックのプライベートデータが一致しません（長さ：%1%と%2%）。"
@@ -6708,11 +6700,11 @@ msgstr ""
 msgid "The difference between tags associated with a track and global tags is explained in mkvmerge's documentation. In short: global tags apply to the complete file while the tags you can add on the 'input' tab apply to only one track."
 msgstr "トラックのタグとグローバルタグの違いはmkvmergeのドキュメントで説明されています。手短に説明すると、'入力'タブで追加できるタグは1つのトラックのみに適用されるのに対し、グローバルタグはファイル全体に適用されます。"
 
-#: src/merge/pr_generic.h:462
+#: src/merge/pr_generic.h:463
 msgid "The display height of the two tracks is different: %1% and %2%"
 msgstr "2つのトラック間で縦解像度が異なっています：%1%と%2%"
 
-#: src/merge/pr_generic.h:457
+#: src/merge/pr_generic.h:458
 msgid "The display width of the two tracks is different: %1% and %2%"
 msgstr "2つのトラック間で横解像度が異なっています：%1%と%2%"
 
@@ -6958,7 +6950,7 @@ msgstr "4番目のモードではチャプタを抽出しXMLに変換します�
 msgid "The given timecode scale factor is outside the valid range (1...10000000 or -1 for 'sample precision even if a video track is present').\n"
 msgstr "指定されたタイムスケールの係数は有効な範囲（1～10000000、もしくはビデオトラックが存在していてもサンプリング音の精度を使用する場合は、-1）から外れています。\n"
 
-#: src/merge/pr_generic.h:452
+#: src/merge/pr_generic.h:453
 msgid "The height of the two tracks is different: %1% and %2%"
 msgstr "2つのトラック間で縦解像度が異なっています：%1%と%2%"
 
@@ -7093,11 +7085,11 @@ msgstr "出力ファイル名'%1%'と入力ファイルの1つのファイル名
 msgid "The next UID was already given in '%1% %2%'.\n"
 msgstr "'%1% %2%'で既に次のUIDは指定されています。\n"
 
-#: src/merge/pr_generic.h:442
+#: src/merge/pr_generic.h:443
 msgid "The number of bits per sample of the two audio tracks is different: %1% and %2%"
 msgstr "2つのオーディオトラック間でサンプル当たりのビット数が異なります：%1%と%2%"
 
-#: src/merge/pr_generic.h:437
+#: src/merge/pr_generic.h:438
 msgid "The number of channels of the two audio tracks is different: %1% and %2%"
 msgstr "2つのオーディオトラック間でチャンネル数が異なっています：%1%と%2%"
 
@@ -7204,7 +7196,7 @@ msgstr "理由はわかりません。"
 msgid "The root element must be <%1%>."
 msgstr "ルート要素は<%1%>でなければなりません。"
 
-#: src/merge/pr_generic.h:432
+#: src/merge/pr_generic.h:433
 msgid "The sample rate of the two audio tracks is different: %1% and %2%"
 msgstr "2つのオーディオトラック間でサンプリングレートが異なっています：%1%と%2%"
 
@@ -7396,7 +7388,7 @@ msgstr "トラックのパラメータが一致しません。"
 msgid "The update information could not be retrieved from %1%.\n"
 msgstr "アップデート情報を %1% から読み出すことができませんでした。\n"
 
-#: src/merge/pr_generic.h:447
+#: src/merge/pr_generic.h:448
 msgid "The width of the two tracks is different: %1% and %2%"
 msgstr "2つのトラック間で横解像度が異なっています：%1%と%2%"
 
@@ -7651,6 +7643,7 @@ msgid "Track %1% with the CodecID '%2%' is missing the \"bits per second (bps)\"
 msgstr "コーデックID '%2%'のトラック%1%は\"bits per second (bps)\"要素がなく、抽出することができません。\n"
 
 #: src/extract/xtr_aac.cpp:42
+#: src/extract/xtr_alac.cpp:48
 #: src/extract/xtr_avc.cpp:61
 #: src/extract/xtr_avi.cpp:39
 #: src/extract/xtr_ogg.cpp:38
@@ -7759,7 +7752,7 @@ msgstr "トラックオーバーレイ：%1%"
 msgid "Track type: %1%"
 msgstr "トラックタイプ：%1%"
 
-#: src/extract/xtr_base.cpp:119
+#: src/extract/xtr_base.cpp:120
 msgid "Tracks with unsupported content encoding schemes (compression or encryption) cannot be extracted.\n"
 msgstr "サポートされていない方式（圧縮や暗号化）でエンコードされた内容を抽出することはできません。\n"
 
@@ -7820,7 +7813,7 @@ msgstr "USFテキスト字幕"
 msgid "UTFstring_to_cstrutf8: Invalid wide character. Please contact moritz@bunkus.org if you think that this is not true."
 msgstr "UTFstring_to_cstrutf8：無効なUnicode文字です。そうではないと考えられる場合はmoritz@bunkus.orgに連絡してください。"
 
-#: src/mpegparser/M2VParser.cpp:244
+#: src/mpegparser/M2VParser.cpp:240
 msgid "Unexpected picture frame after single field frame. Fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr "片フィールドフレームの後に予期せぬピクチャフレームがありました。MUXしようとする前にこのMPEG2ビデオストリームを修復してください。\n"
 
@@ -7953,7 +7946,7 @@ msgstr "ユーザー定義オプション："
 msgid "Using a NALU size length of 3 bytes might result in tracks that won't be decodable with certain AVC/h.264 codecs.\n"
 msgstr "NALUサイズを3バイトにすると、特定のAVC/h.264コーデックでトラックがデコードできなくなるかもしれません。\n"
 
-#: src/merge/pr_generic.h:335
+#: src/merge/pr_generic.h:336
 msgid "Using the demultiplexer for the format '%1%'.\n"
 msgstr "フォーマット'%1%'のデマルチプレクサを使用しています。\n"
 
@@ -7962,7 +7955,7 @@ msgstr "フォーマット'%1%'のデマルチプレクサを使用していま�
 msgid "Using the generic output module for track type '%1%'.\n"
 msgstr "トラックタイプ'%1%'の一般的出力モジュールを使用しています。\n"
 
-#: src/merge/pr_generic.h:337
+#: src/merge/pr_generic.h:338
 msgid "Using the output module for the format '%1%'.\n"
 msgstr "フォーマット'%1%'の出力モジュールを使用しています。\n"
 
@@ -8034,10 +8027,6 @@ msgstr "表示解像度単位"
 #: src/mmg/header_editor/frame.cpp:435
 msgid "Video display width"
 msgstr "横表示解像度"
-
-#: src/mpegparser/M2VParser.cpp:163
-msgid "Video ended with a shortened group of pictures. Some frames have been dropped. You may want to fix the MPEG2 video stream before attempting to multiplex it.\n"
-msgstr "ビデオが短くカットされたGOPで終わっています。ドロップされたフレームがあります。MUXする前にこのMPEG2ビデオストリームを修復してください。\n"
 
 #: src/common/property_element.cpp:134
 msgid "Video interlaced flag"
@@ -9053,7 +9042,7 @@ msgstr "pr_generic.cpp/generic_packetizer_c::add_packet()：timecode < last_time
 msgid "pr_generic.cpp/generic_reader_c::demuxing_requested(): Invalid track type %1%."
 msgstr "pr_generic.cpp/generic_reader_c::demuxing_requested()：無効なトラックタイプ%1%."
 
-#: src/extract/xtr_base.cpp:47
+#: src/extract/xtr_base.cpp:48
 msgid "raw data"
 msgstr "生データ"
 
@@ -9373,8 +9362,14 @@ msgstr "はい"
 #~ msgid "Failed to parse the USF end tag for track %1%: %2%\n"
 #~ msgstr "トラック%1%のUSFエンドタグの解析に失敗しました：%2%\n"
 
+#~ msgid "Found group of picture with broken link. You may want use smart reencode before attempting to multiplex it.\n"
+#~ msgstr "broken linkフラグのあるGOPが見つかりました。MUXしようとする前にsmart reencodeを使ってください。\n"
+
 #~ msgid "Found no encoded data nor '@file' to read binary data from."
 #~ msgstr "エンコードされたデータもしくはバイナリデータを読み込むための'@file'が見つかりませんでした。"
+
+#~ msgid "Found one or more B frames without second reference in the first GOP. You may want to fix the MPEG2 video stream or use smart reencode before attempting to multiplex it.\n"
+#~ msgstr "最初のGOPで二つめの参照先がないBフレームが1つ以上見つかりました。MUXしようとする前にこのMPEG2ビデオストリームを修復もしくはsmart reencodeを使ってください。\n"
 
 #~ msgid "Impossible to use file '%1%': The file could not be opened for reading.\n"
 #~ msgstr "ファイル'%1%'を使用することができません：ファイルを読み込んで開くことができませんでした。\n"
@@ -9459,6 +9454,9 @@ msgstr "はい"
 
 #~ msgid "Sets the compression used for VobSub subtitles. If nothing is chosen then the VobSubs will be automatically compressed with zlib. 'none' results is files that are a lot larger."
 #~ msgstr "VobSub字幕に使用される圧縮方式を指定します。何も指定されていなければVobSubは自動的にzlibで圧縮されます。'無し'を指定するとファイルサイズがかなり増大します。"
+
+#~ msgid "Shortened GOP detected. Some frames have been dropped. You may want to fix the MPEG2 video stream before attempting to multiplex it.\n"
+#~ msgstr "短くカットされたGOPが検出されました。ドロップされたフレームがあります。MUXしようとする前にこのMPEG2ビデオストリームを修復してください。\n"
 
 #~ msgid "TTA lossless audio"
 #~ msgstr "TTAロスレスオーディオ"
@@ -9797,6 +9795,9 @@ msgstr "はい"
 
 #~ msgid "VC1 video elementary stream"
 #~ msgstr "VC1ビデオエレメンタリストリーム"
+
+#~ msgid "Video ended with a shortened group of pictures. Some frames have been dropped. You may want to fix the MPEG2 video stream before attempting to multiplex it.\n"
+#~ msgstr "ビデオが短くカットされたGOPで終わっています。ドロップされたフレームがあります。MUXする前にこのMPEG2ビデオストリームを修復してください。\n"
 
 #~ msgid "VobBtn buttons"
 #~ msgstr "VobBtnボタン"
