@@ -560,6 +560,43 @@
           </para>
         </note>
        </listitem>
+
+       <listitem>
+        <para>
+         Splitting before specific chapters.
+        </para>
+
+        <para>
+         Syntax: <option>--split</option> <literal>chapters:all</literal> or <option>--split</option>
+         <literal>chapters:</literal><parameter>A</parameter><optional>,<parameter>B</parameter><optional>,<parameter>C</parameter>...</optional></optional>
+        </para>
+
+        <para>
+         Example: <code>--split chapters:5,8</code>
+        </para>
+
+        <para>
+         The parameters <parameter>A</parameter>, <parameter>B</parameter>, <parameter>C</parameter> etc must all be positive integers.
+         Numbering starts at 1.  The list of chapter numbers is separated by commas.  Splitting will occur right before the first key frame
+         whose timecode is equal to or bigger than the start timecode for the chapters whose numbers are listed.  A chapter starting at 0s
+         is never considered for splitting and discarded silently.
+        </para>
+
+        <para>
+          The keyword <literal>all</literal> can be used instead of listing all chapter numbers manually.
+        </para>
+
+        <para>
+         The '<literal>chapters:</literal>' prefix must not be omitted.
+        </para>
+
+        <note>
+          <para>
+            The Matroska file format supports arbitrary deeply nested chapter structures called 'edition entries' and 'chapter atoms'.
+            However, this mode only considers the top-most level of chapters across all edition entries.
+          </para>
+        </note>
+       </listitem>
       </orderedlist>
 
       <para>

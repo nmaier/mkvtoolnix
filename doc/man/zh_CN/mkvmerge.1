@@ -546,6 +546,54 @@ The numbers given with this argument are interpreted based on the number of Matr
 .RE
 .RE
 .sp
+.RS 4
+.ie n \{\
+\h'-04' 6.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  6." 4.2
+.\}
+Splitting before specific chapters\&.
+.sp
+Syntax:
+\fB\-\-split\fR
+chapters:all
+or
+\fB\-\-split\fR
+chapters:\fIA\fR[,\fIB\fR[,\fIC\fR\&.\&.\&.]]
+.sp
+Example:
+\-\-split chapters:5,8
+.sp
+The parameters
+\fIA\fR,
+\fIB\fR,
+\fIC\fR
+etc must all be positive integers\&. Numbering starts at 1\&. The list of chapter numbers is separated by commas\&. Splitting will occur right before the first key frame whose timecode is equal to or bigger than the start timecode for the chapters whose numbers are listed\&. A chapter starting at 0s is never considered for splitting and discarded silently\&.
+.sp
+The keyword
+all
+can be used instead of listing all chapter numbers manually\&.
+.sp
+The \*(Aqchapters:\*(Aq prefix must not be omitted\&.
+.if n \{\
+.sp
+.\}
+.RS 4
+.it 1 an-trap
+.nr an-no-space-flag 1
+.nr an-break-flag 1
+.br
+.ps +1
+\fB注意\fR
+.ps -1
+.br
+The Matroska file format supports arbitrary deeply nested chapter structures called \*(Aqedition entries\*(Aq and \*(Aqchapter atoms\*(Aq\&. However, this mode only considers the top\-most level of chapters across all edition entries\&.
+.sp .5v
+.RE
+.RE
+.sp
 此切割模式下输出文件名将以不同于常用操作的方式对待。可能会含有类似
 \fBprintf\fR
 中 \*(Aq%d\*(Aq 的表达式，包括可选的字段宽度，如 \*(Aq%02d\*(Aq。如果含有上述表达式，当前文件序号将按相应格式生成，然后插入到文件名中的相应位置。 如果没有此类匹配模式，则假定匹配模式为在文件扩展名之前插入 \*(Aq\-%03d\*(Aq: \*(Aq\-o 输出\&.mkv\*(Aq 将生成 \*(Aq输出\-001\&.mkv\*(Aq 这样的一系列文件。如果没有扩展名，\*(Aq\-%03d\*(Aq 将被追加在文件名之后。

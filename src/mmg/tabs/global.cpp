@@ -193,6 +193,8 @@ tab_global::translate_split_args() {
   auto value = cob_split_args->GetValue();
   wxString new_tool_tip;
 
+  cob_split_args->Clear();
+
   if (0 == mode)
     st_split_args->SetLabel(Z("Size:"));
 
@@ -200,7 +202,6 @@ tab_global::translate_split_args() {
     st_split_args->SetLabel(Z("Size:"));
     new_tool_tip = TIP("The size after which a new output file is started. The letters 'G', 'M' and 'K' can be used to indicate giga/mega/kilo bytes respectively. "
                        "All units are based on 1024 (G = 1024^3, M = 1024^2, K = 1024).");
-    cob_split_args->Clear();
     cob_split_args->Append(wxEmptyString);
     cob_split_args->Append(wxT("350M"));
     cob_split_args->Append(wxT("650M"));
@@ -218,7 +219,6 @@ tab_global::translate_split_args() {
                        "'nnnnnnnnn'. If given then you may use up to nine digits after the decimal point. "
                        "Examples: 01:00:00 (after one hour) or 1800s (after 1800 seconds).");
 
-    cob_split_args->Clear();
     cob_split_args->Append(wxEmptyString);
     cob_split_args->Append(wxT("01:00:00"));
     cob_split_args->Append(wxT("1800s"));
@@ -259,6 +259,17 @@ tab_global::translate_split_args() {
       Y("mkvmerge does not distinguish between those two and simply counts the number of blocks."),
     };
     new_tool_tip = format_tooltip(wxU(join(" ", help)));
+
+  } else if (6 == mode) {
+    st_split_args->SetLabel(Z("Chapter numbers:"));
+    std::vector<std::string> help = {
+      Y("Either the word 'all' which selects all chapters or a comma-separated list of chapter numbers after which to split."),
+      Y("The numbering starts at 1."),
+      Y("Splitting will occur right before the first key frame whose timecode is equal to or bigger than the start timecode for the chapters whose numbers are listed."),
+      Y("A chapter starting at 0s is never considered for splitting and discarded silently."),
+      Y("This mode only considers the top-most level of chapters across all edition entries."),
+    };
+    new_tool_tip = format_tooltip(wxU(join(" ", help)));
   }
 
   auto tool_tip = cob_split_args->GetToolTip();
@@ -289,6 +300,7 @@ tab_global::translate_ui() {
   cob_split_mode->Append(Z("split after timecodes"));
   cob_split_mode->Append(Z("split by parts"));
   cob_split_mode->Append(Z("split after frame/field numbers"));
+  cob_split_mode->Append(Z("split before chapters"));
   cob_split_mode->SetSelection(split_mode);
 
   cb_link->SetLabel(Z("link files"));
@@ -418,7 +430,7 @@ tab_global::load(wxConfigBase *cfg,
     split_mode_idx = !ec ? 0 : er ? 1 : 2;
 
   } else {
-  // Version 4 folds "enable_splitting" into "split_mode".
+    // Version 4 folds "enable_splitting" into "split_mode".
     bool old_enabled_value = false;
     bool old_enabled_read  = cfg->Read(wxT("enable_splitting"), &old_enabled_value);
 
@@ -431,6 +443,7 @@ tab_global::load(wxConfigBase *cfg,
                      : split_mode == wxT("timecodes") ? 3
                      : split_mode == wxT("parts")     ? 4
                      : split_mode == wxT("frames")    ? 5
+                     : split_mode == wxT("chapters")  ? 6
                      :                                  0;
     }
   }
@@ -503,6 +516,7 @@ tab_global::save(wxConfigBase *cfg) {
                       : 3 == split_mode_idx ? wxT("timecodes")
                       : 4 == split_mode_idx ? wxT("parts")
                       : 5 == split_mode_idx ? wxT("frames")
+                      : 6 == split_mode_idx ? wxT("chapters")
                       :                       wxT("none");
   cfg->Write(wxT("split_mode"), value);
   cfg->Write(wxT("split_args"), cob_split_args->GetValue());

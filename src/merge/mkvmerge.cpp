@@ -124,6 +124,9 @@ set_usage() {
   usage_text += Y("  --split frames:A[,B...]\n"
                   "                           Create a new file after each frame/field A, B\n"
                   "                           etc.\n");
+  usage_text += Y("  --split chapters:all|A[,B...]\n"
+                  "                           Create a new file before each chapter (with 'all')\n"
+                  "                           or before chapter numbers A, B etc.\n");
   usage_text += Y("  --split-max-files <n>    Create at most n files.\n");
   usage_text += Y("  --link                   Link splitted files.\n");
   usage_text += Y("  --link-to-previous <SID> Link the first file to the given SID.\n");
@@ -825,11 +828,75 @@ parse_arg_split_frames(std::string const &arg) {
 
   std::vector<std::string> frames = split(s, ",");
   for (auto &frame : frames) {
-    uint64_t split_after;
+    uint64_t split_after = 0;
     if (!parse_number(frame, split_after) || (0 == split_after))
       mxerror(boost::format(Y("Invalid frame for '--split' in '--split %1%'.\n")) % arg);
     g_cluster_helper->add_split_point(split_point_t(split_after, split_point_t::SPT_FRAME_FIELD, true));
   }
+}
+
+void
+parse_arg_split_chapters(std::string const &arg) {
+  std::string s = arg;
+
+  if (balg::istarts_with(s, "chapters:"))
+    s.erase(0, 9);
+
+  bool use_all = s == "all";
+  std::unordered_map<unsigned int, bool> chapter_numbers;
+
+  if (!use_all) {
+    std::vector<std::string> numbers = split(s, ",");
+    for (auto &number_str : numbers) {
+      unsigned int number;
+      if (!parse_number(number_str, number) || !number)
+        mxerror(boost::format(Y("Invalid chapter number '%1%' for '--split' in '--split %2%': %3%\n")) % number_str % arg % Y("Not a valid number or not positive."));
+      chapter_numbers[number] = true;
+    }
+
+    if (chapter_numbers.empty())
+      mxerror(boost::format(Y("No chapter numbers listed after '--split %1%'.\n")) % arg);
+  }
+
+  if (!g_kax_chapters)
+    mxerror(boost::format(Y("No chapters in source files or chapter files found to split by.\n")));
+
+  std::vector<split_point_t> new_split_points;
+  auto current_number = 0u;
+  for (auto element : *g_kax_chapters) {
+    auto edition = dynamic_cast<KaxEditionEntry *>(element);
+    if (!edition)
+      continue;
+
+    for (auto sub_element : *edition) {
+      auto atom = dynamic_cast<KaxChapterAtom *>(sub_element);
+      if (!atom)
+        continue;
+
+
+      ++current_number;
+      if (!use_all && !chapter_numbers[current_number])
+        continue;
+
+      int64_t split_after = FindChildValue<KaxChapterTimeStart, uint64_t>(atom, 0);
+      if (split_after)
+        new_split_points.push_back(split_point_t{split_after, split_point_t::SPT_TIMECODE, true});
+    }
+  }
+
+  if (!current_number)
+    mxerror(boost::format(Y("No chapters in source files or chapter files found to split by.\n")));
+
+  for (auto &number : chapter_numbers)
+    if (number.first > current_number)
+      mxerror(boost::format(Y("Invalid chapter number '%1%' for '--split' in '--split %2%': %3%\n"))
+              % number.first % arg
+              % (boost::format(Y("Only %1% chapters found in source files & chapter files.")) % current_number));
+
+  brng::sort(new_split_points);
+
+  for (auto &split_point : new_split_points)
+    g_cluster_helper->add_split_point(split_point);
 }
 
 static void
@@ -966,6 +1033,9 @@ parse_arg_split(const std::string &arg) {
   else if (balg::istarts_with(s, "frames:"))
     parse_arg_split_frames(arg);
 
+  else if (balg::istarts_with(s, "chapters:"))
+    g_splitting_by_chapters_arg = arg;
+
   else if ((   (s.size() == 8)
             || (s.size() == 12))
            && (':' == s[2]) && (':' == s[5])
@@ -986,8 +1056,6 @@ parse_arg_split(const std::string &arg) {
     else
       mxerror(boost::format(err_msg) % arg);
   }
-
-  g_cluster_helper->dump_split_points();
 }
 
 /** \brief Parse the \c --default-track argument

@@ -213,6 +213,7 @@ extern int g_default_tracks[3], g_default_tracks_priority[3];
 
 extern bool g_splitting;
 extern int g_split_max_num_files;
+extern std::string g_splitting_by_chapters_arg;
 
 extern append_mode_e g_append_mode;
 

@@ -188,6 +188,7 @@ int64_t g_tags_size                         = 0;
 int g_file_num = 1;
 
 int g_split_max_num_files                   = 65535;
+std::string g_splitting_by_chapters_arg;
 
 append_mode_e g_append_mode                 = APPEND_MODE_FILE_BASED;
 bool s_appending_files                      = false;
@@ -1320,6 +1321,12 @@ create_readers() {
 
     calc_max_chapter_size();
   }
+
+  // Finally parse the chapter splitting argument.
+  if (!g_splitting_by_chapters_arg.empty())
+    parse_arg_split_chapters(g_splitting_by_chapters_arg);
+
+  g_cluster_helper->dump_split_points();
 }
 
 /** \brief Transform the output filename and insert the current file number
