@@ -23,7 +23,7 @@ msgstr ""
 "\n"
 "Het tijdelijke TTA bestand met track ID %1% wordt naar het uiteindelijke TTA bestand gekopieerd. Dit kan even duren. \n"
 
-#: src/merge/output_control.cpp:270
+#: src/merge/output_control.cpp:271
 msgid ""
 "\n"
 "mkvmerge received a SIGINT (probably because the user pressed Ctrl+C). Trying to sanitize the file. If mkvmerge hangs during this process you'll have to kill it manually.\n"
@@ -31,7 +31,7 @@ msgstr ""
 "\n"
 "mkvmerge ontving een SIGINT (waarschijnlijk doordat u op CTRL+C) drukte. Probeer het bestand op te schonen. Als mkvmerge blijft 'hangen' gedurende dit proces moet je het handmatig stoppen.\n"
 
-#: src/merge/mkvmerge.cpp:144
+#: src/merge/mkvmerge.cpp:147
 #, fuzzy
 msgid ""
 "  ( <file1> <file2> )      Treat file1 and file2 as if they were concatenated\n"
@@ -40,7 +40,7 @@ msgstr ""
 "  --attach-file <bestand>         Creëert een bestandsbijlage binnenin het\n"
 "                                                 Matroska bestand.\n"
 
-#: src/merge/mkvmerge.cpp:209
+#: src/merge/mkvmerge.cpp:212
 msgid ""
 "  --aac-is-sbr <TID[:0|1]> The track with the ID is HE-AAC/AAC+/SBR-AAC\n"
 "                           or not. The value ':1' can be omitted.\n"
@@ -48,7 +48,7 @@ msgstr ""
 "  --aac-is-sbr <TID[:0|1]> Het spoor met ID is HE-AAC/AAC+/SBR-AAC\n"
 "                           of niet. De waarde ':1' kan worden weggelaten.\n"
 
-#: src/merge/mkvmerge.cpp:136
+#: src/merge/mkvmerge.cpp:139
 msgid ""
 "  --append-mode <file|track>\n"
 "                           Selects how mkvmerge calculates timecodes when\n"
@@ -58,7 +58,7 @@ msgstr ""
 "                           Selecteert hoe mkvmerge tijd code's berekent wanneer\n"
 "                           bestanden worden bijgevoegd.\n"
 
-#: src/merge/mkvmerge.cpp:131
+#: src/merge/mkvmerge.cpp:134
 msgid ""
 "  --append-to <SFID1:STID1:DFID1:DTID1,SFID2:STID2:DFID2:DTID2,...>\n"
 "                           A comma separated list of file and track IDs\n"
@@ -72,7 +72,7 @@ msgstr ""
 "                           bijgevoegd aan een spoor van het voorafgaande\n"
 "                           bestand.\n"
 
-#: src/merge/mkvmerge.cpp:222
+#: src/merge/mkvmerge.cpp:225
 msgid ""
 "  --aspect-ratio <TID:f|a/b>\n"
 "                           Sets the display dimensions by calculating\n"
@@ -82,7 +82,7 @@ msgstr ""
 "                           Stelt scherm instellingen in door te berekenen de\n"
 "                           breedte en hoogte voor de verwachtte verhouding.\n"
 
-#: src/merge/mkvmerge.cpp:225
+#: src/merge/mkvmerge.cpp:228
 msgid ""
 "  --aspect-ratio-factor <TID:f|a/b>\n"
 "                           First calculates the aspect ratio by multi-\n"
@@ -96,7 +96,7 @@ msgstr ""
 "                           met deze factor en bereken het scherm\n"
 "                           dimensies van deze factor.\n"
 
-#: src/merge/mkvmerge.cpp:154
+#: src/merge/mkvmerge.cpp:157
 msgid ""
 "  --attach-file <file>     Creates a file attachment inside the\n"
 "                           Matroska file.\n"
@@ -104,7 +104,7 @@ msgstr ""
 "  --attach-file <bestand>         Creëert een bestandsbijlage binnenin het\n"
 "                                                 Matroska bestand.\n"
 
-#: src/merge/mkvmerge.cpp:156
+#: src/merge/mkvmerge.cpp:159
 msgid ""
 "  --attach-file-once <file>\n"
 "                           Creates a file attachment inside the\n"
@@ -114,7 +114,7 @@ msgstr ""
 "                           Creëert een bestandsbijlage binnenin het\n"
 "                           eerst geschreven Matroska bestand.\n"
 
-#: src/merge/mkvmerge.cpp:148
+#: src/merge/mkvmerge.cpp:151
 msgid ""
 "  --attachment-description <desc>\n"
 "                           Description for the following attachment.\n"
@@ -122,7 +122,7 @@ msgstr ""
 "  --attachment-description <desc>\n"
 "                           Beschrijving van de volgende bijlage.\n"
 
-#: src/merge/mkvmerge.cpp:150
+#: src/merge/mkvmerge.cpp:153
 msgid ""
 "  --attachment-mime-type <mime type>\n"
 "                           Mime type for the following attachment.\n"
@@ -130,7 +130,7 @@ msgstr ""
 "  --attachment-mime-type <mime type>\n"
 "                           Mime type voor de volgende bijlage.\n"
 
-#: src/merge/mkvmerge.cpp:152
+#: src/merge/mkvmerge.cpp:155
 msgid ""
 "  --attachment-name <name> The name should be stored for the \n"
 "                           following attachment.\n"
@@ -138,7 +138,7 @@ msgstr ""
 "  --attachment-name <naam> De naam zou opgeslagen moeten worden voor \n"
 "                                                 de volgende bijlage.\n"
 
-#: src/merge/mkvmerge.cpp:201
+#: src/merge/mkvmerge.cpp:204
 msgid ""
 "  --blockadd <TID:x>       Sets the max number of block additional\n"
 "                           levels for this track.\n"
@@ -146,7 +146,7 @@ msgstr ""
 "  --blockadd <TID:x>       Stelt het aantal maximale blokken in voor\n"
 "                                         extra niveau's voor dit spoor.\n"
 
-#: src/merge/mkvmerge.cpp:254
+#: src/merge/mkvmerge.cpp:257
 msgid "  --capabilities           Lists optional features mkvmerge was compiled with.\n"
 msgstr "  --capabilities           Optionele lijst waarmee mkvmerge gecompileerd is.\n"
 
@@ -177,7 +177,7 @@ msgstr ""
 msgid "  --clusters-in-meta-seek  Write meta seek data for clusters.\n"
 msgstr "  --clusters-in-meta-seek  Schrijft meta zoek data voor clusters.\n"
 
-#: src/merge/mkvmerge.cpp:257
+#: src/merge/mkvmerge.cpp:260
 msgid ""
 "  --command-line-charset <charset>\n"
 "                           Charset for strings on the command line\n"
@@ -185,7 +185,7 @@ msgstr ""
 "  --command-line-charset <charset>\n"
 "                           Karakterset voor een reeks op de commando regel\n"
 
-#: src/merge/mkvmerge.cpp:245
+#: src/merge/mkvmerge.cpp:248
 msgid ""
 "  --compression <TID:method>\n"
 "                           Sets the compression method used for the\n"
@@ -195,7 +195,7 @@ msgstr ""
 "                           Stelt de compressie in voor een\n"
 "                           specifiek spoor ('none' (geen) of 'zlib').\n"
 
-#: src/merge/mkvmerge.cpp:232
+#: src/merge/mkvmerge.cpp:235
 msgid ""
 "  --cropping <TID:left,top,right,bottom>\n"
 "                           Sets the cropping parameters.\n"
@@ -213,7 +213,7 @@ msgstr ""
 "                                                                          Patroon voor conversie vanuit een 'volg document(en) (cue)'\n"
 "                                                                          ingangen naar hoofdstuk namen.\n"
 
-#: src/merge/mkvmerge.cpp:204
+#: src/merge/mkvmerge.cpp:207
 msgid ""
 "  --cues <TID:none|iframes|all>\n"
 "                           Create cue (index) entries for this track:\n"
@@ -223,11 +223,11 @@ msgstr ""
 "                           Creëeren volg document(en) (cue) (index) ingangen voor\n"
 "                           dit spoor: niets, alleen voor I beelden, voor allen.\n"
 
-#: src/merge/mkvmerge.cpp:262
+#: src/merge/mkvmerge.cpp:265
 msgid "  --debug <topic>          Turns on debugging output for 'topic'.\n"
 msgstr "  --debug <topic>          Zet debuggen uitvoer aan voor 'topic'.\n"
 
-#: src/merge/mkvmerge.cpp:212
+#: src/merge/mkvmerge.cpp:215
 msgid ""
 "  --default-duration <TID:Xs|ms|us|ns|fps>\n"
 "                           Force the default duration of a track to X.\n"
@@ -245,7 +245,7 @@ msgstr ""
 "  --default-language <lng> Gebruik deze taal voor alle sporen totdat deze\n"
 "                                           overschreven wordt met de --language (taal) optie.\n"
 
-#: src/merge/mkvmerge.cpp:195
+#: src/merge/mkvmerge.cpp:198
 msgid ""
 "  --default-track <TID[:bool]>\n"
 "                           Sets the 'default' flag for this track or\n"
@@ -259,7 +259,7 @@ msgstr ""
 msgid "  --disable-lacing         Do not Use lacing.\n"
 msgstr "  --disable-lacing         Gebruik geen aaneenkoppelen.\n"
 
-#: src/merge/mkvmerge.cpp:230
+#: src/merge/mkvmerge.cpp:233
 msgid ""
 "  --display-dimensions <TID:width>x<height>\n"
 "                           Explicitly set the display dimensions.\n"
@@ -271,11 +271,11 @@ msgstr ""
 msgid "  --enable-durations       Enable block durations for all blocks.\n"
 msgstr "  --enable-durations                          Zet blokduur aan voor alle blokken.\n"
 
-#: src/merge/mkvmerge.cpp:263
+#: src/merge/mkvmerge.cpp:266
 msgid "  --engage <feature>       Turns on experimental feature 'feature'.\n"
 msgstr "  --engage <feature>       Zet  experimentele mogelijkheid aan 'feature'.\n"
 
-#: src/merge/mkvmerge.cpp:198
+#: src/merge/mkvmerge.cpp:201
 msgid ""
 "  --forced-track <TID[:bool]>\n"
 "                           Sets the 'forced' flag for this track or\n"
@@ -289,7 +289,7 @@ msgstr ""
 msgid "  --global-tags <file>     Read global tags from a XML file.\n"
 msgstr "  --global-tags <bestand>          Leest de globale markering uit een XML bestand.\n"
 
-#: src/merge/mkvmerge.cpp:207
+#: src/merge/mkvmerge.cpp:210
 msgid ""
 "  --language <TID:lang>    Sets the language for the track (ISO639-2\n"
 "                           code, see --list-languages).\n"
@@ -297,19 +297,19 @@ msgstr ""
 "  --taal <TID:lang>    Stelt de taal voor het spoor in (ISO639-2\n"
 "                                   code, zie --list-lanuages).\n"
 
-#: src/merge/mkvmerge.cpp:128
+#: src/merge/mkvmerge.cpp:131
 msgid "  --link                   Link splitted files.\n"
 msgstr "  --link                                         Link splits bestanden.\n"
 
-#: src/merge/mkvmerge.cpp:130
+#: src/merge/mkvmerge.cpp:133
 msgid "  --link-to-next <SID>     Link the last file to the given SID.\n"
 msgstr "  --link-to-next <SID>               Verbind het laatste bestand met een bepaald SID.\n"
 
-#: src/merge/mkvmerge.cpp:129
+#: src/merge/mkvmerge.cpp:132
 msgid "  --link-to-previous <SID> Link the first file to the given SID.\n"
 msgstr "  --link-to-previous <SID>         Verbind het eerste bestand met een bepaald SID.\n"
 
-#: src/merge/mkvmerge.cpp:252
+#: src/merge/mkvmerge.cpp:255
 msgid ""
 "  --list-languages         Lists all ISO639 languages and their\n"
 "                           ISO639-2 codes.\n"
@@ -317,7 +317,7 @@ msgstr ""
 "  --list-languages         Lijst alle ISO639 talen en hun\n"
 "                                   ISO639-2 code's.\n"
 
-#: src/merge/mkvmerge.cpp:215
+#: src/merge/mkvmerge.cpp:218
 msgid ""
 "  --nalu-size-length <TID:n>\n"
 "                           Force the NALU size length to n bytes with\n"
@@ -327,7 +327,7 @@ msgstr ""
 "                           Forceert de NALU lengte grootte naar n bytes met\n"
 "                           2 <= n <= 4 met waarvan 4 standaard is.\n"
 
-#: src/merge/mkvmerge.cpp:187
+#: src/merge/mkvmerge.cpp:190
 msgid "  --no-chapters            Don't keep chapters from the source file.\n"
 msgstr "  --no-chapters            Neem hoofdstukken uit bronbestand niet over.\n"
 
@@ -335,15 +335,15 @@ msgstr "  --no-chapters            Neem hoofdstukken uit bronbestand niet over.\
 msgid "  --no-cues                Do not write the cue data (the index).\n"
 msgstr "  --no-cues                         Schrijf geen volg documen(en) (cue) data  (de index).\n"
 
-#: src/merge/mkvmerge.cpp:186
+#: src/merge/mkvmerge.cpp:189
 msgid "  --no-global-tags         Don't keep global tags from the source file.\n"
 msgstr "  --no-global-tags         Neem globale markeringen uit bronbestand niet over.\n"
 
-#: src/merge/mkvmerge.cpp:259
+#: src/merge/mkvmerge.cpp:262
 msgid "  --output-charset <cset>  Output messages in this charset\n"
 msgstr "  --output-charset <cset>  Voer de berichten met deze karakterset uit. \n"
 
-#: src/merge/mkvmerge.cpp:255
+#: src/merge/mkvmerge.cpp:258
 msgid "  --priority <priority>    Set the priority mkvmerge runs with.\n"
 msgstr "  --priority <prioriteit>    Stelt de prioriteit in waarmee mkvmerge opstart.\n"
 
@@ -368,6 +368,17 @@ msgstr ""
 "  --split <d[K,M,G]|HH:MM:SS|s>\n"
 "                           Creëert een nieuw bestand na d bytes\n"
 "                           (KB, MB, GB)of na een specifieke tijd.\n"
+
+#: src/merge/mkvmerge.cpp:127
+#, fuzzy
+msgid ""
+"  --split chapters:all|A[,B...]\n"
+"                           Create a new file before each chapter (with 'all')\n"
+"                           or before chapter numbers A, B etc.\n"
+msgstr ""
+"  --split tijdcodes:A[,B...]\n"
+"                           Creëert een nieuw bestand na elke tijdcode A, B\n"
+"                           etc.\n"
 
 #: src/merge/mkvmerge.cpp:124
 #, fuzzy
@@ -402,11 +413,11 @@ msgstr ""
 "                           Creëert een nieuw bestand na elke tijdcode A, B\n"
 "                           etc.\n"
 
-#: src/merge/mkvmerge.cpp:127
+#: src/merge/mkvmerge.cpp:130
 msgid "  --split-max-files <n>    Create at most n files.\n"
 msgstr "  --split-max-files <n>               Creëert op zijn meest  n bestanden.\n"
 
-#: src/merge/mkvmerge.cpp:234
+#: src/merge/mkvmerge.cpp:237
 msgid ""
 "  --stereo-mode <TID:n|keyword>\n"
 "                           Sets the stereo mode parameter. It can\n"
@@ -418,7 +429,7 @@ msgstr ""
 "                           een nummer 0 t/m 14 of een sleutelwoord\n"
 "                           (zie documentatie voor volledige lijst).\n"
 
-#: src/merge/mkvmerge.cpp:240
+#: src/merge/mkvmerge.cpp:243
 msgid ""
 "  --sub-charset <TID:charset>\n"
 "                           Determines the charset the text subtitles are\n"
@@ -432,7 +443,7 @@ msgstr ""
 msgid "  --timecode-scale <n>     Force the timecode scale factor to n.\n"
 msgstr "  --timecode-scale <n>     Forceert de tijd code schaal factor naar n.\n"
 
-#: src/merge/mkvmerge.cpp:211
+#: src/merge/mkvmerge.cpp:214
 msgid "  --timecodes <TID:file>   Read the timecodes to be used from a file.\n"
 msgstr "  --timecodes <TID:file>   Leest de te gebruiken tijd codes in van een bestand.\n"
 
@@ -440,7 +451,7 @@ msgstr "  --timecodes <TID:file>   Leest de te gebruiken tijd codes in van een b
 msgid "  --title <title>          Title for this output file.\n"
 msgstr "  --title <title>            Titel voor dit bestand.\n"
 
-#: src/merge/mkvmerge.cpp:203
+#: src/merge/mkvmerge.cpp:206
 msgid "  --track-name <TID:name>  Sets the name for a track.\n"
 msgstr "  --track-name <TID:name>  Stelt de naam voor een spoor in.\n"
 
@@ -456,7 +467,7 @@ msgstr ""
 "                           en spoor ID's welke de volgorde controleert \n"
 "                           van de sporen in het uitvoer bestand.\n"
 
-#: src/merge/mkvmerge.cpp:183
+#: src/merge/mkvmerge.cpp:186
 msgid ""
 "  --track-tags <n,m,...>   Copy the tags for tracks n,m etc. Default: copy\n"
 "                           tags for all tracks.\n"
@@ -464,39 +475,39 @@ msgstr ""
 "  --track-tags <n,m,...>   Kopieer de markeringen van sporen n,m etc. Standaard: copieer\n"
 "                                          markeringen voor alle sporen.\n"
 
-#: src/merge/mkvmerge.cpp:256
+#: src/merge/mkvmerge.cpp:259
 msgid "  --ui-language <code>     Force the translations for 'code' to be used.\n"
 msgstr "  --ui-language <code>                  Forceert de te gebruiken vertaal 'code'.\n"
 
-#: src/merge/mkvmerge.cpp:164
+#: src/merge/mkvmerge.cpp:167
 msgid "  -A, --no-audio           Don't copy any audio track from this file.\n"
 msgstr "  -A, --no-audio                     Kopieer geen enkele audio spoor van dit bestand.\n"
 
-#: src/merge/mkvmerge.cpp:176
+#: src/merge/mkvmerge.cpp:179
 msgid "  -B, --no-buttons         Don't copy any buttons track from this file.\n"
 msgstr "  -B, --no-buttons                  Kopieer geen enkele knop spoor van dit bestand.\n"
 
-#: src/merge/mkvmerge.cpp:168
+#: src/merge/mkvmerge.cpp:171
 msgid "  -D, --no-video           Don't copy any video track from this file.\n"
 msgstr "  -D, --no-video                      Kopieer geen enkele video spoor van dit bestand.\n"
 
-#: src/merge/mkvmerge.cpp:181
+#: src/merge/mkvmerge.cpp:184
 msgid "  -M, --no-attachments     Don't copy attachments from a source file.\n"
 msgstr "  -M, --no-attachments                   Kopieer geen enkele bijlage uit bron bestand.\n"
 
-#: src/merge/mkvmerge.cpp:172
+#: src/merge/mkvmerge.cpp:175
 msgid "  -S, --no-subtitles       Don't copy any subtitle track from this file.\n"
 msgstr "  -S, --no-subtitles       Kopieer geen enkele ondertiteling spoor van dit bestand.\n"
 
-#: src/merge/mkvmerge.cpp:185
+#: src/merge/mkvmerge.cpp:188
 msgid "  -T, --no-track-tags      Don't copy tags for tracks from the source file.\n"
 msgstr "  -T, --no-track-tags Kopieer geen enkele markering voor sporen van het bron bestand.\n"
 
-#: src/merge/mkvmerge.cpp:267
+#: src/merge/mkvmerge.cpp:270
 msgid "  -V, --version            Show version information.\n"
 msgstr "  -V, --version                           Toon versie informatie.\n"
 
-#: src/merge/mkvmerge.cpp:161
+#: src/merge/mkvmerge.cpp:164
 msgid ""
 "  -a, --audio-tracks <n,m,...>\n"
 "                           Copy audio tracks n,m etc. Default: copy all\n"
@@ -506,7 +517,7 @@ msgstr ""
 "                                              Kopieer audio sporen n,m etc. Standaard: copieer alles\n"
 "                                              audio sporen.\n"
 
-#: src/merge/mkvmerge.cpp:173
+#: src/merge/mkvmerge.cpp:176
 msgid ""
 "  -b, --button-tracks <n,m,...>\n"
 "                           Copy buttons tracks n,m etc. Default: copy\n"
@@ -516,7 +527,7 @@ msgstr ""
 "                                              Kopieer knop sporen n,m etc. Standaard: copieer\n"
 "                                              alle knop sporen.\n"
 
-#: src/merge/mkvmerge.cpp:165
+#: src/merge/mkvmerge.cpp:168
 msgid ""
 "  -d, --video-tracks <n,m,...>\n"
 "                           Copy video tracks n,m etc. Default: copy all\n"
@@ -526,7 +537,7 @@ msgstr ""
 "                                              Kopieer video sporen n,m etc. Standaard: copieer alle\n"
 "                                              video sporen.\n"
 
-#: src/merge/mkvmerge.cpp:220
+#: src/merge/mkvmerge.cpp:223
 msgid ""
 "  -f, --fourcc <FOURCC>    Forces the FourCC to the specified value.\n"
 "                           Works only for video tracks.\n"
@@ -534,19 +545,19 @@ msgstr ""
 "  -f, --fourcc <FOURCC>    Forceert de VIERCC naar opgegeven waarde.\n"
 "                                            Werkt alleen met video sporen.\n"
 
-#: src/merge/mkvmerge.cpp:266
+#: src/merge/mkvmerge.cpp:269
 msgid "  -h, --help               Show this help.\n"
 msgstr "  -h, --help               Toont deze help.\n"
 
-#: src/merge/mkvmerge.cpp:250
+#: src/merge/mkvmerge.cpp:253
 msgid "  -i, --identify <file>    Print information about the source file.\n"
 msgstr "  -i, --identify <bestand>    Print informatie over het bron bestand.\n"
 
-#: src/merge/mkvmerge.cpp:251
+#: src/merge/mkvmerge.cpp:254
 msgid "  -l, --list-types         Lists supported input file types.\n"
 msgstr "  -i, --identify        Somt invoer bestandstypen op.\n"
 
-#: src/merge/mkvmerge.cpp:177
+#: src/merge/mkvmerge.cpp:180
 msgid ""
 "  -m, --attachments <n[:all|first],m[:all|first],...>\n"
 "                           Copy the attachments with the IDs n, m etc to\n"
@@ -566,7 +577,7 @@ msgstr "  -o, --output out        Schrijf naar bestand 'uit'.\n"
 msgid "  -q, --quiet              suppress status output\n"
 msgstr "  -q, --quiet              onderdrukt status uitvoer\n"
 
-#: src/merge/mkvmerge.cpp:260
+#: src/merge/mkvmerge.cpp:263
 msgid ""
 "  -r, --redirect-output <file>\n"
 "                           Redirects all messages into this file.\n"
@@ -574,7 +585,7 @@ msgstr ""
 "  -r, --redirect-output <bestand>\n"
 "                          Omleiden alle berichten naar dit bestand.\n"
 
-#: src/merge/mkvmerge.cpp:169
+#: src/merge/mkvmerge.cpp:172
 msgid ""
 "  -s, --subtitle-tracks <n,m,...>\n"
 "                           Copy subtitle tracks n,m etc. Default: copy\n"
@@ -584,7 +595,7 @@ msgstr ""
 "                           Kopieer ondertiteling sporen n,m etc. Standaard: copieer\n"
 "                           alle ondertitel sporen.\n"
 
-#: src/merge/mkvmerge.cpp:182
+#: src/merge/mkvmerge.cpp:185
 msgid "  -t, --tags <TID:file>    Read tags for the track from a XML file.\n"
 msgstr "  -t, --tags <TID:file>    Lees markeringen voor het spoor van een XML bestand.\n"
 
@@ -596,7 +607,7 @@ msgstr "  -v, --verbose            uitvoerige status\n"
 msgid "  -w, --webm               Create WebM compliant file.\n"
 msgstr "  -w, --webm               Creëer een WebM herkenbaar bestand.\n"
 
-#: src/merge/mkvmerge.cpp:188
+#: src/merge/mkvmerge.cpp:191
 msgid ""
 "  -y, --sync <TID:d[,o[/p]]>\n"
 "                           Synchronize, adjust the track's timecodes with\n"
@@ -614,28 +625,28 @@ msgstr ""
 "                           naar 1 indien weggelaten. Beide 'o' en 'p' kan een\n"
 "                           veranderend nummer zijn.\n"
 
-#: src/merge/mkvmerge.cpp:139
+#: src/merge/mkvmerge.cpp:142
 #, fuzzy
 msgid "  <file1> + <file2>        Append file2 to file1.\n"
 msgstr "  --title <title>            Titel voor dit bestand.\n"
 
-#: src/merge/mkvmerge.cpp:140
+#: src/merge/mkvmerge.cpp:143
 #, fuzzy
 msgid "  <file1> +<file2>         Same as \"<file1> + <file2>\".\n"
 msgstr "  --title <title>            Titel voor dit bestand.\n"
 
-#: src/merge/mkvmerge.cpp:141
+#: src/merge/mkvmerge.cpp:144
 msgid ""
 "  = <file>                 Don't look for and concatenate files with the same\n"
 "                           base name but with a different trailing number.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:143
+#: src/merge/mkvmerge.cpp:146
 #, fuzzy
 msgid "  =<file>                  Same as \"= <file>\".\n"
 msgstr "  --link                                         Link splits bestanden.\n"
 
-#: src/merge/mkvmerge.cpp:264
+#: src/merge/mkvmerge.cpp:267
 msgid ""
 "  @optionsfile             Reads additional command line options from\n"
 "                           the specified file (see man page).\n"
@@ -716,7 +727,7 @@ msgstr " (hou huidige verhouding)"
 msgid " (pixels)"
 msgstr " (pixels)"
 
-#: src/merge/mkvmerge.cpp:147
+#: src/merge/mkvmerge.cpp:150
 msgid " Attachment support (more global options):\n"
 msgstr " Bijlage ondersteuning (meer globale opties):\n"
 
@@ -737,23 +748,23 @@ msgstr " Algemene uitvoer controle (geavanceerde globale opties):\n"
 msgid " Global options:\n"
 msgstr " Globale opties:\n"
 
-#: src/merge/mkvmerge.cpp:160
+#: src/merge/mkvmerge.cpp:163
 msgid " Options for each input file:\n"
 msgstr " Opties voor elk ingevoerd bestand:\n"
 
-#: src/merge/mkvmerge.cpp:244
+#: src/merge/mkvmerge.cpp:247
 msgid " Options that only apply to VobSub subtitle tracks:\n"
 msgstr " Opties alleen geldig voor VobSub ondertitel sporen:\n"
 
-#: src/merge/mkvmerge.cpp:239
+#: src/merge/mkvmerge.cpp:242
 msgid " Options that only apply to text subtitle tracks:\n"
 msgstr " Opties alleen geldig voor tekst ondertitel sporen\n"
 
-#: src/merge/mkvmerge.cpp:219
+#: src/merge/mkvmerge.cpp:222
 msgid " Options that only apply to video tracks:\n"
 msgstr " Opties alleen geldig voor Video ondertitel sporen:\n"
 
-#: src/merge/mkvmerge.cpp:249
+#: src/merge/mkvmerge.cpp:252
 msgid " Other options:\n"
 msgstr " Overige opties:\n"
 
@@ -767,10 +778,10 @@ msgstr " Segment informatie bewerken:\n"
 msgid " at %1%"
 msgstr " bij %1%"
 
-#: src/merge/output_control.cpp:278
-#: src/merge/output_control.cpp:287
-#: src/merge/output_control.cpp:299
-#: src/merge/output_control.cpp:306
+#: src/merge/output_control.cpp:279
+#: src/merge/output_control.cpp:288
+#: src/merge/output_control.cpp:300
+#: src/merge/output_control.cpp:307
 msgid " done\n"
 msgstr "klaar\n"
 
@@ -835,27 +846,27 @@ msgstr "aac_lezer: Kan bestand niet openen."
 msgid "%1%: Error in the Matroska file structure at position %2%. Resyncing to the next level 1 element.\n"
 msgstr "%1%: Fout in de Matroska bestand structuur op positie %2%. Her-syncen naar volgende niveau 1 element.\n"
 
-#: src/merge/mkvmerge.cpp:666
+#: src/merge/mkvmerge.cpp:669
 #, boost-format
 msgid "%1%: divisor is 0 in '%2% %3%'.\n"
 msgstr "%1%: deler is 0 in '%2% %3%'.\n"
 
-#: src/merge/mkvmerge.cpp:641
+#: src/merge/mkvmerge.cpp:644
 #, boost-format
 msgid "%1%: invalid track ID in '%2% %3%'.\n"
 msgstr "%1%: ongeldig spoor ID in '%2% %3%'.\n"
 
-#: src/merge/mkvmerge.cpp:658
+#: src/merge/mkvmerge.cpp:661
 #, boost-format
 msgid "%1%: missing dividend in '%2% %3%'.\n"
 msgstr "%1%: ontbrekend dividend binnen '%2% %3%'.\n"
 
-#: src/merge/mkvmerge.cpp:661
+#: src/merge/mkvmerge.cpp:664
 #, boost-format
 msgid "%1%: missing divisor in '%2% %3%'.\n"
 msgstr "%1%: missend deler in '%2% %3%'.\n"
 
-#: src/merge/mkvmerge.cpp:637
+#: src/merge/mkvmerge.cpp:640
 #, boost-format
 msgid "%1%: missing track ID in '%2% %3%'.\n"
 msgstr "%1%: ontbrekend spoor ID in '%2% %3%'.\n"
@@ -1123,22 +1134,22 @@ msgstr "&Toon log"
 msgid "&Window"
 msgstr "&Scherm"
 
-#: src/merge/mkvmerge.cpp:1804
+#: src/merge/mkvmerge.cpp:1872
 #, boost-format
 msgid "'%1%' can only be used with a file name. No further options are allowed if this option is used.\n"
 msgstr "'%1%' kan alleen gebruikt worden met een bestandsnaam. Geen verdere opties toegestaan als deze optie is geselecteerd.\n"
 
-#: src/merge/mkvmerge.cpp:503
+#: src/merge/mkvmerge.cpp:506
 #, fuzzy, boost-format
 msgid "'%1%' does not contain a valid unit ('s', 'ms', 'us', 'ns', 'fps', 'p' or 'i') in '%2% %3%'.\n"
 msgstr "'%1%' bevat geen geldige unit ('s', 'ms', 'us' of 'ns') in '%2% %3%'.\n"
 
-#: src/merge/mkvmerge.cpp:1132
+#: src/merge/mkvmerge.cpp:1200
 #, boost-format
 msgid "'%1%' is an unsupported argument for --compression. Available compression methods are: %2%\n"
 msgstr "'%1%' een niet ondersteunt argument voor --compressie. Beschikbare compressie methodes zijn %2%\n"
 
-#: src/merge/mkvmerge.cpp:1073
+#: src/merge/mkvmerge.cpp:1141
 #, boost-format
 msgid "'%1%' is an unsupported argument for --cues.\n"
 msgstr "'%1%' is een niet ondersteunt argument voor --cues.\n"
@@ -1148,17 +1159,17 @@ msgstr "'%1%' is een niet ondersteunt argument voor --cues.\n"
 msgid "'%1%' is missing the file name.\n"
 msgstr "'%1%' mist de bestandsnaam.\n"
 
-#: src/merge/mkvmerge.cpp:1542
+#: src/merge/mkvmerge.cpp:1610
 #, boost-format
 msgid "'%1%' is neither a valid ISO639-2 nor a valid ISO639-1 code in '--chapter-language %1%'. See 'mkvmerge --list-languages' for a list of all languages and their respective ISO639-2 codes.\n"
 msgstr "'%1%' is noch een geldige iso639-2 noch een geldige iso639-1 code in --chapter-language %1%'. Zie 'mkvmerge --list-languages' voor een lijst van alle talen en de bijbehorende ISO639-2 code's.\n"
 
-#: src/merge/mkvmerge.cpp:1608
+#: src/merge/mkvmerge.cpp:1676
 #, boost-format
 msgid "'%1%' is neither a valid ISO639-2 nor a valid ISO639-1 code in '--default-language %1%'. See 'mkvmerge --list-languages' for a list of all languages and their respective ISO639-2 codes.\n"
 msgstr "'%1%' is noch een geldige iso639-2 noch een geldige iso639-1 code in''--default-languagel %1%'' Zie 'mkvmerge --list-languages' voor een lijst van alle talen en de bijbehorende ISO639-2 code's.\n"
 
-#: src/merge/mkvmerge.cpp:1168
+#: src/merge/mkvmerge.cpp:1236
 #, boost-format
 msgid "'%1%' is neither a valid ISO639-2 nor a valid ISO639-1 code. See 'mkvmerge --list-languages' for a list of all languages and their respective ISO639-2 codes.\n"
 msgstr "'%1%' is geen van beiden een geldige iso639-2 noch een geldige iso639-1 code. Zie 'mkvmerge --list-languages' voor een lijst van alle talen en de bijbehorende ISO639-2 code's.\n"
@@ -1174,7 +1185,7 @@ msgstr "'%1%' is geen HOOFSTUKxx=... regel."
 msgid "'%1%' is not a CHAPTERxxNAME=... line."
 msgstr "'%1%' is geen HOOFDSTUKxxNAAM=... regel."
 
-#: src/merge/mkvmerge.cpp:477
+#: src/merge/mkvmerge.cpp:480
 #, boost-format
 msgid "'%1%' is not a valid %2% in '%3% %4%'.\n"
 msgstr "'%1%' is niet geldig %2% in '%3% %4%'.\n"
@@ -1184,12 +1195,12 @@ msgstr "'%1%' is niet geldig %2% in '%3% %4%'.\n"
 msgid "'%1%' is not a valid ISO639-2 language code."
 msgstr "'%1%' is geen geldige ISO639-2 taal code."
 
-#: src/merge/mkvmerge.cpp:1328
+#: src/merge/mkvmerge.cpp:1396
 #, boost-format
 msgid "'%1%' is not a valid append mode in '--append-mode %1%'.\n"
 msgstr "'%1%' is geen geldige voeg bij mode in '--append-mode %1%'.\n"
 
-#: src/merge/mkvmerge.cpp:1399
+#: src/merge/mkvmerge.cpp:1467
 #, boost-format
 msgid "'%1%' is not a valid block additional max in '--blockadd %2%'.\n"
 msgstr "'%1%' is geen geldig maximaal extra blok in '--blockadd %2%'.\n"
@@ -1199,8 +1210,8 @@ msgstr "'%1%' is geen geldig maximaal extra blok in '--blockadd %2%'.\n"
 msgid "'%1%' is not a valid ccTLD country code."
 msgstr "'%1%' is geen geldig ccTLD land code."
 
-#: src/merge/mkvmerge.cpp:1267
-#: src/merge/mkvmerge.cpp:1270
+#: src/merge/mkvmerge.cpp:1335
+#: src/merge/mkvmerge.cpp:1338
 #, boost-format
 msgid "'%1%' is not a valid file ID in '--track-order %2%'.\n"
 msgstr "'%1%' is geen geldige bestands ID in '--track-order %2%'.\n"
@@ -1210,47 +1221,47 @@ msgstr "'%1%' is geen geldige bestands ID in '--track-order %2%'.\n"
 msgid "'%1%' is not a valid hack.\n"
 msgstr "'%1%' is geen geldige kraak.\n"
 
-#: src/merge/mkvmerge.cpp:1313
+#: src/merge/mkvmerge.cpp:1381
 #, boost-format
 msgid "'%1%' is not a valid mapping of file and track IDs in '--append-to %2%'.\n"
 msgstr "'%1%' is geen geldige indeling van bestand en sporen ID's in '--append-to %2%'.\n"
 
-#: src/merge/mkvmerge.cpp:1264
+#: src/merge/mkvmerge.cpp:1332
 #, boost-format
 msgid "'%1%' is not a valid pair of file ID and track ID in '--track-order %2%'.\n"
 msgstr "'%1%' is geen geldig paar van bestands ID en spoor ID in '--track-order %2%'.\n"
 
-#: src/merge/mkvmerge.cpp:1391
+#: src/merge/mkvmerge.cpp:1459
 #, boost-format
 msgid "'%1%' is not a valid pair of track ID and block additional in '--blockadd %1%'.\n"
 msgstr "'%1%' is geen geldig paar of spoor ID en extra block in '--blockadd %1%'.\n"
 
-#: src/merge/mkvmerge.cpp:1436
+#: src/merge/mkvmerge.cpp:1504
 #, boost-format
 msgid "'%1%' is not a valid priority class.\n"
 msgstr "'%1%' is geen geldige prioriteit klasse.\n"
 
-#: src/merge/mkvmerge.cpp:1395
+#: src/merge/mkvmerge.cpp:1463
 #, boost-format
 msgid "'%1%' is not a valid track ID in '--blockadd %2%'.\n"
 msgstr "'%1%' is geen geldig spoor ID in '--blockadd %2%'.\n"
 
-#: src/merge/mkvmerge.cpp:1346
+#: src/merge/mkvmerge.cpp:1414
 #, boost-format
 msgid "'%1%' is not a valid track ID in '--default-duration %2%'.\n"
 msgstr "'%1%' s geen geldig spoor ID in '--default-duration %2%'.\n"
 
-#: src/merge/mkvmerge.cpp:1367
+#: src/merge/mkvmerge.cpp:1435
 #, boost-format
 msgid "'%1%' is not a valid track ID in '--nalu-size-length %2%'.\n"
 msgstr "'%1%' s geen geldig spoor ID in '--nalu-size-lenght %2%'.\n"
 
-#: src/merge/mkvmerge.cpp:1363
+#: src/merge/mkvmerge.cpp:1431
 #, boost-format
 msgid "'%1%' is not a valid tuple of track ID and NALU size length in '--nalu-size-length %1%'.\n"
 msgstr "'%1%' is geen geldig tuple van spoor ID en de NALU lengte grootte in '--nalu-size-length %1%'.\n"
 
-#: src/merge/mkvmerge.cpp:1342
+#: src/merge/mkvmerge.cpp:1410
 #, boost-format
 msgid "'%1%' is not a valid tuple of track ID and default duration in '--default-duration %1%'.\n"
 msgstr "'%1%' is geen geldig tuple van spoor ID en de standaard duur in '--default-duration %1%'.\n"
@@ -1265,42 +1276,42 @@ msgstr "'%1%' is alleen toegestaan bij het uithalen van hoofdstukken.\n"
 msgid "'%1%' is only allowed when extracting tracks.\n"
 msgstr "'%1%' is alleen mogelijk als het uit het spoor gehaald wordt.\n"
 
-#: src/merge/mkvmerge.cpp:1824
+#: src/merge/mkvmerge.cpp:1892
 #, boost-format
 msgid "'%1%' lacks a file name.\n"
 msgstr "'%1%' mist een bestandsnaam.\n"
 
-#: src/merge/mkvmerge.cpp:2047
-#: src/merge/mkvmerge.cpp:2211
+#: src/merge/mkvmerge.cpp:2115
+#: src/merge/mkvmerge.cpp:2279
 #, boost-format
 msgid "'%1%' lacks its argument.\n"
 msgstr "'%1%'mist zijn argument.\n"
 
-#: src/merge/mkvmerge.cpp:2120
+#: src/merge/mkvmerge.cpp:2188
 #, boost-format
 msgid "'%1%' lacks the FourCC.\n"
 msgstr "'%1%' mist de FourCC.\n"
 
-#: src/merge/mkvmerge.cpp:2162
+#: src/merge/mkvmerge.cpp:2230
 #, boost-format
 msgid "'%1%' lacks the delay.\n"
 msgstr "'%1%'mist de vertraging.\n"
 
-#: src/merge/mkvmerge.cpp:1981
+#: src/merge/mkvmerge.cpp:2049
 #, boost-format
 msgid "'%1%' lacks the file name.\n"
 msgstr "'%1%' mist de bestandsnaam.\n"
 
-#: src/merge/mkvmerge.cpp:2218
+#: src/merge/mkvmerge.cpp:2286
 #, boost-format
 msgid "'%1%' lacks the track ID.\n"
 msgstr "'%1%' mist het spoor ID.\n"
 
-#: src/merge/mkvmerge.cpp:2085
-#: src/merge/mkvmerge.cpp:2092
-#: src/merge/mkvmerge.cpp:2099
-#: src/merge/mkvmerge.cpp:2106
-#: src/merge/mkvmerge.cpp:2113
+#: src/merge/mkvmerge.cpp:2153
+#: src/merge/mkvmerge.cpp:2160
+#: src/merge/mkvmerge.cpp:2167
+#: src/merge/mkvmerge.cpp:2174
+#: src/merge/mkvmerge.cpp:2181
 #, boost-format
 msgid "'%1%' lacks the track number(s).\n"
 msgstr "'%1%' mist het spoor nummer(s).\n"
@@ -1326,71 +1337,71 @@ msgstr "'%1%': %2%"
 msgid "'%1%': Processing the following files as well: %2%\n"
 msgstr "'%1%': Uitvoeren volgende bestanden alsmede: %2%\n"
 
-#: src/merge/mkvmerge.cpp:2270
+#: src/merge/mkvmerge.cpp:2338
 msgid "'--append-mode' lacks its argument.\n"
 msgstr "'--append-mode' bijvoeg mode, mist zijn argument.\n"
 
-#: src/merge/mkvmerge.cpp:2263
+#: src/merge/mkvmerge.cpp:2331
 msgid "'--append-to' lacks its argument.\n"
 msgstr "'--append-to' bijvoegen aan, mist zijn argument.\n"
 
-#: src/merge/mkvmerge.cpp:2127
+#: src/merge/mkvmerge.cpp:2195
 msgid "'--aspect-ratio' lacks the aspect ratio.\n"
 msgstr "'--aspect-ratio' verwachtte verhouding, mist zijn verwachtte verhouding.\n"
 
-#: src/merge/mkvmerge.cpp:2134
+#: src/merge/mkvmerge.cpp:2202
 msgid "'--aspect-ratio-factor' lacks the aspect ratio factor.\n"
 msgstr "'--aspect-ratio-factor' verwachtte verhouding factor, mist zijn verwachtte verhouding factor.\n"
 
-#: src/merge/mkvmerge.cpp:1952
+#: src/merge/mkvmerge.cpp:2020
 msgid "'--attachment-description' lacks the description.\n"
 msgstr "'--attachement-description' bijlage beschrijving, mist zijn beschrijving.\n"
 
-#: src/merge/mkvmerge.cpp:1961
+#: src/merge/mkvmerge.cpp:2029
 msgid "'--attachment-mime-type' lacks the MIME type.\n"
 msgstr "'--attachement-mime-type' bijlage mime type, mist het MIME type.\n"
 
-#: src/merge/mkvmerge.cpp:1971
+#: src/merge/mkvmerge.cpp:2039
 msgid "'--attachment-name' lacks the name.\n"
 msgstr "'--attachement-name' bijlage naam, mist de naam.\n"
 
-#: src/merge/mkvmerge.cpp:2232
+#: src/merge/mkvmerge.cpp:2300
 msgid "'--blockadd' lacks its argument.\n"
 msgstr "'--blockadd' blok toevoegen, mist zijn argument.\n"
 
-#: src/merge/mkvmerge.cpp:2006
+#: src/merge/mkvmerge.cpp:2074
 msgid "'--chapter-charset' lacks the charset.\n"
 msgstr "'--chapter-charset' hoofdstuk karakter set, mist de karakterset.\n"
 
-#: src/merge/mkvmerge.cpp:1553
+#: src/merge/mkvmerge.cpp:1621
 #, boost-format
 msgid "'--chapter-charset' may only be given once in '--chapter-charset %1%'.\n"
 msgstr "'--' mag maar één keer worden ingeven in hoofdstuk karakter set, '--chapter-charset %1%'.\n"
 
-#: src/merge/mkvmerge.cpp:1556
+#: src/merge/mkvmerge.cpp:1624
 #, boost-format
 msgid "'--chapter-charset' must be given before '--chapters' in '--chapter-charset %1%'.\n"
 msgstr "'--chapter-charset' hoofdstuk karakter set, moet ingegeven worden vóór hoofdstukken in hoofdstukken karakter set, '--chapter' in '--chapter-charset %1%'.\n"
 
-#: src/merge/mkvmerge.cpp:1999
+#: src/merge/mkvmerge.cpp:2067
 msgid "'--chapter-language' lacks the language.\n"
 msgstr "'--chapter-language' hoodstuk taal, mist de taal.\n"
 
-#: src/merge/mkvmerge.cpp:1535
+#: src/merge/mkvmerge.cpp:1603
 #, boost-format
 msgid "'--chapter-language' may only be given once in '--chapter-language %1%'.\n"
 msgstr "'--chapter-language' hoofdstuk taal,  mag maar één keer worden ingegeven in hoofdstuk taaal, '--chapter-language %1%'.\n"
 
-#: src/merge/mkvmerge.cpp:1538
+#: src/merge/mkvmerge.cpp:1606
 #, boost-format
 msgid "'--chapter-language' must be given before '--chapters' in '--chapter-language %1%'.\n"
 msgstr "'--chapter-language' hoofdstuk taal, moet ingegeven worden vóór hoofdstukken in hoofdstuk taal,'--chapters' in '--chapter-language %1%'.\n"
 
-#: src/merge/mkvmerge.cpp:2023
+#: src/merge/mkvmerge.cpp:2091
 msgid "'--chapters' lacks the file name.\n"
 msgstr "'--chapters' hoofdstukken, mist de bestandsnaam.\n"
 
-#: src/merge/mkvmerge.cpp:1933
+#: src/merge/mkvmerge.cpp:2001
 msgid "'--cluster-length' lacks the length.\n"
 msgstr "'--cluster-length' cluster lengte, mist de cluster lengte.\n"
 
@@ -1398,39 +1409,39 @@ msgstr "'--cluster-length' cluster lengte, mist de cluster lengte.\n"
 msgid "'--command-line-charset' is missing its argument.\n"
 msgstr "'--command-line-charset' commando regel karakter set, mist zijn argument.\n"
 
-#: src/merge/mkvmerge.cpp:2225
+#: src/merge/mkvmerge.cpp:2293
 msgid "'--compression' lacks its argument.\n"
 msgstr "'--compression' compressie, mist zijn argument.\n"
 
-#: src/merge/mkvmerge.cpp:2148
+#: src/merge/mkvmerge.cpp:2216
 msgid "'--cropping' lacks the crop parameters.\n"
 msgstr "'--crop' uitsnijden, mist de uitsnij parameters.\n"
 
-#: src/merge/mkvmerge.cpp:2013
+#: src/merge/mkvmerge.cpp:2081
 msgid "'--cue-chapter-name-format' lacks the format.\n"
 msgstr "'--cue-chapter-name-format' volg document(en) (cue) hoofdstuk naam format, mist het formaat.\n"
 
-#: src/merge/mkvmerge.cpp:2016
+#: src/merge/mkvmerge.cpp:2084
 msgid "'--cue-chapter-name-format' must be given before '--chapters'.\n"
 msgstr "'--cue-chapter-name-format' volg document(en) (cue) hoofdstuk naam format, moet ingegeven zijn voor hoofdstukken, '--chapters'.\n"
 
-#: src/merge/mkvmerge.cpp:2169
+#: src/merge/mkvmerge.cpp:2237
 msgid "'--cues' lacks its argument.\n"
 msgstr "'--cue' volg document(en) (cue), mist zijn argument.\n"
 
-#: src/merge/mkvmerge.cpp:2277
+#: src/merge/mkvmerge.cpp:2345
 msgid "'--default-duration' lacks its argument.\n"
 msgstr "'--default-duration' standaard duur, mist zijn argument.\n"
 
-#: src/merge/mkvmerge.cpp:2197
+#: src/merge/mkvmerge.cpp:2265
 msgid "'--default-language' lacks its argument.\n"
 msgstr "'--default-language' standaard taal, mist zijn argument.\n"
 
-#: src/merge/mkvmerge.cpp:2176
+#: src/merge/mkvmerge.cpp:2244
 msgid "'--default-track' lacks its argument.\n"
 msgstr "'--default-track' standaard spoor, mist zijn argument.\n"
 
-#: src/merge/mkvmerge.cpp:2141
+#: src/merge/mkvmerge.cpp:2209
 msgid "'--display-dimensions' lacks the dimensions.\n"
 msgstr "'--display-dimension' standaard schermverhouding, scherm mist de dimensie.\n"
 
@@ -1438,103 +1449,103 @@ msgstr "'--display-dimension' standaard schermverhouding, scherm mist de dimensi
 msgid "'--engage' lacks its argument.\n"
 msgstr "'--engage' aannemen, mis het argument.\n"
 
-#: src/merge/mkvmerge.cpp:2183
+#: src/merge/mkvmerge.cpp:2251
 msgid "'--forced-track' lacks its argument.\n"
 msgstr "'--forced-track' geforceerde spoor, mist het argument.\n"
 
-#: src/merge/mkvmerge.cpp:1990
+#: src/merge/mkvmerge.cpp:2058
 msgid "'--global-tags' lacks the file name.\n"
 msgstr "'--global-tags' globale markeringen, missen de bestandsnaam.\n"
 
-#: src/merge/mkvmerge.cpp:2190
+#: src/merge/mkvmerge.cpp:2258
 msgid "'--language' lacks its argument.\n"
 msgstr "'--language' taal, mist het argument.\n"
 
-#: src/merge/mkvmerge.cpp:2301
+#: src/merge/mkvmerge.cpp:2369
 msgid "'--link' is only useful in combination with '--split'.\n"
 msgstr "'--link' linken, is alleen zinvol in combinatie met splitsen, '--split'.\n"
 
-#: src/merge/mkvmerge.cpp:1919
+#: src/merge/mkvmerge.cpp:1987
 msgid "'--link-to-next' lacks the next UID.\n"
 msgstr "'--link-to-next' link-naar-volgende, mist de volgende UID.\n"
 
-#: src/merge/mkvmerge.cpp:1912
+#: src/merge/mkvmerge.cpp:1980
 msgid "'--link-to-previous' lacks the previous UID.\n"
 msgstr "'--link-to-previous' link-naar-vorige, mist het vorige UID.\n"
 
-#: src/merge/mkvmerge.cpp:2284
+#: src/merge/mkvmerge.cpp:2352
 msgid "'--nalu-size-length' lacks its argument.\n"
 msgstr "'--nalu-size-length' nalu lengte hgrootte, mist zijn argument.\n"
 
-#: src/merge/mkvmerge.cpp:1872
+#: src/merge/mkvmerge.cpp:1940
 msgid "'--priority' lacks its argument.\n"
 msgstr "'--priority' prioriteit, mist zijn argument.\n"
 
-#: src/merge/mkvmerge.cpp:1926
+#: src/merge/mkvmerge.cpp:1994
 msgid "'--segment-uid' lacks the segment UID.\n"
 msgstr "'--segment-uid' mist het segment UID.\n"
 
-#: src/merge/mkvmerge.cpp:2032
+#: src/merge/mkvmerge.cpp:2100
 msgid "'--segmentinfo' lacks the file name.\n"
 msgstr "'--segmentinfo' mist de bestandsnaam.\n"
 
-#: src/merge/mkvmerge.cpp:1893
+#: src/merge/mkvmerge.cpp:1961
 msgid "'--split' lacks the size.\n"
 msgstr "'--split' splits, mist de grootte.\n"
 
-#: src/merge/mkvmerge.cpp:1900
+#: src/merge/mkvmerge.cpp:1968
 msgid "'--split-max-files' lacks the number of files.\n"
 msgstr "'--split-max-files' splits-max-bestanden, mist het aantal bestanden.\n"
 
-#: src/merge/mkvmerge.cpp:2155
+#: src/merge/mkvmerge.cpp:2223
 msgid "'--stereo-mode' lacks its argument.\n"
 msgstr "'--stereo-mode' mist zijn argument.\n"
 
-#: src/merge/mkvmerge.cpp:2204
+#: src/merge/mkvmerge.cpp:2272
 msgid "'--sub-charset' lacks its argument.\n"
 msgstr "'--sub-charset' sub-karakterset, mist zijn argument.\n"
 
-#: src/merge/mkvmerge.cpp:2061
+#: src/merge/mkvmerge.cpp:2129
 msgid "'--timecode-scale' lacks its argument.\n"
 msgstr "'--timecode-scale' tijdcode-schaal, mist zijn argument.\n"
 
-#: src/merge/mkvmerge.cpp:1587
+#: src/merge/mkvmerge.cpp:1655
 msgid "'--timecode-scale' was used more than once.\n"
 msgstr "'--timecode-scale' tijdcode-schaal, is meer dan eens gebruikt.\n"
 
-#: src/merge/mkvmerge.cpp:2246
+#: src/merge/mkvmerge.cpp:2314
 msgid "'--timecodes' lacks its argument.\n"
 msgstr "'--timecodes' tijd codes, missen het argument.\n"
 
-#: src/merge/mkvmerge.cpp:1885
+#: src/merge/mkvmerge.cpp:1953
 msgid "'--title' lacks the title.\n"
 msgstr "'--title' titel, mist de titel.\n"
 
-#: src/merge/mkvmerge.cpp:2239
+#: src/merge/mkvmerge.cpp:2307
 msgid "'--track-name' lacks its argument.\n"
 msgstr "'--track-name' spoor-naam, mist zijn argument.\n"
 
-#: src/merge/mkvmerge.cpp:2253
+#: src/merge/mkvmerge.cpp:2321
 msgid "'--track-order' lacks its argument.\n"
 msgstr "'--track-order' spoor-volgorde, mist zijn argument.\n"
 
-#: src/merge/mkvmerge.cpp:2256
+#: src/merge/mkvmerge.cpp:2324
 msgid "'--track-order' may only be given once.\n"
 msgstr "'--track-order' spoor-volgorde, mag alleen éénmaal gegeven worden.\n"
 
-#: src/merge/mkvmerge.cpp:1687
+#: src/merge/mkvmerge.cpp:1755
 msgid "'-A' and '-a' used on the same source file.\n"
 msgstr "'-A' en '-a' zijn gebruikt inhetzelfde bronbestand\n"
 
-#: src/merge/mkvmerge.cpp:1696
+#: src/merge/mkvmerge.cpp:1764
 msgid "'-B' and '-b' used on the same source file.\n"
 msgstr "'-B' en'-b' zijn gebruikt in hetzelfde bronbestand\n"
 
-#: src/merge/mkvmerge.cpp:1690
+#: src/merge/mkvmerge.cpp:1758
 msgid "'-D' and '-d' used on the same source file.\n"
 msgstr "'-D' en '-d' zijn gebruikt in hetzelfde bronbestand\n"
 
-#: src/merge/mkvmerge.cpp:1693
+#: src/merge/mkvmerge.cpp:1761
 msgid "'-S' and '-s' used on the same source file.\n"
 msgstr "'-S' en '-s' zijn gebruikt in hetzelfde bronbestand.\n"
 
@@ -1713,6 +1724,10 @@ msgstr "Een groep blokken is gevonden op positie %1%, maar er is binnenin geen b
 #, boost-format
 msgid "A block was found at timestamp %1% for track number %2%. However, no headers where found for that track number. The block will be skipped.\n"
 msgstr "Een blok is gevonden op tijd moment %1% voor spoor nummer %2%. Maar geen kop informatie is gevonden voor dat spoor nummer. Het blok wordt overgeslagen.\n"
+
+#: src/mmg/tabs/global.cpp:269
+msgid "A chapter starting at 0s is never considered for splitting and discarded silently."
+msgstr ""
 
 #: src/mmg/tabs/global.cpp:253
 msgid "A comma-separated list of frame/field numbers after which to split."
@@ -2054,7 +2069,7 @@ msgstr "Een ID corresponderend aan een codec."
 msgid "An attachment with the ID %1% was not found.\n"
 msgstr "Een bijlage met het ID %1% is niet gevonden.\n"
 
-#: src/merge/mkvmerge.cpp:1679
+#: src/merge/mkvmerge.cpp:1747
 msgid "An empty file name is not valid.\n"
 msgstr "Een lege bestandsnaam is niet geldig.\n"
 
@@ -2109,7 +2124,7 @@ msgstr "Een ander samenvoeg proces loopt nog. Wacht totdat die klaar is of breek
 msgid "Appending a track from a file to another track from the same file is not allowed. This is the case for tracks number %u and %u."
 msgstr "Een spoor bijvoegen van een bestand naar een ander spoor van hetzelfde bestand is niet toegestaan. Dit is het geval voor spoor nummers %u en %u."
 
-#: src/merge/output_control.cpp:1832
+#: src/merge/output_control.cpp:1839
 #, boost-format
 msgid "Appending track %1% from file no. %2% ('%3%') to track %4% from file no. %5% ('%6%').\n"
 msgstr "Bijvoegen %1% van bestand nr. %2% ('%3%') naar spoor %4% van bestand nr. %5% ('%6%').\n"
@@ -2118,11 +2133,11 @@ msgstr "Bijvoegen %1% van bestand nr. %2% ('%3%') naar spoor %4% van bestand nr.
 msgid "Ask before overwriting things (files, jobs)"
 msgstr "Vragen voordat er overschreven wordt (bestanden, taken)"
 
-#: src/merge/mkvmerge.cpp:632
+#: src/merge/mkvmerge.cpp:635
 msgid "Aspect ratio"
 msgstr "Verwachtte verhouding"
 
-#: src/merge/mkvmerge.cpp:632
+#: src/merge/mkvmerge.cpp:635
 msgid "Aspect ratio factor"
 msgstr "Verwachtte verhouding factor"
 
@@ -2201,12 +2216,12 @@ msgstr "Audio spoor %u"
 msgid "Auto-set output filename"
 msgstr "Automatisch bestandsnaam bij opslaan"
 
-#: src/merge/mkvmerge.cpp:343
+#: src/merge/mkvmerge.cpp:346
 #, boost-format
 msgid "Automatic MIME type recognition for '%1%': %2%\n"
 msgstr "Automatisch MIME type herkenning voor '%1%': %2%\n"
 
-#: src/merge/mkvmerge.cpp:1843
+#: src/merge/mkvmerge.cpp:1911
 msgid "Automatically enabling WebM compliance mode due to output file name extension.\n"
 msgstr "Automatisch aanzetten van WebM herkenbaare mode via bestandsnaam extensie.\n"
 
@@ -2302,9 +2317,9 @@ msgstr "Toont de taak wachtrij bewerker"
 #: src/mmg/mmg_dialog.cpp:325
 #: src/mmg/options/mkvmerge.cpp:52
 #: src/mmg/options/mmg.cpp:62
-#: src/mmg/tabs/global.cpp:315
-#: src/mmg/tabs/global.cpp:332
-#: src/mmg/tabs/global.cpp:336
+#: src/mmg/tabs/global.cpp:327
+#: src/mmg/tabs/global.cpp:344
+#: src/mmg/tabs/global.cpp:348
 #: src/mmg/tabs/input_general.cpp:185
 #: src/mmg/tabs/input_general.cpp:188
 msgid "Browse"
@@ -2439,7 +2454,7 @@ msgstr "Hoofdstuk berwerker is niet leeg"
 msgid "Chapter extraction"
 msgstr "Hoofstuk extractie"
 
-#: src/mmg/tabs/global.cpp:313
+#: src/mmg/tabs/global.cpp:325
 msgid "Chapter file:"
 msgstr "Hoofdstuk bestand:"
 
@@ -2448,7 +2463,7 @@ msgstr "Hoofdstuk bestand:"
 msgid "Chapter files (*.xml)|*.xml|%s"
 msgstr "Hoofstuk bestanden (*.xml)|*.xml|%s"
 
-#: src/mmg/tabs/global.cpp:370
+#: src/mmg/tabs/global.cpp:382
 #, c-format, boost-format
 msgid "Chapter files (*.xml;*.txt;*.cue)|*.xml;*.txt;*.cue|%s"
 msgstr "Hoofstuk bestanden (*.xml;*.txt;*.cue)|*.xml;*.txt;*.cue|%s"
@@ -2461,6 +2476,11 @@ msgstr "Hoofstuk bestanden (*.xml;*.txt;*.mka;*.mkv;*.mk3d;*.cue)|*.xml;*.txt;*.
 #: src/mmg/tabs/chapters.cpp:366
 msgid "Chapter names and languages"
 msgstr "Hoofdstuk talen en namen"
+
+#: src/mmg/tabs/global.cpp:264
+#, fuzzy
+msgid "Chapter numbers:"
+msgstr "Hoofdstukken:"
 
 #: src/mmg/options/chapters.cpp:65
 msgid "Chapter options"
@@ -2486,7 +2506,7 @@ msgstr "Hoofdstuk verificatie succesvol"
 
 #: src/info/mkvinfo.cpp:1485
 #: src/mmg/options/chapters.cpp:125
-#: src/mmg/tabs/global.cpp:312
+#: src/mmg/tabs/global.cpp:324
 #: src/propedit/options.cpp:186
 msgid "Chapters"
 msgstr "Hoofdstukken"
@@ -2496,7 +2516,7 @@ msgstr "Hoofdstukken"
 msgid "Chapters (%d entries) from %s"
 msgstr "Hoofstukken (%d ingangen) van%s"
 
-#: src/merge/output_control.cpp:1433
+#: src/merge/output_control.cpp:1440
 msgid "Chapters are not allowed in WebM compliant files. No chapters will be written into any output file.\n"
 msgstr "Hoofdstukken zijn niet toegestaan in WebM herkenbare bestanden. Er worden geen hoofdstukken geschreven in enig uitvoer bestand.\n"
 
@@ -2522,7 +2542,7 @@ msgstr "Hoofstukken: %1% ingangen"
 msgid "Charset for strings on the command line"
 msgstr "Karakter sets reeks voor commando regel"
 
-#: src/mmg/tabs/global.cpp:321
+#: src/mmg/tabs/global.cpp:333
 #: src/mmg/tabs/input_format.cpp:247
 msgid "Charset:"
 msgstr "Karakter set:"
@@ -2533,7 +2553,7 @@ msgid "Check online for the latest release"
 msgstr "Controleer online voor de laatste versie"
 
 #: src/common/cli_parser.cpp:183
-#: src/merge/mkvmerge.cpp:269
+#: src/merge/mkvmerge.cpp:272
 msgid "Check online for the latest release."
 msgstr "Controleer online voor de laatste versie."
 
@@ -2584,7 +2604,7 @@ msgstr "Kies een invoer bestand om bij te voegen"
 msgid "Choose an output file"
 msgstr "Kies een uitvoer bestand"
 
-#: src/mmg/tabs/global.cpp:369
+#: src/mmg/tabs/global.cpp:381
 msgid "Choose the chapter file"
 msgstr "Kies hoofdstuk bestand"
 
@@ -2600,11 +2620,11 @@ msgstr "Kies het mkvmerge programma"
 msgid "Choose the output directory"
 msgstr "Kies uitvoer map"
 
-#: src/mmg/tabs/global.cpp:359
+#: src/mmg/tabs/global.cpp:371
 msgid "Choose the segment info file"
 msgstr "Kies a.u.b. een bestaand bestand"
 
-#: src/mmg/tabs/global.cpp:349
+#: src/mmg/tabs/global.cpp:361
 msgid "Choose the tags file"
 msgstr "Kies het markeer bestand"
 
@@ -2626,12 +2646,12 @@ msgstr "Sluit bestaande bestand zonder op te slaan"
 msgid "Cluster"
 msgstr "Cluster"
 
-#: src/merge/mkvmerge.cpp:1492
+#: src/merge/mkvmerge.cpp:1560
 #, boost-format
 msgid "Cluster length '%1%' out of range (0..65535).\n"
 msgstr "Cluster lengte '%1%' buiten het bereik van (0..65535).\n"
 
-#: src/merge/mkvmerge.cpp:1485
+#: src/merge/mkvmerge.cpp:1553
 #, boost-format
 msgid "Cluster length '%1%' out of range (100..32000).\n"
 msgstr "Cluster lengte '%1%' buiten het bereik van (100..32000).\n"
@@ -2813,7 +2833,7 @@ msgstr "Kon geen uitreksel maken van de opeenvolgende koppen van dit MPEG-1/2 sp
 msgid "Could not find an index for audio track %1% (avilib error message: %2%). Skipping track.\n"
 msgstr "Kan geen index vinden voor audio spoor %1% (fout code: %2%). Sla spoor over.\n"
 
-#: src/merge/output_control.cpp:1754
+#: src/merge/output_control.cpp:1761
 #, boost-format
 msgid "Could not find gptzr when appending. %1%\n"
 msgstr "Kon gptzr niet vinden tijdens bijvoegen. %1%\n"
@@ -2899,11 +2919,11 @@ msgstr "Land:"
 msgid "Create &option file"
 msgstr "Maak &optie bestand"
 
-#: src/mmg/tabs/global.cpp:339
+#: src/mmg/tabs/global.cpp:351
 msgid "Create WebM compliant file"
 msgstr "Creëer WebM herkenbaar bestand"
 
-#: src/mmg/tabs/global.cpp:340
+#: src/mmg/tabs/global.cpp:352
 msgid "Create a WebM compliant file. mkvmerge also turns this on if the output file name's extension is \"webm\". This mode enforces several restrictions. The only allowed codecs are VP8 video and Vorbis audio tracks. Neither chapters nor tags are allowed. The DocType header item is changed to \"webm\"."
 msgstr "Creëer een WebM herkenbaar bestand. mkvmerge zet dit tevens aan, wanneer het uitvoerbestandsnaam de extensie \"webm\" heeft. Deze modus dwingt diverse beperkingen af. De enig toegestane codecs zijn VP8 video en Vorbis audio sporen. Geen van de volgende hoofdstuk markeringen zijn toegstaan. Het DocType kop item is veranderd naar \"webm\"."
 
@@ -2915,7 +2935,7 @@ msgstr "Creëer een nieuw hoofdstuk bestand"
 msgid "Creating directory '%1%' failed: %2%"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:709
+#: src/merge/mkvmerge.cpp:712
 #, boost-format
 msgid "Cropping parameters: not given in the form <TID>:<left>,<top>,<right>,<bottom> e.g. 0:10,5,10,5 (argument was '%1%').\n"
 msgstr "Uitsnij parameters: niet ingegeven in het formulier <TID>:<links>,<bovenaan>,<rechts>,<onderaan> b.v. 0:10,5,10,5 (argument was '%1%').\n"
@@ -2944,7 +2964,7 @@ msgstr "Volg document(en) (cue) codec staat: %1%"
 msgid "Cue duration: %1%"
 msgstr "Volg cluster positie: %1%"
 
-#: src/mmg/tabs/global.cpp:325
+#: src/mmg/tabs/global.cpp:337
 msgid "Cue name format:"
 msgstr "Volg document(en) (cue) naam:"
 
@@ -3193,8 +3213,8 @@ msgstr "Zet gebruik van SimpelBlokken uit i.p.v. BlokGroepen."
 msgid "Disables lacing for all tracks. This will increase the file's size, especially if there are many audio tracks. Use only for testing."
 msgstr "Zet aaneenkoppelen uit voor alle sporen. Dit verhoogt de bestandsgrootte. Zeker bij meerdere audio sporen. Gebruik het alleen voor testen."
 
-#: src/merge/mkvmerge.cpp:684
-#: src/merge/mkvmerge.cpp:690
+#: src/merge/mkvmerge.cpp:687
+#: src/merge/mkvmerge.cpp:693
 #, boost-format
 msgid "Display dimensions: not given in the form <TID>:<width>x<height>, e.g. 1:640x480 (argument was '%1%').\n"
 msgstr "Toon dimensies: niet ingegeven in formulier <TID>:<breedte>x<hoogte>, b.v. 1:640x480 (het argument was '%1%').\n"
@@ -3257,7 +3277,7 @@ msgstr "Gedaan.\n"
 msgid "Download URL:"
 msgstr "Gedownloadde URL:"
 
-#: src/mmg/tabs/global.cpp:215
+#: src/mmg/tabs/global.cpp:216
 #, fuzzy
 msgid "Duration:"
 msgstr "Beschrijving:"
@@ -3300,7 +3320,7 @@ msgstr "EBML lees versie: %1%"
 msgid "EBML version: %1%"
 msgstr "EBML versie: %1%"
 
-#: src/merge/output_control.cpp:1271
+#: src/merge/output_control.cpp:1272
 #, boost-format
 msgid "EVIL internal bug! (unknown file type). %1%\n"
 msgstr "Kwalijke interne bug! (onbekend bestandstype). %1%\n"
@@ -3342,6 +3362,10 @@ msgstr "Editie %d"
 msgid "EditionEntry %u"
 msgstr "EditieIngang %u"
 
+#: src/mmg/tabs/global.cpp:266
+msgid "Either the word 'all' which selects all chapters or a comma-separated list of chapter numbers after which to split."
+msgstr ""
+
 #: src/propedit/propedit.cpp:70
 #, boost-format
 msgid "Element %1% is written.\n"
@@ -3365,7 +3389,7 @@ msgstr "Elementen in de categorie '%1%' ('--bewerk %2%'):\n"
 msgid "Enabled: %1%"
 msgstr "Aangezet: %1%"
 
-#: src/mmg/tabs/global.cpp:281
+#: src/mmg/tabs/global.cpp:292
 msgid "Enables splitting of the output into more than one file. You can split after a given size, after a given amount of time has passed in each file or after a list of timecodes."
 msgstr "Zet splitsen aan naar één of meerdere bestanden. Je kunt splitsen naar een opgegeven grootte, nadat een opgegeven tijd is verstreken in elk bestand of na een lijst met tijdsduren."
 
@@ -3430,7 +3454,7 @@ msgstr "Fout bij ontleden van hoofdstukken '%1%': sommige verplichte elementen o
 msgid "Error parsing the file"
 msgstr "Fout bij ontleden van bestand"
 
-#: src/merge/mkvmerge.cpp:523
+#: src/merge/mkvmerge.cpp:526
 #: src/propedit/tag_target.cpp:139
 #, boost-format
 msgid "Error parsing the tags in '%1%': some mandatory elements are missing.\n"
@@ -3466,7 +3490,7 @@ msgstr "Fout: Kon invoer bestand niet openen %1% (%2%).\n"
 msgid "Error: No EBML head found."
 msgstr "Fout: Géén EBML kopinfo gevonden."
 
-#: src/merge/mkvmerge.cpp:1837
+#: src/merge/mkvmerge.cpp:1905
 msgid ""
 "Error: no output file name was given.\n"
 "\n"
@@ -3599,7 +3623,7 @@ msgstr "Gefaald de USF codec privé data te ontleden voor spoor %1%: %2%\n"
 msgid "Family UID: %1%"
 msgstr "Familie UID: %1%"
 
-#: src/merge/mkvmerge.cpp:422
+#: src/merge/mkvmerge.cpp:425
 #, boost-format
 msgid "File %1% has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n"
 msgstr "Bestand %1% heeft een onbekend type. Kijk even naar de ondersteunde bestandstypen ('mkvmerge --lijst-typen') en maak contact met de autheur Moritz Bunkus <moritz@bunkus.org> als je bestand wordt ondersteund maar niet correct wordt herkend.\n"
@@ -3688,15 +3712,15 @@ msgstr "Bestand verwijderen niet mogelijk"
 msgid "File structure warning"
 msgstr "Bestand structuur waarschuwing"
 
-#: src/mmg/tabs/global.cpp:300
+#: src/mmg/tabs/global.cpp:312
 msgid "File/segment linking"
 msgstr "Bestand/segment gelinkt"
 
-#: src/mmg/tabs/global.cpp:276
+#: src/mmg/tabs/global.cpp:287
 msgid "File/segment title:"
 msgstr "Bestand/segment titel:"
 
-#: src/merge/output_control.cpp:956
+#: src/merge/output_control.cpp:957
 msgid "Files cannot be appended to themselves. The argument for '--append-to' was invalid.\n"
 msgstr "Bestanden kunnen niet aanzichzelf bijgevoegd worden. Het argument voor '--append-to' was ongeldig.\n"
 
@@ -3727,8 +3751,8 @@ msgstr ""
 msgid "Floating point number"
 msgstr "Veranderend nummer"
 
-#: src/mmg/tabs/global.cpp:309
-#: src/mmg/tabs/global.cpp:311
+#: src/mmg/tabs/global.cpp:321
+#: src/mmg/tabs/global.cpp:323
 msgid "For an in-depth explanantion of file/segment linking and this feature please read mkvmerge's documentation."
 msgstr "Voor uitgebreidere uitleg van bestand/segment linken en de mogelijkheden lees de documentatie van mkvmerge's."
 
@@ -3781,12 +3805,12 @@ msgstr "Gevonden B beeldje zonder tweede referentie in een niet gesloten GOP. He
 msgid "FourCC:"
 msgstr "FourCC:"
 
-#: src/merge/mkvmerge.cpp:1240
+#: src/merge/mkvmerge.cpp:1308
 #, boost-format
 msgid "FourCC: Invalid track ID in '%1% %2%'.\n"
 msgstr "FourCC: Ongeldig spoor ID in '%1% %2%'.\n"
 
-#: src/merge/mkvmerge.cpp:1236
+#: src/merge/mkvmerge.cpp:1304
 #, boost-format
 msgid "FourCC: Missing track ID in '%1% %2%'.\n"
 msgstr "FourCC: Missend spoor nummer in '%1% %2%'.\n"
@@ -3829,7 +3853,7 @@ msgid "Global"
 msgstr "Globaal"
 
 #: src/extract/extract_cli_parser.cpp:59
-#: src/mmg/tabs/global.cpp:275
+#: src/mmg/tabs/global.cpp:286
 msgid "Global options"
 msgstr "Globale opties"
 
@@ -4086,7 +4110,7 @@ msgstr "Interne bug: tracks.cpp SSA #1. %1%"
 msgid "Internal program error"
 msgstr "Interne programma fout"
 
-#: src/merge/mkvmerge.cpp:1164
+#: src/merge/mkvmerge.cpp:1232
 #, boost-format
 msgid "Invalid %1% specified in '--%2% %3%'.\n"
 msgstr "Ongeldig %1% opgegeven in '--%2% %3%'.\n"
@@ -4136,17 +4160,17 @@ msgstr "Ongeldige bijlage ID/bestandsnaam specificatie in argument '%1%'.\n"
 msgid "Invalid attribute '%1%' in node '%2%' at position %3%"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1013
+#: src/merge/mkvmerge.cpp:1081
 #, boost-format
 msgid "Invalid boolean option specified in '--default-track %1%'.\n"
 msgstr "Ongeldige variable optie gespecificeerd in, standaard spoor, '--default-track %1%'.\n"
 
-#: src/merge/mkvmerge.cpp:1039
+#: src/merge/mkvmerge.cpp:1107
 #, boost-format
 msgid "Invalid boolean option specified in '--forced-track %1%'.\n"
 msgstr "Ongeldige variable optie gespecificeerd in, geforceerd-spoor, '--forced-track %1%'.\n"
 
-#: src/merge/mkvmerge.cpp:1420
+#: src/merge/mkvmerge.cpp:1488
 #, boost-format
 msgid "Invalid boolean specified in '--aac-is-sbr %1%'.\n"
 msgstr "Ongeldige variable gespecificeerd in  '--aac-is-sbr %1%'.\n"
@@ -4156,12 +4180,18 @@ msgstr "Ongeldige variable gespecificeerd in  '--aac-is-sbr %1%'.\n"
 msgid "Invalid change spec (%3%) in '%1% %2%'.\n"
 msgstr "Ongeldige wijzig opgave (%3%) in '%1% %2%'.\n"
 
-#: src/merge/mkvmerge.cpp:1094
+#: src/merge/mkvmerge.cpp:853
+#: src/merge/mkvmerge.cpp:892
+#, fuzzy, boost-format
+msgid "Invalid chapter number '%1%' for '--split' in '--split %2%': %3%\n"
+msgstr "Ongeldig formaat voor '--split' in '--split %1%'.\n"
+
+#: src/merge/mkvmerge.cpp:1162
 #, boost-format
 msgid "Invalid compression option specified in '--compression %1%'.\n"
 msgstr "Ongeldige compressie optie opgegeven in, compressie, '--compression %1%'.\n"
 
-#: src/merge/mkvmerge.cpp:1087
+#: src/merge/mkvmerge.cpp:1155
 #, boost-format
 msgid "Invalid compression option. No track ID specified in '--compression %1%'.\n"
 msgstr "Ongeldige compressie optie. Geen spoor ID opgegeven in, compressie, '--compression %1%'.\n"
@@ -4170,12 +4200,12 @@ msgstr "Ongeldige compressie optie. Geen spoor ID opgegeven in, compressie, '--c
 msgid "Invalid country selected"
 msgstr "Ongeldig land geselecteerd"
 
-#: src/merge/mkvmerge.cpp:1064
+#: src/merge/mkvmerge.cpp:1132
 #, boost-format
 msgid "Invalid cues option specified in '--cues %1%'.\n"
 msgstr "Ongeldige volg document(en) (cue) optie opgegeven in '--cues %1%'.\n"
 
-#: src/merge/mkvmerge.cpp:1057
+#: src/merge/mkvmerge.cpp:1125
 #, boost-format
 msgid "Invalid cues option. No track ID specified in '--cues %1%'.\n"
 msgstr "Ongeldige volg document(en) (cue) optie. Geen spoor ID opgegeven in '--cues %1%'.\n"
@@ -4185,12 +4215,12 @@ msgstr "Ongeldige volg document(en) (cue) optie. Geen spoor ID opgegeven in '--c
 msgid "Invalid data for Base64 encoding found."
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:868
+#: src/merge/mkvmerge.cpp:935
 #, fuzzy, boost-format
 msgid "Invalid end time for '--split' in '--split %1%' (current part: %2%). Additional error message: %3%.\n"
 msgstr "Ongeldige tijd voor '--split' in '--split %1%'. Extra fout bericht: %2%.\n"
 
-#: src/merge/mkvmerge.cpp:871
+#: src/merge/mkvmerge.cpp:938
 #, boost-format
 msgid "Invalid end time for '--split' in '--split %1%' (current part: %2%). The end time must be bigger than the start time.\n"
 msgstr ""
@@ -4199,7 +4229,7 @@ msgstr ""
 msgid "Invalid file name"
 msgstr "Ongeldige bestandsnaam"
 
-#: src/merge/mkvmerge.cpp:946
+#: src/merge/mkvmerge.cpp:1013
 #, boost-format
 msgid "Invalid format for '--split' in '--split %1%'.\n"
 msgstr "Ongeldig formaat voor '--split' in '--split %1%'.\n"
@@ -4275,7 +4305,7 @@ msgstr "Ongeldig format: De laatste karakter is een dubbele punt of een decimale
 msgid "Invalid format: unknown character '%1%' found"
 msgstr "Ongeldig format: onbekend karakter '%1%' gevonden"
 
-#: src/merge/mkvmerge.cpp:830
+#: src/merge/mkvmerge.cpp:833
 #, fuzzy, boost-format
 msgid "Invalid frame for '--split' in '--split %1%'.\n"
 msgstr "Ongeldig formaat voor '--split' in '--split %1%'.\n"
@@ -4299,7 +4329,7 @@ msgstr ""
 msgid "Invalid minute: %1%"
 msgstr "Ongeldige minuten: %1%"
 
-#: src/mmg/tabs/global.cpp:619
+#: src/mmg/tabs/global.cpp:633
 msgid "Invalid number of max. split files given."
 msgstr "Ongeldig max. aantal splits bestanden gegeven."
 
@@ -4328,7 +4358,7 @@ msgstr "Ongeldige seconde:  %1%"
 msgid "Invalid selector in '%1% %2%'.\n"
 msgstr "Ongeldige selectie in '%1% %2%'.\n"
 
-#: src/merge/mkvmerge.cpp:900
+#: src/merge/mkvmerge.cpp:967
 #, boost-format
 msgid "Invalid split size in '--split %1%'.\n"
 msgstr "ongeldige splits grootte in '--splits %1%'.\n"
@@ -4337,113 +4367,113 @@ msgstr "ongeldige splits grootte in '--splits %1%'.\n"
 msgid "Invalid start or stop timecode"
 msgstr "Ongeldige start of stop tijd"
 
-#: src/merge/mkvmerge.cpp:862
+#: src/merge/mkvmerge.cpp:929
 #, fuzzy, boost-format
 msgid "Invalid start time for '--split' in '--split %1%' (current part: %2%). Additional error message: %3%.\n"
 msgstr "Ongeldige tijd voor '--split' in '--split %1%'. Extra fout bericht: %2%.\n"
 
-#: src/merge/mkvmerge.cpp:874
+#: src/merge/mkvmerge.cpp:941
 #, fuzzy, boost-format
 msgid "Invalid start time for '--split' in '--split %1%' (current part: %2%). The start time must be bigger than or equal to the previous part's end time.\n"
 msgstr "Ongeldige tijd voor '--split' in '--split %1%'. Extra fout bericht: %2%.\n"
 
-#: src/merge/mkvmerge.cpp:849
+#: src/merge/mkvmerge.cpp:916
 #, fuzzy, boost-format
 msgid "Invalid start/end specification for '--split' in '--split %1%' (curent part: %2%).\n"
 msgstr "Ongeldig formaat voor '--split' in '--split %1%'.\n"
 
-#: src/merge/mkvmerge.cpp:1188
+#: src/merge/mkvmerge.cpp:1256
 #, boost-format
 msgid "Invalid sub charset option. No track ID specified in '--sub-charset %1%'.\n"
 msgstr "Ongeldige sub karakterset optie. Geen spoor ID opgegeven in, sub-karakter set, '--sub-charset %1%'.\n"
 
-#: src/merge/mkvmerge.cpp:1195
+#: src/merge/mkvmerge.cpp:1263
 #, boost-format
 msgid "Invalid sub charset specified in '--sub-charset %1%'.\n"
 msgstr "Ongeldige sub karakterset opgegeven in, sub-karakter set, '--sub-charset %1%'.\n"
 
-#: src/merge/mkvmerge.cpp:584
+#: src/merge/mkvmerge.cpp:587
 #, boost-format
 msgid "Invalid sync option specified in '%1% %2%'.\n"
 msgstr "Ongeldige sync optie opgegeven in '%1% %2%'.\n"
 
-#: src/merge/mkvmerge.cpp:607
+#: src/merge/mkvmerge.cpp:610
 #, boost-format
 msgid "Invalid sync option specified in '%1% %2%'. The divisor is zero.\n"
 msgstr "Ongeldige sync optie opgegeven in '%1% %2%'. De deler is NUL.\n"
 
-#: src/merge/mkvmerge.cpp:613
+#: src/merge/mkvmerge.cpp:616
 #, boost-format
 msgid "Invalid sync option specified in '%1% %2%'. The linear sync value may not be equal to or smaller than zero.\n"
 msgstr "Ongeldige sync optie opgegeven in '%1% %2%'. De lineaire sync waarde mag niet gelijk aan of kleiner zijn dan nul.\n"
 
-#: src/merge/mkvmerge.cpp:576
+#: src/merge/mkvmerge.cpp:579
 #, boost-format
 msgid "Invalid sync option. No track ID specified in '%1% %2%'.\n"
 msgstr "Ongeldige sync optie. Geen spoor ID opgegeven in '%1% %2%'.\n"
 
-#: src/merge/mkvmerge.cpp:1219
+#: src/merge/mkvmerge.cpp:1287
 #, boost-format
 msgid "Invalid tags file name specified in '%1% %2%'.\n"
 msgstr "Ongeldige markeringen bestandsnaam opgegeven in '%1% %2%'.\n"
 
-#: src/merge/mkvmerge.cpp:1212
+#: src/merge/mkvmerge.cpp:1280
 #, boost-format
 msgid "Invalid tags option. No track ID specified in '%1% %2%'.\n"
 msgstr "Ongeldige markeringen optie. Geen spoor ID opgegeven in '%1% %2%'.\n"
 
-#: src/merge/mkvmerge.cpp:788
+#: src/merge/mkvmerge.cpp:791
 #, boost-format
 msgid "Invalid time for '--split' in '--split %1%'. Additional error message: %2%\n"
 msgstr "ongeldige fout voor '--split' in '--split %1%'. Extra fout bericht: %2%\n"
 
-#: src/merge/mkvmerge.cpp:809
+#: src/merge/mkvmerge.cpp:812
 #, boost-format
 msgid "Invalid time for '--split' in '--split %1%'. Additional error message: %2%.\n"
 msgstr "Ongeldige tijd voor '--split' in '--split %1%'. Extra fout bericht: %2%.\n"
 
-#: src/merge/mkvmerge.cpp:553
+#: src/merge/mkvmerge.cpp:556
 #, boost-format
 msgid "Invalid track ID in '%1% %2%'.\n"
 msgstr "Ongeldig spoor ID in '%1% %2%'.\n"
 
-#: src/merge/mkvmerge.cpp:580
-#: src/merge/mkvmerge.cpp:1216
+#: src/merge/mkvmerge.cpp:583
+#: src/merge/mkvmerge.cpp:1284
 #, boost-format
 msgid "Invalid track ID specified in '%1% %2%'.\n"
 msgstr "Ongeldig spoor ID ingegeven in  '%1% %2%'.\n"
 
-#: src/merge/mkvmerge.cpp:1160
+#: src/merge/mkvmerge.cpp:1228
 #, boost-format
 msgid "Invalid track ID specified in '--%1% %2%'.\n"
 msgstr "Ongeldig spoor ID ingegeven in  '--%1% %2%'.\n"
 
-#: src/merge/mkvmerge.cpp:1417
+#: src/merge/mkvmerge.cpp:1485
 #, boost-format
 msgid "Invalid track ID specified in '--aac-is-sbr %1%'.\n"
 msgstr "Ongeldig spoor ID ingegeven in  '--aac-is-sbr %1%'.\n"
 
-#: src/merge/mkvmerge.cpp:1091
+#: src/merge/mkvmerge.cpp:1159
 #, boost-format
 msgid "Invalid track ID specified in '--compression %1%'.\n"
 msgstr "Ongeldig spoor ID ingegeven in  '--compressie %1%'.\n"
 
-#: src/merge/mkvmerge.cpp:1061
+#: src/merge/mkvmerge.cpp:1129
 #, boost-format
 msgid "Invalid track ID specified in '--cues %1%'.\n"
 msgstr "Ongeldig spoor ID ingegeven in  '--cues %1%'.\n"
 
-#: src/merge/mkvmerge.cpp:1007
+#: src/merge/mkvmerge.cpp:1075
 #, boost-format
 msgid "Invalid track ID specified in '--default-track %1%'.\n"
 msgstr "Ongeldig spoor ID ingegeven in  '--default-track %1%'.\n"
 
-#: src/merge/mkvmerge.cpp:1033
+#: src/merge/mkvmerge.cpp:1101
 #, boost-format
 msgid "Invalid track ID specified in '--forced-track %1%'.\n"
 msgstr "Ongeldig spoor ID ingegeven in  '--forced-track %1%'.\n"
 
-#: src/merge/mkvmerge.cpp:1192
+#: src/merge/mkvmerge.cpp:1260
 #, boost-format
 msgid "Invalid track ID specified in '--sub-charset %1%'.\n"
 msgstr "Ongeldig spoor ID ingegeven in '--sub-charset %1%'.\n"
@@ -4511,7 +4541,7 @@ msgstr "Taal is niet op NUL afgesloten"
 
 #: src/mmg/options/chapters.cpp:81
 #: src/mmg/tabs/chapters.cpp:370
-#: src/mmg/tabs/global.cpp:317
+#: src/mmg/tabs/global.cpp:329
 #: src/mmg/tabs/input_general.cpp:178
 msgid "Language:"
 msgstr "Taal:"
@@ -4714,7 +4744,7 @@ msgstr "Matroska bestanden (*.mkv;*.mka;*.mks;*.mk3d)|*.mkv;*.mka;*.mks;*.mk3d|%
 msgid "Max BlockAddition ID: %1%"
 msgstr "Max. BlokToevoeging ID: %1%"
 
-#: src/mmg/tabs/global.cpp:296
+#: src/mmg/tabs/global.cpp:308
 #, fuzzy
 msgid "Max. number of files:"
 msgstr "max. aantal bestanden:"
@@ -4815,7 +4845,7 @@ msgstr "Mist één hex cijfer"
 msgid "Missing output file name in argument '%1%'.\n"
 msgstr "Ontbrekend de uitvoer bestandsnaam in argument '%1%'.\n"
 
-#: src/merge/mkvmerge.cpp:843
+#: src/merge/mkvmerge.cpp:910
 #, fuzzy, boost-format
 msgid "Missing start/end specifications for '--split' in '--split %1%'.\n"
 msgstr "Ongeldig formaat voor '--split' in '--split %1%'.\n"
@@ -4829,12 +4859,12 @@ msgstr "Veranderen van eigenschappen in de sectie '%1%' was gevraagd, maar géé
 msgid "More"
 msgstr "Meer"
 
-#: src/merge/mkvmerge.cpp:1964
+#: src/merge/mkvmerge.cpp:2032
 #, boost-format
 msgid "More than one MIME type was given for a single attachment. '%1%' will be discarded and '%2%' used instead.\n"
 msgstr "Meer dan één MIME type is opgegeven voor een enkele bijlage. '%1%' wordt afgewezen en '%2%' word i.p.v gebruikt.\n"
 
-#: src/merge/mkvmerge.cpp:1955
+#: src/merge/mkvmerge.cpp:2023
 msgid "More than one description was given for a single attachment.\n"
 msgstr "Meer dan één beschrijving is opgegeven voor een enkele bijlage.\n"
 
@@ -4843,12 +4873,12 @@ msgstr "Meer dan één beschrijving is opgegeven voor een enkele bijlage.\n"
 msgid "More than one file name has been given ('%1%' and '%2%').\n"
 msgstr "Meer dan één bestandsnaam is opgegeven.  ('%1%' and '%2%').\n"
 
-#: src/merge/mkvmerge.cpp:1974
+#: src/merge/mkvmerge.cpp:2042
 #, boost-format
 msgid "More than one name was given for a single attachment. '%1%' will be discarded and '%2%' used instead.\n"
 msgstr "Meer dan één naam is opgegeven voor een enkele bijlage. '%1%' wordt overgeslagen '%2%' daarvoor in de paats gebruikt.\n"
 
-#: src/merge/output_control.cpp:1032
+#: src/merge/output_control.cpp:1033
 #, boost-format
 msgid "More than one track is to be appended to the track %1% from file no. %2% ('%3%'). The argument for '--append-to' was invalid.\n"
 msgstr "Meer dan één spoor wordt bijgevoegd aan het spoor %1% van bestand nr. %2% ('%3%'). Het argument voor, bijvoegen aan, '--append to' was ongeldig.\n"
@@ -4875,7 +4905,7 @@ msgstr "Applicatie samenvoegen: %1%"
 msgid "Muxing in progress."
 msgstr "Samenvoegen in uitvoering."
 
-#: src/merge/mkvmerge.cpp:2359
+#: src/merge/mkvmerge.cpp:2427
 #, fuzzy, boost-format
 msgid "Muxing took %1%.\n"
 msgstr "Samenvoegen duurde %1% seconde(n).\n"
@@ -4926,7 +4956,7 @@ msgstr "Volgende bestandsnaam: %1%"
 msgid "Next level 0 element is not a segment but %1%"
 msgstr "Volgende niveau 0 element is geen segment maar %1%"
 
-#: src/mmg/tabs/global.cpp:310
+#: src/mmg/tabs/global.cpp:322
 msgid "Next segment UID:"
 msgstr "Volgend segment UID:"
 
@@ -4940,7 +4970,7 @@ msgstr "Volgende segment UID: %1%"
 msgid "Next segment's unique ID"
 msgstr "Volgende uniek segment ID"
 
-#: src/merge/mkvmerge.cpp:1154
+#: src/merge/mkvmerge.cpp:1222
 #, boost-format
 msgid "No %1% specified in '--%2% %3%'.\n"
 msgstr "Geen %1% opgegeven in '--%2% %3%'.\n"
@@ -4958,12 +4988,12 @@ msgstr "Geen EBML kop gevonden."
 msgid "No MIME type has been selected for the attachment '%s'."
 msgstr "Geen MIME type is geselecteerd voor deze bijlage'%s'."
 
-#: src/merge/mkvmerge.cpp:347
+#: src/merge/mkvmerge.cpp:350
 #, boost-format
 msgid "No MIME type has been set for the attachment '%1%', and it could not be guessed.\n"
 msgstr "Geen MIME type is ingesteld voor de bijlage '%1%', en het kon niet gegokt worden.\n"
 
-#: src/merge/output_control.cpp:991
+#: src/merge/output_control.cpp:992
 #, boost-format
 msgid "No append mapping was given for the file no. %1% ('%2%'). A default mapping of %3% will be used instead. Please keep that in mind if mkvmerge aborts with an error message regarding invalid '--append-to' options.\n"
 msgstr "Geen bijvoeg indeling ingegeven voor bestand nr. %1% ('%2%'). En standaard indeling van %3% wordt daarvoor in de plaats gebruikt. Hou in gedachten, dat als mkvmerge afbreekt met een fout bericht aangaande een ongeldig, bijgevoegd aan, '--append to' optie.\n"
@@ -4978,9 +5008,19 @@ msgstr "Een bijlage met het ID %1% is niet gevonden.\n"
 msgid "No chapter entries have been create yet."
 msgstr "Er zijn nog geen hoofdstuk ingangen gecreëerd."
 
+#: src/merge/mkvmerge.cpp:858
+#, boost-format
+msgid "No chapter numbers listed after '--split %1%'.\n"
+msgstr ""
+
 #: src/mmg/tabs/chapters.cpp:552
 msgid "No chapters found"
 msgstr "Geen hoofdstukken gevonden"
+
+#: src/merge/mkvmerge.cpp:862
+#: src/merge/mkvmerge.cpp:888
+msgid "No chapters in source files or chapter files found to split by.\n"
+msgstr ""
 
 #: src/mmg/header_editor/frame.cpp:516
 msgid "No fields modified"
@@ -5011,7 +5051,7 @@ msgstr "Geen bestandsnaam gevonden na '@'."
 msgid "No help available."
 msgstr "Geen help beschikbaar."
 
-#: src/merge/mkvmerge.cpp:2306
+#: src/merge/mkvmerge.cpp:2374
 msgid "No input files were given. No output will be created.\n"
 msgstr "Geen invoer bestand opgegeven. Er zal geen uitvoer worden gemaakt.\n"
 
@@ -5037,11 +5077,11 @@ msgstr "Geen segment/niveaul 0 element gevonden."
 msgid "No space left to write to"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:2353
+#: src/merge/mkvmerge.cpp:2421
 msgid "No streams to output were found. Aborting.\n"
 msgstr "Geen stromen voor uitvoer gevonden. Afbreken.\n"
 
-#: src/merge/mkvmerge.cpp:1151
+#: src/merge/mkvmerge.cpp:1219
 #, boost-format
 msgid "No track ID specified in '--%1% %2%'.\n"
 msgstr "Geen spoor ID opgegeven in '--%1% %2%'.\n"
@@ -5089,6 +5129,11 @@ msgstr "Geen geldig Matroska bestand (geen EBML kop gevonden)"
 msgid "Not a valid Matroska file (no segment/level 0 element found)"
 msgstr " (geen segment/niveaul 0 element gevonden)"
 
+#: src/merge/mkvmerge.cpp:853
+#, fuzzy
+msgid "Not a valid number or not positive."
+msgstr "Ongeldig max. aantal splits bestanden gegeven."
+
 #: src/extract/attachments.cpp:132
 #: src/extract/timecodes_v2.cpp:187
 #: src/extract/tracks.cpp:320
@@ -5131,7 +5176,12 @@ msgstr ""
 msgid "Online check for updates"
 msgstr "Online controleren op opwaarderingen"
 
-#: src/merge/mkvmerge.cpp:1566
+#: src/merge/mkvmerge.cpp:894
+#, boost-format
+msgid "Only %1% chapters found in source files & chapter files."
+msgstr ""
+
+#: src/merge/mkvmerge.cpp:1634
 #, boost-format
 msgid "Only one chapter file allowed in '%1% %2%'.\n"
 msgstr "Alleen één hoofdstuk bestand toegstaan in '%1% %2%'.\n"
@@ -5149,16 +5199,16 @@ msgstr "Slecht één van <%1%> is toegstaan beneden <%2%>."
 msgid "Only one of <String> and <Binary> may be used beneath <Simple> but not both at the same time."
 msgstr "Alleen één van de <Reeks> en <Binair> kan onder<Simpel> worden gebruikt maar niet allebei tegelijk."
 
-#: src/merge/mkvmerge.cpp:1827
+#: src/merge/mkvmerge.cpp:1895
 msgid "Only one output file allowed.\n"
 msgstr "Alleen één uitvoer bestand toegestaan.\n"
 
-#: src/merge/mkvmerge.cpp:1576
+#: src/merge/mkvmerge.cpp:1644
 #, boost-format
 msgid "Only one segment info file allowed in '%1% %2%'.\n"
 msgstr "Alleen één segment info bestand is toegestaan in '%1% %2%'.\n"
 
-#: src/merge/output_control.cpp:972
+#: src/merge/output_control.cpp:973
 #, boost-format
 msgid "Only partial append mappings were given for the file no. %1% ('%2%'). Either don't specify any mapping (in which case the default mapping will be used) or specify a mapping for all tracks that are to be copied.\n"
 msgstr "Alleen een deel van het bijvoeg herplaatsen is gegeven voor bestand nr. %1% ('%2%'). Eén van beide,  geef herplaatsen niet op (waarbij de standaard herplaatsing zal worden gebruikt) of specificeer herplaatsen voor alle sporen die worden gecopieerd.\n"
@@ -5352,7 +5402,7 @@ msgstr ""
 "je wilt toekennen aan alle onderstaande hoofdstukken\n"
 "Inclusief de huidig geselecteerde."
 
-#: src/merge/mkvmerge.cpp:272
+#: src/merge/mkvmerge.cpp:275
 msgid ""
 "Please read the man page/the HTML documentation to mkvmerge. It\n"
 "explains several details in great length which are not obvious from\n"
@@ -5372,7 +5422,7 @@ msgstr "Vorige bestandsnaam"
 msgid "Previous filename: %1%"
 msgstr "Vorige bestandsnaam: %1%"
 
-#: src/mmg/tabs/global.cpp:308
+#: src/mmg/tabs/global.cpp:320
 msgid "Previous segment UID:"
 msgstr "Vorig segment UID:"
 
@@ -5411,7 +5461,7 @@ msgstr "Voortgang"
 
 #: src/extract/timecodes_v2.cpp:290
 #: src/extract/tracks.cpp:402
-#: src/merge/output_control.cpp:544
+#: src/merge/output_control.cpp:545
 #, boost-format
 msgid "Progress: %1%%%%2%"
 msgstr "Voortgang: %1%%%%2%"
@@ -5421,7 +5471,7 @@ msgstr "Voortgang: %1%%%%2%"
 msgid "Progress: 100%\n"
 msgstr "Voortgang: 100%\n"
 
-#: src/merge/output_control.cpp:511
+#: src/merge/output_control.cpp:512
 #, boost-format
 msgid "Progress: 100%%%1%"
 msgstr "Voortgang: 100%%%1%"
@@ -5841,7 +5891,7 @@ msgstr "Segment UIDs:"
 msgid "Segment UID: %1%"
 msgstr "Segment UID: %1%"
 
-#: src/mmg/tabs/global.cpp:301
+#: src/mmg/tabs/global.cpp:313
 msgid "Segment UIDs:"
 msgstr "Segment UIDs:"
 
@@ -5860,11 +5910,11 @@ msgstr "Segment bestandsnaam"
 msgid "Segment filename: %1%"
 msgstr "Segment bestandsnaam: %1%"
 
-#: src/mmg/tabs/global.cpp:335
+#: src/mmg/tabs/global.cpp:347
 msgid "Segment info file:"
 msgstr "Segment info bestand:"
 
-#: src/mmg/tabs/global.cpp:359
+#: src/mmg/tabs/global.cpp:371
 #, c-format, boost-format
 msgid "Segment info files (*.xml)|*.xml|%s"
 msgstr "Segment info bestanden (*.xml)|*.xml|%s"
@@ -6041,7 +6091,7 @@ msgstr "Zet de scherm breedte van een spoor. De hoogte moet ook ingesteld worden
 msgid "Sets the priority that mkvmerge will run with."
 msgstr "Zet de prioriteit waarmee mkvmerge gestart moet worden."
 
-#: src/mmg/tabs/global.cpp:302
+#: src/mmg/tabs/global.cpp:314
 msgid ""
 "Sets the segment UIDs to use. This is a comma-separated list of 128bit segment UIDs in the usual UID form: hex numbers with or without the \"0x\" prefix, with or without spaces, exactly 32 digits.\n"
 "\n"
@@ -6185,8 +6235,8 @@ msgstr "SimpleBlok (%1% spoor nummer %2%, %3% be(e)ld(en), tijd code %|4$.3f|s =
 msgid "Single field frame before GOP header detected. Fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr "Enkele veld beeld GOP kop ontdekt. Herstel de MPEG2 video stroom voor je een poging het te vermenigvuldigen.\n"
 
-#: src/mmg/tabs/global.cpp:197
-#: src/mmg/tabs/global.cpp:200
+#: src/mmg/tabs/global.cpp:199
+#: src/mmg/tabs/global.cpp:202
 msgid "Size:"
 msgstr ""
 
@@ -6221,7 +6271,7 @@ msgstr "Sommige kop waarden zijn veranderd. Wil je echt een nieuw bestand laden 
 msgid "Some header values have been modified. Do you really want to reload without saving the file?"
 msgstr "Sommige kop waarden zijn veranderd. Wil je echt herladen zonder het bestand te bewaren?"
 
-#: src/merge/output_control.cpp:1473
+#: src/merge/output_control.cpp:1480
 #, boost-format
 msgid "Some tag elements are missing (this error should not have occured - another similar error should have occured earlier). %1%\n"
 msgstr "Sommige markeer elementen ontbreken (deze fout had niet mogen gebeuren - een soortgelijke fout had eerder moeten gebeuren). %1%\n"
@@ -6244,19 +6294,19 @@ msgstr ""
 "Geef de mogelijke veranderingen op voor de verwachtte verhouding\n"
 "(0: vrij vergroten/verkleinen, 1: houdt huidige verhouding, 2: vast)."
 
-#: src/mmg/tabs/global.cpp:280
+#: src/mmg/tabs/global.cpp:291
 msgid "Split mode:"
 msgstr ""
 
-#: src/mmg/tabs/global.cpp:279
+#: src/mmg/tabs/global.cpp:290
 msgid "Splitting"
 msgstr "Splitsen"
 
-#: src/mmg/tabs/global.cpp:536
+#: src/mmg/tabs/global.cpp:550
 msgid "Splitting by size was selected, but no size has been given."
 msgstr "Splitsen op groote is geselecterd  maar er is geen grootte opgegeven."
 
-#: src/mmg/tabs/global.cpp:569
+#: src/mmg/tabs/global.cpp:583
 msgid "Splitting by timecode/duration was selected, but nothing was entered."
 msgstr "Splitsen met tijd code/duur is geselecteerd maar niets is ingegeven."
 
@@ -6264,6 +6314,10 @@ msgstr "Splitsen met tijd code/duur is geselecteerd maar niets is ingegeven."
 #, c-format, boost-format
 msgid "Splitting is active, and at least one of the potential output files '%s%s*%s' already exists. Do you want to overwrite them?"
 msgstr "Splitsen is actief en minstends één van de potentiële uivoer bestanden '%s%s*%s' bestaan reeds. Wil je die overschrijven?"
+
+#: src/mmg/tabs/global.cpp:268
+msgid "Splitting will occur right before the first key frame whose timecode is equal to or bigger than the start timecode for the chapters whose numbers are listed."
+msgstr ""
 
 #: src/mmg/mmg_dialog.cpp:326
 msgid "Sta&rt muxing"
@@ -6321,7 +6375,7 @@ msgstr "Status en voortgang"
 msgid "Status:"
 msgstr "Status:"
 
-#: src/merge/mkvmerge.cpp:750
+#: src/merge/mkvmerge.cpp:753
 #, boost-format
 msgid "Stereo mode parameter: not given in the form <TID>:<n|keyword> where n is a number between 0 and %1% or one of these keywords: %2% (argument was '%3%').\n"
 msgstr "Stereo mode parameter: niet ingegeven in formulier <TID>:<n|keyword> waar n een nummer is tussen 0 en %1% of één van deze ingave's  'geen', 'rechts', 'links', 'beide'  %2% (argument was '%3%').\n"
@@ -6369,7 +6423,7 @@ msgstr "Ondertitel spoor %1%  mist sommige duur elementen. Controleer a.u.b. het
 msgid "Subtitle track %u"
 msgstr "Ondertitel spoor %u"
 
-#: src/merge/mkvmerge.cpp:389
+#: src/merge/mkvmerge.cpp:392
 msgid "Supported file types:\n"
 msgstr "Ondersteunde bestandstypen:\n"
 
@@ -6390,11 +6444,11 @@ msgstr "TTA (The lossless True Audio codec)"
 msgid "Tag extraction"
 msgstr "Markeer extractie"
 
-#: src/mmg/tabs/global.cpp:331
+#: src/mmg/tabs/global.cpp:343
 msgid "Tag file:"
 msgstr "Markeer bestand:"
 
-#: src/mmg/tabs/global.cpp:349
+#: src/mmg/tabs/global.cpp:361
 #, c-format, boost-format
 msgid "Tag files (*.xml)|*.xml|%s"
 msgstr "Markeer bestanden (*.xml)|*.xml|%s"
@@ -6413,7 +6467,7 @@ msgstr "Markeer selectie's"
 msgid "Tags"
 msgstr "Markeringen"
 
-#: src/merge/output_control.cpp:1461
+#: src/merge/output_control.cpp:1468
 msgid "Tags are not allowed in WebM compliant files. No tags will be written into any output file.\n"
 msgstr "Markeringen zijn niet toegstaan in WebM herkenbare bestanden. Er worden geen markeringen geschreven naar het uitvoer bestand.\n"
 
@@ -6488,7 +6542,7 @@ msgstr "De FPS is 0.0 maar de lezer voorzag het pakket niet van een tijdcode. %1
 msgid "The FPS setting for track nr. %s in file '%s' is invalid."
 msgstr "De FPS instellingen voor spoor nr. %s in bestand '%s' is ongeldig."
 
-#: src/merge/mkvmerge.cpp:1243
+#: src/merge/mkvmerge.cpp:1311
 #, boost-format
 msgid "The FourCC must be exactly four characters long in '%1% %2%'.\n"
 msgstr "De FourCC moeten excact vier karakters lang zijn in '%1% %2%'.\n"
@@ -6532,7 +6586,7 @@ msgstr ""
 "\n"
 "De juiste oplossing is, deze hoofdstukken te bewaren in een XML bestand en het bestand dan samen te voegen met de hoofdstukken ingesloten."
 
-#: src/merge/mkvmerge.cpp:1371
+#: src/merge/mkvmerge.cpp:1439
 #, boost-format
 msgid "The NALU size length must be a number between 2 and 4 inclusively in '--nalu-size-length %1%'.\n"
 msgstr "De NALU lengte grootte moet een nummer zijn tussen 2 en 4 gezet in, nalu-grootte-lengte, '--nalu-lenth-size %1%'.\n"
@@ -6599,22 +6653,22 @@ msgstr "Bestand '%1%': houderr: %2%"
 msgid "The XML tag file '%1%' could not be read.\n"
 msgstr "De bijlage '%1%' kon niet worden gelezen.\n"
 
-#: src/merge/mkvmerge.cpp:1637
+#: src/merge/mkvmerge.cpp:1705
 #, boost-format
 msgid "The argument '%1%' to '%2%' is invalid: '%3%' is not a valid track ID.\n"
 msgstr "Het argument '%1%' naar '%2%' is ongeldig: '%3%' is geen geldig spoor ID.\n"
 
-#: src/merge/mkvmerge.cpp:1646
+#: src/merge/mkvmerge.cpp:1714
 #, boost-format
 msgid "The argument '%1%' to '%2%' is invalid: '%3%' must be either 'all' or 'first'.\n"
 msgstr "Het argument '%1%' naar '%2%' is ongeldig: '%3%' moet zijn 'alle' of 'eerste'.\n"
 
-#: src/merge/mkvmerge.cpp:1633
+#: src/merge/mkvmerge.cpp:1701
 #, boost-format
 msgid "The argument '%1%' to '%2%' is invalid: too many colons in element '%3%'.\n"
 msgstr "Het argument '%1%' naar '%2%' is ongeldig: teveel separatie tekens in het element '%3%'.\n"
 
-#: src/merge/mkvmerge.cpp:1591
+#: src/merge/mkvmerge.cpp:1659
 msgid "The argument to '--timecode-scale' must be a number.\n"
 msgstr "Het argument naa,r tijd code-schaal, '--timecode-scale' moet een nummer zijn.\n"
 
@@ -6628,7 +6682,7 @@ msgstr "De verwachtte verhouding instelling voor spoor nr. %s in bestand '%s' is
 msgid "The attachment #%1%, ID %2%, MIME type %3%, size %4%, is written to '%5%'.\n"
 msgstr "De bijlaget #%1%, ID %2%, MIME type %3%, grootte %4%, is geschreven naar '%5%'.\n"
 
-#: src/merge/mkvmerge.cpp:1524
+#: src/merge/mkvmerge.cpp:1592
 #, boost-format
 msgid "The attachment '%1%' could not be read.\n"
 msgstr "De bijlage '%1%' kon niet worden gelezen.\n"
@@ -6666,7 +6720,7 @@ msgstr ""
 msgid "The chosen NALU size length of %1% is too small. Try using '4'.\n"
 msgstr "Het gekozen NALU lengte grootte of %1% is te klein. Probeer '4' te gebruiken.\n"
 
-#: src/merge/mkvmerge.cpp:1670
+#: src/merge/mkvmerge.cpp:1738
 msgid "The closing parenthesis ')' are missing.\n"
 msgstr ""
 
@@ -6695,7 +6749,7 @@ msgstr "Het correctie bestandskop is niet correct gelezen.\n"
 msgid "The country '%s' is not a valid ccTLD and cannot be selected."
 msgstr "Het land '%s' is geen geldig ccTLD en kan niet geselecteerd worden."
 
-#: src/merge/output_control.cpp:1541
+#: src/merge/output_control.cpp:1548
 #, fuzzy
 msgid "The cue entries (the index) are being written...\n"
 msgstr "De volg document(en) (cue) ingangen (de index) worden geschreven..."
@@ -6720,11 +6774,11 @@ msgstr "De standaar taal code '%1%' is geen geldige ISO639-2 taal code en wordt 
 msgid "The delay setting for track nr. %s in file '%s' is invalid."
 msgstr "De vertraag instellingen voor spoor nr. %s in bestand '%s' zijn ongeldig."
 
-#: src/merge/output_control.cpp:1278
-#: src/merge/output_control.cpp:1281
-#: src/merge/output_control.cpp:1284
-#: src/merge/output_control.cpp:1287
-#: src/merge/output_control.cpp:1290
+#: src/merge/output_control.cpp:1279
+#: src/merge/output_control.cpp:1282
+#: src/merge/output_control.cpp:1285
+#: src/merge/output_control.cpp:1288
+#: src/merge/output_control.cpp:1291
 #, boost-format
 msgid ""
 "The demultiplexer for the file '%1%' failed to initialize:\n"
@@ -6733,8 +6787,8 @@ msgstr ""
 "De splitser van het bestand '%1%' faalde op te starten:\n"
 "%2%\n"
 
-#: src/mmg/tabs/global.cpp:333
-#: src/mmg/tabs/global.cpp:337
+#: src/mmg/tabs/global.cpp:345
+#: src/mmg/tabs/global.cpp:349
 msgid "The difference between tags associated with a track and global tags is explained in mkvmerge's documentation. In short: global tags apply to the complete file while the tags you can add on the 'input' tab apply to only one track."
 msgstr "Het verschil tussen een markering gekoppeld aan een spoor en globale markeringen worden uitgelegd in mkvmerge's documentatie. In het kort: globale markeringen gaan over het gehele bestand terwijl de markeringen die jij kunt toevoegen aan de 'invoer' tab alléén gaan over één spoor."
 
@@ -6755,7 +6809,7 @@ msgstr ""
 "Het gesleepte bestand '%s'\n"
 "is geen Matroska bestand."
 
-#: src/mmg/tabs/global.cpp:216
+#: src/mmg/tabs/global.cpp:217
 msgid "The duration after which a new output file is started. The time can be given either in the form HH:MM:SS.nnnnnnnnn or as the number of seconds followed by 's'. You may omit the number of hours 'HH' and the number of nanoseconds 'nnnnnnnnn'. If given then you may use up to nine digits after the decimal point. Examples: 01:00:00 (after one hour) or 1800s (after 1800 seconds)."
 msgstr "De duur waarna een nieuw uitvoer bestand moet worden gestart. De tijd kan in één van beiden de vormen worden gegeven HH:MM:SS.nnnnnnnnn of  als een aantal seconden gevolgd door een 's'. Je mag de hoeveelheid uren overslaan 'HH' en de hoeveelheid aan nanoseconden 'nnnnnnnnn'. Indien ingegeven, mag je tot aan negen nummers gebruiken na de decimale punt. Bijvoorbeeld: 01:00:00 (na één uur) of 1800s (na 1800 seconden)."
 
@@ -6783,7 +6837,7 @@ msgstr "De verkregen waarde voor de video breedte en hoogte van de MPEG4 laag 2 
 msgid "The fifth mode tries to extract chapter information and tags and outputs them as a CUE sheet. This is the reverse of using a CUE sheet with mkvmerge's '--chapters' option."
 msgstr "De vijde mode probeert het hoofstuk informatie te achterhalen, markeert en voert ze uit als in een volg document(en) (cue). Dit is het omgekeerde dan het gebruik maken van een volg document(en) (cue) via mkvmerge's,-hoofdstukken, '--chapters' optie."
 
-#: src/merge/mkvmerge.cpp:1505
+#: src/merge/mkvmerge.cpp:1573
 #, boost-format
 msgid "The file '%1%' cannot be attached because it does not exist or cannot be read.\n"
 msgstr "Het bestand '%1%' kan niet vastgemaakt worden het bestaat niet of kan niet gelezen worden.\n"
@@ -6800,8 +6854,8 @@ msgstr "Het bestand '%1%' kon niet geopend worden voor het lezen van commando re
 #: src/extract/tags.cpp:48
 #: src/extract/timecodes_v2.cpp:194
 #: src/extract/tracks.cpp:329
-#: src/merge/output_control.cpp:333
-#: src/merge/output_control.cpp:466
+#: src/merge/output_control.cpp:334
+#: src/merge/output_control.cpp:467
 #: src/propedit/attachment_target.cpp:63
 #, fuzzy, boost-format
 msgid "The file '%1%' could not be opened for reading: %2%.\n"
@@ -6814,17 +6868,17 @@ msgstr "Het bestand '%1%' kon voor lezen niet geopend worden (%2%).\n"
 #: src/extract/xtr_rmff.cpp:40
 #: src/extract/xtr_tta.cpp:86
 #: src/extract/xtr_wav.cpp:113
-#: src/merge/output_control.cpp:1499
+#: src/merge/output_control.cpp:1506
 #, fuzzy, boost-format
 msgid "The file '%1%' could not be opened for writing: %2%.\n"
 msgstr "Het bestand '%1%' kon voor schrijven niet geopend worden (%2%).\n"
 
-#: src/merge/output_control.cpp:1503
+#: src/merge/output_control.cpp:1510
 #, boost-format
 msgid "The file '%1%' has been opened for writing.\n"
 msgstr "Het bestand '%1%' is voor schrijven aangemaakt.\n"
 
-#: src/merge/mkvmerge.cpp:1726
+#: src/merge/mkvmerge.cpp:1794
 #, boost-format
 msgid "The file '%1%' has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n"
 msgstr "Het bestand '%1%' is een onbekend type. Kijk a.u.b naar de ondersteunende bestandstypen ('mkvmerge --lijst-typen') en maak contact met de autheur Moritz Bunkus <moritz@bunkus.org> als je bestand wordt ondersteund maar niet wordt herkend.\n"
@@ -6844,12 +6898,12 @@ msgstr "Het bestand '%s' bestaat niet."
 msgid "The file '%s' is already processed in combination with the file '%s'. It cannot be added a second time."
 msgstr "Het bestand '%s' wordt al uitgevoerd in combinatie met bestand '%s'. Het kan géén tweede keer worden toegevoegd."
 
-#: src/merge/output_control.cpp:1284
+#: src/merge/output_control.cpp:1285
 msgid "The file content does not match its format type and was not recognized."
 msgstr ""
 
-#: src/merge/output_control.cpp:1278
-#: src/merge/output_control.cpp:1281
+#: src/merge/output_control.cpp:1279
+#: src/merge/output_control.cpp:1282
 #, fuzzy
 msgid "The file could not be opened for reading, or there was not enough data to parse its headers."
 msgstr "Het bestand '%1%' kon niet geopend worden voor het lezen van commando regel argumenten.\n"
@@ -6882,7 +6936,7 @@ msgstr "De bestandskop is te kort.\n"
 msgid "The file header was not read correctly.\n"
 msgstr "De bestandskop is niet correct ingelezen.\n"
 
-#: src/merge/output_control.cpp:1287
+#: src/merge/output_control.cpp:1288
 #, fuzzy
 msgid "The file headers could not be parsed, e.g. because they're incomplete, invalid or damaged."
 msgstr "De FLAC koppen konden niet ontleed worden: de stroom informatie structuur is niet gevonden.\n"
@@ -6896,19 +6950,19 @@ msgstr "Het bestand is een niet ondersteund inhoud formaat (%s)."
 msgid "The file is analyzed.\n"
 msgstr "Het bestand is geanaliseerd.\n"
 
-#: src/merge/output_control.cpp:274
+#: src/merge/output_control.cpp:275
 msgid "The file is being fixed, part 1/4..."
 msgstr "Het bestand wordt gerepareerd, deel 1/4..."
 
-#: src/merge/output_control.cpp:280
+#: src/merge/output_control.cpp:281
 msgid "The file is being fixed, part 2/4..."
 msgstr "Het bestand wordt gerepareerd, deel 2/4..."
 
-#: src/merge/output_control.cpp:289
+#: src/merge/output_control.cpp:290
 msgid "The file is being fixed, part 3/4..."
 msgstr "Het bestand wordt gerepareerd, deel 3/4..."
 
-#: src/merge/output_control.cpp:301
+#: src/merge/output_control.cpp:302
 msgid "The file is being fixed, part 4/4..."
 msgstr "Het bestand wordt gerepareerd, deel 4/4..."
 
@@ -6917,17 +6971,17 @@ msgstr "Het bestand wordt gerepareerd, deel 4/4..."
 msgid "The file name for this segment."
 msgstr "De bestandsnaam voor dit segment."
 
-#: src/merge/output_control.cpp:1005
+#: src/merge/output_control.cpp:1006
 #, boost-format
 msgid "The file no. %1% ('%2%') does not contain a track with the ID %3%, or that track is not to be copied. The argument for '--append-to' was invalid.\n"
 msgstr "Het bestand nr. %1% ('%2%') bevat geen spoor met het ID %3%, of dat spoor kan niet gekopieerd worden. Het argument, bijvoegen aan, '--append to' is ongeldig.\n"
 
-#: src/merge/output_control.cpp:1011
+#: src/merge/output_control.cpp:1012
 #, boost-format
 msgid "The file no. %1% ('%2%') does not contain a track with the ID %3%, or that track is not to be copied. Therefore no track can be appended to it. The argument for '--append-to' was invalid.\n"
 msgstr "Het bestand nr. %1% ('%2%') bevat geen spoor met het ID %3%, of dat spoor kan niet gekopieerd worden. Daarom kan er geen spoor aan bijgevoegd worden. Het argument, bijvoegen aan, '--append to' was ongeldig.\n"
 
-#: src/merge/output_control.cpp:948
+#: src/merge/output_control.cpp:949
 #, boost-format
 msgid "The file no. %1% ('%2%') is not being appended. The argument for '--append-to' was invalid.\n"
 msgstr "Het bestand nr. %1% ('%2%') wordt niet toegevoegd. Het argument voor, bijvoegen aan, '--append to' was ongeldig.\n"
@@ -6948,7 +7002,7 @@ msgstr "het bestand wat je probeerde te bewaren is geen Matroska bestand."
 msgid "The file you tried to save to is a Matroska file. For this to work you have to use the 'Save to Matroska file' menu option."
 msgstr "Het bestand dat je probeerde te bewaren naar... is een Matroska bestand. Voordat dit werkt dien je gebruiken het 'Bewaar naar Matroska bestand' in menu optie."
 
-#: src/merge/mkvmerge.cpp:1714
+#: src/merge/mkvmerge.cpp:1782
 msgid "The first file cannot be appended because there are no files to append to.\n"
 msgstr "Het eerste bestand kan niet worden bijgevoegd omdat er geen bestand is om bij te voegen.\n"
 
@@ -6964,20 +7018,20 @@ msgstr "Het eerste woord vertelt mkvextract wat te extraheren. De tweede moet he
 msgid "The following parts are read after the primary file as if they were all part of one big file."
 msgstr ""
 
-#: src/mmg/tabs/global.cpp:558
+#: src/mmg/tabs/global.cpp:572
 msgid "The format of the split size is invalid (size too small)."
 msgstr "Het formaat van de splits grootte is ongeldig (grootte te klein)."
 
-#: src/mmg/tabs/global.cpp:550
-#: src/mmg/tabs/global.cpp:554
+#: src/mmg/tabs/global.cpp:564
+#: src/mmg/tabs/global.cpp:568
 msgid "The format of the split size is invalid."
 msgstr "Het formaat van de splits grootte is ongeldig."
 
-#: src/mmg/tabs/global.cpp:577
+#: src/mmg/tabs/global.cpp:591
 msgid "The format of the split timecode/duration is invalid."
 msgstr "Het formaat van de spilts tijdcode/duur is ongeldig."
 
-#: src/merge/output_control.cpp:1075
+#: src/merge/output_control.cpp:1076
 msgid "The formats do not match."
 msgstr "De formaten komen niet overeen."
 
@@ -6985,7 +7039,7 @@ msgstr "De formaten komen niet overeen."
 msgid "The fourth mode extracts the chapters and converts them to XML. The output is written to the standard output. The output can be used as a source for mkvmerge."
 msgstr "De vierde mode extraheert de hoofdstukken en zet ze om naar een XML formaat. De uitvoer wordt geschreven naar de standaard uitvoer. De uitvoer kan gebruikt worden als standaard bron voor mkvmerge."
 
-#: src/merge/mkvmerge.cpp:1597
+#: src/merge/mkvmerge.cpp:1665
 msgid "The given timecode scale factor is outside the valid range (1...10000000 or -1 for 'sample precision even if a video track is present').\n"
 msgstr "De gegeven tijd code schaal fator valt buiten een geldig bereik (1...10000000 of-1 voor 'voorbeeld precisie zelfs als een video spoor aanwezig is').\n"
 
@@ -7066,7 +7120,7 @@ msgstr "De regel %1%  van het tijd code bestand '%2%' bevat geen geldig verander
 msgid "The locale could not be set properly. Check the LANG, LC_ALL and LC_MESSAGES environment variables.\n"
 msgstr "De lokatie kon niet juist ingesteld worden. Controleer de taal, LC_ALL and LC_MESSAGES omgeving variabelen.\n"
 
-#: src/mmg/tabs/global.cpp:297
+#: src/mmg/tabs/global.cpp:309
 msgid "The maximum number of files that will be created even if the last file might contain more bytes/time than wanted. Useful e.g. when you want exactly two files. If you leave this empty then there is no limit for the number of files mkvmerge might create."
 msgstr "Het maximaal aantal bestanden dat wordt gecreëerd zelfs wanneer het laatste bestand meer bytes/tijd bevat dan benodigd was. Zinvol b.v. wanneer je precies twee bestanden wilt. Als je dit leeg laat dan is er geen maximaal aantal bestanden dat mkvmerge zou kunnen creeren."
 
@@ -7121,12 +7175,12 @@ msgstr ""
 msgid "The name '%1%' is not a valid property name for the current edit specification in '%2%'.\n"
 msgstr "De naam '%1%' is geen geldige eigendom naam voor de huidige bewerk specificatie in '%2%'.\n"
 
-#: src/merge/mkvmerge.cpp:1682
+#: src/merge/mkvmerge.cpp:1750
 #, boost-format
 msgid "The name of the output file '%1%' and of one of the input files is the same. This would cause mkvmerge to overwrite one of your input files. This is most likely not what you want.\n"
 msgstr "De naam van het uitvoer bestand '%1%' en één van de invoer bestanden zijn INDENTIEK!. Dit zou veroorzaken, dat mkvmerge één van je invoer bestanden overschrijft. Dit is waarschijnlijk niet wat je wilt.\n"
 
-#: src/merge/mkvmerge.cpp:1456
+#: src/merge/mkvmerge.cpp:1524
 #, boost-format
 msgid "The next UID was already given in '%1% %2%'.\n"
 msgstr "Het volgende UID is reeds ingegeven in '%1% %2%'.\n"
@@ -7181,6 +7235,7 @@ msgstr ""
 "aan de bovenkant van het plaatje/beeld."
 
 #: src/mmg/tabs/global.cpp:254
+#: src/mmg/tabs/global.cpp:267
 msgid "The numbering starts at 1."
 msgstr ""
 
@@ -7188,7 +7243,7 @@ msgstr ""
 msgid "The numbers given with this argument are interpreted based on the number of Matroska blocks that are output."
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:2056
+#: src/merge/mkvmerge.cpp:2124
 msgid "The option '--meta-seek-size' is no longer supported. Please read mkvmerge's documentation, especially the section about the MATROSKA FILE LAYOUT.\n"
 msgstr "De optie,meta-zoek-grootte '--meta-seek-size' wordt niet langer ondersteund. Lees a.u.b de handleiding van mkvmerge, speciaal het gedeelte over de MATROSKA BESTANDSLAYOUT.\n"
 
@@ -7206,7 +7261,7 @@ msgstr "Het uitvoer bestand '%s' bestaat reeds. Wil je die overschrijven?"
 msgid "The output file name is invalid, e.g. it might contain invalid characters like ':'."
 msgstr "De uitvoer bestand naam is ongeldig, b.v. het kan een ongeldig karakter bevatten zoals ':'."
 
-#: src/merge/mkvmerge.cpp:1443
+#: src/merge/mkvmerge.cpp:1511
 #, boost-format
 msgid "The previous UID was already given in '%1% %2%'.\n"
 msgstr "Het vorige UID was al opgegeven in '%1% %2%'.\n"
@@ -7241,7 +7296,7 @@ msgstr "De eigendomswaarde is geen geldig getekende geheel in '%1%'. %2%\n"
 msgid "The property value is not a valid unsigned integer in '%1%'. %2%\n"
 msgstr "De eigendomswaarde is geen geldig ongetekend geheel in '%1%'. %2%\n"
 
-#: src/merge/output_control.cpp:1077
+#: src/merge/output_control.cpp:1078
 msgid "The reason is unknown."
 msgstr "De reden is onbekend."
 
@@ -7271,17 +7326,17 @@ msgstr "De geselecteerd taal '%s' voor hoofdstuk '%s' is geen geldige taal code.
 msgid "The sixth mode finds the timecodes of all blocks for a track and outputs a timecode v2 file with these timecodes."
 msgstr "De zesde mode vond de tijd code van alle blokken voor een spoor en voert die uit naar een tijd code v2 bestand met deze tijd code's."
 
-#: src/mmg/tabs/global.cpp:201
+#: src/mmg/tabs/global.cpp:203
 msgid "The size after which a new output file is started. The letters 'G', 'M' and 'K' can be used to indicate giga/mega/kilo bytes respectively. All units are based on 1024 (G = 1024^3, M = 1024^2, K = 1024)."
 msgstr "De grootte waarna een nieuw uitvoer bestand wordt begonnen. De letters 'G', 'M' en 'K' kunnen gebruikt worden om respectievelijk giga/mega/kilo bytes te indiceren. Alle units zijn gebaseerd op 1024 (G = 1024^3, M = 1024^2, K = 1024)."
 
-#: src/merge/mkvmerge.cpp:1518
+#: src/merge/mkvmerge.cpp:1586
 #, boost-format
 msgid "The size of attachment '%1%' is 0.\n"
 msgstr "De grootte van de bijlage '%1%' is 0.\n"
 
-#: src/merge/output_control.cpp:337
-#: src/merge/output_control.cpp:469
+#: src/merge/output_control.cpp:338
+#: src/merge/output_control.cpp:470
 #, boost-format
 msgid "The source file '%1%' could not be opened successfully, or retrieving its size by seeking to the end did not work.\n"
 msgstr "Het bron bestand '%1%' kon niet succesvol worden geopend, of kon de grootte niet worden verkregen, zoeken tot aan het eind werkte niet.\n"
@@ -7405,7 +7460,7 @@ msgstr "De tijdcodes voor deze stroom zijn ge-reset in het midden van het bestan
 msgid "The title for the whole movie."
 msgstr "De titel voor de hele film."
 
-#: src/merge/output_control.cpp:1021
+#: src/merge/output_control.cpp:1022
 #, boost-format
 msgid "The track %1% from file no. %2% ('%3%') is to be appended more than once. The argument for '--append-to' was invalid.\n"
 msgstr "Het spoor %1% van bestand nr. %2% ('%3%') is meer dan eens bijgevoegd. Het argument voor, bijvoegen-aan, '--append-to' was ongeldig.\n"
@@ -7415,17 +7470,17 @@ msgstr "Het spoor %1% van bestand nr. %2% ('%3%') is meer dan eens bijgevoegd. H
 msgid "The track ID %1% does not have a valid CodecID.\n"
 msgstr "Het spoornummer %1% heeft geen geldige CodecID.\n"
 
-#: src/merge/output_control.cpp:852
+#: src/merge/output_control.cpp:853
 #, boost-format
 msgid "The track headers could not be rendered correctly. %1%\n"
 msgstr "De kop sporen konden niet juist terugegeven worden. %1%\n"
 
-#: src/merge/output_control.cpp:1067
+#: src/merge/output_control.cpp:1068
 #, boost-format
 msgid "The track number %1% from the file '%2%' can probably not be appended correctly to the track number %3% from the file '%4%': %5% Please make sure that the resulting file plays correctly the whole time. The author of this program will probably not give support for playback issues with the resulting file.\n"
 msgstr "Spoor nummer %1% van bestand '%2%' kan waarschijnlijk niet worden bijgevoegd aan spoor nummer %3% van het bestand '%4%': %5% Wees er a.u.b zeker van, dat het resulterende bestand de gehele tijd correct wordt afgespeeld. De auteur van dit programma zal waarschijnlijk geen ondersteuning voor afspeel kwesties met het resulterende bestand geven.\n"
 
-#: src/merge/output_control.cpp:1078
+#: src/merge/output_control.cpp:1079
 #, boost-format
 msgid "The track number %1% from the file '%2%' cannot be appended to the track number %3% from the file '%4%'. %5%\n"
 msgstr "Het spoornummer %1% van bestand '%2%' kan niet bijgevoegd worden aan dit spoor nummer %3% van bestand '%4%'. %5%\n"
@@ -7435,7 +7490,7 @@ msgstr "Het spoornummer %1% van bestand '%2%' kan niet bijgevoegd worden aan dit
 msgid "The track number as used in the Block Header."
 msgstr "Het spoornummer zoals gebruikt in de kop blok."
 
-#: src/merge/output_control.cpp:1076
+#: src/merge/output_control.cpp:1077
 msgid "The track parameters do not match."
 msgstr "De spoor parameters komen niet overeen."
 
@@ -7456,8 +7511,8 @@ msgstr ""
 msgid "There is a new version available online."
 msgstr "Er is online een nieuwere versie beschikbaar."
 
-#: src/merge/output_control.cpp:942
-#: src/merge/output_control.cpp:952
+#: src/merge/output_control.cpp:943
+#: src/merge/output_control.cpp:953
 #, boost-format
 msgid "There is no file with the ID '%1%'. The argument for '--append-to' was invalid.\n"
 msgstr "Er is geen bestand met ID '%1%'. Het argument voor, bijvoegen-aan, '--append-to' was ongeldig.\n"
@@ -7582,12 +7637,16 @@ msgstr "Dit bestand bevat geen geldige hoofdstukken."
 msgid "This is the name that will be stored in the output file for this attachment. It defaults to the file name of the original file but can be changed."
 msgstr "Dit is de naam die wordt opgeslagen in het uitvoer bestand voor deze bijlage.  Standaard voor de bestandsnaam van het orginele bestand maar kan veranderd worden."
 
-#: src/mmg/tabs/global.cpp:277
+#: src/mmg/tabs/global.cpp:288
 msgid "This is the title that players may show as the 'main title' for this movie."
 msgstr "Dit is de titlel die afspelers zouden kunen tonen als 'hoofd titel' voor deze film."
 
 #: src/mmg/tabs/global.cpp:255
 msgid "This mode considers only the first video track that is output."
+msgstr ""
+
+#: src/mmg/tabs/global.cpp:270
+msgid "This mode only considers the top-most level of chapters across all edition entries."
 msgstr ""
 
 #: src/mmg/cli_options_dlg.cpp:88
@@ -7604,12 +7663,12 @@ msgstr "Dit eigendom is verplicht en kan niet worden verwijderd in '%1%'. %2%\n"
 msgid "This property is unique. More instances cannot be added in '%1%'. %2%\n"
 msgstr "Dit eigendom is uniek. Meer zaken kunnen niet toegevoegd worden in '%1%'. %2%\n"
 
-#: src/merge/output_control.cpp:297
+#: src/merge/output_control.cpp:298
 #, boost-format
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. %1%\n"
 msgstr "Dit zou ECHT niet mogen gebeuren. De gereserveerde ruimte voor het eerste meta zoek element is te klein. %1%\n"
 
-#: src/merge/output_control.cpp:1692
+#: src/merge/output_control.cpp:1699
 #, boost-format
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. Size needed: %1%. %2%\n"
 msgstr "Dit zou ECHT niet mogen gebeuren. De gereserveerde ruimte voor het eerste meta zoek element is te klein. Heb nodig: %1%. %2%\n"
@@ -7906,17 +7965,17 @@ msgstr "Onbekend hoofdstuk formaat in '%1%'. Het bevat geen ondersteund hoofdstu
 msgid "Unknown content encoding type %1% for track %2%.\n"
 msgstr "Onbekend inhoud codeer type %1% voor spoor %2%.\n"
 
-#: src/merge/mkvmerge.cpp:1461
+#: src/merge/mkvmerge.cpp:1529
 #, boost-format
 msgid "Unknown format for the next UID in '%1% %2%'.\n"
 msgstr "Onbekend format voor de volgende UID in '%1% %2%'.\n"
 
-#: src/merge/mkvmerge.cpp:1448
+#: src/merge/mkvmerge.cpp:1516
 #, boost-format
 msgid "Unknown format for the previous UID in '%1% %2%'.\n"
 msgstr "Onbekend format voor het vorige UID in '%1% %2%'.\n"
 
-#: src/merge/mkvmerge.cpp:1473
+#: src/merge/mkvmerge.cpp:1541
 #, boost-format
 msgid "Unknown format for the segment UID '%3%' in '%1% %2%'.\n"
 msgstr "Onbekend format voor het segment UID '%3%' in '%1% %2%'.\n"
@@ -7977,7 +8036,7 @@ msgstr "Opwaarderen het '%1%' element gefaald. Reden:"
 msgid "Usage"
 msgstr "Gebruik"
 
-#: src/mmg/tabs/global.cpp:295
+#: src/mmg/tabs/global.cpp:307
 msgid "Use 'segment linking' for the resulting files. For an in-depth explanation of this feature consult the mkvmerge documentation."
 msgstr "Gebruik 'segment linken' voor de resulterende bestanden. Voor een volledige uitleg van deze mogelijkheid lees de mkvmerge documentatie."
 
@@ -8002,7 +8061,7 @@ msgstr "Gebruik deze map:"
 msgid "User defined options:"
 msgstr "Gebruiker gedefinieerde opties:"
 
-#: src/merge/mkvmerge.cpp:1375
+#: src/merge/mkvmerge.cpp:1443
 msgid "Using a NALU size length of 3 bytes might result in tracks that won't be decodable with certain AVC/h.264 codecs.\n"
 msgstr "Gebruikmakend van een NALU lengte grootte van 3 bytes kan resulteren in sporen die niet decodeerbaar zijn met bepaalde AVC/h.264 codecs.\n"
 
@@ -8247,7 +8306,7 @@ msgstr "Verkeerde Kate versie: %1%.%2% > %3%.x"
 msgid "Wrong Theora version: %1%.%2%.%3% != 3.2.x"
 msgstr "Verkeerde Theora versie: %1%.%2%.%3% != 3.2.x"
 
-#: src/merge/mkvmerge.cpp:1903
+#: src/merge/mkvmerge.cpp:1971
 msgid "Wrong argument to '--split-max-files'.\n"
 msgstr "Verkeerd argument voor, splits-max-bestanden, '--split-max-files'.\n"
 
@@ -8411,7 +8470,7 @@ msgstr "voltooid met waarschuwingen"
 msgid "compression"
 msgstr "compressie"
 
-#: src/merge/mkvmerge.cpp:312
+#: src/merge/mkvmerge.cpp:315
 #, boost-format
 msgid "create_track_number: file_num not found. %1%\n"
 msgstr "create_track_number: file_num niet gevonden. %1%\n"
@@ -8486,7 +8545,7 @@ msgstr "Er waren waarschuwingen"
 msgid "failed"
 msgstr "mislukt"
 
-#: src/merge/output_control.cpp:615
+#: src/merge/output_control.cpp:616
 #, boost-format
 msgid "filelist_t not found for generic_packetizer_c. %1%\n"
 msgstr "filelist_t niet gevonden voor generic_packetizer_c. %1%\n"
@@ -8594,7 +8653,7 @@ msgstr "lengte %1%, data: %2%"
 msgid "line %1%: The 'delay' timestamp could not be parsed.\n"
 msgstr "regel %1%: De 'vertraging' tijd stempel kon niet worden ontleed.\n"
 
-#: src/mmg/tabs/global.cpp:294
+#: src/mmg/tabs/global.cpp:306
 msgid "link files"
 msgstr "link bestanden"
 
@@ -8849,13 +8908,13 @@ msgstr "mkvmerge -o out [globale opties] [opties1] <bestand1> [@optie bestand ..
 msgid "mkvmerge FAILED with a return code of %d. %s"
 msgstr "mkvmerge GEFAALD met terugkoppel code %d. %s"
 
-#: src/mmg/tabs/global.cpp:536
 #: src/mmg/tabs/global.cpp:550
-#: src/mmg/tabs/global.cpp:554
-#: src/mmg/tabs/global.cpp:558
-#: src/mmg/tabs/global.cpp:569
-#: src/mmg/tabs/global.cpp:577
-#: src/mmg/tabs/global.cpp:619
+#: src/mmg/tabs/global.cpp:564
+#: src/mmg/tabs/global.cpp:568
+#: src/mmg/tabs/global.cpp:572
+#: src/mmg/tabs/global.cpp:583
+#: src/mmg/tabs/global.cpp:591
+#: src/mmg/tabs/global.cpp:633
 msgid "mkvmerge GUI error"
 msgstr "mkvmerge GUI fout"
 
@@ -8878,7 +8937,7 @@ msgstr "mkvmerge GUI instellingen (*.mmg)|*.mmg|%s"
 msgid "mkvmerge GUI: error"
 msgstr "mkvmerge GUI: fout"
 
-#: src/mmg/tabs/global.cpp:326
+#: src/mmg/tabs/global.cpp:338
 msgid "mkvmerge can read CUE sheets for audio CDs and automatically convert them to chapters. This option controls how the chapter names are created. The sequence '%p' is replaced by the track's PERFORMER, the sequence '%t' by the track's TITLE, '%n' by the track's number and '%N' by the track's number padded with a leading 0 for track numbers < 10. The rest is copied as is. If nothing is entered then '%p - %t' will be used."
 msgstr "mkvmerge kan volg document(en) (cue) voor audio cd's lezen en ze automatisch converteren naar hoofdstukken. Deze optie regelt hoe hoofdstuk namen worden gecreëerd. De reeks '%p' is vervangen door het spoor van de artist, de reeks '%t' door het spoor titel, '%n' door het spoornummer en '%N' door het spoornummer opgevuld beginnend met een  0 voor spoor nummers < 10. De rest is gecopiëerd zoals het was. Als niets is ingegeven dan wordt '%p - %t' gebruikt."
 
@@ -8931,21 +8990,21 @@ msgstr "mkvmerge opties"
 msgid "mkvmerge output:"
 msgstr "mkvmerge uitvoer:"
 
-#: src/mmg/tabs/global.cpp:314
-#: src/mmg/tabs/global.cpp:316
+#: src/mmg/tabs/global.cpp:326
+#: src/mmg/tabs/global.cpp:328
 msgid "mkvmerge supports two chapter formats: The OGM like text format and the full featured XML format."
 msgstr "mkvmerge ondersteunt twee hoofdstuk formaten: Het OGM gelijkende tekst format en het volledige XML format."
 
-#: src/mmg/tabs/global.cpp:322
+#: src/mmg/tabs/global.cpp:334
 msgid "mkvmerge supports two chapter formats: The OGM like text format and the full featured XML format. If the OGM format is used and the file's charset is not recognized correctly then this option can be used to correct that. This option is ignored for XML chapter files."
 msgstr "mkvmerge ondersteunt twee hoofdstuk formaten: Het OGM gelijkend tekst format en het uitgebreide XML format. Als het OGM format is gebruikt en de bestands karakter set is niet juist herkend dan kan deze optie gebruikt worden dat te corrigeren. Het negeert dan XML hoofdstuk bestanden."
 
-#: src/mmg/tabs/global.cpp:318
+#: src/mmg/tabs/global.cpp:330
 msgid "mkvmerge supports two chapter formats: The OGM like text format and the full featured XML format. This option specifies the language to be associated with chapters if the OGM chapter format is used. It is ignored for XML chapter files."
 msgstr "mkvmerge ondersteunt twee hoofstuk formaten: Het OGM gelijkend tekst format en het uitgebreide XML format. Deze optie specifceert een taal en ze worden geassocieerd met hoofdstukken als het OGM hoofdstuk format is gebruikt. Het negeert dan XML hoofdstuk bestanden."
 
-#: src/merge/output_control.cpp:268
-#: src/merge/output_control.cpp:308
+#: src/merge/output_control.cpp:269
+#: src/merge/output_control.cpp:309
 msgid "mkvmerge was interrupted by a SIGINT (Ctrl+C?)\n"
 msgstr "mkvmerge werd onderbroken door SIGINT (Ctrl+C?)\n"
 
@@ -9018,7 +9077,7 @@ msgstr "geen algoritme handtekening"
 msgid "no signature hash algorithm"
 msgstr "geen hash algoritme handtekening"
 
-#: src/mmg/tabs/global.cpp:286
+#: src/mmg/tabs/global.cpp:297
 #, fuzzy
 msgid "no splitting"
 msgstr "Splitsen"
@@ -9162,26 +9221,31 @@ msgstr "naast elkaar (links eerst)"
 msgid "side by side (right first)"
 msgstr "naast elkaar (rechts eerst)"
 
-#: src/mmg/tabs/global.cpp:288
+#: src/mmg/tabs/global.cpp:299
 #, fuzzy
 msgid "split after duration"
 msgstr "...na deze tijd:"
 
-#: src/mmg/tabs/global.cpp:291
+#: src/mmg/tabs/global.cpp:302
 msgid "split after frame/field numbers"
 msgstr ""
 
-#: src/mmg/tabs/global.cpp:287
+#: src/mmg/tabs/global.cpp:298
 #, fuzzy
 msgid "split after size"
 msgstr "'--split' splits, mist de grootte.\n"
 
-#: src/mmg/tabs/global.cpp:289
+#: src/mmg/tabs/global.cpp:300
 #, fuzzy
 msgid "split after timecodes"
 msgstr "Hoofstuk tijd codes bijwerken"
 
-#: src/mmg/tabs/global.cpp:290
+#: src/mmg/tabs/global.cpp:303
+#, fuzzy
+msgid "split before chapters"
+msgstr "Verwijder hoofdstuk"
+
+#: src/mmg/tabs/global.cpp:301
 msgid "split by parts"
 msgstr ""
 
@@ -9212,7 +9276,7 @@ msgstr "ondertitels"
 msgid "text subtitles"
 msgstr "SRT tekst ondertiteling"
 
-#: src/merge/mkvmerge.cpp:2248
+#: src/merge/mkvmerge.cpp:2316
 msgid "timecodes"
 msgstr "tijd code's"
 
@@ -9224,7 +9288,7 @@ msgstr "bovenste beneden (links eerst)"
 msgid "top bottom (right first)"
 msgstr "bovenste beneden (rechts eerst)"
 
-#: src/merge/mkvmerge.cpp:2241
+#: src/merge/mkvmerge.cpp:2309
 msgid "track name"
 msgstr "spoor naam"
 
