@@ -607,13 +607,31 @@ tab_global::is_valid_split_timecode_list() {
 
 bool
 tab_global::is_valid_split_frame_list() {
+  auto show_error = [&]() -> bool {
+    wxMessageBox(Z("The format of the split argument is invalid."), Z("mkvmerge GUI error"), wxOK | wxCENTER | wxICON_ERROR);
+    return false;
+  };
+
+  if (cob_split_args->GetValue().IsEmpty())
+    return show_error();
+
   uint64_t value;
   std::vector<wxString> parts = split(cob_split_args->GetValue(), wxString(wxT(",")));
   for (auto &part : parts)
     if (!parse_number(wxMB(part), value) || !value)
-      return false;
+      return show_error();
 
   return true;
+}
+
+bool
+tab_global::is_valid_split_chapters_list() {
+  auto value = cob_split_args->GetValue();
+  if ((value == wxT("all")) || wxRegEx{wxT("^[[:digit:]]+(,[[:digit:]])*$")}.Matches(value))
+    return true;
+
+  wxMessageBox(Z("The format of the split argument is invalid."), Z("mkvmerge GUI error"), wxOK | wxCENTER | wxICON_ERROR);
+  return false;
 }
 
 bool
@@ -623,7 +641,8 @@ tab_global::validate_settings() {
   if (   ((1 == idx) && !is_valid_split_size())
       || ((2 == idx) && !is_valid_split_timecode(cob_split_args->GetValue()))
       || ((3 == idx) && !is_valid_split_timecode_list())
-      || ((5 == idx) && !is_valid_split_frame_list()))
+      || ((5 == idx) && !is_valid_split_frame_list())
+      || ((6 == idx) && !is_valid_split_chapters_list()))
     return false;
 
   int64_t dummy_i;
