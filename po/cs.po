@@ -1734,7 +1734,7 @@ msgstr "Řetězec čitelný pro člověka určující kodek."
 msgid "A human-readable track name."
 msgstr "Název stopy čitelný pro člověka."
 
-#: src/mmg/mmg_dialog.cpp:1427
+#: src/mmg/mmg_dialog.cpp:1428
 #, c-format, boost-format
 msgid "A job with the description '%s' already exists. Do you really want to add another one with the same description?"
 msgstr "Úloha s popisem '%s' již existuje. Opravdu chcete přidat další se stejným popisem?"
@@ -2544,7 +2544,7 @@ msgstr "Online zjišťovat nejnovější verzi."
 msgid "Check online whether or not a new release of MKVToolNix is available on the home page. Will only check when mmg starts and at most once a day. No information is transmitted to the server."
 msgstr "Online zjišťovat, zda je na domovské stránce dostupná nová verze MKVToolNix. Bude zjišťováno pouze při spuštění mmg a nanejvýš jednou denně. Na server se neodesílají žádné informace."
 
-#: src/mmg/mmg_dialog.cpp:1751
+#: src/mmg/mmg_dialog.cpp:1752
 msgid "Checking for updates online; please wait"
 msgstr "Online zjišťování aktualizací; čekejte"
 
@@ -3154,7 +3154,7 @@ msgstr "Odstranit vybrané úlohy z fronty úloh"
 msgid "Description"
 msgstr "Popis"
 
-#: src/mmg/mmg_dialog.cpp:1428
+#: src/mmg/mmg_dialog.cpp:1429
 msgid "Description already exists"
 msgstr "Popis již existuje"
 
@@ -4028,7 +4028,7 @@ msgstr "Písmo importované z %1%"
 msgid "Imported picture from %1%"
 msgstr "Obrázek importovaný z %1%"
 
-#: src/mmg/mmg_dialog.cpp:1896
+#: src/mmg/mmg_dialog.cpp:1897
 msgid "Incompatible mkvmerge version"
 msgstr "Nekompatibilní verze mkvmerge"
 
@@ -4303,7 +4303,7 @@ msgstr ""
 msgid "Invalid minute: %1%"
 msgstr "Neplatná minuta: %1%"
 
-#: src/mmg/tabs/global.cpp:633
+#: src/mmg/tabs/global.cpp:652
 msgid "Invalid number of max. split files given."
 msgstr "Zadán neplatný max. počet rozdělení souborů."
 
@@ -4457,11 +4457,11 @@ msgstr ""
 msgid "Invalid track ID/file name specification in argument '%1%'.\n"
 msgstr ""
 
-#: src/mmg/mmg_dialog.cpp:1464
+#: src/mmg/mmg_dialog.cpp:1465
 msgid "Job added to job queue"
 msgstr "Úloha byla přidána do fronty úloh"
 
-#: src/mmg/mmg_dialog.cpp:1416
+#: src/mmg/mmg_dialog.cpp:1417
 msgid "Job description"
 msgstr "Popis úlohy"
 
@@ -5274,7 +5274,7 @@ msgid "Overwrite existing file(s)?"
 msgstr "Přepsat existující soubory?"
 
 #: src/mmg/mmg_dialog.cpp:547
-#: src/mmg/mmg_dialog.cpp:1410
+#: src/mmg/mmg_dialog.cpp:1411
 msgid "Overwrite existing file?"
 msgstr "Přepsat existující soubor?"
 
@@ -5359,7 +5359,7 @@ msgstr "Šířka pixelu: %1%"
 msgid "Please do not select 'mmg' itself as the 'mkvmerge' executable."
 msgstr "Nevybírejte 'mmg' jako spustitelný soubor 'mkvmerge'."
 
-#: src/mmg/mmg_dialog.cpp:1416
+#: src/mmg/mmg_dialog.cpp:1417
 msgid "Please enter a description for the new job:"
 msgstr "Zadejte popis nové úlohy:"
 
@@ -5445,7 +5445,7 @@ msgstr "Průběh: 100%%%1%"
 msgid "Progress: [%1%%2%] %3%%%"
 msgstr "Průběh: [%1%%2%] %3%%%"
 
-#: src/mmg/mmg_dialog.cpp:1839
+#: src/mmg/mmg_dialog.cpp:1840
 msgid "Querying mkvmerge's capabilities"
 msgstr ""
 
@@ -6499,7 +6499,7 @@ msgstr ""
 msgid "The FourCC setting for track nr. %s in file '%s' is not exactly four characters long."
 msgstr ""
 
-#: src/mmg/mmg_dialog.cpp:1892
+#: src/mmg/mmg_dialog.cpp:1893
 #, boost-format
 msgid "The GUI is configured to use the mkvmerge executable from a different version (%1%) than the GUI itself (%2%). This is not supported but will not be prevented either. You should change the mkvmerge executable in the preferences dialog."
 msgstr ""
@@ -6949,6 +6949,11 @@ msgstr ""
 msgid "The following parts are read after the primary file as if they were all part of one big file."
 msgstr ""
 
+#: src/mmg/tabs/global.cpp:611
+#: src/mmg/tabs/global.cpp:633
+msgid "The format of the split argument is invalid."
+msgstr ""
+
 #: src/mmg/tabs/global.cpp:572
 msgid "The format of the split size is invalid (size too small)."
 msgstr ""
@@ -7146,7 +7151,7 @@ msgid "The order of the various options is not important."
 msgstr ""
 
 #: src/mmg/mmg_dialog.cpp:547
-#: src/mmg/mmg_dialog.cpp:1407
+#: src/mmg/mmg_dialog.cpp:1408
 #, c-format, boost-format
 msgid "The output file '%s' already exists. Do you want to overwrite it?"
 msgstr "Výstupní soubor '%s' již exisuje. Chcete ho přepsat?"
@@ -7396,7 +7401,7 @@ msgstr ""
 msgid "Theora"
 msgstr "Theora"
 
-#: src/mmg/mmg_dialog.cpp:1784
+#: src/mmg/mmg_dialog.cpp:1785
 msgid "There is a new version available online."
 msgstr ""
 
@@ -7411,7 +7416,7 @@ msgstr ""
 msgid "There is no translation available for '%1%'.\n"
 msgstr ""
 
-#: src/mmg/mmg_dialog.cpp:1785
+#: src/mmg/mmg_dialog.cpp:1786
 msgid "There was an error querying the update status."
 msgstr ""
 
@@ -8216,7 +8221,7 @@ msgstr ""
 msgid "Wrong identification string: '%|1$7s|' != 'kate\\0\\0\\0'"
 msgstr ""
 
-#: src/mmg/mmg_dialog.cpp:1783
+#: src/mmg/mmg_dialog.cpp:1784
 msgid "You are already running the latest version."
 msgstr "Používáte nejnovější verzi."
 
@@ -8784,7 +8789,9 @@ msgstr "mkvmerge SELHALO s vráceným kódem %d. %s"
 #: src/mmg/tabs/global.cpp:572
 #: src/mmg/tabs/global.cpp:583
 #: src/mmg/tabs/global.cpp:591
+#: src/mmg/tabs/global.cpp:611
 #: src/mmg/tabs/global.cpp:633
+#: src/mmg/tabs/global.cpp:652
 msgid "mkvmerge GUI error"
 msgstr "Chyba mkvmerge GUI"
 

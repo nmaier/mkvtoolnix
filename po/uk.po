@@ -1747,7 +1747,7 @@ msgstr "Зручний для сприйняття людиною рядок, я
 msgid "A human-readable track name."
 msgstr "Зручна для сприйняття людиною назва треку."
 
-#: src/mmg/mmg_dialog.cpp:1427
+#: src/mmg/mmg_dialog.cpp:1428
 #, c-format, boost-format
 msgid "A job with the description '%s' already exists. Do you really want to add another one with the same description?"
 msgstr "Робота з описом '%s' вже існує. Ви дійсно хочете додати ще одну з тим же описом?"
@@ -2558,7 +2558,7 @@ msgstr "Перевірити наявність останньої версії 
 msgid "Check online whether or not a new release of MKVToolNix is available on the home page. Will only check when mmg starts and at most once a day. No information is transmitted to the server."
 msgstr "Перевіряти наявність нової версії MKVToolNix на домашній веб-сторінці. Перевірка здійснюватиметься при старті mmg і не більше одного раза на день. Ніяка інформація не передається до сервера."
 
-#: src/mmg/mmg_dialog.cpp:1751
+#: src/mmg/mmg_dialog.cpp:1752
 msgid "Checking for updates online; please wait"
 msgstr "Йде перевірка наявності оновлень онлайн; будь ласка, зачекайте"
 
@@ -3168,7 +3168,7 @@ msgstr "Видалити вибране(і) завдання з черги за�
 msgid "Description"
 msgstr "Опис"
 
-#: src/mmg/mmg_dialog.cpp:1428
+#: src/mmg/mmg_dialog.cpp:1429
 msgid "Description already exists"
 msgstr "Опис вже існує"
 
@@ -4044,7 +4044,7 @@ msgstr "Імпортовано шрифтів з %1%"
 msgid "Imported picture from %1%"
 msgstr "Імпортовано зображення з %1%"
 
-#: src/mmg/mmg_dialog.cpp:1896
+#: src/mmg/mmg_dialog.cpp:1897
 msgid "Incompatible mkvmerge version"
 msgstr "Несумісна версія mkvmerge"
 
@@ -4319,7 +4319,7 @@ msgstr "Некорректна довжина шістнадцяткового �
 msgid "Invalid minute: %1%"
 msgstr "Помилка  в момент - хвилин(а): %1%"
 
-#: src/mmg/tabs/global.cpp:633
+#: src/mmg/tabs/global.cpp:652
 msgid "Invalid number of max. split files given."
 msgstr "Невірно задано максимальну кількість файлів для розбиття."
 
@@ -4473,11 +4473,11 @@ msgstr "Невірний ID доріжки заданий в '--sub-charset %1%'
 msgid "Invalid track ID/file name specification in argument '%1%'.\n"
 msgstr "Невірна специфікація ID/назви файлу доріжки для аргументу '%1%'.\n"
 
-#: src/mmg/mmg_dialog.cpp:1464
+#: src/mmg/mmg_dialog.cpp:1465
 msgid "Job added to job queue"
 msgstr "Завдання додано до черги завдань"
 
-#: src/mmg/mmg_dialog.cpp:1416
+#: src/mmg/mmg_dialog.cpp:1417
 msgid "Job description"
 msgstr "Опис завдання"
 
@@ -5290,7 +5290,7 @@ msgid "Overwrite existing file(s)?"
 msgstr "Замінювати існуючий файл(и)?"
 
 #: src/mmg/mmg_dialog.cpp:547
-#: src/mmg/mmg_dialog.cpp:1410
+#: src/mmg/mmg_dialog.cpp:1411
 msgid "Overwrite existing file?"
 msgstr "Замінювати існуючий файл?"
 
@@ -5375,7 +5375,7 @@ msgstr "Ширина в пікселях: %1%"
 msgid "Please do not select 'mmg' itself as the 'mkvmerge' executable."
 msgstr "Будь ласка, не обирайте безпосередньо 'mmg' як виконуваний файл 'mkvmerge'."
 
-#: src/mmg/mmg_dialog.cpp:1416
+#: src/mmg/mmg_dialog.cpp:1417
 msgid "Please enter a description for the new job:"
 msgstr "Будь ласка, введіть опис для нового завдання:"
 
@@ -5467,7 +5467,7 @@ msgstr "Прогрес виконання: 100%%%1%"
 msgid "Progress: [%1%%2%] %3%%%"
 msgstr "Прогрес виконання: [%1%%2%] %3%%%"
 
-#: src/mmg/mmg_dialog.cpp:1839
+#: src/mmg/mmg_dialog.cpp:1840
 msgid "Querying mkvmerge's capabilities"
 msgstr "Запит можливостей mkvmerge"
 
@@ -6531,7 +6531,7 @@ msgstr "FourCC повинен складатися рівно з чотирьо�
 msgid "The FourCC setting for track nr. %s in file '%s' is not exactly four characters long."
 msgstr "FourCC для доріжки номер %s у файлі '%s' не містить точно чотири символи."
 
-#: src/mmg/mmg_dialog.cpp:1892
+#: src/mmg/mmg_dialog.cpp:1893
 #, boost-format
 msgid "The GUI is configured to use the mkvmerge executable from a different version (%1%) than the GUI itself (%2%). This is not supported but will not be prevented either. You should change the mkvmerge executable in the preferences dialog."
 msgstr "GUI налаштований на використання виконуваного файла mkvmerge іншої версії (%1%), ніж сам GUI (%2%). Даний сценарій не підтримується, але не забороняється. Ви можете змінити шлях до виконуваного файла mkvmerge необхідної версії через діалог налаштувань."
@@ -6993,6 +6993,12 @@ msgstr "Перший параметр повідомляє mkvextract, що не
 msgid "The following parts are read after the primary file as if they were all part of one big file."
 msgstr "Вказані частини зчитуються після основного файла так, ніби вони були частиною одного великого файла."
 
+#: src/mmg/tabs/global.cpp:611
+#: src/mmg/tabs/global.cpp:633
+#, fuzzy
+msgid "The format of the split argument is invalid."
+msgstr "Формат задання розміру розділення є неправильним."
+
 #: src/mmg/tabs/global.cpp:572
 msgid "The format of the split size is invalid (size too small)."
 msgstr "Формат задання розміру розділення є неправильним (розмір занадто малий)."
@@ -7227,7 +7233,7 @@ msgid "The order of the various options is not important."
 msgstr "Порядок розташування опцій не має значення."
 
 #: src/mmg/mmg_dialog.cpp:547
-#: src/mmg/mmg_dialog.cpp:1407
+#: src/mmg/mmg_dialog.cpp:1408
 #, c-format, boost-format
 msgid "The output file '%s' already exists. Do you want to overwrite it?"
 msgstr "Вихідний файл '%s' вже існує. Хочете перезаписати його?"
@@ -7480,7 +7486,7 @@ msgstr "Ширина двох доріжок є різною: %1% i %2%"
 msgid "Theora"
 msgstr "Theora"
 
-#: src/mmg/mmg_dialog.cpp:1784
+#: src/mmg/mmg_dialog.cpp:1785
 msgid "There is a new version available online."
 msgstr "Онлайн доступна нова версія."
 
@@ -7495,7 +7501,7 @@ msgstr "Немає файлу з ID '%1%'. Аргумент для '--append-to'
 msgid "There is no translation available for '%1%'.\n"
 msgstr "Немає доступного перекладу для '%1%'.\n"
 
-#: src/mmg/mmg_dialog.cpp:1785
+#: src/mmg/mmg_dialog.cpp:1786
 msgid "There was an error querying the update status."
 msgstr "Сталася помилка при запиті статусу оновлення."
 
@@ -8303,7 +8309,7 @@ msgstr "Неправильний рядок ідентифікації: '%|1$6s|
 msgid "Wrong identification string: '%|1$7s|' != 'kate\\0\\0\\0'"
 msgstr "Неправильний рядок ідентифікації: '%|1$7s|' != 'kate\\0\\0\\0'"
 
-#: src/mmg/mmg_dialog.cpp:1783
+#: src/mmg/mmg_dialog.cpp:1784
 msgid "You are already running the latest version."
 msgstr "Ви вже використовуєте останню версію."
 
@@ -8879,7 +8885,9 @@ msgstr "робота mkvmerge АВАРІЙНО завершена з кодом 
 #: src/mmg/tabs/global.cpp:572
 #: src/mmg/tabs/global.cpp:583
 #: src/mmg/tabs/global.cpp:591
+#: src/mmg/tabs/global.cpp:611
 #: src/mmg/tabs/global.cpp:633
+#: src/mmg/tabs/global.cpp:652
 msgid "mkvmerge GUI error"
 msgstr "помилка mkvmerge GUI"
 

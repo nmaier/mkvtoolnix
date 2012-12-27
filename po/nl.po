@@ -1747,7 +1747,7 @@ msgstr "Een menselijk-leesbare reeks specificeert de codec."
 msgid "A human-readable track name."
 msgstr "En menselijk-leesbaar spoor naam."
 
-#: src/mmg/mmg_dialog.cpp:1427
+#: src/mmg/mmg_dialog.cpp:1428
 #, c-format, boost-format
 msgid "A job with the description '%s' already exists. Do you really want to add another one with the same description?"
 msgstr "Een taak met beschrijving '%s' bestaat al. Wil je echt een ander toevoegen met dezefde beschrijving?"
@@ -2561,7 +2561,7 @@ msgstr "Controleer online voor de laatste versie."
 msgid "Check online whether or not a new release of MKVToolNix is available on the home page. Will only check when mmg starts and at most once a day. No information is transmitted to the server."
 msgstr "Controleer online of er al dan niet een nieuwer versie van MKVToolNix op de thuispagina beschikbaar is. Wortdt leen gecontroleerd als  mmg start en maximaal één keer per dag. Er wordt géén informatie naar de server verzonden!"
 
-#: src/mmg/mmg_dialog.cpp:1751
+#: src/mmg/mmg_dialog.cpp:1752
 msgid "Checking for updates online; please wait"
 msgstr "Controleren op opwaarderingen,moment a.u.b."
 
@@ -3172,7 +3172,7 @@ msgstr "Verwijder geselecteerde taken uit taken wachtrij"
 msgid "Description"
 msgstr "Beschrijving"
 
-#: src/mmg/mmg_dialog.cpp:1428
+#: src/mmg/mmg_dialog.cpp:1429
 msgid "Description already exists"
 msgstr "Beschrijving bestaat reeds"
 
@@ -4052,7 +4052,7 @@ msgstr "Geïmporteerde letter van %1%"
 msgid "Imported picture from %1%"
 msgstr "Geïmporteerd plaatje van %1%"
 
-#: src/mmg/mmg_dialog.cpp:1896
+#: src/mmg/mmg_dialog.cpp:1897
 msgid "Incompatible mkvmerge version"
 msgstr "Niet verenigbaar met deze mkvmerge versie"
 
@@ -4329,7 +4329,7 @@ msgstr ""
 msgid "Invalid minute: %1%"
 msgstr "Ongeldige minuten: %1%"
 
-#: src/mmg/tabs/global.cpp:633
+#: src/mmg/tabs/global.cpp:652
 msgid "Invalid number of max. split files given."
 msgstr "Ongeldig max. aantal splits bestanden gegeven."
 
@@ -4483,11 +4483,11 @@ msgstr "Ongeldig spoor ID ingegeven in '--sub-charset %1%'.\n"
 msgid "Invalid track ID/file name specification in argument '%1%'.\n"
 msgstr "Ongeldig spoor ID/bestandsnaam specificatie in argument '%1%'.\n"
 
-#: src/mmg/mmg_dialog.cpp:1464
+#: src/mmg/mmg_dialog.cpp:1465
 msgid "Job added to job queue"
 msgstr "Taak toegevoegd aan taak wachtrij"
 
-#: src/mmg/mmg_dialog.cpp:1416
+#: src/mmg/mmg_dialog.cpp:1417
 msgid "Job description"
 msgstr "Taak beschrijving"
 
@@ -5303,7 +5303,7 @@ msgid "Overwrite existing file(s)?"
 msgstr "Bestaand bestand(en) overschrijven?"
 
 #: src/mmg/mmg_dialog.cpp:547
-#: src/mmg/mmg_dialog.cpp:1410
+#: src/mmg/mmg_dialog.cpp:1411
 msgid "Overwrite existing file?"
 msgstr "Bestand bestand overschrijven?"
 
@@ -5388,7 +5388,7 @@ msgstr "Pixel breedte: %1%"
 msgid "Please do not select 'mmg' itself as the 'mkvmerge' executable."
 msgstr "Gebruik 'mmg' zelf niet als het 'mkvmerge' programma."
 
-#: src/mmg/mmg_dialog.cpp:1416
+#: src/mmg/mmg_dialog.cpp:1417
 msgid "Please enter a description for the new job:"
 msgstr "Geef a.u.b een beschrijving voor de nieuwe taak:"
 
@@ -5481,7 +5481,7 @@ msgstr "Voortgang: 100%%%1%"
 msgid "Progress: [%1%%2%] %3%%%"
 msgstr "Voortgang: [%1%%2%] %3%%%"
 
-#: src/mmg/mmg_dialog.cpp:1839
+#: src/mmg/mmg_dialog.cpp:1840
 msgid "Querying mkvmerge's capabilities"
 msgstr "Opgevraagde mogelijkheden van mkvmerge"
 
@@ -6552,7 +6552,7 @@ msgstr "De FourCC moeten excact vier karakters lang zijn in '%1% %2%'.\n"
 msgid "The FourCC setting for track nr. %s in file '%s' is not exactly four characters long."
 msgstr "De FourCC instellingen voor spoor nr. %s in bestand '%s' is niet precies vier karakters lang."
 
-#: src/mmg/mmg_dialog.cpp:1892
+#: src/mmg/mmg_dialog.cpp:1893
 #, boost-format
 msgid "The GUI is configured to use the mkvmerge executable from a different version (%1%) than the GUI itself (%2%). This is not supported but will not be prevented either. You should change the mkvmerge executable in the preferences dialog."
 msgstr "GUI is ingesteld om mkvmerge te gebruiken vanuit/af een andere versie (%1%) dan de GUI zelf (%2%). Dit is niet ondersteund maar zal ook niet worden voorkomen. Je zou het mkvmerge programma moeten veranderen in de voorkeur instellingen (Bestand >> Opties >> tab Mkvmerge)."
@@ -7018,6 +7018,12 @@ msgstr "Het eerste woord vertelt mkvextract wat te extraheren. De tweede moet he
 msgid "The following parts are read after the primary file as if they were all part of one big file."
 msgstr ""
 
+#: src/mmg/tabs/global.cpp:611
+#: src/mmg/tabs/global.cpp:633
+#, fuzzy
+msgid "The format of the split argument is invalid."
+msgstr "Het formaat van de splits grootte is ongeldig."
+
 #: src/mmg/tabs/global.cpp:572
 msgid "The format of the split size is invalid (size too small)."
 msgstr "Het formaat van de splits grootte is ongeldig (grootte te klein)."
@@ -7252,7 +7258,7 @@ msgid "The order of the various options is not important."
 msgstr "De volgorde van de verschillende opties zijn niet belangrijk.."
 
 #: src/mmg/mmg_dialog.cpp:547
-#: src/mmg/mmg_dialog.cpp:1407
+#: src/mmg/mmg_dialog.cpp:1408
 #, c-format, boost-format
 msgid "The output file '%s' already exists. Do you want to overwrite it?"
 msgstr "Het uitvoer bestand '%s' bestaat reeds. Wil je die overschrijven?"
@@ -7507,7 +7513,7 @@ msgstr "De breedte van de twee sporen zijn verschillend: %1% en %2%"
 msgid "Theora"
 msgstr ""
 
-#: src/mmg/mmg_dialog.cpp:1784
+#: src/mmg/mmg_dialog.cpp:1785
 msgid "There is a new version available online."
 msgstr "Er is online een nieuwere versie beschikbaar."
 
@@ -7522,7 +7528,7 @@ msgstr "Er is geen bestand met ID '%1%'. Het argument voor, bijvoegen-aan, '--ap
 msgid "There is no translation available for '%1%'.\n"
 msgstr "Geen vertaling beschikbaar voor '%1%'.\n"
 
-#: src/mmg/mmg_dialog.cpp:1785
+#: src/mmg/mmg_dialog.cpp:1786
 msgid "There was an error querying the update status."
 msgstr "Er was een fout bij opvragen van de opwaardeer status."
 
@@ -8336,7 +8342,7 @@ msgstr "Verkeerde identificatie reeks: '%|1$6s|' != 'theora'"
 msgid "Wrong identification string: '%|1$7s|' != 'kate\\0\\0\\0'"
 msgstr "Verkeerde identificatie reeks: '%|1$7s|' != 'kate\\0\\0\\0'"
 
-#: src/mmg/mmg_dialog.cpp:1783
+#: src/mmg/mmg_dialog.cpp:1784
 msgid "You are already running the latest version."
 msgstr "Je hebt reeds de laatste versie."
 
@@ -8914,7 +8920,9 @@ msgstr "mkvmerge GEFAALD met terugkoppel code %d. %s"
 #: src/mmg/tabs/global.cpp:572
 #: src/mmg/tabs/global.cpp:583
 #: src/mmg/tabs/global.cpp:591
+#: src/mmg/tabs/global.cpp:611
 #: src/mmg/tabs/global.cpp:633
+#: src/mmg/tabs/global.cpp:652
 msgid "mkvmerge GUI error"
 msgstr "mkvmerge GUI fout"
 

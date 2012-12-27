@@ -1745,7 +1745,7 @@ msgstr "Gizaki-irakurgarria den kate batek adierazten du kodeka."
 msgid "A human-readable track name."
 msgstr "Bide izen gizakiak-irakurgarri bat."
 
-#: src/mmg/mmg_dialog.cpp:1427
+#: src/mmg/mmg_dialog.cpp:1428
 #, c-format, boost-format
 msgid "A job with the description '%s' already exists. Do you really want to add another one with the same description?"
 msgstr "Jadanik badago '%s' azalpena duen lan bat. Egitan nahi duzu gehitzea beste bat azalpen berdinarekin?"
@@ -2553,7 +2553,7 @@ msgstr "Egiaztatu onlin azken argitalpena."
 msgid "Check online whether or not a new release of MKVToolNix is available on the home page. Will only check when mmg starts and at most once a day. No information is transmitted to the server."
 msgstr "Egiaztatu online MKVToolNix argitalpen berririk eskuragarri dagoen edo ez webgunean. mmg hasitakoan bakarrik eta eguneko gehienez behin egiaztatuko da. Ez da argibiderik igortzen zerbitzarira."
 
-#: src/mmg/mmg_dialog.cpp:1751
+#: src/mmg/mmg_dialog.cpp:1752
 msgid "Checking for updates online; please wait"
 msgstr "Eguneraketak egiaztatzen online; mesedez itxaron"
 
@@ -3163,7 +3163,7 @@ msgstr "Ezabatu hautaturiko lana(k) lan lerrotik"
 msgid "Description"
 msgstr "Azalpena"
 
-#: src/mmg/mmg_dialog.cpp:1428
+#: src/mmg/mmg_dialog.cpp:1429
 msgid "Description already exists"
 msgstr "Azalpena jadanik badago"
 
@@ -4036,7 +4036,7 @@ msgstr "Hizkia hemendik inportaturik: %1%"
 msgid "Imported picture from %1%"
 msgstr "Irudia hemendik inportaturik: %1%"
 
-#: src/mmg/mmg_dialog.cpp:1896
+#: src/mmg/mmg_dialog.cpp:1897
 msgid "Incompatible mkvmerge version"
 msgstr "mkvmerge bertsio bateraezina"
 
@@ -4311,7 +4311,7 @@ msgstr "Eduki hexadezimal luzera baliogabea: 2-gaitik zatigarria izan behar da."
 msgid "Invalid minute: %1%"
 msgstr "Minutu baliogabea: %1%"
 
-#: src/mmg/tabs/global.cpp:633
+#: src/mmg/tabs/global.cpp:652
 msgid "Invalid number of max. split files given."
 msgstr "Emaniko geh. agiri banandu zenbatekoa baliogabea da."
 
@@ -4465,11 +4465,11 @@ msgstr "Bide ID baliogabea adierazi da hemen: '--sub-charset %1%'.\n"
 msgid "Invalid track ID/file name specification in argument '%1%'.\n"
 msgstr "Bide ID/agiri izen baliogabea adierazi da '%1%' argumentoan.\n"
 
-#: src/mmg/mmg_dialog.cpp:1464
+#: src/mmg/mmg_dialog.cpp:1465
 msgid "Job added to job queue"
 msgstr "Lana gehituta lan lerrora"
 
-#: src/mmg/mmg_dialog.cpp:1416
+#: src/mmg/mmg_dialog.cpp:1417
 msgid "Job description"
 msgstr "Lanaren azalpena"
 
@@ -5280,7 +5280,7 @@ msgid "Overwrite existing file(s)?"
 msgstr "Gainidatzi dauden agiriak?"
 
 #: src/mmg/mmg_dialog.cpp:547
-#: src/mmg/mmg_dialog.cpp:1410
+#: src/mmg/mmg_dialog.cpp:1411
 msgid "Overwrite existing file?"
 msgstr "Gainidatzi dagoen agiria?"
 
@@ -5365,7 +5365,7 @@ msgstr "Pixel zabalera: %1%"
 msgid "Please do not select 'mmg' itself as the 'mkvmerge' executable."
 msgstr "Mesedez ez hautatu 'mmg' bera 'mkvmerge' exekutagarri bezala."
 
-#: src/mmg/mmg_dialog.cpp:1416
+#: src/mmg/mmg_dialog.cpp:1417
 msgid "Please enter a description for the new job:"
 msgstr "Mesedez sartu lan berriarentzako azalpen bat:"
 
@@ -5457,7 +5457,7 @@ msgstr "Garapena: 100%%%1%"
 msgid "Progress: [%1%%2%] %3%%%"
 msgstr "Garapena: [%1%%2%] %3%%%"
 
-#: src/mmg/mmg_dialog.cpp:1839
+#: src/mmg/mmg_dialog.cpp:1840
 msgid "Querying mkvmerge's capabilities"
 msgstr "Ikusi mkvmergeren gaitasunak"
 
@@ -6520,7 +6520,7 @@ msgstr "FourCC-k lau hizkiko luzera zehatza izan behar du hemen: '%1% %2%'.\n"
 msgid "The FourCC setting for track nr. %s in file '%s' is not exactly four characters long."
 msgstr "FourCC ezarpena %s bidearentzat '%s' agirian ez da zehazki lau hizkiko luzerakoa."
 
-#: src/mmg/mmg_dialog.cpp:1892
+#: src/mmg/mmg_dialog.cpp:1893
 #, boost-format
 msgid "The GUI is configured to use the mkvmerge executable from a different version (%1%) than the GUI itself (%2%). This is not supported but will not be prevented either. You should change the mkvmerge executable in the preferences dialog."
 msgstr "Erabiltzaile Interfaze Grafika, EIG (%2%) beraren ezberdina den mkvmerge exekutagarri bertsio (%1%) batetik erabiltzeko itxuraturik dago. Hau ez dago sostengaturik baina ez da saihestuko ere. mkvmerge exekutagarria aldatu behar duzu hobespenen elkarrizketan."
@@ -6982,6 +6982,12 @@ msgstr "Lehen hitzak mkvextract-eri esaten dio zer atera. Bigarrena iturburu agi
 msgid "The following parts are read after the primary file as if they were all part of one big file."
 msgstr "Hurrengo zatiak lehen agiriaren ondoren irakurtzen dira, denak agiri handi baten atalak balira bezala."
 
+#: src/mmg/tabs/global.cpp:611
+#: src/mmg/tabs/global.cpp:633
+#, fuzzy
+msgid "The format of the split argument is invalid."
+msgstr "Bananketa neurriaren heuskarria baliogabea da."
+
 #: src/mmg/tabs/global.cpp:572
 msgid "The format of the split size is invalid (size too small)."
 msgstr "Bananketa neurriaren heuskarria baliogabea da (neurri txikiegia)"
@@ -7216,7 +7222,7 @@ msgid "The order of the various options is not important."
 msgstr "Aukera ezberdinen hurrenkera ez da garrantzitsua."
 
 #: src/mmg/mmg_dialog.cpp:547
-#: src/mmg/mmg_dialog.cpp:1407
+#: src/mmg/mmg_dialog.cpp:1408
 #, c-format, boost-format
 msgid "The output file '%s' already exists. Do you want to overwrite it?"
 msgstr "'%s' irtera agiria jadanik badago. Gainidaztea nahi duzu?"
@@ -7469,7 +7475,7 @@ msgstr "Bi bideen zabalera ezberdina da: %1% eta %2%"
 msgid "Theora"
 msgstr "Theora"
 
-#: src/mmg/mmg_dialog.cpp:1784
+#: src/mmg/mmg_dialog.cpp:1785
 msgid "There is a new version available online."
 msgstr "Bertsio berri bat dago eskuragarri online."
 
@@ -7484,7 +7490,7 @@ msgstr "Ez dago '%1%'  ID-a duen agiririk. '--append-to'-rentzako argumentoa bal
 msgid "There is no translation available for '%1%'.\n"
 msgstr "Ez dago itzulpen eskuragarririk '%1%'-rentzat.\n"
 
-#: src/mmg/mmg_dialog.cpp:1785
+#: src/mmg/mmg_dialog.cpp:1786
 msgid "There was an error querying the update status."
 msgstr "Akats bat egon da eguneraketa egoera galdetzerakoan."
 
@@ -8291,7 +8297,7 @@ msgstr "Ezagutarazle kate okerra: '%|1$6s|' != 'theora'"
 msgid "Wrong identification string: '%|1$7s|' != 'kate\\0\\0\\0'"
 msgstr "Ezagutarazle kate okerra: '%|1$7s|' != 'kate\\0\\0\\0'"
 
-#: src/mmg/mmg_dialog.cpp:1783
+#: src/mmg/mmg_dialog.cpp:1784
 msgid "You are already running the latest version."
 msgstr "Jadanik azken bertsioa duzu."
 
@@ -8866,7 +8872,9 @@ msgstr "mkvmerge HUTSEGITEA %d erantzun kodearekin. %s"
 #: src/mmg/tabs/global.cpp:572
 #: src/mmg/tabs/global.cpp:583
 #: src/mmg/tabs/global.cpp:591
+#: src/mmg/tabs/global.cpp:611
 #: src/mmg/tabs/global.cpp:633
+#: src/mmg/tabs/global.cpp:652
 msgid "mkvmerge GUI error"
 msgstr "mkvmerge EIG akatsa"
 
