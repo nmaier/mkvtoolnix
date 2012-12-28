@@ -29,7 +29,7 @@ $build_system_modules[:gtest] = {
     #
     Library.
       new('lib/gtest/src/libgtest').
-      sources([ 'lib/gtest/src' ], :type => :dir).
+      sources([ 'lib/gtest/src' ], :type => :dir, :except => [ 'gtest-all.cc' ]).
       create
 
     Library.
