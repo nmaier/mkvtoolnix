@@ -23,8 +23,13 @@ val(uint32_t value,
   return fourcc_c::big_endian == byte_order ? value : bswap_32(value);
 }
 
+fourcc_c::fourcc_c()
+  : m_value{}
+{
+}
+
 fourcc_c::fourcc_c(uint32_t value,
-                 fourcc_c::byte_order_t byte_order)
+                   fourcc_c::byte_order_t byte_order)
   : m_value{val(value, byte_order)}
 {
 }
@@ -51,6 +56,12 @@ fourcc_c::fourcc_c(unsigned char const *mem,
 {
 }
 
+fourcc_c::fourcc_c(uint32_t const *mem,
+                   fourcc_c::byte_order_t byte_order)
+  : m_value{read(mem, byte_order)}
+{
+}
+
 fourcc_c::fourcc_c(mm_io_cptr const &io,
                    fourcc_c::byte_order_t byte_order)
   : m_value{read(*io, byte_order)}
@@ -58,13 +69,13 @@ fourcc_c::fourcc_c(mm_io_cptr const &io,
 }
 
 fourcc_c::fourcc_c(mm_io_c &io,
-                 fourcc_c::byte_order_t byte_order)
+                   fourcc_c::byte_order_t byte_order)
   : m_value{read(io, byte_order)}
 {
 }
 
 fourcc_c::fourcc_c(mm_io_c *io,
-                 fourcc_c::byte_order_t byte_order)
+                   fourcc_c::byte_order_t byte_order)
   : m_value{read(*io, byte_order)}
 {
 }
@@ -100,7 +111,6 @@ fourcc_c::write(mm_io_c *io,
   return write(*io, byte_order);
 }
 
-
 uint32_t
 fourcc_c::value(fourcc_c::byte_order_t byte_order)
   const {
@@ -112,10 +122,21 @@ fourcc_c::str()
   const {
   char buffer[4];
   put_uint32_be(buffer, m_value);
+  for (auto idx = 0; 4 > idx; ++idx)
+    buffer[idx] = 32 <= buffer[idx] ? buffer[idx] : '?';
 
-  auto format = [&buffer](int idx) { return 32 <= buffer[idx] ? buffer[idx] : '?'; };
+  return std::string{buffer, 4};
+}
 
-  return (boost::format("%1%%2%%3%%4%") % format(0) % format(1) % format(2) % format(3)).str();
+fourcc_c::operator bool()
+  const {
+  return !!m_value;
+}
+
+fourcc_c &
+fourcc_c::reset() {
+  m_value = 0;
+  return *this;
 }
 
 bool
@@ -128,6 +149,12 @@ bool
 fourcc_c::operator !=(fourcc_c const &cmp)
   const {
   return m_value != cmp.m_value;
+}
+
+bool
+fourcc_c::equiv(char const *cmp)
+  const {
+  return balg::to_lower_copy(str()) == balg::to_lower_copy(std::string{cmp});
 }
 
 uint32_t

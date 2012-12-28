@@ -28,6 +28,8 @@ private:
   uint32_t m_value;
 
 public:
+  fourcc_c();
+
   // From an integer value:
   fourcc_c(uint32_t value, byte_order_t byte_order = big_endian);
 
@@ -38,6 +40,7 @@ public:
   // From memory:
   fourcc_c(memory_cptr const &mem, byte_order_t byte_order = big_endian);
   fourcc_c(unsigned char const *mem, byte_order_t byte_order = big_endian);
+  fourcc_c(uint32_t const *mem, byte_order_t byte_order = big_endian);
 
   // From mm_io_c instances:
   fourcc_c(mm_io_cptr const &io, byte_order_t byte_order = big_endian);
@@ -50,9 +53,14 @@ public:
   size_t write(mm_io_c &io, byte_order_t byte_order = big_endian);
   size_t write(mm_io_c *io, byte_order_t byte_order = big_endian);
 
+  fourcc_c &reset();
+
   uint32_t value(byte_order_t byte_order = big_endian) const;
   std::string str() const;
 
+  bool equiv(char const *cmp) const;
+
+  explicit operator bool() const;
   bool operator ==(fourcc_c const &cmp) const;
   bool operator !=(fourcc_c const &cmp) const;
 
