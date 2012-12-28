@@ -134,7 +134,7 @@ struct qtmp4_demuxer_c {
   bool ok;
 
   char type;
-  uint32_t id;
+  uint32_t id, container_id;
   fourcc_c fourcc;
   uint32_t pos;
 
@@ -184,6 +184,7 @@ struct qtmp4_demuxer_c {
     : ok{false}
     , type{'?'}
     , id{0}
+    , container_id{0}
     , pos{0}
     , time_scale{1}
     , duration{0}
@@ -310,7 +311,7 @@ struct qtmp4_chapter_entry_t {
 class qtmp4_reader_c: public generic_reader_c {
 private:
   std::vector<qtmp4_demuxer_cptr> m_demuxers;
-  qtmp4_demuxer_cptr m_chapter_dmx;
+  std::unordered_map<unsigned int, bool> m_chapter_track_ids;
   int64_t m_mdat_pos, m_mdat_size;
   uint32_t m_time_scale;
   fourcc_c m_compression_algorithm;

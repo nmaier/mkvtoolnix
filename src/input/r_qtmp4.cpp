@@ -18,6 +18,7 @@
 #include "common/common_pch.h"
 
 #include <cstring>
+#include <unordered_map>
 #include <zlib.h>
 
 #include <avilib.h>
@@ -230,6 +231,9 @@ qtmp4_reader_c::parse_headers() {
 
   read_chapter_track();
 
+  // Non-chapter "text"-type tracks (subtitles) are not supported at the moment.
+  brng::remove_erase_if(m_demuxers, [this](qtmp4_demuxer_cptr const &dmx) { return 's' == dmx->type; });
+
   if (!g_identifying)
     calculate_timecodes();
 
@@ -399,7 +403,7 @@ qtmp4_reader_c::handle_hdlr_atom(qtmp4_demuxer_cptr &new_dmx,
     new_dmx->type = 'v';
 
   else if (subtype == "text")
-    m_chapter_dmx = new_dmx;
+    new_dmx->type = 's';
 }
 
 void
@@ -506,7 +510,7 @@ qtmp4_reader_c::handle_moov_atom(qt_atom_t parent,
       new_dmx->id = m_demuxers.size();
 
       handle_trak_atom(new_dmx, atom.to_parent(), level + 1);
-      if (('?' != new_dmx->type) && new_dmx->fourcc)
+      if ((('?' != new_dmx->type) && new_dmx->fourcc) || ('s' == new_dmx->type))
         m_demuxers.push_back(new_dmx);
     }
 
@@ -670,20 +674,26 @@ qtmp4_reader_c::parse_itunsmpb(std::string data) {
 
 void
 qtmp4_reader_c::read_chapter_track() {
-  if (m_ti.m_no_chapters || m_chapters || !m_chapter_dmx)
+  at_scope_exit_c remove_chapter_dmxs{[this]() {
+      brng::remove_erase_if(m_demuxers, [this](qtmp4_demuxer_cptr const &dmx) { return m_chapter_track_ids[dmx->container_id]; });
+    }};
+
+  if (m_ti.m_no_chapters || m_chapters)
     return;
 
-  m_chapter_dmx->update_tables(m_time_scale);
+  auto chapter_dmx_itr = brng::find_if(m_demuxers, [this](qtmp4_demuxer_cptr const &dmx) { return ('s' == dmx->type) && m_chapter_track_ids[dmx->container_id]; });
+  if (m_demuxers.end() == chapter_dmx_itr)
+    return;
 
-  if (m_chapter_dmx->sample_table.empty())
+  if ((*chapter_dmx_itr)->sample_table.empty())
     return;
 
   std::vector<qtmp4_chapter_entry_t> entries;
-  uint64_t pts_scale_gcd = boost::math::gcd(static_cast<uint64_t>(1000000000ull), static_cast<uint64_t>(m_chapter_dmx->time_scale));
-  uint64_t pts_scale_num = 1000000000ull                                    / pts_scale_gcd;
-  uint64_t pts_scale_den = static_cast<uint64_t>(m_chapter_dmx->time_scale) / pts_scale_gcd;
+  uint64_t pts_scale_gcd = boost::math::gcd(static_cast<uint64_t>(1000000000ull), static_cast<uint64_t>((*chapter_dmx_itr)->time_scale));
+  uint64_t pts_scale_num = 1000000000ull                                         / pts_scale_gcd;
+  uint64_t pts_scale_den = static_cast<uint64_t>((*chapter_dmx_itr)->time_scale) / pts_scale_gcd;
 
-  for (auto &sample : m_chapter_dmx->sample_table) {
+  for (auto &sample : (*chapter_dmx_itr)->sample_table) {
     if (2 >= sample.size)
       continue;
 
@@ -996,7 +1006,7 @@ qtmp4_reader_c::handle_elst_atom(qtmp4_demuxer_cptr &new_dmx,
 }
 
 void
-qtmp4_reader_c::handle_tkhd_atom(qtmp4_demuxer_cptr &/* new_dmx */,
+qtmp4_reader_c::handle_tkhd_atom(qtmp4_demuxer_cptr &new_dmx,
                                  qt_atom_t atom,
                                  int level) {
   tkhd_atom_t tkhd;
@@ -1007,7 +1017,9 @@ qtmp4_reader_c::handle_tkhd_atom(qtmp4_demuxer_cptr &/* new_dmx */,
   if (m_in->read(&tkhd, sizeof(tkhd_atom_t)) != sizeof(tkhd_atom_t))
     throw mtx::input::header_parsing_x();
 
-  mxdebug_if(m_debug_headers, boost::format("%1%Track ID: %2%\n") % space(level * 2 + 1) % get_uint32_be(&tkhd.track_id));
+  new_dmx->container_id = get_uint32_be(&tkhd.track_id);
+
+  mxdebug_if(m_debug_headers, boost::format("%1%Track ID: %2%\n") % space(level * 2 + 1) % new_dmx->container_id);
 }
 
 void
@@ -1022,6 +1034,10 @@ qtmp4_reader_c::handle_tref_atom(qtmp4_demuxer_cptr &/* new_dmx */,
     std::vector<uint32_t> track_ids;
     for (auto idx = (atom.size - 4) / 8; 0 < idx; --idx)
       track_ids.push_back(m_in->read_uint32_be());
+
+    if (atom.fourcc == "chap")
+      for (auto track_id : track_ids)
+        m_chapter_track_ids[track_id] = true;
 
     if (m_debug_headers) {
       std::string message;
