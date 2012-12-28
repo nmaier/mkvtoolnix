@@ -16,9 +16,8 @@
 
 #include "common/common_pch.h"
 
-#include <stdio.h>
-
 #include "common/ac3.h"
+#include "common/fourcc.h"
 #include "common/mm_io.h"
 #include "output/p_video.h"
 #include "input/qtmp4_atoms.h"
@@ -136,7 +135,7 @@ struct qtmp4_demuxer_c {
 
   char type;
   uint32_t id;
-  char fourcc[4];
+  fourcc_c fourcc;
   uint32_t pos;
 
   int64_t time_scale, duration, global_duration, constant_editlist_offset_ns;
@@ -213,7 +212,6 @@ struct qtmp4_demuxer_c {
     , m_debug_headers{  debugging_requested("qtmp4|qtmp4_full|qtmp4_headers")}
     , m_debug_editlists{debugging_requested("qtmp4|qtmp4_full|qtmp4_editlists")}
   {
-    memset(fourcc, 0, 4);
     memset(&esds, 0, sizeof(esds_t));
   }
 
@@ -265,7 +263,7 @@ private:
 typedef std::shared_ptr<qtmp4_demuxer_c> qtmp4_demuxer_cptr;
 
 struct qt_atom_t {
-  uint32_t fourcc;
+  fourcc_c fourcc;
   uint64_t size;
   uint64_t pos;
   uint32_t hsize;
@@ -314,7 +312,8 @@ private:
   std::vector<qtmp4_demuxer_cptr> m_demuxers;
   qtmp4_demuxer_cptr m_chapter_dmx;
   int64_t m_mdat_pos, m_mdat_size;
-  uint32_t m_time_scale, m_compression_algorithm;
+  uint32_t m_time_scale;
+  fourcc_c m_compression_algorithm;
   int m_main_dmx;
 
   unsigned int m_audio_encoder_delay_samples;
@@ -373,6 +372,7 @@ protected:
   virtual void handle_trak_atom(qtmp4_demuxer_cptr &new_dmx, qt_atom_t parent, int level);
   virtual void handle_edts_atom(qtmp4_demuxer_cptr &new_dmx, qt_atom_t parent, int level);
   virtual void handle_elst_atom(qtmp4_demuxer_cptr &new_dmx, qt_atom_t parent, int level);
+  virtual void handle_tref_atom(qtmp4_demuxer_cptr &new_dmx, qt_atom_t parent, int level);
 
   virtual memory_cptr create_bitmap_info_header(qtmp4_demuxer_cptr &dmx, const char *fourcc, size_t extra_size = 0, const void *extra_data = nullptr);
 
