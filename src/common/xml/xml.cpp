@@ -58,7 +58,8 @@ create_node_name(const char *name,
 document_cptr
 load_file(std::string const &file_name,
           unsigned int options) {
-  mm_text_io_c in(new mm_file_io_c(file_name, MODE_READ));
+  auto af_in = mm_file_io_c::open(file_name, MODE_READ);
+  mm_text_io_c in(af_in.get(), false);
   std::string content;
   auto bytes_to_read = in.get_size() - in.get_byte_order_length();
 
