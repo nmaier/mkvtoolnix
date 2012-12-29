@@ -1917,7 +1917,10 @@ qtmp4_demuxer_c::handle_stsd_atom(uint64_t atom_size,
     handle_video_stsd_atom(atom_size, level);
     if ((0 < stsd_non_priv_struct_size) && (stsd_non_priv_struct_size < atom_size))
       parse_video_header_priv_atoms(atom_size, level);
-  }
+
+  } else if (is_subtitles())
+    handle_subtitles_stsd_atom(atom_size, level);
+
 }
 
 void
@@ -2027,6 +2030,26 @@ qtmp4_demuxer_c::handle_video_stsd_atom(uint64_t atom_size,
   v_width    = get_uint16_be(&v_stsd.width);
   v_height   = get_uint16_be(&v_stsd.height);
   v_bitdepth = get_uint16_be(&v_stsd.depth);
+}
+
+void
+qtmp4_demuxer_c::handle_subtitles_stsd_atom(uint64_t atom_size,
+                                            int level) {
+  auto priv = stsd->get_buffer();
+  auto size = stsd->get_size();
+
+  if (sizeof(base_stsd_atom_t) > atom_size)
+    return;
+
+  base_stsd_atom_t base_stsd;
+  memcpy(&base_stsd, priv, sizeof(base_stsd_atom_t));
+
+  fourcc = fourcc_c{base_stsd.fourcc};
+
+  if (m_debug_headers) {
+    mxdebug(boost::format("%1%FourCC: %2%\n") % space(level * 2 + 1) % fourcc);
+    mxhexdump(0, priv, size);
+  }
 }
 
 void
