@@ -219,7 +219,7 @@ qtmp4_reader_c::parse_headers() {
       if (!dmx->verify_video_parameters())
         continue;
 
-    } else if ('?' == dmx->type) {
+    } else if (dmx->is_unknown()) {
       mxwarn(boost::format(Y("Quicktime/MP4 reader: Track %1% has an unknown type.\n")) % dmx->id);
       continue;
     }
@@ -232,7 +232,7 @@ qtmp4_reader_c::parse_headers() {
   read_chapter_track();
 
   // Non-chapter "text"-type tracks (subtitles) are not supported at the moment.
-  brng::remove_erase_if(m_demuxers, [this](qtmp4_demuxer_cptr const &dmx) { return 's' == dmx->type; });
+  brng::remove_erase_if(m_demuxers, [this](qtmp4_demuxer_cptr const &dmx) { return dmx->is_subtitles(); });
 
   if (!g_identifying)
     calculate_timecodes();
@@ -510,7 +510,7 @@ qtmp4_reader_c::handle_moov_atom(qt_atom_t parent,
       new_dmx->id = m_demuxers.size();
 
       handle_trak_atom(new_dmx, atom.to_parent(), level + 1);
-      if ((('?' != new_dmx->type) && new_dmx->fourcc) || ('s' == new_dmx->type))
+      if ((!new_dmx->is_unknown() && new_dmx->fourcc) || new_dmx->is_subtitles())
         m_demuxers.push_back(new_dmx);
     }
 
@@ -681,7 +681,7 @@ qtmp4_reader_c::read_chapter_track() {
   if (m_ti.m_no_chapters || m_chapters)
     return;
 
-  auto chapter_dmx_itr = brng::find_if(m_demuxers, [this](qtmp4_demuxer_cptr const &dmx) { return ('s' == dmx->type) && m_chapter_track_ids[dmx->container_id]; });
+  auto chapter_dmx_itr = brng::find_if(m_demuxers, [this](qtmp4_demuxer_cptr const &dmx) { return dmx->is_subtitles() && m_chapter_track_ids[dmx->container_id]; });
   if (m_demuxers.end() == chapter_dmx_itr)
     return;
 
@@ -1102,8 +1102,8 @@ qtmp4_reader_c::read(generic_packetizer_c *ptzr,
   int buffer_offset = 0;
   unsigned char *buffer;
 
-  if (   ('v' == dmx->type)
-      && (0 == dmx->pos)
+  if (   dmx->is_video()
+      && !dmx->pos
       && (dmx->fourcc.equiv("mp4v") || dmx->fourcc.equiv("xvid"))
       && dmx->esds_parsed
       && (dmx->esds.decoder_config)) {
@@ -1306,7 +1306,7 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
 
   bool packetizer_ok = true;
 
-  if ('v' == dmx->type) {
+  if (dmx->is_video()) {
     if (dmx->fourcc.equiv("mp4v") || dmx->fourcc.equiv("xvid"))
       create_video_packetizer_mpeg4_p2(dmx);
 
@@ -1391,7 +1391,7 @@ qtmp4_reader_c::identify() {
     if (!dmx->language.empty())
       verbose_info.push_back((boost::format("language:%1%") % dmx->language).str());
 
-    id_result_track(dmx->id, dmx->type == 'v' ? ID_RESULT_TRACK_VIDEO : dmx->type == 'a' ? ID_RESULT_TRACK_AUDIO : ID_RESULT_TRACK_UNKNOWN,
+    id_result_track(dmx->id, dmx->is_video() ? ID_RESULT_TRACK_VIDEO : dmx->is_audio() ? ID_RESULT_TRACK_AUDIO : dmx->is_subtitles() ? ID_RESULT_TRACK_SUBTITLES : ID_RESULT_TRACK_UNKNOWN,
                     (boost::format("%|1$.4s|") %  dmx->fourcc).str(), verbose_info);
   }
 
@@ -1893,6 +1893,18 @@ qtmp4_demuxer_c::is_video()
   return 'v' == type;
 }
 
+bool
+qtmp4_demuxer_c::is_subtitles()
+  const {
+  return 's' == type;
+}
+
+bool
+qtmp4_demuxer_c::is_unknown()
+  const {
+  return !is_audio() && !is_video() && !is_subtitles();
+}
+
 void
 qtmp4_demuxer_c::handle_stsd_atom(uint64_t atom_size,
                                   int level) {
@@ -1903,7 +1915,6 @@ qtmp4_demuxer_c::handle_stsd_atom(uint64_t atom_size,
 
   } else if (is_video()) {
     handle_video_stsd_atom(atom_size, level);
-
     if ((0 < stsd_non_priv_struct_size) && (stsd_non_priv_struct_size < atom_size))
       parse_video_header_priv_atoms(atom_size, level);
   }
