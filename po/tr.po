@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: MKVToolNix 5.9.0\n"
 "Report-Msgid-Bugs-To: moritz@bunkus.org\n"
 "POT-Creation-Date: 2011-01-17 08:47:00+0100\n"
-"PO-Revision-Date: 2012-12-30 16:53+0200\n"
+"PO-Revision-Date: 2012-12-30 17:24+0200\n"
 "Last-Translator: Burak Yavuz <BouRock(at)live.com>\n"
 "Language-Team: BouRock <BouRock(at)live.com>\n"
 "Language: Türkçe\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Plural-Forms: nplurals=2; plural=(n>1);\n"
 "X-Generator: Poedit 1.5.4\n"
 
 #: src/extract/xtr_tta.cpp:117
@@ -824,12 +824,14 @@ msgstr "%1% kare, iz %2%, zaman kodu %3% (%4%), boyut %5%, adler 0x%|6$08x|%7%%8
 msgid "%1% minute"
 msgid_plural "%1% minutes"
 msgstr[0] "%1% dakika"
+msgstr[1] "%1% dakika"
 
 #: src/common/strings/formatting.cpp:249
 #, boost-format
 msgid "%1% second"
 msgid_plural "%1% seconds"
 msgstr[0] "%1% saniye"
+msgstr[1] "%1% saniye"
 
 #: src/input/r_vobsub.cpp:86
 #, boost-format
@@ -5551,9 +5553,9 @@ msgid "Quicktime/MP4 reader: The video track %1% is missing the ESDS atom. Skipp
 msgstr "Quicktime/MP4 okuyucusu: Görüntü izi %1%, ESDS atomu eksik. Bu iz atlanıyor.\n"
 
 #: src/input/r_qtmp4.cpp:306
-#, fuzzy, boost-format
+#, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers with an unknown or unsupported compression algorithm '%1%'. Aborting.\n"
-msgstr "Quicktime/MP4 okuyucusu: Bu dosya, bilinmeyen veya desteklenmeyen sıkıştırma algoritması '%1%%2%%3%%4%' ile sıkıştırılmış başlıkları kullanır. Durduruluyor.\n"
+msgstr "Quicktime/MP4 okuyucusu: Bu dosya, bilinmeyen veya desteklenmeyen sıkıştırma algoritması '%1%' ile sıkıştırılmış başlıkları kullanır. Durduruluyor.\n"
 
 #: src/input/r_qtmp4.cpp:339
 #, boost-format
@@ -5589,9 +5591,9 @@ msgid "Quicktime/MP4 reader: Track ID %1% has more than one FourCC. Only using t
 msgstr "Quicktime/MP4 okuyucusu: İz ID %1% birden fazla FourCC'ye sahip. Sadece ilk (%|2$.4s|) olan kullanılıyor ve bu (%|3$.4s|) olan değil.\n"
 
 #: src/input/r_qtmp4.cpp:2261
-#, fuzzy, boost-format
+#, boost-format
 msgid "Quicktime/MP4 reader: Unknown/unsupported FourCC '%1%' for track %2%.\n"
-msgstr "Quicktime/MP4 okuyucusu: İz %2% için bilinmeyen/desteklenmeyen FourCC '%|1$.4s|'.\n"
+msgstr "Quicktime/MP4 okuyucusu: İz %2% için bilinmeyen/desteklenmeyen FourCC '%1%'.\n"
 
 #: src/input/r_qtmp4.cpp:2314
 #, boost-format
