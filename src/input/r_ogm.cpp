@@ -45,6 +45,7 @@
 #include "output/p_kate.h"
 #include "output/p_mp3.h"
 #include "output/p_mpeg4_p2.h"
+#include "output/p_opus.h"
 #include "output/p_pcm.h"
 #include "output/p_textsubs.h"
 #include "output/p_theora.h"
@@ -121,6 +122,24 @@ public:
   };
   virtual std::string get_codec() {
     return "PCM";
+  };
+};
+
+class ogm_a_opus_demuxer_c: public ogm_demuxer_c {
+public:
+
+public:
+  ogm_a_opus_demuxer_c(ogm_reader_c *p_reader);
+
+  virtual void process_page(int64_t granulepos);
+
+  virtual generic_packetizer_c *create_packetizer();
+
+  virtual const char *get_type() {
+    return ID_RESULT_TRACK_AUDIO;
+  };
+  virtual std::string get_codec() {
+    return "Opus";
   };
 };
 
@@ -479,6 +498,9 @@ ogm_reader_c::handle_new_stream(ogg_page *og) {
   if ((7 <= op.bytes) && !strncmp((char *)&op.packet[1], "vorbis", 6))
     dmx = new ogm_a_vorbis_demuxer_c(this);
 
+  else if ((8 <= op.bytes) && !memcmp(&op.packet[0], "OpusHead", 8))
+    dmx = new ogm_a_opus_demuxer_c(this);
+
   else if ((7 <= op.bytes) && !strncmp((char *)&op.packet[1], "theora", 6))
     dmx = new ogm_v_theora_demuxer_c(this);
 
@@ -558,7 +580,7 @@ ogm_reader_c::handle_new_stream(ogg_page *og) {
   dmx->track_id    = sdemuxers.size();
   dmx->in_use      = (type != "unknown") && demuxing_requested(type[0], dmx->track_id);
 
-  dmx->packet_data.push_back(memory_cptr(new memory_c((unsigned char *)safememdup(op.packet, op.bytes), op.bytes, true)));
+  dmx->packet_data.push_back(memory_c::clone(op.packet, op.bytes));
 
   memcpy(&dmx->os, &os, sizeof(ogg_stream_state));
 
@@ -1065,6 +1087,38 @@ ogm_a_vorbis_demuxer_c::process_page(int64_t /* granulepos */) {
     eos |= op.e_o_s;
 
     if (((*op.packet & 3) == PACKET_TYPE_HEADER) || ((*op.packet & 3) == PACKET_TYPE_COMMENT))
+      continue;
+
+    reader->m_reader_packetizers[ptzr]->process(new packet_t(new memory_c(op.packet, op.bytes, false)));
+  }
+}
+
+// -----------------------------------------------------------
+
+ogm_a_opus_demuxer_c::ogm_a_opus_demuxer_c(ogm_reader_c *p_reader)
+  : ogm_demuxer_c(p_reader)
+{
+  stype              = OGM_STREAM_TYPE_A_OPUS;
+  num_header_packets = 2;
+}
+
+generic_packetizer_c *
+ogm_a_opus_demuxer_c::create_packetizer() {
+  auto ptzr_obj = new opus_packetizer_c(reader, m_ti, packet_data[0]);
+
+  show_packetizer_info(m_ti.m_id, ptzr_obj);
+
+  return ptzr_obj;
+}
+
+void
+ogm_a_opus_demuxer_c::process_page(int64_t /* granulepos */) {
+  ogg_packet op;
+
+  while (ogg_stream_packetout(&os, &op) == 1) {
+    eos |= op.e_o_s;
+
+    if ((4 <= op.bytes) && !memcmp(op.packet, "Opus", 4))
       continue;
 
     reader->m_reader_packetizers[ptzr]->process(new packet_t(new memory_c(op.packet, op.bytes, false)));

@@ -71,6 +71,7 @@
 #include "output/p_mpeg1_2.h"
 #include "output/p_mpeg4_p2.h"
 #include "output/p_mpeg4_p10.h"
+#include "output/p_opus.h"
 #include "output/p_passthrough.h"
 #include "output/p_pcm.h"
 #include "output/p_pgs.h"
@@ -324,7 +325,7 @@ kax_reader_c::verify_alac_audio_track(kax_track_t *t) {
     return true;
 
   if (verbose)
-    mxwarn(boost::format(Y("matroska_reader: The CodecID for track %1% is '%2%', but there was no codec private headers.\n")) % t->tnum % MKV_A_ALAC);
+    mxwarn(boost::format(Y("matroska_reader: The CodecID for track %1% is '%2%', but the private codec data does not contain valid headers.\n")) % t->tnum % MKV_A_VORBIS);
 
   return false;
 }
@@ -343,16 +344,9 @@ kax_reader_c::verify_flac_audio_track(kax_track_t *t) {
 
 bool
 kax_reader_c::verify_vorbis_audio_track(kax_track_t *t) {
-  if (!t->private_data) {
+  if (!t->private_data || !unlace_vorbis_private_data(t, static_cast<unsigned char *>(t->private_data), t->private_size)) {
     if (verbose)
-      mxwarn(boost::format(Y("matroska_reader: The CodecID for track %1% is 'A_VORBIS', but there are no header packets present.\n")) % t->tnum);
-    return false;
-  }
-
-  if (!unlace_vorbis_private_data(t, static_cast<unsigned char *>(t->private_data), t->private_size)) {
-    if (verbose)
-      mxwarn(Y("matroska_reader: Vorbis track does not contain valid headers.\n"));
-
+      mxwarn(boost::format(Y("matroska_reader: The CodecID for track %1% is '%2%', but the private codec data does not contain valid headers.\n")) % t->tnum % MKV_A_VORBIS);
     return false;
   }
 
@@ -367,6 +361,19 @@ kax_reader_c::verify_vorbis_audio_track(kax_track_t *t) {
   // Workaround: do not use durations for such m_tracks.
   if ((m_writing_app == "mkvmerge") && (-1 != m_writing_app_ver) && (0x07000000 > m_writing_app_ver))
     t->ignore_duration_hack = true;
+
+  return true;
+}
+
+bool
+kax_reader_c::verify_opus_audio_track(kax_track_t *t) {
+  if (!t->private_data || !t->private_size) {
+    if (verbose)
+      mxwarn(boost::format(Y("matroska_reader: The CodecID for track %1% is '%2%', but the private codec data does not contain valid headers.\n")) % t->tnum % MKV_A_OPUS);
+    return false;
+  }
+
+  t->a_formattag = FOURCC('O', 'p', 'u', 's');
 
   return true;
 }
@@ -412,6 +419,8 @@ kax_reader_c::verify_audio_track(kax_track_t *t) {
     t->a_formattag = FOURCC('T', 'T', 'A', '1');
   else if (t->codec_id == MKV_A_WAVPACK4)
     t->a_formattag = FOURCC('W', 'V', 'P', '4');
+  else if (balg::starts_with(t->codec_id, MKV_A_OPUS))
+    is_ok = verify_opus_audio_track(t);
 
   if (!is_ok)
     return;
@@ -1480,6 +1489,13 @@ kax_reader_c::create_mp3_audio_packetizer(kax_track_t *t,
 }
 
 void
+kax_reader_c::create_opus_audio_packetizer(kax_track_t *t,
+                                           track_info_c &nti) {
+  set_track_packetizer(t, new opus_packetizer_c(this, nti, memory_c::clone(t->private_data, t->private_size)));
+  show_packetizer_info(t->tnum, t->ptzr_ptr);
+}
+
+void
 kax_reader_c::create_pcm_audio_packetizer(kax_track_t *t,
                                           track_info_c &nti) {
   set_track_packetizer(t, new pcm_packetizer_c(this, nti, t->a_sfreq, t->a_channels, t->a_bps, 0x0003 == t->a_formattag));
@@ -1555,6 +1571,9 @@ kax_reader_c::create_audio_packetizer(kax_track_t *t,
   else if ((FOURCC('f', 'L', 'a', 'C') == t->a_formattag) || (0xf1ac == t->a_formattag))
     create_flac_audio_packetizer(t, nti);
 #endif
+
+  else if (FOURCC('O', 'p', 'u', 's') == t->a_formattag)
+    create_opus_audio_packetizer(t, nti);
 
   else if (FOURCC('T', 'T', 'A', '1') == t->a_formattag)
     create_tta_audio_packetizer(t, nti);

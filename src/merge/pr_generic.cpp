@@ -15,7 +15,7 @@
 #include "common/common_pch.h"
 
 #include <algorithm>
-#include <typeinfo>
+#include <unordered_map>
 
 #include <matroska/KaxContentEncoding.h>
 #include <matroska/KaxTag.h>
@@ -50,6 +50,7 @@
 
 // ---------------------------------------------------------------------
 
+static std::unordered_map<std::string, bool> s_experimental_status_warning_shown;
 std::vector<generic_packetizer_c *> ptzrs_in_header_order;
 
 generic_packetizer_c::generic_packetizer_c(generic_reader_c *reader,
@@ -1136,6 +1137,19 @@ bool
 generic_packetizer_c::wants_cue_duration()
   const {
   return get_track_type() == track_subtitle;
+}
+
+void
+generic_packetizer_c::show_experimental_status_version(std::string const &codec_id) {
+  auto idx = get_format_name().get_untranslated();
+  if (s_experimental_status_warning_shown[idx])
+    return;
+
+  s_experimental_status_warning_shown[idx] = true;
+  mxwarn(boost::format(Y("Note that the Matroska specifications regarding the storage of '%1%' have not been finalized yet. "
+                         "mkvmerge's support for it is therefore subject to change and uses the CodecID '%2%/EXPERIMENTAL' instead of '%2%'. "
+                         "This warning will be removed once the specifications have been finalized and mkvmerge has been updated accordingly.\n"))
+         % get_format_name().get_translated() % codec_id);
 }
 
 //--------------------------------------------------------------------

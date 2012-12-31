@@ -675,6 +675,8 @@ public:
 protected:
   virtual void flush_impl() {
   };
+
+  virtual void show_experimental_status_version(std::string const &codec_id);
 };
 
 extern std::vector<generic_packetizer_c *> ptzrs_in_header_order;
