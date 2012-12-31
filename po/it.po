@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: it\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2012-12-24 11:01+0100\n"
+"PO-Revision-Date: 2012-12-31 22:30+0100\n"
 "Last-Translator: bovirus <bovirus@gmail.com>\n"
 "Language-Team: Italian <moritz@bunkus.org>\n"
 "Language: it\n"
@@ -374,15 +374,14 @@ msgstr ""
 "                           o dopo un certo tempo (OO:MM:SS).\n"
 
 #: src/merge/mkvmerge.cpp:127
-#, fuzzy
 msgid ""
 "  --split chapters:all|A[,B...]\n"
 "                           Create a new file before each chapter (with 'all')\n"
 "                           or before chapter numbers A, B etc.\n"
 msgstr ""
-"  --split frames:A[,B...]\n"
-"                           Crea un nuovo file dopo ogni frame/campo A, B\n"
-"                           ecc.\n"
+"  --split chapters:all|A[,B...]\n"
+"                           Crea un nuovo file dopo ogni capitolo (con 'all')\n"
+"                           o prima dei capitoli numerati A, B, ecc.\n"
 
 #: src/merge/mkvmerge.cpp:124
 msgid ""
@@ -1723,7 +1722,7 @@ msgstr "Trovato un blocco alla posizione data %1% per la traccia numero %2%. Nes
 
 #: src/mmg/tabs/global.cpp:269
 msgid "A chapter starting at 0s is never considered for splitting and discarded silently."
-msgstr ""
+msgstr "Un capitolo che parte a 0s non è mai considerato per la suddivisione e verrà ignorato."
 
 #: src/mmg/tabs/global.cpp:253
 msgid "A comma-separated list of frame/field numbers after which to split."
@@ -1843,7 +1842,7 @@ msgstr "ALAC (Apple Lossless Audio Codec)"
 
 #: src/extract/xtr_alac.cpp:52
 msgid "ALAC private data size mismatch\n"
-msgstr ""
+msgstr "Mancata corrispondenza dimensione dati privati ALAC\n"
 
 #: src/mmg/header_editor/value_page.cpp:143
 msgid ""
@@ -2470,9 +2469,8 @@ msgid "Chapter names and languages"
 msgstr "Nomi capitoli e lingue"
 
 #: src/mmg/tabs/global.cpp:264
-#, fuzzy
 msgid "Chapter numbers:"
-msgstr "Capitoli:"
+msgstr "Numeri capitoli:"
 
 #: src/mmg/options/chapters.cpp:65
 msgid "Chapter options"
@@ -3351,9 +3349,8 @@ msgid "EditionEntry %u"
 msgstr "ElementoEdizione %u"
 
 #: src/mmg/tabs/global.cpp:266
-#, fuzzy
 msgid "Either the word 'all' which selects all chapters or a comma-separated list of chapter numbers after which to split."
-msgstr "Un elenco di numeri. separato da virgole. di frame/campi dopo cui suddividere."
+msgstr "La parola 'all' che seleziona tutti capitoli o un elenco, separato da virgole, di numeri di capitoli dopo quale dividere."
 
 #: src/propedit/propedit.cpp:70
 #, boost-format
@@ -4166,9 +4163,9 @@ msgstr "Specifiche modificate (%3%) non valide in '%1% %2%'.\n"
 
 #: src/merge/mkvmerge.cpp:853
 #: src/merge/mkvmerge.cpp:892
-#, fuzzy, boost-format
+#, boost-format
 msgid "Invalid chapter number '%1%' for '--split' in '--split %2%': %3%\n"
-msgstr "Frame non valido per '--split' in '--split %1%'.\n"
+msgstr "Numero capitolo non valido '%1%' per '--split' in '--split  %2%': %3%\n"
 
 #: src/merge/mkvmerge.cpp:1162
 #, boost-format
@@ -4990,7 +4987,7 @@ msgstr "Non è stato creato alcun elemento capitolo."
 #: src/merge/mkvmerge.cpp:858
 #, boost-format
 msgid "No chapter numbers listed after '--split %1%'.\n"
-msgstr ""
+msgstr "Nessun numero capitolo elencato dopo '--split %1%'.\n"
 
 #: src/mmg/tabs/chapters.cpp:552
 msgid "No chapters found"
@@ -4999,7 +4996,7 @@ msgstr "Nessun capitolo trovato"
 #: src/merge/mkvmerge.cpp:862
 #: src/merge/mkvmerge.cpp:888
 msgid "No chapters in source files or chapter files found to split by.\n"
-msgstr ""
+msgstr "Nessun capitolo da dividere trovato nei file sorgente o nei file capitolo.\n"
 
 #: src/mmg/header_editor/frame.cpp:516
 msgid "No fields modified"
@@ -5109,9 +5106,8 @@ msgid "Not a valid Matroska file (no segment/level 0 element found)"
 msgstr "Non è un file Matroska valido (nessun elemento segmento/livello 0 trovato)"
 
 #: src/merge/mkvmerge.cpp:853
-#, fuzzy
 msgid "Not a valid number or not positive."
-msgstr "Fornito numero max non valido per le suddivisioni."
+msgstr "Non è un numero valido o non è positivo."
 
 #: src/merge/pr_generic.cpp:1149
 #, boost-format
@@ -5163,7 +5159,7 @@ msgstr "Verifica online disponibilità aggiornamenti"
 #: src/merge/mkvmerge.cpp:894
 #, boost-format
 msgid "Only %1% chapters found in source files & chapter files."
-msgstr ""
+msgstr "Trovati solo %1% capitoli nei file sorgenti & file capitolo."
 
 #: src/merge/mkvmerge.cpp:1634
 #, boost-format
@@ -5572,9 +5568,9 @@ msgid "Quicktime/MP4 reader: The video track %1% is missing the ESDS atom. Skipp
 msgstr "Quicktime/MP4 reader: La traccia video %1% manca dell'atom ESDS. Salto questa traccia.\n"
 
 #: src/input/r_qtmp4.cpp:306
-#, fuzzy, boost-format
+#, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers with an unknown or unsupported compression algorithm '%1%'. Aborting.\n"
-msgstr "Quicktime/MP4 reader: Questo file usa intestazioni compresse con un algoritmo di compressione sconosciuto o non supportato '%1%%2%%3%%4%'. Annullo.\n"
+msgstr "Lettore Quicktime/MP4: questo file usa intestazioni compresse con un algoritmo di compressione sconosciuto o non supportato '%1%'. Interruzione.\n"
 
 #: src/input/r_qtmp4.cpp:339
 #, boost-format
@@ -5610,9 +5606,9 @@ msgid "Quicktime/MP4 reader: Track ID %1% has more than one FourCC. Only using t
 msgstr "Quicktime/MP4 reader: La traccia ID %1% ha più di un FourCC. Uso solo il primo (%|2$.4s|) e non questo (%|3$.4s|).\n"
 
 #: src/input/r_qtmp4.cpp:2261
-#, fuzzy, boost-format
+#, boost-format
 msgid "Quicktime/MP4 reader: Unknown/unsupported FourCC '%1%' for track %2%.\n"
-msgstr "Quicktime/MP4 reader: FourCC sconosciuto/non supportato '%|1$.4s|' per la traccia %2%.\n"
+msgstr "Lettore Quicktime/MP4: FourCC '%1%' sconosciuto/non supportato per la traccia %2%.\n"
 
 #: src/input/r_qtmp4.cpp:2314
 #, boost-format
@@ -6305,7 +6301,7 @@ msgstr "La divisione è attiva, ma almeno uno dei potenziali file destinazione '
 
 #: src/mmg/tabs/global.cpp:268
 msgid "Splitting will occur right before the first key frame whose timecode is equal to or bigger than the start timecode for the chapters whose numbers are listed."
-msgstr ""
+msgstr "La divisione avverrà appena prima del primo frame chiave in cui il timecode è uguale o maggiore del primo timecode per il capitolo che è nell'elenco."
 
 #: src/mmg/mmg_dialog.cpp:326
 msgid "Sta&rt muxing"
@@ -7004,9 +7000,8 @@ msgstr "Le seguenti parti vengono lette dopo il file primario come fossero tutte
 
 #: src/mmg/tabs/global.cpp:611
 #: src/mmg/tabs/global.cpp:633
-#, fuzzy
 msgid "The format of the split argument is invalid."
-msgstr "Il formato della dimensione divisione non è valido."
+msgstr "Il formato dell'argomento divisione non è valido."
 
 #: src/mmg/tabs/global.cpp:572
 msgid "The format of the split size is invalid (size too small)."
@@ -7632,7 +7627,7 @@ msgstr "Questo modo considera solo la prima traccia video destinazione."
 
 #: src/mmg/tabs/global.cpp:270
 msgid "This mode only considers the top-most level of chapters across all edition entries."
-msgstr ""
+msgstr "Questo modo considera solo il livello superiore dei capitoli tra tutti gli elementi edizione."
 
 #: src/mmg/cli_options_dlg.cpp:88
 msgid "This option needs an additional argument 'n'. Tells mkvmerge to put at most 'n' data blocks into each cluster. If the number is postfixed with 'ms' then put at most 'n' milliseconds of data into each cluster. The maximum length for a cluster that mkvmerge accepts is 60000 blocks and 32000ms; the minimum length is 100ms. Programs will only be able to seek to clusters, so creating larger clusters may lead to imprecise or slow seeking."
@@ -9212,9 +9207,8 @@ msgid "split after timecodes"
 msgstr "dividi dopo timecode"
 
 #: src/mmg/tabs/global.cpp:303
-#, fuzzy
 msgid "split before chapters"
-msgstr "Rimuovi capitolo"
+msgstr "dividi per capitoli"
 
 #: src/mmg/tabs/global.cpp:301
 msgid "split by parts"
@@ -9859,4 +9853,3 @@ msgstr "sì"
 
 #~ msgid "wavpack_reader: Could not open the file."
 #~ msgstr "wavpack_reader: Impossibile aprire il file."
-
