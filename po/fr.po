@@ -1601,12 +1601,12 @@ msgstr "+-> Analyse superficielle du fichier FLAC : %1%%%%2%"
 msgid "+-> Pre-parsing FLAC file: 100%\n"
 msgstr "+-> Analyse superficielle du fichier FLAC : 100%\n"
 
-#: src/merge/pr_generic.cpp:1419
+#: src/merge/pr_generic.cpp:1433
 #, boost-format
 msgid ", description '%1%'"
 msgstr ", description '%1%'"
 
-#: src/merge/pr_generic.cpp:1420
+#: src/merge/pr_generic.cpp:1434
 #, boost-format
 msgid ", file name '%1%'"
 msgstr ", nom de fichier '%1%'"
@@ -1713,13 +1713,13 @@ msgstr "<Simple> doit contenir un enfant <String> ou <Binary>."
 msgid "<Tag> is missing the <Simple> child."
 msgstr "<Tag> manque à l'enfant <Simple>."
 
-#: src/input/r_matroska.cpp:1974
+#: src/input/r_matroska.cpp:1993
 #, boost-format
 msgid "A block group was found at position %1%, but no block element was found inside it. This might make mkvmerge crash.\n"
 msgstr "Un groupe de blocs a été trouvé à la position %1% mais il ne contient aucun élément de bloc. Cela peut faire planter mkvmerge.\n"
 
-#: src/input/r_matroska.cpp:1876
-#: src/input/r_matroska.cpp:1984
+#: src/input/r_matroska.cpp:1895
+#: src/input/r_matroska.cpp:2003
 #, boost-format
 msgid "A block was found at timestamp %1% for track number %2%. However, no headers where found for that track number. The block will be skipped.\n"
 msgstr "Un bloc a été trouvé au code temporel %1% pour le numéro de piste %2%. Cependant, aucun en-tête n'a été trouvé pour ce numéro de piste. Le bloc sera passé.\n"
@@ -1773,7 +1773,7 @@ msgstr ""
 msgid "A track"
 msgstr "Une piste"
 
-#: src/merge/pr_generic.cpp:1290
+#: src/merge/pr_generic.cpp:1304
 #, boost-format
 msgid "A track with the ID %1% was requested but not found in the file. The corresponding option will be ignored.\n"
 msgstr "Une piste de numéro %1% a été demandée mais n'a pas été trouvée dans le fichier. L'option correspondante sera ignorée.\n"
@@ -2099,7 +2099,7 @@ msgstr "Analyse en cours"
 msgid "Analyze MPEG4 bitstreams, put each frame into one Matroska block, use proper timestamping (I P B B = 0 120 40 80), use V_MPEG4/ISO/... CodecIDs."
 msgstr "Analyser les flux MPEG-4, mettre chaque image dans un bloc Matrosla, utiliser un horodatage correct (I P B B = 0 120 40 80), utiliser les identifiants de codec V_MPEG4/ISO/..."
 
-#: src/merge/pr_generic.cpp:521
+#: src/merge/pr_generic.cpp:522
 #, boost-format
 msgid "Another default track for %1% tracks has already been set. The 'default' flag for track %2% of '%3%' will not be set.\n"
 msgstr "Une autre piste a déjà été prise comme piste par défaut pour %1%. La marque 'défaut' ne sera pas attribuée à la piste %2% sur '%3%'.\n"
@@ -2151,7 +2151,7 @@ msgstr "Joints"
 msgid "Attached files"
 msgstr "Fichiers joints présents"
 
-#: src/merge/pr_generic.cpp:1418
+#: src/merge/pr_generic.cpp:1432
 #, boost-format
 msgid "Attachment ID %1%: type '%2%', size %3% bytes"
 msgstr "Pièce jointe numéro %1% : type '%2%', taille %3% octets"
@@ -2291,11 +2291,11 @@ msgstr "AID %1% erroné\n"
 msgid "Boolean (yes/no, on/off etc)"
 msgstr "Valeur booléenne (oui/non, marche/arrêt, etc)"
 
-#: src/merge/pr_generic.cpp:189
+#: src/merge/pr_generic.cpp:190
 msgid "Both the aspect ratio and '--display-dimensions' were given.\n"
 msgstr "Le format d'image et les dimensions à l'écran ('--display-dimensions') ont été donnés tous les deux.\n"
 
-#: src/merge/pr_generic.cpp:187
+#: src/merge/pr_generic.cpp:188
 msgid "Both the aspect ratio factor and '--display-dimensions' were given.\n"
 msgstr "Le facteur de format d'image et les dimensions à l'écran ('--display-dimensions') ont été donnés tous les deux.\n"
 
@@ -2522,7 +2522,7 @@ msgstr "Chapitres écrits."
 msgid "Chapters:"
 msgstr "Chapitres :"
 
-#: src/merge/pr_generic.cpp:1421
+#: src/merge/pr_generic.cpp:1435
 #, boost-format
 msgid "Chapters: %1% entries"
 msgstr "Chapitres : %1% entrées"
@@ -2741,7 +2741,7 @@ msgstr "Ligne de commande utilisée :"
 msgid "Common languages"
 msgstr "Langues communes"
 
-#: src/merge/pr_generic.cpp:797
+#: src/merge/pr_generic.cpp:798
 #, boost-format
 msgid "Compression failed: %1%\n"
 msgstr "La compression a échoué : %1%.\n"
@@ -2831,12 +2831,12 @@ msgstr "Impossible de trouver gptzr lors de la concaténation. %1%\n"
 msgid "Could not find the codec configuration data in the first MPEG-4 part 2 video frame. This track cannot be stored in native mode.\n"
 msgstr "Impossible de trouver les données de configuration du codec dans la première image vidéo MPEG-4 partie 2. Cette piste ne peut pas être multiplexée dans le mode natif.\n"
 
-#: src/input/r_ogm.cpp:373
+#: src/input/r_ogm.cpp:392
 msgid "Could not find the next Ogg page. This indicates a damaged Ogg/Ogm file. Will try to continue.\n"
 msgstr "Impossible de trouver la page Ogg suivante, ce qui indique un fichier Ogg/Ogm endommagé. Tentative de poursuite.\n"
 
 #: src/input/r_avi.cpp:620
-#: src/input/r_matroska.cpp:1453
+#: src/input/r_matroska.cpp:1462
 msgid "Could not find valid DTS headers in this track's first frames.\n"
 msgstr "Impossible de trouver des en-têtes DTS valables dans les premières images de cette piste.\n"
 
@@ -3617,12 +3617,12 @@ msgstr "UID de la famille : %1%"
 msgid "File %1% has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n"
 msgstr "Le fichier %1% a un type inconnu. Veuillez consulter la liste des types de fichier supportés ('mkvmerge --list-types') et contacter l'auteur Moritz Bunkus <moritz@bunkus.org> si votre type de fichier est pris en charge mais pas reconnu correctement.\n"
 
-#: src/merge/pr_generic.cpp:1416
+#: src/merge/pr_generic.cpp:1430
 #, boost-format
 msgid "File '%1%': container: %2%"
 msgstr "Fichier '%1%' : conteneur : %2%"
 
-#: src/merge/pr_generic.cpp:1666
+#: src/merge/pr_generic.cpp:1680
 #, boost-format
 msgid "File '%1%': unsupported container: %2%\n"
 msgstr "Fichier '%1%' : conteneur non supporté : %2%\n"
@@ -3850,7 +3850,7 @@ msgstr "Options globales"
 msgid "Global tags (%d entries) from %s"
 msgstr "Étiquettes globales (%d entrées) dans %s"
 
-#: src/merge/pr_generic.cpp:1422
+#: src/merge/pr_generic.cpp:1436
 #, boost-format
 msgid "Global tags: %1% entries"
 msgstr "Étiquettes globales : %1% entrées"
@@ -4675,12 +4675,12 @@ msgstr "MPEG-4"
 msgid "Make this track the default track for its type (audio, video, subtitles). Players should prefer tracks with the default track flag set."
 msgstr "Faire de cette piste la piste par défaut de son type (audio, vidéo, sous-titres). Les lecteurs devraient préférer les pistes avec la marque de piste par défaut."
 
-#: src/input/r_matroska.cpp:1381
-#: src/input/r_matroska.cpp:1396
+#: src/input/r_matroska.cpp:1390
+#: src/input/r_matroska.cpp:1405
 msgid "Malformed AAC codec initialization data found.\n"
 msgstr "Données d'initialisation du codec AAC mal formées trouvées.\n"
 
-#: src/input/r_matroska.cpp:1389
+#: src/input/r_matroska.cpp:1398
 #, boost-format
 msgid "Malformed codec id '%1%'.\n"
 msgstr "Identifiant de codec '%1%' mal formé.\n"
@@ -4812,7 +4812,7 @@ msgstr "Nom de fichier manquant"
 msgid "Missing file name after for the option '--edit-headers'."
 msgstr "Nom de fichier manquant pour l'option '--edit-headers'."
 
-#: src/input/r_ogm.cpp:927
+#: src/input/r_ogm.cpp:949
 msgid "Missing header/comment packets for stream. This file is broken but should be muxed correctly. If not please contact the author Moritz Bunkus <moritz@bunkus.org>.\n"
 msgstr "En-tête/Paquets de commentaire manquants pour le flux. Ce fichier est endommagé mais doit être multiplexé correctement. Dans le cas contraire, contactez l'auteur, Moritz Bunkus <moritz@bunkus.org>.\n"
 
@@ -5118,6 +5118,11 @@ msgstr "Ce n'est pas un fichier Matroska correct (aucun segment/élément de niv
 msgid "Not a valid number or not positive."
 msgstr "Nombre de fichiers fractionnés indiqué incorrect."
 
+#: src/merge/pr_generic.cpp:1149
+#, boost-format
+msgid "Note that the Matroska specifications regarding the storage of '%1%' have not been finalized yet. mkvmerge's support for it is therefore subject to change and uses the CodecID '%2%/EXPERIMENTAL' instead of '%2%'. This warning will be removed once the specifications have been finalized and mkvmerge has been updated accordingly.\n"
+msgstr ""
+
 #: src/extract/attachments.cpp:132
 #: src/extract/timecodes_v2.cpp:187
 #: src/extract/tracks.cpp:320
@@ -5135,7 +5140,7 @@ msgstr "Nombre de nanosecondes (non graduées) par image."
 msgid "Numbers of channels in the track."
 msgstr "Nombre de canaux dans la piste."
 
-#: src/input/r_ogm.h:106
+#: src/input/r_ogm.h:107
 msgid "Ogg/OGM"
 msgstr "Ogg/OGM"
 
@@ -5243,6 +5248,15 @@ msgstr "Options"
 msgid "Options meant ONLY for developpers. Do not use them. If something is considered to be an officially supported option then it's NOT in this list!"
 msgstr "Options conçues UNIQUEMENT pour les développeurs. Ne les utilisez pas. Une option officiellement prise en charge ne se trouve PAS dans cette liste !"
 
+#: src/output/p_opus.h:38
+msgid "Opus"
+msgstr ""
+
+#: src/common/file_types.cpp:47
+#, fuzzy
+msgid "Opus (in Ogg) audio files"
+msgstr "Fichiers audio/vidéo Ogg/OGM"
+
 #: src/info/mkvinfo.cpp:673
 #, boost-format
 msgid "Order: %1%"
@@ -5316,7 +5330,7 @@ msgstr "Erreur PTS : 0x%|1$02x| %|2$02x|%|3$02x| %|4$02x|%|5$02x|\n"
 msgid "Packet number %1% contained an invalid FLAC header and is being skipped.\n"
 msgstr "Le paquet numéro %1% contient un en-tête FLAC incorrect et sera ignoré.\n"
 
-#: src/merge/pr_generic.cpp:250
+#: src/merge/pr_generic.cpp:251
 #, boost-format
 msgid "Packet queue not empty (flushed: %1%). Frames have been lost during remux. %2%\n"
 msgstr "La liste de paquets n'est pas vide (%1% terminés). Des images ont été perdues durant le multiplexage. %2%\n"
@@ -5653,7 +5667,7 @@ msgstr "RealAudio"
 msgid "RealMedia"
 msgstr "RealMedia"
 
-#: src/common/file_types.cpp:47
+#: src/common/file_types.cpp:48
 msgid "RealMedia audio/video files"
 msgstr "Fichiers audio/vidéo RealMedia"
 
@@ -5750,7 +5764,7 @@ msgstr "SHA1-160"
 msgid "SRT subtitles"
 msgstr "Sous-titres SRT"
 
-#: src/common/file_types.cpp:48
+#: src/common/file_types.cpp:49
 msgid "SRT text subtitles"
 msgstr "Sous-titres texte SRT"
 
@@ -5758,7 +5772,7 @@ msgstr "Sous-titres texte SRT"
 msgid "SSA/ASS subtitles"
 msgstr "Sous-titres SSA/ASS"
 
-#: src/common/file_types.cpp:49
+#: src/common/file_types.cpp:50
 msgid "SSA/ASS text subtitles"
 msgstr "Sous-titres texte SSA/ASS"
 
@@ -6414,7 +6428,7 @@ msgstr "Supprimer les messages d'état."
 msgid "TTA"
 msgstr "TTA"
 
-#: src/common/file_types.cpp:50
+#: src/common/file_types.cpp:51
 msgid "TTA (The lossless True Audio codec)"
 msgstr "TTA (codec The lossless True Audio)"
 
@@ -6449,7 +6463,7 @@ msgstr "Étiquettes"
 msgid "Tags are not allowed in WebM compliant files. No tags will be written into any output file.\n"
 msgstr "Les étiquettes ne sont pas autorisées dans les fichiers conformes WebM. Aucune étiquette ne sera écrite dans le fichier cible.\n"
 
-#: src/merge/pr_generic.cpp:1423
+#: src/merge/pr_generic.cpp:1437
 #, boost-format
 msgid "Tags for track ID %1%: %2% entries"
 msgstr "Étiquettes pour la piste numéro %1% : %2% entrées"
@@ -6535,7 +6549,7 @@ msgstr "La valeur FourCC de la piste n°%s du fichier '%s' n'a pas exactement qu
 msgid "The GUI is configured to use the mkvmerge executable from a different version (%1%) than the GUI itself (%2%). This is not supported but will not be prevented either. You should change the mkvmerge executable in the preferences dialog."
 msgstr "L'interface est configurée pour fonctionner avec un exécutable mkvmerge d'une version différente (%1%) de la sienne (%2%). Cette situation n'est pas normale bien qu'elle ne soit pas interdite. Vous devriez indiquer un autre exécutable mkvmerge dans les options."
 
-#: src/input/r_ogm.cpp:1441
+#: src/input/r_ogm.cpp:1495
 #, fuzzy, boost-format
 msgid "The Kate identification header could not be parsed (%1%).\n"
 msgstr "L'en-tête d'identification Kate ne peut pas être analysé (%1%).\n"
@@ -6569,7 +6583,7 @@ msgstr ""
 msgid "The NALU size length must be a number between 2 and 4 inclusively in '--nalu-size-length %1%'.\n"
 msgstr "La taille de NALU doit être un nombre entre 2 et 4 compris dans '--nalu-size-length %1%'.\n"
 
-#: src/input/r_ogm.cpp:1271
+#: src/input/r_ogm.cpp:1325
 #, boost-format
 msgid "The Theora identifaction header could not be parsed (%1%).\n"
 msgstr "L'en-tête d'identification Theora ne peut pas être analysé (%1%).\n"
@@ -6701,7 +6715,7 @@ msgstr "La taille de NALU choisie '%1%' est trop petite. Essayez '4'.\n"
 msgid "The closing parenthesis ')' are missing.\n"
 msgstr "Les parenthèses de fermeture ')' sont absentes.\n"
 
-#: src/merge/pr_generic.cpp:1234
+#: src/merge/pr_generic.cpp:1248
 #, boost-format
 msgid "The codec type '%1%' cannot be used in a WebM compliant file.\n"
 msgstr "Le type de codec '%1%' ne peut pas être utilisé dans un fichier conforme à WebM.\n"
@@ -6735,7 +6749,7 @@ msgstr "Les entrées d'index sont créées...\n"
 msgid "The current file (number %d) cannot be removed. There are other files -- at least file number %d -- whose tracks are supposed to be appended to tracks from this file. Please remove those files first."
 msgstr "Le fichier actuel (numéro %d) ne peut pas être supprimé. D'autres fichiers (au moins le numéro %d) ont des pistes susceptibles d'être ajoutées aux siennes. Supprimez d'abord ces fichiers."
 
-#: src/merge/pr_generic.cpp:859
+#: src/merge/pr_generic.cpp:860
 #, boost-format
 msgid "The current packet's timecode is smaller than that of the previous packet. This usually means that the source file is a Matroska file that has not been created 100%% correctly. The timecodes of all packets will be adjusted by %1%ms in order not to lose any data. This may throw audio/video synchronization off, but that can be corrected with mkvmerge's \"--sync\" option. If you already use \"--sync\" and you still get this warning then do NOT worry -- this is normal. If this error happens more than once and you get this message more than once for a particular track then either is the source file badly mastered, or mkvmerge contains a bug. In this case you should contact the author Moritz Bunkus <moritz@bunkus.org>.\n"
 msgstr "Le code temporel du paquet actuel est inférieur à celui du précédent, ce qui signifie habituellement que le fichier source est un fichier Matroska qui n'est pas à 100%% correctement construit. Le code temporel de tous les paquets doit être corrigé de %1% ms pour ne perdre aucune donnée. La désynchronisation éventuelle de l'audio et de la vidéo peut se corriger par l'option \"--sync\". Si vous utilisez cette option et que vous obtenez quand même cet avertissement, ne vous inquiétez PAS, c'est normal. Si cela se reproduit pour une piste particulière, c'est que le fichier source est mal numérisé ou que mkvmerge contient un bogue. Contactez dans ce cas l'auteur Moritz Bunkus <moritz@bunkus.org>.\n"
@@ -6859,7 +6873,7 @@ msgstr "Le fichier '%1%' est ouvert en écriture.\n"
 msgid "The file '%1%' has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n"
 msgstr "Le fichier '%1%' est d'un type inconnu. Consultez la liste des types de fichier supportés ('mkvmerge --list-types') et contactez l'auteur Moritz Bunkus <moritz@bunkus.org> si le type de votre fichier est supporté mais pas reconnu correctement.\n"
 
-#: src/merge/pr_generic.cpp:1670
+#: src/merge/pr_generic.cpp:1684
 #, boost-format
 msgid "The file '%1%' is a non-supported file type (%2%).\n"
 msgstr "Le fichier '%1%' est d'un type non supporté (%2%).\n"
@@ -7362,7 +7376,7 @@ msgstr "L'étiquette ou l'attribut '%1%' à la position %2% contient des donnée
 msgid "The tag or attribute '%1%' at position %2% contains invalid or mal-formed data."
 msgstr "L'étiquette ou l'attribut '%1%' à la position %2% contient des données incorrectes ou mal formées."
 
-#: src/merge/pr_generic.cpp:270
+#: src/merge/pr_generic.cpp:271
 #, boost-format
 msgid "The tags in '%1%' could not be parsed: some mandatory elements are missing.\n"
 msgstr "Les étiquettes de '%1%' ne peuvent pas être analysées : certains éléments obligatoires manquent.\n"
@@ -7429,7 +7443,7 @@ msgstr "Codes temporels à partir desquels un nouveau fichier est créé. Les co
 msgid "The timecodes can be given either in the form HH:MM:SS.nnnnnnnnn or as the number of seconds followed by 's'."
 msgstr "Les codes temporels peuvent être donnés sous la forme HH:MM:SS.nnnnnnnnn ou comme un nombre de secondes suivi de 's'."
 
-#: src/input/r_ogm.cpp:591
+#: src/input/r_ogm.cpp:613
 msgid "The timecodes for this stream have been reset in the middle of the file. This is not supported. The current packet will be discarded.\n"
 msgstr "Les codes temporels pour ce flux ont été réinitialisés au milieu du fichier, ce qui n'est pas accepté. Le paquet actuel sera écarté.\n"
 
@@ -7556,7 +7570,7 @@ msgstr "Cette piste audio MPEG contient %1% octets de données non MP3 au début
 msgid "This MPEG audio track contains %1% bytes of non-MP3 data which were skipped. The audio/video synchronization may have been lost.\n"
 msgstr "Cette piste audio MPEG contient %1% octets de données non MP3 qui ont été sautées. Il se peut que la synchronisation audio/vidéo soit perdue.\n"
 
-#: src/input/r_ogm.cpp:835
+#: src/input/r_ogm.cpp:857
 msgid "This Ogg/OGM file contains chapter or title information. Unfortunately the charset used to store this information in the file cannot be identified unambiguously. The program assumes that your system's current charset is appropriate. This can be overridden with the '--chapter-charset <charset>' switch.\n"
 msgstr "Ce fichier Ogg/OGM contient des informations de titre ou de chapitre. Malheureusement, le jeu de caractères utilisé pour stocker ces informations dans le fichier ne peut pas être identifié avec certitude. Le programme suppose que le jeu de caractères actuel de votre système est adéquat. On peut passer outre avec l'option '--chapter-charset <jeu>'.\n"
 
@@ -7791,7 +7805,7 @@ msgstr "Piste %1% : les informations AAC ne peuvent pas être analysées.\n"
 msgid "Track ID %1% has an unknown AAC type.\n"
 msgstr "La piste numéro %1% a un type AAC inconnu.\n"
 
-#: src/merge/pr_generic.cpp:1417
+#: src/merge/pr_generic.cpp:1431
 #, boost-format
 msgid "Track ID %1%: %2% (%3%)"
 msgstr "Piste numéro %1% : %2% (%3%)"
@@ -7898,7 +7912,7 @@ msgstr "UID :"
 msgid "USF subtitles"
 msgstr "Sous-titres USF"
 
-#: src/common/file_types.cpp:51
+#: src/common/file_types.cpp:52
 msgid "USF text subtitles"
 msgstr "Sous-titres texte USF"
 
@@ -7924,7 +7938,7 @@ msgstr "Profil AAC MPEG-2 inconnu %1%."
 msgid "Unknown AAC MPEG-4 object type %1%."
 msgstr "Type d'objet AAC MPEG-4 %1% inconnu."
 
-#: src/input/r_ogm.cpp:541
+#: src/input/r_ogm.cpp:563
 #, boost-format
 msgid "Unknown audio stream type 0x%|1$04x|. Stream ID %2% will be ignored.\n"
 msgstr "Type de flux audio 0x%|1$04x| inconnu. Le flux ID %2% sera ignoré.\n"
@@ -7997,7 +8011,7 @@ msgstr "Version MPEG non prise en charge : 0x%|1$02x| dans le paquet %2% pour le
 msgid "Unsupported format"
 msgstr "Format non supporté"
 
-#: src/input/r_matroska.cpp:1664
+#: src/input/r_matroska.cpp:1683
 msgid "Unsupported track type for this track.\n"
 msgstr "Type de piste non pris en charge.\n"
 
@@ -8043,7 +8057,7 @@ msgstr "L'utilisation d'une taille de NALU de 3 octets peut conduire à des pist
 msgid "Using the demultiplexer for the format '%1%'.\n"
 msgstr "utilisation du démultiplexeur pour le format '%1%'.\n"
 
-#: src/input/r_matroska.cpp:1239
+#: src/input/r_matroska.cpp:1248
 #, boost-format
 msgid "Using the generic output module for track type '%1%'.\n"
 msgstr "utilisation du module de sortie générique pour le type de piste '%1%'.\n"
@@ -8057,7 +8071,7 @@ msgstr "utilisation du module de sortie pour le format '%1%'.\n"
 msgid "VC1"
 msgstr "VC1"
 
-#: src/common/file_types.cpp:52
+#: src/common/file_types.cpp:53
 msgid "VC1 elementary streams"
 msgstr "Flux élémentaires VC1"
 
@@ -8163,7 +8177,7 @@ msgstr "Afficher le rapport généré par mkvmerge pendant le traitement des tâ
 msgid "VobBtn"
 msgstr "VobBtn"
 
-#: src/common/file_types.cpp:53
+#: src/common/file_types.cpp:54
 msgid "VobButtons"
 msgstr "VobButtons"
 
@@ -8172,7 +8186,7 @@ msgstr "VobButtons"
 msgid "VobSub"
 msgstr "VobSub"
 
-#: src/common/file_types.cpp:54
+#: src/common/file_types.cpp:55
 msgid "VobSub subtitles"
 msgstr "Sous-titres VobSub"
 
@@ -8184,7 +8198,7 @@ msgstr "Vorbis"
 msgid "WAV"
 msgstr "WAV"
 
-#: src/common/file_types.cpp:55
+#: src/common/file_types.cpp:56
 msgid "WAVE (uncompressed PCM audio)"
 msgstr "WAVE (audio PCM non compressé)"
 
@@ -8192,7 +8206,7 @@ msgstr "WAVE (audio PCM non compressé)"
 msgid "WAVPACK"
 msgstr "WAVPACK"
 
-#: src/common/file_types.cpp:56
+#: src/common/file_types.cpp:57
 msgid "WAVPACK v4 audio"
 msgstr "Audio WAVPACK v4"
 
@@ -8221,7 +8235,7 @@ msgstr "Avertissement : "
 msgid "Warnings:"
 msgstr "Avertissements :"
 
-#: src/common/file_types.cpp:57
+#: src/common/file_types.cpp:58
 msgid "WebM audio/video files"
 msgstr "Fichiers audio/vidéo WebM"
 
@@ -8377,7 +8391,7 @@ msgid "append"
 msgstr "Concaténer"
 
 #: src/info/mkvinfo.cpp:929
-#: src/input/r_matroska.cpp:95
+#: src/input/r_matroska.cpp:96
 #: src/mmg/mmg.cpp:61
 msgid "audio"
 msgstr "audio"
@@ -8396,7 +8410,7 @@ msgid "both eyes laced in one block (right first)"
 msgstr "les deux yeux en un bloc (le droit d'abord)"
 
 #: src/info/mkvinfo.cpp:932
-#: src/input/r_matroska.cpp:96
+#: src/input/r_matroska.cpp:97
 msgid "buttons"
 msgstr "boutons"
 
@@ -8645,131 +8659,128 @@ msgstr "lzo_init() a échoué. Résultat : %1%\n"
 msgid "lzo_malloc(LZO1X_999_MEM_COMPRESS) failed.\n"
 msgstr "lzo_malloc(LZO1X_999_MEM_COMPRESS) a échoué.\n"
 
-#: src/input/r_matroska.cpp:310
+#: src/input/r_matroska.cpp:311
 #, boost-format
 msgid "matroska_reader: (MS compatibility mode for track %1%) Matroska says that there are %2% bits per sample, but the WAVEFORMATEX says that there are %3%.\n"
 msgstr "matroska_reader : (mode de compatibilité MS, piste %1%) Matroska dit qu'il y a %2% bits par échantillon mais WAVEFORMATEX dit qu'il y en a %3%.\n"
 
-#: src/input/r_matroska.cpp:301
+#: src/input/r_matroska.cpp:302
 #, boost-format
 msgid "matroska_reader: (MS compatibility mode for track %1%) Matroska says that there are %2% channels, but the WAVEFORMATEX says that there are %3%.\n"
 msgstr "matroska_reader : (mode de compatibilité MS, piste %1%) Matroska dit qu'il y a %2% canaux mais WAVEFORMATEX dit qu'il y en a %3%.\n"
 
-#: src/input/r_matroska.cpp:292
+#: src/input/r_matroska.cpp:293
 #, boost-format
 msgid "matroska_reader: (MS compatibility mode for track %1%) Matroska says that there are %2% samples per second, but WAVEFORMATEX says that there are %3%.\n"
 msgstr "matroska_reader : (mode de compatibilité MS, piste %1%) Matroska dit qu'il y a %2% échantillons par seconde mais WAVEFORMATEX dit qu'il y en a %3%.\n"
 
-#: src/input/r_matroska.cpp:454
+#: src/input/r_matroska.cpp:463
 #, boost-format
 msgid "matroska_reader: (MS compatibility mode, track %1%) Matroska says video height is %2%, but the BITMAPINFOHEADER says %3%.\n"
 msgstr "matroska_reader : (mode de compatibilité MS, piste %1%) Matroska dit que la hauteur vidéo est %2% mais BITMAPINFOHEADER dit %3%.\n"
 
-#: src/input/r_matroska.cpp:445
+#: src/input/r_matroska.cpp:454
 #, boost-format
 msgid "matroska_reader: (MS compatibility mode, track %1%) Matroska says video width is %2%, but the BITMAPINFOHEADER says %3%.\n"
 msgstr "matroska_reader : (mode de compatibilité MS, piste %1%) Matroska dit que la largeur vidéo est %2% mais BITMAPINFOHEADER dit %3%.\n"
 
-#: src/input/r_matroska.cpp:953
+#: src/input/r_matroska.cpp:962
 msgid "matroska_reader: A track is missing its track UID.\n"
 msgstr "matroska_reader : une piste n'a pas son UID de piste.\n"
 
-#: src/input/r_matroska.cpp:943
+#: src/input/r_matroska.cpp:952
 msgid "matroska_reader: A track is missing its track number.\n"
 msgstr "matroska_reader : une piste n'a pas son numéro de piste.\n"
 
-#: src/input/r_matroska.cpp:1305
+#: src/input/r_matroska.cpp:1314
 #, boost-format
 msgid "matroska_reader: Could not keep the track UID %1% because it is already allocated for the new file.\n"
 msgstr "matroska_reader : impossible de conserver l'UID de piste %1% car il est déjà alloué au nouveau fichier.\n"
 
-#: src/input/r_matroska.cpp:1117
-#: src/input/r_matroska.cpp:1122
+#: src/input/r_matroska.cpp:1126
+#: src/input/r_matroska.cpp:1131
 msgid "matroska_reader: No segment found.\n"
 msgstr "matroska_reader : aucun segment trouvé.\n"
 
-#: src/input/r_matroska.cpp:906
+#: src/input/r_matroska.cpp:915
 msgid "matroska_reader: Pixel height is missing.\n"
 msgstr "matroska_reader : la hauteur en pixels est absente.\n"
 
-#: src/input/r_matroska.cpp:904
+#: src/input/r_matroska.cpp:913
 msgid "matroska_reader: Pixel width is missing.\n"
 msgstr "matroska_reader : la largeur en pixels est absente.\n"
 
-#: src/input/r_matroska.cpp:546
+#: src/input/r_matroska.cpp:555
 #, boost-format
 msgid "matroska_reader: The CodecID '%1%' for track %2% is unknown.\n"
 msgstr "matroska_reader : l'identifiant de codec '%1%' de la piste %2% est inconnu.\n"
 
-#: src/input/r_matroska.cpp:433
+#: src/input/r_matroska.cpp:328
+#: src/input/r_matroska.cpp:349
+#: src/input/r_matroska.cpp:372
+#, fuzzy, boost-format
+msgid "matroska_reader: The CodecID for track %1% is '%2%', but the private codec data does not contain valid headers.\n"
+msgstr "matroska_reader : l'identifiant de codec de la piste %1% est '%2%' mais il n'y a aucun en-tête privé de codec.\n"
+
+#: src/input/r_matroska.cpp:442
 #, boost-format
 msgid "matroska_reader: The CodecID for track %1% is '%2%', but there was no BITMAPINFOHEADER struct present. Therefore we don't have a FourCC to identify the video codec used.\n"
 msgstr "matroska_reader : l'identifiant de codec de la piste %1% est '%2%' mais aucune structure BITMAPINFOHEADER n'est présente. Il n'y a donc pas de code FourCC pour identifier le codec vidéo utilisé.\n"
 
-#: src/input/r_matroska.cpp:271
+#: src/input/r_matroska.cpp:272
 #, boost-format
 msgid "matroska_reader: The CodecID for track %1% is '%2%', but there was no WAVEFORMATEX struct present. Therefore we don't have a format ID to identify the audio codec used.\n"
 msgstr "matroska_reader : l'identifiant de codec de la piste %1% est '%2%' mais aucune structure WAVEFORMATEX n'est présente. Il n'y a donc pas d'ID de format pour identifier le codec vidéo utilisé.\n"
 
-#: src/input/r_matroska.cpp:327
-#: src/input/r_matroska.cpp:471
+#: src/input/r_matroska.cpp:480
 #, boost-format
 msgid "matroska_reader: The CodecID for track %1% is '%2%', but there was no codec private headers.\n"
 msgstr "matroska_reader : l'identifiant de codec de la piste %1% est '%2%' mais il n'y a aucun en-tête privé de codec.\n"
 
-#: src/input/r_matroska.cpp:513
-#: src/input/r_matroska.cpp:524
+#: src/input/r_matroska.cpp:522
+#: src/input/r_matroska.cpp:533
 #, boost-format
 msgid "matroska_reader: The CodecID for track %1% is '%2%', but there was no private data found.\n"
 msgstr "matroska_reader : l'identifiant de codec de la piste %1% est '%2%' mais aucune donnée privée n'a été trouvée.\n"
 
-#: src/input/r_matroska.cpp:348
-#, boost-format
-msgid "matroska_reader: The CodecID for track %1% is 'A_VORBIS', but there are no header packets present.\n"
-msgstr "matroska_reader : l'identifiant de codec de la piste %1% est 'A_VORBIS' mais il n'y a aucun paquet d'en-tête présent.\n"
-
-#: src/input/r_matroska.cpp:994
+#: src/input/r_matroska.cpp:1003
 msgid "matroska_reader: The CodecID is missing.\n"
 msgstr "matroska_reader : l'identifiant de codec est absent.\n"
 
-#: src/input/r_matroska.cpp:499
+#: src/input/r_matroska.cpp:508
 #, boost-format
 msgid "matroska_reader: The height for track %1% was not set.\n"
 msgstr "matroska_reader : la hauteur n'est pas définie pour la piste %1%.\n"
 
-#: src/input/r_matroska.cpp:493
+#: src/input/r_matroska.cpp:502
 #, boost-format
 msgid "matroska_reader: The width for track %1% was not set.\n"
 msgstr "matroska_reader : la largeur n'est pas définie pour la piste %1%.\n"
 
-#: src/input/r_matroska.cpp:588
+#: src/input/r_matroska.cpp:597
 #, boost-format
 msgid "matroska_reader: Track %1% seems to be ok.\n"
 msgstr "matroska_reader : la piste %1% semble être OK.\n"
 
-#: src/input/r_matroska.cpp:958
+#: src/input/r_matroska.cpp:967
 msgid "matroska_reader: Track type was not found.\n"
 msgstr "matroska_reader : type de piste introuvable.\n"
 
-#: src/input/r_matroska.cpp:354
-msgid "matroska_reader: Vorbis track does not contain valid headers.\n"
-msgstr "matroska_reader : la piste Vorbis ne contient pas des en-têtes corrects.\n"
-
-#: src/input/r_matroska.cpp:1208
-#: src/input/r_matroska.cpp:1856
+#: src/input/r_matroska.cpp:1217
+#: src/input/r_matroska.cpp:1875
 msgid "matroska_reader: caught exception\n"
 msgstr "matroska_reader : exception captée.\n"
 
-#: src/input/r_matroska.cpp:339
+#: src/input/r_matroska.cpp:340
 #, boost-format
 msgid "matroska_reader: mkvmerge was not compiled with FLAC support. Ignoring track %1%.\n"
 msgstr "matroska_reader : mkvmerge n'a pas été compilé avec prise en charge de FLAC, piste %1% ignorée.\n"
 
-#: src/input/r_matroska.cpp:1104
+#: src/input/r_matroska.cpp:1113
 msgid "matroska_reader: no EBML head found.\n"
 msgstr "matroska_reader : aucun en-tête EBML trouvé.\n"
 
-#: src/input/r_matroska.cpp:583
+#: src/input/r_matroska.cpp:592
 #, boost-format
 msgid "matroska_reader: unknown demuxer type for track %1%: '%2%'\n"
 msgstr "matroska_reader : type de démultiplexeur inconnu pour la piste %1% : '%2%'.\n"
@@ -8942,7 +8953,7 @@ msgstr "mkvmerge a terminé et a renvoyé le code %d. %s"
 msgid "mkvmerge has finished"
 msgstr "mkvmerge terminé"
 
-#: src/input/r_ogm.cpp:493
+#: src/input/r_ogm.cpp:515
 msgid "mkvmerge has not been compiled with FLAC support but handling of this stream has been requested.\n"
 msgstr "mkvmerge n'a pas été compilé avec la prise en charge de FLAC mais la gestion de ce flux a été demandée.\n"
 
@@ -9062,12 +9073,12 @@ msgstr "sans"
 msgid "normal"
 msgstr "normale"
 
-#: src/input/r_ogm.cpp:465
+#: src/input/r_ogm.cpp:484
 #, boost-format
 msgid "ogg_stream_init for stream number %1% failed. Will try to continue and ignore this stream.\n"
 msgstr "ogg_stream_init pour le flux numéro %1% a échoué. On va essayer de continuer en ignorant ce flux.\n"
 
-#: src/input/r_ogm.cpp:377
+#: src/input/r_ogm.cpp:396
 msgid "ogg_sync_buffer failed\n"
 msgstr "ogg_sync_buffer a échoué.\n"
 
@@ -9127,12 +9138,12 @@ msgstr "hauteur (pixels) : %1%"
 msgid "pixel width: %1%"
 msgstr "largeur (pixels) : %1%"
 
-#: src/merge/pr_generic.cpp:871
+#: src/merge/pr_generic.cpp:872
 #, boost-format
 msgid "pr_generic.cpp/generic_packetizer_c::add_packet(): timecode < last_timecode (%1% < %2%). %3%\n"
 msgstr "pr_generic.cpp/generic_packetizer_c::add_packet() : timecode < last_timecode (%1% < %2%). %3%\n"
 
-#: src/merge/pr_generic.cpp:1209
+#: src/merge/pr_generic.cpp:1223
 #, boost-format
 msgid "pr_generic.cpp/generic_reader_c::demuxing_requested(): Invalid track type %1%."
 msgstr "pr_generic.cpp/generic_reader_c::demuxing_requested() : type de piste %1% incorrect."
@@ -9232,7 +9243,7 @@ msgstr "ssa_reader : format incorrect, ligne \"Format\" introuvable dans le sect
 msgid "start >= m->ListSize(). This should not have happened. Please file a bug report. Thanks."
 msgstr "start >= m->ListSize(). Cela n'aurait pas dû se produire. Rédigez un rapport de bogue. Merci."
 
-#: src/input/r_matroska.cpp:98
+#: src/input/r_matroska.cpp:99
 msgid "subtitle"
 msgstr "sous-titre"
 
@@ -9279,8 +9290,8 @@ msgstr "und (indéterminée)"
 #: src/info/mkvinfo.cpp:745
 #: src/info/mkvinfo.cpp:755
 #: src/info/mkvinfo.cpp:933
-#: src/input/r_matroska.cpp:94
-#: src/input/r_matroska.cpp:2208
+#: src/input/r_matroska.cpp:95
+#: src/input/r_matroska.cpp:2227
 #: src/input/r_mpeg_ps.cpp:1326
 #: src/mmg/header_editor/value_page.cpp:150
 #: src/mmg/mmg.cpp:64
@@ -9288,7 +9299,7 @@ msgstr "und (indéterminée)"
 msgid "unknown"
 msgstr "inconnu"
 
-#: src/input/r_matroska.cpp:2201
+#: src/input/r_matroska.cpp:2220
 #, boost-format
 msgid "unknown, format tag 0x%|1$04x|"
 msgstr "inconnu, étiquette de format 0x%|1$04x|"
@@ -9307,7 +9318,7 @@ msgid "verify failed: chapters->CheckMandatory() is false. This should not have 
 msgstr "échec de vérification : chapters->CheckMandatory() est faux. Cela n'aurait pas dû se produire. Rédigez un rapport de bogue.\n"
 
 #: src/info/mkvinfo.cpp:930
-#: src/input/r_matroska.cpp:97
+#: src/input/r_matroska.cpp:98
 #: src/mmg/mmg.cpp:62
 msgid "video"
 msgstr "vidéo"
@@ -9857,6 +9868,12 @@ msgstr "oui"
 
 #~ msgid "matroska_reader: Failed to read the headers."
 #~ msgstr "matroska_reader : échec de lecture des en-têtes."
+
+#~ msgid "matroska_reader: The CodecID for track %1% is 'A_VORBIS', but there are no header packets present.\n"
+#~ msgstr "matroska_reader : l'identifiant de codec de la piste %1% est 'A_VORBIS' mais il n'y a aucun paquet d'en-tête présent.\n"
+
+#~ msgid "matroska_reader: Vorbis track does not contain valid headers.\n"
+#~ msgstr "matroska_reader : la piste Vorbis ne contient pas des en-têtes corrects.\n"
 
 #~ msgid "matroska_reader: |  + There's more than one track with the UID %1%.\n"
 #~ msgstr "matroska_reader : |  + plus d'une piste avec l'UID %1%.\n"
