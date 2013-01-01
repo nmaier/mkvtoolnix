@@ -2108,7 +2108,7 @@ msgstr "%1% iz için başka bir varsayılan iz zaten ayarlandı. İz %2% / '%3%'
 msgid "Another muxing job in still in progress. Please wait until it has finished or abort it manually before starting a new one."
 msgstr "Başka bir çoklama işi hala sürüyor. Lütfen bitene kadar bekleyin ya da yeni bir tane başlamadan önce elle durdurun."
 
-#: src/mmg/tabs/input.cpp:1308
+#: src/mmg/tabs/input.cpp:1303
 #, c-format, boost-format
 msgid "Appending a track from a file to another track from the same file is not allowed. This is the case for tracks number %u and %u."
 msgstr "Dosyadan bir izi aynı dosyadan başka bir ize eklemeye izin verilmez. İz numaraları %u ve %u için durum böyledir."
@@ -2535,7 +2535,7 @@ msgid "Charset:"
 msgstr "Karakter grubu:"
 
 #: src/mmg/mmg_dialog.cpp:310
-#: src/mmg/options/mmg.cpp:106
+#: src/mmg/options/mmg.cpp:102
 msgid "Check online for the latest release"
 msgstr "En son yayımı çevrimiçi kontrol et"
 
@@ -2544,11 +2544,11 @@ msgstr "En son yayımı çevrimiçi kontrol et"
 msgid "Check online for the latest release."
 msgstr "En son yayımı çevrimiçi kontrol et."
 
-#: src/mmg/options/mmg.cpp:107
+#: src/mmg/options/mmg.cpp:103
 msgid "Check online whether or not a new release of MKVToolNix is available on the home page. Will only check when mmg starts and at most once a day. No information is transmitted to the server."
 msgstr "Ana sayfada MKVToolNix'in yeni bir yayımının mevcut olup olmadığını çevrimiçi kontrol eder. Sadece mmg başlatıldığında ve günde en çok bir defa kontrol eder. Sunucuya bilgi aktarılmaz."
 
-#: src/mmg/mmg_dialog.cpp:1752
+#: src/mmg/mmg_dialog.cpp:1750
 msgid "Checking for updates online; please wait"
 msgstr "Güncellemeler çevrimiçi kontrol ediliyor; lütfen bekleyin"
 
@@ -2603,7 +2603,7 @@ msgstr "mkvmerge GKA yardım dosyalarının yerini seçin"
 msgid "Choose the mkvmerge executable"
 msgstr "mkvmerge çalıştırılabilir dosyasını seçin"
 
-#: src/mmg/options/mmg.cpp:265
+#: src/mmg/options/mmg.cpp:257
 msgid "Choose the output directory"
 msgstr "Çıktı dizinini seçin"
 
@@ -2731,7 +2731,7 @@ msgstr "Komut satırı seçenekleri:"
 msgid "Command line saved."
 msgstr "Komut satırı kaydedildi."
 
-#: src/mmg/tabs/input.cpp:567
+#: src/mmg/tabs/input.cpp:562
 msgid "Command line used:"
 msgstr "Komut satırı kullanımı:"
 
@@ -2791,7 +2791,7 @@ msgstr "CoreAudio"
 
 #: src/mmg/jobs.cpp:177
 #: src/mmg/mux_dialog.cpp:116
-#: src/mmg/tabs/input.cpp:507
+#: src/mmg/tabs/input.cpp:502
 #, c-format, boost-format
 msgid "Could not create a temporary file for mkvmerge's command line option called '%s' (error code %d, %s)."
 msgstr "mkvmerge'ün komut satırı '%s' için geçici dosya oluşturulamadı (hata kodu %d, %s)."
@@ -3059,7 +3059,7 @@ msgstr "&Sil"
 msgid "DTS"
 msgstr "DTS"
 
-#: src/output/p_dts.cpp:71
+#: src/output/p_dts.cpp:70
 msgid "DTS header information changed! - New format:\n"
 msgstr "DTS başlığı bilgisi değişti! - Yeni biçim:\n"
 
@@ -3181,10 +3181,6 @@ msgstr "Dizin"
 #: src/mmg/tabs/additional_parts_dlg.cpp:54
 msgid "Directory:"
 msgstr "Dizin:"
-
-#: src/mmg/options/mmg.cpp:101
-msgid "Disable header removal compression for audio and video tracks by default"
-msgstr "Varsayılan olarak ses ve görüntü izleri için başlık kaldırılma sıkıştırmasını etkisizleştir"
 
 #: src/mmg/jobs.cpp:487
 msgid "Disable the selected job(s) and sets their status to 'done'"
@@ -3532,8 +3528,8 @@ msgstr "Veriyi başlık olarak CodecPrivate dahil ham bir dosyaya çıkart."
 msgid "Extract the data to a raw file."
 msgstr "Veriyi ham dosyaya çıkart."
 
-#: src/output/p_avc.cpp:139
-#: src/output/p_mpeg4_p10.cpp:68
+#: src/output/p_avc.cpp:136
+#: src/output/p_mpeg4_p10.cpp:65
 #, boost-format
 msgid "Extracted the aspect ratio information from the MPEG-4 layer 10 (AVC) video data and set the display dimensions to %1%/%2%.\n"
 msgstr ""
@@ -3634,7 +3630,7 @@ msgstr ""
 
 #: src/mmg/mmg_dialog.cpp:786
 #: src/mmg/mux_dialog.cpp:117
-#: src/mmg/tabs/input.cpp:508
+#: src/mmg/tabs/input.cpp:503
 msgid "File creation failed"
 msgstr "Dosya oluşturma başarısız oldu"
 
@@ -3648,22 +3644,22 @@ msgstr "Dosya verisi, boyutu: %1%"
 msgid "File description: %1%"
 msgstr "Dosya tanımlaması: %1%"
 
-#: src/mmg/tabs/input.cpp:560
-#: src/mmg/tabs/input.cpp:575
+#: src/mmg/tabs/input.cpp:555
+#: src/mmg/tabs/input.cpp:570
 msgid "File identification failed"
 msgstr "Dosya tanımlama başarısız oldu"
 
-#: src/mmg/tabs/input.cpp:555
+#: src/mmg/tabs/input.cpp:550
 #, c-format, boost-format
 msgid "File identification failed for '%s'. Return code: %d"
 msgstr "'%s' için dosya tanımlama başarısız oldu. Dönüş kodu: %d"
 
-#: src/mmg/tabs/input.cpp:558
+#: src/mmg/tabs/input.cpp:553
 #, c-format, boost-format
 msgid "File identification failed. Return code: %d. Errno: %d (%s). Make sure that you've selected a mkvmerge executable in the settings dialog."
 msgstr "Dosya tanımlama başarısız oldu. Dönüş kodu: %d. Hata no: %d (%s). Ayarlar iletisinden çalıştırılabilir mkvmerge'ü seçtiğinizden emin olun."
 
-#: src/mmg/tabs/input.cpp:704
+#: src/mmg/tabs/input.cpp:699
 msgid "File is already processed"
 msgstr "Dosya zaten işleniyor"
 
@@ -3685,7 +3681,7 @@ msgstr "Dosya adı: %1%"
 msgid "File parsing failed"
 msgstr "Dosya ayrıştırma başarısız oldu"
 
-#: src/mmg/tabs/input.cpp:763
+#: src/mmg/tabs/input.cpp:758
 msgid "File removal not possible"
 msgstr "Dosya kaldırma mümkün değil"
 
@@ -3996,10 +3992,6 @@ msgstr "Eğer işaretlenmişse mmg onaylama için mevcut dosyaların üzerine ya
 msgid "If checked mmg will automatically set the output filename if it hasn't been set already. This happens when you add the first file. If unset mmg will not touch the output filename."
 msgstr "Eğer işaretlenmişse mmg çıktı dosya adını, ayarlanmadıysa bile otomatik olarak ayarlayacak. İlk dosyayı eklediğinizde bu olur. Eğer ayarlanmazsa mmg çıktı dosya adına dokunmayacak."
 
-#: src/mmg/options/mmg.cpp:102
-msgid "If checked mmg will set the 'compression' drop down box to 'none' for all audio and video tracks by default. The user can still change the compression setting afterwards."
-msgstr "Eğer işaretlenmişse mmg varsayılan olarak tüm ses ve görüntü izleri için 'sıkıştırma' aşağı açılır menü kutusunu 'yok' olarak ayarlayacak. Kullanıcı sonradan hala sıkıştırma ayarını değiştirebilir."
-
 #: src/mmg/options/mmg.cpp:96
 msgid "If checked mmg will warn if it thinks that you're using it incorrectly. Such warnings are shown at least once even if you turn this feature off."
 msgstr "Eğer işaretlenmişse mmg yanlış olarak kullandığınızı düşünürse uyaracak. Böyle uyarılar eğer bu özelliği kapatsanız bile en az bir defa gösterilir."
@@ -4031,11 +4023,11 @@ msgstr "%1% dosyasından içe aktarılmış yazı tipi"
 msgid "Imported picture from %1%"
 msgstr "%1% dosyasından içe aktarılmış resim"
 
-#: src/mmg/mmg_dialog.cpp:1897
+#: src/mmg/mmg_dialog.cpp:1895
 msgid "Incompatible mkvmerge version"
 msgstr "Uyumsuz mkvmerge sürümü"
 
-#: src/mmg/tabs/input.cpp:972
+#: src/mmg/tabs/input.cpp:967
 msgid "Incompatible track"
 msgstr "Uyumsuz iz"
 
@@ -4070,7 +4062,7 @@ msgstr "Girdi dosyaları:"
 msgid "Input too long: %1% > %2%"
 msgstr "Girdi çok uzun: %1% > %2%"
 
-#: src/mmg/options/mmg.cpp:117
+#: src/mmg/options/mmg.cpp:113
 msgid "Interface language:"
 msgstr "Arabirim dili:"
 
@@ -5072,7 +5064,7 @@ msgstr ""
 msgid "No track with the ID %1% was found in the source file.\n"
 msgstr "Kaynak dosyada ID %1% ile bulunan iz yok.\n"
 
-#: src/mmg/tabs/input.cpp:721
+#: src/mmg/tabs/input.cpp:716
 msgid "No tracks found"
 msgstr "Bulunan iz yok"
 
@@ -5282,7 +5274,7 @@ msgstr "Seçili işlerin çıktısı:"
 msgid "Output sampling frequency: %1%"
 msgstr "Çıktı örnekleme sıklığı: %1%"
 
-#: src/mmg/tabs/input.cpp:571
+#: src/mmg/tabs/input.cpp:566
 msgid "Output:"
 msgstr "Çıktı:"
 
@@ -5467,7 +5459,7 @@ msgstr "İlerleme: 100%%%1%"
 msgid "Progress: [%1%%2%] %3%%%"
 msgstr "İlerleme: [%1%%2%] %3%%%"
 
-#: src/mmg/mmg_dialog.cpp:1840
+#: src/mmg/mmg_dialog.cpp:1838
 msgid "Querying mkvmerge's capabilities"
 msgstr "mkvmerge'ün yetenekleri sorgulanıyor"
 
@@ -6122,7 +6114,7 @@ msgstr "Her bir karenin tüm baytlarını onaltılık döküm olarak göster."
 msgid "Show element si&zes\tCtrl-Z"
 msgstr "&Unsur boyutlarını göster\tCtrl-Z"
 
-#: src/mmg/options/mmg.cpp:112
+#: src/mmg/options/mmg.cpp:108
 msgid "Show mmg's debug window"
 msgstr "mmg'nin hata ayıklama penceresini göster"
 
@@ -6162,7 +6154,7 @@ msgstr "Bu yardımı göster."
 msgid "Show version information."
 msgstr "Sürüm bilgisini göster."
 
-#: src/mmg/options/mmg.cpp:113
+#: src/mmg/options/mmg.cpp:109
 msgid "Shows mmg's debug window in which debug messages will appear. This is only useful if you're helping the author debug a problem in mmg."
 msgstr "Hata ayıklama iletilerinin gözükeceği mmg'nin hata ayıklama penceresini göster. Bu sadece mmg içindeki sorunun hatasını ayıklayıp hazırlayana yardım ederseniz faydalıdır."
 
@@ -6227,7 +6219,7 @@ msgstr "Boyut:"
 msgid "Skipping %1% bytes (no valid AAC header found). This might cause audio/video desynchronisation.\n"
 msgstr "%1% bayt atlanıyor (bulunan geçerli AAC başlığı yok). Bu, ses/görüntü eşitliliği bozukluğuna neden olabilir.\n"
 
-#: src/output/p_dts.cpp:87
+#: src/output/p_dts.cpp:86
 #, boost-format
 msgid "Skipping %1% bytes (no valid DTS header found). This might cause audio/video desynchronisation.\n"
 msgstr "%1% bayt atlanıyor (bulunan geçerli DTS başlığı yok). Bu, ses/görüntü eşitliliği bozukluğuna neden olabilir.\n"
@@ -6517,7 +6509,7 @@ msgstr "FLAC başlıkları ayrıştırılamadı: akış bilgisi yapısı bulunma
 msgid "The FPS is 0.0 but the reader did not provide a timecode for a packet. %1%\n"
 msgstr "FPS 0.0'dır ama okuyucu paket için bir zaman kodu vermedi. %1%\n"
 
-#: src/mmg/tabs/input.cpp:1369
+#: src/mmg/tabs/input.cpp:1364
 #, c-format, boost-format
 msgid "The FPS setting for track nr. %s in file '%s' is invalid."
 msgstr "İz numarası %s için '%s' dosyası içindeki FPS geçersiz."
@@ -6527,12 +6519,12 @@ msgstr "İz numarası %s için '%s' dosyası içindeki FPS geçersiz."
 msgid "The FourCC must be exactly four characters long in '%1% %2%'.\n"
 msgstr "'%1% %2%' içindeki FourCC tam olarak dört karakter uzunluğunda olmak zorundadır.\n"
 
-#: src/mmg/tabs/input.cpp:1357
+#: src/mmg/tabs/input.cpp:1352
 #, c-format, boost-format
 msgid "The FourCC setting for track nr. %s in file '%s' is not exactly four characters long."
 msgstr "İz numarası %s için FourCC ayarı, '%s' dosyasında tam olarak dört karakter uzunluğunda değil."
 
-#: src/mmg/mmg_dialog.cpp:1893
+#: src/mmg/mmg_dialog.cpp:1891
 #, boost-format
 msgid "The GUI is configured to use the mkvmerge executable from a different version (%1%) than the GUI itself (%2%). This is not supported but will not be prevented either. You should change the mkvmerge executable in the preferences dialog."
 msgstr "GKA, mkvmerge çalıştırılabilir dosyasını GKA'nün kendinden (%2%) farklı bir sürümünden (%1%) kullanmak için yapılandırılır. Bu desteklenmez ama önlenmeyecektir de. Tercihler iletisindeki mkvmerge çalıştırılabilir dosyasını değiştirmelisiniz."
@@ -6651,7 +6643,7 @@ msgstr ""
 msgid "The argument to '--timecode-scale' must be a number.\n"
 msgstr "'--timecode-scale' için bağımsız değişken bir sayı olmak zorundadır.\n"
 
-#: src/mmg/tabs/input.cpp:1411
+#: src/mmg/tabs/input.cpp:1406
 #, c-format, boost-format
 msgid "The aspect ratio setting for track nr. %s in file '%s' is invalid."
 msgstr "İz numarası %s için en-boy oranı ayarı, '%s' dosyasında geçersiz."
@@ -6689,7 +6681,7 @@ msgid ""
 "Note: This warning can be deactivated in the 'options' dialog. Turn off the 'Warn about usage...' option."
 msgstr ""
 
-#: src/output/p_mpeg4_p10.cpp:156
+#: src/output/p_mpeg4_p10.cpp:153
 #, boost-format
 msgid "The chosen NALU size length of %1% is too small. Try using '4'.\n"
 msgstr "Seçilen %1% NALU boyutu uzunluğu çok küçük. '4'ü deneyin.\n"
@@ -6709,7 +6701,7 @@ msgstr "Kodek türü '%1%', WebM uyum dosyasında kullanılamıyor.\n"
 msgid "The codec's private data does not match (lengths: %1% and %2%)."
 msgstr "Kodek'in özel verisi eşleşmiyor (uzunlukları: %1% ve %2%)."
 
-#: src/output/p_mpeg4_p10.cpp:103
+#: src/output/p_mpeg4_p10.cpp:100
 #, boost-format
 msgid "The codec's private data does not match. Both have the same length (%1%) but different content."
 msgstr "Kodek'in özel verisi eşleşmiyor. Her ikiside aynı uzunluğa sahip (%1%) ama içerik farklı."
@@ -6727,7 +6719,7 @@ msgstr "'%s' ülkesi geçerli bir ccTLD değil ve seçilemiyor."
 msgid "The cue entries (the index) are being written...\n"
 msgstr "Cue girdileri (indeks) yazılıyor...\n"
 
-#: src/mmg/tabs/input.cpp:759
+#: src/mmg/tabs/input.cpp:754
 #, c-format, boost-format
 msgid "The current file (number %d) cannot be removed. There are other files -- at least file number %d -- whose tracks are supposed to be appended to tracks from this file. Please remove those files first."
 msgstr ""
@@ -6742,7 +6734,7 @@ msgstr ""
 msgid "The default language code '%1%' is not a valid ISO639-2 language code and will be ignored.\n"
 msgstr "Varsayılan dil kodu '%1%' geçerli bir ISO639-2 dil kodu değil ve yoksayılacak.\n"
 
-#: src/mmg/tabs/input.cpp:1336
+#: src/mmg/tabs/input.cpp:1331
 #, c-format, boost-format
 msgid "The delay setting for track nr. %s in file '%s' is invalid."
 msgstr "İz numarası %s için '%s' dosyası içindeki gecikme ayarı geçersiz."
@@ -6866,7 +6858,7 @@ msgstr "'%1%' dosyası desteklenmeyen bir dosya türü (%2%).\n"
 msgid "The file '%s' does not exist."
 msgstr "Dosya '%s' mevcut değil."
 
-#: src/mmg/tabs/input.cpp:702
+#: src/mmg/tabs/input.cpp:697
 #, c-format, boost-format
 msgid "The file '%s' is already processed in combination with the file '%s'. It cannot be added a second time."
 msgstr "Dosya '%s' zaten '%s' dosyasının birleştirilmesiyle işleniyor. İkinci bir kez eklenemez."
@@ -6912,7 +6904,7 @@ msgstr "Dosya başlığı doğru olarak okunmadı.\n"
 msgid "The file headers could not be parsed, e.g. because they're incomplete, invalid or damaged."
 msgstr "Dosya başlığı ayrıştırılamadı, örn. çünkü tamamlanmadı, geçersiz ya da hasarlı."
 
-#: src/mmg/tabs/input.cpp:540
+#: src/mmg/tabs/input.cpp:535
 #, c-format, boost-format
 msgid "The file is an unsupported container format (%s)."
 msgstr "Dosya desteklenmeyen kalıp biçimidir (%s)."
@@ -7023,12 +7015,12 @@ msgstr ""
 msgid "The height of the two tracks is different: %1% and %2%"
 msgstr "İki izin yükseklikleri farklı: %1% ve %2%"
 
-#: src/mmg/tabs/input.cpp:721
+#: src/mmg/tabs/input.cpp:716
 #, c-format, boost-format
 msgid "The input file '%s' does not contain any tracks."
 msgstr "Girdi dosyası '%s' hiç iz içermiyor."
 
-#: src/mmg/tabs/input.cpp:1253
+#: src/mmg/tabs/input.cpp:1248
 msgid ""
 "The job file could not have been parsed correctly.\n"
 "Either it is invalid / damaged, or you've just found\n"
@@ -7044,7 +7036,7 @@ msgstr ""
 "\n"
 "(Sorun tab_input::load(), #1 içinde meydana geldi)"
 
-#: src/mmg/tabs/input.cpp:1260
+#: src/mmg/tabs/input.cpp:1255
 msgid ""
 "The job file could not have been parsed correctly.\n"
 "Either it is invalid / damaged, or you've just found\n"
@@ -7060,7 +7052,7 @@ msgstr ""
 "\n"
 "(Sorun tab_input::load(), #2 içinde meydana geldi)"
 
-#: src/mmg/tabs/input.cpp:1273
+#: src/mmg/tabs/input.cpp:1268
 msgid ""
 "The job file could not have been parsed correctly.\n"
 "Either it is invalid / damaged, or you've just found\n"
@@ -7309,7 +7301,7 @@ msgstr "'%1%' ekinin boyutu 0.\n"
 msgid "The source file '%1%' could not be opened successfully, or retrieving its size by seeking to the end did not work.\n"
 msgstr ""
 
-#: src/mmg/tabs/input.cpp:1347
+#: src/mmg/tabs/input.cpp:1342
 #, c-format, boost-format
 msgid "The stretch setting for track nr. %s in file '%s' is invalid."
 msgstr "İz numarası %s için '%s' dosyası içindeki gerginlik ayarı geçersiz."
@@ -7470,7 +7462,7 @@ msgstr "İki izin genişlikleri farklı: %1% ve %2%"
 msgid "Theora"
 msgstr "Theora"
 
-#: src/mmg/mmg_dialog.cpp:1785
+#: src/mmg/mmg_dialog.cpp:1783
 msgid "There is a new version available online."
 msgstr "Çevrimiçi yeni sürüm mevcut."
 
@@ -7485,7 +7477,7 @@ msgstr ""
 msgid "There is no translation available for '%1%'.\n"
 msgstr "'%1%' için mevcut çeviri yok.\n"
 
-#: src/mmg/mmg_dialog.cpp:1786
+#: src/mmg/mmg_dialog.cpp:1784
 msgid "There was an error querying the update status."
 msgstr "Güncelleme durumunu sorgularken hata oldu."
 
@@ -7511,32 +7503,32 @@ msgstr "Uyarılar vardı ya da işlem sonlandırıldı."
 msgid "This AAC track does not contain valid headers. Could not parse the AAC information.\n"
 msgstr "Bu AAC izi geçerli başlıkları içermiyor. AAC bilgisi ayrıştırılamadı.\n"
 
-#: src/output/p_ac3.cpp:62
+#: src/output/p_ac3.cpp:61
 #, boost-format
 msgid "This AC3 track contains %1% bytes of non-AC3 data at the beginning. This corresponds to a delay of %2%ms. This delay will be used instead of the non-AC3 data.\n"
 msgstr ""
 
-#: src/output/p_ac3.cpp:74
+#: src/output/p_ac3.cpp:73
 #, boost-format
 msgid "This AC3 track contains %1% bytes of non-AC3 data which were skipped. The audio/video synchronization may have been lost.\n"
 msgstr ""
 
-#: src/output/p_avc.cpp:99
+#: src/output/p_avc.cpp:96
 #, boost-format
 msgid "This AVC/h.264 contains frames that are too big for the current maximum NALU size. You have to re-run mkvmerge and set the maximum NALU size to %1% for this track (command line parameter '--nalu-size-length %2%:%1%').\n"
 msgstr ""
 
-#: src/output/p_avc.cpp:117
+#: src/output/p_avc.cpp:114
 #, boost-format
 msgid "This AVC/h.264 track does not start with a key frame. The first %1% frames have been skipped.\n"
 msgstr ""
 
-#: src/output/p_mp3.cpp:59
+#: src/output/p_mp3.cpp:58
 #, boost-format
 msgid "This MPEG audio track contains %1% bytes of non-MP3 data at the beginning. This corresponds to a delay of %2%ms. This delay will be used instead of the garbage data.\n"
 msgstr ""
 
-#: src/output/p_mp3.cpp:68
+#: src/output/p_mp3.cpp:67
 #, boost-format
 msgid "This MPEG audio track contains %1% bytes of non-MP3 data which were skipped. The audio/video synchronization may have been lost.\n"
 msgstr ""
@@ -7635,7 +7627,7 @@ msgstr ""
 msgid "This track contains SBR AAC/HE-AAC/AAC+ data. Only needed for AAC input files, because SBR AAC cannot be detected automatically for these files. Not needed for AAC tracks read from MP4 or Matroska files."
 msgstr "Bu iz SBR AAC/HE-AAC/AAC+ verisi içeriyor. Sadece AAC girdi dosyalarına ihtiyaç vardır, çünkü bu dosyalar için SBR AAC otomatik olarak algılanamıyor. MP4 veya Matroska dosyalarından okunan AAC izleri için ihtiyaç yoktur."
 
-#: src/mmg/tabs/input.cpp:972
+#: src/mmg/tabs/input.cpp:967
 msgid "This track is not compatible with the WebM mode and cannot be enabled."
 msgstr "Bu iz WebM kipi ile uyumlu değil ve etkinleştirilemiyor."
 
@@ -7971,7 +7963,7 @@ msgstr ""
 msgid "Unsupported MPEG mpeg_version: 0x%|1$02x| in packet %2% for timecode %3%, assuming MPEG2. No further warnings will be printed for this track.\n"
 msgstr ""
 
-#: src/mmg/tabs/input.cpp:543
+#: src/mmg/tabs/input.cpp:538
 msgid "Unsupported format"
 msgstr "Desteklenmeyen biçim"
 
@@ -8283,7 +8275,7 @@ msgstr "Yanlış tanımlama dizgisi: '%|1$6s|' != 'theora'"
 msgid "Wrong identification string: '%|1$7s|' != 'kate\\0\\0\\0'"
 msgstr "Yanlış tanımlama dizgisi: '%|1$7s|' != 'kate\\0\\0\\0'"
 
-#: src/mmg/mmg_dialog.cpp:1784
+#: src/mmg/mmg_dialog.cpp:1782
 msgid "You are already running the latest version."
 msgstr "Zaten en son sürümü çalıştırmaktasınız."
 
@@ -8324,7 +8316,7 @@ msgstr "[iz %2% için %1% kare, zaman kodu %3%]"
 msgid "aborted"
 msgstr "durduruldu"
 
-#: src/output/p_ac3.cpp:211
+#: src/output/p_ac3.cpp:210
 msgid "ac3_bs_packetizer::add_to_buffer(): Untested code ('size' is odd). If mkvmerge crashes or if the resulting file does not contain the complete and correct audio track, then please contact the author Moritz Bunkus at moritz@bunkus.org.\n"
 msgstr ""
 
@@ -8871,12 +8863,12 @@ msgstr "mkvmerge GKA hazır"
 msgid "mkvmerge GUI settings (*.mmg)|*.mmg|%s"
 msgstr "mkvmerge GKA ayarları (*.mmg)|*.mmg|%s"
 
-#: src/mmg/tabs/input.cpp:1311
-#: src/mmg/tabs/input.cpp:1337
-#: src/mmg/tabs/input.cpp:1348
-#: src/mmg/tabs/input.cpp:1358
-#: src/mmg/tabs/input.cpp:1370
-#: src/mmg/tabs/input.cpp:1412
+#: src/mmg/tabs/input.cpp:1306
+#: src/mmg/tabs/input.cpp:1332
+#: src/mmg/tabs/input.cpp:1343
+#: src/mmg/tabs/input.cpp:1353
+#: src/mmg/tabs/input.cpp:1365
+#: src/mmg/tabs/input.cpp:1407
 msgid "mkvmerge GUI: error"
 msgstr "mkvmerge GKA: hata"
 
@@ -8893,7 +8885,7 @@ msgstr "mkvmerge harici metin dosyalarını okuyabilir ve zaman kodlarını kull
 msgid "mkvmerge does not distinguish between those two and simply counts the number of blocks."
 msgstr "mkvmerge bu ikisi ve blokların sayısını basit sayımları arasında ayırım yapmaz."
 
-#: src/output/p_avc.cpp:106
+#: src/output/p_avc.cpp:103
 #, boost-format
 msgid ""
 "mkvmerge encountered broken or unparsable data in this AVC/h.264 video track. Either your file is damaged (which mkvmerge cannot cope with yet) or this is a bug in mkvmerge itself. The error message was:\n"
@@ -8964,7 +8956,7 @@ msgstr "mkvpropedit [seçenekler] <dosya> <eylemler>"
 msgid "mm_text_io_c: UTF32_* is not supported at the moment.\n"
 msgstr "mm_text_io_c: UTF32_* şimdilik desteklenmiyor.\n"
 
-#: src/mmg/options/mmg.cpp:340
+#: src/mmg/options/mmg.cpp:331
 msgid "mmg"
 msgstr "mmg"
 
@@ -8972,7 +8964,7 @@ msgstr "mmg"
 msgid "mmg debug output"
 msgstr "mmg hata ayıklama çıktısı"
 
-#: src/mmg/options/mmg.cpp:182
+#: src/mmg/options/mmg.cpp:177
 msgid "mmg options"
 msgstr "mmg seçenekleri"
 
@@ -9252,7 +9244,7 @@ msgstr "und (Belirsiz)"
 #: src/input/r_mpeg_ps.cpp:1326
 #: src/mmg/header_editor/value_page.cpp:150
 #: src/mmg/mmg.cpp:64
-#: src/mmg/tabs/input.cpp:533
+#: src/mmg/tabs/input.cpp:528
 msgid "unknown"
 msgstr "bilinmiyor"
 
@@ -9372,11 +9364,17 @@ msgstr "evet"
 #~ msgid "Data is not allowed inside <%1%>."
 #~ msgstr "Tarihe <%1%> içerisinde izin verilmiyor."
 
+#~ msgid "Disable header removal compression for audio and video tracks by default"
+#~ msgstr "Varsayılan olarak ses ve görüntü izleri için başlık kaldırılma sıkıştırmasını etkisizleştir"
+
 #~ msgid "Enable splitting..."
 #~ msgstr "Bölme etkin..."
 
 #~ msgid "Failed to parse an USF subtitle entry for track %1%: %2%\n"
 #~ msgstr "%1% izi için USF altyazısı girişini ayrıştırma başarısız oldu: %2%\n"
+
+#~ msgid "If checked mmg will set the 'compression' drop down box to 'none' for all audio and video tracks by default. The user can still change the compression setting afterwards."
+#~ msgstr "Eğer işaretlenmişse mmg varsayılan olarak tüm ses ve görüntü izleri için 'sıkıştırma' aşağı açılır menü kutusunu 'yok' olarak ayarlayacak. Kullanıcı sonradan hala sıkıştırma ayarını değiştirebilir."
 
 #~ msgid "Invalid binary data format '%1%' specified. Supported are 'Base64', 'ASCII' and 'hex'."
 #~ msgstr "Geçersiz binari veri biçimi '%1%' belirlendi. Desteklenenler 'Base64', 'ASCII' ve 'hex'."

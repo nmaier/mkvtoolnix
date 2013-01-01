@@ -1590,7 +1590,6 @@ mmg_dialog::save_preferences() {
   cfg->Write(wxU("warn_usage"),                      options.warn_usage);
   cfg->Write(wxU("gui_debugging"),                   options.gui_debugging);
   cfg->Write(wxU("set_delay_from_filename"),         options.set_delay_from_filename);
-  cfg->Write(wxU("disable_a_v_compression"),         options.disable_a_v_compression);
   cfg->Write(wxU("check_for_updates"),               options.check_for_updates);
   cfg->Write(wxU("popular_languages"),               join(wxU(" "), options.popular_languages));
 
@@ -1630,7 +1629,6 @@ mmg_dialog::load_preferences() {
   cfg->Read(wxU("warn_usage"),                    &options.warn_usage, true);
   cfg->Read(wxU("gui_debugging"),                 &options.gui_debugging, false);
   cfg->Read(wxU("set_delay_from_filename"),       &options.set_delay_from_filename, true);
-  cfg->Read(wxU("disable_a_v_compression"),       &options.disable_a_v_compression, false);
   cfg->Read(wxU("check_for_updates"),             &options.check_for_updates, true);
   cfg->Read(wxU("popular_languages"),             &s, wxEmptyString);
 

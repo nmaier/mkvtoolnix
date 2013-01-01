@@ -35,7 +35,6 @@
 #define ID_RB_ODM_FIXED                 15115
 #define ID_COB_UI_LANGUAGE              15116
 #define ID_CB_NEW_AFTER_SUCCESSFUL_MUX  15117
-#define ID_CB_DISABLE_HRC               15118
 #define ID_CB_CHECK_FOR_UPDATES         15119
 #define ID_COB_CLEAR_JOB_AFTER_RUN_MODE 15120
 #define ID_CB_CLEAR_JOB_AFTER_RUN       15121
@@ -51,7 +50,6 @@ public:
   wxCheckBox *cb_filenew_after_successful_mux;
   wxCheckBox *cb_warn_usage, *cb_gui_debugging;
   wxCheckBox *cb_set_delay_from_filename;
-  wxCheckBox *cb_disable_header_removal_compression;
 #if defined(HAVE_CURL_EASY_H)
   wxCheckBox *cb_check_for_updates;
 #endif  // defined(HAVE_CURL_EASY_H)

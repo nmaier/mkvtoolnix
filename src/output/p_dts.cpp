@@ -34,7 +34,6 @@ dts_packetizer_c::dts_packetizer_c(generic_reader_c *p_reader,
   , m_skipping_is_normal(false)
 {
   set_track_type(track_audio);
-  set_default_compression_method(COMPRESSION_DTS);
 }
 
 dts_packetizer_c::~dts_packetizer_c() {

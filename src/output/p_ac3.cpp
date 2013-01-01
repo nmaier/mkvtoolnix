@@ -40,7 +40,6 @@ ac3_packetizer_c::ac3_packetizer_c(generic_reader_c *p_reader,
 
   set_track_type(track_audio);
   set_track_default_duration(m_single_packet_duration);
-  set_default_compression_method(COMPRESSION_AC3);
   enable_avi_audio_sync(true);
 }
 

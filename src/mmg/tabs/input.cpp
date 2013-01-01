@@ -300,11 +300,6 @@ tab_input::parse_track_line(mmg_file_cptr file,
   if (track->is_audio())
     track->delay = delay_from_file_name;
 
-  if (   mdlg->options.disable_a_v_compression
-      && !track->appending
-      && (track->is_video() || track->is_audio()))
-    track->compression = wxU("none");
-
   if (info.IsEmpty())
     return;
 

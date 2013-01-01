@@ -39,9 +39,6 @@ mpeg4_p10_video_packetizer_c(generic_reader_c *p_reader,
 
   if (m_ti.m_private_data && (0 < m_ti.m_private_size))
     set_codec_private(m_ti.m_private_data, m_ti.m_private_size);
-
-  if (4 == m_nalu_size_len_dst)
-    set_default_compression_method(COMPRESSION_MPEG4_P10);
 }
 
 void

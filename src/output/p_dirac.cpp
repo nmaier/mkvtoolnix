@@ -29,7 +29,6 @@ dirac_video_packetizer_c::dirac_video_packetizer_c(generic_reader_c *p_reader, t
 {
   set_track_type(track_video);
   set_codec_id(MKV_V_DIRAC);
-  set_default_compression_method(COMPRESSION_DIRAC);
 
   // Dummy values
   m_seqhdr.pixel_width  = 123;

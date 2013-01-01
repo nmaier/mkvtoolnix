@@ -1,3 +1,10 @@
+2013-01-01  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvmerge, mmg: removal: The 'header removal compression' method
+        is not turned on by default anymore. This affects the following
+        track types: AC3, AVC/h.264, Dirac, DTS, MP3. The setting in mmg
+        that turned it off by default has been removed.
+
 2012-12-31  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvmerge: new feature: Added experimental support for the Opus
