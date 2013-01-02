@@ -423,8 +423,45 @@ tab_chapters::enable_buttons(bool enable) {
   b_add_chapter->Enable(enable);
   b_add_subchapter->Enable(enable);
   b_remove_chapter->Enable(enable);
+  enable_adjustment_buttons(enable && contains_atoms());
+}
+
+void
+tab_chapters::enable_adjustment_buttons(bool enable) {
   b_set_values->Enable(enable);
   b_adjust_timecodes->Enable(enable);
+}
+
+bool
+tab_chapters::contains_atoms()
+  const {
+  auto id = tc_chapters->GetSelection();
+  if (!id.IsOk())
+    return false;
+
+  auto data   = static_cast<chapter_node_data_c *>(tc_chapters->GetItemData(id));
+  auto master = data ? data->get() : m_chapters;
+  if (!master)
+    return false;
+
+  std::function<bool(EbmlMaster *)> check_recursively = [&check_recursively](EbmlMaster *m) -> bool {
+    auto atom = dynamic_cast<KaxChapterAtom *>(m);
+    if (atom)
+      return true;
+
+    for (auto child : *m) {
+      atom = dynamic_cast<KaxChapterAtom *>(child);
+      if (atom)
+        return true;
+      auto master = dynamic_cast<EbmlMaster *>(child);
+      if (master && check_recursively(master))
+        return true;
+    }
+
+    return false;
+  };
+
+  return check_recursively(master);
 }
 
 void
@@ -857,6 +894,8 @@ tab_chapters::on_add_chapter(wxCommandEvent &) {
   }
 
   expand_subtree(*tc_chapters, tc_chapters->GetSelection(), true);
+
+  enable_buttons(true);
 }
 
 void
@@ -888,6 +927,8 @@ tab_chapters::on_add_subchapter(wxCommandEvent &) {
   tc_chapters->AppendItem(id, create_chapter_label(*chapter), -1, -1, new chapter_node_data_c(chapter));
 
   expand_subtree(*tc_chapters, tc_chapters->GetSelection(), true);
+
+  enable_buttons(true);
 }
 
 void

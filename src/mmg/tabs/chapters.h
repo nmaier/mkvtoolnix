@@ -159,6 +159,9 @@ protected:
   void set_flag_enabled_default_texts(wxTreeItemId id);
   bool copy_segment_uid(chapter_node_data_c *data);
   bool copy_segment_edition_uid(chapter_node_data_c *data);
+  void enable_adjustment_buttons(bool enable);
+
+  bool contains_atoms() const;
 
   KaxChapterDisplay * get_selected_chapter_display();
 };
