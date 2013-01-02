@@ -1021,7 +1021,7 @@ tab_chapters::get_selected_chapter_display() {
     return nullptr;
 
   auto data = static_cast<chapter_node_data_c *>(tc_chapters->GetItemData(id));
-  if (!data->is_atom)
+  if (!data || !data->is_atom)
     return nullptr;
 
   size_t nth_chapter_display = 0;
