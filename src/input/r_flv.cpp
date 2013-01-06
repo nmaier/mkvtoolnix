@@ -297,6 +297,11 @@ flv_reader_c::identify() {
 }
 
 void
+flv_reader_c::add_available_track_ids() {
+  add_available_track_id_range(m_tracks.size());
+}
+
+void
 flv_reader_c::create_packetizer(int64_t id) {
   if ((0 > id) || (m_tracks.size() <= static_cast<size_t>(id)) || m_tracks[id]->is_ptzr_set())
     return;
