@@ -114,15 +114,15 @@ zal er voor zorgen dat
 een lijst zal uitvoeren van alle beschikbaren vertalingen\&.
 .RE
 .PP
-\fB\-\-debug\fR \fItopic\fR
+\fB\-\-title\fR \fIonderwerp\fR
 .RS 4
-Turn on debugging for a specific feature\&. This option is only useful for developers\&.
+Zet debuggen aan voor een spcifieke mogelijkheid\&. Dit is alleen zinvol voor ontwikkelaars\&.
 .RE
 .PP
-\fB\-\-engage\fR \fIfeature\fR
+\fB\-\-tags\fR \fIfeature\fR
 .RS 4
-Turn on experimental features\&. A list of available features can be requested with
-\fBmkvinfo \-\-engage list\fR\&. These features are not meant to be used in normal situations\&.
+Zet experimentele mogelijkheden aan\&. Een lijst van beschikbare mogelijkheden kan worden opgevraagd met
+\fBmkvinfo \-\-engage list\fR\&. Deze mogelijkheden zijn niet bedoeld in normale situaties\&.
 .RE
 .PP
 \fB\-v\fR, \fB\-\-verbose\fR
@@ -144,13 +144,14 @@ Toon versie informatie en sluit af\&.
 .PP
 \fB\-\-check\-for\-updates\fR
 .RS 4
-Checks online for new releases by downloading the URL
-\m[blue]\fBhttp://mkvtoolnix\-releases\&.bunkus\&.org/latest\-release\&.xml\fR\m[]\&. Four lines will be output in
+Controleert online op nieuwere versie\*(Aqs via ophalen op adres
+\m[blue]\fBhttp://mkvtoolnix\-releases\&.bunkus\&.org/latest\-release\&.xml\fR\m[]\&. Vier regels worden uitgevoerd in
 key=value
-style: the URL from where the information was retrieved (key
-version_check_url), the currently running version (key
-running_version), the latest release\*(Aqs version (key
-available_version) and the download URL (key
+stijl: het adres van waar de informatie wordt verkregen (key
+version_check_url), de huidig uitgevoerde versie (key
+running_version), laatst uitgebrachte versie (key
+available_version
+en het ophaal adres (key
 download_url)\&.
 .sp
 Nadien sluit het programma af met een afsluitwaarde van 0 als er geen nieuwere versie beschikbaar is, met een 1 als er een nieuwere beschikbaar is en 2 indien er een fout ontstond (b\&.v\&. als de opwaardeer info niet verkregen kon worden)\&.
@@ -269,35 +270,35 @@ breekt direct af na het geven van dit waarschuw bericht\&. Fout! bereik in beric
 .PP
 Er zijn een paar plaatsen waar speciale karakters zouden of moeten worden overgeslagen\&. De regels voor het overslaan zijn simpel: elk karakter dat overgeslagen dient te worden wordt vervangen door een backslash "\e" gevolgd door een ander karakter\&.
 .PP
-The rules are: \*(Aq \*(Aq (a space) becomes \*(Aq\es\*(Aq, \*(Aq"\*(Aq (double quotes) becomes \*(Aq\e2\*(Aq, \*(Aq:\*(Aq becomes \*(Aq\ec\*(Aq, \*(Aq#\*(Aq becomes \*(Aq\eh\*(Aq and \*(Aq\e\*(Aq (a single backslash) itself becomes \*(Aq\e\e\*(Aq\&.
-.SH "ENVIRONMENT VARIABLES"
+De regels zijn: \*(Aq \*(Aq (een spatie) wordt \*(Aq\es\*(Aq, \*(Aq"\*(Aq (dubbele aanhalingstekens) wordt \*(Aq\e2\*(Aq, \*(Aq:\*(Aq wordt \*(Aq\ec\*(Aq, \*(Aq#\*(Aq wordt \*(Aq\eh\*(Aq en \*(Aq\e\*(Aq (een enkele (backslash) zelf wordt \*(Aq\e\e\*(Aq\&.
+.SH "OMGEVINGSVARIABELEN"
 .PP
 
 \fBmkvinfo\fR(1)
-uses the default variables that determine the system\*(Aqs locale (e\&.g\&.
+gebruikt de standaard variabelen vanuit het systeem lokatie (b\&.v\&.
 \fILANG\fR
-and the
+en de
 \fILC_*\fR
-family)\&. Additional variables:
+family)\&. Extra variabelen:
 .PP
-\fIMKVTOOLNIX_DEBUG\fR and its short form \fIMTX_DEBUG\fR
+\fIMKVTOOLNIX_DEBUG\fR en de korte versie \fIMTX_DEBUG\fR
 .RS 4
-The content is treated as if it had been passed via the
+De inhoud wordt behandeld alsof het via de
 \fB\-\-debug\fR
-option\&.
+optie gepasseerd is\&.
 .RE
 .PP
-\fIMKVTOOLNIX_ENGAGE\fR and its short form \fIMTX_ENGAGE\fR
+\fIMKVTOOLNIX_ENGAGE\fR en de korte versie \fIMTX_ENGAGE\fR
 .RS 4
-The content is treated as if it had been passed via the
+De inhoud wordt behandeld alsof het via de
 \fB\-\-engage\fR
-option\&.
+optie gepasseerd is\&.
 .RE
 .PP
-\fIMKVTOOLNIX_OPTIONS\fR and its short form \fIMTX_OPTIONS\fR
+\fIMKVTOOLNIX_OPTIONS\fR en de korte versie \fIMTX_OPTIONS\fR
 .RS 4
-The content is split on white space\&. The resulting partial strings are treated as if it had been passed as command line options\&. If you need to pass special characters (e\&.g\&. spaces) then you have to escape them (see
-the section about escaping special characters in text)\&.
+De inhoud wordt gesplitst op een spatie\&. De gedeeltelijk resulterende reeks wordt behandeld aflsof het gedaan is via de commandoregel\&. Indien het nodig is speciale karakters te gebruiken (b\&.v\&. spaties) dan moet je die "insluiten" (zie
+de sectie over overslaan van speciale tekens in tekst)\&.
 .RE
 .SH "ZIE OOK"
 .PP
