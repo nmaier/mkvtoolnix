@@ -1569,20 +1569,20 @@ msgstr "'Bidea gaituta' ikurra"
 msgid "(Unknown element: %1%; ID: 0x%2% size: %3%)"
 msgstr "(Gai ezezaguna: %1%; ID: 0x%2% neurria: %3%)"
 
-#: src/mmg/tabs/chapters.cpp:434
+#: src/mmg/tabs/chapters.cpp:471
 msgid "(new chapter file)"
 msgstr "(atal agiri berria)"
 
-#: src/mmg/tabs/chapters.cpp:457
+#: src/mmg/tabs/chapters.cpp:494
 msgid "(unnamed chapter)"
 msgstr "(izengabeko atala)"
 
-#: src/mmg/tabs/chapters.cpp:833
-#: src/mmg/tabs/chapters.cpp:880
-#: src/mmg/tabs/chapters.cpp:993
-#: src/mmg/tabs/chapters.cpp:1375
-#: src/mmg/tabs/chapters.cpp:1382
-#: src/mmg/tabs/chapters.cpp:1576
+#: src/mmg/tabs/chapters.cpp:870
+#: src/mmg/tabs/chapters.cpp:919
+#: src/mmg/tabs/chapters.cpp:1034
+#: src/mmg/tabs/chapters.cpp:1416
+#: src/mmg/tabs/chapters.cpp:1423
+#: src/mmg/tabs/chapters.cpp:1617
 msgid "(unnamed)"
 msgstr "(izengabea)"
 
@@ -1978,7 +1978,7 @@ msgstr "Ezaugarri bat gehitzen du balioarekin baita ezaugarri hau jadanik badago
 msgid "Adds the current settings as a new job entry to the job queue"
 msgstr "Oraingo ezarpenak gehitzen ditu lan berri baten sarrera bezala lan lerrora"
 
-#: src/mmg/tabs/chapters.cpp:1181
+#: src/mmg/tabs/chapters.cpp:1222
 msgid "Adjust chapter timecodes"
 msgstr "Zehaztu atal denbora-kodeak"
 
@@ -2003,7 +2003,7 @@ msgstr "Agiri Denak (*)|*"
 msgid "All Files (*.*)|*.*"
 msgstr "Agiri Denak (*.*)|*.*"
 
-#: src/mmg/tabs/chapters.cpp:805
+#: src/mmg/tabs/chapters.cpp:842
 msgid "All chapter entries are valid."
 msgstr "Atal sarrera guztiek balio dute."
 
@@ -2086,7 +2086,7 @@ msgstr ""
 "saihesturiko agirizen bat."
 
 #: src/mmg/header_editor/frame.cpp:678
-#: src/mmg/tabs/chapters.cpp:1662
+#: src/mmg/tabs/chapters.cpp:1703
 #: src/propedit/propedit.cpp:44
 msgid "An unknown error occured. The file has been modified."
 msgstr "Akats ezezagun bat gertatu da. Agiria aldatu egin da."
@@ -2450,7 +2450,7 @@ msgstr "Atal aterapena"
 msgid "Chapter file:"
 msgstr "Atal agiria:"
 
-#: src/mmg/tabs/chapters.cpp:663
+#: src/mmg/tabs/chapters.cpp:700
 #, c-format, boost-format
 msgid "Chapter files (*.xml)|*.xml|%s"
 msgstr "Atal agiriak (*.xml)|*.xml|%s"
@@ -2460,7 +2460,7 @@ msgstr "Atal agiriak (*.xml)|*.xml|%s"
 msgid "Chapter files (*.xml;*.txt;*.cue)|*.xml;*.txt;*.cue|%s"
 msgstr "Atal agiriak (*.xml;*.txt;*.cue)|*.xml;*.txt;*.cue|%s"
 
-#: src/mmg/tabs/chapters.cpp:527
+#: src/mmg/tabs/chapters.cpp:564
 #, c-format, boost-format
 msgid "Chapter files (*.xml;*.txt;*.mka;*.mkv;*.mk3d;*.cue)|*.xml;*.txt;*.mka;*.mkv;*.mk3d;*.cue|%s"
 msgstr "Atal agiriak (*.xml;*.txt;*.mka;*.mkv;*.mk3d;*.cue)|*.xml;*.txt;*.mka;*.mkv;*.mk3d;*.cue|%s"
@@ -2483,16 +2483,16 @@ msgstr "Atal aukerak"
 msgid "Chapter parser: The EditionUID %1% is not unique and could not be reused. A new one will be created.\n"
 msgstr "Atal aztertzailea: %1% UID-Edizioa ez da bakarra eta ezingo da berrerabili. Berri bat sortuko da.\n"
 
-#: src/mmg/tabs/chapters.cpp:729
-#: src/mmg/tabs/chapters.cpp:736
-#: src/mmg/tabs/chapters.cpp:742
-#: src/mmg/tabs/chapters.cpp:750
-#: src/mmg/tabs/chapters.cpp:765
-#: src/mmg/tabs/chapters.cpp:783
+#: src/mmg/tabs/chapters.cpp:766
+#: src/mmg/tabs/chapters.cpp:773
+#: src/mmg/tabs/chapters.cpp:779
+#: src/mmg/tabs/chapters.cpp:787
+#: src/mmg/tabs/chapters.cpp:802
+#: src/mmg/tabs/chapters.cpp:820
 msgid "Chapter verification error"
 msgstr "Atal egiaztapen akatsa"
 
-#: src/mmg/tabs/chapters.cpp:805
+#: src/mmg/tabs/chapters.cpp:842
 msgid "Chapter verification succeeded"
 msgstr "Atal egiaztapen ongi egin da"
 
@@ -2512,12 +2512,12 @@ msgstr "Atalak (%d sarrera) -> %s"
 msgid "Chapters are not allowed in WebM compliant files. No chapters will be written into any output file.\n"
 msgstr "Atalak ez daude ahalbideturik WebM bateragarritasun agirietan. Ez da atalik idatziko irteera agirietan.\n"
 
-#: src/mmg/tabs/chapters.cpp:601
+#: src/mmg/tabs/chapters.cpp:638
 msgid "Chapters loaded."
 msgstr "Gertaturiko atalak."
 
-#: src/mmg/tabs/chapters.cpp:705
-#: src/mmg/tabs/chapters.cpp:1639
+#: src/mmg/tabs/chapters.cpp:742
+#: src/mmg/tabs/chapters.cpp:1680
 msgid "Chapters written."
 msgstr "Idatziriko atalak."
 
@@ -2557,7 +2557,7 @@ msgstr "Egiaztatu online MKVToolNix argitalpen berririk eskuragarri dagoen edo e
 msgid "Checking for updates online; please wait"
 msgstr "Eguneraketak egiaztatzen online; mesedez itxaron"
 
-#: src/mmg/tabs/chapters.cpp:526
+#: src/mmg/tabs/chapters.cpp:563
 msgid "Choose a chapter file"
 msgstr "Hautatu atal agiri bat"
 
@@ -2591,8 +2591,8 @@ msgstr "Hautatu eransteko sarrera agiri bat"
 #: src/mmg/mmg_dialog.cpp:756
 #: src/mmg/mmg_dialog.cpp:777
 #: src/mmg/mux_dialog.cpp:204
-#: src/mmg/tabs/chapters.cpp:625
 #: src/mmg/tabs/chapters.cpp:662
+#: src/mmg/tabs/chapters.cpp:699
 msgid "Choose an output file"
 msgstr "Hautatu irteera agiri bat"
 
@@ -2867,7 +2867,7 @@ msgstr "Ezin izan da gakoa ireki."
 msgid "Could not open the corresponding correction file '%1%c'.\n"
 msgstr "Ezin izan da ireki '%1%c' zuzenketa agiria.\n"
 
-#: src/mmg/tabs/chapters.cpp:692
+#: src/mmg/tabs/chapters.cpp:729
 #, c-format, boost-format
 msgid "Could not open the destination file '%s' for writing. Error code: %d (%s)."
 msgstr "Ezin izan da ireki '%s' helmuga agiria idazteko. Akats kodea: %d (%s)."
@@ -3315,7 +3315,7 @@ msgstr "ARRAIOAK barne akatsa! (agiri mota ezezaguna). %1%\n"
 msgid "Each chapter and each edition has a unique identifier. This identifier is normally assigned automatically by the programs, but it can be changed manually if it is really needed."
 msgstr "Atal bakoitzak eta bere edizioak ezagutarazle bakarra du. Ezagutarazle hau arrunt berezgaitasunez esleitzen dute programek, baina eskuz aldatu daiteke egitan  beharrezkoa bada."
 
-#: src/mmg/tabs/chapters.cpp:783
+#: src/mmg/tabs/chapters.cpp:820
 msgid "Each edition must contain at least one chapter."
 msgstr "Edizio bakoitzak gutxienez atal bat izan behar du."
 
@@ -3336,13 +3336,13 @@ msgstr "Editatu iturburu agiri zati gehigarriak"
 msgid "Edit selectors for properties"
 msgstr "Editatu ezaugarri hautatzaileak"
 
-#: src/mmg/tabs/chapters.cpp:489
+#: src/mmg/tabs/chapters.cpp:526
 #, c-format, boost-format
 msgid "Edition %d"
 msgstr "Edizioa %d"
 
-#: src/mmg/tabs/chapters.cpp:828
-#: src/mmg/tabs/chapters.cpp:873
+#: src/mmg/tabs/chapters.cpp:865
+#: src/mmg/tabs/chapters.cpp:912
 #, c-format, boost-format
 msgid "EditionEntry %u"
 msgstr "Edizio-Sarrera %u"
@@ -3423,7 +3423,7 @@ msgstr "Akatsa %1% lerroan: azpidatzi zenbaki bat itxaroten zen eta idazki zati 
 msgid "Error loading settings"
 msgstr "Akatsa ezarpenak gordetzerakoan"
 
-#: src/mmg/tabs/chapters.cpp:692
+#: src/mmg/tabs/chapters.cpp:729
 msgid "Error opening file"
 msgstr "Akatsa agiria irekitzerakoan"
 
@@ -3436,7 +3436,7 @@ msgstr "Akatsa MPEG PS pakete bat aztertzerakoan idazburu irakurketa aldian. Jar
 msgid "Error parsing the chapters in '%1%': some mandatory elements are missing.\n"
 msgstr "Akatsa atalak aztertzerakoan, '%1%': ez daude nahitaezko gai batzuk.\n"
 
-#: src/mmg/tabs/chapters.cpp:576
+#: src/mmg/tabs/chapters.cpp:613
 msgid "Error parsing the file"
 msgstr "Akatsa agiria aztertzerakoan"
 
@@ -3452,8 +3452,8 @@ msgstr "Akatsa argibideak gordetzerakoan"
 
 #: src/mmg/header_editor/frame.cpp:662
 #: src/mmg/header_editor/frame.cpp:668
-#: src/mmg/tabs/chapters.cpp:1645
-#: src/mmg/tabs/chapters.cpp:1651
+#: src/mmg/tabs/chapters.cpp:1686
+#: src/mmg/tabs/chapters.cpp:1692
 msgid "Error writing Matroska file"
 msgstr "Akatsa Matroska agiria idazterakoan"
 
@@ -3684,7 +3684,7 @@ msgid "File name: %1%"
 msgstr "Agiri izena: %1%"
 
 #: src/mmg/header_editor/frame.cpp:257
-#: src/mmg/tabs/chapters.cpp:545
+#: src/mmg/tabs/chapters.cpp:582
 msgid "File parsing failed"
 msgstr "Agiri azterketa hutsegitea"
 
@@ -3693,7 +3693,7 @@ msgid "File removal not possible"
 msgstr "Ezin da agiria kendu"
 
 #: src/mmg/header_editor/frame.cpp:674
-#: src/mmg/tabs/chapters.cpp:1658
+#: src/mmg/tabs/chapters.cpp:1699
 msgid "File structure warning"
 msgstr "Agiri egitura matxura"
 
@@ -4049,12 +4049,12 @@ msgstr "Handitu berritsukeria."
 msgid "Input"
 msgstr "Sarrera"
 
-#: src/mmg/tabs/chapters.cpp:1205
-#: src/mmg/tabs/chapters.cpp:1258
-#: src/mmg/tabs/chapters.cpp:1264
-#: src/mmg/tabs/chapters.cpp:1276
-#: src/mmg/tabs/chapters.cpp:1295
-#: src/mmg/tabs/chapters.cpp:1303
+#: src/mmg/tabs/chapters.cpp:1246
+#: src/mmg/tabs/chapters.cpp:1299
+#: src/mmg/tabs/chapters.cpp:1305
+#: src/mmg/tabs/chapters.cpp:1317
+#: src/mmg/tabs/chapters.cpp:1336
+#: src/mmg/tabs/chapters.cpp:1344
 msgid "Input data error"
 msgstr "Sarrera datu okerrak"
 
@@ -4082,7 +4082,7 @@ msgid "Internal bug: tracks.cpp SSA #1. %1%"
 msgstr "Baren akatsa: bideak.cpp SSA #1. %1%"
 
 #: src/mmg/header_editor/frame.cpp:678
-#: src/mmg/tabs/chapters.cpp:1662
+#: src/mmg/tabs/chapters.cpp:1703
 msgid "Internal program error"
 msgstr "Programaren barne akatsa"
 
@@ -4105,15 +4105,15 @@ msgstr "Base64 hizki baliogabea aurkitu da"
 msgid "Invalid BlockAddition level in argument '%1%'.\n"
 msgstr "BlockAddition maila balioabea argumento honetan: '%1%'.\n"
 
-#: src/mmg/tabs/chapters.cpp:1258
+#: src/mmg/tabs/chapters.cpp:1299
 msgid "Invalid UID. A UID is simply a number."
 msgstr "UID baliogabea. UID bat zenbaki arrunt bat da."
 
-#: src/mmg/tabs/chapters.cpp:1264
+#: src/mmg/tabs/chapters.cpp:1305
 msgid "Invalid UID. This chapter UID is already in use. The original UID has not been changed."
 msgstr "UID baliogabea. Atal UID hau jadanik erabilia da. Jatorrizko UID-a ez da aldatu."
 
-#: src/mmg/tabs/chapters.cpp:1276
+#: src/mmg/tabs/chapters.cpp:1317
 msgid "Invalid UID. This edition UID is already in use. The original UID has not been changed."
 msgstr "UID baliogabea. Edizio UID hau jadanik erabilia da. Jatorrizko UID-a ez da aldatu."
 
@@ -4220,24 +4220,24 @@ msgstr "Heuskarri baliogabea SSA lerro batean ('%1%') %2% denbora-kodean: Lehen 
 msgid "Invalid format for a SSA line ('%1%') at timecode %2%: Too many fields found (%3% instead of 9). This entry will be skipped.\n"
 msgstr "Heuskarri baliogabea SSA lerro batean ('%1%') %2% denbora-kodean: Eremu gehiegi aurkitu dira (%3% 9-ren ordez. Sarrera hau jauzi egingo da.\n"
 
-#: src/mmg/tabs/chapters.cpp:1205
+#: src/mmg/tabs/chapters.cpp:1246
 msgid "Invalid format used for the adjustment."
 msgstr "Heuskarri baliogabea erabili da zehaztapenerako."
 
-#: src/mmg/tabs/chapters.cpp:1303
+#: src/mmg/tabs/chapters.cpp:1344
 #, c-format, boost-format
 msgid "Invalid format used for the end time for '%s'. Setting value to 0."
 msgstr "Heuskarri baliogabea erabili da '%s'-rentzako amaiera denboran. Balioa 0-ean ezartzen."
 
-#: src/mmg/tabs/chapters.cpp:1336
+#: src/mmg/tabs/chapters.cpp:1377
 msgid "Invalid format used for the segment UID. Not using the value."
 msgstr "Heuskarri baliogabea erabili da zati  UID-rakko. Balioa ez erabiltzen."
 
-#: src/mmg/tabs/chapters.cpp:1354
+#: src/mmg/tabs/chapters.cpp:1395
 msgid "Invalid format used for the segment edition UID. Not using the value."
 msgstr "Heuskarri baliogabea erabili da zati edizio UID-rako. Balioa ez erabiltzen."
 
-#: src/mmg/tabs/chapters.cpp:1295
+#: src/mmg/tabs/chapters.cpp:1336
 #, c-format, boost-format
 msgid "Invalid format used for the start time for '%s'. Setting value to 0."
 msgstr "Heuskarri baliogabea erabili da '%s'-rentzako hasiera denboran. Balioa 0-ean ezartzen."
@@ -4290,7 +4290,7 @@ msgid "Invalid header length: %1% (total length: %2%, idx: %3%, dataidx: %4%)\n"
 msgstr "Idazburu luzera baliogabea: %1% (luzera guztira: %2%, idx: %3%, dataidx: %4%)\n"
 
 #: src/mmg/options/chapters.cpp:109
-#: src/mmg/tabs/chapters.cpp:1152
+#: src/mmg/tabs/chapters.cpp:1193
 msgid "Invalid language selected"
 msgstr "Hautaturiko hizkuntza baliogabea da"
 
@@ -4701,7 +4701,7 @@ msgstr "Matroska audio/bideo agiriak"
 msgid "Matroska files (*.mkv *.mka *.mks *.mk3d);;All files (*.*)"
 msgstr "Matroska agiriak (*.mkv *.mka *.mks *.mk3d);;Agiri denak (*.*)"
 
-#: src/mmg/tabs/chapters.cpp:626
+#: src/mmg/tabs/chapters.cpp:663
 #, c-format, boost-format
 msgid "Matroska files (*.mkv;*.mka;*.mk3d)|*.mkv;*.mka;*.mk3d|%s"
 msgstr "Matroska agiriak (*.mkv;*.mka;*.mks;*.mk3d)|*.mkv;*.mka;*.mks;*.mk3d|%s"
@@ -4905,7 +4905,7 @@ msgstr "Izena:"
 msgid "Name: %1%"
 msgstr "Izena: %1%"
 
-#: src/mmg/tabs/chapters.cpp:452
+#: src/mmg/tabs/chapters.cpp:489
 msgid "New chapters created."
 msgstr "Atal berriak sortuta."
 
@@ -4976,7 +4976,7 @@ msgstr "Ez da mapaketarik eman %1% zenbakiko agiriarentzat ('%2%'). %3%-ren bere
 msgid "No attachment matched the spec '%1%'.\n"
 msgstr "Ez dago bat datorren eranskinik '%1%'.\n"
 
-#: src/mmg/tabs/chapters.cpp:765
+#: src/mmg/tabs/chapters.cpp:802
 msgid "No chapter entries have been create yet."
 msgstr "Oraindik ez da atal sarrerarik sortu."
 
@@ -4985,7 +4985,7 @@ msgstr "Oraindik ez da atal sarrerarik sortu."
 msgid "No chapter numbers listed after '--split %1%'.\n"
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:552
+#: src/mmg/tabs/chapters.cpp:589
 msgid "No chapters found"
 msgstr "Ez da atalik aurkitu"
 
@@ -5139,7 +5139,7 @@ msgstr "ogg/OGM audio/bideo agiriak"
 msgid "Ok"
 msgstr "Ongi"
 
-#: src/mmg/tabs/chapters.cpp:729
+#: src/mmg/tabs/chapters.cpp:766
 msgid "One of the chapters does not have a name."
 msgstr "Ataletako batek ez du izenik."
 
@@ -6363,17 +6363,10 @@ msgstr "Estereo moduko parametroa: ez da eman <TID>:<n|keyword> moduan non 'n' 0
 msgid "Stereo mode: %1% (%2%)"
 msgstr "Estereo modua: %1% (%2%)"
 
+#: src/common/property_element.cpp:146
 #: src/mmg/header_editor/frame.cpp:474
 msgid "Stereo-3D video mode (0 - 11, see documentation)."
 msgstr "Estereo-3D bideo modua (0 - 11, ikusi agiritza)."
-
-#: src/common/property_element.cpp:146
-msgid ""
-"Stereo-3D video mode (0: mono, 1: right eye,\n"
-"2: left eye, 3: both eyes)."
-msgstr ""
-"Estereo-3D bideo modua(0: monoa, 1: esk. begia,\n"
-"2: ezk. begia, 3: bi begiak)."
 
 #: src/mmg/tabs/input_format.cpp:230
 msgid "Stereoscopy:"
@@ -6554,7 +6547,7 @@ msgstr "Matroska agiria aztertzen..."
 msgid "The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file."
 msgstr "Matroska agiria aldatu egin da, baina meta bilatzaile sarrera ezin da eguneratu. Honek esanahi du irakurgailuek denbora gehiago beharko dutela gai hau bilatzeko. Mesedez erabili zure irakurgailu gogokoena agiri hau egiaztatzeko."
 
-#: src/mmg/tabs/chapters.cpp:1655
+#: src/mmg/tabs/chapters.cpp:1696
 msgid ""
 "The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file.\n"
 "\n"
@@ -6668,12 +6661,12 @@ msgstr "'%1%' eranskina ezin da irakurri.\n"
 msgid "The changes are written to the file.\n"
 msgstr "Aldaketak agirira idazten dira.\n"
 
-#: src/mmg/tabs/chapters.cpp:742
+#: src/mmg/tabs/chapters.cpp:779
 #, c-format, boost-format
 msgid "The chapter '%s' is missing its language."
 msgstr "'%s' atalak ez du hizkuntza."
 
-#: src/mmg/tabs/chapters.cpp:736
+#: src/mmg/tabs/chapters.cpp:773
 #, c-format, boost-format
 msgid "The chapter '%s' is missing the start time."
 msgstr "'%s' atalak ez du hasiera denborarik."
@@ -6799,7 +6792,7 @@ msgid "The edition UID to play from the segment linked in the chapter's segment 
 msgstr "Edizio UID-a loturaturiko zatitik irakurtzeko atalen zati UID-an. Hau zenbaki bat besterik ez da."
 
 #: src/mmg/header_editor/frame.cpp:660
-#: src/mmg/tabs/chapters.cpp:1643
+#: src/mmg/tabs/chapters.cpp:1684
 #: src/propedit/propedit.cpp:32
 msgid "The element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
 msgstr "Gaia agiriaren amaieran idatzita dago, baina zati neurria ez da eguneratu ahal izan. Hortaz gaia ez da ikusgarria izango. Garapena utzi egingo da. Agiria aldatu egin da!"
@@ -6968,11 +6961,11 @@ msgstr ""
 msgid "The file you tried to open is not a Matroska file."
 msgstr "Irekitzen saiatzen ari zaren agiria ez da Matroska agiri bat."
 
-#: src/mmg/tabs/chapters.cpp:631
+#: src/mmg/tabs/chapters.cpp:668
 msgid "The file you tried to save to is NOT a Matroska file."
 msgstr "Gordetzen saiatzen ari zaren agiria EZ da Matroska agiri bat."
 
-#: src/mmg/tabs/chapters.cpp:668
+#: src/mmg/tabs/chapters.cpp:705
 msgid "The file you tried to save to is a Matroska file. For this to work you have to use the 'Save to Matroska file' menu option."
 msgstr "Gordetzen saiatzen ari zaren agiria ez da Matroska agiri bat. Lan honetarako menuko 'Gorde Matroska agirian' aukera erabili behar duzu."
 
@@ -7081,7 +7074,7 @@ msgstr ""
 "(Akatsa gertatu da: tab_input::load(), #3)"
 
 #: src/mmg/options/chapters.cpp:108
-#: src/mmg/tabs/chapters.cpp:1152
+#: src/mmg/tabs/chapters.cpp:1193
 #, c-format, boost-format
 msgid "The language '%s' is not a valid language and cannot be selected."
 msgstr "'%s' hizkuntza ez da baliozko hizkuntza eta ezin da hautatu."
@@ -7118,7 +7111,7 @@ msgstr ""
 "sasi-katxe sistema ez da erabiliko."
 
 #: src/mmg/header_editor/frame.cpp:666
-#: src/mmg/tabs/chapters.cpp:1649
+#: src/mmg/tabs/chapters.cpp:1690
 #: src/propedit/propedit.cpp:36
 msgid "The meta seek element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
 msgstr "Meta bilaketa gaia agiriaren amaieran idatzita dago, baina zati neurria ezin izan da eguneratu. Hortaz gaia ez da ikusgarria izango. Garapena utzi egingo da. Agiria aldatu egin da!"
@@ -7297,7 +7290,7 @@ msgstr "Bigarren metodoak etiketak atera eta XML-ra bihurtzen ditu. Irteera, irt
 msgid "The seek table in this TTA file seems to be broken.\n"
 msgstr "Bilaketa taula TTA agiri honetan badirudi hautsita dagoela.\n"
 
-#: src/mmg/tabs/chapters.cpp:748
+#: src/mmg/tabs/chapters.cpp:785
 #, c-format, boost-format
 msgid "The selected language '%s' for the chapter '%s' is not a valid language code. Please select one of the predefined ones."
 msgstr "Hautaturiko '%s' hizkuntza '%s' atalarentzat ez da hizkuntza kode baliozkoa. Mesedez hautatu aurrezehazturikoetako bat."
@@ -7595,7 +7588,7 @@ msgid "This file contains coordinates in the timecode lines. Such coordinates ar
 msgstr "Agiri honek koordenadak ditu denbora-kodeetan. Koordenada batzuk ez daude sostengaturik Matroska SRT azpidatzi heuskarrian. Koordenadak berezgaitasunez kenduko dira.\n"
 
 #: src/mmg/header_editor/frame.cpp:257
-#: src/mmg/tabs/chapters.cpp:545
+#: src/mmg/tabs/chapters.cpp:582
 msgid "This file could not be opened or parsed."
 msgstr "Agiri hau ezin da ireki edo aztertu."
 
@@ -7603,11 +7596,11 @@ msgstr "Agiri hau ezin da ireki edo aztertu."
 msgid "This file could not be opened or parsed.\n"
 msgstr "Agiri hau ezin da ireki edo aztertu.\n"
 
-#: src/mmg/tabs/chapters.cpp:552
+#: src/mmg/tabs/chapters.cpp:589
 msgid "This file does not contain any chapters."
 msgstr "Agiri honek ez du atalik."
 
-#: src/mmg/tabs/chapters.cpp:572
+#: src/mmg/tabs/chapters.cpp:609
 msgid "This file does not contain valid chapters."
 msgstr "Agiri honek ez du baliozko atalik."
 
@@ -8286,8 +8279,8 @@ msgid "Wrong file chosen"
 msgstr "Agiri okerra hautatu da"
 
 #: src/mmg/header_editor/frame.cpp:247
-#: src/mmg/tabs/chapters.cpp:631
-#: src/mmg/tabs/chapters.cpp:669
+#: src/mmg/tabs/chapters.cpp:668
+#: src/mmg/tabs/chapters.cpp:706
 msgid "Wrong file selected"
 msgstr "Agiri okerra hautatuta"
 
@@ -8311,7 +8304,7 @@ msgstr "Ezagutarazle kate okerra: '%|1$7s|' != 'kate\\0\\0\\0'"
 msgid "You are already running the latest version."
 msgstr "Jadanik azken bertsioa duzu."
 
-#: src/mmg/tabs/chapters.cpp:1173
+#: src/mmg/tabs/chapters.cpp:1214
 msgid ""
 "You can use this function for adjusting the timecodes\n"
 "of the selected chapter and all its children by a fixed amount.\n"
@@ -9226,7 +9219,7 @@ msgstr "spu_extraction_duration: SPU pakete hautsi bat aurkitu da (next_off < st
 msgid "ssa_reader: Invalid format. Could not find the \"Format\" line in the \"[Events]\" section."
 msgstr "ssa_reader: Heuskarri baliogabea. Ezinezkoa aurkitzea \"Format\" lerroa \"[Events]\" atalean."
 
-#: src/mmg/tabs/chapters.cpp:849
+#: src/mmg/tabs/chapters.cpp:886
 msgid "start >= m->ListSize(). This should not have happened. Please file a bug report. Thanks."
 msgstr "start >= m->ListSize(). Hau ez litzake gertatu behar. Mesedez agiritu matxura jakinarazpen bat. Mila esker."
 
@@ -9300,7 +9293,7 @@ msgstr "igo"
 msgid "utf8_strlen(): Invalid UTF-8 char. First byte: 0x%|1$02x|"
 msgstr "utf8_strlen(): UTF-8 hizkikode baliogabea. Lehen bytea: 0x%|1$02x|"
 
-#: src/mmg/tabs/chapters.cpp:801
+#: src/mmg/tabs/chapters.cpp:838
 msgid "verify failed: chapters->CheckMandatory() is false. This should not have happened. Please file a bug report.\n"
 msgstr "egiaztapen  hutsegitea: atalak ->CheckMandatory() faltsua da. Hau ez litzake gertatu behar. Mesedez agiritu matxura jakinarazpen bat.\n"
 
@@ -9354,6 +9347,13 @@ msgstr "Bai"
 
 #~ msgid "Shortened GOP detected. Some frames have been dropped. You may want to fix the MPEG2 video stream before attempting to multiplex it.\n"
 #~ msgstr "Laburtutako GOP atzeman da. Frame batzuk murriztu dira. Badaiteke zuk MPEG2 bideo jarioa zuzendu nahi izatea hura multiplexatu aurretik.\n"
+
+#~ msgid ""
+#~ "Stereo-3D video mode (0: mono, 1: right eye,\n"
+#~ "2: left eye, 3: both eyes)."
+#~ msgstr ""
+#~ "Estereo-3D bideo modua(0: monoa, 1: esk. begia,\n"
+#~ "2: ezk. begia, 3: bi begiak)."
 
 #~ msgid "The file '%1%' could not be opened for reading (%2%)."
 #~ msgstr "%1% agiria ezin da irakurtzeko ireki (%2%)."

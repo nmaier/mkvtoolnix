@@ -1560,20 +1560,20 @@ msgstr "'有効トラック'フラグ"
 msgid "(Unknown element: %1%; ID: 0x%2% size: %3%)"
 msgstr "(未知のエレメント: %1%; ID：0x%2% サイズ： %3%)"
 
-#: src/mmg/tabs/chapters.cpp:434
+#: src/mmg/tabs/chapters.cpp:471
 msgid "(new chapter file)"
 msgstr "（新しいチャプタファイル）"
 
-#: src/mmg/tabs/chapters.cpp:457
+#: src/mmg/tabs/chapters.cpp:494
 msgid "(unnamed chapter)"
 msgstr "（無名チャプタ）"
 
-#: src/mmg/tabs/chapters.cpp:833
-#: src/mmg/tabs/chapters.cpp:880
-#: src/mmg/tabs/chapters.cpp:993
-#: src/mmg/tabs/chapters.cpp:1375
-#: src/mmg/tabs/chapters.cpp:1382
-#: src/mmg/tabs/chapters.cpp:1576
+#: src/mmg/tabs/chapters.cpp:870
+#: src/mmg/tabs/chapters.cpp:919
+#: src/mmg/tabs/chapters.cpp:1034
+#: src/mmg/tabs/chapters.cpp:1416
+#: src/mmg/tabs/chapters.cpp:1423
+#: src/mmg/tabs/chapters.cpp:1617
 msgid "(unnamed)"
 msgstr "（名前をつけてください）"
 
@@ -1965,7 +1965,7 @@ msgstr "当該プロパティが既に存在する場合でも指定された値
 msgid "Adds the current settings as a new job entry to the job queue"
 msgstr "現在の設定を新しいジョブエントリとしてジョブキューに追加します"
 
-#: src/mmg/tabs/chapters.cpp:1181
+#: src/mmg/tabs/chapters.cpp:1222
 msgid "Adjust chapter timecodes"
 msgstr "チャプタのタイムコード調整"
 
@@ -1990,7 +1990,7 @@ msgstr "全てのファイル(*)|*"
 msgid "All Files (*.*)|*.*"
 msgstr "全てのファイル (*.*)|*.*"
 
-#: src/mmg/tabs/chapters.cpp:805
+#: src/mmg/tabs/chapters.cpp:842
 msgid "All chapter entries are valid."
 msgstr "全てのチャプタエントリは有効です。"
 
@@ -2069,7 +2069,7 @@ msgid ""
 msgstr "前のセグメントに対応するエスケープされたファイル名です。"
 
 #: src/mmg/header_editor/frame.cpp:678
-#: src/mmg/tabs/chapters.cpp:1662
+#: src/mmg/tabs/chapters.cpp:1703
 #: src/propedit/propedit.cpp:44
 msgid "An unknown error occured. The file has been modified."
 msgstr "未知のエラーが発生しました。ファイルは変更されました。"
@@ -2434,7 +2434,7 @@ msgstr "チャプタの抽出"
 msgid "Chapter file:"
 msgstr "チャプタファイル："
 
-#: src/mmg/tabs/chapters.cpp:663
+#: src/mmg/tabs/chapters.cpp:700
 #, c-format, boost-format
 msgid "Chapter files (*.xml)|*.xml|%s"
 msgstr "チャプタファイル (*.xml)|*.xml|%s"
@@ -2444,7 +2444,7 @@ msgstr "チャプタファイル (*.xml)|*.xml|%s"
 msgid "Chapter files (*.xml;*.txt;*.cue)|*.xml;*.txt;*.cue|%s"
 msgstr "チャプタファイル (*.xml;*.txt;*.cue)|*.xml;*.txt;*.cue|%s"
 
-#: src/mmg/tabs/chapters.cpp:527
+#: src/mmg/tabs/chapters.cpp:564
 #, c-format, boost-format
 msgid "Chapter files (*.xml;*.txt;*.mka;*.mkv;*.mk3d;*.cue)|*.xml;*.txt;*.mka;*.mkv;*.mk3d;*.cue|%s"
 msgstr "チャプタファイル (*.xml;*.txt;*.mka;*.mkv;*.mk3d;*.cue)|*.xml;*.txt;*.mka;*.mkv;*.mk3d;*.cue|%s"
@@ -2467,16 +2467,16 @@ msgstr "チャプタオプション"
 msgid "Chapter parser: The EditionUID %1% is not unique and could not be reused. A new one will be created.\n"
 msgstr "チャプタパーサー：エディションUID %1%がユニークではなく、再使用されることもできません。新しいUIDが生成されます。\n"
 
-#: src/mmg/tabs/chapters.cpp:729
-#: src/mmg/tabs/chapters.cpp:736
-#: src/mmg/tabs/chapters.cpp:742
-#: src/mmg/tabs/chapters.cpp:750
-#: src/mmg/tabs/chapters.cpp:765
-#: src/mmg/tabs/chapters.cpp:783
+#: src/mmg/tabs/chapters.cpp:766
+#: src/mmg/tabs/chapters.cpp:773
+#: src/mmg/tabs/chapters.cpp:779
+#: src/mmg/tabs/chapters.cpp:787
+#: src/mmg/tabs/chapters.cpp:802
+#: src/mmg/tabs/chapters.cpp:820
 msgid "Chapter verification error"
 msgstr "チャプタベリファイエラー"
 
-#: src/mmg/tabs/chapters.cpp:805
+#: src/mmg/tabs/chapters.cpp:842
 msgid "Chapter verification succeeded"
 msgstr "チャプタのベリファイに成功しました"
 
@@ -2496,12 +2496,12 @@ msgstr "チャプタ（%d個のエントリ）%sのチャプタ"
 msgid "Chapters are not allowed in WebM compliant files. No chapters will be written into any output file.\n"
 msgstr "チャプタはWebMの規格に準拠したファイルでは使用することができません。どの出力ファイルにもチャプタは書き込まれません。\n"
 
-#: src/mmg/tabs/chapters.cpp:601
+#: src/mmg/tabs/chapters.cpp:638
 msgid "Chapters loaded."
 msgstr "チャプタが読み込まれました。"
 
-#: src/mmg/tabs/chapters.cpp:705
-#: src/mmg/tabs/chapters.cpp:1639
+#: src/mmg/tabs/chapters.cpp:742
+#: src/mmg/tabs/chapters.cpp:1680
 msgid "Chapters written."
 msgstr "チャプタが書き込まれました。"
 
@@ -2541,7 +2541,7 @@ msgstr "MKVToolNixの新しいリリースがホームページで入手可能�
 msgid "Checking for updates online; please wait"
 msgstr "オンラインでアップデートを確認しています；しばらくお待ちください"
 
-#: src/mmg/tabs/chapters.cpp:526
+#: src/mmg/tabs/chapters.cpp:563
 msgid "Choose a chapter file"
 msgstr "チャプタファイルを選んでください"
 
@@ -2575,8 +2575,8 @@ msgstr "追加結合する入力ファイルを選んでください"
 #: src/mmg/mmg_dialog.cpp:756
 #: src/mmg/mmg_dialog.cpp:777
 #: src/mmg/mux_dialog.cpp:204
-#: src/mmg/tabs/chapters.cpp:625
 #: src/mmg/tabs/chapters.cpp:662
+#: src/mmg/tabs/chapters.cpp:699
 msgid "Choose an output file"
 msgstr "出力ファイルを選んでください"
 
@@ -2852,7 +2852,7 @@ msgstr "クリップボードを開けませんでした。"
 msgid "Could not open the corresponding correction file '%1%c'.\n"
 msgstr "付随する訂正ファイル'%1%c'を開くことができませんでした。\n"
 
-#: src/mmg/tabs/chapters.cpp:692
+#: src/mmg/tabs/chapters.cpp:729
 #, c-format, boost-format
 msgid "Could not open the destination file '%s' for writing. Error code: %d (%s)."
 msgstr "ファイル'%s'を開いて書き込むことができませんでした。エラーコード: %d (%s)。"
@@ -3300,7 +3300,7 @@ msgstr "悪質な内部バグです！（未知のファイルタイプです）
 msgid "Each chapter and each edition has a unique identifier. This identifier is normally assigned automatically by the programs, but it can be changed manually if it is really needed."
 msgstr "各チャプタや各エディションはユニークな識別子を持っています。この識別子は通常プログラムによって自動的に割り当てられますが、本当に必要な場合は手動で変えることができます。"
 
-#: src/mmg/tabs/chapters.cpp:783
+#: src/mmg/tabs/chapters.cpp:820
 msgid "Each edition must contain at least one chapter."
 msgstr "各エディションは少なくとも1つのチャプタを含んでいなければなりません。"
 
@@ -3322,13 +3322,13 @@ msgstr "追加のソースファイルの一部を編集してください"
 msgid "Edit selectors for properties"
 msgstr "Editのセレクター"
 
-#: src/mmg/tabs/chapters.cpp:489
+#: src/mmg/tabs/chapters.cpp:526
 #, c-format, boost-format
 msgid "Edition %d"
 msgstr "エディション%d"
 
-#: src/mmg/tabs/chapters.cpp:828
-#: src/mmg/tabs/chapters.cpp:873
+#: src/mmg/tabs/chapters.cpp:865
+#: src/mmg/tabs/chapters.cpp:912
 #, c-format, boost-format
 msgid "EditionEntry %u"
 msgstr "エディションエントリ%u"
@@ -3409,7 +3409,7 @@ msgstr "%1%行目でエラー発生：サブタイトル番号が見つかると
 msgid "Error loading settings"
 msgstr "設定の読み込み中にエラーが発生しました"
 
-#: src/mmg/tabs/chapters.cpp:692
+#: src/mmg/tabs/chapters.cpp:729
 msgid "Error opening file"
 msgstr "ファイルを開く途中でエラーが発生しました"
 
@@ -3422,7 +3422,7 @@ msgstr "MPEG PSパケット解析ののヘッダ読み込みフェイズでエ�
 msgid "Error parsing the chapters in '%1%': some mandatory elements are missing.\n"
 msgstr "'%1%'のチャプタ解析中にエラーが発生しました：必須要素のいくつかがありません。\n"
 
-#: src/mmg/tabs/chapters.cpp:576
+#: src/mmg/tabs/chapters.cpp:613
 msgid "Error parsing the file"
 msgstr "ファイルの解析中にエラーが発生しました"
 
@@ -3438,8 +3438,8 @@ msgstr "情報の保存中にエラーが発生しました"
 
 #: src/mmg/header_editor/frame.cpp:662
 #: src/mmg/header_editor/frame.cpp:668
-#: src/mmg/tabs/chapters.cpp:1645
-#: src/mmg/tabs/chapters.cpp:1651
+#: src/mmg/tabs/chapters.cpp:1686
+#: src/mmg/tabs/chapters.cpp:1692
 msgid "Error writing Matroska file"
 msgstr "Matroskaファイルの書き込み中にエラーが発生しました"
 
@@ -3670,7 +3670,7 @@ msgid "File name: %1%"
 msgstr "ファイル名：%1%"
 
 #: src/mmg/header_editor/frame.cpp:257
-#: src/mmg/tabs/chapters.cpp:545
+#: src/mmg/tabs/chapters.cpp:582
 msgid "File parsing failed"
 msgstr "ファイルの解析に失敗しました"
 
@@ -3679,7 +3679,7 @@ msgid "File removal not possible"
 msgstr "ファイルを削除できません"
 
 #: src/mmg/header_editor/frame.cpp:674
-#: src/mmg/tabs/chapters.cpp:1658
+#: src/mmg/tabs/chapters.cpp:1699
 msgid "File structure warning"
 msgstr "ファイル構造警告"
 
@@ -4040,12 +4040,12 @@ msgstr "より詳細な情報を表示します"
 msgid "Input"
 msgstr "入力"
 
-#: src/mmg/tabs/chapters.cpp:1205
-#: src/mmg/tabs/chapters.cpp:1258
-#: src/mmg/tabs/chapters.cpp:1264
-#: src/mmg/tabs/chapters.cpp:1276
-#: src/mmg/tabs/chapters.cpp:1295
-#: src/mmg/tabs/chapters.cpp:1303
+#: src/mmg/tabs/chapters.cpp:1246
+#: src/mmg/tabs/chapters.cpp:1299
+#: src/mmg/tabs/chapters.cpp:1305
+#: src/mmg/tabs/chapters.cpp:1317
+#: src/mmg/tabs/chapters.cpp:1336
+#: src/mmg/tabs/chapters.cpp:1344
 msgid "Input data error"
 msgstr "入力データエラー"
 
@@ -4073,7 +4073,7 @@ msgid "Internal bug: tracks.cpp SSA #1. %1%"
 msgstr "内部バグ：tracks.cpp SSA #1. %1%"
 
 #: src/mmg/header_editor/frame.cpp:678
-#: src/mmg/tabs/chapters.cpp:1662
+#: src/mmg/tabs/chapters.cpp:1703
 msgid "Internal program error"
 msgstr "内部プログラムエラー"
 
@@ -4096,15 +4096,15 @@ msgstr "無効なBase64文字に遭遇しました"
 msgid "Invalid BlockAddition level in argument '%1%'.\n"
 msgstr "引数'%1%'で無効なBlockAdditionレベルがあります。\n"
 
-#: src/mmg/tabs/chapters.cpp:1258
+#: src/mmg/tabs/chapters.cpp:1299
 msgid "Invalid UID. A UID is simply a number."
 msgstr "無効なUIDです。UIDは数字のみでなければなりません。"
 
-#: src/mmg/tabs/chapters.cpp:1264
+#: src/mmg/tabs/chapters.cpp:1305
 msgid "Invalid UID. This chapter UID is already in use. The original UID has not been changed."
 msgstr "無効なUIDです。このチャプタUIDは既に使用されています。元のUIDは変更されませんでした。"
 
-#: src/mmg/tabs/chapters.cpp:1276
+#: src/mmg/tabs/chapters.cpp:1317
 msgid "Invalid UID. This edition UID is already in use. The original UID has not been changed."
 msgstr "無効なUIDです。このエディションUIDは既に使用されています。元のUIDは変更されませんでした。"
 
@@ -4211,26 +4211,26 @@ msgstr "タイムコード%2%のSSA行（'%1%'）が無効なフォーマット�
 msgid "Invalid format for a SSA line ('%1%') at timecode %2%: Too many fields found (%3% instead of 9). This entry will be skipped.\n"
 msgstr "タイムコード%2%のSSA行（'%1%'）が無効なフォーマットです：フィールドの数が多すぎます（正しくは9つですが%3%でした）。このエントリはスキップされます。\n"
 
-#: src/mmg/tabs/chapters.cpp:1205
+#: src/mmg/tabs/chapters.cpp:1246
 msgid "Invalid format used for the adjustment."
 msgstr "タイムコード調整に使用されているフォーマットが無効です。"
 
-#: src/mmg/tabs/chapters.cpp:1303
+#: src/mmg/tabs/chapters.cpp:1344
 #, c-format, boost-format
 msgid "Invalid format used for the end time for '%s'. Setting value to 0."
 msgstr "'%s'の終了時間に使用されているフォーマットが無効です。値を0に設定します。"
 
-#: src/mmg/tabs/chapters.cpp:1336
+#: src/mmg/tabs/chapters.cpp:1377
 #, fuzzy
 msgid "Invalid format used for the segment UID. Not using the value."
 msgstr "'%s'の終了時間に使用されているフォーマットが無効です。値を0に設定します。"
 
-#: src/mmg/tabs/chapters.cpp:1354
+#: src/mmg/tabs/chapters.cpp:1395
 #, fuzzy
 msgid "Invalid format used for the segment edition UID. Not using the value."
 msgstr "'%s'の終了時間に使用されているフォーマットが無効です。値を0に設定します。"
 
-#: src/mmg/tabs/chapters.cpp:1295
+#: src/mmg/tabs/chapters.cpp:1336
 #, c-format, boost-format
 msgid "Invalid format used for the start time for '%s'. Setting value to 0."
 msgstr "'%s'の開始時間に使用されているフォーマットが無効です。値を0に設定します。"
@@ -4283,7 +4283,7 @@ msgid "Invalid header length: %1% (total length: %2%, idx: %3%, dataidx: %4%)\n"
 msgstr "無効なヘッダ長です：%1%（全体の長さ：%2%、idx：%3%、dataidx：%4%）\n"
 
 #: src/mmg/options/chapters.cpp:109
-#: src/mmg/tabs/chapters.cpp:1152
+#: src/mmg/tabs/chapters.cpp:1193
 msgid "Invalid language selected"
 msgstr "無効な言語が選択されました"
 
@@ -4694,7 +4694,7 @@ msgstr "Matroskaオーディオ/ビデオファイル"
 msgid "Matroska files (*.mkv *.mka *.mks *.mk3d);;All files (*.*)"
 msgstr "Matroskaファイル (*.mkv *.mka *.mks *.mk3d);;全てのファイル (*.*)"
 
-#: src/mmg/tabs/chapters.cpp:626
+#: src/mmg/tabs/chapters.cpp:663
 #, c-format, boost-format
 msgid "Matroska files (*.mkv;*.mka;*.mk3d)|*.mkv;*.mka;*.mk3d|%s"
 msgstr "Matroskaファイル (*.mkv;*.mka;*.mks;*.mk3d)|*.mkv;*.mka;*.mks;*.mk3d|%s"
@@ -4898,7 +4898,7 @@ msgstr "名前："
 msgid "Name: %1%"
 msgstr "名前：%1%"
 
-#: src/mmg/tabs/chapters.cpp:452
+#: src/mmg/tabs/chapters.cpp:489
 msgid "New chapters created."
 msgstr "新しいチャプタが作成されました。"
 
@@ -4969,7 +4969,7 @@ msgstr "ファイル番号%1%のファイル（'%2%'）に追加結合のマッ�
 msgid "No attachment matched the spec '%1%'.\n"
 msgstr "ID %1%の添付ファイルが見つかりませんでした。\n"
 
-#: src/mmg/tabs/chapters.cpp:765
+#: src/mmg/tabs/chapters.cpp:802
 msgid "No chapter entries have been create yet."
 msgstr "チャプタエントリがまだ作成されていません。"
 
@@ -4978,7 +4978,7 @@ msgstr "チャプタエントリがまだ作成されていません。"
 msgid "No chapter numbers listed after '--split %1%'.\n"
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:552
+#: src/mmg/tabs/chapters.cpp:589
 msgid "No chapters found"
 msgstr "チャプタが見つかりませんでした"
 
@@ -5134,7 +5134,7 @@ msgstr "Ogg/OGM オーディオ/ビデオファイル"
 msgid "Ok"
 msgstr "OK"
 
-#: src/mmg/tabs/chapters.cpp:729
+#: src/mmg/tabs/chapters.cpp:766
 msgid "One of the chapters does not have a name."
 msgstr "チャプタの1つに名前がありません。"
 
@@ -6359,17 +6359,10 @@ msgstr "ステレオモードパラメータ：<TID>:<n|keyword>のnが0～%1%�
 msgid "Stereo mode: %1% (%2%)"
 msgstr "ステレオモード：%1%（%2%）"
 
+#: src/common/property_element.cpp:146
 #: src/mmg/header_editor/frame.cpp:474
 msgid "Stereo-3D video mode (0 - 11, see documentation)."
 msgstr "ステレオ3Dビデオモードです（0～11、ドキュメントを参照してください）。"
-
-#: src/common/property_element.cpp:146
-msgid ""
-"Stereo-3D video mode (0: mono, 1: right eye,\n"
-"2: left eye, 3: both eyes)."
-msgstr ""
-"ステレオ3Dビデオモードです\n"
-"（0：モノラル、1：右目、2：左目、3：両目）。"
 
 #: src/mmg/tabs/input_format.cpp:230
 msgid "Stereoscopy:"
@@ -6550,7 +6543,7 @@ msgstr "Matroskaファイルを解析中です。"
 msgid "The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file."
 msgstr "Matroskaファイルは修正されましたが、メタシークエントリを更新することができませんでした。これはプレーヤがこの要素を見つけるのにかなり時間がかかることを意味します。好きなプレーヤでこのファイルをチェックしてください。"
 
-#: src/mmg/tabs/chapters.cpp:1655
+#: src/mmg/tabs/chapters.cpp:1696
 msgid ""
 "The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file.\n"
 "\n"
@@ -6664,12 +6657,12 @@ msgstr "添付ファイル'%1%'を読み込むことができませんでした�
 msgid "The changes are written to the file.\n"
 msgstr "変更をファイルに書き込みます。\n"
 
-#: src/mmg/tabs/chapters.cpp:742
+#: src/mmg/tabs/chapters.cpp:779
 #, c-format, boost-format
 msgid "The chapter '%s' is missing its language."
 msgstr "チャプタ'%s'には言語が指定されていません。"
 
-#: src/mmg/tabs/chapters.cpp:736
+#: src/mmg/tabs/chapters.cpp:773
 #, c-format, boost-format
 msgid "The chapter '%s' is missing the start time."
 msgstr "チャプタ'%s'には開始時間が指定されていません。"
@@ -6796,7 +6789,7 @@ msgid "The edition UID to play from the segment linked in the chapter's segment 
 msgstr ""
 
 #: src/mmg/header_editor/frame.cpp:660
-#: src/mmg/tabs/chapters.cpp:1643
+#: src/mmg/tabs/chapters.cpp:1684
 #: src/propedit/propedit.cpp:32
 msgid "The element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
 msgstr "要素はファイルの終端に書き込まれましたが、セグメントサイズを更新できませんでした。そのため要素は不可視となります。処理は中断されます。ファイルは変更されました！"
@@ -6965,11 +6958,11 @@ msgstr ""
 msgid "The file you tried to open is not a Matroska file."
 msgstr "開こうとしたファイルはMatroskaファイルではありません。"
 
-#: src/mmg/tabs/chapters.cpp:631
+#: src/mmg/tabs/chapters.cpp:668
 msgid "The file you tried to save to is NOT a Matroska file."
 msgstr "チャプタを保存しようとしたファイルはMatroskaファイルではありません。"
 
-#: src/mmg/tabs/chapters.cpp:668
+#: src/mmg/tabs/chapters.cpp:705
 msgid "The file you tried to save to is a Matroska file. For this to work you have to use the 'Save to Matroska file' menu option."
 msgstr "チャプタを保存しようとしたファイルはMatroskaファイルです。このファイルに保存するには'Matroskaファイルに保存'メニューオプションを使用してください。"
 
@@ -7075,7 +7068,7 @@ msgstr ""
 "（問題はtab_input::load(), #3で発生しました）"
 
 #: src/mmg/options/chapters.cpp:108
-#: src/mmg/tabs/chapters.cpp:1152
+#: src/mmg/tabs/chapters.cpp:1193
 #, c-format, boost-format
 msgid "The language '%s' is not a valid language and cannot be selected."
 msgstr "言語'%s'は有効な言語ではないので選択することができません。"
@@ -7110,7 +7103,7 @@ msgstr ""
 "0を指定すると、リファレンスの疑似キャッシュシステムは使用されません。"
 
 #: src/mmg/header_editor/frame.cpp:666
-#: src/mmg/tabs/chapters.cpp:1649
+#: src/mmg/tabs/chapters.cpp:1690
 #: src/propedit/propedit.cpp:36
 msgid "The meta seek element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
 msgstr "メタシーク要素はファイルの終端に書き込まれましたが、セグメントサイズを更新できませんでした。そのため要素は不可視となります。処理は中断されます。ファイルは変更されました！"
@@ -7279,7 +7272,7 @@ msgstr "2番目のモードではタグを抽出しXMLに変換します。出�
 msgid "The seek table in this TTA file seems to be broken.\n"
 msgstr "このTTAファイルのシークテーブルは壊れているようです。\n"
 
-#: src/mmg/tabs/chapters.cpp:748
+#: src/mmg/tabs/chapters.cpp:785
 #, c-format, boost-format
 msgid "The selected language '%s' for the chapter '%s' is not a valid language code. Please select one of the predefined ones."
 msgstr "選択された言語'%s'（チャプタ'%s'）は有効な言語コードではありません。予め定義された中から選択してください。"
@@ -7574,7 +7567,7 @@ msgid "This file contains coordinates in the timecode lines. Such coordinates ar
 msgstr "このファイルはタイムコードの行に座標を含んでいます。そのような座標はMatroska SRT字幕フォーマットではサポートされていません。座標は自動的に除去されます。\n"
 
 #: src/mmg/header_editor/frame.cpp:257
-#: src/mmg/tabs/chapters.cpp:545
+#: src/mmg/tabs/chapters.cpp:582
 msgid "This file could not be opened or parsed."
 msgstr "このファイルを開く、または解析することができませんでした。。"
 
@@ -7582,11 +7575,11 @@ msgstr "このファイルを開く、または解析することができませ
 msgid "This file could not be opened or parsed.\n"
 msgstr "このファイルを開く、または解析することができませんでした。。\n"
 
-#: src/mmg/tabs/chapters.cpp:552
+#: src/mmg/tabs/chapters.cpp:589
 msgid "This file does not contain any chapters."
 msgstr "このファイルにはチャプタがありません。"
 
-#: src/mmg/tabs/chapters.cpp:572
+#: src/mmg/tabs/chapters.cpp:609
 msgid "This file does not contain valid chapters."
 msgstr "このファイルには有効なチャプタがありません。"
 
@@ -8266,8 +8259,8 @@ msgid "Wrong file chosen"
 msgstr "間違ったファイルが選択されました"
 
 #: src/mmg/header_editor/frame.cpp:247
-#: src/mmg/tabs/chapters.cpp:631
-#: src/mmg/tabs/chapters.cpp:669
+#: src/mmg/tabs/chapters.cpp:668
+#: src/mmg/tabs/chapters.cpp:706
 msgid "Wrong file selected"
 msgstr "間違ったファイルが選択されました"
 
@@ -8291,7 +8284,7 @@ msgstr "間違った識別文字列です：'%|1$7s|' != 'kate\\0\\0\\0'"
 msgid "You are already running the latest version."
 msgstr "既に最新のバージョンが実行されています。"
 
-#: src/mmg/tabs/chapters.cpp:1173
+#: src/mmg/tabs/chapters.cpp:1214
 msgid ""
 "You can use this function for adjusting the timecodes\n"
 "of the selected chapter and all its children by a fixed amount.\n"
@@ -9207,7 +9200,7 @@ msgstr "spu_extraction_duration：タイムコード%1%で壊れたSPUパケッ�
 msgid "ssa_reader: Invalid format. Could not find the \"Format\" line in the \"[Events]\" section."
 msgstr "ssa_reader：無効なフォーマットです。\"[Events]\"セクションで\"Format\"行を見つけることができませんでした。"
 
-#: src/mmg/tabs/chapters.cpp:849
+#: src/mmg/tabs/chapters.cpp:886
 msgid "start >= m->ListSize(). This should not have happened. Please file a bug report. Thanks."
 msgstr "start >= m->ListSize()。これは発生するべきではありません。バグレポートを提出してください。ありがとうございます。"
 
@@ -9281,7 +9274,7 @@ msgstr "上へ"
 msgid "utf8_strlen(): Invalid UTF-8 char. First byte: 0x%|1$02x|"
 msgstr "utf8_strlen()：無効なUTF-8の文字です。最初のバイト：0x%|1$02x|"
 
-#: src/mmg/tabs/chapters.cpp:801
+#: src/mmg/tabs/chapters.cpp:838
 msgid "verify failed: chapters->CheckMandatory() is false. This should not have happened. Please file a bug report.\n"
 msgstr "ベリファイが失敗しました：chapters->CheckMandatory()がfalseです。発生するべきではありません。バグレポートを提出してください。\n"
 
@@ -9542,6 +9535,13 @@ msgstr "はい"
 
 #~ msgid "Shortened GOP detected. Some frames have been dropped. You may want to fix the MPEG2 video stream before attempting to multiplex it.\n"
 #~ msgstr "短くカットされたGOPが検出されました。ドロップされたフレームがあります。MUXしようとする前にこのMPEG2ビデオストリームを修復してください。\n"
+
+#~ msgid ""
+#~ "Stereo-3D video mode (0: mono, 1: right eye,\n"
+#~ "2: left eye, 3: both eyes)."
+#~ msgstr ""
+#~ "ステレオ3Dビデオモードです\n"
+#~ "（0：モノラル、1：右目、2：左目、3：両目）。"
 
 #~ msgid "TTA lossless audio"
 #~ msgstr "TTAロスレスオーディオ"

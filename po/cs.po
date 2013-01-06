@@ -1559,20 +1559,20 @@ msgstr "Označení 'Povolená stopa'"
 msgid "(Unknown element: %1%; ID: 0x%2% size: %3%)"
 msgstr "(Neznámá součást: %1%; ID: 0x%2% velikost: %3%)"
 
-#: src/mmg/tabs/chapters.cpp:434
+#: src/mmg/tabs/chapters.cpp:471
 msgid "(new chapter file)"
 msgstr "(nový soubor kapitol)"
 
-#: src/mmg/tabs/chapters.cpp:457
+#: src/mmg/tabs/chapters.cpp:494
 msgid "(unnamed chapter)"
 msgstr "(nepojmenovaná kapitola)"
 
-#: src/mmg/tabs/chapters.cpp:833
-#: src/mmg/tabs/chapters.cpp:880
-#: src/mmg/tabs/chapters.cpp:993
-#: src/mmg/tabs/chapters.cpp:1375
-#: src/mmg/tabs/chapters.cpp:1382
-#: src/mmg/tabs/chapters.cpp:1576
+#: src/mmg/tabs/chapters.cpp:870
+#: src/mmg/tabs/chapters.cpp:919
+#: src/mmg/tabs/chapters.cpp:1034
+#: src/mmg/tabs/chapters.cpp:1416
+#: src/mmg/tabs/chapters.cpp:1423
+#: src/mmg/tabs/chapters.cpp:1617
 msgid "(unnamed)"
 msgstr "(bez názvu)"
 
@@ -1969,7 +1969,7 @@ msgstr "Přidá vlastnost s hodnotou, dokonce i když taková vlastnost již exi
 msgid "Adds the current settings as a new job entry to the job queue"
 msgstr "Přidá současná nastavení jako novou položku do fronty úloh"
 
-#: src/mmg/tabs/chapters.cpp:1181
+#: src/mmg/tabs/chapters.cpp:1222
 msgid "Adjust chapter timecodes"
 msgstr "Upravit časové kódy kapitoly"
 
@@ -1994,7 +1994,7 @@ msgstr "Všechny soubory (*)|*"
 msgid "All Files (*.*)|*.*"
 msgstr "Všechny soubory (*.*)|*.*"
 
-#: src/mmg/tabs/chapters.cpp:805
+#: src/mmg/tabs/chapters.cpp:842
 msgid "All chapter entries are valid."
 msgstr "Všechny položky kapitoly jsou platné."
 
@@ -2077,7 +2077,7 @@ msgstr ""
 "znakem odpovídající předchozímu úseku."
 
 #: src/mmg/header_editor/frame.cpp:678
-#: src/mmg/tabs/chapters.cpp:1662
+#: src/mmg/tabs/chapters.cpp:1703
 #: src/propedit/propedit.cpp:44
 msgid "An unknown error occured. The file has been modified."
 msgstr "Došlo k neznámé chybě. Soubor byl změněn."
@@ -2441,7 +2441,7 @@ msgstr "Extrahování kapitoly"
 msgid "Chapter file:"
 msgstr "Soubor kapitol:"
 
-#: src/mmg/tabs/chapters.cpp:663
+#: src/mmg/tabs/chapters.cpp:700
 #, c-format, boost-format
 msgid "Chapter files (*.xml)|*.xml|%s"
 msgstr "Soubor kapitol (*.xml)|*.xml|%s"
@@ -2451,7 +2451,7 @@ msgstr "Soubor kapitol (*.xml)|*.xml|%s"
 msgid "Chapter files (*.xml;*.txt;*.cue)|*.xml;*.txt;*.cue|%s"
 msgstr "Soubor kapitol (*.xml;*.txt;*.cue)|*.xml;*.txt;*.cue|%s"
 
-#: src/mmg/tabs/chapters.cpp:527
+#: src/mmg/tabs/chapters.cpp:564
 #, c-format, boost-format
 msgid "Chapter files (*.xml;*.txt;*.mka;*.mkv;*.mk3d;*.cue)|*.xml;*.txt;*.mka;*.mkv;*.mk3d;*.cue|%s"
 msgstr "Soubory kapitol (*.xml;*.txt;*.mka;*.mkv;*.mk3d;*.cue)|*.xml;*.txt;*.mka;*.mkv;*.mk3d;*.cue|%s"
@@ -2474,16 +2474,16 @@ msgstr "Volby kapitoly"
 msgid "Chapter parser: The EditionUID %1% is not unique and could not be reused. A new one will be created.\n"
 msgstr "Analyzátor kapitoly: UID edice %1% není jedinečné a nemůže být znovu použito. Bude vytvořeno nové.\n"
 
-#: src/mmg/tabs/chapters.cpp:729
-#: src/mmg/tabs/chapters.cpp:736
-#: src/mmg/tabs/chapters.cpp:742
-#: src/mmg/tabs/chapters.cpp:750
-#: src/mmg/tabs/chapters.cpp:765
-#: src/mmg/tabs/chapters.cpp:783
+#: src/mmg/tabs/chapters.cpp:766
+#: src/mmg/tabs/chapters.cpp:773
+#: src/mmg/tabs/chapters.cpp:779
+#: src/mmg/tabs/chapters.cpp:787
+#: src/mmg/tabs/chapters.cpp:802
+#: src/mmg/tabs/chapters.cpp:820
 msgid "Chapter verification error"
 msgstr "Chyba ověření kapitoly"
 
-#: src/mmg/tabs/chapters.cpp:805
+#: src/mmg/tabs/chapters.cpp:842
 msgid "Chapter verification succeeded"
 msgstr "Úspěšné ověření kapitoly"
 
@@ -2503,12 +2503,12 @@ msgstr "Kapitoly (%d položek) z %s"
 msgid "Chapters are not allowed in WebM compliant files. No chapters will be written into any output file.\n"
 msgstr "Kapitoly nejsou povoleny v kompatibilních souborech WebM. Žádné kapitoly nebudou zapsány do jakéhokoliv výstupního souboru.\n"
 
-#: src/mmg/tabs/chapters.cpp:601
+#: src/mmg/tabs/chapters.cpp:638
 msgid "Chapters loaded."
 msgstr "Kapitoly načteny."
 
-#: src/mmg/tabs/chapters.cpp:705
-#: src/mmg/tabs/chapters.cpp:1639
+#: src/mmg/tabs/chapters.cpp:742
+#: src/mmg/tabs/chapters.cpp:1680
 msgid "Chapters written."
 msgstr "Kapitoly zapsány."
 
@@ -2548,7 +2548,7 @@ msgstr "Online zjišťovat, zda je na domovské stránce dostupná nová verze M
 msgid "Checking for updates online; please wait"
 msgstr "Online zjišťování aktualizací; čekejte"
 
-#: src/mmg/tabs/chapters.cpp:526
+#: src/mmg/tabs/chapters.cpp:563
 msgid "Choose a chapter file"
 msgstr "Vyberte soubor kapitol"
 
@@ -2582,8 +2582,8 @@ msgstr "Vyberte vstupní soubor pro připojení"
 #: src/mmg/mmg_dialog.cpp:756
 #: src/mmg/mmg_dialog.cpp:777
 #: src/mmg/mux_dialog.cpp:204
-#: src/mmg/tabs/chapters.cpp:625
 #: src/mmg/tabs/chapters.cpp:662
+#: src/mmg/tabs/chapters.cpp:699
 msgid "Choose an output file"
 msgstr "Vyberte výstupní soubor"
 
@@ -2858,7 +2858,7 @@ msgstr "Nelze otevřít schránku."
 msgid "Could not open the corresponding correction file '%1%c'.\n"
 msgstr "Nelze otevřít odpovídající soubor oprav '%1%c'.\n"
 
-#: src/mmg/tabs/chapters.cpp:692
+#: src/mmg/tabs/chapters.cpp:729
 #, c-format, boost-format
 msgid "Could not open the destination file '%s' for writing. Error code: %d (%s)."
 msgstr "Nelze otevřít cílový soubor '%s' pro zápis. Kód chyby: %d (%s)."
@@ -3306,7 +3306,7 @@ msgstr "HROZNÁ vnitřní chyba! (neznámý typ souboru). %1%\n"
 msgid "Each chapter and each edition has a unique identifier. This identifier is normally assigned automatically by the programs, but it can be changed manually if it is really needed."
 msgstr "Každá kapitola a každý střih má jedinečný identifikátor. Tento identifikátor je normálně přidělen automaticky programy, ale může být ručně změněn, pokud je to opravdu potřeba."
 
-#: src/mmg/tabs/chapters.cpp:783
+#: src/mmg/tabs/chapters.cpp:820
 msgid "Each edition must contain at least one chapter."
 msgstr "Každý střih musí obsahovat alespoň jednu kapitolu."
 
@@ -3327,13 +3327,13 @@ msgstr ""
 msgid "Edit selectors for properties"
 msgstr "Upravit výběry pro vlastnosti"
 
-#: src/mmg/tabs/chapters.cpp:489
+#: src/mmg/tabs/chapters.cpp:526
 #, c-format, boost-format
 msgid "Edition %d"
 msgstr "Střih %d"
 
-#: src/mmg/tabs/chapters.cpp:828
-#: src/mmg/tabs/chapters.cpp:873
+#: src/mmg/tabs/chapters.cpp:865
+#: src/mmg/tabs/chapters.cpp:912
 #, c-format, boost-format
 msgid "EditionEntry %u"
 msgstr "Položka střihu %u"
@@ -3413,7 +3413,7 @@ msgstr "Chyba na řádku %1%: očekáváno číslo titulku, ale nalezen nějaký
 msgid "Error loading settings"
 msgstr "Chyba načítání nastavení"
 
-#: src/mmg/tabs/chapters.cpp:692
+#: src/mmg/tabs/chapters.cpp:729
 msgid "Error opening file"
 msgstr "Chyba otevírání souboru"
 
@@ -3426,7 +3426,7 @@ msgstr "Cyba analýzy paketu MPEG PS během fáze čtení hlavičky. Tato stopa 
 msgid "Error parsing the chapters in '%1%': some mandatory elements are missing.\n"
 msgstr "Chyba analýzy kapitol v '%1%': schází některé povinné součásti.\n"
 
-#: src/mmg/tabs/chapters.cpp:576
+#: src/mmg/tabs/chapters.cpp:613
 msgid "Error parsing the file"
 msgstr "Chyba analýzy souboru"
 
@@ -3442,8 +3442,8 @@ msgstr "Chyba ukládání informace"
 
 #: src/mmg/header_editor/frame.cpp:662
 #: src/mmg/header_editor/frame.cpp:668
-#: src/mmg/tabs/chapters.cpp:1645
-#: src/mmg/tabs/chapters.cpp:1651
+#: src/mmg/tabs/chapters.cpp:1686
+#: src/mmg/tabs/chapters.cpp:1692
 msgid "Error writing Matroska file"
 msgstr "Chyba zapisování souboru Matroska"
 
@@ -3674,7 +3674,7 @@ msgid "File name: %1%"
 msgstr "Název souboru: %1%"
 
 #: src/mmg/header_editor/frame.cpp:257
-#: src/mmg/tabs/chapters.cpp:545
+#: src/mmg/tabs/chapters.cpp:582
 msgid "File parsing failed"
 msgstr "Selhala analýza souboru"
 
@@ -3683,7 +3683,7 @@ msgid "File removal not possible"
 msgstr "Odebrání souboru není možné"
 
 #: src/mmg/header_editor/frame.cpp:674
-#: src/mmg/tabs/chapters.cpp:1658
+#: src/mmg/tabs/chapters.cpp:1699
 msgid "File structure warning"
 msgstr "Upozornění na strukturu souboru"
 
@@ -4041,12 +4041,12 @@ msgstr "Zvýšit úroveň podrobnosti."
 msgid "Input"
 msgstr "Vstup"
 
-#: src/mmg/tabs/chapters.cpp:1205
-#: src/mmg/tabs/chapters.cpp:1258
-#: src/mmg/tabs/chapters.cpp:1264
-#: src/mmg/tabs/chapters.cpp:1276
-#: src/mmg/tabs/chapters.cpp:1295
-#: src/mmg/tabs/chapters.cpp:1303
+#: src/mmg/tabs/chapters.cpp:1246
+#: src/mmg/tabs/chapters.cpp:1299
+#: src/mmg/tabs/chapters.cpp:1305
+#: src/mmg/tabs/chapters.cpp:1317
+#: src/mmg/tabs/chapters.cpp:1336
+#: src/mmg/tabs/chapters.cpp:1344
 msgid "Input data error"
 msgstr "Chyba vstupních dat"
 
@@ -4074,7 +4074,7 @@ msgid "Internal bug: tracks.cpp SSA #1. %1%"
 msgstr "Vnitřní chyba: tracks.cpp SSA #1. %1%"
 
 #: src/mmg/header_editor/frame.cpp:678
-#: src/mmg/tabs/chapters.cpp:1662
+#: src/mmg/tabs/chapters.cpp:1703
 msgid "Internal program error"
 msgstr "Vnitřní chyba programu"
 
@@ -4097,15 +4097,15 @@ msgstr "Vyskytl se naplatný znak Base64"
 msgid "Invalid BlockAddition level in argument '%1%'.\n"
 msgstr "Neplatná úroveň BlockAddition v parametru '%1%'.\n"
 
-#: src/mmg/tabs/chapters.cpp:1258
+#: src/mmg/tabs/chapters.cpp:1299
 msgid "Invalid UID. A UID is simply a number."
 msgstr "Neplatné UID. UID je prostě číslo."
 
-#: src/mmg/tabs/chapters.cpp:1264
+#: src/mmg/tabs/chapters.cpp:1305
 msgid "Invalid UID. This chapter UID is already in use. The original UID has not been changed."
 msgstr "Neplatné UID. Toto UID kapitoly se již používá. Původní UID nebylo změněno."
 
-#: src/mmg/tabs/chapters.cpp:1276
+#: src/mmg/tabs/chapters.cpp:1317
 msgid "Invalid UID. This edition UID is already in use. The original UID has not been changed."
 msgstr "Neplatné UID. Toto UID střihu se již používá. Původní UID nebylo změněno."
 
@@ -4212,24 +4212,24 @@ msgstr ""
 msgid "Invalid format for a SSA line ('%1%') at timecode %2%: Too many fields found (%3% instead of 9). This entry will be skipped.\n"
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:1205
+#: src/mmg/tabs/chapters.cpp:1246
 msgid "Invalid format used for the adjustment."
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:1303
+#: src/mmg/tabs/chapters.cpp:1344
 #, c-format, boost-format
 msgid "Invalid format used for the end time for '%s'. Setting value to 0."
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:1336
+#: src/mmg/tabs/chapters.cpp:1377
 msgid "Invalid format used for the segment UID. Not using the value."
 msgstr "Použit neznámý formát pro UID úseku. Nepoužívá hodnotu."
 
-#: src/mmg/tabs/chapters.cpp:1354
+#: src/mmg/tabs/chapters.cpp:1395
 msgid "Invalid format used for the segment edition UID. Not using the value."
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:1295
+#: src/mmg/tabs/chapters.cpp:1336
 #, c-format, boost-format
 msgid "Invalid format used for the start time for '%s'. Setting value to 0."
 msgstr ""
@@ -4282,7 +4282,7 @@ msgid "Invalid header length: %1% (total length: %2%, idx: %3%, dataidx: %4%)\n"
 msgstr ""
 
 #: src/mmg/options/chapters.cpp:109
-#: src/mmg/tabs/chapters.cpp:1152
+#: src/mmg/tabs/chapters.cpp:1193
 msgid "Invalid language selected"
 msgstr "Vybrán neplatný jazyk"
 
@@ -4693,7 +4693,7 @@ msgstr "Audio/video soubory Matroska"
 msgid "Matroska files (*.mkv *.mka *.mks *.mk3d);;All files (*.*)"
 msgstr "Soubory Matroska (*.mkv *.mka *.mks *.mk3d);;Všechny soubory (*.*)"
 
-#: src/mmg/tabs/chapters.cpp:626
+#: src/mmg/tabs/chapters.cpp:663
 #, c-format, boost-format
 msgid "Matroska files (*.mkv;*.mka;*.mk3d)|*.mkv;*.mka;*.mk3d|%s"
 msgstr "Soubory Matroska (*.mkv;*.mka;*.mk3d)|*.mkv;*.mka;*.mk3d|%s"
@@ -4897,7 +4897,7 @@ msgstr "Název:"
 msgid "Name: %1%"
 msgstr "Název: %1%"
 
-#: src/mmg/tabs/chapters.cpp:452
+#: src/mmg/tabs/chapters.cpp:489
 msgid "New chapters created."
 msgstr "Nová kapitola byla vytvořena."
 
@@ -4968,7 +4968,7 @@ msgstr ""
 msgid "No attachment matched the spec '%1%'.\n"
 msgstr "Žádná příloha neodpovídá '%1%'.\n"
 
-#: src/mmg/tabs/chapters.cpp:765
+#: src/mmg/tabs/chapters.cpp:802
 msgid "No chapter entries have been create yet."
 msgstr "Zatím nebyla vytvořena žádná položka kapitoly."
 
@@ -4977,7 +4977,7 @@ msgstr "Zatím nebyla vytvořena žádná položka kapitoly."
 msgid "No chapter numbers listed after '--split %1%'.\n"
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:552
+#: src/mmg/tabs/chapters.cpp:589
 msgid "No chapters found"
 msgstr "Nenalezeny žádné kapitoly"
 
@@ -5133,7 +5133,7 @@ msgstr "Audio/video soubory Ogg/OGM"
 msgid "Ok"
 msgstr "OK"
 
-#: src/mmg/tabs/chapters.cpp:729
+#: src/mmg/tabs/chapters.cpp:766
 msgid "One of the chapters does not have a name."
 msgstr "Jedna z kapitol nemá název."
 
@@ -6342,17 +6342,10 @@ msgstr ""
 msgid "Stereo mode: %1% (%2%)"
 msgstr "Stereo režim: %1% (%2%)"
 
+#: src/common/property_element.cpp:146
 #: src/mmg/header_editor/frame.cpp:474
 msgid "Stereo-3D video mode (0 - 11, see documentation)."
 msgstr "Režim videa Stereo-3D (0 - 11, viz dokumentace)."
-
-#: src/common/property_element.cpp:146
-msgid ""
-"Stereo-3D video mode (0: mono, 1: right eye,\n"
-"2: left eye, 3: both eyes)."
-msgstr ""
-"Režim videa Stereo-3D (0: mono, 1: pravé oko,\n"
-"2: levé oko, 3: obě oči)."
 
 #: src/mmg/tabs/input_format.cpp:230
 msgid "Stereoscopy:"
@@ -6533,7 +6526,7 @@ msgstr ""
 msgid "The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file."
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:1655
+#: src/mmg/tabs/chapters.cpp:1696
 msgid ""
 "The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file.\n"
 "\n"
@@ -6644,12 +6637,12 @@ msgstr ""
 msgid "The changes are written to the file.\n"
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:742
+#: src/mmg/tabs/chapters.cpp:779
 #, c-format, boost-format
 msgid "The chapter '%s' is missing its language."
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:736
+#: src/mmg/tabs/chapters.cpp:773
 #, c-format, boost-format
 msgid "The chapter '%s' is missing the start time."
 msgstr ""
@@ -6766,7 +6759,7 @@ msgid "The edition UID to play from the segment linked in the chapter's segment 
 msgstr ""
 
 #: src/mmg/header_editor/frame.cpp:660
-#: src/mmg/tabs/chapters.cpp:1643
+#: src/mmg/tabs/chapters.cpp:1684
 #: src/propedit/propedit.cpp:32
 msgid "The element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
 msgstr ""
@@ -6935,11 +6928,11 @@ msgstr ""
 msgid "The file you tried to open is not a Matroska file."
 msgstr "Soubor, který se pokoušíte otevřít, není soubor Matroska."
 
-#: src/mmg/tabs/chapters.cpp:631
+#: src/mmg/tabs/chapters.cpp:668
 msgid "The file you tried to save to is NOT a Matroska file."
 msgstr "Soubor, do kterého se pokoušíte uložit, NENÍ soubor Matroska."
 
-#: src/mmg/tabs/chapters.cpp:668
+#: src/mmg/tabs/chapters.cpp:705
 msgid "The file you tried to save to is a Matroska file. For this to work you have to use the 'Save to Matroska file' menu option."
 msgstr "Soubor, do kterého se pokoušíte uložit, je soubor Matroska. Aby to fungovalo, musíte použít volbu nabídky 'Uložit do souboru Matroska'."
 
@@ -7029,7 +7022,7 @@ msgid ""
 msgstr ""
 
 #: src/mmg/options/chapters.cpp:108
-#: src/mmg/tabs/chapters.cpp:1152
+#: src/mmg/tabs/chapters.cpp:1193
 #, c-format, boost-format
 msgid "The language '%s' is not a valid language and cannot be selected."
 msgstr ""
@@ -7062,7 +7055,7 @@ msgid ""
 msgstr ""
 
 #: src/mmg/header_editor/frame.cpp:666
-#: src/mmg/tabs/chapters.cpp:1649
+#: src/mmg/tabs/chapters.cpp:1690
 #: src/propedit/propedit.cpp:36
 msgid "The meta seek element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
 msgstr ""
@@ -7226,7 +7219,7 @@ msgstr ""
 msgid "The seek table in this TTA file seems to be broken.\n"
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:748
+#: src/mmg/tabs/chapters.cpp:785
 #, c-format, boost-format
 msgid "The selected language '%s' for the chapter '%s' is not a valid language code. Please select one of the predefined ones."
 msgstr ""
@@ -7521,7 +7514,7 @@ msgid "This file contains coordinates in the timecode lines. Such coordinates ar
 msgstr ""
 
 #: src/mmg/header_editor/frame.cpp:257
-#: src/mmg/tabs/chapters.cpp:545
+#: src/mmg/tabs/chapters.cpp:582
 msgid "This file could not be opened or parsed."
 msgstr ""
 
@@ -7529,11 +7522,11 @@ msgstr ""
 msgid "This file could not be opened or parsed.\n"
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:552
+#: src/mmg/tabs/chapters.cpp:589
 msgid "This file does not contain any chapters."
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:572
+#: src/mmg/tabs/chapters.cpp:609
 msgid "This file does not contain valid chapters."
 msgstr ""
 
@@ -8210,8 +8203,8 @@ msgid "Wrong file chosen"
 msgstr "Zvolen špatný soubor"
 
 #: src/mmg/header_editor/frame.cpp:247
-#: src/mmg/tabs/chapters.cpp:631
-#: src/mmg/tabs/chapters.cpp:669
+#: src/mmg/tabs/chapters.cpp:668
+#: src/mmg/tabs/chapters.cpp:706
 msgid "Wrong file selected"
 msgstr "Vybrán špatný soubor"
 
@@ -8235,7 +8228,7 @@ msgstr ""
 msgid "You are already running the latest version."
 msgstr "Používáte nejnovější verzi."
 
-#: src/mmg/tabs/chapters.cpp:1173
+#: src/mmg/tabs/chapters.cpp:1214
 msgid ""
 "You can use this function for adjusting the timecodes\n"
 "of the selected chapter and all its children by a fixed amount.\n"
@@ -9143,7 +9136,7 @@ msgstr ""
 msgid "ssa_reader: Invalid format. Could not find the \"Format\" line in the \"[Events]\" section."
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:849
+#: src/mmg/tabs/chapters.cpp:886
 msgid "start >= m->ListSize(). This should not have happened. Please file a bug report. Thanks."
 msgstr ""
 
@@ -9217,7 +9210,7 @@ msgstr "nahoru"
 msgid "utf8_strlen(): Invalid UTF-8 char. First byte: 0x%|1$02x|"
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:801
+#: src/mmg/tabs/chapters.cpp:838
 msgid "verify failed: chapters->CheckMandatory() is false. This should not have happened. Please file a bug report.\n"
 msgstr ""
 
@@ -9316,6 +9309,13 @@ msgstr "ano"
 
 #~ msgid "Note"
 #~ msgstr "Poznámka"
+
+#~ msgid ""
+#~ "Stereo-3D video mode (0: mono, 1: right eye,\n"
+#~ "2: left eye, 3: both eyes)."
+#~ msgstr ""
+#~ "Režim videa Stereo-3D (0: mono, 1: pravé oko,\n"
+#~ "2: levé oko, 3: obě oči)."
 
 #~ msgid "The file '%1%' could not be opened for reading (%2%)."
 #~ msgstr "Soubor '%1%' nemohl být otevřen pro čtení (%2%)."

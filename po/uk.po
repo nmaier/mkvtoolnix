@@ -1571,20 +1571,20 @@ msgstr "прапорець 'Доступність доріжки'"
 msgid "(Unknown element: %1%; ID: 0x%2% size: %3%)"
 msgstr "(Невідомий елемент: %1%; ID: 0x%2% розмір: %3%)"
 
-#: src/mmg/tabs/chapters.cpp:434
+#: src/mmg/tabs/chapters.cpp:471
 msgid "(new chapter file)"
 msgstr "(новий файл розділу)"
 
-#: src/mmg/tabs/chapters.cpp:457
+#: src/mmg/tabs/chapters.cpp:494
 msgid "(unnamed chapter)"
 msgstr "(безіменні розділи)"
 
-#: src/mmg/tabs/chapters.cpp:833
-#: src/mmg/tabs/chapters.cpp:880
-#: src/mmg/tabs/chapters.cpp:993
-#: src/mmg/tabs/chapters.cpp:1375
-#: src/mmg/tabs/chapters.cpp:1382
-#: src/mmg/tabs/chapters.cpp:1576
+#: src/mmg/tabs/chapters.cpp:870
+#: src/mmg/tabs/chapters.cpp:919
+#: src/mmg/tabs/chapters.cpp:1034
+#: src/mmg/tabs/chapters.cpp:1416
+#: src/mmg/tabs/chapters.cpp:1423
+#: src/mmg/tabs/chapters.cpp:1617
 msgid "(unnamed)"
 msgstr "(не названо)"
 
@@ -1982,7 +1982,7 @@ msgstr "Додає параметр із значенням, навіть якщ
 msgid "Adds the current settings as a new job entry to the job queue"
 msgstr "Додаються поточні налаштування як запис нового завдання до черги завдань"
 
-#: src/mmg/tabs/chapters.cpp:1181
+#: src/mmg/tabs/chapters.cpp:1222
 msgid "Adjust chapter timecodes"
 msgstr "Налаштувати тайм-коди розділу"
 
@@ -2007,7 +2007,7 @@ msgstr "Всі файли (*)|*"
 msgid "All Files (*.*)|*.*"
 msgstr "Всі файли (*.*)|*.*"
 
-#: src/mmg/tabs/chapters.cpp:805
+#: src/mmg/tabs/chapters.cpp:842
 msgid "All chapter entries are valid."
 msgstr "Всі записи розділу є коректними."
 
@@ -2090,7 +2090,7 @@ msgstr ""
 "до попереднього сегменту."
 
 #: src/mmg/header_editor/frame.cpp:678
-#: src/mmg/tabs/chapters.cpp:1662
+#: src/mmg/tabs/chapters.cpp:1703
 #: src/propedit/propedit.cpp:44
 msgid "An unknown error occured. The file has been modified."
 msgstr "Сталася невідома помилка. Файл було змінено."
@@ -2455,7 +2455,7 @@ msgstr "Витягнення розділів"
 msgid "Chapter file:"
 msgstr "Файл розділу:"
 
-#: src/mmg/tabs/chapters.cpp:663
+#: src/mmg/tabs/chapters.cpp:700
 #, c-format, boost-format
 msgid "Chapter files (*.xml)|*.xml|%s"
 msgstr "Файли розділів (*.xml)|*.xml|%s"
@@ -2465,7 +2465,7 @@ msgstr "Файли розділів (*.xml)|*.xml|%s"
 msgid "Chapter files (*.xml;*.txt;*.cue)|*.xml;*.txt;*.cue|%s"
 msgstr "Файли розділів (*.xml;*.txt;*.cue)|*.xml;*.txt;*.cue|%s"
 
-#: src/mmg/tabs/chapters.cpp:527
+#: src/mmg/tabs/chapters.cpp:564
 #, c-format, boost-format
 msgid "Chapter files (*.xml;*.txt;*.mka;*.mkv;*.mk3d;*.cue)|*.xml;*.txt;*.mka;*.mkv;*.mk3d;*.cue|%s"
 msgstr "Файли розділів (*.xml;*.txt;*.mka;*.mkv;*.mk3d;*.cue)|*.xml;*.txt;*.mka;*.mkv;*.mk3d;*.cue|%s"
@@ -2488,16 +2488,16 @@ msgstr "Опції використання розділів"
 msgid "Chapter parser: The EditionUID %1% is not unique and could not be reused. A new one will be created.\n"
 msgstr "Аналізатор розділів: EditionUID %1% не є унікальним і не може бути використаний повторно. Буде створений новий.\n"
 
-#: src/mmg/tabs/chapters.cpp:729
-#: src/mmg/tabs/chapters.cpp:736
-#: src/mmg/tabs/chapters.cpp:742
-#: src/mmg/tabs/chapters.cpp:750
-#: src/mmg/tabs/chapters.cpp:765
-#: src/mmg/tabs/chapters.cpp:783
+#: src/mmg/tabs/chapters.cpp:766
+#: src/mmg/tabs/chapters.cpp:773
+#: src/mmg/tabs/chapters.cpp:779
+#: src/mmg/tabs/chapters.cpp:787
+#: src/mmg/tabs/chapters.cpp:802
+#: src/mmg/tabs/chapters.cpp:820
 msgid "Chapter verification error"
 msgstr "Помилка перевірки розділу"
 
-#: src/mmg/tabs/chapters.cpp:805
+#: src/mmg/tabs/chapters.cpp:842
 msgid "Chapter verification succeeded"
 msgstr "Перевірка розділу пройшла успішно"
 
@@ -2517,12 +2517,12 @@ msgstr "Розділи (%d записи) з %s"
 msgid "Chapters are not allowed in WebM compliant files. No chapters will be written into any output file.\n"
 msgstr "Розділи не допускаються в сумісних WebM файлах. Жодного розділу не буде записано до будь-якого вихідного файлу.\n"
 
-#: src/mmg/tabs/chapters.cpp:601
+#: src/mmg/tabs/chapters.cpp:638
 msgid "Chapters loaded."
 msgstr "Розділи завантажені."
 
-#: src/mmg/tabs/chapters.cpp:705
-#: src/mmg/tabs/chapters.cpp:1639
+#: src/mmg/tabs/chapters.cpp:742
+#: src/mmg/tabs/chapters.cpp:1680
 msgid "Chapters written."
 msgstr "Розділи записані."
 
@@ -2562,7 +2562,7 @@ msgstr "Перевіряти наявність нової версії MKVToolN
 msgid "Checking for updates online; please wait"
 msgstr "Йде перевірка наявності оновлень онлайн; будь ласка, зачекайте"
 
-#: src/mmg/tabs/chapters.cpp:526
+#: src/mmg/tabs/chapters.cpp:563
 msgid "Choose a chapter file"
 msgstr "Оберіть файл розділу"
 
@@ -2596,8 +2596,8 @@ msgstr "Оберіть вхідний файл, щоб приєднати йог
 #: src/mmg/mmg_dialog.cpp:756
 #: src/mmg/mmg_dialog.cpp:777
 #: src/mmg/mux_dialog.cpp:204
-#: src/mmg/tabs/chapters.cpp:625
 #: src/mmg/tabs/chapters.cpp:662
+#: src/mmg/tabs/chapters.cpp:699
 msgid "Choose an output file"
 msgstr "Оберіть вихідний файл"
 
@@ -2872,7 +2872,7 @@ msgstr "Не вдалося відкрити буфер обміну."
 msgid "Could not open the corresponding correction file '%1%c'.\n"
 msgstr "Не вдалося відкрити відповідний файл корекції '%1%c'.\n"
 
-#: src/mmg/tabs/chapters.cpp:692
+#: src/mmg/tabs/chapters.cpp:729
 #, c-format, boost-format
 msgid "Could not open the destination file '%s' for writing. Error code: %d (%s)."
 msgstr "Не вдалося відкрити файл призначення '%s' для запису. Код помилки: %d (%s)."
@@ -3320,7 +3320,7 @@ msgstr "EVIL (дуже серйозна) внутрішня помилка! (н�
 msgid "Each chapter and each edition has a unique identifier. This identifier is normally assigned automatically by the programs, but it can be changed manually if it is really needed."
 msgstr "Кожний розділ і кожний додаток має унікальний ідентифікатор. Цей ідентифікатор, як правило, присвоюється автоматично програмою, але його можна змінити вручну, якщо це дійсно необхідно."
 
-#: src/mmg/tabs/chapters.cpp:783
+#: src/mmg/tabs/chapters.cpp:820
 msgid "Each edition must contain at least one chapter."
 msgstr "Кожен додаток має містити як мінімум один розділ."
 
@@ -3342,13 +3342,13 @@ msgstr "Редагувати додаткові частини вхідного 
 msgid "Edit selectors for properties"
 msgstr "Редагувати селектори"
 
-#: src/mmg/tabs/chapters.cpp:489
+#: src/mmg/tabs/chapters.cpp:526
 #, c-format, boost-format
 msgid "Edition %d"
 msgstr "Додаток %d"
 
-#: src/mmg/tabs/chapters.cpp:828
-#: src/mmg/tabs/chapters.cpp:873
+#: src/mmg/tabs/chapters.cpp:865
+#: src/mmg/tabs/chapters.cpp:912
 #, c-format, boost-format
 msgid "EditionEntry %u"
 msgstr "Запис Додатку %u"
@@ -3429,7 +3429,7 @@ msgstr "Помилка в рядку %1%: очікувалась певне чи
 msgid "Error loading settings"
 msgstr "Помилка завантаження налаштувань"
 
-#: src/mmg/tabs/chapters.cpp:692
+#: src/mmg/tabs/chapters.cpp:729
 msgid "Error opening file"
 msgstr "Помилка при відкритті файлу"
 
@@ -3442,7 +3442,7 @@ msgstr "Помилка при обробці пакетів MPEG PS під ча�
 msgid "Error parsing the chapters in '%1%': some mandatory elements are missing.\n"
 msgstr "Помилка при обробці розділів у '%1%': деякі обов'язкові елементи відсутні.\n"
 
-#: src/mmg/tabs/chapters.cpp:576
+#: src/mmg/tabs/chapters.cpp:613
 msgid "Error parsing the file"
 msgstr "Помилка при обробці файлу"
 
@@ -3458,8 +3458,8 @@ msgstr "Помилка при збереженні інформації"
 
 #: src/mmg/header_editor/frame.cpp:662
 #: src/mmg/header_editor/frame.cpp:668
-#: src/mmg/tabs/chapters.cpp:1645
-#: src/mmg/tabs/chapters.cpp:1651
+#: src/mmg/tabs/chapters.cpp:1686
+#: src/mmg/tabs/chapters.cpp:1692
 msgid "Error writing Matroska file"
 msgstr "Помилка запису файла Matroska"
 
@@ -3690,7 +3690,7 @@ msgid "File name: %1%"
 msgstr "Назва файла: %1%"
 
 #: src/mmg/header_editor/frame.cpp:257
-#: src/mmg/tabs/chapters.cpp:545
+#: src/mmg/tabs/chapters.cpp:582
 msgid "File parsing failed"
 msgstr "Не вдалося виконати обробку файлу"
 
@@ -3699,7 +3699,7 @@ msgid "File removal not possible"
 msgstr "Видалення файла не є можливим"
 
 #: src/mmg/header_editor/frame.cpp:674
-#: src/mmg/tabs/chapters.cpp:1658
+#: src/mmg/tabs/chapters.cpp:1699
 msgid "File structure warning"
 msgstr "Попередження файлової структури"
 
@@ -4057,12 +4057,12 @@ msgstr "Збільшено докладність виводу інформац�
 msgid "Input"
 msgstr "На вході"
 
-#: src/mmg/tabs/chapters.cpp:1205
-#: src/mmg/tabs/chapters.cpp:1258
-#: src/mmg/tabs/chapters.cpp:1264
-#: src/mmg/tabs/chapters.cpp:1276
-#: src/mmg/tabs/chapters.cpp:1295
-#: src/mmg/tabs/chapters.cpp:1303
+#: src/mmg/tabs/chapters.cpp:1246
+#: src/mmg/tabs/chapters.cpp:1299
+#: src/mmg/tabs/chapters.cpp:1305
+#: src/mmg/tabs/chapters.cpp:1317
+#: src/mmg/tabs/chapters.cpp:1336
+#: src/mmg/tabs/chapters.cpp:1344
 msgid "Input data error"
 msgstr "Вхідна помилка в даних"
 
@@ -4090,7 +4090,7 @@ msgid "Internal bug: tracks.cpp SSA #1. %1%"
 msgstr "Внутрішня помилка: tracks.cpp SSA #1. %1%"
 
 #: src/mmg/header_editor/frame.cpp:678
-#: src/mmg/tabs/chapters.cpp:1662
+#: src/mmg/tabs/chapters.cpp:1703
 msgid "Internal program error"
 msgstr "Внутрішня помилка програми"
 
@@ -4113,15 +4113,15 @@ msgstr "Зафіксовано некоректний символ Base64"
 msgid "Invalid BlockAddition level in argument '%1%'.\n"
 msgstr "Недопустимий рівень BlockAddition в параметрі '%1%'.\n"
 
-#: src/mmg/tabs/chapters.cpp:1258
+#: src/mmg/tabs/chapters.cpp:1299
 msgid "Invalid UID. A UID is simply a number."
 msgstr "Невірний UID. UID є просто числом."
 
-#: src/mmg/tabs/chapters.cpp:1264
+#: src/mmg/tabs/chapters.cpp:1305
 msgid "Invalid UID. This chapter UID is already in use. The original UID has not been changed."
 msgstr "Невірний UID. Цей UID розділу вже використовується. Оригінальний UID не був змінений."
 
-#: src/mmg/tabs/chapters.cpp:1276
+#: src/mmg/tabs/chapters.cpp:1317
 msgid "Invalid UID. This edition UID is already in use. The original UID has not been changed."
 msgstr "Невірний UID. Цей UID додатку вже використовується. Оригінальні UID не був змінений."
 
@@ -4228,24 +4228,24 @@ msgstr "Невірний формат лінії ('%1%') в SSA для тайм-
 msgid "Invalid format for a SSA line ('%1%') at timecode %2%: Too many fields found (%3% instead of 9). This entry will be skipped.\n"
 msgstr "Невірний формат лінії ('%1%') в SSA для тайм-коду %2%: занадто багато знайдено полів (%3% замість 9). Цей запис буде пропущено.\n"
 
-#: src/mmg/tabs/chapters.cpp:1205
+#: src/mmg/tabs/chapters.cpp:1246
 msgid "Invalid format used for the adjustment."
 msgstr "Використовується невірний формат для налагоджування."
 
-#: src/mmg/tabs/chapters.cpp:1303
+#: src/mmg/tabs/chapters.cpp:1344
 #, c-format, boost-format
 msgid "Invalid format used for the end time for '%s'. Setting value to 0."
 msgstr "Використовується невірний формат для часу закінчення '%s'. Встановлення значення 0."
 
-#: src/mmg/tabs/chapters.cpp:1336
+#: src/mmg/tabs/chapters.cpp:1377
 msgid "Invalid format used for the segment UID. Not using the value."
 msgstr "Використовується невірний формат для UID сегмента. Задане значення не використовується."
 
-#: src/mmg/tabs/chapters.cpp:1354
+#: src/mmg/tabs/chapters.cpp:1395
 msgid "Invalid format used for the segment edition UID. Not using the value."
 msgstr "Використовується невірний формат для UID додатку сегмента. Задане значення не використовується."
 
-#: src/mmg/tabs/chapters.cpp:1295
+#: src/mmg/tabs/chapters.cpp:1336
 #, c-format, boost-format
 msgid "Invalid format used for the start time for '%s'. Setting value to 0."
 msgstr "Використовується невірний формат для часу початку '%s'. Встановлення значення 0."
@@ -4298,7 +4298,7 @@ msgid "Invalid header length: %1% (total length: %2%, idx: %3%, dataidx: %4%)\n"
 msgstr "Неправильна довжина заголовка: %1% (повна довжина: %2%, idx: %3%, dataidx: %4%)\n"
 
 #: src/mmg/options/chapters.cpp:109
-#: src/mmg/tabs/chapters.cpp:1152
+#: src/mmg/tabs/chapters.cpp:1193
 msgid "Invalid language selected"
 msgstr "Обрано невірну мову"
 
@@ -4709,7 +4709,7 @@ msgstr "Аудіо/відео файли Matroska"
 msgid "Matroska files (*.mkv *.mka *.mks *.mk3d);;All files (*.*)"
 msgstr "Файли Matroska (*.mkv *.mka *.mks *.mk3d);;Всі файли (*.*)"
 
-#: src/mmg/tabs/chapters.cpp:626
+#: src/mmg/tabs/chapters.cpp:663
 #, c-format, boost-format
 msgid "Matroska files (*.mkv;*.mka;*.mk3d)|*.mkv;*.mka;*.mk3d|%s"
 msgstr "Файли Matroska (*.mkv;*.mka;*.mks;*.mk3d)|*.mkv;*.mka;*.mks;*.mk3d|%s"
@@ -4913,7 +4913,7 @@ msgstr "Назва:"
 msgid "Name: %1%"
 msgstr "Назва: %1%"
 
-#: src/mmg/tabs/chapters.cpp:452
+#: src/mmg/tabs/chapters.cpp:489
 msgid "New chapters created."
 msgstr "Створено нові розділи."
 
@@ -4984,7 +4984,7 @@ msgstr "Не було задано розподілення для файлу н
 msgid "No attachment matched the spec '%1%'.\n"
 msgstr "Вкладення з ID %1% не було знайдено.\n"
 
-#: src/mmg/tabs/chapters.cpp:765
+#: src/mmg/tabs/chapters.cpp:802
 msgid "No chapter entries have been create yet."
 msgstr "Ще не було створено жодного запису розділів."
 
@@ -4993,7 +4993,7 @@ msgstr "Ще не було створено жодного запису розд
 msgid "No chapter numbers listed after '--split %1%'.\n"
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:552
+#: src/mmg/tabs/chapters.cpp:589
 msgid "No chapters found"
 msgstr "Не знайдено жодного розділу"
 
@@ -5149,7 +5149,7 @@ msgstr "Ogg/OGM аудіо/відео файли"
 msgid "Ok"
 msgstr "OK"
 
-#: src/mmg/tabs/chapters.cpp:729
+#: src/mmg/tabs/chapters.cpp:766
 msgid "One of the chapters does not have a name."
 msgstr "Один із розділів не має назви."
 
@@ -6374,17 +6374,10 @@ msgstr "Параметр стереорежиму: не заданий у виг
 msgid "Stereo mode: %1% (%2%)"
 msgstr "Стерео режим: %1% (%2%)"
 
+#: src/common/property_element.cpp:146
 #: src/mmg/header_editor/frame.cpp:474
 msgid "Stereo-3D video mode (0 - 11, see documentation)."
 msgstr "Стерео-3D відеорежим (0 - 11, див. документацію)."
-
-#: src/common/property_element.cpp:146
-msgid ""
-"Stereo-3D video mode (0: mono, 1: right eye,\n"
-"2: left eye, 3: both eyes)."
-msgstr ""
-"Стерео-3D режим відео (0: моно, 1: праве око,\n"
-"2: ліве око, 3: обидва ока)."
 
 #: src/mmg/tabs/input_format.cpp:230
 msgid "Stereoscopy:"
@@ -6565,7 +6558,7 @@ msgstr "Файл Matroska аналізується."
 msgid "The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file."
 msgstr "Файл Matroska був змінений, але запис для мета пошуку не може бути оновлений. Це означає, що плеєру, можливо, важко буде знайти цей елемент. Будь ласка, використовуйте ваш улюблений плеєр для перевірки даного файлу."
 
-#: src/mmg/tabs/chapters.cpp:1655
+#: src/mmg/tabs/chapters.cpp:1696
 msgid ""
 "The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file.\n"
 "\n"
@@ -6679,12 +6672,12 @@ msgstr "Вкладення '%1%' не може бути прочитане.\n"
 msgid "The changes are written to the file.\n"
 msgstr "Зміни записуються до файлу.\n"
 
-#: src/mmg/tabs/chapters.cpp:742
+#: src/mmg/tabs/chapters.cpp:779
 #, c-format, boost-format
 msgid "The chapter '%s' is missing its language."
 msgstr "Для розділу '%s' не вказано його мову."
 
-#: src/mmg/tabs/chapters.cpp:736
+#: src/mmg/tabs/chapters.cpp:773
 #, c-format, boost-format
 msgid "The chapter '%s' is missing the start time."
 msgstr "Для розділу '%s' не вказано його час початку."
@@ -6810,7 +6803,7 @@ msgid "The edition UID to play from the segment linked in the chapter's segment 
 msgstr "UID додатку для відтворення з сегменту, приєднаного у UID сегменті розділу. Він є просто числом."
 
 #: src/mmg/header_editor/frame.cpp:660
-#: src/mmg/tabs/chapters.cpp:1643
+#: src/mmg/tabs/chapters.cpp:1684
 #: src/propedit/propedit.cpp:32
 msgid "The element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
 msgstr "Елемент був записаний в кінець файлу, але розмір сегмента не міг бути поновлений. Тому елемент не буде видимим. Процес буде перервано. Файл був змінений!"
@@ -6979,11 +6972,11 @@ msgstr ""
 msgid "The file you tried to open is not a Matroska file."
 msgstr "Файл, який ви спробували відкрити, не є файлом Matroska."
 
-#: src/mmg/tabs/chapters.cpp:631
+#: src/mmg/tabs/chapters.cpp:668
 msgid "The file you tried to save to is NOT a Matroska file."
 msgstr "Файл, в який ви спробували зберегти, НЕ є файлом Matroska."
 
-#: src/mmg/tabs/chapters.cpp:668
+#: src/mmg/tabs/chapters.cpp:705
 msgid "The file you tried to save to is a Matroska file. For this to work you have to use the 'Save to Matroska file' menu option."
 msgstr "Файл, в який ви спробували зберегти, є файлом Matroska. Для збереження потрібно використовувати пункт меню 'Зберегти до файлу Matroska'."
 
@@ -7092,7 +7085,7 @@ msgstr ""
 "(Проблема виникла в tab_input::load(), #3)"
 
 #: src/mmg/options/chapters.cpp:108
-#: src/mmg/tabs/chapters.cpp:1152
+#: src/mmg/tabs/chapters.cpp:1193
 #, c-format, boost-format
 msgid "The language '%s' is not a valid language and cannot be selected."
 msgstr "Мова '%s' не є коректно заданою мовою і не може бути вибрана."
@@ -7129,7 +7122,7 @@ msgstr ""
 "не використовуватиметься."
 
 #: src/mmg/header_editor/frame.cpp:666
-#: src/mmg/tabs/chapters.cpp:1649
+#: src/mmg/tabs/chapters.cpp:1690
 #: src/propedit/propedit.cpp:36
 msgid "The meta seek element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
 msgstr "Елемент метапошуку був записаний в кінець файлу, але розмір сегмента не може бути поновлений. Тому елемент не буде відображатися. Процес буде перервано. Файл був змінений!"
@@ -7308,7 +7301,7 @@ msgstr "За допомогою другого режиму можна витя�
 msgid "The seek table in this TTA file seems to be broken.\n"
 msgstr "Таблиця пошуку в даному файлі TTA пошкоджена.\n"
 
-#: src/mmg/tabs/chapters.cpp:748
+#: src/mmg/tabs/chapters.cpp:785
 #, c-format, boost-format
 msgid "The selected language '%s' for the chapter '%s' is not a valid language code. Please select one of the predefined ones."
 msgstr "Вибрана мова '%s' для розділу '%s' не є корректним кодом мови. Будь ласка, виберіть один з наперед визначених."
@@ -7606,7 +7599,7 @@ msgid "This file contains coordinates in the timecode lines. Such coordinates ar
 msgstr "Цей файл містить координати в рядках тайм-кодів. Такі координати не підтримуються Matroska SRT форматом субтитрів. Координати будуть автоматично видалені.\n"
 
 #: src/mmg/header_editor/frame.cpp:257
-#: src/mmg/tabs/chapters.cpp:545
+#: src/mmg/tabs/chapters.cpp:582
 msgid "This file could not be opened or parsed."
 msgstr "Цей файл не може бути відкритий або проаналізований."
 
@@ -7614,11 +7607,11 @@ msgstr "Цей файл не може бути відкритий або про�
 msgid "This file could not be opened or parsed.\n"
 msgstr "Цей файл не може бути відкритий або проаналізований.\n"
 
-#: src/mmg/tabs/chapters.cpp:552
+#: src/mmg/tabs/chapters.cpp:589
 msgid "This file does not contain any chapters."
 msgstr "Цей файл не містить розділів."
 
-#: src/mmg/tabs/chapters.cpp:572
+#: src/mmg/tabs/chapters.cpp:609
 msgid "This file does not contain valid chapters."
 msgstr "Цей файл не містить корректно сформованих розділів."
 
@@ -8298,8 +8291,8 @@ msgid "Wrong file chosen"
 msgstr "Неправильно вибраний файл"
 
 #: src/mmg/header_editor/frame.cpp:247
-#: src/mmg/tabs/chapters.cpp:631
-#: src/mmg/tabs/chapters.cpp:669
+#: src/mmg/tabs/chapters.cpp:668
+#: src/mmg/tabs/chapters.cpp:706
 msgid "Wrong file selected"
 msgstr "Неправильно обраний файл"
 
@@ -8323,7 +8316,7 @@ msgstr "Неправильний рядок ідентифікації: '%|1$7s|
 msgid "You are already running the latest version."
 msgstr "Ви вже використовуєте останню версію."
 
-#: src/mmg/tabs/chapters.cpp:1173
+#: src/mmg/tabs/chapters.cpp:1214
 msgid ""
 "You can use this function for adjusting the timecodes\n"
 "of the selected chapter and all its children by a fixed amount.\n"
@@ -9239,7 +9232,7 @@ msgstr "spu_extraction_duration: Виявлено пошкоджений пак�
 msgid "ssa_reader: Invalid format. Could not find the \"Format\" line in the \"[Events]\" section."
 msgstr "ssa_reader: Невірний формат. Не знайдено рядок \"Format\" у секції \"[Events]\"."
 
-#: src/mmg/tabs/chapters.cpp:849
+#: src/mmg/tabs/chapters.cpp:886
 msgid "start >= m->ListSize(). This should not have happened. Please file a bug report. Thanks."
 msgstr "start >= m->ListSize(). Цього не повинно було статися. Будь ласка, повідомте про помилку. Спасибі."
 
@@ -9313,7 +9306,7 @@ msgstr "Вгору"
 msgid "utf8_strlen(): Invalid UTF-8 char. First byte: 0x%|1$02x|"
 msgstr "utf8_strlen(): Невірний UTF-8 символ. Перший байт: 0x%|1$02x|"
 
-#: src/mmg/tabs/chapters.cpp:801
+#: src/mmg/tabs/chapters.cpp:838
 msgid "verify failed: chapters->CheckMandatory() is false. This should not have happened. Please file a bug report.\n"
 msgstr "збій перевірки: chapters->CheckMandatory() ist false. Цього не повинно було статися. Будь ласка, повідомте про помилку.\n"
 
@@ -9589,6 +9582,13 @@ msgstr "Так"
 
 #~ msgid "Shortened GOP detected. Some frames have been dropped. You may want to fix the MPEG2 video stream before attempting to multiplex it.\n"
 #~ msgstr "Виявлено скорочену GOP. Деякі кадри були пропущені. Ви можете виправити MPEG2 відеопотік перед мультиплексуванням як таким.\n"
+
+#~ msgid ""
+#~ "Stereo-3D video mode (0: mono, 1: right eye,\n"
+#~ "2: left eye, 3: both eyes)."
+#~ msgstr ""
+#~ "Стерео-3D режим відео (0: моно, 1: праве око,\n"
+#~ "2: ліве око, 3: обидва ока)."
 
 #~ msgid "TTA lossless audio"
 #~ msgstr "TTA аудіо без втрат"
