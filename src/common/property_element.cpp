@@ -143,7 +143,7 @@ property_element_c::init_tables() {
   ELE("pixel-crop-bottom", KaxVideoPixelCropBottom::ClassInfos, Y("Video crop bottom"),       Y("The number of video pixels to remove\non the bottom of the image."));
   ELE("aspect-ratio-type", KaxVideoAspectRatio::ClassInfos,     Y("Video aspect ratio type"), Y("Specify the possible modifications to the aspect ratio\n"
                                                                                                 "(0: free resizing, 1: keep aspect ratio, 2: fixed)."));
-  ELE("stereo-mode",       KaxVideoStereoMode::ClassInfos,      Y("Video stereo mode"),       Y("Stereo-3D video mode (0: mono, 1: right eye,\n2: left eye, 3: both eyes)."));
+  ELE("stereo-mode",       KaxVideoStereoMode::ClassInfos,      Y("Video stereo mode"),       Y("Stereo-3D video mode (0 - 11, see documentation)."));
 
   sub_master_callbacks = &KaxTrackAudio::ClassInfos;
 
