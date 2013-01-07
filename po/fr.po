@@ -926,7 +926,7 @@ msgstr ""
 msgid "&Abort"
 msgstr "&Interrompre"
 
-#: src/mmg/mmg_dialog.cpp:308
+#: src/mmg/mmg_dialog.cpp:312
 msgid "&About"
 msgstr "&À propos…"
 
@@ -938,24 +938,24 @@ msgstr "&À propos…\tF1"
 msgid "&Add"
 msgstr "&Ajouter"
 
-#: src/mmg/mmg_dialog.cpp:294
-#: src/mmg/mmg_dialog.cpp:328
+#: src/mmg/mmg_dialog.cpp:298
+#: src/mmg/mmg_dialog.cpp:333
 msgid "&Add to job queue"
 msgstr "A&jouter aux tâches en attente"
 
-#: src/mmg/mmg_dialog.cpp:304
+#: src/mmg/mmg_dialog.cpp:308
 msgid "&Attachments\tAlt-2"
 msgstr "&Pièces jointes\tAlt-2"
 
-#: src/mmg/mmg_dialog.cpp:315
+#: src/mmg/mmg_dialog.cpp:320
 msgid "&Chapter Editor"
 msgstr "&Éditeur de chapitres"
 
-#: src/mmg/mmg_dialog.cpp:306
+#: src/mmg/mmg_dialog.cpp:310
 msgid "&Chapter editor\tAlt-4"
 msgstr "&Éditeur de chapitres\tAlt-4"
 
-#: src/mmg/mmg_dialog.cpp:310
+#: src/mmg/mmg_dialog.cpp:315
 msgid "&Check for updates"
 msgstr "&Mise à jour"
 
@@ -972,11 +972,11 @@ msgstr "&Fermer\tCtrl-W"
 msgid "&Collapse all entries\tCtrl-P"
 msgstr "&Replier toutes les entrées\tCtrl-P"
 
-#: src/mmg/mmg_dialog.cpp:291
+#: src/mmg/mmg_dialog.cpp:295
 msgid "&Copy command line to clipboard"
 msgstr "&Copier la ligne de commande dans le presse-papiers"
 
-#: src/mmg/mmg_dialog.cpp:327
+#: src/mmg/mmg_dialog.cpp:332
 msgid "&Copy to clipboard"
 msgstr "&Copier dans le presse-papiers"
 
@@ -1003,54 +1003,54 @@ msgstr "&Développer les éléments importants\tCtrl-E"
 
 #: src/info/wxwidgets_ui.cpp:128
 #: src/mmg/header_editor/frame.cpp:150
-#: src/mmg/mmg_dialog.cpp:313
+#: src/mmg/mmg_dialog.cpp:318
 msgid "&File"
 msgstr "&Fichier"
 
-#: src/mmg/mmg_dialog.cpp:305
+#: src/mmg/mmg_dialog.cpp:309
 msgid "&Global options\tAlt-3"
 msgstr "&Options globales\tAlt-3"
 
-#: src/mmg/mmg_dialog.cpp:287
+#: src/mmg/mmg_dialog.cpp:291
 msgid "&Header editor\tCtrl-E"
 msgstr "&Éditeur d'en-têtes\tCtrl-E"
 
 #: src/info/wxwidgets_ui.cpp:130
 #: src/mmg/header_editor/frame.cpp:152
-#: src/mmg/mmg_dialog.cpp:317
+#: src/mmg/mmg_dialog.cpp:322
 msgid "&Help"
 msgstr "&Aide"
 
 #: src/mmg/header_editor/frame.cpp:149
-#: src/mmg/mmg_dialog.cpp:307
+#: src/mmg/mmg_dialog.cpp:311
 msgid "&Help\tF1"
 msgstr "&Aide\tF1"
 
-#: src/mmg/mmg_dialog.cpp:303
+#: src/mmg/mmg_dialog.cpp:307
 msgid "&Input\tAlt-1"
 msgstr "&Sources\tAlt-1"
 
-#: src/mmg/mmg_dialog.cpp:298
+#: src/mmg/mmg_dialog.cpp:302
 msgid "&Load"
 msgstr "&Charger"
 
-#: src/mmg/mmg_dialog.cpp:283
+#: src/mmg/mmg_dialog.cpp:287
 msgid "&Load settings\tCtrl-L"
 msgstr "&Charger une configuration\tCtrl-L"
 
-#: src/mmg/mmg_dialog.cpp:295
+#: src/mmg/mmg_dialog.cpp:299
 msgid "&Manage jobs\tCtrl-J"
 msgstr "&Gérer les tâches\tCtrl-J"
 
-#: src/mmg/mmg_dialog.cpp:314
+#: src/mmg/mmg_dialog.cpp:319
 msgid "&Muxing"
 msgstr "&Multiplexage"
 
-#: src/mmg/mmg_dialog.cpp:282
+#: src/mmg/mmg_dialog.cpp:286
 msgid "&New\tCtrl-N"
 msgstr "&Nouveau\tCtrl-N"
 
-#: src/mmg/mmg_dialog.cpp:297
+#: src/mmg/mmg_dialog.cpp:301
 msgid "&New chapters"
 msgstr "&Nouveaux chapitres"
 
@@ -1070,7 +1070,7 @@ msgid "&Options"
 msgstr "&Options"
 
 #: src/mmg/header_editor/frame.cpp:145
-#: src/mmg/mmg_dialog.cpp:288
+#: src/mmg/mmg_dialog.cpp:292
 msgid "&Quit\tCtrl-Q"
 msgstr "&Quitter\tCtrl-Q"
 
@@ -1091,7 +1091,7 @@ msgid "&Reset"
 msgstr "&Réinitialiser"
 
 #: src/mmg/jobs.cpp:404
-#: src/mmg/mmg_dialog.cpp:299
+#: src/mmg/mmg_dialog.cpp:303
 msgid "&Save"
 msgstr "&Enregistrer"
 
@@ -1103,7 +1103,7 @@ msgstr "&Enregistrer\tCtrl-S"
 msgid "&Save info as text\tCtrl-S"
 msgstr "&Enregistrer les informations en texte\tCtrl-S"
 
-#: src/mmg/mmg_dialog.cpp:284
+#: src/mmg/mmg_dialog.cpp:288
 msgid "&Save settings\tCtrl-S"
 msgstr "&Enregistrer la configuration\tCtrl-S"
 
@@ -1115,6 +1115,10 @@ msgstr "&Trier"
 msgid "&Start"
 msgstr "&Démarrer"
 
+#: src/mmg/mmg_dialog.cpp:313
+msgid "&Troubleshooting"
+msgstr ""
+
 #: src/mmg/jobs.cpp:475
 #: src/mmg/tabs/additional_parts_dlg.cpp:47
 msgid "&Up"
@@ -1124,7 +1128,7 @@ msgstr "&Monter"
 msgid "&Validate\tCtrl-T"
 msgstr "&Valider\tCtrl-T"
 
-#: src/mmg/mmg_dialog.cpp:302
+#: src/mmg/mmg_dialog.cpp:306
 msgid "&Verify"
 msgstr "&Vérifier"
 
@@ -1132,7 +1136,7 @@ msgstr "&Vérifier"
 msgid "&View log"
 msgstr "&Afficher le journal"
 
-#: src/mmg/mmg_dialog.cpp:316
+#: src/mmg/mmg_dialog.cpp:321
 msgid "&Window"
 msgstr "&Fenêtre"
 
@@ -1747,7 +1751,7 @@ msgstr "Une chaîne compréhensible spécifiant le codec."
 msgid "A human-readable track name."
 msgstr "Un nom de piste compréhensible."
 
-#: src/mmg/mmg_dialog.cpp:1428
+#: src/mmg/mmg_dialog.cpp:1438
 #, c-format, boost-format
 msgid "A job with the description '%s' already exists. Do you really want to add another one with the same description?"
 msgstr "Une tâche de description '%s' existe déjà. Voulez-vous vraiment en ajouter une autre de même description ?"
@@ -1913,7 +1917,7 @@ msgstr ""
 msgid "Add"
 msgstr "Ajouter"
 
-#: src/mmg/mmg_dialog.cpp:296
+#: src/mmg/mmg_dialog.cpp:300
 msgid "Add &command line options"
 msgstr "Aj&outer des options à la ligne de commande"
 
@@ -1974,7 +1978,7 @@ msgstr "Ajouts"
 msgid "Adds a property with the value even if such a property already exists"
 msgstr "Ajouter une propriété avec la valeur même si une telle propriété existe déjà."
 
-#: src/mmg/mmg_dialog.cpp:294
+#: src/mmg/mmg_dialog.cpp:298
 msgid "Adds the current settings as a new job entry to the job queue"
 msgstr "Définir la configuration actuelle comme nouvelle tâche en attente."
 
@@ -2104,7 +2108,7 @@ msgstr "Analyser les flux MPEG-4, mettre chaque image dans un bloc Matrosla, uti
 msgid "Another default track for %1% tracks has already been set. The 'default' flag for track %2% of '%3%' will not be set.\n"
 msgstr "Une autre piste a déjà été prise comme piste par défaut pour %1%. La marque 'défaut' ne sera pas attribuée à la piste %2% sur '%3%'.\n"
 
-#: src/mmg/mmg_dialog.cpp:593
+#: src/mmg/mmg_dialog.cpp:598
 msgid "Another muxing job in still in progress. Please wait until it has finished or abort it manually before starting a new one."
 msgstr "Une autre tâche de multiplexage est déjà en cours. Veuillez attendre qu'elle soit terminée ou interrompez-la avant d'en démarrer une nouvelle."
 
@@ -2170,7 +2174,7 @@ msgid "Attachment style:"
 msgstr "Type d'attachement :"
 
 #: src/info/mkvinfo.cpp:1073
-#: src/mmg/mmg_dialog.cpp:320
+#: src/mmg/mmg_dialog.cpp:325
 #: src/mmg/tabs/attachments.cpp:153
 #: src/propedit/options.cpp:195
 msgid "Attachments"
@@ -2299,11 +2303,11 @@ msgstr "Le format d'image et les dimensions à l'écran ('--display-dimensions')
 msgid "Both the aspect ratio factor and '--display-dimensions' were given.\n"
 msgstr "Le facteur de format d'image et les dimensions à l'écran ('--display-dimensions') ont été donnés tous les deux.\n"
 
-#: src/mmg/mmg_dialog.cpp:295
+#: src/mmg/mmg_dialog.cpp:299
 msgid "Brings up the job queue editor"
 msgstr "Ouvrir le gestionnaire des tâches."
 
-#: src/mmg/mmg_dialog.cpp:325
+#: src/mmg/mmg_dialog.cpp:330
 #: src/mmg/options/mkvmerge.cpp:52
 #: src/mmg/options/mmg.cpp:62
 #: src/mmg/tabs/global.cpp:327
@@ -2335,7 +2339,7 @@ msgstr "Impossible de convertir des images vidéo MPEG-4 non natives en des nati
 msgid "Cannot extract tracks of different kinds to the same file. This was requested for the tracks %1% and %2%.\n"
 msgstr "Impossible d'extraire des pistes de types différents dans le même fichier, ce qui a été demandé pour les pistes %1% et %2%.\n"
 
-#: src/mmg/mmg_dialog.cpp:594
+#: src/mmg/mmg_dialog.cpp:599
 msgid "Cannot start second muxing job"
 msgstr "Impossible de démarrer une autre tâche de multiplexage."
 
@@ -2394,7 +2398,7 @@ msgstr "Changement pour '%1%' effectué. %2% entrées définies.\n"
 msgid "Change for '%1%' executed. One entry added.\n"
 msgstr "Changement pour '%1%\" effectué. Une entrée ajoutée.\n"
 
-#: src/mmg/mmg_dialog.cpp:286
+#: src/mmg/mmg_dialog.cpp:290
 msgid "Change mmg's preferences and options"
 msgstr "Modifier les préférences et options de mmg."
 
@@ -2412,7 +2416,7 @@ msgstr "Position des canaux : %1%"
 msgid "Channels: %1%"
 msgstr "Canaux : %1%"
 
-#: src/mmg/mmg_dialog.cpp:322
+#: src/mmg/mmg_dialog.cpp:327
 msgid "Chapter Editor"
 msgstr "Éditeur de chapitres"
 
@@ -2435,7 +2439,7 @@ msgstr "UID d'édition de la traduction de chapitre : %1%"
 msgid "Chapter Translate ID: %1%"
 msgstr "Identifiant de traduction de chapitre : %1%"
 
-#: src/mmg/mmg_dialog.cpp:622
+#: src/mmg/mmg_dialog.cpp:627
 msgid "Chapter editor is not empty"
 msgstr "Éditeur de chapitres non vide"
 
@@ -2536,7 +2540,7 @@ msgstr "Jeu de caractères pour les chaînes de la ligne de commande"
 msgid "Charset:"
 msgstr "Jeu de caractères :"
 
-#: src/mmg/mmg_dialog.cpp:310
+#: src/mmg/mmg_dialog.cpp:315
 #: src/mmg/options/mmg.cpp:102
 msgid "Check online for the latest release"
 msgstr "Rechercher la dernière version en ligne"
@@ -2550,7 +2554,7 @@ msgstr "Rechercher la dernière version en ligne."
 msgid "Check online whether or not a new release of MKVToolNix is available on the home page. Will only check when mmg starts and at most once a day. No information is transmitted to the server."
 msgstr "Vérifier en ligne si une nouvelle version de MKVToolNix est disponible sur le site. Cette vérification se fait au démarrage de mmg et au plus une fois par jour. Aucune information n'est communiquée au serveur."
 
-#: src/mmg/mmg_dialog.cpp:1750
+#: src/mmg/mmg_dialog.cpp:1760
 msgid "Checking for updates online; please wait"
 msgstr "Recherche en ligne d'une mise à jour, veuillez patienter."
 
@@ -2570,7 +2574,7 @@ msgstr "Choisir un fichier de codes temporels"
 msgid "Choose an attachment file"
 msgstr "Choisir une pièce jointe"
 
-#: src/mmg/mmg_dialog.cpp:400
+#: src/mmg/mmg_dialog.cpp:405
 msgid "Choose an input file"
 msgstr "Choisir un fichier source"
 
@@ -2583,10 +2587,10 @@ msgid "Choose an input file to append"
 msgstr "Choisir un fichier à concaténer"
 
 #: src/mmg/jobs.cpp:417
-#: src/mmg/mmg_dialog.cpp:348
-#: src/mmg/mmg_dialog.cpp:448
-#: src/mmg/mmg_dialog.cpp:756
-#: src/mmg/mmg_dialog.cpp:777
+#: src/mmg/mmg_dialog.cpp:353
+#: src/mmg/mmg_dialog.cpp:453
+#: src/mmg/mmg_dialog.cpp:766
+#: src/mmg/mmg_dialog.cpp:787
 #: src/mmg/mux_dialog.cpp:204
 #: src/mmg/tabs/chapters.cpp:662
 #: src/mmg/tabs/chapters.cpp:699
@@ -2597,7 +2601,7 @@ msgstr "Choisir un fichier cible"
 msgid "Choose the chapter file"
 msgstr "Choisir le fichier de chapitres"
 
-#: src/mmg/mmg_dialog.cpp:658
+#: src/mmg/mmg_dialog.cpp:663
 msgid "Choose the location of the mkvmerge GUI help files"
 msgstr "Choisir l'emplacement des fichiers d'aide de l'interface de mkvmerge'"
 
@@ -2721,7 +2725,7 @@ msgstr "Replier toutes les entrées de sorte qu'aucune de leurs sous-entrées ne
 msgid "Colour space: %1%"
 msgstr "Espace couleur : %1%"
 
-#: src/mmg/mmg_dialog.cpp:808
+#: src/mmg/mmg_dialog.cpp:818
 msgid "Command line copied to clipboard."
 msgstr "Ligne de commande copiée dans le presse-papiers."
 
@@ -2729,7 +2733,7 @@ msgstr "Ligne de commande copiée dans le presse-papiers."
 msgid "Command line options:"
 msgstr "Options ajoutées à la ligne de commande :"
 
-#: src/mmg/mmg_dialog.cpp:766
+#: src/mmg/mmg_dialog.cpp:776
 msgid "Command line saved."
 msgstr "Ligne de commande enregistrée."
 
@@ -2751,15 +2755,15 @@ msgstr "La compression a échoué : %1%.\n"
 msgid "Compression:"
 msgstr "Compression :"
 
-#: src/mmg/mmg_dialog.cpp:395
+#: src/mmg/mmg_dialog.cpp:400
 msgid "Configuration cleared."
 msgstr "Configuration effacée."
 
-#: src/mmg/mmg_dialog.cpp:442
+#: src/mmg/mmg_dialog.cpp:447
 msgid "Configuration loaded."
 msgstr "Configuration chargée."
 
-#: src/mmg/mmg_dialog.cpp:475
+#: src/mmg/mmg_dialog.cpp:480
 msgid "Configuration saved."
 msgstr "Configuration enregistrée."
 
@@ -2783,7 +2787,7 @@ msgstr "Chiffrement du contenu"
 msgid "Convert text subtitles to this charset (default: UTF-8)."
 msgstr "Convertir les sous-titres texte dans ce jeu de caractères (défaut : UTF-8)."
 
-#: src/mmg/mmg_dialog.cpp:291
+#: src/mmg/mmg_dialog.cpp:295
 msgid "Copy the command line to the clipboard"
 msgstr "Copier la ligne de commande dans le presse-papiers."
 
@@ -2804,7 +2808,7 @@ msgstr "Impossible de créer un fichier temporaire pour l'option de commande de 
 msgid "Could not create the file '%s'."
 msgstr "Impossible de créer le fichier '%s'."
 
-#: src/mmg/mmg_dialog.cpp:786
+#: src/mmg/mmg_dialog.cpp:796
 msgid "Could not create the specified file."
 msgstr "Impossible de créer le fichier spécifié."
 
@@ -2856,7 +2860,7 @@ msgstr "Impossible d'initialiser la bibliothèque iconv pour la conversion de UT
 msgid "Could not open '%1%' for reading.\n"
 msgstr "Impossible d'ouvrir '%1%' en lecture.\n"
 
-#: src/mmg/mmg_dialog.cpp:810
+#: src/mmg/mmg_dialog.cpp:820
 msgid "Could not open the clipboard."
 msgstr "Impossible d'ouvrir le presse-papiers."
 
@@ -2904,7 +2908,7 @@ msgstr "Impossible d'écrire dans le fichier cible : %1% (%2%).\n"
 msgid "Country:"
 msgstr "Pays :"
 
-#: src/mmg/mmg_dialog.cpp:293
+#: src/mmg/mmg_dialog.cpp:297
 msgid "Create &option file"
 msgstr "C&réer un fichier d'options"
 
@@ -2916,7 +2920,7 @@ msgstr "Créer un fichier conforme au format WebM"
 msgid "Create a WebM compliant file. mkvmerge also turns this on if the output file name's extension is \"webm\". This mode enforces several restrictions. The only allowed codecs are VP8 video and Vorbis audio tracks. Neither chapters nor tags are allowed. The DocType header item is changed to \"webm\"."
 msgstr "Créer un fichier conforme au format WebM. mkvmerge active automatiquement cette option si l'extension du fichier est \"webm\". Ce mode impose plusieurs restrictions. Les seuls codecs autorisés sont VP8 vidéo et Vorbis audio. Ni les chapitres, ni les étiquettes ne sont autorisés. L'élément d'en-tête DocType est changé en \"webm\"."
 
-#: src/mmg/mmg_dialog.cpp:297
+#: src/mmg/mmg_dialog.cpp:301
 msgid "Create a new chapter file"
 msgstr "Créer un nouveau fichier de chapitres."
 
@@ -3032,7 +3036,7 @@ msgstr "Index :"
 msgid "Current and past jobs:"
 msgstr "Tâches anciennes et actuelles :"
 
-#: src/mmg/mmg_dialog.cpp:748
+#: src/mmg/mmg_dialog.cpp:758
 msgid "Current command line"
 msgstr "Ligne de commande actuelle"
 
@@ -3161,7 +3165,7 @@ msgstr "Supprimer les tâches sélectionnées de la liste."
 msgid "Description"
 msgstr "Description"
 
-#: src/mmg/mmg_dialog.cpp:1429
+#: src/mmg/mmg_dialog.cpp:1439
 msgid "Description already exists"
 msgstr "Description existante"
 
@@ -3417,8 +3421,8 @@ msgid "Error in line %1%: expected subtitle number and found some text.\n"
 msgstr "Erreur à la ligne %1% : un numéro de sous-titre était attendu et un autre texte a été trouvé.\n"
 
 #: src/mmg/mmg.cpp:248
-#: src/mmg/mmg_dialog.cpp:405
-#: src/mmg/mmg_dialog.cpp:426
+#: src/mmg/mmg_dialog.cpp:410
+#: src/mmg/mmg_dialog.cpp:431
 msgid "Error loading settings"
 msgstr "Erreur au chargement des paramètres"
 
@@ -3634,7 +3638,7 @@ msgstr "UIF du fichier : %1%"
 msgid "File contains fewer frames than expected or is corrupt after frame %1%.\n"
 msgstr "Le fichier contient moins d'images que prévu ou est défectueux après l'image %1%.\n"
 
-#: src/mmg/mmg_dialog.cpp:786
+#: src/mmg/mmg_dialog.cpp:796
 #: src/mmg/mux_dialog.cpp:117
 #: src/mmg/tabs/input.cpp:503
 msgid "File creation failed"
@@ -3832,7 +3836,7 @@ msgstr "Gamma : %1%"
 msgid "General track options"
 msgstr "Options générales"
 
-#: src/mmg/mmg_dialog.cpp:321
+#: src/mmg/mmg_dialog.cpp:326
 msgid "Global"
 msgstr "Global"
 
@@ -3900,12 +3904,12 @@ msgstr "Hauteur des images vidéo encodées en pixels."
 msgid "Height of the video frames to display."
 msgstr "Hauteur des images vidéo à l'écran."
 
-#: src/mmg/mmg_dialog.cpp:708
-#: src/mmg/mmg_dialog.cpp:714
+#: src/mmg/mmg_dialog.cpp:713
+#: src/mmg/mmg_dialog.cpp:719
 msgid "Help file not found"
 msgstr "Fichier d'aide non trouvé"
 
-#: src/mmg/mmg_dialog.cpp:738
+#: src/mmg/mmg_dialog.cpp:743
 msgid ""
 "Help is available in form of tool tips, from the\n"
 "'Help' menu or by pressing the 'F1' key."
@@ -4015,6 +4019,10 @@ msgstr ""
 msgid "If splitting is a file can be attached either to all files created or only to the first file. Has no effect if no splitting is used."
 msgstr "Lors d'un fractionnement, un fichier peut être joint à tous les fichiers créés ou seulement au premier. Option sans effet s'il n'y a pas fractionnement."
 
+#: src/mmg/mmg_dialog.cpp:1949
+msgid "If you encounter problems during playback of files please consider visiting the newly created MKVToolNix troubleshooting advice page:"
+msgstr ""
+
 #: src/output/p_textsubs.cpp:69
 #, boost-format
 msgid "Ignoring an entry which starts after it ends (%1%).\n"
@@ -4030,7 +4038,7 @@ msgstr "Police importée de %1%"
 msgid "Imported picture from %1%"
 msgstr "Image importée de %1%"
 
-#: src/mmg/mmg_dialog.cpp:1895
+#: src/mmg/mmg_dialog.cpp:1905
 msgid "Incompatible mkvmerge version"
 msgstr "Version de mkvmerge incompatible"
 
@@ -4047,7 +4055,7 @@ msgstr "Paquet audio AAC incohérent (longueur : %1% != len_check %2%)\n"
 msgid "Increase verbosity."
 msgstr "Augmenter la verbosité."
 
-#: src/mmg/mmg_dialog.cpp:319
+#: src/mmg/mmg_dialog.cpp:324
 msgid "Input"
 msgstr "Sources"
 
@@ -4203,7 +4211,7 @@ msgstr "Temps de fin incorrect pour '--split' dans '--split %1%' (partie actuell
 msgid "Invalid end time for '--split' in '--split %1%' (current part: %2%). The end time must be bigger than the start time.\n"
 msgstr "Temps de fin non valide pour '--split' dans '--split %1%' (partie actuelle : %2%). Le temps de fin doit être plus grand que celui de début.\n"
 
-#: src/mmg/mmg_dialog.cpp:601
+#: src/mmg/mmg_dialog.cpp:606
 msgid "Invalid file name"
 msgstr "Nom de fichier incorrect"
 
@@ -4461,11 +4469,15 @@ msgstr "Numéro de piste incorrect spécifié dans '--sub-charset %1%'.\n"
 msgid "Invalid track ID/file name specification in argument '%1%'.\n"
 msgstr "Indication incorrecte du numéro de piste/nom de fichier dans l'argument '%1%'.\n"
 
-#: src/mmg/mmg_dialog.cpp:1465
+#: src/mmg/mmg_dialog.cpp:1953
+msgid "It can also be opened from the 'Help' menu."
+msgstr ""
+
+#: src/mmg/mmg_dialog.cpp:1475
 msgid "Job added to job queue"
 msgstr "Tâche ajoutée à la liste"
 
-#: src/mmg/mmg_dialog.cpp:1417
+#: src/mmg/mmg_dialog.cpp:1427
 msgid "Job description"
 msgstr "Description de la tâche"
 
@@ -4537,7 +4549,7 @@ msgstr "Langues"
 msgid "Leave additional space (EbmlVoid) in the output file after the chapters."
 msgstr "Laisser un espace supplémentaire (EbmlVoid) dans le fichier cible après les chapitres."
 
-#: src/mmg/mmg_dialog.cpp:296
+#: src/mmg/mmg_dialog.cpp:300
 msgid "Lets you add arbitrary options to the command line"
 msgstr "Ajouter des options particulières à la ligne de commande."
 
@@ -4582,11 +4594,11 @@ msgstr "Ligne %1% : la ligne semble être une entrée de sous-titres mais le cod
 msgid "List all valid property names and exit"
 msgstr "Lister tous les noms de propriétés corrects et quitter."
 
-#: src/mmg/mmg_dialog.cpp:298
+#: src/mmg/mmg_dialog.cpp:302
 msgid "Load a chapter file (simple/OGM format or XML format)"
 msgstr "Charger un fichier de chapitres (format simple/OGM ou format XML)."
 
-#: src/mmg/mmg_dialog.cpp:283
+#: src/mmg/mmg_dialog.cpp:287
 msgid "Load muxing settings from a file"
 msgstr "Charger les paramètres de multiplexage depuis un fichier."
 
@@ -4611,7 +4623,7 @@ msgstr "Type MIME pour cette piste. Sélectionnez un des types MIME prédéfinis
 msgid "MIME type:"
 msgstr "Type MIME :"
 
-#: src/mmg/mmg_dialog.cpp:736
+#: src/mmg/mmg_dialog.cpp:741
 msgid "MKVToolNix is licensed under the GNU GPL v2"
 msgstr "MKVToolNix est diffusé sous licence GNU GPL v2."
 
@@ -4692,7 +4704,7 @@ msgstr "Marquer cette piste 'obligatoire'. Les lecteurs devront la lire."
 msgid "Matroska"
 msgstr "Matroska"
 
-#: src/mmg/mmg_dialog.cpp:350
+#: src/mmg/mmg_dialog.cpp:355
 #, c-format, boost-format
 msgid "Matroska A/V files (*.mka;*.mkv;*.mk3d)|*.mkv;*.mka;*.mk3d|%s"
 msgstr "Fichiers Matroska (*.mkv;*.mka;*.mks;*.mk3d)|*.mkv;*.mka;*.mks;*.mk3d|%s"
@@ -5122,6 +5134,10 @@ msgstr ""
 msgid "Nothing to do.\n"
 msgstr "Rien à faire.\n"
 
+#: src/mmg/mmg_dialog.cpp:1941
+msgid "Notice"
+msgstr ""
+
 #: src/common/property_element.cpp:126
 #: src/mmg/header_editor/frame.cpp:407
 msgid "Number of nanoseconds (not scaled) per frame."
@@ -5205,7 +5221,7 @@ msgstr "Seulement au 1er fichier"
 msgid "Only v7 and newer VobSub files are supported. If you have an older version then use the VSConv utility from http://sourceforge.net/projects/guliverkli/ to convert these files to v7 files.\n"
 msgstr "Seuls les fichiers VobSub version 7 ou plus récente sont pris en charge. Si vous avez une version plus ancienne, utilisez l'utilitaire VSConv ( http://sourceforge.net/projects/guliverkli/) pour convertir ces fichiers en version 7.\n"
 
-#: src/mmg/mmg_dialog.cpp:286
+#: src/mmg/mmg_dialog.cpp:290
 msgid "Op&tions\tCtrl-P"
 msgstr "&Options\tCtrl-P"
 
@@ -5226,7 +5242,7 @@ msgstr "Ouvrir un fichier Matroska existant."
 msgid "Open folder"
 msgstr "Ouvrir le dossier"
 
-#: src/mmg/mmg_dialog.cpp:798
+#: src/mmg/mmg_dialog.cpp:808
 msgid "Option file created."
 msgstr "Fichier d'options créé."
 
@@ -5266,7 +5282,7 @@ msgstr "Autres options"
 msgid "Output"
 msgstr "Compte rendu"
 
-#: src/mmg/mmg_dialog.cpp:324
+#: src/mmg/mmg_dialog.cpp:329
 msgid "Output filename"
 msgstr "Fichier cible"
 
@@ -5287,12 +5303,12 @@ msgstr "Fréquence d'échantillonnage en sortie : %1%"
 msgid "Output:"
 msgstr "Rapport :"
 
-#: src/mmg/mmg_dialog.cpp:566
+#: src/mmg/mmg_dialog.cpp:571
 msgid "Overwrite existing file(s)?"
 msgstr "Remplacer les fichiers existants ?"
 
-#: src/mmg/mmg_dialog.cpp:547
-#: src/mmg/mmg_dialog.cpp:1411
+#: src/mmg/mmg_dialog.cpp:552
+#: src/mmg/mmg_dialog.cpp:1421
 msgid "Overwrite existing file?"
 msgstr "Remplacer le fichier existant ?"
 
@@ -5377,7 +5393,7 @@ msgstr "Largeur (pixels) : %1%"
 msgid "Please do not select 'mmg' itself as the 'mkvmerge' executable."
 msgstr "Veuillez ne pas confondre l'interface graphique 'mmg' et l'exécutable 'mkvmerge'."
 
-#: src/mmg/mmg_dialog.cpp:1417
+#: src/mmg/mmg_dialog.cpp:1427
 msgid "Please enter a description for the new job:"
 msgstr "Veuillez saisir une description pour cette tâche :"
 
@@ -5467,7 +5483,7 @@ msgstr "Progression : 100%%%1%"
 msgid "Progress: [%1%%2%] %3%%%"
 msgstr "Progression : [%1%%2%] %3%%%"
 
-#: src/mmg/mmg_dialog.cpp:1838
+#: src/mmg/mmg_dialog.cpp:1848
 msgid "Querying mkvmerge's capabilities"
 msgstr "Demande des fonctions prises en charge par mkvmerge"
 
@@ -5614,7 +5630,7 @@ msgstr "Démultiplexeur Quicktime/MP4 : FourCC inconnu/non supporté '%|1$.4s|' 
 msgid "Quicktime/MP4 reader: Unknown/unsupported FourCC '%|1$.4s|' for track %2%.\n"
 msgstr "Démultiplexeur Quicktime/MP4 : FourCC inconnu/non supporté '%|1$.4s|' pour la piste %2%.\n"
 
-#: src/mmg/mmg_dialog.cpp:288
+#: src/mmg/mmg_dialog.cpp:292
 msgid "Quit the application"
 msgstr "Quitter le programme."
 
@@ -5732,15 +5748,15 @@ msgstr "Échec de resynchronisation : aucun élément Matroska de niveau 1 corre
 msgid "Resyncing successful at position %1%.\n"
 msgstr "Resynchronisation réussie à la position %1%.\n"
 
-#: src/mmg/mmg_dialog.cpp:289
+#: src/mmg/mmg_dialog.cpp:293
 msgid "Run mkvmerge and start the muxing process"
 msgstr "Exécuter mkvmerge et démarrer le multiplexage."
 
-#: src/mmg/mmg_dialog.cpp:287
+#: src/mmg/mmg_dialog.cpp:291
 msgid "Run the header field editor"
 msgstr "Ouvrir l'éditeur d'en-têtes."
 
-#: src/mmg/mmg_dialog.cpp:290
+#: src/mmg/mmg_dialog.cpp:294
 msgid "S&how the command line"
 msgstr "&Afficher la ligne de commande"
 
@@ -5768,7 +5784,7 @@ msgstr "Sous-titres SSA/ASS"
 msgid "SSA/ASS text subtitles"
 msgstr "Sous-titres texte SSA/ASS"
 
-#: src/mmg/mmg_dialog.cpp:292
+#: src/mmg/mmg_dialog.cpp:296
 msgid "Sa&ve command line"
 msgstr "&Enregistrer la ligne de commande"
 
@@ -5786,7 +5802,7 @@ msgstr "Fréquence d'échantillonnage en Hz."
 msgid "Sampling frequency: %1%"
 msgstr "Fréquence d'échantillonnage : %1%"
 
-#: src/mmg/mmg_dialog.cpp:301
+#: src/mmg/mmg_dialog.cpp:305
 msgid "Save &as"
 msgstr "Enregistrer &sous"
 
@@ -5798,27 +5814,27 @@ msgstr "Enregistrer les informations sous"
 msgid "Save log"
 msgstr "Enregistrer le journal"
 
-#: src/mmg/mmg_dialog.cpp:284
+#: src/mmg/mmg_dialog.cpp:288
 msgid "Save muxing settings to a file"
 msgstr "Enregistrer les paramètres de multiplexage dans un fichier."
 
-#: src/mmg/mmg_dialog.cpp:292
+#: src/mmg/mmg_dialog.cpp:296
 msgid "Save the command line to a file"
 msgstr "Enregistrer la ligne de commande dans un fichier."
 
-#: src/mmg/mmg_dialog.cpp:293
+#: src/mmg/mmg_dialog.cpp:297
 msgid "Save the command line to an option file that can be read by mkvmerge"
 msgstr "Enregistrer la ligne de commande dans un fichier d'options pouvant être lu par mkvmerge."
 
-#: src/mmg/mmg_dialog.cpp:299
+#: src/mmg/mmg_dialog.cpp:303
 msgid "Save the current chapters to a XML file"
 msgstr "Enregistrer les chapitres actuels dans un fichier XML."
 
-#: src/mmg/mmg_dialog.cpp:301
+#: src/mmg/mmg_dialog.cpp:305
 msgid "Save the current chapters to a file with another name"
 msgstr "Enregistrer les chapitres actuels dans un fichier d'un autre nom."
 
-#: src/mmg/mmg_dialog.cpp:300
+#: src/mmg/mmg_dialog.cpp:304
 msgid "Save the current chapters to an existing Matroska file"
 msgstr "Enregistrer les chapitres actuels dans un fichier Matroska existant."
 
@@ -5826,7 +5842,7 @@ msgstr "Enregistrer les chapitres actuels dans un fichier Matroska existant."
 msgid "Save the header values"
 msgstr "Enregistrer les en-têtes."
 
-#: src/mmg/mmg_dialog.cpp:300
+#: src/mmg/mmg_dialog.cpp:304
 msgid "Save to &Matroska file"
 msgstr "Enregistrer dans un fichier &Matroska"
 
@@ -5948,7 +5964,7 @@ msgstr "Sélectionner le fichier Matroska"
 msgid "Select output file"
 msgstr "Sélectionner le fichier cible"
 
-#: src/mmg/mmg_dialog.cpp:285
+#: src/mmg/mmg_dialog.cpp:289
 msgid "Select the file you want to write to"
 msgstr "Sélectionner le nom du fichier cible."
 
@@ -5970,7 +5986,7 @@ msgstr "Déterminer les blocs pour lesquels mkvmerge produira des entrées d'ind
 msgid "Selects the character set a subtitle file or chapter information was written with. Only needed for non-UTF encoded subtitle files or for files with chapter information (e.g. OGM, MP4) for which mkvmerge does not detect the encoding correctly."
 msgstr "Déterminer le jeu de caractères avec lequel le fichier de sous-titres ou les informations de chapitre sont écrits. Nécessaire uniquement pour les fichiers de sous-titres non UTF ou pour les fichiers avec informations de chapitre (par exemple OGM, MP4) pour lesquels mkvmerge ne détecte pas correctement l'encodage."
 
-#: src/mmg/mmg_dialog.cpp:285
+#: src/mmg/mmg_dialog.cpp:289
 msgid "Set &output file"
 msgstr "&Définir le fichier cible"
 
@@ -6130,7 +6146,7 @@ msgstr "Afficher la &taille des éléments\tCtrl-Z"
 msgid "Show mmg's debug window"
 msgstr "Ouvrir la fenêtre de débogage de mmg"
 
-#: src/mmg/mmg_dialog.cpp:308
+#: src/mmg/mmg_dialog.cpp:312
 msgid "Show program information"
 msgstr "Afficher les informations sur ce programme."
 
@@ -6138,7 +6154,7 @@ msgstr "Afficher les informations sur ce programme."
 msgid "Show statistics for each track in verbose mode."
 msgstr "Afficher les statistiques de chaque piste en mode verbeux."
 
-#: src/mmg/mmg_dialog.cpp:290
+#: src/mmg/mmg_dialog.cpp:294
 msgid "Show the command line mmg creates for mkvmerge"
 msgstr "Afficher la ligne de commande créée par mmg pour mkvmerge."
 
@@ -6146,7 +6162,7 @@ msgstr "Afficher la ligne de commande créée par mmg pour mkvmerge."
 msgid "Show the first 16 bytes of each frame as a hex dump."
 msgstr "Afficher les 16 premiers octets de chaque image en hexadécimal."
 
-#: src/mmg/mmg_dialog.cpp:307
+#: src/mmg/mmg_dialog.cpp:311
 msgid "Show the guide to mkvmerge GUI"
 msgstr "Afficher le guide d'utilisation de l'interface de mkvmerge."
 
@@ -6294,7 +6310,7 @@ msgstr "Le fractionnement selon la taille a été choisi mais aucune taille n'a 
 msgid "Splitting by timecode/duration was selected, but nothing was entered."
 msgstr "Le fractionnement selon la durée/ le code temporel a été choisi mais aucune valeur n'a été saisie."
 
-#: src/mmg/mmg_dialog.cpp:564
+#: src/mmg/mmg_dialog.cpp:569
 #, c-format, boost-format
 msgid "Splitting is active, and at least one of the potential output files '%s%s*%s' already exists. Do you want to overwrite them?"
 msgstr "Le fractionnement est actif et au moins un des fichiers cibles potentiels '%s%s*%s' existe déjà. Voulez-vous les remplacer ?"
@@ -6303,11 +6319,11 @@ msgstr "Le fractionnement est actif et au moins un des fichiers cibles potentiel
 msgid "Splitting will occur right before the first key frame whose timecode is equal to or bigger than the start timecode for the chapters whose numbers are listed."
 msgstr ""
 
-#: src/mmg/mmg_dialog.cpp:326
+#: src/mmg/mmg_dialog.cpp:331
 msgid "Sta&rt muxing"
 msgstr "&Démarrer le multiplexage"
 
-#: src/mmg/mmg_dialog.cpp:289
+#: src/mmg/mmg_dialog.cpp:293
 msgid "Sta&rt muxing (run mkvmerge)\tCtrl-R"
 msgstr "&Démarrer le multiplexage (exécuter mkvmerge)\tCtrl-R"
 
@@ -6323,7 +6339,7 @@ msgstr "Démarrer les tâches 'en attente'."
 msgid "Start the selected job(s) regardless of their status"
 msgstr "Démarrer les tâches sélectionnées quel que soit leur état."
 
-#: src/mmg/mmg_dialog.cpp:282
+#: src/mmg/mmg_dialog.cpp:286
 msgid "Start with empty settings"
 msgstr "Démarrer avec les paramètres remis à zéro."
 
@@ -6529,7 +6545,7 @@ msgstr "Le code FourCC dans '%1% %2% doit comporter exactement quatre caractère
 msgid "The FourCC setting for track nr. %s in file '%s' is not exactly four characters long."
 msgstr "La valeur FourCC de la piste n°%s du fichier '%s' n'a pas exactement quatre caractères."
 
-#: src/mmg/mmg_dialog.cpp:1891
+#: src/mmg/mmg_dialog.cpp:1901
 #, boost-format
 msgid "The GUI is configured to use the mkvmerge executable from a different version (%1%) than the GUI itself (%2%). This is not supported but will not be prevented either. You should change the mkvmerge executable in the preferences dialog."
 msgstr "L'interface est configurée pour fonctionner avec un exécutable mkvmerge d'une version différente (%1%) de la sienne (%2%). Cette situation n'est pas normale bien qu'elle ne soit pas interdite. Vous devriez indiquer un autre exécutable mkvmerge dans les options."
@@ -6677,7 +6693,7 @@ msgstr "Il manque la langue dans le chapitre '%s'."
 msgid "The chapter '%s' is missing the start time."
 msgstr "Il manque le temps initial dans le chapitre '%s'."
 
-#: src/mmg/mmg_dialog.cpp:614
+#: src/mmg/mmg_dialog.cpp:619
 msgid ""
 "The chapter editor has been used and contains data. However, no chapter file has been selected on the global page. In mmg, the chapter editor is independant of the muxing process. The chapters present in the editor will NOT be muxed into the output file. Only the various 'save' functions from the chapter editor menu will cause the chapters to be written to the hard disk.\n"
 "\n"
@@ -6886,11 +6902,11 @@ msgstr "Le fichier ne peut pas être ouvert en lecture ou il n'y a pas assez de 
 msgid "The file could not be opened for writing."
 msgstr "Le fichierne peut pas être ouvert en écriture."
 
-#: src/mmg/mmg_dialog.cpp:405
+#: src/mmg/mmg_dialog.cpp:410
 msgid "The file does not exist."
 msgstr "Le fichier n'existe pas."
 
-#: src/mmg/mmg_dialog.cpp:426
+#: src/mmg/mmg_dialog.cpp:431
 msgid "The file does not seem to be a valid mkvmerge GUI settings file."
 msgstr "Le fichier ne semble pas être un fichier de configuration de l'interface de mkvmerge."
 
@@ -7135,11 +7151,11 @@ msgstr ""
 "Si la valeur est 0, le système de pseudo-cache\n"
 "de référence n'est pas utilisé."
 
-#: src/mmg/mmg_dialog.cpp:712
+#: src/mmg/mmg_dialog.cpp:717
 msgid "The mkvmerge GUI help file was not found in the path you've selected. Please try again, or abort by pressing the 'abort' button."
 msgstr "Le fichier d'aide de mkvmerge n'a pas été trouvé à l'endroit que vous avez indiqué. Essayez encore ou abandonnez en appuyant sur le bouton 'annuler'."
 
-#: src/mmg/mmg_dialog.cpp:705
+#: src/mmg/mmg_dialog.cpp:710
 msgid ""
 "The mkvmerge GUI help file was not found. This indicates that it has never before been opened, or that the installation path has since been changed.\n"
 "\n"
@@ -7230,13 +7246,13 @@ msgstr "L'option '--meta-seek-size' n'est plus prise en charge. Lisez la documen
 msgid "The order of the various options is not important."
 msgstr "L'ordre des diverses options n'a pas d'importance."
 
-#: src/mmg/mmg_dialog.cpp:547
-#: src/mmg/mmg_dialog.cpp:1408
+#: src/mmg/mmg_dialog.cpp:552
+#: src/mmg/mmg_dialog.cpp:1418
 #, c-format, boost-format
 msgid "The output file '%s' already exists. Do you want to overwrite it?"
 msgstr "Le fichier cible '%s' existe déjà. Voulez-vous le remplacer ?"
 
-#: src/mmg/mmg_dialog.cpp:601
+#: src/mmg/mmg_dialog.cpp:606
 msgid "The output file name is invalid, e.g. it might contain invalid characters like ':'."
 msgstr "Le nom du fichier cible est incorrect, il contient peut-être des caractères interdits comme ':'."
 
@@ -7484,7 +7500,7 @@ msgstr "Les largeurs des deux pistes sont différentes : %1% et %2%."
 msgid "Theora"
 msgstr "Theora"
 
-#: src/mmg/mmg_dialog.cpp:1783
+#: src/mmg/mmg_dialog.cpp:1793
 msgid "There is a new version available online."
 msgstr "Une nouvelle version est disponible en ligne."
 
@@ -7499,7 +7515,7 @@ msgstr "Il n'y a aucun fichier d'identifiant '%1%'. L'argument pour '--append-to
 msgid "There is no translation available for '%1%'.\n"
 msgstr "Aucune traduction n'est disponible pour '%1%'.\n"
 
-#: src/mmg/mmg_dialog.cpp:1784
+#: src/mmg/mmg_dialog.cpp:1794
 msgid "There was an error querying the update status."
 msgstr "Une erreur s'est produite lors de la recherche d'une mise à jour."
 
@@ -7614,6 +7630,10 @@ msgstr "Nom que cette pièce jointe aura dans le fichier cible. Par défaut, c'e
 #: src/mmg/tabs/global.cpp:288
 msgid "This is the title that players may show as the 'main title' for this movie."
 msgstr "Texte que les lecteurs peuvent afficher comme titre principal du film."
+
+#: src/mmg/mmg_dialog.cpp:1940
+msgid "This message will only shown to you once."
+msgstr ""
 
 #: src/mmg/tabs/global.cpp:255
 msgid "This mode considers only the first video track that is output."
@@ -7852,6 +7872,10 @@ msgstr "Les pistes avec schémas d'encodage des données non supportés (compres
 msgid "Tracks, chapters and tags:"
 msgstr "Pistes, chapitres et étiquettes :"
 
+#: src/mmg/mmg_dialog.cpp:313
+msgid "Troubleshooting advice for playback issues"
+msgstr ""
+
 #: src/input/r_truehd.h:36
 #: src/output/p_truehd.h:42
 msgid "TrueHD"
@@ -8072,7 +8096,7 @@ msgstr "Les bricolages valables sont :\n"
 msgid "Validates the content of all changeable headers"
 msgstr "Valider le contenu de tous les en-têtes variables."
 
-#: src/mmg/mmg_dialog.cpp:302
+#: src/mmg/mmg_dialog.cpp:306
 msgid "Verify the current chapter entries to see if there are any errors"
 msgstr "Vérifier le chapitrage actuel pour voir s'il comporte des erreurs."
 
@@ -8304,7 +8328,7 @@ msgstr "Mauvaise chaîne d'identification : '%|1$6s|' != 'theora'"
 msgid "Wrong identification string: '%|1$7s|' != 'kate\\0\\0\\0'"
 msgstr "Mauvaise chaîne d'identification : '%|1$7s|' != 'kate\\0\\0\\0'"
 
-#: src/mmg/mmg_dialog.cpp:1782
+#: src/mmg/mmg_dialog.cpp:1792
 msgid "You are already running the latest version."
 msgstr "Vous utilisez déjà la dernière version."
 
@@ -8887,8 +8911,8 @@ msgstr "Erreur de mkvmerge GUI"
 msgid "mkvmerge GUI ready"
 msgstr "mkvmerge GUI prêt"
 
-#: src/mmg/mmg_dialog.cpp:400
-#: src/mmg/mmg_dialog.cpp:448
+#: src/mmg/mmg_dialog.cpp:405
+#: src/mmg/mmg_dialog.cpp:453
 #, c-format, boost-format
 msgid "mkvmerge GUI settings (*.mmg)|*.mmg|%s"
 msgstr "Fichiers de configuration de mkvmerge (*.mmg)|*.mmg|%s"
@@ -8990,7 +9014,7 @@ msgstr "mm_text_io_c: UTF32_* n'est pas pris en charge pour le moment.\n"
 msgid "mmg"
 msgstr "mmg"
 
-#: src/mmg/mmg_dialog.cpp:280
+#: src/mmg/mmg_dialog.cpp:284
 msgid "mmg debug output"
 msgstr "Rapport de débogage mmg"
 
@@ -9047,7 +9071,7 @@ msgstr "aucun algorithme de hachage de signature"
 msgid "no splitting"
 msgstr "Fractionnement"
 
-#: src/mmg/mmg_dialog.cpp:1014
+#: src/mmg/mmg_dialog.cpp:1024
 #: src/mmg/tabs/input_extra.cpp:85
 #: src/mmg/tabs/input_extra.cpp:113
 #: src/mmg/tabs/input_extra.cpp:116
