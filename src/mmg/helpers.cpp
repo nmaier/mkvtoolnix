@@ -146,16 +146,15 @@ split(const wxString &src,
 
 wxString
 join(const wxString &pattern,
-     std::vector<wxString> &strings) {
-  wxString dst;
-  uint32_t i;
-
-  if (strings.size() == 0)
+     std::vector<wxString> const &strings) {
+  if (strings.empty())
     return wxEmptyString;
-  dst = strings[0];
-  for (i = 1; i < strings.size(); i++) {
-    dst += pattern;
-    dst += strings[i];
+
+  wxString dst;
+  for (auto &string : strings) {
+    if (!dst.IsEmpty())
+      dst += pattern;
+    dst += string;
   }
 
   return dst;
@@ -163,7 +162,7 @@ join(const wxString &pattern,
 
 wxString
 join(const wxString &pattern,
-     wxArrayString &strings) {
+     wxArrayString const &strings) {
   wxString dst;
   uint32_t i;
 

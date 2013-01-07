@@ -194,6 +194,8 @@ mmg_dialog::mmg_dialog()
 #if defined(HAVE_CURL_EASY_H)
   maybe_check_for_updates();
 #endif  // defined(HAVE_CURL_EASY_H)
+
+  show_update_notices();
 }
 
 mmg_dialog::~mmg_dialog() {
@@ -254,6 +256,8 @@ mmg_dialog::create_menus() {
   wxMenu *help_menu = new wxMenu();
   help_menu->Append(ID_M_HELP_HELP,                  dummy);
   help_menu->Append(ID_M_HELP_ABOUT,                 dummy);
+  help_menu->AppendSeparator();
+  help_menu->Append(ID_M_HELP_TROUBLESHOOTING,       dummy);
 #if defined(HAVE_CURL_EASY_H)
   help_menu->AppendSeparator();
   help_menu->Append(ID_M_HELP_CHECK_FOR_UPDATES,     dummy);
@@ -306,6 +310,7 @@ mmg_dialog::translate_ui() {
   set_menu_item_strings(ID_M_WINDOW_CHAPTEREDITOR,     Z("&Chapter editor\tAlt-4"));
   set_menu_item_strings(ID_M_HELP_HELP,                Z("&Help\tF1"),                            Z("Show the guide to mkvmerge GUI"));
   set_menu_item_strings(ID_M_HELP_ABOUT,               Z("&About"),                               Z("Show program information"));
+  set_menu_item_strings(ID_M_HELP_TROUBLESHOOTING,     Z("&Troubleshooting"),                     Z("Troubleshooting advice for playback issues"));
 #if defined(HAVE_CURL_EASY_H)
   set_menu_item_strings(ID_M_HELP_CHECK_FOR_UPDATES,   Z("&Check for updates"),                   Z("Check online for the latest release"));
 #endif  // defined(HAVE_CURL_EASY_H)
@@ -739,6 +744,11 @@ mmg_dialog::on_about(wxCommandEvent &) {
                         "'Help' menu or by pressing the 'F1' key."));
 
   wxAboutBox(info);
+}
+
+void
+mmg_dialog::on_troubleshooting(wxCommandEvent &) {
+  wxLaunchDefaultBrowser(wxT(MTX_TROUBLESHOOTING_URL));
 }
 
 void
@@ -1914,6 +1924,41 @@ mmg_dialog::scale_with_dpi(size_t width_or_height,
 }
 #endif
 
+void
+mmg_dialog::show_update_notice(wxString const &version,
+                               std::vector<wxString> const &info) {
+  wxString ver = version;
+  ver.Replace(wxT("."), wxT("_"));
+
+  auto cfg       = wxConfigBase::Get();
+  auto const key = wxU("/GUI/update_notices/version_") + ver;
+  bool warned    = false;
+
+  if (cfg->Read(key, &warned, false) && warned)
+    return;
+
+  auto text = join(wxU(" "), info) + wxU("\n\n") + Z("This message will only shown to you once.");
+  wxMessageBox(text, Z("Notice"), wxCENTER | wxOK | wxICON_INFORMATION);
+
+  cfg->Write(key, true);
+}
+
+void
+mmg_dialog::show_update_notice_600() {
+  show_update_notice(wxU("6.0.0"), {
+        Z("If you encounter problems during playback of files please consider visiting the newly created MKVToolNix troubleshooting advice page:")
+      , wxU("\n\n")
+      , wxU(MTX_TROUBLESHOOTING_URL)
+      , wxU("\n\n")
+      , Z("It can also be opened from the 'Help' menu.")
+    });
+}
+
+void
+mmg_dialog::show_update_notices() {
+  show_update_notice_600();
+}
+
 IMPLEMENT_CLASS(mmg_dialog, wxFrame);
 BEGIN_EVENT_TABLE(mmg_dialog, wxFrame)
   EVT_BUTTON(ID_B_BROWSEOUTPUT,           mmg_dialog::on_browse_output)
@@ -1939,6 +1984,7 @@ BEGIN_EVENT_TABLE(mmg_dialog, wxFrame)
   EVT_MENU(ID_M_MUXING_ADD_CLI_OPTIONS,   mmg_dialog::on_add_cli_options)
   EVT_MENU(ID_M_HELP_HELP,                mmg_dialog::on_help)
   EVT_MENU(ID_M_HELP_ABOUT,               mmg_dialog::on_about)
+  EVT_MENU(ID_M_HELP_TROUBLESHOOTING,     mmg_dialog::on_troubleshooting)
 #if defined(HAVE_CURL_EASY_H)
   EVT_MENU(ID_M_HELP_CHECK_FOR_UPDATES,   mmg_dialog::on_check_for_updates)
 #endif  // defined(HAVE_CURL_EASY_H)

@@ -84,6 +84,7 @@
 #define ID_M_HELP_ABOUT                   31000
 #define ID_M_HELP_HELP                    31001
 #define ID_M_HELP_CHECK_FOR_UPDATES       31002
+#define ID_M_HELP_TROUBLESHOOTING         31003
 
 #define HELP_ID_CONTENTS                      1
 #define HELP_ID_INTRODUCTION              10000
@@ -176,6 +177,7 @@ public:
   void on_file_options(wxCommandEvent &evt);
   void on_help(wxCommandEvent &evt);
   void on_about(wxCommandEvent &evt);
+  void on_troubleshooting(wxCommandEvent &evt);
 
   void on_update_command_line(wxTimerEvent &evt);
   void update_command_line();
@@ -272,6 +274,10 @@ protected:
 
   void set_menu_item_strings(int id, const wxString &title, const wxString &help_text = wxEmptyString);
   void create_menus();
+
+  void show_update_notices();
+  void show_update_notice(wxString const &version, std::vector<wxString> const &info);
+  void show_update_notice_600();
 };
 
 extern mmg_dialog *mdlg;

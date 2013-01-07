@@ -48,6 +48,8 @@
 #define TRACK_ID_GLOBAL_TAGS 0x10000001
 #define TRACK_ID_TAGS_BASE   0x10000002
 
+#define MTX_TROUBLESHOOTING_URL "http://mkvtoolnix-releases.bunkus.org/troubleshooting"
+
 // Config file versions and their differences
 //
 // Version 1: base settings
@@ -251,8 +253,8 @@ wxString &break_line(wxString &line, unsigned int break_after = 80);
 wxString extract_language_code(wxString source);
 wxString shell_escape(wxString source, bool cmd_exe_mode = false);
 std::vector<wxString> split(const wxString &src, const wxString &pattern, int max_num = -1);
-wxString join(const wxString &pattern, std::vector<wxString> &strings);
-wxString join(const wxString &pattern, wxArrayString &strings);
+wxString join(const wxString &pattern, std::vector<wxString> const &strings);
+wxString join(const wxString &pattern, wxArrayString const &strings);
 wxString &strip(wxString &s, bool newlines = false);
 std::vector<wxString> & strip(std::vector<wxString> &v, bool newlines = false);
 wxString no_cr(wxString source);
