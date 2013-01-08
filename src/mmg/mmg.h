@@ -212,6 +212,7 @@ struct mmg_options_t {
   bool check_for_updates;
   wxString priority;
   wxArrayString popular_languages;
+  wxString default_cli_options;
 
   mmg_options_t()
     : autoset_output_filename(false)

@@ -40,12 +40,13 @@ public:
 public:
   wxMTX_COMBOBOX_TYPE *cob_option;
   wxTextCtrl *tc_options, *tc_description;
+  wxCheckBox *cb_save_as_default;
 
 public:
   cli_options_dlg(wxWindow *parent);
   void on_option_changed(wxCommandEvent &evt);
   void on_add_clicked(wxCommandEvent &evt);
-  bool go(wxString &options);
+  bool go(wxString &options, bool &save_as_default);
 
 public:
   static void init_cli_option_list();

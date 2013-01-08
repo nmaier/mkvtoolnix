@@ -86,6 +86,7 @@ mmg_dialog::mmg_dialog()
   mdlg = this;
 
   load_preferences();
+  cli_options = options.default_cli_options;
 
 #if defined(__WXGTK__)
   // GTK seems to call bindtextdomain() after our call to it.
@@ -396,6 +397,8 @@ mmg_dialog::on_file_new(wxCommandEvent &evt) {
   notebook->SetSelection(0);
 
   wxRemoveFile(tmp_name);
+
+  cli_options = options.default_cli_options;
 
   set_status_bar(Z("Configuration cleared."));
 }
@@ -1602,6 +1605,7 @@ mmg_dialog::save_preferences() {
   cfg->Write(wxU("set_delay_from_filename"),         options.set_delay_from_filename);
   cfg->Write(wxU("check_for_updates"),               options.check_for_updates);
   cfg->Write(wxU("popular_languages"),               join(wxU(" "), options.popular_languages));
+  cfg->Write(wxU("default_cli_options"),             options.default_cli_options);
 
   cfg->Flush();
 }
@@ -1641,6 +1645,7 @@ mmg_dialog::load_preferences() {
   cfg->Read(wxU("set_delay_from_filename"),       &options.set_delay_from_filename, true);
   cfg->Read(wxU("check_for_updates"),             &options.check_for_updates, true);
   cfg->Read(wxU("popular_languages"),             &s, wxEmptyString);
+  cfg->Read(wxU("default_cli_options"),           &options.default_cli_options);
 
   options.init_popular_languages(s);
   options.validate();
@@ -1659,8 +1664,16 @@ void
 mmg_dialog::on_add_cli_options(wxCommandEvent &) {
   cli_options_dlg dlg(this);
 
-  if (dlg.go(cli_options))
-    update_command_line();
+  bool save_as_default = false;
+  if (!dlg.go(cli_options, save_as_default))
+    return;
+
+  if (save_as_default) {
+    options.default_cli_options = cli_options;
+    save_preferences();
+  }
+
+  update_command_line();
 }
 
 void

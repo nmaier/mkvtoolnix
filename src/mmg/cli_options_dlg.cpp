@@ -21,7 +21,7 @@
 std::vector<cli_option_t> cli_options_dlg::all_cli_options;
 
 cli_options_dlg::cli_options_dlg(wxWindow *parent)
-  : wxDialog(parent, 0, Z("Add command line options"), wxDefaultPosition, wxSize(400, 350))
+  : wxDialog(parent, 0, Z("Add command line options"), wxDefaultPosition, wxSize(450, 400))
 {
   if (all_cli_options.empty())
     init_cli_option_list();
@@ -58,6 +58,10 @@ cli_options_dlg::cli_options_dlg(wxWindow *parent)
   siz_all->AddSpacer(5);
   tc_options = new wxTextCtrl(this, -1);
   siz_all->Add(tc_options, 0, wxGROW | wxLEFT | wxRIGHT, 10);
+
+  cb_save_as_default = new wxCheckBox(this, -1, Z("Save as default for new jobs"));
+  siz_all->AddSpacer(10);
+  siz_all->Add(cb_save_as_default, 0, wxGROW | wxLEFT | wxRIGHT, 10);
 
   siz_all->AddSpacer(10);
   siz_all->Add(new wxStaticLine(this, -1), 0, wxGROW | wxLEFT | wxRIGHT, 10);
@@ -173,13 +177,16 @@ cli_options_dlg::on_add_clicked(wxCommandEvent &) {
 }
 
 bool
-cli_options_dlg::go(wxString &options) {
+cli_options_dlg::go(wxString &options,
+                    bool &save_as_default) {
   tc_options->SetValue(options);
 
   if (ShowModal() != wxID_OK)
     return false;
 
-  options = tc_options->GetValue();
+  options         = tc_options->GetValue();
+  save_as_default = cb_save_as_default->GetValue();
+
   return true;
 }
 
