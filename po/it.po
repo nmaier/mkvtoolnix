@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: it\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2013-01-08 17:08+0100\n"
+"PO-Revision-Date: 2013-01-10 10:50+0100\n"
 "Last-Translator: bovirus <bovirus@gmail.com>\n"
 "Language-Team: Italian <moritz@bunkus.org>\n"
 "Language: it\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.5.3\n"
+"X-Generator: Poedit 1.5.4\n"
 
 #: src/extract/xtr_tta.cpp:117
 #, boost-format
@@ -3494,7 +3494,7 @@ msgstr "Errori:"
 
 #: src/mmg/mux_dialog.cpp:313
 msgid "Everything went fine."
-msgstr "Tutto è andato bene."
+msgstr "Operazione completata senza errori."
 
 #: src/extract/extract_cli_parser.cpp:73
 #: src/extract/extract_cli_parser.cpp:81
@@ -5799,7 +5799,7 @@ msgstr "Salva &come"
 
 #: src/mmg/cli_options_dlg.cpp:62
 msgid "Save as default for new jobs"
-msgstr ""
+msgstr "Salva come predefinito per un nuovo lavoro"
 
 #: src/info/qt_ui.cpp:71
 msgid "Save information as"
@@ -6363,7 +6363,7 @@ msgstr "Stato"
 #: src/mmg/jobs.cpp:56
 #: src/mmg/mux_dialog.cpp:48
 msgid "Status and progress"
-msgstr "Stato e avanzamento"
+msgstr "Stato avanzamento"
 
 #: src/mmg/header_editor/value_page.cpp:174
 #: src/mmg/update_checker.cpp:60
@@ -8948,12 +8948,12 @@ msgstr "eseguibile mkvmerge"
 #: src/mmg/mux_dialog.cpp:305
 #, c-format, boost-format
 msgid "mkvmerge finished with a return code of %d. %s"
-msgstr "mkvmerge ha finito con codice di ritorno %d. %s"
+msgstr "mkvmerge ha completato l'operazione codice di uscita: %d. %s"
 
 #: src/mmg/jobs.cpp:141
 #: src/mmg/mux_dialog.cpp:320
 msgid "mkvmerge has finished"
-msgstr "mkvmerge ha finito"
+msgstr "mkvmerge - operazione completata"
 
 #: src/input/r_ogm.cpp:515
 msgid "mkvmerge has not been compiled with FLAC support but handling of this stream has been requested.\n"
