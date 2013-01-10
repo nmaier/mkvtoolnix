@@ -384,41 +384,16 @@ bool
 flv_reader_c::new_stream_v_avc(flv_track_cptr &track,
                                memory_cptr const &data) {
   try {
-    mm_mem_io_c in(*data.get());
+    auto avcc = mpeg4::p10::avcc_c::unpack(data);
+    avcc.parse_sps_list(true);
 
-    unsigned char buf[6];
-    if (in.read(buf, 6) != 6)
-      return false;
-
-    auto num_sps = static_cast<unsigned int>(buf[5] & 0x1f);
-
-    for (auto sps = 0u; sps < num_sps; sps++) {
-      auto sps_length = in.read_uint16_be();
-      auto sps_buf    = in.read(sps_length);
-
-      mpeg4::p10::sps_info_t sps_info;
-      try {
-        if (!mpeg4::p10::parse_sps(sps_buf, sps_info, true))
-          return false;
-      } catch (mtx::mm_io::end_of_file_x &) {
-      }
-
+    for (auto &sps_info : avcc.m_sps_info_list) {
       if (!track->m_v_width)
         track->m_v_width = sps_info.width;
       if (!track->m_v_height)
         track->m_v_height = sps_info.height;
       if (!track->m_v_frame_rate && sps_info.num_units_in_tick && sps_info.time_scale)
         track->m_v_frame_rate = sps_info.time_scale / sps_info.num_units_in_tick;
-    }
-
-    auto num_pps = in.read_uint8();
-    for (auto pps = 0u; pps < num_pps; pps++) {
-      auto pps_length = in.read_uint16_be();
-      auto pps_buf    = in.read(pps_length);
-
-      mpeg4::p10::pps_info_t pps_info;
-      if (!mpeg4::p10::parse_pps(pps_buf, pps_info))
-        return false;
     }
 
     if (!track->m_v_frame_rate)

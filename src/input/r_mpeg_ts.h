@@ -283,7 +283,7 @@ public:
   bool v_interlaced;
   int v_version, v_width, v_height, v_dwidth, v_dheight;
   double v_frame_rate, v_aspect_ratio;
-  memory_cptr v_avcc, raw_seq_hdr;
+  memory_cptr raw_seq_hdr;
 
   // audio related parameters
   int a_channels, a_sample_rate, a_bits_per_sample, a_bsid;

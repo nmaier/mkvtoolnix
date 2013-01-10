@@ -34,6 +34,163 @@
 namespace mpeg4 {
 namespace p10 {
 
+avcc_c::avcc_c()
+  : m_profile_idc{}
+  , m_profile_compat{}
+  , m_level_idc{}
+  , m_nalu_size_length{}
+{
+}
+
+avcc_c::avcc_c(unsigned int nalu_size_length,
+               std::vector<memory_cptr> const &sps_list,
+               std::vector<memory_cptr> const &pps_list)
+  : m_profile_idc{}
+  , m_profile_compat{}
+  , m_level_idc{}
+  , m_nalu_size_length{nalu_size_length}
+  , m_sps_list{sps_list}
+  , m_pps_list{pps_list}
+{
+}
+
+avcc_c::operator bool()
+  const {
+  return m_nalu_size_length
+      && !m_sps_list.empty()
+      && !m_pps_list.empty()
+      && (m_sps_info_list.empty() || (m_sps_info_list.size() == m_sps_list.size()))
+      && (m_pps_info_list.empty() || (m_pps_info_list.size() == m_pps_list.size()));
+}
+
+bool
+avcc_c::parse_sps_list(bool ignore_errors) {
+  if (m_sps_info_list.size() == m_sps_list.size())
+    return true;
+
+  m_sps_info_list.clear();
+  for (auto &sps: m_sps_list) {
+    sps_info_t sps_info;
+    auto sps_as_rbsp = sps->clone();
+    nalu_to_rbsp(sps_as_rbsp);
+
+    if (ignore_errors) {
+      try {
+        parse_sps(sps_as_rbsp, sps_info);
+      } catch (mtx::mm_io::end_of_file_x &) {
+      }
+    } else if (!parse_sps(sps_as_rbsp, sps_info))
+      return false;
+
+    m_sps_info_list.push_back(sps_info);
+  }
+
+  return true;
+}
+
+bool
+avcc_c::parse_pps_list(bool ignore_errors) {
+  if (m_pps_info_list.size() == m_pps_list.size())
+    return true;
+
+  m_pps_info_list.clear();
+  for (auto &pps: m_pps_list) {
+    pps_info_t pps_info;
+    auto pps_as_rbsp = pps->clone();
+    nalu_to_rbsp(pps_as_rbsp);
+
+    if (ignore_errors) {
+      try {
+        parse_pps(pps_as_rbsp, pps_info);
+      } catch (mtx::mm_io::end_of_file_x &) {
+      }
+    } else if (!parse_pps(pps_as_rbsp, pps_info))
+      return false;
+
+    m_pps_info_list.push_back(pps_info);
+  }
+
+  return true;
+}
+
+memory_cptr
+avcc_c::pack() {
+  parse_sps_list(true);
+  if (!*this)
+    return memory_cptr{};
+
+  unsigned int total_size = 6 + 1;
+
+  for (auto &mem : m_sps_list)
+    total_size += mem->get_size() + 2;
+  for (auto &mem : m_pps_list)
+    total_size += mem->get_size() + 2;
+
+  auto destination = memory_c::alloc(total_size);
+  auto buffer      = destination->get_buffer();
+  auto &sps        = *m_sps_info_list.begin();
+  auto write_list  = [&buffer](std::vector<memory_cptr> const &list, uint8_t num_byte_bits = 0) {
+    *buffer = list.size() | num_byte_bits;
+
+    for (auto &mem : list) {
+      auto size = mem->get_size();
+      put_uint16_be(buffer + 1, size);
+      memcpy(buffer + 3, mem->get_buffer(), size);
+      buffer += 3 + size;
+    }
+  };
+
+  buffer[0] = 1;
+  buffer[1] = m_profile_idc    ? m_profile_idc    : sps.profile_idc;
+  buffer[2] = m_profile_compat ? m_profile_compat : sps.profile_compat;
+  buffer[3] = m_level_idc      ? m_level_idc      : sps.level_idc;
+  buffer[4] = 0xfc | (m_nalu_size_length - 1);
+  buffer   += 5;
+
+  write_list(m_sps_list, 0xe0);
+  write_list(m_pps_list);
+
+  return destination;
+}
+
+avcc_c
+avcc_c::unpack(memory_cptr const &mem) {
+  avcc_c avcc;
+
+  if (!mem || (6 > mem->get_size()))
+    return avcc;
+
+  try {
+    mm_mem_io_c in{*mem};
+
+    auto read_list = [&in](std::vector<memory_cptr> &list, unsigned int num_entries_mask = 0xff) {
+      auto num_entries = in.read_uint8() & num_entries_mask;
+      while (num_entries) {
+        auto size = in.read_uint16_be();
+        list.push_back(in.read(size));
+        --num_entries;
+      }
+    };
+
+    in.skip(1);                 // always 1
+    avcc.m_profile_idc      = in.read_uint8();
+    avcc.m_profile_compat   = in.read_uint8();
+    avcc.m_level_idc        = in.read_uint8();
+    avcc.m_nalu_size_length = (in.read_uint8() & 0x03) + 1;
+
+    read_list(avcc.m_sps_list, 0x0f);
+    read_list(avcc.m_pps_list);
+
+    return avcc;
+
+  } catch (mtx::mm_io::exception &) {
+    return avcc_c{};
+  }
+}
+
+
+
+
 static const struct {
   int numerator, denominator;
 } s_predefined_pars[AVC_NUM_PREDEFINED_PARS] = {
@@ -531,55 +688,42 @@ mpeg4::p10::extract_par(uint8_t *&buffer,
                         uint32_t &par_num,
                         uint32_t &par_den) {
   try {
-    mm_mem_io_c avcc(buffer, buffer_size), new_avcc(nullptr, buffer_size, 1024);
-    memory_cptr nalu(new memory_c());
-
+    auto avcc     = avcc_c::unpack(memory_cptr{new memory_c{buffer, buffer_size, false}});
+    auto new_avcc = avcc;
     par_num       = 1;
     par_den       = 1;
     bool ar_found = false;
 
-    avcc.read(nalu, 5);
-    new_avcc.write(nalu);
+    new_avcc.m_sps_list.clear();
 
-    unsigned int num_sps = avcc.read_uint8();
-    new_avcc.write_uint8(num_sps);
-    num_sps &= 0x1f;
-    mxverb(4, boost::format("mpeg4_p10_extract_par: num_sps %1%\n") % num_sps);
-
-    unsigned int sps;
-    for (sps = 0; sps < num_sps; sps++) {
-      unsigned int length = avcc.read_uint16_be();
-      if ((length + avcc.getFilePointer()) >= buffer_size)
-        length = buffer_size - avcc.getFilePointer();
-      avcc.read(nalu, length);
-
-      bool abort = false;
-      if ((0 < length) && ((nalu->get_buffer()[0] & 0x1f) == 7)) {
+    for (auto &nalu : avcc.m_sps_list) {
+      if (!ar_found) {
         nalu_to_rbsp(nalu);
-        sps_info_t sps_info;
-        if (mpeg4::p10::parse_sps(nalu, sps_info)) {
-          ar_found = sps_info.ar_found;
-          if (ar_found) {
-            par_num = sps_info.par_num;
-            par_den = sps_info.par_den;
+
+        try {
+          sps_info_t sps_info;
+          if (mpeg4::p10::parse_sps(nalu, sps_info)) {
+            ar_found = sps_info.ar_found;
+            if (ar_found) {
+              par_num = sps_info.par_num;
+              par_den = sps_info.par_den;
+            }
           }
+        } catch (mtx::mm_io::end_of_file_x &) {
         }
+
         rbsp_to_nalu(nalu);
-        abort = true;
       }
 
-      new_avcc.write_uint16_be(nalu->get_size());
-      new_avcc.write(nalu);
-
-      if (abort) {
-        avcc.read(nalu, buffer_size - avcc.getFilePointer());
-        new_avcc.write(nalu);
-        break;
-      }
+      new_avcc.m_sps_list.push_back(nalu);
     }
 
-    buffer_size = new_avcc.getFilePointer();
-    buffer      = new_avcc.get_and_lock_buffer();
+    auto packed_new_avcc = new_avcc.pack();
+    if (packed_new_avcc) {
+      buffer_size = packed_new_avcc->get_size();
+      buffer      = packed_new_avcc->get_buffer();
+      packed_new_avcc->lock();
+    }
 
     return ar_found;
 
@@ -1391,51 +1535,10 @@ mpeg4::p10::avc_es_parser_c::create_nalu_with_size(const memory_cptr &src,
   return memory_cptr(new memory_c(buffer, final_size, true));
 }
 
-// TODO:DRY
 memory_cptr
 mpeg4::p10::avc_es_parser_c::get_avcc()
   const {
-  int final_size = 6 + 1;
-  int offset     = 6;
-
-  for (auto &mem : m_sps_list)
-    final_size += mem->get_size() + 2;
-  for (auto &mem : m_pps_list)
-    final_size += mem->get_size() + 2;
-
-  memory_cptr destination = memory_c::alloc(final_size);
-  unsigned char *buffer   = destination->get_buffer();
-
-  assert(!m_sps_list.empty());
-  sps_info_t const &sps = *m_sps_info_list.begin();
-
-  buffer[0] = 1;
-  buffer[1] = sps.profile_idc;
-  buffer[2] = sps.profile_compat;
-  buffer[3] = sps.level_idc;
-  buffer[4] = 0xfc | (m_nalu_size_length - 1);
-  buffer[5] = 0xe0 | m_sps_list.size();
-
-  for (auto &mem : m_sps_list) {
-    int size = mem->get_size();
-
-    write_nalu_size(buffer + offset, size, 2);
-    memcpy(&buffer[offset + 2], mem->get_buffer(), size);
-    offset += 2 + size;
-  }
-
-  buffer[offset] = m_pps_list.size();
-  ++offset;
-
-  for (auto &mem : m_pps_list) {
-    int size = mem->get_size();
-
-    write_nalu_size(buffer + offset, size, 2);
-    memcpy(&buffer[offset + 2], mem->get_buffer(), size);
-    offset += 2 + size;
-  }
-
-  return destination;
+  return avcc_c{static_cast<unsigned int>(m_nalu_size_length), m_sps_list, m_pps_list}.pack();
 }
 
 bool

@@ -75,6 +75,7 @@
 #include "common/matroska.h"
 #include "common/mm_io.h"
 #include "common/mm_io_x.h"
+#include "common/mpeg4_p10.h"
 #include "common/stereo_mode.h"
 #include "common/strings/editing.h"
 #include "common/strings/formatting.h"
@@ -337,26 +338,24 @@ create_codec_dependent_private_info(KaxCodecPrivate &c_priv,
     return (boost::format(Y(" (format tag: 0x%|1$04x|)")) % get_uint16_le(&wfe->w_format_tag)).str();
 
   } else if ((codec_id == MKV_V_MPEG4_AVC) && ('v' == track_type) && (c_priv.GetSize() >= 4)) {
-    unsigned char *avcc      = c_priv.GetBuffer();
-    unsigned int profile_idc = avcc[1];
-    unsigned int level_idc   = avcc[3];
+    auto avcc = mpeg4::p10::avcc_c::unpack(memory_cptr{new memory_c(c_priv.GetBuffer(), c_priv.GetSize(), false)});
 
     return (boost::format(Y(" (h.264 profile: %1% @L%2%.%3%)"))
-            % (  profile_idc ==  44 ? "CAVLC 4:4:4 Intra"
-               : profile_idc ==  66 ? "Baseline"
-               : profile_idc ==  77 ? "Main"
-               : profile_idc ==  83 ? "Scalable Baseline"
-               : profile_idc ==  86 ? "Scalable High"
-               : profile_idc ==  88 ? "Extended"
-               : profile_idc == 100 ? "High"
-               : profile_idc == 110 ? "High 10"
-               : profile_idc == 118 ? "Multiview High"
-               : profile_idc == 122 ? "High 4:2:2"
-               : profile_idc == 128 ? "Stereo High"
-               : profile_idc == 144 ? "High 4:4:4"
-               : profile_idc == 244 ? "High 4:4:4 Predictive"
-               :                      Y("Unknown"))
-            % (level_idc / 10) % (level_idc % 10)).str();
+            % (  avcc.m_profile_idc ==  44 ? "CAVLC 4:4:4 Intra"
+               : avcc.m_profile_idc ==  66 ? "Baseline"
+               : avcc.m_profile_idc ==  77 ? "Main"
+               : avcc.m_profile_idc ==  83 ? "Scalable Baseline"
+               : avcc.m_profile_idc ==  86 ? "Scalable High"
+               : avcc.m_profile_idc ==  88 ? "Extended"
+               : avcc.m_profile_idc == 100 ? "High"
+               : avcc.m_profile_idc == 110 ? "High 10"
+               : avcc.m_profile_idc == 118 ? "Multiview High"
+               : avcc.m_profile_idc == 122 ? "High 4:2:2"
+               : avcc.m_profile_idc == 128 ? "Stereo High"
+               : avcc.m_profile_idc == 144 ? "High 4:4:4"
+               : avcc.m_profile_idc == 244 ? "High 4:4:4 Predictive"
+               :                             Y("Unknown"))
+            % (avcc.m_level_idc / 10) % (avcc.m_level_idc % 10)).str();
   }
 
   return "";

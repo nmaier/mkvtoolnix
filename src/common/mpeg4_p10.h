@@ -196,6 +196,26 @@ public:
   }
 };
 
+class avcc_c {
+public:
+  unsigned int m_profile_idc, m_profile_compat, m_level_idc, m_nalu_size_length;
+  std::vector<memory_cptr> m_sps_list, m_pps_list;
+  std::vector<sps_info_t> m_sps_info_list;
+  std::vector<pps_info_t> m_pps_info_list;
+
+public:
+  avcc_c();
+  avcc_c(unsigned int nalu_size_len, std::vector<memory_cptr> const &sps_list, std::vector<memory_cptr> const &pps_list);
+
+  explicit operator bool() const;
+
+  memory_cptr pack();
+  bool parse_sps_list(bool ignore_errors = false);
+  bool parse_pps_list(bool ignore_errors = false);
+
+  static avcc_c unpack(memory_cptr const &mem);
+};
+
 class avc_es_parser_c {
 protected:
   int m_nalu_size_length;
@@ -216,7 +236,7 @@ protected:
   int64_t m_max_timecode;
   std::map<int64_t, int64_t> m_duration_frequency;
 
-  std::deque<memory_cptr> m_sps_list, m_pps_list, m_extra_data;
+  std::vector<memory_cptr> m_sps_list, m_pps_list, m_extra_data;
   std::vector<sps_info_t> m_sps_info_list;
   std::vector<pps_info_t> m_pps_info_list;
 
