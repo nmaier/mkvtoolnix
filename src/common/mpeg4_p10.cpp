@@ -129,7 +129,7 @@ avcc_c::pack() {
   auto destination = memory_c::alloc(total_size);
   auto buffer      = destination->get_buffer();
   auto &sps        = *m_sps_info_list.begin();
-  auto write_list  = [&buffer](std::vector<memory_cptr> const &list, uint8_t num_byte_bits = 0) {
+  auto write_list  = [&buffer](std::vector<memory_cptr> const &list, uint8_t num_byte_bits) {
     *buffer = list.size() | num_byte_bits;
 
     for (auto &mem : list) {
@@ -148,7 +148,7 @@ avcc_c::pack() {
   buffer   += 5;
 
   write_list(m_sps_list, 0xe0);
-  write_list(m_pps_list);
+  write_list(m_pps_list, 0x00);
 
   return destination;
 }
@@ -163,7 +163,7 @@ avcc_c::unpack(memory_cptr const &mem) {
   try {
     mm_mem_io_c in{*mem};
 
-    auto read_list = [&in](std::vector<memory_cptr> &list, unsigned int num_entries_mask = 0xff) {
+    auto read_list = [&in](std::vector<memory_cptr> &list, unsigned int num_entries_mask) {
       auto num_entries = in.read_uint8() & num_entries_mask;
       while (num_entries) {
         auto size = in.read_uint16_be();
@@ -179,7 +179,7 @@ avcc_c::unpack(memory_cptr const &mem) {
     avcc.m_nalu_size_length = (in.read_uint8() & 0x03) + 1;
 
     read_list(avcc.m_sps_list, 0x0f);
-    read_list(avcc.m_pps_list);
+    read_list(avcc.m_pps_list, 0xff);
 
     return avcc;
 

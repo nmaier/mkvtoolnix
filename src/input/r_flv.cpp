@@ -200,7 +200,6 @@ flv_reader_c::flv_reader_c(track_info_c const &ti,
   , m_audio_track_idx{0}
   , m_video_track_idx{0}
   , m_selected_track_idx{-1}
-  , m_video_frame_rate{0}
   , m_file_done{false}
   , m_debug{debugging_requested("flv|flv_full")}
 {

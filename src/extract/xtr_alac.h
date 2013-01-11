@@ -22,7 +22,6 @@ private:
   memory_cptr m_priv;
   uint64_t m_free_chunk_size;
   uint64_t m_free_chunk_offset;
-  uint64_t m_data_chunk_size;
   uint64_t m_data_chunk_offset;
   uint64_t m_frames_written;
   uint64_t m_packets_written;

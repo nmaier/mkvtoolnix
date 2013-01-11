@@ -22,7 +22,6 @@ namespace mtx { namespace amf {
 script_parser_c::script_parser_c(memory_cptr const &mem)
   : m_data_mem{mem}
   , m_data{*mem.get()}
-  , m_in_ecma_array{}
   , m_in_meta_data{}
   , m_level{}
   , m_debug{debugging_requested("amf|amf_script_parser")}

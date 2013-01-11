@@ -61,7 +61,7 @@ private:
   memory_cptr m_data_mem;
   mm_mem_io_c m_data;
   meta_data_t m_meta_data;
-  bool m_in_ecma_array, m_in_meta_data;
+  bool m_in_meta_data;
   unsigned int m_level;
 
   bool m_debug;

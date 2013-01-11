@@ -30,7 +30,6 @@ xtr_alac_c::xtr_alac_c(std::string const &codec_id,
   , m_priv{}
   , m_free_chunk_size{}
   , m_free_chunk_offset{}
-  , m_data_chunk_size{}
   , m_data_chunk_offset{}
   , m_frames_written{}
   , m_packets_written{}

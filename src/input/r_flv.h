@@ -125,7 +125,6 @@ typedef std::shared_ptr<flv_track_c> flv_track_cptr;
 class flv_reader_c: public generic_reader_c {
 private:
   int m_audio_track_idx, m_video_track_idx, m_selected_track_idx;
-  double m_video_frame_rate;
 
   flv_tag_c m_tag;
 
