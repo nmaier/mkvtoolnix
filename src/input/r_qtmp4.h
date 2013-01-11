@@ -235,6 +235,7 @@ struct qtmp4_demuxer_c {
   bool is_video() const;
   bool is_subtitles() const;
   bool is_unknown() const;
+  bool is_supported() const;
 
   void handle_stsd_atom(uint64_t atom_size, int level);
   void handle_audio_stsd_atom(uint64_t atom_size, int level);
@@ -243,6 +244,7 @@ struct qtmp4_demuxer_c {
 
   void parse_audio_header_priv_atoms(uint64_t atom_size, int level);
   void parse_video_header_priv_atoms(uint64_t atom_size, int level);
+  void parse_subtitles_header_priv_atoms(uint64_t atom_size, int level);
 
   bool verify_audio_parameters();
   bool verify_alac_audio_parameters();
@@ -251,6 +253,9 @@ struct qtmp4_demuxer_c {
   bool verify_video_parameters();
   bool verify_avc_video_parameters();
   bool verify_mp4v_video_parameters();
+
+  bool verify_subtitles_parameters();
+  bool verify_vobsub_subtitles_parameters();
 
   int64_t min_timecode() const;
 
@@ -392,6 +397,8 @@ protected:
   virtual void create_video_packetizer_mpeg4_p2(qtmp4_demuxer_cptr &dmx);
   virtual void create_video_packetizer_standard(qtmp4_demuxer_cptr &dmx);
   virtual void create_video_packetizer_svq1(qtmp4_demuxer_cptr &dmx);
+
+  virtual void create_subtitles_packetizer_vobsub(qtmp4_demuxer_cptr &dmx);
 
   virtual void handle_audio_encoder_delay(qtmp4_demuxer_cptr &dmx);
 

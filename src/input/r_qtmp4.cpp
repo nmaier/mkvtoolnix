@@ -44,6 +44,7 @@
 #include "output/p_passthrough.h"
 #include "output/p_pcm.h"
 #include "output/p_video.h"
+#include "output/p_vobsub.h"
 
 using namespace libmatroska;
 
@@ -219,6 +220,10 @@ qtmp4_reader_c::parse_headers() {
       if (!dmx->verify_video_parameters())
         continue;
 
+    } else if (dmx->is_subtitles()) {
+      if (!dmx->verify_subtitles_parameters())
+        continue;
+
     } else if (dmx->is_unknown()) {
       mxwarn(boost::format(Y("Quicktime/MP4 reader: Track %1% has an unknown type.\n")) % dmx->id);
       continue;
@@ -232,7 +237,7 @@ qtmp4_reader_c::parse_headers() {
   read_chapter_track();
 
   // Non-chapter "text"-type tracks (subtitles) are not supported at the moment.
-  brng::remove_erase_if(m_demuxers, [this](qtmp4_demuxer_cptr const &dmx) { return dmx->is_subtitles(); });
+  brng::remove_erase_if(m_demuxers, [this](qtmp4_demuxer_cptr const &dmx) { return !dmx->is_supported(); });
 
   if (!g_identifying)
     calculate_timecodes();
@@ -402,7 +407,7 @@ qtmp4_reader_c::handle_hdlr_atom(qtmp4_demuxer_cptr &new_dmx,
   else if (subtype == "vide")
     new_dmx->type = 'v';
 
-  else if (subtype == "text")
+  else if ((subtype == "text") || (subtype == "subp"))
     new_dmx->type = 's';
 }
 
@@ -1018,6 +1023,8 @@ qtmp4_reader_c::handle_tkhd_atom(qtmp4_demuxer_cptr &new_dmx,
     throw mtx::input::header_parsing_x();
 
   new_dmx->container_id = get_uint32_be(&tkhd.track_id);
+  new_dmx->v_width      = get_uint32_be(&tkhd.track_width)  >> 16;
+  new_dmx->v_height     = get_uint32_be(&tkhd.track_height) >> 16;
 
   mxdebug_if(m_debug_headers, boost::format("%1%Track ID: %2%\n") % space(level * 2 + 1) % new_dmx->container_id);
 }
@@ -1288,6 +1295,87 @@ qtmp4_reader_c::create_audio_packetizer_passthrough(qtmp4_demuxer_cptr &dmx) {
 }
 
 void
+qtmp4_reader_c::create_subtitles_packetizer_vobsub(qtmp4_demuxer_cptr &dmx) {
+  std::string palette;
+  auto format = [](int v) { return (boost::format("%|1$02x|") % std::min(std::max(v, 0), 255)).str(); };
+  auto buf    = dmx->esds.decoder_config->get_buffer();
+  for (auto i = 0; i < 16; ++i) {
+		int y = static_cast<int>(buf[(i << 2) + 1]) - 0x10;
+		int u = static_cast<int>(buf[(i << 2) + 3]) - 0x80;
+		int v = static_cast<int>(buf[(i << 2) + 2]) - 0x80;
+		int r = (298 * y           + 409 * v + 128) >> 8;
+		int g = (298 * y - 100 * u - 208 * v + 128) >> 8;
+		int b = (298 * y + 516 * u           + 128) >> 8;
+
+    if (i)
+      palette += ", ";
+
+    palette += format(r) + format(g) + format(b);
+  }
+
+  auto idx_str = (boost::format("# VobSub index file, v7 (do not modify this line!)\n"
+                                "#\n"
+                                "# To repair desyncronization, you can insert gaps this way:\n"
+                                "# (it usually happens after vob id changes)\n"
+                                "#\n"
+                                "#        delay: [sign]hh:mm:ss:ms\n"
+                                "#\n"
+                                "# Where:\n"
+                                "#        [sign]: +, - (optional)\n"
+                                "#        hh: hours (0 <= hh)\n"
+                                "#        mm/ss: minutes/seconds (0 <= mm/ss <= 59)\n"
+                                "#        ms: milliseconds (0 <= ms <= 999)\n"
+                                "#\n"
+                                "#        Note: You can't position a sub before the previous with a negative value.\n"
+                                "#\n"
+                                "# You can also modify timestamps or delete a few subs you don't like.\n"
+                                "# Just make sure they stay in increasing order.\n"
+                                "\n"
+                                "\n"
+                                "# Settings\n"
+                                "\n"
+                                "# Original frame size\n"
+                                "size: %1%x%2%\n"
+                                "\n"
+                                "# Origin, relative to the upper-left corner, can be overloaded by aligment\n"
+                                "org: 0, 0\n"
+                                "\n"
+                                "# Image scaling (hor,ver), origin is at the upper-left corner or at the alignment coord (x, y)\n"
+                                "scale: 100%%, 100%%\n"
+                                "\n"
+                                "# Alpha blending\n"
+                                "alpha: 100%%\n"
+                                "\n"
+                                "# Smoothing for very blocky images (use OLD for no filtering)\n"
+                                "smooth: OFF\n"
+                                "\n"
+                                "# In millisecs\n"
+                                "fadein/out: 50, 50\n"
+                                "\n"
+                                "# Force subtitle placement relative to (org.x, org.y)\n"
+                                "align: OFF at LEFT TOP\n"
+                                "\n"
+                                "# For correcting non-progressive desync. (in millisecs or hh:mm:ss:ms)\n"
+                                "# Note: Not effective in DirectVobSub, use \"delay: ... \" instead.\n"
+                                "time offset: 0\n"
+                                "\n"
+                                "# ON: displays only forced subtitles, OFF: shows everything\n"
+                                "forced subs: OFF\n"
+                                "\n"
+                                "# The original palette of the DVD\n"
+                                "palette: %3%\n"
+                                "\n"
+                                "# Custom colors (transp idxs and the four colors)\n"
+                                "custom colors: OFF, tridx: 0000, colors: 000000, 000000, 000000, 000000\n")
+                  % dmx->v_width % dmx->v_height % palette).str();
+
+  mxdebug_if(m_debug_headers, boost::format("VobSub IDX str:\n%1%") % idx_str);
+
+  dmx->ptzr = add_packetizer(new vobsub_packetizer_c(this, idx_str.c_str(), idx_str.length(), m_ti));
+  show_packetizer_info(dmx->id, PTZR(dmx->ptzr));
+}
+
+void
 qtmp4_reader_c::create_packetizer(int64_t tid) {
   unsigned int i;
   qtmp4_demuxer_cptr dmx;
@@ -1323,7 +1411,7 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
       create_video_packetizer_standard(dmx);
 
 
-  } else {
+  } else if (dmx->is_audio()) {
     if (dmx->fourcc.equiv("MP4A") && IS_AAC_OBJECT_TYPE_ID(dmx->esds.object_type_id))
       create_audio_packetizer_aac(dmx);
 
@@ -1346,6 +1434,10 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
       create_audio_packetizer_passthrough(dmx);
 
     handle_audio_encoder_delay(dmx);
+
+  } else {
+    if (dmx->fourcc.equiv("mp4s") && (MP4OTI_VOBSUB == dmx->esds.object_type_id))
+      create_subtitles_packetizer_vobsub(dmx);
   }
 
   if (packetizer_ok && (-1 == m_main_dmx))
@@ -1415,10 +1507,9 @@ qtmp4_reader_c::decode_and_verify_language(uint16_t coded_language) {
   for (i = 0; 3 > i; ++i)
     language += (char)(((coded_language >> ((2 - i) * 5)) & 0x1f) + 0x60);
 
-  balg::to_lower(language);
-
-  if (is_valid_iso639_2_code(language.c_str()))
-    return language;
+  int idx = map_to_iso639_2_code(balg::to_lower_copy(language));
+  if (-1 != idx)
+    return iso639_languages[idx].iso639_2_code;
 
   return "";
 }
@@ -1905,6 +1996,12 @@ qtmp4_demuxer_c::is_unknown()
   return !is_audio() && !is_video() && !is_subtitles();
 }
 
+bool
+qtmp4_demuxer_c::is_supported()
+  const {
+  return is_audio() || is_video() || (is_subtitles() && (fourcc == "mp4s"));
+}
+
 void
 qtmp4_demuxer_c::handle_stsd_atom(uint64_t atom_size,
                                   int level) {
@@ -1918,8 +2015,11 @@ qtmp4_demuxer_c::handle_stsd_atom(uint64_t atom_size,
     if ((0 < stsd_non_priv_struct_size) && (stsd_non_priv_struct_size < atom_size))
       parse_video_header_priv_atoms(atom_size, level);
 
-  } else if (is_subtitles())
+  } else if (is_subtitles()) {
     handle_subtitles_stsd_atom(atom_size, level);
+    if ((0 < stsd_non_priv_struct_size) && (stsd_non_priv_struct_size < atom_size))
+      parse_subtitles_header_priv_atoms(atom_size, level);
+  }
 
 }
 
@@ -2044,11 +2144,12 @@ qtmp4_demuxer_c::handle_subtitles_stsd_atom(uint64_t atom_size,
   base_stsd_atom_t base_stsd;
   memcpy(&base_stsd, priv, sizeof(base_stsd_atom_t));
 
-  fourcc = fourcc_c{base_stsd.fourcc};
+ fourcc                    = fourcc_c{base_stsd.fourcc};
+ stsd_non_priv_struct_size = sizeof(base_stsd_atom_t);
 
   if (m_debug_headers) {
     mxdebug(boost::format("%1%FourCC: %2%\n") % space(level * 2 + 1) % fourcc);
-    mxhexdump(0, priv, size);
+    mxhexdump(0, priv, size, "Debug> ");
   }
 }
 
@@ -2157,6 +2258,54 @@ qtmp4_demuxer_c::parse_video_header_priv_atoms(uint64_t atom_size,
     }
   } catch(...) {
   }
+}
+
+void
+qtmp4_demuxer_c::parse_subtitles_header_priv_atoms(uint64_t atom_size,
+                                                   int level) {
+  auto mem  = stsd->get_buffer() + stsd_non_priv_struct_size;
+  auto size = atom_size - stsd_non_priv_struct_size;
+
+  if (!fourcc.equiv("mp4s")) {
+    priv = memory_c::clone(mem, size);
+    return;
+  }
+
+  mm_mem_io_c mio(mem, size);
+
+  try {
+    while (!mio.eof() && (mio.getFilePointer() < size)) {
+      qt_atom_t atom;
+
+      try {
+        atom = read_qtmp4_atom(&mio);
+      } catch (...) {
+        return;
+      }
+
+      mxdebug_if(m_debug_headers, boost::format("%1%Subtitles private data size: %2%, type: '%3%'\n") % space((level + 1) * 2 + 1) % atom.size % atom.fourcc);
+
+      if (atom.fourcc == "esds") {
+        if (!priv) {
+          priv = memory_c::alloc(atom.size - atom.hsize);
+          if (mio.read(priv, priv->get_size()) != priv->get_size()) {
+            priv.reset();
+            return;
+          }
+        }
+
+        if (!esds_parsed) {
+          mm_mem_io_c memio(priv->get_buffer(), priv->get_size());
+          esds_parsed = parse_esds_atom(memio, level + 1);
+        }
+      }
+
+      mio.setFilePointer(atom.pos + atom.size);
+    }
+  } catch(...) {
+  }
+
+  mxdebug_if(m_debug_headers, boost::format("%1%Decoder config data at end of parsing: %2%\n") % space((level + 1) * 2 + 1) % (esds.decoder_config ? esds.decoder_config->get_size() : 0));
 }
 
 bool
@@ -2365,6 +2514,25 @@ qtmp4_demuxer_c::verify_mp4v_video_parameters() {
   else if (!esds.decoder_config) {
     // This is MPEG4 video, and we need header data for it.
     mxwarn(boost::format(Y("Quicktime/MP4 reader: MPEG4 track %1% is missing the esds atom/the decoder config. Skipping this track.\n")) % id);
+    return false;
+  }
+
+  return true;
+}
+
+bool
+qtmp4_demuxer_c::verify_subtitles_parameters() {
+  if (fourcc.equiv("mp4s") && (MP4OTI_VOBSUB == esds.object_type_id))
+    return verify_vobsub_subtitles_parameters();
+
+  mxwarn(boost::format(Y("Quicktime/MP4 reader: Unknown/unsupported FourCC '%1%' for track %2%.\n")) % fourcc % id);
+  return false;
+}
+
+bool
+qtmp4_demuxer_c::verify_vobsub_subtitles_parameters() {
+  if (!esds.decoder_config || (64 > esds.decoder_config->get_size())) {
+    mxwarn(boost::format(Y("Quicktime/MP4 reader: Track %1% is missing some data. Broken header atoms?\n")) % id);
     return false;
   }
 
