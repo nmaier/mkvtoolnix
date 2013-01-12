@@ -1,5 +1,9 @@
 2013-01-12  Moritz Bunkus  <moritz@bunkus.org>
 
+        * mkvmerge: bug fix in the MP4 reader: Fixed language code
+        conversion from what is used in MP4 to the ISO 639-2 codes used in
+        Matroska (e.g. convert from "deu" to "ger").
+
         * Source distribution: source code archives (tarballs) will be
         compressed with xz instead of bzip2 from now on. The file name's
         extension will therefore change from ".tar.bz2" to ".tar.xz". The
