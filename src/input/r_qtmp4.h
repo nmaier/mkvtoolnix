@@ -234,8 +234,8 @@ struct qtmp4_demuxer_c {
   bool is_audio() const;
   bool is_video() const;
   bool is_subtitles() const;
+  bool is_chapters() const;
   bool is_unknown() const;
-  bool is_supported() const;
 
   void handle_stsd_atom(uint64_t atom_size, int level);
   void handle_audio_stsd_atom(uint64_t atom_size, int level);

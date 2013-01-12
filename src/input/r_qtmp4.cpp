@@ -212,32 +212,29 @@ qtmp4_reader_c::parse_headers() {
   m_in->setFilePointer(m_mdat_pos);
 
   for (auto &dmx : m_demuxers) {
-    if (dmx->is_audio()) {
-      if (!dmx->verify_audio_parameters())
-        continue;
+    if (m_chapter_track_ids[dmx->container_id])
+      dmx->type = 'C';
 
-    } else if (dmx->is_video()) {
-      if (!dmx->verify_video_parameters())
-        continue;
-
-    } else if (dmx->is_subtitles()) {
-      if (!dmx->verify_subtitles_parameters())
-        continue;
-
-    } else if (dmx->is_unknown()) {
-      mxwarn(boost::format(Y("Quicktime/MP4 reader: Track %1% has an unknown type.\n")) % dmx->id);
+    else if (dmx->is_audio() && !dmx->verify_audio_parameters())
       continue;
-    }
+
+    else if (dmx->is_video() && !dmx->verify_video_parameters())
+      continue;
+
+    else if (dmx->is_subtitles() && !dmx->verify_subtitles_parameters())
+      continue;
+
+    else if (dmx->is_unknown())
+      continue;
 
     dmx->ok = dmx->update_tables(m_time_scale);
   }
 
-  detect_interleaving();
-
   read_chapter_track();
 
-  // Non-chapter "text"-type tracks (subtitles) are not supported at the moment.
-  brng::remove_erase_if(m_demuxers, [this](qtmp4_demuxer_cptr const &dmx) { return !dmx->is_supported(); });
+  brng::remove_erase_if(m_demuxers, [this](qtmp4_demuxer_cptr const &dmx) { return !dmx->ok || dmx->is_chapters(); });
+
+  detect_interleaving();
 
   if (!g_identifying)
     calculate_timecodes();
@@ -679,14 +676,10 @@ qtmp4_reader_c::parse_itunsmpb(std::string data) {
 
 void
 qtmp4_reader_c::read_chapter_track() {
-  at_scope_exit_c remove_chapter_dmxs{[this]() {
-      brng::remove_erase_if(m_demuxers, [this](qtmp4_demuxer_cptr const &dmx) { return m_chapter_track_ids[dmx->container_id]; });
-    }};
-
   if (m_ti.m_no_chapters || m_chapters)
     return;
 
-  auto chapter_dmx_itr = brng::find_if(m_demuxers, [this](qtmp4_demuxer_cptr const &dmx) { return dmx->is_subtitles() && m_chapter_track_ids[dmx->container_id]; });
+  auto chapter_dmx_itr = brng::find_if(m_demuxers, [this](qtmp4_demuxer_cptr const &dmx) { return dmx->is_chapters(); });
   if (m_demuxers.end() == chapter_dmx_itr)
     return;
 
@@ -1991,15 +1984,15 @@ qtmp4_demuxer_c::is_subtitles()
 }
 
 bool
-qtmp4_demuxer_c::is_unknown()
+qtmp4_demuxer_c::is_chapters()
   const {
-  return !is_audio() && !is_video() && !is_subtitles();
+  return 'C' == type;
 }
 
 bool
-qtmp4_demuxer_c::is_supported()
+qtmp4_demuxer_c::is_unknown()
   const {
-  return is_audio() || is_video() || (is_subtitles() && (fourcc == "mp4s"));
+  return !is_audio() && !is_video() && !is_subtitles() && !is_chapters();
 }
 
 void
@@ -2407,7 +2400,6 @@ qtmp4_demuxer_c::verify_audio_parameters() {
       && !fourcc.equiv("sac3")
       && !fourcc.equiv("alac")
       ) {
-    mxwarn(boost::format(Y("Quicktime/MP4 reader: Unknown/unsupported FourCC '%1%' for track %2%.\n")) % fourcc % id);
     return false;
   }
 
@@ -2460,7 +2452,6 @@ qtmp4_demuxer_c::verify_video_parameters() {
       && !fourcc.equiv("xvid")
       && !fourcc.equiv("avc1")
       ) {
-    mxwarn(boost::format(Y("Quicktime/MP4 reader: Unknown/unsupported FourCC '%|1$.4s|' for track %2%.\n")) % fourcc % id);
     return false;
   }
 
@@ -2525,7 +2516,6 @@ qtmp4_demuxer_c::verify_subtitles_parameters() {
   if (fourcc.equiv("mp4s") && (MP4OTI_VOBSUB == esds.object_type_id))
     return verify_vobsub_subtitles_parameters();
 
-  mxwarn(boost::format(Y("Quicktime/MP4 reader: Unknown/unsupported FourCC '%1%' for track %2%.\n")) % fourcc % id);
   return false;
 }
 
