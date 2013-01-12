@@ -13,7 +13,7 @@ Release: 1
 Summary:      tools to create, alter and inspect Matroska files
 License:      GPL
 Group:        Productivity/Multimedia/Other
-Source:       %{name}-%{version}.tar.bz2
+Source:       %{name}-%{version}.tar.xz
 Summary:      tools to create, alter and inspect Matroska files
 BuildRoot:    %{_tmppath}/%{name}-%{version}-build
 Prefix:       /usr

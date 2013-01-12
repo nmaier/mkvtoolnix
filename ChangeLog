@@ -1,3 +1,10 @@
+2013-01-12  Moritz Bunkus  <moritz@bunkus.org>
+
+        * Source distribution: source code archives (tarballs) will be
+        compressed with xz instead of bzip2 from now on. The file name's
+        extension will therefore change from ".tar.bz2" to ".tar.xz". The
+        download URL changes accordingly.
+
 2013-01-11  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvmerge: new feature: Implemented reading VobSubs from MP4
