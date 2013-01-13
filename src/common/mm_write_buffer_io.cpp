@@ -50,8 +50,8 @@ mm_write_buffer_io_c::setFilePointer(int64 offset,
                                      seek_mode mode) {
   int64_t new_pos
     = seek_beginning == mode ? offset
-    : seek_end       == mode ? get_size()       - offset
-    :                          getFilePointer() + offset;
+    : seek_end       == mode ? m_proxy_io->get_size() - offset
+    :                          getFilePointer()       + offset;
 
   if (new_pos == static_cast<int64_t>(getFilePointer()))
     return;
