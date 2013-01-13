@@ -861,20 +861,60 @@ render_headers(mm_io_c *out) {
 */
 void
 rerender_track_headers() {
+  bool debug       = debugging_requested("rerender_track_headers");
+  auto render_void = [](int64_t new_size) {
+    delete s_void_after_track_headers;
+    s_void_after_track_headers = new EbmlVoid;
+    s_void_after_track_headers->SetSize(new_size);
+    s_void_after_track_headers->Render(*s_out);
+  };
+
   g_kax_tracks->UpdateSize(false);
 
-  int64_t new_void_size = s_void_after_track_headers->GetElementPosition() + s_void_after_track_headers->GetSize()
-    - g_kax_tracks->GetElementPosition() - g_kax_tracks->ElementSize();
+  int64_t new_void_size = s_void_after_track_headers->GetElementPosition() + s_void_after_track_headers->GetSize() - g_kax_tracks->GetElementPosition() - g_kax_tracks->ElementSize();
 
-  s_out->save_pos(g_kax_tracks->GetElementPosition());
+  if (4 <= new_void_size) {
+    mxdebug_if(debug, boost::format("Normal case, only shrinking void down to %1%\n") % new_void_size);
+
+    s_out->save_pos(g_kax_tracks->GetElementPosition());
+
+    g_kax_tracks->Render(*s_out, false);
+    render_void(new_void_size);
+
+    s_out->restore_pos();
+
+    return;
+  }
+
+  auto current_pos       = s_out->getFilePointer();
+  int64_t data_start_pos = s_void_after_track_headers->GetElementPosition() + s_void_after_track_headers->ElementSize(true);
+  int64_t data_size      = s_out->get_size() - data_start_pos;
+  memory_cptr data;
+
+  s_out->setFilePointer(data_start_pos);
+
+  if (data_size) {
+    // Currently not supported due to lack of test file.
+    mxerror(boost::format(Y("Re-renering track headers: data_size != 0 not implemented yet. %1%\n")) % BUGMSG);
+
+    data = s_out->read(data_size);
+  }
+
+  s_out->setFilePointer(g_kax_tracks->GetElementPosition());
   g_kax_tracks->Render(*s_out, false);
 
-  delete s_void_after_track_headers;
-  s_void_after_track_headers = new EbmlVoid;
-  s_void_after_track_headers->SetSize(new_void_size);
-  s_void_after_track_headers->Render(*s_out);
+  render_void(1024);
 
-  s_out->restore_pos();
+  int64_t new_data_start_pos = s_out->getFilePointer();
+
+  if (data) {
+    s_out->write(data);
+    // TODO: fix cues, meta seek
+  }
+
+  mxdebug_if(debug, boost::format("4 > new void size (%1%). Size of data to move: %2% from %3% to %4%\n") % new_void_size % data_size % data_start_pos % new_data_start_pos);
+
+  s_out->setFilePointer(current_pos + new_data_start_pos - data_start_pos);
 }
 
 /** \brief Render all attachments into the output file at the current position

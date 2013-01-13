@@ -1,3 +1,11 @@
+2013-01-13  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvmerge: bug fix: Re-writing the track headers after they'd
+        grown a lot (to more than the EBML void size located after them
+        allowed for) led to an integer underflow. Then mkvmerge tried to
+        write a void element the size of that integer (e.g. nearly 4 GB on
+        32bit platforms). Fixes #822 and #828.
+
 2013-01-12  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvmerge: bug fix in the MP4 reader: Fixed language code
