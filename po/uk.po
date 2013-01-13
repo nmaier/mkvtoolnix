@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: mkvtoolnix_uk\n"
 "Report-Msgid-Bugs-To: Moritz Bunkus <moritz@bunkus.org>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2012-12-22 12:46+0100\n"
+"PO-Revision-Date: 2013-01-13 15:14+0200\n"
 "Last-Translator: Andriy Bilous'ko <arestarh@ukr.net>\n"
 "Language-Team: Ukrainian <moritz@bunkus.org>\n"
 "Language: uk\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: KBabel 1.11.4\n"
+"X-Generator: Poedit 1.5.4\n"
 
 #: src/extract/xtr_tta.cpp:117
 #, boost-format
@@ -374,25 +374,23 @@ msgstr ""
 "                           або після вказаного часу.\n"
 
 #: src/merge/mkvmerge.cpp:127
-#, fuzzy
 msgid ""
 "  --split chapters:all|A[,B...]\n"
 "                           Create a new file before each chapter (with 'all')\n"
 "                           or before chapter numbers A, B etc.\n"
 msgstr ""
-"  --split timecodes:A[,B...]\n"
-"                           Створюється новий файл після кожного тайм-коду A, B\n"
-"                           і т.д.\n"
+"  --split chapters:all|A[,B...]\n"
+"                           Створюється новий файл перед кожним розділом (при використанні 'all')\n"
+"                           або перед номерами розділів A, B і т.д.\n"
 
 #: src/merge/mkvmerge.cpp:124
-#, fuzzy
 msgid ""
 "  --split frames:A[,B...]\n"
 "                           Create a new file after each frame/field A, B\n"
 "                           etc.\n"
 msgstr ""
-"  --split timecodes:A[,B...]\n"
-"                           Створюється новий файл після кожного тайм-коду A, B\n"
+"  --split frames:A[,B...]\n"
+"                           Створюється новий файл після кожного кадру/поля A, B\n"
 "                           і т.д.\n"
 
 #: src/merge/mkvmerge.cpp:120
@@ -1019,7 +1017,7 @@ msgstr "&Редактор заголовків \tCtrl-E"
 #: src/mmg/header_editor/frame.cpp:152
 #: src/mmg/mmg_dialog.cpp:323
 msgid "&Help"
-msgstr "&Допомога"
+msgstr "&Довідка"
 
 #: src/mmg/header_editor/frame.cpp:149
 #: src/mmg/mmg_dialog.cpp:312
@@ -1117,7 +1115,7 @@ msgstr "&Розпочати виконання"
 
 #: src/mmg/mmg_dialog.cpp:314
 msgid "&Troubleshooting"
-msgstr ""
+msgstr "&Вирішення проблем"
 
 #: src/mmg/jobs.cpp:475
 #: src/mmg/tabs/additional_parts_dlg.cpp:47
@@ -1633,16 +1631,16 @@ msgstr ", розпочато %s"
 #: src/mmg/jobs.cpp:740
 #, c-format, boost-format
 msgid "--- BEGIN job %d (%s, added on %s)"
-msgstr "--- Завдання %d (%s, додано %s)"
+msgstr "--- РОЗПОЧАТО завдання %d (%s, додано %s)"
 
 #: src/mmg/jobs.cpp:750
 #, c-format, boost-format
 msgid "--- END job %d"
-msgstr "--- Завдання %d"
+msgstr "--- ЗАВЕРШЕНО завдання %d"
 
 #: src/mmg/jobs.cpp:745
 msgid "--- No job output found.\n"
-msgstr "--- Не знайдено вихідних данних завдання.\n"
+msgstr "--- Не знайдено вихідних даних завдання.\n"
 
 #: src/mmg/options/languages.cpp:41
 #: src/mmg/tabs/input_general.cpp:156
@@ -1663,7 +1661,7 @@ msgstr "--timecode-scale REPLACEME"
 
 #: src/propedit/propedit_cli_parser.cpp:242
 msgid "1. A number which will be interepreted as an attachment ID as listed by 'mkvmerge --identify-verbose'. These are usually simply numbered starting from 0 (e.g. '2')."
-msgstr ""
+msgstr "1. Число, що буде інтепретуватися як ID вкладення як вказано в 'mkvmerge --identify-verbose'. Це зазвичай проста нумерація, починаючи з 0 (наприклад, '2')."
 
 #: src/info/mkvinfo.cpp:679
 msgid "1: all frames"
@@ -1675,7 +1673,7 @@ msgstr "2 байти"
 
 #: src/propedit/propedit_cli_parser.cpp:243
 msgid "2. A number with the prefix '=' which will be interepreted as the attachment's unique ID (UID) as listed by 'mkvmerge --identify-verbose'. These are usually random-looking numbers (e.g. '128975986723')."
-msgstr ""
+msgstr "2. Число з префіксом '=', що буде інтепретуватися як унікальний ID вкладення (UID) як вказано в  'mkvmerge --identify-verbose'. Це зазвичай випадково згенеровані числа (наприклад,  '128975986723')."
 
 #: src/info/mkvinfo.cpp:681
 msgid "2: codec private data"
@@ -1683,7 +1681,7 @@ msgstr "2: специфічні дані кодека"
 
 #: src/propedit/propedit_cli_parser.cpp:244
 msgid "3. Either 'name:<value>' or 'mime-type:<value>' in which case the selector applies to all attachments whose name or MIME type respectively equals <value>."
-msgstr ""
+msgstr "3. Або 'name:<value>', або 'mime-type:<value>', у випадку чого селектор застосовується до усіх вкладень, чиї назва або MIME-тип відповідно дорівнюють <value>."
 
 #: src/mmg/tabs/input_format.cpp:198
 msgid "4 bytes"
@@ -1730,12 +1728,11 @@ msgstr "Блок був знайдений на позиції %1% для дор
 
 #: src/mmg/tabs/global.cpp:269
 msgid "A chapter starting at 0s is never considered for splitting and discarded silently."
-msgstr ""
+msgstr "Розділ, що починається з 0с, ніколи не враховується при розбитті і пропускається без попереджень."
 
 #: src/mmg/tabs/global.cpp:253
-#, fuzzy
 msgid "A comma-separated list of frame/field numbers after which to split."
-msgstr "Список, розділених комою діапазонів тайм-кодів контенту для обробки."
+msgstr "Список, розділених комою номерів кадрів/полів, після яких здійснювати розбиття."
 
 #: src/mmg/tabs/global.cpp:242
 msgid "A comma-separated list of timecode ranges of content to keep."
@@ -1767,11 +1764,11 @@ msgstr ""
 
 #: src/mmg/tabs/chapters.cpp:350
 msgid "A segment to play in place of this chapter. The edition set via the segment edition UID should be used for this segment, otherwise no edition is used. This is a 128bit segment UID in the usual UID form: hex numbers with or without the \"0x\" prefix, with or without spaces, exactly 32 digits.\n"
-msgstr "Сегмент для відтворення в позиції даного розділу. Додаток, встановлений через UID додатку сегмента, має використовуватися для цього сегмента, в іншому випадку жоден додаток не використовується. Це 128бітний UID сегмента у звичайній формі представлення UID: шістнадцяткові числа з або без префікса \"0x\", з або без пробілів, кількістю в 32 знаки.\n"
+msgstr "Сегмент для відтворення в позиції даного розділу. Редакція, встановлена через UID редакції сегмента, має використовуватися для цього сегмента, в іншому випадку жодна з редакцій не використовується. Це 128бітний UID сегмента у звичайній формі представлення UID: шістнадцяткові числа з або без префікса \"0x\", з або без пробілів, кількістю в 32 знаки.\n"
 
 #: src/mmg/tabs/global.cpp:258
 msgid "A single Matroska block contains either a full frame (for progressive content) or a single field (for interlaced content)."
-msgstr ""
+msgstr "Одиничний блок Matroska містить або повний кадр (для матеріалу з прогресивною розгорткою), або одиничне поле (для матеріалу з черезрядковою розгорткою)."
 
 #: src/info/mkvinfo.cpp:789
 msgid "A track"
@@ -1851,7 +1848,7 @@ msgstr "ALAC (Apple Lossless Audio Codec)"
 
 #: src/extract/xtr_alac.cpp:51
 msgid "ALAC private data size mismatch\n"
-msgstr ""
+msgstr "Неспівпадіння розміру приватних даних ALAC\n"
 
 #: src/mmg/header_editor/value_page.cpp:143
 msgid ""
@@ -1907,15 +1904,15 @@ msgstr "Про mkvinfo"
 
 #: src/propedit/propedit_cli_parser.cpp:210
 msgid "Actions for handling attachments"
-msgstr ""
+msgstr "Дії для опрацювання вкладень"
 
 #: src/propedit/propedit_cli_parser.cpp:195
 msgid "Actions for handling properties"
-msgstr ""
+msgstr "Дії для опрацювання властивостей"
 
 #: src/propedit/propedit_cli_parser.cpp:203
 msgid "Actions for handling tags and chapters"
-msgstr ""
+msgstr "Дії для опрацювання тегів і розділів"
 
 #: src/mmg/cli_options_dlg.cpp:47
 msgid "Add"
@@ -1959,7 +1956,7 @@ msgstr "Додати підрозділ"
 
 #: src/propedit/propedit_cli_parser.cpp:211
 msgid "Add the file 'filename' as a new attachment"
-msgstr ""
+msgstr "Додати файл 'назва файла' як нове вкладення"
 
 #: src/mmg/jobs.cpp:448
 msgid "Added on"
@@ -2059,7 +2056,7 @@ msgstr "Завжди поверх інших вікон"
 
 #: src/propedit/propedit_cli_parser.cpp:241
 msgid "An <attachment-selector> can have three forms:"
-msgstr ""
+msgstr "<attachment-selector> може мати три форми:"
 
 #: src/common/property_element.cpp:129
 #: src/mmg/header_editor/frame.cpp:417
@@ -2173,9 +2170,8 @@ msgid "Attachment extraction"
 msgstr "Витягнення вкладень"
 
 #: src/propedit/propedit_cli_parser.cpp:240
-#, fuzzy
 msgid "Attachment selectors"
-msgstr "Стиль вкладення:"
+msgstr "Селектори вкладень"
 
 #: src/mmg/tabs/attachments.cpp:161
 msgid "Attachment style:"
@@ -2376,11 +2372,11 @@ msgstr "Зафіксоване виключення"
 
 #: src/mmg/cli_options_dlg.cpp:152
 msgid "Causes mkvmerge not to write 'CueDuration' elemenets in the cues."
-msgstr ""
+msgstr "Змушує mkvmerge не записувати елементи 'CueDuration' до структури cue."
 
 #: src/mmg/cli_options_dlg.cpp:154
 msgid "Causes mkvmerge not to write 'CueRelativePosition' elemenets in the cues."
-msgstr ""
+msgstr "Змушує mkvmerge не записувати елементи 'CueRelativePosition' до структури cue."
 
 #: src/mmg/cli_options_dlg.cpp:150
 msgid "Causes mkvmerge to add 'stop display' commands to VobSub subtitle packets that do not contain a duration field."
@@ -2440,7 +2436,7 @@ msgstr "Кодек перекладу розділів: %1%"
 #: src/info/mkvinfo.cpp:454
 #, boost-format
 msgid "Chapter Translate Edition UID: %1%"
-msgstr "UID додатку перекладу розділів: %1%"
+msgstr "UID редакції перекладу розділів: %1%"
 
 #: src/info/mkvinfo.cpp:460
 #, boost-format
@@ -2479,9 +2475,8 @@ msgid "Chapter names and languages"
 msgstr "Назви та мови розділів"
 
 #: src/mmg/tabs/global.cpp:264
-#, fuzzy
 msgid "Chapter numbers:"
-msgstr "Розділи:"
+msgstr "Номери розділів:"
 
 #: src/mmg/options/chapters.cpp:65
 msgid "Chapter options"
@@ -2933,7 +2928,7 @@ msgstr "Створити новий файл розділу"
 
 #: src/common/mm_io_x.h:118
 msgid "Creating directory '%1%' failed: %2%"
-msgstr ""
+msgstr "Помилка при створенні теки '%1%': %2%"
 
 #: src/merge/mkvmerge.cpp:712
 #, boost-format
@@ -2960,9 +2955,9 @@ msgid "Cue codec state: %1%"
 msgstr "Стан кодека Cue: %1%"
 
 #: src/info/mkvinfo.cpp:1028
-#, fuzzy, boost-format
+#, boost-format
 msgid "Cue duration: %1%"
-msgstr "Положення кластеру Cue: %1%"
+msgstr "Тривалість Cue: %1%"
 
 #: src/mmg/tabs/global.cpp:337
 msgid "Cue name format:"
@@ -2997,9 +2992,9 @@ msgid "Cue reference"
 msgstr "Cue посилання"
 
 #: src/info/mkvinfo.cpp:1025
-#, fuzzy, boost-format
+#, boost-format
 msgid "Cue relative position: %1%"
-msgstr "Положення кластеру Cue: %1%"
+msgstr "Відносне положення Cue: %1%"
 
 #: src/common/chapters/cue_parser.cpp:398
 #, boost-format
@@ -3162,7 +3157,7 @@ msgstr "Видалити всі входження параметру"
 
 #: src/propedit/propedit_cli_parser.cpp:213
 msgid "Delete one or more attachments"
-msgstr ""
+msgstr "Видалити одне або декілька вкладень"
 
 #: src/mmg/jobs.cpp:492
 msgid "Delete the selected job(s) from the job queue"
@@ -3273,9 +3268,8 @@ msgid "Download URL:"
 msgstr "URL завантаження:"
 
 #: src/mmg/tabs/global.cpp:216
-#, fuzzy
 msgid "Duration:"
-msgstr "Опис:"
+msgstr "Тривалість:"
 
 #: src/info/mkvinfo.cpp:204
 #, boost-format
@@ -3322,11 +3316,11 @@ msgstr "EVIL (дуже серйозна) внутрішня помилка! (н�
 
 #: src/mmg/tabs/chapters.cpp:347
 msgid "Each chapter and each edition has a unique identifier. This identifier is normally assigned automatically by the programs, but it can be changed manually if it is really needed."
-msgstr "Кожний розділ і кожний додаток має унікальний ідентифікатор. Цей ідентифікатор, як правило, присвоюється автоматично програмою, але його можна змінити вручну, якщо це дійсно необхідно."
+msgstr "Кожний розділ і кожна редакція мають унікальний ідентифікатор. Цей ідентифікатор, як правило, присвоюється автоматично програмою, але його можна змінити вручну, якщо це дійсно необхідно."
 
 #: src/mmg/tabs/chapters.cpp:820
 msgid "Each edition must contain at least one chapter."
-msgstr "Кожен додаток має містити як мінімум один розділ."
+msgstr "Кожна редакція має містити як мінімум один розділ."
 
 #: src/mmg/tabs/global.cpp:243
 msgid "Each range consists of a start and end timecode with a '-' in the middle, e.g. '00:01:15-00:03:20'."
@@ -3342,25 +3336,23 @@ msgid "Edit additional source file parts"
 msgstr "Редагувати додаткові частини вхідного файла"
 
 #: src/propedit/propedit_cli_parser.cpp:224
-#, fuzzy
 msgid "Edit selectors for properties"
-msgstr "Редагувати селектори"
+msgstr "Редагувати селектори для властивостей"
 
 #: src/mmg/tabs/chapters.cpp:526
 #, c-format, boost-format
 msgid "Edition %d"
-msgstr "Додаток %d"
+msgstr "Редакція %d"
 
 #: src/mmg/tabs/chapters.cpp:865
 #: src/mmg/tabs/chapters.cpp:912
 #, c-format, boost-format
 msgid "EditionEntry %u"
-msgstr "Запис Додатку %u"
+msgstr "Запис редакції %u"
 
 #: src/mmg/tabs/global.cpp:266
-#, fuzzy
 msgid "Either the word 'all' which selects all chapters or a comma-separated list of chapter numbers after which to split."
-msgstr "Список, розділених комою діапазонів тайм-кодів контенту для обробки."
+msgstr "Або слово 'all', при вказанні якого обираються всі розділи або список, розділених комою номерів розділів, після яких здійснювати розбиття."
 
 #: src/propedit/propedit.cpp:70
 #, boost-format
@@ -3582,22 +3574,22 @@ msgstr "FLAC (Free Lossless Audio Codec)"
 
 #: src/common/file_types.cpp:36
 msgid "FLV (Flash Video)"
-msgstr ""
+msgstr "FLV (Flash Video)"
 
 #: src/mmg/tabs/input_format.cpp:233
 msgid "FPS:"
 msgstr "Кадрів за секунду:"
 
 #: src/extract/xtr_vobsub.cpp:81
-#, fuzzy, boost-format
+#, boost-format
 msgid "Failed to create the VobSub data file '%1%': %2%\n"
-msgstr "Не вдалося створити файл даних VobSub '%1%': %2% (%3%)\n"
+msgstr "Не вдалося створити файл даних VobSub '%1%': %2%\n"
 
 #: src/extract/xtr_textsubs.cpp:360
 #: src/extract/xtr_vobsub.cpp:235
-#, fuzzy, boost-format
+#, boost-format
 msgid "Failed to create the file '%1%': %2%\n"
-msgstr "Не вдалося створити файл '%1%': %2% (%3%)\n"
+msgstr "Не вдалося створити файл '%1%': %2%\n"
 
 #: src/extract/xtr_base.cpp:73
 #, boost-format
@@ -3605,9 +3597,9 @@ msgid "Failed to create the file '%1%': %2% (%3%)\n"
 msgstr "Не вдалося створити файл '%1%': %2% (%3%)\n"
 
 #: src/extract/xtr_tta.cpp:45
-#, fuzzy, boost-format
+#, boost-format
 msgid "Failed to create the temporary file '%1%': %2%\n"
-msgstr "Не вдалося створити тимчасовий файл '%1%': %2% (%3%)\n"
+msgstr "Не вдалося створити тимчасовий файл '%1%': %2%\n"
 
 #: src/extract/xtr_textsubs.cpp:363
 #, boost-format
@@ -3739,7 +3731,7 @@ msgstr "Прапорці:"
 
 #: src/input/r_flv.cpp:211
 msgid "Flash Video"
-msgstr ""
+msgstr "Flash Video"
 
 #: src/mmg/header_editor/value_page.cpp:147
 msgid "Floating point number"
@@ -3827,7 +3819,7 @@ msgstr "Кадр з розміром %1%%2%%3%"
 
 #: src/mmg/tabs/global.cpp:251
 msgid "Frames/fields:"
-msgstr ""
+msgstr "Кадри/поля:"
 
 #: src/mmg/tabs/input_extra.cpp:130
 msgid "Free-form edit field for user defined options for this track. What you input here is added after all the other options mmg adds so that you could overwrite any of mmg's options for this track. All occurences of the string \"<TID>\" will be replaced by the track's track ID."
@@ -3983,7 +3975,7 @@ msgstr "Якщо розділ не позначено як 'Задіяний', �
 
 #: src/mmg/tabs/chapters.cpp:364
 msgid "If a chapter or an edition is marked 'hidden' then the player should not show this chapter entry (or all of this edition's entries) to the user. Such entries could still be used by the menu system."
-msgstr "Якщо розділ або додаток позначено як 'Прихований', то плеєр не повинен показувати цей розділ (або усі записи додатку) користувачу. Такі записи можуть ще бути використані системою меню."
+msgstr "Якщо розділ або редакцію позначено як 'Приховано', то плеєр не повинен показувати цей розділ (або усі записи редакції) користувачу. Такі записи можуть все ж бути використані системою меню."
 
 #: src/mmg/tabs/global.cpp:246
 msgid "If a range's start timecode is prefixed with '+' then its content will be written to the same file as the previous range. Otherwise a new file will be created for this range."
@@ -3995,11 +3987,11 @@ msgstr "Якщо тайм-код початку пропущено, то вик�
 
 #: src/mmg/tabs/chapters.cpp:359
 msgid "If an edition is marked 'ordered' then the chapters can be defined multiple times and the order to play them is enforced."
-msgstr "Якщо додаток відмічений як 'впорядкований', тоді розділи можуть бути визначені багато разів і порядок їх відтворення є примусовим."
+msgstr "Якщо редакція відмічена як 'впорядкована', тоді розділи можуть бути визначені багато разів і порядок їх відтворення є примусовим."
 
 #: src/mmg/tabs/chapters.cpp:387
 msgid "If an edition is marked as 'default' then it should be used as the default edition."
-msgstr "Якщо додаток відмічений як 'типовий', тоді він має використовуватися як типовий додаток."
+msgstr "Якщо редакція відмічена як 'типова', тоді вона має використовуватися як типова редакція."
 
 #: src/mmg/options/mmg.cpp:68
 msgid "If checked mmg will ask for confirmation before overwriting existing files, or before adding a new job if there's an old job whose description matches the new one."
@@ -4019,7 +4011,7 @@ msgstr "Якщо залишити порожнім, то mmg задасть зб
 
 #: src/mmg/tabs/global.cpp:256
 msgid "If no video track is output no splitting will occur."
-msgstr ""
+msgstr "Якщо не вибрано жодної доріжки відео як вихідної, то розбиття відбуватись не буде."
 
 #: src/mmg/tabs/attachments.cpp:166
 msgid "If splitting is a file can be attached either to all files created or only to the first file. Has no effect if no splitting is used."
@@ -4027,7 +4019,7 @@ msgstr "При розбитті файл може бути прикріплен�
 
 #: src/mmg/mmg_dialog.cpp:1962
 msgid "If you encounter problems during playback of files please consider visiting the newly created MKVToolNix troubleshooting advice page:"
-msgstr ""
+msgstr "Якщо ви помічаєте проблеми під час відтворення файлів, то можете відвідати створену веб-сторінку MKVToolNix з порадами щодо вирішення проблем:"
 
 #: src/output/p_textsubs.cpp:69
 #, boost-format
@@ -4131,7 +4123,7 @@ msgstr "Невірний UID. Цей UID розділу вже використ�
 
 #: src/mmg/tabs/chapters.cpp:1317
 msgid "Invalid UID. This edition UID is already in use. The original UID has not been changed."
-msgstr "Невірний UID. Цей UID додатку вже використовується. Оригінальні UID не був змінений."
+msgstr "Невірний UID. Цей UID редакції вже використовується. Оригінальні UID не був змінений."
 
 #: src/common/mm_io_x.h:147
 msgid "Invalid UTF-8 char. First byte: 0x%|1$02x|"
@@ -4174,9 +4166,9 @@ msgstr "Невірна зміна специфікації (%3%) в '%1% %2%'.\n
 
 #: src/merge/mkvmerge.cpp:853
 #: src/merge/mkvmerge.cpp:892
-#, fuzzy, boost-format
+#, boost-format
 msgid "Invalid chapter number '%1%' for '--split' in '--split %2%': %3%\n"
-msgstr "Невірний формат для '--split' в '--split %1%'.\n"
+msgstr "Невірний номер розділу '%1%' для '--split' у '--split %2%': %3%\n"
 
 #: src/merge/mkvmerge.cpp:1162
 #, boost-format
@@ -4251,7 +4243,7 @@ msgstr "Використовується невірний формат для UI
 
 #: src/mmg/tabs/chapters.cpp:1395
 msgid "Invalid format used for the segment edition UID. Not using the value."
-msgstr "Використовується невірний формат для UID додатку сегмента. Задане значення не використовується."
+msgstr "Використовується невірний формат для UID редакції сегмента. Задане значення не використовується."
 
 #: src/mmg/tabs/chapters.cpp:1336
 #, c-format, boost-format
@@ -4296,9 +4288,9 @@ msgid "Invalid format: unknown character '%1%' found"
 msgstr "Невірний формат: Знайдено невідомий символ '%1%'"
 
 #: src/merge/mkvmerge.cpp:833
-#, fuzzy, boost-format
+#, boost-format
 msgid "Invalid frame for '--split' in '--split %1%'.\n"
-msgstr "Невірний формат для '--split' в '--split %1%'.\n"
+msgstr "Невірний кадр для '--split' в '--split %1%'.\n"
 
 #: src/input/r_vobsub.cpp:530
 #, boost-format
@@ -4475,7 +4467,7 @@ msgstr "Невірна специфікація ID/назви файлу дор�
 
 #: src/mmg/mmg_dialog.cpp:1966
 msgid "It can also be opened from the 'Help' menu."
-msgstr ""
+msgstr "Може бути також відкритим через меню 'Довідка'."
 
 #: src/mmg/mmg_dialog.cpp:1478
 msgid "Job added to job queue"
@@ -4737,9 +4729,8 @@ msgid "Max BlockAddition ID: %1%"
 msgstr "Максимальний ID BlockAddition: %1%"
 
 #: src/mmg/tabs/global.cpp:308
-#, fuzzy
 msgid "Max. number of files:"
-msgstr "максимальне число файлів:"
+msgstr "Максимальне число файлів:"
 
 #: src/info/mkvinfo.cpp:886
 #, boost-format
@@ -4992,9 +4983,9 @@ msgstr "Не було задано розподілення для файлу н
 
 #: src/propedit/attachment_target.cpp:192
 #: src/propedit/attachment_target.cpp:200
-#, fuzzy, boost-format
+#, boost-format
 msgid "No attachment matched the spec '%1%'.\n"
-msgstr "Вкладення з ID %1% не було знайдено.\n"
+msgstr "Жодних вкладень, що відповідають специфікації '%1%'.\n"
 
 #: src/mmg/tabs/chapters.cpp:802
 msgid "No chapter entries have been create yet."
@@ -5003,7 +4994,7 @@ msgstr "Ще не було створено жодного запису розд
 #: src/merge/mkvmerge.cpp:858
 #, boost-format
 msgid "No chapter numbers listed after '--split %1%'.\n"
-msgstr ""
+msgstr "Жодного номера розділу не вказано після '--split %1%'.\n"
 
 #: src/mmg/tabs/chapters.cpp:589
 msgid "No chapters found"
@@ -5012,7 +5003,7 @@ msgstr "Не знайдено жодного розділу"
 #: src/merge/mkvmerge.cpp:862
 #: src/merge/mkvmerge.cpp:888
 msgid "No chapters in source files or chapter files found to split by.\n"
-msgstr ""
+msgstr "Жодних розділів у вхідних файлах або файлів розділів не знайдено щоб мати можливість виконати розбиття.\n"
 
 #: src/mmg/header_editor/frame.cpp:516
 msgid "No fields modified"
@@ -5057,7 +5048,7 @@ msgstr "Не вказано назву результуючого файлу, т
 
 #: src/common/mm_io_x.cpp:40
 msgid "No permission to read from, to write to or to create"
-msgstr ""
+msgstr "Немає прав на зчитування, запис чи створення"
 
 #: src/extract/timecodes_v2.cpp:219
 #: src/extract/tracks.cpp:356
@@ -5067,7 +5058,7 @@ msgstr "Не знайдено сегменту/елементу рівня 0."
 
 #: src/common/mm_io_x.cpp:39
 msgid "No space left to write to"
-msgstr ""
+msgstr "Не залишилось місця для запису"
 
 #: src/merge/mkvmerge.cpp:2421
 msgid "No streams to output were found. Aborting.\n"
@@ -5122,14 +5113,13 @@ msgid "Not a valid Matroska file (no segment/level 0 element found)"
 msgstr "Некорректний файл Matroska (не знайдено сегмента/елемента рівня 0)"
 
 #: src/merge/mkvmerge.cpp:853
-#, fuzzy
 msgid "Not a valid number or not positive."
-msgstr "Невірно задано максимальну кількість файлів для розбиття."
+msgstr "Некоректно вказане число або є від'ємним."
 
 #: src/merge/pr_generic.cpp:1149
 #, boost-format
 msgid "Note that the Matroska specifications regarding the storage of '%1%' have not been finalized yet. mkvmerge's support for it is therefore subject to change and uses the CodecID '%2%/EXPERIMENTAL' instead of '%2%'. This warning will be removed once the specifications have been finalized and mkvmerge has been updated accordingly.\n"
-msgstr ""
+msgstr "Майте на увазі, що специфікації Matroska щодо зберігання '%1%' ще не були завершені. Тому підтримка з боку mkvmerge для них може змінюватись і використовується CodecID '%2%/EXPERIMENTAL' замість '%2%'. Це попередження не буде відображатись як тільки специфікації будуть завершені і mkvmerge буде оновлено відповідно.\n"
 
 #: src/extract/attachments.cpp:132
 #: src/extract/timecodes_v2.cpp:187
@@ -5140,7 +5130,7 @@ msgstr "Нічого робити.\n"
 
 #: src/mmg/mmg_dialog.cpp:1954
 msgid "Notice"
-msgstr ""
+msgstr "Примітка"
 
 #: src/common/property_element.cpp:126
 #: src/mmg/header_editor/frame.cpp:407
@@ -5171,7 +5161,7 @@ msgstr "Один із розділів не має назви."
 
 #: src/propedit/propedit_cli_parser.cpp:254
 msgid "One of the options '--attachment-name', '--attachment-description' or '--attachment-mime-type' has been used without a following '--add-attachment' or '--replace-attachment' option.\n"
-msgstr ""
+msgstr "Одна з опцій '--attachment-name', '--attachment-description' або '--attachment-mime-type' була використана без '--add-attachment' або '--replace-attachment', що мають їм передувати.\n"
 
 #: src/mmg/update_checker.cpp:58
 msgid "Online check for updates"
@@ -5180,7 +5170,7 @@ msgstr "Перевірка наявності оновлень онлайн"
 #: src/merge/mkvmerge.cpp:894
 #, boost-format
 msgid "Only %1% chapters found in source files & chapter files."
-msgstr ""
+msgstr "Знайдено лише %1% розділів у вхідних файлах і файлах розділів."
 
 #: src/merge/mkvmerge.cpp:1634
 #, boost-format
@@ -5262,12 +5252,11 @@ msgstr "Опції, призначені ЛИШЕ для розробників.
 
 #: src/output/p_opus.h:38
 msgid "Opus"
-msgstr ""
+msgstr "Opus"
 
 #: src/common/file_types.cpp:47
-#, fuzzy
 msgid "Opus (in Ogg) audio files"
-msgstr "Ogg/OGM аудіо/відео файли"
+msgstr "Opus (in Ogg) аудіо файли"
 
 #: src/info/mkvinfo.cpp:672
 #, boost-format
@@ -5361,7 +5350,7 @@ msgstr "Аналіз файлу"
 
 #: src/mmg/tabs/global.cpp:240
 msgid "Parts:"
-msgstr ""
+msgstr "Частини:"
 
 #: src/info/mkvinfo.cpp:614
 #, boost-format
@@ -5589,9 +5578,9 @@ msgid "Quicktime/MP4 reader: The video track %1% is missing the ESDS atom. Skipp
 msgstr "Quicktime/MP4 зчитувач: Для відео доріжки %1% відсутній елемент ESDS. Пропуск цієї доріжки.\n"
 
 #: src/input/r_qtmp4.cpp:308
-#, fuzzy, boost-format
+#, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers with an unknown or unsupported compression algorithm '%1%'. Aborting.\n"
-msgstr "Quicktime/MP4 зчитувач: Цей файл використовує стиснуті заголовки, отримані невідомим або непідтримуваним методом стиснення '%1%%2%%3%%4%'. Переривання.\n"
+msgstr "Quicktime/MP4 зчитувач: Цей файл використовує стиснуті заголовки, отримані невідомим або непідтримуваним методом стиснення '%1%'. Переривання.\n"
 
 #: src/input/r_qtmp4.cpp:341
 #, boost-format
@@ -5727,9 +5716,8 @@ msgid "Remove name"
 msgstr "Видалити назву"
 
 #: src/propedit/propedit_cli_parser.cpp:212
-#, fuzzy
 msgid "Replace an attachment with the file 'filename'"
-msgstr "Записати вкладення з ID 'AID' до 'outname'."
+msgstr "Замінити вкладення файлом 'назва файла'"
 
 #: src/common/kax_file.cpp:251
 msgid "Resync failed: no valid Matroska level 1 element found.\n"
@@ -5800,7 +5788,7 @@ msgstr "&Зберегти як"
 
 #: src/mmg/cli_options_dlg.cpp:62
 msgid "Save as default for new jobs"
-msgstr ""
+msgstr "Зберегти як типовий варіант для нових завдань"
 
 #: src/info/qt_ui.cpp:71
 msgid "Save information as"
@@ -5895,7 +5883,7 @@ msgstr "UID сегментів:"
 
 #: src/mmg/tabs/chapters.cpp:352
 msgid "Segment edition UID:"
-msgstr "UID додатку сегмента:"
+msgstr "UID редакції сегмента:"
 
 #: src/common/property_element.cpp:102
 #: src/mmg/header_editor/frame.cpp:322
@@ -6028,7 +6016,7 @@ msgstr "Задати мову:"
 
 #: src/propedit/propedit_cli_parser.cpp:216
 msgid "Set the MIME type to use for the following '--add-attachment' or '--replace-attachment' option"
-msgstr ""
+msgstr "Задає MIME-тип для використання з опціями '--add-attachment' або '--replace-attachment'"
 
 #: src/mmg/options/mmg.cpp:75
 msgid "Set the delay input field from the file name"
@@ -6036,11 +6024,11 @@ msgstr "Встановлювати значення затримки з назв
 
 #: src/propedit/propedit_cli_parser.cpp:215
 msgid "Set the description to use for the following '--add-attachment' or '--replace-attachment' option"
-msgstr ""
+msgstr "Задає опис для використання з опціями '--add-attachment' або '--replace-attachment' "
 
 #: src/propedit/propedit_cli_parser.cpp:214
 msgid "Set the name to use for the following '--add-attachment' or '--replace-attachment' option"
-msgstr ""
+msgstr "Задає назву для використання з опціями '--add-attachment' or '--replace-attachment'"
 
 #: src/mmg/tabs/chapters.cpp:339
 msgid "Set values"
@@ -6233,7 +6221,7 @@ msgstr "Виявлено кадр з одним полем перед загол
 #: src/mmg/tabs/global.cpp:199
 #: src/mmg/tabs/global.cpp:202
 msgid "Size:"
-msgstr ""
+msgstr "Розмір:"
 
 #: src/output/p_aac.cpp:70
 #, boost-format
@@ -6291,7 +6279,7 @@ msgstr ""
 
 #: src/mmg/tabs/global.cpp:291
 msgid "Split mode:"
-msgstr ""
+msgstr "Режим розбиття:"
 
 #: src/mmg/tabs/global.cpp:290
 msgid "Splitting"
@@ -6312,7 +6300,7 @@ msgstr "Розбиття в процесі виконання, і принайм
 
 #: src/mmg/tabs/global.cpp:268
 msgid "Splitting will occur right before the first key frame whose timecode is equal to or bigger than the start timecode for the chapters whose numbers are listed."
-msgstr ""
+msgstr "Розбиття буде відбуватись зразу перед першим ключовим кадром, тайм-код якого рівний або більший за початковий тайм-код розділів, чиї номери вказані."
 
 #: src/mmg/mmg_dialog.cpp:332
 msgid "Sta&rt muxing"
@@ -6806,7 +6794,7 @@ msgstr "Специфікації редагування '%1%' і '%2%' відп�
 
 #: src/mmg/tabs/chapters.cpp:353
 msgid "The edition UID to play from the segment linked in the chapter's segment UID. This is simply a number."
-msgstr "UID додатку для відтворення з сегменту, приєднаного у UID сегменті розділу. Він є просто числом."
+msgstr "UID редакції для відтворення з сегменту, приєднаного у UID сегменті розділу. Він є просто числом."
 
 #: src/mmg/header_editor/frame.cpp:660
 #: src/mmg/tabs/chapters.cpp:1684
@@ -6829,9 +6817,9 @@ msgid "The file '%1%' cannot be attached because it does not exist or cannot be 
 msgstr "Файл '%1%' не може бути приєднаний, тому що він не існує, або не може бути прочитаний.\n"
 
 #: src/propedit/propedit.cpp:102
-#, fuzzy, boost-format
+#, boost-format
 msgid "The file '%1%' could not be opened for reading and writing, or a read/write operation on it failed: %2%.\n"
-msgstr "Файл '%1%' не може бути відкритий для зчитування аргументів командного рядка.\n"
+msgstr "Файл '%1%' не може бути відкритий для зчитування і запису, або операція зчитування/запису для нього завершилась невдало: %2%.\n"
 
 #: src/common/command_line.cpp:47
 #: src/extract/attachments.cpp:142
@@ -6843,9 +6831,9 @@ msgstr "Файл '%1%' не може бути відкритий для зчит
 #: src/merge/output_control.cpp:334
 #: src/merge/output_control.cpp:467
 #: src/propedit/attachment_target.cpp:63
-#, fuzzy, boost-format
+#, boost-format
 msgid "The file '%1%' could not be opened for reading: %2%.\n"
-msgstr "Файл '%1%' не може бути відкритий для читання (%2%).\n"
+msgstr "Файл '%1%' не може бути відкритий для зчитування: %2%.\n"
 
 #: src/extract/attachments.cpp:122
 #: src/extract/tracks.cpp:283
@@ -6855,9 +6843,9 @@ msgstr "Файл '%1%' не може бути відкритий для чита
 #: src/extract/xtr_tta.cpp:86
 #: src/extract/xtr_wav.cpp:113
 #: src/merge/output_control.cpp:1506
-#, fuzzy, boost-format
+#, boost-format
 msgid "The file '%1%' could not be opened for writing: %2%.\n"
-msgstr "Файл '%1%' не може бути відкритий для запису (%2%).\n"
+msgstr "Файл '%1%' не може бути відкритий для запису: %2%.\n"
 
 #: src/merge/output_control.cpp:1510
 #, boost-format
@@ -6972,7 +6960,7 @@ msgstr "Файл номер %1% ('%2%') не приєднується. Аргу�
 
 #: src/common/mm_io_x.cpp:38
 msgid "The file or directory was not found"
-msgstr ""
+msgstr "Файл або теку не було знайдено"
 
 #: src/mmg/header_editor/frame.cpp:247
 msgid "The file you tried to open is not a Matroska file."
@@ -7004,9 +6992,8 @@ msgstr "Вказані частини зчитуються після основ
 
 #: src/mmg/tabs/global.cpp:611
 #: src/mmg/tabs/global.cpp:633
-#, fuzzy
 msgid "The format of the split argument is invalid."
-msgstr "Формат задання розміру розділення є неправильним."
+msgstr "Формат задання аргументу для розбиття є неправильним."
 
 #: src/mmg/tabs/global.cpp:572
 msgid "The format of the split size is invalid (size too small)."
@@ -7204,7 +7191,7 @@ msgid ""
 "on the left of the image."
 msgstr ""
 "Число пікселів відео для видалення\n"
-"зліва зображення."
+"з лівого боку зображення."
 
 #: src/common/property_element.cpp:142
 #: src/mmg/header_editor/frame.cpp:460
@@ -7213,7 +7200,7 @@ msgid ""
 "on the right of the image."
 msgstr ""
 "Число пікселів відео для видалення\n"
-"справа зображення."
+"з правого боку зображення."
 
 #: src/common/property_element.cpp:141
 #: src/mmg/header_editor/frame.cpp:455
@@ -7227,11 +7214,11 @@ msgstr ""
 #: src/mmg/tabs/global.cpp:254
 #: src/mmg/tabs/global.cpp:267
 msgid "The numbering starts at 1."
-msgstr ""
+msgstr "Нумерація починається з 1."
 
 #: src/mmg/tabs/global.cpp:257
 msgid "The numbers given with this argument are interpreted based on the number of Matroska blocks that are output."
-msgstr ""
+msgstr "Числа, вказані через даний аргумент, інтерпретуються, базуючись на кількості блоків Matroska, що записуються у вихідний потік."
 
 #: src/merge/mkvmerge.cpp:2124
 msgid "The option '--meta-seek-size' is no longer supported. Please read mkvmerge's documentation, especially the section about the MATROSKA FILE LAYOUT.\n"
@@ -7378,9 +7365,9 @@ msgid "The tags in '%1%' could not be parsed: some mandatory elements are missin
 msgstr "Теги в '%1%' не можливо було проаналізувати: деякі необхідні елементи відсутні.\n"
 
 #: src/extract/xtr_tta.cpp:80
-#, fuzzy, boost-format
+#, boost-format
 msgid "The temporary file '%1%' could not be opened for reading: %2%.\n"
-msgstr "Тимчасовий файл '%1%' не можливо було відкрити для зчитування (%2%).\n"
+msgstr "Тимчасовий файл '%1%' не можливо відкрити для зчитування: %2%.\n"
 
 #: src/extract/extract_cli_parser.cpp:87
 msgid "The third mode extracts attachments from the source file."
@@ -7631,15 +7618,15 @@ msgstr "Цей заголовок плеєр має відображати як 
 
 #: src/mmg/mmg_dialog.cpp:1953
 msgid "This message will only shown to you once."
-msgstr ""
+msgstr "Дане повідомлення буде показане вам лише одного разу."
 
 #: src/mmg/tabs/global.cpp:255
 msgid "This mode considers only the first video track that is output."
-msgstr ""
+msgstr "Даний режим враховує лише першу доріжку відео, що є вихідною."
 
 #: src/mmg/tabs/global.cpp:270
 msgid "This mode only considers the top-most level of chapters across all edition entries."
-msgstr ""
+msgstr "Даний режим враховує лише верхній рівень розділів серед усіх записів редакції."
 
 #: src/mmg/cli_options_dlg.cpp:92
 msgid "This option needs an additional argument 'n'. Tells mkvmerge to put at most 'n' data blocks into each cluster. If the number is postfixed with 'ms' then put at most 'n' milliseconds of data into each cluster. The maximum length for a cluster that mkvmerge accepts is 60000 blocks and 32000ms; the minimum length is 100ms. Programs will only be able to seek to clusters, so creating larger clusters may lead to imprecise or slow seeking."
@@ -7872,7 +7859,7 @@ msgstr "Доріжки, розділи i теги:"
 
 #: src/mmg/mmg_dialog.cpp:314
 msgid "Troubleshooting advice for playback issues"
-msgstr ""
+msgstr "Поради щодо вирішення проблем з відтворенням"
 
 #: src/input/r_truehd.h:36
 #: src/output/p_truehd.h:42
@@ -7907,9 +7894,8 @@ msgid "Type: %1% (%2%)"
 msgstr "Тип: %1% (%2%)"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:59
-#, fuzzy
 msgid "Typical use cases include reading VOBs from a DVD (e.g. VTS_01_1.VOB, VTS_01_2.VOB, VTS_01_3.VOB)."
-msgstr "Типові випадки використання включають зчитування VOBів з DVD (наприклад, VTS_01_1.VOB, VTS_01_2.VOB, VTS_01_3.VOB) або транспортних потоків MPEG з дисків BluRay."
+msgstr "Типові випадки використання включають зчитування VOBів з DVD (наприклад, VTS_01_1.VOB, VTS_01_2.VOB, VTS_01_3.VOB)."
 
 #: src/mmg/tabs/chapters.cpp:346
 msgid "UID:"
@@ -8725,9 +8711,9 @@ msgstr "matroska_reader: CodecID '%1%' для доріжки %2% є невідо
 #: src/input/r_matroska.cpp:328
 #: src/input/r_matroska.cpp:349
 #: src/input/r_matroska.cpp:372
-#, fuzzy, boost-format
+#, boost-format
 msgid "matroska_reader: The CodecID for track %1% is '%2%', but the private codec data does not contain valid headers.\n"
-msgstr "matroska_reader: CodecID для доріжки %1% - '%2%', але не було знайдено власних заголовків кодека.\n"
+msgstr "matroska_reader: CodecID для доріжки %1% - '%2%', але власні дані кодека не містять коректних заголовків.\n"
 
 #: src/input/r_matroska.cpp:442
 #, boost-format
@@ -8935,7 +8921,7 @@ msgstr "mkvmerge може читати і використовувати тай�
 
 #: src/mmg/tabs/global.cpp:259
 msgid "mkvmerge does not distinguish between those two and simply counts the number of blocks."
-msgstr ""
+msgstr "mkvmerge не знаходить різниці між цими двома і просто підраховує число блоків. "
 
 #: src/output/p_avc.cpp:103
 #, boost-format
@@ -9065,9 +9051,8 @@ msgid "no signature hash algorithm"
 msgstr "немає сигнатури хеш алгоритму"
 
 #: src/mmg/tabs/global.cpp:297
-#, fuzzy
 msgid "no splitting"
-msgstr "Розбиття"
+msgstr "без розбиття"
 
 #: src/mmg/mmg_dialog.cpp:1027
 #: src/mmg/tabs/input_extra.cpp:85
@@ -9209,33 +9194,28 @@ msgid "side by side (right first)"
 msgstr "розміщення поряд (правий спочатку)"
 
 #: src/mmg/tabs/global.cpp:299
-#, fuzzy
 msgid "split after duration"
-msgstr "...після цієї позиції:"
+msgstr "після проміжку вказаної тривалості"
 
 #: src/mmg/tabs/global.cpp:302
 msgid "split after frame/field numbers"
-msgstr ""
+msgstr "після вказаних номерів кадрів/полів"
 
 #: src/mmg/tabs/global.cpp:298
-#, fuzzy
 msgid "split after size"
-msgstr "'--split' не містить розміру.\n"
+msgstr "після вказаного розміру"
 
 #: src/mmg/tabs/global.cpp:300
-#, fuzzy
 msgid "split after timecodes"
-msgstr "Налаштувати тайм-коди розділу"
+msgstr "після вказаних тайм-кодів"
 
 #: src/mmg/tabs/global.cpp:303
-#, fuzzy
 msgid "split before chapters"
-msgstr "Видалити розділ"
+msgstr "перед вказаними розділами"
 
 #: src/mmg/tabs/global.cpp:301
-#, fuzzy
 msgid "split by parts"
-msgstr "...на частини:"
+msgstr "на частини"
 
 #: src/input/subtitles.cpp:600
 #, boost-format
@@ -9322,7 +9302,7 @@ msgstr "utf8_strlen(): Невірний UTF-8 символ. Перший бай�
 
 #: src/mmg/tabs/chapters.cpp:838
 msgid "verify failed: chapters->CheckMandatory() is false. This should not have happened. Please file a bug report.\n"
-msgstr "збій перевірки: chapters->CheckMandatory() ist false. Цього не повинно було статися. Будь ласка, повідомте про помилку.\n"
+msgstr "збій перевірки: chapters->CheckMandatory() is false. Цього не повинно було статися. Будь ласка, повідомте про помилку.\n"
 
 #: src/info/mkvinfo.cpp:929
 #: src/input/r_matroska.cpp:98
@@ -9585,9 +9565,8 @@ msgstr "Так"
 #~ msgid "Quicktime/MP4 reader: Track %1% has an unknown type.\n"
 #~ msgstr "Quicktime/MP4 зчитувач: Доріжка %1% є невідомого типу.\n"
 
-#, fuzzy
 #~ msgid "Quicktime/MP4 reader: Unknown/unsupported FourCC '%1%' for track %2%.\n"
-#~ msgstr "Quicktime/MP4 зчитувач: Невідомий/непідтримуваний FourCC '%|1$.4s|' для доріжки %2%.\n"
+#~ msgstr "Quicktime/MP4 зчитувач: Невідомий/непідтримуваний FourCC '%1%' для доріжки %2%.\n"
 
 #~ msgid "Quicktime/MP4 reader: Unknown/unsupported FourCC '%|1$.4s|' for track %2%.\n"
 #~ msgstr "Quicktime/MP4 зчитувач: Невідомий/непідтримуваний FourCC '%|1$.4s|' для доріжки %2%.\n"
