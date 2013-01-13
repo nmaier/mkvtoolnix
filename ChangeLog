@@ -13,8 +13,8 @@
 
         * mkvmerge: new feature: Implemented reading VobSubs from MP4
         files if they're stored in the Nero Digital way (track sub-type
-        'mp4s', ESDS object type identifier 0xe0). Implements the second
-        half of #815.
+        'mp4s', ESDS object type identifier 0xe0). Implements #821 and the
+        second half of #815.
 
 2013-01-08  Moritz Bunkus  <moritz@bunkus.org>
 
