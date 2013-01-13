@@ -303,11 +303,12 @@ dump_ebml_elements(EbmlElement *element,
       value_str = to_string(static_cast<EbmlDate *>(element)->GetEpochDate());
 
     else
-      value_str = (boost::format("(type: %1%)") %
+      value_str = (boost::format("(type: %1% size: %2%)") %
                    (  dynamic_cast<EbmlBinary *>(element) ? "binary"
                     : dynamic_cast<EbmlMaster *>(element) ? "master"
                     : dynamic_cast<EbmlVoid *>(element)   ? "void"
-                    :                                       "unknown")).str();
+                    :                                       "unknown")
+                   % element->GetSize()).str();
 
     value_str = " " + value_str;
   }
