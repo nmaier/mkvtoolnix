@@ -131,12 +131,13 @@ avcc_c::pack() {
   auto &sps        = *m_sps_info_list.begin();
   auto write_list  = [&buffer](std::vector<memory_cptr> const &list, uint8_t num_byte_bits) {
     *buffer = list.size() | num_byte_bits;
+    ++buffer;
 
     for (auto &mem : list) {
       auto size = mem->get_size();
-      put_uint16_be(buffer + 1, size);
-      memcpy(buffer + 3, mem->get_buffer(), size);
-      buffer += 3 + size;
+      put_uint16_be(buffer, size);
+      memcpy(buffer + 2, mem->get_buffer(), size);
+      buffer += 2 + size;
     }
   };
 
