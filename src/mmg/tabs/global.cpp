@@ -314,8 +314,8 @@ tab_global::translate_ui() {
   cob_split_mode->Append(Z("split after size"));
   cob_split_mode->Append(Z("split after duration"));
   cob_split_mode->Append(Z("split after timecodes"));
-  cob_split_mode->Append(Z("split by parts (timecode-based)"));
-  cob_split_mode->Append(Z("split by parts (frame/field-number-based)"));
+  cob_split_mode->Append(Z("split by parts based on timecodes"));
+  cob_split_mode->Append(Z("split by parts based on frame/field numbers"));
   cob_split_mode->Append(Z("split after frame/field numbers"));
   cob_split_mode->Append(Z("split before chapters"));
   cob_split_mode->SetSelection(split_mode);
