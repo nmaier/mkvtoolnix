@@ -895,7 +895,7 @@ rerender_track_headers() {
 
   if (data_size) {
     // Currently not supported due to lack of test file.
-    mxerror(boost::format(Y("Re-renering track headers: data_size != 0 not implemented yet. %1%\n")) % BUGMSG);
+    mxerror(boost::format(Y("Re-rendering track headers: data_size != 0 not implemented yet. %1%\n")) % BUGMSG);
 
     data = s_out->read(data_size);
   }
