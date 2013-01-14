@@ -947,7 +947,7 @@ parse_arg_split_parts(const std::string &arg,
       mxerror(boost::format(Y("Invalid end time for '--split' in '--split %1%' (current part: %2%). Additional error message: %3%.\n")) % arg % part_spec % timecode_parser_error);
 
     else if (frames_fields && (!parse_number(pair[1], end) || (0 > end)))
-      mxerror(boost::format(Y("Invalid end frame for '--split' in '--split %1%' (current part: %2%).\n")) % arg % part_spec);
+      mxerror(boost::format(Y("Invalid end frame/field number for '--split' in '--split %1%' (current part: %2%).\n")) % arg % part_spec);
 
     if (end <= start) {
       if (frames_fields)
