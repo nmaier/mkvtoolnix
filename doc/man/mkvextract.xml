@@ -494,6 +494,33 @@ source.mkv
    </varlistentry>
 
    <varlistentry>
+    <term>V_THEORA</term>
+    <listitem>
+     <para>
+      <productname>Theora</productname> streams will be written within an <productname>Ogg</productname> container
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>V_VP8</term>
+    <listitem>
+     <para>
+      <abbrev>VP8</abbrev> tracks are written to <abbrev>IVF</abbrev> files.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>A_MPEG/L2</term>
+    <listitem>
+     <para>
+      MPEG-1 Audio Layer II streams will be extracted to raw <abbrev>MP2</abbrev> files.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
     <term>A_MPEG/L3, A_AC3</term>
     <listitem>
      <para>
@@ -551,6 +578,33 @@ source.mkv
    </varlistentry>
 
    <varlistentry>
+    <term>A_ALAC</term>
+    <listitem>
+     <para>
+      <abbrev>ALAC</abbrev> tracks are written to <abbrev>CAF</abbrev> files.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>A_FLAC</term>
+    <listitem>
+     <para>
+      <abbrev>FLAC</abbrev> tracks are written to raw <abbrev>FLAC</abbrev> files.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>A_WAVPACK4</term>
+    <listitem>
+     <para>
+      <productname>WavPack</productname> tracks are written to <abbrev>WV</abbrev> files.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
     <term>S_TEXT/UTF8</term>
     <listitem>
      <para>
@@ -574,6 +628,34 @@ source.mkv
     <listitem>
      <para>
       <productname>Kate</productname> streams will be written within an <productname>Ogg</productname> container.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>S_VOBSUB</term>
+    <listitem>
+     <para>
+      <productname>VobSub</productname> subtitles will be written as <abbrev>SUB</abbrev> files along with the
+      respective index files, as <abbrev>IDX</abbrev> files.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>S_TEXT/USF</term>
+    <listitem>
+     <para>
+      <abbrev>USF</abbrev> text subtitles will be written as <abbrev>USF</abbrev> files.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>S_HDMV/PGS</term>
+    <listitem>
+     <para>
+      <abbrev>PGS</abbrev> subtitles will be written as <abbrev>SUP</abbrev> files.
      </para>
     </listitem>
    </varlistentry>
