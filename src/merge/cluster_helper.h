@@ -48,6 +48,7 @@ struct split_point_t {
     SPT_TIMECODE,
     SPT_CHAPTER,
     SPT_PARTS,
+    SPT_PARTS_FRAME_FIELD,
     SPT_FRAME_FIELD,
   };
 

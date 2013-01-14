@@ -33,12 +33,14 @@ split_point_t::str()
   const {
   return (boost::format("<%1% %2% once:%3% discard:%4% create_file:%5%>")
           % format_timecode(m_point)
-          % (  split_point_t::SPT_DURATION == m_type ? "duration"
-             : split_point_t::SPT_SIZE     == m_type ? "size"
-             : split_point_t::SPT_TIMECODE == m_type ? "timecode"
-             : split_point_t::SPT_CHAPTER  == m_type ? "chapter"
-             : split_point_t::SPT_PARTS    == m_type ? "part"
-             :                                         "unknown")
+          % (  split_point_t::SPT_DURATION          == m_type ? "duration"
+             : split_point_t::SPT_SIZE              == m_type ? "size"
+             : split_point_t::SPT_TIMECODE          == m_type ? "timecode"
+             : split_point_t::SPT_CHAPTER           == m_type ? "chapter"
+             : split_point_t::SPT_PARTS             == m_type ? "part"
+             : split_point_t::SPT_PARTS_FRAME_FIELD == m_type ? "part(frame/field)"
+             : split_point_t::SPT_FRAME_FIELD       == m_type ? "frame/field"
+             :                                                  "unknown")
           % m_use_once % m_discard % m_create_new_file).str();
 }
 
@@ -170,7 +172,8 @@ cluster_helper_c::split_if_necessary(packet_cptr &packet) {
            && (packet->assigned_timecode >= m_current_split_point->m_point))
     split_now = true;
 
-  else if (   (split_point_t::SPT_FRAME_FIELD == m_current_split_point->m_type)
+  else if (   (   (split_point_t::SPT_FRAME_FIELD       == m_current_split_point->m_type)
+               || (split_point_t::SPT_PARTS_FRAME_FIELD == m_current_split_point->m_type))
            && (m_frame_field_number >= m_current_split_point->m_point))
     split_now = true;
 
@@ -196,8 +199,9 @@ cluster_helper_c::split(packet_cptr &packet) {
 
   if (m_current_split_point->m_use_once) {
     if (   m_current_split_point->m_discard
-        && (split_point_t::SPT_PARTS == m_current_split_point->m_type)
-        && (m_split_points.end()     == (m_current_split_point + 1))) {
+        && (   (split_point_t::SPT_PARTS             == m_current_split_point->m_type)
+            || (split_point_t::SPT_PARTS_FRAME_FIELD == m_current_split_point->m_type))
+        && (m_split_points.end() == (m_current_split_point + 1))) {
       mxdebug_if(m_debug_splitting, boost::format("Splitting: Last part in 'parts:' splitting mode finished\n"));
       m_splitting_and_processed_fully = true;
     }
@@ -685,7 +689,8 @@ cluster_helper_c::split_mode_produces_many_files()
   if (!splitting())
     return false;
 
-  if (m_split_points.front().m_type != split_point_t::SPT_PARTS)
+  if (   (split_point_t::SPT_PARTS             != m_split_points.front().m_type)
+      && (split_point_t::SPT_PARTS_FRAME_FIELD != m_split_points.front().m_type))
     return true;
 
   bool first = true;

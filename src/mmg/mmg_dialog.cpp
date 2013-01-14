@@ -1147,7 +1147,8 @@ mmg_dialog::update_command_line() {
                   : 2 == idx ? wxT("duration:")
                   : 3 == idx ? wxT("timecodes:")
                   : 4 == idx ? wxT("parts:")
-                  : 5 == idx ? wxT("frames:")
+                  : 5 == idx ? wxT("parts-frames:")
+                  : 6 == idx ? wxT("frames:")
                   :            wxT("chapters:");
 
     clargs.Add(wxT("--split"));

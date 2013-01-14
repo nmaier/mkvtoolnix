@@ -248,6 +248,22 @@ tab_global::translate_split_args() {
     new_tool_tip = format_tooltip(wxU(join(" ", help)));
 
   } else if (5 == mode) {
+    st_split_args->SetLabel(Z("Parts:"));
+    std::vector<std::string> help = {
+      Y("A comma-separated list of frame/field number ranges of content to keep."),
+      Y("Each range consists of a start and end frame/field number with a '-' in the middle, e.g. '157-238'."),
+      Y("The numbering starts at 1."),
+      Y("This mode considers only the first video track that is output."),
+      Y("If no video track is output no splitting will occur."),
+      Y("The numbers given with this argument are interpreted based on the number of Matroska blocks that are output."),
+      Y("A single Matroska block contains either a full frame (for progressive content) or a single field (for interlaced content)."),
+      Y("mkvmerge does not distinguish between those two and simply counts the number of blocks."),
+      Y("If a start number is left out then the previous range's end number is used, or the start of the file if there was no previous range."),
+      Y("If a range's start number is prefixed with '+' then its content will be written to the same file as the previous range. Otherwise a new file will be created for this range."),
+    };
+    new_tool_tip = format_tooltip(wxU(join(" ", help)));
+
+  } else if (6 == mode) {
     st_split_args->SetLabel(Z("Frames/fields:"));
     std::vector<std::string> help = {
       Y("A comma-separated list of frame/field numbers after which to split."),
@@ -260,7 +276,7 @@ tab_global::translate_split_args() {
     };
     new_tool_tip = format_tooltip(wxU(join(" ", help)));
 
-  } else if (6 == mode) {
+  } else if (7 == mode) {
     st_split_args->SetLabel(Z("Chapter numbers:"));
     std::vector<std::string> help = {
       Y("Either the word 'all' which selects all chapters or a comma-separated list of chapter numbers after which to split."),
@@ -298,7 +314,8 @@ tab_global::translate_ui() {
   cob_split_mode->Append(Z("split after size"));
   cob_split_mode->Append(Z("split after duration"));
   cob_split_mode->Append(Z("split after timecodes"));
-  cob_split_mode->Append(Z("split by parts"));
+  cob_split_mode->Append(Z("split by parts (timecode-based)"));
+  cob_split_mode->Append(Z("split by parts (frame/field-number-based)"));
   cob_split_mode->Append(Z("split after frame/field numbers"));
   cob_split_mode->Append(Z("split before chapters"));
   cob_split_mode->SetSelection(split_mode);
@@ -438,13 +455,14 @@ tab_global::load(wxConfigBase *cfg,
       wxString split_mode;
       cfg->Read(wxT("split_mode"), &split_mode, wxT("none"));
 
-      split_mode_idx = split_mode == wxT("size")      ? 1
-                     : split_mode == wxT("duration")  ? 2
-                     : split_mode == wxT("timecodes") ? 3
-                     : split_mode == wxT("parts")     ? 4
-                     : split_mode == wxT("frames")    ? 5
-                     : split_mode == wxT("chapters")  ? 6
-                     :                                  0;
+      split_mode_idx = split_mode == wxT("size")         ? 1
+                     : split_mode == wxT("duration")     ? 2
+                     : split_mode == wxT("timecodes")    ? 3
+                     : split_mode == wxT("parts")        ? 4
+                     : split_mode == wxT("parts-frames") ? 5
+                     : split_mode == wxT("frames")       ? 6
+                     : split_mode == wxT("chapters")     ? 7
+                     :                                     0;
     }
   }
 
@@ -515,8 +533,9 @@ tab_global::save(wxConfigBase *cfg) {
                       : 2 == split_mode_idx ? wxT("duration")
                       : 3 == split_mode_idx ? wxT("timecodes")
                       : 4 == split_mode_idx ? wxT("parts")
-                      : 5 == split_mode_idx ? wxT("frames")
-                      : 6 == split_mode_idx ? wxT("chapters")
+                      : 5 == split_mode_idx ? wxT("parts-frames")
+                      : 6 == split_mode_idx ? wxT("frames")
+                      : 7 == split_mode_idx ? wxT("chapters")
                       :                       wxT("none");
   cfg->Write(wxT("split_mode"), value);
   cfg->Write(wxT("split_args"), cob_split_args->GetValue());

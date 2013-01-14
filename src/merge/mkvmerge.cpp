@@ -121,6 +121,9 @@ set_usage() {
                   "                           Keep ranges of timecodes start-end, either in\n"
                   "                           separate files or append to previous range's file\n"
                   "                           if prefixed with '+'.\n");
+  usage_text += Y("  --split parts-frames:start1-end1[,[+]start2-end2,...]\n"
+                  "                           Same as 'parts:', but 'startN'/'endN' are frame/\n"
+                  "                           field numbers instead of timecodes.\n");
   usage_text += Y("  --split frames:A[,B...]\n"
                   "                           Create a new file after each frame/field A, B\n"
                   "                           etc.\n");
@@ -900,11 +903,15 @@ parse_arg_split_chapters(std::string const &arg) {
 }
 
 static void
-parse_arg_split_parts(const std::string &arg) {
+parse_arg_split_parts(const std::string &arg,
+                      bool frames_fields) {
   std::string s = arg;
 
   if (balg::istarts_with(s, "parts:"))
     s.erase(0, 6);
+
+  else if (balg::istarts_with(s, "parts-frames:"))
+    s.erase(0, 13);
 
   if (s.empty())
       mxerror(boost::format(Y("Missing start/end specifications for '--split' in '--split %1%'.\n")) % arg);
@@ -925,35 +932,52 @@ parse_arg_split_parts(const std::string &arg) {
     int64_t start;
     if (pair[0].empty())
       start = split_points.empty() ? 0 : std::get<1>(split_points.back());
-    else if (!parse_timecode(pair[0], start))
+
+    else if (!frames_fields && !parse_timecode(pair[0], start))
       mxerror(boost::format(Y("Invalid start time for '--split' in '--split %1%' (current part: %2%). Additional error message: %3%.\n")) % arg % part_spec % timecode_parser_error);
+
+    else if (frames_fields && (!parse_number(pair[0], start) || (0 > start)))
+      mxerror(boost::format(Y("Invalid start frame/field number for '--split' in '--split %1%' (current part: %2%).\n")) % arg % part_spec);
 
     int64_t end;
     if (pair[1].empty())
       end = std::numeric_limits<int64_t>::max();
-    else if (!parse_timecode(pair[1], end))
+
+    else if (!frames_fields && !parse_timecode(pair[1], end))
       mxerror(boost::format(Y("Invalid end time for '--split' in '--split %1%' (current part: %2%). Additional error message: %3%.\n")) % arg % part_spec % timecode_parser_error);
 
-    if (end <= start)
-      mxerror(boost::format(Y("Invalid end time for '--split' in '--split %1%' (current part: %2%). The end time must be bigger than the start time.\n")) % arg % part_spec);
+    else if (frames_fields && (!parse_number(pair[1], end) || (0 > end)))
+      mxerror(boost::format(Y("Invalid end frame for '--split' in '--split %1%' (current part: %2%).\n")) % arg % part_spec);
 
-    if (!split_points.empty() && (start < std::get<1>(split_points.back())))
-      mxerror(boost::format(Y("Invalid start time for '--split' in '--split %1%' (current part: %2%). The start time must be bigger than or equal to the previous part's end time.\n")) % arg % part_spec);
+    if (end <= start) {
+      if (frames_fields)
+        mxerror(boost::format(Y("Invalid end frame/field number for '--split' in '--split %1%' (current part: %2%). The end number must be bigger than the start number.\n")) % arg % part_spec);
+      else
+        mxerror(boost::format(Y("Invalid end time for '--split' in '--split %1%' (current part: %2%). The end time must be bigger than the start time.\n")) % arg % part_spec);
+    }
+
+    if (!split_points.empty() && (start < std::get<1>(split_points.back()))) {
+      if (frames_fields)
+        mxerror(boost::format(Y("Invalid start frame/field number for '--split' in '--split %1%' (current part: %2%). The start number must be bigger than or equal to the previous part's end number.\n")) % arg % part_spec);
+      else
+        mxerror(boost::format(Y("Invalid start time for '--split' in '--split %1%' (current part: %2%). The start time must be bigger than or equal to the previous part's end time.\n")) % arg % part_spec);
+    }
 
     split_points.push_back(std::make_tuple(start, end, create_new_file));
   }
 
+  auto sp_type         = frames_fields ? split_point_t::SPT_PARTS_FRAME_FIELD : split_point_t::SPT_PARTS;
   int64_t previous_end = 0;
 
   for (auto &split_point : split_points) {
     if (previous_end < std::get<0>(split_point))
-      g_cluster_helper->add_split_point(split_point_t{ previous_end, split_point_t::SPT_PARTS, true, true, std::get<2>(split_point) });
-    g_cluster_helper->add_split_point(split_point_t{ std::get<0>(split_point), split_point_t::SPT_PARTS, true, false, std::get<2>(split_point) });
+      g_cluster_helper->add_split_point(split_point_t{ previous_end, sp_type, true, true, std::get<2>(split_point) });
+    g_cluster_helper->add_split_point(split_point_t{ std::get<0>(split_point), sp_type, true, false, std::get<2>(split_point) });
     previous_end = std::get<1>(split_point);
   }
 
   if (std::get<1>(split_points.back()) < std::numeric_limits<int64_t>::max())
-    g_cluster_helper->add_split_point(split_point_t{ std::get<1>(split_points.back()), split_point_t::SPT_PARTS, true, true });
+    g_cluster_helper->add_split_point(split_point_t{ std::get<1>(split_points.back()), sp_type, true, true });
 }
 
 /** \brief Parse the size format to \c --split
@@ -1028,7 +1052,10 @@ parse_arg_split(const std::string &arg) {
     parse_arg_split_timecodes(arg);
 
   else if (balg::istarts_with(s, "parts:"))
-    parse_arg_split_parts(arg);
+    parse_arg_split_parts(arg, false);
+
+  else if (balg::istarts_with(s, "parts-frames:"))
+    parse_arg_split_parts(arg, true);
 
   else if (balg::istarts_with(s, "frames:"))
     parse_arg_split_frames(arg);

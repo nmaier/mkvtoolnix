@@ -1,3 +1,9 @@
+2013-01-14  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvmerge: new feature: Implemented splitting by parts based on
+        frame/field numbers ("--split parts-frames:" in
+        mkvmerge). Implements #819.
+
 2013-01-13  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvmerge: bug fix: Re-writing the track headers after they'd
