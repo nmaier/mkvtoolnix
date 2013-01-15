@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: zh-TW\n"
 "Report-Msgid-Bugs-To: Dean Lee <xslidian@gmail.com>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2013-01-14 21:33+0100\n"
+"PO-Revision-Date: 2013-01-15 13:15+0100\n"
 "Last-Translator: Dongjun Wu <ziyawu@gmail.com>\n"
 "Language-Team: Chinese Traditional <zh-l10n@linux.org.tw>\n"
 "Language: zh_TW\n"
@@ -381,15 +381,14 @@ msgstr ""
 "                           在每個影格/圖場 A、B 等等前面建立新檔案。\n"
 
 #: src/merge/mkvmerge.cpp:124
-#, fuzzy
 msgid ""
 "  --split parts-frames:start1-end1[,[+]start2-end2,...]\n"
 "                           Same as 'parts:', but 'startN'/'endN' are frame/\n"
 "                           field numbers instead of timecodes.\n"
 msgstr ""
-"  --split parts:start1-end1[,[+]start2-end2,...]\n"
-"                           保留時間碼起始-結束範圍，若字首加上「+」\n"
-"                           則會分割成多個檔案或者添加到上一個範圍的檔案。\n"
+"  --split parts-frames:start1-end1[,[+]start2-end2,...]\n"
+"                           和「分割部分」相同，但「startN'/'endN」為影格\n"
+"                           數/圖場數而不是時間碼。\n"
 
 #: src/merge/mkvmerge.cpp:120
 msgid ""
@@ -1720,9 +1719,8 @@ msgid "A chapter starting at 0s is never considered for splitting and discarded 
 msgstr "從 0 秒開始的章節不會被視為分割部分且不會通知直接丟棄。"
 
 #: src/mmg/tabs/global.cpp:253
-#, fuzzy
 msgid "A comma-separated list of frame/field number ranges of content to keep."
-msgstr "用逗號區隔開要保留內容時間碼範圍的清單。"
+msgstr "用逗號區隔開要保留內容的影格/圖場範圍清單。"
 
 #: src/mmg/tabs/global.cpp:269
 msgid "A comma-separated list of frame/field numbers after which to split."
@@ -3308,9 +3306,8 @@ msgid "Each edition must contain at least one chapter."
 msgstr "每個版本必須至少包含一個章節。"
 
 #: src/mmg/tabs/global.cpp:254
-#, fuzzy
 msgid "Each range consists of a start and end frame/field number with a '-' in the middle, e.g. '157-238'."
-msgstr "每個範圍由起始和結束時間碼中間加上「-」組成，例如「00:01:15-00:03:20」。"
+msgstr "每個範圍由起始和結束影格/圖場號碼中間加上「-」組成，例如「157-238」。"
 
 #: src/mmg/tabs/global.cpp:243
 msgid "Each range consists of a start and end timecode with a '-' in the middle, e.g. '00:01:15-00:03:20'."
@@ -3967,18 +3964,16 @@ msgid "If a chapter or an edition is marked 'hidden' then the player should not 
 msgstr "如果章節或版本被標記為“隱藏”，播放器不會顯示該章節項目。這些項目仍然可以透過功能表系統使用。"
 
 #: src/mmg/tabs/global.cpp:262
-#, fuzzy
 msgid "If a range's start number is prefixed with '+' then its content will be written to the same file as the previous range. Otherwise a new file will be created for this range."
-msgstr "若範圍的起始時間碼以「+」開頭則本身的內容會寫入和上一個範圍相同的檔案。否則會為新範圍建立新的檔案。"
+msgstr "若範圍的起始數字以「+」開頭則本身的內容會寫入和上一個範圍相同的檔案。否則會為新範圍建立新的檔案。"
 
 #: src/mmg/tabs/global.cpp:246
 msgid "If a range's start timecode is prefixed with '+' then its content will be written to the same file as the previous range. Otherwise a new file will be created for this range."
 msgstr "若範圍的起始時間碼以「+」開頭則本身的內容會寫入和上一個範圍相同的檔案。否則會為新範圍建立新的檔案。"
 
 #: src/mmg/tabs/global.cpp:261
-#, fuzzy
 msgid "If a start number is left out then the previous range's end number is used, or the start of the file if there was no previous range."
-msgstr "若起始時間碼小於上一個範圍的結束時間碼或檔案的起始時間 (若沒有上一個範圍)。"
+msgstr "若起始數字小於上一個範圍的結束數字或檔案的起始 (若沒有上一個範圍)。"
 
 #: src/mmg/tabs/global.cpp:244
 msgid "If a start timecode is left out then the previous range's end timecode is used, or the start of the file if there was no previous range."
@@ -4200,14 +4195,14 @@ msgid "Invalid data for Base64 encoding found."
 msgstr "找到 Base64 編碼的無效資料。"
 
 #: src/merge/mkvmerge.cpp:950
-#, fuzzy, boost-format
+#, boost-format
 msgid "Invalid end frame/field number for '--split' in '--split %1%' (current part: %2%).\n"
-msgstr "在「--split %1%」(目前部分: %2%) 中「--split' in」指定的起始/結束無效。\n"
+msgstr "在「--split %1%」(目前部分: %2%) 中「--split' in」指定的起始影格/圖場號碼無效。\n"
 
 #: src/merge/mkvmerge.cpp:954
-#, fuzzy, boost-format
+#, boost-format
 msgid "Invalid end frame/field number for '--split' in '--split %1%' (current part: %2%). The end number must be bigger than the start number.\n"
-msgstr "在「--split %1%」(目前部分: %2%) 中「--split' in」的結束時間無效。結束時間必須大於起始時間。\n"
+msgstr "在「--split %1%」(目前部分: %2%) 中「--split' in」的結束影格/圖場號碼無效。結束數字必須大於起始數字。\n"
 
 #: src/merge/mkvmerge.cpp:947
 #, boost-format
@@ -4356,14 +4351,14 @@ msgid "Invalid split size in '--split %1%'.\n"
 msgstr "無效的分割大小「--split %1%」。\n"
 
 #: src/merge/mkvmerge.cpp:940
-#, fuzzy, boost-format
+#, boost-format
 msgid "Invalid start frame/field number for '--split' in '--split %1%' (current part: %2%).\n"
-msgstr "在「--split %1%」(目前部分: %2%) 中「--split' in」指定的起始/結束無效。\n"
+msgstr "在「--split %1%」(目前部分: %2%) 中「--split' in」指定的起始影格/圖場號碼無效。\n"
 
 #: src/merge/mkvmerge.cpp:961
-#, fuzzy, boost-format
+#, boost-format
 msgid "Invalid start frame/field number for '--split' in '--split %1%' (current part: %2%). The start number must be bigger than or equal to the previous part's end number.\n"
-msgstr "在「--split %1%」(目前部分: %2%) 中「--split' in」的結束時間無效。起始時間必須大於或等於上一個部分的結束時間。\n"
+msgstr "在「--split %1%」(目前部分: %2%) 中「--split' in」的結束影格/圖場號碼無效。起始數字必須大於或等於上一個部分的結束數字。\n"
 
 #: src/input/r_usf.cpp:207
 msgid "Invalid start or stop timecode"
@@ -5653,7 +5648,7 @@ msgstr "重新啟用所選任務"
 #: src/merge/output_control.cpp:898
 #, boost-format
 msgid "Re-rendering track headers: data_size != 0 not implemented yet. %1%\n"
-msgstr ""
+msgstr "重新計算軌道表頭: 資料大小 != 0 尚未實現。%1%\n"
 
 #: src/input/r_mpeg_ps.cpp:363
 msgid "Reading encrypted VOBs is not supported.\n"
@@ -6554,7 +6549,7 @@ msgstr "檔案「%s」中軌道 nr. %s 的 FourCC 設定值不是正好四個字
 #: src/mmg/mmg_dialog.cpp:1915
 #, boost-format
 msgid "The GUI is configured to use the mkvmerge executable from a different version (%1%) than the GUI itself (%2%). This is not supported but will not be prevented either. You should change the mkvmerge executable in the preferences dialog."
-msgstr "此圖形介面 (GUI) 設定使用 mkvmerge 可執行檔版本 (%s) 與自己的版本 (%s) 不同。不建議這種情形，但也不會阻止。你可以在偏好設定對話窗裡變更 mkvmerge 可執行檔。"
+msgstr "此圖形介面 (GUI) 設定使用 mkvmerge 可執行檔版本 (%1%) 與自己的版本 (%2%) 不同。不建議這種情形，但也不會阻止。你可以在偏好設定對話窗裡變更 mkvmerge 可執行檔。"
 
 #: src/input/r_ogm.cpp:1495
 #, boost-format
@@ -9209,7 +9204,7 @@ msgstr "時間長度之後分割"
 
 #: src/mmg/tabs/global.cpp:319
 msgid "split after frame/field numbers"
-msgstr "影格數/圖場數之後分割"
+msgstr "影格/圖場號碼之後分割"
 
 #: src/mmg/tabs/global.cpp:314
 msgid "split after size"
@@ -9224,14 +9219,12 @@ msgid "split before chapters"
 msgstr "章節之前分割"
 
 #: src/mmg/tabs/global.cpp:318
-#, fuzzy
 msgid "split by parts based on frame/field numbers"
-msgstr "影格數/圖場數之後分割"
+msgstr "根據影格/圖場號碼分割"
 
 #: src/mmg/tabs/global.cpp:317
-#, fuzzy
 msgid "split by parts based on timecodes"
-msgstr "時間碼之後分割"
+msgstr "根據時間碼分割"
 
 #: src/input/subtitles.cpp:600
 #, boost-format
@@ -10521,4 +10514,3 @@ msgstr "是"
 
 #~ msgid "wrong usage: writing to read-only memory"
 #~ msgstr "錯誤用法: 寫入至唯讀記憶體"
-
