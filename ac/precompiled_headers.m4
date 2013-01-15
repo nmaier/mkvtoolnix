@@ -18,6 +18,9 @@ fi
 if test x"$enable_precompiled_headers" = x"yes"; then
   AC_DEFINE(USE_PRECOMPILED_HEADERS, 1, [Define if precompiled headers are generated and used])
   USE_PRECOMPILED_HEADERS=yes
+  opt_features_yes="$opt_features_yes\n   * pre-compiled headers"
+else
+  opt_features_no="$opt_features_no\n   * pre-compiled headers"
 fi
 
 AC_SUBST(USE_PRECOMPILED_HEADERS)
