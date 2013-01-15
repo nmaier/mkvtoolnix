@@ -371,12 +371,18 @@ refer to the same timecode)\&.
 .sp
 If a start timecode is left out then it defaults to the previous range\*(Aqs end timecode\&. If there was no previous range then it defaults to the start of the file (see example 3)\&.
 .sp
-If an end timecode is left out then it defaults to the end of the source files which basically tells mkvmerge to keep the rest (see example 3)\&.
+If an end timecode is left out then it defaults to the end of the source files which basically tells
+\fBmkvmerge\fR(1)
+to keep the rest (see example 3)\&.
 .sp
 Normally each range will be written to a new file\&. This can be changed so that consecutive ranges are written to the same file\&. For that the user has to prefix the start timecode with a
-+\&. This tells mvkmerge not to create a new file and instead append the range to the same file the previous range was written to\&. Timecodes will be adjusted so that there will be no gap in the output file even if there was a gap in the two ranges in the input file\&.
++\&. This tells
+\fBmkvmerge\fR(1)
+not to create a new file and instead append the range to the same file the previous range was written to\&. Timecodes will be adjusted so that there will be no gap in the output file even if there was a gap in the two ranges in the input file\&.
 .sp
-In example 1 mkvmerge will create two files\&. The first will contain the content starting from
+In example 1
+\fBmkvmerge\fR(1)
+will create two files\&. The first will contain the content starting from
 00:01:20
 until
 00:02:45\&. The second file will contain the content starting from
@@ -384,7 +390,9 @@ until
 until
 00:10:30\&.
 .sp
-In example 2 mkvmerge will create only one file\&. This file will contain both the content starting from
+In example 2
+\fBmkvmerge\fR(1)
+will create only one file\&. This file will contain both the content starting from
 00:01:20
 until
 00:02:45
@@ -393,10 +401,31 @@ and the content starting from
 until
 00:10:30\&.
 .sp
-In example 3 mkvmerge will create two files\&. The first will contain the content from the start of the source files until
+In example 3
+\fBmkvmerge\fR(1)
+will create two files\&. The first will contain the content from the start of the source files until
 00:02:45\&. The second file will contain the content starting from
 00:05:50
 until the end of the source files\&.
+.if n \{\
+.sp
+.\}
+.RS 4
+.it 1 an-trap
+.nr an-no-space-flag 1
+.nr an-break-flag 1
+.br
+.ps +1
+\fB注記\fR
+.ps -1
+.br
+Note that
+\fBmkvmerge\fR(1)
+only makes decisions about splitting at key frame positions\&. This applies to both the start and the end of each range\&. So even if an end timecode is between two key frames
+\fBmkvmerge\fR(1)
+will continue outputting the frames up to but excluding the following key frame\&.
+.sp .5v
+.RE
 .RE
 .sp
 .RS 4
@@ -406,6 +435,144 @@ until the end of the source files\&.
 .el \{\
 .sp -1
 .IP "  5." 4.2
+.\}
+Keeping specific parts by specifying frame/field number ranges while discarding others\&.
+.sp
+Syntax:
+\fB\-\-split\fR
+parts\-frames:\fIstart1\fR\-\fIend1\fR[,[+]\fIstart2\fR\-\fIend2\fR[,[+]\fIstart3\fR\-\fIend3\fR\&.\&.\&.]]
+.sp
+Examples:
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 1.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  1." 4.2
+.\}
+\-\-split parts\-frames:137\-258,548\-1211
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 2.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  2." 4.2
+.\}
+\-\-split parts\-frames:733\-912,+1592\-2730
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 3.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  3." 4.2
+.\}
+\-\-split parts\-frames:\-430,2512\-
+.RE
+.sp
+The
+parts\-frames
+mode tells
+\fBmkvmerge\fR(1)
+to keep certain ranges of frame/field numbers while discarding others\&. The ranges to keep have to be listed after the
+parts\-frames:
+keyword and be separated by commas\&. A range itself consists of a start and an end frame/field number\&. Numbering starts at 1\&.
+.sp
+If a start number is left out then it defaults to the previous range\*(Aqs end number\&. If there was no previous range then it defaults to the start of the file (see example 3)\&.
+.sp
+If an end number is left out then it defaults to the end of the source files which basically tells
+\fBmkvmerge\fR(1)
+to keep the rest (see example 3)\&.
+.sp
+Normally each range will be written to a new file\&. This can be changed so that consecutive ranges are written to the same file\&. For that the user has to prefix the start number with a
++\&. This tells
+\fBmkvmerge\fR(1)
+not to create a new file and instead append the range to the same file the previous range was written to\&. Timecodes will be adjusted so that there will be no gap in the output file even if there was a gap in the two ranges in the input file\&.
+.if n \{\
+.sp
+.\}
+.RS 4
+.it 1 an-trap
+.nr an-no-space-flag 1
+.nr an-break-flag 1
+.br
+.ps +1
+\fB注記\fR
+.ps -1
+.br
+Note that
+\fBmkvmerge\fR(1)
+only makes decisions about splitting at key frame positions\&. This applies to both the start and the end of each range\&. So even if an end frame/field number is between two key frames
+\fBmkvmerge\fR(1)
+will continue outputting the frames up to but excluding the following key frame\&.
+.sp .5v
+.RE
+In example 1
+\fBmkvmerge\fR(1)
+will create two files\&. The first will contain the content starting from the first key frame after
+137
+up to but excluding the first key frame after
+258\&. The second file will contain the content starting from
+548
+until
+1211\&.
+.sp
+In example 2
+\fBmkvmerge\fR(1)
+will create only one file\&. This file will contain both the content starting from
+733
+until
+912
+and the content starting from
+1592
+until
+2730\&.
+.sp
+In example 3
+\fBmkvmerge\fR(1)
+will create two files\&. The first will contain the content from the start of the source files until
+430\&. The second file will contain the content starting from
+2512
+until the end of the source files\&.
+.sp
+This mode considers only the first video track that is output\&. If no video track is output no splitting will occur\&.
+.if n \{\
+.sp
+.\}
+.RS 4
+.it 1 an-trap
+.nr an-no-space-flag 1
+.nr an-break-flag 1
+.br
+.ps +1
+\fB注記\fR
+.ps -1
+.br
+The numbers given with this argument are interpreted based on the number of
+Matroska(TM)
+blocks that are output\&. A single
+Matroska(TM)
+block contains either a full frame (for progressive content) or a single field (for interlaced content)\&. mkvmerge does not distinguish between those two and simply counts the number of blocks\&. For example: If one wanted to split after the 25th full frame with interlaced content one would have to use
+50
+(two fields per full frame) as the split point\&.
+.sp .5v
+.RE
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 6.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  6." 4.2
 .\}
 Splitting after specific frames/fields\&.
 .sp
@@ -437,7 +604,11 @@ This mode considers only the first video track that is output\&. If no video tra
 \fB注記\fR
 .ps -1
 .br
-The numbers given with this argument are interpreted based on the number of Matroska blocks that are output\&. A single Matroska block contains either a full frame (for progressive content) or a single field (for interlaced content)\&. mkvmerge does not distinguish between those two and simply counts the number of blocks\&. For example: If one wanted to split after the 25th full frame with interlaced content one would have to use
+The numbers given with this argument are interpreted based on the number of
+Matroska(TM)
+blocks that are output\&. A single
+Matroska(TM)
+block contains either a full frame (for progressive content) or a single field (for interlaced content)\&. mkvmerge does not distinguish between those two and simply counts the number of blocks\&. For example: If one wanted to split after the 25th full frame with interlaced content one would have to use
 50
 (two fields per full frame) as the split point\&.
 .sp .5v
@@ -446,11 +617,11 @@ The numbers given with this argument are interpreted based on the number of Matr
 .sp
 .RS 4
 .ie n \{\
-\h'-04' 6.\h'+01'\c
+\h'-04' 7.\h'+01'\c
 .\}
 .el \{\
 .sp -1
-.IP "  6." 4.2
+.IP "  7." 4.2
 .\}
 Splitting before specific chapters\&.
 .sp
@@ -487,7 +658,9 @@ The \*(Aqchapters:\*(Aq prefix must not be omitted\&.
 \fB注記\fR
 .ps -1
 .br
-The Matroska file format supports arbitrary deeply nested chapter structures called \*(Aqedition entries\*(Aq and \*(Aqchapter atoms\*(Aq\&. However, this mode only considers the top\-most level of chapters across all edition entries\&.
+The
+Matroska(TM)
+file format supports arbitrary deeply nested chapter structures called \*(Aqedition entries\*(Aq and \*(Aqchapter atoms\*(Aq\&. However, this mode only considers the top\-most level of chapters across all edition entries\&.
 .sp .5v
 .RE
 .RE
@@ -1904,7 +2077,9 @@ Tags (master)
 .\}
 .SH "セグメント情報XMLファイル"
 .PP
-セグメント情報XMLファイルで、Matroskaファイルの"segment information"ヘッダフィールドの特定の値を設定することが可能です。これらの値の全てがコマンドラインオプション経由で設定可能というわけではありません。
+With a segment info XML file it is possible to set certain values in the "segment information" header field of a
+Matroska(TM)
+file\&. All of these values cannot be set via other command line options\&.
 .PP
 他の"segment information"ヘッダフィールドはコマンドラインオプション経由で設定できますが、XMLファイル経由では設定できません。 これはには例えば\fB--title\fRや\fB--timecode-scale\fR
 オプションなどが含まれます。
@@ -1965,7 +2140,9 @@ Matroska(TM)ファイルのレイアウトは非常に柔軟性に富んでい�
 添付ファイル、チャプタ、及びタグエレメントはそれらが存在するときにのみ追加されます。
 .RE
 .PP
-最小構成のMatroskaファイルはこのような構成になります。
+The shortest possible
+Matroska(TM)
+file would look like this:
 .PP
 [EBMLヘッダ] [セグメント [セグメント情報] [トラック情報] [クラスタ1]]
 .PP
