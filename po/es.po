@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: Israel Lucas Torrijos <lukillas.ole@gmail.com>\n"
 "POT-Creation-Date: 2010-06-08 10:00+0200\n"
-"PO-Revision-Date: 2013-01-11 23:09+0100\n"
+"PO-Revision-Date: 2013-01-15 01:44+0100\n"
 "Last-Translator: Israel Lucas a.k.a Overdrive80 <lukillas.ole@gmail.com>\n"
 "Language-Team: Spanish <moritz@bunkus.org>\n"
 "Language: es\n"
@@ -429,16 +429,15 @@ msgstr ""
 "                           etcétera.\n"
 
 #: src/merge/mkvmerge.cpp:124
-#, fuzzy
 msgid ""
 "  --split parts-frames:start1-end1[,[+]start2-end2,...]\n"
 "                           Same as 'parts:', but 'startN'/'endN' are frame/\n"
 "                           field numbers instead of timecodes.\n"
 msgstr ""
 "  --split parts:inicial1-final1[,[+]inicial2-final2,...]\n"
-"                           Mantiene los rangos de los códigos de tiempo\n"
-"                           inicial-final en archivos separados o unidos al\n"
-"                           archivo del rango anterior si tiene el prefijo '+'.\n"
+"                           Al igual que 'parts:', pero 'startN'/'endN' son\n"
+"                           numeros de fotogramas/campos en lugar de\n"
+"                           códigos de tiempo (timecodes).\n"
 
 #: src/merge/mkvmerge.cpp:120
 msgid ""
@@ -1810,9 +1809,8 @@ msgid "A chapter starting at 0s is never considered for splitting and discarded 
 msgstr "Un capítulo que comienza en 0s, nunca se considera para la división y se descarta silenciosamente."
 
 #: src/mmg/tabs/global.cpp:253
-#, fuzzy
 msgid "A comma-separated list of frame/field number ranges of content to keep."
-msgstr "Una lista separada por comas, de códigos de tiempo, del contenido a mantener."
+msgstr "Una lista separada por comas, de números de fotogramas/campos, del contenido a mantener."
 
 #: src/mmg/tabs/global.cpp:269
 msgid "A comma-separated list of frame/field numbers after which to split."
@@ -3408,9 +3406,8 @@ msgid "Each edition must contain at least one chapter."
 msgstr "Cada edición debe contener al menos un capítulo."
 
 #: src/mmg/tabs/global.cpp:254
-#, fuzzy
 msgid "Each range consists of a start and end frame/field number with a '-' in the middle, e.g. '157-238'."
-msgstr "Cada rango tiene un código de tiempo inicial y final, separados en el medio por un  '-', p.e. '00:01:15-00:03:20'."
+msgstr "Cada rango se compone de un numero inicial y final, de fotograma/campo, con un '-' en el medio, p.e. '157-238'."
 
 #: src/mmg/tabs/global.cpp:243
 msgid "Each range consists of a start and end timecode with a '-' in the middle, e.g. '00:01:15-00:03:20'."
@@ -4072,18 +4069,16 @@ msgid "If a chapter or an edition is marked 'hidden' then the player should not 
 msgstr "Si un capítulo está marcado como 'oculto' el reproductor no debería mostrar al usuario este registro del capítulo. Dichos registros todavía podrían ser usados por el sistema de menús."
 
 #: src/mmg/tabs/global.cpp:262
-#, fuzzy
 msgid "If a range's start number is prefixed with '+' then its content will be written to the same file as the previous range. Otherwise a new file will be created for this range."
-msgstr "Si el código de tiempo inicial de un rango esta prefijado con  '+' , entonces su contenido será escrito al mismo archivo que en el rango anterior. De otra manera, un nuevo archivo será creado para ese rango."
+msgstr "Si un número inicial de un rango esta prefijado con  '+' , entonces su contenido será escrito al mismo archivo que en el rango anterior. De otra manera, un nuevo archivo será creado para ese rango."
 
 #: src/mmg/tabs/global.cpp:246
 msgid "If a range's start timecode is prefixed with '+' then its content will be written to the same file as the previous range. Otherwise a new file will be created for this range."
 msgstr "Si el código de tiempo inicial de un rango esta prefijado con  '+' , entonces su contenido será escrito al mismo archivo que en el rango anterior. De otra manera, un nuevo archivo será creado para ese rango."
 
 #: src/mmg/tabs/global.cpp:261
-#, fuzzy
 msgid "If a start number is left out then the previous range's end number is used, or the start of the file if there was no previous range."
-msgstr "Si el código de tiempo inicial es excluído entonces es usado el código de tiempo final del rango anterior, o el inicial del archivo si no había un rango anterior."
+msgstr "Si un número inicial es excluído entonces es usado el número final del rango anterior, o el inicial del archivo si no había un rango anterior."
 
 #: src/mmg/tabs/global.cpp:244
 msgid "If a start timecode is left out then the previous range's end timecode is used, or the start of the file if there was no previous range."
@@ -4305,14 +4300,14 @@ msgid "Invalid data for Base64 encoding found."
 msgstr "Datos incorrectos para la codificación de Base64 "
 
 #: src/merge/mkvmerge.cpp:950
-#, fuzzy, boost-format
+#, boost-format
 msgid "Invalid end frame/field number for '--split' in '--split %1%' (current part: %2%).\n"
-msgstr "Especificación inicial/final incorrecta para '--split' en '--split %1%' (parte actual: %2%).\n"
+msgstr "El número final del fotograma/campo es incorrecto para '--split' en '--split %1%' (parte actual: %2%).\n"
 
 #: src/merge/mkvmerge.cpp:954
-#, fuzzy, boost-format
+#, boost-format
 msgid "Invalid end frame/field number for '--split' in '--split %1%' (current part: %2%). The end number must be bigger than the start number.\n"
-msgstr "Tiempo final incorrecto para '--split' en '--split %1%' (parte actual: %2%). El tiempo final debe ser mayor que el tiempo inicial.\n"
+msgstr "El número final del fotograma/campo es incorrecto '--split' en '--split %1%' (parte actual: %2%). El número final debe ser mayor que el número inicial.\n"
 
 #: src/merge/mkvmerge.cpp:947
 #, boost-format
@@ -4461,14 +4456,14 @@ msgid "Invalid split size in '--split %1%'.\n"
 msgstr "No es válido el tamaño de la división: '--split %1%'.\n"
 
 #: src/merge/mkvmerge.cpp:940
-#, fuzzy, boost-format
+#, boost-format
 msgid "Invalid start frame/field number for '--split' in '--split %1%' (current part: %2%).\n"
-msgstr "Especificación inicial/final incorrecta para '--split' en '--split %1%' (parte actual: %2%).\n"
+msgstr "El número inicial del fotograma/campo es incorrecto para '--split' en '--split %1%' (parte actual: %2%).\n"
 
 #: src/merge/mkvmerge.cpp:961
-#, fuzzy, boost-format
+#, boost-format
 msgid "Invalid start frame/field number for '--split' in '--split %1%' (current part: %2%). The start number must be bigger than or equal to the previous part's end number.\n"
-msgstr "Tiempo inicial incorrecto para '--split' en '--split %1%' (parte actual: %2%). El tiempo inicial debe ser mayor o igual que el tiempo final de la parte anterior.\n"
+msgstr "El número inicial del fotograma/campo es incorrecto para '--split' en '--split %1%' (parte actual: %2%). El número inicial debe ser mayor o igual al número final de la parte anterior.\n"
 
 #: src/input/r_usf.cpp:207
 msgid "Invalid start or stop timecode"
@@ -5760,7 +5755,7 @@ msgstr "Rehabilitar el/los trabajo/s seleccionado/s"
 #: src/merge/output_control.cpp:898
 #, boost-format
 msgid "Re-rendering track headers: data_size != 0 not implemented yet. %1%\n"
-msgstr ""
+msgstr "La reenderizacion de los encabezados de pista: data_size != 0 aun no está implementado. %1%\n"
 
 #: src/input/r_mpeg_ps.cpp:363
 msgid "Reading encrypted VOBs is not supported.\n"
@@ -9356,14 +9351,12 @@ msgid "split before chapters"
 msgstr "dividir tras capítulos"
 
 #: src/mmg/tabs/global.cpp:318
-#, fuzzy
 msgid "split by parts based on frame/field numbers"
-msgstr "cortar después de los números de fotograma/campo"
+msgstr "dividir en partes según los números de fotograma/campo"
 
 #: src/mmg/tabs/global.cpp:317
-#, fuzzy
 msgid "split by parts based on timecodes"
-msgstr "dividir tras códigos de tiempo"
+msgstr "dividir en partes según los códigos de tiempo"
 
 #: src/input/subtitles.cpp:600
 #, boost-format
