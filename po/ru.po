@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: Moritz Bunkus <moritz@bunkus.org>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2013-01-15 15:31+0400\n"
+"PO-Revision-Date: 2013-01-15 13:33+0100\n"
 "Last-Translator: EuGENIUS <Eugenius_V@mail.ru>\n"
 "Language-Team: Russian <moritz@bunkus.org>\n"
 "Language: ru\n"
@@ -1780,7 +1780,7 @@ msgstr ""
 
 #: src/mmg/tabs/chapters.cpp:350
 msgid "A segment to play in place of this chapter. The edition set via the segment edition UID should be used for this segment, otherwise no edition is used. This is a 128bit segment UID in the usual UID form: hex numbers with or without the \"0x\" prefix, with or without spaces, exactly 32 digits.\n"
-msgstr "Сегмент, который надо воспроизвести вместо этой главы. Будет использована редакция, заданная через UID редакции сегмента, иначе не будет использовано никакой редакции вообще. Это 128-битный UID сегмента в обычной форме записи UID: шестнадцатиричное число с префиксом \"0x\" или без, с пробелами или без, длиной ровно в 32 символа."
+msgstr "Сегмент, который надо воспроизвести вместо этой главы. Будет использована редакция, заданная через UID редакции сегмента, иначе не будет использовано никакой редакции вообще. Это 128-битный UID сегмента в обычной форме записи UID: шестнадцатиричное число с префиксом \"0x\" или без, с пробелами или без, длиной ровно в 32 символа.\n"
 
 #: src/mmg/tabs/global.cpp:259
 #: src/mmg/tabs/global.cpp:274
@@ -3011,7 +3011,7 @@ msgstr "Опорный Cue"
 #: src/info/mkvinfo.cpp:1025
 #, boost-format
 msgid "Cue relative position: %1%"
-msgstr "Относительное положение Cue: %1"
+msgstr "Относительное положение Cue: %1%"
 
 #: src/common/chapters/cue_parser.cpp:398
 #, boost-format
@@ -3610,7 +3610,7 @@ msgstr "Не удалось создать файл данных VobSub '%1%': %
 #: src/extract/xtr_vobsub.cpp:235
 #, boost-format
 msgid "Failed to create the file '%1%': %2%\n"
-msgstr "Не удалось создать файл '%1%': %2% (%3%)\n"
+msgstr "Не удалось создать файл '%1%': %2%\n"
 
 #: src/extract/xtr_base.cpp:73
 #, boost-format
@@ -10311,3 +10311,4 @@ msgstr "да"
 
 #~ msgid "wrong usage: writing to read-only memory"
 #~ msgstr "неправильное использование: запись в память только для чтения"
+
