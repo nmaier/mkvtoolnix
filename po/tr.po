@@ -5,10 +5,10 @@
 # BouRock <BouRock(at)live.com>, 2011.
 msgid ""
 msgstr ""
-"Project-Id-Version: MKVToolNix 5.9.0\n"
+"Project-Id-Version: MKVToolNix 6.0.0\n"
 "Report-Msgid-Bugs-To: moritz@bunkus.org\n"
 "POT-Creation-Date: 2011-01-17 08:47:00+0100\n"
-"PO-Revision-Date: 2012-12-30 17:24+0200\n"
+"PO-Revision-Date: 2013-01-15 23:26+0200\n"
 "Last-Translator: Burak Yavuz <BouRock(at)live.com>\n"
 "Language-Team: BouRock <BouRock(at)live.com>\n"
 "Language: Türkçe\n"
@@ -391,16 +391,14 @@ msgstr ""
 "                           dosya oluştur.\n"
 
 #: src/merge/mkvmerge.cpp:124
-#, fuzzy
 msgid ""
 "  --split parts-frames:start1-end1[,[+]start2-end2,...]\n"
 "                           Same as 'parts:', but 'startN'/'endN' are frame/\n"
 "                           field numbers instead of timecodes.\n"
 msgstr ""
-"  --split parts:start1-end1[,[+]start2-end2,...]\n"
-"                           Zaman kodlarının başlama-bitiş aralığını tutar, eğer\n"
-"                           '+' ön ekiyle başlıyorsa ya ayırı dosyalarda tutar ya da\n"
-"                           önceki aralığın dosyasına ekler.\n"
+"  --split parts-frames:start1-end1[,[+]start2-end2,...]\n"
+"                           'Parçalar:' ile aynıdır ama 'startN'/'endN', zaman\n"
+"                            kodlarının yerine kare/alan numaralarıdır.\n"
 
 #: src/merge/mkvmerge.cpp:120
 msgid ""
@@ -1122,7 +1120,7 @@ msgstr "&Başlat"
 
 #: src/mmg/mmg_dialog.cpp:314
 msgid "&Troubleshooting"
-msgstr ""
+msgstr "&Sorun Giderme"
 
 #: src/mmg/jobs.cpp:475
 #: src/mmg/tabs/additional_parts_dlg.cpp:47
@@ -1738,9 +1736,8 @@ msgid "A chapter starting at 0s is never considered for splitting and discarded 
 msgstr ""
 
 #: src/mmg/tabs/global.cpp:253
-#, fuzzy
 msgid "A comma-separated list of frame/field number ranges of content to keep."
-msgstr "Tutmak için içeriğin zaman damgası aralığının virgülle ayrılmış listesi."
+msgstr "Tutmak için içeriğin kare/alan numarası aralığının virgülle ayrılmış listesi."
 
 #: src/mmg/tabs/global.cpp:269
 msgid "A comma-separated list of frame/field numbers after which to split."
@@ -3336,9 +3333,8 @@ msgid "Each edition must contain at least one chapter."
 msgstr "Her yayın en az bir bölüm içermek zorundadır."
 
 #: src/mmg/tabs/global.cpp:254
-#, fuzzy
 msgid "Each range consists of a start and end frame/field number with a '-' in the middle, e.g. '157-238'."
-msgstr "Her aralık tam ortada '-' ile başlama ve bitiş zaman kodundan oluşur, örneğin '00:01:15-00:03:20'."
+msgstr "Her aralık tam ortada '-' ile başlama ve bitiş kare/alan numarasından oluşur, örneğin '157-238'."
 
 #: src/mmg/tabs/global.cpp:243
 msgid "Each range consists of a start and end timecode with a '-' in the middle, e.g. '00:01:15-00:03:20'."
@@ -3996,22 +3992,20 @@ msgid "If a chapter or an edition is marked 'hidden' then the player should not 
 msgstr "Eğer bir bölüm veya yayın 'gizli' olarak işaretliyse sonrasında oynatıcı bu bölüm girişini (ya da bu yayının girişlerinin tümünü) kullanıcıya göstermemelidir. Böyle girişler menü sistemi tarafından hala kullanılabilir."
 
 #: src/mmg/tabs/global.cpp:262
-#, fuzzy
 msgid "If a range's start number is prefixed with '+' then its content will be written to the same file as the previous range. Otherwise a new file will be created for this range."
-msgstr "Eğer aralığın başlama zaman kodu ön eki '+' ise sonrasında içeriği önceki aralıktaki gibi aynı dosyaya yazılacak. Aksi halde bu aralık için yeni bir dosya oluşturulacak."
+msgstr "Eğer aralığın başlama numarası ön eki '+' ise sonrasında içeriği önceki aralıktaki gibi aynı dosyaya yazılacak. Aksi halde bu aralık için yeni bir dosya oluşturulacaktır."
 
 #: src/mmg/tabs/global.cpp:246
 msgid "If a range's start timecode is prefixed with '+' then its content will be written to the same file as the previous range. Otherwise a new file will be created for this range."
-msgstr "Eğer aralığın başlama zaman kodu ön eki '+' ise sonrasında içeriği önceki aralıktaki gibi aynı dosyaya yazılacak. Aksi halde bu aralık için yeni bir dosya oluşturulacak."
+msgstr "Eğer aralığın başlama zaman kodu ön eki '+' ise sonrasında içeriği önceki aralıktaki gibi aynı dosyaya yazılacak. Aksi halde bu aralık için yeni bir dosya oluşturulacaktır."
 
 #: src/mmg/tabs/global.cpp:261
-#, fuzzy
 msgid "If a start number is left out then the previous range's end number is used, or the start of the file if there was no previous range."
-msgstr "Eğer başlama zaman kodu atlanırsa sonrasında önceki aralığın bitiş zaman kodu ya da önceki aralık yoksa dosyanın başlangıcı kullanılır."
+msgstr "Eğer başlama numarası atlanırsa sonrasında önceki aralığın bitiş numarası ya da önceki aralık olmadıysa dosyanın başlangıcı kullanılır."
 
 #: src/mmg/tabs/global.cpp:244
 msgid "If a start timecode is left out then the previous range's end timecode is used, or the start of the file if there was no previous range."
-msgstr "Eğer başlama zaman kodu atlanırsa sonrasında önceki aralığın bitiş zaman kodu ya da önceki aralık yoksa dosyanın başlangıcı kullanılır."
+msgstr "Eğer başlama zaman kodu atlanırsa sonrasında önceki aralığın bitiş zaman kodu ya da önceki aralık olmadıysa dosyanın başlangıcı kullanılır."
 
 #: src/mmg/tabs/chapters.cpp:359
 msgid "If an edition is marked 'ordered' then the chapters can be defined multiple times and the order to play them is enforced."
@@ -4229,14 +4223,14 @@ msgid "Invalid data for Base64 encoding found."
 msgstr "Base64 kodlaması için geçersiz veri bulundu."
 
 #: src/merge/mkvmerge.cpp:950
-#, fuzzy, boost-format
+#, boost-format
 msgid "Invalid end frame/field number for '--split' in '--split %1%' (current part: %2%).\n"
-msgstr "'--split %1%' içinde '--split' için geçersiz başlama/bitiş belirtmesi (şu anki kısım: %2%).\n"
+msgstr "'--split %1%' içinde '--split' için geçersiz bitiş karesi/alanı numarası (şu anki kısım: %2%).\n"
 
 #: src/merge/mkvmerge.cpp:954
-#, fuzzy, boost-format
+#, boost-format
 msgid "Invalid end frame/field number for '--split' in '--split %1%' (current part: %2%). The end number must be bigger than the start number.\n"
-msgstr "'--split %1%' (şu anki parça %2%) içindeki '--split' için geçersiz bitiş zamanı. Bitiş zamanı başlama zamanından daha büyük olmak zorundadır.\n"
+msgstr "'--split %1%' içindeki '--split' için geçersiz bitiş karesi/alanı numarası (şu anki kısım %2%). Bitiş numarası başlama numarasından daha büyük olmak zorundadır.\n"
 
 #: src/merge/mkvmerge.cpp:947
 #, boost-format
@@ -4385,14 +4379,14 @@ msgid "Invalid split size in '--split %1%'.\n"
 msgstr "'--split %1%' içinde geçersiz ayırma boyutu.\n"
 
 #: src/merge/mkvmerge.cpp:940
-#, fuzzy, boost-format
+#, boost-format
 msgid "Invalid start frame/field number for '--split' in '--split %1%' (current part: %2%).\n"
-msgstr "'--split %1%' içinde '--split' için geçersiz başlama/bitiş belirtmesi (şu anki kısım: %2%).\n"
+msgstr "'--split %1%' içinde '--split' için geçersiz başlama karesi/alanı numarası (şu anki kısım: %2%).\n"
 
 #: src/merge/mkvmerge.cpp:961
-#, fuzzy, boost-format
+#, boost-format
 msgid "Invalid start frame/field number for '--split' in '--split %1%' (current part: %2%). The start number must be bigger than or equal to the previous part's end number.\n"
-msgstr "'--split %1%' (şu anki parça %2%) içindeki '--split' için geçersiz bitiş zamanı. Bitiş zamanı başlama zamanından daha büyük ya da önceki parçanın bitiş zamanına eşit olmak zorundadır.\n"
+msgstr "'--split %1%' içindeki '--split' için geçersiz başlama karesi/alanı numarası (şu anki kısım %2%). Başlama numarası önceki kısmın bitiş numarasından daha büyük ya da eşit olmak zorundadır.\n"
 
 #: src/input/r_usf.cpp:207
 msgid "Invalid start or stop timecode"
@@ -4401,17 +4395,17 @@ msgstr "Geçersiz başlatma ve durdurma zaman kodu"
 #: src/merge/mkvmerge.cpp:937
 #, boost-format
 msgid "Invalid start time for '--split' in '--split %1%' (current part: %2%). Additional error message: %3%.\n"
-msgstr "'--split %1%' (şu anki parça %2%) içindeki '--split' için geçersiz başlama zamanı. Additional error message: %3%.\n"
+msgstr "'--split %1%' içindeki '--split' için geçersiz başlama zamanı (şu anki kısım %2%). İlave hata iletisi: %3%.\n"
 
 #: src/merge/mkvmerge.cpp:963
 #, boost-format
 msgid "Invalid start time for '--split' in '--split %1%' (current part: %2%). The start time must be bigger than or equal to the previous part's end time.\n"
-msgstr "'--split %1%' (şu anki parça %2%) içindeki '--split' için geçersiz bitiş zamanı. Bitiş zamanı başlama zamanından daha büyük ya da önceki parçanın bitiş zamanına eşit olmak zorundadır.\n"
+msgstr "'--split %1%' içindeki '--split' için geçersiz başlama zamanı (şu anki kısım %2%). Başlama zamanı önceki kısmın bitiş zamanından daha büyük ya da eşit olmak zorundadır.\n"
 
 #: src/merge/mkvmerge.cpp:923
 #, boost-format
 msgid "Invalid start/end specification for '--split' in '--split %1%' (curent part: %2%).\n"
-msgstr "'--split %1%' içinde '--split' için geçersiz başlama/bitiş belirtmesi (şu anki kısım: %2%).\n"
+msgstr "'--split %1%' içinde '--split' için geçersiz başlama/bitiş belirleme (şu anki kısım: %2%).\n"
 
 #: src/merge/mkvmerge.cpp:1283
 #, boost-format
@@ -4518,7 +4512,7 @@ msgstr "'%1%' bağımsız değişkeninde geçersiz iz ID/dosya adı belirtme.\n"
 
 #: src/mmg/mmg_dialog.cpp:1967
 msgid "It can also be opened from the 'Help' menu."
-msgstr ""
+msgstr "Aynı zamanda 'Yardım' menüsünden açılabilir."
 
 #: src/mmg/mmg_dialog.cpp:1479
 msgid "Job added to job queue"
@@ -4896,7 +4890,7 @@ msgstr "Daha Fazla"
 #: src/merge/mkvmerge.cpp:2059
 #, boost-format
 msgid "More than one MIME type was given for a single attachment. '%1%' will be discarded and '%2%' used instead.\n"
-msgstr ""
+msgstr "Tek bir ek için birden fazla MIME türü verildi. '%1%' göz ardı edilecektir ve bunun yerine '%2%' kullanılacaktır.\n"
 
 #: src/merge/mkvmerge.cpp:2050
 msgid "More than one description was given for a single attachment.\n"
@@ -5181,7 +5175,7 @@ msgstr "Hiçbir şey yapma.\n"
 
 #: src/mmg/mmg_dialog.cpp:1955
 msgid "Notice"
-msgstr ""
+msgstr "Bildiri"
 
 #: src/common/property_element.cpp:126
 #: src/mmg/header_editor/frame.cpp:407
@@ -5264,7 +5258,7 @@ msgstr "Sadece ilkine"
 
 #: src/input/r_vobsub.cpp:103
 msgid "Only v7 and newer VobSub files are supported. If you have an older version then use the VSConv utility from http://sourceforge.net/projects/guliverkli/ to convert these files to v7 files.\n"
-msgstr ""
+msgstr "Sadece v7 ve daha yeni VobSub dosyaları desteklenir. Eğer daha eski sürüme sahipseniz, bu dosyaları v7 dosyalarına dönüştürmek için sonrasında http://sourceforge.net/projects/guliverkli/ adresinden VSConv yardımcı uygulamasını kullanın.\n"
 
 #: src/mmg/mmg_dialog.cpp:291
 msgid "Op&tions\tCtrl-P"
@@ -5303,12 +5297,11 @@ msgstr "Seçenekler, SADECE geliştiriciler içindir demektir. Onları kullanmay
 
 #: src/output/p_opus.h:38
 msgid "Opus"
-msgstr ""
+msgstr "Opus"
 
 #: src/common/file_types.cpp:47
-#, fuzzy
 msgid "Opus (in Ogg) audio files"
-msgstr "Ogg/OGM ses/görüntü dosyaları"
+msgstr "Opus (Ogg içinde) ses dosyaları"
 
 #: src/info/mkvinfo.cpp:672
 #, boost-format
@@ -5686,7 +5679,7 @@ msgstr "Seçili işi(leri) yeniden etkinleştir"
 #: src/merge/output_control.cpp:898
 #, boost-format
 msgid "Re-rendering track headers: data_size != 0 not implemented yet. %1%\n"
-msgstr ""
+msgstr "İz başlıkları yeniden hareketlendiriliyor: data_size != 0 henüz uygulanmadı. %1%\n"
 
 #: src/input/r_mpeg_ps.cpp:363
 msgid "Reading encrypted VOBs is not supported.\n"
@@ -5845,7 +5838,7 @@ msgstr "&Farkılı kaydet"
 
 #: src/mmg/cli_options_dlg.cpp:62
 msgid "Save as default for new jobs"
-msgstr ""
+msgstr "Yeni işler için varsayılan olarak kaydedin"
 
 #: src/info/qt_ui.cpp:71
 msgid "Save information as"
@@ -6105,7 +6098,7 @@ msgstr "Matroska ayrışırıcı kipini 'hızlı' (varsayılan) veya 'tam' olara
 
 #: src/mmg/tabs/input_extra.cpp:126
 msgid "Sets the compression algorithm to be used for this track. If no option is selected mkvmerge will decide whether or not to compress and which algorithm to use based on the track type. Most track types are not compressed at all. "
-msgstr "Bu iz için kullanılan sıkıştırma algoritmasını ayarlar. Eğer hiç seçenek seçilmezse mkvmerge sıkıştırıp sıkıştırmayacağına ve iz türüne bağlı hangi algoritmayı kullanacağına karar verecektir. Çoğu iz türü hiçbir şekilde sıkıştırılmaz."
+msgstr "Bu iz için kullanılan sıkıştırma algoritmasını ayarlar. Eğer hiç seçenek seçilmezse mkvmerge sıkıştırıp sıkıştırmayacağına ve iz türüne dayanarak hangi algoritmayı kullanacağına karar verecektir. Çoğu iz türü hiçbir şekilde sıkıştırılmaz."
 
 #: src/mmg/tabs/input_format.cpp:251
 msgid "Sets the cropping parameters. Must be comma-separated list of four numbers for the cropping to be used at the left, top, right and bottom."
@@ -7650,7 +7643,7 @@ msgstr "Bu, oynatıcının bu film için 'ana başlıkta' gösterebileceği baş
 
 #: src/mmg/mmg_dialog.cpp:1954
 msgid "This message will only shown to you once."
-msgstr ""
+msgstr "Bu ileti sadece bir defa gösterilecek."
 
 #: src/mmg/tabs/global.cpp:256
 #: src/mmg/tabs/global.cpp:271
@@ -7892,7 +7885,7 @@ msgstr "İzler, bölümler ve etiketler:"
 
 #: src/mmg/mmg_dialog.cpp:314
 msgid "Troubleshooting advice for playback issues"
-msgstr ""
+msgstr "Oynatma sorunları için sorun giderme tavsiye et"
 
 #: src/input/r_truehd.h:36
 #: src/output/p_truehd.h:42
@@ -7906,7 +7899,7 @@ msgstr ""
 #: src/extract/xtr_vobsub.cpp:92
 #, boost-format
 msgid "Two VobSub tracks can only be extracted into the same file if their CodecPrivate data matches. This is not the case for the tracks %1% and %2%.\n"
-msgstr ""
+msgstr "İki VobSub izi sadece CodecPrivate verisi eşleşirse aynı dosya içine çıkartılabilir. Bu, iz %1% ve %2% durumu için değildir.\n"
 
 #: src/common/property_element.cpp:139
 #: src/mmg/header_editor/frame.cpp:445
@@ -8743,9 +8736,9 @@ msgstr "matroska_okuyucusu: İz %2% için KodekID '%1%' bilinmiyor.\n"
 #: src/input/r_matroska.cpp:328
 #: src/input/r_matroska.cpp:349
 #: src/input/r_matroska.cpp:372
-#, fuzzy, boost-format
+#, boost-format
 msgid "matroska_reader: The CodecID for track %1% is '%2%', but the private codec data does not contain valid headers.\n"
-msgstr "matroska_okuyucusu: İz '%1%' için KodekID %2%, ama kodek özel başlıkları yoktur.\n"
+msgstr "matroska_okuyucusu: İz '%1%' için KodekID %2%, ama özel kodek verisi geçerli başlıkları içermiyor.\n"
 
 #: src/input/r_matroska.cpp:442
 #, boost-format
@@ -9247,14 +9240,12 @@ msgid "split before chapters"
 msgstr "bölümlerden önce böl"
 
 #: src/mmg/tabs/global.cpp:318
-#, fuzzy
 msgid "split by parts based on frame/field numbers"
-msgstr "kare/alan numarasından sonra böl"
+msgstr "kare/alan numaralarına dayanarak kısımlara göre böl"
 
 #: src/mmg/tabs/global.cpp:317
-#, fuzzy
 msgid "split by parts based on timecodes"
-msgstr "zaman kodlarından sonra böl"
+msgstr "zaman kodlarına dayanarak kısımlara göre böl"
 
 #: src/input/subtitles.cpp:600
 #, boost-format
