@@ -582,8 +582,8 @@
         </note>
 
         <para>
-         In example 1 &mkvmerge; will create two files. The first will contain the content starting from the first key frame after
-         <literal>137</literal> up to but excluding the first key frame after <literal>258</literal>. The second file will contain the
+         In example 1 &mkvmerge; will create two files. The first will contain the content starting from the first key frame at or after
+         <literal>137</literal> up to but excluding the first key frame at or after <literal>258</literal>. The second file will contain the
          content starting from <literal>548</literal> until <literal>1211</literal>.
         </para>
 

@@ -60,7 +60,7 @@ cluster_helper_c::cluster_helper_c()
   , m_discarded_duration{0}
   , m_min_timecode_in_cluster(-1)
   , m_max_timecode_in_cluster(-1)
-  , m_frame_field_number{}
+  , m_frame_field_number{1}
   , m_first_video_keyframe_seen{}
   , m_out(nullptr)
   , m_current_split_point(m_split_points.begin())
