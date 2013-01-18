@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: mkvtoolnix_uk\n"
 "Report-Msgid-Bugs-To: Moritz Bunkus <moritz@bunkus.org>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2013-01-13 15:14+0200\n"
+"PO-Revision-Date: 2013-01-18 18:14+0200\n"
 "Last-Translator: Andriy Bilous'ko <arestarh@ukr.net>\n"
 "Language-Team: Ukrainian <moritz@bunkus.org>\n"
 "Language: uk\n"
@@ -394,16 +394,15 @@ msgstr ""
 "                           і т.д.\n"
 
 #: src/merge/mkvmerge.cpp:124
-#, fuzzy
 msgid ""
 "  --split parts-frames:start1-end1[,[+]start2-end2,...]\n"
 "                           Same as 'parts:', but 'startN'/'endN' are frame/\n"
 "                           field numbers instead of timecodes.\n"
 msgstr ""
-"  --split parts:start1-end1[,[+]start2-end2,...]\n"
-"                           Йде розбиття на основі діапазонів тайм-кодів початок-закінчення, або на окремі\n"
-"                           файли, або відбувається приєднання,\n"
-"                           якщо заданню передує '+'.\n"
+"  --split parts-frames:start1-end1[,[+]start2-end2,...]\n"
+"                           Йде розбиття на основі тієї ж логіки, що і для\n"
+"                           режиму 'на частини:', але 'startN'/'endN' є номерами кадрів/\n"
+"                           полів замість тайм-кодів.\n"
 
 #: src/merge/mkvmerge.cpp:120
 msgid ""
@@ -1743,9 +1742,8 @@ msgid "A chapter starting at 0s is never considered for splitting and discarded 
 msgstr "Розділ, що починається з 0с, ніколи не враховується при розбитті і пропускається без попереджень."
 
 #: src/mmg/tabs/global.cpp:253
-#, fuzzy
 msgid "A comma-separated list of frame/field number ranges of content to keep."
-msgstr "Список, розділених комою діапазонів тайм-кодів контенту для обробки."
+msgstr "Список, розділених комою діапазонів номерів кадрів/полів контенту для обробки."
 
 #: src/mmg/tabs/global.cpp:269
 msgid "A comma-separated list of frame/field numbers after which to split."
@@ -3341,9 +3339,8 @@ msgid "Each edition must contain at least one chapter."
 msgstr "Кожна редакція має містити як мінімум один розділ."
 
 #: src/mmg/tabs/global.cpp:254
-#, fuzzy
 msgid "Each range consists of a start and end frame/field number with a '-' in the middle, e.g. '157-238'."
-msgstr "Кожен діапазон складається з тайм-кодів початку і закінчення з '-' посередині, наприклад, '00:01:15-00:03:20'."
+msgstr "Кожен діапазон складається з номерів кадрів/полів початку і закінчення з '-' посередині, наприклад, '157-238'."
 
 #: src/mmg/tabs/global.cpp:243
 msgid "Each range consists of a start and end timecode with a '-' in the middle, e.g. '00:01:15-00:03:20'."
@@ -4001,18 +3998,16 @@ msgid "If a chapter or an edition is marked 'hidden' then the player should not 
 msgstr "Якщо розділ або редакцію позначено як 'Приховано', то плеєр не повинен показувати цей розділ (або усі записи редакції) користувачу. Такі записи можуть все ж бути використані системою меню."
 
 #: src/mmg/tabs/global.cpp:262
-#, fuzzy
 msgid "If a range's start number is prefixed with '+' then its content will be written to the same file as the previous range. Otherwise a new file will be created for this range."
-msgstr "Якщо тайм-коду початку діапазону передує '+', то цей контент буде записано до того самого файлу, що й попередній діапазон. В іншому випадку, новий файл буде створено для цього діапазону."
+msgstr "Якщо номеру початку діапазону передує '+', то цей контент буде записано до того самого файлу, що й попередній діапазон. В іншому випадку, новий файл буде створено для цього діапазону."
 
 #: src/mmg/tabs/global.cpp:246
 msgid "If a range's start timecode is prefixed with '+' then its content will be written to the same file as the previous range. Otherwise a new file will be created for this range."
 msgstr "Якщо тайм-коду початку діапазону передує '+', то цей контент буде записано до того самого файлу, що й попередній діапазон. В іншому випадку, новий файл буде створено для цього діапазону."
 
 #: src/mmg/tabs/global.cpp:261
-#, fuzzy
 msgid "If a start number is left out then the previous range's end number is used, or the start of the file if there was no previous range."
-msgstr "Якщо тайм-код початку пропущено, то використовується тайм-код закінчення попереднього діапазону, або початок файлу, якщо попереднього діапазону не було."
+msgstr "Якщо номер початку пропущено, то використовується номер закінчення попереднього діапазону, або початок файлу, якщо попереднього діапазону не було."
 
 #: src/mmg/tabs/global.cpp:244
 msgid "If a start timecode is left out then the previous range's end timecode is used, or the start of the file if there was no previous range."
@@ -4234,14 +4229,14 @@ msgid "Invalid data for Base64 encoding found."
 msgstr "Знайдено некорректні дані для набору символів Base64."
 
 #: src/merge/mkvmerge.cpp:950
-#, fuzzy, boost-format
+#, boost-format
 msgid "Invalid end frame/field number for '--split' in '--split %1%' (current part: %2%).\n"
-msgstr "Невірне задання початку/закінчення для '--split' в '--split %1%' (поточна частина: %2%).\n"
+msgstr "Невірне задання номера кадру/поля закінчення для '--split' у '--split %1%' (поточна частина: %2%).\n"
 
 #: src/merge/mkvmerge.cpp:954
-#, fuzzy, boost-format
+#, boost-format
 msgid "Invalid end frame/field number for '--split' in '--split %1%' (current part: %2%). The end number must be bigger than the start number.\n"
-msgstr "Некорректний час закінчення для '--split' у '--split %1%' (поточна частина: %2%). Час закінчення має бути більшим за час початку.\n"
+msgstr "Невірне задання номера кадру/поля закінчення для '--split' у '--split %1%' (поточна частина: %2%). Номер закінчення має бути більшим за номер початку.\n"
 
 #: src/merge/mkvmerge.cpp:947
 #, boost-format
@@ -4390,14 +4385,14 @@ msgid "Invalid split size in '--split %1%'.\n"
 msgstr "Невірний розмір розбиття в '--split %1%'.\n"
 
 #: src/merge/mkvmerge.cpp:940
-#, fuzzy, boost-format
+#, boost-format
 msgid "Invalid start frame/field number for '--split' in '--split %1%' (current part: %2%).\n"
-msgstr "Невірне задання початку/закінчення для '--split' в '--split %1%' (поточна частина: %2%).\n"
+msgstr "Невірне задання номера кадру/поля початку для '--split' у '--split %1%' (поточна частина: %2%).\n"
 
 #: src/merge/mkvmerge.cpp:961
-#, fuzzy, boost-format
+#, boost-format
 msgid "Invalid start frame/field number for '--split' in '--split %1%' (current part: %2%). The start number must be bigger than or equal to the previous part's end number.\n"
-msgstr "Невірний час початку для '--split' в '--split %1%' (поточна частина: %2%). Час початку має бути більшим або рівним часу закінчення попередньої частини.\n"
+msgstr "Невірне задання номера кадру/поля початку для '--split' у '--split %1%' (поточна частина: %2%). Номер початку має бути більшим або рівним номеру закінчення попередньої частини.\n"
 
 #: src/input/r_usf.cpp:207
 msgid "Invalid start or stop timecode"
@@ -5689,7 +5684,7 @@ msgstr "Повтороно ввімкнути обране(і) завдання"
 #: src/merge/output_control.cpp:898
 #, boost-format
 msgid "Re-rendering track headers: data_size != 0 not implemented yet. %1%\n"
-msgstr ""
+msgstr "Повторний рендеринг заголовків доріжок: data_size != 0 ще не реалізовано. %1%\n"
 
 #: src/input/r_mpeg_ps.cpp:363
 msgid "Reading encrypted VOBs is not supported.\n"
@@ -9278,14 +9273,12 @@ msgid "split before chapters"
 msgstr "перед вказаними розділами"
 
 #: src/mmg/tabs/global.cpp:318
-#, fuzzy
 msgid "split by parts based on frame/field numbers"
-msgstr "після вказаних номерів кадрів/полів"
+msgstr "на частини на основі вказаних номерів кадрів/полів"
 
 #: src/mmg/tabs/global.cpp:317
-#, fuzzy
 msgid "split by parts based on timecodes"
-msgstr "після вказаних тайм-кодів"
+msgstr "на частини на основі вказаних тайм-кодів"
 
 #: src/input/subtitles.cpp:600
 #, boost-format
