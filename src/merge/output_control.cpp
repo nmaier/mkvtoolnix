@@ -206,7 +206,7 @@ static KaxInfo *s_kax_infos                 = nullptr;
 static KaxMyDuration *s_kax_duration        = nullptr;
 
 static KaxTags *s_kax_tags                  = nullptr;
-static KaxChapters *s_chapters_in_this_file = nullptr;
+static kax_chapters_cptr s_chapters_in_this_file;
 
 static KaxAttachments *s_kax_as             = nullptr;
 
@@ -1653,26 +1653,24 @@ finish_file(bool last_file) {
 
   // Select the chapters that lie in this file and render them in the space
   // that was resesrved at the beginning.
-  KaxChapters *chapters_here = nullptr;
+  kax_chapters_cptr chapters_here;
 
   if (g_kax_chapters) {
     int64_t offset = g_no_linking ? g_cluster_helper->get_first_timecode_in_file() : 0;
     int64_t start  = g_cluster_helper->get_first_timecode_in_file();
     int64_t end    = start + g_cluster_helper->get_duration();
 
-    chapters_here  = copy_chapters(g_kax_chapters);
+    chapters_here  = clone(g_kax_chapters);
 
     if (g_cluster_helper->splitting())
-      if (!select_chapters_in_timeframe(chapters_here, start, end, offset)) {
-        delete chapters_here;
-        chapters_here = nullptr;
-      }
+      if (!select_chapters_in_timeframe(chapters_here.get(), start, end, offset))
+        chapters_here.reset();
 
     if (chapters_here) {
       merge_chapter_entries(*chapters_here);
-      sort_ebml_master(chapters_here);
+      sort_ebml_master(chapters_here.get());
       s_kax_chapters_void->ReplaceWith(*chapters_here, *s_out, true, true);
-      s_chapters_in_this_file = static_cast<KaxChapters *>(chapters_here->Clone());
+      s_chapters_in_this_file = clone(chapters_here);
     }
 
     delete s_kax_chapters_void;
@@ -1713,15 +1711,12 @@ finish_file(bool last_file) {
     delete tags_here;
   }
 
-  if (s_chapters_in_this_file) {
-    delete s_chapters_in_this_file;
-    s_chapters_in_this_file = nullptr;
-  }
+  if (s_chapters_in_this_file)
+    s_chapters_in_this_file.reset();
 
   if (chapters_here) {
     if (!hack_engaged(ENGAGE_NO_CHAPTERS_IN_META_SEEK))
       g_kax_sh_main->IndexThis(*chapters_here, *g_kax_segment);
-    delete chapters_here;
 
   } else if (!g_cluster_helper->splitting() && g_kax_chapters)
     if (!hack_engaged(ENGAGE_NO_CHAPTERS_IN_META_SEEK))

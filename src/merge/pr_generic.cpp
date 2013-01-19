@@ -1615,7 +1615,7 @@ track_info_c::operator =(const track_info_c &src) {
 
   m_all_tags                   = src.m_all_tags;
   m_tags_file_name             = src.m_tags_file_name;
-  m_tags                       = src.m_tags ? kax_tags_cptr{ static_cast<KaxTags *>(src.m_tags->Clone()) } : kax_tags_cptr{};
+  m_tags                       = src.m_tags ? clone(src.m_tags) : kax_tags_cptr{};
 
   m_all_aac_is_sbr             = src.m_all_aac_is_sbr;
 

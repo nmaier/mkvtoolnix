@@ -69,7 +69,6 @@ kax_chapters_cptr parse_cue_chapters(mm_text_io_c *in, int64_t min_tc, int64_t m
 
 void write_chapters_simple(int &chapter_num, KaxChapters *chapters, mm_io_c *out);
 
-#define copy_chapters(source) dynamic_cast<KaxChapters *>(source->Clone())
 bool select_chapters_in_timeframe(KaxChapters *chapters, int64_t min_tc, int64_t max_tc, int64_t offset);
 
 extern std::string g_default_chapter_language, g_default_chapter_country;

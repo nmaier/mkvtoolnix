@@ -328,4 +328,22 @@ provide_default_for_child(EbmlMaster *master,
 typedef std::shared_ptr<EbmlElement> ebml_element_cptr;
 typedef std::shared_ptr<EbmlMaster> ebml_master_cptr;
 
+template<typename T>
+std::shared_ptr<T>
+clone(T const &e) {
+  return std::shared_ptr<T>{static_cast<T *>(e.Clone())};
+}
+
+template<typename T>
+std::shared_ptr<T>
+clone(T *e) {
+  return clone(*e);
+}
+
+template <typename T>
+std::shared_ptr<T>
+clone(std::shared_ptr<T> const &e) {
+  return clone(*e);
+}
+
 #endif // MTX_COMMON_EBML_H

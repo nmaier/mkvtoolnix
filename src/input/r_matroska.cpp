@@ -1653,7 +1653,7 @@ kax_reader_c::create_packetizer(int64_t tid) {
   if (nti.m_track_name == "")
     nti.m_track_name = t->track_name;
   if (t->tags && demuxing_requested('T', t->tnum))
-    nti.m_tags       = kax_tags_cptr{ dynamic_cast<KaxTags *>(t->tags->Clone()) };
+    nti.m_tags       = clone(t->tags);
 
   if (hack_engaged(ENGAGE_FORCE_PASSTHROUGH_PACKETIZER)) {
     init_passthrough_packetizer(t);
