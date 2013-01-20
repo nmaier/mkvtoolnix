@@ -639,7 +639,7 @@ will create two files\&. The first will contain the content from the start of th
 2512
 until the end of the source files\&.
 .sp
-This mode considers only the first video track that is output\&. If no video track is output no splitting will occur\&.
+该模式只考虑输出的第一条视频轨道。 如果没有输出视频轨道，则将不会进行切割操作。
 .if n \{\
 .sp
 .\}
@@ -671,24 +671,22 @@ block contains either a full frame (for progressive content) or a single field (
 .sp -1
 .IP "  6." 4.2
 .\}
-Splitting after specific frames/fields\&.
+在指定帧/场后切割。
 .sp
-Syntax:
+语法:
 \fB\-\-split\fR
 frames:\fIA\fR[,\fIB\fR[,\fIC\fR\&.\&.\&.]]
 .sp
-Example:
+示例:
 \-\-split frames:120,237,891
 .sp
-The parameters
-\fIA\fR,
-\fIB\fR,
-\fIC\fR
-etc must all be positive integers\&. Numbering starts at 1\&. The list of frame/field numbers is separated by commas\&. After the input stream has reached the current split point\*(Aqs frame/field number a new file is created\&. Then the next split point given in this list is used\&.
+参数
+\fIA\fR、\fIB\fR、\fIC\fR
+等等必须全为正整数。编号从 1 开始。 帧/场编号列表以逗号分隔。 输入流达到当前切割点的帧/场编号后将创建新的输出文件。然后将使用所给定的下一个切割点。
 .sp
-The \*(Aqframes:\*(Aq prefix must not be omitted\&.
+\*(Aqframes:\*(Aq 前缀不得省略。
 .sp
-This mode considers only the first video track that is output\&. If no video track is output no splitting will occur\&.
+该模式只考虑输出的第一条视频轨道。 如果没有输出视频轨道，则将不会进行切割操作。
 .if n \{\
 .sp
 .\}
@@ -720,29 +718,27 @@ block contains either a full frame (for progressive content) or a single field (
 .sp -1
 .IP "  7." 4.2
 .\}
-Splitting before specific chapters\&.
+在指定章节之前切割。
 .sp
-Syntax:
+语法:
 \fB\-\-split\fR
 chapters:all
 or
 \fB\-\-split\fR
 chapters:\fIA\fR[,\fIB\fR[,\fIC\fR\&.\&.\&.]]
 .sp
-Example:
+示例:
 \-\-split chapters:5,8
 .sp
-The parameters
-\fIA\fR,
-\fIB\fR,
-\fIC\fR
-etc must all be positive integers\&. Numbering starts at 1\&. The list of chapter numbers is separated by commas\&. Splitting will occur right before the first key frame whose timecode is equal to or bigger than the start timecode for the chapters whose numbers are listed\&. A chapter starting at 0s is never considered for splitting and discarded silently\&.
+参数
+\fIA\fR、\fIB\fR、\fIC\fR
+等等必须全为正整数。编号从 1 开始。 章节编号列表以逗号分隔。 切割将在时间码等于或大于所列编号对应章节的起始时间码的首个关键帧之前进行。从 0s 开始的章节将不作考虑，并不作提示，直接丢弃。
 .sp
-The keyword
+关键词
 all
-can be used instead of listing all chapter numbers manually\&.
+可选择所有章节编号，无需手工输入。
 .sp
-The \*(Aqchapters:\*(Aq prefix must not be omitted\&.
+\*(Aqchapters:\*(Aq 前缀不得省略。
 .if n \{\
 .sp
 .\}
@@ -1592,14 +1588,15 @@ Matroska(TM)
 .PP
 \fB\-\-check\-for\-updates\fR
 .RS 4
-Checks online for new releases by downloading the URL
-\m[blue]\fBhttp://mkvtoolnix\-releases\&.bunkus\&.org/latest\-release\&.xml\fR\m[]\&. Four lines will be output in
-key=value
-style: the URL from where the information was retrieved (key
-version_check_url), the currently running version (key
-running_version), the latest release\*(Aqs version (key
-available_version) and the download URL (key
-download_url)\&.
+联机下载 URL
+\m[blue]\fBhttp://mkvtoolnix\-releases\&.bunkus\&.org/latest\-release\&.xml\fR\m[]
+以检查新版本。将以
+键=值
+的样式输出四行: 检索信息的 URL（键
+version_check_url），当前运行的版本（键
+running_version），最新版本号（键
+available_version）及其下载 URL（键
+download_url）。
 .sp
 若无更新版本可用，程序将以退出码 0 退出，若有更新版本可用，退出码为 1，若出现错误（如无法检索更新信息），退出码则为 2。
 .sp
@@ -1918,7 +1915,7 @@ $ srttool \-s \-w \-i mymovie\&.srtx \-o mymovie\&.srt
 .RS 4
 .\}
 .nf
-$ mkvmerge \-o mymovie\&.mkv mymovie\&.avi mymovie\&.srt
+$ mkvmerge \-o 我的影片\&.mkv 我的影片\&.avi 我的影片\&.srt
 .fi
 .if n \{\
 .RE
