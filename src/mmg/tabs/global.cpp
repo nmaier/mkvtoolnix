@@ -660,8 +660,8 @@ tab_global::validate_settings() {
   if (   ((1 == idx) && !is_valid_split_size())
       || ((2 == idx) && !is_valid_split_timecode(cob_split_args->GetValue()))
       || ((3 == idx) && !is_valid_split_timecode_list())
-      || ((5 == idx) && !is_valid_split_frame_list())
-      || ((6 == idx) && !is_valid_split_chapters_list()))
+      || ((6 == idx) && !is_valid_split_frame_list())
+      || ((7 == idx) && !is_valid_split_chapters_list()))
     return false;
 
   int64_t dummy_i;
