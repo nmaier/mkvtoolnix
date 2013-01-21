@@ -417,7 +417,7 @@ namespace :man2html do
       dir = language == 'en' ? '' : "/#{language}"
       FileList[ "doc/man#{dir}/*.xml" ].each do |name|
         task File.basename(name, '.xml') => %w{manpages translations:manpages} do
-          runq "JAVA", "java -classpath lib/saxon-he/saxon9he.jar net.sf.saxon.Transform -o:#{name.ext('html')} -xsl:doc/stylesheets/docbook-to-html.xsl #{name}"
+          runq "SAXON-HE #{name}", "java -classpath lib/saxon-he/saxon9he.jar net.sf.saxon.Transform -o:#{name.ext('html')} -xsl:doc/stylesheets/docbook-to-html.xsl #{name}"
         end
       end
     end
