@@ -284,8 +284,9 @@ flv_reader_c::identify() {
 
     id_result_track(idx, track->is_audio() ? ID_RESULT_TRACK_AUDIO : ID_RESULT_TRACK_VIDEO,
                       track->m_fourcc.equiv("AVC1") ? "AVC/h.264"
-                    : track->m_fourcc.equiv("FLV1") ? "FLV1"
-                    : track->m_fourcc.equiv("FLV4") ? "FLV4"
+                    : track->m_fourcc.equiv("FLV1") ? "Sorenson h.263 (Flash version)"
+                    : track->m_fourcc.equiv("VP6F") ? "On2 VP6 (Flash version)"
+                    : track->m_fourcc.equiv("VP6A") ? "On2 VP6 (Flash version with alpha channel)"
                     : track->m_fourcc.equiv("AAC ") ? "AAC"
                     : track->m_fourcc.equiv("MP3 ") ? "MP3"
                     :                                 "Unknown",
@@ -314,7 +315,7 @@ flv_reader_c::create_packetizer(int64_t id) {
   if (track->m_fourcc.equiv("AVC1"))
     create_v_avc_packetizer(track);
 
-  else if (track->m_fourcc.equiv("FLV1") || track->m_fourcc.equiv("FLV4"))
+  else if (track->m_fourcc.equiv("FLV1") || track->m_fourcc.equiv("VP6F") || track->m_fourcc.equiv("VP6A"))
     create_v_generic_packetizer(track);
 
   else if (track->m_fourcc.equiv("AAC "))
@@ -554,10 +555,18 @@ flv_reader_c::process_video_tag_avc(flv_track_cptr &track) {
 bool
 flv_reader_c::process_video_tag_generic(flv_track_cptr &track,
                                         flv_tag_c::codec_type_e codec_id) {
-  track->m_fourcc       = flv_tag_c::CODEC_SORENSON_H263 == codec_id ? "FLV1"
-                        : flv_tag_c::CODEC_VP6           == codec_id ? "FLV4"
-                        :                                              "BUG!";
+  track->m_fourcc       = flv_tag_c::CODEC_SORENSON_H263  == codec_id ? "FLV1"
+                        : flv_tag_c::CODEC_VP6            == codec_id ? "VP6F"
+                        : flv_tag_c::CODEC_VP6_WITH_ALPHA == codec_id ? "VP6A"
+                        :                                               "BUG!";
   track->m_headers_read = true;
+
+  if ((track->m_fourcc == "VP6A") || (track->m_fourcc == "VP6F")) {
+    if (!m_tag.m_data_size)
+      return false;
+    m_tag.m_data_size--;
+    m_in->skip(1);
+  }
 
   return true;
 
