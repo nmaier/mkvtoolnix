@@ -19,6 +19,7 @@
 #include <ostream>
 
 #include "common/byte_buffer.h"
+#include "common/fourcc.h"
 #include "common/mm_io.h"
 #include "merge/pr_generic.h"
 
@@ -94,7 +95,7 @@ operator <<(std::ostream &out,
 class flv_track_c {
 public:
   char m_type;                  // 'v' for video, 'a' for audio
-  uint32_t m_fourcc;
+  fourcc_c m_fourcc;
   bool m_headers_read;
 
   memory_cptr m_payload, m_private_data, m_extra_data;

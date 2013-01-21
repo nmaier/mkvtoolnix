@@ -164,6 +164,8 @@ TEST(FourCC, WritingToMemory) {
 
   fourcc_c big_f{big}, little_f{little, fourcc_c::little_endian};
 
+  ASSERT_EQ(big_f, little_f);
+
   memset(mem->get_buffer(), 0, 4);
   EXPECT_EQ(4u, big_f.write(mem));
   EXPECT_EQ(big, get_uint32_be(mem->get_buffer()));

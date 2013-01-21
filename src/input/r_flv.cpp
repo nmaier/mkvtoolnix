@@ -134,7 +134,6 @@ flv_tag_c::read(mm_io_cptr const &in) {
 
 flv_track_c::flv_track_c(char type)
   : m_type{type}
-  , m_fourcc{}
   , m_headers_read{}
   , m_ptzr{-1}
   , m_timecode{}
@@ -280,16 +279,16 @@ flv_reader_c::identify() {
   size_t idx = 0;
   for (auto track : m_tracks) {
     std::vector<std::string> verbose_info;
-    if (track->m_fourcc == FOURCC('A', 'V', 'C', '1'))
+    if (track->m_fourcc.equiv("avc1"))
       verbose_info.push_back("packetizer:mpeg4_p10_video");
 
     id_result_track(idx, track->is_audio() ? ID_RESULT_TRACK_AUDIO : ID_RESULT_TRACK_VIDEO,
-                      FOURCC('A', 'V', 'C', '1') == track->m_fourcc ? "AVC/h.264"
-                    : FOURCC('F', 'L', 'V', '1') == track->m_fourcc ? "FLV1"
-                    : FOURCC('F', 'L', 'V', '4') == track->m_fourcc ? "FLV4"
-                    : FOURCC('A', 'A', 'C', ' ') == track->m_fourcc ? "AAC"
-                    : FOURCC('M', 'P', '3', ' ') == track->m_fourcc ? "MP3"
-                    :                                                 "Unknown",
+                      track->m_fourcc.equiv("AVC1") ? "AVC/h.264"
+                    : track->m_fourcc.equiv("FLV1") ? "FLV1"
+                    : track->m_fourcc.equiv("FLV4") ? "FLV4"
+                    : track->m_fourcc.equiv("AAC ") ? "AAC"
+                    : track->m_fourcc.equiv("MP3 ") ? "MP3"
+                    :                                 "Unknown",
                     verbose_info);
     ++idx;
   }
@@ -312,17 +311,16 @@ flv_reader_c::create_packetizer(int64_t id) {
 
   m_ti.m_id = id;
 
-  if (track->m_fourcc == FOURCC('A', 'V', 'C', '1'))
+  if (track->m_fourcc.equiv("AVC1"))
     create_v_avc_packetizer(track);
 
-  else if (   (track->m_fourcc == FOURCC('F', 'L', 'V', '1'))
-           || (track->m_fourcc == FOURCC('F', 'L', 'V', '4')))
+  else if (track->m_fourcc.equiv("FLV1") || track->m_fourcc.equiv("FLV4"))
     create_v_generic_packetizer(track);
 
-  else if (track->m_fourcc == FOURCC('A', 'A', 'C', ' '))
+  else if (track->m_fourcc.equiv("AAC "))
     create_a_aac_packetizer(track);
 
-  else if (track->m_fourcc == FOURCC('M', 'P', '3', ' '))
+  else if (track->m_fourcc.equiv("MP3 "))
     create_a_mp3_packetizer(track);
 }
 
@@ -349,8 +347,8 @@ flv_reader_c::create_v_generic_packetizer(flv_track_cptr &track) {
   put_uint32_le(&bih.bi_height,      track->m_v_height);
   put_uint16_le(&bih.bi_planes,      1);
   put_uint16_le(&bih.bi_bit_count,   24);
-  put_uint32_le(&bih.bi_compression, get_uint32_be(&track->m_fourcc));
   put_uint32_le(&bih.bi_size_image,  track->m_v_width * track->m_v_height * 3);
+  track->m_fourcc.write(reinterpret_cast<unsigned char *>(&bih.bi_compression));
 
   m_ti.m_private_data = reinterpret_cast<unsigned char *>(&bih);
   m_ti.m_private_size = sizeof(bih);
@@ -438,7 +436,7 @@ flv_reader_c::process_audio_tag_sound_format(flv_track_cptr &track,
     if (!m_tag.m_data_size)
       return false;
 
-    track->m_fourcc = FOURCC('A', 'A', 'C', ' ');
+    track->m_fourcc = "AAC ";
     uint8_t aac_packet_type = m_in->read_uint8();
     m_tag.m_data_size--;
     if (aac_packet_type != 0) {
@@ -474,8 +472,8 @@ flv_reader_c::process_audio_tag_sound_format(flv_track_cptr &track,
   }
 
   switch (sound_format) {
-    case 2:  track->m_fourcc = FOURCC('M', 'P', '3', ' '); break;
-    case 14: track->m_fourcc = FOURCC('M', 'P', '3', ' '); break;
+    case 2:  track->m_fourcc = "MP3 "; break;
+    case 14: track->m_fourcc = "MP3 "; break;
     default:
       return false;
   }
@@ -521,7 +519,7 @@ flv_reader_c::process_video_tag_avc(flv_track_cptr &track) {
   if (4 > m_tag.m_data_size)
     return false;
 
-  track->m_fourcc          = FOURCC('A', 'V', 'C', '1');
+  track->m_fourcc          = "AVC1";
   uint8_t avc_packet_type  = m_in->read_uint8();
   track->m_v_cts_offset    = static_cast<int64_t>(m_in->read_uint24_be());
   m_tag.m_data_size       -= 4;
@@ -556,9 +554,9 @@ flv_reader_c::process_video_tag_avc(flv_track_cptr &track) {
 bool
 flv_reader_c::process_video_tag_generic(flv_track_cptr &track,
                                         flv_tag_c::codec_type_e codec_id) {
-  track->m_fourcc       = flv_tag_c::CODEC_SORENSON_H263 == codec_id ? FOURCC('F', 'L', 'V', '1')
-                        : flv_tag_c::CODEC_VP6           == codec_id ? FOURCC('F', 'L', 'V', '4')
-                        :                                              FOURCC('B', 'U', 'G', '!');
+  track->m_fourcc       = flv_tag_c::CODEC_SORENSON_H263 == codec_id ? "FLV1"
+                        : flv_tag_c::CODEC_VP6           == codec_id ? "FLV4"
+                        :                                              "BUG!";
   track->m_headers_read = true;
 
   return true;
@@ -739,7 +737,7 @@ flv_reader_c::read(generic_packetizer_c *,
     mxdebug_if(m_debug, boost::format(" PTS in nanoseconds: %1%\n") % track->m_timecode);
 
     int64_t duration = -1;
-    if (track->m_v_frame_rate && (track->m_fourcc == FOURCC('A', 'V', 'C', '1')))
+    if (track->m_v_frame_rate && track->m_fourcc.equiv("AVC1"))
       duration = 1000000000ll / track->m_v_frame_rate;
 
     auto packet = new packet_t(track->m_payload, track->m_timecode, duration, 'I' == track->m_v_frame_type ? VFT_IFRAME : VFT_PFRAMEAUTOMATIC, VFT_NOBFRAME);
