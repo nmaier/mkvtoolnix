@@ -46,33 +46,33 @@ bijlagen,
 hoofdstukken,
 volg document(en) (cue)
 en
-tijd coderingen\&. Het tweede argument is de bron bestandsnaam\&. Het moet zijn een
+tijd coderingen\&. De tweede argument is de bron bestandsnaam\&. Het moet zijn een
 Matroska(TM)
-bestand\&. Alle volgende argumenten zijn opties en de \*(Aquit te halen\*(Aq sepcificaties; Die beiden van de geselecteerde wijze afhangen\&.
+bestand\&. Alle volgende argumenten zijn opties en de \*(Aquit te halen\*(Aq specificaties; Die beiden van de geselecteerde wijze afhangen\&.
 .SS "Algemene opties"
 .PP
-De volgende opties zijn beschikbaar in alle modes en worden slechts \('e\('enmaal beschreven in deze sectie\&.
+De volgende opties zijn beschikbaar in alle modes en worden slechts \('e\('en maal beschreven in deze sectie\&.
 .PP
 \fB\-f\fR, \fB\-\-parse\-fully\fR
 .RS 4
-Stelt de ontleedt mode in op \*(Aqvolledig\*(Aq\&. De standaard waarde ontleedt niet het gehele bestand maar gebruikt de \*(Aqmeta zoek\*(Aq elemen(en) voor het lokaliseren van de vereiste elementen van een bronbestand\&. In 99% van alle gevallen is dit genoeg\&. Maar voor bestanden die het \*(Aqmeta zoek\*(Aq element niet bevatten of voor bestanden die zijn beschadigd kan deze gebruiker mode erg handig zijn\&. Een volledige scan kan een aantal minuten in beslag nemen terwijl een \*(Aqsnelle\*(Aq scan slechts enkele seconden duren\&.
+Stelt de ontleedt mode in op \*(Aqvolledig\*(Aq\&. De standaard waarde ontleedt niet het gehele bestand maar gebruikt het \*(Aqmeta zoek\*(Aq element(en) voor het lokaliseren van de vereiste elementen van een bronbestand\&. In 99% van alle gevallen is dit genoeg\&. Maar voor bestanden die het \*(Aqmeta zoek\*(Aq element niet bevatten of voor bestanden die zijn beschadigd kan deze gebruiker mode erg handig zijn\&. Een volledige scan kan een aantal minuten in beslag nemen terwijl een \*(Aqsnelle\*(Aq scan slechts enkele seconden duren\&.
 .RE
 .PP
-\fB\-\-command\-line\-charset\fR \fI(karakter\-set)\fR
+\fB\-\-command\-line\-charset\fR \fI(karakterset)\fR
 .RS 4
-Plaatst het karakter set om de reeksen om te zetten die vanaf de commandoregel worden opgegeven\&. Standaard wordt gebruikt de karakter set die afhankelijk is van wat er in uw besturingssysteem staat aangegeven (lokatie)\&.
+Plaatst het karakter set om de reeksen om te zetten die vanaf de commandoregel worden opgegeven\&. Standaard wordt gebruikt het karakter set die afhankelijk is van wat er in uw besturingssysteem staat aangegeven (locatie)\&.
 .RE
 .PP
-\fB\-\-output\-charset\fR \fI(karakter\-set)\fR
+\fB\-\-output\-charset\fR \fI(karakterset)\fR
 .RS 4
-Stelt de karakter set in waarnaar de reeksen dienen te worden geconverteerd naar de uitvoer\&. Standaard wordt gebruikt de karakter set die afhankelijk is van wat er in uw besturingssysteem staat aangegeven (lokatie)\&.
+Stelt het karakter set in, waarnaar de reeksen naar de uitvoer dienen te worden geconverteerd\&. Standaard wordt gebruikt het karakter set die afhankelijk is van wat er in uw besturingssysteem staat aangegeven (locatie)\&.
 .RE
 .PP
 \fB\-r\fR, \fB\-\-redirect\-output\fR \fI(bestandsnaam)\fR
 .RS 4
 Schrijft alle berichten naar een bestand
 \fIfile\-name\fR
-i\&.p\&.v naar het \*(Aqapparaat/houder\*(Aq\&. Terwijl dit gemakkelijk met uitvoer omleiden kan worden gedaan, er zijn gevallen waarin deze optie nodig is: wanneer de verwerker e\&.e\&.a her\-interpreteert, voordat het geschreven wordt naar het uitvoer bestand\&. De karakter set met
+i\&.p\&.v\&. naar de \*(Aqapparaat/houder\*(Aq\&. Terwijl dit gemakkelijk met uitvoer omleiden kan worden gedaan, er zijn gevallen waarin deze optie nodig is: wanneer de verwerker e\&.e\&.a\&. herinterpreteert, voordat het geschreven wordt naar de uitvoer bestand\&. Het karakter set met
 \fB\-\-output\-charset\fR
 is toegewezen\&.
 .RE
@@ -89,12 +89,12 @@ en
 \fIcode\fR
 zal voor zorgen dat
 \fBmkvextract\fR(1)
-een lijst zal uitvoeren van alle beschikbaren vertalingen\&.
+een lijst zal uitvoeren van alle beschikbare vertalingen\&.
 .RE
 .PP
 \fB\-\-title\fR \fIonderwerp\fR
 .RS 4
-Zet debuggen aan voor een spcifieke mogelijkheid\&. Dit is alleen zinvol voor ontwikkelaars\&.
+Zet debuggen aan voor een specifieke mogelijkheid\&. Dit is alleen zinvol voor ontwikkelaars\&.
 .RE
 .PP
 \fB\-\-tags\fR \fIfeature\fR
@@ -122,7 +122,7 @@ Toon versie informatie en sluit af\&.
 .PP
 \fB\-\-check\-for\-updates\fR
 .RS 4
-Controleert online op nieuwere versie\*(Aqs via ophalen op adres
+Controleert online op nieuwere versies via ophalen op adres
 \m[blue]\fBhttp://mkvtoolnix\-releases\&.bunkus\&.org/latest\-release\&.xml\fR\m[]\&. Vier regels worden uitgevoerd in
 key=value
 stijl: het adres van waar de informatie wordt verkregen (key
@@ -132,18 +132,18 @@ available_version
 en het ophaal adres (key
 download_url)\&.
 .sp
-Nadien sluit het programma af met een afsluitwaarde van 0 als er geen nieuwere versie beschikbaar is, met een 1 als er een nieuwere beschikbaar is en 2 indien er een fout ontstond (b\&.v\&. als de opwaardeer info niet verkregen kon worden)\&.
+Nadien sluit het programma af met een afsluitwaarde van 0 als er geen nieuwere versie beschikbaar is, met een 1 als er een nieuwere beschikbaar is en 2 indien er een fout ontstond (b\&.v\&. als de opwaardeer informatie niet verkregen kon worden)\&.
 .sp
-Deze optie is alleeen beschikbaar indien het gebouwd is met ondersteuning voor libcurl\&.
+Deze optie is alleen beschikbaar indien het gebouwd is met ondersteuning voor libcurl\&.
 .RE
 .PP
 \fB@\fR\fIoptions\-file\fR
 .RS 4
 Leest extra commandoregel argumenten in van een bestand
-\fIoptions\-file\fR\&. Regels met een spatie (lege ruimte) als eerste karakter, zijn gemarkeerd als een hash (waarde) (\*(Aq#\*(Aq) worden behandeld als commentaar en genegeerd\&. Een spatie aan het begin en einde van een regel worden verwijderd\&. Elke regel mag excact \('e\('en waarde bevatten
+\fIoptions\-file\fR\&. Regels met een spatie (lege ruimte) als eerste karakter, zijn gemarkeerd als een hash (waarde) (\*(Aq#\*(Aq) worden behandeld als commentaar en genegeerd\&. Een spatie aan het begin en einde van een regel worden verwijderd\&. Elke regel mag exact \('e\('en waarde bevatten
 .sp
 Verschillende karakters kunnen worden overgeslagen, b\&.v\&. als het nodig is een niet commentaar regel te starten met \*(Aq#\*(Aq\&. Deze regels worden beschreven in
-de sectie over overslaan van tekst\&.
+de sectie over: Overslaan van speciale karakter(s) in tekst\&.
 .sp
 De commandoregel \*(Aq\fBmkvextract tracks source\&.mkv \-\-raw 1:destination\&.raw\fR\*(Aq kunnen worden geconverteerd naar \('e\('en van de volgende optie bestanden:
 .sp
@@ -164,7 +164,7 @@ source\&.mkv
 .RE
 .SS "Spoor uitpak mode"
 .PP
-Ingave:
+Ingaven:
 \fBmkvextract\fR
 \fBtracks\fR
 \fIsource\-filename\fR
@@ -176,7 +176,7 @@ De volgende commandoregel opties zijn beschikbaar voor elk spoor in \*(Aqtracks\
 .PP
 \fB\-c\fR \fIcharacter\-set\fR
 .RS 4
-Stelt de karakter set in waarna het volgende ondertitel tekst spoor geconverteerd wordt\&. Is alleen geldig, wanneer een volgende ondertitel spoor verwijst naar een tekst ondertitel spoor\&. Standaard naar UTF\-8\&.
+Stelt het karakter set in waarna het volgende ondertitel tekst spoor geconverteerd wordt\&. Is alleen geldig, wanneer een volgende ondertitel spoor verwijst naar een tekst ondertitel spoor\&. Standaard naar UTF\-8\&.
 .RE
 .PP
 \fB\-\-blockadd\fR \fIniveau\fR
@@ -190,7 +190,7 @@ Zorgt er voor dat
 \fBmkvextract\fR(1)
 uitpakt naar een
 CUE
-lijst/document/reeks van de hoofdstuk data en markeer data voor de volgende sporen naar een bestand waarvan de naam van het uitvoer spoor heeft waarna \*(Aq\&.cue\*(Aq eraan toegevoegd wordt\&.
+lijst/document/reeks van het hoofdstuk data en markeer data voor de volgende sporen naar een bestand waarvan de naam van het uitvoer spoor heeft waarna \*(Aq\&.cue\*(Aq eraan toegevoegd wordt\&.
 .RE
 .PP
 \fB\-\-raw\fR
@@ -199,20 +199,20 @@ Pakt de raw dat uit naar een bestand zonder enige inhoud data er omheen\&. Niet 
 \fB\-\-fullraw\fR
 dit merkteken markeren, veroorzaakt niet dat de inhoud van
 CodecPrivate
-element geschreven wordt naar het bestand\&. Deze mode werkt met alle
+element geschreven wordt naar de bestand\&. Deze mode werkt met alle
 CodecIDs, zelfs diegenen die
 \fBmkvextract\fR(1)
-niet eens ondersteunt, maar het resulterende bestand kan onbruikbaar zijn\&.
+niet eens ondersteund, maar het resulterende bestand kan onbruikbaar zijn\&.
 .RE
 .PP
 \fB\-\-fullraw\fR
 .RS 4
 Pakt de raw data uit naar een bestand zonder enige inhoud data er omheen\&. De inhoud van het
 CodecPrivate
-element zal eerst naar het bestand worden geschreven als het spoor zo\*(Aqn hoofd element bevat\&. Deze mode werkt met alle
+element zal eerst naar het bestand worden geschreven als het spoor een dergelijk hoofd element bevat\&. Deze mode werkt met alle
 CodecIDs, zelfs diegene die
 \fBmkvextract\fR(1)
-niet eens ondersteunt, maar het resulterende bestand kan onbruikbaar zijn\&.
+niet eens ondersteund, maar het resulterende bestand kan onbruikbaar zijn\&.
 .RE
 .PP
 \fITID:outname\fR
@@ -226,7 +226,7 @@ als een dergelijk spoor bestaat in het bronbestand\&. Deze optie kan meerdere ke
 \fB\-\-identify\fR
 optie worden verkregen\&.
 .sp
-Eke uitvoernaam zou slechts \('e\('enmaal mogen worden gebruikt\&. De uitzonderingen zijn RealAudio en RealVideo sporen\&. Als je dezelfde naam gebruikt voor verschillende sporen dan zullen die sporen in hetzelfde bestand bewaard worden\&. Voorbeeld:
+Elke uitvoernaam zou slechts \('e\('en maal mogen worden gebruikt\&. De uitzonderingen zijn RealAudio en RealVideo sporen\&. Als je dezelfde naam gebruikt voor verschillende sporen dan zullen die sporen in hetzelfde bestand bewaard worden\&. Voorbeeld:
 .sp
 .if n \{\
 .RS 4
@@ -238,20 +238,20 @@ $ mkvextract tracks input\&.mkv 1:output\-two\-tracks\&.rm 2:output\-two\-tracks
 .RE
 .\}
 .RE
-.SS "Markeeringen extraheer mode"
+.SS "Markeringen extraheren mode"
 .PP
-Ingave:
+Ingaven:
 \fBmkvextract\fR
 \fBtags\fR
 \fIsource\-filename\fR
 [\fIoptions\fR]
 .PP
-De ge\(:extraheerde markeringen zijn geschreven naar het apparaat/houder tenzij de uitvoer is omgeleid (zie de sectie over
+De ge\(:extraheerde markeringen zijn geschreven naar de apparaat/houder tenzij de uitvoer is omgeleid (zie de sectie over
 uitvoer omleiden
 voor details)\&.
-.SS "Bijlagen extraheer mode"
+.SS "Bijlagen extraheren mode"
 .PP
-Ingave:
+Ingaven:
 \fBmkvextract\fR
 \fBattachments\fR
 \fIsource\-filename\fR
@@ -276,7 +276,7 @@ optie\&.
 .RE
 .SS "Hoofdstuk uitpak mode"
 .PP
-Ingave:
+Ingaven:
 \fBmkvextract\fR
 \fBchapters\fR
 \fIsource\-filename\fR
@@ -284,30 +284,30 @@ Ingave:
 .PP
 \fB\-s\fR, \fB\-\-simple\fR
 .RS 4
-Exporteert de hoofdstuk informatie in een simpel tekst formaat gebruikt in de
+Exporteert het hoofdstuk informatie in een simpel tekst formaat gebruikt in de
 OGM
-hulpmiddelen (CHAPTER01=\&.\&.\&., CHAPTER01NAME=\&.\&.\&.)\&. In deze mode wordt sommige informatie overgeslagen\&. Standaard is de hoofdstuk uitvoer naar
+hulpmiddelen (CHAPTER01=\&.\&.\&., CHAPTER01NAME=\&.\&.\&.)\&. In deze mode wordt sommige informatie overgeslagen\&. Standaard is het hoofdstuk uitvoer naar
 XML
 formaat\&.
 .RE
 .PP
-De ge\(:extraheerde hoofdstukken zijn geschreven naar het apparaat/houder tenzij de uitvoer is omgeleid (zie de sectie over
+De ge\(:extraheerde hoofdstukken zijn geschreven naar de apparaat/houder tenzij de uitvoer is omgeleid (zie de sectie over
 uitvoer omleiden
 voor details)\&.
-.SS "Volg document(en) (cue) extraheer mode"
+.SS "Volg document(en) (cue) extraheren mode"
 .PP
-Ingave:
+Ingaven:
 \fBmkvextract\fR
 \fBcuesheet\fR
 \fIsource\-filename\fR
 [\fIoptions\fR]
 .PP
-De ge\(:extraheerde volg document(en) (cue) zijn geschreven naar het apparaat/houder tenzij de uitvoer is omgeleid (zie de sectie over
+De ge\(:extraheerde volg document(en) (cue) zijn geschreven naar de apparaat/houder tenzij de uitvoer is omgeleid (zie de sectie over
 uitvoer omleiden
 voor details)\&.
-.SS "Tijd code extraheer mode"
+.SS "Tijd code extraheren mode"
 .PP
-Ingave:
+Ingaven:
 \fBmkvextract\fR
 \fBtimecodes_v2\fR
 \fIsource\-filename\fR
@@ -315,7 +315,7 @@ Ingave:
 \fITID1:dest\-filename1\fR
 [\fITID2:dest\-filename2\fR \&.\&.\&.]
 .PP
-De ge\(:extraheerde hoofdstukken zijn geschreven naar het apparaat/houder tenzij de uitvoer is omgeleid (zie de sectie over
+De ge\(:extraheerde hoofdstukken zijn geschreven naar de apparaat/houder tenzij de uitvoer is omgeleid (zie de sectie over
 uitvoer omleiden
 voor details)\&.
 .PP
@@ -346,11 +346,11 @@ $ mkvextract timecodes_v2 input\&.mkv 1:tc\-track1\&.txt 2:tc\-track2\&.txt
 .PP
 Verschillende extractie modes veroorzaken dat
 \fBmkvextract\fR(1)
-de ge\(:extraheerde data wegschrijft naar het apparaat/houder\&. In algemene zin, zijn er twee manieren om deze data naar een bestand te schrijven: \('e\('en verzorgd door een \*(Aqschil\*(Aq en \('e\('en verzorgd door
+de ge\(:extraheerde data wegschrijft naar de apparaat/houder\&. In algemene zin, zijn er twee manieren om deze data naar een bestand te schrijven: \('e\('en verzorgd door een \*(Aqschil\*(Aq en \('e\('en verzorgd door
 \fBmkvextract\fR(1)
 zelf\&.
 .PP
-De in het schil ingebouwde omleidingsmechanisme wordt gebruikt door het toevoegen \*(Aq> output\-filename\&.ext\*(Aq op de commandoregel\&. Voorbeeld:
+Het in de schil ingebouwde omleidingsmechanisme wordt gebruikt door het toevoegen \*(Aq> output\-filename\&.ext\*(Aq op de commandoregel\&. Voorbeeld:
 .sp
 .if n \{\
 .RS 4
@@ -398,7 +398,7 @@ soms een speciaal karakter interpreteert nog voordat ze geschreven worden naar e
 .RE
 .SH "UITVOER BESTANDSFORMATEN"
 .PP
-De beslissing over het uitvoer formaat is gebasseerd op het spoor type, niet op de gebruikte extensie van de uitvoer bestandsnaam\&. De volgende spoor typen worden momenteel onderstend:
+De beslissing over het uitvoer formaat is gebaseerd op het spoor type, niet op de gebruikte extensie van de uitvoer bestandsnaam\&. De volgende spoor typen worden momenteel ondersteund:
 .PP
 V_MPEG4/ISO/AVC
 .RS 4
@@ -514,7 +514,7 @@ TrueAudio(TM)
 sporen worden geschreven naar
 TTA
 bestanden\&. Opmerking: door een limitatie in
-Matroska(TM)\*(Aqs tijd code precisie zal de ge\(:extraheerde bestandskop verschillendl zijn aangaande deze twee velden:
+Matroska(TM)\*(Aqs tijd code precisie zal de ge\(:extraheerde bestandskop verschillend zijn aangaande deze twee velden:
 \fIdata_length\fR
 (de totale nummers van voorbeelden in het bestand) en de
 CRC\&.
@@ -609,7 +609,7 @@ Markeringen worden geconverteerd naar een
 XML
 formaat\&. Dit formaat is hetzelfde dat
 \fBmkvmerge\fR(1)
-ondersteunt voor het lezen van markeringen\&.
+ondersteund voor het lezen van markeringen\&.
 .RE
 .PP
 Bijlagen
@@ -623,15 +623,15 @@ Hoofdstukken worden geconverteerd naar een
 XML
 formaat\&. Dit formaat is hetzelfde welke
 \fBmkvmerge\fR(1)
-ondersteunt voor het lezen van hoofdstukken\&. Alternatief is een \*(Aquitgekleedde versie\*(Aq welke uitvoert naar het simpele
+ondersteund voor het lezen van hoofdstukken\&. Alternatief is een \*(Aquitgeklede versie\*(Aq welke uitvoert naar het simpele
 OGM
 stijl formaat\&.
 .RE
 .PP
 Tijd codes
 .RS 4
-Tijd codes worden het eerst gesorteerd en daarna gechreven als en tijd code v2 volgbaar bestandformaat, klaar om aangevoerd te worden naar
-\fBmkvmerge\fR(1)\&. Het extraheren naar andere formaten (v1, v3 en v4) zijn niet onderstend\&.
+Tijd codes worden het eerst gesorteerd en daarna geschreven als en tijd code v2 volg baar bestandformaat, klaar om aangevoerd te worden naar
+\fBmkvmerge\fR(1)\&. Het extraheren naar andere formaten (v1, v3 en v4) zijn niet ondersteund\&.
 .RE
 .SH "VERLAAT CODES"
 .PP
@@ -664,7 +664,7 @@ sluit af met drie afsluit codes:
 \fB1\fR
 \-\- In dit geval heeft
 \fBmkvextract\fR(1)
-minstends \('e\('en waarschuwing uitgegeven, maar extractie is doorgegaan\&. Een waarschuwing wordt vooraf bepaald met de tekst \*(AqWarning:\*(Aq\&. Afhankelijk van de \*(Aqtegengekomen\*(Aq kwesties kan het resltaat goed of slecht zijn\&. De gebruiker wordt geadviseerd om zowel de waarschuwing als de resulterende bestanden te controleren\&.
+minstens \('e\('en waarschuwing uitgegeven, maar extractie is doorgegaan\&. Een waarschuwing wordt vooraf bepaald met de tekst \*(AqWarning:\*(Aq\&. Afhankelijk van de \*(Aqtegengekomen\*(Aq kwesties kan het resultaat goed of slecht zijn\&. De gebruiker wordt geadviseerd om zowel de waarschuwing als de resulterende bestanden te controleren\&.
 .RE
 .sp
 .RS 4
@@ -690,7 +690,7 @@ De regels zijn: \*(Aq \*(Aq (een spatie) wordt \*(Aq\es\*(Aq, \*(Aq"\*(Aq (dubbe
 .PP
 
 \fBmkvextract\fR(1)
-gebruikt de standaard variabelen vanuit het systeem lokatie (b\&.v\&.
+gebruikt de standaard variabelen vanuit het systeem locatie (b\&.v\&.
 \fILANG\fR
 en de
 \fILC_*\fR
@@ -700,7 +700,7 @@ family)\&. Extra variabelen:
 .RS 4
 De inhoud wordt behandeld alsof het via de
 \fB\-\-debug\fR
-optie gepassseerd is\&.
+optie gepasseerd is\&.
 .RE
 .PP
 \fIMKVTOOLNIX_ENGAGE\fR en de korte versie \fIMTX_ENGAGE\fR
@@ -712,8 +712,8 @@ optie gepasseerd is\&.
 .PP
 \fIMKVTOOLNIX_OPTIONS\fR en de korte versie \fIMTX_OPTIONS\fR
 .RS 4
-De inhoud wordt gesplitst op een spatie\&. De gedeeltelijk resulterende reeks wordt behandeld aflsof het gedaan is via de commandoregel\&. Indien het nodig is speciale karakters te gebruiken (b\&.v\&. spaties) dan moet je die "insluiten" (zie
-de sectie over overslaan van speciale tekens in tekst)\&.
+De inhoud wordt gesplitst op een spatie\&. De gedeeltelijk resulterende reeks wordt behandeld alsof het gedaan is via de commandoregel\&. Indien het nodig is speciale karakters te gebruiken (b\&.v\&. spaties) dan moet je die "insluiten" (zie
+de sectie over: Overslaan van speciale karakter(s) in tekst)\&.
 .RE
 .SH "ZIE OOK"
 .PP

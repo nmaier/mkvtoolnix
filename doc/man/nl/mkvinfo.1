@@ -48,9 +48,9 @@ ondersteuning\&.
 .PP
 \fB\-c\fR, \fB\-\-checksums\fR
 .RS 4
-Berekend en toont de
+Berekent en toont de
 \fBAdler32\fR
-controleer som\&. Alleen zinvol voor foutzoeken\&.
+controleer som\&. Alleen zinvol voor fout zoeken\&.
 .RE
 .PP
 \fB\-s\fR, \fB\-\-summary\fR
@@ -62,7 +62,7 @@ vindt en niet elk element\&.
 .PP
 \fB\-t\fR, \fB\-\-track\-info\fR
 .RS 4
-Toont statiustieken voore elk spoor in \*(Aqstille\*(Aq mode\&. Zet tevens \*(Aqstille mode\*(Aq naar 1 als niveau daarvoor 0 was\&.
+Toont statistieken voor elk spoor in \*(Aqstille\*(Aq mode\&. Zet tevens \*(Aqstille mode\*(Aq naar 1 als niveau daarvoor 0 was\&.
 .RE
 .PP
 \fB\-x\fR, \fB\-\-hexdump\fR
@@ -77,24 +77,24 @@ Toont alle bytes van elk beeld als een hex dump\&.
 .PP
 \fB\-z\fR, \fB\-\-size\fR
 .RS 4
-Toon de grootte van elk element inclusief kophoofd
+Toont de grootte van elk element inclusief kop hoofd\&.
 .RE
 .PP
-\fB\-\-command\-line\-charset\fR \fI(karakter\-set)\fR
+\fB\-\-command\-line\-charset\fR \fI(karakterset)\fR
 .RS 4
-Plaatst het karakter set om de reeksen om te zetten die vanaf de commandoregel worden opgegeven\&. Standaard wordt gebruikt de karakter set die afhankelijk is van wat er in uw besturingssysteem staat aangegeven (lokatie)\&.
+Plaatst het karakter set om de reeksen om te zetten die vanaf de commandoregel worden opgegeven\&. Standaard wordt gebruikt het karakter set die afhankelijk is van wat er in uw besturingssysteem staat aangegeven (locatie)\&.
 .RE
 .PP
-\fB\-\-output\-charset\fR \fI(karakter\-set)\fR
+\fB\-\-output\-charset\fR \fI(karakterset)\fR
 .RS 4
-Stelt de karakter set in waarnaar de reeksen dienen te worden geconverteerd naar de uitvoer\&. Standaard wordt gebruikt de karakter set die afhankelijk is van wat er in uw besturingssysteem staat aangegeven (lokatie)\&.
+Stelt het karakter set in, waarnaar de reeksen naar de uitvoer dienen te worden geconverteerd\&. Standaard wordt gebruikt het karakter set die afhankelijk is van wat er in uw besturingssysteem staat aangegeven (locatie)\&.
 .RE
 .PP
 \fB\-r\fR, \fB\-\-redirect\-output\fR \fI(bestandsnaam)\fR
 .RS 4
 Schrijft alle berichten naar een bestand
 \fIfile\-name\fR
-i\&.p\&.v naar het \*(Aqapparaat/houder\*(Aq\&. Terwijl dit gemakkelijk met uitvoer omleiden kan worden gedaan er zijn gevallen waarin deze optie nodig is: wanneer de verwerker e\&.e\&.a her\-interpreteert voordat het geschreven wordt naar het uitvoer bestand\&. De karakter set met
+i\&.p\&.v\&. naar de \*(Aqapparaat/houder\*(Aq\&. Terwijl dit gemakkelijk met uitvoer omleiden kan worden gedaan er zijn gevallen waarin deze optie nodig is: wanneer de verwerker e\&.e\&.a\&. herinterpreteert voordat het geschreven wordt naar de uitvoer bestand\&. Het karakter set met
 \fB\-\-output\-charset\fR
 is toegewezen\&.
 .RE
@@ -111,12 +111,12 @@ en
 \fIcode\fR
 zal er voor zorgen dat
 \fBmkvextract\fR(1)
-een lijst zal uitvoeren van alle beschikbaren vertalingen\&.
+een lijst zal uitvoeren van alle beschikbare vertalingen\&.
 .RE
 .PP
 \fB\-\-title\fR \fIonderwerp\fR
 .RS 4
-Zet debuggen aan voor een spcifieke mogelijkheid\&. Dit is alleen zinvol voor ontwikkelaars\&.
+Zet debuggen aan voor een specifieke mogelijkheid\&. Dit is alleen zinvol voor ontwikkelaars\&.
 .RE
 .PP
 \fB\-\-tags\fR \fIfeature\fR
@@ -144,7 +144,7 @@ Toon versie informatie en sluit af\&.
 .PP
 \fB\-\-check\-for\-updates\fR
 .RS 4
-Controleert online op nieuwere versie\*(Aqs via ophalen op adres
+Controleert online op nieuwere versies via ophalen op adres
 \m[blue]\fBhttp://mkvtoolnix\-releases\&.bunkus\&.org/latest\-release\&.xml\fR\m[]\&. Vier regels worden uitgevoerd in
 key=value
 stijl: het adres van waar de informatie wordt verkregen (key
@@ -154,20 +154,20 @@ available_version
 en het ophaal adres (key
 download_url)\&.
 .sp
-Nadien sluit het programma af met een afsluitwaarde van 0 als er geen nieuwere versie beschikbaar is, met een 1 als er een nieuwere beschikbaar is en 2 indien er een fout ontstond (b\&.v\&. als de opwaardeer info niet verkregen kon worden)\&.
+Nadien sluit het programma af met een afsluitwaarde van 0 als er geen nieuwere versie beschikbaar is, met een 1 als er een nieuwere beschikbaar is en 2 indien er een fout ontstond (b\&.v\&. als de opwaardeer informatie niet verkregen kon worden)\&.
 .sp
-Deze optie is alleeen beschikbaar indien het gebouwd is met ondersteuning voor libcurl\&.
+Deze optie is alleen beschikbaar indien het gebouwd is met ondersteuning voor libcurl\&.
 .RE
 .PP
 \fB@\fR\fIoptions\-file\fR
 .RS 4
 Leest extra commandoregel argumenten in van een bestand
-\fIoptions\-file\fR\&. Regels met een spatie (lege ruimte) als eerste karakter, zijn gemarkeerd als een hash (waarde) (\*(Aq#\*(Aq) worden behandeld als commentaar en genegeerd\&. Een spatie aan het begin en einde van een regel worden verwijderd\&. Elke regel mag excact \('e\('en waarde bevatten
+\fIoptions\-file\fR\&. Regels met een spatie (lege ruimte) als eerste karakter, zijn gemarkeerd als een hash (waarde) (\*(Aq#\*(Aq) worden behandeld als commentaar en genegeerd\&. Een spatie aan het begin en einde van een regel worden verwijderd\&. Elke regel mag exact \('e\('en waarde bevatten
 .sp
 Verschillende karakters kunnen worden overgeslagen, b\&.v\&. als het nodig is een niet commentaar regel te starten met \*(Aq#\*(Aq\&. Deze regels worden beschreven in
-de sectie over overslaan van tekst\&.
+de sectie over: Overslaan van speciale karakter(s) in tekst\&.
 .sp
-De commandoregel \*(Aq\fBmkvinfo \-v \-v input\&.mkv \-\-redirect\-output info\&.txt\fR\*(Aq kon worden geconverteert naar het volgende optie bestand:
+De commandoregel \*(Aq\fBmkvinfo \-v \-v input\&.mkv \-\-redirect\-output info\&.txt\fR\*(Aq kon worden geconverteerd naar het volgende optie bestand:
 .sp
 .if n \{\
 .RS 4
@@ -186,7 +186,7 @@ info\&.txt
 .RE
 .\}
 .RE
-.SH "UITGEBREIDE NIVEAU'S"
+.SH "UITGEBREIDE NIVEAUS"
 .PP
 De optie
 \fB\-v\fR
@@ -217,7 +217,7 @@ Op niveau 3 en hoger zal
 \fBmkvinfo\fR(1)
 enige informatie printen welke niet direct aan een
 Matroska(TM)
-element is gekoppeld\&. Alle overige elementen printen alleen info over de elementen die zojuist werden gevonden\&. Niveau 3 voegt meta informatie toe voor een makkelijkere fout opsporing (lees als: bedoelt voor ontwikkelaars)\&. Alle niveau 3 geschreven regels bevatten zich tussen [ ] om ze makkelijker te herkennen\&.\&.
+element is gekoppeld\&. Alle overige elementen printen alleen info over de elementen die zojuist werden gevonden\&. Niveau 3 voegt meta informatie toe voor een makkelijkere fout opsporing (lees als: bedoelt voor ontwikkelaars)\&. Alle niveau 3 geschreven regels bevatten zich tussen [ ] om ze makkelijker te herkennen\&.
 .SH "VERLAAT CODES"
 .PP
 
@@ -275,7 +275,7 @@ De regels zijn: \*(Aq \*(Aq (een spatie) wordt \*(Aq\es\*(Aq, \*(Aq"\*(Aq (dubbe
 .PP
 
 \fBmkvinfo\fR(1)
-gebruikt de standaard variabelen vanuit het systeem lokatie (b\&.v\&.
+gebruikt de standaard variabelen vanuit het systeem locatie (b\&.v\&.
 \fILANG\fR
 en de
 \fILC_*\fR
@@ -297,8 +297,8 @@ optie gepasseerd is\&.
 .PP
 \fIMKVTOOLNIX_OPTIONS\fR en de korte versie \fIMTX_OPTIONS\fR
 .RS 4
-De inhoud wordt gesplitst op een spatie\&. De gedeeltelijk resulterende reeks wordt behandeld aflsof het gedaan is via de commandoregel\&. Indien het nodig is speciale karakters te gebruiken (b\&.v\&. spaties) dan moet je die "insluiten" (zie
-de sectie over overslaan van speciale tekens in tekst)\&.
+De inhoud wordt gesplitst op een spatie\&. De gedeeltelijk resulterende reeks wordt behandeld alsof het gedaan is via de commandoregel\&. Indien het nodig is speciale karakters te gebruiken (b\&.v\&. spaties) dan moet je die "insluiten" (zie
+de sectie over: Overslaan van speciale karakter(s) in tekst)\&.
 .RE
 .SH "ZIE OOK"
 .PP

@@ -52,7 +52,7 @@ website\&.
 .ps -1
 .br
 .PP
-De volgorde van de commandregel optie\*(Aqs is belangrijk\&. Lees a\&.u\&.b de sectie over
+De volgorde van het commando regel opties zijn belangrijk\&. Lees a\&.u\&.b\&. de sectie over
 "Optie volgorde"
 als je nog onbekend bent met het programma\&.
 .sp .5v
@@ -79,12 +79,12 @@ optie voor details\&.
 .PP
 \fB\-w\fR, \fB\-\-webm\fR
 .RS 4
-Cre\(:eer een WebM herkenbaar bestand\&. mkvmerge zet dit tevens aan wanneer het uitvoerbestandsnaam de extensie "webm" heeft\&. Deze modus dwingt diverse beperkingen af\&. De enig toegestane codecs zijn VP8 video en Vorbis audio sporen\&. G\('e\('en van de volgende hoofdstuk markeringen zijn toegstaan\&. Het DocType kop item is veranderd naar "webm"\&.
+Cre\(:eer een WebM herkenbaar bestand\&. mkvmerge zet dit tevens aan wanneer het uitvoerbestandsnaam de extensie "webm" heeft\&. Deze modus dwingt diverse beperkingen af\&. De enig toegestane codecs zijn VP8 video en Vorbis audio sporen\&. G\('e\('en van het volgende hoofdstuk markeringen zijn toegestaan\&. Het DocType kop item is veranderd naar "webm"\&.
 .RE
 .PP
 \fB\-\-title\fR \fItitle\fR
 .RS 4
-Stelt de algemene naam in voor het uitvoer bestand, b\&.v\&. de film naam\&.
+Stelt de algemene naam in voor de uitvoer bestand, b\&.v\&. de film naam\&.
 .RE
 .PP
 \fB\-\-default\-language\fR \fIlanguage\-code\fR
@@ -93,7 +93,7 @@ Stelt de standaard land code in voor alle sporen tenzij die wordt overschreven m
 \fB\-\-language\fR
 optie\&. De standaard code is \*(Aqonb\*(Aq voor \*(Aqonbekend\*(Aq\&.
 .RE
-.SS "Hanteren van segment info (globale opties)"
+.SS "Hanteren van segment informatie (globale opties)"
 .PP
 \fB\-\-segmentinfo\fR \fIfilename\&.xml\fR
 .RS 4
@@ -108,17 +108,17 @@ DTD
 zijn ingesloten in de MKVToolNix distributie\&.
 .sp
 Zie de sectie over
-segment info XML bestanden
+segment informatie XML bestanden
 zie hieronder voor details\&.
 .RE
 .PP
 \fB\-\-segment\-uid\fR \fISID1,SID2,\&.\&.\&.\fR
 .RS 4
-Stelt het te gebruiken segment UID\*(Aqs in\&. Dit is een komma gesepareerde lijst van 128bit segment UID\*(Aqs in het gebruikelijke UID formaat: hex nummers met of zonder het "0x" voorzetsel, met of zonder spaties, exact 32 cijfers\&.
+Stelt het te gebruiken segment UID\*(Aqs in\&. Dit is een komma gesepareerde lijst van 128bit segment UID\*(Aqs in het gebruikelijke UID formaat: hex nummers met of zonder de "0x" voorzetsel, met of zonder spaties, exact 32 cijfers\&.
 .sp
 Elk gecre\(:eerd bestand bevat \('e\('en segment, en elk segment heeft \('e\('en UID\&. Als er meer segment UID\*(Aqs zijn opgegeven dan er zijn gecre\(:eerd, dan zullen de extra UID\*(Aqs worden genegeerd\&. Zijn er minder UID\*(Aqs opgegeven dan er segmenten zijn gecre\(:eerd, dan worden er willekeurig UID\*(Aqs voor hen aangemaakt\&.
 .RE
-.SS "Hanteren hoofstuk en markeringen (globale opties)"
+.SS "Hanteren hoofdstuk en markeringen (globale opties)"
 .PP
 \fB\-\-chapter\-language\fR \fIlanguage\-code\fR
 .RS 4
@@ -126,25 +126,25 @@ Stelt de ISO639\-2 land code waarde in welke geschreven wordt voor elk hoofdstuk
 hoofdstukken
 hieronder voor details\&.
 .sp
-Deze optie kan gebruikt worden, voor simpele hoofdstukken en voor bronbestanden welke hoofdstukken bevatten maar geen informatie over hoofdstuk talen, b\&.v\&. MP4 and OGM bestanden\&.
+Deze optie kan gebruikt worden, voor simpele hoofdstukken en voor bronbestanden welke hoofdstukken bevatten maar geen informatie over hoofdstuk talen, b\&.v\&. MP4 en OGM bestanden\&.
 .RE
 .PP
 \fB\-\-chapter\-charset\fR \fIcharacter\-set\fR
 .RS 4
-Stelt de karakter set in, die gebruikt wordt voor de UTF\-8 conversie voor simpele hoofdstuk bestanden\&. Zie de sectie over
+Stelt het karakter set in, die gebruikt wordt voor de UTF\-8 conversie voor simpele hoofdstuk bestanden\&. Zie de sectie over
 tekst bestanden en karakter sets
 voor een uitleg hoe
 \fBmkvmerge\fR(1)
-converteert tussen de \*(Aqverschillende\*(Aq karakter sets\&.
+converteert tussen het \*(Aqverschillende\*(Aq karakter sets\&.
 .sp
-Deze schakelaar is ook van toepassing op hoofdstukken die zijn gekopieerd van een bepaalde inhoudstypen, b\&.v\&. Ogg/OGM en MP4 bestanden\&. Zie de sectie over hoofdstukken hieronder voor details\&.
+Deze schakelaar is ook van toepassing op hoofdstukken die zijn gekopieerd van enkele bepaalde inhoudstypen, b\&.v\&. Ogg/OGM en MP4 bestanden\&. Zie de sectie over hoofdstukken hieronder voor details\&.
 .RE
 .PP
 \fB\-\-cue\-chapter\-name\-format\fR \fIformat\fR
 .RS 4
 
 \fBmkvmerge\fR(1)
-ondersteunt lezen van
+ondersteund lezen van
 CUE
 volg document(en) (cue) voor audio bestanden als invoer voor hoofdstukken\&.
 CUE
@@ -154,13 +154,13 @@ en
 \fITITEL\fR
 voor elke index ingang\&.
 \fBmkvmerge\fR(1)
-gebruikt deze twee reeksen om de hoofdstuknaam te construeren\&. Met deze optie kan het formaat dat voor deze naam wordt gebruikt worden geplaatst\&.
+gebruikt deze twee reeksen om het hoofdstuknaam te construeren\&. Met deze optie kan het formaat dat voor deze naam wordt gebruikt worden geplaatst\&.
 .sp
 Is deze optie niet opgegeven, dan zal
 \fBmkvmerge\fR(1)
 het standaard format gebruiken \*(Aq%p \- %t\*(Aq (de artiest (performer), gevolgd door een spatie, een streep, wederom een spatie en de titel)\&.
 .sp
-Is het format opgegeven dan zal alles behalve de volgende meta karakters gekopieerd worden zoals ze zijn, en de meta karakters worden vervangen zoals dit:
+Is de format opgegeven dan zal alles behalve de volgende meta karakters gekopieerd worden zoals ze zijn, en de meta karakters worden vervangen zoals dit:
 .sp
 .RS 4
 .ie n \{\
@@ -234,7 +234,7 @@ kijk hieronder voor details\&.
 .PP
 \fB\-\-track\-order\fR \fIFID1:TID1,FID2:TID2,\&.\&.\&.\fR
 .RS 4
-Deze optie verandert de volgorde waarin de sporen voor een invoer bestand worden gere\(:eerd\&. Het argument is een komma gescheiden lijst van gepaarde ID\*(Aqs\&. Elk paar bevat eerst het bestand ID (\fIFID1\fR) wat simpelweg een nummer van het bestand is op de commandoregel beginnend bij 0\&. Het tweede is een spoor ID (\fITID1\fR) van dat bestand\&. Als sommige spoor id\*(Aqs worden weggelaten, dan zullen die sporen worden gecre\(:eerd na diegene die met deze optie zijn gecre\(:eerd\&.
+Deze optie verandert de volgorde waarin de sporen voor een invoer bestand worden gecre\(:eerd\&. Het argument is een komma gescheiden lijst van gepaarde ID\*(Aqs\&. Elk paar bevat eerst het bestand ID (\fIFID1\fR) wat simpelweg een nummer van het bestand is op de commandoregel beginnend bij 0\&. Het tweede is een spoor ID (\fITID1\fR) van dat bestand\&. Als sommige spoor id\*(Aqs worden weggelaten, dan zullen die sporen worden gecre\(:eerd na diegene die met deze optie zijn gecre\(:eerd\&.
 .RE
 .PP
 \fB\-\-cluster\-length\fR \fIspec\fR
@@ -245,11 +245,11 @@ parameter kan \('e\('en van beide zijn een nummer
 \fIn\fR
 zonder een eenheid of een nummer
 \fId\fR
-vastgezet met \*(Aqms\*(Aq (miliseconden)\&.
+vastgezet met \*(Aqms\*(Aq (milliseconden)\&.
 .sp
 Als er geen eenheid is gebruikt dan zal
 \fBmkvmerge\fR(1)
-hoogstends zetten
+hoogstens zetten
 \fIn\fR
 data blokken in elke cluster\&. Het maximum aantal blokken is 65535\&.
 .sp
@@ -257,7 +257,7 @@ Als het nummer
 \fId\fR
 is vastgezet met \*(Aqms\*(Aq dan zal
 \fBmkvmerge\fR(1)
-hoogstends zetten
+hoogstens zetten
 \fId\fR
 milliseconden aan data in elke cluster\&. Het minimum voor
 \fId\fR
@@ -296,7 +296,7 @@ Zet het aaneenkoppelen uit voor alle sporen\&. Dit zal de bestandsgrootte verhog
 .PP
 \fB\-\-enable\-durations\fR
 .RS 4
-Duur schrijven voor alle blokken\&. Dit zal de bestandsgrootte verhogen en geeft geen extra waarde aan afspelers van dit moment\&.
+Duur schrijven voor alle blokken\&. Dit zal de bestandsgrootte verhogen en geeft geen extra waarde aan af spelers van dit moment\&.
 .RE
 .PP
 \fB\-\-timecode\-scale\fR \fIfactor\fR
@@ -325,9 +325,9 @@ een voorbeeld precisie gebruiken zelfs als er een video spoor aanwezig is\&.
 .PP
 \fB\-\-split\fR \fIspecification\fR
 .RS 4
-Splits het uitvoer bestand na een opgegeven grootte of tijd\&. Opmerking, sporen kunnen all\('e\('en direct voor een sleutel beeld gesplitst worden\&. Vanwege het bufferen zal
+Splits de uitvoer bestand na een opgegeven grootte of tijd\&. Opmerking, sporen kunnen all\('e\('en direct voor een sleutel beeld gesplitst worden\&. Vanwege het bufferen zal
 \fBmkvmerge\fR(1)
-als een splitspunt wordt bereikt, direct voor het volgende sleutel beeld gaan splitsen\&. Daarom kunnen de splitspunten enigzins afwijken van wat de gebruiker op gaf\&.
+als een splitspunt wordt bereikt, direct voor het volgende sleutel beeld gaan splitsen\&. Daarom kunnen de splitspunten enigszins afwijken van wat de gebruiker op gaf\&.
 .sp
 Op het moment ondersteunt
 \fBmkvmerge\fR(1)
@@ -343,7 +343,7 @@ vier verschillende modes\&.
 .\}
 Splitsen op grootte\&.
 .sp
-Ingave:
+Ingaven:
 \fB\-\-split\fR
 [size:]\fId\fR[k|m|g]
 .sp
@@ -369,7 +369,7 @@ De \*(Aqsize:\*(Aq mag vanwege de verenigbaarheid (compatibiliteit) weggelaten w
 .\}
 Splitsen na een duur van\&.
 .sp
-Ingave:
+Ingaven:
 \fB\-\-split\fR
 [duur:]\fIHH:MM:SS\&.nnnnnnnnn\fR|\fId\fRs
 .sp
@@ -390,7 +390,7 @@ het aantal minuten,
 \fISS\fR
 het aantal seconden en
 \fInnnnnnnnn\fR
-het aantal nanoseconden\&. Zowel de uren alsmede de nanoseconden mogen weggelaten worden\&. Er mogen tot aan negen nummers opgegeven worden na de decimale punt\&. Nadat de duur van van de huidige inhoud deze limiet bereikt heeft, wordt er een nieuw uitvoer bestand gestart\&.
+het aantal nanoseconden\&. Zowel de uren evenals de nanoseconden mogen weggelaten worden\&. Er mogen tot aan negen nummers opgegeven worden na de decimale punt\&. Nadat de duur va de huidige inhoud deze limiet bereikt heeft, wordt er een nieuw uitvoer bestand gestart\&.
 .sp
 De \*(Aqduration:\*(Aq mag vanwege de verenigbaarheid (compatibiliteit) weggelaten worden\&.
 .RE
@@ -405,7 +405,7 @@ De \*(Aqduration:\*(Aq mag vanwege de verenigbaarheid (compatibiliteit) weggelat
 .\}
 Splitsen na een specifieke tijd code\&.
 .sp
-Ingave:
+Ingaven:
 \fB\-\-split\fR
 timecodes:\fIA\fR[,\fIB\fR[,\fIC\fR\&.\&.\&.]]
 .sp
@@ -416,7 +416,7 @@ De parameters
 \fIA\fR,
 \fIB\fR,
 \fIC\fR
-etc\&. moeten allen dezelfde indeling hebben als de duur (zie hierboven)\&. De lijst van tijd codes is komma gesepareerd\&. Nadat de uitvoer stroom zijn huidige splits tijd code limiet heeft bereikt wordt er een nieuw bestand gere\(:eerd\&. Daarna wordt het volgende splits punt gebruikt van de gebruikte lijst\&.
+etc\&. moeten allen dezelfde indeling hebben als de duur (zie hierboven)\&. De lijst van tijd codes is komma gescheiden\&. Nadat de uitvoer stroom zijn huidige splits tijd code limiet heeft bereikt wordt er een nieuw bestand gecre\(:eerd\&. Daarna wordt het volgende splits punt gebruikt van de gebruikte lijst\&.
 .sp
 Het \*(Aqtimecodes:\*(Aq voorvoegsel mag niet wegelaten worden\&.
 .RE
@@ -429,9 +429,9 @@ Het \*(Aqtimecodes:\*(Aq voorvoegsel mag niet wegelaten worden\&.
 .sp -1
 .IP "  4." 4.2
 .\}
-Houden van specifieke delen door het specificeren van tijd code bereiken, terwijl het ontdoet van anderen\&.
+Houden van specifieke delen door het specificeren van tijd code bereiken, terwijl het van anderen ontdaan wordt\&.
 .sp
-Ingave:
+Ingaven:
 \fB\-\-split\fR
 parts:\fIstart1\fR\-\fIend1\fR[,[+]\fIstart2\fR\-\fIend2\fR[,[+]\fIstart3\fR\-\fIend3\fR\&.\&.\&.]]
 .sp
@@ -474,7 +474,7 @@ De
 parts
 mode vertelt
 \fBmkvmerge\fR(1)
-bepaalde tijd code beriken te behouden en anderen over te slaans\&. De te behouden bereiken worden uitgelijst na de
+bepaalde tijd code bereiken te behouden en anderen over te slaan\&. De te behouden bereiken worden uit gelijst na de
 parts:
 sleutelwoord en gescheiden door een komma\&. Het bereik zelf bestaat uit een start en een eindtijd code in hetzelfde format als de overige variaties van
 \fI\-\-split\fR
@@ -691,7 +691,7 @@ block contains either a full frame (for progressive content) or a single field (
 .\}
 Splitsen na specifieke beelden/velden codes\&.
 .sp
-Ingave:
+Ingaven:
 \fB\-\-split\fR
 frames:\fIA\fR[,\fIB\fR[,\fIC\fR\&.\&.\&.]]
 .sp
@@ -702,7 +702,7 @@ De parameters
 \fIA\fR,
 \fIB\fR,
 \fIC\fR
-etc\&. moeten allen positieve cijfers bevatten\&. Nummering start vanaf 1\&. De lijst van beeld/veld codes is komma gesepareerd\&. Nadat de uitvoer stroom zijn huidige splits tijd code limiet heeft bereikt wordt er een nieuw bestand gere\(:eerd\&. Daarna wordt het volgende splits punt gebruikt van de gebruikte lijst\&.
+etc\&. moeten allen positieve cijfers bevatten\&. Nummering start vanaf 1\&. De lijst van beeld/veld codes is komma gescheiden\&. Nadat de uitvoer stroom zijn huidige splits tijd code limiet heeft bereikt wordt er een nieuw bestand gecre\(:eerd\&. Daarna wordt het volgende splits punt gebruikt van de gebruikte lijst\&.
 .sp
 Het \*(Aqframes:\*(Aq voorvoegsel mag niet wegelaten worden\&.
 .sp
@@ -754,7 +754,7 @@ De parameters
 \fIA\fR,
 \fIB\fR,
 \fIC\fR
-etc\&. moeten allen positief zijn\&. Nummering start vanaf 1\&. De lijst van hoofstukken is komma gesepareerd\&. Splitsing zal plaatsvinden vlak voor her eerste toets sleutelbeeld waarvan de tijd code gelijk is aan of groter is dan de start tijd code voor de hoofdstukken waarvan de nummers zijn opgenomen\&. Een hoofdstuk vanaf 0s wordt nooit beschouwd voor het splitsen en geruisloos weggegooid\&.
+etc\&. moeten allen positief zijn\&. Nummering start vanaf 1\&. De lijst van hoofstukken is komma gescheiden\&. Splitsing zal plaatsvinden vlak voor het eerste toets sleutelbeeld waarvan de tijd code gelijk is aan of groter is dan de start tijd code voor de hoofdstukken waarvan de nummers zijn opgenomen\&. Een hoofdstuk vanaf 0s wordt nooit beschouwd voor het splitsen en wordt geruisloos weggegooid\&.
 .sp
 Het sleutelwoord
 all
@@ -783,7 +783,7 @@ file format supports arbitrary deeply nested chapter structures called \*(Aqedit
 .sp
 Voor deze splits mode wordt het uitvoer bestand anders behandeld dan onder de normale werking\&. Het mag bevatten een
 \fBprintf\fR
-zoals uitgedrukt \*(Aq%d\*(Aq inclusief een optioneel veld, b\&.v\&. \*(Aq%02d\*(Aq\&. Indien dit het geval is, zal het huidige bestandsaantal geschikt worden geformatteerd en op dat punt in het bestandsnaam worden ingevoegd\&. Is er geen dergelijk patroon dan wordt een patroon van \*(Aq\-%03d\*(Aq aangenomen direct voor de bestand extensie: \*(Aq\-o output\&.mkv\*(Aq zou resulteren in \*(Aqoutput\-001\&.mkv\*(Aq en zo verder\&. Is er geen extensie dan zal \*(Aq\-%03d\*(Aq worden toegevoegd aan de naam\&.
+zoals uitgedrukt \*(Aq%d\*(Aq inclusief een optioneel veld, b\&.v\&. \*(Aq%02d\*(Aq\&. Indien dit het geval is, zal het huidige bestandsaantal geschikt worden geformatteerd en op dat punt in de bestandsnaam worden ingevoegd\&. Is er geen dergelijk patroon dan wordt een patroon van \*(Aq\-%03d\*(Aq aangenomen direct voor de bestand extensie: \*(Aq\-o output\&.mkv\*(Aq zou resulteren in \*(Aqoutput\-001\&.mkv\*(Aq en zo verder\&. Is er geen extensie dan zal \*(Aq\-%03d\*(Aq worden toegevoegd aan de naam\&.
 .RE
 .PP
 \fB\-\-link\fR
@@ -813,7 +813,7 @@ onderstaand voor details\&.
 .PP
 \fB\-\-append\-mode\fR \fImode\fR
 .RS 4
-Calculeert hoe tijd codes worden berekend wanneer die worden toevoegd aan een bestand\&. De parameter
+Calculeert hoe tijd codes worden berekend wanneer die worden toegevoegd aan een bestand\&. De parameter
 \fImode\fR
 kan twee waardes bevatten: \*(Aqfile\*(Aq welke ook standaard is en \*(Aqtrack\*(Aq\&.
 .sp
@@ -842,7 +842,7 @@ Als deze optie weggelaten wordt dan wordt een standaard indeling gebruikt\&. Dez
 .PP
 \fB+\fR
 .RS 4
-Een enkele \*(Aq+\*(Aq veroorzaakt dat het volgende bestand wordt bijgevoegd (bestand wordt dubbel zo groot) i\&.p\&.v toegevoegd\&. De \*(Aq+\*(Aq kan worden ingegeven voor elk volgende bestandsnaam\&. Daarom zijn de volgende twee commando\*(Aqs gelijkwaardig:
+Een enkele \*(Aq+\*(Aq veroorzaakt dat het volgende bestand wordt bijgevoegd (bestand wordt dubbel zo groot) i\&.p\&.v\&. toegevoegd\&. De \*(Aq+\*(Aq kan worden ingegeven voor elk volgende bestandsnaam\&. Daarom zijn de volgende twee commando\*(Aqs gelijkwaardig:
 .sp
 .if n \{\
 .RS 4
@@ -860,7 +860,7 @@ $ mkvmerge \-o full\&.mkv file1\&.mkv +file2\&.mkv
 .RS 4
 Normaal kijkt
 \fBmkvmerge\fR(1)
-naar bestanden in dezelfde map welke dezelfde basis naam bevatten maar alleen verschillen van volgordenummer (b\&.v\&. \*(AqVTS_01_1\&.VOB\*(Aq, \*(AqVTS_01_2\&.VOB\*(Aq, \*(AqVTS_01_3\&.VOB\*(Aq etc) en behandelt al die bestanden alsof zij \('e\('en groot bestand waren\&. Deze optie, een enkele \*(Aq=\*(Aq maakt dat mkvmerge niet kijkt naar die extra bestanden\&.
+naar bestanden in dezelfde map welke dezelfde basis naam bevatten maar alleen verschillen van volgordenummer (b\&.v\&. \*(AqVTS_01_1\&.VOB\*(Aq, \*(AqVTS_01_2\&.VOB\*(Aq, \*(AqVTS_01_3\&.VOB\*(Aq etc\&.) en behandelt al die bestanden alsof zij \('e\('en groot bestand waren\&. Deze optie, een enkele \*(Aq=\*(Aq maakt dat mkvmerge niet kijkt naar die extra bestanden\&.
 .sp
 De \*(Aq=\*(Aq kan ook worden ingegeven voor elk volgende bestandsnaam\&. Daarom zijn de volgende twee commando\*(Aqs gelijkwaardig:
 .sp
@@ -878,14 +878,14 @@ $ mkvmerge \-o full\&.mkv =file1\&.mkv
 .PP
 \fB(\fR \fIfile1\fR \fIfile2\fR \fB)\fR
 .RS 4
-Als er meerdere bestandsnamen zijn opgenomen tussen haakjes, dan zullen die bestanden worden behandeld alsof ze zijn samengevoegd tot \('e\('en enkel groot bestand, dat bestaat uit de inhoud van elk van de bestand achter elkaar\&.
+Als er meerdere bestandsnamen zijn opgenomen tussen haakjes, dan zullen die bestanden worden behandeld alsof ze zijn samengevoegd tot \('e\('en enkel groot bestand, dat bestaat uit de inhoud van elk van de bestanden achter elkaar\&.
 .sp
 Dit kan gebruikt worden voor b\&.v\&. VOB bestanden vanaf een DVD of MPEG transport stromen\&. Het kan niet worden gebruikt als elk bestand zijn eigen set koppen bevat wat meestal het geval is bij stand\-alone\-bestanden, zoals AVI of MP4\&.
 .sp
 Een bestandsnaam tussen haakjes te zetten voorkomt tevens dat
 \fBmkvmerge\fR(1)
 kijkt naar extra bestanden met dezelfde naam zoals beschreven in
-option \fB=\fR\&. Daarom zijn deze twee commandos gelijkwaardig:
+option \fB=\fR\&. Daarom zijn deze twee commando\*(Aqs gelijkwaardig:
 .sp
 .if n \{\
 .RS 4
@@ -908,7 +908,7 @@ Verschillende dingen dienen te worden opgemerkt:
 .sp -1
 .IP "  1." 4.2
 .\}
-Er moet een spatie zijn zowel voor als na de open en sluit haaken\&.
+Er moet een spatie zijn zowel voor als na het open en sluit haken\&.
 .RE
 .sp
 .RS 4
@@ -937,7 +937,7 @@ Sommige insluitingen worden behandeld als speciale tekens\&. Vandaar dat je moet
 .PP
 \fB\-\-attachment\-description\fR \fIdescription\fR
 .RS 4
-Normale tekst beschrijving van de volgende bijlage\&. Is van toepassing op het volgende
+Normale tekst beschrijving van de volgende bijlage\&. Is van toepassing op de volgende
 \fB\-\-attach\-file\fR
 of
 \fB\-\-attach\-file\-once\fR
@@ -1002,7 +1002,7 @@ spoor ID's)\&. Standaard: Kopieer alle audio sporen\&.
 .sp
 Als de IDs zijn voorgezet met
 !
-dan is de betekenis omgekeerd: copieer alles maar de ID\*(Aqs lijsten na de
+dan is de betekenis omgekeerd: kopieer alles maar de ID\*(Aqs lijsten na de
 !\&.
 .RE
 .PP
@@ -1013,12 +1013,12 @@ Kopieer de video sporen
 \fIm\fR
 etc\&. De nummers zijn track ID\*(Aqs welke kunnen worden verkregen met de
 \fB\-\-identify\fR
-schakelaar\&. Zij zijn simpelweg niet de spoor nummers (sie sectie
+schakelaar\&. Zij zijn simpelweg niet de spoor nummers (zie sectie
 spoor ID's)\&. Standaard: Kopieer alle video sporen\&.\&.
 .sp
 Als de IDs zijn voorgezet met
 !
-dan is de betekenis omgekeerd: copieer alles maar de ID\*(Aqs lijsten na de
+dan is de betekenis omgekeerd: kopieer alles maar de ID\*(Aqs lijsten na de
 !\&.
 .RE
 .PP
@@ -1034,22 +1034,23 @@ spoor ID's)\&. Standaard: Kopieer alle ondertitel sporen\&.
 .sp
 Als de IDs zijn voorgezet met
 !
-dan is de betekenis omgekeerd: copieer alles maar de ID\*(Aqs lijsten na de
+dan is de betekenis omgekeerd: kopieer alles maar de ID\*(Aqs lijsten na de
 !\&.
 .RE
 .PP
 \fB\-b\fR, \fB\-\-button\-tracks\fR \fI[!]\fR\fIn,m,\&.\&.\&.\fR
 .RS 4
-Kopieer de knop sporen\fIn\fR,
+Kopieer de knop sporen
+\fIn\fR,
 \fIm\fR
 etc\&. De nummers zijn track ID\*(Aqs welke kunnen worden verkregen met de
 \fB\-\-identify\fR
-schakelaar\&. Zij zijn simpelweg niet de spoor nummerss (zie sectie
+schakelaar\&. Zij zijn simpelweg niet de spoor nummers (zie sectie
 spoor ID's)\&. Standaard: Kopieer alle knop sporen\&.
 .sp
 Als de IDs zijn voorgezet met
 !
-dan is de betekenis omgekeerd: copieer alles maar de ID\*(Aqs lijsten na de
+dan is de betekenis omgekeerd: kopieer alles maar de ID\*(Aqs lijsten na de
 !\&.
 .RE
 .PP
@@ -1065,7 +1066,7 @@ spoor ID's)\&. Zij zijn simpelweg niet de spoor nummers\&. Standaard: Kopieer al
 .sp
 Als de IDs zijn voorgezet met
 !
-dan is de betekenis omgekeerd: copieer alles maar de ID\*(Aqs lijsten na de
+dan is de betekenis omgekeerd: kopieer alles maar de ID\*(Aqs lijsten na de
 !\&.
 .RE
 .PP
@@ -1074,13 +1075,13 @@ dan is de betekenis omgekeerd: copieer alles maar de ID\*(Aqs lijsten na de
 Kopieer de bijlagen met de ID\*(Aqs
 \fIn\fR,
 \fIm\fR
-etc, naar allen of alleen het eerste uitvoer bestand\&. Elk ID kan opgevolgd worden door \*(Aq:all\*(Aq (welke standaard is, als geen van twee is opgegeven) of \*(Aq:first\*(Aq\&. Als het splitsen actief is, dan zullen die bijlagen waarvan de ID\*(Aqs zijn gespecificeerd met \*(Aq:all\*(Aq worden gekopieerd naar alle resulterende uitvoer bestanden, terwijl de anderen alleen gekopieerd worden naar het eerste uitvoerbestand\&. Als splitsen niet actief is, dan hebben beide varianten hetzelfde effect \&.
+etc\&. naar allen of alleen het eerste uitvoer bestand\&. Elk ID kan opgevolgd worden door \*(Aq:all\*(Aq (welke standaard is, als geen van twee is opgegeven) of \*(Aq:first\*(Aq\&. Als het splitsen actief is, dan zullen die bijlagen waarvan de ID\*(Aqs zijn gespecificeerd met \*(Aq:all\*(Aq worden gekopieerd naar alle resulterende uitvoer bestanden, terwijl de anderen alleen gekopieerd worden naar het eerste uitvoerbestand\&. Als splitsen niet actief is, dan hebben beide varianten hetzelfde effect\&.
 .sp
 Standaard is, kopieer alle bijlagen naar alle uitvoer bestanden\&.
 .sp
 Als de IDs zijn voorgezet met
 !
-dan is de betekenis omgekeerd: copieer alles maar de ID\*(Aqs lijsten na de
+dan is de betekenis omgekeerd: kopieer alles maar de ID\*(Aqs lijsten na de
 !\&.
 .RE
 .PP
@@ -1126,20 +1127,20 @@ Kopieer geen globale markeringen van dit bestand\&.
 .PP
 \fB\-\-chapter\-charset\fR \fIcharacter\-set\fR
 .RS 4
-Stelt de karakter set in, die gebruikt wordt voor de conversie naar UTF\-8 voor de hoofdstuk informatie die zich bevindt in het bronbestand\&. Zie de sectie overtekst bestanden en karakter set's
+Stelt het karakter set in, die gebruikt wordt voor de conversie naar UTF\-8 voor het hoofdstuk informatie die zich bevindt in het bronbestand\&. Zie de sectie overtekst bestanden en karakter sets
 voor een uitleg hoe
 \fBmkvmerge\fR(1)
-converteert tussen de karakter set\*(Aqs\&.
+converteert tussen de karakter sets\&.
 .RE
 .PP
 \fB\-\-chapter\-language\fR \fIlanguage\-code\fR
 .RS 4
-Zet de ISO639\-2 taal code, welke wordt geschreven voor elk hoofdstuk ingang\&. Deze optie kan gebruikt worden, voor bronbestanden welke hoofdstuk informatie bevatten maar g\('e\('en informatie over de talen, b\&.v\&. for MP4 en OGM bestanden\&.
+Zet de ISO639\-2 taal code, welke wordt geschreven voor elk hoofdstuk ingang\&. Deze optie kan gebruikt worden, voor bronbestanden welke hoofdstuk informatie bevatten maar g\('e\('en informatie over de talen, b\&.v\&. voor MP4 en OGM bestanden\&.
 .RE
 .PP
 \fB\-y\fR, \fB\-\-sync\fR \fITID:d\fR\fI[,o[/p]]\fR
 .RS 4
-Stelt de tijd code\*(Aqs bij van het spoor met het id
+Stelt de tijd codes bij van het spoor met het id
 \fITID\fR
 met
 \fId\fR
@@ -1149,7 +1150,7 @@ ms\&. De spoor ID\*(Aqs zijn hetzelfde als degene gegeven met
 spoor ID's)\&.
 .sp
 
-\fIo\fR/\fIp\fR: Stel de tijd code\*(Aqs bij met
+\fIo\fR/\fIp\fR: Stel de tijd codes bij met
 \fIo\fR/\fIp\fR
 om lineaire driften te corrigeren\&.
 \fIp\fR
@@ -1173,7 +1174,7 @@ Deze optie kan meerdere keren worden gebruikt voor een invoer bestand, is van to
 .PP
 \fB\-\-cues\fR \fITID:none|iframes|all\fR
 .RS 4
-Controle voor welke sporen cue (index) ingangen worden gere\(:eerd voor een opgegeven spoor (zie sectie
+Controle voor welke sporen cue (index) ingangen worden gecre\(:eerd voor een opgegeven spoor (zie sectie
 Spoor ID's)\&. \*(Aqnone\*(Aq remt het cre\(:eren van volg document(en) (cue) af\&. Voor \*(Aqiframes\*(Aq all\('e\('en blokken zonder voor of achteruit referenties ( = I beelden in video sporen) worden ingevoerd in het \*(Aqvolg document(en) (cue)\*(Aq\&. \*(Aqall\*(Aq zorgt ervoor dat
 \fBmkvmerge\fR(1)
 aanmaakt, volg document(en) (cue) voor alle blokken welke het bestand erg groot maakt\&.
@@ -1218,7 +1219,7 @@ Houd alleen de
 BlockAdditions
 tot aan niveau
 \fIlevel\fR
-voor het opgegeven spoor\&. Standaard is alle niveau\*(Aqs\&. Deze optie heeft alleen effect op sommige codecs zoals WAVPACK4\&.
+voor het opgegeven spoor\&. Standaard is alle niveaus\&. Deze optie heeft alleen effect op sommige codecs zoals WAVPACK4\&.
 .RE
 .PP
 \fB\-\-track\-name\fR \fITID:name\fR
@@ -1231,7 +1232,7 @@ spoor ID's) naar
 \fB\-\-language\fR \fITID:language\fR
 .RS 4
 Stelt de taal in voor het opgegeven spoor (zie sectie
-spoor ID's)\&. Beide ISO639\-2 taal codes en ISO639\-1 land codes zijn toegestaan\&. De land code wordt automatisch vertaald naar taal code\&. Alle talen inclusief hun ISO639\-2 codes kunnen uitgelijst worden met
+spoor ID's)\&. Beide ISO639\-2 taal codes en ISO639\-1 land codes zijn toegestaan\&. Het land code wordt automatisch vertaald naar taal code\&. Alle talen inclusief hun ISO639\-2 codes kunnen uit gelijst worden met
 \fB\-\-list\-languages\fR
 optie\&.
 .sp
@@ -1242,7 +1243,7 @@ Deze optie kan meerdere keren worden gebruikt voor een invoer bestand, is van to
 .RS 4
 Leest de markeringen in van het spoor met het nummer
 \fITID\fR
-van het bestand
+van de bestand
 \fIfile\-name\fR\&. Zie de sectie over
 markeringen
 hieronder voor details\&.
@@ -1272,7 +1273,8 @@ data\&. De reden voor deze schakelaar is, dat het normaal technisch niet mogelij
 AAC
 data van
 SBR AAC
-data zonder deze volledig te decoderen van eenAAC
+data zonder deze volledig te decoderen van een
+AAC
 beeld\&. Aangezien er verscheidene octrooi/patent kwesties zijn met
 AAC
 decoders zal
@@ -1300,8 +1302,8 @@ is, dan kan je toevoegen \*(Aq:0\*(Aq aan het spoor ID\&.
 .PP
 \fB\-\-timecodes\fR \fITID:file\-name\fR
 .RS 4
-Leest de te gebruiken tijd code\*(Aqs in voor een specifiek spoor ID van
-\fIfile\-name\fR\&. Deze krachtige tijd code\*(Aqs heffen de tijd code\*(Aqs die
+Leest de te gebruiken tijd codes in voor een specifiek spoor ID van
+\fIfile\-name\fR\&. Deze krachtige tijd codes heffen de tijd code\*(Aqs die
 \fBmkvmerge\fR(1)
 normaal berekend op\&. Lees de sectie over
 externe tijd code bestanden\&.
@@ -1316,7 +1318,7 @@ om te specificeren de standaard duur in seconden, milliseconden, microseconden, 
 \fIx\fR
 kan zelf een veranderbaar nummer zijn of een fractie\&.
 .sp
-Als de standaard duur niet is geforceerd dan zal mkvmerge proberen de spoor standaard duur proberen te verkrijgen uit de inhoud en/of de gecodeerde bitstroom voor bepaalde spoortypen, b\&.v\&. AVC/h\&.264 of MPEG\-2\&.
+Als de standaard duur niet is geforceerd dan zal mkvmerge proberen de spoor standaard duur proberen te verkrijgen uit de inhoud en/of de gecodeerde bit stroom voor bepaalde spoortypen, b\&.v\&. AVC/h\&.264 of MPEG\-2\&.
 .sp
 Deze optie kan ook gebruikt worden om de
 FPS
@@ -1347,7 +1349,7 @@ compressie bibliotheken\&.
 De compressie methode \*(Aqmpeg4_p2\*(Aq/\*(Aqmpeg4p2\*(Aq is een speciale compressie methode genoemd \*(Aqheader removal\*(Aq die is all\('e\('en beschikbaar voorMPEG4
 deel 2 video sporen\&.
 .sp
-Standaard voor sommige ondertitels zijn \*(Aqzlib\*(Aq compressie\&. Deze compressie wordt door bijna alle afspelers ondersteund zoniet allen\&. Ondersteuning voor andere compressie methoden anders dan \*(Aqnone\*(Aq is niet verzekerd\&.
+Standaard voor sommige ondertitels zijn \*(Aqzlib\*(Aq compressie\&. Deze compressie wordt door bijna alle af spelers ondersteund zo niet allen\&. Ondersteuning voor andere compressie methoden anders dan \*(Aqnone\*(Aq is niet verzekerd\&.
 .RE
 .SS "Opties die alleen op video sporen van toepassing zijn"
 .PP
@@ -1362,7 +1364,7 @@ naar de opgegeven waarde\&. Werkt all\('e\('en voor video sporen in de \*(AqMS v
 .RS 4
 
 Matroska(TM)
-bestanden bevatten twee waarden die de scherm eigenschappen instelt waarnaar een afspeler met afspelen naar toe zou moeten schalen: scherm breedte en scherm hoogte\&. Deze waaren worden ingesteld met deze optie, b\&.v\&. \*(Aq1:640x480\*(Aq\&.
+bestanden bevatten twee waarden die het scherm eigenschappen instelt waarnaar een afspeler met afspelen naar toe zou moeten schalen: scherm breedte en scherm hoogte\&. Deze waarden worden ingesteld met deze optie, b\&.v\&. \*(Aq1:640x480\*(Aq\&.
 .sp
 Een andere manier om de te gebruiken waarden te specificeren is
 \fB\-\-aspect\-ratio\fR
@@ -1377,7 +1379,7 @@ optie (zie hieronder)\&. Deze opties zijn wederzijds \- exclusief\&.
 Matroska(TM)
 bestanden bevatten twee waarden die de scherm eigenschappen instelt waarnaar een afspeler met afspelen naar toe zou moeten schalen: scherm breedte en scherm hoogte\&. Met deze optie zal
 \fBmkvmerge\fR(1)
-automatisch calculeren de scherm breedte en de scherm hoogte gebaseerd, op de orginele beelden/plaatjes breedte en hoogte en de opgegeven verwachte verhouding met deze optie\&. De verhouding kan \('e\('en van beiden zijn een veranderbaar nummer
+automatisch calculeren het scherm breedte en het scherm hoogte gebaseerd, op de originele beelden/plaatjes breedte en hoogte en de opgegeven verwachte verhouding met deze optie\&. De verhouding kan \('e\('en van beiden zijn een veranderbaar nummer
 \fIverhouding\fR
 of als een fractie \*(Aq\fIbreedte\fR/\fIhoogte\fR\*(Aq, b\&.v\&. \*(Aq16/9\*(Aq\&.
 .sp
@@ -1391,7 +1393,7 @@ opties (zie hieronder en hierboven)\&. Deze opties zijn wederzijds \- exclusief\
 \fB\-\-aspect\-ratio\-factor\fR \fITID:factor|n/d\fR
 .RS 4
 Een andere manier om de verwachtte verhouding te specificeren is een
-\fIfactor\fR\&. De orginele verwachtte verhouding factor wordt eerst vermeningvuldigd met deze
+\fIfactor\fR\&. De originele verwachtte verhouding factor wordt eerst vermenigvuldigd met deze
 \fIfactor\fR
 en daarna gebruikt als doel verhouding\&.
 .sp
@@ -1404,7 +1406,7 @@ opties (zie boven)\&. Deze opties zijn wederzijds \- exclusief\&.
 .PP
 \fB\-\-cropping\fR \fITID:left,top,right,bottom\fR
 .RS 4
-Stelt de video spoor uitsnij paramters in naar een gegeven waarden\&.
+Stelt de video spoor uitsnij parameters in naar een gegeven waarde\&.
 .RE
 .PP
 \fB\-\-stereo\-mode\fR \fITID:n|keyword\fR
@@ -1424,13 +1426,13 @@ of \('e\('en van de volgende:
 .PP
 \fB\-\-sub\-charset\fR \fITID:character\-set\fR
 .RS 4
-Stelt de karakter set conversie in naar UTF\-8 voor UTF\-8 ondertitels van een opgegeven spoor ID\&. Indien niet opgegeven, dan worden de huidig verkregen besturingssysteem lokatie gebruikt\&. Opmerking: een karakter set voor ondertitels is niet nodig wanneer er gelezen wordt vanuit een
+Stelt het karakter set conversie in naar UTF\-8 voor UTF\-8 ondertitels van een opgegeven spoor ID\&. Indien niet opgegeven, dan worden het huidig verkregen besturingssysteem locatie gebruikt\&. Opmerking: een karakter set voor ondertitels is niet nodig wanneer er gelezen wordt vanuit een
 Matroska(TM)
 bestand of van Kate stromen, omdat deze altijd zijn opgeslagen in het UTF\-8 format\&. Zie de sectie over
 tekst bestanden en karakter sets
 voor een uitleg hoe
 \fBmkvmerge\fR(1)
-converteert tussen de verschillende karakter sets\&.
+converteert tussen het verschillende karakter sets\&.
 .sp
 Deze optie kan meerdere keren worden gebruikt voor een invoer bestand, is van toepassing op verschillende sporen door het spoor ID elke keer te selecteren\&.
 .RE
@@ -1451,10 +1453,10 @@ Zal
 .sp
 Deze optie maakt dat
 \fBmkvmerge\fR(1)
-extra informatie uitvoert over de inhoud en elk spoor\&. De extra informatie staat tussen haken ( [] )\&. Het bevat een spatie gescheiden sleutel/waarde paar, waar de sleutel en waarde\*(Aqs zijn gescheiden door een dubbel punt (:)\&.
+extra informatie uitvoert over de inhoud en elk spoor\&. De extra informatie staat tussen haken ( [] )\&. Het bevat een spatie gescheiden sleutel/waarde paar, waar de sleutel en waardes zijn gescheiden door een dubbel punt (:)\&.
 .sp
 Elke waarde wordt overgeslagen conform de regels beschreven in
-de sectie over overslaan van speciale karakters in een tekst\&.
+de sectie over: Overslaan van speciale karakter(s) in tekst\&.
 .RE
 .PP
 \fB\-l\fR, \fB\-\-list\-types\fR
@@ -1464,14 +1466,14 @@ Somt invoer bestandstypen op\&.
 .PP
 \fB\-\-list\-languages\fR
 .RS 4
-Somt alle talen en hun ISO639\-2 code\*(Aqs op welke gebruikt kunnen worden met de
+Somt alle talen en hun ISO639\-2 codes op welke gebruikt kunnen worden met de
 \fB\-\-language\fR
 optie\&.
 .RE
 .PP
 \fB\-\-priority\fR \fIpriority\fR
 .RS 4
-Stelt de proces prioriteit in waarmee
+Stelt het proces prioriteit in waarmee
 \fBmkvmerge\fR(1)
 zijn werk doet\&. Geldige waarden zijn \*(Aqlowest\*(Aq, \*(Aqlower\*(Aq, \*(Aqnormal\*(Aq, \*(Aqhigher\*(Aq en \*(Aqhighest\*(Aq\&. Is niets ingegeven dan wordt \*(Aqnormal\*(Aq gebruikt\&. Op unix achtige systemen zal
 \fBmkvmerge\fR(1)
@@ -1480,25 +1482,25 @@ gebruiken de
 functie\&. Daarom kan all\('e\('en de \*(Aqsuper\*(Aq gebruiker die gebruiken \*(Aqhigher\*(Aq en \*(Aqhighest\*(Aq\&. Op Windows zijn alle waarden voor iedereen beschikbaar\&.
 .RE
 .PP
-\fB\-\-command\-line\-charset\fR \fI(karakter\-set)\fR
+\fB\-\-command\-line\-charset\fR \fI(karakterset)\fR
 .RS 4
-Plaatst het karakter dat wordt geplaatst om de reeksen om te zetten die op de commandoregel worden ingeven\&. Het is standaard aan het karakter van het systeem en afhankelijk van de besturingssysteem lokatie\&. Deze instellingen zijn van toepassing op argumenten van de volgende opties:
+Plaatst het karakter dat wordt geplaatst om de reeksen om te zetten die op de commandoregel worden ingeven\&. Het is standaard aan het karakter van het systeem en afhankelijk van het besturingssysteem locatie\&. Deze instellingen zijn van toepassing op argumenten van de volgende opties:
 \fB\-\-title\fR,
 \fB\-\-track\-name\fR
 en
 \fB\-\-attachment\-description\fR\&.
 .RE
 .PP
-\fB\-\-output\-charset\fR \fI(karakter\-set)\fR
+\fB\-\-output\-charset\fR \fI(karakterset)\fR
 .RS 4
-Stelt de karakter set in waarnaar de reeksen dienen te worden geconverteerd naar de uitvoer\&. Standaard wordt gebruikt de karakter set die afhankelijk is van wat er in uw besturingssysteem staat aangegeven (lokatie)\&.
+Stelt het karakter set in, waarnaar de reeksen naar de uitvoer dienen te worden geconverteerd\&. Standaard wordt gebruikt het karakter set die afhankelijk is van wat er in uw besturingssysteem staat aangegeven (locatie)\&.
 .RE
 .PP
 \fB\-r\fR, \fB\-\-redirect\-output\fR \fI(bestandsnaam)\fR
 .RS 4
 Schrijft alle berichten naar een bestand
 \fIfile\-name\fR
-i\&.p\&.v naar het \*(Aqapparaat/houder\*(Aq\&. Terwijl dit gemakkelijk met uitvoer omleiden kan worden gedaan er zijn gevallen waarin deze optie nodig is: wanneer de verwerker e\&.e\&.a her\-interpreteert voordat het geschreven wordt naar het uitvoer bestand\&. De karakter set met
+i\&.p\&.v\&. naar de \*(Aqapparaat/houder\*(Aq\&. Terwijl dit gemakkelijk met uitvoer omleiden kan worden gedaan er zijn gevallen waarin deze optie nodig is: wanneer de verwerker e\&.e\&.a\&. herinterpreteert voordat het geschreven wordt naar de uitvoer bestand\&. Het karakter set met
 \fB\-\-output\-charset\fR
 is toegewezen\&.
 .RE
@@ -1516,12 +1518,12 @@ Hoewel opvragen van een \*(Aqlist\*(Aq voor een land
 \fIcode\fR
 zal er voor zorgen dat
 \fBmkvextract\fR(1)
-een lijst zal uitvoeren van alle beschikbaren vertalingen\&.
+een lijst zal uitvoeren van alle beschikbare vertalingen\&.
 .RE
 .PP
 \fB\-\-title\fR \fIonderwerp\fR
 .RS 4
-Zet debuggen aan voor een spcifieke mogelijkheid\&. Dit is alleen zinvol voor ontwikkelaars\&.
+Zet debuggen aan voor een specifieke mogelijkheid\&. Dit is alleen zinvol voor ontwikkelaars\&.
 .RE
 .PP
 \fB\-\-tags\fR \fIfeature\fR
@@ -1540,7 +1542,7 @@ voor meer informatie\&.
 .PP
 \fB\-\-capabilities\fR
 .RS 4
-Somt informtie op over optionele mogelijkheden die zijn gecompileerd en sluit af\&. De eerste uitvoer regel zal de versie informatie zijn\&. Alle volgende informatie regels bevatten exact \('e\('en woord, waarvan de aanwezigheid aangeeft welke eigenschapen er binnenin zijn gecompileerd\&. Deze mogelijkheden zijn:
+Somt informatie op over optionele mogelijkheden die zijn gecompileerd en sluit af\&. De eerste uitvoer regel zal de versie informatie zijn\&. Alle volgende informatie regels bevatten exact \('e\('en woord, waarvan de aanwezigheid aangeeft welke eigenschapen er binnenin zijn gecompileerd\&. Deze mogelijkheden zijn:
 .sp
 .RS 4
 .ie n \{\
@@ -1603,7 +1605,7 @@ Toon versie informatie en sluit af\&.
 .PP
 \fB\-\-check\-for\-updates\fR
 .RS 4
-Controleert online op nieuwere versie\*(Aqs via ophalen op adres
+Controleert online op nieuwere versies via ophalen op adres
 \m[blue]\fBhttp://mkvtoolnix\-releases\&.bunkus\&.org/latest\-release\&.xml\fR\m[]\&. Vier regels worden uitgevoerd in
 key=value
 stijl: het adres van waar de informatie wordt verkregen (key
@@ -1613,9 +1615,9 @@ available_version
 en het ophaal adres (key
 download_url)\&.
 .sp
-Nadien sluit het programma af met een afsluitwaarde van 0 als er geen nieuwere versie beschikbaar is, met een 1 als er een nieuwere beschikbaar is en 2 indien er een fout ontstond (b\&.v\&. als de opwaardeer info niet verkregen kon worden)\&.
+Nadien sluit het programma af met een afsluitwaarde van 0 als er geen nieuwere versie beschikbaar is, met een 1 als er een nieuwere beschikbaar is en 2 indien er een fout ontstond (b\&.v\&. als de opwaardeer informatie niet verkregen kon worden)\&.
 .sp
-Deze optie is alleeen beschikbaar indien het gebouwd is met ondersteuning voor libcurl\&.
+Deze optie is alleen beschikbaar indien het gebouwd is met ondersteuning voor libcurl\&.
 .RE
 .SH "GEBRUIK"
 .PP
@@ -1638,14 +1640,14 @@ optie\&.
 .ps -1
 .br
 .PP
-De volgorde van de commandregel optie\*(Aqs is belangrijk\&. Lees a\&.u\&.b de sectie over
+De volgorde van het commando regel opties zijn belangrijk\&. Lees a\&.u\&.b\&. de sectie over
 "Optie volgorde"
 als je nog onbekend bent met het programma\&.
 .sp .5v
 .RE
 .SH "OPTIE VOLGORDE"
 .PP
-Voor sommige optie\*(Aqs is de volgorde waarin zij zijn opgegeven belangrijk\&. Optie\*(Aqs mislukken in twee categorie\(:en:
+Voor sommige opties is de volgorde waarin zij zijn opgegeven belangrijk\&. Optie\*(Aqs mislukken in twee categorie\(:en:
 .sp
 .RS 4
 .ie n \{\
@@ -1655,7 +1657,7 @@ Voor sommige optie\*(Aqs is de volgorde waarin zij zijn opgegeven belangrijk\&. 
 .sp -1
 .IP "  1." 4.2
 .\}
-Opties die het programma beinvloeden en niet verbonden zijn aan enig invoerbestand\&. Dez omvatten maar zijn niet beperkt tot
+Opties die het programma be\(:invloeden en niet verbonden zijn aan enig invoerbestand\&. Deze omvatten maar zijn niet beperkt tot
 \fB\-\-command\-line\-charset\fR,
 \fB\-\-output\fR
 of
@@ -1670,7 +1672,7 @@ of
 .sp -1
 .IP "  2." 4.2
 .\}
-Opties die \('e\('en enkel invoerbstand be\(:invloedden of spoor in een invoerbestand\&. Deze optie\*(Aqs zijn allen van toepassing op het invoerbestand op de commandoregel\&. Alle optie\*(Aqs naar hetzelfde invoerbestand (of naar sporen in hetzelfde invoerbestand) mogen in elke volgorde geschreven worden zolang deze voor het invoerbestandsnaam staan\&. Voorbeelden die een invoerbestand be\(:invloedden zijn
+Opties die \('e\('en enkel invoerbestand be\(:invloedden of spoor in een invoerbestand\&. Deze opties zijn allen van toepassing op het invoerbestand op de commandoregel\&. Alle opties naar hetzelfde invoerbestand (of naar sporen in hetzelfde invoerbestand) mogen in elke volgorde geschreven worden zolang deze voor het invoerbestandsnaam staan\&. Voorbeelden die een invoerbestand be\(:invloedden zijn
 \fB\-\-no\-chapters\fR
 of
 \fB\-\-chapter\-charset\fR\&. Voorbeelden voor een enkel spoor
@@ -1679,7 +1681,7 @@ of
 \fB\-\-language\fR\&.
 .RE
 .PP
-De optie\*(Aqs worden uitgevoerd van links naar rechts\&. Indien er een optie meerdere keren is, binnen hetzelfde gebied, dan wordt de laatste gebruikt\&. Daarom zal de titel gezet worden naar "Iets anders" in het volgende voorbeeld:
+De opties worden uitgevoerd van links naar rechts\&. Indien er een optie meerdere keren is, binnen hetzelfde gebied, dan wordt de laatste gebruikt\&. Daarom zal de titel gezet worden naar "Iets anders" in het volgende voorbeeld:
 .sp
 .if n \{\
 .RS 4
@@ -1693,7 +1695,7 @@ $ mkvmerge \-o output\&.mkv \-\-title \*(AqDit \('en Dat\*(Aq input\&.avi \-\-ti
 .PP
 Het volgende voorbeeld toont dat het gebruiken van de optie
 \fB\-\-language\fR
-tweemaal OK is, omdat zij andere gebieden gebruiken\&. Alhoewel zij tot hetzelfde spoor ID behoren maar van verschillende invoer bestanden en daarom verschillende gebieden hebben:
+tweemaal OK is, omdat zij andere gebieden gebruiken\&. Hoewel zij tot hetzelfde spoor ID behoren maar van verschillende invoer bestanden en daarom verschillende gebieden hebben:
 .sp
 .if n \{\
 .RS 4
@@ -1719,7 +1721,7 @@ $ oggenc \-q4 \-omijn film\&.ogg mijn film\&.wav
 .RE
 .\}
 .PP
-Na een paar minuten kan je het video en audio samenvoegen:
+Na een paar minuten kan je de video en audio samenvoegen:
 .sp
 .if n \{\
 .RS 4
@@ -1733,7 +1735,7 @@ $ mkvmerge \-o mijn film\-met\-geluid\&.mkv mijn film\&.avi mijn film\&.ogg
 .PP
 Als jouw
 AVI
-reeds een audio spoor bevat dan wordt ook die gekopieerd (als
+al een audio spoor bevat dan wordt ook die gekopieerd (als
 \fBmkvmerge\fR(1)
 dat audio formaat ondersteunt)\&. Om dat te voorkomen doe simpel
 .sp
@@ -1747,7 +1749,7 @@ $ mkvmerge \-o mijn film\-met\-geluid\&.mkv \-A mijn film\&.avi mijn film\&.ogg
 .RE
 .\}
 .PP
-Na een paar minuten van wikken en wegen rip je een ander audio spoor, b\&.v\&. de regiseur zijn commentaar of een andere taal naar \*(Aqmijn film\-voegtoe\-geluid\&.wav\*(Aq\&. Codeer het opnieuw en voeg het samen met het andere bestand:
+Na een paar minuten van wikken en wegen rip je een ander audio spoor, b\&.v\&. de regisseur zijn commentaar of een andere taal naar \*(Aqmijn film\-voegtoe\-geluid\&.wav\*(Aq\&. Codeer het opnieuw en voeg het samen met het andere bestand:
 .sp
 .if n \{\
 .RS 4
@@ -1776,7 +1778,7 @@ Nu
 mplayer(TM)
 opstarten en geniet\&. Als je meerdere audio sporen hebt (of zelfs video sporen) dan kan je aangeven aan
 mplayer(TM)
-welk spoor af te spelen met de \*(Aq\fB\-vid\fR\*(Aq en \*(Aq\fB\-aid\fR\*(Aq opties\&. Deze zijn 0 gebaseerd en maken geen onderscheid tussen video en audio\&.
+welk spoor af te spelen met het \*(Aq\fB\-vid\fR\*(Aq en \*(Aq\fB\-aid\fR\*(Aq opties\&. Deze zijn 0 gebaseerd en maken geen onderscheid tussen video en audio\&.
 .PP
 Indien het nodig is een audio spoor te synchroniseren kan je dat h\('e\('el makkelijk doen\&. Achterhaal eerst welk spoor ID het Vorbis spoor bevat
 .sp
@@ -1806,7 +1808,7 @@ Dit zou toevoegen 200ms aan stilte aan het begin van het spoor met het ID
 \fB12345\fR
 genomen van \*(Aqoutofsync\&.ogg\*(Aq\&.
 .PP
-Sommige films starten correct gesynchroniseerd maar langzaam aan verloopt dat\&. Voor dit soort films kan je een vertraag factor opgeven die worden toegevoegd aan alle tijd codes \-\- Er wordt g\('e\('en data toegvoegd of verwijderd\&. Dus, als je die factor te klein of te groot maakt dan krijg je een slecht resultaat\&. Een voorbeeld is, dat een episode die ik heb getranscodeerd met
+Sommige films starten correct gesynchroniseerd maar langzaam aan verloopt dat\&. Voor dit soort films kan je een vertraag factor opgeven die worden toegevoegd aan alle tijd codes \-\- Er wordt g\('e\('en data toegevoegd of verwijderd\&. Dus, als je die factor te klein of te groot maakt dan krijg je een slecht resultaat\&. Een voorbeeld is, dat een episode die ik heb getranscodeerd met
 \fB0\&.2\fR
 seconden uit sync aan het eind van de film, welke
 \fB77340\fR
@@ -1937,7 +1939,7 @@ $ mkvmerge \-o mymovie\&.mkv mymovie\&.avi mymovie\&.srt
 .PP
 Als je een taal wilt opgeven voor een gegeven spoor kan dit h\('e\('el makkelijk gedaan worden\&. Zoek eerst de ISO639\-2 code voor jouw taal\&.
 \fBmkvmerge\fR(1)
-kan alle code\*(Aqs uitlijsten voor je:
+kan alle codes uitlijsten voor je:
 .sp
 .if n \{\
 .RS 4
@@ -1967,7 +1969,7 @@ Zoals je kunt zien, kan je de
 \fB\-\-language\fR
 schakelaar meerdere keren gebruiken\&.
 .PP
-Misschien zou je het ook fijn vinden dat de afpeler standaard de Nederlandse taal gebruikt\&. Als je ook nog extra ondertitelingen hebt zoals b\&.v\&. Engels, Frans, en je wilt dat de afpeler de Franse als standaard gebruikt\&. Kan je dit doen met
+Misschien zou je het ook fijn vinden dat de af speler standaard de Nederlandse taal gebruikt\&. Als je ook nog extra ondertitelingen hebt zoals b\&.v\&. Engels, Frans, en je wilt dat de af speler de Franse als standaard gebruikt\&. Kan je dit doen met
 .sp
 .if n \{\
 .RS 4
@@ -1998,7 +2000,7 @@ $ mkvmerge \-o no\-compression\&.mkv \-\-compression \-1:none MyMovie\&.avi \-\-
 .PP
 Sommige opties voor
 \fBmkvmerge\fR(1)
-hebben een spoor ID nodig om te specificeren op welk spoor zij zouden moeten worden toegepast\&. Die spoor ID\*(Aqs worden getoond door de lezers bij het samenvoegen van het huidige invoer bestand, of als
+hebben een spoor ID nodig, om aan te geven op welk spoor zij zouden moeten worden toegepast\&. Die spoor ID\*(Aqs worden getoond door de lezers bij het samenvoegen van het huidige invoer bestand, of als
 \fBmkvmerge\fR(1)
 is opgeroepen met de
 \fB\-\-identify\fR
@@ -2017,7 +2019,7 @@ Track ID 2: audio (A_MPEG/L3)
 .RE
 .\}
 .PP
-Verwar de spoor ID\*(Aqs niet met welke zijn toegewezen aan spo(o)r(en) in het uitvoer MKV bestand met het spoor ID van het invoerbestand\&. Alleen het invoerbestand spoor ID\*(Aqs worden gebruikt voor optie\*(Aqs die deze waarde nodig hebben\&.
+Verwar de spoor ID\*(Aqs niet met welke zijn toegewezen aan spo(o)r(en) in het uitvoer MKV bestand met het spoor ID van het invoerbestand\&. Alleen het invoerbestand spoor ID\*(Aqs worden gebruikt voor opties die deze waarde nodig hebben\&.
 .PP
 Opmerking: Dat elk invoerbestand zijn eigen spoor ID\*(Aqs heeft\&. Daarom het spoor ID voor bestand \*(Aqfile1\&.ext
 gerapporteerd wordt door \*(Aqmkvmerge \-\-identify\*(Aq verander niets, ongeacht hoeveel invoerbestanden in welke positie dan ook \*(Aqfile1\&.ext\*(Aq wordt gebruikt\&.
@@ -2099,25 +2101,25 @@ Alle teksten in
 Matroska(TM)
 bestanden zijn gecodeerd in UTF\-8\&. Dit betekend, dat
 \fBmkvmerge\fR(1)
-alle de te lezen tekst bestanden moet converteren en evenals elke ingegeven tekst op de commandoregel om elke karakter te zetten naar UTF\-8\&. Teruggekoppeld betekend dit ook, dat
-\fBmkvmerge\fR(1)\*(Aqs uitvoer terug geconverterd moet worden naar die karakter set van UTF\-8, b\&.v\&. als een niet Engelse vertaling is gebruikt met
+alle de te lezen tekst bestanden moet converteren en evenals elke ingegeven tekst op de commandoregel om elk karakter te zetten naar UTF\-8\&. Teruggekoppeld betekend dit ook, dat
+\fBmkvmerge\fR(1)\*(Aqs uitvoer terug geconverteerd moet worden naar die karakter set van UTF\-8, b\&.v\&. als een niet Engelse vertaling is gebruikt met
 \fB\-\-ui\-languages\fR
-of voor de orginele tekst uit een
+of voor de originele tekst uit een
 Matroska(TM)
 bestand\&.
 .PP
 
 \fBmkvmerge\fR(1)
-doet deze conversie automatisch gebasseerd op de aanwezigheid van een
+doet deze conversie automatisch gebaseerd op de aanwezigheid van een
 Byte Order Marker (byte volgorde markering)
 (kort:
-BOM) of op basis van het huidige besturingssysteem lokatie\&. Hoe de karakter van de lokatie wordt \*(Aqachterhaald\*(Aq hangt af van het besturingssysteem waarop
+BOM) of op basis van het huidige besturingssysteem locatie\&. Hoe het karakter van de locatie wordt \*(Aqachterhaald\*(Aq hangt af van het besturingssysteem waarop
 \fBmkvmerge\fR(1)
 is opgestart\&.
 .PP
 Tekst bestanden die starten met BOM (byte volgorde markering) zijn al gecodeerd in de vertegenwoordiging van UTF\&.
 \fBmkvmerge\fR(1)
-ondersteunt \('e\('en van de volgende vijf modes: UTF\-8, UTF\-16 Little en Big Endian, UTF\-32 Little en Big Endian\&. Tekst bestanden met een BOM (byte volgorde markering) worden automatisch geconverteerd naar UTF\-8\&. Elke van de parameters die gezet zouden zijn voor een dergelijk bestand (b\&.v\&.
+ondersteund \('e\('en van de volgende vijf modes: UTF\-8, UTF\-16 Little en Big Endian, UTF\-32 Little en Big Endian\&. Tekst bestanden met een BOM (byte volgorde markering) worden automatisch geconverteerd naar UTF\-8\&. Elke van de parameters die gezet zouden zijn voor een dergelijk bestand (b\&.v\&.
 \fB\-\-sub\-charset\fR) worden stilletjes genegeerd\&.
 .PP
 Op Unix\-achtige systemen gebruikt
@@ -2128,13 +2130,13 @@ besturingssysteem oproep, welke beurtelings de omgevingsvariabelen gebruikt
 \fILANG\fR,
 \fILC_ALL\fR
 en
-\fILC_CYPE\fR\&. Het resulterende karakter set is vaak \('e\('en van de UTF\-8 of de ISO\-8859\-* familie en wordt gebruikt voor alle tekst bestand operaties en voor het coderen van reeksen op de commandoregel voor een uitvoer naar het apparaat/houder\&.
+\fILC_CYPE\fR\&. Het resulterende karakter set is vaak \('e\('en van de UTF\-8 of de ISO\-8859\-* familie en wordt gebruikt voor alle tekst bestand operaties en voor het coderen van reeksen op de commandoregel voor een uitvoer naar de apparaat/houder\&.
 .PP
 Met Windows zijn er eigenlijk twee karakter sets welke
 \fBmkvmerge\fR(1)
 gebruikt, door de manier waarop het Windows commandoregel programma
 \fBcmd\&.exe\fR
-is ge\(:implementeerd\&. De eerste karakter set wordt bepaald door een vraag met de
+is ge\(:implementeerd\&. Het eerste karakter set wordt bepaald door een vraag met de
 \fBGetCP()\fR
 besturingssysteem oproep\&. Deze karakter set wordt standaard gebruikt voor tekst bestand conversie en voor alle elementen getoond met het
 GUI
@@ -2144,16 +2146,16 @@ Een andere karakterset kan worden gebruikt als
 \fBcmd\&.exe\fR
 is gebruikt\&. Echter, is het lezen van de opdrachtregel gedaan met de
 \fBGetCommandLineW()\fR
-functie welke reeds een Unicode reeks retouneerd\&. Daarom wordt de optie
+functie welke al een Unicode reeks retourneert\&. Daarom wordt de optie
 \fB\-\-command\-line\-charset\fR
 genegeerd door Windows\&. Uitvoer naar console wordt gedaan met de
 \fBWriteConsoleW()\fR
 functie\&. Daarom de optie
 \fB\-\-output\-charset\fR
-wordt alleen gebruikt in Windows als de uitvoer is geredirigeerd met
+wordt alleen gebruikt in Windows als de uitvoer is geredigeerd met
 \fB\-\-redirect\-output\fR\&.
 .PP
-Als de volgende optie aanwezig is dan is het toegestaan de karakter set te specificeren:
+Als de volgende optie aanwezig is dan is het toegestaan het karakter set te specificeren:
 .sp
 .RS 4
 .ie n \{\
@@ -2165,7 +2167,7 @@ Als de volgende optie aanwezig is dan is het toegestaan de karakter set te speci
 .\}
 
 \fB\-\-sub\-charset\fR
-voor tekst ondertitels en tekst ondertitel sporen opgeslagen in de houder formaat waarvan de karakter set niet onomtstotelijk kan worden vastgesteld (b\&.v\&. Ogg bestanden),
+voor tekst ondertitels en tekst ondertitel sporen opgeslagen in de houder formaat waarvan de karakter set niet onomstotelijk kan worden vastgesteld (b\&.v\&. Ogg bestanden),
 .RE
 .sp
 .RS 4
@@ -2178,7 +2180,7 @@ voor tekst ondertitels en tekst ondertitel sporen opgeslagen in de houder formaa
 .\}
 
 \fB\-\-chapter\-charset\fR
-voor tekst hoofdstuk bestanden en voor hoofdstukken en bestand titels opgeslagen in de houder formaat waarvan de karakter set niet onomtstotelijk kan worden vastgesteld (b\&.v\&. Ogg bestanden voor hoofdstuk informatie, spoor en bestand titels etc\&.; MP4 bestanden voor hoofdstuk informatie),
+voor tekst hoofdstuk bestanden en voor hoofdstukken en bestand titels opgeslagen in de houder formaat waarvan de karakter set niet onomstotelijk kan worden vastgesteld (b\&.v\&. Ogg bestanden voor hoofdstuk informatie, spoor en bestand titels etc\&.; MP4 bestanden voor hoofdstuk informatie),
 .RE
 .sp
 .RS 4
@@ -2191,7 +2193,7 @@ voor tekst hoofdstuk bestanden en voor hoofdstukken en bestand titels opgeslagen
 .\}
 
 \fB\-\-command\-line\-charset\fR
-voor alle ingave\*(Aqs op de commandoregel,
+voor alle ingaven op de commandoregel,
 .RE
 .sp
 .RS 4
@@ -2204,7 +2206,7 @@ voor alle ingave\*(Aqs op de commandoregel,
 .\}
 
 \fB\-\-output\-charset\fR
-voor alle reeksen geschreven naar het apparaat/houder of naar een bestand wanneer de uitvoer is omgeleid met de
+voor alle reeksen geschreven naar de apparaat/houder of naar een bestand wanneer de uitvoer is omgeleid met de
 \fB\-\-redirect\-output\fR
 optie\&.
 .RE
@@ -2214,14 +2216,14 @@ Een optiebestand is een
 \fBmkvmerge\fR(1)
 bestand; waaruit extra commandoregel argumenten gelezen kunnen worden Dit kan worden gebruikt om bepaalde beperkingen van het dos scherm of het besturingssysteem bij het uitvoeren van externe programma\*(Aqs zoals een beperkte opdrachtregel lengte te omzeilen\&.
 .PP
-Er zijn verschillende regels betreffende bestand opties\&. Regels waarvan de eerste niet\-scheidingsteken een hekje is (\*(Aq#\*(Aq) worden afgehandeld als commentaar en worden genegeerd\&. Een spatie aan het eind ee begin van een regel worden verwijderd\&. Elke regel mag exact \('e\('en optie bevatten\&.
+Er zijn verschillende regels betreffende bestand opties\&. Regels waarvan de eerste niet\-scheidingsteken een hekje is (\*(Aq#\*(Aq) worden afgehandeld als commentaar en worden genegeerd\&. Een spatie aan het eind en begin van een regel worden verwijderd\&. Elke regel mag exact \('e\('en optie bevatten\&.
 .PP
 Een regel die niets bevat wordt ook genegeerd\&. Een leeg argument wordt gepresenteerd via de regel \*(Aq#EMPTY#\*(Aq\&.
 .PP
 Verschillende karakters kunnen worden overgeslagen, b\&.v\&. als het nodig is een niet commentaar regel te starten met \*(Aq#\*(Aq\&. Deze regels worden beschreven in
-de sectie over overslaan van tekst\&.
+de sectie over: Overslaan van speciale karakter(s) in tekst\&.
 .PP
-Opmerking: backslashes moeten altijd ingesloten worden\&. Hash marks (\*(Aq#\*(Aq) moeten ingesloten worden indien die niet starten met een commentaar\&.
+Opmerking: backslashes (\*(Aq\e\*(Aq) moeten altijd ingesloten worden\&. Hash markeringen (\*(Aq#\*(Aq) moeten ingesloten worden indien die niet starten met een commentaar\&.
 .PP
 De commandoregel \*(Aq\fBmkvmerge \-o "mijn bestand\&.mkv" \-A "een film\&.avi" geluid\&.ogg\fR\*(Aq kan geconverteerd worden naar het volgende optie bestand:
 .sp
@@ -2251,11 +2253,11 @@ De regels zijn: \*(Aq \*(Aq (een spatie) wordt \*(Aq\es\*(Aq, \*(Aq"\*(Aq (dubbe
 .SH "ONDERTITELINGEN"
 .PP
 Er zijn verschillende tekst ondertitel formaten welke kunnen worden \*(Aqingebakken\*(Aq in
-Matroska(TM)\&. Tekst ondertitels moet worden hergecodeerd naar UTF\-8 zodat deze juist kunnen worden getoond door een afspeler (zie de sectie over
+Matroska(TM)\&. Tekst ondertitels moet worden her gecodeerd naar UTF\-8 zodat deze juist kunnen worden getoond door een afspeler (zie de sectie over
 tekst bestanden en karakter sets
 voor een uitleg hoe
 \fBmkvmerge\fR(1)
-converteert tussen de verschillende karakter sets)\&. Kate ondertitels zijn reeds gecodeerd met UTF\-8 en hoeven niet ge\-hercodeerd te worden\&.
+converteert tussen het verschillende karakter sets)\&. Kate ondertitels zijn al gecodeerd met UTF\-8 en hoeven niet gehercodeerd te worden\&.
 .PP
 De volgende ondertitel formaten worden momenteel ondersteund:
 .sp
@@ -2334,7 +2336,7 @@ segmenten\&. En de meeste bestanden bevatten alleen \('e\('en
 Matroska(TM)
 segment de volgende uitleg gebruikt de term \*(Aqbestand linken\*(Aq hoewel \*(Aqsegment linken\*(Aq meer op zijn plaats zou zijn\&.
 .PP
-Elk segment word ge\(:indentificeerd door een uniek 128 bit lang segment UID\&. Dit UID wordt automatisch gegenereerd door
+Elk segment wordt ge\(:identificeerd door een uniek 128 bit lang segment UID\&. Dit UID wordt automatisch gegenereerd door
 \fBmkvmerge\fR(1)\&. Het linken wordt primair gedaan via het zetten van het segment UID\*(Aqs (kort:
 SID) van het volgende/vorige bestand naar het segment kop informatie\&.
 \fBmkvinfo\fR(1)
@@ -2366,7 +2368,7 @@ voorgevoegd met \*(Aq0x\*(Aq elk, b\&.v\&. \*(Aq0x41 0xda 0x73 0x66 0xd9 0xcf 0x
 \fB0x00\fR
 en
 \fB0xff\fR
-zonder het \*(Aq0x\*(Aq voorvoegsel en zonder spaties, b\&.v\&. \*(Aq41da7366d9cfb21eae78ebb45ecab393\*(Aq\&.
+zonder de \*(Aq0x\*(Aq voorvoegsel en zonder spaties, b\&.v\&. \*(Aq41da7366d9cfb21eae78ebb45ecab393\*(Aq\&.
 .PP
 Als splitsen wordt gebruikt, dan is het eerste bestand gelinkt naar het
 SID
@@ -2383,9 +2385,9 @@ De
 Matroska(TM)
 de specificatie verklaart dat sommige elementen een standaard waarde hebben\&. Gewoonlijk wordt een element niet naar het bestand geschreven als het niet gelijk is aan de standaard waarde, dit om ruimte te besparen\&. De elementen die gebruiker zou kunnen missen in
 \fBmkvinfo\fR(1)\*(Aqs uitvoer, zijn de
-\fIlanuage (taal) \fR
+\fIlanguage (taal) \fR
 en de
-\fI defautt track flag (standaard spoor markering)\fR
+\fI default track flag (standaard spoor markering)\fR
 elementen\&. De standaard waarde voor de
 \fIlanguage (taal) \fRis English (is Engels) (\*(Aqeng\*(Aq), en de standaard waarde voor de
 \fIstandard track flag (standaard spoor markering)\fR
@@ -2431,7 +2433,7 @@ Als een
 Matroska(TM)
 bestandsbijlage bevat en is gebruikt als een invoer bestand dan zal
 \fBmkvmerge\fR(1)
-de bijlage kopieeren naar een nieuw bestand\&. De selectie, welke bijlage wordt gekopieerd en welke niet kan veranderd worden met de opties
+de bijlage kopi\(:eren naar een nieuw bestand\&. De selectie, welke bijlage wordt gekopieerd en welke niet kan veranderd worden met de opties
 \fB\-\-attachments\fR
 en
 \fB\-\-no\-attachments\fR\&.
@@ -2439,7 +2441,8 @@ en
 .PP
 Het
 Matroska(TM)
-hoofdstuk systeem is krachtiger dan het oude bekende systeem vanOGM
+hoofdstuk systeem is krachtiger dan het oude bekende systeem van
+OGM
 bestanden\&. De volledige specificatie kan gevonden worden op de
 \m[blue]\fBMatroska(TM)\fR\m[]\&\s-2\u[1]\d\s+2
 website\&.
@@ -2450,7 +2453,7 @@ ondersteunt twee soorten van hoofdstuk bestanden als invoer\&. Het eerste formaa
 OGM
 hulpmiddel verwacht\&. Het tweede format is een
 XML
-gebasseerd hoofdstuk format welke alle
+gebaseerd hoofdstuk format welke alle
 Matroska(TM)\*(Aqs hoofdstuk functionaliteiten ondersteunt\&.
 .SS "Een eenvoudig hoofdstuk formaat"
 .PP
@@ -2479,7 +2482,7 @@ ChapterAtom\&. Het plaatst geen
 ChapterTrackNumber
 Wat inhoudt, dat de hoofdstukken van toepassing zijn aan alle sporen in het bestand\&.
 .PP
-Aangezien dit een tekst bestand is kan karakter set conversie nog nodig zijn\&. Zie de sectie over
+Omdat dit een tekst bestand is kan karakter set conversie nog nodig zijn\&. Zie de sectie over
 tekst bestanden en karakter sets
 voor een uitleg hoe
 \fBmkvmerge\fR(1)
@@ -2521,7 +2524,7 @@ gebaseerde hoofdstuk formaat lijkt op dit voorbeeld:
 .RE
 .\}
 .PP
-Met dit format zijn drie dingen mogelijk die niet mogelijk zijn met het simpele hoofdstuk format:
+Met deze format zijn drie dingen mogelijk die niet mogelijk zijn met het simpele hoofdstuk format:
 .sp
 .RS 4
 .ie n \{\
@@ -2553,7 +2556,7 @@ Hoofdstukken mogen ingekapseld zijn
 .sp -1
 .IP "  3." 4.2
 .\}
-De taal en het land mag ingesteld worden
+De taal en het land mogen ingesteld worden
 .RE
 .PP
 De mkvtoolnix distributie bevat meerdere voorbeeld bestanden in de
@@ -2602,18 +2605,18 @@ Chapters (master)
 .PP
 Bij het splitsen van bestanden dan zal
 \fBmkvmerge\fR(1)
-tevens de hoofdstukken juist bijstellen\&. Dit betekendt, dat elk bestand slechts de hoofdstukingangen omvat waarop het van toepassing is, en dat de tijd codes worden gecompenseerd om te voldoen aan de nieuwe tijd codes van elk uitvoer bestand\&.
+tevens de hoofdstukken juist bijstellen\&. Dit betekent, dat elk bestand slechts de hoofdstukingangen omvat waarop het van toepassing is, en dat de tijd codes worden gecompenseerd om te voldoen aan de nieuwe tijd codes van elk uitvoer bestand\&.
 .PP
 
 \fBmkvmerge\fR(1)
-is in staat hoofdstukken te kopieeren van
+is in staat hoofdstukken te kopi\(:eren van
 Matroska(TM)
 bronbestanden tenzij dit expliciet is uitgezet met de
 \fB\-\-no\-chapters\fR
-optie\&. De hoofdstukken van alle bronen (Matroska(TM)
+optie\&. De hoofdstukken van alle bronnen (Matroska(TM)
 bestanden, Ogg bestanden,
 MP4
-bestanden, hoofdstuk tekst bestanden) worden gewoonlijk niet samengevoegd maar eindigen als een separate
+bestanden, hoofdstuk tekst bestanden) worden gewoonlijk niet samengevoegd maar eindigen als een gescheiden
 ChapterEditions\&. Alleen wanneer de hoofdstukken worden gelezen van verschillende
 Matroska(TM)
 of
@@ -2631,7 +2634,7 @@ Matroska(TM)
 ondersteunt een uitgebreide set markeringen welke zijn verouderd, een nieuw simpeler systeem welke worden gebruikt in de meeste overige inhoudsformaten:
 \fIKEY=VALUE\fR\&. Hoewel, in
 Matroska(TM)
-deze markeeringen ook kunnen worden ingekapseld, en beide de
+deze markeringen ook kunnen worden ingekapseld, en beide de
 \fIKEY\fR
 en de
 \fIVALUE\fR
@@ -2682,7 +2685,7 @@ deel van de\fB\-\-tags\fR
 opties\&.
 .SS "Voorbeeld"
 .PP
-Laten we aannemen, dat je een markering wiilt toevoegen aan een video spoor gelezen van een
+Laten we aannemen, dat je een markering wilt toevoegen aan een video spoor gelezen van een
 AVI\&.
 \fBmkvmerge \-\-identify file\&.avi\fR
 vertelt je, dat het video spoor ID (verwar dit ID niet met het UID!) 0 is\&. Zodat het jouw markeer bestand kan cre\(:eren, laat weg alle
@@ -2706,11 +2709,11 @@ $ mkvmerge \-o file\&.mkv \-\-tags 0:tags\&.xml file\&.avi
 \fBmkvmerge\fR(1)
 ondersteunt een
 XML
-gebasseerde markeer bestand format\&. Het format is rijkelijk gedocumenteerd op de
+gebaseerde markeer bestand format\&. Het format is rijkelijk gedocumenteerd op de
 \m[blue]\fBMatroska(TM)\fR\m[]\&\s-2\u[3]\d\s+2
-specificaties\&. Beide, zowel het binaire alsmede de bron distributies van MKVToolNix komen met een voorbeeld bestand genaamd
+specificaties\&. Beide, zowel het binaire evenals de bron distributies van MKVToolNix komen met een voorbeeld bestand genaamd
 example\-tags\-2\&.xml
-welke simpelweg alle bekende markeringen opsomt en welke kunnen worden gebrukt als basis voor \*(Aqechte leven\*(Aq markeer bestanden\&.
+welke simpelweg alle bekende markeringen opsomt, welke gebruikt kunnen worden als basis voor \*(Aqechte leven\*(Aq markeringsbestanden\&.
 .PP
 De basis is:
 .sp
@@ -2812,7 +2815,7 @@ Tags (master)
 .if n \{\
 .RE
 .\}
-.SH "DE SEGMENT INFO XML BESTANDEN"
+.SH "HET SEGMENT INFORMATIE XML BESTANDEN"
 .PP
 With a segment info XML file it is possible to set certain values in the "segment information" header field of a
 Matroska(TM)
@@ -2905,7 +2908,7 @@ Dit kan het geval zijn voor all\('e\('en\-audio bestanden\&.
 \fBmkvmerge\fR(1)
 staat de gebruiker toe, de tijd codes voor een specifiek spoor zelf te kiezen\&. Dit kan worden gebruikt, om bestanden met de variabele video beeld verhouding te cre\(:eren of \*(Aqgaten\*(Aq in audio te laten bevatten\&. Een beeld in dit geval, is de unit welke
 \fBmkvmerge\fR(1)
-separaat cre\(:eert per
+afzonderlijk cre\(:eert per
 Matroska(TM)
 blok\&. Voor video is dit exact \('e\('en beeld, voor audio is dit \('e\('en pakket van het specifieke audio type b\&.v\&. voor
 AC3
@@ -3020,7 +3023,7 @@ verlaat met \('e\('en van de drie afsluit codes:
 \fB1\fR
 \-\- In dit geval heeft
 \fBmkvmerge\fR(1)
-tenmiste \('e\('en waarschuwing uitgevaardigd, maar het samenvoegen ging door\&. Een waarschuwing gaat vooraf met de tekst \*(AqWarning:\*(Aq\&. Afhankelijk van de \*(Aqtegengekomen\*(Aq kwesties kan het resltaat goed of slecht zijn\&. De gebruiker wordt geadviseerd om zowel de waarschuwing als de resulterende bestanden te controleren\&.
+ten miste \('e\('en waarschuwing uitgevaardigd, maar het samenvoegen ging door\&. Een waarschuwing gaat vooraf met de tekst \*(AqWarning:\*(Aq\&. Afhankelijk van de \*(Aqtegengekomen\*(Aq kwesties kan het resultaat goed of slecht zijn\&. De gebruiker wordt geadviseerd om zowel de waarschuwing als de resulterende bestanden te controleren\&.
 .RE
 .sp
 .RS 4
@@ -3041,7 +3044,7 @@ breekt direct af na het geven van dit waarschuw bericht\&. Fout! bereik in beric
 .PP
 
 \fBmkvmerge\fR(1)
-gebruikt de standaard variabelen vanuit het systeem lokatie (b\&.v\&.
+gebruikt de standaard variabelen vanuit het systeem locatie (b\&.v\&.
 \fILANG\fR
 en de
 \fILC_*\fR
@@ -3063,8 +3066,8 @@ optie gepasseerd is\&.
 .PP
 \fIMKVTOOLNIX_OPTIONS\fR en de korte versie \fIMTX_OPTIONS\fR
 .RS 4
-De inhoud wordt gesplitst op een spatie\&. De gedeeltelijk resulterende reeks wordt behandeld aflsof het gedaan is via de commandoregel\&. Indien het nodig is speciale karakters te gebruiken (b\&.v\&. spaties) dan moet je die "insluiten" (zie
-de sectie over overslaan van speciale tekens in tekst)\&.
+De inhoud wordt gesplitst op een spatie\&. De gedeeltelijk resulterende reeks wordt behandeld alsof het gedaan is via de commandoregel\&. Indien het nodig is speciale karakters te gebruiken (b\&.v\&. spaties) dan moet je die "insluiten" (zie
+de sectie over: Overslaan van speciale karakter(s) in tekst)\&.
 .RE
 .SH "ZIE OOK"
 .PP

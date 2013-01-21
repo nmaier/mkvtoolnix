@@ -71,7 +71,7 @@ de segment informatie sectie
 .sp
 Zie de sectie over
 bewerk selecteurs/kiezer
-voor een volledige beschrijving van de ingave\*(Aqs\&.
+voor een volledige beschrijving van de ingaven\&.
 .RE
 .PP
 \fB\-a\fR, \fB\-\-add\fR \fIname\fR=\fIvalue\fR
@@ -139,7 +139,7 @@ zijn gespecificeerd (zie hieronder), b\&.v\&.
 .PP
 \fB\-c\fR, \fB\-\-chapters\fR \fIfilename\fR
 .RS 4
-Toievoegen of vervangen van hoofdstukken in het betsand met degene van
+Toievoegen of vervangen van hoofdstukken in het bestand met degene van
 filename
 of verwijder ze als
 filename
@@ -154,7 +154,7 @@ Acties voor afhandelen van bijlagen:
 .PP
 \fB\-\-add\-attachment\fR \fIfilename\fR
 .RS 4
-Adds a new attachment from
+Voegt een nieuwe bijlage van
 \fIfilename\fR\&.
 .sp
 Als de optie
@@ -164,7 +164,7 @@ is gebruikt voorafgaand tot deze optie, wordt die waarde gebruikt als vervanging
 .sp
 Als de optie
 \fB\-\-attachment\-dmime\-type\fR
-is gebruikt voorafgaand tot deze optie, wordt die waarde gebruikt als vervanging van het MIME type\&. Anderes wordt het automatisch gedetecteerd van de inhoud van
+is gebruikt voorafgaand tot deze optie, wordt die waarde gebruikt als vervanging van het MIME type\&. Anders wordt het automatisch gedetecteerd van de inhoud van
 \fIfilename\fR\&.
 .sp
 Als de optie
@@ -242,21 +242,21 @@ uitvoering\&.
 .PP
 Andere opties:
 .PP
-\fB\-\-command\-line\-charset\fR \fI(karakter\-set)\fR
+\fB\-\-command\-line\-charset\fR \fI(karakterset)\fR
 .RS 4
-Plaatst het karakter set om de reeksen om te zetten die vanaf de commandoregel worden opgegeven\&. Standaard wordt gebruikt de karakter set die afhankelijk is van wat er in uw besturingssysteem staat aangegeven (lokatie)\&.
+Plaatst het karakter set om de reeksen om te zetten die vanaf de commandoregel worden opgegeven\&. Standaard wordt gebruikt het karakter set die afhankelijk is van wat er in uw besturingssysteem staat aangegeven (locatie)\&.
 .RE
 .PP
-\fB\-\-output\-charset\fR \fI(karakter\-set)\fR
+\fB\-\-output\-charset\fR \fI(karakterset)\fR
 .RS 4
-Stelt de karakter set in waarnaar de reeksen dienen te worden geconverteerd naar de uitvoer\&. Standaard wordt gebruikt de karakter set die afhankelijk is van wat er in uw besturingssysteem staat aangegeven (lokatie)\&.
+Stelt het karakter set in, waarnaar de reeksen naar de uitvoer dienen te worden geconverteerd\&. Standaard wordt gebruikt het karakter set die afhankelijk is van wat er in uw besturingssysteem staat aangegeven (locatie)\&.
 .RE
 .PP
 \fB\-r\fR, \fB\-\-redirect\-output\fR \fI(bestandsnaam)\fR
 .RS 4
 Schrijft alle berichten naar een bestand
 \fIfile\-name\fR
-i\&.p\&.v naar het \*(Aqapparaat/houder\*(Aq\&. Terwijl dit gemakkelijk met uitvoer omleiden kan worden gedaan er zijn gevallen waarin deze optie nodig is: wanneer de verwerker e\&.e\&.a her\-interpreteert voordat het geschreven wordt naar het uitvoer bestand\&. De karakter set met
+i\&.p\&.v\&. naar de \*(Aqapparaat/houder\*(Aq\&. Terwijl dit gemakkelijk met uitvoer omleiden kan worden gedaan er zijn gevallen waarin deze optie nodig is: wanneer de verwerker e\&.e\&.a\&. herinterpreteert voordat het geschreven wordt naar de uitvoer bestand\&. Het karakter set met
 \fB\-\-output\-charset\fR
 is toegewezen\&.
 .RE
@@ -273,12 +273,12 @@ en
 \fIcode\fR
 zal voor zorgen dat
 \fBmkvextract\fR(1)
-een lijst zal uitvoeren van alle beschikbaren vertalingen\&.
+een lijst zal uitvoeren van alle beschikbare vertalingen\&.
 .RE
 .PP
 \fB\-\-title\fR \fIonderwerp\fR
 .RS 4
-Zet debuggen aan voor een spcifieke mogelijkheid\&. Dit is alleen zinvol voor ontwikkelaars\&.
+Zet debuggen aan voor een specifieke mogelijkheid\&. Dit is alleen zinvol voor ontwikkelaars\&.
 .RE
 .PP
 \fB\-\-tags\fR \fIfeature\fR
@@ -306,7 +306,7 @@ Toon versie informatie en sluit af\&.
 .PP
 \fB\-\-check\-for\-updates\fR
 .RS 4
-Controleert online op nieuwere versie\*(Aqs via ophalen op adres
+Controleert online op nieuwere versies via ophalen op adres
 \m[blue]\fBhttp://mkvtoolnix\-releases\&.bunkus\&.org/latest\-release\&.xml\fR\m[]\&. Vier regels worden uitgevoerd in
 key=value
 stijl: het adres van waar de informatie wordt verkregen (key
@@ -316,18 +316,18 @@ available_version
 en het ophaal adres (key
 download_url)\&.
 .sp
-Nadien sluit het programma af met een afsluitwaarde van 0 als er geen nieuwere versie beschikbaar is, met een 1 als er een nieuwere beschikbaar is en 2 indien er een fout ontstond (b\&.v\&. als de opwaardeer info niet verkregen kon worden)\&.
+Nadien sluit het programma af met een afsluitwaarde van 0 als er geen nieuwere versie beschikbaar is, met een 1 als er een nieuwere beschikbaar is en 2 indien er een fout ontstond (b\&.v\&. als de opwaardeer informatie niet verkregen kon worden)\&.
 .sp
-Deze optie is alleeen beschikbaar indien het gebouwd is met ondersteuning voor libcurl\&.
+Deze optie is alleen beschikbaar indien het gebouwd is met ondersteuning voor libcurl\&.
 .RE
 .PP
 \fB@\fR\fIoptions\-file\fR
 .RS 4
 Leest extra commandoregel argumenten in van een bestand
-\fIoptions\-file\fR\&. Regels met een spatie (lege ruimte) als eerste karakter, zijn gemarkeerd als een hash (waarde) (\*(Aq#\*(Aq) worden behandeld als commentaar en genegeerd\&. Een spatie aan het begin en einde van een regel worden verwijderd\&. Elke regel mag excact \('e\('en waarde bevatten
+\fIoptions\-file\fR\&. Regels met een spatie (lege ruimte) als eerste karakter, zijn gemarkeerd als een hash (waarde) (\*(Aq#\*(Aq) worden behandeld als commentaar en genegeerd\&. Een spatie aan het begin en einde van een regel worden verwijderd\&. Elke regel mag exact \('e\('en waarde bevatten
 .sp
 Verschillende karakters kunnen worden overgeslagen, b\&.v\&. als het nodig is een niet commandoregel te starten met een \*(Aq#\*(Aq de regels worden beschreven in
-de sectie over overslaan van tekst\&.
+de sectie over: Overslaan van speciale karakter(s) in tekst\&.
 .sp
 De commandoregel \*(Aq\fBmkvpropedit source\&.mkv \-\-edit track:a2 \-\-set name=Comments\fR\*(Aq kon niet worden geconverteerd naar het volgende optie bestand:
 .sp
@@ -359,7 +359,7 @@ voeg toe,
 zet
 en
 verwijder
-acties die er op werken\&. Dit blijft geldig todat de volgende optie
+acties die er op werken\&. Dit blijft geldig totdat de volgende optie
 \fB\-\-edit\fR
 is gevonden\&. Het argument naar deze optie wordt genoemd de bewerk selecteur/kiezer\&.
 .PP
@@ -368,7 +368,7 @@ Standaard bewerkt
 de segment informatie sectie
 .SS "Segment informatie"
 .PP
-De segment informatie kan worden geselecteerd met \('e\('en van deze drie woorden: \*(Aqinfo\*(Aq, \*(Aqsegment_info\*(Aq of \*(Aqsegmentinfo\*(Aq\&. het bevat eigenschappen zoals, segment titel of het segment
+Het segment informatie kan worden geselecteerd met \('e\('en van deze drie woorden: \*(Aqinfo\*(Aq, \*(Aqsegment_info\*(Aq of \*(Aqsegmentinfo\*(Aq\&. het bevat eigenschappen zoals, segment titel of het segment
 UID\&.
 .SS "Spoor koppen"
 .PP
@@ -379,7 +379,7 @@ Spoor koppen kunnen worden geselecteerd met een ietwat complexere selectie\&. Al
 Als de parameter
 \fIn\fR
 een nummer is dan zal het
-\fIn\fR\*(Aqde spoor worden geselecteerd\&. De spoor volgorde is hezelfde als
+\fIn\fR\*(Aqde spoor worden geselecteerd\&. De spoor volgorde is hetzelfde als
 \fBmkvmerge\fR(1)\*(Aqs
 \fB\-\-identify\fR
 optie uitvoert\&.
@@ -472,7 +472,7 @@ gevolg door een nummer, de bijlage\*(Aqs unieke ID als uitvoer door
 .\}
 Keuze via bestandsnaam\&. In deze vorm is de keuze het letterlijke woord
 naam:
-gevolg door een bstaande bijlage naam\&. Als deze keuze is geselecteerd met
+gevolg door een bestaande bijlage naam\&. Als deze keuze is geselecteerd met
 \fB\-\-replace\-attachment\fR
 dan moeten dubbele punten binnen de naam overeen te laten komen worden ingesloten als
 \ec\&.
@@ -494,11 +494,11 @@ dan om dubbele punten overeen te laten komen binnenin het MIME\-type moeten word
 .RE
 .SH "VOORBEELDEN"
 .PP
-Het volgende voorbeeld bewerkt een bestand genaamd \*(Aqfilm\&.mkv\*(Aq\&. Het zet het segment titel en modificeert de taal code van een audio en ondertitel spoor\&. Opmerking: Ddat dit voorbeeld kan worden verkort door het weglaten van de eerste optie
+The following example edits a file called \*(Aqmovie\&.mkv\*(Aq\&. It sets the segment title and modifies the language code of an audio and a subtitle track\&. Note that this example can be shortened by leaving out the first
 \fB\-\-edit\fR
-omdat bewerken van het segment informatie element in elk geval standaard is voor alle opties welke worden gevonden voor de eerste
+option because editing the segment information element is the default for all options found before the first
 \fB\-\-edit\fR
-optie\&.
+option anyway\&.
 .sp
 .if n \{\
 .RS 4
@@ -662,7 +662,7 @@ verlaat met \('e\('en van drie verlaat codes:
 \fB1\fR
 \-\- In dit geval heeft
 \fBmkvpropedit\fR(1)
-minstends \('e\('en waarschuwing uitgegeven, maar extractie is doorgegaan\&. Een waarschuwing wordt vooraf bepaald met de tekst \*(AqWarning:\*(Aq\&. Afhankelijk van de \*(Aqtegengekomen\*(Aq kwesties kan het resltaat goed of slecht zijn\&. De gebruiker wordt geadviseerd, om zowel de waarschuwing als de resulterende bestanden te controleren\&.
+minstends \('e\('en waarschuwing uitgegeven, maar extractie is doorgegaan\&. Een waarschuwing wordt vooraf bepaald met de tekst \*(AqWarning:\*(Aq\&. Afhankelijk van de \*(Aqtegengekomen\*(Aq kwesties kan het resultaat goed of slecht zijn\&. De gebruiker wordt geadviseerd, om zowel de waarschuwing als de resulterende bestanden te controleren\&.
 .RE
 .sp
 .RS 4
@@ -688,7 +688,7 @@ De regels zijn: \*(Aq \*(Aq (een spatie) wordt \*(Aq\es\*(Aq, \*(Aq"\*(Aq (dubbe
 .PP
 
 \fBmkvpropedit\fR(1)
-gebruikt de standaard variabelen vanuit het systeem lokatie (b\&.v\&.
+gebruikt de standaard variabelen vanuit het systeem locatie (b\&.v\&.
 \fILANG\fR
 en de
 \fILC_*\fR
@@ -710,8 +710,8 @@ optie gepasseerd is\&.
 .PP
 \fIMKVTOOLNIX_OPTIONS\fR en de korte versie \fIMTX_OPTIONS\fR
 .RS 4
-De inhoud wordt gesplitst op een spatie\&. De gedeeltelijk resulterende reeks wordt behandeld aflsof het gedaan is via de commandoregel\&. Indien het nodig is speciale karakters te gebruiken (b\&.v\&. spaties) dan moet je die "insluiten" (zie
-de sectie over overslaan van speciale karakters in een tekst)\&.
+De inhoud wordt gesplitst op een spatie\&. De gedeeltelijk resulterende reeks wordt behandeld alsof het gedaan is via de commandoregel\&. Indien het nodig is speciale karakters te gebruiken (b\&.v\&. spaties) dan moet je die "insluiten" (zie
+de sectie over: Overslaan van speciale karakter(s) in tekst)\&.
 .RE
 .SH "ZIE OOK"
 .PP
