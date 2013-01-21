@@ -16,7 +16,7 @@
 
 #include "common/common_pch.h"
 
-class split_point_t {
+class split_point_c {
 public:
   enum type_e {
     duration,
@@ -33,7 +33,7 @@ public:
   bool m_use_once, m_discard, m_create_new_file;
 
 public:
-  split_point_t(int64_t point,
+  split_point_c(int64_t point,
                 type_e type,
                 bool use_once,
                 bool discard = false,
@@ -47,7 +47,7 @@ public:
   }
 
   bool
-  operator <(split_point_t const &rhs)
+  operator <(split_point_c const &rhs)
     const {
     return m_point < rhs.m_point;
   }

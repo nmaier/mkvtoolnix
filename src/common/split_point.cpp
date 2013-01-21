@@ -17,7 +17,7 @@
 #include "common/strings/formatting.h"
 
 std::string
-split_point_t::str()
+split_point_c::str()
   const {
   return (boost::format("<%1% %2% once:%3% discard:%4% create_file:%5%>")
           % format_timecode(m_point)

@@ -57,8 +57,8 @@ private:
   bool m_first_video_keyframe_seen;
   mm_io_c *m_out;
 
-  std::vector<split_point_t> m_split_points;
-  std::vector<split_point_t>::iterator m_current_split_point;
+  std::vector<split_point_c> m_split_points;
+  std::vector<split_point_c>::iterator m_current_split_point;
 
   std::map<id_timecode_t, int64_t> m_id_timecode_duration_map;
   size_t m_num_cue_points_postprocessed;
@@ -92,7 +92,7 @@ public:
   int64_t get_discarded_duration() const;
   void handle_discarded_duration(bool create_new_file, bool previously_discarding);
 
-  void add_split_point(const split_point_t &split_point);
+  void add_split_point(split_point_c const &split_point);
   void dump_split_points() const;
   bool splitting() const {
     return !m_split_points.empty();

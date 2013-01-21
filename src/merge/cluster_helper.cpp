@@ -131,7 +131,7 @@ cluster_helper_c::split_if_necessary(packet_cptr &packet) {
   bool split_now = false;
 
   // Maybe we want to start a new file now.
-  if (split_point_t::size == m_current_split_point->m_type) {
+  if (split_point_c::size == m_current_split_point->m_type) {
     int64_t additional_size = 0;
 
     if (!m_packets.empty())
@@ -146,18 +146,18 @@ cluster_helper_c::split_if_necessary(packet_cptr &packet) {
     if ((m_header_overhead + additional_size + m_bytes_in_file) >= m_current_split_point->m_point)
       split_now = true;
 
-  } else if (   (split_point_t::duration == m_current_split_point->m_type)
+  } else if (   (split_point_c::duration == m_current_split_point->m_type)
              && (0 <= m_first_timecode_in_file)
              && (packet->assigned_timecode - m_first_timecode_in_file) >= m_current_split_point->m_point)
     split_now = true;
 
-  else if (   (   (split_point_t::timecode == m_current_split_point->m_type)
-               || (split_point_t::parts    == m_current_split_point->m_type))
+  else if (   (   (split_point_c::timecode == m_current_split_point->m_type)
+               || (split_point_c::parts    == m_current_split_point->m_type))
            && (packet->assigned_timecode >= m_current_split_point->m_point))
     split_now = true;
 
-  else if (   (   (split_point_t::frame_field       == m_current_split_point->m_type)
-               || (split_point_t::parts_frame_field == m_current_split_point->m_type))
+  else if (   (   (split_point_c::frame_field       == m_current_split_point->m_type)
+               || (split_point_c::parts_frame_field == m_current_split_point->m_type))
            && (m_frame_field_number >= m_current_split_point->m_point))
     split_now = true;
 
@@ -183,8 +183,8 @@ cluster_helper_c::split(packet_cptr &packet) {
 
   if (m_current_split_point->m_use_once) {
     if (   m_current_split_point->m_discard
-        && (   (split_point_t::parts             == m_current_split_point->m_type)
-            || (split_point_t::parts_frame_field == m_current_split_point->m_type))
+        && (   (split_point_c::parts             == m_current_split_point->m_type)
+            || (split_point_c::parts_frame_field == m_current_split_point->m_type))
         && (m_split_points.end() == (m_current_split_point + 1))) {
       mxdebug_if(m_debug_splitting, boost::format("Splitting: Last part in 'parts:' splitting mode finished\n"));
       m_splitting_and_processed_fully = true;
@@ -658,7 +658,7 @@ cluster_helper_c::handle_discarded_duration(bool create_new_file,
 }
 
 void
-cluster_helper_c::add_split_point(const split_point_t &split_point) {
+cluster_helper_c::add_split_point(const split_point_c &split_point) {
   m_split_points.push_back(split_point);
   m_current_split_point = m_split_points.begin();
   m_discarding          = m_current_split_point->m_discard;
@@ -673,8 +673,8 @@ cluster_helper_c::split_mode_produces_many_files()
   if (!splitting())
     return false;
 
-  if (   (split_point_t::parts             != m_split_points.front().m_type)
-      && (split_point_t::parts_frame_field != m_split_points.front().m_type))
+  if (   (split_point_c::parts             != m_split_points.front().m_type)
+      && (split_point_c::parts_frame_field != m_split_points.front().m_type))
     return true;
 
   bool first = true;
@@ -698,7 +698,7 @@ cluster_helper_c::dump_split_points()
   const {
   mxdebug_if(m_debug_splitting,
              boost::format("Split points:%1%\n")
-             % boost::accumulate(m_split_points, std::string(""), [](std::string const &accu, split_point_t const &point) { return accu + " " + point.str(); }));
+             % boost::accumulate(m_split_points, std::string(""), [](std::string const &accu, split_point_c const &point) { return accu + " " + point.str(); }));
 }
 
 cluster_helper_c *g_cluster_helper = nullptr;

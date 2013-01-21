@@ -52,6 +52,7 @@
 #include "common/iso639.h"
 #include "common/mm_io.h"
 #include "common/segmentinfo.h"
+#include "common/split_arg_parsing.h"
 #include "common/strings/formatting.h"
 #include "common/strings/parsing.h"
 #include "common/unique_numbers.h"
@@ -793,7 +794,7 @@ parse_arg_split_duration(const std::string &arg) {
   if (!parse_timecode(s, split_after))
     mxerror(boost::format(Y("Invalid time for '--split' in '--split %1%'. Additional error message: %2%\n")) % arg % timecode_parser_error);
 
-  g_cluster_helper->add_split_point(split_point_t(split_after, split_point_t::duration, false));
+  g_cluster_helper->add_split_point(split_point_c(split_after, split_point_c::duration, false));
 }
 
 /** \brief Parse the timecode format to \c --split
@@ -813,7 +814,7 @@ parse_arg_split_timecodes(const std::string &arg) {
     int64_t split_after;
     if (!parse_timecode(timecode, split_after))
       mxerror(boost::format(Y("Invalid time for '--split' in '--split %1%'. Additional error message: %2%.\n")) % arg % timecode_parser_error);
-    g_cluster_helper->add_split_point(split_point_t(split_after, split_point_t::timecode, true));
+    g_cluster_helper->add_split_point(split_point_c(split_after, split_point_c::timecode, true));
   }
 }
 
@@ -834,7 +835,7 @@ parse_arg_split_frames(std::string const &arg) {
     uint64_t split_after = 0;
     if (!parse_number(frame, split_after) || (0 == split_after))
       mxerror(boost::format(Y("Invalid frame for '--split' in '--split %1%'.\n")) % arg);
-    g_cluster_helper->add_split_point(split_point_t(split_after, split_point_t::frame_field, true));
+    g_cluster_helper->add_split_point(split_point_c(split_after, split_point_c::frame_field, true));
   }
 }
 
@@ -864,7 +865,7 @@ parse_arg_split_chapters(std::string const &arg) {
   if (!g_kax_chapters)
     mxerror(boost::format(Y("No chapters in source files or chapter files found to split by.\n")));
 
-  std::vector<split_point_t> new_split_points;
+  std::vector<split_point_c> new_split_points;
   auto current_number = 0u;
   for (auto element : *g_kax_chapters) {
     auto edition = dynamic_cast<KaxEditionEntry *>(element);
@@ -883,7 +884,7 @@ parse_arg_split_chapters(std::string const &arg) {
 
       int64_t split_after = FindChildValue<KaxChapterTimeStart, uint64_t>(atom, 0);
       if (split_after)
-        new_split_points.push_back(split_point_t{split_after, split_point_t::timecode, true});
+        new_split_points.push_back(split_point_c{split_after, split_point_c::timecode, true});
     }
   }
 
@@ -905,79 +906,14 @@ parse_arg_split_chapters(std::string const &arg) {
 static void
 parse_arg_split_parts(const std::string &arg,
                       bool frames_fields) {
-  std::string s = arg;
+  try {
+    auto split_points = mtx::args::parse_split_parts(arg, frames_fields);
+    for (auto &point : split_points)
+      g_cluster_helper->add_split_point(point);
 
-  if (balg::istarts_with(s, "parts:"))
-    s.erase(0, 6);
-
-  else if (balg::istarts_with(s, "parts-frames:"))
-    s.erase(0, 13);
-
-  if (s.empty())
-      mxerror(boost::format(Y("Missing start/end specifications for '--split' in '--split %1%'.\n")) % arg);
-
-  std::vector<std::tuple<int64_t, int64_t, bool> > split_points;
-  for (auto const &part_spec : split(s, ",")) {
-    auto pair = split(part_spec, "-");
-    if (pair.size() != 2)
-      mxerror(boost::format(Y("Invalid start/end specification for '--split' in '--split %1%' (curent part: %2%).\n")) % arg % part_spec);
-
-    bool create_new_file = true;
-    if (pair[0].substr(0, 1) == "+") {
-      if (!split_points.empty())
-        create_new_file = false;
-      pair[0].erase(0, 1);
-    }
-
-    int64_t start;
-    if (pair[0].empty())
-      start = split_points.empty() ? 0 : std::get<1>(split_points.back());
-
-    else if (!frames_fields && !parse_timecode(pair[0], start))
-      mxerror(boost::format(Y("Invalid start time for '--split' in '--split %1%' (current part: %2%). Additional error message: %3%.\n")) % arg % part_spec % timecode_parser_error);
-
-    else if (frames_fields && (!parse_number(pair[0], start) || (0 > start)))
-      mxerror(boost::format(Y("Invalid start frame/field number for '--split' in '--split %1%' (current part: %2%).\n")) % arg % part_spec);
-
-    int64_t end;
-    if (pair[1].empty())
-      end = std::numeric_limits<int64_t>::max();
-
-    else if (!frames_fields && !parse_timecode(pair[1], end))
-      mxerror(boost::format(Y("Invalid end time for '--split' in '--split %1%' (current part: %2%). Additional error message: %3%.\n")) % arg % part_spec % timecode_parser_error);
-
-    else if (frames_fields && (!parse_number(pair[1], end) || (0 > end)))
-      mxerror(boost::format(Y("Invalid end frame/field number for '--split' in '--split %1%' (current part: %2%).\n")) % arg % part_spec);
-
-    if (end <= start) {
-      if (frames_fields)
-        mxerror(boost::format(Y("Invalid end frame/field number for '--split' in '--split %1%' (current part: %2%). The end number must be bigger than the start number.\n")) % arg % part_spec);
-      else
-        mxerror(boost::format(Y("Invalid end time for '--split' in '--split %1%' (current part: %2%). The end time must be bigger than the start time.\n")) % arg % part_spec);
-    }
-
-    if (!split_points.empty() && (start < std::get<1>(split_points.back()))) {
-      if (frames_fields)
-        mxerror(boost::format(Y("Invalid start frame/field number for '--split' in '--split %1%' (current part: %2%). The start number must be bigger than or equal to the previous part's end number.\n")) % arg % part_spec);
-      else
-        mxerror(boost::format(Y("Invalid start time for '--split' in '--split %1%' (current part: %2%). The start time must be bigger than or equal to the previous part's end time.\n")) % arg % part_spec);
-    }
-
-    split_points.push_back(std::make_tuple(start, end, create_new_file));
+  } catch (mtx::args::format_x &ex) {
+    mxerror(ex.what());
   }
-
-  auto sp_type         = frames_fields ? split_point_t::parts_frame_field : split_point_t::parts;
-  int64_t previous_end = 0;
-
-  for (auto &split_point : split_points) {
-    if (previous_end < std::get<0>(split_point))
-      g_cluster_helper->add_split_point(split_point_t{ previous_end, sp_type, true, true, std::get<2>(split_point) });
-    g_cluster_helper->add_split_point(split_point_t{ std::get<0>(split_point), sp_type, true, false, std::get<2>(split_point) });
-    previous_end = std::get<1>(split_point);
-  }
-
-  if (std::get<1>(split_points.back()) < std::numeric_limits<int64_t>::max())
-    g_cluster_helper->add_split_point(split_point_t{ std::get<1>(split_points.back()), sp_type, true, true });
 }
 
 /** \brief Parse the size format to \c --split
@@ -1015,7 +951,7 @@ parse_arg_split_size(const std::string &arg) {
   if (!parse_number(s, split_after))
     mxerror(boost::format(err_msg) % arg);
 
-  g_cluster_helper->add_split_point(split_point_t(split_after * modifier, split_point_t::size, false));
+  g_cluster_helper->add_split_point(split_point_c(split_after * modifier, split_point_c::size, false));
 }
 
 /** \brief Parse the \c --split argument
