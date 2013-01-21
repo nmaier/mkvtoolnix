@@ -19,6 +19,7 @@
 #include <matroska/KaxBlock.h>
 #include <matroska/KaxCluster.h>
 
+#include "common/split_point.h"
 #include "merge/libmatroska_extensions.h"
 #include "merge/pr_generic.h"
 
@@ -40,43 +41,6 @@ public:
   }
 };
 typedef std::shared_ptr<render_groups_c> render_groups_cptr;
-
-struct split_point_t {
-  enum split_point_type_e {
-    SPT_DURATION,
-    SPT_SIZE,
-    SPT_TIMECODE,
-    SPT_CHAPTER,
-    SPT_PARTS,
-    SPT_PARTS_FRAME_FIELD,
-    SPT_FRAME_FIELD,
-  };
-
-  int64_t m_point;
-  split_point_type_e m_type;
-  bool m_use_once, m_discard, m_create_new_file;
-
-  split_point_t(int64_t point,
-                split_point_type_e type,
-                bool use_once,
-                bool discard = false,
-                bool create_new_file = true)
-    : m_point(point)
-    , m_type(type)
-    , m_use_once(use_once)
-    , m_discard(discard)
-    , m_create_new_file(create_new_file)
-  {
-  }
-
-  bool
-  operator <(split_point_t const &rhs)
-    const {
-    return m_point < rhs.m_point;
-  }
-
-  std::string str() const;
-};
 
 typedef std::pair<int64_t, int64_t> id_timecode_t;
 
