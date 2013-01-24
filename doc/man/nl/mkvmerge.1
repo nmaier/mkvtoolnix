@@ -108,7 +108,7 @@ DTD
 zijn ingesloten in de MKVToolNix distributie\&.
 .sp
 Zie de sectie over
-segment informatie XML bestanden
+Het segment informatie XML bestanden
 zie hieronder voor details\&.
 .RE
 .PP
@@ -123,7 +123,7 @@ Elk gecre\(:eerd bestand bevat \('e\('en segment, en elk segment heeft \('e\('en
 \fB\-\-chapter\-language\fR \fIlanguage\-code\fR
 .RS 4
 Stelt de ISO639\-2 land code waarde in welke geschreven wordt voor elk hoofdstuk ingang\&. Standaard naar \*(Aqeng\*(Aq\&. Zie de sectie over
-hoofdstukken
+Hoofdstukken
 hieronder voor details\&.
 .sp
 Deze optie kan gebruikt worden, voor simpele hoofdstukken en voor bronbestanden welke hoofdstukken bevatten maar geen informatie over hoofdstuk talen, b\&.v\&. MP4 en OGM bestanden\&.
@@ -132,7 +132,7 @@ Deze optie kan gebruikt worden, voor simpele hoofdstukken en voor bronbestanden 
 \fB\-\-chapter\-charset\fR \fIcharacter\-set\fR
 .RS 4
 Stelt het karakter set in, die gebruikt wordt voor de UTF\-8 conversie voor simpele hoofdstuk bestanden\&. Zie de sectie over
-tekst bestanden en karakter sets
+Tekst bestanden en karakter set conversies
 voor een uitleg hoe
 \fBmkvmerge\fR(1)
 converteert tussen het \*(Aqverschillende\*(Aq karakter sets\&.
@@ -486,42 +486,42 @@ verwijzen naar dezelfde tijd code)\&.
 .sp
 Als een start tijd code is weggelaten wordt het standaard gezet naar het vorige bereik eindtijd code\&. Als er geen vorig bereik, dan is standaard het begin van het bestand (zie voorbeeld 3)\&.
 .sp
-If an end timecode is left out then it defaults to the end of the source files which basically tells
+Als een eind tijd code is weggelaten, dan is standaard het einde van de bronbestanden die in feite
 \fBmkvmerge\fR(1)
-to keep the rest (see example 3)\&.
+vertelt om de rest te houden (zie voorbeeld 3)
 .sp
-Normally each range will be written to a new file\&. This can be changed so that consecutive ranges are written to the same file\&. For that the user has to prefix the start timecode with a
-+\&. This tells
+Normaal gesproken wordt elk bereik weggeschreven naar een nieuw bestand\&. Dit kan worden veranderd, zodat opeenvolgende reeksen worden geschreven in hetzelfde bestand\&. Daarvoor moet de gebruiker de start tijd code voorzetten met een
++\&. Dit vertelt
 \fBmkvmerge\fR(1)
-not to create a new file and instead append the range to the same file the previous range was written to\&. Timecodes will be adjusted so that there will be no gap in the output file even if there was a gap in the two ranges in the input file\&.
+om niet een nieuw bestand aan te maken en in plaats daarvan het bereik toe te voegen aan hetzelfde bestand die in de vorige reeks is geschreven\&. Tijdcodes zullen worden aangepast, zodat er g\('e\('en gat ontstaat in het uitvoerbestand, zelfs als er een gat in de twee bereiken in het invoerbestand waren\&.
 .sp
-In example 1
+In voorbeeld 1 zal
 \fBmkvmerge\fR(1)
-will create two files\&. The first will contain the content starting from
+twee bestanden aanmaken\&. De eerste bevat de inhoud startend vanaf
 00:01:20
-until
-00:02:45\&. The second file will contain the content starting from
+tot
+00:02:45\&. De tweede zal de inhoud bevatten vanaf
 00:05:50
-until
+tot
 00:10:30\&.
 .sp
-In example 2
+In voorbeeld 2 zal
 \fBmkvmerge\fR(1)
-will create only one file\&. This file will contain both the content starting from
+slechts \('e\('en bestand aanmaken\&. Dit bestand zal beide inhoud bevatten startend van
 00:01:20
-until
+tot
 00:02:45
-and the content starting from
+en de inhoud startend van
 00:05:50
-until
+tot
 00:10:30\&.
 .sp
-In example 3
+In voorbeeld 3 zal
 \fBmkvmerge\fR(1)
-will create two files\&. The first will contain the content from the start of the source files until
-00:02:45\&. The second file will contain the content starting from
+twee bestanden aanmaken\&. De eerste bevat de inhoud vanaf het beging van het bron bestanden tot
+00:02:45\&. Het tweede bevat de inhoud startend vanaf
 00:05:50
-until the end of the source files\&.
+tot het eind van het bron bestanden\&.
 .if n \{\
 .sp
 .\}
@@ -534,11 +534,11 @@ until the end of the source files\&.
 \fBOpmerking\fR
 .ps -1
 .br
-Note that
+Opmerking, dat
 \fBmkvmerge\fR(1)
-only makes decisions about splitting at key frame positions\&. This applies to both the start and the end of each range\&. So even if an end timecode is between two key frames
+alleen beslissingen neemt over het splitsen op sleutel beeld posities\&. Dit geldt voor zowel voor het begin en het einde van elk bereik\&. Dus zelfs als een eind tijdcode tussen twee sleutel beelden ligt, blijft
 \fBmkvmerge\fR(1)
-will continue outputting the frames up to but excluding the following key frame\&.
+beelden uitvoeren tot aan, maar exclusief de volgende sleutel beeld\&.
 .sp .5v
 .RE
 .RE
@@ -551,9 +551,9 @@ will continue outputting the frames up to but excluding the following key frame\
 .sp -1
 .IP "  5." 4.2
 .\}
-Keeping specific parts by specifying frame/field number ranges while discarding others\&.
+Houden van specifieke delen door het specificeren van beeld/veld nummer bereiken, terwijl het van anderen ontdaan wordt\&.
 .sp
-Syntax:
+Ingaven:
 \fB\-\-split\fR
 parts\-frames:\fIstart1\fR\-\fIend1\fR[,[+]\fIstart2\fR\-\fIend2\fR[,[+]\fIstart3\fR\-\fIend3\fR\&.\&.\&.]]
 .sp
@@ -592,24 +592,24 @@ Voorbeeld:
 \-\-split parts\-frames:\-430,2512\-
 .RE
 .sp
-The
+De
 parts\-frames
-mode tells
+mode vertelt
 \fBmkvmerge\fR(1)
-to keep certain ranges of frame/field numbers while discarding others\&. The ranges to keep have to be listed after the
+bepaalde bereiken van beeld/veld nummers te behouden en anderen over te slaan\&. De te behouden bereiken moeten uit gelijst worden na de
 parts\-frames:
-keyword and be separated by commas\&. A range itself consists of a start and an end frame/field number\&. Numbering starts at 1\&.
+sleutelwoord en gescheiden door een komma\&. Het bereik zelf bestaat uit een start en een eind beeld/veld nummer\&. Nummering start op 1\&.
 .sp
-If a start number is left out then it defaults to the previous range\*(Aqs end number\&. If there was no previous range then it defaults to the start of the file (see example 3)\&.
+Als een start nummer is weggelaten wordt het standaard gezet naar het vorige bereik eind nummer\&. Als er geen vorig bereik is, dan is standaard het begin van het bestand (zie voorbeeld 3)\&.
 .sp
-If an end number is left out then it defaults to the end of the source files which basically tells
+Als een eind nummer is weggelaten, dan is standaard het einde van de bronbestanden die in feite
 \fBmkvmerge\fR(1)
-to keep the rest (see example 3)\&.
+vertelt om de rest te behouden (zie voorbeeld 3)
 .sp
-Normally each range will be written to a new file\&. This can be changed so that consecutive ranges are written to the same file\&. For that the user has to prefix the start number with a
-+\&. This tells
+Normaal gesproken, wordt elk bereik weggeschreven naar een nieuw bestand\&. Dit kan worden veranderd, zodat opeenvolgende reeksen worden geschreven in hetzelfde bestand\&. Daarvoor, moet de gebruiker het start nummer voorzetten met een
++\&. Dit vertelt
 \fBmkvmerge\fR(1)
-not to create a new file and instead append the range to the same file the previous range was written to\&. Timecodes will be adjusted so that there will be no gap in the output file even if there was a gap in the two ranges in the input file\&.
+om niet een nieuw bestand aan te maken en in plaats daarvan, het bereik toe te voegen aan hetzelfde bestand die in de vorige reeks werd geschreven\&. Tijdcodes zullen worden aangepast, zodat er g\('e\('en gat ontstaat in het uitvoerbestand, zelfs als er een gat in de twee bereiken in het invoerbestand waren\&.
 .if n \{\
 .sp
 .\}
@@ -622,40 +622,40 @@ not to create a new file and instead append the range to the same file the previ
 \fBOpmerking\fR
 .ps -1
 .br
-Note that
+Opmerking, dat
 \fBmkvmerge\fR(1)
-only makes decisions about splitting at key frame positions\&. This applies to both the start and the end of each range\&. So even if an end frame/field number is between two key frames
+alleen beslissingen neemt over het splitsen op sleutel beeld posities\&. Dit geldt voor zowel voor het begin en het einde van elk bereik\&. Dus zelfs als een eind beeld/veld nummer tussen twee sleutel beelden ligt, blijft
 \fBmkvmerge\fR(1)
-will continue outputting the frames up to but excluding the following key frame\&.
+beelden uitvoeren tot aan, maar exclusief de volgende sleutel beeld\&.
 .sp .5v
 .RE
-In example 1
+In voorbeeld 1 zal
 \fBmkvmerge\fR(1)
-will create two files\&. The first will contain the content starting from the first key frame at or after
+twee bestanden aanmaken\&. De eerste bevat de inhoud startend op of na het eerste sleutel beeld
 137
-up to but excluding the first key frame at or after
-258\&. The second file will contain the content starting from
+maar exclusief het eerste sleutel beeld op of na
+258\&. Het tweede bestand, zal de inhoud bevatten startend vanaf
 548
-until
+tot
 1211\&.
 .sp
-In example 2
+In voorbeeld 2 zal
 \fBmkvmerge\fR(1)
-will create only one file\&. This file will contain both the content starting from
+slechts \('e\('en bestand aanmaken\&. Dit bestand zal beide inhoud bevatten startend van
 733
-until
+tot
 912
-and the content starting from
+en de inhoud startend vanaf
 1592
-until
+tot
 2730\&.
 .sp
-In example 3
+In voorbeeld 3 zal
 \fBmkvmerge\fR(1)
-will create two files\&. The first will contain the content from the start of the source files until
-430\&. The second file will contain the content starting from
+twee bestanden aanmaken\&. De eerste bevat de inhoud vanaf het begin van het bron bestanden tot
+430\&. Het tweede bevat de inhoud startend vanaf
 2512
-until the end of the source files\&.
+tot het eind van het bron bestanden\&.
 .sp
 Deze modus houdt alleen rekening met de eerste video spoor dat wordt uitgevoerd\&. Als er geen video spoor is uitgevoerd dan zal splitsen niet plaatsvinden\&.
 .if n \{\
@@ -670,13 +670,13 @@ Deze modus houdt alleen rekening met de eerste video spoor dat wordt uitgevoerd\
 \fBOpmerking\fR
 .ps -1
 .br
-The numbers given with this argument are interpreted based on the number of
+De getallen met dit argument worden ge\(:interpreteerd op basis van het aantal
 Matroska(TM)
-blocks that are output\&. A single
+blokken die worden uitgevoerd\&. Een enkele
 Matroska(TM)
-block contains either a full frame (for progressive content) or a single field (for interlaced content)\&. mkvmerge does not distinguish between those two and simply counts the number of blocks\&. For example: If one wanted to split after the 25th full frame with interlaced content one would have to use
+blok bevat ofwel een volledig beeld (voor progressieve inhoud) of een enkel veld (voor interlaced inhoud)\&. mkvmerge maakt geen onderscheid tussen die twee en telt eenvoudig telt aantal blokken\&. Als voorbeeld: Als men wilt verdelen na het 25ste volledige beeld met interlaced inhoud zou men
 50
-(two fields per full frame) as the split point\&.
+moeten gebruiken (twee velden per volledig beeld) als splits moment\&.
 .sp .5v
 .RE
 .RE
@@ -719,13 +719,13 @@ Deze modus houdt alleen rekening met de eerste video spoor dat wordt uitgevoerd\
 \fBOpmerking\fR
 .ps -1
 .br
-The numbers given with this argument are interpreted based on the number of
+De getallen met dit argument worden ge\(:interpreteerd op basis van het aantal
 Matroska(TM)
-blocks that are output\&. A single
+blokken die worden uitgevoerd\&. Een enkele
 Matroska(TM)
-block contains either a full frame (for progressive content) or a single field (for interlaced content)\&. mkvmerge does not distinguish between those two and simply counts the number of blocks\&. For example: If one wanted to split after the 25th full frame with interlaced content one would have to use
+blok bevat ofwel een volledig beeld (voor progressieve inhoud) of een enkel veld (voor interlaced inhoud)\&. mkvmerge maakt geen onderscheid tussen die twee en telt eenvoudig telt aantal blokken\&. Als voorbeeld: Als men wilt verdelen na het 25ste volledige beeld met interlaced inhoud zou men
 50
-(two fields per full frame) as the split point\&.
+moeten gebruiken (twee velden per volledig beeld) als splits moment\&.
 .sp .5v
 .RE
 .RE
@@ -774,9 +774,9 @@ chapters:\*(Aq voorvoegsel mag niet wegelaten worden\&.
 \fBOpmerking\fR
 .ps -1
 .br
-The
+Het
 Matroska(TM)
-file format supports arbitrary deeply nested chapter structures called \*(Aqedition entries\*(Aq and \*(Aqchapter atoms\*(Aq\&. However, this mode only considers the top\-most level of chapters across all edition entries\&.
+bestandsformaat ondersteunt willekeurige diep geneste hoofdstuk structuren, genoemd \*(Aqeditie ingaven\*(Aq en \*(Aqhoofdstuk delen\*(Aq\&. Echter, deze modus beperkt zich alleen tot het hoogste niveau van de hoofdstukken doorr alle editie ingaven\&.
 .sp .5v
 .RE
 .RE
@@ -788,8 +788,8 @@ zoals uitgedrukt \*(Aq%d\*(Aq inclusief een optioneel veld, b\&.v\&. \*(Aq%02d\*
 .PP
 \fB\-\-link\fR
 .RS 4
-Bestanden linken aan een ander tijdens het splitsen van het uitvoer bestand\&. Zie de sectie op
-bestand linken/verbinden
+Bestanden linken aan een ander tijdens het splitsen van het uitvoer bestand\&. Zie de sectie over
+Bestand linken
 onderstaand voor details\&.
 .RE
 .PP
@@ -797,8 +797,8 @@ onderstaand voor details\&.
 .RS 4
 Verbindt het laatste uitvoerbestand met het segment UID ingegeven door
 \fIsegment\-UID\fR
-parameter\&. Zie de sectie op
-bestand linken/verbinden
+parameter\&. Zie de sectie over
+Bestand linken
 onderstaand voor details\&.
 .RE
 .PP
@@ -806,8 +806,8 @@ onderstaand voor details\&.
 .RS 4
 Verbindt het laatste uitvoerbestand met het segment UID ingegeven door
 \fIsegment\-UID\fR
-parameter\&. Zie de sectie op
-bestand linken/verbinden
+parameter\&. Zie de sectie over
+Bestand linken
 onderstaand voor details\&.
 .RE
 .PP
@@ -1127,7 +1127,8 @@ Kopieer geen globale markeringen van dit bestand\&.
 .PP
 \fB\-\-chapter\-charset\fR \fIcharacter\-set\fR
 .RS 4
-Stelt het karakter set in, die gebruikt wordt voor de conversie naar UTF\-8 voor het hoofdstuk informatie die zich bevindt in het bronbestand\&. Zie de sectie overtekst bestanden en karakter sets
+Stelt het karakter set in, die gebruikt wordt voor de conversie naar UTF\-8 voor het hoofdstuk informatie die zich bevindt in het bronbestand\&. Zie de sectie over
+Tekst bestanden en karakter set conversies
 voor een uitleg hoe
 \fBmkvmerge\fR(1)
 converteert tussen de karakter sets\&.
@@ -1245,7 +1246,7 @@ Leest de markeringen in van het spoor met het nummer
 \fITID\fR
 van de bestand
 \fIfile\-name\fR\&. Zie de sectie over
-markeringen
+Markeringen
 hieronder voor details\&.
 .RE
 .PP
@@ -1429,7 +1430,7 @@ of \('e\('en van de volgende:
 Stelt het karakter set conversie in naar UTF\-8 voor UTF\-8 ondertitels van een opgegeven spoor ID\&. Indien niet opgegeven, dan worden het huidig verkregen besturingssysteem locatie gebruikt\&. Opmerking: een karakter set voor ondertitels is niet nodig wanneer er gelezen wordt vanuit een
 Matroska(TM)
 bestand of van Kate stromen, omdat deze altijd zijn opgeslagen in het UTF\-8 format\&. Zie de sectie over
-tekst bestanden en karakter sets
+Tekst bestanden en karakter set conversies
 voor een uitleg hoe
 \fBmkvmerge\fR(1)
 converteert tussen het verschillende karakter sets\&.
@@ -1536,7 +1537,7 @@ Zet experimentele mogelijkheden aan\&. Een lijst van beschikbare mogelijkheden k
 .RS 4
 Leest extra commandoregel informatie uit een bestand
 \fIoptions\-file\fR\&. Zie de sectie over
-option files
+Optie bestanden
 voor meer informatie\&.
 .RE
 .PP
@@ -2254,7 +2255,7 @@ De regels zijn: \*(Aq \*(Aq (een spatie) wordt \*(Aq\es\*(Aq, \*(Aq"\*(Aq (dubbe
 .PP
 Er zijn verschillende tekst ondertitel formaten welke kunnen worden \*(Aqingebakken\*(Aq in
 Matroska(TM)\&. Tekst ondertitels moet worden her gecodeerd naar UTF\-8 zodat deze juist kunnen worden getoond door een afspeler (zie de sectie over
-tekst bestanden en karakter sets
+Tekst bestanden en karakter set conversies
 voor een uitleg hoe
 \fBmkvmerge\fR(1)
 converteert tussen het verschillende karakter sets)\&. Kate ondertitels zijn al gecodeerd met UTF\-8 en hoeven niet gehercodeerd te worden\&.
@@ -2269,7 +2270,7 @@ De volgende ondertitel formaten worden momenteel ondersteund:
 .sp -1
 .IP \(bu 2.3
 .\}
-Ondertitel stripper (SRT) bestand(en)
+Ondertitel Ripper (SRT) bestand(en)
 .RE
 .sp
 .RS 4
@@ -2483,7 +2484,7 @@ ChapterTrackNumber
 Wat inhoudt, dat de hoofdstukken van toepassing zijn aan alle sporen in het bestand\&.
 .PP
 Omdat dit een tekst bestand is kan karakter set conversie nog nodig zijn\&. Zie de sectie over
-tekst bestanden en karakter sets
+Tekst bestanden en karakter set conversies
 voor een uitleg hoe
 \fBmkvmerge\fR(1)
 converteert tussen karakter sets\&.
@@ -2817,9 +2818,9 @@ Tags (master)
 .\}
 .SH "HET SEGMENT INFORMATIE XML BESTANDEN"
 .PP
-With a segment info XML file it is possible to set certain values in the "segment information" header field of a
+Met een segment informatie XML bestand is het mogelijk om bepaalde waarden in te stellen in het "segment informatie" kop veld van een
 Matroska(TM)
-file\&. All of these values cannot be set via other command line options\&.
+bestand\&. Al deze waarden kunnen niet worden ingesteld via andere commando regel opties\&.
 .PP
 Overige "segment informatie" kopvelden kunnen gezet worden via de commandoregel opties maar niet via een XML bestand\&. Inclusief b\&.v\&. de
 \fB--title\fR
@@ -2895,9 +2896,9 @@ zijn tevens gewend om clusters binnenin het meta zoek element te plaatsen\&. Daa
 Bijlage, hoofdstuk en markeer elementen zijn all\('e\('en aanwezig indien zij waren toegevoegd\&.
 .RE
 .PP
-The shortest possible
+Het kortst mogelijke
 Matroska(TM)
-file would look like this:
+bestand zou lijken op dit:
 .PP
 [EBML head] [segment [segment information] [track information] [cluster 1]]
 .PP
@@ -2951,7 +2952,7 @@ assume 27\&.930
 .if n \{\
 .RE
 .\}
-.SS "Tijd code formaat v2"
+.SS "Tijd code bestandsformaat v2"
 .PP
 In dit format, bevat elke regel een tijd code voor het corresponderende beeld\&. Deze tijd code moet opgeven worden in milli seconden\&. Het mag een veranderbaar nummer zijn, maar het hoeft niet\&. Jij
 \fImoet\fR
@@ -2969,7 +2970,7 @@ minstens zo veel tijd coderegels opgeven als er aan beelden in het spoor zijn\&.
 .if n \{\
 .RE
 .\}
-.SS "Tijd code formaat v3"
+.SS "Tijd code bestandsformaat v3"
 .PP
 In dit format bevat elke regel een duur in seconden gevolgd door een optioneel aantal beelden per seconde\&. Beide kunnen een veranderbaar nummer zijn\&. Als het aantal beelden per seconde niet is opgegeven dan wordt het standaard aantal gebruikt\&. Voor audio, zou jij de codec zelf de tijd codes moeten laten berekenen\&. Daarvoor zou je moeten gebruiken
 \fB0\&.0\fR
@@ -2989,7 +2990,7 @@ gap, 10\&.050
 .if n \{\
 .RE
 .\}
-.SS "Tijd code formaat v4"
+.SS "Tijd code bestandsformaat v4"
 .PP
 Dit format is identiek aan het v2 format\&. Het enige verschil is dat de tijd codes niet gesorteerd behoeven te zijn\&. Dit format zou bijna nooit gebruikt moeten worden\&.
 .SH "VERLAAT CODES"
@@ -3023,7 +3024,7 @@ verlaat met \('e\('en van de drie afsluit codes:
 \fB1\fR
 \-\- In dit geval heeft
 \fBmkvmerge\fR(1)
-ten miste \('e\('en waarschuwing uitgevaardigd, maar het samenvoegen ging door\&. Een waarschuwing gaat vooraf met de tekst \*(AqWarning:\*(Aq\&. Afhankelijk van de \*(Aqtegengekomen\*(Aq kwesties kan het resultaat goed of slecht zijn\&. De gebruiker wordt geadviseerd om zowel de waarschuwing als de resulterende bestanden te controleren\&.
+ten miste \('e\('en waarschuwing uitgevaardigd, maar het samenvoegen ging door\&. Een waarschuwing gaat vooraf met de tekst \*(AqWaarschuwing:\*(Aq\&. Afhankelijk van de \*(Aqtegengekomen\*(Aq kwesties kan het resultaat goed of slecht zijn\&. De gebruiker wordt geadviseerd om zowel de waarschuwing als de resulterende bestanden te controleren\&.
 .RE
 .sp
 .RS 4
