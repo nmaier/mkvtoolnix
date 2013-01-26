@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: eu\n"
 "Report-Msgid-Bugs-To: Xabier Aramendi <azpidatziak@gmail.com>\n"
 "POT-Creation-Date: 2010-06-08 10:00+0200\n"
-"PO-Revision-Date: 2012-12-22 12:45+0100\n"
+"PO-Revision-Date: 2013-01-25 21:53+0100\n"
 "Last-Translator: Xabier Aramendi (Azpidatziak) <azpidatziak@gmail.com>\n"
 "Language-Team: (EUS_Xabier Aramendi) <azpidatziak@gmail.com>\n"
 "Language: Basque (Euskara)\n"
@@ -369,38 +369,34 @@ msgstr ""
 "                           edo adierazitako denboraren ondoren.\n"
 
 #: src/merge/mkvmerge.cpp:131
-#, fuzzy
 msgid ""
 "  --split chapters:all|A[,B...]\n"
 "                           Create a new file before each chapter (with 'all')\n"
 "                           or before chapter numbers A, B etc.\n"
 msgstr ""
-"  --split timecodes:A[,B...]\n"
-"                           Sortu agiri berri bat denbora-kode bakoitzaren\n"
-"                           ondoren A, B, etab.\n"
+"  --split chapeters:denakA[,B...]\n"
+"                           Sortu agiri berri bat atal bakoitzaren aurretik\n"
+"                           ('denak'-kin) edo atal zenbakien aurretik A, B, etab.\n"
 
 #: src/merge/mkvmerge.cpp:128
-#, fuzzy
 msgid ""
 "  --split frames:A[,B...]\n"
 "                           Create a new file after each frame/field A, B\n"
 "                           etc.\n"
 msgstr ""
-"  --split timecodes:A[,B...]\n"
-"                           Sortu agiri berri bat denbora-kode bakoitzaren\n"
+"  --split frames:A[,B...]\n"
+"                           Sortu agiri berri bat frame/eremu bakoitzaren\n"
 "                           ondoren A, B, etab.\n"
 
 #: src/merge/mkvmerge.cpp:125
-#, fuzzy
 msgid ""
 "  --split parts-frames:start1-end1[,[+]start2-end2,...]\n"
 "                           Same as 'parts:', but 'startN'/'endN' are frame/\n"
 "                           field numbers instead of timecodes.\n"
 msgstr ""
-"  --split parts:hasiera1-amaier1[,[+]hasiera2-amaiera2,...]\n"
-"                           Heutsi hasiera-amaiera denbora-kodeen mailak,\n"
-"                           bai agiri banandutan edo aurreko mailaren agiritik\n"
-"                           gehitu agirietan aurrizkia '+' bada.\n"
+"  --split parts-frames:hasiera1-amaier1[,[+]hasiera2-amaiera2,...]\n"
+"                           'zatiak' bezala:, baina 'hasieraN'/'amaieraN' frame/\n"
+"                           eremu zenbakiak dira denbora-kodeen ordez.\n"
 
 #: src/merge/mkvmerge.cpp:121
 msgid ""
@@ -1127,7 +1123,7 @@ msgstr "&Hasi"
 
 #: src/mmg/mmg_dialog.cpp:314
 msgid "&Troubleshooting"
-msgstr ""
+msgstr "&Arazo konponketa"
 
 #: src/mmg/jobs.cpp:475
 #: src/mmg/tabs/additional_parts_dlg.cpp:47
@@ -1740,17 +1736,15 @@ msgstr "Bloke bat aurkitu da %1% denbora-irarketan %2% bide zenbakiarentzat. Hor
 
 #: src/mmg/tabs/global.cpp:285
 msgid "A chapter starting at 0s is never considered for splitting and discarded silently."
-msgstr ""
+msgstr "0-etik hasten den atala ez da inoiz kontuan hartzen bananketarako eta isilean baztertzen da."
 
 #: src/mmg/tabs/global.cpp:253
-#, fuzzy
 msgid "A comma-separated list of frame/field number ranges of content to keep."
-msgstr "Kakotxaz banandutako husteko edukiaren denbora-kode maila zerrenda bat."
+msgstr "Kakotxaz banandutako heusteko edukiaren frame/eremu zenbaki maila bat."
 
 #: src/mmg/tabs/global.cpp:269
-#, fuzzy
 msgid "A comma-separated list of frame/field numbers after which to split."
-msgstr "Kakotxaz banandutako husteko edukiaren denbora-kode maila zerrenda bat."
+msgstr "Kakotxaz banandutako ondoren banantzeko frame/eremu zenbaki zerrenda bat."
 
 #: src/mmg/tabs/global.cpp:242
 msgid "A comma-separated list of timecode ranges of content to keep."
@@ -1785,7 +1779,7 @@ msgstr "Atal honen tokian irakurtzeko zati bat. Edizio ezarpena zati edizio UID 
 #: src/mmg/tabs/global.cpp:259
 #: src/mmg/tabs/global.cpp:274
 msgid "A single Matroska block contains either a full frame (for progressive content) or a single field (for interlaced content)."
-msgstr ""
+msgstr "Matroska bloke bakar batek  frame oso bat du (eduki aurrerakorrarentzat) edo eremu bakar bat (eduki elkarloturako)."
 
 #: src/info/mkvinfo.cpp:789
 msgid "A track"
@@ -1865,7 +1859,7 @@ msgstr "ALAC (Apple Galeragabeko Audio Kodeka)"
 
 #: src/extract/xtr_alac.cpp:51
 msgid "ALAC private data size mismatch\n"
-msgstr ""
+msgstr "ALAC datu pribatu neurria ez dator bat\n"
 
 #: src/mmg/header_editor/value_page.cpp:143
 msgid ""
@@ -2492,9 +2486,8 @@ msgid "Chapter names and languages"
 msgstr "Atal izenak eta hizkuntza"
 
 #: src/mmg/tabs/global.cpp:280
-#, fuzzy
 msgid "Chapter numbers:"
-msgstr "Atalak:"
+msgstr "Atala zenbakiak:"
 
 #: src/mmg/options/chapters.cpp:65
 msgid "Chapter options"
@@ -2946,7 +2939,7 @@ msgstr "Sortu atal berri agiri bat"
 
 #: src/common/mm_io_x.h:118
 msgid "Creating directory '%1%' failed: %2%"
-msgstr ""
+msgstr "Hutsegitea '%1%' zuzenbidea sortzerakoan: %2%"
 
 #: src/merge/mkvmerge.cpp:716
 #, boost-format
@@ -3286,9 +3279,8 @@ msgid "Download URL:"
 msgstr "Jeisketa URL-a:"
 
 #: src/mmg/tabs/global.cpp:216
-#, fuzzy
 msgid "Duration:"
-msgstr "Azalpena:"
+msgstr "Iraupena:"
 
 #: src/info/mkvinfo.cpp:204
 #, boost-format
@@ -3342,9 +3334,8 @@ msgid "Each edition must contain at least one chapter."
 msgstr "Edizio bakoitzak gutxienez atal bat izan behar du."
 
 #: src/mmg/tabs/global.cpp:254
-#, fuzzy
 msgid "Each range consists of a start and end frame/field number with a '-' in the middle, e.g. '157-238'."
-msgstr "Maila bakoitza hasiera eta amaiera denbora-kode batean datza, '-' batez erditik bananduta, adib. '00:01:15-00:03:20'."
+msgstr "Maila bakoitza hasiera eta amaiera frame/eremu batean datza, '-' batez erditik bananduta, adib. '157-238'."
 
 #: src/mmg/tabs/global.cpp:243
 msgid "Each range consists of a start and end timecode with a '-' in the middle, e.g. '00:01:15-00:03:20'."
@@ -3375,9 +3366,8 @@ msgid "EditionEntry %u"
 msgstr "Edizio-Sarrera %u"
 
 #: src/mmg/tabs/global.cpp:282
-#, fuzzy
 msgid "Either the word 'all' which selects all chapters or a comma-separated list of chapter numbers after which to split."
-msgstr "Kakotxaz banandutako husteko edukiaren denbora-kode maila zerrenda bat."
+msgstr "Edo 'denak' hitza atal guztiak hautatzen dituena edo ondoren banantzeko kakotxaz banandutako atal zenbaki zerrenda bat."
 
 #: src/propedit/propedit.cpp:70
 #, boost-format
@@ -3599,22 +3589,22 @@ msgstr "FLAC (Galeragabeko Audio Kodek Askea)"
 
 #: src/common/file_types.cpp:36
 msgid "FLV (Flash Video)"
-msgstr ""
+msgstr "FLV (Flash Video)"
 
 #: src/mmg/tabs/input_format.cpp:233
 msgid "FPS:"
 msgstr "FS-ko:"
 
 #: src/extract/xtr_vobsub.cpp:81
-#, fuzzy, boost-format
+#, boost-format
 msgid "Failed to create the VobSub data file '%1%': %2%\n"
-msgstr "Hutsegitea '%1%': %2% (%3%) VobSub datu agiria sortzerakoan\n"
+msgstr "Hutsegitea '%1%': %2% VobSub datu agiria sortzerakoan\n"
 
 #: src/extract/xtr_textsubs.cpp:360
 #: src/extract/xtr_vobsub.cpp:235
-#, fuzzy, boost-format
+#, boost-format
 msgid "Failed to create the file '%1%': %2%\n"
-msgstr "Hutsegitea '%1%': %2% (%3%) agiria sortzerakoan\n"
+msgstr "Hutsegitea '%1%': %2% agiria sortzerakoan\n"
 
 #: src/extract/xtr_base.cpp:73
 #, boost-format
@@ -3622,9 +3612,9 @@ msgid "Failed to create the file '%1%': %2% (%3%)\n"
 msgstr "Hutsegitea '%1%': %2% (%3%) agiria sortzerakoan\n"
 
 #: src/extract/xtr_tta.cpp:45
-#, fuzzy, boost-format
+#, boost-format
 msgid "Failed to create the temporary file '%1%': %2%\n"
-msgstr "Hutsegitea aldibaterako '%1%': %2% (%3%) agiria sortzerakoan\n"
+msgstr "Hutsegitea aldibaterako '%1%': %2% agiria sortzerakoan\n"
 
 #: src/extract/xtr_textsubs.cpp:363
 #, boost-format
@@ -3756,7 +3746,7 @@ msgstr "Ikurrak:"
 
 #: src/input/r_flv.cpp:210
 msgid "Flash Video"
-msgstr ""
+msgstr "Flash Video"
 
 #: src/mmg/header_editor/value_page.cpp:147
 msgid "Floating point number"
@@ -3844,7 +3834,7 @@ msgstr "Framearen neurria: %1%%2%%3%"
 
 #: src/mmg/tabs/global.cpp:267
 msgid "Frames/fields:"
-msgstr ""
+msgstr "Frame/eremu:"
 
 #: src/mmg/tabs/input_extra.cpp:130
 msgid "Free-form edit field for user defined options for this track. What you input here is added after all the other options mmg adds so that you could overwrite any of mmg's options for this track. All occurences of the string \"<TID>\" will be replaced by the track's track ID."
@@ -4001,18 +3991,16 @@ msgid "If a chapter or an edition is marked 'hidden' then the player should not 
 msgstr "Atal bat edo edizio bat 'ezkutua' markatuta badago irakurgailuak ez dio atal sarrera hau (edo edizio honen sarrera guztiak) erakutsi beharko erabiltzaileari. Sarrera hauek oraindik menu sistemak erabiliak izan daitezke."
 
 #: src/mmg/tabs/global.cpp:262
-#, fuzzy
 msgid "If a range's start number is prefixed with '+' then its content will be written to the same file as the previous range. Otherwise a new file will be created for this range."
-msgstr "Mailaren hasiera denbora-kodea '+' aurrizkiturik badago bere edukia aurreko mailaren agiri berdinean idatziko da. Bestela agiri berri bat sortuko da maila honentzat."
+msgstr "Mailaren hasiera zenbakia '+'-rekin aurrizkiturik badago bere edukia aurreko mailaren agiri berdinean idatziko da. Bestela agiri berri bat sortuko da maila honentzat."
 
 #: src/mmg/tabs/global.cpp:246
 msgid "If a range's start timecode is prefixed with '+' then its content will be written to the same file as the previous range. Otherwise a new file will be created for this range."
 msgstr "Mailaren hasiera denbora-kodea '+' aurrizkiturik badago bere edukia aurreko mailaren agiri berdinean idatziko da. Bestela agiri berri bat sortuko da maila honentzat."
 
 #: src/mmg/tabs/global.cpp:261
-#, fuzzy
 msgid "If a start number is left out then the previous range's end number is used, or the start of the file if there was no previous range."
-msgstr "Hasiera denbora-kode bat kanpoan badago aurreko mailaren amaiera denbora-kodea erabiltzen da, edo agiriaren hasiera ez badago aurreko mailarik."
+msgstr "Hasiera zenbaki bat kanpoan badago aurreko mailaren amaiera zenbakia erabiltzen da, edo agiriaren hasiera aurreko mailarik ez badago."
 
 #: src/mmg/tabs/global.cpp:244
 msgid "If a start timecode is left out then the previous range's end timecode is used, or the start of the file if there was no previous range."
@@ -4045,7 +4033,7 @@ msgstr "Hutsik utziz gero mmg-ek irteera agiri izena lan honetara gehitutako leh
 #: src/mmg/tabs/global.cpp:257
 #: src/mmg/tabs/global.cpp:272
 msgid "If no video track is output no splitting will occur."
-msgstr ""
+msgstr "Irteera bideo bide gabe bada bananketa ez da gertatuko."
 
 #: src/mmg/tabs/attachments.cpp:166
 msgid "If splitting is a file can be attached either to all files created or only to the first file. Has no effect if no splitting is used."
@@ -4053,7 +4041,7 @@ msgstr "Bananketa agiri bat bada erantsi daiteke bai sorturiko agiri guztietara 
 
 #: src/mmg/mmg_dialog.cpp:1963
 msgid "If you encounter problems during playback of files please consider visiting the newly created MKVToolNix troubleshooting advice page:"
-msgstr ""
+msgstr "Agirien irakurketan arazoak aurkitzen badituzu, mesedez ikusi sortu berria den MKVToolNix arazo konponketa aholku orrialdea:"
 
 #: src/output/p_textsubs.cpp:69
 #, boost-format
@@ -4200,9 +4188,9 @@ msgstr "Bereizitasun aldaketa baliogabea (%3%) hemen: '%1% %2%'.\n"
 
 #: src/merge/mkvmerge.cpp:857
 #: src/merge/mkvmerge.cpp:896
-#, fuzzy, boost-format
+#, boost-format
 msgid "Invalid chapter number '%1%' for '--split' in '--split %2%': %3%\n"
-msgstr "Heuskarri baliogabea '--split'-rentzat hemen: '--split %1%'.\n"
+msgstr "Atal zenbaki baliogabea '%1%' '--split'-rentzat hemen: '--split %2%': %3%\n"
 
 #: src/merge/mkvmerge.cpp:1125
 #, boost-format
@@ -4234,14 +4222,14 @@ msgid "Invalid data for Base64 encoding found."
 msgstr "Datu baliogabeak aurkitu dira Base64 kodeaketarako"
 
 #: src/common/split_arg_parsing.cpp:66
-#, fuzzy, boost-format
+#, boost-format
 msgid "Invalid end frame/field number for '--split' in '--split %1%' (current part: %2%).\n"
-msgstr "Hasiera/amaiera bereizketa baliogabea: '--split' hemen '--split %1%' (oraingo atala: %2%).\n"
+msgstr "Amaiera frame/eremu zenbaki baliogabea: '--split' hemen '--split %1%' (oraingo atala: %2%).\n"
 
 #: src/common/split_arg_parsing.cpp:70
-#, fuzzy, boost-format
+#, boost-format
 msgid "Invalid end frame/field number for '--split' in '--split %1%' (current part: %2%). The end number must be bigger than the start number.\n"
-msgstr "Amaiera denbora baliogabea '--split'-rako hemen: '--split %1%' (oraingo zatia: %2%). Amaiera denbora hasiera denboar baino handiagoa izan behar da.\n"
+msgstr "Amaiera frame/eremu zenbaki baliogabea '--split'-rako hemen: '--split %1%' (oraingo zatia: %2%). Amaiera denbora hasiera denbora baino handiagoa izan behar da.\n"
 
 #: src/common/split_arg_parsing.cpp:63
 #, boost-format
@@ -4332,9 +4320,9 @@ msgid "Invalid format: unknown character '%1%' found"
 msgstr "Heuskarri baliogabea: '%1%' hizki ezezaguna aurkitu da"
 
 #: src/merge/mkvmerge.cpp:837
-#, fuzzy, boost-format
+#, boost-format
 msgid "Invalid frame for '--split' in '--split %1%'.\n"
-msgstr "Heuskarri baliogabea '--split'-rentzat hemen: '--split %1%'.\n"
+msgstr "Frame baliogabea '--split'-rentzat hemen: '--split %1%'.\n"
 
 #: src/input/r_vobsub.cpp:530
 #, boost-format
@@ -4390,12 +4378,12 @@ msgid "Invalid split size in '--split %1%'.\n"
 msgstr "Bananketa neurri baliogabea hemen: '--split %1%'.\n"
 
 #: src/common/split_arg_parsing.cpp:56
-#, fuzzy, boost-format
+#, boost-format
 msgid "Invalid start frame/field number for '--split' in '--split %1%' (current part: %2%).\n"
-msgstr "Hasiera/amaiera bereizketa baliogabea: '--split' hemen '--split %1%' (oraingo atala: %2%).\n"
+msgstr "Hasiera frame/eremu zenbaki baliogabea: '--split' hemen '--split %1%' (oraingo atala: %2%).\n"
 
 #: src/common/split_arg_parsing.cpp:77
-#, fuzzy, boost-format
+#, boost-format
 msgid "Invalid start frame/field number for '--split' in '--split %1%' (current part: %2%). The start number must be bigger than or equal to the previous part's end number.\n"
 msgstr "Hasiera denbora baliogabea: '--split' hemen '--split %1%' (oraingo atala: %2%). Hasiera denbora aurreko atalaren amaiera denboraren berdina edo handiagoa izan behar da.\n"
 
@@ -4521,7 +4509,7 @@ msgstr "Bide ID/agiri izen baliogabea adierazi da '%1%' argumentoan.\n"
 
 #: src/mmg/mmg_dialog.cpp:1967
 msgid "It can also be opened from the 'Help' menu."
-msgstr ""
+msgstr "'Laguntza' menutik ere ireki daiteke."
 
 #: src/mmg/mmg_dialog.cpp:1479
 msgid "Job added to job queue"
@@ -4549,7 +4537,7 @@ msgstr "Kate paketea txikiegia da eta jauzi egiten ari da.\n"
 
 #: src/extract/extract_cli_parser.cpp:68
 msgid "Keep only the BlockAdditions up to this level (default: keep all levels)"
-msgstr "Heutsi bakarrik Bloke-Gehiketa maila honetarainok (berez: heutsi maila denak)"
+msgstr "Heutsi bakarrik Bloke-Gehiketa maila honetarainok (berezkoa: heutsi maila denak)"
 
 #: src/common/compression/lzo.cpp:50
 #, boost-format
@@ -4783,9 +4771,8 @@ msgid "Max BlockAddition ID: %1%"
 msgstr "Geh Bloke-Gehitze ID-a: %1%"
 
 #: src/mmg/tabs/global.cpp:325
-#, fuzzy
 msgid "Max. number of files:"
-msgstr "geh. agiri zenbatekoa:"
+msgstr "Geh. agiri zenbatekoa:"
 
 #: src/info/mkvinfo.cpp:886
 #, boost-format
@@ -5049,7 +5036,7 @@ msgstr "Oraindik ez da atal sarrerarik sortu."
 #: src/merge/mkvmerge.cpp:862
 #, boost-format
 msgid "No chapter numbers listed after '--split %1%'.\n"
-msgstr ""
+msgstr "Ez dago atal zenbakirik zerredaturik '--split %1%' ondoren.\n"
 
 #: src/mmg/tabs/chapters.cpp:589
 msgid "No chapters found"
@@ -5058,7 +5045,7 @@ msgstr "Ez da atalik aurkitu"
 #: src/merge/mkvmerge.cpp:866
 #: src/merge/mkvmerge.cpp:892
 msgid "No chapters in source files or chapter files found to split by.\n"
-msgstr ""
+msgstr "Ez da banantzeko atalik aurkitu iturburu agirietan edo atal agirietan.\n"
 
 #: src/mmg/header_editor/frame.cpp:516
 msgid "No fields modified"
@@ -5101,7 +5088,7 @@ msgstr "Ez da irteera agiri izenik adierazi, eranspenaren izena erabiliko da.\n"
 
 #: src/common/mm_io_x.cpp:40
 msgid "No permission to read from, to write to or to create"
-msgstr ""
+msgstr "Baimen gabe -tik irakurtzeko, -ra idazteko edo sortzeko"
 
 #: src/extract/timecodes_v2.cpp:219
 #: src/extract/tracks.cpp:356
@@ -5111,7 +5098,7 @@ msgstr "Ez da zati/0 maila gairik aurkitu."
 
 #: src/common/mm_io_x.cpp:39
 msgid "No space left to write to"
-msgstr ""
+msgstr "Ez da tokirik gelditzen hona idazteko"
 
 #: src/merge/mkvmerge.cpp:2384
 msgid "No streams to output were found. Aborting.\n"
@@ -5166,14 +5153,13 @@ msgid "Not a valid Matroska file (no segment/level 0 element found)"
 msgstr "Ez da baliozko Matroska agiri bat (ez da zati/0 maila gairik aurkitu)"
 
 #: src/merge/mkvmerge.cpp:857
-#, fuzzy
 msgid "Not a valid number or not positive."
-msgstr "Emaniko geh. agiri banandu zenbatekoa baliogabea da."
+msgstr "Zenbaki baliogabea edo ez positiboa."
 
 #: src/merge/pr_generic.cpp:1149
 #, boost-format
 msgid "Note that the Matroska specifications regarding the storage of '%1%' have not been finalized yet. mkvmerge's support for it is therefore subject to change and uses the CodecID '%2%/EXPERIMENTAL' instead of '%2%'. This warning will be removed once the specifications have been finalized and mkvmerge has been updated accordingly.\n"
-msgstr ""
+msgstr "Ohartu '%1%' biltegiratzeari dagokionez Matroska ezaugarritzea ez dela oraindik amaitu. mkvmerge-ren sostengua aldakorra da eta KodecID '%2%/EXPERIMENTAL' erabiltzen du '%2%'-ren ordez. Ohar hau kendu egingo da ezaugarritzea amaitutakoan eta mkvmerge horretarako eguneratutakoan.\n"
 
 #: src/extract/attachments.cpp:132
 #: src/extract/timecodes_v2.cpp:187
@@ -5184,7 +5170,7 @@ msgstr "Ezer ez egiteko.\n"
 
 #: src/mmg/mmg_dialog.cpp:1955
 msgid "Notice"
-msgstr ""
+msgstr "Oharra"
 
 #: src/common/property_element.cpp:126
 #: src/mmg/header_editor/frame.cpp:407
@@ -5224,7 +5210,7 @@ msgstr "Onlineko eguneraketa egiaztapena"
 #: src/merge/mkvmerge.cpp:898
 #, boost-format
 msgid "Only %1% chapters found in source files & chapter files."
-msgstr ""
+msgstr "%1% atal bakarrik aurkitu dira iturburu agirietan eta atal agirietan."
 
 #: src/merge/mkvmerge.cpp:1597
 #, boost-format
@@ -5306,12 +5292,11 @@ msgstr "Garatzileentzako BAKARRIK dira aukera hauek. Ez dira erabili behar. Zerb
 
 #: src/output/p_opus.h:38
 msgid "Opus"
-msgstr ""
+msgstr "Opus"
 
 #: src/common/file_types.cpp:47
-#, fuzzy
 msgid "Opus (in Ogg) audio files"
-msgstr "ogg/OGM audio/bideo agiriak"
+msgstr "Opus (Ogg-an) audio agiriak"
 
 #: src/info/mkvinfo.cpp:672
 #, boost-format
@@ -5406,7 +5391,7 @@ msgstr "Agiri azterketa"
 #: src/mmg/tabs/global.cpp:240
 #: src/mmg/tabs/global.cpp:251
 msgid "Parts:"
-msgstr ""
+msgstr "Zatiak:"
 
 #: src/info/mkvinfo.cpp:614
 #, boost-format
@@ -5634,9 +5619,9 @@ msgid "Quicktime/MP4 reader: The video track %1% is missing the ESDS atom. Skipp
 msgstr "Quicktime/MP4 irakurgailua: %1% bideo bideak ez du ESDS atomorik. Bide honi jauzi egiten.\n"
 
 #: src/input/r_qtmp4.cpp:308
-#, fuzzy, boost-format
+#, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers with an unknown or unsupported compression algorithm '%1%'. Aborting.\n"
-msgstr "Quicktime/MP4 irakurgailua: Agiri honek idazburu konprimitu ezezagunak edo sostengatu gabeko '%1%%2%%3%%4%' konpresio algoritmoa erabiltzen du. Uzten.\n"
+msgstr "Quicktime/MP4 irakurgailua: Agiri honek idazburu konprimitu konpresio algoritmo ezezaguna edo sostengu gabea erabiltzen du: '%1%'. Uzten.\n"
 
 #: src/input/r_qtmp4.cpp:341
 #, boost-format
@@ -5690,7 +5675,7 @@ msgstr "Ber-gaitu hautaturiko lana(k)"
 #: src/merge/output_control.cpp:898
 #, boost-format
 msgid "Re-rendering track headers: data_size != 0 not implemented yet. %1%\n"
-msgstr ""
+msgstr "Ber-aurkezpen bide idazburuak: datu_neurria != 0 oraindik ezarri gabe. %1%\n"
 
 #: src/input/r_mpeg_ps.cpp:363
 msgid "Reading encrypted VOBs is not supported.\n"
@@ -5849,7 +5834,7 @@ msgstr "Gorde &honela"
 
 #: src/mmg/cli_options_dlg.cpp:62
 msgid "Save as default for new jobs"
-msgstr ""
+msgstr "Gorde berezko bezala lan berrientzat"
 
 #: src/info/qt_ui.cpp:71
 msgid "Save information as"
@@ -6105,7 +6090,7 @@ msgstr "Matroska agiri ebakera ezartzen du hurrengo gehitu/ezarri/ezabatu ekintz
 
 #: src/propedit/propedit_cli_parser.cpp:193
 msgid "Sets the Matroska parser mode to 'fast' (default) or 'full'"
-msgstr "Ezartzen du Matroska aztertzaile modua 'azkar' (berez) edo 'osoa'"
+msgstr "Ezartzen du Matroska aztertzaile modua 'azkar' (berezkoa) edo 'osoa'"
 
 #: src/mmg/tabs/input_extra.cpp:126
 msgid "Sets the compression algorithm to be used for this track. If no option is selected mkvmerge will decide whether or not to compress and which algorithm to use based on the track type. Most track types are not compressed at all. "
@@ -6282,7 +6267,7 @@ msgstr "Eremu bakarreko framea atzeman da GOP idazburuaren aurretik. Zuzendu MPE
 #: src/mmg/tabs/global.cpp:199
 #: src/mmg/tabs/global.cpp:202
 msgid "Size:"
-msgstr ""
+msgstr "Neurria:"
 
 #: src/output/p_aac.cpp:70
 #, boost-format
@@ -6340,7 +6325,7 @@ msgstr ""
 
 #: src/mmg/tabs/global.cpp:307
 msgid "Split mode:"
-msgstr ""
+msgstr "Bananketa modua:"
 
 #: src/mmg/tabs/global.cpp:306
 msgid "Splitting"
@@ -6361,7 +6346,7 @@ msgstr "Bananketa eraginda dago, eta gutxienez ahalezko irteera agirietako bat  
 
 #: src/mmg/tabs/global.cpp:284
 msgid "Splitting will occur right before the first key frame whose timecode is equal to or bigger than the start timecode for the chapters whose numbers are listed."
-msgstr ""
+msgstr "Bananketa zerrendatzen diren atal zenbakien hasiera denbora-kodearen berdina edo handiagoa den denbora kodea duen lehen giltza framearen aurretik egingo da."
 
 #: src/mmg/mmg_dialog.cpp:332
 msgid "Sta&rt muxing"
@@ -6878,9 +6863,9 @@ msgid "The file '%1%' cannot be attached because it does not exist or cannot be 
 msgstr "%1% agiria ezin da erantsi ez dagoelako edo ezin daitekeelako irakurri.\n"
 
 #: src/propedit/propedit.cpp:102
-#, fuzzy, boost-format
+#, boost-format
 msgid "The file '%1%' could not be opened for reading and writing, or a read/write operation on it failed: %2%.\n"
-msgstr "%1% agiria ezin da ireki agindu lerro argumentoak irakurtzeko.\n"
+msgstr "%1% agiria ezin da ireki irakurtzeko edo idazteko, edo irakur/idaz eragiketak huts egin du: %2%.\n"
 
 #: src/common/command_line.cpp:47
 #: src/extract/attachments.cpp:142
@@ -6892,9 +6877,9 @@ msgstr "%1% agiria ezin da ireki agindu lerro argumentoak irakurtzeko.\n"
 #: src/merge/output_control.cpp:334
 #: src/merge/output_control.cpp:467
 #: src/propedit/attachment_target.cpp:63
-#, fuzzy, boost-format
+#, boost-format
 msgid "The file '%1%' could not be opened for reading: %2%.\n"
-msgstr "%1% agiria ezin da irakurtzeko ireki (%2%).\n"
+msgstr "%1% agiria ezin da irakurtzeko ireki: %2%.\n"
 
 #: src/extract/attachments.cpp:122
 #: src/extract/tracks.cpp:283
@@ -6904,9 +6889,9 @@ msgstr "%1% agiria ezin da irakurtzeko ireki (%2%).\n"
 #: src/extract/xtr_tta.cpp:86
 #: src/extract/xtr_wav.cpp:113
 #: src/merge/output_control.cpp:1546
-#, fuzzy, boost-format
+#, boost-format
 msgid "The file '%1%' could not be opened for writing: %2%.\n"
-msgstr "%1% agiria ezin da idazteko ireki (%2%).\n"
+msgstr "%1% agiria ezin da idazteko ireki: %2%.\n"
 
 #: src/merge/output_control.cpp:1550
 #, boost-format
@@ -7021,7 +7006,7 @@ msgstr "%1% ('%2%') zenbaki agiria eransten ari da. '--append-to'-rentzako argum
 
 #: src/common/mm_io_x.cpp:38
 msgid "The file or directory was not found"
-msgstr ""
+msgstr "Agiria edo zuzenbidea ez da aurkitu"
 
 #: src/mmg/header_editor/frame.cpp:247
 msgid "The file you tried to open is not a Matroska file."
@@ -7053,9 +7038,8 @@ msgstr "Hurrengo zatiak lehen agiriaren ondoren irakurtzen dira, denak agiri han
 
 #: src/mmg/tabs/global.cpp:630
 #: src/mmg/tabs/global.cpp:652
-#, fuzzy
 msgid "The format of the split argument is invalid."
-msgstr "Bananketa neurriaren heuskarria baliogabea da."
+msgstr "Bananketa argumentuaren heuskarria baliogabea da."
 
 #: src/mmg/tabs/global.cpp:591
 msgid "The format of the split size is invalid (size too small)."
@@ -7277,12 +7261,12 @@ msgstr ""
 #: src/mmg/tabs/global.cpp:270
 #: src/mmg/tabs/global.cpp:283
 msgid "The numbering starts at 1."
-msgstr ""
+msgstr "Zenbakipena 1-etik hasten da."
 
 #: src/mmg/tabs/global.cpp:258
 #: src/mmg/tabs/global.cpp:273
 msgid "The numbers given with this argument are interpreted based on the number of Matroska blocks that are output."
-msgstr ""
+msgstr "Argumentu honekin emandako zenbakiak irteerako Matroska bloke zenbatekoan ohinarriturik ulertzen dira."
 
 #: src/merge/mkvmerge.cpp:2087
 msgid "The option '--meta-seek-size' is no longer supported. Please read mkvmerge's documentation, especially the section about the MATROSKA FILE LAYOUT.\n"
@@ -7429,9 +7413,9 @@ msgid "The tags in '%1%' could not be parsed: some mandatory elements are missin
 msgstr "'%1%'-ko etiketak ezin dira aztertu: ez daude nahitaezko gaietako batzuk.\n"
 
 #: src/extract/xtr_tta.cpp:80
-#, fuzzy, boost-format
+#, boost-format
 msgid "The temporary file '%1%' could not be opened for reading: %2%.\n"
-msgstr "'%1%' aldibaterako agiria ezin da irakurtzeko ireki (%2%).\n"
+msgstr "'%1%' aldibaterako agiria ezin da irakurtzeko ireki: %2%.\n"
 
 #: src/extract/extract_cli_parser.cpp:87
 msgid "The third mode extracts attachments from the source file."
@@ -7682,16 +7666,16 @@ msgstr "Hau da irakurgailuek filma honentzat 'izenburu nagusi' bezala erakutsi d
 
 #: src/mmg/mmg_dialog.cpp:1954
 msgid "This message will only shown to you once."
-msgstr ""
+msgstr "Mezu hau behin bakarrik erakutsiko zaizu"
 
 #: src/mmg/tabs/global.cpp:256
 #: src/mmg/tabs/global.cpp:271
 msgid "This mode considers only the first video track that is output."
-msgstr ""
+msgstr "Modu honek irteerako lehen bideo bidea bakarrik hartzen du kontuan."
 
 #: src/mmg/tabs/global.cpp:286
 msgid "This mode only considers the top-most level of chapters across all edition entries."
-msgstr ""
+msgstr "Modu honek edizio sarrera guztien artean atalen goreneko maila bakarrik hartzen du kontuan."
 
 #: src/mmg/cli_options_dlg.cpp:92
 msgid "This option needs an additional argument 'n'. Tells mkvmerge to put at most 'n' data blocks into each cluster. If the number is postfixed with 'ms' then put at most 'n' milliseconds of data into each cluster. The maximum length for a cluster that mkvmerge accepts is 60000 blocks and 32000ms; the minimum length is 100ms. Programs will only be able to seek to clusters, so creating larger clusters may lead to imprecise or slow seeking."
@@ -7924,7 +7908,7 @@ msgstr "Bideak, atalak eta etiketak:"
 
 #: src/mmg/mmg_dialog.cpp:314
 msgid "Troubleshooting advice for playback issues"
-msgstr ""
+msgstr "Arazo konponketa aholkuak irakurketa akatsentzat"
 
 #: src/input/r_truehd.h:36
 #: src/output/p_truehd.h:42
@@ -8519,7 +8503,7 @@ msgstr "create_track_number: file_num ez da aurkitu. %1%\n"
 #: src/mmg/tabs/input_extra.cpp:157
 #: src/mmg/tabs/input_general.cpp:103
 msgid "default"
-msgstr "berez"
+msgstr "berezkoa"
 
 #: src/info/mkvinfo.cpp:894
 #, boost-format
@@ -8775,9 +8759,9 @@ msgstr "matroska_reader: %1% Kodek ID-a '%2%' bidearentzat ezezaguna da.\n"
 #: src/input/r_matroska.cpp:328
 #: src/input/r_matroska.cpp:349
 #: src/input/r_matroska.cpp:372
-#, fuzzy, boost-format
+#, boost-format
 msgid "matroska_reader: The CodecID for track %1% is '%2%', but the private codec data does not contain valid headers.\n"
-msgstr "matroska_reader: %1% bidearentzako Kodek ID-a '%2%' da, baina ez dago kodek pribatu idazbururik.\n"
+msgstr "matroska_reader: %1% bidearentzako Kodek ID-a '%2%' da, baina kodek pribatu datuek ez dute baliozko idazbururik.\n"
 
 #: src/input/r_matroska.cpp:442
 #, boost-format
@@ -8986,7 +8970,7 @@ msgstr "mkvmergek ezin du kanpoko idazki agiritik irakurri eta denbora-kodeak er
 #: src/mmg/tabs/global.cpp:260
 #: src/mmg/tabs/global.cpp:275
 msgid "mkvmerge does not distinguish between those two and simply counts the number of blocks."
-msgstr ""
+msgstr "mkvmergek ez du bereizten bi hauen artean eta bloke zenbatekoa bakarrik zenbatzen du."
 
 #: src/output/p_avc.cpp:103
 #, boost-format
@@ -9116,9 +9100,8 @@ msgid "no signature hash algorithm"
 msgstr "hash algoritmo sinadurarik ez"
 
 #: src/mmg/tabs/global.cpp:313
-#, fuzzy
 msgid "no splitting"
-msgstr "Bananketa"
+msgstr "Bananketarik ez"
 
 #: src/mmg/mmg_dialog.cpp:1027
 #: src/mmg/tabs/input_extra.cpp:85
@@ -9260,37 +9243,32 @@ msgid "side by side (right first)"
 msgstr "aldez-alde (eskuina lehenik)"
 
 #: src/mmg/tabs/global.cpp:315
-#, fuzzy
 msgid "split after duration"
-msgstr "...iraupen honen ondoren:"
+msgstr "banandu iraupen honen ondoren"
 
 #: src/mmg/tabs/global.cpp:319
 msgid "split after frame/field numbers"
-msgstr ""
+msgstr "banandu frame/eremu zenbaken ondoren"
 
 #: src/mmg/tabs/global.cpp:314
-#, fuzzy
 msgid "split after size"
-msgstr "'--split' ez du neurririk.\n"
+msgstr "banandu neurri honen ondoren"
 
 #: src/mmg/tabs/global.cpp:316
-#, fuzzy
 msgid "split after timecodes"
-msgstr "Zehaztu atal denbora-kodeak"
+msgstr "banandu denbora-kodeen ondoren"
 
 #: src/mmg/tabs/global.cpp:320
-#, fuzzy
 msgid "split before chapters"
-msgstr "Kendtu atala"
+msgstr "banandu atalen aurretik"
 
 #: src/mmg/tabs/global.cpp:318
 msgid "split by parts based on frame/field numbers"
-msgstr ""
+msgstr "banandu zatietan frame/eremu zenbakietan ohinarriturik"
 
 #: src/mmg/tabs/global.cpp:317
-#, fuzzy
 msgid "split by parts based on timecodes"
-msgstr "Zehaztu atal denbora-kodeak"
+msgstr "banandu denbora-kodeetan ohinarrituriko zatietan"
 
 #: src/input/subtitles.cpp:600
 #, boost-format
