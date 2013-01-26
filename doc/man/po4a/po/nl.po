@@ -1,10 +1,9 @@
-# Moritz Bunkus <moritz@bunkus.org> 2010
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Nederlands 4.0.0.\n"
-"POT-Creation-Date: 2013-01-21 22:41+0100\n"
-"PO-Revision-Date: 2013-01-21 18:35+0100\n"
+"POT-Creation-Date: 2013-01-24 10:22+0100\n"
+"PO-Revision-Date: 2013-01-23 14:23+0100\n"
 "Last-Translator: René Maassen <bmom43@gmail.com>\n"
 "Language-Team: Nederlands rc1 <bmom43@gmail.com>\n"
 "Language: nl_NL\n"
@@ -26,7 +25,7 @@ msgstr "mkvextract"
 #: doc/man/mkvpropedit.xml:6
 #: doc/man/mmg.xml:6
 msgid "6.0.0"
-msgstr ""
+msgstr "6.0.0"
 
 #. type: Content of the date entity
 #: doc/man/mkvextract.xml:7
@@ -35,7 +34,7 @@ msgstr ""
 #: doc/man/mkvpropedit.xml:7
 #: doc/man/mmg.xml:7
 msgid "2013-01-20"
-msgstr ""
+msgstr "2013-01-20"
 
 #. type: Content of the mkvmerge entity
 #: doc/man/mkvextract.xml:9
@@ -583,7 +582,7 @@ msgstr "Ingaven: <command>mkvextract</command> <option>tags</option> <parameter>
 #. type: Content of: <refentry><refsect1><refsect2><para>
 #: doc/man/mkvextract.xml:328
 msgid "The extracted tags are written to the console unless the output is redirected (see the section about <link linkend=\"mkvextract.output_redirection\">output redirection</link> for details)."
-msgstr "De geëxtraheerde markeringen zijn geschreven naar de apparaat/houder tenzij de uitvoer is omgeleid (zie de sectie over <link linkend=\"mkvextract.output_redirection\">uitvoer omleiden</link> voor details)."
+msgstr "De geëxtraheerde markeringen zijn geschreven naar de apparaat/houder tenzij de uitvoer is omgeleid (zie de sectie over <link linkend=\"mkvextract.output_redirection\">Uitvoer omleiden</link> voor details)."
 
 #. type: Content of: <refentry><refsect1><refsect2><title>
 #: doc/man/mkvextract.xml:334
@@ -628,7 +627,7 @@ msgstr "Exporteert het hoofdstuk informatie in een simpel tekst formaat gebruikt
 #. type: Content of: <refentry><refsect1><refsect2><para>
 #: doc/man/mkvextract.xml:376
 msgid "The extracted chapters are written to the console unless the output is redirected (see the section about <link linkend=\"mkvextract.output_redirection\">output redirection</link> for details)."
-msgstr "De geëxtraheerde hoofdstukken zijn geschreven naar de apparaat/houder tenzij de uitvoer is omgeleid (zie de sectie over <link linkend=\"mkvextract.output_redirection\">uitvoer omleiden</link> voor details)."
+msgstr "De geëxtraheerde hoofdstukken zijn geschreven naar de apparaat/houder tenzij de uitvoer is omgeleid (zie de sectie over <link linkend=\"mkvextract.output_redirection\">Uitvoer omleiden</link> voor details)."
 
 #. type: Content of: <refentry><refsect1><refsect2><title>
 #: doc/man/mkvextract.xml:382
@@ -643,7 +642,7 @@ msgstr "Ingaven: <command>mkvextract</command> <option>cuesheet</option> <parame
 #. type: Content of: <refentry><refsect1><refsect2><para>
 #: doc/man/mkvextract.xml:389
 msgid "The extracted cue sheet is written to the console unless the output is redirected (see the section about <link linkend=\"mkvextract.output_redirection\">output redirection</link> for details)."
-msgstr "De geëxtraheerde volg document(en) (cue) zijn geschreven naar de apparaat/houder tenzij de uitvoer is omgeleid (zie de sectie over <link linkend=\"mkvextract.output_redirection\">uitvoer omleiden</link> voor details)."
+msgstr "De geëxtraheerde volg document(en) (cue) zijn geschreven naar de apparaat/houder tenzij de uitvoer is omgeleid (zie de sectie over <link linkend=\"mkvextract.output_redirection\">Uitvoer omleiden</link> voor details)."
 
 #. type: Content of: <refentry><refsect1><refsect2><title>
 #: doc/man/mkvextract.xml:395
@@ -658,7 +657,7 @@ msgstr "Ingaven: <command>mkvextract</command> <option>timecodes_v2</option> <pa
 #. type: Content of: <refentry><refsect1><refsect2><para>
 #: doc/man/mkvextract.xml:402
 msgid "The extracted timecodes are written to the console unless the output is redirected (see the section about <link linkend=\"mkvextract.output_redirection\">output redirection</link> for details)."
-msgstr "De geëxtraheerde hoofdstukken zijn geschreven naar de apparaat/houder tenzij de uitvoer is omgeleid (zie de sectie over <link linkend=\"mkvextract.output_redirection\">uitvoer omleiden</link> voor details)."
+msgstr "De geëxtraheerde hoofdstukken zijn geschreven naar de apparaat/houder tenzij de uitvoer is omgeleid (zie de sectie over <link linkend=\"mkvextract.output_redirection\">Uitvoer omleiden</link> voor details)."
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:411
@@ -756,40 +755,32 @@ msgstr "<productname>RealVideo</productname> sporen worden geschreven naar <prod
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:497
 msgid "V_THEORA"
-msgstr ""
+msgstr "V_THEORA"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:500
-#, fuzzy
-#| msgid "<productname>Kate</productname> streams will be written within an <productname>Ogg</productname> container."
 msgid "<productname>Theora</productname> streams will be written within an <productname>Ogg</productname> container"
-msgstr "<productname>Kate</productname> de stromen zullen binnen een <productname>Ogg</productname> bestand worden geschreven."
+msgstr "<productname>Theora</productname> stromen worden geschreven binnen een <productname>Ogg</productname> bestand"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:506
 msgid "V_VP8"
-msgstr ""
+msgstr "V_VP8"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:509
-#, fuzzy
-#| msgid "Raw <abbrev>PCM</abbrev> data will be written to a <abbrev>WAV</abbrev> file."
 msgid "<abbrev>VP8</abbrev> tracks are written to <abbrev>IVF</abbrev> files."
-msgstr "Raw <abbrev>PCM</abbrev> data zal naar een <abbrev>WAV</abbrev> bestand geschreven worden."
+msgstr "Raw <abbrev>VP8</abbrev> sporen worden geschreven naar <abbrev>WAV</abbrev> bestanden."
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:515
-#, fuzzy
-#| msgid "A_MPEG/L3, A_AC3"
 msgid "A_MPEG/L2"
-msgstr "A_MPEG/L3, A_AC3"
+msgstr "A_MPEG/L2"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:518
-#, fuzzy
-#| msgid "These will be extracted to raw <abbrev>MP3</abbrev> and <abbrev>AC3</abbrev> files."
 msgid "MPEG-1 Audio Layer II streams will be extracted to raw <abbrev>MP2</abbrev> files."
-msgstr "Deze worden uitgepakt naar <abbrev>MP3</abbrev> en <abbrev>AC3</abbrev> bestanden."
+msgstr "MPEG-1 Audio Layer II stromen worden uitgpakt naar raw <abbrev>MP2</abbrev> bestanden."
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:524
@@ -854,38 +845,32 @@ msgstr "<productname>TrueAudio</productname> sporen worden geschreven naar <abbr
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:581
 msgid "A_ALAC"
-msgstr ""
+msgstr "A_ALAC"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:584
-#, fuzzy
-#| msgid "Raw <abbrev>PCM</abbrev> data will be written to a <abbrev>WAV</abbrev> file."
 msgid "<abbrev>ALAC</abbrev> tracks are written to <abbrev>CAF</abbrev> files."
-msgstr "Raw <abbrev>PCM</abbrev> data zal naar een <abbrev>WAV</abbrev> bestand geschreven worden."
+msgstr "<abbrev>ALAC</abbrev> worden geschreven naar <abbrev>CAF</abbrev> bestanden."
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:590
 msgid "A_FLAC"
-msgstr ""
+msgstr "A_FLAC"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:593
-#, fuzzy
-#| msgid "Raw <abbrev>PCM</abbrev> data will be written to a <abbrev>WAV</abbrev> file."
 msgid "<abbrev>FLAC</abbrev> tracks are written to raw <abbrev>FLAC</abbrev> files."
-msgstr "Raw <abbrev>PCM</abbrev> data zal naar een <abbrev>WAV</abbrev> bestand geschreven worden."
+msgstr "<abbrev>FLAC</abbrev> sporen worden geschreven naar raw <abbrev>FLAC</abbrev> bestanden."
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:599
 msgid "A_WAVPACK4"
-msgstr ""
+msgstr "A_WAVPACK4"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:602
-#, fuzzy
-#| msgid "<productname>RealVideo</productname> tracks are written to <productname>RealMedia</productname> files."
 msgid "<productname>WavPack</productname> tracks are written to <abbrev>WV</abbrev> files."
-msgstr "<productname>RealVideo</productname> sporen worden geschreven naar <productname>RealMedia</productname> bestanden."
+msgstr "<productname>WavPack</productname> sporen worden geschreven naar <productname>WV</productname> bestanden."
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:608
@@ -920,38 +905,32 @@ msgstr "<productname>Kate</productname> de stromen zullen binnen een <productnam
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:636
 msgid "S_VOBSUB"
-msgstr ""
+msgstr "S_VOBSUB"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:639
 msgid "<productname>VobSub</productname> subtitles will be written as <abbrev>SUB</abbrev> files along with the respective index files, as <abbrev>IDX</abbrev> files."
-msgstr ""
+msgstr "<productname>VobSub</productname> ondetitels worden geschreven als <abbrev>SUB</abbrev> samen met de bijbehorende index bestanden, als <abbrev>IDX</abbrev> bestanden."
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:646
-#, fuzzy
-#| msgid "S_TEXT/UTF8"
 msgid "S_TEXT/USF"
-msgstr "S_TEXT/UTF8"
+msgstr "S_TEXT/USF"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:649
-#, fuzzy
-#| msgid "Simple text subtitles will be written as <abbrev>SRT</abbrev> files."
 msgid "<abbrev>USF</abbrev> text subtitles will be written as <abbrev>USF</abbrev> files."
-msgstr "Simpele tekst ondertitels worden geschreven in <abbrev>SRT</abbrev> bestanden."
+msgstr "<abbrev>USF</abbrev> tekst ondertitels worden geschreven als <abbrev>USF</abbrev> bestanden."
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:655
 msgid "S_HDMV/PGS"
-msgstr ""
+msgstr "S_HDMV/PGS"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:658
-#, fuzzy
-#| msgid "Raw <abbrev>PCM</abbrev> data will be written to a <abbrev>WAV</abbrev> file."
 msgid "<abbrev>PGS</abbrev> subtitles will be written as <abbrev>SUP</abbrev> files."
-msgstr "Raw <abbrev>PCM</abbrev> data zal naar een <abbrev>WAV</abbrev> bestand geschreven worden."
+msgstr "<abbrev>PGS</abbrev> ondertitels worden geschreven als <abbrev>SUP</abbrev> bestanden."
 
 #. type: Content of: <refentry><refsect1><title>
 #: doc/man/mkvextract.xml:664
@@ -1017,7 +996,7 @@ msgstr "<constant>0</constant> -- Deze verlaat code betekend dat de extractie su
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
 #: doc/man/mkvextract.xml:719
 msgid "<constant>1</constant> -- In this case &mkvextract; has output at least one warning, but extraction did continue.  A warning is prefixed with the text '<literal>Warning:</literal>'.  Depending on the issues involved the resulting files might be ok or not.  The user is urged to check both the warning and the resulting files."
-msgstr "<constant>1</constant> -- In dit geval heeft &mkvextract; minstens één waarschuwing uitgegeven, maar extractie is doorgegaan. Een waarschuwing wordt vooraf bepaald met de tekst '<literal>Warning:</literal>'. Afhankelijk van de 'tegengekomen' kwesties kan het resultaat goed of slecht zijn. De gebruiker wordt geadviseerd om zowel de waarschuwing als de resulterende bestanden te controleren."
+msgstr "<constant>1</constant> -- In dit geval heeft &mkvextract; minstens één waarschuwing uitgegeven, maar extractie is doorgegaan. Een waarschuwing wordt vooraf bepaald met de tekst '<literal>Waarschuwing:</literal>'. Afhankelijk van de 'tegengekomen' kwesties kan het resultaat goed of slecht zijn. De gebruiker wordt geadviseerd om zowel de waarschuwing als de resulterende bestanden te controleren."
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
 #: doc/man/mkvextract.xml:727
@@ -1317,7 +1296,7 @@ msgstr "<constant>0</constant> -- Deze verlaat code betekend dat alles succesvol
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
 #: doc/man/mkvinfo.xml:320
 msgid "<constant>1</constant> -- In this case &mkvinfo; has output at least one warning, but the run did continue.  A warning is prefixed with the text '<literal>Warning:</literal>'."
-msgstr "<constant>1</constant> -- In dit geval heeft &mkvinfo; minimaal één waarschuwing doen uitgaan, maar ging door. Een waarschuwing wordt voorafgegaan met de tekst '<literal>Warning:</literal>'."
+msgstr "<constant>1</constant> -- In dit geval heeft &mkvinfo; minimaal één waarschuwing doen uitgaan, maar ging door. Een waarschuwing wordt voorafgegaan met de tekst '<literal>Waarschuwing:</literal>'."
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
 #: doc/man/mkvinfo.xml:327
@@ -1453,7 +1432,7 @@ msgstr "Leest segment informatie in van een <abbrev>XML</abbrev> bestand. Dit be
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvmerge.xml:146
 msgid "See the section about <link linkend=\"mkvmerge.segmentinfo\">segment info XML files</link> below for details."
-msgstr "Zie de sectie over <link linkend=\"mkvmerge.segmentinfo\">segment informatie XML bestanden</link> zie hieronder voor details."
+msgstr "Zie de sectie over <link linkend=\"mkvmerge.segmentinfo\">Het segment informatie XML bestanden</link> zie hieronder voor details."
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><term>
 #: doc/man/mkvmerge.xml:152
@@ -1484,7 +1463,7 @@ msgstr "<option>--chapter-language</option> <parameter>language-code</parameter>
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvmerge.xml:177
 msgid "Sets the ISO639-2 language code that is written for each chapter entry.  Defaults to '<literal>eng</literal>'.  See the section about <link linkend=\"mkvmerge.chapters\">chapters</link> below for details."
-msgstr "Stelt de ISO639-2 land code waarde in welke geschreven wordt voor elk hoofdstuk ingang. Standaard naar '<literal>eng</literal>'. Zie de sectie over <link linkend=\"mkvmerge.chapters\">hoofdstukken</link> hieronder voor details."
+msgstr "Stelt de ISO639-2 land code waarde in welke geschreven wordt voor elk hoofdstuk ingang. Standaard naar '<literal>eng</literal>'. Zie de sectie over <link linkend=\"mkvmerge.chapters\">Hoofdstukken</link> hieronder voor details."
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvmerge.xml:182
@@ -1500,7 +1479,7 @@ msgstr "<option>--chapter-charset</option> <parameter>character-set</parameter>"
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvmerge.xml:192
 msgid "Sets the character set that is used for the conversion to UTF-8 for simple chapter files. See the section about <link linkend=\"mkvmerge.text_files_and_charsets\"> text files and character sets</link> for an explanation how &mkvmerge; converts between character sets."
-msgstr "Stelt het karakter set in, die gebruikt wordt voor de UTF-8 conversie voor simpele hoofdstuk bestanden. Zie de sectie over <link linkend=\"mkvmerge.text_files_and_charsets\"> tekst bestanden en karakter sets</link> voor een uitleg hoe &mkvmerge; converteert tussen het 'verschillende' karakter sets."
+msgstr "Stelt het karakter set in, die gebruikt wordt voor de UTF-8 conversie voor simpele hoofdstuk bestanden. Zie de sectie over <link linkend=\"mkvmerge.text_files_and_charsets\">Tekst bestanden en karakter set conversies</link> voor een uitleg hoe &mkvmerge; converteert tussen het 'verschillende' karakter sets."
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvmerge.xml:198
@@ -1810,132 +1789,98 @@ msgstr "Als een start tijd code is weggelaten wordt het standaard gezet naar het
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><orderedlist><listitem><para>
 #: doc/man/mkvmerge.xml:498
-#, fuzzy
-#| msgid "If an end timecode is left out then it defaults to the end of the source files which basically tells mkvmerge to keep the rest (see example 3)."
 msgid "If an end timecode is left out then it defaults to the end of the source files which basically tells &mkvmerge; to keep the rest (see example 3)."
-msgstr "Als een eind tijd code is weggelaten, dan is standaard het einde van de bronbestanden die in feite mkvmerge vertelt om de rest te houden (zie voorbeeld 3)"
+msgstr "Als een eind tijd code is weggelaten, dan is standaard het einde van de bronbestanden die in feite &mkvmerge; vertelt om de rest te houden (zie voorbeeld 3)"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><orderedlist><listitem><para>
 #: doc/man/mkvmerge.xml:503
-#, fuzzy
-#| msgid "Normally each range will be written to a new file. This can be changed so that consecutive ranges are written to the same file. For that the user has to prefix the start timecode with a <literal>+</literal>. This tells mvkmerge not to create a new file and instead append the range to the same file the previous range was written to. Timecodes will be adjusted so that there will be no gap in the output file even if there was a gap in the two ranges in the input file."
 msgid "Normally each range will be written to a new file. This can be changed so that consecutive ranges are written to the same file. For that the user has to prefix the start timecode with a <literal>+</literal>. This tells &mkvmerge; not to create a new file and instead append the range to the same file the previous range was written to. Timecodes will be adjusted so that there will be no gap in the output file even if there was a gap in the two ranges in the input file."
-msgstr "Normaal gesproken wordt elk bereik weggeschreven naar een nieuw bestand. Dit kan worden veranderd, zodat opeenvolgende reeksen worden geschreven in hetzelfde bestand. Voor de gebruiker moet de start tijd code voorzetten met een <literal>+</literal>. Dit vertelt mvkmerge om niet een ​​nieuw bestand aan te maken en in plaats daarvan het bereik toe te voegen aan hetzelfde bestand die in de vorige reeks is geschreven. Tijdcodes zullen worden aangepast, zodat er géén gat ontstaat in het uitvoerbestand, zelfs als er een gat in de twee bereiken in het invoerbestand waren."
+msgstr "Normaal gesproken wordt elk bereik weggeschreven naar een nieuw bestand. Dit kan worden veranderd, zodat opeenvolgende reeksen worden geschreven in hetzelfde bestand. Daarvoor moet de gebruiker de start tijd code voorzetten met een <literal>+</literal>. Dit vertelt &mkvmerge; om niet een nieuw bestand aan te maken en in plaats daarvan het bereik toe te voegen aan hetzelfde bestand die in de vorige reeks is geschreven. Tijdcodes zullen worden aangepast, zodat er géén gat ontstaat in het uitvoerbestand, zelfs als er een gat in de twee bereiken in het invoerbestand waren."
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><orderedlist><listitem><para>
 #: doc/man/mkvmerge.xml:510
-#, fuzzy
-#| msgid "In example 1 mkvmerge will create two files. The first will contain the content starting from <literal>00:01:20</literal> until <literal>00:02:45</literal>. The second file will contain the content starting from <literal>00:05:50</literal> until <literal>00:10:30</literal>."
 msgid "In example 1 &mkvmerge; will create two files. The first will contain the content starting from <literal>00:01:20</literal> until <literal>00:02:45</literal>. The second file will contain the content starting from <literal>00:05:50</literal> until <literal>00:10:30</literal>."
-msgstr "In voorbeeld 1 zal mkvmerge twee bestanden aanmaken. De eerste bevat de inhoud startend vanaf <literal>00:01:20</literal> tot <literal>00:02:45</literal>. De tweede zal de inhoud bevatten vanaf <literal>00:05:50</literal> tot <literal>00:10:30</literal>."
+msgstr "In voorbeeld 1 zal &mkvmerge; twee bestanden aanmaken. De eerste bevat de inhoud startend vanaf <literal>00:01:20</literal> tot <literal>00:02:45</literal>. De tweede zal de inhoud bevatten vanaf <literal>00:05:50</literal> tot <literal>00:10:30</literal>."
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><orderedlist><listitem><para>
 #: doc/man/mkvmerge.xml:516
-#, fuzzy
-#| msgid "In example 2 mkvmerge will create only one file. This file will contain both the content starting from <literal>00:01:20</literal> until <literal>00:02:45</literal> and the content starting from <literal>00:05:50</literal> until <literal>00:10:30</literal>."
 msgid "In example 2 &mkvmerge; will create only one file. This file will contain both the content starting from <literal>00:01:20</literal> until <literal>00:02:45</literal> and the content starting from <literal>00:05:50</literal> until <literal>00:10:30</literal>."
-msgstr "In voorbeeld 2 zal mkvmerge slechts één bestand aanmaken.  Dit bestand zal beide inhoud bevatten startend van <literal>00:01:20</literal> tot <literal>00:02:45</literal> en de inhoud startend  van <literal>00:05:50</literal> tot <literal>00:10:30</literal>."
+msgstr "In voorbeeld 2 zal &mkvmerge; slechts één bestand aanmaken.  Dit bestand zal beide inhoud bevatten startend van <literal>00:01:20</literal> tot <literal>00:02:45</literal> en de inhoud startend  van <literal>00:05:50</literal> tot <literal>00:10:30</literal>."
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><orderedlist><listitem><para>
 #: doc/man/mkvmerge.xml:521
-#, fuzzy
-#| msgid "In example 3 mkvmerge will create two files. The first will contain the content from the start of the source files until <literal>00:02:45</literal>. The second file will contain the content starting from <literal>00:05:50</literal> until the end of the source files."
 msgid "In example 3 &mkvmerge; will create two files. The first will contain the content from the start of the source files until <literal>00:02:45</literal>. The second file will contain the content starting from <literal>00:05:50</literal> until the end of the source files."
-msgstr "In voorbeeld 3 zal mkvmerge twee bestanden aanmaken. De eerste bevat de inhoud vanaf het beging van het bron bestanden tot <literal>00:02:45</literal>. Het tweede bevat de inhoud startend vanaf <literal>00:05:50</literal> tot het eind van het bron bestanden."
+msgstr "In voorbeeld 3 zal &mkvmerge; twee bestanden aanmaken. De eerste bevat de inhoud vanaf het beging van het bron bestanden tot <literal>00:02:45</literal>. Het tweede bevat de inhoud startend vanaf <literal>00:05:50</literal> tot het eind van het bron bestanden."
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><orderedlist><listitem><note><para>
 #: doc/man/mkvmerge.xml:528
 msgid "Note that &mkvmerge; only makes decisions about splitting at key frame positions. This applies to both the start and the end of each range. So even if an end timecode is between two key frames &mkvmerge; will continue outputting the frames up to but excluding the following key frame."
-msgstr ""
+msgstr "Opmerking, dat &mkvmerge; alleen beslissingen neemt over het splitsen op sleutel beeld posities. Dit geldt voor zowel voor het begin en het einde van elk bereik. Dus zelfs als een eind tijdcode tussen twee sleutel beelden ligt, blijft &mkvmerge; beelden uitvoeren tot aan, maar exclusief de volgende sleutel beeld."
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><orderedlist><listitem><para>
 #: doc/man/mkvmerge.xml:537
-#, fuzzy
-#| msgid "Keeping specific parts by specifying timecode ranges while discarding others."
 msgid "Keeping specific parts by specifying frame/field number ranges while discarding others."
-msgstr "Houden van specifieke delen door het specificeren van tijd code bereiken, terwijl het van anderen ontdaan wordt."
+msgstr "Houden van specifieke delen door het specificeren van beeld/veld nummer bereiken, terwijl het van anderen ontdaan wordt."
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><orderedlist><listitem><para>
 #: doc/man/mkvmerge.xml:541
-#, fuzzy
-#| msgid "Syntax: <option>--split</option> <literal>parts:</literal><parameter>start1</parameter>-<parameter>end1</parameter><optional>,<optional>+</optional><parameter>start2</parameter>-<parameter>end2</parameter><optional>,<optional>+</optional><parameter>start3</parameter>-<parameter>end3</parameter>...</optional></optional>"
 msgid "Syntax: <option>--split</option> <literal>parts-frames:</literal><parameter>start1</parameter>-<parameter>end1</parameter><optional>,<optional>+</optional><parameter>start2</parameter>-<parameter>end2</parameter><optional>,<optional>+</optional><parameter>start3</parameter>-<parameter>end3</parameter>...</optional></optional>"
-msgstr "Ingaven: <option>--split</option> <literal>parts:</literal><parameter>start1</parameter>-<parameter>end1</parameter><optional>,<optional>+</optional><parameter>start2</parameter>-<parameter>end2</parameter><optional>,<optional>+</optional><parameter>start3</parameter>-<parameter>end3</parameter>...</optional></optional>"
+msgstr "Ingaven: <option>--split</option> <literal>parts-frames:</literal><parameter>start1</parameter>-<parameter>end1</parameter><optional>,<optional>+</optional><parameter>start2</parameter>-<parameter>end2</parameter><optional>,<optional>+</optional><parameter>start3</parameter>-<parameter>end3</parameter>...</optional></optional>"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><orderedlist><listitem><para><orderedlist><listitem><para>
 #: doc/man/mkvmerge.xml:547
-#, fuzzy
-#| msgid "Example: <code>--split frames:120,237,891</code>"
 msgid "<code>--split parts-frames:137-258,548-1211</code>"
-msgstr "Voorbeeld: <code>--split frames:120,237,891</code>"
+msgstr "<code>--split parts-frames:137-258,548-1211</code>"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><orderedlist><listitem><para><orderedlist><listitem><para>
 #: doc/man/mkvmerge.xml:548
-#, fuzzy
-#| msgid "Example: <code>--split frames:120,237,891</code>"
 msgid "<code>--split parts-frames:733-912,+1592-2730</code>"
-msgstr "Voorbeeld: <code>--split frames:120,237,891</code>"
+msgstr "<code>--split parts-frames:733-912,+1592-2730</code>"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><orderedlist><listitem><para><orderedlist><listitem><para>
 #: doc/man/mkvmerge.xml:549
-#, fuzzy
-#| msgid "<code>--split parts:-00:02:45,00:05:50-</code>"
 msgid "<code>--split parts-frames:-430,2512-</code>"
-msgstr "<code>--split parts:-00:02:45,00:05:50-</code>"
+msgstr "<code>--split parts-frames:-430,2512-</code>"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><orderedlist><listitem><para>
 #: doc/man/mkvmerge.xml:554
-#, fuzzy
-#| msgid "The <literal>parts</literal> mode tells &mkvmerge; to keep certain ranges of timecodes while discarding others. The ranges to keep have to be listed after the <literal>parts:</literal> keyword and be separated by commas. A range itself consists of a start and an end timecode in the same format the other variations of <parameter>--split</parameter> accept (e.g. both <literal>00:01:20</literal> and <literal>80s</literal> refer to the same timecode)."
 msgid "The <literal>parts-frames</literal> mode tells &mkvmerge; to keep certain ranges of frame/field numbers while discarding others. The ranges to keep have to be listed after the <literal>parts-frames:</literal> keyword and be separated by commas. A range itself consists of a start and an end frame/field number. Numbering starts at 1."
-msgstr "De <literal>parts</literal> mode vertelt &mkvmerge; bepaalde tijd code bereiken te behouden en anderen over te slaan. De te behouden bereiken worden uit gelijst na de <literal>parts:</literal> sleutelwoord en gescheiden door een komma. Het bereik zelf bestaat uit een start en een eindtijd code in hetzelfde format als de overige variaties van <parameter>--split</parameter> accept (b.v. beide <literal>00:01:20</literal> en <literal>80s</literal> verwijzen naar dezelfde tijd code)."
+msgstr "De <literal>parts-frames</literal> mode vertelt &mkvmerge; bepaalde bereiken van beeld/veld nummers te behouden en anderen over te slaan. De te behouden bereiken moeten uit gelijst worden na de <literal>parts-frames:</literal> sleutelwoord en gescheiden door een komma. Het bereik zelf bestaat uit een start en een eind beeld/veld nummer. Nummering start op 1."
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><orderedlist><listitem><para>
 #: doc/man/mkvmerge.xml:560
-#, fuzzy
-#| msgid "If a start timecode is left out then it defaults to the previous range's end timecode. If there was no previous range then it defaults to the start of the file (see example 3)."
 msgid "If a start number is left out then it defaults to the previous range's end number. If there was no previous range then it defaults to the start of the file (see example 3)."
-msgstr "Als een start tijd code is weggelaten wordt het standaard gezet naar het vorige bereik eindtijd code.  Als er geen vorig bereik, dan is standaard het begin van het bestand (zie voorbeeld 3)."
+msgstr "Als een start nummer is weggelaten wordt het standaard gezet naar het vorige bereik eind nummer.  Als er geen vorig bereik is, dan is standaard het begin van het bestand (zie voorbeeld 3)."
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><orderedlist><listitem><para>
 #: doc/man/mkvmerge.xml:565
-#, fuzzy
-#| msgid "If an end timecode is left out then it defaults to the end of the source files which basically tells mkvmerge to keep the rest (see example 3)."
 msgid "If an end number is left out then it defaults to the end of the source files which basically tells &mkvmerge; to keep the rest (see example 3)."
-msgstr "Als een eind tijd code is weggelaten, dan is standaard het einde van de bronbestanden die in feite mkvmerge vertelt om de rest te houden (zie voorbeeld 3)"
+msgstr "Als een eind nummer is weggelaten, dan is standaard het einde van de bronbestanden die in feite &mkvmerge; vertelt om de rest te behouden (zie voorbeeld 3)"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><orderedlist><listitem><para>
 #: doc/man/mkvmerge.xml:570
-#, fuzzy
-#| msgid "Normally each range will be written to a new file. This can be changed so that consecutive ranges are written to the same file. For that the user has to prefix the start timecode with a <literal>+</literal>. This tells mvkmerge not to create a new file and instead append the range to the same file the previous range was written to. Timecodes will be adjusted so that there will be no gap in the output file even if there was a gap in the two ranges in the input file."
 msgid "Normally each range will be written to a new file. This can be changed so that consecutive ranges are written to the same file. For that the user has to prefix the start number with a <literal>+</literal>. This tells &mkvmerge; not to create a new file and instead append the range to the same file the previous range was written to. Timecodes will be adjusted so that there will be no gap in the output file even if there was a gap in the two ranges in the input file."
-msgstr "Normaal gesproken wordt elk bereik weggeschreven naar een nieuw bestand. Dit kan worden veranderd, zodat opeenvolgende reeksen worden geschreven in hetzelfde bestand. Voor de gebruiker moet de start tijd code voorzetten met een <literal>+</literal>. Dit vertelt mvkmerge om niet een ​​nieuw bestand aan te maken en in plaats daarvan het bereik toe te voegen aan hetzelfde bestand die in de vorige reeks is geschreven. Tijdcodes zullen worden aangepast, zodat er géén gat ontstaat in het uitvoerbestand, zelfs als er een gat in de twee bereiken in het invoerbestand waren."
+msgstr "Normaal gesproken, wordt elk bereik weggeschreven naar een nieuw bestand. Dit kan worden veranderd, zodat opeenvolgende reeksen worden geschreven in hetzelfde bestand. Daarvoor, moet de gebruiker het start nummer voorzetten met een <literal>+</literal>. Dit vertelt &mkvmerge; om niet een nieuw bestand aan te maken en in plaats daarvan, het bereik toe te voegen aan hetzelfde bestand die in de vorige reeks werd geschreven. Tijdcodes zullen worden aangepast, zodat er géén gat ontstaat in het uitvoerbestand, zelfs als er een gat in de twee bereiken in het invoerbestand waren."
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><orderedlist><listitem><note><para>
 #: doc/man/mkvmerge.xml:578
 msgid "Note that &mkvmerge; only makes decisions about splitting at key frame positions. This applies to both the start and the end of each range. So even if an end frame/field number is between two key frames &mkvmerge; will continue outputting the frames up to but excluding the following key frame."
-msgstr ""
+msgstr "Opmerking, dat &mkvmerge; alleen beslissingen neemt over het splitsen op sleutel beeld posities. Dit geldt voor zowel voor het begin en het einde van elk bereik. Dus zelfs als een eind beeld/veld nummer tussen twee sleutel beelden ligt, blijft &mkvmerge; beelden uitvoeren tot aan, maar exclusief de volgende sleutel beeld."
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><orderedlist><listitem><para>
 #: doc/man/mkvmerge.xml:585
-#, fuzzy
-#| msgid "In example 1 mkvmerge will create two files. The first will contain the content starting from <literal>00:01:20</literal> until <literal>00:02:45</literal>. The second file will contain the content starting from <literal>00:05:50</literal> until <literal>00:10:30</literal>."
 msgid "In example 1 &mkvmerge; will create two files. The first will contain the content starting from the first key frame at or after <literal>137</literal> up to but excluding the first key frame at or after <literal>258</literal>. The second file will contain the content starting from <literal>548</literal> until <literal>1211</literal>."
-msgstr "In voorbeeld 1 zal mkvmerge twee bestanden aanmaken. De eerste bevat de inhoud startend vanaf <literal>00:01:20</literal> tot <literal>00:02:45</literal>. De tweede zal de inhoud bevatten vanaf <literal>00:05:50</literal> tot <literal>00:10:30</literal>."
+msgstr "In voorbeeld 1 zal &mkvmerge; twee bestanden aanmaken. De eerste bevat de inhoud startend op of na het eerste sleutel beeld <literal>137</literal> maar exclusief het eerste sleutel beeld op of na <literal>258</literal>. Het tweede bestand, zal de inhoud bevatten startend vanaf <literal>548</literal> tot <literal>1211</literal>."
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><orderedlist><listitem><para>
 #: doc/man/mkvmerge.xml:591
-#, fuzzy
-#| msgid "In example 2 mkvmerge will create only one file. This file will contain both the content starting from <literal>00:01:20</literal> until <literal>00:02:45</literal> and the content starting from <literal>00:05:50</literal> until <literal>00:10:30</literal>."
 msgid "In example 2 &mkvmerge; will create only one file. This file will contain both the content starting from <literal>733</literal> until <literal>912</literal> and the content starting from <literal>1592</literal> until <literal>2730</literal>."
-msgstr "In voorbeeld 2 zal mkvmerge slechts één bestand aanmaken.  Dit bestand zal beide inhoud bevatten startend van <literal>00:01:20</literal> tot <literal>00:02:45</literal> en de inhoud startend  van <literal>00:05:50</literal> tot <literal>00:10:30</literal>."
+msgstr "In voorbeeld 2 zal &mkvmerge; slechts één bestand aanmaken.  Dit bestand zal beide inhoud bevatten startend van <literal>733</literal> tot <literal>912</literal> en de inhoud startend  vanaf <literal>1592</literal> tot <literal>2730</literal>."
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><orderedlist><listitem><para>
 #: doc/man/mkvmerge.xml:596
-#, fuzzy
-#| msgid "In example 3 mkvmerge will create two files. The first will contain the content from the start of the source files until <literal>00:02:45</literal>. The second file will contain the content starting from <literal>00:05:50</literal> until the end of the source files."
 msgid "In example 3 &mkvmerge; will create two files. The first will contain the content from the start of the source files until <literal>430</literal>. The second file will contain the content starting from <literal>2512</literal> until the end of the source files."
-msgstr "In voorbeeld 3 zal mkvmerge twee bestanden aanmaken. De eerste bevat de inhoud vanaf het beging van het bron bestanden tot <literal>00:02:45</literal>. Het tweede bevat de inhoud startend vanaf <literal>00:05:50</literal> tot het eind van het bron bestanden."
+msgstr "In voorbeeld 3 zal &mkvmerge; twee bestanden aanmaken. De eerste bevat de inhoud vanaf het begin van het bron bestanden tot <literal>430</literal>. Het tweede bevat de inhoud startend vanaf <literal>2512</literal> tot het eind van het bron bestanden."
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><orderedlist><listitem><para>
 #: doc/man/mkvmerge.xml:602
@@ -1946,10 +1891,8 @@ msgstr "Deze modus houdt alleen rekening met de eerste video spoor dat wordt uit
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><orderedlist><listitem><note><para>
 #: doc/man/mkvmerge.xml:607
 #: doc/man/mkvmerge.xml:644
-#, fuzzy
-#| msgid "The numbers given with this argument are interpreted based on the number of Matroska blocks that are output.  A single Matroska block contains either a full frame (for progressive content) or a single field (for interlaced content).  mkvmerge does not distinguish between those two and simply counts the number of blocks.  For example: If one wanted to split after the 25th full frame with interlaced content one would have to use <literal>50</literal> (two fields per full frame) as the split point."
 msgid "The numbers given with this argument are interpreted based on the number of &matroska; blocks that are output.  A single &matroska; block contains either a full frame (for progressive content) or a single field (for interlaced content).  mkvmerge does not distinguish between those two and simply counts the number of blocks.  For example: If one wanted to split after the 25th full frame with interlaced content one would have to use <literal>50</literal> (two fields per full frame) as the split point."
-msgstr "De getallen met dit argument worden geïnterpreteerd op basis van het aantal Matroska blokken die worden uitgevoerd. Een enkele Matroska blok bevat ofwel een volledig beeld (voor progressieve inhoud) of een enkel veld (voor interlaced inhoud). mkvmerge maakt geen onderscheid tussen die twee en telt eenvoudig telt aantal blokken. Als voorbeeld: Als men wilt verdelen na de 25e volledige beeld met interlaced inhoud zou men <literal> 50 </literal> (twee velden per volledig beeld) gebruiken als het splitspunt."
+msgstr "De getallen met dit argument worden geïnterpreteerd op basis van het aantal &matroska; blokken die worden uitgevoerd. Een enkele &matroska; blok bevat ofwel een volledig beeld (voor progressieve inhoud) of een enkel veld (voor interlaced inhoud). mkvmerge maakt geen onderscheid tussen die twee en telt eenvoudig telt aantal blokken. Als voorbeeld: Als men wilt verdelen na het 25ste volledige beeld met interlaced inhoud zou men <literal> 50 </literal> moeten gebruiken (twee velden per volledig beeld) als splits moment."
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><orderedlist><listitem><para>
 #: doc/man/mkvmerge.xml:617
@@ -2008,10 +1951,8 @@ msgstr "Het <literal>chapters:</literal>' voorvoegsel mag niet wegelaten worden.
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><orderedlist><listitem><note><para>
 #: doc/man/mkvmerge.xml:683
-#, fuzzy
-#| msgid "The Matroska file format supports arbitrary deeply nested chapter structures called 'edition entries' and 'chapter atoms'.  However, this mode only considers the top-most level of chapters across all edition entries."
 msgid "The &matroska; file format supports arbitrary deeply nested chapter structures called 'edition entries' and 'chapter atoms'.  However, this mode only considers the top-most level of chapters across all edition entries."
-msgstr "Het Matroska bestandsformaat ondersteunt willekeurige diep geneste hoofdstuk structuren, genaamd 'editie opgaves \"en\" hoofdstuk delen'. Echter, deze modus beschouwt alleen het hoogste niveau van de hoofdstukken, over alle editie ingaves."
+msgstr "Het &matroska; bestandsformaat ondersteunt willekeurige diep geneste hoofdstuk structuren, genoemd 'editie ingaven' en 'hoofdstuk delen'.  Echter, deze modus beperkt zich alleen tot het hoogste niveau van de hoofdstukken doorr alle editie ingaven."
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvmerge.xml:691
@@ -2026,7 +1967,7 @@ msgstr "<option>--link</option>"
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvmerge.xml:705
 msgid "Link files to one another when splitting the output file. See the section on <link linkend=\"mkvmerge.file_linking\">file linking</link> below for details."
-msgstr "Bestanden linken aan een ander tijdens het splitsen van het uitvoer bestand. Zie de sectie op <link linkend=\"mkvmerge.file_linking\">bestand linken/verbinden</link> onderstaand voor details."
+msgstr "Bestanden linken aan een ander tijdens het splitsen van het uitvoer bestand. Zie de sectie over <link linkend=\"mkvmerge.file_linking\">Bestand linken</link> onderstaand voor details."
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><term>
 #: doc/man/mkvmerge.xml:712
@@ -2036,7 +1977,7 @@ msgstr "<option>--link-to-previous</option> <parameter>segment-UID</parameter>"
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvmerge.xml:715
 msgid "Links the first output file to the segment with the segment UID given by the <parameter>segment-UID</parameter> parameter. See the section on <link linkend=\"mkvmerge.file_linking\">file linking</link> below for details."
-msgstr "Verbindt het laatste uitvoerbestand met het segment UID ingegeven door <parameter>segment-UID</parameter> parameter. Zie de sectie op <link linkend=\"mkvmerge.file_linking\">bestand linken/verbinden</link> onderstaand voor details."
+msgstr "Verbindt het laatste uitvoerbestand met het segment UID ingegeven door <parameter>segment-UID</parameter> parameter. Zie de sectie over <link linkend=\"mkvmerge.file_linking\">Bestand linken</link> onderstaand voor details."
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><term>
 #: doc/man/mkvmerge.xml:722
@@ -2046,7 +1987,7 @@ msgstr "<option>--link-to-next</option> <parameter>segment-UID</parameter>"
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvmerge.xml:725
 msgid "Links the last output file to the segment with the segment UID given by the <parameter>segment-UID</parameter> parameter. See the section on <link linkend=\"mkvmerge.file_linking\">file linking</link> below for details."
-msgstr "Verbindt het laatste uitvoerbestand met het segment UID ingegeven door <parameter>segment-UID</parameter> parameter. Zie de sectie op <link linkend=\"mkvmerge.file_linking\">bestand linken/verbinden</link> onderstaand voor details."
+msgstr "Verbindt het laatste uitvoerbestand met het segment UID ingegeven door <parameter>segment-UID</parameter> parameter. Zie de sectie over <link linkend=\"mkvmerge.file_linking\">Bestand linken</link> onderstaand voor details."
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><term>
 #: doc/man/mkvmerge.xml:732
@@ -2398,7 +2339,7 @@ msgstr "Kopieer geen globale markeringen van dit bestand."
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvmerge.xml:1103
 msgid "Sets the charset that is used for the conversion to UTF-8 for chapter information contained in the source file. See the section about <link linkend=\"mkvmerge.text_files_and_charsets\"> text files and character sets</link> for an explanation how &mkvmerge; converts between character sets."
-msgstr "Stelt het karakter set in, die gebruikt wordt voor de conversie naar UTF-8 voor het hoofdstuk informatie die zich bevindt in het bronbestand. Zie de sectie over<link linkend=\"mkvmerge.text_files_and_charsets\"> tekst bestanden en karakter sets</link> voor een uitleg hoe &mkvmerge; converteert tussen de karakter sets."
+msgstr "Stelt het karakter set in, die gebruikt wordt voor de conversie naar UTF-8 voor het hoofdstuk informatie die zich bevindt in het bronbestand. Zie de sectie over  <link linkend=\"mkvmerge.text_files_and_charsets\">Tekst bestanden en karakter set conversies</link> voor een uitleg hoe &mkvmerge; converteert tussen de karakter sets."
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvmerge.xml:1114
@@ -2508,7 +2449,7 @@ msgstr "<option>-t</option>, <option>--tags</option> <parameter>TID:file-name</p
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvmerge.xml:1239
 msgid "Read tags for the track with the number <parameter>TID</parameter> from the file <parameter>file-name</parameter>. See the section about <link linkend=\"mkvmerge.tags\">tags</link> below for details."
-msgstr "Leest de markeringen in van het spoor met het nummer <parameter>TID</parameter> van de bestand <parameter>file-name</parameter>. Zie de sectie over <link linkend=\"mkvmerge.tags\">markeringen</link> hieronder voor details."
+msgstr "Leest de markeringen in van het spoor met het nummer <parameter>TID</parameter> van de bestand <parameter>file-name</parameter>. Zie de sectie over <link linkend=\"mkvmerge.tags\">Markeringen</link> hieronder voor details."
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><term>
 #: doc/man/mkvmerge.xml:1246
@@ -2688,7 +2629,7 @@ msgstr "<option>--sub-charset</option> <parameter>TID:character-set</parameter>"
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvmerge.xml:1447
 msgid "Sets the character set for the conversion to UTF-8 for UTF-8 subtitles for the given track ID. If not specified the charset will be derived from the current locale settings. Note that a charset is not needed for subtitles read from &matroska; files or from Kate streams, as these are always stored in UTF-8. See the section about <link linkend=\"mkvmerge.text_files_and_charsets\"> text files and character sets</link> for an explanation how &mkvmerge; converts between character sets."
-msgstr "Stelt het karakter set conversie in naar UTF-8 voor UTF-8 ondertitels van een opgegeven spoor ID. Indien niet opgegeven, dan worden het huidig verkregen besturingssysteem locatie gebruikt. Opmerking: een karakter set voor ondertitels is niet nodig wanneer er gelezen wordt vanuit een &matroska; bestand of van Kate stromen, omdat deze altijd zijn opgeslagen in het UTF-8 format. Zie de sectie over <link linkend=\"mkvmerge.text_files_and_charsets\"> tekst bestanden en karakter sets</link> voor een uitleg hoe &mkvmerge; converteert tussen het verschillende karakter sets."
+msgstr "Stelt het karakter set conversie in naar UTF-8 voor UTF-8 ondertitels van een opgegeven spoor ID. Indien niet opgegeven, dan worden het huidig verkregen besturingssysteem locatie gebruikt. Opmerking: een karakter set voor ondertitels is niet nodig wanneer er gelezen wordt vanuit een &matroska; bestand of van Kate stromen, omdat deze altijd zijn opgeslagen in het UTF-8 format. Zie de sectie over <link linkend=\"mkvmerge.text_files_and_charsets\"> Tekst bestanden en karakter set conversies</link> voor een uitleg hoe &mkvmerge; converteert tussen het verschillende karakter sets."
 
 #. type: Content of: <refentry><refsect1><refsect2><title>
 #: doc/man/mkvmerge.xml:1462
@@ -2774,7 +2715,7 @@ msgstr "Zet experimentele mogelijkheden aan. Een lijst van beschikbare mogelijkh
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvmerge.xml:1596
 msgid "Reads additional command line arguments from the file <parameter>options-file</parameter>. See the section about <link linkend=\"mkvmerge.option_files\">option files</link> for further information."
-msgstr "Leest extra commandoregel informatie uit een bestand <parameter>options-file</parameter>. Zie de sectie over <link linkend=\"mkvmerge.option_files\">option files</link> voor meer informatie."
+msgstr "Leest extra commandoregel informatie uit een bestand <parameter>options-file</parameter>. Zie de sectie over <link linkend=\"mkvmerge.option_files\">Optie bestanden</link> voor meer informatie."
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><term>
 #: doc/man/mkvmerge.xml:1603
@@ -3283,7 +3224,7 @@ msgstr "Ondertitelingen"
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvmerge.xml:2095
 msgid "There are several text and bitmap subtitle formats that can be embedded into &matroska;. Text subtitles must be recoded to UTF-8 so that they can be displayed correctly by a player (see the section about <link linkend=\"mkvmerge.text_files_and_charsets\"> text files and character sets</link> for an explanation how &mkvmerge; converts between character sets). Kate subtitles are already encoded in UTF-8 and do not have to be re-encoded."
-msgstr "Er zijn verschillende tekst ondertitel formaten welke kunnen worden 'ingebakken' in &matroska;. Tekst ondertitels moet worden her gecodeerd naar UTF-8 zodat deze juist kunnen worden getoond door een afspeler (zie de sectie over <link linkend=\"mkvmerge.text_files_and_charsets\"> tekst bestanden en karakter sets</link> voor een uitleg hoe &mkvmerge; converteert tussen het verschillende karakter sets). Kate ondertitels zijn al gecodeerd met UTF-8 en hoeven niet gehercodeerd te worden."
+msgstr "Er zijn verschillende tekst ondertitel formaten welke kunnen worden 'ingebakken' in &matroska;. Tekst ondertitels moet worden her gecodeerd naar UTF-8 zodat deze juist kunnen worden getoond door een afspeler (zie de sectie over <link linkend=\"mkvmerge.text_files_and_charsets\">Tekst bestanden en karakter set conversies</link> voor een uitleg hoe &mkvmerge; converteert tussen het verschillende karakter sets). Kate ondertitels zijn al gecodeerd met UTF-8 en hoeven niet gehercodeerd te worden."
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvmerge.xml:2102
@@ -3293,7 +3234,7 @@ msgstr "De volgende ondertitel formaten worden momenteel ondersteund:"
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
 #: doc/man/mkvmerge.xml:2108
 msgid "Subtitle Ripper (SRT) files"
-msgstr "Ondertitel stripper (SRT) bestand(en)"
+msgstr "Ondertitel Ripper (SRT) bestand(en)"
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
 #: doc/man/mkvmerge.xml:2114
@@ -3441,7 +3382,7 @@ msgstr "&mkvmerge; zal elk paar of regels transformeren naar één &matroska; <c
 #. type: Content of: <refentry><refsect1><refsect2><para>
 #: doc/man/mkvmerge.xml:2257
 msgid "As this is a text file character set conversion may need to be done. See the section about <link linkend=\"mkvmerge.text_files_and_charsets\"> text files and character sets</link> for an explanation how &mkvmerge; converts between character sets."
-msgstr "Omdat dit een tekst bestand is kan karakter set conversie nog nodig zijn. Zie de sectie over <link linkend=\"mkvmerge.text_files_and_charsets\"> tekst bestanden en karakter sets</link> voor een uitleg hoe &mkvmerge; converteert tussen karakter sets."
+msgstr "Omdat dit een tekst bestand is kan karakter set conversie nog nodig zijn. Zie de sectie over <link linkend=\"mkvmerge.text_files_and_charsets\">Tekst bestanden en karakter set conversies</link> voor een uitleg hoe &mkvmerge; converteert tussen karakter sets."
 
 #. type: Content of: <refentry><refsect1><refsect2><title>
 #: doc/man/mkvmerge.xml:2264
@@ -3763,10 +3704,8 @@ msgstr "Het segment informatie XML bestanden"
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvmerge.xml:2490
-#, fuzzy
-#| msgid "With a segment info XML file it is possible to set certain values in the &quot;segment information&quot; header field of a Matroska file. All of these values cannot be set via other command line options."
 msgid "With a segment info XML file it is possible to set certain values in the &quot;segment information&quot; header field of a &matroska; file. All of these values cannot be set via other command line options."
-msgstr "Met een segment informatie XML-bestand is het mogelijk om bepaalde waarden in te stellen in het \"segment informatie\" kop veld van een Matroska bestand. Al deze waarden kunnen niet worden ingesteld via andere commando regel opties."
+msgstr "Met een segment informatie XML bestand is het mogelijk om bepaalde waarden in te stellen in het &quot;segment informatie&quot; kop veld van een &matroska; bestand. Al deze waarden kunnen niet worden ingesteld via andere commando regel opties."
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvmerge.xml:2495
@@ -3840,10 +3779,8 @@ msgstr "Bijlage, hoofdstuk en markeer elementen zijn alléén aanwezig indien zi
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvmerge.xml:2555
-#, fuzzy
-#| msgid "The shortest possible Matroska file would look like this:"
 msgid "The shortest possible &matroska; file would look like this:"
-msgstr "Het kortst mogelijke Matroska bestand zou lijken op dit:"
+msgstr "Het kortst mogelijke &matroska; bestand zou lijken op dit:"
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvmerge.xml:2559
@@ -3908,7 +3845,7 @@ msgstr ""
 #. type: Content of: <refentry><refsect1><refsect2><title>
 #: doc/man/mkvmerge.xml:2604
 msgid "Timecode file format v2"
-msgstr "Tijd code formaat v2"
+msgstr "Tijd code bestandsformaat v2"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
 #: doc/man/mkvmerge.xml:2607
@@ -3932,7 +3869,7 @@ msgstr ""
 #. type: Content of: <refentry><refsect1><refsect2><title>
 #: doc/man/mkvmerge.xml:2619
 msgid "Timecode file format v3"
-msgstr "Tijd code formaat v3"
+msgstr "Tijd code bestandsformaat v3"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
 #: doc/man/mkvmerge.xml:2621
@@ -3960,7 +3897,7 @@ msgstr ""
 #. type: Content of: <refentry><refsect1><refsect2><title>
 #: doc/man/mkvmerge.xml:2636
 msgid "Timecode file format v4"
-msgstr "Tijd code formaat v4"
+msgstr "Tijd code bestandsformaat v4"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
 #: doc/man/mkvmerge.xml:2638
@@ -3980,7 +3917,7 @@ msgstr "<constant>0</constant> -- Deze verlaat code betekend dat het samenvoegen
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
 #: doc/man/mkvmerge.xml:2660
 msgid "<constant>1</constant> -- In this case &mkvmerge; has output at least one warning, but muxing did continue.  A warning is prefixed with the text '<literal>Warning:</literal>'.  Depending on the issues involved the resulting file might be ok or not.  The user is urged to check both the warning and the resulting file."
-msgstr "<constant>1</constant> -- In dit geval heeft &mkvmerge; ten miste één waarschuwing uitgevaardigd, maar het samenvoegen ging door. Een waarschuwing gaat vooraf met de tekst '<literal>Warning:</literal>'. Afhankelijk van de 'tegengekomen' kwesties kan het resultaat goed of slecht zijn. De gebruiker wordt geadviseerd om zowel de waarschuwing als de resulterende bestanden te controleren."
+msgstr "<constant>1</constant> -- In dit geval heeft &mkvmerge; ten miste één waarschuwing uitgevaardigd, maar het samenvoegen ging door. Een waarschuwing gaat vooraf met de tekst '<literal>Waarschuwing:</literal>'. Afhankelijk van de 'tegengekomen' kwesties kan het resultaat goed of slecht zijn. De gebruiker wordt geadviseerd om zowel de waarschuwing als de resulterende bestanden te controleren."
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
 #: doc/man/mkvmerge.xml:2668
@@ -4081,7 +4018,7 @@ msgstr "Standaard bewerkt &mkvpropedit; de segment informatie sectie"
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvpropedit.xml:115
 msgid "See the section about <link linkend=\"mkvpropedit.edit_selectors\">edit selectors</link> for a full description of the syntax."
-msgstr "Zie de sectie over <link linkend=\"mkvpropedit.edit_selectors\">bewerk selecteurs/kiezer</link> voor een volledige beschrijving van de ingaven."
+msgstr "Zie de sectie over <link linkend=\"mkvpropedit.edit_selectors\">Bewerk selecteurs/kiezers</link> voor een volledige beschrijving van de ingaven."
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvpropedit.xml:121
@@ -4146,7 +4083,7 @@ msgstr "<option>-c</option>, <option>--chapters</option> <parameter>filename</pa
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvpropedit.xml:182
 msgid "Add or replace chapters in the file with the ones from <filename>filename</filename> or remove them if <filename>filename</filename> is empty. &mkvpropedit; reads the same XML and simple chapter formats that &mkvmerge; reads as well."
-msgstr "Toievoegen of vervangen van hoofdstukken in het bestand met degene van <filename>filename</filename> of verwijder ze als <filename>filename</filename> leeg is. &mkvpropedit; leest dezelfde XML en simpele hoofdstukformaten die &mkvmerge; ook inleest."
+msgstr "Toevoegen of vervangen van hoofdstukken in het bestand met degene van <filename>filename</filename> of verwijder ze als <filename>filename</filename> leeg is. &mkvpropedit; leest dezelfde XML en simpele hoofdstukformaten die &mkvmerge; ook inleest."
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvpropedit.xml:190
@@ -4410,7 +4347,7 @@ msgstr "Selecteren op MIME type. In deze vorm is de keuze het letterlijke woord<
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvpropedit.xml:584
 msgid "The following example edits a file called '<literal>movie.mkv</literal>'. It sets the segment title and modifies the language code of an audio and a subtitle track. Note that this example can be shortened by leaving out the first <link linkend=\"mkvpropedit.description.edit\"><option>--edit</option></link> option because editing the segment information element is the default for all options found before the first <link linkend=\"mkvpropedit.description.edit\"><option>--edit</option></link> option anyway."
-msgstr "The following example edits a file called '<literal>movie.mkv</literal>'. It sets the segment title and modifies the language code of an audio and a subtitle track. Note that this example can be shortened by leaving out the first <link linkend=\"mkvpropedit.description.edit\"><option>--edit</option></link> option because editing the segment information element is the default for all options found before the first <link linkend=\"mkvpropedit.description.edit\"><option>--edit</option></link> option anyway."
+msgstr "Het volgende voorbeeld bewerkt een bestand genaamd '<literal>film.mkv</literal>'. Het zet het segment titel en modificeert de taal code van een audio en ondertitel spoor. Opmerking: Dat dit voorbeeld kan worden verkort door het weglaten van de eerste <link linkend=\"mkvpropedit.description.edit\"><option>--edit</option></link> optie, omdat bewerken van het segment informatie element in elk geval standaard is voor alle opties welke worden gevonden voor de eerste <link linkend=\"mkvpropedit.description.edit\"><option>--edit</option></link> optie."
 
 #. type: Content of: <refentry><refsect1><screen>
 #: doc/man/mkvpropedit.xml:590
@@ -4541,7 +4478,7 @@ msgstr "<constant>0</constant> -- Deze verlaat code betekend dat het modificeren
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
 #: doc/man/mkvpropedit.xml:671
 msgid "<constant>1</constant> -- In this case &mkvpropedit; has output at least one warning, but the modification did continue.  A warning is prefixed with the text '<literal>Warning:</literal>'.  Depending on the issues involved the resulting files might be ok or not.  The user is urged to check both the warning and the resulting files."
-msgstr "<constant>1</constant> -- In dit geval heeft &mkvpropedit; minstends één waarschuwing uitgegeven, maar extractie is doorgegaan. Een waarschuwing wordt vooraf bepaald met de tekst '<literal>Warning:</literal>'. Afhankelijk van de 'tegengekomen' kwesties kan het resultaat goed of slecht zijn. De gebruiker wordt geadviseerd, om zowel de waarschuwing als de resulterende bestanden te controleren."
+msgstr "<constant>1</constant> -- In dit geval heeft &mkvpropedit; minstends één waarschuwing uitgegeven, maar extractie is doorgegaan. Een waarschuwing wordt vooraf bepaald met de tekst '<literal>Waarschuwing:</literal>'. Afhankelijk van de 'tegengekomen' kwesties kan het resultaat goed of slecht zijn. De gebruiker wordt geadviseerd, om zowel de waarschuwing als de resulterende bestanden te controleren."
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
 #: doc/man/mkvpropedit.xml:679
@@ -4621,4 +4558,3 @@ msgstr "&mkvmerge;, &mkvextract;, &mkvinfo;, &mkvpropedit;"
 
 #~ msgid "If the default duration is not forced then mkvmerge will try to derive the track's default duration from the container and/or codec used.  One case in which this option is of use is when adding <foreignphrase>AVC/h.264</foreignphrase> elementary streams because these do not contain information about their number of frames or a default duration for each frame.  For such files &mkvmerge; will assume a default duration of '<literal>25fps</literal>' unless overridden."
 #~ msgstr "Als de standaard duur niet is geforceerd, dan zal mkvmerge proberen te achterhalen de standaard spoor duur van de houder en/of de gebruikte codec. Eén geval waarin deze optie in gebruik is, is bij het toevoegen van <foreignphrase>AVC/h.264</foreignphrase> elementaire stromen, omdat deze géén informatie bevatten over de standaard aantal beelden per seconde (fps) of een standaard duur van elk beeld. Voor dergelijke bestanden neemt &mkvmerge; aan een standaard duur van '<literal>25fps</literal>' tenzij dit overegeld is."
-
