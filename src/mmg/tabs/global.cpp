@@ -77,7 +77,7 @@ tab_global::tab_global(wxWindow *parent):
   st_split_mode      = new wxStaticText(this, -1, wxEmptyString);
   cob_split_mode     = new wxMTX_COMBOBOX_TYPE(this, ID_COB_SPLIT_MODE, wxEmptyString, wxDefaultPosition, wxSize(100, -1), 0, nullptr, wxCB_DROPDOWN | wxCB_READONLY);
   st_split_args      = new wxStaticText(this, -1, wxEmptyString);
-  cob_split_args     = new wxMTX_COMBOBOX_TYPE(this, ID_COB_SPLIT_MODE, wxEmptyString, wxDefaultPosition, wxSize(100, -1), 0, nullptr, wxCB_DROPDOWN);
+  cob_split_args     = new wxMTX_COMBOBOX_TYPE(this, ID_COB_SPLIT_ARG, wxEmptyString, wxDefaultPosition, wxSize(100, -1), 0, nullptr, wxCB_DROPDOWN);
   st_split_max_files = new wxStaticText(this, wxID_STATIC, wxEmptyString);
   tc_split_max_files = new wxTextCtrl(this, ID_TC_SPLITMAXFILES, wxEmptyString);
 

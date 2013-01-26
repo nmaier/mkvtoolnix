@@ -1,3 +1,10 @@
+2013-01-26  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mmg: bug fix: Selecting one of the pre-defined values from the
+        "split by X" argument drop down box (e.g. "700M") was not leaving
+        the selected entry in the drop down box but set it to empty
+        instead.
+
 2013-01-21  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvmerge: bug fix: Fixed reading VP6 video from FlashVideo
