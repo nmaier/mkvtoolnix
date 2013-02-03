@@ -21,6 +21,7 @@
 #include "common/endian.h"
 #include "common/math.h"
 #include "common/mp3.h"
+#include "common/mm_mpls_multi_file_io.h"
 #include "common/ac3.h"
 #include "common/iso639.h"
 #include "common/truehd.h"
@@ -334,28 +335,30 @@ mpeg_ts_track_c::handle_timecode_wrap(timecode_c &pts,
 bool
 mpeg_ts_reader_c::probe_file(mm_io_c *in,
                              uint64_t size) {
-  return -1 != detect_packet_size(*in, size);
+  auto multi_io = mm_mpls_multi_file_io_c::open_multi(in);
+  bool result   = -1 != detect_packet_size(multi_io ? multi_io.get() : in, size);
+
+  return result;
 }
 
 int
-mpeg_ts_reader_c::detect_packet_size(mm_io_c &in,
+mpeg_ts_reader_c::detect_packet_size(mm_io_c *in,
                                      uint64_t size) {
   try {
+    size        = std::min(static_cast<uint64_t>(TS_PROBE_SIZE), size);
+    auto buffer = memory_c::alloc(size);
+    auto mem    = buffer->get_buffer();
+
+    in->setFilePointer(0, seek_beginning);
+    size = in->read(mem, size);
+
     std::vector<int> positions;
-    size = std::min(static_cast<uint64_t>(TS_PROBE_SIZE), size);
-    memory_cptr buffer = memory_c::alloc(size);
-    unsigned char *mem = buffer->get_buffer();
-    size_t i, k;
-
-    in.setFilePointer(0, seek_beginning);
-    size = in.read(mem, size);
-
-    for (i = 0; i < size; ++i)
+    for (size_t i = 0; i < size; ++i)
       if (0x47 == mem[i])
         positions.push_back(i);
 
-    for (i = 0; positions.size() > i; ++i) {
-      for (k = 0; 0 != potential_packet_sizes[k]; ++k) {
+    for (size_t i = 0; positions.size() > i; ++i) {
+      for (size_t k = 0; 0 != potential_packet_sizes[k]; ++k) {
         unsigned int pos            = positions[i];
         unsigned int packet_size    = potential_packet_sizes[k];
         unsigned int num_startcodes = 1;
@@ -394,16 +397,22 @@ mpeg_ts_reader_c::mpeg_ts_reader_c(const track_info_c &ti,
   , m_debug_timecode_wrapping{debugging_requested("mpeg_ts|mpeg_ts_timecode_wrapping")}
   , m_detected_packet_size(0)
 {
+  auto mpls_in = mm_mpls_multi_file_io_c::open_multi(m_in.get());
+  if (!mpls_in)
+    return;
+
+  m_in                = mpls_in;
+  m_size              = m_in->get_size();
+  m_chapter_timecodes = std::static_pointer_cast<mm_mpls_multi_file_io_c>(mpls_in)->get_chapters();
 }
 
 void
 mpeg_ts_reader_c::read_headers() {
   try {
-    size_t size_to_probe     = std::min(m_size, static_cast<uint64_t>(TS_PIDS_DETECT_SIZE));
-    memory_cptr probe_buffer = memory_c::alloc(size_to_probe);
+    size_t size_to_probe   = std::min(m_size, static_cast<uint64_t>(TS_PIDS_DETECT_SIZE));
+    auto probe_buffer      = memory_c::alloc(size_to_probe);
 
-
-    m_detected_packet_size = detect_packet_size(*m_in, size_to_probe);
+    m_detected_packet_size = detect_packet_size(m_in.get(), size_to_probe);
     m_in->setFilePointer(0);
 
     mxverb(3, boost::format("mpeg_ts: Starting to build PID list. (packet size: %1%)\n") % m_detected_packet_size);
@@ -444,8 +453,41 @@ mpeg_ts_reader_c::read_headers() {
   }
 
   parse_clip_info_file();
+  process_chapter_entries();
 
   show_demuxer_info();
+}
+
+void
+mpeg_ts_reader_c::process_chapter_entries() {
+  if (m_chapter_timecodes.empty() || m_ti.m_no_chapters)
+    return;
+
+  std::stable_sort(m_chapter_timecodes.begin(), m_chapter_timecodes.end());
+
+  mm_mem_io_c out{nullptr, 0, 1000};
+  out.set_file_name(m_ti.m_fname);
+  out.write_bom("UTF-8");
+
+  size_t idx = 0;
+  for (auto &timecode : m_chapter_timecodes) {
+    auto ms = timecode.to_ms();
+    out.puts(boost::format("CHAPTER%|1$02d|=%|2$02d|:%|3$02d|:%|4$02d|.%|5$03d|\n"
+                           "CHAPTER%|1$02d|NAME=Chapter %1%\n")
+             % idx
+             % ( ms / 60 / 60 / 1000)
+             % ((ms      / 60 / 1000) %   60)
+             % ((ms           / 1000) %   60)
+             % ( ms                   % 1000));
+  }
+
+  mm_text_io_c text_out(&out, false);
+  try {
+    m_chapters = parse_chapters(&text_out, 0, -1, 0, m_ti.m_chapter_language, "", true);
+    align_chapter_edition_uids(m_chapters.get());
+
+  } catch (mtx::chapter_parser_x &ex) {
+  }
 }
 
 mpeg_ts_reader_c::~mpeg_ts_reader_c() {
@@ -493,6 +535,9 @@ mpeg_ts_reader_c::identify() {
 
     id_result_track(i, type, fourcc, verbose_info);
   }
+
+  if (!m_chapter_timecodes.empty())
+    id_result_chapters(m_chapter_timecodes.size());
 }
 
 int
@@ -1216,7 +1261,9 @@ bfs::path
 mpeg_ts_reader_c::find_clip_info_file() {
   bool debug = debugging_requested("clpi");
 
-  bfs::path clpi_file(m_ti.m_fname);
+  auto mpls_multi_in = dynamic_cast<mm_mpls_multi_file_io_c *>(get_underlying_input_as_multi_file_io());
+  auto clpi_file     = mpls_multi_in ? mpls_multi_in->get_file_names()[0] : bfs::path{m_ti.m_fname};
+
   clpi_file.replace_extension(".clpi");
 
   mxdebug_if(debug, boost::format("Checking %1%\n") % clpi_file.string());

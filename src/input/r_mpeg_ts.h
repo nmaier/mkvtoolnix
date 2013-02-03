@@ -372,6 +372,8 @@ protected:
   std::vector<mpeg_ts_track_ptr> tracks;
   std::map<generic_packetizer_c *, mpeg_ts_track_ptr> m_ptzr_to_track_map;
 
+  std::vector<timecode_c> m_chapter_timecodes;
+
   bool m_dont_use_audio_pts, m_debug_resync, m_debug_pat_pmt, m_debug_aac, m_debug_timecode_wrapping;
 
   int m_detected_packet_size;
@@ -399,7 +401,7 @@ public:
   virtual bool parse_packet(unsigned char *buf);
 
   static timecode_c read_timecode(unsigned char *p);
-  static int detect_packet_size(mm_io_c &in, uint64_t size);
+  static int detect_packet_size(mm_io_c *in, uint64_t size);
 
 private:
   int parse_pat(unsigned char *pat);
@@ -416,6 +418,8 @@ private:
 
   bfs::path find_clip_info_file();
   void parse_clip_info_file();
+
+  void process_chapter_entries();
 
   bool resync(int64_t start_at);
 
