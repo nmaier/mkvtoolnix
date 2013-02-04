@@ -1469,8 +1469,6 @@ mpeg4::p10::avc_es_parser_c::cleanup() {
       ++m_stats.num_timecodes_generated;
     }
 
-    if (frame_itr->m_start == 1033333333)
-      mxinfo("muh\n");
     frame_itr->m_end = frame_itr->m_start + duration_for(frame_itr->m_si);
 
     previous_frame_itr = frame_itr;
