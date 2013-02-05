@@ -117,12 +117,19 @@ parser_c::parse(mm_io_c *file) {
   try {
     file->setFilePointer(0);
     int64_t file_size = file->get_size();
-    auto content      = file->read(file_size);
+
+    if ((4 * 5 > file_size) || (10 * 1024 * 1024 < file_size))
+      throw mtx::mpls::exception(boost::format("File too small or too big: %1%") % file_size);
+
+    auto content = file->read(4 * 5);
+    m_bc         = std::make_shared<bit_cursor_c>(content->get_buffer(), 4 * 5);
+    parse_header();
+
     file->setFilePointer(0);
 
-    m_bc = std::make_shared<bit_cursor_c>(content->get_buffer(), file_size);
+    content = file->read(file_size);
+    m_bc    = std::make_shared<bit_cursor_c>(content->get_buffer(), file_size);
 
-    parse_header();
     parse_playlist();
     parse_chapters();
 
@@ -138,6 +145,8 @@ parser_c::parse(mm_io_c *file) {
 
   if (m_debug)
     dump();
+
+  file->setFilePointer(0);
 
   return m_ok;
 }
