@@ -334,9 +334,10 @@ mpeg_ts_track_c::handle_timecode_wrap(timecode_c &pts,
 
 bool
 mpeg_ts_reader_c::probe_file(mm_io_c *in,
-                             uint64_t size) {
-  auto multi_io = mm_mpls_multi_file_io_c::open_multi(in);
-  bool result   = -1 != detect_packet_size(multi_io ? multi_io.get() : in, size);
+                             uint64_t) {
+  auto mpls_in   = mm_mpls_multi_file_io_c::open_multi(in);
+  auto in_to_use = mpls_in ? mpls_in.get() : in;
+  bool result    = -1 != detect_packet_size(in_to_use, in_to_use->get_size());
 
   return result;
 }
