@@ -138,8 +138,11 @@ is_adts_header(const unsigned char *buf,
   if ((0 == id) && emphasis_present)
     bc.skip_bits(2);            // emphasis, MPEG-4 only
   bc.skip_bits(1 + 1);          // copyright_id_bit & copyright_id_start
-  int frame_length = bc.get_bits(13);
-  if (0 == frame_length)
+
+  int frame_length    = bc.get_bits(13);
+  int header_bit_size = (((0 == id) && emphasis_present) ? 58 : 56) + (!protection_absent ? 16 : 0);
+
+  if (header_bit_size >= frame_length * 8)
     return false;
 
   bc.skip_bits(11);             // adts_buffer_fullness
@@ -153,7 +156,7 @@ is_adts_header(const unsigned char *buf,
   aac_header->bytes            = frame_length;
   aac_header->channels         = channels > 6 ? 2 : channels;
   aac_header->bit_rate         = 1024;
-  aac_header->header_bit_size  = (((0 == id) && emphasis_present) ? 58 : 56) + (!protection_absent ? 16 : 0);
+  aac_header->header_bit_size  = header_bit_size;
   aac_header->header_byte_size = (aac_header->header_bit_size + 7) / 8;
   aac_header->data_byte_size   = aac_header->bytes - aac_header->header_bit_size / 8;
 

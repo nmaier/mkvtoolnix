@@ -1,3 +1,9 @@
+2013-02-06  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvmerge: bug fix in common AAC code: Fixed wrong calculation of
+        AAC packet size for malformed packets resulting in "safemalloc()"
+        failing to allocate memory. Part of a fix for #832.
+
 2013-02-03  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvmerge: new feature: Implemented support for reading MPLS
