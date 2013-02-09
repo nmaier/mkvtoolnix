@@ -47,7 +47,7 @@ test "split timecodes + appending vs split parts" do
 
   unlink_tmp_files
 
-  result.join '-'
+  result.join '+'
 end
 
 test "data/avi/v-h264-aac.avi three parts one output file, starting at 00:00:00" do
