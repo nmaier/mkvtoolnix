@@ -28,6 +28,7 @@ public:
   virtual ~mm_mpls_multi_file_io_c();
 
   std::vector<timecode_c> const &get_chapters() const;
+  virtual void create_verbose_identification_info(std::vector<std::string> &verbose_info);
 
   static mm_io_cptr open_multi(std::string const &display_file_name);
   static mm_io_cptr open_multi(mm_io_c *in);

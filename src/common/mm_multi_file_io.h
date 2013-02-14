@@ -22,6 +22,7 @@ class mm_multi_file_io_c;
 typedef std::shared_ptr<mm_multi_file_io_c> mm_multi_file_io_cptr;
 
 class mm_multi_file_io_c: public mm_io_c {
+protected:
   struct file_t {
     bfs::path m_file_name;
     uint64_t m_size, m_global_start;

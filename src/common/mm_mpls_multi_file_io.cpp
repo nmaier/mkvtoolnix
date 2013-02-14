@@ -4,6 +4,7 @@
 
 #include "common/debugging.h"
 #include "common/mm_mpls_multi_file_io.h"
+#include "common/strings/formatting.h"
 
 mm_mpls_multi_file_io_c::mm_mpls_multi_file_io_c(std::vector<bfs::path> const &file_names,
                                                  std::string const &display_file_name,
@@ -91,4 +92,17 @@ mm_mpls_multi_file_io_c::open_multi(mm_io_c *in) {
     return mm_io_cptr{};
 
   return mm_io_cptr{new mm_mpls_multi_file_io_c{file_names, in->get_file_name(), mpls_parser}};
+}
+
+void
+mm_mpls_multi_file_io_c::create_verbose_identification_info(std::vector<std::string> &verbose_info) {
+  boost::system::error_code ec;
+  auto total_size = boost::accumulate(m_files, 0ull, [&ec](unsigned long long accu, file_t const &file) { return accu + file.m_size; });
+
+  verbose_info.push_back("playlist:1");
+  verbose_info.push_back((boost::format("playlist_duration:%1%") % m_mpls_parser->get_playlist().duration.to_ns()).str());
+  verbose_info.push_back((boost::format("playlist_size:%1%")     % total_size)                                    .str());
+  verbose_info.push_back((boost::format("playlist_chapters:%1%") % m_mpls_parser->get_chapters().size())          .str());
+  for (auto &file : m_files)
+    verbose_info.push_back((boost::format("playlist_file:%1%") % escape(file.m_file_name.string())).str());
 }

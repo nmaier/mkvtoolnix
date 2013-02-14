@@ -496,7 +496,12 @@ mpeg_ts_reader_c::~mpeg_ts_reader_c() {
 
 void
 mpeg_ts_reader_c::identify() {
-  id_result_container();
+  std::vector<std::string> verbose_info;
+  auto mpls_in = dynamic_cast<mm_mpls_multi_file_io_c *>(get_underlying_input_as_multi_file_io());
+  if (mpls_in)
+    mpls_in->create_verbose_identification_info(verbose_info);
+
+  id_result_container(verbose_info);
 
   size_t i;
   for (i = 0; i < tracks.size(); i++) {
@@ -524,7 +529,7 @@ mpeg_ts_reader_c::identify() {
     if (!fourcc)
       continue;
 
-    std::vector<std::string> verbose_info;
+    verbose_info.clear();
     if (!track->language.empty())
       verbose_info.push_back((boost::format("language:%1%") % escape(track->language)).str());
 
