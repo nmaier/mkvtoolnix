@@ -1100,31 +1100,29 @@ qtmp4_reader_c::read(generic_packetizer_c *ptzr,
   m_in->setFilePointer(index.file_pos);
 
   int buffer_offset = 0;
-  unsigned char *buffer;
+  memory_cptr buffer;
 
   if (   dmx->is_video()
       && !dmx->pos
       && (dmx->fourcc.equiv("mp4v") || dmx->fourcc.equiv("xvid"))
       && dmx->esds_parsed
       && (dmx->esds.decoder_config)) {
-    buffer        = (unsigned char *)safemalloc(index.size + dmx->esds.decoder_config->get_size());
+    buffer        = memory_c::alloc(index.size + dmx->esds.decoder_config->get_size());
     buffer_offset = dmx->esds.decoder_config->get_size();
 
-    memcpy(buffer, dmx->esds.decoder_config->get_buffer(), dmx->esds.decoder_config->get_size());
+    memcpy(buffer->get_buffer(), dmx->esds.decoder_config->get_buffer(), dmx->esds.decoder_config->get_size());
 
   } else {
-    buffer = (unsigned char *)safemalloc(index.size);
+    buffer = memory_c::alloc(index.size);
   }
 
-  if (m_in->read(buffer + buffer_offset, index.size) != index.size) {
+  if (m_in->read(buffer->get_buffer() + buffer_offset, index.size) != index.size) {
     mxwarn(boost::format(Y("Quicktime/MP4 reader: Could not read chunk number %1%/%2% with size %3% from position %4%. Aborting.\n"))
            % dmx->pos % dmx->m_index.size() % index.size % index.file_pos);
-    safefree(buffer);
     return flush_packetizers();
   }
 
-  PTZR(dmx->ptzr)->process(new packet_t(new memory_c(buffer, index.size + buffer_offset, true), index.timecode, index.duration,
-                                        index.is_keyframe ? VFT_IFRAME : VFT_PFRAMEAUTOMATIC, VFT_NOBFRAME));
+  PTZR(dmx->ptzr)->process(new packet_t(buffer, index.timecode, index.duration, index.is_keyframe ? VFT_IFRAME : VFT_PFRAMEAUTOMATIC, VFT_NOBFRAME));
   ++dmx->pos;
 
   if (dmx->pos < dmx->m_index.size())
