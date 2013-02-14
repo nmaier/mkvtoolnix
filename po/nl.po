@@ -4698,7 +4698,7 @@ msgstr "MPEG programma stroom"
 msgid "MPEG program streams"
 msgstr "MPEG programma stromen"
 
-#: src/input/r_mpeg_ts.h:389
+#: src/input/r_mpeg_ts.h:391
 msgid "MPEG transport stream"
 msgstr "MPEG verzend =stromen"
 
@@ -4721,6 +4721,10 @@ msgstr "MPEG-1/2"
 #: src/output/p_mpeg4_p2.h:65
 msgid "MPEG-4"
 msgstr "MPEG-4"
+
+#: src/common/file_types.cpp:43
+msgid "MPLS BluRay playlist"
+msgstr ""
 
 #: src/mmg/tabs/input_general.cpp:181
 msgid "Make this track the default track for its type (audio, video, subtitles). Players should prefer tracks with the default track flag set."
@@ -4756,7 +4760,7 @@ msgstr "Matroska"
 msgid "Matroska A/V files (*.mka;*.mkv;*.mk3d)|*.mkv;*.mka;*.mk3d|%s"
 msgstr "Matroska bestanden (*.mkv;*.mka;*.mks;*.mk3d)|*.mkv;*.mka;*.mks;*.mk3d|%s"
 
-#: src/common/file_types.cpp:43
+#: src/common/file_types.cpp:44
 msgid "Matroska audio/video files"
 msgstr "Matroska audio/video bestanden"
 
@@ -5009,7 +5013,7 @@ msgstr "Volgende uniek segment ID"
 msgid "No %1% specified in '--%2% %3%'.\n"
 msgstr "Geen %1% opgegeven in '--%2% %3%'.\n"
 
-#: src/input/r_qtmp4.cpp:1165
+#: src/input/r_qtmp4.cpp:1161
 msgid "No AC3 header found in first frame; track will be skipped.\n"
 msgstr "Geen AC3 kop gevonden in het eerste beeld; spoor wordt overgeslagen.\n"
 
@@ -5197,7 +5201,7 @@ msgstr "Aantal kanalen in het spoor."
 msgid "Ogg/OGM"
 msgstr "Ogg/OGM"
 
-#: src/common/file_types.cpp:46
+#: src/common/file_types.cpp:47
 msgid "Ogg/OGM audio/video files"
 msgstr "Ogg/OGM audio/video bestanden"
 
@@ -5305,7 +5309,7 @@ msgstr "Opties alleen bedoeld voor ontwikkelaars. Gebruik ze niet. Als er iets v
 msgid "Opus"
 msgstr ""
 
-#: src/common/file_types.cpp:47
+#: src/common/file_types.cpp:48
 #, fuzzy
 msgid "Opus (in Ogg) audio files"
 msgstr "Ogg/OGM audio/video bestanden"
@@ -5365,7 +5369,7 @@ msgstr "PCM"
 msgid "PGS"
 msgstr "PGS"
 
-#: src/common/file_types.cpp:44
+#: src/common/file_types.cpp:45
 msgid "PGS/SUP subtitles"
 msgstr "PGS/SUPondertitels"
 
@@ -5535,7 +5539,7 @@ msgstr "Voortgang: [%1%%2%] %3%%%"
 msgid "Querying mkvmerge's capabilities"
 msgstr "Opgevraagde mogelijkheden van mkvmerge"
 
-#: src/common/file_types.cpp:45
+#: src/common/file_types.cpp:46
 msgid "QuickTime audio/video files"
 msgstr "QuickTime audio/video bestanden"
 
@@ -5543,46 +5547,46 @@ msgstr "QuickTime audio/video bestanden"
 msgid "QuickTime/MP4"
 msgstr "QuickTime/MP4"
 
-#: src/input/r_qtmp4.cpp:276
+#: src/input/r_qtmp4.cpp:274
 #, boost-format
 msgid "Quicktime/MP4 reader: '%1%' atom is too small. Expected size: >= %2%. Actual size: %3%.\n"
 msgstr "Quicktime/MP4 lezer: '%1%' deel is te klein. Verwacht grootte: >= %2%. Huidige grootte: %3%.\n"
 
-#: src/input/r_qtmp4.cpp:1750
+#: src/input/r_qtmp4.cpp:1746
 msgid "Quicktime/MP4 reader: Constant samplesize & variable duration not yet supported. Contact the author if you have such a sample file.\n"
 msgstr "Quicktime/MP4 lezer: Constante voorbeeld grootte & variabele duur nog niet ondersteund. Neem kontakt op met de autheur als je zo'n bestand hebt.\n"
 
-#: src/input/r_qtmp4.cpp:1120
+#: src/input/r_qtmp4.cpp:1118
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read chunk number %1%/%2% with size %3% from position %4%. Aborting.\n"
 msgstr "Quicktime/MP4 lezer: Kon het volgende deel niet lezen %1%/%2% met grootte %3% van positie %4%. Afbreken.\n"
 
-#: src/input/r_qtmp4.cpp:2055
-#: src/input/r_qtmp4.cpp:2069
+#: src/input/r_qtmp4.cpp:2051
+#: src/input/r_qtmp4.cpp:2065
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the extended sound description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4 lezer: Kon uitgebreide geluidsbeschrijving deel niet lezen voor spoor ID %1%.\n"
 
-#: src/input/r_qtmp4.cpp:2026
+#: src/input/r_qtmp4.cpp:2022
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the sound description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4 lezer: Kon  geluidsbeschrijving deel niet lezen voor spoor %1%.\n"
 
-#: src/input/r_qtmp4.cpp:868
+#: src/input/r_qtmp4.cpp:866
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the stream description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4 lezer: Kon deel stroom beschrijving niet lezen voor spoor ID %1%.\n"
 
-#: src/input/r_qtmp4.cpp:2101
+#: src/input/r_qtmp4.cpp:2097
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the video description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4 lezer: Kon video beschrijving deel niet lezen voor spoor ID %1%.\n"
 
-#: src/input/r_qtmp4.cpp:208
+#: src/input/r_qtmp4.cpp:206
 msgid "Quicktime/MP4 reader: Have not found any header atoms.\n"
 msgstr "Quicktime/MP4 lezer: Heb geen enkele kop delen gevonden.\n"
 
-#: src/input/r_qtmp4.cpp:210
+#: src/input/r_qtmp4.cpp:208
 msgid "Quicktime/MP4 reader: Have not found the 'mdat' atom. No movie data found.\n"
 msgstr "Quicktime/MP4 lezer: Heb het 'mdat' deel niet gevonden. Geen film data gevonden.\n"
 
@@ -5591,75 +5595,75 @@ msgstr "Quicktime/MP4 lezer: Heb het 'mdat' deel niet gevonden. Geen film data g
 msgid "Quicktime/MP4 reader: Invalid chunk size %1% at %2%.\n"
 msgstr "Quicktime/MP4 lezer: Ongeldige deel grootte %1% op %2%.\n"
 
-#: src/input/r_qtmp4.cpp:2476
+#: src/input/r_qtmp4.cpp:2472
 #, boost-format
 msgid "Quicktime/MP4 reader: MPEG4 part 10/AVC track %1% is missing its decoder config. Skipping this track.\n"
 msgstr "Quicktime/MP4 lezer: MPEG4 deel 10/AVC spoor %1% mist zijn decoder instelling. Sla dit spoor over.\n"
 
-#: src/input/r_qtmp4.cpp:2507
+#: src/input/r_qtmp4.cpp:2503
 #, boost-format
 msgid "Quicktime/MP4 reader: MPEG4 track %1% is missing the esds atom/the decoder config. Skipping this track.\n"
 msgstr "Quicktime/MP4 lezer: MPEG4 spoor %1% mist het esds deel/de decode instelling. Sla dit spoor over.\n"
 
-#: src/input/r_qtmp4.cpp:445
+#: src/input/r_qtmp4.cpp:443
 #, boost-format
 msgid "Quicktime/MP4 reader: The 'media header' atom ('mdhd') uses the unsupported version %1%.\n"
 msgstr "Quicktime/MP4 lezer: De 'media kop' del ('mdhd') gebruikt een niet ondersteunde versie %1%.\n"
 
-#: src/input/r_qtmp4.cpp:861
+#: src/input/r_qtmp4.cpp:859
 #, boost-format
 msgid "Quicktime/MP4 reader: The 'size' field is too small in the stream description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4 lezer: Het 'grootte' veld is te klein in de stroom deel beschrijving voor spoor ID %1%.\n"
 
-#: src/input/r_qtmp4.cpp:450
+#: src/input/r_qtmp4.cpp:448
 msgid "Quicktime/MP4 reader: The 'time scale' parameter was 0. This is not supported.\n"
 msgstr "Quicktime/MP4 lezer: De 'tijd schaal' parameter was 0. Dit is niet ondersteund.\n"
 
-#: src/input/r_qtmp4.cpp:2439
+#: src/input/r_qtmp4.cpp:2435
 #, boost-format
 msgid "Quicktime/MP4 reader: The AAC track %1% is missing the esds atom/the decoder config. Skipping this track.\n"
 msgstr "Quicktime/MP4 lezer: Het AAC spoor %1% mist het esds deel/de decoder instelling. Sla dit spoor over.\n"
 
-#: src/input/r_qtmp4.cpp:2434
+#: src/input/r_qtmp4.cpp:2430
 #, boost-format
 msgid "Quicktime/MP4 reader: The audio track %1% is using an unsupported 'object type id' of %2% in the 'esds' atom. Skipping this track.\n"
 msgstr "Quicktime/MP4 lezer: Het audio spoor %1% gebruikt een niet ondersteunt 'object type id' van %2% in het 'esds' deel. Sla dit spoor over.\n"
 
-#: src/input/r_qtmp4.cpp:2486
+#: src/input/r_qtmp4.cpp:2482
 #, boost-format
 msgid "Quicktime/MP4 reader: The video track %1% is missing the ESDS atom. Skipping this track.\n"
 msgstr "Quicktime/MP4 lezer: Het video spoor %1% mist het ESDS deel. Sla dit spoor over.\n"
 
-#: src/input/r_qtmp4.cpp:308
+#: src/input/r_qtmp4.cpp:306
 #, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers with an unknown or unsupported compression algorithm '%1%'. Aborting.\n"
 msgstr "Quicktime/MP4 lezer: Dit bestand gebruikt gecomprimeerde koppen met een onbekende compressie algoritme '%1%'. Afbreken.\n"
 
-#: src/input/r_qtmp4.cpp:341
+#: src/input/r_qtmp4.cpp:339
 #, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers, but the expected uncompressed size (%1%) was not what is available after uncompressing (%2%).\n"
 msgstr "Quicktime/MP4 lezer: Dit bestand gebruikt gecomprimeerde koppen, maar de verwachtte ongecomprimeerde grootte (%1%) is niet wat beschikbaar was na decomprimeren (%2%).\n"
 
-#: src/input/r_qtmp4.cpp:332
+#: src/input/r_qtmp4.cpp:330
 #, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers, but the zlib library could not be initialized. Error code from zlib: %1%. Aborting.\n"
 msgstr "Quicktime/MP4 lezer: Dit bestand gebruikt gecomprimeerde koppen, maar de zlib bibliotheek kon niet gestart worden. Fout code van zlib: %1%. Afbreken.\n"
 
-#: src/input/r_qtmp4.cpp:337
+#: src/input/r_qtmp4.cpp:335
 #, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers, but they could not be uncompressed. Error code from zlib: %1%. Aborting.\n"
 msgstr "Quicktime/MP4 lezer: Dit bestand gebruikt gecomprimeerde koppen, maar deze konden niet gedecomprimeerd worden. Fout code van zlib: %1%. Afbreken.\n"
 
-#: src/input/r_qtmp4.cpp:2407
-#: src/input/r_qtmp4.cpp:2422
-#: src/input/r_qtmp4.cpp:2460
-#: src/input/r_qtmp4.cpp:2525
+#: src/input/r_qtmp4.cpp:2403
+#: src/input/r_qtmp4.cpp:2418
+#: src/input/r_qtmp4.cpp:2456
+#: src/input/r_qtmp4.cpp:2521
 #, boost-format
 msgid "Quicktime/MP4 reader: Track %1% is missing some data. Broken header atoms?\n"
 msgstr "Quicktime/MP4 lezer: Spoor %1% er ontbreken delen. Gebroken kop delen?\n"
 
-#: src/input/r_qtmp4.cpp:2034
-#: src/input/r_qtmp4.cpp:2108
+#: src/input/r_qtmp4.cpp:2030
+#: src/input/r_qtmp4.cpp:2104
 #, boost-format
 msgid "Quicktime/MP4 reader: Track ID %1% has more than one FourCC. Only using the first one (%|2$.4s|) and not this one (%|3$.4s|).\n"
 msgstr "Quicktime/MP4 lezer: Spoor ID %1% heeft meer dan één FourCC. Gebruik alleen de eerste (%|2$.4s|) en niet deze (%|3$.4s|).\n"
@@ -5714,7 +5718,7 @@ msgstr "RealAudio"
 msgid "RealMedia"
 msgstr "RealMedia"
 
-#: src/common/file_types.cpp:48
+#: src/common/file_types.cpp:49
 msgid "RealMedia audio/video files"
 msgstr "RealMedia audio/video bestanden"
 
@@ -5810,7 +5814,7 @@ msgstr "SHA1-160"
 msgid "SRT subtitles"
 msgstr "SRT ondertiteling"
 
-#: src/common/file_types.cpp:49
+#: src/common/file_types.cpp:50
 msgid "SRT text subtitles"
 msgstr "SRT tekst ondertiteling"
 
@@ -5818,7 +5822,7 @@ msgstr "SRT tekst ondertiteling"
 msgid "SSA/ASS subtitles"
 msgstr "SSA/ASS ondertiteling"
 
-#: src/common/file_types.cpp:50
+#: src/common/file_types.cpp:51
 msgid "SSA/ASS text subtitles"
 msgstr "SSA/ASS tekst ondertiteling"
 
@@ -6471,7 +6475,7 @@ msgstr "Onderdrukt status uitvoer."
 msgid "TTA"
 msgstr "TTA"
 
-#: src/common/file_types.cpp:51
+#: src/common/file_types.cpp:52
 msgid "TTA (The lossless True Audio codec)"
 msgstr "TTA (The lossless True Audio codec)"
 
@@ -6550,7 +6554,7 @@ msgstr "Het .idx bestand bevat geen 'id: ...' regel welke de taal aangeeft.\n"
 msgid "The AAC profiles are different: %1% and %2%"
 msgstr "De AAC profielen zijn verschillende: %1% en %2%"
 
-#: src/input/r_qtmp4.cpp:1223
+#: src/input/r_qtmp4.cpp:1219
 msgid "The AVC video track is missing the 'CTTS' atom for frame timecode offsets. However, AVC/h.264 allows frames to have more than the traditional one (for P frames) or two (for B frames) references to other frames. The timecodes for such frames will be out-of-order, and the 'CTTS' atom is needed for getting the timecodes right. As it is missing the timecodes for this track might be wrong. You should watch the resulting file and make sure that it looks like you expected it to.\n"
 msgstr "Het AVC video spoor ontbreekt het 'CTTS' deel voor beeld tijdcode compensatie. Hoewel, AVC/h.264 toe staat beelden te hebben die meer zijn dan de traditonele (voor P beelden) of twee (voor B beelden) referende naar andere beelden. De tijdcode voor zulke beelden zijn buiten gebruik, en het 'CTTS' deel is nodig om de tijd code correct te krijgen. Omdat ze missen, kunnen de tijdcodes voor dit spoor foutief zijn. Je zull het resultaat bestand moeten bekijken, om zeker te zijn, dat het is zoals je het verwachtte.\n"
 
@@ -6597,7 +6601,7 @@ msgstr "GUI is ingesteld om mkvmerge te gebruiken vanuit/af een andere versie (%
 msgid "The Kate identification header could not be parsed (%1%).\n"
 msgstr "Het Kate identifactie kop kon niet ontleed worden (%1%).\n"
 
-#: src/input/r_qtmp4.cpp:750
+#: src/input/r_qtmp4.cpp:748
 #, boost-format
 msgid "The MP4 file '%1%' contains chapters whose format was not recognized. This is often the case if the chapters are not encoded in UTF-8. Use the '--chapter-charset' option in order to specify the charset to use.\n"
 msgstr "Het MP4 bestand '%1%' bevat hoofdstukken die waarvan het indeling niet werd herkend. Dit is vaak het geval wanneer de hoofdstukken niet zijn gecodeerd in UTF-8. Gebruik de '--chapter-charset' optie om de te gebruiken karakterset op te geven.\n"
@@ -7826,7 +7830,7 @@ msgstr "Spoor %1% met het CodecID '%2%' ontbreekt de \"default duration\" elemen
 msgid "Track %1%: %2%, codec ID: %3%%4%%5%%6%\n"
 msgstr "Spoor %1%: %2%, codec ID: %3%%4%%5%%6%\n"
 
-#: src/input/r_qtmp4.cpp:2183
+#: src/input/r_qtmp4.cpp:2179
 #, boost-format
 msgid "Track %1%: AAC found, but decoder config data has length %2%.\n"
 msgstr "Spoor %1%: AAC gevonden, maar de decoder config data heeft lengte %2%.\n"
@@ -7846,7 +7850,7 @@ msgstr "Spoor %1%: NAL te groot. Grootte conform het kopveld: %2%, beschikbare i
 msgid "Track %1%: Subtitle entry number %2% is missing its duration. Assuming a duration of 1s.\n"
 msgstr "Spoor %1%: Ondertitel ingang nummer %2% mist zijn duur. Neem een duur aan van 1s.\n"
 
-#: src/input/r_qtmp4.cpp:2186
+#: src/input/r_qtmp4.cpp:2182
 #, boost-format
 msgid "Track %1%: The AAC information could not be parsed.\n"
 msgstr "Spoor %1%: De AAC informatie kon niet ontleed worden.\n"
@@ -7967,7 +7971,7 @@ msgstr "UID:"
 msgid "USF subtitles"
 msgstr "USF ondertiteling"
 
-#: src/common/file_types.cpp:52
+#: src/common/file_types.cpp:53
 msgid "USF text subtitles"
 msgstr "USF tekst ondertiteling"
 
@@ -8126,7 +8130,7 @@ msgstr "Gebruikmakend van de uitvoer module voor het format '%1%'.\n"
 msgid "VC1"
 msgstr "VC1"
 
-#: src/common/file_types.cpp:53
+#: src/common/file_types.cpp:54
 msgid "VC1 elementary streams"
 msgstr "VC1 basis stromen"
 
@@ -8232,7 +8236,7 @@ msgstr "Bekijk de uitvoer welke mkvmerge maakt gedurende het samenvoeg proces vo
 msgid "VobBtn"
 msgstr "VobBtn"
 
-#: src/common/file_types.cpp:54
+#: src/common/file_types.cpp:55
 msgid "VobButtons"
 msgstr "VobKnoppen"
 
@@ -8241,7 +8245,7 @@ msgstr "VobKnoppen"
 msgid "VobSub"
 msgstr "VobSub"
 
-#: src/common/file_types.cpp:55
+#: src/common/file_types.cpp:56
 msgid "VobSub subtitles"
 msgstr "VobSub ondertitels"
 
@@ -8253,7 +8257,7 @@ msgstr "Vorbis"
 msgid "WAV"
 msgstr "WAV"
 
-#: src/common/file_types.cpp:56
+#: src/common/file_types.cpp:57
 msgid "WAVE (uncompressed PCM audio)"
 msgstr "WAVE (ongecomprimeerd PCM audio)"
 
@@ -8261,7 +8265,7 @@ msgstr "WAVE (ongecomprimeerd PCM audio)"
 msgid "WAVPACK"
 msgstr "WAVPACK"
 
-#: src/common/file_types.cpp:57
+#: src/common/file_types.cpp:58
 msgid "WAVPACK v4 audio"
 msgstr "WAVPACK v4 audio"
 
@@ -8290,7 +8294,7 @@ msgstr "Waarschuwing: "
 msgid "Warnings:"
 msgstr "Waarschuwingen:"
 
-#: src/common/file_types.cpp:58
+#: src/common/file_types.cpp:59
 msgid "WebM audio/video files"
 msgstr "WebM audio/video bestanden"
 

@@ -4659,7 +4659,7 @@ msgstr "MPEG PS 程序流"
 msgid "MPEG program streams"
 msgstr "MPEG PS 程序流"
 
-#: src/input/r_mpeg_ts.h:389
+#: src/input/r_mpeg_ts.h:391
 msgid "MPEG transport stream"
 msgstr "MPEG 传输流"
 
@@ -4682,6 +4682,10 @@ msgstr "MPEG-1/2"
 #: src/output/p_mpeg4_p2.h:65
 msgid "MPEG-4"
 msgstr "MPEG-4"
+
+#: src/common/file_types.cpp:43
+msgid "MPLS BluRay playlist"
+msgstr ""
 
 #: src/mmg/tabs/input_general.cpp:181
 msgid "Make this track the default track for its type (audio, video, subtitles). Players should prefer tracks with the default track flag set."
@@ -4717,7 +4721,7 @@ msgstr "Matroska"
 msgid "Matroska A/V files (*.mka;*.mkv;*.mk3d)|*.mkv;*.mka;*.mk3d|%s"
 msgstr "Matroska 文件 (*.mkv;*.mka;*.mks;*.mk3d)|*.mkv;*.mka;*.mks;*.mk3d|%s"
 
-#: src/common/file_types.cpp:43
+#: src/common/file_types.cpp:44
 msgid "Matroska audio/video files"
 msgstr "Matroska 音/视频文件"
 
@@ -4970,7 +4974,7 @@ msgstr "下段唯一 ID"
 msgid "No %1% specified in '--%2% %3%'.\n"
 msgstr "未指定 %1%，在 '--%2% %3%'。\n"
 
-#: src/input/r_qtmp4.cpp:1165
+#: src/input/r_qtmp4.cpp:1161
 msgid "No AC3 header found in first frame; track will be skipped.\n"
 msgstr "首帧未发现 AC3 头; 此轨将被跳过。\n"
 
@@ -5158,7 +5162,7 @@ msgstr "此轨的声道数。"
 msgid "Ogg/OGM"
 msgstr "Ogg/OGM"
 
-#: src/common/file_types.cpp:46
+#: src/common/file_types.cpp:47
 msgid "Ogg/OGM audio/video files"
 msgstr "Ogg/OGM 音/视频文件"
 
@@ -5266,7 +5270,7 @@ msgstr "*仅* 为开发者设计的选项。不要用它们。凡是被官方支
 msgid "Opus"
 msgstr "Opus"
 
-#: src/common/file_types.cpp:47
+#: src/common/file_types.cpp:48
 msgid "Opus (in Ogg) audio files"
 msgstr "Opus (Ogg 中) 音频文件"
 
@@ -5325,7 +5329,7 @@ msgstr "PCM"
 msgid "PGS"
 msgstr "PGS"
 
-#: src/common/file_types.cpp:44
+#: src/common/file_types.cpp:45
 msgid "PGS/SUP subtitles"
 msgstr "PGS/SUP 字幕"
 
@@ -5493,7 +5497,7 @@ msgstr "进度: [%1%%2%] %3%%%"
 msgid "Querying mkvmerge's capabilities"
 msgstr "正向 mkvmerge 询问处理能力"
 
-#: src/common/file_types.cpp:45
+#: src/common/file_types.cpp:46
 msgid "QuickTime audio/video files"
 msgstr "QuickTime 音/视频文件"
 
@@ -5501,46 +5505,46 @@ msgstr "QuickTime 音/视频文件"
 msgid "QuickTime/MP4"
 msgstr "QuickTime/MP4"
 
-#: src/input/r_qtmp4.cpp:276
+#: src/input/r_qtmp4.cpp:274
 #, boost-format
 msgid "Quicktime/MP4 reader: '%1%' atom is too small. Expected size: >= %2%. Actual size: %3%.\n"
 msgstr "Quicktime/MP4 读取器: '%1%' 单元过小。预期尺寸: >= %2%。实际尺寸: %3%。\n"
 
-#: src/input/r_qtmp4.cpp:1750
+#: src/input/r_qtmp4.cpp:1746
 msgid "Quicktime/MP4 reader: Constant samplesize & variable duration not yet supported. Contact the author if you have such a sample file.\n"
 msgstr "Quicktime/MP4 读取器: 尚不支持恒定采样尺寸与可变时长。如果您有这样的文件样本，请联系作者。\n"
 
-#: src/input/r_qtmp4.cpp:1120
+#: src/input/r_qtmp4.cpp:1118
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read chunk number %1%/%2% with size %3% from position %4%. Aborting.\n"
 msgstr "Quicktime/MP4 读取器: 无法读取块号 %1%/%2% 尺寸 %3% 位置 %4%。正在中止。\n"
 
-#: src/input/r_qtmp4.cpp:2055
-#: src/input/r_qtmp4.cpp:2069
+#: src/input/r_qtmp4.cpp:2051
+#: src/input/r_qtmp4.cpp:2065
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the extended sound description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4 读取器: 无法读取轨道 %1% 的扩展音频描述单元。\n"
 
-#: src/input/r_qtmp4.cpp:2026
+#: src/input/r_qtmp4.cpp:2022
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the sound description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4 读取器: 无法读取轨道 %1% 的音频描述单元。\n"
 
-#: src/input/r_qtmp4.cpp:868
+#: src/input/r_qtmp4.cpp:866
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the stream description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4 读取器: 无法读取轨道 %1% 的流描述单元。\n"
 
-#: src/input/r_qtmp4.cpp:2101
+#: src/input/r_qtmp4.cpp:2097
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the video description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4 读取器: 无法读取轨道 %1% 的视频描述单元。\n"
 
-#: src/input/r_qtmp4.cpp:208
+#: src/input/r_qtmp4.cpp:206
 msgid "Quicktime/MP4 reader: Have not found any header atoms.\n"
 msgstr "Quicktime/MP4 读取器: 未发现任何头部单元。\n"
 
-#: src/input/r_qtmp4.cpp:210
+#: src/input/r_qtmp4.cpp:208
 msgid "Quicktime/MP4 reader: Have not found the 'mdat' atom. No movie data found.\n"
 msgstr "Quicktime/MP4 读取器: 未发现 'mdat' 单元。找不到影片数据。\n"
 
@@ -5549,75 +5553,75 @@ msgstr "Quicktime/MP4 读取器: 未发现 'mdat' 单元。找不到影片数据
 msgid "Quicktime/MP4 reader: Invalid chunk size %1% at %2%.\n"
 msgstr "Quicktime/MP4 读取器: 无效的块尺寸 %1% 于 %2%。\n"
 
-#: src/input/r_qtmp4.cpp:2476
+#: src/input/r_qtmp4.cpp:2472
 #, boost-format
 msgid "Quicktime/MP4 reader: MPEG4 part 10/AVC track %1% is missing its decoder config. Skipping this track.\n"
 msgstr "Quicktime/MP4 读取器: MPEG4 part 10/AVC 轨道 %1% 缺解码器配置信息。正在跳过该轨。\n"
 
-#: src/input/r_qtmp4.cpp:2507
+#: src/input/r_qtmp4.cpp:2503
 #, boost-format
 msgid "Quicktime/MP4 reader: MPEG4 track %1% is missing the esds atom/the decoder config. Skipping this track.\n"
 msgstr "Quicktime/MP4 读取器: MPEG4 轨 %1% 缺 esds 单元/解码器配置信息。正在跳过该轨。\n"
 
-#: src/input/r_qtmp4.cpp:445
+#: src/input/r_qtmp4.cpp:443
 #, boost-format
 msgid "Quicktime/MP4 reader: The 'media header' atom ('mdhd') uses the unsupported version %1%.\n"
 msgstr "Quicktime/MP4 读取器: 'media header' 媒体头单元 ('mdhd') 使用了不受支持的版本 %1%。\n"
 
-#: src/input/r_qtmp4.cpp:861
+#: src/input/r_qtmp4.cpp:859
 #, boost-format
 msgid "Quicktime/MP4 reader: The 'size' field is too small in the stream description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4 读取器: 轨道 %1% 的流描述单元的 'size' 字段过小。\n"
 
-#: src/input/r_qtmp4.cpp:450
+#: src/input/r_qtmp4.cpp:448
 msgid "Quicktime/MP4 reader: The 'time scale' parameter was 0. This is not supported.\n"
 msgstr "Quicktime/MP4 读取器: 'time scale' 时间缩放参数为 0。这是不支持的。\n"
 
-#: src/input/r_qtmp4.cpp:2439
+#: src/input/r_qtmp4.cpp:2435
 #, boost-format
 msgid "Quicktime/MP4 reader: The AAC track %1% is missing the esds atom/the decoder config. Skipping this track.\n"
 msgstr "Quicktime/MP4 读取器: 该 AAC 轨道 %1% 缺 esds 单元/解码器配置信息。正在跳过该轨。\n"
 
-#: src/input/r_qtmp4.cpp:2434
+#: src/input/r_qtmp4.cpp:2430
 #, boost-format
 msgid "Quicktime/MP4 reader: The audio track %1% is using an unsupported 'object type id' of %2% in the 'esds' atom. Skipping this track.\n"
 msgstr "Quicktime/MP4 读取器: 音频轨 %1% 的 'esds' 单元使用了不支持的 'object type id' 对象类别号 %2%。正在跳过该轨。\n"
 
-#: src/input/r_qtmp4.cpp:2486
+#: src/input/r_qtmp4.cpp:2482
 #, boost-format
 msgid "Quicktime/MP4 reader: The video track %1% is missing the ESDS atom. Skipping this track.\n"
 msgstr "Quicktime/MP4 读取器: 视频轨 %1% 缺 ESDS 单元。正在跳过此轨。\n"
 
-#: src/input/r_qtmp4.cpp:308
+#: src/input/r_qtmp4.cpp:306
 #, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers with an unknown or unsupported compression algorithm '%1%'. Aborting.\n"
 msgstr "Quicktime/MP4 读取器: 此文件的头部经未知或不支持的压缩算法 '%1%' 压缩。正在中止。\n"
 
-#: src/input/r_qtmp4.cpp:341
+#: src/input/r_qtmp4.cpp:339
 #, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers, but the expected uncompressed size (%1%) was not what is available after uncompressing (%2%).\n"
 msgstr "Quicktime/MP4 读取器: 此文件头部经压缩，但预期的解压后尺寸 (%1%) 与解压得到的尺寸不符 (%2%)。\n"
 
-#: src/input/r_qtmp4.cpp:332
+#: src/input/r_qtmp4.cpp:330
 #, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers, but the zlib library could not be initialized. Error code from zlib: %1%. Aborting.\n"
 msgstr "Quicktime/MP4 读取器: 此文件头部经压缩，但无法初始化 zlib 库。zlib 错误代码: %1%。正在中止。\n"
 
-#: src/input/r_qtmp4.cpp:337
+#: src/input/r_qtmp4.cpp:335
 #, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers, but they could not be uncompressed. Error code from zlib: %1%. Aborting.\n"
 msgstr "Quicktime/MP4 读取器: 此文件头部经压缩，但无法解压。zlib 错误代码: %1%。正在中止。\n"
 
-#: src/input/r_qtmp4.cpp:2407
-#: src/input/r_qtmp4.cpp:2422
-#: src/input/r_qtmp4.cpp:2460
-#: src/input/r_qtmp4.cpp:2525
+#: src/input/r_qtmp4.cpp:2403
+#: src/input/r_qtmp4.cpp:2418
+#: src/input/r_qtmp4.cpp:2456
+#: src/input/r_qtmp4.cpp:2521
 #, boost-format
 msgid "Quicktime/MP4 reader: Track %1% is missing some data. Broken header atoms?\n"
 msgstr "Quicktime/MP4 读取器: 轨道 %1% 缺一些数据。头部单元损坏?\n"
 
-#: src/input/r_qtmp4.cpp:2034
-#: src/input/r_qtmp4.cpp:2108
+#: src/input/r_qtmp4.cpp:2030
+#: src/input/r_qtmp4.cpp:2104
 #, boost-format
 msgid "Quicktime/MP4 reader: Track ID %1% has more than one FourCC. Only using the first one (%|2$.4s|) and not this one (%|3$.4s|).\n"
 msgstr "Quicktime/MP4 读取器: 轨道 ID %1% 有多于一个 FourCC。只使用了第一个 (%|2$.4s|) 而非 (%|3$.4s|)。\n"
@@ -5672,7 +5676,7 @@ msgstr "RealAudio"
 msgid "RealMedia"
 msgstr "RealMedia"
 
-#: src/common/file_types.cpp:48
+#: src/common/file_types.cpp:49
 msgid "RealMedia audio/video files"
 msgstr "RealMedia 音/视频文件"
 
@@ -5768,7 +5772,7 @@ msgstr "SHA1-160"
 msgid "SRT subtitles"
 msgstr "SRT 字幕"
 
-#: src/common/file_types.cpp:49
+#: src/common/file_types.cpp:50
 msgid "SRT text subtitles"
 msgstr "SRT 文本字幕"
 
@@ -5776,7 +5780,7 @@ msgstr "SRT 文本字幕"
 msgid "SSA/ASS subtitles"
 msgstr "SSA/ASS 字幕"
 
-#: src/common/file_types.cpp:50
+#: src/common/file_types.cpp:51
 msgid "SSA/ASS text subtitles"
 msgstr "SSA/ASS 文本字幕"
 
@@ -6425,7 +6429,7 @@ msgstr "禁用状态输出。"
 msgid "TTA"
 msgstr "TTA"
 
-#: src/common/file_types.cpp:51
+#: src/common/file_types.cpp:52
 msgid "TTA (The lossless True Audio codec)"
 msgstr "TTA (The True Audio 无损音频编解码)"
 
@@ -6504,7 +6508,7 @@ msgstr "此 .idx 文件不包含指明语言的 'id: ...' 行。\n"
 msgid "The AAC profiles are different: %1% and %2%"
 msgstr "AAC profile 不同: %1% 与 %2%"
 
-#: src/input/r_qtmp4.cpp:1223
+#: src/input/r_qtmp4.cpp:1219
 msgid "The AVC video track is missing the 'CTTS' atom for frame timecode offsets. However, AVC/h.264 allows frames to have more than the traditional one (for P frames) or two (for B frames) references to other frames. The timecodes for such frames will be out-of-order, and the 'CTTS' atom is needed for getting the timecodes right. As it is missing the timecodes for this track might be wrong. You should watch the resulting file and make sure that it looks like you expected it to.\n"
 msgstr "此 AVC 视频轨缺 'CTTS' 帧时间码偏移单元。然而，AVC/h.264 允许帧有超过通常的一次 (对于 P 帧) 或两次 (对于 B 帧) 帧参考。此类帧的时间码会变得无序，需要 'CTTS' 单元来修正。由于缺时间码，此轨可能出错。请查看生成的文件，确认它是不是您预期的样子。\n"
 
@@ -6551,7 +6555,7 @@ msgstr "为本 GUI 配置的 mkvmerge 可执行程序的版本 (%1%) 与 GUI 自
 msgid "The Kate identification header could not be parsed (%1%).\n"
 msgstr "无法解析 Kate 识别头 (%1%)。\n"
 
-#: src/input/r_qtmp4.cpp:750
+#: src/input/r_qtmp4.cpp:748
 #, boost-format
 msgid "The MP4 file '%1%' contains chapters whose format was not recognized. This is often the case if the chapters are not encoded in UTF-8. Use the '--chapter-charset' option in order to specify the charset to use.\n"
 msgstr "MP4 文件 '%1%' 包含的章节格式未能识别。通常是由于章节未以 UTF-8 编码。请使用 '--chapter-charset' 选项来指定要使用的字符集。\n"
@@ -7765,7 +7769,7 @@ msgstr "轨道 %1%（CodecID 为 '%2%'）缺 \"default duration\" 默认时长�
 msgid "Track %1%: %2%, codec ID: %3%%4%%5%%6%\n"
 msgstr "轨道 %1%: %2%, 编解码器 ID: %3%%4%%5%%6%\n"
 
-#: src/input/r_qtmp4.cpp:2183
+#: src/input/r_qtmp4.cpp:2179
 #, boost-format
 msgid "Track %1%: AAC found, but decoder config data has length %2%.\n"
 msgstr "轨道 %1%: 已发现 AAC, 但解码器配置数据长为 %2%。\n"
@@ -7785,7 +7789,7 @@ msgstr "轨道 %1%: NAL 太大。头部字段给出的尺寸: %2%，包中可用
 msgid "Track %1%: Subtitle entry number %2% is missing its duration. Assuming a duration of 1s.\n"
 msgstr "轨道 %1%: 字幕号 %2% 缺时长。假定为 1 秒。\n"
 
-#: src/input/r_qtmp4.cpp:2186
+#: src/input/r_qtmp4.cpp:2182
 #, boost-format
 msgid "Track %1%: The AAC information could not be parsed.\n"
 msgstr "轨道 %1%: AAC 信息无法解析。\n"
@@ -7906,7 +7910,7 @@ msgstr "UID:"
 msgid "USF subtitles"
 msgstr "USF 字幕"
 
-#: src/common/file_types.cpp:52
+#: src/common/file_types.cpp:53
 msgid "USF text subtitles"
 msgstr "USF 文本字幕"
 
@@ -8065,7 +8069,7 @@ msgstr "使用 %1% 格式通用输出模块。\n"
 msgid "VC1"
 msgstr "VC1"
 
-#: src/common/file_types.cpp:53
+#: src/common/file_types.cpp:54
 msgid "VC1 elementary streams"
 msgstr "VC1 基本流"
 
@@ -8171,7 +8175,7 @@ msgstr "查看 mkvmerge 处理选中任务时的输出信息"
 msgid "VobBtn"
 msgstr "VobBtn"
 
-#: src/common/file_types.cpp:54
+#: src/common/file_types.cpp:55
 msgid "VobButtons"
 msgstr "VobBtn 按钮"
 
@@ -8180,7 +8184,7 @@ msgstr "VobBtn 按钮"
 msgid "VobSub"
 msgstr "VobSub"
 
-#: src/common/file_types.cpp:55
+#: src/common/file_types.cpp:56
 msgid "VobSub subtitles"
 msgstr "VobSub 字幕"
 
@@ -8192,7 +8196,7 @@ msgstr "Vorbis"
 msgid "WAV"
 msgstr "WAV"
 
-#: src/common/file_types.cpp:56
+#: src/common/file_types.cpp:57
 msgid "WAVE (uncompressed PCM audio)"
 msgstr "WAVE (未压缩的 PCM 音频)"
 
@@ -8200,7 +8204,7 @@ msgstr "WAVE (未压缩的 PCM 音频)"
 msgid "WAVPACK"
 msgstr "WAVPACK"
 
-#: src/common/file_types.cpp:57
+#: src/common/file_types.cpp:58
 msgid "WAVPACK v4 audio"
 msgstr "WAVPACK v4 音频"
 
@@ -8229,7 +8233,7 @@ msgstr "警告: "
 msgid "Warnings:"
 msgstr "警告信息:"
 
-#: src/common/file_types.cpp:58
+#: src/common/file_types.cpp:59
 msgid "WebM audio/video files"
 msgstr "WebM 音/视频文件"
 

@@ -4696,7 +4696,7 @@ msgstr "MPEG програмний потік"
 msgid "MPEG program streams"
 msgstr "MPEG програмні потоки"
 
-#: src/input/r_mpeg_ts.h:389
+#: src/input/r_mpeg_ts.h:391
 msgid "MPEG transport stream"
 msgstr "транспортний потік MPEG"
 
@@ -4719,6 +4719,10 @@ msgstr "MPEG-1/2"
 #: src/output/p_mpeg4_p2.h:65
 msgid "MPEG-4"
 msgstr "MPEG-4"
+
+#: src/common/file_types.cpp:43
+msgid "MPLS BluRay playlist"
+msgstr ""
 
 #: src/mmg/tabs/input_general.cpp:181
 msgid "Make this track the default track for its type (audio, video, subtitles). Players should prefer tracks with the default track flag set."
@@ -4754,7 +4758,7 @@ msgstr "Matroska"
 msgid "Matroska A/V files (*.mka;*.mkv;*.mk3d)|*.mkv;*.mka;*.mk3d|%s"
 msgstr "Файли Matroska (*.mkv;*.mka;*.mks;*.mk3d)|*.mkv;*.mka;*.mks;*.mk3d|%s"
 
-#: src/common/file_types.cpp:43
+#: src/common/file_types.cpp:44
 msgid "Matroska audio/video files"
 msgstr "Аудіо/відео файли Matroska"
 
@@ -5007,7 +5011,7 @@ msgstr "Унікальний ID наступного сегмента"
 msgid "No %1% specified in '--%2% %3%'.\n"
 msgstr "Немає %1%, визначеного у '--%2% %3%'.\n"
 
-#: src/input/r_qtmp4.cpp:1165
+#: src/input/r_qtmp4.cpp:1161
 msgid "No AC3 header found in first frame; track will be skipped.\n"
 msgstr "Жодного заголовка AC3 не знайдено в першому кадрі; доріжка буде пропущена.\n"
 
@@ -5195,7 +5199,7 @@ msgstr "Число каналів доріжки."
 msgid "Ogg/OGM"
 msgstr "Ogg/OGM"
 
-#: src/common/file_types.cpp:46
+#: src/common/file_types.cpp:47
 msgid "Ogg/OGM audio/video files"
 msgstr "Ogg/OGM аудіо/відео файли"
 
@@ -5303,7 +5307,7 @@ msgstr "Опції, призначені ЛИШЕ для розробників.
 msgid "Opus"
 msgstr "Opus"
 
-#: src/common/file_types.cpp:47
+#: src/common/file_types.cpp:48
 msgid "Opus (in Ogg) audio files"
 msgstr "Opus (in Ogg) аудіо файли"
 
@@ -5362,7 +5366,7 @@ msgstr "PCM"
 msgid "PGS"
 msgstr "PGS"
 
-#: src/common/file_types.cpp:44
+#: src/common/file_types.cpp:45
 msgid "PGS/SUP subtitles"
 msgstr "PGS/SUP субтитри"
 
@@ -5532,7 +5536,7 @@ msgstr "Прогрес виконання: [%1%%2%] %3%%%"
 msgid "Querying mkvmerge's capabilities"
 msgstr "Запит можливостей mkvmerge"
 
-#: src/common/file_types.cpp:45
+#: src/common/file_types.cpp:46
 msgid "QuickTime audio/video files"
 msgstr "QuickTime аудіо/відео файли"
 
@@ -5540,46 +5544,46 @@ msgstr "QuickTime аудіо/відео файли"
 msgid "QuickTime/MP4"
 msgstr "QuickTime/MP4"
 
-#: src/input/r_qtmp4.cpp:276
+#: src/input/r_qtmp4.cpp:274
 #, boost-format
 msgid "Quicktime/MP4 reader: '%1%' atom is too small. Expected size: >= %2%. Actual size: %3%.\n"
 msgstr "Quicktime/MP4 зчитувач: '%1%' елемент є дуже малим. Очікуваний розмір:> = %2%. Фактичний розмір: %3%.\n"
 
-#: src/input/r_qtmp4.cpp:1750
+#: src/input/r_qtmp4.cpp:1746
 msgid "Quicktime/MP4 reader: Constant samplesize & variable duration not yet supported. Contact the author if you have such a sample file.\n"
 msgstr "Quicktime/MP4 зчитувач: Постійний розмір семплу і змінна тривалість поки не підтримуються. Зв'яжіться з автором, якщо у вас є такий файл.\n"
 
-#: src/input/r_qtmp4.cpp:1120
+#: src/input/r_qtmp4.cpp:1118
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read chunk number %1%/%2% with size %3% from position %4%. Aborting.\n"
 msgstr "Quicktime/MP4 зчитувач: Неможливо прочитати комірки номер %1%/%2% з розміром %3% починаючи з позиції %4%. Переривання.\n"
 
-#: src/input/r_qtmp4.cpp:2055
-#: src/input/r_qtmp4.cpp:2069
+#: src/input/r_qtmp4.cpp:2051
+#: src/input/r_qtmp4.cpp:2065
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the extended sound description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4 зчитувач: Неможливо прочитати елемент розширеного звукового опису для ID доріжки %1%.\n"
 
-#: src/input/r_qtmp4.cpp:2026
+#: src/input/r_qtmp4.cpp:2022
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the sound description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4 зчитувач: Неможливо прочитати елемент опису аудіо для ID доріжки %1%.\n"
 
-#: src/input/r_qtmp4.cpp:868
+#: src/input/r_qtmp4.cpp:866
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the stream description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4 зчитувач: Неможливо прочитати елемент опису потоку для ID доріжки %1%.\n"
 
-#: src/input/r_qtmp4.cpp:2101
+#: src/input/r_qtmp4.cpp:2097
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the video description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4 зчитувач: Неможливо прочитати елемент опису відео для ID доріжки %1%.\n"
 
-#: src/input/r_qtmp4.cpp:208
+#: src/input/r_qtmp4.cpp:206
 msgid "Quicktime/MP4 reader: Have not found any header atoms.\n"
 msgstr "Quicktime/MP4 зчитувач: Не знайдено жодного елементу заголовка.\n"
 
-#: src/input/r_qtmp4.cpp:210
+#: src/input/r_qtmp4.cpp:208
 msgid "Quicktime/MP4 reader: Have not found the 'mdat' atom. No movie data found.\n"
 msgstr "Quicktime/MP4 зчитувач: Не знайдено елементу 'mdat'. Жодних даних відео не знайдено.\n"
 
@@ -5588,75 +5592,75 @@ msgstr "Quicktime/MP4 зчитувач: Не знайдено елементу '
 msgid "Quicktime/MP4 reader: Invalid chunk size %1% at %2%.\n"
 msgstr "Quicktime/MP4 зчитувач: Невірний розмір комірки %1% в %2%.\n"
 
-#: src/input/r_qtmp4.cpp:2476
+#: src/input/r_qtmp4.cpp:2472
 #, boost-format
 msgid "Quicktime/MP4 reader: MPEG4 part 10/AVC track %1% is missing its decoder config. Skipping this track.\n"
 msgstr "Quicktime/MP4 зчитувач: Для доріжки MPEG4 part 10/AVC %1% відсутні налаштування декодера. Пропуск цієї доріжки.\n"
 
-#: src/input/r_qtmp4.cpp:2507
+#: src/input/r_qtmp4.cpp:2503
 #, boost-format
 msgid "Quicktime/MP4 reader: MPEG4 track %1% is missing the esds atom/the decoder config. Skipping this track.\n"
 msgstr "Quicktime/MP4 зчитувач: Для доріжки MPEG4 %1% відсутні елемент esds/налаштування декодера. Пропуск цієї доріжки.\n"
 
-#: src/input/r_qtmp4.cpp:445
+#: src/input/r_qtmp4.cpp:443
 #, boost-format
 msgid "Quicktime/MP4 reader: The 'media header' atom ('mdhd') uses the unsupported version %1%.\n"
 msgstr "Quicktime/MP4 зчитувач: Елемент 'media header' ('mdhd') використовує непідтримувану версію %1%.\n"
 
-#: src/input/r_qtmp4.cpp:861
+#: src/input/r_qtmp4.cpp:859
 #, boost-format
 msgid "Quicktime/MP4 reader: The 'size' field is too small in the stream description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4 зчитувач: Поле 'size' занадто маленьке для елементу опису потоку з ID доріжки %1%.\n"
 
-#: src/input/r_qtmp4.cpp:450
+#: src/input/r_qtmp4.cpp:448
 msgid "Quicktime/MP4 reader: The 'time scale' parameter was 0. This is not supported.\n"
 msgstr "Quicktime/MP4 зчитувач: Параметр 'time scale' був нульовим, що не підтримується.\n"
 
-#: src/input/r_qtmp4.cpp:2439
+#: src/input/r_qtmp4.cpp:2435
 #, boost-format
 msgid "Quicktime/MP4 reader: The AAC track %1% is missing the esds atom/the decoder config. Skipping this track.\n"
 msgstr "Quicktime/MP4 зчитувач: Для доріжки AAC %1% відсутній елемент esds/конфігурація декодера. Пропуск цієї доріжки.\n"
 
-#: src/input/r_qtmp4.cpp:2434
+#: src/input/r_qtmp4.cpp:2430
 #, boost-format
 msgid "Quicktime/MP4 reader: The audio track %1% is using an unsupported 'object type id' of %2% in the 'esds' atom. Skipping this track.\n"
 msgstr "Quicktime/MP4 зчитувач: Для аудіо доріжки %1% використовується непідтримуваний ''object type id' %2%  елементу 'esds'. Пропуск цієї доріжки.\n"
 
-#: src/input/r_qtmp4.cpp:2486
+#: src/input/r_qtmp4.cpp:2482
 #, boost-format
 msgid "Quicktime/MP4 reader: The video track %1% is missing the ESDS atom. Skipping this track.\n"
 msgstr "Quicktime/MP4 зчитувач: Для відео доріжки %1% відсутній елемент ESDS. Пропуск цієї доріжки.\n"
 
-#: src/input/r_qtmp4.cpp:308
+#: src/input/r_qtmp4.cpp:306
 #, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers with an unknown or unsupported compression algorithm '%1%'. Aborting.\n"
 msgstr "Quicktime/MP4 зчитувач: Цей файл використовує стиснуті заголовки, отримані невідомим або непідтримуваним методом стиснення '%1%'. Переривання.\n"
 
-#: src/input/r_qtmp4.cpp:341
+#: src/input/r_qtmp4.cpp:339
 #, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers, but the expected uncompressed size (%1%) was not what is available after uncompressing (%2%).\n"
 msgstr "Quicktime/MP4 зчитувач: Цей файл використовує стиснуті заголовки, але очікуваний нестиснутий розмір (%1%) не був отриманий після розпакування (%2%).\n"
 
-#: src/input/r_qtmp4.cpp:332
+#: src/input/r_qtmp4.cpp:330
 #, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers, but the zlib library could not be initialized. Error code from zlib: %1%. Aborting.\n"
 msgstr "Quicktime/MP4 зчитувач: Цей файл використовує стиснуті заголовки, але бібліотека zlib не може бути ініціалізована. Код помилки zlib: %1%. Переривання.\n"
 
-#: src/input/r_qtmp4.cpp:337
+#: src/input/r_qtmp4.cpp:335
 #, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers, but they could not be uncompressed. Error code from zlib: %1%. Aborting.\n"
 msgstr "Quicktime/MP4 зчитувач: Цей файл використовує стиснуті заголовки, але вони не можуть бути розпаковані. Код помилки zlib: %1%. Переривання.\n"
 
-#: src/input/r_qtmp4.cpp:2407
-#: src/input/r_qtmp4.cpp:2422
-#: src/input/r_qtmp4.cpp:2460
-#: src/input/r_qtmp4.cpp:2525
+#: src/input/r_qtmp4.cpp:2403
+#: src/input/r_qtmp4.cpp:2418
+#: src/input/r_qtmp4.cpp:2456
+#: src/input/r_qtmp4.cpp:2521
 #, boost-format
 msgid "Quicktime/MP4 reader: Track %1% is missing some data. Broken header atoms?\n"
 msgstr "Quicktime/MP4 зчитувач: Для доріжки %1% пропущені деякі дані. Пошкоджені елементи заголовка?\n"
 
-#: src/input/r_qtmp4.cpp:2034
-#: src/input/r_qtmp4.cpp:2108
+#: src/input/r_qtmp4.cpp:2030
+#: src/input/r_qtmp4.cpp:2104
 #, boost-format
 msgid "Quicktime/MP4 reader: Track ID %1% has more than one FourCC. Only using the first one (%|2$.4s|) and not this one (%|3$.4s|).\n"
 msgstr "Quicktime/MP4 зчитувач: Доріжка з ID %1% містить більше, ніж один FourCC. Використовується тільки перший з них (%|2$.4s|) і не цей (%|3$.4s|).\n"
@@ -5711,7 +5715,7 @@ msgstr "RealAudio"
 msgid "RealMedia"
 msgstr "RealMedia"
 
-#: src/common/file_types.cpp:48
+#: src/common/file_types.cpp:49
 msgid "RealMedia audio/video files"
 msgstr "RealMedia аудіо/відео файли"
 
@@ -5807,7 +5811,7 @@ msgstr "SHA1-160"
 msgid "SRT subtitles"
 msgstr "субтитри SRT"
 
-#: src/common/file_types.cpp:49
+#: src/common/file_types.cpp:50
 msgid "SRT text subtitles"
 msgstr "SRT текстові субтитри"
 
@@ -5815,7 +5819,7 @@ msgstr "SRT текстові субтитри"
 msgid "SSA/ASS subtitles"
 msgstr "субтитри SSA/ASS"
 
-#: src/common/file_types.cpp:50
+#: src/common/file_types.cpp:51
 msgid "SSA/ASS text subtitles"
 msgstr "SSA/ASS текстові субтитри"
 
@@ -6467,7 +6471,7 @@ msgstr "Приховати статусну вихідну інформацію.
 msgid "TTA"
 msgstr "TTA"
 
-#: src/common/file_types.cpp:51
+#: src/common/file_types.cpp:52
 msgid "TTA (The lossless True Audio codec)"
 msgstr "TTA (The lossless True Audio codec)"
 
@@ -6546,7 +6550,7 @@ msgstr "Файл .idx не містить рядка 'id: ...' для зазна
 msgid "The AAC profiles are different: %1% and %2%"
 msgstr "Профілі AAC різні: %1% i %2%"
 
-#: src/input/r_qtmp4.cpp:1223
+#: src/input/r_qtmp4.cpp:1219
 msgid "The AVC video track is missing the 'CTTS' atom for frame timecode offsets. However, AVC/h.264 allows frames to have more than the traditional one (for P frames) or two (for B frames) references to other frames. The timecodes for such frames will be out-of-order, and the 'CTTS' atom is needed for getting the timecodes right. As it is missing the timecodes for this track might be wrong. You should watch the resulting file and make sure that it looks like you expected it to.\n"
 msgstr "Для доріжки AVC відео відсутній елемент 'CTTS' для зміщень тайм-коду кадру. Тим не менше, стандарт AVC/h.264 допускає для кадрів мати більше ніж традиційне одне (для кадрів P) або два (для кадрів B) посилання на інші кадри. Тайм-коди для таких кадрів будуть нестандартними, і тому елемент 'CTTS' необхідний для отримання вірних тайм-кодів. Так як данний елемент відсутній, то тайм-коди для цієї доріжки може бути неправильними. Вам необхідно продивитися результуючий файл і переконатися, що він виглядає так, як ви і  очікували.\n"
 
@@ -6593,7 +6597,7 @@ msgstr "GUI налаштований на використання викону�
 msgid "The Kate identification header could not be parsed (%1%).\n"
 msgstr "Заголовок ідентифікації Kate не може бути оброблений (%1%).\n"
 
-#: src/input/r_qtmp4.cpp:750
+#: src/input/r_qtmp4.cpp:748
 #, boost-format
 msgid "The MP4 file '%1%' contains chapters whose format was not recognized. This is often the case if the chapters are not encoded in UTF-8. Use the '--chapter-charset' option in order to specify the charset to use.\n"
 msgstr "Файл MP4 '%1%' містить розділи, формат яких не був розпізнаний. Часто цьому причиною є те, що розділи не закодовані в UTF-8. Щоб задати набір символів для використання, треба використовувати опцію '--chapter-charset'.\n"
@@ -7822,7 +7826,7 @@ msgstr "Для доріжки %1% з CodecID '%2%' відсутній елеме
 msgid "Track %1%: %2%, codec ID: %3%%4%%5%%6%\n"
 msgstr "Доріжка %1%: %2%, ID кодека: %3%%4%%5%%6%\n"
 
-#: src/input/r_qtmp4.cpp:2183
+#: src/input/r_qtmp4.cpp:2179
 #, boost-format
 msgid "Track %1%: AAC found, but decoder config data has length %2%.\n"
 msgstr "Доріжка %1%: AAC знайдений, але дані конфігурації декодера мають довжину %2%.\n"
@@ -7842,7 +7846,7 @@ msgstr "Доріжка %1%: NAL надто великий. Розмір згід
 msgid "Track %1%: Subtitle entry number %2% is missing its duration. Assuming a duration of 1s.\n"
 msgstr "Доріжка %1%: Для запису субтитрів %2% пропущено тривалість. Прийнято тривалість в 1с.\n"
 
-#: src/input/r_qtmp4.cpp:2186
+#: src/input/r_qtmp4.cpp:2182
 #, boost-format
 msgid "Track %1%: The AAC information could not be parsed.\n"
 msgstr "Доріжка %1%: Інформація AAC не може бути зчитана.\n"
@@ -7963,7 +7967,7 @@ msgstr "UID:"
 msgid "USF subtitles"
 msgstr "субтитри USF"
 
-#: src/common/file_types.cpp:52
+#: src/common/file_types.cpp:53
 msgid "USF text subtitles"
 msgstr "USF текстові субтитри"
 
@@ -8122,7 +8126,7 @@ msgstr "Використання вихідного модуля для форм
 msgid "VC1"
 msgstr "VC1"
 
-#: src/common/file_types.cpp:53
+#: src/common/file_types.cpp:54
 msgid "VC1 elementary streams"
 msgstr "VC1 елементарні потоки"
 
@@ -8228,7 +8232,7 @@ msgstr "Показати вихідну інформацію, яку згене�
 msgid "VobBtn"
 msgstr "VobBtn"
 
-#: src/common/file_types.cpp:54
+#: src/common/file_types.cpp:55
 msgid "VobButtons"
 msgstr "VobButtons"
 
@@ -8237,7 +8241,7 @@ msgstr "VobButtons"
 msgid "VobSub"
 msgstr "VobSub"
 
-#: src/common/file_types.cpp:55
+#: src/common/file_types.cpp:56
 msgid "VobSub subtitles"
 msgstr "VobSub субтитри"
 
@@ -8249,7 +8253,7 @@ msgstr "Vorbis"
 msgid "WAV"
 msgstr "WAV"
 
-#: src/common/file_types.cpp:56
+#: src/common/file_types.cpp:57
 msgid "WAVE (uncompressed PCM audio)"
 msgstr "WAVE (нестиснуте PCM аудіо)"
 
@@ -8257,7 +8261,7 @@ msgstr "WAVE (нестиснуте PCM аудіо)"
 msgid "WAVPACK"
 msgstr "WAVPACK"
 
-#: src/common/file_types.cpp:57
+#: src/common/file_types.cpp:58
 msgid "WAVPACK v4 audio"
 msgstr "Аудіо WAVPACK v4"
 
@@ -8286,7 +8290,7 @@ msgstr "Попередження:"
 msgid "Warnings:"
 msgstr "Попередження:"
 
-#: src/common/file_types.cpp:58
+#: src/common/file_types.cpp:59
 msgid "WebM audio/video files"
 msgstr "WebM аудіо/відео файли"
 

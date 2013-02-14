@@ -4689,7 +4689,7 @@ msgstr "MPEG programa jarioa"
 msgid "MPEG program streams"
 msgstr "MPEG programa jarioak"
 
-#: src/input/r_mpeg_ts.h:389
+#: src/input/r_mpeg_ts.h:391
 msgid "MPEG transport stream"
 msgstr "MPEG garraio jarioa"
 
@@ -4712,6 +4712,10 @@ msgstr "MPEG-1/2"
 #: src/output/p_mpeg4_p2.h:65
 msgid "MPEG-4"
 msgstr "MPEG-4"
+
+#: src/common/file_types.cpp:43
+msgid "MPLS BluRay playlist"
+msgstr ""
 
 #: src/mmg/tabs/input_general.cpp:181
 msgid "Make this track the default track for its type (audio, video, subtitles). Players should prefer tracks with the default track flag set."
@@ -4747,7 +4751,7 @@ msgstr "Matroska"
 msgid "Matroska A/V files (*.mka;*.mkv;*.mk3d)|*.mkv;*.mka;*.mk3d|%s"
 msgstr "Matroska A/B agiriak (*.mka;*.mkv;*.mk3d)|*.mkv;*.mka;*.mk3d|%s"
 
-#: src/common/file_types.cpp:43
+#: src/common/file_types.cpp:44
 msgid "Matroska audio/video files"
 msgstr "Matroska audio/bideo agiriak"
 
@@ -5000,7 +5004,7 @@ msgstr "Hurrengo zatiaren ID bakarra"
 msgid "No %1% specified in '--%2% %3%'.\n"
 msgstr "Ez da %1% adierazi hemen: '--%2% %3%'.\n"
 
-#: src/input/r_qtmp4.cpp:1165
+#: src/input/r_qtmp4.cpp:1161
 msgid "No AC3 header found in first frame; track will be skipped.\n"
 msgstr "Ez da AC3 idazbururik aurkitu lehen framean; bidea jauzi egingo da.\n"
 
@@ -5186,7 +5190,7 @@ msgstr "Bideko kanal zenbatekoa"
 msgid "Ogg/OGM"
 msgstr "Ogg/OGM"
 
-#: src/common/file_types.cpp:46
+#: src/common/file_types.cpp:47
 msgid "Ogg/OGM audio/video files"
 msgstr "ogg/OGM audio/bideo agiriak"
 
@@ -5294,7 +5298,7 @@ msgstr "Garatzileentzako BAKARRIK dira aukera hauek. Ez dira erabili behar. Zerb
 msgid "Opus"
 msgstr "Opus"
 
-#: src/common/file_types.cpp:47
+#: src/common/file_types.cpp:48
 msgid "Opus (in Ogg) audio files"
 msgstr "Opus (Ogg-an) audio agiriak"
 
@@ -5353,7 +5357,7 @@ msgstr "PCM"
 msgid "PGS"
 msgstr "PGS"
 
-#: src/common/file_types.cpp:44
+#: src/common/file_types.cpp:45
 msgid "PGS/SUP subtitles"
 msgstr "PGS/SUP azpidatziak"
 
@@ -5523,7 +5527,7 @@ msgstr "Garapena: [%1%%2%] %3%%%"
 msgid "Querying mkvmerge's capabilities"
 msgstr "Ikusi mkvmergeren gaitasunak"
 
-#: src/common/file_types.cpp:45
+#: src/common/file_types.cpp:46
 msgid "QuickTime audio/video files"
 msgstr "QuickTime audio/bideo agiriak"
 
@@ -5531,46 +5535,46 @@ msgstr "QuickTime audio/bideo agiriak"
 msgid "QuickTime/MP4"
 msgstr "QuickTime/MP4"
 
-#: src/input/r_qtmp4.cpp:276
+#: src/input/r_qtmp4.cpp:274
 #, boost-format
 msgid "Quicktime/MP4 reader: '%1%' atom is too small. Expected size: >= %2%. Actual size: %3%.\n"
 msgstr "Quicktime/MP4 irakurgailua: '%1%' atomoa txikiegia da. Itxarondako neurria: >= %2%. Oraingo neurria: %3%.\n"
 
-#: src/input/r_qtmp4.cpp:1750
+#: src/input/r_qtmp4.cpp:1746
 msgid "Quicktime/MP4 reader: Constant samplesize & variable duration not yet supported. Contact the author if you have such a sample file.\n"
 msgstr "Quicktime/MP4 irakurgailua: Lagin-neurri aldagaitza eta iraupen aldakorra ez dago sostengaturik oraindik. Jarri harremanetan egilearekin lagin agiri bat baduzu.\n"
 
-#: src/input/r_qtmp4.cpp:1120
+#: src/input/r_qtmp4.cpp:1118
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read chunk number %1%/%2% with size %3% from position %4%. Aborting.\n"
 msgstr "Quicktime/MP4 irakurgailua: Ezin da irakurri %1%/%2% zenbakiko chunk-argibidea %3% neurriarekin %4% kokapenetik. Uzten.\n"
 
-#: src/input/r_qtmp4.cpp:2055
-#: src/input/r_qtmp4.cpp:2069
+#: src/input/r_qtmp4.cpp:2051
+#: src/input/r_qtmp4.cpp:2065
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the extended sound description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4 irakurgailua: Ezin da irakurri %1% ID-dun biderentzako soinu hedatu azalpen atomoa.\n"
 
-#: src/input/r_qtmp4.cpp:2026
+#: src/input/r_qtmp4.cpp:2022
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the sound description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4 irakurgailua: Ezin da irakurri %1% ID-dun biderentzako soinu azalpen atomoa.\n"
 
-#: src/input/r_qtmp4.cpp:868
+#: src/input/r_qtmp4.cpp:866
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the stream description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4 irakurgailua: Ezin da irakurri %1% ID-dun biderentzako jario azalpen atomoa.\n"
 
-#: src/input/r_qtmp4.cpp:2101
+#: src/input/r_qtmp4.cpp:2097
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the video description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4 irakurgailua: Ezin da irakurri %1% ID-dun biderentzako bideo azalpen atomoa.\n"
 
-#: src/input/r_qtmp4.cpp:208
+#: src/input/r_qtmp4.cpp:206
 msgid "Quicktime/MP4 reader: Have not found any header atoms.\n"
 msgstr "Quicktime/MP4 irakurgailua: Ez da idazburu atomorik aurkitu.\n"
 
-#: src/input/r_qtmp4.cpp:210
+#: src/input/r_qtmp4.cpp:208
 msgid "Quicktime/MP4 reader: Have not found the 'mdat' atom. No movie data found.\n"
 msgstr "Quicktime/MP4 irakurgailua: Ez da 'mdat' atomoa aurkitu. Ez da filma daturik aurkitu.\n"
 
@@ -5579,75 +5583,75 @@ msgstr "Quicktime/MP4 irakurgailua: Ez da 'mdat' atomoa aurkitu. Ez da filma dat
 msgid "Quicktime/MP4 reader: Invalid chunk size %1% at %2%.\n"
 msgstr "Quicktime/MP4 irakurgailua: Chunk-argibide neurri baliogabea %1% --> %2%.\n"
 
-#: src/input/r_qtmp4.cpp:2476
+#: src/input/r_qtmp4.cpp:2472
 #, boost-format
 msgid "Quicktime/MP4 reader: MPEG4 part 10/AVC track %1% is missing its decoder config. Skipping this track.\n"
 msgstr "Quicktime/MP4 irakurgailua: MPEG4 part 10/AVC %1% bideak ez du dekodeatzaile itxurapenik. Bide honi jauzi eginten.\n"
 
-#: src/input/r_qtmp4.cpp:2507
+#: src/input/r_qtmp4.cpp:2503
 #, boost-format
 msgid "Quicktime/MP4 reader: MPEG4 track %1% is missing the esds atom/the decoder config. Skipping this track.\n"
 msgstr "Quicktime/MP4 irakurgailua: MPEG4 part 10/AVC %1% bideak ez du esds atomo/dekodeatzaile itxurapenik. Bide honi jauzi eginten.\n"
 
-#: src/input/r_qtmp4.cpp:445
+#: src/input/r_qtmp4.cpp:443
 #, boost-format
 msgid "Quicktime/MP4 reader: The 'media header' atom ('mdhd') uses the unsupported version %1%.\n"
 msgstr "Quicktime/MP4 irakurgailua: (\"mdhd\") 'multimedia idazburu' atomoak sostengatu gabeko %1% bertsioa erabiltzen du.\n"
 
-#: src/input/r_qtmp4.cpp:861
+#: src/input/r_qtmp4.cpp:859
 #, boost-format
 msgid "Quicktime/MP4 reader: The 'size' field is too small in the stream description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4 irakurgailua: 'neurria' eremua txikiegia da jario azalpen atomoan %1% ID-dun bidearentzat.\n"
 
-#: src/input/r_qtmp4.cpp:450
+#: src/input/r_qtmp4.cpp:448
 msgid "Quicktime/MP4 reader: The 'time scale' parameter was 0. This is not supported.\n"
 msgstr "Quicktime/MP4 irakurgailua: 'denbora neurria' parametroa 0 izan da. Hau ez dago sostengaturik.\n"
 
-#: src/input/r_qtmp4.cpp:2439
+#: src/input/r_qtmp4.cpp:2435
 #, boost-format
 msgid "Quicktime/MP4 reader: The AAC track %1% is missing the esds atom/the decoder config. Skipping this track.\n"
 msgstr "Quicktime/MP4 irakurgailua: %1% AAC bideak ez du esds atomo/dekodeatzaile itxurapenik. Bide honi jauzi egiten.\n"
 
-#: src/input/r_qtmp4.cpp:2434
+#: src/input/r_qtmp4.cpp:2430
 #, boost-format
 msgid "Quicktime/MP4 reader: The audio track %1% is using an unsupported 'object type id' of %2% in the 'esds' atom. Skipping this track.\n"
 msgstr "Quicktime/MP4 irakurgailua: %1% audio bidea sostengatu gabeko %2% 'objetu mota id'-a erabiltzen ari da 'esds' atomoan. Bide honi jauzi egiten.\n"
 
-#: src/input/r_qtmp4.cpp:2486
+#: src/input/r_qtmp4.cpp:2482
 #, boost-format
 msgid "Quicktime/MP4 reader: The video track %1% is missing the ESDS atom. Skipping this track.\n"
 msgstr "Quicktime/MP4 irakurgailua: %1% bideo bideak ez du ESDS atomorik. Bide honi jauzi egiten.\n"
 
-#: src/input/r_qtmp4.cpp:308
+#: src/input/r_qtmp4.cpp:306
 #, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers with an unknown or unsupported compression algorithm '%1%'. Aborting.\n"
 msgstr "Quicktime/MP4 irakurgailua: Agiri honek idazburu konprimitu konpresio algoritmo ezezaguna edo sostengu gabea erabiltzen du: '%1%'. Uzten.\n"
 
-#: src/input/r_qtmp4.cpp:341
+#: src/input/r_qtmp4.cpp:339
 #, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers, but the expected uncompressed size (%1%) was not what is available after uncompressing (%2%).\n"
 msgstr "Quicktime/MP4 irakurgailua: Agiri honek idazburu konprimituak erabiltzen ditu, baina itxarondako deskonpresio neurria (%1%) ez da (%2%) deskonprimitu ondoren eskuragarri dagoena.\n"
 
-#: src/input/r_qtmp4.cpp:332
+#: src/input/r_qtmp4.cpp:330
 #, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers, but the zlib library could not be initialized. Error code from zlib: %1%. Aborting.\n"
 msgstr "Quicktime/MP4 irakurgailua: Agiri honek idazburu konprimituak erabiltzen ditu, baina zlib liburutegia ezin izan da abiarazi. Akats kodea zlib-tik: %1%. Uzten.\n"
 
-#: src/input/r_qtmp4.cpp:337
+#: src/input/r_qtmp4.cpp:335
 #, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers, but they could not be uncompressed. Error code from zlib: %1%. Aborting.\n"
 msgstr "Quicktime/MP4 irakurgailua: Agiri honek idazburu konprimituak erabiltzen ditu, baina ezin da deskonprimitu. Akats kodea zlib-tik: %1%. Uzten.\n"
 
-#: src/input/r_qtmp4.cpp:2407
-#: src/input/r_qtmp4.cpp:2422
-#: src/input/r_qtmp4.cpp:2460
-#: src/input/r_qtmp4.cpp:2525
+#: src/input/r_qtmp4.cpp:2403
+#: src/input/r_qtmp4.cpp:2418
+#: src/input/r_qtmp4.cpp:2456
+#: src/input/r_qtmp4.cpp:2521
 #, boost-format
 msgid "Quicktime/MP4 reader: Track %1% is missing some data. Broken header atoms?\n"
 msgstr "Quicktime/MP4 irakurgailua: %1% bideak ez ditu datu batzuk. Hautsitako atomo idazburuak?\n"
 
-#: src/input/r_qtmp4.cpp:2034
-#: src/input/r_qtmp4.cpp:2108
+#: src/input/r_qtmp4.cpp:2030
+#: src/input/r_qtmp4.cpp:2104
 #, boost-format
 msgid "Quicktime/MP4 reader: Track ID %1% has more than one FourCC. Only using the first one (%|2$.4s|) and not this one (%|3$.4s|).\n"
 msgstr "Quicktime/MP4 irakurgailua: %1% ID-dun bideak FourCC bat baino gehiago ditu. Lehen hau bakarrik erabiltzen (%|2$.4s|), eta ez beste hau (%|3$.4s|).\n"
@@ -5702,7 +5706,7 @@ msgstr "RealAudio"
 msgid "RealMedia"
 msgstr "RealMedia"
 
-#: src/common/file_types.cpp:48
+#: src/common/file_types.cpp:49
 msgid "RealMedia audio/video files"
 msgstr "RealMedia audio/bideo agiriak"
 
@@ -5798,7 +5802,7 @@ msgstr "SHA1-160"
 msgid "SRT subtitles"
 msgstr "SRT azpidatziak"
 
-#: src/common/file_types.cpp:49
+#: src/common/file_types.cpp:50
 msgid "SRT text subtitles"
 msgstr "SRT idazki azpidatziak"
 
@@ -5806,7 +5810,7 @@ msgstr "SRT idazki azpidatziak"
 msgid "SSA/ASS subtitles"
 msgstr "SSA/ASS azpidatziak"
 
-#: src/common/file_types.cpp:50
+#: src/common/file_types.cpp:51
 msgid "SSA/ASS text subtitles"
 msgstr "SSA/ASS idazki azpidatziak"
 
@@ -6458,7 +6462,7 @@ msgstr "Ezeztatu egoera irteera."
 msgid "TTA"
 msgstr "TTA"
 
-#: src/common/file_types.cpp:51
+#: src/common/file_types.cpp:52
 msgid "TTA (The lossless True Audio codec)"
 msgstr "TTA (Galeragabeko True Audio kodeka)"
 
@@ -6537,7 +6541,7 @@ msgstr ".idx agiriak ez du 'id: ...' lerroa hizkuntza adieraziz.\n"
 msgid "The AAC profiles are different: %1% and %2%"
 msgstr "AAC profilak ezberdinak dira: %1% eta %2%"
 
-#: src/input/r_qtmp4.cpp:1223
+#: src/input/r_qtmp4.cpp:1219
 msgid "The AVC video track is missing the 'CTTS' atom for frame timecode offsets. However, AVC/h.264 allows frames to have more than the traditional one (for P frames) or two (for B frames) references to other frames. The timecodes for such frames will be out-of-order, and the 'CTTS' atom is needed for getting the timecodes right. As it is missing the timecodes for this track might be wrong. You should watch the resulting file and make sure that it looks like you expected it to.\n"
 msgstr "AVC bideo bideak ez du 'CTTS' atomoa framen denbora-kode orekatarako. Horrela ere, AVC/h.264-k ahalbidetzen ditu ohiko xehetasun frame bat (P frameak) edo bi (B frameak) baino gehiago beste frame batzuetara. Denbora-kodeak frame hauentzat ordenatu-gabeak izango dira, eta 'CTTS' atomoa beharrezkoa da denbora-kodeak zuzen lortzeko. Hau ez dagoenez bide honentzako denbora-kodeak okerrak izan daitezke. Emaitz agiria ikuskatu beharko zenuke eta zihurtatu itxaroten duzun bezala ikusten dela.\n"
 
@@ -6584,7 +6588,7 @@ msgstr "Erabiltzaile Interfaze Grafika, EIG (%2%) beraren ezberdina den mkvmerge
 msgid "The Kate identification header could not be parsed (%1%).\n"
 msgstr "Kate ezagutarazle idazburua ezin da aztertu (%1%).\n"
 
-#: src/input/r_qtmp4.cpp:750
+#: src/input/r_qtmp4.cpp:748
 #, boost-format
 msgid "The MP4 file '%1%' contains chapters whose format was not recognized. This is often the case if the chapters are not encoded in UTF-8. Use the '--chapter-charset' option in order to specify the charset to use.\n"
 msgstr "'%1%' MP4 agiriak ezagutzen ez den heuskarri bateko atalak ditu. Hau batzuetan gertatzen da atalak ez daudenean UTF-8-an kodeatuta. Erabili '--chapter-charset' aukera erabiltzeko hizkikodea adierazteko.\n"
@@ -7813,7 +7817,7 @@ msgstr "'%2%' Kodek ID-dun %1% bideak ez du \"default duration\" gaia eta ezin d
 msgid "Track %1%: %2%, codec ID: %3%%4%%5%%6%\n"
 msgstr "Bidea: %1%: %2%. Kodek ID-a: %3%%4%%5%%6%\n"
 
-#: src/input/r_qtmp4.cpp:2183
+#: src/input/r_qtmp4.cpp:2179
 #, boost-format
 msgid "Track %1%: AAC found, but decoder config data has length %2%.\n"
 msgstr "%1% bidea: AAC aurkitu da, baina dekodeatzaile itxurapen datuek %2% luzera dute.\n"
@@ -7833,7 +7837,7 @@ msgstr "%1% bidea: NAL handiegia. Idazburu eremuaren araberako neurria: %2%, byt
 msgid "Track %1%: Subtitle entry number %2% is missing its duration. Assuming a duration of 1s.\n"
 msgstr "%1% bidea: %2% zenbakiko azpidatzi sarrerak ez du iraupenik. 1 seg-ko iraupena suposatzen.\n"
 
-#: src/input/r_qtmp4.cpp:2186
+#: src/input/r_qtmp4.cpp:2182
 #, boost-format
 msgid "Track %1%: The AAC information could not be parsed.\n"
 msgstr "%1% bidea: AAC argibideak ezin dira aztertu.\n"
@@ -7954,7 +7958,7 @@ msgstr "UID-a:"
 msgid "USF subtitles"
 msgstr "USF azpidatziak"
 
-#: src/common/file_types.cpp:52
+#: src/common/file_types.cpp:53
 msgid "USF text subtitles"
 msgstr "USF idazki azpidatziak"
 
@@ -8113,7 +8117,7 @@ msgstr "Irteera moduloa erabiltzen '%1%' heuskarrirako.\n"
 msgid "VC1"
 msgstr "VC1"
 
-#: src/common/file_types.cpp:53
+#: src/common/file_types.cpp:54
 msgid "VC1 elementary streams"
 msgstr "VC1 ohinarrizko jarioak"
 
@@ -8219,7 +8223,7 @@ msgstr "Ikusi mkvmergek multiplexaketa garapenean zehar hautaturiko lanentzat so
 msgid "VobBtn"
 msgstr "VobBtn"
 
-#: src/common/file_types.cpp:54
+#: src/common/file_types.cpp:55
 msgid "VobButtons"
 msgstr "Vob-Botoiak"
 
@@ -8228,7 +8232,7 @@ msgstr "Vob-Botoiak"
 msgid "VobSub"
 msgstr "VobSub"
 
-#: src/common/file_types.cpp:55
+#: src/common/file_types.cpp:56
 msgid "VobSub subtitles"
 msgstr "VobSub azpidatziak"
 
@@ -8240,7 +8244,7 @@ msgstr "Vorbis"
 msgid "WAV"
 msgstr "WAV"
 
-#: src/common/file_types.cpp:56
+#: src/common/file_types.cpp:57
 msgid "WAVE (uncompressed PCM audio)"
 msgstr "WAVE (konprimitu gabeko PCM audioa)"
 
@@ -8248,7 +8252,7 @@ msgstr "WAVE (konprimitu gabeko PCM audioa)"
 msgid "WAVPACK"
 msgstr "WAVPACK"
 
-#: src/common/file_types.cpp:57
+#: src/common/file_types.cpp:58
 msgid "WAVPACK v4 audio"
 msgstr "WAVPACK v4 audioa"
 
@@ -8277,7 +8281,7 @@ msgstr "Kontuz:"
 msgid "Warnings:"
 msgstr "Kontuz oharrak:"
 
-#: src/common/file_types.cpp:58
+#: src/common/file_types.cpp:59
 msgid "WebM audio/video files"
 msgstr "WebM audio/bideo agiriak"
 
