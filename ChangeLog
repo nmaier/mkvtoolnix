@@ -1,3 +1,8 @@
+2013-02-16  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvmerge: bug fix: Fixed reading certain MP4 atoms with invalid
+        length fields.
+
 2013-02-06  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvmerge: bug fix in common AAC code: Fixed wrong calculation of

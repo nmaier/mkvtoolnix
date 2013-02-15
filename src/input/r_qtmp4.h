@@ -295,6 +295,13 @@ struct qt_atom_t {
   }
 };
 
+inline std::ostream &
+operator <<(std::ostream &out,
+            qt_atom_t const &atom) {
+  out << (boost::format("<%1% at %2% size %3% hsize %4%>") % atom.fourcc % atom.pos % atom.size % atom.hsize);
+  return out;
+}
+
 struct qtmp4_chapter_entry_t {
   std::string m_name;
   int64_t m_timecode;
@@ -327,7 +334,7 @@ private:
 
   unsigned int m_audio_encoder_delay_samples;
 
-  bool m_debug_chapters, m_debug_headers, m_debug_tables, m_debug_interleaving;
+  bool m_debug_chapters, m_debug_headers, m_debug_tables, m_debug_interleaving, m_debug_resync;
 
 public:
   qtmp4_reader_c(const track_info_c &ti, const mm_io_cptr &in);
@@ -351,6 +358,7 @@ protected:
   virtual void parse_headers();
   virtual void calculate_timecodes();
   virtual qt_atom_t read_atom(mm_io_c *read_from = nullptr, bool exit_on_error = true);
+  virtual bool resync_to_top_level_atom(uint64_t start_pos);
   virtual void parse_itunsmpb(std::string data);
 
   virtual void handle_cmov_atom(qt_atom_t parent, int level);

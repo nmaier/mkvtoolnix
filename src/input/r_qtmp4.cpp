@@ -135,6 +135,7 @@ qtmp4_reader_c::qtmp4_reader_c(const track_info_c &ti,
   , m_debug_headers(     debugging_requested("qtmp4") || debugging_requested("qtmp4_full") || debugging_requested("qtmp4_headers"))
   , m_debug_tables(                                      debugging_requested("qtmp4_full") || debugging_requested("qtmp4_tables"))
   , m_debug_interleaving(debugging_requested("qtmp4") || debugging_requested("qtmp4_full") || debugging_requested("qtmp4_interleaving"))
+  , m_debug_resync(      debugging_requested("qtmp4|qtmp4_full|qtmp4_resync"))
 {
 }
 
@@ -165,6 +166,51 @@ qtmp4_reader_c::read_atom(mm_io_c *read_from,
 
 #define skip_atom() m_in->setFilePointer(atom.pos + atom.size)
 
+bool
+qtmp4_reader_c::resync_to_top_level_atom(uint64_t start_pos) {
+  static std::vector<std::string> const s_top_level_atoms{ "ftyp", "pdin", "moov", "moof", "mfra", "mdat", "free", "skip" };
+  static auto test_atom_at = [this](uint64_t atom_pos, uint64_t expected_hsize, fourcc_c const &expected_fourcc) {
+    m_in->setFilePointer(atom_pos);
+    auto test_atom = read_atom(nullptr, false);
+    mxdebug_if(m_debug_resync, boost::format("Test for %1%bit offset atom: %2%\n") % (8 == expected_hsize ? 32 : 64) % test_atom);
+
+    if ((test_atom.fourcc == expected_fourcc) && (test_atom.hsize == expected_hsize) && ((test_atom.pos + test_atom.size) <= m_size)) {
+      mxdebug_if(m_debug_resync, boost::format("%1%bit offset atom looks good\n") % (8 == expected_hsize ? 32 : 64));
+      m_in->setFilePointer(atom_pos);
+      return true;
+    }
+
+    return false;
+  };
+
+  try {
+    m_in->setFilePointer(start_pos);
+    fourcc_c fourcc{m_in};
+    auto next_pos = start_pos;
+
+    mxdebug_if(m_debug_resync, boost::format("Starting resync at %1%, FourCC %2%\n") % start_pos % fourcc);
+    while (true) {
+      m_in->setFilePointer(next_pos);
+      fourcc.shift_read(m_in);
+      next_pos = m_in->getFilePointer();
+
+      if (!fourcc.human_readable() || !fourcc.equiv(s_top_level_atoms))
+        continue;
+
+      auto fourcc_pos = m_in->getFilePointer() - 4;
+      mxdebug_if(m_debug_resync, boost::format("Human readable at %1%: %2%\n") % fourcc_pos % fourcc);
+
+      if (test_atom_at(fourcc_pos - 12, 16, fourcc) || test_atom_at(fourcc_pos - 4, 8, fourcc))
+        return true;
+    }
+
+  } catch (mtx::mm_io::exception &ex) {
+    mxdebug_if(m_debug_resync, boost::format("I/O exception during resync: %1%\n") % ex.what());
+  }
+
+  return false;
+}
+
 void
 qtmp4_reader_c::parse_headers() {
   unsigned int idx;
@@ -174,7 +220,7 @@ qtmp4_reader_c::parse_headers() {
   bool headers_parsed = false;
   do {
     qt_atom_t atom = read_atom();
-    mxdebug_if(m_debug_headers, boost::format("'%1%' atom, size %2%, at %3%\n") % atom.fourcc % atom.size % atom.pos);
+    mxdebug_if(m_debug_headers, boost::format("atom %1% human readable? %2%\n") % atom % atom.fourcc.human_readable());
 
     if (atom.fourcc == "ftyp") {
       auto tmp = fourcc_c{m_in};
@@ -191,16 +237,16 @@ qtmp4_reader_c::parse_headers() {
       handle_moov_atom(atom.to_parent(), 0);
       headers_parsed = true;
 
-    } else if (atom.fourcc == "wide") {
-      skip_atom();
-
     } else if (atom.fourcc == "mdat") {
       m_mdat_pos  = m_in->getFilePointer();
       m_mdat_size = atom.size;
       skip_atom();
 
-    } else
+    } else if (atom.fourcc.human_readable())
       skip_atom();
+
+    else if (!resync_to_top_level_atom(atom.pos))
+      break;
 
   } while (!m_in->eof() && (!headers_parsed || (-1 == m_mdat_pos)));
 
