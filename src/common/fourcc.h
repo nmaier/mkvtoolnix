@@ -47,6 +47,10 @@ public:
   fourcc_c(mm_io_c &io, byte_order_t byte_order = big_endian);
   fourcc_c(mm_io_c *io, byte_order_t byte_order = big_endian);
 
+  fourcc_c &shift_read(mm_io_cptr const &io, byte_order_t byte_order = big_endian);
+  fourcc_c &shift_read(mm_io_c &io, byte_order_t byte_order = big_endian);
+  fourcc_c &shift_read(mm_io_c *io, byte_order_t byte_order = big_endian);
+
   size_t write(memory_cptr const &mem, byte_order_t byte_order = big_endian);
   size_t write(unsigned char *mem, byte_order_t byte_order = big_endian);
   size_t write(mm_io_cptr const &io, byte_order_t byte_order = big_endian);
@@ -59,6 +63,8 @@ public:
   std::string str() const;
 
   bool equiv(char const *cmp) const;
+  bool equiv(std::vector<std::string> const &cmp) const;
+  bool human_readable(size_t min_num = 3) const;
 
   explicit operator bool() const;
   bool operator ==(fourcc_c const &cmp) const;

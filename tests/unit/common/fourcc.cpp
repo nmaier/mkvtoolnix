@@ -300,6 +300,34 @@ TEST(FourCC, Equivalence) {
 
   EXPECT_FALSE(fourcc_c{"ABCD"}.equiv("qwer"));
   EXPECT_FALSE(fourcc_c{"abcd"}.equiv("qwer"));
+
+  std::vector<std::string> vec{ "abcd", "WeRt", "uiOP", "VBNM" };
+  EXPECT_TRUE(fourcc_c{"ABCD"}.equiv(vec));
+  EXPECT_TRUE(fourcc_c{"WeRt"}.equiv(vec));
+  EXPECT_TRUE(fourcc_c{"vbnm"}.equiv(vec));
+
+  EXPECT_FALSE(fourcc_c{"dcba"}.equiv(vec));
+}
+
+TEST(FourCC, HumanReadable) {
+  EXPECT_TRUE(fourcc_c{"ABCD"}.human_readable());
+  EXPECT_TRUE(fourcc_c{"ABC?"}.human_readable());
+  EXPECT_TRUE(fourcc_c{"AB??"}.human_readable(2));
+
+  EXPECT_TRUE(fourcc_c{"abcd"}.human_readable());
+  EXPECT_TRUE(fourcc_c{"abc?"}.human_readable());
+  EXPECT_TRUE(fourcc_c{"ab??"}.human_readable(2));
+
+  EXPECT_TRUE(fourcc_c{"a007"}.human_readable());
+  EXPECT_TRUE(fourcc_c{"?007"}.human_readable());
+
+  EXPECT_FALSE(fourcc_c{"abc?"}.human_readable(4));
+  EXPECT_FALSE(fourcc_c{"ab??"}.human_readable());
+
+  EXPECT_FALSE(fourcc_c{"abc?"}.human_readable(4));
+  EXPECT_FALSE(fourcc_c{"ab??"}.human_readable());
+
+  EXPECT_FALSE(fourcc_c{"??07"}.human_readable());
 }
 
 }

@@ -157,6 +157,24 @@ fourcc_c::equiv(char const *cmp)
   return balg::to_lower_copy(str()) == balg::to_lower_copy(std::string{cmp});
 }
 
+bool
+fourcc_c::equiv(std::vector<std::string> const &cmp)
+  const {
+  auto lower = balg::to_lower_copy(str());
+  for (auto &s : cmp)
+    if (lower == balg::to_lower_copy(s))
+      return true;
+  return false;
+}
+
+bool
+fourcc_c::human_readable(size_t min_num)
+  const {
+  static auto char_ok = [](char c) { return (('a' <= c) && ('z' >= c)) || (('A' <= c) && ('Z' >= c)) || (('0' <= c) && ('9' >= c)) || (0xa9 == c); };
+  auto lower          = balg::to_lower_copy(str());
+  return min_num <= boost::accumulate(lower, 0u, [](unsigned num, char c) { return num + (char_ok(c) ? 1 : 0); });
+}
+
 uint32_t
 fourcc_c::read(void const *mem,
                fourcc_c::byte_order_t byte_order) {
@@ -167,4 +185,23 @@ uint32_t
 fourcc_c::read(mm_io_c &io,
                fourcc_c::byte_order_t byte_order) {
   return val(io.read_uint32_be(), byte_order);
+}
+
+fourcc_c &
+fourcc_c::shift_read(mm_io_cptr const &io,
+                     byte_order_t byte_order) {
+  return shift_read(*io, byte_order);
+}
+
+fourcc_c &
+fourcc_c::shift_read(mm_io_c &io,
+                     byte_order_t byte_order) {
+  m_value = big_endian == byte_order ? (m_value << 8) | io.read_uint8() : (m_value >> 8) | (io.read_uint8() << 24);
+  return *this;
+}
+
+fourcc_c &
+fourcc_c::shift_read(mm_io_c *io,
+                     byte_order_t byte_order) {
+  return shift_read(*io, byte_order);
 }
