@@ -52,8 +52,8 @@ private:
   int64_t m_max_timecode_and_duration, m_max_video_timecode_rendered;
   int64_t m_previous_cluster_tc, m_num_cue_elements, m_header_overhead;
   int64_t m_timecode_offset;
-  int64_t m_bytes_in_file, m_first_timecode_in_file, m_first_discarded_timecode, m_last_discarded_timecode_and_duration, m_discarded_duration;
-  int64_t m_min_timecode_in_cluster, m_max_timecode_in_cluster, m_frame_field_number;
+  int64_t m_bytes_in_file, m_first_timecode_in_file, m_first_timecode_in_part, m_first_discarded_timecode, m_last_discarded_timecode_and_duration, m_discarded_duration, m_previous_discarded_duration;
+  int64_t m_max_timecode_in_file, m_min_timecode_in_cluster, m_max_timecode_in_cluster, m_frame_field_number;
   bool m_first_video_keyframe_seen;
   mm_io_c *m_out;
 
@@ -85,9 +85,15 @@ public:
   int64_t get_timecode();
   int render();
   int get_cluster_content_size();
-  int64_t get_duration();
-  int64_t get_first_timecode_in_file() {
+  int64_t get_duration() const;
+  int64_t get_first_timecode_in_file() const {
     return m_first_timecode_in_file;
+  }
+  int64_t get_first_timecode_in_part() const {
+    return m_first_timecode_in_part;
+  }
+  int64_t get_max_timecode_in_file() const {
+    return m_max_timecode_in_file;
   }
   int64_t get_discarded_duration() const;
   void handle_discarded_duration(bool create_new_file, bool previously_discarding);

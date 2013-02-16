@@ -39,9 +39,12 @@ cluster_helper_c::cluster_helper_c()
   , m_timecode_offset(0)
   , m_bytes_in_file(0)
   , m_first_timecode_in_file(-1)
+  , m_first_timecode_in_part{-1}
   , m_first_discarded_timecode{-1}
   , m_last_discarded_timecode_and_duration{0}
   , m_discarded_duration{0}
+  , m_previous_discarded_duration{}
+  , m_max_timecode_in_file{-1}
   , m_min_timecode_in_cluster(-1)
   , m_max_timecode_in_cluster(-1)
   , m_frame_field_number{1}
@@ -178,8 +181,7 @@ cluster_helper_c::split(packet_cptr &packet) {
 
   mxdebug_if(m_debug_splitting, boost::format("Splitting: splitpoint %1% reached before timecode %2%, create new? %3%.\n") % m_current_split_point->str() % format_timecode(packet->assigned_timecode) % create_new_file);
 
-  if (create_new_file)
-    finish_file();
+  finish_file(false, create_new_file, previously_discarding);
 
   if (m_current_split_point->m_use_once) {
     if (   m_current_split_point->m_discard
@@ -201,9 +203,12 @@ cluster_helper_c::split(packet_cptr &packet) {
       m_timecode_offset = g_video_packetizer ? m_max_video_timecode_rendered : packet->assigned_timecode;
     }
 
-    m_bytes_in_file                        = 0;
-    m_first_timecode_in_file               = -1;
+    m_bytes_in_file          =  0;
+    m_first_timecode_in_file = -1;
+    m_max_timecode_in_file   = -1;
   }
+
+  m_first_timecode_in_part = -1;
 
   handle_discarded_duration(create_new_file, previously_discarding);
 
@@ -426,7 +431,10 @@ cluster_helper_c::render() {
 
     if (-1 == m_first_timecode_in_file)
       m_first_timecode_in_file = pack->assigned_timecode;
+    if (-1 == m_first_timecode_in_part)
+      m_first_timecode_in_part = pack->assigned_timecode;
 
+    m_max_timecode_in_file      = std::max(pack->assigned_timecode,                        m_max_timecode_in_file);
     m_max_timecode_and_duration = std::max(pack->assigned_timecode + pack->get_duration(), m_max_timecode_and_duration);
 
     if (!pack->is_key_frame() || !track_entry.LacingEnabled())
@@ -617,12 +625,13 @@ cluster_helper_c::postprocess_cues() {
 }
 
 int64_t
-cluster_helper_c::get_duration() {
+cluster_helper_c::get_duration()
+  const {
+  auto result = m_max_timecode_and_duration - m_first_timecode_in_file - m_discarded_duration;
   mxdebug_if(m_debug_duration,
-             boost::format("cluster_helper_c::get_duration(): %1% - %2% - %4% = %3%\n")
-             % m_max_timecode_and_duration % m_first_timecode_in_file % (m_max_timecode_and_duration - m_first_timecode_in_file) % get_discarded_duration());
-
-  return m_max_timecode_and_duration - m_first_timecode_in_file - get_discarded_duration();
+             boost::format("cluster_helper_c::get_duration(): max_tc_and_dur %1% - first_tc_in_file %2% - discarded_duration %3% = %4%\n")
+             % m_max_timecode_and_duration % m_first_timecode_in_file % m_discarded_duration % result);
+  return result;
 }
 
 int64_t
@@ -634,6 +643,8 @@ cluster_helper_c::get_discarded_duration()
 void
 cluster_helper_c::handle_discarded_duration(bool create_new_file,
                                             bool previously_discarding) {
+  m_previous_discarded_duration = m_discarded_duration;
+
   if (create_new_file) { // || (!previously_discarding && m_discarding)) {
     mxdebug_if(m_debug_splitting,
                boost::format("RESETTING discarded duration of %1%, create_new_file %2% previously_discarding %3% m_discarding %4%\n")

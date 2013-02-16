@@ -252,6 +252,11 @@ operator<<(std::ostream &str,
   return str;
 }
 
+static int64_t
+calculate_file_duration() {
+  return irnd(static_cast<double>(g_cluster_helper->get_duration()) / static_cast<double>(g_timecode_scale));
+}
+
 /** \brief Fix the file after mkvmerge has been interrupted
 
    On Unix like systems mkvmerge will install a signal handler. On \c SIGUSR1
@@ -282,7 +287,7 @@ sighandler(int /* signum */) {
   // Now re-render the kax_duration and fill in the biggest timecode
   // as the file's duration.
   s_out->save_pos(s_kax_duration->GetElementPosition());
-  s_kax_duration->SetValue(irnd(static_cast<double>(g_cluster_helper->get_duration()) / static_cast<double>(g_timecode_scale)));
+  s_kax_duration->SetValue(calculate_file_duration());
   s_kax_duration->Render(*s_out);
   s_out->restore_pos();
   mxinfo(Y(" done\n"));
@@ -1556,8 +1561,67 @@ create_next_output_file() {
   add_tags_from_cue_chapters();
   prepare_tags_for_rendering();
 
-  if (!g_cluster_helper->discarding())
-    ++g_file_num;
+  if (g_cluster_helper->discarding())
+    return;
+
+  ++g_file_num;
+
+  s_chapters_in_this_file.reset();
+}
+
+static void
+add_chapters_for_current_part() {
+  bool debug = debugging_requested("splitting_chapters");
+
+  mxdebug_if(debug, boost::format("Adding chapters. have_global? %1% splitting? %2%\n") % !!g_kax_chapters % g_cluster_helper->splitting());
+
+  if (!g_cluster_helper->splitting()) {
+    s_chapters_in_this_file = clone(g_kax_chapters);
+    merge_chapter_entries(*s_chapters_in_this_file);
+    sort_ebml_master(s_chapters_in_this_file.get());
+    return;
+  }
+
+  int64_t start                   = g_cluster_helper->get_first_timecode_in_part();
+  int64_t end                     = g_cluster_helper->get_max_timecode_in_file(); // start + g_cluster_helper->get_duration();
+  int64_t offset                  = g_no_linking ? g_cluster_helper->get_first_timecode_in_file() + g_cluster_helper->get_discarded_duration() : 0;
+
+  auto chapters_here              = clone(g_kax_chapters);
+  bool have_chapters_in_timeframe = select_chapters_in_timeframe(chapters_here.get(), start, end, offset);
+
+  mxdebug_if(debug, boost::format("offset %1% start %2% end %3% have chapters in timeframe? %4% chapters in this file? %5%\n") % offset % start % end % have_chapters_in_timeframe % !!s_chapters_in_this_file);
+
+  if (!have_chapters_in_timeframe)
+    return;
+
+  if (!s_chapters_in_this_file)
+    s_chapters_in_this_file = chapters_here;
+  else {
+    brng::copy(chapters_here->GetElementList(), std::back_inserter(s_chapters_in_this_file->GetElementList()));
+    chapters_here->GetElementList().clear();
+  }
+
+  merge_chapter_entries(*s_chapters_in_this_file);
+  sort_ebml_master(s_chapters_in_this_file.get());
+}
+
+static void
+render_chapters() {
+  bool debug = debugging_requested("splitting_chapters");
+
+  mxdebug_if(debug,
+             boost::format("render_chapters: have void? %1% size %2% have chapters? %3% size %4%\n")
+             % !!s_kax_chapters_void     % (s_kax_chapters_void     ? s_kax_chapters_void    ->ElementSize() : 0)
+             % !!s_chapters_in_this_file % (s_chapters_in_this_file ? s_chapters_in_this_file->ElementSize() : 0));
+
+  if (!s_kax_chapters_void)
+    return;
+
+  if (s_chapters_in_this_file)
+    s_kax_chapters_void->ReplaceWith(*s_chapters_in_this_file, *s_out, true, true);
+
+  delete s_kax_chapters_void;
+  s_kax_chapters_void = nullptr;
 }
 
 /** \brief Finishes and closes the current file
@@ -1568,18 +1632,25 @@ create_next_output_file() {
    file and rendered at the front.  The segment duration and the
    segment size are set to their actual values.
 */
-int64_t
-finish_file(bool last_file) {
+void
+finish_file(bool last_file,
+            bool create_new_file,
+            bool previously_discarding) {
+  if (g_kax_chapters && !previously_discarding)
+    add_chapters_for_current_part();
+
+  if (!last_file && !create_new_file)
+    return;
+
   bool do_output = verbose && !dynamic_cast<mm_null_io_c *>(s_out.get());
   if (do_output)
     mxinfo("\n");
 
   // Render the track headers a second time if the user has requested that.
   if (hack_engaged(ENGAGE_WRITE_HEADERS_TWICE)) {
-    EbmlElement *second_tracks = g_kax_tracks->Clone();
+    auto second_tracks = clone(g_kax_tracks);
     second_tracks->Render(*s_out);
     g_kax_sh_main->IndexThis(*second_tracks, *g_kax_segment);
-    delete second_tracks;
   }
 
   // Render the cues.
@@ -1592,12 +1663,7 @@ finish_file(bool last_file) {
   // Now re-render the s_kax_duration and fill in the biggest timecode
   // as the file's duration.
   s_out->save_pos(s_kax_duration->GetElementPosition());
-  mxverb(3,
-         boost::format("mkvmerge: s_kax_duration: gdur %1% tcs %2% du %3%\n")
-         % g_cluster_helper->get_duration() % g_timecode_scale
-         % irnd((double)g_cluster_helper->get_duration() / (double)((int64_t)g_timecode_scale)));
-
-  s_kax_duration->SetValue(irnd(static_cast<double>(g_cluster_helper->get_duration()) / static_cast<double>(g_timecode_scale)));
+  s_kax_duration->SetValue(calculate_file_duration());
   s_kax_duration->Render(*s_out);
 
   // If splitting is active and this is the last part then handle the
@@ -1651,32 +1717,7 @@ finish_file(bool last_file) {
     g_kax_sh_main->IndexThis(*s_kax_infos, *g_kax_segment);
   }
 
-  // Select the chapters that lie in this file and render them in the space
-  // that was resesrved at the beginning.
-  kax_chapters_cptr chapters_here;
-
-  if (g_kax_chapters) {
-    int64_t offset = g_no_linking ? g_cluster_helper->get_first_timecode_in_file() : 0;
-    int64_t start  = g_cluster_helper->get_first_timecode_in_file();
-    int64_t end    = start + g_cluster_helper->get_duration();
-
-    chapters_here  = clone(g_kax_chapters);
-
-    if (g_cluster_helper->splitting())
-      if (!select_chapters_in_timeframe(chapters_here.get(), start, end, offset))
-        chapters_here.reset();
-
-    if (chapters_here) {
-      merge_chapter_entries(*chapters_here);
-      sort_ebml_master(chapters_here.get());
-      s_kax_chapters_void->ReplaceWith(*chapters_here, *s_out, true, true);
-      s_chapters_in_this_file = clone(chapters_here);
-    }
-
-    delete s_kax_chapters_void;
-    s_kax_chapters_void = nullptr;
-
-  }
+  render_chapters();
 
   // Render the meta seek information with the cues
   if (g_write_meta_seek_for_clusters && (g_kax_sh_cues->ListSize() > 0) && !hack_engaged(ENGAGE_NO_META_SEEK)) {
@@ -1711,16 +1752,11 @@ finish_file(bool last_file) {
     delete tags_here;
   }
 
-  if (s_chapters_in_this_file)
+  if (s_chapters_in_this_file) {
+    if (!hack_engaged(ENGAGE_NO_CHAPTERS_IN_META_SEEK))
+      g_kax_sh_main->IndexThis(*s_chapters_in_this_file, *g_kax_segment);
     s_chapters_in_this_file.reset();
-
-  if (chapters_here) {
-    if (!hack_engaged(ENGAGE_NO_CHAPTERS_IN_META_SEEK))
-      g_kax_sh_main->IndexThis(*chapters_here, *g_kax_segment);
-
-  } else if (!g_cluster_helper->splitting() && g_kax_chapters)
-    if (!hack_engaged(ENGAGE_NO_CHAPTERS_IN_META_SEEK))
-      g_kax_sh_main->IndexThis(*g_kax_chapters, *g_kax_segment);
+  }
 
   if (s_kax_as) {
     g_kax_sh_main->IndexThis(*s_kax_as, *g_kax_segment);
@@ -1759,8 +1795,6 @@ finish_file(bool last_file) {
   delete s_head;
 
   s_head = nullptr;
-
-  return final_file_size;
 }
 
 static void establish_deferred_connections(filelist_t &file);

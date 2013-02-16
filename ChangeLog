@@ -1,5 +1,8 @@
 2013-02-16  Moritz Bunkus  <moritz@bunkus.org>
 
+        * mkvmerge: bug fix: Fixed handling chapters when splitting by
+        parts (both parts/timecodes and parts/frames). Fixes #831.
+
         * mkvmerge: bug fix: Fixed reading certain MP4 atoms with invalid
         length fields.
 
