@@ -249,6 +249,7 @@ class SimpleTest
       command  << " >#{temp_file.path} 2>&1 "
     end
 
+    puts "COMMAND #{command}" if ENV['DEBUG']
     self.error "system command failed: #{command} (#{$? >> 8})" if !system(command) && (options[:exit_code] != ($? >> 8))
 
     return IO.readlines(temp_file.path) if temp_file
