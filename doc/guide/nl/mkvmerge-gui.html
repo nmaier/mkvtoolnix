@@ -1,0 +1,1108 @@
+<html>
+ <head>
+  <title>De gids voor mkvmerge GUI</title>
+ </head>
+ <body>
+  <h1>De gids voor mkvmerge GUI (mmg)</h1>
+
+  <i>Ren&eacute; Maassen</i>
+  <hr>
+
+  <h2>Inhoudsopgave</h2>
+
+  <p>
+   <ol>
+    <li>
+     <a href="mkvmerge-gui.html#introduction">Introductie</a>
+     <br>
+     <ol>
+      <li>
+       <a href="mkvmerge-gui.html#whatismatroska">Wat is Matroska&trade; ?</a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#whatismkvmerge">Wat is mkvmerge? Wat is mkvmerge GUI?</a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#latestversion">Laatste versie ophalen</a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#scope">Gebied van deze gids</a>
+      </li>
+     </ol>
+    </li>
+    <li>
+     <a href="mkvmerge-gui.html#setup">Instellen van mkvmerge GUI</a>
+    </li>
+    <li>
+     <a href="mkvmerge-gui.html#muxing">Matroska&trade; bestanden maken</a>
+     <br>
+     <ol>
+      <li>
+       <a href="mkvmerge-gui.html#basics">Basis</a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#fileoptions">Opties voor invoer bestanden</a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#trackoptions">Opties voor elk spoor</a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#attachments">Bijlagen</a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#globaloptions">Globale opties</a>
+       <br>
+       <ol>
+        <li>
+         <a href="mkvmerge-gui.html#global_title">Bestand/segment titel</a>
+        </li>
+        <li>
+         <a href="mkvmerge-gui.html#global_split">Automatisch splitsen en bestand linken</a>
+        </li>
+        <li>
+         <a href="mkvmerge-gui.html#global_link">Handmatig bestand/segment linken </a>
+        </li>
+        <li>
+         <a href="mkvmerge-gui.html#global_chapters">Hoofdstukken</a>
+        </li>
+        <li>
+         <a href="mkvmerge-gui.html#global_tags">Globale markeringen</a>
+        </li>
+       </ol>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#doit">Het samen voeg proces starten</a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#saveload">Bewaren en laden van samenvoeg instellingen</a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#jobqueue">Wachtrij voor verschillende taken</a>
+      </li>
+     </ol>
+    </li>
+    <li>
+     <a href="mkvmerge-gui.html#chaptereditor">Het hoofdstuk bewerker</a>
+     <br>
+     <ol>
+      <li>
+       <a href="mkvmerge-gui.html#chapterconcept">Matroska&trade; 's hoofdstuk concept</a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#chapterexamples">Voorbeelden</a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#chapterformats">Ondersteunde hoofdstuk formaten door mkvmerge</a>
+       <br>
+       <ol>
+        <li>
+         <a href="mkvmerge-gui.html#cfsimple">Simpele/OGM stijl hoofdstuk bestanden</a>
+        </li>
+        <li>
+         <a href="mkvmerge-gui.html#cfxml">Uitgebreide XML stijl hoofdstuk bestanden </a>
+        </li>
+        <li>
+         <a href="mkvmerge-gui.html#cfkax">Hoofdstukken gevonden in Matroska&trade; bestanden</a>
+        </li>
+       </ol>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#creatingchapters">Maken van hoofdstuk bestanden</a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#editingchapters">Bewerken bestaande hoofdstukken</a>
+      </li>
+     </ol>
+    </li>
+    <li>
+     <a href="mkvmerge-gui.html#headereditor">De kop bewerker</a>
+     <br>
+     <ol>
+      <li>
+       <a href="mkvmerge-gui.html#he_addingremovingheaderfields">Verwijderen en toevoegen van kop velden</a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#he_analyzingthefile">Openen van bestaand bestand</a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#he_editingthefile">Bewerken kop velden</a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#he_validation">Valideren</a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#he_saving">Bestand opslaan</a>
+      </li>
+     </ol>
+    </li>
+   </ol>
+  </p>
+
+  <hr>
+
+  <a name="wxhh_introduction"></a>
+  <h2><a name="introduction">1. Introductie</a></h2>
+
+  <h3><a name="whatismatroska">1.1. Wat is Matroska&trade; ?</a></h3>
+
+  <p>(<i>Opmerking: Gewoon gekopieerd van www.matroska.org <a href="http://www.matroska.org/"target="_blank"></a>.</i>)</p>
+
+  <p><strong>Matroska&trade;</strong> heeft het doel uit te groeien tot de indelingsnorm voor Multimedia houders.
+Het werd afgeleid van het project MCF, maar onderscheidt zich aanzienlijk,
+ omdat het gebaseerd is op EBML (Extensible Binary Meta Language),
+ een binaire afgeleide van XML. EBML geeft het Matroska&trade; ontwikkel team
+ significante voordelen in termen van toekomstige indeling & uitbreidbaarheid,
+ zonder te breken met de bestandsondersteuning van de oude ontleders.</p>
+
+  <p>Als je nog meer informatie wilt hebben ga dan naar
+   <a href="http://www.matroska.org/"target="_blank">Matroska&trade;</a> 's thuis pagina.</p>
+
+  <h3><a name="whatismkvmerge">1.2. Wat is mkvmerge? Wat is mkvmerge GUI?</a></h3>
+
+  <p><i>mkvmerge</i> en <i>mkvmerge GUI</i> (of gewoon <i>mmg</i>) zijn twee
+   programma's gemaakt door <a href="mailto:moritz@bunkus.org">Moritz
+   Bunkus</a>.  Zij zijn een onderdeel van het <i>mkvtoolnix</i> pakket. <i>Mkvmerge</i>
+ kan een heel scala aan multimedia bestanden lezen en die inhoud
+ plaatsen in Matroska&trade; bestanden. Helaas is dit een commando regel programma (DOS),
+ en niet iedereen is even handig met de commando's op de DOS prompt. Dat is precies
+  waar <i>mkvmerge GUI</i> om de hoek komt kijken. Het is een grafische schil voor <i>mkvmerge</i> die de gebruiker
+ een intuïtieve maar krachtige mogelijkheid geeft naar <i>mkvmerge</i> commando's.</p>
+
+  <p>Beide programma's zijn beschikbaar voor zowel Windows als GNU/Linux en andere Unix achtige.
+ De programma's zijn uitgebracht onder de GPL voorwaarden, daarom
+is de broncode voor iedereen die geïnteresseerd is beschikbaar.</p>
+
+  <h3><a name="latestversion">1.3. De laatste versie ophalen</a></h3>
+
+  <p>Je kunt de laatste versie van mkvtoolnix altijd vinden op <i>mkvtoolnix</i>
+   <a href="http://www.bunkus.org/videotools/mkvtoolnix/"target="_blank">Moritz
+    Bunkus' website</a>. Linux/Unix gebruikers zullen waarschijnlijk de broncode
+ van <i>mkvtoolnix</i> downloaden en daarna zelf compileren.</p>
+
+  <h3><a name="scope">1.4. Gebied van deze gids</a></h3>
+
+  <p>Deze gids focust zich all&eacute;&eacute;n tot de "grafische schil" deel van dit hulpmiddel.
+ Alle commandoregel opties worden tot in detail uitgelegd <i>mkvmerge</i>'s <a href="http://www.bunkus.org/videotools/mkvtoolnix/doc/mkvextract.html" target="_blank">handleiding</a> html pagina.</p>
+
+  <hr>
+
+  <a name="wxhh_setup"></a>
+  <h2><a name="setup">2. Instellen van mkvmerge GUI</a></h2>
+
+  <p>(<i>Opmerking: Deze sectie bespreekt niet het compileren of installeren van
+ <i>mkvmerge</i>. <i>Mkvmerge</i>'s heeft haar eigen documentatie en README bestanden, die zijn bijgevoegd
+ in het mkvtoolnix pakket.</i>)</p>
+
+  <div align="center">
+   <p>
+    <img alt="Selecteren van mvkmerge.exe" title="Selecteren van mvkmerge.exe" src="images/selectmkvmergeexecutable.png">
+    <br>
+    <font size="-1">Plaatje 1: Gebruik deze knop om de locatie van
+     het <i>mkvmerge</i> programma op te geven.</font>
+   </p>
+  </div>
+
+  <p>Het enige dat <i>mmg</i> moet weten is, de locatie van het <i>mkvmerge</i> binaire/programma.
+ Onder normale omstandigheden wordt het automatisch gevonden.
+ Als dat niet het geval is, dan kan je hier selecteren waar het binaire/programma
+ zich bevind, kies <strong>Bestand</strong> vervolgens <strong>Opties</strong> en daarna de <i>Mkvmerge</i> tabblad.</p>
+
+  <hr>
+
+  <a name="wxhh_muxing"></a>
+  <h2><a name="muxing">3. Maken van Matroska&trade; bestanden</a></h2>
+
+  <h3><a name="basics">3.1. Basis</a></h3>
+
+  <p><i>Mkvmerge</i> maakt een strikt verschil tussen bestanden en sporen.
+Een invoer bestand bevat gewoonlijk &eacute;&eacute;n of meer sporen. <i>Mkvmerge</i> heeft
+ ten minste &eacute;&eacute;n invoer bestand en een Matroska&trade; bestandsnaam nodig.
+ Laatste wordt automatisch aangemaakt net voordat <i>Mkvmerge</i> start. Beginnen
+ met deze minimale opties, kan de gebruiker &eacute;&eacute;n of meer invoer bestanden toevoegen,
+ selecteren van specifieke/extra opties voor elk spoor, voeg
+<i>globale</i> opties toe, via het tabblad <strong>Globaal</strong> voor meer opties etc.</p>
+
+  <p>Typische basis stappen zijn:<br>
+   <ol>
+    <li>selecteer invoer <i>bestanden</i>,</li>
+    <li>stel de taal in voor de <i>sporen</i>,</li>
+    <li>stel de film <i>bestandstitel</i> in,</li>
+    <li>stel <i>uitvoer bestandsnaam</i> in, (uitvoer bestandsnaam (video) wordt automatisch ingesteld naar de invoer bestandsnaam) en</li>
+    <li><i>start</i> het samenvoeg (muxing) proces.</li>
+   </ol>
+  </p>
+
+  <div align="center">
+   <p>
+    <img alt="Toevoegen & verwijderen van bestanden" title="Toevoegen & verwijderen van bestanden" src="images/addremovefiles.png">
+    <br>
+    <font size="-1">Plaatje 2: Gebruik deze knop voor toevoegen & verwijderen van bestanden.</font>
+   </p>
+  </div>
+
+  <p>Wanneer <i>mmg</i> is opgestart, toont het de eerste en waarschijnlijk het belangrijkste tabblad:
+Het <strong>Invoer</strong> tabblad. Hier zie je vier verschillende elementen. Het meest hoogste is het invoer scherm
+waarin alle ingevoerde bestanden staan. Direct daaronder vind je de opties die tot het huidig
+geselecteerde invoer <i>bestand</i> behoort.</p>
+
+  <p>Plaatje 2 toont 5 knoppen aan de rechterzijde van het bovenste invoer scherm.
+ Deze kunnen worden gebruikt, om bestanden aan het invoerscherm toe te voegen
+ met <i>Toevoegen</i> of  <i>Bijvoegen</i> of <i>Extra delen</i> toe te voegen.
+ Geselecteerde bestanden te <i>Verwijderen</i> of met <i>Alles verwijderen</i></p>
+
+  <p>Er is een verschil tussen het <i>toevoegen</i> en het <i>bijvoegen</i> van
+ een bestand. Gewoonlijk worden alle sporen <i>toegevoegd</i> aan een bestand. Daardoor
+ wordt aan het uiteindelijke Matroska&trade; bestand, een bestand parallel toegevoegd.
+ Dit is gewoonlijk het geval, als je b.v. een video bestand hebt, &eacute;&eacute;n of meer geluidssporen
+ en &eacute;&eacute;n of meer ondertitel sporen. Zij bevatten allen materiaal, dat bij dezelfde tijd code
+ behoort en tegelijkertijd moeten worden afgespeeld.</p>
+
+  <p><i>Bijvoegen</i> van een bestand aan de anders kant, zal er voor zorgen
+ dat alle sporen van het tweede bestand worden <i>toegevoegd</i> aan een eerder
+ <i>toegevoegd</i> bestand. Op die manier, wordt de inhoud van het ene spoor direct na de ander afgespeeld (niet parallel maar in serie).
+ Je kunt all&eacute;&eacute;n sporen van hetzelfde type samenvoegen (video naar video sporen etc.),
+ hebben dezelfde codec (b.v. MP3 naar MP3 maar niet MP3 naar AC3)
+ en met dezelfde kwaliteit/parameters  (b.v. sample rate 48.0 KHz).</p>
+
+  <p>Je kunt het verschil zien, tussen een <i>toegevoegd</i> bestand en een <i>bijgevoegd</i> bestand
+ door naar de naam te kijken. <i>Bijgevoegde</i> bestanden en sporen starten allemaal met
+   &quot;<code>++&gt;</code>&quot;.</p>
+
+  <div align="center">
+   <p>
+    <img alt="Selecteren van specifieke sporen" title="Selecteren van specifieke sporen" src="images/trackselection.png">
+    <br>
+    <font size="-1">Plaatje 3: Twee aan en &eacute;&eacute;n uit gevinkt spoor.
+Het tweede spoor wordt niet gekopieerd naar het uitvoerbestand.</font>
+   </p>
+  </div>
+
+  <p>Zodra de gebruiker ten minste &eacute;&eacute;n <i>invoerbestand</i> heeft toegevoegd in
+ de bovenste keuzelijst, zal de tweede keuzelijst alle beschikbare sporen
+ tonen. Elk <i>spoor</i>, is standaard actief en zal worden samengevoegd in
+ het uiteindelijke bestand. Echter, dit kan je veranderen, door te klikken
+ op het vakje precies voor de naam van de spoor in de tweede keuzelijst.
+ Dit is weergegeven in plaatje 3.</p>
+
+  <p>Voor elk van deze sporen kan de gebruiker specifieke spoor opties selecteren met
+ de invoervelden en selectievakjes onder de spoor lijst. Deze opties zullen
+ beschreven worden in de volgende secties.</p>
+
+  <p>Aan de rechterkant van de spoor lijst scherm, zitten twee knoppen waarmee
+ je de controle hebt over de volgorde in het uitvoer bestand, door te drukken
+ op de <i>Omhoog</i> en <i>Omlaag</i> knop. Het huidig geselecteerde spoor, wordt verplaatst
+ conform de ingedrukte knop. Er zijn enige beperkingen m.b.t. heen en weer verplaatsen
+ van <i>Bijgevoegde</i> sporen (diegene die vooraf gegaan worden met &quot;<code>++&gt;</code>&quot;)
+ zoals een <i>bijgevoegd</i> spoor niet het eerste spoor mag zijn, enz.</p>
+
+  <h3><a name="fileoptions">3.2. Opties voor invoer bestanden</a></h3>
+
+  <p>Zodra de gebruiker een invoerbestand heeft toegevoegd en geselecteerd,
+ kan hij de opties instellen die van toepassing zullen zijn op dat specifieke bestand.
+ Op dit moment, heeft het programma drie opties, die zijn allen all&eacute;&eacute;n beschikbaar voor
+ Matroska&trade; bestanden: <code>G&eacute;&eacute;n hoofdstukken</code>, <code>G&eacute;&eacute;n bijlagen</code>
+ en <code>G&eacute;&eacute;n markeringen</code>. Deze opties vertelt <i>mkvmerge</i> geen enkele
+ hoofdstukken / bijlagen / markeringen van het huidige bronbestand te kopiëren.</p>
+
+  <p>Meer informatie over hoofdstukken kunnen worden gevonden in de sectie over
+ <a href="mkvmerge-gui.html#chaptereditor">Het hoofdstuk bewerker</a> in dit
+   document en in <i>mkvmerge</i>'s eigen documentatie.</p>
+
+  <h3><a name="trackoptions">3.3. Opties voor elk spoor</a></h3>
+
+  <p>Afhankelijk van het huidig geselecteerde type spoor (audio,
+ video, ondertitels) of zelfs afhankelijk van de inhoud van het spoor,
+ zullen slechts een deel van de specifieke spoor opties beschikbaar
+ zijn. Deze opties omvatten meer dan twee sub-pagina's. Er
+ zijn <em>Algemene spoor opties</em>, <em>Specifieke formaat
+ opties</em> en <em>Extra opties</em>.</p>
+
+  <div align="center">
+   <p>
+    <img alt="Typische opties voor een video spoor" title="Typische opties voor een video spoor" src="images/generaltrackoptions.png">
+    <br>
+    <font size="-1">Plaatje 4: Gemeenschappelijke opties voor alle soorten sporen</font>
+   </p>
+  </div>
+
+  <p><b>Opmerking:</b> Tenzij ter zijde geschoven door de gebruiker, zal <i>mkvmerge</i>
+ ofwel de instellingen kopiëren van het invoerbestand als de bron-formaat dergelijke
+ informatie ondersteunt, of het zal gebruik maken van gevoelige standaardwaarden.</p>
+
+  <p>De beschikbare algemene opties zijn:</p>
+
+  <ul>
+   <li><code>Spoor naam:</code> De gebruiker kan een naam instellen voor het huidige
+ spoor. Deze naam is een vrije-vorm regel Praktische voorbeelden zouden kunnen zijn
+ 'Regisseur commentaar' of 'Prachtig uitzicht op Amsterdam'. Opmerking: Dat deze
+ namen niet zijn bedoeld om de filmtitel te bevatten!</li>
+
+   <li><code>Taal:</code> De gebruiker kan de taal selecteren voor elk spoor
+ onafhankelijk van het type. Deze taal is gecodeerd in het ISO639-2 taal code.
+ De uitklaplijst bevat alle ISO639-2 codes, dus als gebruiker hoef je je geen zorgen
+ te maken over kiezen van een verkeerde taal code.</li>
+
+   <li><code>Standaard spoor markering:</code> Matroska&trade; kent een markering, die
+ de af speler vertelt dat een specifiek spoor de voorkeur heeft bij afspelen, tenzij,
+ de gebruiker een ander heeft spoor opgegeven. Natuurlijk, heeft elk spoor <i>type</i> zijn eigen
+ standaard spoor, b.v. het standaard geluidsspoor is de Engelse, en de
+ standaard ondertitel spoor is de Nederlandse. Als er geen spoor als
+ standaard spoor wordt ingesteld, dan zal <i>mkvmerge</i> de voorkeur geven aan elk eerste
+ spoor type dat het vindt als standaard spoor. Dit komt overeen met het gedrag van
+ verschillende mediaspelers.</li>
+
+   <li><code>Geforceerde spoor markering:</code> Matroska&trade; kent een markering, die
+ de af speler vertelt dat een specifiek spoor de voorkeur heeft bij afspelen, tenzij,
+ de gebruiker een ander heeft spoor opgegeven. Natuurlijk, heeft elk spoor <i>type</i> zijn eigen
+ standaard spoor, b.v. het standaard geluidsspoor is de Engelse, en de
+ standaard ondertitel spoor is de Nederlandse. Als er geen spoor als
+ standaard spoor wordt ingesteld, dan zal <i>mkvmerge</i> de voorkeur geven aan elk eerste
+ spoor type dat het vindt als standaard spoor. Dit komt overeen met het gedrag van
+ verschillende mediaspelers.</li>
+
+   <li><code>Markeringen:</code> Voor elk spoor kan je een XML markeringsbestand aanmaken.
+ Voor een volledige uitleg van alle markeringen verwijzen wij je naar het voorbeeld bestand
+ en de eigen documentatie van <a href="http://www.bunkus.org/videotools/mkvtoolnix/doc/mkvmerge.html" target="_blank"><i>mkvmerge</i>'s</a>. In waarschijnlijk
+ 99% van alle gevallen dat je deze optie wilt gebruiken en markeringen wil associëren met
+ een specifieke spoor. Is de markering optie op het tabblad <i>Globaal</i> waarschijnlijk niet
+ wat je nodig hebt.</li>
+
+   <li><code>Tijd codes:</code> Normaal zal <i>mkvmerge</i> voor elk beeld de
+ tijdcodes afleiden vanuit het bronbestand. Maar het kan ook tijdcodes lezen en
+ gebruiken uit een extern tekstbestand waarvan je de naam hier kunt opgeven.
+ Deze functie is een zeer geavanceerde functie. Bijna alle gebruikers moeten
+ deze vermelding leeg laten.</li>
+  </ul>
+
+  <div align="center">
+   <p>
+    <img alt="Typische opties voor een video spoor" title="Typische opties voor een video spoor" src="images/videotrackoptions.png">
+    <br>
+    <font size="-1">Plaatje 5: Typische opties voor een video spoor</font>
+   </p>
+  </div>
+
+  <p>Het specifieke formaat opties omvatten:</p>
+
+  <ul>
+   <li><code>Verwachtte verhouding:</code> Met deze optie, kan de gebruiker de beeldverhouding
+ instellen die moet worden gebruikt bij het afspelen. De standaardwaarde, is de verkregen
+ verhouding waarmee de film werd gecodeerd maar deze kan worden gewijzigd, b.v. voor anamorphotische
+ (systematische vertekening) coderingen. De grafische schil verwacht een indeling ofwel in een decimaal format
+ (b.v. '2.33') of een fractie (b.v. '16/9').
+    <br>
+ Een andere mogelijkheid is, de waarden voor de breedte en hoogte weergave handmatig in
+ te stellen. Dit kan handig zijn, wanneer je parameters wilt bijstellen naar een specifieke
+ resolutie/beeldverhouding. Als je een beeldverhouding opgeeft dan zal
+ <i>mkvmerge</i> het scherm dimensies berekenen aan de hand van
+ de grootte van het video spoor.
+<br>
+    Deze optie is all&eacute;&eacute;n beschikbaar voor video sporen.</li>
+
+   <li><code>FourCC:</code> Matroska&trade; slaat normaal de Four-CC niet op
+ welke vaak gebruikt wordt in andere inhoudsformaten ter identificatie van de gebruikte codec.
+ Matroska&trade; heeft haar eigen format, genaamd, <i>CodecID</i>, maar het heeft ook een AVI
+ compatibiliteits mode. In deze mode wordt de FourCC ook opgeslagen. Met deze optie
+ kan de FourCC geforceerd opgeslagen worden in een andere waarde. Echter, je kunt
+ het <i>CodecID</i> niet veranderen welke door <i>mkvmerge</i> gebruikt wordt.
+    <br>
+    Deze optie is all&eacute;&eacute;n beschikbaar voor video sporen.</li>
+
+   <li><code>Stereoscopisch:</code> Er is een technologie, die
+ pseudo driedimensionale beelden verstrekt door het afspelen van twee
+ video-sporen die tegelijkertijd zijn opgenomen vanuit een iets andere
+ positie. Elk oog, ziet &eacute;&eacute;n van die sporen dit noemen wij <i>stereo mode</i>.
+ Meeste gebruikers dienen dit leeg te laten.
+    <br>
+    Deze optie is alleen beschikbaar voor video sporen.</li>
+
+   <li><code>Beelden per sec (FPS):</code> Het aantal van <i>beelden per seconde (fps)</i> voor
+ AVC/h.264 video sporen. Wanneer je een AVC/h.264 elementaire hoofdstroom toevoegt
+ dan zal aan <i>mkvmerge</i> vertelt moeten worden, met hoeveel beelden per seconde
+ deze video was opgenomen, omdat dat stukje informatie in de hoofdstroom niet
+ beschikbaar is. Als je niets opgeeft, dan zal  <i>mkvmerge</i> de standaard zetten naar 25.
+ Je kunt dit ingeven met decimale waarden (b.v. 29.97) of met fracties (b.v. 30000/1001).
+    <br>
+ Deze optie is alleen beschikbaar voor AVC/h.264 video sporen gelezen van
+ AVC/h.264 elementaire sporen.</li>
+
+  </ul>
+
+  <div align="center">
+   <p>
+    <img alt="Typische opties voor een audio spoor" title=" Typische opties voor een audio spoor" src="images/audiotrackoptions.png">
+    <br>
+    <font size="-1">Plaatje 6: Typische opties voor een audio spoor</font>
+   </p>
+  </div>
+
+  <ul>
+   <li><code>Vertraging (in ms):</code> In sommige gevallen zijn audio en video niet
+ correct gesynchroniseerd. Met deze optie kan de gebruiker de tijd codes
+ van elk spoor verschuiven met een opgegeven waarde, zowel positief als negatief.
+ Het aantal dat je hier ingeeft, is het aantal in milliseconden
+ die worden toegevoegd aan elke tijd code na de <code>Oprekken tot</code>
+ waarde die is toegevoegd (zie hieronder).
+    <br>
+ Deze optie is beschikbaar voor alle spoor typen. Echter, tijd code
+ aanpassingen werken het best bij video en ondertitel sporen gedurende het afspelen.</li>
+
+   <li><code>Oprekken tot:</code> In sommige gevallen zullen de video en audio sporen
+ langzaam aan verschuiven gedurende het afspelen. Dit kan opgelost worden, door een factor
+ waarmee tijd codes opgerekt dienen te worden op te geven aan <i>mkvmerge</i>.
+ Is er niets opgegeven, dan wordt '1.0' aangenomen, welke de tijd codes niet veranderen.
+    <br>
+    De waarde die je ingeeft kan zijn een decimale waarde of een
+    fractie, b.v. &quot;1/2&quot;. De factor wordt toegepast voor de
+ <code>Vertraging</code> is toegevoegd (zie hierboven).
+    <br>
+ Deze optie is beschikbaar voor alle spoor typen. Echter, tijd code
+ aanpassingen werken het best bij video en ondertitel sporen gedurende het afspelen.</li>
+
+   <li><code>Karakter set:</code> Sommige tekst ondertitel formaten bewaren het
+ gebruikte karakter set waarmee ze gemaakt werden niet. Dit is belangrijk, omdat tekst
+ ondertitels automatisch worden geconverteerd naar het UTF-8 karakter set tijdens het
+ samenvoegen. <i>mkvmerge</i> zal normaal gesproken aannemen, dat de systeem huidige
+ karakter set dezelfde is waarmee de ondertitel tekst bestand mee geschreven was. Maar
+ in het geval dat dit niet het geval is, kan de gebruiker het juiste karakter set corrigeren.
+    <br>
+    Deze optie is all&eacute;&eacute;n beschikbaar voor ondertitel sporen.</li>
+  </ul>
+
+<div align="center">
+   <p>
+    <img alt="Typische opties voor tekst ondertitel sporen" title="Typische opties voor tekst ondertitel sporen" src="images/textsubtitlestrackoptions.png">
+    <br>
+    <font size="-1">Plaatje 7: Typische opties voor tekst ondertitel sporen</font>
+   </p>
+  </div>
+
+  <ul>
+   <li><code>AAC is SBR/HE-AAC/AAC+:</code> De nieuwe technologie genaamd 'high
+ efficiency AAC' heeft enkele nadelen, wanneer het wordt opgeslagen in
+ <code>.AAC</code> bestanden: Het is niet mogelijk het HE-AAC deel voor deze
+ bestanden te detecteren. Daarom moet de gebruiker deze optie handmatig te
+ controleren, indien van toepassing. Houd er rekening mee dat dit probleem niet
+bestaat voor HE-AAC opgeslagen in <code>.MP4</code> bestanden.</li>
+  </ul>
+
+  <div align="center">
+   <p>
+    <img alt="Typische opties voor Cues" title="Typische opties voor Cues" src="images/extraoptions.png">
+    <br>
+    <font size="-1">Plaatje 8: Typische opties voor Cues</font>
+   </p>
+  </div>
+
+  <ul>
+   <li><code>Cues:</code> De <i>cues</i> zijn voor Matroska&trade; wat de index is
+ voor AVI bestanden. Zij bevatten linken naar sleutelbeelden. Gewoonlijk dien
+ je deze optie op zijn 'standaard' waarde te laten staan. <i>Mkvmerge</i> zal automatisch
+ de beste methode kiezen voor een bepaald type spoor. Een volledige uitleg over
+ sporen kan gevonden worden in <i>mkvmerge</i>'s documentatie.</li>
+
+   <li><code>Compressie:</code> Matroska&trade; beschikt over een krachtig comprimeer
+ systeem voor sporen met een verliesvrije compressie algoritmen. Deze
+ compressie kan op elk spoor worden toegepast, maar sommige af spelers ondersteunen
+ dit alleen voor VobSub sporen. Hier is het meest bruikbaar. Andere
+ sporen, speciaal audio en video sporen, zijn al gecomprimeerd dus...
+ die extra compressie, zal geen extra resultaat hebben. Voor VobSubs kan
+ je een extra resultaat behalen van ongeveer 30% als je zlib compressie aanzet.
+ dat is waarom dat standaard is voor VobSub sporen.
+    <br>
+ Je zou deze instelling op <i>standaard</i> moeten laten staan.</li>
+   <li><code>Gebruiker gedefinieerde opties:</code>
+    2
+  </li>
+  </ul>
+
+  <h3><a name="attachments">3.4. bijlagen</a></h3>
+
+  <p>Matroska&trade; bestanden kunnen ook andere bestanden bevatten. Dit werkt
+ als basis, precies hetzelfde als je favoriete email programma. De achterliggende
+ gedachte is, extra informatie te verschaffen over het bestanden. Sommige voorbeelden
+ zouden kunnen zijn, CD/DVD/Blu-ray hoezen van een geripte CD/DVD/Blu-ray, extra achtergrond
+ informatie in tekst over de film, of zelfs een paar gecomprimeerde lettertypen voor de ondertitels.</p>
+
+  <p>Elke bijlage heeft twee dingen nodig: Bestandsnaam (lijkt mij duidelijk) en het MIME
+ type dat geassocieerd zou moeten worden met het bestand. Het gebruik is gemakkelijk en in overeenstemming met
+ het toevoegen van bestanden via de invoer <i>input</i> tab.</p>
+
+  <div align="center">
+   <p>
+    <img alt="Toevoegen en verwijderen bijlagen" title="Toevoegen en verwijderen bijlagen" src="images/addingremovingattachments.png">
+    <br>
+    <font size="-1">Plaatje 9: Toevoegen en verwijderen van bijlagen met deze knoppen.</font>
+   </p>
+  </div>
+
+  <p>Op het tweede tabblad van de <i>Bijlagen</i> tabblad, kan je een bestand
+ met de <i>Toevoegen</i> knop en het verwijderen van de geselecteerde bijlage met de
+ <i>Verwijderen</i> knop. Wanneer eenmaal een bijlage is geselecteerd dan worden de
+ overige opties in dit tabblad beschikbaar. Voor elke bijlage moet je het MIME type
+ selecteren, maar de beschrijving is optioneel. Maar het is een goed idee om
+ altijd een beschrijving op te geven. Dit maakt het voor anderen makkelijker om te
+ achterhalen wat jij hebt toegevoegd aan dit Matroska&trade; bestand.</p>
+
+  <div align="center">
+   <p>
+    <img alt="Typische opties voor een bijlage" title="Typische opties voor een bijlage" src="images/attachmentoptions.png">
+    <br>
+    <font size="-1">Plaatje 10: Typische opties voor een bijlage</font>
+   </p>
+  </div>
+
+ <p>De laatste optie, <code>Bijlage stijl:</code> wordt alleen berekend,
+ wanneer u ook de uitvoer splitst in verschillende bestanden. (Splitsen in het algemeen,
+ wordt uitgelegd in de volgende sectie.) Als de optie <code>Voor alle
+ bestanden</code> is geselecteerd, dan wordt het huidige bestand gekoppeld aan alle
+ aangemaakte uitvoer bestanden. Als de optie <code>Alleen de eerste</code> is
+ geselecteerd, dan wordt de bijlage all&eacute;&eacute;n aan het eerste aangemaakte uitvoer bestand
+ gekoppeld</p>
+
+  <h3><a name="globaloptions">3.5. Opties Globaal</a></h3>
+
+  <p>Het derde tabblad, <i>Globaal</i>, staat bol van de opties die van  toepassing
+ zijn op het volledige bestand en niet alleen voor &eacute;&eacute;n of meer sporen.</p>
+
+  <h4><a name="global_title">3.5.1. Bestand/segment titel</a></h4>
+
+  <div align="center">
+   <p>
+    <img alt="Selecteren van een film titel" title="Selecteren van een film titel" src="images/movietitle.png">
+    <br>
+    <font size="-1">Plaatje 11: Een titel selecteren voor de film</font>
+   </p>
+  </div>
+
+  <p><code>Bestand/segment titel:</code> Deze titel wordt gebruikt voor de eigenlijke
+ film titel, bv. 'The butterfly effect'.</p>
+
+  <h4><a name="global_split">3.5.2. Automatisch splitsen en bestand linken</a></h4>
+
+  <p>De <code>Splitsen</code> sectie beschrijft, hoe een uitvoer
+ bestand in meerdere kleinere bestanden gesplitst wordt. Is splitsen
+ niet aangezet, wordt er &eacute;&eacute;n groot bestand aangemaakt.
+ Als splitsen is aangezet, dan kan je aan <i>mkvmerge</i> opgeven,
+ wanneer er gestart moet worden met een nieuw bestand na een bepaalde
+ grootte of tijd. De geaccepteerde formaten zijn:
+   <br>
+   <ul>
+    <li>Voor de grootte: Een aantal optioneel gevolgd door de letter 'K', 'M'
+ of 'G' aangevende in kilobytes (1024 bytes), megabytes (1024 * 1024
+ bytes) of gigabytes (1024 * 1024 * 1024 bytes). Bijvoorbeeld: '700M'
+ of '100000K'.</li>
+
+    <li>Voor de tijd: Is de format of <code>HH:MM:SS.nnn</code>
+ tot aan negen cijfers (nanoseconde precisie) of een getal
+ gevolgd door de letter 's' daarmee aangevende het aantal seconden.
+ Verschillende tijd codes kunnen worden ingegeven gescheiden door een
+ komma.<br>
+
+ Houd er rekening mee, dat de tijdcodes verwijzen naar de ongesplitste uitvoerstroom.
+ Invoeren van een waarde '00:10:00,00:20:00' zal daarom resulteren in
+ drie bestanden, waarvan de eerste twee ongeveer 10 minuten lang zijn.
+ Het derde deel, zal de rest bevatten van de uitvoerstroom. Dit is onafhankelijk
+ van de <i>Bestand linken</i> mogelijkheid.<br>
+
+     Voorbeelden: '01:20:00' (splitst na 1 uur, 20 minuten) of
+     '1800s' (splitst na 1800 seconden = 30 minuten).</li>
+   </ul>
+  </p>
+
+  <div align="center">
+   <p>
+    <img alt="Typische opties voor splitsen" title="Typische opties voor splitsen" src="images/splitting.png">
+    <br>
+    <font size="-1">Plaatje 12: Typische opties voor splitsen. Twee bestanden aanmaken
+     welke ongeveer 700meg groot zijn.</font>
+   </p>
+  </div>
+
+  <p><code>Niet linken:</code> Deze optie regelt hoe <i>mkvmerge</i> het
+ splitsen zal afhandelen. Een kleine uitleg van deze mogelijkheid:</p>
+
+  <p>Matroska&trade; ondersteunt bestand linken, wat simpelweg betekend, dat een bepaald
+ bestand de voorganger of opvolger is van het huidige bestand. Om precies te zijn,
+ het zijn niet echt de bestanden die gelinkt zijn, maar de Matroska&trade; segmenten.
+ En de meeste bestanden bevatten alleen &eacute;&eacute;n Matroska&trade; segment de volgende uitleg gebruikt
+ de term 'bestand linken' hoewel 'segment linken' meer op zijn plaats zou zijn.</p>
+
+  <p>Elk segment wordt geïdentificeerd door een uniek 128 bit lang segment UID.
+ Dit UID wordt automatisch gegenereerd door <i>mkvmerge</i>. Het linken wordt
+ primair gedaan via het zetten van het segment UID's van het volgende/vorige
+ bestand naar het segment kop informatie <i>Mkvinfo</i> print deze UID's
+ als het hen vindt.</p>
+
+  <p>Als een bestand wordt gesplitst in meerdere kleinere bestanden en linken wordt
+ gebruikt, dan zullen de tijd codes niet opnieuw starten op 0 maar doorgaan op daar
+ waar het vorige bestand eindigde. Op deze manier zal absolute de tijd code behouden
+ blijven, zelfs wanneer het vorige bestand niet aanwezig/beschikbaar is (b.v. bij
+ <i>streaming</i>). Als er g&eacute;&eacute;n linken is gebruikt, dan zouden de tijd codes moeten
+ starten op 0 voor elk bestand. Standaard gebruikt <i>mkvmerge</i> bestand linken
+ niet, omdat de meeste af spelers nog steeds gelinkte bestande niet juist behandelen.
+ Als je wilt kan je dit aanzetten, door <i>Bestanden linken</i> af te vinken</p>
+
+  <h4><a name="global_link">3.5.3. Handmatig bestand/segment linken</a></h4>
+
+  <p>Ongeacht of het splitsen actief is of niet, de gebruiker kan <i>mkvmerge</i>
+ vertellen het geproduceerde bestand te linken naar een specifiek UID's.
+ Dit kan worden gedaan, door een geldig segment UID in de twee invoervelden,
+ <code>Vorig segment UID</code> en <code>Volgend segment UID</code>. Deze opties
+ accepteren een segment UID in het formaat dat <i>mkvinfo</i> uitvoert: 16 hexadecimale
+ nummers tussen 0x00 en 0xff voorgevoegd met 0x elk en gescheiden met een spatie, b.v.
+ <code>0x41 0xda 0x73 0x66 0xd9 0xcf 0xb2 0x1e 0xae 0x78 0xeb 0xb4 0x5e 0xca 0xb3 0x93</code>.
+ Als alternatief kan een kortere vorm worden gebruikt: 16 hexadecimale nummers tussen 0x00 en
+ 0xff zonder de <i>0x</i> voorvoegsel en zonder spaties, b.v. <code>41da7366d9cfb21eae78ebb45ecab393</code>.</p>
+
+  <p>Als splitsen wordt gebruikt, dan is het eerste bestand gelinkt naar het
+ UID opgegeven in de <code>Vorige segment UID</code> invoer veld en het
+ laatste bestand is gelinkt naar UID opgegeven in de <code>Volgende segment
+ UID</code> invoer veld. Als splitsen niet is gebruikt, dan zal &eacute;&eacute;n uitvoer
+ bestand worden gelinkt naar beide UID's.</p>
+
+  <h4><a name="global_chapters">3.5.4. Hoofdstukken</a></h4>
+
+  <p>Met de <i>Bladeren</i> knop kan je de hoofdstukken selecteren die
+ toegevoegd moet worden naar het uitvoerbestand. Een volledige uitleg van
+ alle aspecten over hoofdstukken kunnen gevonden worden in het <a href="mkvmerge-gui.html#chaptereditor">
+ Het hoofdstuk bewerker</a> sectie.</p>
+
+  <h4><a name="global_tags">3.5.5. Globale markeringen</a></h4>
+
+  <p>In tegenstelling, tot de markeringen die je voor elk spoor kunt selecteren
+ op het <i>Invoer</i> tabblad, moeten de markeringen die hier worden geselecteerd een
+ spoor UID bevatten. Deze markeringen worden niet automatisch toegevoegd aan enig
+ spoor. In 99% van alle gevallen is die NIET de optie die je wilt gebruiken!</p>
+
+  <p>Een volledige uitleg, kan gevonden worden in mkvmerge's documentatie.</p>
+
+  <h3><a name="doit">3.6. Het samen voeg proces starten</a></h3>
+
+  <p>Wanneer eenmaal alles is ingesteld, kan het samenvoeg proces gestart worden.
+ Het laatste wat je nog moet doen is, aangeven waar naar toe samen te voegen. Met de
+ <code>Bladeren</code> knop kan je het uitvoer bestand selecteren. Nadat dit gedaan is,
+ druk op de <code>Start samenvoegen</code> knop of selecteer in het menu <i>Samenvoegen</i>
+ de functie <code>Start samenvoegen(start mkvmerge CTR-R)</code>.</p>
+
+  <p>Als alles correct is ingesteld zal <i>mmg</i> het samenvoeg scherm tonen.
+ De voortgang die bovenaan wordt getoond, is een algemene beschrijving van waar
+<i>mkvmerge</i> op het moment mee bezig is.</p>
+
+  <div align="center">
+   <p>
+    <img alt="Het samenvoeg scherm" title="Het samenvoeg scherm" src="images/muxingwindow.png">
+    <br>
+    <font size="-1">Plaatje 13: Het samenvoeg scherm</font>
+   </p>
+  </div>
+
+  <p><i>Mkvmerge</i>, kent drie verschillende <i>Prioriteitsniveaus</i> voor haar berichten:
+ Status rapporten, waarschuwingen en fouten. Alle statusrapport berichten worden
+ weergegeven in het bovenste venster. Deze omvatten alle tegengekomen spoortypen
+ en andere interessante dingen.</p>
+
+  <p>Waarschuwingen worden getoond in het middelste scherm. <i>Mkvmerge</i>, zal niet
+ afbreken als het een waarschuwing afgeeft maar het kan het samen voegen stoppen voor
+ het spoor waarvoor de waarschuwing is afgegeven. Je moet nauwkeurig aandacht besteden aan
+ alle waarschuwingen.</p>
+
+  <p>Fouten worden getoond in het onderste scherm. Fouten zijn altijd fataal, en
+ <i>mkvmerge</i> zal direct stoppen nadat het een foutbericht afgeeft.
+ Dergelijke berichten zouden kunnen zijn, dat de harde schijf vol is of dat het
+ bronbestand beschadigd is en verder niet uitgevoerd kan worden.</p>
+
+  <p>De knop <code>Afbreken</code> geeft aan <i>mkvmerge</i> de opdracht te
+ stoppen met het samenvoeg proces. Tenzij <i>mkvmerge</i> vastzit in een eindeloze
+ lus zal het snel stoppen nadat je de knop hebt ingedrukt. Met <code>Bewaar log</code>
+ kan je de volledige uitvoer van mkvmerge opslaan in een tekstbestand voor verdere
+ bestudering. Of in het geval dat je tegen een bug aanloopt en mij wat meer
+ informatie wilt sturen.</p>
+
+  <h3><a name="saveload">3.7. Opslaan en bewaren samenvoeg instellingen</a></h3>
+
+  <p>Al je noeste werk om alles in te stellen, hoeft niet verloren te zijn gegaan
+ wanneer je het programma verlaat. Je kunt al je samenvoeg instellingen opslaan in
+ een tekst bestand met de <code>Bewaar instellingen</code> optie in het menu
+ <code>Bestand</code> en ze later herstellen met de <code>Laad instellingen</code> optie.
+ De standaard extensie is <code>.mmg</code> en wordt gewoonlijk niet door andere
+ progamma's gebruikt. Je kunt deze extensie ook associëren met <i>mmg</i>, zodat de
+ instellingen automatisch geladen worden wanneer je een dergelijk instellingen
+ bestand oproept.</p>
+
+  <h3><a name="jobqueue">3.8. Verschillende taken in een wachtrij plaatsen</a></h3>
+
+  <p>In het geval dat je meerdere bestanden wilt samenvoegen, dan hoef je niet het eerste
+ bestand te prepareren, wachten totdat het klaar is met samenvoegen en dan het volgende bestand
+ prepareren. <i>Mkvmerge GUI</i> heeft een taak manager waarmee je volledige taken in een
+ wachtrij kan plaatsen. Ze &eacute;&eacute;n voor &eacute;&eacute;n
+ uitvoeren voor jouw gemak. De basis stappen voor de taak manager zijn:</p>
+
+  <p>
+   <ol>
+    <li>Voeg alle bestanden toe en stel alle opties in, geef de uitvoer bestandsnaam in.</li>
+    <li>Druk op de knop <code>Voeg toe aan taak wachtrij</code> en selecteer een titel waarnaar
+ deze taak verwijst.</li>
+    <li>Herhaal dit zoveel als je wilt.</li>
+    <li>Breng het taak manager scherm naar voren via <i>menu</i> kies <code>Samenvoegen</code>
+ en kies <code>Beheer taken</code>.</li>
+    <li>Druk op de <code>Start</code> knop.</li>
+    <li>Haal iets te drinken, of ga winkelen, een gesprek voeren o.i.d. ;))</li>
+   </ol>
+  </p>
+
+  <div align="center">
+   <p>
+    <img alt="Taak wachtrij dialoog venster" title="Taak wacht rij dialoog venster" src="images/jobmanagerprogress.png">
+    <img alt="Taak wachtrij dialoog venster &eacute;&eacute;n taak klaar" title="Taak wacht rij dialoog venster &eacute;&eacute;n taak klaar" src="images/jobmanager_done.png"><br>
+    <font size="-1">Plaatje 14: Taak wachtrij dialoog <i>&eacute;&eacute;n in uitvoerring (tijd in berekening)</i></font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <font size="-1">Plaatje 15: Taak wachtrij dialoog <i>&eacute;&eacute;n taak voltooid</i></font>
+   </p>
+  </div>
+
+  <div align="center">
+   <p>
+    <img alt="Taak rij beheer" title="Taak rij beheer" src="images/jobmanager.png">
+    <br>
+    <font size="-1">Plaatje 16: Taak rij beheer dialoog &eacute;&eacute;n klaar &eacute;&eacute;n wachtend</font>
+   </p>
+  </div>
+
+  <p>Elke taak heeft zes attributen: Een ID welke automatisch wordt gekozen door
+   <i>mkvmerge GUI</i>; zijn status (<code>Wachtend</code> het is nog niet
+ samengevoegd, <code>Klaar</code> samenvoegen succesvol voltooid,
+ <code>Klaar met waarschuwing(en)</code> het samenvoegen is succesvol voltooid maar
+ er waren waarschuwing(en), <code>Mislukt</code> het samenvoegen is mislukt); de
+ naam die je eerder hebt ingegeven, de datum en tijd dat de taak werd toegevoegd
+ aan de taak wachtrij, de datum en tijd dat het samenvoeg proces werd
+ gestart voor deze taak, de datum en tijd wanneer het samenvoeg proces werd voltooid.</p>
+
+  <p>De algemene knoppen vind je aan de onderzijde. De <code>Start</code>
+ knop zal het samen voegen starten van alle geselecteerde taken waarvan de taak status
+ <code>Wachtend</code> is. De knop <code>Start geselecteerde</code> zal het samen voegen
+ starten van all&eacute;&eacute;n de geselecteerde taken onafhankelijk van hun status.</p>
+
+  <p>Met de knoppen aan de rechterkant kan je alle taken manipuleren. De knoppen
+ <code>Omhoog</code> en <code>Omlaag</code> verplaatst de geselecteerde taken
+ omhoog of omlaag in de lijst. De knop <code>Activeren</code> stelt de taak status
+ in naar <code>Wachtend</code> zodat ze gestart zullen worden nadat er op de knop
+ <code>Start</code> is gedrukt. De knop <code>Deactiveren</code> zal de status
+ op <code>Klaar</code> zetten.</p>
+
+  <p>Gedurende het samenvoegen, zal <i>mkvmerge</i>'s uitvoer niet worden getoond
+ maar opgeslagen worden. Als je de taak uitvoer wilt zien, dan moet je op de knop
+<code>Toon log</code> drukken. Dit is handig, indien er een taak werd voltooid met een
+ waarschuwing of indien het volledig mislukte.</p>
+
+  <hr>
+
+  <a name="wxhh_chaptereditor"></a>
+  <h2><a name="chaptereditor">4. Het hoofdstuk bewerker</a></h2>
+
+  <p>E&eacute;n van de nieuwe mogelijkheden van <i>mmg</i> is een volledige uitgeruste
+ hoofdstuk bewerker. Het kan tekst gebaseerde hoofdstuk bestanden lezen, hoofdstukken importeren
+ van bestaande Matroska&trade; bestanden, in tekst geschreven hoofdstuk bestanden kunnen geselecteerd
+ worden op de <i>Globale</i> tabblad en de hoofdstukken direct wegschrijven naar een bestaand
+ Matroska&trade; bestand.</p>
+
+  <h3><a name="chapterconcept">4.1. Het Matroska&trade; 's hoofdstuk concept</a></h3>
+
+  <p>In tegenstelling tot vele andere systemen ondersteunt Matroska&trade; <i>geneste</i>
+ hoofdstukken. Dit houd eigenlijk in, dat je sub hoofdstukken kan toevoegen aan hoofdstukken.</p>
+
+  <p>Een hoofdstuk eenheid in Matroska&trade; bestaat uit tenminste vier items: Het
+ UID van de spo(o)r(en) dit geldt voor het hoofdstuk titel / naam, de start tijd
+ en de geassocieerde taal code. Extra elementen zijn optioneel en bevatten het
+ eind tijd, meer taal codes en land codes. Meestal heeft de gebruiker all&eacute;&eacute;n
+ maar de verplichte elementen nodig. Hiervan, kan hij alleen de naam, de starttijd
+ en de taal code specificeren. <i>Mkvmerge</i> zal dan automatisch alle hoofdstukken
+ toewijzen aan het volledige bestand.</p>
+
+  <h3><a name="chapterexamples">4.2. Voorbeelden</a></h3>
+
+  <p>Het eerste voorbeeld is een makkelijke. De desbetreffende film bevat vier
+ delen: De intro aan het begin, eerste bedrijf, het tweede bedrijf,
+ en de aftiteling. Opmerking, eindtijdcodes zijn optioneel.</p>
+
+  <p><code>Intro (vanaf 00:00:00, taal Nederlands)
+    <br>
+    Bedrijf 1 (vanaf 00:01:00, taal Engels)
+    <br>
+    Bedrijf 2 (vanaf 00:05:30, taal Engels)
+    <br>
+    aftiteling (vanaf 00:12:20 tot 00;12:55, taal Engels)</code></p>
+
+  <p>Een meer complex voorbeeld inclusief een sub hoofdstuk(ken). Laten we Ludwig
+ van Beethovens opera Fidelio nemen. Kortheidshalve, voeg ik alleen met de eerste
+ drie delen toe van de twee bedrijven.</p>
+
+  <p>Het eerste bedrijf bevat:
+   <ol>
+    <li>Intro (6:24 lang),</li>
+    <li>Aria: 'Jetzt, Sch&auml;tzchen, jetzt sind wir allein' (4:46
+     lang) en</li>
+    <li>Dialoog: 'Armer Jaquino' (0:10 lang).</li>
+   </ol>
+   Het tweede bedrijf bevat:
+   <ol>
+    <li>Intro en Aria: 'Gott! welch Dunkel hier!' (10:46
+     lang),</li>
+    <li>Melodrama en Duet: 'Wie kalt ist es' (5:21 lang) en</li>
+    <li>Dialoog: 'Er erwacht!' (0:59 lang).</li>
+   </ol>
+  </p>
+
+  <p>Het eerste bedrijf, welke ons eerste hoofdstuk zal zijn, heeft een gecombineerde lengte
+ van 11:20. Ons tweede bedrijf heeft een lengte van 17:06. Deze hoofdstukken zien er
+ ongeveer als volgt uit:</p>
+
+  <p><code>Eerste bedrijf (van 00:00:00 tot 00:11:20, taal Duits,
+ land Duitsland)
+    <br>
+    &nbsp;&nbsp;&nbsp; Intro (van 00:00:00 tot 00:06:24, taal
+ Duits, land Duitsland)
+    <br>
+    &nbsp;&nbsp;&nbsp; Aria: 'Jetzt, Sch&auml;tzchen, jetzt sind wir allein'
+    (van 00:06:24 tot 00:11:10, taal Nederlands, land Duitsland)<br>
+    &nbsp;&nbsp;&nbsp; Dialoog: 'Armer Jaquino' (van 00:11:10 tot 00:11:20,
+    taal Duits, land Duitsland)
+    <br>
+
+    Tweede bedrijf (van 00:11:20 tot 00:28:26, taal Duits,
+    land Duitsland)
+    <br>
+    &nbsp;&nbsp;&nbsp; Intro en Aria: 'Gott! welch Dunkel hier!'
+    (van 00:11:20 tot 00:22:06, taal Duits, land Duitsland)
+    <br>
+    &nbsp;&nbsp;&nbsp; Melodrama en Duet: 'Wie kalt ist es' (van 00:22:06
+    tot 00:27:27, taal Duits, land Duitsland)
+    <br>
+    &nbsp;&nbsp;&nbsp; Dialoog: 'Er erwacht!' (van 00:27:27 tot 00:28:26,
+    taal Duits, land Duitsland)
+   </code>
+  </p>
+
+  <h3><a name="chapterformats">4.3. De door mkvmerge ondersteunde hoofdstuk formaten</a></h3>
+
+  <p><i>Mkvmerge</i> en <i>mmg</i>'s ondersteunen beide verschillende
+ hoofdstuk formaten voor hoofdstukken.</p>
+
+  <h4><a name="cfsimple">4.3.1. Simpele/OGM hoofdstuk stijl bestanden</a></h4>
+
+  <p>E&eacute;n meest simpele formats is de format dat gebruikt wordt in OGM bestanden. Het is een
+ tekst gebaseerd format. Elk hoofdstuk deel bevat twee regels, de eerste
+ bevat de start tijd, en het tweede de hoofdstuk naam. Alle regels zijn
+ genummerd.</p>
+
+  <p>Het eerste voorbeeld van hierboven kan worden uitgedrukt in dit format:<br>
+   <code>CHAPTER01=00:00:00.000<br>
+    CHAPTER01NAME=Intro<br>
+    CHAPTER02=00:01:00.000<br>
+    CHAPTER02NAME=Bedrijf 1<br>
+    CHAPTER03=00:05:30.000<br>
+    CHAPTER03NAME=Bedrijf 2<br>
+    CHAPTER04=00:12:20.000<br>
+    CHAPTER04NAME=Aftiteling
+   </code>
+  </p>
+
+  <p>Het tweede voorbeeld kan niet worden uitgedrukt in dit formaat,
+ omdat het geen taalspecificaties noch eind tijden of geneste hoofdstukken
+ ondersteunt. Het voordeel is, dat dergelijke bestanden erg eenvoudig te maken
+ zijn, en er zijn verschillende hulpmiddelen beschikbaar voor zowel Windows
+ als Unix / Linux die dergelijke bestanden direct vanaf Dvd's kunnen maken.</p>
+
+ <p>Door de beperkingen van <i>mmg</i> kan het g&eacute;&eacute;n
+ hoofdstukken uitvoeren in dit format.</p>
+
+  <h4><a name="cfxml">4.3.2. Volledig uitgeruste XML stijl hoofdstuk bestanden</a></h4>
+
+  <p>Ik heb een XML gebaseerd hoofdstuk formaat gemaakt, dat overeenkomt met het systeem
+ waarvan Matroska&trade; gebruik maakt. Met dit format, heb je volledige controle over
+ alle mogelijkheden. Ik zal de format hier niet in detail beschrijven. Neem eens een
+ kijkje bij de XML hoofdstuk voorbeeld bestanden die mee kwamen met <i>mkvtoolnix</i>.</p>
+
+  <h4><a name="cfkax">4.3.3. Hoofdstukken gevonden in Matroska&trade; bestanden</a></h4>
+
+  <p>Het hoofdstuk bewerker kan hoofdstukken direct inlezen van Matroska&trade; bestanden.  Deze
+ kunnen worden geschreven naar XML hoofdstuk bestanden en terug naar hetzelfde  Matroska&trade;
+ bestand of een ander Matroska&trade; bestand. Alle mogelijkheden worden ondersteund.</p>
+
+  <h3><a name="creatingchapters">4.4. Maken van hoofdstuk bestanden</a></h3>
+
+  <p>Het hoofdstuk bewerker bestaat uit drie delen: Het boomstructuur aanzicht van alle
+ hoofdstukken, de drie knoppen om hoofdstukken toe te voegen of te verwijderen.
+ Twee invoervelden die worden gebruikt voor de instellingen van het hoofdstuk delen.
+ Een knop voor <i>Bijwerken tijd codes</i> is voor het wijzigen van de <strong>alle</strong>
+ tijd codes waarvan, <i>mmg</i> automatisch uitlegt wat het kan doen.</p>
+
+  <div align="center">
+   <p>
+    <img alt="De hoofdstuk bewerker" title="De hoofdstuk bewerker" src="images/chaptereditor.png">
+    <br>
+    <font size="-1">Plaatje 17: De hoofdstuk bewerker toont het voorbeeld van hierboven</font>
+   </p>
+  </div>
+
+  <p>In Matroska&trade; bestanden worden hoofdstukken gedefinieerd met een start en
+ eind tijd en een naam met bijbehorende taal. Je kunt verschillende namen hebben
+ voor &eacute;&eacute;n hoofdstuk en elk daarvan kan gekoppeld worden aan een andere taal. Je
+ kunt ook een eind tijd ingeven maar dat is niet verplicht.</p>
+
+  <p>Een nieuw hoofdstuk bestand wordt gestart met de <code>Nieuw hoofdstuk</code>
+ optie in de <code>Hoofdmenu</code><code><strong> &gt;&gt;</strong></code> <code>Hoofdstuk bewerken</code>.
+ Je kunt hoofdstukken toevoegen met <code>Voeg hoofdstuk toe</code> of <code>Voeg sub hoofdstuk toe</code>
+ knoppen. Het verschil tussen deze twee knoppen is, dat wanneer een hoofdstuk is geselecteerd <code>Voeg hoofdstuk toe</code>
+ een hoofdstuk zal toevoegen op hetzelfde niveau direct na het geselecteerde
+ hoofdstuk en <code>Voeg sub hoofdstuk toe</code> zal een hoofdstuk toevoegen als
+ laatste sub hoofdstuk van het huidig geselecteerde hoofdstuk.</p>
+
+  <p>Het <code>Verwijder hoofdstuk</code>moet je met zorg behandelen. Het verwijdert het volledige
+ hoofdstuk incl. alle sub hoofdstukken zonder een bevestiging te vragen, en op het moment is er
+ g&eacute;&eacute;n mogelijkheid dit te herstellen (weg is ook <strong>echt</strong> weg).</p>
+
+  <p>Nadat je een hoofdstuk ingang hebt geselecteerd, kan je de data daarvan
+ veranderen. De begin-en eindtijd kunnen zijn, ofwel <code>HH:MM:SS.mmm</code>
+ of gewoonweg <code>HH:MM:SS</code>. E&eacute;n hoofdstuknaam is reeds
+ toegevoegd. Je kunt het bewerken, de taal instellen die voor deze naam is
+ ingegeven. Op deze manier kan je namen in verschillende talen ingeven, b.v.
+ 'The hero arrives' met 'eng' als de taal en 'De held arriveert' met 'dut' als
+ de taal. Druk gewoon op de <code>Voeg naam toe</code> knop als je meer ingangen
+ wenst en <code>Verwijder naam</code> om er &eacute;&eacute;n te verwijderen.</p>
+
+  <p>Aanmaken van v&eacute;&eacute;l hoofdstukken en altijd de taal instellen kan een hele klus zijn. Daarom
+ kan je in <i>mmg</i> taal en land markeringen instellen, welke als standaard gebruikt moeten
+ worden via het volgende <code>Hoofd menu</code> <code><strong>&gt;&gt;</strong></code>
+ <code>Opties</code> <code><strong>&gt;&gt;</strong></code> <code>Hoofdstukken</code>
+ Het <code>Zet waarden</code> knop doet iets soortgelijks. Hiermee kan je een taal en/of land
+ instellen voor het huidige geselecteerde ingaven en allen die daarbij behoren.</p>
+
+  <p>Opslaan van hoofdstukken naar XML bestanden kan gedaan worden met <code>Opslaan</code> of
+ <code>Bewaar als</code>. <code>Bewaar als</code> kan niet gebruikt worden om hoofdstukken
+ te bewaren naar een bestaand Matroska&trade; bestand.
+ Je moet daarvoor gebruiken <code>Bewaar als Matroska&trade; bestand</code>.</p>
+
+  <h3><a name="editingchapters">4.5. Bewerken bestaande hoofdstukken</a></h3>
+
+  <p>Je kunt bestaande hoofdstuk bestanden of hoofdstukken van Matroska&trade;
+ bestanden laden, door te kiezen <code>Laden</code> optie van de <code>Hoofdstuk bewerker</code> menu.
+ <i>Mmg</i> zal automatisch het gebruikte bestandstype detecteren en de hoofdstukken inlezen.</p>
+
+  <a name="wxhh_headereditor"></a>
+  <h2><a name="headereditor">5. Het kop bewerker</a></h2>
+
+  <p>
+ Mmg komt met een bewerker voor kop velden van bestaande Matroska&trade; bestanden.
+ Het kan gestart worden via mmg's &quot;Bestand&quot; menu door te kiezen:
+ &quot;Kop bewerken&quot;.
+  </p>
+
+  <p>
+ Met de Kop bewerker, kan de gebruiker bepaalde velden van de gesegmenteerde informatie koppen en
+ de koppen van elk spoor bewerken, zonder dat het hele bestand opnieuw samengevoegd moet worden.
+ Het gebruik is gemakkelijk: laad een bestand, selecteer het bewuste kop veld dat je wilt veranderen,
+ verander de waarde en sla het bestand op.
+  </p>
+
+  <h3><a name="he_addingremovingheaderfields">5.1. Toevoegen en verwijderen kop velden</a></h3>
+
+  <p>
+ De Matroska&trade; bestandsformat staat toe, dat de meeste kop velden aan of afwezig kunnen zijn.
+ Mmg's kop bewerker zal alle invoer tonen van alle ondersteunde kop velden zelfs, wanneer deze
+ nog niet in het bestand aanwezig zijn. Het staat de gebruiker toe, velden toe te voegen die op
+ het moment nog niet in het bestand aanwezig zijn. Of zelfs bestaande tekst velden uit het bestand
+ verwijderen.
+  </p>
+
+  <h3><a name="he_analyzingthefile">5.2. Bestaand bestand openen</a></h3>
+
+  <p>
+  De gebruiker kan starten met een bestand te bewerken door te kiezen:
+  &quot;Open&quot; van het &quot;Bestand&quot; menu. Na het selecteren van het
+  juiste bestand, zal de kop bewerker het bestand scannen op alle belangrijke
+  elementen. Dit kan even duren afhankelijk van de bestandsgrootte. Dit is
+  noodzakelijk vanwege de Matroska&trade; 's flexibele bestandsstructuur.
+  </p>
+
+  <h3><a name="he_editingthefile">5.3. Bewerken kop velden</a></h3>
+
+  <p>
+  Na het openen van het bestand, zal het linker scherm de elementen tonen voor
+  het segment koppen en &eacute;&eacute;n element voor elk spoor dat in het bestand gevonden
+  is. Elk deel in de boomstructuur, bevat een aantal sub elementen welke de
+  werkelijke waarde van de kop bevat. Wanneer de gebruiker een dergelijk sub
+  element selecteert, wordt het rechter scherm opgewaardeerd met de actuele
+  informatie van dat element:
+  </p>
+
+  <p>
+   <ul>
+    <li>het type (een getal, een reeks etc.),</li>
+    <li>haar naam,</li>
+    <li>een korte beschrijving van de inhoud</li>
+    <li>of het element al dan niet aanwezig is in het bestand,
+        inclusief een optie om het te verwijderen als het er is, of het toe te
+        voegen als het er niet is,</li>
+    <li>de elementen originele waarde indien het aanwezig was
+        toen het bestand werd geopend en</li>
+    <li>een mogelijkheid om de inhoud te wijzigen.</li>
+   </ul>
+  </p>
+
+  <p>
+  Meeste waarde soorten spreken voor zich, getallen, reeksen etc. Het binaire
+  type, wordt echter getoond als een reeks hexadecimale cijfers. De toegestane
+  formaten zijn hetzelfde als verschillende opties waarmee mkvmerge segment UID's
+  specificeert: ofwel een eenvoudige opeenvolging van hexadecimale cijfers
+  (bijvoorbeeld 1857a7fe7d...) of de hexadecimale getallen voorafgegaan door
+  &quot;0x&quot; voor elk paar (bijv. 0x18 0x57 0xa7 0xFE 0x7d...).
+  </p>
+
+  <h3><a name="he_validation">5.4. Verifiëren (valideren)</a></h3>
+
+  <p>
+  De gebruiker kan de veranderingen verifiëren door te kiezen voor
+  &quot;Verifiëren&quot; uit het &quot;Kop bewerken&quot; menu. Verifiëren wordt
+  ook elke keer automatisch uitgevoerd wanneer de gebruiker het bestand wil
+  opslaan. Verifiëren zorgt er voor, dat de waarden die de gebruiker heeft
+  ingevoerd, opgeslagen kunnen worden in het desbetreffende element.
+  Bijvoorbeeld, een getal element mag g&eacute;&eacute;n letters bevatten.
+  </p>
+
+  <p>
+  Als verifiëren mislukt, dan wordt het eerste mislukte element verificatie
+  geselecteerd, zodat de gebruiker de fout kan corrigeren.
+  </p>
+
+  <h3><a name="he_saving">5.5. Het bestand opslaan</a></h3>
+
+  <p>
+  De gebruiker kan de wijzigingen opslaan door te kiezen: &quot;Opslaan&quot;
+  van het &quot;Hoofdstuk bewerken&quot; menu. Zijn er g&eacute;&eacute;n veranderingen
+  gemaakt, dan zal mmg dat zeggen en het bestand niet opslaan.
+  </p>
+
+  <p>
+  Voor het wijzigen van een bestand, zal MMG controleren of het bestand is
+  gewijzigd door een ander programma, wanneer het is geopend. Als dat het geval
+  is, dan zal mmg de gebruiker waarschuwen. Alle veranderingen negeren en het
+  bestand laden, om ervoor te zorgen dat het bestand niet wordt beschadigd.
+  </p>
+
+  <p>
+ Mmg zal heel hard proberen, om geschikte plekken te vinden voor het schrijven
+ van de gewijzigde koppen. Het zal bestaande kop elementen overschrijven op de
+ originele positie, Ebml Void elementen en alle andere exemplaren van de koppen
+ die het vindt. Het zal ook de meta zoek koppen bijwerken, zodat de koppen gemakkelijk
+ gevonden kunnen worden door applicaties die het bestand inlezen.
+  </p>
+
+  <p>
+ Na het opslaan van het bestand, zal het kopstuk bewerker het bestand automatisch
+ herladen en het opnieuw analyseren. Dit wordt gedaan, om te  voorkomen dat er g&eacute;&eacute;n
+ bestandsbeschadiging optreedt. Omdat het proces van het opslaan van het bestand
+ aanzienlijk vertraagt. Deze veiligheidsvoorziening, zal in de toekomstige versie van
+ mmg verwijderd worden, nadat het voldoende is uitgetest.
+  </p>
+ </body>
+</html>
