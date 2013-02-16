@@ -170,9 +170,11 @@ fourcc_c::equiv(std::vector<std::string> const &cmp)
 bool
 fourcc_c::human_readable(size_t min_num)
   const {
-  static auto char_ok = [](char c) { return (('a' <= c) && ('z' >= c)) || (('A' <= c) && ('Z' >= c)) || (('0' <= c) && ('9' >= c)) || (0xa9 == c); };
-  auto lower          = balg::to_lower_copy(str());
-  return min_num <= boost::accumulate(lower, 0u, [](unsigned num, char c) { return num + (char_ok(c) ? 1 : 0); });
+  static auto byte_ok = [](int c) { return (('a' <= c) && ('z' >= c)) || (('A' <= c) && ('Z' >= c)) || (('0' <= c) && ('9' >= c)) || (0xa9 == c); };
+  auto num            = 0u;
+  for (auto shift = 0; 3 >= shift; ++shift)
+    num += byte_ok((m_value >> (shift * 8)) & 0xff) ? 1 : 0;
+  return min_num <= num;
 }
 
 uint32_t

@@ -328,6 +328,8 @@ TEST(FourCC, HumanReadable) {
   EXPECT_FALSE(fourcc_c{"ab??"}.human_readable());
 
   EXPECT_FALSE(fourcc_c{"??07"}.human_readable());
+
+  EXPECT_TRUE(fourcc_c{0xa9a9a9a9}.human_readable());
 }
 
 }
