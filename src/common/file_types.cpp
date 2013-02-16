@@ -40,7 +40,7 @@ file_type_t::get_supported() {
   s_supported_file_types.push_back(file_type_t(Y("MPEG program streams"),                "mpg mpeg m2v mpv evo evob vob"));
   s_supported_file_types.push_back(file_type_t(Y("MPEG transport streams"),              "ts m2ts mts"));
   s_supported_file_types.push_back(file_type_t(Y("MPEG video elementary streams"),       "m1v m2v mpv"));
-  s_supported_file_types.push_back(file_type_t(Y("MPLS BluRay playlist"),                "mpls"));
+  s_supported_file_types.push_back(file_type_t(Y("MPLS Blu-ray playlist"),               "mpls"));
   s_supported_file_types.push_back(file_type_t(Y("Matroska audio/video files"),          "mka mks mkv mk3d webm webmv webma"));
   s_supported_file_types.push_back(file_type_t(Y("PGS/SUP subtitles"),                   "sup"));
   s_supported_file_types.push_back(file_type_t(Y("QuickTime audio/video files"),         "mov"));
