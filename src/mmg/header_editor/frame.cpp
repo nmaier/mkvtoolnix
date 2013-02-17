@@ -442,7 +442,7 @@ header_editor_frame_c::handle_tracks(kax_analyzer_data_c *data) {
       child_page->init();
 
       child_page = new he_unsigned_integer_value_page_c(this, page, k_track_entry, KaxVideoDisplayUnit::ClassInfos,
-                                                        YT("Video display unit"), YT("Type of the unit for DisplayWidth/Height\n(0: pixels, 1: centimeters, 2: inches)."));
+                                                        YT("Video display unit"), YT("Type of the unit for DisplayWidth/Height\n(0: pixels, 1: centimeters, 2: inches, 3: aspect ratio)."));
       child_page->set_sub_master_callbacks(KaxTrackVideo::ClassInfos);
       child_page->init();
 

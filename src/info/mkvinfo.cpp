@@ -623,6 +623,7 @@ handle_video_track(EbmlStream *&es,
                    % (  0 == unit ? Y(" (pixels)")
                       : 1 == unit ? Y(" (centimeters)")
                       : 2 == unit ? Y(" (inches)")
+                      : 3 == unit ? Y(" (aspect ratio)")
                       :               ""));
 
     } else if (is_id(l4, KaxVideoGamma))

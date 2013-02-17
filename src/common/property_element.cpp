@@ -136,7 +136,7 @@ property_element_c::init_tables() {
   ELE("pixel-height",      KaxVideoPixelHeight::ClassInfos,     Y("Video pixel height"),      Y("Height of the encoded video frames in pixels."));
   ELE("display-width",     KaxVideoDisplayWidth::ClassInfos,    Y("Video display width"),     Y("Width of the video frames to display."));
   ELE("display-height",    KaxVideoDisplayHeight::ClassInfos,   Y("Video display height"),    Y("Height of the video frames to display."));
-  ELE("display-unit",      KaxVideoDisplayUnit::ClassInfos,     Y("Video display unit"),      Y("Type of the unit for DisplayWidth/Height\n(0: pixels, 1: centimeters, 2: inches)."));
+  ELE("display-unit",      KaxVideoDisplayUnit::ClassInfos,     Y("Video display unit"),      Y("Type of the unit for DisplayWidth/Height\n(0: pixels, 1: centimeters, 2: inches, 3: aspect ratio)."));
   ELE("pixel-crop-left",   KaxVideoPixelCropLeft::ClassInfos,   Y("Video crop left"),         Y("The number of video pixels to remove\non the left of the image."));
   ELE("pixel-crop-top",    KaxVideoPixelCropTop::ClassInfos,    Y("Video crop top"),          Y("The number of video pixels to remove\non the top of the image."));
   ELE("pixel-crop-right",  KaxVideoPixelCropRight::ClassInfos,  Y("Video crop right"),        Y("The number of video pixels to remove\non the right of the image."));
