@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nederlands 4.0.0.\n"
 "POT-Creation-Date: 2013-01-24 10:22+0100\n"
-"PO-Revision-Date: 2013-02-16 21:05+0100\n"
+"PO-Revision-Date: 2013-02-17 17:59+0100\n"
 "Last-Translator: René Maassen <bmom43@gmail.com>\n"
 "Language-Team: Nederlands rc1 <bmom43@gmail.com>\n"
 "Language: nl_NL\n"
@@ -3245,7 +3245,7 @@ msgstr ""
 "Het &matroska; bestandsformaat ondersteunt willekeurige diep geneste "
 "hoofdstuk structuren, genoemd 'editie ingaven' en 'hoofdstuk delen'.  "
 "Echter, deze modus beperkt zich alleen tot het hoogste niveau van de "
-"hoofdstukken doorr alle editie ingaven."
+"hoofdstukken door alle editie ingaven."
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvmerge.xml:691
@@ -5016,9 +5016,9 @@ msgstr ""
 
 #. type: Content of: <refentry><refsect1><screen>
 #: doc/man/mkvmerge.xml:1743
-#, no-wrap
+#, fuzzy, no-wrap
 msgid "$ oggenc -q4 -oMyMovie.ogg MyMovie.wav"
-msgstr "$ oggenc -q4 -omijn film.ogg mijn film.wav"
+msgstr "$ oggenc -q4 -o mijn film.ogg mijn film.wav"
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvmerge.xml:1746
@@ -8125,3 +8125,4 @@ msgstr "&mkvmerge;, &mkvextract;, &mkvinfo;, &mkvpropedit;"
 #~ "seconde (fps) of een standaard duur van elk beeld. Voor dergelijke "
 #~ "bestanden neemt &mkvmerge; aan een standaard duur van '<literal>25fps</"
 #~ "literal>' tenzij dit overegeld is."
+
