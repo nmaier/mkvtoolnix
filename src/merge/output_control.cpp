@@ -1596,10 +1596,8 @@ add_chapters_for_current_part() {
 
   if (!s_chapters_in_this_file)
     s_chapters_in_this_file = chapters_here;
-  else {
-    brng::copy(chapters_here->GetElementList(), std::back_inserter(s_chapters_in_this_file->GetElementList()));
-    chapters_here->GetElementList().clear();
-  }
+  else
+    move_chapters_by_edition(*s_chapters_in_this_file, *chapters_here);
 
   merge_chapter_entries(*s_chapters_in_this_file);
   sort_ebml_master(s_chapters_in_this_file.get());
