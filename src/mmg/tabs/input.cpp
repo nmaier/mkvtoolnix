@@ -396,6 +396,9 @@ tab_input::parse_container_line(mmg_file_cptr file,
     } else if ((pair.size() == 2) && (pair[0] == wxT("other_file")))
       file->other_files.push_back(wxFileName(unescape(pair[1])));
 
+    else if ((pair.size() == 2) && (pair[0] == wxT("playlist_file")))
+      file->playlist_files.push_back(wxFileName(unescape(pair[1])));
+
     else if ((pair.size() == 2) && (pair[0] == wxT("segment_uid")))
       segment_uid = unescape(to_utf8(pair[1]));
 
