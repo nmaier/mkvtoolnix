@@ -1,7 +1,7 @@
 '\" t
 .\"     Title: mkvmerge
 .\"    Author: Moritz Bunkus <moritz@bunkus.org>
-.\" Generator: DocBook XSL Stylesheets v1.77.1 <http://docbook.sf.net/>
+.\" Generator: DocBook XSL Stylesheets v1.78.0 <http://docbook.sf.net/>
 .\"      Date: 2013-01-20
 .\"    Manual: 用户命令
 .\"    Source: MKVToolNix 6.0.0
@@ -411,7 +411,7 @@ timecodes:\fIA\fR[,\fIB\fR[,\fIC\fR\&.\&.\&.]]
 .sp -1
 .IP "  4." 4.2
 .\}
-通过指定时间码区域，保留特定部分，并丢弃其余部分。
+通过指定时间码范围，保留特定部分，并丢弃其余部分。
 .sp
 语法:
 \fB\-\-split\fR
@@ -468,42 +468,47 @@ parts:
 .sp
 若起始时间码留空，则默认为前一段的终止时间码。若不存在前一段，则默认为文件开头 (参见示例 3)。
 .sp
-If an end timecode is left out then it defaults to the end of the source files which basically tells
+若终止时间码留空，则默认为源文件末尾，亦即告诉
 \fBmkvmerge\fR(1)
-to keep the rest (see example 3)\&.
+保留其余部分 (参见示例 3)。
 .sp
-Normally each range will be written to a new file\&. This can be changed so that consecutive ranges are written to the same file\&. For that the user has to prefix the start timecode with a
-+\&. This tells
+通常每一段都会写入新的文件。该行为也可以调整，以便将连续的分段写入同一个文件。要实现这种效果，用户可以在起始时间码开头加上
++
+前缀。这样可以告诉
 \fBmkvmerge\fR(1)
-not to create a new file and instead append the range to the same file the previous range was written to\&. Timecodes will be adjusted so that there will be no gap in the output file even if there was a gap in the two ranges in the input file\&.
+不要创建新文件，而是将该分段写入与之前一段相同的文件当中。时间码也会自动调整，确保即使输入文件中两分段不连续，输出文件中也不出现间隙。
 .sp
-In example 1
+例 1 中
 \fBmkvmerge\fR(1)
-will create two files\&. The first will contain the content starting from
+会创建两个文件。第一个包含从
 00:01:20
-until
-00:02:45\&. The second file will contain the content starting from
-00:05:50
-until
-00:10:30\&.
-.sp
-In example 2
-\fBmkvmerge\fR(1)
-will create only one file\&. This file will contain both the content starting from
-00:01:20
-until
+到
 00:02:45
-and the content starting from
+之间的内容。第二个文件包含从
 00:05:50
-until
-00:10:30\&.
+到
+00:10:30
+之间的内容。
 .sp
-In example 3
+例 2 中
 \fBmkvmerge\fR(1)
-will create two files\&. The first will contain the content from the start of the source files until
-00:02:45\&. The second file will contain the content starting from
+将只创建一个文件。该文件包含从
+00:01:20
+到
+00:02:45
+及从
 00:05:50
-until the end of the source files\&.
+到
+00:10:30
+的内容。
+.sp
+例 3 中
+\fBmkvmerge\fR(1)
+将创建两个文件。第一个包含从源文件开头到
+00:02:45
+的内容。第二个文件将包含从
+00:05:50
+到源文件结尾之间的内容。
 .if n \{\
 .sp
 .\}
@@ -516,11 +521,9 @@ until the end of the source files\&.
 \fB注意\fR
 .ps -1
 .br
-Note that
-\fBmkvmerge\fR(1)
-only makes decisions about splitting at key frame positions\&. This applies to both the start and the end of each range\&. So even if an end timecode is between two key frames
-\fBmkvmerge\fR(1)
-will continue outputting the frames up to but excluding the following key frame\&.
+请注意，\fBmkvmerge\fR(1)
+只在关键帧位置决定是否切割。每段切割区域的起始点与结束点均为关键帧。因此即使结束时间码介于两个关键帧之间，\fBmkvmerge\fR(1)
+也将继续输出帧，直到下一关键帧为止（不包括）。
 .sp .5v
 .RE
 .RE
@@ -533,11 +536,11 @@ will continue outputting the frames up to but excluding the following key frame\
 .sp -1
 .IP "  5." 4.2
 .\}
-Keeping specific parts by specifying frame/field number ranges while discarding others\&.
+通过指定帧/场序号范围，保留特定部分，并丢弃其余部分。
 .sp
-Syntax:
+语法:
 \fB\-\-split\fR
-parts\-frames:\fIstart1\fR\-\fIend1\fR[,[+]\fIstart2\fR\-\fIend2\fR[,[+]\fIstart3\fR\-\fIend3\fR\&.\&.\&.]]
+parts\-frames:\fI起点1\fR\-\fI终点1\fR[,[+]\fI起点2\fR\-\fI终点2\fR[,[+]\fI起点3\fR\-\fI终点3\fR\&.\&.\&.]]
 .sp
 示例:
 .sp
@@ -574,24 +577,25 @@ parts\-frames:\fIstart1\fR\-\fIend1\fR[,[+]\fIstart2\fR\-\fIend2\fR[,[+]\fIstart
 \-\-split parts\-frames:\-430,2512\-
 .RE
 .sp
-The
+
 parts\-frames
-mode tells
+模式可以告诉
 \fBmkvmerge\fR(1)
-to keep certain ranges of frame/field numbers while discarding others\&. The ranges to keep have to be listed after the
+保留特定帧/场序号范围，而丢弃其余部分。要保留的范围需要在
 parts\-frames:
-keyword and be separated by commas\&. A range itself consists of a start and an end frame/field number\&. Numbering starts at 1\&.
+关键词后列出，以逗号隔开。各分段由起始及终止帧/场序号组成。序号从 1 开始计数。
 .sp
-If a start number is left out then it defaults to the previous range\*(Aqs end number\&. If there was no previous range then it defaults to the start of the file (see example 3)\&.
+若起始序号留空，则默认为前一段的终止序号。若不存在前一段，则默认为文件开头 (参见示例 3)。
 .sp
-If an end number is left out then it defaults to the end of the source files which basically tells
+若终止序号留空，则默认为文件末尾，亦即告诉
 \fBmkvmerge\fR(1)
-to keep the rest (see example 3)\&.
+保留其余部分 (参见示例 3)。
 .sp
-Normally each range will be written to a new file\&. This can be changed so that consecutive ranges are written to the same file\&. For that the user has to prefix the start number with a
-+\&. This tells
+通常每一段都会写入新的文件。该行为也可以调整，以便将连续的分段写入同一个文件。要实现这种效果，用户可以在起始序号开头加上
++
+前缀。这样可以告诉
 \fBmkvmerge\fR(1)
-not to create a new file and instead append the range to the same file the previous range was written to\&. Timecodes will be adjusted so that there will be no gap in the output file even if there was a gap in the two ranges in the input file\&.
+不要创建新文件，而是将该分段写入与之前一段相同的文件当中。时间码也会自动调整，确保即使输入文件中两分段不连续，输出文件中也不出现间隙。
 .if n \{\
 .sp
 .\}
@@ -604,40 +608,42 @@ not to create a new file and instead append the range to the same file the previ
 \fB注意\fR
 .ps -1
 .br
-Note that
-\fBmkvmerge\fR(1)
-only makes decisions about splitting at key frame positions\&. This applies to both the start and the end of each range\&. So even if an end frame/field number is between two key frames
-\fBmkvmerge\fR(1)
-will continue outputting the frames up to but excluding the following key frame\&.
+请注意，\fBmkvmerge\fR(1)
+只在关键帧位置决定是否切割。每段切割区域的起始点与结束点均为关键帧。因此即使结束帧/场序号介于两个关键帧之间，\fBmkvmerge\fR(1)
+也将继续输出帧，直到下一关键帧为止（不包括）。
 .sp .5v
 .RE
-In example 1
+例 1 中
 \fBmkvmerge\fR(1)
-will create two files\&. The first will contain the content starting from the first key frame at or after
+会创建两个文件。第一个包含从第
 137
-up to but excluding the first key frame at or after
-258\&. The second file will contain the content starting from
+帧或之后的第一个关键帧，到第
+258
+帧或之后的第一个关键帧（但不含该关键帧）之间的内容。第二个文件包含第
 548
-until
-1211\&.
+到
+1211
+帧之间的内容。
 .sp
-In example 2
+例 2 中
 \fBmkvmerge\fR(1)
-will create only one file\&. This file will contain both the content starting from
+将只创建一个文件。该文件包含从
 733
-until
+到
 912
-and the content starting from
+及从
 1592
-until
-2730\&.
+到
+2730
+的内容。
 .sp
-In example 3
+例 3 中
 \fBmkvmerge\fR(1)
-will create two files\&. The first will contain the content from the start of the source files until
-430\&. The second file will contain the content starting from
+将创建两个文件。第一个包含源文件开头到
+430
+的内容。第二个文件将包含从
 2512
-until the end of the source files\&.
+到源文件结尾之间的内容。
 .sp
 该模式只考虑输出的第一条视频轨道。 如果没有输出视频轨道，则将不会进行切割操作。
 .if n \{\
@@ -652,13 +658,13 @@ until the end of the source files\&.
 \fB注意\fR
 .ps -1
 .br
-The numbers given with this argument are interpreted based on the number of
+通过本参数给出的数字将根据输出的
 Matroska(TM)
-blocks that are output\&. A single
+区块解析。 单个
 Matroska(TM)
-block contains either a full frame (for progressive content) or a single field (for interlaced content)\&. mkvmerge does not distinguish between those two and simply counts the number of blocks\&. For example: If one wanted to split after the 25th full frame with interlaced content one would have to use
+区块可包含完整的一帧 (对于逐行扫描的内容) 或单场 (对于隔行扫描的内容)。 mkvmerge 不区分两者，它直接统计区块数目。 例如: 假设某人希望在隔行扫描的第 25 个完整帧之后切割，则应使用
 50
-(two fields per full frame) as the split point\&.
+(每帧对应两场) 作为切割点。
 .sp .5v
 .RE
 .RE
@@ -699,13 +705,13 @@ frames:\fIA\fR[,\fIB\fR[,\fIC\fR\&.\&.\&.]]
 \fB注意\fR
 .ps -1
 .br
-The numbers given with this argument are interpreted based on the number of
+通过本参数给出的数字将根据输出的
 Matroska(TM)
-blocks that are output\&. A single
+区块解析。 单个
 Matroska(TM)
-block contains either a full frame (for progressive content) or a single field (for interlaced content)\&. mkvmerge does not distinguish between those two and simply counts the number of blocks\&. For example: If one wanted to split after the 25th full frame with interlaced content one would have to use
+区块可包含完整的一帧 (对于逐行扫描的内容) 或单场 (对于隔行扫描的内容)。 mkvmerge 不区分两者，它直接统计区块数目。 例如: 假设某人希望在隔行扫描的第 25 个完整帧之后切割，则应使用
 50
-(two fields per full frame) as the split point\&.
+(每帧对应两场) 作为切割点。
 .sp .5v
 .RE
 .RE
@@ -751,9 +757,9 @@ all
 \fB注意\fR
 .ps -1
 .br
-The
+
 Matroska(TM)
-file format supports arbitrary deeply nested chapter structures called \*(Aqedition entries\*(Aq and \*(Aqchapter atoms\*(Aq\&. However, this mode only considers the top\-most level of chapters across all edition entries\&.
+文件格式支持任意深度嵌套的章节结构，称为\(lq版本条目\(rq与\(lq章节原子\(rq。 但该模式仅考虑所有版本条目中最顶层的章节。
 .sp .5v
 .RE
 .RE
@@ -2792,9 +2798,9 @@ Tags (主)
 .\}
 .SH "剪辑信息 XML 文件"
 .PP
-With a segment info XML file it is possible to set certain values in the "segment information" header field of a
+可以通过剪辑信息 XML 文件设置
 Matroska(TM)
-file\&. All of these values cannot be set via other command line options\&.
+文件 "剪辑信息" 头部字段的特定值。所有这些值都无法通过其他命令行选项设置。
 .PP
 还有一些 "剪辑信息" 头部字段可以通过命令行选项设置，而非通过 XML 文件。包括如
 \fB--title\fR
@@ -2869,9 +2875,9 @@ Matroska(TM)
 附件、章节和标签元素仅当被添加后才会出现。
 .RE
 .PP
-The shortest possible
+允许的最精简的
 Matroska(TM)
-file would look like this:
+文件是像这样的：
 .PP
 [EBML 头] [剪辑 [剪辑信息] [轨道信息] [簇 1]]
 .PP
