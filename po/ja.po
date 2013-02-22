@@ -696,16 +696,21 @@ msgid " (FourCC: %1%%2%%3%%4%, 0x%|5$08x|)"
 msgstr " (FourCC: %1%%2%%3%%4%, 0x%|5$08x|)"
 
 #: src/info/mkvinfo.cpp:190
-#: src/info/mkvinfo.cpp:855
+#: src/info/mkvinfo.cpp:856
 #, boost-format
 msgid " (adler: 0x%|1$08x|)"
 msgstr " (adler: 0x%|1$08x|)"
+
+#: src/info/mkvinfo.cpp:626
+#, fuzzy
+msgid " (aspect ratio)"
+msgstr "(固定アスペクト比)"
 
 #: src/info/mkvinfo.cpp:624
 msgid " (centimeters)"
 msgstr " (センチメートル)"
 
-#: src/info/mkvinfo.cpp:648
+#: src/info/mkvinfo.cpp:649
 msgid " (fixed)"
 msgstr " (固定)"
 
@@ -714,7 +719,7 @@ msgstr " (固定)"
 msgid " (format tag: 0x%|1$04x|)"
 msgstr " (フォーマットタグ: 0x%|1$04x|)"
 
-#: src/info/mkvinfo.cpp:646
+#: src/info/mkvinfo.cpp:647
 msgid " (free resizing)"
 msgstr " (可変アスペクト比)"
 
@@ -727,7 +732,7 @@ msgstr " (h.264プロファイル：%1% @L%2%.%3%)"
 msgid " (inches)"
 msgstr " (インチ)"
 
-#: src/info/mkvinfo.cpp:647
+#: src/info/mkvinfo.cpp:648
 msgid " (keep aspect ratio)"
 msgstr "(固定アスペクト比)"
 
@@ -1666,7 +1671,7 @@ msgstr "--timecode-scale 値"
 msgid "1. A number which will be interepreted as an attachment ID as listed by 'mkvmerge --identify-verbose'. These are usually simply numbered starting from 0 (e.g. '2')."
 msgstr ""
 
-#: src/info/mkvinfo.cpp:679
+#: src/info/mkvinfo.cpp:680
 msgid "1: all frames"
 msgstr "1: 全フレーム"
 
@@ -1678,7 +1683,7 @@ msgstr "2バイト"
 msgid "2. A number with the prefix '=' which will be interepreted as the attachment's unique ID (UID) as listed by 'mkvmerge --identify-verbose'. These are usually random-looking numbers (e.g. '128975986723')."
 msgstr ""
 
-#: src/info/mkvinfo.cpp:681
+#: src/info/mkvinfo.cpp:682
 msgid "2: codec private data"
 msgstr "2: コーデック固有データ"
 
@@ -1780,7 +1785,7 @@ msgstr ""
 msgid "A single Matroska block contains either a full frame (for progressive content) or a single field (for interlaced content)."
 msgstr ""
 
-#: src/info/mkvinfo.cpp:789
+#: src/info/mkvinfo.cpp:790
 msgid "A track"
 msgstr "トラック"
 
@@ -1975,7 +1980,7 @@ msgstr "追加のソースファイルの一部"
 msgid "AdditionalID: %1%"
 msgstr "追加ID：%1%"
 
-#: src/info/mkvinfo.cpp:1207
+#: src/info/mkvinfo.cpp:1208
 msgid "Additions"
 msgstr "追加情報"
 
@@ -1999,7 +2004,7 @@ msgstr "タイムコードを調整"
 msgid "After loading a file expand the most important elements"
 msgstr "ファイル読み込み後に最も重要な要素を展開します"
 
-#: src/info/mkvinfo.cpp:704
+#: src/info/mkvinfo.cpp:705
 #, boost-format
 msgid "Algorithm: %1% (%2%)"
 msgstr "アルゴリズム：%1% (%2%)"
@@ -2122,7 +2127,7 @@ msgstr "MUXジョブがまだ実行中です。終了するまで待つか、新
 msgid "Appending a track from a file to another track from the same file is not allowed. This is the case for tracks number %u and %u."
 msgstr "同じファイルのトラックを別のトラックに追加することはできません。トラック番号%uと%uがこれに当てはまります。"
 
-#: src/merge/output_control.cpp:1908
+#: src/merge/output_control.cpp:1906
 #, boost-format
 msgid "Appending track %1% from file no. %2% ('%3%') to track %4% from file no. %5% ('%6%').\n"
 msgstr "ファイル番号%2%（'%3%'）のトラック%1%を、ファイル番号%5%（'%6%'）のトラック%4%に追加しています。\n"
@@ -2139,7 +2144,7 @@ msgstr "アスペクト比"
 msgid "Aspect ratio factor"
 msgstr "アスペクト比の係数"
 
-#: src/info/mkvinfo.cpp:644
+#: src/info/mkvinfo.cpp:645
 #, boost-format
 msgid "Aspect ratio type: %1%%2%"
 msgstr "アスペクト比の種類：%1%%2%"
@@ -2152,7 +2157,7 @@ msgstr "アスペクト比:"
 msgid "At least one <ChapterAtom> element is needed."
 msgstr "最低でも1つの<ChapterAtom>要素が必要です。"
 
-#: src/info/mkvinfo.cpp:1081
+#: src/info/mkvinfo.cpp:1082
 msgid "Attached"
 msgstr "添付ファイル"
 
@@ -2178,7 +2183,7 @@ msgstr "添付方式："
 msgid "Attachment style:"
 msgstr "添付方式："
 
-#: src/info/mkvinfo.cpp:1072
+#: src/info/mkvinfo.cpp:1073
 #: src/mmg/mmg_dialog.cpp:326
 #: src/mmg/tabs/attachments.cpp:153
 #: src/propedit/options.cpp:195
@@ -2282,7 +2287,7 @@ msgstr "ブロックの持続時間：%1%.%|2$06d|ms"
 
 #: src/extract/timecodes_v2.cpp:304
 #: src/extract/tracks.cpp:416
-#: src/info/mkvinfo.cpp:1123
+#: src/info/mkvinfo.cpp:1124
 msgid "Block group"
 msgstr "ブロックグループ"
 
@@ -2367,7 +2372,7 @@ msgstr "カテゴリがNULで終わっていません"
 
 #: src/extract/timecodes_v2.cpp:383
 #: src/extract/tracks.cpp:466
-#: src/info/mkvinfo.cpp:1698
+#: src/info/mkvinfo.cpp:1699
 msgid "Caught exception"
 msgstr "例外をキャッチしました"
 
@@ -2502,7 +2507,7 @@ msgstr "チャプタベリファイエラー"
 msgid "Chapter verification succeeded"
 msgstr "チャプタのベリファイに成功しました"
 
-#: src/info/mkvinfo.cpp:1484
+#: src/info/mkvinfo.cpp:1485
 #: src/mmg/options/chapters.cpp:125
 #: src/mmg/tabs/global.cpp:341
 #: src/propedit/options.cpp:186
@@ -2640,7 +2645,7 @@ msgstr "保存しないで現在のファイルを閉じます"
 
 #: src/extract/timecodes_v2.cpp:285
 #: src/extract/tracks.cpp:398
-#: src/info/mkvinfo.cpp:1658
+#: src/info/mkvinfo.cpp:1659
 msgid "Cluster"
 msgstr "クラスタ"
 
@@ -2676,22 +2681,22 @@ msgstr "クラスタのタイムコード：%|1$.3f|s"
 msgid "Codec ID"
 msgstr "コーデックID"
 
-#: src/info/mkvinfo.cpp:848
+#: src/info/mkvinfo.cpp:849
 #, boost-format
 msgid "Codec ID: %1%"
 msgstr "コーデックID：%1%"
 
-#: src/info/mkvinfo.cpp:876
+#: src/info/mkvinfo.cpp:877
 #, boost-format
 msgid "Codec decode all: %1%"
 msgstr ""
 
-#: src/info/mkvinfo.cpp:873
+#: src/info/mkvinfo.cpp:874
 #, boost-format
 msgid "Codec download URL: %1%"
 msgstr "コーデックダウンロードURL：%1%"
 
-#: src/info/mkvinfo.cpp:870
+#: src/info/mkvinfo.cpp:871
 #, boost-format
 msgid "Codec info URL: %1%"
 msgstr "コーデック情報URL：%1%"
@@ -2701,12 +2706,12 @@ msgstr "コーデック情報URL：%1%"
 msgid "Codec name"
 msgstr "コーデック名"
 
-#: src/info/mkvinfo.cpp:863
+#: src/info/mkvinfo.cpp:864
 #, boost-format
 msgid "Codec name: %1%"
 msgstr "コーデック名：%1%"
 
-#: src/info/mkvinfo.cpp:867
+#: src/info/mkvinfo.cpp:868
 #, boost-format
 msgid "Codec settings: %1%"
 msgstr "コーデック設定：%1%"
@@ -2716,7 +2721,7 @@ msgstr "コーデック設定：%1%"
 msgid "Codec state: %1%"
 msgstr "コーデック状態：%1%"
 
-#: src/info/mkvinfo.cpp:860
+#: src/info/mkvinfo.cpp:861
 #, boost-format
 msgid "CodecPrivate, length %1%%2%"
 msgstr "CodecPrivate、長さ %1%%2%"
@@ -2725,7 +2730,7 @@ msgstr "CodecPrivate、長さ %1%%2%"
 msgid "Collapse all entries so that none of their sub-entries will be shown"
 msgstr "全てのエントリを折り畳み、サブエントリを表示しません"
 
-#: src/info/mkvinfo.cpp:652
+#: src/info/mkvinfo.cpp:653
 #, boost-format
 msgid "Colour space: %1%"
 msgstr "色空間：%1%"
@@ -2772,19 +2777,19 @@ msgstr "設定が読み込まれました。"
 msgid "Configuration saved."
 msgstr "設定が保存されました。"
 
-#: src/info/mkvinfo.cpp:698
+#: src/info/mkvinfo.cpp:699
 msgid "Content compression"
 msgstr "コンテンツ圧縮"
 
-#: src/info/mkvinfo.cpp:668
+#: src/info/mkvinfo.cpp:669
 msgid "Content encoding"
 msgstr "コンテンツエンコーディング"
 
-#: src/info/mkvinfo.cpp:664
+#: src/info/mkvinfo.cpp:665
 msgid "Content encodings"
 msgstr "コンテンツエンコーディング"
 
-#: src/info/mkvinfo.cpp:718
+#: src/info/mkvinfo.cpp:719
 msgid "Content encryption"
 msgstr "コンテンツ暗号化"
 
@@ -2831,7 +2836,7 @@ msgstr "このMPEG-1/2トラックからシーケンスヘッダを抽出する�
 msgid "Could not find an index for audio track %1% (avilib error message: %2%). Skipping track.\n"
 msgstr "オーディオトラック%1%のインデックスを見つけられませんでした（avilibエラーメッセージ：%2%）。トラックをスキップします。\n"
 
-#: src/merge/output_control.cpp:1830
+#: src/merge/output_control.cpp:1828
 #, boost-format
 msgid "Could not find gptzr when appending. %1%\n"
 msgstr "追加結合時にgptzrを見つけられませんでした。%1%\n"
@@ -2942,22 +2947,22 @@ msgstr "クロッピングのパラメータ：<TID>:<left>,<top>,<right>,<botto
 msgid "Cropping:"
 msgstr "クロッピング："
 
-#: src/info/mkvinfo.cpp:1031
+#: src/info/mkvinfo.cpp:1032
 #, boost-format
 msgid "Cue block number: %1%"
 msgstr "CUEブロック番号：%1%"
 
-#: src/info/mkvinfo.cpp:1022
+#: src/info/mkvinfo.cpp:1023
 #, boost-format
 msgid "Cue cluster position: %1%"
 msgstr "CUEクラスタ位置：%1%"
 
-#: src/info/mkvinfo.cpp:1035
+#: src/info/mkvinfo.cpp:1036
 #, boost-format
 msgid "Cue codec state: %1%"
 msgstr "CUEコーデック状態：%1%"
 
-#: src/info/mkvinfo.cpp:1028
+#: src/info/mkvinfo.cpp:1029
 #, fuzzy, boost-format
 msgid "Cue duration: %1%"
 msgstr "CUEクラスタ位置：%1%"
@@ -2966,35 +2971,35 @@ msgstr "CUEクラスタ位置：%1%"
 msgid "Cue name format:"
 msgstr "CUEの名前フォーマット："
 
-#: src/info/mkvinfo.cpp:1008
+#: src/info/mkvinfo.cpp:1009
 msgid "Cue point"
 msgstr "CUEポイント"
 
-#: src/info/mkvinfo.cpp:1045
+#: src/info/mkvinfo.cpp:1046
 #, boost-format
 msgid "Cue ref cluster: %1%"
 msgstr "CUE参照クラスタ：%1%"
 
-#: src/info/mkvinfo.cpp:1051
+#: src/info/mkvinfo.cpp:1052
 #, boost-format
 msgid "Cue ref codec state: %1%"
 msgstr "CUE参照状態：%1%"
 
-#: src/info/mkvinfo.cpp:1048
+#: src/info/mkvinfo.cpp:1049
 #, boost-format
 msgid "Cue ref number: %1%"
 msgstr "CUE参照番号：%1%"
 
-#: src/info/mkvinfo.cpp:1042
+#: src/info/mkvinfo.cpp:1043
 #, boost-format
 msgid "Cue ref time: %|1$.3f|s"
 msgstr "CUE参照時間：%|1$.3f|s"
 
-#: src/info/mkvinfo.cpp:1038
+#: src/info/mkvinfo.cpp:1039
 msgid "Cue reference"
 msgstr "CUE参照"
 
-#: src/info/mkvinfo.cpp:1025
+#: src/info/mkvinfo.cpp:1026
 #, fuzzy, boost-format
 msgid "Cue relative position: %1%"
 msgstr "CUEクラスタ位置：%1%"
@@ -3014,21 +3019,21 @@ msgstr "CUEシートパーサ：%3%行目のインデックス番号が無効で
 msgid "Cue sheet parser: No INDEX entry found for the previous TRACK entry (current line: %1%)\n"
 msgstr "CUEシートパーサ：前のトラックエントリのインデックスエントリが見つかりませんでした（現在%1%行目）\n"
 
-#: src/info/mkvinfo.cpp:1012
+#: src/info/mkvinfo.cpp:1013
 #, boost-format
 msgid "Cue time: %|1$.3f|s"
 msgstr "CUE時間：%|1$.3f|s"
 
-#: src/info/mkvinfo.cpp:1015
+#: src/info/mkvinfo.cpp:1016
 msgid "Cue track positions"
 msgstr "CUEトラック位置"
 
-#: src/info/mkvinfo.cpp:1019
+#: src/info/mkvinfo.cpp:1020
 #, boost-format
 msgid "Cue track: %1%"
 msgstr "CUEトラック：%1%"
 
-#: src/info/mkvinfo.cpp:995
+#: src/info/mkvinfo.cpp:996
 msgid "Cues (subentries will be skipped)"
 msgstr "CUE (サブエントリはスキップされます)"
 
@@ -3127,12 +3132,12 @@ msgstr "デフォルト"
 msgid "Default duration"
 msgstr "デフォルトのフレーム持続期間"
 
-#: src/info/mkvinfo.cpp:891
+#: src/info/mkvinfo.cpp:892
 #, boost-format
 msgid "Default duration: %|1$.3f|ms (%|2$.3f| frames/fields per second for a video track)"
 msgstr "デフォルトのフレーム持続期間：%|1$.3f|ms（ビデオトラックの場合は毎秒%|2$.3f|フレーム/フィールド）"
 
-#: src/info/mkvinfo.cpp:903
+#: src/info/mkvinfo.cpp:904
 #, boost-format
 msgid "Default flag: %1%"
 msgstr "デフォルトフラグ：%1%"
@@ -3243,17 +3248,17 @@ msgstr "メタシーク要素にチャプタのエントリを追加しません
 msgid "Do not write meta seek elements at all."
 msgstr "メタシーク要素を全く記録しません。"
 
-#: src/info/mkvinfo.cpp:1546
+#: src/info/mkvinfo.cpp:1547
 #, boost-format
 msgid "Doc type read version: %1%"
 msgstr ""
 
-#: src/info/mkvinfo.cpp:1543
+#: src/info/mkvinfo.cpp:1544
 #, boost-format
 msgid "Doc type version: %1%"
 msgstr ""
 
-#: src/info/mkvinfo.cpp:1540
+#: src/info/mkvinfo.cpp:1541
 #, boost-format
 msgid "Doc type: %1%"
 msgstr ""
@@ -3289,26 +3294,26 @@ msgstr "長さ: %|1$.3f|s (%2%)"
 msgid "E&xit\tCtrl-Q"
 msgstr "終了(&X)\tCtrl-Q"
 
-#: src/info/mkvinfo.cpp:1516
+#: src/info/mkvinfo.cpp:1517
 msgid "EBML head"
 msgstr "EBMLヘッダ"
 
-#: src/info/mkvinfo.cpp:1534
+#: src/info/mkvinfo.cpp:1535
 #, boost-format
 msgid "EBML maximum ID length: %1%"
 msgstr "EBML最大ID長：%1%"
 
-#: src/info/mkvinfo.cpp:1537
+#: src/info/mkvinfo.cpp:1538
 #, boost-format
 msgid "EBML maximum size length: %1%"
 msgstr "EBML最大サイズ長：%1%"
 
-#: src/info/mkvinfo.cpp:1531
+#: src/info/mkvinfo.cpp:1532
 #, boost-format
 msgid "EBML read version: %1%"
 msgstr ""
 
-#: src/info/mkvinfo.cpp:1528
+#: src/info/mkvinfo.cpp:1529
 #, boost-format
 msgid "EBML version: %1%"
 msgstr "EBMLバージョン：%1%"
@@ -3383,7 +3388,7 @@ msgstr "要素"
 msgid "Elements in the category '%1%' ('--edit %2%'):\n"
 msgstr "カテゴリ'%1%'の要素（'--edit %2%'）：\n"
 
-#: src/info/mkvinfo.cpp:840
+#: src/info/mkvinfo.cpp:841
 #, boost-format
 msgid "Enabled: %1%"
 msgstr "有効：%1%"
@@ -3392,12 +3397,12 @@ msgstr "有効：%1%"
 msgid "Enables splitting of the output into more than one file. You can split after a given size, after a given amount of time has passed in each file or after a list of timecodes."
 msgstr "出力の複数ファイルへの分割を有効にします。サイズや時間、タイムコードのリストによって分割することができます。"
 
-#: src/info/mkvinfo.cpp:724
+#: src/info/mkvinfo.cpp:725
 #, boost-format
 msgid "Encryption algorithm: %1% (%2%)"
 msgstr "暗号化アルゴリズム：%1% (%2%)"
 
-#: src/info/mkvinfo.cpp:735
+#: src/info/mkvinfo.cpp:736
 #, boost-format
 msgid "Encryption key ID: %1%"
 msgstr "暗号化鍵ID：%1%"
@@ -3479,7 +3484,7 @@ msgstr "エラー："
 msgid "Error: "
 msgstr "エラー："
 
-#: src/info/mkvinfo.cpp:1597
+#: src/info/mkvinfo.cpp:1598
 #, boost-format
 msgid "Error: Couldn't open input file %1% (%2%).\n"
 msgstr "エラー：入力ファイル%1%（%2%）を開けませんでした。\n"
@@ -3637,7 +3642,7 @@ msgstr "ファイル'%1%'：コンテナ：%2%"
 msgid "File '%1%': unsupported container: %2%\n"
 msgstr "ファイル'%1%'：サポートされていないコンテナ：%2%\n"
 
-#: src/info/mkvinfo.cpp:1097
+#: src/info/mkvinfo.cpp:1098
 #, boost-format
 msgid "File UID: %1%"
 msgstr "ファイルUID：%1%"
@@ -3654,12 +3659,12 @@ msgstr "ファイルが予測されたよりも少ないフレームしか含ん
 msgid "File creation failed"
 msgstr "ファイルの作成に失敗しました"
 
-#: src/info/mkvinfo.cpp:1094
+#: src/info/mkvinfo.cpp:1095
 #, boost-format
 msgid "File data, size: %1%"
 msgstr "ファイルデータ、サイズ：%1%"
 
-#: src/info/mkvinfo.cpp:1085
+#: src/info/mkvinfo.cpp:1086
 #, boost-format
 msgid "File description: %1%"
 msgstr "ファイル説明：%1%"
@@ -3691,7 +3696,7 @@ msgstr "ファイルは修正されました"
 msgid "File name"
 msgstr "ファイル名"
 
-#: src/info/mkvinfo.cpp:1088
+#: src/info/mkvinfo.cpp:1089
 #, boost-format
 msgid "File name: %1%"
 msgstr "ファイル名：%1%"
@@ -3766,7 +3771,7 @@ msgstr "Xiph方式でブロックを1つにまとめます。"
 msgid "Force the translations for 'code' to be used."
 msgstr "使用される翻訳を'code'に強制設定します。"
 
-#: src/info/mkvinfo.cpp:906
+#: src/info/mkvinfo.cpp:907
 #, boost-format
 msgid "Forced flag: %1%"
 msgstr "強制表示フラグ：%1%"
@@ -3818,7 +3823,7 @@ msgstr "FourCC：'%1% %2%'でトラックIDがありません。\n"
 msgid "Frame number: %1%"
 msgstr "フレーム数：%1%"
 
-#: src/info/mkvinfo.cpp:655
+#: src/info/mkvinfo.cpp:656
 #, boost-format
 msgid "Frame rate: %1%"
 msgstr "フレームレート：%1%"
@@ -3837,7 +3842,7 @@ msgstr ""
 msgid "Free-form edit field for user defined options for this track. What you input here is added after all the other options mmg adds so that you could overwrite any of mmg's options for this track. All occurences of the string \"<TID>\" will be replaced by the track's track ID."
 msgstr "このトラックのユーザー定義オプションを自由に入力するフィールドです。ここに入力したオプションは、このトラックのmmgのオプションを上書きできるようにmmgが付加する全てのオプションの後ろに付加されます。文字列\"<TID>\"は全てこのトラックのトラックIDに置き換えられます。"
 
-#: src/info/mkvinfo.cpp:629
+#: src/info/mkvinfo.cpp:630
 #, boost-format
 msgid "Gamma: %1%"
 msgstr "ガンマ：%1%"
@@ -4104,7 +4109,7 @@ msgstr "入力が長すぎます：%1% > %2%"
 msgid "Interface language:"
 msgstr "インターフェース言語："
 
-#: src/info/mkvinfo.cpp:632
+#: src/info/mkvinfo.cpp:633
 #, boost-format
 msgid "Interlaced: %1%"
 msgstr "インターレース：%1%"
@@ -4554,7 +4559,7 @@ msgstr "LZO圧縮に失敗しました：結果%1%\n"
 msgid "Lace number: %1%"
 msgstr ""
 
-#: src/info/mkvinfo.cpp:900
+#: src/info/mkvinfo.cpp:901
 #, boost-format
 msgid "Lacing flag: %1%"
 msgstr ""
@@ -4579,7 +4584,7 @@ msgstr "言語がNULで終わっていません。"
 msgid "Language:"
 msgstr "言語："
 
-#: src/info/mkvinfo.cpp:910
+#: src/info/mkvinfo.cpp:911
 #, boost-format
 msgid "Language: %1%"
 msgstr "言語：%1%"
@@ -4654,7 +4659,7 @@ msgstr "ログファイル (*.txt)|*.txt|%s"
 msgid "Log output:"
 msgstr "ログ出力："
 
-#: src/info/mkvinfo.cpp:753
+#: src/info/mkvinfo.cpp:754
 msgid "MD5"
 msgstr "MD5"
 
@@ -4774,7 +4779,7 @@ msgstr "Matroskaファイル (*.mkv;*.mka;*.mks;*.mk3d)|*.mkv;*.mka;*.mks;*.mk3d
 msgid "Matroska files (*.mkv;*.mka;*.mks;*.mk3d)|*.mkv;*.mka;*.mks;*.mk3d|%s"
 msgstr "Matroskaファイル (*.mkv;*.mka;*.mks;*.mk3d)|*.mkv;*.mka;*.mks;*.mk3d|%s"
 
-#: src/info/mkvinfo.cpp:917
+#: src/info/mkvinfo.cpp:918
 #, boost-format
 msgid "Max BlockAddition ID: %1%"
 msgstr "最大BlockAddition ID：%1%"
@@ -4784,7 +4789,7 @@ msgstr "最大BlockAddition ID：%1%"
 msgid "Max. number of files:"
 msgstr "ファイルの最大分割数："
 
-#: src/info/mkvinfo.cpp:886
+#: src/info/mkvinfo.cpp:887
 #, boost-format
 msgid "MaxCache: %1%"
 msgstr "最大キャッシュ：%1%"
@@ -4815,12 +4820,12 @@ msgstr "メモリアロケーションエラー：%1%（%2%）。\n"
 msgid "Memory for a RealAudio/RealVideo frame could not be allocated.\n"
 msgstr "RealAudio/RealVideoのフレームのためのメモリを確保することができませんでした。\n"
 
-#: src/info/mkvinfo.cpp:1091
+#: src/info/mkvinfo.cpp:1092
 #, boost-format
 msgid "Mime type: %1%"
 msgstr "MIMEタイプ：%1%"
 
-#: src/info/mkvinfo.cpp:883
+#: src/info/mkvinfo.cpp:884
 #, boost-format
 msgid "MinCache: %1%"
 msgstr "最小キャッシュ：%1%"
@@ -4890,7 +4895,7 @@ msgstr "'--split %1%'で'--split'の開始点/終了点がありません。\n"
 msgid "Modification of properties in the section '%1%' was requested, but no corresponding level 1 element was found in the file. %2%\n"
 msgstr "セクション'%1%'のプロパティの変更が要求されましたが、ファイルには対応するレベル1の要素が見つかりませんでした。%2%\n"
 
-#: src/info/mkvinfo.cpp:1211
+#: src/info/mkvinfo.cpp:1212
 msgid "More"
 msgstr ""
 
@@ -4963,7 +4968,7 @@ msgstr "このトラックの名前を入力します　例：\"ディレクタ�
 msgid "Name:"
 msgstr "名前："
 
-#: src/info/mkvinfo.cpp:844
+#: src/info/mkvinfo.cpp:845
 #, boost-format
 msgid "Name: %1%"
 msgstr "名前：%1%"
@@ -4986,7 +4991,7 @@ msgstr "次のファイル名"
 msgid "Next filename: %1%"
 msgstr "次のファイル名：%1%"
 
-#: src/info/mkvinfo.cpp:1637
+#: src/info/mkvinfo.cpp:1638
 #, boost-format
 msgid "Next level 0 element is not a segment but %1%"
 msgstr "次のレベル0要素はセグメントではなく%1%です"
@@ -5014,7 +5019,7 @@ msgstr "'--%2% %3%'で%1%が指定されていません。\n"
 msgid "No AC3 header found in first frame; track will be skipped.\n"
 msgstr "AC3ヘッダが最初のフレームで見つかりませんでした：トラックはスキップされます。\n"
 
-#: src/info/mkvinfo.cpp:1611
+#: src/info/mkvinfo.cpp:1612
 msgid "No EBML head found."
 msgstr "EBMLヘッダが見つかりません。"
 
@@ -5073,7 +5078,7 @@ msgstr ""
 msgid "No file loaded"
 msgstr "ファイルが読み込まれていません"
 
-#: src/info/mkvinfo.cpp:1719
+#: src/info/mkvinfo.cpp:1720
 #: src/propedit/options.cpp:33
 msgid "No file name given.\n"
 msgstr "ファイル名が指定されていません。\n"
@@ -5104,7 +5109,7 @@ msgstr ""
 
 #: src/extract/timecodes_v2.cpp:219
 #: src/extract/tracks.cpp:356
-#: src/info/mkvinfo.cpp:1625
+#: src/info/mkvinfo.cpp:1626
 msgid "No segment/level 0 element found."
 msgstr "セグメント/レベル0の要素が見つかりませんでした。"
 
@@ -5312,7 +5317,7 @@ msgstr ""
 msgid "Opus (in Ogg) audio files"
 msgstr "Ogg/OGM オーディオ/ビデオファイル"
 
-#: src/info/mkvinfo.cpp:672
+#: src/info/mkvinfo.cpp:673
 #, boost-format
 msgid "Order: %1%"
 msgstr "順番：%1%"
@@ -5398,7 +5403,7 @@ msgstr "ファイルを完全に解析し全ての要素を表示します"
 msgid "Parse the whole file instead of relying on the index."
 msgstr "インデックスを信頼する代わりにファイルの全体を解析します。"
 
-#: src/info/mkvinfo.cpp:1411
+#: src/info/mkvinfo.cpp:1412
 msgid "Parsing file"
 msgstr "ファイルを解析しています"
 
@@ -5676,7 +5681,7 @@ msgstr "ヘッダエディタを終了します"
 msgid "Quits mkvinfo"
 msgstr "mkvinfoを終了します"
 
-#: src/info/mkvinfo.cpp:743
+#: src/info/mkvinfo.cpp:744
 msgid "RSA"
 msgstr "RSA"
 
@@ -5803,7 +5808,7 @@ msgstr "コマンドラインを表示(&S)"
 msgid "S&tart selected"
 msgstr "選択したジョブを開始(&T)"
 
-#: src/info/mkvinfo.cpp:752
+#: src/info/mkvinfo.cpp:753
 msgid "SHA1-160"
 msgstr "SHA1-160"
 
@@ -5893,29 +5898,29 @@ msgstr "Matroskaファイルに保存(&M)"
 msgid "Saves the information from the current file to a text file"
 msgstr "現在のファイルの情報をテキストファイルに保存します"
 
-#: src/info/mkvinfo.cpp:686
+#: src/info/mkvinfo.cpp:687
 #, boost-format
 msgid "Scope: %1% (%2%)"
 msgstr "スコープ：%1% (%2%)"
 
-#: src/info/mkvinfo.cpp:968
+#: src/info/mkvinfo.cpp:969
 #, boost-format
 msgid "Seek ID: %1% (%2%)"
 msgstr "シークID：%1% (%2%)"
 
-#: src/info/mkvinfo.cpp:960
+#: src/info/mkvinfo.cpp:961
 msgid "Seek entry"
 msgstr "シークエントリ"
 
-#: src/info/mkvinfo.cpp:951
+#: src/info/mkvinfo.cpp:952
 msgid "Seek head"
 msgstr "シークヘッダ"
 
-#: src/info/mkvinfo.cpp:947
+#: src/info/mkvinfo.cpp:948
 msgid "Seek head (subentries will be skipped)"
 msgstr "シークヘッダ (サブエントリはスキップされます)"
 
-#: src/info/mkvinfo.cpp:981
+#: src/info/mkvinfo.cpp:982
 #, boost-format
 msgid "Seek position: %1%"
 msgstr "シーク位置：%1%"
@@ -5979,7 +5984,7 @@ msgstr "セグメント情報"
 
 #: src/extract/timecodes_v2.cpp:277
 #: src/extract/tracks.cpp:391
-#: src/info/mkvinfo.cpp:778
+#: src/info/mkvinfo.cpp:779
 #: src/info/qt_ui.cpp:179
 #: src/info/wxwidgets_ui.cpp:213
 msgid "Segment tracks"
@@ -5990,12 +5995,12 @@ msgstr "セグメントトラック"
 msgid "Segment unique ID"
 msgstr "セグメントの固有ID"
 
-#: src/info/mkvinfo.cpp:1633
+#: src/info/mkvinfo.cpp:1634
 #, boost-format
 msgid "Segment, size %1%"
 msgstr "セグメント、サイズ %1%"
 
-#: src/info/mkvinfo.cpp:1631
+#: src/info/mkvinfo.cpp:1632
 msgid "Segment, size unknown"
 msgstr "セグメント、不明なサイズ"
 
@@ -6151,7 +6156,7 @@ msgstr ""
 msgid "Sets the stereo mode of the video track to this value. If left empty then the track's original stereo mode will be kept or, if it didn't have one, none will be set at all."
 msgstr "ビデオトラックのステレオモードをこの値に設定します。空白のままにしておくと、トラックの元のステレオモードが保持されるか、ステレオモードが無い場合は何も設定されません。"
 
-#: src/info/mkvinfo.cpp:713
+#: src/info/mkvinfo.cpp:714
 #, boost-format
 msgid "Settings: %1%"
 msgstr "設定：%1%"
@@ -6230,22 +6235,22 @@ msgstr "プログラムのバージョン情報を表示します。"
 msgid "Shows mmg's debug window in which debug messages will appear. This is only useful if you're helping the author debug a problem in mmg."
 msgstr "デバッグメッセージが表示されるmmgのデバッグウィンドウを表示します。これは作者がmmgの問題をデバッグするのを手助けする場合にのみ有効です。"
 
-#: src/info/mkvinfo.cpp:740
+#: src/info/mkvinfo.cpp:741
 #, boost-format
 msgid "Signature algorithm: %1% (%2%)"
 msgstr "署名アルゴリズム：%1% (%2%)"
 
-#: src/info/mkvinfo.cpp:749
+#: src/info/mkvinfo.cpp:750
 #, boost-format
 msgid "Signature hash algorithm: %1% (%2%)"
 msgstr "署名ハッシュアルゴリズム：%1% (%2%)"
 
-#: src/info/mkvinfo.cpp:757
+#: src/info/mkvinfo.cpp:758
 #, boost-format
 msgid "Signature key ID: %1%"
 msgstr "署名鍵ID：%1%"
 
-#: src/info/mkvinfo.cpp:760
+#: src/info/mkvinfo.cpp:761
 #, boost-format
 msgid "Signature: %1%"
 msgstr "署名：%1%"
@@ -6254,7 +6259,7 @@ msgstr "署名：%1%"
 msgid "Signed integer"
 msgstr "符号付き整数"
 
-#: src/info/mkvinfo.cpp:1113
+#: src/info/mkvinfo.cpp:1114
 #, boost-format
 msgid "Silent Track Number: %1%"
 msgstr ""
@@ -6301,7 +6306,7 @@ msgstr "%1%バイトをスキップします（有効なDTSヘッダが見つか
 msgid "Skipping %1% bytes at the beginning (no valid MP3 header found).\n"
 msgstr "開始点で%1%バイトをスキップします（有効なMP3ヘッダが見つかりませんでした）。\n"
 
-#: src/info/mkvinfo.cpp:1227
+#: src/info/mkvinfo.cpp:1228
 msgid "Slices"
 msgstr "スライス"
 
@@ -6400,7 +6405,7 @@ msgstr "開始日時"
 msgid "Starting job ID %d (%s) on %s"
 msgstr "ジョブID %d（%s）の処理を開始します　開始日時：%s"
 
-#: src/info/mkvinfo.cpp:1572
+#: src/info/mkvinfo.cpp:1573
 #, boost-format
 msgid "Statistics for track number %1%: number of blocks: %2%; size in bytes: %3%; duration in seconds: %4%; approximate bitrate in bits/second: %5%\n"
 msgstr "トラック番号%1%の統計情報: ブロックの数: %2%；サイズ（バイト）: %3%; 持続時間（秒）: %4%; おおよそのビットレート（ビット/秒）: %5%\n"
@@ -6424,7 +6429,7 @@ msgstr "ステータス："
 msgid "Stereo mode parameter: not given in the form <TID>:<n|keyword> where n is a number between 0 and %1% or one of these keywords: %2% (argument was '%3%').\n"
 msgstr "ステレオモードパラメータ：<TID>:<n|keyword>のnが0～%1%の数字ではないか、keywordが%2%のうちの1つではありません（パラメータは'%3%'でした）。\n"
 
-#: src/info/mkvinfo.cpp:637
+#: src/info/mkvinfo.cpp:638
 #, boost-format
 msgid "Stereo mode: %1% (%2%)"
 msgstr "ステレオモード：%1%（%2%）"
@@ -6499,7 +6504,7 @@ msgstr "タグファイル (*.xml;*.txt)|*.xml;*.txt|%s"
 msgid "Tag selectors"
 msgstr "タグセレクター"
 
-#: src/info/mkvinfo.cpp:1500
+#: src/info/mkvinfo.cpp:1501
 #: src/propedit/options.cpp:177
 msgid "Tags"
 msgstr "タグ"
@@ -6785,7 +6790,7 @@ msgstr "訂正ファイルのヘッダを正しく読み取ることができま
 msgid "The country '%s' is not a valid ccTLD and cannot be selected."
 msgstr "国'%s'は有効なccTLDコードではないので選択できません。"
 
-#: src/merge/output_control.cpp:1659
+#: src/merge/output_control.cpp:1657
 msgid "The cue entries (the index) are being written...\n"
 msgstr "キューエントリ（インデックス）が書き込まれています...\n"
 
@@ -7695,7 +7700,7 @@ msgstr "このプロパティは唯一のものです。'%1%'でさらに追加�
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. %1%\n"
 msgstr "これは本当に、本当に発生するべきではありません。最初のメタシーク要素のために確保されたスペースが小さすぎます。%1%\n"
 
-#: src/merge/output_control.cpp:1770
+#: src/merge/output_control.cpp:1768
 #, boost-format
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. Size needed: %1%. %2%\n"
 msgstr "これは本当に、本当に発生するべきではありません。最初のメタシーク要素のために確保されたスペースが小さすぎます。必要なサイズ：%1%。%2%\n"
@@ -7712,7 +7717,7 @@ msgstr "このトラックがSBR AAC/HE-AAC/AAC+のデータを含んでいる�
 msgid "This track is not compatible with the WebM mode and cannot be enabled."
 msgstr "このトラックはWebMと互換性がないため、有効化することはできません。"
 
-#: src/info/mkvinfo.cpp:1231
+#: src/info/mkvinfo.cpp:1232
 msgid "Time slice"
 msgstr "タイムスライス"
 
@@ -7728,7 +7733,7 @@ msgstr "タイムコードファイル (*.tmc;*.txt)|*.tmc;*.txt|%s"
 #: src/extract/timecodes_v2.cpp:252
 #: src/extract/tracks.cpp:384
 #: src/info/mkvinfo.cpp:480
-#: src/info/mkvinfo.cpp:914
+#: src/info/mkvinfo.cpp:915
 #, boost-format
 msgid "Timecode scale: %1%"
 msgstr "タイムコードスケール：%1%"
@@ -7807,7 +7812,7 @@ msgstr "コーデックID '%2%'のトラック%1%は\"codec private\"要素が�
 msgid "Track %1% with the CodecID '%2%' is missing the \"default duration\" element and cannot be extracted.\n"
 msgstr "コーデックID '%2%'のトラック%1%は\"default duration\"要素がなく、抽出することができません。\n"
 
-#: src/info/mkvinfo.cpp:926
+#: src/info/mkvinfo.cpp:927
 #, boost-format
 msgid "Track %1%: %2%, codec ID: %3%%4%%5%%6%\n"
 msgstr "トラック %1%：%2%、コーデックID： %3%%4%%5%%6%\n"
@@ -7853,7 +7858,7 @@ msgstr "トラックID %1%：%2%（%3%）"
 msgid "Track UID"
 msgstr "トラックUID"
 
-#: src/info/mkvinfo.cpp:821
+#: src/info/mkvinfo.cpp:822
 #, boost-format
 msgid "Track UID: %1%"
 msgstr "トラックUID：%1%"
@@ -7882,17 +7887,17 @@ msgstr "トラック番号"
 msgid "Track number %1% has been encrypted and decryption has not yet been implemented.\n"
 msgstr "トラック%1%は暗号化されていますが暗号化解除はまだ実装されていません。\n"
 
-#: src/info/mkvinfo.cpp:816
+#: src/info/mkvinfo.cpp:817
 #, boost-format
 msgid "Track number: %1% (track ID for mkvmerge & mkvextract: %2%)"
 msgstr "トラック番号：%1% （トラックID for mkvmerge & mkvextract: %2%)"
 
-#: src/info/mkvinfo.cpp:879
+#: src/info/mkvinfo.cpp:880
 #, boost-format
 msgid "Track overlay: %1%"
 msgstr "トラックオーバーレイ：%1%"
 
-#: src/info/mkvinfo.cpp:831
+#: src/info/mkvinfo.cpp:832
 #, boost-format
 msgid "Track type: %1%"
 msgstr "トラックタイプ：%1%"
@@ -7925,9 +7930,10 @@ msgstr "2つのVobSubトラックを同じファイルに抽出できるのは�
 
 #: src/common/property_element.cpp:139
 #: src/mmg/header_editor/frame.cpp:445
+#, fuzzy
 msgid ""
 "Type of the unit for DisplayWidth/Height\n"
-"(0: pixels, 1: centimeters, 2: inches)."
+"(0: pixels, 1: centimeters, 2: inches, 3: aspect ratio)."
 msgstr ""
 "縦表示解像度・横表示解像度の単位です\n"
 "（0：ピクセル、1：センチメートル、2：インチ）。"
@@ -7936,7 +7942,7 @@ msgstr ""
 msgid "Type:"
 msgstr "タイプ："
 
-#: src/info/mkvinfo.cpp:691
+#: src/info/mkvinfo.cpp:692
 #, boost-format
 msgid "Type: %1% (%2%)"
 msgstr "タイプ：%1% (%2%)"
@@ -8430,7 +8436,7 @@ msgstr "アナグリフ方式（緑／マゼンタ）"
 msgid "append"
 msgstr "追加結合"
 
-#: src/info/mkvinfo.cpp:928
+#: src/info/mkvinfo.cpp:929
 #: src/input/r_matroska.cpp:96
 #: src/mmg/mmg.cpp:61
 msgid "audio"
@@ -8449,7 +8455,7 @@ msgstr "フィールドシーケンシャル方式（レフトファースト）
 msgid "both eyes laced in one block (right first)"
 msgstr "フィールドシーケンシャル方式（ライトファースト）"
 
-#: src/info/mkvinfo.cpp:931
+#: src/info/mkvinfo.cpp:932
 #: src/input/r_matroska.cpp:97
 msgid "buttons"
 msgstr "ボタン"
@@ -8488,7 +8494,7 @@ msgstr "正常に完了しました"
 msgid "completed with warnings"
 msgstr "完了しましたが、警告があります"
 
-#: src/info/mkvinfo.cpp:693
+#: src/info/mkvinfo.cpp:694
 msgid "compression"
 msgstr "圧縮"
 
@@ -8504,7 +8510,7 @@ msgstr "create_track_number：file_numが見つかりませんでした。%1%\n"
 msgid "default"
 msgstr "デフォルト"
 
-#: src/info/mkvinfo.cpp:894
+#: src/info/mkvinfo.cpp:895
 #, boost-format
 msgid "default duration: %|1$.3f|ms (%|2$.3f| frames/fields per second for a video track)"
 msgstr "デフォルトのフレーム持続期間：%|1$.3f|ms（ビデオトラックの場合毎秒%|2$.3f|フレーム/フィールド）"
@@ -8518,7 +8524,7 @@ msgstr "deflateInit()が失敗しました。結果：%1%\n"
 msgid "disable all"
 msgstr "全て無効"
 
-#: src/info/mkvinfo.cpp:1336
+#: src/info/mkvinfo.cpp:1337
 msgid "discardable, "
 msgstr " "
 
@@ -8553,7 +8559,7 @@ msgstr "全て有効"
 msgid "enabled"
 msgstr "有効"
 
-#: src/info/mkvinfo.cpp:694
+#: src/info/mkvinfo.cpp:695
 msgid "encryption"
 msgstr "暗号化"
 
@@ -8628,7 +8634,7 @@ msgstr "全てのフレーム"
 msgid "have an xcptn\n"
 msgstr "例外があります\n"
 
-#: src/info/mkvinfo.cpp:709
+#: src/info/mkvinfo.cpp:710
 msgid "header removal"
 msgstr "ヘッダ削除"
 
@@ -8657,11 +8663,11 @@ msgstr "inflateInit()が失敗しました。結果：%1%\n"
 msgid "is being estimated"
 msgstr "計算中です"
 
-#: src/info/mkvinfo.cpp:1334
+#: src/info/mkvinfo.cpp:1335
 msgid "key, "
 msgstr "キー、"
 
-#: src/info/mkvinfo.cpp:911
+#: src/info/mkvinfo.cpp:912
 #, boost-format
 msgid "language: %1%"
 msgstr "言語：%1%"
@@ -9031,7 +9037,7 @@ msgstr "mkvmergeは2種類のチャプタフォーマットをサポートして
 msgid "mkvmerge was interrupted by a SIGINT (Ctrl+C?)\n"
 msgstr "mkvmergeは割り込み信号（Ctrl+C？）によって中断されました。\n"
 
-#: src/info/mkvinfo.cpp:817
+#: src/info/mkvinfo.cpp:818
 #, boost-format
 msgid "mkvmerge/mkvextract track ID: %1%"
 msgstr "mkvmerge/mkvextractのトラックID: %1%"
@@ -9080,7 +9086,7 @@ msgstr "mpeg_ps_reader：発生するべきではありません #2。%1%"
 msgid "no"
 msgstr "いいえ"
 
-#: src/info/mkvinfo.cpp:726
+#: src/info/mkvinfo.cpp:727
 msgid "no encryption"
 msgstr "暗号化なし"
 
@@ -9092,11 +9098,11 @@ msgstr "エラー無し"
 msgid "no file loaded"
 msgstr "ファイルが読み込まれていません"
 
-#: src/info/mkvinfo.cpp:742
+#: src/info/mkvinfo.cpp:743
 msgid "no signature algorithm"
 msgstr "署名アルゴリズムなし"
 
-#: src/info/mkvinfo.cpp:751
+#: src/info/mkvinfo.cpp:752
 msgid "no signature hash algorithm"
 msgstr "署名ハッシュアルゴリズムなし"
 
@@ -9219,7 +9225,7 @@ msgstr "削除"
 msgid "remove all"
 msgstr "全て削除"
 
-#: src/info/mkvinfo.cpp:683
+#: src/info/mkvinfo.cpp:684
 msgid "rest: unknown"
 msgstr "1でも2でもない：未知"
 
@@ -9294,7 +9300,7 @@ msgstr "start >= m->ListSize()。これは発生するべきではありませ�
 msgid "subtitle"
 msgstr "字幕"
 
-#: src/info/mkvinfo.cpp:930
+#: src/info/mkvinfo.cpp:931
 #: src/mmg/mmg.cpp:63
 msgid "subtitles"
 msgstr "字幕"
@@ -9330,13 +9336,13 @@ msgstr "und (Undetermined)"
 
 #: src/common/mm_io_win.cpp:168
 #: src/common/stereo_mode.cpp:68
-#: src/info/mkvinfo.cpp:685
-#: src/info/mkvinfo.cpp:695
-#: src/info/mkvinfo.cpp:710
-#: src/info/mkvinfo.cpp:732
-#: src/info/mkvinfo.cpp:744
-#: src/info/mkvinfo.cpp:754
-#: src/info/mkvinfo.cpp:932
+#: src/info/mkvinfo.cpp:686
+#: src/info/mkvinfo.cpp:696
+#: src/info/mkvinfo.cpp:711
+#: src/info/mkvinfo.cpp:733
+#: src/info/mkvinfo.cpp:745
+#: src/info/mkvinfo.cpp:755
+#: src/info/mkvinfo.cpp:933
 #: src/input/r_matroska.cpp:95
 #: src/input/r_matroska.cpp:2227
 #: src/input/r_mpeg_ps.cpp:1326
@@ -9364,7 +9370,7 @@ msgstr "utf8_strlen()：無効なUTF-8の文字です。最初のバイト：0x%
 msgid "verify failed: chapters->CheckMandatory() is false. This should not have happened. Please file a bug report.\n"
 msgstr "ベリファイが失敗しました：chapters->CheckMandatory()がfalseです。発生するべきではありません。バグレポートを提出してください。\n"
 
-#: src/info/mkvinfo.cpp:929
+#: src/info/mkvinfo.cpp:930
 #: src/input/r_matroska.cpp:98
 #: src/mmg/mmg.cpp:62
 msgid "video"

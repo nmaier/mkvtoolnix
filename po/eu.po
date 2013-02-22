@@ -699,16 +699,21 @@ msgid " (FourCC: %1%%2%%3%%4%, 0x%|5$08x|)"
 msgstr " (FourCC: %1%%2%%3%%4%, 0x%|5$08x|)"
 
 #: src/info/mkvinfo.cpp:190
-#: src/info/mkvinfo.cpp:855
+#: src/info/mkvinfo.cpp:856
 #, boost-format
 msgid " (adler: 0x%|1$08x|)"
 msgstr " (adler: 0x%|1$08x|)"
+
+#: src/info/mkvinfo.cpp:626
+#, fuzzy
+msgid " (aspect ratio)"
+msgstr " (heutsi ikuspegi mailari)"
 
 #: src/info/mkvinfo.cpp:624
 msgid " (centimeters)"
 msgstr " (metroehunenak)"
 
-#: src/info/mkvinfo.cpp:648
+#: src/info/mkvinfo.cpp:649
 msgid " (fixed)"
 msgstr " (zuzenduta)"
 
@@ -717,7 +722,7 @@ msgstr " (zuzenduta)"
 msgid " (format tag: 0x%|1$04x|)"
 msgstr " (heuskarri etiketa: 0x%|1$04x|)"
 
-#: src/info/mkvinfo.cpp:646
+#: src/info/mkvinfo.cpp:647
 msgid " (free resizing)"
 msgstr " (birneurriratze askea)"
 
@@ -730,7 +735,7 @@ msgstr " (h.264 profila: %1% @L%2%.%3%)"
 msgid " (inches)"
 msgstr " (hatzbeteak)"
 
-#: src/info/mkvinfo.cpp:647
+#: src/info/mkvinfo.cpp:648
 msgid " (keep aspect ratio)"
 msgstr " (heutsi ikuspegi mailari)"
 
@@ -1671,7 +1676,7 @@ msgstr "--timecode-scale REPLACEME"
 msgid "1. A number which will be interepreted as an attachment ID as listed by 'mkvmerge --identify-verbose'. These are usually simply numbered starting from 0 (e.g. '2')."
 msgstr "1. Eranskin baten ID bezala ulertuko den zenbaki bat 'mkvmerge --identify-verbose' zerrendan bezala . Hauek arrunt 0-etik hasten diren zenbakipen arruntak dira (adib. '2')."
 
-#: src/info/mkvinfo.cpp:679
+#: src/info/mkvinfo.cpp:680
 msgid "1: all frames"
 msgstr "1: frame guztiak"
 
@@ -1683,7 +1688,7 @@ msgstr "2 byte"
 msgid "2. A number with the prefix '=' which will be interepreted as the attachment's unique ID (UID) as listed by 'mkvmerge --identify-verbose'. These are usually random-looking numbers (e.g. '128975986723')."
 msgstr "2. '=' aurrizkia duen zenbaki bat zeina eranskinaren ID (UID) bakarra bezala ulertuko da 'mkvmerge --identify-verbose' zerrendan bezala. Hauek arrunt zorizko-bilaketa zenbakiak dira (adib. '128975986723')."
 
-#: src/info/mkvinfo.cpp:681
+#: src/info/mkvinfo.cpp:682
 msgid "2: codec private data"
 msgstr "2: kodekaren datu pribatuak"
 
@@ -1781,7 +1786,7 @@ msgstr "Atal honen tokian irakurtzeko zati bat. Edizio ezarpena zati edizio UID 
 msgid "A single Matroska block contains either a full frame (for progressive content) or a single field (for interlaced content)."
 msgstr "Matroska bloke bakar batek  frame oso bat du (eduki aurrerakorrarentzat) edo eremu bakar bat (eduki elkarloturako)."
 
-#: src/info/mkvinfo.cpp:789
+#: src/info/mkvinfo.cpp:790
 msgid "A track"
 msgstr "Bide bat"
 
@@ -1982,7 +1987,7 @@ msgstr "Iturburu agiri zati gehigarriak"
 msgid "AdditionalID: %1%"
 msgstr "ID-gehigarria: %1%"
 
-#: src/info/mkvinfo.cpp:1207
+#: src/info/mkvinfo.cpp:1208
 msgid "Additions"
 msgstr "Gehigarriak"
 
@@ -2006,7 +2011,7 @@ msgstr "Zehaztu denbora-kodeak"
 msgid "After loading a file expand the most important elements"
 msgstr "Agiri bat gertatu ondoren hedatu gai garrantzitsuenak"
 
-#: src/info/mkvinfo.cpp:704
+#: src/info/mkvinfo.cpp:705
 #, boost-format
 msgid "Algorithm: %1% (%2%)"
 msgstr "Algoritmoa: %1% (%2%)"
@@ -2133,7 +2138,7 @@ msgstr "Oraindik beste lan multiplexaketa bat dago garatzen. Mesedez itxaron har
 msgid "Appending a track from a file to another track from the same file is not allowed. This is the case for tracks number %u and %u."
 msgstr "Agiri batekik bide bat gehitzea agiri bereko beste bide batera ez dago ahalbideturik. Hau da %u eta %u zenbakiko bideen kasua."
 
-#: src/merge/output_control.cpp:1908
+#: src/merge/output_control.cpp:1906
 #, boost-format
 msgid "Appending track %1% from file no. %2% ('%3%') to track %4% from file no. %5% ('%6%').\n"
 msgstr "%2% zenbakiko agiritiko ('%3%') %1% bidea gehitzea %5% zenbakiko agiritiko %4% bidera ('%6%').\n"
@@ -2150,7 +2155,7 @@ msgstr "Ikuspegi maila"
 msgid "Aspect ratio factor"
 msgstr "Ikuspegi maila ezaugarria"
 
-#: src/info/mkvinfo.cpp:644
+#: src/info/mkvinfo.cpp:645
 #, boost-format
 msgid "Aspect ratio type: %1%%2%"
 msgstr "Ikuspegi maila mota: %1%%2%"
@@ -2163,7 +2168,7 @@ msgstr "Ikuspegi maila:"
 msgid "At least one <ChapterAtom> element is needed."
 msgstr "Gutxienez <ChapterAtom> gai bat behar da."
 
-#: src/info/mkvinfo.cpp:1081
+#: src/info/mkvinfo.cpp:1082
 msgid "Attached"
 msgstr "Erantsita"
 
@@ -2188,7 +2193,7 @@ msgstr "Eranskin hautatzaileak"
 msgid "Attachment style:"
 msgstr "Eranskinaren estiloa:"
 
-#: src/info/mkvinfo.cpp:1072
+#: src/info/mkvinfo.cpp:1073
 #: src/mmg/mmg_dialog.cpp:326
 #: src/mmg/tabs/attachments.cpp:153
 #: src/propedit/options.cpp:195
@@ -2292,7 +2297,7 @@ msgstr "Bloke iraupena: %1%.%|2$06d|sm"
 
 #: src/extract/timecodes_v2.cpp:304
 #: src/extract/tracks.cpp:416
-#: src/info/mkvinfo.cpp:1123
+#: src/info/mkvinfo.cpp:1124
 msgid "Block group"
 msgstr "Bloke taldea"
 
@@ -2377,7 +2382,7 @@ msgstr "Kategoria ez da NUL-en amaitua"
 
 #: src/extract/timecodes_v2.cpp:383
 #: src/extract/tracks.cpp:466
-#: src/info/mkvinfo.cpp:1698
+#: src/info/mkvinfo.cpp:1699
 msgid "Caught exception"
 msgstr "Salbuespena harrapatu da"
 
@@ -2511,7 +2516,7 @@ msgstr "Atal egiaztapen akatsa"
 msgid "Chapter verification succeeded"
 msgstr "Atal egiaztapen ongi egin da"
 
-#: src/info/mkvinfo.cpp:1484
+#: src/info/mkvinfo.cpp:1485
 #: src/mmg/options/chapters.cpp:125
 #: src/mmg/tabs/global.cpp:341
 #: src/propedit/options.cpp:186
@@ -2649,7 +2654,7 @@ msgstr "Itxi oraingo agiria aldaketak gorde gabe"
 
 #: src/extract/timecodes_v2.cpp:285
 #: src/extract/tracks.cpp:398
-#: src/info/mkvinfo.cpp:1658
+#: src/info/mkvinfo.cpp:1659
 msgid "Cluster"
 msgstr "Kluster"
 
@@ -2685,22 +2690,22 @@ msgstr "Klusterraren denbora-kodea: %|1$.3f|s"
 msgid "Codec ID"
 msgstr "Kodek ID-a"
 
-#: src/info/mkvinfo.cpp:848
+#: src/info/mkvinfo.cpp:849
 #, boost-format
 msgid "Codec ID: %1%"
 msgstr "Kodek ID-a: %1%"
 
-#: src/info/mkvinfo.cpp:876
+#: src/info/mkvinfo.cpp:877
 #, boost-format
 msgid "Codec decode all: %1%"
 msgstr "Kodekaren dekodeaketa denak: %1%"
 
-#: src/info/mkvinfo.cpp:873
+#: src/info/mkvinfo.cpp:874
 #, boost-format
 msgid "Codec download URL: %1%"
 msgstr "Kodek jeisketa URL-a: %1%"
 
-#: src/info/mkvinfo.cpp:870
+#: src/info/mkvinfo.cpp:871
 #, boost-format
 msgid "Codec info URL: %1%"
 msgstr "Kodekaren argibide URL-a: %1%"
@@ -2710,12 +2715,12 @@ msgstr "Kodekaren argibide URL-a: %1%"
 msgid "Codec name"
 msgstr "Kodekaren izena"
 
-#: src/info/mkvinfo.cpp:863
+#: src/info/mkvinfo.cpp:864
 #, boost-format
 msgid "Codec name: %1%"
 msgstr "Kodekaren izena: %1%"
 
-#: src/info/mkvinfo.cpp:867
+#: src/info/mkvinfo.cpp:868
 #, boost-format
 msgid "Codec settings: %1%"
 msgstr "Kodekaren ezarpenak: %1%"
@@ -2725,7 +2730,7 @@ msgstr "Kodekaren ezarpenak: %1%"
 msgid "Codec state: %1%"
 msgstr "Kodekaren egoera: %1%"
 
-#: src/info/mkvinfo.cpp:860
+#: src/info/mkvinfo.cpp:861
 #, boost-format
 msgid "CodecPrivate, length %1%%2%"
 msgstr "Kodek-Pribatu, luzera %1%%2%"
@@ -2734,7 +2739,7 @@ msgstr "Kodek-Pribatu, luzera %1%%2%"
 msgid "Collapse all entries so that none of their sub-entries will be shown"
 msgstr "Bildu sarrera guztiak beren azpi-sarrerak ez erakusteko bezala"
 
-#: src/info/mkvinfo.cpp:652
+#: src/info/mkvinfo.cpp:653
 #, boost-format
 msgid "Colour space: %1%"
 msgstr "Margo tartea: %1%"
@@ -2781,19 +2786,19 @@ msgstr "Itxurapena gertatuta."
 msgid "Configuration saved."
 msgstr "Itxurapena gordeta."
 
-#: src/info/mkvinfo.cpp:698
+#: src/info/mkvinfo.cpp:699
 msgid "Content compression"
 msgstr "Eduki konpresioa"
 
-#: src/info/mkvinfo.cpp:668
+#: src/info/mkvinfo.cpp:669
 msgid "Content encoding"
 msgstr "Eduki kodeaketa"
 
-#: src/info/mkvinfo.cpp:664
+#: src/info/mkvinfo.cpp:665
 msgid "Content encodings"
 msgstr "Eduki kodeaketak"
 
-#: src/info/mkvinfo.cpp:718
+#: src/info/mkvinfo.cpp:719
 msgid "Content encryption"
 msgstr "Eduki enkriptaketa"
 
@@ -2839,7 +2844,7 @@ msgstr "Ezin izan da atera sekuentzia idazburua MPEG-1/2 bide honetatik.\n"
 msgid "Could not find an index for audio track %1% (avilib error message: %2%). Skipping track.\n"
 msgstr "Ezin izan da aurkitu aurkibide bat %1% audio bidearentzat (avilib akats mezua: %2%). Bide jauzketa.\n"
 
-#: src/merge/output_control.cpp:1830
+#: src/merge/output_control.cpp:1828
 #, boost-format
 msgid "Could not find gptzr when appending. %1%\n"
 msgstr "Ezin izan da aurkitu gptzr erantsterakoan. %1%\n"
@@ -2950,22 +2955,22 @@ msgstr "Mozketa parametroak: ez dira ematen forma hauetan, <TID>:<left>,<top>,<r
 msgid "Cropping:"
 msgstr "Mozketa:"
 
-#: src/info/mkvinfo.cpp:1031
+#: src/info/mkvinfo.cpp:1032
 #, boost-format
 msgid "Cue block number: %1%"
 msgstr "Clue bloke zenbakia: %1%"
 
-#: src/info/mkvinfo.cpp:1022
+#: src/info/mkvinfo.cpp:1023
 #, boost-format
 msgid "Cue cluster position: %1%"
 msgstr "Cue kluster kokapena: %1%"
 
-#: src/info/mkvinfo.cpp:1035
+#: src/info/mkvinfo.cpp:1036
 #, boost-format
 msgid "Cue codec state: %1%"
 msgstr "Cue kodekaren egoera: %1%"
 
-#: src/info/mkvinfo.cpp:1028
+#: src/info/mkvinfo.cpp:1029
 #, boost-format
 msgid "Cue duration: %1%"
 msgstr "Cue iraupena: %1%"
@@ -2974,35 +2979,35 @@ msgstr "Cue iraupena: %1%"
 msgid "Cue name format:"
 msgstr "Cue izen heuskarria:"
 
-#: src/info/mkvinfo.cpp:1008
+#: src/info/mkvinfo.cpp:1009
 msgid "Cue point"
 msgstr "Cue puntua"
 
-#: src/info/mkvinfo.cpp:1045
+#: src/info/mkvinfo.cpp:1046
 #, boost-format
 msgid "Cue ref cluster: %1%"
 msgstr "Cue xeh. klusterra: %1%"
 
-#: src/info/mkvinfo.cpp:1051
+#: src/info/mkvinfo.cpp:1052
 #, boost-format
 msgid "Cue ref codec state: %1%"
 msgstr "Cue xeh. kodek egoera:: %1%"
 
-#: src/info/mkvinfo.cpp:1048
+#: src/info/mkvinfo.cpp:1049
 #, boost-format
 msgid "Cue ref number: %1%"
 msgstr "Cue xeh. zenbakia: %1%"
 
-#: src/info/mkvinfo.cpp:1042
+#: src/info/mkvinfo.cpp:1043
 #, boost-format
 msgid "Cue ref time: %|1$.3f|s"
 msgstr "Cue xeh. denbora: %|1$.3f|s"
 
-#: src/info/mkvinfo.cpp:1038
+#: src/info/mkvinfo.cpp:1039
 msgid "Cue reference"
 msgstr "Cue xehetasuna"
 
-#: src/info/mkvinfo.cpp:1025
+#: src/info/mkvinfo.cpp:1026
 #, boost-format
 msgid "Cue relative position: %1%"
 msgstr "Cue kokapen erlatiboa: %1%"
@@ -3022,21 +3027,21 @@ msgstr "Cue orri aztertzailea: AURKIBIDE zenbaki baliogabea (lortua %1%, itxaron
 msgid "Cue sheet parser: No INDEX entry found for the previous TRACK entry (current line: %1%)\n"
 msgstr "Cue orri aztertzailea: Ez da AURKIBIDE sarrerarik aurkitu aurreko BIDE sarrerarentzat (oraingo lerroa: %1%)\n"
 
-#: src/info/mkvinfo.cpp:1012
+#: src/info/mkvinfo.cpp:1013
 #, boost-format
 msgid "Cue time: %|1$.3f|s"
 msgstr "Cue denbora: %|1$.3f|s"
 
-#: src/info/mkvinfo.cpp:1015
+#: src/info/mkvinfo.cpp:1016
 msgid "Cue track positions"
 msgstr "Cue bide kokapenak"
 
-#: src/info/mkvinfo.cpp:1019
+#: src/info/mkvinfo.cpp:1020
 #, boost-format
 msgid "Cue track: %1%"
 msgstr "Cue bidea: %1%"
 
-#: src/info/mkvinfo.cpp:995
+#: src/info/mkvinfo.cpp:996
 msgid "Cues (subentries will be skipped)"
 msgstr "Cues (azpisarrerak jauzi egingo dira)"
 
@@ -3135,12 +3140,12 @@ msgstr "Berezkoa"
 msgid "Default duration"
 msgstr "Berezko iraupena"
 
-#: src/info/mkvinfo.cpp:891
+#: src/info/mkvinfo.cpp:892
 #, boost-format
 msgid "Default duration: %|1$.3f|ms (%|2$.3f| frames/fields per second for a video track)"
 msgstr "Berezko iraupena: %|1$.3f|sm (%|2$.3f| frame/eremu segunduko bideo bide batentzat)"
 
-#: src/info/mkvinfo.cpp:903
+#: src/info/mkvinfo.cpp:904
 #, boost-format
 msgid "Default flag: %1%"
 msgstr "Berezko ikurra: %1%"
@@ -3251,17 +3256,17 @@ msgstr "Ez gehitu sarrera bat atalentzat meta bilaketa gaian."
 msgid "Do not write meta seek elements at all."
 msgstr "Ez idatzi meta bilaketa gairik inon."
 
-#: src/info/mkvinfo.cpp:1546
+#: src/info/mkvinfo.cpp:1547
 #, boost-format
 msgid "Doc type read version: %1%"
 msgstr "Agiri mota irakurketa bertsioa: %1%"
 
-#: src/info/mkvinfo.cpp:1543
+#: src/info/mkvinfo.cpp:1544
 #, boost-format
 msgid "Doc type version: %1%"
 msgstr "Agiri mota bertsioa: %1%"
 
-#: src/info/mkvinfo.cpp:1540
+#: src/info/mkvinfo.cpp:1541
 #, boost-format
 msgid "Doc type: %1%"
 msgstr "Agiri mota: %1%"
@@ -3296,26 +3301,26 @@ msgstr "Iraupena: %|1$.3f|s (%2%)"
 msgid "E&xit\tCtrl-Q"
 msgstr "I&rten\tCtrl-Q"
 
-#: src/info/mkvinfo.cpp:1516
+#: src/info/mkvinfo.cpp:1517
 msgid "EBML head"
 msgstr "EBML burua"
 
-#: src/info/mkvinfo.cpp:1534
+#: src/info/mkvinfo.cpp:1535
 #, boost-format
 msgid "EBML maximum ID length: %1%"
 msgstr "EBLM gehienezko ID luzera: %1%"
 
-#: src/info/mkvinfo.cpp:1537
+#: src/info/mkvinfo.cpp:1538
 #, boost-format
 msgid "EBML maximum size length: %1%"
 msgstr "EBLM gehienezko neurri luzera: %1%"
 
-#: src/info/mkvinfo.cpp:1531
+#: src/info/mkvinfo.cpp:1532
 #, boost-format
 msgid "EBML read version: %1%"
 msgstr "EBLM irakurketa bertsioa: %1%"
 
-#: src/info/mkvinfo.cpp:1528
+#: src/info/mkvinfo.cpp:1529
 #, boost-format
 msgid "EBML version: %1%"
 msgstr "EBML bertsioa: %1%"
@@ -3387,7 +3392,7 @@ msgstr "Gaiak"
 msgid "Elements in the category '%1%' ('--edit %2%'):\n"
 msgstr "'%1%' kategoriako gaiak ('--edit %2%'):\n"
 
-#: src/info/mkvinfo.cpp:840
+#: src/info/mkvinfo.cpp:841
 #, boost-format
 msgid "Enabled: %1%"
 msgstr "Gaituta:%1%"
@@ -3396,12 +3401,12 @@ msgstr "Gaituta:%1%"
 msgid "Enables splitting of the output into more than one file. You can split after a given size, after a given amount of time has passed in each file or after a list of timecodes."
 msgstr "Irteera bananketa gaitzen du agiri batean baino gehiagotan. Banandu dezakezu emaniko neurri baten ondoren, agiri bakoitzean igarotako denbora kopuru baten ondoren edo denbora-kode zerrenda baten ondoren."
 
-#: src/info/mkvinfo.cpp:724
+#: src/info/mkvinfo.cpp:725
 #, boost-format
 msgid "Encryption algorithm: %1% (%2%)"
 msgstr "Enkriptaketa algoritmoa: %1% (%2%)"
 
-#: src/info/mkvinfo.cpp:735
+#: src/info/mkvinfo.cpp:736
 #, boost-format
 msgid "Encryption key ID: %1%"
 msgstr "Enkriptaketa ID giltza: %1%"
@@ -3483,7 +3488,7 @@ msgstr "Akatsa:"
 msgid "Error: "
 msgstr "Akatsa:"
 
-#: src/info/mkvinfo.cpp:1597
+#: src/info/mkvinfo.cpp:1598
 #, boost-format
 msgid "Error: Couldn't open input file %1% (%2%).\n"
 msgstr "Akatsa: Ezinezkoa sarrera agiria irekitzea %1% (%2%).\n"
@@ -3641,7 +3646,7 @@ msgstr "Agiria '%1%': edukiontzia: %2%"
 msgid "File '%1%': unsupported container: %2%\n"
 msgstr "Agiria '%1%': edukiontzi sostengugabea: %2%\n"
 
-#: src/info/mkvinfo.cpp:1097
+#: src/info/mkvinfo.cpp:1098
 #, boost-format
 msgid "File UID: %1%"
 msgstr "Agiri UID-a:%1%"
@@ -3658,12 +3663,12 @@ msgstr "Agiriak uste baino frame gutxiago ditu edo hondatuta dago %1% framearen 
 msgid "File creation failed"
 msgstr "Agiri sortze hutsegitea"
 
-#: src/info/mkvinfo.cpp:1094
+#: src/info/mkvinfo.cpp:1095
 #, boost-format
 msgid "File data, size: %1%"
 msgstr "Agiri datuak, neurria: %1%"
 
-#: src/info/mkvinfo.cpp:1085
+#: src/info/mkvinfo.cpp:1086
 #, boost-format
 msgid "File description: %1%"
 msgstr "Agiri azalpena: %1%"
@@ -3695,7 +3700,7 @@ msgstr "Agiria aldatuta"
 msgid "File name"
 msgstr "Agiri izena"
 
-#: src/info/mkvinfo.cpp:1088
+#: src/info/mkvinfo.cpp:1089
 #, boost-format
 msgid "File name: %1%"
 msgstr "Agiri izena: %1%"
@@ -3769,7 +3774,7 @@ msgstr "Behartu Xiph estiloko lokarria."
 msgid "Force the translations for 'code' to be used."
 msgstr "Behartu erabiltzeko 'kode' itzulpenak."
 
-#: src/info/mkvinfo.cpp:906
+#: src/info/mkvinfo.cpp:907
 #, boost-format
 msgid "Forced flag: %1%"
 msgstr "Ikur behartua: %1%"
@@ -3821,7 +3826,7 @@ msgstr "FourCC: Ez dago bide ID-a, '%1% %2%'.\n"
 msgid "Frame number: %1%"
 msgstr "Frame zenbakia: %1%"
 
-#: src/info/mkvinfo.cpp:655
+#: src/info/mkvinfo.cpp:656
 #, boost-format
 msgid "Frame rate: %1%"
 msgstr "Frame neurria: %1%"
@@ -3840,7 +3845,7 @@ msgstr "Frame/eremu:"
 msgid "Free-form edit field for user defined options for this track. What you input here is added after all the other options mmg adds so that you could overwrite any of mmg's options for this track. All occurences of the string \"<TID>\" will be replaced by the track's track ID."
 msgstr "Forma-askeko edizio eremua erabiltzaileak bide honentzako aukerak zehazteko. Hemen sartzen duzuna mmg-k beste aukera guztiak gehitu ondoren gehitzen da, hortaz bide honentzako mmg-ren aukera guztiak gainidazten dituzu. \"<TID>\" katearen gertaera guztiak bidearen bide ID-rekin ordeztuko dira."
 
-#: src/info/mkvinfo.cpp:629
+#: src/info/mkvinfo.cpp:630
 #, boost-format
 msgid "Gamma: %1%"
 msgstr "Gamma: %1%"
@@ -4101,7 +4106,7 @@ msgstr "Sarrera luzeegia: %1% > %2%"
 msgid "Interface language:"
 msgstr "Intefaze hizkuntza:"
 
-#: src/info/mkvinfo.cpp:632
+#: src/info/mkvinfo.cpp:633
 #, boost-format
 msgid "Interlaced: %1%"
 msgstr "Elkarlotura: %1%"
@@ -4549,7 +4554,7 @@ msgstr "LZO konpresio hutsegitea. Emaitza: %1%\n"
 msgid "Lace number: %1%"
 msgstr "Lokarri zenbakia: %1%"
 
-#: src/info/mkvinfo.cpp:900
+#: src/info/mkvinfo.cpp:901
 #, boost-format
 msgid "Lacing flag: %1%"
 msgstr "Lokarri ikurra: %1%"
@@ -4574,7 +4579,7 @@ msgstr "Hizkuntza ez da NULO amaitu"
 msgid "Language:"
 msgstr "Hizkuntza:"
 
-#: src/info/mkvinfo.cpp:910
+#: src/info/mkvinfo.cpp:911
 #, boost-format
 msgid "Language: %1%"
 msgstr "Hizkuntza: %1%"
@@ -4649,7 +4654,7 @@ msgstr "Ohar agiriak (*.txt)|*.txt|%s"
 msgid "Log output:"
 msgstr "Irteera oharra:"
 
-#: src/info/mkvinfo.cpp:753
+#: src/info/mkvinfo.cpp:754
 msgid "MD5"
 msgstr "MD5"
 
@@ -4769,7 +4774,7 @@ msgstr "Matroska agiriak (*.mkv;*.mka;*.mks;*.mk3d)|*.mkv;*.mka;*.mks;*.mk3d|%s"
 msgid "Matroska files (*.mkv;*.mka;*.mks;*.mk3d)|*.mkv;*.mka;*.mks;*.mk3d|%s"
 msgstr "Matroska agiriak (*.mkv;*.mka;*.mks;*.mk3d)|*.mkv;*.mka;*.mks;*.mk3d|%s"
 
-#: src/info/mkvinfo.cpp:917
+#: src/info/mkvinfo.cpp:918
 #, boost-format
 msgid "Max BlockAddition ID: %1%"
 msgstr "Geh Bloke-Gehitze ID-a: %1%"
@@ -4778,7 +4783,7 @@ msgstr "Geh Bloke-Gehitze ID-a: %1%"
 msgid "Max. number of files:"
 msgstr "Geh. agiri zenbatekoa:"
 
-#: src/info/mkvinfo.cpp:886
+#: src/info/mkvinfo.cpp:887
 #, boost-format
 msgid "MaxCache: %1%"
 msgstr "Geh.-Katxea: %1%"
@@ -4809,12 +4814,12 @@ msgstr "Oroimen esleipen akatsa: %1% (%2%).\n"
 msgid "Memory for a RealAudio/RealVideo frame could not be allocated.\n"
 msgstr "RealAudio/RealVideo frame oroimena ezin da esleitu.\n"
 
-#: src/info/mkvinfo.cpp:1091
+#: src/info/mkvinfo.cpp:1092
 #, boost-format
 msgid "Mime type: %1%"
 msgstr "Mime mota: %1%"
 
-#: src/info/mkvinfo.cpp:883
+#: src/info/mkvinfo.cpp:884
 #, boost-format
 msgid "MinCache: %1%"
 msgstr "Gutx-Katxea: %1%"
@@ -4884,7 +4889,7 @@ msgstr "Hasiera/amaiera adierazpena ez dago: '--split' hemen '--split %1%'.\n"
 msgid "Modification of properties in the section '%1%' was requested, but no corresponding level 1 element was found in the file. %2%\n"
 msgstr "'%1%' zatiko ezaugarri aldaketa eskatu da, baina ez da 1 mailari dagokion gai bat ere aurkitu. %2%\n"
 
-#: src/info/mkvinfo.cpp:1211
+#: src/info/mkvinfo.cpp:1212
 msgid "More"
 msgstr "Gehiago"
 
@@ -4957,7 +4962,7 @@ msgstr "Bide honentzako izena, adib. \"zuzendariaren aipamenak\"."
 msgid "Name:"
 msgstr "Izena:"
 
-#: src/info/mkvinfo.cpp:844
+#: src/info/mkvinfo.cpp:845
 #, boost-format
 msgid "Name: %1%"
 msgstr "Izena: %1%"
@@ -4980,7 +4985,7 @@ msgstr "Hurrengo agirizena"
 msgid "Next filename: %1%"
 msgstr "Hurrengo agirizena: %1%"
 
-#: src/info/mkvinfo.cpp:1637
+#: src/info/mkvinfo.cpp:1638
 #, boost-format
 msgid "Next level 0 element is not a segment but %1%"
 msgstr "0 mailako hurrengo gaia ez da zati bat baina %1%"
@@ -5008,7 +5013,7 @@ msgstr "Ez da %1% adierazi hemen: '--%2% %3%'.\n"
 msgid "No AC3 header found in first frame; track will be skipped.\n"
 msgstr "Ez da AC3 idazbururik aurkitu lehen framean; bidea jauzi egingo da.\n"
 
-#: src/info/mkvinfo.cpp:1611
+#: src/info/mkvinfo.cpp:1612
 msgid "No EBML head found."
 msgstr "Ez da EBML idazbururik aurkitu."
 
@@ -5065,7 +5070,7 @@ msgstr "Ez da agiririk gertatu oraindik. Agiri bat ireki dezakezu 'Ireki' hautat
 msgid "No file loaded"
 msgstr "Ez dago agiririk gertatuta"
 
-#: src/info/mkvinfo.cpp:1719
+#: src/info/mkvinfo.cpp:1720
 #: src/propedit/options.cpp:33
 msgid "No file name given.\n"
 msgstr "Ez da agiri izenik eman.\n"
@@ -5096,7 +5101,7 @@ msgstr "Baimen gabe -tik irakurtzeko, -ra idazteko edo sortzeko"
 
 #: src/extract/timecodes_v2.cpp:219
 #: src/extract/tracks.cpp:356
-#: src/info/mkvinfo.cpp:1625
+#: src/info/mkvinfo.cpp:1626
 msgid "No segment/level 0 element found."
 msgstr "Ez da zati/0 maila gairik aurkitu."
 
@@ -5302,7 +5307,7 @@ msgstr "Opus"
 msgid "Opus (in Ogg) audio files"
 msgstr "Opus (Ogg-an) audio agiriak"
 
-#: src/info/mkvinfo.cpp:672
+#: src/info/mkvinfo.cpp:673
 #, boost-format
 msgid "Order: %1%"
 msgstr "Antolakuntza: %1%"
@@ -5388,7 +5393,7 @@ msgstr "Aztertu agiri osorik eta erakutsi gai guztiak"
 msgid "Parse the whole file instead of relying on the index."
 msgstr "Aztertu agiri osoa aurkibideaz fidatzearen ordez."
 
-#: src/info/mkvinfo.cpp:1411
+#: src/info/mkvinfo.cpp:1412
 msgid "Parsing file"
 msgstr "Agiri azterketa"
 
@@ -5668,7 +5673,7 @@ msgstr "Utzi idazburu editatzailetaik"
 msgid "Quits mkvinfo"
 msgstr "Utzi mkvinfo"
 
-#: src/info/mkvinfo.cpp:743
+#: src/info/mkvinfo.cpp:744
 msgid "RSA"
 msgstr "RSA"
 
@@ -5794,7 +5799,7 @@ msgstr "&Erakutsi agindu lerroa"
 msgid "S&tart selected"
 msgstr "Hasi ha&utapena"
 
-#: src/info/mkvinfo.cpp:752
+#: src/info/mkvinfo.cpp:753
 msgid "SHA1-160"
 msgstr "SHA1-160"
 
@@ -5884,29 +5889,29 @@ msgstr "Gorde &Matroska agiri bezala"
 msgid "Saves the information from the current file to a text file"
 msgstr "Gorde oraingo agiriaren argibieak idazki agiri batean"
 
-#: src/info/mkvinfo.cpp:686
+#: src/info/mkvinfo.cpp:687
 #, boost-format
 msgid "Scope: %1% (%2%)"
 msgstr "Irismena: %1% (%2%)"
 
-#: src/info/mkvinfo.cpp:968
+#: src/info/mkvinfo.cpp:969
 #, boost-format
 msgid "Seek ID: %1% (%2%)"
 msgstr "Bilatu ID-a: %1% (%2%)"
 
-#: src/info/mkvinfo.cpp:960
+#: src/info/mkvinfo.cpp:961
 msgid "Seek entry"
 msgstr "Bilatu sarrera"
 
-#: src/info/mkvinfo.cpp:951
+#: src/info/mkvinfo.cpp:952
 msgid "Seek head"
 msgstr "Bilatu idazburua"
 
-#: src/info/mkvinfo.cpp:947
+#: src/info/mkvinfo.cpp:948
 msgid "Seek head (subentries will be skipped)"
 msgstr "Bilatu idazburua (azpisarrerak jauzi egingo dira)"
 
-#: src/info/mkvinfo.cpp:981
+#: src/info/mkvinfo.cpp:982
 #, boost-format
 msgid "Seek position: %1%"
 msgstr "Bilatu kokapena: %1%"
@@ -5968,7 +5973,7 @@ msgstr "Zati argibideak"
 
 #: src/extract/timecodes_v2.cpp:277
 #: src/extract/tracks.cpp:391
-#: src/info/mkvinfo.cpp:778
+#: src/info/mkvinfo.cpp:779
 #: src/info/qt_ui.cpp:179
 #: src/info/wxwidgets_ui.cpp:213
 msgid "Segment tracks"
@@ -5979,12 +5984,12 @@ msgstr "Zati bideak"
 msgid "Segment unique ID"
 msgstr "Zatiaren ID bakarra"
 
-#: src/info/mkvinfo.cpp:1633
+#: src/info/mkvinfo.cpp:1634
 #, boost-format
 msgid "Segment, size %1%"
 msgstr "Zatia, neurria %1%"
 
-#: src/info/mkvinfo.cpp:1631
+#: src/info/mkvinfo.cpp:1632
 msgid "Segment, size unknown"
 msgstr "Zatia, neurri ezezaguna"
 
@@ -6138,7 +6143,7 @@ msgstr ""
 msgid "Sets the stereo mode of the video track to this value. If left empty then the track's original stereo mode will be kept or, if it didn't have one, none will be set at all."
 msgstr "Bideo bidearen estereo modua balio honetan ezartzen du. Hutsik badago bidearen jatorrizko estereo moduari heutsiko zaio edo, bat ere ez badago, ez da ezer ezarriko."
 
-#: src/info/mkvinfo.cpp:713
+#: src/info/mkvinfo.cpp:714
 #, boost-format
 msgid "Settings: %1%"
 msgstr "Ezarpenak: %1%"
@@ -6217,22 +6222,22 @@ msgstr "Erakutsi bertsio argibideak."
 msgid "Shows mmg's debug window in which debug messages will appear. This is only useful if you're helping the author debug a problem in mmg."
 msgstr "Garbiketa mezuak agertuko diren mmg-ren garbiketa leihoa erakusten du. Hau erabilgarria da bakarrik egilea mmg-ko arazo bat garbitzen laguntzen ari bazara."
 
-#: src/info/mkvinfo.cpp:740
+#: src/info/mkvinfo.cpp:741
 #, boost-format
 msgid "Signature algorithm: %1% (%2%)"
 msgstr "Sinadura algoritmoa: %1% (%2%)"
 
-#: src/info/mkvinfo.cpp:749
+#: src/info/mkvinfo.cpp:750
 #, boost-format
 msgid "Signature hash algorithm: %1% (%2%)"
 msgstr "Sinadura hash algoritmoa: %1% (%2%)"
 
-#: src/info/mkvinfo.cpp:757
+#: src/info/mkvinfo.cpp:758
 #, boost-format
 msgid "Signature key ID: %1%"
 msgstr "Sinadura giltza ID-a: %1%"
 
-#: src/info/mkvinfo.cpp:760
+#: src/info/mkvinfo.cpp:761
 #, boost-format
 msgid "Signature: %1%"
 msgstr "Sinadura: %1%"
@@ -6241,7 +6246,7 @@ msgstr "Sinadura: %1%"
 msgid "Signed integer"
 msgstr "Seinudun osoa"
 
-#: src/info/mkvinfo.cpp:1113
+#: src/info/mkvinfo.cpp:1114
 #, boost-format
 msgid "Silent Track Number: %1%"
 msgstr "Bide Isil Zenbakia: %1%"
@@ -6288,7 +6293,7 @@ msgstr "Jauzita %1% byte (baliogabeko DTS idazburua aurkitu da). Honek audio/bid
 msgid "Skipping %1% bytes at the beginning (no valid MP3 header found).\n"
 msgstr "Jauzita %1% byte hasieran (baliogabeko MP3 idazburua aurkitu da).\n"
 
-#: src/info/mkvinfo.cpp:1227
+#: src/info/mkvinfo.cpp:1228
 msgid "Slices"
 msgstr "Ebaketak"
 
@@ -6389,7 +6394,7 @@ msgstr "Hasita"
 msgid "Starting job ID %d (%s) on %s"
 msgstr "Lana abiatzen ID-a: %d (%s) en %s"
 
-#: src/info/mkvinfo.cpp:1572
+#: src/info/mkvinfo.cpp:1573
 #, boost-format
 msgid "Statistics for track number %1%: number of blocks: %2%; size in bytes: %3%; duration in seconds: %4%; approximate bitrate in bits/second: %5%\n"
 msgstr "Estatistikak %1% bide zenbakiarentzat: bloke zenbatekoa: %2%; neurria bytetan: %3%; iraupena segundutan: %4%; gutxi-gorabeharako bitneurria bit/segundutan: %5%\n"
@@ -6413,7 +6418,7 @@ msgstr "Egoera:"
 msgid "Stereo mode parameter: not given in the form <TID>:<n|keyword> where n is a number between 0 and %1% or one of these keywords: %2% (argument was '%3%').\n"
 msgstr "Estereo moduko parametroa: ez da eman <TID>:<n|keyword> moduan non 'n' 0 eta %1% arteko zenbaki bat edo giltzahitz hauetako bat: %2% (argumentoa izan da: '%3%').\n"
 
-#: src/info/mkvinfo.cpp:637
+#: src/info/mkvinfo.cpp:638
 #, boost-format
 msgid "Stereo mode: %1% (%2%)"
 msgstr "Estereo modua: %1% (%2%)"
@@ -6488,7 +6493,7 @@ msgstr "Etiketa agiriak (*.xml;*.txt)|*.xml;*.txt|%s"
 msgid "Tag selectors"
 msgstr "Etiketa hautatzaileak"
 
-#: src/info/mkvinfo.cpp:1500
+#: src/info/mkvinfo.cpp:1501
 #: src/propedit/options.cpp:177
 msgid "Tags"
 msgstr "Etiketak"
@@ -6774,7 +6779,7 @@ msgstr "Zuzenketa agiri idazburua ez da zuzen irakurri.\n"
 msgid "The country '%s' is not a valid ccTLD and cannot be selected."
 msgstr "'%s' herrialdea ez da ccTLD baliozko bat eta ezin da hautatu."
 
-#: src/merge/output_control.cpp:1659
+#: src/merge/output_control.cpp:1657
 msgid "The cue entries (the index) are being written...\n"
 msgstr "Cue sarrerak (aurkibidea) idazten ari dira...\n"
 
@@ -7700,7 +7705,7 @@ msgstr "Ezaugarri hau bakarra da. Ezin dira eskabide gehiago gehitu hemen: '%1%'
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. %1%\n"
 msgstr "Hau EGITAN ez litzake gertatu behar. Lehen meta bilaketa gaiarentzat gordetako tartea txikiegia da. %1%\n"
 
-#: src/merge/output_control.cpp:1770
+#: src/merge/output_control.cpp:1768
 #, boost-format
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. Size needed: %1%. %2%\n"
 msgstr "Hau EGITAN ez litzake gertatu behar. Lehen meta bilaketa gaiarentzat gordetako tartea txikiegia da. Beharrezko neurria: %1%. %2%\n"
@@ -7717,7 +7722,7 @@ msgstr "Bide honek SBR AAC/HE-AAC/AAC+ datuak ditu. AAC sarrera agirientzako bak
 msgid "This track is not compatible with the WebM mode and cannot be enabled."
 msgstr "Bide hau ez da bateragarria WebM moduarekin eta ezin da gaitu."
 
-#: src/info/mkvinfo.cpp:1231
+#: src/info/mkvinfo.cpp:1232
 msgid "Time slice"
 msgstr "Ebaketa denbora"
 
@@ -7733,7 +7738,7 @@ msgstr "Denbora-kode agiriak (*.tmc;*.txt)|*.tmc;*.txt|%s"
 #: src/extract/timecodes_v2.cpp:252
 #: src/extract/tracks.cpp:384
 #: src/info/mkvinfo.cpp:480
-#: src/info/mkvinfo.cpp:914
+#: src/info/mkvinfo.cpp:915
 #, boost-format
 msgid "Timecode scale: %1%"
 msgstr "Denbora-kode neurria: %1%"
@@ -7812,7 +7817,7 @@ msgstr "'%2%' Kodek ID-dun %1% bideak ez du \"codec private\" gaia eta ezn da at
 msgid "Track %1% with the CodecID '%2%' is missing the \"default duration\" element and cannot be extracted.\n"
 msgstr "'%2%' Kodek ID-dun %1% bideak ez du \"default duration\" gaia eta ezin da atera.\n"
 
-#: src/info/mkvinfo.cpp:926
+#: src/info/mkvinfo.cpp:927
 #, boost-format
 msgid "Track %1%: %2%, codec ID: %3%%4%%5%%6%\n"
 msgstr "Bidea: %1%: %2%. Kodek ID-a: %3%%4%%5%%6%\n"
@@ -7858,7 +7863,7 @@ msgstr "%1% ID-dun bidea: %1%: %2% (%3%)"
 msgid "Track UID"
 msgstr "Bide UID-a"
 
-#: src/info/mkvinfo.cpp:821
+#: src/info/mkvinfo.cpp:822
 #, boost-format
 msgid "Track UID: %1%"
 msgstr "Bide UID-a: %1%"
@@ -7887,17 +7892,17 @@ msgstr "Bide zenbakia"
 msgid "Track number %1% has been encrypted and decryption has not yet been implemented.\n"
 msgstr "%1% zenbakiko bidea enkriptaketa eta desenkriptaketa oraindik ez dago gehituta.\n"
 
-#: src/info/mkvinfo.cpp:816
+#: src/info/mkvinfo.cpp:817
 #, boost-format
 msgid "Track number: %1% (track ID for mkvmerge & mkvextract: %2%)"
 msgstr "Bide zenbakia: %1% (bide ID-a mkvmerge eta mkvextract-entzat: %2%)"
 
-#: src/info/mkvinfo.cpp:879
+#: src/info/mkvinfo.cpp:880
 #, boost-format
 msgid "Track overlay: %1%"
 msgstr "Bide gainjarpena: %1%"
 
-#: src/info/mkvinfo.cpp:831
+#: src/info/mkvinfo.cpp:832
 #, boost-format
 msgid "Track type: %1%"
 msgstr "Bide mota: %1%"
@@ -7930,9 +7935,10 @@ msgstr "Bi VobSub bideak bakarrik atera daitezke agiri berdinera beren Kodek-Pri
 
 #: src/common/property_element.cpp:139
 #: src/mmg/header_editor/frame.cpp:445
+#, fuzzy
 msgid ""
 "Type of the unit for DisplayWidth/Height\n"
-"(0: pixels, 1: centimeters, 2: inches)."
+"(0: pixels, 1: centimeters, 2: inches, 3: aspect ratio)."
 msgstr ""
 "Bateko mota Zabalera/Garaiera Erakuspenerako\n"
 "(0: pixel, 1: metroehunen, 2: hatzbete)."
@@ -7941,7 +7947,7 @@ msgstr ""
 msgid "Type:"
 msgstr "Mota:"
 
-#: src/info/mkvinfo.cpp:691
+#: src/info/mkvinfo.cpp:692
 #, boost-format
 msgid "Type: %1% (%2%)"
 msgstr "Mota: %1% (%2%)"
@@ -8435,7 +8441,7 @@ msgstr "Anaglifoa (orlegia/magenta)"
 msgid "append"
 msgstr "erantsi"
 
-#: src/info/mkvinfo.cpp:928
+#: src/info/mkvinfo.cpp:929
 #: src/input/r_matroska.cpp:96
 #: src/mmg/mmg.cpp:61
 msgid "audio"
@@ -8454,7 +8460,7 @@ msgstr "bi begiak bloke batean nahastuta (ezkerra lehenik)"
 msgid "both eyes laced in one block (right first)"
 msgstr "bi begiak bloke batean nahastuta (eskuina lehenik)"
 
-#: src/info/mkvinfo.cpp:931
+#: src/info/mkvinfo.cpp:932
 #: src/input/r_matroska.cpp:97
 msgid "buttons"
 msgstr "botoiak"
@@ -8493,7 +8499,7 @@ msgstr "Ongi osatuta"
 msgid "completed with warnings"
 msgstr "Kontuz oharrekin osatuta"
 
-#: src/info/mkvinfo.cpp:693
+#: src/info/mkvinfo.cpp:694
 msgid "compression"
 msgstr "konpresioa"
 
@@ -8509,7 +8515,7 @@ msgstr "create_track_number: file_num ez da aurkitu. %1%\n"
 msgid "default"
 msgstr "berezkoa"
 
-#: src/info/mkvinfo.cpp:894
+#: src/info/mkvinfo.cpp:895
 #, boost-format
 msgid "default duration: %|1$.3f|ms (%|2$.3f| frames/fields per second for a video track)"
 msgstr "berezko iraupena: %|1$.3f|sm (%|2$.3f| frame/eremu segunduko bideo bide batentzat)"
@@ -8523,7 +8529,7 @@ msgstr "deflateInit() hutsegitea. Emaitza: %1%\n"
 msgid "disable all"
 msgstr "ezgaitu denak"
 
-#: src/info/mkvinfo.cpp:1336
+#: src/info/mkvinfo.cpp:1337
 msgid "discardable, "
 msgstr "baztergarria,"
 
@@ -8558,7 +8564,7 @@ msgstr "gaitu denak"
 msgid "enabled"
 msgstr "gaituta"
 
-#: src/info/mkvinfo.cpp:694
+#: src/info/mkvinfo.cpp:695
 msgid "encryption"
 msgstr "enkriptaketa"
 
@@ -8631,7 +8637,7 @@ msgstr "frame guztientzat"
 msgid "have an xcptn\n"
 msgstr "izan xcptn bat\n"
 
-#: src/info/mkvinfo.cpp:709
+#: src/info/mkvinfo.cpp:710
 msgid "header removal"
 msgstr "Idazburu kentzea"
 
@@ -8660,11 +8666,11 @@ msgstr "inflateInit() hutsegitea. Emaitza: %1%\n"
 msgid "is being estimated"
 msgstr "estimatzen ari da"
 
-#: src/info/mkvinfo.cpp:1334
+#: src/info/mkvinfo.cpp:1335
 msgid "key, "
 msgstr "giltza,"
 
-#: src/info/mkvinfo.cpp:911
+#: src/info/mkvinfo.cpp:912
 #, boost-format
 msgid "language: %1%"
 msgstr "hizkuntza: %1%"
@@ -9034,7 +9040,7 @@ msgstr "mkvmergek bi atal heuskarri sostengatzen du: OGM idazki heuskarri bezala
 msgid "mkvmerge was interrupted by a SIGINT (Ctrl+C?)\n"
 msgstr "mkvmerge SIGINT batek eten du (inteligentzia seinaleak) (Ktrl+C?)\n"
 
-#: src/info/mkvinfo.cpp:817
+#: src/info/mkvinfo.cpp:818
 #, boost-format
 msgid "mkvmerge/mkvextract track ID: %1%"
 msgstr "mkvmerge/mkvextract bide ID-a: %1%"
@@ -9083,7 +9089,7 @@ msgstr "mpeg_ps_reader: Hau ez litzake gertatu behar #2. %1%"
 msgid "no"
 msgstr "ez"
 
-#: src/info/mkvinfo.cpp:726
+#: src/info/mkvinfo.cpp:727
 msgid "no encryption"
 msgstr "enkriptaketatu gabe"
 
@@ -9095,11 +9101,11 @@ msgstr "akatsik ez"
 msgid "no file loaded"
 msgstr "ez dago agiririk gertatuta"
 
-#: src/info/mkvinfo.cpp:742
+#: src/info/mkvinfo.cpp:743
 msgid "no signature algorithm"
 msgstr "algoritmo sinadurarik ez"
 
-#: src/info/mkvinfo.cpp:751
+#: src/info/mkvinfo.cpp:752
 msgid "no signature hash algorithm"
 msgstr "hash algoritmo sinadurarik ez"
 
@@ -9221,7 +9227,7 @@ msgstr "kendu"
 msgid "remove all"
 msgstr "kendu denak"
 
-#: src/info/mkvinfo.cpp:683
+#: src/info/mkvinfo.cpp:684
 msgid "rest: unknown"
 msgstr "gainontzekoa: ezezaguna"
 
@@ -9291,7 +9297,7 @@ msgstr "start >= m->ListSize(). Hau ez litzake gertatu behar. Mesedez agiritu ma
 msgid "subtitle"
 msgstr "azpidatzia"
 
-#: src/info/mkvinfo.cpp:930
+#: src/info/mkvinfo.cpp:931
 #: src/mmg/mmg.cpp:63
 msgid "subtitles"
 msgstr "azpidatziak"
@@ -9327,13 +9333,13 @@ msgstr "zehgab (Zehaztugabea)"
 
 #: src/common/mm_io_win.cpp:168
 #: src/common/stereo_mode.cpp:68
-#: src/info/mkvinfo.cpp:685
-#: src/info/mkvinfo.cpp:695
-#: src/info/mkvinfo.cpp:710
-#: src/info/mkvinfo.cpp:732
-#: src/info/mkvinfo.cpp:744
-#: src/info/mkvinfo.cpp:754
-#: src/info/mkvinfo.cpp:932
+#: src/info/mkvinfo.cpp:686
+#: src/info/mkvinfo.cpp:696
+#: src/info/mkvinfo.cpp:711
+#: src/info/mkvinfo.cpp:733
+#: src/info/mkvinfo.cpp:745
+#: src/info/mkvinfo.cpp:755
+#: src/info/mkvinfo.cpp:933
 #: src/input/r_matroska.cpp:95
 #: src/input/r_matroska.cpp:2227
 #: src/input/r_mpeg_ps.cpp:1326
@@ -9361,7 +9367,7 @@ msgstr "utf8_strlen(): UTF-8 hizkikode baliogabea. Lehen bytea: 0x%|1$02x|"
 msgid "verify failed: chapters->CheckMandatory() is false. This should not have happened. Please file a bug report.\n"
 msgstr "egiaztapen  hutsegitea: atalak ->CheckMandatory() faltsua da. Hau ez litzake gertatu behar. Mesedez agiritu matxura jakinarazpen bat.\n"
 
-#: src/info/mkvinfo.cpp:929
+#: src/info/mkvinfo.cpp:930
 #: src/input/r_matroska.cpp:98
 #: src/mmg/mmg.cpp:62
 msgid "video"
