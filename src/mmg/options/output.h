@@ -21,14 +21,14 @@
 
 #include "mmg/options/tab_base.h"
 
-#define ID_CB_AUTOSET_OUTPUT_FILENAME   15103
-#define ID_CB_ASK_BEFORE_OVERWRITING    15104
-#define ID_TC_OUTPUT_DIRECTORY          15111
-#define ID_B_BROWSE_OUTPUT_DIRECTORY    15112
-#define ID_RB_ODM_INPUT_FILE            15113
-#define ID_RB_ODM_PREVIOUS              15114
-#define ID_RB_ODM_FIXED                 15115
-#define ID_RB_ODM_PARENT_OF_INPUT_FILE  15122
+#define ID_CB_AUTOSET_OUTPUT_FILENAME             15103
+#define ID_CB_ASK_BEFORE_OVERWRITING              15104
+#define ID_TC_OUTPUT_DIRECTORY                    15111
+#define ID_B_BROWSE_OUTPUT_DIRECTORY              15112
+#define ID_RB_ODM_INPUT_FILE                      15113
+#define ID_RB_ODM_PREVIOUS                        15114
+#define ID_RB_ODM_FIXED                           15115
+#define ID_RB_ODM_PARENT_OF_INPUT_FILE            15122
 #define ID_CB_UNIQUE_OUTPUT_FILE_NAME_SUGGESTIONS 15123
 
 class optdlg_output_tab: public optdlg_base_tab {

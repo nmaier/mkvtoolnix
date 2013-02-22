@@ -1588,28 +1588,28 @@ mmg_dialog::save_preferences() {
   cfg->SetPath(wxU("/GUI"));
 
   GetPosition(&x, &y);
-  cfg->Write(wxU("window_position_x"),               x);
-  cfg->Write(wxU("window_position_y"),               y);
-  cfg->Write(wxU("warned_chapter_editor_not_empty"), warned_chapter_editor_not_empty);
-  cfg->Write(wxU("previous_output_directory"),       previous_output_directory);
+  cfg->Write(wxU("window_position_x"),                   x);
+  cfg->Write(wxU("window_position_y"),                   y);
+  cfg->Write(wxU("warned_chapter_editor_not_empty"),     warned_chapter_editor_not_empty);
+  cfg->Write(wxU("previous_output_directory"),           previous_output_directory);
 
-  cfg->Write(wxU("mkvmerge_executable"),             options.mkvmerge);
-  cfg->Write(wxU("process_priority"),                options.priority);
-  cfg->Write(wxU("autoset_output_filename"),         options.autoset_output_filename);
-  cfg->Write(wxU("output_directory_mode"),           (long)options.output_directory_mode);
-  cfg->Write(wxU("clear_job_after_run_mode"),        static_cast<long>(options.clear_job_after_run_mode));
-  cfg->Write(wxU("output_directory"),                options.output_directory);
-  cfg->Write(wxU("ask_before_overwriting"),          options.ask_before_overwriting);
+  cfg->Write(wxU("mkvmerge_executable"),                 options.mkvmerge);
+  cfg->Write(wxU("process_priority"),                    options.priority);
+  cfg->Write(wxU("autoset_output_filename"),             options.autoset_output_filename);
+  cfg->Write(wxU("output_directory_mode"),               (long)options.output_directory_mode);
+  cfg->Write(wxU("clear_job_after_run_mode"),            static_cast<long>(options.clear_job_after_run_mode));
+  cfg->Write(wxU("output_directory"),                    options.output_directory);
+  cfg->Write(wxU("ask_before_overwriting"),              options.ask_before_overwriting);
   cfg->Write(wxU("unique_output_file_name_suggestions"), options.unique_output_file_name_suggestions);
-  cfg->Write(wxU("filenew_after_add_to_jobqueue"),   options.filenew_after_add_to_jobqueue);
-  cfg->Write(wxU("filenew_after_successful_mux"),    options.filenew_after_successful_mux);
-  cfg->Write(wxU("on_top"),                          options.on_top);
-  cfg->Write(wxU("warn_usage"),                      options.warn_usage);
-  cfg->Write(wxU("gui_debugging"),                   options.gui_debugging);
-  cfg->Write(wxU("set_delay_from_filename"),         options.set_delay_from_filename);
-  cfg->Write(wxU("check_for_updates"),               options.check_for_updates);
-  cfg->Write(wxU("popular_languages"),               join(wxU(" "), options.popular_languages));
-  cfg->Write(wxU("default_cli_options"),             options.default_cli_options);
+  cfg->Write(wxU("filenew_after_add_to_jobqueue"),       options.filenew_after_add_to_jobqueue);
+  cfg->Write(wxU("filenew_after_successful_mux"),        options.filenew_after_successful_mux);
+  cfg->Write(wxU("on_top"),                              options.on_top);
+  cfg->Write(wxU("warn_usage"),                          options.warn_usage);
+  cfg->Write(wxU("gui_debugging"),                       options.gui_debugging);
+  cfg->Write(wxU("set_delay_from_filename"),             options.set_delay_from_filename);
+  cfg->Write(wxU("check_for_updates"),                   options.check_for_updates);
+  cfg->Write(wxU("popular_languages"),                   join(wxU(" "), options.popular_languages));
+  cfg->Write(wxU("default_cli_options"),                 options.default_cli_options);
 
   cfg->Flush();
 }
@@ -1629,28 +1629,28 @@ mmg_dialog::load_preferences() {
       && (0 < window_pos_y) && (0xffff > window_pos_y))
     Move(window_pos_x, window_pos_y);
 
-  cfg->Read(wxU("warned_chapterditor_not_empty"), &warned_chapter_editor_not_empty, false);
-  cfg->Read(wxU("previous_output_directory"),     &previous_output_directory, wxU(""));
+  cfg->Read(wxU("warned_chapterditor_not_empty"),       &warned_chapter_editor_not_empty,             false);
+  cfg->Read(wxU("previous_output_directory"),           &previous_output_directory,                   wxEmptyString);
 
-  cfg->Read(wxU("mkvmerge_executable"),           &options.mkvmerge, wxU("mkvmerge"));
-  cfg->Read(wxU("process_priority"),              &options.priority, wxU("normal"));
-  cfg->Read(wxU("autoset_output_filename"),       &options.autoset_output_filename, true);
-  cfg->Read(wxU("output_directory_mode"),         &value_long, ODM_FROM_FIRST_INPUT_FILE);
+  cfg->Read(wxU("mkvmerge_executable"),                 &options.mkvmerge,                            wxU("mkvmerge"));
+  cfg->Read(wxU("process_priority"),                    &options.priority,                            wxU("normal"));
+  cfg->Read(wxU("autoset_output_filename"),             &options.autoset_output_filename,             true);
+  cfg->Read(wxU("output_directory_mode"),               &value_long,                                  ODM_FROM_FIRST_INPUT_FILE);
   options.output_directory_mode = static_cast<output_directory_mode_e>(value_long);
-  cfg->Read(wxU("clear_job_after_run_mode"),      &value_long, CJAR_NEVER);
+  cfg->Read(wxU("clear_job_after_run_mode"),            &value_long,                                  CJAR_NEVER);
   options.clear_job_after_run_mode = static_cast<clear_job_after_run_mode_e>(value_long);
-  cfg->Read(wxU("output_directory"),              &options.output_directory, wxU(""));
-  cfg->Read(wxU("ask_before_overwriting"),        &options.ask_before_overwriting, true);
+  cfg->Read(wxU("output_directory"),                    &options.output_directory,                    wxEmptyString);
+  cfg->Read(wxU("ask_before_overwriting"),              &options.ask_before_overwriting,              true);
   cfg->Read(wxU("unique_output_file_name_suggestions"), &options.unique_output_file_name_suggestions, true);
-  cfg->Read(wxU("filenew_after_add_to_jobqueue"), &options.filenew_after_add_to_jobqueue, false);
-  cfg->Read(wxU("filenew_after_successful_mux"),  &options.filenew_after_successful_mux, false);
-  cfg->Read(wxU("on_top"),                        &options.on_top, false);
-  cfg->Read(wxU("warn_usage"),                    &options.warn_usage, true);
-  cfg->Read(wxU("gui_debugging"),                 &options.gui_debugging, false);
-  cfg->Read(wxU("set_delay_from_filename"),       &options.set_delay_from_filename, true);
-  cfg->Read(wxU("check_for_updates"),             &options.check_for_updates, true);
-  cfg->Read(wxU("popular_languages"),             &s, wxEmptyString);
-  cfg->Read(wxU("default_cli_options"),           &options.default_cli_options);
+  cfg->Read(wxU("filenew_after_add_to_jobqueue"),       &options.filenew_after_add_to_jobqueue,       false);
+  cfg->Read(wxU("filenew_after_successful_mux"),        &options.filenew_after_successful_mux,        false);
+  cfg->Read(wxU("on_top"),                              &options.on_top,                              false);
+  cfg->Read(wxU("warn_usage"),                          &options.warn_usage,                          true);
+  cfg->Read(wxU("gui_debugging"),                       &options.gui_debugging,                       false);
+  cfg->Read(wxU("set_delay_from_filename"),             &options.set_delay_from_filename,             true);
+  cfg->Read(wxU("check_for_updates"),                   &options.check_for_updates,                   true);
+  cfg->Read(wxU("popular_languages"),                   &s,                                           wxEmptyString);
+  cfg->Read(wxU("default_cli_options"),                 &options.default_cli_options,                 wxEmptyString);
 
   options.init_popular_languages(s);
   options.validate();

@@ -144,14 +144,14 @@ optdlg_output_tab::enable_output_filename_controls(bool enable) {
 
 void
 optdlg_output_tab::save_options() {
-  m_options.output_directory        = tc_output_directory->GetValue();
-  m_options.autoset_output_filename = cb_autoset_output_filename->IsChecked();
+  m_options.output_directory                    = tc_output_directory->GetValue();
+  m_options.autoset_output_filename             = cb_autoset_output_filename->IsChecked();
   m_options.unique_output_file_name_suggestions = cb_unique_output_file_name_suggestions->IsChecked();
-  m_options.ask_before_overwriting  = cb_ask_before_overwriting->IsChecked();
-  m_options.output_directory_mode   = rb_odm_input_file->GetValue()           ? ODM_FROM_FIRST_INPUT_FILE
-                                    : rb_odm_parent_of_input_file->GetValue() ? ODM_PARENT_OF_FIRST_INPUT_FILE
-                                    : rb_odm_previous->GetValue()             ? ODM_PREVIOUS
-                                    :                                           ODM_FIXED;
+  m_options.ask_before_overwriting              = cb_ask_before_overwriting->IsChecked();
+  m_options.output_directory_mode               = rb_odm_input_file->GetValue()           ? ODM_FROM_FIRST_INPUT_FILE
+                                                : rb_odm_parent_of_input_file->GetValue() ? ODM_PARENT_OF_FIRST_INPUT_FILE
+                                                : rb_odm_previous->GetValue()             ? ODM_PREVIOUS
+                                                :                                           ODM_FIXED;
 }
 
 wxString
