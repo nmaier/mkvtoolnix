@@ -49,29 +49,6 @@ optdlg_mmg_tab::optdlg_mmg_tab(wxWindow *parent,
   : optdlg_base_tab(parent, options)
 {
   // Create the controls.
-  cb_autoset_output_filename = new wxCheckBox(this, ID_CB_AUTOSET_OUTPUT_FILENAME, Z("Auto-set output filename"));
-  cb_autoset_output_filename->SetToolTip(TIP("If checked mmg will automatically set the output filename "
-                                             "if it hasn't been set already. This happens when you add "
-                                             "the first file. If unset mmg will not touch the output filename."));
-
-  rb_odm_input_file = new wxRadioButton(this, ID_RB_ODM_INPUT_FILE, Z("Same directory as the first input file's"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP);
-  rb_odm_previous   = new wxRadioButton(this, ID_RB_ODM_PREVIOUS, Z("Use the previous output directory"));
-  rb_odm_fixed      = new wxRadioButton(this, ID_RB_ODM_FIXED, Z("Use this directory:"));
-
-  tc_output_directory       = new wxTextCtrl(this, ID_TC_OUTPUT_DIRECTORY, m_options.output_directory);
-  b_browse_output_directory = new wxButton(this, ID_B_BROWSE_OUTPUT_DIRECTORY, Z("Browse"));
-
-  tc_output_directory->SetToolTip(TIP("If left empty then mmg will set the output file name to be in the same directory as the first file added to this job. "
-                                      "Otherwise this directory will be used."));
-
-  cb_ask_before_overwriting = new wxCheckBox(this, ID_CB_ASK_BEFORE_OVERWRITING, Z("Ask before overwriting things (files, jobs)"));
-  cb_ask_before_overwriting->SetToolTip(TIP("If checked mmg will ask for "
-                                            "confirmation before overwriting "
-                                            "existing files, or before adding "
-                                            "a new job if there's an old job "
-                                            "whose description matches the "
-                                            "new one."));
-
   cb_set_delay_from_filename = new wxCheckBox(this, ID_CB_SET_DELAY_FROM_FILENAME, Z("Set the delay input field from the file name"));
   cb_set_delay_from_filename->SetToolTip(TIP("When a file is added its name is scanned. If it contains "
                                              "the word 'DELAY' followed by a number then this number "
@@ -142,18 +119,12 @@ optdlg_mmg_tab::optdlg_mmg_tab(wxWindow *parent,
 
   // Set the defaults.
 
-  cb_autoset_output_filename->SetValue(m_options.autoset_output_filename);
-  cb_ask_before_overwriting->SetValue(m_options.ask_before_overwriting);
   cb_on_top->SetValue(m_options.on_top);
   cb_filenew_after_add_to_jobqueue->SetValue(m_options.filenew_after_add_to_jobqueue);
   cb_filenew_after_successful_mux->SetValue(m_options.filenew_after_successful_mux);
   cb_warn_usage->SetValue(m_options.warn_usage);
   cb_gui_debugging->SetValue(m_options.gui_debugging);
   cb_set_delay_from_filename->SetValue(m_options.set_delay_from_filename);
-
-  rb_odm_input_file->SetValue(m_options.output_directory_mode == ODM_FROM_FIRST_INPUT_FILE);
-  rb_odm_previous->SetValue(m_options.output_directory_mode == ODM_PREVIOUS);
-  rb_odm_fixed->SetValue(m_options.output_directory_mode == ODM_FIXED);
 
   cb_clear_job_after_run->SetValue(m_options.clear_job_after_run_mode != CJAR_NEVER);
   set_combobox_selection(cob_clear_job_after_run_mode, std::max(static_cast<int>(m_options.clear_job_after_run_mode), 1) - 1);
@@ -166,8 +137,6 @@ optdlg_mmg_tab::optdlg_mmg_tab(wxWindow *parent,
 #if defined(HAVE_CURL_EASY_H)
   cb_check_for_updates->SetValue(m_options.check_for_updates);
 #endif  // defined(HAVE_CURL_EASY_H)
-
-  enable_output_filename_controls(m_options.autoset_output_filename);
 
   // Create the layout.
 
@@ -188,32 +157,6 @@ optdlg_mmg_tab::optdlg_mmg_tab(wxWindow *parent,
   siz_all->Add(siz_line, 0, wxGROW | wxLEFT, 5);
   siz_all->AddSpacer(5);
 #endif  // HAVE_LIBINTL_H
-
-  siz_all->Add(cb_autoset_output_filename, 0, wxLEFT, 5);
-  siz_all->AddSpacer(5);
-
-#if defined(SYS_WINDOWS)
-  int left_offset = 16;
-#else
-  int left_offset = 24;
-#endif
-
-  siz_all->Add(rb_odm_input_file, 0, wxLEFT, left_offset);
-  siz_all->AddSpacer(5);
-
-  siz_all->Add(rb_odm_previous, 0, wxLEFT, left_offset);
-  siz_all->AddSpacer(5);
-
-  siz_line = new wxBoxSizer(wxHORIZONTAL);
-  siz_line->Add(rb_odm_fixed, 0, wxALIGN_CENTER_VERTICAL, 0);
-  siz_line->Add(tc_output_directory, 1, wxALIGN_CENTER_VERTICAL | wxLEFT, 5);
-  siz_line->Add(b_browse_output_directory, 0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 5);
-
-  siz_all->Add(siz_line, 0, wxGROW | wxLEFT, left_offset);
-  siz_all->AddSpacer(5);
-
-  siz_all->Add(cb_ask_before_overwriting, 0, wxLEFT, 5);
-  siz_all->AddSpacer(5);
 
   siz_all->Add(cb_set_delay_from_filename, 0, wxLEFT, 5);
   siz_all->AddSpacer(5);
@@ -253,32 +196,8 @@ optdlg_mmg_tab::optdlg_mmg_tab(wxWindow *parent,
 }
 
 void
-optdlg_mmg_tab::on_browse_output_directory(wxCommandEvent &) {
-  wxDirDialog dlg(this, Z("Choose the output directory"), tc_output_directory->GetValue());
-
-  if (dlg.ShowModal() == wxID_OK)
-    tc_output_directory->SetValue(dlg.GetPath());
-}
-
-void
-optdlg_mmg_tab::on_autoset_output_filename_selected(wxCommandEvent &) {
-  enable_output_filename_controls(cb_autoset_output_filename->IsChecked());
-}
-
-void
 optdlg_mmg_tab::on_clear_job_after_run_pressed(wxCommandEvent &) {
   cob_clear_job_after_run_mode->Enable(cb_clear_job_after_run->IsChecked());
-}
-
-void
-optdlg_mmg_tab::enable_output_filename_controls(bool enable) {
-  bool odm_is_fixed = rb_odm_fixed->GetValue();
-
-  rb_odm_input_file->Enable(enable);
-  rb_odm_previous->Enable(enable);
-  rb_odm_fixed->Enable(enable);
-  tc_output_directory->Enable(enable && odm_is_fixed);
-  b_browse_output_directory->Enable(enable && odm_is_fixed);
 }
 
 std::string
@@ -292,18 +211,12 @@ optdlg_mmg_tab::get_selected_ui_language() {
 
 void
 optdlg_mmg_tab::save_options() {
-  m_options.output_directory              = tc_output_directory->GetValue();
-  m_options.autoset_output_filename       = cb_autoset_output_filename->IsChecked();
-  m_options.ask_before_overwriting        = cb_ask_before_overwriting->IsChecked();
   m_options.on_top                        = cb_on_top->IsChecked();
   m_options.filenew_after_add_to_jobqueue = cb_filenew_after_add_to_jobqueue->IsChecked();
   m_options.filenew_after_successful_mux  = cb_filenew_after_successful_mux->IsChecked();
   m_options.warn_usage                    = cb_warn_usage->IsChecked();
   m_options.gui_debugging                 = cb_gui_debugging->IsChecked();
   m_options.set_delay_from_filename       = cb_set_delay_from_filename->IsChecked();
-  m_options.output_directory_mode         = rb_odm_input_file->GetValue() ? ODM_FROM_FIRST_INPUT_FILE
-                                          : rb_odm_previous->GetValue()   ? ODM_PREVIOUS
-                                          :                                 ODM_FIXED;
   m_options.clear_job_after_run_mode      = cb_clear_job_after_run->IsChecked() ? static_cast<clear_job_after_run_mode_e>(cob_clear_job_after_run_mode->GetSelection() + 1) : CJAR_NEVER;
 #if defined(HAVE_CURL_EASY_H)
   m_options.check_for_updates             = cb_check_for_updates->IsChecked();
@@ -333,10 +246,5 @@ optdlg_mmg_tab::get_title() {
 
 IMPLEMENT_CLASS(optdlg_mmg_tab, optdlg_base_tab);
 BEGIN_EVENT_TABLE(optdlg_mmg_tab, optdlg_base_tab)
-  EVT_BUTTON(ID_B_BROWSE_OUTPUT_DIRECTORY,    optdlg_mmg_tab::on_browse_output_directory)
-  EVT_CHECKBOX(ID_CB_AUTOSET_OUTPUT_FILENAME, optdlg_mmg_tab::on_autoset_output_filename_selected)
-  EVT_RADIOBUTTON(ID_RB_ODM_INPUT_FILE,       optdlg_mmg_tab::on_autoset_output_filename_selected)
-  EVT_RADIOBUTTON(ID_RB_ODM_PREVIOUS,         optdlg_mmg_tab::on_autoset_output_filename_selected)
-  EVT_RADIOBUTTON(ID_RB_ODM_FIXED,            optdlg_mmg_tab::on_autoset_output_filename_selected)
   EVT_CHECKBOX(ID_CB_CLEAR_JOB_AFTER_RUN,     optdlg_mmg_tab::on_clear_job_after_run_pressed)
 END_EVENT_TABLE();

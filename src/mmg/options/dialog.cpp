@@ -30,6 +30,7 @@
 #include "mmg/options/languages.h"
 #include "mmg/options/mkvmerge.h"
 #include "mmg/options/mmg.h"
+#include "mmg/options/output.h"
 
 options_dialog::options_dialog(wxWindow *parent,
                                mmg_options_t &options)
@@ -40,6 +41,7 @@ options_dialog::options_dialog(wxWindow *parent,
   nb_tabs = new wxNotebook(this, ID_NOTEBOOK, wxDefaultPosition, wxDefaultSize, wxNB_TOP);
 
   tabs.push_back(new optdlg_mmg_tab(      nb_tabs, options));
+  tabs.push_back(new optdlg_output_tab(   nb_tabs, options));
   tabs.push_back(new optdlg_mkvmerge_tab( nb_tabs, options));
   tabs.push_back(new optdlg_languages_tab(nb_tabs, options));
   tabs.push_back(new optdlg_chapters_tab( nb_tabs, options));
