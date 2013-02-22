@@ -56,6 +56,11 @@ mmg_options_t::validate() {
   if (   (priority != wxU("highest")) && (priority != wxU("higher")) && (priority != wxU("normal"))
       && (priority != wxU("lower"))   && (priority != wxU("lowest")))
     priority = wxU("normal");
+
+  if (   (SDP_ALWAYS_ASK  != scan_directory_for_playlists)
+      && (SDP_ALWAYS_SCAN != scan_directory_for_playlists)
+      && (SDP_NEVER       != scan_directory_for_playlists))
+    scan_directory_for_playlists = SDP_ALWAYS_ASK;
 }
 
 wxString

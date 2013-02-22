@@ -31,6 +31,7 @@
 #define ID_CB_CHECK_FOR_UPDATES         15119
 #define ID_COB_CLEAR_JOB_AFTER_RUN_MODE 15120
 #define ID_CB_CLEAR_JOB_AFTER_RUN       15121
+#define ID_COB_SCAN_DIRECTORY_FOR_PLAYLISTS 15124
 
 class optdlg_mmg_tab: public optdlg_base_tab {
   DECLARE_CLASS(optdlg_mmg_tab);
@@ -45,7 +46,8 @@ public:
   wxCheckBox *cb_check_for_updates;
 #endif  // defined(HAVE_CURL_EASY_H)
   wxCheckBox *cb_clear_job_after_run;
-  wxMTX_COMBOBOX_TYPE *cob_clear_job_after_run_mode;
+  wxMTX_COMBOBOX_TYPE *cob_clear_job_after_run_mode, *cob_scan_directory_for_playlists;
+  wxTextCtrl *tc_min_playlist_duration;
 
 #if defined(HAVE_LIBINTL_H)
   wxMTX_COMBOBOX_TYPE *cob_ui_language;

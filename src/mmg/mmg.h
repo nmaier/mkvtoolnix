@@ -191,10 +191,16 @@ enum output_directory_mode_e {
 };
 
 enum clear_job_after_run_mode_e {
-  CJAR_NEVER      = 0,
+  CJAR_NEVER       = 0,
   CJAR_SUCCESSFULL = 1,
   CJAR_WARNINGS    = 2,
   CJAR_ALWAYS      = 3,
+};
+
+enum scan_directory_for_playlists_e {
+  SDP_ALWAYS_ASK  = 0,
+  SDP_ALWAYS_SCAN = 1,
+  SDP_NEVER       = 2,
 };
 
 struct mmg_options_t {
@@ -204,6 +210,8 @@ struct mmg_options_t {
   output_directory_mode_e output_directory_mode;
   clear_job_after_run_mode_e clear_job_after_run_mode;
   bool ask_before_overwriting, unique_output_file_name_suggestions;
+  scan_directory_for_playlists_e scan_directory_for_playlists;
+  uint64_t min_playlist_duration;
   bool on_top;
   bool filenew_after_add_to_jobqueue;
   bool filenew_after_successful_mux;
@@ -221,6 +229,8 @@ struct mmg_options_t {
     , clear_job_after_run_mode(CJAR_NEVER)
     , ask_before_overwriting(false)
     , unique_output_file_name_suggestions{true}
+    , scan_directory_for_playlists{SDP_ALWAYS_ASK}
+    , min_playlist_duration{120}
     , on_top(false)
     , filenew_after_add_to_jobqueue(false)
     , filenew_after_successful_mux(false)

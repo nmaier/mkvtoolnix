@@ -21,6 +21,7 @@
 #include <wx/statline.h>
 
 #include "common/strings/editing.h"
+#include "common/strings/parsing.h"
 #include "common/translation.h"
 #include "common/wx.h"
 #include "mmg/cli_options_dlg.h"
@@ -117,6 +118,20 @@ optdlg_mmg_tab::optdlg_mmg_tab(wxWindow *parent,
   }
 #endif  // HAVE_LIBINTL_H
 
+  auto st_scan_directory_for_playlists = new wxStaticText(this, -1, Z("Scan directory for other playlists:"));
+
+  wxString const scan_directory_for_playlists_choices[] = {
+    Z("always ask the user"),
+    Z("always scan for other playlists"),
+    Z("never scan for other playlists"),
+  };
+  cob_scan_directory_for_playlists = new wxMTX_COMBOBOX_TYPE(this, ID_COB_SCAN_DIRECTORY_FOR_PLAYLISTS, Z("always ask the user"), wxDefaultPosition, wxDefaultSize, 3, scan_directory_for_playlists_choices, wxCB_READONLY);
+
+  auto st_min_playlist_duration = new wxStaticText(this, -1, Z("Minimum duration for playlists in seconds:"));
+  tc_min_playlist_duration = new wxTextCtrl(this, -1, wxU(boost::format("%1%") % m_options.min_playlist_duration));
+  tc_min_playlist_duration->SetToolTip(TIP("Only playlists whose duration are at least this long are considered and offered to the user for selection."));
+  tc_min_playlist_duration->SetValidator(wxTextValidator(wxFILTER_NUMERIC));
+
   // Set the defaults.
 
   cb_on_top->SetValue(m_options.on_top);
@@ -137,6 +152,8 @@ optdlg_mmg_tab::optdlg_mmg_tab(wxWindow *parent,
 #if defined(HAVE_CURL_EASY_H)
   cb_check_for_updates->SetValue(m_options.check_for_updates);
 #endif  // defined(HAVE_CURL_EASY_H)
+
+  cob_scan_directory_for_playlists->SetSelection(static_cast<int>(m_options.scan_directory_for_playlists));
 
   // Create the layout.
 
@@ -192,6 +209,20 @@ optdlg_mmg_tab::optdlg_mmg_tab(wxWindow *parent,
   siz_all->Add(cb_gui_debugging, 0, wxLEFT, 5);
   siz_all->AddSpacer(5);
 
+  siz_line = new wxBoxSizer(wxHORIZONTAL);
+  siz_line->Add(st_scan_directory_for_playlists,  0, wxALIGN_CENTER_VERTICAL,                             0);
+  siz_line->Add(cob_scan_directory_for_playlists, 1, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT | wxGROW, 5);
+
+  siz_all->Add(siz_line, 0, wxLEFT | wxGROW, 5);
+  siz_all->AddSpacer(5);
+
+  siz_line = new wxBoxSizer(wxHORIZONTAL);
+  siz_line->Add(st_min_playlist_duration, 0, wxALIGN_CENTER_VERTICAL,                             0);
+  siz_line->Add(tc_min_playlist_duration, 1, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT | wxGROW, 5);
+
+  siz_all->Add(siz_line, 0, wxLEFT | wxGROW, 5);
+  siz_all->AddSpacer(5);
+
   SetSizer(siz_all);
 }
 
@@ -221,6 +252,9 @@ optdlg_mmg_tab::save_options() {
 #if defined(HAVE_CURL_EASY_H)
   m_options.check_for_updates             = cb_check_for_updates->IsChecked();
 #endif  // defined(HAVE_CURL_EASY_H)
+  m_options.scan_directory_for_playlists  = static_cast<scan_directory_for_playlists_e>(cob_scan_directory_for_playlists->GetSelection());
+  if (!parse_number(to_utf8(tc_min_playlist_duration->GetValue()), m_options.min_playlist_duration))
+    m_options.min_playlist_duration = 0;
 
 #if defined(HAVE_LIBINTL_H)
   std::string new_ui_locale = get_selected_ui_language();

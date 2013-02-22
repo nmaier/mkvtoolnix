@@ -1610,6 +1610,8 @@ mmg_dialog::save_preferences() {
   cfg->Write(wxU("check_for_updates"),                   options.check_for_updates);
   cfg->Write(wxU("popular_languages"),                   join(wxU(" "), options.popular_languages));
   cfg->Write(wxU("default_cli_options"),                 options.default_cli_options);
+  cfg->Write(wxU("scan_directory_for_playlists"),        static_cast<int>(options.scan_directory_for_playlists));
+  cfg->Write(wxU("min_playlist_duration"),               static_cast<long>(options.min_playlist_duration));
 
   cfg->Flush();
 }
@@ -1651,6 +1653,10 @@ mmg_dialog::load_preferences() {
   cfg->Read(wxU("check_for_updates"),                   &options.check_for_updates,                   true);
   cfg->Read(wxU("popular_languages"),                   &s,                                           wxEmptyString);
   cfg->Read(wxU("default_cli_options"),                 &options.default_cli_options,                 wxEmptyString);
+  cfg->Read(wxU("scan_directory_for_playlists"),        &value_long,                                  SDP_ALWAYS_ASK);
+  options.scan_directory_for_playlists = static_cast<scan_directory_for_playlists_e>(value_long);
+  cfg->Read(wxU("min_playlist_duration"),               &value_long,                                  120);
+  options.min_playlist_duration        = value_long;
 
   options.init_popular_languages(s);
   options.validate();
