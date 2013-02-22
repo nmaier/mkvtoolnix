@@ -36,9 +36,10 @@ optdlg_output_tab::optdlg_output_tab(wxWindow *parent,
                                              "if it hasn't been set already. This happens when you add "
                                              "the first file. If unset mmg will not touch the output filename."));
 
-  rb_odm_input_file = new wxRadioButton(this, ID_RB_ODM_INPUT_FILE, Z("Same directory as the first input file's"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP);
-  rb_odm_previous   = new wxRadioButton(this, ID_RB_ODM_PREVIOUS, Z("Use the previous output directory"));
-  rb_odm_fixed      = new wxRadioButton(this, ID_RB_ODM_FIXED, Z("Use this directory:"));
+  rb_odm_input_file           = new wxRadioButton(this, ID_RB_ODM_INPUT_FILE,           Z("Same directory as the first input file's"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP);
+  rb_odm_parent_of_input_file = new wxRadioButton(this, ID_RB_ODM_PARENT_OF_INPUT_FILE, Z("Parent directory of the first input file"));
+  rb_odm_previous             = new wxRadioButton(this, ID_RB_ODM_PREVIOUS,             Z("Use the previous output directory"));
+  rb_odm_fixed                = new wxRadioButton(this, ID_RB_ODM_FIXED,                Z("Use this directory:"));
 
   tc_output_directory       = new wxTextCtrl(this, ID_TC_OUTPUT_DIRECTORY, m_options.output_directory);
   b_browse_output_directory = new wxButton(this, ID_B_BROWSE_OUTPUT_DIRECTORY, Z("Browse"));
@@ -59,9 +60,10 @@ optdlg_output_tab::optdlg_output_tab(wxWindow *parent,
   cb_autoset_output_filename->SetValue(m_options.autoset_output_filename);
   cb_ask_before_overwriting->SetValue(m_options.ask_before_overwriting);
 
-  rb_odm_input_file->SetValue(m_options.output_directory_mode == ODM_FROM_FIRST_INPUT_FILE);
-  rb_odm_previous->SetValue(m_options.output_directory_mode == ODM_PREVIOUS);
-  rb_odm_fixed->SetValue(m_options.output_directory_mode == ODM_FIXED);
+  rb_odm_input_file->          SetValue(m_options.output_directory_mode == ODM_FROM_FIRST_INPUT_FILE);
+  rb_odm_parent_of_input_file->SetValue(m_options.output_directory_mode == ODM_PARENT_OF_FIRST_INPUT_FILE);
+  rb_odm_previous->            SetValue(m_options.output_directory_mode == ODM_PREVIOUS);
+  rb_odm_fixed->               SetValue(m_options.output_directory_mode == ODM_FIXED);
 
   enable_output_filename_controls(m_options.autoset_output_filename);
 
@@ -85,6 +87,9 @@ optdlg_output_tab::optdlg_output_tab(wxWindow *parent,
 #endif
 
   siz_all->Add(rb_odm_input_file, 0, wxLEFT, left_offset);
+  siz_all->AddSpacer(5);
+
+  siz_all->Add(rb_odm_parent_of_input_file, 0, wxLEFT, left_offset);
   siz_all->AddSpacer(5);
 
   siz_all->Add(rb_odm_previous, 0, wxLEFT, left_offset);
@@ -130,12 +135,13 @@ optdlg_output_tab::enable_output_filename_controls(bool enable) {
 
 void
 optdlg_output_tab::save_options() {
-  m_options.output_directory              = tc_output_directory->GetValue();
-  m_options.autoset_output_filename       = cb_autoset_output_filename->IsChecked();
-  m_options.ask_before_overwriting        = cb_ask_before_overwriting->IsChecked();
-  m_options.output_directory_mode         = rb_odm_input_file->GetValue() ? ODM_FROM_FIRST_INPUT_FILE
-                                          : rb_odm_previous->GetValue()   ? ODM_PREVIOUS
-                                          :                                 ODM_FIXED;
+  m_options.output_directory        = tc_output_directory->GetValue();
+  m_options.autoset_output_filename = cb_autoset_output_filename->IsChecked();
+  m_options.ask_before_overwriting  = cb_ask_before_overwriting->IsChecked();
+  m_options.output_directory_mode   = rb_odm_input_file->GetValue()           ? ODM_FROM_FIRST_INPUT_FILE
+                                    : rb_odm_parent_of_input_file->GetValue() ? ODM_PARENT_OF_FIRST_INPUT_FILE
+                                    : rb_odm_previous->GetValue()             ? ODM_PREVIOUS
+                                    :                                           ODM_FIXED;
 }
 
 wxString
@@ -145,9 +151,10 @@ optdlg_output_tab::get_title() {
 
 IMPLEMENT_CLASS(optdlg_output_tab, optdlg_base_tab);
 BEGIN_EVENT_TABLE(optdlg_output_tab, optdlg_base_tab)
-  EVT_BUTTON(ID_B_BROWSE_OUTPUT_DIRECTORY,    optdlg_output_tab::on_browse_output_directory)
-  EVT_CHECKBOX(ID_CB_AUTOSET_OUTPUT_FILENAME, optdlg_output_tab::on_autoset_output_filename_selected)
-  EVT_RADIOBUTTON(ID_RB_ODM_INPUT_FILE,       optdlg_output_tab::on_autoset_output_filename_selected)
-  EVT_RADIOBUTTON(ID_RB_ODM_PREVIOUS,         optdlg_output_tab::on_autoset_output_filename_selected)
-  EVT_RADIOBUTTON(ID_RB_ODM_FIXED,            optdlg_output_tab::on_autoset_output_filename_selected)
+  EVT_BUTTON(ID_B_BROWSE_OUTPUT_DIRECTORY,        optdlg_output_tab::on_browse_output_directory)
+  EVT_CHECKBOX(ID_CB_AUTOSET_OUTPUT_FILENAME,     optdlg_output_tab::on_autoset_output_filename_selected)
+  EVT_RADIOBUTTON(ID_RB_ODM_INPUT_FILE,           optdlg_output_tab::on_autoset_output_filename_selected)
+  EVT_RADIOBUTTON(ID_RB_ODM_PARENT_OF_INPUT_FILE, optdlg_output_tab::on_autoset_output_filename_selected)
+  EVT_RADIOBUTTON(ID_RB_ODM_PREVIOUS,             optdlg_output_tab::on_autoset_output_filename_selected)
+  EVT_RADIOBUTTON(ID_RB_ODM_FIXED,                optdlg_output_tab::on_autoset_output_filename_selected)
 END_EVENT_TABLE();

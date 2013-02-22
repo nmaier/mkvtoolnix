@@ -28,6 +28,7 @@
 #define ID_RB_ODM_INPUT_FILE            15113
 #define ID_RB_ODM_PREVIOUS              15114
 #define ID_RB_ODM_FIXED                 15115
+#define ID_RB_ODM_PARENT_OF_INPUT_FILE  15122
 
 class optdlg_output_tab: public optdlg_base_tab {
   DECLARE_CLASS(optdlg_output_tab);
@@ -35,7 +36,7 @@ class optdlg_output_tab: public optdlg_base_tab {
 public:
   wxTextCtrl *tc_output_directory;
   wxCheckBox *cb_ask_before_overwriting, *cb_autoset_output_filename;
-  wxRadioButton *rb_odm_input_file, *rb_odm_previous, *rb_odm_fixed;
+  wxRadioButton *rb_odm_input_file, *rb_odm_parent_of_input_file, *rb_odm_previous, *rb_odm_fixed;
   wxButton *b_browse_output_directory;
 
 public:

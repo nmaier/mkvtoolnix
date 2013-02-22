@@ -184,9 +184,10 @@ struct mmg_attachment_t {
 typedef std::shared_ptr<mmg_attachment_t> mmg_attachment_cptr;
 
 enum output_directory_mode_e {
-  ODM_FROM_FIRST_INPUT_FILE = 0,
-  ODM_PREVIOUS              = 1,
-  ODM_FIXED                 = 2,
+  ODM_FROM_FIRST_INPUT_FILE      = 0,
+  ODM_PREVIOUS                   = 1,
+  ODM_FIXED                      = 2,
+  ODM_PARENT_OF_FIRST_INPUT_FILE = 3,
 };
 
 enum clear_job_after_run_mode_e {

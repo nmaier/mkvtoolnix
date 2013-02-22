@@ -1344,6 +1344,8 @@ mmg_dialog::set_output_maybe(const wxString &new_output) {
     output_dir = previous_output_directory;
   else if (ODM_FIXED == options.output_directory_mode)
     output_dir = options.output_directory;
+  else if (ODM_PARENT_OF_FIRST_INPUT_FILE == options.output_directory_mode)
+    output_dir = wxFileName{ source_file_name.GetPath() }.GetPath();
 
   if (output_dir.IsEmpty())
     output_dir = source_file_name.GetPath();

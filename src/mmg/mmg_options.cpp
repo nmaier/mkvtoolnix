@@ -47,9 +47,10 @@ mmg_options_t::init_popular_languages(const wxString &list) {
 
 void
 mmg_options_t::validate() {
-  if (   (ODM_FROM_FIRST_INPUT_FILE != output_directory_mode)
-      && (ODM_PREVIOUS              != output_directory_mode)
-      && (ODM_FIXED                 != output_directory_mode))
+  if (   (ODM_FROM_FIRST_INPUT_FILE      != output_directory_mode)
+      && (ODM_PARENT_OF_FIRST_INPUT_FILE != output_directory_mode)
+      && (ODM_PREVIOUS                   != output_directory_mode)
+      && (ODM_FIXED                      != output_directory_mode))
     output_directory_mode = ODM_FROM_FIRST_INPUT_FILE;
 
   if (   (priority != wxU("highest")) && (priority != wxU("higher")) && (priority != wxU("normal"))

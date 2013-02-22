@@ -1,3 +1,9 @@
+2013-02-22  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mmg: new feature: The output file name can be auto-set to be
+        located in the first input file's parent directory. Implements
+        #849.
+
 2013-02-17  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvinfo, mkvpropedit, mmg's header editor: bug fix: Fixed the
