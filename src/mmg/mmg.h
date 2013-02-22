@@ -203,7 +203,7 @@ struct mmg_options_t {
   bool autoset_output_filename;
   output_directory_mode_e output_directory_mode;
   clear_job_after_run_mode_e clear_job_after_run_mode;
-  bool ask_before_overwriting;
+  bool ask_before_overwriting, unique_output_file_name_suggestions;
   bool on_top;
   bool filenew_after_add_to_jobqueue;
   bool filenew_after_successful_mux;
@@ -220,6 +220,7 @@ struct mmg_options_t {
     , output_directory_mode(ODM_FROM_FIRST_INPUT_FILE)
     , clear_job_after_run_mode(CJAR_NEVER)
     , ask_before_overwriting(false)
+    , unique_output_file_name_suggestions{true}
     , on_top(false)
     , filenew_after_add_to_jobqueue(false)
     , filenew_after_successful_mux(false)

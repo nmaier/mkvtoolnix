@@ -47,6 +47,10 @@ optdlg_output_tab::optdlg_output_tab(wxWindow *parent,
   tc_output_directory->SetToolTip(TIP("If left empty then mmg will set the output file name to be in the same directory as the first file added to this job. "
                                       "Otherwise this directory will be used."));
 
+  cb_unique_output_file_name_suggestions = new wxCheckBox(this, ID_CB_UNIQUE_OUTPUT_FILE_NAME_SUGGESTIONS, Z("Make suggested output file names unique"));
+  cb_unique_output_file_name_suggestions->SetToolTip(TIP("If checked mmg make sure the suggested output file name is unique by adding a number (e.g. ' (1)') to the end of the file name. "
+                                                         "This is only done if the unmodified file name already exists."));
+
   cb_ask_before_overwriting = new wxCheckBox(this, ID_CB_ASK_BEFORE_OVERWRITING, Z("Ask before overwriting things (files, jobs)"));
   cb_ask_before_overwriting->SetToolTip(TIP("If checked mmg will ask for "
                                             "confirmation before overwriting "
@@ -58,6 +62,7 @@ optdlg_output_tab::optdlg_output_tab(wxWindow *parent,
   // Set the defaults.
 
   cb_autoset_output_filename->SetValue(m_options.autoset_output_filename);
+  cb_unique_output_file_name_suggestions->SetValue(m_options.unique_output_file_name_suggestions);
   cb_ask_before_overwriting->SetValue(m_options.ask_before_overwriting);
 
   rb_odm_input_file->          SetValue(m_options.output_directory_mode == ODM_FROM_FIRST_INPUT_FILE);
@@ -103,6 +108,9 @@ optdlg_output_tab::optdlg_output_tab(wxWindow *parent,
   siz_all->Add(siz_line, 0, wxGROW | wxLEFT, left_offset);
   siz_all->AddSpacer(5);
 
+  siz_all->Add(cb_unique_output_file_name_suggestions, 0, wxLEFT, left_offset);
+  siz_all->AddSpacer(5);
+
   siz_all->Add(cb_ask_before_overwriting, 0, wxLEFT, 5);
   siz_all->AddSpacer(5);
 
@@ -131,12 +139,14 @@ optdlg_output_tab::enable_output_filename_controls(bool enable) {
   rb_odm_fixed->Enable(enable);
   tc_output_directory->Enable(enable && odm_is_fixed);
   b_browse_output_directory->Enable(enable && odm_is_fixed);
+  cb_unique_output_file_name_suggestions->Enable(enable);
 }
 
 void
 optdlg_output_tab::save_options() {
   m_options.output_directory        = tc_output_directory->GetValue();
   m_options.autoset_output_filename = cb_autoset_output_filename->IsChecked();
+  m_options.unique_output_file_name_suggestions = cb_unique_output_file_name_suggestions->IsChecked();
   m_options.ask_before_overwriting  = cb_ask_before_overwriting->IsChecked();
   m_options.output_directory_mode   = rb_odm_input_file->GetValue()           ? ODM_FROM_FIRST_INPUT_FILE
                                     : rb_odm_parent_of_input_file->GetValue() ? ODM_PARENT_OF_FIRST_INPUT_FILE

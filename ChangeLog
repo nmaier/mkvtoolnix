@@ -1,5 +1,9 @@
 2013-02-22  Moritz Bunkus  <moritz@bunkus.org>
 
+        * mmg: new feature: Added an option for disabling making the
+        suggested output file name unique by adding a running number
+        (e.g. ' (1)'). Implements #848.
+
         * mmg: new feature: The output file name can be auto-set to be
         located in the first input file's parent directory. Implements
         #849.

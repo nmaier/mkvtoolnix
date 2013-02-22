@@ -1358,7 +1358,7 @@ mmg_dialog::set_output_maybe(const wxString &new_output) {
     output_file_name.SetName(source_file_name.GetName() + (0 == idx ? wxT("") : wxString::Format(wxT(" (%u)"), idx)));
     output_file_name.SetExt(suggest_file_name_extension());
 
-    if (!output_file_name.FileExists())
+    if (!options.unique_output_file_name_suggestions || !output_file_name.FileExists())
       break;
 
     ++idx;
@@ -1600,6 +1600,7 @@ mmg_dialog::save_preferences() {
   cfg->Write(wxU("clear_job_after_run_mode"),        static_cast<long>(options.clear_job_after_run_mode));
   cfg->Write(wxU("output_directory"),                options.output_directory);
   cfg->Write(wxU("ask_before_overwriting"),          options.ask_before_overwriting);
+  cfg->Write(wxU("unique_output_file_name_suggestions"), options.unique_output_file_name_suggestions);
   cfg->Write(wxU("filenew_after_add_to_jobqueue"),   options.filenew_after_add_to_jobqueue);
   cfg->Write(wxU("filenew_after_successful_mux"),    options.filenew_after_successful_mux);
   cfg->Write(wxU("on_top"),                          options.on_top);
@@ -1640,6 +1641,7 @@ mmg_dialog::load_preferences() {
   options.clear_job_after_run_mode = static_cast<clear_job_after_run_mode_e>(value_long);
   cfg->Read(wxU("output_directory"),              &options.output_directory, wxU(""));
   cfg->Read(wxU("ask_before_overwriting"),        &options.ask_before_overwriting, true);
+  cfg->Read(wxU("unique_output_file_name_suggestions"), &options.unique_output_file_name_suggestions, true);
   cfg->Read(wxU("filenew_after_add_to_jobqueue"), &options.filenew_after_add_to_jobqueue, false);
   cfg->Read(wxU("filenew_after_successful_mux"),  &options.filenew_after_successful_mux, false);
   cfg->Read(wxU("on_top"),                        &options.on_top, false);
