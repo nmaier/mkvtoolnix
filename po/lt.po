@@ -1625,7 +1625,7 @@ msgstr ""
 msgid "A human-readable track name."
 msgstr ""
 
-#: src/mmg/mmg_dialog.cpp:1442
+#: src/mmg/mmg_dialog.cpp:1444
 #, c-format, boost-format
 msgid "A job with the description '%s' already exists. Do you really want to add another one with the same description?"
 msgstr ""
@@ -1917,7 +1917,7 @@ msgstr ""
 msgid "Also using the correction file '%1%c'.\n"
 msgstr ""
 
-#: src/mmg/options/mmg.cpp:93
+#: src/mmg/options/mmg.cpp:70
 msgid "Always on top"
 msgstr "Visada viršuje"
 
@@ -1990,7 +1990,7 @@ msgstr ""
 msgid "Appending track %1% from file no. %2% ('%3%') to track %4% from file no. %5% ('%6%').\n"
 msgstr ""
 
-#: src/mmg/options/mmg.cpp:67
+#: src/mmg/options/output.cpp:54
 msgid "Ask before overwriting things (files, jobs)"
 msgstr ""
 
@@ -2072,7 +2072,7 @@ msgstr ""
 msgid "Audio track %u"
 msgstr "%u garso takelis"
 
-#: src/mmg/options/mmg.cpp:52
+#: src/mmg/options/output.cpp:34
 msgid "Auto-set output filename"
 msgstr "Automatiškai parinkti išvestinos rinkmenos pavadinimą"
 
@@ -2176,7 +2176,7 @@ msgstr ""
 
 #: src/mmg/mmg_dialog.cpp:331
 #: src/mmg/options/mkvmerge.cpp:52
-#: src/mmg/options/mmg.cpp:62
+#: src/mmg/options/output.cpp:45
 #: src/mmg/tabs/global.cpp:344
 #: src/mmg/tabs/global.cpp:361
 #: src/mmg/tabs/global.cpp:365
@@ -2407,7 +2407,7 @@ msgid "Charset:"
 msgstr "Koduotė:"
 
 #: src/mmg/mmg_dialog.cpp:316
-#: src/mmg/options/mmg.cpp:102
+#: src/mmg/options/mmg.cpp:79
 msgid "Check online for the latest release"
 msgstr "Tikrinti, ar yra programos atnaujinimų."
 
@@ -2416,11 +2416,11 @@ msgstr "Tikrinti, ar yra programos atnaujinimų."
 msgid "Check online for the latest release."
 msgstr "Tikrinti, ar yra programos atnaujinimų"
 
-#: src/mmg/options/mmg.cpp:103
+#: src/mmg/options/mmg.cpp:80
 msgid "Check online whether or not a new release of MKVToolNix is available on the home page. Will only check when mmg starts and at most once a day. No information is transmitted to the server."
 msgstr ""
 
-#: src/mmg/mmg_dialog.cpp:1774
+#: src/mmg/mmg_dialog.cpp:1778
 msgid "Checking for updates online; please wait"
 msgstr ""
 
@@ -2475,7 +2475,7 @@ msgstr ""
 msgid "Choose the mkvmerge executable"
 msgstr "Pasirinkite  mkvmerge programą"
 
-#: src/mmg/options/mmg.cpp:257
+#: src/mmg/options/output.cpp:122
 msgid "Choose the output directory"
 msgstr "Pasirinkite išvedimo katalogą"
 
@@ -2487,11 +2487,11 @@ msgstr ""
 msgid "Choose the tags file"
 msgstr "Pasirinkite gairių rinkmeną"
 
-#: src/mmg/options/mmg.cpp:83
+#: src/mmg/options/mmg.cpp:60
 msgid "Clear inputs after a successful muxing run"
 msgstr ""
 
-#: src/mmg/options/mmg.cpp:81
+#: src/mmg/options/mmg.cpp:58
 msgid "Clear inputs after adding a job to the job queue"
 msgstr ""
 
@@ -3030,7 +3030,7 @@ msgstr "Pasirinktus darbus pašalinti iš darbų sąrašo"
 msgid "Description"
 msgstr "Aprašas"
 
-#: src/mmg/mmg_dialog.cpp:1443
+#: src/mmg/mmg_dialog.cpp:1445
 msgid "Description already exists"
 msgstr "Aprašas jau yra"
 
@@ -3858,19 +3858,23 @@ msgstr ""
 msgid "If an edition is marked as 'default' then it should be used as the default edition."
 msgstr ""
 
-#: src/mmg/options/mmg.cpp:68
+#: src/mmg/options/output.cpp:51
+msgid "If checked mmg make sure the suggested output file name is unique by adding a number (e.g. ' (1)') to the end of the file name. This is only done if the unmodified file name already exists."
+msgstr ""
+
+#: src/mmg/options/output.cpp:55
 msgid "If checked mmg will ask for confirmation before overwriting existing files, or before adding a new job if there's an old job whose description matches the new one."
 msgstr ""
 
-#: src/mmg/options/mmg.cpp:53
+#: src/mmg/options/output.cpp:35
 msgid "If checked mmg will automatically set the output filename if it hasn't been set already. This happens when you add the first file. If unset mmg will not touch the output filename."
 msgstr ""
 
-#: src/mmg/options/mmg.cpp:96
+#: src/mmg/options/mmg.cpp:73
 msgid "If checked mmg will warn if it thinks that you're using it incorrectly. Such warnings are shown at least once even if you turn this feature off."
 msgstr ""
 
-#: src/mmg/options/mmg.cpp:64
+#: src/mmg/options/output.cpp:47
 msgid "If left empty then mmg will set the output file name to be in the same directory as the first file added to this job. Otherwise this directory will be used."
 msgstr ""
 
@@ -3883,7 +3887,7 @@ msgstr ""
 msgid "If splitting is a file can be attached either to all files created or only to the first file. Has no effect if no splitting is used."
 msgstr ""
 
-#: src/mmg/mmg_dialog.cpp:1963
+#: src/mmg/mmg_dialog.cpp:1967
 msgid "If you encounter problems during playback of files please consider visiting the newly created MKVToolNix troubleshooting advice page:"
 msgstr "Jei kyla problemų grojant ar paleisdžiant failus, aplankykite naujai sukurtą MKVToolNix problemų sprendimui skirtą puslapį:"
 
@@ -3902,7 +3906,7 @@ msgstr ""
 msgid "Imported picture from %1%"
 msgstr ""
 
-#: src/mmg/mmg_dialog.cpp:1919
+#: src/mmg/mmg_dialog.cpp:1923
 msgid "Incompatible mkvmerge version"
 msgstr ""
 
@@ -3941,7 +3945,7 @@ msgstr "Įvedimo rinkmenos:"
 msgid "Input too long: %1% > %2%"
 msgstr ""
 
-#: src/mmg/options/mmg.cpp:113
+#: src/mmg/options/mmg.cpp:90
 msgid "Interface language:"
 msgstr "Sąsajos kalba:"
 
@@ -4351,15 +4355,15 @@ msgstr ""
 msgid "Invalid track ID/file name specification in argument '%1%'.\n"
 msgstr ""
 
-#: src/mmg/mmg_dialog.cpp:1967
+#: src/mmg/mmg_dialog.cpp:1971
 msgid "It can also be opened from the 'Help' menu."
 msgstr "Jį pasieksite ir per „Pagalbos“ meniu."
 
-#: src/mmg/mmg_dialog.cpp:1479
+#: src/mmg/mmg_dialog.cpp:1481
 msgid "Job added to job queue"
 msgstr "Darbas įtrauktas į darbų eilę"
 
-#: src/mmg/mmg_dialog.cpp:1431
+#: src/mmg/mmg_dialog.cpp:1433
 msgid "Job description"
 msgstr "Darbo aprašas"
 
@@ -4560,6 +4564,11 @@ msgstr "MPEG-4"
 #: src/common/file_types.cpp:43
 msgid "MPLS Blu-ray playlist"
 msgstr ""
+
+#: src/mmg/options/output.cpp:50
+#, fuzzy
+msgid "Make suggested output file names unique"
+msgstr "Automatiškai parinkti išvestinos rinkmenos pavadinimą"
 
 #: src/mmg/tabs/input_general.cpp:181
 msgid "Make this track the default track for its type (audio, video, subtitles). Players should prefer tracks with the default track flag set."
@@ -5017,7 +5026,7 @@ msgstr ""
 msgid "Nothing to do.\n"
 msgstr "Nėra ką daryti. \n"
 
-#: src/mmg/mmg_dialog.cpp:1955
+#: src/mmg/mmg_dialog.cpp:1959
 msgid "Notice"
 msgstr "Pranešimas"
 
@@ -5130,7 +5139,7 @@ msgid "Option file created."
 msgstr "Nuostatų rinkmena sukurta."
 
 #: src/info/info_cli_parser.cpp:35
-#: src/mmg/options/dialog.cpp:36
+#: src/mmg/options/dialog.cpp:37
 #: src/propedit/propedit_cli_parser.cpp:191
 msgid "Options"
 msgstr "Parinktys"
@@ -5162,6 +5171,7 @@ msgid "Other options"
 msgstr "Kitos parinktys"
 
 #: src/mmg/mux_dialog.cpp:62
+#: src/mmg/options/output.cpp:159
 msgid "Output"
 msgstr "Išvedimas"
 
@@ -5191,7 +5201,7 @@ msgid "Overwrite existing file(s)?"
 msgstr "Perrašyti esamas rinkmenas?"
 
 #: src/mmg/mmg_dialog.cpp:555
-#: src/mmg/mmg_dialog.cpp:1425
+#: src/mmg/mmg_dialog.cpp:1427
 msgid "Overwrite existing file?"
 msgstr "Perrašyti esamą rinkmeną?"
 
@@ -5224,6 +5234,10 @@ msgstr ""
 #: src/merge/pr_generic.cpp:251
 #, boost-format
 msgid "Packet queue not empty (flushed: %1%). Frames have been lost during remux. %2%\n"
+msgstr ""
+
+#: src/mmg/options/output.cpp:40
+msgid "Parent directory of the first input file"
 msgstr ""
 
 #: src/info/wxwidgets_ui.cpp:118
@@ -5277,7 +5291,7 @@ msgstr "Taškelio plotis: %1%"
 msgid "Please do not select 'mmg' itself as the 'mkvmerge' executable."
 msgstr ""
 
-#: src/mmg/mmg_dialog.cpp:1431
+#: src/mmg/mmg_dialog.cpp:1433
 msgid "Please enter a description for the new job:"
 msgstr "Aprašykite naują darbą:"
 
@@ -5364,7 +5378,7 @@ msgstr "Eiga: 100%%%1%"
 msgid "Progress: [%1%%2%] %3%%%"
 msgstr "Eiga: [%1%%2%] %3%%%"
 
-#: src/mmg/mmg_dialog.cpp:1862
+#: src/mmg/mmg_dialog.cpp:1866
 msgid "Querying mkvmerge's capabilities"
 msgstr ""
 
@@ -5598,7 +5612,7 @@ msgstr "Pašalinti skyrių"
 msgid "Remove element"
 msgstr "Pašalinti elementą"
 
-#: src/mmg/options/mmg.cpp:90
+#: src/mmg/options/mmg.cpp:67
 msgid "Remove job from job queue after run:"
 msgstr ""
 
@@ -5659,7 +5673,7 @@ msgstr ""
 msgid "Sa&ve command line"
 msgstr "Į&rašyti komandinę eilutę"
 
-#: src/mmg/options/mmg.cpp:57
+#: src/mmg/options/output.cpp:39
 msgid "Same directory as the first input file's"
 msgstr ""
 
@@ -5906,7 +5920,7 @@ msgstr "Nurodykite kalbą:"
 msgid "Set the MIME type to use for the following '--add-attachment' or '--replace-attachment' option"
 msgstr ""
 
-#: src/mmg/options/mmg.cpp:75
+#: src/mmg/options/mmg.cpp:52
 msgid "Set the delay input field from the file name"
 msgstr ""
 
@@ -6008,7 +6022,7 @@ msgstr ""
 msgid "Show element si&zes\tCtrl-Z"
 msgstr "Rodyti elementų &dydžius\tCtrl-Z"
 
-#: src/mmg/options/mmg.cpp:108
+#: src/mmg/options/mmg.cpp:85
 msgid "Show mmg's debug window"
 msgstr "Rodyti mmg derinimo langą"
 
@@ -6048,7 +6062,7 @@ msgstr "Rodyti šią pagalbą"
 msgid "Show version information."
 msgstr "Rodyti informaciją apie versiją"
 
-#: src/mmg/options/mmg.cpp:109
+#: src/mmg/options/mmg.cpp:86
 msgid "Shows mmg's debug window in which debug messages will appear. This is only useful if you're helping the author debug a problem in mmg."
 msgstr ""
 
@@ -6409,7 +6423,7 @@ msgstr ""
 msgid "The FourCC setting for track nr. %s in file '%s' is not exactly four characters long."
 msgstr ""
 
-#: src/mmg/mmg_dialog.cpp:1915
+#: src/mmg/mmg_dialog.cpp:1919
 #, boost-format
 msgid "The GUI is configured to use the mkvmerge executable from a different version (%1%) than the GUI itself (%2%). This is not supported but will not be prevented either. You should change the mkvmerge executable in the preferences dialog."
 msgstr ""
@@ -7066,7 +7080,7 @@ msgid "The order of the various options is not important."
 msgstr ""
 
 #: src/mmg/mmg_dialog.cpp:555
-#: src/mmg/mmg_dialog.cpp:1422
+#: src/mmg/mmg_dialog.cpp:1424
 #, c-format, boost-format
 msgid "The output file '%s' already exists. Do you want to overwrite it?"
 msgstr ""
@@ -7316,7 +7330,7 @@ msgstr ""
 msgid "Theora"
 msgstr "Theora"
 
-#: src/mmg/mmg_dialog.cpp:1807
+#: src/mmg/mmg_dialog.cpp:1811
 msgid "There is a new version available online."
 msgstr ""
 
@@ -7331,7 +7345,7 @@ msgstr ""
 msgid "There is no translation available for '%1%'.\n"
 msgstr ""
 
-#: src/mmg/mmg_dialog.cpp:1808
+#: src/mmg/mmg_dialog.cpp:1812
 msgid "There was an error querying the update status."
 msgstr ""
 
@@ -7441,7 +7455,7 @@ msgstr ""
 msgid "This is the title that players may show as the 'main title' for this movie."
 msgstr ""
 
-#: src/mmg/mmg_dialog.cpp:1954
+#: src/mmg/mmg_dialog.cpp:1958
 msgid "This message will only shown to you once."
 msgstr "Šio pranešimo daugiau nematysite."
 
@@ -7853,11 +7867,11 @@ msgstr ""
 msgid "Use the old AAC codec IDs (e.g. 'A_AAC/MPEG4/SBR') instead of the new one ('A_AAC')."
 msgstr ""
 
-#: src/mmg/options/mmg.cpp:58
+#: src/mmg/options/output.cpp:41
 msgid "Use the previous output directory"
 msgstr "Naudoti ankstesnį išvedimo katalogą"
 
-#: src/mmg/options/mmg.cpp:59
+#: src/mmg/options/output.cpp:42
 msgid "Use this directory:"
 msgstr "Naudoti šį išvedimo katalogą:"
 
@@ -8031,7 +8045,7 @@ msgstr "WAVPACK v4 garsas"
 msgid "WAVPACK4"
 msgstr "WAVPACK4"
 
-#: src/mmg/options/mmg.cpp:95
+#: src/mmg/options/mmg.cpp:72
 msgid "Warn about possible incorrect usage of mmg"
 msgstr ""
 
@@ -8056,7 +8070,7 @@ msgstr "Įspėjimai:"
 msgid "WebM audio/video files"
 msgstr "WebM garso/vaizdo rinkmenos"
 
-#: src/mmg/options/mmg.cpp:76
+#: src/mmg/options/mmg.cpp:53
 msgid "When a file is added its name is scanned. If it contains the word 'DELAY' followed by a number then this number is automatically put into the 'delay' input field for any audio track found in the file."
 msgstr ""
 
@@ -8136,7 +8150,7 @@ msgstr ""
 msgid "Wrong identification string: '%|1$7s|' != 'kate\\0\\0\\0'"
 msgstr ""
 
-#: src/mmg/mmg_dialog.cpp:1806
+#: src/mmg/mmg_dialog.cpp:1810
 msgid "You are already running the latest version."
 msgstr "Naudojate naujausią versiją."
 
@@ -8183,7 +8197,7 @@ msgstr "pridėti"
 msgid "additional parts"
 msgstr ""
 
-#: src/mmg/options/mmg.cpp:88
+#: src/mmg/options/mmg.cpp:65
 msgid "always"
 msgstr "visada"
 
@@ -8326,7 +8340,7 @@ msgstr "įgalinta"
 msgid "encryption"
 msgstr "šifravimas"
 
-#: src/mmg/options/mmg.cpp:87
+#: src/mmg/options/mmg.cpp:64
 #, fuzzy
 msgid "even if there were warnings"
 msgstr "užbaigta, bet buvo įspėjimų"
@@ -8810,7 +8824,7 @@ msgstr ""
 msgid "mm_text_io_c: UTF32_* is not supported at the moment.\n"
 msgstr ""
 
-#: src/mmg/options/mmg.cpp:331
+#: src/mmg/options/mmg.cpp:244
 msgid "mmg"
 msgstr "mmg"
 
@@ -8818,7 +8832,7 @@ msgstr "mmg"
 msgid "mmg debug output"
 msgstr ""
 
-#: src/mmg/options/mmg.cpp:177
+#: src/mmg/options/mmg.cpp:146
 msgid "mmg options"
 msgstr "„mmg“ parinktys"
 
@@ -8894,13 +8908,18 @@ msgstr ""
 msgid "only for I frames"
 msgstr ""
 
-#: src/mmg/options/mmg.cpp:86
+#: src/mmg/options/mmg.cpp:63
 msgid "only if the run was successfull"
 msgstr ""
 
 #: src/mmg/tabs/chapters.cpp:358
 msgid "ordered"
 msgstr ""
+
+#: src/mmg/options/output.cpp:80
+#, fuzzy
+msgid "output options"
+msgstr "Skyrių parinktys"
 
 #: src/info/mkvinfo.cpp:548
 #, boost-format

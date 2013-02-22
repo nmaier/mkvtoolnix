@@ -1835,7 +1835,7 @@ msgstr "Una palabra legible para el usuario especifica el códec."
 msgid "A human-readable track name."
 msgstr "Un nombre de pista legible."
 
-#: src/mmg/mmg_dialog.cpp:1442
+#: src/mmg/mmg_dialog.cpp:1444
 #, c-format, boost-format
 msgid "A job with the description '%s' already exists. Do you really want to add another one with the same description?"
 msgstr "Un trabajo con la descripción '%s' ya existe. ¿Realmente quieres añadir otro más con la misma descripción?"
@@ -2138,7 +2138,7 @@ msgstr "También intenta extraer las hojas de distribución de pistas (CUE sheet
 msgid "Also using the correction file '%1%c'.\n"
 msgstr "Usando también el archivo de corrección '%1%c'.\n"
 
-#: src/mmg/options/mmg.cpp:93
+#: src/mmg/options/mmg.cpp:70
 msgid "Always on top"
 msgstr "Siempre en primer plano"
 
@@ -2215,7 +2215,7 @@ msgstr "La unión de una pista de un archivo con otra pista del mismo archivo no
 msgid "Appending track %1% from file no. %2% ('%3%') to track %4% from file no. %5% ('%6%').\n"
 msgstr "Uniendo la pista %1% del archivo n.º %2% ('%3%') a la pista %4% del archivo n.º %5% ('%6%').\n"
 
-#: src/mmg/options/mmg.cpp:67
+#: src/mmg/options/output.cpp:54
 msgid "Ask before overwriting things (files, jobs)"
 msgstr "Preguntar antes de sobreescribir archivos, trabajos..."
 
@@ -2297,7 +2297,7 @@ msgstr "Frecuencia de muestreo del audio"
 msgid "Audio track %u"
 msgstr "Pista de audio %u"
 
-#: src/mmg/options/mmg.cpp:52
+#: src/mmg/options/output.cpp:34
 msgid "Auto-set output filename"
 msgstr "Establecer de forma automática el destino del archivo creado"
 
@@ -2401,7 +2401,7 @@ msgstr "Abre el editor de la lista de tareas"
 
 #: src/mmg/mmg_dialog.cpp:331
 #: src/mmg/options/mkvmerge.cpp:52
-#: src/mmg/options/mmg.cpp:62
+#: src/mmg/options/output.cpp:45
 #: src/mmg/tabs/global.cpp:344
 #: src/mmg/tabs/global.cpp:361
 #: src/mmg/tabs/global.cpp:365
@@ -2632,7 +2632,7 @@ msgid "Charset:"
 msgstr "Código de caracteres:"
 
 #: src/mmg/mmg_dialog.cpp:316
-#: src/mmg/options/mmg.cpp:102
+#: src/mmg/options/mmg.cpp:79
 msgid "Check online for the latest release"
 msgstr "Comprobar online la última versión"
 
@@ -2641,11 +2641,11 @@ msgstr "Comprobar online la última versión"
 msgid "Check online for the latest release."
 msgstr "Comprobar online la última versión."
 
-#: src/mmg/options/mmg.cpp:103
+#: src/mmg/options/mmg.cpp:80
 msgid "Check online whether or not a new release of MKVToolNix is available on the home page. Will only check when mmg starts and at most once a day. No information is transmitted to the server."
 msgstr "Comprobar online, si hay disponible o no en su pagina de inicio, una nueva version de MKVToolNix. Unicamente se comprobará cuando mmg se inicie y como máximo una vez al dia. Ninguna informacion es enviada al servidor."
 
-#: src/mmg/mmg_dialog.cpp:1774
+#: src/mmg/mmg_dialog.cpp:1778
 msgid "Checking for updates online; please wait"
 msgstr "Comprobando actualizaciones, por favor espere"
 
@@ -2700,7 +2700,7 @@ msgstr "Elige la localización de los archivos de ayuda de mkvmerge GUI (interfa
 msgid "Choose the mkvmerge executable"
 msgstr "Elige el ejecutable de mkvmerge"
 
-#: src/mmg/options/mmg.cpp:257
+#: src/mmg/options/output.cpp:122
 msgid "Choose the output directory"
 msgstr "Elige el destino de salida"
 
@@ -2712,11 +2712,11 @@ msgstr "Elige un archivo de informacion del segmento"
 msgid "Choose the tags file"
 msgstr "Elige un archivo de etiquetas"
 
-#: src/mmg/options/mmg.cpp:83
+#: src/mmg/options/mmg.cpp:60
 msgid "Clear inputs after a successful muxing run"
 msgstr "Borrar los registros después de realizar el multiplexado."
 
-#: src/mmg/options/mmg.cpp:81
+#: src/mmg/options/mmg.cpp:58
 msgid "Clear inputs after adding a job to the job queue"
 msgstr "Borrar los registros después de añadir un trabajo a la lista de tareas"
 
@@ -3255,7 +3255,7 @@ msgstr "Eliminar el/los trabajo/s seleccionado/s desde la lista de tareas"
 msgid "Description"
 msgstr "Descripción"
 
-#: src/mmg/mmg_dialog.cpp:1443
+#: src/mmg/mmg_dialog.cpp:1445
 msgid "Description already exists"
 msgstr "La descripción ya existe"
 
@@ -4097,19 +4097,23 @@ msgstr "Si una edición está marcada como 'ordenado', entonces los capítulos s
 msgid "If an edition is marked as 'default' then it should be used as the default edition."
 msgstr "Si una edición está marcada como por 'defecto', entonces se debe usar como la edición predeterminada."
 
-#: src/mmg/options/mmg.cpp:68
+#: src/mmg/options/output.cpp:51
+msgid "If checked mmg make sure the suggested output file name is unique by adding a number (e.g. ' (1)') to the end of the file name. This is only done if the unmodified file name already exists."
+msgstr ""
+
+#: src/mmg/options/output.cpp:55
 msgid "If checked mmg will ask for confirmation before overwriting existing files, or before adding a new job if there's an old job whose description matches the new one."
 msgstr "Mmg pedirá confirmación para sobreescribir archivos existentes si comprueba que al añadir un nuevo trabajo hay otro anterior cuya descripción coinciden."
 
-#: src/mmg/options/mmg.cpp:53
+#: src/mmg/options/output.cpp:35
 msgid "If checked mmg will automatically set the output filename if it hasn't been set already. This happens when you add the first file. If unset mmg will not touch the output filename."
 msgstr "Mmg establecerá de forma automática el destino del archivo creado si comprueba que todavía no ha sido establecido. Esto sucede cuando añades el primer archivo. Si no se establece, Mmg no cambiará el nombre del archivo de salida."
 
-#: src/mmg/options/mmg.cpp:96
+#: src/mmg/options/mmg.cpp:73
 msgid "If checked mmg will warn if it thinks that you're using it incorrectly. Such warnings are shown at least once even if you turn this feature off."
 msgstr "Mmg te avisará si comprueba que lo estás usando no válidamente. Estas advertencias se muestran al menos una vez, incluso si desactivas esta función."
 
-#: src/mmg/options/mmg.cpp:64
+#: src/mmg/options/output.cpp:47
 msgid "If left empty then mmg will set the output file name to be in the same directory as the first file added to this job. Otherwise this directory will be used."
 msgstr "Si lo dejas vacío mmg establecerá el nombre de archivo creado en el mismo directorio que del primer archivo añadido al proyecto. De lo contrario, se utilizará este directorio."
 
@@ -4122,7 +4126,7 @@ msgstr "Si no hay ninguna pista de vídeo de salida, no se producirá ninguna di
 msgid "If splitting is a file can be attached either to all files created or only to the first file. Has no effect if no splitting is used."
 msgstr "Si la división es un archivo puede ser agregado, ya sea para todos los archivos creados o solo para el primero. Si la división (splitting) no es utilizada no tiene ningún efecto."
 
-#: src/mmg/mmg_dialog.cpp:1963
+#: src/mmg/mmg_dialog.cpp:1967
 msgid "If you encounter problems during playback of files please consider visiting the newly created MKVToolNix troubleshooting advice page:"
 msgstr "Si encuentra problemas durante la reproducción de los archivos, considere visitar la nueva página de solución de problemas de MKVToolNix:"
 
@@ -4141,7 +4145,7 @@ msgstr "Fuente importada desde %1%"
 msgid "Imported picture from %1%"
 msgstr "Imagen importada desde %1%"
 
-#: src/mmg/mmg_dialog.cpp:1919
+#: src/mmg/mmg_dialog.cpp:1923
 msgid "Incompatible mkvmerge version"
 msgstr "Versión no compatible de mkvmerge"
 
@@ -4180,7 +4184,7 @@ msgstr "Archivos de entrada:"
 msgid "Input too long: %1% > %2%"
 msgstr "Entrada demasiado larga: %1% > %2%"
 
-#: src/mmg/options/mmg.cpp:113
+#: src/mmg/options/mmg.cpp:90
 msgid "Interface language:"
 msgstr "Idioma del interfaz:"
 
@@ -4590,15 +4594,15 @@ msgstr "ID de pista especificado en '--sub-charset %1%'.\n"
 msgid "Invalid track ID/file name specification in argument '%1%'.\n"
 msgstr "El ID o nombre de archivo de la pista especificada en el argumento '%1%' no son válidos.\n"
 
-#: src/mmg/mmg_dialog.cpp:1967
+#: src/mmg/mmg_dialog.cpp:1971
 msgid "It can also be opened from the 'Help' menu."
 msgstr "También puedes acceder desde el menu 'Ayuda'."
 
-#: src/mmg/mmg_dialog.cpp:1479
+#: src/mmg/mmg_dialog.cpp:1481
 msgid "Job added to job queue"
 msgstr "Trabajo añadido a la lista de tareas"
 
-#: src/mmg/mmg_dialog.cpp:1431
+#: src/mmg/mmg_dialog.cpp:1433
 msgid "Job description"
 msgstr "Descripción del trabajo"
 
@@ -4799,6 +4803,11 @@ msgstr "MPEG-4"
 #: src/common/file_types.cpp:43
 msgid "MPLS Blu-ray playlist"
 msgstr "MPLS Blu-ray playlist"
+
+#: src/mmg/options/output.cpp:50
+#, fuzzy
+msgid "Make suggested output file names unique"
+msgstr "Establecer de forma automática el destino del archivo creado"
 
 #: src/mmg/tabs/input_general.cpp:181
 msgid "Make this track the default track for its type (audio, video, subtitles). Players should prefer tracks with the default track flag set."
@@ -5257,7 +5266,7 @@ msgstr "Tenga en cuenta que las especificaciones de Matroska, en cuanto al almac
 msgid "Nothing to do.\n"
 msgstr "Nada que hacer.\n"
 
-#: src/mmg/mmg_dialog.cpp:1955
+#: src/mmg/mmg_dialog.cpp:1959
 msgid "Notice"
 msgstr "Nota"
 
@@ -5370,7 +5379,7 @@ msgid "Option file created."
 msgstr "Archivo de opciones creado."
 
 #: src/info/info_cli_parser.cpp:35
-#: src/mmg/options/dialog.cpp:36
+#: src/mmg/options/dialog.cpp:37
 #: src/propedit/propedit_cli_parser.cpp:191
 msgid "Options"
 msgstr "Opciones"
@@ -5401,6 +5410,7 @@ msgid "Other options"
 msgstr "Otras opciones"
 
 #: src/mmg/mux_dialog.cpp:62
+#: src/mmg/options/output.cpp:159
 msgid "Output"
 msgstr "Salida"
 
@@ -5430,7 +5440,7 @@ msgid "Overwrite existing file(s)?"
 msgstr "¿Sobreescribir los archivos existentes?"
 
 #: src/mmg/mmg_dialog.cpp:555
-#: src/mmg/mmg_dialog.cpp:1425
+#: src/mmg/mmg_dialog.cpp:1427
 msgid "Overwrite existing file?"
 msgstr "¿Sobreescribir el archivo existente?"
 
@@ -5464,6 +5474,11 @@ msgstr "El número de paquete %1% contenido en el encabezado FLAC no es válido 
 #, boost-format
 msgid "Packet queue not empty (flushed: %1%). Frames have been lost during remux. %2%\n"
 msgstr "La lista de paquetes no está vacía (nivelado: %1%). Los fotogramas (frames) se han perdido durante el remultiplexado. %2%\n"
+
+#: src/mmg/options/output.cpp:40
+#, fuzzy
+msgid "Parent directory of the first input file"
+msgstr "El mismo directorio que del primer archivo añadido"
 
 #: src/info/wxwidgets_ui.cpp:118
 msgid "Parse the file completely and show all elements"
@@ -5516,7 +5531,7 @@ msgstr "Anchura en píxeles: %1%"
 msgid "Please do not select 'mmg' itself as the 'mkvmerge' executable."
 msgstr "Por favor, no selecciones mmg como el ejecutable de mkvmerge"
 
-#: src/mmg/mmg_dialog.cpp:1431
+#: src/mmg/mmg_dialog.cpp:1433
 msgid "Please enter a description for the new job:"
 msgstr "Por favor, introduce una descripción para el nuevo trabajo:"
 
@@ -5608,7 +5623,7 @@ msgstr "Progreso: 100%%%1%"
 msgid "Progress: [%1%%2%] %3%%%"
 msgstr "Progreso: [%1%%2%] %3%%%"
 
-#: src/mmg/mmg_dialog.cpp:1862
+#: src/mmg/mmg_dialog.cpp:1866
 msgid "Querying mkvmerge's capabilities"
 msgstr "Consultar las capacidades de mkvmerge"
 
@@ -5842,7 +5857,7 @@ msgstr "Eliminar capítulo"
 msgid "Remove element"
 msgstr "Eliminar elemento"
 
-#: src/mmg/options/mmg.cpp:90
+#: src/mmg/options/mmg.cpp:67
 msgid "Remove job from job queue after run:"
 msgstr "Eliminar tarea de la lista, después de ejecutarse:"
 
@@ -5903,7 +5918,7 @@ msgstr "Subtítulos de texto SSA/ASS "
 msgid "Sa&ve command line"
 msgstr "Gu&ardar la línea de comandos"
 
-#: src/mmg/options/mmg.cpp:57
+#: src/mmg/options/output.cpp:39
 msgid "Same directory as the first input file's"
 msgstr "El mismo directorio que del primer archivo añadido"
 
@@ -6156,7 +6171,7 @@ msgstr "Establecer el idioma a:"
 msgid "Set the MIME type to use for the following '--add-attachment' or '--replace-attachment' option"
 msgstr "Establece el tipo MIMe a usar para las siguientes opciones '--add-attachment' o '--replace-attachment'"
 
-#: src/mmg/options/mmg.cpp:75
+#: src/mmg/options/mmg.cpp:52
 msgid "Set the delay input field from the file name"
 msgstr "Establecer el desfase (delay) desde el nombre del archivo"
 
@@ -6261,7 +6276,7 @@ msgstr "Muestra todos los bytes de cada fotograma como un volcado hexadecimal."
 msgid "Show element si&zes\tCtrl-Z"
 msgstr "Muestra los ta&maños de los elementos\tCtrl-Z"
 
-#: src/mmg/options/mmg.cpp:108
+#: src/mmg/options/mmg.cpp:85
 msgid "Show mmg's debug window"
 msgstr "Muestra la ventana del depuración de mmg"
 
@@ -6301,7 +6316,7 @@ msgstr "Muestra esta ayuda."
 msgid "Show version information."
 msgstr "Muestra la información de la versión."
 
-#: src/mmg/options/mmg.cpp:109
+#: src/mmg/options/mmg.cpp:86
 msgid "Shows mmg's debug window in which debug messages will appear. This is only useful if you're helping the author debug a problem in mmg."
 msgstr "Muestra la ventana de depuración de mmg en la que aparecerán mensajes. Esto es útil únicamente si estás ayudando al autor a corregir un problema en mmg."
 
@@ -6666,7 +6681,7 @@ msgstr "El FourCC debe ser exactamente de cuatro caracteres de extensión en '%1
 msgid "The FourCC setting for track nr. %s in file '%s' is not exactly four characters long."
 msgstr "El FourCC establecido para la pista nr. %s en el archivo '%s' no es exactamente de cuatro caracteres de extensión."
 
-#: src/mmg/mmg_dialog.cpp:1915
+#: src/mmg/mmg_dialog.cpp:1919
 #, boost-format
 msgid "The GUI is configured to use the mkvmerge executable from a different version (%1%) than the GUI itself (%2%). This is not supported but will not be prevented either. You should change the mkvmerge executable in the preferences dialog."
 msgstr "La interfaz gráfica está configurada para usar el ejecutable de mkvmerge desde una versión diferente (%1%) de la propia interfaz (%2%). Esta no es compatible, pero tampoco será evitada. Debes cambiar la ruta del ejecutable de mkvmerge; para ello, dirígete a la barra de menús, selecciona Archivo y después Opciones. Se abrirá una ventana que consta de cuatro pestañas, entonces dirígete a la que dice mkvmerge y verás que desde ahí podrás indicar la ruta de localización del ejecutable."
@@ -7372,7 +7387,7 @@ msgid "The order of the various options is not important."
 msgstr "El orden de las diferentes opciones no es importante."
 
 #: src/mmg/mmg_dialog.cpp:555
-#: src/mmg/mmg_dialog.cpp:1422
+#: src/mmg/mmg_dialog.cpp:1424
 #, c-format, boost-format
 msgid "The output file '%s' already exists. Do you want to overwrite it?"
 msgstr "El archivo de salida '%s' ya existe. ¿Quieres sobreescribirlo?"
@@ -7625,7 +7640,7 @@ msgstr "El ancho de las dos pistas es diferente: %1% y %2%"
 msgid "Theora"
 msgstr "Theora"
 
-#: src/mmg/mmg_dialog.cpp:1807
+#: src/mmg/mmg_dialog.cpp:1811
 msgid "There is a new version available online."
 msgstr "Hay una nueva versión disponible."
 
@@ -7640,7 +7655,7 @@ msgstr "No hay archivo con el ID '%1%'. El argumento para '--append-to' no fue v
 msgid "There is no translation available for '%1%'.\n"
 msgstr "No hay traducción disponible para '%1%'.\n"
 
-#: src/mmg/mmg_dialog.cpp:1808
+#: src/mmg/mmg_dialog.cpp:1812
 msgid "There was an error querying the update status."
 msgstr "Hubo un error al consultar el estado de la actualización."
 
@@ -7759,7 +7774,7 @@ msgstr "Este es el nombre que será almacenado en el archivo de salida para este
 msgid "This is the title that players may show as the 'main title' for this movie."
 msgstr "Este es el título que el reproductor debe mostrar como el título principal para esta pelicula."
 
-#: src/mmg/mmg_dialog.cpp:1954
+#: src/mmg/mmg_dialog.cpp:1958
 msgid "This message will only shown to you once."
 msgstr "Este mensaje únicamente aparecerá una vez."
 
@@ -8174,11 +8189,11 @@ msgstr "Usar los valores fijados para los elementos que cambian con cada archivo
 msgid "Use the old AAC codec IDs (e.g. 'A_AAC/MPEG4/SBR') instead of the new one ('A_AAC')."
 msgstr "Usar los IDs del antiguo códec AAC (p. ej., 'A_AAC/MPEG4/SBR') en lugar de uno nuevo ('A_AAC')"
 
-#: src/mmg/options/mmg.cpp:58
+#: src/mmg/options/output.cpp:41
 msgid "Use the previous output directory"
 msgstr "Usar el anterior directorio de salida"
 
-#: src/mmg/options/mmg.cpp:59
+#: src/mmg/options/output.cpp:42
 msgid "Use this directory:"
 msgstr "Usar este directorio:"
 
@@ -8352,7 +8367,7 @@ msgstr "Audio WAVPACK v4"
 msgid "WAVPACK4"
 msgstr "WAVPACK4"
 
-#: src/mmg/options/mmg.cpp:95
+#: src/mmg/options/mmg.cpp:72
 msgid "Warn about possible incorrect usage of mmg"
 msgstr "Avisos acerca de un posible uso incorrecto de mmg"
 
@@ -8377,7 +8392,7 @@ msgstr "Advertencias:"
 msgid "WebM audio/video files"
 msgstr "Archivos de audio/video WebM"
 
-#: src/mmg/options/mmg.cpp:76
+#: src/mmg/options/mmg.cpp:53
 msgid "When a file is added its name is scanned. If it contains the word 'DELAY' followed by a number then this number is automatically put into the 'delay' input field for any audio track found in the file."
 msgstr "Cuando un archivo es añadido, su nombre es analizado. Si contiene la palabra DELAY seguida de un número, este último será puesto automáticamente en el campo «delay» para cualquier pista de audio que aparece en el archivo."
 
@@ -8457,7 +8472,7 @@ msgstr "Cadena de caracteres de identificación errónea: '%|1$6s|' != 'theora'"
 msgid "Wrong identification string: '%|1$7s|' != 'kate\\0\\0\\0'"
 msgstr "Cadena de caracteres de identificación errónea: '%|1$7s|' != 'kate\\0\\0\\0'"
 
-#: src/mmg/mmg_dialog.cpp:1806
+#: src/mmg/mmg_dialog.cpp:1810
 msgid "You are already running the latest version."
 msgstr "Ya está ejecutando la última versión."
 
@@ -8512,7 +8527,7 @@ msgstr "Añadir"
 msgid "additional parts"
 msgstr "Partes adicionales"
 
-#: src/mmg/options/mmg.cpp:88
+#: src/mmg/options/mmg.cpp:65
 msgid "always"
 msgstr "Siempre"
 
@@ -8655,7 +8670,7 @@ msgstr "Visible"
 msgid "encryption"
 msgstr "cifrado"
 
-#: src/mmg/options/mmg.cpp:87
+#: src/mmg/options/mmg.cpp:64
 msgid "even if there were warnings"
 msgstr "Incluso si hubieran advertencias"
 
@@ -9140,7 +9155,7 @@ msgstr "mkvpropedit [opciones] <archivo> <acciones>"
 msgid "mm_text_io_c: UTF32_* is not supported at the moment.\n"
 msgstr "mm_text_io_c: UTF32_* no es compatible por el momento.\n"
 
-#: src/mmg/options/mmg.cpp:331
+#: src/mmg/options/mmg.cpp:244
 msgid "mmg"
 msgstr "mmg"
 
@@ -9148,7 +9163,7 @@ msgstr "mmg"
 msgid "mmg debug output"
 msgstr "Depurador de mmg"
 
-#: src/mmg/options/mmg.cpp:177
+#: src/mmg/options/mmg.cpp:146
 msgid "mmg options"
 msgstr "Opciones de mmg"
 
@@ -9224,13 +9239,18 @@ msgstr "ogg_sync_buffer ha fallado\n"
 msgid "only for I frames"
 msgstr "Sólo para fotogramas I"
 
-#: src/mmg/options/mmg.cpp:86
+#: src/mmg/options/mmg.cpp:63
 msgid "only if the run was successfull"
 msgstr "sólo si la ejecución ha sido correcta."
 
 #: src/mmg/tabs/chapters.cpp:358
 msgid "ordered"
 msgstr "Ordenado"
+
+#: src/mmg/options/output.cpp:80
+#, fuzzy
+msgid "output options"
+msgstr "Opciones del capítulo"
 
 #: src/info/mkvinfo.cpp:548
 #, boost-format

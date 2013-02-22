@@ -1745,7 +1745,7 @@ msgstr "一個人類可讀的字串，描述編解碼器。"
 msgid "A human-readable track name."
 msgstr "一個人類可讀的字串，描述軌道名稱。"
 
-#: src/mmg/mmg_dialog.cpp:1442
+#: src/mmg/mmg_dialog.cpp:1444
 #, c-format, boost-format
 msgid "A job with the description '%s' already exists. Do you really want to add another one with the same description?"
 msgstr "描述為「%s」的任務已存在。是否加入描述相同的任務?"
@@ -2042,7 +2042,7 @@ msgstr "也試著從這個軌道的章節資訊和標籤中提取 CUE 表單。"
 msgid "Also using the correction file '%1%c'.\n"
 msgstr "也使用修正檔案「%1%c」。\n"
 
-#: src/mmg/options/mmg.cpp:93
+#: src/mmg/options/mmg.cpp:70
 msgid "Always on top"
 msgstr "總在最前面"
 
@@ -2115,7 +2115,7 @@ msgstr "不允許將一個檔案的軌道添加至同一個檔案的其他軌道
 msgid "Appending track %1% from file no. %2% ('%3%') to track %4% from file no. %5% ('%6%').\n"
 msgstr "正在添加合併軌道 %1%（自檔案 %2% (「%3%」)）至軌道 %4%（自檔案 %5% (「%6%」)）。\n"
 
-#: src/mmg/options/mmg.cpp:67
+#: src/mmg/options/output.cpp:54
 msgid "Ask before overwriting things (files, jobs)"
 msgstr "覆寫前詢問（檔案、任務等）"
 
@@ -2197,7 +2197,7 @@ msgstr "音訊取樣頻率"
 msgid "Audio track %u"
 msgstr "音軌 %u"
 
-#: src/mmg/options/mmg.cpp:52
+#: src/mmg/options/output.cpp:34
 msgid "Auto-set output filename"
 msgstr "自動設定輸出檔名"
 
@@ -2301,7 +2301,7 @@ msgstr "調出任務佇列編輯器"
 
 #: src/mmg/mmg_dialog.cpp:331
 #: src/mmg/options/mkvmerge.cpp:52
-#: src/mmg/options/mmg.cpp:62
+#: src/mmg/options/output.cpp:45
 #: src/mmg/tabs/global.cpp:344
 #: src/mmg/tabs/global.cpp:361
 #: src/mmg/tabs/global.cpp:365
@@ -2532,7 +2532,7 @@ msgid "Charset:"
 msgstr "字元集:"
 
 #: src/mmg/mmg_dialog.cpp:316
-#: src/mmg/options/mmg.cpp:102
+#: src/mmg/options/mmg.cpp:79
 msgid "Check online for the latest release"
 msgstr "線上檢查最新版本"
 
@@ -2541,11 +2541,11 @@ msgstr "線上檢查最新版本"
 msgid "Check online for the latest release."
 msgstr "線上檢查最新發佈的版本。"
 
-#: src/mmg/options/mmg.cpp:103
+#: src/mmg/options/mmg.cpp:80
 msgid "Check online whether or not a new release of MKVToolNix is available on the home page. Will only check when mmg starts and at most once a day. No information is transmitted to the server."
 msgstr "線上檢查 MKVToolNix 首頁上是否有可更新的新版本。只有 mmg 啟動時會檢查且一天最多檢查一次。不會傳送任何資訊到伺服器。"
 
-#: src/mmg/mmg_dialog.cpp:1774
+#: src/mmg/mmg_dialog.cpp:1778
 msgid "Checking for updates online; please wait"
 msgstr "正在線上檢查更新; 請稍候"
 
@@ -2600,7 +2600,7 @@ msgstr "選擇 mkvmerge GUI 説明檔的路徑"
 msgid "Choose the mkvmerge executable"
 msgstr "選擇 mkvmerge 可執行檔"
 
-#: src/mmg/options/mmg.cpp:257
+#: src/mmg/options/output.cpp:122
 msgid "Choose the output directory"
 msgstr "選擇輸出目錄"
 
@@ -2612,11 +2612,11 @@ msgstr "選擇剪輯資訊檔"
 msgid "Choose the tags file"
 msgstr "選擇標籤檔"
 
-#: src/mmg/options/mmg.cpp:83
+#: src/mmg/options/mmg.cpp:60
 msgid "Clear inputs after a successful muxing run"
 msgstr "成功合成後清空輸入檔清單"
 
-#: src/mmg/options/mmg.cpp:81
+#: src/mmg/options/mmg.cpp:58
 msgid "Clear inputs after adding a job to the job queue"
 msgstr "任務加入到任務佇列後清空輸入檔清單"
 
@@ -3155,7 +3155,7 @@ msgstr "從任務佇列中刪除所選任務"
 msgid "Description"
 msgstr "描述"
 
-#: src/mmg/mmg_dialog.cpp:1443
+#: src/mmg/mmg_dialog.cpp:1445
 msgid "Description already exists"
 msgstr "描述已存在"
 
@@ -3992,19 +3992,23 @@ msgstr "如果版本被標記為「定序」則章節會被定義成多段時間
 msgid "If an edition is marked as 'default' then it should be used as the default edition."
 msgstr "如果版本被標記為「預設」則會被使用作為預設版本。"
 
-#: src/mmg/options/mmg.cpp:68
+#: src/mmg/options/output.cpp:51
+msgid "If checked mmg make sure the suggested output file name is unique by adding a number (e.g. ' (1)') to the end of the file name. This is only done if the unmodified file name already exists."
+msgstr ""
+
+#: src/mmg/options/output.cpp:55
 msgid "If checked mmg will ask for confirmation before overwriting existing files, or before adding a new job if there's an old job whose description matches the new one."
 msgstr "如果選中該項，mmg 將在覆寫已存在的檔案或在新增一個與已有任務描述相同的新任務時，尋問您的確認。"
 
-#: src/mmg/options/mmg.cpp:53
+#: src/mmg/options/output.cpp:35
 msgid "If checked mmg will automatically set the output filename if it hasn't been set already. This happens when you add the first file. If unset mmg will not touch the output filename."
 msgstr "如果選中該項，且輸出檔案名尚未設定，mmg 將會自動設定。這只發生在您添加第一個檔案時。如果未選該項，mmg 不會修改輸出檔名。"
 
-#: src/mmg/options/mmg.cpp:96
+#: src/mmg/options/mmg.cpp:73
 msgid "If checked mmg will warn if it thinks that you're using it incorrectly. Such warnings are shown at least once even if you turn this feature off."
 msgstr "如果選中該項，mmg 將在它認為您用法不正確時發出警告。即使您將該功能關閉，此類警告也將至少出現一次。"
 
-#: src/mmg/options/mmg.cpp:64
+#: src/mmg/options/output.cpp:47
 msgid "If left empty then mmg will set the output file name to be in the same directory as the first file added to this job. Otherwise this directory will be used."
 msgstr "如果留空，mmg 將設定輸出檔名與添加至此任務的第一個檔案同路徑。反之將使用此目錄。"
 
@@ -4017,7 +4021,7 @@ msgstr "如果沒有視訊軌道則輸出不會分割。"
 msgid "If splitting is a file can be attached either to all files created or only to the first file. Has no effect if no splitting is used."
 msgstr "如果啟用了檔分割，一個檔可以附加至建立的所有檔，或僅附加至建立的第一個檔。如果未使用分割功能則無影響。"
 
-#: src/mmg/mmg_dialog.cpp:1963
+#: src/mmg/mmg_dialog.cpp:1967
 msgid "If you encounter problems during playback of files please consider visiting the newly created MKVToolNix troubleshooting advice page:"
 msgstr "若你在播放檔案時遇到問題，請考慮訪問新建立的 MKVToolNix 障礙排除建議網頁:"
 
@@ -4036,7 +4040,7 @@ msgstr "匯入的字體，自 %1%"
 msgid "Imported picture from %1%"
 msgstr "匯入的圖片，自 %1%"
 
-#: src/mmg/mmg_dialog.cpp:1919
+#: src/mmg/mmg_dialog.cpp:1923
 msgid "Incompatible mkvmerge version"
 msgstr "不相容的 mkvmerge 版本"
 
@@ -4075,7 +4079,7 @@ msgstr "輸入檔:"
 msgid "Input too long: %1% > %2%"
 msgstr "輸入過長: %1% > %2%"
 
-#: src/mmg/options/mmg.cpp:113
+#: src/mmg/options/mmg.cpp:90
 msgid "Interface language:"
 msgstr "介面語言:"
 
@@ -4485,15 +4489,15 @@ msgstr "無效的軌道 ID 指定，在「--sub-charset %1%」。\n"
 msgid "Invalid track ID/file name specification in argument '%1%'.\n"
 msgstr "在參數「%1%」中指定的軌道 ID 或檔名無效。\n"
 
-#: src/mmg/mmg_dialog.cpp:1967
+#: src/mmg/mmg_dialog.cpp:1971
 msgid "It can also be opened from the 'Help' menu."
 msgstr "也可以從「說明」選單開啟。"
 
-#: src/mmg/mmg_dialog.cpp:1479
+#: src/mmg/mmg_dialog.cpp:1481
 msgid "Job added to job queue"
 msgstr "任務已添加至任務佇列"
 
-#: src/mmg/mmg_dialog.cpp:1431
+#: src/mmg/mmg_dialog.cpp:1433
 msgid "Job description"
 msgstr "任務描述"
 
@@ -4694,6 +4698,11 @@ msgstr "MPEG-4"
 #: src/common/file_types.cpp:43
 msgid "MPLS Blu-ray playlist"
 msgstr ""
+
+#: src/mmg/options/output.cpp:50
+#, fuzzy
+msgid "Make suggested output file names unique"
+msgstr "自動設定輸出檔名"
 
 #: src/mmg/tabs/input_general.cpp:181
 msgid "Make this track the default track for its type (audio, video, subtitles). Players should prefer tracks with the default track flag set."
@@ -5152,7 +5161,7 @@ msgstr "注意 Matroska 規範有關「%1%」的儲存方面尚未完成。mkvme
 msgid "Nothing to do.\n"
 msgstr "什麼都不做。\n"
 
-#: src/mmg/mmg_dialog.cpp:1955
+#: src/mmg/mmg_dialog.cpp:1959
 msgid "Notice"
 msgstr "注意"
 
@@ -5265,7 +5274,7 @@ msgid "Option file created."
 msgstr "選項檔已建立。"
 
 #: src/info/info_cli_parser.cpp:35
-#: src/mmg/options/dialog.cpp:36
+#: src/mmg/options/dialog.cpp:37
 #: src/propedit/propedit_cli_parser.cpp:191
 msgid "Options"
 msgstr "選項"
@@ -5296,6 +5305,7 @@ msgid "Other options"
 msgstr "其他選項"
 
 #: src/mmg/mux_dialog.cpp:62
+#: src/mmg/options/output.cpp:159
 msgid "Output"
 msgstr "輸出"
 
@@ -5325,7 +5335,7 @@ msgid "Overwrite existing file(s)?"
 msgstr "覆寫已存在的檔案?"
 
 #: src/mmg/mmg_dialog.cpp:555
-#: src/mmg/mmg_dialog.cpp:1425
+#: src/mmg/mmg_dialog.cpp:1427
 msgid "Overwrite existing file?"
 msgstr "覆寫已存在的檔案?"
 
@@ -5359,6 +5369,11 @@ msgstr "套件編號 %1% 包含無效的 FLAC 表頭，將被跳過。\n"
 #, boost-format
 msgid "Packet queue not empty (flushed: %1%). Frames have been lost during remux. %2%\n"
 msgstr "套件佇列不是空的 (已緩衝: %1%)。畫格已在重新合成時丟失。 %2%\n"
+
+#: src/mmg/options/output.cpp:40
+#, fuzzy
+msgid "Parent directory of the first input file"
+msgstr "與第一個輸入檔同目錄"
 
 #: src/info/wxwidgets_ui.cpp:118
 msgid "Parse the file completely and show all elements"
@@ -5411,7 +5426,7 @@ msgstr "像素寬度: %1%"
 msgid "Please do not select 'mmg' itself as the 'mkvmerge' executable."
 msgstr "請不要選擇「mmg」自己作為「mkvmerge」可執行檔。"
 
-#: src/mmg/mmg_dialog.cpp:1431
+#: src/mmg/mmg_dialog.cpp:1433
 msgid "Please enter a description for the new job:"
 msgstr "請輸入新任務的描述:"
 
@@ -5501,7 +5516,7 @@ msgstr "進度: 100%%%1%"
 msgid "Progress: [%1%%2%] %3%%%"
 msgstr "進度: [%1%%2%] %3%%%"
 
-#: src/mmg/mmg_dialog.cpp:1862
+#: src/mmg/mmg_dialog.cpp:1866
 msgid "Querying mkvmerge's capabilities"
 msgstr "正向 mkvmerge 查詢處理能力"
 
@@ -5735,7 +5750,7 @@ msgstr "移除章節"
 msgid "Remove element"
 msgstr "移除元件"
 
-#: src/mmg/options/mmg.cpp:90
+#: src/mmg/options/mmg.cpp:67
 msgid "Remove job from job queue after run:"
 msgstr "執行後從任務佇列中移除任務:"
 
@@ -5796,7 +5811,7 @@ msgstr "SSA/ASS 文字字幕"
 msgid "Sa&ve command line"
 msgstr "儲存命令列(&V)"
 
-#: src/mmg/options/mmg.cpp:57
+#: src/mmg/options/output.cpp:39
 msgid "Same directory as the first input file's"
 msgstr "與第一個輸入檔同目錄"
 
@@ -6047,7 +6062,7 @@ msgstr "設定語言為:"
 msgid "Set the MIME type to use for the following '--add-attachment' or '--replace-attachment' option"
 msgstr "設定用於下列「--add-attachment」或「--replace-attachment」選項的 MIME 類型。"
 
-#: src/mmg/options/mmg.cpp:75
+#: src/mmg/options/mmg.cpp:52
 msgid "Set the delay input field from the file name"
 msgstr "根據第一個檔案的名稱設定“延遲”輸入框"
 
@@ -6152,7 +6167,7 @@ msgstr "以十六進位轉儲形式顯示每畫格的全部位元組。"
 msgid "Show element si&zes\tCtrl-Z"
 msgstr "顯示元件大小(&Z)\tCtrl-Z"
 
-#: src/mmg/options/mmg.cpp:108
+#: src/mmg/options/mmg.cpp:85
 msgid "Show mmg's debug window"
 msgstr "顯示 mmg 的除錯視窗"
 
@@ -6192,7 +6207,7 @@ msgstr "顯示這項說明。"
 msgid "Show version information."
 msgstr "顯示版本資訊。"
 
-#: src/mmg/options/mmg.cpp:109
+#: src/mmg/options/mmg.cpp:86
 msgid "Shows mmg's debug window in which debug messages will appear. This is only useful if you're helping the author debug a problem in mmg."
 msgstr "顯示 mmg 的除錯視窗，在該視窗中會出現除錯訊息。這只當您幫助作者除錯 mmg 的問題時有用。"
 
@@ -6555,7 +6570,7 @@ msgstr "FourCC 值必須為四個字元的長度，在「%1% %2%」。\n"
 msgid "The FourCC setting for track nr. %s in file '%s' is not exactly four characters long."
 msgstr "檔案「%s」中軌道 nr. %s 的 FourCC 設定值不是正好四個字元長。"
 
-#: src/mmg/mmg_dialog.cpp:1915
+#: src/mmg/mmg_dialog.cpp:1919
 #, boost-format
 msgid "The GUI is configured to use the mkvmerge executable from a different version (%1%) than the GUI itself (%2%). This is not supported but will not be prevented either. You should change the mkvmerge executable in the preferences dialog."
 msgstr "此圖形介面 (GUI) 設定使用 mkvmerge 可執行檔版本 (%1%) 與自己的版本 (%2%) 不同。不建議這種情形，但也不會阻止。你可以在偏好設定對話窗裡變更 mkvmerge 可執行檔。"
@@ -7246,7 +7261,7 @@ msgid "The order of the various options is not important."
 msgstr "各種選項的順序不會影響結果。"
 
 #: src/mmg/mmg_dialog.cpp:555
-#: src/mmg/mmg_dialog.cpp:1422
+#: src/mmg/mmg_dialog.cpp:1424
 #, c-format, boost-format
 msgid "The output file '%s' already exists. Do you want to overwrite it?"
 msgstr "即將輸出的檔案「%s」已存在。是否覆蓋？"
@@ -7499,7 +7514,7 @@ msgstr "兩軌寬度不同: %1% 與 %2%"
 msgid "Theora"
 msgstr "Theora"
 
-#: src/mmg/mmg_dialog.cpp:1807
+#: src/mmg/mmg_dialog.cpp:1811
 msgid "There is a new version available online."
 msgstr "線上有新版本可更新。"
 
@@ -7514,7 +7529,7 @@ msgstr "沒有檔案的 ID 為「%1%」。參數「--append-to」無效。\n"
 msgid "There is no translation available for '%1%'.\n"
 msgstr "尚無「%1%」的翻譯。\n"
 
-#: src/mmg/mmg_dialog.cpp:1808
+#: src/mmg/mmg_dialog.cpp:1812
 msgid "There was an error querying the update status."
 msgstr "查詢更新狀態時發生錯誤。"
 
@@ -7630,7 +7645,7 @@ msgstr "這是附件在輸出檔中存儲的名稱。預設為原檔案的名稱
 msgid "This is the title that players may show as the 'main title' for this movie."
 msgstr "這是播放器將作為此影片的“主標題”顯示的標題。"
 
-#: src/mmg/mmg_dialog.cpp:1954
+#: src/mmg/mmg_dialog.cpp:1958
 msgid "This message will only shown to you once."
 msgstr "此訊息只會顯示一次。"
 
@@ -8045,11 +8060,11 @@ msgstr "對隨著檔案改變而變動的元件 (合成日期, 剪輯 UID, 軌�
 msgid "Use the old AAC codec IDs (e.g. 'A_AAC/MPEG4/SBR') instead of the new one ('A_AAC')."
 msgstr "使用舊的 AAC 編解碼器 ID (如「A_AAC/MPEG4/SBR」) 代替新的 (「A_AAC」)。"
 
-#: src/mmg/options/mmg.cpp:58
+#: src/mmg/options/output.cpp:41
 msgid "Use the previous output directory"
 msgstr "使用上一個輸出目錄"
 
-#: src/mmg/options/mmg.cpp:59
+#: src/mmg/options/output.cpp:42
 msgid "Use this directory:"
 msgstr "使用這個目錄:"
 
@@ -8223,7 +8238,7 @@ msgstr "WAVPACK v4 音訊"
 msgid "WAVPACK4"
 msgstr "WAVPACK4"
 
-#: src/mmg/options/mmg.cpp:95
+#: src/mmg/options/mmg.cpp:72
 msgid "Warn about possible incorrect usage of mmg"
 msgstr "對 mmg 可能的錯誤用法發出警告"
 
@@ -8248,7 +8263,7 @@ msgstr "警告:"
 msgid "WebM audio/video files"
 msgstr "WebM 音訊/視訊檔"
 
-#: src/mmg/options/mmg.cpp:76
+#: src/mmg/options/mmg.cpp:53
 msgid "When a file is added its name is scanned. If it contains the word 'DELAY' followed by a number then this number is automatically put into the 'delay' input field for any audio track found in the file."
 msgstr "當檔案被添加時它的名稱會被掃描。如果包含單詞“delay”且有一數字緊隨其後，這個數字將被自動輸入至已發現的該檔案的所有音軌的“延遲”輸入框。"
 
@@ -8328,7 +8343,7 @@ msgstr "錯誤的識別字串:「%|1$6s|」!=「theora」"
 msgid "Wrong identification string: '%|1$7s|' != 'kate\\0\\0\\0'"
 msgstr "錯誤的識別字串:「%|1$7s|」!=「kate\\0\\0\\0」"
 
-#: src/mmg/mmg_dialog.cpp:1806
+#: src/mmg/mmg_dialog.cpp:1810
 msgid "You are already running the latest version."
 msgstr "已是最新版本。"
 
@@ -8381,7 +8396,7 @@ msgstr "加入"
 msgid "additional parts"
 msgstr "附加部分"
 
-#: src/mmg/options/mmg.cpp:88
+#: src/mmg/options/mmg.cpp:65
 msgid "always"
 msgstr "永遠"
 
@@ -8524,7 +8539,7 @@ msgstr "啟用"
 msgid "encryption"
 msgstr "加密"
 
-#: src/mmg/options/mmg.cpp:87
+#: src/mmg/options/mmg.cpp:64
 msgid "even if there were warnings"
 msgstr "即使出現警告資訊"
 
@@ -9009,7 +9024,7 @@ msgstr "mkvpropedit [選項] <檔案> <動作>"
 msgid "mm_text_io_c: UTF32_* is not supported at the moment.\n"
 msgstr "mm_text_io_c: 目前尚不支援 UTF32_*。\n"
 
-#: src/mmg/options/mmg.cpp:331
+#: src/mmg/options/mmg.cpp:244
 msgid "mmg"
 msgstr "mmg"
 
@@ -9017,7 +9032,7 @@ msgstr "mmg"
 msgid "mmg debug output"
 msgstr "mmg 除錯輸出"
 
-#: src/mmg/options/mmg.cpp:177
+#: src/mmg/options/mmg.cpp:146
 msgid "mmg options"
 msgstr "mmg 選項"
 
@@ -9093,13 +9108,18 @@ msgstr "ogg_sync_buffer 失敗\n"
 msgid "only for I frames"
 msgstr "僅 I 畫格"
 
-#: src/mmg/options/mmg.cpp:86
+#: src/mmg/options/mmg.cpp:63
 msgid "only if the run was successfull"
 msgstr "僅執行成功時"
 
 #: src/mmg/tabs/chapters.cpp:358
 msgid "ordered"
 msgstr "已排列順序"
+
+#: src/mmg/options/output.cpp:80
+#, fuzzy
+msgid "output options"
+msgstr "章節選項"
 
 #: src/info/mkvinfo.cpp:548
 #, boost-format

@@ -1763,7 +1763,7 @@ msgstr "Een menselijk-leesbare reeks specificeert de codec."
 msgid "A human-readable track name."
 msgstr "En menselijk-leesbaar spoor naam."
 
-#: src/mmg/mmg_dialog.cpp:1442
+#: src/mmg/mmg_dialog.cpp:1444
 #, c-format, boost-format
 msgid "A job with the description '%s' already exists. Do you really want to add another one with the same description?"
 msgstr "Een taak met beschrijving '%s' bestaat al. Wil je echt een ander toevoegen met dezelfde beschrijving?"
@@ -2066,7 +2066,7 @@ msgstr "Probeer ook  uit te pakken het volg document(en) (cue) van de hoofdstuk 
 msgid "Also using the correction file '%1%c'.\n"
 msgstr "Gebruik ook het correctie bestand '%1%c'.\n"
 
-#: src/mmg/options/mmg.cpp:93
+#: src/mmg/options/mmg.cpp:70
 msgid "Always on top"
 msgstr "Altijd bovenaan"
 
@@ -2143,7 +2143,7 @@ msgstr "Een spoor bijvoegen van een bestand naar een ander spoor van hetzelfde b
 msgid "Appending track %1% from file no. %2% ('%3%') to track %4% from file no. %5% ('%6%').\n"
 msgstr "Bijvoegen %1% van bestand nr. %2% ('%3%') naar spoor %4% van bestand nr. %5% ('%6%').\n"
 
-#: src/mmg/options/mmg.cpp:67
+#: src/mmg/options/output.cpp:54
 msgid "Ask before overwriting things (files, jobs)"
 msgstr "Vragen voordat er overschreven wordt (bestanden, taken)"
 
@@ -2225,7 +2225,7 @@ msgstr "Audio voorbeeld frequentie"
 msgid "Audio track %u"
 msgstr "Audio spoor %u"
 
-#: src/mmg/options/mmg.cpp:52
+#: src/mmg/options/output.cpp:34
 msgid "Auto-set output filename"
 msgstr "Automatisch bestandsnaam bij opslaan"
 
@@ -2329,7 +2329,7 @@ msgstr "Toont de taak wachtrij bewerker"
 
 #: src/mmg/mmg_dialog.cpp:331
 #: src/mmg/options/mkvmerge.cpp:52
-#: src/mmg/options/mmg.cpp:62
+#: src/mmg/options/output.cpp:45
 #: src/mmg/tabs/global.cpp:344
 #: src/mmg/tabs/global.cpp:361
 #: src/mmg/tabs/global.cpp:365
@@ -2560,7 +2560,7 @@ msgid "Charset:"
 msgstr "Karakter set:"
 
 #: src/mmg/mmg_dialog.cpp:316
-#: src/mmg/options/mmg.cpp:102
+#: src/mmg/options/mmg.cpp:79
 msgid "Check online for the latest release"
 msgstr "Controleer online voor de laatste versie"
 
@@ -2569,11 +2569,11 @@ msgstr "Controleer online voor de laatste versie"
 msgid "Check online for the latest release."
 msgstr "Controleer online voor de laatste versie."
 
-#: src/mmg/options/mmg.cpp:103
+#: src/mmg/options/mmg.cpp:80
 msgid "Check online whether or not a new release of MKVToolNix is available on the home page. Will only check when mmg starts and at most once a day. No information is transmitted to the server."
 msgstr "Controleer online of er al dan niet een nieuwer versie van MKVToolNix op de thuispagina beschikbaar is. Wordt alleen gecontroleerd als  mmg start en maximaal één keer per dag. Er wordt géén informatie naar de server verzonden!"
 
-#: src/mmg/mmg_dialog.cpp:1774
+#: src/mmg/mmg_dialog.cpp:1778
 msgid "Checking for updates online; please wait"
 msgstr "Controleren op opwaarderingen, moment a.u.b."
 
@@ -2628,7 +2628,7 @@ msgstr "Kies de locatie van de mkvmerge GUI help bestanden"
 msgid "Choose the mkvmerge executable"
 msgstr "Kies het mkvmerge programma"
 
-#: src/mmg/options/mmg.cpp:257
+#: src/mmg/options/output.cpp:122
 msgid "Choose the output directory"
 msgstr "Kies uitvoer map"
 
@@ -2640,11 +2640,11 @@ msgstr "Kies a.u.b. een bestaand bestand"
 msgid "Choose the tags file"
 msgstr "Kies het markeer bestand"
 
-#: src/mmg/options/mmg.cpp:83
+#: src/mmg/options/mmg.cpp:60
 msgid "Clear inputs after a successful muxing run"
 msgstr "Wis invoeringen na succesvolle samenvoeging"
 
-#: src/mmg/options/mmg.cpp:81
+#: src/mmg/options/mmg.cpp:58
 msgid "Clear inputs after adding a job to the job queue"
 msgstr "Wis invoeringen na toevoegen taak aan taak wachtrij"
 
@@ -3183,7 +3183,7 @@ msgstr "Verwijder geselecteerde taken uit taken wachtrij"
 msgid "Description"
 msgstr "Beschrijving"
 
-#: src/mmg/mmg_dialog.cpp:1443
+#: src/mmg/mmg_dialog.cpp:1445
 msgid "Description already exists"
 msgstr "Beschrijving bestaat reeds"
 
@@ -4021,19 +4021,23 @@ msgstr "Als een editie gemarkeerd is als 'gesorteerd' dan kunnen de hoofdstukken
 msgid "If an edition is marked as 'default' then it should be used as the default edition."
 msgstr "Als een editie is gemarkeerd als  'standaard' dan zou het gebruikt moeten worden als standaard editie."
 
-#: src/mmg/options/mmg.cpp:68
+#: src/mmg/options/output.cpp:51
+msgid "If checked mmg make sure the suggested output file name is unique by adding a number (e.g. ' (1)') to the end of the file name. This is only done if the unmodified file name already exists."
+msgstr ""
+
+#: src/mmg/options/output.cpp:55
 msgid "If checked mmg will ask for confirmation before overwriting existing files, or before adding a new job if there's an old job whose description matches the new one."
 msgstr "Indien aangevinkt, zal mmg om een bevestiging vragen voor het overschrijven van bestanden, of voordat er een nieuwe taak wordt toegevoegd wanneer er een oude taak is, waarvan de naam hetzelfde is."
 
-#: src/mmg/options/mmg.cpp:53
+#: src/mmg/options/output.cpp:35
 msgid "If checked mmg will automatically set the output filename if it hasn't been set already. This happens when you add the first file. If unset mmg will not touch the output filename."
 msgstr "Indien aangevinkt, zal mmg automatisch de uitvoer bestandsnaam instellen als dat niet reeds gebeurd is. Dit gebeurt, wanneer je het eerste bestand toevoegt. Indien niet afgevinkt dan zal mmg de uitvoerbestandsnaam niet wijzigen."
 
-#: src/mmg/options/mmg.cpp:96
+#: src/mmg/options/mmg.cpp:73
 msgid "If checked mmg will warn if it thinks that you're using it incorrectly. Such warnings are shown at least once even if you turn this feature off."
 msgstr "Indien aangevinkt, zal mmg je waarschuwen als het denkt dat je het onjuist gebruikt. Die waarschuwingen worden tenminste één maal getoond zelfs als deze mogelijkheid uitstaat."
 
-#: src/mmg/options/mmg.cpp:64
+#: src/mmg/options/output.cpp:47
 msgid "If left empty then mmg will set the output file name to be in the same directory as the first file added to this job. Otherwise this directory will be used."
 msgstr "Indien leeggelaten dan zal mmg de uitvoer in dezelfde map plaatsen vanwaar het eerste bestand geladen is in deze taak. Anders zal deze map worden gebruikt."
 
@@ -4046,7 +4050,7 @@ msgstr "Als er geen video uitvoer is dan wordt er niet gesplitst."
 msgid "If splitting is a file can be attached either to all files created or only to the first file. Has no effect if no splitting is used."
 msgstr "Als een bestand splitst, kan het aan alle gecreëerde bestanden of slechts aan het eerste bestand worden vastgemaakt. Heeft geen effect op hoe het splitsen wordt gebruikt."
 
-#: src/mmg/mmg_dialog.cpp:1963
+#: src/mmg/mmg_dialog.cpp:1967
 msgid "If you encounter problems during playback of files please consider visiting the newly created MKVToolNix troubleshooting advice page:"
 msgstr "Als je problemen hebt gedurende het afspelen van bestanden, zou je kunnen overwegen een bezoek te brengen aan de nieuw gecreëerde MKVToolNix 'oplossingen voor problemen' pagina:"
 
@@ -4065,7 +4069,7 @@ msgstr "Geïmporteerde letter van %1%"
 msgid "Imported picture from %1%"
 msgstr "Geïmporteerd plaatje van %1%"
 
-#: src/mmg/mmg_dialog.cpp:1919
+#: src/mmg/mmg_dialog.cpp:1923
 msgid "Incompatible mkvmerge version"
 msgstr "Niet verenigbaar met deze mkvmerge versie"
 
@@ -4104,7 +4108,7 @@ msgstr "Invoer bestanden:"
 msgid "Input too long: %1% > %2%"
 msgstr "Invoer te lang: %1% > %2%"
 
-#: src/mmg/options/mmg.cpp:113
+#: src/mmg/options/mmg.cpp:90
 msgid "Interface language:"
 msgstr "Programma taal:"
 
@@ -4514,15 +4518,15 @@ msgstr "Ongeldig spoor ID ingegeven in '--sub-charset %1%'.\n"
 msgid "Invalid track ID/file name specification in argument '%1%'.\n"
 msgstr "Ongeldig spoor ID/bestandsnaam specificatie in argument '%1%'.\n"
 
-#: src/mmg/mmg_dialog.cpp:1967
+#: src/mmg/mmg_dialog.cpp:1971
 msgid "It can also be opened from the 'Help' menu."
 msgstr "Het kan ook geopend worden vanuit het 'Help' menu."
 
-#: src/mmg/mmg_dialog.cpp:1479
+#: src/mmg/mmg_dialog.cpp:1481
 msgid "Job added to job queue"
 msgstr "Taak toegevoegd aan taak wachtrij"
 
-#: src/mmg/mmg_dialog.cpp:1431
+#: src/mmg/mmg_dialog.cpp:1433
 msgid "Job description"
 msgstr "Taak beschrijving"
 
@@ -4723,6 +4727,11 @@ msgstr "MPEG-4"
 #: src/common/file_types.cpp:43
 msgid "MPLS Blu-ray playlist"
 msgstr ""
+
+#: src/mmg/options/output.cpp:50
+#, fuzzy
+msgid "Make suggested output file names unique"
+msgstr "Automatisch bestandsnaam bij opslaan"
 
 #: src/mmg/tabs/input_general.cpp:181
 msgid "Make this track the default track for its type (audio, video, subtitles). Players should prefer tracks with the default track flag set."
@@ -5181,7 +5190,7 @@ msgstr "Opmerking,  dat de  Matroska specificaties betreffende opslag van '%1%' 
 msgid "Nothing to do.\n"
 msgstr "Niets te doen.\n"
 
-#: src/mmg/mmg_dialog.cpp:1955
+#: src/mmg/mmg_dialog.cpp:1959
 msgid "Notice"
 msgstr "Opmerking"
 
@@ -5294,7 +5303,7 @@ msgid "Option file created."
 msgstr "Optie bestand aangemaakt."
 
 #: src/info/info_cli_parser.cpp:35
-#: src/mmg/options/dialog.cpp:36
+#: src/mmg/options/dialog.cpp:37
 #: src/propedit/propedit_cli_parser.cpp:191
 msgid "Options"
 msgstr "Opties"
@@ -5325,6 +5334,7 @@ msgid "Other options"
 msgstr "Overige opties"
 
 #: src/mmg/mux_dialog.cpp:62
+#: src/mmg/options/output.cpp:159
 msgid "Output"
 msgstr "Uitvoer"
 
@@ -5354,7 +5364,7 @@ msgid "Overwrite existing file(s)?"
 msgstr "Bestaand bestand(en) overschrijven?"
 
 #: src/mmg/mmg_dialog.cpp:555
-#: src/mmg/mmg_dialog.cpp:1425
+#: src/mmg/mmg_dialog.cpp:1427
 msgid "Overwrite existing file?"
 msgstr "Bestand overschrijven?"
 
@@ -5388,6 +5398,11 @@ msgstr "Pakket nummer %1% bevat een ongeldige FLAC wordt overgeslagen.\n"
 #, boost-format
 msgid "Packet queue not empty (flushed: %1%). Frames have been lost during remux. %2%\n"
 msgstr "Pakket rij niet leeg (verloren: %1%). beelden zijn verloren gegaan gedurende het samenvoegen. %2%\n"
+
+#: src/mmg/options/output.cpp:40
+#, fuzzy
+msgid "Parent directory of the first input file"
+msgstr "Zelfde map van waaruit  bestand(en) is/wordt ingelezen"
 
 #: src/info/wxwidgets_ui.cpp:118
 msgid "Parse the file completely and show all elements"
@@ -5440,7 +5455,7 @@ msgstr "Pixel breedte: %1%"
 msgid "Please do not select 'mmg' itself as the 'mkvmerge' executable."
 msgstr "Gebruik 'mmg' zelf niet als het 'mkvmerge' programma."
 
-#: src/mmg/mmg_dialog.cpp:1431
+#: src/mmg/mmg_dialog.cpp:1433
 msgid "Please enter a description for the new job:"
 msgstr "Geef a.u.b. een beschrijving voor de nieuwe taak:"
 
@@ -5532,7 +5547,7 @@ msgstr "Voortgang: 100%%%1%"
 msgid "Progress: [%1%%2%] %3%%%"
 msgstr "Voortgang: [%1%%2%] %3%%%"
 
-#: src/mmg/mmg_dialog.cpp:1862
+#: src/mmg/mmg_dialog.cpp:1866
 msgid "Querying mkvmerge's capabilities"
 msgstr "Opgevraagde mogelijkheden van mkvmerge"
 
@@ -5766,7 +5781,7 @@ msgstr "Verwijder hoofdstuk"
 msgid "Remove element"
 msgstr "Verwijder element"
 
-#: src/mmg/options/mmg.cpp:90
+#: src/mmg/options/mmg.cpp:67
 msgid "Remove job from job queue after run:"
 msgstr "Verwijder taak uit wachtrij na voltooiing"
 
@@ -5827,7 +5842,7 @@ msgstr "SSA/ASS tekst ondertiteling"
 msgid "Sa&ve command line"
 msgstr "Be&waar commando regel"
 
-#: src/mmg/options/mmg.cpp:57
+#: src/mmg/options/output.cpp:39
 msgid "Same directory as the first input file's"
 msgstr "Zelfde map van waaruit  bestand(en) is/wordt ingelezen"
 
@@ -6078,7 +6093,7 @@ msgstr "Stel taal in op:"
 msgid "Set the MIME type to use for the following '--add-attachment' or '--replace-attachment' option"
 msgstr "Stelt de te gebruiken MIME type in voor de volgende '--add-attachment' of '--replace-attachment' optie"
 
-#: src/mmg/options/mmg.cpp:75
+#: src/mmg/options/mmg.cpp:52
 msgid "Set the delay input field from the file name"
 msgstr "Haal de vertraging uit het bestand en plaats die op het invul veld"
 
@@ -6183,7 +6198,7 @@ msgstr "Toon alle bytes van elk beeld als een hex dump."
 msgid "Show element si&zes\tCtrl-Z"
 msgstr "Toon element groo&tte\tCtrl-Z"
 
-#: src/mmg/options/mmg.cpp:108
+#: src/mmg/options/mmg.cpp:85
 msgid "Show mmg's debug window"
 msgstr "Toon mmg's debug scherm"
 
@@ -6223,7 +6238,7 @@ msgstr "Toon deze help."
 msgid "Show version information."
 msgstr "Toon versie informatie."
 
-#: src/mmg/options/mmg.cpp:109
+#: src/mmg/options/mmg.cpp:86
 msgid "Shows mmg's debug window in which debug messages will appear. This is only useful if you're helping the author debug a problem in mmg."
 msgstr "Toont mmg's fout code scherm, waarin de fout codes worden getoond. Dit is alleen zinvol om de auteur te helpen met een 'fout' probleem in mmg."
 
@@ -6588,7 +6603,7 @@ msgstr "De FourCC moeten exact vier karakters lang zijn in '%1% %2%'.\n"
 msgid "The FourCC setting for track nr. %s in file '%s' is not exactly four characters long."
 msgstr "De FourCC instellingen voor spoor nr. %s in bestand '%s' is niet precies vier karakters lang."
 
-#: src/mmg/mmg_dialog.cpp:1915
+#: src/mmg/mmg_dialog.cpp:1919
 #, boost-format
 msgid "The GUI is configured to use the mkvmerge executable from a different version (%1%) than the GUI itself (%2%). This is not supported but will not be prevented either. You should change the mkvmerge executable in the preferences dialog."
 msgstr "GUI is ingesteld om mkvmerge te gebruiken vanuit/af een andere versie (%1%) dan de GUI zelf (%2%). Dit is niet ondersteund maar zal ook niet worden voorkomen. Je zou het mkvmerge programma moeten veranderen in de voorkeur instellingen (Bestand >> Opties >> tab Mkvmerge)."
@@ -7291,7 +7306,7 @@ msgid "The order of the various options is not important."
 msgstr "De volgorde van de verschillende opties zijn niet belangrijk.."
 
 #: src/mmg/mmg_dialog.cpp:555
-#: src/mmg/mmg_dialog.cpp:1422
+#: src/mmg/mmg_dialog.cpp:1424
 #, c-format, boost-format
 msgid "The output file '%s' already exists. Do you want to overwrite it?"
 msgstr "Het uitvoer bestand '%s' bestaat reeds. Wil je die overschrijven?"
@@ -7544,7 +7559,7 @@ msgstr "De breedte van de twee sporen zijn verschillend: %1% en %2%"
 msgid "Theora"
 msgstr "Theora"
 
-#: src/mmg/mmg_dialog.cpp:1807
+#: src/mmg/mmg_dialog.cpp:1811
 msgid "There is a new version available online."
 msgstr "Er is online een nieuwere versie beschikbaar."
 
@@ -7559,7 +7574,7 @@ msgstr "Er is geen bestand met ID '%1%'. Het argument voor, bijvoegen-aan, '--ap
 msgid "There is no translation available for '%1%'.\n"
 msgstr "Geen vertaling beschikbaar voor '%1%'.\n"
 
-#: src/mmg/mmg_dialog.cpp:1808
+#: src/mmg/mmg_dialog.cpp:1812
 msgid "There was an error querying the update status."
 msgstr "Er was een fout bij opvragen van de opwaardeer status."
 
@@ -7678,7 +7693,7 @@ msgstr "Dit is de naam die wordt opgeslagen in het uitvoer bestand voor deze bij
 msgid "This is the title that players may show as the 'main title' for this movie."
 msgstr "Dit is de titel die af spelers zouden kunnen tonen als 'hoofd titel' voor deze film."
 
-#: src/mmg/mmg_dialog.cpp:1954
+#: src/mmg/mmg_dialog.cpp:1958
 msgid "This message will only shown to you once."
 msgstr "Dit bericht wordt je slechts één maal getoond."
 
@@ -8093,11 +8108,11 @@ msgstr "Gebruik vaste waardes voor elementen die anders bij elk bestand verander
 msgid "Use the old AAC codec IDs (e.g. 'A_AAC/MPEG4/SBR') instead of the new one ('A_AAC')."
 msgstr "Gebruikmakend van de oude AAC codec IDs (e.g. 'A_AAC/MPEG4/SBR') i.p.v. de nieuwe ('A_AAC')."
 
-#: src/mmg/options/mmg.cpp:58
+#: src/mmg/options/output.cpp:41
 msgid "Use the previous output directory"
 msgstr "Gebruik voorgaande uitvoer map"
 
-#: src/mmg/options/mmg.cpp:59
+#: src/mmg/options/output.cpp:42
 msgid "Use this directory:"
 msgstr "Gebruik deze map:"
 
@@ -8271,7 +8286,7 @@ msgstr "WAVPACK v4 audio"
 msgid "WAVPACK4"
 msgstr "WAVPACK4"
 
-#: src/mmg/options/mmg.cpp:95
+#: src/mmg/options/mmg.cpp:72
 msgid "Warn about possible incorrect usage of mmg"
 msgstr "Waarschuw over mogelijk onjuist gebruik van MMG"
 
@@ -8296,7 +8311,7 @@ msgstr "Waarschuwingen:"
 msgid "WebM audio/video files"
 msgstr "WebM audio/video bestanden"
 
-#: src/mmg/options/mmg.cpp:76
+#: src/mmg/options/mmg.cpp:53
 msgid "When a file is added its name is scanned. If it contains the word 'DELAY' followed by a number then this number is automatically put into the 'delay' input field for any audio track found in the file."
 msgstr "Als een bestand wordt toegevoegd wordt de naam gescand. Als het woord 'DELAY' bevat gevolgd door een nummer dan wordt dit nummer automatisch toegevoegd aan het invoer veld 'delay' voor elk audio spoor gevonden in het bestand."
 
@@ -8376,7 +8391,7 @@ msgstr "Verkeerde identificatie reeks: '%|1$6s|' != 'theora'"
 msgid "Wrong identification string: '%|1$7s|' != 'kate\\0\\0\\0'"
 msgstr "Verkeerde identificatie reeks: '%|1$7s|' != 'kate\\0\\0\\0'"
 
-#: src/mmg/mmg_dialog.cpp:1806
+#: src/mmg/mmg_dialog.cpp:1810
 msgid "You are already running the latest version."
 msgstr "Je hebt reeds de laatste versie."
 
@@ -8431,7 +8446,7 @@ msgstr "Toevoegen"
 msgid "additional parts"
 msgstr "Extra delen"
 
-#: src/mmg/options/mmg.cpp:88
+#: src/mmg/options/mmg.cpp:65
 msgid "always"
 msgstr "altijd"
 
@@ -8574,7 +8589,7 @@ msgstr "aangezet"
 msgid "encryption"
 msgstr "versleuteling"
 
-#: src/mmg/options/mmg.cpp:87
+#: src/mmg/options/mmg.cpp:64
 msgid "even if there were warnings"
 msgstr "zelfs als er waarschuwingen waren"
 
@@ -9059,7 +9074,7 @@ msgstr "mkvpropedit [opties] <file> <actions>"
 msgid "mm_text_io_c: UTF32_* is not supported at the moment.\n"
 msgstr "mm_text_io_c: UTF32_* wordt op het moment niet ondersteund.\n"
 
-#: src/mmg/options/mmg.cpp:331
+#: src/mmg/options/mmg.cpp:244
 msgid "mmg"
 msgstr "mmg"
 
@@ -9067,7 +9082,7 @@ msgstr "mmg"
 msgid "mmg debug output"
 msgstr "mmg debug uitvoer"
 
-#: src/mmg/options/mmg.cpp:177
+#: src/mmg/options/mmg.cpp:146
 msgid "mmg options"
 msgstr "Mmg opties"
 
@@ -9143,13 +9158,18 @@ msgstr "ogg_sync_buffer mislukt\n"
 msgid "only for I frames"
 msgstr "alleen voor I beelden"
 
-#: src/mmg/options/mmg.cpp:86
+#: src/mmg/options/mmg.cpp:63
 msgid "only if the run was successfull"
 msgstr "alleen als de taak succesvol was"
 
 #: src/mmg/tabs/chapters.cpp:358
 msgid "ordered"
 msgstr "gesorteerd"
+
+#: src/mmg/options/output.cpp:80
+#, fuzzy
+msgid "output options"
+msgstr "Hoofdstuk opties"
 
 #: src/info/mkvinfo.cpp:548
 #, boost-format

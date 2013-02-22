@@ -1765,7 +1765,7 @@ msgstr "Gizaki-irakurgarria den kate batek adierazten du kodeka."
 msgid "A human-readable track name."
 msgstr "Bide izen gizakiak-irakurgarri bat."
 
-#: src/mmg/mmg_dialog.cpp:1442
+#: src/mmg/mmg_dialog.cpp:1444
 #, c-format, boost-format
 msgid "A job with the description '%s' already exists. Do you really want to add another one with the same description?"
 msgstr "Jadanik badago '%s' azalpena duen lan bat. Egitan nahi duzu gehitzea beste bat azalpen berdinarekin?"
@@ -2066,7 +2066,7 @@ msgstr "Saiatu ere ateratzen CUE orria atal argibideetatik eta bide honentzako e
 msgid "Also using the correction file '%1%c'.\n"
 msgstr "Erabiltzen ere '%1%c' agiri zuzenketa.\n"
 
-#: src/mmg/options/mmg.cpp:93
+#: src/mmg/options/mmg.cpp:70
 msgid "Always on top"
 msgstr "Betik gainean"
 
@@ -2143,7 +2143,7 @@ msgstr "Agiri batekik bide bat gehitzea agiri bereko beste bide batera ez dago a
 msgid "Appending track %1% from file no. %2% ('%3%') to track %4% from file no. %5% ('%6%').\n"
 msgstr "%2% zenbakiko agiritiko ('%3%') %1% bidea gehitzea %5% zenbakiko agiritiko %4% bidera ('%6%').\n"
 
-#: src/mmg/options/mmg.cpp:67
+#: src/mmg/options/output.cpp:54
 msgid "Ask before overwriting things (files, jobs)"
 msgstr "Galdetu gauzak gainidatzi aurretik (agiriak, lanak)"
 
@@ -2225,7 +2225,7 @@ msgstr "Audio laginketa maiztasuna"
 msgid "Audio track %u"
 msgstr "Audio bidea %u"
 
-#: src/mmg/options/mmg.cpp:52
+#: src/mmg/options/output.cpp:34
 msgid "Auto-set output filename"
 msgstr "Berez-ezarri irteera agirizena"
 
@@ -2329,7 +2329,7 @@ msgstr "Lan lerro editatzailea irekitzen du"
 
 #: src/mmg/mmg_dialog.cpp:331
 #: src/mmg/options/mkvmerge.cpp:52
-#: src/mmg/options/mmg.cpp:62
+#: src/mmg/options/output.cpp:45
 #: src/mmg/tabs/global.cpp:344
 #: src/mmg/tabs/global.cpp:361
 #: src/mmg/tabs/global.cpp:365
@@ -2560,7 +2560,7 @@ msgid "Charset:"
 msgstr "Hizkikodea:"
 
 #: src/mmg/mmg_dialog.cpp:316
-#: src/mmg/options/mmg.cpp:102
+#: src/mmg/options/mmg.cpp:79
 msgid "Check online for the latest release"
 msgstr "Egiaztatu online azken argitalpena"
 
@@ -2569,11 +2569,11 @@ msgstr "Egiaztatu online azken argitalpena"
 msgid "Check online for the latest release."
 msgstr "Egiaztatu onlin azken argitalpena."
 
-#: src/mmg/options/mmg.cpp:103
+#: src/mmg/options/mmg.cpp:80
 msgid "Check online whether or not a new release of MKVToolNix is available on the home page. Will only check when mmg starts and at most once a day. No information is transmitted to the server."
 msgstr "Egiaztatu online MKVToolNix argitalpen berririk eskuragarri dagoen edo ez webgunean. mmg hasitakoan bakarrik eta eguneko gehienez behin egiaztatuko da. Ez da argibiderik igortzen zerbitzarira."
 
-#: src/mmg/mmg_dialog.cpp:1774
+#: src/mmg/mmg_dialog.cpp:1778
 msgid "Checking for updates online; please wait"
 msgstr "Eguneraketak egiaztatzen online; mesedez itxaron"
 
@@ -2628,7 +2628,7 @@ msgstr "Hautatu mkvmergeren EIG laguntza agirien kokalekua"
 msgid "Choose the mkvmerge executable"
 msgstr "Hautatu mkvmerge exekutagarria"
 
-#: src/mmg/options/mmg.cpp:257
+#: src/mmg/options/output.cpp:122
 msgid "Choose the output directory"
 msgstr "Hautatu irteera zuzenbidea"
 
@@ -2640,11 +2640,11 @@ msgstr "Hautatu zati argibide agiria"
 msgid "Choose the tags file"
 msgstr "Hautatu etiketa agiria"
 
-#: src/mmg/options/mmg.cpp:83
+#: src/mmg/options/mmg.cpp:60
 msgid "Clear inputs after a successful muxing run"
 msgstr "Garbitu sarrerak multiplexaketa ongi burutu ondoren"
 
-#: src/mmg/options/mmg.cpp:81
+#: src/mmg/options/mmg.cpp:58
 msgid "Clear inputs after adding a job to the job queue"
 msgstr "Garbitu sarrerak lan bat lan lerrora gehitu ondoren"
 
@@ -3183,7 +3183,7 @@ msgstr "Ezabatu hautaturiko lana(k) lan lerrotik"
 msgid "Description"
 msgstr "Azalpena"
 
-#: src/mmg/mmg_dialog.cpp:1443
+#: src/mmg/mmg_dialog.cpp:1445
 msgid "Description already exists"
 msgstr "Azalpena jadanik badago"
 
@@ -4019,19 +4019,23 @@ msgstr "Edizio bat 'hurrenkeran' markatzen bada atalek denbora anitz zehaztu dit
 msgid "If an edition is marked as 'default' then it should be used as the default edition."
 msgstr "Edizio bat 'berezkoa' bezala makatuta badago berezko edizio bezala erabili behar da."
 
-#: src/mmg/options/mmg.cpp:68
+#: src/mmg/options/output.cpp:51
+msgid "If checked mmg make sure the suggested output file name is unique by adding a number (e.g. ' (1)') to the end of the file name. This is only done if the unmodified file name already exists."
+msgstr ""
+
+#: src/mmg/options/output.cpp:55
 msgid "If checked mmg will ask for confirmation before overwriting existing files, or before adding a new job if there's an old job whose description matches the new one."
 msgstr "Hautatzen bada mmg-ek baieztapena eskatuko du dauden agiriak gainidatzi aurretik, edo lan berri bat gehitu aurretik lan zaharren bat badago berri batekin bat datorren azalpena duena."
 
-#: src/mmg/options/mmg.cpp:53
+#: src/mmg/options/output.cpp:35
 msgid "If checked mmg will automatically set the output filename if it hasn't been set already. This happens when you add the first file. If unset mmg will not touch the output filename."
 msgstr "Hautatzen bada mmg-ek berezgaitasunez ezarriko du irteera agirizena jadanik ezarria izan ez bada. Hau gertatzen da lehen agiria gehitzen duzunean. Ezartzen ez bada mmg-ek ez du ikutuko irteera agirizena."
 
-#: src/mmg/options/mmg.cpp:96
+#: src/mmg/options/mmg.cpp:73
 msgid "If checked mmg will warn if it thinks that you're using it incorrectly. Such warnings are shown at least once even if you turn this feature off."
 msgstr "Hautatzen bada mmg-ek ohartaraziko du oker erabiltzen ari zarela uste badu. Ohartarazpen hauek gutxienez behin erakusten dira baita ezaugarri hau ezgaitzen baduzue ere."
 
-#: src/mmg/options/mmg.cpp:64
+#: src/mmg/options/output.cpp:47
 msgid "If left empty then mmg will set the output file name to be in the same directory as the first file added to this job. Otherwise this directory will be used."
 msgstr "Hutsik utziz gero mmg-ek irteera agiri izena lan honetara gehitutako lehen agiriaren zuzenbide berean ezarriko du. Bestela zuzenbide hau erabiliko da."
 
@@ -4044,7 +4048,7 @@ msgstr "Irteera bideo bide gabe bada bananketa ez da gertatuko."
 msgid "If splitting is a file can be attached either to all files created or only to the first file. Has no effect if no splitting is used."
 msgstr "Bananketa agiri bat bada erantsi daiteke bai sorturiko agiri guztietara edo lehen agirira bakarrik. Ez du eraginik bananketa ez bada erabiltzen."
 
-#: src/mmg/mmg_dialog.cpp:1963
+#: src/mmg/mmg_dialog.cpp:1967
 msgid "If you encounter problems during playback of files please consider visiting the newly created MKVToolNix troubleshooting advice page:"
 msgstr "Agirien irakurketan arazoak aurkitzen badituzu, mesedez ikusi sortu berria den MKVToolNix arazo konponketa aholku orrialdea:"
 
@@ -4063,7 +4067,7 @@ msgstr "Hizkia hemendik inportaturik: %1%"
 msgid "Imported picture from %1%"
 msgstr "Irudia hemendik inportaturik: %1%"
 
-#: src/mmg/mmg_dialog.cpp:1919
+#: src/mmg/mmg_dialog.cpp:1923
 msgid "Incompatible mkvmerge version"
 msgstr "mkvmerge bertsio bateraezina"
 
@@ -4102,7 +4106,7 @@ msgstr "Sarrera agiriak:"
 msgid "Input too long: %1% > %2%"
 msgstr "Sarrera luzeegia: %1% > %2%"
 
-#: src/mmg/options/mmg.cpp:113
+#: src/mmg/options/mmg.cpp:90
 msgid "Interface language:"
 msgstr "Intefaze hizkuntza:"
 
@@ -4512,15 +4516,15 @@ msgstr "Bide ID baliogabea adierazi da hemen: '--sub-charset %1%'.\n"
 msgid "Invalid track ID/file name specification in argument '%1%'.\n"
 msgstr "Bide ID/agiri izen baliogabea adierazi da '%1%' argumentoan.\n"
 
-#: src/mmg/mmg_dialog.cpp:1967
+#: src/mmg/mmg_dialog.cpp:1971
 msgid "It can also be opened from the 'Help' menu."
 msgstr "'Laguntza' menutik ere ireki daiteke."
 
-#: src/mmg/mmg_dialog.cpp:1479
+#: src/mmg/mmg_dialog.cpp:1481
 msgid "Job added to job queue"
 msgstr "Lana gehituta lan lerrora"
 
-#: src/mmg/mmg_dialog.cpp:1431
+#: src/mmg/mmg_dialog.cpp:1433
 msgid "Job description"
 msgstr "Lanaren azalpena"
 
@@ -4721,6 +4725,11 @@ msgstr "MPEG-4"
 #: src/common/file_types.cpp:43
 msgid "MPLS Blu-ray playlist"
 msgstr ""
+
+#: src/mmg/options/output.cpp:50
+#, fuzzy
+msgid "Make suggested output file names unique"
+msgstr "Berez-ezarri irteera agirizena"
 
 #: src/mmg/tabs/input_general.cpp:181
 msgid "Make this track the default track for its type (audio, video, subtitles). Players should prefer tracks with the default track flag set."
@@ -5177,7 +5186,7 @@ msgstr "Ohartu '%1%' biltegiratzeari dagokionez Matroska ezaugarritzea ez dela o
 msgid "Nothing to do.\n"
 msgstr "Ezer ez egiteko.\n"
 
-#: src/mmg/mmg_dialog.cpp:1955
+#: src/mmg/mmg_dialog.cpp:1959
 msgid "Notice"
 msgstr "Oharra"
 
@@ -5290,7 +5299,7 @@ msgid "Option file created."
 msgstr "Aukera agiria sortuta."
 
 #: src/info/info_cli_parser.cpp:35
-#: src/mmg/options/dialog.cpp:36
+#: src/mmg/options/dialog.cpp:37
 #: src/propedit/propedit_cli_parser.cpp:191
 msgid "Options"
 msgstr "Aukerak"
@@ -5321,6 +5330,7 @@ msgid "Other options"
 msgstr "Beste aukerak"
 
 #: src/mmg/mux_dialog.cpp:62
+#: src/mmg/options/output.cpp:159
 msgid "Output"
 msgstr "Irteera"
 
@@ -5350,7 +5360,7 @@ msgid "Overwrite existing file(s)?"
 msgstr "Gainidatzi dauden agiriak?"
 
 #: src/mmg/mmg_dialog.cpp:555
-#: src/mmg/mmg_dialog.cpp:1425
+#: src/mmg/mmg_dialog.cpp:1427
 msgid "Overwrite existing file?"
 msgstr "Gainidatzi dagoen agiria?"
 
@@ -5384,6 +5394,11 @@ msgstr "%1% pakete zenbakiak FLAC idazburu baliogabea du eta jauzi egiten ari da
 #, boost-format
 msgid "Packet queue not empty (flushed: %1%). Frames have been lost during remux. %2%\n"
 msgstr "Pakete lerroa ez dago hutsik (orekatuta: %1%). Frameak galdu egin dira bermultiplexaketan. %2%\n"
+
+#: src/mmg/options/output.cpp:40
+#, fuzzy
+msgid "Parent directory of the first input file"
+msgstr "Lehen sarrera agiriaren zuzenbide bera"
 
 #: src/info/wxwidgets_ui.cpp:118
 msgid "Parse the file completely and show all elements"
@@ -5436,7 +5451,7 @@ msgstr "Pixel zabalera: %1%"
 msgid "Please do not select 'mmg' itself as the 'mkvmerge' executable."
 msgstr "Mesedez ez hautatu 'mmg' bera 'mkvmerge' exekutagarri bezala."
 
-#: src/mmg/mmg_dialog.cpp:1431
+#: src/mmg/mmg_dialog.cpp:1433
 msgid "Please enter a description for the new job:"
 msgstr "Mesedez sartu lan berriarentzako azalpen bat:"
 
@@ -5528,7 +5543,7 @@ msgstr "Garapena: 100%%%1%"
 msgid "Progress: [%1%%2%] %3%%%"
 msgstr "Garapena: [%1%%2%] %3%%%"
 
-#: src/mmg/mmg_dialog.cpp:1862
+#: src/mmg/mmg_dialog.cpp:1866
 msgid "Querying mkvmerge's capabilities"
 msgstr "Ikusi mkvmergeren gaitasunak"
 
@@ -5762,7 +5777,7 @@ msgstr "Kendtu atala"
 msgid "Remove element"
 msgstr "Kendu gaia"
 
-#: src/mmg/options/mmg.cpp:90
+#: src/mmg/options/mmg.cpp:67
 msgid "Remove job from job queue after run:"
 msgstr "Kendu lana lan lerrotik ekin ondoren:"
 
@@ -5823,7 +5838,7 @@ msgstr "SSA/ASS idazki azpidatziak"
 msgid "Sa&ve command line"
 msgstr "G&orde agindu lerroa"
 
-#: src/mmg/options/mmg.cpp:57
+#: src/mmg/options/output.cpp:39
 msgid "Same directory as the first input file's"
 msgstr "Lehen sarrera agiriaren zuzenbide bera"
 
@@ -6073,7 +6088,7 @@ msgstr "Ezarri hizkuntza:"
 msgid "Set the MIME type to use for the following '--add-attachment' or '--replace-attachment' option"
 msgstr "Ezarri  '--add-attachment' edo '--replace-attachment' aukeratan erabiltzeko MIME mota"
 
-#: src/mmg/options/mmg.cpp:75
+#: src/mmg/options/mmg.cpp:52
 msgid "Set the delay input field from the file name"
 msgstr "Ezarri sarrera atzerapen eremua agiri izenetik"
 
@@ -6178,7 +6193,7 @@ msgstr "Erakutsi frame bakoitzaren byte guztiak hex iraulketa bezala."
 msgid "Show element si&zes\tCtrl-Z"
 msgstr "Erakutsi gai &neurriak\tCtrl-Z"
 
-#: src/mmg/options/mmg.cpp:108
+#: src/mmg/options/mmg.cpp:85
 msgid "Show mmg's debug window"
 msgstr "Erakutsi mmg-ren garbiketa leihoa"
 
@@ -6218,7 +6233,7 @@ msgstr "Erakutsi laguntza hau."
 msgid "Show version information."
 msgstr "Erakutsi bertsio argibideak."
 
-#: src/mmg/options/mmg.cpp:109
+#: src/mmg/options/mmg.cpp:86
 msgid "Shows mmg's debug window in which debug messages will appear. This is only useful if you're helping the author debug a problem in mmg."
 msgstr "Garbiketa mezuak agertuko diren mmg-ren garbiketa leihoa erakusten du. Hau erabilgarria da bakarrik egilea mmg-ko arazo bat garbitzen laguntzen ari bazara."
 
@@ -6583,7 +6598,7 @@ msgstr "FourCC-k lau hizkiko luzera zehatza izan behar du hemen: '%1% %2%'.\n"
 msgid "The FourCC setting for track nr. %s in file '%s' is not exactly four characters long."
 msgstr "FourCC ezarpena %s bidearentzat '%s' agirian ez da zehazki lau hizkiko luzerakoa."
 
-#: src/mmg/mmg_dialog.cpp:1915
+#: src/mmg/mmg_dialog.cpp:1919
 #, boost-format
 msgid "The GUI is configured to use the mkvmerge executable from a different version (%1%) than the GUI itself (%2%). This is not supported but will not be prevented either. You should change the mkvmerge executable in the preferences dialog."
 msgstr "Erabiltzaile Interfaze Grafika, EIG (%2%) beraren ezberdina den mkvmerge exekutagarri bertsio (%1%) batetik erabiltzeko itxuraturik dago. Hau ez dago sostengaturik baina ez da saihestuko ere. mkvmerge exekutagarria aldatu behar duzu hobespenen elkarrizketan."
@@ -7286,7 +7301,7 @@ msgid "The order of the various options is not important."
 msgstr "Aukera ezberdinen hurrenkera ez da garrantzitsua."
 
 #: src/mmg/mmg_dialog.cpp:555
-#: src/mmg/mmg_dialog.cpp:1422
+#: src/mmg/mmg_dialog.cpp:1424
 #, c-format, boost-format
 msgid "The output file '%s' already exists. Do you want to overwrite it?"
 msgstr "'%s' irtera agiria jadanik badago. Gainidaztea nahi duzu?"
@@ -7539,7 +7554,7 @@ msgstr "Bi bideen zabalera ezberdina da: %1% eta %2%"
 msgid "Theora"
 msgstr "Theora"
 
-#: src/mmg/mmg_dialog.cpp:1807
+#: src/mmg/mmg_dialog.cpp:1811
 msgid "There is a new version available online."
 msgstr "Bertsio berri bat dago eskuragarri online."
 
@@ -7554,7 +7569,7 @@ msgstr "Ez dago '%1%'  ID-a duen agiririk. '--append-to'-rentzako argumentoa bal
 msgid "There is no translation available for '%1%'.\n"
 msgstr "Ez dago itzulpen eskuragarririk '%1%'-rentzat.\n"
 
-#: src/mmg/mmg_dialog.cpp:1808
+#: src/mmg/mmg_dialog.cpp:1812
 msgid "There was an error querying the update status."
 msgstr "Akats bat egon da eguneraketa egoera galdetzerakoan."
 
@@ -7673,7 +7688,7 @@ msgstr "Hau da eranskin honentzako irteera agirian biltegiratuko den izena. Bere
 msgid "This is the title that players may show as the 'main title' for this movie."
 msgstr "Hau da irakurgailuek filma honentzat 'izenburu nagusi' bezala erakutsi dezaketena."
 
-#: src/mmg/mmg_dialog.cpp:1954
+#: src/mmg/mmg_dialog.cpp:1958
 msgid "This message will only shown to you once."
 msgstr "Mezu hau behin bakarrik erakutsiko zaizu"
 
@@ -8088,11 +8103,11 @@ msgstr "Erabili zuzendutako balioak bestela agiri bakoitzean aldatzen diren gaie
 msgid "Use the old AAC codec IDs (e.g. 'A_AAC/MPEG4/SBR') instead of the new one ('A_AAC')."
 msgstr "Erabili AAC kodek ID zaharrak (adib., 'A_AAC/MPEG4/SBR') berri baten ordez ('A_AAC')"
 
-#: src/mmg/options/mmg.cpp:58
+#: src/mmg/options/output.cpp:41
 msgid "Use the previous output directory"
 msgstr "Erabili aurreko irteera zuzenbidea"
 
-#: src/mmg/options/mmg.cpp:59
+#: src/mmg/options/output.cpp:42
 msgid "Use this directory:"
 msgstr "Erabili zuzenbide hau:"
 
@@ -8266,7 +8281,7 @@ msgstr "WAVPACK v4 audioa"
 msgid "WAVPACK4"
 msgstr "WAVPACK4"
 
-#: src/mmg/options/mmg.cpp:95
+#: src/mmg/options/mmg.cpp:72
 msgid "Warn about possible incorrect usage of mmg"
 msgstr "Jakinarazi mmg-ren ahalezko erabilera okerraz"
 
@@ -8291,7 +8306,7 @@ msgstr "Kontuz oharrak:"
 msgid "WebM audio/video files"
 msgstr "WebM audio/bideo agiriak"
 
-#: src/mmg/options/mmg.cpp:76
+#: src/mmg/options/mmg.cpp:53
 msgid "When a file is added its name is scanned. If it contains the word 'DELAY' followed by a number then this number is automatically put into the 'delay' input field for any audio track found in the file."
 msgstr "Agiri bat gehitzen denean bere izena mihatzen da. Honek badu 'ATZERAPENA' hitza zenbaki batez jarraitua zenbaki hau berezgaitasunez jartzen da sarrerako 'atzerapena' eremuan agirian aurkitzen den audio bide ororentzat."
 
@@ -8371,7 +8386,7 @@ msgstr "Ezagutarazle kate okerra: '%|1$6s|' != 'theora'"
 msgid "Wrong identification string: '%|1$7s|' != 'kate\\0\\0\\0'"
 msgstr "Ezagutarazle kate okerra: '%|1$7s|' != 'kate\\0\\0\\0'"
 
-#: src/mmg/mmg_dialog.cpp:1806
+#: src/mmg/mmg_dialog.cpp:1810
 msgid "You are already running the latest version."
 msgstr "Jadanik azken bertsioa duzu."
 
@@ -8425,7 +8440,7 @@ msgstr "gehitu"
 msgid "additional parts"
 msgstr "zati gehigarriak"
 
-#: src/mmg/options/mmg.cpp:88
+#: src/mmg/options/mmg.cpp:65
 msgid "always"
 msgstr "betik"
 
@@ -8568,7 +8583,7 @@ msgstr "gaituta"
 msgid "encryption"
 msgstr "enkriptaketa"
 
-#: src/mmg/options/mmg.cpp:87
+#: src/mmg/options/mmg.cpp:64
 msgid "even if there were warnings"
 msgstr "baita kontuz oharrak egonda ere"
 
@@ -9053,7 +9068,7 @@ msgstr "mkvpropedit [aukerak] <agira> <ekintzak>"
 msgid "mm_text_io_c: UTF32_* is not supported at the moment.\n"
 msgstr "mm_text_io_c: UTF32_* ez dago sostengaturik oraingoz.\n"
 
-#: src/mmg/options/mmg.cpp:331
+#: src/mmg/options/mmg.cpp:244
 msgid "mmg"
 msgstr "mmg"
 
@@ -9061,7 +9076,7 @@ msgstr "mmg"
 msgid "mmg debug output"
 msgstr "mmg garbiketa irteera"
 
-#: src/mmg/options/mmg.cpp:177
+#: src/mmg/options/mmg.cpp:146
 msgid "mmg options"
 msgstr "mmg aukerak"
 
@@ -9137,13 +9152,18 @@ msgstr "ogg_sync_buffer hutsegitea\n"
 msgid "only for I frames"
 msgstr "I framentzat bakarrik"
 
-#: src/mmg/options/mmg.cpp:86
+#: src/mmg/options/mmg.cpp:63
 msgid "only if the run was successfull"
 msgstr "ongi ekin bada bakarrik"
 
 #: src/mmg/tabs/chapters.cpp:358
 msgid "ordered"
 msgstr "hurrenkeran"
+
+#: src/mmg/options/output.cpp:80
+#, fuzzy
+msgid "output options"
+msgstr "Atal aukerak"
 
 #: src/info/mkvinfo.cpp:548
 #, boost-format
