@@ -14,6 +14,7 @@
 #include "common/common_pch.h"
 
 #include <wx/wx.h>
+#include <wx/dir.h>
 #include <wx/dnd.h>
 #include <wx/file.h>
 #include <wx/listctrl.h>
@@ -32,10 +33,12 @@
 #include "mmg/mmg.h"
 #include "mmg/mmg_dialog.h"
 #include "mmg/tabs/additional_parts_dlg.h"
+#include "mmg/tabs/ask_scan_for_playlists_dlg.h"
 #include "mmg/tabs/attachments.h"
 #include "mmg/tabs/input.h"
 #include "mmg/tabs/global.h"
-
+#include "mmg/tabs/select_scanned_file_dlg.h"
+#include "mmg/tabs/scanning_for_playlists_dlg.h"
 
 wxArrayString sorted_iso_codes;
 wxArrayString sorted_charsets;
@@ -709,14 +712,19 @@ tab_input::add_file(wxString const &file_name,
   if (!run_mkvmerge_identification(file_name, output))
     return;
 
+  wxString actual_file_name = append ? file_name : check_for_and_handle_playlist_file(file_name, output);
+
+  if (actual_file_name.IsEmpty())
+    return;
+
   auto file       = std::make_shared<mmg_file_t>();
   file->appending = append;
-  file->file_name = file_name;
+  file->file_name = actual_file_name;
 
   parse_identification_output(file, output);
 
   if (file->tracks.empty()) {
-    wxMessageBox(wxString::Format(Z("The input file '%s' does not contain any tracks."), file_name.c_str()), Z("No tracks found"));
+    wxMessageBox(wxString::Format(Z("The input file '%s' does not contain any tracks."), file->file_name.c_str()), Z("No tracks found"));
     return;
   }
 
@@ -1429,6 +1437,96 @@ tab_input::handle_webm_mode(bool enabled) {
       clb_tracks->Check(i, false);
     }
   }
+}
+
+wxString
+tab_input::check_for_and_handle_playlist_file(wxString const &file_name,
+                                              wxArrayString &original_output) {
+  if (SDP_NEVER == mdlg->options.scan_directory_for_playlists)
+    return file_name;
+
+  auto properties = parse_properties(wxT("container:"), original_output);
+
+  if (properties[wxT("playlist")] != wxT("1"))
+    return file_name;
+
+  auto dir_path = wxFileName{file_name}.GetPath();
+  wxDir dir{dir_path};
+
+  if (!dir.IsOpened())
+    return file_name;
+
+  std::vector<wxString> other_files;
+  wxString other_file_name;
+
+  auto wanted_ext = wxFileName{file_name}.GetExt();
+  auto full_name  = wxFileName{file_name}.GetFullName();
+  bool cont       = dir.GetFirst(&other_file_name, wxEmptyString, wxDIR_FILES);
+  while (cont) {
+    if ((full_name != other_file_name) && (wxFileName{other_file_name}.GetExt() == wanted_ext))
+      other_files.push_back(dir_path + wxFileName::GetPathSeparator() + other_file_name);
+    cont = dir.GetNext(&other_file_name);
+  }
+
+  if (2 > other_files.size())
+    return file_name;
+
+  if (SDP_ALWAYS_ASK == mdlg->options.scan_directory_for_playlists) {
+    ask_scan_for_playlists_dlg dlg{this, other_files.size()};
+    if (wxID_CANCEL == dlg.ShowModal())
+      return file_name;
+  }
+
+  scanning_for_playlists_dlg dlg{this, file_name, original_output, other_files};
+  if (dlg.scan() == wxID_CANCEL)
+    return wxEmptyString;
+
+  auto playlists = dlg.get_playlists();
+  if (playlists.empty())
+    return wxEmptyString;
+
+  int idx;
+  if (1 == playlists.size())
+    idx = 0;
+
+  else {
+    select_scanned_file_dlg select_dlg{this, playlists, file_name};
+    if (select_dlg.ShowModal() == wxID_CANCEL)
+      return wxEmptyString;
+
+    idx = select_dlg.get_selected_playlist_idx();
+  }
+
+  auto &playlist  = playlists[idx];
+  original_output = playlist->output;
+
+  return playlist->file_name;
+}
+
+std::map<wxString, wxString>
+tab_input::parse_properties(wxString const &wanted_line,
+                            wxArrayString const &output)
+  const {
+  std::map<wxString, wxString> properties;
+  wxString info;
+  int pos_wanted, pos_properties;
+
+  for (size_t idx = 0, count = output.GetCount(); idx < count; ++idx)
+    if (wxNOT_FOUND != (pos_wanted = output[idx].Find(wanted_line))) {
+      if (wxNOT_FOUND != (pos_properties = output[idx].Find(wxT("["))))
+        info = output[idx].Mid(pos_wanted + wanted_line.Length()).AfterFirst(wxT('[')).BeforeLast(wxT(']'));
+      break;
+    }
+
+  if (info.IsEmpty())
+    return properties;
+
+  for (auto &arg : split(info, wxU(" "))) {
+    auto pair = split(arg, wxU(":"), 2);
+    properties[pair[0]] = unescape(pair[1]);
+  }
+
+  return properties;
 }
 
 IMPLEMENT_CLASS(tab_input, wxPanel);

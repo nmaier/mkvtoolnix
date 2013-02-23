@@ -229,7 +229,8 @@ public:
   void parse_identification_output(mmg_file_cptr file, wxArrayString const &output);
   bool run_mkvmerge_identification(wxString const &file_name, wxArrayString &output);
   void insert_file_in_controls(mmg_file_cptr file, bool append);
-
+  wxString check_for_and_handle_playlist_file(wxString const &file_name, wxArrayString &original_output);
+  std::map<wxString, wxString> parse_properties(wxString const &wanted_line, wxArrayString const &output) const;
 };
 
 #endif // MTX_TAB_INPUT_H

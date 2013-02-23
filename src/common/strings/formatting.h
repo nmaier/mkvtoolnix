@@ -58,6 +58,8 @@ operator <<(std::ostream &out,
   return out;
 }
 
+std::string format_file_size(int64_t size);
+
 std::string format_paragraph(const std::string &text_to_wrap,
                              int indent_column                    = 0,
                              const std::string &indent_first_line = empty_string,

@@ -188,3 +188,44 @@ get_installation_path() {
 }
 
 #endif // SYS_WINDOWS
+
+namespace mtx {
+
+int
+system(std::string const &command) {
+#ifdef SYS_WINDOWS
+  std::wstring wcommand = to_wide(command);
+  auto mem              = memory_c::clone(wcommand.c_str(), (wcommand.length() + 1) * sizeof(wchar_t));
+
+  STARTUPINFOW si;
+  PROCESS_INFORMATION pi;
+  memset(&si, 0, sizeof(STARTUPINFOW));
+  memset(&pi, 0, sizeof(PROCESS_INFORMATION));
+
+  auto result = ::CreateProcessW(NULL,                                           // application name (use only cmd line)
+                                 reinterpret_cast<wchar_t *>(mem->get_buffer()), // full command line
+                                 NULL,                                           // security attributes: defaults for both
+                                 NULL,                                           //   the process and its main thread
+                                 FALSE,                                          // inherit handles if we use pipes
+                                 CREATE_NO_WINDOW,                               // process creation flags
+                                 NULL,                                           // environment (use the same)
+                                 NULL,                                           // current directory (use the same)
+                                 &si,                                            // startup info (unused here)
+                                 &pi                                             // process info
+                                 );
+
+  // Wait until child process exits.
+  WaitForSingleObject(pi.hProcess, INFINITE);
+
+  // Close process and thread handles.
+  CloseHandle(pi.hProcess);
+  CloseHandle(pi.hThread);
+
+  return !result ? -1 : 0;
+
+#else  // SYS_WINDOWS
+  return ::system(command.c_str());
+#endif  // SYS_WINDOWS
+}
+
+}

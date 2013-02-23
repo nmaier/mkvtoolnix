@@ -1,3 +1,13 @@
+2013-02-24  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mmg: new feature: When a playlist file (e.g. MPLS Blu-ray
+        playlist) is added mmg can optionally scan all the other files in
+        the directory that have the same extension and present the user
+        with the results (including them playback time, total size, number
+        of chapters, number and types of tracks). The user can then select
+        the actual playlist file to add. The user can configure the
+        minimum playlist duration in order to filter out too short ones.
+
 2013-02-22  Moritz Bunkus  <moritz@bunkus.org>
 
         * mmg: new feature: Added an option for disabling making the

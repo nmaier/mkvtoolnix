@@ -255,3 +255,13 @@ create_minutes_seconds_time_string(unsigned int seconds,
           % (boost::format(NY("%1% minute", "%1% minutes", minutes)) % minutes)
           % result).str();
 }
+
+std::string
+format_file_size(int64_t size) {
+  auto result = size <       1024ll ? (boost::format(Y("%1% bytes"))   % size)
+              : size <    1048576ll ? (boost::format(Y("%1%.%2% KiB")) % (size / 1024)               % ((size * 10 /               1024) % 10))
+              : size < 1073741824ll ? (boost::format(Y("%1%.%2% MiB")) % (size / 1024 / 1024)        % ((size * 10 /        1024 / 1024) % 10))
+              :                       (boost::format(Y("%1%.%2% GiB")) % (size / 1024 / 1024 / 1024) % ((size * 10 / 1024 / 1024 / 1024) % 10));
+
+  return result.str();
+}

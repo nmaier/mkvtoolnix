@@ -39,4 +39,10 @@ unsigned int get_windows_version();
 
 #endif
 
+namespace mtx {
+
+int system(std::string const &command);
+
+}
+
 #endif

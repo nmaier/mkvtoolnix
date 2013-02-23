@@ -29,7 +29,7 @@ ask_scan_for_playlists_dlg::ask_scan_for_playlists_dlg(wxWindow *parent,
                                       wxU(boost::format(Y("The file you've added is a playlist. The directory it is located it contains %1% other file(s) with the same extension. "
                                                           "mmg can scan these files, present the results including duration and number of tracks of each playlist found and let you chose which one to add."))
                                           % num_other_files));
-	st_question->Wrap(500);
+	st_question->Wrap(480);
 
 	auto st_in_the_future = new wxStaticText(this, wxID_ANY, Z("What to do in the future:"), wxDefaultPosition, wxDefaultSize, 0);
 
