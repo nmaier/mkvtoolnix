@@ -487,6 +487,24 @@ mpeg_ps_reader_c::new_stream_v_avc_or_mpeg_1_2(mpeg_ps_id_t id,
     uint64_t marker            = 0;
     int pos                    = 0;
 
+    while (4 > buffer.get_size()) {
+      if (!find_next_packet_for_id(id, PS_PROBE_SIZE))
+        throw false;
+
+      auto packet = parse_packet(id);
+      if (!packet)
+        continue;
+
+      buffer.add(packet.m_buffer->get_buffer(), packet.m_length);
+    }
+
+    marker = get_uint32_be(buffer.get_buffer());
+    if (NALU_START_CODE == marker) {
+      m_in->restore_pos();
+      new_stream_v_avc(id, buf, length, track);
+      return;
+    }
+
     while (1) {
       unsigned char *ptr = buffer.get_buffer();
       int buffer_size    = buffer.get_size();
@@ -521,13 +539,6 @@ mpeg_ps_reader_c::new_stream_v_avc_or_mpeg_1_2(mpeg_ps_id_t id,
               avc_access_unit_found = true;
               break;
           }
-
-          if (avc_seq_param_found && avc_pic_param_found && (avc_access_unit_found || avc_slice_found)) {
-            m_in->restore_pos();
-            new_stream_v_avc(id, buf, length, track);
-            return;
-          }
-
         }
 
         if (mpeg_is_start_code(marker)) {
@@ -551,7 +562,7 @@ mpeg_ps_reader_c::new_stream_v_avc_or_mpeg_1_2(mpeg_ps_id_t id,
       }
 
       if (!find_next_packet_for_id(id, PS_PROBE_SIZE))
-        throw false;
+        break;
 
       auto packet = parse_packet(id);
       if (!packet)
@@ -559,6 +570,13 @@ mpeg_ps_reader_c::new_stream_v_avc_or_mpeg_1_2(mpeg_ps_id_t id,
 
       buffer.add(packet.m_buffer->get_buffer(), packet.m_length);
     }
+
+    if (avc_seq_param_found && avc_pic_param_found && (avc_access_unit_found || avc_slice_found)) {
+      m_in->restore_pos();
+      new_stream_v_avc(id, buf, length, track);
+      return;
+    }
+
   } catch (...) {
   }
 

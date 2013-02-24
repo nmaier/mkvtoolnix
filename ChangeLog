@@ -1,5 +1,8 @@
 2013-02-24  Moritz Bunkus  <moritz@bunkus.org>
 
+        * mkvmerge: bug fix: Fixed mkvmerge sometimes mistakenly detecting
+        MPEG-1 video in MPEG program streams as AVC/h.264. Fixes #845.
+
         * mmg: new feature: When a playlist file (e.g. MPLS Blu-ray
         playlist) is added mmg can optionally scan all the other files in
         the directory that have the same extension and present the user
