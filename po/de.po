@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2013-02-22 20:12+0100\n"
+"PO-Revision-Date: 2013-02-24 10:59+0100\n"
 "Last-Translator: Moritz Bunkus <moritz@bunkus.org>\n"
 "Language-Team: German <moritz@bunkus.org>\n"
 "Language: de\n"
@@ -835,6 +835,11 @@ msgstr "### Globale Einstellungen zur Ausgabe ###"
 msgid "%1% built on %2% %3%"
 msgstr "%1% gebaut am %2% %3%"
 
+#: src/common/strings/formatting.cpp:261
+#, boost-format
+msgid "%1% bytes"
+msgstr "%1% Bytes"
+
 #: src/info/mkvinfo.cpp:207
 #, boost-format
 msgid "%1% frame, track %2%, timecode %3% (%4%), duration %|5$.3f|, size %6%, adler 0x%|7$08x|%8%%9%\n"
@@ -857,12 +862,33 @@ msgid_plural "%1% minutes"
 msgstr[0] "%1% Minute"
 msgstr[1] "%1% Minuten"
 
+#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:41
+#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:141
+#, boost-format
+msgid "%1% of %2% file(s) processed"
+msgstr "%1% von %2% Dateien verarbeitet"
+
 #: src/common/strings/formatting.cpp:249
 #, boost-format
 msgid "%1% second"
 msgid_plural "%1% seconds"
 msgstr[0] "%1% Sekunde"
 msgstr[1] "%1% Sekunden"
+
+#: src/common/strings/formatting.cpp:264
+#, boost-format
+msgid "%1%.%2% GiB"
+msgstr "%1%.%2% GiB"
+
+#: src/common/strings/formatting.cpp:262
+#, boost-format
+msgid "%1%.%2% KiB"
+msgstr "%1%.%2% KiB"
+
+#: src/common/strings/formatting.cpp:263
+#, boost-format
+msgid "%1%.%2% MiB"
+msgstr "%1%.%2% MiB"
 
 #: src/input/r_vobsub.cpp:86
 #, boost-format
@@ -949,6 +975,7 @@ msgstr ""
 "http://www.bunkus.org/videotools/mkvtoolnix/"
 
 #: src/mmg/jobs.cpp:96
+#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:45
 msgid "&Abort"
 msgstr "&Abbrechen"
 
@@ -961,6 +988,7 @@ msgid "&About\tF1"
 msgstr "Ü&ber\tF1"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:45
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:51
 msgid "&Add"
 msgstr "&Hinzufügen"
 
@@ -972,6 +1000,10 @@ msgstr "Zu &Jobwarteschlange hinzufügen"
 #: src/mmg/mmg_dialog.cpp:309
 msgid "&Attachments\tAlt-2"
 msgstr "Datei&anhänge\tAlt-2"
+
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:52
+msgid "&Cancel"
+msgstr "&Abbrechen"
 
 #: src/mmg/mmg_dialog.cpp:321
 msgid "&Chapter Editor"
@@ -1009,6 +1041,10 @@ msgstr "In &Zwischenablage kopieren"
 #: src/mmg/jobs.cpp:486
 msgid "&Disable"
 msgstr "&Deaktivieren"
+
+#: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:46
+msgid "&Don't scan, just add the file"
+msgstr "&Nicht scannen, nur Datei hinzufügen"
 
 #: src/mmg/jobs.cpp:478
 #: src/mmg/tabs/additional_parts_dlg.cpp:48
@@ -1132,6 +1168,10 @@ msgstr "Informationen als Text &speichern\tCtrl-S"
 #: src/mmg/mmg_dialog.cpp:289
 msgid "&Save settings\tCtrl-S"
 msgstr "Einstellungen &speichern\tCtrl-S"
+
+#: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:45
+msgid "&Scan for other playlists"
+msgstr "Nach Abspiellisten &scannen"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:49
 msgid "&Sort"
@@ -2064,7 +2104,7 @@ msgstr "Alle anderen Zeichenketten funktionieren so wie die Trackkopfdatenselekt
 msgid "All supported files|*.mkv;*.mka;*.mks;*.mk3d;*.webm;*.webma;*.webmv|Matroska files (*.mkv;*.mka;*.mks;*.mk3d)|*.mkv;*.mka;*.mks;*.mk3d|WebM files (*.webm;*.webma;*.webmv)|*.webm;*.webma;*.webmv|All files|*.*"
 msgstr "Alle unterstützten Dateien|*.mkv;*.mka;*.mks;*.mk3d;*.webm;*.webma;*.webmv|Matroska-Dateien (*.mkv;*.mka;*.mks;*.mk3d)|*.mkv;*.mka;*.mks;*.mk3d|WebM-Dateien (*.webm;*.webma;*.webmv)|*.webm;*.webma;*.webmv|Alle Dateien|*.*"
 
-#: src/mmg/tabs/input.cpp:250
+#: src/mmg/tabs/input.cpp:253
 #, c-format, boost-format
 msgid "All supported media files|%s%s|%s"
 msgstr "Alle unterstützten Mediendateien|%s%s|%s"
@@ -2086,7 +2126,7 @@ msgstr "Zusätzlich zu Tracks werden Kapitelinformationen als Cuesheet extrahier
 msgid "Also using the correction file '%1%c'.\n"
 msgstr "Lese auch die Korrekturdatei '%1%c'.\n"
 
-#: src/mmg/options/mmg.cpp:70
+#: src/mmg/options/mmg.cpp:71
 msgid "Always on top"
 msgstr "Über allen anderen Fenstern"
 
@@ -2153,7 +2193,7 @@ msgstr "Ein anderer Track für %1% wurde bereits als Standardtrack festgelegt. D
 msgid "Another muxing job in still in progress. Please wait until it has finished or abort it manually before starting a new one."
 msgstr "Es wird momentan ein anderer Job ausgeführt. Bitte warten Sie, bis er beendet wurde, oder brechen Sie ihn ab, bevor Sie einen neuen Job starten."
 
-#: src/mmg/tabs/input.cpp:1303
+#: src/mmg/tabs/input.cpp:1314
 #, c-format, boost-format
 msgid "Appending a track from a file to another track from the same file is not allowed. This is the case for tracks number %u and %u."
 msgstr "Das Anhängen eines Tracks aus einer Datei an einen anderen Track aus derselben Datei ist nicht zulässig. Dieses ist für die Tracks Nummer %u und %u der Fall."
@@ -2580,7 +2620,7 @@ msgid "Charset:"
 msgstr "Zeichensatz:"
 
 #: src/mmg/mmg_dialog.cpp:316
-#: src/mmg/options/mmg.cpp:79
+#: src/mmg/options/mmg.cpp:80
 msgid "Check online for the latest release"
 msgstr "Online nach der neuesten Programmversion suchen"
 
@@ -2589,11 +2629,11 @@ msgstr "Online nach der neuesten Programmversion suchen"
 msgid "Check online for the latest release."
 msgstr "Online nach der neuesten Programmversion suchen"
 
-#: src/mmg/options/mmg.cpp:80
+#: src/mmg/options/mmg.cpp:81
 msgid "Check online whether or not a new release of MKVToolNix is available on the home page. Will only check when mmg starts and at most once a day. No information is transmitted to the server."
 msgstr "Online auf der Homepage nachschauen, ob es eine neuere Version von MKVToolNix gibt. Die Überprüfung findet maximal einmal täglich statt, und zwar wenn mmg gestartet wird. Es werden keine Information an den Server übertragen."
 
-#: src/mmg/mmg_dialog.cpp:1778
+#: src/mmg/mmg_dialog.cpp:1784
 msgid "Checking for updates online; please wait"
 msgstr "Es wird online nach neuen Programmversionen gesucht; bitte warten"
 
@@ -2617,11 +2657,11 @@ msgstr "Datei zum Anhängen auswählen"
 msgid "Choose an input file"
 msgstr "Quelldatei auswählen"
 
-#: src/mmg/tabs/input.cpp:257
+#: src/mmg/tabs/input.cpp:260
 msgid "Choose an input file to add"
 msgstr "Quelldatei zum Hinzufügen auswählen"
 
-#: src/mmg/tabs/input.cpp:257
+#: src/mmg/tabs/input.cpp:260
 msgid "Choose an input file to append"
 msgstr "Quelldatei zum Anhängen auswählen"
 
@@ -2660,11 +2700,11 @@ msgstr "Segment-Info-Datei auswählen"
 msgid "Choose the tags file"
 msgstr "Tagdatei auswählen"
 
-#: src/mmg/options/mmg.cpp:60
+#: src/mmg/options/mmg.cpp:61
 msgid "Clear inputs after a successful muxing run"
 msgstr "Eingabefelder nach einem erfolgreichen Muxvorgang leeren"
 
-#: src/mmg/options/mmg.cpp:58
+#: src/mmg/options/mmg.cpp:59
 msgid "Clear inputs after adding a job to the job queue"
 msgstr "Eingabefelder nach Hinzufügen eines Jobs zur Warteschlange leeren"
 
@@ -2704,6 +2744,10 @@ msgstr "Größe des vorherigen Clusters: %1%"
 #, boost-format
 msgid "Cluster timecode: %|1$.3f|s"
 msgstr "Clusterzeitstempel: %|1$.3f|s"
+
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:67
+msgid "Codec"
+msgstr "Codec"
 
 #: src/common/property_element.cpp:129
 #: src/mmg/header_editor/frame.cpp:417
@@ -2776,7 +2820,7 @@ msgstr "Kommandozeilenoptionen:"
 msgid "Command line saved."
 msgstr "Kommandozeile gespeichert."
 
-#: src/mmg/tabs/input.cpp:562
+#: src/mmg/tabs/input.cpp:568
 msgid "Command line used:"
 msgstr "Benutzte Kommandozeile:"
 
@@ -2836,7 +2880,7 @@ msgstr "CoreAudio"
 
 #: src/mmg/jobs.cpp:177
 #: src/mmg/mux_dialog.cpp:116
-#: src/mmg/tabs/input.cpp:502
+#: src/mmg/tabs/input.cpp:508
 #, c-format, boost-format
 msgid "Could not create a temporary file for mkvmerge's command line option called '%s' (error code %d, %s)."
 msgstr "Die temporäre Datei für die Kommandozeile für mkvmerge '%s' konnte nicht erstellt werden (Fehlercode %d, %s)."
@@ -3213,6 +3257,10 @@ msgstr "Beschreibung existiert bereits"
 msgid "Description:"
 msgstr "Beschreibung:"
 
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:37
+msgid "Details"
+msgstr "Details"
+
 #: src/common/file_types.cpp:30
 #: src/input/r_dirac.h:33
 #: src/output/p_dirac.h:38
@@ -3220,6 +3268,7 @@ msgid "Dirac"
 msgstr "Dirac"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:74
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:74
 msgid "Directory"
 msgstr "Verzeichnis"
 
@@ -3303,7 +3352,12 @@ msgstr "Fertig.\n"
 msgid "Download URL:"
 msgstr "Download-URL:"
 
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:60
+msgid "Duration"
+msgstr "Dauer"
+
 #: src/mmg/tabs/global.cpp:216
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:39
 msgid "Duration:"
 msgstr "Dauer:"
 
@@ -3565,7 +3619,7 @@ msgstr "Es wurde ein Zeitstempel im folgenden Format erwartet: HH:MM:SS.nnn (HH 
 msgid "Exports the chapter information in the simple format used in OGM tools (CHAPTER01=... CHAPTER01NAME=...)."
 msgstr "Extrahiert Kapitelinformationen im einfachen Format, das auch in verschiedenen OGM-Tools verwendet wird (CHAPTER01=... CHAPTER01NAME=...)."
 
-#: src/mmg/tabs/input.cpp:190
+#: src/mmg/tabs/input.cpp:193
 msgid "Extra options"
 msgstr "Zusatzoptionen"
 
@@ -3679,7 +3733,7 @@ msgstr "Die Datei enthält weniger Frames als erwartet, oder sie ist nach Frame 
 
 #: src/mmg/mmg_dialog.cpp:799
 #: src/mmg/mux_dialog.cpp:117
-#: src/mmg/tabs/input.cpp:503
+#: src/mmg/tabs/input.cpp:509
 msgid "File creation failed"
 msgstr "Erstellen einer Datei schlug fehl"
 
@@ -3693,22 +3747,22 @@ msgstr "Dateiinhalt, Größe: %1%"
 msgid "File description: %1%"
 msgstr "Dateibeschreibung: %1%"
 
-#: src/mmg/tabs/input.cpp:555
-#: src/mmg/tabs/input.cpp:570
+#: src/mmg/tabs/input.cpp:561
+#: src/mmg/tabs/input.cpp:576
 msgid "File identification failed"
 msgstr "Dateiidentifikation schlug fehl"
 
-#: src/mmg/tabs/input.cpp:550
+#: src/mmg/tabs/input.cpp:556
 #, c-format, boost-format
 msgid "File identification failed for '%s'. Return code: %d"
 msgstr "Die Dateiidentifikation von '%s' ist fehlgeschlagen. Rückgabecode: %d"
 
-#: src/mmg/tabs/input.cpp:553
+#: src/mmg/tabs/input.cpp:559
 #, c-format, boost-format
 msgid "File identification failed. Return code: %d. Errno: %d (%s). Make sure that you've selected a mkvmerge executable in the settings dialog."
 msgstr "Die Dateiidentifikation schlug fehl. Rückgabecode: %d. Fehler: %d (%s). Bite stellen Sie sicher, dass sie den Pfad zur mkvmerge.exe in den Einstellungen richtig gesetzt haben."
 
-#: src/mmg/tabs/input.cpp:699
+#: src/mmg/tabs/input.cpp:705
 msgid "File is already processed"
 msgstr "Datei wird bereits verarbeitet"
 
@@ -3717,6 +3771,8 @@ msgid "File modified"
 msgstr "Datei modifiziert"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:72
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:58
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:72
 msgid "File name"
 msgstr "Dateiname"
 
@@ -3730,7 +3786,7 @@ msgstr "Dateiname: %1%"
 msgid "File parsing failed"
 msgstr "Parsen der Datei schlug fehl"
 
-#: src/mmg/tabs/input.cpp:758
+#: src/mmg/tabs/input.cpp:769
 msgid "File removal not possible"
 msgstr "Entfernen der Datei nicht möglich"
 
@@ -3819,7 +3875,7 @@ msgstr "Erzwingt, dass das NALU-Längenfeld eine bestimmte Größe hat. Dieser P
 msgid "Forces the timecode scale factor to REPLACEME. You have to replace REPLACEME with a value between 1000 and 10000000 or with -1. Normally mkvmerge will use a value of 1000000 which means that timecodes and durations will have a precision of 1ms. For files that will not contain a video track but at least one audio track mkvmerge will automatically choose a timecode scale factor so that all timecodes and durations have a precision of one sample. This causes bigger overhead but allows precise seeking and extraction. If the magical value -1 is used then mkvmerge will use sample precision even if a video track is present."
 msgstr "Setzt den Zeitstempelskalierungsfaktor fest auf ERSETZMICH. Sie müssen anstelle von ERSETZMICH einen Wert zwischen 1000 und 10000000 oder den speziellen Wert -1 benutzen. Normalerweise benutzt mkvmerge 1000000 als Zeitstempelskalierungsfaktor, was einer Auflösung von 1ms entspricht. Für Dateien, die keinen Videotrack und mindestens einen Audiotrack beinhalten werden, wählt mkvmerge den Faktor automatisch so, dass alle Zeitstempel und die Blockdauer eine Auflösung von einem Sample haben. Dieses führt zu höherem Verschnitt, erlaubt aber präzises Anspringen beliebiger Stellen innerhalb der Datei und präzisere Zeitstempel beim Extrahieren. Wird der spezielle Wert -1 benutzt, so benutzt mkvmerge selbst dann Sample-Auflösung, wenn ein Videotrack vorhanden ist."
 
-#: src/mmg/tabs/input.cpp:189
+#: src/mmg/tabs/input.cpp:192
 msgid "Format specific options"
 msgstr "Formatspezifische Optionen"
 
@@ -3870,7 +3926,7 @@ msgstr "Freitexteingabezeile für benutzerdefinierte Optionen für diesen Track.
 msgid "Gamma: %1%"
 msgstr "Gamma: %1%"
 
-#: src/mmg/tabs/input.cpp:188
+#: src/mmg/tabs/input.cpp:191
 msgid "General track options"
 msgstr "Allgemeine Track-Optionen"
 
@@ -4053,7 +4109,7 @@ msgstr "Ist diese Option aktiviert, so fragt mmg nach, bevor es Dateien übersch
 msgid "If checked mmg will automatically set the output filename if it hasn't been set already. This happens when you add the first file. If unset mmg will not touch the output filename."
 msgstr "Ist diese Option aktiviert, so wird mmg beim Hinzufügen der ersten Quelldatei den Zieldateinamen automatisch vorgeben. Ist die Option nicht aktiviert, so wird der Zieldateiname nie verändert."
 
-#: src/mmg/options/mmg.cpp:73
+#: src/mmg/options/mmg.cpp:74
 msgid "If checked mmg will warn if it thinks that you're using it incorrectly. Such warnings are shown at least once even if you turn this feature off."
 msgstr "Ist diese Option aktiviert, so warnt mmg in bestimmten Situationen, in denen es von einer potenziell falschen Bedienung ausgeht. Diese Warnungen werden selbst bei deaktivierter Option zumindest einmal angezeigt."
 
@@ -4070,7 +4126,7 @@ msgstr "Falls kein Video-Track ausgegeben wird, so wird die Ausgabe auch nicht a
 msgid "If splitting is a file can be attached either to all files created or only to the first file. Has no effect if no splitting is used."
 msgstr "Wenn das Aufteilen der Zieldatei aktiviert ist, so kann ein Dateianhang entweder nur an die erste Datei oder an alle Dateien angehängt werden. Diese Einstellung hat keine Auswirkung, wenn das Aufteilen nicht aktiviert ist."
 
-#: src/mmg/mmg_dialog.cpp:1967
+#: src/mmg/mmg_dialog.cpp:1973
 msgid "If you encounter problems during playback of files please consider visiting the newly created MKVToolNix troubleshooting advice page:"
 msgstr "Falls Sie beim Abspielen von Dateien auf Probleme stoßen, so ziehen Sie bitte in Betracht, die neu erstelle Seite zur Behandlung von Problemen in MKVToolNix zu besuchen:"
 
@@ -4089,11 +4145,11 @@ msgstr "Aus %1% importierte Schrit"
 msgid "Imported picture from %1%"
 msgstr "Aus %1% importiertes Bild"
 
-#: src/mmg/mmg_dialog.cpp:1923
+#: src/mmg/mmg_dialog.cpp:1929
 msgid "Incompatible mkvmerge version"
 msgstr "Inkompatible mkvmerge-Version"
 
-#: src/mmg/tabs/input.cpp:967
+#: src/mmg/tabs/input.cpp:978
 msgid "Incompatible track"
 msgstr "Inkompatibler Track"
 
@@ -4119,7 +4175,7 @@ msgstr "Quellen"
 msgid "Input data error"
 msgstr "Dateneingabefehler"
 
-#: src/mmg/tabs/input.cpp:179
+#: src/mmg/tabs/input.cpp:182
 msgid "Input files:"
 msgstr "Quelldateien:"
 
@@ -4128,7 +4184,7 @@ msgstr "Quelldateien:"
 msgid "Input too long: %1% > %2%"
 msgstr "Eingabe zu lang: %1% > %2%"
 
-#: src/mmg/options/mmg.cpp:90
+#: src/mmg/options/mmg.cpp:91
 msgid "Interface language:"
 msgstr "Sprache der Benutzeroberfläche:"
 
@@ -4538,7 +4594,7 @@ msgstr "Ungültige Track-ID in '--sub-charset %1%' angegeben.\n"
 msgid "Invalid track ID/file name specification in argument '%1%'.\n"
 msgstr "Ungültige Angabe von Track-ID und Dateiname in Argument '%1%'.\n"
 
-#: src/mmg/mmg_dialog.cpp:1971
+#: src/mmg/mmg_dialog.cpp:1977
 msgid "It can also be opened from the 'Help' menu."
 msgstr "Sie kann auch aus dem 'Hilfe'-Menü heraus geöffnet werden."
 
@@ -4587,6 +4643,7 @@ msgstr "Flag für Paketbündelung: %1%"
 
 #: src/common/property_element.cpp:128
 #: src/mmg/header_editor/frame.cpp:413
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:69
 msgid "Language"
 msgstr "Sprache"
 
@@ -4870,6 +4927,10 @@ msgstr "Kleinster erlaubter Wert: %1%, tatsächlicher Wert: %2%"
 #: src/mmg/header_editor/frame.cpp:396
 msgid "Minimum cache"
 msgstr "Minimale Cachetiefe"
+
+#: src/mmg/options/mmg.cpp:130
+msgid "Minimum duration for playlists in seconds:"
+msgstr "Mindestdauer für Abspiellisten in Sekunden:"
 
 #: src/common/command_line.cpp:211
 msgid "Missing argument for '--output-charset'.\n"
@@ -5160,7 +5221,7 @@ msgstr "Es wurde kein Track gefunden, der zum Berabeitungsziel '%1%' passt. %2%\
 msgid "No track with the ID %1% was found in the source file.\n"
 msgstr "Ein Track mit der ID %1% wurde in der Quelldatei nicht gefunden.\n"
 
-#: src/mmg/tabs/input.cpp:716
+#: src/mmg/tabs/input.cpp:727
 msgid "No tracks found"
 msgstr "Keine Tracks gefunden"
 
@@ -5209,9 +5270,13 @@ msgstr "Beachten Sie, dass die Matroska-Spezifikationen für die Speicherung von
 msgid "Nothing to do.\n"
 msgstr "Nichts zu tun.\n"
 
-#: src/mmg/mmg_dialog.cpp:1959
+#: src/mmg/mmg_dialog.cpp:1965
 msgid "Notice"
 msgstr "Mitteilung"
+
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:43
+msgid "Number of chapters:"
+msgstr "Anzahl Kapitel:"
 
 #: src/common/property_element.cpp:126
 #: src/mmg/header_editor/frame.cpp:407
@@ -5283,6 +5348,10 @@ msgstr "Es darf nur eine Segmentinformationsdatei angegeben werden (Argument war
 #, boost-format
 msgid "Only partial append mappings were given for the file no. %1% ('%2%'). Either don't specify any mapping (in which case the default mapping will be used) or specify a mapping for all tracks that are to be copied.\n"
 msgstr "Für Datei Nummer %1% ('%2%') wurde eine unvollständige Zuordnung für das Anhängen von Tracks angegeben. Geben Sie entweder eine vollständige Zuordnung für alle zu muxenden Tracks aus dieser Datei an, oder lassen Sie die Zuordnung für die Datei weg, wobei dann die Standardzuordnung benutzt wird.\n"
+
+#: src/mmg/options/mmg.cpp:132
+msgid "Only playlists whose duration are at least this long are considered and offered to the user for selection."
+msgstr "Nur Abspiellisten, die mindestens so lang sind, werden berücksichtigt und dem Benutzer zur Auswahl angeboten."
 
 #: src/info/info_cli_parser.cpp:42
 msgid "Only show summaries of the contents, not each element."
@@ -5374,7 +5443,7 @@ msgstr "Ausgabe der ausgewählten Jobs"
 msgid "Output sampling frequency: %1%"
 msgstr "Ausgabeabtastrate: %1%"
 
-#: src/mmg/tabs/input.cpp:566
+#: src/mmg/tabs/input.cpp:572
 msgid "Output:"
 msgstr "Ausgabe:"
 
@@ -5468,6 +5537,10 @@ msgstr "Pixelhöhe: %1%"
 #, boost-format
 msgid "Pixel width: %1%"
 msgstr "Pixelbreite: %1%"
+
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:47
+msgid "Playlist items:"
+msgstr "Abspiellisteneinträge"
 
 #: src/mmg/options/mkvmerge.cpp:110
 msgid "Please do not select 'mmg' itself as the 'mkvmerge' executable."
@@ -5565,7 +5638,7 @@ msgstr "Fortschritt: 100%%%1%"
 msgid "Progress: [%1%%2%] %3%%%"
 msgstr "Fortschritt: [%1%%2%] %3%%%"
 
-#: src/mmg/mmg_dialog.cpp:1866
+#: src/mmg/mmg_dialog.cpp:1872
 msgid "Querying mkvmerge's capabilities"
 msgstr "Abfrage der von mkvmerge unterstützten Features"
 
@@ -5788,6 +5861,7 @@ msgstr "Die aktuelle Datei neu laden, ohne zu speichern"
 #: src/mmg/jobs.cpp:65
 #: src/mmg/jobs.cpp:67
 #: src/mmg/mux_dialog.cpp:50
+#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:43
 msgid "Remaining time:"
 msgstr "Verbleibende Zeit:"
 
@@ -5799,7 +5873,7 @@ msgstr "Kapitel entfernen"
 msgid "Remove element"
 msgstr "Element entfernen"
 
-#: src/mmg/options/mmg.cpp:67
+#: src/mmg/options/mmg.cpp:68
 msgid "Remove job from job queue after run:"
 msgstr "Job nach Ausführung aus Warteschlange entfernen:"
 
@@ -5926,6 +6000,22 @@ msgstr "In Matroska-Datei speichern"
 msgid "Saves the information from the current file to a text file"
 msgstr "Speichert die Informationen der aktuellen Datei in einer Textdatei"
 
+#: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:24
+msgid "Scan directory for other playlists"
+msgstr "Verzeichnis nach Abspiellisten scannen"
+
+#: src/mmg/options/mmg.cpp:121
+msgid "Scan directory for other playlists:"
+msgstr "Verzeichnis nach Abspiellisten scannen:"
+
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:32
+msgid "Scanned files"
+msgstr "Gescannte Dateien"
+
+#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:30
+msgid "Scanning directory"
+msgstr "Scanne Verzeichnis"
+
 #: src/info/mkvinfo.cpp:687
 #, boost-format
 msgid "Scope: %1% (%2%)"
@@ -6034,6 +6124,10 @@ msgstr "Segment, unbekannte Größe"
 msgid "Select Matroska file"
 msgstr "Matroska-Datei auswählen"
 
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:27
+msgid "Select file to add"
+msgstr "Datei zum Hinzufügen auswählen"
+
 #: src/info/wxwidgets_ui.cpp:282
 msgid "Select output file"
 msgstr "Zieldatei auswählen"
@@ -6117,7 +6211,7 @@ msgstr "Sprache ändern in:"
 msgid "Set the MIME type to use for the following '--add-attachment' or '--replace-attachment' option"
 msgstr "Setzt den MIME-Typ, der in der folgenden Option '--add-attachment' oder '--replacement-attachment' benutzt wird"
 
-#: src/mmg/options/mmg.cpp:52
+#: src/mmg/options/mmg.cpp:53
 msgid "Set the delay input field from the file name"
 msgstr "Die Verzögerung beim Hinzufügen aus dem Dateinamen ableiten"
 
@@ -6222,7 +6316,7 @@ msgstr "Alle Bytes aller Frames als Hexdump anzeigen."
 msgid "Show element si&zes\tCtrl-Z"
 msgstr "Elemente-Größen an&zeigen\tCtrl-Z"
 
-#: src/mmg/options/mmg.cpp:85
+#: src/mmg/options/mmg.cpp:86
 msgid "Show mmg's debug window"
 msgstr "mmgs Debug-Fenster anzeigen"
 
@@ -6262,7 +6356,7 @@ msgstr "Zeigt diesen Hilfetext an."
 msgid "Show version information."
 msgstr "Versionsinformationen anzeigen."
 
-#: src/mmg/options/mmg.cpp:86
+#: src/mmg/options/mmg.cpp:87
 msgid "Shows mmg's debug window in which debug messages will appear. This is only useful if you're helping the author debug a problem in mmg."
 msgstr "Zeigt mmgs Debugfenster an, in dem Debugmeldungen angezeigt werden. Dies ist nur sinnvoll, wenn Sie dem Autor bei der Behebung von Fehlern helfen."
 
@@ -6317,8 +6411,13 @@ msgstr "SimpleBlock (%1%Track Nummer %2%, %3% Frame(s), Zeitstempel %|4$.3f|s = 
 msgid "Single field frame before GOP header detected. Fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr "Bild mit nur einem Feld vor Bildgruppenkopf gefunden. Bitte diesen Fehler im MPEG2-Videostrom beheben und danach erneut versuchen, ihn zu muxen.\n"
 
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:62
+msgid "Size"
+msgstr "Größe"
+
 #: src/mmg/tabs/global.cpp:199
 #: src/mmg/tabs/global.cpp:202
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:41
 msgid "Size:"
 msgstr "Größe:"
 
@@ -6613,7 +6712,7 @@ msgstr "Die FLAC-Kopfpakete konnten nicht geparst werden: die Stream-Information
 msgid "The FPS is 0.0 but the reader did not provide a timecode for a packet. %1%\n"
 msgstr "Die Anzahl der Bilder pro Sekunde ist 0.0, aber der Demuxer hat für ein Paket keinen Zeitstempel angegeben. %1%\n"
 
-#: src/mmg/tabs/input.cpp:1364
+#: src/mmg/tabs/input.cpp:1375
 #, c-format, boost-format
 msgid "The FPS setting for track nr. %s in file '%s' is invalid."
 msgstr "Der BPS-Wert für Track Nummer %s in Datei '%s' ist ungültig."
@@ -6623,12 +6722,12 @@ msgstr "Der BPS-Wert für Track Nummer %s in Datei '%s' ist ungültig."
 msgid "The FourCC must be exactly four characters long in '%1% %2%'.\n"
 msgstr "Der FourCC-Code muss exakt vier Zeichen lang sein (Argument war '%1% %2%').\n"
 
-#: src/mmg/tabs/input.cpp:1352
+#: src/mmg/tabs/input.cpp:1363
 #, c-format, boost-format
 msgid "The FourCC setting for track nr. %s in file '%s' is not exactly four characters long."
 msgstr "Der Wert für FourCC für Track Nummer %s in Datei '%s' ist nicht exakt vier Zeichen lang."
 
-#: src/mmg/mmg_dialog.cpp:1919
+#: src/mmg/mmg_dialog.cpp:1925
 #, boost-format
 msgid "The GUI is configured to use the mkvmerge executable from a different version (%1%) than the GUI itself (%2%). This is not supported but will not be prevented either. You should change the mkvmerge executable in the preferences dialog."
 msgstr "Das GUI ist so eingestellt, dass es eine mkvmerge-Programmdatei mit anderer Version (%1%) benutzt, als sie das GUI selber hat (%2%). Dies wird nicht unterstützt aber auch nicht verhindert. Sie sollten die mkvmerge-Programmdatei im Einstellungs-Dialog ändern."
@@ -6747,7 +6846,7 @@ msgstr "Das Argument '%1%\" für '%2%' ist ungültig: Zu viele Kommata in Elemen
 msgid "The argument to '--timecode-scale' must be a number.\n"
 msgstr "Das Argument für '--timecode-scale' muss eine Nummer sein.\n"
 
-#: src/mmg/tabs/input.cpp:1406
+#: src/mmg/tabs/input.cpp:1417
 #, c-format, boost-format
 msgid "The aspect ratio setting for track nr. %s in file '%s' is invalid."
 msgstr "Die Werte für das Seitenverhältnis für Track Nummer %s in Datei '%s' ist ungültig."
@@ -6828,7 +6927,7 @@ msgstr "Das Land '%s' ist kein gültiger ccTLD-Code und kann nicht ausgewählt w
 msgid "The cue entries (the index) are being written...\n"
 msgstr "Die Cueeinträge (der Index) werden geschrieben...\n"
 
-#: src/mmg/tabs/input.cpp:754
+#: src/mmg/tabs/input.cpp:765
 #, c-format, boost-format
 msgid "The current file (number %d) cannot be removed. There are other files -- at least file number %d -- whose tracks are supposed to be appended to tracks from this file. Please remove those files first."
 msgstr "Die aktuelle Quelldatei (Nummer %d) kann nicht entfernt werden. Es gibt andere Quelldateien (zumindest Datei Nummer %d), deren Tracks an Tracks aus der ausgewählten Datei angehängt werden sollen. Bitte entfernen Sie zuerst diese anderen Quelldateien."
@@ -6843,7 +6942,7 @@ msgstr "Der Zeitstempel des aktuellen Paketes ist kleiner als der Zeitstempel de
 msgid "The default language code '%1%' is not a valid ISO639-2 language code and will be ignored.\n"
 msgstr "Das Standardsprachkürzel '%1%' ist kein gültiger ISO639-2-Code und wird ignoriert.\n"
 
-#: src/mmg/tabs/input.cpp:1331
+#: src/mmg/tabs/input.cpp:1342
 #, c-format, boost-format
 msgid "The delay setting for track nr. %s in file '%s' is invalid."
 msgstr "Der Wert für die Verzögerung für Track Nummer %s in Quelldatei '%s' ist ungültig."
@@ -6971,7 +7070,7 @@ msgstr "Die Datei '%1%' hat einen nicht unterstützten Typ (%2%).\n"
 msgid "The file '%s' does not exist."
 msgstr "Die Datei '%s' existiert nicht."
 
-#: src/mmg/tabs/input.cpp:697
+#: src/mmg/tabs/input.cpp:703
 #, c-format, boost-format
 msgid "The file '%s' is already processed in combination with the file '%s'. It cannot be added a second time."
 msgstr "Die Datei '%s' wird bereits zusammen mit der Datei '%s' verarbeitet. Sie kann nicht ein zweites Mal hinzugefügt werden."
@@ -7017,7 +7116,7 @@ msgstr "Der Dateikopf konnte nicht vollständig gelesen werden.\n"
 msgid "The file headers could not be parsed, e.g. because they're incomplete, invalid or damaged."
 msgstr "Die Kopfpakete konnten nicht geparst werden, z.B. weil sie unvollständig, ungültig oder beschädigt sind."
 
-#: src/mmg/tabs/input.cpp:535
+#: src/mmg/tabs/input.cpp:541
 #, c-format, boost-format
 msgid "The file is an unsupported container format (%s)."
 msgstr "Die Datei enthält ein nicht unterstütztes Containerformat (%s)."
@@ -7078,6 +7177,11 @@ msgstr "Die Datei, in die Sie speichern möchten, ist KEINE Matroska-Datei."
 msgid "The file you tried to save to is a Matroska file. For this to work you have to use the 'Save to Matroska file' menu option."
 msgstr "Die Datei, in die Sie speichern wollten, ist eine Matroska-Datei. Damit das richtig funktioniert, müssen Sie den Menüpunkt 'In Matroska-Datei speichern' auswählen."
 
+#: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:29
+#, boost-format
+msgid "The file you've added is a playlist. The directory it is located it contains %1% other file(s) with the same extension. mmg can scan these files, present the results including duration and number of tracks of each playlist found and let you chose which one to add."
+msgstr "Die Datei, die Sie hinzugefügt haben, ist eine Abspielliste. Das Verzeichnis, in dem sie sich befindet, enthält %1% weitere Datei(en) mit der selben Erweiterung. mmg kann diese Dateien scannen, Ihnen die Ergebnisse inklusive Dauer und Anzahl Tracks jeder Abspielliste anzeigen und Sie wählen lassen, welche Datei hinzugefügt wird."
+
 #: src/merge/mkvmerge.cpp:1745
 msgid "The first file cannot be appended because there are no files to append to.\n"
 msgstr "Die erste Datei kann nicht angehängt werden, weil es keine Dateien gibt, an die sie angehängt werden könnte.\n"
@@ -7128,12 +7232,12 @@ msgstr "Der angegebene Zeitstempelskalierungsfaktor liegt außerhalb des zuläss
 msgid "The height of the two tracks is different: %1% and %2%"
 msgstr "Die Höhe der zwei Tracks ist unterschiedlich: %1% und %2%"
 
-#: src/mmg/tabs/input.cpp:716
+#: src/mmg/tabs/input.cpp:727
 #, c-format, boost-format
 msgid "The input file '%s' does not contain any tracks."
 msgstr "Die Quelldatei '%s' enthält keine Tracks."
 
-#: src/mmg/tabs/input.cpp:1248
+#: src/mmg/tabs/input.cpp:1259
 msgid ""
 "The job file could not have been parsed correctly.\n"
 "Either it is invalid / damaged, or you've just found\n"
@@ -7149,7 +7253,7 @@ msgstr ""
 "\n"
 "(Problem trat auf in tab_input::load(), #1)"
 
-#: src/mmg/tabs/input.cpp:1255
+#: src/mmg/tabs/input.cpp:1266
 msgid ""
 "The job file could not have been parsed correctly.\n"
 "Either it is invalid / damaged, or you've just found\n"
@@ -7165,7 +7269,7 @@ msgstr ""
 "\n"
 "(Problem trat auf in tab_input::load(), #2)"
 
-#: src/mmg/tabs/input.cpp:1268
+#: src/mmg/tabs/input.cpp:1279
 msgid ""
 "The job file could not have been parsed correctly.\n"
 "Either it is invalid / damaged, or you've just found\n"
@@ -7424,7 +7528,7 @@ msgstr "Die Größe des Dateianhanges '%1%' ist 0.\n"
 msgid "The source file '%1%' could not be opened successfully, or retrieving its size by seeking to the end did not work.\n"
 msgstr "Die Quelldatei '%1%' konnte nicht geöffnet werden, oder aber die Größenabfrage schlug fehl.\n"
 
-#: src/mmg/tabs/input.cpp:1342
+#: src/mmg/tabs/input.cpp:1353
 #, c-format, boost-format
 msgid "The stretch setting for track nr. %s in file '%s' is invalid."
 msgstr "Der Streck-Wert für Track Nummer %s in Datei '%s' ist ungültig."
@@ -7588,7 +7692,7 @@ msgstr "Die Breite der zwei Tracks ist unterschiedlich: %1% und %2%"
 msgid "Theora"
 msgstr "Theora"
 
-#: src/mmg/mmg_dialog.cpp:1811
+#: src/mmg/mmg_dialog.cpp:1817
 msgid "There is a new version available online."
 msgstr "Auf der Homepage ist eine neue Version verfügbar."
 
@@ -7603,7 +7707,7 @@ msgstr "Es gibt keine Datei mit der Nummer '%1%'. Das Argument für '--append-to
 msgid "There is no translation available for '%1%'.\n"
 msgstr "Für '%1%' ist keine Übersetzung verfübar.\n"
 
-#: src/mmg/mmg_dialog.cpp:1812
+#: src/mmg/mmg_dialog.cpp:1818
 msgid "There was an error querying the update status."
 msgstr "Bei der Online-Abfrage der Versionsinformationen trat ein Fehler auf."
 
@@ -7723,7 +7827,7 @@ msgstr "Dies ist der Name, der in der Zieldatei als Name des Dateianhanges gespe
 msgid "This is the title that players may show as the 'main title' for this movie."
 msgstr "Dies ist der Titel, den Abspielprogramme als Name oder Titel des Films anzeigen können."
 
-#: src/mmg/mmg_dialog.cpp:1958
+#: src/mmg/mmg_dialog.cpp:1964
 msgid "This message will only shown to you once."
 msgstr "Diese Nachricht wird Ihnen nur einmal angezeigt."
 
@@ -7768,7 +7872,7 @@ msgstr "Das hätte nicht passieren dürfen. Bitte wenden Sie sich an den Autor M
 msgid "This track contains SBR AAC/HE-AAC/AAC+ data. Only needed for AAC input files, because SBR AAC cannot be detected automatically for these files. Not needed for AAC tracks read from MP4 or Matroska files."
 msgstr "Dieser Track enthält SBR AAC/HE-AAC/AAC+-Daten. Wird nur bei AAC-Quelldateien benötigt, weil SBR AAC nicht automatisch von normalem AAC unterschieden werden kann. Wird nicht für AAC-Tracks benötigt, die aus MP4- oder Matroska-Dateien gelesen werden."
 
-#: src/mmg/tabs/input.cpp:967
+#: src/mmg/tabs/input.cpp:978
 msgid "This track is not compatible with the WebM mode and cannot be enabled."
 msgstr "Dieser Track ist nicht mit dem WebM-Modus kompatibel und kann nicht aktiviert werden."
 
@@ -7961,9 +8065,13 @@ msgstr "Tracktyp: %1%"
 msgid "Tracks with unsupported content encoding schemes (compression or encryption) cannot be extracted.\n"
 msgstr "Tracks mit nicht unterstützten Kodierschemata (Kompression oder Verschlüsselung) können nicht extrahiert werden.\n"
 
-#: src/mmg/tabs/input.cpp:184
+#: src/mmg/tabs/input.cpp:187
 msgid "Tracks, chapters and tags:"
 msgstr "Tracks, Kapitel und Tags:"
+
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:45
+msgid "Tracks:"
+msgstr "Tracks:"
 
 #: src/mmg/mmg_dialog.cpp:314
 msgid "Troubleshooting advice for playback issues"
@@ -7982,6 +8090,10 @@ msgstr "TrueHD Audiostreams bestehen aus zwei Frametypen: Sync-Frames und Nicht-
 #, boost-format
 msgid "Two VobSub tracks can only be extracted into the same file if their CodecPrivate data matches. This is not the case for the tracks %1% and %2%.\n"
 msgstr "Zwei VobSub-Tracks können nur dann in dieselbe Datei extrahiert werden, wenn ihre privaten Codec-Konfigurationsdaten übereinstimmen. Dies ist für die Tracks %1% und %2% nicht der Fall.\n"
+
+#: src/mmg/tabs/select_scanned_file_dlg.cpp:65
+msgid "Type"
+msgstr "Typ"
 
 #: src/common/property_element.cpp:139
 #: src/mmg/header_editor/frame.cpp:445
@@ -8108,7 +8220,7 @@ msgstr "Vorzeichenlose ganze Zahl"
 msgid "Unsupported MPEG mpeg_version: 0x%|1$02x| in packet %2% for timecode %3%, assuming MPEG2. No further warnings will be printed for this track.\n"
 msgstr "Nicht unterstützte MPEG-Version: 0x%|1$02x| in Paket %2% bei Zeitstempel %3%. Der Track wird wie MPEG Version 2 behandelt. Für diesen Track werden keine weiteren Warnungen diesbezüglich ausgegeben.\n"
 
-#: src/mmg/tabs/input.cpp:538
+#: src/mmg/tabs/input.cpp:544
 msgid "Unsupported format"
 msgstr ""
 "Die Matroska-Datei wurde bereits geändert, aber der Meta-Index konnte nicht aktualisiert werden. Das bedeutet, dass Abspielprogramme das neu geschriebene Element nicht so leicht oder gar nicht finden werden. Bitte benutzen Sie Ihr favorisiertes Abspielprogramm, um zu überprüfen, ob die Datei problemlos abgespielt werden kann.\n"
@@ -8329,7 +8441,7 @@ msgstr "WAVPACK v4 Audio"
 msgid "WAVPACK4"
 msgstr "WAVPACK4"
 
-#: src/mmg/options/mmg.cpp:72
+#: src/mmg/options/mmg.cpp:73
 msgid "Warn about possible incorrect usage of mmg"
 msgstr "Wegen potenziell falscher Benutzung von mmg warnen"
 
@@ -8354,7 +8466,11 @@ msgstr "Warnungen: "
 msgid "WebM audio/video files"
 msgstr "WebM Audio/Video-Dateien"
 
-#: src/mmg/options/mmg.cpp:53
+#: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:34
+msgid "What to do in the future:"
+msgstr "In der Zukunft:"
+
+#: src/mmg/options/mmg.cpp:54
 msgid "When a file is added its name is scanned. If it contains the word 'DELAY' followed by a number then this number is automatically put into the 'delay' input field for any audio track found in the file."
 msgstr "Wenn eine Quelldatei hinzugefügt wird, wird ihr Dateiname untersucht. Falls er das Wort 'DELAY' gefolgt von einer Nummer enthält, so wird diese Nummer automatisch in das Feld 'Verzögerung' für jeden Audiotrack dieser Quelldatei eingetragen."
 
@@ -8437,7 +8553,7 @@ msgstr "Falsche Identifikationskennung: '%|1$6s|' != 'theora'"
 msgid "Wrong identification string: '%|1$7s|' != 'kate\\0\\0\\0'"
 msgstr "Falsche Identifikationskennung: '%|1$7s|' != 'kate\\0\\0\\0'"
 
-#: src/mmg/mmg_dialog.cpp:1810
+#: src/mmg/mmg_dialog.cpp:1816
 msgid "You are already running the latest version."
 msgstr "Sie haben bereits die aktuelle Version installiert."
 
@@ -8487,17 +8603,29 @@ msgid "ac3_bs_packetizer::add_to_buffer(): Untested code ('size' is odd). If mkv
 msgstr "ac3_bs_packetizer::add_to_buffer(): Ungetesteter Code ('size' ist ungerade). Falls mkvmerge abstürzt oder die resultierende Datei nicht den vollständigen und korrekten Audiotrack enthält, dann wenden Sie sich bitte an den Autor Moritz Bunkus <moritz@bunkus.org>.\n"
 
 #: src/mmg/tabs/attachments.cpp:154
-#: src/mmg/tabs/input.cpp:180
+#: src/mmg/tabs/input.cpp:183
 msgid "add"
 msgstr "hinzufügen"
 
-#: src/mmg/tabs/input.cpp:187
+#: src/mmg/tabs/input.cpp:190
 msgid "additional parts"
 msgstr "weitere Teile"
 
-#: src/mmg/options/mmg.cpp:65
+#: src/mmg/options/mmg.cpp:66
 msgid "always"
 msgstr "immer"
+
+#: src/mmg/options/mmg.cpp:124
+#: src/mmg/options/mmg.cpp:128
+#: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:37
+#: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:41
+msgid "always ask the user"
+msgstr "immer den Benutzer fragen"
+
+#: src/mmg/options/mmg.cpp:125
+#: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:38
+msgid "always scan for other playlists"
+msgstr "immer nach Abspiellisten scannen"
 
 #: src/common/stereo_mode.cpp:58
 msgid "anaglyph (cyan/red)"
@@ -8507,13 +8635,14 @@ msgstr "anaglyph (Zyan/Rot)"
 msgid "anaglyph (green/magenta)"
 msgstr "anaglyph (Grün/Magenta)"
 
-#: src/mmg/tabs/input.cpp:182
+#: src/mmg/tabs/input.cpp:185
 msgid "append"
 msgstr "anhängen"
 
 #: src/info/mkvinfo.cpp:929
 #: src/input/r_matroska.cpp:96
 #: src/mmg/mmg.cpp:61
+#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:180
 msgid "audio"
 msgstr "Audio"
 
@@ -8622,7 +8751,7 @@ msgstr "fertig"
 msgid "done/warnings"
 msgstr "fertig/Warnungen"
 
-#: src/mmg/tabs/input.cpp:186
+#: src/mmg/tabs/input.cpp:189
 msgid "down"
 msgstr "runter"
 
@@ -8638,7 +8767,7 @@ msgstr "aktiviert"
 msgid "encryption"
 msgstr "Verschlüsselung"
 
-#: src/mmg/options/mmg.cpp:64
+#: src/mmg/options/mmg.cpp:65
 msgid "even if there were warnings"
 msgstr "selbst, wenn es Warnungen gab"
 
@@ -8733,6 +8862,7 @@ msgstr "inflateInit() schlug fehl. Fehlercode: %1%\n"
 #: src/mmg/jobs.cpp:68
 #: src/mmg/jobs.cpp:156
 #: src/mmg/mux_dialog.cpp:51
+#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:44
 msgid "is being estimated"
 msgstr "wird abgeschätzt"
 
@@ -9029,12 +9159,12 @@ msgstr "mkvmerge GUI bereit"
 msgid "mkvmerge GUI settings (*.mmg)|*.mmg|%s"
 msgstr "mkvmerge GUI Optionen (*.mmg)|*.mmg|%s"
 
-#: src/mmg/tabs/input.cpp:1306
-#: src/mmg/tabs/input.cpp:1332
+#: src/mmg/tabs/input.cpp:1317
 #: src/mmg/tabs/input.cpp:1343
-#: src/mmg/tabs/input.cpp:1353
-#: src/mmg/tabs/input.cpp:1365
-#: src/mmg/tabs/input.cpp:1407
+#: src/mmg/tabs/input.cpp:1354
+#: src/mmg/tabs/input.cpp:1364
+#: src/mmg/tabs/input.cpp:1376
+#: src/mmg/tabs/input.cpp:1418
 msgid "mkvmerge GUI: error"
 msgstr "mkvmerge GUI: Fehler"
 
@@ -9123,7 +9253,7 @@ msgstr "mkvpropedit [Optionen] <Dateiname> <Aktionen>"
 msgid "mm_text_io_c: UTF32_* is not supported at the moment.\n"
 msgstr "mm_text_io_c: UTF32_* wird momentan nicht unterstützt.\n"
 
-#: src/mmg/options/mmg.cpp:244
+#: src/mmg/options/mmg.cpp:278
 msgid "mmg"
 msgstr "mmg"
 
@@ -9131,7 +9261,7 @@ msgstr "mmg"
 msgid "mmg debug output"
 msgstr "mmg Debugausgaben"
 
-#: src/mmg/options/mmg.cpp:146
+#: src/mmg/options/mmg.cpp:163
 msgid "mmg options"
 msgstr "mmg-Optionen"
 
@@ -9152,6 +9282,11 @@ msgstr "mpeg_ps_reader: Hätte nicht passieren sollen #1. %1%"
 #, boost-format
 msgid "mpeg_ps_reader: Should not have happened #2. %1%"
 msgstr "mpeg_ps_reader: Hätte nicht passieren sollen #2. %1%"
+
+#: src/mmg/options/mmg.cpp:126
+#: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:39
+msgid "never scan for other playlists"
+msgstr "niemals nach Abspiellisten scannen"
 
 #: src/mmg/header_editor/bool_value_page.cpp:43
 #: src/mmg/tabs/input_general.cpp:105
@@ -9207,7 +9342,7 @@ msgstr "ogg_sync_buffer schlug fehl\n"
 msgid "only for I frames"
 msgstr "nur für I-Frames"
 
-#: src/mmg/options/mmg.cpp:63
+#: src/mmg/options/mmg.cpp:64
 msgid "only if the run was successfull"
 msgstr "nur bei erfolgreicher Ausführung"
 
@@ -9293,11 +9428,11 @@ msgid "real_reader: Only audio header versions 3, 4 and 5 are supported. Track I
 msgstr "real_reader: Es werden nur die Audiokopfdatenversionen 3, 4 und 5 unterstützt. Track ID %1% benutzt Version %2% und wird ausgelassen.\n"
 
 #: src/mmg/tabs/attachments.cpp:155
-#: src/mmg/tabs/input.cpp:181
+#: src/mmg/tabs/input.cpp:184
 msgid "remove"
 msgstr "entfernen"
 
-#: src/mmg/tabs/input.cpp:183
+#: src/mmg/tabs/input.cpp:186
 msgid "remove all"
 msgstr "alle entfernen"
 
@@ -9373,6 +9508,7 @@ msgstr "Untertitel"
 
 #: src/info/mkvinfo.cpp:931
 #: src/mmg/mmg.cpp:63
+#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:180
 msgid "subtitles"
 msgstr "Untertitel"
 
@@ -9419,7 +9555,8 @@ msgstr "und (nicht festgelegt)"
 #: src/input/r_mpeg_ps.cpp:1326
 #: src/mmg/header_editor/value_page.cpp:150
 #: src/mmg/mmg.cpp:64
-#: src/mmg/tabs/input.cpp:528
+#: src/mmg/tabs/input.cpp:534
+#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:180
 msgid "unknown"
 msgstr "unbekannt"
 
@@ -9428,7 +9565,7 @@ msgstr "unbekannt"
 msgid "unknown, format tag 0x%|1$04x|"
 msgstr "unbekannt, Formatidentifikator 0x%|1$04x|"
 
-#: src/mmg/tabs/input.cpp:185
+#: src/mmg/tabs/input.cpp:188
 msgid "up"
 msgstr "hoch"
 
@@ -9444,6 +9581,7 @@ msgstr "verify failed: chapters->CheckMandatory() ist false. Das hätte nicht pa
 #: src/info/mkvinfo.cpp:930
 #: src/input/r_matroska.cpp:98
 #: src/mmg/mmg.cpp:62
+#: src/mmg/tabs/scanning_for_playlists_dlg.cpp:180
 msgid "video"
 msgstr "Video"
 
