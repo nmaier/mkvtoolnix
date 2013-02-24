@@ -44,10 +44,10 @@ mm_mpls_multi_file_io_c::open_multi(mm_io_c *in) {
   }
 
   auto mpls_dir   = bfs::system_complete(bfs::path(in->get_file_name())).remove_filename();
-  auto stream_dir = mpls_dir / ".." / "STREAM";
+  auto stream_dir = mpls_dir.parent_path() / "STREAM";
 
   if (!bfs::exists(stream_dir))
-    stream_dir = mpls_dir / ".." / "stream";
+    stream_dir = mpls_dir.parent_path() / "stream";
 
   auto have_stream_dir = bfs::exists(stream_dir);
 
@@ -57,19 +57,19 @@ mm_mpls_multi_file_io_c::open_multi(mm_io_c *in) {
     if (have_stream_dir) {
       auto file = stream_dir / (boost::format("%1%.%2%") % item.clip_id % item.codec_id).str();
       if (bfs::exists(file))
-        return bfs::canonical(file);
+        return file;
 
       file = stream_dir / (boost::format("%1%.%2%") % item.clip_id % balg::to_lower_copy(item.codec_id)).str();
       if (bfs::exists(file))
-        return bfs::canonical(file);
+        return file;
     }
 
     auto file = mpls_dir / (boost::format("%1%.%2%") % item.clip_id % item.codec_id).str();
     if (bfs::exists(file))
-      return bfs::canonical(file);
+      return file;
 
     file = mpls_dir / (boost::format("%1%.%2%") % item.clip_id % balg::to_lower_copy(item.codec_id)).str();
-    return bfs::exists(file) ? bfs::canonical(file) : bfs::path{};
+    return bfs::exists(file) ? file : bfs::path{};
   };
 
   std::vector<bfs::path> file_names;
