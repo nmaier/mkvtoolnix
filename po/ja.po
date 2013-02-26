@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2012-12-22 12:45+0100\n"
+"PO-Revision-Date: 2013-02-27 02:29+0900\n"
 "Last-Translator: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "Language-Team: Japanese <boiled.sugar@gmail.com>\n"
 "Language: ja\n"
@@ -702,9 +702,8 @@ msgid " (adler: 0x%|1$08x|)"
 msgstr " (adler: 0x%|1$08x|)"
 
 #: src/info/mkvinfo.cpp:626
-#, fuzzy
 msgid " (aspect ratio)"
-msgstr "(固定アスペクト比)"
+msgstr "(アスペクト比)"
 
 #: src/info/mkvinfo.cpp:624
 msgid " (centimeters)"
@@ -820,9 +819,9 @@ msgid "%1% built on %2% %3%"
 msgstr "%1% ビルド日時 %2% %3%"
 
 #: src/common/strings/formatting.cpp:261
-#, fuzzy, boost-format
+#, boost-format
 msgid "%1% bytes"
-msgstr "2バイト"
+msgstr "%1%バイト"
 
 #: src/info/mkvinfo.cpp:207
 #, boost-format
@@ -849,7 +848,7 @@ msgstr[0] "%1%分"
 #: src/mmg/tabs/scanning_for_playlists_dlg.cpp:141
 #, boost-format
 msgid "%1% of %2% file(s) processed"
-msgstr ""
+msgstr "%2%個のファイル中%1%個が処理されました"
 
 #: src/common/strings/formatting.cpp:249
 #, boost-format
@@ -860,17 +859,17 @@ msgstr[0] "%1%秒"
 #: src/common/strings/formatting.cpp:264
 #, boost-format
 msgid "%1%.%2% GiB"
-msgstr ""
+msgstr "%1%.%2% GiB"
 
 #: src/common/strings/formatting.cpp:262
 #, boost-format
 msgid "%1%.%2% KiB"
-msgstr ""
+msgstr "%1%.%2% KiB"
 
 #: src/common/strings/formatting.cpp:263
 #, boost-format
 msgid "%1%.%2% MiB"
-msgstr ""
+msgstr "%1%.%2% MiB"
 
 #: src/input/r_vobsub.cpp:86
 #, boost-format
@@ -982,9 +981,8 @@ msgid "&Attachments\tAlt-2"
 msgstr "添付ファイル(&A)\tAlt-2"
 
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:52
-#, fuzzy
 msgid "&Cancel"
-msgstr "キャンセル"
+msgstr "キャンセル(&C)"
 
 #: src/mmg/mmg_dialog.cpp:321
 msgid "&Chapter Editor"
@@ -1025,7 +1023,7 @@ msgstr "無効化(&D)"
 
 #: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:46
 msgid "&Don't scan, just add the file"
-msgstr ""
+msgstr "スキャンせず、ファイルの追加のみ行う(&D)"
 
 #: src/mmg/jobs.cpp:478
 #: src/mmg/tabs/additional_parts_dlg.cpp:48
@@ -1152,7 +1150,7 @@ msgstr "設定を保存(&S)\tCtrl-S"
 
 #: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:45
 msgid "&Scan for other playlists"
-msgstr ""
+msgstr "他のプレイリストがないかスキャンします(&S)"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:49
 msgid "&Sort"
@@ -1164,7 +1162,7 @@ msgstr "開始(&S)"
 
 #: src/mmg/mmg_dialog.cpp:314
 msgid "&Troubleshooting"
-msgstr ""
+msgstr "トラブルシューティング(&T)"
 
 #: src/mmg/jobs.cpp:475
 #: src/mmg/tabs/additional_parts_dlg.cpp:47
@@ -1710,7 +1708,7 @@ msgstr "--timecode-scale 値"
 
 #: src/propedit/propedit_cli_parser.cpp:242
 msgid "1. A number which will be interepreted as an attachment ID as listed by 'mkvmerge --identify-verbose'. These are usually simply numbered starting from 0 (e.g. '2')."
-msgstr ""
+msgstr "1. 'mkvmerge --identify-verbose'で列挙される、添付ファイルのIDとして解釈される数字。これは通常、単純に0を開始点として番号が付けられます（例：'2'）。"
 
 #: src/info/mkvinfo.cpp:680
 msgid "1: all frames"
@@ -1722,7 +1720,7 @@ msgstr "2バイト"
 
 #: src/propedit/propedit_cli_parser.cpp:243
 msgid "2. A number with the prefix '=' which will be interepreted as the attachment's unique ID (UID) as listed by 'mkvmerge --identify-verbose'. These are usually random-looking numbers (e.g. '128975986723')."
-msgstr ""
+msgstr "2. 'mkvmerge --identify-verbose'で列挙され、添付ファイルのユニークID（UID）として解釈される、'='が最初に付加された数字。これは通常ランダムに見える数字です（例：'128975986723'）。"
 
 #: src/info/mkvinfo.cpp:682
 msgid "2: codec private data"
@@ -1730,7 +1728,7 @@ msgstr "2: コーデック固有データ"
 
 #: src/propedit/propedit_cli_parser.cpp:244
 msgid "3. Either 'name:<value>' or 'mime-type:<value>' in which case the selector applies to all attachments whose name or MIME type respectively equals <value>."
-msgstr ""
+msgstr "3. 'name:<value>'もしくは'mime-type:<value>'。どちらの場合も、名前もしくはMIMEタイプがそれぞれ<value>と等しい添付ファイルにセレクタが適用されます。"
 
 #: src/mmg/tabs/input_format.cpp:198
 msgid "4 bytes"
@@ -1777,17 +1775,15 @@ msgstr "トラック番号%2%のタイムスタンプ%1%でブロックが見つ
 
 #: src/mmg/tabs/global.cpp:285
 msgid "A chapter starting at 0s is never considered for splitting and discarded silently."
-msgstr ""
+msgstr "0秒が開始点のチャプタは決して分割を考慮されることはなく、無言で廃棄されます。"
 
 #: src/mmg/tabs/global.cpp:253
-#, fuzzy
 msgid "A comma-separated list of frame/field number ranges of content to keep."
-msgstr "保持する内容のタイムコードの範囲の、コンマで区切られたリストです。"
+msgstr "保持する内容のフレーム・フィールド数の範囲の、コンマで区切られたリストです。"
 
 #: src/mmg/tabs/global.cpp:269
-#, fuzzy
 msgid "A comma-separated list of frame/field numbers after which to split."
-msgstr "保持する内容のタイムコードの範囲の、コンマで区切られたリストです。"
+msgstr "何フレーム・フィールド後に分割するかの、コンマで区切られたリストです。"
 
 #: src/mmg/tabs/global.cpp:242
 msgid "A comma-separated list of timecode ranges of content to keep."
@@ -1819,12 +1815,12 @@ msgstr ""
 
 #: src/mmg/tabs/chapters.cpp:350
 msgid "A segment to play in place of this chapter. The edition set via the segment edition UID should be used for this segment, otherwise no edition is used. This is a 128bit segment UID in the usual UID form: hex numbers with or without the \"0x\" prefix, with or without spaces, exactly 32 digits.\n"
-msgstr ""
+msgstr "このチャプタの代わりに再生されるセグメントです。セグメントエディションUID経由のエディションセットをこのセグメントに使用してください。さもないと、どのエディションも使用されません。これは、通常のUIDの形式（つまり\"0x\"のプレフィックスはあってもなくてもよく、スペースもあってもなくてもよい、ちょうど32桁の16進数）の128bitセグメントUIDです。\n"
 
 #: src/mmg/tabs/global.cpp:259
 #: src/mmg/tabs/global.cpp:274
 msgid "A single Matroska block contains either a full frame (for progressive content) or a single field (for interlaced content)."
-msgstr ""
+msgstr "1つのMatroskaブロックには、完全な1フレーム（プログレッシブのコンテンツの場合）か片フィールド（インターレースのコンテンツの場合）が格納されています。"
 
 #: src/info/mkvinfo.cpp:790
 msgid "A track"
@@ -1891,16 +1887,15 @@ msgstr "AC3"
 
 #: src/output/p_alac.h:34
 msgid "ALAC"
-msgstr ""
+msgstr "ALAC"
 
 #: src/common/file_types.cpp:29
-#, fuzzy
 msgid "ALAC (Apple Lossless Audio Codec)"
-msgstr "FLAC（Free Lossless Audio Codec）"
+msgstr "ALAC (Apple Lossless Audio Codec)"
 
 #: src/extract/xtr_alac.cpp:51
 msgid "ALAC private data size mismatch\n"
-msgstr ""
+msgstr "ALACのプライベートデータが一致しません\n"
 
 #: src/mmg/header_editor/value_page.cpp:143
 msgid ""
@@ -1954,15 +1949,15 @@ msgstr "mkvinfoについて"
 
 #: src/propedit/propedit_cli_parser.cpp:210
 msgid "Actions for handling attachments"
-msgstr ""
+msgstr "添付ファイルを処理するアクション"
 
 #: src/propedit/propedit_cli_parser.cpp:195
 msgid "Actions for handling properties"
-msgstr ""
+msgstr "プロパティを処理するアクション"
 
 #: src/propedit/propedit_cli_parser.cpp:203
 msgid "Actions for handling tags and chapters"
-msgstr ""
+msgstr "タグやチャプタを処理するアクション"
 
 #: src/mmg/cli_options_dlg.cpp:47
 msgid "Add"
@@ -2006,7 +2001,7 @@ msgstr "サブチャプタを追加"
 
 #: src/propedit/propedit_cli_parser.cpp:211
 msgid "Add the file 'filename' as a new attachment"
-msgstr ""
+msgstr "'filename'のファイルを新しい添付ファイルとして追加します"
 
 #: src/mmg/jobs.cpp:448
 msgid "Added on"
@@ -2106,7 +2101,7 @@ msgstr "常に手前に表示"
 
 #: src/propedit/propedit_cli_parser.cpp:241
 msgid "An <attachment-selector> can have three forms:"
-msgstr ""
+msgstr "<attachment-selector>は3つの形式を取ることができます："
 
 #: src/common/property_element.cpp:129
 #: src/mmg/header_editor/frame.cpp:417
@@ -2216,9 +2211,8 @@ msgid "Attachment extraction"
 msgstr "添付ファイルの抽出"
 
 #: src/propedit/propedit_cli_parser.cpp:240
-#, fuzzy
 msgid "Attachment selectors"
-msgstr "添付方式："
+msgstr "添付ファイルセレクタ："
 
 #: src/mmg/tabs/attachments.cpp:161
 msgid "Attachment style:"
@@ -2419,11 +2413,11 @@ msgstr "例外をキャッチしました"
 
 #: src/mmg/cli_options_dlg.cpp:152
 msgid "Causes mkvmerge not to write 'CueDuration' elemenets in the cues."
-msgstr ""
+msgstr "mkvmergeが'CueDuration'要素をキューに書き込まないようにします。"
 
 #: src/mmg/cli_options_dlg.cpp:154
 msgid "Causes mkvmerge not to write 'CueRelativePosition' elemenets in the cues."
-msgstr ""
+msgstr "mkvmergeが'CueRelativePosition'要素をキューに書き込まないようにします。"
 
 #: src/mmg/cli_options_dlg.cpp:150
 msgid "Causes mkvmerge to add 'stop display' commands to VobSub subtitle packets that do not contain a duration field."
@@ -2473,22 +2467,22 @@ msgstr "チャプタエディタ"
 
 #: src/info/mkvinfo.cpp:450
 msgid "Chapter Translate"
-msgstr ""
+msgstr "Chapter Translate"
 
 #: src/info/mkvinfo.cpp:457
 #, boost-format
 msgid "Chapter Translate Codec: %1%"
-msgstr ""
+msgstr "Chapter Translate Codec: %1%"
 
 #: src/info/mkvinfo.cpp:454
 #, boost-format
 msgid "Chapter Translate Edition UID: %1%"
-msgstr ""
+msgstr "Chapter Translate Edition UID: %1%"
 
 #: src/info/mkvinfo.cpp:460
 #, boost-format
 msgid "Chapter Translate ID: %1%"
-msgstr ""
+msgstr "Chapter Translate ID: %1%"
 
 #: src/mmg/mmg_dialog.cpp:630
 msgid "Chapter editor is not empty"
@@ -2522,9 +2516,8 @@ msgid "Chapter names and languages"
 msgstr "チャプタ名と言語"
 
 #: src/mmg/tabs/global.cpp:280
-#, fuzzy
 msgid "Chapter numbers:"
-msgstr "チャプタ："
+msgstr "チャプタ番号："
 
 #: src/mmg/options/chapters.cpp:65
 msgid "Chapter options"
@@ -2718,9 +2711,8 @@ msgid "Cluster timecode: %|1$.3f|s"
 msgstr "クラスタのタイムコード：%|1$.3f|s"
 
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:67
-#, fuzzy
 msgid "Codec"
-msgstr "コーデックID"
+msgstr "コーデック"
 
 #: src/common/property_element.cpp:129
 #: src/mmg/header_editor/frame.cpp:417
@@ -2735,7 +2727,7 @@ msgstr "コーデックID：%1%"
 #: src/info/mkvinfo.cpp:877
 #, boost-format
 msgid "Codec decode all: %1%"
-msgstr ""
+msgstr "Codec decode all: %1%"
 
 #: src/info/mkvinfo.cpp:874
 #, boost-format
@@ -2848,9 +2840,8 @@ msgid "Copy the command line to the clipboard"
 msgstr "コマンドラインをクリップボードにコピーします"
 
 #: src/input/r_coreaudio.h:60
-#, fuzzy
 msgid "CoreAudio"
-msgstr "RealAudio"
+msgstr "CoreAudio"
 
 #: src/mmg/jobs.cpp:177
 #: src/mmg/mux_dialog.cpp:116
@@ -2982,7 +2973,7 @@ msgstr "新しいチャプタファイルを作成します"
 
 #: src/common/mm_io_x.h:118
 msgid "Creating directory '%1%' failed: %2%"
-msgstr ""
+msgstr "ディレクトリ'%1%'の作成に失敗しました：%2%"
 
 #: src/merge/mkvmerge.cpp:716
 #, boost-format
@@ -3009,9 +3000,9 @@ msgid "Cue codec state: %1%"
 msgstr "CUEコーデック状態：%1%"
 
 #: src/info/mkvinfo.cpp:1029
-#, fuzzy, boost-format
+#, boost-format
 msgid "Cue duration: %1%"
-msgstr "CUEクラスタ位置：%1%"
+msgstr "Cue duration: %1%"
 
 #: src/mmg/tabs/global.cpp:354
 msgid "Cue name format:"
@@ -3046,9 +3037,9 @@ msgid "Cue reference"
 msgstr "CUE参照"
 
 #: src/info/mkvinfo.cpp:1026
-#, fuzzy, boost-format
+#, boost-format
 msgid "Cue relative position: %1%"
-msgstr "CUEクラスタ位置：%1%"
+msgstr "Cue relative position: %1%"
 
 #: src/common/chapters/cue_parser.cpp:398
 #, boost-format
@@ -3181,7 +3172,7 @@ msgstr "デフォルトのフレーム持続期間"
 #: src/info/mkvinfo.cpp:892
 #, boost-format
 msgid "Default duration: %|1$.3f|ms (%|2$.3f| frames/fields per second for a video track)"
-msgstr "デフォルトのフレーム持続期間：%|1$.3f|ms（ビデオトラックの場合は毎秒%|2$.3f|フレーム/フィールド）"
+msgstr "デフォルトのフレーム持続期間：%|1$.3f|ms（ビデオトラックの場合は毎秒%|2$.3f|フレーム・フィールド）"
 
 #: src/info/mkvinfo.cpp:904
 #, boost-format
@@ -3211,7 +3202,7 @@ msgstr "そのプロパティを全て削除します"
 
 #: src/propedit/propedit_cli_parser.cpp:213
 msgid "Delete one or more attachments"
-msgstr ""
+msgstr "1つまたは複数の添付ファイルを削除します。"
 
 #: src/mmg/jobs.cpp:492
 msgid "Delete the selected job(s) from the job queue"
@@ -3233,7 +3224,7 @@ msgstr "説明："
 
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:37
 msgid "Details"
-msgstr ""
+msgstr "詳細"
 
 #: src/common/file_types.cpp:30
 #: src/input/r_dirac.h:33
@@ -3302,17 +3293,17 @@ msgstr "メタシーク要素を全く記録しません。"
 #: src/info/mkvinfo.cpp:1547
 #, boost-format
 msgid "Doc type read version: %1%"
-msgstr ""
+msgstr "Doc type read version: %1%"
 
 #: src/info/mkvinfo.cpp:1544
 #, boost-format
 msgid "Doc type version: %1%"
-msgstr ""
+msgstr "Doc type version: %1%"
 
 #: src/info/mkvinfo.cpp:1541
 #, boost-format
 msgid "Doc type: %1%"
-msgstr ""
+msgstr "Doc type: %1%"
 
 #: src/common/file_types.cpp:31
 msgid "Dolby TrueHD"
@@ -3327,15 +3318,13 @@ msgid "Download URL:"
 msgstr "ダウンロードURL："
 
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:60
-#, fuzzy
 msgid "Duration"
-msgstr "説明："
+msgstr "継続時間"
 
 #: src/mmg/tabs/global.cpp:216
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:39
-#, fuzzy
 msgid "Duration:"
-msgstr "説明："
+msgstr "継続時間："
 
 #: src/info/mkvinfo.cpp:204
 #, boost-format
@@ -3368,7 +3357,7 @@ msgstr "EBML最大サイズ長：%1%"
 #: src/info/mkvinfo.cpp:1532
 #, boost-format
 msgid "EBML read version: %1%"
-msgstr ""
+msgstr "EBML read version: %1%"
 
 #: src/info/mkvinfo.cpp:1529
 #, boost-format
@@ -3389,9 +3378,8 @@ msgid "Each edition must contain at least one chapter."
 msgstr "各エディションは少なくとも1つのチャプタを含んでいなければなりません。"
 
 #: src/mmg/tabs/global.cpp:254
-#, fuzzy
 msgid "Each range consists of a start and end frame/field number with a '-' in the middle, e.g. '157-238'."
-msgstr "各範囲は、'-'を真ん中に置いた開始点と終了点のタイムコードで構成されます、例：'00:01:15-00:03:20'。"
+msgstr "各範囲は、'-'を真ん中に置いた開始点と終了点のフレーム・フィールド番号で構成されます、例：'157-238'。"
 
 #: src/mmg/tabs/global.cpp:243
 msgid "Each range consists of a start and end timecode with a '-' in the middle, e.g. '00:01:15-00:03:20'."
@@ -3407,9 +3395,8 @@ msgid "Edit additional source file parts"
 msgstr "追加のソースファイルの一部を編集してください"
 
 #: src/propedit/propedit_cli_parser.cpp:224
-#, fuzzy
 msgid "Edit selectors for properties"
-msgstr "Editのセレクター"
+msgstr "プロパティのEditセレクター"
 
 #: src/mmg/tabs/chapters.cpp:526
 #, c-format, boost-format
@@ -3423,9 +3410,8 @@ msgid "EditionEntry %u"
 msgstr "エディションエントリ%u"
 
 #: src/mmg/tabs/global.cpp:282
-#, fuzzy
 msgid "Either the word 'all' which selects all chapters or a comma-separated list of chapter numbers after which to split."
-msgstr "保持する内容のタイムコードの範囲の、コンマで区切られたリストです。"
+msgstr "全てのチャプタを選択する'all'という単語か、保持する内容のタイムコードの範囲のコンマで区切られたリストです。"
 
 #: src/propedit/propedit.cpp:70
 #, boost-format
@@ -3647,22 +3633,22 @@ msgstr "FLAC（Free Lossless Audio Codec）"
 
 #: src/common/file_types.cpp:36
 msgid "FLV (Flash Video)"
-msgstr ""
+msgstr "FLV (Flash Video)"
 
 #: src/mmg/tabs/input_format.cpp:233
 msgid "FPS:"
 msgstr "FPS："
 
 #: src/extract/xtr_vobsub.cpp:81
-#, fuzzy, boost-format
+#, boost-format
 msgid "Failed to create the VobSub data file '%1%': %2%\n"
-msgstr "Vobsubデータファイル'%1%'の作成に失敗しました：%2% (%3%)\n"
+msgstr "Vobsubデータファイル'%1%'の作成に失敗しました：%2%\n"
 
 #: src/extract/xtr_textsubs.cpp:360
 #: src/extract/xtr_vobsub.cpp:235
-#, fuzzy, boost-format
+#, boost-format
 msgid "Failed to create the file '%1%': %2%\n"
-msgstr "ファイル'%1%'の作成に失敗しました：%2% (%3%)\n"
+msgstr "ファイル'%1%'の作成に失敗しました：%2%\n"
 
 #: src/extract/xtr_base.cpp:73
 #, boost-format
@@ -3670,9 +3656,9 @@ msgid "Failed to create the file '%1%': %2% (%3%)\n"
 msgstr "ファイル'%1%'の作成に失敗しました：%2% (%3%)\n"
 
 #: src/extract/xtr_tta.cpp:45
-#, fuzzy, boost-format
+#, boost-format
 msgid "Failed to create the temporary file '%1%': %2%\n"
-msgstr "一時ファイル'%1%'の作成に失敗しました：%2% (%3%)\n"
+msgstr "一時ファイル'%1%'の作成に失敗しました：%2%\n"
 
 #: src/extract/xtr_textsubs.cpp:363
 #, boost-format
@@ -3801,13 +3787,12 @@ msgid "Finished processing on %s"
 msgstr "%sの処理が終了しました"
 
 #: src/mmg/tabs/chapters.cpp:354
-#, fuzzy
 msgid "Flags:"
-msgstr "タグ："
+msgstr "フラグ："
 
 #: src/input/r_flv.cpp:210
 msgid "Flash Video"
-msgstr ""
+msgstr "Flash Video"
 
 #: src/mmg/header_editor/value_page.cpp:147
 msgid "Floating point number"
@@ -3895,7 +3880,7 @@ msgstr "フレームサイズ：%1%%2%%3%"
 
 #: src/mmg/tabs/global.cpp:267
 msgid "Frames/fields:"
-msgstr ""
+msgstr "フレーム・フィールド："
 
 #: src/mmg/tabs/input_extra.cpp:130
 msgid "Free-form edit field for user defined options for this track. What you input here is added after all the other options mmg adds so that you could overwrite any of mmg's options for this track. All occurences of the string \"<TID>\" will be replaced by the track's track ID."
@@ -4049,23 +4034,20 @@ msgid "If a chapter is not marked 'enabled' then the player should skip the part
 msgstr "'有効'にチェックが入っていないと、プレーヤはファイルのうちこのチャプタが占める部分をスキップします。"
 
 #: src/mmg/tabs/chapters.cpp:364
-#, fuzzy
 msgid "If a chapter or an edition is marked 'hidden' then the player should not show this chapter entry (or all of this edition's entries) to the user. Such entries could still be used by the menu system."
-msgstr "'隠す'にチェックが入っていると、プレーヤはこのチャプタエントリをユーザーに対して表示しません。しかしそのエントリをメニューシステムに使用することはできます。"
+msgstr "チャプタやエディションが'隠す'としてマークされていると、プレーヤはこのチャプタエントリ（もしくはこのエディションのエントリ全て）をユーザーに対して表示しません。しかしそのエントリをメニューシステムに使用することはできます。"
 
 #: src/mmg/tabs/global.cpp:262
-#, fuzzy
 msgid "If a range's start number is prefixed with '+' then its content will be written to the same file as the previous range. Otherwise a new file will be created for this range."
-msgstr "ある範囲の開始点のタイムコードに'+'の接頭辞がついていた場合、その内容はその前の範囲と同じファイルに書きこまれます。そうでなければ、この範囲のために新しいファイルが作成されます。"
+msgstr "ある範囲の開始点の数字に'+'の接頭辞がついていた場合、その内容はその前の範囲と同じファイルに書きこまれます。そうでなければ、この範囲のために新しいファイルが作成されます。"
 
 #: src/mmg/tabs/global.cpp:246
 msgid "If a range's start timecode is prefixed with '+' then its content will be written to the same file as the previous range. Otherwise a new file will be created for this range."
 msgstr "ある範囲の開始点のタイムコードに'+'の接頭辞がついていた場合、その内容はその前の範囲と同じファイルに書きこまれます。そうでなければ、この範囲のために新しいファイルが作成されます。"
 
 #: src/mmg/tabs/global.cpp:261
-#, fuzzy
 msgid "If a start number is left out then the previous range's end number is used, or the start of the file if there was no previous range."
-msgstr "開始点のタイムコードがなかった場合は、その前の範囲の終了点のタイムコードが使われるか、もしくはその前の範囲がなかった場合はファイルの開始点が使われます。"
+msgstr "開始点の数字がなかった場合は、その前の範囲の終了点の数字が使われるか、もしくはその前の範囲がなかった場合はファイルの開始点が使われます。"
 
 #: src/mmg/tabs/global.cpp:244
 msgid "If a start timecode is left out then the previous range's end timecode is used, or the start of the file if there was no previous range."
@@ -4073,15 +4055,15 @@ msgstr "開始点のタイムコードがなかった場合は、その前の範
 
 #: src/mmg/tabs/chapters.cpp:359
 msgid "If an edition is marked 'ordered' then the chapters can be defined multiple times and the order to play them is enforced."
-msgstr ""
+msgstr "もしエディションが'ordered'とマークされていた場合、そのチャプタは複数回定義することができ、それらを再生する順番は強制的に決まります。"
 
 #: src/mmg/tabs/chapters.cpp:387
 msgid "If an edition is marked as 'default' then it should be used as the default edition."
-msgstr ""
+msgstr "もしエディションが'default'とマークされていた場合、そのエディションはデフォルトのエディションとして使用される必要があります。"
 
 #: src/mmg/options/output.cpp:51
 msgid "If checked mmg make sure the suggested output file name is unique by adding a number (e.g. ' (1)') to the end of the file name. This is only done if the unmodified file name already exists."
-msgstr ""
+msgstr "チェックが入っていると、mkvmergeGUIはファイル名の最後に数字（例：'(1)'）を付加して、設定された出力ファイル名が確実にユニークになるようにします。この処理は未修正のファイル名が既に存在する場合にのみ行われます。"
 
 #: src/mmg/options/output.cpp:55
 msgid "If checked mmg will ask for confirmation before overwriting existing files, or before adding a new job if there's an old job whose description matches the new one."
@@ -4102,7 +4084,7 @@ msgstr "空白のままにしておくと、mmgはこのジョブに最初に追
 #: src/mmg/tabs/global.cpp:257
 #: src/mmg/tabs/global.cpp:272
 msgid "If no video track is output no splitting will occur."
-msgstr ""
+msgstr "ビデオトラックが出力されない場合は分割は行われません。"
 
 #: src/mmg/tabs/attachments.cpp:166
 msgid "If splitting is a file can be attached either to all files created or only to the first file. Has no effect if no splitting is used."
@@ -4112,7 +4094,7 @@ msgstr ""
 
 #: src/mmg/mmg_dialog.cpp:1973
 msgid "If you encounter problems during playback of files please consider visiting the newly created MKVToolNix troubleshooting advice page:"
-msgstr ""
+msgstr "もしファイルの再生中に問題に遭遇した場合は、新しく作成されたMKVToolNixトラブルシューティングアドバイスページを訪問することを検討してください："
 
 #: src/output/p_textsubs.cpp:69
 #, boost-format
@@ -4582,7 +4564,7 @@ msgstr "パラメータ'%1%'で無効なトラックID・ファイル名が指�
 
 #: src/mmg/mmg_dialog.cpp:1977
 msgid "It can also be opened from the 'Help' menu."
-msgstr ""
+msgstr "'ヘルプ'メニューから開くこともできます。"
 
 #: src/mmg/mmg_dialog.cpp:1481
 msgid "Job added to job queue"
@@ -4620,12 +4602,12 @@ msgstr "LZO圧縮に失敗しました：結果%1%\n"
 #: src/info/mkvinfo.cpp:201
 #, boost-format
 msgid "Lace number: %1%"
-msgstr ""
+msgstr "Lace number: %1%"
 
 #: src/info/mkvinfo.cpp:901
 #, boost-format
 msgid "Lacing flag: %1%"
-msgstr ""
+msgstr "Lacing flag: %1%"
 
 #: src/common/property_element.cpp:128
 #: src/mmg/header_editor/frame.cpp:413
@@ -4789,12 +4771,11 @@ msgstr "MPEG-4"
 
 #: src/common/file_types.cpp:43
 msgid "MPLS Blu-ray playlist"
-msgstr ""
+msgstr "MPLS Blu-ray プレイリスト"
 
 #: src/mmg/options/output.cpp:50
-#, fuzzy
 msgid "Make suggested output file names unique"
-msgstr "出力ファイル名を自動設定する"
+msgstr "自動設定されたファイル名をユニークにする"
 
 #: src/mmg/tabs/input_general.cpp:181
 msgid "Make this track the default track for its type (audio, video, subtitles). Players should prefer tracks with the default track flag set."
@@ -4854,7 +4835,6 @@ msgid "Max BlockAddition ID: %1%"
 msgstr "最大BlockAddition ID：%1%"
 
 #: src/mmg/tabs/global.cpp:325
-#, fuzzy
 msgid "Max. number of files:"
 msgstr "ファイルの最大分割数："
 
@@ -4918,7 +4898,7 @@ msgstr "最小キャッシュ"
 
 #: src/mmg/options/mmg.cpp:130
 msgid "Minimum duration for playlists in seconds:"
-msgstr ""
+msgstr "プレイリストの最小の継続時間（秒単位）："
 
 #: src/common/command_line.cpp:211
 msgid "Missing argument for '--output-charset'.\n"
@@ -4970,7 +4950,7 @@ msgstr "セクション'%1%'のプロパティの変更が要求されました�
 
 #: src/info/mkvinfo.cpp:1212
 msgid "More"
-msgstr ""
+msgstr "More"
 
 #: src/merge/mkvmerge.cpp:1995
 #, boost-format
@@ -5113,9 +5093,9 @@ msgstr "ファイル番号%1%のファイル（'%2%'）に追加結合のマッ�
 
 #: src/propedit/attachment_target.cpp:192
 #: src/propedit/attachment_target.cpp:200
-#, fuzzy, boost-format
+#, boost-format
 msgid "No attachment matched the spec '%1%'.\n"
-msgstr "ID %1%の添付ファイルが見つかりませんでした。\n"
+msgstr "スペック'%1%'に一致する添付ファイルがありませんでした。\n"
 
 #: src/mmg/tabs/chapters.cpp:802
 msgid "No chapter entries have been create yet."
@@ -5124,7 +5104,7 @@ msgstr "チャプタエントリがまだ作成されていません。"
 #: src/merge/mkvmerge.cpp:862
 #, boost-format
 msgid "No chapter numbers listed after '--split %1%'.\n"
-msgstr ""
+msgstr "'--split %1%'の後にチャプタ番号が列挙されていません。\n"
 
 #: src/mmg/tabs/chapters.cpp:589
 msgid "No chapters found"
@@ -5133,7 +5113,7 @@ msgstr "チャプタが見つかりませんでした"
 #: src/merge/mkvmerge.cpp:866
 #: src/merge/mkvmerge.cpp:892
 msgid "No chapters in source files or chapter files found to split by.\n"
-msgstr ""
+msgstr "分割に使用すべきソースファイル中のチャプタやチャプタファイルが見つかりませんでした。\n"
 
 #: src/mmg/header_editor/frame.cpp:516
 msgid "No fields modified"
@@ -5178,7 +5158,7 @@ msgstr "出力ファイル名が指定されなかったので、添付ファイ
 
 #: src/common/mm_io_x.cpp:40
 msgid "No permission to read from, to write to or to create"
-msgstr ""
+msgstr "読み込み、もしくは書き込み、作成のための権限がありません"
 
 #: src/extract/timecodes_v2.cpp:219
 #: src/extract/tracks.cpp:356
@@ -5188,7 +5168,7 @@ msgstr "セグメント/レベル0の要素が見つかりませんでした。"
 
 #: src/common/mm_io_x.cpp:39
 msgid "No space left to write to"
-msgstr ""
+msgstr "書き込むべき空き容量がありません"
 
 #: src/merge/mkvmerge.cpp:2384
 msgid "No streams to output were found. Aborting.\n"
@@ -5243,14 +5223,13 @@ msgid "Not a valid Matroska file (no segment/level 0 element found)"
 msgstr "有効なMatroskaファイルではありません（セグメント/レベル0の要素が見つかりませんでした）"
 
 #: src/merge/mkvmerge.cpp:857
-#, fuzzy
 msgid "Not a valid number or not positive."
-msgstr "ファイルの最大分割数に無効な値が指定されました。"
+msgstr "有効な数字ではないか、正の数ではありません。"
 
 #: src/merge/pr_generic.cpp:1149
 #, boost-format
 msgid "Note that the Matroska specifications regarding the storage of '%1%' have not been finalized yet. mkvmerge's support for it is therefore subject to change and uses the CodecID '%2%/EXPERIMENTAL' instead of '%2%'. This warning will be removed once the specifications have been finalized and mkvmerge has been updated accordingly.\n"
-msgstr ""
+msgstr "'%1%'の格納に関するMatroskaの仕様はまだ最終決定されていないことに注意してください。よってmkvmergeのサポートは変更される可能性があり、'%2%'の代わりに'%2%/EXPERIMENTAL'のコーデックIDを使用します。仕様が最終決定され次第この警告は削除され、mkvmergeもそれに従って更新されます。\n"
 
 #: src/extract/attachments.cpp:132
 #: src/extract/timecodes_v2.cpp:187
@@ -5261,12 +5240,11 @@ msgstr "何もすることがありません。\n"
 
 #: src/mmg/mmg_dialog.cpp:1965
 msgid "Notice"
-msgstr ""
+msgstr "通知"
 
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:43
-#, fuzzy
 msgid "Number of chapters:"
-msgstr "チャプタを新規作成(&N)"
+msgstr "チャプタの数："
 
 #: src/common/property_element.cpp:126
 #: src/mmg/header_editor/frame.cpp:407
@@ -5297,7 +5275,7 @@ msgstr "チャプタの1つに名前がありません。"
 
 #: src/propedit/propedit_cli_parser.cpp:254
 msgid "One of the options '--attachment-name', '--attachment-description' or '--attachment-mime-type' has been used without a following '--add-attachment' or '--replace-attachment' option.\n"
-msgstr ""
+msgstr "'--attachment-name'、'--attachment-description'、'--attachment-mime-type'オプションの内の1つが、その後に'--add-attachment' か'--replace-attachment'オプション無しで使用されました。\n"
 
 #: src/mmg/update_checker.cpp:58
 msgid "Online check for updates"
@@ -5306,7 +5284,7 @@ msgstr "オンラインでのアップデートチェック"
 #: src/merge/mkvmerge.cpp:898
 #, boost-format
 msgid "Only %1% chapters found in source files & chapter files."
-msgstr ""
+msgstr "ソースファイル中とチャプタファイルから%1%個のチャプタしか見つかりませんでした。"
 
 #: src/merge/mkvmerge.cpp:1597
 #, boost-format
@@ -5341,7 +5319,7 @@ msgstr "ファイル番号%1%のファイル'%2%'に対して部分的な追加�
 
 #: src/mmg/options/mmg.cpp:132
 msgid "Only playlists whose duration are at least this long are considered and offered to the user for selection."
-msgstr ""
+msgstr "継続時間が最低この長さのプレイリストのみが、検討されユーザーが選択できるよう提示されます。"
 
 #: src/info/info_cli_parser.cpp:42
 msgid "Only show summaries of the contents, not each element."
@@ -5392,12 +5370,11 @@ msgstr "これらのオプションは開発者「専用」です。使わない
 
 #: src/output/p_opus.h:38
 msgid "Opus"
-msgstr ""
+msgstr "Opus"
 
 #: src/common/file_types.cpp:48
-#, fuzzy
 msgid "Opus (in Ogg) audio files"
-msgstr "Ogg/OGM オーディオ/ビデオファイル"
+msgstr "Opus (in Ogg) audio files"
 
 #: src/info/mkvinfo.cpp:673
 #, boost-format
@@ -5479,9 +5456,8 @@ msgid "Packet queue not empty (flushed: %1%). Frames have been lost during remux
 msgstr "パケットキューが空ではありません（フラッシュ：%1%）。MUX中にフレームが失われました。%2%\n"
 
 #: src/mmg/options/output.cpp:40
-#, fuzzy
 msgid "Parent directory of the first input file"
-msgstr "最初の入力ファイルと同じディレクトリ"
+msgstr "最初の入力ファイルの親ディレクトリ"
 
 #: src/info/wxwidgets_ui.cpp:118
 msgid "Parse the file completely and show all elements"
@@ -5498,7 +5474,7 @@ msgstr "ファイルを解析しています"
 #: src/mmg/tabs/global.cpp:240
 #: src/mmg/tabs/global.cpp:251
 msgid "Parts:"
-msgstr ""
+msgstr "部分："
 
 #: src/info/mkvinfo.cpp:614
 #, boost-format
@@ -5532,7 +5508,7 @@ msgstr "ピクセル幅：%1%"
 
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:47
 msgid "Playlist items:"
-msgstr ""
+msgstr "プレイリストアイテム："
 
 #: src/mmg/options/mkvmerge.cpp:110
 msgid "Please do not select 'mmg' itself as the 'mkvmerge' executable."
@@ -5728,9 +5704,9 @@ msgid "Quicktime/MP4 reader: The video track %1% is missing the ESDS atom. Skipp
 msgstr "Quicktime/MP4リーダ：ビデオトラック%1%はESDS atomがありません。このトラックをスキップします。\n"
 
 #: src/input/r_qtmp4.cpp:354
-#, fuzzy, boost-format
+#, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers with an unknown or unsupported compression algorithm '%1%'. Aborting.\n"
-msgstr "Quicktime/MP4リーダ：このファイルは未知もしくはサポートされていない圧縮アルゴリズム'%1%%2%%3%%4%'で圧縮されたヘッダを使用しています。中断します。\n"
+msgstr "Quicktime/MP4リーダ：このファイルは未知もしくはサポートされていない圧縮アルゴリズム'%1%'で圧縮されたヘッダを使用しています。中断します。\n"
 
 #: src/input/r_qtmp4.cpp:387
 #, boost-format
@@ -5784,7 +5760,7 @@ msgstr "選択したジョブを再有効化します"
 #: src/merge/output_control.cpp:903
 #, boost-format
 msgid "Re-rendering track headers: data_size != 0 not implemented yet. %1%\n"
-msgstr ""
+msgstr "トラックヘッダを再レンダリングしています：data_size != 0はまだ実装されていません。%1%\n"
 
 #: src/input/r_mpeg_ps.cpp:363
 msgid "Reading encrypted VOBs is not supported.\n"
@@ -5842,7 +5818,7 @@ msgstr "参照優先度：%1%"
 #: src/info/mkvinfo.cpp:198
 #, boost-format
 msgid "Reference virtual: %1%"
-msgstr ""
+msgstr "Reference virtual: %1%"
 
 #: src/mmg/header_editor/frame.cpp:143
 msgid "Reload the current file without saving"
@@ -5872,9 +5848,8 @@ msgid "Remove name"
 msgstr "名前を削除"
 
 #: src/propedit/propedit_cli_parser.cpp:212
-#, fuzzy
 msgid "Replace an attachment with the file 'filename'"
-msgstr "IDが'AID'の添付ファイルを'outname'に書き込みます。"
+msgstr "'filename'のファイルで添付ファイルを置き換えます"
 
 #: src/common/kax_file.cpp:251
 msgid "Resync failed: no valid Matroska level 1 element found.\n"
@@ -5945,7 +5920,7 @@ msgstr "名前をつけて保存(&A)"
 
 #: src/mmg/cli_options_dlg.cpp:62
 msgid "Save as default for new jobs"
-msgstr ""
+msgstr "新しいジョブのためのデフォルトとして保存する"
 
 #: src/info/qt_ui.cpp:71
 msgid "Save information as"
@@ -5993,20 +5968,19 @@ msgstr "現在のファイルの情報をテキストファイルに保存しま
 
 #: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:24
 msgid "Scan directory for other playlists"
-msgstr ""
+msgstr "他のプレイリストがないかディレクトリをスキャンします"
 
 #: src/mmg/options/mmg.cpp:121
 msgid "Scan directory for other playlists:"
-msgstr ""
+msgstr "他のプレイリストがないかディレクトリをスキャン："
 
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:32
-#, fuzzy
 msgid "Scanned files"
-msgstr "添付ファイル"
+msgstr "スキャンされたファイル"
 
 #: src/mmg/tabs/scanning_for_playlists_dlg.cpp:30
 msgid "Scanning directory"
-msgstr ""
+msgstr "ディレクトリをスキャンしています"
 
 #: src/info/mkvinfo.cpp:687
 #, boost-format
@@ -6043,7 +6017,6 @@ msgid "Segment"
 msgstr "セグメント"
 
 #: src/mmg/tabs/chapters.cpp:349
-#, fuzzy
 msgid "Segment UID:"
 msgstr "セグメントUID："
 
@@ -6057,9 +6030,8 @@ msgid "Segment UIDs:"
 msgstr "セグメントUID："
 
 #: src/mmg/tabs/chapters.cpp:352
-#, fuzzy
 msgid "Segment edition UID:"
-msgstr "セグメントUID："
+msgstr "セグメントエディションUID："
 
 #: src/common/property_element.cpp:102
 #: src/mmg/header_editor/frame.cpp:322
@@ -6119,9 +6091,8 @@ msgid "Select Matroska file"
 msgstr "Matroskaファイルを選択してください"
 
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:27
-#, fuzzy
 msgid "Select file to add"
-msgstr "適用する値を選択してください"
+msgstr "追加するファイルを選択してください"
 
 #: src/info/wxwidgets_ui.cpp:282
 msgid "Select output file"
@@ -6199,7 +6170,7 @@ msgstr "次の言語に設定："
 
 #: src/propedit/propedit_cli_parser.cpp:216
 msgid "Set the MIME type to use for the following '--add-attachment' or '--replace-attachment' option"
-msgstr ""
+msgstr "後ろの'--add-attachment'や'--replace-attachment'オプションで使用するMIMEタイプを設定します"
 
 #: src/mmg/options/mmg.cpp:53
 msgid "Set the delay input field from the file name"
@@ -6207,11 +6178,11 @@ msgstr "ファイル名からディレイの入力フィールドを設定する
 
 #: src/propedit/propedit_cli_parser.cpp:215
 msgid "Set the description to use for the following '--add-attachment' or '--replace-attachment' option"
-msgstr ""
+msgstr "後ろの'--add-attachment'や'--replace-attachment'オプションで使用する説明を設定します"
 
 #: src/propedit/propedit_cli_parser.cpp:214
 msgid "Set the name to use for the following '--add-attachment' or '--replace-attachment' option"
-msgstr ""
+msgstr "後ろの'--add-attachment'や'--replace-attachment'オプションで使用する名前を設定します"
 
 #: src/mmg/tabs/chapters.cpp:339
 msgid "Set values"
@@ -6377,7 +6348,7 @@ msgstr "符号付き整数"
 #: src/info/mkvinfo.cpp:1114
 #, boost-format
 msgid "Silent Track Number: %1%"
-msgstr ""
+msgstr "Silent Track Number: %1%"
 
 #: src/extract/timecodes_v2.cpp:310
 msgid "Simple block"
@@ -6403,13 +6374,13 @@ msgstr "GOPヘッダの前に片フィールドのフレームが検出されま
 
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:62
 msgid "Size"
-msgstr ""
+msgstr "サイズ"
 
 #: src/mmg/tabs/global.cpp:199
 #: src/mmg/tabs/global.cpp:202
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:41
 msgid "Size:"
-msgstr ""
+msgstr "サイズ："
 
 #: src/output/p_aac.cpp:70
 #, boost-format
@@ -6465,7 +6436,7 @@ msgstr ""
 
 #: src/mmg/tabs/global.cpp:307
 msgid "Split mode:"
-msgstr ""
+msgstr "分割モード："
 
 #: src/mmg/tabs/global.cpp:306
 msgid "Splitting"
@@ -6486,7 +6457,7 @@ msgstr "ファイル分割が有効で、出力される予定のファイル'%s
 
 #: src/mmg/tabs/global.cpp:284
 msgid "Splitting will occur right before the first key frame whose timecode is equal to or bigger than the start timecode for the chapters whose numbers are listed."
-msgstr ""
+msgstr "番号が列挙されているチャプタの開始点のタイムコードと等しいか、それより大きいタイムコードの最初のキーフレーム直前で分割が行われます。"
 
 #: src/mmg/mmg_dialog.cpp:332
 msgid "Sta&rt muxing"
@@ -6710,9 +6681,9 @@ msgid "The FourCC must be exactly four characters long in '%1% %2%'.\n"
 msgstr "FourCCは4文字ちょうどでなければなりません（'%1% %2%'でのパラメータ）。\n"
 
 #: src/mmg/tabs/input.cpp:1363
-#, fuzzy, c-format, boost-format
+#, c-format, boost-format
 msgid "The FourCC setting for track nr. %s in file '%s' is not exactly four characters long."
-msgstr "トラックID %s（ファイル'%s'）のFourCC指定が4文字ちょうどではありません。"
+msgstr "トラック番号%s（ファイル'%s'）のFourCC指定が4文字ちょうどではありません。"
 
 #: src/mmg/mmg_dialog.cpp:1925
 #, boost-format
@@ -6720,7 +6691,7 @@ msgid "The GUI is configured to use the mkvmerge executable from a different ver
 msgstr "このGUIは、GUI自体（%2%）とは違うバージョン（%1%）のmkvmerge実行ファイルを使用するように設定されました。これはサポートされてはいませんが、妨げられることもありません。設定ダイアログでmkvmerge実行ファイルを変更するべきです。"
 
 #: src/input/r_ogm.cpp:1495
-#, fuzzy, boost-format
+#, boost-format
 msgid "The Kate identification header could not be parsed (%1%).\n"
 msgstr "カラオケ・テキスト判別ヘッダを解析できませんでした（%1%）。\n"
 
@@ -7004,9 +6975,9 @@ msgid "The file '%1%' cannot be attached because it does not exist or cannot be 
 msgstr "ファイルが存在していないか読み取れないため、ファイル'%1%'を添付することができません。\n"
 
 #: src/propedit/propedit.cpp:102
-#, fuzzy, boost-format
+#, boost-format
 msgid "The file '%1%' could not be opened for reading and writing, or a read/write operation on it failed: %2%.\n"
-msgstr "ファイル'%1%'を開いてコマンドラインのパラメータを読み込むことができませんでした。\n"
+msgstr "ファイル'%1%'を読み書きのために開くことができなかったか、読み・書きの操作が失敗しました：%2%\n"
 
 #: src/common/command_line.cpp:47
 #: src/extract/attachments.cpp:142
@@ -7018,9 +6989,9 @@ msgstr "ファイル'%1%'を開いてコマンドラインのパラメータを�
 #: src/merge/output_control.cpp:339
 #: src/merge/output_control.cpp:472
 #: src/propedit/attachment_target.cpp:63
-#, fuzzy, boost-format
+#, boost-format
 msgid "The file '%1%' could not be opened for reading: %2%.\n"
-msgstr "ファイル'%1%'を開いて読み込むことができませんでした（%2%）。\n"
+msgstr "ファイル'%1%'を開いて読み込むことができませんでした：%2%。\n"
 
 #: src/extract/attachments.cpp:122
 #: src/extract/tracks.cpp:283
@@ -7030,9 +7001,9 @@ msgstr "ファイル'%1%'を開いて読み込むことができませんでし�
 #: src/extract/xtr_tta.cpp:86
 #: src/extract/xtr_wav.cpp:113
 #: src/merge/output_control.cpp:1551
-#, fuzzy, boost-format
+#, boost-format
 msgid "The file '%1%' could not be opened for writing: %2%.\n"
-msgstr "ファイル'%1%'を開いて書き込むことができませんでした（%2%）。\n"
+msgstr "ファイル'%1%'を開いて書き込むことができませんでした：%2%。\n"
 
 #: src/merge/output_control.cpp:1555
 #, boost-format
@@ -7147,7 +7118,7 @@ msgstr "ファイル番号%1%（'%2%'）は追加結合されていません。'
 
 #: src/common/mm_io_x.cpp:38
 msgid "The file or directory was not found"
-msgstr ""
+msgstr "ファイルもしくはディレクトリが見つかりませんでした"
 
 #: src/mmg/header_editor/frame.cpp:247
 msgid "The file you tried to open is not a Matroska file."
@@ -7164,7 +7135,7 @@ msgstr "チャプタを保存しようとしたファイルはMatroskaファイ�
 #: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:29
 #, boost-format
 msgid "The file you've added is a playlist. The directory it is located it contains %1% other file(s) with the same extension. mmg can scan these files, present the results including duration and number of tracks of each playlist found and let you chose which one to add."
-msgstr ""
+msgstr "追加されたファイルはプレイリストです。このファイルがあるディレクトリには、同じ拡張子のファイルが他に%1%個あります。mmgはこれらのファイルをスキャンして、見つかった各プレイリストの継続時間とトラック数の結果を表示し、どれを追加するのか選択できるようにすることができます。"
 
 #: src/merge/mkvmerge.cpp:1745
 msgid "The first file cannot be appended because there are no files to append to.\n"
@@ -7184,9 +7155,8 @@ msgstr "以下の部分ファイルは第一ファイルの後に続いて、あ
 
 #: src/mmg/tabs/global.cpp:630
 #: src/mmg/tabs/global.cpp:652
-#, fuzzy
 msgid "The format of the split argument is invalid."
-msgstr "指定サイズで分割のフォーマットが無効です。"
+msgstr "分割の引数のフォーマットが無効です。"
 
 #: src/mmg/tabs/global.cpp:591
 msgid "The format of the split size is invalid (size too small)."
@@ -7393,12 +7363,12 @@ msgstr "イメージの上部で除去するビデオピクセル数です。"
 #: src/mmg/tabs/global.cpp:270
 #: src/mmg/tabs/global.cpp:283
 msgid "The numbering starts at 1."
-msgstr ""
+msgstr "1から数え始めてください。"
 
 #: src/mmg/tabs/global.cpp:258
 #: src/mmg/tabs/global.cpp:273
 msgid "The numbers given with this argument are interpreted based on the number of Matroska blocks that are output."
-msgstr ""
+msgstr "この引数に与えられた数字は、出力されるMatroskaブロックの数に基づいて解釈されます。"
 
 #: src/merge/mkvmerge.cpp:2087
 msgid "The option '--meta-seek-size' is no longer supported. Please read mkvmerge's documentation, especially the section about the MATROSKA FILE LAYOUT.\n"
@@ -7545,9 +7515,9 @@ msgid "The tags in '%1%' could not be parsed: some mandatory elements are missin
 msgstr "'%1%'のタグを解析することができません：いくつかの必須要素がありません。\n"
 
 #: src/extract/xtr_tta.cpp:80
-#, fuzzy, boost-format
+#, boost-format
 msgid "The temporary file '%1%' could not be opened for reading: %2%.\n"
-msgstr "一時ファイル'%1%'を開いて読み込むことができませんでした（%2%）。\n"
+msgstr "一時ファイル'%1%'を開いて読み込むことができませんでした：%2%。\n"
 
 #: src/extract/extract_cli_parser.cpp:87
 msgid "The third mode extracts attachments from the source file."
@@ -7795,16 +7765,16 @@ msgstr "この映像のメインタイトルとしてプレーヤが表示する
 
 #: src/mmg/mmg_dialog.cpp:1964
 msgid "This message will only shown to you once."
-msgstr ""
+msgstr "このメッセージは一回のみ表示されます。"
 
 #: src/mmg/tabs/global.cpp:256
 #: src/mmg/tabs/global.cpp:271
 msgid "This mode considers only the first video track that is output."
-msgstr ""
+msgstr "このモードでは出力される最初のビデオトラックだけを考慮します。"
 
 #: src/mmg/tabs/global.cpp:286
 msgid "This mode only considers the top-most level of chapters across all edition entries."
-msgstr ""
+msgstr "このモードでは、全エディションエントリに渡って最も上のレベルのチャプタのみを考慮します。"
 
 #: src/mmg/cli_options_dlg.cpp:92
 msgid "This option needs an additional argument 'n'. Tells mkvmerge to put at most 'n' data blocks into each cluster. If the number is postfixed with 'ms' then put at most 'n' milliseconds of data into each cluster. The maximum length for a cluster that mkvmerge accepts is 60000 blocks and 32000ms; the minimum length is 100ms. Programs will only be able to seek to clusters, so creating larger clusters may lead to imprecise or slow seeking."
@@ -8036,13 +8006,12 @@ msgid "Tracks, chapters and tags:"
 msgstr "トラック、チャプタ、タグ："
 
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:45
-#, fuzzy
 msgid "Tracks:"
-msgstr "トラック名："
+msgstr "トラック："
 
 #: src/mmg/mmg_dialog.cpp:314
 msgid "Troubleshooting advice for playback issues"
-msgstr ""
+msgstr "再生の問題へのトラブルシューティングアドバイス"
 
 #: src/input/r_truehd.h:36
 #: src/output/p_truehd.h:42
@@ -8059,19 +8028,17 @@ msgid "Two VobSub tracks can only be extracted into the same file if their Codec
 msgstr "2つのVobSubトラックを同じファイルに抽出できるのは、CodecPrivateデータが一致するときだけです。トラック%1%と%2%はそうではありません。\n"
 
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:65
-#, fuzzy
 msgid "Type"
-msgstr "タイプ："
+msgstr "タイプ"
 
 #: src/common/property_element.cpp:139
 #: src/mmg/header_editor/frame.cpp:445
-#, fuzzy
 msgid ""
 "Type of the unit for DisplayWidth/Height\n"
 "(0: pixels, 1: centimeters, 2: inches, 3: aspect ratio)."
 msgstr ""
 "縦表示解像度・横表示解像度の単位です\n"
-"（0：ピクセル、1：センチメートル、2：インチ）。"
+"（0：ピクセル、1：センチメートル、2：インチ、3：アスペクト比）。"
 
 #: src/mmg/header_editor/value_page.cpp:152
 msgid "Type:"
@@ -8083,9 +8050,8 @@ msgid "Type: %1% (%2%)"
 msgstr "タイプ：%1% (%2%)"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:59
-#, fuzzy
 msgid "Typical use cases include reading VOBs from a DVD (e.g. VTS_01_1.VOB, VTS_01_2.VOB, VTS_01_3.VOB)."
-msgstr "典型的な使用例としては、DVDのVOB（例：VTS_01_1.VOB, VTS_01_2.VOB, VTS_01_3.VOB）やブルーレイディスクのMPEGトランスポートストリームの読み込みがあります。"
+msgstr "典型的な使用例としては、DVDのVOB（例：VTS_01_1.VOB, VTS_01_2.VOB, VTS_01_3.VOB）の読み込みがあります。"
 
 #: src/mmg/tabs/chapters.cpp:346
 msgid "UID:"
@@ -8424,7 +8390,7 @@ msgstr "WebMオーディオ/ビデオファイル"
 
 #: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:34
 msgid "What to do in the future:"
-msgstr ""
+msgstr "今後はどうしますか："
 
 #: src/mmg/options/mmg.cpp:54
 msgid "When a file is added its name is scanned. If it contains the word 'DELAY' followed by a number then this number is automatically put into the 'delay' input field for any audio track found in the file."
@@ -8568,12 +8534,12 @@ msgstr "いつでも"
 #: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:37
 #: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:41
 msgid "always ask the user"
-msgstr ""
+msgstr "常にユーザーに尋ねる"
 
 #: src/mmg/options/mmg.cpp:125
 #: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:38
 msgid "always scan for other playlists"
-msgstr ""
+msgstr "常に他のプレイリストがないかスキャンする"
 
 #: src/common/stereo_mode.cpp:58
 msgid "anaglyph (cyan/red)"
@@ -8665,7 +8631,7 @@ msgstr "デフォルト"
 #: src/info/mkvinfo.cpp:895
 #, boost-format
 msgid "default duration: %|1$.3f|ms (%|2$.3f| frames/fields per second for a video track)"
-msgstr "デフォルトのフレーム持続期間：%|1$.3f|ms（ビデオトラックの場合毎秒%|2$.3f|フレーム/フィールド）"
+msgstr "デフォルトのフレーム持続期間：%|1$.3f|ms（ビデオトラックの場合毎秒%|2$.3f|フレーム・フィールド）"
 
 #: src/common/compression/zlib.cpp:73
 #, boost-format
@@ -8919,9 +8885,9 @@ msgstr "matroska_reader：トラック%2%のコーデックID '%1%'は未知の�
 #: src/input/r_matroska.cpp:328
 #: src/input/r_matroska.cpp:349
 #: src/input/r_matroska.cpp:372
-#, fuzzy, boost-format
+#, boost-format
 msgid "matroska_reader: The CodecID for track %1% is '%2%', but the private codec data does not contain valid headers.\n"
-msgstr "matroska_reader：トラック%1%のコーデックIDは'%2%'ですが、コーデックプライベートヘッダがありません。\n"
+msgstr "matroska_reader：トラック%1%のコーデックIDは'%2%'ですが、プライベートコーデックデータに有効なヘッダが含まれていません。\n"
 
 #: src/input/r_matroska.cpp:442
 #, boost-format
@@ -9130,7 +9096,7 @@ msgstr "mkvmergeは外部のテキストファイルからタイムコードを�
 #: src/mmg/tabs/global.cpp:260
 #: src/mmg/tabs/global.cpp:275
 msgid "mkvmerge does not distinguish between those two and simply counts the number of blocks."
-msgstr ""
+msgstr "mkvmergeはその2つを区別せず、ただ単にブロックの数を数えます。"
 
 #: src/output/p_avc.cpp:103
 #, boost-format
@@ -9236,7 +9202,7 @@ msgstr "mpeg_ps_reader：発生するべきではありません #2。%1%"
 #: src/mmg/options/mmg.cpp:126
 #: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:39
 msgid "never scan for other playlists"
-msgstr ""
+msgstr "常に他のプレイリストがないかスキャンしない"
 
 #: src/mmg/header_editor/bool_value_page.cpp:43
 #: src/mmg/tabs/input_general.cpp:105
@@ -9265,9 +9231,8 @@ msgid "no signature hash algorithm"
 msgstr "署名ハッシュアルゴリズムなし"
 
 #: src/mmg/tabs/global.cpp:313
-#, fuzzy
 msgid "no splitting"
-msgstr "ファイル分割"
+msgstr "分割しない"
 
 #: src/mmg/mmg_dialog.cpp:1027
 #: src/mmg/tabs/input_extra.cpp:85
@@ -9299,12 +9264,11 @@ msgstr "実行が成功した場合のみ"
 
 #: src/mmg/tabs/chapters.cpp:358
 msgid "ordered"
-msgstr ""
+msgstr "ordered"
 
 #: src/mmg/options/output.cpp:80
-#, fuzzy
 msgid "output options"
-msgstr "チャプタオプション"
+msgstr "出力オプション"
 
 #: src/info/mkvinfo.cpp:548
 #, boost-format
@@ -9414,37 +9378,32 @@ msgid "side by side (right first)"
 msgstr "サイドバイサイド方式（ライトファースト）"
 
 #: src/mmg/tabs/global.cpp:315
-#, fuzzy
 msgid "split after duration"
-msgstr "指定時間で分割:"
+msgstr "指定継続時間の後で分割"
 
 #: src/mmg/tabs/global.cpp:319
 msgid "split after frame/field numbers"
-msgstr ""
+msgstr "指定フレーム・フィールド数後に分割"
 
 #: src/mmg/tabs/global.cpp:314
-#, fuzzy
 msgid "split after size"
-msgstr "'--split'にサイズが指定されていません。\n"
+msgstr "指定サイズの後で分割"
 
 #: src/mmg/tabs/global.cpp:316
-#, fuzzy
 msgid "split after timecodes"
-msgstr "チャプタのタイムコード調整"
+msgstr "指定タイムコード後"
 
 #: src/mmg/tabs/global.cpp:320
-#, fuzzy
 msgid "split before chapters"
-msgstr "チャプタを削除"
+msgstr "チャプタの前で分割"
 
 #: src/mmg/tabs/global.cpp:318
 msgid "split by parts based on frame/field numbers"
-msgstr ""
+msgstr "フレーム・フィールド数に基づいて部分分割"
 
 #: src/mmg/tabs/global.cpp:317
-#, fuzzy
 msgid "split by parts based on timecodes"
-msgstr "チャプタのタイムコード調整"
+msgstr "タイムコードに基づいて部分分割"
 
 #: src/input/subtitles.cpp:600
 #, boost-format
@@ -10407,4 +10366,3 @@ msgstr "はい"
 
 #~ msgid "wrong usage: writing to read-only memory"
 #~ msgstr "間違った使用法：読み込み専用メモリへの書き込み"
-

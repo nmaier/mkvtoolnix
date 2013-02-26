@@ -1,7 +1,7 @@
 '\" t
 .\"     Title: mkvmerge
 .\"    Author: Moritz Bunkus <moritz@bunkus.org>
-.\" Generator: DocBook XSL Stylesheets v1.78.0 <http://docbook.sf.net/>
+.\" Generator: DocBook XSL Stylesheets v1.76.1 <http://docbook.sf.net/>
 .\"      Date: 2013-01-20
 .\"    Manual: Gebruiker commando\*(Aqs
 .\"    Source: MKVToolNix 6.0.0
@@ -998,7 +998,7 @@ Kopieer de audio sporen
 etc\&. De nummers zijn track ID\*(Aqs welke verkregen kunnen worden met de
 \fB\-\-identify\fR
 schakelaar\&. Zij zijn simpelweg niet de spoor nummers (zie sectie
-Spoor ID's)\&. Standaard: Kopieer alle audio sporen\&.
+Spoor ID\*(Aqs)\&. Standaard: Kopieer alle audio sporen\&.
 .sp
 Als de IDs zijn voorgezet met
 !
@@ -1014,7 +1014,7 @@ Kopieer de video sporen
 etc\&. De nummers zijn track ID\*(Aqs welke kunnen worden verkregen met de
 \fB\-\-identify\fR
 schakelaar\&. Zij zijn simpelweg niet de spoor nummers (zie sectie
-Spoor ID's)\&. Standaard: Kopieer alle video sporen\&.\&.
+Spoor ID\*(Aqs)\&. Standaard: Kopieer alle video sporen\&.\&.
 .sp
 Als de IDs zijn voorgezet met
 !
@@ -1030,7 +1030,7 @@ Kopieer de ondertitel sporen
 etc\&. De nummers zijn track ID\*(Aqs welke kunnen worden verkregen met de
 \fB\-\-identify\fR
 schakelaar\&. Zij zijn simpelweg niet de spoor nummers (zie sectie
-Spoor ID's)\&. Standaard: Kopieer alle ondertitel sporen\&.
+Spoor ID\*(Aqs)\&. Standaard: Kopieer alle ondertitel sporen\&.
 .sp
 Als de IDs zijn voorgezet met
 !
@@ -1046,7 +1046,7 @@ Kopieer de knop sporen
 etc\&. De nummers zijn track ID\*(Aqs welke kunnen worden verkregen met de
 \fB\-\-identify\fR
 schakelaar\&. Zij zijn simpelweg niet de spoor nummers (zie sectie
-Spoor ID's)\&. Standaard: Kopieer alle knop sporen\&.
+Spoor ID\*(Aqs)\&. Standaard: Kopieer alle knop sporen\&.
 .sp
 Als de IDs zijn voorgezet met
 !
@@ -1062,7 +1062,7 @@ Kopieer de markeringen voor sporen
 etc\&. De nummers zijn track ID\*(Aqs welke kunnen worden verkregen met de
 \fB\-\-identify\fR
 schakelaar (zie sectie
-Spoor ID's)\&. Zij zijn simpelweg niet de spoor nummers\&. Standaard: Kopieer alle markering sporen\&.
+Spoor ID\*(Aqs)\&. Zij zijn simpelweg niet de spoor nummers\&. Standaard: Kopieer alle markering sporen\&.
 .sp
 Als de IDs zijn voorgezet met
 !
@@ -1148,7 +1148,7 @@ met
 ms\&. De spoor ID\*(Aqs zijn hetzelfde als degene gegeven met
 \fB\-\-identify\fR
 (zie sectie
-Spoor ID's)\&.
+Spoor ID\*(Aqs)\&.
 .sp
 
 \fIo\fR/\fIp\fR: Stel de tijd codes bij met
@@ -1176,7 +1176,7 @@ Deze optie kan meerdere keren worden gebruikt voor een invoer bestand, is van to
 \fB\-\-cues\fR \fITID:none|iframes|all\fR
 .RS 4
 Controle voor welke sporen cue (index) ingangen worden gecre\(:eerd voor een opgegeven spoor (zie sectie
-Spoor ID's)\&. \*(Aqnone\*(Aq remt het cre\(:eren van volg document(en) (cue) af\&. Voor \*(Aqiframes\*(Aq all\('e\('en blokken zonder voor of achteruit referenties ( = I beelden in video sporen) worden ingevoerd in het \*(Aqvolg document(en) (cue)\*(Aq\&. \*(Aqall\*(Aq zorgt ervoor dat
+Spoor ID\*(Aqs)\&. \*(Aqnone\*(Aq remt het cre\(:eren van volg document(en) (cue) af\&. Voor \*(Aqiframes\*(Aq all\('e\('en blokken zonder voor of achteruit referenties ( = I beelden in video sporen) worden ingevoerd in het \*(Aqvolg document(en) (cue)\*(Aq\&. \*(Aqall\*(Aq zorgt ervoor dat
 \fBmkvmerge\fR(1)
 aanmaakt, volg document(en) (cue) voor alle blokken welke het bestand erg groot maakt\&.
 .sp
@@ -1192,7 +1192,7 @@ Deze optie kan meerdere keren worden gebruikt voor een invoer bestand, is van to
 \fB\-\-default\-track\fR \fITID\fR\fI[:bool]\fR
 .RS 4
 Zet de \*(Aqstandaard\*(Aq markering voor een gegeven spoor (zie sectie
-Spoor ID's) als het optionele argument
+Spoor ID\*(Aqs) als het optionele argument
 \fIbool\fR
 niet aanwezig is\&. Als de gebruiker niet zelf uitdrukkelijk een spoor selecteert, dan zou de af speler een spoor prefereren dat zijn \*(Aqstandaard\*(Aq markering heeft\&. Alleen \('e\('en spoor van elk soort (audio, video, ondertitels, knoppen) kunnen deze \*(Aqstandaard\*(Aq markering gezet hebben\&. Indien een gebruiker geen spoor wenst te hebben met een standaard spoor markering gezet, dan moet hij zetten
 \fIbool\fR
@@ -1206,7 +1206,7 @@ Deze optie kan meerdere keren worden gebruikt voor een invoer bestand, is van to
 \fB\-\-forced\-track\fR \fITID\fR\fI[:bool]\fR
 .RS 4
 Stelt de \*(Aqgeforceerde\*(Aq markering in voor een gegeven spoor (zie sectie
-Spoor ID's) als het optionele argument
+Spoor ID\*(Aqs) als het optionele argument
 \fIbool\fR
 niet aanwezig is\&. Een af speler moet alle sporen afspelen waarvan deze markering is gezet
 \fB1\fR\&.
@@ -1226,14 +1226,14 @@ voor het opgegeven spoor\&. Standaard is alle niveaus\&. Deze optie heeft alleen
 \fB\-\-track\-name\fR \fITID:name\fR
 .RS 4
 Stelt het spoor naam in van een gegeven spoor (zie sectie
-Spoor ID's) naar
+Spoor ID\*(Aqs) naar
 \fInaam\fR\&.
 .RE
 .PP
 \fB\-\-language\fR \fITID:language\fR
 .RS 4
 Stelt de taal in voor het opgegeven spoor (zie sectie
-Spoor ID's)\&. Beide ISO639\-2 taal codes en ISO639\-1 land codes zijn toegestaan\&. Het land code wordt automatisch vertaald naar taal code\&. Alle talen inclusief hun ISO639\-2 codes kunnen uit gelijst worden met
+Spoor ID\*(Aqs)\&. Beide ISO639\-2 taal codes en ISO639\-1 land codes zijn toegestaan\&. Het land code wordt automatisch vertaald naar taal code\&. Alle talen inclusief hun ISO639\-2 codes kunnen uit gelijst worden met
 \fB\-\-list\-languages\fR
 optie\&.
 .sp
@@ -2823,9 +2823,9 @@ Matroska(TM)
 bestand\&. Al deze waarden kunnen niet worden ingesteld via andere commando regel opties\&.
 .PP
 Overige "segment informatie" kopvelden kunnen gezet worden via de commandoregel opties maar niet via een XML bestand\&. Inclusief b\&.v\&. de
-\fB--title\fR
+\fB\-\-title\fR
 en de
-\fB--timecode-scale\fR
+\fB\-\-timecode\-scale\fR
 opties\&.
 .PP
 Er zijn nog andere elementen die kunnen worden ingesteld noch via commandoregel opties, noch via de XML\-bestanden\&. Deze bevatten de volgende elementen:
