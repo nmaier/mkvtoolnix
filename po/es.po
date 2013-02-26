@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: Israel Lucas Torrijos <lukillas.ole@gmail.com>\n"
 "POT-Creation-Date: 2010-06-08 10:00+0200\n"
-"PO-Revision-Date: 2013-02-20 15:35+0100\n"
+"PO-Revision-Date: 2013-02-26 02:25+0100\n"
 "Last-Translator: Israel Lucas a.k.a Overdrive80 <lukillas.ole@gmail.com>\n"
 "Language-Team: Spanish <moritz@bunkus.org>\n"
 "Language: es\n"
@@ -775,9 +775,8 @@ msgid " (adler: 0x%|1$08x|)"
 msgstr " (adler: 0x%|1$08x|)"
 
 #: src/info/mkvinfo.cpp:626
-#, fuzzy
 msgid " (aspect ratio)"
-msgstr " (mantener relación de aspecto)"
+msgstr " (relación de aspecto)"
 
 #: src/info/mkvinfo.cpp:624
 msgid " (centimeters)"
@@ -893,9 +892,9 @@ msgid "%1% built on %2% %3%"
 msgstr "%1% creado el %2% %3%"
 
 #: src/common/strings/formatting.cpp:261
-#, fuzzy, boost-format
+#, boost-format
 msgid "%1% bytes"
-msgstr "2 bytes"
+msgstr "%1% bytes"
 
 #: src/info/mkvinfo.cpp:207
 #, boost-format
@@ -923,7 +922,7 @@ msgstr[1] "%1% minutos"
 #: src/mmg/tabs/scanning_for_playlists_dlg.cpp:141
 #, boost-format
 msgid "%1% of %2% file(s) processed"
-msgstr ""
+msgstr "%1% de %2% archivo(s) procesado(s)"
 
 #: src/common/strings/formatting.cpp:249
 #, boost-format
@@ -935,17 +934,17 @@ msgstr[1] "%1% segundos"
 #: src/common/strings/formatting.cpp:264
 #, boost-format
 msgid "%1%.%2% GiB"
-msgstr ""
+msgstr "%1%.%2% GB"
 
 #: src/common/strings/formatting.cpp:262
 #, boost-format
 msgid "%1%.%2% KiB"
-msgstr ""
+msgstr "%1%.%2% KB"
 
 #: src/common/strings/formatting.cpp:263
 #, boost-format
 msgid "%1%.%2% MiB"
-msgstr ""
+msgstr "%1%.%2% MB"
 
 #: src/input/r_vobsub.cpp:86
 #, boost-format
@@ -1058,7 +1057,7 @@ msgstr "&Adjuntos\tAlt-2"
 
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:52
 msgid "&Cancel"
-msgstr ""
+msgstr "&Cancelar"
 
 #: src/mmg/mmg_dialog.cpp:321
 msgid "&Chapter Editor"
@@ -1099,7 +1098,7 @@ msgstr "&Deshabilitar"
 
 #: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:46
 msgid "&Don't scan, just add the file"
-msgstr ""
+msgstr "&No analizar, sólo añadir el archivo"
 
 #: src/mmg/jobs.cpp:478
 #: src/mmg/tabs/additional_parts_dlg.cpp:48
@@ -1226,7 +1225,7 @@ msgstr "&Guardar ajustes\tCtrl-S"
 
 #: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:45
 msgid "&Scan for other playlists"
-msgstr ""
+msgstr "&Buscar otros playlists"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:49
 msgid "&Sort"
@@ -2798,9 +2797,8 @@ msgid "Cluster timecode: %|1$.3f|s"
 msgstr "Código de tiempo del clúster: %|1$.3f|s"
 
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:67
-#, fuzzy
 msgid "Codec"
-msgstr "ID del códec"
+msgstr "Codec"
 
 #: src/common/property_element.cpp:129
 #: src/mmg/header_editor/frame.cpp:417
@@ -3312,7 +3310,7 @@ msgstr "Descripción:"
 
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:37
 msgid "Details"
-msgstr ""
+msgstr "Detalles"
 
 #: src/common/file_types.cpp:30
 #: src/input/r_dirac.h:33
@@ -3406,9 +3404,8 @@ msgid "Download URL:"
 msgstr "URL de descarga:"
 
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:60
-#, fuzzy
 msgid "Duration"
-msgstr "Duración:"
+msgstr "Duración"
 
 #: src/mmg/tabs/global.cpp:216
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:39
@@ -3577,7 +3574,7 @@ msgstr "Error cargando ajustes"
 msgid "Error opening file"
 msgstr "Error abriendo archivo"
 
-#: src/input/r_mpeg_ps.cpp:991
+#: src/input/r_mpeg_ps.cpp:1009
 msgid "Error parsing a MPEG PS packet during the header reading phase. This stream seems to be badly damaged.\n"
 msgstr "Error analizando un paquete MPEG PS durante la fase de lectura del encabezado. Este archivo parece estar muy corrupto.\n"
 
@@ -4157,7 +4154,7 @@ msgstr "Si una edición está marcada como por 'defecto', entonces se debe usar 
 
 #: src/mmg/options/output.cpp:51
 msgid "If checked mmg make sure the suggested output file name is unique by adding a number (e.g. ' (1)') to the end of the file name. This is only done if the unmodified file name already exists."
-msgstr ""
+msgstr "Si está activada, mmg se asegura de que el nombre del archivo de salida que se sugiere es único, al añadir un número (p. e. \"(1)\") al final del nombre de archivo. Esto sólo se hace si ya existe el nombre del archivo, sin modificar."
 
 #: src/mmg/options/output.cpp:55
 msgid "If checked mmg will ask for confirmation before overwriting existing files, or before adding a new job if there's an old job whose description matches the new one."
@@ -4864,9 +4861,8 @@ msgid "MPLS Blu-ray playlist"
 msgstr "MPLS Blu-ray playlist"
 
 #: src/mmg/options/output.cpp:50
-#, fuzzy
 msgid "Make suggested output file names unique"
-msgstr "Establecer de forma automática el destino del archivo creado"
+msgstr "Proponer nombres unicos para el archivo de salida"
 
 #: src/mmg/tabs/input_general.cpp:181
 msgid "Make this track the default track for its type (audio, video, subtitles). Players should prefer tracks with the default track flag set."
@@ -4989,7 +4985,7 @@ msgstr "Caché mínima"
 
 #: src/mmg/options/mmg.cpp:130
 msgid "Minimum duration for playlists in seconds:"
-msgstr ""
+msgstr "Duración mínima en segundos para los playlists:"
 
 #: src/common/command_line.cpp:211
 msgid "Missing argument for '--output-charset'.\n"
@@ -5334,9 +5330,8 @@ msgid "Notice"
 msgstr "Nota"
 
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:43
-#, fuzzy
 msgid "Number of chapters:"
-msgstr "&Nuevo"
+msgstr "Números de capítulos:"
 
 #: src/common/property_element.cpp:126
 #: src/mmg/header_editor/frame.cpp:407
@@ -5411,7 +5406,7 @@ msgstr "Solo parte de las asignaciones añadidas se le dieron al archivo n.º %1
 
 #: src/mmg/options/mmg.cpp:132
 msgid "Only playlists whose duration are at least this long are considered and offered to the user for selection."
-msgstr ""
+msgstr "Sólo el playlist cuya duración sea al menos de esta longitud, es considerado y ofrecido al usuario para su elección."
 
 #: src/info/info_cli_parser.cpp:42
 msgid "Only show summaries of the contents, not each element."
@@ -5548,9 +5543,8 @@ msgid "Packet queue not empty (flushed: %1%). Frames have been lost during remux
 msgstr "La lista de paquetes no está vacía (nivelado: %1%). Los fotogramas (frames) se han perdido durante el remultiplexado. %2%\n"
 
 #: src/mmg/options/output.cpp:40
-#, fuzzy
 msgid "Parent directory of the first input file"
-msgstr "El mismo directorio que del primer archivo añadido"
+msgstr "Directorio principal del primer archivo añadido"
 
 #: src/info/wxwidgets_ui.cpp:118
 msgid "Parse the file completely and show all elements"
@@ -5601,7 +5595,7 @@ msgstr "Anchura en píxeles: %1%"
 
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:47
 msgid "Playlist items:"
-msgstr ""
+msgstr "Elementos del Playlist:"
 
 #: src/mmg/options/mkvmerge.cpp:110
 msgid "Please do not select 'mmg' itself as the 'mkvmerge' executable."
@@ -6063,20 +6057,19 @@ msgstr "Guarde la información desde el actual archivo a uno de texto"
 
 #: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:24
 msgid "Scan directory for other playlists"
-msgstr ""
+msgstr "Buscar en el directorio otros playlists"
 
 #: src/mmg/options/mmg.cpp:121
 msgid "Scan directory for other playlists:"
-msgstr ""
+msgstr "Buscar en el directorio otros playlists:"
 
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:32
-#, fuzzy
 msgid "Scanned files"
-msgstr "Archivos adjuntos"
+msgstr "Archivos analizados"
 
 #: src/mmg/tabs/scanning_for_playlists_dlg.cpp:30
 msgid "Scanning directory"
-msgstr ""
+msgstr "Analizando directorio"
 
 #: src/info/mkvinfo.cpp:687
 #, boost-format
@@ -6187,9 +6180,8 @@ msgid "Select Matroska file"
 msgstr "Selecciona archivo Matroska"
 
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:27
-#, fuzzy
 msgid "Select file to add"
-msgstr "Selecciona los valores que se aplicarán"
+msgstr "Selecciona archivo a añadir"
 
 #: src/info/wxwidgets_ui.cpp:282
 msgid "Select output file"
@@ -6471,9 +6463,8 @@ msgid "Single field frame before GOP header detected. Fix the MPEG2 video stream
 msgstr "Fotograma con un único campo antes del encabezado GOP detectado. Fija el archivo de video MPEG2 antes de intentar multiplexarlo.\n"
 
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:62
-#, fuzzy
 msgid "Size"
-msgstr "Tamaño:"
+msgstr "Tamaño"
 
 #: src/mmg/tabs/global.cpp:199
 #: src/mmg/tabs/global.cpp:202
@@ -7236,7 +7227,7 @@ msgstr "El archivo que intentas guardar es un archivo Matroska. Para realizar es
 #: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:29
 #, boost-format
 msgid "The file you've added is a playlist. The directory it is located it contains %1% other file(s) with the same extension. mmg can scan these files, present the results including duration and number of tracks of each playlist found and let you chose which one to add."
-msgstr ""
+msgstr "El archivo que añadiste es un playlist. El directorio donde se encuentra contiene %1% otro(s) archivo(s) con la misma extensión. Mmg puede analizar estos archivos, y mostrar los resultados incluyendo la duración y el número de pistas de cada playlist encontrado, y permitirte elegir cual añadir."
 
 #: src/merge/mkvmerge.cpp:1745
 msgid "The first file cannot be appended because there are no files to append to.\n"
@@ -8127,9 +8118,8 @@ msgid "Tracks, chapters and tags:"
 msgstr "Pistas, capítulos y etiquetas:"
 
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:45
-#, fuzzy
 msgid "Tracks:"
-msgstr "Nombre de pista:"
+msgstr "Pistas:"
 
 #: src/mmg/mmg_dialog.cpp:314
 msgid "Troubleshooting advice for playback issues"
@@ -8150,19 +8140,17 @@ msgid "Two VobSub tracks can only be extracted into the same file if their Codec
 msgstr "Las dos pistas VobSub solo pueden ser extraídas en el mismo archivo si sus datos particulares del códec que coinciden. Este no es el caso para las pistas %1% y %2%.\n"
 
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:65
-#, fuzzy
 msgid "Type"
-msgstr "Tipo:"
+msgstr "Tipo"
 
 #: src/common/property_element.cpp:139
 #: src/mmg/header_editor/frame.cpp:445
-#, fuzzy
 msgid ""
 "Type of the unit for DisplayWidth/Height\n"
 "(0: pixels, 1: centimeters, 2: inches, 3: aspect ratio)."
 msgstr ""
 "Tipo de unidad para mostrar la anchura/altura\n"
-"(0: píxeles, 1: centímetros, 2: pulgadas)."
+"(0: píxeles, 1: centímetros, 2: pulgadas, 3: relación de aspecto)."
 
 #: src/mmg/header_editor/value_page.cpp:152
 msgid "Type:"
@@ -8514,11 +8502,11 @@ msgstr "Archivos de audio/video WebM"
 
 #: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:34
 msgid "What to do in the future:"
-msgstr ""
+msgstr "Qué hacer en el futuro:"
 
 #: src/mmg/options/mmg.cpp:54
 msgid "When a file is added its name is scanned. If it contains the word 'DELAY' followed by a number then this number is automatically put into the 'delay' input field for any audio track found in the file."
-msgstr "Cuando un archivo es añadido, su nombre es analizado. Si contiene la palabra DELAY seguida de un número, este último será puesto automáticamente en el campo «delay» para cualquier pista de audio que aparece en el archivo."
+msgstr "Cuando un archivo es añadido, su nombre es analizado. Si contiene la palabra DELAY seguida de un número, este último será puesto automáticamente en el campo 'delay' para cualquier pista de audio que aparece en el archivo."
 
 #: src/common/property_element.cpp:135
 #: src/mmg/header_editor/frame.cpp:425
@@ -8660,12 +8648,12 @@ msgstr "Siempre"
 #: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:37
 #: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:41
 msgid "always ask the user"
-msgstr ""
+msgstr "simpre preguntar al usuario"
 
 #: src/mmg/options/mmg.cpp:125
 #: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:38
 msgid "always scan for other playlists"
-msgstr ""
+msgstr "siempre buscar otros playlists"
 
 #: src/common/stereo_mode.cpp:58
 msgid "anaglyph (cyan/red)"
@@ -9313,12 +9301,12 @@ msgstr "mmg reiniciará la lista a predeterminada si ninguna entrada se  selecci
 msgid "mono"
 msgstr "Mono"
 
-#: src/input/r_mpeg_ps.cpp:1135
+#: src/input/r_mpeg_ps.cpp:1153
 #, boost-format
 msgid "mpeg_ps_reader: Should not have happened #1. %1%"
 msgstr "mpeg_ps_reader: No tendria que haber ocurrido #1. %1%"
 
-#: src/input/r_mpeg_ps.cpp:1162
+#: src/input/r_mpeg_ps.cpp:1180
 #, boost-format
 msgid "mpeg_ps_reader: Should not have happened #2. %1%"
 msgstr "mpeg_ps_reader: No tendria que haber ocurrido #2. %1%"
@@ -9326,7 +9314,7 @@ msgstr "mpeg_ps_reader: No tendria que haber ocurrido #2. %1%"
 #: src/mmg/options/mmg.cpp:126
 #: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:39
 msgid "never scan for other playlists"
-msgstr ""
+msgstr "nunca buscar otros playlists"
 
 #: src/mmg/header_editor/bool_value_page.cpp:43
 #: src/mmg/tabs/input_general.cpp:105
@@ -9391,9 +9379,8 @@ msgid "ordered"
 msgstr "Ordenado"
 
 #: src/mmg/options/output.cpp:80
-#, fuzzy
 msgid "output options"
-msgstr "Opciones del capítulo"
+msgstr "Opciones de salida"
 
 #: src/info/mkvinfo.cpp:548
 #, boost-format
@@ -9593,7 +9580,7 @@ msgstr "und (Indeterminado)"
 #: src/info/mkvinfo.cpp:933
 #: src/input/r_matroska.cpp:95
 #: src/input/r_matroska.cpp:2227
-#: src/input/r_mpeg_ps.cpp:1326
+#: src/input/r_mpeg_ps.cpp:1344
 #: src/mmg/header_editor/value_page.cpp:150
 #: src/mmg/mmg.cpp:64
 #: src/mmg/tabs/input.cpp:534
