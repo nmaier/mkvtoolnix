@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: eu\n"
 "Report-Msgid-Bugs-To: Xabier Aramendi <azpidatziak@gmail.com>\n"
 "POT-Creation-Date: 2010-06-08 10:00+0200\n"
-"PO-Revision-Date: 2013-01-25 21:53+0100\n"
+"PO-Revision-Date: 2013-02-26 21:37+0100\n"
 "Last-Translator: Xabier Aramendi (Azpidatziak) <azpidatziak@gmail.com>\n"
 "Language-Team: (EUS_Xabier Aramendi) <azpidatziak@gmail.com>\n"
 "Language: Basque (Euskara)\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.5.4\n"
+"X-Generator: Poedit 1.5.5\n"
 
 #: src/extract/xtr_tta.cpp:117
 #, boost-format
@@ -705,9 +705,8 @@ msgid " (adler: 0x%|1$08x|)"
 msgstr " (adler: 0x%|1$08x|)"
 
 #: src/info/mkvinfo.cpp:626
-#, fuzzy
 msgid " (aspect ratio)"
-msgstr " (heutsi ikuspegi mailari)"
+msgstr " (ikuspegi maila)"
 
 #: src/info/mkvinfo.cpp:624
 msgid " (centimeters)"
@@ -823,9 +822,9 @@ msgid "%1% built on %2% %3%"
 msgstr "%1% eraikia: %2% %3%"
 
 #: src/common/strings/formatting.cpp:261
-#, fuzzy, boost-format
+#, boost-format
 msgid "%1% bytes"
-msgstr "2 byte"
+msgstr "%1% byte"
 
 #: src/info/mkvinfo.cpp:207
 #, boost-format
@@ -853,7 +852,7 @@ msgstr[1] "%1% minutu"
 #: src/mmg/tabs/scanning_for_playlists_dlg.cpp:141
 #, boost-format
 msgid "%1% of %2% file(s) processed"
-msgstr ""
+msgstr "%1% of %2% agiri prozesatuta"
 
 #: src/common/strings/formatting.cpp:249
 #, boost-format
@@ -865,17 +864,17 @@ msgstr[1] "%1% segundu"
 #: src/common/strings/formatting.cpp:264
 #, boost-format
 msgid "%1%.%2% GiB"
-msgstr ""
+msgstr "%1%.%2% GiB"
 
 #: src/common/strings/formatting.cpp:262
 #, boost-format
 msgid "%1%.%2% KiB"
-msgstr ""
+msgstr "%1%.%2% KiB"
 
 #: src/common/strings/formatting.cpp:263
 #, boost-format
 msgid "%1%.%2% MiB"
-msgstr ""
+msgstr "%1%.%2% MiB"
 
 #: src/input/r_vobsub.cpp:86
 #, boost-format
@@ -988,7 +987,7 @@ msgstr "&Eranskinak\tAlt-2"
 
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:52
 msgid "&Cancel"
-msgstr ""
+msgstr "E&zeztatu"
 
 #: src/mmg/mmg_dialog.cpp:321
 msgid "&Chapter Editor"
@@ -1029,7 +1028,7 @@ msgstr "&Ezgaitu"
 
 #: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:46
 msgid "&Don't scan, just add the file"
-msgstr ""
+msgstr "E&z mihatu beste irakur-zerrendentzat"
 
 #: src/mmg/jobs.cpp:478
 #: src/mmg/tabs/additional_parts_dlg.cpp:48
@@ -1156,7 +1155,7 @@ msgstr "Gorde &ezarpenak\tCtrl-S"
 
 #: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:45
 msgid "&Scan for other playlists"
-msgstr ""
+msgstr "&Mihatu beste irakur-zerrendentzat"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:49
 msgid "&Sort"
@@ -2726,9 +2725,8 @@ msgid "Cluster timecode: %|1$.3f|s"
 msgstr "Klusterraren denbora-kodea: %|1$.3f|s"
 
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:67
-#, fuzzy
 msgid "Codec"
-msgstr "Kodek ID-a"
+msgstr "Kodeka"
 
 #: src/common/property_element.cpp:129
 #: src/mmg/header_editor/frame.cpp:417
@@ -3240,7 +3238,7 @@ msgstr "Azalpena:"
 
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:37
 msgid "Details"
-msgstr ""
+msgstr "Xehetasunak"
 
 #: src/common/file_types.cpp:30
 #: src/input/r_dirac.h:33
@@ -3334,9 +3332,8 @@ msgid "Download URL:"
 msgstr "Jeisketa URL-a:"
 
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:60
-#, fuzzy
 msgid "Duration"
-msgstr "Iraupena:"
+msgstr "Iraupena"
 
 #: src/mmg/tabs/global.cpp:216
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:39
@@ -3505,7 +3502,7 @@ msgstr "Akatsa ezarpenak gordetzerakoan"
 msgid "Error opening file"
 msgstr "Akatsa agiria irekitzerakoan"
 
-#: src/input/r_mpeg_ps.cpp:991
+#: src/input/r_mpeg_ps.cpp:1009
 msgid "Error parsing a MPEG PS packet during the header reading phase. This stream seems to be badly damaged.\n"
 msgstr "Akatsa MPEG PS pakete bat aztertzerakoan idazburu irakurketa aldian. Jario honek oso hondatua dirudi.\n"
 
@@ -4079,7 +4076,7 @@ msgstr "Edizio bat 'berezkoa' bezala makatuta badago berezko edizio bezala erabi
 
 #: src/mmg/options/output.cpp:51
 msgid "If checked mmg make sure the suggested output file name is unique by adding a number (e.g. ' (1)') to the end of the file name. This is only done if the unmodified file name already exists."
-msgstr ""
+msgstr "Hautatua badago mmg-l iradokituriko irteera agiri izena bakarra dela zihurtatzen du zenbaki bat gehituz (adib. ' (1)') agiri izenaren amaierara. Hau egiten da bakarrik aldatugabeko agiri izena jadanik badago."
 
 #: src/mmg/options/output.cpp:55
 msgid "If checked mmg will ask for confirmation before overwriting existing files, or before adding a new job if there's an old job whose description matches the new one."
@@ -4783,12 +4780,11 @@ msgstr "MPEG-4"
 
 #: src/common/file_types.cpp:43
 msgid "MPLS Blu-ray playlist"
-msgstr ""
+msgstr "MPLS Bluray iraku-zerrenda"
 
 #: src/mmg/options/output.cpp:50
-#, fuzzy
 msgid "Make suggested output file names unique"
-msgstr "Berez-ezarri irteera agirizena"
+msgstr "Egin iradokituriko irteera agiria bakar"
 
 #: src/mmg/tabs/input_general.cpp:181
 msgid "Make this track the default track for its type (audio, video, subtitles). Players should prefer tracks with the default track flag set."
@@ -4911,7 +4907,7 @@ msgstr "Gutxieneko katxea"
 
 #: src/mmg/options/mmg.cpp:130
 msgid "Minimum duration for playlists in seconds:"
-msgstr ""
+msgstr "Irakur-zerrendentzako gutxienezko iraupena segunduetan:"
 
 #: src/common/command_line.cpp:211
 msgid "Missing argument for '--output-charset'.\n"
@@ -5254,9 +5250,8 @@ msgid "Notice"
 msgstr "Oharra"
 
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:43
-#, fuzzy
 msgid "Number of chapters:"
-msgstr "&Atal berriak"
+msgstr "Atal zenbatekoa:"
 
 #: src/common/property_element.cpp:126
 #: src/mmg/header_editor/frame.cpp:407
@@ -5331,7 +5326,7 @@ msgstr "Bakarrik gehitutako mapaketen zati bat eman da %1% zenbakiko agiriarentz
 
 #: src/mmg/options/mmg.cpp:132
 msgid "Only playlists whose duration are at least this long are considered and offered to the user for selection."
-msgstr ""
+msgstr "Gutxinez luzera hau duten irakur-zerrendak bakarrik hartzen dira kontuan eta eskaintzen dira erabiltzaileari hautapenerako."
 
 #: src/info/info_cli_parser.cpp:42
 msgid "Only show summaries of the contents, not each element."
@@ -5468,9 +5463,8 @@ msgid "Packet queue not empty (flushed: %1%). Frames have been lost during remux
 msgstr "Pakete lerroa ez dago hutsik (orekatuta: %1%). Frameak galdu egin dira bermultiplexaketan. %2%\n"
 
 #: src/mmg/options/output.cpp:40
-#, fuzzy
 msgid "Parent directory of the first input file"
-msgstr "Lehen sarrera agiriaren zuzenbide bera"
+msgstr "Lehen sarrera agiriaren gaineko zuzenbidea"
 
 #: src/info/wxwidgets_ui.cpp:118
 msgid "Parse the file completely and show all elements"
@@ -5521,7 +5515,7 @@ msgstr "Pixel zabalera: %1%"
 
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:47
 msgid "Playlist items:"
-msgstr ""
+msgstr "Irakur-zerrendako gaiak:"
 
 #: src/mmg/options/mkvmerge.cpp:110
 msgid "Please do not select 'mmg' itself as the 'mkvmerge' executable."
@@ -5983,20 +5977,19 @@ msgstr "Gorde oraingo agiriaren argibieak idazki agiri batean"
 
 #: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:24
 msgid "Scan directory for other playlists"
-msgstr ""
+msgstr "Mihatu zuzenbidea beste irakur-zerrendentzat"
 
 #: src/mmg/options/mmg.cpp:121
 msgid "Scan directory for other playlists:"
-msgstr ""
+msgstr "Mihatu zuzenbidea beste irakur-zerrendentzat:"
 
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:32
-#, fuzzy
 msgid "Scanned files"
-msgstr "Erantsitako agiriak"
+msgstr "Mihatutako agiriak"
 
 #: src/mmg/tabs/scanning_for_playlists_dlg.cpp:30
 msgid "Scanning directory"
-msgstr ""
+msgstr "Zuzenbide mihaketa"
 
 #: src/info/mkvinfo.cpp:687
 #, boost-format
@@ -6107,9 +6100,8 @@ msgid "Select Matroska file"
 msgstr "Hautatu Matroska agiria"
 
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:27
-#, fuzzy
 msgid "Select file to add"
-msgstr "Hautatu ezartzeko balioak"
+msgstr "Hautatu gehitzeko agiria"
 
 #: src/info/wxwidgets_ui.cpp:282
 msgid "Select output file"
@@ -6388,9 +6380,8 @@ msgid "Single field frame before GOP header detected. Fix the MPEG2 video stream
 msgstr "Eremu bakarreko framea atzeman da GOP idazburuaren aurretik. Zuzendu MPEG2 bideo jarioa hura multiplexatzen saiatu aurretik.\n"
 
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:62
-#, fuzzy
 msgid "Size"
-msgstr "Neurria:"
+msgstr "Neurria"
 
 #: src/mmg/tabs/global.cpp:199
 #: src/mmg/tabs/global.cpp:202
@@ -7152,7 +7143,7 @@ msgstr "Gordetzen saiatzen ari zaren agiria ez da Matroska agiri bat. Lan honeta
 #: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:29
 #, boost-format
 msgid "The file you've added is a playlist. The directory it is located it contains %1% other file(s) with the same extension. mmg can scan these files, present the results including duration and number of tracks of each playlist found and let you chose which one to add."
-msgstr ""
+msgstr "Gehitu duzun agiria irakur-zerrenda bat da. Kokaturik dagoen zuzenbideak beste %1% agiri d(it)u luzapen berdinarekin. mmg-k agiri hauek mihatu ditzake, aurkitutako irakur-zerrenda bakoitzaren iraupena eta bide zenbatekoa barneratuz emaitzak aurkeztu eta zein gehitzea nahi duzun hautatzea eskainiz."
 
 #: src/merge/mkvmerge.cpp:1745
 msgid "The first file cannot be appended because there are no files to append to.\n"
@@ -8041,9 +8032,8 @@ msgid "Tracks, chapters and tags:"
 msgstr "Bideak, atalak eta etiketak:"
 
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:45
-#, fuzzy
 msgid "Tracks:"
-msgstr "Bide izena:"
+msgstr "Bideak:"
 
 #: src/mmg/mmg_dialog.cpp:314
 msgid "Troubleshooting advice for playback issues"
@@ -8064,19 +8054,17 @@ msgid "Two VobSub tracks can only be extracted into the same file if their Codec
 msgstr "Bi VobSub bideak bakarrik atera daitezke agiri berdinera beren Kodek-Pribatu datuak bat badatoz. Hau ez da gertatzen %1% eta %2% bideetan.\n"
 
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:65
-#, fuzzy
 msgid "Type"
-msgstr "Mota:"
+msgstr "Mota"
 
 #: src/common/property_element.cpp:139
 #: src/mmg/header_editor/frame.cpp:445
-#, fuzzy
 msgid ""
 "Type of the unit for DisplayWidth/Height\n"
 "(0: pixels, 1: centimeters, 2: inches, 3: aspect ratio)."
 msgstr ""
 "Bateko mota Zabalera/Garaiera Erakuspenerako\n"
-"(0: pixel, 1: metroehunen, 2: hatzbete)."
+"(0: pixel, 1: metroehunen, 2: hatzbete, 3: ikuspegi maila)."
 
 #: src/mmg/header_editor/value_page.cpp:152
 msgid "Type:"
@@ -8428,7 +8416,7 @@ msgstr "WebM audio/bideo agiriak"
 
 #: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:34
 msgid "What to do in the future:"
-msgstr ""
+msgstr "Zer egin etorkizunean:"
 
 #: src/mmg/options/mmg.cpp:54
 msgid "When a file is added its name is scanned. If it contains the word 'DELAY' followed by a number then this number is automatically put into the 'delay' input field for any audio track found in the file."
@@ -8573,12 +8561,12 @@ msgstr "betik"
 #: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:37
 #: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:41
 msgid "always ask the user"
-msgstr ""
+msgstr "betik galdetu erabiltzaileari"
 
 #: src/mmg/options/mmg.cpp:125
 #: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:38
 msgid "always scan for other playlists"
-msgstr ""
+msgstr "betik mihatu beste irakur-zerrendentzat"
 
 #: src/common/stereo_mode.cpp:58
 msgid "anaglyph (cyan/red)"
@@ -9226,12 +9214,12 @@ msgstr "mmg-k berezko zerrenda berrezarriko du ez bada sarrerarik hautatzen."
 msgid "mono"
 msgstr "monoa"
 
-#: src/input/r_mpeg_ps.cpp:1135
+#: src/input/r_mpeg_ps.cpp:1153
 #, boost-format
 msgid "mpeg_ps_reader: Should not have happened #1. %1%"
 msgstr "mpeg_ps_reader: Hau ez litzake gertatu behar #1. %1%"
 
-#: src/input/r_mpeg_ps.cpp:1162
+#: src/input/r_mpeg_ps.cpp:1180
 #, boost-format
 msgid "mpeg_ps_reader: Should not have happened #2. %1%"
 msgstr "mpeg_ps_reader: Hau ez litzake gertatu behar #2. %1%"
@@ -9239,7 +9227,7 @@ msgstr "mpeg_ps_reader: Hau ez litzake gertatu behar #2. %1%"
 #: src/mmg/options/mmg.cpp:126
 #: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:39
 msgid "never scan for other playlists"
-msgstr ""
+msgstr "inoiz ez mihatu beste irakur-zerrendentzat"
 
 #: src/mmg/header_editor/bool_value_page.cpp:43
 #: src/mmg/tabs/input_general.cpp:105
@@ -9304,9 +9292,8 @@ msgid "ordered"
 msgstr "hurrenkeran"
 
 #: src/mmg/options/output.cpp:80
-#, fuzzy
 msgid "output options"
-msgstr "Atal aukerak"
+msgstr "irteera aukerak"
 
 #: src/info/mkvinfo.cpp:548
 #, boost-format
@@ -9421,7 +9408,7 @@ msgstr "banandu iraupen honen ondoren"
 
 #: src/mmg/tabs/global.cpp:319
 msgid "split after frame/field numbers"
-msgstr "banandu frame/eremu zenbaken ondoren"
+msgstr "banandu frame/eremu zenbakien ondoren"
 
 #: src/mmg/tabs/global.cpp:314
 msgid "split after size"
@@ -9506,7 +9493,7 @@ msgstr "zehgab (Zehaztugabea)"
 #: src/info/mkvinfo.cpp:933
 #: src/input/r_matroska.cpp:95
 #: src/input/r_matroska.cpp:2227
-#: src/input/r_mpeg_ps.cpp:1326
+#: src/input/r_mpeg_ps.cpp:1344
 #: src/mmg/header_editor/value_page.cpp:150
 #: src/mmg/mmg.cpp:64
 #: src/mmg/tabs/input.cpp:534
