@@ -5,10 +5,10 @@
 # BouRock <BouRock(at)live.com>, 2011.
 msgid ""
 msgstr ""
-"Project-Id-Version: MKVToolNix 6.0.0\n"
+"Project-Id-Version: MKVToolNix 6.1.0\n"
 "Report-Msgid-Bugs-To: moritz@bunkus.org\n"
 "POT-Creation-Date: 2011-01-17 08:47:00+0100\n"
-"PO-Revision-Date: 2013-01-15 23:26+0200\n"
+"PO-Revision-Date: 2013-02-27 09:16+0200\n"
 "Last-Translator: Burak Yavuz <BouRock(at)live.com>\n"
 "Language-Team: BouRock <BouRock(at)live.com>\n"
 "Language: Türkçe\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n>1);\n"
-"X-Generator: Poedit 1.5.4\n"
+"X-Generator: Poedit 1.5.5\n"
 
 #: src/extract/xtr_tta.cpp:117
 #, boost-format
@@ -702,9 +702,8 @@ msgid " (adler: 0x%|1$08x|)"
 msgstr " (adler: 0x%|1$08x|)"
 
 #: src/info/mkvinfo.cpp:626
-#, fuzzy
 msgid " (aspect ratio)"
-msgstr " (en-boy oranını tut)"
+msgstr " (en-boy oranını)"
 
 #: src/info/mkvinfo.cpp:624
 msgid " (centimeters)"
@@ -820,9 +819,9 @@ msgid "%1% built on %2% %3%"
 msgstr "%1%, %2% %3% üzerine kurulu"
 
 #: src/common/strings/formatting.cpp:261
-#, fuzzy, boost-format
+#, boost-format
 msgid "%1% bytes"
-msgstr "2 bayt"
+msgstr "%1% bayt"
 
 #: src/info/mkvinfo.cpp:207
 #, boost-format
@@ -850,7 +849,7 @@ msgstr[1] "%1% dakika"
 #: src/mmg/tabs/scanning_for_playlists_dlg.cpp:141
 #, boost-format
 msgid "%1% of %2% file(s) processed"
-msgstr ""
+msgstr "%1% / %2% dosya işlendi"
 
 #: src/common/strings/formatting.cpp:249
 #, boost-format
@@ -862,17 +861,17 @@ msgstr[1] "%1% saniye"
 #: src/common/strings/formatting.cpp:264
 #, boost-format
 msgid "%1%.%2% GiB"
-msgstr ""
+msgstr "%1%.%2% GiB"
 
 #: src/common/strings/formatting.cpp:262
 #, boost-format
 msgid "%1%.%2% KiB"
-msgstr ""
+msgstr "%1%.%2% KiB"
 
 #: src/common/strings/formatting.cpp:263
 #, boost-format
 msgid "%1%.%2% MiB"
-msgstr ""
+msgstr "%1%.%2% MiB"
 
 #: src/input/r_vobsub.cpp:86
 #, boost-format
@@ -985,7 +984,7 @@ msgstr "&Ekler\tAlt-2"
 
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:52
 msgid "&Cancel"
-msgstr ""
+msgstr "İ&ptal"
 
 #: src/mmg/mmg_dialog.cpp:321
 msgid "&Chapter Editor"
@@ -1026,7 +1025,7 @@ msgstr "&Etkisiz"
 
 #: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:46
 msgid "&Don't scan, just add the file"
-msgstr ""
+msgstr "Tara&ma, sadece dosyayı ekle"
 
 #: src/mmg/jobs.cpp:478
 #: src/mmg/tabs/additional_parts_dlg.cpp:48
@@ -1153,7 +1152,7 @@ msgstr "Ayarları &kaydet\tCtrl-S"
 
 #: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:45
 msgid "&Scan for other playlists"
-msgstr ""
+msgstr "Diğer oynatma listeleri için &tara"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:49
 msgid "&Sort"
@@ -2405,7 +2404,7 @@ msgstr "İkinci çoklama işi başlatılamıyor"
 #: src/extract/xtr_textsubs.cpp:315
 #, boost-format
 msgid "Cannot write track %1% with the CodecID '%2%' to the file '%3%' because track %4% with the CodecID '%5%' is already being written to the same file, and their CodecPrivate data (the USF styles etc) do not match.\n"
-msgstr ""
+msgstr "KodekID '%2%' ile olan iz %1%, '%3%' dosyasına yazılamaz çünkü KodekID '%5%' ile olan iz %4% zaten aynı dosyaya yazılmış ve CodecPrivate verileri (USF stilleri vs.) eşleşmiyor.\n"
 
 #: src/extract/xtr_avi.cpp:48
 #: src/extract/xtr_base.cpp:65
@@ -2413,7 +2412,7 @@ msgstr ""
 #: src/extract/xtr_textsubs.cpp:310
 #, boost-format
 msgid "Cannot write track %1% with the CodecID '%2%' to the file '%3%' because track %4% with the CodecID '%5%' is already being written to the same file.\n"
-msgstr ""
+msgstr "KodekID '%2%' ile olan iz %1%, '%3%' dosyasına yazılamaz çünkü KodekID '%5%' ile olan iz %4% zaten aynı dosyaya yazılmış.\n"
 
 #: src/common/kate.cpp:80
 msgid "Category is not NUL terminated"
@@ -2725,9 +2724,8 @@ msgid "Cluster timecode: %|1$.3f|s"
 msgstr "Küme zaman kodu: %|1$.3f|s"
 
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:67
-#, fuzzy
 msgid "Codec"
-msgstr "Kodek ID"
+msgstr "Kodek"
 
 #: src/common/property_element.cpp:129
 #: src/mmg/header_editor/frame.cpp:417
@@ -3239,7 +3237,7 @@ msgstr "Tanım:"
 
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:37
 msgid "Details"
-msgstr ""
+msgstr "Ayrıntılar"
 
 #: src/common/file_types.cpp:30
 #: src/input/r_dirac.h:33
@@ -3333,9 +3331,8 @@ msgid "Download URL:"
 msgstr "İndirme URL'si:"
 
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:60
-#, fuzzy
 msgid "Duration"
-msgstr "Süre:"
+msgstr "Süre"
 
 #: src/mmg/tabs/global.cpp:216
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:39
@@ -3504,7 +3501,7 @@ msgstr "Ayarları yükleme hatası"
 msgid "Error opening file"
 msgstr "Dosya açma hatası"
 
-#: src/input/r_mpeg_ps.cpp:991
+#: src/input/r_mpeg_ps.cpp:1009
 msgid "Error parsing a MPEG PS packet during the header reading phase. This stream seems to be badly damaged.\n"
 msgstr "Başlık okuma aşaması sırasında MPEG PS paketi ayrıştırma hastası. Bu akış kötü bir şekilde hasarlı görünüyor.\n"
 
@@ -3598,7 +3595,7 @@ msgstr "Beklenen zaman biçimi: HH:MM:SS.nnn (HH = saat, MM = dakika, SS = saniy
 
 #: src/extract/extract_cli_parser.cpp:96
 msgid "Exports the chapter information in the simple format used in OGM tools (CHAPTER01=... CHAPTER01NAME=...)."
-msgstr ""
+msgstr "OGM araçları içinde kullanılan basit biçimdeki bölüm bilgisini dışa aktarır (BÖLÜM01=... BÖLÜM01ADI=...)."
 
 #: src/mmg/tabs/input.cpp:193
 msgid "Extra options"
@@ -3636,7 +3633,7 @@ msgstr ""
 #: src/extract/tracks.cpp:97
 #, boost-format
 msgid "Extraction of track ID %1% with the CodecID '%2%' is not supported.\n"
-msgstr ""
+msgstr "KodekID '%2%' ile olan iz ID %1% çıkartılması desteklenmiyor.\n"
 
 #: src/input/r_flac.h:52
 #: src/output/p_flac.h:39
@@ -3689,7 +3686,7 @@ msgstr "Aile UID: %1%"
 #: src/merge/mkvmerge.cpp:429
 #, boost-format
 msgid "File %1% has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n"
-msgstr ""
+msgstr "Dosya %1%, bilinmeyen türe sahip. Lütfen desteklenen dosya türlerine ('mkvmerge --list-types') bir bakın ve dosya türünüz destekleniyor ama doğru bir şekilde tanınmıyorsa, yazar Moritz Bunkus <moritz@bunkus.org> ile temasa geçin.\n"
 
 #: src/merge/pr_generic.cpp:1430
 #, boost-format
@@ -4109,7 +4106,7 @@ msgstr ""
 
 #: src/mmg/mmg_dialog.cpp:1973
 msgid "If you encounter problems during playback of files please consider visiting the newly created MKVToolNix troubleshooting advice page:"
-msgstr ""
+msgstr "Eğer dosyaların oynatılması sırasında sorunlarla karşılaşıyorsanız lütfen yeni oluşturulmuş MKVToolNix sorun giderme yardımcısı sayfasını ziyaret etmeyi düşünün:"
 
 #: src/output/p_textsubs.cpp:69
 #, boost-format
@@ -4786,12 +4783,11 @@ msgstr "MPEG-4"
 
 #: src/common/file_types.cpp:43
 msgid "MPLS Blu-ray playlist"
-msgstr ""
+msgstr "MPLS Blu-ray oynatma listesi"
 
 #: src/mmg/options/output.cpp:50
-#, fuzzy
 msgid "Make suggested output file names unique"
-msgstr "Çıktı dosya adını otomatik ayarla"
+msgstr "Önerilen çıktı dosyası adlarını benzersiz yap"
 
 #: src/mmg/tabs/input_general.cpp:181
 msgid "Make this track the default track for its type (audio, video, subtitles). Players should prefer tracks with the default track flag set."
@@ -4914,7 +4910,7 @@ msgstr "En az önbellek"
 
 #: src/mmg/options/mmg.cpp:130
 msgid "Minimum duration for playlists in seconds:"
-msgstr ""
+msgstr "Saniye olarak oynatma listeleri için en az süre:"
 
 #: src/common/command_line.cpp:211
 msgid "Missing argument for '--output-charset'.\n"
@@ -5259,9 +5255,8 @@ msgid "Notice"
 msgstr "Bildiri"
 
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:43
-#, fuzzy
 msgid "Number of chapters:"
-msgstr "&Yeni bölümler"
+msgstr "Bölüm sayısı:"
 
 #: src/common/property_element.cpp:126
 #: src/mmg/header_editor/frame.cpp:407
@@ -5473,9 +5468,8 @@ msgid "Packet queue not empty (flushed: %1%). Frames have been lost during remux
 msgstr "Paket kuyruğu boş değil (temizlenen: %1%). Kareler yeniden çoklama sırasında kayboldu. %2%\n"
 
 #: src/mmg/options/output.cpp:40
-#, fuzzy
 msgid "Parent directory of the first input file"
-msgstr "İlk girdi dosyasının diziniyle aynı"
+msgstr "İlk girdi dosyasının ana dizini"
 
 #: src/info/wxwidgets_ui.cpp:118
 msgid "Parse the file completely and show all elements"
@@ -5526,7 +5520,7 @@ msgstr "Piksel genişliği: %1%"
 
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:47
 msgid "Playlist items:"
-msgstr ""
+msgstr "Oynatma listesi öğeleri:"
 
 #: src/mmg/options/mkvmerge.cpp:110
 msgid "Please do not select 'mmg' itself as the 'mkvmerge' executable."
@@ -5905,7 +5899,7 @@ msgstr "SRT altyazıları"
 
 #: src/common/file_types.cpp:50
 msgid "SRT text subtitles"
-msgstr "SRT metni altyazıları"
+msgstr "SRT metin altyazıları"
 
 #: src/input/r_ssa.h:32
 msgid "SSA/ASS subtitles"
@@ -5913,7 +5907,7 @@ msgstr "SSA/ASS altyazıları"
 
 #: src/common/file_types.cpp:51
 msgid "SSA/ASS text subtitles"
-msgstr "SSA/ASS metni altyazıları"
+msgstr "SSA/ASS metin altyazıları"
 
 #: src/mmg/mmg_dialog.cpp:297
 msgid "Sa&ve command line"
@@ -5987,20 +5981,19 @@ msgstr "Şu anki dosyadan bilgiyi bir metin dosyasına kaydet"
 
 #: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:24
 msgid "Scan directory for other playlists"
-msgstr ""
+msgstr "Diğer oynatma listeleri için dizini tara"
 
 #: src/mmg/options/mmg.cpp:121
 msgid "Scan directory for other playlists:"
-msgstr ""
+msgstr "Diğer oynatma listeleri için dizini tara:"
 
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:32
-#, fuzzy
 msgid "Scanned files"
-msgstr "Ekli dosyalar"
+msgstr "Taranan dosyalar"
 
 #: src/mmg/tabs/scanning_for_playlists_dlg.cpp:30
 msgid "Scanning directory"
-msgstr ""
+msgstr "Dizin taranıyor"
 
 #: src/info/mkvinfo.cpp:687
 #, boost-format
@@ -6111,9 +6104,8 @@ msgid "Select Matroska file"
 msgstr "Matroska dosyası seç"
 
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:27
-#, fuzzy
 msgid "Select file to add"
-msgstr "Uygulamak için değerleri seçin"
+msgstr "Eklemek için dosya seçin"
 
 #: src/info/wxwidgets_ui.cpp:282
 msgid "Select output file"
@@ -6392,9 +6384,8 @@ msgid "Single field frame before GOP header detected. Fix the MPEG2 video stream
 msgstr "GOP başlığından önce tek alan karesi saptandı. Çoklamak için denemeden önce MPEG2 görüntü akışını düzeltin.\n"
 
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:62
-#, fuzzy
 msgid "Size"
-msgstr "Boyut:"
+msgstr "Boyut"
 
 #: src/mmg/tabs/global.cpp:199
 #: src/mmg/tabs/global.cpp:202
@@ -6861,6 +6852,11 @@ msgid ""
 "\n"
 "Note: This warning can be deactivated in the 'options' dialog. Turn off the 'Warn about usage...' option."
 msgstr ""
+"Bölüm düzenleyicisi kullanılmış ve veri içeriyor. Ancak, genel sayfada hiç bölüm dosyası seçilmemiş. Mmg içinde bölüm düzenleyicisi çoklama işleminden bağımsızdır. Düzenleyicide bulunan bölümler çıktı dosyasına ÇOKLANMAYACAKTIR. Sadece bölüm düzenleyicisi menüsünden çeşitli 'kaydet' işlevleri, bölümlerin sabit diske yazılmasına neden olacak.\n"
+"\n"
+"Gerçekten çoklamaya devam etmek istiyor musunuz?\n"
+"\n"
+"Not: Bu uyarı 'seçenekler' iletisinden devre dışı bırakılabilir. 'Kullanım hakkında uyar...' seçeneğini kapatın."
 
 #: src/output/p_mpeg4_p10.cpp:153
 #, boost-format
@@ -7524,16 +7520,16 @@ msgstr ""
 
 #: src/common/xml/xml.h:130
 msgid "The tag or attribute '%1%' at position %2% contains data that is outside its allowed range."
-msgstr ""
+msgstr "İzin verilen aralığı dışında %2% konumundaki etiket ya da öznitelik '%1%' veri içeriyor."
 
 #: src/common/xml/xml.h:110
 msgid "The tag or attribute '%1%' at position %2% contains invalid or mal-formed data."
-msgstr ""
+msgstr "%2% konumundaki etiket ya da öznitelik '%1%' geçersiz ya da bozuk biçimlenmiş veri içeriyor."
 
 #: src/merge/pr_generic.cpp:271
 #, boost-format
 msgid "The tags in '%1%' could not be parsed: some mandatory elements are missing.\n"
-msgstr ""
+msgstr "'%1%' içindeki etiketler ayrıştırılamadı: bazı zorunlu öğeler eksik.\n"
 
 #: src/extract/xtr_tta.cpp:80
 #, boost-format
@@ -7658,7 +7654,7 @@ msgstr "Çevrimiçi yeni sürüm mevcut."
 #: src/merge/output_control.cpp:998
 #, boost-format
 msgid "There is no file with the ID '%1%'. The argument for '--append-to' was invalid.\n"
-msgstr ""
+msgstr "ID '%1%' ile olan bir dosya yok. '--append-to' için bağımsız değişken geçersizdi.\n"
 
 #: src/common/command_line.cpp:258
 #, boost-format
@@ -7782,7 +7778,7 @@ msgstr "Bu ileti sadece bir defa gösterilecek."
 #: src/mmg/tabs/global.cpp:256
 #: src/mmg/tabs/global.cpp:271
 msgid "This mode considers only the first video track that is output."
-msgstr ""
+msgstr "Bu kip sadece çıktı olan ilk görüntü izini dikkate alır."
 
 #: src/mmg/tabs/global.cpp:286
 msgid "This mode only considers the top-most level of chapters across all edition entries."
@@ -8018,9 +8014,8 @@ msgid "Tracks, chapters and tags:"
 msgstr "İzler, bölümler ve etiketler:"
 
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:45
-#, fuzzy
 msgid "Tracks:"
-msgstr "İz adı:"
+msgstr "İzler:"
 
 #: src/mmg/mmg_dialog.cpp:314
 msgid "Troubleshooting advice for playback issues"
@@ -8041,19 +8036,17 @@ msgid "Two VobSub tracks can only be extracted into the same file if their Codec
 msgstr "İki VobSub izi sadece CodecPrivate verisi eşleşirse aynı dosya içine çıkartılabilir. Bu, iz %1% ve %2% durumu için değildir.\n"
 
 #: src/mmg/tabs/select_scanned_file_dlg.cpp:65
-#, fuzzy
 msgid "Type"
-msgstr "Türü:"
+msgstr "Türü"
 
 #: src/common/property_element.cpp:139
 #: src/mmg/header_editor/frame.cpp:445
-#, fuzzy
 msgid ""
 "Type of the unit for DisplayWidth/Height\n"
 "(0: pixels, 1: centimeters, 2: inches, 3: aspect ratio)."
 msgstr ""
 "GörüntüGenişliği/Yüksekliği için birimin türü\n"
-"(0: piksel, 1: santimetre, 2: inç)."
+"(0: piksel, 1: santimetre, 2: inç, 3: en-boy oranı)."
 
 #: src/mmg/header_editor/value_page.cpp:152
 msgid "Type:"
@@ -8078,7 +8071,7 @@ msgstr "USF altyazıları"
 
 #: src/common/file_types.cpp:53
 msgid "USF text subtitles"
-msgstr "USF metni altyazıları"
+msgstr "USF metin altyazıları"
 
 #: src/common/ebml.cpp:85
 msgid "UTFstring_to_cstrutf8: Invalid wide character. Please contact moritz@bunkus.org if you think that this is not true."
@@ -8405,7 +8398,7 @@ msgstr "WebM ses/görüntü dosyaları"
 
 #: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:34
 msgid "What to do in the future:"
-msgstr ""
+msgstr "İleride ne yapılsın:"
 
 #: src/mmg/options/mmg.cpp:54
 msgid "When a file is added its name is scanned. If it contains the word 'DELAY' followed by a number then this number is automatically put into the 'delay' input field for any audio track found in the file."
@@ -8550,12 +8543,12 @@ msgstr "her zaman"
 #: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:37
 #: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:41
 msgid "always ask the user"
-msgstr ""
+msgstr "her zaman kullanıcıyı sor"
 
 #: src/mmg/options/mmg.cpp:125
 #: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:38
 msgid "always scan for other playlists"
-msgstr ""
+msgstr "her zaman diğer oynatma listeleri için tara"
 
 #: src/common/stereo_mode.cpp:58
 msgid "anaglyph (cyan/red)"
@@ -8583,11 +8576,11 @@ msgstr "örnek başına bit: %1%"
 
 #: src/common/stereo_mode.cpp:61
 msgid "both eyes laced in one block (left first)"
-msgstr ""
+msgstr "her iki göz bir bloğa bağlı (önce sol)"
 
 #: src/common/stereo_mode.cpp:62
 msgid "both eyes laced in one block (right first)"
-msgstr ""
+msgstr "her iki göz bir bloğa bağlı (önce sağ)"
 
 #: src/info/mkvinfo.cpp:932
 #: src/input/r_matroska.cpp:97
@@ -9203,12 +9196,12 @@ msgstr "Eğer hiç giriş seçilmezse, mmg varsayılan listeye sıfırlayacaktı
 msgid "mono"
 msgstr "mono"
 
-#: src/input/r_mpeg_ps.cpp:1135
+#: src/input/r_mpeg_ps.cpp:1153
 #, boost-format
 msgid "mpeg_ps_reader: Should not have happened #1. %1%"
 msgstr "mpeg_ps_reader: Olmamalıydı #1. %1%"
 
-#: src/input/r_mpeg_ps.cpp:1162
+#: src/input/r_mpeg_ps.cpp:1180
 #, boost-format
 msgid "mpeg_ps_reader: Should not have happened #2. %1%"
 msgstr "mpeg_ps_reader: Olmamalıydı #2. %1%"
@@ -9216,7 +9209,7 @@ msgstr "mpeg_ps_reader: Olmamalıydı #2. %1%"
 #: src/mmg/options/mmg.cpp:126
 #: src/mmg/tabs/ask_scan_for_playlists_dlg.cpp:39
 msgid "never scan for other playlists"
-msgstr ""
+msgstr "diğer oynatma listeleri için asla tarama"
 
 #: src/mmg/header_editor/bool_value_page.cpp:43
 #: src/mmg/tabs/input_general.cpp:105
@@ -9281,9 +9274,8 @@ msgid "ordered"
 msgstr "sıralı"
 
 #: src/mmg/options/output.cpp:80
-#, fuzzy
 msgid "output options"
-msgstr "Bölüm seçenekleri"
+msgstr "çıktı seçenekleri"
 
 #: src/info/mkvinfo.cpp:548
 #, boost-format
@@ -9445,7 +9437,7 @@ msgstr "altyazı"
 
 #: src/output/p_textsubs.h:37
 msgid "text subtitles"
-msgstr "metni altyazıları"
+msgstr "metin altyazıları"
 
 #: src/merge/mkvmerge.cpp:2279
 msgid "timecodes"
@@ -9483,7 +9475,7 @@ msgstr "und (Belirsiz)"
 #: src/info/mkvinfo.cpp:933
 #: src/input/r_matroska.cpp:95
 #: src/input/r_matroska.cpp:2227
-#: src/input/r_mpeg_ps.cpp:1326
+#: src/input/r_mpeg_ps.cpp:1344
 #: src/mmg/header_editor/value_page.cpp:150
 #: src/mmg/mmg.cpp:64
 #: src/mmg/tabs/input.cpp:534
