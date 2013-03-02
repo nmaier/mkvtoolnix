@@ -127,6 +127,9 @@ typedef UINT64_TYPE uint64_t;
 #endif
 
 #if defined(SYS_WINDOWS)
+// Support at least Windows 2000.
+# define WINVER       0x0500
+# define _WIN32_WINNT 0x0500
 # define PATHSEP '\\'
 #else
 # define PATHSEP '/'
