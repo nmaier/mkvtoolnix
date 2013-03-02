@@ -29,6 +29,7 @@
 
 #if defined(SYS_WINDOWS)
 # include <windows.h>
+# include <winnls.h>
 
 # include "common/fs_sys_helpers.h"
 # include "common/memory.h"
@@ -42,36 +43,40 @@ translation_c::translation_c(const std::string &unix_locale,
                              const std::string &windows_locale_sysname,
                              const std::string &english_name,
                              const std::string &translated_name,
-                             bool line_breaks_anywhere)
+                             bool line_breaks_anywhere,
+                             int language_id,
+                             int sub_language_id)
   : m_unix_locale(unix_locale)
   , m_windows_locale(windows_locale)
   , m_windows_locale_sysname(windows_locale_sysname)
   , m_english_name(english_name)
   , m_translated_name(translated_name)
   , m_line_breaks_anywhere(line_breaks_anywhere)
+  , m_language_id(language_id)
+  , m_sub_language_id(sub_language_id)
 {
 }
 
 void
 translation_c::initialize_available_translations() {
   ms_available_translations.clear();
-  ms_available_translations.push_back(translation_c("en_US", "en",    "english",    "English",             "English",     false));
+  ms_available_translations.push_back(translation_c("en_US", "en",    "english",    "English",             "English",     false, 0x0009, 0x00));
 #if defined(HAVE_LIBINTL_H)
-  ms_available_translations.push_back(translation_c("cs_CZ", "cs",    "czech",      "Czech",               "Čeština",     false));
-  ms_available_translations.push_back(translation_c("de_DE", "de",    "german",     "German",              "Deutsch",     false));
-  ms_available_translations.push_back(translation_c("es_ES", "es",    "spanish",    "Spanish",             "Español",     false));
-  ms_available_translations.push_back(translation_c("eu_ES", "eu",    "basque",     "Basque",              "Euskara",     false));
-  ms_available_translations.push_back(translation_c("fr_FR", "fr",    "french",     "French",              "Français",    false));
-  ms_available_translations.push_back(translation_c("it_IT", "it",    "italian",    "Italian",             "Italiano",    false));
-  ms_available_translations.push_back(translation_c("ja_JP", "ja",    "japanese",   "Japanese",            "日本語",      true));
-  ms_available_translations.push_back(translation_c("lt_LT", "lt",    "lithuanian", "Lithuanian",          "Lietuvių",    false));
-  ms_available_translations.push_back(translation_c("nl_NL", "nl",    "dutch",      "Dutch",               "Nederlands",  false));
-  ms_available_translations.push_back(translation_c("pl_PL", "pl",    "polish",     "Polish",              "Polski",      false));
-  ms_available_translations.push_back(translation_c("ru_RU", "ru",    "russian",    "Russian",             "Русский",     false));
-  ms_available_translations.push_back(translation_c("tr_TR", "tr",    "turkish",    "Turkish",             "Türkçe",      false));
-  ms_available_translations.push_back(translation_c("uk_UA", "uk",    "ukrainian",  "Ukrainian",           "Український", false));
-  ms_available_translations.push_back(translation_c("zh_CN", "zh_CN", "chinese",    "Chinese Simplified",  "简体中文",    true));
-  ms_available_translations.push_back(translation_c("zh_TW", "zh_TW", "chinese",    "Chinese Traditional", "繁體中文",    true));
+  ms_available_translations.push_back(translation_c("cs_CZ", "cs",    "czech",      "Czech",               "Čeština",     false, 0x0005, 0x00));
+  ms_available_translations.push_back(translation_c("de_DE", "de",    "german",     "German",              "Deutsch",     false, 0x0007, 0x00));
+  ms_available_translations.push_back(translation_c("es_ES", "es",    "spanish",    "Spanish",             "Español",     false, 0x000a, 0x00));
+  ms_available_translations.push_back(translation_c("eu_ES", "eu",    "basque",     "Basque",              "Euskara",     false, 0x002d, 0x00));
+  ms_available_translations.push_back(translation_c("fr_FR", "fr",    "french",     "French",              "Français",    false, 0x000c, 0x00));
+  ms_available_translations.push_back(translation_c("it_IT", "it",    "italian",    "Italian",             "Italiano",    false, 0x0010, 0x00));
+  ms_available_translations.push_back(translation_c("ja_JP", "ja",    "japanese",   "Japanese",            "日本語",      true,  0x0011, 0x00));
+  ms_available_translations.push_back(translation_c("lt_LT", "lt",    "lithuanian", "Lithuanian",          "Lietuvių",    false, 0x0027, 0x00));
+  ms_available_translations.push_back(translation_c("nl_NL", "nl",    "dutch",      "Dutch",               "Nederlands",  false, 0x0013, 0x00));
+  ms_available_translations.push_back(translation_c("pl_PL", "pl",    "polish",     "Polish",              "Polski",      false, 0x0015, 0x00));
+  ms_available_translations.push_back(translation_c("ru_RU", "ru",    "russian",    "Russian",             "Русский",     false, 0x0019, 0x00));
+  ms_available_translations.push_back(translation_c("tr_TR", "tr",    "turkish",    "Turkish",             "Türkçe",      false, 0x001f, 0x00));
+  ms_available_translations.push_back(translation_c("uk_UA", "uk",    "ukrainian",  "Ukrainian",           "Український", false, 0x0022, 0x00));
+  ms_available_translations.push_back(translation_c("zh_CN", "zh_CN", "chinese",    "Chinese Simplified",  "简体中文",    true,  0x0004, 0x02));
+  ms_available_translations.push_back(translation_c("zh_TW", "zh_TW", "chinese",    "Chinese Traditional", "繁體中文",    true,  0x0004, 0x01));
 #endif
 
   ms_active_translation_idx = 0;
@@ -101,9 +106,22 @@ translation_c::look_up_translation(const std::string &locale) {
   return -1;
 }
 
+int
+translation_c::look_up_translation(int language_id, int sub_language_id) {
+  auto ptr = brng::find_if(ms_available_translations, [language_id,sub_language_id](translation_c const &tr) {
+      return (tr.m_language_id == language_id) && (!tr.m_sub_language_id || (tr.m_sub_language_id == sub_language_id));
+    });
+
+  int idx = ptr == ms_available_translations.end() ? -1 : std::distance(ms_available_translations.begin(), ptr);
+  mxdebug_if(debugging_requested("locale"), boost::format("look_up_translation for 0x%|1$04x|/0x%|2$02x|: %3%\n") % language_id % sub_language_id % idx);
+
+  return idx;
+}
+
 std::string
 translation_c::get_default_ui_locale() {
   std::string locale;
+  bool debug = debugging_requested("locale");
 
 #if defined(HAVE_LIBINTL_H)
 # if defined(SYS_WINDOWS)
@@ -115,39 +133,30 @@ translation_c::get_default_ui_locale() {
   if (!env_var.empty() && (-1 != look_up_translation(env_var)))
     return env_var;
 
-  char *data;
-  int len = GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SENGLANGUAGE, nullptr, 0);
-  if (0 < len) {
-    data = (char *)safemalloc(len);
-    memset(data, 0, len);
-    if (0 != GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SENGLANGUAGE, data, len))
-      locale = data;
-    safefree(data);
+  auto lang_id = GetUserDefaultUILanguage();
+  int idx      = translation_c::look_up_translation(lang_id & 0x3ff, (lang_id >> 10) & 0x3f);
+  if (-1 != idx)
+    locale = ms_available_translations[idx].get_locale();
 
-    int idx = translation_c::look_up_translation(locale);
-    if (-1 != idx)
-      locale = ms_available_translations[idx].get_locale();
-  }
+  mxdebug_if(debug, boost::format("[lang_id %|1$04x| idx %2% locale %3%\n") % lang_id % idx % locale);
 
 # else  // SYS_WINDOWS
 
   char *data = setlocale(LC_MESSAGES, nullptr);
   if (data) {
     std::string previous_locale = data;
-    if (debugging_requested("locale"))
-      mxinfo(boost::format("[get_default_ui_locale previous %1%]\n") % previous_locale);
+    mxdebug_if(debug, boost::format("[get_default_ui_locale previous %1%]\n") % previous_locale);
     setlocale(LC_MESSAGES, "");
     data = setlocale(LC_MESSAGES, nullptr);
 
     if (data)
       locale = data;
 
-    if (debugging_requested("locale"))
-      mxinfo(boost::format("[get_default_ui_locale new %1%]\n") % locale);
+    mxdebug_if(debug, boost::format("[get_default_ui_locale new %1%]\n") % locale);
 
     setlocale(LC_MESSAGES, previous_locale.c_str());
-  } else if (debugging_requested("locale"))
-    mxinfo(boost::format("[get_default_ui_locale get previous failed]\n"));
+  } else
+    mxdebug_if(debug, boost::format("[get_default_ui_locale get previous failed]\n"));
 
 # endif // SYS_WINDOWS
 #endif  // HAVE_LIBINTL_H
