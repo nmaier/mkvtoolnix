@@ -118,6 +118,8 @@ mtx_common_cleanup() {
 
 void
 mtx_common_init(std::string const &program_name) {
+  init_common_output(true);
+
   s_program_name = program_name;
 
 #if defined(SYS_WINDOWS)
@@ -137,7 +139,7 @@ mtx_common_init(std::string const &program_name) {
 
   mm_file_io_c::setup();
   g_cc_local_utf8 = charset_converter_c::init("");
-  init_common_output();
+  init_common_output(false);
 
   stereo_mode_c::init();
 }
