@@ -852,7 +852,7 @@ parse_arg_split_chapters(std::string const &arg) {
   if (!use_all) {
     std::vector<std::string> numbers = split(s, ",");
     for (auto &number_str : numbers) {
-      unsigned int number;
+      auto number = 0u;
       if (!parse_number(number_str, number) || !number)
         mxerror(boost::format(Y("Invalid chapter number '%1%' for '--split' in '--split %2%': %3%\n")) % number_str % arg % Y("Not a valid number or not positive."));
       chapter_numbers[number] = true;
