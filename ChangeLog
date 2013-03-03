@@ -1,5 +1,10 @@
 2013-03-03  Moritz Bunkus  <moritz@bunkus.org>
 
+        * mmg: bug fix: The validation for the argument to "split by
+        chapters" was wrongfully rejecting certain valid inputs (chapter
+        number lists in which the second or any later chapter number was
+        higher than 9).
+
         * all: enhancement on Windows: all programs now determine the
         interface language to use from the user's selected interface
         language (C function "GetUserDefaultUILanguage()"), not from the

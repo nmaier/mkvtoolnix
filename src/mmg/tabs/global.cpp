@@ -646,7 +646,7 @@ tab_global::is_valid_split_frame_list() {
 bool
 tab_global::is_valid_split_chapters_list() {
   auto value = cob_split_args->GetValue();
-  if ((value == wxT("all")) || wxRegEx{wxT("^[[:digit:]]+(,[[:digit:]])*$")}.Matches(value))
+  if ((value == wxT("all")) || wxRegEx{wxT("^[[:digit:]]+(,[[:digit:]]+)*$")}.Matches(value))
     return true;
 
   wxMessageBox(Z("The format of the split argument is invalid."), Z("mkvmerge GUI error"), wxOK | wxCENTER | wxICON_ERROR);
