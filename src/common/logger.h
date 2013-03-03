@@ -46,7 +46,7 @@ operator <<(logger_c &logger,
   return logger;
 }
 
-#define log_current_location(log_file) logger_c::get_default_logger() << (boost::format("Current file & line: %1%:%2%") % __FILE__ % __LINE__)
-#define log_it(arg)                    logger_c::get_default_logger() << arg
+#define log_current_location() logger_c::get_default_logger() << (boost::format("Current file & line: %1%:%2%") % __FILE__ % __LINE__)
+#define log_it(arg)            logger_c::get_default_logger() << arg
 
 #endif // MTX__COMMON_CLI_PARSER_H

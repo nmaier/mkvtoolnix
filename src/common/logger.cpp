@@ -10,12 +10,17 @@
 
 #include "common/common_pch.h"
 
+#include <chrono>
+#include <ctime>
+
 #include "common/logger.h"
 #include "common/fs_sys_helpers.h"
 #include "common/mm_io_x.h"
 #include "common/strings/formatting.h"
 
 logger_cptr logger_c::s_default_logger;
+
+static auto s_program_start_time = std::chrono::high_resolution_clock::now();
 
 logger_c::logger_c(bfs::path const &file_name)
   : m_file_name(file_name)
@@ -35,7 +40,16 @@ logger_c::log(std::string const &message) {
   try {
     mm_text_io_c out(new mm_file_io_c(m_file_name.string(), bfs::exists(m_file_name) ? MODE_WRITE : MODE_CREATE));
     out.setFilePointer(0, seek_end);
-    out.puts(to_string(get_current_time_millis() - m_log_start) + " " + message + "\n");
+
+    auto now  = std::chrono::high_resolution_clock::now();
+    auto diff = now - s_program_start_time;
+    auto tnow = std::chrono::high_resolution_clock::to_time_t(now);
+
+    // 2013-03-02 15:42:32
+    char timestamp[30];
+    std::strftime(timestamp, 30, "%Y-%m-%d %H:%M:%S", std::localtime(&tnow));
+
+    out.puts((boost::format("%1% +%2%ms %3%\n") % timestamp % std::chrono::duration_cast<std::chrono::milliseconds>(diff).count() % message).str());
   } catch (mtx::mm_io::exception &ex) {
   }
 }
