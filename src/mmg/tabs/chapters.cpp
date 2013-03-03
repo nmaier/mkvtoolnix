@@ -432,6 +432,22 @@ tab_chapters::enable_adjustment_buttons(bool enable) {
   b_adjust_timecodes->Enable(enable);
 }
 
+static bool
+contains_atoms_recursively(EbmlMaster *m) {
+  if (dynamic_cast<KaxChapterAtom *>(m))
+    return true;
+
+  for (auto child : *m) {
+    if (dynamic_cast<KaxChapterAtom *>(child))
+      return true;
+    auto master = dynamic_cast<EbmlMaster *>(child);
+    if (master && contains_atoms_recursively(master))
+      return true;
+  }
+
+  return false;
+}
+
 bool
 tab_chapters::contains_atoms()
   const {
@@ -441,27 +457,8 @@ tab_chapters::contains_atoms()
 
   auto data   = static_cast<chapter_node_data_c *>(tc_chapters->GetItemData(id));
   auto master = data ? data->get() : m_chapters;
-  if (!master)
-    return false;
 
-  std::function<bool(EbmlMaster *)> check_recursively = [&check_recursively](EbmlMaster *m) -> bool {
-    auto atom = dynamic_cast<KaxChapterAtom *>(m);
-    if (atom)
-      return true;
-
-    for (auto child : *m) {
-      atom = dynamic_cast<KaxChapterAtom *>(child);
-      if (atom)
-        return true;
-      auto master = dynamic_cast<EbmlMaster *>(child);
-      if (master && check_recursively(master))
-        return true;
-    }
-
-    return false;
-  };
-
-  return check_recursively(master);
+  return master ? contains_atoms_recursively(master) : false;
 }
 
 void
