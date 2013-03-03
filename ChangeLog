@@ -1,3 +1,10 @@
+2013-03-03  Moritz Bunkus  <moritz@bunkus.org>
+
+        * all: enhancement on Windows: all programs now determine the
+        interface language to use from the user's selected interface
+        language (C function "GetUserDefaultUILanguage()"), not from the
+        locale setting. Implements #852.
+
 2013-03-02  Moritz Bunkus  <moritz@bunkus.org>
 
         * Released v6.1.0.
