@@ -623,7 +623,7 @@ end
     new("#{[ lib[:dir] ].flatten.first}/lib#{lib[:name]}").
     sources([ lib[:dir] ].flatten, :type => :dir, :except => lib[:except]).
     build_dll(lib[:name] == 'mtxcommon').
-    libraries(:iconv, :z, :compression, :matroska, :ebml, :rpcrt4).
+    libraries(:iconv, :z, :matroska, :ebml, :rpcrt4).
     create
 end
 
@@ -634,7 +634,6 @@ $common_libs = [
   :matroska,
   :ebml,
   :z,
-  :compression,
   :pugixml,
   :iconv,
   :intl,

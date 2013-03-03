@@ -1,5 +1,8 @@
 2013-03-03  Moritz Bunkus  <moritz@bunkus.org>
 
+        * mkvmerge: removal: Support for BZ2 (bzlib) and LZO (lzo1x)
+        compression has been removed.
+
         * mmg: bug fix: Using drag & drop to add playlists will no longer
         lock the dragging application (e.g. Windows Explorer) in D&D mode
         for the duration of the scan for other playlists.

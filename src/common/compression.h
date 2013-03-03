@@ -22,8 +22,6 @@
 enum compression_method_e {
   COMPRESSION_UNSPECIFIED = 0,
   COMPRESSION_ZLIB,
-  COMPRESSION_BZ2,
-  COMPRESSION_LZO,
   COMPRESSION_HEADER_REMOVAL,
   COMPRESSION_MPEG4_P2,
   COMPRESSION_MPEG4_P10,
@@ -96,9 +94,7 @@ protected:
   }
 };
 
-#include "common/compression/bzlib.h"
 #include "common/compression/header_removal.h"
-#include "common/compression/lzo.h"
 #include "common/compression/zlib.h"
 
 #endif // MTX_COMMON_COMPRESSION_H

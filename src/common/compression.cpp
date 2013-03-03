@@ -24,14 +24,12 @@
 using namespace libmatroska;
 
 static const char *compression_methods[] = {
-  "unspecified", "zlib", "bz2", "lzo", "header_removal", "mpeg4_p2", "mpeg4_p10", "dirac", "dts", "ac3", "mp3", "analyze_header_removal", "none"
+  "unspecified", "zlib", "header_removal", "mpeg4_p2", "mpeg4_p10", "dirac", "dts", "ac3", "mp3", "analyze_header_removal", "none"
 };
 
 static const int compression_method_map[] = {
   0,                            // unspecified
   0,                            // zlib
-  1,                            // bzlib
-  2,                            // lzo1x
   3,                            // header removal
   3,                            // mpeg4_p2 is header removal
   3,                            // mpeg4_p10 is header removal
@@ -68,18 +66,8 @@ compressor_c::create(compression_method_e method) {
 
 compressor_ptr
 compressor_c::create(const char *method) {
-#if defined(HAVE_LZO)
-  if (!strcasecmp(method, compression_methods[COMPRESSION_LZO]))
-    return compressor_ptr(new lzo_compressor_c());
-#endif // HAVE_LZO1X_H
-
   if (!strcasecmp(method, compression_methods[COMPRESSION_ZLIB]))
     return compressor_ptr(new zlib_compressor_c());
-
-#if defined(HAVE_BZLIB_H)
-  if (!strcasecmp(method, compression_methods[COMPRESSION_BZ2]))
-    return compressor_ptr(new bzlib_compressor_c());
-#endif // HAVE_BZLIB_H
 
   if (!strcasecmp(method, compression_methods[COMPRESSION_MPEG4_P2]))
     return compressor_ptr(new mpeg4_p2_compressor_c());
@@ -112,16 +100,6 @@ compressor_ptr
 compressor_c::create_from_file_name(std::string const &file_name) {
   auto pos = file_name.rfind(".");
   auto ext = balg::to_lower_copy(pos == std::string::npos ? file_name : file_name.substr(pos + 1));
-
-#if defined(HAVE_LZO)
-  if ((ext == "lz") || (ext == "lzo"))
-    return compressor_ptr(new lzo_compressor_c());
-#endif // HAVE_LZO
-
-#if defined(HAVE_BZLIB_H)
-  if ((ext == "bz2") || (ext == "bzip"))
-    return compressor_ptr(new bzlib_compressor_c());
-#endif // HAVE_BZLIB_H
 
   if (ext == "gz")
     return compressor_ptr(new zlib_compressor_c());

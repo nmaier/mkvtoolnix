@@ -104,10 +104,6 @@ tab_input_extra::setup_compression() {
   cob_compression->Append(wxEmptyString);
   cob_compression->Append(wxEmptyString);
   cob_compression->Append(wxT("zlib"));
-  if (capabilities[wxT("BZ2")] == wxT("true"))
-    cob_compression->Append(wxT("bz2"));
-  if (capabilities[wxT("LZO")] == wxT("true"))
-    cob_compression->Append(wxT("lzo"));
 
   cob_compression_translations.clear();
   cob_compression_translations.add(wxT("none"), Z("none"));

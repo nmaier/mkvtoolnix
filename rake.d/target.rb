@@ -122,7 +122,6 @@ class Target
       when :curl             then c(:CURL_LIBS)
       when :magic            then c(:MAGIC_LIBS)
       when :flac             then c(:FLAC_LIBS)
-      when :compression      then [ c(:LZO_LIBS), c(:BZ2_LIBS) ]
       when :iconv            then c(:ICONV_LIBS)
       when :intl             then c(:LIBINTL_LIBS)
       when :boost_regex      then c(:BOOST_REGEX_LIB)

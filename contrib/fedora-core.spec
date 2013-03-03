@@ -8,7 +8,7 @@ License: GPL
 Group: Multimedia
 Source: %{name}-%{version}.tar.xz
 BuildRoot: %{_tmppath}/%{name}-%{version}-tmproot
-BuildRequires: gcc gcc-c++ make flac-devel libogg-devel libvorbis-devel wxGTK-devel >= 2.8 boost-devel file-devel lzo-devel bzip2-devel zlib-devel gettext-devel ruby libcurl-devel
+BuildRequires: gcc gcc-c++ make flac-devel libogg-devel libvorbis-devel wxGTK-devel >= 2.8 boost-devel file-devel zlib-devel gettext-devel ruby libcurl-devel
 
 %description
 Matroska video utilities.

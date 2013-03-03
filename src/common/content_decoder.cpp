@@ -95,21 +95,15 @@ content_decoder_c::initialize(KaxTrackEntry &ktentry) {
       enc.compressor = std::shared_ptr<compressor_c>(new zlib_compressor_c());
 
     else if (1 == enc.comp_algo) {
-#if !defined(HAVE_BZLIB_H)
       mxwarn(boost::format(Y("Track %1% was compressed with bzlib but mkvmerge has not been compiled with support for bzlib compression.\n")) % tid);
       ok = false;
       break;
-#else
-      enc.compressor = std::shared_ptr<compressor_c>(new bzlib_compressor_c());
-#endif
+
     } else if (2 == enc.comp_algo) {
-#if !defined(HAVE_LZO1X_H)
       mxwarn(boost::format(Y("Track %1% was compressed with lzo1x but mkvmerge has not been compiled with support for lzo1x compression.\n")) % tid);
       ok = false;
       break;
-#else
-      enc.compressor = std::shared_ptr<compressor_c>(new lzo_compressor_c());
-#endif
+
     } else if (3 == enc.comp_algo) {
       enc.compressor = std::shared_ptr<compressor_c>(new header_removal_compressor_c);
       std::static_pointer_cast<header_removal_compressor_c>(enc.compressor)->set_bytes(enc.comp_settings);

@@ -199,10 +199,6 @@ get_latest_release_version() {
   mtx_release_version_t release;
 
   auto doc = retrieve_and_parse_xml(url + ".gz");
-#if defined(HAVE_BZLIB_H)
-  if (!doc)
-    doc = retrieve_and_parse_xml(url + ".bz2");
-#endif  // HAVE_BZLIB_H
   if (!doc)
     doc = retrieve_and_parse_xml(url);
   if (!doc)
@@ -234,12 +230,6 @@ mtx::xml::document_cptr
 get_releases_info() {
   std::string url = MTX_RELEASES_INFO_URL;
   debugging_requested("releases_info_url", &url);
-
-#if defined(HAVE_BZLIB_H)
-  auto doc = retrieve_and_parse_xml(url + ".bz2");
-  if (doc)
-    return doc;
-#endif  // HAVE_BZLIB_H
 
   return retrieve_and_parse_xml(url + ".gz");
 }

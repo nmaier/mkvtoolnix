@@ -322,8 +322,6 @@ MergeWidget::onCompressionChanged(int newValue) {
     compression = 0 == newValue ? Track::CompDefault
                 : 1 == newValue ? Track::CompNone
                 :                 Track::CompZlib;
-  else
-    compression = ui->compression->currentText() == Q("lzo") ? Track::CompLzo : Track::CompBz2;
 
   withSelectedTracks([&](Track *track) { track->m_compression = compression; }, true);
 }

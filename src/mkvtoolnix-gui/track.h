@@ -36,10 +36,8 @@ public:
     CompDefault = 0,
     CompNone,
     CompZlib,
-    CompLzo,
-    CompBz2,
     CompMin = CompDefault,
-    CompMax = CompBz2
+    CompMax = CompZlib
   };
 
   QHash<QString, QString> m_properties;

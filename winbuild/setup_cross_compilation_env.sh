@@ -96,7 +96,7 @@ function build_base {
 function build_libraries {
   echo Building the required libraries
   cd ${INSTALL_DIR}
-  make TARGET=${TARGET} JOBS=${PARALLEL} gettext boost bzip2 curl file flac libiconv lzo ogg pthreads vorbis wxwidgets zlib >> $LOGFILE 2>&1
+  make TARGET=${TARGET} JOBS=${PARALLEL} gettext boost curl file flac libiconv ogg pthreads vorbis wxwidgets zlib >> $LOGFILE 2>&1
 }
 
 # main

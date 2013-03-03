@@ -288,12 +288,6 @@ set_usage() {
 static void
 print_capabilities() {
   mxinfo(boost::format("VERSION=%1%\n") % version_info);
-#if defined(HAVE_BZLIB_H)
-  mxinfo("BZ2\n");
-#endif
-#if defined(HAVE_LZO)
-  mxinfo("LZO\n");
-#endif
 #if defined(HAVE_FLAC_FORMAT_H)
   mxinfo("FLAC\n");
 #endif
@@ -1106,7 +1100,7 @@ parse_arg_cues(const std::string &s,
 
 /** \brief Parse the \c --compression argument
 
-   The argument must have the form \c TID:compression, e.g. \c 0:bz2.
+   The argument must have the form \c TID:compression, e.g. \c 0:zlib.
 */
 static void
 parse_arg_compression(const std::string &s,
@@ -1144,20 +1138,6 @@ parse_arg_compression(const std::string &s,
 
   if (parts[1] == "analyze_header_removal")
       ti.m_compression_list[id] = COMPRESSION_ANALYZE_HEADER_REMOVAL;
-
-#ifdef HAVE_LZO
-  if ((parts[1] == "lzo") || (parts[1] == "lzo1x"))
-    ti.m_compression_list[id] = COMPRESSION_LZO;
-  else
-    available_compression_methods.push_back("lzo");
-#endif
-
-#ifdef HAVE_BZLIB_H
-  if ((parts[1] == "bz2") || (parts[1] == "bzlib"))
-    ti.m_compression_list[id] = COMPRESSION_BZ2;
-  else
-    available_compression_methods.push_back("bz2");
-#endif
 
   if (ti.m_compression_list[id] == COMPRESSION_UNSPECIFIED)
     mxerror(boost::format(Y("'%1%' is an unsupported argument for --compression. Available compression methods are: %2%\n")) % s % join(", ", available_compression_methods));
