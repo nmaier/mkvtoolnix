@@ -73,14 +73,12 @@ public:
   input_drop_target_c(tab_input *n_owner):
     owner(n_owner) {}
   virtual bool OnDropFiles(wxCoord /* x */, wxCoord /* y */, const wxArrayString &dropped_files) {
-    size_t i;
-
-    for (i = 0; i < dropped_files.Count(); i++)
-      owner->add_file(dropped_files[i], false);
-
+    owner->add_dropped_files(dropped_files);
     return true;
   }
 };
+
+wxEventType const tab_input::ms_event{wxNewEventType()};
 
 tab_input::tab_input(wxWindow *parent)
   : wxPanel(parent, -1, wxDefaultPosition, wxSize(100, 400), wxTAB_TRAVERSAL)
@@ -743,6 +741,21 @@ tab_input::add_file(wxString const &file_name,
   st_tracks->Enable(true);
   clb_tracks->Enable(true);
   enable_file_controls();
+}
+
+void
+tab_input::add_dropped_files(wxArrayString const &files) {
+  for (auto &file : files)
+    dropped_files.Add(file);
+
+  wxCommandEvent evt(tab_input::ms_event, tab_input::dropped_files_added);
+  wxPostEvent(this, evt);
+}
+
+void
+tab_input::on_dropped_files_added(wxCommandEvent &) {
+  for (auto &file : dropped_files)
+    add_file(file, false);
 }
 
 void
@@ -1544,4 +1557,6 @@ BEGIN_EVENT_TABLE(tab_input, wxPanel)
   EVT_CHECKLISTBOX(ID_CLB_TRACKS,   tab_input::on_track_enabled)
 
   EVT_TIMER(ID_T_INPUTVALUES,       tab_input::on_value_copy_timer)
+
+  EVT_COMMAND(tab_input::dropped_files_added, tab_input::ms_event, tab_input::on_dropped_files_added)
 END_EVENT_TABLE();

@@ -172,6 +172,12 @@ class tab_input: public wxPanel {
   DECLARE_CLASS(tab_input);
   DECLARE_EVENT_TABLE();
 public:
+  static wxEventType const ms_event;
+  enum event_type_e {
+    dropped_files_added = 1,
+  };
+
+public:
   tab_input_general *ti_general;
   tab_input_format *ti_format;
   tab_input_extra *ti_extra;
@@ -189,12 +195,14 @@ public:
   int selected_file, selected_track;
 
   wxString media_files;
+  wxArrayString dropped_files;
 
 public:
   tab_input(wxWindow *parent);
 
   void on_add_file(wxCommandEvent &evt);
   void add_file(const wxString &file_name, bool append);
+  void add_dropped_files(wxArrayString const &files);
   void select_file(bool append);
   void on_remove_file(wxCommandEvent &evt);
   void on_remove_all_files(wxCommandEvent &evt);
@@ -207,6 +215,7 @@ public:
   void on_track_enabled(wxCommandEvent &evt);
   void on_value_copy_timer(wxTimerEvent &evt);
   void on_file_new(wxCommandEvent &evt);
+  void on_dropped_files_added(wxCommandEvent &evt);
 
   void set_track_mode(mmg_track_t *t);
   void enable_file_controls();

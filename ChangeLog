@@ -1,5 +1,9 @@
 2013-03-03  Moritz Bunkus  <moritz@bunkus.org>
 
+        * mmg: bug fix: Using drag & drop to add playlists will no longer
+        lock the dragging application (e.g. Windows Explorer) in D&D mode
+        for the duration of the scan for other playlists.
+
         * mmg: bug fix: The validation for the argument to "split by
         chapters" was wrongfully rejecting certain valid inputs (chapter
         number lists in which the second or any later chapter number was
