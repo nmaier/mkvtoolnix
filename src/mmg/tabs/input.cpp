@@ -756,6 +756,7 @@ void
 tab_input::on_dropped_files_added(wxCommandEvent &) {
   for (auto &file : dropped_files)
     add_file(file, false);
+  dropped_files.clear();
 }
 
 void
