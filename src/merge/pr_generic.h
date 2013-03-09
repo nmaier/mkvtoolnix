@@ -390,6 +390,9 @@ public:
     add_available_track_id_range(0, num - 1);
   }
 
+  virtual int64_t get_file_size() {
+    return m_in->get_size();
+  }
   virtual int64_t get_queued_bytes() const;
   virtual bool is_simple_subtitle_container() {
     return false;

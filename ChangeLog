@@ -1,5 +1,10 @@
 2013-03-09  Moritz Bunkus  <moritz@bunkus.org>
 
+        * mkvmerge: bug fix: The progress percentage was sometimes using
+        the wrong input file as the reference if multiple files are read
+        with the "additional parts" mechanism (on the command line: the
+        syntax "( VTS_01_1.VOB VTS_1_2.VOB VTS_1_3.VOB )".
+
         * mkvmerge: bug fix: Fixed one situation that could lead to
         mkvmerge aborting with the error message "Re-rendering track
         headers: data_size != 0 not implemented yet".

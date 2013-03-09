@@ -1385,6 +1385,10 @@ create_readers() {
 
       file.reader->read_headers();
 
+      // Re-calculate file size because the reader might switch to a
+      // multi I/O reader in read_headers().
+      file.size = file.reader->get_file_size();
+
     } catch (mtx::mm_io::open_x &error) {
       mxerror(boost::format(Y("The demultiplexer for the file '%1%' failed to initialize:\n%2%\n")) % file.ti->m_fname % Y("The file could not be opened for reading, or there was not enough data to parse its headers."));
 
