@@ -46,6 +46,7 @@
 #include <matroska/KaxCluster.h>
 #include <matroska/KaxClusterData.h>
 #include <matroska/KaxCues.h>
+#include <matroska/KaxCuesData.h>
 #include <matroska/KaxInfo.h>
 #include <matroska/KaxInfoData.h>
 #include <matroska/KaxSeekHead.h>
@@ -193,6 +194,7 @@ std::string g_splitting_by_chapters_arg;
 append_mode_e g_append_mode                 = APPEND_MODE_FILE_BASED;
 bool s_appending_files                      = false;
 bool s_debug_appending                      = false;
+bool s_debug_rerender_track_headers         = false;
 
 bool g_stereo_mode_used                     = false;
 
@@ -859,6 +861,60 @@ render_headers(mm_io_c *out) {
   }
 }
 
+static void
+adjust_cue_and_seekhead_positions(int64_t original_offset,
+                                  int64_t new_offset) {
+  auto delta                    = new_offset - original_offset;
+  auto relative_original_offset = g_kax_segment->GetRelativePosition(original_offset);
+  mxdebug_if(s_debug_rerender_track_headers, boost::format("[rerender] Adjusting cue positions from %1% to %2%, delta %3%, relative from %4%\n") % original_offset % new_offset % delta % relative_original_offset);
+
+  if (!delta)
+    return;
+
+  if (g_kax_cues)
+    for (auto cues_child : g_kax_cues->GetElementList()) {
+      auto point = dynamic_cast<KaxCuePoint *>(cues_child);
+      if (!point)
+        continue;
+
+      for (auto point_child : *point) {
+        auto positions = dynamic_cast<KaxCueTrackPositions *>(point_child);
+        if (!positions)
+          continue;
+
+        auto &cluster_position = GetChild<KaxCueClusterPosition>(positions);
+        auto old_value         = cluster_position.GetValue();
+        bool is_affected       = old_value < relative_original_offset;
+        auto new_value         = is_affected ? old_value : old_value + (delta > 0 ? delta : std::min<int64_t>(old_value, delta));
+        cluster_position.SetValue(new_value);
+
+        mxdebug_if(s_debug_rerender_track_headers, boost::format("[rerender]  Cluster position: affected? %1% old %2% new %3%\n") % is_affected % old_value % new_value);
+      }
+    }
+
+  // TODO: adjust meta seek
+}
+
+static void
+render_void(int64_t new_size) {
+  auto actual_size = new_size;
+
+  delete s_void_after_track_headers;
+  s_void_after_track_headers = new EbmlVoid;
+  s_void_after_track_headers->SetSize(new_size);
+  s_void_after_track_headers->UpdateSize();
+
+  while (static_cast<int64_t>(s_void_after_track_headers->ElementSize()) > new_size)
+    s_void_after_track_headers->SetSize(--actual_size);
+
+  if (static_cast<int64_t>(s_void_after_track_headers->ElementSize()) < new_size)
+    s_void_after_track_headers->SetSizeLength(new_size - actual_size - 1);
+
+  mxdebug_if(s_debug_rerender_track_headers, boost::format("[rerender] render_void new_size %1% actual_size %2% size_length %3%\n") % new_size % actual_size % (new_size - actual_size - 1));
+
+  s_void_after_track_headers->Render(*s_out);
+}
+
 /** \brief Overwrites the track headers with current values
 
    Can be used by packetizers that have to modify their headers
@@ -866,20 +922,13 @@ render_headers(mm_io_c *out) {
 */
 void
 rerender_track_headers() {
-  bool debug       = debugging_requested("rerender_track_headers");
-  auto render_void = [](int64_t new_size) {
-    delete s_void_after_track_headers;
-    s_void_after_track_headers = new EbmlVoid;
-    s_void_after_track_headers->SetSize(new_size);
-    s_void_after_track_headers->Render(*s_out);
-  };
-
   g_kax_tracks->UpdateSize(false);
 
-  int64_t new_void_size = s_void_after_track_headers->GetElementPosition() + s_void_after_track_headers->GetSize() - g_kax_tracks->GetElementPosition() - g_kax_tracks->ElementSize();
+  int64_t new_void_size       = s_void_after_track_headers->GetElementPosition() + s_void_after_track_headers->ElementSize() - g_kax_tracks->GetElementPosition() - g_kax_tracks->ElementSize();
+  auto projected_new_void_pos = g_kax_tracks->GetElementPosition() + g_kax_tracks->ElementSize();
 
   if (4 <= new_void_size) {
-    mxdebug_if(debug, boost::format("Normal case, only shrinking void down to %1%\n") % new_void_size);
+    auto old_void_pos = s_void_after_track_headers->GetElementPosition();
 
     s_out->save_pos(g_kax_tracks->GetElementPosition());
 
@@ -887,6 +936,18 @@ rerender_track_headers() {
     render_void(new_void_size);
 
     s_out->restore_pos();
+
+    mxdebug_if(s_debug_rerender_track_headers,
+               boost::format("[rerender] Normal case, only shrinking void down to %1%, new position %2% projected %9% new full size %3% new end %4% s_out size %5% old void start pos %6% tracks pos %7% tracks size %8%\n")
+               % new_void_size                                                                                  // 1
+               % s_void_after_track_headers->GetElementPosition()                                               // 2
+               % s_void_after_track_headers->ElementSize()                                                      // 3
+               % (s_void_after_track_headers->GetElementPosition() + s_void_after_track_headers->ElementSize()) // 4
+               % s_out->get_size()                                                                              // 5
+               % old_void_pos                                                                                   // 6
+               % g_kax_tracks->GetElementPosition()                                                             // 7
+               % g_kax_tracks->ElementSize()                                                                    // 8
+               % projected_new_void_pos);                                                                       // 9
 
     return;
   }
@@ -902,6 +963,10 @@ rerender_track_headers() {
     // Currently not supported due to lack of test file.
     mxerror(boost::format(Y("Re-rendering track headers: data_size != 0 not implemented yet. %1%\n")) % BUGMSG);
 
+    mxdebug_if(s_debug_rerender_track_headers,
+               boost::format("[rerender] void pos %1% void size %2% = data_start_pos %3% s_out size %4% => data_size %5%\n")
+               % s_void_after_track_headers->GetElementPosition() % s_void_after_track_headers->ElementSize(true) % data_start_pos % s_out->get_size() % data_size);
+
     data = s_out->read(data_size);
   }
 
@@ -914,10 +979,10 @@ rerender_track_headers() {
 
   if (data) {
     s_out->write(data);
-    // TODO: fix cues, meta seek
+    adjust_cue_and_seekhead_positions(data_start_pos, new_data_start_pos);
   }
 
-  mxdebug_if(debug, boost::format("4 > new void size (%1%). Size of data to move: %2% from %3% to %4%\n") % new_void_size % data_size % data_start_pos % new_data_start_pos);
+  mxdebug_if(s_debug_rerender_track_headers, boost::format("[rerender] 4 > new void size (%1%). Size of data to move: %2% from %3% to %4%\n") % new_void_size % data_size % data_start_pos % new_data_start_pos);
 
   s_out->setFilePointer(current_pos + new_data_start_pos - data_start_pos);
 }
@@ -2137,7 +2202,8 @@ discard_queued_packets() {
 */
 void
 main_loop() {
-  s_debug_appending = debugging_requested("append|appending");
+  s_debug_appending              = debugging_requested("append|appending");
+  s_debug_rerender_track_headers = debugging_requested("rerender|rerender_track_headers");
 
   // Let's go!
   while (1) {

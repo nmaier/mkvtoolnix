@@ -79,10 +79,10 @@ mm_write_buffer_io_c::close() {
 }
 
 uint32
-mm_write_buffer_io_c::_read(void *,
-                            size_t) {
-  throw mtx::mm_io::wrong_read_write_access_x();
-  return 0;
+mm_write_buffer_io_c::_read(void *buffer,
+                            size_t size) {
+  flush_buffer();
+  return mm_proxy_io_c::_read(buffer, size);
 }
 
 size_t

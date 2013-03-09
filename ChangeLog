@@ -1,3 +1,9 @@
+2013-03-09  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvmerge: bug fix: Fixed one situation that could lead to
+        mkvmerge aborting with the error message "Re-rendering track
+        headers: data_size != 0 not implemented yet".
+
 2013-03-03  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvmerge: removal: Support for BZ2 (bzlib) and LZO (lzo1x)
