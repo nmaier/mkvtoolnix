@@ -1,5 +1,9 @@
 2013-03-09  Moritz Bunkus  <moritz@bunkus.org>
 
+        * mkvmerge: bug fix: MPEG program stream reader: tracks with
+        invalid video properties (e.g. width or height = 0) are ignored
+        properly.
+
         * mkvmerge: bug fix: The progress percentage was sometimes using
         the wrong input file as the reference if multiple files are read
         with the "additional parts" mechanism (on the command line: the

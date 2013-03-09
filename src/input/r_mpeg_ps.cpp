@@ -642,10 +642,10 @@ mpeg_ps_reader_c::new_stream_v_mpeg_1_2(mpeg_ps_id_t id,
       break;
   }
 
-  if ((MPV_PARSER_STATE_FRAME != state) || !found_i_frame) {
+  if ((MPV_PARSER_STATE_FRAME != state) || !found_i_frame || !m2v_parser->GetMPEGVersion() || !seq_hdr.width || !seq_hdr.height) {
     mxverb(3, boost::format("MPEG PS: blacklisting id 0x%|1$02x|(%|2$02x|) for supposed type MPEG1/2\n") % id.id % id.sub_id);
     blacklisted_ids[id.idx()] = true;
-    return;
+    throw false;
   }
 
   track->fourcc         = FOURCC('M', 'P', 'G', '0' + m2v_parser->GetMPEGVersion());
