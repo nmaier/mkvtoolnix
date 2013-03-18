@@ -364,6 +364,9 @@ public:
   virtual ~generic_reader_c();
 
   virtual translatable_string_c get_format_name() const = 0;
+  virtual bool is_providing_timecodes() const {
+    return true;
+  }
 
   virtual void read_headers() = 0;
   virtual file_status_e read(generic_packetizer_c *ptzr, bool force = false) = 0;

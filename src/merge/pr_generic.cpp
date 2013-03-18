@@ -1356,16 +1356,17 @@ generic_reader_c::flush_packetizers() {
 
 void
 generic_reader_c::id_result_container(const std::string &verbose_info) {
-  m_id_results_container.info = get_format_name().get_translated();
-  m_id_results_container.verbose_info.clear();
+  std::vector<std::string> verbose_info_list;
   if (!verbose_info.empty())
-    m_id_results_container.verbose_info.push_back(verbose_info);
+    verbose_info_list.push_back(verbose_info);
+  id_result_container(verbose_info_list);
 }
 
 void
 generic_reader_c::id_result_container(const std::vector<std::string> &verbose_info) {
   m_id_results_container.info         = get_format_name().get_translated();
   m_id_results_container.verbose_info = verbose_info;
+  m_id_results_container.verbose_info.push_back((boost::format("is_providing_timecodes:%1%") % (is_providing_timecodes() ? 1 : 0)).str());
 }
 
 void

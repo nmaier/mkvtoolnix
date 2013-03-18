@@ -40,6 +40,9 @@ public:
   virtual file_status_e read(generic_packetizer_c *ptzr, bool force = false);
   virtual void identify();
   virtual void create_packetizer(int64_t tid);
+  virtual bool is_providing_timecodes() const {
+    return false;
+  }
 
   static int probe_file(mm_io_c *in, uint64_t size, int64_t probe_range, int num_headers = 5, bool require_zero_offset = false);
 
