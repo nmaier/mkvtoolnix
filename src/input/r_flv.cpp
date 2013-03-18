@@ -390,8 +390,8 @@ flv_reader_c::new_stream_v_avc(flv_track_cptr &track,
         track->m_v_width = sps_info.width;
       if (!track->m_v_height)
         track->m_v_height = sps_info.height;
-      if (!track->m_v_frame_rate && sps_info.num_units_in_tick && sps_info.time_scale)
-        track->m_v_frame_rate = sps_info.time_scale / sps_info.num_units_in_tick;
+      if (!track->m_v_frame_rate && sps_info.timing_info.num_units_in_tick && sps_info.timing_info.time_scale)
+        track->m_v_frame_rate = sps_info.timing_info.time_scale / sps_info.timing_info.num_units_in_tick;
     }
 
     if (!track->m_v_frame_rate)

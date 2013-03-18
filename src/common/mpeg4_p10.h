@@ -51,6 +51,13 @@
 namespace mpeg4 {
 namespace p10 {
 
+struct timing_info_t {
+  unsigned int num_units_in_tick, time_scale;
+  bool is_present, fixed_frame_rate;
+
+  int64_t default_duration() const;
+};
+
 struct sps_info_t {
   unsigned int id;
 
@@ -72,9 +79,7 @@ struct sps_info_t {
   unsigned int par_num, par_den;
 
   // timing_info:
-  bool timing_info_present;
-  unsigned int num_units_in_tick, time_scale;
-  bool fixed_frame_rate;
+  timing_info_t timing_info;
 
   unsigned int crop_left, crop_top, crop_right, crop_bottom;
   unsigned int width, height;
@@ -88,7 +93,6 @@ struct sps_info_t {
   void dump();
 
   bool timing_info_valid() const;
-  int64_t default_duration() const;
 };
 
 struct pps_info_t {
@@ -276,9 +280,22 @@ public:
   void force_default_duration(int64_t default_duration) {
     m_forced_default_duration = default_duration;
   }
+  bool is_default_duration_forced() const {
+    return -1 != m_forced_default_duration;
+  }
 
   void set_container_default_duration(int64_t default_duration) {
     m_container_default_duration = default_duration;
+  }
+
+  bool has_timing_info() const {
+    return !m_sps_info_list.empty() && m_sps_info_list[0].timing_info_valid();
+  }
+
+  timing_info_t get_timing_info() const {
+    if (!has_timing_info())
+      throw std::out_of_range{"no timing information present"};
+    return m_sps_info_list[0].timing_info;
   }
 
   void set_keep_ar_info(bool keep) {

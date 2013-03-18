@@ -287,6 +287,12 @@ slcopy(bit_cursor_c &r,
   }
 }
 
+int64_t
+mpeg4::p10::timing_info_t::default_duration()
+  const {
+  return 1000000000ll * num_units_in_tick / time_scale;
+}
+
 void
 mpeg4::p10::sps_info_t::dump() {
   mxinfo(boost::format("sps_info dump:\n"
@@ -333,10 +339,10 @@ mpeg4::p10::sps_info_t::dump() {
          % ar_found
          % par_num
          % par_den
-         % timing_info_present
-         % num_units_in_tick
-         % time_scale
-         % fixed_frame_rate
+         % timing_info.is_present
+         % timing_info.num_units_in_tick
+         % timing_info.time_scale
+         % timing_info.fixed_frame_rate
          % crop_left
          % crop_top
          % crop_right
@@ -349,15 +355,9 @@ mpeg4::p10::sps_info_t::dump() {
 bool
 mpeg4::p10::sps_info_t::timing_info_valid()
   const {
-  return timing_info_present
-      && (0 != num_units_in_tick)
-      && (0 != time_scale);
-}
-
-int64_t
-mpeg4::p10::sps_info_t::default_duration()
-  const {
-  return 1000000000ll * num_units_in_tick / time_scale;
+  return timing_info.is_present
+      && (0 != timing_info.num_units_in_tick)
+      && (0 != timing_info.time_scale);
 }
 
 void
@@ -601,11 +601,11 @@ mpeg4::p10::parse_sps(memory_cptr &buffer,
       gecopy(r, w);               // chroma_sample_loc_type_top_field
       gecopy(r, w);               // chroma_sample_loc_type_bottom_field
     }
-    sps.timing_info_present = w.copy_bits(1, r);
-    if (sps.timing_info_present) {
-      sps.num_units_in_tick = w.copy_bits(32, r);
-      sps.time_scale        = w.copy_bits(32, r);
-      sps.fixed_frame_rate  = w.copy_bits(1, r);
+    sps.timing_info.is_present = w.copy_bits(1, r);
+    if (sps.timing_info.is_present) {
+      sps.timing_info.num_units_in_tick = w.copy_bits(32, r);
+      sps.timing_info.time_scale        = w.copy_bits(32, r);
+      sps.timing_info.fixed_frame_rate  = w.copy_bits(1, r);
     }
 
     bool f = false;
@@ -1109,7 +1109,7 @@ mpeg4::p10::avc_es_parser_c::handle_sps_nalu(memory_cptr &nalu) {
 
   if (   !has_stream_default_duration()
       && sps_info.timing_info_valid()) {
-    m_stream_default_duration = sps_info.default_duration();
+    m_stream_default_duration = sps_info.timing_info.default_duration();
     mxdebug_if(m_debug_timecodes, boost::format("Stream default duration: %1%\n") % m_stream_default_duration);
   }
 
@@ -1323,7 +1323,7 @@ int64_t
 mpeg4::p10::avc_es_parser_c::duration_for(slice_info_t const &si)
   const {
   int64_t duration = -1 != m_forced_default_duration                                                  ? m_forced_default_duration
-                   : (m_sps_info_list.size() > si.sps) && m_sps_info_list[si.sps].timing_info_valid() ? m_sps_info_list[si.sps].default_duration()
+                   : (m_sps_info_list.size() > si.sps) && m_sps_info_list[si.sps].timing_info_valid() ? m_sps_info_list[si.sps].timing_info.default_duration()
                    : -1 != m_stream_default_duration                                                  ? m_stream_default_duration
                    : -1 != m_container_default_duration                                               ? m_container_default_duration
                    :                                                                                    20000000;

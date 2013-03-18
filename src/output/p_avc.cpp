@@ -116,6 +116,16 @@ mpeg4_p10_es_video_packetizer_c::handle_delayed_headers() {
   memory_cptr new_avcc = m_parser.get_avcc();
   set_codec_private(new_avcc->get_buffer(), new_avcc->get_size());
 
+  if (   !m_reader->is_providing_timecodes()
+      && !m_timecode_factory
+      && !m_parser.is_default_duration_forced()
+      && (   !m_parser.has_timing_info()
+          || (   !m_parser.get_timing_info().fixed_frame_rate
+              && (m_parser.get_timing_info().default_duration() < 5000000)))) // 200 fields/s
+    mxwarn_tid(m_ti.m_fname, m_ti.m_id, Y("This AVC/h.264 track's timing information indicates that it uses a variable frame rate. "
+                                          "However, no default duration nor an external timecode file has been provided for it, nor does the source container provide timecodes. "
+                                          "The resulting timecodes may not be useful.\n"));
+
   handle_aspect_ratio();
   handle_actual_default_duration();
 
