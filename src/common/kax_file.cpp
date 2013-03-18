@@ -23,22 +23,33 @@
 #include "common/ebml.h"
 #include "common/fs_sys_helpers.h"
 #include "common/kax_file.h"
+#include "common/strings/formatting.h"
 
 kax_file_c::kax_file_c(mm_io_cptr &in)
   : m_in(in)
   , m_resynced(false)
   , m_resync_start_pos(0)
   , m_file_size(m_in->get_size())
+  , m_timecode_scale{-1}
+  , m_last_timecode{-1}
   , m_es(new EbmlStream(*m_in))
-  , m_debug_read_next(debugging_requested("kax_file") || debugging_requested("kax_file_read_next"))
-  , m_debug_resync(debugging_requested("kax_file") || debugging_requested("kax_file_resync"))
+  , m_debug_read_next(debugging_requested("kax_file|kax_file_read_next"))
+  , m_debug_resync(debugging_requested(   "kax_file|kax_file_resync"))
 {
 }
 
 EbmlElement *
-kax_file_c::read_next_level1_element(uint32_t wanted_id) {
+kax_file_c::read_next_level1_element(uint32_t wanted_id,
+                                     bool report_cluster_timecode) {
   try {
-    return read_next_level1_element_internal(wanted_id);
+    auto element = read_next_level1_element_internal(wanted_id);
+
+    if (report_cluster_timecode && (-1 != m_timecode_scale))
+      mxinfo(boost::format(Y("The first cluster timecode after the resync is %1%.\n"))
+             % format_timecode(FindChildValue<KaxClusterTimecode>(static_cast<KaxCluster *>(element)) * m_timecode_scale));
+
+    return element;
+
   } catch (mtx::exception &e) {
     mxinfo(boost::format("\nmtx ex: %1% (type: %2%)\n") % e.error() % typeid(e).name());
   } catch (std::exception &e) {
@@ -74,9 +85,9 @@ kax_file_c::read_next_level1_element_internal(uint32_t wanted_id) {
   // Easiest case: next level 1 element following the previous one
   // without any element inbetween.
   if (   (wanted_id == actual_id.m_value)
-         || (   (0 == wanted_id)
-                && (   is_level1_element_id(actual_id)
-                       || is_global_element_id(actual_id)))) {
+      || (   (0 == wanted_id)
+          && (   is_level1_element_id(actual_id)
+              || is_global_element_id(actual_id)))) {
     EbmlElement *l1 = read_one_element();
     if (l1)
       return l1;
@@ -177,9 +188,15 @@ kax_file_c::resync_to_level1_element_internal(uint32_t wanted_id) {
 
   uint32_t actual_id = m_in->read_uint32_be();
   int64_t start_time = get_current_time_millis();
+  bool is_cluster_id = EBML_ID_VALUE(EBML_ID(KaxCluster)) == wanted_id;
 
   mxinfo(boost::format(Y("%1%: Error in the Matroska file structure at position %2%. Resyncing to the next level 1 element.\n"))
          % m_in->get_file_name() % m_resync_start_pos);
+
+  if (is_cluster_id && (-1 != m_last_timecode)) {
+    mxinfo(boost::format(Y("The last timecode processed before the error was encountered was %1%.\n")) % format_timecode(m_last_timecode));
+    m_last_timecode = -1;
+  }
 
   if (m_debug_resync)
     mxinfo(boost::format("kax_file::resync_to_level1_element(): starting at %1% potential ID %|2$08x|\n") % m_resync_start_pos % actual_id);
@@ -242,7 +259,7 @@ kax_file_c::resync_to_level1_element_internal(uint32_t wanted_id) {
     if ((4 == num_headers) || valid_unknown_size) {
       mxinfo(boost::format(Y("Resyncing successful at position %1%.\n")) % current_start_pos);
       m_in->setFilePointer(current_start_pos, seek_beginning);
-      return read_next_level1_element(wanted_id);
+      return read_next_level1_element(wanted_id, is_cluster_id);
     }
 
     m_in->setFilePointer(current_start_pos + 4, seek_beginning);
@@ -286,4 +303,14 @@ kax_file_c::get_element_size(EbmlElement *e) {
     max_end_pos = std::max(max_end_pos, static_cast<unsigned long>((*m)[idx]->GetElementPosition() + get_element_size((*m)[idx])));
 
   return max_end_pos - e->GetElementPosition();
+}
+
+void
+kax_file_c::set_timecode_scale(int64_t timecode_scale) {
+  m_timecode_scale = timecode_scale;
+}
+
+void
+kax_file_c::set_last_timecode(int64_t last_timecode) {
+  m_last_timecode = last_timecode;
 }

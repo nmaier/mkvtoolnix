@@ -793,6 +793,8 @@ kax_reader_c::read_headers_info(mm_io_c *io,
   m_segment_duration = irnd(FindChildValue<KaxDuration>(info) * m_tc_scale);
   m_title            = to_utf8(FindChildValue<KaxTitle>(info));
 
+  m_in_file->set_timecode_scale(m_tc_scale);
+
   // Let's try to parse the "writing application" string. This usually
   // contains the name and version number of the application used for
   // creating this Matroska file. Examples are:
@@ -1918,6 +1920,8 @@ kax_reader_c::process_simple_block(KaxCluster *cluster,
   }
 
   m_last_timecode = block_simple->GlobalTimecode();
+  if (0 < block_simple->NumberFrames())
+    m_in_file->set_last_timecode(m_last_timecode + (block_simple->NumberFrames() - 1) * frame_duration);
 
   // If we're appending this file to another one then the core
   // needs the timecodes shifted to zero.
@@ -2024,6 +2028,9 @@ kax_reader_c::process_block_group(KaxCluster *cluster,
   }
 
   m_last_timecode = block->GlobalTimecode();
+  if (0 < block->NumberFrames())
+    m_in_file->set_last_timecode(m_last_timecode + (block->NumberFrames() - 1) * frame_duration);
+
   // If we're appending this file to another one then the core
   // needs the timecodes shifted to zero.
   if (m_appending)

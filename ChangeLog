@@ -1,3 +1,10 @@
+2013-03-18  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvmerge: enhancement: Matroska reader: If mkvmerge encounters a
+        broken file structure it will output the last timecode
+        successfully read before resyncing. After the resync the first
+        cluster timecode will be reported as well.
+
 2013-03-09  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvmerge: bug fix: MPEG program stream reader: tracks with

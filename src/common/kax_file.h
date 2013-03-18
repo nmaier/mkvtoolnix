@@ -29,6 +29,7 @@ protected:
   mm_io_cptr m_in;
   bool m_resynced;
   uint64_t m_resync_start_pos, m_file_size;
+  int64_t m_timecode_scale, m_last_timecode;
   std::shared_ptr<EbmlStream> m_es;
 
   bool m_debug_read_next, m_debug_resync;
@@ -42,13 +43,16 @@ public:
   virtual bool is_level1_element_id(vint_c id) const;
   virtual bool is_global_element_id(vint_c id) const;
 
-  virtual EbmlElement *read_next_level1_element(uint32_t wanted_id = 0);
+  virtual EbmlElement *read_next_level1_element(uint32_t wanted_id = 0, bool report_cluster_timecode = false);
   virtual KaxCluster *read_next_cluster();
 
   virtual EbmlElement *resync_to_level1_element(uint32_t wanted_id = 0);
   virtual KaxCluster *resync_to_cluster();
 
   static unsigned long get_element_size(EbmlElement *e);
+
+  virtual void set_timecode_scale(int64_t timecode_scale);
+  virtual void set_last_timecode(int64_t last_timecode);
 
 protected:
   virtual EbmlElement *read_one_element();
