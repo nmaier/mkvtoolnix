@@ -1658,12 +1658,12 @@ msgstr "+-> Попередній аналіз файлу FLAC: %1%%%%2%"
 msgid "+-> Pre-parsing FLAC file: 100%\n"
 msgstr "+-> Попередній аналіз файлу FLAC: 100%\n"
 
-#: src/merge/pr_generic.cpp:1433
+#: src/merge/pr_generic.cpp:1434
 #, boost-format
 msgid ", description '%1%'"
 msgstr ", опис '%1%'"
 
-#: src/merge/pr_generic.cpp:1434
+#: src/merge/pr_generic.cpp:1435
 #, boost-format
 msgid ", file name '%1%'"
 msgstr ", назва файлу '%1%'"
@@ -2220,7 +2220,7 @@ msgstr "Приєднано"
 msgid "Attached files"
 msgstr "Вкладені файли"
 
-#: src/merge/pr_generic.cpp:1432
+#: src/merge/pr_generic.cpp:1433
 #, boost-format
 msgid "Attachment ID %1%: type '%2%', size %3% bytes"
 msgstr "ID вкладення %1%: тип '%2%', розмір %3% байт"
@@ -2578,7 +2578,7 @@ msgstr "Розділи записані."
 msgid "Chapters:"
 msgstr "Розділи:"
 
-#: src/merge/pr_generic.cpp:1435
+#: src/merge/pr_generic.cpp:1436
 #, boost-format
 msgid "Chapters: %1% entries"
 msgstr "Розділи: %1% запис(и)(ів)"
@@ -3604,7 +3604,7 @@ msgstr "Витягувати дані у необроблений (сирий) �
 msgid "Extract the data to a raw file."
 msgstr "Витягувати дані у необроблений (сирий) файл."
 
-#: src/output/p_avc.cpp:136
+#: src/output/p_avc.cpp:146
 #: src/output/p_mpeg4_p10.cpp:65
 #, boost-format
 msgid "Extracted the aspect ratio information from the MPEG-4 layer 10 (AVC) video data and set the display dimensions to %1%/%2%.\n"
@@ -3683,12 +3683,12 @@ msgstr "UID сімейства: %1%"
 msgid "File %1% has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n"
 msgstr "Файл %1% має невідомий тип. Будь ласка, продивіться підтримувані типи файлів ('mkvmerge --list-types') і зв'яжіться з автором Moritz Bunkus <moritz@bunkus.org>, якщо ваш тип файлу підтримується, але не розпізнається належним чином.\n"
 
-#: src/merge/pr_generic.cpp:1430
+#: src/merge/pr_generic.cpp:1431
 #, boost-format
 msgid "File '%1%': container: %2%"
 msgstr "Файл '%1%': контейнер: %2%"
 
-#: src/merge/pr_generic.cpp:1680
+#: src/merge/pr_generic.cpp:1681
 #, boost-format
 msgid "File '%1%': unsupported container: %2%\n"
 msgstr "Файл '%1%': непідтримуваний контейнер: %2%\n"
@@ -3917,7 +3917,7 @@ msgstr "Глобальні опції"
 msgid "Global tags (%d entries) from %s"
 msgstr "Глобальні теги (%d записів) з %s"
 
-#: src/merge/pr_generic.cpp:1436
+#: src/merge/pr_generic.cpp:1437
 #, boost-format
 msgid "Global tags: %1% entries"
 msgstr "Глобальні теги: %1% записів"
@@ -6606,7 +6606,7 @@ msgstr "Теги"
 msgid "Tags are not allowed in WebM compliant files. No tags will be written into any output file.\n"
 msgstr "Теги не допускаються у сумісних WebM файлах. Жодних тегів не буде записано до будь-яких вихідних файлів.\n"
 
-#: src/merge/pr_generic.cpp:1437
+#: src/merge/pr_generic.cpp:1438
 #, boost-format
 msgid "Tags for track ID %1%: %2% entries"
 msgstr "Теги для доріжки з ID %1%: %2% записи(ів)"
@@ -6659,7 +6659,7 @@ msgstr "Для доріжки AVC відео відсутній елемент '
 msgid "The CUE sheet for track %1% will be written to '%2%'.\n"
 msgstr "Трек-лист CUE для доріжки %1% буде записаний до '%2%'.\n"
 
-#: src/merge/pr_generic.h:471
+#: src/merge/pr_generic.h:474
 msgid "The CodecID of the two tracks is different: %1% and %2%"
 msgstr "CodecID двох доріжок різні: %1% i %2%"
 
@@ -6864,7 +6864,7 @@ msgid "The codec type '%1%' cannot be used in a WebM compliant file.\n"
 msgstr "Кодек типу '%1%' не може використовуватися в сумісному WebM файлі.\n"
 
 #: src/output/p_flac.cpp:101
-#: src/merge/pr_generic.h:478
+#: src/merge/pr_generic.h:481
 #, boost-format
 msgid "The codec's private data does not match (lengths: %1% and %2%)."
 msgstr "Специфічні дані кодеків не співпадають (довжини: %1% i %2%)."
@@ -6925,11 +6925,11 @@ msgstr ""
 msgid "The difference between tags associated with a track and global tags is explained in mkvmerge's documentation. In short: global tags apply to the complete file while the tags you can add on the 'input' tab apply to only one track."
 msgstr "Різниця між тегами, що пов'язані з доріжками, і глобальними тегами пояснюється в документації mkvmerge. Якщо коротко, то: глобальні теги застосовуються до всього файлу, в той час, як звичайні теги можна додати на вкладці 'На вході' і вони будуть застосовуватись лише до однієї вибраної доріжки."
 
-#: src/merge/pr_generic.h:466
+#: src/merge/pr_generic.h:469
 msgid "The display height of the two tracks is different: %1% and %2%"
 msgstr "Висота дисплея двох доріжок є різною: %1% i %2%"
 
-#: src/merge/pr_generic.h:461
+#: src/merge/pr_generic.h:464
 msgid "The display width of the two tracks is different: %1% and %2%"
 msgstr "Ширина дисплея двох доріжок є різною: %1% i %2%"
 
@@ -7016,7 +7016,7 @@ msgstr "Файл '%1%' був відкритий для запису.\n"
 msgid "The file '%1%' has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n"
 msgstr "Файл '%1%' має невідомий тип. Будь ласка, продивіться підтримувані типи файлів ('mkvmerge --list-types') і зв'яжіться з автором Moritz Bunkus <moritz@bunkus.org>, якщо ваш тип файлу підтримується, але не розпізнається належним чином.\n"
 
-#: src/merge/pr_generic.cpp:1684
+#: src/merge/pr_generic.cpp:1685
 #, boost-format
 msgid "The file '%1%' is a non-supported file type (%2%).\n"
 msgstr "Файл '%1%' має непідтримуваний тип (%2%).\n"
@@ -7189,7 +7189,7 @@ msgstr "Четвертий режим дозволяє витягувати ро
 msgid "The given timecode scale factor is outside the valid range (1...10000000 or -1 for 'sample precision even if a video track is present').\n"
 msgstr "Даний масштабний коефіцієнт тайм-коду знаходиться за межами допустимого діапазону (1 ... 10000000 або -1 для 'точності до семплу, навіть якщо доріжка відео присутня').\n"
 
-#: src/merge/pr_generic.h:456
+#: src/merge/pr_generic.h:459
 msgid "The height of the two tracks is different: %1% and %2%"
 msgstr "Висота кадру двох доріжок є різною: %1% i %2%"
 
@@ -7336,11 +7336,11 @@ msgstr "Назва вихідного файлу '%1%' і одного з вхі
 msgid "The next UID was already given in '%1% %2%'.\n"
 msgstr "Наступний UID вже заданий в '%1% %2%'.\n"
 
-#: src/merge/pr_generic.h:446
+#: src/merge/pr_generic.h:449
 msgid "The number of bits per sample of the two audio tracks is different: %1% and %2%"
 msgstr "Кількість біт на семпл двох звукових доріжок є різною: %1% i %2%"
 
-#: src/merge/pr_generic.h:441
+#: src/merge/pr_generic.h:444
 msgid "The number of channels of the two audio tracks is different: %1% and %2%"
 msgstr "Число каналів двох звукових доріжок є різною: %1% i %2%"
 
@@ -7458,7 +7458,7 @@ msgstr "Причини цього поки невідомі."
 msgid "The root element must be <%1%>."
 msgstr "Кореневий елемент повинен бути <%1%>."
 
-#: src/merge/pr_generic.h:436
+#: src/merge/pr_generic.h:439
 msgid "The sample rate of the two audio tracks is different: %1% and %2%"
 msgstr "Частота дискретизації двох звукових доріжок є різною: %1% i %2%"
 
@@ -7650,7 +7650,7 @@ msgstr "Параметри доріжок не співпадають."
 msgid "The update information could not be retrieved from %1%.\n"
 msgstr "Інформацію про оновлення не вдається отримати від %1%.\n"
 
-#: src/merge/pr_generic.h:451
+#: src/merge/pr_generic.h:454
 msgid "The width of the two tracks is different: %1% and %2%"
 msgstr "Ширина двох доріжок є різною: %1% i %2%"
 
@@ -7718,6 +7718,10 @@ msgstr "Цей AVC/h.264 містить кадри, які є занадто в�
 #, boost-format
 msgid "This AVC/h.264 track does not start with a key frame. The first %1% frames have been skipped.\n"
 msgstr "Ця доріжка AVC/h.264 не починається з ключового кадру. Перших %1% кадрів було пропущено.\n"
+
+#: src/output/p_avc.cpp:125
+msgid "This AVC/h.264 track's timing information indicates that it uses a variable frame rate. However, no default duration nor an external timecode file has been provided for it, nor does the source container provide timecodes. The resulting timecodes may not be useful.\n"
+msgstr ""
 
 #: src/output/p_mp3.cpp:58
 #, boost-format
@@ -7972,7 +7976,7 @@ msgstr "Доріжка %1%: Інформація AAC не може бути зч
 msgid "Track ID %1% has an unknown AAC type.\n"
 msgstr "Доріжка з ID %1% має невідомий AAC тип.\n"
 
-#: src/merge/pr_generic.cpp:1431
+#: src/merge/pr_generic.cpp:1432
 #, boost-format
 msgid "Track ID %1%: %2% (%3%)"
 msgstr "Доріжка з ID %1%: %2% (%3%)"

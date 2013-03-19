@@ -1635,12 +1635,12 @@ msgstr "+-> 預先解析 FLAC 檔案: %1%%%%2%"
 msgid "+-> Pre-parsing FLAC file: 100%\n"
 msgstr "+-> 預先解析 FLAC 檔案: 100%\n"
 
-#: src/merge/pr_generic.cpp:1433
+#: src/merge/pr_generic.cpp:1434
 #, boost-format
 msgid ", description '%1%'"
 msgstr ", 描述 「%1%」"
 
-#: src/merge/pr_generic.cpp:1434
+#: src/merge/pr_generic.cpp:1435
 #, boost-format
 msgid ", file name '%1%'"
 msgstr ", 檔名「%1%」"
@@ -2187,7 +2187,7 @@ msgstr "附加的"
 msgid "Attached files"
 msgstr "附加檔案清單"
 
-#: src/merge/pr_generic.cpp:1432
+#: src/merge/pr_generic.cpp:1433
 #, boost-format
 msgid "Attachment ID %1%: type '%2%', size %3% bytes"
 msgstr "附件 ID %1%: 類型「%2%」, 大小 %3% 位元組"
@@ -2545,7 +2545,7 @@ msgstr "章節已寫入。"
 msgid "Chapters:"
 msgstr "章節:"
 
-#: src/merge/pr_generic.cpp:1435
+#: src/merge/pr_generic.cpp:1436
 #, boost-format
 msgid "Chapters: %1% entries"
 msgstr "章節: %1% 項目"
@@ -3571,7 +3571,7 @@ msgstr "提取資料到 raw 檔案，包括 CodecPrivate 作為表頭。"
 msgid "Extract the data to a raw file."
 msgstr "提取資料到 raw 檔案。"
 
-#: src/output/p_avc.cpp:136
+#: src/output/p_avc.cpp:146
 #: src/output/p_mpeg4_p10.cpp:65
 #, boost-format
 msgid "Extracted the aspect ratio information from the MPEG-4 layer 10 (AVC) video data and set the display dimensions to %1%/%2%.\n"
@@ -3650,12 +3650,12 @@ msgstr "家族 UID: %1%"
 msgid "File %1% has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n"
 msgstr "檔案 %1% 類型未知。請查看受支援的檔案類型清單 (「mkvmerge --list-types」)，如果您的檔案類型受支援但沒被正常識別，請聯繫作者 Moritz Bunkus <moritz@bunkus.org>。\n"
 
-#: src/merge/pr_generic.cpp:1430
+#: src/merge/pr_generic.cpp:1431
 #, boost-format
 msgid "File '%1%': container: %2%"
 msgstr "檔案「%1%」: 容器: %2%"
 
-#: src/merge/pr_generic.cpp:1680
+#: src/merge/pr_generic.cpp:1681
 #, boost-format
 msgid "File '%1%': unsupported container: %2%\n"
 msgstr "檔案「%1%」: 不支援的容器: %2%\n"
@@ -3884,7 +3884,7 @@ msgstr " 整體選項"
 msgid "Global tags (%d entries) from %s"
 msgstr "整體標籤 (%d 個項目) 自 %s"
 
-#: src/merge/pr_generic.cpp:1436
+#: src/merge/pr_generic.cpp:1437
 #, boost-format
 msgid "Global tags: %1% entries"
 msgstr "整體標籤: %1% 項目"
@@ -6569,7 +6569,7 @@ msgstr "標籤"
 msgid "Tags are not allowed in WebM compliant files. No tags will be written into any output file.\n"
 msgstr "在 WebM 遵循檔裡不能有標籤。不會將標籤寫進任何輸出檔。\n"
 
-#: src/merge/pr_generic.cpp:1437
+#: src/merge/pr_generic.cpp:1438
 #, boost-format
 msgid "Tags for track ID %1%: %2% entries"
 msgstr "軌道 ID 的標籤 %1%: %2% 項目"
@@ -6622,7 +6622,7 @@ msgstr "此 AVC 視訊軌缺少「CTTS」畫格時間碼偏移單元。然而，
 msgid "The CUE sheet for track %1% will be written to '%2%'.\n"
 msgstr "軌道 %1% 的 CUE 表單會寫入到 「%2%」。\n"
 
-#: src/merge/pr_generic.h:471
+#: src/merge/pr_generic.h:474
 msgid "The CodecID of the two tracks is different: %1% and %2%"
 msgstr "兩軌的 CodecID 不同: %1% 與 %2%"
 
@@ -6827,7 +6827,7 @@ msgid "The codec type '%1%' cannot be used in a WebM compliant file.\n"
 msgstr "此編解碼器類型「%1%」無法用在 WebM 遵循檔。\n"
 
 #: src/output/p_flac.cpp:101
-#: src/merge/pr_generic.h:478
+#: src/merge/pr_generic.h:481
 #, boost-format
 msgid "The codec's private data does not match (lengths: %1% and %2%)."
 msgstr "編解碼器專有資料不符 (長度: %1% 與 %2%)。"
@@ -6888,11 +6888,11 @@ msgstr ""
 msgid "The difference between tags associated with a track and global tags is explained in mkvmerge's documentation. In short: global tags apply to the complete file while the tags you can add on the 'input' tab apply to only one track."
 msgstr "關於關聯至軌道的標籤與整體標籤的區別已在 mkvmerge 文件檔中作出解釋。簡而言之: 整體標籤應用於整個檔案，而您能在「輸入」選項分頁中添加的標籤僅能應用於單個軌道。"
 
-#: src/merge/pr_generic.h:466
+#: src/merge/pr_generic.h:469
 msgid "The display height of the two tracks is different: %1% and %2%"
 msgstr "兩軌的顯示高度不同: %1% 與 %2%"
 
-#: src/merge/pr_generic.h:461
+#: src/merge/pr_generic.h:464
 msgid "The display width of the two tracks is different: %1% and %2%"
 msgstr "兩軌的顯示寬度不同: %1% 與 %2%"
 
@@ -6979,7 +6979,7 @@ msgstr "檔案「%1%」已開啟以寫入。\n"
 msgid "The file '%1%' has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n"
 msgstr "檔案「%1%」類型未知。請查看支援的檔案類型 (「mkvmerge --list-types」)，若您的檔案類型受支援但被錯誤識別，請聯繫作者 Moritz Bunkus <moritz@bunkus.org>。\n"
 
-#: src/merge/pr_generic.cpp:1684
+#: src/merge/pr_generic.cpp:1685
 #, boost-format
 msgid "The file '%1%' is a non-supported file type (%2%).\n"
 msgstr "此檔案「%1%」類型不支援 (%2%)。\n"
@@ -7152,7 +7152,7 @@ msgstr "第四種模式可提取章節並將章節轉換成 XML。此輸出會�
 msgid "The given timecode scale factor is outside the valid range (1...10000000 or -1 for 'sample precision even if a video track is present').\n"
 msgstr "給定的時間碼縮放比例超出有效範圍 (1...10000000 或 -1 代表「即使視訊軌已提供時的取樣精確度」)。\n"
 
-#: src/merge/pr_generic.h:456
+#: src/merge/pr_generic.h:459
 msgid "The height of the two tracks is different: %1% and %2%"
 msgstr "兩軌高度不同: %1% 與 %2%"
 
@@ -7295,11 +7295,11 @@ msgstr "輸出檔「%1%」的名稱與輸入檔之一相同。這將使 mkvmerge
 msgid "The next UID was already given in '%1% %2%'.\n"
 msgstr "下一 UID 已在「%1% %2%」給出。\n"
 
-#: src/merge/pr_generic.h:446
+#: src/merge/pr_generic.h:449
 msgid "The number of bits per sample of the two audio tracks is different: %1% and %2%"
 msgstr "兩軌的每次取樣位元數（音訊位元深度）不同: %1% 與 %2%"
 
-#: src/merge/pr_generic.h:441
+#: src/merge/pr_generic.h:444
 msgid "The number of channels of the two audio tracks is different: %1% and %2%"
 msgstr "兩音軌的聲道數不同: %1% 與 %2%"
 
@@ -7409,7 +7409,7 @@ msgstr "原因不詳。"
 msgid "The root element must be <%1%>."
 msgstr "根元件必須為 <%1%>。"
 
-#: src/merge/pr_generic.h:436
+#: src/merge/pr_generic.h:439
 msgid "The sample rate of the two audio tracks is different: %1% and %2%"
 msgstr "兩音軌的取樣頻率不同: %1% 與 %2%"
 
@@ -7601,7 +7601,7 @@ msgstr "軌道參數不符。"
 msgid "The update information could not be retrieved from %1%.\n"
 msgstr "無法從 %1% 取得更新資訊。\n"
 
-#: src/merge/pr_generic.h:451
+#: src/merge/pr_generic.h:454
 msgid "The width of the two tracks is different: %1% and %2%"
 msgstr "兩軌寬度不同: %1% 與 %2%"
 
@@ -7669,6 +7669,10 @@ msgstr "此 AVC/h.264 包含大於目前最大 NALU 長的畫格。您需要重�
 #, boost-format
 msgid "This AVC/h.264 track does not start with a key frame. The first %1% frames have been skipped.\n"
 msgstr "此 AVC/h.264 軌道未以關鍵畫格開頭。已跳過開頭 %1% 畫格。\n"
+
+#: src/output/p_avc.cpp:125
+msgid "This AVC/h.264 track's timing information indicates that it uses a variable frame rate. However, no default duration nor an external timecode file has been provided for it, nor does the source container provide timecodes. The resulting timecodes may not be useful.\n"
+msgstr ""
 
 #: src/output/p_mp3.cpp:58
 #, boost-format
@@ -7920,7 +7924,7 @@ msgstr "軌道 %1%: AAC 資訊無法解析。\n"
 msgid "Track ID %1% has an unknown AAC type.\n"
 msgstr "軌道 ID %1% 的 AAC 類型未知。\n"
 
-#: src/merge/pr_generic.cpp:1431
+#: src/merge/pr_generic.cpp:1432
 #, boost-format
 msgid "Track ID %1%: %2% (%3%)"
 msgstr "軌道 ID %1%: %2% (%3%)"

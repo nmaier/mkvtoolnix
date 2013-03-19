@@ -1650,12 +1650,12 @@ msgstr "+-> FLACファイルを事前解析中です: %1%%%%2%"
 msgid "+-> Pre-parsing FLAC file: 100%\n"
 msgstr "+-> FLACファイルを事前解析中です: 100%\n"
 
-#: src/merge/pr_generic.cpp:1433
+#: src/merge/pr_generic.cpp:1434
 #, boost-format
 msgid ", description '%1%'"
 msgstr ", 説明 '%1%'"
 
-#: src/merge/pr_generic.cpp:1434
+#: src/merge/pr_generic.cpp:1435
 #, boost-format
 msgid ", file name '%1%'"
 msgstr ", ファイル名 '%1%'"
@@ -2201,7 +2201,7 @@ msgstr "添付ファイル"
 msgid "Attached files"
 msgstr "添付ファイル"
 
-#: src/merge/pr_generic.cpp:1432
+#: src/merge/pr_generic.cpp:1433
 #, boost-format
 msgid "Attachment ID %1%: type '%2%', size %3% bytes"
 msgstr "添付ファイル ID %1%：タイプ'%2%'、サイズ%3%バイト"
@@ -2559,7 +2559,7 @@ msgstr "チャプタが書き込まれました。"
 msgid "Chapters:"
 msgstr "チャプタ："
 
-#: src/merge/pr_generic.cpp:1435
+#: src/merge/pr_generic.cpp:1436
 #, boost-format
 msgid "Chapters: %1% entries"
 msgstr "チャプタ：%1%個のエントリ"
@@ -3585,7 +3585,7 @@ msgstr "CodecPrivateをヘッダとして含むrawファイルへとデータを
 msgid "Extract the data to a raw file."
 msgstr "rawファイルへとデータを抽出します。"
 
-#: src/output/p_avc.cpp:136
+#: src/output/p_avc.cpp:146
 #: src/output/p_mpeg4_p10.cpp:65
 #, boost-format
 msgid "Extracted the aspect ratio information from the MPEG-4 layer 10 (AVC) video data and set the display dimensions to %1%/%2%.\n"
@@ -3664,12 +3664,12 @@ msgstr "ファミリーUID: %1%"
 msgid "File %1% has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n"
 msgstr "ファイル%1%は未知のファイルタイプです。サポートされているファイルタイプ一覧（'mkvmerge --list-types'）を参照し、もしそのファイルタイプがサポートされているのに正しく認識されない場合は、作者のMoritz Bunkus <moritz@bunkus.org>に連絡してください。\n"
 
-#: src/merge/pr_generic.cpp:1430
+#: src/merge/pr_generic.cpp:1431
 #, boost-format
 msgid "File '%1%': container: %2%"
 msgstr "ファイル'%1%'：コンテナ：%2%"
 
-#: src/merge/pr_generic.cpp:1680
+#: src/merge/pr_generic.cpp:1681
 #, boost-format
 msgid "File '%1%': unsupported container: %2%\n"
 msgstr "ファイル'%1%'：サポートされていないコンテナ：%2%\n"
@@ -3898,7 +3898,7 @@ msgstr " グローバルオプション"
 msgid "Global tags (%d entries) from %s"
 msgstr "グローバルタグ（%d個のエントリ）%sのタグ"
 
-#: src/merge/pr_generic.cpp:1436
+#: src/merge/pr_generic.cpp:1437
 #, boost-format
 msgid "Global tags: %1% entries"
 msgstr "グローバルタグ：%1%個のエントリ"
@@ -6588,7 +6588,7 @@ msgstr "タグ"
 msgid "Tags are not allowed in WebM compliant files. No tags will be written into any output file.\n"
 msgstr "タグはWebMの規格に準拠したファイルでは使用することができません。どの出力ファイルにもタグは書き込まれません。\n"
 
-#: src/merge/pr_generic.cpp:1437
+#: src/merge/pr_generic.cpp:1438
 #, boost-format
 msgid "Tags for track ID %1%: %2% entries"
 msgstr "トラックID %1%のタグ：%2%個のエントリ"
@@ -6641,7 +6641,7 @@ msgstr "このAVCビデオトラックにはフレームタイムコードを補
 msgid "The CUE sheet for track %1% will be written to '%2%'.\n"
 msgstr "トラック%1%のCUEシートは'%2%'に書き込まれました。\n"
 
-#: src/merge/pr_generic.h:471
+#: src/merge/pr_generic.h:474
 msgid "The CodecID of the two tracks is different: %1% and %2%"
 msgstr "2つのトラック間でコーデックIDが異なっています：%1%と%2%"
 
@@ -6846,7 +6846,7 @@ msgid "The codec type '%1%' cannot be used in a WebM compliant file.\n"
 msgstr "コーデックタイプ'%1%'はWebMの規格に準拠したファイルでは使用することができません。\n"
 
 #: src/output/p_flac.cpp:101
-#: src/merge/pr_generic.h:478
+#: src/merge/pr_generic.h:481
 #, boost-format
 msgid "The codec's private data does not match (lengths: %1% and %2%)."
 msgstr "コーデックのプライベートデータが一致しません（長さ：%1%と%2%）。"
@@ -6907,11 +6907,11 @@ msgstr ""
 msgid "The difference between tags associated with a track and global tags is explained in mkvmerge's documentation. In short: global tags apply to the complete file while the tags you can add on the 'input' tab apply to only one track."
 msgstr "トラックのタグとグローバルタグの違いはmkvmergeのドキュメントで説明されています。手短に説明すると、'入力'タブで追加できるタグは1つのトラックのみに適用されるのに対し、グローバルタグはファイル全体に適用されます。"
 
-#: src/merge/pr_generic.h:466
+#: src/merge/pr_generic.h:469
 msgid "The display height of the two tracks is different: %1% and %2%"
 msgstr "2つのトラック間で縦解像度が異なっています：%1%と%2%"
 
-#: src/merge/pr_generic.h:461
+#: src/merge/pr_generic.h:464
 msgid "The display width of the two tracks is different: %1% and %2%"
 msgstr "2つのトラック間で横解像度が異なっています：%1%と%2%"
 
@@ -6999,7 +6999,7 @@ msgstr "ファイル'%1%'を開いて書き込んでいます。\n"
 msgid "The file '%1%' has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n"
 msgstr "ファイル%1%は未知のファイルタイプです。サポートされているファイルタイプ一覧（'mkvmerge --list-types'）を参照し、もしそのファイルタイプがサポートされているのに正しく認識されない場合は、作者のMoritz Bunkus <moritz@bunkus.org>に連絡してください。\n"
 
-#: src/merge/pr_generic.cpp:1684
+#: src/merge/pr_generic.cpp:1685
 #, boost-format
 msgid "The file '%1%' is a non-supported file type (%2%).\n"
 msgstr "ファイル'%1%'はサポートされていないファイルタイプです（%2%）。\n"
@@ -7172,7 +7172,7 @@ msgstr "4番目のモードではチャプタを抽出しXMLに変換します�
 msgid "The given timecode scale factor is outside the valid range (1...10000000 or -1 for 'sample precision even if a video track is present').\n"
 msgstr "指定されたタイムスケールの係数は有効な範囲（1～10000000、もしくはビデオトラックが存在していてもサンプリング音の精度を使用する場合は、-1）から外れています。\n"
 
-#: src/merge/pr_generic.h:456
+#: src/merge/pr_generic.h:459
 msgid "The height of the two tracks is different: %1% and %2%"
 msgstr "2つのトラック間で縦解像度が異なっています：%1%と%2%"
 
@@ -7312,11 +7312,11 @@ msgstr "出力ファイル名'%1%'と入力ファイルの1つのファイル名
 msgid "The next UID was already given in '%1% %2%'.\n"
 msgstr "'%1% %2%'で既に次のUIDは指定されています。\n"
 
-#: src/merge/pr_generic.h:446
+#: src/merge/pr_generic.h:449
 msgid "The number of bits per sample of the two audio tracks is different: %1% and %2%"
 msgstr "2つのオーディオトラック間でサンプル当たりのビット数が異なります：%1%と%2%"
 
-#: src/merge/pr_generic.h:441
+#: src/merge/pr_generic.h:444
 msgid "The number of channels of the two audio tracks is different: %1% and %2%"
 msgstr "2つのオーディオトラック間でチャンネル数が異なっています：%1%と%2%"
 
@@ -7426,7 +7426,7 @@ msgstr "理由はわかりません。"
 msgid "The root element must be <%1%>."
 msgstr "ルート要素は<%1%>でなければなりません。"
 
-#: src/merge/pr_generic.h:436
+#: src/merge/pr_generic.h:439
 msgid "The sample rate of the two audio tracks is different: %1% and %2%"
 msgstr "2つのオーディオトラック間でサンプリングレートが異なっています：%1%と%2%"
 
@@ -7618,7 +7618,7 @@ msgstr "トラックのパラメータが一致しません。"
 msgid "The update information could not be retrieved from %1%.\n"
 msgstr "アップデート情報を %1% から読み出すことができませんでした。\n"
 
-#: src/merge/pr_generic.h:451
+#: src/merge/pr_generic.h:454
 msgid "The width of the two tracks is different: %1% and %2%"
 msgstr "2つのトラック間で横解像度が異なっています：%1%と%2%"
 
@@ -7686,6 +7686,10 @@ msgstr "このAVC/h.264は現在のNALUサイズの最大値には大きすぎ�
 #, boost-format
 msgid "This AVC/h.264 track does not start with a key frame. The first %1% frames have been skipped.\n"
 msgstr "このAVC/h.264トラックはキーフレームで始まっていません。最初の%1%フレームはスキップされました。\n"
+
+#: src/output/p_avc.cpp:125
+msgid "This AVC/h.264 track's timing information indicates that it uses a variable frame rate. However, no default duration nor an external timecode file has been provided for it, nor does the source container provide timecodes. The resulting timecodes may not be useful.\n"
+msgstr ""
 
 #: src/output/p_mp3.cpp:58
 #, boost-format
@@ -7937,7 +7941,7 @@ msgstr "トラック%1%：AAC情報を解析することができませんでし
 msgid "Track ID %1% has an unknown AAC type.\n"
 msgstr "Track ID %1%は未知のAACタイプです。\n"
 
-#: src/merge/pr_generic.cpp:1431
+#: src/merge/pr_generic.cpp:1432
 #, boost-format
 msgid "Track ID %1%: %2% (%3%)"
 msgstr "トラックID %1%：%2%（%3%）"

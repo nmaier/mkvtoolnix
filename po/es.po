@@ -1725,12 +1725,12 @@ msgstr "+-> Análisis previo del archivo FLAC: %1%%%%2%"
 msgid "+-> Pre-parsing FLAC file: 100%\n"
 msgstr "+-> Análisis previo del archivo FLAC: 100%\n"
 
-#: src/merge/pr_generic.cpp:1433
+#: src/merge/pr_generic.cpp:1434
 #, boost-format
 msgid ", description '%1%'"
 msgstr ", descripción '%1%'"
 
-#: src/merge/pr_generic.cpp:1434
+#: src/merge/pr_generic.cpp:1435
 #, boost-format
 msgid ", file name '%1%'"
 msgstr ", nombre de archivo '%1%'"
@@ -2287,7 +2287,7 @@ msgstr "Adjunto"
 msgid "Attached files"
 msgstr "Archivos adjuntos"
 
-#: src/merge/pr_generic.cpp:1432
+#: src/merge/pr_generic.cpp:1433
 #, boost-format
 msgid "Attachment ID %1%: type '%2%', size %3% bytes"
 msgstr "ID del archivo adjunto %1%: tipo '%2%', tamaño %3% bytes"
@@ -2645,7 +2645,7 @@ msgstr "Capítulos escritos."
 msgid "Chapters:"
 msgstr "Capítulos:"
 
-#: src/merge/pr_generic.cpp:1435
+#: src/merge/pr_generic.cpp:1436
 #, boost-format
 msgid "Chapters: %1% entries"
 msgstr "Capítulos: %1% registros"
@@ -3671,7 +3671,7 @@ msgstr "Extraer los datos a un archivo en bruto (no editado) incluido el códec 
 msgid "Extract the data to a raw file."
 msgstr "Extraer los datos a un archivo en bruto (no editado)."
 
-#: src/output/p_avc.cpp:136
+#: src/output/p_avc.cpp:146
 #: src/output/p_mpeg4_p10.cpp:65
 #, boost-format
 msgid "Extracted the aspect ratio information from the MPEG-4 layer 10 (AVC) video data and set the display dimensions to %1%/%2%.\n"
@@ -3750,12 +3750,12 @@ msgstr "Familia UID: %1%"
 msgid "File %1% has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n"
 msgstr "El archivo %1% es de tipo desconocido.  Por favor, busca los tipos de archivos compatibles ('mkvmerge --list-types'), y si el tipo de archivo es de los compatibles pero no lo reconoce correctamente, contacta con el autor, Moritz Bunkus <moritz@bunkus.org>\n"
 
-#: src/merge/pr_generic.cpp:1430
+#: src/merge/pr_generic.cpp:1431
 #, boost-format
 msgid "File '%1%': container: %2%"
 msgstr "Archivo '%1%': contenedor: %2%"
 
-#: src/merge/pr_generic.cpp:1680
+#: src/merge/pr_generic.cpp:1681
 #, boost-format
 msgid "File '%1%': unsupported container: %2%\n"
 msgstr "Archivo '%1%': contenedor no compatible: %2%\n"
@@ -3986,7 +3986,7 @@ msgstr "Opciones generales"
 msgid "Global tags (%d entries) from %s"
 msgstr "Etiquetas generales (%d registros) de %s"
 
-#: src/merge/pr_generic.cpp:1436
+#: src/merge/pr_generic.cpp:1437
 #, boost-format
 msgid "Global tags: %1% entries"
 msgstr "Etiquetas generales: %1% registros"
@@ -6680,7 +6680,7 @@ msgstr "Etiquetas"
 msgid "Tags are not allowed in WebM compliant files. No tags will be written into any output file.\n"
 msgstr "Las etiquetas no están permitidas en archivos compatibles WebM. Las etiquetas no serán escritas en ningún archivo creado.\n"
 
-#: src/merge/pr_generic.cpp:1437
+#: src/merge/pr_generic.cpp:1438
 #, boost-format
 msgid "Tags for track ID %1%: %2% entries"
 msgstr "Etiquetas para el ID de la pista %1%: %2% registros"
@@ -6733,7 +6733,7 @@ msgstr "A la pista de video AVC le falta la partícula 'CTTS' para el ajuste del
 msgid "The CUE sheet for track %1% will be written to '%2%'.\n"
 msgstr "Las hojas de distribución de pistas (CUE Sheet) para la pista %1% serán escritas a '%2%'.\n"
 
-#: src/merge/pr_generic.h:471
+#: src/merge/pr_generic.h:474
 msgid "The CodecID of the two tracks is different: %1% and %2%"
 msgstr "El ID del codec de las dos pistas es diferente: %1% y %2%"
 
@@ -6939,7 +6939,7 @@ msgid "The codec type '%1%' cannot be used in a WebM compliant file.\n"
 msgstr "El tipo de códec '%1%' no puede ser usado en archivos compatibles WebM.\n"
 
 #: src/output/p_flac.cpp:101
-#: src/merge/pr_generic.h:478
+#: src/merge/pr_generic.h:481
 #, boost-format
 msgid "The codec's private data does not match (lengths: %1% and %2%)."
 msgstr "Los datos particulares del códec no coinciden (extensiónes: %1% y %2%)."
@@ -7000,11 +7000,11 @@ msgstr ""
 msgid "The difference between tags associated with a track and global tags is explained in mkvmerge's documentation. In short: global tags apply to the complete file while the tags you can add on the 'input' tab apply to only one track."
 msgstr "La diferencia entre etiquetas asociadas con una pista y las etiquetas generales estan explicadas en la documentación de mkvmerge. En pocas palabras, las etiquetas generales se aplican a un archivo completo, mientras que las etiquetas que puedes añadir en la pestaña Entrada, se aplican a una sola pista."
 
-#: src/merge/pr_generic.h:466
+#: src/merge/pr_generic.h:469
 msgid "The display height of the two tracks is different: %1% and %2%"
 msgstr "La altura de visualización de las dos pistas es diferente: %1% and %2%"
 
-#: src/merge/pr_generic.h:461
+#: src/merge/pr_generic.h:464
 msgid "The display width of the two tracks is different: %1% and %2%"
 msgstr "La anchura de visualización de las dos pistas es diferente: %1% and %2%"
 
@@ -7091,7 +7091,7 @@ msgstr "El archivo %1% ha sido abierto para su escritura.\n"
 msgid "The file '%1%' has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n"
 msgstr "El archivo %1% es de un tipo desconocido. Por favor, observa los archivos compatibles ('mkvmerge --list-types') y contacta con el autor, Moritz Bunkus <moritz@bunkus.org>, si el tipo de archivo es compatible pero no es reconocido correctamente.\n"
 
-#: src/merge/pr_generic.cpp:1684
+#: src/merge/pr_generic.cpp:1685
 #, boost-format
 msgid "The file '%1%' is a non-supported file type (%2%).\n"
 msgstr "El archivo %1% es un tipo de archivo incompatible (%2%).\n"
@@ -7264,7 +7264,7 @@ msgstr "El cuarto modo extrae los capítulos y los convierte a XML. El archivo s
 msgid "The given timecode scale factor is outside the valid range (1...10000000 or -1 for 'sample precision even if a video track is present').\n"
 msgstr "El factor de escala asignado en los códigos de tiempo esta fuera de un rango válido (1... 10000000 o -1 para precisión de la muestra incluso si una pista de video está presente).\n"
 
-#: src/merge/pr_generic.h:456
+#: src/merge/pr_generic.h:459
 msgid "The height of the two tracks is different: %1% and %2%"
 msgstr "La altura de las dos pistas es diferentes: %1% y %2%"
 
@@ -7413,11 +7413,11 @@ msgstr "El nombre del archivo de salida '%1%' y del único archivo de entrada es
 msgid "The next UID was already given in '%1% %2%'.\n"
 msgstr "El próximo UID ya fue asignado en '%1% %2%'.\n"
 
-#: src/merge/pr_generic.h:446
+#: src/merge/pr_generic.h:449
 msgid "The number of bits per sample of the two audio tracks is different: %1% and %2%"
 msgstr "El número de bits por muestra de las dos pistas de audio es diferente: %1% y %2%"
 
-#: src/merge/pr_generic.h:441
+#: src/merge/pr_generic.h:444
 msgid "The number of channels of the two audio tracks is different: %1% and %2%"
 msgstr "El número de canales de las dos pistas de audio es diferente: %1% y %2%"
 
@@ -7535,7 +7535,7 @@ msgstr "La razón es desconocida."
 msgid "The root element must be <%1%>."
 msgstr "El elemento fundamental (root) debe ser <%1%>."
 
-#: src/merge/pr_generic.h:436
+#: src/merge/pr_generic.h:439
 msgid "The sample rate of the two audio tracks is different: %1% and %2%"
 msgstr "La frecuencia de muestreo de dos pistas de audio es diferente: %1% y %2%"
 
@@ -7727,7 +7727,7 @@ msgstr "Los parámetros de la pista no coinciden."
 msgid "The update information could not be retrieved from %1%.\n"
 msgstr "La información de la actualización no se pudo recuperar desde %1%.\n"
 
-#: src/merge/pr_generic.h:451
+#: src/merge/pr_generic.h:454
 msgid "The width of the two tracks is different: %1% and %2%"
 msgstr "El ancho de las dos pistas es diferente: %1% y %2%"
 
@@ -7795,6 +7795,10 @@ msgstr "Esta pista AVC/h.264 contiene fotogramas que son demasiado grandes para 
 #, boost-format
 msgid "This AVC/h.264 track does not start with a key frame. The first %1% frames have been skipped.\n"
 msgstr "Esta pista AVC/h.264 no se inicia con un fotograma clave (keyframe). El primer %1% fotograma ha sido omitido.\n"
+
+#: src/output/p_avc.cpp:125
+msgid "This AVC/h.264 track's timing information indicates that it uses a variable frame rate. However, no default duration nor an external timecode file has been provided for it, nor does the source container provide timecodes. The resulting timecodes may not be useful.\n"
+msgstr ""
 
 #: src/output/p_mp3.cpp:58
 #, boost-format
@@ -8049,7 +8053,7 @@ msgstr "Pista %1%: La información AAC no ha podido ser analizada.\n"
 msgid "Track ID %1% has an unknown AAC type.\n"
 msgstr "El ID de la pista %1% tiene un tipo AAC desconocido.\n"
 
-#: src/merge/pr_generic.cpp:1431
+#: src/merge/pr_generic.cpp:1432
 #, boost-format
 msgid "Track ID %1%: %2% (%3%)"
 msgstr "El ID de la pista %1%: %2% (%3%)"

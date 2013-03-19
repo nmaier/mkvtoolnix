@@ -1652,12 +1652,12 @@ msgstr "+-> FLAC dosyası ön-ayrıştırması yapılıyor: %1%%%%2%"
 msgid "+-> Pre-parsing FLAC file: 100%\n"
 msgstr "+-> FLAC dosyası ön-ayrıştırması yapılıyor: %100\n"
 
-#: src/merge/pr_generic.cpp:1433
+#: src/merge/pr_generic.cpp:1434
 #, boost-format
 msgid ", description '%1%'"
 msgstr ", tanımı '%1%'"
 
-#: src/merge/pr_generic.cpp:1434
+#: src/merge/pr_generic.cpp:1435
 #, boost-format
 msgid ", file name '%1%'"
 msgstr ", dosya adı '%1%'"
@@ -2214,7 +2214,7 @@ msgstr "Ekli"
 msgid "Attached files"
 msgstr "Ekli dosyalar"
 
-#: src/merge/pr_generic.cpp:1432
+#: src/merge/pr_generic.cpp:1433
 #, boost-format
 msgid "Attachment ID %1%: type '%2%', size %3% bytes"
 msgstr "Ek ID %1%: türü '%2%', boyutu %3% bayt"
@@ -2572,7 +2572,7 @@ msgstr "Bölümler yazıldı."
 msgid "Chapters:"
 msgstr "Bölümler:"
 
-#: src/merge/pr_generic.cpp:1435
+#: src/merge/pr_generic.cpp:1436
 #, boost-format
 msgid "Chapters: %1% entries"
 msgstr "Bölüm: %1% girdi"
@@ -3598,7 +3598,7 @@ msgstr "Veriyi başlık olarak CodecPrivate dahil ham bir dosyaya çıkart."
 msgid "Extract the data to a raw file."
 msgstr "Veriyi ham dosyaya çıkart."
 
-#: src/output/p_avc.cpp:136
+#: src/output/p_avc.cpp:146
 #: src/output/p_mpeg4_p10.cpp:65
 #, boost-format
 msgid "Extracted the aspect ratio information from the MPEG-4 layer 10 (AVC) video data and set the display dimensions to %1%/%2%.\n"
@@ -3677,12 +3677,12 @@ msgstr "Aile UID: %1%"
 msgid "File %1% has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n"
 msgstr "Dosya %1%, bilinmeyen türe sahip. Lütfen desteklenen dosya türlerine ('mkvmerge --list-types') bir bakın ve dosya türünüz destekleniyor ama doğru bir şekilde tanınmıyorsa, yazar Moritz Bunkus <moritz@bunkus.org> ile temasa geçin.\n"
 
-#: src/merge/pr_generic.cpp:1430
+#: src/merge/pr_generic.cpp:1431
 #, boost-format
 msgid "File '%1%': container: %2%"
 msgstr "Dosya '%1%': kalıp: %2%"
 
-#: src/merge/pr_generic.cpp:1680
+#: src/merge/pr_generic.cpp:1681
 #, boost-format
 msgid "File '%1%': unsupported container: %2%\n"
 msgstr "Dosya '%1%': desteklenmeyen kalıp: %2%\n"
@@ -3911,7 +3911,7 @@ msgstr "Genel seçenekler"
 msgid "Global tags (%d entries) from %s"
 msgstr "Genel etiket (%d girdi), dosya: %s"
 
-#: src/merge/pr_generic.cpp:1436
+#: src/merge/pr_generic.cpp:1437
 #, boost-format
 msgid "Global tags: %1% entries"
 msgstr "Genel etiket: %1% girdi"
@@ -6599,7 +6599,7 @@ msgstr "Etiketler"
 msgid "Tags are not allowed in WebM compliant files. No tags will be written into any output file.\n"
 msgstr "WebM uyumlu dosyalarda etiketlere izin verilmez. Herhangi bir çıktı dosyasına hiç etiket yazılmadı.\n"
 
-#: src/merge/pr_generic.cpp:1437
+#: src/merge/pr_generic.cpp:1438
 #, boost-format
 msgid "Tags for track ID %1%: %2% entries"
 msgstr "İz ID %1% için etiket: %2% giriş"
@@ -6652,7 +6652,7 @@ msgstr ""
 msgid "The CUE sheet for track %1% will be written to '%2%'.\n"
 msgstr ""
 
-#: src/merge/pr_generic.h:471
+#: src/merge/pr_generic.h:474
 msgid "The CodecID of the two tracks is different: %1% and %2%"
 msgstr "İki izin KodekID'leri farklı: %1% ve %2%"
 
@@ -6857,7 +6857,7 @@ msgid "The codec type '%1%' cannot be used in a WebM compliant file.\n"
 msgstr "Kodek türü '%1%', WebM uyum dosyasında kullanılamıyor.\n"
 
 #: src/output/p_flac.cpp:101
-#: src/merge/pr_generic.h:478
+#: src/merge/pr_generic.h:481
 #, boost-format
 msgid "The codec's private data does not match (lengths: %1% and %2%)."
 msgstr "Kodek'in özel verisi eşleşmiyor (uzunlukları: %1% ve %2%)."
@@ -6918,11 +6918,11 @@ msgstr ""
 msgid "The difference between tags associated with a track and global tags is explained in mkvmerge's documentation. In short: global tags apply to the complete file while the tags you can add on the 'input' tab apply to only one track."
 msgstr "İz ile ilişkilendirlmiş etiketler ve genel etiketler arasındaki fark mkvmerge'ün belgesinde açıklanır. Kısaca: genel etiketler tamamlanmış dosyalara uygulanırken etiketleri 'girdi' sekmesinde sadece bir ize ekleyebilirsiniz."
 
-#: src/merge/pr_generic.h:466
+#: src/merge/pr_generic.h:469
 msgid "The display height of the two tracks is different: %1% and %2%"
 msgstr "İki izin görüntü yüksekliği farklı: %1% ve %2%"
 
-#: src/merge/pr_generic.h:461
+#: src/merge/pr_generic.h:464
 msgid "The display width of the two tracks is different: %1% and %2%"
 msgstr "İki izin görüntü genişliği farklı: %1% ve %2%"
 
@@ -7009,7 +7009,7 @@ msgstr "'%1%' dosyası yazmak için açıldı.\n"
 msgid "The file '%1%' has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n"
 msgstr "Dosya '%1%' bilinmeyen bir tür. Lütfen desteklenen dosya türlerine ('mkvmerge --list-types') bakın ve eğer dosya türünüz destekleniyor ama düzgün olarak tanınmıyorsa, yazar Moritz Bunkus <moritz@bunkus.org> ile temasa geçin.\n"
 
-#: src/merge/pr_generic.cpp:1684
+#: src/merge/pr_generic.cpp:1685
 #, boost-format
 msgid "The file '%1%' is a non-supported file type (%2%).\n"
 msgstr "'%1%' dosyası desteklenmeyen bir dosya türü (%2%).\n"
@@ -7182,7 +7182,7 @@ msgstr ""
 msgid "The given timecode scale factor is outside the valid range (1...10000000 or -1 for 'sample precision even if a video track is present').\n"
 msgstr ""
 
-#: src/merge/pr_generic.h:456
+#: src/merge/pr_generic.h:459
 msgid "The height of the two tracks is different: %1% and %2%"
 msgstr "İki izin yükseklikleri farklı: %1% ve %2%"
 
@@ -7321,11 +7321,11 @@ msgstr ""
 msgid "The next UID was already given in '%1% %2%'.\n"
 msgstr "Sonraki UID, '%1% %2%' içinde zaten verildi.\n"
 
-#: src/merge/pr_generic.h:446
+#: src/merge/pr_generic.h:449
 msgid "The number of bits per sample of the two audio tracks is different: %1% and %2%"
 msgstr "İki ses izinin örnek başına bit sayıları farklı: %1% ve %2%"
 
-#: src/merge/pr_generic.h:441
+#: src/merge/pr_generic.h:444
 msgid "The number of channels of the two audio tracks is different: %1% and %2%"
 msgstr "İki ses izinin kanal sayıları farklı: %1% ve %2%"
 
@@ -7443,7 +7443,7 @@ msgstr "Sebep bilinmiyor."
 msgid "The root element must be <%1%>."
 msgstr "Kök unsur <%1%> olmak zorunda."
 
-#: src/merge/pr_generic.h:436
+#: src/merge/pr_generic.h:439
 msgid "The sample rate of the two audio tracks is different: %1% and %2%"
 msgstr "İki ses izinin örnekleme oranı farklı: %1% ve %2%"
 
@@ -7632,7 +7632,7 @@ msgstr "İz parametreleri uyuşmuyor."
 msgid "The update information could not be retrieved from %1%.\n"
 msgstr "%1% adresinden güncelleme bilgisi alınamadı.\n"
 
-#: src/merge/pr_generic.h:451
+#: src/merge/pr_generic.h:454
 msgid "The width of the two tracks is different: %1% and %2%"
 msgstr "İki izin genişlikleri farklı: %1% ve %2%"
 
@@ -7699,6 +7699,10 @@ msgstr ""
 #: src/output/p_avc.cpp:114
 #, boost-format
 msgid "This AVC/h.264 track does not start with a key frame. The first %1% frames have been skipped.\n"
+msgstr ""
+
+#: src/output/p_avc.cpp:125
+msgid "This AVC/h.264 track's timing information indicates that it uses a variable frame rate. However, no default duration nor an external timecode file has been provided for it, nor does the source container provide timecodes. The resulting timecodes may not be useful.\n"
 msgstr ""
 
 #: src/output/p_mp3.cpp:58
@@ -7945,7 +7949,7 @@ msgstr "İz %1%: AAC bilgisi ayrıştırılamadı.\n"
 msgid "Track ID %1% has an unknown AAC type.\n"
 msgstr "İz ID %1% bilinmeyen bir AAC türüne sahip.\n"
 
-#: src/merge/pr_generic.cpp:1431
+#: src/merge/pr_generic.cpp:1432
 #, boost-format
 msgid "Track ID %1%: %2% (%3%)"
 msgstr "İz ID %1%: %2% (%3%)"

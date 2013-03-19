@@ -1655,12 +1655,12 @@ msgstr "+-> FLAC agiriaren aurre-azterketa: %1%%%%2%"
 msgid "+-> Pre-parsing FLAC file: 100%\n"
 msgstr "+-> FLAC agiriaren aurre-azterketa: 100%\n"
 
-#: src/merge/pr_generic.cpp:1433
+#: src/merge/pr_generic.cpp:1434
 #, boost-format
 msgid ", description '%1%'"
 msgstr ", azalpena '%1%'"
 
-#: src/merge/pr_generic.cpp:1434
+#: src/merge/pr_generic.cpp:1435
 #, boost-format
 msgid ", file name '%1%'"
 msgstr ", agiri izena '%1%'"
@@ -2215,7 +2215,7 @@ msgstr "Erantsita"
 msgid "Attached files"
 msgstr "Erantsitako agiriak"
 
-#: src/merge/pr_generic.cpp:1432
+#: src/merge/pr_generic.cpp:1433
 #, boost-format
 msgid "Attachment ID %1%: type '%2%', size %3% bytes"
 msgstr "Eranskin ID-a %1%: mota '%2%', neurria %3% byte"
@@ -2573,7 +2573,7 @@ msgstr "Idatziriko atalak."
 msgid "Chapters:"
 msgstr "Atalak:"
 
-#: src/merge/pr_generic.cpp:1435
+#: src/merge/pr_generic.cpp:1436
 #, boost-format
 msgid "Chapters: %1% entries"
 msgstr "Atalak: %1% sarrera"
@@ -3599,7 +3599,7 @@ msgstr "Atera datuak raw agiri batera Kodek Pribatua idazburu bezala barneratuz.
 msgid "Extract the data to a raw file."
 msgstr "Atera datuak raw agiri batera."
 
-#: src/output/p_avc.cpp:136
+#: src/output/p_avc.cpp:146
 #: src/output/p_mpeg4_p10.cpp:65
 #, boost-format
 msgid "Extracted the aspect ratio information from the MPEG-4 layer 10 (AVC) video data and set the display dimensions to %1%/%2%.\n"
@@ -3678,12 +3678,12 @@ msgstr "Sendi UID-a: %1%"
 msgid "File %1% has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n"
 msgstr "%1% agiria mota ezezagunekoa da. Mesedez bata begirada bat sostengaturiko agiri motei (('mkvmerge --list-types') eta jarri harremanetan egilearekin, Moritz Bunkus <moritz@bunkus.org> zure agiri mota sostengatua bada baina ez da egoki ezagutua.\n"
 
-#: src/merge/pr_generic.cpp:1430
+#: src/merge/pr_generic.cpp:1431
 #, boost-format
 msgid "File '%1%': container: %2%"
 msgstr "Agiria '%1%': edukiontzia: %2%"
 
-#: src/merge/pr_generic.cpp:1680
+#: src/merge/pr_generic.cpp:1681
 #, boost-format
 msgid "File '%1%': unsupported container: %2%\n"
 msgstr "Agiria '%1%': edukiontzi sostengugabea: %2%\n"
@@ -3912,7 +3912,7 @@ msgstr "Aukera orokorrak"
 msgid "Global tags (%d entries) from %s"
 msgstr "Etiketa orokorrak (%d sarrera) --> %s"
 
-#: src/merge/pr_generic.cpp:1436
+#: src/merge/pr_generic.cpp:1437
 #, boost-format
 msgid "Global tags: %1% entries"
 msgstr "Etiketa orokorrak: %1% sarrera"
@@ -6597,7 +6597,7 @@ msgstr "Etiketak"
 msgid "Tags are not allowed in WebM compliant files. No tags will be written into any output file.\n"
 msgstr "Etiketak ez daude ahalbideturik WebM bateragarritasun agirietan. Etiketak ez dira idatziko irteera agirietan.\n"
 
-#: src/merge/pr_generic.cpp:1437
+#: src/merge/pr_generic.cpp:1438
 #, boost-format
 msgid "Tags for track ID %1%: %2% entries"
 msgstr "Etiketak bide ID-arentzat %1%: %2% sarrera"
@@ -6650,7 +6650,7 @@ msgstr "AVC bideo bideak ez du 'CTTS' atomoa framen denbora-kode orekatarako. Ho
 msgid "The CUE sheet for track %1% will be written to '%2%'.\n"
 msgstr "%1% bidearentzako CUE orriak '%2%'-ra idatziko dira.\n"
 
-#: src/merge/pr_generic.h:471
+#: src/merge/pr_generic.h:474
 msgid "The CodecID of the two tracks is different: %1% and %2%"
 msgstr "Bi bideen kodekaren ID-a ezberdina da: %1% eta %2%"
 
@@ -6855,7 +6855,7 @@ msgid "The codec type '%1%' cannot be used in a WebM compliant file.\n"
 msgstr "'%1%' kodek mota ezin da WebM agiri bateragarri batean erabili.\n"
 
 #: src/output/p_flac.cpp:101
-#: src/merge/pr_generic.h:478
+#: src/merge/pr_generic.h:481
 #, boost-format
 msgid "The codec's private data does not match (lengths: %1% and %2%)."
 msgstr "Kodekaren datu pribatuak ez datoz bat (luzerak: %1% eta %2%)."
@@ -6916,11 +6916,11 @@ msgstr ""
 msgid "The difference between tags associated with a track and global tags is explained in mkvmerge's documentation. In short: global tags apply to the complete file while the tags you can add on the 'input' tab apply to only one track."
 msgstr "Bide batekin elkarturiko etiketen eta etiketa orokorren arteko ezberdintasuna mkvmergeren agiritzan azaltzen da. Laburki: etiketa orokorrak agiri osoari ezartzen zaizkio, aldiz 'sarrera' hegatsean gehitu ditzakezun etiketak bide bakar bati ezartzen zaizkio."
 
-#: src/merge/pr_generic.h:466
+#: src/merge/pr_generic.h:469
 msgid "The display height of the two tracks is different: %1% and %2%"
 msgstr "Bi bideen erakuspen garaiera ezberdina da: %1% eta %2%"
 
-#: src/merge/pr_generic.h:461
+#: src/merge/pr_generic.h:464
 msgid "The display width of the two tracks is different: %1% and %2%"
 msgstr "Bi bideen erakuspen zabalera ezberdina da: %1% eta %2%"
 
@@ -7007,7 +7007,7 @@ msgstr "%1% agiria idazteko ireki da.\n"
 msgid "The file '%1%' has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n"
 msgstr "%1% agiria mota ezezagunekoa da. Mesedez bota begirada bat sostengaturiko agiri motei ('mkvmerge --list-types') eta jarri harremanetan egilearekin, Moritz Bunkus <moritz@bunkus.org>, zure agiri mota sostengatua bada baina ez bada egoki ezagutzen.\n"
 
-#: src/merge/pr_generic.cpp:1684
+#: src/merge/pr_generic.cpp:1685
 #, boost-format
 msgid "The file '%1%' is a non-supported file type (%2%).\n"
 msgstr "%1% agiria sostengatu-gabeko agiri mota batekoa da (%2%).\n"
@@ -7180,7 +7180,7 @@ msgstr "Laugarren moduak atalak atera eta XML-ra bihurtzen ditu. Irteera irteera
 msgid "The given timecode scale factor is outside the valid range (1...10000000 or -1 for 'sample precision even if a video track is present').\n"
 msgstr "Denbora-kode neurri ezaugarria baliozko mailatik kanpo dago (1... 10000000 edo -1 'lagin zehaztasunerako baita bideo bidea badago').\n"
 
-#: src/merge/pr_generic.h:456
+#: src/merge/pr_generic.h:459
 msgid "The height of the two tracks is different: %1% and %2%"
 msgstr "Bi bideen garaiera ezberdina da: %1% eta %2%"
 
@@ -7327,11 +7327,11 @@ msgstr "'%1%' irteera agiriaren eta sarrera agirietako baten izena berdina da. H
 msgid "The next UID was already given in '%1% %2%'.\n"
 msgstr "Hurrengo UID-a jadanik eman da hemen: '%1% %2%'.\n"
 
-#: src/merge/pr_generic.h:446
+#: src/merge/pr_generic.h:449
 msgid "The number of bits per sample of the two audio tracks is different: %1% and %2%"
 msgstr "Bi audio bideen lagineko/bit zenbatekoa ezberdina da: %1% eta %2%"
 
-#: src/merge/pr_generic.h:441
+#: src/merge/pr_generic.h:444
 msgid "The number of channels of the two audio tracks is different: %1% and %2%"
 msgstr "Bi audio bideen bide zenbatekoa ezberdina da: %1% eta %2%"
 
@@ -7449,7 +7449,7 @@ msgstr "Zergaitia ezezaguna da."
 msgid "The root element must be <%1%>."
 msgstr "Erro gaia izan behar da: <%1%>."
 
-#: src/merge/pr_generic.h:436
+#: src/merge/pr_generic.h:439
 msgid "The sample rate of the two audio tracks is different: %1% and %2%"
 msgstr "Bi audio bideen lagin neurria ezberdina da: %1% eta %2%"
 
@@ -7641,7 +7641,7 @@ msgstr "Bide parametroak ez datoz bat."
 msgid "The update information could not be retrieved from %1%.\n"
 msgstr "Eguneraketa argibideak ezin dira %1%-tik berreskuratu.\n"
 
-#: src/merge/pr_generic.h:451
+#: src/merge/pr_generic.h:454
 msgid "The width of the two tracks is different: %1% and %2%"
 msgstr "Bi bideen zabalera ezberdina da: %1% eta %2%"
 
@@ -7709,6 +7709,10 @@ msgstr "AVC/h.264 bide honek handiegiak diren frameak ditu oraingo NALU neurrira
 #, boost-format
 msgid "This AVC/h.264 track does not start with a key frame. The first %1% frames have been skipped.\n"
 msgstr "AVC/h.264 bide hau ez da giltza frame batekin hasten. Lehen %1% frameak jauzi egin dira.\n"
+
+#: src/output/p_avc.cpp:125
+msgid "This AVC/h.264 track's timing information indicates that it uses a variable frame rate. However, no default duration nor an external timecode file has been provided for it, nor does the source container provide timecodes. The resulting timecodes may not be useful.\n"
+msgstr ""
 
 #: src/output/p_mp3.cpp:58
 #, boost-format
@@ -7963,7 +7967,7 @@ msgstr "%1% bidea: AAC argibideak ezin dira aztertu.\n"
 msgid "Track ID %1% has an unknown AAC type.\n"
 msgstr "%1% ID-dun bideak AAC mota ezezaguna du.\n"
 
-#: src/merge/pr_generic.cpp:1431
+#: src/merge/pr_generic.cpp:1432
 #, boost-format
 msgid "Track ID %1%: %2% (%3%)"
 msgstr "%1% ID-dun bidea: %1%: %2% (%3%)"

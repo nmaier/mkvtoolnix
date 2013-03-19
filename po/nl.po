@@ -1654,12 +1654,12 @@ msgstr "+-> Voor-ontleden FLAC bestand: %1%%%%2%"
 msgid "+-> Pre-parsing FLAC file: 100%\n"
 msgstr "+-> Voor-ontleden FLAC bestand: 100%\n"
 
-#: src/merge/pr_generic.cpp:1433
+#: src/merge/pr_generic.cpp:1434
 #, boost-format
 msgid ", description '%1%'"
 msgstr ", beschrijving '%1%'"
 
-#: src/merge/pr_generic.cpp:1434
+#: src/merge/pr_generic.cpp:1435
 #, boost-format
 msgid ", file name '%1%'"
 msgstr ", bestandsnaam '%1%'"
@@ -2216,7 +2216,7 @@ msgstr "Vastgemaakt"
 msgid "Attached files"
 msgstr "Bestand bijlagen"
 
-#: src/merge/pr_generic.cpp:1432
+#: src/merge/pr_generic.cpp:1433
 #, boost-format
 msgid "Attachment ID %1%: type '%2%', size %3% bytes"
 msgstr "Bijlage ID %1%: type '%2%', grootte %3% bytes"
@@ -2574,7 +2574,7 @@ msgstr "Hoofdstuk geschreven."
 msgid "Chapters:"
 msgstr "Hoofdstukken:"
 
-#: src/merge/pr_generic.cpp:1435
+#: src/merge/pr_generic.cpp:1436
 #, boost-format
 msgid "Chapters: %1% entries"
 msgstr "Hoofdstukken: %1% ingangen"
@@ -3602,7 +3602,7 @@ msgstr "Extract de data naar een raw bestand inclusief de CodecPrivate als een k
 msgid "Extract the data to a raw file."
 msgstr "Extract de data naar een raw bestand."
 
-#: src/output/p_avc.cpp:136
+#: src/output/p_avc.cpp:146
 #: src/output/p_mpeg4_p10.cpp:65
 #, boost-format
 msgid "Extracted the aspect ratio information from the MPEG-4 layer 10 (AVC) video data and set the display dimensions to %1%/%2%.\n"
@@ -3681,12 +3681,12 @@ msgstr "Familie UID: %1%"
 msgid "File %1% has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n"
 msgstr "Bestand %1% heeft een onbekend type. Kijk even naar de ondersteunde bestandstypen ('mkvmerge --list-types') en maak contact met de auteur Moritz Bunkus <moritz@bunkus.org> als je bestand wordt ondersteund maar niet correct wordt herkend.\n"
 
-#: src/merge/pr_generic.cpp:1430
+#: src/merge/pr_generic.cpp:1431
 #, boost-format
 msgid "File '%1%': container: %2%"
 msgstr "Bestand '%1%': houder: %2%"
 
-#: src/merge/pr_generic.cpp:1680
+#: src/merge/pr_generic.cpp:1681
 #, boost-format
 msgid "File '%1%': unsupported container: %2%\n"
 msgstr "Bestand '%1%': niet ondersteunde houder: %2%\n"
@@ -3915,7 +3915,7 @@ msgstr "Globale opties"
 msgid "Global tags (%d entries) from %s"
 msgstr "Globale markeringen (%d ingangen) van %s"
 
-#: src/merge/pr_generic.cpp:1436
+#: src/merge/pr_generic.cpp:1437
 #, boost-format
 msgid "Global tags: %1% entries"
 msgstr "Globale markeer: %1% ingangen"
@@ -6611,7 +6611,7 @@ msgstr "Markeringen"
 msgid "Tags are not allowed in WebM compliant files. No tags will be written into any output file.\n"
 msgstr "Markeringen zijn niet toegestaan in WebM herkenbare bestanden. Er worden geen markeringen geschreven naar het uitvoer bestand.\n"
 
-#: src/merge/pr_generic.cpp:1437
+#: src/merge/pr_generic.cpp:1438
 #, boost-format
 msgid "Tags for track ID %1%: %2% entries"
 msgstr "Markeringen voor spoor ID %1%: %2% ingangen"
@@ -6664,7 +6664,7 @@ msgstr "Het AVC video spoor ontbreekt het 'CTTS' deel voor beeld tijd code compe
 msgid "The CUE sheet for track %1% will be written to '%2%'.\n"
 msgstr "De volg document(en) (cue) voor spoor %1% wordt geschreven naar '%2%'.\n"
 
-#: src/merge/pr_generic.h:471
+#: src/merge/pr_generic.h:474
 msgid "The CodecID of the two tracks is different: %1% and %2%"
 msgstr "Het CodecID van de twee sporen zijn verschillend: %1% en %2%"
 
@@ -6869,7 +6869,7 @@ msgid "The codec type '%1%' cannot be used in a WebM compliant file.\n"
 msgstr "Het codec type '%1%' kan niet gebruikt worden in een WebM herkenbaar bestand.\n"
 
 #: src/output/p_flac.cpp:101
-#: src/merge/pr_generic.h:478
+#: src/merge/pr_generic.h:481
 #, boost-format
 msgid "The codec's private data does not match (lengths: %1% and %2%)."
 msgstr "De codecs privé data komen niet overeen (lengte: %1% en %2%)."
@@ -6930,11 +6930,11 @@ msgstr ""
 msgid "The difference between tags associated with a track and global tags is explained in mkvmerge's documentation. In short: global tags apply to the complete file while the tags you can add on the 'input' tab apply to only one track."
 msgstr "Het verschil tussen een markering gekoppeld aan een spoor en globale markeringen worden uitgelegd in mkvmerge's documentatie. In het kort: globale markeringen gaan over het gehele bestand terwijl de markeringen die jij kunt toevoegen aan de 'invoer' tab alléén gaan over één spoor."
 
-#: src/merge/pr_generic.h:466
+#: src/merge/pr_generic.h:469
 msgid "The display height of the two tracks is different: %1% and %2%"
 msgstr "De scherm hoogte van de twee sporen zijn verschillend: %1% en %2%"
 
-#: src/merge/pr_generic.h:461
+#: src/merge/pr_generic.h:464
 msgid "The display width of the two tracks is different: %1% and %2%"
 msgstr "De scherm  breedte van de twee sporen zijn verschillend: %1% en %2%"
 
@@ -7021,7 +7021,7 @@ msgstr "Het bestand '%1%' is voor schrijven aangemaakt.\n"
 msgid "The file '%1%' has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n"
 msgstr "Het bestand '%1%' is een onbekend type. Kijk a.u.b. naar de ondersteunende bestandstypen ('mkvmerge --list-types') en maak contact met de auteur Moritz Bunkus <moritz@bunkus.org> als je bestand wordt ondersteund maar niet wordt herkend.\n"
 
-#: src/merge/pr_generic.cpp:1684
+#: src/merge/pr_generic.cpp:1685
 #, boost-format
 msgid "The file '%1%' is a non-supported file type (%2%).\n"
 msgstr "Het bestand '%1%' is een niet ondersteund bestandstype (%2%).\n"
@@ -7194,7 +7194,7 @@ msgstr "De vierde mode extraheert de hoofdstukken en zet ze om naar een XML form
 msgid "The given timecode scale factor is outside the valid range (1...10000000 or -1 for 'sample precision even if a video track is present').\n"
 msgstr "De gegeven tijd code schaal factor valt buiten een geldig bereik (1...10000000 of-1 voor 'voorbeeld precisie zelfs als een video spoor aanwezig is').\n"
 
-#: src/merge/pr_generic.h:456
+#: src/merge/pr_generic.h:459
 msgid "The height of the two tracks is different: %1% and %2%"
 msgstr "De hoogte van de twee sporen verschillen: %1% en %2%"
 
@@ -7341,11 +7341,11 @@ msgstr "De naam van het uitvoer bestand '%1%' en één van de invoer bestanden z
 msgid "The next UID was already given in '%1% %2%'.\n"
 msgstr "Het volgende UID is reeds ingegeven in '%1% %2%'.\n"
 
-#: src/merge/pr_generic.h:446
+#: src/merge/pr_generic.h:449
 msgid "The number of bits per sample of the two audio tracks is different: %1% and %2%"
 msgstr "Het aantal bits per voorbeeld van de twee audio sporen zijn verschillend: %1% en %2%"
 
-#: src/merge/pr_generic.h:441
+#: src/merge/pr_generic.h:444
 msgid "The number of channels of the two audio tracks is different: %1% and %2%"
 msgstr "Het aantal kanalen van de twee audio sporen zijn verschillend: %1% and %2%"
 
@@ -7463,7 +7463,7 @@ msgstr "De reden is onbekend."
 msgid "The root element must be <%1%>."
 msgstr "Het root element moet zijn <%1%>."
 
-#: src/merge/pr_generic.h:436
+#: src/merge/pr_generic.h:439
 msgid "The sample rate of the two audio tracks is different: %1% and %2%"
 msgstr "De voorbeeld verhouding van de twee audio sporen zijn verschillend: %1% en %2%"
 
@@ -7655,7 +7655,7 @@ msgstr "De spoor parameters komen niet overeen."
 msgid "The update information could not be retrieved from %1%.\n"
 msgstr "Het opwaardeer bestand kon niet verkregen worden van (%1%).\n"
 
-#: src/merge/pr_generic.h:451
+#: src/merge/pr_generic.h:454
 msgid "The width of the two tracks is different: %1% and %2%"
 msgstr "De breedte van de twee sporen zijn verschillend: %1% en %2%"
 
@@ -7723,6 +7723,10 @@ msgstr "Dit AVC/h.264 bevat beelden welke te groot zijn voor het maximum NALU gr
 #, boost-format
 msgid "This AVC/h.264 track does not start with a key frame. The first %1% frames have been skipped.\n"
 msgstr "Dit AVC/h.264 spoor start niet met het sleutel beeld. Het eerste %1% beeld is overgeslagen.\n"
+
+#: src/output/p_avc.cpp:125
+msgid "This AVC/h.264 track's timing information indicates that it uses a variable frame rate. However, no default duration nor an external timecode file has been provided for it, nor does the source container provide timecodes. The resulting timecodes may not be useful.\n"
+msgstr ""
 
 #: src/output/p_mp3.cpp:58
 #, boost-format
@@ -7977,7 +7981,7 @@ msgstr "Spoor %1%: De AAC informatie kon niet ontleed worden.\n"
 msgid "Track ID %1% has an unknown AAC type.\n"
 msgstr "Spoor ID %1% heeft een onbekend AAC type.\n"
 
-#: src/merge/pr_generic.cpp:1431
+#: src/merge/pr_generic.cpp:1432
 #, boost-format
 msgid "Track ID %1%: %2% (%3%)"
 msgstr "Spoor ID %1%: %2% (%3%)"
