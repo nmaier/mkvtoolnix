@@ -219,6 +219,9 @@ set_usage() {
   usage_text += Y("  --default-duration <TID:Xs|ms|us|ns|fps>\n"
                   "                           Force the default duration of a track to X.\n"
                   "                           X can be a floating point number or a fraction.\n");
+  usage_text += Y("  --fix-bitstream-timing-information <TID[:bool]>\n"
+                  "                           Adjust the frame/field rate stored in the video\n"
+                  "                           bitstream to match the track's default duration.\n");
   usage_text += Y("  --nalu-size-length <TID:n>\n"
                   "                           Force the NALU size length to n bytes with\n"
                   "                           2 <= n <= 4 with 4 being the default.\n");
@@ -1389,6 +1392,33 @@ parse_arg_nalu_size_length(const std::string &s,
   ti.m_nalu_size_lengths[id] = nalu_size_length;
 }
 
+/** \brief Parse the \c --fix-bitstream-timing-information argument
+
+   The argument must have the form \c TID or \c TID:boolean. The former
+   is equivalent to \c TID:1.
+*/
+static void
+parse_arg_fix_bitstream_frame_rate(const std::string &s,
+                                   track_info_c &ti) {
+  bool fix   = true;
+  auto parts = split(s, ":", 2);
+  int64_t id = 0;
+
+  strip(parts);
+  if (!parse_number(parts[0], id))
+    mxerror(boost::format(Y("Invalid track ID specified in '--fix-bitstream-timing-information %1%'.\n")) % s);
+
+  try {
+    if (2 == parts.size())
+      fix = parse_bool(parts[1]);
+  } catch (...) {
+    mxerror(boost::format(Y("Invalid boolean option specified in '--fix-bitstream-timing-information %1%'.\n")) % s);
+  }
+
+  ti.m_fix_bitstream_frame_rate_flags[id] = fix;
+}
+
+
 /** \brief Parse the argument for \c --blockadd
 
    The argument must be a tupel consisting of a track ID and the max number
@@ -2295,6 +2325,13 @@ parse_args(std::vector<std::string> args) {
         mxerror(Y("'--nalu-size-length' lacks its argument.\n"));
 
       parse_arg_nalu_size_length(next_arg, *ti);
+      sit++;
+
+    } else if (this_arg == "--fix-bitstream-timing-information") {
+      if (no_next_arg)
+        mxerror(Y("'--fix-bitstream-timing-information' lacks its argument.\n"));
+
+      parse_arg_fix_bitstream_frame_rate(next_arg, *ti);
       sit++;
 
     } else if (this_arg == "+")

@@ -43,8 +43,17 @@ mpeg4_p10_video_packetizer_c(generic_reader_c *p_reader,
 
 void
 mpeg4_p10_video_packetizer_c::set_headers() {
-  if (m_ti.m_private_data && (0 < m_ti.m_private_size))
+  if (m_ti.m_private_data && m_ti.m_private_size) {
     extract_aspect_ratio();
+
+    if (m_ti.m_fix_bitstream_frame_rate) {
+      int64_t l_track_default_duration = 0.0 < m_fps ? static_cast<int64_t>(1000000000.0 / m_fps) : -1;
+      int64_t duration                 = m_timecode_factory ? m_timecode_factory->get_default_duration(l_track_default_duration) : l_track_default_duration;
+
+      mpeg4::p10::fix_sps_fps(m_ti.m_private_data, m_ti.m_private_size, duration);
+      set_codec_private(m_ti.m_private_data, m_ti.m_private_size);
+    }
+  }
 
   video_packetizer_c::set_headers();
 }

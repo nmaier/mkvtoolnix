@@ -287,6 +287,35 @@ slcopy(bit_cursor_c &r,
   }
 }
 
+struct common_default_duration_t {
+  int64_t duration;
+  int num_units_in_tick, time_scale;
+};
+
+std::vector<common_default_duration_t> s_common_default_durations{
+  { 1000000000ll / 120,             1,    120 }, // 120 fps
+  { 1000000000ll / 100,             1,    100 }, // 100 fps
+  { 1000000000ll /  50,             1,     50 }, //  50 fps
+  { 1000000000ll /  24,             1,     24 }, //  24 fps
+  { 1000000000ll /  25,             1,     25 }, //  25 fps
+  { 1000000000ll /  60,             1,     60 }, //  60 fps
+  { 1000000000ll /  30,             1,     30 }, //  30 fps
+  { 1000000000ll * 1001 / 48000, 1001,  48000 }, //  47.952 fps
+  { 1000000000ll * 1001 / 24000, 1001,  24000 }, //  23.976 fps
+  { 1000000000ll * 1001 / 60000, 1001,  60000 }, //  59.94 fps
+  { 1000000000ll * 1001 / 30000, 1001,  30000 }, //  29.97 fps
+};
+
+static std::pair<int, int>
+find_timing_info(int64_t duration) {
+  // search in the common FPS list
+  for (auto &common_default_duration : s_common_default_durations)
+    if (std::abs(duration - common_default_duration.duration) < 20000)
+      return std::make_pair(common_default_duration.num_units_in_tick, common_default_duration.time_scale);
+
+  return std::make_pair((duration * 0x80000000) / 1000000000ll, 0x80000000);
+}
+
 int64_t
 mpeg4::p10::timing_info_t::default_duration()
   const {
@@ -455,16 +484,19 @@ mpeg4::p10::rbsp_to_nalu(memory_cptr &buffer) {
 bool
 mpeg4::p10::parse_sps(memory_cptr &buffer,
                       sps_info_t &sps,
-                      bool keep_ar_info) {
+                      bool keep_ar_info,
+                      bool fix_bitstream_frame_rate,
+                      int64_t duration) {
   std::unordered_map<unsigned int, bool> s_high_level_profile_ids{
     {  44, true }, {  83, true }, {  86, true }, { 100, true }, { 110, true }, { 118, true }, { 122, true }, { 128, true }, { 244, true }
   };
 
+  int const add_space   = 100;
   int size              = buffer->get_size();
-  unsigned char *newsps = (unsigned char *)safemalloc(size + 100);
-  memory_cptr mcptr_newsps(new memory_c(newsps, size, true));
+  auto mcptr_newsps     = memory_c::alloc(size + add_space);
+  auto newsps           = mcptr_newsps->get_buffer();
   bit_cursor_c r(buffer->get_buffer(), size);
-  bit_writer_c w(newsps, size);
+  bit_writer_c w(newsps, size + add_space);
   int i, nref, mb_width, mb_height;
 
   keep_ar_info = !hack_engaged(ENGAGE_REMOVE_BITSTREAM_AR_INFO);
@@ -474,6 +506,17 @@ mpeg4::p10::parse_sps(memory_cptr &buffer,
   sps.par_num  = 1;
   sps.par_den  = 1;
   sps.ar_found = false;
+
+  int num_units_in_tick = 0, time_scale = 0;
+
+  if (-1 == duration)
+    fix_bitstream_frame_rate = false;
+
+  else {
+    auto timing_info  = find_timing_info(duration);
+    num_units_in_tick = timing_info.first;
+    time_scale        = timing_info.second;
+  }
 
   w.copy_bits(3, r);            // forbidden_zero_bit, nal_ref_idc
   if (w.copy_bits(5, r) != 7)   // nal_unit_type
@@ -557,8 +600,10 @@ mpeg4::p10::parse_sps(memory_cptr &buffer,
     sps.width      -= crop_unit_x * (sps.crop_left + sps.crop_right);
     sps.height     -= crop_unit_y * (sps.crop_top  + sps.crop_bottom);
   }
-  sps.vui_present = w.copy_bits(1, r);
-  if (sps.vui_present == 1) {
+
+  sps.vui_present = r.get_bit();
+  if (sps.vui_present) {
+    w.put_bit(1);
     if (r.get_bit() == 1) {     // ar_info_present
       int ar_type = r.get_bits(8);
 
@@ -601,12 +646,34 @@ mpeg4::p10::parse_sps(memory_cptr &buffer,
       gecopy(r, w);               // chroma_sample_loc_type_top_field
       gecopy(r, w);               // chroma_sample_loc_type_bottom_field
     }
-    sps.timing_info.is_present = w.copy_bits(1, r);
-    if (sps.timing_info.is_present) {
-      sps.timing_info.num_units_in_tick = w.copy_bits(32, r);
-      sps.timing_info.time_scale        = w.copy_bits(32, r);
-      sps.timing_info.fixed_frame_rate  = w.copy_bits(1, r);
+
+    sps.timing_info.is_present = r.get_bit();
+
+    if (sps.timing_info.is_present) {                    // Read original values.
+      sps.timing_info.num_units_in_tick = r.get_bits(32);
+      sps.timing_info.time_scale        = r.get_bits(32);
+      sps.timing_info.fixed_frame_rate  = r.get_bit();
     }
+
+    if (fix_bitstream_frame_rate) {                      // write the new timing info
+      w.put_bit(1);                                      // timing_info_present
+      w.put_bits(32, num_units_in_tick);                 // num_units_in_tick
+      w.put_bits(32, time_scale);                        // time_scale
+      w.put_bit(1);                                      // fixed_frame_rate
+
+      sps.timing_info.is_present        = true;
+      sps.timing_info.num_units_in_tick = num_units_in_tick;
+      sps.timing_info.time_scale        = time_scale;
+      sps.timing_info.fixed_frame_rate  = true;
+
+    } else if (sps.timing_info.is_present) {             // copy the old timing info
+      w.put_bit(1);                                      // timing_info_present
+      w.put_bits(32, sps.timing_info.num_units_in_tick); // num_units_in_tick
+      w.put_bits(32, sps.timing_info.time_scale);        // time_scale
+      w.put_bit(sps.timing_info.fixed_frame_rate);       // fixed_frame_rate
+
+    } else
+      w.put_bit(0);                                      // timing_info_present
 
     bool f = false;
     if (w.copy_bits(1, r) == 1) { // nal_hrd_parameters_present
@@ -630,7 +697,32 @@ mpeg4::p10::parse_sps(memory_cptr &buffer,
       gecopy(r, w);               // num_reorder_frames
       gecopy(r, w);               // max_dec_frame_buffering
     }
-  }
+
+  } else if (fix_bitstream_frame_rate) { // vui_present == 0: build new video usability information
+    w.put_bit(1);                        // vui_present
+    w.put_bit(0);                        // aspect_ratio_info_present_flag
+    w.put_bit(0);                        // overscan_info_present_flag
+    w.put_bit(0);                        // video_signal_type_present_flag
+    w.put_bit(0);                        // chroma_loc_info_present_flag
+
+                                         // Timing info
+    w.put_bit(1);                        // timing_info_present
+    w.put_bits(32, num_units_in_tick);   // num_units_in_tick
+    w.put_bits(32, time_scale);          // time_scale
+    w.put_bit(1);                        // fixed_frame_rate
+
+    sps.timing_info.is_present        = true;
+    sps.timing_info.num_units_in_tick = num_units_in_tick;
+    sps.timing_info.time_scale        = time_scale;
+    sps.timing_info.fixed_frame_rate  = 1;
+
+    w.put_bit(0);                      // nal_hrd_parameters_present_flag
+    w.put_bit(0);                      // vcl_hrd_parameters_present_flag
+    w.put_bit(0);                      // pic_struct_present_flag
+    w.put_bit(0);                      // bitstream_restriction_flag
+
+  } else
+    w.put_bit(0);
 
   w.put_bit(1);
   w.byte_align();
@@ -733,6 +825,55 @@ mpeg4::p10::extract_par(uint8_t *&buffer,
   }
 }
 
+void
+mpeg4::p10::fix_sps_fps(uint8_t *&buffer,
+                        size_t &buffer_size,
+                        int64_t duration) {
+  try {
+    mm_mem_io_c avcc(buffer, buffer_size), new_avcc(nullptr, buffer_size, 1024);
+    memory_cptr nalu(new memory_c());
+
+    avcc.read(nalu, 5);
+    new_avcc.write(nalu);
+
+    // parse and fix the sps
+    unsigned int num_sps = avcc.read_uint8();
+    new_avcc.write_uint8(num_sps);
+    num_sps &= 0x1f;
+    mxverb(4, boost::format("p_mpeg4_p10_fix_sps_fps: num_sps %1%\n") % num_sps);
+
+    unsigned int sps;
+    for (sps = 0; sps < num_sps; sps++) {
+      unsigned int length = avcc.read_uint16_be();
+      if ((length + avcc.getFilePointer()) >= buffer_size)
+        length = buffer_size - avcc.getFilePointer();
+      avcc.read(nalu, length);
+
+      if ((0 < length) && ((nalu->get_buffer()[0] & 0x1f) == NALU_TYPE_SEQ_PARAM)) {
+        nalu_to_rbsp(nalu);
+        sps_info_t sps_info;
+        parse_sps(nalu, sps_info, true, true, duration);
+        rbsp_to_nalu(nalu);
+      }
+
+      new_avcc.write_uint16_be(nalu->get_size());
+      new_avcc.write(nalu);
+    }
+
+    // copy the pps
+    auto remaining_bytes = avcc.get_size() - avcc.getFilePointer();
+    if (remaining_bytes) {
+      avcc.read(nalu, remaining_bytes);
+      new_avcc.write(nalu);
+    }
+
+    buffer_size = new_avcc.getFilePointer();
+    buffer      = new_avcc.get_and_lock_buffer();
+
+  } catch(...) {
+  }
+}
+
 bool
 mpeg4::p10::is_avc_fourcc(const char *fourcc) {
   return !strncasecmp(fourcc, "avc",  3)
@@ -792,6 +933,7 @@ mpeg4::p10::avcc_to_nalus(const unsigned char *buffer,
 mpeg4::p10::avc_es_parser_c::avc_es_parser_c()
   : m_nalu_size_length(4)
   , m_keep_ar_info(true)
+  , m_fix_bitstream_frame_rate(false)
   , m_avcc_ready(false)
   , m_avcc_changed(false)
   , m_stream_default_duration(-1)
@@ -1074,8 +1216,10 @@ mpeg4::p10::avc_es_parser_c::handle_sps_nalu(memory_cptr &nalu) {
   sps_info_t sps_info;
 
   nalu_to_rbsp(nalu);
-  if (!parse_sps(nalu, sps_info, m_keep_ar_info))
+
+  if (!parse_sps(nalu, sps_info, m_keep_ar_info, m_fix_bitstream_frame_rate, duration_for(0, true)))
     return;
+
   rbsp_to_nalu(nalu);
 
   size_t i;
@@ -1320,14 +1464,15 @@ mpeg4::p10::avc_es_parser_c::parse_slice(memory_cptr &buffer,
 }
 
 int64_t
-mpeg4::p10::avc_es_parser_c::duration_for(slice_info_t const &si)
+mpeg4::p10::avc_es_parser_c::duration_for(unsigned int sps,
+                                          bool field_pic_flag)
   const {
-  int64_t duration = -1 != m_forced_default_duration                                                  ? m_forced_default_duration
-                   : (m_sps_info_list.size() > si.sps) && m_sps_info_list[si.sps].timing_info_valid() ? m_sps_info_list[si.sps].timing_info.default_duration()
-                   : -1 != m_stream_default_duration                                                  ? m_stream_default_duration
-                   : -1 != m_container_default_duration                                               ? m_container_default_duration
-                   :                                                                                    20000000;
-  return duration * (si.field_pic_flag ? 1 : 2);
+  int64_t duration = -1 != m_forced_default_duration                                            ? m_forced_default_duration
+                   : (m_sps_info_list.size() > sps) && m_sps_info_list[sps].timing_info_valid() ? m_sps_info_list[sps].timing_info.default_duration()
+                   : -1 != m_stream_default_duration                                            ? m_stream_default_duration
+                   : -1 != m_container_default_duration                                         ? m_container_default_duration
+                   :                                                                              20000000;
+  return duration * (field_pic_flag ? 1 : 2);
 }
 
 int64_t

@@ -120,6 +120,12 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *reader,
   else if (map_has_key(m_ti.m_default_track_flags, -1))
     m_ti.m_default_track = m_ti.m_default_track_flags[-1];
 
+  // Let's see if the user has given a fix avc fps flag for this track.
+  if (map_has_key(m_ti.m_fix_bitstream_frame_rate_flags, m_ti.m_id))
+    m_ti.m_fix_bitstream_frame_rate = m_ti.m_fix_bitstream_frame_rate_flags[m_ti.m_id];
+  else if (map_has_key(m_ti.m_fix_bitstream_frame_rate_flags, -1))
+    m_ti.m_fix_bitstream_frame_rate = m_ti.m_fix_bitstream_frame_rate_flags[-1];
+
   // Let's see if the user has given a forced track flag for this track.
   if (map_has_key(m_ti.m_forced_track_flags, m_ti.m_id))
     m_ti.m_forced_track = m_ti.m_forced_track_flags[m_ti.m_id];
@@ -1185,6 +1191,7 @@ generic_reader_c::generic_reader_c(const track_info_c &ti,
   add_all_requested_track_ids(timecode_sync_t,      m_timecode_syncs);
   add_all_requested_track_ids(cue_strategy_e,       m_cue_creations);
   add_all_requested_track_ids(bool,                 m_default_track_flags);
+  add_all_requested_track_ids(bool,                 m_fix_bitstream_frame_rate_flags);
   add_all_requested_track_ids(std::string,          m_languages);
   add_all_requested_track_ids(std::string,          m_sub_charsets);
   add_all_requested_track_ids(std::string,          m_all_tags);
@@ -1536,6 +1543,7 @@ track_info_c::track_info_c()
   , m_reset_timecodes(false)
   , m_cues(CUE_STRATEGY_UNSPECIFIED)
   , m_default_track(boost::logic::indeterminate)
+  , m_fix_bitstream_frame_rate(boost::logic::indeterminate)
   , m_forced_track(boost::logic::indeterminate)
   , m_enabled_track(boost::logic::indeterminate)
   , m_compression(COMPRESSION_UNSPECIFIED)
@@ -1601,6 +1609,9 @@ track_info_c::operator =(const track_info_c &src) {
 
   m_default_track_flags        = src.m_default_track_flags;
   m_default_track              = src.m_default_track;
+
+  m_fix_bitstream_frame_rate_flags = src.m_fix_bitstream_frame_rate_flags;
+  m_fix_bitstream_frame_rate       = src.m_fix_bitstream_frame_rate;
 
   m_forced_track_flags         = src.m_forced_track_flags;
   m_forced_track               = src.m_forced_track;

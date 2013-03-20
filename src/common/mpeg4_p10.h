@@ -139,10 +139,11 @@ struct slice_info_t {
 void nalu_to_rbsp(memory_cptr &buffer);
 void rbsp_to_nalu(memory_cptr &buffer);
 
-bool parse_sps(memory_cptr &buffer, sps_info_t &sps, bool keep_ar_info = false);
+bool parse_sps(memory_cptr &buffer, sps_info_t &sps, bool keep_ar_info = false, bool fix_bitstream_frame_rate = false, int64_t duration = -1);
 bool parse_pps(memory_cptr &buffer, pps_info_t &pps);
 
 bool extract_par(uint8_t *&buffer, size_t &buffer_size, uint32_t &par_num, uint32_t &par_den);
+void fix_sps_fps(uint8_t *&buffer, size_t &buffer_size, int64_t duration);
 bool is_avc_fourcc(const char *fourcc);
 memory_cptr avcc_to_nalus(const unsigned char *buffer, size_t size);
 
@@ -224,7 +225,7 @@ class avc_es_parser_c {
 protected:
   int m_nalu_size_length;
 
-  bool m_keep_ar_info;
+  bool m_keep_ar_info, m_fix_bitstream_frame_rate;
   bool m_avcc_ready, m_avcc_changed;
 
   int64_t m_stream_default_duration, m_forced_default_duration, m_container_default_duration;
@@ -302,6 +303,10 @@ public:
     m_keep_ar_info = keep;
   }
 
+  void set_fix_bitstream_frame_rate(bool fix) {
+    m_fix_bitstream_frame_rate = fix;
+  }
+
   void add_bytes(unsigned char *buf, size_t size);
   void add_bytes(memory_cptr &buf) {
     add_bytes(buf->get_buffer(), buf->get_size());
@@ -376,7 +381,10 @@ public:
     return m_stream_default_duration;
   }
 
-  int64_t duration_for(slice_info_t const &si) const;
+  int64_t duration_for(unsigned int sps, bool field_pic_flag) const;
+  int64_t duration_for(slice_info_t const &si) const {
+    return duration_for(si.sps, si.field_pic_flag);
+  }
   int64_t get_most_often_used_duration() const;
 
   size_t get_num_field_slices() const;
