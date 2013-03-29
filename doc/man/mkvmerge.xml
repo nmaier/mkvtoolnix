@@ -1278,7 +1278,7 @@ $ mkvmerge -o out.mkv '(' file.mkv ')'</screen>
      </listitem>
     </varlistentry>
 
-    <varlistentry>
+    <varlistentry id="mkvmerge.description.default_duration">
      <term><option>--default-duration</option> <parameter>TID:x</parameter></term>
      <listitem>
       <para>
@@ -1298,6 +1298,22 @@ $ mkvmerge -o out.mkv '(' file.mkv ')'</screen>
       <para>
        This option can also be used to change the <abbrev>FPS</abbrev> of video tracks without having to use an external timecode file.
       </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry id="mkvmerge.description.fix_bitstream_timing_information">
+     <term><option>--fix-bitstream-timing-information</option> <parameter>TID<optional>:0|1</optional></parameter></term>
+     <listitem>
+      <para>
+       Normally &mkvmerge; does not change the timing information (frame/field rate) stored in the video bitstream. With this option that
+       information is adjusted to match the container timing information. The container timing information can come from various sources:
+       from the command line (see option <link linkend="mkvmerge.description.default_duration"><option>--default-duration</option></link>),
+       the source container or derived from the bitstream.
+      </para>
+
+      <note>
+       <para>This has only been implemented for AVC/h.264 video tracks so far.</para>
+      </note>
      </listitem>
     </varlistentry>
 

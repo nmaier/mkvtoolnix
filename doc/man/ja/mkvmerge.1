@@ -999,6 +999,29 @@ AACファイルがSBR AACデータを含む場合に必要です。このスイ�
 このオプションは、外部タイムコードファイルを使用せずにビデオトラックのFPSを変更するのにも使えます。
 .RE
 .PP
+\fB\-\-fix\-bitstream\-timing\-information\fR \fITID\fR\fI[:0|1]\fR
+.RS 4
+Normally
+\fBmkvmerge\fR(1)
+does not change the timing information (frame/field rate) stored in the video bitstream\&. With this option that information is adjusted to match the container timing information\&. The container timing information can come from various sources: from the command line (see option
+\fB\-\-default\-duration\fR), the source container or derived from the bitstream\&.
+.if n \{\
+.sp
+.\}
+.RS 4
+.it 1 an-trap
+.nr an-no-space-flag 1
+.nr an-break-flag 1
+.br
+.ps +1
+\fB注記\fR
+.ps -1
+.br
+This has only been implemented for AVC/h\&.264 video tracks so far\&.
+.sp .5v
+.RE
+.RE
+.PP
 \fB\-\-nalu\-size\-length\fR \fITID:n\fR
 .RS 4
 
