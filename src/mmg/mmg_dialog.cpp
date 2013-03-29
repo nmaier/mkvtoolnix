@@ -1012,6 +1012,11 @@ mmg_dialog::update_command_line() {
         clargs.Add(value);
       }
 
+      if (t->fix_bitstream_timing_info) {
+        clargs.Add(wxT("--fix-bitstream-timing-information"));
+        clargs.Add(wxString::Format(wxT("%s:1"), sid.c_str()));
+      }
+
       if (0 != t->nalu_size_length) {
         clargs.Add(wxT("--nalu-size-length"));
         clargs.Add(wxString::Format(wxT("%s:%d"), sid.c_str(), t->nalu_size_length));

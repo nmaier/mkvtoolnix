@@ -56,6 +56,7 @@
 #define ID_CB_FORCED_TRACK                11037
 #define ID_TC_CROPPING                    11038
 #define ID_B_ADDITIONAL_PARTS             11039
+#define ID_CB_FIX_BITSTREAM_TIMING_INFO   11040
 #define ID_NB_OPTIONS                     11999
 
 extern const wxChar *predefined_aspect_ratios[];
@@ -102,7 +103,7 @@ class tab_input_format: public wxPanel {
   DECLARE_CLASS(tab_input_format);
   DECLARE_EVENT_TABLE();
 public:
-  wxCheckBox *cb_aac_is_sbr;
+  wxCheckBox *cb_aac_is_sbr, *cb_fix_bitstream_timing_info;
   wxMTX_COMBOBOX_TYPE *cob_sub_charset, *cob_aspect_ratio, *cob_fourcc, *cob_stereo_mode, *cob_fps, *cob_nalu_size_length;
   wxTextCtrl *tc_delay, *tc_stretch, *tc_cropping;
   wxRadioButton *rb_aspect_ratio, *rb_display_dimensions;
@@ -123,6 +124,7 @@ public:
   void set_track_mode(mmg_track_t *t);
 
   void on_aac_is_sbr_clicked(wxCommandEvent &evt);
+  void on_fix_bitstream_timing_info_clicked(wxCommandEvent &evt);
   void on_subcharset_selected(wxCommandEvent &evt);
   void on_delay_changed(wxCommandEvent &evt);
   void on_stretch_changed(wxCommandEvent &evt);

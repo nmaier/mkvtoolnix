@@ -960,6 +960,7 @@ tab_input::on_track_selected(wxCommandEvent &) {
   ti_extra->tc_user_defined->SetValue(t->user_defined);
 
   ti_format->cb_aac_is_sbr->SetValue(t->aac_is_sbr);
+  ti_format->cb_fix_bitstream_timing_info->SetValue(t->fix_bitstream_timing_info);
   ti_format->cob_nalu_size_length->SetSelection(t->nalu_size_length / 2);
   ti_format->cob_stereo_mode->SetSelection(t->stereo_mode);
   ti_format->cob_sub_charset->SetValue(ti_format->cob_sub_charset_translations.to_translated(t->sub_charset));
@@ -1064,6 +1065,7 @@ tab_input::save(wxConfigBase *cfg) {
       cfg->Write(wxT("default_track_2"),             t->default_track);
       cfg->Write(wxT("forced_track"),                t->forced_track);
       cfg->Write(wxT("aac_is_sbr"),                  t->aac_is_sbr);
+      cfg->Write(wxT("fix_bitstream_timing_info"),   t->fix_bitstream_timing_info);
       cfg->Write(wxT("language"),                    t->language);
       cfg->Write(wxT("track_name"),                  t->track_name);
       cfg->Write(wxT("cues"),                        t->cues);
@@ -1194,6 +1196,7 @@ tab_input::load(wxConfigBase *cfg,
         cfg->Read(wxT("default_track_2"),           &tr->default_track,               0);
       cfg->Read(wxT("forced_track"),                &tr->forced_track,                false);
       cfg->Read(wxT("aac_is_sbr"),                  &tr->aac_is_sbr,                  false);
+      cfg->Read(wxT("fix_bitstream_timing_info"),   &tr->fix_bitstream_timing_info,   false);
       cfg->Read(wxT("language"),                    &tr->language);
       cfg->Read(wxT("track_name"),                  &tr->track_name);
       cfg->Read(wxT("cues"),                        &tr->cues);

@@ -74,7 +74,7 @@ struct mmg_track_t {
   bool enabled, display_dimensions_selected;
 
   int default_track;
-  bool aac_is_sbr, aac_is_sbr_detected, forced_track;
+  bool aac_is_sbr, aac_is_sbr_detected, fix_bitstream_timing_info, forced_track;
   bool track_name_was_present;
   wxString language, track_name, cues, delay, stretch, sub_charset;
   wxString tags, fourcc, aspect_ratio, cropping, compression, timecodes, fps;
@@ -99,6 +99,7 @@ struct mmg_track_t {
     , default_track(0)
     , aac_is_sbr(false)
     , aac_is_sbr_detected(false)
+    , fix_bitstream_timing_info{false}
     , forced_track(false)
     , track_name_was_present(false)
     , language(wxT("und"))
