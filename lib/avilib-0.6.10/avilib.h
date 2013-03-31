@@ -392,6 +392,7 @@ int  AVI_can_read_audio(avi_t *AVI);
 int  AVI_can_read_text(avi_t *AVI);
 
 long AVI_max_video_chunk(avi_t *AVI);
+long AVI_max_audio_chunk(avi_t *AVI);
 
 long AVI_frame_size(avi_t *AVI, long frame);
 long AVI_audio_size(avi_t *AVI, long frame);
