@@ -17,5 +17,5 @@ PKG_PROG_PKG_CONFIG
 
 dnl Check for headers
 AC_HEADER_STDC()
-AC_CHECK_HEADERS([inttypes.h stdint.h sys/types.h])
-AC_CHECK_FUNCS(vsscanf,,)
+AC_CHECK_HEADERS([inttypes.h stdint.h sys/types.h sys/syscall.h])
+AC_CHECK_FUNCS([vsscanf syscall],,)

@@ -17,6 +17,9 @@
 #ifdef SYS_WINDOWS
 # include <windows.h>
 #endif
+#if defined(HAVE_SYS_SYSCALL_H)
+# include <sys/syscall.h>
+#endif
 
 #include <matroska/KaxVersion.h>
 #include <matroska/FileKax.h>
@@ -107,6 +110,14 @@ set_process_priority(int priority) {
   // 'warn if return value is ignored'.
   if (!nice(s_nice_levels[priority + 2])) {
   }
+
+# if defined(HAVE_SYSCALL) && defined(SYS_ioprio_set)
+  if (0 < s_nice_levels[priority + 2])
+    syscall(SYS_ioprio_set,
+            1,        // IOPRIO_WHO_PROCESS
+            0,        // current process/thread
+            3 << 13); // I/O class 'idle'
+# endif
 #endif
 }
 
