@@ -1,3 +1,8 @@
+2013-03-31  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvmerge: bug fix: Fixed reading AVI files with audio chunks of
+        size 0. Fixes #843.
+
 2013-03-29  Moritz Bunkus  <moritz@bunkus.org>
 
         * mmg: new feature: Add control for new option

@@ -782,25 +782,31 @@ avi_reader_c::read_video() {
 file_status_e
 avi_reader_c::read_audio(avi_demuxer_t &demuxer) {
   AVI_set_audio_track(m_avi, demuxer.m_aid);
-  int size = AVI_read_audio_chunk(m_avi, nullptr);
 
-  if (0 >= size)
-    return flush_packetizer(demuxer.m_ptzr);
+  while (true) {
+    int size = AVI_audio_size(m_avi, AVI_get_audio_position_index(m_avi));
 
-  memory_cptr chunk = memory_c::alloc(size);
-  size              = AVI_read_audio_chunk(m_avi, reinterpret_cast<char *>(chunk->get_buffer()));
+    if (-1 == size)
+      return flush_packetizer(demuxer.m_ptzr);
 
-  if (0 >= size)
-    return flush_packetizer(demuxer.m_ptzr);
+    if (!size) {
+      AVI_set_audio_position_index(m_avi, AVI_get_audio_position_index(m_avi) + 1);
+      continue;
+    }
 
-  bool need_more_data = 0 != AVI_read_audio_chunk(m_avi, nullptr);
+    auto chunk = memory_c::alloc(size);
+    size       = AVI_read_audio_chunk(m_avi, reinterpret_cast<char *>(chunk->get_buffer()));
 
-  PTZR(demuxer.m_ptzr)->add_avi_block_size(size);
-  PTZR(demuxer.m_ptzr)->process(new packet_t(chunk));
+    if (0 >= size)
+      continue;
 
-  m_bytes_processed += size;
+    PTZR(demuxer.m_ptzr)->add_avi_block_size(size);
+    PTZR(demuxer.m_ptzr)->process(new packet_t(chunk));
 
-  return need_more_data ? FILE_STATUS_MOREDATA : flush_packetizer(demuxer.m_ptzr);
+    m_bytes_processed += size;
+
+    return AVI_get_audio_position_index(m_avi) < AVI_max_audio_chunk(m_avi) ? FILE_STATUS_MOREDATA : flush_packetizer(demuxer.m_ptzr);
+  }
 }
 
 file_status_e
