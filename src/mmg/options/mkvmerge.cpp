@@ -54,7 +54,8 @@ optdlg_mkvmerge_tab::optdlg_mkvmerge_tab(wxWindow *parent,
   wxStaticText *st_priority = new wxStaticText(this, -1, Z("Process priority:"));
   cob_priority              = new wxMTX_COMBOBOX_TYPE(this, ID_COB_PRIORITY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_DROPDOWN | wxCB_READONLY);
 
-  cob_priority->SetToolTip(TIP("Sets the priority that mkvmerge will run with."));
+  cob_priority->SetToolTip(TIP("Sets the priority that mkvmerge will run with. "
+                               "Chosing 'lowest' will cause mkvmerge to select a low I/O priority as well."));
 
   size_t i;
   for (i = 0; cob_priority_translations.entries.size() > i; ++i)
