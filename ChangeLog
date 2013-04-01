@@ -1,3 +1,9 @@
+2013-04-01  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvmerge: new feature: Selecting the lowest process priority
+        with "--priority lowest" will cause mkvmerge to also select an
+        idle/background I/O priority. Implements #863.
+
 2013-03-31  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvmerge: bug fix: Fixed reading AVI files with audio chunks of
