@@ -24,6 +24,7 @@
 #include <matroska/KaxVersion.h>
 #include <matroska/FileKax.h>
 
+#include "common/fs_sys_helpers.h"
 #include "common/hacks.h"
 #include "common/random.h"
 #include "common/stereo_mode.h"
@@ -36,6 +37,18 @@
 #endif
 
 #if defined(SYS_WINDOWS)
+#include "common/fs_sys_helpers.h"
+
+// See http://msdn.microsoft.com/en-us/library/windows/desktop/ms686219(v=vs.85).aspx
+# if !defined(PROCESS_MODE_BACKGROUND_BEGIN)
+#  define PROCESS_MODE_BACKGROUND_BEGIN 0x00100000
+# endif
+
+// See http://msdn.microsoft.com/en-us/library/windows/desktop/ms686277(v=vs.85).aspx
+# if !defined(THREAD_MODE_BACKGROUND_BEGIN)
+#  define THREAD_MODE_BACKGROUND_BEGIN 0x00010000
+# endif
+
 typedef UINT (WINAPI *p_get_error_mode)(void);
 static void
 fix_windows_errormode() {
@@ -99,6 +112,15 @@ set_process_priority(int priority) {
     { ABOVE_NORMAL_PRIORITY_CLASS, THREAD_PRIORITY_ABOVE_NORMAL },
     { HIGH_PRIORITY_CLASS,         THREAD_PRIORITY_HIGHEST      },
   };
+
+  // If the lowest priority should be used and we're on Vista or later
+  // then use background priority. This also selects a lower I/O
+  // priority.
+  if ((-2 == priority) && (get_windows_version() >= WINDOWS_VERSION_VISTA)) {
+    SetPriorityClass(GetCurrentProcess(), PROCESS_MODE_BACKGROUND_BEGIN);
+    SetThreadPriority(GetCurrentThread(), THREAD_MODE_BACKGROUND_BEGIN);
+    return;
+  }
 
   SetPriorityClass(GetCurrentProcess(), s_priority_classes[priority + 2].priority_class);
   SetThreadPriority(GetCurrentThread(), s_priority_classes[priority + 2].thread_priority);
