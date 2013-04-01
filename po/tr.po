@@ -2667,7 +2667,7 @@ msgstr "Bölüm dosyasını seçin"
 msgid "Choose the location of the mkvmerge GUI help files"
 msgstr "mkvmerge GKA yardım dosyalarının yerini seçin"
 
-#: src/mmg/options/mkvmerge.cpp:96
+#: src/mmg/options/mkvmerge.cpp:97
 msgid "Choose the mkvmerge executable"
 msgstr "mkvmerge çalıştırılabilir dosyasını seçin"
 
@@ -3584,7 +3584,7 @@ msgstr "Herşey yolunda gitti."
 msgid "Example"
 msgstr "Örnek"
 
-#: src/mmg/options/mkvmerge.cpp:98
+#: src/mmg/options/mkvmerge.cpp:99
 #, c-format, boost-format
 msgid "Executable files (*.exe)|*.exe|%s"
 msgstr "Çalıştırılabilir dosyalar (*.exe)|*.exe|%s"
@@ -5541,7 +5541,7 @@ msgstr "Piksel genişliği: %1%"
 msgid "Playlist items:"
 msgstr "Oynatma listesi öğeleri:"
 
-#: src/mmg/options/mkvmerge.cpp:110
+#: src/mmg/options/mkvmerge.cpp:111
 msgid "Please do not select 'mmg' itself as the 'mkvmerge' executable."
 msgstr "Lütfen 'mkvmerge' çalıştırılabiliri olarak 'mmg'nin kendisini seçmeyin."
 
@@ -6255,8 +6255,8 @@ msgid "Sets the display width of the track. The height must be set as well, or t
 msgstr "İzin görüntüleme genişliğini ayarlar. Yükseklik te ayarlanmak zorundadır ya da bu alan yoksayılacaktır."
 
 #: src/mmg/options/mkvmerge.cpp:57
-msgid "Sets the priority that mkvmerge will run with."
-msgstr "mkvmerge'ün birlikte çalışacağı önceliği ayarlar."
+msgid "Sets the priority that mkvmerge will run with. Chosing 'lowest' will cause mkvmerge to select a low I/O priority as well."
+msgstr ""
 
 #: src/mmg/tabs/global.cpp:331
 msgid ""
@@ -8487,7 +8487,7 @@ msgstr "Yanlış Theora sürümü: %1%.%2%.%3% != 3.2.x"
 msgid "Wrong argument to '--split-max-files'.\n"
 msgstr "'--split-max-files' için yanlış bağımsız değişken.\n"
 
-#: src/mmg/options/mkvmerge.cpp:110
+#: src/mmg/options/mkvmerge.cpp:111
 msgid "Wrong file chosen"
 msgstr "Yanlış dosya seçimi"
 
@@ -9062,7 +9062,7 @@ msgstr "mkvextract.cpp/show_element(): seviye > 9: %1%"
 msgid "mkvinfo [options] <inname>"
 msgstr "mkvinfo [seçenekler] <ismen>"
 
-#: src/mmg/options/mkvmerge.cpp:135
+#: src/mmg/options/mkvmerge.cpp:136
 msgid "mkvmerge"
 msgstr "mkvmerge"
 
@@ -9152,7 +9152,7 @@ msgstr "mkvmerge FLAC desteğiyle derlenmedi ama bu akışı kullanabilmesi tale
 msgid "mkvmerge is running"
 msgstr "mkvmerge çalışıyor"
 
-#: src/mmg/options/mkvmerge.cpp:73
+#: src/mmg/options/mkvmerge.cpp:74
 msgid "mkvmerge options"
 msgstr "mkvmerge seçenekleri"
 
@@ -9687,6 +9687,9 @@ msgstr "evet"
 
 #~ msgid "Right eye"
 #~ msgstr "Sağ göz"
+
+#~ msgid "Sets the priority that mkvmerge will run with."
+#~ msgstr "mkvmerge'ün birlikte çalışacağı önceliği ayarlar."
 
 #~ msgid ""
 #~ "Stereo-3D video mode (0: mono, 1: right eye,\n"

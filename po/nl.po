@@ -2669,7 +2669,7 @@ msgstr "Kies hoofdstuk bestand"
 msgid "Choose the location of the mkvmerge GUI help files"
 msgstr "Kies de locatie van de mkvmerge GUI help bestanden"
 
-#: src/mmg/options/mkvmerge.cpp:96
+#: src/mmg/options/mkvmerge.cpp:97
 msgid "Choose the mkvmerge executable"
 msgstr "Kies het mkvmerge programma"
 
@@ -3588,7 +3588,7 @@ msgstr "Alles ging goed."
 msgid "Example"
 msgstr "Voorbeeld"
 
-#: src/mmg/options/mkvmerge.cpp:98
+#: src/mmg/options/mkvmerge.cpp:99
 #, c-format, boost-format
 msgid "Executable files (*.exe)|*.exe|%s"
 msgstr "Uitvoerbare bestanden (*.exe)|*.exe|%s"
@@ -5546,7 +5546,7 @@ msgstr "Pixel breedte: %1%"
 msgid "Playlist items:"
 msgstr ""
 
-#: src/mmg/options/mkvmerge.cpp:110
+#: src/mmg/options/mkvmerge.cpp:111
 msgid "Please do not select 'mmg' itself as the 'mkvmerge' executable."
 msgstr "Gebruik 'mmg' zelf niet als het 'mkvmerge' programma."
 
@@ -6264,8 +6264,8 @@ msgid "Sets the display width of the track. The height must be set as well, or t
 msgstr "Zet de scherm breedte van een spoor. De hoogte moet ook ingesteld worden, anders wordt dit veld genegeerd."
 
 #: src/mmg/options/mkvmerge.cpp:57
-msgid "Sets the priority that mkvmerge will run with."
-msgstr "Zet de prioriteit waarmee mkvmerge gestart moet worden."
+msgid "Sets the priority that mkvmerge will run with. Chosing 'lowest' will cause mkvmerge to select a low I/O priority as well."
+msgstr ""
 
 #: src/mmg/tabs/global.cpp:331
 msgid ""
@@ -8522,7 +8522,7 @@ msgstr "Verkeerde Theora versie: %1%.%2%.%3% != 3.2.x"
 msgid "Wrong argument to '--split-max-files'.\n"
 msgstr "Verkeerd argument voor, splits-max-bestanden, '--split-max-files'.\n"
 
-#: src/mmg/options/mkvmerge.cpp:110
+#: src/mmg/options/mkvmerge.cpp:111
 msgid "Wrong file chosen"
 msgstr "Verkeerd bestand gekozen"
 
@@ -9098,7 +9098,7 @@ msgstr "mkvextract.cpp/show_element(): niveau > 9: %1%"
 msgid "mkvinfo [options] <inname>"
 msgstr "mkvinfo [opties] <inname>"
 
-#: src/mmg/options/mkvmerge.cpp:135
+#: src/mmg/options/mkvmerge.cpp:136
 msgid "mkvmerge"
 msgstr "Mkvmerge"
 
@@ -9188,7 +9188,7 @@ msgstr "mkvmerge is niet gecompileerd met FLAC ondersteuning maar het afhandelen
 msgid "mkvmerge is running"
 msgstr "mkvmerge wordt uitgevoerd"
 
-#: src/mmg/options/mkvmerge.cpp:73
+#: src/mmg/options/mkvmerge.cpp:74
 msgid "mkvmerge options"
 msgstr "Mkvmerge opties"
 
@@ -9829,6 +9829,9 @@ msgstr "ja"
 
 #~ msgid "Sets the compression used for VobSub subtitles. If nothing is chosen then the VobSubs will be automatically compressed with zlib. 'none' results is files that are a lot larger."
 #~ msgstr "Stelt de gebruikte compressie in voor VobSub ondertitels. Als er niets is geselecteerd, dan zal de VobSubs automatisch worden gecomprimeerd met zlib. 'geen' zal resuleeren in bestanden die aanmerkelijk groter zijn."
+
+#~ msgid "Sets the priority that mkvmerge will run with."
+#~ msgstr "Zet de prioriteit waarmee mkvmerge gestart moet worden."
 
 #~ msgid "Shortened GOP detected. Some frames have been dropped. You may want to fix the MPEG2 video stream before attempting to multiplex it.\n"
 #~ msgstr "Verkort GOP gedetecteerd. Sommige beelden zijn vervallen. Misschien wil je de MPEG2 video stroom herstellen voordat je een poging doet het te vermenigvuldigen.\n"

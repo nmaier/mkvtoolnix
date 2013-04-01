@@ -2654,7 +2654,7 @@ msgstr "チャプタファイルを選んでください"
 msgid "Choose the location of the mkvmerge GUI help files"
 msgstr "mkvmerge GUIのヘルプファイルがある場所を選んでください"
 
-#: src/mmg/options/mkvmerge.cpp:96
+#: src/mmg/options/mkvmerge.cpp:97
 msgid "Choose the mkvmerge executable"
 msgstr "mkvmergeの実行ファイルを選んでください"
 
@@ -3571,7 +3571,7 @@ msgstr "全て正常に終了しました。"
 msgid "Example"
 msgstr "例"
 
-#: src/mmg/options/mkvmerge.cpp:98
+#: src/mmg/options/mkvmerge.cpp:99
 #, c-format, boost-format
 msgid "Executable files (*.exe)|*.exe|%s"
 msgstr "実行ファイル (*.exe)|*.exe|%s"
@@ -5529,7 +5529,7 @@ msgstr "ピクセル幅：%1%"
 msgid "Playlist items:"
 msgstr "プレイリストアイテム："
 
-#: src/mmg/options/mkvmerge.cpp:110
+#: src/mmg/options/mkvmerge.cpp:111
 msgid "Please do not select 'mmg' itself as the 'mkvmerge' executable."
 msgstr "mmgそれ自体をmkvmergeの実行ファイルとして指定しないでください。"
 
@@ -6244,8 +6244,8 @@ msgid "Sets the display width of the track. The height must be set as well, or t
 msgstr "トラックの横解像度を指定します。縦も同様に指定されなければなりません。さもなくばこのフィールドは無視されます。"
 
 #: src/mmg/options/mkvmerge.cpp:57
-msgid "Sets the priority that mkvmerge will run with."
-msgstr "mkvmergeの優先度を指定します。"
+msgid "Sets the priority that mkvmerge will run with. Chosing 'lowest' will cause mkvmerge to select a low I/O priority as well."
+msgstr ""
 
 #: src/mmg/tabs/global.cpp:331
 msgid ""
@@ -8479,7 +8479,7 @@ msgstr "間違ったTheoraのバージョンです：%1%.%2%.%3% != 3.2.x"
 msgid "Wrong argument to '--split-max-files'.\n"
 msgstr "'--split-max-files'のパラメータが間違っています。\n"
 
-#: src/mmg/options/mkvmerge.cpp:110
+#: src/mmg/options/mkvmerge.cpp:111
 msgid "Wrong file chosen"
 msgstr "間違ったファイルが選択されました"
 
@@ -9055,7 +9055,7 @@ msgstr "mkvextract.cpp/show_element(): (レベル) > 9: %1%"
 msgid "mkvinfo [options] <inname>"
 msgstr "mkvinfo [オプション] <入力ファイル名>"
 
-#: src/mmg/options/mkvmerge.cpp:135
+#: src/mmg/options/mkvmerge.cpp:136
 msgid "mkvmerge"
 msgstr "mkvmerge"
 
@@ -9145,7 +9145,7 @@ msgstr "mkvmergeはFLACをサポートしてコンパイルされていません
 msgid "mkvmerge is running"
 msgstr "mkvmergeが実行中です"
 
-#: src/mmg/options/mkvmerge.cpp:73
+#: src/mmg/options/mkvmerge.cpp:74
 msgid "mkvmerge options"
 msgstr "mkvmergeのオプション"
 
@@ -9784,6 +9784,9 @@ msgstr "はい"
 
 #~ msgid "Sets the compression used for VobSub subtitles. If nothing is chosen then the VobSubs will be automatically compressed with zlib. 'none' results is files that are a lot larger."
 #~ msgstr "VobSub字幕に使用される圧縮方式を指定します。何も指定されていなければVobSubは自動的にzlibで圧縮されます。'無し'を指定するとファイルサイズがかなり増大します。"
+
+#~ msgid "Sets the priority that mkvmerge will run with."
+#~ msgstr "mkvmergeの優先度を指定します。"
 
 #~ msgid "Shortened GOP detected. Some frames have been dropped. You may want to fix the MPEG2 video stream before attempting to multiplex it.\n"
 #~ msgstr "短くカットされたGOPが検出されました。ドロップされたフレームがあります。MUXしようとする前にこのMPEG2ビデオストリームを修復してください。\n"

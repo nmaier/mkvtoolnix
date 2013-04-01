@@ -2637,7 +2637,7 @@ msgstr "选择章节文件"
 msgid "Choose the location of the mkvmerge GUI help files"
 msgstr "选择 mkvmerge GUI 帮助文件的路径"
 
-#: src/mmg/options/mkvmerge.cpp:96
+#: src/mmg/options/mkvmerge.cpp:97
 msgid "Choose the mkvmerge executable"
 msgstr "选择 mkvmerge 可执行程序"
 
@@ -3554,7 +3554,7 @@ msgstr "一切正常。"
 msgid "Example"
 msgstr "示例"
 
-#: src/mmg/options/mkvmerge.cpp:98
+#: src/mmg/options/mkvmerge.cpp:99
 #, c-format, boost-format
 msgid "Executable files (*.exe)|*.exe|%s"
 msgstr "可执行文件 (*.exe)|*.exe|%s"
@@ -5508,7 +5508,7 @@ msgstr "像素宽度: %1%"
 msgid "Playlist items:"
 msgstr "播放列表项:"
 
-#: src/mmg/options/mkvmerge.cpp:110
+#: src/mmg/options/mkvmerge.cpp:111
 msgid "Please do not select 'mmg' itself as the 'mkvmerge' executable."
 msgstr "请不要把 'mmg' 自己当作 'mkvmerge' 可执行程序选择。"
 
@@ -6220,8 +6220,8 @@ msgid "Sets the display width of the track. The height must be set as well, or t
 msgstr "设置轨道的显示宽度。必须同时设置高度，否则此字段将被忽略。"
 
 #: src/mmg/options/mkvmerge.cpp:57
-msgid "Sets the priority that mkvmerge will run with."
-msgstr "选择 mkvmerge 运行时的优先级。"
+msgid "Sets the priority that mkvmerge will run with. Chosing 'lowest' will cause mkvmerge to select a low I/O priority as well."
+msgstr ""
 
 #: src/mmg/tabs/global.cpp:331
 msgid ""
@@ -8457,7 +8457,7 @@ msgstr "错误的 Theora 版本: %1%.%2%.%3% != 3.2.x"
 msgid "Wrong argument to '--split-max-files'.\n"
 msgstr "'--split-max-files' 参数错误。\n"
 
-#: src/mmg/options/mkvmerge.cpp:110
+#: src/mmg/options/mkvmerge.cpp:111
 msgid "Wrong file chosen"
 msgstr "文件选错"
 
@@ -9031,7 +9031,7 @@ msgstr "mkvextract.cpp/show_element(): 层级 > 9: %1%"
 msgid "mkvinfo [options] <inname>"
 msgstr "mkvinfo [选项] <inname>"
 
-#: src/mmg/options/mkvmerge.cpp:135
+#: src/mmg/options/mkvmerge.cpp:136
 msgid "mkvmerge"
 msgstr "mkvmerge"
 
@@ -9121,7 +9121,7 @@ msgstr "mkvmerge 编译时未包含 FLAC 支持，但收到了对此类流的处
 msgid "mkvmerge is running"
 msgstr "mkvmerge 正在运行"
 
-#: src/mmg/options/mkvmerge.cpp:73
+#: src/mmg/options/mkvmerge.cpp:74
 msgid "mkvmerge options"
 msgstr "mkvmerge 选项"
 
@@ -9864,6 +9864,9 @@ msgstr "是"
 
 #~ msgid "Sets the compression used for VobSub subtitles. If nothing is chosen then the VobSubs will be automatically compressed with zlib. 'none' results is files that are a lot larger."
 #~ msgstr "选择 VobSub 字幕使用的压缩方式。如果没有选中任何方式，VobSub 字幕将自动使用 zlib 压缩。选“无”将导致文件变得很大。"
+
+#~ msgid "Sets the priority that mkvmerge will run with."
+#~ msgstr "选择 mkvmerge 运行时的优先级。"
 
 #~ msgid "Shortened GOP detected. Some frames have been dropped. You may want to fix the MPEG2 video stream before attempting to multiplex it.\n"
 #~ msgstr "侦测到短缺的 GOP 画面组。已丢弃一些帧。您可能需要考虑在尝试混流之前修复该 MPEG2 视频流。\n"

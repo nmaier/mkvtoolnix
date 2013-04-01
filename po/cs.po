@@ -2665,7 +2665,7 @@ msgstr "Vyberte soubor kapitol"
 msgid "Choose the location of the mkvmerge GUI help files"
 msgstr "Vyberte umístění souborů nápovědy mkvmerge GUI"
 
-#: src/mmg/options/mkvmerge.cpp:96
+#: src/mmg/options/mkvmerge.cpp:97
 msgid "Choose the mkvmerge executable"
 msgstr "Vyberte spustitelný soubor mkvmerge"
 
@@ -3585,7 +3585,7 @@ msgstr "Všechno proběhlo v pořádku."
 msgid "Example"
 msgstr "Příklad"
 
-#: src/mmg/options/mkvmerge.cpp:98
+#: src/mmg/options/mkvmerge.cpp:99
 #, c-format, boost-format
 msgid "Executable files (*.exe)|*.exe|%s"
 msgstr "Spustitelné soubory (*.exe)|*.exe|%s"
@@ -5546,7 +5546,7 @@ msgstr "Šířka pixelu: %1%"
 msgid "Playlist items:"
 msgstr ""
 
-#: src/mmg/options/mkvmerge.cpp:110
+#: src/mmg/options/mkvmerge.cpp:111
 msgid "Please do not select 'mmg' itself as the 'mkvmerge' executable."
 msgstr "Nevybírejte 'mmg' jako spustitelný soubor 'mkvmerge'."
 
@@ -6252,8 +6252,8 @@ msgid "Sets the display width of the track. The height must be set as well, or t
 msgstr "Nastaví šířku zobrazení stopy. Výška musí být také nastavena, jinak bude toto pole ignorováno."
 
 #: src/mmg/options/mkvmerge.cpp:57
-msgid "Sets the priority that mkvmerge will run with."
-msgstr "Nastaví prioritu, s jakou mkvmerge poběží."
+msgid "Sets the priority that mkvmerge will run with. Chosing 'lowest' will cause mkvmerge to select a low I/O priority as well."
+msgstr ""
 
 #: src/mmg/tabs/global.cpp:331
 msgid ""
@@ -8450,7 +8450,7 @@ msgstr "Špatná verze Theory: %1%.%2%.%3% != 3.2.x"
 msgid "Wrong argument to '--split-max-files'.\n"
 msgstr "Špatný parametr k '--split-max-files'.\n"
 
-#: src/mmg/options/mkvmerge.cpp:110
+#: src/mmg/options/mkvmerge.cpp:111
 msgid "Wrong file chosen"
 msgstr "Zvolen špatný soubor"
 
@@ -9018,7 +9018,7 @@ msgstr ""
 msgid "mkvinfo [options] <inname>"
 msgstr ""
 
-#: src/mmg/options/mkvmerge.cpp:135
+#: src/mmg/options/mkvmerge.cpp:136
 msgid "mkvmerge"
 msgstr "mkvmerge"
 
@@ -9106,7 +9106,7 @@ msgstr ""
 msgid "mkvmerge is running"
 msgstr "mkvmerge běží"
 
-#: src/mmg/options/mkvmerge.cpp:73
+#: src/mmg/options/mkvmerge.cpp:74
 msgid "mkvmerge options"
 msgstr "Volby mkvmerge"
 
@@ -9581,6 +9581,9 @@ msgstr "ano"
 
 #~ msgid "Note"
 #~ msgstr "Poznámka"
+
+#~ msgid "Sets the priority that mkvmerge will run with."
+#~ msgstr "Nastaví prioritu, s jakou mkvmerge poběží."
 
 #~ msgid ""
 #~ "Stereo-3D video mode (0: mono, 1: right eye,\n"

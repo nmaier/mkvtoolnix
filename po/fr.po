@@ -2664,7 +2664,7 @@ msgstr "Choisir le fichier de chapitres"
 msgid "Choose the location of the mkvmerge GUI help files"
 msgstr "Choisir l'emplacement des fichiers d'aide de l'interface de mkvmerge'"
 
-#: src/mmg/options/mkvmerge.cpp:96
+#: src/mmg/options/mkvmerge.cpp:97
 msgid "Choose the mkvmerge executable"
 msgstr "Choisir l'exécutable mkvmerge"
 
@@ -3581,7 +3581,7 @@ msgstr "Tout s'est bien déroulé."
 msgid "Example"
 msgstr "Exemple"
 
-#: src/mmg/options/mkvmerge.cpp:98
+#: src/mmg/options/mkvmerge.cpp:99
 #, c-format, boost-format
 msgid "Executable files (*.exe)|*.exe|%s"
 msgstr "Fichiers exécutables (*.exe)|*.exe|%s"
@@ -5535,7 +5535,7 @@ msgstr "Largeur (pixels) : %1%"
 msgid "Playlist items:"
 msgstr "Éléments liste de lecture :"
 
-#: src/mmg/options/mkvmerge.cpp:110
+#: src/mmg/options/mkvmerge.cpp:111
 msgid "Please do not select 'mmg' itself as the 'mkvmerge' executable."
 msgstr "Veuillez ne pas confondre l'interface graphique 'mmg' et l'exécutable 'mkvmerge'."
 
@@ -6249,8 +6249,8 @@ msgid "Sets the display width of the track. The height must be set as well, or t
 msgstr "Fixer la largeur à l'écran de la piste. La hauteur doit également être indiquée, sinon cette valeur est ignorée."
 
 #: src/mmg/options/mkvmerge.cpp:57
-msgid "Sets the priority that mkvmerge will run with."
-msgstr "Définir la priorité de fonctionnement de mkvmerge."
+msgid "Sets the priority that mkvmerge will run with. Chosing 'lowest' will cause mkvmerge to select a low I/O priority as well."
+msgstr ""
 
 #: src/mmg/tabs/global.cpp:331
 msgid ""
@@ -8498,7 +8498,7 @@ msgstr "Mauvaise version Theora : %1%.%2%.%3% != 3.2.x"
 msgid "Wrong argument to '--split-max-files'.\n"
 msgstr "Mauvais argument pour '--split-max-files'.\n"
 
-#: src/mmg/options/mkvmerge.cpp:110
+#: src/mmg/options/mkvmerge.cpp:111
 msgid "Wrong file chosen"
 msgstr "Mauvais fichier choisi"
 
@@ -9074,7 +9074,7 @@ msgstr "mkvextract.cpp/show_element() : niveau > 9 : %1%"
 msgid "mkvinfo [options] <inname>"
 msgstr "mkvinfo [options] <source>"
 
-#: src/mmg/options/mkvmerge.cpp:135
+#: src/mmg/options/mkvmerge.cpp:136
 msgid "mkvmerge"
 msgstr "mkvmerge"
 
@@ -9164,7 +9164,7 @@ msgstr "mkvmerge n'a pas été compilé avec la prise en charge de FLAC mais la 
 msgid "mkvmerge is running"
 msgstr "mkvmerge en cours"
 
-#: src/mmg/options/mkvmerge.cpp:73
+#: src/mmg/options/mkvmerge.cpp:74
 msgid "mkvmerge options"
 msgstr "Options de mkvmerge"
 
@@ -9715,6 +9715,9 @@ msgstr "oui"
 
 #~ msgid "Remember that special characters like &, <, > and \" must be escaped in the usual HTML way: &amp; for '&', &lt; for '<', &gt; for '>' and &quot; for '\"'."
 #~ msgstr "Faire attention à ce que les caractères spéciaux comme &, <, > et \" soient donnés sous la forme HTML habituelle : &amp; pour '&', &lt; pour '<', &gt; pour '>' et &quot; pour '\"'."
+
+#~ msgid "Sets the priority that mkvmerge will run with."
+#~ msgstr "Définir la priorité de fonctionnement de mkvmerge."
 
 #~ msgid "Shortened GOP detected. Some frames have been dropped. You may want to fix the MPEG2 video stream before attempting to multiplex it.\n"
 #~ msgstr "Groupe d'images écourté trouvé. Certaines images ont été éliminées. Vous devriez corriger le flux vidéo MPEG-2 avant de tenter de le multiplexer.\n"

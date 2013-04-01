@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2013-03-29 18:06+0100\n"
+"PO-Revision-Date: 2013-04-01 12:06+0200\n"
 "Last-Translator: Moritz Bunkus <moritz@bunkus.org>\n"
 "Language-Team: German <moritz@bunkus.org>\n"
 "Language: de\n"
@@ -2687,7 +2687,7 @@ msgstr "Kapiteldatei auswählen"
 msgid "Choose the location of the mkvmerge GUI help files"
 msgstr "Den Ort der Hilfedateien für mkvmerge-GUI auswählen"
 
-#: src/mmg/options/mkvmerge.cpp:96
+#: src/mmg/options/mkvmerge.cpp:97
 msgid "Choose the mkvmerge executable"
 msgstr "mkvmerge-Programmdatei auswählen"
 
@@ -3604,7 +3604,7 @@ msgstr "Alles lief gut."
 msgid "Example"
 msgstr "Beispiel"
 
-#: src/mmg/options/mkvmerge.cpp:98
+#: src/mmg/options/mkvmerge.cpp:99
 #, c-format, boost-format
 msgid "Executable files (*.exe)|*.exe|%s"
 msgstr "Ausführbare Dateien (*.exe)|*.exe|%s"
@@ -5558,7 +5558,7 @@ msgstr "Pixelbreite: %1%"
 msgid "Playlist items:"
 msgstr "Abspiellisteneinträge"
 
-#: src/mmg/options/mkvmerge.cpp:110
+#: src/mmg/options/mkvmerge.cpp:111
 msgid "Please do not select 'mmg' itself as the 'mkvmerge' executable."
 msgstr "Bitte wählen Sie nicht 'mmg' als Datei für 'mkvmerge' aus, weil es dadurch zu einer Endlosschleife kommt."
 
@@ -6280,8 +6280,8 @@ msgid "Sets the display width of the track. The height must be set as well, or t
 msgstr "Setzt die Anzeigebreite des Tracks. Die Anzeigehöhe muss ebenfalls gesetzt sein. Andernfalls wird dieser Wert ignoriert."
 
 #: src/mmg/options/mkvmerge.cpp:57
-msgid "Sets the priority that mkvmerge will run with."
-msgstr "Legt die Prozesspriorität für mkvmerge fest."
+msgid "Sets the priority that mkvmerge will run with. Chosing 'lowest' will cause mkvmerge to select a low I/O priority as well."
+msgstr "Legt die Prozesspriorität für mkvmerge fest. 'Am niedrigsten' sorgt dafür, dass mkvmerge ebenfalls eine niedrige I/O-Priorität auswählt."
 
 #: src/mmg/tabs/global.cpp:331
 msgid ""
@@ -8557,7 +8557,7 @@ msgstr "Falsche Theora-Version: %1%.%2%.%3% != 3.2.x"
 msgid "Wrong argument to '--split-max-files'.\n"
 msgstr "Falsches Argument zu '--split-max-files'.\n"
 
-#: src/mmg/options/mkvmerge.cpp:110
+#: src/mmg/options/mkvmerge.cpp:111
 msgid "Wrong file chosen"
 msgstr "Falsche Datei ausgewählt"
 
@@ -9136,7 +9136,7 @@ msgstr "mkvextract.cpp/show_element(): level > 9: %1%"
 msgid "mkvinfo [options] <inname>"
 msgstr "mkvinfo [Optionen] <Quellname>"
 
-#: src/mmg/options/mkvmerge.cpp:135
+#: src/mmg/options/mkvmerge.cpp:136
 msgid "mkvmerge"
 msgstr "mkvmerge"
 
@@ -9226,7 +9226,7 @@ msgstr "mkvmerge wurden ohne FLAC-Unterstützung compiliert, aber dieser FLAC-St
 msgid "mkvmerge is running"
 msgstr "mkvmerge läuft"
 
-#: src/mmg/options/mkvmerge.cpp:73
+#: src/mmg/options/mkvmerge.cpp:74
 msgid "mkvmerge options"
 msgstr "mkvmerge-Optionen"
 
@@ -9636,6 +9636,9 @@ msgstr "ja"
 
 #~ msgid "Quicktime/MP4 reader: Unknown/unsupported FourCC '%|1$.4s|' for track %2%.\n"
 #~ msgstr "Quicktime/MP4-Demuxer: Unbekannte/nicht unterstützte FourCC '%|1$.4s|' für Track %2%.\n"
+
+#~ msgid "Sets the priority that mkvmerge will run with."
+#~ msgstr "Legt die Prozesspriorität für mkvmerge fest."
 
 #~ msgid "bzip2 compression failed. Result: %1%\n"
 #~ msgstr "bzip2-Komprimierung schlug fehl. Fehlercode: %1%\n"

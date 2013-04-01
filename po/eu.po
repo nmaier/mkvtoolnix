@@ -2668,7 +2668,7 @@ msgstr "Hautatu atal agiria"
 msgid "Choose the location of the mkvmerge GUI help files"
 msgstr "Hautatu mkvmergeren EIG laguntza agirien kokalekua"
 
-#: src/mmg/options/mkvmerge.cpp:96
+#: src/mmg/options/mkvmerge.cpp:97
 msgid "Choose the mkvmerge executable"
 msgstr "Hautatu mkvmerge exekutagarria"
 
@@ -3585,7 +3585,7 @@ msgstr "Dena ongi joan da."
 msgid "Example"
 msgstr "Adibidea"
 
-#: src/mmg/options/mkvmerge.cpp:98
+#: src/mmg/options/mkvmerge.cpp:99
 #, c-format, boost-format
 msgid "Executable files (*.exe)|*.exe|%s"
 msgstr "Agiri exekutagarriak (*.exe)|*.exe|%s"
@@ -5536,7 +5536,7 @@ msgstr "Pixel zabalera: %1%"
 msgid "Playlist items:"
 msgstr "Irakur-zerrendako gaiak:"
 
-#: src/mmg/options/mkvmerge.cpp:110
+#: src/mmg/options/mkvmerge.cpp:111
 msgid "Please do not select 'mmg' itself as the 'mkvmerge' executable."
 msgstr "Mesedez ez hautatu 'mmg' bera 'mkvmerge' exekutagarri bezala."
 
@@ -6251,8 +6251,8 @@ msgid "Sets the display width of the track. The height must be set as well, or t
 msgstr "Bidearen erakuspen zabalera ezartzen du. Garaiera ere ezarri behar da, edo eremu hau ezikusi egingo da."
 
 #: src/mmg/options/mkvmerge.cpp:57
-msgid "Sets the priority that mkvmerge will run with."
-msgstr "mkvmergek ekingo duen lehentasuna ezartzen du."
+msgid "Sets the priority that mkvmerge will run with. Chosing 'lowest' will cause mkvmerge to select a low I/O priority as well."
+msgstr ""
 
 #: src/mmg/tabs/global.cpp:331
 msgid ""
@@ -8505,7 +8505,7 @@ msgstr "Theora bertsio okerra: %1%.%2%.%3% != 3.2.x"
 msgid "Wrong argument to '--split-max-files'.\n"
 msgstr "Argumento okerra: '--split-max-files'.\n"
 
-#: src/mmg/options/mkvmerge.cpp:110
+#: src/mmg/options/mkvmerge.cpp:111
 msgid "Wrong file chosen"
 msgstr "Agiri okerra hautatu da"
 
@@ -9080,7 +9080,7 @@ msgstr "mkvextract.cpp/show_element(): maila > 9: %1%"
 msgid "mkvinfo [options] <inname>"
 msgstr "mkvinfo [aukerak] <izena>"
 
-#: src/mmg/options/mkvmerge.cpp:135
+#: src/mmg/options/mkvmerge.cpp:136
 msgid "mkvmerge"
 msgstr "mkvmerge"
 
@@ -9170,7 +9170,7 @@ msgstr "mkvmerge ez da bildua izan FLAC sostenguarekin, baina jario honen kudeak
 msgid "mkvmerge is running"
 msgstr "mkvmerge ekinean dago"
 
-#: src/mmg/options/mkvmerge.cpp:73
+#: src/mmg/options/mkvmerge.cpp:74
 msgid "mkvmerge options"
 msgstr "mkvmerge aukerak"
 
@@ -9605,6 +9605,9 @@ msgstr "Bai"
 
 #~ msgid "Quicktime/MP4 reader: Unknown/unsupported FourCC '%|1$.4s|' for track %2%.\n"
 #~ msgstr "Quicktime/MP4 irakurgailua: FourCC ezezaguna/sostengatugabea '%|1$.4s|' %2% bidearentzat.\n"
+
+#~ msgid "Sets the priority that mkvmerge will run with."
+#~ msgstr "mkvmergek ekingo duen lehentasuna ezartzen du."
 
 #~ msgid "Shortened GOP detected. Some frames have been dropped. You may want to fix the MPEG2 video stream before attempting to multiplex it.\n"
 #~ msgstr "Laburtutako GOP atzeman da. Frame batzuk murriztu dira. Badaiteke zuk MPEG2 bideo jarioa zuzendu nahi izatea hura multiplexatu aurretik.\n"

@@ -2653,7 +2653,7 @@ msgstr "Wybierz plik rozdziału"
 msgid "Choose the location of the mkvmerge GUI help files"
 msgstr "Wybierz miejsce gdzie mieszczą się pliki pomocy mkvmerge GUI"
 
-#: src/mmg/options/mkvmerge.cpp:96
+#: src/mmg/options/mkvmerge.cpp:97
 msgid "Choose the mkvmerge executable"
 msgstr "Wybierz plik wykonywalny exe mkvmerge"
 
@@ -3572,7 +3572,7 @@ msgstr "Wszystko poszło w porządku."
 msgid "Example"
 msgstr "Przykład"
 
-#: src/mmg/options/mkvmerge.cpp:98
+#: src/mmg/options/mkvmerge.cpp:99
 #, c-format, boost-format
 msgid "Executable files (*.exe)|*.exe|%s"
 msgstr "Pliki wykonywalne (*.exe)|*.exe|%s"
@@ -5528,7 +5528,7 @@ msgstr "Szerokość w pikselach: %1%"
 msgid "Playlist items:"
 msgstr ""
 
-#: src/mmg/options/mkvmerge.cpp:110
+#: src/mmg/options/mkvmerge.cpp:111
 msgid "Please do not select 'mmg' itself as the 'mkvmerge' executable."
 msgstr "Prosze nie wybierać \"mmg\" jako plik wykonywalny \"mkvmerge\"."
 
@@ -6244,8 +6244,8 @@ msgid "Sets the display width of the track. The height must be set as well, or t
 msgstr "Ustaw rozdzielczość wyświetlania ścieżki. Powinna być wpisana zarówno szerokość jak i wysokość aby program użył tej opcji."
 
 #: src/mmg/options/mkvmerge.cpp:57
-msgid "Sets the priority that mkvmerge will run with."
-msgstr "Ustaw priorytet dla procesu mkvmerge."
+msgid "Sets the priority that mkvmerge will run with. Chosing 'lowest' will cause mkvmerge to select a low I/O priority as well."
+msgstr ""
 
 #: src/mmg/tabs/global.cpp:331
 msgid ""
@@ -8460,7 +8460,7 @@ msgstr "Zła wersja Theora: %1%.%2%.%3% != 3.2.x"
 msgid "Wrong argument to '--split-max-files'.\n"
 msgstr "Błędny parametr opcji \"--split-max-files\".\n"
 
-#: src/mmg/options/mkvmerge.cpp:110
+#: src/mmg/options/mkvmerge.cpp:111
 msgid "Wrong file chosen"
 msgstr "Wybrano zły plik"
 
@@ -9035,7 +9035,7 @@ msgstr ""
 msgid "mkvinfo [options] <inname>"
 msgstr ""
 
-#: src/mmg/options/mkvmerge.cpp:135
+#: src/mmg/options/mkvmerge.cpp:136
 msgid "mkvmerge"
 msgstr "mkvmerge"
 
@@ -9123,7 +9123,7 @@ msgstr ""
 msgid "mkvmerge is running"
 msgstr "mkvmerge pracuje nad plikiem..."
 
-#: src/mmg/options/mkvmerge.cpp:73
+#: src/mmg/options/mkvmerge.cpp:74
 msgid "mkvmerge options"
 msgstr "opcje mkvmerge"
 
@@ -9545,6 +9545,9 @@ msgstr "tak"
 
 #~ msgid "Muxing took 1 second.\n"
 #~ msgstr "Muksowanie trwało 1 sekundę.\n"
+
+#~ msgid "Sets the priority that mkvmerge will run with."
+#~ msgstr "Ustaw priorytet dla procesu mkvmerge."
 
 #~ msgid ""
 #~ "Stereo-3D video mode (0: mono, 1: right eye,\n"
