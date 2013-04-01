@@ -89,6 +89,7 @@ def setup_globals
   $build_tools           ||=  c?(:TOOLS)
 
   cflags_common            = "-Wall -Wno-comment -Wfatal-errors "
+  cflags_common           += "#{c(:WNO_SELF_ASSIGN)} " if c?(:USE_CLANG) && c?(:USE_QT)
   cflags_common           += "#{c(:OPTIMIZATION_CFLAGS)} -D_FILE_OFFSET_BITS=64 #{c(:MATROSKA_CFLAGS)} #{c(:EBML_CFLAGS)} #{c(:EXTRA_CFLAGS)} #{c(:DEBUG_CFLAGS)} #{c(:PROFILING_CFLAGS)} #{c(:USER_CPPFLAGS)} "
   cflags_common           += "-DPACKAGE=\\\"#{c(:PACKAGE)}\\\" -DVERSION=\\\"#{c(:VERSION)}\\\" -DMTX_LOCALE_DIR=\\\"#{c(:localedir)}\\\" -DMTX_PKG_DATA_DIR=\\\"#{c(:pkgdatadir)}\\\" -DMTX_DOC_DIR=\\\"#{c(:docdir)}\\\" "
   cflags_common           += "#{c(:QUNUSED_ARGUMENTS)}"
