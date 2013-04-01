@@ -134,7 +134,7 @@ set_process_priority(int priority) {
   }
 
 # if defined(HAVE_SYSCALL) && defined(SYS_ioprio_set)
-  if (0 < s_nice_levels[priority + 2])
+  if (-2 == priority)
     syscall(SYS_ioprio_set,
             1,        // IOPRIO_WHO_PROCESS
             0,        // current process/thread
