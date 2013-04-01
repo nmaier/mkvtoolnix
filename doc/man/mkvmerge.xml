@@ -1537,6 +1537,9 @@ $ mkvmerge -o out.mkv '(' file.mkv ')'</screen>
        <citerefentry><refentrytitle>nice</refentrytitle><manvolnum>2</manvolnum></citerefentry> function. Therefore only the super user can
        use '<literal>higher</literal>' and '<literal>highest</literal>'. On Windows all values are useable for every user.
       </para>
+
+      <para>Selecting '<literal>lowest</literal>' also causes &mkvmerge; to select idle I/O priority in addition to the lowest possible
+      process priority.</para>
      </listitem>
     </varlistentry>
 

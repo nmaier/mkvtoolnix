@@ -1121,6 +1121,10 @@ Matroska(TM)ファイルは再生時の画像スケールを決定するため�
 .RS 4
 
 \fBmkvmerge\fR(1)を実行する際のプロセス優先度を指定します。指定できるのは\*(Aqlowest\*(Aq、\*(Aqlower\*(Aq、\*(Aqnormal\*(Aq、\*(Aqhigher\*(Aq、及び\*(Aqhighest\*(Aqです。指定されない場合、\*(Aqnormal\*(Aqが使用されます。UNIX系のシステムでは、\fBmkvmerge\fR(1)は\fBnice\fR(2)関数を使用するので、\*(Aqhigher\*(Aq及び\*(Aqhighest\*(Aqはスーパーユーザのみが使用可能です。Windowsでは全てのユーザが全優先度を使用可能です。
+.sp
+Selecting \*(Aqlowest\*(Aq also causes
+\fBmkvmerge\fR(1)
+to select idle I/O priority in addition to the lowest possible process priority\&.
 .RE
 .PP
 \fB\-\-command\-line\-charset\fR \fIcharacter\-set\fR

@@ -1500,6 +1500,10 @@ runs with\&. Valid values are \*(Aqlowest\*(Aq, \*(Aqlower\*(Aq, \*(Aqnormal\*(A
 will use the
 \fBnice\fR(2)
 function\&. Therefore only the super user can use \*(Aqhigher\*(Aq and \*(Aqhighest\*(Aq\&. On Windows all values are useable for every user\&.
+.sp
+Selecting \*(Aqlowest\*(Aq also causes
+\fBmkvmerge\fR(1)
+to select idle I/O priority in addition to the lowest possible process priority\&.
 .RE
 .PP
 \fB\-\-command\-line\-charset\fR \fIcharacter\-set\fR
