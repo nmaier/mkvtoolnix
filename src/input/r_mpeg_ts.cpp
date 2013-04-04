@@ -472,6 +472,7 @@ mpeg_ts_reader_c::process_chapter_entries() {
 
   size_t idx = 0;
   for (auto &timecode : m_chapter_timecodes) {
+    ++idx;
     auto ms = timecode.to_ms();
     out.puts(boost::format("CHAPTER%|1$02d|=%|2$02d|:%|3$02d|:%|4$02d|.%|5$03d|\n"
                            "CHAPTER%|1$02d|NAME=Chapter %1%\n")

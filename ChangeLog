@@ -1,3 +1,9 @@
+2013-04-04  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvmerge: bug fix: All entries in chapters imported from MPLS
+        playlists were named "Chapter 0". The numbering has been
+        fixed. Fixes #870.
+
 2013-04-01  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvmerge: new feature: Selecting the lowest process priority
