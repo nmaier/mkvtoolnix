@@ -6728,10 +6728,6 @@ msgstr "Kate ezagutarazle idazburua ezin da aztertu (%1%).\n"
 msgid "The MP4 file '%1%' contains chapters whose format was not recognized. This is often the case if the chapters are not encoded in UTF-8. Use the '--chapter-charset' option in order to specify the charset to use.\n"
 msgstr "'%1%' MP4 agiriak ezagutzen ez den heuskarri bateko atalak ditu. Hau batzuetan gertatzen da atalak ez daudenean UTF-8-an kodeatuta. Erabili '--chapter-charset' aukera erabiltzeko hizkikodea adierazteko.\n"
 
-#: src/mmg/wx_kax_analyzer.cpp:36
-msgid "The Matroska file is analyzed."
-msgstr "Matroska agiria aztertzen..."
-
 #: src/mmg/header_editor/frame.cpp:672
 #: src/propedit/propedit.cpp:40
 msgid "The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file."
@@ -7103,8 +7099,10 @@ msgstr "Agiri idazburuak ezin dira aztertu, adib. osatugabeak, baliogabeak edo h
 msgid "The file is an unsupported container format (%s)."
 msgstr "Agiria sostengatu gabeko edukiontzi heuskarria da (%s)."
 
+#: src/mmg/wx_kax_analyzer.cpp:36
 #: src/propedit/propedit.cpp:94
-msgid "The file is analyzed.\n"
+#, fuzzy
+msgid "The file is being analyzed."
 msgstr "Agiria aztertuta dago.\n"
 
 #: src/merge/output_control.cpp:282
@@ -9619,6 +9617,9 @@ msgstr "Bai"
 #~ "Estereo-3D bideo modua(0: monoa, 1: esk. begia,\n"
 #~ "2: ezk. begia, 3: bi begiak)."
 
+#~ msgid "The Matroska file is analyzed."
+#~ msgstr "Matroska agiria aztertzen..."
+
 #~ msgid "The file '%1%' could not be opened for reading (%2%)."
 #~ msgstr "%1% agiria ezin da irakurtzeko ireki (%2%)."
 
@@ -9637,6 +9638,10 @@ msgstr "Bai"
 
 #~ msgid "The file '%1%' could not be opened for writing (%2%, %3%).\n"
 #~ msgstr "%1% ezin da idazteko ireki (%2%, %3%).\n"
+
+#, fuzzy
+#~ msgid "The file is being analyzed.\n"
+#~ msgstr "Agiria aztertuta dago.\n"
 
 #, fuzzy
 #~ msgid "The output file '%1%' could not be opened for writing: %2%.\n"

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2013-04-01 12:06+0200\n"
+"PO-Revision-Date: 2013-04-07 13:00+0200\n"
 "Last-Translator: Moritz Bunkus <moritz@bunkus.org>\n"
 "Language-Team: German <moritz@bunkus.org>\n"
 "Language: de\n"
@@ -6758,10 +6758,6 @@ msgstr "Das Kate-Identifikationskopfpaket konnte nicht geparst werden (%1%).\n"
 msgid "The MP4 file '%1%' contains chapters whose format was not recognized. This is often the case if the chapters are not encoded in UTF-8. Use the '--chapter-charset' option in order to specify the charset to use.\n"
 msgstr "Die MP4-Datei '%1%' enthält Kapitel, deren Format nicht erkannt wurde. Dies passiert oft, wenn der Zeichensatz der Kapitel nicht UTF-8 ist. Benutzen Sie die Option '--chapter-charset', um den zu benutzenden Zeichensatz festzulegen.\n"
 
-#: src/mmg/wx_kax_analyzer.cpp:36
-msgid "The Matroska file is analyzed."
-msgstr "Die Matroska-Datei wird analysiert."
-
 #: src/mmg/header_editor/frame.cpp:672
 #: src/propedit/propedit.cpp:40
 msgid "The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file."
@@ -7137,9 +7133,10 @@ msgstr "Die Kopfpakete konnten nicht geparst werden, z.B. weil sie unvollständi
 msgid "The file is an unsupported container format (%s)."
 msgstr "Die Datei enthält ein nicht unterstütztes Containerformat (%s)."
 
+#: src/mmg/wx_kax_analyzer.cpp:36
 #: src/propedit/propedit.cpp:94
-msgid "The file is analyzed.\n"
-msgstr "Die Datei wird analysiert.\n"
+msgid "The file is being analyzed."
+msgstr "Die Datei wird analysiert."
 
 #: src/merge/output_control.cpp:282
 msgid "The file is being fixed, part 1/4..."
@@ -9639,6 +9636,13 @@ msgstr "ja"
 
 #~ msgid "Sets the priority that mkvmerge will run with."
 #~ msgstr "Legt die Prozesspriorität für mkvmerge fest."
+
+#~ msgid "The Matroska file is analyzed."
+#~ msgstr "Die Matroska-Datei wird analysiert."
+
+#, fuzzy
+#~ msgid "The file is being analyzed.\n"
+#~ msgstr "Die Datei wird analysiert.\n"
 
 #~ msgid "bzip2 compression failed. Result: %1%\n"
 #~ msgstr "bzip2-Komprimierung schlug fehl. Fehlercode: %1%\n"

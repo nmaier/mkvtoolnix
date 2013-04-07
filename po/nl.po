@@ -6742,10 +6742,6 @@ msgstr "Het Kate identificatie kop kon niet ontleed worden (%1%).\n"
 msgid "The MP4 file '%1%' contains chapters whose format was not recognized. This is often the case if the chapters are not encoded in UTF-8. Use the '--chapter-charset' option in order to specify the charset to use.\n"
 msgstr "Het MP4 bestand '%1%' bevat hoofdstukken die waarvan het indeling niet werd herkend. Dit is vaak het geval wanneer de hoofdstukken niet zijn gecodeerd in UTF-8. Gebruik de '--chapter-charset' optie om de te gebruiken karakterset op te geven.\n"
 
-#: src/mmg/wx_kax_analyzer.cpp:36
-msgid "The Matroska file is analyzed."
-msgstr "Het Matroska bestand wordt geanalyseerd."
-
 #: src/mmg/header_editor/frame.cpp:672
 #: src/propedit/propedit.cpp:40
 msgid "The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file."
@@ -7117,8 +7113,10 @@ msgstr "De bestandskoppen konden niet ontleed worden: b.v. doordat ze incompleet
 msgid "The file is an unsupported container format (%s)."
 msgstr "Het bestand is een niet ondersteund inhoud formaat (%s)."
 
+#: src/mmg/wx_kax_analyzer.cpp:36
 #: src/propedit/propedit.cpp:94
-msgid "The file is analyzed.\n"
+#, fuzzy
+msgid "The file is being analyzed."
 msgstr "Het bestand is geanalyseerd.\n"
 
 #: src/merge/output_control.cpp:282
@@ -9856,6 +9854,9 @@ msgstr "ja"
 #~ msgid "The MPEG-4 part 2 compression only works with native MPEG-4. However, native MPEG-4 mode has not been selected with '--engage native_mpeg4'.\n"
 #~ msgstr "Het MPEG-4 part 2 compressie werkt alleen met basis MPEG-4. Hoewel, basis MPEG-4 mode is niet geselecteerd met selected with '--engage basis_mpeg4'.\n"
 
+#~ msgid "The Matroska file is analyzed."
+#~ msgstr "Het Matroska bestand wordt geanalyseerd."
+
 #~ msgid "The binary data must be at least %1% bytes long."
 #~ msgstr "De binaire data moet minimaal %1% bytes lang zijn."
 
@@ -9886,6 +9887,10 @@ msgstr "ja"
 
 #~ msgid "The file '%1%' is empty."
 #~ msgstr "Het bestand '%1%' is leeg."
+
+#, fuzzy
+#~ msgid "The file is being analyzed.\n"
+#~ msgstr "Het bestand is geanalyseerd.\n"
 
 #~ msgid "The header has already been written."
 #~ msgstr "De kop is reeds geschreven."

@@ -6750,10 +6750,6 @@ msgstr "Идентификационный заголовок Kate не може
 msgid "The MP4 file '%1%' contains chapters whose format was not recognized. This is often the case if the chapters are not encoded in UTF-8. Use the '--chapter-charset' option in order to specify the charset to use.\n"
 msgstr "MP4-файл '%1%' содержит главы, формат которых не распознан. Такое часто случается, если главы не были закодированы в UTF-8. Воспользуйтесь ключом '--chapter-charset', чтобы указать, какой набор символов надо использовать..\n"
 
-#: src/mmg/wx_kax_analyzer.cpp:36
-msgid "The Matroska file is analyzed."
-msgstr "Файл Matroska проанализирован."
-
 #: src/mmg/header_editor/frame.cpp:672
 #: src/propedit/propedit.cpp:40
 msgid "The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file."
@@ -7125,8 +7121,10 @@ msgstr "Заголовки файла не могут быть проанали�
 msgid "The file is an unsupported container format (%s)."
 msgstr "Файл имеет неподдерживаемый формат контейнера (%s)."
 
+#: src/mmg/wx_kax_analyzer.cpp:36
 #: src/propedit/propedit.cpp:94
-msgid "The file is analyzed.\n"
+#, fuzzy
+msgid "The file is being analyzed."
 msgstr "Файл проанализирован.\n"
 
 #: src/merge/output_control.cpp:282
@@ -9883,6 +9881,9 @@ msgstr "да"
 #~ msgid "The MPEG-4 part 2 compression only works with native MPEG-4. However, native MPEG-4 mode has not been selected with '--engage native_mpeg4'.\n"
 #~ msgstr "Сжатие MPEG-4 part 2 работает только с родным MPEG-4. Однако родной режим MPEG-4 не был выбран при помощи '--engage native_mpeg4'.\n"
 
+#~ msgid "The Matroska file is analyzed."
+#~ msgstr "Файл Matroska проанализирован."
+
 #~ msgid "The binary data must be at least %1% bytes long."
 #~ msgstr "Двоичные данные должны быть длиной по крайней мере %1% байт."
 
@@ -9913,6 +9914,10 @@ msgstr "да"
 
 #~ msgid "The file '%1%' is empty."
 #~ msgstr "Файл '%1%' пуст."
+
+#, fuzzy
+#~ msgid "The file is being analyzed.\n"
+#~ msgstr "Файл проанализирован.\n"
 
 #~ msgid "The header has already been written."
 #~ msgstr "Заголовок уже был записан."

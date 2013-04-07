@@ -6725,10 +6725,6 @@ msgstr ""
 msgid "The MP4 file '%1%' contains chapters whose format was not recognized. This is often the case if the chapters are not encoded in UTF-8. Use the '--chapter-charset' option in order to specify the charset to use.\n"
 msgstr ""
 
-#: src/mmg/wx_kax_analyzer.cpp:36
-msgid "The Matroska file is analyzed."
-msgstr ""
-
 #: src/mmg/header_editor/frame.cpp:672
 #: src/propedit/propedit.cpp:40
 msgid "The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file."
@@ -7088,8 +7084,10 @@ msgstr "Hlavičky souboru nemohly být analyzovány, např. protože jsou nekomp
 msgid "The file is an unsupported container format (%s)."
 msgstr "Soubor má nepodporovaný formát kontejneru (%s)."
 
+#: src/mmg/wx_kax_analyzer.cpp:36
 #: src/propedit/propedit.cpp:94
-msgid "The file is analyzed.\n"
+#, fuzzy
+msgid "The file is being analyzed."
 msgstr "Soubor je analyzován.\n"
 
 #: src/merge/output_control.cpp:282
@@ -9613,6 +9611,10 @@ msgstr "ano"
 
 #~ msgid "The file '%1%' is empty."
 #~ msgstr "Soubor '%1%' je prázdný."
+
+#, fuzzy
+#~ msgid "The file is being analyzed.\n"
+#~ msgstr "Soubor je analyzován.\n"
 
 #, fuzzy
 #~ msgid "The output file '%1%' could not be opened for writing: %2%.\n"

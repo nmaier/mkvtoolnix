@@ -6719,10 +6719,6 @@ msgstr "カラオケ・テキスト判別ヘッダを解析できませんでし
 msgid "The MP4 file '%1%' contains chapters whose format was not recognized. This is often the case if the chapters are not encoded in UTF-8. Use the '--chapter-charset' option in order to specify the charset to use.\n"
 msgstr "MP4ファイル '%1%' は、認識できないフォーマットのチャプタを含んでいます。これは大抵チャプタがUTF-8でエンコードされていないということです。'--chapter-charset' オプションを使用して、使用する文字セットを指定してください。\n"
 
-#: src/mmg/wx_kax_analyzer.cpp:36
-msgid "The Matroska file is analyzed."
-msgstr "Matroskaファイルを解析中です。"
-
 #: src/mmg/header_editor/frame.cpp:672
 #: src/propedit/propedit.cpp:40
 msgid "The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file."
@@ -7095,8 +7091,10 @@ msgstr "ファイルヘッダをパースすることができませんでした
 msgid "The file is an unsupported container format (%s)."
 msgstr "このファイルはサポートされていないコンテナフォーマット（%s）です。"
 
+#: src/mmg/wx_kax_analyzer.cpp:36
 #: src/propedit/propedit.cpp:94
-msgid "The file is analyzed.\n"
+#, fuzzy
+msgid "The file is being analyzed."
 msgstr "ファイルを解析します。\n"
 
 #: src/merge/output_control.cpp:282
@@ -9808,6 +9806,9 @@ msgstr "はい"
 #~ msgid "The FLAC header data is different for the two tracks (lengths: %1% and %2%)"
 #~ msgstr "FLACヘッダデータが2つのトラック間で異なっています（長さ：%1%と%2%）"
 
+#~ msgid "The Matroska file is analyzed."
+#~ msgstr "Matroskaファイルを解析中です。"
+
 #~ msgid "The binary data must be at least %1% bytes long."
 #~ msgstr "そのバイナリデータは最低でも%1%バイトでなければなりません。"
 
@@ -9838,6 +9839,10 @@ msgstr "はい"
 
 #~ msgid "The file '%1%' is empty."
 #~ msgstr "ファイル'%1%'は空です。"
+
+#, fuzzy
+#~ msgid "The file is being analyzed.\n"
+#~ msgstr "ファイルを解析します。\n"
 
 #~ msgid "The header has already been written."
 #~ msgstr "ヘッダは既に記録されています。"

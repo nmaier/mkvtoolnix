@@ -6724,10 +6724,6 @@ msgstr "L'en-tête d'identification Kate ne peut pas être analysé (%1%).\n"
 msgid "The MP4 file '%1%' contains chapters whose format was not recognized. This is often the case if the chapters are not encoded in UTF-8. Use the '--chapter-charset' option in order to specify the charset to use.\n"
 msgstr "Le fichier MP4 '%1%' contient des chapitres dont le format n'est pas reconnu. C'est souvent le cas quand les chapitres ne sont pas encodés en UTF-8. Utiliser l'option '--chapter-charset' pour préciser le jeux de caractères à utiliser.\n"
 
-#: src/mmg/wx_kax_analyzer.cpp:36
-msgid "The Matroska file is analyzed."
-msgstr "Le fichier Matroska est analysé."
-
 #: src/mmg/header_editor/frame.cpp:672
 #: src/propedit/propedit.cpp:40
 msgid "The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file."
@@ -7099,8 +7095,10 @@ msgstr "Les en-têtes de fichier ne peuvent pas être analysés, ils sont peut-�
 msgid "The file is an unsupported container format (%s)."
 msgstr "Le fichier est d'un format conteneur non supporté (%s)."
 
+#: src/mmg/wx_kax_analyzer.cpp:36
 #: src/propedit/propedit.cpp:94
-msgid "The file is analyzed.\n"
+#, fuzzy
+msgid "The file is being analyzed."
 msgstr "Le fichier est analysé.\n"
 
 #: src/merge/output_control.cpp:282
@@ -9736,6 +9734,9 @@ msgstr "oui"
 #~ msgid "The FLAC header data is different for the two tracks (lengths: %1% and %2%)"
 #~ msgstr "Les données d'en-tête FLAC des deux pistes sont différentes (longueur : %1% et %2%)."
 
+#~ msgid "The Matroska file is analyzed."
+#~ msgstr "Le fichier Matroska est analysé."
+
 #~ msgid "The binary data must be at least %1% bytes long."
 #~ msgstr "Les données binaires doivent avoir une longueur d'au moins %1% octets."
 
@@ -9766,6 +9767,10 @@ msgstr "oui"
 
 #~ msgid "The file '%1%' is empty."
 #~ msgstr "Le fichier '%1%' est vide."
+
+#, fuzzy
+#~ msgid "The file is being analyzed.\n"
+#~ msgstr "Le fichier est analysé.\n"
 
 #~ msgid "The header has already been written."
 #~ msgstr "L'en-tête a déjà été écrit."

@@ -6730,10 +6730,6 @@ msgstr "Kate tanımlama başlığı ayrıştırılamadı (%1%).\n"
 msgid "The MP4 file '%1%' contains chapters whose format was not recognized. This is often the case if the chapters are not encoded in UTF-8. Use the '--chapter-charset' option in order to specify the charset to use.\n"
 msgstr ""
 
-#: src/mmg/wx_kax_analyzer.cpp:36
-msgid "The Matroska file is analyzed."
-msgstr "Matroska dosyası analiz ediliyor."
-
 #: src/mmg/header_editor/frame.cpp:672
 #: src/propedit/propedit.cpp:40
 msgid "The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file."
@@ -7105,8 +7101,10 @@ msgstr "Dosya başlığı ayrıştırılamadı, örn. çünkü tamamlanmadı, ge
 msgid "The file is an unsupported container format (%s)."
 msgstr "Dosya desteklenmeyen kalıp biçimidir (%s)."
 
+#: src/mmg/wx_kax_analyzer.cpp:36
 #: src/propedit/propedit.cpp:94
-msgid "The file is analyzed.\n"
+#, fuzzy
+msgid "The file is being analyzed."
 msgstr "Dosya analiz ediliyor.\n"
 
 #: src/merge/output_control.cpp:282
@@ -9702,6 +9700,9 @@ msgstr "evet"
 #~ msgid "The ALAC header data is different for the two tracks (lengths: %1% and %2%)"
 #~ msgstr "İki izin yükseklikleri farklı: %1% ve %2%"
 
+#~ msgid "The Matroska file is analyzed."
+#~ msgstr "Matroska dosyası analiz ediliyor."
+
 #~ msgid "The binary data must be at least %1% bytes long."
 #~ msgstr "Binari veri en az %1% bayt uzunluğunda olmak zorundadır."
 
@@ -9732,6 +9733,10 @@ msgstr "evet"
 
 #~ msgid "The file '%1%' is empty."
 #~ msgstr "Dosya '%1%' boş."
+
+#, fuzzy
+#~ msgid "The file is being analyzed.\n"
+#~ msgstr "Dosya analiz ediliyor.\n"
 
 #~ msgid "The header has already been written."
 #~ msgstr "Başlık zaten yazılmış."

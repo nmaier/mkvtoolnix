@@ -6700,10 +6700,6 @@ msgstr "無法解析 Kate 辨識表頭 (%1%)。\n"
 msgid "The MP4 file '%1%' contains chapters whose format was not recognized. This is often the case if the chapters are not encoded in UTF-8. Use the '--chapter-charset' option in order to specify the charset to use.\n"
 msgstr "此 MP4 檔「%1%」含有無法辨識格式的章節。若章節不是用 UTF-8 編碼時常發生這個情形。使用「--chapter-charset」選項來指定要使用的字元編碼集。\n"
 
-#: src/mmg/wx_kax_analyzer.cpp:36
-msgid "The Matroska file is analyzed."
-msgstr "正在分析 Matroska 檔。"
-
 #: src/mmg/header_editor/frame.cpp:672
 #: src/propedit/propedit.cpp:40
 msgid "The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file."
@@ -7075,8 +7071,10 @@ msgstr "無法解析此檔案表頭，可能是因為檔案不完整、無效或
 msgid "The file is an unsupported container format (%s)."
 msgstr "此檔案為不支援的容器格式 (%s)。"
 
+#: src/mmg/wx_kax_analyzer.cpp:36
 #: src/propedit/propedit.cpp:94
-msgid "The file is analyzed.\n"
+#, fuzzy
+msgid "The file is being analyzed."
 msgstr "檔案已分析。\n"
 
 #: src/merge/output_control.cpp:282
@@ -9905,6 +9903,9 @@ msgstr "是"
 #~ msgid "The MPEG-4 part 2 compression only works with native MPEG-4. However, native MPEG-4 mode has not been selected with '--engage native_mpeg4'.\n"
 #~ msgstr "MPEG-4 part 2 壓縮僅適用於原生 MPEG-4。然而，您未使用「--engage native_mpeg4」選擇原生 MPEG-4 模式。\n"
 
+#~ msgid "The Matroska file is analyzed."
+#~ msgstr "正在分析 Matroska 檔。"
+
 #~ msgid "The binary data must be at least %1% bytes long."
 #~ msgstr "此二位元資料最少 %1% 位元組長。"
 
@@ -9935,6 +9936,10 @@ msgstr "是"
 
 #~ msgid "The file '%1%' is empty."
 #~ msgstr "檔案「%1%」為空。"
+
+#, fuzzy
+#~ msgid "The file is being analyzed.\n"
+#~ msgstr "檔案已分析。\n"
 
 #~ msgid "The header has already been written."
 #~ msgstr "表頭已被寫入。"

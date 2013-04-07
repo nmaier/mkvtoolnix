@@ -6722,10 +6722,6 @@ msgstr ""
 msgid "The MP4 file '%1%' contains chapters whose format was not recognized. This is often the case if the chapters are not encoded in UTF-8. Use the '--chapter-charset' option in order to specify the charset to use.\n"
 msgstr ""
 
-#: src/mmg/wx_kax_analyzer.cpp:36
-msgid "The Matroska file is analyzed."
-msgstr "Plik Matroski jest poddawany analizie."
-
 #: src/mmg/header_editor/frame.cpp:672
 #: src/propedit/propedit.cpp:40
 msgid "The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file."
@@ -7090,8 +7086,10 @@ msgstr ""
 msgid "The file is an unsupported container format (%s)."
 msgstr "Plik posiada nieobsługiwany format kontenera (%s)."
 
+#: src/mmg/wx_kax_analyzer.cpp:36
 #: src/propedit/propedit.cpp:94
-msgid "The file is analyzed.\n"
+#, fuzzy
+msgid "The file is being analyzed."
 msgstr "Plik został przeanalizowany.\n"
 
 #: src/merge/output_control.cpp:282
@@ -9563,12 +9561,19 @@ msgstr "tak"
 #~ msgid "The FLAC header data is different for the two tracks (lengths: %1% and %2%)"
 #~ msgstr "Ścieżki różnią się nagłówkami FLAC (długość: %1% oraz %2%)"
 
+#~ msgid "The Matroska file is analyzed."
+#~ msgstr "Plik Matroski jest poddawany analizie."
+
 #, fuzzy
 #~ msgid "The file '%1%' could not be opened for reading: %2%."
 #~ msgstr "Plik tagów XML '%1%' zawiera błąd: %2%\n"
 
 #~ msgid "The file '%1%' is empty."
 #~ msgstr "Plik '%1%' jest pusty."
+
+#, fuzzy
+#~ msgid "The file is being analyzed.\n"
+#~ msgstr "Plik został przeanalizowany.\n"
 
 #, fuzzy
 #~ msgid "The output file '%1%' could not be opened for writing: %2%.\n"
