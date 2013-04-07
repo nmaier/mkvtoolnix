@@ -91,7 +91,7 @@ run(options_cptr &options) {
     mxerror(boost::format("The file '%1%' could not be opened for reading and writing: %1.\n") % options->m_file_name % ex);
   }
 
-  mxinfo(Y("The file is analyzed.\n"));
+  mxinfo(boost::format("%1%\n") % Y("The file is being analyzed."));
 
   analyzer->set_show_progress(options->m_show_progress);
 
