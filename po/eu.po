@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: eu\n"
 "Report-Msgid-Bugs-To: Xabier Aramendi <azpidatziak@gmail.com>\n"
 "POT-Creation-Date: 2010-06-08 10:00+0200\n"
-"PO-Revision-Date: 2013-02-26 21:37+0100\n"
+"PO-Revision-Date: 2013-04-04 23:09+0100\n"
 "Last-Translator: Xabier Aramendi (Azpidatziak) <azpidatziak@gmail.com>\n"
 "Language-Team: (EUS_Xabier Aramendi) <azpidatziak@gmail.com>\n"
 "Language: Basque (Euskara)\n"
@@ -275,15 +275,14 @@ msgid "  --engage <feature>       Turns on experimental feature 'feature'.\n"
 msgstr "  --engage <ezaugarria>    'feature' ezaugarri esperimentala eragiten du.\n"
 
 #: src/merge/mkvmerge.cpp:222
-#, fuzzy
 msgid ""
 "  --fix-bitstream-timing-information <TID[:bool]>\n"
 "                           Adjust the frame/field rate stored in the video\n"
 "                           bitstream to match the track's default duration.\n"
 msgstr ""
-"  --forced-track <TID[:bool]>\n"
-"                           'behartua' ikurra ezartzen du bide honentzat\n"
-"                           edo ez egotera behartzen du boolearra 0 bada.\n"
+"  --fix-bitstream-timing-information <TID[:bool]>\n"
+"                           Bideoaren bitjarioan biltegiratutako frame/eremu neurria\n"
+"                           zehazten du bidearen berezko iraupenarekin bat etortzeko.\n"
 
 #: src/merge/mkvmerge.cpp:205
 msgid ""
@@ -1517,9 +1516,8 @@ msgid "'--engage' lacks its argument.\n"
 msgstr "'--engage' ez du bere argumentoa.\n"
 
 #: src/merge/mkvmerge.cpp:2332
-#, fuzzy
 msgid "'--fix-bitstream-timing-information' lacks its argument.\n"
-msgstr "'--default-duration' ez du bere argumentoa.\n"
+msgstr "'--fix-bitstream-timing-information' ez du bere argumentoa.\n"
 
 #: src/merge/mkvmerge.cpp:2224
 msgid "'--forced-track' lacks its argument.\n"
@@ -3806,9 +3804,8 @@ msgid "Finished processing on %s"
 msgstr "%s garapena amaituta"
 
 #: src/mmg/tabs/input_format.cpp:260
-#, fuzzy
 msgid "Fix bitstream timing information"
-msgstr "Akatsa argibideak gordetzerakoan"
+msgstr "Zuzendu bitjario denborapen argibideak"
 
 #: src/mmg/tabs/chapters.cpp:354
 msgid "Flags:"
@@ -4246,9 +4243,9 @@ msgid "Invalid boolean option specified in '--default-track %1%'.\n"
 msgstr "Boolean aukera baliogabea adierazi da hemen: '--default-track %1%'.\n"
 
 #: src/merge/mkvmerge.cpp:1415
-#, fuzzy, boost-format
+#, boost-format
 msgid "Invalid boolean option specified in '--fix-bitstream-timing-information %1%'.\n"
-msgstr "Boolean aukera baliogabea adierazi da hemen: '--forced-track %1%'.\n"
+msgstr "Boolean aukera baliogabea adierazi da hemen: '--fix-bitstream-timing-information %1%'.\n"
 
 #: src/merge/mkvmerge.cpp:1067
 #, boost-format
@@ -4572,9 +4569,9 @@ msgid "Invalid track ID specified in '--default-track %1%'.\n"
 msgstr "Bide ID baliogabea adierazi da hemen: '--default-track %1%'.\n"
 
 #: src/merge/mkvmerge.cpp:1409
-#, fuzzy, boost-format
+#, boost-format
 msgid "Invalid track ID specified in '--fix-bitstream-timing-information %1%'.\n"
-msgstr "Bide ID baliogabea adierazi da hemen:  '--forced-track %1%'.\n"
+msgstr "Bide ID baliogabea adierazi da hemen:  '--fix-bitstream-timing-information %1%'.\n"
 
 #: src/merge/mkvmerge.cpp:1061
 #, boost-format
@@ -5229,7 +5226,7 @@ msgstr "Idazburu eremuetako bat ere ez da aldatu. Ez da ezer gordeko."
 
 #: src/mmg/tabs/input_format.cpp:261
 msgid "Normally mkvmerge does not change the timing information (frame/field rate) stored in the video bitstream. With this option that information is adjusted to match the container timing information. The container timing information can come from various sources: from the command line via --default-duration, the source container or derived from the bitstream."
-msgstr ""
+msgstr "Arrunt mkvmergek ez ditu bideoaren bitjarioan biltegiratutako denborapen argibideak aldatzen (frame/eremu neurria). Aukera honekin argibideak edukiontziaren denborapen argibideekin bat etortzeko zehazten dira. Edukiontziaren denborapen argibideak iturburu anitzetatik etorri daitezke: komando lerroaren bidez --default-duration, iturburu edukiontzitik edo bitjariotik eratorrita. "
 
 #: src/mmg/cli_options_dlg.cpp:144
 msgid "Normally mkvmerge keeps aspect ratio information in MPEG4 video bitstreams and puts the information into the container. This option causes mkvmerge to remove the aspect ratio information from the bitstream."
@@ -6252,7 +6249,7 @@ msgstr "Bidearen erakuspen zabalera ezartzen du. Garaiera ere ezarri behar da, e
 
 #: src/mmg/options/mkvmerge.cpp:57
 msgid "Sets the priority that mkvmerge will run with. Chosing 'lowest' will cause mkvmerge to select a low I/O priority as well."
-msgstr ""
+msgstr "mkvmergek ekingo duen lehentasuna ezartzen du. 'apalena' hautatzeak mkvmergeri S/I lehentasun apalena hautatzea eragingo dio."
 
 #: src/mmg/tabs/global.cpp:331
 msgid ""
@@ -7165,7 +7162,7 @@ msgstr "Gehitu duzun agiria irakur-zerrenda bat da. Kokaturik dagoen zuzenbideak
 #: src/common/kax_file.cpp:48
 #, boost-format
 msgid "The first cluster timecode after the resync is %1%.\n"
-msgstr ""
+msgstr "Lehen klusterraren denbora-kodea berraldiberetu ondoren da %1%.\n"
 
 #: src/merge/mkvmerge.cpp:1755
 msgid "The first file cannot be appended because there are no files to append to.\n"
@@ -7284,7 +7281,7 @@ msgstr "'%1%' hizkuntza kodea ez da ISO639-2 hikuntza kode baliozko bat eta ezik
 #: src/common/kax_file.cpp:197
 #, boost-format
 msgid "The last timecode processed before the error was encountered was %1%.\n"
-msgstr ""
+msgstr "Akatsa aurkitu aurretiko prozesaturiko azken denbora-kodea izan da %1%.\n"
 
 #: src/merge/timecode_factory.cpp:213
 #, boost-format
@@ -7745,7 +7742,7 @@ msgstr "AVC/h.264 bide hau ez da giltza frame batekin hasten. Lehen %1% frameak 
 
 #: src/output/p_avc.cpp:126
 msgid "This AVC/h.264 track's timing information indicates that it uses a variable frame rate. However, no default duration nor an external timecode file has been provided for it, nor does the source container provide timecodes. The resulting timecodes may not be useful.\n"
-msgstr ""
+msgstr "AVC/h.264 bide honen denborapen argibideek adierazten dute frame neurri aldakorra erabiltzen duela. Horrela ere, ez da ez berezko iraupenik ez kanpoko denbora-koderik eman berarentzat, eta iturburu edukiontziak ere ez ditu denbora-kodeak ematen. Emaitz denbora-kodeak badaiteke ez izatea erabilgarriak.\n"
 
 #: src/output/p_mp3.cpp:58
 #, boost-format
@@ -9638,10 +9635,6 @@ msgstr "Bai"
 
 #~ msgid "The file '%1%' could not be opened for writing (%2%, %3%).\n"
 #~ msgstr "%1% ezin da idazteko ireki (%2%, %3%).\n"
-
-#, fuzzy
-#~ msgid "The file is being analyzed.\n"
-#~ msgstr "Agiria aztertuta dago.\n"
 
 #, fuzzy
 #~ msgid "The output file '%1%' could not be opened for writing: %2%.\n"
