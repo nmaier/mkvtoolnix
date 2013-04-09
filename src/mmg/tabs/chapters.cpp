@@ -575,7 +575,7 @@ tab_chapters::load(wxString name) {
     if (kax_analyzer_c::probe(wxMB(name))) {
       analyzer  = wx_kax_analyzer_cptr(new wx_kax_analyzer_c(this, wxMB(name)));
       file_name = name;
-      if (!analyzer->process()) {
+      if (!analyzer->process(kax_analyzer_c::parse_mode_full, MODE_READ)) {
         wxMessageBox(Z("This file could not be opened or parsed."), Z("File parsing failed"), wxOK | wxCENTER | wxICON_ERROR);
         analyzer.reset();
 
@@ -1670,7 +1670,14 @@ tab_chapters::is_empty() {
 
 void
 tab_chapters::write_chapters_to_matroska_file() {
-  kax_analyzer_c::update_element_result_e result = (0 == m_chapters->ListSize() ? analyzer->remove_elements(KaxChapters::ClassInfos.GlobalId) : analyzer->update_element(m_chapters));
+  kax_analyzer_c::update_element_result_e result;
+  try {
+    result = (0 == m_chapters->ListSize() ? analyzer->remove_elements(KaxChapters::ClassInfos.GlobalId) : analyzer->update_element(m_chapters));
+  } catch (mtx::mm_io::exception &) {
+    wxMessageBox(Z("Writing to the file failed. Typical reasons include the file being write-protected, locked by another process or you not having write permissions for the target directory."),
+                 Z("Error writing Matroska file"), wxCENTER | wxOK | wxICON_ERROR, this);
+    return;
+  }
 
   switch (result) {
     case kax_analyzer_c::uer_success:

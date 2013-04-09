@@ -1,3 +1,9 @@
+2013-04-09  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mmg: bug fix: Loading chapters from Matroska files will open the
+        file in read-only mode allowing to read from write-protected
+        files.
+
 2013-04-04  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvmerge: bug fix: All entries in chapters imported from MPLS
