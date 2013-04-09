@@ -2131,7 +2131,7 @@ msgid ""
 msgstr "转义的文件名，对应上一剪辑。"
 
 #: src/mmg/header_editor/frame.cpp:678
-#: src/mmg/tabs/chapters.cpp:1700
+#: src/mmg/tabs/chapters.cpp:1707
 #: src/propedit/propedit.cpp:44
 msgid "An unknown error occured. The file has been modified."
 msgstr "发生未知错误。文件已修改。"
@@ -2495,8 +2495,8 @@ msgid "Chapter files (*.xml;*.txt;*.cue)|*.xml;*.txt;*.cue|%s"
 msgstr "章节文件 (*.xml;*.txt;*.cue)|*.xml;*.txt;*.cue|%s"
 
 #: src/mmg/tabs/chapters.cpp:561
-#, c-format, boost-format
-msgid "Chapter files (*.xml;*.txt;*.mka;*.mkv;*.mk3d;*.cue)|*.xml;*.txt;*.mka;*.mkv;*.mk3d;*.cue|%s"
+#, fuzzy, c-format, boost-format
+msgid "Chapter files (*.xml;*.txt;*.mka;*.mkv;*.mks;*.mk3d;*.cue)|*.xml;*.txt;*.mka;*.mkv;*.mks;*.mk3d;*.cue|%s"
 msgstr "章节文件 (*.xml;*.txt;*.mka;*.mkv;*.mk3d;*.cue)|*.xml;*.txt;*.mka;*.mkv;*.mk3d;*.cue|%s"
 
 #: src/mmg/tabs/chapters.cpp:366
@@ -2550,7 +2550,7 @@ msgid "Chapters loaded."
 msgstr "章节已载入。"
 
 #: src/mmg/tabs/chapters.cpp:739
-#: src/mmg/tabs/chapters.cpp:1677
+#: src/mmg/tabs/chapters.cpp:1684
 msgid "Chapters written."
 msgstr "章节已写入。"
 
@@ -3501,8 +3501,9 @@ msgstr "保存信息出错"
 
 #: src/mmg/header_editor/frame.cpp:662
 #: src/mmg/header_editor/frame.cpp:668
-#: src/mmg/tabs/chapters.cpp:1683
-#: src/mmg/tabs/chapters.cpp:1689
+#: src/mmg/tabs/chapters.cpp:1678
+#: src/mmg/tabs/chapters.cpp:1690
+#: src/mmg/tabs/chapters.cpp:1696
 msgid "Error writing Matroska file"
 msgstr "写入 Matroska 文件出错"
 
@@ -3744,7 +3745,7 @@ msgid "File removal not possible"
 msgstr "文件不能移除"
 
 #: src/mmg/header_editor/frame.cpp:674
-#: src/mmg/tabs/chapters.cpp:1696
+#: src/mmg/tabs/chapters.cpp:1703
 msgid "File structure warning"
 msgstr "文件结构警告"
 
@@ -4156,7 +4157,7 @@ msgid "Internal bug: tracks.cpp SSA #1. %1%"
 msgstr "内部错误: tracks.cpp SSA #1。 %1%"
 
 #: src/mmg/header_editor/frame.cpp:678
-#: src/mmg/tabs/chapters.cpp:1700
+#: src/mmg/tabs/chapters.cpp:1707
 msgid "Internal program error"
 msgstr "内部程序错误"
 
@@ -6700,7 +6701,7 @@ msgstr "MP4 文件 '%1%' 包含的章节格式未能识别。通常是由于章�
 msgid "The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file."
 msgstr "Matroska 文件已修改，但元定位项无法更新。这意味着播放器可能很难找到该元素。请使用您最喜欢的播放器检查此文件。"
 
-#: src/mmg/tabs/chapters.cpp:1693
+#: src/mmg/tabs/chapters.cpp:1700
 msgid ""
 "The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file.\n"
 "\n"
@@ -6945,7 +6946,7 @@ msgid "The edition UID to play from the segment linked in the chapter's segment 
 msgstr "要播放的版本 UID，来自章节的剪辑 UID 所链接的剪辑。纯数字。"
 
 #: src/mmg/header_editor/frame.cpp:660
-#: src/mmg/tabs/chapters.cpp:1681
+#: src/mmg/tabs/chapters.cpp:1688
 #: src/propedit/propedit.cpp:32
 msgid "The element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
 msgstr "元素已被写至文件尾部，但剪辑尺寸无法更新。因此这些元素将不可见。处理进程将被中止。文件已被修改!"
@@ -7278,7 +7279,7 @@ msgstr ""
 "如果设为 0, 将不使用参考伪缓存系统。"
 
 #: src/mmg/header_editor/frame.cpp:666
-#: src/mmg/tabs/chapters.cpp:1687
+#: src/mmg/tabs/chapters.cpp:1694
 #: src/propedit/propedit.cpp:36
 msgid "The meta seek element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
 msgstr "元定位元素已被写至文件尾部，但剪辑尺寸无法更新。因此这些元素不可见。处理进程将被中止。文件已被更改!"
@@ -8440,6 +8441,10 @@ msgstr "正在导出信息"
 #, boost-format
 msgid "Writing the VobSub index file '%1%'.\n"
 msgstr "正在写入 VobSub 索引文件 '%1%'。\n"
+
+#: src/mmg/tabs/chapters.cpp:1677
+msgid "Writing to the file failed. Typical reasons include the file being write-protected, locked by another process or you not having write permissions for the target directory."
+msgstr ""
 
 #: src/common/kate.cpp:59
 #, boost-format

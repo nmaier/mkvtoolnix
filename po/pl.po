@@ -2146,7 +2146,7 @@ msgid ""
 msgstr ""
 
 #: src/mmg/header_editor/frame.cpp:678
-#: src/mmg/tabs/chapters.cpp:1700
+#: src/mmg/tabs/chapters.cpp:1707
 #: src/propedit/propedit.cpp:44
 msgid "An unknown error occured. The file has been modified."
 msgstr "Wystąpił nieznany błąd. Plik został zmodyfikowany."
@@ -2510,8 +2510,8 @@ msgid "Chapter files (*.xml;*.txt;*.cue)|*.xml;*.txt;*.cue|%s"
 msgstr "Pliki rozdziałów (*.xml;*.txt;*.cue)|*.xml;*.txt;*.cue|%s"
 
 #: src/mmg/tabs/chapters.cpp:561
-#, c-format, boost-format
-msgid "Chapter files (*.xml;*.txt;*.mka;*.mkv;*.mk3d;*.cue)|*.xml;*.txt;*.mka;*.mkv;*.mk3d;*.cue|%s"
+#, fuzzy, c-format, boost-format
+msgid "Chapter files (*.xml;*.txt;*.mka;*.mkv;*.mks;*.mk3d;*.cue)|*.xml;*.txt;*.mka;*.mkv;*.mks;*.mk3d;*.cue|%s"
 msgstr "Pliki rozdziałów (*.xml;*.txt;*.mka;*.mkv;*.mk3d;*.cue)|*.xml;*.txt;*.mka;*.mkv;*.mk3d;*.cue|%s"
 
 #: src/mmg/tabs/chapters.cpp:366
@@ -2565,7 +2565,7 @@ msgid "Chapters loaded."
 msgstr "Wczytano rozdziały."
 
 #: src/mmg/tabs/chapters.cpp:739
-#: src/mmg/tabs/chapters.cpp:1677
+#: src/mmg/tabs/chapters.cpp:1684
 msgid "Chapters written."
 msgstr "Rozdziały zostały zapisane."
 
@@ -3516,8 +3516,9 @@ msgstr "Błąd podczas zapisywania informacji"
 
 #: src/mmg/header_editor/frame.cpp:662
 #: src/mmg/header_editor/frame.cpp:668
-#: src/mmg/tabs/chapters.cpp:1683
-#: src/mmg/tabs/chapters.cpp:1689
+#: src/mmg/tabs/chapters.cpp:1678
+#: src/mmg/tabs/chapters.cpp:1690
+#: src/mmg/tabs/chapters.cpp:1696
 msgid "Error writing Matroska file"
 msgstr "Błąd podczas zapisu pliku Matroski"
 
@@ -3759,7 +3760,7 @@ msgid "File removal not possible"
 msgstr "Nie jest możliwe usunięcie pliku"
 
 #: src/mmg/header_editor/frame.cpp:674
-#: src/mmg/tabs/chapters.cpp:1696
+#: src/mmg/tabs/chapters.cpp:1703
 msgid "File structure warning"
 msgstr "Ostrzeżenie o strukturze pliku"
 
@@ -4169,7 +4170,7 @@ msgid "Internal bug: tracks.cpp SSA #1. %1%"
 msgstr "Błąd wewnętrzny: tracks.cpp SSA #1. %1%"
 
 #: src/mmg/header_editor/frame.cpp:678
-#: src/mmg/tabs/chapters.cpp:1700
+#: src/mmg/tabs/chapters.cpp:1707
 msgid "Internal program error"
 msgstr "Błąd wewnętrzny programu"
 
@@ -6717,7 +6718,7 @@ msgstr ""
 msgid "The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file."
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:1693
+#: src/mmg/tabs/chapters.cpp:1700
 msgid ""
 "The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file.\n"
 "\n"
@@ -6957,7 +6958,7 @@ msgid "The edition UID to play from the segment linked in the chapter's segment 
 msgstr "To pole odnosi się do UID edycji, która będzie odtwarzana z segmentu, którego UID został podany w opcji powyżej. To jest po prostu liczba."
 
 #: src/mmg/header_editor/frame.cpp:660
-#: src/mmg/tabs/chapters.cpp:1681
+#: src/mmg/tabs/chapters.cpp:1688
 #: src/propedit/propedit.cpp:32
 msgid "The element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
 msgstr "Element został zapisany na końcu pliku, jednak rozmiar segmentu nie mógł być zmieniony. W związku z tym element nie będzie widoczny. Proces zostanie przerwany. Plik został zmieniony!"
@@ -7292,7 +7293,7 @@ msgstr ""
 "bufor nie zostanie użyty."
 
 #: src/mmg/header_editor/frame.cpp:666
-#: src/mmg/tabs/chapters.cpp:1687
+#: src/mmg/tabs/chapters.cpp:1694
 #: src/propedit/propedit.cpp:36
 msgid "The meta seek element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
 msgstr ""
@@ -8453,6 +8454,10 @@ msgstr "Zapisywanie info"
 #, boost-format
 msgid "Writing the VobSub index file '%1%'.\n"
 msgstr "Zapisywanie pliku indeksu VobSub \"%1%\".\n"
+
+#: src/mmg/tabs/chapters.cpp:1677
+msgid "Writing to the file failed. Typical reasons include the file being write-protected, locked by another process or you not having write permissions for the target directory."
+msgstr ""
 
 #: src/common/kate.cpp:59
 #, boost-format

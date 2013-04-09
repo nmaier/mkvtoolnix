@@ -2235,7 +2235,7 @@ msgstr ""
 "segmento previo."
 
 #: src/mmg/header_editor/frame.cpp:678
-#: src/mmg/tabs/chapters.cpp:1700
+#: src/mmg/tabs/chapters.cpp:1707
 #: src/propedit/propedit.cpp:44
 msgid "An unknown error occured. The file has been modified."
 msgstr "Un error desconocido ha ocurrido. El archivo ha sido modificado."
@@ -2599,8 +2599,8 @@ msgid "Chapter files (*.xml;*.txt;*.cue)|*.xml;*.txt;*.cue|%s"
 msgstr "Archivos del capítulo (*.xml;*.txt;*.cue)|*.xml;*.txt;*.cue|%s"
 
 #: src/mmg/tabs/chapters.cpp:561
-#, c-format, boost-format
-msgid "Chapter files (*.xml;*.txt;*.mka;*.mkv;*.mk3d;*.cue)|*.xml;*.txt;*.mka;*.mkv;*.mk3d;*.cue|%s"
+#, fuzzy, c-format, boost-format
+msgid "Chapter files (*.xml;*.txt;*.mka;*.mkv;*.mks;*.mk3d;*.cue)|*.xml;*.txt;*.mka;*.mkv;*.mks;*.mk3d;*.cue|%s"
 msgstr "Archivos del capítulo (*.xml;*.txt;*.mka;*.mkv;*.mk3d;*.cue)|*.xml;*.txt;*.mka;*.mkv;*.mk3d;*.cue|%s"
 
 #: src/mmg/tabs/chapters.cpp:366
@@ -2654,7 +2654,7 @@ msgid "Chapters loaded."
 msgstr "Capítulos cargados."
 
 #: src/mmg/tabs/chapters.cpp:739
-#: src/mmg/tabs/chapters.cpp:1677
+#: src/mmg/tabs/chapters.cpp:1684
 msgid "Chapters written."
 msgstr "Capítulos escritos."
 
@@ -3605,8 +3605,9 @@ msgstr "Error guardando la información"
 
 #: src/mmg/header_editor/frame.cpp:662
 #: src/mmg/header_editor/frame.cpp:668
-#: src/mmg/tabs/chapters.cpp:1683
-#: src/mmg/tabs/chapters.cpp:1689
+#: src/mmg/tabs/chapters.cpp:1678
+#: src/mmg/tabs/chapters.cpp:1690
+#: src/mmg/tabs/chapters.cpp:1696
 msgid "Error writing Matroska file"
 msgstr "Error escribiendo el archivo Matroska"
 
@@ -3848,7 +3849,7 @@ msgid "File removal not possible"
 msgstr "No es posible eliminar el archivo"
 
 #: src/mmg/header_editor/frame.cpp:674
-#: src/mmg/tabs/chapters.cpp:1696
+#: src/mmg/tabs/chapters.cpp:1703
 msgid "File structure warning"
 msgstr "Aviso de fallo en la estructura del archivo"
 
@@ -4265,7 +4266,7 @@ msgid "Internal bug: tracks.cpp SSA #1. %1%"
 msgstr "Fallo interno: pistas.cpp SSA #1. %1%"
 
 #: src/mmg/header_editor/frame.cpp:678
-#: src/mmg/tabs/chapters.cpp:1700
+#: src/mmg/tabs/chapters.cpp:1707
 msgid "Internal program error"
 msgstr "Error interno del programa"
 
@@ -6817,7 +6818,7 @@ msgstr "El archivo MP4 '%1%' contiene capítulos cuyo formato no se reconoce. A 
 msgid "The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file."
 msgstr "El archivo Matroska ha sido modificado, pero el registro meta seek no ha podido ser actualizado. Esto significa que los reproductores podrían tener dificultades en encontrar este elemento. Por favor, usa tu reproductor favorito para comprobar este archivo."
 
-#: src/mmg/tabs/chapters.cpp:1693
+#: src/mmg/tabs/chapters.cpp:1700
 msgid ""
 "The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file.\n"
 "\n"
@@ -7063,7 +7064,7 @@ msgid "The edition UID to play from the segment linked in the chapter's segment 
 msgstr "El edición UID para reproducir desde el segmento vinculado en el segmento UID del capítulo. Esto es simplemente un número."
 
 #: src/mmg/header_editor/frame.cpp:660
-#: src/mmg/tabs/chapters.cpp:1681
+#: src/mmg/tabs/chapters.cpp:1688
 #: src/propedit/propedit.cpp:32
 msgid "The element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
 msgstr "El elemento fue escrito al final del archivo, pero el tamaño del segmento no pudo ser actualizado. Por lo tanto, el elemento no será visible. El proceso será cancelado. ¡El archivo ha sido cambiado!"
@@ -7399,7 +7400,7 @@ msgstr ""
 "no es utilizada."
 
 #: src/mmg/header_editor/frame.cpp:666
-#: src/mmg/tabs/chapters.cpp:1687
+#: src/mmg/tabs/chapters.cpp:1694
 #: src/propedit/propedit.cpp:36
 msgid "The meta seek element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
 msgstr "El elemento meta seek fue escrito al final del archivo, pero el tamaño del segmento no pudo ser actualizado. Por lo tanto, no será visible. El proceso será cancelado. ¡El archivo ha sido modificado!"
@@ -8575,6 +8576,10 @@ msgstr "Información de escritura"
 #, boost-format
 msgid "Writing the VobSub index file '%1%'.\n"
 msgstr "Escritura del índice del archivo VobSub '%1%'.\n"
+
+#: src/mmg/tabs/chapters.cpp:1677
+msgid "Writing to the file failed. Typical reasons include the file being write-protected, locked by another process or you not having write permissions for the target directory."
+msgstr ""
 
 #: src/common/kate.cpp:59
 #, boost-format
