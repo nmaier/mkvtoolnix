@@ -558,7 +558,7 @@ tab_chapters::fix_missing_languages(EbmlMaster &master) {
 void
 tab_chapters::on_load_chapters(wxCommandEvent &) {
   wxFileDialog dlg(nullptr, Z("Choose a chapter file"), last_open_dir, wxEmptyString,
-                   wxString::Format(Z("Chapter files (*.xml;*.txt;*.mka;*.mkv;*.mk3d;*.cue)|*.xml;*.txt;*.mka;*.mkv;*.mk3d;*.cue|%s"), ALLFILES.c_str()), wxFD_OPEN);
+                   wxString::Format(Z("Chapter files (*.xml;*.txt;*.mka;*.mkv;*.mks;*.mk3d;*.cue)|*.xml;*.txt;*.mka;*.mkv;*.mks;*.mk3d;*.cue|%s"), ALLFILES.c_str()), wxFD_OPEN);
 
   if ((dlg.ShowModal() == wxID_OK) && load(dlg.GetPath()))
   last_open_dir = dlg.GetDirectory();
