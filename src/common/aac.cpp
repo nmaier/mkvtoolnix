@@ -19,6 +19,7 @@
 #include "common/bit_cursor.h"
 #include "common/aac.h"
 #include "common/matroska.h"
+#include "common/strings/formatting.h"
 
 const int g_aac_sampling_freq[16] = {96000, 88200, 64000, 48000, 44100, 32000,
                                      24000, 22050, 16000, 12000, 11025,  8000,
@@ -200,14 +201,12 @@ parse_aac_data(const unsigned char *data,
                int &sample_rate,
                int &output_sample_rate,
                bool &sbr) {
+  static debugging_option_c s_debug{"parse_aac_data|aac_full"};
+
   if (size < 2)
     return false;
 
-  mxverb(4, boost::format("parse_aac_data: size %1%, data: 0x") % size);
-  int i;
-  for (i = 0; i < size; i++)
-    mxverb(4, boost::format("%|1$02x| ") % static_cast<unsigned int>(data[i]));
-  mxverb(4, "\n");
+  mxdebug_if(s_debug, boost::format("parse_aac_data: size %1%, data: %2%\n") % size % to_hex(data, size));
 
   profile = data[0] >> 3;
   if (0 == profile)
