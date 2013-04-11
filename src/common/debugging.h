@@ -23,4 +23,24 @@ void init_debugging();
 
 int parse_debug_interval_arg(const std::string &option, int default_value = 1000, int invalid_value = -1);
 
+class debugging_option_c {
+protected:
+  boost::tribool m_requested;
+  std::string m_option;
+
+public:
+  debugging_option_c(std::string const &option)
+    : m_requested{boost::logic::indeterminate}
+    , m_option{option}
+  {
+  }
+
+  operator bool() {
+    if (boost::logic::indeterminate(m_requested))
+      m_requested = debugging_requested(m_option);
+
+    return m_requested;
+  }
+};
+
 #endif  // MTX_COMMON_DEBUGGING_H
