@@ -1643,6 +1643,9 @@ process_file(const std::string &file_name) {
 
     kax_file_cptr kax_file = kax_file_cptr(new kax_file_c(in));
 
+    // Prevent reporting "first timecode after resync":
+    kax_file->set_timecode_scale(-1);
+
     while ((l1 = kax_file->read_next_level1_element())) {
       std::shared_ptr<EbmlElement> af_l1(l1);
 
