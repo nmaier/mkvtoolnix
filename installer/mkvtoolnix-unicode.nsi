@@ -90,7 +90,6 @@ Page custom showExternalLinks
 # MUI end ------
 
 !include "WinVer.nsh"
-!include "EnvVarUpdate.nsh"
 !include "LogicLib.nsh"
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}${PRODUCT_VERSION_BUILD}"
@@ -474,8 +473,6 @@ Section -Post
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayVersion" "${PRODUCT_VERSION}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "URLInfoAbout" "${PRODUCT_WEB_SITE}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "Publisher" "${PRODUCT_PUBLISHER}"
-
-  ${EnvVarUpdate} $0 "PATH" "A" "HKLM" "$INSTDIR"
 SectionEnd
 
 Function showExternalLinks
@@ -700,8 +697,6 @@ Section Uninstall
   DeleteRegKey HKLM "${PRODUCT_DIR_REGKEY}"
   DeleteRegKey HKLM "${MTX_REGKEY}"
   DeleteRegKey HKCU "${MTX_REGKEY}"
-
-  ${un.EnvVarUpdate} $0 "PATH" "R" "HKLM" "$INSTDIR"
 
   SetAutoClose true
 SectionEnd

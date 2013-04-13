@@ -1,5 +1,8 @@
 2013-04-13  Moritz Bunkus  <moritz@bunkus.org>
 
+        * installer: The installation directory will no longer be added to
+        the PATH environment variable.
+
         * mkvmerge: bug fix: The parsing of the AAC AudioSpecificConfig
         structure (the bytes contained in Matroska's CodecPrivate and in
         MP4's "ESDS" atom) was fixed to support parsing the
