@@ -117,7 +117,7 @@ aac_reader_c::create_packetizer(int64_t) {
 // Try to guess if the MPEG4 header contains the emphasis field (2 bits)
 void
 aac_reader_c::guess_adts_version() {
-  aac_header_t tmp_aacheader;
+  aac_header_c tmp_aacheader;
 
   m_emphasis_present = false;
 

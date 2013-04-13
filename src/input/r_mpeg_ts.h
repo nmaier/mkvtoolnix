@@ -288,7 +288,7 @@ public:
   // audio related parameters
   int a_channels, a_sample_rate, a_bits_per_sample, a_bsid;
   dts_header_t a_dts_header;
-  aac_header_t m_aac_header;
+  aac_header_c m_aac_header;
 
   bool m_apply_dts_timecode_fix, m_use_dts, m_timecodes_wrapped;
 

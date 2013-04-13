@@ -27,7 +27,7 @@ class aac_reader_c: public generic_reader_c {
 private:
   memory_cptr m_chunk;
   bool m_emphasis_present, m_sbr_status_set;
-  aac_header_t m_aacheader;
+  aac_header_c m_aacheader;
 
 public:
   aac_reader_c(const track_info_c &ti, const mm_io_cptr &in);

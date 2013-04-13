@@ -16,6 +16,8 @@
 
 #include "common/common_pch.h"
 
+#include "common/bit_cursor.h"
+
 #define AAC_ID_MPEG4 0
 #define AAC_ID_MPEG2 1
 
@@ -31,24 +33,38 @@
 
 extern const int g_aac_sampling_freq[16];
 
-struct aac_header_t {
-  int sample_rate;
-  int bit_rate;
-  int channels;
-  int bytes;
+class aac_header_c {
+public:
+  int object_type, extension_object_type, profile, sample_rate, output_sample_rate, bit_rate, channels, bytes;
   int id;                       // 0 = MPEG-4, 1 = MPEG-2
-  int profile;
   int header_bit_size, header_byte_size, data_byte_size;
 
-  aac_header_t();
+  bool is_sbr, is_valid;
+
+protected:
+  bit_reader_cptr m_bc;
+
+public:
+  aac_header_c();
 
   std::string to_string() const;
+
+public:
+  static aac_header_c from_audio_specific_config(const unsigned char *data, int size);
+
+protected:
+  int read_object_type();
+  int read_sample_rate();
+  void read_ga_specific_config();
+  void read_program_config_element();
+  void read_error_protection_specific_config();
+  void parse(const unsigned char *data, int size);
 };
 
-bool operator ==(const aac_header_t &h1, const aac_header_t &h2);
+bool operator ==(const aac_header_c &h1, const aac_header_c &h2);
 
-bool parse_aac_adif_header(const unsigned char *buf, int size, aac_header_t *aac_header);
-int find_aac_header(const unsigned char *buf, int size, aac_header_t *aac_header, bool emphasis_present);
+bool parse_aac_adif_header(const unsigned char *buf, int size, aac_header_c *aac_header);
+int find_aac_header(const unsigned char *buf, int size, aac_header_c *aac_header, bool emphasis_present);
 int find_consecutive_aac_headers(const unsigned char *buf, int size, int num);
 
 int get_aac_sampling_freq_idx(int sampling_freq);

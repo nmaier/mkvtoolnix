@@ -45,7 +45,7 @@ public:
   virtual connection_result_e can_connect_to(generic_packetizer_c *src, std::string &error_message);
 
 private:
-  virtual unsigned char *get_aac_packet(aac_header_t *aacheader);
+  virtual unsigned char *get_aac_packet(aac_header_c *aacheader);
   virtual int process_headerless(packet_cptr packet);
 };
 
