@@ -28,22 +28,22 @@ struct channel_arrangement {
 };
 
 static const channel_arrangement channel_arrangements[16] = {
-  { 1, "A (mono)" },
-  { 2, "A, B (dual mono)" },
-  { 2, "L, R (left, right)" },
-  { 2, "L+R, L-R (sum, difference)" },
-  { 2, "LT, RT (left and right total)" },
-  { 3, "C, L, R (center, left, right)" },
-  { 3, "L, R, S (left, right, surround)" },
-  { 4, "C, L, R, S (center, left, right, surround)" },
-  { 4, "L, R, SL, SR (left, right, surround-left, surround-right)" },
-  { 5, "C, L, R, SL, SR (center, left, right, surround-left, surround-right)" },
-  { 6, "CL, CR, L, R, SL, SR (center-left, center-right, left, right, surround-left, surround-right)" },
-  { 6, "C, L, R, LR, RR, OV (center, left, right, left-rear, right-rear, overhead)" },
-  { 6, "CF, CR, LF, RF, LR, RR  (center-front, center-rear, left-front, right-front, left-rear, right-rear)" },
-  { 7, "CL, C, CR, L, R, SL, SR  (center-left, center, center-right, left, right, surround-left, surround-right)" },
+  { 1, "A (mono)"                                                                                                                                    },
+  { 2, "A, B (dual mono)"                                                                                                                            },
+  { 2, "L, R (left, right)"                                                                                                                          },
+  { 2, "L+R, L-R (sum, difference)"                                                                                                                  },
+  { 2, "LT, RT (left and right total)"                                                                                                               },
+  { 3, "C, L, R (center, left, right)"                                                                                                               },
+  { 3, "L, R, S (left, right, surround)"                                                                                                             },
+  { 4, "C, L, R, S (center, left, right, surround)"                                                                                                  },
+  { 4, "L, R, SL, SR (left, right, surround-left, surround-right)"                                                                                   },
+  { 5, "C, L, R, SL, SR (center, left, right, surround-left, surround-right)"                                                                        },
+  { 6, "CL, CR, L, R, SL, SR (center-left, center-right, left, right, surround-left, surround-right)"                                                },
+  { 6, "C, L, R, LR, RR, OV (center, left, right, left-rear, right-rear, overhead)"                                                                  },
+  { 6, "CF, CR, LF, RF, LR, RR  (center-front, center-rear, left-front, right-front, left-rear, right-rear)"                                         },
+  { 7, "CL, C, CR, L, R, SL, SR  (center-left, center, center-right, left, right, surround-left, surround-right)"                                    },
   { 8, "CL, CR, L, R, SL1, SL2, SR1, SR2 (center-left, center-right, left, right, surround-left1, surround-left2, surround-right1, surround-right2)" },
-  { 8, "CL, C, CR, L, R, SL, S, SR (center-left, center, center-right, left, right, surround-left, surround, surround-right)" },
+  { 8, "CL, C, CR, L, R, SL, S, SR (center-left, center, center-right, left, right, surround-left, surround, surround-right)"                        },
   // other modes are not defined as of yet
 };
 
@@ -67,14 +67,14 @@ static const int transmission_bitrates[32] = {
 };
 
 enum source_pcm_resolution {
-  spr_16 = 0,
-  spr_16_ES,  //_ES means: surround channels mastered in DTS-ES
-  spr_20,
-  spr_20_ES,
-  spr_invalid4,
-  spr_24_ES,
-  spr_24,
-  spr_invalid7
+    spr_16 = 0
+  , spr_16_ES  //_ES means: surround channels mastered in DTS-ES
+  , spr_20
+  , spr_20_ES
+  , spr_invalid4
+  , spr_24_ES
+  , spr_24
+  , spr_invalid7
 };
 
 int
@@ -116,85 +116,47 @@ find_dts_header_internal(const unsigned char *buf,
 
   bit_reader_c bc(buf + offset + 4, size - offset - 4);
 
-  unsigned int t;
+  dts_header->frametype             = bc.get_bit() ? dts_header_s::FRAMETYPE_NORMAL : dts_header_s::FRAMETYPE_TERMINATION;
+  dts_header->deficit_sample_count  = (bc.get_bits(5) + 1) % 32;
+  dts_header->crc_present           = bc.get_bit();
+  dts_header->num_pcm_sample_blocks = bc.get_bits(7) + 1;
+  dts_header->frame_byte_size       = bc.get_bits(14) + 1;
 
-  t = bc.get_bit();
-  dts_header->frametype = (t)? dts_header_s::FRAMETYPE_NORMAL : dts_header_s::FRAMETYPE_TERMINATION;
-
-  t = bc.get_bits(5);
-  dts_header->deficit_sample_count = (t+1) % 32;
-
-  t = bc.get_bit();
-  dts_header->crc_present = (t)? true : false;
-
-  t = bc.get_bits(7);
-  if (t < 5)  {
-    mxwarn(Y("DTS_Header problem: invalid number of blocks in frame\n"));
-    //return -1;
-  }
-  dts_header->num_pcm_sample_blocks = t + 1;
-
-  t = bc.get_bits(14);
-  if (t < 95) {
+  if (96 > dts_header->frame_byte_size) {
     mxwarn(Y("DTS_Header problem: invalid frame bytes size\n"));
     return -1;
   }
-  dts_header->frame_byte_size = t+1;
 
-  t = bc.get_bits(6);
-  if (t >= 16) {
-    dts_header->audio_channels = -1;
+  int t = bc.get_bits(6);
+  if (16 <= t) {
+    dts_header->audio_channels            = -1;
     dts_header->audio_channel_arrangement = "unknown (user defined)";
   } else {
-    dts_header->audio_channels = channel_arrangements[t].num_channels;
-    dts_header->audio_channel_arrangement =
-      channel_arrangements[t].description;
+    dts_header->audio_channels            = channel_arrangements[t].num_channels;
+    dts_header->audio_channel_arrangement = channel_arrangements[t].description;
   }
 
-  t = bc.get_bits(4);
-  dts_header->core_sampling_frequency = core_samplefreqs[t];
-  if (core_samplefreqs[t] < 0) {
-    mxwarn(Y("DTS_Header problem: invalid core sampling frequency\n"));
-    return -1;
-  }
-
-  t = bc.get_bits(5);
-  dts_header->transmission_bitrate = transmission_bitrates[t];
-
-  dts_header->embedded_down_mix = bc.get_bit();
-  dts_header->embedded_dynamic_range = bc.get_bit();
-  dts_header->embedded_time_stamp = bc.get_bit();
-  dts_header->auxiliary_data = bc.get_bit();
-  dts_header->hdcd_master = bc.get_bit();
-
-  t = bc.get_bits(3);
-  dts_header->extension_audio_descriptor = (dts_header_s::extension_audio_descriptor_e)t;
-
-  dts_header->extended_coding = bc.get_bit();
-
+  dts_header->core_sampling_frequency    = core_samplefreqs[bc.get_bits(4)];
+  dts_header->transmission_bitrate       = transmission_bitrates[bc.get_bits(5)];
+  dts_header->embedded_down_mix          = bc.get_bit();
+  dts_header->embedded_dynamic_range     = bc.get_bit();
+  dts_header->embedded_time_stamp        = bc.get_bit();
+  dts_header->auxiliary_data             = bc.get_bit();
+  dts_header->hdcd_master                = bc.get_bit();
+  dts_header->extension_audio_descriptor = static_cast<dts_header_s::extension_audio_descriptor_e>(bc.get_bits(3));
+  dts_header->extended_coding            = bc.get_bit();
   dts_header->audio_sync_word_in_sub_sub = bc.get_bit();
+  dts_header->lfe_type                   = static_cast<dts_header_s::lfe_type_e>(bc.get_bits(2));
+  dts_header->predictor_history_flag     = bc.get_bit();
 
-  t = bc.get_bits(2);
-  dts_header->lfe_type = (dts_header_s::lfe_type_e)t;
+  if (dts_header->crc_present)
+     bc.skip_bits(16);
 
-  dts_header->predictor_history_flag = bc.get_bit();
+  dts_header->multirate_interpolator     = static_cast<dts_header_s::multirate_interpolator_e>(bc.get_bit());
+  dts_header->encoder_software_revision  = bc.get_bits(4);
+  dts_header->copy_history               = bc.get_bits(2);
 
-  if (dts_header->crc_present) {
-    t = bc.get_bits(16);
-    // unsigned short header_CRC_sum = t; // not used yet
-  }
-
-  t = bc.get_bit();
-  dts_header->multirate_interpolator = (dts_header_s::multirate_interpolator_e)t;
-
-  t = bc.get_bits(4);
-  dts_header->encoder_software_revision = t;
-
-  t = bc.get_bits(2);
-  dts_header->copy_history = t;
-
-  t = bc.get_bits(3);
-  switch (t) {
+  switch (bc.get_bits(3)) {
     case spr_16:
       dts_header->source_pcm_resolution = 16;
       dts_header->source_surround_in_es = false;
@@ -230,18 +192,12 @@ find_dts_header_internal(const unsigned char *buf,
       return -1;
   }
 
-  dts_header->front_sum_difference = bc.get_bit();
-
-  dts_header->surround_sum_difference = bc.get_bit();
-
-  t = bc.get_bits(4);
-  if (dts_header->encoder_software_revision == 7) {
-    dts_header->dialog_normalization_gain = -((int)t);
-  } else if (dts_header->encoder_software_revision == 6) {
-    dts_header->dialog_normalization_gain = -16-((int)t);
-  } else {
-    dts_header->dialog_normalization_gain = 0;
-  }
+  dts_header->front_sum_difference      = bc.get_bit();
+  dts_header->surround_sum_difference   = bc.get_bit();
+  t                                     = bc.get_bits(4);
+  dts_header->dialog_normalization_gain = 7 == dts_header->encoder_software_revision ? -t
+                                        : 6 == dts_header->encoder_software_revision ? -16 - t
+                                        :                                              0;
 
   // Detect DTS HD master audio / high resolution part
   dts_header->dts_hd       = false;
@@ -256,7 +212,7 @@ find_dts_header_internal(const unsigned char *buf,
   if (get_uint32_be(buf + hd_offset) != DTS_HD_HEADER_MAGIC)
     return offset;
 
-  dts_header->dts_hd  = true;
+  dts_header->dts_hd = true;
 
   bc.init(buf + hd_offset, size - hd_offset);
 
@@ -458,38 +414,38 @@ dts_14_to_dts_16(const unsigned short *src,
   const unsigned long l = srcwords >> 3;
 
   for (unsigned long b = 0; b < l; b++) {
-    unsigned short src_0 = (src[0]>>8) | (src[0]<<8);
-    unsigned short src_1 = (src[1]>>8) | (src[1]<<8);
+    unsigned short src_0 = (src[0] >>  8) | (src[0] << 8);
+    unsigned short src_1 = (src[1] >>  8) | (src[1] << 8);
     // 14 + 2
-    unsigned short dst_0 = (src_0 << 2)   | ((src_1 & 0x3fff) >> 12);
-    dst[0] = (dst_0>>8) | (dst_0<<8);
+    unsigned short dst_0 = (src_0  <<  2) | ((src_1 & 0x3fff) >> 12);
+    dst[0]               = (dst_0  >>  8) | (dst_0            <<  8);
     // 12 + 4
-    unsigned short src_2 = (src[2]>>8) | (src[2]<<8);
-    unsigned short dst_1 = (src_1 << 4)  | ((src_2 & 0x3fff) >> 10);
-    dst[1] = (dst_1>>8) | (dst_1<<8);
+    unsigned short src_2 = (src[2] >>  8) | (src[2]           <<  8);
+    unsigned short dst_1 = (src_1  <<  4) | ((src_2 & 0x3fff) >> 10);
+    dst[1]               = (dst_1  >>  8) | (dst_1            <<  8);
     // 10 + 6
-    unsigned short src_3 = (src[3]>>8) | (src[3]<<8);
-    unsigned short dst_2 = (src_2 << 6)  | ((src_3 & 0x3fff) >> 8);
-    dst[2] = (dst_2>>8) | (dst_2<<8);
+    unsigned short src_3 = (src[3] >>  8) | (src[3]           <<  8);
+    unsigned short dst_2 = (src_2  <<  6) | ((src_3 & 0x3fff) >>  8);
+    dst[2]               = (dst_2  >>  8) | (dst_2            <<  8);
     // 8  + 8
-    unsigned short src_4 = (src[4]>>8) | (src[4]<<8);
-    unsigned short dst_3 = (src_3 << 8)  | ((src_4 & 0x3fff) >> 6);
-    dst[3] = (dst_3>>8) | (dst_3<<8);
+    unsigned short src_4 = (src[4] >>  8) | (src[4]           <<  8);
+    unsigned short dst_3 = (src_3  <<  8) | ((src_4 & 0x3fff) >>  6);
+    dst[3]               = (dst_3  >>  8) | (dst_3            <<  8);
     // 6  + 10
-    unsigned short src_5 = (src[5]>>8) | (src[5]<<8);
-    unsigned short dst_4 = (src_4 << 10) | ((src_5 & 0x3fff) >> 4);
-    dst[4] = (dst_4>>8) | (dst_4<<8);
+    unsigned short src_5 = (src[5] >>  8) | (src[5]           <<  8);
+    unsigned short dst_4 = (src_4  << 10) | ((src_5 & 0x3fff) >>  4);
+    dst[4]               = (dst_4  >>  8) | (dst_4            <<  8);
     // 4  + 12
-    unsigned short src_6 = (src[6]>>8) | (src[6]<<8);
-    unsigned short dst_5 = (src_5 << 12) | ((src_6 & 0x3fff) >> 2);
-    dst[5] = (dst_5>>8) | (dst_5<<8);
+    unsigned short src_6 = (src[6] >>  8) | (src[6]           <<  8);
+    unsigned short dst_5 = (src_5  << 12) | ((src_6 & 0x3fff) >>  2);
+    dst[5]               = (dst_5  >>  8) | (dst_5            <<  8);
     // 2  + 14
-    unsigned short src_7 = (src[7]>>8) | (src[7]<<8);
-    unsigned short dst_6 = (src_6 << 14) | (src_7 & 0x3fff);
-    dst[6] = (dst_6>>8) | (dst_6<<8);
+    unsigned short src_7 = (src[7] >>  8) | (src[7]           <<  8);
+    unsigned short dst_6 = (src_6  << 14) | (src_7 & 0x3fff);
+    dst[6]               = (dst_6  >>  8) | (dst_6            <<  8);
 
-    dst += 7;
-    src += 8;
+    dst                 += 7;
+    src                 += 8;
   }
 }
 
@@ -498,19 +454,16 @@ detect_dts(const void *src_buf,
            int len,
            bool &dts14_to_16,
            bool &swap_bytes) {
-  int dts_swap_bytes, dts_14_16, cur_buf;
-  unsigned short *buf[2];
   dts_header_t dtsheader;
-  bool is_dts = false;
+  int dts_swap_bytes     = 0;
+  int dts_14_16          = 0;
+  bool is_dts            = false;
+  len                   &= ~0xf;
+  int cur_buf            = 0;
+  memory_cptr af_buf[2]  = { memory_c::alloc(len),                                        memory_c::alloc(len)                                        };
+  unsigned short *buf[2] = { reinterpret_cast<unsigned short *>(af_buf[0]->get_buffer()), reinterpret_cast<unsigned short *>(af_buf[1]->get_buffer()) };
 
-  len &= ~0xf;
-
-  cur_buf = 0;
-
-  buf[0] = (unsigned short *)safemalloc(len);
-  buf[1] = (unsigned short *)safemalloc(len);
-
-  for (dts_swap_bytes = 0; dts_swap_bytes < 2; dts_swap_bytes++) {
+  for (dts_swap_bytes = 0; 2 > dts_swap_bytes; ++dts_swap_bytes) {
     memcpy(buf[cur_buf], src_buf, len);
 
     if (dts_swap_bytes) {
@@ -518,7 +471,7 @@ detect_dts(const void *src_buf,
       cur_buf ^= 1;
     }
 
-    for (dts_14_16 = 0; dts_14_16 < 2; dts_14_16++) {
+    for (dts_14_16 = 0; 2 > dts_14_16; ++dts_14_16) {
       if (dts_14_16) {
         dts_14_to_dts_16(buf[cur_buf], len / 2, buf[cur_buf^1]);
         cur_buf ^= 1;
@@ -526,7 +479,7 @@ detect_dts(const void *src_buf,
 
       int dst_buf_len = dts_14_16 ? (len * 7 / 8) : len;
 
-      if (find_dts_header((const unsigned char *)buf[cur_buf], dst_buf_len, &dtsheader) >= 0) {
+      if (find_dts_header(af_buf[cur_buf]->get_buffer(), dst_buf_len, &dtsheader) >= 0) {
         is_dts = true;
         break;
       }
@@ -536,11 +489,8 @@ detect_dts(const void *src_buf,
       break;
   }
 
-  safefree(buf[0]);
-  safefree(buf[1]);
-
-  dts14_to_16 = dts_14_16 != 0;
-  swap_bytes = dts_swap_bytes != 0;
+  dts14_to_16 = dts_14_16      != 0;
+  swap_bytes  = dts_swap_bytes != 0;
 
   return is_dts;
 }
@@ -550,7 +500,7 @@ operator!=(const dts_header_t &l,
            const dts_header_t &r) {
   //if (l.frametype != r.frametype) return true;
   //if (l.deficit_sample_count != r.deficit_sample_count) return true;
-  if ((   l.crc_present                        != r.crc_present)
+  if (   (l.crc_present                        != r.crc_present)
       || (l.num_pcm_sample_blocks              != r.num_pcm_sample_blocks)
       || ((l.frame_byte_size - l.hd_part_size) != (r.frame_byte_size - r.hd_part_size))
       || (l.audio_channels                     != r.audio_channels)
