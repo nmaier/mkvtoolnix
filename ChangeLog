@@ -1,5 +1,10 @@
 2013-04-13  Moritz Bunkus  <moritz@bunkus.org>
 
+        * mkvextract: enhancement: track extraction mode: If mkvextract
+        encounters a broken file structure it will output the last
+        timecode successfully read before resyncing. After the resync the
+        first cluster timecode will be reported as well.
+
         * installer: The installation directory will no longer be added to
         the PATH environment variable.
 

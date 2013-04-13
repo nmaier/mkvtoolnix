@@ -30,7 +30,7 @@ kax_file_c::kax_file_c(mm_io_cptr &in)
   , m_resynced(false)
   , m_resync_start_pos(0)
   , m_file_size(m_in->get_size())
-  , m_timecode_scale{-1}
+  , m_timecode_scale{TIMECODE_SCALE}
   , m_last_timecode{-1}
   , m_es(new EbmlStream(*m_in))
   , m_debug_read_next(debugging_requested("kax_file|kax_file_read_next"))
@@ -188,7 +188,7 @@ kax_file_c::resync_to_level1_element_internal(uint32_t wanted_id) {
 
   uint32_t actual_id = m_in->read_uint32_be();
   int64_t start_time = get_current_time_millis();
-  bool is_cluster_id = EBML_ID_VALUE(EBML_ID(KaxCluster)) == wanted_id;
+  bool is_cluster_id = !wanted_id || (EBML_ID_VALUE(EBML_ID(KaxCluster)) == wanted_id); // 0 means: any level 1 element will do
 
   mxinfo(boost::format(Y("%1%: Error in the Matroska file structure at position %2%. Resyncing to the next level 1 element.\n"))
          % m_in->get_file_name() % m_resync_start_pos);
