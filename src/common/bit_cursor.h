@@ -135,14 +135,8 @@ public:
   }
 
   void byte_align() {
-    if (8 == m_bits_valid)
-      return;
-
-    if (m_out_of_data)
-      throw mtx::mm_io::end_of_file_x();
-
-    m_bits_valid     = 0;
-    m_byte_position += 1;
+    if (8 != m_bits_valid)
+      skip_bits(m_bits_valid);
   }
 
   void set_bit_position(unsigned int pos) {
