@@ -219,7 +219,7 @@ public:
 
   virtual void found_new_stream(mpeg_ps_id_t id);
 
-  virtual bool read_timestamp(bit_cursor_c &bc, int64_t &timestamp);
+  virtual bool read_timestamp(bit_reader_c &bc, int64_t &timestamp);
   virtual bool read_timestamp(int c, int64_t &timestamp);
   virtual mpeg_ps_packet_c parse_packet(mpeg_ps_id_t id, bool read_data = true);
   virtual bool find_next_packet(mpeg_ps_id_t &id, int64_t max_file_pos = -1);

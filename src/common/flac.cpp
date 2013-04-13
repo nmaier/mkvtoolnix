@@ -25,7 +25,7 @@
 #include "common/flac.h"
 
 static bool
-flac_skip_utf8(bit_cursor_c &bits,
+flac_skip_utf8(bit_reader_c &bits,
                int size) {
 
   uint32_t value = bits.get_bits(8);
@@ -58,7 +58,7 @@ int
 flac_get_num_samples_internal(unsigned char *mem,
                               int size,
                               FLAC__StreamMetadata_StreamInfo &stream_info) {
-  bit_cursor_c bits(mem, size);
+  bit_reader_c bits(mem, size);
 
   // Sync word: 11 1111 1111 1110
   if (bits.peek_bits(14) != 0x3ffe)

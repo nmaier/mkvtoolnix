@@ -56,8 +56,8 @@ namespace ac3 {
     bool is_eac3() const;
     void add_dependent_frame(frame_c const &frame, unsigned char const *buffer, size_t buffer_size);
     bool decode_header(unsigned char const *buffer, size_t buffer_size);
-    bool decode_header_type_eac3(bit_cursor_c &bc);
-    bool decode_header_type_ac3(bit_cursor_c &bc);
+    bool decode_header_type_eac3(bit_reader_c &bc);
+    bool decode_header_type_ac3(bit_reader_c &bc);
 
     std::string to_string(bool verbose) const;
 

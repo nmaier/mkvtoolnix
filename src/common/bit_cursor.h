@@ -8,7 +8,7 @@
 
    A class for file-like access on the bit level
 
-   The bit_cursor_c class was originally written by Peter Niemayer
+   The bit_reader_c class was originally written by Peter Niemayer
      <niemayer@isg.de> and modified by Moritz Bunkus <moritz@bunkus.org>.
 */
 
@@ -19,7 +19,7 @@
 
 #include "common/mm_io_x.h"
 
-class bit_cursor_c {
+class bit_reader_c {
 private:
   const unsigned char *m_end_of_data;
   const unsigned char *m_byte_position;
@@ -28,7 +28,7 @@ private:
   bool m_out_of_data;
 
 public:
-  bit_cursor_c(const unsigned char *data, unsigned int len) {
+  bit_reader_c(const unsigned char *data, unsigned int len) {
     init(data, len);
   }
 
@@ -167,6 +167,7 @@ public:
     set_bit_position(get_bit_position() + 1);
   }
 };
+typedef std::shared_ptr<bit_reader_c> bit_reader_cptr;
 
 class bit_writer_c {
 private:
@@ -187,7 +188,7 @@ public:
   {
   }
 
-  uint64_t copy_bits(unsigned int n, bit_cursor_c &src) {
+  uint64_t copy_bits(unsigned int n, bit_reader_c &src) {
     uint64_t value = src.get_bits(n);
     put_bits(n, value);
 
@@ -248,6 +249,6 @@ public:
     return pos;
   }
 };
-typedef std::shared_ptr<bit_cursor_c> bit_cursor_cptr;
+typedef std::shared_ptr<bit_writer_c> bit_writer_cptr;
 
 #endif // MTX_COMMON_BIT_CURSOR_H

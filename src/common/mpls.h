@@ -88,7 +88,7 @@ protected:
   playlist_t m_playlist;
   std::vector<timecode_c> m_chapters;
 
-  bit_cursor_cptr m_bc;
+  bit_reader_cptr m_bc;
 
 public:
   parser_c();

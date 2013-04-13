@@ -60,7 +60,7 @@ ac3::frame_c::add_dependent_frame(frame_c const &frame,
 bool
 ac3::frame_c::decode_header(unsigned char const *buffer,
                             size_t buffer_size) {
-  bit_cursor_c bc(buffer, buffer_size);
+  bit_reader_c bc(buffer, buffer_size);
 
   try {
     init();
@@ -81,7 +81,7 @@ ac3::frame_c::decode_header(unsigned char const *buffer,
 }
 
 bool
-ac3::frame_c::decode_header_type_eac3(bit_cursor_c &bc) {
+ac3::frame_c::decode_header_type_eac3(bit_reader_c &bc) {
   static const int sample_rates[] = { 48000, 44100, 32000, 24000, 22050, 16000 };
   static const int channels[]     = {     2,     1,     2,     3,     3,     4,     4,     5 };
   static const int samples[]      = {   256,   512,   768,  1536 };
@@ -111,7 +111,7 @@ ac3::frame_c::decode_header_type_eac3(bit_cursor_c &bc) {
 }
 
 bool
-ac3::frame_c::decode_header_type_ac3(bit_cursor_c &bc) {
+ac3::frame_c::decode_header_type_ac3(bit_reader_c &bc) {
   static const uint16_t sample_rates[]     = { 48000, 44100, 32000 };
   static const uint8_t channel_modes[]     = {  2,  1,  2,  3,  3,  4,  4,   5 };
   static const uint16_t bit_rates[]        = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 384, 448, 512, 576, 640 };

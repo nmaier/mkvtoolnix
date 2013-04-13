@@ -76,9 +76,9 @@ namespace clpi {
     virtual void dump();
 
   protected:
-    virtual void parse_header(bit_cursor_cptr &bc);
-    virtual void parse_program_info(bit_cursor_cptr &bc);
-    virtual void parse_program_stream(bit_cursor_cptr &bc, program_cptr &program);
+    virtual void parse_header(bit_reader_cptr &bc);
+    virtual void parse_program_info(bit_reader_cptr &bc);
+    virtual void parse_program_stream(bit_reader_cptr &bc, program_cptr &program);
   };
   typedef std::shared_ptr<parser_c> parser_cptr;
 

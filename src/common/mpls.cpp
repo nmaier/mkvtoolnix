@@ -122,13 +122,13 @@ parser_c::parse(mm_io_c *file) {
       throw mtx::mpls::exception(boost::format("File too small or too big: %1%") % file_size);
 
     auto content = file->read(4 * 5);
-    m_bc         = std::make_shared<bit_cursor_c>(content->get_buffer(), 4 * 5);
+    m_bc         = std::make_shared<bit_reader_c>(content->get_buffer(), 4 * 5);
     parse_header();
 
     file->setFilePointer(0);
 
     content = file->read(file_size);
-    m_bc    = std::make_shared<bit_cursor_c>(content->get_buffer(), file_size);
+    m_bc    = std::make_shared<bit_reader_c>(content->get_buffer(), file_size);
 
     parse_playlist();
     parse_chapters();

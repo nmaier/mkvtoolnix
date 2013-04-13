@@ -78,7 +78,7 @@ vc1::parse_sequence_header(const unsigned char *buf,
     static const int s_framerate_nr[5] = { 24, 25, 30, 50, 60 };
     static const int s_framerate_dr[2] = { 1000, 1001 };
 
-    bit_cursor_c bc(buf, size);
+    bit_reader_c bc(buf, size);
     vc1::sequence_header_t hdr;
 
     bc.skip_bits(32);           // Marker
@@ -172,7 +172,7 @@ vc1::parse_entrypoint(const unsigned char *buf,
                       vc1::entrypoint_t &entrypoint,
                       vc1::sequence_header_t &seqhdr) {
   try {
-    bit_cursor_c bc(buf, size);
+    bit_reader_c bc(buf, size);
     vc1::entrypoint_t ep;
 
     bc.skip_bits(32);           // marker
@@ -222,7 +222,7 @@ vc1::parse_frame_header(const unsigned char *buf,
                         frame_header_t &frame_header,
                         vc1::sequence_header_t &seqhdr) {
   try {
-    bit_cursor_c bc(buf, size);
+    bit_reader_c bc(buf, size);
     vc1::frame_header_t fh;
 
     bc.skip_bits(32);           // marker

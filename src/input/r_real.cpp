@@ -637,7 +637,7 @@ real_reader_c::get_rv_dimensions(unsigned char *buf,
   static const uint32_t cw[8]  = { 160, 176, 240, 320, 352, 640, 704, 0 };
   static const uint32_t ch1[8] = { 120, 132, 144, 240, 288, 480,   0, 0 };
   static const uint32_t ch2[4] = { 180, 360, 576,   0 };
-  bit_cursor_c bc(buf, size);
+  bit_reader_c bc(buf, size);
 
   try {
     bc.skip_bits(13);

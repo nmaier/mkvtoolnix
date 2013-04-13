@@ -235,7 +235,7 @@ mpeg_ps_reader_c::read_timestamp(int c,
 }
 
 bool
-mpeg_ps_reader_c::read_timestamp(bit_cursor_c &bc,
+mpeg_ps_reader_c::read_timestamp(bit_reader_c &bc,
                                  int64_t &timestamp) {
   bc.skip_bits(4);
   int64_t temp_timestamp = bc.get_bits(3);
@@ -378,7 +378,7 @@ mpeg_ps_reader_c::parse_packet(mpeg_ps_id_t id,
     if (m_in->read(af_header->get_buffer(), hdrlen) != hdrlen)
       return packet;
 
-    bit_cursor_c bc(af_header->get_buffer(), hdrlen);
+    bit_reader_c bc(af_header->get_buffer(), hdrlen);
 
     try {
       // PTS

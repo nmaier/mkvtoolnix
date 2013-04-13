@@ -40,7 +40,7 @@ static bool
 parse_aac_adif_header_internal(const unsigned char *buf,
                                int size,
                                aac_header_t *aac_header) {
-  bit_cursor_c bc(buf, size);
+  bit_reader_c bc(buf, size);
 
   int profile             = 0;
   int sfreq_index         = 0;
@@ -122,7 +122,7 @@ is_adts_header(const unsigned char *buf,
                int size,
                aac_header_t *aac_header,
                bool emphasis_present) {
-  bit_cursor_c bc(buf, size);
+  bit_reader_c bc(buf, size);
 
   if (bc.get_bits(12) != 0xfff)            // ADTS header
     return false;

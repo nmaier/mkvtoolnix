@@ -217,7 +217,7 @@ static const struct {
 };
 
 static int
-gecopy(bit_cursor_c &r,
+gecopy(bit_reader_c &r,
        bit_writer_c &w) {
   int	n = 0, bit;
 
@@ -234,7 +234,7 @@ gecopy(bit_cursor_c &r,
 }
 
 static int
-geread(bit_cursor_c &r) {
+geread(bit_reader_c &r) {
   int	n = 0, bit;
 
   while ((bit = r.get_bit()) == 0)
@@ -246,20 +246,20 @@ geread(bit_cursor_c &r) {
 }
 
 static int
-sgeread(bit_cursor_c &r) {
+sgeread(bit_reader_c &r) {
   int v = geread(r);
   return v & 1 ? (v + 1) / 2 : -(v / 2);
 }
 
 static int
-sgecopy(bit_cursor_c &r,
+sgecopy(bit_reader_c &r,
         bit_writer_c &w) {
   int v = gecopy(r, w);
   return v & 1 ? (v + 1) / 2 : -(v / 2);
 }
 
 static void
-hrdcopy(bit_cursor_c &r,
+hrdcopy(bit_reader_c &r,
         bit_writer_c &w) {
   int ncpb = gecopy(r,w);       // cpb_cnt_minus1
   w.copy_bits(4, r);            // bit_rate_scale
@@ -276,7 +276,7 @@ hrdcopy(bit_cursor_c &r,
 }
 
 static void
-slcopy(bit_cursor_c &r,
+slcopy(bit_reader_c &r,
        bit_writer_c &w,
        int size) {
   int delta, next = 8, j;
@@ -495,7 +495,7 @@ mpeg4::p10::parse_sps(memory_cptr &buffer,
   int size              = buffer->get_size();
   auto mcptr_newsps     = memory_c::alloc(size + add_space);
   auto newsps           = mcptr_newsps->get_buffer();
-  bit_cursor_c r(buffer->get_buffer(), size);
+  bit_reader_c r(buffer->get_buffer(), size);
   bit_writer_c w(newsps, size + add_space);
   int i, nref, mb_width, mb_height;
 
@@ -739,7 +739,7 @@ bool
 mpeg4::p10::parse_pps(memory_cptr &buffer,
                       pps_info_t &pps) {
   try {
-    bit_cursor_c r(buffer->get_buffer(), buffer->get_size());
+    bit_reader_c r(buffer->get_buffer(), buffer->get_size());
 
     memset(&pps, 0, sizeof(pps));
 
@@ -1300,7 +1300,7 @@ mpeg4::p10::avc_es_parser_c::handle_sei_nalu(memory_cptr &nalu) {
   try {
     nalu_to_rbsp(nalu);
 
-    bit_cursor_c r(nalu->get_buffer(), nalu->get_size());
+    bit_reader_c r(nalu->get_buffer(), nalu->get_size());
 
     r.skip_bits(8);
 
@@ -1389,7 +1389,7 @@ bool
 mpeg4::p10::avc_es_parser_c::parse_slice(memory_cptr &buffer,
                                          slice_info_t &si) {
   try {
-    bit_cursor_c r(buffer->get_buffer(), buffer->get_size());
+    bit_reader_c r(buffer->get_buffer(), buffer->get_size());
 
     memset(&si, 0, sizeof(si));
 

@@ -114,7 +114,7 @@ find_dts_header_internal(const unsigned char *buf,
     // no header found
     return -1;
 
-  bit_cursor_c bc(buf + offset + 4, size - offset - 4);
+  bit_reader_c bc(buf + offset + 4, size - offset - 4);
 
   unsigned int t;
 
