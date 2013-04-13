@@ -151,12 +151,20 @@ public:
     m_bits_valid    = 8 - (pos % 8);
   }
 
-  int get_bit_position() {
+  int get_bit_position() const {
     return (m_byte_position - m_start_of_data) * 8 + 8 - m_bits_valid;
+  }
+
+  int get_remaining_bits() const {
+    return (m_end_of_data - m_byte_position) * 8 - 8 + m_bits_valid;
   }
 
   void skip_bits(unsigned int num) {
     set_bit_position(get_bit_position() + num);
+  }
+
+  void skip_bit() {
+    set_bit_position(get_bit_position() + 1);
   }
 };
 
