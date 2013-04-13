@@ -59,7 +59,33 @@ AC_DEFUN([AX_WNO_SELF_ASSIGN_FLAG],[
   AC_SUBST(WNO_SELF_ASSIGN)
 ])
 
+AC_DEFUN([AX_WNO_MISMATCHED_TAGS_FLAG],[
+  AC_CACHE_CHECK([for the compiler flag "-Wno-mismatched-tags"], [ax_cv_wno_mismatched_tags_flag],[
+
+    CXXFLAGS_SAVED=$CXXFLAGS
+    CXXFLAGS="$CXXFLAGS -Wno-mismatched-tags"
+    export CXXFLAGS
+
+    AC_LANG_PUSH(C++)
+    AC_TRY_COMPILE(
+      [],
+      [1;],
+      [ax_cv_wno_mismatched_tags_flag="yes"],
+      [ax_cv_wno_mismatched_tags_flag="no"])
+    AC_LANG_POP
+
+    CXXFLAGS="$CXXFLAGS_SAVED"
+  ])
+
+  WNO_MISMATCHED_TAGS=""
+  if test x"$ax_cv_wno_mismatched_tags_flag" = xyes ; then
+    WNO_MISMATCHED_TAGS="-Wno-mismatched-tags"
+  fi
+  AC_SUBST(WNO_MISMATCHED_TAGS)
+])
+
 AX_QUNUSED_ARGUMENTS_FLAG
+AX_WNO_MISMATCHED_TAGS_FLAG
 AX_WNO_SELF_ASSIGN_FLAG
 AX_COMPILER_IS_CLANG
 AC_SUBST(USE_CLANG)
