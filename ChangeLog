@@ -1,5 +1,9 @@
 2013-04-13  Moritz Bunkus  <moritz@bunkus.org>
 
+        * mkvmerge: bug fix: DTS parsing: no more warnings about
+        incompatible encoder revision numbers will be printed. Fixes
+        #866.
+
         * mkvextract: enhancement: track extraction mode: If mkvextract
         encounters a broken file structure it will output the last
         timecode successfully read before resyncing. After the resync the

@@ -189,10 +189,6 @@ find_dts_header_internal(const unsigned char *buf,
 
   t = bc.get_bits(4);
   dts_header->encoder_software_revision = t;
-  if (t > 7) {
-    mxwarn(Y("DTS_Header problem: encoded with an incompatible new encoder version\n"));
-    return -1;
-  }
 
   t = bc.get_bits(2);
   dts_header->copy_history = t;
