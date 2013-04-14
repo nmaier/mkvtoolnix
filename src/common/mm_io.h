@@ -53,6 +53,7 @@ public:
   virtual uint32_t read_uint32_le();
   virtual uint64_t read_uint64_le();
   virtual uint16_t read_uint16_be();
+  virtual int32_t read_int24_be();
   virtual uint32_t read_uint24_be();
   virtual uint32_t read_uint32_be();
   virtual uint64_t read_uint64_be();

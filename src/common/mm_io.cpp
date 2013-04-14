@@ -355,6 +355,11 @@ mm_io_c::read_uint16_be() {
   return get_uint16_be(buffer);
 }
 
+int32_t
+mm_io_c::read_int24_be() {
+  return (static_cast<int32_t>(read_uint24_be()) + 0xff800000) ^ 0xff800000;
+}
+
 uint32_t
 mm_io_c::read_uint24_be() {
   unsigned char buffer[3];
