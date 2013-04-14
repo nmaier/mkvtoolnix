@@ -522,7 +522,7 @@ flv_reader_c::process_video_tag_avc(flv_track_cptr &track) {
 
   track->m_fourcc          = "AVC1";
   uint8_t avc_packet_type  = m_in->read_uint8();
-  track->m_v_cts_offset    = static_cast<int64_t>(m_in->read_uint24_be());
+  track->m_v_cts_offset    = m_in->read_int24_be();
   m_tag.m_data_size       -= 4;
 
   // The CTS offset is only valid for NALUs.
