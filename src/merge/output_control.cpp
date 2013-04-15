@@ -109,6 +109,7 @@
 #include "input/r_wav.h"
 #include "input/r_wavpack.h"
 #include "merge/cluster_helper.h"
+#include "merge/cues.h"
 #include "merge/mkvmerge.h"
 #include "merge/output_control.h"
 #include "merge/debugging.h"
@@ -166,7 +167,6 @@ bool g_identify_for_mmg                     = false;
 KaxSegment *g_kax_segment                   = nullptr;
 KaxTracks *g_kax_tracks                     = nullptr;
 KaxTrackEntry *g_kax_last_entry             = nullptr;
-KaxCues *g_kax_cues                         = nullptr;
 KaxSeekHead *g_kax_sh_main                  = nullptr;
 KaxSeekHead *g_kax_sh_cues                  = nullptr;
 kax_chapters_cptr g_kax_chapters;
@@ -282,7 +282,7 @@ sighandler(int /* signum */) {
   mxinfo(Y("The file is being fixed, part 1/4..."));
   // Render the cues.
   if (g_write_cues && g_cue_writing_requested)
-    g_kax_cues->Render(*s_out);
+    cues_c::get().write(*s_out, *g_kax_sh_main);
   mxinfo(Y(" done\n"));
 
   mxinfo(Y("The file is being fixed, part 2/4..."));
@@ -295,10 +295,6 @@ sighandler(int /* signum */) {
   mxinfo(Y(" done\n"));
 
   mxinfo(Y("The file is being fixed, part 3/4..."));
-  // Write meta seek information if it is not disabled.
-  if (g_cue_writing_requested)
-    g_kax_sh_main->IndexThis(*g_kax_cues, *g_kax_segment);
-
   if ((g_kax_sh_main->ListSize() > 0) && !hack_engaged(ENGAGE_NO_META_SEEK)) {
     g_kax_sh_main->UpdateSize();
     if (s_kax_sh_void->ReplaceWith(*g_kax_sh_main, *s_out, true) == INVALID_FILEPOS_T)
@@ -549,6 +545,9 @@ display_progress(bool is_100percent = false) {
   if (!display_progress)
     return;
 
+  // if (2 < current_percentage)
+  //   exit(42);
+
   mxinfo(boost::format(Y("Progress: %1%%%%2%")) % current_percentage % "\r");
 
   s_previous_percentage  = current_percentage;
@@ -658,8 +657,6 @@ set_timecode_scale() {
 
   g_max_ns_per_cluster = std::min<int64_t>(32700 * g_timecode_scale, g_max_ns_per_cluster);
   GetChild<KaxTimecodeScale>(s_kax_infos).SetValue(g_timecode_scale);
-
-  g_kax_cues->SetGlobalTimecodeScale(g_timecode_scale);
 
   mxdebug_if(debug, boost::format("timecode_scale: %1% max ns per cluster: %2%\n") % g_timecode_scale % g_max_ns_per_cluster);
 }
@@ -871,26 +868,27 @@ adjust_cue_and_seekhead_positions(int64_t original_offset,
   if (!delta)
     return;
 
-  if (g_kax_cues)
-    for (auto cues_child : g_kax_cues->GetElementList()) {
-      auto point = dynamic_cast<KaxCuePoint *>(cues_child);
-      if (!point)
-        continue;
+  // TODO: read cues from temporary storage file, adjust, write back
+  // if (g_cue_writing_requested)
+  //   for (auto cues_child : g_kax_cues->GetElementList()) {
+  //     auto point = dynamic_cast<KaxCuePoint *>(cues_child);
+  //     if (!point)
+  //       continue;
 
-      for (auto point_child : *point) {
-        auto positions = dynamic_cast<KaxCueTrackPositions *>(point_child);
-        if (!positions)
-          continue;
+  //     for (auto point_child : *point) {
+  //       auto positions = dynamic_cast<KaxCueTrackPositions *>(point_child);
+  //       if (!positions)
+  //         continue;
 
-        auto &cluster_position = GetChild<KaxCueClusterPosition>(positions);
-        auto old_value         = cluster_position.GetValue();
-        bool is_affected       = old_value < relative_original_offset;
-        auto new_value         = is_affected ? old_value : old_value + (delta > 0 ? delta : std::min<int64_t>(old_value, delta));
-        cluster_position.SetValue(new_value);
+  //       auto &cluster_position = GetChild<KaxCueClusterPosition>(positions);
+  //       auto old_value         = cluster_position.GetValue();
+  //       bool is_affected       = old_value < relative_original_offset;
+  //       auto new_value         = is_affected ? old_value : old_value + (delta > 0 ? delta : std::min<int64_t>(old_value, delta));
+  //       cluster_position.SetValue(new_value);
 
-        mxdebug_if(s_debug_rerender_track_headers, boost::format("[rerender]  Cluster position: affected? %1% old %2% new %3%\n") % is_affected % old_value % new_value);
-      }
-    }
+  //       mxdebug_if(s_debug_rerender_track_headers, boost::format("[rerender]  Cluster position: affected? %1% old %2% new %3%\n") % is_affected % old_value % new_value);
+  //     }
+  //   }
 
   // TODO: adjust meta seek
 }
@@ -1608,10 +1606,7 @@ create_next_output_file() {
   mxdebug_if(debugging_requested("splitting"), boost::format("splitting: Create next output file; splitting? %1% discarding? %2%\n") % g_cluster_helper->splitting() % g_cluster_helper->discarding());
 
   auto this_outfile   = g_cluster_helper->split_mode_produces_many_files() ? create_output_name() : g_outfile;
-
   g_kax_segment       = new KaxSegment();
-  g_kax_cues          = new KaxCues();
-  g_kax_cues->SetGlobalTimecodeScale((int64_t)g_timecode_scale);
 
   // Open the output file.
   try {
@@ -1624,6 +1619,7 @@ create_next_output_file() {
     mxinfo(boost::format(Y("The file '%1%' has been opened for writing.\n")) % this_outfile);
 
   g_cluster_helper->set_output(s_out.get());
+
   render_headers(s_out.get());
   render_attachments(s_out.get());
   render_chapter_void_placeholder();
@@ -1724,7 +1720,7 @@ finish_file(bool last_file,
   if (g_write_cues && g_cue_writing_requested) {
     if (do_output)
       mxinfo(Y("The cue entries (the index) are being written...\n"));
-    g_kax_cues->Render(*s_out);
+    cues_c::get().write(*s_out, *g_kax_sh_main);
   }
 
   // Now re-render the s_kax_duration and fill in the biggest timecode
@@ -1810,10 +1806,6 @@ finish_file(bool last_file,
 
   }
 
-  // Write meta seek information if it is not disabled.
-  if (g_cue_writing_requested)
-    g_kax_sh_main->IndexThis(*g_kax_cues, *g_kax_segment);
-
   if (tags_here) {
     g_kax_sh_main->IndexThis(*tags_here, *g_kax_segment);
     delete tags_here;
@@ -1853,7 +1845,6 @@ finish_file(bool last_file,
   g_kax_segment->RemoveAll();
 
   delete g_kax_segment;
-  delete g_kax_cues;
   delete s_kax_sh_void;
   delete g_kax_sh_main;
   delete s_void_after_track_headers;

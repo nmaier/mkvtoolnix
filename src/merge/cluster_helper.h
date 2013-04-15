@@ -42,8 +42,6 @@ public:
 };
 typedef std::shared_ptr<render_groups_c> render_groups_cptr;
 
-typedef std::pair<int64_t, int64_t> id_timecode_t;
-
 class cluster_helper_c {
 private:
   kax_cluster_c *m_cluster;
@@ -60,14 +58,9 @@ private:
   std::vector<split_point_c> m_split_points;
   std::vector<split_point_c>::iterator m_current_split_point;
 
-  std::map<id_timecode_t, int64_t> m_id_timecode_duration_map;
-  size_t m_num_cue_points_postprocessed;
-
   bool m_discarding, m_splitting_and_processed_fully;
 
-  bool m_no_cue_duration, m_no_cue_relative_position;
-
-  bool m_debug_splitting, m_debug_packets, m_debug_duration, m_debug_rendering, m_debug_cue_duration, m_debug_cue_relative_position;
+  bool m_debug_splitting, m_debug_packets, m_debug_duration, m_debug_rendering;
 
 public:
   cluster_helper_c();
@@ -127,9 +120,7 @@ private:
   void split_if_necessary(packet_cptr &packet);
   void split(packet_cptr &packet);
 
-  bool add_to_cues_maybe(packet_cptr &pack, kax_block_blob_c &block_group);
-  void postprocess_cues();
-  std::map<id_timecode_t, int64_t> calculate_block_positions() const;
+  bool add_to_cues_maybe(packet_cptr &pack);
 };
 
 extern cluster_helper_c *g_cluster_helper;

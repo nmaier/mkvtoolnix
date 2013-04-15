@@ -188,7 +188,6 @@ extern KaxTags *g_tags_from_cue_chapters;
 extern KaxSegment *g_kax_segment;
 extern KaxTracks *g_kax_tracks;
 extern KaxTrackEntry *g_kax_last_entry;
-extern KaxCues *g_kax_cues;
 extern KaxSeekHead *g_kax_sh_main, *g_kax_sh_cues;
 extern kax_chapters_cptr g_kax_chapters;
 extern int64_t g_tags_size;

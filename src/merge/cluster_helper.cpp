@@ -19,6 +19,7 @@
 #include "common/math.h"
 #include "common/strings/formatting.h"
 #include "merge/cluster_helper.h"
+#include "merge/cues.h"
 #include "merge/libmatroska_extensions.h"
 #include "merge/output_control.h"
 #include "output/p_video.h"
@@ -51,17 +52,12 @@ cluster_helper_c::cluster_helper_c()
   , m_first_video_keyframe_seen{}
   , m_out(nullptr)
   , m_current_split_point(m_split_points.begin())
-  , m_num_cue_points_postprocessed{}
   , m_discarding{false}
   , m_splitting_and_processed_fully{false}
-  , m_no_cue_duration{hack_engaged(ENGAGE_NO_CUE_DURATION)}
-  , m_no_cue_relative_position{hack_engaged(ENGAGE_NO_CUE_RELATIVE_POSITION)}
   , m_debug_splitting{debugging_requested("cluster_helper|splitting")}
   , m_debug_packets{  debugging_requested("cluster_helper|cluster_helper_packets")}
   , m_debug_duration{ debugging_requested("cluster_helper|cluster_helper_duration")}
   , m_debug_rendering{debugging_requested("cluster_helper|cluster_helper_rendering")}
-  , m_debug_cue_duration{debugging_requested("cluster_helper|cluster_helper_cue_duration")}
-  , m_debug_cue_relative_position{debugging_requested("cluster_helper|cluster_helper_cue_relative_position")}
 {
 }
 
@@ -206,7 +202,6 @@ cluster_helper_c::split(packet_cptr &packet) {
     m_bytes_in_file          =  0;
     m_first_timecode_in_file = -1;
     m_max_timecode_in_file   = -1;
-    m_num_cue_points_postprocessed = 0;
   }
 
   m_first_timecode_in_part = -1;
@@ -332,8 +327,8 @@ cluster_helper_c::must_duration_be_set(render_groups_c *rg,
 int
 cluster_helper_c::render() {
   std::vector<render_groups_cptr> render_groups;
-
-  m_id_timecode_duration_map.clear();
+  KaxCues cues;
+  cues.SetGlobalTimecodeScale(g_timecode_scale);
 
   bool use_simpleblock    = !hack_engaged(ENGAGE_NO_SIMPLE_BLOCKS);
 
@@ -444,7 +439,7 @@ cluster_helper_c::render() {
     render_group->m_durations.push_back(pack->get_unmodified_duration());
     render_group->m_duration_mandatory |= pack->duration_mandatory;
 
-    m_id_timecode_duration_map[ id_timecode_t{ source->get_track_num(), pack->assigned_timecode - timecode_offset } ] = pack->get_duration();
+    cues_c::get().set_duration_for_id_timecode(source->get_track_num(), pack->assigned_timecode - timecode_offset, pack->get_duration());
 
     if (new_block_group) {
       // Set the reference priority if it was wanted.
@@ -469,8 +464,11 @@ cluster_helper_c::render() {
     if (!new_block_group)
       new_block_group = previous_block_group;
 
-    else if (g_write_cues && (!added_to_cues || has_codec_state))
-      added_to_cues = add_to_cues_maybe(pack, *new_block_group);
+    else if (g_write_cues && (!added_to_cues || has_codec_state)) {
+      added_to_cues = add_to_cues_maybe(pack);
+      if (added_to_cues)
+        cues.AddBlockBlob(*new_block_group);
+    }
 
     pack->group = new_block_group;
   }
@@ -484,7 +482,7 @@ cluster_helper_c::render() {
       m_cluster->set_min_timecode(min_cl_timecode - timecode_offset);
       m_cluster->set_max_timecode(max_cl_timecode - timecode_offset);
 
-      m_cluster->Render(*m_out, *g_kax_cues);
+      m_cluster->Render(*m_out, cues);
       m_bytes_in_file += m_cluster->ElementSize();
 
       if (g_kax_sh_cues)
@@ -492,7 +490,8 @@ cluster_helper_c::render() {
 
       m_previous_cluster_tc = m_cluster->GlobalTimecode();
 
-      postprocess_cues();
+      cues_c::get().postprocess_cues(cues, *m_cluster);
+
     } else
       m_previous_cluster_tc = -1;
   }
@@ -506,8 +505,7 @@ cluster_helper_c::render() {
 }
 
 bool
-cluster_helper_c::add_to_cues_maybe(packet_cptr &pack,
-                                    kax_block_blob_c &block_group) {
+cluster_helper_c::add_to_cues_maybe(packet_cptr &pack) {
   auto &source  = *pack->source;
   auto strategy = source.get_cue_creation();
 
@@ -531,98 +529,12 @@ cluster_helper_c::add_to_cues_maybe(packet_cptr &pack,
   if (!add)
     return false;
 
-  g_kax_cues->AddBlockBlob(block_group);
   source.set_last_cue_timecode(pack->assigned_timecode);
 
   ++m_num_cue_elements;
   g_cue_writing_requested = 1;
 
   return true;
-}
-
-std::map<id_timecode_t, int64_t>
-cluster_helper_c::calculate_block_positions()
-  const {
-
-  std::map<id_timecode_t, int64_t> positions;
-
-  for (auto child : *m_cluster) {
-    auto simple_block = dynamic_cast<KaxSimpleBlock *>(child);
-    if (simple_block) {
-      simple_block->SetParent(*m_cluster);
-      positions[ id_timecode_t{ simple_block->TrackNum(), simple_block->GlobalTimecode() } ] = simple_block->GetElementPosition();
-      continue;
-    }
-
-    auto block_group = dynamic_cast<KaxBlockGroup *>(child);
-    if (!block_group)
-      continue;
-
-    auto block = FindChild<KaxBlock>(block_group);
-    if (!block)
-      continue;
-
-    block->SetParent(*m_cluster);
-    positions[ id_timecode_t{ block->TrackNum(), block->GlobalTimecode() } ] = block->GetElementPosition();
-  }
-
-  return positions;
-}
-
-void
-cluster_helper_c::postprocess_cues() {
-  if (!g_kax_cues || !m_cluster)
-    return;
-
-  if (m_no_cue_duration && m_no_cue_relative_position)
-    return;
-
-  auto cluster_data_start_pos = m_cluster->GetElementPosition() + m_cluster->HeadSize();
-  auto block_positions        = calculate_block_positions();
-
-  auto &children = g_kax_cues->GetElementList();
-  for (auto size = children.size(); m_num_cue_points_postprocessed < size; ++m_num_cue_points_postprocessed) {
-    auto point = dynamic_cast<KaxCuePoint *>(children[m_num_cue_points_postprocessed]);
-    if (!point)
-      continue;
-
-    auto time = static_cast<int64_t>(GetChild<KaxCueTime>(point).GetValue() * g_timecode_scale);
-
-    for (auto child : *point) {
-      auto positions = dynamic_cast<KaxCueTrackPositions *>(child);
-      if (!positions)
-        continue;
-
-      auto track_num = GetChild<KaxCueTrack>(positions).GetValue();
-
-      // Set CueRelativePosition for all cues.
-      if (!m_no_cue_relative_position) {
-        auto position_itr = block_positions.find({ track_num, time });
-        auto position     = block_positions.end() != position_itr ? std::max<int64_t>(position_itr->second, cluster_data_start_pos) : 0ll;
-        if (position)
-          GetChild<KaxCueRelativePosition>(positions).SetValue(position - cluster_data_start_pos);
-
-        mxdebug_if(m_debug_cue_relative_position,
-                   boost::format("cue_relative_position: looking for <%1%:%2%>: cluster_data_start_pos %3% position %4%\n")
-                   % track_num % time % cluster_data_start_pos % position);
-      }
-
-      // Set CueDuration if the packetizer wants them.
-      if (m_no_cue_duration)
-        continue;
-
-      auto duration_itr = m_id_timecode_duration_map.find({ track_num, time });
-      auto ptzr         = g_packetizers_by_track_num[track_num];
-
-      if (!ptzr || !ptzr->wants_cue_duration())
-        continue;
-
-      if ((m_id_timecode_duration_map.end() != duration_itr) && (0 < duration_itr->second))
-        GetChild<KaxCueDuration>(positions).SetValue(RND_TIMECODE_SCALE(duration_itr->second) / g_timecode_scale);
-
-      mxdebug_if(m_debug_cue_duration, boost::format("cue_duration: looking for <%1%:%2%>: %3%\n") % track_num % time % (duration_itr == m_id_timecode_duration_map.end() ? static_cast<int64_t>(-1) : duration_itr->second));
-    }
-  }
 }
 
 int64_t

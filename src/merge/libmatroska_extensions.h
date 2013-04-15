@@ -84,4 +84,16 @@ public:
 };
 typedef std::shared_ptr<kax_block_blob_c> kax_block_blob_cptr;
 
+class kax_cues_position_dummy_c: public KaxCues {
+public:
+  kax_cues_position_dummy_c()
+    : KaxCues{}
+  {
+  }
+
+  filepos_t Render(IOCallback &output) {
+    return EbmlElement::Render(output, true, false, true);
+  }
+};
+
 #endif // MTX_LIBMATROSKA_EXTENSIONS
