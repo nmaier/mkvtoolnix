@@ -45,6 +45,8 @@ int kt_get_a_bps(KaxTrackEntry &track);
 int kt_get_v_pixel_width(KaxTrackEntry &track);
 int kt_get_v_pixel_height(KaxTrackEntry &track);
 
+int write_ebml_element_head(mm_io_c &out, EbmlId const &id, int64_t content_size);
+
 #define is_id(e, ref) (EbmlId(*e) == EBML_ID(ref))
 #if !defined(EBML_INFO)
 #define EBML_INFO(ref)  ref::ClassInfos

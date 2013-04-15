@@ -515,3 +515,17 @@ remove_voids_from_master(EbmlElement *element) {
   if (master)
     DeleteChildren<EbmlVoid>(master);
 }
+
+int
+write_ebml_element_head(mm_io_c &out,
+                        EbmlId const &id,
+                        int64_t content_size) {
+	int id_size    = EBML_ID_LENGTH(id);
+	int coded_size = CodedSizeLength(content_size, 0);
+  uint8_t buffer[4 + 8];
+
+	id.Fill(buffer);
+	CodedValueLength(content_size, coded_size, &buffer[id_size]);
+
+  return out.write(buffer, id_size + coded_size);
+}
