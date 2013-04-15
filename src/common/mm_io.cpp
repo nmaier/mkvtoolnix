@@ -820,6 +820,14 @@ mm_mem_io_c::eof() {
 }
 
 unsigned char *
+mm_mem_io_c::get_buffer()
+  const {
+  if (m_read_only)
+    throw mtx::invalid_parameter_x();
+  return m_mem;
+}
+
+unsigned char *
 mm_mem_io_c::get_and_lock_buffer() {
   m_free_mem = false;
   return m_mem;

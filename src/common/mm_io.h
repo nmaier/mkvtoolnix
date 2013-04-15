@@ -236,6 +236,7 @@ public:
     m_file_name = file_name;
   }
 
+  virtual unsigned char *get_buffer() const;
   virtual unsigned char *get_and_lock_buffer();
   virtual std::string get_content() const;
 
