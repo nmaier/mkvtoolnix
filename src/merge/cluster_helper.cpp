@@ -206,6 +206,7 @@ cluster_helper_c::split(packet_cptr &packet) {
     m_bytes_in_file          =  0;
     m_first_timecode_in_file = -1;
     m_max_timecode_in_file   = -1;
+    m_num_cue_points_postprocessed = 0;
   }
 
   m_first_timecode_in_part = -1;

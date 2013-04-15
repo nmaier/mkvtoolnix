@@ -1,3 +1,9 @@
+2013-04-15  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvmerge: bug fix: If splitting had been active then the
+        elements "cue duration" and "cue relative position" were only
+        written to the first output file.
+
 2013-04-14  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvmerge: bug fix: The "CTS offset" field of FLV files with
