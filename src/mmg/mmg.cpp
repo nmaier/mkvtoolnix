@@ -243,23 +243,23 @@ mmg_app::handle_command_line_arguments() {
     return;
   }
 
-  wxString file = wargs[0];
-  if (!wxFileExists(file) || wxDirExists(file))
-    wxMessageBox(wxString::Format(Z("The file '%s' does not exist."), file.c_str()), Z("Error loading settings"), wxOK | wxCENTER | wxICON_ERROR);
-  else {
+  for (auto &file : wargs)
+    if (!wxFileExists(file) || wxDirExists(file))
+      wxMessageBox(wxString::Format(Z("The file '%s' does not exist."), file.c_str()), Z("Error loading settings"), wxOK | wxCENTER | wxICON_ERROR);
+    else {
 #ifdef SYS_WINDOWS
-    if ((file.Length() > 3) && (file.c_str()[1] != wxT(':')) && (file.c_str()[0] != wxT('\\')))
-      file = wxGetCwd() + wxT("\\") + file;
+      if ((file.Length() > 3) && (file.c_str()[1] != wxT(':')) && (file.c_str()[0] != wxT('\\')))
+        file = wxGetCwd() + wxT("\\") + file;
 #else
-    if ((file.Length() > 0) && (file.c_str()[0] != wxT('/')))
-      file = wxGetCwd() + wxT("/") + file;
+      if ((file.Length() > 0) && (file.c_str()[0] != wxT('/')))
+        file = wxGetCwd() + wxT("/") + file;
 #endif
 
-    if (wxFileName(file).GetExt() == wxU("mmg"))
-      mdlg->load(file);
-    else
-      mdlg->input_page->add_file(file, false);
-  }
+      if (wxFileName(file).GetExt() == wxU("mmg"))
+        mdlg->load(file);
+      else
+        mdlg->input_page->add_file(file, false);
+    }
 }
 
 int

@@ -1,5 +1,10 @@
 2013-04-16  Moritz Bunkus  <moritz@bunkus.org>
 
+        * mmg: bug fix: mmg will now handle all file names given on the
+        command line instead of only the first one. This allows things
+        like opening several selected files with mmg in Windows, and mmg
+        will add all of them. Fixes #867.
+
         * mkvmerge: bug fix: The amount of memory required to store the
         cues during muxing has been reduced drastically. This is more
         noticeable the more video and subtitle tracks are muxed. Fixes
