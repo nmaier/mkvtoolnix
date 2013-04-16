@@ -1,3 +1,10 @@
+2013-04-16  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvmerge: bug fix: The amount of memory required to store the
+        cues during muxing has been reduced drastically. This is more
+        noticeable the more video and subtitle tracks are muxed. Fixes
+        #871.
+
 2013-04-15  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvmerge: bug fix: If splitting had been active then the
