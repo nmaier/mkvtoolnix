@@ -67,7 +67,7 @@ cues_c::add(KaxCuePoint &point) {
 
     uint64_t codec_state_position = FindChildValue<KaxCueCodecState>(*positions);
     if (codec_state_position)
-      m_codec_state_position_map[ { track_num, timecode } ] = codec_state_position;
+      m_codec_state_position_map[ id_timecode_t{ track_num, timecode } ] = codec_state_position;
   }
 }
 
