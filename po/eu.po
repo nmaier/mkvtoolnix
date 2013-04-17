@@ -804,8 +804,8 @@ msgstr " %1%"
 
 #: src/merge/output_control.cpp:286
 #: src/merge/output_control.cpp:295
-#: src/merge/output_control.cpp:307
-#: src/merge/output_control.cpp:314
+#: src/merge/output_control.cpp:303
+#: src/merge/output_control.cpp:310
 msgid " done\n"
 msgstr " eginda\n"
 
@@ -2191,7 +2191,7 @@ msgstr "Oraindik beste lan multiplexaketa bat dago garatzen. Mesedez itxaron har
 msgid "Appending a track from a file to another track from the same file is not allowed. This is the case for tracks number %u and %u."
 msgstr "Agiri batekik bide bat gehitzea agiri bereko beste bide batera ez dago ahalbideturik. Hau da %u eta %u zenbakiko bideen kasua."
 
-#: src/merge/output_control.cpp:1975
+#: src/merge/output_control.cpp:1966
 #, boost-format
 msgid "Appending track %1% from file no. %2% ('%3%') to track %4% from file no. %5% ('%6%').\n"
 msgstr "%2% zenbakiko agiritiko ('%3%') %1% bidea gehitzea %5% zenbakiko agiritiko %4% bidera ('%6%').\n"
@@ -2338,7 +2338,7 @@ msgid "Block duration: %1%.%|2$06d|ms"
 msgstr "Bloke iraupena: %1%.%|2$06d|sm"
 
 #: src/extract/timecodes_v2.cpp:304
-#: src/extract/tracks.cpp:416
+#: src/extract/tracks.cpp:431
 #: src/info/mkvinfo.cpp:1124
 msgid "Block group"
 msgstr "Bloke taldea"
@@ -2423,8 +2423,8 @@ msgid "Category is not NUL terminated"
 msgstr "Kategoria ez da NUL-en amaitua"
 
 #: src/extract/timecodes_v2.cpp:383
-#: src/extract/tracks.cpp:466
-#: src/info/mkvinfo.cpp:1699
+#: src/extract/tracks.cpp:486
+#: src/info/mkvinfo.cpp:1702
 msgid "Caught exception"
 msgstr "Salbuespena harrapatu da"
 
@@ -2570,7 +2570,7 @@ msgstr "Atalak"
 msgid "Chapters (%d entries) from %s"
 msgstr "Atalak (%d sarrera) -> %s"
 
-#: src/merge/output_control.cpp:1554
+#: src/merge/output_control.cpp:1552
 msgid "Chapters are not allowed in WebM compliant files. No chapters will be written into any output file.\n"
 msgstr "Atalak ez daude ahalbideturik WebM bateragarritasun agirietan. Ez da atalik idatziko irteera agirietan.\n"
 
@@ -2695,8 +2695,8 @@ msgid "Close the current file without saving"
 msgstr "Itxi oraingo agiria aldaketak gorde gabe"
 
 #: src/extract/timecodes_v2.cpp:285
-#: src/extract/tracks.cpp:398
-#: src/info/mkvinfo.cpp:1659
+#: src/extract/tracks.cpp:409
+#: src/info/mkvinfo.cpp:1662
 msgid "Cluster"
 msgstr "Kluster"
 
@@ -2721,7 +2721,7 @@ msgid "Cluster previous size: %1%"
 msgstr "Klusterraren aurreko neurria: %1%"
 
 #: src/extract/timecodes_v2.cpp:300
-#: src/extract/tracks.cpp:407
+#: src/extract/tracks.cpp:418
 #: src/info/mkvinfo.cpp:214
 #, boost-format
 msgid "Cluster timecode: %|1$.3f|s"
@@ -2890,7 +2890,7 @@ msgstr "Ezin izan da atera sekuentzia idazburua MPEG-1/2 bide honetatik.\n"
 msgid "Could not find an index for audio track %1% (avilib error message: %2%). Skipping track.\n"
 msgstr "Ezin izan da aurkitu aurkibide bat %1% audio bidearentzat (avilib akats mezua: %2%). Bide jauzketa.\n"
 
-#: src/merge/output_control.cpp:1897
+#: src/merge/output_control.cpp:1888
 #, boost-format
 msgid "Could not find gptzr when appending. %1%\n"
 msgstr "Ezin izan da aurkitu gptzr erantsterakoan. %1%\n"
@@ -3138,27 +3138,15 @@ msgstr "DTS idazburu argibideak aldatuta! - Heuskarri berria:\n"
 msgid "DTS/DTS-HD (Digital Theater System)"
 msgstr "DTS/DTS-HD (Zinema Digital Sistema)"
 
-#: src/common/dts.cpp:193
-msgid "DTS_Header problem: encoded with an incompatible new encoder version\n"
-msgstr "DTS_Idazburu arazoa: kodeaturik bateragarria ez den kodeatzaile bertsio berri batekin\n"
-
-#: src/common/dts.cpp:157
-msgid "DTS_Header problem: invalid core sampling frequency\n"
-msgstr "DTS_Idazburu arazoa: nukleo laginketa maiztasun baliogabea\n"
-
-#: src/common/dts.cpp:139
+#: src/common/dts.cpp:126
 msgid "DTS_Header problem: invalid frame bytes size\n"
 msgstr "DTS_Idazburu arazoa: frame byte neurri baliogabea\n"
 
-#: src/common/dts.cpp:132
-msgid "DTS_Header problem: invalid number of blocks in frame\n"
-msgstr "DTS_Idazburu arazoa: frame bloke zenbateko baliogabea\n"
-
-#: src/common/dts.cpp:233
+#: src/common/dts.cpp:191
 msgid "DTS_Header problem: invalid source PCM resolution\n"
 msgstr "DTS_Idazburu arazoa: iturburu PCM bereizmen baliogabea\n"
 
-#: src/common/dts.cpp:291
+#: src/common/dts.cpp:243
 msgid "DTS_Header problem: not enough data to read header\n"
 msgstr "DTS_Idazburu arazoa: ez dago nahikoa datu idazburua irakurtzeko\n"
 
@@ -3381,7 +3369,7 @@ msgstr "EBLM irakurketa bertsioa: %1%"
 msgid "EBML version: %1%"
 msgstr "EBML bertsioa: %1%"
 
-#: src/merge/output_control.cpp:1382
+#: src/merge/output_control.cpp:1380
 #, boost-format
 msgid "EVIL internal bug! (unknown file type). %1%\n"
 msgstr "ARRAIOAK barne akatsa! (agiri mota ezezaguna). %1%\n"
@@ -3551,7 +3539,7 @@ msgid "Error: Couldn't open input file %1% (%2%).\n"
 msgstr "Akatsa: Ezinezkoa sarrera agiria irekitzea %1% (%2%).\n"
 
 #: src/extract/timecodes_v2.cpp:205
-#: src/extract/tracks.cpp:341
+#: src/extract/tracks.cpp:351
 msgid "Error: No EBML head found."
 msgstr "Akatsa: Ez da EBML burua aurkitu."
 
@@ -3786,7 +3774,7 @@ msgstr "Agiri/zati lotura"
 msgid "File/segment title:"
 msgstr "Agiri/zati izenburua:"
 
-#: src/merge/output_control.cpp:1067
+#: src/merge/output_control.cpp:1065
 msgid "Files cannot be appended to themselves. The argument for '--append-to' was invalid.\n"
 msgstr "Agiriak ezin dira berari erantsi. '--append-to' argumetoa baliogabea izan da.\n"
 
@@ -4993,7 +4981,7 @@ msgstr "Agiri izen bat baino gehiago eman da ('%1%' eta '%2%').\n"
 msgid "More than one name was given for a single attachment. '%1%' will be discarded and '%2%' used instead.\n"
 msgstr "Agiri izen bat baino gehiago eman da eranspen bakar baterako. '%1%' baztertu egingo da eta '%2%' erabiliko da ordez.\n"
 
-#: src/merge/output_control.cpp:1143
+#: src/merge/output_control.cpp:1141
 #, boost-format
 msgid "More than one track is to be appended to the track %1% from file no. %2% ('%3%'). The argument for '--append-to' was invalid.\n"
 msgstr "Bide bat baino gehiago da %1% bidera gehitzeko %2% agiri zenbakitik ('%3%'). '--append-to'-rentzako argumetoa baliogabea da.\n"
@@ -5108,7 +5096,7 @@ msgstr "Ez dago MIME motarik hautatuta '%s' eranskinetik."
 msgid "No MIME type has been set for the attachment '%1%', and it could not be guessed.\n"
 msgstr "Ez da MIME motarik ezarri '%1%' eranspenarentzat, eta badaiteke ez asmatzea.\n"
 
-#: src/merge/output_control.cpp:1102
+#: src/merge/output_control.cpp:1100
 #, boost-format
 msgid "No append mapping was given for the file no. %1% ('%2%'). A default mapping of %3% will be used instead. Please keep that in mind if mkvmerge aborts with an error message regarding invalid '--append-to' options.\n"
 msgstr "Ez da mapaketarik eman %1% zenbakiko agiriarentzat ('%2%'). %3%-ren berezko mapaketa erabiliko da ordez. Mesedez gogoan izan mkvmergek '--append-to' aukera baliogabei buruzko akats mezu batekin uzten badu.\n"
@@ -5151,7 +5139,7 @@ msgstr "Ez da agiririk gertatu oraindik. Agiri bat ireki dezakezu 'Ireki' hautat
 msgid "No file loaded"
 msgstr "Ez dago agiririk gertatuta"
 
-#: src/info/mkvinfo.cpp:1720
+#: src/info/mkvinfo.cpp:1723
 #: src/propedit/options.cpp:33
 msgid "No file name given.\n"
 msgstr "Ez da agiri izenik eman.\n"
@@ -5181,7 +5169,7 @@ msgid "No permission to read from, to write to or to create"
 msgstr "Baimen gabe -tik irakurtzeko, -ra idazteko edo sortzeko"
 
 #: src/extract/timecodes_v2.cpp:219
-#: src/extract/tracks.cpp:356
+#: src/extract/tracks.cpp:366
 #: src/info/mkvinfo.cpp:1626
 msgid "No segment/level 0 element found."
 msgstr "Ez da zati/0 maila gairik aurkitu."
@@ -5204,7 +5192,7 @@ msgstr "Ez da bide ID-rik adierazi hemen: '--%1% %2%'.\n"
 msgid "No track corresponding to the edit specification '%1%' was found. %2%\n"
 msgstr "Ez da biderik aurkitu '%1%' edizio adierazpenarekin bat datorrenik. %2%\n"
 
-#: src/extract/tracks.cpp:313
+#: src/extract/tracks.cpp:323
 #, boost-format
 msgid "No track with the ID %1% was found in the source file.\n"
 msgstr "Ez da biderik aurkitu %1% ID-arekin iturburu agirian.\n"
@@ -5257,7 +5245,7 @@ msgstr "Ohartu '%1%' biltegiratzeari dagokionez Matroska ezaugarritzea ez dela o
 
 #: src/extract/attachments.cpp:132
 #: src/extract/timecodes_v2.cpp:187
-#: src/extract/tracks.cpp:320
+#: src/extract/tracks.cpp:330
 #: src/propedit/options.cpp:36
 msgid "Nothing to do.\n"
 msgstr "Ezer ez egiteko.\n"
@@ -5336,7 +5324,7 @@ msgstr "Irteera agiri bat bakarrik ahalbidetuta.\n"
 msgid "Only one segment info file allowed in '%1% %2%'.\n"
 msgstr "Zati argibide agiri bat bakarrik ahalbidetuta hemen: '%1% %2%'.\n"
 
-#: src/merge/output_control.cpp:1083
+#: src/merge/output_control.cpp:1081
 #, boost-format
 msgid "Only partial append mappings were given for the file no. %1% ('%2%'). Either don't specify any mapping (in which case the default mapping will be used) or specify a mapping for all tracks that are to be copied.\n"
 msgstr "Bakarrik gehitutako mapaketen zati bat eman da %1% zenbakiko agiriarentzat ('%2%'). Ez bada mapaketarik adierazten (honela bada berezko mapaketa erabiliko da) edo mapaketa bat adierazi kopiatu behar diren bide guztientzat.\n"
@@ -5609,8 +5597,8 @@ msgid "Progress"
 msgstr "Garapena"
 
 #: src/extract/timecodes_v2.cpp:290
-#: src/extract/tracks.cpp:402
-#: src/merge/output_control.cpp:552
+#: src/extract/tracks.cpp:413
+#: src/merge/output_control.cpp:551
 #, boost-format
 msgid "Progress: %1%%%%2%"
 msgstr "Garapena: %1%%%%2%"
@@ -5620,7 +5608,7 @@ msgstr "Garapena: %1%%%%2%"
 msgid "Progress: 100%\n"
 msgstr "Garapena: 100%\n"
 
-#: src/merge/output_control.cpp:519
+#: src/merge/output_control.cpp:515
 #, boost-format
 msgid "Progress: 100%%%1%"
 msgstr "Garapena: 100%%%1%"
@@ -5783,7 +5771,7 @@ msgstr "RSA"
 msgid "Re-enable the selected job(s)"
 msgstr "Ber-gaitu hautaturiko lana(k)"
 
-#: src/merge/output_control.cpp:964
+#: src/merge/output_control.cpp:962
 #, boost-format
 msgid "Re-rendering track headers: data_size != 0 not implemented yet. %1%\n"
 msgstr "Ber-aurkezpen bide idazburuak: datu_neurria != 0 oraindik ezarri gabe. %1%\n"
@@ -6036,7 +6024,7 @@ msgid "Seek position: %1%"
 msgstr "Bilatu kokapena: %1%"
 
 #: src/extract/timecodes_v2.cpp:223
-#: src/extract/tracks.cpp:361
+#: src/extract/tracks.cpp:371
 #: src/info/qt_ui.cpp:177
 #: src/info/wxwidgets_ui.cpp:210
 msgid "Segment"
@@ -6079,7 +6067,7 @@ msgid "Segment info files (*.xml)|*.xml|%s"
 msgstr "Zati argibide agiriak (*.xml)|*.xml|%s"
 
 #: src/extract/timecodes_v2.cpp:243
-#: src/extract/tracks.cpp:379
+#: src/extract/tracks.cpp:389
 #: src/info/mkvinfo.cpp:468
 #: src/info/qt_ui.cpp:178
 #: src/info/wxwidgets_ui.cpp:213
@@ -6091,7 +6079,7 @@ msgid "Segment information"
 msgstr "Zati argibideak"
 
 #: src/extract/timecodes_v2.cpp:277
-#: src/extract/tracks.cpp:391
+#: src/extract/tracks.cpp:402
 #: src/info/mkvinfo.cpp:779
 #: src/info/qt_ui.cpp:179
 #: src/info/wxwidgets_ui.cpp:213
@@ -6383,7 +6371,7 @@ msgstr "Bloke arrunta"
 msgid "Simple chapter parser: %1%\n"
 msgstr "Atal aztertzaile arrunta: %1%\n"
 
-#: src/extract/tracks.cpp:420
+#: src/extract/tracks.cpp:435
 msgid "SimpleBlock"
 msgstr "Bloke-Arrunta"
 
@@ -6437,7 +6425,7 @@ msgstr "Idazburu balio batzuk aldatu egin dira. Egitan nahi duzu agiri berri bat
 msgid "Some header values have been modified. Do you really want to reload without saving the file?"
 msgstr "Idazburu balio batzuk aldatu egin dira. Egitan nahi duzu birgertatzea agiria gorde gabe?"
 
-#: src/merge/output_control.cpp:1594
+#: src/merge/output_control.cpp:1592
 #, boost-format
 msgid "Some tag elements are missing (this error should not have occured - another similar error should have occured earlier). %1%\n"
 msgstr "Ez dago zenbait etiketa osagai (akats hau ez litzake gertatu behar - antzeko beste akats bat gertatu da duela gutxi). %1%\n"
@@ -6626,7 +6614,7 @@ msgstr "Etiketa hautatzaileak"
 msgid "Tags"
 msgstr "Etiketak"
 
-#: src/merge/output_control.cpp:1582
+#: src/merge/output_control.cpp:1580
 msgid "Tags are not allowed in WebM compliant files. No tags will be written into any output file.\n"
 msgstr "Etiketak ez daude ahalbideturik WebM bateragarritasun agirietan. Etiketak ez dira idatziko irteera agirietan.\n"
 
@@ -6678,7 +6666,7 @@ msgstr "AAC profilak ezberdinak dira: %1% eta %2%"
 msgid "The AVC video track is missing the 'CTTS' atom for frame timecode offsets. However, AVC/h.264 allows frames to have more than the traditional one (for P frames) or two (for B frames) references to other frames. The timecodes for such frames will be out-of-order, and the 'CTTS' atom is needed for getting the timecodes right. As it is missing the timecodes for this track might be wrong. You should watch the resulting file and make sure that it looks like you expected it to.\n"
 msgstr "AVC bideo bideak ez du 'CTTS' atomoa framen denbora-kode orekatarako. Horrela ere, AVC/h.264-k ahalbidetzen ditu ohiko xehetasun frame bat (P frameak) edo bi (B frameak) baino gehiago beste frame batzuetara. Denbora-kodeak frame hauentzat ordenatu-gabeak izango dira, eta 'CTTS' atomoa beharrezkoa da denbora-kodeak zuzen lortzeko. Hau ez dagoenez bide honentzako denbora-kodeak okerrak izan daitezke. Emaitz agiria ikuskatu beharko zenuke eta zihurtatu itxaroten duzun bezala ikusten dela.\n"
 
-#: src/extract/tracks.cpp:279
+#: src/extract/tracks.cpp:289
 #, boost-format
 msgid "The CUE sheet for track %1% will be written to '%2%'.\n"
 msgstr "%1% bidearentzako CUE orriak '%2%'-ra idatziko dira.\n"
@@ -6903,7 +6891,7 @@ msgstr "Zuzenketa agiri idazburua ez da zuzen irakurri.\n"
 msgid "The country '%s' is not a valid ccTLD and cannot be selected."
 msgstr "'%s' herrialdea ez da ccTLD baliozko bat eta ezin da hautatu."
 
-#: src/merge/output_control.cpp:1726
+#: src/merge/output_control.cpp:1722
 msgid "The cue entries (the index) are being written...\n"
 msgstr "Cue sarrerak (aurkibidea) idazten ari dira...\n"
 
@@ -6927,11 +6915,11 @@ msgstr "'%1%' berezko hizkuntza kodea ez da ISO639-2 hizkuntza kode baliozko bat
 msgid "The delay setting for track nr. %s in file '%s' is invalid."
 msgstr "nr bidearentzako atzerapen ezarpena. %s '%s' agirian baliogabea da."
 
-#: src/merge/output_control.cpp:1393
-#: src/merge/output_control.cpp:1396
-#: src/merge/output_control.cpp:1399
-#: src/merge/output_control.cpp:1402
-#: src/merge/output_control.cpp:1405
+#: src/merge/output_control.cpp:1391
+#: src/merge/output_control.cpp:1394
+#: src/merge/output_control.cpp:1397
+#: src/merge/output_control.cpp:1400
+#: src/merge/output_control.cpp:1403
 #, boost-format
 msgid ""
 "The demultiplexer for the file '%1%' failed to initialize:\n"
@@ -7006,27 +6994,27 @@ msgstr "%1% agiria ezin da ireki irakurtzeko edo idazteko, edo irakur/idaz eragi
 #: src/extract/cuesheets.cpp:208
 #: src/extract/tags.cpp:48
 #: src/extract/timecodes_v2.cpp:194
-#: src/extract/tracks.cpp:329
-#: src/merge/output_control.cpp:341
-#: src/merge/output_control.cpp:474
+#: src/extract/tracks.cpp:339
+#: src/merge/output_control.cpp:337
+#: src/merge/output_control.cpp:470
 #: src/propedit/attachment_target.cpp:63
 #, boost-format
 msgid "The file '%1%' could not be opened for reading: %2%.\n"
 msgstr "%1% agiria ezin da irakurtzeko ireki: %2%.\n"
 
 #: src/extract/attachments.cpp:122
-#: src/extract/tracks.cpp:283
+#: src/extract/tracks.cpp:293
 #: src/extract/xtr_avi.cpp:56
 #: src/extract/xtr_avi.cpp:60
 #: src/extract/xtr_rmff.cpp:40
 #: src/extract/xtr_tta.cpp:86
 #: src/extract/xtr_wav.cpp:113
-#: src/merge/output_control.cpp:1620
+#: src/merge/output_control.cpp:1615
 #, boost-format
 msgid "The file '%1%' could not be opened for writing: %2%.\n"
 msgstr "%1% agiria ezin da idazteko ireki: %2%.\n"
 
-#: src/merge/output_control.cpp:1624
+#: src/merge/output_control.cpp:1619
 #, boost-format
 msgid "The file '%1%' has been opened for writing.\n"
 msgstr "%1% agiria idazteko ireki da.\n"
@@ -7051,12 +7039,12 @@ msgstr "'%s' agiria ez dago."
 msgid "The file '%s' is already processed in combination with the file '%s'. It cannot be added a second time."
 msgstr "'%s' agiria jadanik prozesatu da '%s' agiriarekin batera. Ezin da bigarren aldiz gehitu."
 
-#: src/merge/output_control.cpp:1399
+#: src/merge/output_control.cpp:1397
 msgid "The file content does not match its format type and was not recognized."
 msgstr "Agiriaren edukia ez dator bat heuskarri motarekin eta ez da ezagutzen."
 
-#: src/merge/output_control.cpp:1393
-#: src/merge/output_control.cpp:1396
+#: src/merge/output_control.cpp:1391
+#: src/merge/output_control.cpp:1394
 msgid "The file could not be opened for reading, or there was not enough data to parse its headers."
 msgstr "Agiria ezin da irakurtzeko ireki, edo ez du nahikoa datu bere idazburuak aztertzeko."
 
@@ -7088,7 +7076,7 @@ msgstr "Agiri idazburua laburregia da.\n"
 msgid "The file header was not read correctly.\n"
 msgstr "Agiri idazburua ezin da zuzen irakurri.\n"
 
-#: src/merge/output_control.cpp:1402
+#: src/merge/output_control.cpp:1400
 msgid "The file headers could not be parsed, e.g. because they're incomplete, invalid or damaged."
 msgstr "Agiri idazburuak ezin dira aztertu, adib. osatugabeak, baliogabeak edo hondatuta daudelako."
 
@@ -7115,7 +7103,7 @@ msgstr "Agiria zuzentzen ari da, zatia 2/4..."
 msgid "The file is being fixed, part 3/4..."
 msgstr "Agiria zuzentzen ari da, zatia 3/4..."
 
-#: src/merge/output_control.cpp:309
+#: src/merge/output_control.cpp:305
 msgid "The file is being fixed, part 4/4..."
 msgstr "Agiria zuzentzen ari da, zatia 4/4..."
 
@@ -7124,17 +7112,17 @@ msgstr "Agiria zuzentzen ari da, zatia 4/4..."
 msgid "The file name for this segment."
 msgstr "Agiri izena zati honentzat."
 
-#: src/merge/output_control.cpp:1116
+#: src/merge/output_control.cpp:1114
 #, boost-format
 msgid "The file no. %1% ('%2%') does not contain a track with the ID %3%, or that track is not to be copied. The argument for '--append-to' was invalid.\n"
 msgstr "%1% ('%2%') zenbaki agiriak ez du %3% ID-a duen biderik, edo bide hori ez da kopiatu behar.  '--append-to'-rentzako argumentoa baliogabea da.\n"
 
-#: src/merge/output_control.cpp:1122
+#: src/merge/output_control.cpp:1120
 #, boost-format
 msgid "The file no. %1% ('%2%') does not contain a track with the ID %3%, or that track is not to be copied. Therefore no track can be appended to it. The argument for '--append-to' was invalid.\n"
 msgstr "%1% ('%2%') zenbaki agiriak ez du %3% ID-a duen biderik, edo bide hori ez da kopiatu behar. Hortaz ezin da biderik erantsi. '--append-to'-rentzako argumentoa baliogabea da.\n"
 
-#: src/merge/output_control.cpp:1059
+#: src/merge/output_control.cpp:1057
 #, boost-format
 msgid "The file no. %1% ('%2%') is not being appended. The argument for '--append-to' was invalid.\n"
 msgstr "%1% ('%2%') zenbaki agiria eransten ari da. '--append-to'-rentzako argumentoa baliogabea da.\n"
@@ -7199,7 +7187,7 @@ msgstr "Bananketa neurriaren heuskarria baliogabea da."
 msgid "The format of the split timecode/duration is invalid."
 msgstr "Bananketa denbora-kode/iraupen heuskarria baliogabea da."
 
-#: src/merge/output_control.cpp:1186
+#: src/merge/output_control.cpp:1184
 msgid "The formats do not match."
 msgstr "Heuskarriak ez datoz  bat."
 
@@ -7471,7 +7459,7 @@ msgstr "Ezaugarri balioa ez da baliozko seindun oso bat hemen: '%1%'. %2%\n"
 msgid "The property value is not a valid unsigned integer in '%1%'. %2%\n"
 msgstr "Ezaugarri balioa ez da baliozko seinugabeko oso bat hemen: '%1%'. %2%\n"
 
-#: src/merge/output_control.cpp:1188
+#: src/merge/output_control.cpp:1186
 msgid "The reason is unknown."
 msgstr "Zergaitia ezezaguna da."
 
@@ -7510,8 +7498,8 @@ msgstr "Irteera agiri berri bat abiarazi ondorengo neurria. G, M eta K hizkiak e
 msgid "The size of attachment '%1%' is 0.\n"
 msgstr "'%1%' eranskinaren neurria da 0.\n"
 
-#: src/merge/output_control.cpp:345
-#: src/merge/output_control.cpp:477
+#: src/merge/output_control.cpp:341
+#: src/merge/output_control.cpp:473
 #, boost-format
 msgid "The source file '%1%' could not be opened successfully, or retrieving its size by seeking to the end did not work.\n"
 msgstr "'%1%' iturburu agiria ez da ongi ireki, edo bere neurria berreskuratzea amaiera arte bilatuz ez da ongi irten.\n"
@@ -7633,7 +7621,7 @@ msgstr "Jario honentzako denbora-kodeak agiriaren erdian berrezarri dira. Hau ez
 msgid "The title for the whole movie."
 msgstr "Filma osoaren izenburua."
 
-#: src/merge/output_control.cpp:1132
+#: src/merge/output_control.cpp:1130
 #, boost-format
 msgid "The track %1% from file no. %2% ('%3%') is to be appended more than once. The argument for '--append-to' was invalid.\n"
 msgstr "%1% bidea %2% zebk. agiritik ('%3%') behin baino gehiagotan erantsi daiteke. '--append-to'-rentzako argumentoa ez da baliozkoa.\n"
@@ -7643,17 +7631,17 @@ msgstr "%1% bidea %2% zebk. agiritik ('%3%') behin baino gehiagotan erantsi dait
 msgid "The track ID %1% does not have a valid CodecID.\n"
 msgstr "%1% ID-ko bideak ez dut baliozko Kodek ID bat.\n"
 
-#: src/merge/output_control.cpp:860
+#: src/merge/output_control.cpp:857
 #, boost-format
 msgid "The track headers could not be rendered correctly. %1%\n"
 msgstr "Bide idazburuak ezin dira zuzen aurkeztu. %1%\n"
 
-#: src/merge/output_control.cpp:1178
+#: src/merge/output_control.cpp:1176
 #, boost-format
 msgid "The track number %1% from the file '%2%' can probably not be appended correctly to the track number %3% from the file '%4%': %5% Please make sure that the resulting file plays correctly the whole time. The author of this program will probably not give support for playback issues with the resulting file.\n"
 msgstr "El número de pista %1% del archivo '%2%' probablemente no puede ser unida correctamente al número de pista %3% del archivo '%4%': %5% Por favor, asegúrate de que el archivo resultante se reproduce todo el tiempo de forma correcta. El autor del programa probablemente no desarrollará ninguna herramienta de compatibilidad para los fallos de reproducción con el archivo resultante.\n"
 
-#: src/merge/output_control.cpp:1189
+#: src/merge/output_control.cpp:1187
 #, boost-format
 msgid "The track number %1% from the file '%2%' cannot be appended to the track number %3% from the file '%4%'. %5%\n"
 msgstr "%1% zebk. bidea '%2%' agiritik ezin da erantsi %3% zebk. bidera '%4%' agiritik. %5%\n"
@@ -7663,7 +7651,7 @@ msgstr "%1% zebk. bidea '%2%' agiritik ezin da erantsi %3% zebk. bidera '%4%' ag
 msgid "The track number as used in the Block Header."
 msgstr "Bide zenbakia Bloke Idazburuan erabili bezala."
 
-#: src/merge/output_control.cpp:1187
+#: src/merge/output_control.cpp:1185
 msgid "The track parameters do not match."
 msgstr "Bide parametroak ez datoz bat."
 
@@ -7684,8 +7672,8 @@ msgstr "Theora"
 msgid "There is a new version available online."
 msgstr "Bertsio berri bat dago eskuragarri online."
 
-#: src/merge/output_control.cpp:1053
-#: src/merge/output_control.cpp:1063
+#: src/merge/output_control.cpp:1051
+#: src/merge/output_control.cpp:1061
 #, boost-format
 msgid "There is no file with the ID '%1%'. The argument for '--append-to' was invalid.\n"
 msgstr "Ez dago '%1%'  ID-a duen agiririk. '--append-to'-rentzako argumentoa baliogabea da.\n"
@@ -7845,12 +7833,12 @@ msgstr "Ezaugarri hau nahiezkoa da eta ezin da ezabatu hemen: '%1%'. %2%\n"
 msgid "This property is unique. More instances cannot be added in '%1%'. %2%\n"
 msgstr "Ezaugarri hau bakarra da. Ezin dira eskabide gehiago gehitu hemen: '%1%'. %2%\n"
 
-#: src/merge/output_control.cpp:305
+#: src/merge/output_control.cpp:301
 #, boost-format
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. %1%\n"
 msgstr "Hau EGITAN ez litzake gertatu behar. Lehen meta bilaketa gaiarentzat gordetako tartea txikiegia da. %1%\n"
 
-#: src/merge/output_control.cpp:1837
+#: src/merge/output_control.cpp:1829
 #, boost-format
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. Size needed: %1%. %2%\n"
 msgstr "Hau EGITAN ez litzake gertatu behar. Lehen meta bilaketa gaiarentzat gordetako tartea txikiegia da. Beharrezko neurria: %1%. %2%\n"
@@ -7881,7 +7869,7 @@ msgid "Timecode files (*.tmc;*.txt)|*.tmc;*.txt|%s"
 msgstr "Denbora-kode agiriak (*.tmc;*.txt)|*.tmc;*.txt|%s"
 
 #: src/extract/timecodes_v2.cpp:252
-#: src/extract/tracks.cpp:384
+#: src/extract/tracks.cpp:395
 #: src/info/mkvinfo.cpp:480
 #: src/info/mkvinfo.cpp:915
 #, boost-format
@@ -8745,7 +8733,7 @@ msgstr "baita kontuz oharrak egonda ere"
 msgid "failed"
 msgstr "hutseginda"
 
-#: src/merge/output_control.cpp:623
+#: src/merge/output_control.cpp:622
 #, boost-format
 msgid "filelist_t not found for generic_packetizer_c. %1%\n"
 msgstr "filelist_t ez da aurkitzen generic_packetizer_c -rentzat. %1%\n"
@@ -9192,7 +9180,7 @@ msgid "mkvmerge supports two chapter formats: The OGM like text format and the f
 msgstr "mkvmergek bi atal heuskarri sostengatzen du: OGM idazki heuskarri bezala eta XML-a ezaugarri guztiekin. Aukera honek atalekin elkartzeko hizkuntza adierazten du OGM atal heuskarria erabiltzen bada. Ezikusi egiten da XML atal agiretarako."
 
 #: src/merge/output_control.cpp:276
-#: src/merge/output_control.cpp:316
+#: src/merge/output_control.cpp:312
 msgid "mkvmerge was interrupted by a SIGINT (Ctrl+C?)\n"
 msgstr "mkvmerge SIGINT batek eten du (inteligentzia seinaleak) (Ktrl+C?)\n"
 
@@ -9205,7 +9193,7 @@ msgstr "mkvmerge/mkvextract bide ID-a: %1%"
 msgid "mkvpropedit [options] <file> <actions>"
 msgstr "mkvpropedit [aukerak] <agira> <ekintzak>"
 
-#: src/common/mm_io.cpp:999
+#: src/common/mm_io.cpp:1012
 msgid "mm_text_io_c: UTF32_* is not supported at the moment.\n"
 msgstr "mm_text_io_c: UTF32_* ez dago sostengaturik oraingoz.\n"
 
@@ -9573,6 +9561,15 @@ msgstr "Bai"
 
 #~ msgid "BZ2_bzDecompress() failed. Result: %1%\n"
 #~ msgstr "BZ2_bzDecompress() hutsegitea. Emaitza: %1%\n"
+
+#~ msgid "DTS_Header problem: encoded with an incompatible new encoder version\n"
+#~ msgstr "DTS_Idazburu arazoa: kodeaturik bateragarria ez den kodeatzaile bertsio berri batekin\n"
+
+#~ msgid "DTS_Header problem: invalid core sampling frequency\n"
+#~ msgstr "DTS_Idazburu arazoa: nukleo laginketa maiztasun baliogabea\n"
+
+#~ msgid "DTS_Header problem: invalid number of blocks in frame\n"
+#~ msgstr "DTS_Idazburu arazoa: frame bloke zenbateko baliogabea\n"
 
 #~ msgid "Disable header removal compression for audio and video tracks by default"
 #~ msgstr "Ezgaitu idazburu konpresioa audio eta bideo bideentzat berez."
