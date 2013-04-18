@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-07-30 19:00+0100\n"
-"PO-Revision-Date: 2013-02-26 15:03+0100\n"
+"PO-Revision-Date: 2013-04-18 12:05+0100\n"
 "Last-Translator: DenB <denb10@free.fr>\n"
 "Language-Team: DenB <denb10@free.fr>\n"
 "Language: fr\n"
@@ -273,15 +273,14 @@ msgid "  --engage <feature>       Turns on experimental feature 'feature'.\n"
 msgstr "  --engage <fonction>      Activer la fonction expérimentale 'fonction'.\n"
 
 #: src/merge/mkvmerge.cpp:222
-#, fuzzy
 msgid ""
 "  --fix-bitstream-timing-information <TID[:bool]>\n"
 "                           Adjust the frame/field rate stored in the video\n"
 "                           bitstream to match the track's default duration.\n"
 msgstr ""
-"  --forced-track <TID[:bool]>\n"
-"                           Établir la marque 'obligatoire' pour cette piste\n"
-"                           ou la supprimer si 'bool' est 0.\n"
+"  --fix-bitstream-timing-information <TID[:bool]>\n"
+"                           Ajuster la fréquence d'image ou de champ stockée\n"
+"                           dans le flux vidéo sur le durée par défaut de la piste.\n"
 
 #: src/merge/mkvmerge.cpp:205
 msgid ""
@@ -1520,9 +1519,8 @@ msgid "'--engage' lacks its argument.\n"
 msgstr "L'argument manque à '--engage'.\n"
 
 #: src/merge/mkvmerge.cpp:2332
-#, fuzzy
 msgid "'--fix-bitstream-timing-information' lacks its argument.\n"
-msgstr "L'argument manque à '--default-duration'.\n"
+msgstr "L'argument manque à '--fix-bitstream-timing-information'.\n"
 
 #: src/merge/mkvmerge.cpp:2224
 msgid "'--forced-track' lacks its argument.\n"
@@ -2522,9 +2520,9 @@ msgid "Chapter files (*.xml;*.txt;*.cue)|*.xml;*.txt;*.cue|%s"
 msgstr "Fichiers de chapitres (*.xml;*.txt;*.cue)|*.xml;*.txt;*.cue|%s"
 
 #: src/mmg/tabs/chapters.cpp:561
-#, fuzzy, c-format, boost-format
+#, c-format, boost-format
 msgid "Chapter files (*.xml;*.txt;*.mka;*.mkv;*.mks;*.mk3d;*.cue)|*.xml;*.txt;*.mka;*.mkv;*.mks;*.mk3d;*.cue|%s"
-msgstr "Fichiers de chapitres (*.xml;*.txt;*.mka;*.mkv;*.mk3d;*.cue)|*.xml;*.txt;*.mka;*.mkv;*.mk3d;*.cue|%s"
+msgstr "Fichiers de chapitres (*.xml;*.txt;*.mka;*.mkv;*.mks;*.mk3d;*.cue)|*.xml;*.txt;*.mka;*.mkv;*.mks;*.mk3d;*.cue|%s"
 
 #: src/mmg/tabs/chapters.cpp:366
 msgid "Chapter names and languages"
@@ -3791,9 +3789,8 @@ msgid "Finished processing on %s"
 msgstr "Traitement terminé le %s."
 
 #: src/mmg/tabs/input_format.cpp:260
-#, fuzzy
 msgid "Fix bitstream timing information"
-msgstr "Erreur à l'enregistrement des informations"
+msgstr "Correction de l'information de temps du flux de données"
 
 #: src/mmg/tabs/chapters.cpp:354
 msgid "Flags:"
@@ -4232,9 +4229,9 @@ msgid "Invalid boolean option specified in '--default-track %1%'.\n"
 msgstr "Option booléenne incorrecte spécifiée dans '--default-track %1%'.\n"
 
 #: src/merge/mkvmerge.cpp:1415
-#, fuzzy, boost-format
+#, boost-format
 msgid "Invalid boolean option specified in '--fix-bitstream-timing-information %1%'.\n"
-msgstr "Option booléenne incorrecte spécifiée dans '--forced-track %1%'.\n"
+msgstr "Option booléenne incorrecte spécifiée dans '--fix-bitstream-timing-information %1%'.\n"
 
 #: src/merge/mkvmerge.cpp:1067
 #, boost-format
@@ -4558,9 +4555,9 @@ msgid "Invalid track ID specified in '--default-track %1%'.\n"
 msgstr "Numéro de piste incorrect spécifié dans '--default-track %1%'.\n"
 
 #: src/merge/mkvmerge.cpp:1409
-#, fuzzy, boost-format
+#, boost-format
 msgid "Invalid track ID specified in '--fix-bitstream-timing-information %1%'.\n"
-msgstr "Numéro de piste incorrect spécifié dans '--forced-track %1%'.\n"
+msgstr "Numéro de piste incorrect spécifié dans '--fix-bitstream-timing-information %1%'.\n"
 
 #: src/merge/mkvmerge.cpp:1061
 #, boost-format
@@ -5217,7 +5214,7 @@ msgstr "Aucun des champs d'en-tête n'a été modifié. Rien n'a été enregistr
 
 #: src/mmg/tabs/input_format.cpp:261
 msgid "Normally mkvmerge does not change the timing information (frame/field rate) stored in the video bitstream. With this option that information is adjusted to match the container timing information. The container timing information can come from various sources: from the command line via --default-duration, the source container or derived from the bitstream."
-msgstr ""
+msgstr "Normalement, mkvmerge ne modifie pas l'information de temps (fréquence d'image ou de champ) contenue dans le flux vidéo. Avec cette option, cette information est réglée sur celle du conteneur. L'information de temps du conteneur peut avoir diverses provenances : ligne de commande via --default-duration, conteneur source ou flux de données."
 
 #: src/mmg/cli_options_dlg.cpp:144
 msgid "Normally mkvmerge keeps aspect ratio information in MPEG4 video bitstreams and puts the information into the container. This option causes mkvmerge to remove the aspect ratio information from the bitstream."
@@ -6239,7 +6236,7 @@ msgstr "Fixer la largeur à l'écran de la piste. La hauteur doit également êt
 
 #: src/mmg/options/mkvmerge.cpp:57
 msgid "Sets the priority that mkvmerge will run with. Chosing 'lowest' will cause mkvmerge to select a low I/O priority as well."
-msgstr ""
+msgstr "Définit la priorité de fonctionnement de mkvmerge. En choisissant 'la plus basse', mkvmerge sélectionnera en plus une priorité E/S basse."
 
 #: src/mmg/tabs/global.cpp:331
 msgid ""
@@ -7049,7 +7046,7 @@ msgstr "Le fichier ne peut pas être ouvert en lecture ou il n'y a pas assez de 
 
 #: src/info/qt_ui.cpp:77
 msgid "The file could not be opened for writing."
-msgstr "Le fichierne peut pas être ouvert en écriture."
+msgstr "Le fichier ne peut pas être ouvert en écriture."
 
 #: src/mmg/mmg_dialog.cpp:413
 msgid "The file does not exist."
@@ -7086,9 +7083,8 @@ msgstr "Le fichier est d'un format conteneur non supporté (%s)."
 
 #: src/mmg/wx_kax_analyzer.cpp:36
 #: src/propedit/propedit.cpp:94
-#, fuzzy
 msgid "The file is being analyzed."
-msgstr "Le fichier est analysé.\n"
+msgstr "Le fichier est en cours d'analyse."
 
 #: src/merge/output_control.cpp:282
 msgid "The file is being fixed, part 1/4..."
@@ -7150,7 +7146,7 @@ msgstr "Le fichier ajouté est une liste de lecture. Le dossier dans lequel il s
 #: src/common/kax_file.cpp:48
 #, boost-format
 msgid "The first cluster timecode after the resync is %1%.\n"
-msgstr ""
+msgstr "Le premier code temporel après la resynchronisation est %1%.\n"
 
 #: src/merge/mkvmerge.cpp:1755
 msgid "The first file cannot be appended because there are no files to append to.\n"
@@ -7269,7 +7265,7 @@ msgstr "'%1%' n'est pas un code de langue ISO639-2 correct, il sera ignoré.\n"
 #: src/common/kax_file.cpp:197
 #, boost-format
 msgid "The last timecode processed before the error was encountered was %1%.\n"
-msgstr ""
+msgstr "Le dernier code temporel traité avant l'erreur était %1%.\n"
 
 #: src/merge/timecode_factory.cpp:213
 #, boost-format
@@ -7730,7 +7726,7 @@ msgstr "Cette piste AVC/h.264 ne débute pas par une image clé. Les %1% premiè
 
 #: src/output/p_avc.cpp:126
 msgid "This AVC/h.264 track's timing information indicates that it uses a variable frame rate. However, no default duration nor an external timecode file has been provided for it, nor does the source container provide timecodes. The resulting timecodes may not be useful.\n"
-msgstr ""
+msgstr "L'information de temps de cette piste AVC/h.264 indique l'utilisation d'une fréquence d'image variable. Toutefois, aucune durée par défaut ni aucun code temporel externe n'est donné et le conteneur source ne fournit aucun code temporel. Il se pourrait que les codes temporels résultants ne soient pas pertinents.\n"
 
 #: src/output/p_mp3.cpp:58
 #, boost-format
@@ -8473,7 +8469,7 @@ msgstr "Écriture du fichier d'index VobSub '%1%'.\n"
 
 #: src/mmg/tabs/chapters.cpp:1677
 msgid "Writing to the file failed. Typical reasons include the file being write-protected, locked by another process or you not having write permissions for the target directory."
-msgstr ""
+msgstr "L'écriture du fichier a échoué. Les raisons typiques sont : fichier en lecture seule, fichier verrouillé par un autre processus ou pas d'autorisation d'écriture dans le dossier de destination."
 
 #: src/common/kate.cpp:59
 #, boost-format
