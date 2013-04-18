@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: Israel Lucas Torrijos <lukillas.ole@gmail.com>\n"
 "POT-Creation-Date: 2010-06-08 10:00+0200\n"
-"PO-Revision-Date: 2013-02-26 02:25+0100\n"
+"PO-Revision-Date: 2013-04-17 18:53+0100\n"
 "Last-Translator: Israel Lucas a.k.a Overdrive80 <lukillas.ole@gmail.com>\n"
 "Language-Team: Spanish <moritz@bunkus.org>\n"
 "Language: es\n"
@@ -300,16 +300,15 @@ msgid "  --engage <feature>       Turns on experimental feature 'feature'.\n"
 msgstr "  --engage <feature>       Habilita la característica experimental 'feature'.\n"
 
 #: src/merge/mkvmerge.cpp:222
-#, fuzzy
 msgid ""
 "  --fix-bitstream-timing-information <TID[:bool]>\n"
 "                           Adjust the frame/field rate stored in the video\n"
 "                           bitstream to match the track's default duration.\n"
 msgstr ""
-"  --forced-track <TID[:bool]>\n"
-"                           Establece como forzada esta pista o\n"
-"                           la obliga a no estar presente si el\n"
-"                           booleano es 0.\n"
+"  --fix-bitstream-timing-information <TID[:bool]>\n"
+"                           Ajusta la tasa de fotogramas/campos\n"
+"                           almacenado en el video para que coincida\n"
+"                           con la duración por defecto de la pista.\n"
 
 #: src/merge/mkvmerge.cpp:205
 msgid ""
@@ -1588,9 +1587,8 @@ msgid "'--engage' lacks its argument.\n"
 msgstr "'--engage' carece de su argumento.\n"
 
 #: src/merge/mkvmerge.cpp:2332
-#, fuzzy
 msgid "'--fix-bitstream-timing-information' lacks its argument.\n"
-msgstr "'--default-duration' carece de su argumento.\n"
+msgstr "'--fix-bitstream-timing-information' carece de su argumento.\n"
 
 #: src/merge/mkvmerge.cpp:2224
 msgid "'--forced-track' lacks its argument.\n"
@@ -2599,9 +2597,9 @@ msgid "Chapter files (*.xml;*.txt;*.cue)|*.xml;*.txt;*.cue|%s"
 msgstr "Archivos del capítulo (*.xml;*.txt;*.cue)|*.xml;*.txt;*.cue|%s"
 
 #: src/mmg/tabs/chapters.cpp:561
-#, fuzzy, c-format, boost-format
+#, c-format, boost-format
 msgid "Chapter files (*.xml;*.txt;*.mka;*.mkv;*.mks;*.mk3d;*.cue)|*.xml;*.txt;*.mka;*.mkv;*.mks;*.mk3d;*.cue|%s"
-msgstr "Archivos del capítulo (*.xml;*.txt;*.mka;*.mkv;*.mk3d;*.cue)|*.xml;*.txt;*.mka;*.mkv;*.mk3d;*.cue|%s"
+msgstr "Archivos del capítulo (*.xml;*.txt;*.mka;*.mkv;*.mks;*.mk3d;*.cue)|*.xml;*.txt;*.mka;*.mkv;*.mks;*.mk3d;*.cue|%s"
 
 #: src/mmg/tabs/chapters.cpp:366
 msgid "Chapter names and languages"
@@ -3870,9 +3868,8 @@ msgid "Finished processing on %s"
 msgstr "Finalizado el proceso en %s"
 
 #: src/mmg/tabs/input_format.cpp:260
-#, fuzzy
 msgid "Fix bitstream timing information"
-msgstr "Error guardando la información"
+msgstr "Corregir la información de sincronización del bitstream"
 
 #: src/mmg/tabs/chapters.cpp:354
 msgid "Flags:"
@@ -4314,9 +4311,9 @@ msgid "Invalid boolean option specified in '--default-track %1%'.\n"
 msgstr "No es válida la opción del boleano especificado en '--default-track %1%'.\n"
 
 #: src/merge/mkvmerge.cpp:1415
-#, fuzzy, boost-format
+#, boost-format
 msgid "Invalid boolean option specified in '--fix-bitstream-timing-information %1%'.\n"
-msgstr "No es válida la opción del boleano especificado en '--forced-track %1%'.\n"
+msgstr "La opción del boleano especificado no es válida en '--fix-bitstream-timing-information %1%'.\n"
 
 #: src/merge/mkvmerge.cpp:1067
 #, boost-format
@@ -4640,9 +4637,9 @@ msgid "Invalid track ID specified in '--default-track %1%'.\n"
 msgstr "ID de pista especificado en '--default-track %1%'.\n"
 
 #: src/merge/mkvmerge.cpp:1409
-#, fuzzy, boost-format
+#, boost-format
 msgid "Invalid track ID specified in '--fix-bitstream-timing-information %1%'.\n"
-msgstr "ID de pista especificado en  '--forced-track %1%'.\n"
+msgstr "El ID de la pista especificada es invalida en '--fix-bitstream-timing-information %1%'.\n"
 
 #: src/merge/mkvmerge.cpp:1061
 #, boost-format
@@ -5299,7 +5296,7 @@ msgstr "Ninguno de los campos del encabezado fue modificado. Nada ha sido guarda
 
 #: src/mmg/tabs/input_format.cpp:261
 msgid "Normally mkvmerge does not change the timing information (frame/field rate) stored in the video bitstream. With this option that information is adjusted to match the container timing information. The container timing information can come from various sources: from the command line via --default-duration, the source container or derived from the bitstream."
-msgstr ""
+msgstr "Normalmente mkvmerge no cambia la informacion de sincronización (tasa de fotogramas/campos) almacenada en el video. Con esta opción esa información es ajustada para coincidir con la información de sincronización del contenedor. La información de sincronización del contenedor puede provenir de varias fuentes: de la linea de comandos --default-duration, del contenedor o de la información derivada del video."
 
 #: src/mmg/cli_options_dlg.cpp:144
 msgid "Normally mkvmerge keeps aspect ratio information in MPEG4 video bitstreams and puts the information into the container. This option causes mkvmerge to remove the aspect ratio information from the bitstream."
@@ -6325,7 +6322,7 @@ msgstr "Establece el ancho de la visualización de la pista. La altura debe esta
 
 #: src/mmg/options/mkvmerge.cpp:57
 msgid "Sets the priority that mkvmerge will run with. Chosing 'lowest' will cause mkvmerge to select a low I/O priority as well."
-msgstr ""
+msgstr "Ajusta la prioridad que mkvmerge se ejecuta. Elegiendo 'muy baja' hará que mkvmerge seleccione también una baja prioridad I/O (Input/Output). "
 
 #: src/mmg/tabs/global.cpp:331
 msgid ""
@@ -7175,9 +7172,8 @@ msgstr "El archivo es un formato de contenedor no compatible (%s)."
 
 #: src/mmg/wx_kax_analyzer.cpp:36
 #: src/propedit/propedit.cpp:94
-#, fuzzy
 msgid "The file is being analyzed."
-msgstr "El archivo está analizado.\n"
+msgstr "El archivo está siendo analizado."
 
 #: src/merge/output_control.cpp:282
 msgid "The file is being fixed, part 1/4..."
@@ -7239,7 +7235,7 @@ msgstr "El archivo que añadiste es un playlist. El directorio donde se encuentr
 #: src/common/kax_file.cpp:48
 #, boost-format
 msgid "The first cluster timecode after the resync is %1%.\n"
-msgstr ""
+msgstr "El primer cluster del timecode despues de la resincronización es %1%.\n"
 
 #: src/merge/mkvmerge.cpp:1755
 msgid "The first file cannot be appended because there are no files to append to.\n"
@@ -7358,7 +7354,7 @@ msgstr "El código del idioma '%1%' no es un código de idioma ISO639-2 válido 
 #: src/common/kax_file.cpp:197
 #, boost-format
 msgid "The last timecode processed before the error was encountered was %1%.\n"
-msgstr ""
+msgstr "El último timecode procesado antes del error encontrado fue %1%.\n"
 
 #: src/merge/timecode_factory.cpp:213
 #, boost-format
@@ -7821,7 +7817,7 @@ msgstr "Esta pista AVC/h.264 no se inicia con un fotograma clave (keyframe). El 
 
 #: src/output/p_avc.cpp:126
 msgid "This AVC/h.264 track's timing information indicates that it uses a variable frame rate. However, no default duration nor an external timecode file has been provided for it, nor does the source container provide timecodes. The resulting timecodes may not be useful.\n"
-msgstr ""
+msgstr "La información de sincronización de la pista AVC/h.264 indica que usa una tasa de fotogramas variable (variable framerate). Sin embargo, ni la duración por defecto ni un archivo de timecodes externo ha sido proporcionado para esto, y tampoco el contenedor proporciona los timecodes. Los timecodes resultantes puede que no sean útiles.\n"
 
 #: src/output/p_mp3.cpp:58
 #, boost-format
@@ -8567,7 +8563,7 @@ msgstr "Escritura del índice del archivo VobSub '%1%'.\n"
 
 #: src/mmg/tabs/chapters.cpp:1677
 msgid "Writing to the file failed. Typical reasons include the file being write-protected, locked by another process or you not having write permissions for the target directory."
-msgstr ""
+msgstr "La escritura del archivo ha fallado. La causa más frecuente es que el archivo esta protegido contra escritura, bloqueado por otro proceso o no tienes permisos de escritura en el directorio indicado."
 
 #: src/common/kate.cpp:59
 #, boost-format
