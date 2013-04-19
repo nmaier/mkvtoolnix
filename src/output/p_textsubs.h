@@ -22,12 +22,11 @@ class textsubs_packetizer_c: public generic_packetizer_c {
 private:
   int m_packetno;
   charset_converter_cptr m_cc_utf8;
-  memory_cptr m_global_data;
   std::string m_codec_id;
   bool m_recode;
 
 public:
-  textsubs_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, const char *codec_id, const void *global_data, int global_size, bool recode, bool is_utf8);
+  textsubs_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, const char *codec_id, bool recode, bool is_utf8);
   virtual ~textsubs_packetizer_c();
 
   virtual int process(packet_cptr packet);

@@ -46,11 +46,8 @@ mpeg4_p2_video_packetizer_c(generic_reader_c *p_reader,
 
   } else {
     set_codec_id(MKV_V_MPEG4_ASP);
-    if (!m_input_is_native) {
-      safefree(m_ti.m_private_data);
-      m_ti.m_private_data = nullptr;
-      m_ti.m_private_size = 0;
-    }
+    if (!m_input_is_native)
+      m_ti.m_private_data.reset();
 
     // If no external timecode file has been specified then mkvmerge
     // might have created a factory due to the --default-duration
@@ -176,16 +173,12 @@ mpeg4_p2_video_packetizer_c::extract_config_data(packet_cptr &packet) {
   if (m_ti.m_private_data)
     return;
 
-  memory_c *config_data = mpeg4::p2::parse_config_data(packet->data->get_buffer(), packet->data->get_size(), m_config_data);
-  if (!config_data)
+  m_ti.m_private_data = memory_cptr{mpeg4::p2::parse_config_data(packet->data->get_buffer(), packet->data->get_size(), m_config_data)};
+  if (!m_ti.m_private_data)
     mxerror_tid(m_ti.m_fname, m_ti.m_id, Y("Could not find the codec configuration data in the first MPEG-4 part 2 video frame. This track cannot be stored in native mode.\n"));
 
-  m_ti.m_private_data = (unsigned char *)safememdup(config_data->get_buffer(), config_data->get_size());
-  m_ti.m_private_size = config_data->get_size();
-  delete config_data;
-
   fix_codec_string();
-  set_codec_private(m_ti.m_private_data, m_ti.m_private_size);
+  set_codec_private(m_ti.m_private_data);
   rerender_track_headers();
 }
 
@@ -193,13 +186,14 @@ void
 mpeg4_p2_video_packetizer_c::fix_codec_string() {
   static const unsigned char start_code[4] = {0x00, 0x00, 0x01, 0xb2};
 
-  if (!m_ti.m_private_data || (0 == m_ti.m_private_size))
+  if (!m_ti.m_private_data || (0 == m_ti.m_private_data->get_size()))
     return;
 
-  int size = m_ti.m_private_size;
+  auto private_data = m_ti.m_private_data->get_buffer();
+  int size = m_ti.m_private_data->get_size();
   int i;
   for (i = 0; 9 < size;) {
-    if (memcmp(&m_ti.m_private_data[i], start_code, 4) != 0) {
+    if (memcmp(&private_data[i], start_code, 4) != 0) {
       ++i;
       --size;
       continue;
@@ -207,12 +201,12 @@ mpeg4_p2_video_packetizer_c::fix_codec_string() {
 
     i    += 8;
     size -= 8;
-    if (strncasecmp((const char *)&m_ti.m_private_data[i - 4], "divx", 4) != 0)
+    if (strncasecmp((const char *)&private_data[i - 4], "divx", 4) != 0)
       continue;
 
-    unsigned char *end_pos = (unsigned char *)memchr(&m_ti.m_private_data[i], 0, size);
+    unsigned char *end_pos = (unsigned char *)memchr(&private_data[i], 0, size);
     if (!end_pos)
-      end_pos = &m_ti.m_private_data[i + size];
+      end_pos = &private_data[i + size];
 
     --end_pos;
     if ('p' == *end_pos)
@@ -361,11 +355,11 @@ mpeg4_p2_video_packetizer_c::extract_size(const unsigned char *buffer,
       set_video_pixel_width(xtr_width);
       set_video_pixel_height(xtr_height);
 
-      if (!m_output_is_native && (sizeof(alBITMAPINFOHEADER) <= m_ti.m_private_size)) {
-        alBITMAPINFOHEADER *bih = (alBITMAPINFOHEADER *)m_ti.m_private_data;
+      if (!m_output_is_native && m_ti.m_private_data && (sizeof(alBITMAPINFOHEADER) <= m_ti.m_private_data->get_size())) {
+        auto bih = reinterpret_cast<alBITMAPINFOHEADER *>(m_ti.m_private_data->get_buffer());
         put_uint32_le(&bih->bi_width,  xtr_width);
         put_uint32_le(&bih->bi_height, xtr_height);
-        set_codec_private(m_ti.m_private_data, m_ti.m_private_size);
+        set_codec_private(m_ti.m_private_data);
       }
 
       m_hvideo_display_width  = -1;

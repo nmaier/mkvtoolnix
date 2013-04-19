@@ -16,8 +16,8 @@
 #include "common/hacks.h"
 #include "common/matroska.h"
 #include "common/truehd.h"
+#include "merge/connection_checks.h"
 #include "merge/output_control.h"
-#include "merge/pr_generic.h"
 #include "output/p_truehd.h"
 
 using namespace libmatroska;

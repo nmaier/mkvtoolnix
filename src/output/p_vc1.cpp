@@ -88,7 +88,7 @@ vc1_video_packetizer_c::set_headers() {
   } else
     set_track_default_duration(1000000000ll * 1001 / 30000);
 
-  set_codec_private(buf->get_buffer(), buf->get_size());
+  set_codec_private(buf);
 
   generic_packetizer_c::set_headers();
 

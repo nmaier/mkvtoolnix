@@ -72,8 +72,6 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *reader,
   , m_default_track_warning_printed(false)
   , m_huid(0)
   , m_htrack_max_add_block_ids(-1)
-  , m_hcodec_private(nullptr)
-  , m_hcodec_private_length(0)
   , m_haudio_sampling_freq(-1.0)
   , m_haudio_output_sampling_freq(-1.0)
   , m_haudio_channels(-1)
@@ -252,7 +250,6 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *reader,
 }
 
 generic_packetizer_c::~generic_packetizer_c() {
-  safefree(m_hcodec_private);
   if (!m_packet_queue.empty())
     mxerror_tid(m_ti.m_fname, m_ti.m_id, boost::format(Y("Packet queue not empty (flushed: %1%). Frames have been lost during remux. %2%\n")) % m_has_been_flushed % BUGMSG);
 }
@@ -344,21 +341,15 @@ generic_packetizer_c::set_codec_id(const std::string &id) {
 }
 
 void
-generic_packetizer_c::set_codec_private(const unsigned char *cp,
-                                        int length) {
-  safefree(m_hcodec_private);
+generic_packetizer_c::set_codec_private(memory_cptr const &buffer) {
+  if (buffer && buffer->get_size()) {
+    m_hcodec_private = buffer->clone();
 
-  if (!cp) {
-    m_hcodec_private        = nullptr;
-    m_hcodec_private_length = 0;
-    return;
-  }
+    if (m_track_entry)
+      GetChild<KaxCodecPrivate>(*m_track_entry).CopyBuffer(static_cast<binary *>(m_hcodec_private->get_buffer()), m_hcodec_private->get_size());
 
-  m_hcodec_private        = (unsigned char *)safememdup(cp, length);
-  m_hcodec_private_length = length;
-
-  if (m_track_entry)
-    GetChild<KaxCodecPrivate>(*m_track_entry).CopyBuffer((binary *)m_hcodec_private, m_hcodec_private_length);
+  } else
+    m_hcodec_private.reset();
 }
 
 void
@@ -634,7 +625,7 @@ generic_packetizer_c::set_headers() {
     GetChild<KaxCodecID>(m_track_entry).SetValue(m_hcodec_id);
 
   if (m_hcodec_private)
-    GetChild<KaxCodecPrivate>(*m_track_entry).CopyBuffer((binary *)m_hcodec_private, m_hcodec_private_length);
+    GetChild<KaxCodecPrivate>(*m_track_entry).CopyBuffer(static_cast<binary *>(m_hcodec_private->get_buffer()), m_hcodec_private->get_size());
 
   if (!outputting_webm()) {
     if (-1 != m_htrack_min_cache)
@@ -1528,11 +1519,8 @@ generic_reader_c::get_underlying_input_as_multi_file_io()
 //--------------------------------------------------------------------
 
 track_info_c::track_info_c()
-  : m_initialized(true)
-  , m_id(0)
+  : m_id(0)
   , m_disable_multi_file(false)
-  , m_private_data(nullptr)
-  , m_private_size(0)
   , m_aspect_ratio(0.0)
   , m_display_width(0)
   , m_display_height(0)
@@ -1562,20 +1550,8 @@ track_info_c::track_info_c()
 {
 }
 
-void
-track_info_c::free_contents() {
-  if (!m_initialized)
-    return;
-
-  safefree(m_private_data);
-
-  m_initialized = false;
-}
-
 track_info_c &
 track_info_c::operator =(const track_info_c &src) {
-  free_contents();
-
   m_id                         = src.m_id;
   m_fname                      = src.m_fname;
 
@@ -1586,8 +1562,7 @@ track_info_c::operator =(const track_info_c &src) {
   m_track_tags                 = src.m_track_tags;
   m_disable_multi_file         = src.m_disable_multi_file;
 
-  m_private_size               = src.m_private_size;
-  m_private_data               = (unsigned char *)safememdup(src.m_private_data, m_private_size);
+  m_private_data               = src.m_private_data ? src.m_private_data->clone() : src.m_private_data;
 
   m_all_fourccs                = src.m_all_fourccs;
 
@@ -1669,8 +1644,6 @@ track_info_c::operator =(const track_info_c &src) {
 
   m_default_durations          = src.m_default_durations;
   m_max_blockadd_ids           = src.m_max_blockadd_ids;
-
-  m_initialized                = true;
 
   return *this;
 }

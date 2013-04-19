@@ -154,8 +154,9 @@ usf_reader_c::create_packetizer(int64_t tid) {
   if (!demuxing_requested('s', tid) || (-1 != track->m_ptzr))
     return;
 
-  m_ti.m_language = track->m_language;
-  track->m_ptzr   = add_packetizer(new textsubs_packetizer_c(this, m_ti, MKV_S_TEXTUSF, m_private_data.c_str(), m_private_data.length(), false, true));
+  m_ti.m_private_data = memory_c::clone(m_private_data);
+  m_ti.m_language     = track->m_language;
+  track->m_ptzr       = add_packetizer(new textsubs_packetizer_c(this, m_ti, MKV_S_TEXTUSF, false, true));
   show_packetizer_info(tid, PTZR(track->m_ptzr));
 }
 

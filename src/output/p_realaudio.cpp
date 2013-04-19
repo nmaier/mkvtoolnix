@@ -14,7 +14,7 @@
 #include "common/common_pch.h"
 
 #include "common/matroska.h"
-#include "merge/pr_generic.h"
+#include "merge/connection_checks.h"
 #include "output/p_realaudio.h"
 
 using namespace libmatroska;
@@ -24,14 +24,12 @@ ra_packetizer_c::ra_packetizer_c(generic_reader_c *p_reader,
                                  int samples_per_sec,
                                  int channels,
                                  int bits_per_sample,
-                                 uint32_t fourcc,
-                                 const memory_cptr &private_data)
+                                 uint32_t fourcc)
   : generic_packetizer_c(p_reader, p_ti)
   , m_samples_per_sec(samples_per_sec)
   , m_channels(channels)
   , m_bits_per_sample(bits_per_sample)
   , m_fourcc(fourcc)
-  , m_private_data(private_data ? private_data->clone() : private_data)
 {
   set_track_type(track_audio, TFA_SHORT_QUEUEING);
 }
@@ -47,8 +45,7 @@ ra_packetizer_c::set_headers() {
   set_audio_sampling_freq((float)m_samples_per_sec);
   set_audio_channels(m_channels);
   set_audio_bit_depth(m_bits_per_sample);
-  if (m_private_data)
-    set_codec_private(m_private_data->get_buffer(), m_private_data->get_size());
+  set_codec_private(m_ti.m_private_data);
 
   generic_packetizer_c::set_headers();
   m_track_entry->EnableLacing(false);

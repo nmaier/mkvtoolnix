@@ -20,11 +20,8 @@
 #include "merge/pr_generic.h"
 
 class vobsub_packetizer_c: public generic_packetizer_c {
-private:
-  memory_cptr idx_data;
-
 public:
-  vobsub_packetizer_c(generic_reader_c *_reader, const void *_idx_data, int _idx_data_size, track_info_c &_ti);
+  vobsub_packetizer_c(generic_reader_c *reader, track_info_c &ti);
   virtual ~vobsub_packetizer_c();
 
   virtual int process(packet_cptr packet);

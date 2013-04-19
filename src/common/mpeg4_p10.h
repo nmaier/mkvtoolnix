@@ -142,8 +142,8 @@ void rbsp_to_nalu(memory_cptr &buffer);
 bool parse_sps(memory_cptr &buffer, sps_info_t &sps, bool keep_ar_info = false, bool fix_bitstream_frame_rate = false, int64_t duration = -1);
 bool parse_pps(memory_cptr &buffer, pps_info_t &pps);
 
-bool extract_par(uint8_t *&buffer, size_t &buffer_size, uint32_t &par_num, uint32_t &par_den);
-void fix_sps_fps(uint8_t *&buffer, size_t &buffer_size, int64_t duration);
+memory_cptr extract_par(memory_cptr const &buffer, uint32_t &par_num, uint32_t &par_den);
+memory_cptr fix_sps_fps(memory_cptr const &buffer, int64_t duration);
 bool is_avc_fourcc(const char *fourcc);
 memory_cptr avcc_to_nalus(const unsigned char *buffer, size_t size);
 

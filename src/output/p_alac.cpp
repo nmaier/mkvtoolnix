@@ -16,6 +16,7 @@
 #include "common/alac.h"
 #include "common/hacks.h"
 #include "common/matroska.h"
+#include "merge/connection_checks.h"
 #include "output/p_alac.h"
 
 using namespace libmatroska;
@@ -37,7 +38,7 @@ alac_packetizer_c::alac_packetizer_c(generic_reader_c *p_reader,
   set_audio_sampling_freq(static_cast<double>(m_sample_rate));
   set_audio_channels(m_channels);
 
-  set_codec_private(magic_cookie->get_buffer(), magic_cookie->get_size());
+  set_codec_private(magic_cookie);
 }
 
 alac_packetizer_c::~alac_packetizer_c() {

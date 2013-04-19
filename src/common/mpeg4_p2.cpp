@@ -342,7 +342,7 @@ mpeg4::p2::find_frame_types(const unsigned char *buffer,
    \return \c nullptr if no configuration data was found and a pointer to
      a memory_c object otherwise. This object has to be deleted manually.
 */
-memory_c *
+memory_cptr
 mpeg4::p2::parse_config_data(const unsigned char *buffer,
                              int buffer_size,
                              mpeg4::p2::config_data_t &config_data) {
@@ -389,16 +389,16 @@ mpeg4::p2::parse_config_data(const unsigned char *buffer,
     } catch (...) {
     }
 
-  memory_c *mem;
+  memory_cptr mem;
   if (-1 == vos_offset) {
-    mem                = new memory_c((unsigned char *)safemalloc(size + 5), size + 5, true);
+    mem                = memory_c::alloc(size + 5);
     unsigned char *dst = mem->get_buffer();
     put_uint32_be(dst, MPEGVIDEO_VOS_START_CODE);
     dst[4] = 0xf5;
     memcpy(dst + 5, buffer, size);
 
   } else {
-    mem                = new memory_c((unsigned char *)safemalloc(size), size, true);
+    mem                = memory_c::alloc(size);
     unsigned char *dst = mem->get_buffer();
     put_uint32_be(dst, MPEGVIDEO_VOS_START_CODE);
     if (3 >= buffer[vos_offset + 4])

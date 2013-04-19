@@ -420,8 +420,7 @@ ogm_reader_c::create_packetizer(int64_t tid) {
   if (!dmx->in_use)
     return;
 
-  m_ti.m_private_data = nullptr;
-  m_ti.m_private_size = 0;
+  m_ti.m_private_data.reset();
   m_ti.m_id           = tid;
   m_ti.m_language     = dmx->language;
   m_ti.m_track_name   = dmx->title;
@@ -1104,7 +1103,8 @@ ogm_a_opus_demuxer_c::ogm_a_opus_demuxer_c(ogm_reader_c *p_reader)
 
 generic_packetizer_c *
 ogm_a_opus_demuxer_c::create_packetizer() {
-  auto ptzr_obj = new opus_packetizer_c(reader, m_ti, packet_data[0]);
+  m_ti.m_private_data = packet_data[0];
+  auto ptzr_obj       = new opus_packetizer_c(reader, m_ti);
 
   show_packetizer_info(m_ti.m_id, ptzr_obj);
 
@@ -1135,7 +1135,7 @@ ogm_s_text_demuxer_c::ogm_s_text_demuxer_c(ogm_reader_c *p_reader)
 
 generic_packetizer_c *
 ogm_s_text_demuxer_c::create_packetizer() {
-  generic_packetizer_c *ptzr_obj = new textsubs_packetizer_c(reader, m_ti, MKV_S_TEXTUTF8, nullptr, 0, true, false);
+  generic_packetizer_c *ptzr_obj = new textsubs_packetizer_c(reader, m_ti, MKV_S_TEXTUTF8, true, false);
 
   show_packetizer_info(m_ti.m_id, ptzr_obj);
 
@@ -1177,9 +1177,6 @@ ogm_v_avc_demuxer_c::ogm_v_avc_demuxer_c(ogm_reader_c *p_reader)
 generic_packetizer_c *
 ogm_v_avc_demuxer_c::create_packetizer() {
   stream_header *sth          = (stream_header *)&packet_data[0]->get_buffer()[1];
-
-  m_ti.m_private_data         = nullptr;
-  m_ti.m_private_size         = 0;
   generic_packetizer_c *vptzr = new mpeg4_p10_es_video_packetizer_c(reader, m_ti);
 
   vptzr->set_video_pixel_dimensions(get_uint32_le(&sth->sh.video.width), get_uint32_le(&sth->sh.video.height));
@@ -1235,8 +1232,7 @@ ogm_v_mscomp_demuxer_c::create_packetizer() {
   put_uint32_le(&bih.bi_size_image, get_uint32_le(&bih.bi_width) * get_uint32_le(&bih.bi_height) * 3);
   memcpy(&bih.bi_compression, sth->subtype, 4);
 
-  m_ti.m_private_data = (unsigned char *)&bih;
-  m_ti.m_private_size = sizeof(alBITMAPINFOHEADER);
+  m_ti.m_private_data = memory_c::clone(&bih, sizeof(alBITMAPINFOHEADER));
 
   double fps          = (double)10000000.0 / get_uint64_le(&sth->time_unit);
   int width           = get_uint32_le(&sth->sh.video.width);
@@ -1249,8 +1245,6 @@ ogm_v_mscomp_demuxer_c::create_packetizer() {
     ptzr_obj = new video_packetizer_c(reader, m_ti, nullptr, fps, width, height);
 
   show_packetizer_info(m_ti.m_id, ptzr_obj);
-
-  m_ti.m_private_data = nullptr;
 
   return ptzr_obj;
 }
@@ -1328,16 +1322,12 @@ ogm_v_theora_demuxer_c::initialize() {
 
 generic_packetizer_c *
 ogm_v_theora_demuxer_c::create_packetizer() {
-  memory_cptr codecprivate       = lace_memory_xiph(packet_data);
-  m_ti.m_private_data            = codecprivate->get_buffer();
-  m_ti.m_private_size            = codecprivate->get_size();
+  m_ti.m_private_data            = lace_memory_xiph(packet_data);
 
   double                fps      = (double)theora.frn / (double)theora.frd;
   generic_packetizer_c *ptzr_obj = new theora_video_packetizer_c(reader, m_ti, fps, theora.fmbw, theora.fmbh);
 
   show_packetizer_info(m_ti.m_id, ptzr_obj);
-
-  m_ti.m_private_data = nullptr;
 
   return ptzr_obj;
 }
@@ -1498,15 +1488,10 @@ ogm_s_kate_demuxer_c::initialize() {
 
 generic_packetizer_c *
 ogm_s_kate_demuxer_c::create_packetizer() {
-  memory_cptr codecprivate       = lace_memory_xiph(packet_data);
-  m_ti.m_private_data            = codecprivate->get_buffer();
-  m_ti.m_private_size            = codecprivate->get_size();
-
-  generic_packetizer_c *ptzr_obj = new kate_packetizer_c(reader, m_ti, m_ti.m_private_data, m_ti.m_private_size);
+  m_ti.m_private_data = lace_memory_xiph(packet_data);
+  auto ptzr_obj       = new kate_packetizer_c(reader, m_ti);
 
   show_packetizer_info(m_ti.m_id, ptzr_obj);
-
-  m_ti.m_private_data = nullptr;
 
   return ptzr_obj;
 }

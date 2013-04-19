@@ -15,6 +15,7 @@
 
 #include "common/matroska.h"
 #include "common/mp3.h"
+#include "merge/connection_checks.h"
 #include "merge/output_control.h"
 #include "output/p_mp3.h"
 

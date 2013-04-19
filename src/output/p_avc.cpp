@@ -17,6 +17,7 @@
 #include "common/math.h"
 #include "common/matroska.h"
 #include "common/mpeg4_p10.h"
+#include "merge/connection_checks.h"
 #include "merge/output_control.h"
 #include "output/p_avc.h"
 
@@ -114,8 +115,7 @@ mpeg4_p10_es_video_packetizer_c::handle_delayed_headers() {
   if (0 < m_parser.get_num_skipped_frames())
     mxwarn_tid(m_ti.m_fname, m_ti.m_id, boost::format(Y("This AVC/h.264 track does not start with a key frame. The first %1% frames have been skipped.\n")) % m_parser.get_num_skipped_frames());
 
-  memory_cptr new_avcc = m_parser.get_avcc();
-  set_codec_private(new_avcc->get_buffer(), new_avcc->get_size());
+  set_codec_private(m_parser.get_avcc());
 
   if (   !m_reader->is_providing_timecodes()
       && !m_timecode_factory

@@ -69,8 +69,8 @@ ssa_reader_c::create_packetizer(int64_t) {
   if (!demuxing_requested('s', 0) || (NPTZR() != 0))
     return;
 
-  std::string global = m_subs->get_global();
-  add_packetizer(new textsubs_packetizer_c(this, m_ti, m_subs->is_ass() ?  MKV_S_TEXTASS : MKV_S_TEXTSSA, global.c_str(), global.length(), false, false));
+  m_ti.m_private_data = memory_c::clone(m_subs->get_global());
+  add_packetizer(new textsubs_packetizer_c(this, m_ti, m_subs->is_ass() ?  MKV_S_TEXTASS : MKV_S_TEXTSSA, false, false));
   show_packetizer_info(0, PTZR0);
 }
 

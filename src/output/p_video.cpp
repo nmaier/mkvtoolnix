@@ -19,7 +19,7 @@
 #include "common/math.h"
 #include "common/matroska.h"
 #include "common/mpeg4_p2.h"
-#include "merge/output_control.h"
+#include "merge/connection_checks.h"
 #include "output/p_video.h"
 
 #include <avilib.h>
@@ -49,7 +49,7 @@ video_packetizer_c::video_packetizer_c(generic_reader_c *p_reader,
   else
     set_codec_id(MKV_V_MSCOMP);
 
-  set_codec_private(m_ti.m_private_data, m_ti.m_private_size);
+  set_codec_private(m_ti.m_private_data);
   check_fourcc();
 }
 
@@ -57,16 +57,16 @@ void
 video_packetizer_c::check_fourcc() {
   if (   (m_hcodec_id                != MKV_V_MSCOMP)
       || !m_ti.m_private_data
-      || (sizeof(alBITMAPINFOHEADER) >  m_ti.m_private_size))
+      || (sizeof(alBITMAPINFOHEADER) >  m_ti.m_private_data->get_size()))
     return;
 
   if (!m_ti.m_fourcc.empty()) {
-    memcpy(&((alBITMAPINFOHEADER *)m_ti.m_private_data)->bi_compression, m_ti.m_fourcc.c_str(), 4);
-    set_codec_private(m_ti.m_private_data, m_ti.m_private_size);
+    memcpy(&reinterpret_cast<alBITMAPINFOHEADER *>(m_ti.m_private_data->get_buffer())->bi_compression, m_ti.m_fourcc.c_str(), 4);
+    set_codec_private(m_ti.m_private_data);
   }
 
   char fourcc[5];
-  memcpy(fourcc, &((alBITMAPINFOHEADER *)m_ti.m_private_data)->bi_compression, 4);
+  memcpy(fourcc, &reinterpret_cast<alBITMAPINFOHEADER *>(m_ti.m_private_data->get_buffer())->bi_compression, 4);
   fourcc[4] = 0;
 
   if (mpeg4::p2::is_v3_fourcc(fourcc))

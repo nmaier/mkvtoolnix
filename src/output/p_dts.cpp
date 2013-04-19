@@ -16,8 +16,7 @@
 
 #include "common/dts.h"
 #include "common/matroska.h"
-#include "merge/output_control.h"
-#include "merge/pr_generic.h"
+#include "merge/connection_checks.h"
 #include "output/p_dts.h"
 
 using namespace libmatroska;

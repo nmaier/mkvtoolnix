@@ -16,6 +16,7 @@
 #include "common/aac.h"
 #include "common/hacks.h"
 #include "common/matroska.h"
+#include "merge/connection_checks.h"
 #include "output/p_aac.h"
 
 using namespace libmatroska;
@@ -130,8 +131,8 @@ aac_packetizer_c::set_headers() {
   set_audio_sampling_freq((float)m_samples_per_sec);
   set_audio_channels(m_channels);
 
-  if (m_ti.m_private_data && (0 < m_ti.m_private_size))
-    set_codec_private(m_ti.m_private_data, m_ti.m_private_size);
+  if (m_ti.m_private_data && (0 < m_ti.m_private_data->get_size()))
+    set_codec_private(m_ti.m_private_data);
 
   else if (!hack_engaged(ENGAGE_OLD_AAC_CODECID)) {
     unsigned char buffer[5];
@@ -140,7 +141,7 @@ aac_packetizer_c::set_headers() {
                                  m_channels, m_samples_per_sec,
                                  AAC_PROFILE_SBR == m_profile ? m_samples_per_sec * 2 : m_samples_per_sec,
                                  AAC_PROFILE_SBR == m_profile);
-    set_codec_private(buffer, length);
+    set_codec_private(memory_c::clone(buffer, length));
   }
 
   generic_packetizer_c::set_headers();

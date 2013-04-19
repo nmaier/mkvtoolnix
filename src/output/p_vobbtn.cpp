@@ -20,6 +20,7 @@
 #include "common/endian.h"
 #include "common/matroska.h"
 #include "common/mm_io.h"
+#include "merge/connection_checks.h"
 #include "output/p_vobbtn.h"
 
 using namespace libmatroska;

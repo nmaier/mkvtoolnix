@@ -28,7 +28,7 @@ private:
   mtx::opus::id_header_t m_id_header;
 
 public:
-  opus_packetizer_c(generic_reader_c *p_reader,  track_info_c &p_ti, memory_cptr const &id_header);
+  opus_packetizer_c(generic_reader_c *reader,  track_info_c &ti);
   virtual ~opus_packetizer_c();
 
   virtual int process(packet_cptr packet);

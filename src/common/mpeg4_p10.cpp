@@ -764,24 +764,21 @@ mpeg4::p10::parse_pps(memory_cptr &buffer,
    This function searches a buffer containing the MPEG4 layer 10 (AVC) codec
    initialization for the pixel aspectc ratio. If it is found then the
    numerator and the denominator are returned, and the aspect ratio
-   information is removed from the buffer. The new buffer is returned
-   in the variable \c buffer, and the new size is returned in \c buffer_size.
+   information is removed from the buffer. The new buffer is returned.
 
    \param buffer The buffer containing the MPEG4 layer 10 codec data.
-   \param buffer_size The size of the buffer in bytes.
    \param par_num The numerator, if found, is stored in this variable.
    \param par_den The denominator, if found, is stored in this variable.
 
-   \return \c true if the pixel aspect ratio was found and \c false
-     otherwise.
+   \return The new buffer. If the pixel aspect ratio was not found
+     then both \c par_num and \c par_den are set to 0.
 */
-bool
-mpeg4::p10::extract_par(uint8_t *&buffer,
-                        size_t &buffer_size,
+memory_cptr
+mpeg4::p10::extract_par(memory_cptr const &buffer,
                         uint32_t &par_num,
                         uint32_t &par_den) {
   try {
-    auto avcc     = avcc_c::unpack(memory_cptr{new memory_c{buffer, buffer_size, false}});
+    auto avcc     = avcc_c::unpack(buffer);
     auto new_avcc = avcc;
     par_num       = 1;
     par_den       = 1;
@@ -812,25 +809,28 @@ mpeg4::p10::extract_par(uint8_t *&buffer,
     }
 
     auto packed_new_avcc = new_avcc.pack();
-    if (packed_new_avcc) {
-      buffer_size = packed_new_avcc->get_size();
-      buffer      = packed_new_avcc->get_buffer();
-      packed_new_avcc->lock();
+
+    if (!ar_found) {
+      par_num = 0;
+      par_den = 0;
     }
 
-    return ar_found;
+    return packed_new_avcc;
 
   } catch(...) {
-    return false;
+    par_num = 0;
+    par_den = 0;
+
+    return buffer;
   }
 }
 
-void
-mpeg4::p10::fix_sps_fps(uint8_t *&buffer,
-                        size_t &buffer_size,
+memory_cptr
+mpeg4::p10::fix_sps_fps(memory_cptr const &buffer,
                         int64_t duration) {
   try {
-    mm_mem_io_c avcc(buffer, buffer_size), new_avcc(nullptr, buffer_size, 1024);
+    auto buffer_size = buffer->get_size();
+    mm_mem_io_c avcc(buffer->get_buffer(), buffer->get_size()), new_avcc(nullptr, buffer_size, 1024);
     memory_cptr nalu(new memory_c());
 
     avcc.read(nalu, 5);
@@ -867,10 +867,10 @@ mpeg4::p10::fix_sps_fps(uint8_t *&buffer,
       new_avcc.write(nalu);
     }
 
-    buffer_size = new_avcc.getFilePointer();
-    buffer      = new_avcc.get_and_lock_buffer();
+    return memory_cptr{new memory_c{new_avcc.get_and_lock_buffer(), new_avcc.getFilePointer()}};
 
   } catch(...) {
+    return memory_cptr{};
   }
 }
 

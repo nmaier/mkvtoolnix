@@ -232,8 +232,7 @@ public:
   bool m_disable_multi_file;
 
   // Options used by the packetizers.
-  unsigned char *m_private_data;
-  size_t m_private_size;
+  memory_cptr m_private_data;
 
   std::map<int64_t, std::string> m_all_fourccs;
   std::string m_fourcc;
@@ -316,17 +315,13 @@ public:
 
 public:
   track_info_c();
-  track_info_c(const track_info_c &src)
-    : m_initialized(false)
-  {
+  track_info_c(const track_info_c &src) {
     *this = src;
   }
   virtual ~track_info_c() {
-    free_contents();
   }
 
   track_info_c &operator =(const track_info_c &src);
-  virtual void free_contents();
   virtual bool display_dimensions_or_aspect_ratio_set();
 };
 
@@ -437,53 +432,6 @@ enum connection_result_e {
   CAN_CONNECT_MAYBE_CODECPRIVATE
 };
 
-#define connect_check_a_samplerate(a, b)                                                                                       \
-  if ((a) != (b)) {                                                                                                            \
-    error_message = (boost::format(Y("The sample rate of the two audio tracks is different: %1% and %2%")) % (a) % (b)).str(); \
-    return CAN_CONNECT_NO_PARAMETERS;                                                                                          \
-  }
-#define connect_check_a_channels(a, b)                                                                                                \
-  if ((a) != (b)) {                                                                                                                   \
-    error_message = (boost::format(Y("The number of channels of the two audio tracks is different: %1% and %2%")) % (a) % (b)).str(); \
-    return CAN_CONNECT_NO_PARAMETERS;                                                                                                 \
-  }
-#define connect_check_a_bitdepth(a, b)                                                                                                       \
-  if ((a) != (b)) {                                                                                                                          \
-    error_message = (boost::format(Y("The number of bits per sample of the two audio tracks is different: %1% and %2%")) % (a) % (b)).str(); \
-    return CAN_CONNECT_NO_PARAMETERS;                                                                                                        \
-  }
-#define connect_check_v_width(a, b)                                                                                \
-  if ((a) != (b)) {                                                                                                \
-    error_message = (boost::format(Y("The width of the two tracks is different: %1% and %2%")) % (a) % (b)).str(); \
-    return CAN_CONNECT_NO_PARAMETERS;                                                                              \
-  }
-#define connect_check_v_height(a, b)                                                                                \
-  if ((a) != (b)) {                                                                                                 \
-    error_message = (boost::format(Y("The height of the two tracks is different: %1% and %2%")) % (a) % (b)).str(); \
-    return CAN_CONNECT_NO_PARAMETERS;                                                                               \
-  }
-#define connect_check_v_dwidth(a, b)                                                                                       \
-  if ((a) != (b)) {                                                                                                        \
-    error_message = (boost::format(Y("The display width of the two tracks is different: %1% and %2%")) % (a) % (b)).str(); \
-    return CAN_CONNECT_NO_PARAMETERS;                                                                                      \
-  }
-#define connect_check_v_dheight(a, b)                                                                                       \
-  if ((a) != (b)) {                                                                                                         \
-    error_message = (boost::format(Y("The display height of the two tracks is different: %1% and %2%")) % (a) % (b)).str(); \
-    return CAN_CONNECT_NO_PARAMETERS;                                                                                       \
-  }
-#define connect_check_codec_id(a, b)                                                                                 \
-  if ((a) != (b)) {                                                                                                  \
-    error_message = (boost::format(Y("The CodecID of the two tracks is different: %1% and %2%")) % (a) % (b)).str(); \
-    return CAN_CONNECT_NO_PARAMETERS;                                                                                \
-  }
-#define connect_check_codec_private(b)                                                                                                                                \
-  if (   (!!this->m_ti.m_private_data != !!b->m_ti.m_private_data)                                                                                                    \
-      || (  this->m_ti.m_private_size !=   b->m_ti.m_private_size)                                                                                                    \
-      || (  this->m_ti.m_private_data &&   memcmp(this->m_ti.m_private_data, b->m_ti.m_private_data, this->m_ti.m_private_size))) {                                   \
-    error_message = (boost::format(Y("The codec's private data does not match (lengths: %1% and %2%).")) % this->m_ti.m_private_size % b->m_ti.m_private_size).str(); \
-    return CAN_CONNECT_MAYBE_CODECPRIVATE;                                                                                                                            \
-  }
 
 typedef std::deque<packet_cptr>::iterator packet_cptr_di;
 
@@ -508,8 +456,7 @@ protected:
   int m_htrack_max_add_block_ids;
 
   std::string m_hcodec_id;
-  unsigned char *m_hcodec_private;
-  size_t m_hcodec_private_length;
+  memory_cptr m_hcodec_private;
 
   float m_haudio_sampling_freq, m_haudio_output_sampling_freq;
   int m_haudio_channels, m_haudio_bit_depth;
@@ -613,7 +560,7 @@ public:
   virtual void set_language(const std::string &language);
 
   virtual void set_codec_id(const std::string &id);
-  virtual void set_codec_private(const unsigned char *cp, int length);
+  virtual void set_codec_private(memory_cptr const &buffer);
 
   virtual void set_track_min_cache(int min_cache);
   virtual void set_track_max_cache(int max_cache);

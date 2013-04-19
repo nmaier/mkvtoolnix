@@ -127,7 +127,8 @@ vobsub_reader_c::create_packetizer(int64_t tid) {
   vobsub_track_c *track = tracks[tid];
   m_ti.m_id             = tid;
   m_ti.m_language       = tracks[tid]->language;
-  track->ptzr           = add_packetizer(new vobsub_packetizer_c(this, idx_data.c_str(), idx_data.length(), m_ti));
+  m_ti.m_private_data   = memory_c::clone(idx_data);
+  track->ptzr           = add_packetizer(new vobsub_packetizer_c(this, m_ti));
 
   int64_t avg_duration;
   if (!track->entries.empty()) {

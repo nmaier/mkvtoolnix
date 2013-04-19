@@ -37,21 +37,19 @@ mpeg4_p10_video_packetizer_c(generic_reader_c *p_reader,
 
   setup_nalu_size_len_change();
 
-  if (m_ti.m_private_data && (0 < m_ti.m_private_size))
-    set_codec_private(m_ti.m_private_data, m_ti.m_private_size);
+  set_codec_private(m_ti.m_private_data);
 }
 
 void
 mpeg4_p10_video_packetizer_c::set_headers() {
-  if (m_ti.m_private_data && m_ti.m_private_size) {
+  if (m_ti.m_private_data && m_ti.m_private_data->get_size()) {
     extract_aspect_ratio();
 
     if (m_ti.m_fix_bitstream_frame_rate) {
       int64_t l_track_default_duration = 0.0 < m_fps ? static_cast<int64_t>(1000000000.0 / m_fps) : -1;
       int64_t duration                 = m_timecode_factory ? m_timecode_factory->get_default_duration(l_track_default_duration) : l_track_default_duration;
 
-      mpeg4::p10::fix_sps_fps(m_ti.m_private_data, m_ti.m_private_size, duration);
-      set_codec_private(m_ti.m_private_data, m_ti.m_private_size);
+      set_codec_private(mpeg4::p10::fix_sps_fps(m_ti.m_private_data, duration));
     }
   }
 
@@ -60,21 +58,24 @@ mpeg4_p10_video_packetizer_c::set_headers() {
 
 void
 mpeg4_p10_video_packetizer_c::extract_aspect_ratio() {
-  uint32_t num, den;
+  uint32_t num = 0, den = 0;
 
-  if (mpeg4::p10::extract_par(m_ti.m_private_data, m_ti.m_private_size, num, den) && (0 != num) && (0 != den)) {
-    if (!display_dimensions_or_aspect_ratio_set()) {
-      double par = (double)num / (double)den;
+  if (!m_ti.m_private_data)
+    return;
 
-      set_video_display_dimensions(1 <= par ? irnd(m_width * par) : m_width,
-                                   1 <= par ? m_height            : irnd(m_height / par),
-                                   PARAMETER_SOURCE_BITSTREAM);
+  mpeg4::p10::extract_par(m_ti.m_private_data, num, den);
+  if (!num || !den || display_dimensions_or_aspect_ratio_set())
+    return;
 
-      mxinfo_tid(m_ti.m_fname, m_ti.m_id,
-                 boost::format(Y("Extracted the aspect ratio information from the MPEG-4 layer 10 (AVC) video data and set the display dimensions to %1%/%2%.\n"))
-                 % m_ti.m_display_width % m_ti.m_display_height);
-    }
-  }
+  auto par = static_cast<double>(num) / static_cast<double>(den);
+
+  set_video_display_dimensions(1 <= par ? irnd(m_width * par) : m_width,
+                               1 <= par ? m_height            : irnd(m_height / par),
+                               PARAMETER_SOURCE_BITSTREAM);
+
+  mxinfo_tid(m_ti.m_fname, m_ti.m_id,
+             boost::format(Y("Extracted the aspect ratio information from the MPEG-4 layer 10 (AVC) video data and set the display dimensions to %1%/%2%.\n"))
+             % m_ti.m_display_width % m_ti.m_display_height);
 }
 
 int
@@ -105,8 +106,8 @@ mpeg4_p10_video_packetizer_c::can_connect_to(generic_packetizer_c *src,
   if (CAN_CONNECT_YES != result)
     return result;
 
-  if (m_ti.m_private_data && memcmp(m_ti.m_private_data, vsrc->m_ti.m_private_data, m_ti.m_private_size)) {
-    error_message = (boost::format(Y("The codec's private data does not match. Both have the same length (%1%) but different content.")) % m_ti.m_private_size).str();
+  if (m_ti.m_private_data && vsrc->m_ti.m_private_data && memcmp(m_ti.m_private_data->get_buffer(), vsrc->m_ti.m_private_data->get_buffer(), m_ti.m_private_data->get_size())) {
+    error_message = (boost::format(Y("The codec's private data does not match. Both have the same length (%1%) but different content.")) % m_ti.m_private_data->get_size()).str();
     return CAN_CONNECT_MAYBE_CODECPRIVATE;
   }
 
@@ -115,20 +116,21 @@ mpeg4_p10_video_packetizer_c::can_connect_to(generic_packetizer_c *src,
 
 void
 mpeg4_p10_video_packetizer_c::setup_nalu_size_len_change() {
-  if (!m_ti.m_private_data || (5 > m_ti.m_private_size))
+  if (!m_ti.m_private_data || (5 > m_ti.m_private_data->get_size()))
     return;
 
-  m_nalu_size_len_src = (m_ti.m_private_data[4] & 0x03) + 1;
+  auto private_data   = m_ti.m_private_data->get_buffer();
+  m_nalu_size_len_src = (private_data[4] & 0x03) + 1;
   m_nalu_size_len_dst = m_nalu_size_len_src;
 
   if (!m_ti.m_nalu_size_length || (m_ti.m_nalu_size_length == m_nalu_size_len_src))
     return;
 
-  m_nalu_size_len_dst    = m_ti.m_nalu_size_length;
-  m_ti.m_private_data[4] = (m_ti.m_private_data[4] & 0xfc) | (m_nalu_size_len_dst - 1);
-  m_max_nalu_size        = 1ll << (8 * m_nalu_size_len_dst);
+  m_nalu_size_len_dst = m_ti.m_nalu_size_length;
+  private_data[4]     = (private_data[4] & 0xfc) | (m_nalu_size_len_dst - 1);
+  m_max_nalu_size     = 1ll << (8 * m_nalu_size_len_dst);
 
-  set_codec_private(m_ti.m_private_data, m_ti.m_private_size);
+  set_codec_private(m_ti.m_private_data);
 
   mxverb(2, boost::format("mpeg4_p10: Adjusting NALU size length from %1% to %2%\n") % m_nalu_size_len_src % m_nalu_size_len_dst);
 }
