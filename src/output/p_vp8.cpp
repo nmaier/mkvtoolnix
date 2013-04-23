@@ -15,6 +15,7 @@
 
 #include "common/ivf.h"
 #include "common/matroska.h"
+#include "merge/connection_checks.h"
 #include "output/p_vp8.h"
 
 using namespace libmatroska;

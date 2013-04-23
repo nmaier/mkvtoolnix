@@ -1149,21 +1149,11 @@ mpeg_ts_reader_c::create_packetizer(int64_t id) {
 
 void
 mpeg_ts_reader_c::create_mpeg1_2_video_packetizer(mpeg_ts_track_ptr &track) {
+  m_ti.m_private_data = track->raw_seq_hdr;
+  auto m2vpacketizer  = new mpeg1_2_video_packetizer_c(this, m_ti, track->v_version, track->v_frame_rate, track->v_width, track->v_height, track->v_dwidth, track->v_dheight, false);
+  track->ptzr         = add_packetizer(m2vpacketizer);
 
-  if (track->raw_seq_hdr && (0 < track->raw_seq_hdr->get_size())) {
-    m_ti.m_private_data = track->raw_seq_hdr->get_buffer();
-    m_ti.m_private_size = track->raw_seq_hdr->get_size();
-  } else {
-    m_ti.m_private_data = nullptr;
-    m_ti.m_private_size = 0;
-  }
-
-  generic_packetizer_c *m2vpacketizer = new mpeg1_2_video_packetizer_c(this, m_ti, track->v_version, track->v_frame_rate, track->v_width, track->v_height,
-                                                                       track->v_dwidth, track->v_dheight, false);
-  track->ptzr                         = add_packetizer(m2vpacketizer);
   show_packetizer_info(m_ti.m_id, PTZR(track->ptzr));
-  m_ti.m_private_data                 = nullptr;
-  m_ti.m_private_size                 = 0;
   m2vpacketizer->set_video_interlaced_flag(track->v_interlaced);
 }
 

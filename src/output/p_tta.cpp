@@ -16,6 +16,7 @@
 #include "common/math.h"
 #include "common/matroska.h"
 #include "common/tta.h"
+#include "merge/connection_checks.h"
 #include "output/p_tta.h"
 
 using namespace libmatroska;

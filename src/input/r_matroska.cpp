@@ -1261,7 +1261,7 @@ kax_reader_c::init_passthrough_packetizer(kax_track_t *t) {
 
   ptzr->set_track_type(MAP_TRACK_TYPE(t->type));
   ptzr->set_codec_id(t->codec_id);
-  ptzr->set_codec_private(static_cast<const unsigned char *>(t->private_data), t->private_size);
+  ptzr->set_codec_private(memory_c::clone(t->private_data, t->private_size));
 
   if (0.0 < t->v_frate)
     ptzr->set_track_default_duration(1000000000.0 / t->v_frate);
@@ -1469,9 +1469,7 @@ kax_reader_c::create_dts_audio_packetizer(kax_track_t *t,
 void
 kax_reader_c::create_flac_audio_packetizer(kax_track_t *t,
                                            track_info_c &nti) {
-  safefree(nti.m_private_data);
-  nti.m_private_data = nullptr;
-  nti.m_private_size = 0;
+  nti.m_private_data.reset();
 
   if (FOURCC('f', 'L', 'a', 'C') == t->a_formattag)
     set_track_packetizer(t, new flac_packetizer_c(this, nti, static_cast<unsigned char *>(t->private_data), t->private_size));
@@ -1493,7 +1491,7 @@ kax_reader_c::create_mp3_audio_packetizer(kax_track_t *t,
 void
 kax_reader_c::create_opus_audio_packetizer(kax_track_t *t,
                                            track_info_c &nti) {
-  set_track_packetizer(t, new opus_packetizer_c(this, nti, memory_c::clone(t->private_data, t->private_size)));
+  set_track_packetizer(t, new opus_packetizer_c(this, nti));
   show_packetizer_info(t->tnum, t->ptzr_ptr);
 }
 
@@ -1507,10 +1505,7 @@ kax_reader_c::create_pcm_audio_packetizer(kax_track_t *t,
 void
 kax_reader_c::create_tta_audio_packetizer(kax_track_t *t,
                                           track_info_c &nti) {
-  safefree(nti.m_private_data);
-  nti.m_private_data = nullptr;
-  nti.m_private_size = 0;
-
+  nti.m_private_data.reset();
   set_track_packetizer(t, new tta_packetizer_c(this, nti, t->a_channels, t->a_bps, t->a_sfreq));
   show_packetizer_info(t->tnum, t->ptzr_ptr);
 }
@@ -1525,11 +1520,9 @@ kax_reader_c::create_vorbis_audio_packetizer(kax_track_t *t,
 void
 kax_reader_c::create_wavpack_audio_packetizer(kax_track_t *t,
                                               track_info_c &nti) {
+  nti.m_private_data.reset();
+
   wavpack_meta_t meta;
-
-  nti.m_private_data   = static_cast<unsigned char *>(t->private_data);
-  nti.m_private_size   = t->private_size;
-
   meta.bits_per_sample = t->a_bps;
   meta.channel_count   = t->a_channels;
   meta.sample_rate     = t->a_sfreq;
@@ -1539,8 +1532,6 @@ kax_reader_c::create_wavpack_audio_packetizer(kax_track_t *t,
     meta.samples_per_block = t->a_sfreq / t->v_frate;
 
   set_track_packetizer(t, new wavpack_packetizer_c(this, nti, meta));
-  nti.m_private_data = nullptr;
-  nti.m_private_size = 0;
 
   show_packetizer_info(t->tnum, t->ptzr_ptr);
 }
@@ -1594,7 +1585,7 @@ void
 kax_reader_c::create_subtitle_packetizer(kax_track_t *t,
                                          track_info_c &nti) {
   if (t->codec_id == MKV_S_VOBSUB) {
-    set_track_packetizer(t, new vobsub_packetizer_c(this, t->private_data, t->private_size, nti));
+    set_track_packetizer(t, new vobsub_packetizer_c(this, nti));
     show_packetizer_info(t->tnum, t->ptzr_ptr);
 
     t->sub_type = 'v';
@@ -1602,13 +1593,13 @@ kax_reader_c::create_subtitle_packetizer(kax_track_t *t,
   } else if (balg::starts_with(t->codec_id, "S_TEXT") || (t->codec_id == "S_SSA") || (t->codec_id == "S_ASS")) {
     std::string new_codec_id = ((t->codec_id == "S_SSA") || (t->codec_id == "S_ASS")) ? std::string("S_TEXT/") + std::string(&t->codec_id[2]) : t->codec_id;
 
-    set_track_packetizer(t, new textsubs_packetizer_c(this, nti, new_codec_id.c_str(), t->private_data, t->private_size, false, true));
+    set_track_packetizer(t, new textsubs_packetizer_c(this, nti, new_codec_id.c_str(), false, true));
     show_packetizer_info(t->tnum, t->ptzr_ptr);
 
     t->sub_type = 't';
 
   } else if (t->codec_id == MKV_S_KATE) {
-    set_track_packetizer(t, new kate_packetizer_c(this, nti, t->private_data, t->private_size));
+    set_track_packetizer(t, new kate_packetizer_c(this, nti));
     show_packetizer_info(t->tnum, t->ptzr_ptr);
     t->sub_type = 'k';
 
@@ -1625,17 +1616,16 @@ kax_reader_c::create_subtitle_packetizer(kax_track_t *t,
 void
 kax_reader_c::create_button_packetizer(kax_track_t *t,
                                        track_info_c &nti) {
-  if (t->codec_id == MKV_B_VOBBTN) {
-    safefree(nti.m_private_data);
-    nti.m_private_data = nullptr;
-    nti.m_private_size = 0;
-    t->sub_type        = 'b';
-
-    set_track_packetizer(t, new vobbtn_packetizer_c(this, nti, t->v_width, t->v_height));
-    show_packetizer_info(t->tnum, t->ptzr_ptr);
-
-  } else
+  if (t->codec_id != MKV_B_VOBBTN) {
     init_passthrough_packetizer(t);
+    return;
+  }
+
+  nti.m_private_data.reset();
+  t->sub_type = 'b';
+
+  set_track_packetizer(t, new vobbtn_packetizer_c(this, nti, t->v_width, t->v_height));
+  show_packetizer_info(t->tnum, t->ptzr_ptr);
 }
 
 void
@@ -1646,8 +1636,7 @@ kax_reader_c::create_packetizer(int64_t tid) {
     return;
 
   track_info_c nti(m_ti);
-  nti.m_private_data = safememdup(t->private_data, t->private_size);
-  nti.m_private_size = t->private_size;
+  nti.m_private_data = memory_c::clone(t->private_data, t->private_size);
   nti.m_id           = t->tnum; // ID for this track.
 
   if (nti.m_language == "")
@@ -1715,7 +1704,7 @@ kax_reader_c::create_mpeg4_p10_es_video_packetizer(kax_track_t *t,
 void
 kax_reader_c::create_mpeg4_p10_video_packetizer(kax_track_t *t,
                                                 track_info_c &nti) {
-  if ((0 == nti.m_private_size) || !nti.m_private_data) {
+  if (!nti.m_private_data || !nti.m_private_data->get_size()) {
     // avc_es_parser_cptr parser = parse_first_mpeg4_p10_frame(t, nti);
     create_mpeg4_p10_es_video_packetizer(t, nti);
     return;

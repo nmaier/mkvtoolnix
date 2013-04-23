@@ -132,7 +132,7 @@ namespace mpeg4 {
     bool extract_par(const unsigned char *buffer, int buffer_size, uint32_t &par_num, uint32_t &par_den);
     bool extract_size(const unsigned char *buffer, int buffer_size, uint32_t &width, uint32_t &height);
     void find_frame_types(const unsigned char *buffer, int buffer_size, std::vector<video_frame_t> &frames, const config_data_t &config_data);
-    memory_c * parse_config_data(const unsigned char *buffer, int buffer_size, config_data_t &config_data);
+    memory_cptr parse_config_data(const unsigned char *buffer, int buffer_size, config_data_t &config_data);
   };
 };
 

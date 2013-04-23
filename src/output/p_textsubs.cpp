@@ -14,8 +14,8 @@
 #include "common/common_pch.h"
 
 #include "common/matroska.h"
+#include "merge/connection_checks.h"
 #include "merge/packet_extensions.h"
-#include "merge/pr_generic.h"
 #include "output/p_textsubs.h"
 
 using namespace libmatroska;
@@ -27,13 +27,10 @@ boost::regex textsubs_packetizer_c::s_re_translate_nl("\n", boost::regex::perl);
 textsubs_packetizer_c::textsubs_packetizer_c(generic_reader_c *p_reader,
                                              track_info_c &p_ti,
                                              const char *codec_id,
-                                             const void *global_data,
-                                             int global_size,
                                              bool recode,
                                              bool is_utf8)
   : generic_packetizer_c(p_reader, p_ti)
   , m_packetno(0)
-  , m_global_data(new memory_c((unsigned char *)safememdup(global_data, global_size), global_size, true))
   , m_codec_id(codec_id)
   , m_recode(recode)
 {
@@ -51,9 +48,7 @@ textsubs_packetizer_c::~textsubs_packetizer_c() {
 void
 textsubs_packetizer_c::set_headers() {
   set_codec_id(m_codec_id);
-
-  if (m_global_data->is_allocated())
-    set_codec_private((unsigned char *)m_global_data->get_buffer(), m_global_data->get_size());
+  set_codec_private(m_ti.m_private_data);
 
   generic_packetizer_c::set_headers();
 

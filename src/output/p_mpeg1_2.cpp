@@ -161,7 +161,7 @@ mpeg1_2_video_packetizer_c::remove_stuffing_bytes_and_handle_sequence_headers(pa
     return;
 
   if (!m_hcodec_private) {
-    set_codec_private(new_seq_hdr->get_buffer(), new_seq_hdr->get_size());
+    set_codec_private(new_seq_hdr);
     rerender_track_headers();
   }
 
@@ -282,7 +282,7 @@ void
 mpeg1_2_video_packetizer_c::create_private_data() {
   MPEGChunk *raw_seq_hdr = m_parser.GetRealSequenceHeader();
   if (raw_seq_hdr) {
-    set_codec_private(raw_seq_hdr->GetPointer(), raw_seq_hdr->GetSize());
+    set_codec_private(memory_c::clone(raw_seq_hdr->GetPointer(), raw_seq_hdr->GetSize()));
     rerender_track_headers();
   }
 }

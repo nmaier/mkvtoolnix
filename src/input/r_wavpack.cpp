@@ -94,12 +94,9 @@ wavpack_reader_c::create_packetizer(int64_t) {
   if (!demuxing_requested('a', 0) || (NPTZR() != 0))
     return;
 
-  uint16_t version_le;
-  put_uint16_le(&version_le, header.version);
-  m_ti.m_private_data = (unsigned char *)&version_le;
-  m_ti.m_private_size = sizeof(uint16_t);
+  m_ti.m_private_data = memory_c::alloc(sizeof(uint16_t));
+  put_uint16_le(m_ti.m_private_data->get_buffer(), header.version);
   add_packetizer(new wavpack_packetizer_c(this, m_ti, meta));
-  m_ti.m_private_data = nullptr;
 
   show_packetizer_info(0, PTZR0);
 }

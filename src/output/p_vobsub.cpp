@@ -23,12 +23,9 @@
 
 using namespace libmatroska;
 
-vobsub_packetizer_c::vobsub_packetizer_c(generic_reader_c *_reader,
-                                         const void *_idx_data,
-                                         int _idx_data_size,
-                                         track_info_c &_ti)
-  : generic_packetizer_c(_reader, _ti)
-  , idx_data(new memory_c((unsigned char *)safememdup(_idx_data, _idx_data_size), _idx_data_size, true))
+vobsub_packetizer_c::vobsub_packetizer_c(generic_reader_c *reader,
+                                         track_info_c &ti)
+  : generic_packetizer_c(reader, ti)
 {
   set_track_type(track_subtitle);
   set_default_compression_method(COMPRESSION_ZLIB);
@@ -40,7 +37,7 @@ vobsub_packetizer_c::~vobsub_packetizer_c() {
 void
 vobsub_packetizer_c::set_headers() {
   set_codec_id(MKV_S_VOBSUB);
-  set_codec_private(idx_data->get_buffer(), idx_data->get_size());
+  set_codec_private(m_ti.m_private_data);
 
   generic_packetizer_c::set_headers();
 

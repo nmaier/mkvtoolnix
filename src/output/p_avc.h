@@ -39,7 +39,7 @@ public:
   virtual void flush_frames();
 
   virtual translatable_string_c get_format_name() const {
-    return YT("AVC/h.264");
+    return YT("AVC/h.264 (unframed)");
   };
 
   virtual void connect(generic_packetizer_c *src, int64_t p_append_timecode_offset = -1);

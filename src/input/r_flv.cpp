@@ -311,6 +311,7 @@ flv_reader_c::create_packetizer(int64_t id) {
     return;
 
   m_ti.m_id = id;
+  m_ti.m_private_data.reset();
 
   if (track->m_fourcc.equiv("AVC1"))
     create_v_avc_packetizer(track);
@@ -327,15 +328,9 @@ flv_reader_c::create_packetizer(int64_t id) {
 
 void
 flv_reader_c::create_v_avc_packetizer(flv_track_cptr &track) {
-  if (track->m_private_data) {
-    m_ti.m_private_data = track->m_private_data->get_buffer();
-    m_ti.m_private_size = track->m_private_data->get_size();
-  }
-
-  track->m_ptzr = add_packetizer(new mpeg4_p10_video_packetizer_c(this, m_ti, track->m_v_frame_rate, track->m_v_width, track->m_v_height));
+  m_ti.m_private_data = track->m_private_data;
+  track->m_ptzr       = add_packetizer(new mpeg4_p10_video_packetizer_c(this, m_ti, track->m_v_frame_rate, track->m_v_width, track->m_v_height));
   show_packetizer_info(m_video_track_idx, PTZR(track->m_ptzr));
-
-  m_ti.m_private_data = NULL;
 }
 
 void
@@ -351,13 +346,10 @@ flv_reader_c::create_v_generic_packetizer(flv_track_cptr &track) {
   put_uint32_le(&bih.bi_size_image,  track->m_v_width * track->m_v_height * 3);
   track->m_fourcc.write(reinterpret_cast<unsigned char *>(&bih.bi_compression));
 
-  m_ti.m_private_data = reinterpret_cast<unsigned char *>(&bih);
-  m_ti.m_private_size = sizeof(bih);
+  m_ti.m_private_data = memory_c::clone(&bih, sizeof(bih));
 
   track->m_ptzr = add_packetizer(new video_packetizer_c(this, m_ti, MKV_V_MSCOMP, track->m_v_frame_rate, track->m_v_width, track->m_v_height));
   show_packetizer_info(m_video_track_idx, PTZR(track->m_ptzr));
-
-  m_ti.m_private_data = NULL;
 }
 
 void

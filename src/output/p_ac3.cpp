@@ -15,8 +15,8 @@
 
 #include "common/ac3.h"
 #include "common/matroska.h"
+#include "merge/connection_checks.h"
 #include "merge/output_control.h"
-#include "merge/pr_generic.h"
 #include "output/p_ac3.h"
 
 using namespace libmatroska;

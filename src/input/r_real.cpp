@@ -251,14 +251,9 @@ real_reader_c::parse_headers() {
 
 void
 real_reader_c::create_video_packetizer(real_demuxer_cptr dmx) {
-  if (dmx->private_data) {
-    m_ti.m_private_data = dmx->private_data->get_buffer();
-    m_ti.m_private_size = dmx->private_data->get_size();
-  }
-
+  m_ti.m_private_data  = dmx->private_data;
   std::string codec_id = (boost::format("V_REAL/%1%") % dmx->fourcc).str();
   dmx->ptzr            = add_packetizer(new video_packetizer_c(this, m_ti, codec_id.c_str(), 0.0, dmx->width, dmx->height));
-  m_ti.m_private_data  = nullptr;
 
   if (strcmp(dmx->fourcc, "RV40"))
     dmx->rv_dimensions = true;
@@ -361,7 +356,8 @@ real_reader_c::create_audio_packetizer(real_demuxer_cptr dmx) {
     if (!strcasecmp(dmx->fourcc, "COOK"))
       dmx->cook_audio_fix = true;
 
-    dmx->ptzr = add_packetizer(new ra_packetizer_c(this, m_ti, dmx->samples_per_second, dmx->channels, dmx->bits_per_sample, get_uint32_be(dmx->fourcc), dmx->private_data));
+    m_ti.m_private_data = dmx->private_data;
+    dmx->ptzr           = add_packetizer(new ra_packetizer_c(this, m_ti, dmx->samples_per_second, dmx->channels, dmx->bits_per_sample, get_uint32_be(dmx->fourcc)));
 
     show_packetizer_info(dmx->track->id, PTZR(dmx->ptzr));
   }
@@ -379,6 +375,7 @@ real_reader_c::create_packetizer(int64_t tid) {
 
   rmff_track_t *track = dmx->track;
   m_ti.m_id           = track->id;
+  m_ti.m_private_data.reset();
 
   if (RMFF_TRACK_TYPE_VIDEO == track->type)
     create_video_packetizer(dmx);

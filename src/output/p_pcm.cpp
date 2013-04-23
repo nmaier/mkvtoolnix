@@ -15,7 +15,7 @@
 #include "common/common_pch.h"
 
 #include "common/matroska.h"
-#include "merge/pr_generic.h"
+#include "merge/connection_checks.h"
 #include "output/p_pcm.h"
 
 using namespace libmatroska;

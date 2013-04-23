@@ -17,6 +17,7 @@
 #include <vorbis/codec.h>
 
 #include "common/matroska.h"
+#include "merge/connection_checks.h"
 #include "merge/output_control.h"
 #include "output/p_vorbis.h"
 
@@ -76,8 +77,7 @@ vorbis_packetizer_c::set_headers() {
 
   set_codec_id(MKV_A_VORBIS);
 
-  memory_cptr codec_private = lace_memory_xiph(m_headers);
-  set_codec_private(codec_private->get_buffer(), codec_private->get_size());
+  set_codec_private(lace_memory_xiph(m_headers));
 
   set_audio_sampling_freq((float)m_vi.rate);
   set_audio_channels(m_vi.channels);

@@ -155,7 +155,6 @@ qtmp4_reader_c::read_headers() {
 }
 
 qtmp4_reader_c::~qtmp4_reader_c() {
-  m_ti.m_private_data = nullptr;
 }
 
 qt_atom_t
@@ -1229,25 +1228,16 @@ qtmp4_reader_c::create_audio_packetizer_alac(qtmp4_demuxer_cptr &dmx) {
 
 void
 qtmp4_reader_c::create_video_packetizer_svq1(qtmp4_demuxer_cptr &dmx) {
-  memory_cptr bih(create_bitmap_info_header(dmx, "SVQ1"));
-
-  m_ti.m_private_size = bih->get_size();
-  m_ti.m_private_data = (unsigned char *)bih->get_buffer();
-
-  dmx->ptzr         = add_packetizer(new video_packetizer_c(this, m_ti, MKV_V_MSCOMP, 0.0, dmx->v_width, dmx->v_height));
-  m_ti.m_private_data = nullptr;
+  m_ti.m_private_data = create_bitmap_info_header(dmx, "SVQ1");
+  dmx->ptzr           = add_packetizer(new video_packetizer_c(this, m_ti, MKV_V_MSCOMP, 0.0, dmx->v_width, dmx->v_height));
 
   show_packetizer_info(dmx->id, PTZR(dmx->ptzr));
 }
 
 void
 qtmp4_reader_c::create_video_packetizer_mpeg4_p2(qtmp4_demuxer_cptr &dmx) {
-  memory_cptr bih(create_bitmap_info_header(dmx, "DIVX"));
-
-  m_ti.m_private_size = bih->get_size();
-  m_ti.m_private_data = (unsigned char *)bih->get_buffer();
-  dmx->ptzr         = add_packetizer(new mpeg4_p2_video_packetizer_c(this, m_ti, 0.0, dmx->v_width, dmx->v_height, false));
-  m_ti.m_private_data = nullptr;
+  m_ti.m_private_data = create_bitmap_info_header(dmx, "DIVX");
+  dmx->ptzr           = add_packetizer(new mpeg4_p2_video_packetizer_c(this, m_ti, 0.0, dmx->v_width, dmx->v_height, false));
 
   show_packetizer_info(dmx->id, PTZR(dmx->ptzr));
 }
@@ -1270,34 +1260,24 @@ qtmp4_reader_c::create_video_packetizer_mpeg4_p10(qtmp4_demuxer_cptr &dmx) {
                  "As it is missing the timecodes for this track might be wrong. "
                  "You should watch the resulting file and make sure that it looks like you expected it to.\n"));
 
-  m_ti.m_private_size = dmx->priv->get_size();
-  m_ti.m_private_data = dmx->priv->get_buffer();
-  dmx->ptzr         = add_packetizer(new mpeg4_p10_video_packetizer_c(this, m_ti, dmx->fps, dmx->v_width, dmx->v_height));
-  m_ti.m_private_data = nullptr;
+  m_ti.m_private_data = dmx->priv;
+  dmx->ptzr           = add_packetizer(new mpeg4_p10_video_packetizer_c(this, m_ti, dmx->fps, dmx->v_width, dmx->v_height));
 
   show_packetizer_info(dmx->id, PTZR(dmx->ptzr));
 }
 
 void
 qtmp4_reader_c::create_video_packetizer_standard(qtmp4_demuxer_cptr &dmx) {
-  m_ti.m_private_size = dmx->stsd->get_size();
-  m_ti.m_private_data = dmx->stsd->get_buffer();
+  m_ti.m_private_data = dmx->stsd;
   dmx->ptzr           = add_packetizer(new video_packetizer_c(this, m_ti, MKV_V_QUICKTIME, 0.0, dmx->v_width, dmx->v_height));
-  m_ti.m_private_data = nullptr;
 
   show_packetizer_info(dmx->id, PTZR(dmx->ptzr));
 }
 
 void
 qtmp4_reader_c::create_audio_packetizer_aac(qtmp4_demuxer_cptr &dmx) {
-  if (dmx->esds.decoder_config) {
-    m_ti.m_private_data = dmx->esds.decoder_config->get_buffer();
-    m_ti.m_private_size = dmx->esds.decoder_config->get_size();
-  }
-
+  m_ti.m_private_data = dmx->esds.decoder_config;
   dmx->ptzr           = add_packetizer(new aac_packetizer_c(this, m_ti, AAC_ID_MPEG4, dmx->a_aac_profile, (int)dmx->a_samplerate, dmx->a_channels, false, true));
-  m_ti.m_private_data = nullptr;
-  m_ti.m_private_size = 0;
 
   if (dmx->a_aac_is_sbr)
     PTZR(dmx->ptzr)->set_audio_output_sampling_freq(dmx->a_aac_output_sample_rate);
@@ -1324,7 +1304,7 @@ qtmp4_reader_c::create_audio_packetizer_passthrough(qtmp4_demuxer_cptr &dmx) {
 
   ptzr->set_track_type(track_audio);
   ptzr->set_codec_id(MKV_A_QUICKTIME);
-  ptzr->set_codec_private(dmx->stsd->get_buffer(), dmx->stsd->get_size());
+  ptzr->set_codec_private(dmx->stsd);
   ptzr->set_audio_sampling_freq(dmx->a_samplerate);
   ptzr->set_audio_channels(dmx->a_channels);
 
@@ -1408,7 +1388,8 @@ qtmp4_reader_c::create_subtitles_packetizer_vobsub(qtmp4_demuxer_cptr &dmx) {
 
   mxdebug_if(m_debug_headers, boost::format("VobSub IDX str:\n%1%") % idx_str);
 
-  dmx->ptzr = add_packetizer(new vobsub_packetizer_c(this, idx_str.c_str(), idx_str.length(), m_ti));
+  m_ti.m_private_data = memory_c::clone(idx_str);
+  dmx->ptzr = add_packetizer(new vobsub_packetizer_c(this, m_ti));
   show_packetizer_info(dmx->id, PTZR(dmx->ptzr));
 }
 
@@ -1428,6 +1409,7 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
 
   m_ti.m_id          = dmx->id;
   m_ti.m_language    = dmx->language;
+  m_ti.m_private_data.reset();
 
   bool packetizer_ok = true;
 

@@ -209,6 +209,11 @@ public:
     return memory_cptr(new memory_c(static_cast<unsigned char *>(safememdup(buffer, size)), size, true));
   }
 
+  static inline memory_cptr
+  clone(std::string const &buffer) {
+    return clone(buffer.c_str(), buffer.length());
+  }
+
 private:
   struct counter {
     X *ptr;

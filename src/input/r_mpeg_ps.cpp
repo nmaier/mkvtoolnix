@@ -1128,8 +1128,11 @@ mpeg_ps_reader_c::create_packetizer(int64_t id) {
   if (!demuxing_requested(tracks[id]->type, id))
     return;
 
+  m_ti.m_private_data.reset();
   m_ti.m_id = id;
-  mpeg_ps_track_ptr &track = tracks[id];
+
+  auto &track = tracks[id];
+
   if ('a' == track->type) {
     if (   (FOURCC('M', 'P', '1', ' ') == track->fourcc)
         || (FOURCC('M', 'P', '2', ' ') == track->fourcc)
@@ -1157,15 +1160,12 @@ mpeg_ps_reader_c::create_packetizer(int64_t id) {
         || (FOURCC('M', 'P', 'G', '2') == track->fourcc)) {
       generic_packetizer_c *m2vpacketizer;
 
-      m_ti.m_private_data = track->raw_seq_hdr;
-      m_ti.m_private_size = track->raw_seq_hdr_size;
+      m_ti.m_private_data = memory_c::clone(track->raw_seq_hdr, track->raw_seq_hdr_size);
       m2vpacketizer       = new mpeg1_2_video_packetizer_c(this, m_ti, track->v_version, track->v_frame_rate, track->v_width, track->v_height,
                                                            track->v_dwidth, track->v_dheight, false);
       track->ptzr         = add_packetizer(m2vpacketizer);
       show_packetizer_info(id, PTZR(track->ptzr));
       m2vpacketizer->set_video_interlaced_flag(track->v_interlaced);
-      m_ti.m_private_data = nullptr;
-      m_ti.m_private_size = 0;
 
     } else if (track->fourcc == FOURCC('A', 'V', 'C', '1')) {
       track->ptzr = add_packetizer(new mpeg4_p10_es_video_packetizer_c(this, m_ti));

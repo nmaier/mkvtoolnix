@@ -21,7 +21,7 @@
 #include "common/checksums.h"
 #include "common/flac.h"
 #include "common/matroska.h"
-#include "merge/pr_generic.h"
+#include "merge/connection_checks.h"
 #include "output/p_flac.h"
 
 using namespace libmatroska;
@@ -58,7 +58,7 @@ flac_packetizer_c::~flac_packetizer_c() {
 void
 flac_packetizer_c::set_headers() {
   set_codec_id(MKV_A_FLAC);
-  set_codec_private(m_header->get_buffer(), m_header->get_size());
+  set_codec_private(m_header);
   set_audio_sampling_freq((float)m_stream_info.sample_rate);
   set_audio_channels(m_stream_info.channels);
   set_audio_bit_depth(m_stream_info.bits_per_sample);
