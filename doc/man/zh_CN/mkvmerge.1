@@ -1312,10 +1312,11 @@ FPS（帧率）。
 .PP
 \fB\-\-fix\-bitstream\-timing\-information\fR \fITID\fR\fI[:0|1]\fR
 .RS 4
-Normally
+通常
 \fBmkvmerge\fR(1)
-does not change the timing information (frame/field rate) stored in the video bitstream\&. With this option that information is adjusted to match the container timing information\&. The container timing information can come from various sources: from the command line (see option
-\fB\-\-default\-duration\fR), the source container or derived from the bitstream\&.
+不会更改视频位流中存储的时间同步信息 (帧/场速率)。本选项可调整此信息，使之与容器的时间同步信息匹配。容器时间同步信息可从多个来源得到: 命令行指定 (参见
+\fB\-\-default\-duration\fR
+选项)、源容器或从位流得出。
 .if n \{\
 .sp
 .\}
@@ -1328,7 +1329,7 @@ does not change the timing information (frame/field rate) stored in the video bi
 \fB注意\fR
 .ps -1
 .br
-This has only been implemented for AVC/h\&.264 video tracks so far\&.
+目前仅完成对 AVC/h\&.264 视频轨的实现。
 .sp .5v
 .RE
 .RE
