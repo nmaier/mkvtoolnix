@@ -345,7 +345,7 @@ EOT
       name = manpage.gsub(/man\//, "man/#{language}/")
       file name            => [ name.ext('xml'),     "doc/man/po4a/po/#{language}.po" ]
       file name.ext('xml') => [ manpage.ext('.xml'), "doc/man/po4a/po/#{language}.po" ] do |t|
-	runq "    PO4A #{manpage.ext('.xml')} (#{language})", "#{c(:PO4A_TRANSLATE)} #{c(:PO4A_TRANSLATE_FLAGS)} -m #{manpage.ext('.xml')} -p doc/man/po4a/po/#{language}.po -l #{t.name}"
+        runq "    PO4A #{manpage.ext('.xml')} (#{language})", "#{c(:PO4A_TRANSLATE)} #{c(:PO4A_TRANSLATE_FLAGS)} -m #{manpage.ext('.xml')} -p doc/man/po4a/po/#{language}.po -l #{t.name}"
       end
     end
   end
