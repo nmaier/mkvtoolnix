@@ -136,13 +136,21 @@ struct slice_info_t {
   }
 };
 
+struct par_extraction_t {
+  memory_cptr new_avcc;
+  unsigned int numerator, denominator;
+  bool successful;
+
+  bool is_valid() const;
+};
+
 void nalu_to_rbsp(memory_cptr &buffer);
 void rbsp_to_nalu(memory_cptr &buffer);
 
 bool parse_sps(memory_cptr &buffer, sps_info_t &sps, bool keep_ar_info = false, bool fix_bitstream_frame_rate = false, int64_t duration = -1);
 bool parse_pps(memory_cptr &buffer, pps_info_t &pps);
 
-memory_cptr extract_par(memory_cptr const &buffer, uint32_t &par_num, uint32_t &par_den);
+par_extraction_t extract_par(memory_cptr const &buffer);
 memory_cptr fix_sps_fps(memory_cptr const &buffer, int64_t duration);
 bool is_avc_fourcc(const char *fourcc);
 memory_cptr avcc_to_nalus(const unsigned char *buffer, size_t size);

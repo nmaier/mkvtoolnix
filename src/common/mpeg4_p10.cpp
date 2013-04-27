@@ -213,6 +213,13 @@ static const struct {
   {   3,  2 },
   {   2,  1 },
 };
+
+bool
+par_extraction_t::is_valid()
+  const {
+  return successful && numerator && denominator;
+}
+
 };
 };
 
@@ -761,28 +768,25 @@ mpeg4::p10::parse_pps(memory_cptr &buffer,
 
 /** Extract the pixel aspect ratio from the MPEG4 layer 10 (AVC) codec data
 
-   This function searches a buffer containing the MPEG4 layer 10 (AVC) codec
-   initialization for the pixel aspectc ratio. If it is found then the
-   numerator and the denominator are returned, and the aspect ratio
-   information is removed from the buffer. The new buffer is returned.
+   This function searches a buffer containing the MPEG4 layer 10 (AVC)
+   codec initialization for the pixel aspectc ratio. If it is found
+   then the numerator and the denominator are extracted, and the
+   aspect ratio information is removed from the buffer. A structure
+   containing the new buffer, the numerator/denominator and the
+   success status is returned.
 
    \param buffer The buffer containing the MPEG4 layer 10 codec data.
-   \param par_num The numerator, if found, is stored in this variable.
-   \param par_den The denominator, if found, is stored in this variable.
 
-   \return The new buffer. If the pixel aspect ratio was not found
-     then both \c par_num and \c par_den are set to 0.
+   \return A \c par_extraction_t structure.
 */
-memory_cptr
-mpeg4::p10::extract_par(memory_cptr const &buffer,
-                        uint32_t &par_num,
-                        uint32_t &par_den) {
+mpeg4::p10::par_extraction_t
+mpeg4::p10::extract_par(memory_cptr const &buffer) {
   try {
-    auto avcc     = avcc_c::unpack(buffer);
-    auto new_avcc = avcc;
-    par_num       = 1;
-    par_den       = 1;
-    bool ar_found = false;
+    auto avcc            = avcc_c::unpack(buffer);
+    auto new_avcc        = avcc;
+    bool ar_found        = false;
+    unsigned int par_num = 1;
+    unsigned int par_den = 1;
 
     new_avcc.m_sps_list.clear();
 
@@ -810,18 +814,10 @@ mpeg4::p10::extract_par(memory_cptr const &buffer,
 
     auto packed_new_avcc = new_avcc.pack();
 
-    if (!ar_found) {
-      par_num = 0;
-      par_den = 0;
-    }
-
-    return packed_new_avcc;
+    return par_extraction_t{packed_new_avcc, ar_found ? par_num : 0, ar_found ? par_den : 0, ar_found};
 
   } catch(...) {
-    par_num = 0;
-    par_den = 0;
-
-    return buffer;
+    return par_extraction_t{buffer, 0, 0, false};
   }
 }
 

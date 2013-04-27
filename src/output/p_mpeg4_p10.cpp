@@ -58,16 +58,12 @@ mpeg4_p10_video_packetizer_c::set_headers() {
 
 void
 mpeg4_p10_video_packetizer_c::extract_aspect_ratio() {
-  uint32_t num = 0, den = 0;
+  auto result = mpeg4::p10::extract_par(m_ti.m_private_data);
 
-  if (!m_ti.m_private_data)
+  if (!result.is_valid() || display_dimensions_or_aspect_ratio_set())
     return;
 
-  mpeg4::p10::extract_par(m_ti.m_private_data, num, den);
-  if (!num || !den || display_dimensions_or_aspect_ratio_set())
-    return;
-
-  auto par = static_cast<double>(num) / static_cast<double>(den);
+  auto par = static_cast<double>(result.numerator) / static_cast<double>(result.denominator);
 
   set_video_display_dimensions(1 <= par ? irnd(m_width * par) : m_width,
                                1 <= par ? m_height            : irnd(m_height / par),
