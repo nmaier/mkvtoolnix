@@ -108,8 +108,9 @@ class SimpleTest
     @blocks[:tests] << {
       :name  => full_command_line,
       :block => lambda {
-        merge full_command_line, :exit_code => options[:exit_code]
-        options[:keep_tmp] ? hash_file(tmp) : hash_tmp
+        output = options[:output] || tmp
+        merge full_command_line, :exit_code => options[:exit_code], :output => output
+        options[:keep_tmp] ? hash_file(output) : hash_tmp
       },
     }
   end

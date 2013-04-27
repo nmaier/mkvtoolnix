@@ -126,6 +126,9 @@ avcc_c::pack() {
   for (auto &mem : m_pps_list)
     total_size += mem->get_size() + 2;
 
+  if (m_trailer)
+    total_size += m_trailer->get_size();
+
   auto destination = memory_c::alloc(total_size);
   auto buffer      = destination->get_buffer();
   auto &sps        = *m_sps_info_list.begin();
@@ -150,6 +153,9 @@ avcc_c::pack() {
 
   write_list(m_sps_list, 0xe0);
   write_list(m_pps_list, 0x00);
+
+  if (m_trailer)
+    memcpy(buffer, m_trailer->get_buffer(), m_trailer->get_size());
 
   return destination;
 }
@@ -181,6 +187,9 @@ avcc_c::unpack(memory_cptr const &mem) {
 
     read_list(avcc.m_sps_list, 0x0f);
     read_list(avcc.m_pps_list, 0xff);
+
+    if (in.getFilePointer() < static_cast<uint64_t>(in.get_size()))
+      avcc.m_trailer = in.read(in.get_size() - in.getFilePointer());
 
     return avcc;
 
@@ -781,6 +790,8 @@ mpeg4::p10::parse_pps(memory_cptr &buffer,
 */
 mpeg4::p10::par_extraction_t
 mpeg4::p10::extract_par(memory_cptr const &buffer) {
+  static debugging_option_c s_debug_ar{"extract_par|avc_sps|sps_aspect_ratio"};
+
   try {
     auto avcc            = avcc_c::unpack(buffer);
     auto new_avcc        = avcc;
@@ -797,6 +808,9 @@ mpeg4::p10::extract_par(memory_cptr const &buffer) {
         try {
           sps_info_t sps_info;
           if (mpeg4::p10::parse_sps(nalu, sps_info)) {
+            if (s_debug_ar)
+              sps_info.dump();
+
             ar_found = sps_info.ar_found;
             if (ar_found) {
               par_num = sps_info.par_num;
@@ -812,9 +826,10 @@ mpeg4::p10::extract_par(memory_cptr const &buffer) {
       new_avcc.m_sps_list.push_back(nalu);
     }
 
-    auto packed_new_avcc = new_avcc.pack();
+    if (!new_avcc)
+      return par_extraction_t{buffer, 0, 0, false};
 
-    return par_extraction_t{packed_new_avcc, ar_found ? par_num : 0, ar_found ? par_den : 0, ar_found};
+    return par_extraction_t{new_avcc.pack(), ar_found ? par_num : 0, ar_found ? par_den : 0, true};
 
   } catch(...) {
     return par_extraction_t{buffer, 0, 0, false};

@@ -1,3 +1,9 @@
+2013-04-27  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvmerge: bug fix: The option "--engage
+        remove_bitstream_ar_info" will now work on AVC/h.264 tracks read
+        from Matroska/MP4 files as well. Fixes #868.
+
 2013-04-16  Moritz Bunkus  <moritz@bunkus.org>
 
         * mmg: bug fix: mmg will now handle all file names given on the

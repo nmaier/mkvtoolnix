@@ -42,15 +42,14 @@ mpeg4_p10_video_packetizer_c(generic_reader_c *p_reader,
 
 void
 mpeg4_p10_video_packetizer_c::set_headers() {
-  if (m_ti.m_private_data && m_ti.m_private_data->get_size()) {
+  if (m_ti.m_private_data && m_ti.m_private_data->get_size())
     extract_aspect_ratio();
 
-    if (m_ti.m_fix_bitstream_frame_rate) {
-      int64_t l_track_default_duration = 0.0 < m_fps ? static_cast<int64_t>(1000000000.0 / m_fps) : -1;
-      int64_t duration                 = m_timecode_factory ? m_timecode_factory->get_default_duration(l_track_default_duration) : l_track_default_duration;
+  if (m_ti.m_private_data && m_ti.m_private_data->get_size() && m_ti.m_fix_bitstream_frame_rate) {
+    int64_t l_track_default_duration = 0.0 < m_fps ? static_cast<int64_t>(1000000000.0 / m_fps) : -1;
+    int64_t duration                 = m_timecode_factory ? m_timecode_factory->get_default_duration(l_track_default_duration) : l_track_default_duration;
 
-      set_codec_private(mpeg4::p10::fix_sps_fps(m_ti.m_private_data, duration));
-    }
+    set_codec_private(mpeg4::p10::fix_sps_fps(m_ti.m_private_data, duration));
   }
 
   video_packetizer_c::set_headers();
@@ -59,6 +58,8 @@ mpeg4_p10_video_packetizer_c::set_headers() {
 void
 mpeg4_p10_video_packetizer_c::extract_aspect_ratio() {
   auto result = mpeg4::p10::extract_par(m_ti.m_private_data);
+
+  set_codec_private(result.new_avcc);
 
   if (!result.is_valid() || display_dimensions_or_aspect_ratio_set())
     return;

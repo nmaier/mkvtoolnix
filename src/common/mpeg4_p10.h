@@ -215,6 +215,7 @@ public:
   std::vector<memory_cptr> m_sps_list, m_pps_list;
   std::vector<sps_info_t> m_sps_info_list;
   std::vector<pps_info_t> m_pps_info_list;
+  memory_cptr m_trailer;
 
 public:
   avcc_c();
