@@ -527,13 +527,11 @@ avi_reader_c::create_aac_packetizer(int aid,
   int profile, channels, sample_rate, output_sample_rate;
   bool is_sbr;
 
-  bool aac_data_created  = false;
   bool headerless        = (AVI_audio_format(m_avi) != 0x706d);
 
   if (!m_ti.m_private_data
       || (   (0x706d                       == AVI_audio_format(m_avi))
              && ((sizeof(alWAVEFORMATEX) + 7)  < m_ti.m_private_data->get_size()))) {
-    aac_data_created     = true;
     channels             = AVI_audio_channels(m_avi);
     sample_rate          = AVI_audio_rate(m_avi);
     if (44100 > sample_rate) {
