@@ -14,7 +14,6 @@
 
 #include "common/common_pch.h"
 
-#include <type_traits>
 #include <boost/type_traits.hpp>
 
 #include <ebml/EbmlBinary.h>

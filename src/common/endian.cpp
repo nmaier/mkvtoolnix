@@ -11,7 +11,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
+#include "common/common_pch.h"
 
 #include <algorithm>
 
@@ -188,4 +188,3 @@ put_uint64_be(void *buf,
   tmp[1] = (value >>= 8) & 0xff;
   tmp[0] = (value >>= 8) & 0xff;
 }
-

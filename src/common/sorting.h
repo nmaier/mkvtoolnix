@@ -16,8 +16,6 @@
 
 #include "common/common_pch.h"
 
-#include <type_traits>
-
 #include <boost/lexical_cast.hpp>
 
 #include "common/strings/utf8.h"
