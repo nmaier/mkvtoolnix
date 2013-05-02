@@ -122,6 +122,7 @@ base64_decode(const std::string &src,
 
     unsigned int values_idx;
     unsigned char values[4];
+    memset(values, 0, 4);
     for (values_idx = 0; values_idx < in_pos; values_idx++) {
       values[values_idx] =
           (('A' <= in[values_idx]) && ('Z' >= in[values_idx])) ? in[values_idx] - 'A'
