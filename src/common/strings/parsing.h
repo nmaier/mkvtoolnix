@@ -19,7 +19,6 @@
 #include <locale.h>
 
 #include <boost/lexical_cast.hpp>
-#include <boost/type_traits/is_unsigned.hpp>
 
 #include "common/at_scope_exit.h"
 
@@ -47,7 +46,7 @@ bool
 parse_number(StrT const &string,
              ValueT &value) {
   try {
-    mtx::conversion::unsigned_checker< boost::is_unsigned<ValueT>::value >::do_check(string);
+    mtx::conversion::unsigned_checker< std::is_unsigned<ValueT>::value >::do_check(string);
     value = boost::lexical_cast<ValueT>(string);
     return true;
   } catch (boost::bad_lexical_cast &) {
