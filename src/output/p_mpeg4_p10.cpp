@@ -68,7 +68,7 @@ mpeg4_p10_video_packetizer_c::extract_aspect_ratio() {
 
   set_video_display_dimensions(1 <= par ? irnd(m_width * par) : m_width,
                                1 <= par ? m_height            : irnd(m_height / par),
-                               PARAMETER_SOURCE_BITSTREAM);
+                               OPTION_SOURCE_BITSTREAM);
 
   mxinfo_tid(m_ti.m_fname, m_ti.m_id,
              boost::format(Y("Extracted the aspect ratio information from the MPEG-4 layer 10 (AVC) video data and set the display dimensions to %1%/%2%.\n"))

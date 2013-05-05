@@ -112,19 +112,19 @@ kax_track_t::handle_packetizer_display_dimensions() {
   // these and signal the packetizer not to extract the dimensions
   // from the bitstream.
   if ((0 != v_dwidth) && (0 != v_dheight))
-    ptzr_ptr->set_video_display_dimensions(v_dwidth, v_dheight, PARAMETER_SOURCE_CONTAINER);
+    ptzr_ptr->set_video_display_dimensions(v_dwidth, v_dheight, OPTION_SOURCE_CONTAINER);
 }
 
 void
 kax_track_t::handle_packetizer_pixel_cropping() {
   if ((0 < v_pcleft) || (0 < v_pctop) || (0 < v_pcright) || (0 < v_pcbottom))
-    ptzr_ptr->set_video_pixel_cropping(v_pcleft, v_pctop, v_pcright, v_pcbottom, PARAMETER_SOURCE_CONTAINER);
+    ptzr_ptr->set_video_pixel_cropping(v_pcleft, v_pctop, v_pcright, v_pcbottom, OPTION_SOURCE_CONTAINER);
 }
 
 void
 kax_track_t::handle_packetizer_stereo_mode() {
   if (stereo_mode_c::unspecified != v_stereo_mode)
-    ptzr_ptr->set_video_stereo_mode(v_stereo_mode, PARAMETER_SOURCE_CONTAINER);
+    ptzr_ptr->set_video_stereo_mode(v_stereo_mode, OPTION_SOURCE_CONTAINER);
 }
 
 void

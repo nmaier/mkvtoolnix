@@ -28,6 +28,7 @@
 
 #include "common/chapters/chapters.h"
 #include "common/compression.h"
+#include "common/option_with_source.h"
 #include "common/stereo_mode.h"
 #include "common/strings/editing.h"
 #include "common/tags/tags.h"
@@ -179,13 +180,6 @@ enum default_track_priority_e {
   DEFAULT_TRACK_PRIORITY_CMDLINE     = 255
 };
 
-enum parameter_source_e {
-  PARAMETER_SOURCE_NONE      = 0,
-  PARAMETER_SOURCE_BITSTREAM = 1,
-  PARAMETER_SOURCE_CONTAINER = 2,
-  PARAMETER_SOURCE_CMDLINE   = 3,
-};
-
 struct display_properties_t {
   float aspect_ratio;
   bool ar_factor;
@@ -204,10 +198,18 @@ struct pixel_crop_t {
   int left, top, right, bottom;
 
   pixel_crop_t()
-  : left(0)
-  , top(0)
-  , right(0)
-  , bottom(0)
+  : left{}
+  , top{}
+  , right{}
+  , bottom{}
+  {
+  }
+
+  pixel_crop_t(int p_left, int p_top, int p_right, int p_bottom)
+  : left{p_left}
+  , top{p_top}
+  , right{p_right}
+  , bottom{p_bottom}
   {
   }
 };
@@ -240,7 +242,7 @@ public:
   float m_aspect_ratio;
   int m_display_width, m_display_height;
   bool m_aspect_ratio_given, m_aspect_ratio_is_factor, m_display_dimensions_given;
-  parameter_source_e m_display_dimensions_source;
+  option_source_e m_display_dimensions_source;
 
   std::map<int64_t, timecode_sync_t> m_timecode_syncs; // As given on the command line
   timecode_sync_t m_tcsync;                       // For this very track
@@ -285,12 +287,10 @@ public:
   std::string m_ext_timecodes;         // For this very track
 
   std::map<int64_t, pixel_crop_t> m_pixel_crop_list; // As given on the command line
-  pixel_crop_t m_pixel_cropping;  // For this very track
-  parameter_source_e m_pixel_cropping_source;
+  option_with_source_c<pixel_crop_t> m_pixel_cropping;  // For this very track
 
   std::map<int64_t, stereo_mode_c::mode> m_stereo_mode_list; // As given on the command line
-  stereo_mode_c::mode m_stereo_mode;                    // For this very track
-  parameter_source_e m_stereo_mode_source;
+  option_with_source_c<stereo_mode_c::mode> m_stereo_mode;   // For this very track
 
   std::map<int64_t, int64_t> m_default_durations; // As given on the command line
   std::map<int64_t, int> m_max_blockadd_ids; // As given on the command line
@@ -584,11 +584,11 @@ public:
   virtual void set_video_pixel_dimensions(int width, int height);
   virtual void set_video_display_width(int width);
   virtual void set_video_display_height(int height);
-  virtual void set_video_display_dimensions(int width, int height, parameter_source_e source);
-  virtual void set_video_aspect_ratio(double aspect_ratio, bool is_factor, parameter_source_e source);
-  virtual void set_video_pixel_cropping(int left, int top, int right, int bottom, parameter_source_e source);
-  virtual void set_video_pixel_cropping(const pixel_crop_t &cropping, parameter_source_e source);
-  virtual void set_video_stereo_mode(stereo_mode_c::mode stereo_mode, parameter_source_e source);
+  virtual void set_video_display_dimensions(int width, int height, option_source_e source);
+  virtual void set_video_aspect_ratio(double aspect_ratio, bool is_factor, option_source_e source);
+  virtual void set_video_pixel_cropping(int left, int top, int right, int bottom, option_source_e source);
+  virtual void set_video_pixel_cropping(const pixel_crop_t &cropping, option_source_e source);
+  virtual void set_video_stereo_mode(stereo_mode_c::mode stereo_mode, option_source_e source);
   virtual void set_video_stereo_mode_impl(EbmlMaster &video, stereo_mode_c::mode stereo_mode);
 
   virtual void set_as_default_track(int type, int priority);

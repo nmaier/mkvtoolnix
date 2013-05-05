@@ -180,9 +180,9 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *reader,
   if (-2 != i) {
     display_properties_t &dprop = m_ti.m_display_properties[i];
     if (0 > dprop.aspect_ratio) {
-      set_video_display_dimensions(dprop.width, dprop.height, PARAMETER_SOURCE_CMDLINE);
+      set_video_display_dimensions(dprop.width, dprop.height, OPTION_SOURCE_COMMAND_LINE);
     } else {
-      set_video_aspect_ratio(dprop.aspect_ratio, dprop.ar_factor, PARAMETER_SOURCE_CMDLINE);
+      set_video_aspect_ratio(dprop.aspect_ratio, dprop.ar_factor, OPTION_SOURCE_COMMAND_LINE);
       m_ti.m_aspect_ratio_given = true;
     }
   }
@@ -203,12 +203,12 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *reader,
   // Let's see if the user has specified a FourCC for this track.
   i = LOOKUP_TRACK_ID(m_ti.m_pixel_crop_list);
   if (-2 != i)
-    set_video_pixel_cropping(m_ti.m_pixel_crop_list[i], PARAMETER_SOURCE_CMDLINE);
+    set_video_pixel_cropping(m_ti.m_pixel_crop_list[i], OPTION_SOURCE_COMMAND_LINE);
 
   // Let's see if the user has specified a stereo mode for this track.
   i = LOOKUP_TRACK_ID(m_ti.m_stereo_mode_list);
   if (-2 != i)
-    set_video_stereo_mode(m_ti.m_stereo_mode_list[m_ti.m_id], PARAMETER_SOURCE_CMDLINE);
+    set_video_stereo_mode(m_ti.m_stereo_mode_list[m_ti.m_id], OPTION_SOURCE_COMMAND_LINE);
 
   // Let's see if the user has specified a default duration for this track.
   if (map_has_key(m_ti.m_default_durations, m_ti.m_id))
@@ -477,7 +477,7 @@ generic_packetizer_c::set_video_display_height(int height) {
 void
 generic_packetizer_c::set_video_display_dimensions(int width,
                                                    int height,
-                                                   parameter_source_e source) {
+                                                   option_source_e source) {
   if (display_dimensions_or_aspect_ratio_set() && (m_ti.m_display_dimensions_source >= source))
     return;
 
@@ -495,7 +495,7 @@ generic_packetizer_c::set_video_display_dimensions(int width,
 void
 generic_packetizer_c::set_video_aspect_ratio(double aspect_ratio,
                                              bool is_factor,
-                                             parameter_source_e source) {
+                                             option_source_e source) {
   if (display_dimensions_or_aspect_ratio_set() && (m_ti.m_display_dimensions_source >= source))
     return;
 
@@ -534,43 +534,33 @@ generic_packetizer_c::set_video_pixel_cropping(int left,
                                                int top,
                                                int right,
                                                int bottom,
-                                               parameter_source_e source) {
-  if (source <= m_ti.m_pixel_cropping_source)
-    return;
-
-  m_ti.m_pixel_cropping.left   = left;
-  m_ti.m_pixel_cropping.top    = top;
-  m_ti.m_pixel_cropping.right  = right;
-  m_ti.m_pixel_cropping.bottom = bottom;
-  m_ti.m_pixel_cropping_source = source;
+                                               option_source_e source) {
+  m_ti.m_pixel_cropping.set(pixel_crop_t{left, top, right, bottom}, source);
 
   if (m_track_entry) {
     KaxTrackVideo &video = GetChild<KaxTrackVideo>(m_track_entry);
+    auto crop            = m_ti.m_pixel_cropping.get();
 
-    GetChild<KaxVideoPixelCropLeft  >(video).SetValue(m_ti.m_pixel_cropping.left);
-    GetChild<KaxVideoPixelCropTop   >(video).SetValue(m_ti.m_pixel_cropping.top);
-    GetChild<KaxVideoPixelCropRight >(video).SetValue(m_ti.m_pixel_cropping.right);
-    GetChild<KaxVideoPixelCropBottom>(video).SetValue(m_ti.m_pixel_cropping.bottom);
+    GetChild<KaxVideoPixelCropLeft  >(video).SetValue(crop.left);
+    GetChild<KaxVideoPixelCropTop   >(video).SetValue(crop.top);
+    GetChild<KaxVideoPixelCropRight >(video).SetValue(crop.right);
+    GetChild<KaxVideoPixelCropBottom>(video).SetValue(crop.bottom);
   }
 }
 
 void
 generic_packetizer_c::set_video_pixel_cropping(const pixel_crop_t &cropping,
-                                               parameter_source_e source) {
+                                               option_source_e source) {
   set_video_pixel_cropping(cropping.left, cropping.top, cropping.right, cropping.bottom, source);
 }
 
 void
 generic_packetizer_c::set_video_stereo_mode(stereo_mode_c::mode stereo_mode,
-                                            parameter_source_e source) {
-  if (source <= m_ti.m_stereo_mode_source)
-    return;
+                                            option_source_e source) {
+  m_ti.m_stereo_mode.set(stereo_mode, source);
 
-  m_ti.m_stereo_mode        = stereo_mode;
-  m_ti.m_stereo_mode_source = source;
-
-  if (m_track_entry && (stereo_mode_c::unspecified != stereo_mode))
-    set_video_stereo_mode_impl(GetChild<KaxTrackVideo>(*m_track_entry), m_ti.m_stereo_mode);
+  if (m_track_entry && (stereo_mode_c::unspecified != m_ti.m_stereo_mode.get()))
+    set_video_stereo_mode_impl(GetChild<KaxTrackVideo>(*m_track_entry), m_ti.m_stereo_mode.get());
 }
 
 void
@@ -702,15 +692,16 @@ generic_packetizer_c::set_headers() {
       GetChild<KaxVideoDisplayWidth >(video).SetDefaultSize(4);
       GetChild<KaxVideoDisplayHeight>(video).SetDefaultSize(4);
 
-      if (PARAMETER_SOURCE_NONE != m_ti.m_pixel_cropping_source) {
-        GetChild<KaxVideoPixelCropLeft  >(video).SetValue(m_ti.m_pixel_cropping.left);
-        GetChild<KaxVideoPixelCropTop   >(video).SetValue(m_ti.m_pixel_cropping.top);
-        GetChild<KaxVideoPixelCropRight >(video).SetValue(m_ti.m_pixel_cropping.right);
-        GetChild<KaxVideoPixelCropBottom>(video).SetValue(m_ti.m_pixel_cropping.bottom);
+      if (m_ti.m_pixel_cropping) {
+        auto crop = m_ti.m_pixel_cropping.get();
+        GetChild<KaxVideoPixelCropLeft  >(video).SetValue(crop.left);
+        GetChild<KaxVideoPixelCropTop   >(video).SetValue(crop.top);
+        GetChild<KaxVideoPixelCropRight >(video).SetValue(crop.right);
+        GetChild<KaxVideoPixelCropBottom>(video).SetValue(crop.bottom);
       }
 
-      if ((PARAMETER_SOURCE_NONE != m_ti.m_stereo_mode_source) && (stereo_mode_c::unspecified != m_ti.m_stereo_mode))
-        set_video_stereo_mode_impl(video, m_ti.m_stereo_mode);
+      if (m_ti.m_stereo_mode && (stereo_mode_c::unspecified != m_ti.m_stereo_mode.get()))
+        set_video_stereo_mode_impl(video, m_ti.m_stereo_mode.get());
     }
 
   } else if (track_audio == m_htrack_type) {
@@ -1527,7 +1518,7 @@ track_info_c::track_info_c()
   , m_aspect_ratio_given(false)
   , m_aspect_ratio_is_factor(false)
   , m_display_dimensions_given(false)
-  , m_display_dimensions_source(PARAMETER_SOURCE_NONE)
+  , m_display_dimensions_source(OPTION_SOURCE_NONE)
   , m_reset_timecodes(false)
   , m_cues(CUE_STRATEGY_UNSPECIFIED)
   , m_default_track(boost::logic::indeterminate)
@@ -1535,9 +1526,6 @@ track_info_c::track_info_c()
   , m_forced_track(boost::logic::indeterminate)
   , m_enabled_track(boost::logic::indeterminate)
   , m_compression(COMPRESSION_UNSPECIFIED)
-  , m_pixel_cropping_source(PARAMETER_SOURCE_NONE)
-  , m_stereo_mode(stereo_mode_c::unspecified)
-  , m_stereo_mode_source(PARAMETER_SOURCE_NONE)
   , m_nalu_size_length(0)
   , m_no_chapters(false)
   , m_no_global_tags(false)
@@ -1617,11 +1605,9 @@ track_info_c::operator =(const track_info_c &src) {
 
   m_pixel_crop_list            = src.m_pixel_crop_list;
   m_pixel_cropping             = src.m_pixel_cropping;
-  m_pixel_cropping_source      = src.m_pixel_cropping_source;
 
   m_stereo_mode_list           = src.m_stereo_mode_list;
   m_stereo_mode                = src.m_stereo_mode;
-  m_stereo_mode_source         = src.m_stereo_mode_source;
 
   m_nalu_size_lengths          = src.m_nalu_size_lengths;
   m_nalu_size_length           = src.m_nalu_size_length;
@@ -1650,7 +1636,7 @@ track_info_c::operator =(const track_info_c &src) {
 
 bool
 track_info_c::display_dimensions_or_aspect_ratio_set() {
-  return PARAMETER_SOURCE_NONE != m_display_dimensions_source;
+  return OPTION_SOURCE_NONE != m_display_dimensions_source;
 }
 
 //--------------------------------------------------------------------
