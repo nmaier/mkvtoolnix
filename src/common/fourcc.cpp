@@ -96,19 +96,19 @@ fourcc_c::write(unsigned char *mem,
 size_t
 fourcc_c::write(mm_io_cptr const &io,
                 fourcc_c::byte_order_t byte_order) {
-  return write(*io, byte_order);
+  return write(io.get(), byte_order);
 }
 
 size_t
 fourcc_c::write(mm_io_c &io,
                 fourcc_c::byte_order_t byte_order) {
-  return io.write_uint32_be(val(m_value, byte_order));
+  return write(&io, byte_order);
 }
 
 size_t
 fourcc_c::write(mm_io_c *io,
                 fourcc_c::byte_order_t byte_order) {
-  return write(*io, byte_order);
+  return io->write_uint32_be(val(m_value, byte_order));
 }
 
 uint32_t
