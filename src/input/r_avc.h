@@ -16,11 +16,14 @@
 
 #include "common/common_pch.h"
 
+#include "common/debugging.h"
 #include "common/mpeg4_p10.h"
 #include "merge/pr_generic.h"
 
 class avc_es_reader_c: public generic_reader_c {
-private:
+protected:
+  static debugging_option_c ms_debug;
+
   int m_width, m_height;
 
   memory_cptr m_buffer;

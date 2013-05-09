@@ -36,6 +36,8 @@
 
 using namespace mpeg4::p10;
 
+debugging_option_c avc_es_reader_c::ms_debug{"avc_reader"};
+
 int
 avc_es_reader_c::probe_file(mm_io_c *in,
                             uint64_t size) {
@@ -69,10 +71,10 @@ avc_es_reader_c::probe_file(mm_io_c *in,
     }
 
   } catch (mtx::exception &e) {
-    mxinfo(boost::format(Y("Error %1%\n")) % e.error());
+    mxdebug_if(ms_debug, (boost::format(Y("Error %1%\n")) % e.error()));
 
   } catch (...) {
-    mxinfo(Y("have an xcptn\n"));
+    mxdebug_if(ms_debug, Y("have an xcptn\n"));
   }
 
   return 0;
@@ -146,4 +148,3 @@ avc_es_reader_c::identify() {
   id_result_container();
   id_result_track(0, ID_RESULT_TRACK_VIDEO, "MPEG-4 part 10 ES", "packetizer:mpeg4_p10_es_video");
 }
-
