@@ -201,39 +201,33 @@ bool
 mpeg_es_reader_c::read_frame(M2VParser &parser,
                              mm_io_c &in,
                              int64_t max_size) {
-  int bytes_probed;
+  auto af_buffer = memory_c::alloc(READ_SIZE);
+  auto buffer    = af_buffer->get_buffer();
+  int bytes_probed = 0;
 
-  bytes_probed = 0;
   while (true) {
-    int state;
+    auto state = parser.GetState();
 
-    state = parser.GetState();
-
-    if (MPV_PARSER_STATE_NEED_DATA == state) {
-      if ((max_size != -1) && (bytes_probed > max_size))
-        return false;
-
-      int bytes_to_read     = (parser.GetFreeBufferSpace() < READ_SIZE) ? parser.GetFreeBufferSpace() : READ_SIZE;
-      unsigned char *buffer = new unsigned char[bytes_to_read];
-      int bytes_read        = in.read(buffer, bytes_to_read);
-      if (0 == bytes_read) {
-        delete [] buffer;
-        break;
-      }
-      bytes_probed += bytes_read;
-
-      parser.WriteData(buffer, bytes_read);
-      parser.SetEOS();
-      delete [] buffer;
-
-    } else if (MPV_PARSER_STATE_FRAME == state)
+    if (MPV_PARSER_STATE_FRAME == state)
       return true;
 
-    else if ((MPV_PARSER_STATE_EOS == state) || (MPV_PARSER_STATE_ERROR == state))
+    if ((MPV_PARSER_STATE_EOS == state) || (MPV_PARSER_STATE_ERROR == state))
       return false;
-  }
 
-  return false;
+    assert(MPV_PARSER_STATE_NEED_DATA == state);
+
+    if ((max_size != -1) && (bytes_probed > max_size))
+      return false;
+
+    int bytes_read = in.read(buffer, std::min<int>(parser.GetFreeBufferSpace(), READ_SIZE));
+    if (!bytes_read)
+      return false;
+
+    bytes_probed += bytes_read;
+
+    parser.WriteData(buffer, bytes_read);
+    parser.SetEOS();
+  }
 }
 
 void
