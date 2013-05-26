@@ -1932,7 +1932,7 @@ msgstr ""
 "ASCII рядок (без спеціальних символів, як то\n"
 "Umlaute і т.д.)"
 
-#: src/input/r_avc.h:32
+#: src/input/r_avc.h:35
 #: src/output/p_mpeg4_p10.h:34
 msgid "AVC/h.264"
 msgstr "AVC/h.264"
@@ -3477,7 +3477,7 @@ msgstr "Англійська назва мови"
 msgid "Error"
 msgstr "Помилка"
 
-#: src/input/r_avc.cpp:72
+#: src/input/r_avc.cpp:74
 #, boost-format
 msgid "Error %1%\n"
 msgstr "Помилка %1%\n"
@@ -8801,7 +8801,7 @@ msgstr "flac_reader: Не вдалося ініціалізувати форму
 msgid "for all frames"
 msgstr "для всіх кадрів"
 
-#: src/input/r_avc.cpp:75
+#: src/input/r_avc.cpp:77
 #: src/input/r_vc1.cpp:52
 msgid "have an xcptn\n"
 msgstr "містить xcptn\n"

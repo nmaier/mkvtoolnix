@@ -1669,12 +1669,12 @@ msgstr "+-> FLAC agiriaren aurre-azterketa: %1%%%%2%"
 msgid "+-> Pre-parsing FLAC file: 100%\n"
 msgstr "+-> FLAC agiriaren aurre-azterketa: 100%\n"
 
-#: src/merge/pr_generic.cpp:1432
+#: src/merge/pr_generic.cpp:1423
 #, boost-format
 msgid ", description '%1%'"
 msgstr ", azalpena '%1%'"
 
-#: src/merge/pr_generic.cpp:1433
+#: src/merge/pr_generic.cpp:1424
 #, boost-format
 msgid ", file name '%1%'"
 msgstr ", agiri izena '%1%'"
@@ -1843,7 +1843,7 @@ msgstr "Matroska bloke bakar batek  frame oso bat du (eduki aurrerakorrarentzat)
 msgid "A track"
 msgstr "Bide bat"
 
-#: src/merge/pr_generic.cpp:1302
+#: src/merge/pr_generic.cpp:1293
 #, boost-format
 msgid "A track with the ID %1% was requested but not found in the file. The corresponding option will be ignored.\n"
 msgstr "%1% ID-dun bidea eskatu da baina ez da agirian aurkitu. Aukera hori ezikusi egingo da.\n"
@@ -1927,7 +1927,7 @@ msgstr ""
 "ASCII katea (ez hizki bereziak\n"
 "Umlaute, etab. bezalakoak)"
 
-#: src/input/r_avc.h:32
+#: src/input/r_avc.h:35
 #: src/output/p_mpeg4_p10.h:34
 msgid "AVC/h.264"
 msgstr "AVC/h.264"
@@ -2233,7 +2233,7 @@ msgstr "Erantsita"
 msgid "Attached files"
 msgstr "Erantsitako agiriak"
 
-#: src/merge/pr_generic.cpp:1431
+#: src/merge/pr_generic.cpp:1422
 #, boost-format
 msgid "Attachment ID %1%: type '%2%', size %3% bytes"
 msgstr "Eranskin ID-a %1%: mota '%2%', neurria %3% byte"
@@ -2591,7 +2591,7 @@ msgstr "Idatziriko atalak."
 msgid "Chapters:"
 msgstr "Atalak:"
 
-#: src/merge/pr_generic.cpp:1434
+#: src/merge/pr_generic.cpp:1425
 #, boost-format
 msgid "Chapters: %1% entries"
 msgstr "Atalak: %1% sarrera"
@@ -2814,7 +2814,7 @@ msgstr "Erabilitako agindu lerroa:"
 msgid "Common languages"
 msgstr "Hizkuntza arruntak"
 
-#: src/merge/pr_generic.cpp:795
+#: src/merge/pr_generic.cpp:786
 #, boost-format
 msgid "Compression failed: %1%\n"
 msgstr "Konpresio hutsegitea: %1%\n"
@@ -3472,7 +3472,7 @@ msgstr "Hizkuntza izena ingeleraz"
 msgid "Error"
 msgstr "Akatsa"
 
-#: src/input/r_avc.cpp:72
+#: src/input/r_avc.cpp:74
 #, boost-format
 msgid "Error %1%\n"
 msgstr "Akatsa %1%\n"
@@ -3612,7 +3612,7 @@ msgstr "Atera datuak raw agiri batera."
 msgid "Extracted the aspect ratio information from the MPEG-4 layer 10 (AVC) video data and set the display dimensions to %1%/%2%.\n"
 msgstr "Ikuspegi maila argibideak aterata MPEG-4 layer 10 (AVC) bideo datuetatik eta erakuspen neurriak honela ezarrita: %1%/%2%.\n"
 
-#: src/output/p_mpeg4_p2.cpp:331
+#: src/output/p_mpeg4_p2.cpp:330
 #, boost-format
 msgid "Extracted the aspect ratio information from the MPEG4 layer 2 video data and set the display dimensions to %1%/%2%.\n"
 msgstr "Ikuspegi maila argibideak aterata MPEG-4 layer 2 bideo datuetatik eta erakuspen neurriak honela ezarrita: %1%/%2%.\n"
@@ -3685,12 +3685,12 @@ msgstr "Sendi UID-a: %1%"
 msgid "File %1% has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n"
 msgstr "%1% agiria mota ezezagunekoa da. Mesedez bata begirada bat sostengaturiko agiri motei (('mkvmerge --list-types') eta jarri harremanetan egilearekin, Moritz Bunkus <moritz@bunkus.org> zure agiri mota sostengatua bada baina ez da egoki ezagutua.\n"
 
-#: src/merge/pr_generic.cpp:1429
+#: src/merge/pr_generic.cpp:1420
 #, boost-format
 msgid "File '%1%': container: %2%"
 msgstr "Agiria '%1%': edukiontzia: %2%"
 
-#: src/merge/pr_generic.cpp:1665
+#: src/merge/pr_generic.cpp:1651
 #, boost-format
 msgid "File '%1%': unsupported container: %2%\n"
 msgstr "Agiria '%1%': edukiontzi sostengugabea: %2%\n"
@@ -3923,7 +3923,7 @@ msgstr "Aukera orokorrak"
 msgid "Global tags (%d entries) from %s"
 msgstr "Etiketa orokorrak (%d sarrera) --> %s"
 
-#: src/merge/pr_generic.cpp:1435
+#: src/merge/pr_generic.cpp:1426
 #, boost-format
 msgid "Global tags: %1% entries"
 msgstr "Etiketa orokorrak: %1% sarrera"
@@ -5242,7 +5242,7 @@ msgstr "Ez da baliozko Matroska agiri bat (ez da zati/0 maila gairik aurkitu)"
 msgid "Not a valid number or not positive."
 msgstr "Zenbaki baliogabea edo ez positiboa."
 
-#: src/merge/pr_generic.cpp:1146
+#: src/merge/pr_generic.cpp:1137
 #, boost-format
 msgid "Note that the Matroska specifications regarding the storage of '%1%' have not been finalized yet. mkvmerge's support for it is therefore subject to change and uses the CodecID '%2%/EXPERIMENTAL' instead of '%2%'. This warning will be removed once the specifications have been finalized and mkvmerge has been updated accordingly.\n"
 msgstr "Ohartu '%1%' biltegiratzeari dagokionez Matroska ezaugarritzea ez dela oraindik amaitu. mkvmerge-ren sostengua aldakorra da eta KodecID '%2%/EXPERIMENTAL' erabiltzen du '%2%'-ren ordez. Ohar hau kendu egingo da ezaugarritzea amaitutakoan eta mkvmerge horretarako eguneratutakoan.\n"
@@ -6622,7 +6622,7 @@ msgstr "Etiketak"
 msgid "Tags are not allowed in WebM compliant files. No tags will be written into any output file.\n"
 msgstr "Etiketak ez daude ahalbideturik WebM bateragarritasun agirietan. Etiketak ez dira idatziko irteera agirietan.\n"
 
-#: src/merge/pr_generic.cpp:1436
+#: src/merge/pr_generic.cpp:1427
 #, boost-format
 msgid "Tags for track ID %1%: %2% entries"
 msgstr "Etiketak bide ID-arentzat %1%: %2% sarrera"
@@ -6870,7 +6870,7 @@ msgstr "Hautaturiko %1%-ren NALU neurri luzera txikiegia da. Saiatu '4' erabiltz
 msgid "The closing parenthesis ')' are missing.\n"
 msgstr "Itxiera hitzartea ')' ez dago.\n"
 
-#: src/merge/pr_generic.cpp:1246
+#: src/merge/pr_generic.cpp:1237
 #, boost-format
 msgid "The codec type '%1%' cannot be used in a WebM compliant file.\n"
 msgstr "'%1%' kodek mota ezin da WebM agiri bateragarri batean erabili.\n"
@@ -6904,7 +6904,7 @@ msgstr "Cue sarrerak (aurkibidea) idazten ari dira...\n"
 msgid "The current file (number %d) cannot be removed. There are other files -- at least file number %d -- whose tracks are supposed to be appended to tracks from this file. Please remove those files first."
 msgstr "Oraingo agiria (zenbakia: %d) ezin da kendu. Beste agiri batzuk daude -- gutxienez %d zenbakiko agiria -- hauen bideak suposatzen da agiri honetatik erantsiko direla bideetara. Mesedez kendu agiri hauek lehenik."
 
-#: src/merge/pr_generic.cpp:857
+#: src/merge/pr_generic.cpp:848
 #, boost-format
 msgid "The current packet's timecode is smaller than that of the previous packet. This usually means that the source file is a Matroska file that has not been created 100%% correctly. The timecodes of all packets will be adjusted by %1%ms in order not to lose any data. This may throw audio/video synchronization off, but that can be corrected with mkvmerge's \"--sync\" option. If you already use \"--sync\" and you still get this warning then do NOT worry -- this is normal. If this error happens more than once and you get this message more than once for a particular track then either is the source file badly mastered, or mkvmerge contains a bug. In this case you should contact the author Moritz Bunkus <moritz@bunkus.org>.\n"
 msgstr "Oraingo paketearen denbora-kodea aurreko paketea baino txikiagoa da. Honek arrunt esanahi du iturburu agiria %%100 ongi sortu gabeko Matroska agiri bat dela. Pakete guztien denbora-kodeak %1%sm zehaztuko dira daturik ez galtzeko. Honek audio/bideo aldiberetzea nahastu dezake, baina hori mkvmergeren \"--sync\" aukeraren bidez zuzendu daiteke. Jadanik \"--sync\" erabili baduzu eta oraindik kontuz ohar hau baduzu EZ kezkatu, egoera arrunta da. Akats hau behin baino gehiagotan gertatzen bada eta bide beragaitik mezu hau behin baino gehiagotan jasotzen baduzu, iturburu agiria gaizki osatuta dago edo mkvmergek akats bat du. Horrela bada jarri zaitez harremanetan egilearekin, Moritz Bunkus <moritz@bunkus.org>.\n"
@@ -6973,7 +6973,7 @@ msgstr "Edizio UID-a loturaturiko zatitik irakurtzeko atalen zati UID-an. Hau ze
 msgid "The element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
 msgstr "Gaia agiriaren amaieran idatzita dago, baina zati neurria ez da eguneratu ahal izan. Hortaz gaia ez da ikusgarria izango. Garapena utzi egingo da. Agiria aldatu egin da!"
 
-#: src/output/p_mpeg4_p2.cpp:372
+#: src/output/p_mpeg4_p2.cpp:371
 #, boost-format
 msgid "The extracted values for video width and height from the MPEG4 layer 2 video data bitstream differ from what the values in the source container. The ones from the video data bitstream (%1%x%2%) will be used.\n"
 msgstr "Bideo zabalera eta garaierarako MPEG4 layer 2 bideo datu bitjariotik ateratako balioak iturburu edukiontzikoen ezberdinak dira. Bideo datu bitjariokoak  (%1%x%2%) erabiliko dira.\n"
@@ -7028,7 +7028,7 @@ msgstr "%1% agiria idazteko ireki da.\n"
 msgid "The file '%1%' has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n"
 msgstr "%1% agiria mota ezezagunekoa da. Mesedez bota begirada bat sostengaturiko agiri motei ('mkvmerge --list-types') eta jarri harremanetan egilearekin, Moritz Bunkus <moritz@bunkus.org>, zure agiri mota sostengatua bada baina ez bada egoki ezagutzen.\n"
 
-#: src/merge/pr_generic.cpp:1669
+#: src/merge/pr_generic.cpp:1655
 #, boost-format
 msgid "The file '%1%' is a non-supported file type (%2%).\n"
 msgstr "%1% agiria sostengatu-gabeko agiri mota batekoa da (%2%).\n"
@@ -7989,7 +7989,7 @@ msgstr "%1% bidea: AAC argibideak ezin dira aztertu.\n"
 msgid "Track ID %1% has an unknown AAC type.\n"
 msgstr "%1% ID-dun bideak AAC mota ezezaguna du.\n"
 
-#: src/merge/pr_generic.cpp:1430
+#: src/merge/pr_generic.cpp:1421
 #, boost-format
 msgid "Track ID %1%: %2% (%3%)"
 msgstr "%1% ID-dun bidea: %1%: %2% (%3%)"
@@ -8791,7 +8791,7 @@ msgstr "flac_reader: ezin da FLAC paketatzailea abiarazi.\n"
 msgid "for all frames"
 msgstr "frame guztientzat"
 
-#: src/input/r_avc.cpp:75
+#: src/input/r_avc.cpp:77
 #: src/input/r_vc1.cpp:52
 msgid "have an xcptn\n"
 msgstr "izan xcptn bat\n"
@@ -9345,12 +9345,12 @@ msgstr "pixel garaiera: %1%"
 msgid "pixel width: %1%"
 msgstr "pixel zabalera: %1%"
 
-#: src/merge/pr_generic.cpp:869
+#: src/merge/pr_generic.cpp:860
 #, boost-format
 msgid "pr_generic.cpp/generic_packetizer_c::add_packet(): timecode < last_timecode (%1% < %2%). %3%\n"
 msgstr "pr_generic.cpp/generic_packetizer_c::add_packet(): denbora-kodea < azken_denbora-kodea (%1% < %2%). %3%\n"
 
-#: src/merge/pr_generic.cpp:1221
+#: src/merge/pr_generic.cpp:1212
 #, boost-format
 msgid "pr_generic.cpp/generic_reader_c::demuxing_requested(): Invalid track type %1%."
 msgstr "pr_generic.cpp/generic_reader_c::demuxing_requested(): Bide mota baliogabea %1%."

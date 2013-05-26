@@ -1648,12 +1648,12 @@ msgstr "+-> 預先解析 FLAC 檔案: %1%%%%2%"
 msgid "+-> Pre-parsing FLAC file: 100%\n"
 msgstr "+-> 預先解析 FLAC 檔案: 100%\n"
 
-#: src/merge/pr_generic.cpp:1432
+#: src/merge/pr_generic.cpp:1423
 #, boost-format
 msgid ", description '%1%'"
 msgstr ", 描述 「%1%」"
 
-#: src/merge/pr_generic.cpp:1433
+#: src/merge/pr_generic.cpp:1424
 #, boost-format
 msgid ", file name '%1%'"
 msgstr ", 檔名「%1%」"
@@ -1822,7 +1822,7 @@ msgstr "單一 Matroska 區塊可包含完整影格 (漸進式內容) 或單一�
 msgid "A track"
 msgstr "一個軌道"
 
-#: src/merge/pr_generic.cpp:1302
+#: src/merge/pr_generic.cpp:1293
 #, boost-format
 msgid "A track with the ID %1% was requested but not found in the file. The corresponding option will be ignored.\n"
 msgstr "ID 為 %1% 的軌道被要求但在檔案中沒有找到。相應的選項將被忽略。\n"
@@ -1902,7 +1902,7 @@ msgstr ""
 "ASCII 字串 (不能使用像德語\n"
 "變母音符號¨這樣的特殊字元)"
 
-#: src/input/r_avc.h:32
+#: src/input/r_avc.h:35
 #: src/output/p_mpeg4_p10.h:34
 msgid "AVC/h.264"
 msgstr "AVC/h.264"
@@ -2204,7 +2204,7 @@ msgstr "附加的"
 msgid "Attached files"
 msgstr "附加檔案清單"
 
-#: src/merge/pr_generic.cpp:1431
+#: src/merge/pr_generic.cpp:1422
 #, boost-format
 msgid "Attachment ID %1%: type '%2%', size %3% bytes"
 msgstr "附件 ID %1%: 類型「%2%」, 大小 %3% 位元組"
@@ -2562,7 +2562,7 @@ msgstr "章節已寫入。"
 msgid "Chapters:"
 msgstr "章節:"
 
-#: src/merge/pr_generic.cpp:1434
+#: src/merge/pr_generic.cpp:1425
 #, boost-format
 msgid "Chapters: %1% entries"
 msgstr "章節: %1% 項目"
@@ -2785,7 +2785,7 @@ msgstr "使用命令列:"
 msgid "Common languages"
 msgstr "共通語言"
 
-#: src/merge/pr_generic.cpp:795
+#: src/merge/pr_generic.cpp:786
 #, boost-format
 msgid "Compression failed: %1%\n"
 msgstr "壓縮失敗: %1%\n"
@@ -2878,7 +2878,7 @@ msgstr "在第一個 MPEG-4 part 2 視訊畫格中找不到編解碼器設定資
 msgid "Could not find the next Ogg page. This indicates a damaged Ogg/Ogm file. Will try to continue.\n"
 msgstr "找不到 Ogg 的下一頁。這表示 Ogg/Ogm 檔案可能已損壞。將試著繼續。\n"
 
-#: src/input/r_avi.cpp:607
+#: src/input/r_avi.cpp:605
 #: src/input/r_matroska.cpp:1464
 msgid "Could not find valid DTS headers in this track's first frames.\n"
 msgstr "在這軌道的第一個畫格裡找不到正確的 DTS 表頭。\n"
@@ -3443,7 +3443,7 @@ msgstr "英文語言名稱"
 msgid "Error"
 msgstr "錯誤"
 
-#: src/input/r_avc.cpp:72
+#: src/input/r_avc.cpp:74
 #, boost-format
 msgid "Error %1%\n"
 msgstr "錯誤 %1%\n"
@@ -3578,12 +3578,12 @@ msgid "Extract the data to a raw file."
 msgstr "提取資料到 raw 檔案。"
 
 #: src/output/p_avc.cpp:147
-#: src/output/p_mpeg4_p10.cpp:77
+#: src/output/p_mpeg4_p10.cpp:74
 #, boost-format
 msgid "Extracted the aspect ratio information from the MPEG-4 layer 10 (AVC) video data and set the display dimensions to %1%/%2%.\n"
 msgstr "從 MPEG-4 layer 10 (AVC) 視訊資料中提取外觀比例資訊並設定顯示尺寸為 %1%/%2%。\n"
 
-#: src/output/p_mpeg4_p2.cpp:331
+#: src/output/p_mpeg4_p2.cpp:330
 #, boost-format
 msgid "Extracted the aspect ratio information from the MPEG4 layer 2 video data and set the display dimensions to %1%/%2%.\n"
 msgstr "從 MPEG4 layer 2 視訊資料中提取外觀比例資訊並設定顯示尺寸為 %1%/%2%。\n"
@@ -3656,12 +3656,12 @@ msgstr "家族 UID: %1%"
 msgid "File %1% has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n"
 msgstr "檔案 %1% 類型未知。請查看受支援的檔案類型清單 (「mkvmerge --list-types」)，如果您的檔案類型受支援但沒被正常識別，請聯繫作者 Moritz Bunkus <moritz@bunkus.org>。\n"
 
-#: src/merge/pr_generic.cpp:1429
+#: src/merge/pr_generic.cpp:1420
 #, boost-format
 msgid "File '%1%': container: %2%"
 msgstr "檔案「%1%」: 容器: %2%"
 
-#: src/merge/pr_generic.cpp:1665
+#: src/merge/pr_generic.cpp:1651
 #, boost-format
 msgid "File '%1%': unsupported container: %2%\n"
 msgstr "檔案「%1%」: 不支援的容器: %2%\n"
@@ -3894,7 +3894,7 @@ msgstr " 整體選項"
 msgid "Global tags (%d entries) from %s"
 msgstr "整體標籤 (%d 個項目) 自 %s"
 
-#: src/merge/pr_generic.cpp:1435
+#: src/merge/pr_generic.cpp:1426
 #, boost-format
 msgid "Global tags: %1% entries"
 msgstr "整體標籤: %1% 項目"
@@ -4187,9 +4187,9 @@ msgstr "無效 UID。該版本 UID 已被使用。原 UID 沒有被改變。"
 msgid "Invalid UTF-8 char. First byte: 0x%|1$02x|"
 msgstr "無效 UTF-8 字元。第一位元組: 0x%|1$02x|"
 
-#: src/input/r_avi.cpp:616
-#: src/input/r_avi.cpp:621
-#: src/input/r_avi.cpp:638
+#: src/input/r_avi.cpp:614
+#: src/input/r_avi.cpp:619
+#: src/input/r_avi.cpp:636
 msgid "Invalid Vorbis headers in AVI audio track."
 msgstr "有無效的 Vorbis 表頭，在 AVI 音軌中。"
 
@@ -5216,7 +5216,7 @@ msgstr "不是有效的 Matroska 檔 (未發現有效的 剪輯/0 層級元件)"
 msgid "Not a valid number or not positive."
 msgstr "無效的數字或不是正的。"
 
-#: src/merge/pr_generic.cpp:1146
+#: src/merge/pr_generic.cpp:1137
 #, boost-format
 msgid "Note that the Matroska specifications regarding the storage of '%1%' have not been finalized yet. mkvmerge's support for it is therefore subject to change and uses the CodecID '%2%/EXPERIMENTAL' instead of '%2%'. This warning will be removed once the specifications have been finalized and mkvmerge has been updated accordingly.\n"
 msgstr "注意 Matroska 規範有關「%1%」的儲存方面尚未完成。mkvmerge 支援是因為改變主題且使用 CodecID '%2%/EXPERIMENTAL' 替代「%2%」。一旦規範完成會移除這個警告而 mkvmerge 也會相應地更新。\n"
@@ -6593,7 +6593,7 @@ msgstr "標籤"
 msgid "Tags are not allowed in WebM compliant files. No tags will be written into any output file.\n"
 msgstr "在 WebM 遵循檔裡不能有標籤。不會將標籤寫進任何輸出檔。\n"
 
-#: src/merge/pr_generic.cpp:1436
+#: src/merge/pr_generic.cpp:1427
 #, boost-format
 msgid "Tags for track ID %1%: %2% entries"
 msgstr "軌道 ID 的標籤 %1%: %2% 項目"
@@ -6832,7 +6832,7 @@ msgstr ""
 "\n"
 "備註: 本警告可以在「設定」選項頁停用。關閉「對...用法發出警告」選項即可。"
 
-#: src/output/p_mpeg4_p10.cpp:164
+#: src/output/p_mpeg4_p10.cpp:161
 #, boost-format
 msgid "The chosen NALU size length of %1% is too small. Try using '4'.\n"
 msgstr "選擇的 NALU 長度大小 %1% 過小。請嘗試使用「4」。\n"
@@ -6841,7 +6841,7 @@ msgstr "選擇的 NALU 長度大小 %1% 過小。請嘗試使用「4」。\n"
 msgid "The closing parenthesis ')' are missing.\n"
 msgstr "缺少表示關閉的括號「)」。\n"
 
-#: src/merge/pr_generic.cpp:1246
+#: src/merge/pr_generic.cpp:1237
 #, boost-format
 msgid "The codec type '%1%' cannot be used in a WebM compliant file.\n"
 msgstr "此編解碼器類型「%1%」無法用在 WebM 遵循檔。\n"
@@ -6852,7 +6852,7 @@ msgstr "此編解碼器類型「%1%」無法用在 WebM 遵循檔。\n"
 msgid "The codec's private data does not match (lengths: %1% and %2%)."
 msgstr "編解碼器專有資料不符 (長度: %1% 與 %2%)。"
 
-#: src/output/p_mpeg4_p10.cpp:110
+#: src/output/p_mpeg4_p10.cpp:107
 #, boost-format
 msgid "The codec's private data does not match. Both have the same length (%1%) but different content."
 msgstr "編解碼器專有資料不符。長度相同 (%1%) 但內容不同。"
@@ -6875,7 +6875,7 @@ msgstr "正在寫入 cue 項目 (此索引)...\n"
 msgid "The current file (number %d) cannot be removed. There are other files -- at least file number %d -- whose tracks are supposed to be appended to tracks from this file. Please remove those files first."
 msgstr "目前檔案 (序號 %d) 不能移除。有其他檔案 -- 至少檔案號為 %d 的檔案 -- 有要添加至此檔某軌道的軌道。請先移除那些檔案。"
 
-#: src/merge/pr_generic.cpp:857
+#: src/merge/pr_generic.cpp:848
 #, boost-format
 msgid "The current packet's timecode is smaller than that of the previous packet. This usually means that the source file is a Matroska file that has not been created 100%% correctly. The timecodes of all packets will be adjusted by %1%ms in order not to lose any data. This may throw audio/video synchronization off, but that can be corrected with mkvmerge's \"--sync\" option. If you already use \"--sync\" and you still get this warning then do NOT worry -- this is normal. If this error happens more than once and you get this message more than once for a particular track then either is the source file badly mastered, or mkvmerge contains a bug. In this case you should contact the author Moritz Bunkus <moritz@bunkus.org>.\n"
 msgstr "目前套件的時間碼比前一個套件的小。這通常表明來源檔未正常 100%% 建立的 Matroska 檔案。所有套件的時間碼將以 %1%ms 調整以避免丟失任何資料。這可能導致音/視訊不同步，但可以透過 mkvmerge 的 \"--sync\" 選項修正。如果您已經使用了 \"--sync\" 但仍然收到本警告，請 *不要* 著急 -- 這是正常的。如果對於一個特定軌超過一次出現本錯誤且您超過一次收到本訊息，既可能是因為來源檔嚴重錯誤，也可能是因為 mkvmerge 包含了某個 bug。如果是這樣，請聯繫作者 Moritz Bunkus <moritz@bunkus.org>。\n"
@@ -6944,7 +6944,7 @@ msgstr "要從在章節的剪輯 UID 連結剪輯播放的版本 UID。為一個
 msgid "The element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
 msgstr "元件已被寫至檔案結尾部，但剪輯大小無法更新。因此這些元件將不可見。處理處理程序將被中止。檔已被修改!"
 
-#: src/output/p_mpeg4_p2.cpp:372
+#: src/output/p_mpeg4_p2.cpp:371
 #, boost-format
 msgid "The extracted values for video width and height from the MPEG4 layer 2 video data bitstream differ from what the values in the source container. The ones from the video data bitstream (%1%x%2%) will be used.\n"
 msgstr "從 MPEG4 layer 2 視訊資料位元流中提取的視訊寬度和高度值與來源容器中的不同。將使用視訊資料位元流中的 (%1%x%2%)。\n"
@@ -6999,7 +6999,7 @@ msgstr "檔案「%1%」已開啟以寫入。\n"
 msgid "The file '%1%' has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n"
 msgstr "檔案「%1%」類型未知。請查看支援的檔案類型 (「mkvmerge --list-types」)，若您的檔案類型受支援但被錯誤識別，請聯繫作者 Moritz Bunkus <moritz@bunkus.org>。\n"
 
-#: src/merge/pr_generic.cpp:1669
+#: src/merge/pr_generic.cpp:1655
 #, boost-format
 msgid "The file '%1%' is a non-supported file type (%2%).\n"
 msgstr "此檔案「%1%」類型不支援 (%2%)。\n"
@@ -7666,7 +7666,7 @@ msgstr "有警告資訊"
 msgid "There were warnings, or the process was terminated."
 msgstr "有警告資訊，或者處理處理程序被中止。"
 
-#: src/input/r_avi.cpp:555
+#: src/input/r_avi.cpp:553
 #: src/input/r_real.cpp:289
 msgid "This AAC track does not contain valid headers. Could not parse the AAC information.\n"
 msgstr "此 AAC 軌道不含有效的表頭。無法解析 AAC 資訊。\n"
@@ -7802,7 +7802,7 @@ msgstr "這 *真的* 不該發生。為第一個變換定位元件預留的空�
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. Size needed: %1%. %2%\n"
 msgstr "這 *真的* 不該發生。為第一個變換定位元件預留的空間過小。需要的大小: %1%. %2%\n"
 
-#: src/common/common.h:101
+#: src/common/common.h:104
 msgid "This should not have happened. Please contact the author Moritz Bunkus <moritz@bunkus.org> with this error/warning message, a description of what you were trying to do, the command line used and which operating system you are using. Thank you."
 msgstr "這不該發生。請聯繫作者 Moritz Bunkus <moritz@bunkus.org>，並附上本錯誤/警告訊息、您正打算做的事情的描述、使用的命令列及您正在使用的作業系統。感謝。"
 
@@ -7945,7 +7945,7 @@ msgstr "軌道 %1%: AAC 資訊無法解析。\n"
 msgid "Track ID %1% has an unknown AAC type.\n"
 msgstr "軌道 ID %1% 的 AAC 類型未知。\n"
 
-#: src/merge/pr_generic.cpp:1430
+#: src/merge/pr_generic.cpp:1421
 #, boost-format
 msgid "Track ID %1%: %2% (%3%)"
 msgstr "軌道 ID %1%: %2% (%3%)"
@@ -8746,7 +8746,7 @@ msgstr "flac_reader: 無法初始化 FLAC 分組器。\n"
 msgid "for all frames"
 msgstr "全部畫格"
 
-#: src/input/r_avc.cpp:75
+#: src/input/r_avc.cpp:77
 #: src/input/r_vc1.cpp:52
 msgid "have an xcptn\n"
 msgstr "出現異常\n"
@@ -9300,12 +9300,12 @@ msgstr "像素高度: %1%"
 msgid "pixel width: %1%"
 msgstr "像素寬度: %1%"
 
-#: src/merge/pr_generic.cpp:869
+#: src/merge/pr_generic.cpp:860
 #, boost-format
 msgid "pr_generic.cpp/generic_packetizer_c::add_packet(): timecode < last_timecode (%1% < %2%). %3%\n"
 msgstr "pr_generic.cpp/generic_packetizer_c::add_packet(): timecode < last_timecode (%1% < %2%)。 %3%\n"
 
-#: src/merge/pr_generic.cpp:1221
+#: src/merge/pr_generic.cpp:1212
 #, boost-format
 msgid "pr_generic.cpp/generic_reader_c::demuxing_requested(): Invalid track type %1%."
 msgstr "pr_generic.cpp/generic_reader_c::demuxing_requested(): 無效軌道類型 %1%。"
