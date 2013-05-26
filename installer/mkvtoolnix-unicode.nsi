@@ -334,6 +334,9 @@ Section "Program files" SEC01
   SetOutPath "$INSTDIR\locale\pl\LC_MESSAGES"
   File "/oname=mkvtoolnix.mo" "po\pl.mo"
   File "/oname=wxstd.mo" "wxWidgets-po\pl\LC_MESSAGES\wxstd.mo"
+  SetOutPath "$INSTDIR\locale\pt\LC_MESSAGES"
+  File "/oname=mkvtoolnix.mo" "po\pt.mo"
+  File "/oname=wxstd.mo" "wxWidgets-po\pt\LC_MESSAGES\wxstd.mo"
   SetOutPath "$INSTDIR\locale\ru\LC_MESSAGES"
   File "/oname=mkvtoolnix.mo" "po\ru.mo"
   File "/oname=wxstd.mo" "wxWidgets-po\ru\LC_MESSAGES\wxstd.mo"
@@ -648,6 +651,10 @@ Section Uninstall
   Delete "$INSTDIR\locale\pl\LC_MESSAGES\*.*"
   RMDir "$INSTDIR\locale\pl\LC_MESSAGES"
   RMDir "$INSTDIR\locale\pl"
+
+  Delete "$INSTDIR\locale\pt\LC_MESSAGES\*.*"
+  RMDir "$INSTDIR\locale\pt\LC_MESSAGES"
+  RMDir "$INSTDIR\locale\pt"
 
   Delete "$INSTDIR\locale\ru\LC_MESSAGES\*.*"
   RMDir "$INSTDIR\locale\ru\LC_MESSAGES"
