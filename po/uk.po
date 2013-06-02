@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: mkvtoolnix_uk\n"
 "Report-Msgid-Bugs-To: Moritz Bunkus <moritz@bunkus.org>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2013-05-03 13:54+0200\n"
+"PO-Revision-Date: 2013-06-02 19:48+0200\n"
 "Last-Translator: Andriy Bilous'ko <arestarh@ukr.net>\n"
 "Language-Team: Ukrainian <moritz@bunkus.org>\n"
 "Language: uk\n"
@@ -795,7 +795,7 @@ msgstr " Інші опції:\n"
 
 #: src/merge/mkvmerge.cpp:94
 msgid " Segment info handling:\n"
-msgstr " Сегмент обробки інформації:\n"
+msgstr "Обробка інформації сегменту:\n"
 
 #: src/extract/mkvextract.cpp:59
 #: src/info/mkvinfo.cpp:218
@@ -1938,9 +1938,8 @@ msgid "AVC/h.264"
 msgstr "AVC/h.264"
 
 #: src/output/p_avc.h:42
-#, fuzzy
 msgid "AVC/h.264 (unframed)"
-msgstr "AVC/h.264"
+msgstr "AVC/h.264 (для некадрован. вмісту)"
 
 #: src/common/file_types.cpp:27
 msgid "AVC/h.264 elementary streams"
@@ -8813,7 +8812,7 @@ msgstr "Видалення заголовка"
 #: src/mmg/tabs/chapters.cpp:355
 #: src/mmg/tabs/chapters.cpp:363
 msgid "hidden"
-msgstr "Прихований"
+msgstr "Приховано"
 
 #: src/mmg/options/mkvmerge.cpp:41
 msgid "higher"
@@ -9305,7 +9304,7 @@ msgstr "тільки якщо запуск пройшов успішно"
 
 #: src/mmg/tabs/chapters.cpp:358
 msgid "ordered"
-msgstr "впорядковані"
+msgstr "Впорядковано"
 
 #: src/mmg/options/output.cpp:80
 msgid "output options"
