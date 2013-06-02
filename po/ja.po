@@ -661,7 +661,7 @@ msgstr ""
 
 #: src/merge/mkvmerge.cpp:150
 msgid "  =<file>                  Same as \"= <file>\".\n"
-msgstr "  =<file>                  \"= <file>\".\n"
+msgstr "  =<file>                  \"= <file>\"と同じです。\n"
 
 #: src/merge/mkvmerge.cpp:274
 msgid ""
@@ -1126,11 +1126,11 @@ msgstr "終了(&Q)\tCtrl-Q"
 
 #: src/mmg/jobs.cpp:483
 msgid "&Re-enable"
-msgstr "&再有効化(&R)"
+msgstr "再有効化(&R)"
 
 #: src/mmg/header_editor/frame.cpp:143
 msgid "&Reload\tCtrl-R"
-msgstr "&再読み込み(&R)\tCtrl-R"
+msgstr "再読み込み(&R)\tCtrl-R"
 
 #: src/mmg/tabs/additional_parts_dlg.cpp:46
 msgid "&Remove"
@@ -3112,7 +3112,7 @@ msgstr "現在のバージョン："
 
 #: src/mmg/jobs.cpp:491
 msgid "D&elete"
-msgstr "削除(&D)"
+msgstr "削除(&E)"
 
 #: src/input/r_dts.h:40
 #: src/output/p_dts.h:45
@@ -3915,7 +3915,7 @@ msgstr "グローバルタグ：%1%個のエントリ"
 
 #: src/mmg/header_editor/frame.cpp:151
 msgid "H&eaders"
-msgstr "ヘッダ(&H)"
+msgstr "ヘッダ(&E)"
 
 #: src/mmg/header_editor/frame.cpp:171
 msgid "Header editor"
@@ -5341,7 +5341,7 @@ msgstr "v7以降のVobSubファイルのみがサポートされています。�
 
 #: src/mmg/mmg_dialog.cpp:291
 msgid "Op&tions\tCtrl-P"
-msgstr "オプション(&P)\tCtrl-P"
+msgstr "オプション(&T)\tCtrl-P"
 
 #: src/info/qt_ui.cpp:64
 msgid "Open File"
@@ -5800,7 +5800,7 @@ msgstr "RealMediaオーディオ/ビデオファイル"
 #: src/input/r_real.cpp:338
 #, boost-format
 msgid "RealMedia files may contain HE-AAC / AAC+ / SBR AAC audio. In some cases this can NOT be detected automatically. Therefore you have to specifiy '--aac-is-sbr %1%' manually for this input file if the file actually contains SBR AAC. The file will be muxed in the WRONG way otherwise. Also read mkvmerge's documentation.\n"
-msgstr "RealMediaファイルはHE-AAC/AAC+/SBR AACオーディオを含んでいることがあります。これは自動で検知できないことがあります。よってこの入力ファイルが実際にSBE AACを含んでいる場合、手動で'--aac-is-sbr %1%'を指定しなければなりません。でないと間違ってMUXされてしまいます。mkvmergeのドキュメントも読んでください。\n"
+msgstr "RealMediaファイルはHE-AAC/AAC+/SBR AACオーディオを含んでいることがあります。これは自動で検知できないことがあります。よってこの入力ファイルが実際にSBR AACを含んでいる場合、手動で'--aac-is-sbr %1%'を指定しなければなりません。でないと間違ってMUXされてしまいます。mkvmergeのドキュメントも読んでください。\n"
 
 #: src/common/cli_parser.cpp:178
 msgid "Redirects all messages into this file."
@@ -5876,7 +5876,7 @@ msgstr "ヘッダフィールドエディタを起動します"
 
 #: src/mmg/mmg_dialog.cpp:295
 msgid "S&how the command line"
-msgstr "コマンドラインを表示(&S)"
+msgstr "コマンドラインを表示(&H)"
 
 #: src/mmg/jobs.cpp:514
 msgid "S&tart selected"
@@ -5904,7 +5904,7 @@ msgstr "SSA/ASSテキスト字幕"
 
 #: src/mmg/mmg_dialog.cpp:297
 msgid "Sa&ve command line"
-msgstr "コマンドラインを保存(&A)"
+msgstr "コマンドラインを保存(&V)"
 
 #: src/mmg/options/output.cpp:39
 msgid "Same directory as the first input file's"
@@ -8196,7 +8196,7 @@ msgstr "出力ファイルにセグメントリンクを使用します。この
 
 #: src/mmg/cli_options_dlg.cpp:131
 msgid "Use fixed values for the elements that change with each file otherwise (muxing date, segment UID, track UIDs etc.). Two files muxed with the same settings and this switch activated will be identical."
-msgstr "このオプションを指定しなければ各ファイル間で異なる値を取るパラメータ（MUX日、セグメントUDI、トラックUID等）を固定値にします。同じ設定かつこのオプションを指定してMUXされたファイルはそっくりなファイルになります。"
+msgstr "このオプションを指定しなければ各ファイル間で異なる値を取るパラメータ（MUX日、セグメントUID、トラックUID等）を固定値にします。同じ設定かつこのオプションを指定してMUXされたファイルはそっくりなファイルになります。"
 
 #: src/mmg/cli_options_dlg.cpp:140
 msgid "Use the old AAC codec IDs (e.g. 'A_AAC/MPEG4/SBR') instead of the new one ('A_AAC')."
