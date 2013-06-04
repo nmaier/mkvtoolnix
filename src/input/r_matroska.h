@@ -261,6 +261,8 @@ protected:
 #if defined(HAVE_FLAC_FORMAT_H)
   virtual void create_flac_audio_packetizer(kax_track_t *t, track_info_c &nti);
 #endif
+  virtual void create_hevc_video_packetizer(kax_track_t *t, track_info_c &nti);
+  virtual void create_hevc_es_video_packetizer(kax_track_t *t, track_info_c &nti);
   virtual void create_mp3_audio_packetizer(kax_track_t *t, track_info_c &nti);
   virtual void create_opus_audio_packetizer(kax_track_t *t, track_info_c &nti);
   virtual void create_pcm_audio_packetizer(kax_track_t *t, track_info_c &nti);
