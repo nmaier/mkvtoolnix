@@ -1632,7 +1632,7 @@ hevc::hevc_es_parser_c::duration_for(slice_info_t const &si)
                    : -1 != m_stream_default_duration                                                  ? m_stream_default_duration
                    : -1 != m_container_default_duration                                               ? m_container_default_duration
                    :                                                                                    20000000;
-  return duration;
+  return duration * 2;
 }
 
 int64_t
