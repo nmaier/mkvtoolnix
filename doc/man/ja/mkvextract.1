@@ -1,7 +1,7 @@
 '\" t
 .\"     Title: mkvextract
 .\"    Author: Bunkus Moritz[FAMILY Given] <moritz@bunkus.org>
-.\" Generator: DocBook XSL Stylesheets v1.78.0 <http://docbook.sf.net/>
+.\" Generator: DocBook XSL Stylesheets v1.78.1 <http://docbook.sf.net/>
 .\"      Date: 2013-04-27
 .\"    Manual:  
 .\"    Source: MKVToolNix 6.2.0
@@ -34,7 +34,6 @@ mkvextract \- Matroska(TM) ファイルから、他の形式のファイルを�
 \fBmkvextract\fR {mode} {source\-filename} [options] [extraction\-spec]
 .SH "説明"
 .PP
-
 Matroska(TM)
 ファイルの特定の部分を、他の有用なフォーマットで抽出します。最初の\fBmode\fR引数は、\fBmkvextract\fR(1)
 に何を抽出すべきかを指示します。現在サポートされているのは、トラック、タグ、添付ファイル、チャプタ、CUEシート
@@ -113,7 +112,6 @@ download_url)\&.
 .PP
 \fB@\fR\fIoptions\-file\fR
 .RS 4
-
 \fIoptions\-file\fRで指定されたファイルから追加のコマンドラインオプションを読み込みます。行で最初の空白文字でない文字がハッシュマーク(\*(Aq#\*(Aq)である行はコメントとして扱われ、無視されます。行頭、及び行末の空白文字は取り除かれます。各行には一つずつしかオプションを指定できません。
 .sp
 エスケープすることができる文字もあります。例えば、コメントではない行を\*(Aq#\*(Aqで始める必要がある場合です。そのルールは、エスケープ文字についてのセクションで説明されています。
@@ -138,12 +136,7 @@ source\&.mkv
 .SS "トラック抽出モード"
 .PP
 書式:
-\fBmkvextract\fR
-\fBtracks\fR
-\fIsource\-filename\fR
-[\fIoptions\fR]
-\fITID1:dest\-filename1\fR
-[\fITID2:dest\-filename2\fR \&.\&.\&.]
+\fBmkvextract\fR\fBtracks\fR\fIsource\-filename\fR[\fIoptions\fR]\fITID1:dest\-filename1\fR[\fITID2:dest\-filename2\fR \&.\&.\&.]
 .PP
 以下のコマンドラインオプションは、トラック抽出モードでは各トラック毎に指定することができます。これらのオプションは、作用するトラック指定子(下記参照)の前に指定しなければなりません。
 .PP
@@ -159,7 +152,6 @@ source\&.mkv
 .PP
 \fB\-\-cuesheet\fR
 .RS 4
-
 \fBmkvextract\fR(1)に、直後のトラックのチャプタ情報とタグデータからCUEシートを生成します。出力ファイルの名前はトラックの出力名に\*(Aq\&.cue\*(Aqをつけたものになります。
 .RE
 .PP
@@ -192,21 +184,13 @@ $ mkvextract tracks input\&.mkv 1:output\-two\-tracks\&.rm 2:output\-two\-tracks
 .SS "タグ抽出モード"
 .PP
 書式:
-\fBmkvextract\fR
-\fBtags\fR
-\fIsource\-filename\fR
-[\fIoptions\fR]
+\fBmkvextract\fR\fBtags\fR\fIsource\-filename\fR[\fIoptions\fR]
 .PP
-抽出されたタグは、出力がリダイレクトされていなればコンソールに出力されます。(詳細については、出力リダイレクトについてのセクションを参照ください。)
+抽出されたタグは、出力がリダイレクトされていなければコンソールに出力されます。(詳細については、出力リダイレクトについてのセクションを参照ください。)
 .SS "添付ファイル抽出モード"
 .PP
 書式:
-\fBmkvextract\fR
-\fBattachments\fR
-\fIsource\-filename\fR
-[\fIoptions\fR]
-\fIAID1:outname1\fR
-[\fIAID2:outname2\fR \&.\&.\&.]
+\fBmkvextract\fR\fBattachments\fR\fIsource\-filename\fR[\fIoptions\fR]\fIAID1:outname1\fR[\fIAID2:outname2\fR \&.\&.\&.]
 .PP
 \fIAID\fR:\fIoutname\fR
 .RS 4
@@ -215,10 +199,7 @@ IDが\fIAID\fRである添付ファイルがもしソースファイルに存在
 .SS "チャプタ抽出モード"
 .PP
 書式:
-\fBmkvextract\fR
-\fBchapters\fR
-\fIsource\-filename\fR
-[\fIoptions\fR]
+\fBmkvextract\fR\fBchapters\fR\fIsource\-filename\fR[\fIoptions\fR]
 .PP
 \fB\-s\fR, \fB\-\-simple\fR
 .RS 4
@@ -226,27 +207,19 @@ IDが\fIAID\fRである添付ファイルがもしソースファイルに存在
 toolsで使用される、シンプルフォーマット(CHAPTER01=\&.\&.\&., CHAPTER01NAME=\&.\&.\&.)で出力します。このモードでは、一部の情報は破棄されます。デフォルトでは、チャプタはXMLフォーマットで出力されます。
 .RE
 .PP
-抽出されたチャプタは、出力がリダイレクトされていなればコンソールに出力されます。(詳細については、出力リダイレクトについてのセクションを参照ください。)
+抽出されたチャプタは、出力がリダイレクトされていなければコンソールに出力されます。(詳細については、出力リダイレクトについてのセクションを参照ください。)
 .SS "CUEシート抽出モード"
 .PP
 書式:
-\fBmkvextract\fR
-\fBcuesheet\fR
-\fIsource\-filename\fR
-[\fIoptions\fR]
+\fBmkvextract\fR\fBcuesheet\fR\fIsource\-filename\fR[\fIoptions\fR]
 .PP
-抽出されたCUEシートは、出力がリダイレクトされていなればコンソールに出力されます。(詳細については、出力リダイレクトについてのセクションを参照ください。)
+抽出されたCUEシートは、出力がリダイレクトされていなければコンソールに出力されます。(詳細については、出力リダイレクトについてのセクションを参照ください。)
 .SS "タイムコード抽出モード"
 .PP
 書式:
-\fBmkvextract\fR
-\fBtimecodes_v2\fR
-\fIsource\-filename\fR
-[\fIoptions\fR]
-\fITID1:dest\-filename1\fR
-[\fITID2:dest\-filename2\fR \&.\&.\&.]
+\fBmkvextract\fR\fBtimecodes_v2\fR\fIsource\-filename\fR[\fIoptions\fR]\fITID1:dest\-filename1\fR[\fITID2:dest\-filename2\fR \&.\&.\&.]
 .PP
-抽出されたタイムコードは、出力がリダイレクトされていなればコンソールに出力されます。(詳細については、出力リダイレクトについてのセクションを参照ください。)
+抽出されたタイムコードは、出力がリダイレクトされていなければコンソールに出力されます。(詳細については、出力リダイレクトについてのセクションを参照ください。)
 .PP
 \fITID:outname\fR
 .RS 4
@@ -280,7 +253,6 @@ $ mkvextract tags source\&.mkv > tags\&.xml
 .RE
 .\}
 .PP
-
 \fBmkvextract\fR(1)自体のリダイレクトは、\fB\-\-redirect\-output\fRオプションを指定することで使用できます。例:
 .sp
 .if n \{\
@@ -314,7 +286,6 @@ Windowsでは、\fB\-\-redirect\-output\fRオプションを使用するべき�
 .PP
 V_MPEG4/ISO/AVC
 .RS 4
-
 H\&.264/AVCビデオトラックは、H\&.264エレメンタリ・ストリームに書き出されます。これは例えばGPAC(TM)パッケージに含まれる、MP4Box(TM)などにより処理できます。
 .RE
 .PP
@@ -325,13 +296,11 @@ V_MS/VFW/FOURCC
 .PP
 V_REAL/*
 .RS 4
-
 RealVideo(TM)トラックは、RealMedia(TM)ファイルに書き出されます。
 .RE
 .PP
 V_THEORA
 .RS 4
-
 Theora(TM)
 streams will be written within an
 Ogg(TM)
@@ -340,7 +309,6 @@ container
 .PP
 V_VP8
 .RS 4
-
 VP8
 tracks are written to
 IVF
@@ -361,7 +329,6 @@ A_MPEG/L3, A_AC3
 .PP
 A_PCM/INT/LIT
 .RS 4
-
 PCMRawデータは、WAVファイルに書き出されます。
 .RE
 .PP
@@ -377,19 +344,16 @@ Vorbis audioはOggVorbis(TM)ファイルに書き出されます。
 .PP
 A_REAL/*
 .RS 4
-
 RealAudio(TM)トラックはRealMedia(TM)ファイルに書き出されます。
 .RE
 .PP
 A_TTA1
 .RS 4
-
 TrueAudio(TM)トラックはTTAファイルに書き出されます。Matroska(TM)のタイムコード精度の上限のため、抽出されたファイルのヘッダは、\fIdata_length\fRフィールド(ファイルに含まれる総サンプル数)とCRCについては不正確になります。
 .RE
 .PP
 A_ALAC
 .RS 4
-
 ALAC
 tracks are written to
 CAF
@@ -398,7 +362,6 @@ files\&.
 .PP
 A_FLAC
 .RS 4
-
 FLAC
 tracks are written to raw
 FLAC
@@ -407,7 +370,6 @@ files\&.
 .PP
 A_WAVPACK4
 .RS 4
-
 WavPack(TM)
 tracks are written to
 WV
@@ -421,19 +383,16 @@ S_TEXT/UTF8
 .PP
 S_TEXT/SSA, S_TEXT/ASS
 .RS 4
-
 SSA及びASSテキスト字幕は、それぞれSSA、ASSファイルに書き出されます。
 .RE
 .PP
 S_KATE
 .RS 4
-
 Kate(TM)ストリームはOgg(TM)コンテナに格納されます。
 .RE
 .PP
 S_VOBSUB
 .RS 4
-
 VobSub(TM)
 subtitles will be written as
 SUB
@@ -444,7 +403,6 @@ files\&.
 .PP
 S_TEXT/USF
 .RS 4
-
 USF
 text subtitles will be written as
 USF
@@ -453,7 +411,6 @@ files\&.
 .PP
 S_HDMV/PGS
 .RS 4
-
 PGS
 subtitles will be written as
 SUP
@@ -481,7 +438,6 @@ files\&.
 .RE
 .SH "返り値"
 .PP
-
 \fBmkvextract\fR(1)は下の3つの返り値を返します。
 .sp
 .RS 4
@@ -492,7 +448,6 @@ files\&.
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB0\fR
 \-\- この返り値は抽出が成功したことを意味します。
 .RE
@@ -505,7 +460,6 @@ files\&.
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB1\fR
 \-\- この返り値は、一つ以上の警告が出力されましたが、抽出が続行されたことを意味します。警告は \*(Aq警告:\*(Aq という文字列を先頭につけて出力されます。出力ファイルが無事であるかどうかは、場合によります。出力ファイルを確認することを強く推奨します。
 .RE
@@ -518,7 +472,6 @@ files\&.
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB2\fR
 \-\- この返り値は、エラーが発生し、エラーメッセージを出力した後に\fBmkvextract\fR(1)が処理を中断したことを示します。エラーメッセージは不正なコマンドラインやファイルI/Oエラー、壊れたファイルなど様々です。
 .RE
@@ -529,7 +482,6 @@ files\&.
 ルール：\*(Aq \*(Aq（半角スペース）は\*(Aq\es\*(Aqに、\*(Aq"\*(Aq（ダブルクォーテーション）は\*(Aq\e2\*(Aqに、\*(Aq:\*(Aqは\*(Aq\ec\*(Aqに、\*(Aq#\*(Aqは\*(Aq\eh\*(Aqに、そして\*(Aq\e\*(Aqそれ自体は\*(Aq\e\e\*(Aqになります。
 .SH "環境変数"
 .PP
-
 \fBmkvextract\fR(1)はシステムのロケールを決めるデフォルトの変数（例：\fILANG\fRや\fILC_*\fR系）を使用します。追加の変数は以下の通りです：
 .PP
 \fIMKVTOOLNIX_DEBUG\fRとその短縮形\fIMTX_DEBUG\fR
@@ -539,7 +491,7 @@ files\&.
 .PP
 \fIMKVTOOLNIX_ENGAGE\fRとその短縮形\fIMTX_ENGAGE\fR
 .RS 4
-その内容は、あたかも\fB\-\-debug\fRオプション経由で渡されたかのように扱われます。
+その内容は、あたかも\fB\-\-engage\fRオプション経由で渡されたかのように扱われます。
 .RE
 .PP
 \fIMKVTOOLNIX_OPTIONS\fRとその短縮形\fIMTX_OPTIONS\fR
@@ -548,7 +500,6 @@ files\&.
 .RE
 .SH "関連項目"
 .PP
-
 \fBmkvmerge\fR(1),
 \fBmkvinfo\fR(1),
 \fBmkvpropedit\fR(1),

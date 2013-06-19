@@ -1,7 +1,7 @@
 '\" t
 .\"     Title: mkvpropedit
 .\"    Author: Bunkus Moritz[FAMILY Given] <moritz@bunkus.org>
-.\" Generator: DocBook XSL Stylesheets v1.78.0 <http://docbook.sf.net/>
+.\" Generator: DocBook XSL Stylesheets v1.78.1 <http://docbook.sf.net/>
 .\"      Date: 2013-04-27
 .\"    Manual:  
 .\"    Source: MKVToolNix 6.2.0
@@ -31,7 +31,7 @@
 mkvpropedit \- 再MUXすることなく、既存のMatroska(TM)ファイルのプロパティを修正する
 .SH "書式"
 .HP \w'\fBmkvpropedit\fR\ 'u
-\fBmkvpropedit\fR [options] {source\-filename}
+\fBmkvpropedit\fR [options] {source\-filename} {actions}
 .SH "説明"
 .PP
 このプログラムは、既存のMatroska(TM)ファイルを解析し、そのプロパティのいくつかを修正します。そして、それらの修正を既存のファイルに書き込みます。プロパティの中で変更可能なのは、セグメント情報エレメント(例えばタイトル)と、トラックヘッダ(例えば言語コードや\*(Aqデフォルトトラック\*(Aqフラグ、トラック名)です。
@@ -61,7 +61,6 @@ Actions that deal with track and segment info properties:
 .PP
 \fB\-a\fR, \fB\-\-add\fR \fIname\fR=\fIvalue\fR
 .RS 4
-
 \fIname\fRで指定された名前のプロパティを\fIvalue\fRで指定した値で追加します。プロパティは、既にその名前のプロパティが存在する場合も追加されます。ほとんどのプロパティは一意的で、複数回追加できないことに注意してください。
 .RE
 .PP
@@ -79,20 +78,16 @@ Actions that deal with tags and chapters:
 .PP
 \fB\-t\fR, \fB\-\-tags\fR \fIselector\fR:\fIfilename\fR
 .RS 4
-
 ファイル名からのタグを、このファイル中のタグに追加、あるいは置換します。もしファイル名が空白なら、タグを削除します。\fBmkvpropedit\fR(1)は、\fBmkvmerge\fR(1)が読み込むのと同じXMLタグフォーマットを読み込みます。
 .sp
-
 \fIセレクタ\fRは、\fBall\fR、\fBglobal\fR、または\fBtrack\fRのうちどれか一つを指定してください。\fBall\fRを指定すると、\fBmkvpropedit\fR(1)はファイル中の全てのタグを置換あるいは削除します。\fBglobal\fRを指定すると、グローバルタグだけが置換あるいは削除されます。
 .sp
-
 \fBtrack\fRを指定すると、\fBmkvpropedit\fR(1)は特定のトラックのタグを置換します。また、filenameから読み込まれたタグは、同じトラックに割り当てられます。edit selectorsが指定されるのと同じ様に（下を参照してください）、トラックは指定されます。(see below), e\&.g\&.
 \-\-tags track:a1:new\-audio\-tags\&.xml\&.
 .RE
 .PP
 \fB\-c\fR, \fB\-\-chapters\fR \fIfilename\fR
 .RS 4
-
 ファイル名からのチャプタを、このファイル中のタグに追加、あるいは置換します。もしファイル名が空白なら、チャプタを削除します。\fBmkvpropedit\fR(1)は、\fBmkvmerge\fR(1)が読み込むのと同じXMLまたはシンプルチャプタフォーマットを読み込みます。
 .RE
 .PP
@@ -251,12 +246,11 @@ download_url)\&.
 .PP
 \fB@\fR\fIoptions\-file\fR
 .RS 4
-
 \fIoptions\-file\fRで指定されたファイルから追加のコマンドラインオプションを読み込みます。行で最初の空白文字でない文字がハッシュマーク(\*(Aq#\*(Aq)である行はコメントとして扱われ、無視されます。行頭、及び行末の空白文字は取り除かれます。各行には一つずつしかオプションを指定できません。
 .sp
 エスケープすることのできる文字もあります。例えば、コメントではない行を\*(Aq#\*(Aqで始める必要のある場合です。そのルールは、エスケープ文字についてのセクションで説明されています。
 .sp
-\*(Aq\fBmkvpropedit source\&.mkv \-\-edit trach:a2 \-\-set name=Comments\fR\*(Aqというコマンドラインと同じことは、次のようなオプションファイルによって指定できます。
+\*(Aq\fBmkvpropedit source\&.mkv \-\-edit track:a2 \-\-set name=Comments\fR\*(Aqというコマンドラインと同じことは、次のようなオプションファイルによって指定できます。
 .sp
 .if n \{\
 .RS 4
@@ -277,7 +271,6 @@ name=Comments
 .RE
 .SH "エディットセレクタ"
 .PP
-
 \fB\-\-edit\fRオプションは、以降のadd、set及びdeleteアクションが適用されるMatroska(TM)ファイルセクション(セグメント情報または特定のトラックヘッダ)を設定します。これは次の\fB\-\-edit\fRオプションが見付かるまでずっと有効です。このオプションへの引数はエディットセレクタと呼ばれます。
 .PP
 デフォルトでは、\fBmkvpropedit\fR(1)はセグメント情報のセクションを編集します。
@@ -513,7 +506,6 @@ $ mkvpropedit movie\&.mkv \-\-delete\-attachment mime\-type:application/x\-truet
 .\}
 .SH "返り値"
 .PP
-
 \fBmkvpropedit\fR(1)は下の3つの返り値を返します。
 .sp
 .RS 4
@@ -524,7 +516,6 @@ $ mkvpropedit movie\&.mkv \-\-delete\-attachment mime\-type:application/x\-truet
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB0\fR
 \-\- この返り値は変更が成功したことを示します。
 .RE
@@ -537,7 +528,6 @@ $ mkvpropedit movie\&.mkv \-\-delete\-attachment mime\-type:application/x\-truet
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB1\fR
 \-\- この返り値は、一つ以上の警告が出力されましたが、抽出が続行されたことを意味します。警告は \*(Aq警告:\*(Aq という文字列を先頭につけて出力されます。出力ファイルが無事であるかどうかは、場合によります。出力ファイルを確認することを強く推奨します。
 .RE
@@ -550,7 +540,8 @@ $ mkvpropedit movie\&.mkv \-\-delete\-attachment mime\-type:application/x\-truet
 .sp -1
 .IP \(bu 2.3
 .\}
-この返り値は、エラーが発生し、エラーメッセージを表示した直後に\fBmkvpropedit\fR(1)が終了したことを示します。エラーメッセージは不正なコマンドラインやファイルI/Oエラー、壊れたファイルなど様々です。
+\fB2\fR
+\-\- この返り値は、エラーが発生し、エラーメッセージを表示した直後に\fBmkvpropedit\fR(1)が終了したことを示します。エラーメッセージは不正なコマンドラインやファイルI/Oエラー、壊れたファイルなど様々です。
 .RE
 .SH "テキスト中の特殊文字をエスケープする"
 .PP
@@ -559,7 +550,6 @@ $ mkvpropedit movie\&.mkv \-\-delete\-attachment mime\-type:application/x\-truet
 ルール：\*(Aq \*(Aq（半角スペース）は\*(Aq\es\*(Aqに、\*(Aq"\*(Aq（ダブルクォーテーション）は\*(Aq\e2\*(Aqに、\*(Aq:\*(Aqは\*(Aq\ec\*(Aqに、\*(Aq#\*(Aqは\*(Aq\eh\*(Aqに、そして\*(Aq\e\*(Aqそれ自体は\*(Aq\e\e\*(Aqになります。
 .SH "環境変数"
 .PP
-
 \fBmkvpropedit\fR(1)はシステムのロケールを決めるデフォルトの変数（例：\fILANG\fRや\fILC_*\fR系）を使用します。追加の変数は以下の通りです：
 .PP
 \fIMKVTOOLNIX_DEBUG\fRとその短縮形\fIMTX_DEBUG\fR
@@ -569,7 +559,7 @@ $ mkvpropedit movie\&.mkv \-\-delete\-attachment mime\-type:application/x\-truet
 .PP
 \fIMKVTOOLNIX_ENGAGE\fRとその短縮形\fIMTX_ENGAGE\fR
 .RS 4
-その内容は、あたかも\fB\-\-debug\fRオプション経由で渡されたかのように扱われます。
+その内容は、あたかも\fB\-\-engage\fRオプション経由で渡されたかのように扱われます。
 .RE
 .PP
 \fIMKVTOOLNIX_OPTIONS\fRとその短縮形\fIMTX_OPTIONS\fR
@@ -578,7 +568,6 @@ $ mkvpropedit movie\&.mkv \-\-delete\-attachment mime\-type:application/x\-truet
 .RE
 .SH "関連項目"
 .PP
-
 \fBmkvmerge\fR(1),
 \fBmkvinfo\fR(1),
 \fBmkvextract\fR(1),

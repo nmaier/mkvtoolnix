@@ -1,7 +1,7 @@
 '\" t
 .\"     Title: mkvinfo
 .\"    Author: Bunkus Moritz[FAMILY Given] <moritz@bunkus.org>
-.\" Generator: DocBook XSL Stylesheets v1.78.0 <http://docbook.sf.net/>
+.\" Generator: DocBook XSL Stylesheets v1.78.1 <http://docbook.sf.net/>
 .\"      Date: 2013-04-27
 .\"    Manual:  
 .\"    Source: MKVToolNix 6.2.0
@@ -39,7 +39,6 @@ mkvinfo \- Matroska(TM)ファイルの要素についての情報を表示しま
 .PP
 \fB\-g\fR, \fB\-\-gui\fR
 .RS 4
-
 GUIを起動します。このオプションは、mkvinfoがGUIをサポートするようにコンパイルされていなければ無効です。
 .RE
 .PP
@@ -136,7 +135,6 @@ download_url)\&.
 .PP
 \fB@\fR\fIoptions\-file\fR
 .RS 4
-
 \fIoptions\-file\fRで指定されたファイルから追加のコマンドラインオプションを読み込みます。行で最初の空白文字でない文字がハッシュマーク(\*(Aq#\*(Aq)である行はコメントとして扱われ、無視されます。行頭、及び行末の空白文字は取り除かれます。各行には一つずつしかオプションを指定できません。
 .sp
 エスケープすることのできる文字もあります。例えば、コメントではない行を\*(Aq#\*(Aqで始める必要のある場合です。そのルールは、エスケープ文字についてのセクションで説明されています。
@@ -162,7 +160,6 @@ info\&.txt
 .RE
 .SH "冗長レベル"
 .PP
-
 \fB\-v\fRオプションにより、\fBmkvinfo\fR(1)の冗長レベルを上げ、入力ファイルについてのより詳しい情報を出力させることができます。
 .PP
 レベル0では、トラックヘッダとトラックの種類のみを出力します。\fBmkvinfo\fR(1)は、ヘッダを完全に解析し終るとすぐに(より技術的には、最初のクラスタを検出した直後に)終了します。このレベルでは、シークヘッドエントリ及びCUEがトラック情報の前に格納されていたとしても表示されません。
@@ -174,7 +171,6 @@ info\&.txt
 レベル3以上では、Matroska(TM)エレメントに直接関係ない情報も表示します。他のエレメントについては、見付かったものだけを表示します。レベル3はデバッグ用にメタ情報を追加します(開発者向け)。レベル3で追加された行は、全て角括弧で囲われています。
 .SH "返り値"
 .PP
-
 \fBmkvinfo\fR(1)は下の3つの返り値を返します。
 .sp
 .RS 4
@@ -185,7 +181,6 @@ info\&.txt
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB0\fR
 \-\- この返り値は正常に終了したことを示します。
 .RE
@@ -198,7 +193,6 @@ info\&.txt
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB1\fR
 \-\- この返り値は、少なくとも一つの警告が表示されましたが、処理が続行されたことを意味します。警告は \*(Aq警告:\*(Aq という文字列を先頭につけて出力されます。
 .RE
@@ -211,7 +205,8 @@ info\&.txt
 .sp -1
 .IP \(bu 2.3
 .\}
-この返り値は、エラーが発生し、エラーメッセージを表示した直後に\fBmkvinfo\fR(1)が終了したことを示します。エラーメッセージは不正なコマンドラインやファイルI/Oエラー、壊れたファイルなど様々です。
+\fB2\fR
+\-\- この返り値は、エラーが発生し、エラーメッセージを表示した直後に\fBmkvinfo\fR(1)が終了したことを示します。エラーメッセージは不正なコマンドラインやファイルI/Oエラー、壊れたファイルなど様々です。
 .RE
 .SH "テキスト中の特殊文字をエスケープする"
 .PP
@@ -220,7 +215,6 @@ info\&.txt
 ルール：\*(Aq \*(Aq（半角スペース）は\*(Aq\es\*(Aqに、\*(Aq"\*(Aq（ダブルクォーテーション）は\*(Aq\e2\*(Aqに、\*(Aq:\*(Aqは\*(Aq\ec\*(Aqに、\*(Aq#\*(Aqは\*(Aq\eh\*(Aqに、そして\*(Aq\e\*(Aqそれ自体は\*(Aq\e\e\*(Aqになります。
 .SH "環境変数"
 .PP
-
 \fBmkvinfo\fR(1)はシステムのロケールを決めるデフォルトの変数（例：\fILANG\fRや\fILC_*\fR系）を使用します。追加の変数は以下の通りです：
 .PP
 \fIMKVTOOLNIX_DEBUG\fRとその短縮形\fIMTX_DEBUG\fR
@@ -230,7 +224,7 @@ info\&.txt
 .PP
 \fIMKVTOOLNIX_ENGAGE\fRとその短縮形\fIMTX_ENGAGE\fR
 .RS 4
-その内容は、あたかも\fB\-\-debug\fRオプション経由で渡されたかのように扱われます。
+その内容は、あたかも\fB\-\-engage\fRオプション経由で渡されたかのように扱われます。
 .RE
 .PP
 \fIMKVTOOLNIX_OPTIONS\fRとその短縮形\fIMTX_OPTIONS\fR
@@ -239,7 +233,6 @@ info\&.txt
 .RE
 .SH "関連項目"
 .PP
-
 \fBmkvmerge\fR(1),
 \fBmkvextract\fR(1),
 \fBmkvpropedit\fR(1),
