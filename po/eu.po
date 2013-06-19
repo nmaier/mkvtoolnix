@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: eu\n"
 "Report-Msgid-Bugs-To: Xabier Aramendi <azpidatziak@gmail.com>\n"
 "POT-Creation-Date: 2010-06-08 10:00+0200\n"
-"PO-Revision-Date: 2013-05-01 17:34+0100\n"
+"PO-Revision-Date: 2013-06-15 19:20+0100\n"
 "Last-Translator: Xabier Aramendi (Azpidatziak) <azpidatziak@gmail.com>\n"
 "Language-Team: (EUS_Xabier Aramendi) <azpidatziak@gmail.com>\n"
 "Language: Basque (Euskara)\n"
@@ -1933,9 +1933,8 @@ msgid "AVC/h.264"
 msgstr "AVC/h.264"
 
 #: src/output/p_avc.h:42
-#, fuzzy
 msgid "AVC/h.264 (unframed)"
-msgstr "AVC/h.264"
+msgstr "AVC/h.264 (framegabetuta)"
 
 #: src/common/file_types.cpp:27
 msgid "AVC/h.264 elementary streams"
@@ -7092,7 +7091,7 @@ msgstr "Agiria sostengatu gabeko edukiontzi heuskarria da (%s)."
 #: src/mmg/wx_kax_analyzer.cpp:36
 #: src/propedit/propedit.cpp:94
 msgid "The file is being analyzed."
-msgstr "Agiria aztertuta dago."
+msgstr "Agiria aztertzen..."
 
 #: src/merge/output_control.cpp:282
 msgid "The file is being fixed, part 1/4..."
@@ -9486,7 +9485,7 @@ msgstr "tta_reader: neurria_etiketa < 0 c'tor. %1%\n"
 
 #: src/mmg/tabs/input_general.cpp:140
 msgid "und (Undetermined)"
-msgstr "zehgab (Zehaztugabea)"
+msgstr "und (Zehaztugabea)"
 
 #: src/common/mm_io_win.cpp:168
 #: src/common/stereo_mode.cpp:68
