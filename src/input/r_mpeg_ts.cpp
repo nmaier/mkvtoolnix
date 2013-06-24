@@ -382,21 +382,21 @@ mpeg_ts_reader_c::detect_packet_size(mm_io_c *in,
 mpeg_ts_reader_c::mpeg_ts_reader_c(const track_info_c &ti,
                                    const mm_io_cptr &in)
   : generic_reader_c(ti, in)
-  , PAT_found(false)
-  , PMT_found(false)
+  , PAT_found{}
+  , PMT_found{}
   , PMT_pid(-1)
-  , es_to_process(0)
+  , es_to_process{}
   , m_global_timecode_offset{}
   , input_status(INPUT_PROBE)
   , track_buffer_ready(-1)
-  , file_done(false)
-  , m_packet_sent_to_packetizer(false)
-  , m_dont_use_audio_pts(debugging_requested("mpeg_ts_dont_use_audio_pts") || debugging_requested("mpeg_ts"))
-  , m_debug_resync(debugging_requested("mpeg_ts_resync") || debugging_requested("mpeg_ts"))
-  , m_debug_pat_pmt(debugging_requested("mpeg_ts_pat") || debugging_requested("mpeg_ts_pmt") || debugging_requested("mpeg_ts"))
-  , m_debug_aac(debugging_requested("mpeg_aac") || debugging_requested("mpeg_ts"))
+  , file_done{}
+  , m_packet_sent_to_packetizer{}
+  , m_dont_use_audio_pts{     debugging_requested("mpeg_ts|mpeg_ts_dont_use_audio_pts")}
+  , m_debug_resync{           debugging_requested("mpeg_ts|mpeg_ts_resync")}
+  , m_debug_pat_pmt{          debugging_requested("mpeg_ts|mpeg_ts_pat|mpeg_ts_pmt")}
+  , m_debug_aac{              debugging_requested("mpeg_ts|mpeg_aac")}
   , m_debug_timecode_wrapping{debugging_requested("mpeg_ts|mpeg_ts_timecode_wrapping")}
-  , m_detected_packet_size(0)
+  , m_detected_packet_size{}
 {
   auto mpls_in = mm_mpls_multi_file_io_c::open_multi(m_in.get());
   if (!mpls_in)
