@@ -5,7 +5,7 @@
         not given within a script tag. Fixes #880.
 
         * mkvmerge: bug fix: Fixed handling MPEG transport streams with
-        broken PES packet streams. Fixes #887.
+        broken PES packet streams. Fixes #879 and #887.
 
         * mkvextract: bug fix: mkvextract writes the correct value for the
         "block alignment" value in the header of WAV files (mostly affects
