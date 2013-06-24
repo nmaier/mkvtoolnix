@@ -923,7 +923,7 @@ mpeg_ts_reader_c::parse_packet(unsigned char *buf) {
   mxverb(3, boost::format("mpeg_ts: Table/PES completed (%1%) for PID %2%\n") % track->pes_payload->get_size() % table_pid);
 
   if (input_status == INPUT_PROBE)
-    probe_packet_complete(track, tidx);
+    probe_packet_complete(track);
 
   else
     // PES completed, set track to quicly send it to the rightpacketizer
@@ -933,8 +933,7 @@ mpeg_ts_reader_c::parse_packet(unsigned char *buf) {
 }
 
 void
-mpeg_ts_reader_c::probe_packet_complete(mpeg_ts_track_ptr &track,
-                                        int tidx) {
+mpeg_ts_reader_c::probe_packet_complete(mpeg_ts_track_ptr &track) {
   int result = -1;
 
   if (track->type == PAT_TYPE)
@@ -970,9 +969,12 @@ mpeg_ts_reader_c::probe_packet_complete(mpeg_ts_track_ptr &track,
   track->pes_payload->remove(track->pes_payload->get_size());
 
   if (result == 0) {
-    if (track->type == PAT_TYPE || track->type == PMT_TYPE)
-      tracks.erase(tracks.begin() + tidx);
-    else {
+    if (track->type == PAT_TYPE || track->type == PMT_TYPE) {
+      auto it = brng::find(tracks, track);
+      if (tracks.end() != it)
+        tracks.erase(it);
+
+    } else {
       track->processed = true;
       track->probed_ok = true;
       es_to_process--;
@@ -1007,18 +1009,24 @@ mpeg_ts_reader_c::parse_start_unit_packet(mpeg_ts_track_ptr &track,
     ts_payload                 = (unsigned char *)table_data;
 
   } else {
+    auto previous_pes_payload_size = track->pes_payload_size;
     mpeg_ts_pes_header_t *pes_data = (mpeg_ts_pes_header_t *)ts_payload;
     track->pes_payload_size        = pes_data->get_pes_packet_length();
 
     if (0 < track->pes_payload_size)
       track->pes_payload_size = track->pes_payload_size - 3 - pes_data->pes_header_data_length;
 
-    if (   (track->pes_payload_size        == 0)
-        && (track->pes_payload->get_size() != 0)
-        && (input_status                   == INPUT_READ)) {
-      track->pes_payload_size = track->pes_payload->get_size();
-      mxverb(3, boost::format("mpeg_ts: Table/PES completed (%1%) for PID %2%\n") % track->pes_payload_size % ts_packet_header->get_pid());
-      track->send_to_packetizer();
+    if (track->pes_payload->get_size() && (previous_pes_payload_size != track->pes_payload_size)) {
+      if (!previous_pes_payload_size) {
+        if (INPUT_READ == input_status) {
+          track->pes_payload_size = track->pes_payload->get_size();
+          track->send_to_packetizer();
+        } else
+          probe_packet_complete(track);
+      }
+
+      track->pes_payload->remove(track->pes_payload->get_size());
+      track->data_ready = false;
     }
 
     mxverb(4, boost::format("   PES info: stream_id = %1%\n") % (int)pes_data->stream_id);

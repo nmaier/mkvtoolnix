@@ -1,5 +1,8 @@
 2013-06-24  Moritz Bunkus  <moritz@bunkus.org>
 
+        * mkvmerge: bug fix: Fixed handling MPEG transport streams with
+        broken PES packet streams. Fixes #887.
+
         * mkvextract: bug fix: mkvextract writes the correct value for the
         "block alignment" value in the header of WAV files (mostly affects
         mono PCM audio tracks). Fixes #883.
