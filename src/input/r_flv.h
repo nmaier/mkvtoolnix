@@ -119,6 +119,9 @@ public:
   bool is_video() const;
   bool is_valid() const;
   bool is_ptzr_set() const;
+
+  void postprocess_header_data();
+  void extract_flv1_width_and_height();
 };
 
 typedef std::shared_ptr<flv_track_c> flv_track_cptr;

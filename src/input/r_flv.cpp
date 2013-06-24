@@ -16,6 +16,7 @@
 #include <avilib.h>
 
 #include "common/amf.h"
+#include "common/bit_cursor.h"
 #include "common/endian.h"
 #include "common/matroska.h"
 #include "common/mm_io_x.h"
@@ -175,6 +176,58 @@ bool
 flv_track_c::is_ptzr_set()
   const {
   return -1 != m_ptzr;
+}
+
+void
+flv_track_c::postprocess_header_data() {
+  if (m_headers_read)
+    return;
+
+  if (m_fourcc == "FLV1")
+    extract_flv1_width_and_height();
+}
+
+void
+flv_track_c::extract_flv1_width_and_height() {
+  static auto const s_dimensions = std::vector< std::pair<unsigned int, unsigned int> >{
+    { 352, 288 }, { 176, 144 }, { 128, 96 }, { 320, 240 }, { 160, 120 }
+  };
+
+  if (m_v_width && m_v_height) {
+    m_headers_read = true;
+    return;
+  }
+
+  if (!m_payload || !m_payload->get_size())
+    return;
+
+  try {
+    auto r = bit_reader_c{m_payload->get_buffer(), static_cast<unsigned int>(m_payload->get_size())};
+    if (r.get_bits(17) != 1)
+      return;                     // bad picture start code
+
+    auto format = r.get_bits(5);
+    if ((0 != format) && (1 != format))
+      return;                     // bad picture format
+
+    r.skip_bits(8);             // picture timestamp
+
+    format = r.get_bits(3);
+    if ((0 == format) || (1 == format)) {
+      auto num_bits   = 0 == format ? 8 : 16;
+      m_v_width       = r.get_bits(num_bits);
+      m_v_height      = r.get_bits(num_bits);
+
+    } else if (format < (s_dimensions.size() + 2)) {
+      auto dimensions = s_dimensions[format - 2];
+      m_v_width       = dimensions.first;
+      m_v_height      = dimensions.second;
+    }
+
+  } catch (mtx::exception &) {
+  }
+
+  m_headers_read = m_v_width && m_v_height;
 }
 
 // --------------------------------------------------
@@ -551,14 +604,16 @@ flv_reader_c::process_video_tag_generic(flv_track_cptr &track,
                         : flv_tag_c::CODEC_VP6            == codec_id ? "VP6F"
                         : flv_tag_c::CODEC_VP6_WITH_ALPHA == codec_id ? "VP6A"
                         :                                               "BUG!";
-  track->m_headers_read = true;
 
   if ((track->m_fourcc == "VP6A") || (track->m_fourcc == "VP6F")) {
     if (!m_tag.m_data_size)
       return false;
     m_tag.m_data_size--;
     m_in->skip(1);
-  }
+    track->m_headers_read = true;
+
+  } else if (track->m_fourcc == "FLV1")
+    track->m_headers_read = track->m_v_width && track->m_v_height;
 
   return true;
 
@@ -618,10 +673,13 @@ flv_reader_c::process_video_tag(flv_track_cptr &track) {
              || (flv_tag_c::CODEC_VP6_WITH_ALPHA == codec_id))
       return process_video_tag_generic(track, codec_id);
 
-  } else
-    mxdebug_if(m_debug, boost::format("  Codec type unknown (%1%)\n") % static_cast<unsigned int>(codec_id));
+    else
+      track->m_headers_read = true;
 
-  track->m_headers_read = true;
+  } else {
+    mxdebug_if(m_debug, boost::format("  Codec type unknown (%1%)\n") % static_cast<unsigned int>(codec_id));
+    track->m_headers_read = true;
+  }
 
   return true;
 }
@@ -695,10 +753,15 @@ flv_reader_c::process_tag(bool skip_payload) {
 
   mxdebug_if(m_debug, boost::format("Data size after processing: %1%; timecode in ms: %2%\n") % m_tag.m_data_size % track->m_timecode);
 
-  if (!m_tag.m_data_size || skip_payload)
+  if (!m_tag.m_data_size)
     return true;
 
   track->m_payload = m_in->read(m_tag.m_data_size);
+
+  track->postprocess_header_data();
+
+  if (skip_payload)
+    track->m_payload.reset();
 
   return true;
 }

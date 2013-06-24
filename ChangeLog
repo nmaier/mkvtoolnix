@@ -1,5 +1,9 @@
 2013-06-24  Moritz Bunkus  <moritz@bunkus.org>
 
+        * mkvmerge: bug fix: FLV reader: Implemented deriving the video
+        dimensions for FLV1 type tracks from the frame content if they're
+        not given within a script tag. Fixes #880.
+
         * mkvmerge: bug fix: Fixed handling MPEG transport streams with
         broken PES packet streams. Fixes #887.
 
