@@ -1,3 +1,9 @@
+2013-06-24  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvextract: bug fix: mkvextract writes the correct value for the
+        "block alignment" value in the header of WAV files (mostly affects
+        mono PCM audio tracks). Fixes #883.
+
 2013-05-26  Moritz Bunkus  <moritz@bunkus.org>
 
         * all: new feature: added a Portuguese translation of the programs

@@ -37,6 +37,8 @@ xtr_wav_c::create_file(xtr_base_c *master,
   int channels = kt_get_a_channels(track);
   int sfreq    = (int)kt_get_a_sfreq(track);
   int bps      = kt_get_a_bps(track);
+  auto block_align = bps * channels / boost::math::gcd(8, bps);
+
 
   if (-1 == bps)
     mxerror(boost::format(Y("Track %1% with the CodecID '%2%' is missing the \"bits per second (bps)\" element and cannot be extracted.\n")) % m_tid % m_codec_id);
@@ -53,7 +55,7 @@ xtr_wav_c::create_file(xtr_base_c *master,
   put_uint16_le(&m_wh.common.wChannels,        channels);
   put_uint32_le(&m_wh.common.dwSamplesPerSec,  sfreq);
   put_uint32_le(&m_wh.common.dwAvgBytesPerSec, channels * sfreq * bps / 8);
-  put_uint16_le(&m_wh.common.wBlockAlign,       4);
+  put_uint16_le(&m_wh.common.wBlockAlign,      block_align);
   put_uint16_le(&m_wh.common.wBitsPerSample,   bps);
 
   m_out->write(&m_wh, sizeof(wave_header));
