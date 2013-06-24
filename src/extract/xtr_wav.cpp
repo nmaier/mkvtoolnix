@@ -34,9 +34,9 @@ xtr_wav_c::create_file(xtr_base_c *master,
                        KaxTrackEntry &track) {
   init_content_decoder(track);
 
-  int channels = kt_get_a_channels(track);
-  int sfreq    = (int)kt_get_a_sfreq(track);
-  int bps      = kt_get_a_bps(track);
+  auto channels    = kt_get_a_channels(track);
+  auto sfreq       = static_cast<int>(kt_get_a_sfreq(track));
+  auto bps         = kt_get_a_bps(track);
   auto block_align = bps * channels / boost::math::gcd(8, bps);
 
 
