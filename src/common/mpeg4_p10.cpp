@@ -503,7 +503,8 @@ mpeg4::p10::parse_sps(memory_cptr &buffer,
                       bool keep_ar_info,
                       bool fix_bitstream_frame_rate,
                       int64_t duration) {
-  std::unordered_map<unsigned int, bool> s_high_level_profile_ids{
+  static auto s_debug_fix_bistream_timing_info = debugging_option_c{"fix_bitstream_timing_info"};
+  static auto s_high_level_profile_ids         = std::unordered_map<unsigned int, bool>{
     {  44, true }, {  83, true }, {  86, true }, { 100, true }, { 110, true }, { 118, true }, { 122, true }, { 128, true }, { 244, true }
   };
 
@@ -532,6 +533,8 @@ mpeg4::p10::parse_sps(memory_cptr &buffer,
     auto timing_info  = find_timing_info(duration);
     num_units_in_tick = timing_info.first;
     time_scale        = timing_info.second;
+
+    mxdebug_if(s_debug_fix_bistream_timing_info, boost::format("fix_bitstream_timing_info: duration %1%: units/tick: %2% time_scale: %3%\n") % duration % num_units_in_tick % time_scale);
   }
 
   w.copy_bits(3, r);            // forbidden_zero_bit, nal_ref_idc

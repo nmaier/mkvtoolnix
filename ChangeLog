@@ -1,3 +1,9 @@
+2013-06-26  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvmerge: bug fix: AVC/h.264 output module: fixed writing the
+        wrong values if --fix-bitstream-timing-information is used. Fixes
+        #888.
+
 2013-06-24  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvmerge: bug fix: FLV reader: Implemented deriving the video

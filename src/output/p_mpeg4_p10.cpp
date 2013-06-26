@@ -42,14 +42,33 @@ mpeg4_p10_video_packetizer_c(generic_reader_c *p_reader,
 
 void
 mpeg4_p10_video_packetizer_c::set_headers() {
+  static auto s_debug_fix_bistream_timing_info = debugging_option_c{"fix_bitstream_timing_info"};
+
   if (m_ti.m_private_data && m_ti.m_private_data->get_size())
     extract_aspect_ratio();
 
   if (m_ti.m_private_data && m_ti.m_private_data->get_size() && m_ti.m_fix_bitstream_frame_rate) {
-    int64_t l_track_default_duration = 0.0 < m_fps ? static_cast<int64_t>(1000000000.0 / m_fps) : -1;
-    int64_t duration                 = m_timecode_factory ? m_timecode_factory->get_default_duration(l_track_default_duration) : l_track_default_duration;
+    int64_t l_track_default_duration = -1;
 
-    set_codec_private(mpeg4::p10::fix_sps_fps(m_ti.m_private_data, duration));
+    if (m_timecode_factory)
+      l_track_default_duration = m_timecode_factory->get_default_duration(-1);
+
+    if ((-1 == l_track_default_duration) && m_default_duration_forced)
+      l_track_default_duration = m_htrack_default_duration;
+
+    if ((-1 == l_track_default_duration) && (0.0 < m_fps))
+      l_track_default_duration = static_cast<int64_t>(1000000000.0 / m_fps);
+
+    if (-1 != l_track_default_duration)
+      l_track_default_duration /= 2;
+
+    mxdebug_if(s_debug_fix_bistream_timing_info,
+               boost::format("fix_bitstream_timing_info: factory default_duration %1% default_duration_forced? %2% htrack_default_duration %3% fps %4% l_track_default_duration %5%\n")
+               % (m_timecode_factory ? m_timecode_factory->get_default_duration(-1) : -2)
+               % m_default_duration_forced % m_htrack_default_duration
+               % m_fps % l_track_default_duration);
+
+    set_codec_private(mpeg4::p10::fix_sps_fps(m_ti.m_private_data, l_track_default_duration));
   }
 
   video_packetizer_c::set_headers();
