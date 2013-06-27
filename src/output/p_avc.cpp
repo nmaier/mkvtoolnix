@@ -210,8 +210,10 @@ mpeg4_p10_es_video_packetizer_c::connect(generic_packetizer_c *src,
   m_htrack_default_duration = real_src->m_htrack_default_duration;
   m_default_duration_forced = real_src->m_default_duration_forced;
 
-  if (m_default_duration_forced && (-1 != m_htrack_default_duration))
-    m_parser.force_default_duration(m_htrack_default_duration);
+  if (m_default_duration_forced && (-1 != m_htrack_default_duration)) {
+    m_default_duration_for_interlaced_content = m_htrack_default_duration / 2;
+    m_parser.force_default_duration(m_default_duration_for_interlaced_content);
+  }
 }
 
 connection_result_e

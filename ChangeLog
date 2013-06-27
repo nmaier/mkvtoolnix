@@ -1,5 +1,10 @@
 2013-06-27  Moritz Bunkus  <moritz@bunkus.org>
 
+        * mkvmerge: bug fix: When appending unframed AVC/h.264 tracks and
+        setting the default duration the second and all following source
+        parts will use the same default duration as set for the first
+        part. Fixes #889.
+
         * all: enhancement (Windows only): mmg will store its settings in
         a file "mkvtoolnix.ini" in the same folder mmg.exe is located in
         if MKVToolNix hasn't been installed via its installer. If it has
