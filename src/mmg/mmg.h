@@ -323,9 +323,12 @@ public:
   virtual int OnExit();
   virtual void init_ui_locale();
   virtual void handle_command_line_arguments();
-  virtual wxString get_config_file_name();
-  virtual wxString get_jobs_folder();
+  virtual wxString get_config_file_name() const;
+  virtual wxString get_jobs_folder() const;
   virtual void prepare_mmg_data_folder();
+
+protected:
+  virtual void init_config_base() const;
 };
 
 extern mmg_app *app;

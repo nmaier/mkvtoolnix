@@ -1,5 +1,11 @@
 2013-06-27  Moritz Bunkus  <moritz@bunkus.org>
 
+        * all: enhancement (Windows only): mmg will store its settings in
+        a file "mkvtoolnix.ini" in the same folder mmg.exe is located in
+        if MKVToolNix hasn't been installed via its installer. If it has
+        been installed then the settings are stored in the Windows
+        registry. This way MKVToolNix is truly portable.
+
         * mmg: new feature: mmg's windows and dialogs will remember and
         restore their positions and sizes. Implements #878.
 

@@ -16,7 +16,11 @@
 #include <wx/wx.h>
 #include <wx/config.h>
 #include <wx/file.h>
+#include <wx/fileconf.h>
 #include <wx/regex.h>
+#ifdef SYS_WINDOWS
+# include <wx/msw/registry.h>
+#endif
 
 #ifdef __WXMAC__
 # include <ApplicationServices/ApplicationServices.h>
@@ -124,12 +128,18 @@ mmg_app::init_ui_locale() {
 }
 
 wxString
-mmg_app::get_config_file_name() {
+mmg_app::get_config_file_name()
+  const {
+#ifdef SYS_WINDOWS
+  return wxU(get_installation_path()) + wxT("/mkvtoolnix.ini");
+#else
   return wxU(get_application_data_folder()) + wxT("/config");
+#endif
 }
 
 wxString
-mmg_app::get_jobs_folder() {
+mmg_app::get_jobs_folder()
+  const {
   return wxU(get_application_data_folder()) + wxT("/jobs");
 }
 
@@ -154,6 +164,25 @@ mmg_app::prepare_mmg_data_folder() {
 #endif
 }
 
+void
+mmg_app::init_config_base()
+  const {
+  auto cfg = static_cast<wxConfigBase *>(nullptr);
+
+#if defined(SYS_WINDOWS)
+  wxString dummy;
+  wxRegKey key("HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\mmg.exe");
+  if (key.Exists() && key.QueryValue("", dummy) && !dummy.IsEmpty())
+    cfg = new wxConfig{wxT("mkvmergeGUI")};
+#endif
+
+  if (!cfg)
+    cfg = new wxFileConfig{wxT("mkvmergeGUI"), wxEmptyString, get_config_file_name()};
+
+  cfg->SetExpandEnvVars(false);
+  wxConfigBase::Set(cfg);
+}
+
 bool
 mmg_app::OnInit() {
 #ifdef __WXMAC__
@@ -166,23 +195,15 @@ mmg_app::OnInit() {
 
   mtx_common_init("mmg");
 
-  wxConfigBase *cfg;
   uint32_t i;
   wxString k, v;
   int index;
 
   prepare_mmg_data_folder();
-
-#if defined(SYS_WINDOWS)
-  cfg = new wxConfig(wxT("mkvmergeGUI"));
-#else
-  cfg = new wxFileConfig(wxT("mkvmergeGUI"), wxEmptyString, get_config_file_name());
-#endif
-  cfg->SetExpandEnvVars(false);
-  wxConfigBase::Set(cfg);
-
+  init_config_base();
   init_ui_locale();
 
+  auto cfg = wxConfigBase::Get();
   cfg->SetPath(wxT("/GUI"));
   cfg->Read(wxT("last_directory"), &last_open_dir, wxEmptyString);
   for (i = 0; i < 4; i++) {
