@@ -1,13 +1,13 @@
 '\" t
 .\"     Title: mkvextract
 .\"    Author: Moritz Bunkus <moritz@bunkus.org>
-.\" Generator: DocBook XSL Stylesheets v1.78.0 <http://docbook.sf.net/>
-.\"      Date: 2013-04-27
+.\" Generator: DocBook XSL Stylesheets v1.78.1 <http://docbook.sf.net/>
+.\"      Date: 2013-06-27
 .\"    Manual: Gebruiker commando\*(Aqs
-.\"    Source: MKVToolNix 6.2.0
+.\"    Source: MKVToolNix 6.3.0
 .\"  Language: Dutch
 .\"
-.TH "MKVEXTRACT" "1" "2013\-04\-27" "MKVToolNix 6\&.2\&.0" "Gebruiker commando\*(Aqs"
+.TH "MKVEXTRACT" "1" "2013\-06\-27" "MKVToolNix 6\&.3\&.0" "Gebruiker commando\*(Aqs"
 .\" -----------------------------------------------------------------
 .\" * Define some portability stuff
 .\" -----------------------------------------------------------------
@@ -165,12 +165,7 @@ source\&.mkv
 .SS "Spoor uitpak mode"
 .PP
 Ingaven:
-\fBmkvextract\fR
-\fBtracks\fR
-\fIsource\-filename\fR
-[\fIoptions\fR]
-\fITID1:dest\-filename1\fR
-[\fITID2:dest\-filename2\fR \&.\&.\&.]
+\fBmkvextract\fR\fBtracks\fR\fIsource\-filename\fR[\fIoptions\fR]\fITID1:dest\-filename1\fR[\fITID2:dest\-filename2\fR \&.\&.\&.]
 .PP
 De volgende commandoregel opties zijn beschikbaar voor elk spoor in \*(Aqtracks\*(Aq uitpak mode\&. Zij zullen vooraan moeten worden geplaatst in de spoor specificatie (zie hieronder) Zij zouden toegepast moeten zijn op\&.
 .PP
@@ -241,10 +236,7 @@ $ mkvextract tracks input\&.mkv 1:output\-two\-tracks\&.rm 2:output\-two\-tracks
 .SS "Markeringen extraheren mode"
 .PP
 Ingaven:
-\fBmkvextract\fR
-\fBtags\fR
-\fIsource\-filename\fR
-[\fIoptions\fR]
+\fBmkvextract\fR\fBtags\fR\fIsource\-filename\fR[\fIoptions\fR]
 .PP
 De ge\(:extraheerde markeringen zijn geschreven naar de apparaat/houder tenzij de uitvoer is omgeleid (zie de sectie over:
 Uitvoer omleiden
@@ -252,12 +244,7 @@ voor details)\&.
 .SS "Bijlagen extraheren mode"
 .PP
 Ingaven:
-\fBmkvextract\fR
-\fBattachments\fR
-\fIsource\-filename\fR
-[\fIoptions\fR]
-\fIAID1:outname1\fR
-[\fIAID2:outname2\fR \&.\&.\&.]
+\fBmkvextract\fR\fBattachments\fR\fIsource\-filename\fR[\fIoptions\fR]\fIAID1:outname1\fR[\fIAID2:outname2\fR \&.\&.\&.]
 .PP
 \fIAID\fR:\fIoutname\fR
 .RS 4
@@ -277,10 +264,7 @@ optie\&.
 .SS "Hoofdstuk uitpak mode"
 .PP
 Ingaven:
-\fBmkvextract\fR
-\fBchapters\fR
-\fIsource\-filename\fR
-[\fIoptions\fR]
+\fBmkvextract\fR\fBchapters\fR\fIsource\-filename\fR[\fIoptions\fR]
 .PP
 \fB\-s\fR, \fB\-\-simple\fR
 .RS 4
@@ -297,10 +281,7 @@ voor details)\&.
 .SS "Volg document(en) (cue) extraheren mode"
 .PP
 Ingaven:
-\fBmkvextract\fR
-\fBcuesheet\fR
-\fIsource\-filename\fR
-[\fIoptions\fR]
+\fBmkvextract\fR\fBcuesheet\fR\fIsource\-filename\fR[\fIoptions\fR]
 .PP
 De ge\(:extraheerde volg document(en) (cue) zijn geschreven naar de apparaat/houder tenzij de uitvoer is omgeleid (zie de sectie over:
 Uitvoer omleiden
@@ -308,12 +289,7 @@ voor details)\&.
 .SS "Tijd code extraheren mode"
 .PP
 Ingaven:
-\fBmkvextract\fR
-\fBtimecodes_v2\fR
-\fIsource\-filename\fR
-[\fIoptions\fR]
-\fITID1:dest\-filename1\fR
-[\fITID2:dest\-filename2\fR \&.\&.\&.]
+\fBmkvextract\fR\fBtimecodes_v2\fR\fIsource\-filename\fR[\fIoptions\fR]\fITID1:dest\-filename1\fR[\fITID2:dest\-filename2\fR \&.\&.\&.]
 .PP
 De ge\(:extraheerde hoofdstukken zijn geschreven naar de apparaat/houder tenzij de uitvoer is omgeleid (zie de sectie over:
 Uitvoer omleiden
@@ -362,7 +338,6 @@ $ mkvextract tags source\&.mkv > tags\&.xml
 .RE
 .\}
 .PP
-
 \fBmkvextract\fR(1)\*(Aqs eigen omleiding wordt aangehaald met
 \fB\-\-redirect\-output\fR
 option\&. Voorbeeld:
@@ -402,7 +377,6 @@ De beslissing over het uitvoer formaat is gebaseerd op het spoor type, niet op d
 .PP
 V_MPEG4/ISO/AVC
 .RS 4
-
 H\&.264
 /
 AVC
@@ -428,7 +402,6 @@ bestanden\&.
 .PP
 V_REAL/*
 .RS 4
-
 RealVideo(TM)
 sporen worden geschreven naar
 RealMedia(TM)
@@ -437,7 +410,6 @@ bestanden\&.
 .PP
 V_THEORA
 .RS 4
-
 Theora(TM)
 stromen worden geschreven binnen een
 Ogg(TM)
@@ -500,7 +472,6 @@ bestand\&.
 .PP
 A_REAL/*
 .RS 4
-
 RealAudio(TM)
 sporen worden geschreven naar
 RealMedia(TM)
@@ -509,7 +480,6 @@ bestanden\&.
 .PP
 A_TTA1
 .RS 4
-
 TrueAudio(TM)
 sporen worden geschreven naar
 TTA
@@ -522,7 +492,6 @@ CRC\&.
 .PP
 A_ALAC
 .RS 4
-
 ALAC
 worden geschreven naar
 CAF
@@ -531,7 +500,6 @@ bestanden\&.
 .PP
 A_FLAC
 .RS 4
-
 FLAC
 sporen worden geschreven naar raw
 FLAC
@@ -540,7 +508,6 @@ bestanden\&.
 .PP
 A_WAVPACK4
 .RS 4
-
 WavPack(TM)
 sporen worden geschreven naar
 WV(TM)
@@ -556,7 +523,6 @@ bestanden\&.
 .PP
 S_TEXT/SSA, S_TEXT/ASS
 .RS 4
-
 SSA
 en
 ASS
@@ -567,7 +533,6 @@ bestanden\&.
 .PP
 S_KATE
 .RS 4
-
 Kate(TM)
 de stromen zullen binnen een
 Ogg(TM)
@@ -576,7 +541,6 @@ bestand worden geschreven\&.
 .PP
 S_VOBSUB
 .RS 4
-
 VobSub(TM)
 ondetitels worden geschreven als
 SUB
@@ -587,7 +551,6 @@ bestanden\&.
 .PP
 S_TEXT/USF
 .RS 4
-
 USF
 tekst ondertitels worden geschreven als
 USF
@@ -596,7 +559,6 @@ bestanden\&.
 .PP
 S_HDMV/PGS
 .RS 4
-
 PGS
 ondertitels worden geschreven als
 SUP
@@ -635,7 +597,6 @@ Tijd codes worden het eerst gesorteerd en daarna geschreven als en tijd code v2 
 .RE
 .SH "VERLAAT CODES"
 .PP
-
 \fBmkvextract\fR(1)
 sluit af met drie afsluit codes:
 .sp
@@ -647,7 +608,6 @@ sluit af met drie afsluit codes:
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB0\fR
 \-\- Deze verlaat code betekend dat de extractie succesvol is voltooid\&.
 .RE
@@ -660,7 +620,6 @@ sluit af met drie afsluit codes:
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB1\fR
 \-\- In dit geval heeft
 \fBmkvextract\fR(1)
@@ -675,7 +634,6 @@ minstens \('e\('en waarschuwing uitgegeven, maar extractie is doorgegaan\&. Een 
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB2\fR
 \-\- Deze verlaat code wordt gebruikt nadat een fout is ontstaan\&.
 \fBmkvextract\fR(1)
@@ -688,7 +646,6 @@ Er zijn een paar plaatsen waar speciale karakters zouden of moeten worden overge
 De regels zijn: \*(Aq \*(Aq (een spatie) wordt \*(Aq\es\*(Aq, \*(Aq"\*(Aq (dubbele aanhalingstekens) wordt \*(Aq\e2\*(Aq, \*(Aq:\*(Aq wordt \*(Aq\ec\*(Aq, \*(Aq#\*(Aq wordt \*(Aq\eh\*(Aq en \*(Aq\e\*(Aq (een enkele (backslash) zelf wordt \*(Aq\e\e\*(Aq\&.
 .SH "OMGEVINGSVARIABELEN"
 .PP
-
 \fBmkvextract\fR(1)
 gebruikt de standaard variabelen vanuit het systeem locatie (b\&.v\&.
 \fILANG\fR
@@ -717,7 +674,6 @@ Overslaan van speciale karakter(s) in tekst)\&.
 .RE
 .SH "ZIE OOK"
 .PP
-
 \fBmkvmerge\fR(1),
 \fBmkvinfo\fR(1),
 \fBmkvpropedit\fR(1),

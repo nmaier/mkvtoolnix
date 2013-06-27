@@ -1,13 +1,13 @@
 '\" t
 .\"     Title: mkvextract
 .\"    Author: Moritz Bunkus <moritz@bunkus.org>
-.\" Generator: DocBook XSL Stylesheets v1.78.0 <http://docbook.sf.net/>
-.\"      Date: 2013-04-27
+.\" Generator: DocBook XSL Stylesheets v1.78.1 <http://docbook.sf.net/>
+.\"      Date: 2013-06-27
 .\"    Manual: Користувацькі команди
-.\"    Source: MKVToolNix 6.2.0
+.\"    Source: MKVToolNix 6.3.0
 .\"  Language: Ukrainian
 .\"
-.TH "mkvextract" "1" "2013\-04\-27" "MKVToolNix 6\&.2\&.0" "Користувацькі команди"
+.TH "mkvextract" "1" "2013\-06\-27" "MKVToolNix 6\&.3\&.0" "Користувацькі команди"
 .\" -----------------------------------------------------------------
 .\" * Define some portability stuff
 .\" -----------------------------------------------------------------
@@ -86,8 +86,7 @@ Matroska(TM)\&. Всі зазначені аргументи є опціями �
 і
 \fILC_ALL\fR\&. Після введення
 list\*(Aq як
-\fIcode\fR
-\fBmkvextract\fR(1)
+\fIcode\fR\fBmkvextract\fR(1)
 відобразить список доступних перекладів\&.
 .RE
 .PP
@@ -162,12 +161,7 @@ source\&.mkv
 .SS "Режим витягнення доріжок"
 .PP
 Синтаксис:
-\fBmkvextract\fR
-\fBtracks\fR
-\fIsource\-filename\fR
-[\fIoptions\fR]
-\fITID1:dest\-filename1\fR
-[\fITID2:dest\-filename2\fR \&.\&.\&.]
+\fBmkvextract\fR\fBtracks\fR\fIsource\-filename\fR[\fIoptions\fR]\fITID1:dest\-filename1\fR[\fITID2:dest\-filename2\fR \&.\&.\&.]
 .PP
 Наступні опції командного рядка доступні для кожної доріжки в режимі витягнення \*(Aqtracks\*(Aq\&. Вони мають бути присутні після вказання доріжки (див\&. нижче), до якої будуть застосовуватись\&.
 .PP
@@ -238,22 +232,14 @@ $ mkvextract tracks input\&.mkv 1:output\-two\-tracks\&.rm 2:output\-two\-tracks
 .SS "Режим витягнення тегів"
 .PP
 Синтаксис:
-\fBmkvextract\fR
-\fBtags\fR
-\fIsource\-filename\fR
-[\fIoptions\fR]
+\fBmkvextract\fR\fBtags\fR\fIsource\-filename\fR[\fIoptions\fR]
 .PP
 Витягнуті теги записуються до консолі, якщо інформація на виході не перенаправляється (щоб розібратися детально, див\&. розділ
 output redirection)\&.
 .SS "Режим витягнення вкладень"
 .PP
 Синтаксис:
-\fBmkvextract\fR
-\fBattachments\fR
-\fIsource\-filename\fR
-[\fIoptions\fR]
-\fIAID1:outname1\fR
-[\fIAID2:outname2\fR \&.\&.\&.]
+\fBmkvextract\fR\fBattachments\fR\fIsource\-filename\fR[\fIoptions\fR]\fIAID1:outname1\fR[\fIAID2:outname2\fR \&.\&.\&.]
 .PP
 \fIAID\fR:\fIoutname\fR
 .RS 4
@@ -272,10 +258,7 @@ Matroska(TM)\&. Дану опцію можна задавати декілька
 .SS "Режим витягнення розділів"
 .PP
 Синтаксис:
-\fBmkvextract\fR
-\fBchapters\fR
-\fIsource\-filename\fR
-[\fIoptions\fR]
+\fBmkvextract\fR\fBchapters\fR\fIsource\-filename\fR[\fIoptions\fR]
 .PP
 \fB\-s\fR, \fB\-\-simple\fR
 .RS 4
@@ -290,22 +273,14 @@ output redirection)\&.\&.
 .SS "Режим витягнення списків Cue"
 .PP
 Синтаксис:
-\fBmkvextract\fR
-\fBcuesheet\fR
-\fIsource\-filename\fR
-[\fIoptions\fR]
+\fBmkvextract\fR\fBcuesheet\fR\fIsource\-filename\fR[\fIoptions\fR]
 .PP
 Витягнуті списки Cue записуються до консолі, якщо інформація на виході не перенаправляється (щоб розібратися детально, див\&. розділ
 output redirection)\&.
 .SS "Режим витягнення тайм\-кодів"
 .PP
 Синтаксис:
-\fBmkvextract\fR
-\fBtimecodes_v2\fR
-\fIsource\-filename\fR
-[\fIoptions\fR]
-\fITID1:dest\-filename1\fR
-[\fITID2:dest\-filename2\fR \&.\&.\&.]
+\fBmkvextract\fR\fBtimecodes_v2\fR\fIsource\-filename\fR[\fIoptions\fR]\fITID1:dest\-filename1\fR[\fITID2:dest\-filename2\fR \&.\&.\&.]
 .PP
 Витягнуті тайм\-коди записуються до консолі, якщо інформація на виході не перенаправляється (щоб розібратися детально, див\&. розділ
 output redirection)\&.
@@ -391,7 +366,6 @@ $ mkvextract tags source\&.mkv \-\-redirect\-output tags\&.xml
 .PP
 V_MPEG4/ISO/AVC
 .RS 4
-
 H\&.264
 /
 AVC
@@ -423,7 +397,6 @@ RealMedia(TM)\&.
 .PP
 V_THEORA
 .RS 4
-
 Theora(TM)
 streams will be written within an
 Ogg(TM)
@@ -432,7 +405,6 @@ container
 .PP
 V_VP8
 .RS 4
-
 VP8
 tracks are written to
 IVF
@@ -502,7 +474,6 @@ CRC\&.
 .PP
 A_ALAC
 .RS 4
-
 ALAC
 tracks are written to
 CAF
@@ -511,7 +482,6 @@ files\&.
 .PP
 A_FLAC
 .RS 4
-
 FLAC
 tracks are written to raw
 FLAC
@@ -520,7 +490,6 @@ files\&.
 .PP
 A_WAVPACK4
 .RS 4
-
 WavPack(TM)
 tracks are written to
 WV
@@ -554,7 +523,6 @@ Ogg(TM)\&.
 .PP
 S_VOBSUB
 .RS 4
-
 VobSub(TM)
 subtitles will be written as
 SUB
@@ -565,7 +533,6 @@ files\&.
 .PP
 S_TEXT/USF
 .RS 4
-
 USF
 text subtitles will be written as
 USF
@@ -574,7 +541,6 @@ files\&.
 .PP
 S_HDMV/PGS
 .RS 4
-
 PGS
 subtitles will be written as
 SUP
@@ -610,7 +576,6 @@ OGM\&.
 .RE
 .SH "КОДИ ЗАВЕРШЕННЯ"
 .PP
-
 \fBmkvextract\fR(1)
 завершує роботу одним з трьох кодів завершення:
 .sp
@@ -622,7 +587,6 @@ OGM\&.
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB0\fR
 \-\- Цей код означає, що витягнення пройшло успішно\&.
 .RE
@@ -635,7 +599,6 @@ OGM\&.
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB1\fR
 \-\- В цьому випадку
 \fBmkvextract\fR(1)
@@ -650,7 +613,6 @@ OGM\&.
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB2\fR
 \-\- Цей код завершення використовується у випадку помилки\&.
 \fBmkvextract\fR(1)
@@ -663,7 +625,6 @@ OGM\&.
 The rules are: \*(Aq \*(Aq (a space) becomes \*(Aq\es\*(Aq, \*(Aq"\*(Aq (double quotes) becomes \*(Aq\e2\*(Aq, \*(Aq:\*(Aq becomes \*(Aq\ec\*(Aq, \*(Aq#\*(Aq becomes \*(Aq\eh\*(Aq and \*(Aq\e\*(Aq (a single backslash) itself becomes \*(Aq\e\e\*(Aq\&.
 .SH "Environment variables"
 .PP
-
 \fBmkvextract\fR(1)
 uses the default variables that determine the system\*(Aqs locale (e\&.g\&.
 \fILANG\fR
@@ -692,7 +653,6 @@ the section about escaping special characters in text)\&.
 .RE
 .SH "ДИВІТЬСЯ ТАКОЖ"
 .PP
-
 \fBmkvmerge\fR(1),
 \fBmkvinfo\fR(1),
 \fBmkvpropedit\fR(1),

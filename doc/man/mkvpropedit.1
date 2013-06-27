@@ -1,13 +1,13 @@
 '\" t
 .\"     Title: mkvpropedit
 .\"    Author: Moritz Bunkus <moritz@bunkus.org>
-.\" Generator: DocBook XSL Stylesheets v1.78.0 <http://docbook.sf.net/>
-.\"      Date: 2013-04-27
+.\" Generator: DocBook XSL Stylesheets v1.78.1 <http://docbook.sf.net/>
+.\"      Date: 2013-06-27
 .\"    Manual: User Commands
-.\"    Source: MKVToolNix 6.2.0
+.\"    Source: MKVToolNix 6.3.0
 .\"  Language: English
 .\"
-.TH "MKVPROPEDIT" "1" "2013\-04\-27" "MKVToolNix 6\&.2\&.0" "User Commands"
+.TH "MKVPROPEDIT" "1" "2013\-06\-27" "MKVToolNix 6\&.3\&.0" "User Commands"
 .\" -----------------------------------------------------------------
 .\" * Define some portability stuff
 .\" -----------------------------------------------------------------
@@ -117,15 +117,13 @@ must be one of the words
 \fBglobal\fR
 or
 \fBtrack\fR\&. For
-\fBall\fR
-\fBmkvpropedit\fR(1)
+\fBall\fR\fBmkvpropedit\fR(1)
 will replace or remove all tags in a file\&. With
 \fBglobal\fR
 only global tags will be replaced or removed\&.
 .sp
 With
-\fBtrack\fR
-\fBmkvpropedit\fR(1)
+\fBtrack\fR\fBmkvpropedit\fR(1)
 will replace tags for a specific track\&. Additionally the tags read from
 filename
 will be assigned to the same track\&. The track is specified in the same way
@@ -630,7 +628,6 @@ $ mkvpropedit movie\&.mkv \-\-delete\-attachment mime\-type:application/x\-truet
 .\}
 .SH "EXIT CODES"
 .PP
-
 \fBmkvpropedit\fR(1)
 exits with one of three exit codes:
 .sp
@@ -642,7 +639,6 @@ exits with one of three exit codes:
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB0\fR
 \-\- This exit codes means that the modification has completed successfully\&.
 .RE
@@ -655,7 +651,6 @@ exits with one of three exit codes:
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB1\fR
 \-\- In this case
 \fBmkvpropedit\fR(1)
@@ -670,7 +665,6 @@ has output at least one warning, but the modification did continue\&. A warning 
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB2\fR
 \-\- This exit code is used after an error occurred\&.
 \fBmkvpropedit\fR(1)
@@ -683,7 +677,6 @@ There are a few places in which special characters in text must or should be esc
 The rules are: \*(Aq \*(Aq (a space) becomes \*(Aq\es\*(Aq, \*(Aq"\*(Aq (double quotes) becomes \*(Aq\e2\*(Aq, \*(Aq:\*(Aq becomes \*(Aq\ec\*(Aq, \*(Aq#\*(Aq becomes \*(Aq\eh\*(Aq and \*(Aq\e\*(Aq (a single backslash) itself becomes \*(Aq\e\e\*(Aq\&.
 .SH "ENVIRONMENT VARIABLES"
 .PP
-
 \fBmkvpropedit\fR(1)
 uses the default variables that determine the system\*(Aqs locale (e\&.g\&.
 \fILANG\fR
@@ -712,7 +705,6 @@ the section about escaping special characters in text)\&.
 .RE
 .SH "SEE ALSO"
 .PP
-
 \fBmkvmerge\fR(1),
 \fBmkvinfo\fR(1),
 \fBmkvextract\fR(1),

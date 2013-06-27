@@ -1,13 +1,13 @@
 '\" t
 .\"     Title: mkvmerge
 .\"    Author: Moritz Bunkus <moritz@bunkus.org>
-.\" Generator: DocBook XSL Stylesheets v1.78.0 <http://docbook.sf.net/>
-.\"      Date: 2013-04-27
+.\" Generator: DocBook XSL Stylesheets v1.78.1 <http://docbook.sf.net/>
+.\"      Date: 2013-06-27
 .\"    Manual: 用户命令
-.\"    Source: MKVToolNix 6.2.0
+.\"    Source: MKVToolNix 6.3.0
 .\"  Language: Chinese
 .\"
-.TH "MKVMERGE" "1" "2013\-04\-27" "MKVToolNix 6\&.2\&.0" "用户命令"
+.TH "MKVMERGE" "1" "2013\-06\-27" "MKVToolNix 6\&.3\&.0" "用户命令"
 .\" -----------------------------------------------------------------
 .\" * Define some portability stuff
 .\" -----------------------------------------------------------------
@@ -141,7 +141,6 @@ DTD
 .PP
 \fB\-\-cue\-chapter\-name\-format\fR \fI格式\fR
 .RS 4
-
 \fBmkvmerge\fR(1)
 支持读取音频文件的
 CUE
@@ -256,7 +255,6 @@ CUE
 毫秒的数据。\fId\fR
 的最小值是 \*(Aq100ms\*(Aq，最大值是 \*(Aq32000ms\*(Aq。
 .sp
-
 \fBmkvmerge\fR(1)
 默认每簇最多放置 65535 个数据块或 5000ms 的数据。
 .sp
@@ -333,8 +331,7 @@ Matroska(TM) 文件规划
 按尺寸切割。
 .sp
 语法:
-\fB\-\-split\fR
-[size:]\fId\fR[k|m|g]
+\fB\-\-split\fR[size:]\fId\fR[k|m|g]
 .sp
 示例:
 \-\-split size:700m
@@ -359,8 +356,7 @@ Matroska(TM) 文件规划
 在一定时长后切割。
 .sp
 语法:
-\fB\-\-split\fR
-[duration:]\fIHH:MM:SS\&.nnnnnnnnn\fR|\fId\fRs
+\fB\-\-split\fR[duration:]\fIHH:MM:SS\&.nnnnnnnnn\fR|\fId\fRs
 .sp
 示例:
 \-\-split duration:00:60:00\&.000
@@ -390,8 +386,7 @@ Matroska(TM) 文件规划
 在指定时间码后切割。
 .sp
 语法:
-\fB\-\-split\fR
-timecodes:\fIA\fR[,\fIB\fR[,\fIC\fR\&.\&.\&.]]
+\fB\-\-split\fRtimecodes:\fIA\fR[,\fIB\fR[,\fIC\fR\&.\&.\&.]]
 .sp
 示例:
 \-\-split timecodes:00:45:00\&.000,01:20:00\&.250,6300s
@@ -414,8 +409,7 @@ timecodes:\fIA\fR[,\fIB\fR[,\fIC\fR\&.\&.\&.]]
 通过指定时间码范围，保留特定部分，并丢弃其余部分。
 .sp
 语法:
-\fB\-\-split\fR
-parts:\fI起点1\fR\-\fI终点1\fR[,[+]\fI起点3\fR\-\fI终点2\fR[,[+]\fI起点3\fR\-\fI终点3\fR\&.\&.\&.]]
+\fB\-\-split\fRparts:\fI起点1\fR\-\fI终点1\fR[,[+]\fI起点3\fR\-\fI终点2\fR[,[+]\fI起点3\fR\-\fI终点3\fR\&.\&.\&.]]
 .sp
 示例:
 .sp
@@ -452,7 +446,6 @@ parts:\fI起点1\fR\-\fI终点1\fR[,[+]\fI起点3\fR\-\fI终点2\fR[,[+]\fI起�
 \-\-split parts:\-00:02:45,00:05:50\-
 .RE
 .sp
-
 parts
 模式可以告诉
 \fBmkvmerge\fR(1)
@@ -539,8 +532,7 @@ parts:
 通过指定帧/场序号范围，保留特定部分，并丢弃其余部分。
 .sp
 语法:
-\fB\-\-split\fR
-parts\-frames:\fI起点1\fR\-\fI终点1\fR[,[+]\fI起点2\fR\-\fI终点2\fR[,[+]\fI起点3\fR\-\fI终点3\fR\&.\&.\&.]]
+\fB\-\-split\fRparts\-frames:\fI起点1\fR\-\fI终点1\fR[,[+]\fI起点2\fR\-\fI终点2\fR[,[+]\fI起点3\fR\-\fI终点3\fR\&.\&.\&.]]
 .sp
 示例:
 .sp
@@ -577,7 +569,6 @@ parts\-frames:\fI起点1\fR\-\fI终点1\fR[,[+]\fI起点2\fR\-\fI终点2\fR[,[+]
 \-\-split parts\-frames:\-430,2512\-
 .RE
 .sp
-
 parts\-frames
 模式可以告诉
 \fBmkvmerge\fR(1)
@@ -680,8 +671,7 @@ Matroska(TM)
 在指定帧/场后切割。
 .sp
 语法:
-\fB\-\-split\fR
-frames:\fIA\fR[,\fIB\fR[,\fIC\fR\&.\&.\&.]]
+\fB\-\-split\fRframes:\fIA\fR[,\fIB\fR[,\fIC\fR\&.\&.\&.]]
 .sp
 示例:
 \-\-split frames:120,237,891
@@ -727,11 +717,9 @@ Matroska(TM)
 在指定章节之前切割。
 .sp
 语法:
-\fB\-\-split\fR
-chapters:all
+\fB\-\-split\fRchapters:all
 or
-\fB\-\-split\fR
-chapters:\fIA\fR[,\fIB\fR[,\fIC\fR\&.\&.\&.]]
+\fB\-\-split\fRchapters:\fIA\fR[,\fIB\fR[,\fIC\fR\&.\&.\&.]]
 .sp
 示例:
 \-\-split chapters:5,8
@@ -757,7 +745,6 @@ all
 \fB注意\fR
 .ps -1
 .br
-
 Matroska(TM)
 文件格式支持任意深度嵌套的章节结构，称为\(lq版本条目\(rq与\(lq章节原子\(rq。 但该模式仅考虑所有版本条目中最顶层的章节。
 .sp .5v
@@ -1133,7 +1120,6 @@ ms 进行调整。轨道 ID 与
 轨道 ID
 段落)。
 .sp
-
 \fIo\fR/\fIp\fR: 按
 \fIo\fR/\fIp\fR
 调整时间戳以修复线性偏移。如果省略
@@ -1250,8 +1236,7 @@ HE\-AAC
 或
 AAC+)。下述情况下需要此选项：a) 源文件是
 AAC
-文件 (\fI不是\fR
-Matroska(TM)
+文件 (\fI不是\fRMatroska(TM)
 文件) 且 b) 该
 AAC
 文件含有
@@ -1372,7 +1357,6 @@ FourCC
 .PP
 \fB\-\-display\-dimensions\fR \fITID:宽度x高度\fR
 .RS 4
-
 Matroska(TM)
 文件含有两个设定播放器回放时应当将画面缩放到的显示属性值: 显示宽度与显示高度。 可以使用本选项设定这些数值，如 \*(Aq1:640x480\*(Aq。
 .sp
@@ -1385,7 +1369,6 @@ Matroska(TM)
 .PP
 \fB\-\-aspect\-ratio\fR \fITID:宽高比|宽度/高度\fR
 .RS 4
-
 Matroska(TM)
 文件含有两个设定播放器回放时应当将画面缩放到的显示属性值: 显示宽度与显示高度。 通过本选项
 \fBmkvmerge\fR(1)
@@ -2016,7 +1999,6 @@ $ mkvmerge \-o 无压缩\&.mkv \-\-compression \-1:none 我的影片\&.avi \-\-c
 .\}
 .SH "轨道 ID"
 .PP
-
 \fBmkvmerge\fR(1)
 的一些选项要求提供轨道 ID 以指定应应用到的轨道。 当读取器分离当前输入文件时，或者使用
 \fB\-\-identify\fR
@@ -2051,7 +2033,6 @@ Track ID 2: 音频 (A_MPEG/L3)
 .sp -1
 .IP \(bu 2.3
 .\}
-
 AVI
 文件: 视频轨 ID 为 0。音频轨的 ID 由 1 开始升序分配。
 .RE
@@ -2064,7 +2045,6 @@ AVI
 .sp -1
 .IP \(bu 2.3
 .\}
-
 AAC、AC3、MP3、SRT
 与
 WAV
@@ -2107,7 +2087,6 @@ WAV
 .sp .5v
 .RE
 .PP
-
 Matroska(TM)
 文件中的所有文本均使用 UTF\-8 编码。这意味着
 \fBmkvmerge\fR(1)
@@ -2119,7 +2098,6 @@ Matroska(TM)
 Matroska(TM)
 文件中的文本。
 .PP
-
 \fBmkvmerge\fR(1)
 根据是否有
 字节顺序标记
@@ -2173,7 +2151,6 @@ GUI
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB\-\-sub\-charset\fR
 用于文本字幕文件以及存储于字符集含糊的容器格式（如 Ogg 文件）中的文本字幕轨,
 .RE
@@ -2186,7 +2163,6 @@ GUI
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB\-\-chapter\-charset\fR
 用于章节文本文件以及存储于字符集含糊的容器格式（如 Ogg 文件的章节信息，轨道和文件标题等；MP4 文件的章节信息）中的章节和文件标题,
 .RE
@@ -2199,7 +2175,6 @@ GUI
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB\-\-command\-line\-charset\fR
 用于所有命令行上的字符串,
 .RE
@@ -2212,7 +2187,6 @@ GUI
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB\-\-output\-charset\fR
 用于输出到命令行或文件（当使用
 \fB\-\-redirect\-output\fR
@@ -2220,7 +2194,6 @@ GUI
 .RE
 .SH "选项文件"
 .PP
-
 \fBmkvmerge\fR(1)
 可从选项文件中读取额外的命令行参数。这样可以规避 shell 或操作系统在执行外部程序时的特定限制，如命令行长度的限制。
 .PP
@@ -2338,7 +2311,6 @@ BluRay 光盘中的 PGS 位图字幕文件
 .RE
 .SH "文件链接"
 .PP
-
 Matroska(TM)
 支持文件链接，即声明当前文件的前趋与后继文件是哪个文件。严谨地讲，被连接的不是文件而是
 Matroska(TM)
@@ -2394,7 +2366,6 @@ SID
 建立链接。
 .SH "默认值"
 .PP
-
 Matroska(TM)
 规范提到，一些元素有其默认值。通常为了节省空间，如果一个元素的值等同于其默认值，它将不被写入文件。用户在
 \fBmkvinfo\fR(1)
@@ -2453,7 +2424,6 @@ Matroska(TM)
 选项修改。
 .SH "章节"
 .PP
-
 Matroska(TM)
 章节系统比大家知道的旧系统\(em\(em
 OGM
@@ -2461,7 +2431,6 @@ OGM
 \m[blue]\fBMatroska(TM) 网站\fR\m[]\&\s-2\u[1]\d\s+2
 找到。
 .PP
-
 \fBmkvmerge\fR(1)
 支持输入两种章节文件。第一种格式，叫作 \*(Aq简单章节格式\*(Aq，与
 OGM
@@ -2489,11 +2458,9 @@ CHAPTER03NAME=宝宝摇屋子
 .RE
 .\}
 .PP
-
 \fBmkvmerge\fR(1)
 将转换每两行为一个
-Matroska(TM)
-章节单位（ChapterAtom）。这种情况不会设定任何
+Matroska(TM)章节单位（ChapterAtom）。这种情况不会设定任何
 章节轨道号（ChapterTrackNumber），也就是说所有章节被应用到文件的所有轨道。
 .PP
 由于是文本文件，可能需要进行字符集转换。关于
@@ -2617,11 +2584,9 @@ Chapters (主)
 .\}
 .SS "一般性备注"
 .PP
-
 \fBmkvmerge\fR(1)
 切割文件时会同时适当调整章节。这意味着每个文件只包含应用到该文件的章节项，时间码也将被调整到与各输出文件相匹配。
 .PP
-
 \fBmkvmerge\fR(1)
 能够从
 Matroska(TM)
@@ -2643,7 +2608,6 @@ XML
 .SH "标签"
 .SS "介绍"
 .PP
-
 Matroska(TM)
 广泛支持废弃标签，还支持一种新式的、类似其他大多数容器使用的较简单的标签系统:
 \fIKEY=VALUE\fR。然而，在
@@ -2656,17 +2620,14 @@ example\-tags\-2\&.xml
 展示了如何使用这个新系统。
 .SS "标签细述"
 .PP
-
 Matroska(TM)
 标签不会自动应用到整个文件上。它们可以应用到整个文件，还可以应用到文件的不同部分: 一个或多个轨道, 一个或多个章节, 甚至是两者的组合。\m[blue]\fBMatroska(TM) 规范\fR\m[]\&\s-2\u[3]\d\s+2
 有这方面的更多详情。
 .PP
 重要的一点是标签通过
-Targets
-Matroska(TM)
+TargetsMatroska(TM)
 标签元素与轨道或章节相连，而用于此链接的 UID
-\fI并非\fR
-\fBmkvmerge\fR(1)
+\fI并非\fR\fBmkvmerge\fR(1)
 常用的轨道 ID。而是
 \fBmkvmerge\fR(1)
 自动计算而来 (当轨道来自非
@@ -2677,7 +2638,6 @@ Matroska(TM)
 \fBmkvmerge\fR(1)
 处理过之前很难知道应该在标签文件中使用哪些 UID。
 .PP
-
 \fBmkvmerge\fR(1)
 支持两个为
 Matroska(TM)
@@ -2715,7 +2675,6 @@ $ mkvmerge \-o 文件\&.mkv \-\-tags 0:标签\&.xml 文件\&.avi
 .\}
 .SS "标签文件格式"
 .PP
-
 \fBmkvmerge\fR(1)
 支持基于
 XML
@@ -2748,8 +2707,7 @@ example\-tags\-2\&.xml
 .IP \(bu 2.3
 .\}
 实际意义上的标签放在
-<Tag>
-XML
+<Tag>XML
 标签对中。
 .RE
 .sp
@@ -2870,7 +2828,6 @@ Info (主)
 .\}
 .SH "MATROSKA(TM) 文件规划"
 .PP
-
 Matroska(TM)
 文件规划非常灵活。\fBmkvmerge\fR(1)
 将按预先定义的方式渲染文件。生成的文件是这样的：
@@ -2912,7 +2869,6 @@ Matroska(TM)
 这也是纯音频文件的样子。
 .SH "外部时间码文件"
 .PP
-
 \fBmkvmerge\fR(1)
 允许用户为各轨道选择特定的时间码。这可用来创建包含可变帧率视频或音频中有空隙的文件。这种情况下的帧是
 \fBmkvmerge\fR(1)
@@ -2936,7 +2892,6 @@ $ mkvmerge \&.\&.\&. \-\-timecodes 0:我的时间码\&.txt v1\&.avi +v2\&.avi
 .RE
 .\}
 .PP
-
 \fBmkvmerge\fR(1)
 可识别四种格式的时间码。版本号在时间码文件的第一行内。空行，只含有空格的行，以及以 \*(Aq#\*(Aq 开头的行在处理时将被忽略。
 .SS "时间码文件格式 v1"
@@ -3001,7 +2956,6 @@ gap, 10\&.050
 此格式与 v2 格式相似。 唯一的不同在于时间码不必经过排序。 通常不应使用此格式。
 .SH "退出代码"
 .PP
-
 \fBmkvmerge\fR(1)
 退出时会返回以下三个退出代码中的一个：
 .sp
@@ -3013,7 +2967,6 @@ gap, 10\&.050
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB0\fR
 \-\- 此退出代码说明已成功完成混流。
 .RE
@@ -3026,7 +2979,6 @@ gap, 10\&.050
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB1\fR
 \-\- 这种情况下
 \fBmkvmerge\fR(1)
@@ -3041,7 +2993,6 @@ gap, 10\&.050
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB2\fR
 \-\- 此退出代码用于错误发生之后。
 \fBmkvmerge\fR(1)
@@ -3049,7 +3000,6 @@ gap, 10\&.050
 .RE
 .SH "环境变量"
 .PP
-
 \fBmkvmerge\fR(1)
 会使用决定系统区域设置的默认变量 (如
 \fILANG\fR
@@ -3077,7 +3027,6 @@ gap, 10\&.050
 .RE
 .SH "参阅"
 .PP
-
 \fBmkvinfo\fR(1),
 \fBmkvextract\fR(1),
 \fBmkvpropedit\fR(1),

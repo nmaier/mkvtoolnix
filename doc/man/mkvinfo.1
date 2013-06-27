@@ -1,13 +1,13 @@
 '\" t
 .\"     Title: mkvinfo
 .\"    Author: Moritz Bunkus <moritz@bunkus.org>
-.\" Generator: DocBook XSL Stylesheets v1.78.0 <http://docbook.sf.net/>
-.\"      Date: 2013-04-27
+.\" Generator: DocBook XSL Stylesheets v1.78.1 <http://docbook.sf.net/>
+.\"      Date: 2013-06-27
 .\"    Manual: User Commands
-.\"    Source: MKVToolNix 6.2.0
+.\"    Source: MKVToolNix 6.3.0
 .\"  Language: English
 .\"
-.TH "MKVINFO" "1" "2013\-04\-27" "MKVToolNix 6\&.2\&.0" "User Commands"
+.TH "MKVINFO" "1" "2013\-06\-27" "MKVToolNix 6\&.3\&.0" "User Commands"
 .\" -----------------------------------------------------------------
 .\" * Define some portability stuff
 .\" -----------------------------------------------------------------
@@ -219,7 +219,6 @@ Matroska(TM)
 element\&. All other elements only print stuff about the elements that were just found\&. Level 3 adds meta information to ease debugging (read: it\*(Aqs intended for developers only)\&. All lines written by level 3 are enclosed in square brackets to make filtering them out easy\&.
 .SH "EXIT CODES"
 .PP
-
 \fBmkvinfo\fR(1)
 exits with one of three exit codes:
 .sp
@@ -231,7 +230,6 @@ exits with one of three exit codes:
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB0\fR
 \-\- This exit codes means that the run has completed successfully\&.
 .RE
@@ -244,7 +242,6 @@ exits with one of three exit codes:
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB1\fR
 \-\- In this case
 \fBmkvinfo\fR(1)
@@ -259,7 +256,6 @@ has output at least one warning, but the run did continue\&. A warning is prefix
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB2\fR
 \-\- This exit code is used after an error occurred\&.
 \fBmkvinfo\fR(1)
@@ -272,7 +268,6 @@ There are a few places in which special characters in text must or should be esc
 The rules are: \*(Aq \*(Aq (a space) becomes \*(Aq\es\*(Aq, \*(Aq"\*(Aq (double quotes) becomes \*(Aq\e2\*(Aq, \*(Aq:\*(Aq becomes \*(Aq\ec\*(Aq, \*(Aq#\*(Aq becomes \*(Aq\eh\*(Aq and \*(Aq\e\*(Aq (a single backslash) itself becomes \*(Aq\e\e\*(Aq\&.
 .SH "ENVIRONMENT VARIABLES"
 .PP
-
 \fBmkvinfo\fR(1)
 uses the default variables that determine the system\*(Aqs locale (e\&.g\&.
 \fILANG\fR
@@ -301,7 +296,6 @@ the section about escaping special characters in text)\&.
 .RE
 .SH "SEE ALSO"
 .PP
-
 \fBmkvmerge\fR(1),
 \fBmkvextract\fR(1),
 \fBmkvpropedit\fR(1),

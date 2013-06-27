@@ -1,13 +1,13 @@
 '\" t
 .\"     Title: mkvmerge
 .\"    Author: Moritz Bunkus <moritz@bunkus.org>
-.\" Generator: DocBook XSL Stylesheets v1.78.0 <http://docbook.sf.net/>
-.\"      Date: 2013-04-27
+.\" Generator: DocBook XSL Stylesheets v1.78.1 <http://docbook.sf.net/>
+.\"      Date: 2013-06-27
 .\"    Manual: Gebruiker commando\*(Aqs
-.\"    Source: MKVToolNix 6.2.0
+.\"    Source: MKVToolNix 6.3.0
 .\"  Language: Dutch
 .\"
-.TH "MKVMERGE" "1" "2013\-04\-27" "MKVToolNix 6\&.2\&.0" "Gebruiker commando\*(Aqs"
+.TH "MKVMERGE" "1" "2013\-06\-27" "MKVToolNix 6\&.3\&.0" "Gebruiker commando\*(Aqs"
 .\" -----------------------------------------------------------------
 .\" * Define some portability stuff
 .\" -----------------------------------------------------------------
@@ -142,7 +142,6 @@ Deze schakelaar is ook van toepassing op hoofdstukken die zijn gekopieerd van en
 .PP
 \fB\-\-cue\-chapter\-name\-format\fR \fIformat\fR
 .RS 4
-
 \fBmkvmerge\fR(1)
 ondersteund lezen van
 CUE
@@ -263,7 +262,6 @@ milliseconden aan data in elke cluster\&. Het minimum voor
 \fId\fR
 is \*(Aq100ms\*(Aq, en het maximum is \*(Aq32000ms\*(Aq\&.
 .sp
-
 \fBmkvmerge\fR(1)
 plaatst standaard op zijn hoogst 65535 data blokken en 5000ms aan data in een cluster\&.
 .sp
@@ -344,8 +342,7 @@ vier verschillende modes\&.
 Splitsen op grootte\&.
 .sp
 Ingaven:
-\fB\-\-split\fR
-[size:]\fId\fR[k|m|g]
+\fB\-\-split\fR[size:]\fId\fR[k|m|g]
 .sp
 Voorbeelden:
 \-\-split size:700m
@@ -370,8 +367,7 @@ De \*(Aqsize:\*(Aq mag vanwege de verenigbaarheid (compatibiliteit) weggelaten w
 Splitsen na een duur van\&.
 .sp
 Ingaven:
-\fB\-\-split\fR
-[duur:]\fIHH:MM:SS\&.nnnnnnnnn\fR|\fId\fRs
+\fB\-\-split\fR[duur:]\fIHH:MM:SS\&.nnnnnnnnn\fR|\fId\fRs
 .sp
 Voorbeeld:
 \-\-split duration:00:60:00\&.000
@@ -406,8 +402,7 @@ De \*(Aqduration:\*(Aq mag vanwege de verenigbaarheid (compatibiliteit) weggelat
 Splitsen na een specifieke tijd code\&.
 .sp
 Ingaven:
-\fB\-\-split\fR
-timecodes:\fIA\fR[,\fIB\fR[,\fIC\fR\&.\&.\&.]]
+\fB\-\-split\fRtimecodes:\fIA\fR[,\fIB\fR[,\fIC\fR\&.\&.\&.]]
 .sp
 Voorbeeld:
 \-\-split timecodes:00:45:00\&.000,01:20:00\&.250,6300s
@@ -432,8 +427,7 @@ Het \*(Aqtimecodes:\*(Aq voorvoegsel mag niet wegelaten worden\&.
 Houden van specifieke delen door het specificeren van tijd code bereiken, terwijl het van anderen ontdaan wordt\&.
 .sp
 Ingaven:
-\fB\-\-split\fR
-parts:\fIstart1\fR\-\fIend1\fR[,[+]\fIstart2\fR\-\fIend2\fR[,[+]\fIstart3\fR\-\fIend3\fR\&.\&.\&.]]
+\fB\-\-split\fRparts:\fIstart1\fR\-\fIend1\fR[,[+]\fIstart2\fR\-\fIend2\fR[,[+]\fIstart3\fR\-\fIend3\fR\&.\&.\&.]]
 .sp
 Voorbeeld:
 .sp
@@ -554,8 +548,7 @@ beelden uitvoeren tot aan, maar exclusief de volgende sleutel beeld\&.
 Houden van specifieke delen door het specificeren van beeld/veld nummer bereiken, terwijl het van anderen ontdaan wordt\&.
 .sp
 Ingaven:
-\fB\-\-split\fR
-parts\-frames:\fIstart1\fR\-\fIend1\fR[,[+]\fIstart2\fR\-\fIend2\fR[,[+]\fIstart3\fR\-\fIend3\fR\&.\&.\&.]]
+\fB\-\-split\fRparts\-frames:\fIstart1\fR\-\fIend1\fR[,[+]\fIstart2\fR\-\fIend2\fR[,[+]\fIstart3\fR\-\fIend3\fR\&.\&.\&.]]
 .sp
 Voorbeeld:
 .sp
@@ -692,8 +685,7 @@ moeten gebruiken (twee velden per volledig beeld) als splits moment\&.
 Splitsen na specifieke beelden/velden codes\&.
 .sp
 Ingaven:
-\fB\-\-split\fR
-frames:\fIA\fR[,\fIB\fR[,\fIC\fR\&.\&.\&.]]
+\fB\-\-split\fRframes:\fIA\fR[,\fIB\fR[,\fIC\fR\&.\&.\&.]]
 .sp
 Voorbeeld:
 \-\-split frames:120,237,891
@@ -741,11 +733,9 @@ moeten gebruiken (twee velden per volledig beeld) als splits moment\&.
 Splitsen na een specifieke hoofstukken\&.
 .sp
 Syntax:
-\fB\-\-split\fR
-chapters:all
+\fB\-\-split\fRchapters:all
 or
-\fB\-\-split\fR
-chapters:\fIA\fR[,\fIB\fR[,\fIC\fR\&.\&.\&.]]
+\fB\-\-split\fRchapters:\fIA\fR[,\fIB\fR[,\fIC\fR\&.\&.\&.]]
 .sp
 Voorbeeld:
 \-\-split chapters:5,8
@@ -946,7 +936,6 @@ optie\&.
 .PP
 \fB\-\-attachment\-mime\-type\fR \fIMIME type\fR
 .RS 4
-
 MIME
 type van de volgende bijlage\&. Is van toepassing op de volgende
 \fB\-\-attach\-file\fR
@@ -982,7 +971,6 @@ aan alle uitvoerbestanden zijn vastgemaakt terwijl degene vastgemaakt met de
 \fB\-\-attach\-file\-once\fR
 alleen zijn vastgemaakt aan het eerste bestand\&. Is splitsen niet gebruikt dan doen beide hetzelfde\&.
 .sp
-
 \fBmkvextract\fR(1)
 kan worden gebruikt om bestanden uit een
 Matroska(TM)
@@ -1150,7 +1138,6 @@ ms\&. De spoor ID\*(Aqs zijn hetzelfde als degene gegeven met
 (zie sectie
 Spoor ID's)\&.
 .sp
-
 \fIo\fR/\fIp\fR: Stel de tijd codes bij met
 \fIo\fR/\fIp\fR
 om lineaire driften te corrigeren\&.
@@ -1386,7 +1373,6 @@ naar de opgegeven waarde\&. Werkt all\('e\('en voor video sporen in de \*(AqMS v
 .PP
 \fB\-\-display\-dimensions\fR \fITID:widthxheight\fR
 .RS 4
-
 Matroska(TM)
 bestanden bevatten twee waarden die het scherm eigenschappen instelt waarnaar een af speler met afspelen naar toe zou moeten schalen: scherm breedte en scherm hoogte\&. Deze waarden worden ingesteld met deze optie, b\&.v\&. \*(Aq1:640x480\*(Aq\&.
 .sp
@@ -1399,7 +1385,6 @@ optie (zie hieronder)\&. Deze opties zijn wederzijds \- exclusief\&.
 .PP
 \fB\-\-aspect\-ratio\fR \fITID:ratio|width/height\fR
 .RS 4
-
 Matroska(TM)
 bestanden bevatten twee waarden die de scherm eigenschappen instelt waarnaar een af speler met afspelen naar toe zou moeten schalen: scherm breedte en scherm hoogte\&. Met deze optie zal
 \fBmkvmerge\fR(1)
@@ -2062,7 +2047,6 @@ Spoor ID\*(Aqs worden toegewezen zoals dit:
 .sp -1
 .IP \(bu 2.3
 .\}
-
 AVI
 bestanden: Het video spoor heeft het ID 0\&. De audio sporen krijgen de ID\*(Aqs in oplopende volgorde beginnend bij 1\&.
 .RE
@@ -2075,7 +2059,6 @@ bestanden: Het video spoor heeft het ID 0\&. De audio sporen krijgen de ID\*(Aqs
 .sp -1
 .IP \(bu 2.3
 .\}
-
 AAC,
 AC3,
 MP3,
@@ -2136,7 +2119,6 @@ of voor de originele tekst uit een
 Matroska(TM)
 bestand\&.
 .PP
-
 \fBmkvmerge\fR(1)
 doet deze conversie automatisch gebaseerd op de aanwezigheid van een
 Byte Order Marker (byte volgorde markering)
@@ -2193,7 +2175,6 @@ Als de volgende optie aanwezig is dan is het toegestaan het karakter set te spec
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB\-\-sub\-charset\fR
 voor tekst ondertitels en tekst ondertitel sporen opgeslagen in de houder formaat waarvan de karakter set niet onomstotelijk kan worden vastgesteld (b\&.v\&. Ogg bestanden),
 .RE
@@ -2206,7 +2187,6 @@ voor tekst ondertitels en tekst ondertitel sporen opgeslagen in de houder formaa
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB\-\-chapter\-charset\fR
 voor tekst hoofdstuk bestanden en voor hoofdstukken en bestand titels opgeslagen in de houder formaat waarvan de karakter set niet onomstotelijk kan worden vastgesteld (b\&.v\&. Ogg bestanden voor hoofdstuk informatie, spoor en bestand titels etc\&.; MP4 bestanden voor hoofdstuk informatie),
 .RE
@@ -2219,7 +2199,6 @@ voor tekst hoofdstuk bestanden en voor hoofdstukken en bestand titels opgeslagen
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB\-\-command\-line\-charset\fR
 voor alle ingaven op de commandoregel,
 .RE
@@ -2232,7 +2211,6 @@ voor alle ingaven op de commandoregel,
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB\-\-output\-charset\fR
 voor alle reeksen geschreven naar de apparaat/houder of naar een bestand wanneer de uitvoer is omgeleid met de
 \fB\-\-redirect\-output\fR
@@ -2356,7 +2334,6 @@ PGS bitmap ondertitel bestanden zoals gevonden op BluRay schijven
 .RE
 .SH "BESTAND LINKEN"
 .PP
-
 Matroska(TM)
 ondersteunt bestand linken welke eenvoudig zegt, dat een specifiek bestand de voorganger of de opvolger van het huidige bestand is\&. Om precies te zijn, het zijn niet echt de bestanden die gelinkt zijn maar de
 Matroska(TM)
@@ -2475,7 +2452,6 @@ bestanden\&. De volledige specificatie kan gevonden worden op de
 \m[blue]\fBMatroska(TM)\fR\m[]\&\s-2\u[1]\d\s+2
 website\&.
 .PP
-
 \fBmkvmerge\fR(1)
 ondersteunt twee soorten van hoofdstuk bestanden als invoer\&. Het eerste formaat, genoemd \*(Aqsimpel hoofdstuk format\*(Aq, is hetzelfde format dat het
 OGM
@@ -2502,11 +2478,9 @@ CHAPTER03NAME=Baby rocks the house
 .RE
 .\}
 .PP
-
 \fBmkvmerge\fR(1)
 zal elk paar of regels transformeren naar \('e\('en
-Matroska(TM)
-ChapterAtom\&. Het plaatst geen
+Matroska(TM)ChapterAtom\&. Het plaatst geen
 ChapterTrackNumber
 Wat inhoudt, dat de hoofdstukken van toepassing zijn aan alle sporen in het bestand\&.
 .PP
@@ -2635,7 +2609,6 @@ Bij het splitsen van bestanden dan zal
 \fBmkvmerge\fR(1)
 tevens de hoofdstukken juist bijstellen\&. Dit betekent, dat elk bestand slechts de hoofdstukingangen omvat waarop het van toepassing is, en dat de tijd codes worden gecompenseerd om te voldoen aan de nieuwe tijd codes van elk uitvoer bestand\&.
 .PP
-
 \fBmkvmerge\fR(1)
 is in staat hoofdstukken te kopi\(:eren van
 Matroska(TM)
@@ -2657,7 +2630,6 @@ bestanden aaneenkoppelen en nadien samenvoegen\&.
 .SH "MARKERINGEN"
 .SS "Introductie"
 .PP
-
 Matroska(TM)
 ondersteunt een uitgebreide set markeringen welke zijn verouderd, een nieuw simpeler systeem welke worden gebruikt in de meeste overige inhoudsformaten:
 \fIKEY=VALUE\fR\&. Hoewel, in
@@ -2671,15 +2643,13 @@ example\-tags\-2\&.xml
 toont hoe dit nieuwe systeem te gebruiken\&.
 .SS "Gebied van de markeringen"
 .PP
-
 Matroska(TM)
 markeringen worden niet automatisch toegekend aan het hele bestand\&. Dat kunnen zij, maar zij kunnen ook op verschillende delen van het bestand van toepassing zijn: aan \('e\('en of meerdere sporen, aan \('e\('en of meerdere hoofdstukken, of zelfs een combinatie van beide\&.
 \m[blue]\fBDe Matroska(TM) specificaties\fR\m[]\&\s-2\u[3]\d\s+2
 geeft meer informatie over dit feit\&.
 .PP
 E\('en belangrijk feit is, dat markeringen gelinkt zijn naar sporen of hoofdstukken met de
-Targets
-Matroska(TM)
+TargetsMatroska(TM)
 markeer element, en dat de gebruikte UID\*(Aqs voor dit linken
 \fIniet\fR
 zijn, de spoor ID\*(Aqs die overal door
@@ -2693,7 +2663,6 @@ Matroska(TM)
 bestand is\&. Daarom is het moeilijk te bepalen, welke UID\*(Aqs te gebruiken in het markeer bestand voordat het bestand wordt overgedragen naar
 \fBmkvmerge\fR(1)\&.
 .PP
-
 \fBmkvmerge\fR(1)
 kent twee opties waarmee je markeringen kunt toevoegen aan
 Matroska(TM)
@@ -2733,7 +2702,6 @@ $ mkvmerge \-o file\&.mkv \-\-tags 0:tags\&.xml file\&.avi
 .\}
 .SS "Markeer bestandsformaat"
 .PP
-
 \fBmkvmerge\fR(1)
 ondersteunt een
 XML
@@ -2766,8 +2734,7 @@ Het buitenste element moet zijn
 .IP \(bu 2.3
 .\}
 E\('en logische markering welke binnenin \('e\('en paar bevindt van
-<Tag>
-XML
+<Tag>XML
 markeringen\&.
 .RE
 .sp
@@ -2932,7 +2899,6 @@ bestand zou lijken op dit:
 Dit kan het geval zijn voor all\('e\('en\-audio bestanden\&.
 .SH "EXTERNE TIJD CODE BESTANDEN"
 .PP
-
 \fBmkvmerge\fR(1)
 staat de gebruiker toe, de tijd codes voor een specifiek spoor zelf te kiezen\&. Dit kan worden gebruikt, om bestanden met de variabele video beeld verhouding te cre\(:eren of \*(Aqgaten\*(Aq in audio te laten bevatten\&. Een beeld in dit geval, is de unit welke
 \fBmkvmerge\fR(1)
@@ -3022,7 +2988,6 @@ gap, 10\&.050
 Dit format is identiek aan het v2 format\&. Het enige verschil is dat de tijd codes niet gesorteerd behoeven te zijn\&. Dit format zou bijna nooit gebruikt moeten worden\&.
 .SH "VERLAAT CODES"
 .PP
-
 \fBmkvinfo\fR(1)
 verlaat met \('e\('en van de drie afsluit codes:
 .sp
@@ -3034,7 +2999,6 @@ verlaat met \('e\('en van de drie afsluit codes:
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB0\fR
 \-\- Deze verlaat code betekend dat het samenvoegen succesvol voltooid is\&.
 .RE
@@ -3047,7 +3011,6 @@ verlaat met \('e\('en van de drie afsluit codes:
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB1\fR
 \-\- In dit geval heeft
 \fBmkvmerge\fR(1)
@@ -3062,7 +3025,6 @@ ten miste \('e\('en waarschuwing uitgevaardigd, maar het samenvoegen ging door\&
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB2\fR
 \-\- Deze afsluit code wordt gebruikt nadat er een fout ontstond\&.
 \fBmkvmerge\fR(1)
@@ -3070,7 +3032,6 @@ breekt direct af na het geven van dit waarschuw bericht\&. Fout! bereik in beric
 .RE
 .SH "OMGEVINGSVARIABELEN"
 .PP
-
 \fBmkvmerge\fR(1)
 gebruikt de standaard variabelen vanuit het systeem locatie (b\&.v\&.
 \fILANG\fR
@@ -3099,7 +3060,6 @@ Overslaan van speciale karakter(s) in tekst)\&.
 .RE
 .SH "ZIE OOK"
 .PP
-
 \fBmkvinfo\fR(1),
 \fBmkvextract\fR(1),
 \fBmkvpropedit\fR(1),

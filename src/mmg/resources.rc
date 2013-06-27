@@ -4,8 +4,8 @@ mkvmergeGUI ICON  "../../share/icons/windows/mkvmergeGUI.ico"
 #include "wx/msw/wx.rc"
 
 1 VERSIONINFO
- FILEVERSION 6, 2, 0, 0
- PRODUCTVERSION 6, 2, 0, 0
+ FILEVERSION 6, 3, 0, 0
+ PRODUCTVERSION 6, 3, 0, 0
  FILEFLAGSMASK 0x3f
  FILEOS 0x4
 BEGIN
@@ -15,12 +15,12 @@ BEGIN
     BEGIN
       VALUE "CompanyName", "Moritz Bunkus"
       VALUE "FileDescription", "mmg"
-      VALUE "FileVersion", "6.2.0"
+      VALUE "FileVersion", "6.3.0"
       VALUE "InternalName", "mmg"
       VALUE "LegalCopyright", "Released under the GNU Pulic License http://www.gnu.org/licenses/gpl-2.0.html"
       VALUE "OriginalFilename", "mmg"
       VALUE "ProductName", "MKVToolNix"
-      VALUE "ProductVersion", "6.2.0"
+      VALUE "ProductVersion", "6.3.0"
     END
   END
   BLOCK "VarFileInfo"

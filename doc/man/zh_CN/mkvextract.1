@@ -1,13 +1,13 @@
 '\" t
 .\"     Title: mkvextract
 .\"    Author: Moritz Bunkus <moritz@bunkus.org>
-.\" Generator: DocBook XSL Stylesheets v1.78.0 <http://docbook.sf.net/>
-.\"      Date: 2013-04-27
+.\" Generator: DocBook XSL Stylesheets v1.78.1 <http://docbook.sf.net/>
+.\"      Date: 2013-06-27
 .\"    Manual: 用户命令
-.\"    Source: MKVToolNix 6.2.0
+.\"    Source: MKVToolNix 6.3.0
 .\"  Language: Chinese
 .\"
-.TH "MKVEXTRACT" "1" "2013\-04\-27" "MKVToolNix 6\&.2\&.0" "用户命令"
+.TH "MKVEXTRACT" "1" "2013\-06\-27" "MKVToolNix 6\&.3\&.0" "用户命令"
 .\" -----------------------------------------------------------------
 .\" * Define some portability stuff
 .\" -----------------------------------------------------------------
@@ -159,12 +159,7 @@ tracks
 .SS "轨道提取模式"
 .PP
 语法:
-\fBmkvextract\fR
-\fBtracks\fR
-\fI源文件名\fR
-[\fI选项\fR]
-\fITID1:目标文件名1\fR
-[\fITID2:目标文件名2\fR \&.\&.\&.]
+\fBmkvextract\fR\fBtracks\fR\fI源文件名\fR[\fI选项\fR]\fITID1:目标文件名1\fR[\fITID2:目标文件名2\fR \&.\&.\&.]
 .PP
 以下命令行在 \*(Aqtracks\*(Aq 轨道提取模式下对各轨道可用。它们应当在所应用到的轨道指令（参阅下文）之前出现。
 .PP
@@ -237,10 +232,7 @@ $ mkvextract tracks 输入\&.mkv 1:输出两条轨道\&.rm 2:输出两条轨道\
 .SS "标签提取模式"
 .PP
 语法:
-\fBmkvextract\fR
-\fBtags\fR
-\fI源文件名\fR
-[\fI选项\fR]
+\fBmkvextract\fR\fBtags\fR\fI源文件名\fR[\fI选项\fR]
 .PP
 提取出的标签将被输出到命令行，除非输出被重定向（详情参见关于
 输出重定向
@@ -248,12 +240,7 @@ $ mkvextract tracks 输入\&.mkv 1:输出两条轨道\&.rm 2:输出两条轨道\
 .SS "附件提取模式"
 .PP
 语法:
-\fBmkvextract\fR
-\fBattachments\fR
-\fI源文件名\fR
-[\fI选项\fR]
-\fIAID1:输出文件名1\fR
-[\fIAID2:输出文件名2\fR \&.\&.\&.]
+\fBmkvextract\fR\fBattachments\fR\fI源文件名\fR[\fI选项\fR]\fIAID1:输出文件名1\fR[\fIAID2:输出文件名2\fR \&.\&.\&.]
 .PP
 \fIAID\fR:\fI输出文件名\fR
 .RS 4
@@ -273,10 +260,7 @@ Matroska(TM)
 .SS "章节提取模式"
 .PP
 语法:
-\fBmkvextract\fR
-\fBchapters\fR
-\fI源文件名\fR
-[\fI选项\fR]
+\fBmkvextract\fR\fBchapters\fR\fI源文件名\fR[\fI选项\fR]
 .PP
 \fB\-s\fR, \fB\-\-simple\fR
 .RS 4
@@ -293,10 +277,7 @@ XML
 .SS "Cue 表单提取模式"
 .PP
 语法:
-\fBmkvextract\fR
-\fBcuesheet\fR
-\fI源文件名\fR
-[\fI选项\fR]
+\fBmkvextract\fR\fBcuesheet\fR\fI源文件名\fR[\fI选项\fR]
 .PP
 提取出的 cue 表单将被输出到命令行，除非输出被重定向（详情参见关于
 输出重定向
@@ -304,12 +285,7 @@ XML
 .SS "时间码提取模式"
 .PP
 语法:
-\fBmkvextract\fR
-\fBtimecodes_v2\fR
-\fI源文件名\fR
-[\fI选项\fR]
-\fITID1:目标文件名1\fR
-[\fITID2:目标文件名2\fR \&.\&.\&.]
+\fBmkvextract\fR\fBtimecodes_v2\fR\fI源文件名\fR[\fI选项\fR]\fITID1:目标文件名1\fR[\fITID2:目标文件名2\fR \&.\&.\&.]
 .PP
 提取出的时间码将被输出到命令行，除非输出被重定向（详情参见关于
 输出重定向
@@ -358,7 +334,6 @@ $ mkvextract tags 源\&.mkv > 标签\&.xml
 .RE
 .\}
 .PP
-
 \fBmkvextract\fR(1)
 自身的重定向功能可通过
 \fB\-\-redirect\-output\fR
@@ -399,7 +374,6 @@ $ mkvextract tags 源\&.mkv \-\-redirect\-output 标签\&.xml
 .PP
 V_MPEG4/ISO/AVC
 .RS 4
-
 H\&.264
 /
 AVC
@@ -425,7 +399,6 @@ AVI
 .PP
 V_REAL/*
 .RS 4
-
 RealVideo(TM)
 轨道将被输出为
 RealMedia(TM)
@@ -434,7 +407,6 @@ RealMedia(TM)
 .PP
 V_THEORA
 .RS 4
-
 Theora(TM)
 流将以
 Ogg(TM)
@@ -443,7 +415,6 @@ Ogg(TM)
 .PP
 V_VP8
 .RS 4
-
 VP8
 轨道将输出为
 IVF
@@ -496,7 +467,6 @@ OggVorbis(TM)
 .PP
 A_REAL/*
 .RS 4
-
 RealAudio(TM)
 轨道将被输出为
 RealMedia(TM)
@@ -505,7 +475,6 @@ RealMedia(TM)
 .PP
 A_TTA1
 .RS 4
-
 TrueAudio(TM)
 轨道将被输出为
 TTA
@@ -518,7 +487,6 @@ CRC。
 .PP
 A_ALAC
 .RS 4
-
 ALAC
 轨道将输出为
 CAF
@@ -527,7 +495,6 @@ CAF
 .PP
 A_FLAC
 .RS 4
-
 FLAC
 轨道将输出为原始的
 FLAC
@@ -536,7 +503,6 @@ FLAC
 .PP
 A_WAVPACK4
 .RS 4
-
 WavPack(TM)
 轨道将输出为
 WV
@@ -552,7 +518,6 @@ SRT
 .PP
 S_TEXT/SSA, S_TEXT/ASS
 .RS 4
-
 SSA
 与
 ASS
@@ -563,7 +528,6 @@ SSA/ASS
 .PP
 S_KATE
 .RS 4
-
 Kate(TM)
 流将以
 Ogg(TM)
@@ -572,7 +536,6 @@ Ogg(TM)
 .PP
 S_VOBSUB
 .RS 4
-
 VobSub(TM)
 字幕将输出为
 SUB
@@ -582,7 +545,6 @@ IDX）。
 .PP
 S_TEXT/USF
 .RS 4
-
 USF
 文本字幕将输出为
 USF
@@ -591,7 +553,6 @@ USF
 .PP
 S_HDMV/PGS
 .RS 4
-
 PGS
 字幕将输出为
 SUP
@@ -630,7 +591,6 @@ OGM
 .RE
 .SH "退出代码"
 .PP
-
 \fBmkvextract\fR(1)
 退出时会返回以下三个退出代码中的一个：
 .sp
@@ -642,7 +602,6 @@ OGM
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB0\fR
 \-\- 此退出代码说明已成功完成提取。
 .RE
@@ -655,7 +614,6 @@ OGM
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB1\fR
 \-\- 这种情况下
 \fBmkvextract\fR(1)
@@ -670,7 +628,6 @@ OGM
 .sp -1
 .IP \(bu 2.3
 .\}
-
 \fB2\fR
 \-\- 此退出代码用于错误发生之后。
 \fBmkvextract\fR(1)
@@ -683,7 +640,6 @@ OGM
 规则为: \*(Aq \*(Aq (空格) 变为 \*(Aq\es\*(Aq、\*(Aq"\*(Aq (双引号) 变为 \*(Aq\e2\*(Aq、\*(Aq:\*(Aq 变为 \*(Aq\ec\*(Aq、\*(Aq#\*(Aq 变为 \*(Aq\eh\*(Aq，而 \*(Aq\e\*(Aq (单个反斜杠) 自己则变为 \*(Aq\e\e\*(Aq。
 .SH "环境变量"
 .PP
-
 \fBmkvextract\fR(1)
 使用决定系统区域设置的默认变量 (如
 \fILANG\fR
@@ -711,7 +667,6 @@ OGM
 .RE
 .SH "参阅"
 .PP
-
 \fBmkvmerge\fR(1),
 \fBmkvinfo\fR(1),
 \fBmkvpropedit\fR(1),
