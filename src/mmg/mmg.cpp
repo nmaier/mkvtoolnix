@@ -171,8 +171,8 @@ mmg_app::init_config_base()
 
 #if defined(SYS_WINDOWS)
   wxString dummy;
-  wxRegKey key("HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\mmg.exe");
-  if (key.Exists() && key.QueryValue("", dummy) && !dummy.IsEmpty())
+  wxRegKey key(wxU("HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\mmg.exe"));
+  if (key.Exists() && key.QueryValue(wxU(""), dummy) && !dummy.IsEmpty())
     cfg = new wxConfig{wxT("mkvmergeGUI")};
 #endif
 
