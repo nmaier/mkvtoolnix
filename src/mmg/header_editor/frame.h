@@ -27,6 +27,7 @@
 
 #include "common/translation.h"
 #include "mmg/header_editor/page_base.h"
+#include "mmg/window_geometry_saver.h"
 #include "mmg/wx_kax_analyzer.h"
 
 #define ID_M_HE_FILE_OPEN            20000
@@ -76,6 +77,9 @@ public:
   std::shared_ptr<EbmlElement> m_e_segment_info, m_e_tracks;
 
   bool m_ignore_tree_selection_changes;
+
+protected:
+  window_geometry_saver_c m_geometry_saver;
 
 public:
   header_editor_frame_c(wxWindow *parent);

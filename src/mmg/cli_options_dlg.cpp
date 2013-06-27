@@ -21,7 +21,8 @@
 std::vector<cli_option_t> cli_options_dlg::all_cli_options;
 
 cli_options_dlg::cli_options_dlg(wxWindow *parent)
-  : wxDialog(parent, 0, Z("Add command line options"), wxDefaultPosition, wxSize(450, 400))
+  : wxDialog(parent, 0, Z("Add command line options"))
+  , m_geometry_saver{this, "cli_options_dlg"}
 {
   if (all_cli_options.empty())
     init_cli_option_list();
@@ -76,6 +77,8 @@ cli_options_dlg::cli_options_dlg(wxWindow *parent)
   siz_all->AddSpacer(10);
 
   SetSizer(siz_all);
+
+  m_geometry_saver.set_default_size(450, 400, true).restore();
 }
 
 void

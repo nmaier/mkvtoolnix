@@ -19,9 +19,14 @@
 #include "mmg/mmg.h"
 #include "common/wx.h"
 
+#include "mmg/window_geometry_saver.h"
+
 class show_text_dlg: public wxDialog {
   DECLARE_CLASS(show_text_dlg);
   DECLARE_EVENT_TABLE();
+protected:
+  window_geometry_saver_c m_geometry_saver;
+
 public:
   show_text_dlg(wxWindow *parent, const wxString &title, const wxString &text);
 };

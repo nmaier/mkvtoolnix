@@ -23,6 +23,7 @@
 # include "common/fs_sys_helpers.h"
 # include "mmg/taskbar_progress.h"
 #endif  // SYS_WINDOWS
+#include "mmg/window_geometry_saver.h"
 
 #define ID_B_MUX_OK                       18000
 #define ID_B_MUX_SAVELOG                  18001
@@ -55,6 +56,8 @@ protected:
 
   wxTimer m_read_input_timer;
   std::string m_available_input;
+
+  window_geometry_saver_c m_geometry_saver;
 
 public:
 

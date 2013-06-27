@@ -56,6 +56,7 @@ update_check_thread_c::Entry() {
 
 update_check_dlg_c::update_check_dlg_c(wxWindow *parent)
   : wxDialog(parent, -1, Z("Online check for updates"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxMAXIMIZE_BOX)
+  , m_geometry_saver{this, "update_check_dlg"}
 {
   wxStaticText *st_status_label            = new wxStaticText(this, wxID_STATIC, Z("Status:"));
   m_st_status                              = new wxStaticText(this, wxID_STATIC, wxEmptyString);
@@ -110,7 +111,8 @@ update_check_dlg_c::update_check_dlg_c(wxWindow *parent)
 
   SetMinSize(wxSize(400, 400));
   SetSizer(m_siz_all);
-  SetSize(wxSize(700, 500));
+
+  m_geometry_saver.set_default_size(700, 500, true).restore();
 }
 
 void

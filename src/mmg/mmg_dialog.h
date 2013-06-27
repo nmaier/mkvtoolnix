@@ -28,6 +28,7 @@
 #endif  // defined(HAVE_CURL_EASY_H)
 
 #include "mmg/mmg.h"
+#include "mmg/window_geometry_saver.h"
 
 #define ID_TC_OUTPUT                      10000
 #define ID_B_BROWSEOUTPUT                 10001
@@ -158,6 +159,9 @@ public:
 public:
   static size_t ms_dpi_x, ms_dpi_y;
 #endif
+
+protected:
+  window_geometry_saver_c m_geometry_saver;
 
 public:
   mmg_dialog();

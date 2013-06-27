@@ -21,6 +21,7 @@
 #include <wx/process.h>
 
 #include "mmg/taskbar_progress.h"
+#include "mmg/window_geometry_saver.h"
 
 #define ID_JOBS_B_UP                      17001
 #define ID_JOBS_B_DOWN                    17002
@@ -57,6 +58,7 @@ class job_log_dialog: public wxDialog {
   DECLARE_EVENT_TABLE();
 protected:
   wxString text;
+  window_geometry_saver_c m_geometry_saver;
 
 public:
   job_log_dialog(wxWindow *parent, wxString &log);
@@ -91,6 +93,8 @@ protected:
   taskbar_progress_c *m_taskbar_progress;
 #endif
 
+  window_geometry_saver_c m_geometry_saver;
+
 public:
   job_run_dialog(wxWindow *parent, std::vector<int> &n_jobs_to_start);
 
@@ -122,6 +126,8 @@ protected:
   jobdlg_list_view *lv_jobs;
   wxButton *b_ok, *b_up, *b_down, *b_abort, *b_abort_after_current, *b_delete;
   wxButton *b_start, *b_start_selected, *b_reenable, *b_view_log, *b_disable;
+
+  window_geometry_saver_c m_geometry_saver;
 
 public:
   job_dialog(wxWindow *parent);

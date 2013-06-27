@@ -17,6 +17,7 @@
 #include "common/common_pch.h"
 
 #include "mmg/mmg.h"
+#include "mmg/window_geometry_saver.h"
 
 #define ID_CLIOPTIONS_COB 2000
 #define ID_CLIOPTIONS_ADD 2001
@@ -37,10 +38,11 @@ class cli_options_dlg: public wxDialog {
 public:
   static std::vector<cli_option_t> all_cli_options;
 
-public:
+protected:
   wxMTX_COMBOBOX_TYPE *cob_option;
   wxTextCtrl *tc_options, *tc_description;
   wxCheckBox *cb_save_as_default;
+  window_geometry_saver_c m_geometry_saver;
 
 public:
   cli_options_dlg(wxWindow *parent);

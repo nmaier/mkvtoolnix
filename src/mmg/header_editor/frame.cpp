@@ -71,6 +71,7 @@ header_editor_frame_c::header_editor_frame_c(wxWindow *parent)
   , m_bs_main(nullptr)
   , m_bs_page(nullptr)
   , m_ignore_tree_selection_changes(false)
+  , m_geometry_saver{this, "header_editor_frame"}
 {
   wxPanel *frame_panel = new wxPanel(this);
 
@@ -88,8 +89,6 @@ header_editor_frame_c::header_editor_frame_c(wxWindow *parent)
   m_bs_main->Add(m_page_panel,3, wxGROW | wxALL, 5);
 
   frame_panel->SetSizer(m_bs_main);
-
-  SetMinSize(wxSize(800, 600));
 
   clear_pages();
 
@@ -117,6 +116,8 @@ header_editor_frame_c::header_editor_frame_c(wxWindow *parent)
   menu_bar->Append(m_headers_menu,                     dummy);
   menu_bar->Append(help_menu,                          dummy);
   SetMenuBar(menu_bar);
+
+  m_geometry_saver.set_default_size(800, 600, true).restore();
 
   translate_ui();
 

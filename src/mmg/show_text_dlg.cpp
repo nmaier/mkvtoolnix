@@ -19,9 +19,10 @@
 
 show_text_dlg::show_text_dlg(wxWindow *parent,
                              const wxString &title,
-                             const wxString &text):
-  wxDialog(parent, 0, title, wxDefaultPosition, wxSize(400, 350)) {
-
+                             const wxString &text)
+  : wxDialog(parent, 0, title)
+  , m_geometry_saver{this, "show_text_dlg"}
+{
   wxBoxSizer *siz_all, *siz_line;
   wxTextCtrl *tc_message;
 
@@ -43,6 +44,8 @@ show_text_dlg::show_text_dlg(wxWindow *parent,
   siz_all->AddSpacer(10);
 
   SetSizer(siz_all);
+
+  m_geometry_saver.set_default_size(400, 350, true).restore();
 }
 
 IMPLEMENT_CLASS(show_text_dlg, wxDialog);

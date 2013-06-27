@@ -41,6 +41,7 @@ mux_dialog::mux_dialog(wxWindow *parent)
   , m_abort_button_changed(false)
   , m_exit_code(0)
   , m_progress(0)
+  , m_geometry_saver{this, "mux_dialog"}
 {
   wxBoxSizer *siz_all, *siz_buttons, *siz_line;
   wxStaticBoxSizer *siz_status, *siz_output;
@@ -89,7 +90,8 @@ mux_dialog::mux_dialog(wxWindow *parent)
   siz_all->Add(siz_buttons, 0, wxGROW | wxALL, 10);
 
   SetSizerAndFit(siz_all);
-  SetSize(wxSize(720, 520));
+
+  m_geometry_saver.set_default_size(720, 520, true).restore();
 }
 
 void

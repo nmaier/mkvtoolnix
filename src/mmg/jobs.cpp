@@ -40,7 +40,7 @@
 
 job_run_dialog::job_run_dialog(wxWindow *,
                                std::vector<int> &n_jobs_to_start)
-  : wxDialog(nullptr, -1, Z("mkvmerge is running"), wxDefaultPosition, wxSize(700, 700), wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxMINIMIZE_BOX | wxMAXIMIZE_BOX)
+  : wxDialog(nullptr, -1, Z("mkvmerge is running"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxMINIMIZE_BOX | wxMAXIMIZE_BOX)
   , t_update(new wxTimer(this, 1))
   , out(nullptr)
   , process(nullptr)
@@ -51,6 +51,7 @@ job_run_dialog::job_run_dialog(wxWindow *,
 #if defined(SYS_WINDOWS)
   , m_taskbar_progress(nullptr)
 #endif
+  , m_geometry_saver{this, "job_run_dialog"}
 {
   wxBoxSizer *siz_all      = new wxBoxSizer(wxVERTICAL);
   wxStaticBoxSizer *siz_sb = new wxStaticBoxSizer(new wxStaticBox(this, -1, Z("Status and progress")), wxVERTICAL);
@@ -106,6 +107,8 @@ job_run_dialog::job_run_dialog(wxWindow *,
   siz_all->SetSizeHints(this);
 
   SetSizer(siz_all);
+
+  m_geometry_saver.set_default_size(700, 700, true).restore();
 
 #if defined(SYS_WINDOWS)
   if (get_windows_version() >= WINDOWS_VERSION_7)
@@ -389,6 +392,7 @@ job_log_dialog::job_log_dialog(wxWindow *parent,
                                wxString &log)
   : wxDialog(parent, -1, Z("Job output"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
   , text(log)
+  , m_geometry_saver{this, "job_log_dialog"}
 {
   wxBoxSizer *siz_all = new wxBoxSizer(wxVERTICAL);
   siz_all->Add(new wxStaticText(this, -1, Z("Output of the selected jobs:")), 0, wxALIGN_LEFT | wxLEFT | wxTOP, 10);
@@ -407,7 +411,7 @@ job_log_dialog::job_log_dialog(wxWindow *parent,
   siz_all->SetSizeHints(this);
   SetSizer(siz_all);
 
-  SetSize(wxSize(900, 500));
+  m_geometry_saver.set_default_size(900, 500, true).restore();
 
   ShowModal();
 }
@@ -429,8 +433,9 @@ job_log_dialog::on_save(wxCommandEvent &) {
 
 // ---------------------------------------------------
 
-job_dialog::job_dialog(wxWindow *parent):
-  wxDialog(parent, -1, Z("Job queue management"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxMINIMIZE_BOX | wxMAXIMIZE_BOX) {
+job_dialog::job_dialog(wxWindow *parent)
+  : wxDialog(parent, -1, Z("Job queue management"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxMINIMIZE_BOX | wxMAXIMIZE_BOX)
+  , m_geometry_saver{this, "job_dialog"} {
 
   wxBoxSizer *siz_all = new wxBoxSizer(wxVERTICAL);
   siz_all->Add(new wxStaticText(this, -1, Z("Current and past jobs:")), 0, wxALIGN_LEFT | wxALL, 10);
@@ -518,7 +523,7 @@ job_dialog::job_dialog(wxWindow *parent):
   siz_all->SetSizeHints(this);
   SetSizer(siz_all);
 
-  SetSize(wxSize(800, 500));
+  m_geometry_saver.set_default_size(800, 500, true).restore();
 
   enable_buttons(false);
 

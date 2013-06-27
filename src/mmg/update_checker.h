@@ -26,6 +26,8 @@
 #  include <wx/thread.h>
 #  include "common/version.h"
 
+#  include "mmg/window_geometry_saver.h"
+
 class mmg_dialog;
 
 class update_check_thread_c: public wxThread {
@@ -47,6 +49,7 @@ private:
   wxBoxSizer *m_siz_all;
   wxRichTextCtrl *m_changelog;
   mtx_release_version_t m_version;
+  window_geometry_saver_c m_geometry_saver;
 
 public:
   update_check_dlg_c(wxWindow *parent);

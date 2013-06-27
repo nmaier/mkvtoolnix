@@ -79,6 +79,7 @@ mmg_dialog::mmg_dialog()
   , m_checking_for_updates(false)
   , m_update_check_dlg(nullptr)
 #endif  // defined(HAVE_CURL_EASY_H)
+  , m_geometry_saver{this, "mmg_dialog"}
 {
   wxBoxSizer *bs_main;
   wxPanel *panel;
@@ -156,19 +157,18 @@ mmg_dialog::mmg_dialog()
   bs_main->Add(bs_buttons, 0, wxALIGN_CENTER_HORIZONTAL);
 
 #ifdef SYS_WINDOWS
-  wxSize size(700, 680);
+  auto size = wxSize{700, 680};
   wxLogMessage(wxT("dpi is %u/%u"), static_cast<unsigned int>(ms_dpi_x), static_cast<unsigned int>(ms_dpi_y));
   if (is_higher_dpi()) {
     size.SetWidth( size.GetWidth()  + scale_with_dpi((840 - 700) / 1.5, true));
     size.SetHeight(size.GetHeight() + scale_with_dpi((850 - 680) / 1.5, false));
   }
 
-  SetSizeHints(size);
-  SetSize(size);
 #else
-  SetSizeHints(700, 660);
-  SetSize(700, 660);
+  auto size = wxSize{700, 660};
 #endif
+
+  m_geometry_saver.set_default_size(size.GetWidth(), size.GetHeight(), true).restore();
 
   log_window->Show(options.gui_debugging);
   set_on_top(options.on_top);
