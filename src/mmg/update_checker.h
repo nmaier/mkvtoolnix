@@ -43,7 +43,7 @@ class update_check_dlg_c: public wxDialog {
   DECLARE_CLASS(update_check_dlg_c);
   DECLARE_EVENT_TABLE();
 private:
-  wxStaticText *m_st_status, *m_st_current_version, *m_st_available_version, *m_st_download_url_label;
+  wxStaticText *m_st_status, *m_st_available_version;
   wxHyperlinkCtrl *m_hlc_download_url;
   wxButton *m_b_close, *m_b_download;
   wxBoxSizer *m_siz_all;
