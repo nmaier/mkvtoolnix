@@ -25,14 +25,15 @@ pcm_packetizer_c::pcm_packetizer_c(generic_reader_c *p_reader,
                                    int samples_per_sec,
                                    int channels,
                                    int bits_per_sample,
-                                   bool ieee_float)
+                                   pcm_format_e format)
   : generic_packetizer_c(p_reader, p_ti)
   , m_samples_per_sec(samples_per_sec)
   , m_channels(channels)
   , m_bits_per_sample(bits_per_sample)
   , m_packet_size(0)
+  , m_min_packet_size{static_cast<size_t>(samples_per_sec * channels * bits_per_sample * 4 / 1000 / 8)} // Minimum: 4ms of samples if we should pass it through unmodified
   , m_samples_output(0)
-  , m_ieee_float(ieee_float)
+  , m_format{format}
   , m_s2tc(1000000000ll, m_samples_per_sec)
 {
 
@@ -60,16 +61,8 @@ pcm_packetizer_c::~pcm_packetizer_c() {
 
 void
 pcm_packetizer_c::set_headers() {
-  if (m_ieee_float)
-    set_codec_id(MKV_A_PCM_FLOAT);
-
-  else if (big_endian)
-    set_codec_id(MKV_A_PCM_BE);
-
-  else
-    set_codec_id(MKV_A_PCM);
-
-  set_audio_sampling_freq((float)m_samples_per_sec);
+  set_codec_id(ieee_float == m_format ? MKV_A_PCM_FLOAT : MKV_A_PCM);
+  set_audio_sampling_freq(static_cast<double>(m_samples_per_sec));
   set_audio_channels(m_channels);
   set_audio_bit_depth(m_bits_per_sample);
 
@@ -78,7 +71,7 @@ pcm_packetizer_c::set_headers() {
 
 int
 pcm_packetizer_c::process(packet_cptr packet) {
-  if (packet->has_timecode())
+  if (packet->has_timecode() && (packet->data->get_size() >= m_min_packet_size))
     return process_packaged(packet);
 
   m_buffer.add(packet->data->get_buffer(), packet->data->get_size());

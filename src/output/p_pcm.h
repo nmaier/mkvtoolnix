@@ -21,15 +21,22 @@
 #include "merge/pr_generic.h"
 
 class pcm_packetizer_c: public generic_packetizer_c {
+public:
+  enum pcm_format_e {
+    little_endian_integer = 0,
+    big_endian_integer    = 1,
+    ieee_float            = 2
+  };
+
 private:
   int m_samples_per_sec, m_channels, m_bits_per_sample, m_samples_per_packet;
-  size_t m_packet_size, m_samples_output;
-  bool m_ieee_float;
+  size_t m_packet_size, m_min_packet_size, m_samples_output;
+  pcm_format_e m_format;
   byte_buffer_c m_buffer;
   samples_to_timecode_converter_c m_s2tc;
 
 public:
-  pcm_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, int p_samples_per_sec, int channels, int bits_per_sample, bool ieee_float = false);
+  pcm_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, int p_samples_per_sec, int channels, int bits_per_sample, pcm_format_e format = little_endian_integer);
   virtual ~pcm_packetizer_c();
 
   virtual int process(packet_cptr packet);

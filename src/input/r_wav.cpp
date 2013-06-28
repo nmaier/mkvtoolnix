@@ -403,7 +403,7 @@ wav_pcm_demuxer_c::create_packetizer() {
                                 get_uint32_le(&m_wheader->common.dwSamplesPerSec),
                                 get_uint16_le(&m_wheader->common.wChannels),
                                 get_uint16_le(&m_wheader->common.wBitsPerSample),
-                                ieee_float);
+                                ieee_float ? pcm_packetizer_c::ieee_float : pcm_packetizer_c::little_endian_integer);
 
   show_packetizer_info(0, m_ptzr);
 
