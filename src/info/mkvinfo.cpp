@@ -181,6 +181,7 @@ size_t s_mkvmerge_track_id = 0;
 #define BF_CODEC_STATE                       BF_DO(30)
 #define BF_AT                                BF_DO(31)
 #define BF_SIZE                              BF_DO(32)
+#define BF_BLOCK_GROUP_DISCARD_PADDING       BF_DO(33)
 
 void
 init_common_boost_formats() {
@@ -217,6 +218,7 @@ init_common_boost_formats() {
   BF_ADD(Y("Codec state: %1%"));                                                                                // 30 -- BF_CODEC_STATE
   BF_ADD(Y(" at %1%"));                                                                                         // 31 -- BF_AT
   BF_ADD(Y(" size %1%"));                                                                                       // 32 -- BF_SIZE
+  BF_ADD(Y("Discard padding: %|1$.3f|ms (%2%ns)"));                                                             // 33 -- BF_BLOCK_GROUP_DISCARD_PADDING
 }
 
 std::string
@@ -920,7 +922,15 @@ handle_tracks(EbmlStream *&es,
         else if (is_id(l3, KaxContentEncodings))
           handle_content_encodings(es, l3);
 
-        else if (!is_global(es, l3, 3))
+        else if (is_id(l3, KaxCodecDelay)) {
+          auto value = static_cast<KaxCodecDelay *>(l3)->GetValue();
+          show_element(l3, 3, boost::format(Y("Codec delay: %|1$.3f|ms (%2%ns)")) % (static_cast<double>(value) / 1000000.0) % value);
+
+        } else if (is_id(l3, KaxSeekPreRoll)) {
+          auto value = static_cast<KaxSeekPreRoll *>(l3)->GetValue();
+          show_element(l3, 3, boost::format(Y("Seek pre-roll: %|1$.3f|ms (%2%ns)")) % (static_cast<double>(value) / 1000000.0) % value);
+
+        } else if (!is_global(es, l3, 3))
           show_unknown_element(l3, 3);
 
       if (g_options.m_show_summary)
@@ -1202,6 +1212,11 @@ handle_block_group(EbmlStream *&es,
 
     else if (is_id(l3, KaxCodecState))
       show_element(l3, 3, BF_CODEC_STATE                    % format_binary(static_cast<KaxCodecState *>(l3)));
+
+    else if (is_id(l3, KaxDiscardPadding)) {
+      auto value = static_cast<KaxDiscardPadding *>(l3)->GetValue();
+      show_element(l3, 3, BF_BLOCK_GROUP_DISCARD_PADDING    % (static_cast<double>(value) / 1000000.0) % value);
+    }
 
 #endif // MATROSKA_VERSION >= 2
     else if (is_id(l3, KaxBlockAdditions)) {
