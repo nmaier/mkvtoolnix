@@ -109,7 +109,7 @@ tab_input_general::setup_default_track() {
     entries.Alloc(cob_default_translations.entries.size());
     for (auto idx = cob_default_translations.entries.size(); 0 < idx; --idx)
       entries.Add(wxEmptyString);
-    cob_default->Append(entries);
+    append_combobox_items(cob_default, entries);
   }
 
   auto selection = cob_default->GetSelection();
@@ -130,7 +130,7 @@ tab_input_general::setup_forced_track() {
     entries.Alloc(cob_default_translations.entries.size());
     for (auto idx = cob_forced_translations.entries.size(); 0 < idx; --idx)
       entries.Add(wxEmptyString);
-    cob_forced->Append(entries);
+    append_combobox_items(cob_forced, entries);
   }
 
   auto selection = cob_forced->GetSelection();
@@ -174,7 +174,7 @@ tab_input_general::setup_languages() {
 
   size_t selection = cob_language->GetSelection();
   cob_language->Clear();
-  cob_language->Append(sorted_iso_codes);
+  append_combobox_items(cob_language, sorted_iso_codes);
   cob_language->SetSelection(selection);
 }
 
