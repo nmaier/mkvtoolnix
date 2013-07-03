@@ -104,14 +104,18 @@ tab_input_general::setup_default_track() {
   cob_default_translations.add(wxT("yes"),     Z("yes"));
   cob_default_translations.add(wxT("no"),      Z("no"));
 
-  size_t i;
-  if (0 == cob_default->GetCount())
-    for (i = 0; cob_default_translations.entries.size() > i; ++i)
-      cob_default->Append(wxEmptyString);
+  if (!cob_default->GetCount()) {
+    auto entries = wxArrayString{};
+    entries.Alloc(cob_default_translations.entries.size());
+    for (auto idx = cob_default_translations.entries.size(); 0 < idx; --idx)
+      entries.Add(wxEmptyString);
+    cob_default->Append(entries);
+  }
 
-  size_t selection = cob_default->GetSelection();
-  for (i = 0; cob_default_translations.entries.size() > i; ++i)
-    cob_default->SetString(i, cob_default_translations.entries[i].translated);
+  auto selection = cob_default->GetSelection();
+  auto idx       = 0;
+  for (auto const &entry : cob_default_translations.entries)
+    cob_default->SetString(idx++, entry.translated);
   cob_default->SetSelection(selection);
 }
 
@@ -121,14 +125,18 @@ tab_input_general::setup_forced_track() {
   cob_forced_translations.add(wxT("no"),  Z("no"));
   cob_forced_translations.add(wxT("yes"), Z("yes"));
 
-  size_t i;
-  if (0 == cob_forced->GetCount())
-    for (i = 0; cob_forced_translations.entries.size() > i; ++i)
-      cob_forced->Append(wxEmptyString);
+  if (!cob_forced->GetCount()) {
+    auto entries = wxArrayString{};
+    entries.Alloc(cob_default_translations.entries.size());
+    for (auto idx = cob_forced_translations.entries.size(); 0 < idx; --idx)
+      entries.Add(wxEmptyString);
+    cob_forced->Append(entries);
+  }
 
-  size_t selection = cob_forced->GetSelection();
-  for (i = 0; cob_forced_translations.entries.size() > i; ++i)
-    cob_forced->SetString(i, cob_forced_translations.entries[i].translated);
+  auto selection = cob_forced->GetSelection();
+  auto idx       = 0;
+  for (auto const &entry : cob_forced_translations.entries)
+    cob_forced->SetString(idx++, entry.translated);
   cob_forced->SetSelection(selection);
 }
 
@@ -166,8 +174,7 @@ tab_input_general::setup_languages() {
 
   size_t selection = cob_language->GetSelection();
   cob_language->Clear();
-  for (i = 0; i < sorted_iso_codes.Count(); i++)
-    cob_language->Append(sorted_iso_codes[i]);
+  cob_language->Append(sorted_iso_codes);
   cob_language->SetSelection(selection);
 }
 

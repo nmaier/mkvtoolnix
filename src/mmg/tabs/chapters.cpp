@@ -110,13 +110,14 @@ chapter_values_dlg::chapter_values_dlg(wxWindow *parent)
   siz_all->Add(siz_input, 0, wxGROW | wxLEFT | wxRIGHT, 10);
   siz_all->AddSpacer(10);
 
-  size_t i;
-  for (i = 0; i < sorted_iso_codes.Count(); i++)
-    cob_language->Append(sorted_iso_codes[i]);
+  cob_language->Append(sorted_iso_codes);
 
-  cob_country->Append(wxEmptyString);
+  auto entries = wxArrayString{};
+  entries.Alloc(cctlds.size() + 1);
+  entries.Add(wxEmptyString);
   for (auto &cctld : cctlds)
-    cob_country->Append(wxU(cctld));
+    entries.Add(wxU(cctld));
+  cob_country->Append(entries);
 
   auto siz_buttons = new wxBoxSizer(wxHORIZONTAL);
   siz_buttons->AddStretchSpacer();
@@ -284,9 +285,7 @@ tab_chapters::tab_chapters(wxWindow *parent,
 
   cob_language_code = new wxMTX_COMBOBOX_TYPE(this, ID_CB_CHAPTERSELECTLANGUAGECODE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_DROPDOWN | wxCB_READONLY);
   cob_language_code->SetMinSize(wxSize(0, 0));
-  size_t i;
-  for (i = 0; i < sorted_iso_codes.Count(); i++)
-    cob_language_code->Append(sorted_iso_codes[i]);
+  cob_language_code->Append(sorted_iso_codes);
   cob_language_code->SetValue(wxEmptyString);
   siz_line = new wxBoxSizer(wxHORIZONTAL);
   siz_line->Add(cob_language_code, 3, wxGROW, 0);
@@ -295,9 +294,14 @@ tab_chapters::tab_chapters(wxWindow *parent,
   st_country = new wxStaticText(this, wxID_STATIC, wxEmptyString);
   siz_line->Add(st_country, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
   cob_country_code = new wxMTX_COMBOBOX_TYPE(this, ID_CB_CHAPTERSELECTCOUNTRYCODE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_DROPDOWN | wxCB_READONLY);
-  cob_country_code->Append(wxEmptyString);
+
+  auto entries     = wxArrayString{};
+  entries.Alloc(cctlds.size() + 1);
+  entries.Add(wxEmptyString);
   for (auto &cctld : cctlds)
-    cob_country_code->Append(wxU(cctld));
+    entries.Add(wxU(cctld));
+  cob_country_code->Append(entries);
+
   cob_country_code->SetValue(wxEmptyString);
   siz_line->Add(cob_country_code, 1, wxGROW, 0);
   siz_fg->Add(siz_line, 0, wxGROW, 0);

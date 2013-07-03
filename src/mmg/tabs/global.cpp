@@ -33,7 +33,6 @@ tab_global::tab_global(wxWindow *parent):
   wxFlexGridSizer *siz_linking, *siz_chap_l1_l2, *siz_fg;
   wxBoxSizer *siz_all, *siz_line;
   wxBoxSizer *siz_chap_l1, *siz_chap_l2, *siz_chap_l3;
-  uint32_t i;
 
   sb_file_segment_title = new wxStaticBox(this,  -1, wxEmptyString);
   st_file_segment_title = new wxStaticText(this, -1, wxEmptyString);
@@ -145,8 +144,7 @@ tab_global::tab_global(wxWindow *parent):
   cob_chap_language = new wxMTX_COMBOBOX_TYPE(this, ID_CB_CHAPTERLANGUAGE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_READONLY);
   cob_chap_language->SetMinSize(wxSize(50, -1));
   cob_chap_language->Append(wxEmptyString);
-  for (i = 0; i < sorted_iso_codes.Count(); i++)
-    cob_chap_language->Append(sorted_iso_codes[i]);
+  cob_chap_language->Append(sorted_iso_codes);
   siz_chap_l2 = new wxBoxSizer(wxHORIZONTAL);
   siz_chap_l2->Add(cob_chap_language, 1, wxALIGN_CENTER_VERTICAL | wxGROW | wxRIGHT, 5);
 
@@ -156,8 +154,7 @@ tab_global::tab_global(wxWindow *parent):
   cob_chap_charset = new wxMTX_COMBOBOX_TYPE(this, ID_CB_CHAPTERCHARSET, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_READONLY);
   cob_chap_charset->SetMinSize(wxSize(50, -1));
   cob_chap_charset->Append(wxEmptyString);
-  for (i = 0; i < sorted_charsets.Count(); i++)
-    cob_chap_charset->Append(sorted_charsets[i]);
+  cob_chap_charset->Append(sorted_charsets);
   siz_chap_l2->Add(cob_chap_charset, 1, wxALIGN_CENTER_VERTICAL | wxGROW | wxRIGHT, 5);
   siz_chap_l1_l2->Add(siz_chap_l2, 1, wxGROW | wxTOP | wxBOTTOM, 2);
   siz_chapters->Add(siz_chap_l1_l2, 0, wxGROW, 0);
@@ -189,11 +186,10 @@ tab_global::tab_global(wxWindow *parent):
 
 void
 tab_global::translate_split_args() {
-  auto mode  = cob_split_mode->GetSelection();
-  auto value = cob_split_args->GetValue();
+  auto mode    = cob_split_mode->GetSelection();
+  auto value   = cob_split_args->GetValue();
+  auto entries = wxArrayString{};
   wxString new_tool_tip;
-
-  cob_split_args->Clear();
 
   if (0 == mode)
     st_split_args->SetLabel(Z("Size:"));
@@ -202,15 +198,15 @@ tab_global::translate_split_args() {
     st_split_args->SetLabel(Z("Size:"));
     new_tool_tip = TIP("The size after which a new output file is started. The letters 'G', 'M' and 'K' can be used to indicate giga/mega/kilo bytes respectively. "
                        "All units are based on 1024 (G = 1024^3, M = 1024^2, K = 1024).");
-    cob_split_args->Append(wxEmptyString);
-    cob_split_args->Append(wxT("350M"));
-    cob_split_args->Append(wxT("650M"));
-    cob_split_args->Append(wxT("700M"));
-    cob_split_args->Append(wxT("703M"));
-    cob_split_args->Append(wxT("800M"));
-    cob_split_args->Append(wxT("1000M"));
-    cob_split_args->Append(wxT("4483M"));
-    cob_split_args->Append(wxT("8142M"));
+    entries.Add(wxEmptyString);
+    entries.Add(wxT("350M"));
+    entries.Add(wxT("650M"));
+    entries.Add(wxT("700M"));
+    entries.Add(wxT("703M"));
+    entries.Add(wxT("800M"));
+    entries.Add(wxT("1000M"));
+    entries.Add(wxT("4483M"));
+    entries.Add(wxT("8142M"));
 
   } else if (2 == mode) {
     st_split_args->SetLabel(Z("Duration:"));
@@ -219,9 +215,9 @@ tab_global::translate_split_args() {
                        "'nnnnnnnnn'. If given then you may use up to nine digits after the decimal point. "
                        "Examples: 01:00:00 (after one hour) or 1800s (after 1800 seconds).");
 
-    cob_split_args->Append(wxEmptyString);
-    cob_split_args->Append(wxT("01:00:00"));
-    cob_split_args->Append(wxT("1800s"));
+    entries.Add(wxEmptyString);
+    entries.Add(wxT("01:00:00"));
+    entries.Add(wxT("1800s"));
 
   } else if (3 == mode) {
     st_split_args->SetLabel(Z("Timecodes:"));
@@ -288,6 +284,9 @@ tab_global::translate_split_args() {
     new_tool_tip = format_tooltip(wxU(join(" ", help)));
   }
 
+  cob_split_args->Clear();
+  cob_split_args->Append(entries);
+
   auto tool_tip = cob_split_args->GetToolTip();
   if (tool_tip)
     tool_tip->SetTip(new_tool_tip);
@@ -309,15 +308,17 @@ tab_global::translate_ui() {
                                 "after a given amount of time has passed in each file or after a list of timecodes."));
 
   auto split_mode = std::max(cob_split_mode->GetSelection(), 0);
+  auto entries    = wxArrayString{};
+  entries.Add(Z("no splitting"));
+  entries.Add(Z("split after size"));
+  entries.Add(Z("split after duration"));
+  entries.Add(Z("split after timecodes"));
+  entries.Add(Z("split by parts based on timecodes"));
+  entries.Add(Z("split by parts based on frame/field numbers"));
+  entries.Add(Z("split after frame/field numbers"));
+  entries.Add(Z("split before chapters"));
   cob_split_mode->Clear();
-  cob_split_mode->Append(Z("no splitting"));
-  cob_split_mode->Append(Z("split after size"));
-  cob_split_mode->Append(Z("split after duration"));
-  cob_split_mode->Append(Z("split after timecodes"));
-  cob_split_mode->Append(Z("split by parts based on timecodes"));
-  cob_split_mode->Append(Z("split by parts based on frame/field numbers"));
-  cob_split_mode->Append(Z("split after frame/field numbers"));
-  cob_split_mode->Append(Z("split before chapters"));
+  cob_split_mode->Append(entries);
   cob_split_mode->SetSelection(split_mode);
 
   cb_link->SetLabel(Z("link files"));

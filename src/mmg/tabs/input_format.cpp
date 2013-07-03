@@ -38,7 +38,6 @@ tab_input_format::tab_input_format(wxWindow *parent,
 
   wxFlexGridSizer *siz_fg;
   wxBoxSizer *siz_all, *siz_line;
-  int i;
 
   siz_all = new wxBoxSizer(wxVERTICAL);
   siz_all->AddSpacer(TOPBOTTOMSPACING);
@@ -52,10 +51,7 @@ tab_input_format::tab_input_format(wxWindow *parent,
   siz_fg->Add(rb_aspect_ratio, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
   cob_aspect_ratio = new wxMTX_COMBOBOX_TYPE(this, ID_CB_ASPECTRATIO, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_DROPDOWN);
-
-  for (i = 0; predefined_aspect_ratios[i]; ++i)
-    cob_aspect_ratio->Append(predefined_aspect_ratios[i]);
-
+  cob_aspect_ratio->Append(wxArrayString{8, predefined_aspect_ratios});
   cob_aspect_ratio->SetSizeHints(0, -1);
   siz_fg->Add(cob_aspect_ratio, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
@@ -163,38 +159,48 @@ void
 tab_input_format::setup_control_contents() {
   size_t i;
   int selection;
-  if (0 == cob_fourcc->GetCount())
-    for (i = 0; predefined_fourccs[i]; ++i)
-      cob_fourcc->Append(predefined_fourccs[i]);
+  if (!cob_fourcc->GetCount())
+    cob_fourcc->Append(wxArrayString{6, predefined_fourccs});
 
-  unsigned int num_stereo_modes = stereo_mode_c::max_index() + 1;
-  if (0 == cob_stereo_mode->GetCount())
+  auto num_stereo_modes = stereo_mode_c::max_index() + 1;
+  if (!cob_stereo_mode->GetCount()) {
+    auto entries = wxArrayString{};
+    entries.Alloc(num_stereo_modes);
     for (i = 0; num_stereo_modes >= i; ++i)
-      cob_stereo_mode->Append(wxEmptyString);
+      entries.Add(wxEmptyString);
+    cob_stereo_mode->Append(entries);
+  }
 
   selection = cob_stereo_mode->GetSelection();
   for (i = 0; num_stereo_modes > i; ++i)
     cob_stereo_mode->SetString(i + 1, wxString::Format(wxT("%s (%u; %s)"), wxU(stereo_mode_c::translate(i)).c_str(), static_cast<unsigned int>(i), wxU(stereo_mode_c::s_modes[i]).c_str()));
   cob_stereo_mode->SetSelection(selection);
 
-  if (0 == cob_fps->GetCount()) {
-    cob_fps->Append(wxEmptyString);
-    cob_fps->Append(wxT("24p"));
-    cob_fps->Append(wxT("25p"));
-    cob_fps->Append(wxT("30p"));
-    cob_fps->Append(wxT("50i"));
-    cob_fps->Append(wxT("50p"));
-    cob_fps->Append(wxT("60i"));
-    cob_fps->Append(wxT("60p"));
-    cob_fps->Append(wxT("24000/1001p"));
-    cob_fps->Append(wxT("30000/1001p"));
-    cob_fps->Append(wxT("60000/1001i"));
-    cob_fps->Append(wxT("60000/1001p"));
+  if (!cob_fps->GetCount()) {
+    auto entries = wxArrayString{};
+    entries.Alloc(12);
+    entries.Add(wxEmptyString);
+    entries.Add(wxT("24p"));
+    entries.Add(wxT("25p"));
+    entries.Add(wxT("30p"));
+    entries.Add(wxT("50i"));
+    entries.Add(wxT("50p"));
+    entries.Add(wxT("60i"));
+    entries.Add(wxT("60p"));
+    entries.Add(wxT("24000/1001p"));
+    entries.Add(wxT("30000/1001p"));
+    entries.Add(wxT("60000/1001i"));
+    entries.Add(wxT("60000/1001p"));
+    cob_fps->Append(entries);
   }
 
-  if (0 == cob_nalu_size_length->GetCount())
+  if (0 == cob_nalu_size_length->GetCount()) {
+    auto entries = wxArrayString{};
+    entries.Alloc(3);
     for (i = 0; 3 > i; ++i)
-      cob_nalu_size_length->Append(wxEmptyString);
+      entries.Add(wxEmptyString);
+    cob_nalu_size_length->Append(entries);
+  }
 
   selection = cob_nalu_size_length->GetSelection();
   cob_nalu_size_length->SetString(0, Z("Default"));
@@ -202,14 +208,13 @@ tab_input_format::setup_control_contents() {
   cob_nalu_size_length->SetString(2, Z("4 bytes"));
   cob_nalu_size_length->SetSelection(selection);
 
-  if (0 == sorted_charsets.Count())
-    for (auto &sub_charset : sub_charsets)
+  if (!sorted_charsets.Count())
+    for (auto const &sub_charset : sub_charsets)
       sorted_charsets.Add(wxU(sub_charset));
 
   if (0 == cob_sub_charset->GetCount()) {
     cob_sub_charset->Append(wxEmptyString);
-    for (i = 0; sorted_charsets.Count() > i; ++i)
-      cob_sub_charset->Append(sorted_charsets[i]);
+    cob_sub_charset->Append(sorted_charsets);
   }
 
   cob_sub_charset_translations.clear();

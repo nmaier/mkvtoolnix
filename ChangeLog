@@ -1,3 +1,10 @@
+2013-07-03  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mmg: bug fix: Fixed overly long startup time with wxWidgets
+        2.9.x (especially on Windows) by using alternative methods for
+        initializing certain controls. Makes startup time on par with
+        wxWidgets 2.8. See #893.
+
 2013-07-02  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvinfo: new feature: Added support for the new Matroska
