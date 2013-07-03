@@ -1961,12 +1961,47 @@ kax_reader_c::process_simple_block(KaxCluster *cluster,
 void
 kax_reader_c::process_block_group(KaxCluster *cluster,
                                   KaxBlockGroup *block_group) {
-  int64_t block_duration       = -1;
-  int64_t block_bref           = VFT_IFRAME;
-  int64_t block_fref           = VFT_NOBFRAME;
-  bool bref_found              = false;
-  bool fref_found              = false;
-  KaxReferenceBlock *ref_block = static_cast<KaxReferenceBlock *>(block_group->FindFirstElt(EBML_INFO(KaxReferenceBlock), false));
+  auto block = FindChild<KaxBlock>(block_group);
+  if (!block) {
+    mxwarn_fn(m_ti.m_fname,
+              boost::format(Y("A block group was found at position %1%, but no block element was found inside it. This might make mkvmerge crash.\n"))
+              % block_group->GetElementPosition());
+    return;
+  }
+
+  block->SetParent(*cluster);
+  auto block_track = find_track_by_num(block->TrackNum());
+
+  if (!block_track) {
+    mxwarn_fn(m_ti.m_fname,
+              boost::format(Y("A block was found at timestamp %1% for track number %2%. However, no headers where found for that track number. "
+                              "The block will be skipped.\n")) % format_timecode(block->GlobalTimecode()) % block->TrackNum());
+    return;
+  }
+
+  auto duration       = FindChild<KaxBlockDuration>(block_group);
+  auto block_duration = duration             ? static_cast<int64_t>(duration->GetValue() * m_tc_scale / block->NumberFrames())
+                      : block_track->v_frate ? static_cast<int64_t>(1000000000.0 / block_track->v_frate)
+                      :                        int64_t{-1};
+  auto frame_duration = -1 == block_duration ? int64_t{0} : block_duration;
+  m_last_timecode     = block->GlobalTimecode();
+
+  if (0 < block->NumberFrames())
+    m_in_file->set_last_timecode(m_last_timecode + (block->NumberFrames() - 1) * frame_duration);
+
+  // If we're appending this file to another one then the core
+  // needs the timecodes shifted to zero.
+  if (m_appending)
+    m_last_timecode -= m_first_timecode;
+
+  if (-1 == block_track->ptzr)
+    return;
+
+  auto block_bref = int64_t{VFT_IFRAME};
+  auto block_fref = int64_t{VFT_NOBFRAME};
+  bool bref_found = false;
+  bool fref_found = false;
+  auto ref_block  = FindChild<KaxReferenceBlock>(block_group);
 
   while (ref_block) {
     if (0 >= ref_block->GetValue()) {
@@ -1977,35 +2012,8 @@ kax_reader_c::process_block_group(KaxCluster *cluster,
       fref_found = true;
     }
 
-    ref_block = static_cast<KaxReferenceBlock *>(block_group->FindNextElt(*ref_block, false));
+    ref_block = FindNextChild<KaxReferenceBlock>(block_group, ref_block);
   }
-
-  KaxBlock *block = static_cast<KaxBlock *>(block_group->FindFirstElt(EBML_INFO(KaxBlock), false));
-  if (!block) {
-    mxwarn_fn(m_ti.m_fname,
-              boost::format(Y("A block group was found at position %1%, but no block element was found inside it. This might make mkvmerge crash.\n"))
-              % block_group->GetElementPosition());
-    return;
-  }
-
-  block->SetParent(*cluster);
-  kax_track_t *block_track = find_track_by_num(block->TrackNum());
-
-  if (!block_track) {
-    mxwarn_fn(m_ti.m_fname,
-              boost::format(Y("A block was found at timestamp %1% for track number %2%. However, no headers where found for that track number. "
-                              "The block will be skipped.\n")) % format_timecode(block->GlobalTimecode()) % block->TrackNum());
-    return;
-  }
-
-  KaxBlockAdditions *blockadd = static_cast<KaxBlockAdditions *>(block_group->FindFirstElt(EBML_INFO(KaxBlockAdditions), false));
-  KaxBlockDuration *duration  = static_cast<KaxBlockDuration *>(block_group->FindFirstElt(EBML_INFO(KaxBlockDuration), false));
-
-  if (duration)
-    block_duration = duration->GetValue() * m_tc_scale / block->NumberFrames();
-  else if (0 != block_track->v_frate)
-    block_duration = 1000000000.0 / block_track->v_frate;
-  int64_t frame_duration = (block_duration == -1) ? 0 : block_duration;
 
   if (('s' == block_track->type) && (-1 == block_duration))
     block_duration = 0;
@@ -2016,18 +2024,9 @@ kax_reader_c::process_block_group(KaxCluster *cluster,
       block_duration = 0;
   }
 
-  m_last_timecode = block->GlobalTimecode();
-  if (0 < block->NumberFrames())
-    m_in_file->set_last_timecode(m_last_timecode + (block->NumberFrames() - 1) * frame_duration);
+  auto codec_state = FindChild<KaxCodecState>(block_group);
 
-  // If we're appending this file to another one then the core
-  // needs the timecodes shifted to zero.
-  if (m_appending)
-    m_last_timecode -= m_first_timecode;
-
-  KaxCodecState *codec_state = static_cast<KaxCodecState *>(block_group->FindFirstElt(EBML_INFO(KaxCodecState)));
-
-  if ((-1 != block_track->ptzr) && block_track->passthrough) {
+  if (block_track->passthrough) {
     // The handling for passthrough is a bit different. We don't have
     // any special cases, e.g. 0 terminating a string for the subs
     // and stuff. Just pass everything through as it is.
@@ -2038,11 +2037,11 @@ kax_reader_c::process_block_group(KaxCluster *cluster,
 
     size_t i;
     for (i = 0; i < block->NumberFrames(); i++) {
-      DataBuffer &data_buffer = block->GetBuffer(i);
-      memory_cptr data(new memory_c(data_buffer.Buffer(), data_buffer.Size(), false));
+      auto &data_buffer = block->GetBuffer(i);
+      auto data         = std::make_shared<memory_c>(data_buffer.Buffer(), data_buffer.Size(), false);
       block_track->content_decoder.reverse(data, CONTENT_ENCODING_SCOPE_BLOCK);
 
-      packet_cptr packet(new packet_t(data, m_last_timecode + i * frame_duration, block_duration, block_bref, block_fref));
+      auto packet                = std::make_shared<packet_t>(data, m_last_timecode + i * frame_duration, block_duration, block_bref, block_fref);
       packet->duration_mandatory = duration;
 
       if (codec_state)
@@ -2051,67 +2050,66 @@ kax_reader_c::process_block_group(KaxCluster *cluster,
       static_cast<passthrough_packetizer_c *>(PTZR(block_track->ptzr))->process(packet);
     }
 
-  } else if (-1 != block_track->ptzr) {
-    if (bref_found) {
-      if (FOURCC('r', 'e', 'a', 'l') == block_track->a_formattag)
-        block_bref = block_track->previous_timecode;
-      else
-        block_bref += m_last_timecode;
-    }
-    if (fref_found)
-      block_fref += m_last_timecode;
+    return;
+  }
 
-    size_t i;
-    for (i = 0; i < block->NumberFrames(); i++) {
-      DataBuffer &data_buffer = block->GetBuffer(i);
-      memory_cptr data(new memory_c(data_buffer.Buffer(), data_buffer.Size(), false));
-      block_track->content_decoder.reverse(data, CONTENT_ENCODING_SCOPE_BLOCK);
+  if (bref_found) {
+    if (FOURCC('r', 'e', 'a', 'l') == block_track->a_formattag)
+      block_bref = block_track->previous_timecode;
+    else
+      block_bref += m_last_timecode;
+  }
+  if (fref_found)
+    block_fref += m_last_timecode;
 
-      if (('s' == block_track->type) && ('t' == block_track->sub_type)) {
-        if ((2 < data->get_size()) || ((0 < data->get_size()) && (' ' != *data->get_buffer()) && (0 != *data->get_buffer()) && !iscr(*data->get_buffer()))) {
-          memory_cptr mem(data->clone());
-          mem->resize(mem->get_size() + 1);
-          mem->get_buffer()[ mem->get_size() - 1 ] = 0;
+  for (auto block_idx = 0u, num_frames = block->NumberFrames(); block_idx < num_frames; ++block_idx) {
+    auto &data_buffer = block->GetBuffer(block_idx);
+    auto data         = std::make_shared<memory_c>(data_buffer.Buffer(), data_buffer.Size(), false);
+    block_track->content_decoder.reverse(data, CONTENT_ENCODING_SCOPE_BLOCK);
 
-          packet_cptr packet(new packet_t(mem, m_last_timecode, block_duration, block_bref, block_fref));
-          if (codec_state)
-            packet->codec_state = memory_c::clone(codec_state->GetBuffer(), codec_state->GetSize());
+    if (('s' == block_track->type) && ('t' == block_track->sub_type)) {
+      if ((2 < data->get_size()) || ((0 < data->get_size()) && (' ' != *data->get_buffer()) && (0 != *data->get_buffer()) && !iscr(*data->get_buffer()))) {
+        auto mem = data->clone();
+        mem->resize(mem->get_size() + 1);
+        mem->get_buffer()[ mem->get_size() - 1 ] = 0;
 
-          PTZR(block_track->ptzr)->process(packet);
-        }
-
-      } else {
-        packet_cptr packet(new packet_t(data, m_last_timecode + i * frame_duration, block_duration, block_bref, block_fref));
-
-        if ((duration) && (0 == duration->GetValue()))
-          packet->duration_mandatory = true;
-
+        auto packet = std::make_shared<packet_t>(mem, m_last_timecode, block_duration, block_bref, block_fref);
         if (codec_state)
           packet->codec_state = memory_c::clone(codec_state->GetBuffer(), codec_state->GetSize());
 
-        if (blockadd) {
-          size_t k;
-          for (k = 0; k < blockadd->ListSize(); k++) {
-            if (!(is_id((*blockadd)[k], KaxBlockMore)))
-              continue;
-
-            KaxBlockMore *blockmore           = static_cast<KaxBlockMore *>((*blockadd)[k]);
-            KaxBlockAdditional *blockadd_data = &GetChild<KaxBlockAdditional>(*blockmore);
-
-            memory_cptr blockadded(new memory_c(blockadd_data->GetBuffer(), blockadd_data->GetSize(), false));
-            block_track->content_decoder.reverse(blockadded, CONTENT_ENCODING_SCOPE_BLOCK);
-
-            packet->data_adds.push_back(blockadded);
-          }
-        }
-
         PTZR(block_track->ptzr)->process(packet);
       }
-    }
 
-    block_track->previous_timecode  = m_last_timecode;
-    block_track->units_processed   += block->NumberFrames();
+    } else {
+      auto packet = std::make_shared<packet_t>(data, m_last_timecode + block_idx * frame_duration, block_duration, block_bref, block_fref);
+
+      if ((duration) && !duration->GetValue())
+        packet->duration_mandatory = true;
+
+      if (codec_state)
+        packet->codec_state = memory_c::clone(codec_state->GetBuffer(), codec_state->GetSize());
+
+      auto blockadd = FindChild<KaxBlockAdditions>(block_group);
+      if (blockadd) {
+        for (auto &child : *blockadd) {
+          if (!(is_id(child, KaxBlockMore)))
+            continue;
+
+          auto blockmore     = static_cast<KaxBlockMore *>(child);
+          auto blockadd_data = &GetChild<KaxBlockAdditional>(*blockmore);
+          auto blockadded    = std::make_shared<memory_c>(blockadd_data->GetBuffer(), blockadd_data->GetSize(), false);
+          block_track->content_decoder.reverse(blockadded, CONTENT_ENCODING_SCOPE_BLOCK);
+
+          packet->data_adds.push_back(blockadded);
+        }
+      }
+
+      PTZR(block_track->ptzr)->process(packet);
+    }
   }
+
+  block_track->previous_timecode  = m_last_timecode;
+  block_track->units_processed   += block->NumberFrames();
 }
 
 int
