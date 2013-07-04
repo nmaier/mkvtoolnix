@@ -58,7 +58,7 @@ window_geometry_saver_c::restore() {
   cfg->SetPath(get_config_group());
 
   // Position
-  if (cfg->Read(wxT("x"), &x, 0) && cfg->Read(wxT("y"), &y, 0))
+  if (cfg->Read(wxT("x"), &x, 0) && cfg->Read(wxT("y"), &y, 0) && (0 <= x) && (0 <= y))
     valid = true;
 
   else if (m_x && m_y) {
@@ -104,10 +104,16 @@ window_geometry_saver_c::save()
   auto cfg  = wxConfigBase::Get();
 
   cfg->SetPath(get_config_group());
-  cfg->Write(wxT("x"),      rect.GetX());
-  cfg->Write(wxT("y"),      rect.GetY());
-  cfg->Write(wxT("width"),  rect.GetWidth());
-  cfg->Write(wxT("height"), rect.GetHeight());
+
+  if ((rect.GetX() >= 0) && (rect.GetY() >= 0)) {
+    cfg->Write(wxT("x"), rect.GetX());
+    cfg->Write(wxT("y"), rect.GetY());
+  }
+
+  if ((rect.GetWidth() > 0) && (rect.GetHeight() > 0)) {
+    cfg->Write(wxT("width"),  rect.GetWidth());
+    cfg->Write(wxT("height"), rect.GetHeight());
+  }
 }
 
 wxString

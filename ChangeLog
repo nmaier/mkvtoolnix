@@ -1,3 +1,8 @@
+2013-07-04  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mmg: bug fix: Closing mmg's window while it was minimized caused
+        mmg to appear hidden and unmovable when started the next time.
+
 2013-07-03  Moritz Bunkus  <moritz@bunkus.org>
 
         * mmg: bug fix: Fixed overly long startup time with wxWidgets
