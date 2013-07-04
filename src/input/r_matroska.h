@@ -46,6 +46,7 @@ struct kax_track_t {
   uint32_t min_cache, max_cache, max_blockadd_id;
   bool lacing_flag;
   uint64_t default_duration;
+  timecode_c seek_pre_roll;
 
   // Parameters for video tracks
   uint64_t v_width, v_height, v_dwidth, v_dheight;

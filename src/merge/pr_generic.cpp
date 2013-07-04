@@ -405,6 +405,13 @@ generic_packetizer_c::set_track_enabled_flag(bool enabled_track) {
 }
 
 void
+generic_packetizer_c::set_track_seek_pre_roll(timecode_c const &seek_pre_roll) {
+  m_seek_pre_roll = seek_pre_roll;
+  if (m_track_entry)
+    GetChild<KaxSeekPreRoll>(m_track_entry).SetValue(seek_pre_roll.to_ns());
+}
+
+void
 generic_packetizer_c::set_audio_sampling_freq(float freq) {
   m_haudio_sampling_freq = freq;
   if (m_track_entry)
@@ -652,6 +659,9 @@ generic_packetizer_c::set_headers() {
 
   if (!boost::logic::indeterminate(m_ti.m_enabled_track))
     GetChild<KaxTrackFlagEnabled>(m_track_entry).SetValue(m_ti.m_enabled_track ? 1 : 0);
+
+  if (m_seek_pre_roll.valid())
+    GetChild<KaxSeekPreRoll>(m_track_entry).SetValue(m_seek_pre_roll.to_ns());
 
   if (track_video == m_htrack_type) {
     KaxTrackVideo &video = GetChild<KaxTrackVideo>(m_track_entry);
