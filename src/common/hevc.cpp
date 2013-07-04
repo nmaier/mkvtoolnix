@@ -264,7 +264,7 @@ par_extraction_t::is_valid()
 static int
 gecopy(bit_reader_c &r,
        bit_writer_c &w) {
-  int	n = 0, bit;
+  int n = 0, bit;
 
   while ((bit = r.get_bit()) == 0) {
     w.put_bit(0);
@@ -280,7 +280,7 @@ gecopy(bit_reader_c &r,
 
 static int
 geread(bit_reader_c &r) {
-  int	n = 0, bit;
+  int n = 0, bit;
 
   while ((bit = r.get_bit()) == 0)
     ++n;
@@ -572,17 +572,17 @@ vui_parameters_copy(bit_reader_c &r,
     if (HEVC_EXTENDED_SAR == ar_type) {
       sps.par_num = r.get_bits(16); // sar_width
       sps.par_den = r.get_bits(16); // sar_height
-
-      if (keep_ar_info) {
-        w.put_bits(16, sps.par_num);
-        w.put_bits(16, sps.par_den);
-      }
     } else if (HEVC_NUM_PREDEFINED_PARS >= ar_type) {
       sps.par_num = hevc::s_predefined_pars[ar_type].numerator;
       sps.par_den = hevc::s_predefined_pars[ar_type].denominator;
-    } else
-      sps.ar_found = false;
-  }
+    }
+
+    if (keep_ar_info) {
+      w.put_bits(16, sps.par_num);
+      w.put_bits(16, sps.par_den);
+    }
+  } else
+    sps.ar_found = false;
 
   // copy the rest
   if (w.copy_bits(1, r) == 1)   // overscan_info_present_flag
