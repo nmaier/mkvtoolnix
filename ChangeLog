@@ -1,5 +1,10 @@
 2013-07-04  Moritz Bunkus  <moritz@bunkus.org>
 
+        * mmg: bug fix: The "jobs" folder will be created in the same
+        mmg.exe is located in for the portable version. The installed
+        version will still keep the folder where has already been
+        (%APP_DATA%\mkvtoolnix\jobs).
+
         * mmg: bug fix: Closing mmg's window while it was minimized caused
         mmg to appear hidden and unmovable when started the next time.
 

@@ -77,6 +77,14 @@ mmg_track_t::is_webm_compatible() {
   return (is_audio() || is_video()) && re_valid_webm_codecs.Matches(ctype);
 }
 
+mmg_app::mmg_app() {
+#if defined(SYS_WINDOWS)
+  wxString dummy;
+  wxRegKey key(wxU("HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\mmg.exe"));
+  m_is_installed = key.Exists() && key.QueryValue(wxU(""), dummy) && !dummy.IsEmpty();
+#endif
+}
+
 void
 mmg_app::init_ui_locale() {
   std::string locale;
@@ -140,7 +148,11 @@ mmg_app::get_config_file_name()
 wxString
 mmg_app::get_jobs_folder()
   const {
+#if defined(SYS_WINDOWS)
+  return (m_is_installed ? wxU(get_application_data_folder()) : wxU(get_installation_path())) + wxT("\\jobs");
+#else
   return wxU(get_application_data_folder()) + wxT("/jobs");
+#endif
 }
 
 void
@@ -170,9 +182,7 @@ mmg_app::init_config_base()
   auto cfg = static_cast<wxConfigBase *>(nullptr);
 
 #if defined(SYS_WINDOWS)
-  wxString dummy;
-  wxRegKey key(wxU("HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\mmg.exe"));
-  if (key.Exists() && key.QueryValue(wxU(""), dummy) && !dummy.IsEmpty())
+  if (m_is_installed)
     cfg = new wxConfig{wxT("mkvmergeGUI")};
 #endif
 

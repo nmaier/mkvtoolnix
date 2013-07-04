@@ -317,7 +317,14 @@ void wxdie(const wxString &errmsg);
 wxString format_tooltip(const wxString &s);
 
 class mmg_app: public wxApp {
+protected:
+#if defined(SYS_WINDOWS)
+  bool m_is_installed;
+#endif
+
 public:
+  mmg_app();
+
   std::string m_ui_locale;
   wxLocale m_locale;
 public:
