@@ -388,7 +388,7 @@ cluster_helper_c::render() {
     kax_block_blob_c *previous_block_group = !render_group->m_groups.empty() ? render_group->m_groups.back().get() : nullptr;
     kax_block_blob_c *new_block_group      = previous_block_group;
 
-    if (!pack->is_key_frame() || has_codec_state)
+    if (!pack->is_key_frame() || has_codec_state || pack->has_discard_padding())
       render_group->m_more_data = false;
 
     if (!render_group->m_more_data) {
@@ -400,10 +400,9 @@ cluster_helper_c::render() {
         = !use_simpleblock                         ? BLOCK_BLOB_NO_SIMPLE
         : must_duration_be_set(render_group, pack) ? BLOCK_BLOB_NO_SIMPLE
         : !pack->data_adds.empty()                 ? BLOCK_BLOB_NO_SIMPLE
+        : has_codec_state                          ? BLOCK_BLOB_NO_SIMPLE
+        : pack->has_discard_padding()              ? BLOCK_BLOB_NO_SIMPLE
         :                                            BLOCK_BLOB_ALWAYS_SIMPLE;
-
-      if (has_codec_state)
-        this_block_blob_type = BLOCK_BLOB_NO_SIMPLE;
 
       render_group->m_groups.push_back(kax_block_blob_cptr(new kax_block_blob_c(this_block_blob_type)));
       new_block_group = render_group->m_groups.back().get();
@@ -457,6 +456,9 @@ cluster_helper_c::render() {
           GetChild<KaxBlockAdditional>(block_more).CopyBuffer((binary *)pack->data_adds[data_add_idx]->get_buffer(), pack->data_adds[data_add_idx]->get_size());
         }
       }
+
+      if (pack->has_discard_padding())
+        GetChild<KaxDiscardPadding>(*new_block_group).SetValue(pack->discard_padding.to_ns());
     }
 
     elements_in_cluster++;

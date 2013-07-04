@@ -276,6 +276,7 @@ protected:
 
   virtual void process_simple_block(KaxCluster *cluster, KaxSimpleBlock *block_simple);
   virtual void process_block_group(KaxCluster *cluster, KaxBlockGroup *block_group);
+  virtual void process_block_group_common(KaxBlockGroup *block_group, packet_t *packet);
 
   void init_l1_position_storage(deferred_positions_t &storage);
   virtual bool has_deferred_element_been_processed(deferred_l1_type_e type, int64_t position);

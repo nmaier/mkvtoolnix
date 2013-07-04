@@ -27,6 +27,7 @@
 
 #include "common/aac.h"
 #include "common/chapters/chapters.h"
+#include "common/debugging.h"
 #include "common/ebml.h"
 #include "common/endian.h"
 #include "common/hacks.h"
@@ -126,7 +127,10 @@ public:
 };
 
 class ogm_a_opus_demuxer_c: public ogm_demuxer_c {
-public:
+protected:
+  timecode_c m_calculated_end_timecode;
+
+  static debugging_option_c ms_debug;
 
 public:
   ogm_a_opus_demuxer_c(ogm_reader_c *p_reader);
@@ -142,6 +146,8 @@ public:
     return "Opus";
   };
 };
+
+debugging_option_c ogm_a_opus_demuxer_c::ms_debug{"opus"};
 
 class ogm_a_vorbis_demuxer_c: public ogm_demuxer_c {
 public:
@@ -1096,6 +1102,7 @@ ogm_a_vorbis_demuxer_c::process_page(int64_t /* granulepos */) {
 
 ogm_a_opus_demuxer_c::ogm_a_opus_demuxer_c(ogm_reader_c *p_reader)
   : ogm_demuxer_c(p_reader)
+  , m_calculated_end_timecode{timecode_c::ns(0)}
 {
   stype              = OGM_STREAM_TYPE_A_OPUS;
   num_header_packets = 2;
@@ -1112,8 +1119,10 @@ ogm_a_opus_demuxer_c::create_packetizer() {
 }
 
 void
-ogm_a_opus_demuxer_c::process_page(int64_t /* granulepos */) {
+ogm_a_opus_demuxer_c::process_page(int64_t granulepos) {
   ogg_packet op;
+
+  auto ogg_timecode = timecode_c::ns(granulepos * 1000000000 / 48000);
 
   while (ogg_stream_packetout(&os, &op) == 1) {
     eos |= op.e_o_s;
@@ -1121,7 +1130,18 @@ ogm_a_opus_demuxer_c::process_page(int64_t /* granulepos */) {
     if ((4 <= op.bytes) && !memcmp(op.packet, "Opus", 4))
       continue;
 
-    reader->m_reader_packetizers[ptzr]->process(new packet_t(new memory_c(op.packet, op.bytes, false)));
+    auto packet                = std::make_shared<packet_t>(memory_c::clone(op.packet, op.bytes));
+    auto toc                   = mtx::opus::toc_t::decode(packet->data);
+    m_calculated_end_timecode += toc.packet_duration;
+
+    if (m_calculated_end_timecode > ogg_timecode) {
+      packet->discard_padding = m_calculated_end_timecode - ogg_timecode;
+      mxdebug_if(ms_debug,
+                 boost::format("Opus discard padding calculated %1% Ogg timestamp %2% diff %3% samples %4%\n")
+                 % m_calculated_end_timecode % ogg_timecode % packet->discard_padding % (packet->discard_padding.to_ns() * 48000 / 1000000000));
+    }
+
+    reader->m_reader_packetizers[ptzr]->process(packet);
   }
 }
 

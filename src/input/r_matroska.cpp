@@ -1959,6 +1959,19 @@ kax_reader_c::process_simple_block(KaxCluster *cluster,
 }
 
 void
+kax_reader_c::process_block_group_common(KaxBlockGroup *block_group,
+                                         packet_t *packet) {
+  auto codec_state     = FindChild<KaxCodecState>(block_group);
+  auto discard_padding = FindChild<KaxDiscardPadding>(block_group);
+
+  if (codec_state)
+    packet->codec_state = memory_c::clone(codec_state->GetBuffer(), codec_state->GetSize());
+
+  if (discard_padding)
+    packet->discard_padding = timecode_c::ns(discard_padding->GetValue());
+}
+
+void
 kax_reader_c::process_block_group(KaxCluster *cluster,
                                   KaxBlockGroup *block_group) {
   auto block = FindChild<KaxBlock>(block_group);
@@ -2024,8 +2037,6 @@ kax_reader_c::process_block_group(KaxCluster *cluster,
       block_duration = 0;
   }
 
-  auto codec_state = FindChild<KaxCodecState>(block_group);
-
   if (block_track->passthrough) {
     // The handling for passthrough is a bit different. We don't have
     // any special cases, e.g. 0 terminating a string for the subs
@@ -2044,8 +2055,7 @@ kax_reader_c::process_block_group(KaxCluster *cluster,
       auto packet                = std::make_shared<packet_t>(data, m_last_timecode + i * frame_duration, block_duration, block_bref, block_fref);
       packet->duration_mandatory = duration;
 
-      if (codec_state)
-        packet->codec_state = memory_c::clone(codec_state->GetBuffer(), codec_state->GetSize());
+      process_block_group_common(block_group, packet.get());
 
       static_cast<passthrough_packetizer_c *>(PTZR(block_track->ptzr))->process(packet);
     }
@@ -2074,8 +2084,8 @@ kax_reader_c::process_block_group(KaxCluster *cluster,
         mem->get_buffer()[ mem->get_size() - 1 ] = 0;
 
         auto packet = std::make_shared<packet_t>(mem, m_last_timecode, block_duration, block_bref, block_fref);
-        if (codec_state)
-          packet->codec_state = memory_c::clone(codec_state->GetBuffer(), codec_state->GetSize());
+
+        process_block_group_common(block_group, packet.get());
 
         PTZR(block_track->ptzr)->process(packet);
       }
@@ -2086,8 +2096,7 @@ kax_reader_c::process_block_group(KaxCluster *cluster,
       if ((duration) && !duration->GetValue())
         packet->duration_mandatory = true;
 
-      if (codec_state)
-        packet->codec_state = memory_c::clone(codec_state->GetBuffer(), codec_state->GetSize());
+      process_block_group_common(block_group, packet.get());
 
       auto blockadd = FindChild<KaxBlockAdditions>(block_group);
       if (blockadd) {

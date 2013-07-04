@@ -16,6 +16,8 @@
 
 #include "common/common_pch.h"
 
+#include "common/timecode.h"
+
 namespace libmatroska {
   class KaxBlock;
   class KaxBlockBlob;
@@ -56,30 +58,32 @@ struct packet_t {
   int64_t timecode, bref, fref, duration, assigned_timecode;
   int64_t timecode_before_factory;
   int64_t unmodified_assigned_timecode, unmodified_duration;
+  timecode_c discard_padding;
   bool duration_mandatory, superseeded, gap_following, factory_applied;
   generic_packetizer_c *source;
 
   std::vector<packet_extension_cptr> extensions;
 
   packet_t()
-    : group(nullptr)
-    , block(nullptr)
-    , cluster(nullptr)
-    , ref_priority(0)
+    : group{}
+    , block{}
+    , cluster{}
+    , ref_priority{}
     , time_factor(1)
-    , timecode(0)
-    , bref(0)
-    , fref(0)
+    , timecode{}
+    , bref{}
+    , fref{}
     , duration(-1)
-    , assigned_timecode(0)
-    , timecode_before_factory(0)
-    , unmodified_assigned_timecode(0)
-    , unmodified_duration(0)
-    , duration_mandatory(false)
-    , superseeded(false)
-    , gap_following(false)
-    , factory_applied(false)
-    , source(nullptr)
+    , assigned_timecode{}
+    , timecode_before_factory{}
+    , unmodified_assigned_timecode{}
+    , unmodified_duration{}
+    , discard_padding{}
+    , duration_mandatory{}
+    , superseeded{}
+    , gap_following{}
+    , factory_applied{}
+    , source{}
   {
   }
 
@@ -89,24 +93,25 @@ struct packet_t {
            int64_t p_bref     = -1,
            int64_t p_fref     = -1)
     : data(p_memory)
-    , group(nullptr)
-    , block(nullptr)
-    , cluster(nullptr)
-    , ref_priority(0)
+    , group{}
+    , block{}
+    , cluster{}
+    , ref_priority{}
     , time_factor(1)
     , timecode(p_timecode)
     , bref(p_bref)
     , fref(p_fref)
     , duration(p_duration)
-    , assigned_timecode(0)
-    , timecode_before_factory(0)
-    , unmodified_assigned_timecode(0)
-    , unmodified_duration(0)
-    , duration_mandatory(false)
-    , superseeded(false)
-    , gap_following(false)
-    , factory_applied(false)
-    , source(nullptr)
+    , assigned_timecode{}
+    , timecode_before_factory{}
+    , unmodified_assigned_timecode{}
+    , unmodified_duration{}
+    , discard_padding{}
+    , duration_mandatory{}
+    , superseeded{}
+    , gap_following{}
+    , factory_applied{}
+    , source{}
   {
   }
 
@@ -116,24 +121,25 @@ struct packet_t {
            int64_t p_bref     = -1,
            int64_t p_fref     = -1)
     : data(memory_cptr(n_memory))
-    , group(nullptr)
-    , block(nullptr)
-    , cluster(nullptr)
-    , ref_priority(0)
+    , group{}
+    , block{}
+    , cluster{}
+    , ref_priority{}
     , time_factor(1)
     , timecode(p_timecode)
     , bref(p_bref)
     , fref(p_fref)
     , duration(p_duration)
-    , assigned_timecode(0)
-    , timecode_before_factory(0)
-    , unmodified_assigned_timecode(0)
-    , unmodified_duration(0)
-    , duration_mandatory(false)
-    , superseeded(false)
-    , gap_following(false)
-    , factory_applied(false)
-    , source(nullptr)
+    , assigned_timecode{}
+    , timecode_before_factory{}
+    , unmodified_assigned_timecode{}
+    , unmodified_duration{}
+    , discard_padding{}
+    , duration_mandatory{}
+    , superseeded{}
+    , gap_following{}
+    , factory_applied{}
+    , source{}
   {
   }
 
@@ -162,6 +168,12 @@ struct packet_t {
   has_duration()
     const {
     return 0 <= duration;
+  }
+
+  bool
+  has_discard_padding()
+    const {
+    return discard_padding.valid();
   }
 
   int64_t

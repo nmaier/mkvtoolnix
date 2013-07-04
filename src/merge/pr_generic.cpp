@@ -795,11 +795,8 @@ generic_packetizer_c::add_packet(packet_cptr pack) {
 
   m_enqueued_bytes += pack->data->get_size();
 
-  if ((0 > pack->bref) && (0 <= pack->fref)) {
-    int64_t tmp = pack->bref;
-    pack->bref  = pack->fref;
-    pack->fref  = tmp;
-  }
+  if ((0 > pack->bref) && (0 <= pack->fref))
+    std::swap(pack->bref, pack->fref);
 
   if (1 != m_connected_to)
     add_packet2(pack);
@@ -816,8 +813,11 @@ generic_packetizer_c::add_packet2(packet_cptr pack) {
     pack->bref     = ADJUST_TIMECODE(pack->bref);
   if (pack->has_fref())
     pack->fref     = ADJUST_TIMECODE(pack->fref);
-  if (pack->has_duration())
-    pack->duration = (int64_t)(pack->duration * m_ti.m_tcsync.numerator / m_ti.m_tcsync.denominator);
+  if (pack->has_duration()) {
+    pack->duration = static_cast<int64_t>(pack->duration * m_ti.m_tcsync.numerator / m_ti.m_tcsync.denominator);
+    if (pack->has_discard_padding())
+      pack->duration -= std::min(pack->duration, pack->discard_padding.to_ns());
+  }
 
   if ((2 > m_htrack_min_cache) && pack->has_fref()) {
     set_track_min_cache(2);
