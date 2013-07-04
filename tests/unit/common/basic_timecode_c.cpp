@@ -113,6 +113,26 @@ TEST(BasicTimecode, ThrowOnDeconstructionOfInvalid) {
   EXPECT_NO_THROW(timecode_c{}.to_ns(1));
 }
 
+TEST(BasicTimecode, ConstructFromSamples) {
+  EXPECT_EQ(timecode_c::samples(     0, 48000).to_ns(),          0);
+  EXPECT_EQ(timecode_c::samples( 19999, 48000).to_ns(),  416645833);
+  EXPECT_EQ(timecode_c::samples( 20000, 48000).to_ns(),  416666667);
+  EXPECT_EQ(timecode_c::samples( 48000, 48000).to_ns(), 1000000000);
+  EXPECT_EQ(timecode_c::samples(123456, 48000).to_ns(), 2572000000);
+
+  EXPECT_THROW(timecode_c::samples(123, 0), std::domain_error);
+}
+
+TEST(BasicTimecode, DeconstructToSamples) {
+  EXPECT_EQ(timecode_c::ns(         0).to_samples(48000),      0);
+  EXPECT_EQ(timecode_c::ns( 416645833).to_samples(48000),  19999);
+  EXPECT_EQ(timecode_c::ns( 416666667).to_samples(48000),  20000);
+  EXPECT_EQ(timecode_c::ns(1000000000).to_samples(48000),  48000);
+  EXPECT_EQ(timecode_c::ns(2572000000).to_samples(48000), 123456);
+
+  EXPECT_THROW(timecode_c::ns(123).to_samples(0), std::domain_error);
+}
+
 TEST(BasicTimecode, Resetting) {
   auto v = timecode_c::ns(1);
 

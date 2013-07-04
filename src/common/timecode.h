@@ -105,6 +105,14 @@ public:
     return m_timecode * 9 / 100000;
   }
 
+  T to_samples(T sample_rate) const {
+    if (!m_valid)
+      throw std::domain_error{"invalid timecode"};
+    if (!sample_rate)
+      throw std::domain_error{"invalid sample rate"};
+    return (m_timecode * sample_rate / 100000000 + 5) / 10;
+  }
+
   // arithmetic
   basic_timecode_c<T> operator +=(basic_timecode_c<T> const &other) {
     if (!m_valid || !other.m_valid)
@@ -185,6 +193,12 @@ public:
 
   static basic_timecode_c<T> factor(T value) {
     return basic_timecode_c<T>{value};
+  }
+
+  static basic_timecode_c<T> samples(T samples, T sample_rate) {
+    if (!sample_rate)
+      throw std::domain_error{"invalid sample rate"};
+    return basic_timecode_c<T>{(samples * 10000000000 / sample_rate + 5) / 10};
   }
 };
 
