@@ -33,6 +33,7 @@ require_relative "rake.d/extensions"
 
 $build_system_modules = {}
 $have_gtest           = Dir.exists? 'lib/gtest'
+$gtest_apps           = []
 
 require_relative "rake.d/config"
 require_relative "rake.d/helpers"
@@ -544,12 +545,8 @@ task :clean do
     po/*.mo doc/guide/**/*.hhk
   }
   patterns += $applications + $tools.collect { |name| "src/tools/#{name}" }
-  verbose   = ENV['V'].to_bool
 
-  patterns.collect { |pattern| FileList[pattern].to_a }.flatten.uniq.select { |file_name| File.exists? file_name }.each do |file_name|
-    puts "      rm #{file_name}" if verbose
-    File.unlink file_name
-  end
+  remove_files_by_patters patterns
 
   if Dir.exists? $dependency_dir
     puts "  rm -rf #{$dependency_dir}" if verbose
@@ -584,6 +581,13 @@ namespace :clean do
     task name do
       run "rm -f doc/man/*.html doc/man/*/*.html"
     end
+  end
+
+  desc "Remove compiled objects and programs in the unit test suite"
+  task :unittests do
+    patterns  = %w{tests/unit/*.o tests/unit/*/*.o tests/unit/*.a tests/unit/*/*.a}
+    patterns += $gtest_apps.collect { |app| "tests/unit/#{app}/#{app}" }
+    remove_files_by_patters patterns
   end
 end
 

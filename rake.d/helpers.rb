@@ -180,3 +180,12 @@ def adjust_to_poedit_style(in_name, out_name)
 
   File.unlink in_name
 end
+
+def remove_files_by_patters patterns
+  verbose = ENV['V'].to_bool
+
+  patterns.collect { |pattern| FileList[pattern].to_a }.flatten.uniq.select { |file_name| File.exists? file_name }.each do |file_name|
+    puts "      rm #{file_name}" if verbose
+    File.unlink file_name
+  end
+end

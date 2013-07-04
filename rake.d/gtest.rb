@@ -1,14 +1,14 @@
 #!/usr/bin/env ruby
 
-gtest_apps = %w{common propedit}
+$gtest_apps = %w{common propedit}
 
 namespace :tests do
   desc "Build the unit tests"
-  task :unit => gtest_apps.collect { |app| "tests/unit/#{app}/#{app}" }
+  task :unit => $gtest_apps.collect { |app| "tests/unit/#{app}/#{app}" }
 
   desc "Build and run the unit tests"
   task :run_unit => 'tests:unit' do
-    gtest_apps.each { |app| run "./tests/unit/#{app}/#{app}" }
+    $gtest_apps.each { |app| run "./tests/unit/#{app}/#{app}" }
   end
 end
 
@@ -37,7 +37,7 @@ $build_system_modules[:gtest] = {
       sources('tests/unit', :type => :dir).
       create
 
-    gtest_apps.each do |app|
+    $gtest_apps.each do |app|
       Application.
         new("tests/unit/#{app}/#{app}").
         description("Build the unit tests executable for '#{app}'").
