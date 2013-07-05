@@ -203,6 +203,7 @@ kax_reader_c::kax_reader_c(const track_info_c &ti,
   , m_writing_app_ver(-1)
   , m_attachment_id(0)
   , m_file_status(FILE_STATUS_MOREDATA)
+  , m_opus_experimental_warning_shown{}
 {
   init_l1_position_storage(m_deferred_l1_positions);
   init_l1_position_storage(m_handled_l1_positions);
@@ -1505,6 +1506,15 @@ kax_reader_c::create_opus_audio_packetizer(kax_track_t *t,
                                            track_info_c &nti) {
   set_track_packetizer(t, new opus_packetizer_c(this, nti));
   show_packetizer_info(t->tnum, t->ptzr_ptr);
+
+  if (!m_opus_experimental_warning_shown && (t->codec_id == std::string{MKV_A_OPUS} + "/EXPERIMENTAL")) {
+    mxwarn(boost::format(Y("'%1%': You're re-muxing an Opus track that was muxed in experimental mode. "
+                           "The resulting track will be written in final mode, but one detail cannot be recovered from a track muxed in experimental mode: the end trimming. "
+                           "This means that a decoder might output a few samples more than originally intended. "
+                           "You should re-mux from the original Opus file if possible.\n"))
+           % m_ti.m_fname);
+    m_opus_experimental_warning_shown = true;
+  }
 }
 
 void

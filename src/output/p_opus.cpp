@@ -29,8 +29,6 @@ opus_packetizer_c::opus_packetizer_c(generic_reader_c *reader,
 {
   mxdebug_if(m_debug, boost::format("ID header: %1%\n") % m_id_header);
 
-  show_experimental_status_version(MKV_A_OPUS);
-
   set_track_type(track_audio);
   set_codec_private(m_ti.m_private_data);
 }
@@ -40,7 +38,7 @@ opus_packetizer_c::~opus_packetizer_c() {
 
 void
 opus_packetizer_c::set_headers() {
-  set_codec_id((boost::format("%1%/EXPERIMENTAL") % MKV_A_OPUS).str());
+  set_codec_id((boost::format("%1%") % MKV_A_OPUS).str());
 
   set_track_seek_pre_roll(timecode_c::samples(m_id_header.pre_skip, 48000));
   set_codec_delay(timecode_c::ms(80));

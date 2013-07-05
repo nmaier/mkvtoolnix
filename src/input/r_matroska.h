@@ -193,6 +193,8 @@ private:
 
   file_status_e m_file_status;
 
+  bool m_opus_experimental_warning_shown;
+
 public:
   kax_reader_c(const track_info_c &ti, const mm_io_cptr &in);
   virtual ~kax_reader_c();
