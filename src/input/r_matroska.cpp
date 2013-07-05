@@ -1001,9 +1001,13 @@ kax_reader_c::read_headers_tracks(mm_io_c *io,
     track->max_cache        = FindChildValue<KaxTrackMaxCache>(ktentry);
     track->v_bframes        = 1 < track->min_cache;
 
-    auto kax_seek_pre_roll = FindChild<KaxSeekPreRoll>(ktentry);
+    auto kax_seek_pre_roll  = FindChild<KaxSeekPreRoll>(ktentry);
+    auto kax_codec_delay    = FindChild<KaxCodecDelay>(ktentry);
+
     if (kax_seek_pre_roll)
       track->seek_pre_roll = timecode_c::ns(kax_seek_pre_roll->GetValue());
+    if (kax_codec_delay)
+      track->codec_delay   = timecode_c::ns(kax_codec_delay->GetValue());
 
     if (track->codec_id.empty())
       mxerror(Y("matroska_reader: The CodecID is missing.\n"));
@@ -1275,6 +1279,8 @@ kax_reader_c::init_passthrough_packetizer(kax_track_t *t) {
     ptzr->set_track_max_cache(t->max_cache);
   if (t->seek_pre_roll.valid())
     ptzr->set_track_seek_pre_roll(t->seek_pre_roll);
+  if (t->codec_delay.valid())
+    ptzr->set_codec_delay(t->codec_delay);
 
   if ('v' == t->type) {
     ptzr->set_video_pixel_width(t->v_width);

@@ -454,7 +454,7 @@ protected:
   bool m_default_track_warning_printed;
   uint64_t m_huid;
   int m_htrack_max_add_block_ids;
-  timecode_c m_seek_pre_roll;
+  timecode_c m_seek_pre_roll, m_codec_delay;
 
   std::string m_hcodec_id;
   memory_cptr m_hcodec_private;
@@ -563,6 +563,10 @@ public:
     return m_seek_pre_roll;
   }
 
+  virtual timecode_c const &get_codec_delay() const {
+    return m_codec_delay;
+  }
+
   virtual void set_language(const std::string &language);
 
   virtual void set_codec_id(const std::string &id);
@@ -576,6 +580,7 @@ public:
   virtual void set_track_forced_flag(bool forced_track);
   virtual void set_track_enabled_flag(bool enabled_track);
   virtual void set_track_seek_pre_roll(timecode_c const &seek_pre_roll);
+  virtual void set_codec_delay(timecode_c const &codec_delay);
 
   virtual void set_audio_sampling_freq(float freq);
   virtual float get_audio_sampling_freq() const {

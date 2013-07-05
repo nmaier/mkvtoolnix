@@ -412,6 +412,13 @@ generic_packetizer_c::set_track_seek_pre_roll(timecode_c const &seek_pre_roll) {
 }
 
 void
+generic_packetizer_c::set_codec_delay(timecode_c const &codec_delay) {
+  m_codec_delay = codec_delay;
+  if (m_track_entry)
+    GetChild<KaxCodecDelay>(m_track_entry).SetValue(codec_delay.to_ns());
+}
+
+void
 generic_packetizer_c::set_audio_sampling_freq(float freq) {
   m_haudio_sampling_freq = freq;
   if (m_track_entry)
@@ -662,6 +669,9 @@ generic_packetizer_c::set_headers() {
 
   if (m_seek_pre_roll.valid())
     GetChild<KaxSeekPreRoll>(m_track_entry).SetValue(m_seek_pre_roll.to_ns());
+
+  if (m_codec_delay.valid())
+    GetChild<KaxCodecDelay>(m_track_entry).SetValue(m_codec_delay.to_ns());
 
   if (track_video == m_htrack_type) {
     KaxTrackVideo &video = GetChild<KaxTrackVideo>(m_track_entry);
