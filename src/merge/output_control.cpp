@@ -2174,7 +2174,7 @@ select_winning_packetizer() {
     if (!winner || !winner->pack)
       winner = &ptzr;
 
-    else if (ptzr.pack && (ptzr.pack->assigned_timecode < winner->pack->assigned_timecode))
+    else if (ptzr.pack && (ptzr.pack->output_order_timecode < winner->pack->output_order_timecode))
       winner = &ptzr;
   }
 
