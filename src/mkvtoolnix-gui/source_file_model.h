@@ -48,13 +48,14 @@ public:
   virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
 protected:
-  SourceFile *sourceFileFromIndex(QModelIndex const &index) const;
-
   QVariant dataDecoration(QModelIndex const &index, SourceFile *sourceFile) const;
   QVariant dataDisplay(QModelIndex const &index, SourceFile *sourceFile) const;
 
   virtual void addFilesAndTracks(QList<SourceFilePtr> const &files);
   virtual void appendFilesAndTracks(QModelIndex fileToAddToIdx, QList<SourceFilePtr> const &files);
+
+public:                         // static
+  static SourceFile *fromIndex(QModelIndex const &index);
 };
 
 #endif  // MTX_MKVTOOLNIXGUI_SOURCE_FILE_MODEL_H

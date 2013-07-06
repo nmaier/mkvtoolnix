@@ -38,7 +38,7 @@ SourceFileModel::index(int row,
   if (!m_sourceFiles || (0 > row) || (0 > column))
     return QModelIndex{};
 
-  auto parentFile = sourceFileFromIndex(parent);
+  auto parentFile = fromIndex(parent);
   if (!parentFile)
     return row < m_sourceFiles->size() ? createIndex(row, column, m_sourceFiles->at(row).get()) : QModelIndex{};
 
@@ -55,7 +55,7 @@ SourceFileModel::index(int row,
 QModelIndex
 SourceFileModel::parent(QModelIndex const &child)
   const {
-  auto sourceFile = sourceFileFromIndex(child);
+  auto sourceFile = fromIndex(child);
   if (!sourceFile)
     return QModelIndex{};
 
@@ -89,7 +89,7 @@ SourceFileModel::rowCount(QModelIndex const &parent)
     return 0;
   if (!m_sourceFiles)
     return 0;
-  auto parentSourceFile = sourceFileFromIndex(parent);
+  auto parentSourceFile = fromIndex(parent);
   if (!parentSourceFile)
     return m_sourceFiles->size();
   return parentSourceFile->m_additionalParts.size() + parentSourceFile->m_appendedFiles.size();
@@ -139,7 +139,7 @@ SourceFileModel::data(QModelIndex const &index,
   if (role == Qt::TextAlignmentRole)
     return SizeColumn == index.column() ? Qt::AlignRight : Qt::AlignLeft;
 
-  auto sourceFile = sourceFileFromIndex(index);
+  auto sourceFile = fromIndex(index);
   if (!sourceFile)
     return QVariant{};
 
@@ -174,8 +174,7 @@ SourceFileModel::headerData(int section,
 }
 
 SourceFile *
-SourceFileModel::sourceFileFromIndex(QModelIndex const &index)
-  const {
+SourceFileModel::fromIndex(QModelIndex const &index) {
   if (index.isValid())
     return static_cast<SourceFile *>(index.internalPointer());
   return nullptr;
@@ -187,10 +186,10 @@ SourceFileModel::addAdditionalParts(QModelIndex fileToAddToIdx,
   if (fileNames.isEmpty() || !fileToAddToIdx.isValid())
     return;
 
-  if (sourceFileFromIndex(fileToAddToIdx)->m_additionalPart)
+  if (fromIndex(fileToAddToIdx)->m_additionalPart)
     fileToAddToIdx = parent(fileToAddToIdx);
 
-  auto fileToAddTo = sourceFileFromIndex(fileToAddToIdx);
+  auto fileToAddTo = fromIndex(fileToAddToIdx);
   assert(fileToAddToIdx.isValid() && fileToAddTo);
 
   fileNames.erase(std::remove_if(fileNames.begin(), fileNames.end(), [&](QString const &fileName) {
@@ -254,7 +253,7 @@ SourceFileModel::appendFilesAndTracks(QModelIndex fileToAddToIdx,
   if (!fileToAddToIdx.isValid())
     return;
 
-  // auto fileToAddTo = sourceFileFromIndex(fileToAddToIdx);
+  // auto fileToAddTo = fromIndex(fileToAddToIdx);
     // if (fileToAddTo->isAdditionalPart() || fileToAddTo->isAppended())
     //   fileToAddToIdx = parent(fileToAddToIdx);
 }
@@ -263,7 +262,7 @@ SourceFileModel::appendFilesAndTracks(QModelIndex fileToAddToIdx,
 //   } else
 //     fileToAddToIdx
 
-//   fileToAddTo = sourceFileFromIndex(fileToAddToIdx);
+//   fileToAddTo = fromIndex(fileToAddToIdx);
 //   assert(fileToAddToIdx.isValid() && fileToAddTo);
 
 //   *m_sourceFiles << identifier.file();
