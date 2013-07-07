@@ -1299,7 +1299,8 @@ hevc::hevc_es_parser_c::handle_slice_nalu(memory_cptr &nalu) {
   m_incomplete_frame.m_keyframe =  m_recovery_point_valid
                                 || (   is_i_slice
                                     && (   (m_debug_keyframe_detection && !m_b_frames_since_keyframe)
-                                        || (HEVC_NALU_TYPE_IDR_W_RADL == si.nalu_type)));
+                                        || (HEVC_NALU_TYPE_IDR_W_RADL == si.nalu_type)
+                                        || (HEVC_NALU_TYPE_CRA_NUT    == si.nalu_type)));
   m_recovery_point_valid        =  false;
 
   if (m_incomplete_frame.m_keyframe) {
@@ -1717,7 +1718,7 @@ hevc::hevc_es_parser_c::cleanup() {
       break;
     }
 
-    if (HEVC_NALU_TYPE_IDR_W_RADL == idr.type) {
+    if ((HEVC_NALU_TYPE_IDR_W_RADL == idr.type) || (HEVC_NALU_TYPE_CRA_NUT == idr.type)) {
       frame_itr->m_presentation_order = 0;
       prev_pic_order_cnt_lsb = prev_pic_order_cnt_msb = 0;
     } else {
