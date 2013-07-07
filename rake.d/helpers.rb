@@ -208,3 +208,21 @@ def remove_files_by_patters patterns
     File.unlink file_name
   end
 end
+
+class Rake::Task
+  def investigate
+    result = "------------------------------\n"
+    result << "Investigating #{name}\n"
+    result << "class: #{self.class}\n"
+    result <<  "task needed: #{needed?}\n"
+    result <<  "timestamp: #{timestamp}\n"
+    result << "pre-requisites:\n"
+    prereqs = @prerequisites.collect { |name| Rake::Task[name] }
+    prereqs.sort! { |a,b| a.timestamp <=> b.timestamp }
+    result += prereqs.collect { |p| "--#{p.name} (#{p.timestamp})\n" }.join("")
+    latest_prereq = @prerequisites.collect{|n| Rake::Task[n].timestamp}.max
+    result <<  "latest-prerequisite time: #{latest_prereq}\n"
+    result << "................................\n\n"
+    return result
+  end
+end
