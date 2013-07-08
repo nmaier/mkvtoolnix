@@ -6,8 +6,8 @@
 #include <QFileInfo>
 
 TrackModel::TrackModel(QObject *parent)
-  : QAbstractItemModel(parent)
-  , m_tracks(nullptr)
+  : QStandardItemModel{parent}
+  , m_tracks{}
   , m_audioIcon(":/icons/16x16/knotify.png")
   , m_videoIcon(":/icons/16x16/tool-animator.png")
   , m_subtitleIcon(":/icons/16x16/subtitles.png")
@@ -19,6 +19,10 @@ TrackModel::TrackModel(QObject *parent)
   , m_noIcon(":/icons/16x16/dialog-cancel.png")
   , m_debug{"track_model"}
 {
+  auto labels = QStringList{};
+  labels << QY("Codec") << QY("Mux this") << QY("Language") << QY("Source file") << QY("Type") << QY("Name") << QY("ID");
+  setHorizontalHeaderLabels(labels);
+  horizontalHeaderItem(6)->setTextAlignment(Qt::AlignRight);
 }
 
 TrackModel::~TrackModel() {
@@ -30,180 +34,47 @@ TrackModel::setTracks(QList<Track *> &tracks) {
   reset();
 }
 
-QModelIndex
-TrackModel::index(int row,
-                  int column,
-                  QModelIndex const &parent)
-  const {
-  if (!m_tracks || (0 > row) || (0 > column))
-    return QModelIndex{};
+QList<QStandardItem *>
+TrackModel::createRow(Track *track) {
+  auto items = QList<QStandardItem *>{};
 
-  auto parentTrack = trackFromIndex(parent);
-  if (!parentTrack)
-    return row < m_tracks->size() ? createIndex(row, column, m_tracks->at(row)) : QModelIndex{};
+  items << new QStandardItem{track->isChapters() || track->isGlobalTags() || track->isTags() ? QY("%1 entries").arg(track->m_size) : track->m_codec};
+  items << new QStandardItem{  track->isAudio()      ? QY("audio")
+                             : track->isVideo()      ? QY("video")
+                             : track->isSubtitles()  ? QY("subtitles")
+                             : track->isButtons()    ? QY("buttons")
+                             : track->isAttachment() ? QY("attachment")
+                             : track->isChapters()   ? QY("chapters")
+                             : track->isTags()       ? QY("tags")
+                             : track->isGlobalTags() ? QY("global tags")
+                             :                          Q("INTERNAL ERROR")};
+  items << new QStandardItem{track->m_muxThis ? QY("yes") : QY("no")};
+  items << new QStandardItem{track->m_language};
+  items << new QStandardItem{QFileInfo{ track->m_file->m_fileName }.fileName()};
+  items << new QStandardItem{track->m_name};
+  items << new QStandardItem{-1 == track->m_id ? Q("") : QString::number(track->m_id)};
 
-  if (parentTrack->m_appendedTracks.size() >= row)
-    return QModelIndex{};
+  items[0]->setData(QVariant::fromValue(track), Util::TrackRole);
+  items[1]->setIcon(  track->isAudio()      ? m_audioIcon
+                    : track->isVideo()      ? m_videoIcon
+                    : track->isSubtitles()  ? m_subtitleIcon
+                    : track->isAttachment() ? m_attachmentIcon
+                    : track->isChapters()   ? m_chaptersIcon
+                    : track->isTags()       ? m_tagsIcon
+                    : track->isGlobalTags() ? m_tagsIcon
+                    :                         m_genericIcon);
+  items[2]->setIcon(track->m_muxThis ? m_yesIcon : m_noIcon);
+  items[6]->setTextAlignment(Qt::AlignRight);
 
-  auto childTrack = parentTrack->m_appendedTracks[row];
+  m_tracksToItems[track] = items[0];
 
-  if (!childTrack)
-    return QModelIndex{};
-
-  return createIndex(row, column, childTrack);
-}
-
-QModelIndex
-TrackModel::parent(QModelIndex const &child)
-  const {
-  if (0 != child.column())
-    return QModelIndex{};
-
-  auto track = trackFromIndex(child);
-  if (!track || !track->m_appendedTo)
-    return QModelIndex{};
-
-  auto grandparentTrack = track->m_appendedTo->m_appendedTo;
-  int row               = (grandparentTrack ? grandparentTrack->m_appendedTracks : *m_tracks).indexOf(track->m_appendedTo);
-  if (-1 != row)
-    return createIndex(row, 0, track->m_appendedTo);
-
-  return QModelIndex{};
-}
-
-int
-TrackModel::rowCount(QModelIndex const &parent)
-  const {
-  if (parent.column() > 0)
-    return 0;
-  if (!m_tracks)
-    return 0;
-  auto parentTrack = trackFromIndex(parent);
-  if (!parentTrack)
-    return m_tracks->size();
-  return parentTrack->m_appendedTracks.size();
-}
-
-int
-TrackModel::columnCount(QModelIndex const &)
-  const {
-  return NumberOfColumns;
-}
-
-QVariant
-TrackModel::dataTextAlignment(QModelIndex const &index)
-  const {
-  return IDColumn == index.column() ? Qt::AlignRight : Qt::AlignLeft;
-}
-
-QVariant
-TrackModel::dataDecoration(QModelIndex const &index,
-                           Track *track)
-  const {
-  if (CodecColumn == index.column())
-    return track->isAudio()      ? m_audioIcon
-         : track->isVideo()      ? m_videoIcon
-         : track->isSubtitles()  ? m_subtitleIcon
-         : track->isAttachment() ? m_attachmentIcon
-         : track->isChapters()   ? m_chaptersIcon
-         : track->isTags()       ? m_tagsIcon
-         : track->isGlobalTags() ? m_tagsIcon
-         :                         m_genericIcon;
-
-  else if (MuxColumn == index.column())
-    return track->m_muxThis ? m_yesIcon : m_noIcon;
-
-  else
-    return QVariant{};
-}
-
-QVariant
-TrackModel::dataDisplay(QModelIndex const &index,
-                        Track *track)
-  const {
-  if (CodecColumn == index.column())
-    return track->isChapters() || track->isGlobalTags() || track->isTags() ? QString(QY("%1 entries")).arg(track->m_size)
-         :                                                                   track->m_codec;
-
-  else if (TypeColumn == index.column())
-    return track->isAudio()      ? QY("audio")
-         : track->isVideo()      ? QY("video")
-         : track->isSubtitles()  ? QY("subtitles")
-         : track->isButtons()    ? QY("buttons")
-         : track->isAttachment() ? QY("attachment")
-         : track->isChapters()   ? QY("chapters")
-         : track->isTags()       ? QY("tags")
-         : track->isGlobalTags() ? QY("global tags")
-         :                          Q("INTERNAL ERROR");
-
-  else if (MuxColumn == index.column())
-    return track->m_muxThis ? QY("yes") : QY("no");
-
-  else if (LanguageColumn == index.column())
-    return track->m_language;
-
-  else if (SourceFileColumn == index.column())
-    return  QFileInfo{ track->m_file->m_fileName }.fileName();
-
-  else if (NameColumn == index.column())
-    return track->m_name;
-
-  else if (IDColumn == index.column())
-    return -1 == track->m_id ? Q("") : QString::number(track->m_id);
-
-  else
-    return QVariant{};
-}
-
-QVariant
-TrackModel::data(QModelIndex const &index,
-                 int role)
-  const {
-  auto track = trackFromIndex(index);
-  if (!track)
-    return QVariant{};
-
-  if (Qt::TextAlignmentRole == role)
-    return dataTextAlignment(index);
-
-  if (Qt::DecorationRole == role)
-    return dataDecoration(index, track);
-
-  if (Qt::DisplayRole == role)
-    return dataDisplay(index, track);
-
-  return QVariant{};
-}
-
-QVariant
-TrackModel::headerData(int section,
-                       Qt::Orientation orientation,
-                       int role)
-  const {
-  if (Qt::Horizontal != orientation)
-    return QVariant{};
-
-  if (Qt::DisplayRole == role)
-    return CodecColumn      == section ? QY("Codec")
-         : MuxColumn        == section ? QY("Mux this")
-         : LanguageColumn   == section ? QY("Language")
-         : SourceFileColumn == section ? QY("Source file")
-         : TypeColumn       == section ? QY("Type")
-         : NameColumn       == section ? QY("Name")
-         : IDColumn         == section ? QY("ID")
-         :                                Q("INTERNAL ERROR");
-
-  if (Qt::TextAlignmentRole == role)
-    return IDColumn == section ? Qt::AlignRight : Qt::AlignLeft;
-
-  return QVariant{};
+  return items;
 }
 
 Track *
-TrackModel::trackFromIndex(QModelIndex const &index)
-  const {
+TrackModel::fromIndex(QModelIndex const &index) {
   if (index.isValid())
-    return static_cast<Track *>(index.internalPointer());
+    return index.data(Util::TrackRole).value<Track *>();
   return nullptr;
 }
 
@@ -237,26 +108,40 @@ TrackModel::trackUpdated(Track *track) {
   if (-1 == row)
     return;
 
-  emit dataChanged(createIndex(row, 0, track), createIndex(row, NumberOfColumns - 1, track));
+  emit dataChanged(createIndex(row, 0, track), createIndex(row, columnCount() - 1, track));
 }
 
 void
-TrackModel::addTracks(QList<TrackPtr> tracks) {
+TrackModel::addTracks(QList<TrackPtr> const &tracks) {
+  for (auto &track : tracks) {
+    *m_tracks << track.get();
+    invisibleRootItem()->appendRow(createRow(track.get()));
+  }
+}
+
+void
+TrackModel::appendTracks(SourceFile *fileToAppendTo,
+                         QList<TrackPtr> const &tracks) {
   if (tracks.isEmpty())
     return;
 
-  beginInsertRows(QModelIndex{}, m_tracks->size(), m_tracks->size() + tracks.size() - 1);
-  for (auto &track : tracks)
-    *m_tracks << track.get();
-  endInsertRows();
-}
+  auto lastTrack = boost::accumulate(*m_tracks, static_cast<Track *>(nullptr), [](Track *accu, Track *t) { return t->isRegular() ? t : accu; });
+  assert(!!lastTrack);
 
-void
-TrackModel::clear() {
-  if (m_tracks->isEmpty())
-    return;
+  for (auto &newTrack : tracks) {
+    // Things like tags, chapters and attachments aren't appended to a
+    // specific track. Instead they're appended to the top list.
+    if (!newTrack->isRegular()) {
+      *m_tracks << newTrack.get();
+      invisibleRootItem()->appendRow(createRow(newTrack.get()));
+      continue;
+    }
 
-  beginResetModel();
-  m_tracks->clear();
-  endResetModel();
+    newTrack->m_appendedTo = fileToAppendTo->findFirstTrackOfType(newTrack->m_type);
+    if (!newTrack->m_appendedTo)
+      newTrack->m_appendedTo = lastTrack;
+
+    newTrack->m_appendedTo->m_appendedTracks << newTrack.get();
+    m_tracksToItems[ newTrack->m_appendedTo ]->appendRow(createRow(newTrack.get()));
+  }
 }

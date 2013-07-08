@@ -3,17 +3,23 @@
 #include "common/sorting.h"
 #include "mkvtoolnix-gui/source_file_model.h"
 #include "mkvtoolnix-gui/track_model.h"
+#include "mkvtoolnix-gui/util/util.h"
 
 #include <QFileInfo>
 
 SourceFileModel::SourceFileModel(QObject *parent)
-  : QAbstractItemModel{parent}
+  : QStandardItemModel{parent}
   , m_sourceFiles{}
   , m_tracksModel{}
 {
   m_additionalPartIcon.addFile(":/icons/16x16/distribute-horizontal-margin.png");
   m_addedIcon.addFile(":/icons/16x16/distribute-horizontal-x.png");
   m_normalIcon.addFile(":/icons/16x16/distribute-vertical-page.png");
+
+  auto labels = QStringList{};
+  labels << QY("File name") << QY("Container") << QY("File size") << QY("Directory");
+  setHorizontalHeaderLabels(labels);
+  horizontalHeaderItem(2)->setTextAlignment(Qt::AlignRight);
 }
 
 SourceFileModel::~SourceFileModel() {
@@ -30,200 +36,72 @@ SourceFileModel::setSourceFiles(QList<SourceFilePtr> &sourceFiles) {
   reset();
 }
 
-QModelIndex
-SourceFileModel::index(int row,
-                       int column,
-                       QModelIndex const &parent)
+QList<QStandardItem *>
+SourceFileModel::createRow(SourceFile *sourceFile)
   const {
-  if (!m_sourceFiles || (0 > row) || (0 > column))
-    return QModelIndex{};
+  auto items = QList<QStandardItem *>{};
+  auto info  = QFileInfo{sourceFile->m_fileName};
 
-  auto parentFile = fromIndex(parent);
-  if (!parentFile)
-    return row < m_sourceFiles->size() ? createIndex(row, column, m_sourceFiles->at(row).get()) : QModelIndex{};
+  items << new QStandardItem{info.fileName()};
+  items << new QStandardItem{sourceFile->m_additionalPart ? QY("(additional part)") : sourceFile->m_container};
+  items << new QStandardItem{QString::number(info.size())};
+  items << new QStandardItem{info.filePath()};
 
-  auto childFile = row <  parentFile->m_additionalParts.size()                                       ? parentFile->m_additionalParts[row].get()
-                 : row < (parentFile->m_additionalParts.size() + parentFile->m_appendedFiles.size()) ? parentFile->m_appendedFiles[row - parentFile->m_additionalParts.size()].get()
-                 :                                                                                     nullptr;
+  items[0]->setData(QVariant::fromValue(sourceFile), Util::SourceFileRole);
+  items[0]->setIcon(  sourceFile->m_additionalPart ? m_additionalPartIcon
+                    : sourceFile->m_appended       ? m_addedIcon
+                    :                                m_normalIcon);
 
-  if (!childFile)
-    return QModelIndex{};
+  items[2]->setTextAlignment(Qt::AlignRight);
 
-  return createIndex(row, column, childFile);
-}
-
-QModelIndex
-SourceFileModel::parent(QModelIndex const &child)
-  const {
-  auto sourceFile = fromIndex(child);
-  if (!sourceFile)
-    return QModelIndex{};
-
-  auto parentSourceFile = sourceFile->m_appendedTo;
-  if (!parentSourceFile)
-    return QModelIndex{};
-
-  auto grandparentSourceFile = parentSourceFile->m_appendedTo;
-  if (!grandparentSourceFile) {
-    for (int row = 0; m_sourceFiles->size() > row; ++row)
-      if (m_sourceFiles->at(row).get() == parentSourceFile)
-        return createIndex(row, 0, parentSourceFile);
-    return QModelIndex{};
-  }
-
-  for (int row = 0; grandparentSourceFile->m_additionalParts.size() > row; ++row)
-    if (grandparentSourceFile->m_additionalParts[row].get() == parentSourceFile)
-      return createIndex(row, 0, parentSourceFile);
-
-  for (int row = 0; grandparentSourceFile->m_appendedFiles.size() > row; ++row)
-    if (grandparentSourceFile->m_appendedFiles[row].get() == parentSourceFile)
-      return createIndex(row + parentSourceFile->m_additionalParts.size(), 0, parentSourceFile);
-
-  return QModelIndex{};
-}
-
-int
-SourceFileModel::rowCount(QModelIndex const &parent)
-  const {
-  if (parent.column() > 0)
-    return 0;
-  if (!m_sourceFiles)
-    return 0;
-  auto parentSourceFile = fromIndex(parent);
-  if (!parentSourceFile)
-    return m_sourceFiles->size();
-  return parentSourceFile->m_additionalParts.size() + parentSourceFile->m_appendedFiles.size();
-}
-
-int
-SourceFileModel::columnCount(QModelIndex const &)
-  const {
-  return NumberOfColumns;
-}
-
-QVariant
-SourceFileModel::dataDecoration(QModelIndex const &index,
-                                SourceFile *sourceFile)
-  const {
-  return FileNameColumn != index.column() ? QVariant{}
-       : sourceFile->m_additionalPart     ? m_additionalPartIcon
-       : sourceFile->m_appended           ? m_addedIcon
-       :                                    m_normalIcon;
-}
-
-QVariant
-SourceFileModel::dataDisplay(QModelIndex const &index,
-                             SourceFile *sourceFile)
-  const {
-  QFileInfo info{sourceFile->m_fileName};
-  if (FileNameColumn == index.column())
-    return QFileInfo{sourceFile->m_fileName}.fileName();
-
-  else if (ContainerColumn == index.column())
-    return sourceFile->m_additionalPart ? QY("(additional part)") : sourceFile->m_container;
-
-  else if (SizeColumn == index.column())
-    return QFileInfo{sourceFile->m_fileName}.size();
-
-  else if (DirectoryColumn == index.column())
-    return QFileInfo{sourceFile->m_fileName}.filePath();
-
-  else
-    return QVariant{};
-}
-
-QVariant
-SourceFileModel::data(QModelIndex const &index,
-                      int role)
-  const {
-  if (role == Qt::TextAlignmentRole)
-    return SizeColumn == index.column() ? Qt::AlignRight : Qt::AlignLeft;
-
-  auto sourceFile = fromIndex(index);
-  if (!sourceFile)
-    return QVariant{};
-
-  if (role == Qt::DecorationRole)
-    return dataDecoration(index, sourceFile);
-
-  if (role == Qt::DisplayRole)
-    return dataDisplay(index, sourceFile);
-
-  return QVariant{};
-}
-
-QVariant
-SourceFileModel::headerData(int section,
-                            Qt::Orientation orientation,
-                            int role)
-  const {
-  if (Qt::Horizontal != orientation)
-    return QVariant{};
-
-  if (Qt::DisplayRole == role)
-    return FileNameColumn  == section ? QY("File name")
-         : ContainerColumn == section ? QY("Container")
-         : SizeColumn      == section ? QY("File size")
-         : DirectoryColumn == section ? QY("Directory")
-         :                               Q("INTERNAL ERROR");
-
-  if (Qt::TextAlignmentRole == role)
-    return SizeColumn == section ? Qt::AlignRight : Qt::AlignLeft;
-
-  return QVariant{};
+  return items;
 }
 
 SourceFile *
 SourceFileModel::fromIndex(QModelIndex const &index) {
   if (index.isValid())
-    return static_cast<SourceFile *>(index.internalPointer());
+    return index.data(Util::SourceFileRole).value<SourceFile *>();
   return nullptr;
 }
 
 void
-SourceFileModel::addAdditionalParts(QModelIndex fileToAddToIdx,
-                                    QStringList fileNames) {
-  if (fileNames.isEmpty() || !fileToAddToIdx.isValid())
+SourceFileModel::addAdditionalParts(QModelIndex const &fileToAddToIdx,
+                                    QStringList const &fileNames) {
+  auto actualIdx = toTopLevelIdx(fileToAddToIdx);
+  if (fileNames.isEmpty() || !actualIdx.isValid())
     return;
 
-  if (fromIndex(fileToAddToIdx)->m_additionalPart)
-    fileToAddToIdx = parent(fileToAddToIdx);
+  auto fileToAddTo = fromIndex(actualIdx);
+  auto itemToAddTo = itemFromIndex(actualIdx);
+  assert(fileToAddTo && itemToAddTo);
 
-  auto fileToAddTo = fromIndex(fileToAddToIdx);
-  assert(fileToAddToIdx.isValid() && fileToAddTo);
-
-  fileNames.erase(std::remove_if(fileNames.begin(), fileNames.end(), [&](QString const &fileName) {
-        if (fileToAddTo->m_fileName == fileName)
-          return true;
-        for (auto additionalPart : fileToAddTo->m_additionalParts)
-          if (additionalPart->m_fileName == fileName)
-            return true;
+  auto actualFileNames = QStringList{};
+  std::copy_if(fileNames.begin(), fileNames.end(), std::back_inserter(actualFileNames), [&fileToAddTo](QString const &fileName) -> bool {
+      if (fileToAddTo->m_fileName == fileName)
         return false;
-      }), fileNames.end());
+      for (auto additionalPart : fileToAddTo->m_additionalParts)
+        if (additionalPart->m_fileName == fileName)
+          return false;
+      return true;
+    });
 
-  if (fileNames.isEmpty())
+  if (actualFileNames.isEmpty())
     return;
 
-  mtx::sort::naturally(fileNames.begin(), fileNames.end());
+  mtx::sort::naturally(actualFileNames.begin(), actualFileNames.end());
 
-  auto startRow = fileToAddTo->m_additionalParts.size();
-  auto endRow   = startRow + fileNames.size() - 1;
-
-  beginInsertRows(fileToAddToIdx, startRow, endRow);
-
-  for (auto &fileName : fileNames) {
+  for (auto &fileName : actualFileNames) {
     auto additionalPart              = std::make_shared<SourceFile>(fileName);
     additionalPart->m_additionalPart = true;
     additionalPart->m_appendedTo     = fileToAddTo;
 
     fileToAddTo->m_additionalParts << additionalPart;
+    itemToAddTo->appendRow(createRow(additionalPart.get()));
   }
-
-  endInsertRows();
 }
 
 void
-SourceFileModel::addOrAppendFilesAndTracks(QModelIndex fileToAddToIdx,
+SourceFileModel::addOrAppendFilesAndTracks(QModelIndex const &fileToAddToIdx,
                                            QList<SourceFilePtr> const &files,
                                            bool append) {
   assert(m_tracksModel);
@@ -239,43 +117,42 @@ SourceFileModel::addOrAppendFilesAndTracks(QModelIndex fileToAddToIdx,
 
 void
 SourceFileModel::addFilesAndTracks(QList<SourceFilePtr> const &files) {
-  beginInsertRows(QModelIndex{}, m_sourceFiles->size(), m_sourceFiles->size() + files.size() - 1);
   *m_sourceFiles << files;
-  endInsertRows();
+  for (auto const &file : files)
+    invisibleRootItem()->appendRow(createRow(file.get()));
 
   m_tracksModel->addTracks(std::accumulate(files.begin(), files.end(), QList<TrackPtr>{}, [](QList<TrackPtr> &accu, SourceFilePtr const &file) { return accu << file->m_tracks; }));
 }
 
-void
-SourceFileModel::appendFilesAndTracks(QModelIndex fileToAddToIdx,
-                                      QList<SourceFilePtr> const &files) {
-  assert(false);
-  if (!fileToAddToIdx.isValid())
-    return;
+QModelIndex
+SourceFileModel::toTopLevelIdx(QModelIndex const &idx)
+  const {
+  if (!idx.isValid())
+    return QModelIndex{};
 
-  // auto fileToAddTo = fromIndex(fileToAddToIdx);
-    // if (fileToAddTo->isAdditionalPart() || fileToAddTo->isAppended())
-    //   fileToAddToIdx = parent(fileToAddToIdx);
+  auto parent = idx.parent();
+  return parent == QModelIndex{} ? idx : parent;
 }
 
-//   if (append) {
-//   } else
-//     fileToAddToIdx
-
-//   fileToAddTo = fromIndex(fileToAddToIdx);
-//   assert(fileToAddToIdx.isValid() && fileToAddTo);
-
-//   *m_sourceFiles << identifier.file();
-//   for (auto &track : identifier.file()->m_tracks)
-//     m_config.m_tracks << track.get();
-// }
-
 void
-SourceFileModel::clear() {
-  if (m_sourceFiles->isEmpty())
+SourceFileModel::appendFilesAndTracks(QModelIndex const &fileToAppendToIdx,
+                                      QList<SourceFilePtr> const &files) {
+  auto actualIdx = toTopLevelIdx(fileToAppendToIdx);
+  if (files.isEmpty() || !actualIdx.isValid())
     return;
 
-  beginResetModel();
-  m_sourceFiles->clear();
-  endResetModel();
+  auto fileToAppendTo = fromIndex(actualIdx);
+  auto itemToAppendTo = itemFromIndex(actualIdx);
+  assert(fileToAppendTo && itemToAppendTo);
+
+  for (auto const &file : files) {
+    file->m_appended   = true;
+    file->m_appendedTo = fileToAppendTo;
+
+    fileToAppendTo->m_appendedFiles << file;
+    itemToAppendTo->appendRow(createRow(file.get()));
+  }
+
+  for (auto const &file : files)
+    m_tracksModel->appendTracks(fileToAppendTo, file->m_tracks);
 }

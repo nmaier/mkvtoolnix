@@ -168,3 +168,10 @@ SourceFile::fixAssociations(MuxConfig::Loader &l) {
   for (auto &track : m_tracks)
     track->m_file = this;
 }
+
+Track *
+SourceFile::findFirstTrackOfType(Track::Type type)
+  const {
+  auto itr = brng::find_if(m_tracks, [type](TrackPtr const &track) { return type == track->m_type; });
+  return itr != m_tracks.end() ? itr->get() : nullptr;
+}

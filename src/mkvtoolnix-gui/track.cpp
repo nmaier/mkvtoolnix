@@ -95,7 +95,7 @@ Track::isAppended()
 bool
 Track::isRegular()
   const {
-  return isAudio() || isVideo() || isSubtitles();
+  return isAudio() || isVideo() || isSubtitles() || isButtons();
 }
 
 void
@@ -233,4 +233,10 @@ Track::fixAssociations(MuxConfig::Loader &l) {
       throw mtx::InvalidSettingsX{};
     m_appendedTracks << l.objectIDToTrack.value(appendedTrackID.toLongLong());
   }
+}
+
+std::string
+Track::debugInfo()
+  const {
+  return (boost::format("%1%/%2%:%3%@%4%") % static_cast<unsigned int>(m_type) % m_id % m_codec % this).str();
 }

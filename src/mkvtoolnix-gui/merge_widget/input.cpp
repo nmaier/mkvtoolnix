@@ -13,6 +13,7 @@
 
 #include <QFileDialog>
 #include <QList>
+#include <QMessageBox>
 #include <QString>
 
 void
@@ -132,11 +133,11 @@ MergeWidget::onTrackSelectionChanged() {
 
   enableInputControls(m_typeIndependantControls, true);
 
-  auto idxs = selection.at(0).indexes();
-  if (idxs.isEmpty() || !idxs.at(0).isValid())
+  auto idxs = selection[0].indexes();
+  if (idxs.isEmpty() || !idxs[0].isValid())
     return;
 
-  auto track = static_cast<Track *>(idxs.at(0).internalPointer());
+  auto track = TrackModel::fromIndex(idxs[0]);
   if (!track)
     return;
 
@@ -248,10 +249,10 @@ MergeWidget::withSelectedTracks(std::function<void(Track *)> code,
 
   for (auto &indexRange : selection) {
     auto idxs = indexRange.indexes();
-    if (idxs.isEmpty() || !idxs.at(0).isValid())
+    if (idxs.isEmpty() || !idxs[0].isValid())
       continue;
 
-    auto track = static_cast<Track *>(idxs.at(0).internalPointer());
+    auto track = TrackModel::fromIndex(idxs[0]);
     if (!track || (track->m_appendedTo && notIfAppending))
       continue;
 
@@ -446,6 +447,12 @@ MergeWidget::onAddFiles() {
 
 void
 MergeWidget::onAppendFiles() {
+  // auto selectedFile = SourceFileModel::fromIndex(selectedSourceFile());
+  // if (selectedFile && !selectedFile->m_tracks.size()) {
+  //   QMessageBox::critical(this, QY("Unable to append files"), QY("You cannot append tracks or add additional parts to files that contain tracks."));
+  //   return;
+  // }
+
   addOrAppendFiles(true);
 }
 
@@ -487,7 +494,14 @@ MergeWidget::selectFilesToAdd(QString const &title) {
 
 void
 MergeWidget::onAddAdditionalParts() {
-  m_filesModel->addAdditionalParts(selectedSourceFile(), selectFilesToAdd(QY("Add media files as additional parts")));
+  auto currentIdx = selectedSourceFile();
+  auto sourceFile = SourceFileModel::fromIndex(currentIdx);
+  if (sourceFile && !sourceFile->m_tracks.size()) {
+    QMessageBox::critical(this, QY("Unable to append files"), QY("You cannot append tracks or add additional parts to files that contain tracks."));
+    return;
+  }
+
+  m_filesModel->addAdditionalParts(currentIdx, selectFilesToAdd(QY("Add media files as additional parts")));
 }
 
 void
@@ -552,10 +566,5 @@ MergeWidget::retranslateInputUI() {
 QModelIndex
 MergeWidget::selectedSourceFile()
   const {
-  auto selection = ui->files->selectionModel()->selection();
-  if (selection.isEmpty())
-    return QModelIndex{};
-
-  auto idxs = selection.at(0).indexes();
-  return idxs.isEmpty() ? QModelIndex{} : idxs.at(0);
+  return ui->files->selectionModel()->currentIndex();
 }

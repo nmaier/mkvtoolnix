@@ -79,6 +79,8 @@ public:
   virtual void saveSettings(QSettings &settings) const;
   virtual void loadSettings(MuxConfig::Loader &l);
   virtual void fixAssociations(MuxConfig::Loader &l);
+
+  virtual std::string debugInfo() const;
 };
 
 #endif  // MTX_MKVTOOLNIX_GUI_TRACK_H
