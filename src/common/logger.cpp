@@ -20,7 +20,7 @@
 
 logger_cptr logger_c::s_default_logger;
 
-static auto s_program_start_time = std::chrono::high_resolution_clock::now();
+static auto s_program_start_time = std::chrono::system_clock::now();
 
 logger_c::logger_c(bfs::path const &file_name)
   : m_file_name(file_name)
@@ -41,9 +41,9 @@ logger_c::log(std::string const &message) {
     mm_text_io_c out(new mm_file_io_c(m_file_name.string(), bfs::exists(m_file_name) ? MODE_WRITE : MODE_CREATE));
     out.setFilePointer(0, seek_end);
 
-    auto now  = std::chrono::high_resolution_clock::now();
+    auto now  = std::chrono::system_clock::now();
     auto diff = now - s_program_start_time;
-    auto tnow = std::chrono::high_resolution_clock::to_time_t(now);
+    auto tnow = std::chrono::system_clock::to_time_t(now);
 
     // 2013-03-02 15:42:32
     char timestamp[30];
