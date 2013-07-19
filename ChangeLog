@@ -1,3 +1,10 @@
+2013-07-19  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvmerge: bug fix: CueRelativePosition was wrong for
+        BlockGroups: it pointed to the Block inside the group instead of
+        the BlockGroup itself. CueRelativePosition elements for
+        SimpleBlock elements are not affected. Fixes #903.
+
 2013-07-05  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvmerge: new feature: Implemented final Opus muxing.

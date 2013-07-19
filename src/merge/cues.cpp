@@ -167,7 +167,7 @@ cues_c::calculate_block_positions(KaxCluster &cluster)
       continue;
 
     block->SetParent(cluster);
-    positions[ id_timecode_t{ block->TrackNum(), block->GlobalTimecode() } ] = block->GetElementPosition();
+    positions[ id_timecode_t{ block->TrackNum(), block->GlobalTimecode() } ] = block_group->GetElementPosition();
   }
 
   return positions;
