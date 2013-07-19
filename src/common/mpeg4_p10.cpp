@@ -533,9 +533,9 @@ mpeg4::p10::parse_sps(memory_cptr &buffer,
     auto timing_info  = find_timing_info(duration);
     num_units_in_tick = timing_info.first;
     time_scale        = timing_info.second;
-
-    mxdebug_if(s_debug_fix_bistream_timing_info, boost::format("fix_bitstream_timing_info: duration %1%: units/tick: %2% time_scale: %3%\n") % duration % num_units_in_tick % time_scale);
   }
+
+  mxdebug_if(s_debug_fix_bistream_timing_info, boost::format("fix_bitstream_timing_info: duration %1%: units/tick: %2% time_scale: %3%\n") % duration % num_units_in_tick % time_scale);
 
   w.copy_bits(3, r);            // forbidden_zero_bit, nal_ref_idc
   if (w.copy_bits(5, r) != 7)   // nal_unit_type
@@ -621,6 +621,7 @@ mpeg4::p10::parse_sps(memory_cptr &buffer,
   }
 
   sps.vui_present = r.get_bit();
+  mxdebug_if(s_debug_fix_bistream_timing_info, boost::format("VUI present? %1%\n") % sps.vui_present);
   if (sps.vui_present) {
     w.put_bit(1);
     if (r.get_bit() == 1) {     // ar_info_present
@@ -673,6 +674,10 @@ mpeg4::p10::parse_sps(memory_cptr &buffer,
       sps.timing_info.time_scale        = r.get_bits(32);
       sps.timing_info.fixed_frame_rate  = r.get_bit();
     }
+
+    mxdebug_if(s_debug_fix_bistream_timing_info,
+               boost::format("timing info present? %1% #units %2% time_scale %3% fixed rate %4%\n")
+               % sps.timing_info.is_present % sps.timing_info.num_units_in_tick % sps.timing_info.time_scale % sps.timing_info.fixed_frame_rate);
 
     if (fix_bitstream_frame_rate) {                      // write the new timing info
       w.put_bit(1);                                      // timing_info_present
