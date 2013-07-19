@@ -504,6 +504,7 @@ mpeg4::p10::parse_sps(memory_cptr &buffer,
                       bool fix_bitstream_frame_rate,
                       int64_t duration) {
   static auto s_debug_fix_bistream_timing_info = debugging_option_c{"fix_bitstream_timing_info"};
+  static auto s_debug_remove_bistream_ar_info  = debugging_option_c{"remove_bitstream_ar_info"};
   static auto s_high_level_profile_ids         = std::unordered_map<unsigned int, bool>{
     {  44, true }, {  83, true }, {  86, true }, { 100, true }, { 110, true }, { 118, true }, { 122, true }, { 128, true }, { 244, true }
   };
@@ -621,10 +622,12 @@ mpeg4::p10::parse_sps(memory_cptr &buffer,
   }
 
   sps.vui_present = r.get_bit();
-  mxdebug_if(s_debug_fix_bistream_timing_info, boost::format("VUI present? %1%\n") % sps.vui_present);
+  mxdebug_if(s_debug_fix_bistream_timing_info || s_debug_remove_bistream_ar_info, boost::format("VUI present? %1%\n") % sps.vui_present);
   if (sps.vui_present) {
     w.put_bit(1);
-    if (r.get_bit() == 1) {     // ar_info_present
+    bool ar_info_present = r.get_bit();
+    mxdebug_if(s_debug_remove_bistream_ar_info, boost::format("ar_info_present? %1%\n") % ar_info_present);
+    if (ar_info_present) {     // ar_info_present
       int ar_type = r.get_bits(8);
 
       if (keep_ar_info) {
@@ -650,6 +653,10 @@ mpeg4::p10::parse_sps(memory_cptr &buffer,
 
       } else
         sps.ar_found = false;
+
+      mxdebug_if(s_debug_remove_bistream_ar_info,
+                 boost::format("keep_ar_info %1% ar_type %2% par_num %3% par_den %4%\n")
+                 % keep_ar_info % ar_type % sps.par_num % sps.par_den);
 
     } else
       w.put_bit(0);             // ar_info_present
