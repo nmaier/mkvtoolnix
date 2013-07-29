@@ -34,6 +34,9 @@
 namespace mpeg4 {
 namespace p10 {
 
+static auto s_debug_fix_bistream_timing_info = debugging_option_c{"fix_bitstream_timing_info"};
+static auto s_debug_remove_bistream_ar_info  = debugging_option_c{"remove_bitstream_ar_info"};
+
 avcc_c::avcc_c()
   : m_profile_idc{}
   , m_profile_compat{}
@@ -503,9 +506,7 @@ mpeg4::p10::parse_sps(memory_cptr &buffer,
                       bool keep_ar_info,
                       bool fix_bitstream_frame_rate,
                       int64_t duration) {
-  static auto s_debug_fix_bistream_timing_info = debugging_option_c{"fix_bitstream_timing_info"};
-  static auto s_debug_remove_bistream_ar_info  = debugging_option_c{"remove_bitstream_ar_info"};
-  static auto s_high_level_profile_ids         = std::unordered_map<unsigned int, bool>{
+  static auto s_high_level_profile_ids = std::unordered_map<unsigned int, bool>{
     {  44, true }, {  83, true }, {  86, true }, { 100, true }, { 110, true }, { 118, true }, { 122, true }, { 128, true }, { 244, true }
   };
 
@@ -866,7 +867,7 @@ mpeg4::p10::fix_sps_fps(memory_cptr const &buffer,
     unsigned int num_sps = avcc.read_uint8();
     new_avcc.write_uint8(num_sps);
     num_sps &= 0x1f;
-    mxverb(4, boost::format("p_mpeg4_p10_fix_sps_fps: num_sps %1%\n") % num_sps);
+    mxdebug_if(s_debug_fix_bistream_timing_info, boost::format("p_mpeg4_p10_fix_sps_fps: num_sps %1%\n") % num_sps);
 
     unsigned int sps;
     for (sps = 0; sps < num_sps; sps++) {
