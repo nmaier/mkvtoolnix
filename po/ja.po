@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2013-06-07 21:41+0900\n"
+"PO-Revision-Date: 2013-07-29 21:32+0900\n"
 "Last-Translator: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "Language-Team: Japanese <boiled.sugar@gmail.com>\n"
 "Language: ja\n"
@@ -1400,7 +1400,7 @@ msgstr "'%1%'：後続のファイルを同様に処理しています：%2%\n"
 #: src/input/r_matroska.cpp:1511
 #, boost-format
 msgid "'%1%': You're re-muxing an Opus track that was muxed in experimental mode. The resulting track will be written in final mode, but one detail cannot be recovered from a track muxed in experimental mode: the end trimming. This means that a decoder might output a few samples more than originally intended. You should re-mux from the original Opus file if possible.\n"
-msgstr ""
+msgstr "'%1%'：実験的モードでMUXされたOpusのトラックを再MUXしようとしています。出力されるトラックは最終的なモードで上書きされますが、実験的モードでMUXされたトラックからは詳細情報が1つ回復不能になります。エンドトリミングがそれです。これは、デコーダーの出力が元々意図されていたよりも数サンプル多くなる可能性があるということを意味します。もし可能であれば、オリジナルのOpusファイルから再MUXしてください。\n"
 
 #: src/merge/mkvmerge.cpp:2311
 msgid "'--append-mode' lacks its argument.\n"
@@ -2740,9 +2740,9 @@ msgid "Codec decode all: %1%"
 msgstr "Codec decode all: %1%"
 
 #: src/info/mkvinfo.cpp:927
-#, fuzzy, boost-format
+#, boost-format
 msgid "Codec delay: %|1$.3f|ms (%2%ns)"
-msgstr "遅延：%|1$.3f|ms"
+msgstr "Codec delay: %|1$.3f|ms (%2%ns)"
 
 #: src/info/mkvinfo.cpp:876
 #, boost-format
@@ -3257,9 +3257,9 @@ msgid "Disables lacing for all tracks. This will increase the file's size, espec
 msgstr "全てのトラックで複数のフレームを1つのブロックにまとめません。これは特に多数のオーディオトラックがある場合に、ファイルサイズを増大させます。テスト目的でのみ使用してください。"
 
 #: src/info/mkvinfo.cpp:221
-#, fuzzy, boost-format
+#, boost-format
 msgid "Discard padding: %|1$.3f|ms (%2%ns)"
-msgstr "長さ: %|1$.3f|s (%2%)"
+msgstr "Discard padding: %|1$.3f|ms (%2%ns)"
 
 #: src/merge/mkvmerge.cpp:688
 #: src/merge/mkvmerge.cpp:694
@@ -6030,9 +6030,9 @@ msgid "Seek position: %1%"
 msgstr "シーク位置：%1%"
 
 #: src/info/mkvinfo.cpp:931
-#, fuzzy, boost-format
+#, boost-format
 msgid "Seek pre-roll: %|1$.3f|ms (%2%ns)"
-msgstr "長さ: %|1$.3f|s (%2%)"
+msgstr "Seek pre-roll: %|1$.3f|ms (%2%ns)"
 
 #: src/extract/timecodes_v2.cpp:223
 #: src/extract/tracks.cpp:371
@@ -10428,4 +10428,3 @@ msgstr "はい"
 
 #~ msgid "wrong usage: writing to read-only memory"
 #~ msgstr "間違った使用法：読み込み専用メモリへの書き込み"
-
