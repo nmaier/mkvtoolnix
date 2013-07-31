@@ -1,4 +1,4 @@
-/** MPEG video helper functions (MPEG 1, 2 and 4)
+/** HEVC video helper functions
 
    mkvmerge -- utility for splicing together matroska files
    from component media subtypes
@@ -97,11 +97,80 @@
 
 namespace hevc{
 
+/*
+Bytes                                    Bits
+      configuration_version               8     The value should be 0 until the format has been finalized. Thereafter is should have the specified value
+                                                (probably 1). This allows us to recognize (and ignore) non-standard CodecPrivate
+1
+      general_profile_space               2     Specifies the context for the interpretation of general_profile_idc and
+                                                general_profile_compatibility_flag
+      general_tier_flag                   1     Specifies the context for the interpretation of general_level_idc
+      general_profile_idc                 5     Defines the profile of the bitstream
+1
+      general_profile_compatibility_flag  32    Defines profile compatibility, see [2] for interpretation
+4
+      general_progressive_source_flag     1     Source is progressive, see [2] for interpretation.
+      general_interlace_source_flag       1     Source is interlaced, see [2] for interpretation.
+      general_nonpacked_constraint_flag   1     If 1 then no frame packing arrangement SEI messages, see [2] for more information
+      general_frame_only_constraint_flag  1     If 1 then no fields, see [2] for interpretation
+      reserved                            44    Reserved field, value TBD 0
+6
+      general_level_idc                   8     Defines the level of the bitstream
+1
+      reserved                            4     Reserved Field, value '1111'b
+      min_spatial_segmentation_idc        12    Maximum possible size of distinct coded spatial segmentation regions in the pictures of the CVS
+2
+      reserved                            6     Reserved Field, value '111111'b
+      Parallelism_type                    2     0=unknown, 1=slices, 2=tiles, 3=WPP
+1
+      reserved                            6     Reserved field, value '111111'b
+      chroma_format_idc                   2     See table 6-1, HEVC
+1
+      reserved                            5     Reserved Field, value '11111'b
+      bit_depth_luma_minus8               3     Bit depth luma minus 8
+1
+      reserved                            5     Reserved Field, value '11111'b
+      bit_depth_chroma_minus8             3     Bit depth chroma minus 8
+1
+      reserved                            16    Reserved Field, value 0
+2
+      reserved                            2     Reserved Field, value 0
+      max_sub_layers                      3     maximum number of temporal sub-layers
+      temporal_id_nesting_flag            1     Specifies whether inter prediction is additionally restricted. see [2] for interpretation.
+      size_nalu_minus_one                 2     Size of field NALU Length – 1
+1
+      num_parameter_sets                  8     Number of parameter sets
+1
+--
+23 bytes total
+*/
+#define GENERAL_PARAMS_BLOCK_SIZE 12
+
+struct codec_private_t {
+  unsigned char configuration_version;
+  unsigned char general_params_block[GENERAL_PARAMS_BLOCK_SIZE];
+  unsigned char min_spatial_segmentation_idc[2];
+  unsigned char parallelism_type;
+  unsigned char chroma_format_idc;
+  unsigned char bit_depth_luma_minus8;
+  unsigned char bit_depth_chroma_minus8;
+  unsigned char reserved[2];
+  unsigned char rmts;
+  unsigned char num_parameter_sets;
+
+  codec_private_t() {
+    memset(this, 0, sizeof(*this));
+  }
+};
+
 struct vps_info_t {
   unsigned int id;
 
   unsigned int profile_idc;
   unsigned int level_idc;
+
+  codec_private_t codec_private;
+  unsigned int max_sub_layers_minus1;
 
   uint32_t checksum;
 
@@ -129,10 +198,14 @@ struct short_term_ref_pic_set_t {
 struct sps_info_t {
   unsigned int id;
   unsigned int vps_id;
+  unsigned int max_sub_layers_minus1;
+  unsigned int temporal_id_nesting_flag;
 
   short_term_ref_pic_set_t short_term_ref_pic_sets[64];
 
   unsigned int chroma_format_idc;
+  unsigned int bit_depth_luma_minus8;
+  unsigned int bit_depth_chroma_minus8;
   unsigned int separate_colour_plane_flag;
   unsigned int log2_min_luma_coding_block_size_minus3;
   unsigned int log2_diff_max_min_luma_coding_block_size;
@@ -141,6 +214,7 @@ struct sps_info_t {
   // vui:
   bool vui_present, ar_found;
   unsigned int par_num, par_den;
+  unsigned int min_spatial_segmentation_idc;
 
   // timing_info:
   bool timing_info_present;
@@ -179,6 +253,23 @@ struct pps_info_t {
   void dump();
 };
 
+struct sei_info_t {
+  unsigned char divx_uuid[16];
+  unsigned char divx_code[9];
+  unsigned char divx_message_type;
+  unsigned int divx_payload_size;
+  unsigned char *divx_payload;
+
+  sei_info_t() {
+    memset(this, 0, sizeof(*this));
+  }
+
+  ~sei_info_t() {
+      if(divx_payload)
+          free(divx_payload);
+  }
+};
+
 struct slice_info_t {
   unsigned char nalu_type;
   unsigned char type;
@@ -213,6 +304,9 @@ void rbsp_to_nalu(memory_cptr &buffer);
 bool parse_vps(memory_cptr &buffer, vps_info_t &vps);
 bool parse_sps(memory_cptr &buffer, sps_info_t &sps, std::vector<vps_info_t> &m_vps_info_list, bool keep_ar_info = false);
 bool parse_pps(memory_cptr &buffer, pps_info_t &pps);
+bool parse_sei(memory_cptr &buffer, sei_info_t &sei);
+
+bool handle_sei_payload(mm_mem_io_c &byte_reader, unsigned int sei_payload_type, unsigned int sei_payload_size, sei_info_t &sei);
 
 par_extraction_t extract_par(memory_cptr const &buffer);
 bool is_hevc_fourcc(const char *fourcc);
@@ -274,12 +368,33 @@ public:
 
 class hevcc_c {
 public:
-  unsigned int m_profile_idc, m_level_idc, m_nalu_size_length;
-  std::vector<memory_cptr> m_vps_list, m_sps_list, m_pps_list;
+  unsigned int m_configuration_version,
+               m_general_profile_space,
+               m_general_tier_flag,
+               m_general_profile_idc,
+               m_general_profile_compatibility_flag,
+               m_general_progressive_source_flag,
+               m_general_interlace_source_flag,
+               m_general_nonpacked_constraint_flag,
+               m_general_frame_only_constraint_flag,
+               m_general_level_idc,
+               m_min_spatial_segmentation_idc,
+               m_parallelism_type,
+               m_chroma_format_idc,
+               m_bit_depth_luma_minus8,
+               m_bit_depth_chroma_minus8,
+               m_max_sub_layers,
+               m_temporal_id_nesting_flag,
+               m_size_nalu_minus_one,
+               m_nalu_size_length;
+  std::vector<memory_cptr> m_vps_list,
+                           m_sps_list,
+                           m_pps_list,
+                           m_sei_list;
   std::vector<vps_info_t> m_vps_info_list;
   std::vector<sps_info_t> m_sps_info_list;
   std::vector<pps_info_t> m_pps_info_list;
-  memory_cptr m_trailer;
+  std::vector<sei_info_t> m_sei_info_list;
 
 public:
   hevcc_c();
@@ -287,11 +402,12 @@ public:
 
   explicit operator bool() const;
 
-  memory_cptr pack();
   bool parse_vps_list(bool ignore_errors = false);
   bool parse_sps_list(bool ignore_errors = false);
   bool parse_pps_list(bool ignore_errors = false);
+  bool parse_sei_list(bool ignore_errors = false);
 
+  memory_cptr pack();
   static hevcc_c unpack(memory_cptr const &mem);
 };
 
@@ -315,10 +431,15 @@ protected:
   int64_t m_max_timecode;
   std::map<int64_t, int64_t> m_duration_frequency;
 
-  std::vector<memory_cptr> m_vps_list, m_sps_list, m_pps_list, m_extra_data;
+  std::vector<memory_cptr> m_vps_list,
+                           m_sps_list,
+                           m_pps_list,
+                           m_sei_list,
+                           m_extra_data;
   std::vector<vps_info_t> m_vps_info_list;
   std::vector<sps_info_t> m_sps_info_list;
   std::vector<pps_info_t> m_pps_info_list;
+  std::vector<sei_info_t> m_sei_info_list;
 
   memory_cptr m_unparsed_buffer;
   uint64_t m_stream_position, m_parsed_position;

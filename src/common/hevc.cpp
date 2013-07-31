@@ -33,8 +33,24 @@
 namespace hevc {
 
 hevcc_c::hevcc_c()
-  : m_profile_idc{}
-  , m_level_idc{}
+  : m_configuration_version{}
+  , m_general_profile_space{}
+  , m_general_tier_flag{}
+  , m_general_profile_idc{}
+  , m_general_profile_compatibility_flag{}
+  , m_general_progressive_source_flag{}
+  , m_general_interlace_source_flag{}
+  , m_general_nonpacked_constraint_flag{}
+  , m_general_frame_only_constraint_flag{}
+  , m_general_level_idc{}
+  , m_min_spatial_segmentation_idc{}
+  , m_parallelism_type{}
+  , m_chroma_format_idc{}
+  , m_bit_depth_luma_minus8{}
+  , m_bit_depth_chroma_minus8{}
+  , m_max_sub_layers{}
+  , m_temporal_id_nesting_flag{}
+  , m_size_nalu_minus_one{}
   , m_nalu_size_length{}
 {
 }
@@ -43,8 +59,24 @@ hevcc_c::hevcc_c(unsigned int nalu_size_length,
                  std::vector<memory_cptr> const &vps_list,
                  std::vector<memory_cptr> const &sps_list,
                  std::vector<memory_cptr> const &pps_list)
-  : m_profile_idc{}
-  , m_level_idc{}
+  : m_configuration_version{}
+  , m_general_profile_space{}
+  , m_general_tier_flag{}
+  , m_general_profile_idc{}
+  , m_general_profile_compatibility_flag{}
+  , m_general_progressive_source_flag{}
+  , m_general_interlace_source_flag{}
+  , m_general_nonpacked_constraint_flag{}
+  , m_general_frame_only_constraint_flag{}
+  , m_general_level_idc{}
+  , m_min_spatial_segmentation_idc{}
+  , m_parallelism_type{}
+  , m_chroma_format_idc{}
+  , m_bit_depth_luma_minus8{}
+  , m_bit_depth_chroma_minus8{}
+  , m_max_sub_layers{}
+  , m_temporal_id_nesting_flag{}
+  , m_size_nalu_minus_one{}
   , m_nalu_size_length{nalu_size_length}
   , m_vps_list{vps_list}
   , m_sps_list{sps_list}
@@ -138,31 +170,126 @@ hevcc_c::parse_pps_list(bool ignore_errors) {
   return true;
 }
 
+bool
+hevcc_c::parse_sei_list(bool ignore_errors) {
+  if (m_sei_info_list.size() == m_sei_list.size())
+    return true;
+
+  m_sei_info_list.clear();
+  for (auto &sei: m_sei_list) {
+    sei_info_t sei_info;
+    auto sei_as_rbsp = sei->clone();
+    nalu_to_rbsp(sei_as_rbsp);
+
+    if (ignore_errors) {
+      try {
+        parse_sei(sei_as_rbsp, sei_info);
+      } catch (mtx::mm_io::end_of_file_x &) {
+      }
+    } else if (!parse_sei(sei_as_rbsp, sei_info))
+      return false;
+
+    m_sei_info_list.push_back(sei_info);
+  }
+
+  return true;
+}
+
+/* Codec Private Data
+
+The format of the MKV CodecPrivate element for HEVC has been aligned with MP4 and GPAC/MP4Box.
+The definition of MP4 for HEVC has not been finalized. The version of MP4Box appears to be
+aligned with the latest version of the HEVC standard. The configuration_version field should be
+kept 0 until CodecPrivate for HEVC have been finalized. Thereafter it shall have the required value of 1.
+The CodecPrivate format is flexible and allows storage of arbitrary NAL units.
+However it is restricted by MP4 to VPS, SPS and PPS headers and SEI messages that apply to the
+whole stream as for example user data. The table below specifies the format:
+
+Value                               Bits  Description
+-----                               ----  -----------
+configuration_version               8   The value should be 0 until the format has been finalized. Thereafter is should have the specified value (probably 1). This allows us to recognize (and ignore) non-standard CodecPrivate
+general_profile_space               2     Specifies the context for the interpretation of general_profile_idc and  general_profile_compatibility_flag
+general_tier_flag                   1     Specifies the context for the interpretation of general_level_idc
+general_profile_idc                 5     Defines the profile of the bitstream
+general_profile_compatibility_flag  32    Defines profile compatibility, see [2] for interpretation
+general_progressive_source_flag     1     Source is progressive, see [2] for interpretation.
+general_interlace_source_flag       1     Source is interlaced, see [2] for interpretation.
+general_nonpacked_constraint_flag   1     If 1 then no frame packing arrangement SEI messages, see [2] for more information
+general_frame_only_constraint_flag  1     If 1 then no fields, see [2] for interpretation
+reserved                            44    Reserved field, value TBD 0
+general_level_idc                   8     Defines the level of the bitstream
+reserved                            4     Reserved Field, value '1111'b
+min_spatial_segmentation_idc        12    Maximum possible size of distinct coded spatial segmentation regions in the pictures of the CVS
+reserved                            6     Reserved Field, value '111111'b
+parallelism_type                    2     0=unknown, 1=slices, 2=tiles, 3=WPP
+reserved                            6     Reserved field, value '111111'b
+chroma_format_idc                   2     See table 6-1, HEVC
+reserved                            5     Reserved Field, value '11111'b
+bit_depth_luma_minus8               3     Bit depth luma minus 8
+reserved                            5     Reserved Field, value '11111'b
+bit_depth_chroma_minus8             3     Bit depth chroma minus 8
+reserved                            16    Reserved Field, value 0
+reserved                            2     Reserved Field, value 0
+max_sub_layers                      3     maximum number of temporal sub-layers
+temporal_id_nesting_flag            1     Specifies whether inter prediction is additionally restricted. see [2] for interpretation.
+size_nalu_minus_one                 2     Size of field NALU Length – 1
+num_parameter_sets                  8     Number of parameter sets
+
+for (i=0;i<num_parameter_sets;i++) {
+  array_completeness                1     1 when there is no duplicate parameter set with same id in the stream, 0 otherwise or unknown
+  reserved                          1     Value '1'b
+  nal_unit_type                     6     Nal unit type, restricted to VPS, SPS, PPS and SEI, SEI must be of declarative nature which applies to the whole stream such as user data sei.
+  nal_unit_count                    16    Number of nal units
+  for (j=0;j<nalu_unit_count;j+) {
+    size                            16    Size of nal unit
+    for(k=0;k<size;k++) {
+      data[k]                       8     Nalu data+
+    }
+  }
+}
+
+*/
 memory_cptr
 hevcc_c::pack() {
   parse_vps_list(true);
   parse_sps_list(true);
+  parse_pps_list(true);
+  parse_sei_list(true);
+
   if (!*this)
     return memory_cptr{};
 
-  unsigned int total_size = 7 + 1;
+  unsigned int total_size = 23;
 
   for (auto &mem : m_vps_list)
-    total_size += mem->get_size() + 2;
+    total_size += mem->get_size() + 1 + 2 + 2; // NALU bytes + (array_comp|reserved|nal_unit_type) + nal_unit_count + NALU size
   for (auto &mem : m_sps_list)
-    total_size += mem->get_size() + 2;
+    total_size += mem->get_size() + 1 + 2 + 2; // NALU bytes + (array_comp|reserved|nal_unit_type) + nal_unit_count + NALU size
   for (auto &mem : m_pps_list)
-    total_size += mem->get_size() + 2;
-
-  if (m_trailer)
-    total_size += m_trailer->get_size();
+    total_size += mem->get_size() + 1 + 2 + 2; // NALU bytes + (array_comp|reserved|nal_unit_type) + nal_unit_count + NALU size
+  for (auto &mem : m_sei_list)
+    total_size += mem->get_size() + 1 + 2 + 2; // NALU bytes + (array_comp|reserved|nal_unit_type) + nal_unit_count + NALU size
 
   auto destination = memory_c::alloc(total_size);
   auto buffer      = destination->get_buffer();
-  auto &vps        = *m_vps_info_list.begin();
-  auto write_list  = [&buffer](std::vector<memory_cptr> const &list, uint8_t num_byte_bits) {
-    *buffer = list.size() | num_byte_bits;
-    ++buffer;
+
+  // for (i=0;i<num_parameter_sets;i++) {
+  //   array_completeness                   1  1 when there is no duplicate parameter set with same id in the stream, 0 otherwise or unknown
+  //   reserved                             1  Value '1'b
+  //   nal_unit_type                        6  Nal unit type, restricted to VPS, SPS, PPS and SEI, SEI must be of declarative nature which applies to the
+  //                                           whole stream such as user data sei.
+  //   nal_unit_count                       16 Number of nal units
+  //   for (j=0;j<nalu_unit_count;j+) {
+  //     size                               16 Size of nal unit
+  //     for(k=0;k<size;k++) {
+  //       data[k]                          8  Nalu data+
+  //     }
+  //   }
+  // }
+  auto write_list = [&buffer](std::vector<memory_cptr> const &list, uint8 nal_unit_type) {
+    *buffer++ = (0 << 7) | (1 << 6) | (nal_unit_type & 0x3F);
+    put_uint16_be(buffer, list.size());
+    buffer += 2;
 
     for (auto &mem : list) {
       auto size = mem->get_size();
@@ -172,19 +299,49 @@ hevcc_c::pack() {
     }
   };
 
-  buffer[0] = 1;
-  buffer[1] = m_profile_idc    ? m_profile_idc    : vps.profile_idc;
-  buffer[2] = 0;
-  buffer[3] = m_level_idc      ? m_level_idc      : vps.level_idc;
-  buffer[4] = 0xfc | (m_nalu_size_length - 1);
-  buffer   += 5;
+  // configuration version
+  *buffer++ = m_vps_info_list[0].codec_private.configuration_version;
+  // general parameters block
+  memcpy(buffer, &(m_vps_info_list[0].codec_private.general_params_block), GENERAL_PARAMS_BLOCK_SIZE);
+  buffer += GENERAL_PARAMS_BLOCK_SIZE;
+  // reserved                            4     Reserved Field, value '1111'b
+  // min_spatial_segmentation_idc        12    Maximum possible size of distinct coded spatial segmentation regions in the pictures of the CVS
+  *buffer++= 0xF0 | ((m_sps_info_list[0].min_spatial_segmentation_idc >> 8) & 0x0F);
+  *buffer++ = m_sps_info_list[0].min_spatial_segmentation_idc & 0XFF;
+  // reserved                            6     Reserved Field, value '111111'b
+  // parallelism_type                    2     0=unknown, 1=slices, 2=tiles, 3=WPP
+  *buffer++ = 0xFC | 0x00; // unknown
+  // reserved                            6     Reserved field, value '111111'b
+  // chroma_format_idc                   2     See table 6-1, HEVC
+  *buffer++ = 0xFC | (m_sps_info_list[0].chroma_format_idc & 0x03);
+  // reserved                            5     Reserved Field, value '11111'b
+  // bit_depth_luma_minus8               3     Bit depth luma minus 8
+  *buffer++ = 0xF8 | ((m_sps_info_list[0].bit_depth_luma_minus8) & 0x07);
+  // reserved                            5     Reserved Field, value '11111'b
+  // bit_depth_chroma_minus8             3     Bit depth chroma minus 8
+  *buffer++ = 0xF8 | ((m_sps_info_list[0].bit_depth_chroma_minus8) & 0x07);
+  // reserved                            16    Reserved Field, value 0
+  *buffer++ = 0;
+  *buffer++ = 0;
+  // reserved                            2     Reserved Field, value 0
+  // max_sub_layers                      3     maximum number of temporal sub-layers
+  // temporal_id_nesting_flag            1     Specifies whether inter prediction is additionally restricted. see [2] for interpretation.
+  // size_nalu_minus_one                 2     Size of field NALU Length – 1
+  *buffer++ = (((m_sps_info_list[0].max_sub_layers_minus1 + 1) & 0x03) << 6) |
+              ((m_sps_info_list[0].temporal_id_nesting_flag & 0x01) << 2) |
+              ((m_nalu_size_length - 1) & 0x03);
+  // num_parameter_sets                  8     Number of parameter sets
+  unsigned int num_parameter_sets = m_vps_list.size() + m_sps_list.size() + m_pps_list.size() + m_sei_list.size();
+  *buffer++ = num_parameter_sets;
 
-  write_list(m_vps_list, 0xe0);
-  write_list(m_sps_list, 0xe0);
-  write_list(m_pps_list, 0x00);
-
-  if (m_trailer)
-    memcpy(buffer, m_trailer->get_buffer(), m_trailer->get_size());
+  if(m_vps_list.size())
+    write_list(m_vps_list, HEVC_NALU_TYPE_VIDEO_PARAM);
+  if(m_sps_list.size())
+    write_list(m_sps_list, HEVC_NALU_TYPE_SEQ_PARAM);
+  if(m_pps_list.size())
+    write_list(m_pps_list, HEVC_NALU_TYPE_PIC_PARAM);
+  if(m_sei_list.size())
+    write_list(m_sei_list, HEVC_NALU_TYPE_PREFIX_SEI);
 
   return destination;
 }
@@ -193,33 +350,89 @@ hevcc_c
 hevcc_c::unpack(memory_cptr const &mem) {
   hevcc_c hevcc;
 
-  if (!mem || (7 > mem->get_size()))
+  if (!mem)
     return hevcc;
 
   try {
-    mm_mem_io_c in{*mem};
+    bit_reader_c bit_reader(mem->get_buffer(), mem->get_size());
+    mm_mem_io_c byte_reader{*mem};
 
-    auto read_list = [&in](std::vector<memory_cptr> &list, unsigned int num_entries_mask) {
-      auto num_entries = in.read_uint8() & num_entries_mask;
-      while (num_entries) {
-        auto size = in.read_uint16_be();
-        list.push_back(in.read(size));
-        --num_entries;
+    auto read_list = [&byte_reader](std::vector<memory_cptr> &list, uint8 nal_unit_type) {
+
+      auto type = byte_reader.read_uint8() & 0x3F;
+
+      if(type == nal_unit_type) {
+        auto num_parameter_sets = byte_reader.read_uint16_be();
+
+        while (num_parameter_sets) {
+          auto size = byte_reader.read_uint16_be();
+          list.push_back(byte_reader.read(size));
+          --num_parameter_sets;
+        }
       }
     };
 
-    in.skip(1);                 // always 1
-    hevcc.m_profile_idc      = in.read_uint8();
-    in.read_uint8();
-    hevcc.m_level_idc        = in.read_uint8();
-    hevcc.m_nalu_size_length = (in.read_uint8() & 0x03) + 1;
+    // configuration_version               8     The value should be 0 until the format has been finalized. Thereafter is should have the specified value
+    //                                           (probably 1). This allows us to recognize (and ignore) non-standard CodecPrivate
+    hevcc.m_configuration_version = bit_reader.get_bits(8);
+    // general_profile_space               2     Specifies the context for the interpretation of general_profile_idc and
+    //                                           general_profile_compatibility_flag
+    hevcc.m_general_profile_space = bit_reader.get_bits(2);
+    // general_tier_flag                   1     Specifies the context for the interpretation of general_level_idc
+    hevcc.m_general_tier_flag = bit_reader.get_bits(1);
+    // general_profile_idc                 5     Defines the profile of the bitstream
+    hevcc.m_general_profile_idc = bit_reader.get_bits(5);
+    // general_profile_compatibility_flag  32    Defines profile compatibility, see [2] for interpretation
+    hevcc.m_general_profile_compatibility_flag = bit_reader.get_bits(32);
+    // general_progressive_source_flag     1     Source is progressive, see [2] for interpretation.
+    hevcc.m_general_progressive_source_flag = bit_reader.get_bits(1);
+    // general_interlace_source_flag       1     Source is interlaced, see [2] for interpretation.
+    hevcc.m_general_interlace_source_flag = bit_reader.get_bits(1);
+    // general_nonpacked_constraint_flag  1     If 1 then no frame packing arrangement SEI messages, see [2] for more information
+    hevcc.m_general_nonpacked_constraint_flag = bit_reader.get_bits(1);
+    // general_frame_only_constraint_flag  1     If 1 then no fields, see [2] for interpretation
+    hevcc.m_general_frame_only_constraint_flag = bit_reader.get_bits(1);
+    // reserved                            44    Reserved field, value TBD 0
+    bit_reader.skip_bits(44);
+    // general_level_idc                   8     Defines the level of the bitstream
+    hevcc.m_general_level_idc = bit_reader.get_bits(8);
+    // reserved                            4     Reserved Field, value '1111'b
+    bit_reader.skip_bits(4);
+    // min_spatial_segmentation_idc        12    Maximum possible size of distinct coded spatial segmentation regions in the pictures of the CVS
+    hevcc.m_min_spatial_segmentation_idc = bit_reader.get_bits(12);
+    // reserved                            6     Reserved Field, value '111111'b
+    bit_reader.skip_bits(6);
+    // parallelism_type                    2     0=unknown, 1=slices, 2=tiles, 3=WPP
+    hevcc.m_parallelism_type = bit_reader.get_bits(2);
+    // reserved                            6     Reserved field, value '111111'b
+    bit_reader.skip_bits(6);
+    // chroma_format_idc                   2     See table 6-1, HEVC
+    hevcc.m_chroma_format_idc = bit_reader.get_bits(2);
+    // reserved                            5     Reserved Field, value '11111'b
+    bit_reader.skip_bits(5);
+    // bit_depth_luma_minus8               3     Bit depth luma minus 8
+    hevcc.m_bit_depth_luma_minus8 = bit_reader.get_bits(3);
+    // reserved                            5     Reserved Field, value '11111'b
+    bit_reader.skip_bits(5);
+    // bit_depth_chroma_minus8             3     Bit depth chroma minus 8
+    hevcc.m_bit_depth_chroma_minus8 = bit_reader.get_bits(3);
+    // reserved                            16    Reserved Field, value 0
+    bit_reader.skip_bits(16);
+    // reserved                            2     Reserved Field, value 0
+    bit_reader.skip_bits(2);
+    // max_sub_layers                      3     maximum number of temporal sub-layers
+    hevcc.m_max_sub_layers = bit_reader.get_bits(3);
+    // temporal_id_nesting_flag            1     Specifies whether inter prediction is additionally restricted. see [2] for interpretation.
+    hevcc.m_temporal_id_nesting_flag = bit_reader.get_bits(1);
+    // size_nalu_minus_one                 2     Size of field NALU Length – 1
+    hevcc.m_size_nalu_minus_one = bit_reader.get_bits(2);
 
-    read_list(hevcc.m_vps_list, 0x0f);
-    read_list(hevcc.m_sps_list, 0x0f);
-    read_list(hevcc.m_pps_list, 0xff);
-
-    if (in.getFilePointer() < static_cast<uint64_t>(in.get_size()))
-      hevcc.m_trailer = in.read(in.get_size() - in.getFilePointer());
+    // now skip over initial data and read in parameter sets, use byte reader
+    byte_reader.skip(23);
+    read_list(hevcc.m_vps_list, HEVC_NALU_TYPE_VIDEO_PARAM);
+    read_list(hevcc.m_sps_list, HEVC_NALU_TYPE_SEQ_PARAM);
+    read_list(hevcc.m_pps_list, HEVC_NALU_TYPE_PIC_PARAM);
+    read_list(hevcc.m_sei_list, HEVC_NALU_TYPE_PREFIX_SEI);
 
     return hevcc;
 
@@ -227,9 +440,6 @@ hevcc_c::unpack(memory_cptr const &mem) {
     return hevcc_c{};
   }
 }
-
-
-
 
 static const struct {
   int numerator, denominator;
@@ -615,7 +825,7 @@ vui_parameters_copy(bit_reader_c &r,
     }
     if (w.copy_bits(1, r) == 1) { // bitstream_restriction_flag
       w.copy_bits(3, r);  // tiles_fixed_structure_flag, motion_vectors_over_pic_boundaries_flag, restricted_ref_pic_lists_flag
-      gecopy(r, w); // min_spatial_segmentation_idc
+      sps.min_spatial_segmentation_idc = gecopy(r, w); // min_spatial_segmentation_idc
       gecopy(r, w); // max_bytes_per_pic_denom
       gecopy(r, w); // max_bits_per_mincu_denom
       gecopy(r, w); // log2_max_mv_length_horizontal
@@ -746,6 +956,7 @@ hevc::parse_vps(memory_cptr &buffer,
                 vps_info_t &vps) {
   int size              = buffer->get_size();
   unsigned char *newsps = (unsigned char *)safemalloc(size + 100);
+  memset(newsps, 0, sizeof(char) * (size+100));
   memory_cptr mcptr_newsps(new memory_c(newsps, size + 100, true));
   bit_reader_c r(buffer->get_buffer(), size);
   bit_writer_c w(newsps, size + 100);
@@ -759,17 +970,19 @@ hevc::parse_vps(memory_cptr &buffer,
   w.copy_bits(6, r);            // nuh_reserved_zero_6bits
   w.copy_bits(3, r);            // nuh_temporal_id_plus1
 
-  vps.id = w.copy_bits(4, r);                               // vps_video_parameter_set_id
-  w.copy_bits(2+6, r);                                      // vps_reserved_three_2bits, vps_reserved_zero_6bits
-  unsigned int max_sub_layers_minus1 = w.copy_bits(3, r);   // vps_max_sub_layers_minus1
-  w.copy_bits(1+16, r);                                     // vps_temporal_id_nesting_flag, vps_reserved_0xffff_16bits
+  vps.id = w.copy_bits(4, r);                       // vps_video_parameter_set_id
+  w.copy_bits(2+6, r);                              // vps_reserved_three_2bits, vps_reserved_zero_6bits
+  vps.max_sub_layers_minus1 = w.copy_bits(3, r);    // vps_max_sub_layers_minus1
+  w.copy_bits(1+16, r);                             // vps_temporal_id_nesting_flag, vps_reserved_0xffff_16bits
 
-  profile_tier_copy(r, w, vps, max_sub_layers_minus1);  // profile_tier_level(vps_max_sub_layers_minus1)
+  // At this point we are at newsps + 6 bytes, profile_tier_level follows
+  profile_tier_copy(r, w, vps, vps.max_sub_layers_minus1);  // profile_tier_level(vps_max_sub_layers_minus1)
+
+  // First 12 bytes of profile_tier_level belong in codec private data under the general_params_block
+  memcpy(&vps.codec_private.general_params_block, newsps+6, 12);
 
   bool vps_sub_layer_ordering_info_present_flag = w.copy_bits(1, r);  // vps_sub_layer_ordering_info_present_flag
-  for (i = (vps_sub_layer_ordering_info_present_flag ?
-    0 : max_sub_layers_minus1);
-    i <= max_sub_layers_minus1; i++) {
+  for (i = (vps_sub_layer_ordering_info_present_flag ? 0 : vps.max_sub_layers_minus1); i <= vps.max_sub_layers_minus1; i++) {
     gecopy(r, w); // vps_max_dec_pic_buffering_minus1[i]
     gecopy(r, w); // vps_max_num_reorder_pics[i]
     gecopy(r, w); // vps_max_latency_increase[i]
@@ -794,7 +1007,7 @@ hevc::parse_vps(memory_cptr &buffer,
       gecopy(r, w);             // hrd_op_set_idx[i]
       if (i > 0)
         cprms_present_flag = w.copy_bits(1, r); // cprms_present_flag[i]
-      hrd_parameters_copy(r, w, cprms_present_flag, max_sub_layers_minus1);
+      hrd_parameters_copy(r, w, cprms_present_flag, vps.max_sub_layers_minus1);
     }
   }
 
@@ -839,9 +1052,9 @@ hevc::parse_sps(memory_cptr &buffer,
   w.copy_bits(6, r);            // nuh_reserved_zero_6bits
   w.copy_bits(3, r);            // nuh_temporal_id_plus1
 
-  sps.vps_id = w.copy_bits(4, r);                           // sps_video_parameter_set_id
-  unsigned int max_sub_layers_minus1 = w.copy_bits(3, r);   // sps_max_sub_layers_minus1
-  w.copy_bits(1, r);                                        // sps_temporal_id_nesting_flag
+  sps.vps_id = w.copy_bits(4, r);                   // sps_video_parameter_set_id
+  sps.max_sub_layers_minus1 = w.copy_bits(3, r);    // sps_max_sub_layers_minus1
+  sps.temporal_id_nesting_flag = w.copy_bits(1, r); // sps_temporal_id_nesting_flag
 
   size_t vps_idx;
   for (vps_idx = 0; m_vps_info_list.size() > vps_idx; ++vps_idx)
@@ -854,7 +1067,7 @@ hevc::parse_sps(memory_cptr &buffer,
 
   vps_info_t &vps = m_vps_info_list[vps_idx];
 
-  profile_tier_copy(r, w, vps, max_sub_layers_minus1);  // profile_tier_level(sps_max_sub_layers_minus1)
+  profile_tier_copy(r, w, vps, sps.max_sub_layers_minus1);  // profile_tier_level(sps_max_sub_layers_minus1)
 
   sps.id = gecopy(r, w);  // sps_seq_parameter_set_id
 
@@ -871,14 +1084,12 @@ hevc::parse_sps(memory_cptr &buffer,
     gecopy(r, w); // conf_win_bottom_offset
   }
 
-  gecopy(r, w); // bit_depth_luma_minus8
-  gecopy(r, w); // bit_depth_chroma_minus8
+  sps.bit_depth_luma_minus8 = gecopy(r, w); // bit_depth_luma_minus8
+  sps.bit_depth_chroma_minus8 = gecopy(r, w); // bit_depth_chroma_minus8
   sps.log2_max_pic_order_cnt_lsb = gecopy(r, w) + 4; // log2_max_pic_order_cnt_lsb_minus4
 
   bool sps_sub_layer_ordering_info_present_flag = w.copy_bits(1, r);  // sps_sub_layer_ordering_info_present_flag
-  for (i = (sps_sub_layer_ordering_info_present_flag ?
-    0 : max_sub_layers_minus1);
-    i <= max_sub_layers_minus1; i++) {
+  for (i = (sps_sub_layer_ordering_info_present_flag ? 0 : sps.max_sub_layers_minus1); i <= sps.max_sub_layers_minus1; i++) {
     gecopy(r, w); // sps_max_dec_pic_buffering_minus1[i]
     gecopy(r, w); // sps_max_num_reorder_pics[i]
     gecopy(r, w); // sps_max_latency_increase[i]
@@ -924,7 +1135,7 @@ hevc::parse_sps(memory_cptr &buffer,
 
   sps.vui_present = w.copy_bits(1, r); // vui_parameters_present_flag
   if (sps.vui_present == 1) {
-    vui_parameters_copy(r, w, sps, keep_ar_info, max_sub_layers_minus1);  //vui_parameters()
+    vui_parameters_copy(r, w, sps, keep_ar_info, sps.max_sub_layers_minus1);  //vui_parameters()
   }
 
   if (w.copy_bits(1, r) == 1) // sps_extension_flag
@@ -963,6 +1174,91 @@ hevc::parse_pps(memory_cptr &buffer,
     pps.num_extra_slice_header_bits = r.get_bits(3);  // num_extra_slice_header_bits
 
     pps.checksum          = calc_adler32(buffer->get_buffer(), buffer->get_size());
+
+    return true;
+  } catch (...) {
+    return false;
+  }
+}
+
+bool
+hevc::handle_sei_payload(mm_mem_io_c &byte_reader,
+                         unsigned int sei_payload_type,
+                         unsigned int sei_payload_size,
+                         sei_info_t &sei) {
+  // See HEVC spec, A.2.1
+  // DivXID uses is user_data_unregistered
+  if(sei_payload_type == 5) {
+    memset(&sei, 0, sizeof(sei));
+
+    byte_reader.read(&sei.divx_uuid, 16);        // divx_uuid
+    byte_reader.read(&sei.divx_code, 9);         // divx_code
+    byte_reader.read(&sei.divx_message_type, 1); // divx_message_type
+
+    // Is there payload data?
+    unsigned int payload_size = sei_payload_size - 26;
+    if(payload_size) {
+      sei.divx_payload_size = payload_size;
+      sei.divx_payload = (unsigned char*) malloc(payload_size);
+      byte_reader.read(sei.divx_payload, payload_size);
+    }
+
+    return true;
+  }
+  else {
+      byte_reader.skip(sei_payload_size);
+  }
+
+  return false;
+}
+
+// HEVC spec, 7.3.2.4
+bool
+hevc::parse_sei(memory_cptr &buffer,
+                sei_info_t &sei) {
+  try {
+    mm_mem_io_c byte_reader{*buffer};
+
+    unsigned int bytes_read = 0;
+    unsigned int buffer_size = buffer->get_size();
+    unsigned int payload_type = 0;
+    unsigned int payload_size = 0;
+
+    unsigned char *p = buffer->get_buffer();
+    p = p;
+
+    byte_reader.skip(2); // skip the nalu header
+    bytes_read+=2;
+
+    while(bytes_read < buffer_size-2) {
+      payload_type = 0;
+
+      unsigned int i = byte_reader.read_uint8();
+      bytes_read++;
+
+      while(i == 0xFF) {
+        payload_type += 255;
+        i = byte_reader.read_uint8();
+        bytes_read++;
+      }
+      payload_type += i;
+
+      payload_size = 0;
+
+      i = byte_reader.read_uint8();
+      bytes_read++;
+
+      while(i == 0xFF) {
+        payload_size += 255;
+        i = byte_reader.read_uint8();
+        bytes_read++;
+      }
+      payload_size += i;
+
+      handle_sei_payload(byte_reader, payload_type, payload_size, sei);
+
+      bytes_read += payload_size;
+    }
 
     return true;
   } catch (...) {
@@ -1436,35 +1732,18 @@ hevc::hevc_es_parser_c::handle_pps_nalu(memory_cptr &nalu) {
 
 void
 hevc::hevc_es_parser_c::handle_sei_nalu(memory_cptr &nalu) {
-  try {
-    nalu_to_rbsp(nalu);
+  sei_info_t sei_info;
 
-    bit_reader_c r(nalu->get_buffer(), nalu->get_size());
+  nalu_to_rbsp(nalu);
+  if (!parse_sei(nalu, sei_info))
+    return;
+  rbsp_to_nalu(nalu);
 
-    r.skip_bits(8);
+  m_sei_list.push_back(nalu);
+  m_sei_info_list.push_back(sei_info);
+  m_hevcc_changed = true;
 
-    while (1) {
-      int ptype = 0;
-      int value;
-      while ((value = r.get_bits(8)) == 0xff)
-        ptype += value;
-      ptype += value;
-
-      int psize = 0;
-      while ((value = r.get_bits(8)) == 0xff)
-        psize += value;
-      psize += value;
-
-      if (6 == ptype) {         // recovery point
-        m_recovery_point_valid = true;
-        return;
-      } else if (0x80 == ptype)
-        return;
-
-      r.skip_bits(psize * 8);
-    }
-  } catch (...) {
-  }
+  m_extra_data.push_back(create_nalu_with_size(nalu));
 }
 
 void

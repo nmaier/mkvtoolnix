@@ -364,11 +364,11 @@ create_codec_dependent_private_info(KaxCodecPrivate &c_priv,
     auto hevcc = hevc::hevcc_c::unpack(std::make_shared<memory_c>(c_priv.GetBuffer(), c_priv.GetSize(), false));
 
     return (boost::format(Y(" (HEVC profile: %1% @L%2%.%3%)"))
-            % (  hevcc.m_profile_idc == 1 ? "Main"
-               : hevcc.m_profile_idc == 2 ? "Main 10"
-               : hevcc.m_profile_idc == 3 ? "Main Still Picture"
-               :                            Y("Unknown"))
-            % (hevcc.m_level_idc / 3 / 10) % (hevcc.m_level_idc / 3 % 10)).str();
+            % (  hevcc.m_general_profile_idc == 1 ? "Main"
+               : hevcc.m_general_profile_idc == 2 ? "Main 10"
+               : hevcc.m_general_profile_idc == 3 ? "Main Still Picture"
+               :                                    Y("Unknown"))
+            % (hevcc.m_general_level_idc / 3 / 10) % (hevcc.m_general_level_idc / 3 % 10)).str();
   }
 
   return "";
