@@ -29,8 +29,7 @@ xtr_hevc_c::create_file(xtr_base_c *master,
     mxerror(boost::format(Y("Track %1% CodecPrivate is too small.\n")) % m_tid);
 
   binary *buf = mpriv->get_buffer();
-  unsigned char *p = (unsigned char *)buf;
-  p = p;
+
   m_nal_size_size = 1 + (buf[21] & 3);
 
   // Parameter sets in this order: vps, sps, pps, sei
