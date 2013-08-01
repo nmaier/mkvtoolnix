@@ -362,12 +362,12 @@ hevcc_c::unpack(memory_cptr const &mem) {
       auto type = byte_reader.read_uint8() & 0x3F;
 
       if(type == nal_unit_type) {
-        auto num_parameter_sets = byte_reader.read_uint16_be();
+        auto nal_unit_count = byte_reader.read_uint16_be();
 
-        while (num_parameter_sets) {
+        while (nal_unit_count) {
           auto size = byte_reader.read_uint16_be();
           list.push_back(byte_reader.read(size));
-          --num_parameter_sets;
+          --nal_unit_count;
         }
       }
     };
@@ -427,12 +427,30 @@ hevcc_c::unpack(memory_cptr const &mem) {
     // size_nalu_minus_one                 2     Size of field NALU Length – 1
     hevcc.m_size_nalu_minus_one = bit_reader.get_bits(2);
 
+    unsigned int num_parameter_sets = bit_reader.get_bits(8);
+
     // now skip over initial data and read in parameter sets, use byte reader
     byte_reader.skip(23);
-    read_list(hevcc.m_vps_list, HEVC_NALU_TYPE_VIDEO_PARAM);
-    read_list(hevcc.m_sps_list, HEVC_NALU_TYPE_SEQ_PARAM);
-    read_list(hevcc.m_pps_list, HEVC_NALU_TYPE_PIC_PARAM);
-    read_list(hevcc.m_sei_list, HEVC_NALU_TYPE_PREFIX_SEI);
+
+    if(num_parameter_sets) {
+      read_list(hevcc.m_vps_list, HEVC_NALU_TYPE_VIDEO_PARAM);
+      num_parameter_sets -= hevcc.m_vps_list.size();
+    }
+
+    if(num_parameter_sets) {
+      read_list(hevcc.m_sps_list, HEVC_NALU_TYPE_SEQ_PARAM);
+      num_parameter_sets -= hevcc.m_sps_list.size();
+    }
+
+    if(num_parameter_sets) {
+      read_list(hevcc.m_pps_list, HEVC_NALU_TYPE_PIC_PARAM);
+      num_parameter_sets -= hevcc.m_pps_list.size();
+    }
+
+    if(num_parameter_sets) {
+      read_list(hevcc.m_sei_list, HEVC_NALU_TYPE_PREFIX_SEI);
+      num_parameter_sets -= hevcc.m_sei_list.size();
+    }
 
     return hevcc;
 
