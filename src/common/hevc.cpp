@@ -1925,12 +1925,12 @@ hevc::hevc_es_parser_c::parse_slice(memory_cptr &buffer,
 int64_t
 hevc::hevc_es_parser_c::duration_for(slice_info_t const &si)
   const {
-  int64_t duration = -1 != m_forced_default_duration                                                  ? m_forced_default_duration
+  int64_t duration = -1 != m_forced_default_duration                                                  ? m_forced_default_duration * 2
                    : (m_sps_info_list.size() > si.sps) && m_sps_info_list[si.sps].timing_info_valid() ? m_sps_info_list[si.sps].default_duration()
-                   : -1 != m_stream_default_duration                                                  ? m_stream_default_duration
-                   : -1 != m_container_default_duration                                               ? m_container_default_duration
-                   :                                                                                    20000000;
-  return duration * 2;
+                   : -1 != m_stream_default_duration                                                  ? m_stream_default_duration * 2
+                   : -1 != m_container_default_duration                                               ? m_container_default_duration * 2
+                   :                                                                                    20000000 * 2;
+  return duration;
 }
 
 int64_t
