@@ -2032,7 +2032,7 @@ hevc::hevc_es_parser_c::cleanup() {
 
       frame_itr->m_presentation_order = poc_lsb + poc_msb;
 
-      if (si.type != HEVC_SLICE_TYPE_B) {  // is this accurate?
+      if ((HEVC_NALU_TYPE_RADL_N != idr.type) && (HEVC_NALU_TYPE_RADL_R != idr.type) && (HEVC_NALU_TYPE_RASL_N != idr.type) && (HEVC_NALU_TYPE_RASL_R != idr.type)) {
           prev_pic_order_cnt_lsb = poc_lsb;
           prev_pic_order_cnt_msb = poc_msb;
       }
