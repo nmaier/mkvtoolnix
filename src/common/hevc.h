@@ -88,6 +88,30 @@
 #define HEVC_NALU_TYPE_UNSPEC62       62
 #define HEVC_NALU_TYPE_UNSPEC63       63
 
+#define HEVC_SEI_BUFFERING_PERIOD                      0
+#define HEVC_SEI_PICTURE_TIMING                        1
+#define HEVC_SEI_PAN_SCAN_RECT                         2
+#define HEVC_SEI_FILLER_PAYLOAD                        3
+#define HEVC_SEI_USER_DATA_REGISTERED_ITU_T_T35        4
+#define HEVC_SEI_USER_DATA_UNREGISTERED                5
+#define HEVC_SEI_RECOVERY_POINT                        6
+#define HEVC_SEI_SCENE_INFO                            9
+#define HEVC_SEI_FULL_FRAME_SNAPSHOT                   15
+#define HEVC_SEI_PROGRESSIVE_REFINEMENT_SEGMENT_START  16
+#define HEVC_SEI_PROGRESSIVE_REFINEMENT_SEGMENT_END    17
+#define HEVC_SEI_FILM_GRAIN_CHARACTERISTICS            19
+#define HEVC_SEI_POST_FILTER_HINT                      22
+#define HEVC_SEI_TONE_MAPPING_INFO                     23
+#define HEVC_SEI_FRAME_PACKING                         45
+#define HEVC_SEI_DISPLAY_ORIENTATION                   47
+#define HEVC_SEI_SOP_DESCRIPTION                       128
+#define HEVC_SEI_ACTIVE_PARAMETER_SETS                 129
+#define HEVC_SEI_DECODING_UNIT_INFO                    130
+#define HEVC_SEI_TEMPORAL_LEVEL0_INDEX                 131
+#define HEVC_SEI_DECODED_PICTURE_HASH                  132
+#define HEVC_SEI_SCALABLE_NESTING                      133
+#define HEVC_SEI_REGION_REFRESH_INFO                   134
+
 #define HEVC_SLICE_TYPE_P   0
 #define HEVC_SLICE_TYPE_B   1
 #define HEVC_SLICE_TYPE_I   2
@@ -149,17 +173,24 @@ Bytes                                    Bits
 struct codec_private_t {
   unsigned char configuration_version;
   unsigned char general_params_block[GENERAL_PARAMS_BLOCK_SIZE];
-  unsigned char min_spatial_segmentation_idc[2];
+  unsigned int  min_spatial_segmentation_idc;
   unsigned char parallelism_type;
   unsigned char chroma_format_idc;
   unsigned char bit_depth_luma_minus8;
   unsigned char bit_depth_chroma_minus8;
   unsigned char reserved[2];
-  unsigned char rmts;
+  unsigned int  max_sub_layers_minus1;
+  unsigned int  temporal_id_nesting_flag;
   unsigned char num_parameter_sets;
+
+  bool have_general_params_block;
+  bool have_sps_data;
 
   codec_private_t() {
     memset(this, 0, sizeof(*this));
+
+    have_general_params_block = false;
+    have_sps_data = false;
   }
 };
 
@@ -169,7 +200,6 @@ struct vps_info_t {
   unsigned int profile_idc;
   unsigned int level_idc;
 
-  codec_private_t codec_private;
   unsigned int max_sub_layers_minus1;
 
   uint32_t checksum;
@@ -301,12 +331,11 @@ struct par_extraction_t {
 void nalu_to_rbsp(memory_cptr &buffer);
 void rbsp_to_nalu(memory_cptr &buffer);
 
-bool parse_vps(memory_cptr &buffer, vps_info_t &vps);
-bool parse_sps(memory_cptr &buffer, sps_info_t &sps, std::vector<vps_info_t> &m_vps_info_list, bool keep_ar_info = false);
+bool parse_vps(memory_cptr &buffer, vps_info_t &vps, codec_private_t &codec_private);
+bool parse_sps(memory_cptr &buffer, sps_info_t &sps, std::vector<vps_info_t> &m_vps_info_list, codec_private_t &codec_private, bool keep_ar_info = false);
 bool parse_pps(memory_cptr &buffer, pps_info_t &pps);
-bool parse_sei(memory_cptr &buffer, sei_info_t &sei);
-
-bool handle_sei_payload(mm_mem_io_c &byte_reader, unsigned int sei_payload_type, unsigned int sei_payload_size, sei_info_t &sei);
+bool parse_sei(memory_cptr &buffer/*, sei_info_t &sei*/);
+bool handle_sei_payload(mm_mem_io_c &byte_reader, unsigned int sei_payload_type, unsigned int sei_payload_size /*, sei_info_t &sei*/);
 
 par_extraction_t extract_par(memory_cptr const &buffer);
 bool is_hevc_fourcc(const char *fourcc);
@@ -394,18 +423,24 @@ public:
   std::vector<vps_info_t> m_vps_info_list;
   std::vector<sps_info_t> m_sps_info_list;
   std::vector<pps_info_t> m_pps_info_list;
-  std::vector<sei_info_t> m_sei_info_list;
+  //std::vector<sei_info_t> m_sei_info_list;
+  codec_private_t m_codec_private;
 
 public:
   hevcc_c();
-  hevcc_c(unsigned int nalu_size_len, std::vector<memory_cptr> const &vps_list, std::vector<memory_cptr> const &sps_list, std::vector<memory_cptr> const &pps_list);
+  hevcc_c(unsigned int nalu_size_len,
+          std::vector<memory_cptr> const &vps_list,
+          std::vector<memory_cptr> const &sps_list,
+          std::vector<memory_cptr> const &pps_list,
+          std::vector<memory_cptr> const &sei_list,
+          codec_private_t const &codec_private);
 
   explicit operator bool() const;
 
   bool parse_vps_list(bool ignore_errors = false);
   bool parse_sps_list(bool ignore_errors = false);
   bool parse_pps_list(bool ignore_errors = false);
-  bool parse_sei_list(bool ignore_errors = false);
+  //bool parse_sei_list(bool ignore_errors = false);
 
   memory_cptr pack();
   static hevcc_c unpack(memory_cptr const &mem);
@@ -439,7 +474,8 @@ protected:
   std::vector<vps_info_t> m_vps_info_list;
   std::vector<sps_info_t> m_sps_info_list;
   std::vector<pps_info_t> m_pps_info_list;
-  std::vector<sei_info_t> m_sei_info_list;
+  //std::vector<sei_info_t> m_sei_info_list;
+  codec_private_t m_codec_private;
 
   memory_cptr m_unparsed_buffer;
   uint64_t m_stream_position, m_parsed_position;
