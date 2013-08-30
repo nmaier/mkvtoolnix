@@ -172,32 +172,51 @@ Bytes                                    Bits
 
 struct codec_private_t {
   unsigned char configuration_version;
-  unsigned char general_params_block[GENERAL_PARAMS_BLOCK_SIZE];
+
+  // vps data
+  unsigned int profile_space;
+  unsigned int tier_flag;
+  unsigned int profile_idc;
+  unsigned int profile_compatibility_flag;
+  unsigned int progressive_source_flag;
+  unsigned int interlaced_source_flag;
+  unsigned int non_packed_constraint_flag;
+  unsigned int frame_only_constraint_flag;
+  unsigned int level_idc;
+
+  // sps data
   unsigned int  min_spatial_segmentation_idc;
-  unsigned char parallelism_type;
   unsigned char chroma_format_idc;
   unsigned char bit_depth_luma_minus8;
   unsigned char bit_depth_chroma_minus8;
-  unsigned char reserved[2];
   unsigned int  max_sub_layers_minus1;
   unsigned int  temporal_id_nesting_flag;
-  unsigned char num_parameter_sets;
 
-  bool have_general_params_block;
-  bool have_sps_data;
+  unsigned char num_parameter_sets;
+  unsigned char parallelism_type;
+
+  int vps_data_id;
+  int sps_data_id;
 
   codec_private_t() {
     memset(this, 0, sizeof(*this));
 
-    have_general_params_block = false;
-    have_sps_data = false;
+    vps_data_id = -1;
+    sps_data_id = -1;
   }
 };
 
 struct vps_info_t {
   unsigned int id;
 
+  unsigned int profile_space;
+  unsigned int tier_flag;
   unsigned int profile_idc;
+  unsigned int profile_compatibility_flag;
+  unsigned int progressive_source_flag;
+  unsigned int interlaced_source_flag;
+  unsigned int non_packed_constraint_flag;
+  unsigned int frame_only_constraint_flag;
   unsigned int level_idc;
 
   unsigned int max_sub_layers_minus1;
@@ -331,8 +350,8 @@ struct par_extraction_t {
 void nalu_to_rbsp(memory_cptr &buffer);
 void rbsp_to_nalu(memory_cptr &buffer);
 
-bool parse_vps(memory_cptr &buffer, vps_info_t &vps, codec_private_t &codec_private);
-bool parse_sps(memory_cptr &buffer, sps_info_t &sps, std::vector<vps_info_t> &m_vps_info_list, codec_private_t &codec_private, bool keep_ar_info = false);
+bool parse_vps(memory_cptr &buffer, vps_info_t &vps);
+bool parse_sps(memory_cptr &buffer, sps_info_t &sps, std::vector<vps_info_t> &m_vps_info_list, bool keep_ar_info = false);
 bool parse_pps(memory_cptr &buffer, pps_info_t &pps);
 bool parse_sei(memory_cptr &buffer/*, sei_info_t &sei*/);
 bool handle_sei_payload(mm_mem_io_c &byte_reader, unsigned int sei_payload_type, unsigned int sei_payload_size /*, sei_info_t &sei*/);

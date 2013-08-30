@@ -112,10 +112,10 @@ hevcc_c::parse_vps_list(bool ignore_errors) {
 
     if (ignore_errors) {
       try {
-        parse_vps(vps_as_rbsp, vps_info, m_codec_private);
+        parse_vps(vps_as_rbsp, vps_info);
       } catch (mtx::mm_io::end_of_file_x &) {
       }
-    } else if (!parse_vps(vps_as_rbsp, vps_info, m_codec_private))
+    } else if (!parse_vps(vps_as_rbsp, vps_info))
       return false;
 
     m_vps_info_list.push_back(vps_info);
@@ -137,10 +137,10 @@ hevcc_c::parse_sps_list(bool ignore_errors) {
 
     if (ignore_errors) {
       try {
-        parse_sps(sps_as_rbsp, sps_info, m_vps_info_list, m_codec_private);
+        parse_sps(sps_as_rbsp, sps_info, m_vps_info_list);
       } catch (mtx::mm_io::end_of_file_x &) {
       }
-    } else if (!parse_sps(sps_as_rbsp, sps_info, m_vps_info_list, m_codec_private))
+    } else if (!parse_sps(sps_as_rbsp, sps_info, m_vps_info_list))
       return false;
 
     m_sps_info_list.push_back(sps_info);
@@ -308,8 +308,38 @@ hevcc_c::pack() {
   // configuration version
   *buffer++ = m_codec_private.configuration_version;
   // general parameters block
-  memcpy(buffer, &(m_codec_private.general_params_block), GENERAL_PARAMS_BLOCK_SIZE);
-  buffer += GENERAL_PARAMS_BLOCK_SIZE;
+  //memcpy(buffer, &(m_codec_private.general_params_block), GENERAL_PARAMS_BLOCK_SIZE);
+  //buffer += GENERAL_PARAMS_BLOCK_SIZE;
+  // general_profile_space               2     Specifies the context for the interpretation of general_profile_idc and
+  //                                           general_profile_compatibility_flag
+  // general_tier_flag                   1     Specifies the context for the interpretation of general_level_idc
+  // general_profile_idc                 5     Defines the profile of the bitstream
+  *buffer++ = ((m_codec_private.profile_space & 0x03) << 6) |
+              ((m_codec_private.tier_flag & 0x01) << 5) |
+              (m_codec_private.profile_idc & 0x1F);
+  // general_profile_compatibility_flag  32    Defines profile compatibility
+  *buffer++ = (m_codec_private.profile_compatibility_flag & 0xFF000000) >> 24;
+  *buffer++ = (m_codec_private.profile_compatibility_flag & 0x00FF0000) >> 16;
+  *buffer++ = (m_codec_private.profile_compatibility_flag & 0x0000FF00) >> 8;
+  *buffer++ =  m_codec_private.profile_compatibility_flag & 0x000000FF;
+  // general_progressive_source_flag     1     Source is progressive, see [2] for interpretation.
+  // general_interlace_source_flag       1     Source is interlaced, see [2] for interpretation.
+  // general_non-packed_constraint_flag  1     If 1 then no frame packing arrangement SEI messages, see [2] for more information
+  // general_frame_only_constraint_flag  1     If 1 then no fields, see [2] for interpretation
+  // reserved                            44    Reserved field, value TBD 0
+  *buffer = 0;
+  *buffer |= ((m_codec_private.progressive_source_flag & 0x01) << 7) |
+             ((m_codec_private.interlaced_source_flag & 0x01) << 6) |
+             ((m_codec_private.non_packed_constraint_flag & 0x01) << 5) |
+             (m_codec_private.frame_only_constraint_flag & 0x01 << 4);
+  buffer++;
+  *buffer++ = 0;
+  *buffer++ = 0;
+  *buffer++ = 0;
+  *buffer++ = 0;
+  *buffer++ = 0;
+  // general_level_idc                   8     Defines the level of the bitstream
+  *buffer++ = m_codec_private.level_idc & 0xFF;
   // reserved                            4     Reserved Field, value '1111'b
   // min_spatial_segmentation_idc        12    Maximum possible size of distinct coded spatial segmentation regions in the pictures of the CVS
   *buffer++= 0xF0 | ((m_codec_private.min_spatial_segmentation_idc >> 8) & 0x0F);
@@ -539,10 +569,14 @@ profile_tier_copy(bit_reader_c &r,
   unsigned int i;
   std::vector<bool> sub_layer_profile_present_flag, sub_layer_level_present_flag;
 
-  w.copy_bits(2+1, r);    // general_profile_space, general_tier_flag
+  vps.profile_space = w.copy_bits(2, r);
+  vps.tier_flag = w.copy_bits(1, r);
   vps.profile_idc = w.copy_bits(5, r);  // general_profile_idc
-  w.copy_bits(32, r);     // general_profile_compatibility_flag[]
-  w.copy_bits(4, r);      // general_progressive_source_flag, general_interlaced_source_flag, general_non_packed_constraint_flag, general_frame_only_constraint_flag
+  vps.profile_compatibility_flag = w.copy_bits(32, r);
+  vps.progressive_source_flag = w.copy_bits(1, r);
+  vps.interlaced_source_flag = w.copy_bits(1, r);
+  vps.non_packed_constraint_flag = w.copy_bits(1, r);
+  vps.frame_only_constraint_flag = w.copy_bits(1, r);
   w.copy_bits(44, r);     // general_reserved_zero_44bits
   vps.level_idc = w.copy_bits(8, r);    // general_level_idc
 
@@ -981,8 +1015,7 @@ hevc::rbsp_to_nalu(memory_cptr &buffer) {
 
 bool
 hevc::parse_vps(memory_cptr &buffer,
-                vps_info_t &vps,
-                codec_private_t &codec_private) {
+                vps_info_t &vps) {
   int size              = buffer->get_size();
   unsigned char *newvps = (unsigned char *)safemalloc(size + 100);
   memset(newvps, 0, sizeof(char) * (size+100));
@@ -1006,12 +1039,6 @@ hevc::parse_vps(memory_cptr &buffer,
 
   // At this point we are at newvps + 6 bytes, profile_tier_level follows
   profile_tier_copy(r, w, vps, vps.max_sub_layers_minus1);  // profile_tier_level(vps_max_sub_layers_minus1)
-
-  // First 12 bytes of profile_tier_level belong in codec private data under the general_params_block
-  if(false == codec_private.have_general_params_block) {
-    memcpy(&codec_private.general_params_block, newvps+6, 12);
-    codec_private.have_general_params_block = true;
-  }
 
   bool vps_sub_layer_ordering_info_present_flag = w.copy_bits(1, r);  // vps_sub_layer_ordering_info_present_flag
   for (i = (vps_sub_layer_ordering_info_present_flag ? 0 : vps.max_sub_layers_minus1); i <= vps.max_sub_layers_minus1; i++) {
@@ -1062,7 +1089,6 @@ bool
 hevc::parse_sps(memory_cptr &buffer,
                 sps_info_t &sps,
                 std::vector<vps_info_t> &m_vps_info_list,
-                codec_private_t &codec_private,
                 bool keep_ar_info) {
   int size              = buffer->get_size();
   unsigned char *newsps = (unsigned char *)safemalloc(size + 100);
@@ -1101,12 +1127,6 @@ hevc::parse_sps(memory_cptr &buffer,
   vps_info_t &vps = m_vps_info_list[vps_idx];
 
   profile_tier_copy(r, w, vps, sps.max_sub_layers_minus1);  // profile_tier_level(sps_max_sub_layers_minus1)
-
-  // First 12 bytes of profile_tier_level belong in codec private data under the general_params_block
-  if(false == codec_private.have_general_params_block) {
-    memcpy(&codec_private.general_params_block, newsps+3, 12);
-    codec_private.have_general_params_block = true;
-  }
 
   sps.id = gecopy(r, w);  // sps_seq_parameter_set_id
 
@@ -1474,8 +1494,7 @@ hevc::extract_par(memory_cptr const &buffer) {
 
         try {
           sps_info_t sps_info;
-          codec_private_t codec_private;
-          if (hevc::parse_sps(nalu, sps_info, new_hevcc.m_vps_info_list, codec_private)) {
+          if (hevc::parse_sps(nalu, sps_info, new_hevcc.m_vps_info_list)) {
             if (s_debug_ar)
               sps_info.dump();
 
@@ -1800,7 +1819,7 @@ hevc::hevc_es_parser_c::handle_vps_nalu(memory_cptr &nalu) {
   vps_info_t vps_info;
 
   nalu_to_rbsp(nalu);
-  if (!parse_vps(nalu, vps_info, m_codec_private))
+  if (!parse_vps(nalu, vps_info))
     return;
   rbsp_to_nalu(nalu);
 
@@ -1819,7 +1838,35 @@ hevc::hevc_es_parser_c::handle_vps_nalu(memory_cptr &nalu) {
 
     m_vps_info_list[i] = vps_info;
     m_vps_list[i]      = nalu;
-    m_hevcc_changed     = true;
+    m_hevcc_changed    = true;
+
+    // Update codec private if needed
+    if(m_codec_private.vps_data_id == (int) vps_info.id) {
+        m_codec_private.profile_space = vps_info.profile_space;
+        m_codec_private.tier_flag = vps_info.tier_flag;
+        m_codec_private.profile_idc = vps_info.profile_idc;
+        m_codec_private.profile_compatibility_flag = vps_info.profile_compatibility_flag;
+        m_codec_private.progressive_source_flag = vps_info.progressive_source_flag;
+        m_codec_private.interlaced_source_flag = vps_info.interlaced_source_flag;
+        m_codec_private.non_packed_constraint_flag = vps_info.non_packed_constraint_flag;
+        m_codec_private.frame_only_constraint_flag = vps_info.frame_only_constraint_flag;
+        m_codec_private.level_idc = vps_info.level_idc;
+        m_codec_private.vps_data_id = vps_info.id;
+    }
+  }
+
+  // Update codec private if needed
+  if(-1 == m_codec_private.vps_data_id) {
+      m_codec_private.profile_space = vps_info.profile_space;
+      m_codec_private.tier_flag = vps_info.tier_flag;
+      m_codec_private.profile_idc = vps_info.profile_idc;
+      m_codec_private.profile_compatibility_flag = vps_info.profile_compatibility_flag;
+      m_codec_private.progressive_source_flag = vps_info.progressive_source_flag;
+      m_codec_private.interlaced_source_flag = vps_info.interlaced_source_flag;
+      m_codec_private.non_packed_constraint_flag = vps_info.non_packed_constraint_flag;
+      m_codec_private.frame_only_constraint_flag = vps_info.frame_only_constraint_flag;
+      m_codec_private.level_idc = vps_info.level_idc;
+      m_codec_private.vps_data_id = vps_info.id;
   }
 
   m_extra_data.push_back(create_nalu_with_size(nalu));
@@ -1830,7 +1877,7 @@ hevc::hevc_es_parser_c::handle_sps_nalu(memory_cptr &nalu) {
   sps_info_t sps_info;
 
   nalu_to_rbsp(nalu);
-  if (!parse_sps(nalu, sps_info, m_vps_info_list, m_codec_private, m_keep_ar_info))
+  if (!parse_sps(nalu, sps_info, m_vps_info_list, m_keep_ar_info))
     return;
   rbsp_to_nalu(nalu);
 
@@ -1850,21 +1897,31 @@ hevc::hevc_es_parser_c::handle_sps_nalu(memory_cptr &nalu) {
 
     m_sps_info_list[i] = sps_info;
     m_sps_list[i]      = nalu;
-    m_hevcc_changed     = true;
+    m_hevcc_changed    = true;
 
-  } else
-    use_sps_info = false;
-
-  m_extra_data.push_back(create_nalu_with_size(nalu));
-
-  if(false == m_codec_private.have_sps_data) {
+    // Update codec private if needed
+    if(m_codec_private.sps_data_id == (int) sps_info.id) {
       m_codec_private.min_spatial_segmentation_idc = sps_info.min_spatial_segmentation_idc;
       m_codec_private.chroma_format_idc = sps_info.chroma_format_idc;
       m_codec_private.bit_depth_luma_minus8 = sps_info.bit_depth_luma_minus8;
       m_codec_private.bit_depth_chroma_minus8 = sps_info.bit_depth_chroma_minus8;
       m_codec_private.max_sub_layers_minus1 = sps_info.max_sub_layers_minus1;
       m_codec_private.temporal_id_nesting_flag = sps_info.temporal_id_nesting_flag;
-      m_codec_private.have_sps_data = true;
+    }
+  } else
+    use_sps_info = false;
+
+  m_extra_data.push_back(create_nalu_with_size(nalu));
+
+  // Update codec private if needed
+  if(-1 == m_codec_private.sps_data_id) {
+      m_codec_private.min_spatial_segmentation_idc = sps_info.min_spatial_segmentation_idc;
+      m_codec_private.chroma_format_idc = sps_info.chroma_format_idc;
+      m_codec_private.bit_depth_luma_minus8 = sps_info.bit_depth_luma_minus8;
+      m_codec_private.bit_depth_chroma_minus8 = sps_info.bit_depth_chroma_minus8;
+      m_codec_private.max_sub_layers_minus1 = sps_info.max_sub_layers_minus1;
+      m_codec_private.temporal_id_nesting_flag = sps_info.temporal_id_nesting_flag;
+      m_codec_private.sps_data_id = sps_info.id;
   }
 
   if (use_sps_info && m_debug_sps_info)
