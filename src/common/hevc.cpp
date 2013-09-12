@@ -308,8 +308,6 @@ hevcc_c::pack() {
   // configuration version
   *buffer++ = m_codec_private.configuration_version;
   // general parameters block
-  //memcpy(buffer, &(m_codec_private.general_params_block), GENERAL_PARAMS_BLOCK_SIZE);
-  //buffer += GENERAL_PARAMS_BLOCK_SIZE;
   // general_profile_space               2     Specifies the context for the interpretation of general_profile_idc and
   //                                           general_profile_compatibility_flag
   // general_tier_flag                   1     Specifies the context for the interpretation of general_level_idc
@@ -328,11 +326,10 @@ hevcc_c::pack() {
   // general_frame_only_constraint_flag  1     If 1 then no fields, see [2] for interpretation
   // reserved                            44    Reserved field, value TBD 0
   *buffer = 0;
-  *buffer |= ((m_codec_private.progressive_source_flag & 0x01) << 7) |
-             ((m_codec_private.interlaced_source_flag & 0x01) << 6) |
-             ((m_codec_private.non_packed_constraint_flag & 0x01) << 5) |
-             (m_codec_private.frame_only_constraint_flag & 0x01 << 4);
-  buffer++;
+  *buffer++ |= ((m_codec_private.progressive_source_flag & 0x01) << 7) |
+               ((m_codec_private.interlaced_source_flag & 0x01) << 6) |
+               ((m_codec_private.non_packed_constraint_flag & 0x01) << 5) |
+               (m_codec_private.frame_only_constraint_flag & 0x01 << 4);
   *buffer++ = 0;
   *buffer++ = 0;
   *buffer++ = 0;
@@ -834,24 +831,25 @@ vui_parameters_copy(bit_reader_c &r,
     unsigned int ar_type = r.get_bits(8);   // aspect_ratio_idc
 
     if (keep_ar_info) {
-      w.put_bit(1);
-      w.put_bits(8, ar_type);
+      w.put_bit(1);                         // aspect_ratio_info_present_flag
+      w.put_bits(8, ar_type);               // aspect_ratio_idc
     } else
-      w.put_bit(0);
+      w.put_bit(0);                         // aspect_ratio_info_present_flag
 
     sps.ar_found = true;
 
     if (HEVC_EXTENDED_SAR == ar_type) {
       sps.par_num = r.get_bits(16); // sar_width
       sps.par_den = r.get_bits(16); // sar_height
+
+      if (keep_ar_info &&
+          0xFF == ar_type) {
+        w.put_bits(16, sps.par_num);
+        w.put_bits(16, sps.par_den);
+      }
     } else if (HEVC_NUM_PREDEFINED_PARS >= ar_type) {
       sps.par_num = hevc::s_predefined_pars[ar_type].numerator;
       sps.par_den = hevc::s_predefined_pars[ar_type].denominator;
-    }
-
-    if (keep_ar_info) {
-      w.put_bits(16, sps.par_num);
-      w.put_bits(16, sps.par_den);
     }
   } else
     sps.ar_found = false;
@@ -1077,8 +1075,11 @@ hevc::parse_vps(memory_cptr &buffer,
   w.put_bit(1);
   w.byte_align();
 
-  buffer = mcptr_newvps;
-  buffer->set_size(w.get_bit_position() / 8);
+  // Given we don't change the NALU while writing to w,
+  // then we don't need to replace buffer with the bits we've written into w.
+  // Leaving this code as reference if we ever do change the NALU while writing to w.
+  //buffer = mcptr_newvps;
+  //buffer->set_size(w.get_bit_position() / 8);
 
   vps.checksum = calc_adler32(buffer->get_buffer(), buffer->get_size());
 
@@ -1204,6 +1205,8 @@ hevc::parse_sps(memory_cptr &buffer,
   w.put_bit(1);
   w.byte_align();
 
+  // We potentially changed the NALU data with regards to the handling of keep_ar_info.
+  // Therefore, we replace buffer with the changed NALU that exists in w.
   buffer = mcptr_newsps;
   buffer->set_size(w.get_bit_position() / 8);
 
