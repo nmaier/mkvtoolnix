@@ -1,3 +1,8 @@
+2013-09-14  Monty Montgomery  <xiphmont@gmail.com>
+
+        * mkvinfo: bug fix: The track information summary enabled with
+        -t/--track-info counted bytes in SimpleBlocks twice.
+
 2013-07-19  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvmerge: bug fix: CueRelativePosition was wrong for

@@ -1364,8 +1364,6 @@ handle_simple_block(EbmlStream *&es,
     DataBuffer &data = block.GetBuffer(i);
     uint32_t adler   = calc_adler32(data.Buffer(), data.Size());
 
-    tinfo.m_size += data.Size();
-
     std::string adler_str;
     if (g_options.m_calc_checksums)
       adler_str = (BF_SIMPLE_BLOCK_ADLER % adler).str();
