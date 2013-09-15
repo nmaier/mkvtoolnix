@@ -65,29 +65,21 @@ xtr_ivf_c::create_file(xtr_base_c *master,
 }
 
 void
-xtr_ivf_c::handle_frame(memory_cptr &frame,
-                        KaxBlockAdditions *,
-                        int64_t timecode,
-                        int64_t,
-                        int64_t,
-                        int64_t,
-                        bool,
-                        bool,
-                        bool) {
-  m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
+xtr_ivf_c::handle_frame(xtr_frame_t &f) {
+  m_content_decoder.reverse(f.frame, CONTENT_ENCODING_SCOPE_BLOCK);
 
-  uint64_t frame_number = timecode * m_frame_rate_num / m_frame_rate_den / 1000000000ull;
+  uint64_t frame_number = f.timecode * m_frame_rate_num / m_frame_rate_den / 1000000000ull;
 
   mxverb(2, boost::format("timecode %1% num %2% den %3% frame_number %4% calculated back %5%\n")
-         % timecode % m_frame_rate_num % m_frame_rate_den % frame_number
+         % f.timecode % m_frame_rate_num % m_frame_rate_den % frame_number
          % (frame_number * 1000000000ull * m_frame_rate_den / m_frame_rate_num));
 
   ivf::frame_header_t frame_header;
-  put_uint32_le(&frame_header.frame_size, frame->get_size());
+  put_uint32_le(&frame_header.frame_size, f.frame->get_size());
   put_uint32_le(&frame_header.timestamp,  frame_number);
 
-  m_out->write(&frame_header,       sizeof(frame_header));
-  m_out->write(frame->get_buffer(), frame->get_size());
+  m_out->write(&frame_header,         sizeof(frame_header));
+  m_out->write(f.frame->get_buffer(), f.frame->get_size());
 
   ++m_frame_count;
 }
@@ -99,4 +91,3 @@ xtr_ivf_c::finish_file() {
   m_out->setFilePointer(0, seek_beginning);
   m_out->write(&m_file_header, sizeof(m_file_header));
 }
-

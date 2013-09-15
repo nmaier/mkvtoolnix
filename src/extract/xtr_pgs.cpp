@@ -27,22 +27,14 @@ xtr_pgs_c::xtr_pgs_c(const std::string &codec_id,
 }
 
 void
-xtr_pgs_c::handle_frame(memory_cptr &frame,
-                        KaxBlockAdditions *,
-                        int64_t timecode,
-                        int64_t,
-                        int64_t,
-                        int64_t,
-                        bool,
-                        bool,
-                        bool) {
-  m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
+xtr_pgs_c::handle_frame(xtr_frame_t &f) {
+  m_content_decoder.reverse(f.frame, CONTENT_ENCODING_SCOPE_BLOCK);
 
   binary sup_header[10];
-  binary *mybuffer = frame->get_buffer();
-  int data_size    = frame->get_size();
+  binary *mybuffer = f.frame->get_buffer();
+  int data_size    = f.frame->get_size();
   int offset       = 0;
-  uint64_t pts     = (timecode * 9) / 100000;
+  uint64_t pts     = (f.timecode * 9) / 100000;
 
   memcpy(sup_header, "PG", 2);
   put_uint32_be(&sup_header[2], (uint32)pts);

@@ -118,16 +118,8 @@ xtr_wavpack4_c::create_file(xtr_base_c *master,
 }
 
 void
-xtr_wavpack4_c::handle_frame(memory_cptr &frame,
-                             KaxBlockAdditions *additions,
-                             int64_t,
-                             int64_t,
-                             int64_t,
-                             int64_t,
-                             bool,
-                             bool,
-                             bool) {
-  m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
+xtr_wavpack4_c::handle_frame(xtr_frame_t &f) {
+  m_content_decoder.reverse(f.frame, CONTENT_ENCODING_SCOPE_BLOCK);
 
   // build the main header
 
@@ -142,8 +134,8 @@ xtr_wavpack4_c::handle_frame(memory_cptr &frame,
   wv_header[15] = 0xFF;
   put_uint32_le(&wv_header[16], m_number_of_samples); // block_index
 
-  const binary *mybuffer  = frame->get_buffer();
-  int data_size           = frame->get_size();
+  const binary *mybuffer  = f.frame->get_buffer();
+  int data_size           = f.frame->get_size();
   m_number_of_samples    += get_uint32_le(mybuffer);
 
   // rest of the header:
@@ -183,8 +175,8 @@ xtr_wavpack4_c::handle_frame(memory_cptr &frame,
   }
 
   // support hybrid mode data
-  if (m_corr_out && (additions)) {
-    KaxBlockMore *block_more = FindChild<KaxBlockMore>(additions);
+  if (m_corr_out && (f.additions)) {
+    KaxBlockMore *block_more = FindChild<KaxBlockMore>(f.additions);
 
     if (!block_more)
       return;

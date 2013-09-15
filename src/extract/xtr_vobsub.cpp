@@ -99,31 +99,23 @@ xtr_vobsub_c::create_file(xtr_base_c *master,
 }
 
 void
-xtr_vobsub_c::handle_frame(memory_cptr &frame,
-                           KaxBlockAdditions *,
-                           int64_t timecode,
-                           int64_t,
-                           int64_t,
-                           int64_t,
-                           bool,
-                           bool,
-                           bool) {
+xtr_vobsub_c::handle_frame(xtr_frame_t &f) {
   static unsigned char padding_data[8] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
 
   xtr_vobsub_c *vmaster = !m_master ? this : static_cast<xtr_vobsub_c *>(m_master);
 
-  m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
+  m_content_decoder.reverse(f.frame, CONTENT_ENCODING_SCOPE_BLOCK);
 
-  unsigned char *data = frame->get_buffer();
-  size_t size         = frame->get_size();
+  unsigned char *data = f.frame->get_buffer();
+  size_t size         = f.frame->get_size();
 
   m_positions.push_back(vmaster->m_out->getFilePointer());
-  m_timecodes.push_back(timecode);
+  m_timecodes.push_back(f.timecode);
 
   uint32_t padding = (2048 - (size + sizeof(mpeg_ps_header_t) + sizeof(mpeg_es_header_t))) & 2047;
   uint32_t first   = size + sizeof(mpeg_ps_header_t) + sizeof(mpeg_es_header_t) > 2048 ? 2048 - sizeof(mpeg_ps_header_t) - sizeof(mpeg_es_header_t) : size;
 
-  uint64_t c       = timecode * 9 / 100000;
+  uint64_t c       = f.timecode * 9 / 100000;
 
   mpeg_ps_header_t ps;
   memset(&ps, 0, sizeof(mpeg_ps_header_t));

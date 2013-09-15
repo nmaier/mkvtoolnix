@@ -105,16 +105,8 @@ xtr_aac_c::create_file(xtr_base_c *master,
 #endif
 
 void
-xtr_aac_c::handle_frame(memory_cptr &frame,
-                        KaxBlockAdditions *,
-                        int64_t,
-                        int64_t,
-                        int64_t,
-                        int64_t,
-                        bool,
-                        bool,
-                        bool) {
-  m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
+xtr_aac_c::handle_frame(xtr_frame_t &f) {
+  m_content_decoder.reverse(f.frame, CONTENT_ENCODING_SCOPE_BLOCK);
 
   // Recreate the ADTS headers. What a fun. Like runing headlong into
   // a solid wall. But less painful. Well such is life, you know.
@@ -156,7 +148,7 @@ xtr_aac_c::handle_frame(memory_cptr &frame,
   // copyright id start, 1 bit = 0 (ASSUMPTION!)
 
   // frame length, 13 bits
-  int len  = frame->get_size() + 7;
+  int len  = f.frame->get_size() + 7;
   adts[3] |= len >> 11;
   adts[4]  = (len >> 3) & 0xff;
   adts[5]  = (len & 7) << 5;
@@ -169,5 +161,5 @@ xtr_aac_c::handle_frame(memory_cptr &frame,
 
   // Write the ADTS header and the data itself.
   m_out->write(adts, 56 / 8);
-  m_out->write(frame);
+  m_out->write(f.frame);
 }

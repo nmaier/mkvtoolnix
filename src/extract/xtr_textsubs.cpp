@@ -40,29 +40,21 @@ xtr_srt_c::create_file(xtr_base_c *master,
 }
 
 void
-xtr_srt_c::handle_frame(memory_cptr &frame,
-                        KaxBlockAdditions *,
-                        int64_t timecode,
-                        int64_t duration,
-                        int64_t,
-                        int64_t,
-                        bool,
-                        bool,
-                        bool) {
-  m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
+xtr_srt_c::handle_frame(xtr_frame_t &f) {
+  m_content_decoder.reverse(f.frame, CONTENT_ENCODING_SCOPE_BLOCK);
 
-  if (-1 == duration) {
+  if (-1 == f.duration) {
     mxwarn(boost::format(Y("Track %1%: Subtitle entry number %2% is missing its duration. Assuming a duration of 1s.\n")) % m_tid % (m_num_entries + 1));
-    duration = 1000000000;
+    f.duration = 1000000000;
   }
 
-  int64_t start = timecode / 1000000;
-  int64_t end   = start + duration / 1000000;
+  int64_t start =         f.timecode / 1000000;
+  int64_t end   = start + f.duration / 1000000;
 
   ++m_num_entries;
-  char *text = new char[frame->get_size() + 1];
-  memcpy(text, frame->get_buffer(), frame->get_size());
-  text[frame->get_size()] = 0;
+  char *text = new char[f.frame->get_size() + 1];
+  memcpy(text, f.frame->get_buffer(), f.frame->get_size());
+  text[f.frame->get_size()] = 0;
 
   std::string buffer =
     (boost::format("%1%\n"
@@ -165,31 +157,23 @@ xtr_ssa_c::create_file(xtr_base_c *master,
 }
 
 void
-xtr_ssa_c::handle_frame(memory_cptr &frame,
-                        KaxBlockAdditions *,
-                        int64_t timecode,
-                        int64_t duration,
-                        int64_t,
-                        int64_t,
-                        bool,
-                        bool,
-                        bool) {
-  m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
+xtr_ssa_c::handle_frame(xtr_frame_t &f) {
+  m_content_decoder.reverse(f.frame, CONTENT_ENCODING_SCOPE_BLOCK);
 
-  if (0 > duration) {
+  if (0 > f.duration) {
     mxwarn(boost::format(Y("Subtitle track %1% is missing some duration elements. "
                            "Please check the resulting SSA/ASS file for entries that have the same start and end time.\n"))
            % m_tid);
     m_warning_printed = true;
   }
 
-  int64_t start = timecode / 1000000;
-  int64_t end   = start + duration / 1000000;
+  int64_t start =         f.timecode / 1000000;
+  int64_t end   = start + f.duration / 1000000;
 
-  char *s       = (char *)safemalloc(frame->get_size() + 1);
+  char *s       = (char *)safemalloc(f.frame->get_size() + 1);
   memory_c af_s((unsigned char *)s, 0, true);
-  memcpy(s, frame->get_buffer(), frame->get_size());
-  s[frame->get_size()] = 0;
+  memcpy(s, f.frame->get_buffer(), f.frame->get_size());
+  s[f.frame->get_size()] = 0;
 
   // Split the line into the fields.
   // Specs say that the following fields are to put into the block:
@@ -198,7 +182,7 @@ xtr_ssa_c::handle_frame(memory_cptr &frame,
   std::vector<std::string> fields = split(s, ",", 9);
   if (9 < fields.size()) {
     mxwarn(boost::format(Y("Invalid format for a SSA line ('%1%') at timecode %2%: Too many fields found (%3% instead of 9). This entry will be skipped.\n"))
-           % s % format_timecode(timecode * 1000000, 3) % fields.size());
+           % s % format_timecode(f.timecode * 1000000, 3) % fields.size());
     return;
   }
 
@@ -209,7 +193,7 @@ xtr_ssa_c::handle_frame(memory_cptr &frame,
   int num;
   if (!parse_number(fields[0], num)) {
     mxwarn(boost::format(Y("Invalid format for a SSA line ('%1%') at timecode %2%: The first field is not an integer. This entry will be skipped.\n"))
-           % s % format_timecode(timecode * 1000000, 3));
+           % s % format_timecode(f.timecode * 1000000, 3));
     return;
   }
 
@@ -366,19 +350,11 @@ xtr_usf_c::create_file(xtr_base_c *master,
 }
 
 void
-xtr_usf_c::handle_frame(memory_cptr &frame,
-                        KaxBlockAdditions *,
-                        int64_t timecode,
-                        int64_t duration,
-                        int64_t,
-                        int64_t,
-                        bool,
-                        bool,
-                        bool) {
-  m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
+xtr_usf_c::handle_frame(xtr_frame_t &f) {
+  m_content_decoder.reverse(f.frame, CONTENT_ENCODING_SCOPE_BLOCK);
 
-  usf_entry_t entry("", timecode, timecode + duration);
-  entry.m_text.append((const char *)frame->get_buffer(), frame->get_size());
+  usf_entry_t entry("", f.timecode, f.timecode + f.duration);
+  entry.m_text.append((const char *)f.frame->get_buffer(), f.frame->get_size());
   m_entries.push_back(entry);
 }
 

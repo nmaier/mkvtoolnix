@@ -85,21 +85,13 @@ xtr_avc_c::create_file(xtr_base_c *master,
 }
 
 void
-xtr_avc_c::handle_frame(memory_cptr &frame,
-                        KaxBlockAdditions *,
-                        int64_t,
-                        int64_t,
-                        int64_t,
-                        int64_t,
-                        bool,
-                        bool,
-                        bool) {
-  m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
+xtr_avc_c::handle_frame(xtr_frame_t &f) {
+  m_content_decoder.reverse(f.frame, CONTENT_ENCODING_SCOPE_BLOCK);
 
   size_t pos  = 0;
-  binary *buf = (binary *)frame->get_buffer();
+  binary *buf = (binary *)f.frame->get_buffer();
 
-  while (frame->get_size() > pos)
-    if (!write_nal(buf, pos, frame->get_size(), m_nal_size_size))
+  while (f.frame->get_size() > pos)
+    if (!write_nal(buf, pos, f.frame->get_size(), m_nal_size_size))
       return;
 }

@@ -36,25 +36,17 @@ xtr_mpeg1_2_video_c::create_file(xtr_base_c *master,
 }
 
 void
-xtr_mpeg1_2_video_c::handle_frame(memory_cptr &frame,
-                                  KaxBlockAdditions *,
-                                  int64_t,
-                                  int64_t,
-                                  int64_t bref,
-                                  int64_t,
-                                  bool keyframe,
-                                  bool,
-                                  bool references_valid) {
-  m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
+xtr_mpeg1_2_video_c::handle_frame(xtr_frame_t &f) {
+  m_content_decoder.reverse(f.frame, CONTENT_ENCODING_SCOPE_BLOCK);
 
-  binary *buf = (binary *)frame->get_buffer();
+  binary *buf = (binary *)f.frame->get_buffer();
 
-  if (references_valid)
-    keyframe = (0 == bref);
+  if (f.references_valid)
+    f.keyframe = (0 == f.bref);
 
-  if (keyframe && m_seq_hdr) {
+  if (f.keyframe && m_seq_hdr) {
     bool seq_hdr_found = false;
-    size_t size        = frame->get_size();
+    size_t size        = f.frame->get_size();
 
     if (4 <= size) {
       uint32_t marker = get_uint32_be(buf);
@@ -81,7 +73,7 @@ xtr_mpeg1_2_video_c::handle_frame(memory_cptr &frame,
       m_out->write(m_seq_hdr);
   }
 
-  m_out->write(buf, frame->get_size());
+  m_out->write(buf, f.frame->get_size());
 }
 
 void

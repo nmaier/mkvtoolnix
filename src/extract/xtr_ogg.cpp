@@ -114,23 +114,15 @@ xtr_oggbase_c::header_packets_unlaced(std::vector<memory_cptr> &) {
 }
 
 void
-xtr_oggbase_c::handle_frame(memory_cptr &frame,
-                            KaxBlockAdditions *,
-                            int64_t timecode,
-                            int64_t duration,
-                            int64_t,
-                            int64_t,
-                            bool,
-                            bool,
-                            bool) {
-  m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
+xtr_oggbase_c::handle_frame(xtr_frame_t &f) {
+  m_content_decoder.reverse(f.frame, CONTENT_ENCODING_SCOPE_BLOCK);
 
   if (-1 != m_queued_granulepos)
-    m_queued_granulepos = timecode * m_sfreq / 1000000000;
+    m_queued_granulepos = f.timecode * m_sfreq / 1000000000;
 
-  queue_frame(frame, 0);
+  queue_frame(f.frame, 0);
 
-  m_previous_end = timecode + duration;
+  m_previous_end = f.timecode + f.duration;
 }
 
 xtr_oggbase_c::~xtr_oggbase_c() {
@@ -244,20 +236,12 @@ xtr_oggvorbis_c::header_packets_unlaced(std::vector<memory_cptr> &header_packets
 
 
 void
-xtr_oggvorbis_c::handle_frame(memory_cptr &frame,
-                              KaxBlockAdditions *,
-                              int64_t,
-                              int64_t,
-                              int64_t,
-                              int64_t,
-                              bool,
-                              bool,
-                              bool) {
-  m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
+xtr_oggvorbis_c::handle_frame(xtr_frame_t &f) {
+  m_content_decoder.reverse(f.frame, CONTENT_ENCODING_SCOPE_BLOCK);
 
   ogg_packet op;
-  op.packet               = frame->get_buffer();
-  op.bytes                = frame->get_size();
+  op.packet               = f.frame->get_buffer();
+  op.bytes                = f.frame->get_size();
   int64_t this_block_size = vorbis_packet_blocksize(&m_vorbis_info, &op);
 
   if (-1 != m_previous_block_size) {
@@ -268,7 +252,7 @@ xtr_oggvorbis_c::handle_frame(memory_cptr &frame,
   m_previous_end        = m_samples * 1000000000 / m_sfreq;
   m_previous_block_size = this_block_size;
 
-  queue_frame(frame, 0);
+  queue_frame(f.frame, 0);
 }
 
 // ------------------------------------------------------------------------
@@ -294,26 +278,18 @@ xtr_oggkate_c::header_packets_unlaced(std::vector<memory_cptr> &header_packets) 
 }
 
 void
-xtr_oggkate_c::handle_frame(memory_cptr &frame,
-                            KaxBlockAdditions *,
-                            int64_t timecode,
-                            int64_t,
-                            int64_t,
-                            int64_t,
-                            bool,
-                            bool,
-                            bool) {
-  m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
+xtr_oggkate_c::handle_frame(xtr_frame_t &f) {
+  m_content_decoder.reverse(f.frame, CONTENT_ENCODING_SCOPE_BLOCK);
 
   ogg_packet op;
   op.b_o_s    = 0;
-  op.e_o_s    = (frame->get_size() == 1) && (frame->get_buffer()[0] == 0x7f);
+  op.e_o_s    = (f.frame->get_size() == 1) && (f.frame->get_buffer()[0] == 0x7f);
   op.packetno = m_packetno;
-  op.packet   = frame->get_buffer();
-  op.bytes    = frame->get_size();
+  op.packet   = f.frame->get_buffer();
+  op.bytes    = f.frame->get_size();
 
   /* we encode the backlink in the granulepos */
-  float f_timecode   = timecode / 1000000000.0;
+  float f_timecode   = f.timecode / 1000000000.0;
   int64_t g_backlink = 0;
 
   if (op.bytes >= static_cast<long>(1 + 3 * sizeof(int64_t)))
@@ -355,25 +331,17 @@ xtr_oggtheora_c::header_packets_unlaced(std::vector<memory_cptr> &header_packets
 }
 
 void
-xtr_oggtheora_c::handle_frame(memory_cptr &frame,
-                              KaxBlockAdditions *,
-                              int64_t,
-                              int64_t,
-                              int64_t,
-                              int64_t,
-                              bool,
-                              bool,
-                              bool) {
-  m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
+xtr_oggtheora_c::handle_frame(xtr_frame_t &f) {
+  m_content_decoder.reverse(f.frame, CONTENT_ENCODING_SCOPE_BLOCK);
 
-  if (frame->get_size() && (0x00 == (frame->get_buffer()[0] & 0x40))) {
+  if (f.frame->get_size() && (0x00 == (f.frame->get_buffer()[0] & 0x40))) {
     m_keyframe_number     += m_non_keyframe_number + 1;
     m_non_keyframe_number  = 0;
 
   } else
     m_non_keyframe_number += 1;
 
-  queue_frame(frame, (m_keyframe_number << m_theora_header.kfgshift) | (m_non_keyframe_number & ((1 << m_theora_header.kfgshift) - 1)));
+  queue_frame(f.frame, (m_keyframe_number << m_theora_header.kfgshift) | (m_non_keyframe_number & ((1 << m_theora_header.kfgshift) - 1)));
 }
 
 void

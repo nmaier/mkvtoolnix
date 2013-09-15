@@ -51,22 +51,14 @@ xtr_tta_c::create_file(xtr_base_c *,
 }
 
 void
-xtr_tta_c::handle_frame(memory_cptr &frame,
-                        KaxBlockAdditions *,
-                        int64_t,
-                        int64_t duration,
-                        int64_t,
-                        int64_t,
-                        bool,
-                        bool,
-                        bool) {
-  m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
+xtr_tta_c::handle_frame(xtr_frame_t &f) {
+  m_content_decoder.reverse(f.frame, CONTENT_ENCODING_SCOPE_BLOCK);
 
-  m_frame_sizes.push_back(frame->get_size());
-  m_out->write(frame);
+  m_frame_sizes.push_back(f.frame->get_size());
+  m_out->write(f.frame);
 
-  if (0 < duration)
-    m_previous_duration = duration;
+  if (0 < f.duration)
+    m_previous_duration = f.duration;
 }
 
 void

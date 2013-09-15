@@ -184,9 +184,10 @@ handle_blockgroup(KaxBlockGroup &blockgroup,
       this_duration = duration / block->NumberFrames();
     }
 
-    DataBuffer &data = block->GetBuffer(i);
-    memory_cptr frame(new memory_c(data.Buffer(), data.Size(), false));
-    extractor->handle_frame(frame, kadditions, this_timecode, this_duration, bref, fref, false, false, true);
+    auto &data = block->GetBuffer(i);
+    auto frame = std::make_shared<memory_c>(data.Buffer(), data.Size(), false);
+    auto f     = xtr_frame_t{frame, kadditions, this_timecode, this_duration, bref, fref, false, false, true};
+    extractor->handle_frame(f);
 
     max_timecode = std::max(max_timecode, this_timecode);
   }
@@ -228,9 +229,10 @@ handle_simpleblock(KaxSimpleBlock &simpleblock,
       this_duration = duration / simpleblock.NumberFrames();
     }
 
-    DataBuffer &data = simpleblock.GetBuffer(i);
-    memory_cptr frame(new memory_c(data.Buffer(), data.Size(), false));
-    extractor->handle_frame(frame, nullptr, this_timecode, this_duration, -1, -1, simpleblock.IsKeyframe(), simpleblock.IsDiscardable(), false);
+    auto &data = simpleblock.GetBuffer(i);
+    auto frame = std::make_shared<memory_c>(data.Buffer(), data.Size(), false);
+    auto f     = xtr_frame_t{frame, nullptr, this_timecode, this_duration, -1, -1, simpleblock.IsKeyframe(), simpleblock.IsDiscardable(), false};
+    extractor->handle_frame(f);
 
     max_timecode = std::max(max_timecode, this_timecode);
   }

@@ -79,24 +79,16 @@ xtr_avi_c::create_file(xtr_base_c *master,
 }
 
 void
-xtr_avi_c::handle_frame(memory_cptr &frame,
-                        KaxBlockAdditions *,
-                        int64_t,
-                        int64_t duration,
-                        int64_t bref,
-                        int64_t,
-                        bool keyframe,
-                        bool,
-                        bool references_valid) {
-  if (references_valid)
-    keyframe = (0 == bref);
+xtr_avi_c::handle_frame(xtr_frame_t &f) {
+  if (f.references_valid)
+    f.keyframe = (0 == f.bref);
 
-  m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
-  AVI_write_frame(m_avi, (char *)frame->get_buffer(), frame->get_size(), keyframe);
+  m_content_decoder.reverse(f.frame, CONTENT_ENCODING_SCOPE_BLOCK);
+  AVI_write_frame(m_avi, (char *)f.frame->get_buffer(), f.frame->get_size(), f.keyframe);
 
-  if (((double)duration / 1000000.0 - (1000.0 / m_fps)) >= 1.5) {
+  if (((double)f.duration / 1000000.0 - (1000.0 / m_fps)) >= 1.5) {
     int k;
-    int nfr = irnd((double)duration / 1000000.0 * m_fps / 1000.0);
+    int nfr = irnd((double)f.duration / 1000000.0 * m_fps / 1000.0);
     for (k = 2; k <= nfr; k++)
       AVI_write_frame(m_avi, nullptr, 0, 0);
   }

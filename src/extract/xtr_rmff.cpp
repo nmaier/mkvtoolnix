@@ -55,26 +55,18 @@ xtr_rmff_c::create_file(xtr_base_c *master,
 }
 
 void
-xtr_rmff_c::handle_frame(memory_cptr &frame,
-                         KaxBlockAdditions *,
-                         int64_t timecode,
-                         int64_t,
-                         int64_t bref,
-                         int64_t,
-                         bool keyframe,
-                         bool,
-                         bool references_valid) {
-  m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
+xtr_rmff_c::handle_frame(xtr_frame_t &f) {
+  m_content_decoder.reverse(f.frame, CONTENT_ENCODING_SCOPE_BLOCK);
 
-  if (references_valid)
-    keyframe = (0 == bref);
+  if (f.references_valid)
+    f.keyframe = (0 == f.bref);
 
-  rmff_frame_t *rmff_frame = rmff_allocate_frame(frame->get_size(), frame->get_buffer());
+  rmff_frame_t *rmff_frame = rmff_allocate_frame(f.frame->get_size(), f.frame->get_buffer());
   if (!rmff_frame)
     mxerror(Y("Memory for a RealAudio/RealVideo frame could not be allocated.\n"));
 
-  rmff_frame->timecode = timecode / 1000000;
-  if (keyframe)
+  rmff_frame->timecode = f.timecode / 1000000;
+  if (f.keyframe)
     rmff_frame->flags  = RMFF_FRAME_FLAG_KEYFRAME;
 
   if ('V' == m_codec_id[0])

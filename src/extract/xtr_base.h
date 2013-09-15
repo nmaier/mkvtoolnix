@@ -23,6 +23,13 @@
 
 using namespace libmatroska;
 
+struct xtr_frame_t {
+  memory_cptr &frame;
+  KaxBlockAdditions *additions;
+  int64_t timecode, duration, bref, fref;
+  bool keyframe, discardable, references_valid;
+};
+
 class xtr_base_c {
 public:
   std::string m_codec_id, m_file_name, m_container_name;
@@ -43,8 +50,7 @@ public:
   virtual ~xtr_base_c();
 
   virtual void create_file(xtr_base_c *_master, KaxTrackEntry &track);
-  virtual void handle_frame(memory_cptr &frame, KaxBlockAdditions *additions, int64_t timecode, int64_t duration, int64_t bref, int64_t fref,
-                            bool keyframe, bool discardable, bool references_valid);
+  virtual void handle_frame(xtr_frame_t &f);
   virtual void handle_codec_state(memory_cptr &/* codec_state */) {
   };
   virtual void finish_track();

@@ -193,19 +193,11 @@ xtr_alac_c::finish_file() {
 }
 
 void
-xtr_alac_c::handle_frame(memory_cptr &frame,
-                         KaxBlockAdditions *,
-                         int64_t,
-                         int64_t,
-                         int64_t,
-                         int64_t,
-                         bool,
-                         bool,
-                         bool) {
-  m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
+xtr_alac_c::handle_frame(xtr_frame_t &f) {
+  m_content_decoder.reverse(f.frame, CONTENT_ENCODING_SCOPE_BLOCK);
 
-  m_out->write(frame);
-  auto tval        = frame->get_size();
+  m_out->write(f.frame);
+  auto tval        = f.frame->get_size();
   m_bytes_written += tval;
 
   auto amt_diff    = m_bytes_written - m_prev_written;
