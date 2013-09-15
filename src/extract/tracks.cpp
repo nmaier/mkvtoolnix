@@ -187,7 +187,7 @@ handle_blockgroup(KaxBlockGroup &blockgroup,
     auto &data = block->GetBuffer(i);
     auto frame = std::make_shared<memory_c>(data.Buffer(), data.Size(), false);
     auto f     = xtr_frame_t{frame, kadditions, this_timecode, this_duration, bref, fref, false, false, true};
-    extractor->handle_frame(f);
+    extractor->decode_and_handle_frame(f);
 
     max_timecode = std::max(max_timecode, this_timecode);
   }
@@ -232,7 +232,7 @@ handle_simpleblock(KaxSimpleBlock &simpleblock,
     auto &data = simpleblock.GetBuffer(i);
     auto frame = std::make_shared<memory_c>(data.Buffer(), data.Size(), false);
     auto f     = xtr_frame_t{frame, nullptr, this_timecode, this_duration, -1, -1, simpleblock.IsKeyframe(), simpleblock.IsDiscardable(), false};
-    extractor->handle_frame(f);
+    extractor->decode_and_handle_frame(f);
 
     max_timecode = std::max(max_timecode, this_timecode);
   }

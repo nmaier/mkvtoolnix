@@ -119,8 +119,6 @@ xtr_wavpack4_c::create_file(xtr_base_c *master,
 
 void
 xtr_wavpack4_c::handle_frame(xtr_frame_t &f) {
-  m_content_decoder.reverse(f.frame, CONTENT_ENCODING_SCOPE_BLOCK);
-
   // build the main header
 
   binary wv_header[32];

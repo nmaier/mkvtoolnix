@@ -66,8 +66,6 @@ xtr_ivf_c::create_file(xtr_base_c *master,
 
 void
 xtr_ivf_c::handle_frame(xtr_frame_t &f) {
-  m_content_decoder.reverse(f.frame, CONTENT_ENCODING_SCOPE_BLOCK);
-
   uint64_t frame_number = f.timecode * m_frame_rate_num / m_frame_rate_den / 1000000000ull;
 
   mxverb(2, boost::format("timecode %1% num %2% den %3% frame_number %4% calculated back %5%\n")

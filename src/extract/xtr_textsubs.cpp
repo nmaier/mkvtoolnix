@@ -41,8 +41,6 @@ xtr_srt_c::create_file(xtr_base_c *master,
 
 void
 xtr_srt_c::handle_frame(xtr_frame_t &f) {
-  m_content_decoder.reverse(f.frame, CONTENT_ENCODING_SCOPE_BLOCK);
-
   if (-1 == f.duration) {
     mxwarn(boost::format(Y("Track %1%: Subtitle entry number %2% is missing its duration. Assuming a duration of 1s.\n")) % m_tid % (m_num_entries + 1));
     f.duration = 1000000000;
@@ -158,8 +156,6 @@ xtr_ssa_c::create_file(xtr_base_c *master,
 
 void
 xtr_ssa_c::handle_frame(xtr_frame_t &f) {
-  m_content_decoder.reverse(f.frame, CONTENT_ENCODING_SCOPE_BLOCK);
-
   if (0 > f.duration) {
     mxwarn(boost::format(Y("Subtitle track %1% is missing some duration elements. "
                            "Please check the resulting SSA/ASS file for entries that have the same start and end time.\n"))
@@ -351,8 +347,6 @@ xtr_usf_c::create_file(xtr_base_c *master,
 
 void
 xtr_usf_c::handle_frame(xtr_frame_t &f) {
-  m_content_decoder.reverse(f.frame, CONTENT_ENCODING_SCOPE_BLOCK);
-
   usf_entry_t entry("", f.timecode, f.timecode + f.duration);
   entry.m_text.append((const char *)f.frame->get_buffer(), f.frame->get_size());
   m_entries.push_back(entry);

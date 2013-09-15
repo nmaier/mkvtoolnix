@@ -104,8 +104,6 @@ xtr_vobsub_c::handle_frame(xtr_frame_t &f) {
 
   xtr_vobsub_c *vmaster = !m_master ? this : static_cast<xtr_vobsub_c *>(m_master);
 
-  m_content_decoder.reverse(f.frame, CONTENT_ENCODING_SCOPE_BLOCK);
-
   unsigned char *data = f.frame->get_buffer();
   size_t size         = f.frame->get_size();
 

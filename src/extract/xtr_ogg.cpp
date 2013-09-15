@@ -115,8 +115,6 @@ xtr_oggbase_c::header_packets_unlaced(std::vector<memory_cptr> &) {
 
 void
 xtr_oggbase_c::handle_frame(xtr_frame_t &f) {
-  m_content_decoder.reverse(f.frame, CONTENT_ENCODING_SCOPE_BLOCK);
-
   if (-1 != m_queued_granulepos)
     m_queued_granulepos = f.timecode * m_sfreq / 1000000000;
 
@@ -237,8 +235,6 @@ xtr_oggvorbis_c::header_packets_unlaced(std::vector<memory_cptr> &header_packets
 
 void
 xtr_oggvorbis_c::handle_frame(xtr_frame_t &f) {
-  m_content_decoder.reverse(f.frame, CONTENT_ENCODING_SCOPE_BLOCK);
-
   ogg_packet op;
   op.packet               = f.frame->get_buffer();
   op.bytes                = f.frame->get_size();
@@ -279,8 +275,6 @@ xtr_oggkate_c::header_packets_unlaced(std::vector<memory_cptr> &header_packets) 
 
 void
 xtr_oggkate_c::handle_frame(xtr_frame_t &f) {
-  m_content_decoder.reverse(f.frame, CONTENT_ENCODING_SCOPE_BLOCK);
-
   ogg_packet op;
   op.b_o_s    = 0;
   op.e_o_s    = (f.frame->get_size() == 1) && (f.frame->get_buffer()[0] == 0x7f);
@@ -332,8 +326,6 @@ xtr_oggtheora_c::header_packets_unlaced(std::vector<memory_cptr> &header_packets
 
 void
 xtr_oggtheora_c::handle_frame(xtr_frame_t &f) {
-  m_content_decoder.reverse(f.frame, CONTENT_ENCODING_SCOPE_BLOCK);
-
   if (f.frame->get_size() && (0x00 == (f.frame->get_buffer()[0] & 0x40))) {
     m_keyframe_number     += m_non_keyframe_number + 1;
     m_non_keyframe_number  = 0;

@@ -49,6 +49,8 @@ public:
   xtr_base_c(const std::string &codec_id, int64_t tid, track_spec_t &tspec, const char *container_name = nullptr);
   virtual ~xtr_base_c();
 
+  void decode_and_handle_frame(xtr_frame_t &f);
+
   virtual void create_file(xtr_base_c *_master, KaxTrackEntry &track);
   virtual void handle_frame(xtr_frame_t &f);
   virtual void handle_codec_state(memory_cptr &/* codec_state */) {

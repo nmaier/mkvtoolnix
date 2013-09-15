@@ -52,8 +52,6 @@ xtr_tta_c::create_file(xtr_base_c *,
 
 void
 xtr_tta_c::handle_frame(xtr_frame_t &f) {
-  m_content_decoder.reverse(f.frame, CONTENT_ENCODING_SCOPE_BLOCK);
-
   m_frame_sizes.push_back(f.frame->get_size());
   m_out->write(f.frame);
 

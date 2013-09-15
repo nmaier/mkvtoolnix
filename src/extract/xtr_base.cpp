@@ -78,8 +78,13 @@ xtr_base_c::create_file(xtr_base_c *master,
 }
 
 void
-xtr_base_c::handle_frame(xtr_frame_t &f) {
+xtr_base_c::decode_and_handle_frame(xtr_frame_t &f) {
   m_content_decoder.reverse(f.frame, CONTENT_ENCODING_SCOPE_BLOCK);
+  handle_frame(f);
+}
+
+void
+xtr_base_c::handle_frame(xtr_frame_t &f) {
   m_out->write(f.frame);
   m_bytes_written += f.frame->get_size();
 }

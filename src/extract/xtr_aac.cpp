@@ -106,8 +106,6 @@ xtr_aac_c::create_file(xtr_base_c *master,
 
 void
 xtr_aac_c::handle_frame(xtr_frame_t &f) {
-  m_content_decoder.reverse(f.frame, CONTENT_ENCODING_SCOPE_BLOCK);
-
   // Recreate the ADTS headers. What a fun. Like runing headlong into
   // a solid wall. But less painful. Well such is life, you know.
   // But then again I've just seen a beautiful girl walking by my

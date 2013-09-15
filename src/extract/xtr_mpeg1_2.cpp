@@ -37,8 +37,6 @@ xtr_mpeg1_2_video_c::create_file(xtr_base_c *master,
 
 void
 xtr_mpeg1_2_video_c::handle_frame(xtr_frame_t &f) {
-  m_content_decoder.reverse(f.frame, CONTENT_ENCODING_SCOPE_BLOCK);
-
   binary *buf = (binary *)f.frame->get_buffer();
 
   if (f.references_valid)
