@@ -36,6 +36,8 @@ public:
   content_decoder_c m_content_decoder;
   bool m_content_decoder_initialized;
 
+  bool m_debug;
+
 public:
   xtr_base_c(const std::string &codec_id, int64_t tid, track_spec_t &tspec, const char *container_name = nullptr);
   virtual ~xtr_base_c();

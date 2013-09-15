@@ -52,6 +52,7 @@ xtr_base_c::xtr_base_c(const std::string &codec_id,
   , m_default_duration(0)
   , m_bytes_written(0)
   , m_content_decoder_initialized(false)
+  , m_debug{}
 {
 }
 
