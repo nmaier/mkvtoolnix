@@ -14,7 +14,7 @@ msgstr ""
 "X-Poedit-Language: French\n"
 "X-Poedit-Country: FRANCE\n"
 
-#: src/extract/xtr_tta.cpp:117
+#: src/extract/xtr_tta.cpp:107
 #, boost-format
 msgid ""
 "\n"
@@ -2343,7 +2343,7 @@ msgid "Block duration: %1%.%|2$06d|ms"
 msgstr "Durée de bloc : %1%.%|2$06d|ms"
 
 #: src/extract/timecodes_v2.cpp:304
-#: src/extract/tracks.cpp:431
+#: src/extract/tracks.cpp:438
 #: src/info/mkvinfo.cpp:1134
 msgid "Block group"
 msgstr "Groupe de blocs"
@@ -2410,15 +2410,15 @@ msgstr "Impossible d'extraire des pistes de types différents dans le même fich
 msgid "Cannot start second muxing job"
 msgstr "Impossible de démarrer une autre tâche de multiplexage."
 
-#: src/extract/xtr_textsubs.cpp:315
+#: src/extract/xtr_textsubs.cpp:295
 #, boost-format
 msgid "Cannot write track %1% with the CodecID '%2%' to the file '%3%' because track %4% with the CodecID '%5%' is already being written to the same file, and their CodecPrivate data (the USF styles etc) do not match.\n"
 msgstr "Impossible d'écrire la piste %1% avec l'identifiant de codec '%2%' dans le fichier '%3%' parce que la piste %4% avec l'identifiant de codec '%5%' est déjà dans ce fichier avec des données de codec privées (les styles TSF par exemple) qui ne correspondent pas.\n"
 
 #: src/extract/xtr_avi.cpp:48
-#: src/extract/xtr_base.cpp:65
+#: src/extract/xtr_base.cpp:66
 #: src/extract/xtr_ivf.cpp:51
-#: src/extract/xtr_textsubs.cpp:310
+#: src/extract/xtr_textsubs.cpp:290
 #, boost-format
 msgid "Cannot write track %1% with the CodecID '%2%' to the file '%3%' because track %4% with the CodecID '%5%' is already being written to the same file.\n"
 msgstr "Impossible d'écrire la piste %1% avec l'identifiant de codec '%2%' dans le fichier '%3%' parce que la piste %4% avec l'identifiant de codec '%5%' est déjà dans ce fichier.\n"
@@ -2428,8 +2428,8 @@ msgid "Category is not NUL terminated"
 msgstr "La catégorie n'est pas terminé par NUL."
 
 #: src/extract/timecodes_v2.cpp:383
-#: src/extract/tracks.cpp:486
-#: src/info/mkvinfo.cpp:1717
+#: src/extract/tracks.cpp:493
+#: src/info/mkvinfo.cpp:1715
 msgid "Caught exception"
 msgstr "Une exception a été interceptée."
 
@@ -2563,7 +2563,7 @@ msgstr "Erreur lors de la vérification des chapitres."
 msgid "Chapter verification succeeded"
 msgstr "Vérification des chapitres réussie."
 
-#: src/info/mkvinfo.cpp:1500
+#: src/info/mkvinfo.cpp:1498
 #: src/mmg/options/chapters.cpp:125
 #: src/mmg/tabs/global.cpp:342
 #: src/propedit/options.cpp:186
@@ -2700,8 +2700,8 @@ msgid "Close the current file without saving"
 msgstr "Fermer le fichier actuel sans enregistrer."
 
 #: src/extract/timecodes_v2.cpp:285
-#: src/extract/tracks.cpp:409
-#: src/info/mkvinfo.cpp:1677
+#: src/extract/tracks.cpp:416
+#: src/info/mkvinfo.cpp:1675
 msgid "Cluster"
 msgstr "Cluster"
 
@@ -2726,7 +2726,7 @@ msgid "Cluster previous size: %1%"
 msgstr "Taille de cluster précédente : %1%"
 
 #: src/extract/timecodes_v2.cpp:300
-#: src/extract/tracks.cpp:418
+#: src/extract/tracks.cpp:425
 #: src/info/mkvinfo.cpp:215
 #, boost-format
 msgid "Cluster timecode: %|1$.3f|s"
@@ -3310,17 +3310,17 @@ msgstr "Ne pas ajouter une entrée pour les chapitres dans le méta-index de rec
 msgid "Do not write meta seek elements at all."
 msgstr "Ne pas écrire de méta-index de recherche du tout."
 
-#: src/info/mkvinfo.cpp:1562
+#: src/info/mkvinfo.cpp:1560
 #, boost-format
 msgid "Doc type read version: %1%"
 msgstr "Version lue du type de document : %1%"
 
-#: src/info/mkvinfo.cpp:1559
+#: src/info/mkvinfo.cpp:1557
 #, boost-format
 msgid "Doc type version: %1%"
 msgstr "Version du type de document : %1%"
 
-#: src/info/mkvinfo.cpp:1556
+#: src/info/mkvinfo.cpp:1554
 #, boost-format
 msgid "Doc type: %1%"
 msgstr "Type de document : %1%"
@@ -3360,26 +3360,26 @@ msgstr "Durée : %|1$.3f|s (%2%)"
 msgid "E&xit\tCtrl-Q"
 msgstr "&Quitter\tCtrl-Q"
 
-#: src/info/mkvinfo.cpp:1532
+#: src/info/mkvinfo.cpp:1530
 msgid "EBML head"
 msgstr "En-tête EBML"
 
-#: src/info/mkvinfo.cpp:1550
+#: src/info/mkvinfo.cpp:1548
 #, boost-format
 msgid "EBML maximum ID length: %1%"
 msgstr "Longueur maximale de l'identifiant EBML : %1%"
 
-#: src/info/mkvinfo.cpp:1553
+#: src/info/mkvinfo.cpp:1551
 #, boost-format
 msgid "EBML maximum size length: %1%"
 msgstr "Longueur maximale de la taille EBML : %1%"
 
-#: src/info/mkvinfo.cpp:1547
+#: src/info/mkvinfo.cpp:1545
 #, boost-format
 msgid "EBML read version: %1%"
 msgstr "Version EBML lue : %1%"
 
-#: src/info/mkvinfo.cpp:1544
+#: src/info/mkvinfo.cpp:1542
 #, boost-format
 msgid "EBML version: %1%"
 msgstr "Version EBML : %1%"
@@ -3548,13 +3548,13 @@ msgstr "Erreur :"
 msgid "Error: "
 msgstr "Erreur : "
 
-#: src/info/mkvinfo.cpp:1613
+#: src/info/mkvinfo.cpp:1611
 #, boost-format
 msgid "Error: Couldn't open input file %1% (%2%).\n"
 msgstr "Erreur : impossible d'ouvrir le fichier source %1% (%2%).\n"
 
 #: src/extract/timecodes_v2.cpp:205
-#: src/extract/tracks.cpp:351
+#: src/extract/tracks.cpp:358
 msgid "Error: No EBML head found."
 msgstr "Erreur : aucun en-tête EBML trouvé."
 
@@ -3665,13 +3665,13 @@ msgstr "Images par seconde :"
 msgid "Failed to create the VobSub data file '%1%': %2%\n"
 msgstr "La création du fichier de données VobSub '%1%' a échoué : %2%\n"
 
-#: src/extract/xtr_textsubs.cpp:360
-#: src/extract/xtr_vobsub.cpp:235
+#: src/extract/xtr_textsubs.cpp:340
+#: src/extract/xtr_vobsub.cpp:225
 #, boost-format
 msgid "Failed to create the file '%1%': %2%\n"
 msgstr "La création du fichier '%1%' a échoué : %2%\n"
 
-#: src/extract/xtr_base.cpp:73
+#: src/extract/xtr_base.cpp:74
 #, boost-format
 msgid "Failed to create the file '%1%': %2% (%3%)\n"
 msgstr "La création du fichier '%1%' a échoué : %2% (%3%)\n"
@@ -3681,7 +3681,7 @@ msgstr "La création du fichier '%1%' a échoué : %2% (%3%)\n"
 msgid "Failed to create the temporary file '%1%': %2%\n"
 msgstr "La création du fichier temporaire '%1%' a échoué : %2%\n"
 
-#: src/extract/xtr_textsubs.cpp:363
+#: src/extract/xtr_textsubs.cpp:343
 #, boost-format
 msgid "Failed to parse the USF codec private data for track %1%: %2%\n"
 msgstr "L'analyse des données de codec privées USF pour la piste %1% a échoué : %2%\n"
@@ -4182,7 +4182,7 @@ msgstr "Langue de l'interface :"
 msgid "Interlaced: %1%"
 msgstr "Entrelacé : %1%"
 
-#: src/extract/xtr_textsubs.cpp:143
+#: src/extract/xtr_textsubs.cpp:133
 #, boost-format
 msgid "Internal bug: tracks.cpp SSA #1. %1%"
 msgstr "Bogue interne : tracks.cpp SSA #1. %1%"
@@ -4331,12 +4331,12 @@ msgstr "Nom de fichier incorrect"
 msgid "Invalid format for '--split' in '--split %1%'.\n"
 msgstr "Format incorrect pour '--split' dans '--split %1%'.\n"
 
-#: src/extract/xtr_textsubs.cpp:211
+#: src/extract/xtr_textsubs.cpp:191
 #, boost-format
 msgid "Invalid format for a SSA line ('%1%') at timecode %2%: The first field is not an integer. This entry will be skipped.\n"
 msgstr "Format incorrect pour une ligne SSA ('%1%') au code temporel %2% : le premier champ n'est pas un nombre entier. Cette entrée sera ignorée.\n"
 
-#: src/extract/xtr_textsubs.cpp:200
+#: src/extract/xtr_textsubs.cpp:180
 #, boost-format
 msgid "Invalid format for a SSA line ('%1%') at timecode %2%: Too many fields found (%3% instead of 9). This entry will be skipped.\n"
 msgstr "Format incorrect pour une ligne SSA ('%1%') au code temporel %2% : trop de champs trouvés (%3% au lieu de 9). Cette entrée sera ignorée.\n"
@@ -4891,7 +4891,7 @@ msgstr "Cache maximum"
 msgid "Memory allocation error: %1% (%2%).\n"
 msgstr "Erreur d'allocation de mémoire : %1% (%2%).\n"
 
-#: src/extract/xtr_rmff.cpp:74
+#: src/extract/xtr_rmff.cpp:64
 msgid "Memory for a RealAudio/RealVideo frame could not be allocated.\n"
 msgstr "Impossible d'allouer la mémoire pour une image RealAudio-/RealVideo.\n"
 
@@ -5070,7 +5070,7 @@ msgstr "Fichier suivant"
 msgid "Next filename: %1%"
 msgstr "Fichier suivant : %1%"
 
-#: src/info/mkvinfo.cpp:1653
+#: src/info/mkvinfo.cpp:1651
 #, boost-format
 msgid "Next level 0 element is not a segment but %1%"
 msgstr "L'élément de niveau 0 suivant n'est pas un segment mais %1%."
@@ -5098,7 +5098,7 @@ msgstr "Aucun %1% spécifié dans '--%2% %3%'.\n"
 msgid "No AC3 header found in first frame; track will be skipped.\n"
 msgstr "Aucun en-tête AC3 trouvé dans la première image, la piste sera passée.\n"
 
-#: src/info/mkvinfo.cpp:1627
+#: src/info/mkvinfo.cpp:1625
 msgid "No EBML head found."
 msgstr "Aucun en-tête EBML trouvé."
 
@@ -5157,7 +5157,7 @@ msgstr ""
 msgid "No file loaded"
 msgstr "Aucun fichier chargé"
 
-#: src/info/mkvinfo.cpp:1738
+#: src/info/mkvinfo.cpp:1736
 #: src/propedit/options.cpp:33
 msgid "No file name given.\n"
 msgstr "Aucun nom donné au fichier.\n"
@@ -5187,8 +5187,8 @@ msgid "No permission to read from, to write to or to create"
 msgstr "Aucune permission pour lire, écrire ou créer"
 
 #: src/extract/timecodes_v2.cpp:219
-#: src/extract/tracks.cpp:366
-#: src/info/mkvinfo.cpp:1641
+#: src/extract/tracks.cpp:373
+#: src/info/mkvinfo.cpp:1639
 msgid "No segment/level 0 element found."
 msgstr "Aucun segment/élément de niveau 0 trouvé."
 
@@ -5210,7 +5210,7 @@ msgstr "Aucun I de piste spécifié dans '--%1% %2%'.\n"
 msgid "No track corresponding to the edit specification '%1%' was found. %2%\n"
 msgstr "Aucune piste correspondant à l'édition '%1%' n'a été trouvée. %2%\n"
 
-#: src/extract/tracks.cpp:323
+#: src/extract/tracks.cpp:330
 #, boost-format
 msgid "No track with the ID %1% was found in the source file.\n"
 msgstr "Aucune piste de numéro %1% n'a été trouvée dans le fichier source.\n"
@@ -5263,7 +5263,7 @@ msgstr "Notez que les spécifications Matroska concernant le stockage de '%1%' n
 
 #: src/extract/attachments.cpp:132
 #: src/extract/timecodes_v2.cpp:187
-#: src/extract/tracks.cpp:330
+#: src/extract/tracks.cpp:337
 #: src/propedit/options.cpp:36
 msgid "Nothing to do.\n"
 msgstr "Rien à faire.\n"
@@ -5497,7 +5497,7 @@ msgstr "Analyser complètement le fichier et afficher tous les éléments."
 msgid "Parse the whole file instead of relying on the index."
 msgstr "Analyser le fichier entier au lieu de se fier à l'index."
 
-#: src/info/mkvinfo.cpp:1427
+#: src/info/mkvinfo.cpp:1425
 msgid "Parsing file"
 msgstr "Analyse du fichier "
 
@@ -5613,7 +5613,7 @@ msgid "Progress"
 msgstr "Progression"
 
 #: src/extract/timecodes_v2.cpp:290
-#: src/extract/tracks.cpp:413
+#: src/extract/tracks.cpp:420
 #: src/merge/output_control.cpp:551
 #, boost-format
 msgid "Progress: %1%%%%2%"
@@ -6045,7 +6045,7 @@ msgid "Seek pre-roll: %|1$.3f|ms (%2%ns)"
 msgstr "Durée : %|1$.3f|s (%2%)"
 
 #: src/extract/timecodes_v2.cpp:223
-#: src/extract/tracks.cpp:371
+#: src/extract/tracks.cpp:378
 #: src/info/qt_ui.cpp:177
 #: src/info/wxwidgets_ui.cpp:210
 msgid "Segment"
@@ -6088,7 +6088,7 @@ msgid "Segment info files (*.xml)|*.xml|%s"
 msgstr "Fichiers d'informations des segments (*.xml)|*.xml|%s"
 
 #: src/extract/timecodes_v2.cpp:243
-#: src/extract/tracks.cpp:389
+#: src/extract/tracks.cpp:396
 #: src/info/mkvinfo.cpp:470
 #: src/info/qt_ui.cpp:178
 #: src/info/wxwidgets_ui.cpp:213
@@ -6100,7 +6100,7 @@ msgid "Segment information"
 msgstr "Informations sur le segment"
 
 #: src/extract/timecodes_v2.cpp:277
-#: src/extract/tracks.cpp:402
+#: src/extract/tracks.cpp:409
 #: src/info/mkvinfo.cpp:781
 #: src/info/qt_ui.cpp:179
 #: src/info/wxwidgets_ui.cpp:213
@@ -6112,12 +6112,12 @@ msgstr "Pistes du segment"
 msgid "Segment unique ID"
 msgstr "Identifiant unique du segment"
 
-#: src/info/mkvinfo.cpp:1649
+#: src/info/mkvinfo.cpp:1647
 #, boost-format
 msgid "Segment, size %1%"
 msgstr "Segment, taille %1%"
 
-#: src/info/mkvinfo.cpp:1647
+#: src/info/mkvinfo.cpp:1645
 msgid "Segment, size unknown"
 msgstr "Segment, taille inconnue"
 
@@ -6393,7 +6393,7 @@ msgstr "Bloc simple"
 msgid "Simple chapter parser: %1%\n"
 msgstr "Analyse de chapitres simple : %1%\n"
 
-#: src/extract/tracks.cpp:435
+#: src/extract/tracks.cpp:442
 msgid "SimpleBlock"
 msgstr "Bloc simple"
 
@@ -6530,7 +6530,7 @@ msgstr "Démarrée le"
 msgid "Starting job ID %d (%s) on %s"
 msgstr "Démarrage de la tâche d'identifiant %d (%s) le %s."
 
-#: src/info/mkvinfo.cpp:1588
+#: src/info/mkvinfo.cpp:1586
 #, boost-format
 msgid "Statistics for track number %1%: number of blocks: %2%; size in bytes: %3%; duration in seconds: %4%; approximate bitrate in bits/second: %5%\n"
 msgstr "Statistiques pour la piste numéro %1% : nombre de blocs : %2% ; taille en octets : %3% ; durée en secondes : %4% ; débit approximatif en bits/seconde : %5%\n"
@@ -6580,7 +6580,7 @@ msgstr "Étirer les codes temporels de la piste. La saisie peut prendre deux for
 msgid "String"
 msgstr "Chaîne"
 
-#: src/extract/xtr_textsubs.cpp:180
+#: src/extract/xtr_textsubs.cpp:160
 #, boost-format
 msgid "Subtitle track %1% is missing some duration elements. Please check the resulting SSA/ASS file for entries that have the same start and end time.\n"
 msgstr "Il manque certains éléments de durée à la piste de sous-titres %1%. Vérifiez les entrées du fichier SSA/ASS obtenu qui ont les mêmes temps de début et de fin.\n"
@@ -6629,7 +6629,7 @@ msgstr "Fichiers d'étiquettes (*.xml;*.txt)|*.xml;*.txt|%s"
 msgid "Tag selectors"
 msgstr "Sélecteurs d'étiquette"
 
-#: src/info/mkvinfo.cpp:1516
+#: src/info/mkvinfo.cpp:1514
 #: src/propedit/options.cpp:177
 msgid "Tags"
 msgstr "Étiquettes"
@@ -6686,7 +6686,7 @@ msgstr "Les profils AAC sont différents : %1% et %2%."
 msgid "The AVC video track is missing the 'CTTS' atom for frame timecode offsets. However, AVC/h.264 allows frames to have more than the traditional one (for P frames) or two (for B frames) references to other frames. The timecodes for such frames will be out-of-order, and the 'CTTS' atom is needed for getting the timecodes right. As it is missing the timecodes for this track might be wrong. You should watch the resulting file and make sure that it looks like you expected it to.\n"
 msgstr "Il manque l'atome 'CTTS' avec les décalages temporels à la piste vidéo AVC, il se peut que les codes temporels de cette piste soient faux. AVC/h.264 autorise les images avec plus que le nombre habituel de références aux autres images (une pour les images P et deux pour les images B). Les codes temporels de telles images sont faux et l'atome 'CTTS' est nécessaire pour les rétablir correctement. Vous devriez examiner le fichier obtenu pour voir s'il est conforme à ce que vous attendiez.\n"
 
-#: src/extract/tracks.cpp:289
+#: src/extract/tracks.cpp:296
 #, boost-format
 msgid "The CUE sheet for track %1% will be written to '%2%'.\n"
 msgstr "La feuille de montage CUE pour la piste %1% sera écrite dans le fichier '%2%'.\n"
@@ -7014,7 +7014,7 @@ msgstr "Le fichier '%1%' ne peut pas être ouvert en lecture ou écriture, ou al
 #: src/extract/cuesheets.cpp:208
 #: src/extract/tags.cpp:48
 #: src/extract/timecodes_v2.cpp:194
-#: src/extract/tracks.cpp:339
+#: src/extract/tracks.cpp:346
 #: src/merge/output_control.cpp:337
 #: src/merge/output_control.cpp:470
 #: src/propedit/attachment_target.cpp:63
@@ -7023,11 +7023,11 @@ msgid "The file '%1%' could not be opened for reading: %2%.\n"
 msgstr "Le fichier '%1%' ne peut pas être ouvert en lecture : %2%.\n"
 
 #: src/extract/attachments.cpp:122
-#: src/extract/tracks.cpp:293
+#: src/extract/tracks.cpp:300
 #: src/extract/xtr_avi.cpp:56
 #: src/extract/xtr_avi.cpp:60
 #: src/extract/xtr_rmff.cpp:40
-#: src/extract/xtr_tta.cpp:86
+#: src/extract/xtr_tta.cpp:76
 #: src/extract/xtr_wav.cpp:115
 #: src/merge/output_control.cpp:1615
 #, boost-format
@@ -7569,7 +7569,7 @@ msgstr "L'étiquette ou l'attribut '%1%' à la position %2% contient des donnée
 msgid "The tags in '%1%' could not be parsed: some mandatory elements are missing.\n"
 msgstr "Les étiquettes de '%1%' ne peuvent pas être analysées : certains éléments obligatoires manquent.\n"
 
-#: src/extract/xtr_tta.cpp:80
+#: src/extract/xtr_tta.cpp:70
 #, boost-format
 msgid "The temporary file '%1%' could not be opened for reading: %2%.\n"
 msgstr "Le fichier temporaire '%1%' ne peut pas être ouvert en lecture : %2%.\n"
@@ -7885,7 +7885,7 @@ msgid "Timecode files (*.tmc;*.txt)|*.tmc;*.txt|%s"
 msgstr "Fichiers de codes temporels (*.tmc;*.txt)|*.tmc;*.txt|%s"
 
 #: src/extract/timecodes_v2.cpp:252
-#: src/extract/tracks.cpp:395
+#: src/extract/tracks.cpp:402
 #: src/info/mkvinfo.cpp:482
 #: src/info/mkvinfo.cpp:917
 #, boost-format
@@ -7936,7 +7936,7 @@ msgstr "La piste %1% a été compressée avec lzo1x mais mkvmerge n'a pas été 
 msgid "Track %1% with the CodecID '%2%' contains invalid \"codec private\" data for AAC.\n"
 msgstr "La piste %1% dont l'identifiant de codec est '%2%' contient des données privées de configuration du codec non acceptées par AAC.\n"
 
-#: src/extract/xtr_ogg.cpp:88
+#: src/extract/xtr_ogg.cpp:97
 #, boost-format
 msgid "Track %1% with the CodecID '%2%' does not contain valid headers.\n"
 msgstr "La piste %1% dont l'identifiant de codec est '%2%' ne contient pas d'en-têtes corrects.\n"
@@ -7950,11 +7950,11 @@ msgstr "Il manque l'élément \"bits par seconde (bps)\" à la piste %1% dont l'
 #: src/extract/xtr_alac.cpp:47
 #: src/extract/xtr_avc.cpp:61
 #: src/extract/xtr_avi.cpp:39
-#: src/extract/xtr_ogg.cpp:38
-#: src/extract/xtr_ogg.cpp:73
+#: src/extract/xtr_ogg.cpp:40
+#: src/extract/xtr_ogg.cpp:76
 #: src/extract/xtr_rmff.cpp:31
-#: src/extract/xtr_textsubs.cpp:105
-#: src/extract/xtr_textsubs.cpp:294
+#: src/extract/xtr_textsubs.cpp:95
+#: src/extract/xtr_textsubs.cpp:274
 #: src/extract/xtr_vobsub.cpp:65
 #: src/extract/xtr_wav.cpp:97
 #, boost-format
@@ -7976,7 +7976,7 @@ msgstr "Piste %1% : %2%, identifiant du codec : %3%%4%%5%%6%\n"
 msgid "Track %1%: AAC found, but decoder config data has length %2%.\n"
 msgstr "Piste %1% : AAC trouvé mais les données de configuration du décodeur ont une longueur de %2%.\n"
 
-#: src/extract/xtr_textsubs.cpp:397
+#: src/extract/xtr_textsubs.cpp:367
 #, boost-format
 msgid "Track %1%: An USF subtitle entry starting at timecode %2% is not well-formed XML and will be skipped.\n"
 msgstr "Piste %1% : une entrée de sous-titre USF commençant au code temporel %2% n'est pas en XML bien formé et sera ignorée.\n"
@@ -7986,7 +7986,7 @@ msgstr "Piste %1% : une entrée de sous-titre USF commençant au code temporel %
 msgid "Track %1%: NAL too big. Size according to header field: %2%, available bytes in packet: %3%. This NAL is defect and will be skipped.\n"
 msgstr "Piste %1% : NAL trop gros. Taille selon le champ d'en-tête : %2%, octets disponibles dans le paquet : %3%. Ce NAL est défectueux et sera ignoré.\n"
 
-#: src/extract/xtr_textsubs.cpp:55
+#: src/extract/xtr_textsubs.cpp:45
 #, boost-format
 msgid "Track %1%: Subtitle entry number %2% is missing its duration. Assuming a duration of 1s.\n"
 msgstr "Piste %1% : il manque la durée à l'entrée de sous-titre numéro %2%, durée de 1s supposée.\n"
@@ -8056,7 +8056,7 @@ msgstr "Superposition de piste : %1%"
 msgid "Track type: %1%"
 msgstr "Type de piste : %1%"
 
-#: src/extract/xtr_base.cpp:120
+#: src/extract/xtr_base.cpp:118
 msgid "Tracks with unsupported content encoding schemes (compression or encryption) cannot be extracted.\n"
 msgstr "Les pistes avec schémas d'encodage des données non supportés (compression ou chiffrement) ne peuvent pas être extraites.\n"
 
@@ -8486,7 +8486,7 @@ msgstr "Application d'écriture : %1%"
 msgid "Writing info"
 msgstr "Écriture des informations"
 
-#: src/extract/xtr_vobsub.cpp:223
+#: src/extract/xtr_vobsub.cpp:213
 #, boost-format
 msgid "Writing the VobSub index file '%1%'.\n"
 msgstr "Écriture du fichier d'index VobSub '%1%'.\n"

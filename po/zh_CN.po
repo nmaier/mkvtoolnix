@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Poedit 1.5.5\n"
 
-#: src/extract/xtr_tta.cpp:117
+#: src/extract/xtr_tta.cpp:107
 #, boost-format
 msgid ""
 "\n"
@@ -2316,7 +2316,7 @@ msgid "Block duration: %1%.%|2$06d|ms"
 msgstr "块时长: %1%.%|2$06d|ms"
 
 #: src/extract/timecodes_v2.cpp:304
-#: src/extract/tracks.cpp:431
+#: src/extract/tracks.cpp:438
 #: src/info/mkvinfo.cpp:1134
 msgid "Block group"
 msgstr "块组"
@@ -2383,15 +2383,15 @@ msgstr "无法将不同类型的轨道提取到一个文件。轨道 %1% 和 %2%
 msgid "Cannot start second muxing job"
 msgstr "不能启动其他混流任务"
 
-#: src/extract/xtr_textsubs.cpp:315
+#: src/extract/xtr_textsubs.cpp:295
 #, boost-format
 msgid "Cannot write track %1% with the CodecID '%2%' to the file '%3%' because track %4% with the CodecID '%5%' is already being written to the same file, and their CodecPrivate data (the USF styles etc) do not match.\n"
 msgstr "无法写入轨道 %1%（CodecID '%2%'）至文件 '%3%'，因为轨道 %4%（CodecID '%5%'）已被写入同一文件，且它们的 CodecPrivate 编解码器专有数据 (如 USF 样式) 不相匹配。\n"
 
 #: src/extract/xtr_avi.cpp:48
-#: src/extract/xtr_base.cpp:65
+#: src/extract/xtr_base.cpp:66
 #: src/extract/xtr_ivf.cpp:51
-#: src/extract/xtr_textsubs.cpp:310
+#: src/extract/xtr_textsubs.cpp:290
 #, boost-format
 msgid "Cannot write track %1% with the CodecID '%2%' to the file '%3%' because track %4% with the CodecID '%5%' is already being written to the same file.\n"
 msgstr "无法写入轨道 %1%（CodecID '%2%'）至文件 '%3%'，因为轨道 %4%（CodecID '%5%'）已被写入同一文件。\n"
@@ -2401,8 +2401,8 @@ msgid "Category is not NUL terminated"
 msgstr "类别未以 NUL 收尾"
 
 #: src/extract/timecodes_v2.cpp:383
-#: src/extract/tracks.cpp:486
-#: src/info/mkvinfo.cpp:1717
+#: src/extract/tracks.cpp:493
+#: src/info/mkvinfo.cpp:1715
 msgid "Caught exception"
 msgstr "发生异常"
 
@@ -2536,7 +2536,7 @@ msgstr "章节验证出错"
 msgid "Chapter verification succeeded"
 msgstr "章节验证成功"
 
-#: src/info/mkvinfo.cpp:1500
+#: src/info/mkvinfo.cpp:1498
 #: src/mmg/options/chapters.cpp:125
 #: src/mmg/tabs/global.cpp:342
 #: src/propedit/options.cpp:186
@@ -2673,8 +2673,8 @@ msgid "Close the current file without saving"
 msgstr "在不保存的情况下关闭当前文件"
 
 #: src/extract/timecodes_v2.cpp:285
-#: src/extract/tracks.cpp:409
-#: src/info/mkvinfo.cpp:1677
+#: src/extract/tracks.cpp:416
+#: src/info/mkvinfo.cpp:1675
 msgid "Cluster"
 msgstr "簇"
 
@@ -2699,7 +2699,7 @@ msgid "Cluster previous size: %1%"
 msgstr "前簇长: %1%"
 
 #: src/extract/timecodes_v2.cpp:300
-#: src/extract/tracks.cpp:418
+#: src/extract/tracks.cpp:425
 #: src/info/mkvinfo.cpp:215
 #, boost-format
 msgid "Cluster timecode: %|1$.3f|s"
@@ -3283,17 +3283,17 @@ msgstr "不要在元定位元素中添加章节项。"
 msgid "Do not write meta seek elements at all."
 msgstr "不要写入任何元定位元素。"
 
-#: src/info/mkvinfo.cpp:1562
+#: src/info/mkvinfo.cpp:1560
 #, boost-format
 msgid "Doc type read version: %1%"
 msgstr "文档类型读取版本: %1%"
 
-#: src/info/mkvinfo.cpp:1559
+#: src/info/mkvinfo.cpp:1557
 #, boost-format
 msgid "Doc type version: %1%"
 msgstr "文档类型版本: %1%"
 
-#: src/info/mkvinfo.cpp:1556
+#: src/info/mkvinfo.cpp:1554
 #, boost-format
 msgid "Doc type: %1%"
 msgstr "文档类型: %1%"
@@ -3333,26 +3333,26 @@ msgstr "持续时长: %|1$.3f|s (%2%)"
 msgid "E&xit\tCtrl-Q"
 msgstr "退出(&X)\tCtrl-Q"
 
-#: src/info/mkvinfo.cpp:1532
+#: src/info/mkvinfo.cpp:1530
 msgid "EBML head"
 msgstr "EBML 头"
 
-#: src/info/mkvinfo.cpp:1550
+#: src/info/mkvinfo.cpp:1548
 #, boost-format
 msgid "EBML maximum ID length: %1%"
 msgstr "EBML 最大 ID 长: %1%"
 
-#: src/info/mkvinfo.cpp:1553
+#: src/info/mkvinfo.cpp:1551
 #, boost-format
 msgid "EBML maximum size length: %1%"
 msgstr "EBML 最大长度: %1%"
 
-#: src/info/mkvinfo.cpp:1547
+#: src/info/mkvinfo.cpp:1545
 #, boost-format
 msgid "EBML read version: %1%"
 msgstr "EBML 读取版本: %1%"
 
-#: src/info/mkvinfo.cpp:1544
+#: src/info/mkvinfo.cpp:1542
 #, boost-format
 msgid "EBML version: %1%"
 msgstr "EBML 版本: %1%"
@@ -3521,13 +3521,13 @@ msgstr "出错:"
 msgid "Error: "
 msgstr "出错: "
 
-#: src/info/mkvinfo.cpp:1613
+#: src/info/mkvinfo.cpp:1611
 #, boost-format
 msgid "Error: Couldn't open input file %1% (%2%).\n"
 msgstr "出错: 无法打开输入文件 %1% (%2%)。\n"
 
 #: src/extract/timecodes_v2.cpp:205
-#: src/extract/tracks.cpp:351
+#: src/extract/tracks.cpp:358
 msgid "Error: No EBML head found."
 msgstr "出错: 未发现 EBML 头。"
 
@@ -3638,13 +3638,13 @@ msgstr "帧率 (fps):"
 msgid "Failed to create the VobSub data file '%1%': %2%\n"
 msgstr "创建 VobSub 数据文件 '%1%' 失败: %2%\n"
 
-#: src/extract/xtr_textsubs.cpp:360
-#: src/extract/xtr_vobsub.cpp:235
+#: src/extract/xtr_textsubs.cpp:340
+#: src/extract/xtr_vobsub.cpp:225
 #, boost-format
 msgid "Failed to create the file '%1%': %2%\n"
 msgstr "创建文件 '%1%' 失败: %2%\n"
 
-#: src/extract/xtr_base.cpp:73
+#: src/extract/xtr_base.cpp:74
 #, boost-format
 msgid "Failed to create the file '%1%': %2% (%3%)\n"
 msgstr "创建文件失败 '%1%': %2% (%3%)\n"
@@ -3654,7 +3654,7 @@ msgstr "创建文件失败 '%1%': %2% (%3%)\n"
 msgid "Failed to create the temporary file '%1%': %2%\n"
 msgstr "创建临时文件 '%1%' 失败: %2%\n"
 
-#: src/extract/xtr_textsubs.cpp:363
+#: src/extract/xtr_textsubs.cpp:343
 #, boost-format
 msgid "Failed to parse the USF codec private data for track %1%: %2%\n"
 msgstr "解析轨道 %1% 的 USF 编解码器专有数据失败: %2%\n"
@@ -4155,7 +4155,7 @@ msgstr "界面语言:"
 msgid "Interlaced: %1%"
 msgstr "交错扫描: %1%"
 
-#: src/extract/xtr_textsubs.cpp:143
+#: src/extract/xtr_textsubs.cpp:133
 #, boost-format
 msgid "Internal bug: tracks.cpp SSA #1. %1%"
 msgstr "内部错误: tracks.cpp SSA #1。 %1%"
@@ -4304,12 +4304,12 @@ msgstr "无效的文件名"
 msgid "Invalid format for '--split' in '--split %1%'.\n"
 msgstr "'--split' 格式无效，在 '--split %1%' 中。\n"
 
-#: src/extract/xtr_textsubs.cpp:211
+#: src/extract/xtr_textsubs.cpp:191
 #, boost-format
 msgid "Invalid format for a SSA line ('%1%') at timecode %2%: The first field is not an integer. This entry will be skipped.\n"
 msgstr "SSA 行 ('%1%') 于时间码 %2% 格式无效: 第一个字段不是整数。该条将被跳过。\n"
 
-#: src/extract/xtr_textsubs.cpp:200
+#: src/extract/xtr_textsubs.cpp:180
 #, boost-format
 msgid "Invalid format for a SSA line ('%1%') at timecode %2%: Too many fields found (%3% instead of 9). This entry will be skipped.\n"
 msgstr "SSA 行 ('%1%') 于时间码 %2% 格式无效: 发现过多字段 (%3% 而不是 9)。该条将被跳过。\n"
@@ -4864,7 +4864,7 @@ msgstr "最大缓存"
 msgid "Memory allocation error: %1% (%2%).\n"
 msgstr "内存分配出错: %1% (%2%)。\n"
 
-#: src/extract/xtr_rmff.cpp:74
+#: src/extract/xtr_rmff.cpp:64
 msgid "Memory for a RealAudio/RealVideo frame could not be allocated.\n"
 msgstr "无法为一个 RealAudio/RealVideo 帧分配内存。\n"
 
@@ -5043,7 +5043,7 @@ msgstr "下一文件名"
 msgid "Next filename: %1%"
 msgstr "下一文件名: %1%"
 
-#: src/info/mkvinfo.cpp:1653
+#: src/info/mkvinfo.cpp:1651
 #, boost-format
 msgid "Next level 0 element is not a segment but %1%"
 msgstr "下一个 0 层级元素不是剪辑而是 %1%"
@@ -5071,7 +5071,7 @@ msgstr "未指定 %1%，在 '--%2% %3%'。\n"
 msgid "No AC3 header found in first frame; track will be skipped.\n"
 msgstr "首帧未发现 AC3 头; 此轨将被跳过。\n"
 
-#: src/info/mkvinfo.cpp:1627
+#: src/info/mkvinfo.cpp:1625
 msgid "No EBML head found."
 msgstr "未找到 EBML 头。"
 
@@ -5130,7 +5130,7 @@ msgstr ""
 msgid "No file loaded"
 msgstr "未载入文件"
 
-#: src/info/mkvinfo.cpp:1738
+#: src/info/mkvinfo.cpp:1736
 #: src/propedit/options.cpp:33
 msgid "No file name given.\n"
 msgstr "未给定文件名。\n"
@@ -5160,8 +5160,8 @@ msgid "No permission to read from, to write to or to create"
 msgstr "无读取、写入或创建权限"
 
 #: src/extract/timecodes_v2.cpp:219
-#: src/extract/tracks.cpp:366
-#: src/info/mkvinfo.cpp:1641
+#: src/extract/tracks.cpp:373
+#: src/info/mkvinfo.cpp:1639
 msgid "No segment/level 0 element found."
 msgstr "未发现剪辑/0 层级元素。"
 
@@ -5183,7 +5183,7 @@ msgstr "未指定轨道 ID，在 '--%1% %2%'。\n"
 msgid "No track corresponding to the edit specification '%1%' was found. %2%\n"
 msgstr "未发现与编辑指定 '%1%' 相应的轨道。%2%\n"
 
-#: src/extract/tracks.cpp:323
+#: src/extract/tracks.cpp:330
 #, boost-format
 msgid "No track with the ID %1% was found in the source file.\n"
 msgstr "源文件中找不到 ID 为 %1% 的轨道。\n"
@@ -5236,7 +5236,7 @@ msgstr "注意与 '%1%' 存储相关的Matroska 规范尚未确定。因此 mkvm
 
 #: src/extract/attachments.cpp:132
 #: src/extract/timecodes_v2.cpp:187
-#: src/extract/tracks.cpp:330
+#: src/extract/tracks.cpp:337
 #: src/propedit/options.cpp:36
 msgid "Nothing to do.\n"
 msgstr "无事可做。\n"
@@ -5470,7 +5470,7 @@ msgstr "完整解析文件并显示所有元素"
 msgid "Parse the whole file instead of relying on the index."
 msgstr "解析整个文件，而不是依照索引。"
 
-#: src/info/mkvinfo.cpp:1427
+#: src/info/mkvinfo.cpp:1425
 msgid "Parsing file"
 msgstr "正在解析文件"
 
@@ -5586,7 +5586,7 @@ msgid "Progress"
 msgstr "进度"
 
 #: src/extract/timecodes_v2.cpp:290
-#: src/extract/tracks.cpp:413
+#: src/extract/tracks.cpp:420
 #: src/merge/output_control.cpp:551
 #, boost-format
 msgid "Progress: %1%%%%2%"
@@ -6018,7 +6018,7 @@ msgid "Seek pre-roll: %|1$.3f|ms (%2%ns)"
 msgstr "持续时长: %|1$.3f|s (%2%)"
 
 #: src/extract/timecodes_v2.cpp:223
-#: src/extract/tracks.cpp:371
+#: src/extract/tracks.cpp:378
 #: src/info/qt_ui.cpp:177
 #: src/info/wxwidgets_ui.cpp:210
 msgid "Segment"
@@ -6061,7 +6061,7 @@ msgid "Segment info files (*.xml)|*.xml|%s"
 msgstr "剪辑信息文件 (*.xml)|*.xml|%s"
 
 #: src/extract/timecodes_v2.cpp:243
-#: src/extract/tracks.cpp:389
+#: src/extract/tracks.cpp:396
 #: src/info/mkvinfo.cpp:470
 #: src/info/qt_ui.cpp:178
 #: src/info/wxwidgets_ui.cpp:213
@@ -6073,7 +6073,7 @@ msgid "Segment information"
 msgstr "剪辑信息"
 
 #: src/extract/timecodes_v2.cpp:277
-#: src/extract/tracks.cpp:402
+#: src/extract/tracks.cpp:409
 #: src/info/mkvinfo.cpp:781
 #: src/info/qt_ui.cpp:179
 #: src/info/wxwidgets_ui.cpp:213
@@ -6085,12 +6085,12 @@ msgstr "剪辑轨道"
 msgid "Segment unique ID"
 msgstr "剪辑唯一 ID"
 
-#: src/info/mkvinfo.cpp:1649
+#: src/info/mkvinfo.cpp:1647
 #, boost-format
 msgid "Segment, size %1%"
 msgstr "剪辑, 尺寸 %1%"
 
-#: src/info/mkvinfo.cpp:1647
+#: src/info/mkvinfo.cpp:1645
 msgid "Segment, size unknown"
 msgstr "剪辑, 尺寸未知"
 
@@ -6364,7 +6364,7 @@ msgstr "简单块"
 msgid "Simple chapter parser: %1%\n"
 msgstr "简单章节解析器: %1%\n"
 
-#: src/extract/tracks.cpp:435
+#: src/extract/tracks.cpp:442
 msgid "SimpleBlock"
 msgstr "简单块"
 
@@ -6501,7 +6501,7 @@ msgstr "启动时间"
 msgid "Starting job ID %d (%s) on %s"
 msgstr "正在启动任务 ID %d (%s) 于 %s"
 
-#: src/info/mkvinfo.cpp:1588
+#: src/info/mkvinfo.cpp:1586
 #, boost-format
 msgid "Statistics for track number %1%: number of blocks: %2%; size in bytes: %3%; duration in seconds: %4%; approximate bitrate in bits/second: %5%\n"
 msgstr "%1% 号轨道统计: 块数: %2%; 尺寸: %3% 字节; 时长: %4% 秒; 大致码率: %5% bps\n"
@@ -6551,7 +6551,7 @@ msgstr "伸展此轨的时间码。本项支持两种格式。既可以是正的
 msgid "String"
 msgstr "字符串"
 
-#: src/extract/xtr_textsubs.cpp:180
+#: src/extract/xtr_textsubs.cpp:160
 #, boost-format
 msgid "Subtitle track %1% is missing some duration elements. Please check the resulting SSA/ASS file for entries that have the same start and end time.\n"
 msgstr "字幕轨 %1% 缺时长元素。请检查输出的 SSA/ASS 文件中有相同起始和终止时间的条目。\n"
@@ -6600,7 +6600,7 @@ msgstr "标签文件 (*.xml;*.txt)|*.xml;*.txt|%s"
 msgid "Tag selectors"
 msgstr "标签选择器"
 
-#: src/info/mkvinfo.cpp:1516
+#: src/info/mkvinfo.cpp:1514
 #: src/propedit/options.cpp:177
 msgid "Tags"
 msgstr "标签"
@@ -6657,7 +6657,7 @@ msgstr "AAC profile 不同: %1% 与 %2%"
 msgid "The AVC video track is missing the 'CTTS' atom for frame timecode offsets. However, AVC/h.264 allows frames to have more than the traditional one (for P frames) or two (for B frames) references to other frames. The timecodes for such frames will be out-of-order, and the 'CTTS' atom is needed for getting the timecodes right. As it is missing the timecodes for this track might be wrong. You should watch the resulting file and make sure that it looks like you expected it to.\n"
 msgstr "此 AVC 视频轨缺 'CTTS' 帧时间码偏移单元。然而，AVC/h.264 允许帧有超过通常的一次 (对于 P 帧) 或两次 (对于 B 帧) 帧参考。此类帧的时间码会变得无序，需要 'CTTS' 单元来修正。由于缺时间码，此轨可能出错。请查看生成的文件，确认它是不是您预期的样子。\n"
 
-#: src/extract/tracks.cpp:289
+#: src/extract/tracks.cpp:296
 #, boost-format
 msgid "The CUE sheet for track %1% will be written to '%2%'.\n"
 msgstr "轨道 %1% 的 CUE 表单将被写至 '%2%'。\n"
@@ -6985,7 +6985,7 @@ msgstr "文件 '%1%' 无法以读取及写入模式打开，或对该文件的�
 #: src/extract/cuesheets.cpp:208
 #: src/extract/tags.cpp:48
 #: src/extract/timecodes_v2.cpp:194
-#: src/extract/tracks.cpp:339
+#: src/extract/tracks.cpp:346
 #: src/merge/output_control.cpp:337
 #: src/merge/output_control.cpp:470
 #: src/propedit/attachment_target.cpp:63
@@ -6994,11 +6994,11 @@ msgid "The file '%1%' could not be opened for reading: %2%.\n"
 msgstr "文件 '%1%' 无法以读取模式打开: %2%。\n"
 
 #: src/extract/attachments.cpp:122
-#: src/extract/tracks.cpp:293
+#: src/extract/tracks.cpp:300
 #: src/extract/xtr_avi.cpp:56
 #: src/extract/xtr_avi.cpp:60
 #: src/extract/xtr_rmff.cpp:40
-#: src/extract/xtr_tta.cpp:86
+#: src/extract/xtr_tta.cpp:76
 #: src/extract/xtr_wav.cpp:115
 #: src/merge/output_control.cpp:1615
 #, boost-format
@@ -7528,7 +7528,7 @@ msgstr "位于 %2% 的标签或属性 '%1%' 包含无效或异常数据。"
 msgid "The tags in '%1%' could not be parsed: some mandatory elements are missing.\n"
 msgstr "无法解析 '%1%' 中的标签: 缺少一些必要元素。\n"
 
-#: src/extract/xtr_tta.cpp:80
+#: src/extract/xtr_tta.cpp:70
 #, boost-format
 msgid "The temporary file '%1%' could not be opened for reading: %2%.\n"
 msgstr "临时文件 '%1%' 无法以读取模式打开: %2%。\n"
@@ -7844,7 +7844,7 @@ msgid "Timecode files (*.tmc;*.txt)|*.tmc;*.txt|%s"
 msgstr "时间码文件 (*.tmc;*.txt)|*.tmc;*.txt|%s"
 
 #: src/extract/timecodes_v2.cpp:252
-#: src/extract/tracks.cpp:395
+#: src/extract/tracks.cpp:402
 #: src/info/mkvinfo.cpp:482
 #: src/info/mkvinfo.cpp:917
 #, boost-format
@@ -7895,7 +7895,7 @@ msgstr "轨道 %1% 以 lzo1x 压缩，但 mkvmerge 编译时未包含 lzo1x 压�
 msgid "Track %1% with the CodecID '%2%' contains invalid \"codec private\" data for AAC.\n"
 msgstr "轨道 %1%（CodecID 为 '%2%'）包含无效的 AAC \"codec private\" 编解码器专有数据。\n"
 
-#: src/extract/xtr_ogg.cpp:88
+#: src/extract/xtr_ogg.cpp:97
 #, boost-format
 msgid "Track %1% with the CodecID '%2%' does not contain valid headers.\n"
 msgstr "轨道 %1%（CodecID 为 '%2%'）不含有效的头。\n"
@@ -7909,11 +7909,11 @@ msgstr "轨道 %1%（CodecID 为 '%2%'）缺 \"比特每秒 (bps)\" 元素，不
 #: src/extract/xtr_alac.cpp:47
 #: src/extract/xtr_avc.cpp:61
 #: src/extract/xtr_avi.cpp:39
-#: src/extract/xtr_ogg.cpp:38
-#: src/extract/xtr_ogg.cpp:73
+#: src/extract/xtr_ogg.cpp:40
+#: src/extract/xtr_ogg.cpp:76
 #: src/extract/xtr_rmff.cpp:31
-#: src/extract/xtr_textsubs.cpp:105
-#: src/extract/xtr_textsubs.cpp:294
+#: src/extract/xtr_textsubs.cpp:95
+#: src/extract/xtr_textsubs.cpp:274
 #: src/extract/xtr_vobsub.cpp:65
 #: src/extract/xtr_wav.cpp:97
 #, boost-format
@@ -7935,7 +7935,7 @@ msgstr "轨道 %1%: %2%, 编解码器 ID: %3%%4%%5%%6%\n"
 msgid "Track %1%: AAC found, but decoder config data has length %2%.\n"
 msgstr "轨道 %1%: 已发现 AAC, 但解码器配置数据长为 %2%。\n"
 
-#: src/extract/xtr_textsubs.cpp:397
+#: src/extract/xtr_textsubs.cpp:367
 #, boost-format
 msgid "Track %1%: An USF subtitle entry starting at timecode %2% is not well-formed XML and will be skipped.\n"
 msgstr "轨道 %1%: 开始于时间码 %2% 的 USF 字幕条目不是规范的 XML 格式，将被跳过处理。\n"
@@ -7945,7 +7945,7 @@ msgstr "轨道 %1%: 开始于时间码 %2% 的 USF 字幕条目不是规范的 X
 msgid "Track %1%: NAL too big. Size according to header field: %2%, available bytes in packet: %3%. This NAL is defect and will be skipped.\n"
 msgstr "轨道 %1%: NAL 太大。头部字段给出的尺寸: %2%，包中可用字节数: %3%。该 NAL 已损坏，将被跳过处理。\n"
 
-#: src/extract/xtr_textsubs.cpp:55
+#: src/extract/xtr_textsubs.cpp:45
 #, boost-format
 msgid "Track %1%: Subtitle entry number %2% is missing its duration. Assuming a duration of 1s.\n"
 msgstr "轨道 %1%: 字幕号 %2% 缺时长。假定为 1 秒。\n"
@@ -8015,7 +8015,7 @@ msgstr "轨道覆盖: %1%"
 msgid "Track type: %1%"
 msgstr "轨道类型: %1%"
 
-#: src/extract/xtr_base.cpp:120
+#: src/extract/xtr_base.cpp:118
 msgid "Tracks with unsupported content encoding schemes (compression or encryption) cannot be extracted.\n"
 msgstr "使用不支持的内容编码（压缩或加密）方案的轨道不能提取。\n"
 
@@ -8445,7 +8445,7 @@ msgstr "写入程序: %1%"
 msgid "Writing info"
 msgstr "正在导出信息"
 
-#: src/extract/xtr_vobsub.cpp:223
+#: src/extract/xtr_vobsub.cpp:213
 #, boost-format
 msgid "Writing the VobSub index file '%1%'.\n"
 msgstr "正在写入 VobSub 索引文件 '%1%'。\n"
