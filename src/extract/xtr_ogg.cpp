@@ -17,8 +17,10 @@
 #include "common/ebml.h"
 #include "common/endian.h"
 #include "common/hacks.h"
-#include "common/random.h"
 #include "common/kate.h"
+#include "common/opus.h"
+#include "common/random.h"
+#include "common/version.h"
 #include "extract/xtr_ogg.h"
 
 // ------------------------------------------------------------------------
@@ -67,7 +69,8 @@ xtr_oggbase_c::create_file(xtr_base_c *master,
 
 void
 xtr_oggbase_c::create_standard_file(xtr_base_c *master,
-                                    KaxTrackEntry &track) {
+                                    KaxTrackEntry &track,
+                                    LacingType lacing) {
   KaxCodecPrivate *priv = FindChild<KaxCodecPrivate>(&track);
   if (!priv)
     mxerror(boost::format(Y("Track %1% with the CodecID '%2%' is missing the \"codec private\" element and cannot be extracted.\n")) % m_tid % m_codec_id);
@@ -76,11 +79,17 @@ xtr_oggbase_c::create_standard_file(xtr_base_c *master,
   memory_cptr mpriv = decode_codec_private(priv);
 
   std::vector<memory_cptr> header_packets;
-  try {
-    header_packets = unlace_memory_xiph(mpriv);
 
-    if (header_packets.empty())
-      throw false;
+  try {
+    if (lacing == LACING_NONE)
+      header_packets.push_back(mpriv);
+
+    else {
+      header_packets = unlace_memory_xiph(mpriv);
+
+      if (header_packets.empty())
+        throw false;
+    }
 
     header_packets_unlaced(header_packets);
 
@@ -214,7 +223,7 @@ xtr_oggvorbis_c::~xtr_oggvorbis_c() {
 void
 xtr_oggvorbis_c::create_file(xtr_base_c *master,
                              KaxTrackEntry &track) {
-  create_standard_file(master, track);
+  create_standard_file(master, track, LACING_AUTO);
 }
 
 void
@@ -263,7 +272,7 @@ xtr_oggkate_c::xtr_oggkate_c(const std::string &codec_id,
 void
 xtr_oggkate_c::create_file(xtr_base_c *master,
                            KaxTrackEntry &track) {
-  create_standard_file(master, track);
+  create_standard_file(master, track, LACING_AUTO);
 }
 
 void
@@ -316,7 +325,7 @@ xtr_oggtheora_c::xtr_oggtheora_c(const std::string &codec_id,
 void
 xtr_oggtheora_c::create_file(xtr_base_c *master,
                              KaxTrackEntry &track) {
-  create_standard_file(master, track);
+  create_standard_file(master, track, LACING_AUTO);
 }
 
 void
@@ -338,6 +347,59 @@ xtr_oggtheora_c::handle_frame(xtr_frame_t &f) {
 
 void
 xtr_oggtheora_c::finish_file() {
+  write_queued_frame(true);
+  flush_pages();
+}
+
+// ------------------------------------------------------------------------
+
+xtr_oggopus_c::xtr_oggopus_c(const std::string &codec_id,
+                             int64_t tid,
+                             track_spec_t &tspec)
+  : xtr_oggbase_c{codec_id, tid, tspec}
+  , m_position{timecode_c::ns(0)}
+{
+  m_debug = debugging_requested("opus|opus_extrator");
+}
+
+void
+xtr_oggopus_c::create_file(xtr_base_c *master,
+                           KaxTrackEntry &track) {
+  create_standard_file(master, track, LACING_NONE);
+}
+
+void
+xtr_oggopus_c::header_packets_unlaced(std::vector<memory_cptr> &header_packets) {
+  auto signature = std::string{"OpusTags"};
+  auto version   = std::string{"unknown encoder; extracted from Matroska with "} + get_version_info("mkvextract");
+  auto ver_len   = version.length();
+  auto mem       = memory_c::alloc(8 + 4 + ver_len + 4);
+  auto buffer    = reinterpret_cast<char *>(mem->get_buffer());
+
+  signature.copy(buffer,                      8);
+  put_uint32_le(buffer + 8,                   ver_len);
+  version.copy(buffer + 8 + 4,                ver_len);
+  put_uint32_le(buffer + mem->get_size() - 4, 0);
+
+  header_packets.push_back(mem);
+}
+
+void
+xtr_oggopus_c::handle_frame(xtr_frame_t &f) {
+  try {
+    auto toc = mtx::opus::toc_t::decode(f.frame);
+    mxdebug_if(m_debug, boost::format("Position: %1% discard_duration: %2% TOC: %3%\n") % m_position % f.discard_duration % toc);
+
+    m_position = m_position + toc.packet_duration - f.discard_duration;
+    queue_frame(f.frame, m_position.to_samples(48000));
+
+  } catch (mtx::opus::exception &ex) {
+    mxdebug_if(m_debug, boost::format("Exception: %1%\n") % ex.what());
+  }
+}
+
+void
+xtr_oggopus_c::finish_file() {
   write_queued_frame(true);
   flush_pages();
 }

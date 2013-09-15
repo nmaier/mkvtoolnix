@@ -147,6 +147,8 @@ xtr_base_c::create_extractor(const std::string &new_codec_id,
     return new xtr_alac_c(new_codec_id, new_tid, tspec);
   else if (new_codec_id == MKV_A_VORBIS)
     return new xtr_oggvorbis_c(new_codec_id, new_tid, tspec);
+  else if (new_codec_id == MKV_A_OPUS)
+    return new xtr_oggopus_c(new_codec_id, new_tid, tspec);
   else if (balg::istarts_with(new_codec_id, "A_AAC"))
     return new xtr_aac_c(new_codec_id, new_tid, tspec);
   else if (balg::istarts_with(new_codec_id, "A_REAL/"))
