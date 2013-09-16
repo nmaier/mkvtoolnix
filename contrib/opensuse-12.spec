@@ -7,7 +7,7 @@ BuildRequires: flac flac-devel gcc-c++ gtk2 gtk2-devel libogg0 libogg-devel libs
 
 Name:         mkvtoolnix
 URL:          http://www.bunkus.org/videotools/mkvtoolnix/
-Version: 6.4.0
+Version: 6.4.1
 Release: 1
 Summary:      tools to create, alter and inspect Matroska files
 License:      GPL
