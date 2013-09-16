@@ -890,8 +890,6 @@ generic_packetizer_c::add_packet2(packet_cptr pack) {
     apply_factory_once(pack);
   else
     apply_factory();
-
-  pack->output_order_timecode = timecode_c::ns(pack->assigned_timecode - std::max(m_codec_delay.to_ns(0), m_seek_pre_roll.to_ns(0)));
 }
 
 void
@@ -908,6 +906,8 @@ generic_packetizer_c::get_packet() {
 
   packet_cptr pack = m_packet_queue.front();
   m_packet_queue.pop_front();
+
+  pack->output_order_timecode = timecode_c::ns(pack->assigned_timecode - std::max(m_codec_delay.to_ns(0), m_seek_pre_roll.to_ns(0)));
 
   m_enqueued_bytes -= pack->data->get_size();
 
