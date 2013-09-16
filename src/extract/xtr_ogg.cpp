@@ -371,7 +371,7 @@ xtr_oggopus_c::create_file(xtr_base_c *master,
 void
 xtr_oggopus_c::header_packets_unlaced(std::vector<memory_cptr> &header_packets) {
   auto signature = std::string{"OpusTags"};
-  auto version   = std::string{"unknown encoder; extracted from Matroska with "} + get_version_info("mkvextract");
+  auto version   = std::string{"unknown encoder; extracted from Matroska with "} + (!hack_engaged(ENGAGE_NO_VARIABLE_DATA) ? get_version_info("mkvextract") : std::string{"mkvextract"});
   auto ver_len   = version.length();
   auto mem       = memory_c::alloc(8 + 4 + ver_len + 4);
   auto buffer    = reinterpret_cast<char *>(mem->get_buffer());
