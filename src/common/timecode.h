@@ -150,6 +150,14 @@ public:
     return basic_timecode_c<T>{std::abs(m_timecode), m_valid};
   }
 
+  basic_timecode_c<T> value_or_min() const {
+    return m_valid ? *this : min();
+  }
+
+  basic_timecode_c<T> value_or_max() const {
+    return m_valid ? *this : max();
+  }
+
   // comparison
   bool operator <(basic_timecode_c<T> const &other) const {
     return !m_valid &&  other.m_valid ? true
@@ -199,6 +207,15 @@ public:
     if (!sample_rate)
       throw std::domain_error{"invalid sample rate"};
     return basic_timecode_c<T>{(samples * 10000000000 / sample_rate + 5) / 10};
+  }
+
+  // min/max
+  static basic_timecode_c<T> min() {
+    return ns(std::numeric_limits<T>::min());
+  }
+
+  static basic_timecode_c<T> max() {
+    return ns(std::numeric_limits<T>::max());
   }
 };
 

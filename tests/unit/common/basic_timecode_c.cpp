@@ -144,5 +144,14 @@ TEST(BasicTimecode, Resetting) {
   EXPECT_THROW(v.to_ns(), std::domain_error);
 }
 
+TEST(BasicTimecode, MinMax) {
+  EXPECT_TRUE(timecode_c::min()                <  timecode_c::max());
+  EXPECT_TRUE(timecode_c::min()                == timecode_c::ns(std::numeric_limits<int64_t>::min()));
+  EXPECT_TRUE(timecode_c::max()                == timecode_c::ns(std::numeric_limits<int64_t>::max()));
+  EXPECT_TRUE(timecode_c{}.value_or_min()      == timecode_c::min());
+  EXPECT_TRUE(timecode_c{}.value_or_max()      == timecode_c::max());
+  EXPECT_TRUE(timecode_c::ns(1).value_or_min() == timecode_c::ns(1));
+  EXPECT_TRUE(timecode_c::ns(1).value_or_max() == timecode_c::ns(1));
+}
 
 }
