@@ -1,3 +1,12 @@
+2013-09-17  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvmerge: bug fix: The "duration" element was calculated wrong
+        if the first element in the file wasn't the one with the smallest
+        timestamp. To be precise, it was too short by the difference
+        between the first timestamp and the smallest one (e.g with video
+        sequences timestamped 80ms, 0ms, 40ms, 120ms... the duration was
+        80ms too short).
+
 2013-09-16  Moritz Bunkus  <moritz@bunkus.org>
 
         * Released v6.4.1.

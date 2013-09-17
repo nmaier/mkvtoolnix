@@ -45,6 +45,7 @@ cluster_helper_c::cluster_helper_c()
   , m_last_discarded_timecode_and_duration{0}
   , m_discarded_duration{0}
   , m_previous_discarded_duration{}
+  , m_min_timecode_in_file{}
   , m_max_timecode_in_file{-1}
   , m_min_timecode_in_cluster(-1)
   , m_max_timecode_in_cluster(-1)
@@ -202,6 +203,7 @@ cluster_helper_c::split(packet_cptr &packet) {
     m_bytes_in_file          =  0;
     m_first_timecode_in_file = -1;
     m_max_timecode_in_file   = -1;
+    m_min_timecode_in_file.reset();
   }
 
   m_first_timecode_in_part = -1;
@@ -429,6 +431,7 @@ cluster_helper_c::render() {
     if (-1 == m_first_timecode_in_part)
       m_first_timecode_in_part = pack->assigned_timecode;
 
+    m_min_timecode_in_file      = std::min(timecode_c::ns(pack->assigned_timecode),        m_min_timecode_in_file.value_or_max());
     m_max_timecode_in_file      = std::max(pack->assigned_timecode,                        m_max_timecode_in_file);
     m_max_timecode_and_duration = std::max(pack->assigned_timecode + pack->get_duration(), m_max_timecode_and_duration);
 
@@ -542,10 +545,10 @@ cluster_helper_c::add_to_cues_maybe(packet_cptr &pack) {
 int64_t
 cluster_helper_c::get_duration()
   const {
-  auto result = m_max_timecode_and_duration - m_first_timecode_in_file - m_discarded_duration;
+  auto result = m_max_timecode_and_duration - m_min_timecode_in_file.to_ns(0) - m_discarded_duration;
   mxdebug_if(m_debug_duration,
-             boost::format("cluster_helper_c::get_duration(): max_tc_and_dur %1% - first_tc_in_file %2% - discarded_duration %3% = %4%\n")
-             % m_max_timecode_and_duration % m_first_timecode_in_file % m_discarded_duration % result);
+             boost::format("cluster_helper_c::get_duration(): max_tc_and_dur %1% - min_tc_in_file %2% - discarded_duration %3% = %4% ; first_tc_in_file = %5%\n")
+             % m_max_timecode_and_duration % m_min_timecode_in_file.to_ns(0) % m_discarded_duration % result % m_first_timecode_in_file);
   return result;
 }
 
