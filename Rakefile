@@ -303,9 +303,16 @@ namespace :translations do
     %w{LANGUAGE EMAIL}.each { |e| fail "Variable '#{e}' is not set" if ENV[e].blank? }
 
     require 'rexml/document'
-    node   = REXML::XPath.first REXML::Document.new(File.new("/usr/share/xml/iso-codes/iso_639.xml")), "//iso_639_entry[@name='#{ENV['LANGUAGE']}']"
-    locale = node ? node.attributes['iso_639_1_code'] : nil
-    fail "Unknown language/ISO-639-1 code not found" if locale.blank?
+    iso639_file = "/usr/share/xml/iso-codes/iso_639.xml"
+    node        = REXML::XPath.first REXML::Document.new(File.new(iso639_file)), "//iso_639_entry[@name='#{ENV['LANGUAGE']}']"
+    locale      = node ? node.attributes['iso_639_1_code'] : nil
+    if locale.blank?
+      if /^ [a-z]{2} (?: _ [A-Z]{2} )? $/x.match(ENV['LANGUAGE'])
+        locale = ENV['LANGUAGE']
+      else
+        fail "Unknown language/ISO-639-1 code not found in #{iso639_file}"
+      end
+    end
 
     puts "  CREATE po/#{locale}.po"
     File.open "po/#{locale}.po", "w" do |out|
