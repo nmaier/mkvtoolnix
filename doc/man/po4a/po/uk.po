@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 4.4.0\n"
-"POT-Creation-Date: 2013-04-27 18:19+0300\n"
+"POT-Creation-Date: 2013-10-02 19:40+0200\n"
 "PO-Revision-Date: 2011-12-14 22:25+0200\n"
 "Last-Translator: Andriy Bilous'ko <arestarh@ukr.net>\n"
 "Language-Team: uk <moritz@bunkus.org>\n"
@@ -35,7 +35,7 @@ msgstr "6.4.1"
 #: doc/man/mkvmerge.xml:7
 #: doc/man/mkvpropedit.xml:7
 #: doc/man/mmg.xml:7
-msgid "2013-03-02"
+msgid "2013-09-16"
 msgstr ""
 
 #. type: Content of the mkvmerge entity
@@ -929,115 +929,127 @@ msgstr "Доріжки <productname>RealVideo</productname> записуютьс
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:608
+msgid "A_OPUS"
+msgstr ""
+
+#. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: doc/man/mkvextract.xml:611
+#, fuzzy
+#| msgid "<productname>RealAudio</productname> tracks are written to <productname>RealMedia</productname> files."
+msgid "<productname>Opus</productname> tracks are written to <productname>OggOpus</productname> files."
+msgstr "Доріжки <productname>RealAudio</productname> записуються до файлів <productname>RealMedia</productname>."
+
+#. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
+#: doc/man/mkvextract.xml:617
 msgid "S_TEXT/UTF8"
 msgstr "S_TEXT/UTF8"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:611
+#: doc/man/mkvextract.xml:620
 msgid "Simple text subtitles will be written as <abbrev>SRT</abbrev> files."
 msgstr "Прості текстові субтитри будуть записані до файлів <abbrev>SRT</abbrev>."
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvextract.xml:617
+#: doc/man/mkvextract.xml:626
 msgid "S_TEXT/SSA, S_TEXT/ASS"
 msgstr "S_TEXT/SSA, S_TEXT/ASS"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:620
+#: doc/man/mkvextract.xml:629
 msgid "<abbrev>SSA</abbrev> and <abbrev>ASS</abbrev> text subtitles will be written as <abbrev>SSA</abbrev>/<abbrev>ASS</abbrev> files respectively."
 msgstr "Текстові субтитри <abbrev>SSA</abbrev> і <abbrev>ASS</abbrev> будуть записані до файлів <abbrev>SSA</abbrev>/<abbrev>ASS</abbrev> відповідно."
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvextract.xml:627
+#: doc/man/mkvextract.xml:636
 msgid "S_KATE"
 msgstr "S_KATE"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:630
+#: doc/man/mkvextract.xml:639
 msgid "<productname>Kate</productname> streams will be written within an <productname>Ogg</productname> container."
 msgstr "Потоки <productname>Kate</productname> будуть записані до контейнеру <productname>Ogg</productname>."
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvextract.xml:636
+#: doc/man/mkvextract.xml:645
 msgid "S_VOBSUB"
 msgstr ""
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:639
+#: doc/man/mkvextract.xml:648
 msgid "<productname>VobSub</productname> subtitles will be written as <abbrev>SUB</abbrev> files along with the respective index files, as <abbrev>IDX</abbrev> files."
 msgstr ""
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvextract.xml:646
+#: doc/man/mkvextract.xml:655
 #, fuzzy
 #| msgid "S_TEXT/UTF8"
 msgid "S_TEXT/USF"
 msgstr "S_TEXT/UTF8"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:649
+#: doc/man/mkvextract.xml:658
 #, fuzzy
 #| msgid "Simple text subtitles will be written as <abbrev>SRT</abbrev> files."
 msgid "<abbrev>USF</abbrev> text subtitles will be written as <abbrev>USF</abbrev> files."
 msgstr "Прості текстові субтитри будуть записані до файлів <abbrev>SRT</abbrev>."
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvextract.xml:655
+#: doc/man/mkvextract.xml:664
 msgid "S_HDMV/PGS"
 msgstr ""
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:658
+#: doc/man/mkvextract.xml:667
 #, fuzzy
 #| msgid "Raw <abbrev>PCM</abbrev> data will be written to a <abbrev>WAV</abbrev> file."
 msgid "<abbrev>PGS</abbrev> subtitles will be written as <abbrev>SUP</abbrev> files."
 msgstr "Необроблені <abbrev>PCM</abbrev> дані будуть записані до файлу <abbrev>WAV</abbrev>."
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvextract.xml:664
+#: doc/man/mkvextract.xml:673
 #: doc/man/mkvmerge.xml:2379
 msgid "Tags"
 msgstr "Теги"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:667
+#: doc/man/mkvextract.xml:676
 msgid "Tags are converted to a &xml; format. This format is the same that &mkvmerge; supports for reading tags."
 msgstr "Теги конвертуються до формату &xml;. Цей формат є тим самим, який &mkvmerge; підтримує для читання тегів."
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvextract.xml:673
+#: doc/man/mkvextract.xml:682
 #: doc/man/mkvmerge.xml:2214
 msgid "Attachments"
 msgstr "Вкладення"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:676
+#: doc/man/mkvextract.xml:685
 msgid "Attachments are written to they output file as they are. No conversion whatsoever is done."
 msgstr "Вкладення записуються як є до файлу на виході. Ніяких перетворень не виконується."
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvextract.xml:682
+#: doc/man/mkvextract.xml:691
 #: doc/man/mkvmerge.xml:2243
 msgid "Chapters"
 msgstr "Розділи"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:685
+#: doc/man/mkvextract.xml:694
 msgid "Chapters are converted to a &xml; format. This format is the same that &mkvmerge; supports for reading chapters. Alternatively a stripped-down version can be output in the simple <abbrev>OGM</abbrev> style format."
 msgstr "Розділи конвертуються до формату &xml;. Цей формат є тим самим, який &mkvmerge; підтримує для читання розділів. Як альтернатива, можна витягувати розділи до спрощеного стильового формату <abbrev>OGM</abbrev>."
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvextract.xml:692
+#: doc/man/mkvextract.xml:701
 msgid "Timecodes"
 msgstr "Тайм-коди"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:695
+#: doc/man/mkvextract.xml:704
 msgid "Timecodes are first sorted and then output as a timecode v2 format compliant file ready to be fed to &mkvmerge;.  The extraction to other formats (v1, v3 and v4) is not supported."
 msgstr "Тайм-коди спочатку сортуються і потім виводяться у сумісному файловому форматі тайм-кодів v2 для використання &mkvmerge;. Витягнення до інших форматів (v1, v3 і v4) не підтримується."
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvextract.xml:704
+#: doc/man/mkvextract.xml:713
 #: doc/man/mkvinfo.xml:305
 #: doc/man/mkvmerge.xml:2664
 #: doc/man/mkvpropedit.xml:656
@@ -1045,27 +1057,27 @@ msgid "Exit codes"
 msgstr "Коди завершення"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvextract.xml:707
+#: doc/man/mkvextract.xml:716
 msgid "&mkvextract; exits with one of three exit codes:"
 msgstr "&mkvextract; завершує роботу одним з трьох кодів завершення:"
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvextract.xml:713
+#: doc/man/mkvextract.xml:722
 msgid "<constant>0</constant> -- This exit codes means that extraction has completed successfully."
 msgstr "<constant>0</constant> -- Цей код означає, що витягнення пройшло успішно."
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvextract.xml:719
+#: doc/man/mkvextract.xml:728
 msgid "<constant>1</constant> -- In this case &mkvextract; has output at least one warning, but extraction did continue.  A warning is prefixed with the text '<literal>Warning:</literal>'.  Depending on the issues involved the resulting files might be ok or not.  The user is urged to check both the warning and the resulting files."
 msgstr "<constant>1</constant> -- В цьому випадку &mkvextract; було видано хоча б одне попередження, проте витягнення продовжувалось. Попередженню передує текст '<literal>Warning:</literal>'. В залежності від помилок, що сталися, результуючі файли можуть бути або цілими, або пошкодженими. Користувачу рекомендується як звернути увагу на саме попередження, так і перевірити результуючі файли."
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvextract.xml:727
+#: doc/man/mkvextract.xml:736
 msgid "<constant>2</constant> -- This exit code is used after an error occurred.  &mkvextract; aborts right after outputting the error message.  Error messages range from wrong command line arguments over read/write errors to broken files."
 msgstr "<constant>2</constant> -- Цей код завершення використовується у випадку помилки. &mkvextract; припиняє роботу одразу після виведення повідомлення про помилку. Помилки виникають через невірні параметри командного рядка, помилки читання/запису або через з самого початку пошкоджені файли."
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvextract.xml:735
+#: doc/man/mkvextract.xml:744
 #: doc/man/mkvinfo.xml:335
 #: doc/man/mkvmerge.xml:2100
 #: doc/man/mkvpropedit.xml:687
@@ -1073,7 +1085,7 @@ msgid "Escaping special chars in text"
 msgstr "Виокремлення спеціальних символів у тексті"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvextract.xml:737
+#: doc/man/mkvextract.xml:746
 #: doc/man/mkvinfo.xml:337
 #: doc/man/mkvmerge.xml:2102
 #: doc/man/mkvpropedit.xml:689
@@ -1081,7 +1093,7 @@ msgid "There are a few places in which special characters in text must or should
 msgstr "Є декілька місць, де спеціальні символи у тексті мають або повинні бути виокремлені. Правила для виокремлювання прості: кожен символ, що потребує виокремлення, замінюється на зворотній слеш з деяким символом, що йде після нього."
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvextract.xml:742
+#: doc/man/mkvextract.xml:751
 #: doc/man/mkvinfo.xml:342
 #: doc/man/mkvmerge.xml:2107
 #: doc/man/mkvpropedit.xml:694
@@ -1091,7 +1103,7 @@ msgid "The rules are: ' ' (a space) becomes '\\s', '&quot;' (double quotes) beco
 msgstr "Правила такі: ' ' замінюється на '\\s', '&quot;' замінюється на '\\2', ':' замінюється на '\\c', '#' замінюється на '\\h' and '\\' замінюється на '\\\\'."
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvextract.xml:747
+#: doc/man/mkvextract.xml:756
 #: doc/man/mkvinfo.xml:347
 #: doc/man/mkvmerge.xml:2695
 #: doc/man/mkvpropedit.xml:699
@@ -1099,12 +1111,12 @@ msgid "Environment variables"
 msgstr ""
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvextract.xml:750
+#: doc/man/mkvextract.xml:759
 msgid "&mkvextract; uses the default variables that determine the system's locale (e.g. <varname>LANG</varname> and the <varname>LC_*</varname> family). Additional variables:"
 msgstr ""
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvextract.xml:756
+#: doc/man/mkvextract.xml:765
 #: doc/man/mkvinfo.xml:356
 #: doc/man/mkvmerge.xml:2704
 #: doc/man/mkvpropedit.xml:708
@@ -1112,14 +1124,14 @@ msgid "<varname>MKVTOOLNIX_DEBUG</varname> and its short form <varname>MTX_DEBUG
 msgstr ""
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:758
+#: doc/man/mkvextract.xml:767
 #, fuzzy
 #| msgid "&mkvextract;'s own redirection is invoked with the <link linkend=\"mkvextract.description.common.redirect_output\"><option>--redirect-output</option></link> option. Example:"
 msgid "The content is treated as if it had been passed via the <link linkend=\"mkvextract.description.debug\"><option>--debug</option></link> option."
 msgstr "Перенаправлення за допомогою &mkvextract; здійснюється через опцію <link linkend=\"mkvextract.description.common.redirect_output\"><option>--redirect-output</option></link>. Наприклад:"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvextract.xml:764
+#: doc/man/mkvextract.xml:773
 #: doc/man/mkvinfo.xml:364
 #: doc/man/mkvmerge.xml:2712
 #: doc/man/mkvpropedit.xml:716
@@ -1127,14 +1139,14 @@ msgid "<varname>MKVTOOLNIX_ENGAGE</varname> and its short form <varname>MTX_ENGA
 msgstr ""
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:766
+#: doc/man/mkvextract.xml:775
 #, fuzzy
 #| msgid "&mkvextract;'s own redirection is invoked with the <link linkend=\"mkvextract.description.common.redirect_output\"><option>--redirect-output</option></link> option. Example:"
 msgid "The content is treated as if it had been passed via the <link linkend=\"mkvextract.description.engage\"><option>--engage</option></link> option."
 msgstr "Перенаправлення за допомогою &mkvextract; здійснюється через опцію <link linkend=\"mkvextract.description.common.redirect_output\"><option>--redirect-output</option></link>. Наприклад:"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvextract.xml:772
+#: doc/man/mkvextract.xml:781
 #: doc/man/mkvinfo.xml:372
 #: doc/man/mkvmerge.xml:2720
 #: doc/man/mkvpropedit.xml:724
@@ -1142,12 +1154,12 @@ msgid "<varname>MKVTOOLNIX_OPTIONS</varname> and its short form <varname>MTX_OPT
 msgstr ""
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:774
+#: doc/man/mkvextract.xml:783
 msgid "The content is split on white space. The resulting partial strings are treated as if it had been passed as command line options. If you need to pass special characters (e.g. spaces) then you have to escape them (see <link linkend=\"mkvextract.escaping\">the section about escaping special characters in text</link>)."
 msgstr ""
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvextract.xml:783
+#: doc/man/mkvextract.xml:792
 #: doc/man/mkvinfo.xml:383
 #: doc/man/mkvmerge.xml:2731
 #: doc/man/mkvpropedit.xml:735
@@ -1156,12 +1168,12 @@ msgid "See also"
 msgstr "Дивіться також"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvextract.xml:785
+#: doc/man/mkvextract.xml:794
 msgid "&mkvmerge;, &mkvinfo;, &mkvpropedit;, &mmg;"
 msgstr "&mkvmerge;, &mkvinfo;, &mkvpropedit;, &mmg;"
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvextract.xml:790
+#: doc/man/mkvextract.xml:799
 #: doc/man/mkvinfo.xml:390
 #: doc/man/mkvmerge.xml:2738
 #: doc/man/mkvpropedit.xml:742
@@ -1170,7 +1182,7 @@ msgid "WWW"
 msgstr "WWW"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvextract.xml:792
+#: doc/man/mkvextract.xml:801
 #: doc/man/mkvinfo.xml:392
 #: doc/man/mkvmerge.xml:2740
 #: doc/man/mkvpropedit.xml:744
