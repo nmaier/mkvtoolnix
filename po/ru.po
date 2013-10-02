@@ -4965,7 +4965,7 @@ msgstr "Отсутствует имя файла"
 msgid "Missing file name after for the option '--edit-headers'."
 msgstr "Отсутствует имя файла после '--edit-headers'."
 
-#: src/input/r_ogm.cpp:954
+#: src/input/r_ogm.cpp:981
 msgid "Missing header/comment packets for stream. This file is broken but should be muxed correctly. If not please contact the author Moritz Bunkus <moritz@bunkus.org>.\n"
 msgstr "Отсутствуют пакеты заголовка/комментария для потока. Этот файл повреждён, но должен мультиплексироваться правильно. Если это не так, пожалуйста, сообщите автору Moritz Bunkus <moritz@bunkus.org>.\n"
 
@@ -6753,7 +6753,7 @@ msgstr "Длина параметра FourCC дорожки номер %s в ф�
 msgid "The GUI is configured to use the mkvmerge executable from a different version (%1%) than the GUI itself (%2%). This is not supported but will not be prevented either. You should change the mkvmerge executable in the preferences dialog."
 msgstr "GUI настроен на использование исполняемого файла mkvmerge иной версии (%1%), чем сам GUI (%2%). Это не поддерживается, но и не запрещено. Вам лучше заменить исполняемый файл mkvmerge в диалоговом окне настройки."
 
-#: src/input/r_ogm.cpp:1505
+#: src/input/r_ogm.cpp:1532
 #, boost-format
 msgid "The Kate identification header could not be parsed (%1%).\n"
 msgstr "Идентификационный заголовок Kate не может быть обработан (%1%).\n"
@@ -6783,7 +6783,7 @@ msgstr ""
 msgid "The NALU size length must be a number between 2 and 4 inclusively in '--nalu-size-length %1%'.\n"
 msgstr "Длина размера NALU должна быть целым числом от 2 до 4 включительно '--nalu-size-length %1%'.\n"
 
-#: src/input/r_ogm.cpp:1339
+#: src/input/r_ogm.cpp:1366
 #, boost-format
 msgid "The Theora identifaction header could not be parsed (%1%).\n"
 msgstr "Идентификационный заголовок Theora не может быть обработан (%1%).\n"
@@ -7792,9 +7792,13 @@ msgstr "Эта дорожка MPEG audio содержит %1% байт не-MP3 
 msgid "This MPEG audio track contains %1% bytes of non-MP3 data which were skipped. The audio/video synchronization may have been lost.\n"
 msgstr "Эта дорожка MPEG audio содержит %1% байт не-MP3 данных, которые были пропущены. Возможно, синхронизация звука и изображения была нарушена.\n"
 
-#: src/input/r_ogm.cpp:862
+#: src/input/r_ogm.cpp:884
 msgid "This Ogg/OGM file contains chapter or title information. Unfortunately the charset used to store this information in the file cannot be identified unambiguously. The program assumes that your system's current charset is appropriate. This can be overridden with the '--chapter-charset <charset>' switch.\n"
 msgstr "Этот файл Ogg/OGM содержит информацию о заголовке или главах. К сожалению, кодировка, в которой была сохранена эта информация в файле, не может быть определена однозначно. Программа предполагает, что нужной является кодировка, используемая в вашей системе. Это может быть переопределено ключом '--chapter-charset <charset>'.\n"
+
+#: src/input/r_ogm.cpp:891
+msgid "This Ogg/OGM file contains chapters but they could not be parsed. This can be due to the character set not being set properly for them or due to the entries not matching the expected SRT-style format.\n"
+msgstr ""
 
 #: src/mmg/header_editor/value_page.cpp:171
 msgid ""

@@ -4824,7 +4824,7 @@ msgstr "Ficheiro não encontrado"
 msgid "Missing file name after for the option '--edit-headers'."
 msgstr ""
 
-#: src/input/r_ogm.cpp:954
+#: src/input/r_ogm.cpp:981
 msgid "Missing header/comment packets for stream. This file is broken but should be muxed correctly. If not please contact the author Moritz Bunkus <moritz@bunkus.org>.\n"
 msgstr ""
 
@@ -6600,7 +6600,7 @@ msgstr ""
 msgid "The GUI is configured to use the mkvmerge executable from a different version (%1%) than the GUI itself (%2%). This is not supported but will not be prevented either. You should change the mkvmerge executable in the preferences dialog."
 msgstr ""
 
-#: src/input/r_ogm.cpp:1505
+#: src/input/r_ogm.cpp:1532
 #, boost-format
 msgid "The Kate identification header could not be parsed (%1%).\n"
 msgstr ""
@@ -6627,7 +6627,7 @@ msgstr ""
 msgid "The NALU size length must be a number between 2 and 4 inclusively in '--nalu-size-length %1%'.\n"
 msgstr ""
 
-#: src/input/r_ogm.cpp:1339
+#: src/input/r_ogm.cpp:1366
 #, boost-format
 msgid "The Theora identifaction header could not be parsed (%1%).\n"
 msgstr ""
@@ -7605,8 +7605,12 @@ msgstr ""
 msgid "This MPEG audio track contains %1% bytes of non-MP3 data which were skipped. The audio/video synchronization may have been lost.\n"
 msgstr ""
 
-#: src/input/r_ogm.cpp:862
+#: src/input/r_ogm.cpp:884
 msgid "This Ogg/OGM file contains chapter or title information. Unfortunately the charset used to store this information in the file cannot be identified unambiguously. The program assumes that your system's current charset is appropriate. This can be overridden with the '--chapter-charset <charset>' switch.\n"
+msgstr ""
+
+#: src/input/r_ogm.cpp:891
+msgid "This Ogg/OGM file contains chapters but they could not be parsed. This can be due to the character set not being set properly for them or due to the entries not matching the expected SRT-style format.\n"
 msgstr ""
 
 #: src/mmg/header_editor/value_page.cpp:171
