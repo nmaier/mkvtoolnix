@@ -1,3 +1,13 @@
+2013-10-02  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvmerge: bug fix: Reading OGM files with chapter entries not
+        encoded in the system's local character set has been fixed. During
+        identification the number of chapter entries is still output by
+        removing any non-ASCII characters from the chapter entries. When
+        muxing an additional warning is output if parsing those chapter
+        entries fails, e.g. due to the format being wrong or due to the
+        charset guessed wrongly. Fixes #919.
+
 2013-09-17  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvmerge: bug fix: The "duration" element was calculated wrong

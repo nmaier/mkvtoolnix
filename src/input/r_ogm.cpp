@@ -835,34 +835,61 @@ ogm_reader_c::handle_stream_comments() {
       title      = "";
     }
 
-    bool chapters_set = false;
+    auto chapters_set               = false;
+    auto exception_parsing_chapters = false;
+
     if (!chapter_strings.empty() && !m_ti.m_no_chapters) {
       try {
         std::shared_ptr<mm_mem_io_c> out(new mm_mem_io_c(nullptr, 0, 1000));
 
-        out->write_bom("UTF-8");
-        for (j = 0; j < chapter_strings.size(); j++)
-          out->puts(cch->utf8(chapter_strings[j]) + std::string("\n"));
+        if (g_identifying) {
+          // OGM comments might be written in a charset other than
+          // UTF-8. During identification we simply want to know how
+          // many chapter entries there are. As mmg's users have no
+          // way to specify the chapter charset when adding a file
+          // such charset issues may cause mkvmerge to abort or not to
+          // show any chapters at all (if "parse_chapters()"
+          // fails). So just remove all chars > 127.
+          for (auto chapter_string : chapter_strings) {
+            // auto cleaned = std::string{};
+            // balg::copy_if(chapter_string, [](char c) { return c >= 0; }, std::back_inserter(cleaned));
+            brng::remove_erase_if(chapter_string, [](char c) { return c < 0; });
+            out->puts(chapter_string + std::string{"\n"});
+          }
+
+        } else {
+          out->write_bom("UTF-8");
+          for (auto &chapter_string : chapter_strings)
+            out->puts(cch->utf8(chapter_string) + std::string{"\n"});
+        }
+
         out->set_file_name(m_ti.m_fname);
 
         std::shared_ptr<mm_text_io_c> text_out(new mm_text_io_c(out.get(), false));
 
-        m_chapters   = parse_chapters(text_out.get(), 0, -1, 0, m_ti.m_chapter_language);
+        m_chapters   = parse_chapters(text_out.get(), 0, -1, 0, m_ti.m_chapter_language, "", true);
         chapters_set = true;
 
         align_chapter_edition_uids(m_chapters.get());
       } catch (...) {
+        exception_parsing_chapters = true;
       }
     }
 
-    if (    (segment_title_set || chapters_set)
-         && !charset_warning_printed
-         && (m_ti.m_chapter_charset.empty())) {
+    if (   exception_parsing_chapters
+        || (   (segment_title_set || chapters_set)
+            && !charset_warning_printed
+            && (m_ti.m_chapter_charset.empty()))) {
       mxwarn_fn(m_ti.m_fname,
                 Y("This Ogg/OGM file contains chapter or title information. Unfortunately the charset used to store this information in "
                   "the file cannot be identified unambiguously. The program assumes that your system's current charset is appropriate. This can "
                   "be overridden with the '--chapter-charset <charset>' switch.\n"));
       charset_warning_printed = true;
+
+      if (exception_parsing_chapters)
+        mxwarn_fn(m_ti.m_fname,
+                  Y("This Ogg/OGM file contains chapters but they could not be parsed. "
+                    "This can be due to the character set not being set properly for them or due to the entries not matching the expected SRT-style format.\n"));
     }
   }
 }
