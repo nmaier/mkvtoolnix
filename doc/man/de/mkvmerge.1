@@ -1,0 +1,3017 @@
+'\" t
+.\"     Title: mkvmerge
+.\"    Author: Moritz Bunkus <moritz@bunkus.org>
+.\" Generator: DocBook XSL Stylesheets v1.78.1 <http://docbook.sf.net/>
+.\"      Date: 2013-09-16
+.\"    Manual: Benutzerbefehle
+.\"    Source: MKVToolNix 6.4.1
+.\"  Language: German
+.\"
+.TH "MKVMERGE" "1" "2013\-09\-16" "MKVToolNix 6\&.4\&.1" "Benutzerbefehle"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+mkvmerge \- f\(:ugt Multimedia\-Datenstr\(:ome in eine Matroska(TM)\-Datei zusammen\&.
+.SH "\(:UBERSICHT"
+.HP \w'\fBmkvmerge\fR\ 'u
+\fBmkvmerge\fR [globale\ Optionen] {\-o\ Ausgabe} [Optionen1] {Datei1} [[Optionen2]\ {Datei2}] [@Optionendatei]
+.SH "BESCHREIBUNG"
+.PP
+Dieses Programm nimmt die Eingabe von mehreren Mediendateien und vereinigt ihre Datenstr\(:ome (alle oder nur eine Auswahl) in eine
+Matroska(TM)\-Datei\&. Siehe
+\m[blue]\fBdie Matroska(TM)\-Website\fR\m[]\&\s-2\u[1]\d\s+2\&.
+.if n \{\
+.sp
+.\}
+.RS 4
+.it 1 an-trap
+.nr an-no-space-flag 1
+.nr an-break-flag 1
+.br
+.ps +1
+\fBWichtig\fR
+.ps -1
+.br
+.PP
+Die Reihenfolge der Befehlszeilenoptionen ist wichtig\&. Bitte lesen Sie den Abschnitt
+\(FcReihenfolge der Optionen\(Fo, falls sie ein neuer Nutzer des Programms sind\&.
+.sp .5v
+.RE
+.SS "Globale Optionen"
+.PP
+\fB\-v\fR, \fB\-\-verbose\fR
+.RS 4
+erh\(:oht die Detailstufe\&.
+.RE
+.PP
+\fB\-q\fR, \fB\-\-quiet\fR
+.RS 4
+unterdr\(:uckt die Statusausgabe\&.
+.RE
+.PP
+\fB\-o\fR, \fB\-\-output\fR \fIDateiname\fR
+.RS 4
+schreibt in die Datei
+\fIDateiname\fR\&. Falls Aufteilung benutzt wird, wird dieser Parameter etwas anders behandelt\&. Einzelheiten finden Sie in der Erl\(:auterung der Option
+\fB\-\-split\fR\&.
+.RE
+.PP
+\fB\-w\fR, \fB\-\-webm\fR
+.RS 4
+erstellt eine WebM\-konforme Datei\&. Dies wird auch eingeschaltet, falls die Namensendung der Ausgabedatei \(Fcwebm\(Fo ist\&. Dieser Modus erzwingt mehrere Einschr\(:ankungen\&. Die einzigen erlauben Codecs sind VP8\-Video und Vorbis\-Tonspuren\&. Weder Kapitel noch Tags sind erlaubt\&. Das Kopfelement DocType wird in \(Fcwebm\(Fo ge\(:andert\&.
+.RE
+.PP
+\fB\-\-title\fR \fITitel\fR
+.RS 4
+setzt den allgemeinen Titel f\(:ur die Ausgabedatei, z\&.B\&. den Namen des Films\&.
+.RE
+.PP
+\fB\-\-default\-language\fR \fISprachcode\fR
+.RS 4
+setzt den Standardsprachcode, der f\(:ur alle Spuren benutzt wird, sofern er nicht mit der Option
+\fB\-\-language\fR
+\(:uberschrieben wurde\&. Der Standardsprachcode ist \(Fcund\(Fo f\(:ur \(Fcundefiniert\(Fo\&.
+.RE
+.SS "Handhabung von Segmentinformationen (globale Optionen)"
+.PP
+\fB\-\-segmentinfo\fR \fIDateiname\&.xml\fR
+.RS 4
+liest Segmentinformationen aus einer
+XML\-Datei\&. Diese Datei kann die Segmentfamilie
+UID
+enthalten, die Segment\-UID
+und die vorherigen und n\(:achsten Segment\-UID\-Elemente\&. Eine Beispieldatei und ein
+DTD
+sind in dem ver\(:offentlichten MKVToolNix enthalten\&.
+.sp
+Einzelheiten finden Sie im Abschnitt weiter unten \(:uber
+Segmentinformations-XML-Dateien\&.
+.RE
+.PP
+\fB\-\-segment\-uid\fR \fISID1,SID2,\&...\fR
+.RS 4
+setzt die zu verwendenden UIDs\&. Dies ist eine durch Kommas getrennte Liste von 128\-Bit\-Sgement\-UIDs in der gew\(:ohnlichen UID\-Form: Hexadezimalzahlen mit oder ohne Pr\(:afix \(Fc0x\(Fo, mit oder ohne Leerzeichen, exakt 32 Ziffern lang\&.
+.sp
+Jede erstellte Datei enth\(:alt ein Segment und jedes Segment hat eine Segment\-UID\&. Falls mehr Segment\-UIDs angegeben als Segmente erstellt werden, werden die \(:ubersch\(:ussigen UIDs ignoriert\&. Falls weniger Segment\-UIDs angegeben als Segmente erstellt werden, dann werden f\(:ur diese Segmente zuf\(:allige UIDs erzeugt\&.
+.RE
+.SS "Handhabung von Kapiteln und Tags (globale Optionen)"
+.PP
+\fB\-\-chapter\-language\fR \fISprachcode\fR
+.RS 4
+setzt den ISO\-639\-2\-Sprachcode, der f\(:ur jeden Kapiteleintrag geschrieben wurde\&. Voreinstellung ist \(Fceng\(Fo\&. Einzelheiten finden Sie im nachfolgenden Abschnitt \(:uber
+Kapitel\&.
+.sp
+Diese Option kann sowohl f\(:ur einfache Kapiteldateien als auch f\(:ur Quelldateien benutzt werden, die Kapitel enthalten, aber keine Informationen \(:uber die Sprache der Kapitel, z\&.B\&. MP4\- und OGM\-Dateien\&.
+.RE
+.PP
+\fB\-\-chapter\-charset\fR \fIZeichensatz\fR
+.RS 4
+setzt den Zeichensatz, der f\(:ur die Umwandlung einfacher Kapiteldateien in UTF\-8 verwendet wird\&. Eine Erkl\(:arung, wie
+\fBmkvmerge\fR(1)
+Zeichens\(:atze umwandelt, finden Sie im Abschnitt \(:uber
+Textdateien und Zeichens\(:atze\&.
+.sp
+Dieser Schalter gilt auch f\(:ur Kapitel, die aus bestimmten Containertypen kopiert werden, z\&.B\&. Ogg/OGM\- und MP4\-Dateien\&. Einzelheiten finden Sie im nachfolgenden Abschnitt \(:uber Kapitel\&.
+.RE
+.PP
+\fB\-\-cue\-chapter\-name\-format\fR \fIFormat\fR
+.RS 4
+\fBmkvmerge\fR(1)
+unterst\(:utzt das Lesen von
+CUEsheets f\(:ur Audiodateien als Eingabe f\(:ur Kapitel\&.
+CUEsheets enthalten normalerweise f\(:ur jeden Indexeintrag die Eintr\(:age
+\fIPERFORMER\fR
+(\(FcInterpret\(Fo) und
+\fITITLE\fR
+(\(FcTitel\(Fo)\&.
+\fBmkvmerge\fR(1)
+benutzt diese beiden Zeichenketten, um den Kapitelnamen aufzubauen\&. Mit dieser Option kann das f\(:ur diesen Namen verwendete Format gesetzt werden\&.
+.sp
+Falls diese Option nicht angegeben wurde, ist das Format \(Fc%p \- %t\(Fo (der Interpret gefolgt von einem Leerzeichen, einem Gedankenstrich, einem weiteren Leerzeichen und dem Titel) die Voreinstellung von
+\fBmkvmerge\fR(1)\&.
+.sp
+Falls das Format angegeben wurde, dann wird alles au\(sser den folgenden Metazeichen, so wie es ist, kopiert und die Metazeichen werden wie folgt ersetzt:
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+\fI%p\fR
+wird durch die Zeichenkette
+\fIPERFORMER\fR
+des aktuellen Eintrags ersetzt,
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+\fI%t\fR
+wird durch die Zeichenkette
+\fITITLE\fR
+des aktuellen Eintrags ersetzt,
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+\fI%n\fR
+wird durch die aktuelle Spurnummer ersetzt und
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+\fI%N\fR
+wird durch die aktuelle Spurnummer, aufgef\(:ullt mit einer f\(:uhrenden Null, falls sie kleiner als zehn ist, ersetzt\&.
+.RE
+.RE
+.PP
+\fB\-\-chapters\fR \fIDateiname\fR
+.RS 4
+liest Kapitelinformationen aus der Datei
+\fIDateiname\fR\&. Einzelheiten finden Sie im nachfolgenden Abschnitt \(:uber
+Kapitel\&.
+.RE
+.PP
+\fB\-\-global\-tags\fR \fIDateiname\fR
+.RS 4
+liest globale Tags aus der Datei
+\fIDateiname\fR\&. Einzelheiten finden Sie im nachfolgenden Abschnitt \(:uber
+Tags\&.
+.RE
+.SS "Allgemeine Ausgabesteuerung (fortgeschrittene globale Optionen)"
+.PP
+\fB\-\-track\-order\fR \fIFID1:TID1,FID2:TID2,\&...\fR
+.RS 4
+Diese Option \(:andert die Reihenfolge, in der die Spuren f\(:ur eine Eingabedatei erstellt werden\&. Das Argument ist eine durch Kommas getrennte Liste von ID\-Paaren\&. Jedes Paar enth\(:alt zuerst die Datei\-ID (\fIFID1\fR), die einfach die Zahl ist, an welcher Stelle auf der Befehlszeile, beginnend bei 0, die Datei erscheint\&. Als zweites kommt die Spur\-ID (\fITID1\fR) dieser Datei\&. Falls irgendwelche Spuren weggelassen werden, dann werden diese Spuren erstellt, nachdem die mit dieser Option angegebenen erstellt wurden\&.
+.RE
+.PP
+\fB\-\-cluster\-length\fR \fISpezifikation\fR
+.RS 4
+begrenzt die Anzahl von Datenbl\(:ocken oder die Laufzeit von Daten in jedem Cluster\&. Der Parameter
+\fISpezifikation\fR
+kann entweder eine Zahl
+\fIn\fR
+ohne eine Einheit oder eine Zahl
+\fId\fR
+sein, der \(Fcms\(Fo folgt\&.
+.sp
+Falls keine Einheit benutzt wird, wird
+\fBmkvmerge\fR(1)
+h\(:ochstens
+\fIn\fR
+Datenbl\(:ocke in jeden Cluster ablegen\&. Die maximale Anzahl von Bl\(:ocken liegt bei 65535\&.
+.sp
+Falls der Zahl
+\fId\fR
+ein \(Fcms\(Fo folgt, dann wird
+\fBmkvmerge\fR(1)
+h\(:ochstens
+\fId\fR
+Millisekunden Daten in jeden Cluster ablegen\&. Das Minimum f\(:ur
+\fId\fR
+liegt bei \(Fc100ms\(Fo und das Maximum bei \(Fc32000ms\(Fo\&.
+.sp
+Standardm\(:a\(ssig legt
+\fBmkvmerge\fR(1)
+h\(:ochstens 65535 Datenbl\(:ocke und 5000 ms Daten in einen Cluster\&.
+.sp
+Programme, die versuchen, ein bestimmtes Bild zu finden, k\(:onnen nur einen Cluster direkt suchen und m\(:ussen danach den ganzen Cluster lesen\&. Daher kann das Erstellen gro\(sser Cluster zu ungenauem oder langsamem Durchsuchen f\(:uhren\&.
+.RE
+.PP
+\fB\-\-no\-cues\fR
+.RS 4
+teilt
+\fBmkvmerge\fR(1)
+mit, dass es die Indexdaten nicht erzeugen und schreiben soll, die mit einem Index in einem AVI verglichen werden k\(:onnen\&.
+Matroska(TM)\-Dateien k\(:onnen ohne die Indexdaten abgespielt werden, aber das Durchsuchen ist m\(:oglicherweise ungenauer und langsamer\&. Benutzen Sie dies nur, falls Sie wirklich dringend Platz brauchen oder f\(:ur Testzwecke\&. Siehe auch die Option
+\fB\-\-cues\fR, die f\(:ur jede Eingabedatei angegeben werden kann\&.
+.RE
+.PP
+\fB\-\-clusters\-in\-meta\-seek\fR
+.RS 4
+sagt
+\fBmkvmerge\fR(1), dass es ein Metasuchelement am Ende der Datei erstellen soll, das alle Cluster enth\(:alt\&. Siehe auch den Abschnitt \(:uber das
+Matroska(TM)-Datei-Layout\&.
+.RE
+.PP
+\fB\-\-disable\-lacing\fR
+.RS 4
+deaktiviert das Zusammenbinden aller Spuren, Dies erh\(:oht die Gr\(:o\(sse der Datei, insbesondere dann, wenn es viele Tonspuren gibt\&. Diese Option ist nicht f\(:ur den t\(:aglichen Gebrauch gedacht\&.
+.RE
+.PP
+\fB\-\-enable\-durations\fR
+.RS 4
+schreibt die Laufzeiten f\(:ur alle Bl\(:ocke\&. Dies erh\(:oht die Gr\(:o\(sse der Datei und bietet dem, der es abspielt, im Moment keinen zus\(:atzlichen Wert\&.
+.RE
+.PP
+\fB\-\-timecode\-scale\fR \fIFaktor\fR
+.RS 4
+erzwingt den Faktor
+\fIFaktor\fR
+f\(:ur die Zeitstempelskala\&. G\(:ultige Werte sind im Bereich
+\fB1000\fR\&.\&.\fB10000000\fR
+und der Spezialwert
+\fB\-1\fR\&.
+.sp
+Normalerweise wird
+\fBmkvmerge\fR(1)
+einen Wert von
+\fB1000000\fR
+benutzen\&. Das bedeutet, dass Zeitstempel und Laufzeiten die Genauigkeit von 1 ms haben\&. F\(:ur Dateien, die keine Videospuren aber mindestens eine Tonspur enthalten, wird
+\fBmkvmerge\fR(1)
+automatisch einen Faktor der Zeitstempelskala so w\(:ahlen, dass alle Zeitstempel und Laufzeiten die Genauigkeit eines Audio\-Samples bekommen\&. Dies verursacht einen gr\(:o\(sseren Aufwand, erm\(:oglicht aber genaueres Suchen und Extrahieren\&.
+.sp
+Falls der Spezialwert
+\fB\-1\fR
+benutzt wird, dann wird
+\fBmkvmerge\fR(1)
+die Genauigkeit des Samples auch dann verwenden, wenn eine Videospur vorhanden ist\&.
+.RE
+.SS "Datei aufteilen, verkn\(:upfen, anh\(:angen und verketten (weitere globale Optionen)"
+.PP
+\fB\-\-split\fR \fISpezifikation\fR
+.RS 4
+teilt die Ausgabedatei nach der angegebenen Gr\(:o\(sse oder Zeit auf\&. Bitte beachten Sie, dass Spuren nur kurz vor einem Schl\(:usselbild geteilt werden k\(:onnen\&. Aufgrund von Pufferung wird
+\fBmkvmerge\fR(1)
+kurz vor dem n\(:achsten Schl\(:usselbild aufteilen, nachdem der Aufteilungspunkt erreicht wurde\&. Daher kann sich der Aufteilungspunkt ein wenig von dem unterscheiden, den der Benutzer angegeben hat\&.
+.sp
+Derzeit unterst\(:utzt
+\fBmkvmerge\fR(1)
+vier verschiedene Modi\&.
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 1.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  1." 4.2
+.\}
+Aufteilen anhand der Gr\(:o\(sse
+.sp
+Syntax:
+\fB\-\-split\fR[size:]\fId\fR[k|m|g]
+.sp
+Beispiele:
+\-\-split size:700m
+oder
+\-\-split 150000000
+.sp
+Der Parameter
+\fId\fR
+kann mit \(Fck\(Fo, \(Fcm\(Fo oder \(Fcg\(Fo enden, um anzuzeigen, ob die Gr\(:o\(sse in kB, MB beziehungsweise GB vorliegt\&. Andernfalls wird von einer Gr\(:o\(sse in Byte ausgegangen\&. Nachdem die aktuelle Ausgabedatei diese Gr\(:o\(ssenbegrenzung erreicht hat, wird eine neue angefangen\&.
+.sp
+Das Pr\(:afix \(Fcsize:\(Fo kann aus Kompatibilit\(:atsgr\(:unden weggelassen werden\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 2.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  2." 4.2
+.\}
+Aufteilen nach einer Laufzeit
+.sp
+Syntax:
+\fB\-\-split\fR[duration:]\fIHH:MM:SS\&.nnnnnnnnn\fR|\fId\fRs
+.sp
+Beispiele:
+\-\-split duration:00:60:00\&.000
+oder
+\-\-split 3600s
+.sp
+Der Parameter muss entweder die Form
+\fIHH:MM:SS\&.nnnnnnnnn\fR
+haben, um die Laufzeit mit einer Genauigkeit bis zu einer Nanosekunde anzugeben, oder eine Zahl
+\fId\fR
+gefolgt vom Buchstaben \(Fcs\(Fo sein, um eine Laufzeit in Sekunden anzugeben\&.
+\fIHH\fR
+ist die Anzahl der Stunden,
+\fIMM\fR
+die Anzahl der Minuten,
+\fISS\fR
+die Anzahl der Sekunden und
+\fInnnnnnnnn\fR
+die Anzahl der Nanosekunden\&. Sowohl die Zahl der Stunden als auch die der Nanosekunden kann weggelassen werden\&. Es k\(:onnnen bis zu neun Nachkommastellen vorliegen\&. Nachdem der Laufzeit des Inhalts in der aktuellen Ausgabe diese Begrenzung erreicht hat, wird eine neue Ausgabedatei begonnen\&.
+.sp
+Das Pr\(:afix \(Fcduration:\(Fo darf aus Kompatibilit\(:atsgr\(:unden weggelassen werden\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 3.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  3." 4.2
+.\}
+Aufteilen nach bestimmten Zeitstempeln
+.sp
+Syntax:
+\fB\-\-split\fRtimecodes:\fIA\fR[,\fIB\fR[,\fIC\fR\&...]]
+.sp
+Beispiel:
+\-\-split timecodes:00:45:00\&.000,01:20:00\&.250,6300s
+.sp
+Die Parameter
+\fIA\fR,
+\fIB\fR,
+\fIC\fR
+etc\&. m\(:ussen alle das gleiche Format wie das haben, das f\(:ur die Laufzeit benutzt wurde (siehe oben)\&. Die Liste der Zeitstempel wird durch Kommas getrennt\&. Nachdem der Eingabestrom den Zeitstempel des n\(:achsten Aufteilungspunkts erreicht hat, wird eine neue Datei erstellt\&. Dann wird der n\(:achste Aufteilungspunkt in der Liste benutzt\&.
+.sp
+Das Pr\(:afix \(Fctimecodes:\(Fo darf nicht weggelassen werden\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 4.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  4." 4.2
+.\}
+Aufbewahren bestimmter Teile durch die Angabe von Zeitstempelbereichen, w\(:ahrend andere verworfen werden
+.sp
+Syntax:
+\fB\-\-split\fRparts:\fIStart1\fR\-\fIEnde1\fR[,[+]\fIStart2\fR\-\fIEnde2\fR[,[+]\fIStart3\fR\-\fIEnde3\fR\&...]]
+.sp
+Beispiele:
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 1.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  1." 4.2
+.\}
+\-\-split parts:00:01:20\-00:02:45,00:05:50\-00:10:30
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 2.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  2." 4.2
+.\}
+\-\-split parts:00:01:20\-00:02:45,+00:05:50\-00:10:30
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 3.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  3." 4.2
+.\}
+\-\-split parts:\-00:02:45,00:05:50\-
+.RE
+.sp
+Der Modus
+parts
+teilt
+\fBmkvmerge\fR(1)
+mit, dass bestimmte Zeitstempelbereiche aufbewahrt werden, w\(:ahrend andere verworfen werden\&. Die Bereiche, die aufbewahrt werden sollen, m\(:ussen nach dem Sch\(:usselwort
+parts:
+aufgef\(:uhrt und durch Kommas getrennt werden\&. Ein Bereich selbst besteht aus einem Start\- und Endezeitstempel im selben Format, wie dem, das andere Variationen von
+\fI\-\-split\fR
+akzeptieren (z\&.B\&. beziehen sich sowohl
+00:01:20
+als auch
+80s
+auf den selben Zeitstempel)\&.
+.sp
+Falls ein Startzeitstempel weggelassen wurde, wird er standardm\(:a\(ssig auf das Ende des vorherigen Zeitstempelbereichs gesetzt\&. Falls es keinen vorherigen Bereich gab, dann wird er standardm\(:a\(ssig auf den Dateianfang gesetzt (siehe Beispiel 3)\&.
+.sp
+Falls ein Endezeitstempel weggelassen wird, dann wird dies standardm\(:a\(ssig das Ende der Quelldateien, wodurch
+\fBmkvmerge\fR(1)
+im Prinzip mitgeteilt wird, dass es den Rest behalten soll (siehe Beispiel 3)\&.
+.sp
+Normalerweise wird jeder Bereich in eine neue Datei geschrieben\&. Dies kann so ge\(:andert werden, dass aufeinanderfolgende Bereiche in dieselbe Datei geschrieben werden\&. Daf\(:ur muss der Benutzer dem Startzeitstempel ein
++
+voranstellen\&. Dies teilt
+\fBmkvmerge\fR(1)
+mit, dass es keine neue Datei erstellen und den Bereich stattdessen an dieselbe Datei anh\(:angen soll, in die der letzte Bereich geschrieben wurde\&. Zeitstempel werden angepasst, so dass es in der Ausgabedatei keine L\(:ucke gibt, selbst wenn es in den beiden Bereichen in der Eingabedatei eine L\(:ucke gab\&.
+.sp
+Im Beispiel 1 wird
+\fBmkvmerge\fR(1)
+zwei Dateien erstellen\&. Die erste wird den Inhalt beginnend bei
+00:01:20
+bis
+00:02:45
+enthalten\&. Die zweite Datei wird den Inhalt von
+00:05:50
+bis
+00:10:30
+enthalten\&.
+.sp
+Im Beispiel 2 wird
+\fBmkvmerge\fR(1)
+nur eine Datei erstellen\&. Diese Datei wird den Inhalt beginnend bei
+00:01:20
+bis
+00:02:45
+und den Inhalt beginnend bei
+00:05:50
+bis
+00:10:30
+enthalten\&.
+.sp
+Im Beispiel 3 wird
+\fBmkvmerge\fR(1)
+zwei Dateien erstellen\&. Die erste wird den Inhalt vom Anfang der Quelldateien bis
+00:02:45
+enthalten\&. Die zweite Datei wird den Inhalt beginnend bei
+00:05:50
+bis zum Ende der Quelldatei enthalten\&.
+.if n \{\
+.sp
+.\}
+.RS 4
+.it 1 an-trap
+.nr an-no-space-flag 1
+.nr an-break-flag 1
+.br
+.ps +1
+\fBAnmerkung\fR
+.ps -1
+.br
+Beachten Sie, dass
+\fBmkvmerge\fR(1)
+nur Entscheidungen \(:uber das Aufteilen an Schl\(:usselbildpositionen trifft\&. Dies gilt sowohl f\(:ur den Anfang als auch das Ende von jedem Bereich\&. Daher wird
+\fBmkvmerge\fR(1)
+sogar dann mit der Ausgabe der Bilder bis vor das n\(:achste Bild fortfahren, wenn der Zeitstempel zwischen zwei Schl\(:usselbildern liegt\&.
+.sp .5v
+.RE
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 5.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  5." 4.2
+.\}
+Aufbewahren bestimmter Teile durch Angabe von Bild\-/Feldnummerbereichen w\(:ahrend andere verworfen werden
+.sp
+Syntax:
+\fB\-\-split\fRparts\-frames:\fIStart1\fR\-\fIEnde1\fR[,[+]\fIStart2\fR\-\fIEnde2\fR[,[+]\fIStart3\fR\-\fIEnde3\fR\&...]]
+.sp
+Beispiele:
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 1.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  1." 4.2
+.\}
+\-\-split parts\-frames:137\-258,548\-1211
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 2.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  2." 4.2
+.\}
+\-\-split parts\-frames:733\-912,+1592\-2730
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 3.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  3." 4.2
+.\}
+\-\-split parts\-frames:\-430,2512\-
+.RE
+.sp
+Der Modus
+parts\-frames
+teilt
+\fBmkvmerge\fR(1)
+mit, dass bestimmte Bereiche von Bild\-/Feldnummern aufbewahrt werden, w\(:ahrend andere verworfen werden\&. Die Bereiche, die aufbewahrt werden sollen, m\(:ussen nach dem Sch\(:usselwort
+parts\-frames:
+aufgef\(:uhrt und durch Kommas getrennt werden\&. Ein Bereich selbst besteht aus einer Start\- und Endbildnummer\&. Die Nummerierung beginnt bei 1\&.
+.sp
+Falls eine Startnummer weggelassen wird, wird sie standardm\(:a\(ssig auf die Endnummer des vorherigen Bereichs gesetzt\&. Falls es keinen vorherigen Bereich gibt, wird sie standardm\(:a\(ssig zum Dateianfang (siehe Beispiel 3)\&.
+.sp
+Falls eine Endnummer weggelassen wird, dann wird dies standardm\(:a\(ssig das Ende der Quelldateien, wodurch
+\fBmkvmerge\fR(1)
+im Prinzip mitgeteilt wird, dass es den Rest behalten soll (siehe Beispiel 3)\&.
+.sp
+Normalerweise wird jeder Bereich in eine neue Datei geschrieben\&. Dies kann so ge\(:andert werden, dass aufeinanderfolgende Bereiche in dieselbe Datei geschrieben werden\&. Daf\(:ur muss der Benutzer der Startnummer ein
++
+voranstellen\&. Dies teilt
+\fBmkvmerge\fR(1)
+mit, dass es keine neue Datei erstellen und den Bereich stattdessen an dieselbe Datei anh\(:angen soll, in die der letzte Bereich geschrieben wurde\&. Zeitstempel werden so angepasst, dass es in der Ausgabedatei keine L\(:ucke gibt, auch dann nicht, wenn es in den beiden Bereichen in der Eingabedatei eine L\(:ucke gab\&.
+.if n \{\
+.sp
+.\}
+.RS 4
+.it 1 an-trap
+.nr an-no-space-flag 1
+.nr an-break-flag 1
+.br
+.ps +1
+\fBAnmerkung\fR
+.ps -1
+.br
+Beachten Sie, dass
+\fBmkvmerge\fR(1)
+nur Entscheidungen \(:uber das Aufteilen an Schl\(:usselbildpositionen trifft\&. Dies gilt sowohl f\(:ur den Anfang als auch das Ende jedes Bereichs\&. Daher wird
+\fBmkvmerge\fR(1)
+sogar dann mit der Ausgabe der Bilder bis vor das n\(:achste Bild fortfahren, wenn die Bild\-/Feldnummer zwischen zwei Schl\(:usselbildern liegt\&.
+.sp .5v
+.RE
+Im Beispiel 1 wird
+\fBmkvmerge\fR(1)
+zwei Dateien erstellen\&. Die erste wird den Inhalt beginnend beim ersten Schl\(:usselbild bei oder nach
+137
+bis vor das erste Schl\(:usselbild bei oder nach
+258
+enthalten\&. Die zweite Datei wird den Inhalt beginnend bei
+548
+bis
+1211
+enthalten\&.
+.sp
+Im Beispiel 2 wird
+\fBmkvmerge\fR(1)
+nur eine Datei erstellen\&. Diese Datei wird den Inhalt beginnend bei
+733
+bis
+912
+und den Inhalt beginnend bei
+1592
+bis
+2730
+enthalten\&.
+.sp
+Im Beispiel 3 wird
+\fBmkvmerge\fR(1)
+zwei Dateien erstellen\&. Die erste wird den Inhalt vom Anfang der Quelldateien bis
+430
+enthalten\&. Die zweite Datei wird den Inhalt beginnend bei
+2512
+bis zum Ende der Quelldatei enthalten\&.
+.sp
+Dieser Modus betrachtet nur die erste Videospur, die ausgegeben wird\&. Falls keine Videospur ausgegeben wird, wird es keine Aufteilung geben\&.
+.if n \{\
+.sp
+.\}
+.RS 4
+.it 1 an-trap
+.nr an-no-space-flag 1
+.nr an-break-flag 1
+.br
+.ps +1
+\fBAnmerkung\fR
+.ps -1
+.br
+Die mit diesem Argument angegebenen Zahlen werden basierend auf der Zahl der ausgegebenen
+Matroska(TM)\-Bl\(:ocke interpretiert\&. Ein einzelner
+Matroska(TM)\-Block enth\(:alt entweder ein komplettes Bild (f\(:ur fortlaufenden Inhalt) oder ein einzelnes Feld (f\(:ur Inhalt im Halbbildverfahren)\&. Mkvmerge unterscheidet nicht zwischen diesen beiden und z\(:ahlt einfach nur die Anzahl der Bl\(:ocke\&. Zum Beispiel: Falls jemand nach dem 25\&. kompletten Bild bei Inhalt im Halbbildverfahren aufteilen m\(:ochte, m\(:usste er
+50
+als Aufteilungspunkt benutzen (zwei Felder pro komplettem Bild)\&.
+.sp .5v
+.RE
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 6.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  6." 4.2
+.\}
+Aufteilen nach bestimmten Bildern/Feldern
+.sp
+Syntax:
+\fB\-\-split\fRframes:\fIA\fR[,\fIB\fR[,\fIC\fR\&...]]
+.sp
+Beispiel:
+\-\-split frames:120,237,891
+.sp
+Die Parameter
+\fIA\fR,
+\fIB\fR,
+\fIC\fR
+etc\&. m\(:ussen jeweils positive Ganzzahlen sein\&. Die Nummerierung beginnt bei 1\&. Die Liste der Bild\-/Feldnummern wird durch Kommas getrennt\&. Nachdem der Eingabedatenstrom die Bild\-/Feldnummer des aktuellen Aufteilungspunkts erreicht hat, wird eine neue Datei erstellt\&. Dann wird der n\(:achste in der Liste angegebene Aufteilungspunkt benutzt\&.
+.sp
+Das Pr\(:afix \(Fcframes:\(Fo darf nicht weggelassen werden\&.
+.sp
+Dieser Modus betrachtet nur die erste Videospur, die ausgegeben wird\&. Falls keine Videospur ausgegeben wird, wird es keine Aufteilung geben\&.
+.if n \{\
+.sp
+.\}
+.RS 4
+.it 1 an-trap
+.nr an-no-space-flag 1
+.nr an-break-flag 1
+.br
+.ps +1
+\fBAnmerkung\fR
+.ps -1
+.br
+Die mit diesem Argument angegebenen Zahlen werden basierend auf der Zahl der ausgegebenen
+Matroska(TM)\-Bl\(:ocke interpretiert\&. Ein einzelner
+Matroska(TM)\-Block enth\(:alt entweder ein komplettes Bild (f\(:ur fortlaufenden Inhalt) oder ein einzelnes Feld (f\(:ur Inhalt im Halbbildverfahren)\&. Mkvmerge unterscheidet nicht zwischen diesen beiden und z\(:ahlt einfach nur die Anzahl der Bl\(:ocke\&. Zum Beispiel: Falls jemand nach dem 25\&. kompletten Bild bei Inhalt im Halbbildverfahren aufteilen m\(:ochte, m\(:usste er
+50
+als Aufteilungspunkt benutzen (zwei Felder pro komplettem Bild)\&.
+.sp .5v
+.RE
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 7.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  7." 4.2
+.\}
+Aufteilen vor bestimmten Kapiteln
+.sp
+Syntax:
+\fB\-\-split\fRchapters:all
+oder
+\fB\-\-split\fRchapters:\fIA\fR[,\fIB\fR[,\fIC\fR\&...]]
+.sp
+Beispiel:
+\-\-split chapters:5,8
+.sp
+Die Parameter
+\fIA\fR,
+\fIB\fR,
+\fIC\fR
+etc\&. m\(:ussen jeweils positive Ganzzahlen sein\&. Die Nummerierung beginnt bei 1\&. Die Liste der Kapitel wird durch Kommas getrennt\&. Die Aufteilung wird kurz vor dem ersten Schl\(:usselbild auftreten, dessen Zeitstempel gr\(:o\(sser oder gleich dem Startzeitstempel f\(:ur die Kapitel ist, deren Nummern aufgelistet wurden\&. Ein Kapitel, das bei 0s beginnt, wird niemals f\(:ur das Aufteilen ber\(:ucksichtigt und stillschweigend verworfen\&.
+.sp
+Anstatt alle Kapitelnummern manuell aufzuf\(:uhren, kann das Schl\(:usselwort
+all
+benutzt werden\&.
+.sp
+Das Pr\(:afix \(Fcchapters:\(Fo darf nicht weggelassen werden\&.
+.if n \{\
+.sp
+.\}
+.RS 4
+.it 1 an-trap
+.nr an-no-space-flag 1
+.nr an-break-flag 1
+.br
+.ps +1
+\fBAnmerkung\fR
+.ps -1
+.br
+Das Matroska\-Dateiformat unterst\(:utzt beliebig tief verschachtelte Kapitelstrukturen, \(FcEditionseintr\(:age\(Fo und \(FcKapitelelemente\(Fo genannt\&. Dieser Modus betrachtet allerdings nur die obersten Ebenen der Kapitel \(:uber alle Editionseintr\(:age hinweg\&.
+.sp .5v
+.RE
+.RE
+.sp
+Bei diesem Aufteilungsmodus wird der Ausgabedateiname anderes als im normalen Betrieb behandelt\&. Er kann einen Ausdruck \(Fc%d\(Fo enthalten, \(:ahnlich wie
+\fBprintf\fR, einschlie\(sslich einer Feldbreite, z\&.B\&. \(Fc%02d\(Fo\&. Falls dies der Fall ist, wird die aktuelle Dateizahl entsprechend formatiert und an der Stelle im Dateinamen eingesetzt\&. Falls kein derartiges Muster vorkommt, dann wird vom Muster \(Fc\-%03d\(Fo direkt vor der Dateinamenserweiterung ausgegangen: \(Fc\-o Ausgabe\&.mkv\(Fo w\(:urde zu \(FcAusgabe\-001\&.mkv\(Fo f\(:uhren und so weiter\&. Falls es keine Dateinamenserweiterung gibt, wird \(Fc\-%03d\(Fo an den Namen angeh\(:angt\&.
+.RE
+.PP
+\fB\-\-link\fR
+.RS 4
+verkn\(:upft Dateien mit anderen, wenn die Ausgabedatei aufgeteilt wird\&. Einzelheiten finden Sie im nachfolgenden Kapitel \(:uber das
+Verkn\(:upfen von Dateien\&.
+.RE
+.PP
+\fB\-\-link\-to\-previous\fR \fISegment\-UID\fR
+.RS 4
+verkn\(:upft die erste Ausgabedatei an das Segment mit der durch den Parameter
+\fISegment\-UID\fR
+angegebenen Segment\-UID\&. Einzelheiten finden Sie im nachfolgenden Abschnitt \(:uber das
+Verkn\(:upfen von Dateien\&.
+.RE
+.PP
+\fB\-\-link\-to\-next\fR \fISegment\-UID\fR
+.RS 4
+verkn\(:upft die letzte Ausgabedatei an das Segment mit der durch den Parameter
+\fISegment\-UID\fR
+angegebenen Segment\-UID\&. Einzelheiten finden Sie im nachfolgenden Kapitel \(:uber das
+Verkn\(:upfen von Dateien\&.
+.RE
+.PP
+\fB\-\-append\-mode\fR \fIModus\fR
+.RS 4
+legt fest, wie Zeitstempel beim Anh\(:angen von Dateien berechnet werden\&. Der Parameter
+\fIModus\fR
+kann zwei Werte annehmen: \(Fcfile\(Fo, der auch die Voreinstellung ist, und \(Fctrack\(Fo\&.
+.sp
+Wenn Mkvmerge eine Spur (von nun an \(Fctrack2_1\(Fo genannt) von einer zweiten Datei (\(Fcfile2\(Fo genannt) an eine Spur (\(Fctrack1_1\(Fo genannt) von der ersten Datei (\(Fcfile1\(Fo genannt) anh\(:angt, dann m\(:ussen alle Zeitstempel f\(:ur \(Fctrack2_1\(Fo um einen Betrag versetzt werden\&. Im Modus \(Fcfile\(Fo ist dies der h\(:ochste in \(Fcfile1\(Fo aufgetretene Betrag, auch wenn dieser Zeitstempel von einer anderen Spur als \(Fctrack1_1\(Fo stammt\&. Im Modus \(Fctrack\(Fo ist der Versatz der h\(:ochste Zeitstempel aus \(Fctrack1_1\(Fo\&.
+.sp
+Ungl\(:ucklicherweise kann Mkvmerge nicht bestimmen, welcher Modus zuverl\(:assig benutzt werden kann\&. Daher ist der Modus \(Fcfile\(Fo die Voreinstellung\&. Der Modus \(Fcfile\(Fo funktioniert normalerweise bei Dateien besser, die unabh\(:angig von anderen erstellt wurden, z\&.B\&. wenn
+AVI\- oder
+MP4\-Dateien angeh\(:angt werden\&. Der Modus \(Fctrack\(Fo funktioniert m\(:oglicherweise besser bei Quellen, die eigentlich nur Teile einer gro\(ssen Datei sind, z\&.B\&. bei
+VOB\- und
+EVO\-Dateien\&.
+.sp
+Untertitelspuren werden immer so behandelt, als sei der Modus \(Fcfile\(Fo aktiv, sogar dann, wenn tats\(:achlich der Modus \(Fctrack\(Fo aktiv ist\&.
+.RE
+.PP
+\fB\-\-append\-to\fR \fISFID1:STID1:DFID1:DTID1\fR\fI[,\&...]\fR
+.RS 4
+Diese Option steuert, an welche Spur eine andere Spur angeh\(:angt wird\&. Jede Spezifikation enth\(:alt vier IDs: eine Datei\-ID, eine Spur\-ID, eine zweite Datei\-ID und eine zweite Spur\-ID\&. Das erste Paar aus \(FcQuelldatei\-ID\(Fo und \(FcQuellspur\-ID\(Fo kennzeichnet die Spur, die angeh\(:angt wird\&. Das zweite Paar aus \(FcZieldatei\-ID\(Fo und \(FcZielspur\-ID\(Fo kennzeichnet die Spur, an die die erste angeh\(:angt wird\&.
+.sp
+Falls diese Option weggelassen wurde, wird eine Standardzuordnung benutzt\&. Diese Standardzuordnung h\(:angt jede Spur der aktuellen Datei an eine Spur der vorherigen Datei mit derselben Spur\-ID an\&. Dies erm\(:oglicht einfaches Anh\(:angen mit dem Befehl
+\fBmkvmerge \-o Ausgabe\&.mkv Teil1\&.mkv +Teil2\&.mkv\fR, falls ein Film in zwei Teile geschnitten wurde und beide Dateien dieselbe Anzahl von Spuren und Spur\-IDs haben\&.
+.RE
+.PP
+\fB+\fR
+.RS 4
+Ein einzelnes \(Fc+\(Fo f\(:uhrt dazu, dass die n\(:achste Datei angeh\(:angt statt hinzugef\(:ugt wird\&. Das \(Fc+\(Fo kann au\(sserdem vor den n\(:achsten Dateinamen gesetzt werden\&. Daher sind die beiden folgenden Befehle identisch:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-o vollst\(:andig\&.mkv Datei1\&.mkv + Datei2\&.mkv
+$ mkvmerge \-o vollst\(:andig\&.mkv Datei1\&.mkv +Datei2\&.mkv
+.fi
+.if n \{\
+.RE
+.\}
+.RE
+.PP
+\fB=\fR
+.RS 4
+Normalerweise sucht
+\fBmkvmerge\fR(1)
+im selben Verzeichnis nach Dateien wie eine Eingabedatei, die den gleichen Basisnamen hat und sich nur in ihrer fortlaufenden Nummer unterscheidet (z\&.B\&. \(FcVTS_01_1\&.VOB\(Fo, \(FcVTS_01_2\&.VOB\(Fo, \(FcVTS_01_3\&.VOB\(Fo, etc\&.) und behandelt alle diese Dateien, als ob sie zu einer einzigen gro\(ssen Datei verbunden w\(:aren\&. Diese Option, ein einzelnes \(Fc=\(Fo, veranlasst Mkvmerge, nicht nach diesen zus\(:atzlichen Dateien zu suchen\&.
+.sp
+Das \(Fc=\(Fo kann kann au\(sserdem vor den n\(:achsten Dateinamen gesetzt werden\&. Daher entsprechen die beiden folgenden Befehle einander:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-o vollst\(:andig\&.mkv = Datei1\&.mkv
+$ mkvmerge \-o vollst\(:andig\&.mkv =Datei1\&.mkv
+.fi
+.if n \{\
+.RE
+.\}
+.RE
+.PP
+\fB(\fR \fIDatei1\fR \fIDatei2\fR \fB)\fR
+.RS 4
+Falls mehrere Dateinamen in runden Klammern stehen, dann werden diese Dateien so behandelt, als ob sie in einer einzigen gro\(ssen Datei verbunden w\(:aren, die aus dem Inhalt jeder der Dateien besteht, einer nach der anderen\&.
+.sp
+Dies kann z\&.B\&. f\(:ur VOB\-Dateien benutzt werden, die von einer DVD oder MPEG\-Transportdatenstr\(:omen stammen\&. Es kann nicht verwendet werden, falls jede Datei einen eigenen Kopfdatensatz enth\(:alt, was normalerweise bei eigenst\(:andigen Dateien wie AVI oder MP4 der Fall ist\&.
+.sp
+Einen Dateinamen in runde Klammern zu stecken verhindert auch, dass
+\fBmkvmerge\fR(1)
+nach zus\(:atzlichen Dateien mit dem selben Basisnamen sucht\&. Dies wird bei der
+Option \fB=\fR
+beschrieben\&. Daher entsprechen die beiden folgenden Befehlszeilen einander:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-o Ausgabe\&.mkv = Datei\&.mkv
+$ mkvmerge \-o Ausgabe\&.mkv \*(Aq(\*(Aq Datei\&.mkv \*(Aq)\*(Aq
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+Es ist auf mehrere Dinge zu achten:
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 1.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  1." 4.2
+.\}
+Sowohl nach der \(:offnenden als auch vor der schlie\(ssenden runden Klammer m\(:ussen Leerzeichen stehen\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 2.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  2." 4.2
+.\}
+Jeder Parameter in runden Klammern wird als Dateiname interpretiert\&. Daher m\(:ussen alle Optionen, die auf diese logische Datei angewandt werden, vor der \(:offnenden runden Klammer aufgef\(:uhrt werden\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 3.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  3." 4.2
+.\}
+Einige Shells behandeln runde Klammern als Sonderzeichen\&. Daher m\(:ussen Sie sie maskieren oder wie im oben gezeigten Beispiel in Anf\(:uhrungszeichen setzen\&.
+.RE
+.RE
+.SS "Unterst\(:utzung von Anh\(:angen (weitere globale Optionen)"
+.PP
+\fB\-\-attachment\-description\fR \fIBeschreibung\fR
+.RS 4
+Klarschriftbeschreibung des folgenden Anhangs\&. Gilt f\(:ur die n\(:achste Option
+\fB\-\-attach\-file\fR
+oder
+\fB\-\-attach\-file\-once\fR\&.
+.RE
+.PP
+\fB\-\-attachment\-mime\-type\fR \fIMIME\-Typ\fR
+.RS 4
+MIME\-Typ des folgenden Anhangs\&. Gilt f\(:ur die n\(:achste Option
+\fB\-\-attach\-file\fR
+oder
+\fB\-\-attach\-file\-once\fR\&. Eine Liste offiziell anerkannter
+MIME\-Typen kann z\&.B\&. auf der
+\m[blue]\fBIANA\-Homepage\fR\m[]\&\s-2\u[2]\d\s+2
+gefunden werden\&. Der
+MIME\-Typ ist f\(:ur einen Anhang vorgeschrieben\&.
+.RE
+.PP
+\fB\-\-attachment\-name\fR \fIName\fR
+.RS 4
+setzt den Namen, der in der Ausgabedatei f\(:ur diesen Anhang gespeichert wird\&. Falls diese Option nicht angegeben ist, wird der Name vom Dateinamen des Anhangs abgeleitet, der mit der Option
+\fB\-\-attach\-file\fR
+oder der Option
+\fB\-\-attach\-file\-once\fR
+vorgegeben wird\&.
+.RE
+.PP
+\fB\-\-attach\-file\fR \fIDateiname\fR, \fB\-\-attach\-file\-once\fR \fIDateiname\fR
+.RS 4
+erstellt einen Dateianhang innerhalb der
+Matroska(TM)\-Datei\&. Der
+MIME\-Typ muss gesetzt worden sein, bevor diese Option benutzt werden kann\&. Der Unterschied zwischen diesen beiden Formen besteht darin, dass w\(:ahrend der Aufteilung die mit
+\fB\-\-attach\-file\fR
+angeh\(:angten Dateien an alle Ausgabedateien angeh\(:angt werden, w\(:ahrend die mit der Option
+\fB\-\-attach\-file\-once\fR
+angeh\(:angten nur an die erste erstellte Datei angeh\(:angt werden\&. Falls keine Aufteilung benutzt wird, tun beide dasselbe\&.
+.sp
+\fBmkvextract\fR(1)
+kann benutzt werden, um angeh\(:angte Dateien aus einer
+Matroska(TM)\-Datei zu extrahieren\&.
+.RE
+.SS "Optionen, die f\(:ur jede Eingabedatei verwendet werden k\(:onnen"
+.PP
+\fB\-a\fR, \fB\-\-audio\-tracks\fR \fI[!]\fR\fIn,m,\&...\fR
+.RS 4
+kopiert die Tonspuren
+\fIn\fR,
+\fIm\fR
+etc\&. Die Zahlen sind Spur\-IDs, die \(:uber den Schalter
+\fB\-\-identify\fR
+abgefragt werden k\(:onnen\&. Sie sind nicht nur einfach die Spurnummern (siehe den Abschnitt
+Spur-IDs)\&. Voreinstellung: alle Tonspuren kopieren\&.
+.sp
+Falls den IDs ein
+!
+vorangestellt ist, ist ihre Bedeutung umgekehrt: alles kopieren au\(sser den nach
+!
+aufgef\(:uhrten IDs\&.
+.RE
+.PP
+\fB\-d\fR, \fB\-\-video\-tracks\fR \fI[!]\fR\fIn,m,\&...\fR
+.RS 4
+kopiert die Videospuren
+\fIn\fR,
+\fIm\fR
+etc\&. Die Zahlen sind Spur\-IDs, die \(:uber den Schalter
+\fB\-\-identify\fR
+abgefragt werden k\(:onnen\&. Sie sind nicht nur einfach die Spurnummern (siehe den Abschnitt
+Spur-IDs)\&. Voreinstellung: alle Videospuren kopieren\&.
+.sp
+Falls den IDs ein
+!
+vorangestellt ist, ist ihre Bedeutung umgekehrt: alles kopieren au\(sser den nach
+!
+aufgef\(:uhrten IDs\&.
+.RE
+.PP
+\fB\-s\fR, \fB\-\-subtitle\-tracks\fR \fI[!]\fR\fIn,m,\&...\fR
+.RS 4
+kopiert die Untertitelspuren
+\fIn\fR,
+\fIm\fR
+etc\&. Die Zahlen sind Spur\-IDs, die \(:uber den Schalter
+\fB\-\-identify\fR
+abgefragt werden k\(:onnen\&. Sie sind nicht nur einfach die Spurnummern (siehe den Abschnitt
+Spur-IDs)\&. Voreinstellung: alle Untertitelspuren kopieren\&.
+.sp
+Falls den IDs ein
+!
+vorangestellt ist, ist ihre Bedeutung umgekehrt: alles kopieren au\(sser den nach
+!
+aufgef\(:uhrten IDs\&.
+.RE
+.PP
+\fB\-b\fR, \fB\-\-button\-tracks\fR \fI[!]\fR\fIn,m,\&...\fR
+.RS 4
+kopiert die Button\-Spuren
+\fIn\fR,
+\fIm\fR
+etc\&. Die Zahlen sind Spur\-IDs, die \(:uber den Schalter
+\fB\-\-identify\fR
+abgefragt werden k\(:onnen\&. Sie sind nicht nur einfach die Spurnummern (siehe den Abschnitt
+Spur-IDs)\&. Voreinstellung: alle Button\-Spuren kopieren\&.
+.sp
+Falls den IDs ein
+!
+vorangestellt ist, ist ihre Bedeutung umgekehrt: alles kopieren au\(sser den nach
+!
+aufgef\(:uhrten IDs\&.
+.RE
+.PP
+\fB\-\-track\-tags\fR \fI[!]\fR\fIn,m,\&...\fR
+.RS 4
+kopiert die Tags f\(:ur Spuren
+\fIn\fR,
+\fIm\fR
+etc\&. Die Zahlen sind Spur\-IDs, die \(:uber den Schalter
+\fB\-\-identify\fR
+abgefragt werden k\(:onnen\&. Sie sind nicht nur einfach die Spurnummern (siehe den Abschnitt
+Spur-IDs)\&. Voreinstellung: Tags f\(:ur alle Spuren kopieren\&.
+.sp
+Falls den IDs ein
+!
+vorangestellt ist, ist ihre Bedeutung umgekehrt: alles kopieren au\(sser den nach
+!
+aufgef\(:uhrten IDs\&.
+.RE
+.PP
+\fB\-m\fR, \fB\-\-attachments\fR \fI[!]\fR\fIn\fR\fI[:all|first]\fR\fI,m\fR\fI[:all|first]\fR\fI,\&...\fR
+.RS 4
+kopiert die Anh\(:ange mit den IDs
+\fIn\fR,
+\fIm\fR
+etc\&. in alle Ausgabedateien oder nur in die erste\&. Jeder ID kann entweder \(Fc:all\(Fo folgen (was Voreinstellung ist, wenn nichts eingegeben wird) oder \(Fc:first\(Fo\&. Falls Aufteilen aktiv ist, dann werden diese Anh\(:ange, deren IDs mit \(Fc:all\(Fo angegeben wurden, in alle resultierenden Ausgabedateien kopiert, w\(:ahrend die anderen nur in die erste Ausgabedatei kopiert werden\&. Falls kein Aufteilen aktiv ist, dann haben beide Varianten dieselben Auswirkungen\&.
+.sp
+Standardm\(:a\(ssig werden alle Anh\(:ange in alle Ausgabedateien kopiert\&.
+.sp
+Falls den IDs ein
+!
+vorangestellt ist, ist ihre Bedeutung umgekehrt: alles kopieren au\(sser den nach
+!
+aufgef\(:uhrten IDs\&.
+.RE
+.PP
+\fB\-A\fR, \fB\-\-no\-audio\fR
+.RS 4
+keine Tonspur aus dieser Datei kopieren
+.RE
+.PP
+\fB\-D\fR, \fB\-\-no\-video\fR
+.RS 4
+keine Videospur aus dieser Datei kopieren
+.RE
+.PP
+\fB\-S\fR, \fB\-\-no\-subtitles\fR
+.RS 4
+keine Untertitelspur aus dieser Datei kopieren
+.RE
+.PP
+\fB\-B\fR, \fB\-\-no\-buttons\fR
+.RS 4
+keine Button\-Spur aus dieser Datei kopieren
+.RE
+.PP
+\fB\-T\fR, \fB\-\-no\-track\-tags\fR
+.RS 4
+keine spurspezifischen Tags aus dieser Datei kopieren
+.RE
+.PP
+\fB\-\-no\-chapters\fR
+.RS 4
+keine Kapitel aus dieser Datei kopieren
+.RE
+.PP
+\fB\-M\fR, \fB\-\-no\-attachments\fR
+.RS 4
+keine Anh\(:ange aus dieser Datei kopieren
+.RE
+.PP
+\fB\-\-no\-global\-tags\fR
+.RS 4
+keine globalen Tags aus dieser Datei kopieren
+.RE
+.PP
+\fB\-\-chapter\-charset\fR \fIZeichensatz\fR
+.RS 4
+setzt den Zeichensatz, der f\(:ur die Umwandlung der in der Quelldatei enthaltenen Kapitelinformation nach UTF\-8 verwendet wird\&. Eine Erkl\(:arung, wie
+\fBmkvmerge\fR(1)
+Zeichens\(:atze umwandelt, finden Sie im Abschnitt \(:uber
+Textdateien und Zeichens\(:atze\&.
+.RE
+.PP
+\fB\-\-chapter\-language\fR \fISprachcode\fR
+.RS 4
+setzt den ISO 639\-2\-Sprachcode, der f\(:ur jeden Kapiteleintrag geschrieben wird\&. Diese Option kann f\(:ur Quelldateien benutzt werden, die Kapitel, jedoch keine Informationen \(:uber die Sprachen der Kapitel, enthalten, z\&.B\&. bei MP4\- und OGM\-Dateien\&.
+.RE
+.PP
+\fB\-y\fR, \fB\-\-sync\fR \fITID:d\fR\fI[,o[/p]]\fR
+.RS 4
+passt die Zeitstempel der Spur mit der ID
+\fITID\fR
+um
+\fId\fR
+ms an\&. Die Spur\-IDs sind dieselben, wie die mit
+\fB\-\-identify\fR
+angegebenen (siehe den Abschnitt
+Spur-IDs)\&.
+.sp
+\fIo\fR/\fIp\fR: passen die Zeitstempel um
+\fIo\fR/\fIp\fR
+an, um lineare Verschiebungen zu beheben\&. Falls
+\fIp\fR
+weggelassen wird, ist sie standardm\(:a\(ssig 1\&. Sowohl
+\fIo\fR
+als auch
+\fIp\fR
+k\(:onnen Flie\(sskommazahlen sein\&.
+.sp
+Voreinstellung: keine manuelle Synchronisationskorrektur (was dasselbe wie
+\fId\fR
+=
+\fB0\fR
+und
+\fIo\fR/\fIp\fR
+=
+\fB1\&.0\fRist)\&.
+.sp
+Diese Option kann mehrfach f\(:ur eine Eingabedatei benutzt werden und gilt f\(:ur mehrere Spuren, indem jedesmal eine andere Spur\-ID ausgew\(:ahlt wird\&.
+.RE
+.PP
+\fB\-\-cues\fR \fITID:none|iframes|all\fR
+.RS 4
+steuert, f\(:ur welchen Spurenindex Eintr\(:age f\(:ur die angegebene Spur erstellt werden (siehe den Abschnitt
+Spur-IDs)\&. \(Fcnone\(Fo verhindert das Erstellen von Indexeintr\(:agen\&. F\(:ur \(Fciframes\(Fo werden nur Bl\(:ocke ohne Vorw\(:arts\- oder R\(:uckw\(:artsbez\(:uge (= IFrames in Videospuren) in das Cuesheet abgelegt\&. \(Fcall\(Fo veranlasst
+\fBmkvmerge\fR(1), Indexeintr\(:age f\(:ur alle Bl\(:ocke zu erstellen, wodurch die Datei sehr gro\(ss wird\&.
+.sp
+F\(:ur Videospuren ist die Voreinstellung \(Fciframes\(Fo und f\(:ur alle anderen \(Fcnone\(Fo\&. Siehe auch die Option
+\fB\-\-no\-cues\fR, die das Erstellen von Indexeintr\(:agen verhindert, ohne die benutzten
+\fB\-\-cues\fR\-Optionen zu ber\(:ucksichtigen\&.
+.sp
+Diese Option kann mehrfach f\(:ur eine Eingabedatei benutzt werden und gilt f\(:ur mehrere Spuren, indem jedesmal eine andere Spur\-ID ausgew\(:ahlt wird\&.
+.RE
+.PP
+\fB\-\-default\-track\fR \fITID\fR\fI[:bool]\fR
+.RS 4
+setzt den Standardschalter f\(:ur die angegebene Spur (siehe den Abschnitt
+Spur-IDs), falls das optionale Argument
+\fIbool\fR
+nicht vorhanden ist\&. Falls der Anwender nicht explizit selbst eine Spur ausw\(:ahlt, dann sollte das Abspielprogramm die Spur bevorzugen, f\(:ur die der Standardschalter gesetzt ist\&. Nur eine Spur jeder Art (Ton, Video, Untertitel, Buttons) kann einen gesetzten \(FcStandard\(Fo\-Schalter haben\&. Falls der Anwender nicht m\(:ochte, dass der Standardspurschalter gesetzt ist, muss er
+\fIbool\fR
+f\(:ur alle Spuren auf
+\fB0\fR
+setzen\&.
+.sp
+Diese Option kann mehrfach f\(:ur eine Eingabedatei benutzt werden und gilt f\(:ur mehrere Spuren, indem jedesmal eine andere Spur\-ID ausgew\(:ahlt wird\&.
+.RE
+.PP
+\fB\-\-forced\-track\fR \fITID\fR\fI[:bool]\fR
+.RS 4
+setzt den Schalter \(FcAbspielen erzwingen\(Fo f\(:ur die angegebene Spur (siehe den Abschnitt
+Spur-IDs), falls das optionale Argument
+\fIbool\fR
+nicht vorhanden ist\&. Ein Abspielprogramm muss alle Spuren abspielen, f\(:ur die der Schalter auf
+\fB1\fR
+gesetzt wurde\&.
+.sp
+Diese Option kann mehrfach f\(:ur eine Eingabedatei benutzt werden und gilt f\(:ur mehrere Spuren, indem jedesmal eine andere Spur\-ID ausgew\(:ahlt wird\&.
+.RE
+.PP
+\fB\-\-blockadd\fR \fITID:Stufe\fR
+.RS 4
+beh\(:alt f\(:ur die angegebene Spur nur die
+BlockAdditions
+bis hinauf zur Stufe
+\fIStufe\fR\&. Standardm\(:a\(ssig werden alle Stufen aufbewahrt\&. Diese Option beeinflusst nur bestimmte Arten von Codecs wie WAVPACK4\&.
+.RE
+.PP
+\fB\-\-track\-name\fR \fITID:Name\fR
+.RS 4
+setzt den Spurnamen f\(:ur die angegebene Spur (siehe den Abschnitt
+Spur-IDs) auf
+\fIName\fR\&.
+.RE
+.PP
+\fB\-\-language\fR \fITID:Sprache\fR
+.RS 4
+setzt die Sprache der angegebenen Spur (siehe den Abschnitt
+Spur-IDs)\&. Es sind sowohl ISO 639\-2\-Sprachcodes als auch ISO 639\-1\-L\(:andercodes erlaubt\&. Die L\(:andercodes werden automatisch in die Sprachcodes umgewandelt\&. Alle Sprachcodes einschlie\(sslich ihrer ISO 639\-2\-Codes k\(:onnen mit der Option
+\fB\-\-list\-languages\fR
+aufgef\(:uhrt werden\&.
+.sp
+Diese Option kann mehrfach f\(:ur eine Eingabedatei benutzt werden und gilt f\(:ur mehrere Spuren, indem jedesmal eine andere Spur\-ID ausgew\(:ahlt wird\&.
+.RE
+.PP
+\fB\-t\fR, \fB\-\-tags\fR \fITID:Dateiname\fR
+.RS 4
+liest Tags f\(:ur die Spur mit der Nummer
+\fITID\fR
+aus der Datei
+\fIDateiname\fR\&. Einzelheiten finden Sie im nachfolgenden Abschnitt \(:uber
+Tags\&.
+.RE
+.PP
+\fB\-\-aac\-is\-sbr\fR \fITID\fR\fI[:0|1]\fR
+.RS 4
+teilt
+\fBmkvmerge\fR(1)
+mit, dass die Spur mit der ID
+\fITID\fR
+vom Typ
+SBR AAC
+ist (auch als
+HE\-AAC
+oder
+AAC+
+bekannt)\&. Diese Option wird ben\(:otigt, falls a) die Quelldatei eine
+AAC\-Datei ist (\fInicht\fR
+f\(:ur eine
+Matroska(TM)\-Datei) und b) die
+AAC\-Datei \(FcSBR AAC\(Fo\-Daten enth\(:alt\&. Der Grund f\(:ur diesen Schalter ist, dass es technisch unm\(:oglich ist, normale
+AAC\-Daten von
+SBR AAC
+zu unterscheiden, ohne das komplette
+AAC\-Bild zu entschl\(:usseln\&. Da es mehrere Patentprobleme mit
+AAC\-Entschl\(:usselungsprogrammen gibt, wird
+\fBmkvmerge\fR(1)
+diese Entschl\(:usselungsstufe niemals enthalten\&. Daher ist dieser Schalter f\(:ur
+SBR AAC\-Dateien zwingend notwendig\&. Die resultierende Datei kann m\(:oglicherweise nicht korrekt oder gar nicht wiedergegeben werden, wenn der Schalter weggelassen wird\&.
+.sp
+Falls die Quelldatei eine
+Matroska(TM)\-Datei ist, sollte die
+CodecID
+ausreichen, um
+SBR AAC
+zu bestimmen\&. Falls die
+CodecID
+jedoch falsch ist, kann der Schalter benutzt werden, um dies zu korrigieren\&.
+.sp
+Falls Mkvmerge f\(:alschlicherweise feststellt, dass eine
+AACSBR
+ist, k\(:onnen Sie \(Fc:0\(Fo zur Spur\-ID hinzuf\(:ugen\&.
+.RE
+.PP
+\fB\-\-timecodes\fR \fITID:Dateiname\fR
+.RS 4
+Die Zeitstempel, die f\(:ur eine bestimmte Spur\-ID von
+\fIDateiname\fR
+benutzt werden, werden gelesen\&. Diese Zeitstempel erzwingen das \(:Uberschreiben der normalerweise von
+\fBmkvmerge\fR(1)
+berechneten Zeitstempel\&. Lesen Sie den Abschnitt \(:uber
+externe Zeitstempeldateien\&.
+.RE
+.PP
+\fB\-\-default\-duration\fR \fITID:x\fR
+.RS 4
+erzwingt, dass die Standarddauer einer gegebenen Spur den angegebenen Wert annimmt\&. Au\(sserdem werden die Zeitstempel der Spur so ge\(:andert, dass sie zur Standarddauer passen\&. Dem Argument
+\fIx\fR
+muss \(Fcs\(Fo, \(Fcms\(Fo, \(Fcus\(Fo, \(Fcns\(Fo, \(Fcfps\(Fo, \(Fcp\(Fo oder \(Fci\(Fo folgen, um die Dauer in Sekunden, Millisekunden, Mikrosekunden, Nanosekunden, Bildern pro Sekunde, fortlaufenden Bildern pro Sekunde beziehungsweise Halbbildern pro Sekunde anzugeben\&. Die Zahl
+\fIx\fR
+selbst kann eine Flie\(sskommazahl oder ein Bruch sein\&.
+.sp
+Falls die Standarddauer nicht erzwungen wird, dann wird Mkvmerge versuchen, die Standarddauer der Spur, des Containers und/oder des codierten Bitstroms bei bestimmten Spurtypen, z\&.B\&. AVC/h\&.264 oder MPEG\-2, abzuleiten\&.
+.sp
+Diese Option kann auch benutzt werden, um die
+BpS
+von Videospuren zu \(:andern, ohne eine externe Zeitstempeldatei zu verwenden\&.
+.RE
+.PP
+\fB\-\-fix\-bitstream\-timing\-information\fR \fITID\fR\fI[:0|1]\fR
+.RS 4
+Normalerweise \(:andert
+\fBmkvmerge\fR(1)
+nicht die Zeiteinteilungsinformation (Bild\-/Feldrate), die im Video\-Bitstrom gespeichert ist\&. Mit dieser Option wird diese Information angepasst, damit sie zur Zeiteinteilungsinformation des Containers passt\&. Die Zeiteinteilungsinformation des Containers kann aus verschiedenen Quelle stammen: von der Befehlszeile (siehe die Option
+\fB\-\-default\-duration\fR), dem Quell\-Container oder kann aus dem Bitstrom abgeleitet sein\&.
+.if n \{\
+.sp
+.\}
+.RS 4
+.it 1 an-trap
+.nr an-no-space-flag 1
+.nr an-break-flag 1
+.br
+.ps +1
+\fBAnmerkung\fR
+.ps -1
+.br
+Dies wurde bisher nur f\(:ur AVC/h\&.264\-Videospuren implementiert\&.
+.sp .5v
+.RE
+.RE
+.PP
+\fB\-\-nalu\-size\-length\fR \fITID:n\fR
+.RS 4
+erzwingt eine L\(:ange der
+NALU\-Gr\(:o\(sse von
+\fIn\fR
+Byte\&. Dieser Parameter wird nur benutzt, falls der einfache
+AVC/h\&.264\-Datenstr\(:ome verwendet wird\&. Falls er weggelassen wird, ist die Voreinstellung 4 Byte, es gibt aber Dateien, die Bilder oder Teile enthalten, die alle kleiner als 65536 Byte sind\&. F\(:ur derartige Dateien k\(:onnen Sie diesen Parameter benutzen und die Gr\(:o\(sse auf 2 vermindern\&.
+.RE
+.PP
+\fB\-\-compression\fR \fITID:n\fR
+.RS 4
+w\(:ahlt die Komprimierungsmethode aus, die f\(:ur diese Spur benutzt wird\&. Beachten Sie, dass das Abspielprogramm diese Methode ebenfalls unterst\(:utzen muss\&. G\(:ultige Werte sind \(Fcnone\(Fo, \(Fczlib\(Fo, \(Fclzo\(Fo/\(Fclxo1x\(Fo, \(Fcbz2\(Fo/\(Fcbzlib\(Fo und \(Fcmpeg4_p2\(Fo/\(Fcmpeg4p2\(Fo\&. Die Werte \(Fclzo\(Fo/\(Fclxo1x\(Fo und \(Fcbz2\(Fo/\(Fcbzlib\(Fo sind nur verf\(:ugbar, falls
+\fBmkvmerge\fR(1)
+mit Unterst\(:utzung f\(:ur die Komprimierungsbibliotheken
+liblzo(TM)
+beziehungsweise
+bzlib(TM)
+\(:ubersetzt wurde\&.
+.sp
+Die Komprimierungsmethode \(Fcmpeg4_p2\(Fo/\(Fcmpeg4p2\(Fo ist eine besondere Komprimierungsmethode, genannt \(FcKopfdaten entfernen\(Fo, die nur f\(:ur
+MPEG4\-Teil\-2\-Videospuren verf\(:ugbar ist\&.
+.sp
+F\(:ur einige Untertitelspuren ist die Voreinstellung \(Fczlib\(Fo\-Komprimierung\&. Diese Komprimierungsmethode ist au\(sserdem jene, die die meisten, wenn nicht sogar alle Abspielprogramme unterst\(:utzen\&. F\(:ur andere Komprimierungsmethoden au\(sser \(Fcnone\(Fo kann keine Unterst\(:utzung zugesichert werden\&.
+.RE
+.SS "Optionen, die nur f\(:ur Videospuren gelten"
+.PP
+\fB\-f\fR, \fB\-\-fourcc\fR \fITID:FourCC\fR
+.RS 4
+erzwingt, dass
+FourCC
+den angegebenen Wert annimmt; funktioniert nur bei Videospuren im \(FcMS\-Kompatibilit\(:atsmodus\(Fo\&.
+.RE
+.PP
+\fB\-\-display\-dimensions\fR \fITID:BreitexH\(:ohe\fR
+.RS 4
+Matroska(TM)\-Dateien enthalten zwei Werte, die die Anzeigeeigenschaften setzen, auf die ein Abspielprogramm das Bild bei der Wiedergabe skalieren sollte: Anzeigebreite und Anzeigeh\(:ohe\&. Diese Werte k\(:onnen mit dieser Option gesetzt werden, z\&.B\&. \(Fc1:640x480\(Fo\&.
+.sp
+Eine weitere M\(:oglichkeit, die Werte anzugeben, ist die Verwendung der Option
+\fB\-\-aspect\-ratio\fR
+oder
+\fB\-\-aspect\-ratio\-factor\fR
+(siehe unten)\&. Diese Optionen schlie\(ssen sich gegenseitig aus\&.
+.RE
+.PP
+\fB\-\-aspect\-ratio\fR \fITID:Verh\(:altnis|Breite/H\(:ohe\fR
+.RS 4
+Matroska(TM)\-Dateien enthalten zwei Werte, die die Anzeigeeigenschaften setzen, auf die ein Abspielprogramm das Bild bei der Wiedergabe skalieren sollte: Anzeigebreite und Anzeigeh\(:ohe\&. Mit dieser Option wird
+\fBmkvmerge\fR(1)
+automatisch die Anzeigebreite und Anzeigeh\(:ohe basierend auf der Originalbreite und \-h\(:ohe berechnen und das mit dieser Option angegebene Seitenerh\(:altnis ber\(:ucksichtigen\&. Das Verh\(:altnis kann entweder als Flie\(sskommazahl
+\fIVerh\(:altnis\fR
+oder als Bruch \(Fc\fIBreite\fR/\fIH\(:ohe\fR\(Fo, z\&.B\&. \(Fc16/9\(Fo, angegeben werden\&.
+.sp
+Eine weitere M\(:oglichkeit, die Werte anzugeben, ist die Verwendung der Option
+\fB\-\-aspect\-ratio\-factor\fR
+oder
+\fB\-\-display\-dimensions\fR
+(siehe oben und unten)\&. Diese Optionen schlie\(ssen sich gegenseitig aus\&.
+.RE
+.PP
+\fB\-\-aspect\-ratio\-factor\fR \fITID:Faktor|n/d\fR
+.RS 4
+Eine weitere M\(:oglichkeit, das Seitenerh\(:altnis zu setzen, ist die Angabe eines
+\fIFaktor\fRs\&. Das Originalseitenverh\(:altnis wird zuerst mit diesem
+\fIFaktor\fR
+multipliziert und hinterher als Zielseitenverh\(:altnis benutzt\&.
+.sp
+Eine weitere M\(:oglichkeit, die Werte anzugeben, ist die Verwendung der Option
+\fB\-\-aspect\-ratio\fR
+oder
+\fB\-\-display\-dimensions\fR
+(siehe oben)\&. Diese Optionen schlie\(ssen sich gegenseitig aus\&.
+.RE
+.PP
+\fB\-\-cropping\fR \fITID:links,oben,rechts,unten\fR
+.RS 4
+setzt die Parameter f\(:ur das Abschneiden von Bildpunkten einer Videospur auf die angegebenen Werte\&.
+.RE
+.PP
+\fB\-\-stereo\-mode\fR \fITID:n|Schl\(:usselwort\fR
+.RS 4
+setzt den Stereomodus f\(:ur die Videospur mit der Spur\-ID
+\fITID\fR\&. Der Modus kann entweder eine Zahl
+\fIn\fR
+zwischen
+\fB0\fR
+und
+\fB14\fR
+oder eines dieser Schl\(:usselw\(:orter sein:
+.sp
+\(Fcmono\(Fo, \(Fcside_by_side_left_first\(Fo, \(Fctop_bottom_right_first\(Fo, \(Fctop_bottom_left_first\(Fo, \(Fccheckerboard_right_first\(Fo, \(Fccheckerboard_left_first\(Fo, \(Fcrow_interleaved_right_first\(Fo, \(Fcrow_interleaved_left_first\(Fo, \(Fccolumn_interleaved_right_first\(Fo, \(Fccolumn_interleaved_left_first\(Fo, \(Fcanaglyph_cyan_red\(Fo, \(Fcside_by_side_right_first\(Fo, \(Fcanaglyph_green_magenta\(Fo, \(Fcboth_eyes_laced_left_first\(Fo, \(Fcboth_eyes_laced_right_first\(Fo
+.RE
+.SS "Optionen, die nur f\(:ur Untertitelspuren gelten"
+.PP
+\fB\-\-sub\-charset\fR \fITID:Zeichensatz\fR
+.RS 4
+setzt den Zeichensatz f\(:ur die Umwandlung nach UTF\-8 f\(:ur UTF\-8\-Untertitel der angegebenen Spur\-ID\&. Ist er nicht angegeben, wird der Zeichensatz von den aktuellen Locale\-Einstellungen abgeleitet\&. Beachten Sie, dass f\(:ur Untertitel, die aus
+Matroska(TM)\-Dateien oder Kate\-Datenstr\(:omen stammen, kein Zeichensatz erforderlich ist, da diese immer in UTF\-8 gespeichert werden\&. Ein Erkl\(:arung, wie
+\fBmkvmerge\fR(1)
+Zeichens\(:atze umwandelt, finden Sie im Abschnitt \(:uber
+Textdateien und Zeichens\(:atze\&.
+.sp
+Diese Option kann mehrfach f\(:ur eine Eingabedatei benutzt werden und gilt f\(:ur mehrere Spuren, indem jedesmal eine andere Spur\-ID ausgew\(:ahlt wird\&.
+.RE
+.SS "Weitere Optionen"
+.PP
+\fB\-i\fR, \fB\-\-identify\fR \fIDateiname\fR
+.RS 4
+wird
+\fBmkvmerge\fR(1)
+veranlassen, die einzelne Datei eingehend zu untersuchen und ihren Typ, die in der Datei enthaltenen Spuren und ihre Spur\-IDs zu melden\&. Falls diese Option benutzt wird, ist der Dateiname die einzige weitere erlaubte Option\&.
+.RE
+.PP
+\fB\-I\fR, \fB\-\-identify\-verbose\fR \fIDateiname\fR
+.RS 4
+wird
+\fBmkvmerge\fR(1)
+veranlassen, die einzelne Datei eingehend zu untersuchen und ihren Typ, die in der Datei enthaltenen Spuren und ihre Spur\-IDs zu melden\&. Falls diese Option benutzt wird, ist der Dateiname die einzige weitere erlaubte Option\&.
+.sp
+Diese Option veranlasst
+\fBmkvmerge\fR(1), zus\(:atzliche Informationen \(:uber den Container und jede darin enthaltene Spur auszugeben\&. Die zus\(:atzlichen Informationen werden in eckige Klammern eingeschlossen\&. Sie bestehen aus durch Leerzeichen getrennten Schl\(:ussel/Wert\-Paaren, bei denen Schl\(:ussel und Werte durch einen Doppelpunkt getrennt werden\&.
+.sp
+Jeder Wert wird entsprechend den im
+Abschnitt \(:uber Maskieren von Sonderzeichen in Text
+beschriebenen Regeln maskiert\&.
+.RE
+.PP
+\fB\-l\fR, \fB\-\-list\-types\fR
+.RS 4
+f\(:uhrt unterst\(:utzte Eingabedateitypen auf\&.
+.RE
+.PP
+\fB\-\-list\-languages\fR
+.RS 4
+Lists all languages and their ISO639\-2 code which can be used with the
+\fB\-\-language\fR
+option\&.
+.RE
+.PP
+\fB\-\-priority\fR \fIPriorit\(:at\fR
+.RS 4
+setzt die Prozesspriorit\(:at, mit der
+\fBmkvmerge\fR(1)
+ausgef\(:uhrt wird\&. G\(:ultige Werte sind \(Fclowest\(Fo, \(Fclower\(Fo, \(Fcnormal\(Fo, \(Fchigher\(Fo und \(Fchighest\(Fo\&. Falls nichts angegeben wurde, wird \(Fcnormal\(Fo benutzt\&. Auf Unix\-\(:ahnlichen Systemen wird
+\fBmkvmerge\fR(1)
+die Funktion
+\fBnice\fR(2)
+verwenden\&. Daher kann nur der Superuser \(Fchigher\(Fo und \(Fchighest\(Fo benutzen\&. Auf Windows sind alle Werte f\(:ur jeden Anwender benutzbar\&.
+.sp
+Die Auswahl von \(Fclowest\(Fo veranlasst
+\fBmkvmerge\fR(1)
+au\(sserdem, zus\(:atzlich zur niedrigsten m\(:oglichen Prozesspriorit\(:at eine Leerlauf\-E/A\-Priorit\(:at zu w\(:ahlen\&.
+.RE
+.PP
+\fB\-\-command\-line\-charset\fR \fIZeichensatz\fR
+.RS 4
+setzt den Zeichensatz, um auf der Befehlszeile angegebene Zeichenketten umzuwandeln\&. Voreinstellung ist der Zeichensatz der aktuellen Locale des Systems\&. Diese Einstellung gilt f\(:ur Argumente der folgenden Optionen:
+\fB\-\-title\fR,
+\fB\-\-track\-name\fR
+und
+\fB\-\-attachment\-description\fR\&.
+.RE
+.PP
+\fB\-\-output\-charset\fR \fIZeichensatz\fR
+.RS 4
+setzt den Zeichensatz, in den Zeichenketten zur Ausgabe umgewandelt werden\&. Voreinstellung ist der Zeichensatz der aktuellen Locale des Systems\&.
+.RE
+.PP
+\fB\-r\fR, \fB\-\-redirect\-output\fR \fIDateiname\fR
+.RS 4
+schreibt alle Nachrichten in die Datei
+\fIDateiname\fR
+statt auf die Konsole\&. Obwohl dies einfach durch Ausgabeumleitung erledigt werden kann, gibt es F\(:alle, in denen diese Option ben\(:otigt wird: wenn das Terminal die Ausgabe vor dem Schreiben in eine Datei neu auswertet\&. Der mit
+\fB\-\-output\-charset\fR
+gesetzte Zeichensatz wird dabei ber\(:ucksichtigt\&.
+.RE
+.PP
+\fB\-\-ui\-language\fR \fICode\fR
+.RS 4
+erzwingt, dass die \(:Ubersetzungen f\(:ur die Sprache
+\fICode\fR
+benutzt werden (z\&.B\&. \(Fcde_DE\(Fo f\(:ur die deutschen \(:Ubersetzungen)\&. Vorzugsweise sollten jedoch die Umgebungsvariablen
+\fILANG\fR,
+\fILC_MESSAGES\fR
+und
+\fILC_ALL\fR
+benutzt werden\&. Die Eingabe von \(Fclist\(Fo als
+\fICode\fR
+wird
+\fBmkvmerge\fR(1)
+veranlassen, eine Liste der verf\(:ugbaren \(:Ubersetzungen auszugeben\&.
+.RE
+.PP
+\fB\-\-debug\fR \fIThema\fR
+.RS 4
+schaltet die Fehlersuche f\(:ur eine bestimmte Funktionalit\(:at ein\&. Diese Option ist nur f\(:ur Entwicker n\(:utzlich\&.
+.RE
+.PP
+\fB\-\-engage\fR \fIFunktionalit\(:at\fR
+.RS 4
+schaltet experimentelle Funktionalit\(:aten ein\&. Eine Liste verf\(:ugbarer Funktionalit\(:aten kann mit
+\fBmkvmerge \-\-engage list\fR
+abgefragt werden\&. Diese Funktionalit\(:aten sind nicht f\(:ur die Verwendung in Alltagssituationen gedacht\&.
+.RE
+.PP
+\fB@\fR\fIOptionsdatei\fR
+.RS 4
+liest zus\(:atzliche Befehlszeilenargumente aus der Datei
+\fIOptionsdatei\fR\&. Weitere Informationen finden Sie im Abschnitt \(:uber
+Optionsdateien\&.
+.RE
+.PP
+\fB\-\-capabilities\fR
+.RS 4
+f\(:uhrt Informationen \(:uber optionale Funktionalit\(:aten auf, die einkompiliert wurden, und beendet sich\&. Die erste ausgegebene Zeile wird die Versionsinformation sein\&. Alle folgenden Zeilen enthalten genau ein Wort, dessen Vorhandensein anzeigt, dass die Funktionalit\(:at einkompiliert wurde\&. Diese Funktionalit\(:aten sind:
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+\(FcBZ2\(Fo \(en die
+bzlib(TM)\-Komprimierungsbibliothek\&. Beeinflusst die f\(:ur die Option
+\fB\-\-compression\fR
+verf\(:ugbaren Komprimierungsmethoden\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+\(FcLZO\(Fo \(en die
+lzo(TM)\-Komprimierungsbibliothek\&. Beeinflusst die f\(:ur die Option
+\fB\-\-compression\fR
+verf\(:ugbaren Komprimierungsmethoden\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+\(FcFLAC\(Fo \(en Lesen roher
+FLAC\-Dateien und Handhabung von
+FLAC\-Spuren in anderen Containern, z\&.B\&.
+Ogg(TM)
+oder
+Matroska(TM)\&.
+.RE
+.RE
+.PP
+\fB\-h\fR, \fB\-\-help\fR
+.RS 4
+zeigt Benutzungsinformationen und beendet sich\&.
+.RE
+.PP
+\fB\-V\fR, \fB\-\-version\fR
+.RS 4
+zeigt Versionsinformationen und beendet sich\&.
+.RE
+.PP
+\fB\-\-check\-for\-updates\fR
+.RS 4
+pr\(:uft online durch Herunterladen der URL
+\m[blue]\fBhttp://mkvtoolnix\-releases\&.bunkus\&.org/latest\-release\&.xml\fR\m[], ob es neue Ver\(:offentlichungen gibt\&. Vier Zeilen werden im Stil
+Schl\(:ussel=Wert
+ausgegeben: die URL, von der die Informationen bezogen wurden (Schl\(:ussel
+version_check_url), die aktuell laufende Version (Schl\(:ussel
+running_version), die Version der neusten Ver\(:offentlichung (Schl\(:ussel
+available_version) und die Download\-URL (Schl\(:ussel
+download_url)\&.
+.sp
+Anschlie\(ssend beendet sich das Programm mit einem R\(:uckgabewert von 0, falls keine neuere Ver\(:offentlichung verf\(:ugbar ist, mit 1, wenn eine neuere Ver\(:offentlichung verf\(:ugbar ist und mit 2, falls ein Fehler auftritt (z\&.B\&., wenn die Aktualisierungsinformationen nicht abgefragt werden konnten)\&.
+.sp
+Diese Option ist nur verf\(:ugbar, falls das Programm mit Unterst\(:utzung f\(:ur Libcurl gebaut wurde\&.
+.RE
+.SH "AUFRUF"
+.PP
+F\(:ur jede Datei kann der Benutzer ausw\(:ahlen, welche Spuren
+\fBmkvmerge\fR(1)
+nehmen soll\&. Sie alle werden in eine mit
+\fB\-o\fR
+angegebene Datei abgelegt\&. Eine Liste bekannter (und unterst\(:utzter) Quellformate kann mit der Option
+\fB\-l\fR
+abgefragt werden\&.
+.if n \{\
+.sp
+.\}
+.RS 4
+.it 1 an-trap
+.nr an-no-space-flag 1
+.nr an-break-flag 1
+.br
+.ps +1
+\fBWichtig\fR
+.ps -1
+.br
+.PP
+Die Reihenfolge der Befehlszeilenoptionen ist wichtig\&. Bitte lesen Sie den Abschnitt
+\(FcReihenfolge der Optionen\(Fo, falls sie ein neuer Nutzer des Programms sind\&.
+.sp .5v
+.RE
+.SH "REIHENFOLGE DER OPTIONEN"
+.PP
+Die Reihenfolge, in der die Optionen eingegeben werden, ist f\(:ur einige Optionen wichtig\&. Optionen fallen unter zwei Kategorien:
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 1.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  1." 4.2
+.\}
+Optionen, die das ganze Programm beeinflussen und nicht an irgeneine Eingabedatei gebunden sind\&. Dies sind unter anderem
+\fB\-\-command\-line\-charset\fR,
+\fB\-\-output\fR
+oder
+\fB\-\-title\fR\&. Diese k\(:onnen \(:uberall auf der Befehlszeile erscheinen\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 2.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  2." 4.2
+.\}
+Optionen, die eine einzelne Eingabedatei oder eine einzelne Spur in einer Eingabedatei beeinflussen\&. Diese Optionen gelten f\(:ur die auf der Befehlszeile folgende Datei\&. Alle Optionen, die f\(:ur dieselbe Eingabedatei (oder f\(:ur Spuren derselben Eingabedatei) gelten, k\(:onnen in jeder Reihenfolge geschrieben werden, solange sie alle vor dem Namen dieser Eingabedatei erschienen\&. Beispiele f\(:ur Optionen, die f\(:ur eine Eingabedatei gelten, sind
+\fB\-\-no\-chapters\fR
+oder
+\fB\-\-chapter\-charset\fR\&. Beispiele f\(:ur Optionen, die f\(:ur eine einzelne Spur gelten, sind
+\fB\-\-default\-duration\fR
+oder
+\fB\-\-language\fR\&.
+.RE
+.PP
+Die Optionen werden von links nach rechts verarbeitet\&. Falls eine Option mehrfach innerhalb desselben Geltungsbereichs erscheint, dann wird das letzte Auftreten benutzt\&. Daher wird der Titel im folgenden Beispiel auf \(FcEtwas anderes\(Fo gesetzt:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-o Ausgabe\&.mkv \-\-title \*(AqDies und das\*(Aq Eingabe\&.avi \-\-title \*(AqEtwas anderes\*(Aq
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+Das folgende Beispiel zeigt die zweimalige Verwendung der Option
+\fB\-\-language\fR, die in Ordnung ist, da sie in unterschiedlichen Geltungsbereichen liegen\&. Obwohl sie f\(:ur dieselbe Spur\-ID gelten, gelten sie f\(:ur verschiedene Eingabedateien und haben daher unterschiedliche Geltungsbereiche:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-o Ausgabe\&.mkv \-\-language 0:fre fran\(,cais\&.ogg \-\-language 0:deu deutsch\&.ogg
+.fi
+.if n \{\
+.RE
+.\}
+.SH "BEISPIELE"
+.PP
+Angenommen, Sie haben eine Datei namens MeinFilm\&.avi und die Tonspur in einer separaten Datei, z\&.B\&. \(FcMeinFilm\&.wav\(Fo\&. Als erstes m\(:ochten Sie den Ton in
+OggVorbis(TM)
+codieren:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ oggenc \-q4 \-oMeinFilm\&.ogg MeinFilm\&.wav
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+Nach ein paar Minuten k\(:onnen Sie Video und Ton kombinieren:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-o MeinFilm\-mit\-Ton\&.mkv MeinFilm\&.avi MeinFilm\&.ogg
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+Falls Ihr
+AVI
+breits eine Tonspur enth\(:alt, dann wird sie ebenfalls kopiert (wenn
+\fBmkvmerge\fR(1)
+das Audioformat unterst\(:utzt)\&. Um dies zu verhindern, tun Sie einfach Folgendes:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-o MeinFilm\-mit\-Ton\&.mkv \-A MeinFilm\&.avi MeinFilm\&.ogg
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+Nach einigen Minuten \(:Uberlegung rippen Sie eine andere Tonspur, z\&.B\&. die Kommentare des Regisseurs oder eine weitere Sprache f\(:ur
+MeinFilm\-f\(:ugt\-Ton\-hinzu\&.wav\&. Codieren Sie ihn erneut und kombinieren Sie ihn mit der anderen Datei:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ oggenc \-q4 \-oMeinFilm\-f\(:ugt\-Ton\-hinzu\&.ogg MeinFilm\-f\(:ugt\-Ton\-hinzu\&.wav
+$ mkvmerge \-o MM\-komplett\&.mkv MeinFilm\-mit\-Ton\&.mkv MeinFilm\-f\(:ugt\-Ton\-hinzu\&.ogg
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+Dasselbe Ergegnis kann erzielt werden durch
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-o MM\-komplett\&.mkv \-A MeinFilm\&.avi MeinFilm\&.ogg MeinFilm\-f\(:ugt\-Ton\-hinzu\&.ogg
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+Werfen Sie nun
+mplayer(TM)
+an und genie\(ssen Sie\&. Falls Sie mehrere Tonspuren (oder sogar Videospuren) haben, dann k\(:onnen Sie
+mplayer(TM)
+mit den Optionen \(Fc\fB\-vid\fR
+und \(Fc\fB\-aid\fR\(Fo sagen, welche Spuren er abspielen soll\&. Diese sind nullbasiert und unterscheiden nicht zwischen Video und Ton\&.
+.PP
+Falls Sie eine synchronisierte Tonspur ben\(:otigen, k\(:onnen Sie dies einfach erledigen\&. Finden Sie zuerst die Spur\-ID der Vorbis\-Spur heraus mittels
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-\-identify Unsynchron\&.ogg
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+Nun k\(:onnen Sie diese ID in der folgenden Befehlszeile benutzen:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-o Synchron\&.mkv \-A Quelle\&.avi \-y 12345:200 Unsynchron\&.ogg
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+dies w\(:urde 200 ms Stille an den Anfang der Tonspur mit der ID
+\fB12345\fR, die aus \(FcUnsynchron\&.ogg\(Fo stammt, hinzuf\(:ugen\&.
+.PP
+Einige Filme starten korrekt synchronisiert, verlieren jedoch langsam ihre Synchronisierung\&. F\(:ur diese Art von Filmen k\(:onnen Sie einen Verz\(:ogerungsfaktor angeben, der f\(:ur alle Zeitstempel gilt \(en es werden keine Daten hinzugef\(:ugt oder entfernt\&. Falls Sie diesen Faktor zu gro\(ss oder zu klein w\(:ahlen, erhalten Sie schlechte Ergebnisse\&. Ein Beispiel war eine umcodierte Episode, die am Ende des
+\fB77340\fR
+Bilder langen Films um
+\fB0,2\fR
+Sekunden von der Synchronizit\(:at abwich\&. Bei
+\fB29,97 BpS\fR
+entsprechen
+\fB0,2\fR
+Sekunden ungef\(:ahr
+\fB6\fR
+Bildern\&. Also machte ich Folgendes:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-o Synchron\&.mkv \-y 23456:0,77346/77340 Unsynchron\&.mkv
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+Das Resultat war gut\&.
+.PP
+Die Synchronisationsoptionen k\(:onnen auf die gleiche Weise auch f\(:ur Untertitel benutzt werden\&.
+.PP
+F\(:ur Textuntertitel k\(:onnen Sie entweder irgendwelche Windows\-Software (wie
+SubRipper(TM)) oder das Paket
+subrip(TM)
+nehmen, das Sie in den Quellen von
+\fBtranscode\fR(1)
+im Verzeichnis \(Fccontrib/subrip\(Fo finden\&. Allgemein l\(:auft dies so ab:
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 1.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  1." 4.2
+.\}
+Extrahieren eines rohen Untertiteldatenstroms aus der Quelle:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ tccat \-i /Pfad/zur/kopierten/DVD/ \-T 1 \-L | tcextract \-x ps1 \-t vob \-a 0x20 | subtitle2pgm \-o MeinFilm
+.fi
+.if n \{\
+.RE
+.\}
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 2.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  2." 4.2
+.\}
+Umwandlung der resultierenden PGM\-Bilder in Text mit Gocr:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ pgm2txt MeinFilm
+.fi
+.if n \{\
+.RE
+.\}
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 3.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  3." 4.2
+.\}
+Rechtschreibpr\(:ufung der resultierenden Textdateien:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ ispell \-d american *txt
+.fi
+.if n \{\
+.RE
+.\}
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 4.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  4." 4.2
+.\}
+Umwandlung der Textdateien in eine SRT\-Datei:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ srttool \-s \-w \-i MeinFilm\&.srtx \-o MeinFilm\&.srt
+.fi
+.if n \{\
+.RE
+.\}
+.RE
+.PP
+Die resultierende Datei kann als weitere Eingabedatei f\(:ur
+\fBmkvmerge\fR(1)
+benutzt werden:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-o MeinFilm\&.mkv MeinFilm\&.avi MeinFilm\&.srt
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+Falls Sie die Sprache f\(:ur eine gegebene Spur angeben m\(:ochten, geht dies einfach\&. Finden Sie zuerst den ISO 639\-2\-Sprachcode Ihrer Sprache heraus\&.
+\fBmkvmerge\fR(1)
+kann all diese Codes f\(:ur Sie auff\(:uhren:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-\-list\-languages
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+Durchsuchen Sie die Liste nach den Sprachen, die Sie ben\(:otigen\&. Angenommen, Sie haben zwei Tonspuren in eine
+Matroska(TM)\-Datei abgelegt, m\(:ochten ihre Sprachcodes setzen und wollen, dass ihre Spur\-IDs 2 und 3 sind\&. Dies k\(:onnen Sie wie folgt erreichen:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-o mit\-Sprachcodes\&.mkv \-\-language 2:ger \-\-language 3:dut ohne_Sprachcodes\&.mkv
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+Wie Sie sehen, k\(:onnen Sie den Schalter
+\fB\-\-language\fR
+mehrfach verwenden\&.
+.PP
+Vielleicht wollen Sie auch, dass das Abspielprogramm die niederl\(:andische Sprache als Standardsprache verwendet\&. Sie haben au\(sserdem zus\(:atzliche Untertitel, z\&.B\&. auf Englisch und Franz\(:osisch und m\(:ochten, dass das Abspielprogramm sie standardm\(:a\(ssig auf Franz\(:osisch anzeigt\&. Dies k\(:onnen Sie wie folgt erreichen:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-o mit\-Sprachcodes\&.mkv \-\-language 2:ger \-\-language 3:dut \-\-default\-track 3 ohne\-Sprachcodes\&.mkv \-\-language 0:eng english\&.srt \-\-default\-track 0 \-\-language 0:fre french\&.srt
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+Falls Sie in der Ausgabe von
+\fBmkvinfo\fR(1)
+nicht die Sprache oder die Standardspurschalter sehen, die Sie angegeben haben, dann lesen Sie bitte den Abschnitt \(:uber
+Vorgabewerte\&.
+.PP
+Schalten Sie die Komprimierung f\(:ur eine Eingabedatei aus\&.
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-o Unkomprimiert\&.mkv \-\-compression \-1:none MeinFilm\&.avi \-\-compression \-1:none MeinFilm\&.srt
+.fi
+.if n \{\
+.RE
+.\}
+.SH "SPUR-IDS"
+.PP
+Einige der Optionen f\(:ur
+\fBmkvmerge\fR(1)
+ben\(:otigen eine Spur\-ID als Angabe, f\(:ur welche Spur sie gelten\&. Diese Spur\-IDs werden durch die Leseprogramme beim demuxen (Trennen der Datenstr\(:ome) der aktuellen Datei oder wenn
+\fBmkvmerge\fR(1)
+mit der Option
+\fB\-\-identify\fR
+aufgerufen wird, ausgegeben\&. Ein Beispiel f\(:ur einer derartige Ausgabe:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-i v\&.mkv
+Datei \(Fcv\&.mkv\(Fo: Container: Matroska(TM)
+Spur\-ID 1: Video (V_MS/VFW/FOURCC, DIV3)
+Spur\-ID 2: Ton (A_MPEG/L3)
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+Verwechseln Sie nicht die Spur\-IDs, die den Spuren zugewiesen sind, die in der Ausgabe\-MKV\-Datei abgelegt wurden mit den Spur\-IDs der Eingabedateien\&. Nur die Spur\-IDs der Eingabedateien werden f\(:ur Optionen benutzt, die diese Werte ben\(:otigen\&.
+.PP
+Beachten Sie auch, dass jede Eingabedatei ihre eigene Gruppe von Spur\-IDs hat\&. Daher \(:andert sich die Spur\-ID f\(:ur die Datei \(FcDatei1\&.ext\(Fo, die von \(Fcmkvmerge \-\-identify\(Fo gemeldet wurde, nicht, unabh\(:angig davon, wieviele andere Eingabedateien es gibt oder an welcher Stelle \(FcDatei1\&.ext\(Fo benutzt wird\&.
+.PP
+Spur\-IDs werden wie folgt zugeteilt:
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+AVI\-Dateien: Die Videospur hat die ID 0\&. Die Tonspuren bekommen IDs in aufsteigender Reihenfolge, beginnend bei 1\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+AAC\-,
+AC3\-,
+MP3\-,
+SRT\- und
+WAV\-Dateien: Die einzige \(FcSpur\(Fo der Datei erh\(:alt die ID 0\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+Die meisten anderen Dateien: Die Spur\-IDs werden in der Reihenfolge zugeteilt, in der die Spuren in der Datei gefunden werden, beginnend bei 0\&.
+.RE
+.PP
+Die spezielle Spur\-ID \(Fc\fB\-1\fR\(Fo ist ein Platzhalter und wendet den angegebenen Schalter auf alle Spuren an, die aus einer Eingabedatei gelesen werden\&.
+.PP
+Die Optionen, die die Spur\-IDs benutzen, enthalten in der Beschreibung \(FcTID\(Fo\&. Die folgenden Optionen verwenden die Spur\-IDs ebenfalls:
+\fB\-\-audio\-tracks\fR,
+\fB\-\-video\-tracks\fR,
+\fB\-\-subtitle\-tracks\fR,
+\fB\-\-button\-tracks\fR
+und
+\fB\-\-track\-tags\fR\&.
+.SH "UMWANDLUNGEN VON TEXTDATEIEN UND ZEICHENS\(:ATZEN"
+.if n \{\
+.sp
+.\}
+.RS 4
+.it 1 an-trap
+.nr an-no-space-flag 1
+.nr an-break-flag 1
+.br
+.ps +1
+\fBAnmerkung\fR
+.ps -1
+.br
+.PP
+Dieser Abschnitt gilt f\(:ur alle Programme in MKVToolNix, wenn auch nur von
+\fBmkvmerge\fR(1)
+die Rede ist\&.
+.sp .5v
+.RE
+.PP
+Jedweder Text in einer
+Matroska(TM)\-Datei wird in UTF\-8 codiert\&. Das bedeutet, dass
+\fBmkvmerge\fR(1)
+jede Textdatei, die es liest, ebenso wie jeden auf der Befehlszeile angegebenen Text, von einem Zeichensatz nach UTF\-8 umwandeln muss\&. Im Umkehrschluss bedeutet das auch, dass die Ausgaben von
+\fBmkvmerge\fR(1)
+von UTF\-8 in diesen Zeichensatz zur\(:uck umgewandelt werden m\(:ussen, z\&.B\&. falls eine nicht englische \(:Ubersetzung mit
+\fB\-\-ui\-language\fR
+benutzt wird oder f\(:ur einen Text, der aus einer
+Matroska(TM)\-Datei stammt\&.
+.PP
+\fBmkvmerge\fR(1)
+erledigt dies automatisch, basierend auf dem Vorhandensein einer
+Byte\-Reihenfolgenmarkierung, kurz
+BOM
+(Byte Order Marker) oder der aktuellen Locale des Systems\&. Wie der Zeichensatz von der Locale geschlussfolgert wird, h\(:angt vom Betriebssystem ab, auf dem
+\fBmkvmerge\fR(1)
+l\(:auft\&.
+.PP
+Textdateien, die mit einem BOM beginnen, sind bereits in einer Erscheinungsform von UTF codiert\&.
+\fBmkvmerge\fR(1)
+unters\(:utzt die folgenden f\(:unf Modi: UTF\-8, UTF\-16 Little und Big Endian sowie UTF\-32 Little\- und Big Endian\&. Textdateien mit einem BOM werden automatisch in UTF\-8 umgewandelt\&. Alle Parameter, die andernfalls den Zeichensatz einer solchen Datei \(:andern w\(:urden (z\&.B\&.
+\fB\-\-sub\-charset\fR), werden stillschweigend irgnoriert\&.
+.PP
+Auf UNIX\-\(:ahnlichen Systemen benutzt
+\fBmkvmerge\fR(1)
+den Systemaufruf
+\fBsetlocale\fR(3), der wiederum die Umgebungsvariablen
+\fILANG\fR,
+\fILC_ALL\fR
+und
+\fILC_CYPE\fR
+verwendet\&. Der resultierende Zeichensatz stammt oft aus der UTF\-8\- oder der ISO\-8859\-*\-Familie und wird f\(:ur alle Textdateitransaktionen und f\(:ur das Codieren aller Zeichenketten auf der Befehlszeile, sowie die Ausgabe an die Konsole benutzt\&.
+.PP
+Auf Windows gibt es tats\(:achlich zwei verschiedene Zeichens\(:atze, die
+\fBmkvmerge\fR(1)
+aufgrund der Art, wie das Windows\-Shell\-Programm
+\fBcmd\&.exe\fR
+implementiert ist, benutzt\&. Der erste Zeichensatz wird durch Aufrufen des Systemaufrufs
+\fBGetACP()\fR
+bestimmt\&. Dieser Zeichensatz wird als Voreinstellung f\(:ur Textdateiumwandlungen und f\(:ur alle durch
+GUI\-Programme im Paket MKVToolNix angezeigten Elemente verwendet\&.
+.PP
+Ein weiterer Zeichensatz k\(:onnte benutzt werden, falls
+\fBcmd\&.exe\fR
+verwendet wird\&. Das Lesen der Befehlszeile wird jedoch mit der Funktion
+\fBGetCommandLineW()\fR
+erledigt, die bereits eine Unicode\-Zeichenkette zur\(:uckgibt\&. Daher wird die Option
+\fB\-\-command\-line\-charset\fR
+unter Windows ignoriert\&. Die Ausgabe auf die Konsole wird mit der Funktion
+\fBWriteConsoleW()\fR
+realisiert\&. Deshalb wird die Funktion
+\fB\-\-output\-charset\fR
+unter Windows nur benutzt, falls die Ausgabe mit
+\fB\-\-redirect\-output\fR
+umgeleitet wird\&.
+.PP
+Die folgenden Optionen, die die Angabe des Zeichensatzes erm\(:oglichen, existieren:
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+\fB\-\-sub\-charset\fR
+f\(:ur Textuntertiteldateien und \-spuren, die in Containerformaten gespeichert sind, deren Zeichensatz nicht eindeutig bestimmt werden k\(:onnen (z\&.B\&. OGG\-Dateien),
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+\fB\-\-chapter\-charset\fR
+f\(:ur Kapiteltextdateien, sowie Kapitel\- und Dateititel, die in Containerformaten gespeichert sind, deren Zeichensatz nicht eindeutig bestimmt werden kann (z\&.B\&. Ogg\-Dateien f\(:ur Kapitelinformationen, Spur\- und Dateititel etc\&.; MP4\-Dateien f\(:ur Kapitelinformationen),
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+\fB\-\-command\-line\-charset\fR
+f\(:ur alle Zeichenketten auf der Befehlszeile,
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+\fB\-\-output\-charset\fR
+f\(:ur alle auf die Konsole oder in eine Datei geschriebenen Zeichenketten, falls die Ausgabe mit der Option
+\fB\-\-redirect\-output\fR
+umgeleitet wurde\&.
+.RE
+.SH "OPTIONSDATEIEN"
+.PP
+Ein Optionsdatei ist eine Datei aus der
+\fBmkvmerge\fR(1)
+zus\(:atzliche Befehlszeilenargumente lesen kann\&. Diese kann benutzt werden, um bestimmte Beschr\(:ankungen der Shell oder des Betriebssystems wie eine begrenzte L\(:ange der Befehlszeile zu umgehen, wenn externe Programme ausgef\(:uhrt werden\&.
+.PP
+Es gibt mehrere Regeln bez\(:uglich Optionsdateien\&. Zeilen, deren erstes Nichtleerraumzeichen ein Rautenzeichen (\(Fc#\(Fo) ist, werden als Kommentare betrachtet und ignoriert\&. Leerr\(:aume am Anfang und Ende einer Zeile werden entfernt\&. Jede Zeile muss genau eine Option enthalten\&.
+.PP
+Eine Zeile, die sonst nichts enth\(:alt, wird auch ignoriert\&. Ein leeres Argument wird durch die Zeile \(Fc#EMPTY#\(Fo dargestellt\&.
+.PP
+Verschiedene Zeichen k\(:onnen maskiert werden, z\&.B\&. falls Sie m\(:ochten, dass eine Nichtkommentarzeile mit einem \(Fc#\(Fo beginnt\&. Die Regeln werden im
+Abschnitt \(:uber Maskieren von Text
+beschrieben\&.
+.PP
+Beachten Sie, dass R\(:uckw\(:artsschr\(:agstriche immer maskiert werden m\(:ussen\&. Rautenzeichen (\(Fc#\(Fo) m\(:ussen maskiert werden, falls sie keine Kommentarzeile einleiten\&.
+.PP
+Die Befehlszeile \(Fc\fBmkvmerge \-o "Meine Datei\&.mkv" \-A "ein Film\&.avi" Ton\&.ogg\fR\(Fo kann in die folgende Optionsdatei umgewandelt werden:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+# Unter Windows in die Datei \(Fcc:\eMatroska\emeine Datei\&.mkv\(Fo schreiben
+\-o
+c:\e\eMatroska\e\emeine Datei\&.mkv
+# den Titel auf \(Fc#65\(Fo setzen
+\-\-title
+\eh65
+# nur das Video aus \(Fcein Film\&.avi\(Fo nehmen
+\-A
+ein Film\&.avi
+Ton\&.ogg
+.fi
+.if n \{\
+.RE
+.\}
+.SH "SONDERZEICHEN IN TEXT MASKIEREN"
+.PP
+Es gibt ein paar Stellen, an denen Sonderzeichen in Text maskiert werden m\(:ussen oder sollen\&. Die Regeln zum Maskieren sind einfach: Jedes Zeichen, das maskiert werden soll, wird durch einen R\(:uckw\(:artsschr\(:agstrich gefolgt von einem weiteren Zeichen ersetzt\&.
+.PP
+Die Regeln lauten: \(Fc \(Fo (ein Leerzeichen) wird \(Fc\es\(Fo, \(Fc"\(Fo (doppeltes Anf\(:uhrungszeichen) wird \(Fc\e2\(Fo, \(Fc:\(Fo wird \(Fc\ec\(Fo, \(Fc#\(Fo wird \(Fc\eh\(Fo und \(Fc\e\(Fo (ein einfacher R\(:uckw\(:artsschr\(:agstrich selbst) wird \(Fc\e\e\(Fo\&.
+.SH "UNTERTITEL"
+.PP
+Es gibt mehrere Text\- und Bitmap\-Untertitelformate, die in
+Matroska(TM)
+eingebettet werden k\(:onnen\&. Textuntertitel m\(:ussen in UTF\-8 umcodiert werden, so dass sie korrekt durch ein Abspielprogramm angezeigt werden k\(:onnen (Eine Erkl\(:arung, wie
+\fBmkvmerge\fR(1)
+Zeichens\(:atze umwandelt, finden Sie im Abschnitt \(:uber
+Textdateien und Zeichens\(:atze)\&. Kate\-Untertitel sind bereits in UTF\-8 codiert und m\(:ussen nicht erneut codiert werden\&.
+.PP
+Die folgenden Untertitelformate werden derzeit unterst\(:utzt:
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+Subtitle\-Ripper\-Dateien (SRT)
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+Substation Alpha (SSA) / Advanced\-Substation\-Alpha\-Skripte (ASS)
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+Universal\-Subtitle\-Format\-Dateien (USF)
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+OggKate\-Datenstr\(:ome
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+VobSub\-Bitmap\-Untertiteldateien
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+PGS\-Bitmap\-Untertiteldateien, wie sie auf Blu\-Ray\-Discs zu finden sind
+.RE
+.SH "VERKN\(:UPFEN VON DATEIEN"
+.PP
+Matroska(TM)
+unterst\(:utzt das Verkn\(:upfen von Dateien, was einfach hei\(sst, dass eine bestimmte Datei der Vorg\(:anger oder Nachfolger der aktuellen Datei ist\&. Genauer ausgedr\(:uckt werden die Dateien nicht wirklich verkn\(:upft, sondern die
+Matroska(TM)\-Segmente\&. Da die meisten Dateien wahrscheinlich nur ein
+Matroska(TM)\-Segment enthalten werden, benutzen die folgenden Erkl\(:arungen den Begriff \(FcVerkn\(:upfen von Dateien\(Fo, obwohl es eigentlich \(FcVerkn\(:upfen von Segmenten\(Fo hei\(ssen m\(:usste\&.
+.PP
+Jedes Segment wird durch eine eindeutige 128 Bit lange Segment\-UID bezeichnet\&. Diese UID wird automatisch von
+\fBmkvmerge\fR(1)
+erzeugt\&. Das Verkn\(:upfen wird in erster Linie durch Ablegen der Segment\-UIDs (kurz:
+SID) der vorherigen/n\(:achsten Datei in die Segmentkopfdateninformationen erledigt\&.
+\fBmkvinfo\fR(1)
+gibt diese
+SIDs
+aus, falls es sie findet\&.
+.PP
+Falls eine Datei in mehrere kleinere unterteilt wurde und Verkn\(:upfen verwendet wird, dann werden die Zeitstempel nicht wieder bei 0 beginnen\&. Sie werden dort fortfahren, wo die letzte Datei aufh\(:orte\&. Auf diese Weise wird auch dann die absolute Zeit vorgehalten, wenn die vorhergehenden Dateien nicht verf\(:ugbar sind (z\&.B\&. beim \(:Ubertragen)\&. Falls kein Verkn\(:upfen verwendet wird, dann sollten die Zeitstempel f\(:ur jede Datei bei 0 beginnen\&. Standardm\(:a\(ssig verwendet
+\fBmkvmerge\fR(1)
+kein Verkn\(:upfen von Dateien\&. Falls Sie es einschalten m\(:ochten, k\(:onnen Sie dies mit der Option
+\fB\-\-link\fR
+einschalten\&. Diese Option ist nur n\(:utzlich, falls das Aufteilen ebenfalls aktiviert ist\&.
+.PP
+Unabh\(:angig davon, ob Aufteilung aktiv ist oder nicht, kann der Anwender
+\fBmkvmerge\fR(1)
+mitteilen, dass die erstellten Dateien mit speziellen
+SIDs
+verkn\(:upft werden sollen\&. Dies kann mit den Optionen
+\fB\-\-link\-to\-previous\fR
+und
+\fB\-\-link\-to\-next\fR
+erreicht werden\&. Diese Optionen akzeptieren eine Segment\-SID
+in dem von
+\fBmkvinfo\fR(1)
+ausgegebenen Format: 16 hexadezimalen Zahlen zwischen
+\fB0x00\fR
+und
+\fB0xff\fR, denen jeweils \(Fc0x\(Fo vorangestellt wurde, z\&.B\&. \(Fc0x41 0xda 0x73 0x66 0xd9 0xcf 0xb2 0x1e 0xae 0x78 0xeb 0xb4 0x5e 0xca 0xb3 0x93\(Fo\&. Alternativ kann eine k\(:urzere Form benutzt werden: 16 hexadezimalen Zahlen zwischen
+\fB0x00\fR
+und
+\fB0xff\fR
+ohne das vorangestellte \(Fc0x\(Fo und ohne die Leerzeichen, z\&.B\&. \(Fc41da7366d9cfb21eae78ebb45ecab393\(Fo\&.
+.PP
+Falls Aufteilen benutzt wird, dann wird die erste Datei mit der durch
+\fB\-\-link\-to\-previous\fR
+und die letzte mit der durch
+\fB\-\-link\-to\-next\fR
+angegebenen
+SID
+verkn\(:upft\&. Falls kein Aufteilen benutzt wird, dann wird die einzige Ausgabedatei mit beiden
+SIDs
+verkn\(:upft\&.
+.SH "VORGABEWERTE"
+.PP
+Die
+Matroska(TM)\-Spezifikation legt fest, dass einige Elemente Vorgabewerte haben\&. Normalerweise wird ein Element, um Platz zu sparen, nicht in die Datei geschrieben, falls sein Wert dem Vorgabewert entspricht\&. Die Elemente, die der Anwender vielleicht in der Ausgabe von
+\fBmkvinfo\fR(1)
+vermisst, sind
+\fISprache\fR
+und
+\fIStandardspurschalter\fR\&. Der Vorgabewert f\(:ur die
+\fISprache\fR
+ist Englisch (\(Fceng\(Fo) und der Vorgabewert f\(:ur den
+\fIStandardspurschalter\fR
+ist
+\fItrue\fR\&. Daher wird eine Spur, falls Sie
+\fB\-\-language 0:eng\fR
+daf\(:ur verwenden, nicht in der Ausgabe von
+\fBmkvinfo\fR(1)
+erscheinen\&.
+.SH "ANH\(:ANGE"
+.PP
+Vielleicht wollen Sie ein paar Fotos zusammen mit Ihrer
+Matroska(TM)\-Datei aufbewahren oder Sie benutzen
+SSA\-Untertitel und ben\(:otigen eine bestimmte
+TrueType(TM)\-Schrift, die wirklich selten vorkommt\&. In diesen F\(:allen k\(:onnen Sie die Dateien an die
+Matroska(TM)\-Datei anh\(:angen\&. Sie werden nicht nur an die Datei angeh\(:angt, sondern darin eingebettet\&. Ein Abspielprogramm kann dann diese Dateien (im Fall mit den Fotos) anzeigen oder sie zum Rendern der Untertitel (im Fall mit der
+TrueType(TM)\-Schrift) verwenden\&.
+.PP
+Hier nun ein Beispiel, wie eine Foto und eine
+TrueType(TM)\-Schrift an die Ausgabedatei angeh\(:angt werden:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-o Ausgabe\&.mkv \-A Video\&.avi Ton\&.ogg \e
+  \-\-attachment\-description "Die Band und ich hinter der B\(:uhne bei einer kleinen Zusammenkunft" \e
+  \-\-attachment\-mime\-type image/jpeg \e
+  \-\-attach\-file Die_Band_und_ich\&.jpg \e
+  \-\-attachment\-description "Die wirkliche seltene und unglaublich gutaussehende Schrift" \e
+  \-\-attachment\-type application/octet\-stream \e
+  \-\-attach\-file wirkliche_coole_Schrift\&.ttf
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+Falls eine
+Matroska(TM)\-Datei, die Anh\(:ange enth\(:alt, als Eingabedatei benutzt wird, dann wird
+\fBmkvmerge\fR(1)
+die Anh\(:ange in die neue Datei kopieren\&. Die Auswahl, welche Anh\(:ange kopiert werden, kann mit den Optionen
+\fB\-\-attachments\fR
+und
+\fB\-\-no\-attachments\fR
+ge\(:andert werden\&.
+.SH "KAPITEL"
+.PP
+Das
+Matroska(TM)\-Kapitelsystem ist leistungsf\(:ahiger als das alte bekannte System, das von
+OGM\-Dateien benutzt wird\&. Die vollst\(:andige Spezifikation ist auf
+\m[blue]\fBder Matroska(TM)\-Website\fR\m[]\&\s-2\u[1]\d\s+2
+zu finden\&.
+.PP
+\fBmkvmerge\fR(1)
+unterst\(:utzt als Eingabe zwei Arten von Kapiteldateien\&. Das erste Format, \(Fceinfaches Kapitelformat\(Fo genannt, ist dasselbe, das die
+OGM\-Werkzeuge erwarten\&. Das zweite Format ist ein
+XML\-basiertes Kapitelformat, das alle Kapitelfunktionalit\(:aten von
+Matroska(TM)
+unterst\(:utzt\&.
+.SS "Das einfache Kapitelformat"
+.PP
+Dieses Format besteht aus Zeilenpaaren, die mit \(FcCHAPTERxx=\(Fo beziehungsweise \(FcCHAPTERxxNAME=\(Fo beginnen\&. Das erste enth\(:alt den Startzeitstempel, w\(:ahrend das zweite den Titel enth\(:alt\&. Hier ein Beispiel:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+CHAPTER01=00:00:00\&.000
+CHAPTER01NAME=Intro
+CHAPTER02=00:02:30\&.000
+CHAPTER02NAME=Baby prepares to rock
+CHAPTER03=00:02:42\&.300
+CHAPTER03NAME=Baby rocks the house
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+\fBmkvmerge\fR(1)
+wird jedes Zeilenpaar in ein
+Matroska(TM)\-ChapterAtom
+umwandeln\&. Es setzt keine
+ChapterTrackNumber, das hei\(sst, dass alle Kapitel f\(:ur alle Spuren in der Datei gelten\&.
+.PP
+Falls dies eine Textdatei ist, muss m\(:oglicherweise eine Umwandlung des Zeichensatzes durchgef\(:uhrt werden\&. Eine Erkl\(:arung, wie
+\fBmkvmerge\fR(1)
+Zeichens\(:atze umwandelt, finden Sie im Abschnitt \(:uber
+Textdateien und Zeichens\(:atze\&.
+.SS "Das XML\-basierte Kapitelformat"
+.PP
+Das
+XML\-basierte Kapitelformat sieht wie in diesem Beispiel aus:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+<?xml version="1\&.0" encoding="ISO\-8859\-1"?>
+<!DOCTYPE Chapters SYSTEM "Matroska\-Kapitel\&.dtd">
+<Chapters>
+  <EditionEntry>
+    <ChapterAtom>
+      <ChapterTimeStart>00:00:30\&.000</ChapterTimeStart>
+      <ChapterTimeEnd>00:01:20\&.000</ChapterTimeEnd>
+      <ChapterDisplay>
+        <ChapterString>Ein kurzes Kapitel</ChapterString>
+        <ChapterLanguage>eng</ChapterLanguage>
+      </ChapterDisplay>
+      <ChapterAtom>
+        <ChapterTimeStart>00:00:46\&.000</ChapterTimeStart>
+        <ChapterTimeEnd>00:01:10\&.000</ChapterTimeEnd>
+        <ChapterDisplay>
+          <ChapterString>Ein Teil dieses kurzen Kapitels</ChapterString>
+          <ChapterLanguage>eng</ChapterLanguage>
+        </ChapterDisplay>
+      </ChapterAtom>
+    </ChapterAtom>
+  </EditionEntry>
+</Chapters>
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+Mit diesem Format sind drei Dinge m\(:oglich, die mit dem einfachen Kapitelformat nicht m\(:oglich sind:
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 1.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  1." 4.2
+.\}
+Der Zeitstempel f\(:ur das Ende des Kapitels kann gesetzt werden\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 2.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  2." 4.2
+.\}
+Kapitel k\(:onnen verschachtelt werden\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 3.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  3." 4.2
+.\}
+Die Sprache und das Land k\(:onnen gesetzt werden\&.
+.RE
+.PP
+Die Mkvtoolnix\-Distribution enth\(:alt einige Beispieldateien im Unterverzeichnis
+doc, die als Basis benutzt werden k\(:onnen\&.
+.PP
+Im Folgenden werden unterst\(:utzte XML\-Tags, ihre Datentypen und, falls zweckm\(:a\(ssig, der g\(:ultige Bereich f\(:ur ihre Werte aufgef\(:uhrt:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+Chapters (master)
+  EditionEntry (master)
+    EditionUID (unsigned integer, valid range: 1 <= value)
+    EditionFlagHidden (unsigned integer, valid range: 0 <= value <= 1)
+    EditionFlagDefault (unsigned integer, valid range: 0 <= value <= 1)
+    EditionFlagOrdered (unsigned integer, valid range: 0 <= value <= 1)
+    ChapterAtom (master)
+      ChapterAtom (master)
+      ChapterUID (unsigned integer, valid range: 1 <= value)
+      ChapterTimeStart (unsigned integer)
+      ChapterTimeEnd (unsigned integer)
+      ChapterFlagHidden (unsigned integer, valid range: 0 <= value <= 1)
+      ChapterFlagEnabled (unsigned integer, valid range: 0 <= value <= 1)
+      ChapterSegmentUID (binary, valid range: 1 <= length in bytes)
+      ChapterSegmentEditionUID (unsigned integer, valid range: 1 <= value)
+      ChapterPhysicalEquiv (unsigned integer)
+      ChapterTrack (master)
+        ChapterTrackNumber (unsigned integer, valid range: 1 <= value)
+      ChapterDisplay (master)
+        ChapterString (UTF\-8 string)
+        ChapterLanguage (UTF\-8 string)
+        ChapterCountry (UTF\-8 string)
+      ChapterProcess (master)
+        ChapterProcessCodecID (unsigned integer)
+        ChapterProcessPrivate (binary)
+        ChapterProcessCommand (master)
+          ChapterProcessTime (unsigned integer)
+          ChapterProcessData (binary)
+.fi
+.if n \{\
+.RE
+.\}
+.SS "Allgemeine Hinweise"
+.PP
+Beim Aufteilen von Dateien wird
+\fBmkvmerge\fR(1)
+die Kapitel ebenfalls korrekt anpassen\&. Dies bedeutet, dass jede Datei nur die Kapiteleintr\(:age beinhaltet, die f\(:ur die gelten, und dass die Zeitstempel versetzt werden, damit sie zu den neuen Zeitstempeln jeder Ausgabedatei passen\&.
+.PP
+\fBmkvmerge\fR(1)
+kann Kapitel aus
+Matroska(TM)\-Quelldateien kopieren, es sei denn, dies wurde explizit mit der Option
+\fB\-\-no\-chapters\fR
+deaktiviert\&. Die Kapitel aus allen Quellen (Matroska(TM)\-Dateien, Ogg\-Dateien,
+MP4\-Dateien, Kapiteltextdateien) werden \(:ublicherweise nicht zusammengef\(:ugt, landen aber in separaten
+ChapterEditions\&. Nur falls Kapitel aus mehreren
+Matroska(TM)\- oder
+XML\-Dateien gelesen werden, die dieselbe Fassung von UIDs gemeinsam benutzen, werden Kapitel in eine einzige
+ChapterEdition\-Datei zusammengef\(:ugt\&. Falls ein derartiges Zusammenf\(:ugen in anderen Situationen ebenfalls erw\(:unscht ist, dann muss der Anwender zuerst die Kapitel aus allen Quellen mit
+\fBmkvextract\fR(1)
+extrahieren, die
+XML\-Dateien zusammenf\(:ugen und sie dann hinterher multiplexen (ihre Datenstr\(:ome zusammenf\(:ugen)\&.
+.SH "TAGS"
+.SS "Einleitung"
+.PP
+Matroska(TM)
+unterst\(:utzt einen umfangreichen (missbilligten) Satz an Tags und ein neueres, einfacheres System, wie es in den meisten anderen Containern verwandt wird:
+\fISCHL\(:USSEL=WERT\fR\&. In
+Matroska(TM)
+k\(:onnen diese Tags jedoch ebenfalls verschachtelt werden und sowohl
+\fISCHL\(:USSEL\fR
+als auch
+\fIWERT\fR
+sind Elemente f\(:ur sich\&. Die Beispieldatei
+example\-tags\-2\&.xml
+zeigt, wie dieses neue System benutzt wird\&.
+.SS "Geltungsbereich der Tags"
+.PP
+Matroska(TM)\-Tags gelten nicht automatisch f\(:ur die gesamte Datei\&. Sie k\(:onnen, aber sie k\(:onnen auch f\(:ur unterschiedliche Teile der Datei gelten: f\(:ur eine oder mehrere Spuren, f\(:ur ein oder mehrere Kapitel oder sogar f\(:ur eine Kombination von beiden\&.
+\m[blue]\fBDie Matroska(TM)\-Spezifikation\fR\m[]\&\s-2\u[3]\d\s+2
+liefert weitere Einzelheiten zu diesem Umstand\&.
+.PP
+Eine wichtige Tatsache ist, dass Tags mit Spuren oder Kapiteln anhand des Tag\-Elements
+Targets
+verkn\(:upft werden und dass die f\(:ur diese Verkn\(:upfungen verwendeten UIDs
+\fInicht\fR
+die sonst \(:uberall von
+\fBmkvmerge\fR(1)
+benutzten Spur\-IDs sind\&. Stattdessen sind die verwendeten Nummern die UIDs, die
+\fBmkvmerge\fR(1)
+automatisch berechnet (falls die Spur aus einer Datei stammt, die ein anderes Format als
+Matroska(TM)
+hat) oder die aus der Quelldatei kopiert wurden, falls die Quelldatei der Spur eine
+Matroska(TM)\-Datei ist\&. Daher ist es schwierig zu wissen, welche UIDs in dem Tag benutzt werden sollen, bevor die Datei an
+\fBmkvmerge\fR(1)
+\(:ubergeben wurde\&.
+.PP
+\fBmkvmerge\fR(1)
+kennt zwei Optionen, mit denen Sie
+Matroska(TM)\-Dateien Tags hinzuf\(:ugen k\(:onnen: die Optionen
+\fB\-\-global\-tags\fR
+und
+\fB\-\-tags\fR\&. Der Unterschied besteht darin, dass erstere,
+\fB\-\-global\-tags\fR, daf\(:ur sorgen wird, dass die Tags f\(:ur die gesamte Datei gelten, indem diese oben erw\(:ahnten
+Targets\-Elemente entfernt werden\&. Die letztere Option,
+\fB\-\-tags\fR, f\(:ugt automatisch die UID hinzu, die
+\fBmkvmerge\fR(1)
+f\(:ur den mit dem
+\fITID\fR\-Teil der Option
+\fB\-\-tags\fR
+angegebenen Tag erzeugt\&.
+.SS "Beispiel"
+.PP
+Sagen wir mal, Sie m\(:ochten einer aus einem
+AVI
+gelesenen Videospur Tags hinzuf\(:ugen\&.
+\fBmkvmerge \-\-identify Datei\&.avi\fR
+teilt Ihnen mit, dass die ID der Videospur 0 ist (verwechseln Sie diese ID nicht mit der UID)\&. Deshalb erstellen Sie Ihre Tag\-Datei, lassen alle
+Targets\-Elemente weg und rufen
+\fBmkvmerge\fR(1)
+auf:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-o Datei\&.mkv \-\-tags 0:Tags\&.xml Datei\&.avi
+.fi
+.if n \{\
+.RE
+.\}
+.SS "Format der Tag\-Datei"
+.PP
+\fBmkvmerge\fR(1)
+unterst\(:utzt ein
+XML\-basiertes Tag\-Dateifomat\&. Das Format ist sehr eng an
+\m[blue]\fBdie Matroska(TM)\-Spezifikation\fR\m[]\&\s-2\u[3]\d\s+2
+angelehnt\&. Sowohl die Bin\(:ar\- als auch die Quelldistribution von MKVToolNix bringen eine Musterdatei namens
+example\-tags\-2\&.xml
+mit, die einfach alle bekannten Tags auff\(:uhrt und als Basis f\(:ur Tag\-Dateien in der Praxis benutzt werden kann\&.
+.PP
+Die Grundlagen sind:
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+Das \(:au\(sserste Element muss
+<Tags>
+sein\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+Ein logischer Tag ist innerhalb eines Paares von
+<Tag>\-XML\-Tags enthalten\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+Leerzeichen direkt vor und hinter Tag\-Inhalt werden ignoriert\&.
+.RE
+.SS "Datentypen"
+.PP
+Das neue Tag\-System vom
+Matroska(TM)
+kennt nur zwei Datentypen, eine UTF\-8\-Zeichenkette und einen bin\(:aren Typ\&. Erstere wird f\(:ur den Namen und das Element
+<String>
+des Tags benutzt, w\(:ahrend der bin\(:are Typ f\(:ur das Element
+<Binary>
+verwendet wird\&.
+.PP
+Da die bin\(:aren Daten selbst nicht in eine
+XML\-Datei passen w\(:urden, unterst\(:utzt
+\fBmkvmerge\fR(1)
+zwei weitere Methoden zum Speichern bin\(:arer Daten\&. Falls der Inhalt eines
+XML\-Tags mit einem \(Fc@\(Fo beginnt, wird der folgende Text als ein Dateiname angesehen\&. Der zugeh\(:orige Inhalt der Datei wird in das
+Matroska(TM)\-Element kopiert\&.
+.PP
+Andernfalls wird erwartet, dass die Daten
+Base64\-codiert vorliegen\&. Dies ist eine Codierung, die bin\(:are Daten in einen eingeschr\(:ankten Satz von
+ASCII\-Zeichen umwandelt und z\&.B\&. in E\-Mail\-Programmen benutzt wird\&.
+\fBmkvextract\fR(1)
+wird f\(:ur bin\(:are Elemente
+Base64\-codierte Daten ausgeben\&.
+.PP
+Das missbilligte Tag\-System kennt ein paar weitere Datentypen, die in der offiziellen
+Matroska(TM)\-Tag\-Spezifikation zu finden sind\&. Da
+\fBmkvmerge\fR(1)
+dieses System nicht mehr unterst\(:utzt, werden diese Typen hier nicht beschrieben\&.
+.SS "Bekannte Tags des XML\-Dateiformats"
+.PP
+Im Folgenden werden unterst\(:utzte XML\-Tags, ihre Datentypen und, falls zweckm\(:a\(ssig, der g\(:ultige Bereich f\(:ur ihre Werte aufgef\(:uhrt:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+Tags (master)
+  Tag (master)
+    Targets (master)
+      TargetTypeValue (unsigned integer)
+      TargetType (UTF\-8 string)
+      TrackUID (unsigned integer)
+      EditionUID (unsigned integer)
+      ChapterUID (unsigned integer)
+      AttachmentUID (unsigned integer)
+    Simple (master)
+      Simple (master)
+      Name (UTF\-8 string)
+      TagLanguage (UTF\-8 string)
+      DefaultLanguage (unsigned integer)
+      String (UTF\-8 string)
+      Binary (binary)
+.fi
+.if n \{\
+.RE
+.\}
+.SH "DIE SEGMENTINFORMATIONS-XML-DATEIEN"
+.PP
+Mit einer Segmentinformations\-XML\-Datei ist es m\(:oglich, bestimmte Werte im Kopffeld \(Fcsegment information\(Fo einer
+Matroska(TM)\-Datei zu setzen\&. Alle diese Werte k\(:onnen nicht \(:uber andere Befehlszeilenoptionen gesetzt werden\&.
+.PP
+Andere \(Fcsegment information\(Fos\-Kopffelder k\(:onnen \(:uber Befehlszeilenoptionen gesetzt werden, jedoch nicht \(:uber die XML\-Datei\&. Dies umfasst z\&.B\&. die Optionen
+\fB--title\fR
+und
+\fB--timecode-scale\fR\&.
+.PP
+Es gibt andere Elemente, die weder \(:uber Befehlszeilenoptionen noch \(:uber die XML\-Dateien gesetzt werden k\(:onnen\&. Dies beinhaltet die folgenden Elemente:
+\fIDateUTC\fR
+(auch als \(Fcmuxing date\(Fo bekannt),
+\fIMuxingApp\fR,
+\fIWritingApp\fR
+und
+\fIDuration\fR\&. Sie werden immer von
+\fBmkvmerge\fR(1)
+selbst gesetzt\&.
+.PP
+Im Folgenden werden unterst\(:utzte XML\-Tags, ihre Datentypen und, falls zweckm\(:a\(ssig, der g\(:ultige Bereich f\(:ur ihre Werte aufgef\(:uhrt:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+Info (master)
+  SegmentUID (binary, valid range: length in bytes == 16)
+  SegmentFilename (UTF\-8 string)
+  PreviousSegmentUID (binary, valid range: length in bytes == 16)
+  PreviousSegmentFilename (UTF\-8 string)
+  NextSegmentUID (binary, valid range: length in bytes == 16)
+  NextSegmentFilename (UTF\-8 string)
+  SegmentFamily (binary, valid range: length in bytes == 16)
+  ChapterTranslate (master)
+    ChapterTranslateEditionUID (unsigned integer)
+    ChapterTranslateCodec (unsigned integer)
+    ChapterTranslateID (binary)
+.fi
+.if n \{\
+.RE
+.\}
+.SH "MATROSKA(TM)-DATEILAYOUT"
+.PP
+Das
+Matroska(TM)\-Dateilayout ist ziemlich flexibel\&.
+\fBmkvmerge\fR(1)
+wird eine Datei auf eine vordefinierte Art rendern\&. Die resultierende Datei sieht wie folgt aus:
+.PP
+[EBML head] [segment {meta seek #1} [segment information] [track information] {attachments} {chapters} [cluster 1] {cluster 2} \&... {cluster n} {cues} {meta seek #2} {tags}]
+.PP
+Die Elemente in geschweiften Klammern sind optional und h\(:angen vom Inhalt und den benutzten Optionen ab\&. Ein paar Anmerkungen:
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+\(Fcmeta seek #1\(Fo beinhaltet nur eine kleine Zahl von Elementen der Stufe eins und das nur, falls sie tats\(:achlich existieren: Anh\(:ange, Kapitel, Indizes, Tags, \(Fcmeta seek #2\(Fo\&. \(:Altere Versionen von
+\fBmkvmerge\fR(1)
+legten auch die Cluster in dieses Metasuchelement ab\&. Daher wurden einige ungenaue Annahmen n\(:otig, um ausreichend Platz zu reservieren\&. Dies schlug oft fehl\&. Nun werden nur die Cluster in \(Fcmeta seek #2\(Fo gespeichert und \(Fcmeta seek #1\(Fo verweist auf das Metasuchelement #2\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+Anhang\-, Kapitel\- und Tag\-Elemente sind nur vorhanden, falls sie hinzugef\(:ugt wurden\&.
+.RE
+.PP
+Die k\(:urzest m\(:ogliche
+Matroska(TM)\-Datei w\(:urde etwa so aussehen:
+.PP
+[EBML head] [segment [segment information] [track information] [cluster 1]]
+.PP
+Dies k\(:onnte bei reinen Tondateien der Fall sein\&.
+.SH "EXTERNE ZEITSTEMPELDATEIEN"
+.PP
+\fBmkvmerge\fR(1)
+erlaubt dem Benutzer, die Zeitstempel f\(:ur eine bestimmte Spur selbst auszuw\(:ahlen\&. Dies kann benutzt werden, um Dateien mit variabler Videobildrate zu erstellen oder L\(:ucken in den Ton einzuarbeiten\&. In diesem Fall ist ein Bild die Einheit, die
+\fBmkvmerge\fR(1)
+separat pro
+Matroska(TM)\-Block erstellt\&. F\(:ur Video ist dies genau ein Bild, f\(:ur Ton ist dies ein Paket des speziellen Audiotyps\&. Dies w\(:are z\&.B\&. f\(:ur
+AC3
+ein Paket, das
+\fB1536\fR\-Samples enth\(:alt\&.
+.PP
+Zeitstempeldateien, die benutzt werden, wenn Spuren aneinander angeh\(:angt werden, d\(:urfen nur f\(:ur den ersten Teil in einer Kette von Spuren angegeben werden\&. Falls Sie zum Beispiel zwei Dateien, v1\&.avi und v2\&.avi, anh\(:angen und dabei Zeitstempel verwenden m\(:ochten, muss Ihre Befehlszeile etwa so aussehen:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \&... \-\-timecodes 0:meine_Zeitstempel\&.txt v1\&.avi +v2\&.avi
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+Es gibt vier Formate, die
+\fBmkvmerge\fR(1)
+bekannt sind\&. Die erste Zeile enth\(:alt immer die Versionsnummer\&. Leere Zeilen, Zeilen, die nur Leerr\(:aume enthalten und Zeilen, die mit \(Fc#\(Fo beginnen, werden ignoriert\&.
+.SS "Zeitstempeldateiformat v1"
+.PP
+Dieses Format beginnt mit der Versionszeile\&. Die zweite Zeile deklariert die Standardanzahl von Bildern pro Sekunde (BpS)\&. Alle folgenden Zeilen enthalten drei durch Kommas getrennte Zahlen: das Startbild (\fB0\fR
+ist das erste Bild), das Endbild und die Anzahl der Bilder in diesem Bereich\&. Die
+BpS
+sind eine Flie\(sskommazahl mit dem Punkt \(Fc\&.\(Fo als Dezimalpunkt\&. Die Bereiche k\(:onnen L\(:ucken enthalten, f\(:ur die die Standard\-BpS
+benutzt werden\&. Ein Beispiel:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+# Zeitstempelformat v1
+assume 27\&.930
+800,1000,25
+1500,1700,30
+.fi
+.if n \{\
+.RE
+.\}
+.SS "Zeitstempeldateiformat v2"
+.PP
+In diesem Format enth\(:alt jede Zeile einen Zeitstempel f\(:ur das zugeh\(:orige Bild\&. Dieser Zeitstempel muss mit einer Genauigkeit von Millisekunden angegeben werden\&. Er kann eine Flie\(sskommazahl sein, muss aber nicht\&. Sie
+\fIm\(:ussen\fR
+mindestens so viele Zeitstempelzeilen angeben, wie es Bilder in der Spur gibt\&. Die Zeitstempel m\(:ussen sortiert sein\&. Beispiel f\(:ur 25 bps:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+# Zeitstempelformat v2
+0
+40
+80
+.fi
+.if n \{\
+.RE
+.\}
+.SS "Zeitstempeldateiformat v3"
+.PP
+In diesem Format enth\(:alt jede Zeile eine Dauer in Sekunden, gefolgt von einer optionalen Zahl von Bildern pro Sekunde\&. Beide k\(:onnen Flie\(sskommazahlen sein\&. Falls die Zahl der Bilder pro Sekunde nicht vorliegt, wird die Voreinstellung benutzt\&. F\(:ur Audio sollten Sie den Codec die Bildzeitstempel selbst berechnen lassen\&. Dazu sollten Sie
+\fB0,0\fR
+als Anzahl der Bilder pro Sekunde verwenden\&. Sie k\(:onnen auch L\(:ucken im Datenstrom erzeugen, indem Sie das Schl\(:usselwort \(Fcgap\(Fo gefolgt von der Dauer der L\(:ucke benutzen\&. Beispiel einer Audiodatei:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+# Zeitstempelformat v3
+assume 0\&.0
+25\&.325
+7\&.530,38\&.236
+gap, 10\&.050
+2\&.000,38\&.236
+.fi
+.if n \{\
+.RE
+.\}
+.SS "Zeitstempeldateiformat v4"
+.PP
+Dieses Format ist identisch mit dem Format v2\&. Der einzige Unterschied besteht darin, dass Zeitstempel nicht sortiert werden m\(:ussen\&. Dieses Format sollte so gut wie nie benutzt werden\&.
+.SH "R\(:UCKGABEWERTE"
+.PP
+\fBmkvmerge\fR(1)
+beendet sich mit einem von drei R\(:uckgabewerten:
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+\fB0\fR
+\(en dieser R\(:uckgabewert bedeutet, dass das Muxing erfolgreich abgeschlossen wurde\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+\fB1\fR
+\(en in diesem Fall hat
+\fBmkvmerge\fR(1)
+mindestens eine Warnung ausgegeben, das Muxing wurde aber fortgesetzt\&. Einer Warnung wird der Text \(FcWarning:\(Fo vorangestellt\&. Abh\(:angig von den autgetretenen Problemen k\(:onnen die resultierenden Dateien in Ordnung sein oder nicht\&. Dem Anwender wird nachdr\(:ucklich geraten, sowohl die Warnung als auch die resultierende Datei zu \(:uberpr\(:ufen\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+\fB2\fR
+\(en dieser R\(:uckgabewert wird benutzt, nachdem ein Fehler aufgetreten ist\&.
+\fBmkvmerge\fR(1)
+wird gleich nach der Ausgabe der Fehlermeldung abgebrochen\&. Fehlermeldungen reichen von falschen Befehlszeilenargumenten \(:uber Lese\-/Schreibfehler bis hin zu besch\(:adigten Dateien\&.
+.RE
+.SH "UMGEBUNGSVARIABLEN"
+.PP
+\fBmkvmerge\fR(1)
+verwendet die Standardvariablen, die die Locale des System bestimmen (d\&.h\&.
+\fILANG\fR
+und die
+\fILC_*\fR\-Familie)\&. Zus\(:atzliche Variablen:
+.PP
+\fIMKVTOOLNIX_DEBUG\fR und ihre Kurzform \fIMTX_DEBUG\fR
+.RS 4
+Der Inhalt wird behandelt, als ob er mit der Option
+\fB\-\-debug\fR
+\(:ubergeben worden w\(:are\&.
+.RE
+.PP
+\fIMKVTOOLNIX_ENGAGE\fR und ihre Kurzform \fIMTX_ENGAGE\fR
+.RS 4
+Der Inhalt wird behandelt, als ob er mit der Option
+\fB\-\-engage\fR
+\(:ubergeben worden w\(:are\&.
+.RE
+.PP
+\fIMKVTOOLNIX_OPTIONS\fR und ihre Kurzform \fIMTX_OPTIONS\fR
+.RS 4
+Der Inhalt wird bei Leerr\(:aumen aufgeteilt\&. Die resultierenden Teilzeichenketten werden behandelt, als ob sie als Befehlszeilenoptionen \(:ubergeben worden w\(:aren\&. Falls Sie Sonderzeichen \(:ubergeben m\(:ochten (z\&.B\&. Leerzeichen), m\(:ussen Sie sie maskieren (siehe
+den Abschnitt \(:uber Maskieren von Sonderzeichen in Text)\&.
+.RE
+.SH "SIEHE AUCH"
+.PP
+\fBmkvinfo\fR(1),
+\fBmkvextract\fR(1),
+\fBmkvpropedit\fR(1),
+\fBmmg\fR(1)
+.SH "WWW"
+.PP
+Die neuste Version kann immer auf
+\m[blue]\fBder MKVToolNix\-Homepage\fR\m[]\&\s-2\u[4]\d\s+2
+gefunden werden\&.
+.SH "AUTOR"
+.PP
+\fBMoritz Bunkus\fR <\&moritz@bunkus\&.org\&>
+.RS 4
+Entwickler
+.RE
+.SH "FU\(ssNOTEN"
+.IP " 1." 4
+die
+Matroska(TM)-Website
+.RS 4
+\%http://www.matroska.org/
+.RE
+.IP " 2." 4
+IANA-Homepage
+.RS 4
+\%http://www.iana.org/assignments/media-types/
+.RE
+.IP " 3." 4
+Die
+Matroska(TM)-Spezifikation
+.RS 4
+\%http://matroska.org/technical/specs/index.html
+.RE
+.IP " 4." 4
+der MKVToolNix-Homepage
+.RS 4
+\%http://www.bunkus.org/videotools/mkvtoolnix/
+.RE

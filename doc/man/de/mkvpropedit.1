@@ -1,0 +1,737 @@
+'\" t
+.\"     Title: mkvpropedit
+.\"    Author: Moritz Bunkus <moritz@bunkus.org>
+.\" Generator: DocBook XSL Stylesheets v1.78.1 <http://docbook.sf.net/>
+.\"      Date: 2013-09-16
+.\"    Manual: Benutzerbefehle
+.\"    Source: MKVToolNix 6.4.1
+.\"  Language: German
+.\"
+.TH "MKVPROPEDIT" "1" "2013\-09\-16" "MKVToolNix 6\&.4\&.1" "Benutzerbefehle"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+mkvpropedit \- \(:andert Eigenschaften von existierenden Matroska(TM)\-Dateien ohne ein komplett neues Muxing\&.
+.SH "\(:UBERSICHT"
+.HP \w'\fBmkvpropedit\fR\ 'u
+\fBmkvpropedit\fR [Optionen] {Quelldateiname} {Aktionen}
+.SH "BESCHREIBUNG"
+.PP
+Dieses Programm analysiert eine existierende
+Matroska(TM)\-Datei und \(:andert einige ihrer Eigenschaften\&. Dann schreibt es diese \(:Anderungen in die existierende Datei\&. Unter den Eigenschaften, die ge\(:andert werden k\(:onnen, sind die Segmentinformationselemente (z\&.B\&. der Titel) und die Spurenkopfdaten (z\&.B\&. der Sprachcode, der Scahlter \(FcStandardspur\(Fo oder der Name)\&.
+.PP
+Optionen:
+.PP
+\fB\-l\fR, \fB\-\-list\-property\-names\fR
+.RS 4
+f\(:uhrt alle bekannten und bearbeitbaren Eigenschaftsnamen, ihren Typ (Zeichenkette, Ganzzahl, Boolean etc\&.) und eine kurze Beschreibung auf\&. Das Programm beendet sich anschlie\(ssend\&. Daher muss der Parameter
+\fIQuelldateiname\fR
+nicht mitgegeben werden\&.
+.RE
+.PP
+\fB\-p\fR, \fB\-\-parse\-mode\fR \fIModus\fR
+.RS 4
+setzt den Auswertungsmodus\&. Der Parameter
+\fIModus\fR
+kann entweder \(Fcfast\(Fo (was auch die Voreinstellung ist) oder \(Fcfull\(Fo sein\&. Der Modus \(Fcfast\(Fo wertet nicht die ganze Datei aus, benutzt aber die Metasuchelemente zum Orten der ben\(:otigten Elemente der Quelldatei\&. In 99% der F\(:alle reicht dies\&. Aber f\(:ur Dateien, die keine Metasuchelemente enthalten oder besch\(:adigt sind, kann es notwendig sein, dass der Anwender den Auswertungsmodus \(Fcfull\(Fo benutzt\&. Ein vollst\(:andiger Scan einer Datei kann ein paar Minuten in Anspruch nehmen, w\(:ahrend ein schneller Scan nur Sekunden dauert\&.
+.RE
+.PP
+Aktionen, die mit Eigenschaften von Spur\- und Segmentinformationen umgehen:
+.PP
+\fB\-e\fR, \fB\-\-edit\fR \fISelektor\fR
+.RS 4
+setzt den
+Matroska(TM)\-Dateiabschnitt (Segmentinformationen oder die Kopfdaten einer bestimmten Spur), mit der alle nachfolgenden
+add\-,
+set\- und
+delete\-Aktionen arbeiten\&. Diese Option kann mehrfach benutzt werden, um \(:Anderungen an mehr als einem Element vorzunehmen\&.
+.sp
+Standardm\(:a\(ssig wird
+\fBmkvpropedit\fR(1)
+den Segmentinformationsabschnitt bearbeiten\&.
+.sp
+Eine vollst\(:andige Beschreibung der Syntax finden Sie im Abschnitt \(:uber
+Selektoren zur Bearbeitung\&.
+.RE
+.PP
+\fB\-a\fR, \fB\-\-add\fR \fIName\fR=\fIWert\fR
+.RS 4
+f\(:ugt die Eigenschaft
+\fIName\fR
+mit dem Wert
+\fIWert\fR
+hinzu\&. Die Eigenschaft wird selbst dann hinzugef\(:ugt, wenn eine derartige Eigenschaft bereits existiert\&. Beachten Sie, dass die meisten Eigenschaften eindeutig sind und nicht \(:ofter als einmal auftreten k\(:onnen\&.
+.RE
+.PP
+\fB\-s\fR, \fB\-\-set\fR \fIName\fR=\fIWert\fR
+.RS 4
+setzt alle Vorkommen der Eigenschaft
+\fIName\fR
+auf den Wert
+\fIWert\fR\&. Falls keine derartige Eigenschaft existiert, wird sie hinzugef\(:ugt\&.
+.RE
+.PP
+\fB\-d\fR, \fB\-\-delete\fR \fIName\fR
+.RS 4
+l\(:oscht alle Vorkommen der Eigenschaft
+\fIName\fR\&. Beachten Sie, dass einige Eigenschaften ben\(:otigt werden und nicht gel\(:oscht werden k\(:onnen\&.
+.RE
+.PP
+Aktionen, die mit Tags und Kapitel umgehen:
+.PP
+\fB\-t\fR, \fB\-\-tags\fR \fISelektor\fR:\fIDateiname\fR
+.RS 4
+f\(:ugt in der Datei Tags hinzu, ersetzt sie durch die aus
+\fIDateiname\fR
+oder entfernt sie, falls
+\fIDateiname\fR
+leer ist\&.
+\fBmkvpropedit\fR(1)
+liest dasselbe XML\-Tag\-Format, das auch
+\fBmkvmerge\fR(1)
+liest\&.
+.sp
+Der
+\fISelektor\fR
+muss eines der W\(:orter
+\fBall\fR,
+\fBglobal\fR
+oder
+\fBtrack\fR
+sein\&. Bei
+\fBall\fR
+wird
+\fBmkvpropedit\fR(1)
+alle Tags in einer Datei ersetzen oder entfernen\&. Bei
+\fBglobal\fR
+werden nur globale Tags ersetzt oder entfernt\&.
+.sp
+Bei
+\fBtrack\fR
+wird
+\fBmkvpropedit\fR(1)
+Tags f\(:ur eine bestimmte Spur ersetzen\&. Zus\(:atzlich werden die aus
+\fIDateiname\fR
+gelesenen Tags derselben Spur zugeteilt\&. Die Spur wird auf dieselbe Weise angegeben wie die
+Selektoren zur Bearbeitung
+(siehe unten), z\&.B\&.
+\-\-tags track:a1:neue\-Audio\-Tags\&.xml\&.
+.RE
+.PP
+\fB\-c\fR, \fB\-\-chapters\fR \fIDateiname\fR
+.RS 4
+f\(:ugt in der Datei Kapitel aus
+\fIDateiname\fR
+hinzu, ersetzt sie dadurch oder entfernt sie, falls
+\fIDateiname\fR
+leer ist\&.
+\fBmkvpropedit\fR(1)
+liest dieselben XML\- und Kapitelformate, die auch
+\fBmkvmerge\fR(1)
+liest\&.
+.RE
+.PP
+Aktionen f\(:ur den Umgang mit Anh\(:angen:
+.PP
+\fB\-\-add\-attachment\fR \fIDateiname\fR
+.RS 4
+f\(:ugt einen neuen Anhang aus
+\fIDateiname\fR
+hinzu\&.
+.sp
+Falls die Option
+\fB\-\-attachment\-name\fR
+vor dieser Option benutzt wurde, wird ihr Wert als Name des neuen Anhangs verwendet\&. Andernfalls wird er aus
+\fIDateiname\fR
+abgeleitet\&.
+.sp
+Falls die Option
+\fB\-\-attachment\-mime\-type\fR
+vor dieser Option benutzt wurde, wird ihr Wert als MIME\-Typ des neuen Anhangs verwendet\&. Andernfalls wird er automatisch anhand des Inhalts von
+\fIDateiname\fR
+bestimmt\&.
+.sp
+Falls die Option
+\fB\-\-attachment\-description\fR
+vor dieser Option benutzt wurde, wird ihr Wert als Beschreibung des neuen Anhangs verwendet\&. Andernfalls wird keine Beschreibung hinterlegt\&.
+.RE
+.PP
+\fB\-\-replace\-attachment\fR \fISelektor\fR:\fIDateiname\fR
+.RS 4
+ersetzt einen oder mehrere Anh\(:ange, die zum
+\fISelektor\fR
+passen, durch die Datei
+\fIDateiname\fR\&. Falls mehr als ein existierender Anhang zum
+\fISelektor\fR
+passt, werden alle ihre Inhalte durch den Inhalt von
+\fIDateiname\fR
+ersetzt\&.
+.sp
+Der
+\fISelektor\fR
+kann eine von vier Formen haben\&. Sie werden unten im Abschnitt
+Anhangauswahlpunkte
+erkl\(:art\&.
+.sp
+Falls die Option
+\fB\-\-attachment\-name\fR
+vor dieser Option benutzt wurde, wird ihr Wert als Name des ersetzten Anhangs verwendet\&. Andernfalls wird der Name nicht ge\(:andert\&.
+.sp
+Falls die Option
+\fB\-\-attachment\-mime\-type\fR
+vor dieser Option benutzt wurde, wird ihr Wert als MIME\-Typ des ersetzten Anhangs verwendet\&. Andernfalls wird der MIME\-Typ nicht ge\(:andert\&.
+.sp
+Falls die Option
+\fB\-\-attachment\-description\fR
+vor dieser Option benutzt wurde, wird ihr Wert als Beschreibung des ersetzten Anhangs verwendet\&. Andernfalls wird die Beschreibung nicht ge\(:andert\&.
+.RE
+.PP
+\fB\-\-delete\-attachment\fR \fISelektor\fR
+.RS 4
+l\(:oscht einen oder mehrere Anh\(:ange, die zum
+\fISelektor\fR
+passen\&.
+.sp
+Der
+\fISelektor\fR
+kann eine von vier Formen haben\&. Sie werden unten im Abschnitt
+Anhangauswahlpunkte
+erkl\(:art\&.
+.RE
+.PP
+Optionen f\(:ur Aktionen mit Anh\(:angen:
+.PP
+\fB\-\-attachment\-name\fR \fIName\fR
+.RS 4
+setzt den Namen, der f\(:ur die nachfolgende
+\fB\-\-add\-attachment\fR\- oder
+\fB\-\-replace\-attachment\fR\-Transaktion benutzt wird\&.
+.RE
+.PP
+\fB\-\-attachment\-mime\-type\fR \fIMIME\-Typ\fR
+.RS 4
+setzt den MIME\-Typ, der f\(:ur die nachfolgende
+\fB\-add\-attachment\fR\- oder
+\fB\-\-replace\-attachment\fR\-Transaktion benutzt wird\&.
+.RE
+.PP
+\fB\-\-attachment\-description\fR \fIBeschreibung\fR
+.RS 4
+setzt die Beschreibung, die f\(:ur die nachfolgende
+\fB\-add\-attachment\fR\- oder
+\fB\-\-replace\-attachment\fR\-Transaktion benutzt wird\&.
+.RE
+.PP
+Weitere Optionen:
+.PP
+\fB\-\-command\-line\-charset\fR \fIZeichensatz\fR
+.RS 4
+setzt den Zeichensatz, um auf der Befehlszeile angegebene Zeichenketten umzuwandeln\&. Voreinstellung ist der Zeichensatz der aktuellen Locale des Systems\&.
+.RE
+.PP
+\fB\-\-output\-charset\fR \fIZeichensatz\fR
+.RS 4
+setzt den Zeichensatz, in den Zeichenketten zur Ausgabe umgewandelt werden\&. Voreinstellung ist der Zeichensatz der aktuellen Locale des Systems\&.
+.RE
+.PP
+\fB\-r\fR, \fB\-\-redirect\-output\fR \fIDateiname\fR
+.RS 4
+schreibt alle Nachrichten in die Datei
+\fIDateiname\fR
+statt auf die Konsole\&. Obwohl dies einfach durch Ausgabeumleitung erledigt werden kann, gibt es F\(:alle, in denen diese Option ben\(:otigt wird: wenn das Terminal die Ausgabe vor dem Schreiben in eine Datei neu auswertet\&. Der mit
+\fB\-\-output\-charset\fR
+gesetzte Zeichensatz wird dabei ber\(:ucksichtigt\&.
+.RE
+.PP
+\fB\-\-ui\-language\fR \fICode\fR
+.RS 4
+erzwingt, dass die \(:Ubersetzungen f\(:ur die Sprache
+\fICode\fR
+benutzt werden (z\&.B\&. \(Fcde_DE\(Fo f\(:ur die deutschen \(:Ubersetzungen)\&. Vorzugsweise sollten jedoch die Umgebungsvariablen
+\fILANG\fR,
+\fILC_MESSAGES\fR
+und
+\fILC_ALL\fR
+benutzt werden\&. Die Eingabe von \(Fclist\(Fo als
+\fICode\fR
+wird
+\fBmkvextract\fR(1)
+veranlassen, eine Liste der verf\(:ugbaren \(:Ubersetzungen auszugeben\&.
+.RE
+.PP
+\fB\-\-debug\fR \fIThema\fR
+.RS 4
+schaltet die Fehlersuche f\(:ur eine bestimmte Funktionalit\(:at ein\&. Diese Option ist nur f\(:ur Entwicker n\(:utzlich\&.
+.RE
+.PP
+\fB\-\-engage\fR \fIFunktionalit\(:at\fR
+.RS 4
+schaltet experimentelle Funktionalit\(:aten ein\&. Eine Liste verf\(:ugbarer Funktionalit\(:aten kann mit
+\fBmkvpropedit \-\-engage list\fR
+abgefragt werden\&. Diese Funktionalit\(:aten sind nicht f\(:ur die Verwendung in Alltagssituationen gedacht\&.
+.RE
+.PP
+\fB\-v\fR, \fB\-\-verbose\fR
+.RS 4
+detaillierte Ausgabe, zeigt alle wichtigen
+Matroska(TM)\-Elemente, so wie sie gelesen wurden\&.
+.RE
+.PP
+\fB\-h\fR, \fB\-\-help\fR
+.RS 4
+zeigt Benutzungsinformationen und beendet sich\&.
+.RE
+.PP
+\fB\-V\fR, \fB\-\-version\fR
+.RS 4
+zeigt Versionsinformationen und beendet sich\&.
+.RE
+.PP
+\fB\-\-check\-for\-updates\fR
+.RS 4
+pr\(:uft online durch Herunterladen der URL
+\m[blue]\fBhttp://mkvtoolnix\-releases\&.bunkus\&.org/latest\-release\&.xml\fR\m[], ob es neue Ver\(:offentlichungen gibt\&. Vier Zeilen werden im Stil
+Schl\(:ussel=Wert
+ausgegeben: die URL, von der die Informationen bezogen wurden (Schl\(:ussel
+version_check_url), die aktuell laufende Version (Schl\(:ussel
+running_version), die Version der neusten Ver\(:offentlichung (Schl\(:ussel
+available_version) und die Download\-URL (Schl\(:ussel
+download_url)\&.
+.sp
+Anschlie\(ssend beendet sich das Programm mit einem R\(:uckgabewert von 0, falls keine neuere Ver\(:offentlichung verf\(:ugbar ist, mit 1, wenn eine neuere Ver\(:offentlichung verf\(:ugbar ist und mit 2, falls ein Fehler auftritt (z\&.B\&., wenn die Aktualisierungsinformationen nicht abgefragt werden konnten)\&.
+.sp
+Diese Option ist nur verf\(:ugbar, falls das Programm mit Unterst\(:utzung f\(:ur Libcurl gebaut wurde\&.
+.RE
+.PP
+\fB@\fR\fIOptionsdatei\fR
+.RS 4
+liest zus\(:atzliche Befehlszeilenargumente aus der Datei
+\fIOptionsdatei\fR\&. Zeilen, deren erstes Nichtleerraumzeichen ein Rautenzeichen (\(Fc#\(Fo) ist, werden als Kommentare betrachtet und ignoriert\&. Leerr\(:aume am Anfang und Ende einer Zeile werden abgeschnitten\&. Jede Zeile darf genau eine Option enthalten\&.
+.sp
+Verschiedene Zeichen k\(:onnen maskiert werden, z\&.B\&. falls Sie m\(:ochten, dass eine Nichtkommentarzeile mit einem \(Fc#\(Fo beginnt\&. Die Regeln werden im
+Abschnitt \(:uber Maskieren von Text
+beschrieben\&.
+.sp
+Die Befehlszeile \(Fc\fBmkvpropedit Quelle\&.mkv \-\-edit track:a2 \-\-set name=Kommentare\fR\(Fo kann in die folgende Optionsdatei umgewandelt werden:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+# Quelle\&.mkv \(:andern
+Quelle\&.mkv
+# die zweite Tonspur bearbeiten
+\-\-edit
+track:a2
+# und den Titel auf \(FcKommentare\(Fo setzen
+\-\-set
+name=Kommentare
+.fi
+.if n \{\
+.RE
+.\}
+.RE
+.SH "SELEKTOREN ZUR BEARBEITUNG"
+.PP
+Die Option
+\fB\-\-edit\fR
+setzt den
+Matroska(TM)\-Dateiabschnitt (Segmentinformationen oder die Kopfdaten einer bestimmten Spur) so, dass alle nachfolgenden
+add\-,
+set\- und
+delete\-Aktionen damit arbeiten\&. Dies bleibt g\(:ultig, bis die n\(:achste
+\fB\-\-edit\fR\-Option gefunden wird\&. Das Argument f\(:ur diese Option wird Selektor zur Bearbeitung genannt\&.
+.PP
+Standardm\(:a\(ssig wird
+\fBmkvpropedit\fR(1)
+den Segmentinformationsabschnitt bearbeiten\&.
+.SS "Segmentinformation"
+.PP
+Die Segmentinformation kann mit einem dieser drei W\(:orter ausgew\(:ahlt werden: \(Fcinfo\(Fo, \(Fcsegment_info\(Fo oder \(Fcsegmentinfo\(Fo\&. Sie enth\(:alt Eigenschaften wie den Segmenttitel oder die
+UID
+des Segments\&.
+.SS "Spurenkopfdaten"
+.PP
+Spurenkopfdaten k\(:onnen mit einem etwas komplexeren Selektor ausgew\(:ahlt werden\&. Alle Varianten beginnen mit \(Fctrack:\(Fo\&. Die Spurenkopfdaten beinhalten Elemente wie den Sprachcode, den \(FcStandardspur\(Fo\-Schalter oder den Namen der Spur\&.
+.PP
+\fBtrack:\fR\fIn\fR
+.RS 4
+Falls der Parameter
+\fIn\fR
+eine Zahl ist, wird die
+\fIn\fR\&. Spur ausgew\(:ahlt\&. Die Reihenfolge der Spuren ist dieselbe, die die Option
+\fB\-\-identify\fR
+von
+\fBmkvmerge\fR(1)
+ausgibt\&.
+.sp
+Die Nummerierung beginnt bei 1\&.
+.RE
+.PP
+\fBtrack:\fR\fIt\fR\fIn\fR
+.RS 4
+Falls der Parameter mit einem einzelnen Zeichen
+\fIt\fR
+gefolgt von einem
+\fIn\fR
+beginnt, wird die
+\fIn\fR\&. Spur eines speziellen Spurtyps ausgew\(:ahlt\&. Der Spurtypparameter
+\fIt\fR
+muss eines der folgenden Zeichen sein: \(Fca\(Fo f\(:ur eine Tonspur, \(Fcb\(Fo f\(:ur eine Button\-Spur \(Fcs\(Fo f\(:ur eine Untertitelspur und \(Fcv\(Fo f\(:ur eine Videospur\&. Die Reihenfolge der Spuren ist diesselbe wie die der Ausgabe der
+\fBmkvmerge\fR(1)\-Option
+\fB\-\-identify\fR\&.
+.sp
+Die Nummerierung beginnt bei 1\&.
+.RE
+.PP
+\fBtrack:\fR=\fIUID\fR
+.RS 4
+Falls der Parameter mit einem \(Fc=\(Fo gefolgt von einer Zahl
+\fIUID\fR
+beginnt, wird die Spur ausgew\(:ahlt, deren Spur\-UID
+dieser
+\fIUID\fR
+entspricht\&. Spur\-UIDs k\(:onnen mit
+\fBmkvinfo\fR(1)
+abgefragt werden\&.
+.RE
+.PP
+\fBtrack:\fR@\fINummer\fR
+.RS 4
+Falls der Parameter mit einem \(Fc@\(Fo gefolgt von einer Nummer
+\fINummer\fR
+beginnt, wird die Spur ausgew\(:ahlt, deren Spurnummer dieser
+\fINummer\fR
+entspricht\&. Spurnummern k\(:onnen mit
+\fBmkvinfo\fR(1)
+abgefragt werden\&.
+.RE
+.SS "Hinweise"
+.PP
+Aufgrund der Natur der Spurauswahlpunkte zur Bearbeitung ist es m\(:oglich, dass tats\(:achlich mehrere Selektoren zu den Kopfdaten derselben Spur passen\&. In diesen F\(:allen werden alle Aktionen f\(:ur diese Selektoren zur Bearbeitung kombiniert und in der Reihenfolge ausgef\(:uhrt, in der sie auf der Befehlszeile angegeben wurden\&.
+.SH "SELEKTOREN F\(:UR ANH\(:ANGE"
+.PP
+Ein Selektor f\(:ur Anh\(:ange wird in den beiden Aktionen
+\fB\-\-replace\-attachment\fR
+und
+\fB\-\-delete\-attachment\fR
+benutzt\&. Er kann eine der folgenden vier Formen haben:
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 1.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  1." 4.2
+.\}
+Auswahl \(:uber die ID des Anhangs\&. In dieser Form ist der Selektor einfach eine Nummer, die ID des Anhangs, wie sie vom Identifizierungsbefehl von
+\fBmkvmerge\fR(1)
+ausgegeben wird\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 2.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  2." 4.2
+.\}
+Auswahl \(:uber die UID (eindeutig ID) des Anhangs\&. In dieser Form ist der Selektor das Gleichheitszeichen
+=
+gefolgt von einer Nummer, der eindeutigen ID des Anhangs, wie sie vom Identifizierungsbefehl von
+\fBmkvmerge\fR(1)
+ausgegeben wird\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 3.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  3." 4.2
+.\}
+Auswahl \(:uber den Namen des Anhangs\&. In dieser Form ist der Selektor das Wort
+name:
+gefolgt vom existierenden Namen des Anhangs\&. Falls dieser Selektor mit
+\fB\-\-replace\-attachment\fR
+benutzt wird, m\(:ussen Doppelpunkte innerhalb des Namens als
+\ec
+maskiert werden\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 4.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  4." 4.2
+.\}
+Auswahl \(:uber den MIME\-Typ\&. In dieser Form ist der Selektor das Wort
+mime\-type:
+gefolgt vom existierenden MIME\-Typ des Anhangs\&. Falls dieser Selektor mit
+\fB\-\-replace\-attachment\fR
+benutzt wird, m\(:ussen Doppelpunkte innerhalb des MIME\-Typs als
+\ec
+maskiert werden\&.
+.RE
+.SH "BEISPIELE"
+.PP
+Das folgende Beispiel bearbeitet eine Datei namens \(FcFilm\&.mkv\(Fo\&. Es setzt den Segmenttitel und \(:andert den Sprachcode einer Ton\- und Untertitelspur\&. Beachten Sie, dass dieses Beispiel durch Weglassen der ersten Option
+\fB\-\-edit\fR
+verk\(:urzt werden kann, da das Bearbeiten der Segmentinformation ohnehin f\(:ur alle Optionen, die vor dem ersten
+\fB\-\-edit\fR
+gefunden werden, die Voreinstellung ist\&.
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvpropedit Film\&.mkv \-\-edit info \-\-set "title=Der Film" \-\-edit track:a1 \-\-set language=fre \-\-edit track:a2 \-\-set language=ita
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+Das zweite Beispiel entfernt den Standardspurschalter\(Fo von der ersten Untertitelspur und setzt ihn f\(:ur die zweite\&. Beachten Sie, dass
+\fBmkvpropedit\fR(1)
+im Gegensatz zu
+\fBmkvmerge\fR(1)
+nicht den \(FcStandardspurschalter\(Fo von anderen Spuren auf \(Fc0\(Fo setzt, falls es f\(:ur eine andere Spur automatisch auf \(Fc1\(Fo gesetzt wird\&.
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvpropedit Film\&.mkv \-\-edit track:s1 \-\-set flag\-default=0 \-\-edit track:s2 \-\-set flag\-default=1
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+Das Ersetzen der Tags f\(:ur die zweite Untertitelspur in einer Datei sieht so aus:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvpropedit Film\&.mkv \-\-tags track:s2:Neue\-Untertitel\-Tags\&.xml
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+Entfernen aller Tags erfordert das Weglassen des Dateinamens:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvpropedit Film\&.mkv \-\-tags all:
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+Das Ersetzen der Kapitel in einer Datei sieht so aus:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvpropedit Film\&.mkv \-\-chapters Neue\-Kapitel\&.xml
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+Entfernen aller Kapitel erfordert das Weglassen des Dateinamens:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvpropedit Film\&.mkv \-\-chapters \*(Aq\*(Aq
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+Hinzuf\(:ugen einer Schriftdatei (Arial\&.ttf) als Anhang:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvpropedit Film\&.mkv \-\-add\-attachment Arial\&.ttf
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+Hinzuf\(:ugen einer Schriftdatei (89719823\&.ttf) als Anhang und Bereitstellen von ein paar Informationen, dass es sich wirklich nur um Arial handelt:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvpropedit Film\&.mkv \-\-attachment\-name Arial\&.ttf \-\-attachment\-description \*(AqDie Schrift Arial als eine TrueType\-Schrift\*(Aq \-\-attachment\-mime\-type application/x\-truetype\-font \-\-add\-attachment 89719823\&.ttf
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+Ersetzen einer angeh\(:angten Schriftdatei (Comic\&.ttf) durch eine andere (Arial\&.ttf):
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvpropedit Film\&.mkv \-\-attachment\-name Arial\&.ttf \-\-attachment\-description \*(AqDie Schrift Arial als eine TrueType\-Schrift\*(Aq \-\-replace\-attachment name:Comic\&.ttf:Arial\&.ttf
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+L\(:oschen der zweiten angeh\(:angten Datei, egal worum es sich handelt:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvpropedit Film\&.mkv \-\-delete\-attachment 2
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+L\(:oschen aller angeh\(:angten Schriften anhand des MIME\-Typs:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvpropedit Film\&.mkv \-\-delete\-attachment mime\-type:application/x\-truetype\-font
+.fi
+.if n \{\
+.RE
+.\}
+.SH "R\(:UCKGABEWERTE"
+.PP
+\fBmkvpropedit\fR(1)
+beendet sich mit einem von drei R\(:uckgabewerten:
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+\fB0\fR
+\(en dieser R\(:uckgabewert bedeutet, dass die \(:Anderung erfolgreich abgeschlossen wurde\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+\fB1\fR
+\(en in diesem Fall hat
+\fBmkvpropedit\fR(1)
+mindestens eine Warnung ausgegeben, das \(:Andern wurde aber fortgesetzt\&. Einer Warnung wird der Text \(FcWarning:\(Fo vorangestellt\&. Abh\(:angig von den autgetretenen Problemen k\(:onnen die resultierenden Dateien in Ordnung sein oder nicht\&. Dem Anwender wird nachdr\(:ucklich geraten, sowohl die Warnung als auch die resultierenden Dateien zu \(:uberpr\(:ufen\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+\fB2\fR
+\(en dieser R\(:uckgabewert wird benutzt, nachdem ein Fehler aufgetreten ist\&.
+\fBmkvpropedit\fR(1)
+wird gleich nach der Ausgabe der Fehlermeldung abgebrochen\&. Fehlermeldungen reichen von falschen Befehlszeilenargumenten \(:uber Lese\-/Schreibfehler bis hin zu besch\(:adigten Dateien\&.
+.RE
+.SH "SONDERZEICHEN IN TEXT MASKIEREN"
+.PP
+Es gibt ein paar Stellen, an denen Sonderzeichen in Text maskiert werden m\(:ussen oder sollen\&. Die Regeln zum Maskieren sind einfach: Jedes Zeichen, das maskiert werden soll, wird durch einen R\(:uckw\(:artsschr\(:agstrich gefolgt von einem weiteren Zeichen ersetzt\&.
+.PP
+Die Regeln lauten: \(Fc \(Fo (ein Leerzeichen) wird \(Fc\es\(Fo, \(Fc"\(Fo (doppeltes Anf\(:uhrungszeichen) wird \(Fc\e2\(Fo, \(Fc:\(Fo wird \(Fc\ec\(Fo, \(Fc#\(Fo wird \(Fc\eh\(Fo und \(Fc\e\(Fo (ein einfacher R\(:uckw\(:artsschr\(:agstrich selbst) wird \(Fc\e\e\(Fo\&.
+.SH "UMGEBUNGSVARIABLEN"
+.PP
+\fBmkvpropedit\fR(1)
+verwendet die Standardvariablen, die die Locale des System bestimmen (d\&.h\&.
+\fILANG\fR
+und die
+\fILC_*\fR\-Familie)\&. Zus\(:atzliche Variablen:
+.PP
+\fIMKVTOOLNIX_DEBUG\fR und ihre Kurzform \fIMTX_DEBUG\fR
+.RS 4
+Der Inhalt wird behandelt, als ob er mit der Option
+\fB\-\-debug\fR
+\(:ubergeben worden w\(:are\&.
+.RE
+.PP
+\fIMKVTOOLNIX_ENGAGE\fR und ihre Kurzform \fIMTX_ENGAGE\fR
+.RS 4
+Der Inhalt wird behandelt, als ob er mit der Option
+\fB\-\-engage\fR
+\(:ubergeben worden w\(:are\&.
+.RE
+.PP
+\fIMKVTOOLNIX_OPTIONS\fR und ihre Kurzform \fIMTX_OPTIONS\fR
+.RS 4
+Der Inhalt wird bei Leerr\(:aumen aufgeteilt\&. Die resultierenden Teilzeichenketten werden behandelt, als ob sie als Befehlszeilenoptionen \(:ubergeben worden w\(:aren\&. Falls Sie Sonderzeichen \(:ubergeben m\(:ochten (z\&.B\&. Leerzeichen), m\(:ussen Sie sie maskieren (siehe
+den Abschnitt \(:uber Maskieren von Sonderzeichen in Text)\&.
+.RE
+.SH "SIEHE AUCH"
+.PP
+\fBmkvmerge\fR(1),
+\fBmkvinfo\fR(1),
+\fBmkvextract\fR(1),
+\fBmmg\fR(1)
+.SH "WWW"
+.PP
+Die neuste Version kann immer auf
+\m[blue]\fBder MKVToolNix\-Homepage\fR\m[]\&\s-2\u[1]\d\s+2
+gefunden werden\&.
+.SH "AUTOR"
+.PP
+\fBMoritz Bunkus\fR <\&moritz@bunkus\&.org\&>
+.RS 4
+Entwickler
+.RE
+.SH "FU\(ssNOTEN"
+.IP " 1." 4
+der MKVToolNix-Homepage
+.RS 4
+\%http://www.bunkus.org/videotools/mkvtoolnix/
+.RE
