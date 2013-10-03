@@ -233,7 +233,7 @@ source.mkv
    <title>Track extraction mode</title>
 
    <para>
-    Syntax: <command>mkvextract</command> <option>tracks</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional> <parameter>TID1:dest-filename1</parameter> <optional><parameter>TID2:dest-filename2</parameter> ...</optional>
+    Syntax: <command>mkvextract <option>tracks</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional> <parameter>TID1:dest-filename1</parameter> <optional><parameter>TID2:dest-filename2</parameter> ...</optional></command>
    </para>
 
    <para>
@@ -321,7 +321,7 @@ source.mkv
    <title>Tags extraction mode</title>
 
    <para>
-    Syntax: <command>mkvextract</command> <option>tags</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional>
+    Syntax: <command>mkvextract <option>tags</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional></command>
    </para>
 
    <para>
@@ -334,7 +334,7 @@ source.mkv
    <title>Attachments extraction mode</title>
 
    <para>
-    Syntax: <command>mkvextract</command> <option>attachments</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional> <parameter>AID1:outname1</parameter> <optional><parameter>AID2:outname2</parameter> ...</optional>
+    Syntax: <command>mkvextract <option>attachments</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional> <parameter>AID1:outname1</parameter> <optional><parameter>AID2:outname2</parameter> ...</optional></command>
    </para>
 
    <variablelist>
@@ -356,7 +356,7 @@ source.mkv
    <title>Chapters extraction mode</title>
 
    <para>
-    Syntax: <command>mkvextract</command> <option>chapters</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional>
+    Syntax: <command>mkvextract <option>chapters</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional></command>
    </para>
 
    <variablelist>
@@ -382,7 +382,7 @@ source.mkv
    <title>Cue sheet extraction mode</title>
 
    <para>
-    Syntax: <command>mkvextract</command> <option>cuesheet</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional>
+    Syntax: <command>mkvextract <option>cuesheet</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional></command>
    </para>
 
    <para>
@@ -395,7 +395,7 @@ source.mkv
    <title>Timecode extraction mode</title>
 
    <para>
-    Syntax: <command>mkvextract</command> <option>timecodes_v2</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional> <parameter>TID1:dest-filename1</parameter> <optional><parameter>TID2:dest-filename2</parameter> ...</optional>
+    Syntax: <command>mkvextract <option>timecodes_v2</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional> <parameter>TID1:dest-filename1</parameter> <optional><parameter>TID2:dest-filename2</parameter> ...</optional></command>
    </para>
 
    <para>

@@ -135,8 +135,8 @@ source\&.mkv
 .RE
 .SS "トラック抽出モード"
 .PP
-書式:
-\fBmkvextract\fR\fBtracks\fR\fIsource\-filename\fR[\fIoptions\fR]\fITID1:dest\-filename1\fR[\fITID2:dest\-filename2\fR \&.\&.\&.]
+Syntax:
+\fBmkvextract \fR\fB\fBtracks\fR\fR\fB \fR\fB\fIsource\-filename\fR\fR\fB \fR\fB[\fIoptions\fR]\fR\fB \fR\fB\fITID1:dest\-filename1\fR\fR\fB \fR\fB[\fITID2:dest\-filename2\fR \&.\&.\&.]\fR
 .PP
 以下のコマンドラインオプションは、トラック抽出モードでは各トラック毎に指定することができます。これらのオプションは、作用するトラック指定子(下記参照)の前に指定しなければなりません。
 .PP
@@ -183,14 +183,14 @@ $ mkvextract tracks input\&.mkv 1:output\-two\-tracks\&.rm 2:output\-two\-tracks
 .RE
 .SS "タグ抽出モード"
 .PP
-書式:
-\fBmkvextract\fR\fBtags\fR\fIsource\-filename\fR[\fIoptions\fR]
+Syntax:
+\fBmkvextract \fR\fB\fBtags\fR\fR\fB \fR\fB\fIsource\-filename\fR\fR\fB \fR\fB[\fIoptions\fR]\fR
 .PP
 抽出されたタグは、出力がリダイレクトされていなければコンソールに出力されます。(詳細については、出力リダイレクトについてのセクションを参照ください。)
 .SS "添付ファイル抽出モード"
 .PP
-書式:
-\fBmkvextract\fR\fBattachments\fR\fIsource\-filename\fR[\fIoptions\fR]\fIAID1:outname1\fR[\fIAID2:outname2\fR \&.\&.\&.]
+Syntax:
+\fBmkvextract \fR\fB\fBattachments\fR\fR\fB \fR\fB\fIsource\-filename\fR\fR\fB \fR\fB[\fIoptions\fR]\fR\fB \fR\fB\fIAID1:outname1\fR\fR\fB \fR\fB[\fIAID2:outname2\fR \&.\&.\&.]\fR
 .PP
 \fIAID\fR:\fIoutname\fR
 .RS 4
@@ -198,8 +198,8 @@ IDが\fIAID\fRである添付ファイルがもしソースファイルに存在
 .RE
 .SS "チャプタ抽出モード"
 .PP
-書式:
-\fBmkvextract\fR\fBchapters\fR\fIsource\-filename\fR[\fIoptions\fR]
+Syntax:
+\fBmkvextract \fR\fB\fBchapters\fR\fR\fB \fR\fB\fIsource\-filename\fR\fR\fB \fR\fB[\fIoptions\fR]\fR
 .PP
 \fB\-s\fR, \fB\-\-simple\fR
 .RS 4
@@ -210,14 +210,14 @@ toolsで使用される、シンプルフォーマット(CHAPTER01=\&.\&.\&., CH
 抽出されたチャプタは、出力がリダイレクトされていなければコンソールに出力されます。(詳細については、出力リダイレクトについてのセクションを参照ください。)
 .SS "CUEシート抽出モード"
 .PP
-書式:
-\fBmkvextract\fR\fBcuesheet\fR\fIsource\-filename\fR[\fIoptions\fR]
+Syntax:
+\fBmkvextract \fR\fB\fBcuesheet\fR\fR\fB \fR\fB\fIsource\-filename\fR\fR\fB \fR\fB[\fIoptions\fR]\fR
 .PP
 抽出されたCUEシートは、出力がリダイレクトされていなければコンソールに出力されます。(詳細については、出力リダイレクトについてのセクションを参照ください。)
 .SS "タイムコード抽出モード"
 .PP
-書式:
-\fBmkvextract\fR\fBtimecodes_v2\fR\fIsource\-filename\fR[\fIoptions\fR]\fITID1:dest\-filename1\fR[\fITID2:dest\-filename2\fR \&.\&.\&.]
+Syntax:
+\fBmkvextract \fR\fB\fBtimecodes_v2\fR\fR\fB \fR\fB\fIsource\-filename\fR\fR\fB \fR\fB[\fIoptions\fR]\fR\fB \fR\fB\fITID1:dest\-filename1\fR\fR\fB \fR\fB[\fITID2:dest\-filename2\fR \&.\&.\&.]\fR
 .PP
 抽出されたタイムコードは、出力がリダイレクトされていなければコンソールに出力されます。(詳細については、出力リダイレクトについてのセクションを参照ください。)
 .PP
