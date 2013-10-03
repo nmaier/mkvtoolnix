@@ -1,12 +1,13 @@
 # German translations for mkvtoolnix package (man pages)
 # Copyright (C) 2013 Chris Leick <c.leick@vollbio.de>
+# Copyright (C) 2013 Moritz Bunkus <moritz@bunkus.org>
 # This file is distributed under the same license as the mkvtoolnix package.
 msgid ""
 msgstr ""
 "Project-Id-Version: mkvtoolnix 6.2.0\n"
 "Report-Msgid-Bugs-To: mkvtoolnix@packages.debian.org\n"
 "POT-Creation-Date: 2013-10-03 22:39+0200\n"
-"PO-Revision-Date: 2013-10-03 21:53+0200\n"
+"PO-Revision-Date: 2013-10-03 22:45+0200\n"
 "Last-Translator: Chris Leick <c.leick@vollbio.de>\n"
 "Language-Team: German <debian-l10n-german@lists.debian.org>\n"
 "Language: de\n"
@@ -24,15 +25,13 @@ msgstr "mkvextract"
 #: doc/man/mkvextract.xml:6 doc/man/mkvinfo.xml:6 doc/man/mkvmerge.xml:6
 #: doc/man/mkvpropedit.xml:6 doc/man/mmg.xml:6
 msgid "6.4.1"
-msgstr ""
+msgstr "6.4.1"
 
 #. type: Content of the date entity
 #: doc/man/mkvextract.xml:7 doc/man/mkvinfo.xml:7 doc/man/mkvmerge.xml:7
 #: doc/man/mkvpropedit.xml:7 doc/man/mmg.xml:7
-#, fuzzy
-#| msgid "2013-04-27"
 msgid "2013-09-16"
-msgstr "27. April 2013"
+msgstr "16. Oktober 2013"
 
 #. type: Content of the mkvmerge entity
 #: doc/man/mkvextract.xml:9 doc/man/mkvinfo.xml:9 doc/man/mkvmerge.xml:9
@@ -379,10 +378,8 @@ msgstr "Spurextrahierungsmodus"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
 #: doc/man/mkvextract.xml:236
-#, fuzzy
-#| msgid "Syntax: <command>mkvextract</command> <option>tracks</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional> <parameter>TID1:dest-filename1</parameter> <optional><parameter>TID2:dest-filename2</parameter> ...</optional>"
 msgid "Syntax: <command>mkvextract <option>tracks</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional> <parameter>TID1:dest-filename1</parameter> <optional><parameter>TID2:dest-filename2</parameter> ...</optional></command>"
-msgstr "Syntax: <command>mkvextract</command> <option>tracks</option> <parameter>Quelldateiname</parameter> <optional><parameter>Optionen</parameter></optional> <parameter>TID1:Zieldateiname1</parameter> <optional><parameter>TID2:Zieldateiname2</parameter> …</optional>"
+msgstr "Syntax: <command>mkvextract <option>tracks</option> <parameter>Quelldateiname</parameter> <optional><parameter>Optionen</parameter></optional> <parameter>TID1:Zieldateiname1</parameter> <optional><parameter>TID2:Zieldateiname2</parameter> …</optional></command>"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
 #: doc/man/mkvextract.xml:240
@@ -467,10 +464,8 @@ msgstr "Extrahierungsmodus für Tags"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
 #: doc/man/mkvextract.xml:324
-#, fuzzy
-#| msgid "Syntax: <command>mkvextract</command> <option>tags</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional>"
 msgid "Syntax: <command>mkvextract <option>tags</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional></command>"
-msgstr "Syntax: <command>mkvextract</command> <option>tags</option> <parameter>Quelldateiname</parameter> <optional><parameter>Optionen</parameter></optional>"
+msgstr "Syntax: <command>mkvextract <option>tags</option> <parameter>Quelldateiname</parameter> <optional><parameter>Optionen</parameter></optional></command>"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
 #: doc/man/mkvextract.xml:328
@@ -484,10 +479,8 @@ msgstr "Extrahierungsmodus für Anhänge"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
 #: doc/man/mkvextract.xml:337
-#, fuzzy
-#| msgid "Syntax: <command>mkvextract</command> <option>attachments</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional> <parameter>AID1:outname1</parameter> <optional><parameter>AID2:outname2</parameter> ...</optional>"
 msgid "Syntax: <command>mkvextract <option>attachments</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional> <parameter>AID1:outname1</parameter> <optional><parameter>AID2:outname2</parameter> ...</optional></command>"
-msgstr "Syntax: <command>mkvextract</command> <option>attachments</option> <parameter>Quelldateiname</parameter> <optional><parameter>Optionen</parameter></optional> <parameter>AID1:Ausgabename1</parameter> <optional><parameter>AID2:Ausgabename2</parameter> …</optional>"
+msgstr "Syntax: <command>mkvextract <option>attachments</option> <parameter>Quelldateiname</parameter> <optional><parameter>Optionen</parameter></optional> <parameter>AID1:Ausgabename1</parameter> <optional><parameter>AID2:Ausgabename2</parameter> …</optional></command>"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:342
@@ -506,10 +499,8 @@ msgstr "Kapitelextrahierungsmodus"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
 #: doc/man/mkvextract.xml:359
-#, fuzzy
-#| msgid "Syntax: <command>mkvextract</command> <option>chapters</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional>"
 msgid "Syntax: <command>mkvextract <option>chapters</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional></command>"
-msgstr "Syntax: <command>mkvextract</command> <option>Kapitel</option> <parameter>Quelldateiname</parameter> <optional><parameter>Optionen</parameter></optional>"
+msgstr "Syntax: <command>mkvextract <option>chapters</option> <parameter>Quelldateiname</parameter> <optional><parameter>Optionen</parameter></optional></command>"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:364
@@ -533,10 +524,8 @@ msgstr "Extrahierungsmodus für Cuesheets"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
 #: doc/man/mkvextract.xml:385
-#, fuzzy
-#| msgid "Syntax: <command>mkvextract</command> <option>cuesheet</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional>"
 msgid "Syntax: <command>mkvextract <option>cuesheet</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional></command>"
-msgstr "Syntax: <command>mkvextract</command> <option>cuesheet</option> <parameter>Quelldateiname</parameter> <optional><parameter>Optionen</parameter></optional>"
+msgstr "Syntax: <command>mkvextract <option>cuesheet</option> <parameter>Quelldateiname</parameter> <optional><parameter>Optionen</parameter></optional></command>"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
 #: doc/man/mkvextract.xml:389
@@ -550,10 +539,8 @@ msgstr "Zeitstempelextrahierungsmodus"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
 #: doc/man/mkvextract.xml:398
-#, fuzzy
-#| msgid "Syntax: <command>mkvextract</command> <option>timecodes_v2</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional> <parameter>TID1:dest-filename1</parameter> <optional><parameter>TID2:dest-filename2</parameter> ...</optional>"
 msgid "Syntax: <command>mkvextract <option>timecodes_v2</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional> <parameter>TID1:dest-filename1</parameter> <optional><parameter>TID2:dest-filename2</parameter> ...</optional></command>"
-msgstr "Syntax: <command>mkvextract</command> <option>timecodes_v2</option> <parameter>Quelldateiname</parameter> <optional><parameter>Optionen</parameter></optional> <parameter>TID1:Zieldateiname1</parameter> <optional><parameter>TID2:Zieldateiname2</parameter> …</optional>"
+msgstr "Syntax: <command>mkvextract <option>timecodes_v2</option> <parameter>Quelldateiname</parameter> <optional><parameter>Optionen</parameter></optional> <parameter>TID1:Zieldateiname1</parameter> <optional><parameter>TID2:Zieldateiname2</parameter> …</optional></command>"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
 #: doc/man/mkvextract.xml:402
@@ -779,14 +766,12 @@ msgstr "<abbrev>WavPack</abbrev>-Spuren werden in <abbrev>WV</abbrev>-Dateien ge
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:608
 msgid "A_OPUS"
-msgstr ""
+msgstr "A_OPUS"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:611
-#, fuzzy
-#| msgid "<productname>RealAudio</productname> tracks are written to <productname>RealMedia</productname> files."
 msgid "<productname>Opus</productname> tracks are written to <productname>OggOpus</productname> files."
-msgstr "<productname>RealAudio</productname>-Spuren werden in <productname>RealMedia</productname>-Dateien geschrieben."
+msgstr "<productname>Opus</productname>-Spuren werden in <productname>OggOpus</productname>-Dateien geschrieben."
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:617
@@ -2582,10 +2567,8 @@ msgstr "<option>--list-languages</option>"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvmerge.xml:1524
-#, fuzzy
-#| msgid "Lists all languages and their ISO 639-2 code which can be used with the <link linkend=\"mkvmerge.description.language\"><option>--language</option></link> option."
 msgid "Lists all languages and their ISO639-2 code which can be used with the <link linkend=\"mkvmerge.description.language\"><option>--language</option></link> option."
-msgstr "führt alle Sprachen und ihren ISO 639-2-Code auf, die mit der Option <link linkend=\"mkvmerge.description.language\"><option>--language</option></link> benutzt werden können."
+msgstr "Führt alle Sprachen und ihren ISO 639-2-Code auf, die mit der Option <link linkend=\"mkvmerge.description.language\"><option>--language</option></link> benutzt werden können."
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><term>
 #: doc/man/mkvmerge.xml:1531
@@ -3273,15 +3256,7 @@ msgstr "Dieses Format besteht aus Zeilenpaaren, die mit »<literal>CHAPTERxx=</l
 
 #. type: Content of: <refentry><refsect1><refsect2><screen>
 #: doc/man/mkvmerge.xml:2263
-#, fuzzy, no-wrap
-#| msgid ""
-#| "CHAPTER01=00:00:00.000\n"
-#| "CHAPTER01NAME=Intro\n"
-#| "CHAPTER02=00:02:30.000\n"
-#| "CHAPTER02=00:02:30.000\n"
-#| "CHAPTER02NAME=Baby prepares to rock\n"
-#| "CHAPTER03=00:02:42.300\n"
-#| "CHAPTER03NAME=Baby rocks the house"
+#, no-wrap
 msgid ""
 "CHAPTER01=00:00:00.000\n"
 "CHAPTER01NAME=Intro\n"
@@ -3292,7 +3267,6 @@ msgid ""
 msgstr ""
 "CHAPTER01=00:00:00.000\n"
 "CHAPTER01NAME=Einleitung\n"
-"CHAPTER02=00:02:30.000\n"
 "CHAPTER02=00:02:30.000\n"
 "CHAPTER02NAME=Baby bereitet sich vor zu rocken\n"
 "CHAPTER03=00:02:42.300\n"
