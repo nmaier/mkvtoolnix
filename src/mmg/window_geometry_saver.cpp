@@ -92,6 +92,9 @@ window_geometry_saver_c::restore() {
     x = std::max(std::min<int>(x, wxSystemSettings::GetMetric(wxSYS_SCREEN_X)), 100);
     y = std::max(std::min<int>(y, wxSystemSettings::GetMetric(wxSYS_SCREEN_Y)), 100);
 
+    m_restored_width  = x;
+    m_restored_height = y;
+
     m_window->SetSize(x, y);
   }
 }
@@ -111,8 +114,8 @@ window_geometry_saver_c::save()
   }
 
   if ((rect.GetWidth() > 0) && (rect.GetHeight() > 0)) {
-    cfg->Write(wxT("width"),  rect.GetWidth());
-    cfg->Write(wxT("height"), rect.GetHeight());
+    cfg->Write(wxT("width"),  get_value_for_saving(rect.GetWidth(),  m_restored_width));
+    cfg->Write(wxT("height"), get_value_for_saving(rect.GetHeight(), m_restored_height));
   }
 }
 
@@ -120,4 +123,16 @@ wxString
 window_geometry_saver_c::get_config_group()
   const {
   return wxU(boost::format("/GUI/geometry/%1%") % m_name);
+}
+
+int
+window_geometry_saver_c::get_value_for_saving(int current_value,
+                                              boost::optional<unsigned int> restored_value) {
+  // wxWidgets is... interesting. When setting the size with SetSize()
+  // upon restoration the window ends up one pixel wider than the
+  // values I specified. So adjust for that here.
+
+  if (restored_value && ((*restored_value + 1) == current_value))
+    return *restored_value;
+  return current_value;
 }

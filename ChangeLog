@@ -1,3 +1,8 @@
+2013-10-04  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mmg: bug fix: saved window widths were growing by 1 pixel each
+        time mmg was exited.
+
 2013-10-03  Moritz Bunkus  <moritz@bunkus.org>
 
         * documentation: Added a German translation of the man pages by

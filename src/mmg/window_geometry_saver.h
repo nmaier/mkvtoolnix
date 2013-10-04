@@ -23,7 +23,7 @@ class window_geometry_saver_c {
 protected:
   wxWindow *m_window;
   std::string m_name;
-  boost::optional<unsigned int> m_x, m_y, m_width, m_height;
+  boost::optional<unsigned int> m_x, m_y, m_width, m_height, m_restored_width, m_restored_height;
   bool m_set_as_min_size;
 
 public:
@@ -40,6 +40,8 @@ public:
 
 protected:
   wxString get_config_group() const;
+
+  static int get_value_for_saving(int current_value, boost::optional<unsigned int> restored_value);
 };
 
 #endif
