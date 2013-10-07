@@ -281,7 +281,7 @@ hevcc_c::pack() {
 
   // for (i=0;i<num_parameter_sets;i++) {
   //   array_completeness                   1  1 when there is no duplicate parameter set with same id in the stream, 0 otherwise or unknown
-  //   reserved                             1  Value '1'b
+  //   reserved                             1  Value '0'b
   //   nal_unit_type                        6  Nal unit type, restricted to VPS, SPS, PPS and SEI, SEI must be of declarative nature which applies to the
   //                                           whole stream such as user data sei.
   //   nal_unit_count                       16 Number of nal units
@@ -293,7 +293,7 @@ hevcc_c::pack() {
   //   }
   // }
   auto write_list = [&buffer](std::vector<memory_cptr> const &list, uint8 nal_unit_type) {
-    *buffer++ = (0 << 7) | (1 << 6) | (nal_unit_type & 0x3F);
+    *buffer++ = (0 << 7) | (0 << 6) | (nal_unit_type & 0x3F);
     put_uint16_be(buffer, list.size());
     buffer += 2;
 
