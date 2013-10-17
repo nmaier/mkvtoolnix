@@ -113,19 +113,18 @@ attachment_target_c::parse_spec(command_e command,
 
   boost::regex s_spec_re;
   boost::smatch matches;
-  unsigned int offset;
+  auto offset = 0u;
 
   if (ac_replace == m_command) {
     // captures:                    1    2        3            4                    5         6
     s_spec_re = boost::regex{"^ (?: (=)? (\\d+) : (.+) ) | (?: (name | mime-type) : ([^:]+) : (.+) ) $", boost::regex::perl | boost::regex::icase | boost::regex::mod_x};
     offset    = 1;
 
-  } else if (ac_delete == m_command) {
+  } else if (ac_delete == m_command)
     // captures:                    1    2                     3                    4
     s_spec_re = boost::regex{"^ (?: (=)? (\\d+)        ) | (?: (name | mime-type) : (.+) ) $",           boost::regex::perl | boost::regex::icase | boost::regex::mod_x};
-    offset    = 0;
 
-  } else
+  else
     assert(false);
 
   if (!boost::regex_match(spec, matches, s_spec_re))
@@ -236,6 +235,7 @@ attachment_target_c::matches_by_uid_name_or_mime_type(KaxAttached &att) {
   }
 
   assert(false);
+  return false;                 // avoid compiler warning
 }
 
 bool
