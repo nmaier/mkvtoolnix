@@ -2831,7 +2831,7 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
 	 nvi += nrEntries;
 	 AVI->video_index = (video_index_entry *) realloc (AVI->video_index, nvi * sizeof (video_index_entry));
 	 if (!AVI->video_index) {
-		 fprintf(stderr, "AVILIB: out of mem (size = %ld)\n", nvi * sizeof (video_index_entry));
+		 fprintf(stderr, "AVILIB: out of mem (size = %ld)\n", (long)(nvi * sizeof (video_index_entry)));
 		 exit(1);
 	 }
 
