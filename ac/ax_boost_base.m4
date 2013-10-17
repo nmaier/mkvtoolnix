@@ -89,11 +89,14 @@ if test "x$want_boost" = "xyes"; then
     dnl this (as it rises problems for generic multi-arch support).
     dnl The last entry in the list is chosen by default when no libraries
     dnl are found, e.g. when only header-only libraries are installed!
-    libsubdirs="lib"
-    ax_arch=`uname -m`
-    if test $ax_arch = x86_64 -o $ax_arch = ppc64 -o $ax_arch = s390x -o $ax_arch = sparc64; then
-        libsubdirs="lib64 lib lib64"
+    case $host_cpu in
+      i*86) libsubdirs="lib/i386-${host_os}"        ;;
+      *)    libsubdirs="lib/${host_cpu}-${host_os}" ;;
+    esac
+    if test $host_cpu = x86_64 -o $host_cpu = ppc64 -o $host_cpu = s390x -o $host_cpu = sparc64; then
+        libsubdirs="$libsubdirs lib64"
     fi
+    libsubdirs="$libsubdirs lib"
 
     dnl first we check the system location for boost libraries
     dnl this location ist chosen if boost libraries are installed with the --layout=system option

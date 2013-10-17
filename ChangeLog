@@ -1,3 +1,9 @@
+2013-10-17  Moritz Bunkus  <moritz@bunkus.org>
+
+        * build system: bug fix: fix autodetection of Boost's library path
+        if it is installed in the multiarch directories
+        (e.g. /usr/lib/i386-linux-gnu or /usr/lib/x86_64-linux-gnu).
+
 2013-10-04  Moritz Bunkus  <moritz@bunkus.org>
 
         * mmg: bug fix: saved window widths were growing by 1 pixel each
