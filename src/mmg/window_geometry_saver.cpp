@@ -132,7 +132,7 @@ window_geometry_saver_c::get_value_for_saving(int current_value,
   // upon restoration the window ends up one pixel wider than the
   // values I specified. So adjust for that here.
 
-  if (restored_value && ((*restored_value + 1) == current_value))
+  if (restored_value && (static_cast<int>(*restored_value + 1) == current_value))
     return *restored_value;
   return current_value;
 }
