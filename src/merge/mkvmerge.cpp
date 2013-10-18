@@ -519,6 +519,8 @@ parse_number_with_unit(const std::string &s,
 void
 parse_and_add_tags(const std::string &file_name) {
   auto tags = mtx::xml::ebml_tags_converter_c::parse_file(file_name, false);
+  if (!tags)
+    return;
 
   for (auto element : *tags) {
     auto tag = dynamic_cast<KaxTag *>(element);

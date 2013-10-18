@@ -1,3 +1,8 @@
+2013-10-18  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvmerge: bug fix: fixed a crash when reading empty global tag
+        files. Fixes #921.
+
 2013-10-17  Moritz Bunkus  <moritz@bunkus.org>
 
         * build system: bug fix: fix autodetection of Boost's library path
