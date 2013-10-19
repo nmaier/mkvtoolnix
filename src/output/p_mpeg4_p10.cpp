@@ -106,6 +106,8 @@ mpeg4_p10_video_packetizer_c::process(packet_cptr packet) {
   if (m_nalu_size_len_dst && (m_nalu_size_len_dst != m_nalu_size_len_src))
     change_nalu_size_len(packet);
 
+  remove_filler_nalus(*packet->data);
+
   add_packet(packet);
 
   return FILE_STATUS_MOREDATA;
@@ -211,4 +213,35 @@ mpeg4_p10_video_packetizer_c::change_nalu_size_len(packet_cptr packet) {
   }
 
   packet->data->set_size(dst_pos);
+}
+
+void
+mpeg4_p10_video_packetizer_c::remove_filler_nalus(memory_c &data)
+  const {
+  auto ptr        = data.get_buffer();
+  auto total_size = data.get_size();
+  auto idx        = 0u;
+
+  while ((idx + m_nalu_size_len_dst) < total_size) {
+    auto nalu_size = (4 == m_nalu_size_len_dst) ? get_uint32_be(&ptr[idx])
+                   : (3 == m_nalu_size_len_dst) ? get_uint24_be(&ptr[idx])
+                   :                              get_uint16_be(&ptr[idx]);
+
+    nalu_size     += m_nalu_size_len_dst;
+
+    if ((idx + nalu_size) > total_size)
+      break;
+
+    if (ptr[idx + m_nalu_size_len_dst] == NALU_TYPE_FILLER_DATA) {
+      memmove(&ptr[idx], &ptr[idx + nalu_size], total_size - idx - nalu_size);
+      total_size -= nalu_size;
+    }
+
+    idx += nalu_size;
+  }
+
+  if (data.get_size() == total_size)
+    return;
+
+  data.resize(total_size);
 }

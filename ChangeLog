@@ -1,5 +1,10 @@
 2013-10-19  Moritz Bunkus  <moritz@bunkus.org>
 
+        * mkvmerge: enhancement: filler NALUs will now be removed from
+        framed h.264/AVC tracks (such as the ones read from Matroska/MP4
+        files) just like they have already been when handling unframed
+        tracks.
+
         * mkvextract: new feature: implemented support for extracting VP9
         tracks into IVF files.
 

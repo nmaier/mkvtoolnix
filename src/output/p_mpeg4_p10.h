@@ -38,6 +38,7 @@ protected:
   virtual void extract_aspect_ratio();
   virtual void setup_nalu_size_len_change();
   virtual void change_nalu_size_len(packet_cptr packet);
+  virtual void remove_filler_nalus(memory_c &data) const;
 };
 
 #endif  // MTX_P_MPEG4_P10_H
