@@ -7,10 +7,10 @@ class T_017chapters < Test
   end
 
   def run
-    merge("--sub-charset 0:ISO-8859-1 data/srt/vde.srt " +
+    merge("--sub-charset 0:ISO-8859-1 data/subtitles/srt/vde.srt " +
            "--chapter-charset ISO-8859-1 --chapters data/text/shortchaps.txt")
     hash = hash_tmp
-    merge("--sub-charset 0:ISO-8859-1 data/srt/vde.srt " +
+    merge("--sub-charset 0:ISO-8859-1 data/subtitles/srt/vde.srt " +
            "--chapters data/text/vmap.chapters.xml")
     return hash + "-" + hash_tmp
   end

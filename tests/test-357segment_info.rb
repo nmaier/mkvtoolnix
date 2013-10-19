@@ -3,7 +3,7 @@
 # T_357segment_info
 describe "mkvmerge / segment info XML"
 
-source  = "data/srt/ven.srt"
+source  = "data/subtitles/srt/ven.srt"
 invalid = Dir["data/text/segment-info-invalid-*.xml"]
 
 # Valid files:

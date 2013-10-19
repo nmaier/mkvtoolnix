@@ -3,7 +3,7 @@
 # T_355chapters
 describe "mkvmerge / XML chapters"
 
-source  = "data/srt/ven.srt"
+source  = "data/subtitles/srt/ven.srt"
 invalid = Dir["data/text/chapters-invalid-*.xml"]
 
 # Valid files:

@@ -39,7 +39,7 @@ test "several" do
   hashes  = []
   src     = "#{tmp}-src"
   work    = "#{tmp}-work"
-  command = "data/srt/vde.srt " + sources.collect { |s| "--attachment-name '#{s[:name]}' --attachment-mime-type '#{s[:mime_type]}' --attachment-description '#{s[:description]}' --attach-file 'data/text/#{s[:file]}'" }.join(' ')
+  command = "data/subtitles/srt/vde.srt " + sources.collect { |s| "--attachment-name '#{s[:name]}' --attachment-mime-type '#{s[:mime_type]}' --attachment-description '#{s[:description]}' --attach-file 'data/text/#{s[:file]}'" }.join(' ')
 
   merge command, :keep_tmp => true, :output => src
   hashes << hash_file(src)

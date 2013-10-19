@@ -4,7 +4,7 @@
 describe "mkvmerge / DocTypeVersion and DocTypeReadVersion"
 
 test "all versions" do
-  sources = "data/avi/v.avi data/srt/ven.srt"
+  sources = "data/avi/v.avi data/subtitles/srt/ven.srt"
   hashes  = []
   hacks   = []
 

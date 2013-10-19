@@ -7,7 +7,7 @@ class T_261line_endings_in_text_files < Test
 
   def run
     checksums = %w{unix dos mac}.collect do |style|
-      merge "data/srt/line-endings/subs-#{style}.srt"
+      merge "data/subtitles/srt/line-endings/subs-#{style}.srt"
       hash_tmp
     end
 

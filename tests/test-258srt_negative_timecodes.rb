@@ -6,7 +6,7 @@ class T_258srt_negative_timecodes < Test
   end
 
   def run
-    merge 1, "--subtitle-charset -1:ISO-8859-1 data/srt/negative_timecodes.srt"
+    merge 1, "--subtitle-charset -1:ISO-8859-1 data/subtitles/srt/negative_timecodes.srt"
     return hash_tmp
   end
 end

@@ -3,7 +3,7 @@
 # T_356tags
 describe "mkvmerge / XML tags"
 
-source  = "data/srt/ven.srt"
+source  = "data/subtitles/srt/ven.srt"
 invalid = Dir["data/text/tags-invalid-*.xml"]
 
 # Valid files:
