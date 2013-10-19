@@ -47,6 +47,7 @@
 #include "common/endian.h"
 #include "common/hacks.h"
 #include "common/iso639.h"
+#include "common/ivf.h"
 #include "common/math.h"
 #include "common/matroska.h"
 #include "common/mm_io.h"
@@ -1343,7 +1344,8 @@ kax_reader_c::create_video_packetizer(kax_track_t *t,
            || (t->codec_id == MKV_V_MPEG2)
            || (t->codec_id == MKV_V_THEORA)
            || (t->codec_id == MKV_V_DIRAC)
-           || (t->codec_id == MKV_V_VP8)) {
+           || (t->codec_id == MKV_V_VP8)
+           || (t->codec_id == MKV_V_VP9)) {
     if ((t->codec_id == MKV_V_MPEG1) || (t->codec_id == MKV_V_MPEG2)) {
       int version = t->codec_id[6] - '0';
       set_track_packetizer(t, new mpeg1_2_video_packetizer_c(this, nti, version, t->v_frate, t->v_width, t->v_height, t->v_dwidth, t->v_dheight, true));
@@ -1365,8 +1367,8 @@ kax_reader_c::create_video_packetizer(kax_track_t *t,
       set_track_packetizer(t, new dirac_video_packetizer_c(this, nti));
       show_packetizer_info(t->tnum, t->ptzr_ptr);
 
-    } else if (t->codec_id == MKV_V_VP8) {
-      set_track_packetizer(t, new vpx_video_packetizer_c(this, nti));
+    } else if ((t->codec_id == MKV_V_VP8) || (t->codec_id == MKV_V_VP9)) {
+      set_track_packetizer(t, new vpx_video_packetizer_c(this, nti, t->codec_id == MKV_V_VP8 ? ivf::VP8 : ivf::VP9));
       show_packetizer_info(t->tnum, t->ptzr_ptr);
       t->handle_packetizer_pixel_dimensions();
       t->handle_packetizer_default_duration();

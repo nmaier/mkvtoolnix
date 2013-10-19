@@ -27,6 +27,7 @@
 #include "common/endian.h"
 #include "common/error.h"
 #include "common/hacks.h"
+#include "common/ivf.h"
 #include "common/math.h"
 #include "common/matroska.h"
 #include "common/mpeg1_2.h"
@@ -353,7 +354,7 @@ avi_reader_c::create_mpeg4_p10_packetizer() {
 void
 avi_reader_c::create_vp8_packetizer() {
   m_ti.m_private_data.reset();
-  m_vptzr = add_packetizer(new vpx_video_packetizer_c(this, m_ti));
+  m_vptzr = add_packetizer(new vpx_video_packetizer_c(this, m_ti, ivf::VP8));
 
   PTZR(m_vptzr)->set_track_default_duration(1000000000ll / m_fps);
   PTZR(m_vptzr)->set_video_pixel_width(AVI_video_width(m_avi));

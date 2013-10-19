@@ -20,6 +20,12 @@
 
 namespace ivf {
 
+enum codec_e {
+  UNKNOWN_CODEC,
+  VP8,
+  VP9,
+};
+
 #if defined(COMP_MSC)
 #pragma pack(push,1)
 #endif
@@ -36,6 +42,7 @@ struct PACKED_STRUCTURE file_header_t {
   uint32_t      unused;
 
   file_header_t();
+  codec_e get_codec() const;
 };
 
 struct PACKED_STRUCTURE frame_header_t {
@@ -45,7 +52,7 @@ struct PACKED_STRUCTURE frame_header_t {
   frame_header_t();
 };
 
-bool is_keyframe(const memory_cptr &buffer);
+bool is_keyframe(const memory_cptr &buffer, codec_e codec);
 
 #if defined(COMP_MSC)
 #pragma pack(pop)

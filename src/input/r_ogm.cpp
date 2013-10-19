@@ -32,6 +32,7 @@
 #include "common/endian.h"
 #include "common/hacks.h"
 #include "common/iso639.h"
+#include "common/ivf.h"
 #include "common/math.h"
 #include "common/matroska.h"
 #include "common/mpeg4_p2.h"
@@ -1458,7 +1459,7 @@ ogm_v_vp8_demuxer_c::initialize() {
 
 generic_packetizer_c *
 ogm_v_vp8_demuxer_c::create_packetizer() {
-  auto ptzr_obj = new vpx_video_packetizer_c(reader, m_ti);
+  auto ptzr_obj = new vpx_video_packetizer_c(reader, m_ti, ivf::VP8);
 
   ptzr_obj->set_video_pixel_width(pixel_width);
   ptzr_obj->set_video_pixel_height(pixel_height);

@@ -21,14 +21,16 @@
 using namespace libmatroska;
 
 vpx_video_packetizer_c::vpx_video_packetizer_c(generic_reader_c *p_reader,
-                                               track_info_c &p_ti)
+                                               track_info_c &p_ti,
+                                               ivf::codec_e p_codec)
   : generic_packetizer_c(p_reader, p_ti)
   , m_previous_timecode(-1)
+  , m_codec{p_codec}
 {
   m_timecode_factory_application_mode = TFA_SHORT_QUEUEING;
 
   set_track_type(track_video);
-  set_codec_id(MKV_V_VP8);
+  set_codec_id(p_codec == ivf::VP8 ? MKV_V_VP8 : MKV_V_VP9);
 }
 
 void
@@ -38,7 +40,7 @@ vpx_video_packetizer_c::set_headers() {
 
 int
 vpx_video_packetizer_c::process(packet_cptr packet) {
-  packet->bref        = ivf::is_keyframe(packet->data) ? -1 : m_previous_timecode;
+  packet->bref        = ivf::is_keyframe(packet->data, m_codec) ? -1 : m_previous_timecode;
   m_previous_timecode = packet->timecode;
 
   add_packet(packet);

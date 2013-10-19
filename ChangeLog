@@ -1,5 +1,8 @@
 2013-10-19  Moritz Bunkus  <moritz@bunkus.org>
 
+        * mkvmerge: new feature: implemented support for VP9 read from IVF
+        and Matroska/WebM files. Implements #899.
+
         * mkvextract: enhancement: using the same track/attachment ID
         multiple times in "tracks", "attachments" or "timecodes_v2" mode
         will result in an error message instead of one empty
