@@ -198,7 +198,7 @@ extract_cli_parser_c::set_extraction_mode() {
     { "chapters",     options_c::em_chapters     },
     { "cuesheet",     options_c::em_cuesheet     },
     { "timecodes_v2", options_c::em_timecodes_v2 },
-    { nullptr,           options_c::em_unknown      },
+    { nullptr,        options_c::em_unknown      },
   };
 
   int i;
