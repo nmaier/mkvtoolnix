@@ -56,6 +56,7 @@ rm -rf $RPM_BUILD_ROOT
 %doc AUTHORS COPYING README ChangeLog NEWS TODO
 %{_bindir}/*
 %{_datadir}/man/man1/*
+%{_datadir}/man/de/man1/*
 %{_datadir}/man/ja/man1/*
 %{_datadir}/man/nl/man1/*
 %{_datadir}/man/uk/man1/*
