@@ -104,6 +104,7 @@ mmg_dialog::mmg_dialog()
   SetTitle(wxU(get_version_info("mkvmerge GUI")));
 
   log_window = new wxLogWindow(this, wxEmptyString, false);
+  log_window->PassMessages(false);
   wxLog::SetActiveTarget(log_window);
 
   create_menus();
