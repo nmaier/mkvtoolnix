@@ -83,7 +83,7 @@
 #include "output/p_vobsub.h"
 #include "output/p_vorbis.h"
 #include "output/p_vc1.h"
-#include "output/p_vp8.h"
+#include "output/p_vpx.h"
 #include "output/p_wavpack.h"
 
 using namespace libmatroska;
@@ -1366,7 +1366,7 @@ kax_reader_c::create_video_packetizer(kax_track_t *t,
       show_packetizer_info(t->tnum, t->ptzr_ptr);
 
     } else if (t->codec_id == MKV_V_VP8) {
-      set_track_packetizer(t, new vp8_video_packetizer_c(this, nti));
+      set_track_packetizer(t, new vpx_video_packetizer_c(this, nti));
       show_packetizer_info(t->tnum, t->ptzr_ptr);
       t->handle_packetizer_pixel_dimensions();
       t->handle_packetizer_default_duration();

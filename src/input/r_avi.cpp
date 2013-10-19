@@ -46,7 +46,7 @@
 #include "output/p_pcm.h"
 #include "output/p_video.h"
 #include "output/p_vorbis.h"
-#include "output/p_vp8.h"
+#include "output/p_vpx.h"
 
 #define GAB2_TAG                 FOURCC('G', 'A', 'B', '2')
 #define GAB2_ID_LANGUAGE         0x0000
@@ -353,7 +353,7 @@ avi_reader_c::create_mpeg4_p10_packetizer() {
 void
 avi_reader_c::create_vp8_packetizer() {
   m_ti.m_private_data.reset();
-  m_vptzr = add_packetizer(new vp8_video_packetizer_c(this, m_ti));
+  m_vptzr = add_packetizer(new vpx_video_packetizer_c(this, m_ti));
 
   PTZR(m_vptzr)->set_track_default_duration(1000000000ll / m_fps);
   PTZR(m_vptzr)->set_video_pixel_width(AVI_video_width(m_avi));

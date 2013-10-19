@@ -18,7 +18,7 @@
 #include "common/endian.h"
 #include "common/ivf.h"
 #include "input/r_ivf.h"
-#include "output/p_vp8.h"
+#include "output/p_vpx.h"
 #include "merge/output_control.h"
 
 int
@@ -72,7 +72,7 @@ ivf_reader_c::create_packetizer(int64_t) {
   if (!demuxing_requested('v', 0) || (NPTZR() != 0))
     return;
 
-  vp8_video_packetizer_c *packetizer = new vp8_video_packetizer_c(this, m_ti);
+  auto packetizer = new vpx_video_packetizer_c(this, m_ti);
   add_packetizer(packetizer);
 
   packetizer->set_video_pixel_width(m_width);

@@ -6,7 +6,7 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   VP8 video output module
+   VPX video output module
 
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
@@ -16,11 +16,11 @@
 #include "common/ivf.h"
 #include "common/matroska.h"
 #include "merge/connection_checks.h"
-#include "output/p_vp8.h"
+#include "output/p_vpx.h"
 
 using namespace libmatroska;
 
-vp8_video_packetizer_c::vp8_video_packetizer_c(generic_reader_c *p_reader,
+vpx_video_packetizer_c::vpx_video_packetizer_c(generic_reader_c *p_reader,
                                                track_info_c &p_ti)
   : generic_packetizer_c(p_reader, p_ti)
   , m_previous_timecode(-1)
@@ -32,12 +32,12 @@ vp8_video_packetizer_c::vp8_video_packetizer_c(generic_reader_c *p_reader,
 }
 
 void
-vp8_video_packetizer_c::set_headers() {
+vpx_video_packetizer_c::set_headers() {
   generic_packetizer_c::set_headers();
 }
 
 int
-vp8_video_packetizer_c::process(packet_cptr packet) {
+vpx_video_packetizer_c::process(packet_cptr packet) {
   packet->bref        = ivf::is_keyframe(packet->data) ? -1 : m_previous_timecode;
   m_previous_timecode = packet->timecode;
 
@@ -47,9 +47,9 @@ vp8_video_packetizer_c::process(packet_cptr packet) {
 }
 
 connection_result_e
-vp8_video_packetizer_c::can_connect_to(generic_packetizer_c *src,
+vpx_video_packetizer_c::can_connect_to(generic_packetizer_c *src,
                                        std::string &error_message) {
-  vp8_video_packetizer_c *psrc = dynamic_cast<vp8_video_packetizer_c *>(src);
+  vpx_video_packetizer_c *psrc = dynamic_cast<vpx_video_packetizer_c *>(src);
   if (!psrc)
     return CAN_CONNECT_NO_FORMAT;
 
@@ -62,6 +62,6 @@ vp8_video_packetizer_c::can_connect_to(generic_packetizer_c *src,
 }
 
 bool
-vp8_video_packetizer_c::is_compatible_with(output_compatibility_e compatibility) {
+vpx_video_packetizer_c::is_compatible_with(output_compatibility_e compatibility) {
   return (OC_MATROSKA == compatibility) || (OC_WEBM == compatibility);
 }

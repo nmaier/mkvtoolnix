@@ -52,7 +52,7 @@
 #include "output/p_theora.h"
 #include "output/p_video.h"
 #include "output/p_vorbis.h"
-#include "output/p_vp8.h"
+#include "output/p_vpx.h"
 
 #define BUFFER_SIZE 4096
 
@@ -1458,7 +1458,7 @@ ogm_v_vp8_demuxer_c::initialize() {
 
 generic_packetizer_c *
 ogm_v_vp8_demuxer_c::create_packetizer() {
-  vp8_video_packetizer_c *ptzr_obj = new vp8_video_packetizer_c(reader, m_ti);
+  auto ptzr_obj = new vpx_video_packetizer_c(reader, m_ti);
 
   ptzr_obj->set_video_pixel_width(pixel_width);
   ptzr_obj->set_video_pixel_height(pixel_height);
