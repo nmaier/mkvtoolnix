@@ -890,27 +890,27 @@ msgstr "%1%: Nelze otevřít soubor titulků"
 msgid "%1%: Error in the Matroska file structure at position %2%. Resyncing to the next level 1 element.\n"
 msgstr "%1%: Chyba ve struktuře souboru Matroska na pozici %2%. Nová synchronizace na další prvek úrovně 1.\n"
 
-#: src/merge/mkvmerge.cpp:670
+#: src/merge/mkvmerge.cpp:672
 #, boost-format
 msgid "%1%: divisor is 0 in '%2% %3%'.\n"
 msgstr "%1%: dělitel je 0 v '%2% %3%'.\n"
 
-#: src/merge/mkvmerge.cpp:645
+#: src/merge/mkvmerge.cpp:647
 #, boost-format
 msgid "%1%: invalid track ID in '%2% %3%'.\n"
 msgstr "%1%: neplatné ID stopy v '%2% %3%'.\n"
 
-#: src/merge/mkvmerge.cpp:662
+#: src/merge/mkvmerge.cpp:664
 #, boost-format
 msgid "%1%: missing dividend in '%2% %3%'.\n"
 msgstr "%1%: chybějící dělenec v '%2% %3%'.\n"
 
-#: src/merge/mkvmerge.cpp:665
+#: src/merge/mkvmerge.cpp:667
 #, boost-format
 msgid "%1%: missing divisor in '%2% %3%'.\n"
 msgstr "%1%: chybějící dělitel v '%2% %3%'.\n"
 
-#: src/merge/mkvmerge.cpp:641
+#: src/merge/mkvmerge.cpp:643
 #, boost-format
 msgid "%1%: missing track ID in '%2% %3%'.\n"
 msgstr "%1%: chybějící ID stopy v '%2% %3%'.\n"
@@ -967,7 +967,7 @@ msgstr ""
 msgid "&Abort"
 msgstr "&Přerušit"
 
-#: src/mmg/mmg_dialog.cpp:313
+#: src/mmg/mmg_dialog.cpp:314
 msgid "&About"
 msgstr "&O aplikaci"
 
@@ -980,12 +980,12 @@ msgstr "&O aplikaci\tF1"
 msgid "&Add"
 msgstr "&Přidat"
 
-#: src/mmg/mmg_dialog.cpp:299
-#: src/mmg/mmg_dialog.cpp:334
+#: src/mmg/mmg_dialog.cpp:300
+#: src/mmg/mmg_dialog.cpp:335
 msgid "&Add to job queue"
 msgstr "&Přidat do fronty úloh"
 
-#: src/mmg/mmg_dialog.cpp:309
+#: src/mmg/mmg_dialog.cpp:310
 msgid "&Attachments\tAlt-2"
 msgstr "&Přílohy\tAlt-2"
 
@@ -993,15 +993,15 @@ msgstr "&Přílohy\tAlt-2"
 msgid "&Cancel"
 msgstr ""
 
-#: src/mmg/mmg_dialog.cpp:321
+#: src/mmg/mmg_dialog.cpp:322
 msgid "&Chapter Editor"
 msgstr "&Editor kapitol"
 
-#: src/mmg/mmg_dialog.cpp:311
+#: src/mmg/mmg_dialog.cpp:312
 msgid "&Chapter editor\tAlt-4"
 msgstr "&Editor kapitol\tAlt-4"
 
-#: src/mmg/mmg_dialog.cpp:316
+#: src/mmg/mmg_dialog.cpp:317
 msgid "&Check for updates"
 msgstr "&Zkontrolovat aktualizace"
 
@@ -1018,11 +1018,11 @@ msgstr "&Zavřít\tCtrl-W"
 msgid "&Collapse all entries\tCtrl-P"
 msgstr "&Sbalit všechny položky\tCtrl-P"
 
-#: src/mmg/mmg_dialog.cpp:296
+#: src/mmg/mmg_dialog.cpp:297
 msgid "&Copy command line to clipboard"
 msgstr "&Kopírovat příkazový řádek do schránky"
 
-#: src/mmg/mmg_dialog.cpp:333
+#: src/mmg/mmg_dialog.cpp:334
 msgid "&Copy to clipboard"
 msgstr "&Kopírovat do schránky"
 
@@ -1053,54 +1053,54 @@ msgstr "&Rozbalit důležité součásti\tCtrl-E"
 
 #: src/info/wxwidgets_ui.cpp:128
 #: src/mmg/header_editor/frame.cpp:151
-#: src/mmg/mmg_dialog.cpp:319
+#: src/mmg/mmg_dialog.cpp:320
 msgid "&File"
 msgstr "&Soubor"
 
-#: src/mmg/mmg_dialog.cpp:310
+#: src/mmg/mmg_dialog.cpp:311
 msgid "&Global options\tAlt-3"
 msgstr "&Všeobecné volby\tAlt-3"
 
-#: src/mmg/mmg_dialog.cpp:292
+#: src/mmg/mmg_dialog.cpp:293
 msgid "&Header editor\tCtrl-E"
 msgstr "Editor &hlavičky\tCtrl-E"
 
 #: src/info/wxwidgets_ui.cpp:130
 #: src/mmg/header_editor/frame.cpp:153
-#: src/mmg/mmg_dialog.cpp:323
+#: src/mmg/mmg_dialog.cpp:324
 msgid "&Help"
 msgstr "&Nápověda"
 
 #: src/mmg/header_editor/frame.cpp:150
-#: src/mmg/mmg_dialog.cpp:312
+#: src/mmg/mmg_dialog.cpp:313
 msgid "&Help\tF1"
 msgstr "&Nápověda\tF1"
 
-#: src/mmg/mmg_dialog.cpp:308
+#: src/mmg/mmg_dialog.cpp:309
 msgid "&Input\tAlt-1"
 msgstr "&Vstup\tAlt-1"
 
-#: src/mmg/mmg_dialog.cpp:303
+#: src/mmg/mmg_dialog.cpp:304
 msgid "&Load"
 msgstr "&Načíst"
 
-#: src/mmg/mmg_dialog.cpp:288
+#: src/mmg/mmg_dialog.cpp:289
 msgid "&Load settings\tCtrl-L"
 msgstr "&Načíst nastavení\tCtrl-L"
 
-#: src/mmg/mmg_dialog.cpp:300
+#: src/mmg/mmg_dialog.cpp:301
 msgid "&Manage jobs\tCtrl-J"
 msgstr "&Správce úloh\tCtrl-J"
 
-#: src/mmg/mmg_dialog.cpp:320
+#: src/mmg/mmg_dialog.cpp:321
 msgid "&Muxing"
 msgstr "&Zpracování"
 
-#: src/mmg/mmg_dialog.cpp:287
+#: src/mmg/mmg_dialog.cpp:288
 msgid "&New\tCtrl-N"
 msgstr "&Nový\tCtrl-N"
 
-#: src/mmg/mmg_dialog.cpp:302
+#: src/mmg/mmg_dialog.cpp:303
 msgid "&New chapters"
 msgstr "&Nové kapitoly"
 
@@ -1120,7 +1120,7 @@ msgid "&Options"
 msgstr "&Volby"
 
 #: src/mmg/header_editor/frame.cpp:146
-#: src/mmg/mmg_dialog.cpp:293
+#: src/mmg/mmg_dialog.cpp:294
 msgid "&Quit\tCtrl-Q"
 msgstr "&Konec\tCtrl-Q"
 
@@ -1141,7 +1141,7 @@ msgid "&Reset"
 msgstr "&Obnovit"
 
 #: src/mmg/jobs.cpp:408
-#: src/mmg/mmg_dialog.cpp:304
+#: src/mmg/mmg_dialog.cpp:305
 msgid "&Save"
 msgstr "&Uložit"
 
@@ -1153,7 +1153,7 @@ msgstr "&Uložit\tCtrl-S"
 msgid "&Save info as text\tCtrl-S"
 msgstr "&Uložit informaci jako text\tCtrl-S"
 
-#: src/mmg/mmg_dialog.cpp:289
+#: src/mmg/mmg_dialog.cpp:290
 msgid "&Save settings\tCtrl-S"
 msgstr "&Uložit nastavení\tCtrl-S"
 
@@ -1169,7 +1169,7 @@ msgstr "&Seřadit"
 msgid "&Start"
 msgstr "&Spustit"
 
-#: src/mmg/mmg_dialog.cpp:314
+#: src/mmg/mmg_dialog.cpp:315
 msgid "&Troubleshooting"
 msgstr ""
 
@@ -1182,7 +1182,7 @@ msgstr "&Nahoru"
 msgid "&Validate\tCtrl-T"
 msgstr "&Schválit\tCtrl-T"
 
-#: src/mmg/mmg_dialog.cpp:307
+#: src/mmg/mmg_dialog.cpp:308
 msgid "&Verify"
 msgstr "&Ověřit"
 
@@ -1190,11 +1190,11 @@ msgstr "&Ověřit"
 msgid "&View log"
 msgstr "&Zobrazit protokol"
 
-#: src/mmg/mmg_dialog.cpp:322
+#: src/mmg/mmg_dialog.cpp:323
 msgid "&Window"
 msgstr "&Okno"
 
-#: src/merge/mkvmerge.cpp:1845
+#: src/merge/mkvmerge.cpp:1847
 #, boost-format
 msgid "'%1%' can only be used with a file name. No further options are allowed if this option is used.\n"
 msgstr "'%1%' může být použito pouze s názvem souboru. Žádné další volby nejsou povoleny, pokud je použita tato volba.\n"
@@ -1204,12 +1204,12 @@ msgstr "'%1%' může být použito pouze s názvem souboru. Žádné další vol
 msgid "'%1%' does not contain a valid unit ('s', 'ms', 'us', 'ns', 'fps', 'p' or 'i') in '%2% %3%'.\n"
 msgstr "'%1%' neobsahuje platnou jednotku ('s', 'ms', 'us', 'ns', 'fps', 'p' nebo 'i') v '%2% %3%'.\n"
 
-#: src/merge/mkvmerge.cpp:1146
+#: src/merge/mkvmerge.cpp:1148
 #, boost-format
 msgid "'%1%' is an unsupported argument for --compression. Available compression methods are: %2%\n"
 msgstr "'%1%' je nepodporovaný parametr pro '--compression'. Dostupné metody komprese jsou: %2%\n"
 
-#: src/merge/mkvmerge.cpp:1101
+#: src/merge/mkvmerge.cpp:1103
 #, boost-format
 msgid "'%1%' is an unsupported argument for --cues.\n"
 msgstr "'%1%' je nepodporovaný parametr pro '--cues'.\n"
@@ -1219,17 +1219,17 @@ msgstr "'%1%' je nepodporovaný parametr pro '--cues'.\n"
 msgid "'%1%' is missing the file name.\n"
 msgstr "'%1%' chybí název souboru.\n"
 
-#: src/merge/mkvmerge.cpp:1583
+#: src/merge/mkvmerge.cpp:1585
 #, boost-format
 msgid "'%1%' is neither a valid ISO639-2 nor a valid ISO639-1 code in '--chapter-language %1%'. See 'mkvmerge --list-languages' for a list of all languages and their respective ISO639-2 codes.\n"
 msgstr "'%1%' není platný ISO639-2 ani ISO639-1 kód v '--chapter-language %1%'. Viz 'mkvmerge --list-languages' pro seznam všech jazyků a jejich příslušných ISO639-2 kódů.\n"
 
-#: src/merge/mkvmerge.cpp:1649
+#: src/merge/mkvmerge.cpp:1651
 #, boost-format
 msgid "'%1%' is neither a valid ISO639-2 nor a valid ISO639-1 code in '--default-language %1%'. See 'mkvmerge --list-languages' for a list of all languages and their respective ISO639-2 codes.\n"
 msgstr "'%1%' není platný ISO639-2 ani ISO639-1 kód v '--default-language %1%'. Viz 'mkvmerge --list-languages' pro seznam všech jazyků a jejich příslušných ISO639-2 kódů.\n"
 
-#: src/merge/mkvmerge.cpp:1182
+#: src/merge/mkvmerge.cpp:1184
 #, boost-format
 msgid "'%1%' is neither a valid ISO639-2 nor a valid ISO639-1 code. See 'mkvmerge --list-languages' for a list of all languages and their respective ISO639-2 codes.\n"
 msgstr "'%1%' není platný ISO639-2 ani ISO639-1 kód. Viz 'mkvmerge --list-languages' pro seznam všech jazyků a jejich příslušných ISO639-2 kódů.\n"
@@ -1255,12 +1255,12 @@ msgstr "'%1%' není platný %2% v '%3% %4%'.\n"
 msgid "'%1%' is not a valid ISO639-2 language code."
 msgstr "'%1%' není platný kód jazyka ISO639-2."
 
-#: src/merge/mkvmerge.cpp:1342
+#: src/merge/mkvmerge.cpp:1344
 #, boost-format
 msgid "'%1%' is not a valid append mode in '--append-mode %1%'.\n"
 msgstr "'%1%' není platný režim připojení v '--append-mode %1%'.\n"
 
-#: src/merge/mkvmerge.cpp:1440
+#: src/merge/mkvmerge.cpp:1442
 #, boost-format
 msgid "'%1%' is not a valid block additional max in '--blockadd %2%'.\n"
 msgstr "'%1%' není platný maximální dodatečný blok v '--blockadd %2%'.\n"
@@ -1270,8 +1270,8 @@ msgstr "'%1%' není platný maximální dodatečný blok v '--blockadd %2%'.\n"
 msgid "'%1%' is not a valid ccTLD country code."
 msgstr "'%1%' není platný ccTLD kód země."
 
-#: src/merge/mkvmerge.cpp:1281
-#: src/merge/mkvmerge.cpp:1284
+#: src/merge/mkvmerge.cpp:1283
+#: src/merge/mkvmerge.cpp:1286
 #, boost-format
 msgid "'%1%' is not a valid file ID in '--track-order %2%'.\n"
 msgstr "'%1%' není platné ID souboru v '--track-order %2%'.\n"
@@ -1281,47 +1281,47 @@ msgstr "'%1%' není platné ID souboru v '--track-order %2%'.\n"
 msgid "'%1%' is not a valid hack.\n"
 msgstr "'%1%' není platný hack.\n"
 
-#: src/merge/mkvmerge.cpp:1327
+#: src/merge/mkvmerge.cpp:1329
 #, boost-format
 msgid "'%1%' is not a valid mapping of file and track IDs in '--append-to %2%'.\n"
 msgstr "'%1%' není platné přiřazení souboru ID stop v '--append-to %2%'.\n"
 
-#: src/merge/mkvmerge.cpp:1278
+#: src/merge/mkvmerge.cpp:1280
 #, boost-format
 msgid "'%1%' is not a valid pair of file ID and track ID in '--track-order %2%'.\n"
 msgstr "'%1%' není platný pár ID souboru a ID stopy v '--track-order %2%'.\n"
 
-#: src/merge/mkvmerge.cpp:1432
+#: src/merge/mkvmerge.cpp:1434
 #, boost-format
 msgid "'%1%' is not a valid pair of track ID and block additional in '--blockadd %1%'.\n"
 msgstr "'%1%' není platný pár ID stopy a doplňkového bloku v '--blockadd %1%'.\n"
 
-#: src/merge/mkvmerge.cpp:1477
+#: src/merge/mkvmerge.cpp:1479
 #, boost-format
 msgid "'%1%' is not a valid priority class.\n"
 msgstr "'%1%' není platná třída priority.\n"
 
-#: src/merge/mkvmerge.cpp:1436
+#: src/merge/mkvmerge.cpp:1438
 #, boost-format
 msgid "'%1%' is not a valid track ID in '--blockadd %2%'.\n"
 msgstr "'%1%' není platné ID stopy v '--blockadd %2%'.\n"
 
-#: src/merge/mkvmerge.cpp:1360
+#: src/merge/mkvmerge.cpp:1362
 #, boost-format
 msgid "'%1%' is not a valid track ID in '--default-duration %2%'.\n"
 msgstr "'%1%' není platné ID stopy v '--default-duration %2%'.\n"
 
-#: src/merge/mkvmerge.cpp:1381
+#: src/merge/mkvmerge.cpp:1383
 #, boost-format
 msgid "'%1%' is not a valid track ID in '--nalu-size-length %2%'.\n"
 msgstr "'%1%' není platné ID stopy v '--nalu-size-length %2%'.\n"
 
-#: src/merge/mkvmerge.cpp:1377
+#: src/merge/mkvmerge.cpp:1379
 #, boost-format
 msgid "'%1%' is not a valid tuple of track ID and NALU size length in '--nalu-size-length %1%'.\n"
 msgstr "'%1%' není platný pár ID stopy a velikosti NALU v '--nalu-size-length %1%'.\n"
 
-#: src/merge/mkvmerge.cpp:1356
+#: src/merge/mkvmerge.cpp:1358
 #, boost-format
 msgid "'%1%' is not a valid tuple of track ID and default duration in '--default-duration %1%'.\n"
 msgstr "'%1%' není platný pár ID stopy a výchozí délky v '--default-duration %1%'.\n"
@@ -1336,42 +1336,42 @@ msgstr "'%1%' je povoleno pouze při extrahování kapitol.\n"
 msgid "'%1%' is only allowed when extracting tracks.\n"
 msgstr "'%1%' je povoleno pouze při extrahování stop.\n"
 
-#: src/merge/mkvmerge.cpp:1865
+#: src/merge/mkvmerge.cpp:1867
 #, boost-format
 msgid "'%1%' lacks a file name.\n"
 msgstr "'%1%' postrádá název souboru.\n"
 
-#: src/merge/mkvmerge.cpp:2088
-#: src/merge/mkvmerge.cpp:2252
+#: src/merge/mkvmerge.cpp:2090
+#: src/merge/mkvmerge.cpp:2254
 #, boost-format
 msgid "'%1%' lacks its argument.\n"
 msgstr "'%1%' postrádá jeho parametr.\n"
 
-#: src/merge/mkvmerge.cpp:2161
+#: src/merge/mkvmerge.cpp:2163
 #, boost-format
 msgid "'%1%' lacks the FourCC.\n"
 msgstr "'%1%' postrádá kód FourCC.\n"
 
-#: src/merge/mkvmerge.cpp:2203
+#: src/merge/mkvmerge.cpp:2205
 #, boost-format
 msgid "'%1%' lacks the delay.\n"
 msgstr "'%1%' postrádá zpoždění.\n"
 
-#: src/merge/mkvmerge.cpp:2022
+#: src/merge/mkvmerge.cpp:2024
 #, boost-format
 msgid "'%1%' lacks the file name.\n"
 msgstr "'%1%' postrádá název souboru.\n"
 
-#: src/merge/mkvmerge.cpp:2259
+#: src/merge/mkvmerge.cpp:2261
 #, boost-format
 msgid "'%1%' lacks the track ID.\n"
 msgstr "'%1%' postrádá ID stopy.\n"
 
-#: src/merge/mkvmerge.cpp:2126
-#: src/merge/mkvmerge.cpp:2133
-#: src/merge/mkvmerge.cpp:2140
-#: src/merge/mkvmerge.cpp:2147
-#: src/merge/mkvmerge.cpp:2154
+#: src/merge/mkvmerge.cpp:2128
+#: src/merge/mkvmerge.cpp:2135
+#: src/merge/mkvmerge.cpp:2142
+#: src/merge/mkvmerge.cpp:2149
+#: src/merge/mkvmerge.cpp:2156
 #, boost-format
 msgid "'%1%' lacks the track number(s).\n"
 msgstr "'%1%' postrádá číslo stopy.\n"
@@ -1402,71 +1402,71 @@ msgstr "'%1%': Zpracovat také následující soubory: %2%\n"
 msgid "'%1%': You're re-muxing an Opus track that was muxed in experimental mode. The resulting track will be written in final mode, but one detail cannot be recovered from a track muxed in experimental mode: the end trimming. This means that a decoder might output a few samples more than originally intended. You should re-mux from the original Opus file if possible.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:2311
+#: src/merge/mkvmerge.cpp:2313
 msgid "'--append-mode' lacks its argument.\n"
 msgstr "'--append-mode' postrádá svůj parametr.\n"
 
-#: src/merge/mkvmerge.cpp:2304
+#: src/merge/mkvmerge.cpp:2306
 msgid "'--append-to' lacks its argument.\n"
 msgstr "'--append-to' postrádá svůj parametr.\n"
 
-#: src/merge/mkvmerge.cpp:2168
+#: src/merge/mkvmerge.cpp:2170
 msgid "'--aspect-ratio' lacks the aspect ratio.\n"
 msgstr "'--aspect-ratio' postrádá poměr stran.\n"
 
-#: src/merge/mkvmerge.cpp:2175
+#: src/merge/mkvmerge.cpp:2177
 msgid "'--aspect-ratio-factor' lacks the aspect ratio factor.\n"
 msgstr "'--aspect-ratio-factor' postrádá koeficient poměru stran.\n"
 
-#: src/merge/mkvmerge.cpp:1993
+#: src/merge/mkvmerge.cpp:1995
 msgid "'--attachment-description' lacks the description.\n"
 msgstr "'--attachment-description' postrádá popis.\n"
 
-#: src/merge/mkvmerge.cpp:2002
+#: src/merge/mkvmerge.cpp:2004
 msgid "'--attachment-mime-type' lacks the MIME type.\n"
 msgstr "'--attachment-mime-type' postrádá MIME typ.\n"
 
-#: src/merge/mkvmerge.cpp:2012
+#: src/merge/mkvmerge.cpp:2014
 msgid "'--attachment-name' lacks the name.\n"
 msgstr "'--attachment-name' postrádá název.\n"
 
-#: src/merge/mkvmerge.cpp:2273
+#: src/merge/mkvmerge.cpp:2275
 msgid "'--blockadd' lacks its argument.\n"
 msgstr "'--blockadd' postrádá svůj parametr.\n"
 
-#: src/merge/mkvmerge.cpp:2047
+#: src/merge/mkvmerge.cpp:2049
 msgid "'--chapter-charset' lacks the charset.\n"
 msgstr "'--chapter-charset' postrádá znakovou sadu.\n"
 
-#: src/merge/mkvmerge.cpp:1594
+#: src/merge/mkvmerge.cpp:1596
 #, boost-format
 msgid "'--chapter-charset' may only be given once in '--chapter-charset %1%'.\n"
 msgstr "'--chapter-charset' může být zadána pouze jednou v '--chapter-charset %1%'.\n"
 
-#: src/merge/mkvmerge.cpp:1597
+#: src/merge/mkvmerge.cpp:1599
 #, boost-format
 msgid "'--chapter-charset' must be given before '--chapters' in '--chapter-charset %1%'.\n"
 msgstr "'--chapter-charset' musí být zadána před '--chapters' v '--chapter-charset %1%'.\n"
 
-#: src/merge/mkvmerge.cpp:2040
+#: src/merge/mkvmerge.cpp:2042
 msgid "'--chapter-language' lacks the language.\n"
 msgstr "'--chapter-language' postrádá jazyk.\n"
 
-#: src/merge/mkvmerge.cpp:1576
+#: src/merge/mkvmerge.cpp:1578
 #, boost-format
 msgid "'--chapter-language' may only be given once in '--chapter-language %1%'.\n"
 msgstr "'--chapter-language' může být zadán pouze jednou v '--chapter-language %1%'.\n"
 
-#: src/merge/mkvmerge.cpp:1579
+#: src/merge/mkvmerge.cpp:1581
 #, boost-format
 msgid "'--chapter-language' must be given before '--chapters' in '--chapter-language %1%'.\n"
 msgstr "'--chapter-language' musí být zadán před '--chapters' v '--chapter-language %1%'.\n"
 
-#: src/merge/mkvmerge.cpp:2064
+#: src/merge/mkvmerge.cpp:2066
 msgid "'--chapters' lacks the file name.\n"
 msgstr "'--chapters' postrádá název souboru.\n"
 
-#: src/merge/mkvmerge.cpp:1974
+#: src/merge/mkvmerge.cpp:1976
 msgid "'--cluster-length' lacks the length.\n"
 msgstr "'--cluster-length' postrádá délku.\n"
 
@@ -1474,39 +1474,39 @@ msgstr "'--cluster-length' postrádá délku.\n"
 msgid "'--command-line-charset' is missing its argument.\n"
 msgstr "'--command-line-charset' postrádá svůj parametr.\n"
 
-#: src/merge/mkvmerge.cpp:2266
+#: src/merge/mkvmerge.cpp:2268
 msgid "'--compression' lacks its argument.\n"
 msgstr "'--compression' postrádá svůj parametr.\n"
 
-#: src/merge/mkvmerge.cpp:2189
+#: src/merge/mkvmerge.cpp:2191
 msgid "'--cropping' lacks the crop parameters.\n"
 msgstr "'--cropping' postrádá parametery oříznutí.\n"
 
-#: src/merge/mkvmerge.cpp:2054
+#: src/merge/mkvmerge.cpp:2056
 msgid "'--cue-chapter-name-format' lacks the format.\n"
 msgstr "'--cue-chapter-name-format' postrádá formát.\n"
 
-#: src/merge/mkvmerge.cpp:2057
+#: src/merge/mkvmerge.cpp:2059
 msgid "'--cue-chapter-name-format' must be given before '--chapters'.\n"
 msgstr "'--cue-chapter-name-format' musí být zadán před '--chapters'.\n"
 
-#: src/merge/mkvmerge.cpp:2210
+#: src/merge/mkvmerge.cpp:2212
 msgid "'--cues' lacks its argument.\n"
 msgstr "'--cues' postrádá svůj parametr.\n"
 
-#: src/merge/mkvmerge.cpp:2318
+#: src/merge/mkvmerge.cpp:2320
 msgid "'--default-duration' lacks its argument.\n"
 msgstr "'--default-duration' postrádá svůj parametr.\n"
 
-#: src/merge/mkvmerge.cpp:2238
+#: src/merge/mkvmerge.cpp:2240
 msgid "'--default-language' lacks its argument.\n"
 msgstr "'--default-language' postrádá svůj parametr.\n"
 
-#: src/merge/mkvmerge.cpp:2217
+#: src/merge/mkvmerge.cpp:2219
 msgid "'--default-track' lacks its argument.\n"
 msgstr "'--default-track' postrádá svůj parametr.\n"
 
-#: src/merge/mkvmerge.cpp:2182
+#: src/merge/mkvmerge.cpp:2184
 msgid "'--display-dimensions' lacks the dimensions.\n"
 msgstr "'--display-dimensions' postrádá rozměry.\n"
 
@@ -1514,108 +1514,108 @@ msgstr "'--display-dimensions' postrádá rozměry.\n"
 msgid "'--engage' lacks its argument.\n"
 msgstr "'--engage' postrádá svůj parametr.\n"
 
-#: src/merge/mkvmerge.cpp:2332
+#: src/merge/mkvmerge.cpp:2334
 #, fuzzy
 msgid "'--fix-bitstream-timing-information' lacks its argument.\n"
 msgstr "'--default-duration' postrádá svůj parametr.\n"
 
-#: src/merge/mkvmerge.cpp:2224
+#: src/merge/mkvmerge.cpp:2226
 msgid "'--forced-track' lacks its argument.\n"
 msgstr "'--forced-track' postrádá svůj parametr.\n"
 
-#: src/merge/mkvmerge.cpp:2031
+#: src/merge/mkvmerge.cpp:2033
 msgid "'--global-tags' lacks the file name.\n"
 msgstr "'--global-tags' postrádá název souboru.\n"
 
-#: src/merge/mkvmerge.cpp:2231
+#: src/merge/mkvmerge.cpp:2233
 msgid "'--language' lacks its argument.\n"
 msgstr "'--language' postrádá svůj parametr.\n"
 
-#: src/merge/mkvmerge.cpp:2349
+#: src/merge/mkvmerge.cpp:2351
 msgid "'--link' is only useful in combination with '--split'.\n"
 msgstr "'--link' je použitelný pouze v kombinaci s '--split'.\n"
 
-#: src/merge/mkvmerge.cpp:1960
+#: src/merge/mkvmerge.cpp:1962
 msgid "'--link-to-next' lacks the next UID.\n"
 msgstr "'--link-to-next' postrádá další UID.\n"
 
-#: src/merge/mkvmerge.cpp:1953
+#: src/merge/mkvmerge.cpp:1955
 msgid "'--link-to-previous' lacks the previous UID.\n"
 msgstr "'--link-to-previous' postrádá předchozí UID.\n"
 
-#: src/merge/mkvmerge.cpp:2325
+#: src/merge/mkvmerge.cpp:2327
 msgid "'--nalu-size-length' lacks its argument.\n"
 msgstr "'--nalu-size-length' postrádá svůj parametr.\n"
 
-#: src/merge/mkvmerge.cpp:1913
+#: src/merge/mkvmerge.cpp:1915
 msgid "'--priority' lacks its argument.\n"
 msgstr "'--priority' postrádá svůj parametr.\n"
 
-#: src/merge/mkvmerge.cpp:1967
+#: src/merge/mkvmerge.cpp:1969
 msgid "'--segment-uid' lacks the segment UID.\n"
 msgstr "'--segment-uid' postrádá UID úseku.\n"
 
-#: src/merge/mkvmerge.cpp:2073
+#: src/merge/mkvmerge.cpp:2075
 msgid "'--segmentinfo' lacks the file name.\n"
 msgstr "'--segmentinfo' postrádá název souboru.\n"
 
-#: src/merge/mkvmerge.cpp:1934
+#: src/merge/mkvmerge.cpp:1936
 msgid "'--split' lacks the size.\n"
 msgstr "'--split' postrádá velikost.\n"
 
-#: src/merge/mkvmerge.cpp:1941
+#: src/merge/mkvmerge.cpp:1943
 msgid "'--split-max-files' lacks the number of files.\n"
 msgstr "'--split-max-files' postrádá počet souborů.\n"
 
-#: src/merge/mkvmerge.cpp:2196
+#: src/merge/mkvmerge.cpp:2198
 msgid "'--stereo-mode' lacks its argument.\n"
 msgstr "'--stereo-mode' postrádá svůj parametr.\n"
 
-#: src/merge/mkvmerge.cpp:2245
+#: src/merge/mkvmerge.cpp:2247
 msgid "'--sub-charset' lacks its argument.\n"
 msgstr "'--sub-charset' postrádá svůj parametr.\n"
 
-#: src/merge/mkvmerge.cpp:2102
+#: src/merge/mkvmerge.cpp:2104
 msgid "'--timecode-scale' lacks its argument.\n"
 msgstr "'--timecode-scale' postrádá svůj parametr.\n"
 
-#: src/merge/mkvmerge.cpp:1628
+#: src/merge/mkvmerge.cpp:1630
 msgid "'--timecode-scale' was used more than once.\n"
 msgstr "'--timecode-scale' byl použit více než jednou.\n"
 
-#: src/merge/mkvmerge.cpp:2287
+#: src/merge/mkvmerge.cpp:2289
 msgid "'--timecodes' lacks its argument.\n"
 msgstr "'--timecodes' postrádá svůj parametr.\n"
 
-#: src/merge/mkvmerge.cpp:1926
+#: src/merge/mkvmerge.cpp:1928
 msgid "'--title' lacks the title.\n"
 msgstr "'--title' postrádá název.\n"
 
-#: src/merge/mkvmerge.cpp:2280
+#: src/merge/mkvmerge.cpp:2282
 msgid "'--track-name' lacks its argument.\n"
 msgstr "'--track-name' postrádá svůj parametr.\n"
 
-#: src/merge/mkvmerge.cpp:2294
+#: src/merge/mkvmerge.cpp:2296
 msgid "'--track-order' lacks its argument.\n"
 msgstr "'--track-order' postrádá svůj parametr.\n"
 
-#: src/merge/mkvmerge.cpp:2297
+#: src/merge/mkvmerge.cpp:2299
 msgid "'--track-order' may only be given once.\n"
 msgstr "'--track-order' může být zadáno pouze jednou.\n"
 
-#: src/merge/mkvmerge.cpp:1728
+#: src/merge/mkvmerge.cpp:1730
 msgid "'-A' and '-a' used on the same source file.\n"
 msgstr "'-A' a '-a' použity na stejný zdrojový soubor.\n"
 
-#: src/merge/mkvmerge.cpp:1737
+#: src/merge/mkvmerge.cpp:1739
 msgid "'-B' and '-b' used on the same source file.\n"
 msgstr "'-B' a '-b' použity na stejný zdrojový soubor.\n"
 
-#: src/merge/mkvmerge.cpp:1731
+#: src/merge/mkvmerge.cpp:1733
 msgid "'-D' and '-d' used on the same source file.\n"
 msgstr "'-D' a '-d' použity na stejný zdrojový soubor.\n"
 
-#: src/merge/mkvmerge.cpp:1734
+#: src/merge/mkvmerge.cpp:1736
 msgid "'-S' and '-s' used on the same source file.\n"
 msgstr "'-S' a '-s' použity na stejný zdrojový soubor.\n"
 
@@ -1818,7 +1818,7 @@ msgstr "Řetězec čitelný pro člověka určující kodek."
 msgid "A human-readable track name."
 msgstr "Název stopy čitelný pro člověka."
 
-#: src/mmg/mmg_dialog.cpp:1449
+#: src/mmg/mmg_dialog.cpp:1450
 #, c-format, boost-format
 msgid "A job with the description '%s' already exists. Do you really want to add another one with the same description?"
 msgstr "Úloha s popisem '%s' již existuje. Opravdu chcete přidat další se stejným popisem?"
@@ -1993,7 +1993,7 @@ msgstr ""
 msgid "Add"
 msgstr "Přidat"
 
-#: src/mmg/mmg_dialog.cpp:301
+#: src/mmg/mmg_dialog.cpp:302
 msgid "Add &command line options"
 msgstr "&Přidat volby příkazového řádku"
 
@@ -2054,7 +2054,7 @@ msgstr "Přídavky"
 msgid "Adds a property with the value even if such a property already exists"
 msgstr "Přidá vlastnost s hodnotou, dokonce i když taková vlastnost již existuje"
 
-#: src/mmg/mmg_dialog.cpp:299
+#: src/mmg/mmg_dialog.cpp:300
 msgid "Adds the current settings as a new job entry to the job queue"
 msgstr "Přidá současná nastavení jako novou položku do fronty úloh"
 
@@ -2143,7 +2143,7 @@ msgstr "ID odpovídající kodeku."
 msgid "An attachment with the ID %1% was not found.\n"
 msgstr "Příloha s ID %1% nebyla nalezena.\n"
 
-#: src/merge/mkvmerge.cpp:1720
+#: src/merge/mkvmerge.cpp:1722
 msgid "An empty file name is not valid.\n"
 msgstr "Prázdný název souboru není platný.\n"
 
@@ -2188,7 +2188,7 @@ msgstr "Analyzovat MPEG4 bitové proudy, vložit každý snímek do jednoho blok
 msgid "Another default track for %1% tracks has already been set. The 'default' flag for track %2% of '%3%' will not be set.\n"
 msgstr "Již byla nastavena jná výchozí stopa pro %1% stopy. Označení 'výchozí' pro stopu %2% z '%3%' nebude nastavena.\n"
 
-#: src/mmg/mmg_dialog.cpp:601
+#: src/mmg/mmg_dialog.cpp:602
 msgid "Another muxing job in still in progress. Please wait until it has finished or abort it manually before starting a new one."
 msgstr "Stále probíhá jiná úloha zpracování. Čekejte, dokud nebude dokončena nebo ji ručně přerušte před spuštěním nové úlohy."
 
@@ -2206,11 +2206,11 @@ msgstr "Připojení stopy %1% ze souboru č. %2% ('%3%') ke stopě %4% ze soubor
 msgid "Ask before overwriting things (files, jobs)"
 msgstr "Zeptat se před přepsáním (souborů, úloh)"
 
-#: src/merge/mkvmerge.cpp:636
+#: src/merge/mkvmerge.cpp:638
 msgid "Aspect ratio"
 msgstr "Poměr stran"
 
-#: src/merge/mkvmerge.cpp:636
+#: src/merge/mkvmerge.cpp:638
 msgid "Aspect ratio factor"
 msgstr "Činitel poměru stran"
 
@@ -2253,7 +2253,7 @@ msgid "Attachment style:"
 msgstr "Styl přílohy:"
 
 #: src/info/mkvinfo.cpp:1083
-#: src/mmg/mmg_dialog.cpp:326
+#: src/mmg/mmg_dialog.cpp:327
 #: src/mmg/tabs/attachments.cpp:156
 #: src/propedit/options.cpp:195
 msgid "Attachments"
@@ -2293,7 +2293,7 @@ msgstr "Automaticky nastavit název výstupního souboru"
 msgid "Automatic MIME type recognition for '%1%': %2%\n"
 msgstr "Automatické rozpoznání MIME typu pro '%1%': %2%\n"
 
-#: src/merge/mkvmerge.cpp:1884
+#: src/merge/mkvmerge.cpp:1886
 msgid "Automatically enabling WebM compliance mode due to output file name extension.\n"
 msgstr "Automatické povolení režimu kompatibility WebM kvůli příponě názvu výstupního souboru.\n"
 
@@ -2371,11 +2371,11 @@ msgstr "Byl zadán jak poměr stran tak i '--display-dimensions'.\n"
 msgid "Both the aspect ratio factor and '--display-dimensions' were given.\n"
 msgstr "Byl zadán jak koeficient poměru stran tak i '--display-dimensions'.\n"
 
-#: src/mmg/mmg_dialog.cpp:300
+#: src/mmg/mmg_dialog.cpp:301
 msgid "Brings up the job queue editor"
 msgstr "Otevře editor fronty úloh"
 
-#: src/mmg/mmg_dialog.cpp:331
+#: src/mmg/mmg_dialog.cpp:332
 #: src/mmg/options/mkvmerge.cpp:52
 #: src/mmg/options/output.cpp:45
 #: src/mmg/tabs/global.cpp:345
@@ -2407,7 +2407,7 @@ msgstr "Nelze převést nenativní MPEG4 snímky videa na nativní, pokud zdrojo
 msgid "Cannot extract tracks of different kinds to the same file. This was requested for the tracks %1% and %2%.\n"
 msgstr "Nelze extrahovat stopy různého typu do do stejného souboru. To bylo požadováno pro stopy %1% a %2%.\n"
 
-#: src/mmg/mmg_dialog.cpp:602
+#: src/mmg/mmg_dialog.cpp:603
 msgid "Cannot start second muxing job"
 msgstr "Nelze spustit druhou úlohu zpracování"
 
@@ -2466,7 +2466,7 @@ msgstr "Provedena změna pro '%1%'. Počet nastavených položek: %2%\n"
 msgid "Change for '%1%' executed. One entry added.\n"
 msgstr "Provedena změna pro '%1%'. Přidána jedna položka.\n"
 
-#: src/mmg/mmg_dialog.cpp:291
+#: src/mmg/mmg_dialog.cpp:292
 msgid "Change mmg's preferences and options"
 msgstr "Změnit předvolby a možnosti mmg"
 
@@ -2484,7 +2484,7 @@ msgstr "Pozice kanálů: %1%"
 msgid "Channels: %1%"
 msgstr "Kanály: %1%"
 
-#: src/mmg/mmg_dialog.cpp:328
+#: src/mmg/mmg_dialog.cpp:329
 msgid "Chapter Editor"
 msgstr "Editor kapitol"
 
@@ -2507,7 +2507,7 @@ msgstr "UID edice překladu kapitoly: %1%"
 msgid "Chapter Translate ID: %1%"
 msgstr "ID překladu kapitoly: %1%"
 
-#: src/mmg/mmg_dialog.cpp:630
+#: src/mmg/mmg_dialog.cpp:631
 msgid "Chapter editor is not empty"
 msgstr "Editor kapitol není prázdný"
 
@@ -2608,7 +2608,7 @@ msgstr "Znaková sada pro řetězce v příkazovém řádku"
 msgid "Charset:"
 msgstr "Znaková sada:"
 
-#: src/mmg/mmg_dialog.cpp:316
+#: src/mmg/mmg_dialog.cpp:317
 #: src/mmg/options/mmg.cpp:80
 msgid "Check online for the latest release"
 msgstr "Online zjišťovat nejnovější verzi."
@@ -2622,7 +2622,7 @@ msgstr "Online zjišťovat nejnovější verzi."
 msgid "Check online whether or not a new release of MKVToolNix is available on the home page. Will only check when mmg starts and at most once a day. No information is transmitted to the server."
 msgstr "Online zjišťovat, zda je na domovské stránce dostupná nová verze MKVToolNix. Bude zjišťováno pouze při spuštění mmg a nanejvýš jednou denně. Na server se neodesílají žádné informace."
 
-#: src/mmg/mmg_dialog.cpp:1789
+#: src/mmg/mmg_dialog.cpp:1790
 msgid "Checking for updates online; please wait"
 msgstr "Online zjišťování aktualizací; čekejte"
 
@@ -2642,7 +2642,7 @@ msgstr "Vyberte soubor časových kódů"
 msgid "Choose an attachment file"
 msgstr "Vyberte soubor přílohy"
 
-#: src/mmg/mmg_dialog.cpp:408
+#: src/mmg/mmg_dialog.cpp:409
 msgid "Choose an input file"
 msgstr "Vyberte vstupní soubor"
 
@@ -2655,10 +2655,10 @@ msgid "Choose an input file to append"
 msgstr "Vyberte vstupní soubor pro připojení"
 
 #: src/mmg/jobs.cpp:421
-#: src/mmg/mmg_dialog.cpp:354
-#: src/mmg/mmg_dialog.cpp:456
-#: src/mmg/mmg_dialog.cpp:769
-#: src/mmg/mmg_dialog.cpp:790
+#: src/mmg/mmg_dialog.cpp:355
+#: src/mmg/mmg_dialog.cpp:457
+#: src/mmg/mmg_dialog.cpp:770
+#: src/mmg/mmg_dialog.cpp:791
 #: src/mmg/mux_dialog.cpp:206
 #: src/mmg/tabs/chapters.cpp:663
 #: src/mmg/tabs/chapters.cpp:700
@@ -2669,7 +2669,7 @@ msgstr "Vyberte výstupní soubor"
 msgid "Choose the chapter file"
 msgstr "Vyberte soubor kapitol"
 
-#: src/mmg/mmg_dialog.cpp:666
+#: src/mmg/mmg_dialog.cpp:667
 msgid "Choose the location of the mkvmerge GUI help files"
 msgstr "Vyberte umístění souborů nápovědy mkvmerge GUI"
 
@@ -2707,12 +2707,12 @@ msgstr "Zavřít současný soubor bez uložení"
 msgid "Cluster"
 msgstr "Cluster"
 
-#: src/merge/mkvmerge.cpp:1533
+#: src/merge/mkvmerge.cpp:1535
 #, boost-format
 msgid "Cluster length '%1%' out of range (0..65535).\n"
 msgstr "Délka clusteru '%1%' je mimo rozsah (0..65535).\n"
 
-#: src/merge/mkvmerge.cpp:1526
+#: src/merge/mkvmerge.cpp:1528
 #, boost-format
 msgid "Cluster length '%1%' out of range (100..32000).\n"
 msgstr "Délka clusteru '%1%' je mimo rozsah (100..32000).\n"
@@ -2803,7 +2803,7 @@ msgstr "Sbalit všechny položky, aby nebyla zobrazena žádná z jejich podpolo
 msgid "Colour space: %1%"
 msgstr "Barevný prostor: %1%"
 
-#: src/mmg/mmg_dialog.cpp:821
+#: src/mmg/mmg_dialog.cpp:822
 msgid "Command line copied to clipboard."
 msgstr "Příkazový řádek zkopírován do schránky."
 
@@ -2811,7 +2811,7 @@ msgstr "Příkazový řádek zkopírován do schránky."
 msgid "Command line options:"
 msgstr "Volby příkazového řádku:"
 
-#: src/mmg/mmg_dialog.cpp:779
+#: src/mmg/mmg_dialog.cpp:780
 msgid "Command line saved."
 msgstr "Příkazový řádek uložen."
 
@@ -2833,15 +2833,15 @@ msgstr "Komprese selhala: %1%\n"
 msgid "Compression:"
 msgstr "Komprese:"
 
-#: src/mmg/mmg_dialog.cpp:403
+#: src/mmg/mmg_dialog.cpp:404
 msgid "Configuration cleared."
 msgstr "Konfigurace vymazána."
 
-#: src/mmg/mmg_dialog.cpp:450
+#: src/mmg/mmg_dialog.cpp:451
 msgid "Configuration loaded."
 msgstr "Konfigurace načtena."
 
-#: src/mmg/mmg_dialog.cpp:483
+#: src/mmg/mmg_dialog.cpp:484
 msgid "Configuration saved."
 msgstr "Konfigurace uložena."
 
@@ -2865,7 +2865,7 @@ msgstr "Šifrování obsahu"
 msgid "Convert text subtitles to this charset (default: UTF-8)."
 msgstr "Převést textové titulky na tuto znakovou sadu (výchozí: UTF-8)."
 
-#: src/mmg/mmg_dialog.cpp:296
+#: src/mmg/mmg_dialog.cpp:297
 msgid "Copy the command line to the clipboard"
 msgstr "Kopírovat příkazový řádek do schránky"
 
@@ -2885,7 +2885,7 @@ msgstr "Nelze vytvořit dočasný soubor pro volbu příkazového řádku mkvmer
 msgid "Could not create the file '%s'."
 msgstr "Nelze vytvořit soubor '%s'."
 
-#: src/mmg/mmg_dialog.cpp:799
+#: src/mmg/mmg_dialog.cpp:800
 msgid "Could not create the specified file."
 msgstr "Nelze vytvořit zadaný soubor."
 
@@ -2937,7 +2937,7 @@ msgstr "Nelze inicializovat 'iconv' knihovnu pro převod z UTF-8 do %1%. Někter
 msgid "Could not open '%1%' for reading.\n"
 msgstr "Nelze otevřít '%1%' pro čtení.\n"
 
-#: src/mmg/mmg_dialog.cpp:823
+#: src/mmg/mmg_dialog.cpp:824
 msgid "Could not open the clipboard."
 msgstr "Nelze otevřít schránku."
 
@@ -2985,7 +2985,7 @@ msgstr "Nelze zapisovat do výstupního souboru: %1% (%2%)\n"
 msgid "Country:"
 msgstr "Země:"
 
-#: src/mmg/mmg_dialog.cpp:298
+#: src/mmg/mmg_dialog.cpp:299
 msgid "Create &option file"
 msgstr "&Vytvořit soubor voleb"
 
@@ -2997,7 +2997,7 @@ msgstr "Vytvořit odpovídající soubor WebM"
 msgid "Create a WebM compliant file. mkvmerge also turns this on if the output file name's extension is \"webm\". This mode enforces several restrictions. The only allowed codecs are VP8 video and Vorbis audio tracks. Neither chapters nor tags are allowed. The DocType header item is changed to \"webm\"."
 msgstr "Vytvoří soubor vyhovující specifikaci WebM. mkvmerge tuto volbu také zapne, pokud je název přípony výstupního souboru \"webm\". Tento režim vynutí některá omezení. Jediné povolené kodeky jsou VP8 pro video a Vorbis pro audio stopy. Kapitoly ani štíky nejsou povoleny. Položka hlavičky Typ dokumentu je změněna na \"webm\"."
 
-#: src/mmg/mmg_dialog.cpp:302
+#: src/mmg/mmg_dialog.cpp:303
 msgid "Create a new chapter file"
 msgstr "Vytvořit nový soubor kapitol"
 
@@ -3005,7 +3005,7 @@ msgstr "Vytvořit nový soubor kapitol"
 msgid "Creating directory '%1%' failed: %2%"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:713
+#: src/merge/mkvmerge.cpp:715
 #, boost-format
 msgid "Cropping parameters: not given in the form <TID>:<left>,<top>,<right>,<bottom> e.g. 0:10,5,10,5 (argument was '%1%').\n"
 msgstr "Parametry ořezání: nezadány ve formuláři <TID>:<left>,<top>,<right>,<bottom> (např. 0:10,5,10,5) (parametr byl '%1%').\n"
@@ -3113,7 +3113,7 @@ msgstr "Indexy:"
 msgid "Current and past jobs:"
 msgstr "Aktuální a minulé úlohy:"
 
-#: src/mmg/mmg_dialog.cpp:761
+#: src/mmg/mmg_dialog.cpp:762
 msgid "Current command line"
 msgstr "Aktuální příkazový řádek"
 
@@ -3230,7 +3230,7 @@ msgstr "Odstranit vybrané úlohy z fronty úloh"
 msgid "Description"
 msgstr "Popis"
 
-#: src/mmg/mmg_dialog.cpp:1450
+#: src/mmg/mmg_dialog.cpp:1451
 msgid "Description already exists"
 msgstr "Popis již existuje"
 
@@ -3276,8 +3276,8 @@ msgstr "Zakáže svazování pro všechny stopy. To zvýší velikost souboru, h
 msgid "Discard padding: %|1$.3f|ms (%2%ns)"
 msgstr "Délka: %|1$.3f|s (%2%)"
 
-#: src/merge/mkvmerge.cpp:688
-#: src/merge/mkvmerge.cpp:694
+#: src/merge/mkvmerge.cpp:690
+#: src/merge/mkvmerge.cpp:696
 #, boost-format
 msgid "Display dimensions: not given in the form <TID>:<width>x<height>, e.g. 1:640x480 (argument was '%1%').\n"
 msgstr "Rozměry zobrazení: neurčené ve formuláři <TID>:<width>x<height>, např. 1:640x480 (parametr byl '%1%').\n"
@@ -3504,8 +3504,8 @@ msgid "Error in line %1%: expected subtitle number and found some text.\n"
 msgstr "Chyba na řádku %1%: očekáváno číslo titulku, ale nalezen nějaký text.\n"
 
 #: src/mmg/mmg.cpp:279
-#: src/mmg/mmg_dialog.cpp:413
-#: src/mmg/mmg_dialog.cpp:434
+#: src/mmg/mmg_dialog.cpp:414
+#: src/mmg/mmg_dialog.cpp:435
 msgid "Error loading settings"
 msgstr "Chyba načítání nastavení"
 
@@ -3526,7 +3526,7 @@ msgstr "Chyba analýzy kapitol v '%1%': schází některé povinné součásti.\
 msgid "Error parsing the file"
 msgstr "Chyba analýzy souboru"
 
-#: src/merge/mkvmerge.cpp:527
+#: src/merge/mkvmerge.cpp:529
 #: src/propedit/tag_target.cpp:139
 #, boost-format
 msgid "Error parsing the tags in '%1%': some mandatory elements are missing.\n"
@@ -3563,7 +3563,7 @@ msgstr "Chyba: Nelze otevřít vstupní soubor %1% (%2%).\n"
 msgid "Error: No EBML head found."
 msgstr "Chyba: Nenalezena žádná hlavička EBML."
 
-#: src/merge/mkvmerge.cpp:1878
+#: src/merge/mkvmerge.cpp:1880
 msgid ""
 "Error: no output file name was given.\n"
 "\n"
@@ -3722,7 +3722,7 @@ msgstr "UID souboru: %1%"
 msgid "File contains fewer frames than expected or is corrupt after frame %1%.\n"
 msgstr "Soubor obsahuje méně snímků, než se čekalo, nebo je po snímku %1% poškozen.\n"
 
-#: src/mmg/mmg_dialog.cpp:799
+#: src/mmg/mmg_dialog.cpp:800
 #: src/mmg/mux_dialog.cpp:119
 #: src/mmg/tabs/input.cpp:507
 msgid "File creation failed"
@@ -3883,12 +3883,12 @@ msgstr ""
 msgid "FourCC:"
 msgstr "FourCC:"
 
-#: src/merge/mkvmerge.cpp:1254
+#: src/merge/mkvmerge.cpp:1256
 #, boost-format
 msgid "FourCC: Invalid track ID in '%1% %2%'.\n"
 msgstr "FourCC: Neplatné ID stopy v '%1% %2%'.\n"
 
-#: src/merge/mkvmerge.cpp:1250
+#: src/merge/mkvmerge.cpp:1252
 #, boost-format
 msgid "FourCC: Missing track ID in '%1% %2%'.\n"
 msgstr "FourCC: Chybějící ID stopy v '%1% %2%'.\n"
@@ -3926,7 +3926,7 @@ msgstr "Gamma: %1%"
 msgid "General track options"
 msgstr "Hlavní volby stopy"
 
-#: src/mmg/mmg_dialog.cpp:327
+#: src/mmg/mmg_dialog.cpp:328
 msgid "Global"
 msgstr "Všeobecné"
 
@@ -3994,12 +3994,12 @@ msgstr "Výška kódovaných snímků videa v pixelech."
 msgid "Height of the video frames to display."
 msgstr "Výška zobrazení snímků videa."
 
-#: src/mmg/mmg_dialog.cpp:716
-#: src/mmg/mmg_dialog.cpp:722
+#: src/mmg/mmg_dialog.cpp:717
+#: src/mmg/mmg_dialog.cpp:723
 msgid "Help file not found"
 msgstr "Soubor nápovědy nebyl nalezen"
 
-#: src/mmg/mmg_dialog.cpp:746
+#: src/mmg/mmg_dialog.cpp:747
 msgid ""
 "Help is available in form of tool tips, from the\n"
 "'Help' menu or by pressing the 'F1' key."
@@ -4122,7 +4122,7 @@ msgstr ""
 msgid "If splitting is a file can be attached either to all files created or only to the first file. Has no effect if no splitting is used."
 msgstr "Při rozdělení může být soubor přiložen buď ke všem vytvořeným souborům nebo pouze k prvnímu souboru. Nemá žádný vliv, pokud není použito žádné rozdělení."
 
-#: src/mmg/mmg_dialog.cpp:1978
+#: src/mmg/mmg_dialog.cpp:1979
 msgid "If you encounter problems during playback of files please consider visiting the newly created MKVToolNix troubleshooting advice page:"
 msgstr ""
 
@@ -4141,7 +4141,7 @@ msgstr "Písmo importované z %1%"
 msgid "Imported picture from %1%"
 msgstr "Obrázek importovaný z %1%"
 
-#: src/mmg/mmg_dialog.cpp:1934
+#: src/mmg/mmg_dialog.cpp:1935
 msgid "Incompatible mkvmerge version"
 msgstr "Nekompatibilní verze mkvmerge"
 
@@ -4158,7 +4158,7 @@ msgstr "Nekonzistentní paket audia AAC (délka: %1% != len_check %2%)\n"
 msgid "Increase verbosity."
 msgstr "Zvýšit úroveň podrobnosti."
 
-#: src/mmg/mmg_dialog.cpp:325
+#: src/mmg/mmg_dialog.cpp:326
 msgid "Input"
 msgstr "Vstup"
 
@@ -4199,7 +4199,7 @@ msgstr "Vnitřní chyba: tracks.cpp SSA #1. %1%"
 msgid "Internal program error"
 msgstr "Vnitřní chyba programu"
 
-#: src/merge/mkvmerge.cpp:1178
+#: src/merge/mkvmerge.cpp:1180
 #, boost-format
 msgid "Invalid %1% specified in '--%2% %3%'.\n"
 msgstr "Neplatný %1% uvedený v '--%2% %3%'.\n"
@@ -4249,22 +4249,22 @@ msgstr ""
 msgid "Invalid attribute '%1%' in node '%2%' at position %3%"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1041
+#: src/merge/mkvmerge.cpp:1043
 #, boost-format
 msgid "Invalid boolean option specified in '--default-track %1%'.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1415
+#: src/merge/mkvmerge.cpp:1417
 #, boost-format
 msgid "Invalid boolean option specified in '--fix-bitstream-timing-information %1%'.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1067
+#: src/merge/mkvmerge.cpp:1069
 #, boost-format
 msgid "Invalid boolean option specified in '--forced-track %1%'.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1461
+#: src/merge/mkvmerge.cpp:1463
 #, boost-format
 msgid "Invalid boolean specified in '--aac-is-sbr %1%'.\n"
 msgstr ""
@@ -4274,18 +4274,18 @@ msgstr ""
 msgid "Invalid change spec (%3%) in '%1% %2%'.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:854
-#: src/merge/mkvmerge.cpp:893
+#: src/merge/mkvmerge.cpp:856
+#: src/merge/mkvmerge.cpp:895
 #, boost-format
 msgid "Invalid chapter number '%1%' for '--split' in '--split %2%': %3%\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1122
+#: src/merge/mkvmerge.cpp:1124
 #, boost-format
 msgid "Invalid compression option specified in '--compression %1%'.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1115
+#: src/merge/mkvmerge.cpp:1117
 #, boost-format
 msgid "Invalid compression option. No track ID specified in '--compression %1%'.\n"
 msgstr ""
@@ -4294,12 +4294,12 @@ msgstr ""
 msgid "Invalid country selected"
 msgstr "Vybrána neplatná země"
 
-#: src/merge/mkvmerge.cpp:1092
+#: src/merge/mkvmerge.cpp:1094
 #, boost-format
 msgid "Invalid cues option specified in '--cues %1%'.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1085
+#: src/merge/mkvmerge.cpp:1087
 #, boost-format
 msgid "Invalid cues option. No track ID specified in '--cues %1%'.\n"
 msgstr ""
@@ -4329,11 +4329,11 @@ msgstr ""
 msgid "Invalid end time for '--split' in '--split %1%' (current part: %2%). The end time must be bigger than the start time.\n"
 msgstr ""
 
-#: src/mmg/mmg_dialog.cpp:609
+#: src/mmg/mmg_dialog.cpp:610
 msgid "Invalid file name"
 msgstr "Neplatný název souboru"
 
-#: src/merge/mkvmerge.cpp:970
+#: src/merge/mkvmerge.cpp:972
 #, boost-format
 msgid "Invalid format for '--split' in '--split %1%'.\n"
 msgstr ""
@@ -4407,7 +4407,7 @@ msgstr ""
 msgid "Invalid format: unknown character '%1%' found"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:834
+#: src/merge/mkvmerge.cpp:836
 #, boost-format
 msgid "Invalid frame for '--split' in '--split %1%'.\n"
 msgstr ""
@@ -4460,7 +4460,7 @@ msgstr "Neplatná sekunda: %1%"
 msgid "Invalid selector in '%1% %2%'.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:924
+#: src/merge/mkvmerge.cpp:926
 #, boost-format
 msgid "Invalid split size in '--split %1%'.\n"
 msgstr ""
@@ -4494,103 +4494,103 @@ msgstr ""
 msgid "Invalid start/end specification for '--split' in '--split %1%' (curent part: %2%).\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1202
+#: src/merge/mkvmerge.cpp:1204
 #, boost-format
 msgid "Invalid sub charset option. No track ID specified in '--sub-charset %1%'.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1209
+#: src/merge/mkvmerge.cpp:1211
 #, boost-format
 msgid "Invalid sub charset specified in '--sub-charset %1%'.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:588
+#: src/merge/mkvmerge.cpp:590
 #, boost-format
 msgid "Invalid sync option specified in '%1% %2%'.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:611
+#: src/merge/mkvmerge.cpp:613
 #, boost-format
 msgid "Invalid sync option specified in '%1% %2%'. The divisor is zero.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:617
+#: src/merge/mkvmerge.cpp:619
 #, boost-format
 msgid "Invalid sync option specified in '%1% %2%'. The linear sync value may not be equal to or smaller than zero.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:580
+#: src/merge/mkvmerge.cpp:582
 #, boost-format
 msgid "Invalid sync option. No track ID specified in '%1% %2%'.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1233
+#: src/merge/mkvmerge.cpp:1235
 #, boost-format
 msgid "Invalid tags file name specified in '%1% %2%'.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1226
+#: src/merge/mkvmerge.cpp:1228
 #, boost-format
 msgid "Invalid tags option. No track ID specified in '%1% %2%'.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:792
+#: src/merge/mkvmerge.cpp:794
 #, boost-format
 msgid "Invalid time for '--split' in '--split %1%'. Additional error message: %2%\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:813
+#: src/merge/mkvmerge.cpp:815
 #, boost-format
 msgid "Invalid time for '--split' in '--split %1%'. Additional error message: %2%.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:557
+#: src/merge/mkvmerge.cpp:559
 #, boost-format
 msgid "Invalid track ID in '%1% %2%'.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:584
-#: src/merge/mkvmerge.cpp:1230
+#: src/merge/mkvmerge.cpp:586
+#: src/merge/mkvmerge.cpp:1232
 #, boost-format
 msgid "Invalid track ID specified in '%1% %2%'.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1174
+#: src/merge/mkvmerge.cpp:1176
 #, boost-format
 msgid "Invalid track ID specified in '--%1% %2%'.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1458
+#: src/merge/mkvmerge.cpp:1460
 #, boost-format
 msgid "Invalid track ID specified in '--aac-is-sbr %1%'.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1119
+#: src/merge/mkvmerge.cpp:1121
 #, boost-format
 msgid "Invalid track ID specified in '--compression %1%'.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1089
+#: src/merge/mkvmerge.cpp:1091
 #, boost-format
 msgid "Invalid track ID specified in '--cues %1%'.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1035
+#: src/merge/mkvmerge.cpp:1037
 #, boost-format
 msgid "Invalid track ID specified in '--default-track %1%'.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1409
+#: src/merge/mkvmerge.cpp:1411
 #, boost-format
 msgid "Invalid track ID specified in '--fix-bitstream-timing-information %1%'.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1061
+#: src/merge/mkvmerge.cpp:1063
 #, boost-format
 msgid "Invalid track ID specified in '--forced-track %1%'.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1206
+#: src/merge/mkvmerge.cpp:1208
 #, boost-format
 msgid "Invalid track ID specified in '--sub-charset %1%'.\n"
 msgstr ""
@@ -4600,15 +4600,15 @@ msgstr ""
 msgid "Invalid track ID/file name specification in argument '%1%'.\n"
 msgstr ""
 
-#: src/mmg/mmg_dialog.cpp:1982
+#: src/mmg/mmg_dialog.cpp:1983
 msgid "It can also be opened from the 'Help' menu."
 msgstr ""
 
-#: src/mmg/mmg_dialog.cpp:1486
+#: src/mmg/mmg_dialog.cpp:1487
 msgid "Job added to job queue"
 msgstr "Úloha byla přidána do fronty úloh"
 
-#: src/mmg/mmg_dialog.cpp:1438
+#: src/mmg/mmg_dialog.cpp:1439
 msgid "Job description"
 msgstr "Popis úlohy"
 
@@ -4676,7 +4676,7 @@ msgstr "Jazyky"
 msgid "Leave additional space (EbmlVoid) in the output file after the chapters."
 msgstr ""
 
-#: src/mmg/mmg_dialog.cpp:301
+#: src/mmg/mmg_dialog.cpp:302
 msgid "Lets you add arbitrary options to the command line"
 msgstr ""
 
@@ -4721,11 +4721,11 @@ msgstr ""
 msgid "List all valid property names and exit"
 msgstr ""
 
-#: src/mmg/mmg_dialog.cpp:303
+#: src/mmg/mmg_dialog.cpp:304
 msgid "Load a chapter file (simple/OGM format or XML format)"
 msgstr "Načíst soubor kapitol (jednoduchý/OGM formát nebor XML formát)"
 
-#: src/mmg/mmg_dialog.cpp:288
+#: src/mmg/mmg_dialog.cpp:289
 msgid "Load muxing settings from a file"
 msgstr "Načíst nastavení zpracování ze souboru"
 
@@ -4750,7 +4750,7 @@ msgstr "MIME typ této stopy. Vyberte jeden z předdefinovaných MIME typů nebo
 msgid "MIME type:"
 msgstr "MIME typ:"
 
-#: src/mmg/mmg_dialog.cpp:744
+#: src/mmg/mmg_dialog.cpp:745
 msgid "MKVToolNix is licensed under the GNU GPL v2"
 msgstr "MKVToolNix je licencován podle GNU GPL v2"
 
@@ -4840,7 +4840,7 @@ msgstr "Označit tuto stopu jako 'vynucenou'. Přehrávače tuto stopu musí př
 msgid "Matroska"
 msgstr "Matroska"
 
-#: src/mmg/mmg_dialog.cpp:356
+#: src/mmg/mmg_dialog.cpp:357
 #, c-format, boost-format
 msgid "Matroska A/V files (*.mka;*.mkv;*.mk3d)|*.mkv;*.mka;*.mk3d|%s"
 msgstr "Soubory Matroska (*.mkv;*.mka;*.mk3d)|*.mkv;*.mka;*.mk3d|%s"
@@ -4987,12 +4987,12 @@ msgstr ""
 msgid "More"
 msgstr "Více"
 
-#: src/merge/mkvmerge.cpp:2005
+#: src/merge/mkvmerge.cpp:2007
 #, boost-format
 msgid "More than one MIME type was given for a single attachment. '%1%' will be discarded and '%2%' used instead.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1996
+#: src/merge/mkvmerge.cpp:1998
 msgid "More than one description was given for a single attachment.\n"
 msgstr ""
 
@@ -5001,7 +5001,7 @@ msgstr ""
 msgid "More than one file name has been given ('%1%' and '%2%').\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:2015
+#: src/merge/mkvmerge.cpp:2017
 #, boost-format
 msgid "More than one name was given for a single attachment. '%1%' will be discarded and '%2%' used instead.\n"
 msgstr ""
@@ -5033,7 +5033,7 @@ msgstr "Aplikace zpracování: %1%"
 msgid "Muxing in progress."
 msgstr "Probíhá zpracování."
 
-#: src/merge/mkvmerge.cpp:2407
+#: src/merge/mkvmerge.cpp:2409
 #, boost-format
 msgid "Muxing took %1%.\n"
 msgstr "Zpracování trvalo %1%.\n"
@@ -5098,7 +5098,7 @@ msgstr "UID dalšího úseku: %1%"
 msgid "Next segment's unique ID"
 msgstr "Jedinečné ID dalšího úseku"
 
-#: src/merge/mkvmerge.cpp:1168
+#: src/merge/mkvmerge.cpp:1170
 #, boost-format
 msgid "No %1% specified in '--%2% %3%'.\n"
 msgstr ""
@@ -5126,8 +5126,8 @@ msgstr ""
 msgid "No append mapping was given for the file no. %1% ('%2%'). A default mapping of %3% will be used instead. Please keep that in mind if mkvmerge aborts with an error message regarding invalid '--append-to' options.\n"
 msgstr ""
 
-#: src/propedit/attachment_target.cpp:192
-#: src/propedit/attachment_target.cpp:200
+#: src/propedit/attachment_target.cpp:191
+#: src/propedit/attachment_target.cpp:199
 #, boost-format
 msgid "No attachment matched the spec '%1%'.\n"
 msgstr "Žádná příloha neodpovídá '%1%'.\n"
@@ -5136,7 +5136,7 @@ msgstr "Žádná příloha neodpovídá '%1%'.\n"
 msgid "No chapter entries have been create yet."
 msgstr "Zatím nebyla vytvořena žádná položka kapitoly."
 
-#: src/merge/mkvmerge.cpp:859
+#: src/merge/mkvmerge.cpp:861
 #, boost-format
 msgid "No chapter numbers listed after '--split %1%'.\n"
 msgstr ""
@@ -5145,8 +5145,8 @@ msgstr ""
 msgid "No chapters found"
 msgstr "Nenalezeny žádné kapitoly"
 
-#: src/merge/mkvmerge.cpp:863
-#: src/merge/mkvmerge.cpp:889
+#: src/merge/mkvmerge.cpp:865
+#: src/merge/mkvmerge.cpp:891
 msgid "No chapters in source files or chapter files found to split by.\n"
 msgstr ""
 
@@ -5179,7 +5179,7 @@ msgstr "Nebyl nalezen žádný název souboru po '@'."
 msgid "No help available."
 msgstr "Není dostupná žádná nápověda."
 
-#: src/merge/mkvmerge.cpp:2354
+#: src/merge/mkvmerge.cpp:2356
 msgid "No input files were given. No output will be created.\n"
 msgstr "Nebyl zadán žádný vstupní soubor. Nebude vytvořen žádný výstup.\n"
 
@@ -5205,11 +5205,11 @@ msgstr ""
 msgid "No space left to write to"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:2401
+#: src/merge/mkvmerge.cpp:2403
 msgid "No streams to output were found. Aborting.\n"
 msgstr "Nebyly nalezeny žádné datové proudy pro výstup. Přerušení.\n"
 
-#: src/merge/mkvmerge.cpp:1165
+#: src/merge/mkvmerge.cpp:1167
 #, boost-format
 msgid "No track ID specified in '--%1% %2%'.\n"
 msgstr "Není uvedeno žádné ID stopy v '--%1% %2%'.\n"
@@ -5261,7 +5261,7 @@ msgstr "Není platný soubor Matroska (nenalezena žádná hlavička EBML)"
 msgid "Not a valid Matroska file (no segment/level 0 element found)"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:854
+#: src/merge/mkvmerge.cpp:856
 #, fuzzy
 msgid "Not a valid number or not positive."
 msgstr "Zadán neplatný max. počet rozdělení souborů."
@@ -5278,7 +5278,7 @@ msgstr ""
 msgid "Nothing to do.\n"
 msgstr "Není co dělat.\n"
 
-#: src/mmg/mmg_dialog.cpp:1970
+#: src/mmg/mmg_dialog.cpp:1971
 msgid "Notice"
 msgstr ""
 
@@ -5322,12 +5322,12 @@ msgstr ""
 msgid "Online check for updates"
 msgstr "Kontrola aktualizací online"
 
-#: src/merge/mkvmerge.cpp:895
+#: src/merge/mkvmerge.cpp:897
 #, boost-format
 msgid "Only %1% chapters found in source files & chapter files."
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1607
+#: src/merge/mkvmerge.cpp:1609
 #, boost-format
 msgid "Only one chapter file allowed in '%1% %2%'.\n"
 msgstr "Je povolen pouze jeden soubor kapitol v '%1% %2%'.\n"
@@ -5344,11 +5344,11 @@ msgstr "Je povolen pouze jeden výskyt <%1%> pod <%2%> na pozici %3%."
 msgid "Only one of <String> and <Binary> may be used beneath <Simple> but not both at the same time."
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1868
+#: src/merge/mkvmerge.cpp:1870
 msgid "Only one output file allowed.\n"
 msgstr "Je povolen pouze jeden výstupní soubor.\n"
 
-#: src/merge/mkvmerge.cpp:1617
+#: src/merge/mkvmerge.cpp:1619
 #, boost-format
 msgid "Only one segment info file allowed in '%1% %2%'.\n"
 msgstr "Je povolen pouze jeden soubor informací o úseku v '%1% %2%'.\n"
@@ -5374,7 +5374,7 @@ msgstr "Pouze k prvnímu"
 msgid "Only v7 and newer VobSub files are supported. If you have an older version then use the VSConv utility from http://sourceforge.net/projects/guliverkli/ to convert these files to v7 files.\n"
 msgstr ""
 
-#: src/mmg/mmg_dialog.cpp:291
+#: src/mmg/mmg_dialog.cpp:292
 msgid "Op&tions\tCtrl-P"
 msgstr "&Volby\tCtrl-P"
 
@@ -5395,7 +5395,7 @@ msgstr "Otevřít existující soubor Matroska"
 msgid "Open folder"
 msgstr "Otevřít složku"
 
-#: src/mmg/mmg_dialog.cpp:811
+#: src/mmg/mmg_dialog.cpp:812
 msgid "Option file created."
 msgstr "Soubor voleb byl vytvořen."
 
@@ -5436,7 +5436,7 @@ msgstr "Další volby"
 msgid "Output"
 msgstr "Výstup"
 
-#: src/mmg/mmg_dialog.cpp:330
+#: src/mmg/mmg_dialog.cpp:331
 msgid "Output filename"
 msgstr "Název výstupního souboru"
 
@@ -5457,12 +5457,12 @@ msgstr "Výstupní vzorkovací frekvence: %1%"
 msgid "Output:"
 msgstr "Výstup:"
 
-#: src/mmg/mmg_dialog.cpp:574
+#: src/mmg/mmg_dialog.cpp:575
 msgid "Overwrite existing file(s)?"
 msgstr "Přepsat existující soubory?"
 
-#: src/mmg/mmg_dialog.cpp:555
-#: src/mmg/mmg_dialog.cpp:1432
+#: src/mmg/mmg_dialog.cpp:556
+#: src/mmg/mmg_dialog.cpp:1433
 msgid "Overwrite existing file?"
 msgstr "Přepsat existující soubor?"
 
@@ -5557,7 +5557,7 @@ msgstr ""
 msgid "Please do not select 'mmg' itself as the 'mkvmerge' executable."
 msgstr "Nevybírejte 'mmg' jako spustitelný soubor 'mkvmerge'."
 
-#: src/mmg/mmg_dialog.cpp:1438
+#: src/mmg/mmg_dialog.cpp:1439
 msgid "Please enter a description for the new job:"
 msgstr "Zadejte popis nové úlohy:"
 
@@ -5643,7 +5643,7 @@ msgstr "Průběh: 100%%%1%"
 msgid "Progress: [%1%%2%] %3%%%"
 msgstr "Průběh: [%1%%2%] %3%%%"
 
-#: src/mmg/mmg_dialog.cpp:1877
+#: src/mmg/mmg_dialog.cpp:1878
 msgid "Querying mkvmerge's capabilities"
 msgstr ""
 
@@ -5776,7 +5776,7 @@ msgstr ""
 msgid "Quicktime/MP4 reader: Track ID %1% has more than one FourCC. Only using the first one (%|2$.4s|) and not this one (%|3$.4s|).\n"
 msgstr ""
 
-#: src/mmg/mmg_dialog.cpp:293
+#: src/mmg/mmg_dialog.cpp:294
 msgid "Quit the application"
 msgstr "Ukončit aplikaci"
 
@@ -5899,15 +5899,15 @@ msgstr "Nová synchronizace selhala: nebyl nalezen žádný prvek Matroska úrov
 msgid "Resyncing successful at position %1%.\n"
 msgstr "Úspěšná nová synchronizace na pozici %1%.\n"
 
-#: src/mmg/mmg_dialog.cpp:294
+#: src/mmg/mmg_dialog.cpp:295
 msgid "Run mkvmerge and start the muxing process"
 msgstr "Spustit mkvmerge a zahájit proces zpracování"
 
-#: src/mmg/mmg_dialog.cpp:292
+#: src/mmg/mmg_dialog.cpp:293
 msgid "Run the header field editor"
 msgstr "Spustit editor pole hlavičky"
 
-#: src/mmg/mmg_dialog.cpp:295
+#: src/mmg/mmg_dialog.cpp:296
 msgid "S&how the command line"
 msgstr "&Zobrazit příkazový řádek"
 
@@ -5935,7 +5935,7 @@ msgstr "Titulky SSA/ASS"
 msgid "SSA/ASS text subtitles"
 msgstr "Textové titulky SSA/ASS"
 
-#: src/mmg/mmg_dialog.cpp:297
+#: src/mmg/mmg_dialog.cpp:298
 msgid "Sa&ve command line"
 msgstr "&Uložit příkazový řádek"
 
@@ -5953,7 +5953,7 @@ msgstr "Vzorkovací frekvence v Hz."
 msgid "Sampling frequency: %1%"
 msgstr "Vzorkovací frekvence: %1%"
 
-#: src/mmg/mmg_dialog.cpp:306
+#: src/mmg/mmg_dialog.cpp:307
 msgid "Save &as"
 msgstr "Uložit &jako"
 
@@ -5969,27 +5969,27 @@ msgstr "Uložit informaci jako"
 msgid "Save log"
 msgstr "Uložit protokol"
 
-#: src/mmg/mmg_dialog.cpp:289
+#: src/mmg/mmg_dialog.cpp:290
 msgid "Save muxing settings to a file"
 msgstr "Uložit nastavení zpracování do souboru"
 
-#: src/mmg/mmg_dialog.cpp:297
+#: src/mmg/mmg_dialog.cpp:298
 msgid "Save the command line to a file"
 msgstr "Uložit příkazový řádek do souboru"
 
-#: src/mmg/mmg_dialog.cpp:298
+#: src/mmg/mmg_dialog.cpp:299
 msgid "Save the command line to an option file that can be read by mkvmerge"
 msgstr "Uložit příkazový řádek do souboru s možnostmi, který mkvmerge může přečíst"
 
-#: src/mmg/mmg_dialog.cpp:304
+#: src/mmg/mmg_dialog.cpp:305
 msgid "Save the current chapters to a XML file"
 msgstr "Uložit aktuální kapitoly do souboru XML"
 
-#: src/mmg/mmg_dialog.cpp:306
+#: src/mmg/mmg_dialog.cpp:307
 msgid "Save the current chapters to a file with another name"
 msgstr "Uložit aktuální kapitoly do souboru s jiným názvem"
 
-#: src/mmg/mmg_dialog.cpp:305
+#: src/mmg/mmg_dialog.cpp:306
 msgid "Save the current chapters to an existing Matroska file"
 msgstr "Uložit aktuální kapitoly do existujícího souboru Matroska"
 
@@ -5997,7 +5997,7 @@ msgstr "Uložit aktuální kapitoly do existujícího souboru Matroska"
 msgid "Save the header values"
 msgstr "Upožit hodnoty hlavičky"
 
-#: src/mmg/mmg_dialog.cpp:305
+#: src/mmg/mmg_dialog.cpp:306
 msgid "Save to &Matroska file"
 msgstr "Uložit do souboru &Matroska"
 
@@ -6144,7 +6144,7 @@ msgstr "Vyberte hodnoty, které mají být použity"
 msgid "Select output file"
 msgstr "Vyberte výstupní soubor"
 
-#: src/mmg/mmg_dialog.cpp:290
+#: src/mmg/mmg_dialog.cpp:291
 msgid "Select the file you want to write to"
 msgstr "Vyberte soubor, do kterého chcete zapisovat"
 
@@ -6168,7 +6168,7 @@ msgstr "Vybere, pro které bloky mkvmerge vytvoří položky indexu. Volba \"vý
 msgid "Selects the character set a subtitle file or chapter information was written with. Only needed for non-UTF encoded subtitle files or for files with chapter information (e.g. OGM, MP4) for which mkvmerge does not detect the encoding correctly."
 msgstr "Vybere znakovou sadu, v jaké byl uložen soubor titulků nebo informace o kapitolách. Nutné pouze pro soubory titulků nebo pro soubory s iformacemi o kapitolách, které nemají kódování UTF (např. OGM, MP4), u kterých mkvmerge nedokáže správně detekovat kódování."
 
-#: src/mmg/mmg_dialog.cpp:290
+#: src/mmg/mmg_dialog.cpp:291
 msgid "Set &output file"
 msgstr "&Nastavit výstupní soubor"
 
@@ -6320,7 +6320,7 @@ msgstr "&Zobrazit velikosti prvku\tCtrl-Z"
 msgid "Show mmg's debug window"
 msgstr "Zobrazit okno ladění mmg"
 
-#: src/mmg/mmg_dialog.cpp:313
+#: src/mmg/mmg_dialog.cpp:314
 msgid "Show program information"
 msgstr "Zobrazit informaci o programu"
 
@@ -6328,7 +6328,7 @@ msgstr "Zobrazit informaci o programu"
 msgid "Show statistics for each track in verbose mode."
 msgstr "Zobrazit statistiku pro každou stopu v podrobném režimu."
 
-#: src/mmg/mmg_dialog.cpp:295
+#: src/mmg/mmg_dialog.cpp:296
 msgid "Show the command line mmg creates for mkvmerge"
 msgstr "Zobrazit příkazový řádek, který mmg vytváří pro mkvmerge"
 
@@ -6336,7 +6336,7 @@ msgstr "Zobrazit příkazový řádek, který mmg vytváří pro mkvmerge"
 msgid "Show the first 16 bytes of each frame as a hex dump."
 msgstr "Zobrazit prvních 16 bajtů každého snímku v šestnáctkové soustavě."
 
-#: src/mmg/mmg_dialog.cpp:312
+#: src/mmg/mmg_dialog.cpp:313
 msgid "Show the guide to mkvmerge GUI"
 msgstr "Zobrazit průvodce v mkvmerge GUI"
 
@@ -6487,7 +6487,7 @@ msgstr "Bylo vybráno rozdělení podle velikosti, ale nebyla zadána žádná v
 msgid "Splitting by timecode/duration was selected, but nothing was entered."
 msgstr "Bylo vybráno rozdělení podle časového kódu nebo délky, ale nebylo nic zadáno."
 
-#: src/mmg/mmg_dialog.cpp:572
+#: src/mmg/mmg_dialog.cpp:573
 #, c-format, boost-format
 msgid "Splitting is active, and at least one of the potential output files '%s%s*%s' already exists. Do you want to overwrite them?"
 msgstr "Rozdělení je aktivní a alespoň jeden z potenciálních výstupních souborů '%s%s*%s' již existuje. Chcete je přepsat?"
@@ -6496,11 +6496,11 @@ msgstr "Rozdělení je aktivní a alespoň jeden z potenciálních výstupních 
 msgid "Splitting will occur right before the first key frame whose timecode is equal to or bigger than the start timecode for the chapters whose numbers are listed."
 msgstr ""
 
-#: src/mmg/mmg_dialog.cpp:332
+#: src/mmg/mmg_dialog.cpp:333
 msgid "Sta&rt muxing"
 msgstr "&Spustit zpracování"
 
-#: src/mmg/mmg_dialog.cpp:294
+#: src/mmg/mmg_dialog.cpp:295
 msgid "Sta&rt muxing (run mkvmerge)\tCtrl-R"
 msgstr "&Spustit zpracování (spustit mkvmerge)\tCtrl-R"
 
@@ -6516,7 +6516,7 @@ msgstr "Spustit úlohy, jejichž stav je  'čeká'."
 msgid "Start the selected job(s) regardless of their status"
 msgstr "Spustit vybrané úlohy bez ohledu na jejich stav"
 
-#: src/mmg/mmg_dialog.cpp:287
+#: src/mmg/mmg_dialog.cpp:288
 msgid "Start with empty settings"
 msgstr "Spustit s prázdným nastavením"
 
@@ -6552,7 +6552,7 @@ msgstr "Stav a průběh"
 msgid "Status:"
 msgstr "Stav:"
 
-#: src/merge/mkvmerge.cpp:754
+#: src/merge/mkvmerge.cpp:756
 #, boost-format
 msgid "Stereo mode parameter: not given in the form <TID>:<n|keyword> where n is a number between 0 and %1% or one of these keywords: %2% (argument was '%3%').\n"
 msgstr ""
@@ -6712,7 +6712,7 @@ msgstr ""
 msgid "The FPS setting for track nr. %s in file '%s' is invalid."
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1257
+#: src/merge/mkvmerge.cpp:1259
 #, boost-format
 msgid "The FourCC must be exactly four characters long in '%1% %2%'.\n"
 msgstr ""
@@ -6722,7 +6722,7 @@ msgstr ""
 msgid "The FourCC setting for track nr. %s in file '%s' is not exactly four characters long."
 msgstr ""
 
-#: src/mmg/mmg_dialog.cpp:1930
+#: src/mmg/mmg_dialog.cpp:1931
 #, boost-format
 msgid "The GUI is configured to use the mkvmerge executable from a different version (%1%) than the GUI itself (%2%). This is not supported but will not be prevented either. You should change the mkvmerge executable in the preferences dialog."
 msgstr ""
@@ -6749,7 +6749,7 @@ msgid ""
 "The proper solution is to save these chapters into a XML file and then to remux the file with the chapters included."
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1385
+#: src/merge/mkvmerge.cpp:1387
 #, boost-format
 msgid "The NALU size length must be a number between 2 and 4 inclusively in '--nalu-size-length %1%'.\n"
 msgstr ""
@@ -6815,22 +6815,22 @@ msgstr "XML soubor štítků '%1%' obsahuje chybu: %2%\n"
 msgid "The XML tag file '%1%' could not be read.\n"
 msgstr "XML soubor štítků '%1%' nemohl být přečten.\n"
 
-#: src/merge/mkvmerge.cpp:1678
+#: src/merge/mkvmerge.cpp:1680
 #, boost-format
 msgid "The argument '%1%' to '%2%' is invalid: '%3%' is not a valid track ID.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1687
+#: src/merge/mkvmerge.cpp:1689
 #, boost-format
 msgid "The argument '%1%' to '%2%' is invalid: '%3%' must be either 'all' or 'first'.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1674
+#: src/merge/mkvmerge.cpp:1676
 #, boost-format
 msgid "The argument '%1%' to '%2%' is invalid: too many colons in element '%3%'.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1632
+#: src/merge/mkvmerge.cpp:1634
 msgid "The argument to '--timecode-scale' must be a number.\n"
 msgstr ""
 
@@ -6844,7 +6844,7 @@ msgstr ""
 msgid "The attachment #%1%, ID %2%, MIME type %3%, size %4%, is written to '%5%'.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1565
+#: src/merge/mkvmerge.cpp:1567
 #, boost-format
 msgid "The attachment '%1%' could not be read.\n"
 msgstr ""
@@ -6863,7 +6863,7 @@ msgstr ""
 msgid "The chapter '%s' is missing the start time."
 msgstr ""
 
-#: src/mmg/mmg_dialog.cpp:622
+#: src/mmg/mmg_dialog.cpp:623
 msgid ""
 "The chapter editor has been used and contains data. However, no chapter file has been selected on the global page. In mmg, the chapter editor is independant of the muxing process. The chapters present in the editor will NOT be muxed into the output file. Only the various 'save' functions from the chapter editor menu will cause the chapters to be written to the hard disk.\n"
 "\n"
@@ -6877,7 +6877,7 @@ msgstr ""
 msgid "The chosen NALU size length of %1% is too small. Try using '4'.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1711
+#: src/merge/mkvmerge.cpp:1713
 msgid "The closing parenthesis ')' are missing.\n"
 msgstr ""
 
@@ -6989,7 +6989,7 @@ msgstr ""
 msgid "The fifth mode tries to extract chapter information and tags and outputs them as a CUE sheet. This is the reverse of using a CUE sheet with mkvmerge's '--chapters' option."
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1546
+#: src/merge/mkvmerge.cpp:1548
 #, boost-format
 msgid "The file '%1%' cannot be attached because it does not exist or cannot be read.\n"
 msgstr "Soubor '%1%' nemůže být připojen, protože neexistuje nebo nemůže být přečten.\n"
@@ -7030,7 +7030,7 @@ msgstr "Soubor '%1%' nemohl být otevřen pro zápis: %2%.\n"
 msgid "The file '%1%' has been opened for writing.\n"
 msgstr "Soubor '%1%' byl otevřen pro zápis.\n"
 
-#: src/merge/mkvmerge.cpp:1767
+#: src/merge/mkvmerge.cpp:1769
 #, boost-format
 msgid "The file '%1%' has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n"
 msgstr "Soubor '%1%' je neznámého typu. Podívejte se na podporované typy souborů ('mkvmerge --list-types') a kontaktujte autora Moritze Bunkuse <moritz@bunkus.org>, pokud je váš typ podporován, ale nebyl správně rozpoznán.\n"
@@ -7063,11 +7063,11 @@ msgstr "Soubor nemohl být otevřen pro čtení nebo nebylo dostatek údajů pro
 msgid "The file could not be opened for writing."
 msgstr "Soubor nemohl být otevřen pro zápis."
 
-#: src/mmg/mmg_dialog.cpp:413
+#: src/mmg/mmg_dialog.cpp:414
 msgid "The file does not exist."
 msgstr "Soubor neexistuje."
 
-#: src/mmg/mmg_dialog.cpp:434
+#: src/mmg/mmg_dialog.cpp:435
 msgid "The file does not seem to be a valid mkvmerge GUI settings file."
 msgstr "Soubor pravděpodobně není platným souborem nastavení mkvmerge GUI."
 
@@ -7164,7 +7164,7 @@ msgstr ""
 msgid "The first cluster timecode after the resync is %1%.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1755
+#: src/merge/mkvmerge.cpp:1757
 msgid "The first file cannot be appended because there are no files to append to.\n"
 msgstr ""
 
@@ -7206,7 +7206,7 @@ msgstr ""
 msgid "The fourth mode extracts the chapters and converts them to XML. The output is written to the standard output. The output can be used as a source for mkvmerge."
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1638
+#: src/merge/mkvmerge.cpp:1640
 msgid "The given timecode scale factor is outside the valid range (1...10000000 or -1 for 'sample precision even if a video track is present').\n"
 msgstr ""
 
@@ -7302,11 +7302,11 @@ msgid ""
 "is not used."
 msgstr ""
 
-#: src/mmg/mmg_dialog.cpp:720
+#: src/mmg/mmg_dialog.cpp:721
 msgid "The mkvmerge GUI help file was not found in the path you've selected. Please try again, or abort by pressing the 'abort' button."
 msgstr ""
 
-#: src/mmg/mmg_dialog.cpp:713
+#: src/mmg/mmg_dialog.cpp:714
 msgid ""
 "The mkvmerge GUI help file was not found. This indicates that it has never before been opened, or that the installation path has since been changed.\n"
 "\n"
@@ -7318,12 +7318,12 @@ msgstr ""
 msgid "The name '%1%' is not a valid property name for the current edit specification in '%2%'.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1723
+#: src/merge/mkvmerge.cpp:1725
 #, boost-format
 msgid "The name of the output file '%1%' and of one of the input files is the same. This would cause mkvmerge to overwrite one of your input files. This is most likely not what you want.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1497
+#: src/merge/mkvmerge.cpp:1499
 #, boost-format
 msgid "The next UID was already given in '%1% %2%'.\n"
 msgstr ""
@@ -7380,7 +7380,7 @@ msgstr ""
 msgid "The numbers given with this argument are interpreted based on the number of Matroska blocks that are output."
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:2097
+#: src/merge/mkvmerge.cpp:2099
 msgid "The option '--meta-seek-size' is no longer supported. Please read mkvmerge's documentation, especially the section about the MATROSKA FILE LAYOUT.\n"
 msgstr ""
 
@@ -7388,17 +7388,17 @@ msgstr ""
 msgid "The order of the various options is not important."
 msgstr ""
 
-#: src/mmg/mmg_dialog.cpp:555
-#: src/mmg/mmg_dialog.cpp:1429
+#: src/mmg/mmg_dialog.cpp:556
+#: src/mmg/mmg_dialog.cpp:1430
 #, c-format, boost-format
 msgid "The output file '%s' already exists. Do you want to overwrite it?"
 msgstr "Výstupní soubor '%s' již exisuje. Chcete ho přepsat?"
 
-#: src/mmg/mmg_dialog.cpp:609
+#: src/mmg/mmg_dialog.cpp:610
 msgid "The output file name is invalid, e.g. it might contain invalid characters like ':'."
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1484
+#: src/merge/mkvmerge.cpp:1486
 #, boost-format
 msgid "The previous UID was already given in '%1% %2%'.\n"
 msgstr ""
@@ -7467,7 +7467,7 @@ msgstr ""
 msgid "The size after which a new output file is started. The letters 'G', 'M' and 'K' can be used to indicate giga/mega/kilo bytes respectively. All units are based on 1024 (G = 1024^3, M = 1024^2, K = 1024)."
 msgstr "Velikost, po které je založen nový výstupní soubor. Písmena 'G', 'M' a 'K' můžou být použita pro označení giga, mega nebo kilo bajtů. Všechny jednotky jsou mocniny 1024 (G = 1024^3, M = 1024^2, K = 1024)."
 
-#: src/merge/mkvmerge.cpp:1559
+#: src/merge/mkvmerge.cpp:1561
 #, boost-format
 msgid "The size of attachment '%1%' is 0.\n"
 msgstr ""
@@ -7639,7 +7639,7 @@ msgstr ""
 msgid "Theora"
 msgstr "Theora"
 
-#: src/mmg/mmg_dialog.cpp:1822
+#: src/mmg/mmg_dialog.cpp:1823
 msgid "There is a new version available online."
 msgstr ""
 
@@ -7654,7 +7654,7 @@ msgstr ""
 msgid "There is no translation available for '%1%'.\n"
 msgstr ""
 
-#: src/mmg/mmg_dialog.cpp:1823
+#: src/mmg/mmg_dialog.cpp:1824
 msgid "There was an error querying the update status."
 msgstr ""
 
@@ -7781,7 +7781,7 @@ msgstr "Toto je název, který bude uložen ve výstupním souboru pro tuto př�
 msgid "This is the title that players may show as the 'main title' for this movie."
 msgstr "Toto je název, který přehrávač může zobrazovat jako 'hlavní název' tohoto filmu."
 
-#: src/mmg/mmg_dialog.cpp:1969
+#: src/mmg/mmg_dialog.cpp:1970
 msgid "This message will only shown to you once."
 msgstr ""
 
@@ -8028,7 +8028,7 @@ msgstr "Stopy, kapitoly a štítky:"
 msgid "Tracks:"
 msgstr "Název stopy:"
 
-#: src/mmg/mmg_dialog.cpp:314
+#: src/mmg/mmg_dialog.cpp:315
 msgid "Troubleshooting advice for playback issues"
 msgstr ""
 
@@ -8120,17 +8120,17 @@ msgstr ""
 msgid "Unknown content encoding type %1% for track %2%.\n"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:1502
+#: src/merge/mkvmerge.cpp:1504
 #, boost-format
 msgid "Unknown format for the next UID in '%1% %2%'.\n"
 msgstr "Neznámý formát pro další UID v  in '%1% %2%'.\n"
 
-#: src/merge/mkvmerge.cpp:1489
+#: src/merge/mkvmerge.cpp:1491
 #, boost-format
 msgid "Unknown format for the previous UID in '%1% %2%'.\n"
 msgstr "Neznámý formát pro předchozí UID in '%1% %2%'.\n"
 
-#: src/merge/mkvmerge.cpp:1514
+#: src/merge/mkvmerge.cpp:1516
 #, boost-format
 msgid "Unknown format for the segment UID '%3%' in '%1% %2%'.\n"
 msgstr "Neznámý formát pro UID úseku '%3%' v '%1% %2%'.\n"
@@ -8216,7 +8216,7 @@ msgstr "Použít tento adresář:"
 msgid "User defined options:"
 msgstr "Vlastní volby:"
 
-#: src/merge/mkvmerge.cpp:1389
+#: src/merge/mkvmerge.cpp:1391
 msgid "Using a NALU size length of 3 bytes might result in tracks that won't be decodable with certain AVC/h.264 codecs.\n"
 msgstr ""
 
@@ -8254,7 +8254,7 @@ msgstr ""
 msgid "Validates the content of all changeable headers"
 msgstr ""
 
-#: src/mmg/mmg_dialog.cpp:307
+#: src/mmg/mmg_dialog.cpp:308
 msgid "Verify the current chapter entries to see if there are any errors"
 msgstr ""
 
@@ -8464,7 +8464,7 @@ msgstr "Špatná verze Kate: %1%.%2% > %3%.x"
 msgid "Wrong Theora version: %1%.%2%.%3% != 3.2.x"
 msgstr "Špatná verze Theory: %1%.%2%.%3% != 3.2.x"
 
-#: src/merge/mkvmerge.cpp:1944
+#: src/merge/mkvmerge.cpp:1946
 msgid "Wrong argument to '--split-max-files'.\n"
 msgstr "Špatný parametr k '--split-max-files'.\n"
 
@@ -8494,7 +8494,7 @@ msgstr ""
 msgid "Wrong identification string: '%|1$7s|' != 'kate\\0\\0\\0'"
 msgstr ""
 
-#: src/mmg/mmg_dialog.cpp:1821
+#: src/mmg/mmg_dialog.cpp:1822
 msgid "You are already running the latest version."
 msgstr "Používáte nejnovější verzi."
 
@@ -9061,12 +9061,12 @@ msgstr "mkvmerge SELHALO s vráceným kódem %d. %s"
 msgid "mkvmerge GUI error"
 msgstr "Chyba mkvmerge GUI"
 
-#: src/mmg/mmg_dialog.cpp:189
+#: src/mmg/mmg_dialog.cpp:190
 msgid "mkvmerge GUI ready"
 msgstr "mkvmerge GUI je připraveno"
 
-#: src/mmg/mmg_dialog.cpp:408
-#: src/mmg/mmg_dialog.cpp:456
+#: src/mmg/mmg_dialog.cpp:409
+#: src/mmg/mmg_dialog.cpp:457
 #, c-format, boost-format
 msgid "mkvmerge GUI settings (*.mmg)|*.mmg|%s"
 msgstr "Nastavení mkvmerge GUI (*.mmg)|*.mmg|%s"
@@ -9167,7 +9167,7 @@ msgstr ""
 msgid "mmg"
 msgstr "mmg"
 
-#: src/mmg/mmg_dialog.cpp:285
+#: src/mmg/mmg_dialog.cpp:286
 msgid "mmg debug output"
 msgstr ""
 
@@ -9231,7 +9231,7 @@ msgstr "žádný hash algoritmus podpisu"
 msgid "no splitting"
 msgstr "Rozdělení"
 
-#: src/mmg/mmg_dialog.cpp:1032
+#: src/mmg/mmg_dialog.cpp:1033
 #: src/mmg/tabs/input_extra.cpp:85
 #: src/mmg/tabs/input_extra.cpp:117
 #: src/mmg/tabs/input_extra.cpp:120
@@ -9435,7 +9435,7 @@ msgstr "titulky"
 msgid "text subtitles"
 msgstr "textové titulky"
 
-#: src/merge/mkvmerge.cpp:2289
+#: src/merge/mkvmerge.cpp:2291
 msgid "timecodes"
 msgstr "časové kódy"
 
@@ -9447,7 +9447,7 @@ msgstr ""
 msgid "top bottom (right first)"
 msgstr ""
 
-#: src/merge/mkvmerge.cpp:2282
+#: src/merge/mkvmerge.cpp:2284
 msgid "track name"
 msgstr "název stopy"
 
@@ -9661,3 +9661,4 @@ msgstr "ano"
 
 #~ msgid "tet_index: '%1%' not found\n"
 #~ msgstr "tet_index: '%1%' nebyl nalezen\n"
+
