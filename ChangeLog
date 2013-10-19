@@ -1,5 +1,8 @@
 2013-10-19  Moritz Bunkus  <moritz@bunkus.org>
 
+        * mkvextract: new feature: implemented support for extracting VP9
+        tracks into IVF files.
+
         * mkvmerge: new feature: implemented support for VP9 read from IVF
         and Matroska/WebM files. Implements #899.
 

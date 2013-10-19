@@ -52,8 +52,10 @@ xtr_ivf_c::create_file(xtr_base_c *master,
                             "track %4% with the CodecID '%5%' is already being written to the same file.\n"))
             % m_tid % m_codec_id % m_file_name % master->m_tid % master->m_codec_id);
 
+  auto fourcc = m_codec_id == MKV_V_VP8 ? "VP80" : "VP90";
+
   memcpy(m_file_header.file_magic, "DKIF", 4);
-  memcpy(m_file_header.fourcc,     "VP80", 4);
+  memcpy(m_file_header.fourcc,     fourcc, 4);
 
   put_uint16_le(&m_file_header.header_size,    sizeof(m_file_header));
   put_uint16_le(&m_file_header.width,          kt_get_v_pixel_width(track));
