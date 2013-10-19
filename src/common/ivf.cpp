@@ -17,17 +17,21 @@
 
 #include "common/ivf.h"
 
-ivf::file_header_t::file_header_t()
+namespace ivf {
+
+file_header_t::file_header_t()
 {
   memset(this, 0, sizeof(*this));
 }
 
-ivf::frame_header_t::frame_header_t()
+frame_header_t::frame_header_t()
 {
   memset(this, 0, sizeof(*this));
 }
 
 bool
-ivf::is_keyframe(const memory_cptr &buffer) {
+is_keyframe(memory_cptr const &buffer) {
   return buffer && (0 < buffer->get_size()) && ((buffer->get_buffer()[0] & 0x01) == 0);
 }
+
+};
