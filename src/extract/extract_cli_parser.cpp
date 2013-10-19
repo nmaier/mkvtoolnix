@@ -232,6 +232,10 @@ extract_cli_parser_c::add_extraction_spec() {
 
   parse_number(matches[1].str(), track.tid);
 
+  if (m_used_tids[track.tid])
+    mxerror(boost::format(Y("The ID '%1%' has already been used for another output file.\n")) % track.tid);
+  m_used_tids[track.tid] = true;
+
   std::string output_file_name;
   if (matches[3].matched)
     output_file_name = matches[3].str();

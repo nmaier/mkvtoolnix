@@ -1,5 +1,10 @@
 2013-10-19  Moritz Bunkus  <moritz@bunkus.org>
 
+        * mkvextract: enhancement: using the same track/attachment ID
+        multiple times in "tracks", "attachments" or "timecodes_v2" mode
+        will result in an error message instead of one empty
+        file. Implements #914.
+
         * mmg: bug fix: With wxWidgets 2.9.x/3.0.x debug message will no
         longer appear as modal dialogs but only go to the log window.
 

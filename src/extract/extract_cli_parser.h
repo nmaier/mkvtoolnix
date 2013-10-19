@@ -13,6 +13,8 @@
 
 #include "common/common_pch.h"
 
+#include <unordered_map>
+
 #include "common/cli_parser.h"
 #include "extract/mkvextract.h"
 #include "extract/options.h"
@@ -26,6 +28,8 @@ protected:
   bool m_extract_cuesheet;
   int m_extract_blockadd_level;
   track_spec_t::target_mode_e m_target_mode;
+
+  std::unordered_map<int64_t, bool> m_used_tids;
 
 public:
   extract_cli_parser_c(const std::vector<std::string> &args);

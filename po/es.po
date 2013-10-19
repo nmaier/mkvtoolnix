@@ -5045,7 +5045,7 @@ msgstr "Entrada ausente"
 msgid "Missing one hex digit"
 msgstr "Falta un dígito hexadecimal"
 
-#: src/extract/extract_cli_parser.cpp:243
+#: src/extract/extract_cli_parser.cpp:247
 #, boost-format
 msgid "Missing output file name in argument '%1%'.\n"
 msgstr "Nombre de archivo creado ausente en el argumento '%1%'.\n"
@@ -5264,7 +5264,7 @@ msgstr "Los archivos de entrada no fueron seleccionados. Ningún archivo creado 
 msgid "No metadata block found. This file is broken.\n"
 msgstr "No se encontró ningún bloque de metadatos. Este archivo está roto.\n"
 
-#: src/extract/extract_cli_parser.cpp:241
+#: src/extract/extract_cli_parser.cpp:245
 msgid "No output file name specified, will use attachment name.\n"
 msgstr "No se especificó ningún nombre para el archivo creado, por lo que será usado el nombre del archivo adjunto.\n"
 
@@ -6815,6 +6815,11 @@ msgstr "El FourCC establecido para la pista nr. %s en el archivo '%s' no es exac
 #, boost-format
 msgid "The GUI is configured to use the mkvmerge executable from a different version (%1%) than the GUI itself (%2%). This is not supported but will not be prevented either. You should change the mkvmerge executable in the preferences dialog."
 msgstr "La interfaz gráfica está configurada para usar el ejecutable de mkvmerge desde una versión diferente (%1%) de la propia interfaz (%2%). Esta no es compatible, pero tampoco será evitada. Debes cambiar la ruta del ejecutable de mkvmerge; para ello, dirígete a la barra de menús, selecciona Archivo y después Opciones. Se abrirá una ventana que consta de cuatro pestañas, entonces dirígete a la que dice mkvmerge y verás que desde ahí podrás indicar la ruta de localización del ejecutable."
+
+#: src/extract/extract_cli_parser.cpp:236
+#, fuzzy, boost-format
+msgid "The ID '%1%' has already been used for another output file.\n"
+msgstr "El archivo %1% ha sido abierto para su escritura.\n"
 
 #: src/input/r_ogm.cpp:1532
 #, boost-format

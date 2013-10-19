@@ -4806,7 +4806,7 @@ msgstr "Trūksta įvedimo"
 msgid "Missing one hex digit"
 msgstr ""
 
-#: src/extract/extract_cli_parser.cpp:243
+#: src/extract/extract_cli_parser.cpp:247
 #, boost-format
 msgid "Missing output file name in argument '%1%'.\n"
 msgstr ""
@@ -5023,7 +5023,7 @@ msgstr ""
 msgid "No metadata block found. This file is broken.\n"
 msgstr ""
 
-#: src/extract/extract_cli_parser.cpp:241
+#: src/extract/extract_cli_parser.cpp:245
 msgid "No output file name specified, will use attachment name.\n"
 msgstr ""
 
@@ -6561,6 +6561,11 @@ msgstr ""
 #, boost-format
 msgid "The GUI is configured to use the mkvmerge executable from a different version (%1%) than the GUI itself (%2%). This is not supported but will not be prevented either. You should change the mkvmerge executable in the preferences dialog."
 msgstr ""
+
+#: src/extract/extract_cli_parser.cpp:236
+#, fuzzy, boost-format
+msgid "The ID '%1%' has already been used for another output file.\n"
+msgstr "Rinkmeną „%1%“ atverėme įrašymui.\n"
 
 #: src/input/r_ogm.cpp:1532
 #, boost-format

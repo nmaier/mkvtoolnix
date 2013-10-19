@@ -4947,7 +4947,7 @@ msgstr "Brak plików wejściowych"
 msgid "Missing one hex digit"
 msgstr "Brakuje jednej cyfry hexadecymalnej"
 
-#: src/extract/extract_cli_parser.cpp:243
+#: src/extract/extract_cli_parser.cpp:247
 #, boost-format
 msgid "Missing output file name in argument '%1%'.\n"
 msgstr "Brakuje nazwy pliku wyjściowego w parametrze \"%1%\".\n"
@@ -5166,7 +5166,7 @@ msgstr "Nie podano żadnych plików wejściowych. Nic nie zostanie zapisane.\n"
 msgid "No metadata block found. This file is broken.\n"
 msgstr "Nie znaleziono bloku z metadanymi. Ten plik jest uszkodzony.\n"
 
-#: src/extract/extract_cli_parser.cpp:241
+#: src/extract/extract_cli_parser.cpp:245
 msgid "No output file name specified, will use attachment name.\n"
 msgstr "Nie podano nazwy pliku wyjściowego, zostanie użyta nazwa załącznika.\n"
 
@@ -6713,6 +6713,11 @@ msgstr "Kod FourCC dla ścieżki nr %s w pliku \"%s\" nie zawiera dokładnie czt
 #, boost-format
 msgid "The GUI is configured to use the mkvmerge executable from a different version (%1%) than the GUI itself (%2%). This is not supported but will not be prevented either. You should change the mkvmerge executable in the preferences dialog."
 msgstr "GUI jest przystosowane do pracy z plikem wykonywalnym mkvmerge z innej wersji (%1%) niż samo GUI (%2%). Taka sytuacja nie jest zabroniona ale i nie jest wspierana. Powinienieś zmienić plik exe mkvmerge w ustawieniach programu."
+
+#: src/extract/extract_cli_parser.cpp:236
+#, boost-format
+msgid "The ID '%1%' has already been used for another output file.\n"
+msgstr ""
 
 #: src/input/r_ogm.cpp:1532
 #, boost-format
