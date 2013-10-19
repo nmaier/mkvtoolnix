@@ -979,17 +979,12 @@ mm_text_io_c::read_next_char(char *buffer) {
     return 0;
 
   unsigned long data = 0;
-  size_t i;
-  if ((BO_UTF16_LE == m_byte_order) || (BO_UTF32_LE == m_byte_order))
-    for (i = 0; i < size; i++) {
-      data <<= 8;
-      data  |= stream[size - i - 1];
-    }
-  else
-    for (i = 0; i < size; i++) {
-      data <<= 8;
-      data  |= stream[i];
-    }
+  auto little_endian = ((BO_UTF16_LE == m_byte_order) || (BO_UTF32_LE == m_byte_order));
+  auto shift         = little_endian ? 0 : 8 * (size - 1);
+  for (auto i = 0u; i < size; i++) {
+    data  |= static_cast<unsigned long>(stream[i]) << shift;
+    shift += little_endian ? 8 : -8;
+  }
 
   if (data < 0x80) {
     buffer[0] = data;
