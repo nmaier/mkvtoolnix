@@ -7,6 +7,9 @@ if test x"$ac_cv_compiler_is_clang" = xyes; then
   QUNUSED_ARGUMENTS="-Qunused-arguments"
   WNO_SELF_ASSIGN="-Wno-self-assign"
   WNO_MISMATCHED_TAGS="-Wno-mismatched-tags"
+
+elif check_version 4.8.0 $ac_cv_gcc_version ; then
+  WLOGICAL_OP="-Wlogical-op"
 fi
 
 AC_SUBST(QUNUSED_ARGUMENTS)
