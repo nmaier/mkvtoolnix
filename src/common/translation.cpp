@@ -57,6 +57,7 @@ translation_c::translation_c(const std::string &unix_locale,
 {
 }
 
+// See http://msdn.microsoft.com/en-us/library/windows/desktop/dd318693(v=vs.85).aspx for the (sub) language IDs.
 void
 translation_c::initialize_available_translations() {
   ms_available_translations.clear();
@@ -72,6 +73,7 @@ translation_c::initialize_available_translations() {
   ms_available_translations.push_back(translation_c("lt_LT", "lt",    "lithuanian", "Lithuanian",          "Lietuvių",    false, 0x0027, 0x00));
   ms_available_translations.push_back(translation_c("nl_NL", "nl",    "dutch",      "Dutch",               "Nederlands",  false, 0x0013, 0x00));
   ms_available_translations.push_back(translation_c("pl_PL", "pl",    "polish",     "Polish",              "Polski",      false, 0x0015, 0x00));
+  ms_available_translations.push_back(translation_c("pt_PT", "pt",    "portuguese", "Portuguese",          "Português",   false, 0x0016, 0x02));
   ms_available_translations.push_back(translation_c("ru_RU", "ru",    "russian",    "Russian",             "Русский",     false, 0x0019, 0x00));
   ms_available_translations.push_back(translation_c("tr_TR", "tr",    "turkish",    "Turkish",             "Türkçe",      false, 0x001f, 0x00));
   ms_available_translations.push_back(translation_c("uk_UA", "uk",    "ukrainian",  "Ukrainian",           "Український", false, 0x0022, 0x00));

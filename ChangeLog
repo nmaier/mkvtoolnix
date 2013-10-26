@@ -1,5 +1,10 @@
 2013-10-26  Moritz Bunkus  <moritz@bunkus.org>
 
+        * all: integrated the Portuguese translation. Although the
+        translation files themselves had been added back in 6.3.0 that
+        translation wasn't available for selection due to forgetfulness on
+        my part.
+
         * mkvmerge: bug fix: The file detection code in the MPEG
         elementary stream reader had a logic error. Fixes #928. In
         practice this logic error didn't have any consequence.
