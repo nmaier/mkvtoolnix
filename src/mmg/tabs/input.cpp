@@ -104,22 +104,22 @@ tab_input::tab_input(wxWindow *parent)
   wxBoxSizer *siz_buttons_all  = new wxBoxSizer(wxVERTICAL);
   wxBoxSizer *siz_buttons_line = new wxBoxSizer(wxHORIZONTAL);
 
-  siz_buttons_line->Add(b_add_file,    0, wxGROW | wxALL, STDSPACING);
-  siz_buttons_line->Add(b_append_file, 0, wxGROW | wxALL, STDSPACING);
+  siz_buttons_line->Add(b_add_file,    0,  wxALL, STDSPACING);
+  siz_buttons_line->Add(b_append_file, 0,  wxALL, STDSPACING);
   siz_buttons_all->Add(siz_buttons_line);
 
   siz_buttons_line = new wxBoxSizer(wxHORIZONTAL);
-  siz_buttons_line->Add(b_remove_file,      0, wxGROW | wxALL, STDSPACING);
-  siz_buttons_line->Add(b_remove_all_files, 0, wxGROW | wxALL, STDSPACING);
+  siz_buttons_line->Add(b_remove_file,      0,  wxALL, STDSPACING);
+  siz_buttons_line->Add(b_remove_all_files, 0,  wxALL, STDSPACING);
   siz_buttons_all->Add(siz_buttons_line);
 
-  siz_buttons_all->Add(b_additional_parts, 0, wxGROW | wxALL, STDSPACING);
+  siz_buttons_all->Add(b_additional_parts, 0,  wxALL, STDSPACING);
 
   siz_line = new wxBoxSizer(wxHORIZONTAL);
-  siz_line->Add(lb_input_files, 1, wxGROW | wxALL, STDSPACING);
-  siz_line->Add(siz_buttons_all, 0, wxGROW | wxALL, STDSPACING);
+  siz_line->Add(lb_input_files,  0,  wxALL, STDSPACING);
+  siz_line->Add(siz_buttons_all, 0,  wxALL, STDSPACING);
 
-  siz_all->Add(siz_line, 0, wxGROW | wxLEFT | wxRIGHT, LEFTRIGHTSPACING);
+  siz_all->Add(siz_line, 0,  wxLEFT | wxRIGHT, LEFTRIGHTSPACING);
 
   siz_line  = new wxBoxSizer(wxHORIZONTAL);
   st_tracks = new wxStaticText(this, wxID_STATIC, wxEmptyString);
@@ -131,15 +131,15 @@ tab_input::tab_input(wxWindow *parent)
   wxBoxSizer *siz_column = new wxBoxSizer(wxVERTICAL);
   clb_tracks = new wxCheckListBox(this, ID_CLB_TRACKS);
   clb_tracks->Enable(false);
-  siz_line->Add(clb_tracks, 1, wxGROW | wxALIGN_TOP | wxALL, STDSPACING);
+  siz_line->Add(clb_tracks, 0,  wxALIGN_TOP | wxALL, STDSPACING);
   b_track_up = new wxButton(this, ID_B_TRACKUP, wxEmptyString);
   b_track_up->Enable(false);
-  siz_column->Add(b_track_up, 0, wxGROW | wxALL, STDSPACING);
+  siz_column->Add(b_track_up, 0,  wxALL, STDSPACING);
   b_track_down = new wxButton(this, ID_B_TRACKDOWN, wxEmptyString);
   b_track_down->Enable(false);
-  siz_column->Add(b_track_down, 0, wxGROW | wxALL, STDSPACING);
+  siz_column->Add(b_track_down, 0,  wxALL, STDSPACING);
   siz_line->Add(siz_column);
-  siz_all->Add(siz_line, 3, wxGROW | wxLEFT | wxRIGHT, LEFTRIGHTSPACING);
+  siz_all->Add(siz_line, 0,  wxLEFT | wxRIGHT, LEFTRIGHTSPACING);
 
   nb_options = new wxNotebook(this, ID_NB_OPTIONS, wxDefaultPosition, wxDefaultSize, wxNB_TOP);
 
@@ -151,7 +151,9 @@ tab_input::tab_input(wxWindow *parent)
   nb_options->AddPage(ti_format,  wxEmptyString);
   nb_options->AddPage(ti_extra,   wxEmptyString);
 
-  siz_all->Add(nb_options, 0, wxGROW | wxLEFT | wxRIGHT, LEFTRIGHTSPACING);
+  siz_line = new wxBoxSizer(wxHORIZONTAL);
+  siz_line->Add(nb_options, 1,  wxLEFT | wxRIGHT, LEFTRIGHTSPACING);
+  siz_all->Add(siz_line);
 
   siz_all->AddSpacer(TOPBOTTOMSPACING);
 
