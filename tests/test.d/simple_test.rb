@@ -154,14 +154,18 @@ class SimpleTest
       :name  => "mkvmerge UI locale #{locale}",
       :block => lambda {
         sys "../src/mkvmerge -o /dev/null --ui-language #{locale} data/avi/v.avi | head -n 2 | tail -n 1 > #{tmp}-#{locale}"
-        hash_file "#{tmp}-#{locale}"
+        result = hash_file "#{tmp}-#{locale}"
+        self.error 'Locale #{locale} not supported by MKVToolNix' if result == 'f54ee70a6ad9bfc5f61de5ba5ca5a3c8'
+        result
       },
     }
     @blocks[:tests] << {
       :name  => "mkvinfo UI locale #{locale}",
       :block => lambda {
         sys "../src/mkvinfo --ui-language #{locale} data/mkv/complex.mkv | head -n 2 > #{tmp}-#{locale}"
-        hash_file "#{tmp}-#{locale}"
+        result = hash_file "#{tmp}-#{locale}"
+        self.error 'Locale #{locale} not supported by MKVToolNix' if result == 'f54ee70a6ad9bfc5f61de5ba5ca5a3c8'
+        result
       },
     }
   end
