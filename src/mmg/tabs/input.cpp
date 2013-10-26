@@ -85,81 +85,89 @@ tab_input::tab_input(wxWindow *parent)
   , selected_file{-1}
   , selected_track{-1}
 {
-  wxBoxSizer *siz_all = new wxBoxSizer(wxVERTICAL);
-  siz_all->AddSpacer(TOPBOTTOMSPACING);
+  // Create the controls
 
-  st_input_files       = new wxStaticText(this, wxID_STATIC, wxEmptyString);
-  wxBoxSizer *siz_line = new wxBoxSizer(wxHORIZONTAL);
-  siz_line->Add(st_input_files, 0, wxALL, STDSPACING);
-  siz_all->Add(siz_line, 0, wxLEFT | wxRIGHT, LEFTRIGHTSPACING);
+  st_input_files     = new wxStaticText(  this, wxID_STATIC,           wxEmptyString);
+  lb_input_files     = new wxListBox(     this, ID_LB_INPUTFILES);
 
-  lb_input_files = new wxListBox(this, ID_LB_INPUTFILES);
+  b_add_file         = new wxButton(      this, ID_B_ADDFILE,          wxEmptyString);
+  b_remove_file      = new wxButton(      this, ID_B_REMOVEFILE,       wxEmptyString);
+  b_append_file      = new wxButton(      this, ID_B_APPENDFILE,       wxEmptyString);
+  b_remove_all_files = new wxButton(      this, ID_B_REMOVE_ALL_FILES, wxEmptyString);
+  b_additional_parts = new wxButton(      this, ID_B_ADDITIONAL_PARTS, wxEmptyString);
 
-  b_add_file         = new wxButton(this, ID_B_ADDFILE,          wxEmptyString);
-  b_remove_file      = new wxButton(this, ID_B_REMOVEFILE,       wxEmptyString);
-  b_append_file      = new wxButton(this, ID_B_APPENDFILE,       wxEmptyString);
-  b_remove_all_files = new wxButton(this, ID_B_REMOVE_ALL_FILES, wxEmptyString);
-  b_additional_parts = new wxButton(this, ID_B_ADDITIONAL_PARTS, wxEmptyString);
+  st_tracks          = new wxStaticText(  this, wxID_STATIC,           wxEmptyString);
+  clb_tracks         = new wxCheckListBox(this, ID_CLB_TRACKS);
 
-  wxBoxSizer *siz_buttons_all  = new wxBoxSizer(wxVERTICAL);
-  wxBoxSizer *siz_buttons_line = new wxBoxSizer(wxHORIZONTAL);
+  b_track_up         = new wxButton(      this, ID_B_TRACKUP,          wxEmptyString);
+  b_track_down       = new wxButton(      this, ID_B_TRACKDOWN,        wxEmptyString);
 
-  siz_buttons_line->Add(b_add_file,    0,  wxALL, STDSPACING);
-  siz_buttons_line->Add(b_append_file, 0,  wxALL, STDSPACING);
-  siz_buttons_all->Add(siz_buttons_line);
-
-  siz_buttons_line = new wxBoxSizer(wxHORIZONTAL);
-  siz_buttons_line->Add(b_remove_file,      0,  wxALL, STDSPACING);
-  siz_buttons_line->Add(b_remove_all_files, 0,  wxALL, STDSPACING);
-  siz_buttons_all->Add(siz_buttons_line);
-
-  siz_buttons_all->Add(b_additional_parts, 0,  wxALL, STDSPACING);
-
-  siz_line = new wxBoxSizer(wxHORIZONTAL);
-  siz_line->Add(lb_input_files,  0,  wxALL, STDSPACING);
-  siz_line->Add(siz_buttons_all, 0,  wxALL, STDSPACING);
-
-  siz_all->Add(siz_line, 0,  wxLEFT | wxRIGHT, LEFTRIGHTSPACING);
-
-  siz_line  = new wxBoxSizer(wxHORIZONTAL);
-  st_tracks = new wxStaticText(this, wxID_STATIC, wxEmptyString);
-  st_tracks->Enable(false);
-  siz_line->Add(st_tracks, 0, wxALL, STDSPACING);
-  siz_all->Add(siz_line, 0, wxLEFT | wxRIGHT, LEFTRIGHTSPACING);
-
-  siz_line = new wxBoxSizer(wxHORIZONTAL);
-  wxBoxSizer *siz_column = new wxBoxSizer(wxVERTICAL);
-  clb_tracks = new wxCheckListBox(this, ID_CLB_TRACKS);
-  clb_tracks->Enable(false);
-  siz_line->Add(clb_tracks, 0,  wxALIGN_TOP | wxALL, STDSPACING);
-  b_track_up = new wxButton(this, ID_B_TRACKUP, wxEmptyString);
-  b_track_up->Enable(false);
-  siz_column->Add(b_track_up, 0,  wxALL, STDSPACING);
-  b_track_down = new wxButton(this, ID_B_TRACKDOWN, wxEmptyString);
-  b_track_down->Enable(false);
-  siz_column->Add(b_track_down, 0,  wxALL, STDSPACING);
-  siz_line->Add(siz_column);
-  siz_all->Add(siz_line, 0,  wxLEFT | wxRIGHT, LEFTRIGHTSPACING);
-
-  nb_options = new wxNotebook(this, ID_NB_OPTIONS, wxDefaultPosition, wxDefaultSize, wxNB_TOP);
-
-  ti_general = new tab_input_general(nb_options, this);
-  ti_format  = new tab_input_format(nb_options,  this);
-  ti_extra   = new tab_input_extra(nb_options,   this);
+  nb_options         = new wxNotebook(    this, ID_NB_OPTIONS,         wxDefaultPosition, wxDefaultSize, wxNB_TOP);
+  ti_general         = new tab_input_general(nb_options, this);
+  ti_format          = new tab_input_format( nb_options, this);
+  ti_extra           = new tab_input_extra(  nb_options, this);
 
   nb_options->AddPage(ti_general, wxEmptyString);
   nb_options->AddPage(ti_format,  wxEmptyString);
   nb_options->AddPage(ti_extra,   wxEmptyString);
 
-  siz_line = new wxBoxSizer(wxHORIZONTAL);
-  siz_line->Add(nb_options, 1,  wxLEFT | wxRIGHT, LEFTRIGHTSPACING);
-  siz_all->Add(siz_line);
+  // Create the layout
+  auto siz_files_label = new wxBoxSizer(wxHORIZONTAL);
+  siz_files_label->Add(st_input_files, 0, wxALL, STDSPACING);
 
+  auto siz_add_remove_buttons = new wxFlexGridSizer(2);
+  siz_add_remove_buttons->AddGrowableCol(0);
+  siz_add_remove_buttons->AddGrowableCol(1);
+
+  siz_add_remove_buttons->Add(b_add_file,         0, wxALL, STDSPACING);
+  siz_add_remove_buttons->Add(b_append_file,      0, wxALL, STDSPACING);
+  siz_add_remove_buttons->Add(b_remove_file,      0, wxALL, STDSPACING);
+  siz_add_remove_buttons->Add(b_remove_all_files, 0, wxALL, STDSPACING);
+
+  auto siz_additional_parts = new wxBoxSizer(wxHORIZONTAL);
+  siz_additional_parts->Add(b_additional_parts, 0,  wxALL, STDSPACING);
+
+  auto siz_file_buttons = new wxBoxSizer(wxVERTICAL);
+  siz_file_buttons->Add(siz_add_remove_buttons);
+  siz_file_buttons->Add(siz_additional_parts);
+
+  auto siz_files = new wxBoxSizer(wxHORIZONTAL);
+  siz_files->Add(lb_input_files,   0,  wxALL, STDSPACING);
+  siz_files->Add(siz_file_buttons, 0,  wxALL, STDSPACING);
+
+  auto siz_tracks_label = new wxBoxSizer(wxHORIZONTAL);
+  siz_tracks_label->Add(st_tracks, 0, wxALL, STDSPACING);
+
+  auto siz_track_buttons = new wxBoxSizer(wxVERTICAL);
+  siz_track_buttons->Add(b_track_up,   0, wxALL, STDSPACING);
+  siz_track_buttons->Add(b_track_down, 0, wxALL, STDSPACING);
+  siz_track_buttons->AddStretchSpacer();
+
+  auto siz_tracks = new wxBoxSizer(wxHORIZONTAL);
+  siz_tracks->Add(clb_tracks, 0,  wxALIGN_TOP | wxALL, STDSPACING);
+  siz_tracks->Add(siz_track_buttons);
+
+  auto siz_notebook = new wxBoxSizer(wxHORIZONTAL);
+  siz_notebook->Add(nb_options);
+
+  auto siz_all = new wxBoxSizer(wxVERTICAL);
+  siz_all->AddSpacer(TOPBOTTOMSPACING);
+  siz_all->Add(siz_files_label,  0, wxLEFT | wxRIGHT, LEFTRIGHTSPACING);
+  siz_all->Add(siz_files,        0, wxLEFT | wxRIGHT, LEFTRIGHTSPACING);
+  siz_all->Add(siz_tracks_label, 0, wxLEFT | wxRIGHT, LEFTRIGHTSPACING);
+  siz_all->Add(siz_tracks,       0, wxLEFT | wxRIGHT, LEFTRIGHTSPACING);
+  siz_all->Add(siz_notebook,     0, wxLEFT | wxRIGHT, LEFTRIGHTSPACING);
   siz_all->AddSpacer(TOPBOTTOMSPACING);
 
   SetSizer(siz_all);
 
   translate_ui();
+
+  // Disable certain controls
+  st_tracks   ->Enable(false);
+  clb_tracks  ->Enable(false);
+  b_track_up  ->Enable(false);
+  b_track_down->Enable(false);
 
   set_track_mode(nullptr);
   enable_file_controls();
@@ -169,10 +177,6 @@ tab_input::tab_input(wxWindow *parent)
   value_copy_timer.Start(333);
 
   SetDropTarget(new input_drop_target_c(this));
-
-  wxConfig *cfg = (wxConfig *)wxConfigBase::Get();
-
-  cfg->SetPath(wxT("/GUI"));
 }
 
 void
