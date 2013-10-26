@@ -116,7 +116,7 @@ mmg_dialog::mmg_dialog()
   panel = new wxPanel(this, -1);
 
   bs_main = new wxBoxSizer(wxVERTICAL);
-  panel->SetSizer(bs_main);
+  panel->SetSizerAndFit(bs_main);
   panel->SetAutoLayout(true);
 
   notebook            = new wxNotebook(panel, ID_NOTEBOOK, wxDefaultPosition, wxSize(500, 500), wxNB_TOP);

@@ -106,7 +106,7 @@ job_run_dialog::job_run_dialog(wxWindow *,
   siz_all->Add(siz_line, 0, wxGROW | wxTOP | wxBOTTOM, 10);
   siz_all->SetSizeHints(this);
 
-  SetSizer(siz_all);
+  SetSizerAndFit(siz_all);
 
   m_geometry_saver.set_default_size(700, 700, true).restore();
 
@@ -409,7 +409,7 @@ job_log_dialog::job_log_dialog(wxWindow *parent,
   siz_buttons->Add(1, 0, 1, wxGROW, 0);
   siz_all->Add(siz_buttons, 0, wxGROW | wxTOP | wxBOTTOM, 10);
   siz_all->SetSizeHints(this);
-  SetSizer(siz_all);
+  SetSizerAndFit(siz_all);
 
   m_geometry_saver.set_default_size(900, 500, true).restore();
 
@@ -521,7 +521,7 @@ job_dialog::job_dialog(wxWindow *parent)
   siz_b_bottom->Add(b_start_selected, 0, wxGROW | wxLEFT, 10);
   siz_all->Add(siz_b_bottom, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 10);
   siz_all->SetSizeHints(this);
-  SetSizer(siz_all);
+  SetSizerAndFit(siz_all);
 
   m_geometry_saver.set_default_size(800, 500, true).restore();
 

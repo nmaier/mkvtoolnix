@@ -87,7 +87,7 @@ optdlg_chapters_tab::optdlg_chapters_tab(wxWindow *parent,
   siz_all->Add(siz_input, 0, wxGROW | wxLEFT | wxRIGHT, 5);
   siz_all->AddSpacer(5);
 
-  SetSizer(siz_all);
+  SetSizerAndFit(siz_all);
 }
 
 void

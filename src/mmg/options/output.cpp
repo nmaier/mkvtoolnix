@@ -114,7 +114,7 @@ optdlg_output_tab::optdlg_output_tab(wxWindow *parent,
   siz_all->Add(cb_ask_before_overwriting, 0, wxLEFT, 5);
   siz_all->AddSpacer(5);
 
-  SetSizer(siz_all);
+  SetSizerAndFit(siz_all);
 }
 
 void

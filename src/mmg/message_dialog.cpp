@@ -43,7 +43,7 @@ message_dialog::message_dialog(wxWindow *parent,
   siz_all->Add(tc_message,  1, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5);
   siz_all->Add(siz_buttons, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5);
 
-  SetSizer(siz_all);
+  SetSizerAndFit(siz_all);
 }
 
 message_dialog::~message_dialog() {

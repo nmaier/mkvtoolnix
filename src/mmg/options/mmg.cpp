@@ -223,7 +223,7 @@ optdlg_mmg_tab::optdlg_mmg_tab(wxWindow *parent,
   siz_all->Add(siz_line, 0, wxLEFT | wxGROW, 5);
   siz_all->AddSpacer(5);
 
-  SetSizer(siz_all);
+  SetSizerAndFit(siz_all);
 }
 
 void

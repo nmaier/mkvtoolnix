@@ -43,7 +43,7 @@ show_text_dlg::show_text_dlg(wxWindow *parent,
   siz_all->Add(siz_line, 0, wxGROW, 0);
   siz_all->AddSpacer(10);
 
-  SetSizer(siz_all);
+  SetSizerAndFit(siz_all);
 
   m_geometry_saver.set_default_size(400, 350, true).restore();
 }

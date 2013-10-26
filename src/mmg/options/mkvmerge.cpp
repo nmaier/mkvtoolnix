@@ -89,7 +89,7 @@ optdlg_mkvmerge_tab::optdlg_mkvmerge_tab(wxWindow *parent,
   siz_all->Add(siz_fg, 0, wxGROW | wxLEFT | wxRIGHT, 5);
   siz_all->AddSpacer(5);
 
-  SetSizer(siz_all);
+  SetSizerAndFit(siz_all);
 }
 
 void

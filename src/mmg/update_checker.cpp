@@ -110,7 +110,7 @@ update_check_dlg_c::update_check_dlg_c(wxWindow *parent)
   m_siz_all->Add(siz_button,  0, wxLEFT | wxRIGHT | wxBOTTOM | wxGROW, 5);
 
   SetMinSize(wxSize(400, 400));
-  SetSizer(m_siz_all);
+  SetSizerAndFit(m_siz_all);
 
   m_geometry_saver.set_default_size(700, 500, true).restore();
 }

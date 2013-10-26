@@ -82,13 +82,13 @@ header_editor_frame_c::header_editor_frame_c(wxWindow *parent)
 
   m_page_panel = new wxPanel(frame_panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_SIMPLE);
   m_bs_page    = new wxBoxSizer(wxHORIZONTAL);
-  m_page_panel->SetSizer(m_bs_page);
+  m_page_panel->SetSizerAndFit(m_bs_page);
 
   m_bs_main = new wxBoxSizer(wxHORIZONTAL);
   m_bs_main->Add(m_tc_tree,   2, wxGROW | wxALL, 5);
   m_bs_main->Add(m_page_panel,3, wxGROW | wxALL, 5);
 
-  frame_panel->SetSizer(m_bs_main);
+  frame_panel->SetSizerAndFit(m_bs_main);
 
   clear_pages();
 

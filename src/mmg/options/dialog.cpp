@@ -63,7 +63,7 @@ options_dialog::options_dialog(wxWindow *parent,
   siz_all->Add(siz_line, 0, wxGROW, 0);
   siz_all->AddSpacer(5);
 
-  SetSizer(siz_all);
+  SetSizerAndFit(siz_all);
 
   siz_all->SetMinSize(wxSize(600, -1));
   siz_all->SetSizeHints(this);

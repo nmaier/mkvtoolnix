@@ -38,7 +38,7 @@ he_empty_page_c::he_empty_page_c(header_editor_frame_c *parent,
   siz->Add(m_st_content,           0, wxGROW | wxLEFT | wxRIGHT, 5);
   siz->AddStretchSpacer();
 
-  SetSizer(siz);
+  SetSizerAndFit(siz);
 }
 
 he_empty_page_c::~he_empty_page_c() {

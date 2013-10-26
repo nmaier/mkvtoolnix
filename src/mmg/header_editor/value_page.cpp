@@ -120,7 +120,7 @@ he_value_page_c::init() {
   siz->Add(siz_line, 0, wxGROW | wxLEFT | wxRIGHT, 5);
   siz->AddSpacer(5);
 
-  SetSizer(siz);
+  SetSizerAndFit(siz);
 
   if (!m_toplevel_page)
     m_parent->append_page(this);
