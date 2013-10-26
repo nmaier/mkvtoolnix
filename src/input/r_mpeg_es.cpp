@@ -84,7 +84,7 @@ mpeg_es_reader_c::probe_file(mm_io_c *in,
         else if (MPEGVIDEO_EXT_START_CODE     == value)
           gop_start_code_found      = true;
 
-        else if ((MPEGVIDEO_FIRST_SLICE_START_CODE >= value) && (MPEGVIDEO_LAST_SLICE_START_CODE <= value))
+        else if ((MPEGVIDEO_FIRST_SLICE_START_CODE <= value) && (MPEGVIDEO_LAST_SLICE_START_CODE >= value))
           slice_start_code_found    = true;
 
         ok = sequence_start_code_found && picture_start_code_found && (gop_start_code_found || ext_start_code_found || slice_start_code_found);

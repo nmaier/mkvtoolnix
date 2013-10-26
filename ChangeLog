@@ -1,3 +1,9 @@
+2013-10-26  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvmerge: bug fix: The file detection code in the MPEG
+        elementary stream reader had a logic error. Fixes #928. In
+        practice this logic error didn't have any consequence.
+
 2013-10-19  Moritz Bunkus  <moritz@bunkus.org>
 
         * Released v6.5.0.
