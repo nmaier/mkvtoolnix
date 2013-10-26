@@ -54,7 +54,7 @@ dnl
       AC_LANG_PUSH(C++)
       ac_save_CXXFLAGS="$CXXFLAGS"
       ac_save_LIBS="$LIBS"
-      CXXFLAGS="$CXXFLAGS $WXWIDGETS_CFLAGS"
+      CXXFLAGS="$CXXFLAGS $STD_CXX11 $WXWIDGETS_CFLAGS"
       LIBS="$LDFLAGS $WXWIDGETS_LIBS"
       AC_TRY_LINK([
 #include <wx/dnd.h>
@@ -81,7 +81,7 @@ wxTreeItemId id;
       AC_LANG_PUSH(C++)
       ac_save_CXXFLAGS="$CXXFLAGS"
       ac_save_LIBS="$LIBS"
-      CXXFLAGS="$CXXFLAGS $WXWIDGETS_CFLAGS"
+      CXXFLAGS="$CXXFLAGS $STD_CXX11 $WXWIDGETS_CFLAGS"
       LIBS="$LDFLAGS $WXWIDGETS_LIBS"
       AC_TRY_COMPILE([
 #include <wx/app.h>
@@ -126,7 +126,7 @@ int dummy;
     AC_LANG_PUSH(C++)
     ac_save_CXXFLAGS="$CXXFLAGS"
     ac_save_LIBS="$LIBS"
-    CXXFLAGS="$CXXFLAGS $WXWIDGETS_CFLAGS"
+    CXXFLAGS="$CXXFLAGS $STD_CXX11 $WXWIDGETS_CFLAGS"
     LIBS="$LDFLAGS $WXWIDGETS_LIBS"
 
     AC_CACHE_CHECK([for wxWidgets class wxBitmapComboBox], [ac_cv_wx_bitmapcombobox], [
