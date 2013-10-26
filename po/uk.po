@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: mkvtoolnix_uk\n"
 "Report-Msgid-Bugs-To: Moritz Bunkus <moritz@bunkus.org>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2013-09-14 15:47+0200\n"
+"PO-Revision-Date: 2013-10-26 16:13+0200\n"
 "Last-Translator: Andriy Bilous'ko <arestarh@ukr.net>\n"
 "Language-Team: Ukrainian <moritz@bunkus.org>\n"
 "Language: uk\n"
@@ -4051,9 +4051,8 @@ msgid "ISO639-2 code"
 msgstr "ISO639-2 код"
 
 #: src/input/r_ivf.h:34
-#, fuzzy
 msgid "IVF (VP8/VP9)"
-msgstr "IVF (VP8)"
+msgstr "IVF (VP8/VP9)"
 
 #: src/common/file_types.cpp:37
 msgid "IVF with VP8 video files"
@@ -6737,9 +6736,9 @@ msgid "The GUI is configured to use the mkvmerge executable from a different ver
 msgstr "GUI налаштований на використання виконуваного файла mkvmerge іншої версії (%1%), ніж сам GUI (%2%). Даний сценарій не підтримується, але не забороняється. Ви можете змінити шлях до виконуваного файла mkvmerge необхідної версії через діалог налаштувань."
 
 #: src/extract/extract_cli_parser.cpp:236
-#, fuzzy, boost-format
+#, boost-format
 msgid "The ID '%1%' has already been used for another output file.\n"
-msgstr "Файл '%1%' був відкритий для запису.\n"
+msgstr "ID '%1%' вже був використаний для іншого файла на виході.\n"
 
 #: src/input/r_ogm.cpp:1533
 #, boost-format
@@ -7313,7 +7312,7 @@ msgstr "Останнім опрацьованим тайм-кодом перед
 msgid "The line %1% of the timecode file '%2%' does not contain a valid floating point number.\n"
 msgstr "Рядок %1% файлу тайм-коду '%2%' не містить корректно задане число з плаваючою комою.\n"
 
-#: src/common/translation.cpp:306
+#: src/common/translation.cpp:308
 msgid "The locale could not be set properly. Check the LANG, LC_ALL and LC_MESSAGES environment variables.\n"
 msgstr "Локаль (мова) не може бути встановлена правильно. Перевірте змінні оточення LANG, LC_ALL і  LC_MESSAGES.\n"
 
@@ -7785,7 +7784,7 @@ msgstr "Цей файл Ogg/OGM містить інформацію розділ
 
 #: src/input/r_ogm.cpp:892
 msgid "This Ogg/OGM file contains chapters but they could not be parsed. This can be due to the character set not being set properly for them or due to the entries not matching the expected SRT-style format.\n"
-msgstr ""
+msgstr "Даний файл Ogg/OGM містить розділи, але вони не могли бути опрацьовані. Причиною можуть бути набір символів розділів, що не встановлений вірно або записи розділів, що не підпадають під формат SRT.\n"
 
 #: src/mmg/header_editor/value_page.cpp:171
 msgid ""
@@ -8309,7 +8308,7 @@ msgstr "VC1 елементарні потоки"
 
 #: src/output/p_vpx.h:34
 msgid "VP8/VP9"
-msgstr ""
+msgstr "VP8/VP9"
 
 #: src/common/hacks.cpp:68
 msgid "Valid hacks are:\n"
@@ -10541,4 +10540,3 @@ msgstr "Так"
 
 #~ msgid "wrong usage: writing to read-only memory"
 #~ msgstr "wrong usage: запис тільки до \"пам'яті для читання\""
-
