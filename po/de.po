@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: mkvtoolnix 6.4.1\n"
 "Report-Msgid-Bugs-To: moritz@bunkus.org\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2013-10-23 23:46+0100\n"
+"PO-Revision-Date: 2013-10-26 12:47+0200\n"
 "Last-Translator: Moritz Bunkus <moritz@bunkus.org>\n"
 "Language-Team: German <moritz@bunkus.org>\n"
 "Language: de\n"
@@ -4067,9 +4067,8 @@ msgid "ISO639-2 code"
 msgstr "ISO639-2-Code"
 
 #: src/input/r_ivf.h:34
-#, fuzzy
 msgid "IVF (VP8/VP9)"
-msgstr "IVF (VP8)"
+msgstr "IVF (VP8/VP9)"
 
 #: src/common/file_types.cpp:37
 msgid "IVF with VP8 video files"
@@ -6761,9 +6760,9 @@ msgid "The GUI is configured to use the mkvmerge executable from a different ver
 msgstr "Das GUI ist so eingestellt, dass es eine Mkvmerge-Programmdatei mit anderer Version (%1%) benutzt, als sie das GUI selber hat (%2%). Dies wird nicht unterstützt aber auch nicht verhindert. Sie sollten die Mkvmerge-Programmdatei im Einstellungsdialog ändern."
 
 #: src/extract/extract_cli_parser.cpp:236
-#, fuzzy, boost-format
+#, boost-format
 msgid "The ID '%1%' has already been used for another output file.\n"
-msgstr "Die Datei »%1%« wurde zum Schreiben geöffnet.\n"
+msgstr "Die ID '%1%' wurde bereits für eine andere Ausgabedatei genutzt.\n"
 
 #: src/input/r_ogm.cpp:1533
 #, boost-format
@@ -7813,7 +7812,7 @@ msgstr "Diese Ogg-/OGM-Datei enthält Kapitelinformationen oder einen Titel. Lei
 
 #: src/input/r_ogm.cpp:892
 msgid "This Ogg/OGM file contains chapters but they could not be parsed. This can be due to the character set not being set properly for them or due to the entries not matching the expected SRT-style format.\n"
-msgstr ""
+msgstr "Diese Ogg/OGM-Datei enthält Kapitel, die nicht analysiert werden konnten. Dies kann an einem falsch oder nicht gesetzten Zeichensatz liegen, oder aber am Format der Einträge, falls sie nicht dem erwarteten SRT-Stil folgen.\n"
 
 #: src/mmg/header_editor/value_page.cpp:171
 msgid ""
@@ -8346,7 +8345,7 @@ msgstr "VC1 elementary streams"
 
 #: src/output/p_vpx.h:34
 msgid "VP8/VP9"
-msgstr ""
+msgstr "VP8/VP9"
 
 #: src/common/hacks.cpp:68
 msgid "Valid hacks are:\n"
