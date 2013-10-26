@@ -1,5 +1,8 @@
 2013-10-26  Moritz Bunkus  <moritz@bunkus.org>
 
+        * mmg: bug fix: fixed the tracks list box on the input tab being
+        invisible/0 pixels high with wxWidgets 2.9.x/3.x.
+
         * all: integrated the Portuguese translation. Although the
         translation files themselves had been added back in 6.3.0 that
         translation wasn't available for selection due to forgetfulness on
