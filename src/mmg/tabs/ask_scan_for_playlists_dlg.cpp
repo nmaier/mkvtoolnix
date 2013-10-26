@@ -62,7 +62,7 @@ ask_scan_for_playlists_dlg::ask_scan_for_playlists_dlg(wxWindow *parent,
 	siz_all->Add(siz_in_the_future, 1, wxEXPAND, 5);
 	siz_all->Add(siz_buttons,       1, wxEXPAND, 5);
 
-	SetSizer(siz_all);
+	SetSizerAndFit(siz_all);
 	Layout();
 
 	Centre(wxBOTH);

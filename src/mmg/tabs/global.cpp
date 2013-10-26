@@ -181,7 +181,7 @@ tab_global::tab_global(wxWindow *parent):
   siz_all->Add(siz_split,       0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5);
   siz_all->Add(siz_linking_box, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5);
   siz_all->Add(siz_chapters,    0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5);
-  SetSizer(siz_all);
+  SetSizerAndFit(siz_all);
 }
 
 void

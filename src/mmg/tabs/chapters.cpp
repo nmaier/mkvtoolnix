@@ -127,7 +127,7 @@ chapter_values_dlg::chapter_values_dlg(wxWindow *parent)
   siz_all->Add(siz_buttons, 0, wxGROW, 0);
   siz_all->AddSpacer(10);
 
-  SetSizer(siz_all);
+  SetSizerAndFit(siz_all);
 
   siz_all->SetSizeHints(this);
 }
@@ -328,7 +328,7 @@ tab_chapters::tab_chapters(wxWindow *parent,
   no_update               = false;
 
   SetDropTarget(new chapters_drop_target_c(this));
-  SetSizer(siz_all);
+  SetSizerAndFit(siz_all);
 }
 
 tab_chapters::~tab_chapters() {

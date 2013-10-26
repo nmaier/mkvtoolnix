@@ -125,15 +125,16 @@ tab_input::tab_input(wxWindow *parent)
   siz_add_remove_buttons->Add(b_remove_all_files, 0, wxALL, STDSPACING);
 
   auto siz_additional_parts = new wxBoxSizer(wxHORIZONTAL);
-  siz_additional_parts->Add(b_additional_parts, 0,  wxALL, STDSPACING);
+  siz_additional_parts->Add(b_additional_parts, 1, wxGROW | wxALL, STDSPACING);
 
   auto siz_file_buttons = new wxBoxSizer(wxVERTICAL);
-  siz_file_buttons->Add(siz_add_remove_buttons);
-  siz_file_buttons->Add(siz_additional_parts);
+  siz_file_buttons->Add(siz_add_remove_buttons, 0, wxGROW);
+  siz_file_buttons->Add(siz_additional_parts,   0, wxGROW);
+  siz_file_buttons->AddStretchSpacer();
 
   auto siz_files = new wxBoxSizer(wxHORIZONTAL);
-  siz_files->Add(lb_input_files,   0,  wxALL, STDSPACING);
-  siz_files->Add(siz_file_buttons, 0,  wxALL, STDSPACING);
+  siz_files->Add(lb_input_files,   1, wxGROW | wxALL, STDSPACING);
+  siz_files->Add(siz_file_buttons, 0, wxGROW | wxALL, STDSPACING);
 
   auto siz_tracks_label = new wxBoxSizer(wxHORIZONTAL);
   siz_tracks_label->Add(st_tracks, 0, wxALL, STDSPACING);
@@ -144,22 +145,22 @@ tab_input::tab_input(wxWindow *parent)
   siz_track_buttons->AddStretchSpacer();
 
   auto siz_tracks = new wxBoxSizer(wxHORIZONTAL);
-  siz_tracks->Add(clb_tracks, 0,  wxALIGN_TOP | wxALL, STDSPACING);
-  siz_tracks->Add(siz_track_buttons);
+  siz_tracks->Add(clb_tracks,        1, wxGROW | wxALIGN_TOP | wxALL, STDSPACING);
+  siz_tracks->Add(siz_track_buttons, 0, wxGROW);
 
   auto siz_notebook = new wxBoxSizer(wxHORIZONTAL);
-  siz_notebook->Add(nb_options);
+  siz_notebook->Add(nb_options, 1);
 
   auto siz_all = new wxBoxSizer(wxVERTICAL);
   siz_all->AddSpacer(TOPBOTTOMSPACING);
-  siz_all->Add(siz_files_label,  0, wxLEFT | wxRIGHT, LEFTRIGHTSPACING);
-  siz_all->Add(siz_files,        0, wxLEFT | wxRIGHT, LEFTRIGHTSPACING);
-  siz_all->Add(siz_tracks_label, 0, wxLEFT | wxRIGHT, LEFTRIGHTSPACING);
-  siz_all->Add(siz_tracks,       0, wxLEFT | wxRIGHT, LEFTRIGHTSPACING);
-  siz_all->Add(siz_notebook,     0, wxLEFT | wxRIGHT, LEFTRIGHTSPACING);
+  siz_all->Add(siz_files_label,  0,          wxLEFT | wxRIGHT, LEFTRIGHTSPACING);
+  siz_all->Add(siz_files,        1, wxGROW | wxLEFT | wxRIGHT, LEFTRIGHTSPACING);
+  siz_all->Add(siz_tracks_label, 0,          wxLEFT | wxRIGHT, LEFTRIGHTSPACING);
+  siz_all->Add(siz_tracks,       1, wxGROW | wxLEFT | wxRIGHT, LEFTRIGHTSPACING);
+  siz_all->Add(siz_notebook,     0, wxGROW | wxLEFT | wxRIGHT, LEFTRIGHTSPACING);
   siz_all->AddSpacer(TOPBOTTOMSPACING);
 
-  SetSizer(siz_all);
+  SetSizerAndFit(siz_all);
 
   translate_ui();
 

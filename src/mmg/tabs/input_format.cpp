@@ -152,7 +152,7 @@ tab_input_format::tab_input_format(wxWindow *parent,
 
   siz_all->AddSpacer(TOPBOTTOMSPACING);
 
-  SetSizer(siz_all);
+  SetSizerAndFit(siz_all);
 }
 
 void

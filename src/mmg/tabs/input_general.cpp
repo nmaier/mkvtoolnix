@@ -94,7 +94,7 @@ tab_input_general::tab_input_general(wxWindow *parent,
 
   siz_fg->Add(siz_line, 1, wxGROW | wxALIGN_CENTER_VERTICAL, 0);
 
-  SetSizer(siz_fg);
+  SetSizerAndFit(siz_fg);
 }
 
 void

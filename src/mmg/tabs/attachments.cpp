@@ -137,7 +137,7 @@ tab_attachments::tab_attachments(wxWindow *parent):
   siz_all->Add(siz_box_attached_files, 1, wxALL | wxGROW, 5);
   siz_all->Add(siz_box_attachments,    1, wxALL | wxGROW, 5);
 
-  SetSizer(siz_all);
+  SetSizerAndFit(siz_all);
 
   enable(false);
   selected_attachment = -1;

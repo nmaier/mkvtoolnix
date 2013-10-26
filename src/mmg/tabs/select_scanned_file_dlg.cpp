@@ -135,7 +135,7 @@ select_scanned_file_dlg::select_scanned_file_dlg(wxWindow *parent,
 	siz_all->Add(siz_columns, 1, wxEXPAND, 5);
 	siz_all->Add(siz_buttons, 0, wxEXPAND, 5);
 
-	SetSizer(siz_all);
+	SetSizerAndFit(siz_all);
 	Layout();
 
 	Centre(wxBOTH);
