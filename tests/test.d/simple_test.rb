@@ -147,6 +147,8 @@ class SimpleTest
   end
 
   def test_ui_locale locale, *args
+    describe "mkvmerge / UI locale: #{locale}"
+
     options = args.extract_options!
     @blocks[:tests] << {
       :name  => "mkvmerge UI locale #{locale}",
