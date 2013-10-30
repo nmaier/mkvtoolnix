@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: mkvtoonix-eu\n"
 "Report-Msgid-Bugs-To: Xabier Aramendi <azpidatziak@gmail.com>\n"
 "POT-Creation-Date: 2010-06-08 10:00+0200\n"
-"PO-Revision-Date: 2013-08-23 19:51+0100\n"
+"PO-Revision-Date: 2013-10-28 11:37+0100\n"
 "Last-Translator: Xabier Aramendi (Azpidatziak) <azpidatziak@gmail.com>\n"
 "Language-Team: (EUS_Xabier Aramendi) <azpidatziak@gmail.com>\n"
 "Language: Basque (Euskara)\n"
@@ -2110,7 +2110,7 @@ msgstr "Beste kate guztiak bide idazburu hautatzaileek bezala egiten dute lan (i
 msgid "All supported files|*.mkv;*.mka;*.mks;*.mk3d;*.webm;*.webma;*.webmv|Matroska files (*.mkv;*.mka;*.mks;*.mk3d)|*.mkv;*.mka;*.mks;*.mk3d|WebM files (*.webm;*.webma;*.webmv)|*.webm;*.webma;*.webmv|All files|*.*"
 msgstr "Sostengaturiko agiri denak|*.mkv;*.mka;*.mks;*.mk3d;*.webm;*.webma;*.webmv|Matroska agiriak (*.mkv;*.mka;*.mks;*.mk3d)|*.mkv;*.mka;*.mks;*.mk3d|WebM agiriak (*.webm;*.webma;*.webmv)|*.webm;*.webma;*.webmv|Agiri denak|*.*"
 
-#: src/mmg/tabs/input.cpp:251
+#: src/mmg/tabs/input.cpp:262
 #, c-format, boost-format
 msgid "All supported media files|%s%s|%s"
 msgstr "Sostengaturiko multimedia agiri denak|%s%s|%s"
@@ -2199,7 +2199,7 @@ msgstr "Jadanik ezarrita dago berezko beste bide bat %1% bideentzat. 'berezko' i
 msgid "Another muxing job in still in progress. Please wait until it has finished or abort it manually before starting a new one."
 msgstr "Oraindik beste lan multiplexaketa bat dago garatzen. Mesedez itxaron hark amaitu arte edo utzi eskuz berri bat hasi aurretik."
 
-#: src/mmg/tabs/input.cpp:1331
+#: src/mmg/tabs/input.cpp:1342
 #, c-format, boost-format
 msgid "Appending a track from a file to another track from the same file is not allowed. This is the case for tracks number %u and %u."
 msgstr "Agiri batekik bide bat gehitzea agiri bereko beste bide batera ez dago ahalbideturik. Hau da %u eta %u zenbakiko bideen kasua."
@@ -2652,11 +2652,11 @@ msgstr "Hautatu eranskin agiri bat"
 msgid "Choose an input file"
 msgstr "Hautatu sarrera agiri bat"
 
-#: src/mmg/tabs/input.cpp:258
+#: src/mmg/tabs/input.cpp:269
 msgid "Choose an input file to add"
 msgstr "Hautatu gehitzeko sarrera agiri bat"
 
-#: src/mmg/tabs/input.cpp:258
+#: src/mmg/tabs/input.cpp:269
 msgid "Choose an input file to append"
 msgstr "Hautatu eransteko sarrera agiri bat"
 
@@ -2820,7 +2820,7 @@ msgstr "Agindu lerro aukerak:"
 msgid "Command line saved."
 msgstr "Agindu lerroa gordeta."
 
-#: src/mmg/tabs/input.cpp:566
+#: src/mmg/tabs/input.cpp:577
 msgid "Command line used:"
 msgstr "Erabilitako agindu lerroa:"
 
@@ -2880,7 +2880,7 @@ msgstr "CoreAudio"
 
 #: src/mmg/jobs.cpp:180
 #: src/mmg/mux_dialog.cpp:118
-#: src/mmg/tabs/input.cpp:506
+#: src/mmg/tabs/input.cpp:517
 #, c-format, boost-format
 msgid "Could not create a temporary file for mkvmerge's command line option called '%s' (error code %d, %s)."
 msgstr "Ezinezkoa aldibaterako agiria sortzea '%s' deituriko mkvmergeren agindu lerro aukerarentzat (akats kodea %d, %s)."
@@ -3613,7 +3613,7 @@ msgstr "Heuskarri honetako denbora itxaroten zen: HH:MM:SS.nnn (HH = orduak, MM 
 msgid "Exports the chapter information in the simple format used in OGM tools (CHAPTER01=... CHAPTER01NAME=...)."
 msgstr "Atal argibideak esportatzen ditu OGM tresnatan erabilitako heuskarri arrunt batean (CHAPTER01=... CHAPTER01NAME=...)."
 
-#: src/mmg/tabs/input.cpp:191
+#: src/mmg/tabs/input.cpp:202
 msgid "Extra options"
 msgstr "Gain aukerak"
 
@@ -3727,7 +3727,7 @@ msgstr "Agiriak uste baino frame gutxiago ditu edo hondatuta dago %1% framearen 
 
 #: src/mmg/mmg_dialog.cpp:800
 #: src/mmg/mux_dialog.cpp:119
-#: src/mmg/tabs/input.cpp:507
+#: src/mmg/tabs/input.cpp:518
 msgid "File creation failed"
 msgstr "Agiri sortze hutsegitea"
 
@@ -3741,22 +3741,22 @@ msgstr "Agiri datuak, neurria: %1%"
 msgid "File description: %1%"
 msgstr "Agiri azalpena: %1%"
 
-#: src/mmg/tabs/input.cpp:559
-#: src/mmg/tabs/input.cpp:574
+#: src/mmg/tabs/input.cpp:570
+#: src/mmg/tabs/input.cpp:585
 msgid "File identification failed"
 msgstr "Agiri ezagupen hutsegitea"
 
-#: src/mmg/tabs/input.cpp:554
+#: src/mmg/tabs/input.cpp:565
 #, c-format, boost-format
 msgid "File identification failed for '%s'. Return code: %d"
 msgstr "Agiri ezagutarazpen hutsegitea '%s'-rentzat. Erantzun kodea: %d"
 
-#: src/mmg/tabs/input.cpp:557
+#: src/mmg/tabs/input.cpp:568
 #, c-format, boost-format
 msgid "File identification failed. Return code: %d. Errno: %d (%s). Make sure that you've selected a mkvmerge executable in the settings dialog."
 msgstr "Ezagutarazpen hutsegitea. Erantzun kodea: %d. Akats zebk: %d (%s). Zihurtatu mkvmerge exekutagarri bat hautaturik dizula ezarpen elkarrizketan."
 
-#: src/mmg/tabs/input.cpp:703
+#: src/mmg/tabs/input.cpp:714
 msgid "File is already processed"
 msgstr "Agiria jadanik prozesaturik dago"
 
@@ -3780,7 +3780,7 @@ msgstr "Agiri izena: %1%"
 msgid "File parsing failed"
 msgstr "Agiri azterketa hutsegitea"
 
-#: src/mmg/tabs/input.cpp:783
+#: src/mmg/tabs/input.cpp:794
 msgid "File removal not possible"
 msgstr "Ezin da agiria kendu"
 
@@ -3873,7 +3873,7 @@ msgstr "Behartzen du NALU neurri luzera byte zenbateko batera. Parametro hau esk
 msgid "Forces the timecode scale factor to REPLACEME. You have to replace REPLACEME with a value between 1000 and 10000000 or with -1. Normally mkvmerge will use a value of 1000000 which means that timecodes and durations will have a precision of 1ms. For files that will not contain a video track but at least one audio track mkvmerge will automatically choose a timecode scale factor so that all timecodes and durations have a precision of one sample. This causes bigger overhead but allows precise seeking and extraction. If the magical value -1 is used then mkvmerge will use sample precision even if a video track is present."
 msgstr "Behartzen du denbora-kode neurri ezaugarria REPLACEME-ra. REPLACEME ordeztu behar duzu 1000 eta 10000000 arteko balio batekin edo -1-rekin. Arrunt, mkvmergek 1000000 balioa erabiliko du, honek esanahi du denbora-kodeek eta iraupenek 1 sm-ko zehaztasuna izango dutela. Bideo biderik izango ez duten agirientzat baina gutxienez audio bide bat bai mkvmergek berezgaitasunez hautatuko du denbora-kode neurri ezaugarri bat denbora-kode eta iraupen guztiek lagin baten zehaztasuna izan dezaten. Honek burugaintza handiagoa eragiten du baina bilaketa eta aterapen zehatza ahalbidetzen du. -1 balio magikoa erabiltzen bada mkvmergek lagin zehaztasuna erabiliko du baita bideo bidea badago ere."
 
-#: src/mmg/tabs/input.cpp:190
+#: src/mmg/tabs/input.cpp:201
 msgid "Format specific options"
 msgstr "Heuskarri aukera bereiziak"
 
@@ -3924,7 +3924,7 @@ msgstr "Forma-askeko edizio eremua erabiltzaileak bide honentzako aukerak zehazt
 msgid "Gamma: %1%"
 msgstr "Gamma: %1%"
 
-#: src/mmg/tabs/input.cpp:189
+#: src/mmg/tabs/input.cpp:200
 msgid "General track options"
 msgstr "Bidearen aukera orokorrak"
 
@@ -4050,9 +4050,8 @@ msgid "ISO639-2 code"
 msgstr "ISO639-2 kodea"
 
 #: src/input/r_ivf.h:34
-#, fuzzy
 msgid "IVF (VP8/VP9)"
-msgstr "IVF (VP8)"
+msgstr "IVF (VP8/VP9)"
 
 #: src/common/file_types.cpp:37
 msgid "IVF with VP8 video files"
@@ -4146,7 +4145,7 @@ msgstr "Irudia hemendik inportaturik: %1%"
 msgid "Incompatible mkvmerge version"
 msgstr "mkvmerge bertsio bateraezina"
 
-#: src/mmg/tabs/input.cpp:993
+#: src/mmg/tabs/input.cpp:1004
 msgid "Incompatible track"
 msgstr "Bide bateraezina"
 
@@ -4172,7 +4171,7 @@ msgstr "Sarrera"
 msgid "Input data error"
 msgstr "Sarrera datu okerrak"
 
-#: src/mmg/tabs/input.cpp:180
+#: src/mmg/tabs/input.cpp:191
 msgid "Input files:"
 msgstr "Sarrera agiriak:"
 
@@ -5221,7 +5220,7 @@ msgstr "Ez da biderik aurkitu '%1%' edizio adierazpenarekin bat datorrenik. %2%\
 msgid "No track with the ID %1% was found in the source file.\n"
 msgstr "Ez da biderik aurkitu %1% ID-arekin iturburu agirian.\n"
 
-#: src/mmg/tabs/input.cpp:725
+#: src/mmg/tabs/input.cpp:736
 msgid "No tracks found"
 msgstr "Ez da biderik aurkitu"
 
@@ -5447,7 +5446,7 @@ msgstr "Hautaturiko lanen irteera:"
 msgid "Output sampling frequency: %1%"
 msgstr "Irteera laginketa maiztasuna: %1%"
 
-#: src/mmg/tabs/input.cpp:570
+#: src/mmg/tabs/input.cpp:581
 msgid "Output:"
 msgstr "Irteera:"
 
@@ -6713,7 +6712,7 @@ msgstr "FLAC idazburuak ezin dira aztertu: jario argibide egitura ez da aurkitu.
 msgid "The FPS is 0.0 but the reader did not provide a timecode for a packet. %1%\n"
 msgstr "FS-koa 0,0 da baina irakurgailuak ez du denbora-koderik eman pakete batentzat. %1%\n"
 
-#: src/mmg/tabs/input.cpp:1392
+#: src/mmg/tabs/input.cpp:1403
 #, c-format, boost-format
 msgid "The FPS setting for track nr. %s in file '%s' is invalid."
 msgstr "FS-ko ezarpena nr bidearentzat. %s '%s' agirian baliogabea da."
@@ -6723,7 +6722,7 @@ msgstr "FS-ko ezarpena nr bidearentzat. %s '%s' agirian baliogabea da."
 msgid "The FourCC must be exactly four characters long in '%1% %2%'.\n"
 msgstr "FourCC-k lau hizkiko luzera zehatza izan behar du hemen: '%1% %2%'.\n"
 
-#: src/mmg/tabs/input.cpp:1380
+#: src/mmg/tabs/input.cpp:1391
 #, c-format, boost-format
 msgid "The FourCC setting for track nr. %s in file '%s' is not exactly four characters long."
 msgstr "FourCC ezarpena %s bidearentzat '%s' agirian ez da zehazki lau hizkiko luzerakoa."
@@ -6734,9 +6733,9 @@ msgid "The GUI is configured to use the mkvmerge executable from a different ver
 msgstr "Erabiltzaile Interfaze Grafika, EIG (%2%) beraren ezberdina den mkvmerge exekutagarri bertsio (%1%) batetik erabiltzeko itxuraturik dago. Hau ez dago sostengaturik baina ez da saihestuko ere. mkvmerge exekutagarria aldatu behar duzu hobespenen elkarrizketan."
 
 #: src/extract/extract_cli_parser.cpp:236
-#, fuzzy, boost-format
+#, boost-format
 msgid "The ID '%1%' has already been used for another output file.\n"
-msgstr "%1% agiria idazteko ireki da.\n"
+msgstr "'%1%' ID-a jadanik beste irteera agiri batek erabalzen du.\n"
 
 #: src/input/r_ogm.cpp:1533
 #, boost-format
@@ -6848,7 +6847,7 @@ msgstr "'%1%' -> '%2%' argumentoa baliogabea da: bi puntu seinu gehiegi '%3%' ga
 msgid "The argument to '--timecode-scale' must be a number.\n"
 msgstr "'--timecode-scale'-rako argumentoa zenbaki bat izan behar da.\n"
 
-#: src/mmg/tabs/input.cpp:1434
+#: src/mmg/tabs/input.cpp:1445
 #, c-format, boost-format
 msgid "The aspect ratio setting for track nr. %s in file '%s' is invalid."
 msgstr "nr bidearentzako ikuspegi maila ezarpena. %s '%s' agirian baliogabea da."
@@ -6885,7 +6884,7 @@ msgid ""
 "\n"
 "Note: This warning can be deactivated in the 'options' dialog. Turn off the 'Warn about usage...' option."
 msgstr ""
-"Atal editatzailea erabilia izan da eta datuak ditu. Horrela ere, ez da atal agiririk hautatu orrialde orokorrean. mmg-an, atal editatzailea askea da multiplexaketa garapenarekiko. Editatzailean dauden atalek EZ dira irteera agirian multiplexatuko. Atal editatzaileko 'gorde' eginkizun batzuk bakarrik eragingo dute atalak diska gogorrean idaztaraztea.\n"
+"Atal editatzailea erabilia izan da eta datuak ditu. Horrela ere, ez da atal agiririk hautatu orrialde orokorrean. mmg-an, atal editatzailea askea da multiplexaketa garapenarekiko. Editatzailean dauden atalak EZ dira irteera agirian multiplexatuko. Atal editatzaileko 'gorde' eginkizun batzuk bakarrik eragingo dute atalak diska gogorrean idaztaraztea.\n"
 "\n"
 "Egitan nahi duzu multiplexaketarekin jarraitzea?\n"
 "\n"
@@ -6929,7 +6928,7 @@ msgstr "'%s' herrialdea ez da ccTLD baliozko bat eta ezin da hautatu."
 msgid "The cue entries (the index) are being written...\n"
 msgstr "Cue sarrerak (aurkibidea) idazten ari dira...\n"
 
-#: src/mmg/tabs/input.cpp:779
+#: src/mmg/tabs/input.cpp:790
 #, c-format, boost-format
 msgid "The current file (number %d) cannot be removed. There are other files -- at least file number %d -- whose tracks are supposed to be appended to tracks from this file. Please remove those files first."
 msgstr "Oraingo agiria (zenbakia: %d) ezin da kendu. Beste agiri batzuk daude -- gutxienez %d zenbakiko agiria -- hauen bideak suposatzen da agiri honetatik erantsiko direla bideetara. Mesedez kendu agiri hauek lehenik."
@@ -6944,7 +6943,7 @@ msgstr "Oraingo paketearen denbora-kodea aurreko paketea baino txikiagoa da. Hon
 msgid "The default language code '%1%' is not a valid ISO639-2 language code and will be ignored.\n"
 msgstr "'%1%' berezko hizkuntza kodea ez da ISO639-2 hizkuntza kode baliozko bat eta ezikusi egingo da.\n"
 
-#: src/mmg/tabs/input.cpp:1359
+#: src/mmg/tabs/input.cpp:1370
 #, c-format, boost-format
 msgid "The delay setting for track nr. %s in file '%s' is invalid."
 msgstr "nr bidearentzako atzerapen ezarpena. %s '%s' agirian baliogabea da."
@@ -7068,7 +7067,7 @@ msgstr "%1% agiria sostengatu-gabeko agiri mota batekoa da (%2%).\n"
 msgid "The file '%s' does not exist."
 msgstr "'%s' agiria ez dago."
 
-#: src/mmg/tabs/input.cpp:701
+#: src/mmg/tabs/input.cpp:712
 #, c-format, boost-format
 msgid "The file '%s' is already processed in combination with the file '%s'. It cannot be added a second time."
 msgstr "'%s' agiria jadanik prozesatu da '%s' agiriarekin batera. Ezin da bigarren aldiz gehitu."
@@ -7114,7 +7113,7 @@ msgstr "Agiri idazburua ezin da zuzen irakurri.\n"
 msgid "The file headers could not be parsed, e.g. because they're incomplete, invalid or damaged."
 msgstr "Agiri idazburuak ezin dira aztertu, adib. osatugabeak, baliogabeak edo hondatuta daudelako."
 
-#: src/mmg/tabs/input.cpp:539
+#: src/mmg/tabs/input.cpp:550
 #, c-format, boost-format
 msgid "The file is an unsupported container format (%s)."
 msgstr "Agiria sostengatu gabeko edukiontzi heuskarria da (%s)."
@@ -7236,12 +7235,12 @@ msgstr "Denbora-kode neurri ezaugarria baliozko mailatik kanpo dago (1... 100000
 msgid "The height of the two tracks is different: %1% and %2%"
 msgstr "Bi bideen garaiera ezberdina da: %1% eta %2%"
 
-#: src/mmg/tabs/input.cpp:725
+#: src/mmg/tabs/input.cpp:736
 #, c-format, boost-format
 msgid "The input file '%s' does not contain any tracks."
 msgstr "'%s' sarrera agiriak ez dut biderik."
 
-#: src/mmg/tabs/input.cpp:1276
+#: src/mmg/tabs/input.cpp:1287
 msgid ""
 "The job file could not have been parsed correctly.\n"
 "Either it is invalid / damaged, or you've just found\n"
@@ -7257,7 +7256,7 @@ msgstr ""
 "\n"
 "(Akatsa gertatu da: tab_input::load(), #1)"
 
-#: src/mmg/tabs/input.cpp:1283
+#: src/mmg/tabs/input.cpp:1294
 msgid ""
 "The job file could not have been parsed correctly.\n"
 "Either it is invalid / damaged, or you've just found\n"
@@ -7273,7 +7272,7 @@ msgstr ""
 "\n"
 "(Akatsa gertatu da: tab_input::load(), #2)"
 
-#: src/mmg/tabs/input.cpp:1296
+#: src/mmg/tabs/input.cpp:1307
 msgid ""
 "The job file could not have been parsed correctly.\n"
 "Either it is invalid / damaged, or you've just found\n"
@@ -7310,7 +7309,7 @@ msgstr "Akatsa aurkitu aurretiko prozesaturiko azken denbora-kodea izan da %1%.\
 msgid "The line %1% of the timecode file '%2%' does not contain a valid floating point number.\n"
 msgstr "'%2%' denbora-kode agiriko %1% lerroak ez dut zenbaki hamarren baliozko bat.\n"
 
-#: src/common/translation.cpp:306
+#: src/common/translation.cpp:308
 msgid "The locale could not be set properly. Check the LANG, LC_ALL and LC_MESSAGES environment variables.\n"
 msgstr "Tokiko agiritegia ezin da egoki ezarri. Egiaztatu LANG, LC_ALL eta LC_MESSAGES inguru aldaerak.\n"
 
@@ -7537,7 +7536,7 @@ msgstr "'%1%' eranskinaren neurria da 0.\n"
 msgid "The source file '%1%' could not be opened successfully, or retrieving its size by seeking to the end did not work.\n"
 msgstr "'%1%' iturburu agiria ez da ongi ireki, edo bere neurria berreskuratzea amaiera arte bilatuz ez da ongi irten.\n"
 
-#: src/mmg/tabs/input.cpp:1370
+#: src/mmg/tabs/input.cpp:1381
 #, c-format, boost-format
 msgid "The stretch setting for track nr. %s in file '%s' is invalid."
 msgstr "'%s' agiriko %s bide zenbakiko luzera ezarpena ez da baliozkoa."
@@ -7782,7 +7781,7 @@ msgstr "Ogg/OGM agiri honek atal edo izenburu argibideak ditu. Zorigaitzez agiri
 
 #: src/input/r_ogm.cpp:892
 msgid "This Ogg/OGM file contains chapters but they could not be parsed. This can be due to the character set not being set properly for them or due to the entries not matching the expected SRT-style format.\n"
-msgstr ""
+msgstr "Ogg/OGM agiri honek atalak ditu baina ezin dira aztertuak izan. Hau izan daiteke hizki-kodeak ez direlako beraientzat egoki ezarri edo sarrerak ez datozelako bat itxarondako SRT-estilo heuskarriarekin.\n"
 
 #: src/mmg/header_editor/value_page.cpp:171
 msgid ""
@@ -7888,7 +7887,7 @@ msgstr "Hau ez litzake gertatu behar. Mesedez jarri harremanetan egilearekin, Mo
 msgid "This track contains SBR AAC/HE-AAC/AAC+ data. Only needed for AAC input files, because SBR AAC cannot be detected automatically for these files. Not needed for AAC tracks read from MP4 or Matroska files."
 msgstr "Bide honek SBR AAC/HE-AAC/AAC+ datuak ditu. AAC sarrera agirientzako bakarrik behar direnak, zeren SBR AAC ezin da berezgaitasunez atzeman agiri horietatik. Ez da beharrezkoa AAC bideak MP4 edo Matroska agirietatik irakurtzeko."
 
-#: src/mmg/tabs/input.cpp:993
+#: src/mmg/tabs/input.cpp:1004
 msgid "This track is not compatible with the WebM mode and cannot be enabled."
 msgstr "Bide hau ez da bateragarria WebM moduarekin eta ezin da gaitu."
 
@@ -8081,7 +8080,7 @@ msgstr "Bide mota: %1%"
 msgid "Tracks with unsupported content encoding schemes (compression or encryption) cannot be extracted.\n"
 msgstr "Eduki kodeaketa eskema sostengatu gabeko bideak (konpresioa edo enkriptaketa) ezin dira atera.\n"
 
-#: src/mmg/tabs/input.cpp:185
+#: src/mmg/tabs/input.cpp:196
 msgid "Tracks, chapters and tags:"
 msgstr "Bideak, atalak eta etiketak:"
 
@@ -8236,7 +8235,7 @@ msgstr "Seinugabeko osoa"
 msgid "Unsupported MPEG mpeg_version: 0x%|1$02x| in packet %2% for timecode %3%, assuming MPEG2. No further warnings will be printed for this track.\n"
 msgstr "Sostengugabeko MPEG mpeg_version: 0x%|1$02x| %2% paketean %3% denbora-kodearentzat, MPEG2 suposatzen. Ez da kontuz ohar gehiago irarkituko bide honentzat.\n"
 
-#: src/mmg/tabs/input.cpp:542
+#: src/mmg/tabs/input.cpp:553
 msgid "Unsupported format"
 msgstr "Heuskarri sostengu gabea"
 
@@ -8306,7 +8305,7 @@ msgstr "VC1 ohinarrizko jarioak"
 
 #: src/output/p_vpx.h:34
 msgid "VP8/VP9"
-msgstr ""
+msgstr "VP8/VP9"
 
 #: src/common/hacks.cpp:68
 msgid "Valid hacks are:\n"
@@ -8602,11 +8601,11 @@ msgid "ac3_bs_packetizer::add_to_buffer(): Untested code ('size' is odd). If mkv
 msgstr "ac3_bs_packetizer::add_to_buffer(): Aztertu gabeko kodea ('neurria' arraroa da). mkvmerge matxuratzen bada edo emaitz agiriak ez badu audio bide osoa eta zuzen, mesedez jarri harremanetan egilearekin, Moritz Bunkus, en moritz@bunkus.org.\n"
 
 #: src/mmg/tabs/attachments.cpp:157
-#: src/mmg/tabs/input.cpp:181
+#: src/mmg/tabs/input.cpp:192
 msgid "add"
 msgstr "gehitu"
 
-#: src/mmg/tabs/input.cpp:188
+#: src/mmg/tabs/input.cpp:199
 msgid "additional parts"
 msgstr "zati gehigarriak"
 
@@ -8634,7 +8633,7 @@ msgstr "Anaglifoa (zian/gorria)"
 msgid "anaglyph (green/magenta)"
 msgstr "Anaglifoa (orlegia/magenta)"
 
-#: src/mmg/tabs/input.cpp:183
+#: src/mmg/tabs/input.cpp:194
 msgid "append"
 msgstr "erantsi"
 
@@ -8745,7 +8744,7 @@ msgstr "eginda"
 msgid "done/warnings"
 msgstr "eginda/oharrak"
 
-#: src/mmg/tabs/input.cpp:187
+#: src/mmg/tabs/input.cpp:198
 msgid "down"
 msgstr "jeitsi"
 
@@ -9140,12 +9139,12 @@ msgstr "mkvmerge EIG gertu"
 msgid "mkvmerge GUI settings (*.mmg)|*.mmg|%s"
 msgstr "mkvmerge EIG ezarpenak (*.mmg)|*.mmg|%s"
 
-#: src/mmg/tabs/input.cpp:1334
-#: src/mmg/tabs/input.cpp:1360
+#: src/mmg/tabs/input.cpp:1345
 #: src/mmg/tabs/input.cpp:1371
-#: src/mmg/tabs/input.cpp:1381
-#: src/mmg/tabs/input.cpp:1393
-#: src/mmg/tabs/input.cpp:1435
+#: src/mmg/tabs/input.cpp:1382
+#: src/mmg/tabs/input.cpp:1392
+#: src/mmg/tabs/input.cpp:1404
+#: src/mmg/tabs/input.cpp:1446
 msgid "mkvmerge GUI: error"
 msgstr "mkvmerge EIG: akatsa"
 
@@ -9409,11 +9408,11 @@ msgid "real_reader: Only audio header versions 3, 4 and 5 are supported. Track I
 msgstr "real_reader: 3,4 eta 5 audio idazburu bertsioak bakarrik daude sostengatuak. Bide ID %1%-ek %2% bertsioa erabiltzen du eta jauzi egingo da.\n"
 
 #: src/mmg/tabs/attachments.cpp:158
-#: src/mmg/tabs/input.cpp:182
+#: src/mmg/tabs/input.cpp:193
 msgid "remove"
 msgstr "kendu"
 
-#: src/mmg/tabs/input.cpp:184
+#: src/mmg/tabs/input.cpp:195
 msgid "remove all"
 msgstr "kendu denak"
 
@@ -9536,7 +9535,7 @@ msgstr "und (Zehaztugabea)"
 #: src/input/r_mpeg_ps.cpp:1344
 #: src/mmg/header_editor/value_page.cpp:150
 #: src/mmg/mmg.cpp:68
-#: src/mmg/tabs/input.cpp:532
+#: src/mmg/tabs/input.cpp:543
 #: src/mmg/tabs/scanning_for_playlists_dlg.cpp:180
 msgid "unknown"
 msgstr "ezezaguna"
@@ -9546,7 +9545,7 @@ msgstr "ezezaguna"
 msgid "unknown, format tag 0x%|1$04x|"
 msgstr "ezezaguna, heuskarri etiketa 0x%|1$04x|"
 
-#: src/mmg/tabs/input.cpp:186
+#: src/mmg/tabs/input.cpp:197
 msgid "up"
 msgstr "igo"
 
