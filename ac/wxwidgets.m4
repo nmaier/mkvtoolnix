@@ -57,6 +57,7 @@ dnl
       CXXFLAGS="$CXXFLAGS $STD_CXX11 $WXWIDGETS_CFLAGS"
       LIBS="$LDFLAGS $WXWIDGETS_LIBS"
       AC_TRY_LINK([
+#undef __STRICT_ANSI__
 #include <wx/dnd.h>
 #include <wx/treectrl.h>
 ], [
@@ -84,6 +85,7 @@ wxTreeItemId id;
       CXXFLAGS="$CXXFLAGS $STD_CXX11 $WXWIDGETS_CFLAGS"
       LIBS="$LDFLAGS $WXWIDGETS_LIBS"
       AC_TRY_COMPILE([
+#undef __STRICT_ANSI__
 #include <wx/app.h>
 ], [
 #if defined(wxUSE_UNICODE) && wxUSE_UNICODE
@@ -131,6 +133,7 @@ int dummy;
 
     AC_CACHE_CHECK([for wxWidgets class wxBitmapComboBox], [ac_cv_wx_bitmapcombobox], [
       AC_TRY_COMPILE([
+#undef __STRICT_ANSI__
 #include <wx/bmpcbox.h>
 ], [
 wxBitmapComboBox bitmap_combobox(NULL, -1);
@@ -143,6 +146,7 @@ wxBitmapComboBox bitmap_combobox(NULL, -1);
 
     AC_CACHE_CHECK([for wxMenuBar member function SetMenuLabel], [ac_cv_wx_menubar_setmenulabel], [
       AC_TRY_COMPILE([
+#undef __STRICT_ANSI__
 #include <wx/string.h>
 #include <wx/menu.h>
 ], [
@@ -157,6 +161,7 @@ bar.SetMenuLabel(0, wxEmptyString);
 
     AC_CACHE_CHECK([for wxMenuItem member function SetItemlabel], [ac_cv_wx_menuitem_setitemlabel], [
       AC_TRY_COMPILE([
+#undef __STRICT_ANSI__
 #include <wx/string.h>
 #include <wx/menuitem.h>
 ], [
