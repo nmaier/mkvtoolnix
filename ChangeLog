@@ -1,3 +1,9 @@
+2013-11-02  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvmerge: bug fix: fixed accessing invalid memory in the memory
+        handling core routines. May be triggered by the code to remove
+        filler NALUs introduced in v6.5.0. Fixes #931.
+
 2013-10-26  Moritz Bunkus  <moritz@bunkus.org>
 
         * mmg: bug fix: fixed the tracks list box on the input tab being

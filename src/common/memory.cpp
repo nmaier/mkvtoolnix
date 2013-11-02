@@ -29,7 +29,7 @@ memory_c::resize(size_t new_size)
 
   } else {
     X *tmp = (X *)safemalloc(new_size);
-    memcpy(tmp, its_counter->ptr + its_counter->offset, its_counter->size - its_counter->offset);
+    memcpy(tmp, its_counter->ptr + its_counter->offset, std::min(new_size, its_counter->size - its_counter->offset));
     its_counter->ptr     = tmp;
     its_counter->is_free = true;
     its_counter->size    = new_size;
