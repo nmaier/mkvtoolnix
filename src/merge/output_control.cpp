@@ -499,6 +499,9 @@ get_file_type(filelist_t &file) {
 
 static generic_reader_c *
 determine_display_reader() {
+  if (g_video_packetizer)
+    return g_video_packetizer->m_reader;
+
   auto winner = static_cast<filelist_t const *>(nullptr);
   for (auto &current : g_files)
     if (!current.appending && (0 != current.reader->get_num_packetizers()) && (!winner || (current.size > winner->size)))
