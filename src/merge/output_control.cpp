@@ -497,6 +497,23 @@ get_file_type(filelist_t &file) {
   file.type     = type;
 }
 
+static generic_reader_c *
+determine_display_reader() {
+  auto winner = static_cast<filelist_t const *>(nullptr);
+  for (auto &current : g_files)
+    if (!current.appending && (0 != current.reader->get_num_packetizers()) && (!winner || (current.size > winner->size)))
+      winner = &current;
+
+  if (winner)
+    return winner->reader;
+
+  for (auto &current : g_files)
+    if (!current.appending && (!winner || (current.size > winner->size)))
+      winner = &current;
+
+  return winner->reader;
+}
+
 /** \brief Selects a reader for displaying its progress information
 */
 static void
@@ -516,22 +533,8 @@ display_progress(bool is_100percent = false) {
     return;
   }
 
-  if (!s_display_reader) {
-    std::vector<filelist_t>::const_iterator i;
-
-    const filelist_t *winner = nullptr;
-    for (auto &current : g_files)
-      if (!current.appending && (0 != current.reader->get_num_packetizers()) && (!winner || (current.size > winner->size)))
-        winner = &current;
-
-    if (!winner) {
-      for (auto &current : g_files)
-        if (!current.appending && (!winner || (current.size > winner->size)))
-          winner = &current;
-    }
-
-    s_display_reader = winner->reader;
-  }
+  if (!s_display_reader)
+    s_display_reader = determine_display_reader();
 
   bool display_progress  = false;
   int current_percentage = (s_display_reader->get_progress() + s_display_files_done * 100) / s_display_path_length;
