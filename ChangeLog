@@ -1,3 +1,9 @@
+2013-11-14  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvinfo: bug fix: at most the lower 32bits of the track numbers
+        and track UIDs elements were output, even if the element in the
+        file used more bits. Fixes #935.
+
 2013-11-02  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvmerge: bug fix: fixed accessing invalid memory in the memory

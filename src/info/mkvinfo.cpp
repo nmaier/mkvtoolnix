@@ -89,7 +89,7 @@
 using namespace libmatroska;
 
 struct kax_track_t {
-  unsigned int tnum, tuid;
+  uint64_t tnum, tuid;
   char type;
   int64_t default_duration;
   size_t mkvmerge_track_id;
