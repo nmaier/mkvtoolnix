@@ -119,6 +119,7 @@ struct frame_t {
 
   frame_t();
   void init();
+  bool is_key() const;
 };
 typedef std::shared_ptr<frame_t> frame_cptr;
 

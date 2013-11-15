@@ -55,6 +55,12 @@ vc1::frame_t::init() {
 }
 
 bool
+vc1::frame_t::is_key()
+  const {
+  return contains_sequence_header || (vc1::FRAME_TYPE_I == header.frame_type);
+}
+
+bool
 vc1::parse_sequence_header(const unsigned char *buf,
                            int size,
                            vc1::sequence_header_t &seqhdr) {
