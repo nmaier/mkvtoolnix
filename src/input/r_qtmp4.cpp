@@ -950,6 +950,12 @@ qtmp4_reader_c::handle_stsz_atom(qtmp4_demuxer_cptr &new_dmx,
       qt_sample_t sample;
 
       sample.size = m_in->read_uint32_be();
+
+      // This is a sanity check against damaged samples. I have one of
+      // those in which one sample was suppposed to be > 2GB big.
+      if (sample.size >= 100 * 1024 * 1024)
+        sample.size = 0;
+
       new_dmx->sample_table.push_back(sample);
     }
 
@@ -1912,6 +1918,7 @@ qtmp4_demuxer_c::build_index() {
 
 void
 qtmp4_demuxer_c::build_index_constant_sample_size_mode() {
+  mxinfo(boost::format("CONST mode\n"));
   size_t keyframe_table_idx  = 0;
   size_t keyframe_table_size = keyframe_table.size();
 
@@ -1949,6 +1956,7 @@ qtmp4_demuxer_c::build_index_constant_sample_size_mode() {
 
 void
 qtmp4_demuxer_c::build_index_chunk_mode() {
+  mxinfo(boost::format("CHUNK mode\n"));
   size_t keyframe_table_idx  = 0;
   size_t keyframe_table_size = keyframe_table.size();
 
