@@ -458,7 +458,7 @@ tab_input::parse_attachment_line(mmg_file_cptr file,
   file->attached_files.push_back(a);
 
   wxLogMessage(wxT("Attached file ID %ld MIME type '%s' size %ld description '%s' name '%s'"),
-               a->id, a->mime_type.c_str(), a->size, a->description.c_str(), a->name.c_str());
+               static_cast<long>(a->id), a->mime_type.c_str(), static_cast<long>(a->size), a->description.c_str(), a->name.c_str());
 }
 
 void
@@ -526,11 +526,11 @@ tab_input::run_mkvmerge_identification(wxString const &file_name,
   wxArrayString errors;
   auto result = wxExecute(command, output, errors);
 
-  wxLogMessage(wxT("identify 1: result: %d"), result);
+  wxLogMessage(wxT("identify 1: result: %d"), static_cast<int>(result));
   for (size_t i = 0; i < output.Count(); i++)
-    wxLogMessage(wxT("identify 1: output[%d]: ``%s''"), i, output[i].c_str());
+    wxLogMessage(wxT("identify 1: output[%d]: ``%s''"), static_cast<int>(i), output[i].c_str());
   for (size_t i = 0; i < errors.Count(); i++)
-    wxLogMessage(wxT("identify 1: errors[%d]: ``%s''"), i, errors[i].c_str());
+    wxLogMessage(wxT("identify 1: errors[%d]: ``%s''"), static_cast<int>(i), errors[i].c_str());
 
   wxRemoveFile(opt_file_name);
 

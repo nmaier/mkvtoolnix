@@ -1,5 +1,9 @@
 2013-11-24  Moritz Bunkus  <moritz@bunkus.org>
 
+        * mmg: bug fix: fixed an assertion in wxLogMessage() due to wrong
+        format string/argument data types caused by changes in wxWidgets
+        3.0.0. See Debian bug #730273.
+
         * mkvmerge: bug fix: improved resilience against MP4 files with
         obviously wrong entries in the 'sample size table' (STSZ) atom.
 
