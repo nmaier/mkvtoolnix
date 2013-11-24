@@ -1,3 +1,8 @@
+2013-11-24  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvmerge: bug fix: improved VC1 frame type detection so that it
+        works even for streams without entry points.
+
 2013-11-14  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvinfo: bug fix: at most the lower 32bits of the track numbers

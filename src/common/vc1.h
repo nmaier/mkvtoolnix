@@ -41,6 +41,12 @@ enum frame_type_e {
   FRAME_TYPE_P_SKIPPED,
 };
 
+enum frame_coding_mode_e {
+  FCM_PROGRESSIVE = 0,
+  FCM_ILACE_FRAME,
+  FCM_ILACE_FIELD,
+};
+
 struct sequence_header_t {
   int  profile;
   int  level;
@@ -114,10 +120,9 @@ struct frame_t {
   memory_cptr    data;
   int64_t        timecode;
   int64_t        duration;
-  bool           contains_sequence_header;
-  bool           contains_field;
+  bool           contains_field, contains_entry_point;
 
-  frame_t();
+  frame_t(frame_header_t const &p_header);
   void init();
   bool is_key() const;
 };
