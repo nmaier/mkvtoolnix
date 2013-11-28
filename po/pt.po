@@ -1977,7 +1977,7 @@ msgstr ""
 msgid "All supported files|*.mkv;*.mka;*.mks;*.mk3d;*.webm;*.webma;*.webmv|Matroska files (*.mkv;*.mka;*.mks;*.mk3d)|*.mkv;*.mka;*.mks;*.mk3d|WebM files (*.webm;*.webma;*.webmv)|*.webm;*.webma;*.webmv|All files|*.*"
 msgstr "Todos os ficheiros suportados|*.mkv;*.mka;*.mks;*.mk3d;*.webm;*.webma;*.webmv|Ficheiros Matroska (*.mkv;*.mka;*.mks;*.mk3d)|*.mkv;*.mka;*.mks;*.mk3d|Ficheiros WebM (*.webm;*.webma;*.webmv)|*.webm;*.webma;*.webmv|Todos os ficheiros|*.*"
 
-#: src/mmg/tabs/input.cpp:251
+#: src/mmg/tabs/input.cpp:262
 #, c-format, boost-format
 msgid "All supported media files|%s%s|%s"
 msgstr "Todos os ficheiros multimédia suportados|%s%s|%s"
@@ -2062,12 +2062,12 @@ msgstr ""
 msgid "Another muxing job in still in progress. Please wait until it has finished or abort it manually before starting a new one."
 msgstr ""
 
-#: src/mmg/tabs/input.cpp:1331
+#: src/mmg/tabs/input.cpp:1342
 #, c-format, boost-format
 msgid "Appending a track from a file to another track from the same file is not allowed. This is the case for tracks number %u and %u."
 msgstr ""
 
-#: src/merge/output_control.cpp:1966
+#: src/merge/output_control.cpp:1972
 #, boost-format
 msgid "Appending track %1% from file no. %2% ('%3%') to track %4% from file no. %5% ('%6%').\n"
 msgstr ""
@@ -2447,7 +2447,7 @@ msgstr "Capítulos"
 msgid "Chapters (%d entries) from %s"
 msgstr "Capítulos (%d entradas) de %s"
 
-#: src/merge/output_control.cpp:1552
+#: src/merge/output_control.cpp:1558
 msgid "Chapters are not allowed in WebM compliant files. No chapters will be written into any output file.\n"
 msgstr ""
 
@@ -2516,11 +2516,11 @@ msgstr "Seleccione um ficheiro para anexar"
 msgid "Choose an input file"
 msgstr "Seleccione um ficheiro de configurações"
 
-#: src/mmg/tabs/input.cpp:258
+#: src/mmg/tabs/input.cpp:269
 msgid "Choose an input file to add"
 msgstr "Seleccione um ficheiro para adicionar"
 
-#: src/mmg/tabs/input.cpp:258
+#: src/mmg/tabs/input.cpp:269
 msgid "Choose an input file to append"
 msgstr "Seleccione um ficheiro para acrescentar"
 
@@ -2685,7 +2685,7 @@ msgstr "Opções da linha de comando:"
 msgid "Command line saved."
 msgstr "Linha de comando guardada."
 
-#: src/mmg/tabs/input.cpp:566
+#: src/mmg/tabs/input.cpp:577
 msgid "Command line used:"
 msgstr "Linha de comando utilizada:"
 
@@ -2745,7 +2745,7 @@ msgstr ""
 
 #: src/mmg/jobs.cpp:180
 #: src/mmg/mux_dialog.cpp:118
-#: src/mmg/tabs/input.cpp:506
+#: src/mmg/tabs/input.cpp:517
 #, c-format, boost-format
 msgid "Could not create a temporary file for mkvmerge's command line option called '%s' (error code %d, %s)."
 msgstr ""
@@ -2773,7 +2773,7 @@ msgstr ""
 msgid "Could not find an index for audio track %1% (avilib error message: %2%). Skipping track.\n"
 msgstr ""
 
-#: src/merge/output_control.cpp:1888
+#: src/merge/output_control.cpp:1894
 #, boost-format
 msgid "Could not find gptzr when appending. %1%\n"
 msgstr ""
@@ -3257,7 +3257,7 @@ msgstr ""
 msgid "EBML version: %1%"
 msgstr ""
 
-#: src/merge/output_control.cpp:1380
+#: src/merge/output_control.cpp:1386
 #, boost-format
 msgid "EVIL internal bug! (unknown file type). %1%\n"
 msgstr ""
@@ -3478,7 +3478,7 @@ msgstr ""
 msgid "Exports the chapter information in the simple format used in OGM tools (CHAPTER01=... CHAPTER01NAME=...)."
 msgstr ""
 
-#: src/mmg/tabs/input.cpp:191
+#: src/mmg/tabs/input.cpp:202
 msgid "Extra options"
 msgstr "Opções adicionais"
 
@@ -3594,7 +3594,7 @@ msgstr ""
 
 #: src/mmg/mmg_dialog.cpp:800
 #: src/mmg/mux_dialog.cpp:119
-#: src/mmg/tabs/input.cpp:507
+#: src/mmg/tabs/input.cpp:518
 msgid "File creation failed"
 msgstr "Falha na criação do ficheiro"
 
@@ -3608,22 +3608,22 @@ msgstr ""
 msgid "File description: %1%"
 msgstr "Descrição do ficheiro: %1%"
 
-#: src/mmg/tabs/input.cpp:559
-#: src/mmg/tabs/input.cpp:574
+#: src/mmg/tabs/input.cpp:570
+#: src/mmg/tabs/input.cpp:585
 msgid "File identification failed"
 msgstr "Falha na identificação do ficheiro"
 
-#: src/mmg/tabs/input.cpp:554
+#: src/mmg/tabs/input.cpp:565
 #, c-format, boost-format
 msgid "File identification failed for '%s'. Return code: %d"
 msgstr "Falha na identificação do ficheiro: '%s'. Código de erro: %d"
 
-#: src/mmg/tabs/input.cpp:557
+#: src/mmg/tabs/input.cpp:568
 #, c-format, boost-format
 msgid "File identification failed. Return code: %d. Errno: %d (%s). Make sure that you've selected a mkvmerge executable in the settings dialog."
 msgstr ""
 
-#: src/mmg/tabs/input.cpp:703
+#: src/mmg/tabs/input.cpp:714
 msgid "File is already processed"
 msgstr "O ficheiro já foi processado"
 
@@ -3647,7 +3647,7 @@ msgstr "Nome do ficheiro: %1%"
 msgid "File parsing failed"
 msgstr ""
 
-#: src/mmg/tabs/input.cpp:783
+#: src/mmg/tabs/input.cpp:794
 msgid "File removal not possible"
 msgstr "Não é possível remover o ficheiro"
 
@@ -3664,7 +3664,7 @@ msgstr "Ligações do ficheiro/segmento"
 msgid "File/segment title:"
 msgstr "Título do ficheiro/segmento"
 
-#: src/merge/output_control.cpp:1065
+#: src/merge/output_control.cpp:1071
 msgid "Files cannot be appended to themselves. The argument for '--append-to' was invalid.\n"
 msgstr ""
 
@@ -3740,7 +3740,7 @@ msgstr ""
 msgid "Forces the timecode scale factor to REPLACEME. You have to replace REPLACEME with a value between 1000 and 10000000 or with -1. Normally mkvmerge will use a value of 1000000 which means that timecodes and durations will have a precision of 1ms. For files that will not contain a video track but at least one audio track mkvmerge will automatically choose a timecode scale factor so that all timecodes and durations have a precision of one sample. This causes bigger overhead but allows precise seeking and extraction. If the magical value -1 is used then mkvmerge will use sample precision even if a video track is present."
 msgstr ""
 
-#: src/mmg/tabs/input.cpp:190
+#: src/mmg/tabs/input.cpp:201
 msgid "Format specific options"
 msgstr "Opções de formato específicas "
 
@@ -3791,7 +3791,7 @@ msgstr ""
 msgid "Gamma: %1%"
 msgstr ""
 
-#: src/mmg/tabs/input.cpp:189
+#: src/mmg/tabs/input.cpp:200
 msgid "General track options"
 msgstr "Opções gerais das pistas"
 
@@ -4013,7 +4013,7 @@ msgstr ""
 msgid "Incompatible mkvmerge version"
 msgstr "Versão do mkvmerge incompativel"
 
-#: src/mmg/tabs/input.cpp:993
+#: src/mmg/tabs/input.cpp:1004
 msgid "Incompatible track"
 msgstr "Pista incompatível"
 
@@ -4039,7 +4039,7 @@ msgstr "Introdução"
 msgid "Input data error"
 msgstr ""
 
-#: src/mmg/tabs/input.cpp:180
+#: src/mmg/tabs/input.cpp:191
 msgid "Input files:"
 msgstr "Ficheiros de entrada:"
 
@@ -4873,7 +4873,7 @@ msgstr ""
 msgid "More than one name was given for a single attachment. '%1%' will be discarded and '%2%' used instead.\n"
 msgstr ""
 
-#: src/merge/output_control.cpp:1141
+#: src/merge/output_control.cpp:1147
 #, boost-format
 msgid "More than one track is to be appended to the track %1% from file no. %2% ('%3%'). The argument for '--append-to' was invalid.\n"
 msgstr ""
@@ -4970,7 +4970,7 @@ msgstr "ID único do segmento seguinte"
 msgid "No %1% specified in '--%2% %3%'.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:1208
+#: src/input/r_qtmp4.cpp:1214
 msgid "No AC3 header found in first frame; track will be skipped.\n"
 msgstr ""
 
@@ -4988,7 +4988,7 @@ msgstr ""
 msgid "No MIME type has been set for the attachment '%1%', and it could not be guessed.\n"
 msgstr ""
 
-#: src/merge/output_control.cpp:1100
+#: src/merge/output_control.cpp:1106
 #, boost-format
 msgid "No append mapping was given for the file no. %1% ('%2%'). A default mapping of %3% will be used instead. Please keep that in mind if mkvmerge aborts with an error message regarding invalid '--append-to' options.\n"
 msgstr ""
@@ -5089,7 +5089,7 @@ msgstr ""
 msgid "No track with the ID %1% was found in the source file.\n"
 msgstr ""
 
-#: src/mmg/tabs/input.cpp:725
+#: src/mmg/tabs/input.cpp:736
 msgid "No tracks found"
 msgstr "Nenhuma pista encontrada"
 
@@ -5217,7 +5217,7 @@ msgstr ""
 msgid "Only one segment info file allowed in '%1% %2%'.\n"
 msgstr ""
 
-#: src/merge/output_control.cpp:1081
+#: src/merge/output_control.cpp:1087
 #, boost-format
 msgid "Only partial append mappings were given for the file no. %1% ('%2%'). Either don't specify any mapping (in which case the default mapping will be used) or specify a mapping for all tracks that are to be copied.\n"
 msgstr ""
@@ -5317,7 +5317,7 @@ msgstr "Relatório de saída para a(s) tarefa(s) seleccionada(s):"
 msgid "Output sampling frequency: %1%"
 msgstr ""
 
-#: src/mmg/tabs/input.cpp:570
+#: src/mmg/tabs/input.cpp:581
 msgid "Output:"
 msgstr "Saída:"
 
@@ -5489,7 +5489,7 @@ msgstr "Progresso"
 
 #: src/extract/timecodes_v2.cpp:290
 #: src/extract/tracks.cpp:420
-#: src/merge/output_control.cpp:551
+#: src/merge/output_control.cpp:557
 #, boost-format
 msgid "Progress: %1%%%%2%"
 msgstr "Progresso: %1%%%%2%"
@@ -5499,7 +5499,7 @@ msgstr "Progresso: %1%%%%2%"
 msgid "Progress: 100%\n"
 msgstr "Progresso: 100%\n"
 
-#: src/merge/output_control.cpp:515
+#: src/merge/output_control.cpp:535
 #, boost-format
 msgid "Progress: 100%%%1%"
 msgstr "Progresso: 100%%%1%"
@@ -5526,22 +5526,22 @@ msgstr "QuickTime/MP4"
 msgid "Quicktime/MP4 reader: '%1%' atom is too small. Expected size: >= %2%. Actual size: %3%.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:1776
+#: src/input/r_qtmp4.cpp:1782
 msgid "Quicktime/MP4 reader: Constant samplesize & variable duration not yet supported. Contact the author if you have such a sample file.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:1165
+#: src/input/r_qtmp4.cpp:1171
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read chunk number %1%/%2% with size %3% from position %4%. Aborting.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:2081
-#: src/input/r_qtmp4.cpp:2095
+#: src/input/r_qtmp4.cpp:2089
+#: src/input/r_qtmp4.cpp:2103
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the extended sound description atom for track ID %1%.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:2052
+#: src/input/r_qtmp4.cpp:2060
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the sound description atom for track ID %1%.\n"
 msgstr ""
@@ -5551,7 +5551,7 @@ msgstr ""
 msgid "Quicktime/MP4 reader: Could not read the stream description atom for track ID %1%.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:2127
+#: src/input/r_qtmp4.cpp:2135
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the video description atom for track ID %1%.\n"
 msgstr ""
@@ -5569,12 +5569,12 @@ msgstr ""
 msgid "Quicktime/MP4 reader: Invalid chunk size %1% at %2%.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:2502
+#: src/input/r_qtmp4.cpp:2510
 #, boost-format
 msgid "Quicktime/MP4 reader: MPEG4 part 10/AVC track %1% is missing its decoder config. Skipping this track.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:2533
+#: src/input/r_qtmp4.cpp:2541
 #, boost-format
 msgid "Quicktime/MP4 reader: MPEG4 track %1% is missing the esds atom/the decoder config. Skipping this track.\n"
 msgstr ""
@@ -5593,17 +5593,17 @@ msgstr ""
 msgid "Quicktime/MP4 reader: The 'time scale' parameter was 0. This is not supported.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:2465
+#: src/input/r_qtmp4.cpp:2473
 #, boost-format
 msgid "Quicktime/MP4 reader: The AAC track %1% is missing the esds atom/the decoder config. Skipping this track.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:2460
+#: src/input/r_qtmp4.cpp:2468
 #, boost-format
 msgid "Quicktime/MP4 reader: The audio track %1% is using an unsupported 'object type id' of %2% in the 'esds' atom. Skipping this track.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:2512
+#: src/input/r_qtmp4.cpp:2520
 #, boost-format
 msgid "Quicktime/MP4 reader: The video track %1% is missing the ESDS atom. Skipping this track.\n"
 msgstr ""
@@ -5628,16 +5628,16 @@ msgstr ""
 msgid "Quicktime/MP4 reader: This file uses compressed headers, but they could not be uncompressed. Error code from zlib: %1%. Aborting.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:2433
-#: src/input/r_qtmp4.cpp:2448
-#: src/input/r_qtmp4.cpp:2486
-#: src/input/r_qtmp4.cpp:2551
+#: src/input/r_qtmp4.cpp:2441
+#: src/input/r_qtmp4.cpp:2456
+#: src/input/r_qtmp4.cpp:2494
+#: src/input/r_qtmp4.cpp:2559
 #, boost-format
 msgid "Quicktime/MP4 reader: Track %1% is missing some data. Broken header atoms?\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:2060
-#: src/input/r_qtmp4.cpp:2134
+#: src/input/r_qtmp4.cpp:2068
+#: src/input/r_qtmp4.cpp:2142
 #, boost-format
 msgid "Quicktime/MP4 reader: Track ID %1% has more than one FourCC. Only using the first one (%|2$.4s|) and not this one (%|3$.4s|).\n"
 msgstr ""
@@ -5662,7 +5662,7 @@ msgstr "RSA"
 msgid "Re-enable the selected job(s)"
 msgstr "Re-activa a(s) tarefa(s) selecionada(s)"
 
-#: src/merge/output_control.cpp:962
+#: src/merge/output_control.cpp:968
 #, boost-format
 msgid "Re-rendering track headers: data_size != 0 not implemented yet. %1%\n"
 msgstr ""
@@ -6322,7 +6322,7 @@ msgstr "Alguns valores no cabeçalho foram alterados. Deseja ler um novo ficheir
 msgid "Some header values have been modified. Do you really want to reload without saving the file?"
 msgstr "Alguns valores no cabeçalho foram alterados. Deseja reler o ficheiro sem guardar?"
 
-#: src/merge/output_control.cpp:1592
+#: src/merge/output_control.cpp:1598
 #, boost-format
 msgid "Some tag elements are missing (this error should not have occured - another similar error should have occured earlier). %1%\n"
 msgstr ""
@@ -6509,7 +6509,7 @@ msgstr ""
 msgid "Tags"
 msgstr "Etiquetas"
 
-#: src/merge/output_control.cpp:1580
+#: src/merge/output_control.cpp:1586
 msgid "Tags are not allowed in WebM compliant files. No tags will be written into any output file.\n"
 msgstr ""
 
@@ -6557,7 +6557,7 @@ msgstr ""
 msgid "The AAC profiles are different: %1% and %2%"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:1257
+#: src/input/r_qtmp4.cpp:1263
 msgid "The AVC video track is missing the 'CTTS' atom for frame timecode offsets. However, AVC/h.264 allows frames to have more than the traditional one (for P frames) or two (for B frames) references to other frames. The timecodes for such frames will be out-of-order, and the 'CTTS' atom is needed for getting the timecodes right. As it is missing the timecodes for this track might be wrong. You should watch the resulting file and make sure that it looks like you expected it to.\n"
 msgstr "Na pista de vídeo AVC falta a informação 'CTTS' para o ajuste dos códigos de tempo. Contudo, o AVC/h.264 permite aos frames terem mais de uma (para os frames P) ou duas (para os frames B) referências a outros frames. Os códigos de tempo para estes frames estão detriorados, e a informação 'CTTS' é necessária para obter os códigos de tempo. Como não existe essa informação para esta pista, os códigos de tempo podem estar errados. Deve verificar se o ficheiro obtido está de acordo com o que pretende.\n"
 
@@ -6579,7 +6579,7 @@ msgstr ""
 msgid "The FPS is 0.0 but the reader did not provide a timecode for a packet. %1%\n"
 msgstr ""
 
-#: src/mmg/tabs/input.cpp:1392
+#: src/mmg/tabs/input.cpp:1403
 #, c-format, boost-format
 msgid "The FPS setting for track nr. %s in file '%s' is invalid."
 msgstr ""
@@ -6589,7 +6589,7 @@ msgstr ""
 msgid "The FourCC must be exactly four characters long in '%1% %2%'.\n"
 msgstr ""
 
-#: src/mmg/tabs/input.cpp:1380
+#: src/mmg/tabs/input.cpp:1391
 #, c-format, boost-format
 msgid "The FourCC setting for track nr. %s in file '%s' is not exactly four characters long."
 msgstr ""
@@ -6711,7 +6711,7 @@ msgstr ""
 msgid "The argument to '--timecode-scale' must be a number.\n"
 msgstr ""
 
-#: src/mmg/tabs/input.cpp:1434
+#: src/mmg/tabs/input.cpp:1445
 #, c-format, boost-format
 msgid "The aspect ratio setting for track nr. %s in file '%s' is invalid."
 msgstr ""
@@ -6788,11 +6788,11 @@ msgstr ""
 msgid "The country '%s' is not a valid ccTLD and cannot be selected."
 msgstr ""
 
-#: src/merge/output_control.cpp:1722
+#: src/merge/output_control.cpp:1728
 msgid "The cue entries (the index) are being written...\n"
 msgstr "As entradas CUE (o índice) estão a ser escritas...\n"
 
-#: src/mmg/tabs/input.cpp:779
+#: src/mmg/tabs/input.cpp:790
 #, c-format, boost-format
 msgid "The current file (number %d) cannot be removed. There are other files -- at least file number %d -- whose tracks are supposed to be appended to tracks from this file. Please remove those files first."
 msgstr ""
@@ -6807,16 +6807,16 @@ msgstr ""
 msgid "The default language code '%1%' is not a valid ISO639-2 language code and will be ignored.\n"
 msgstr ""
 
-#: src/mmg/tabs/input.cpp:1359
+#: src/mmg/tabs/input.cpp:1370
 #, c-format, boost-format
 msgid "The delay setting for track nr. %s in file '%s' is invalid."
 msgstr ""
 
-#: src/merge/output_control.cpp:1391
-#: src/merge/output_control.cpp:1394
 #: src/merge/output_control.cpp:1397
 #: src/merge/output_control.cpp:1400
 #: src/merge/output_control.cpp:1403
+#: src/merge/output_control.cpp:1406
+#: src/merge/output_control.cpp:1409
 #, boost-format
 msgid ""
 "The demultiplexer for the file '%1%' failed to initialize:\n"
@@ -6905,12 +6905,12 @@ msgstr "O ficheiro não pode ser aberto ou analisado.\n"
 #: src/extract/xtr_rmff.cpp:40
 #: src/extract/xtr_tta.cpp:76
 #: src/extract/xtr_wav.cpp:115
-#: src/merge/output_control.cpp:1615
+#: src/merge/output_control.cpp:1621
 #, fuzzy, boost-format
 msgid "The file '%1%' could not be opened for writing: %2%.\n"
 msgstr "O ficheiro '%1%' foi criado para escrita.\n"
 
-#: src/merge/output_control.cpp:1619
+#: src/merge/output_control.cpp:1625
 #, boost-format
 msgid "The file '%1%' has been opened for writing.\n"
 msgstr "O ficheiro '%1%' foi criado para escrita.\n"
@@ -6930,17 +6930,17 @@ msgstr "O ficheiro '%1%' não é suportado (%2%).\n"
 msgid "The file '%s' does not exist."
 msgstr "O ficheiro '%s' não existe."
 
-#: src/mmg/tabs/input.cpp:701
+#: src/mmg/tabs/input.cpp:712
 #, c-format, boost-format
 msgid "The file '%s' is already processed in combination with the file '%s'. It cannot be added a second time."
 msgstr ""
 
-#: src/merge/output_control.cpp:1397
+#: src/merge/output_control.cpp:1403
 msgid "The file content does not match its format type and was not recognized."
 msgstr ""
 
-#: src/merge/output_control.cpp:1391
-#: src/merge/output_control.cpp:1394
+#: src/merge/output_control.cpp:1397
+#: src/merge/output_control.cpp:1400
 msgid "The file could not be opened for reading, or there was not enough data to parse its headers."
 msgstr ""
 
@@ -6972,11 +6972,11 @@ msgstr ""
 msgid "The file header was not read correctly.\n"
 msgstr ""
 
-#: src/merge/output_control.cpp:1400
+#: src/merge/output_control.cpp:1406
 msgid "The file headers could not be parsed, e.g. because they're incomplete, invalid or damaged."
 msgstr ""
 
-#: src/mmg/tabs/input.cpp:539
+#: src/mmg/tabs/input.cpp:550
 #, c-format, boost-format
 msgid "The file is an unsupported container format (%s)."
 msgstr "Ficheiro não suportado (%s)."
@@ -7007,17 +7007,17 @@ msgstr ""
 msgid "The file name for this segment."
 msgstr "O nome do ficheiro para este segmento."
 
-#: src/merge/output_control.cpp:1114
+#: src/merge/output_control.cpp:1120
 #, boost-format
 msgid "The file no. %1% ('%2%') does not contain a track with the ID %3%, or that track is not to be copied. The argument for '--append-to' was invalid.\n"
 msgstr "O ficheiro nº. %1% ('%2%') não contém uma pista com o ID %3%, ou a pista não pode ser copiada. O argumento '--append-to' não é válido.\n"
 
-#: src/merge/output_control.cpp:1120
+#: src/merge/output_control.cpp:1126
 #, boost-format
 msgid "The file no. %1% ('%2%') does not contain a track with the ID %3%, or that track is not to be copied. Therefore no track can be appended to it. The argument for '--append-to' was invalid.\n"
 msgstr ""
 
-#: src/merge/output_control.cpp:1057
+#: src/merge/output_control.cpp:1063
 #, boost-format
 msgid "The file no. %1% ('%2%') is not being appended. The argument for '--append-to' was invalid.\n"
 msgstr "O ficheiro nº. %1% ('%2%') não será acrescentado. O argumento '--append-to' é inválido.\n"
@@ -7082,7 +7082,7 @@ msgstr ""
 msgid "The format of the split timecode/duration is invalid."
 msgstr ""
 
-#: src/merge/output_control.cpp:1184
+#: src/merge/output_control.cpp:1190
 msgid "The formats do not match."
 msgstr ""
 
@@ -7098,12 +7098,12 @@ msgstr ""
 msgid "The height of the two tracks is different: %1% and %2%"
 msgstr ""
 
-#: src/mmg/tabs/input.cpp:725
+#: src/mmg/tabs/input.cpp:736
 #, c-format, boost-format
 msgid "The input file '%s' does not contain any tracks."
 msgstr "O ficheiro de entrada '%s' não contém qualquer pista."
 
-#: src/mmg/tabs/input.cpp:1276
+#: src/mmg/tabs/input.cpp:1287
 msgid ""
 "The job file could not have been parsed correctly.\n"
 "Either it is invalid / damaged, or you've just found\n"
@@ -7113,7 +7113,7 @@ msgid ""
 "(Problem occured in tab_input::load(), #1)"
 msgstr ""
 
-#: src/mmg/tabs/input.cpp:1283
+#: src/mmg/tabs/input.cpp:1294
 msgid ""
 "The job file could not have been parsed correctly.\n"
 "Either it is invalid / damaged, or you've just found\n"
@@ -7123,7 +7123,7 @@ msgid ""
 "(Problem occured in tab_input::load(), #2)"
 msgstr ""
 
-#: src/mmg/tabs/input.cpp:1296
+#: src/mmg/tabs/input.cpp:1307
 msgid ""
 "The job file could not have been parsed correctly.\n"
 "Either it is invalid / damaged, or you've just found\n"
@@ -7154,7 +7154,7 @@ msgstr ""
 msgid "The line %1% of the timecode file '%2%' does not contain a valid floating point number.\n"
 msgstr ""
 
-#: src/common/translation.cpp:306
+#: src/common/translation.cpp:308
 msgid "The locale could not be set properly. Check the LANG, LC_ALL and LC_MESSAGES environment variables.\n"
 msgstr ""
 
@@ -7325,7 +7325,7 @@ msgstr ""
 msgid "The property value is not a valid unsigned integer in '%1%'. %2%\n"
 msgstr ""
 
-#: src/merge/output_control.cpp:1186
+#: src/merge/output_control.cpp:1192
 msgid "The reason is unknown."
 msgstr "A razão é desconhecida"
 
@@ -7373,7 +7373,7 @@ msgstr ""
 msgid "The source file '%1%' could not be opened successfully, or retrieving its size by seeking to the end did not work.\n"
 msgstr ""
 
-#: src/mmg/tabs/input.cpp:1370
+#: src/mmg/tabs/input.cpp:1381
 #, c-format, boost-format
 msgid "The stretch setting for track nr. %s in file '%s' is invalid."
 msgstr ""
@@ -7487,7 +7487,7 @@ msgstr ""
 msgid "The title for the whole movie."
 msgstr "Título completo do filme."
 
-#: src/merge/output_control.cpp:1130
+#: src/merge/output_control.cpp:1136
 #, boost-format
 msgid "The track %1% from file no. %2% ('%3%') is to be appended more than once. The argument for '--append-to' was invalid.\n"
 msgstr ""
@@ -7497,17 +7497,17 @@ msgstr ""
 msgid "The track ID %1% does not have a valid CodecID.\n"
 msgstr ""
 
-#: src/merge/output_control.cpp:857
+#: src/merge/output_control.cpp:863
 #, boost-format
 msgid "The track headers could not be rendered correctly. %1%\n"
 msgstr ""
 
-#: src/merge/output_control.cpp:1176
+#: src/merge/output_control.cpp:1182
 #, boost-format
 msgid "The track number %1% from the file '%2%' can probably not be appended correctly to the track number %3% from the file '%4%': %5% Please make sure that the resulting file plays correctly the whole time. The author of this program will probably not give support for playback issues with the resulting file.\n"
 msgstr ""
 
-#: src/merge/output_control.cpp:1187
+#: src/merge/output_control.cpp:1193
 #, boost-format
 msgid "The track number %1% from the file '%2%' cannot be appended to the track number %3% from the file '%4%'. %5%\n"
 msgstr ""
@@ -7517,7 +7517,7 @@ msgstr ""
 msgid "The track number as used in the Block Header."
 msgstr "O número da pista utilizada no cabeçalho."
 
-#: src/merge/output_control.cpp:1185
+#: src/merge/output_control.cpp:1191
 msgid "The track parameters do not match."
 msgstr ""
 
@@ -7538,8 +7538,8 @@ msgstr ""
 msgid "There is a new version available online."
 msgstr "Existe uma nova versão online."
 
-#: src/merge/output_control.cpp:1051
-#: src/merge/output_control.cpp:1061
+#: src/merge/output_control.cpp:1057
+#: src/merge/output_control.cpp:1067
 #, boost-format
 msgid "There is no file with the ID '%1%'. The argument for '--append-to' was invalid.\n"
 msgstr ""
@@ -7706,7 +7706,7 @@ msgstr ""
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. %1%\n"
 msgstr ""
 
-#: src/merge/output_control.cpp:1829
+#: src/merge/output_control.cpp:1835
 #, boost-format
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. Size needed: %1%. %2%\n"
 msgstr ""
@@ -7719,7 +7719,7 @@ msgstr ""
 msgid "This track contains SBR AAC/HE-AAC/AAC+ data. Only needed for AAC input files, because SBR AAC cannot be detected automatically for these files. Not needed for AAC tracks read from MP4 or Matroska files."
 msgstr ""
 
-#: src/mmg/tabs/input.cpp:993
+#: src/mmg/tabs/input.cpp:1004
 msgid "This track is not compatible with the WebM mode and cannot be enabled."
 msgstr "Esta pista não é compatível com o modo WebM, e não pode ser activada."
 
@@ -7823,7 +7823,7 @@ msgstr ""
 msgid "Track %1%: %2%, codec ID: %3%%4%%5%%6%\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:2209
+#: src/input/r_qtmp4.cpp:2217
 #, boost-format
 msgid "Track %1%: AAC found, but decoder config data has length %2%.\n"
 msgstr ""
@@ -7843,7 +7843,7 @@ msgstr ""
 msgid "Track %1%: Subtitle entry number %2% is missing its duration. Assuming a duration of 1s.\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:2212
+#: src/input/r_qtmp4.cpp:2220
 #, boost-format
 msgid "Track %1%: The AAC information could not be parsed.\n"
 msgstr ""
@@ -7912,7 +7912,7 @@ msgstr "Tipo de pista: %1%"
 msgid "Tracks with unsupported content encoding schemes (compression or encryption) cannot be extracted.\n"
 msgstr ""
 
-#: src/mmg/tabs/input.cpp:185
+#: src/mmg/tabs/input.cpp:196
 msgid "Tracks, chapters and tags:"
 msgstr "Pistas, capítulos e etiquetas (Tags):"
 
@@ -8070,7 +8070,7 @@ msgstr "Número inteiro sem simbolos"
 msgid "Unsupported MPEG mpeg_version: 0x%|1$02x| in packet %2% for timecode %3%, assuming MPEG2. No further warnings will be printed for this track.\n"
 msgstr ""
 
-#: src/mmg/tabs/input.cpp:542
+#: src/mmg/tabs/input.cpp:553
 msgid "Unsupported format"
 msgstr "Formato não suportado"
 
@@ -8429,11 +8429,11 @@ msgid "ac3_bs_packetizer::add_to_buffer(): Untested code ('size' is odd). If mkv
 msgstr ""
 
 #: src/mmg/tabs/attachments.cpp:157
-#: src/mmg/tabs/input.cpp:181
+#: src/mmg/tabs/input.cpp:192
 msgid "add"
 msgstr "adicionar"
 
-#: src/mmg/tabs/input.cpp:188
+#: src/mmg/tabs/input.cpp:199
 msgid "additional parts"
 msgstr "partes adicionais"
 
@@ -8461,7 +8461,7 @@ msgstr ""
 msgid "anaglyph (green/magenta)"
 msgstr ""
 
-#: src/mmg/tabs/input.cpp:183
+#: src/mmg/tabs/input.cpp:194
 msgid "append"
 msgstr "acrescentar"
 
@@ -8572,7 +8572,7 @@ msgstr "terminado"
 msgid "done/warnings"
 msgstr "terminado/avisos"
 
-#: src/mmg/tabs/input.cpp:187
+#: src/mmg/tabs/input.cpp:198
 msgid "down"
 msgstr "para baixo"
 
@@ -8597,7 +8597,7 @@ msgstr "mesmo que existam avisos"
 msgid "failed"
 msgstr "falhou"
 
-#: src/merge/output_control.cpp:622
+#: src/merge/output_control.cpp:628
 #, boost-format
 msgid "filelist_t not found for generic_packetizer_c. %1%\n"
 msgstr ""
@@ -8967,12 +8967,12 @@ msgstr "MKVMerge pronto"
 msgid "mkvmerge GUI settings (*.mmg)|*.mmg|%s"
 msgstr "Ficheiro de configurações do mkvmerge GUI (*.mmg)|*.mmg|%s"
 
-#: src/mmg/tabs/input.cpp:1334
-#: src/mmg/tabs/input.cpp:1360
+#: src/mmg/tabs/input.cpp:1345
 #: src/mmg/tabs/input.cpp:1371
-#: src/mmg/tabs/input.cpp:1381
-#: src/mmg/tabs/input.cpp:1393
-#: src/mmg/tabs/input.cpp:1435
+#: src/mmg/tabs/input.cpp:1382
+#: src/mmg/tabs/input.cpp:1392
+#: src/mmg/tabs/input.cpp:1404
+#: src/mmg/tabs/input.cpp:1446
 msgid "mkvmerge GUI: error"
 msgstr "Erro no MKVmerge"
 
@@ -9234,11 +9234,11 @@ msgid "real_reader: Only audio header versions 3, 4 and 5 are supported. Track I
 msgstr ""
 
 #: src/mmg/tabs/attachments.cpp:158
-#: src/mmg/tabs/input.cpp:182
+#: src/mmg/tabs/input.cpp:193
 msgid "remove"
 msgstr "remover"
 
-#: src/mmg/tabs/input.cpp:184
+#: src/mmg/tabs/input.cpp:195
 msgid "remove all"
 msgstr "remover todos"
 
@@ -9361,7 +9361,7 @@ msgstr "N/A (indeterminado)"
 #: src/input/r_mpeg_ps.cpp:1344
 #: src/mmg/header_editor/value_page.cpp:150
 #: src/mmg/mmg.cpp:68
-#: src/mmg/tabs/input.cpp:532
+#: src/mmg/tabs/input.cpp:543
 #: src/mmg/tabs/scanning_for_playlists_dlg.cpp:180
 msgid "unknown"
 msgstr "desconhecido"
@@ -9371,7 +9371,7 @@ msgstr "desconhecido"
 msgid "unknown, format tag 0x%|1$04x|"
 msgstr ""
 
-#: src/mmg/tabs/input.cpp:186
+#: src/mmg/tabs/input.cpp:197
 msgid "up"
 msgstr "para cima"
 
