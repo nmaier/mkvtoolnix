@@ -1647,12 +1647,12 @@ msgstr "(yeni bölüm dosyası)"
 msgid "(unnamed chapter)"
 msgstr "(isimsiz bölüm)"
 
-#: src/mmg/tabs/chapters.cpp:871
-#: src/mmg/tabs/chapters.cpp:920
-#: src/mmg/tabs/chapters.cpp:1035
-#: src/mmg/tabs/chapters.cpp:1417
-#: src/mmg/tabs/chapters.cpp:1424
-#: src/mmg/tabs/chapters.cpp:1618
+#: src/mmg/tabs/chapters.cpp:883
+#: src/mmg/tabs/chapters.cpp:932
+#: src/mmg/tabs/chapters.cpp:1046
+#: src/mmg/tabs/chapters.cpp:1428
+#: src/mmg/tabs/chapters.cpp:1435
+#: src/mmg/tabs/chapters.cpp:1744
 msgid "(unnamed)"
 msgstr "(isimsiz)"
 
@@ -2058,7 +2058,7 @@ msgstr "Böyle bir özellik zaten olsa bile değerle birlikte bir özellik ekler
 msgid "Adds the current settings as a new job entry to the job queue"
 msgstr "Şu anki ayarları yeni bir iş girişi olarak iş kuyruğuna ekler"
 
-#: src/mmg/tabs/chapters.cpp:1223
+#: src/mmg/tabs/chapters.cpp:1234
 msgid "Adjust chapter timecodes"
 msgstr "Bölüm zaman kodlarını ayarla"
 
@@ -2083,7 +2083,7 @@ msgstr "Tüm Dosyalar (*)|*"
 msgid "All Files (*.*)|*.*"
 msgstr "Tüm Dosyalar (*.*)|*.*"
 
-#: src/mmg/tabs/chapters.cpp:843
+#: src/mmg/tabs/chapters.cpp:855
 msgid "All chapter entries are valid."
 msgstr "Tüm bölüm girdileri geçerli."
 
@@ -2166,7 +2166,7 @@ msgstr ""
 "dosya adı."
 
 #: src/mmg/header_editor/frame.cpp:679
-#: src/mmg/tabs/chapters.cpp:1711
+#: src/mmg/tabs/chapters.cpp:1837
 #: src/propedit/propedit.cpp:44
 msgid "An unknown error occured. The file has been modified."
 msgstr "Bilinmeyen bir hata meydana geldi. Dosya değiştirildi."
@@ -2507,6 +2507,14 @@ msgstr "Bölüm Çevirme Yayın UID: %1%"
 msgid "Chapter Translate ID: %1%"
 msgstr "Bölüm Çevirme ID: %1%"
 
+#: src/mmg/tabs/chapters.cpp:1643
+msgid "Chapter atoms may only be dropped onto other atoms and chapter editions."
+msgstr ""
+
+#: src/mmg/tabs/chapters.cpp:1636
+msgid "Chapter editions may only be dropped onto the root node or other editions."
+msgstr ""
+
 #: src/mmg/mmg_dialog.cpp:631
 msgid "Chapter editor is not empty"
 msgstr "Bölüm düzenleyicisi boş değil"
@@ -2519,7 +2527,7 @@ msgstr "Bölüm çıkarma"
 msgid "Chapter file:"
 msgstr "Bölüm dosyası:"
 
-#: src/mmg/tabs/chapters.cpp:701
+#: src/mmg/tabs/chapters.cpp:713
 #, c-format, boost-format
 msgid "Chapter files (*.xml)|*.xml|%s"
 msgstr "Bölüm dosyaları (*.xml)|*.xml|%s"
@@ -2529,7 +2537,7 @@ msgstr "Bölüm dosyaları (*.xml)|*.xml|%s"
 msgid "Chapter files (*.xml;*.txt;*.cue)|*.xml;*.txt;*.cue|%s"
 msgstr "Bölüm dosyaları (*.xml;*.txt;*.cue)|*.xml;*.txt;*.cue|%s"
 
-#: src/mmg/tabs/chapters.cpp:565
+#: src/mmg/tabs/chapters.cpp:577
 #, c-format, boost-format
 msgid "Chapter files (*.xml;*.txt;*.mka;*.mkv;*.mks;*.mk3d;*.cue)|*.xml;*.txt;*.mka;*.mkv;*.mks;*.mk3d;*.cue|%s"
 msgstr "Bölüm dosyaları (*.xml;*.txt;*.mka;*.mkv;*.mks;*.mk3d;*.cue)|*.xml;*.txt;*.mka;*.mkv;*.mks;*.mk3d;*.cue|%s"
@@ -2551,16 +2559,16 @@ msgstr "Bölüm seçenekleri"
 msgid "Chapter parser: The EditionUID %1% is not unique and could not be reused. A new one will be created.\n"
 msgstr "Bölüm ayrıştırıcısı: YayınUID %1% benzersiz değil ve yeniden kullanılamadı. Yeni bir tane oluşturulacak.\n"
 
-#: src/mmg/tabs/chapters.cpp:767
-#: src/mmg/tabs/chapters.cpp:774
-#: src/mmg/tabs/chapters.cpp:780
-#: src/mmg/tabs/chapters.cpp:788
-#: src/mmg/tabs/chapters.cpp:803
-#: src/mmg/tabs/chapters.cpp:821
+#: src/mmg/tabs/chapters.cpp:779
+#: src/mmg/tabs/chapters.cpp:786
+#: src/mmg/tabs/chapters.cpp:792
+#: src/mmg/tabs/chapters.cpp:800
+#: src/mmg/tabs/chapters.cpp:815
+#: src/mmg/tabs/chapters.cpp:833
 msgid "Chapter verification error"
 msgstr "Bölüm doğrulama hatası"
 
-#: src/mmg/tabs/chapters.cpp:843
+#: src/mmg/tabs/chapters.cpp:855
 msgid "Chapter verification succeeded"
 msgstr "Bölüm doğrulama başarılı oldu"
 
@@ -2580,12 +2588,12 @@ msgstr "Bölümler (%d girdi), dosya: %s"
 msgid "Chapters are not allowed in WebM compliant files. No chapters will be written into any output file.\n"
 msgstr "WebM uyumlu dosyalar içinde bölümlere izin verilmiyor. Herhangi bir çıktı dosyası içine bölümler yazılmayacak.\n"
 
-#: src/mmg/tabs/chapters.cpp:639
+#: src/mmg/tabs/chapters.cpp:651
 msgid "Chapters loaded."
 msgstr "Bölümler yüklendi."
 
-#: src/mmg/tabs/chapters.cpp:743
-#: src/mmg/tabs/chapters.cpp:1688
+#: src/mmg/tabs/chapters.cpp:755
+#: src/mmg/tabs/chapters.cpp:1814
 msgid "Chapters written."
 msgstr "Bölümler yazıldı."
 
@@ -2625,7 +2633,7 @@ msgstr "Ana sayfada MKVToolNix'in yeni bir yayımının mevcut olup olmadığın
 msgid "Checking for updates online; please wait"
 msgstr "Güncellemeler çevrimiçi kontrol ediliyor; lütfen bekleyin"
 
-#: src/mmg/tabs/chapters.cpp:564
+#: src/mmg/tabs/chapters.cpp:576
 msgid "Choose a chapter file"
 msgstr "Bölüm dosyasını seçin"
 
@@ -2659,8 +2667,8 @@ msgstr "İlave etmek için girdi dosyasını seçin"
 #: src/mmg/mmg_dialog.cpp:770
 #: src/mmg/mmg_dialog.cpp:791
 #: src/mmg/mux_dialog.cpp:206
-#: src/mmg/tabs/chapters.cpp:663
-#: src/mmg/tabs/chapters.cpp:700
+#: src/mmg/tabs/chapters.cpp:675
+#: src/mmg/tabs/chapters.cpp:712
 msgid "Choose an output file"
 msgstr "Çıktı dosyasını seçin"
 
@@ -2944,7 +2952,7 @@ msgstr "Pano açılamadı."
 msgid "Could not open the corresponding correction file '%1%c'.\n"
 msgstr "İlgili düzeltme dosyası '%1%c' açılamadı.\n"
 
-#: src/mmg/tabs/chapters.cpp:730
+#: src/mmg/tabs/chapters.cpp:742
 #, c-format, boost-format
 msgid "Could not open the destination file '%s' for writing. Error code: %d (%s)."
 msgstr "Yazmak için hedef dosya '%s' açılamadı. Hata kodu: %d (%s)."
@@ -3394,7 +3402,7 @@ msgstr "KÖTÜ dahili hata! (bilinmeyen dosya türü). %1%\n"
 msgid "Each chapter and each edition has a unique identifier. This identifier is normally assigned automatically by the programs, but it can be changed manually if it is really needed."
 msgstr "Her bölüm ve her yayın eşsiz tanımlayıcıya sahiptir. Bu tanımlayıcı normalde programlar tarafından otomatik olarak atanır ama eğer gerçekten ona ihtiyaç varsa el ile değiştirilebilir."
 
-#: src/mmg/tabs/chapters.cpp:821
+#: src/mmg/tabs/chapters.cpp:833
 msgid "Each edition must contain at least one chapter."
 msgstr "Her yayın en az bir bölüm içermek zorundadır."
 
@@ -3420,12 +3428,12 @@ msgid "Edit selectors for properties"
 msgstr "Özellikler için seçicileri düzenle"
 
 #: src/mmg/tabs/chapters.cpp:527
-#, c-format, boost-format
-msgid "Edition %d"
+#, fuzzy
+msgid "Edition"
 msgstr "Yayın %d"
 
-#: src/mmg/tabs/chapters.cpp:866
-#: src/mmg/tabs/chapters.cpp:913
+#: src/mmg/tabs/chapters.cpp:878
+#: src/mmg/tabs/chapters.cpp:925
 #, c-format, boost-format
 msgid "EditionEntry %u"
 msgstr "Yayın Girişi %u"
@@ -3505,7 +3513,7 @@ msgstr "Satır %1% içinde hata: beklenen altyazı numarası ama bazı metinler 
 msgid "Error loading settings"
 msgstr "Ayarları yükleme hatası"
 
-#: src/mmg/tabs/chapters.cpp:730
+#: src/mmg/tabs/chapters.cpp:742
 msgid "Error opening file"
 msgstr "Dosya açma hatası"
 
@@ -3518,7 +3526,7 @@ msgstr "Başlık okuma aşaması sırasında MPEG PS paketi ayrıştırma hastas
 msgid "Error parsing the chapters in '%1%': some mandatory elements are missing.\n"
 msgstr "'%1%' içindeki bölümleri ayrıştırma hatası: bazı zorunlu öğeler eksik.\n"
 
-#: src/mmg/tabs/chapters.cpp:614
+#: src/mmg/tabs/chapters.cpp:626
 msgid "Error parsing the file"
 msgstr "Dosyayı ayrıştırma hatası"
 
@@ -3534,9 +3542,9 @@ msgstr "Bilgi kaydetme hatası"
 
 #: src/mmg/header_editor/frame.cpp:663
 #: src/mmg/header_editor/frame.cpp:669
-#: src/mmg/tabs/chapters.cpp:1682
-#: src/mmg/tabs/chapters.cpp:1694
-#: src/mmg/tabs/chapters.cpp:1700
+#: src/mmg/tabs/chapters.cpp:1808
+#: src/mmg/tabs/chapters.cpp:1820
+#: src/mmg/tabs/chapters.cpp:1826
 msgid "Error writing Matroska file"
 msgstr "Matroska dosyası yazma hatası"
 
@@ -3769,7 +3777,7 @@ msgid "File name: %1%"
 msgstr "Dosya adı: %1%"
 
 #: src/mmg/header_editor/frame.cpp:258
-#: src/mmg/tabs/chapters.cpp:583
+#: src/mmg/tabs/chapters.cpp:595
 msgid "File parsing failed"
 msgstr "Dosya ayrıştırma başarısız oldu"
 
@@ -3778,7 +3786,7 @@ msgid "File removal not possible"
 msgstr "Dosya kaldırma mümkün değil"
 
 #: src/mmg/header_editor/frame.cpp:675
-#: src/mmg/tabs/chapters.cpp:1707
+#: src/mmg/tabs/chapters.cpp:1833
 msgid "File structure warning"
 msgstr "Dosya yapısı uyarısı"
 
@@ -4158,12 +4166,12 @@ msgstr "Ayrıntıyı arttır."
 msgid "Input"
 msgstr "Girdi"
 
-#: src/mmg/tabs/chapters.cpp:1247
-#: src/mmg/tabs/chapters.cpp:1300
-#: src/mmg/tabs/chapters.cpp:1306
-#: src/mmg/tabs/chapters.cpp:1318
-#: src/mmg/tabs/chapters.cpp:1337
-#: src/mmg/tabs/chapters.cpp:1345
+#: src/mmg/tabs/chapters.cpp:1258
+#: src/mmg/tabs/chapters.cpp:1311
+#: src/mmg/tabs/chapters.cpp:1317
+#: src/mmg/tabs/chapters.cpp:1329
+#: src/mmg/tabs/chapters.cpp:1348
+#: src/mmg/tabs/chapters.cpp:1356
 msgid "Input data error"
 msgstr "Girdi veri hatası"
 
@@ -4191,7 +4199,7 @@ msgid "Internal bug: tracks.cpp SSA #1. %1%"
 msgstr "Dahili hata: tracks.cpp SSA #1. %1%"
 
 #: src/mmg/header_editor/frame.cpp:679
-#: src/mmg/tabs/chapters.cpp:1711
+#: src/mmg/tabs/chapters.cpp:1837
 msgid "Internal program error"
 msgstr "Dahili program hatası"
 
@@ -4214,15 +4222,15 @@ msgstr "Geçersiz Base64 karakteriyle kaşılaşıldı"
 msgid "Invalid BlockAddition level in argument '%1%'.\n"
 msgstr "'%1%' bağımsız değişkeninde geçersiz BlokEkleme seviyesi.\n"
 
-#: src/mmg/tabs/chapters.cpp:1300
+#: src/mmg/tabs/chapters.cpp:1311
 msgid "Invalid UID. A UID is simply a number."
 msgstr "Geçersiz UID. UID basitçe bir numaradır."
 
-#: src/mmg/tabs/chapters.cpp:1306
+#: src/mmg/tabs/chapters.cpp:1317
 msgid "Invalid UID. This chapter UID is already in use. The original UID has not been changed."
 msgstr "Geçersiz UID. Bu bölüm UID'si zaten kullanımda. Orijinal UID değiştirilmedi."
 
-#: src/mmg/tabs/chapters.cpp:1318
+#: src/mmg/tabs/chapters.cpp:1329
 msgid "Invalid UID. This edition UID is already in use. The original UID has not been changed."
 msgstr "Geçersiz UID. Bu yayın UID'si zaten kullanımda. Orijinal UID değiştirilmedi."
 
@@ -4344,24 +4352,24 @@ msgstr "%2% zaman kodunda SSA satırı ('%1%') için geçersiz biçim: İlk alan
 msgid "Invalid format for a SSA line ('%1%') at timecode %2%: Too many fields found (%3% instead of 9). This entry will be skipped.\n"
 msgstr "%2% zaman kodunda SSA satırı ('%1%') için geçersiz biçim: Çok fazla alan bulundu (9 yerine %3%). Bu giriş atlanacak.\n"
 
-#: src/mmg/tabs/chapters.cpp:1247
+#: src/mmg/tabs/chapters.cpp:1258
 msgid "Invalid format used for the adjustment."
 msgstr "Ayarlama olarak geçersiz biçim kullanıldı."
 
-#: src/mmg/tabs/chapters.cpp:1345
+#: src/mmg/tabs/chapters.cpp:1356
 #, c-format, boost-format
 msgid "Invalid format used for the end time for '%s'. Setting value to 0."
 msgstr "'%s' için bitiş zamanı olarak geçersiz biçim kullanıldı. Değer 0'a ayarlanıyor."
 
-#: src/mmg/tabs/chapters.cpp:1378
+#: src/mmg/tabs/chapters.cpp:1389
 msgid "Invalid format used for the segment UID. Not using the value."
 msgstr "Parça UID'si için geçersiz biçim kullanıldı. Değer kullanılmıyor."
 
-#: src/mmg/tabs/chapters.cpp:1396
+#: src/mmg/tabs/chapters.cpp:1407
 msgid "Invalid format used for the segment edition UID. Not using the value."
 msgstr "Parça yayın UID'si için geçersiz biçim kullanıldı. Değer kullanılmıyor."
 
-#: src/mmg/tabs/chapters.cpp:1337
+#: src/mmg/tabs/chapters.cpp:1348
 #, c-format, boost-format
 msgid "Invalid format used for the start time for '%s'. Setting value to 0."
 msgstr "'%s' için başlama zamanı olarak geçersiz biçim kullanıldı. Değer 0'a ayarlanıyor."
@@ -4414,7 +4422,7 @@ msgid "Invalid header length: %1% (total length: %2%, idx: %3%, dataidx: %4%)\n"
 msgstr "Geçersiz başlık uzunluğu: %1% (toplam uzunluk: %2%, idx: %3%, dataidx: %4%)\n"
 
 #: src/mmg/options/chapters.cpp:109
-#: src/mmg/tabs/chapters.cpp:1194
+#: src/mmg/tabs/chapters.cpp:1205
 msgid "Invalid language selected"
 msgstr "Geçersiz dil seçildi"
 
@@ -4440,6 +4448,12 @@ msgstr "Geçersiz dakika sayısı: %1% > 59"
 #, boost-format
 msgid "Invalid number of seconds: %1% > 59"
 msgstr "Geçersiz saniye sayısı: %1% > 59"
+
+#: src/mmg/tabs/chapters.cpp:1636
+#: src/mmg/tabs/chapters.cpp:1643
+#, fuzzy
+msgid "Invalid operation"
+msgstr "Geçersiz başlatma zaman kodu"
 
 #: src/common/chapters/chapters.cpp:195
 #, boost-format
@@ -4850,7 +4864,7 @@ msgstr "Matroska ses/görüntü dosyaları"
 msgid "Matroska files (*.mkv *.mka *.mks *.mk3d);;All files (*.*)"
 msgstr "Matroska dosyaları (*.mkv *.mka *.mks *.mk3d);;Tüm dosyalar (*.*)"
 
-#: src/mmg/tabs/chapters.cpp:664
+#: src/mmg/tabs/chapters.cpp:676
 #, c-format, boost-format
 msgid "Matroska files (*.mkv;*.mka;*.mk3d)|*.mkv;*.mka;*.mk3d|%s"
 msgstr "Matroska dosyaları (*.mkv;*.mka;*.mk3d)|*.mkv;*.mka;*.mk3d|%s"
@@ -5128,7 +5142,7 @@ msgstr ""
 msgid "No attachment matched the spec '%1%'.\n"
 msgstr "Belirli %1% ile birlikte eşleşen ek yok.\n"
 
-#: src/mmg/tabs/chapters.cpp:803
+#: src/mmg/tabs/chapters.cpp:815
 msgid "No chapter entries have been create yet."
 msgstr "Henüz oluşturulmuş bölüm girişleri yok."
 
@@ -5137,7 +5151,7 @@ msgstr "Henüz oluşturulmuş bölüm girişleri yok."
 msgid "No chapter numbers listed after '--split %1%'.\n"
 msgstr "'--split %1%' sonra listelenen bölüm numarası yok.\n"
 
-#: src/mmg/tabs/chapters.cpp:590
+#: src/mmg/tabs/chapters.cpp:602
 msgid "No chapters found"
 msgstr "Bulunan bölüm yok"
 
@@ -5304,7 +5318,7 @@ msgstr "Ogg/OGM ses/görüntü dosyaları"
 msgid "Ok"
 msgstr "Tamam"
 
-#: src/mmg/tabs/chapters.cpp:767
+#: src/mmg/tabs/chapters.cpp:779
 msgid "One of the chapters does not have a name."
 msgstr "Bölümlerden birinin adı yok."
 
@@ -6749,7 +6763,7 @@ msgstr ""
 msgid "The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file."
 msgstr "Matroska dosyası değiştirldi ama meta arama girişi güncellenemedi. Bu, oynatıcıların bu öğeyi bulmada zorlanabileceği anlamına gelir. Lütfen dosyayı kontrol etmek için sık kullandığınız oynatıcınızı kullanın."
 
-#: src/mmg/tabs/chapters.cpp:1704
+#: src/mmg/tabs/chapters.cpp:1830
 msgid ""
 "The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file.\n"
 "\n"
@@ -6863,12 +6877,12 @@ msgstr "Ek '%1%' okunamadı.\n"
 msgid "The changes are written to the file.\n"
 msgstr "Değişiklikler dosyaya yazıldı.\n"
 
-#: src/mmg/tabs/chapters.cpp:780
+#: src/mmg/tabs/chapters.cpp:792
 #, c-format, boost-format
 msgid "The chapter '%s' is missing its language."
 msgstr "Bölüm '%s' kendi dilinde eksik."
 
-#: src/mmg/tabs/chapters.cpp:774
+#: src/mmg/tabs/chapters.cpp:786
 #, c-format, boost-format
 msgid "The chapter '%s' is missing the start time."
 msgstr "Bölüm '%s' başlama zamanında eksik."
@@ -6994,7 +7008,7 @@ msgid "The edition UID to play from the segment linked in the chapter's segment 
 msgstr ""
 
 #: src/mmg/header_editor/frame.cpp:661
-#: src/mmg/tabs/chapters.cpp:1692
+#: src/mmg/tabs/chapters.cpp:1818
 #: src/propedit/propedit.cpp:32
 msgid "The element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
 msgstr ""
@@ -7164,11 +7178,11 @@ msgstr "Dosya veya dizin bulunamadı"
 msgid "The file you tried to open is not a Matroska file."
 msgstr "Açmayı denediğiniz dosya Matroska dosyası değil."
 
-#: src/mmg/tabs/chapters.cpp:669
+#: src/mmg/tabs/chapters.cpp:681
 msgid "The file you tried to save to is NOT a Matroska file."
 msgstr "Kaydetmeyi denediğiniz dosya Matroska dosyası DEĞİL."
 
-#: src/mmg/tabs/chapters.cpp:706
+#: src/mmg/tabs/chapters.cpp:718
 msgid "The file you tried to save to is a Matroska file. For this to work you have to use the 'Save to Matroska file' menu option."
 msgstr "Kaydetmeye çalıştığınız dosya Matroska dosyasıdır. Bunun çalışması için ' Matroska dosyasına kaydet' menü seçeneğini kullanmak zorundasınız."
 
@@ -7286,7 +7300,7 @@ msgstr ""
 "(Sorun tab_input::load(), #3 içinde meydana geldi)"
 
 #: src/mmg/options/chapters.cpp:108
-#: src/mmg/tabs/chapters.cpp:1194
+#: src/mmg/tabs/chapters.cpp:1205
 #, c-format, boost-format
 msgid "The language '%s' is not a valid language and cannot be selected."
 msgstr "'%s' dili geçerli bir dil değil ve seçilemiyor."
@@ -7324,7 +7338,7 @@ msgid ""
 msgstr ""
 
 #: src/mmg/header_editor/frame.cpp:667
-#: src/mmg/tabs/chapters.cpp:1698
+#: src/mmg/tabs/chapters.cpp:1824
 #: src/propedit/propedit.cpp:36
 msgid "The meta seek element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
 msgstr ""
@@ -7501,7 +7515,7 @@ msgstr ""
 msgid "The seek table in this TTA file seems to be broken.\n"
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:786
+#: src/mmg/tabs/chapters.cpp:798
 #, c-format, boost-format
 msgid "The selected language '%s' for the chapter '%s' is not a valid language code. Please select one of the predefined ones."
 msgstr "Seçilen '%s' dili bölüm '%s' için geçerli bir dil kodu değil. Lütfen öntanımlı olanlardan birini seçin."
@@ -7795,7 +7809,7 @@ msgid "This file contains coordinates in the timecode lines. Such coordinates ar
 msgstr ""
 
 #: src/mmg/header_editor/frame.cpp:258
-#: src/mmg/tabs/chapters.cpp:583
+#: src/mmg/tabs/chapters.cpp:595
 msgid "This file could not be opened or parsed."
 msgstr "Bu dosya açılamadı veya ayrıştırılamadı."
 
@@ -7803,11 +7817,11 @@ msgstr "Bu dosya açılamadı veya ayrıştırılamadı."
 msgid "This file could not be opened or parsed.\n"
 msgstr "Bu dosya açılamadı veya ayrıştırılamadı.\n"
 
-#: src/mmg/tabs/chapters.cpp:590
+#: src/mmg/tabs/chapters.cpp:602
 msgid "This file does not contain any chapters."
 msgstr "Bu dosya hiç bölüm içermiyor."
 
-#: src/mmg/tabs/chapters.cpp:610
+#: src/mmg/tabs/chapters.cpp:622
 msgid "This file does not contain valid chapters."
 msgstr "Bu dosya geçerli bölüm içermiyor."
 
@@ -8488,7 +8502,7 @@ msgstr "Yazma bilgisi"
 msgid "Writing the VobSub index file '%1%'.\n"
 msgstr "VobSub indeks dosyası '%1%' yazılıyor.\n"
 
-#: src/mmg/tabs/chapters.cpp:1681
+#: src/mmg/tabs/chapters.cpp:1807
 msgid "Writing to the file failed. Typical reasons include the file being write-protected, locked by another process or you not having write permissions for the target directory."
 msgstr ""
 
@@ -8511,8 +8525,8 @@ msgid "Wrong file chosen"
 msgstr "Yanlış dosya seçimi"
 
 #: src/mmg/header_editor/frame.cpp:248
-#: src/mmg/tabs/chapters.cpp:669
-#: src/mmg/tabs/chapters.cpp:707
+#: src/mmg/tabs/chapters.cpp:681
+#: src/mmg/tabs/chapters.cpp:719
 msgid "Wrong file selected"
 msgstr "Yanlış dosya seçildi"
 
@@ -8536,7 +8550,7 @@ msgstr "Yanlış tanımlama dizgisi: '%|1$7s|' != 'kate\\0\\0\\0'"
 msgid "You are already running the latest version."
 msgstr "Zaten en son sürümü çalıştırmaktasınız."
 
-#: src/mmg/tabs/chapters.cpp:1215
+#: src/mmg/tabs/chapters.cpp:1226
 msgid ""
 "You can use this function for adjusting the timecodes\n"
 "of the selected chapter and all its children by a fixed amount.\n"
@@ -9455,7 +9469,7 @@ msgstr "spu_extraction_duration: %1% zaman kodunda bozulmuş SPU paketiyle (next
 msgid "ssa_reader: Invalid format. Could not find the \"Format\" line in the \"[Events]\" section."
 msgstr "ssa_okuyucusu: Geçersiz biçim. \"[Olaylar]\" bölümünde \"Biçim\" satırı bulunamadı."
 
-#: src/mmg/tabs/chapters.cpp:887
+#: src/mmg/tabs/chapters.cpp:899
 msgid "start >= m->ListSize(). This should not have happened. Please file a bug report. Thanks."
 msgstr "start >= m->ListSize(). Bu olmamalıydı. Lütfen bir hata raporu doldurun. Teşekkürler."
 
@@ -9531,7 +9545,7 @@ msgstr "yukarı"
 msgid "utf8_strlen(): Invalid UTF-8 char. First byte: 0x%|1$02x|"
 msgstr "utf8_strlen(): Geçersiz UTF-8 kar. İlk bayt: 0x%|1$02x|"
 
-#: src/mmg/tabs/chapters.cpp:839
+#: src/mmg/tabs/chapters.cpp:851
 msgid "verify failed: chapters->CheckMandatory() is false. This should not have happened. Please file a bug report.\n"
 msgstr "doğrulama başarısız: bölümler->CheckMandatory() yanlış. Bu olmamalıydı. Lütfen bir hata raporu doldurun.\n"
 
@@ -9667,9 +9681,6 @@ msgstr "evet"
 #, fuzzy
 #~ msgid "Invalid end frame for '--split' in '--split %1%' (current part: %2%).\n"
 #~ msgstr "'--split %1%' içinde '--split' için geçersiz başlama/bitiş belirtmesi (şu anki kısım: %2%).\n"
-
-#~ msgid "Invalid start timecode"
-#~ msgstr "Geçersiz başlatma zaman kodu"
 
 #~ msgid "LZO compression failed. Result: %1%\n"
 #~ msgstr "LZO sıkıştırma başarısız oldu. Sonuç: %1%\n"

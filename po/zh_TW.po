@@ -1630,12 +1630,12 @@ msgstr "(新章節檔)"
 msgid "(unnamed chapter)"
 msgstr "(未命名章節)"
 
-#: src/mmg/tabs/chapters.cpp:871
-#: src/mmg/tabs/chapters.cpp:920
-#: src/mmg/tabs/chapters.cpp:1035
-#: src/mmg/tabs/chapters.cpp:1417
-#: src/mmg/tabs/chapters.cpp:1424
-#: src/mmg/tabs/chapters.cpp:1618
+#: src/mmg/tabs/chapters.cpp:883
+#: src/mmg/tabs/chapters.cpp:932
+#: src/mmg/tabs/chapters.cpp:1046
+#: src/mmg/tabs/chapters.cpp:1428
+#: src/mmg/tabs/chapters.cpp:1435
+#: src/mmg/tabs/chapters.cpp:1744
 msgid "(unnamed)"
 msgstr "(未命名)"
 
@@ -2035,7 +2035,7 @@ msgstr "以此數值加入屬性，即使這個屬性已經存在"
 msgid "Adds the current settings as a new job entry to the job queue"
 msgstr "將目前設定作為新任務項加入到任務佇列"
 
-#: src/mmg/tabs/chapters.cpp:1223
+#: src/mmg/tabs/chapters.cpp:1234
 msgid "Adjust chapter timecodes"
 msgstr "調整章節時間碼"
 
@@ -2060,7 +2060,7 @@ msgstr "所有檔案 (*)|*"
 msgid "All Files (*.*)|*.*"
 msgstr "所有檔案 (*.*)|*.*"
 
-#: src/mmg/tabs/chapters.cpp:843
+#: src/mmg/tabs/chapters.cpp:855
 msgid "All chapter entries are valid."
 msgstr "所有章節項目皆正確。"
 
@@ -2139,7 +2139,7 @@ msgid ""
 msgstr "轉義的檔名，對應上一剪輯。"
 
 #: src/mmg/header_editor/frame.cpp:679
-#: src/mmg/tabs/chapters.cpp:1711
+#: src/mmg/tabs/chapters.cpp:1837
 #: src/propedit/propedit.cpp:44
 msgid "An unknown error occured. The file has been modified."
 msgstr "發生未知錯誤。檔案已修改。"
@@ -2480,6 +2480,14 @@ msgstr "章節翻譯版本 UID: %1%"
 msgid "Chapter Translate ID: %1%"
 msgstr "章節翻譯 ID: %1%"
 
+#: src/mmg/tabs/chapters.cpp:1643
+msgid "Chapter atoms may only be dropped onto other atoms and chapter editions."
+msgstr ""
+
+#: src/mmg/tabs/chapters.cpp:1636
+msgid "Chapter editions may only be dropped onto the root node or other editions."
+msgstr ""
+
 #: src/mmg/mmg_dialog.cpp:631
 msgid "Chapter editor is not empty"
 msgstr "章節編輯器不是空的"
@@ -2492,7 +2500,7 @@ msgstr "提取章節"
 msgid "Chapter file:"
 msgstr "章節檔案:"
 
-#: src/mmg/tabs/chapters.cpp:701
+#: src/mmg/tabs/chapters.cpp:713
 #, c-format, boost-format
 msgid "Chapter files (*.xml)|*.xml|%s"
 msgstr "章節檔案 (*.xml)|*.xml|%s"
@@ -2502,7 +2510,7 @@ msgstr "章節檔案 (*.xml)|*.xml|%s"
 msgid "Chapter files (*.xml;*.txt;*.cue)|*.xml;*.txt;*.cue|%s"
 msgstr "章節檔案 (*.xml;*.txt;*.cue)|*.xml;*.txt;*.cue|%s"
 
-#: src/mmg/tabs/chapters.cpp:565
+#: src/mmg/tabs/chapters.cpp:577
 #, c-format, boost-format
 msgid "Chapter files (*.xml;*.txt;*.mka;*.mkv;*.mks;*.mk3d;*.cue)|*.xml;*.txt;*.mka;*.mkv;*.mks;*.mk3d;*.cue|%s"
 msgstr "章節檔案 (*.xml;*.txt;*.mka;*.mkv;*.mks;*.mk3d;*.cue)|*.xml;*.txt;*.mka;*.mkv;*.mks;*.mk3d;*.cue|%s"
@@ -2524,16 +2532,16 @@ msgstr "章節選項"
 msgid "Chapter parser: The EditionUID %1% is not unique and could not be reused. A new one will be created.\n"
 msgstr "章節解析器: 版本 UID %1% 不唯一，不能重複使用。將建立一個新的。\n"
 
-#: src/mmg/tabs/chapters.cpp:767
-#: src/mmg/tabs/chapters.cpp:774
-#: src/mmg/tabs/chapters.cpp:780
-#: src/mmg/tabs/chapters.cpp:788
-#: src/mmg/tabs/chapters.cpp:803
-#: src/mmg/tabs/chapters.cpp:821
+#: src/mmg/tabs/chapters.cpp:779
+#: src/mmg/tabs/chapters.cpp:786
+#: src/mmg/tabs/chapters.cpp:792
+#: src/mmg/tabs/chapters.cpp:800
+#: src/mmg/tabs/chapters.cpp:815
+#: src/mmg/tabs/chapters.cpp:833
 msgid "Chapter verification error"
 msgstr "章節驗證發生錯誤"
 
-#: src/mmg/tabs/chapters.cpp:843
+#: src/mmg/tabs/chapters.cpp:855
 msgid "Chapter verification succeeded"
 msgstr "章節驗證成功"
 
@@ -2553,12 +2561,12 @@ msgstr "章節 (%d 個項目) 自 %s"
 msgid "Chapters are not allowed in WebM compliant files. No chapters will be written into any output file.\n"
 msgstr "在 WebM 遵循檔裡不能有章節。不會將章節寫進任何輸出檔。\n"
 
-#: src/mmg/tabs/chapters.cpp:639
+#: src/mmg/tabs/chapters.cpp:651
 msgid "Chapters loaded."
 msgstr "章節已載入。"
 
-#: src/mmg/tabs/chapters.cpp:743
-#: src/mmg/tabs/chapters.cpp:1688
+#: src/mmg/tabs/chapters.cpp:755
+#: src/mmg/tabs/chapters.cpp:1814
 msgid "Chapters written."
 msgstr "章節已寫入。"
 
@@ -2598,7 +2606,7 @@ msgstr "線上檢查 MKVToolNix 首頁上是否有可更新的新版本。只有
 msgid "Checking for updates online; please wait"
 msgstr "正在線上檢查更新; 請稍候"
 
-#: src/mmg/tabs/chapters.cpp:564
+#: src/mmg/tabs/chapters.cpp:576
 msgid "Choose a chapter file"
 msgstr "選擇章節檔"
 
@@ -2632,8 +2640,8 @@ msgstr "選擇要添加的檔案"
 #: src/mmg/mmg_dialog.cpp:770
 #: src/mmg/mmg_dialog.cpp:791
 #: src/mmg/mux_dialog.cpp:206
-#: src/mmg/tabs/chapters.cpp:663
-#: src/mmg/tabs/chapters.cpp:700
+#: src/mmg/tabs/chapters.cpp:675
+#: src/mmg/tabs/chapters.cpp:712
 msgid "Choose an output file"
 msgstr "選擇輸出檔"
 
@@ -2917,7 +2925,7 @@ msgstr "無法開啟剪貼簿。"
 msgid "Could not open the corresponding correction file '%1%c'.\n"
 msgstr "無法開啟一致性校正檔案「%1%c」。\n"
 
-#: src/mmg/tabs/chapters.cpp:730
+#: src/mmg/tabs/chapters.cpp:742
 #, c-format, boost-format
 msgid "Could not open the destination file '%s' for writing. Error code: %d (%s)."
 msgstr "無法開啟目的檔案「%s」以寫入。錯誤代號: %d (%s)。"
@@ -3367,7 +3375,7 @@ msgstr "*邪惡的* 內部錯誤! (未知的檔案類型)。 %1%\n"
 msgid "Each chapter and each edition has a unique identifier. This identifier is normally assigned automatically by the programs, but it can be changed manually if it is really needed."
 msgstr "每個章節和版本都有唯一的 ID。該 ID 通常由程式自動指派，但也可以手動修改（如果確實需要的話）。"
 
-#: src/mmg/tabs/chapters.cpp:821
+#: src/mmg/tabs/chapters.cpp:833
 msgid "Each edition must contain at least one chapter."
 msgstr "每個版本必須至少包含一個章節。"
 
@@ -3393,12 +3401,12 @@ msgid "Edit selectors for properties"
 msgstr "屬性的編輯選擇器"
 
 #: src/mmg/tabs/chapters.cpp:527
-#, c-format, boost-format
-msgid "Edition %d"
+#, fuzzy
+msgid "Edition"
 msgstr "版本%d"
 
-#: src/mmg/tabs/chapters.cpp:866
-#: src/mmg/tabs/chapters.cpp:913
+#: src/mmg/tabs/chapters.cpp:878
+#: src/mmg/tabs/chapters.cpp:925
 #, c-format, boost-format
 msgid "EditionEntry %u"
 msgstr "版本條目 %u"
@@ -3478,7 +3486,7 @@ msgstr "在第 %1% 行處發生錯誤: 預期為字幕編號但發現一些文�
 msgid "Error loading settings"
 msgstr "載入設定發生錯誤"
 
-#: src/mmg/tabs/chapters.cpp:730
+#: src/mmg/tabs/chapters.cpp:742
 msgid "Error opening file"
 msgstr "開啟檔案時發生錯誤"
 
@@ -3491,7 +3499,7 @@ msgstr "在表頭讀取階段解析 MPEG PS 套件時發生錯誤。媒體流似
 msgid "Error parsing the chapters in '%1%': some mandatory elements are missing.\n"
 msgstr "解析「%1%」中的章節時發生錯誤: 缺少一些必須的元件。\n"
 
-#: src/mmg/tabs/chapters.cpp:614
+#: src/mmg/tabs/chapters.cpp:626
 msgid "Error parsing the file"
 msgstr "解析檔案時發生錯誤"
 
@@ -3507,9 +3515,9 @@ msgstr "儲存資訊發生錯誤"
 
 #: src/mmg/header_editor/frame.cpp:663
 #: src/mmg/header_editor/frame.cpp:669
-#: src/mmg/tabs/chapters.cpp:1682
-#: src/mmg/tabs/chapters.cpp:1694
-#: src/mmg/tabs/chapters.cpp:1700
+#: src/mmg/tabs/chapters.cpp:1808
+#: src/mmg/tabs/chapters.cpp:1820
+#: src/mmg/tabs/chapters.cpp:1826
 msgid "Error writing Matroska file"
 msgstr "寫入 Matroska 檔時發生錯誤"
 
@@ -3742,7 +3750,7 @@ msgid "File name: %1%"
 msgstr "檔名: %1%"
 
 #: src/mmg/header_editor/frame.cpp:258
-#: src/mmg/tabs/chapters.cpp:583
+#: src/mmg/tabs/chapters.cpp:595
 msgid "File parsing failed"
 msgstr "解析檔案失敗"
 
@@ -3751,7 +3759,7 @@ msgid "File removal not possible"
 msgstr "檔案不能移除"
 
 #: src/mmg/header_editor/frame.cpp:675
-#: src/mmg/tabs/chapters.cpp:1707
+#: src/mmg/tabs/chapters.cpp:1833
 msgid "File structure warning"
 msgstr "檔案結構警告"
 
@@ -4130,12 +4138,12 @@ msgstr "增強詳細程度。"
 msgid "Input"
 msgstr "輸入"
 
-#: src/mmg/tabs/chapters.cpp:1247
-#: src/mmg/tabs/chapters.cpp:1300
-#: src/mmg/tabs/chapters.cpp:1306
-#: src/mmg/tabs/chapters.cpp:1318
-#: src/mmg/tabs/chapters.cpp:1337
-#: src/mmg/tabs/chapters.cpp:1345
+#: src/mmg/tabs/chapters.cpp:1258
+#: src/mmg/tabs/chapters.cpp:1311
+#: src/mmg/tabs/chapters.cpp:1317
+#: src/mmg/tabs/chapters.cpp:1329
+#: src/mmg/tabs/chapters.cpp:1348
+#: src/mmg/tabs/chapters.cpp:1356
 msgid "Input data error"
 msgstr "輸入資料錯誤"
 
@@ -4163,7 +4171,7 @@ msgid "Internal bug: tracks.cpp SSA #1. %1%"
 msgstr "內部錯誤: tracks.cpp SSA #1。 %1%"
 
 #: src/mmg/header_editor/frame.cpp:679
-#: src/mmg/tabs/chapters.cpp:1711
+#: src/mmg/tabs/chapters.cpp:1837
 msgid "Internal program error"
 msgstr "內部程式錯誤"
 
@@ -4186,15 +4194,15 @@ msgstr "遇到無效的 Base64 字元"
 msgid "Invalid BlockAddition level in argument '%1%'.\n"
 msgstr "無效的附加區塊層級，在參數「%1%」中。\n"
 
-#: src/mmg/tabs/chapters.cpp:1300
+#: src/mmg/tabs/chapters.cpp:1311
 msgid "Invalid UID. A UID is simply a number."
 msgstr "無效 UID。UID 僅僅是個數位。"
 
-#: src/mmg/tabs/chapters.cpp:1306
+#: src/mmg/tabs/chapters.cpp:1317
 msgid "Invalid UID. This chapter UID is already in use. The original UID has not been changed."
 msgstr "無效 UID。該章節 UID 已被使用。原 UID 沒有被改變。"
 
-#: src/mmg/tabs/chapters.cpp:1318
+#: src/mmg/tabs/chapters.cpp:1329
 msgid "Invalid UID. This edition UID is already in use. The original UID has not been changed."
 msgstr "無效 UID。該版本 UID 已被使用。原 UID 沒有被改變。"
 
@@ -4316,24 +4324,24 @@ msgstr "SSA 這一行 (「%1%」) 於時間碼 %2% 格式無效: 第一個欄位
 msgid "Invalid format for a SSA line ('%1%') at timecode %2%: Too many fields found (%3% instead of 9). This entry will be skipped.\n"
 msgstr "SSA 這一行 (「%1%」) 於時間碼 %2% 格式無效: 發現過多欄位 (%3% 而不是 9)。該條將被跳過。\n"
 
-#: src/mmg/tabs/chapters.cpp:1247
+#: src/mmg/tabs/chapters.cpp:1258
 msgid "Invalid format used for the adjustment."
 msgstr "調整功能使用的格式無效。"
 
-#: src/mmg/tabs/chapters.cpp:1345
+#: src/mmg/tabs/chapters.cpp:1356
 #, c-format, boost-format
 msgid "Invalid format used for the end time for '%s'. Setting value to 0."
 msgstr "終止時間「%s」格式無效。設定值為 0。"
 
-#: src/mmg/tabs/chapters.cpp:1378
+#: src/mmg/tabs/chapters.cpp:1389
 msgid "Invalid format used for the segment UID. Not using the value."
 msgstr "剪輯 UID 使用無效的格式。不會使用該數值。"
 
-#: src/mmg/tabs/chapters.cpp:1396
+#: src/mmg/tabs/chapters.cpp:1407
 msgid "Invalid format used for the segment edition UID. Not using the value."
 msgstr "剪輯版本 UID 使用無效的格式。不會使用該數值。"
 
-#: src/mmg/tabs/chapters.cpp:1337
+#: src/mmg/tabs/chapters.cpp:1348
 #, c-format, boost-format
 msgid "Invalid format used for the start time for '%s'. Setting value to 0."
 msgstr "起始時間「%s」格式無效。設定值為 0。"
@@ -4386,7 +4394,7 @@ msgid "Invalid header length: %1% (total length: %2%, idx: %3%, dataidx: %4%)\n"
 msgstr "表頭長度無效: %1% (總長: %2%, 索引: %3%, 資料索引: %4%)\n"
 
 #: src/mmg/options/chapters.cpp:109
-#: src/mmg/tabs/chapters.cpp:1194
+#: src/mmg/tabs/chapters.cpp:1205
 msgid "Invalid language selected"
 msgstr "無效的語言選擇"
 
@@ -4412,6 +4420,12 @@ msgstr "無效分數: %1% > 59"
 #, boost-format
 msgid "Invalid number of seconds: %1% > 59"
 msgstr "無效秒數: %1% > 59"
+
+#: src/mmg/tabs/chapters.cpp:1636
+#: src/mmg/tabs/chapters.cpp:1643
+#, fuzzy
+msgid "Invalid operation"
+msgstr "無效的開始時間碼"
 
 #: src/common/chapters/chapters.cpp:195
 #, boost-format
@@ -4820,7 +4834,7 @@ msgstr "Matroska 音訊/視訊檔"
 msgid "Matroska files (*.mkv *.mka *.mks *.mk3d);;All files (*.*)"
 msgstr "Matroska 檔案 (*.mkv *.mka *.mks *.mk3d);;所有檔 (*.*)"
 
-#: src/mmg/tabs/chapters.cpp:664
+#: src/mmg/tabs/chapters.cpp:676
 #, c-format, boost-format
 msgid "Matroska files (*.mkv;*.mka;*.mk3d)|*.mkv;*.mka;*.mk3d|%s"
 msgstr "Matroska 檔案 (*.mkv;*.mka;*.mks;*.mk3d)|*.mkv;*.mka;*.mks;*.mk3d|%s"
@@ -5098,7 +5112,7 @@ msgstr "沒有為檔案 %1% (「%2%」) 指定添加對應。將使用預設對�
 msgid "No attachment matched the spec '%1%'.\n"
 msgstr "沒有符合形式「%1%」的附件。\n"
 
-#: src/mmg/tabs/chapters.cpp:803
+#: src/mmg/tabs/chapters.cpp:815
 msgid "No chapter entries have been create yet."
 msgstr "尚未建立任何章節項目。"
 
@@ -5107,7 +5121,7 @@ msgstr "尚未建立任何章節項目。"
 msgid "No chapter numbers listed after '--split %1%'.\n"
 msgstr "沒有章節編號列在「--split %1%」後面。\n"
 
-#: src/mmg/tabs/chapters.cpp:590
+#: src/mmg/tabs/chapters.cpp:602
 msgid "No chapters found"
 msgstr "未找到章節"
 
@@ -5274,7 +5288,7 @@ msgstr "Ogg/OGM 音訊/視訊檔"
 msgid "Ok"
 msgstr "確定"
 
-#: src/mmg/tabs/chapters.cpp:767
+#: src/mmg/tabs/chapters.cpp:779
 msgid "One of the chapters does not have a name."
 msgstr "有一個章節沒有名稱。"
 
@@ -6719,7 +6733,7 @@ msgstr "此 MP4 檔「%1%」含有無法辨識格式的章節。若章節不是�
 msgid "The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file."
 msgstr "Matroska 檔已經修改過，但變換定位項目無法更新。這表示播放器可能很難找到該元件。請使用您喜歡的播放器檢查此檔案。"
 
-#: src/mmg/tabs/chapters.cpp:1704
+#: src/mmg/tabs/chapters.cpp:1830
 msgid ""
 "The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file.\n"
 "\n"
@@ -6833,12 +6847,12 @@ msgstr "附件「%1%」無法讀取。\n"
 msgid "The changes are written to the file.\n"
 msgstr "將變更寫入檔案。\n"
 
-#: src/mmg/tabs/chapters.cpp:780
+#: src/mmg/tabs/chapters.cpp:792
 #, c-format, boost-format
 msgid "The chapter '%s' is missing its language."
 msgstr "章節「%s」遺失它的語言。"
 
-#: src/mmg/tabs/chapters.cpp:774
+#: src/mmg/tabs/chapters.cpp:786
 #, c-format, boost-format
 msgid "The chapter '%s' is missing the start time."
 msgstr "章節「%s」遺失起始時間。"
@@ -6964,7 +6978,7 @@ msgid "The edition UID to play from the segment linked in the chapter's segment 
 msgstr "要從在章節的剪輯 UID 連結剪輯播放的版本 UID。為一個簡單的數字。"
 
 #: src/mmg/header_editor/frame.cpp:661
-#: src/mmg/tabs/chapters.cpp:1692
+#: src/mmg/tabs/chapters.cpp:1818
 #: src/propedit/propedit.cpp:32
 msgid "The element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
 msgstr "元件已被寫至檔案結尾部，但剪輯大小無法更新。因此這些元件將不可見。處理處理程序將被中止。檔已被修改!"
@@ -7134,11 +7148,11 @@ msgstr "找不到此檔案或目錄"
 msgid "The file you tried to open is not a Matroska file."
 msgstr "您試著開啟的檔案不是 Matroska 檔。"
 
-#: src/mmg/tabs/chapters.cpp:669
+#: src/mmg/tabs/chapters.cpp:681
 msgid "The file you tried to save to is NOT a Matroska file."
 msgstr "您試著儲存至的檔案 *不是* Matroska 檔。"
 
-#: src/mmg/tabs/chapters.cpp:706
+#: src/mmg/tabs/chapters.cpp:718
 msgid "The file you tried to save to is a Matroska file. For this to work you have to use the 'Save to Matroska file' menu option."
 msgstr "您試著儲存至的檔案是個 Matroska 檔。要這樣做的話，您應該使用“儲存至 Matroska 檔”功能表項目。"
 
@@ -7256,7 +7270,7 @@ msgstr ""
 "(問題出在 tab_input::load(), #3)"
 
 #: src/mmg/options/chapters.cpp:108
-#: src/mmg/tabs/chapters.cpp:1194
+#: src/mmg/tabs/chapters.cpp:1205
 #, c-format, boost-format
 msgid "The language '%s' is not a valid language and cannot be selected."
 msgstr "語言「%s」不是有效的語言，不可選。"
@@ -7296,7 +7310,7 @@ msgstr ""
 "如果設為 0, 將不使用參考偽快取系統。"
 
 #: src/mmg/header_editor/frame.cpp:667
-#: src/mmg/tabs/chapters.cpp:1698
+#: src/mmg/tabs/chapters.cpp:1824
 #: src/propedit/propedit.cpp:36
 msgid "The meta seek element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
 msgstr "變換定位元件已被寫至檔案結尾部，但剪輯大小無法更新。因此這些元件不可見。處理處理程序將被中止。檔案已有改動！"
@@ -7467,7 +7481,7 @@ msgstr "第二種模式可提取標籤並將標籤轉換成 XML。此輸出會�
 msgid "The seek table in this TTA file seems to be broken.\n"
 msgstr "此 TTA 檔案中的定位表似乎已損壞。\n"
 
-#: src/mmg/tabs/chapters.cpp:786
+#: src/mmg/tabs/chapters.cpp:798
 #, c-format, boost-format
 msgid "The selected language '%s' for the chapter '%s' is not a valid language code. Please select one of the predefined ones."
 msgstr "選定的語言「%s」（章節「%s」）不是有效的語言碼。請選擇預定義碼中的一項。"
@@ -7770,7 +7784,7 @@ msgid "This file contains coordinates in the timecode lines. Such coordinates ar
 msgstr "此檔案時間軸中含有坐標。此類坐標不受 Matroska SRT 字幕格式的支援。坐標將被自動移除。\n"
 
 #: src/mmg/header_editor/frame.cpp:258
-#: src/mmg/tabs/chapters.cpp:583
+#: src/mmg/tabs/chapters.cpp:595
 msgid "This file could not be opened or parsed."
 msgstr "檔案無法開啟或解析。"
 
@@ -7778,11 +7792,11 @@ msgstr "檔案無法開啟或解析。"
 msgid "This file could not be opened or parsed.\n"
 msgstr "這個檔案無法開啟或解析。\n"
 
-#: src/mmg/tabs/chapters.cpp:590
+#: src/mmg/tabs/chapters.cpp:602
 msgid "This file does not contain any chapters."
 msgstr "此檔案不包含任何章節。"
 
-#: src/mmg/tabs/chapters.cpp:610
+#: src/mmg/tabs/chapters.cpp:622
 msgid "This file does not contain valid chapters."
 msgstr "此檔案不包含有效章節。"
 
@@ -8463,7 +8477,7 @@ msgstr "正在匯出資訊"
 msgid "Writing the VobSub index file '%1%'.\n"
 msgstr "正在寫入 VobSub 索引檔「%1%」。\n"
 
-#: src/mmg/tabs/chapters.cpp:1681
+#: src/mmg/tabs/chapters.cpp:1807
 msgid "Writing to the file failed. Typical reasons include the file being write-protected, locked by another process or you not having write permissions for the target directory."
 msgstr "寫入檔案失敗。常見的原因可能是檔案有寫入保護、其他程式鎖住該檔案或你沒有寫入檔案所在目錄的權限。"
 
@@ -8486,8 +8500,8 @@ msgid "Wrong file chosen"
 msgstr "選擇錯誤的檔案"
 
 #: src/mmg/header_editor/frame.cpp:248
-#: src/mmg/tabs/chapters.cpp:669
-#: src/mmg/tabs/chapters.cpp:707
+#: src/mmg/tabs/chapters.cpp:681
+#: src/mmg/tabs/chapters.cpp:719
 msgid "Wrong file selected"
 msgstr "選擇錯誤的檔案"
 
@@ -8511,7 +8525,7 @@ msgstr "錯誤的識別字串:「%|1$7s|」!=「kate\\0\\0\\0」"
 msgid "You are already running the latest version."
 msgstr "已是最新版本。"
 
-#: src/mmg/tabs/chapters.cpp:1215
+#: src/mmg/tabs/chapters.cpp:1226
 msgid ""
 "You can use this function for adjusting the timecodes\n"
 "of the selected chapter and all its children by a fixed amount.\n"
@@ -9429,7 +9443,7 @@ msgstr "spu_extraction_duration: 遇到損壞的 SPU 套件 (next_off < start_of
 msgid "ssa_reader: Invalid format. Could not find the \"Format\" line in the \"[Events]\" section."
 msgstr "ssa_reader: 無效格式。\"[Events]\" 區段中未找到 \"Format\" 這一行。"
 
-#: src/mmg/tabs/chapters.cpp:887
+#: src/mmg/tabs/chapters.cpp:899
 msgid "start >= m->ListSize(). This should not have happened. Please file a bug report. Thanks."
 msgstr "start >= m->ListSize()。這不該發生。請提交錯誤報告。感謝。"
 
@@ -9505,7 +9519,7 @@ msgstr "上移"
 msgid "utf8_strlen(): Invalid UTF-8 char. First byte: 0x%|1$02x|"
 msgstr "utf8_strlen(): 無效 UTF-8 字元。第一位元組: 0x%|1$02x|"
 
-#: src/mmg/tabs/chapters.cpp:839
+#: src/mmg/tabs/chapters.cpp:851
 msgid "verify failed: chapters->CheckMandatory() is false. This should not have happened. Please file a bug report.\n"
 msgstr "verify failed: chapters->CheckMandatory() 為 false。這不該發生。請提交錯誤報告。\n"
 
@@ -9785,9 +9799,6 @@ msgstr "是"
 
 #~ msgid "Invalid hexadecimal data encountered: '%1%' is neither white space nor a hexadecimal number."
 #~ msgstr "遇到無效的十六進位資料:「%1%」既不是空格也不是十六進位數。"
-
-#~ msgid "Invalid start timecode"
-#~ msgstr "無效的開始時間碼"
 
 #~ msgid ""
 #~ "Known file types:\n"

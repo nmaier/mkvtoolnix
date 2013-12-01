@@ -1659,12 +1659,12 @@ msgstr "(nouveau fichier de chapitres)"
 msgid "(unnamed chapter)"
 msgstr "(chapitre sans nom)"
 
-#: src/mmg/tabs/chapters.cpp:871
-#: src/mmg/tabs/chapters.cpp:920
-#: src/mmg/tabs/chapters.cpp:1035
-#: src/mmg/tabs/chapters.cpp:1417
-#: src/mmg/tabs/chapters.cpp:1424
-#: src/mmg/tabs/chapters.cpp:1618
+#: src/mmg/tabs/chapters.cpp:883
+#: src/mmg/tabs/chapters.cpp:932
+#: src/mmg/tabs/chapters.cpp:1046
+#: src/mmg/tabs/chapters.cpp:1428
+#: src/mmg/tabs/chapters.cpp:1435
+#: src/mmg/tabs/chapters.cpp:1744
 msgid "(unnamed)"
 msgstr "(sans nom)"
 
@@ -2065,7 +2065,7 @@ msgstr "Ajouter une propriété avec la valeur même si une telle propriété ex
 msgid "Adds the current settings as a new job entry to the job queue"
 msgstr "Définir la configuration actuelle comme nouvelle tâche en attente."
 
-#: src/mmg/tabs/chapters.cpp:1223
+#: src/mmg/tabs/chapters.cpp:1234
 msgid "Adjust chapter timecodes"
 msgstr "Ajuster les codes temporels du chapitre"
 
@@ -2090,7 +2090,7 @@ msgstr "Tous les fichiers (*)|*"
 msgid "All Files (*.*)|*.*"
 msgstr "Tous les fichiers (*.*)|*.*"
 
-#: src/mmg/tabs/chapters.cpp:843
+#: src/mmg/tabs/chapters.cpp:855
 msgid "All chapter entries are valid."
 msgstr "Toutes les entrées de chapitre sont correctes."
 
@@ -2169,7 +2169,7 @@ msgid ""
 msgstr "Un nom de fichier faisant allusion au segment précédent."
 
 #: src/mmg/header_editor/frame.cpp:679
-#: src/mmg/tabs/chapters.cpp:1711
+#: src/mmg/tabs/chapters.cpp:1837
 #: src/propedit/propedit.cpp:44
 msgid "An unknown error occured. The file has been modified."
 msgstr "Une erreur inconnue s'est produite. Le fichier a été modifié."
@@ -2510,6 +2510,14 @@ msgstr "UID d'édition de traduction de chapitre : %1%"
 msgid "Chapter Translate ID: %1%"
 msgstr "Identifiant de traduction de chapitre : %1%"
 
+#: src/mmg/tabs/chapters.cpp:1643
+msgid "Chapter atoms may only be dropped onto other atoms and chapter editions."
+msgstr ""
+
+#: src/mmg/tabs/chapters.cpp:1636
+msgid "Chapter editions may only be dropped onto the root node or other editions."
+msgstr ""
+
 #: src/mmg/mmg_dialog.cpp:631
 msgid "Chapter editor is not empty"
 msgstr "Éditeur de chapitres non vide"
@@ -2522,7 +2530,7 @@ msgstr "Extraction des chapitres"
 msgid "Chapter file:"
 msgstr "Fichier de chapitres :"
 
-#: src/mmg/tabs/chapters.cpp:701
+#: src/mmg/tabs/chapters.cpp:713
 #, c-format, boost-format
 msgid "Chapter files (*.xml)|*.xml|%s"
 msgstr "Fichiers de chapitres (*.xml)|*.xml|%s"
@@ -2532,7 +2540,7 @@ msgstr "Fichiers de chapitres (*.xml)|*.xml|%s"
 msgid "Chapter files (*.xml;*.txt;*.cue)|*.xml;*.txt;*.cue|%s"
 msgstr "Fichiers de chapitres (*.xml;*.txt;*.cue)|*.xml;*.txt;*.cue|%s"
 
-#: src/mmg/tabs/chapters.cpp:565
+#: src/mmg/tabs/chapters.cpp:577
 #, c-format, boost-format
 msgid "Chapter files (*.xml;*.txt;*.mka;*.mkv;*.mks;*.mk3d;*.cue)|*.xml;*.txt;*.mka;*.mkv;*.mks;*.mk3d;*.cue|%s"
 msgstr "Fichiers de chapitres (*.xml;*.txt;*.mka;*.mkv;*.mks;*.mk3d;*.cue)|*.xml;*.txt;*.mka;*.mkv;*.mks;*.mk3d;*.cue|%s"
@@ -2554,16 +2562,16 @@ msgstr "Options des chapitres"
 msgid "Chapter parser: The EditionUID %1% is not unique and could not be reused. A new one will be created.\n"
 msgstr "Analyse des chapitres : l'UID d'édition %1% n'est pas unique et ne peut pas être réutilisé, un nouveau sera créé.\n"
 
-#: src/mmg/tabs/chapters.cpp:767
-#: src/mmg/tabs/chapters.cpp:774
-#: src/mmg/tabs/chapters.cpp:780
-#: src/mmg/tabs/chapters.cpp:788
-#: src/mmg/tabs/chapters.cpp:803
-#: src/mmg/tabs/chapters.cpp:821
+#: src/mmg/tabs/chapters.cpp:779
+#: src/mmg/tabs/chapters.cpp:786
+#: src/mmg/tabs/chapters.cpp:792
+#: src/mmg/tabs/chapters.cpp:800
+#: src/mmg/tabs/chapters.cpp:815
+#: src/mmg/tabs/chapters.cpp:833
 msgid "Chapter verification error"
 msgstr "Erreur lors de la vérification des chapitres."
 
-#: src/mmg/tabs/chapters.cpp:843
+#: src/mmg/tabs/chapters.cpp:855
 msgid "Chapter verification succeeded"
 msgstr "Vérification des chapitres réussie."
 
@@ -2583,12 +2591,12 @@ msgstr "Chapitres (%d entrées) dans %s"
 msgid "Chapters are not allowed in WebM compliant files. No chapters will be written into any output file.\n"
 msgstr "Les chapitres ne sont pas admis dans les fichiers conformes WebM. Aucun chapitre ne sera écrit dans n'importe quel fichier cible.\n"
 
-#: src/mmg/tabs/chapters.cpp:639
+#: src/mmg/tabs/chapters.cpp:651
 msgid "Chapters loaded."
 msgstr "Chapitres chargés."
 
-#: src/mmg/tabs/chapters.cpp:743
-#: src/mmg/tabs/chapters.cpp:1688
+#: src/mmg/tabs/chapters.cpp:755
+#: src/mmg/tabs/chapters.cpp:1814
 msgid "Chapters written."
 msgstr "Chapitres écrits."
 
@@ -2628,7 +2636,7 @@ msgstr "Vérifier en ligne si une nouvelle version de MKVToolNix est disponible 
 msgid "Checking for updates online; please wait"
 msgstr "Recherche en ligne d'une mise à jour, veuillez patienter."
 
-#: src/mmg/tabs/chapters.cpp:564
+#: src/mmg/tabs/chapters.cpp:576
 msgid "Choose a chapter file"
 msgstr "Choisir un fichier de chapitres"
 
@@ -2662,8 +2670,8 @@ msgstr "Choisir un fichier à concaténer"
 #: src/mmg/mmg_dialog.cpp:770
 #: src/mmg/mmg_dialog.cpp:791
 #: src/mmg/mux_dialog.cpp:206
-#: src/mmg/tabs/chapters.cpp:663
-#: src/mmg/tabs/chapters.cpp:700
+#: src/mmg/tabs/chapters.cpp:675
+#: src/mmg/tabs/chapters.cpp:712
 msgid "Choose an output file"
 msgstr "Choisir un fichier cible"
 
@@ -2947,7 +2955,7 @@ msgstr "Impossible d'ouvrir le presse-papiers."
 msgid "Could not open the corresponding correction file '%1%c'.\n"
 msgstr "Impossible d'ouvrir le fichier de correction correspondant '%1%c'.\n"
 
-#: src/mmg/tabs/chapters.cpp:730
+#: src/mmg/tabs/chapters.cpp:742
 #, c-format, boost-format
 msgid "Could not open the destination file '%s' for writing. Error code: %d (%s)."
 msgstr "Le fichier cible '%s' n'a pas pu être ouvert en écriture. Code d'erreur : %d (%s)."
@@ -3397,7 +3405,7 @@ msgstr "Erreur interne fatale ! (type de fichier inconnu). %1%\n"
 msgid "Each chapter and each edition has a unique identifier. This identifier is normally assigned automatically by the programs, but it can be changed manually if it is really needed."
 msgstr "Chaque chapitre ou édition possède un identifiant unique. Cet identifiant est assigné automatiquement par le logiciel mais peut être modifié manuellement si nécessaire."
 
-#: src/mmg/tabs/chapters.cpp:821
+#: src/mmg/tabs/chapters.cpp:833
 msgid "Each edition must contain at least one chapter."
 msgstr "Chaque édition doit contenir au moins un chapitre."
 
@@ -3423,12 +3431,12 @@ msgid "Edit selectors for properties"
 msgstr "Modifier les propriétés des sélecteurs"
 
 #: src/mmg/tabs/chapters.cpp:527
-#, c-format, boost-format
-msgid "Edition %d"
+#, fuzzy
+msgid "Edition"
 msgstr "Édition %d"
 
-#: src/mmg/tabs/chapters.cpp:866
-#: src/mmg/tabs/chapters.cpp:913
+#: src/mmg/tabs/chapters.cpp:878
+#: src/mmg/tabs/chapters.cpp:925
 #, c-format, boost-format
 msgid "EditionEntry %u"
 msgstr "Entrée d'édition %u"
@@ -3508,7 +3516,7 @@ msgstr "Erreur à la ligne %1% : un numéro de sous-titre était attendu et un a
 msgid "Error loading settings"
 msgstr "Erreur au chargement des paramètres"
 
-#: src/mmg/tabs/chapters.cpp:730
+#: src/mmg/tabs/chapters.cpp:742
 msgid "Error opening file"
 msgstr "Erreur à l'ouverture du fichier"
 
@@ -3521,7 +3529,7 @@ msgstr "Erreur à l'analyse d'un paquet MPEG PS pendant la phase de lecture des 
 msgid "Error parsing the chapters in '%1%': some mandatory elements are missing.\n"
 msgstr "Erreur à l'analyse des chapitres dans '%1%' : des éléments obligatoires manquent.\n"
 
-#: src/mmg/tabs/chapters.cpp:614
+#: src/mmg/tabs/chapters.cpp:626
 msgid "Error parsing the file"
 msgstr "Erreur à l'analyse du fichier"
 
@@ -3537,9 +3545,9 @@ msgstr "Erreur à l'enregistrement des informations"
 
 #: src/mmg/header_editor/frame.cpp:663
 #: src/mmg/header_editor/frame.cpp:669
-#: src/mmg/tabs/chapters.cpp:1682
-#: src/mmg/tabs/chapters.cpp:1694
-#: src/mmg/tabs/chapters.cpp:1700
+#: src/mmg/tabs/chapters.cpp:1808
+#: src/mmg/tabs/chapters.cpp:1820
+#: src/mmg/tabs/chapters.cpp:1826
 msgid "Error writing Matroska file"
 msgstr "Erreur à l'écriture du fichier Matroska"
 
@@ -3772,7 +3780,7 @@ msgid "File name: %1%"
 msgstr "Nom du fichier : %1%"
 
 #: src/mmg/header_editor/frame.cpp:258
-#: src/mmg/tabs/chapters.cpp:583
+#: src/mmg/tabs/chapters.cpp:595
 msgid "File parsing failed"
 msgstr "Échec d'analyse du fichier"
 
@@ -3781,7 +3789,7 @@ msgid "File removal not possible"
 msgstr "Suppression du fichier impossible"
 
 #: src/mmg/header_editor/frame.cpp:675
-#: src/mmg/tabs/chapters.cpp:1707
+#: src/mmg/tabs/chapters.cpp:1833
 msgid "File structure warning"
 msgstr "WAvertissement sur la structure du fichier"
 
@@ -4160,12 +4168,12 @@ msgstr "Augmenter la verbosité."
 msgid "Input"
 msgstr "Sources"
 
-#: src/mmg/tabs/chapters.cpp:1247
-#: src/mmg/tabs/chapters.cpp:1300
-#: src/mmg/tabs/chapters.cpp:1306
-#: src/mmg/tabs/chapters.cpp:1318
-#: src/mmg/tabs/chapters.cpp:1337
-#: src/mmg/tabs/chapters.cpp:1345
+#: src/mmg/tabs/chapters.cpp:1258
+#: src/mmg/tabs/chapters.cpp:1311
+#: src/mmg/tabs/chapters.cpp:1317
+#: src/mmg/tabs/chapters.cpp:1329
+#: src/mmg/tabs/chapters.cpp:1348
+#: src/mmg/tabs/chapters.cpp:1356
 msgid "Input data error"
 msgstr "Erreur dans les données sources"
 
@@ -4193,7 +4201,7 @@ msgid "Internal bug: tracks.cpp SSA #1. %1%"
 msgstr "Bogue interne : tracks.cpp SSA #1. %1%"
 
 #: src/mmg/header_editor/frame.cpp:679
-#: src/mmg/tabs/chapters.cpp:1711
+#: src/mmg/tabs/chapters.cpp:1837
 msgid "Internal program error"
 msgstr "Erreur programme interne"
 
@@ -4216,15 +4224,15 @@ msgstr "Caractère Base64 incorrect rencontré"
 msgid "Invalid BlockAddition level in argument '%1%'.\n"
 msgstr "Niveau pour BlockAddition incorrect dans l'argument '%1%'.\n"
 
-#: src/mmg/tabs/chapters.cpp:1300
+#: src/mmg/tabs/chapters.cpp:1311
 msgid "Invalid UID. A UID is simply a number."
 msgstr "UID incorrect. Un UID est simplement un nombre."
 
-#: src/mmg/tabs/chapters.cpp:1306
+#: src/mmg/tabs/chapters.cpp:1317
 msgid "Invalid UID. This chapter UID is already in use. The original UID has not been changed."
 msgstr "UID incorrect. Cet UID de chapitre est déjà utilisé. L'UID d'origine n'a pas été changé."
 
-#: src/mmg/tabs/chapters.cpp:1318
+#: src/mmg/tabs/chapters.cpp:1329
 msgid "Invalid UID. This edition UID is already in use. The original UID has not been changed."
 msgstr "UID incorrect. Cet UID d'édition est déjà utilisé. L'UID d'origine n'a pas été changé."
 
@@ -4346,24 +4354,24 @@ msgstr "Format incorrect pour une ligne SSA ('%1%') au code temporel %2% : le pr
 msgid "Invalid format for a SSA line ('%1%') at timecode %2%: Too many fields found (%3% instead of 9). This entry will be skipped.\n"
 msgstr "Format incorrect pour une ligne SSA ('%1%') au code temporel %2% : trop de champs trouvés (%3% au lieu de 9). Cette entrée sera ignorée.\n"
 
-#: src/mmg/tabs/chapters.cpp:1247
+#: src/mmg/tabs/chapters.cpp:1258
 msgid "Invalid format used for the adjustment."
 msgstr "Format incorrect utilisé pour l'ajustement."
 
-#: src/mmg/tabs/chapters.cpp:1345
+#: src/mmg/tabs/chapters.cpp:1356
 #, c-format, boost-format
 msgid "Invalid format used for the end time for '%s'. Setting value to 0."
 msgstr "Format incorrect pour le temps final de '%s'. Réglage de la valeur à 0."
 
-#: src/mmg/tabs/chapters.cpp:1378
+#: src/mmg/tabs/chapters.cpp:1389
 msgid "Invalid format used for the segment UID. Not using the value."
 msgstr "Format incorrect pour l'UID de segment. Valeur non utilisée."
 
-#: src/mmg/tabs/chapters.cpp:1396
+#: src/mmg/tabs/chapters.cpp:1407
 msgid "Invalid format used for the segment edition UID. Not using the value."
 msgstr "Format incorrect pour l'UID d'édition de segment. Valeur non utilisée."
 
-#: src/mmg/tabs/chapters.cpp:1337
+#: src/mmg/tabs/chapters.cpp:1348
 #, c-format, boost-format
 msgid "Invalid format used for the start time for '%s'. Setting value to 0."
 msgstr "Format incorrect pour le temps initial de '%s'. Réglage de la valeur à 0."
@@ -4416,7 +4424,7 @@ msgid "Invalid header length: %1% (total length: %2%, idx: %3%, dataidx: %4%)\n"
 msgstr "Longueur d'en-tête incorrecte : %1% (longueur totale : %2%, index : %3%, index de données : %4%).\n"
 
 #: src/mmg/options/chapters.cpp:109
-#: src/mmg/tabs/chapters.cpp:1194
+#: src/mmg/tabs/chapters.cpp:1205
 msgid "Invalid language selected"
 msgstr "Langue sélectionnée incorrecte."
 
@@ -4442,6 +4450,12 @@ msgstr "Nombre de minutes incorrect : %1% > 59."
 #, boost-format
 msgid "Invalid number of seconds: %1% > 59"
 msgstr "Nombre de secondes incorrect : %1% > 59."
+
+#: src/mmg/tabs/chapters.cpp:1636
+#: src/mmg/tabs/chapters.cpp:1643
+#, fuzzy
+msgid "Invalid operation"
+msgstr "Code temporel de démarrage incorrect."
 
 #: src/common/chapters/chapters.cpp:195
 #, boost-format
@@ -4850,7 +4864,7 @@ msgstr "Fichiers Matroska audio/vidéo"
 msgid "Matroska files (*.mkv *.mka *.mks *.mk3d);;All files (*.*)"
 msgstr "Fichiers Matroska (*.mkv *.mka *.mks *.mk3d);;Tous les fichiers (*.*)"
 
-#: src/mmg/tabs/chapters.cpp:664
+#: src/mmg/tabs/chapters.cpp:676
 #, c-format, boost-format
 msgid "Matroska files (*.mkv;*.mka;*.mk3d)|*.mkv;*.mka;*.mk3d|%s"
 msgstr "Fichiers Matroska (*.mkv;*.mka;*.mks;*.mk3d)|*.mkv;*.mka;*.mks;*.mk3d|%s"
@@ -5128,7 +5142,7 @@ msgstr "Aucun plan de concaténation n'a été donné pour le fichier n°%1% ('%
 msgid "No attachment matched the spec '%1%'.\n"
 msgstr "Aucune pièce jointe ne correspond à '%1%'.\n"
 
-#: src/mmg/tabs/chapters.cpp:803
+#: src/mmg/tabs/chapters.cpp:815
 msgid "No chapter entries have been create yet."
 msgstr "Aucune entrée de chapitre n'a encore été créée."
 
@@ -5137,7 +5151,7 @@ msgstr "Aucune entrée de chapitre n'a encore été créée."
 msgid "No chapter numbers listed after '--split %1%'.\n"
 msgstr "Aucun numéro de chapitre listé après '--split %1%'.\n"
 
-#: src/mmg/tabs/chapters.cpp:590
+#: src/mmg/tabs/chapters.cpp:602
 msgid "No chapters found"
 msgstr "Aucun chapitre trouvé"
 
@@ -5304,7 +5318,7 @@ msgstr "Fichiers audio/vidéo Ogg/OGM"
 msgid "Ok"
 msgstr "OK"
 
-#: src/mmg/tabs/chapters.cpp:767
+#: src/mmg/tabs/chapters.cpp:779
 msgid "One of the chapters does not have a name."
 msgstr "Un des chapitres n'a pas de nom."
 
@@ -6749,7 +6763,7 @@ msgstr "Le fichier MP4 '%1%' contient des chapitres dont le format n'est pas rec
 msgid "The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file."
 msgstr "Le fichier Matroska a été modifié mais l'entrée du méta-index de recherche ne peut pas être actualisée, ce qui signifie que les lecteurs auront du mal à localiser cet élément. Testez ce fichier dans votre lecteur préféré."
 
-#: src/mmg/tabs/chapters.cpp:1704
+#: src/mmg/tabs/chapters.cpp:1830
 msgid ""
 "The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file.\n"
 "\n"
@@ -6863,12 +6877,12 @@ msgstr "La pièce jointe '%1%' ne peut pas être lue.\n"
 msgid "The changes are written to the file.\n"
 msgstr "Les changements ont été écrits dans le fichier.\n"
 
-#: src/mmg/tabs/chapters.cpp:780
+#: src/mmg/tabs/chapters.cpp:792
 #, c-format, boost-format
 msgid "The chapter '%s' is missing its language."
 msgstr "Il manque la langue dans le chapitre '%s'."
 
-#: src/mmg/tabs/chapters.cpp:774
+#: src/mmg/tabs/chapters.cpp:786
 #, c-format, boost-format
 msgid "The chapter '%s' is missing the start time."
 msgstr "Il manque le temps initial dans le chapitre '%s'."
@@ -6994,7 +7008,7 @@ msgid "The edition UID to play from the segment linked in the chapter's segment 
 msgstr "L'UID d'édition pour lire depuis le segment lié dans l'UID de segment du chapitre. C'est simplement un nombre."
 
 #: src/mmg/header_editor/frame.cpp:661
-#: src/mmg/tabs/chapters.cpp:1692
+#: src/mmg/tabs/chapters.cpp:1818
 #: src/propedit/propedit.cpp:32
 msgid "The element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
 msgstr "L'élément a été écrit à la fin du fichier mais la taille du segment ne peut pas être actualisée. L'élément ne sera donc pas visible. Le processus va s'interrompre. Le fichier a été modifié !"
@@ -7164,11 +7178,11 @@ msgstr "Le fichier ou dossier est introuvable"
 msgid "The file you tried to open is not a Matroska file."
 msgstr "Le fichier que vous essayez d'ouvrir n'est pas un fichier Matroska."
 
-#: src/mmg/tabs/chapters.cpp:669
+#: src/mmg/tabs/chapters.cpp:681
 msgid "The file you tried to save to is NOT a Matroska file."
 msgstr "Le fichier que vous essayez d'enregistrer n'est PAS un fichier Matroska."
 
-#: src/mmg/tabs/chapters.cpp:706
+#: src/mmg/tabs/chapters.cpp:718
 msgid "The file you tried to save to is a Matroska file. For this to work you have to use the 'Save to Matroska file' menu option."
 msgstr "Le fichier dans lequel vous essayez d'enregistrer est un fichier Matroska. Pour que cela fonctionne, vous devez utiliser l'option de menu 'Enregistrer dans un fichier Matroska'."
 
@@ -7286,7 +7300,7 @@ msgstr ""
 "(problème survenu dans tab_input::load(), #3)"
 
 #: src/mmg/options/chapters.cpp:108
-#: src/mmg/tabs/chapters.cpp:1194
+#: src/mmg/tabs/chapters.cpp:1205
 #, c-format, boost-format
 msgid "The language '%s' is not a valid language and cannot be selected."
 msgstr "'%s' n'est pas une langue valable et ne peut pas être sélectionné."
@@ -7328,7 +7342,7 @@ msgstr ""
 "de référence n'est pas utilisé."
 
 #: src/mmg/header_editor/frame.cpp:667
-#: src/mmg/tabs/chapters.cpp:1698
+#: src/mmg/tabs/chapters.cpp:1824
 #: src/propedit/propedit.cpp:36
 msgid "The meta seek element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
 msgstr "Le méta-index de recherche a été écrit à la fin du fichier mais la taille du segment ne peut pas être actualisée. L'élément ne sera donc pas visible. Le processus va s'interrompre. Le fichier a été modifié !"
@@ -7509,7 +7523,7 @@ msgstr "Le deuxième mode extrait les étiquettes et les convertit en XML. Le ra
 msgid "The seek table in this TTA file seems to be broken.\n"
 msgstr "La liste des index de recherche de ce fichier TTA semble être endommagée.\n"
 
-#: src/mmg/tabs/chapters.cpp:786
+#: src/mmg/tabs/chapters.cpp:798
 #, c-format, boost-format
 msgid "The selected language '%s' for the chapter '%s' is not a valid language code. Please select one of the predefined ones."
 msgstr "La langue '%s' choisie pour le chapitre '%s' n'a pas un code correct. Sélectionnez un des codes prédéfinis."
@@ -7812,7 +7826,7 @@ msgid "This file contains coordinates in the timecode lines. Such coordinates ar
 msgstr "Ce fichier contient des lignes de codes temporels avec des coordonnées non supportées par le format de sous-titres Matroska SRT. Ces coordonnées seront supprimées automatiquement.\n"
 
 #: src/mmg/header_editor/frame.cpp:258
-#: src/mmg/tabs/chapters.cpp:583
+#: src/mmg/tabs/chapters.cpp:595
 msgid "This file could not be opened or parsed."
 msgstr "Ce fichier ne peut pas être ouvert ou analysé."
 
@@ -7820,11 +7834,11 @@ msgstr "Ce fichier ne peut pas être ouvert ou analysé."
 msgid "This file could not be opened or parsed.\n"
 msgstr "Ce fichier ne peut pas être ouvert ou analysé.\n"
 
-#: src/mmg/tabs/chapters.cpp:590
+#: src/mmg/tabs/chapters.cpp:602
 msgid "This file does not contain any chapters."
 msgstr "Ce fichier ne contient aucun chapitre."
 
-#: src/mmg/tabs/chapters.cpp:610
+#: src/mmg/tabs/chapters.cpp:622
 msgid "This file does not contain valid chapters."
 msgstr "Ce fichier ne contient aucun chapitre valide."
 
@@ -8505,7 +8519,7 @@ msgstr "Écriture des informations"
 msgid "Writing the VobSub index file '%1%'.\n"
 msgstr "Écriture du fichier d'index VobSub '%1%'.\n"
 
-#: src/mmg/tabs/chapters.cpp:1681
+#: src/mmg/tabs/chapters.cpp:1807
 msgid "Writing to the file failed. Typical reasons include the file being write-protected, locked by another process or you not having write permissions for the target directory."
 msgstr "L'écriture du fichier a échoué. Les raisons typiques sont : fichier en lecture seule, fichier verrouillé par un autre processus ou pas d'autorisation d'écriture dans le dossier de destination."
 
@@ -8528,8 +8542,8 @@ msgid "Wrong file chosen"
 msgstr "Mauvais fichier choisi"
 
 #: src/mmg/header_editor/frame.cpp:248
-#: src/mmg/tabs/chapters.cpp:669
-#: src/mmg/tabs/chapters.cpp:707
+#: src/mmg/tabs/chapters.cpp:681
+#: src/mmg/tabs/chapters.cpp:719
 msgid "Wrong file selected"
 msgstr "Mauvais fichier sélectionné"
 
@@ -8553,7 +8567,7 @@ msgstr "Mauvaise chaîne d'identification : '%|1$7s|' != 'kate\\0\\0\\0'"
 msgid "You are already running the latest version."
 msgstr "Vous utilisez déjà la dernière version."
 
-#: src/mmg/tabs/chapters.cpp:1215
+#: src/mmg/tabs/chapters.cpp:1226
 msgid ""
 "You can use this function for adjusting the timecodes\n"
 "of the selected chapter and all its children by a fixed amount.\n"
@@ -9473,7 +9487,7 @@ msgstr "spu_extraction_duration : paquet SPU endommagé (next_off < start_off) r
 msgid "ssa_reader: Invalid format. Could not find the \"Format\" line in the \"[Events]\" section."
 msgstr "ssa_reader : format incorrect, ligne \"Format\" introuvable dans le section \"[Events]\"."
 
-#: src/mmg/tabs/chapters.cpp:887
+#: src/mmg/tabs/chapters.cpp:899
 msgid "start >= m->ListSize(). This should not have happened. Please file a bug report. Thanks."
 msgstr "start >= m->ListSize(). Cela n'aurait pas dû se produire. Rédigez un rapport de bogue. Merci."
 
@@ -9549,7 +9563,7 @@ msgstr "Monter"
 msgid "utf8_strlen(): Invalid UTF-8 char. First byte: 0x%|1$02x|"
 msgstr "utf8_strlen() : caractère UTF-8 incorrect. Premier octet : 0x%|1$02x|"
 
-#: src/mmg/tabs/chapters.cpp:839
+#: src/mmg/tabs/chapters.cpp:851
 msgid "verify failed: chapters->CheckMandatory() is false. This should not have happened. Please file a bug report.\n"
 msgstr "échec de vérification : chapters->CheckMandatory() est faux. Cela n'aurait pas dû se produire. Rédigez un rapport de bogue.\n"
 
@@ -9706,9 +9720,6 @@ msgstr "oui"
 
 #~ msgid "Invalid hexadecimal data encountered: '%1%' is neither white space nor a hexadecimal number."
 #~ msgstr "Données hexadécimales incorrectes rencontrées : '%1%' n'est ni un espace ni un nombre hexadécimal."
-
-#~ msgid "Invalid start timecode"
-#~ msgstr "Code temporel de démarrage incorrect."
 
 #~ msgid "LZO compression failed. Result: %1%\n"
 #~ msgstr "La compression LZO a échoué. Résultat : %1%\n"
