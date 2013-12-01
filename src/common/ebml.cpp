@@ -494,6 +494,31 @@ find_ebml_element_by_id(EbmlMaster *master,
   return nullptr;
 }
 
+std::pair<EbmlMaster *, size_t>
+find_element_in_master(EbmlMaster *master,
+                       EbmlElement *element_to_find) {
+  if (!master || !element_to_find)
+    return std::make_pair<EbmlMaster *, size_t>(nullptr, 0);
+
+  auto &elements = master->GetElementList();
+  auto itr       = brng::find(elements, element_to_find);
+
+  if (itr != elements.end())
+    return std::make_pair(master, std::distance(elements.begin(), itr));
+
+  for (auto &sub_element : elements) {
+    auto sub_master = dynamic_cast<EbmlMaster *>(sub_element);
+    if (!sub_master)
+      continue;
+
+    auto result = find_element_in_master(sub_master, element_to_find);
+    if (result.first)
+      return result;
+  }
+
+  return std::make_pair<EbmlMaster *, size_t>(nullptr, 0);
+}
+
 void
 fix_mandatory_elements(EbmlElement *master) {
   if (dynamic_cast<KaxInfo *>(master))

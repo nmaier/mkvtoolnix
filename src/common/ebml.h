@@ -322,6 +322,7 @@ const EbmlCallbacks *find_ebml_parent_callbacks(const EbmlCallbacks &base, const
 const EbmlSemantic *find_ebml_semantic(const EbmlCallbacks &base, const EbmlId &id);
 
 EbmlElement *find_ebml_element_by_id(EbmlMaster *master, const EbmlId &id);
+std::pair<EbmlMaster *, size_t> find_element_in_master(EbmlMaster *master, EbmlElement *element_to_find);
 
 void fix_mandatory_elements(EbmlElement *master);
 
