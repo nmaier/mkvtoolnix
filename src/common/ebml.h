@@ -298,6 +298,18 @@ GetChildValue(EbmlMaster *master) {
   return GetChild<Telement>(master).GetValue();
 }
 
+template<typename T>
+bool
+Is(EbmlElement *e) {
+  return !e ? false : (EbmlId(*e) == T::ClassInfos.GlobalId);
+}
+
+template<typename T1, typename T2, typename... Trest>
+bool
+Is(EbmlElement *e) {
+  return !e ? false : Is<T1>(e) || Is<T2, Trest...>(e);
+}
+
 EbmlElement *empty_ebml_master(EbmlElement *e);
 EbmlElement *create_ebml_element(const EbmlCallbacks &callbacks, const EbmlId &id);
 EbmlMaster *sort_ebml_master(EbmlMaster *e);
