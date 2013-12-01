@@ -1,8 +1,8 @@
-!define LANG "Polish"
-!insertmacro LANG_STRING STRING_SHORTCUT_ON_DESKTOP "Should a shortcut be placed on the desktop?"
-!insertmacro LANG_STRING STRING_UNINSTALLED_OK "$(^Name) was successfully uninstalled."
-!insertmacro LANG_STRING STRING_REMOVE_PROGRAM_QUESTION "Do you really want to remove $(^Name) and all of its components?"
-!insertmacro LANG_STRING STRING_REMOVE_JOB_FILES_QUESTION "Should job files created by the GUI be deleted as well?"
+﻿!define LANG "Polish"
+!insertmacro LANG_STRING STRING_SHORTCUT_ON_DESKTOP "Czy utworzyć skrót na pulpicie?"
+!insertmacro LANG_STRING STRING_UNINSTALLED_OK "$(^Name) został pomyślnie odinstalowany."
+!insertmacro LANG_STRING STRING_REMOVE_PROGRAM_QUESTION "Czy na pewno chcesz usunąć $(^Name) oraz wszystkie jego składniki?"
+!insertmacro LANG_STRING STRING_REMOVE_JOB_FILES_QUESTION "Czy pliki zadań utworzone przez program również powinny zostać usunięte?"
 
 # Local Variables:
 # mode: nsi
