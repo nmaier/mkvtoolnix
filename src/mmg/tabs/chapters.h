@@ -81,7 +81,7 @@ class tab_chapters: public wxPanel {
   DECLARE_EVENT_TABLE();
 public:
   wxTreeCtrl *tc_chapters;
-  wxTreeItemId tid_root;
+  wxTreeItemId tid_root, m_dragged_item;
   wxButton *b_add_chapter, *b_add_subchapter, *b_remove_chapter;
   wxButton *b_set_values, *b_adjust_timecodes;
   wxMenu *m_chapters_menu;
@@ -136,12 +136,15 @@ public:
   void set_display_values(KaxChapterDisplay *display);
   void set_timecode_values(KaxChapterAtom *atom);
   void adjust_timecodes_recursively(wxTreeItemId id, int64_t adjust_by);
+  void on_drag_begin(wxTreeEvent &evt);
+  void on_drag_end(wxTreeEvent &evt);
 
   bool copy_values(wxTreeItemId id);
   int64_t parse_time(wxString s);
   bool verify_atom_recursively(EbmlElement *e);
   bool verify(bool called_interactively = false);
   void add_recursively(wxTreeItemId &parent, EbmlMaster &master);
+  wxTreeItemId add_element_recursively(wxTreeItemId &parent, EbmlElement &element, size_t insert_before);
   wxString create_chapter_label(KaxChapterAtom &chapter);
   void fix_missing_languages(EbmlMaster &master);
   void enable_inputs(bool enable, bool is_edition = false);

@@ -518,23 +518,35 @@ tab_chapters::create_chapter_label(KaxChapterAtom &chapter) {
   return label + wxU(language) + wxT("]");
 }
 
+wxTreeItemId
+tab_chapters::add_element_recursively(wxTreeItemId &parent,
+                                      EbmlElement &element,
+                                      size_t insert_before) {
+  if (EbmlId(element) == KaxEditionEntry::ClassInfos.GlobalId) {
+    auto eentry = dynamic_cast<KaxEditionEntry *>(&element);
+    auto label  = Z("Edition");
+    auto item   = tc_chapters->InsertItem(parent, std::min(insert_before, tc_chapters->GetChildrenCount(parent, false)), label, -1, -1, new chapter_node_data_c(eentry));
+    add_recursively(item, *eentry);
+
+    return item;
+
+  } else if (EbmlId(element) == KaxChapterAtom::ClassInfos.GlobalId) {
+    auto chapter = dynamic_cast<KaxChapterAtom *>(&element);
+    auto label   = create_chapter_label(*chapter);
+    auto item    = tc_chapters->InsertItem(parent, std::min(insert_before, tc_chapters->GetChildrenCount(parent, false)), label, -1, -1, new chapter_node_data_c(chapter));
+    add_recursively(item, *chapter);
+
+    return item;
+  }
+
+  return wxTreeItemId{};
+}
+
 void
 tab_chapters::add_recursively(wxTreeItemId &parent,
                               EbmlMaster &master) {
-  for (auto child : master) {
-    if (EbmlId(*child) == KaxEditionEntry::ClassInfos.GlobalId) {
-      auto eentry = static_cast<KaxEditionEntry *>(child);
-      auto label  = wxString::Format(Z("Edition %d"), (int)tc_chapters->GetChildrenCount(tid_root, false) + 1);
-      auto item   = tc_chapters->AppendItem(parent, label, -1, -1, new chapter_node_data_c(eentry));
-      add_recursively(item, *static_cast<EbmlMaster *>(child));
-
-    } else if (EbmlId(*child) == KaxChapterAtom::ClassInfos.GlobalId) {
-      auto chapter = static_cast<KaxChapterAtom *>(child);
-      auto label   = create_chapter_label(*chapter);
-      auto item    = tc_chapters->AppendItem(parent, label, -1, -1, new chapter_node_data_c(chapter));
-      add_recursively(item, *static_cast<EbmlMaster *>(child));
-    }
-  }
+  for (auto child : master)
+    add_element_recursively(parent, *child, std::numeric_limits<size_t>::max());
 }
 
 void
@@ -965,7 +977,6 @@ tab_chapters::on_remove_chapter(wxCommandEvent &) {
 
   delete element_to_delete;
   elements.erase(itr);
-  tc_chapters->DeleteChildren(id);
   tc_chapters->Delete(id);
 }
 
@@ -1591,6 +1602,121 @@ tab_chapters::on_flag_ordered(wxCommandEvent &) {
 }
 
 void
+tab_chapters::on_drag_begin(wxTreeEvent &evt) {
+  // Don't allow dragging of the root node.
+  if (evt.GetItem() == tid_root)
+    return;
+
+  // Store currently dragged node for use in on_drag_end().
+  m_dragged_item = evt.GetItem();
+  copy_values(m_dragged_item);
+  evt.Allow();
+}
+
+void
+tab_chapters::on_drag_end(wxTreeEvent &evt) {
+  auto src       = m_dragged_item;
+  auto dst       = evt.GetItem();
+  m_dragged_item = wxTreeItemId{};
+
+  if (!src.IsOk() || !dst.IsOk() || (src == dst))
+    return;
+
+  // Verify drag&drop operation.
+  auto src_node = static_cast<chapter_node_data_c *>(tc_chapters->GetItemData(src));
+  auto dst_node = static_cast<chapter_node_data_c *>(tc_chapters->GetItemData(dst));
+  if (!src_node)
+    return;
+
+  if (!src_node->is_atom) {
+    // Editions may only be dropped onto the root node or other
+    // editions.
+    if (   (dst != tid_root)
+        && (!dst_node || dst_node->is_atom)) {
+      wxMessageBox(Z("Chapter editions may only be dropped onto the root node or other editions."), Z("Invalid operation"), wxOK | wxCENTER | wxICON_ERROR);
+      return;
+    }
+
+  } else if (dst == tid_root) {
+    // Atoms may be dropped onto other atoms and onto editions, just not
+    // onto the root node.
+    wxMessageBox(Z("Chapter atoms may only be dropped onto other atoms and chapter editions."), Z("Invalid operation"), wxOK | wxCENTER | wxICON_ERROR);
+    return;
+  }
+
+  auto src_master = src_node->get();
+  auto src_parent = find_element_in_master(m_chapters, src_master);
+  if (!src_parent.first)
+    return;
+
+  auto dst_master = dst_node ? dst_node->get() : static_cast<EbmlMaster *>(nullptr);
+  auto dst_parent = find_element_in_master(m_chapters, dst_master);
+
+  // dump_ebml_elements(m_chapters, true);
+  // mxinfo(boost::format("found src parent %1% position in parent %2%\n") % src_parent.first % src_parent.second);
+  // mxinfo(boost::format("found dst parent %1% position in parent %2%\n") % dst_parent.first % dst_parent.second);
+
+  // Operation is valid. First calculate where to re-insert into
+  // KaxChapters.
+  size_t insert_before_in_master, insert_before_in_tree;
+  EbmlMaster *new_parent_master;
+  wxTreeItemId new_parent_id;
+
+  if (   (!src_node->is_atom && (dst == tid_root))
+      || ( src_node->is_atom && dst_node && !dst_node->is_atom)) {
+    // This is either an edition being dropped onto the root node or
+    // an atom dropped onto an edition. In that case insert the item
+    // as the new first child of the element it was dropped on.
+
+    new_parent_id           = dst;
+    new_parent_master       = !src_node->is_atom ? static_cast<EbmlMaster *>(m_chapters) : dst_master;
+    insert_before_in_master = std::distance(new_parent_master->GetElementList().begin(), brng::find_if(new_parent_master->GetElementList(), Is<KaxEditionEntry, KaxChapterAtom>));
+    insert_before_in_tree   = 0;
+
+  } else {
+    // This case is an edition being dropped onto an edition or a
+    // chapter atom dropped onto a chapter atom. In this case insert
+    // the dragged item after the item it was dropped on. Pay special
+    // attention to the case of the old and new parent being the same
+    // and the item being moved down as it has already been removed
+    // from the structures; therefore offsets have to take that into
+    // account.
+
+    wxASSERT(!!dst_parent.first);
+
+    new_parent_id           = tc_chapters->GetItemParent(dst);
+    new_parent_master       = dst_parent.first;
+    insert_before_in_master = dst_parent.second + 1;
+    insert_before_in_tree   = 0;
+
+    for (auto idx = 0u; idx < insert_before_in_master; ++idx)
+      if (Is<KaxEditionEntry, KaxChapterAtom>((*new_parent_master)[idx]))
+        ++insert_before_in_tree;
+
+    if ((src_parent.first == dst_parent.first) && (src_parent.second < dst_parent.second)) {
+      --insert_before_in_master;
+      --insert_before_in_tree;
+    }
+  }
+
+  // Now perform the actual modifications. Remove the entries from the
+  // tree control and KaxChapters.
+  tc_chapters->Delete(src);
+  src_parent.first->Remove(src_parent.second);
+
+  // Re-insert the element into KaxChapters and into the tree. Finally
+  // select the item in the tree.
+  new_parent_master->InsertElement(*src_master, insert_before_in_master);
+
+  // mxinfo(boost::format("new parent: %1%; inserted before in master: %2% in tree: %3%; DUMP after re-insertion:\n") % new_parent_master % insert_before_in_master % insert_before_in_tree);
+  // dump_ebml_elements(m_chapters, true);
+
+  auto id_after_recreation = add_element_recursively(new_parent_id, *src_master, insert_before_in_tree);
+  expand_subtree(*tc_chapters, id_after_recreation);
+  tc_chapters->SelectItem(id_after_recreation);
+}
+
+void
 tab_chapters::set_timecode_values(KaxChapterAtom *atom) {
   no_update = true;
 
@@ -1728,6 +1854,8 @@ BEGIN_EVENT_TABLE(tab_chapters, wxPanel)
   EVT_BUTTON(ID_B_ADD_CHAPTERNAME,              tab_chapters::on_add_chapter_name)
   EVT_BUTTON(ID_B_REMOVE_CHAPTERNAME,           tab_chapters::on_remove_chapter_name)
   EVT_TREE_SEL_CHANGED(ID_TRC_CHAPTERS,         tab_chapters::on_entry_selected)
+  EVT_TREE_BEGIN_DRAG(ID_TRC_CHAPTERS,          tab_chapters::on_drag_begin)
+  EVT_TREE_END_DRAG(ID_TRC_CHAPTERS,            tab_chapters::on_drag_end)
   EVT_COMBOBOX(ID_CB_CHAPTERSELECTLANGUAGECODE, tab_chapters::on_language_code_selected)
   EVT_COMBOBOX(ID_CB_CHAPTERSELECTCOUNTRYCODE,  tab_chapters::on_country_code_selected)
   EVT_LISTBOX(ID_LB_CHAPTERNAMES,               tab_chapters::on_chapter_name_selected)
