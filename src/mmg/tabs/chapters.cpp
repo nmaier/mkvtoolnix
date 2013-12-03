@@ -617,9 +617,9 @@ tab_chapters::load(wxString name) {
       new_chapters       = ebml_element_cptr(parse_chapters(wxMB(name), 0, -1, 0, "", "", true, &source_is_simple_format));
       source_is_kax_file = false;
     }
-  } catch (mtx::exception &) {
+  } catch (mtx::exception &ex) {
     analyzer.reset();
-    wxString s = Z("This file does not contain valid chapters.");
+    auto s = wxU(boost::format(Y("This file does not contain valid chapters. Error message from the parser: %1%")) % ex);
     break_line(s);
     while (s[s.Length() - 1] == wxT('\n'))
       s.Remove(s.Length() - 1);
