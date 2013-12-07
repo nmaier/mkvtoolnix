@@ -1609,7 +1609,9 @@ tab_chapters::on_drag_begin(wxTreeEvent &evt) {
 
   // Store currently dragged node for use in on_drag_end().
   m_dragged_item = evt.GetItem();
-  copy_values(m_dragged_item);
+  auto selected = tc_chapters->GetSelection();
+  if (selected.IsOk())
+    copy_values(selected);
   evt.Allow();
 }
 
