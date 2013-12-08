@@ -16,6 +16,7 @@
 
 #include "common/common_pch.h"
 
+#include <sstream>
 #include <unordered_map>
 
 class debugging_c {
