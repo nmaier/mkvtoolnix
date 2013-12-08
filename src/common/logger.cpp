@@ -49,7 +49,9 @@ logger_c::log(std::string const &message) {
     char timestamp[30];
     std::strftime(timestamp, 30, "%Y-%m-%d %H:%M:%S", std::localtime(&tnow));
 
-    out.puts((boost::format("%1% +%2%ms %3%\n") % timestamp % std::chrono::duration_cast<std::chrono::milliseconds>(diff).count() % message).str());
+    out.puts((boost::format("%1% +%2%ms %3%") % timestamp % std::chrono::duration_cast<std::chrono::milliseconds>(diff).count() % message).str());
+    if (message.size() && (message[message.size() - 1] != '\n'))
+      out.puts("\n");
   } catch (mtx::mm_io::exception &ex) {
   }
 }
