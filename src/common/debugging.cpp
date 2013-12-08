@@ -42,7 +42,8 @@ debugging_requested(const std::string &option,
 }
 
 void
-request_debugging(const std::string &options) {
+request_debugging(const std::string &options,
+                  bool enable) {
   std::vector<std::string> all_options = split(options);
 
   for (auto &one_option : all_options) {
@@ -51,6 +52,8 @@ request_debugging(const std::string &options) {
       continue;
     if (parts[0] == "!")
       s_debugging_options.clear();
+    else if (!enable)
+      s_debugging_options.erase(parts[0]);
     else
       s_debugging_options[parts[0]] = 1 == parts.size() ? std::string("") : parts[1];
   }

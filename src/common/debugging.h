@@ -18,7 +18,7 @@
 
 bool debugging_requested(const char *option, std::string *arg = nullptr);
 bool debugging_requested(const std::string &option, std::string *arg = nullptr);
-void request_debugging(const std::string &options);
+void request_debugging(const std::string &options, bool enable = true);
 void init_debugging();
 
 int parse_debug_interval_arg(const std::string &option, int default_value = 1000, int invalid_value = -1);
