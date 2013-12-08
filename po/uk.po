@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: mkvtoolnix_uk\n"
 "Report-Msgid-Bugs-To: Moritz Bunkus <moritz@bunkus.org>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2013-10-26 16:13+0200\n"
+"PO-Revision-Date: 2013-12-07 15:36+0200\n"
 "Last-Translator: Andriy Bilous'ko <arestarh@ukr.net>\n"
 "Language-Team: Ukrainian <moritz@bunkus.org>\n"
 "Language: uk\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 1.5.7\n"
+"X-Generator: Poedit 1.6.1\n"
 
 #: src/extract/xtr_tta.cpp:107
 #, boost-format
@@ -2515,11 +2515,11 @@ msgstr "ID перекладу розділів: %1%"
 
 #: src/mmg/tabs/chapters.cpp:1658
 msgid "Chapter atoms may only be dropped onto other atoms and chapter editions."
-msgstr ""
+msgstr "Елементи розділів можуть бути переміщені лише на інші елементи і редакції розділів."
 
 #: src/mmg/tabs/chapters.cpp:1651
 msgid "Chapter editions may only be dropped onto the root node or other editions."
-msgstr ""
+msgstr "Редакції розділів можуть бути переміщені лише на кореневий вузол або інші редакції."
 
 #: src/mmg/mmg_dialog.cpp:631
 msgid "Chapter editor is not empty"
@@ -3434,9 +3434,8 @@ msgid "Edit selectors for properties"
 msgstr "Редагувати селектори для властивостей"
 
 #: src/mmg/tabs/chapters.cpp:530
-#, fuzzy
 msgid "Edition"
-msgstr "Редакція %d"
+msgstr "Редакція"
 
 #: src/mmg/tabs/chapters.cpp:881
 #: src/mmg/tabs/chapters.cpp:928
@@ -4456,9 +4455,8 @@ msgstr "Невірна кількість секунд: %1% > 59"
 
 #: src/mmg/tabs/chapters.cpp:1651
 #: src/mmg/tabs/chapters.cpp:1658
-#, fuzzy
 msgid "Invalid operation"
-msgstr "Невірний тайм-код початку"
+msgstr "Невірна операція"
 
 #: src/common/chapters/chapters.cpp:195
 #, boost-format
