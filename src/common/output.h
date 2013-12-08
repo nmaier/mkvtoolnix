@@ -136,39 +136,6 @@ mxverb_tid(unsigned int level,
 
 extern const std::string empty_string;
 
-class ebml_dumper_c {
-public:
-  enum target_type_e {
-    STDOUT,
-    MM_IO,
-    LOGGER,
-  };
-
-private:
-  bool m_values, m_addresses, m_indexes;
-  size_t m_max_level;
-  target_type_e m_target_type;
-  mm_io_c *m_io_target;
-  std::stringstream m_buffer;
-
-public:
-  ebml_dumper_c();
-
-  ebml_dumper_c &values(bool p_values);
-  ebml_dumper_c &addresses(bool p_addresses);
-  ebml_dumper_c &indexes(bool p_indexes);
-  ebml_dumper_c &max_level(int p_max_level);
-  ebml_dumper_c &target(target_type_e p_target_type, mm_io_c *p_io_target = nullptr);
-
-  ebml_dumper_c &dump(EbmlElement const *element);
-
-private:
-  void dump_impl(EbmlElement const *element, size_t level, size_t index);
-  std::string to_string(EbmlElement const *element) const;
-};
-
-void dump_ebml_elements(EbmlElement *element, bool with_values = false);
-
 std::string fourcc_to_string(uint32_t fourcc);
 
 #endif  // MTX_COMMON_OUTPUT_H

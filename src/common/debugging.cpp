@@ -15,8 +15,22 @@
 
 #include <sstream>
 
+#include <ebml/EbmlDate.h>
+#include <ebml/EbmlDummy.h>
+#include <ebml/EbmlFloat.h>
+#include <ebml/EbmlMaster.h>
+#include <ebml/EbmlSInteger.h>
+#include <ebml/EbmlString.h>
+#include <ebml/EbmlUInteger.h>
+#include <ebml/EbmlUnicodeString.h>
+#include <ebml/EbmlVoid.h>
+
+#include "common/debugging.h"
 #include "common/logger.h"
 #include "common/strings/editing.h"
+#include "common/strings/formatting.h"
+
+using namespace libebml;
 
 std::unordered_map<std::string, std::string> debugging_c::ms_debugging_options;
 bool debugging_c::ms_send_to_logger = false;
@@ -140,4 +154,123 @@ void
 debugging_option_c::invalidate_cache() {
   for (auto &opt : ms_registered_options)
     opt.m_requested = boost::logic::indeterminate;
+}
+
+// ------------------------------------------------------------
+
+ebml_dumper_c::ebml_dumper_c()
+  : m_values{true}
+  , m_addresses{true}
+  , m_indexes{true}
+  , m_max_level{std::numeric_limits<size_t>::max()}
+  , m_target_type{STDOUT}
+  , m_io_target{}
+{
+}
+
+std::string
+ebml_dumper_c::to_string(EbmlElement const *element)
+  const {
+  return dynamic_cast<EbmlUInteger      const *>(element) ? ::to_string(static_cast<EbmlUInteger      const *>(element)->GetValue())
+       : dynamic_cast<EbmlSInteger      const *>(element) ? ::to_string(static_cast<EbmlSInteger      const *>(element)->GetValue())
+       : dynamic_cast<EbmlFloat         const *>(element) ? ::to_string(static_cast<EbmlFloat         const *>(element)->GetValue(), 9)
+       : dynamic_cast<EbmlUnicodeString const *>(element) ?             static_cast<EbmlUnicodeString const *>(element)->GetValueUTF8()
+       : dynamic_cast<EbmlString        const *>(element) ?             static_cast<EbmlString        const *>(element)->GetValue()
+       : dynamic_cast<EbmlDate          const *>(element) ? ::to_string(static_cast<EbmlDate          const *>(element)->GetEpochDate())
+       : (boost::format("(type: %1% size: %2%)") %
+          (  dynamic_cast<EbmlBinary const *>(element)    ? "binary"
+           : dynamic_cast<EbmlMaster const *>(element)    ? "master"
+           : dynamic_cast<EbmlVoid   const *>(element)    ? "void"
+           :                                                "unknown")
+          % element->GetSize()).str();
+}
+
+
+ebml_dumper_c &
+ebml_dumper_c::values(bool p_values) {
+  m_values = p_values;
+  return *this;
+}
+
+ebml_dumper_c &
+ebml_dumper_c::addresses(bool p_addresses) {
+  m_addresses = p_addresses;
+  return *this;
+}
+
+ebml_dumper_c &
+ebml_dumper_c::indexes(bool p_indexes) {
+  m_indexes = p_indexes;
+  return *this;
+}
+
+ebml_dumper_c &
+ebml_dumper_c::max_level(int p_max_level) {
+  m_max_level = p_max_level;
+  return *this;
+}
+
+ebml_dumper_c &
+ebml_dumper_c::target(target_type_e p_target_type,
+                      mm_io_c *p_io_target) {
+  m_target_type = p_target_type;
+  m_io_target   = p_io_target;
+  return *this;
+}
+
+ebml_dumper_c &
+ebml_dumper_c::dump(EbmlElement const *element) {
+  dump_impl(element, 0, 0);
+
+  switch (m_target_type) {
+    case STDOUT: mxinfo(m_buffer.str()); break;
+    case LOGGER: log_it(m_buffer.str()); break;
+    case MM_IO:  assert(!!m_io_target); m_io_target->puts(m_buffer.str()); break;
+    default:     assert(false);
+  }
+
+  m_buffer.str("");
+
+  return *this;
+}
+
+void
+ebml_dumper_c::dump_impl(EbmlElement const *element,
+                         size_t level,
+                         size_t index) {
+  if (level > m_max_level)
+    return;
+
+  m_buffer << std::string(level, ' ');
+
+  if (m_indexes)
+    m_buffer << index << " ";
+
+  if (!element) {
+    m_buffer << "nullptr" << std::endl;
+    return;
+  }
+
+  m_buffer << EBML_NAME(element);
+
+  if (m_addresses)
+    m_buffer << (boost::format(" @%1%") % element);
+
+  if (m_values)
+    m_buffer << " " << to_string(element);
+
+  m_buffer << std::endl;
+
+  auto master = dynamic_cast<EbmlMaster const *>(element);
+  if (!master)
+    return;
+
+  for (auto idx = 0u; master->ListSize() > idx; ++idx)
+    dump_impl((*master)[idx], level + 1, idx);
+}
+
+void
+dump_ebml_elements(EbmlElement *element,
+                   bool with_values) {
+  ebml_dumper_c{}.values(with_values).dump(element);
 }
