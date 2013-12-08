@@ -26,7 +26,7 @@ msgstr ""
 "\n"
 "第 %1% 軌的暫存 TTA 檔正被複製到最終 TTA 檔中。這可能需要些時間。\n"
 
-#: src/merge/output_control.cpp:278
+#: src/merge/output_control.cpp:277
 msgid ""
 "\n"
 "mkvmerge received a SIGINT (probably because the user pressed Ctrl+C). Trying to sanitize the file. If mkvmerge hangs during this process you'll have to kill it manually.\n"
@@ -780,10 +780,10 @@ msgstr " 剪輯資訊處理:\n"
 msgid " at %1%"
 msgstr " 在 %1%"
 
-#: src/merge/output_control.cpp:286
-#: src/merge/output_control.cpp:295
-#: src/merge/output_control.cpp:303
-#: src/merge/output_control.cpp:310
+#: src/merge/output_control.cpp:285
+#: src/merge/output_control.cpp:294
+#: src/merge/output_control.cpp:302
+#: src/merge/output_control.cpp:309
 msgid " done\n"
 msgstr " 完成\n"
 
@@ -1360,18 +1360,18 @@ msgstr "「%1%」缺少軌道 ID。\n"
 msgid "'%1%' lacks the track number(s).\n"
 msgstr "「%1%」缺少軌道編號。\n"
 
-#: src/common/output.cpp:165
-#: src/common/output.cpp:178
-#: src/common/output.cpp:191
-#: src/common/output.cpp:212
+#: src/common/output.cpp:157
+#: src/common/output.cpp:170
+#: src/common/output.cpp:183
+#: src/common/output.cpp:204
 #, boost-format
 msgid "'%1%' track %2%: %3%"
 msgstr "「%1%」軌道 %2%: %3%"
 
-#: src/common/output.cpp:158
-#: src/common/output.cpp:171
-#: src/common/output.cpp:184
-#: src/common/output.cpp:201
+#: src/common/output.cpp:150
+#: src/common/output.cpp:163
+#: src/common/output.cpp:176
+#: src/common/output.cpp:193
 #, boost-format
 msgid "'%1%': %2%"
 msgstr "「%1%」: %2%"
@@ -1622,20 +1622,20 @@ msgstr "「可用軌」標記"
 msgid "(Unknown element: %1%; ID: 0x%2% size: %3%)"
 msgstr "(未知元件: %1%; ID: 0x%2% 大小: %3%)"
 
-#: src/mmg/tabs/chapters.cpp:472
+#: src/mmg/tabs/chapters.cpp:475
 msgid "(new chapter file)"
 msgstr "(新章節檔)"
 
-#: src/mmg/tabs/chapters.cpp:495
+#: src/mmg/tabs/chapters.cpp:498
 msgid "(unnamed chapter)"
 msgstr "(未命名章節)"
 
-#: src/mmg/tabs/chapters.cpp:883
-#: src/mmg/tabs/chapters.cpp:932
-#: src/mmg/tabs/chapters.cpp:1046
-#: src/mmg/tabs/chapters.cpp:1428
-#: src/mmg/tabs/chapters.cpp:1435
-#: src/mmg/tabs/chapters.cpp:1744
+#: src/mmg/tabs/chapters.cpp:886
+#: src/mmg/tabs/chapters.cpp:935
+#: src/mmg/tabs/chapters.cpp:1050
+#: src/mmg/tabs/chapters.cpp:1433
+#: src/mmg/tabs/chapters.cpp:1440
+#: src/mmg/tabs/chapters.cpp:1765
 msgid "(unnamed)"
 msgstr "(未命名)"
 
@@ -1813,7 +1813,7 @@ msgid ""
 "segment between many others (128 bits)."
 msgstr "隨機生成的在眾多剪輯中識別目前剪輯的唯一 ID (128 位)。"
 
-#: src/mmg/tabs/chapters.cpp:354
+#: src/mmg/tabs/chapters.cpp:357
 msgid "A segment to play in place of this chapter. The edition set via the segment edition UID should be used for this segment, otherwise no edition is used. This is a 128bit segment UID in the usual UID form: hex numbers with or without the \"0x\" prefix, with or without spaces, exactly 32 digits.\n"
 msgstr "在此章節要播放的剪輯。此剪輯應該會用到剪輯編輯 UID 的設定，也就是不會用到編輯。這是以一般 UID 形式表示的 128 位元剪輯 UID: 可於字首加上或不加上「0x」來切換十六進位碼格式，加上或不加上空格表示 32 位數字。\n"
 
@@ -1911,7 +1911,7 @@ msgstr ""
 msgid "AVC/h.264"
 msgstr "AVC/h.264"
 
-#: src/output/p_avc.h:42
+#: src/output/p_avc.h:43
 #, fuzzy
 msgid "AVC/h.264 (unframed)"
 msgstr "AVC/h.264"
@@ -1978,7 +1978,7 @@ msgstr "加入命令列選項(&C)"
 msgid "Add additional parts"
 msgstr "加入附加部分"
 
-#: src/mmg/tabs/chapters.cpp:340
+#: src/mmg/tabs/chapters.cpp:343
 msgid "Add chapter"
 msgstr "加入章節"
 
@@ -1990,7 +1990,7 @@ msgstr "加入命令列選項"
 msgid "Add element"
 msgstr "加入元件"
 
-#: src/mmg/tabs/chapters.cpp:371
+#: src/mmg/tabs/chapters.cpp:374
 msgid "Add name"
 msgstr "加入名稱"
 
@@ -2002,7 +2002,7 @@ msgstr "從「檔案名稱」加入或取代檔案裡的章節，如果「檔案
 msgid "Add or replace tags in the file with the ones from 'filename' or remove them if 'filename' is empty (see below and man page for syntax)"
 msgstr "從「檔案名稱」加入或取代檔案裡的標籤，如果「檔案名稱」是空白的則移除標籤 (請見下面和 syntax 的使用說明頁面)"
 
-#: src/mmg/tabs/chapters.cpp:341
+#: src/mmg/tabs/chapters.cpp:344
 msgid "Add subchapter"
 msgstr "加入子章節"
 
@@ -2035,11 +2035,11 @@ msgstr "以此數值加入屬性，即使這個屬性已經存在"
 msgid "Adds the current settings as a new job entry to the job queue"
 msgstr "將目前設定作為新任務項加入到任務佇列"
 
-#: src/mmg/tabs/chapters.cpp:1234
+#: src/mmg/tabs/chapters.cpp:1238
 msgid "Adjust chapter timecodes"
 msgstr "調整章節時間碼"
 
-#: src/mmg/tabs/chapters.cpp:346
+#: src/mmg/tabs/chapters.cpp:349
 msgid "Adjust timecodes"
 msgstr "調整時間碼"
 
@@ -2060,7 +2060,7 @@ msgstr "所有檔案 (*)|*"
 msgid "All Files (*.*)|*.*"
 msgstr "所有檔案 (*.*)|*.*"
 
-#: src/mmg/tabs/chapters.cpp:855
+#: src/mmg/tabs/chapters.cpp:858
 msgid "All chapter entries are valid."
 msgstr "所有章節項目皆正確。"
 
@@ -2139,7 +2139,7 @@ msgid ""
 msgstr "轉義的檔名，對應上一剪輯。"
 
 #: src/mmg/header_editor/frame.cpp:679
-#: src/mmg/tabs/chapters.cpp:1837
+#: src/mmg/tabs/chapters.cpp:1858
 #: src/propedit/propedit.cpp:44
 msgid "An unknown error occured. The file has been modified."
 msgstr "發生未知錯誤。檔案已修改。"
@@ -2170,7 +2170,7 @@ msgstr "另一個合成任務仍在處理中。要啟動一項新任務，請等
 msgid "Appending a track from a file to another track from the same file is not allowed. This is the case for tracks number %u and %u."
 msgstr "不允許將一個檔案的軌道添加至同一個檔案的其他軌道。出現問題的軌道編號為 %u 與 %u。"
 
-#: src/merge/output_control.cpp:1972
+#: src/merge/output_control.cpp:1969
 #, boost-format
 msgid "Appending track %1% from file no. %2% ('%3%') to track %4% from file no. %5% ('%6%').\n"
 msgstr "正在添加合併軌道 %1%（自檔案 %2% (「%3%」)）至軌道 %4%（自檔案 %5% (「%6%」)）。\n"
@@ -2480,11 +2480,11 @@ msgstr "章節翻譯版本 UID: %1%"
 msgid "Chapter Translate ID: %1%"
 msgstr "章節翻譯 ID: %1%"
 
-#: src/mmg/tabs/chapters.cpp:1643
+#: src/mmg/tabs/chapters.cpp:1658
 msgid "Chapter atoms may only be dropped onto other atoms and chapter editions."
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:1636
+#: src/mmg/tabs/chapters.cpp:1651
 msgid "Chapter editions may only be dropped onto the root node or other editions."
 msgstr ""
 
@@ -2500,7 +2500,7 @@ msgstr "提取章節"
 msgid "Chapter file:"
 msgstr "章節檔案:"
 
-#: src/mmg/tabs/chapters.cpp:713
+#: src/mmg/tabs/chapters.cpp:716
 #, c-format, boost-format
 msgid "Chapter files (*.xml)|*.xml|%s"
 msgstr "章節檔案 (*.xml)|*.xml|%s"
@@ -2510,12 +2510,12 @@ msgstr "章節檔案 (*.xml)|*.xml|%s"
 msgid "Chapter files (*.xml;*.txt;*.cue)|*.xml;*.txt;*.cue|%s"
 msgstr "章節檔案 (*.xml;*.txt;*.cue)|*.xml;*.txt;*.cue|%s"
 
-#: src/mmg/tabs/chapters.cpp:577
+#: src/mmg/tabs/chapters.cpp:580
 #, c-format, boost-format
 msgid "Chapter files (*.xml;*.txt;*.mka;*.mkv;*.mks;*.mk3d;*.cue)|*.xml;*.txt;*.mka;*.mkv;*.mks;*.mk3d;*.cue|%s"
 msgstr "章節檔案 (*.xml;*.txt;*.mka;*.mkv;*.mks;*.mk3d;*.cue)|*.xml;*.txt;*.mka;*.mkv;*.mks;*.mk3d;*.cue|%s"
 
-#: src/mmg/tabs/chapters.cpp:370
+#: src/mmg/tabs/chapters.cpp:373
 msgid "Chapter names and languages"
 msgstr "章節名稱與語言"
 
@@ -2532,16 +2532,16 @@ msgstr "章節選項"
 msgid "Chapter parser: The EditionUID %1% is not unique and could not be reused. A new one will be created.\n"
 msgstr "章節解析器: 版本 UID %1% 不唯一，不能重複使用。將建立一個新的。\n"
 
-#: src/mmg/tabs/chapters.cpp:779
-#: src/mmg/tabs/chapters.cpp:786
-#: src/mmg/tabs/chapters.cpp:792
-#: src/mmg/tabs/chapters.cpp:800
-#: src/mmg/tabs/chapters.cpp:815
-#: src/mmg/tabs/chapters.cpp:833
+#: src/mmg/tabs/chapters.cpp:782
+#: src/mmg/tabs/chapters.cpp:789
+#: src/mmg/tabs/chapters.cpp:795
+#: src/mmg/tabs/chapters.cpp:803
+#: src/mmg/tabs/chapters.cpp:818
+#: src/mmg/tabs/chapters.cpp:836
 msgid "Chapter verification error"
 msgstr "章節驗證發生錯誤"
 
-#: src/mmg/tabs/chapters.cpp:855
+#: src/mmg/tabs/chapters.cpp:858
 msgid "Chapter verification succeeded"
 msgstr "章節驗證成功"
 
@@ -2557,20 +2557,20 @@ msgstr "章節"
 msgid "Chapters (%d entries) from %s"
 msgstr "章節 (%d 個項目) 自 %s"
 
-#: src/merge/output_control.cpp:1558
+#: src/merge/output_control.cpp:1554
 msgid "Chapters are not allowed in WebM compliant files. No chapters will be written into any output file.\n"
 msgstr "在 WebM 遵循檔裡不能有章節。不會將章節寫進任何輸出檔。\n"
 
-#: src/mmg/tabs/chapters.cpp:651
+#: src/mmg/tabs/chapters.cpp:654
 msgid "Chapters loaded."
 msgstr "章節已載入。"
 
-#: src/mmg/tabs/chapters.cpp:755
-#: src/mmg/tabs/chapters.cpp:1814
+#: src/mmg/tabs/chapters.cpp:758
+#: src/mmg/tabs/chapters.cpp:1835
 msgid "Chapters written."
 msgstr "章節已寫入。"
 
-#: src/mmg/tabs/chapters.cpp:339
+#: src/mmg/tabs/chapters.cpp:342
 msgid "Chapters:"
 msgstr "章節:"
 
@@ -2606,7 +2606,7 @@ msgstr "線上檢查 MKVToolNix 首頁上是否有可更新的新版本。只有
 msgid "Checking for updates online; please wait"
 msgstr "正在線上檢查更新; 請稍候"
 
-#: src/mmg/tabs/chapters.cpp:576
+#: src/mmg/tabs/chapters.cpp:579
 msgid "Choose a chapter file"
 msgstr "選擇章節檔"
 
@@ -2640,8 +2640,8 @@ msgstr "選擇要添加的檔案"
 #: src/mmg/mmg_dialog.cpp:770
 #: src/mmg/mmg_dialog.cpp:791
 #: src/mmg/mux_dialog.cpp:206
-#: src/mmg/tabs/chapters.cpp:675
-#: src/mmg/tabs/chapters.cpp:712
+#: src/mmg/tabs/chapters.cpp:678
+#: src/mmg/tabs/chapters.cpp:715
 msgid "Choose an output file"
 msgstr "選擇輸出檔"
 
@@ -2882,7 +2882,7 @@ msgstr "無法從該 MPEG-1/2 軌道提取序列表頭。\n"
 msgid "Could not find an index for audio track %1% (avilib error message: %2%). Skipping track.\n"
 msgstr "找不到音軌 %1% 的索引 (avilib 錯誤訊息: %2%)。正在跳過此軌。\n"
 
-#: src/merge/output_control.cpp:1894
+#: src/merge/output_control.cpp:1891
 #, boost-format
 msgid "Could not find gptzr when appending. %1%\n"
 msgstr "添加時找不到 gptzr。 %1%\n"
@@ -2925,7 +2925,7 @@ msgstr "無法開啟剪貼簿。"
 msgid "Could not open the corresponding correction file '%1%c'.\n"
 msgstr "無法開啟一致性校正檔案「%1%c」。\n"
 
-#: src/mmg/tabs/chapters.cpp:742
+#: src/mmg/tabs/chapters.cpp:745
 #, c-format, boost-format
 msgid "Could not open the destination file '%s' for writing. Error code: %d (%s)."
 msgstr "無法開啟目的檔案「%s」以寫入。錯誤代號: %d (%s)。"
@@ -2960,7 +2960,7 @@ msgid "Could not write to the output file: %1% (%2%)\n"
 msgstr "無法寫入輸出檔: %1% (%2%)\n"
 
 #: src/mmg/options/chapters.cpp:84
-#: src/mmg/tabs/chapters.cpp:375
+#: src/mmg/tabs/chapters.cpp:378
 msgid "Country:"
 msgstr "國家:"
 
@@ -3117,7 +3117,7 @@ msgstr "目前版本:"
 msgid "D&elete"
 msgstr "刪除(&E)"
 
-#: src/input/r_dts.h:40
+#: src/input/r_dts.h:41
 #: src/output/p_dts.h:45
 msgid "DTS"
 msgstr "DTS"
@@ -3152,7 +3152,7 @@ msgstr "日期 (無效, 值: %1%)"
 msgid "Date: %1% UTC"
 msgstr "日期: %1% UTC"
 
-#: src/common/output.cpp:92
+#: src/common/output.cpp:84
 msgid "Debug> "
 msgstr "除錯> "
 
@@ -3366,16 +3366,16 @@ msgstr "EBML 讀取版本: %1%"
 msgid "EBML version: %1%"
 msgstr "EBML 版本: %1%"
 
-#: src/merge/output_control.cpp:1386
+#: src/merge/output_control.cpp:1382
 #, boost-format
 msgid "EVIL internal bug! (unknown file type). %1%\n"
 msgstr "*邪惡的* 內部錯誤! (未知的檔案類型)。 %1%\n"
 
-#: src/mmg/tabs/chapters.cpp:351
+#: src/mmg/tabs/chapters.cpp:354
 msgid "Each chapter and each edition has a unique identifier. This identifier is normally assigned automatically by the programs, but it can be changed manually if it is really needed."
 msgstr "每個章節和版本都有唯一的 ID。該 ID 通常由程式自動指派，但也可以手動修改（如果確實需要的話）。"
 
-#: src/mmg/tabs/chapters.cpp:833
+#: src/mmg/tabs/chapters.cpp:836
 msgid "Each edition must contain at least one chapter."
 msgstr "每個版本必須至少包含一個章節。"
 
@@ -3400,13 +3400,13 @@ msgstr "編輯附加來源檔案分割數"
 msgid "Edit selectors for properties"
 msgstr "屬性的編輯選擇器"
 
-#: src/mmg/tabs/chapters.cpp:527
+#: src/mmg/tabs/chapters.cpp:530
 #, fuzzy
 msgid "Edition"
 msgstr "版本%d"
 
-#: src/mmg/tabs/chapters.cpp:878
-#: src/mmg/tabs/chapters.cpp:925
+#: src/mmg/tabs/chapters.cpp:881
+#: src/mmg/tabs/chapters.cpp:928
 #, c-format, boost-format
 msgid "EditionEntry %u"
 msgstr "版本條目 %u"
@@ -3452,7 +3452,7 @@ msgstr "加密演算法: %1% (%2%)"
 msgid "Encryption key ID: %1%"
 msgstr "加密鑰匙 ID: %1%"
 
-#: src/mmg/tabs/chapters.cpp:349
+#: src/mmg/tabs/chapters.cpp:352
 msgid "End:"
 msgstr "終止時間:"
 
@@ -3480,17 +3480,17 @@ msgstr "在第 %1% 行處發生錯誤: 預期為 SRT 時間碼行，但發現的
 msgid "Error in line %1%: expected subtitle number and found some text.\n"
 msgstr "在第 %1% 行處發生錯誤: 預期為字幕編號但發現一些文字。\n"
 
-#: src/mmg/mmg.cpp:279
+#: src/mmg/mmg.cpp:281
 #: src/mmg/mmg_dialog.cpp:414
 #: src/mmg/mmg_dialog.cpp:435
 msgid "Error loading settings"
 msgstr "載入設定發生錯誤"
 
-#: src/mmg/tabs/chapters.cpp:742
+#: src/mmg/tabs/chapters.cpp:745
 msgid "Error opening file"
 msgstr "開啟檔案時發生錯誤"
 
-#: src/input/r_mpeg_ps.cpp:1009
+#: src/input/r_mpeg_ps.cpp:1010
 msgid "Error parsing a MPEG PS packet during the header reading phase. This stream seems to be badly damaged.\n"
 msgstr "在表頭讀取階段解析 MPEG PS 套件時發生錯誤。媒體流似乎已被嚴重損壞。\n"
 
@@ -3499,7 +3499,7 @@ msgstr "在表頭讀取階段解析 MPEG PS 套件時發生錯誤。媒體流似
 msgid "Error parsing the chapters in '%1%': some mandatory elements are missing.\n"
 msgstr "解析「%1%」中的章節時發生錯誤: 缺少一些必須的元件。\n"
 
-#: src/mmg/tabs/chapters.cpp:626
+#: src/mmg/tabs/chapters.cpp:629
 msgid "Error parsing the file"
 msgstr "解析檔案時發生錯誤"
 
@@ -3515,18 +3515,18 @@ msgstr "儲存資訊發生錯誤"
 
 #: src/mmg/header_editor/frame.cpp:663
 #: src/mmg/header_editor/frame.cpp:669
-#: src/mmg/tabs/chapters.cpp:1808
-#: src/mmg/tabs/chapters.cpp:1820
-#: src/mmg/tabs/chapters.cpp:1826
+#: src/mmg/tabs/chapters.cpp:1829
+#: src/mmg/tabs/chapters.cpp:1841
+#: src/mmg/tabs/chapters.cpp:1847
 msgid "Error writing Matroska file"
 msgstr "寫入 Matroska 檔時發生錯誤"
 
-#: src/common/output.cpp:85
+#: src/common/output.cpp:77
 #: src/mmg/mux_dialog.cpp:278
 msgid "Error:"
 msgstr "發生錯誤:"
 
-#: src/common/output.cpp:86
+#: src/common/output.cpp:78
 msgid "Error: "
 msgstr "發生錯誤: "
 
@@ -3750,7 +3750,7 @@ msgid "File name: %1%"
 msgstr "檔名: %1%"
 
 #: src/mmg/header_editor/frame.cpp:258
-#: src/mmg/tabs/chapters.cpp:595
+#: src/mmg/tabs/chapters.cpp:598
 msgid "File parsing failed"
 msgstr "解析檔案失敗"
 
@@ -3759,7 +3759,7 @@ msgid "File removal not possible"
 msgstr "檔案不能移除"
 
 #: src/mmg/header_editor/frame.cpp:675
-#: src/mmg/tabs/chapters.cpp:1833
+#: src/mmg/tabs/chapters.cpp:1854
 msgid "File structure warning"
 msgstr "檔案結構警告"
 
@@ -3771,7 +3771,7 @@ msgstr "檔案/剪輯連接"
 msgid "File/segment title:"
 msgstr "檔案/剪輯標題:"
 
-#: src/merge/output_control.cpp:1071
+#: src/merge/output_control.cpp:1067
 msgid "Files cannot be appended to themselves. The argument for '--append-to' was invalid.\n"
 msgstr "檔案不能被添加至自己上。「--append-to」的參數無效。\n"
 
@@ -3793,7 +3793,7 @@ msgstr "已完成對 %s 的處理"
 msgid "Fix bitstream timing information"
 msgstr "修復位元串流時間資訊"
 
-#: src/mmg/tabs/chapters.cpp:358
+#: src/mmg/tabs/chapters.cpp:361
 msgid "Flags:"
 msgstr "標記:"
 
@@ -3993,7 +3993,7 @@ msgstr ""
 "您既可以直接在下面輸入，也可以從下拉清單中選取，\n"
 "再按下“加入”按鈕。"
 
-#: src/mmg/tabs/chapters.cpp:347
+#: src/mmg/tabs/chapters.cpp:350
 msgid "Here you can adjust all the timecodes of the selected chapter and of all its sub-chapters by a specific amount either increasing or decreasing them."
 msgstr "這裡可以用指定的增減量來調整選擇章節的所有時間碼。"
 
@@ -4008,7 +4008,7 @@ msgstr ""
 "如果需要，這些值也可以以後修改。\n"
 "預設值會在您離開 mmg 時儲存。"
 
-#: src/mmg/tabs/chapters.cpp:344
+#: src/mmg/tabs/chapters.cpp:347
 msgid "Here you can set the values for the language and the country that you want to apply to all the chapters below and including the currently selected entry."
 msgstr "設定您希望應用至下面所有章節（含目前所選項目）的語言及國家值。"
 
@@ -4033,15 +4033,15 @@ msgstr "IVF (VP8)"
 msgid "IVF with VP8 video files"
 msgstr "含 VP8 視訊檔的 IVF"
 
-#: src/mmg/tabs/chapters.cpp:360
+#: src/mmg/tabs/chapters.cpp:363
 msgid "If a chapter is marked 'hidden' then the player should not show this chapter entry to the user. Such entries could still be used by the menu system."
 msgstr "如果一個章節被標記為“隱藏”，播放器將不會向使用者顯示該章節項目。這樣的項目仍然可以透過功能表系統調用。"
 
-#: src/mmg/tabs/chapters.cpp:388
+#: src/mmg/tabs/chapters.cpp:391
 msgid "If a chapter is not marked 'enabled' then the player should skip the part of the file that this chapter occupies."
 msgstr "如果一個章節沒有被標記為“啟用”，播放器將會跳過檔案中被該章節佔用的一段。"
 
-#: src/mmg/tabs/chapters.cpp:368
+#: src/mmg/tabs/chapters.cpp:371
 msgid "If a chapter or an edition is marked 'hidden' then the player should not show this chapter entry (or all of this edition's entries) to the user. Such entries could still be used by the menu system."
 msgstr "如果章節或版本被標記為“隱藏”，播放器不會顯示該章節項目。這些項目仍然可以透過功能表系統使用。"
 
@@ -4061,11 +4061,11 @@ msgstr "若起始數字小於上一個範圍的結束數字或檔案的起始 (�
 msgid "If a start timecode is left out then the previous range's end timecode is used, or the start of the file if there was no previous range."
 msgstr "若起始時間碼小於上一個範圍的結束時間碼或檔案的起始時間 (若沒有上一個範圍)。"
 
-#: src/mmg/tabs/chapters.cpp:363
+#: src/mmg/tabs/chapters.cpp:366
 msgid "If an edition is marked 'ordered' then the chapters can be defined multiple times and the order to play them is enforced."
 msgstr "如果版本被標記為「定序」則章節會被定義成多段時間且會強制播放順序。"
 
-#: src/mmg/tabs/chapters.cpp:391
+#: src/mmg/tabs/chapters.cpp:394
 msgid "If an edition is marked as 'default' then it should be used as the default edition."
 msgstr "如果版本被標記為「預設」則會被使用作為預設版本。"
 
@@ -4138,12 +4138,12 @@ msgstr "增強詳細程度。"
 msgid "Input"
 msgstr "輸入"
 
-#: src/mmg/tabs/chapters.cpp:1258
-#: src/mmg/tabs/chapters.cpp:1311
-#: src/mmg/tabs/chapters.cpp:1317
-#: src/mmg/tabs/chapters.cpp:1329
-#: src/mmg/tabs/chapters.cpp:1348
-#: src/mmg/tabs/chapters.cpp:1356
+#: src/mmg/tabs/chapters.cpp:1262
+#: src/mmg/tabs/chapters.cpp:1316
+#: src/mmg/tabs/chapters.cpp:1322
+#: src/mmg/tabs/chapters.cpp:1334
+#: src/mmg/tabs/chapters.cpp:1353
+#: src/mmg/tabs/chapters.cpp:1361
 msgid "Input data error"
 msgstr "輸入資料錯誤"
 
@@ -4171,7 +4171,7 @@ msgid "Internal bug: tracks.cpp SSA #1. %1%"
 msgstr "內部錯誤: tracks.cpp SSA #1。 %1%"
 
 #: src/mmg/header_editor/frame.cpp:679
-#: src/mmg/tabs/chapters.cpp:1837
+#: src/mmg/tabs/chapters.cpp:1858
 msgid "Internal program error"
 msgstr "內部程式錯誤"
 
@@ -4194,15 +4194,15 @@ msgstr "遇到無效的 Base64 字元"
 msgid "Invalid BlockAddition level in argument '%1%'.\n"
 msgstr "無效的附加區塊層級，在參數「%1%」中。\n"
 
-#: src/mmg/tabs/chapters.cpp:1311
+#: src/mmg/tabs/chapters.cpp:1316
 msgid "Invalid UID. A UID is simply a number."
 msgstr "無效 UID。UID 僅僅是個數位。"
 
-#: src/mmg/tabs/chapters.cpp:1317
+#: src/mmg/tabs/chapters.cpp:1322
 msgid "Invalid UID. This chapter UID is already in use. The original UID has not been changed."
 msgstr "無效 UID。該章節 UID 已被使用。原 UID 沒有被改變。"
 
-#: src/mmg/tabs/chapters.cpp:1329
+#: src/mmg/tabs/chapters.cpp:1334
 msgid "Invalid UID. This edition UID is already in use. The original UID has not been changed."
 msgstr "無效 UID。該版本 UID 已被使用。原 UID 沒有被改變。"
 
@@ -4324,24 +4324,24 @@ msgstr "SSA 這一行 (「%1%」) 於時間碼 %2% 格式無效: 第一個欄位
 msgid "Invalid format for a SSA line ('%1%') at timecode %2%: Too many fields found (%3% instead of 9). This entry will be skipped.\n"
 msgstr "SSA 這一行 (「%1%」) 於時間碼 %2% 格式無效: 發現過多欄位 (%3% 而不是 9)。該條將被跳過。\n"
 
-#: src/mmg/tabs/chapters.cpp:1258
+#: src/mmg/tabs/chapters.cpp:1262
 msgid "Invalid format used for the adjustment."
 msgstr "調整功能使用的格式無效。"
 
-#: src/mmg/tabs/chapters.cpp:1356
+#: src/mmg/tabs/chapters.cpp:1361
 #, c-format, boost-format
 msgid "Invalid format used for the end time for '%s'. Setting value to 0."
 msgstr "終止時間「%s」格式無效。設定值為 0。"
 
-#: src/mmg/tabs/chapters.cpp:1389
+#: src/mmg/tabs/chapters.cpp:1394
 msgid "Invalid format used for the segment UID. Not using the value."
 msgstr "剪輯 UID 使用無效的格式。不會使用該數值。"
 
-#: src/mmg/tabs/chapters.cpp:1407
+#: src/mmg/tabs/chapters.cpp:1412
 msgid "Invalid format used for the segment edition UID. Not using the value."
 msgstr "剪輯版本 UID 使用無效的格式。不會使用該數值。"
 
-#: src/mmg/tabs/chapters.cpp:1348
+#: src/mmg/tabs/chapters.cpp:1353
 #, c-format, boost-format
 msgid "Invalid format used for the start time for '%s'. Setting value to 0."
 msgstr "起始時間「%s」格式無效。設定值為 0。"
@@ -4394,7 +4394,7 @@ msgid "Invalid header length: %1% (total length: %2%, idx: %3%, dataidx: %4%)\n"
 msgstr "表頭長度無效: %1% (總長: %2%, 索引: %3%, 資料索引: %4%)\n"
 
 #: src/mmg/options/chapters.cpp:109
-#: src/mmg/tabs/chapters.cpp:1205
+#: src/mmg/tabs/chapters.cpp:1209
 msgid "Invalid language selected"
 msgstr "無效的語言選擇"
 
@@ -4421,8 +4421,8 @@ msgstr "無效分數: %1% > 59"
 msgid "Invalid number of seconds: %1% > 59"
 msgstr "無效秒數: %1% > 59"
 
-#: src/mmg/tabs/chapters.cpp:1636
-#: src/mmg/tabs/chapters.cpp:1643
+#: src/mmg/tabs/chapters.cpp:1651
+#: src/mmg/tabs/chapters.cpp:1658
 #, fuzzy
 msgid "Invalid operation"
 msgstr "無效的開始時間碼"
@@ -4639,7 +4639,7 @@ msgid "Language is not NUL terminated"
 msgstr "語言未以 NUL 結尾"
 
 #: src/mmg/options/chapters.cpp:81
-#: src/mmg/tabs/chapters.cpp:374
+#: src/mmg/tabs/chapters.cpp:377
 #: src/mmg/tabs/global.cpp:347
 #: src/mmg/tabs/input_general.cpp:185
 msgid "Language:"
@@ -4752,7 +4752,7 @@ msgstr "MP4 音/視訊檔"
 msgid "MPEG audio files"
 msgstr "MPEG 音訊檔"
 
-#: src/input/r_mpeg_ps.h:210
+#: src/input/r_mpeg_ps.h:211
 msgid "MPEG program stream"
 msgstr "MPEG 節目串流"
 
@@ -4834,7 +4834,7 @@ msgstr "Matroska 音訊/視訊檔"
 msgid "Matroska files (*.mkv *.mka *.mks *.mk3d);;All files (*.*)"
 msgstr "Matroska 檔案 (*.mkv *.mka *.mks *.mk3d);;所有檔 (*.*)"
 
-#: src/mmg/tabs/chapters.cpp:676
+#: src/mmg/tabs/chapters.cpp:679
 #, c-format, boost-format
 msgid "Matroska files (*.mkv;*.mka;*.mk3d)|*.mkv;*.mka;*.mk3d|%s"
 msgstr "Matroska 檔案 (*.mkv;*.mka;*.mks;*.mk3d)|*.mkv;*.mka;*.mks;*.mk3d|%s"
@@ -4928,11 +4928,11 @@ msgstr "「--ui-language」缺少參數。\n"
 msgid "Missing argument to '%1%'.\n"
 msgstr "缺少給「%1%」的參數。\n"
 
-#: src/mmg/mmg.cpp:270
+#: src/mmg/mmg.cpp:272
 msgid "Missing file name"
 msgstr "缺少檔名"
 
-#: src/mmg/mmg.cpp:270
+#: src/mmg/mmg.cpp:272
 msgid "Missing file name after for the option '--edit-headers'."
 msgstr "選項「--edit-headers」後缺少檔名。"
 
@@ -4986,7 +4986,7 @@ msgstr "指定多個檔名 (「%1%」和「%2%」)。\n"
 msgid "More than one name was given for a single attachment. '%1%' will be discarded and '%2%' used instead.\n"
 msgstr "單個附件被指定了多於一個名稱。「%1%」將被廢棄，並用「%2%」代替。\n"
 
-#: src/merge/output_control.cpp:1147
+#: src/merge/output_control.cpp:1143
 #, boost-format
 msgid "More than one track is to be appended to the track %1% from file no. %2% ('%3%'). The argument for '--append-to' was invalid.\n"
 msgstr "被添加至軌道 %1%（自檔案 %2% (「%3%」)）的軌道多於一條。「--append-to」的參數無效。\n"
@@ -5032,7 +5032,7 @@ msgid "Name for this track, e.g. \"director's comments\"."
 msgstr "此軌的名稱，如“導演評論”。"
 
 #: src/mmg/tabs/attachments.cpp:159
-#: src/mmg/tabs/chapters.cpp:373
+#: src/mmg/tabs/chapters.cpp:376
 msgid "Name:"
 msgstr "名稱:"
 
@@ -5041,7 +5041,7 @@ msgstr "名稱:"
 msgid "Name: %1%"
 msgstr "名稱: %1%"
 
-#: src/mmg/tabs/chapters.cpp:490
+#: src/mmg/tabs/chapters.cpp:493
 msgid "New chapters created."
 msgstr "新章節已建立。"
 
@@ -5101,7 +5101,7 @@ msgstr "附件「%s」的 MIME 類型尚未選擇。"
 msgid "No MIME type has been set for the attachment '%1%', and it could not be guessed.\n"
 msgstr "附件「%1%」的 MIME 類型尚未設定，且無法猜測。\n"
 
-#: src/merge/output_control.cpp:1106
+#: src/merge/output_control.cpp:1102
 #, boost-format
 msgid "No append mapping was given for the file no. %1% ('%2%'). A default mapping of %3% will be used instead. Please keep that in mind if mkvmerge aborts with an error message regarding invalid '--append-to' options.\n"
 msgstr "沒有為檔案 %1% (「%2%」) 指定添加對應。將使用預設對應 %3%。如果 mkvmerge 異常中止並輸出關於無效的「--append-to」選項的錯誤訊息，請留意。\n"
@@ -5112,7 +5112,7 @@ msgstr "沒有為檔案 %1% (「%2%」) 指定添加對應。將使用預設對�
 msgid "No attachment matched the spec '%1%'.\n"
 msgstr "沒有符合形式「%1%」的附件。\n"
 
-#: src/mmg/tabs/chapters.cpp:815
+#: src/mmg/tabs/chapters.cpp:818
 msgid "No chapter entries have been create yet."
 msgstr "尚未建立任何章節項目。"
 
@@ -5121,7 +5121,7 @@ msgstr "尚未建立任何章節項目。"
 msgid "No chapter numbers listed after '--split %1%'.\n"
 msgstr "沒有章節編號列在「--split %1%」後面。\n"
 
-#: src/mmg/tabs/chapters.cpp:602
+#: src/mmg/tabs/chapters.cpp:605
 msgid "No chapters found"
 msgstr "未找到章節"
 
@@ -5288,7 +5288,7 @@ msgstr "Ogg/OGM 音訊/視訊檔"
 msgid "Ok"
 msgstr "確定"
 
-#: src/mmg/tabs/chapters.cpp:779
+#: src/mmg/tabs/chapters.cpp:782
 msgid "One of the chapters does not have a name."
 msgstr "有一個章節沒有名稱。"
 
@@ -5331,7 +5331,7 @@ msgstr "僅允許有一個輸出檔。\n"
 msgid "Only one segment info file allowed in '%1% %2%'.\n"
 msgstr "僅允許有一個剪輯檔，在「%1% %2%」。\n"
 
-#: src/merge/output_control.cpp:1087
+#: src/merge/output_control.cpp:1083
 #, boost-format
 msgid "Only partial append mappings were given for the file no. %1% ('%2%'). Either don't specify any mapping (in which case the default mapping will be used) or specify a mapping for all tracks that are to be copied.\n"
 msgstr "只給出了檔案 %1% (「%2%」) 的部分添加對應。只有不指定任何對應 (此時將使用預設對應) 或為所有軌道指定對應時，才會複製所有軌道。\n"
@@ -5455,7 +5455,7 @@ msgstr "PGS"
 msgid "PGS/SUP subtitles"
 msgstr "PGS/SUP 字幕"
 
-#: src/input/r_pgssup.h:34
+#: src/input/r_pgssup.h:33
 msgid "PGSSUP"
 msgstr "PGSSUP"
 
@@ -5603,7 +5603,7 @@ msgstr "進度"
 
 #: src/extract/timecodes_v2.cpp:290
 #: src/extract/tracks.cpp:420
-#: src/merge/output_control.cpp:557
+#: src/merge/output_control.cpp:553
 #, boost-format
 msgid "Progress: %1%%%%2%"
 msgstr "進度: %1%%%%2%"
@@ -5613,7 +5613,7 @@ msgstr "進度: %1%%%%2%"
 msgid "Progress: 100%\n"
 msgstr "進度: 100%\n"
 
-#: src/merge/output_control.cpp:535
+#: src/merge/output_control.cpp:531
 #, boost-format
 msgid "Progress: 100%%%1%"
 msgstr "進度: 100%%%1%"
@@ -5649,13 +5649,13 @@ msgstr "Quicktime/MP4 讀取器: 尚不支援固定取樣大小與可變時間�
 msgid "Quicktime/MP4 reader: Could not read chunk number %1%/%2% with size %3% from position %4%. Aborting.\n"
 msgstr "Quicktime/MP4 讀取器: 無法讀取塊號 %1%/%2% 大小 %3% 位置 %4%。正在中止。\n"
 
-#: src/input/r_qtmp4.cpp:2089
-#: src/input/r_qtmp4.cpp:2103
+#: src/input/r_qtmp4.cpp:2088
+#: src/input/r_qtmp4.cpp:2102
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the extended sound description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4 讀取器: 無法讀取軌道 %1% 的擴展音訊描述單元。\n"
 
-#: src/input/r_qtmp4.cpp:2060
+#: src/input/r_qtmp4.cpp:2059
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the sound description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4 讀取器: 無法讀取軌道 %1% 的音訊描述單元。\n"
@@ -5665,7 +5665,7 @@ msgstr "Quicktime/MP4 讀取器: 無法讀取軌道 %1% 的音訊描述單元。
 msgid "Quicktime/MP4 reader: Could not read the stream description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4 讀取器: 無法讀取軌道 %1% 的流描述單元。\n"
 
-#: src/input/r_qtmp4.cpp:2135
+#: src/input/r_qtmp4.cpp:2134
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the video description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4 讀取器: 無法讀取軌道 %1% 的視訊描述單元。\n"
@@ -5683,12 +5683,12 @@ msgstr "Quicktime/MP4 讀取器: 未發現「mdat」單元。找不到影片資�
 msgid "Quicktime/MP4 reader: Invalid chunk size %1% at %2%.\n"
 msgstr "Quicktime/MP4 讀取器: 無效的區塊大小 %1% 於 %2%。\n"
 
-#: src/input/r_qtmp4.cpp:2510
+#: src/input/r_qtmp4.cpp:2509
 #, boost-format
 msgid "Quicktime/MP4 reader: MPEG4 part 10/AVC track %1% is missing its decoder config. Skipping this track.\n"
 msgstr "Quicktime/MP4 讀取器: MPEG4 part 10/AVC 軌道 %1% 缺少解碼器設定資訊。正在跳過該軌。\n"
 
-#: src/input/r_qtmp4.cpp:2541
+#: src/input/r_qtmp4.cpp:2540
 #, boost-format
 msgid "Quicktime/MP4 reader: MPEG4 track %1% is missing the esds atom/the decoder config. Skipping this track.\n"
 msgstr "Quicktime/MP4 讀取器: MPEG4 軌 %1% 缺少 esds 單元/解碼器設定資訊。正在跳過該軌。\n"
@@ -5707,17 +5707,17 @@ msgstr "Quicktime/MP4 讀取器: 軌道 %1% 的媒體流描述單元的「size�
 msgid "Quicktime/MP4 reader: The 'time scale' parameter was 0. This is not supported.\n"
 msgstr "Quicktime/MP4 讀取器: 「time scale」時間縮放參數為 0。這是不支援的。\n"
 
-#: src/input/r_qtmp4.cpp:2473
+#: src/input/r_qtmp4.cpp:2472
 #, boost-format
 msgid "Quicktime/MP4 reader: The AAC track %1% is missing the esds atom/the decoder config. Skipping this track.\n"
 msgstr "Quicktime/MP4 讀取器: 該 AAC 軌道 %1% 缺少 esds 單元/解碼器設定資訊。正在跳過該軌。\n"
 
-#: src/input/r_qtmp4.cpp:2468
+#: src/input/r_qtmp4.cpp:2467
 #, boost-format
 msgid "Quicktime/MP4 reader: The audio track %1% is using an unsupported 'object type id' of %2% in the 'esds' atom. Skipping this track.\n"
 msgstr "Quicktime/MP4 讀取器: 音軌 %1% 的「esds」單元使用了不支援的「object type id」物件類別號 %2%。正在跳過該軌。\n"
 
-#: src/input/r_qtmp4.cpp:2520
+#: src/input/r_qtmp4.cpp:2519
 #, boost-format
 msgid "Quicktime/MP4 reader: The video track %1% is missing the ESDS atom. Skipping this track.\n"
 msgstr "Quicktime/MP4 讀取器: 視訊軌 %1% 遺失 ESDS 單元。正在跳過此軌。\n"
@@ -5742,16 +5742,16 @@ msgstr "Quicktime/MP4 讀取器: 此檔按的表頭經過壓縮，但無法初�
 msgid "Quicktime/MP4 reader: This file uses compressed headers, but they could not be uncompressed. Error code from zlib: %1%. Aborting.\n"
 msgstr "Quicktime/MP4 讀取器: 此檔按的表頭經過壓縮，但無法解壓。zlib 錯誤碼: %1%。正在中止。\n"
 
-#: src/input/r_qtmp4.cpp:2441
-#: src/input/r_qtmp4.cpp:2456
-#: src/input/r_qtmp4.cpp:2494
-#: src/input/r_qtmp4.cpp:2559
+#: src/input/r_qtmp4.cpp:2440
+#: src/input/r_qtmp4.cpp:2455
+#: src/input/r_qtmp4.cpp:2493
+#: src/input/r_qtmp4.cpp:2558
 #, boost-format
 msgid "Quicktime/MP4 reader: Track %1% is missing some data. Broken header atoms?\n"
 msgstr "Quicktime/MP4 讀取器: 軌道 %1% 缺少一些資料。表頭單元損壞?\n"
 
-#: src/input/r_qtmp4.cpp:2068
-#: src/input/r_qtmp4.cpp:2142
+#: src/input/r_qtmp4.cpp:2067
+#: src/input/r_qtmp4.cpp:2141
 #, boost-format
 msgid "Quicktime/MP4 reader: Track ID %1% has more than one FourCC. Only using the first one (%|2$.4s|) and not this one (%|3$.4s|).\n"
 msgstr "Quicktime/MP4 讀取器: 軌道 ID %1% 有多於一個 FourCC。只使用了第一個 (%|2$.4s|) 而非 (%|3$.4s|)。\n"
@@ -5776,12 +5776,12 @@ msgstr "RSA"
 msgid "Re-enable the selected job(s)"
 msgstr "重新啟用所選任務"
 
-#: src/merge/output_control.cpp:968
+#: src/merge/output_control.cpp:964
 #, boost-format
 msgid "Re-rendering track headers: data_size != 0 not implemented yet. %1%\n"
 msgstr "重新計算軌道表頭: 資料大小 != 0 尚未實現。%1%\n"
 
-#: src/input/r_mpeg_ps.cpp:363
+#: src/input/r_mpeg_ps.cpp:364
 msgid "Reading encrypted VOBs is not supported.\n"
 msgstr "不支援讀取加密的 VOB。\n"
 
@@ -5850,7 +5850,7 @@ msgstr "在不儲存的情況下重新載入目前檔案"
 msgid "Remaining time:"
 msgstr "剩餘時間: "
 
-#: src/mmg/tabs/chapters.cpp:342
+#: src/mmg/tabs/chapters.cpp:345
 msgid "Remove chapter"
 msgstr "移除章節"
 
@@ -5862,7 +5862,7 @@ msgstr "移除元件"
 msgid "Remove job from job queue after run:"
 msgstr "執行後從任務佇列中移除任務:"
 
-#: src/mmg/tabs/chapters.cpp:372
+#: src/mmg/tabs/chapters.cpp:375
 msgid "Remove name"
 msgstr "移除名稱"
 
@@ -6040,7 +6040,7 @@ msgstr "時間長度: %|1$.3f|s (%2%)"
 msgid "Segment"
 msgstr "剪輯"
 
-#: src/mmg/tabs/chapters.cpp:353
+#: src/mmg/tabs/chapters.cpp:356
 msgid "Segment UID:"
 msgstr "剪輯 UID:"
 
@@ -6053,7 +6053,7 @@ msgstr "剪輯 UID: %1%"
 msgid "Segment UIDs:"
 msgstr "剪輯 UID:"
 
-#: src/mmg/tabs/chapters.cpp:356
+#: src/mmg/tabs/chapters.cpp:359
 msgid "Segment edition UID:"
 msgstr "剪輯版本 UID:"
 
@@ -6207,7 +6207,7 @@ msgstr "設定用於下列「--add-attachment」或「--replace-attachment」選
 msgid "Set the name to use for the following '--add-attachment' or '--replace-attachment' option"
 msgstr "設定用於下列「--add-attachment」或「--replace-attachment」選項的名稱"
 
-#: src/mmg/tabs/chapters.cpp:343
+#: src/mmg/tabs/chapters.cpp:346
 msgid "Set values"
 msgstr "設定語言值"
 
@@ -6436,7 +6436,7 @@ msgstr "一些表頭值已被修改。您確實要在不儲存目前檔案的情
 msgid "Some header values have been modified. Do you really want to reload without saving the file?"
 msgstr "一些表頭值已被修改。您確實要在不儲存檔案的情況下重新載入？"
 
-#: src/merge/output_control.cpp:1598
+#: src/merge/output_control.cpp:1594
 #, boost-format
 msgid "Some tag elements are missing (this error should not have occured - another similar error should have occured earlier). %1%\n"
 msgstr "缺少某些標籤元件 (不該發生此錯誤 - 另一個類似的錯誤應該在早些時候發生過)。%1%\n"
@@ -6506,7 +6506,7 @@ msgstr "啟動選擇的任務（不論其狀態如何）"
 msgid "Start with empty settings"
 msgstr "清空所有設定並重新啟動"
 
-#: src/mmg/tabs/chapters.cpp:348
+#: src/mmg/tabs/chapters.cpp:351
 msgid "Start:"
 msgstr "開始時間:"
 
@@ -6623,7 +6623,7 @@ msgstr "標籤選擇器"
 msgid "Tags"
 msgstr "標籤"
 
-#: src/merge/output_control.cpp:1586
+#: src/merge/output_control.cpp:1582
 msgid "Tags are not allowed in WebM compliant files. No tags will be written into any output file.\n"
 msgstr "在 WebM 遵循檔裡不能有標籤。不會將標籤寫進任何輸出檔。\n"
 
@@ -6733,7 +6733,7 @@ msgstr "此 MP4 檔「%1%」含有無法辨識格式的章節。若章節不是�
 msgid "The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file."
 msgstr "Matroska 檔已經修改過，但變換定位項目無法更新。這表示播放器可能很難找到該元件。請使用您喜歡的播放器檢查此檔案。"
 
-#: src/mmg/tabs/chapters.cpp:1830
+#: src/mmg/tabs/chapters.cpp:1851
 msgid ""
 "The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file.\n"
 "\n"
@@ -6847,12 +6847,12 @@ msgstr "附件「%1%」無法讀取。\n"
 msgid "The changes are written to the file.\n"
 msgstr "將變更寫入檔案。\n"
 
-#: src/mmg/tabs/chapters.cpp:792
+#: src/mmg/tabs/chapters.cpp:795
 #, c-format, boost-format
 msgid "The chapter '%s' is missing its language."
 msgstr "章節「%s」遺失它的語言。"
 
-#: src/mmg/tabs/chapters.cpp:786
+#: src/mmg/tabs/chapters.cpp:789
 #, c-format, boost-format
 msgid "The chapter '%s' is missing the start time."
 msgstr "章節「%s」遺失起始時間。"
@@ -6905,7 +6905,7 @@ msgstr "校正檔未能正常讀取。\n"
 msgid "The country '%s' is not a valid ccTLD and cannot be selected."
 msgstr "國家「%s」不是有效的 ccTLD，不能選擇。"
 
-#: src/merge/output_control.cpp:1728
+#: src/merge/output_control.cpp:1725
 msgid "The cue entries (the index) are being written...\n"
 msgstr "正在寫入 cue 項目 (此索引)...\n"
 
@@ -6929,11 +6929,11 @@ msgstr "預設語言碼「%1%」不是有效的 ISO639-2 語言碼，將被忽�
 msgid "The delay setting for track nr. %s in file '%s' is invalid."
 msgstr "對檔案「%s」的 %s 軌的延遲設定無效。"
 
-#: src/merge/output_control.cpp:1397
-#: src/merge/output_control.cpp:1400
-#: src/merge/output_control.cpp:1403
-#: src/merge/output_control.cpp:1406
-#: src/merge/output_control.cpp:1409
+#: src/merge/output_control.cpp:1393
+#: src/merge/output_control.cpp:1396
+#: src/merge/output_control.cpp:1399
+#: src/merge/output_control.cpp:1402
+#: src/merge/output_control.cpp:1405
 #, boost-format
 msgid ""
 "The demultiplexer for the file '%1%' failed to initialize:\n"
@@ -6973,12 +6973,12 @@ msgstr "在指定時間長度後開始輸出新檔。時間能以 HH:MM:SS.nnnnn
 msgid "The edit specifications '%1%' and '%2%' resolve to the same track with the UID %3%.\n"
 msgstr "此編輯規格「%1%」和「%2%」決定 UID %3% 為相同軌道。\n"
 
-#: src/mmg/tabs/chapters.cpp:357
+#: src/mmg/tabs/chapters.cpp:360
 msgid "The edition UID to play from the segment linked in the chapter's segment UID. This is simply a number."
 msgstr "要從在章節的剪輯 UID 連結剪輯播放的版本 UID。為一個簡單的數字。"
 
 #: src/mmg/header_editor/frame.cpp:661
-#: src/mmg/tabs/chapters.cpp:1818
+#: src/mmg/tabs/chapters.cpp:1839
 #: src/propedit/propedit.cpp:32
 msgid "The element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
 msgstr "元件已被寫至檔案結尾部，但剪輯大小無法更新。因此這些元件將不可見。處理處理程序將被中止。檔已被修改!"
@@ -7009,8 +7009,8 @@ msgstr "無法開啟檔案「%1%」進行讀取和寫入，或是讀取/寫入�
 #: src/extract/tags.cpp:48
 #: src/extract/timecodes_v2.cpp:194
 #: src/extract/tracks.cpp:346
-#: src/merge/output_control.cpp:337
-#: src/merge/output_control.cpp:470
+#: src/merge/output_control.cpp:336
+#: src/merge/output_control.cpp:469
 #: src/propedit/attachment_target.cpp:63
 #, boost-format
 msgid "The file '%1%' could not be opened for reading: %2%.\n"
@@ -7023,12 +7023,12 @@ msgstr "無法開啟檔案「%1%」進行讀取: %2%。\n"
 #: src/extract/xtr_rmff.cpp:40
 #: src/extract/xtr_tta.cpp:76
 #: src/extract/xtr_wav.cpp:115
-#: src/merge/output_control.cpp:1621
+#: src/merge/output_control.cpp:1618
 #, boost-format
 msgid "The file '%1%' could not be opened for writing: %2%.\n"
 msgstr "無法開啟檔案「%1%」進行寫入: %2%。\n"
 
-#: src/merge/output_control.cpp:1625
+#: src/merge/output_control.cpp:1622
 #, boost-format
 msgid "The file '%1%' has been opened for writing.\n"
 msgstr "檔案「%1%」已開啟以寫入。\n"
@@ -7043,7 +7043,7 @@ msgstr "檔案「%1%」類型未知。請查看支援的檔案類型 (「mkvmerg
 msgid "The file '%1%' is a non-supported file type (%2%).\n"
 msgstr "此檔案「%1%」類型不支援 (%2%)。\n"
 
-#: src/mmg/mmg.cpp:279
+#: src/mmg/mmg.cpp:281
 #, c-format, boost-format
 msgid "The file '%s' does not exist."
 msgstr "檔案「%s」不存在。"
@@ -7053,12 +7053,12 @@ msgstr "檔案「%s」不存在。"
 msgid "The file '%s' is already processed in combination with the file '%s'. It cannot be added a second time."
 msgstr "此檔案「%s」已經用檔案「%s」以結合方式處理。它不能重複加入。"
 
-#: src/merge/output_control.cpp:1403
+#: src/merge/output_control.cpp:1399
 msgid "The file content does not match its format type and was not recognized."
 msgstr "檔案內容不符合本身的格式類型而無法辨認。"
 
-#: src/merge/output_control.cpp:1397
-#: src/merge/output_control.cpp:1400
+#: src/merge/output_control.cpp:1393
+#: src/merge/output_control.cpp:1396
 msgid "The file could not be opened for reading, or there was not enough data to parse its headers."
 msgstr "無法開啟此檔案進行讀取，或者沒有足夠的資料進行分析該檔案的表頭。"
 
@@ -7090,7 +7090,7 @@ msgstr "檔頭太短。\n"
 msgid "The file header was not read correctly.\n"
 msgstr "檔頭讀取異常。\n"
 
-#: src/merge/output_control.cpp:1406
+#: src/merge/output_control.cpp:1402
 msgid "The file headers could not be parsed, e.g. because they're incomplete, invalid or damaged."
 msgstr "無法解析此檔案表頭，可能是因為檔案不完整、無效或已損壞。"
 
@@ -7104,19 +7104,19 @@ msgstr "此檔案為不支援的容器格式 (%s)。"
 msgid "The file is being analyzed."
 msgstr "正在分析檔案。"
 
-#: src/merge/output_control.cpp:282
+#: src/merge/output_control.cpp:281
 msgid "The file is being fixed, part 1/4..."
 msgstr "正在固定檔案，第 1/4 步..."
 
-#: src/merge/output_control.cpp:288
+#: src/merge/output_control.cpp:287
 msgid "The file is being fixed, part 2/4..."
 msgstr "正在固定檔案，第 2/4 步..."
 
-#: src/merge/output_control.cpp:297
+#: src/merge/output_control.cpp:296
 msgid "The file is being fixed, part 3/4..."
 msgstr "正在固定檔案，第 3/4 步..."
 
-#: src/merge/output_control.cpp:305
+#: src/merge/output_control.cpp:304
 msgid "The file is being fixed, part 4/4..."
 msgstr "正在固定檔，第 4/4 步..."
 
@@ -7125,17 +7125,17 @@ msgstr "正在固定檔，第 4/4 步..."
 msgid "The file name for this segment."
 msgstr "此剪輯的檔名。"
 
-#: src/merge/output_control.cpp:1120
+#: src/merge/output_control.cpp:1116
 #, boost-format
 msgid "The file no. %1% ('%2%') does not contain a track with the ID %3%, or that track is not to be copied. The argument for '--append-to' was invalid.\n"
 msgstr "檔案 %1% (「%2%」) 不含 ID 為 %3% 的軌道，或者沒選擇複製該軌道。選項「--append-to」的參數無效。\n"
 
-#: src/merge/output_control.cpp:1126
+#: src/merge/output_control.cpp:1122
 #, boost-format
 msgid "The file no. %1% ('%2%') does not contain a track with the ID %3%, or that track is not to be copied. Therefore no track can be appended to it. The argument for '--append-to' was invalid.\n"
 msgstr "檔案 %1% (「%2%」) 不含 ID 為 %3% 的軌道，或者沒選擇複製該軌道。因此沒有軌道可以添加給它。選項「--append-to」的參數無效。\n"
 
-#: src/merge/output_control.cpp:1063
+#: src/merge/output_control.cpp:1059
 #, boost-format
 msgid "The file no. %1% ('%2%') is not being appended. The argument for '--append-to' was invalid.\n"
 msgstr "此檔案 %1% (「%2%」) 未被添加。選項「--append-to」的參數無效。\n"
@@ -7148,11 +7148,11 @@ msgstr "找不到此檔案或目錄"
 msgid "The file you tried to open is not a Matroska file."
 msgstr "您試著開啟的檔案不是 Matroska 檔。"
 
-#: src/mmg/tabs/chapters.cpp:681
+#: src/mmg/tabs/chapters.cpp:684
 msgid "The file you tried to save to is NOT a Matroska file."
 msgstr "您試著儲存至的檔案 *不是* Matroska 檔。"
 
-#: src/mmg/tabs/chapters.cpp:718
+#: src/mmg/tabs/chapters.cpp:721
 msgid "The file you tried to save to is a Matroska file. For this to work you have to use the 'Save to Matroska file' menu option."
 msgstr "您試著儲存至的檔案是個 Matroska 檔。要這樣做的話，您應該使用“儲存至 Matroska 檔”功能表項目。"
 
@@ -7200,7 +7200,7 @@ msgstr "分割大小格式無效。"
 msgid "The format of the split timecode/duration is invalid."
 msgstr "分割時間碼/時間長度格式無效。"
 
-#: src/merge/output_control.cpp:1190
+#: src/merge/output_control.cpp:1186
 msgid "The formats do not match."
 msgstr "格式不符。"
 
@@ -7270,7 +7270,7 @@ msgstr ""
 "(問題出在 tab_input::load(), #3)"
 
 #: src/mmg/options/chapters.cpp:108
-#: src/mmg/tabs/chapters.cpp:1205
+#: src/mmg/tabs/chapters.cpp:1209
 #, c-format, boost-format
 msgid "The language '%s' is not a valid language and cannot be selected."
 msgstr "語言「%s」不是有效的語言，不可選。"
@@ -7310,7 +7310,7 @@ msgstr ""
 "如果設為 0, 將不使用參考偽快取系統。"
 
 #: src/mmg/header_editor/frame.cpp:667
-#: src/mmg/tabs/chapters.cpp:1824
+#: src/mmg/tabs/chapters.cpp:1845
 #: src/propedit/propedit.cpp:36
 msgid "The meta seek element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
 msgstr "變換定位元件已被寫至檔案結尾部，但剪輯大小無法更新。因此這些元件不可見。處理處理程序將被中止。檔案已有改動！"
@@ -7460,7 +7460,7 @@ msgstr "屬性值「%1%」不是有效的帶正負號整數。%2%\n"
 msgid "The property value is not a valid unsigned integer in '%1%'. %2%\n"
 msgstr "此屬性值在「%1%」不是有效的不帶正負號整數。%2%\n"
 
-#: src/merge/output_control.cpp:1192
+#: src/merge/output_control.cpp:1188
 msgid "The reason is unknown."
 msgstr "原因不詳。"
 
@@ -7481,7 +7481,7 @@ msgstr "第二種模式可提取標籤並將標籤轉換成 XML。此輸出會�
 msgid "The seek table in this TTA file seems to be broken.\n"
 msgstr "此 TTA 檔案中的定位表似乎已損壞。\n"
 
-#: src/mmg/tabs/chapters.cpp:798
+#: src/mmg/tabs/chapters.cpp:801
 #, c-format, boost-format
 msgid "The selected language '%s' for the chapter '%s' is not a valid language code. Please select one of the predefined ones."
 msgstr "選定的語言「%s」（章節「%s」）不是有效的語言碼。請選擇預定義碼中的一項。"
@@ -7499,8 +7499,8 @@ msgstr "在此大小後開始新的輸出檔。字母「G」, 「M」和「K」�
 msgid "The size of attachment '%1%' is 0.\n"
 msgstr "附件「%1%」的大小為 0。\n"
 
-#: src/merge/output_control.cpp:341
-#: src/merge/output_control.cpp:473
+#: src/merge/output_control.cpp:340
+#: src/merge/output_control.cpp:472
 #, boost-format
 msgid "The source file '%1%' could not be opened successfully, or retrieving its size by seeking to the end did not work.\n"
 msgstr "來源檔案「%1%」無法成功開啟，或者無法透過定位至末端檢索。\n"
@@ -7622,7 +7622,7 @@ msgstr "此媒體流的時間碼在檔案中途重置。這是不支援的。目
 msgid "The title for the whole movie."
 msgstr "整部影片的標題。"
 
-#: src/merge/output_control.cpp:1136
+#: src/merge/output_control.cpp:1132
 #, boost-format
 msgid "The track %1% from file no. %2% ('%3%') is to be appended more than once. The argument for '--append-to' was invalid.\n"
 msgstr "軌道 %1% （自檔案 %2% (「%3%」)）被添加超過一次。「--append-to」的參數無效。\n"
@@ -7632,17 +7632,17 @@ msgstr "軌道 %1% （自檔案 %2% (「%3%」)）被添加超過一次。「--a
 msgid "The track ID %1% does not have a valid CodecID.\n"
 msgstr "軌道識別碼 %1% 無有效的 CodecID。\n"
 
-#: src/merge/output_control.cpp:863
+#: src/merge/output_control.cpp:859
 #, boost-format
 msgid "The track headers could not be rendered correctly. %1%\n"
 msgstr "軌道頭無法正確演算。%1%\n"
 
-#: src/merge/output_control.cpp:1182
+#: src/merge/output_control.cpp:1178
 #, boost-format
 msgid "The track number %1% from the file '%2%' can probably not be appended correctly to the track number %3% from the file '%4%': %5% Please make sure that the resulting file plays correctly the whole time. The author of this program will probably not give support for playback issues with the resulting file.\n"
 msgstr "軌道編號 %1% （自檔案「%2%」）可能無法被正確添加至軌道編號 %3% （自檔「%4%」）: %5% 請確認生成的檔是否可以完整地正常播放。本程式的作者可能無法提供關於播放生成的檔案的支援。\n"
 
-#: src/merge/output_control.cpp:1193
+#: src/merge/output_control.cpp:1189
 #, boost-format
 msgid "The track number %1% from the file '%2%' cannot be appended to the track number %3% from the file '%4%'. %5%\n"
 msgstr "軌道編號 %1% （自檔案「%2%」）無法添加至軌道編號 %3% （自檔案「%4%」）。%5%\n"
@@ -7652,7 +7652,7 @@ msgstr "軌道編號 %1% （自檔案「%2%」）無法添加至軌道編號 %3%
 msgid "The track number as used in the Block Header."
 msgstr "區塊表頭使用的軌道編號。"
 
-#: src/merge/output_control.cpp:1191
+#: src/merge/output_control.cpp:1187
 msgid "The track parameters do not match."
 msgstr "軌道參數不符。"
 
@@ -7673,8 +7673,8 @@ msgstr "Theora"
 msgid "There is a new version available online."
 msgstr "線上有新版本可更新。"
 
-#: src/merge/output_control.cpp:1057
-#: src/merge/output_control.cpp:1067
+#: src/merge/output_control.cpp:1053
+#: src/merge/output_control.cpp:1063
 #, boost-format
 msgid "There is no file with the ID '%1%'. The argument for '--append-to' was invalid.\n"
 msgstr "沒有檔案的 ID 為「%1%」。參數「--append-to」無效。\n"
@@ -7784,7 +7784,7 @@ msgid "This file contains coordinates in the timecode lines. Such coordinates ar
 msgstr "此檔案時間軸中含有坐標。此類坐標不受 Matroska SRT 字幕格式的支援。坐標將被自動移除。\n"
 
 #: src/mmg/header_editor/frame.cpp:258
-#: src/mmg/tabs/chapters.cpp:595
+#: src/mmg/tabs/chapters.cpp:598
 msgid "This file could not be opened or parsed."
 msgstr "檔案無法開啟或解析。"
 
@@ -7792,12 +7792,13 @@ msgstr "檔案無法開啟或解析。"
 msgid "This file could not be opened or parsed.\n"
 msgstr "這個檔案無法開啟或解析。\n"
 
-#: src/mmg/tabs/chapters.cpp:602
+#: src/mmg/tabs/chapters.cpp:605
 msgid "This file does not contain any chapters."
 msgstr "此檔案不包含任何章節。"
 
-#: src/mmg/tabs/chapters.cpp:622
-msgid "This file does not contain valid chapters."
+#: src/mmg/tabs/chapters.cpp:625
+#, fuzzy, boost-format
+msgid "This file does not contain valid chapters. Error message from the parser: %1%"
 msgstr "此檔案不包含有效章節。"
 
 #: src/mmg/tabs/attachments.cpp:160
@@ -7835,12 +7836,12 @@ msgstr "這項屬性在「%1%」中是強制的且不能刪除的。%2%\n"
 msgid "This property is unique. More instances cannot be added in '%1%'. %2%\n"
 msgstr "這名稱是唯一的。多數情況下無法被加入到「%1%」。%2%\n"
 
-#: src/merge/output_control.cpp:301
+#: src/merge/output_control.cpp:300
 #, boost-format
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. %1%\n"
 msgstr "這 *真的* 不該發生。為第一個變換定位元件預留的空間過小。%1%\n"
 
-#: src/merge/output_control.cpp:1835
+#: src/merge/output_control.cpp:1832
 #, boost-format
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. Size needed: %1%. %2%\n"
 msgstr "這 *真的* 不該發生。為第一個變換定位元件預留的空間過小。需要的大小: %1%. %2%\n"
@@ -7957,7 +7958,7 @@ msgstr "軌道 %1%（CodecID 為「%2%」）缺少 \"default duration\" 預設�
 msgid "Track %1%: %2%, codec ID: %3%%4%%5%%6%\n"
 msgstr "軌道 %1%: %2%, 編解碼器 ID: %3%%4%%5%%6%\n"
 
-#: src/input/r_qtmp4.cpp:2217
+#: src/input/r_qtmp4.cpp:2216
 #, boost-format
 msgid "Track %1%: AAC found, but decoder config data has length %2%.\n"
 msgstr "軌道 %1%: 已發現 AAC, 但解碼器設定資料長度為 %2%。\n"
@@ -7977,7 +7978,7 @@ msgstr "軌道 %1%: NAL 太大。根據檔頭字段的大小: %2%，封包可用
 msgid "Track %1%: Subtitle entry number %2% is missing its duration. Assuming a duration of 1s.\n"
 msgstr "軌道 %1%: 字幕編號 %2% 缺少時間長度。假定為 1 秒。\n"
 
-#: src/input/r_qtmp4.cpp:2220
+#: src/input/r_qtmp4.cpp:2219
 #, boost-format
 msgid "Track %1%: The AAC information could not be parsed.\n"
 msgstr "軌道 %1%: AAC 資訊無法解析。\n"
@@ -8098,7 +8099,7 @@ msgstr "類型: %1% (%2%)"
 msgid "Typical use cases include reading VOBs from a DVD (e.g. VTS_01_1.VOB, VTS_01_2.VOB, VTS_01_3.VOB)."
 msgstr "典型使用情形包括讀取 DVD 的 VOB (例如 VTS_01_1.VOB、VTS_01_2.VOB、VTS_01_3.VOB)。"
 
-#: src/mmg/tabs/chapters.cpp:350
+#: src/mmg/tabs/chapters.cpp:353
 msgid "UID:"
 msgstr "UID:"
 
@@ -8421,7 +8422,7 @@ msgstr "第 %1% 行處警告: 起始時間早於前一條的起始時間。此�
 msgid "Warning:"
 msgstr "警告:"
 
-#: src/common/output.cpp:89
+#: src/common/output.cpp:81
 msgid "Warning: "
 msgstr "警告: "
 
@@ -8477,7 +8478,7 @@ msgstr "正在匯出資訊"
 msgid "Writing the VobSub index file '%1%'.\n"
 msgstr "正在寫入 VobSub 索引檔「%1%」。\n"
 
-#: src/mmg/tabs/chapters.cpp:1807
+#: src/mmg/tabs/chapters.cpp:1828
 msgid "Writing to the file failed. Typical reasons include the file being write-protected, locked by another process or you not having write permissions for the target directory."
 msgstr "寫入檔案失敗。常見的原因可能是檔案有寫入保護、其他程式鎖住該檔案或你沒有寫入檔案所在目錄的權限。"
 
@@ -8500,8 +8501,8 @@ msgid "Wrong file chosen"
 msgstr "選擇錯誤的檔案"
 
 #: src/mmg/header_editor/frame.cpp:248
-#: src/mmg/tabs/chapters.cpp:681
-#: src/mmg/tabs/chapters.cpp:719
+#: src/mmg/tabs/chapters.cpp:684
+#: src/mmg/tabs/chapters.cpp:722
 msgid "Wrong file selected"
 msgstr "選擇錯誤的檔案"
 
@@ -8525,7 +8526,7 @@ msgstr "錯誤的識別字串:「%|1$7s|」!=「kate\\0\\0\\0」"
 msgid "You are already running the latest version."
 msgstr "已是最新版本。"
 
-#: src/mmg/tabs/chapters.cpp:1226
+#: src/mmg/tabs/chapters.cpp:1230
 msgid ""
 "You can use this function for adjusting the timecodes\n"
 "of the selected chapter and all its children by a fixed amount.\n"
@@ -8665,7 +8666,7 @@ msgstr "壓縮"
 msgid "create_track_number: file_num not found. %1%\n"
 msgstr "create_track_number: file_num 未找到。 %1%\n"
 
-#: src/mmg/tabs/chapters.cpp:390
+#: src/mmg/tabs/chapters.cpp:393
 #: src/mmg/tabs/input_extra.cpp:82
 #: src/mmg/tabs/input_extra.cpp:161
 #: src/mmg/tabs/input_general.cpp:103
@@ -8717,7 +8718,7 @@ msgstr "下移"
 msgid "enable all"
 msgstr "全部啟用"
 
-#: src/mmg/tabs/chapters.cpp:387
+#: src/mmg/tabs/chapters.cpp:390
 msgid "enabled"
 msgstr "啟用"
 
@@ -8734,7 +8735,7 @@ msgstr "即使出現警告資訊"
 msgid "failed"
 msgstr "失敗"
 
-#: src/merge/output_control.cpp:628
+#: src/merge/output_control.cpp:624
 #, boost-format
 msgid "filelist_t not found for generic_packetizer_c. %1%\n"
 msgstr "filelist_t 未找到以供給 generic_packetizer_c。 %1%\n"
@@ -8798,8 +8799,8 @@ msgstr "出現異常\n"
 msgid "header removal"
 msgstr "移除表頭"
 
-#: src/mmg/tabs/chapters.cpp:359
-#: src/mmg/tabs/chapters.cpp:367
+#: src/mmg/tabs/chapters.cpp:362
+#: src/mmg/tabs/chapters.cpp:370
 msgid "hidden"
 msgstr "隱藏"
 
@@ -9180,8 +9181,8 @@ msgstr "mkvmerge 支援兩種章節格式: 類似 OGM 的文字格式和全功�
 msgid "mkvmerge supports two chapter formats: The OGM like text format and the full featured XML format. This option specifies the language to be associated with chapters if the OGM chapter format is used. It is ignored for XML chapter files."
 msgstr "mkvmerge 支援兩種章節格式: 類似 OGM 的文字格式和全功能的 XML 格式。此選項指定 OGM 章節格式所關聯的語言。對於 XML 章節檔，此選項將被忽略。"
 
-#: src/merge/output_control.cpp:276
-#: src/merge/output_control.cpp:312
+#: src/merge/output_control.cpp:275
+#: src/merge/output_control.cpp:311
 msgid "mkvmerge was interrupted by a SIGINT (Ctrl+C?)\n"
 msgstr "mkvmerge 被 SIGINT 中止 (按了 Ctrl+C?)\n"
 
@@ -9218,12 +9219,12 @@ msgstr "如果沒有選擇任何項目 mmg 將會重設為預設值。"
 msgid "mono"
 msgstr "單視角"
 
-#: src/input/r_mpeg_ps.cpp:1156
+#: src/input/r_mpeg_ps.cpp:1157
 #, boost-format
 msgid "mpeg_ps_reader: Should not have happened #1. %1%"
 msgstr "mpeg_ps_reader: 不該發生 #1。 %1%"
 
-#: src/input/r_mpeg_ps.cpp:1180
+#: src/input/r_mpeg_ps.cpp:1181
 #, boost-format
 msgid "mpeg_ps_reader: Should not have happened #2. %1%"
 msgstr "mpeg_ps_reader: 不該發生 #2。 %1%"
@@ -9291,7 +9292,7 @@ msgstr "僅 I 畫格"
 msgid "only if the run was successfull"
 msgstr "僅執行成功時"
 
-#: src/mmg/tabs/chapters.cpp:362
+#: src/mmg/tabs/chapters.cpp:365
 msgid "ordered"
 msgstr "已排列順序"
 
@@ -9443,7 +9444,7 @@ msgstr "spu_extraction_duration: 遇到損壞的 SPU 套件 (next_off < start_of
 msgid "ssa_reader: Invalid format. Could not find the \"Format\" line in the \"[Events]\" section."
 msgstr "ssa_reader: 無效格式。\"[Events]\" 區段中未找到 \"Format\" 這一行。"
 
-#: src/mmg/tabs/chapters.cpp:899
+#: src/mmg/tabs/chapters.cpp:902
 msgid "start >= m->ListSize(). This should not have happened. Please file a bug report. Thanks."
 msgstr "start >= m->ListSize()。這不該發生。請提交錯誤報告。感謝。"
 
@@ -9497,7 +9498,7 @@ msgstr "und (未定)"
 #: src/info/mkvinfo.cpp:943
 #: src/input/r_matroska.cpp:96
 #: src/input/r_matroska.cpp:2254
-#: src/input/r_mpeg_ps.cpp:1344
+#: src/input/r_mpeg_ps.cpp:1345
 #: src/mmg/header_editor/value_page.cpp:150
 #: src/mmg/mmg.cpp:68
 #: src/mmg/tabs/input.cpp:543
@@ -9519,7 +9520,7 @@ msgstr "上移"
 msgid "utf8_strlen(): Invalid UTF-8 char. First byte: 0x%|1$02x|"
 msgstr "utf8_strlen(): 無效 UTF-8 字元。第一位元組: 0x%|1$02x|"
 
-#: src/mmg/tabs/chapters.cpp:851
+#: src/mmg/tabs/chapters.cpp:854
 msgid "verify failed: chapters->CheckMandatory() is false. This should not have happened. Please file a bug report.\n"
 msgstr "verify failed: chapters->CheckMandatory() 為 false。這不該發生。請提交錯誤報告。\n"
 

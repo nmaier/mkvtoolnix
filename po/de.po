@@ -25,7 +25,7 @@ msgstr ""
 "\n"
 "Die temporäre TTA-Datei für Spur-ID %1% wird in die endgültige TTA-Datei kopiert. Das kann eine Weile dauern.\n"
 
-#: src/merge/output_control.cpp:278
+#: src/merge/output_control.cpp:277
 msgid ""
 "\n"
 "mkvmerge received a SIGINT (probably because the user pressed Ctrl+C). Trying to sanitize the file. If mkvmerge hangs during this process you'll have to kill it manually.\n"
@@ -816,10 +816,10 @@ msgstr " Behandlung von Segment-Informationen:\n"
 msgid " at %1%"
 msgstr " an %1%"
 
-#: src/merge/output_control.cpp:286
-#: src/merge/output_control.cpp:295
-#: src/merge/output_control.cpp:303
-#: src/merge/output_control.cpp:310
+#: src/merge/output_control.cpp:285
+#: src/merge/output_control.cpp:294
+#: src/merge/output_control.cpp:302
+#: src/merge/output_control.cpp:309
 msgid " done\n"
 msgstr " fertig\n"
 
@@ -1399,18 +1399,18 @@ msgstr "Der Option »%1%« fehlt die Spur-ID.\n"
 msgid "'%1%' lacks the track number(s).\n"
 msgstr "Der Option »%1%« fehlen die Spur-ID(s).\n"
 
-#: src/common/output.cpp:165
-#: src/common/output.cpp:178
-#: src/common/output.cpp:191
-#: src/common/output.cpp:212
+#: src/common/output.cpp:157
+#: src/common/output.cpp:170
+#: src/common/output.cpp:183
+#: src/common/output.cpp:204
 #, boost-format
 msgid "'%1%' track %2%: %3%"
 msgstr "»%1%« Spur %2%: %3%"
 
-#: src/common/output.cpp:158
-#: src/common/output.cpp:171
-#: src/common/output.cpp:184
-#: src/common/output.cpp:201
+#: src/common/output.cpp:150
+#: src/common/output.cpp:163
+#: src/common/output.cpp:176
+#: src/common/output.cpp:193
 #, boost-format
 msgid "'%1%': %2%"
 msgstr "»%1%«: %2%"
@@ -1661,20 +1661,20 @@ msgstr "»Spur aktiv«-Schalter"
 msgid "(Unknown element: %1%; ID: 0x%2% size: %3%)"
 msgstr "(Unbekanntes Element: %1%; ID: 0x%2% Größe: %3%)"
 
-#: src/mmg/tabs/chapters.cpp:472
+#: src/mmg/tabs/chapters.cpp:475
 msgid "(new chapter file)"
 msgstr "(neue Kapiteldatei)"
 
-#: src/mmg/tabs/chapters.cpp:495
+#: src/mmg/tabs/chapters.cpp:498
 msgid "(unnamed chapter)"
 msgstr "(unbenanntes Kapitel)"
 
-#: src/mmg/tabs/chapters.cpp:883
-#: src/mmg/tabs/chapters.cpp:932
-#: src/mmg/tabs/chapters.cpp:1046
-#: src/mmg/tabs/chapters.cpp:1428
-#: src/mmg/tabs/chapters.cpp:1435
-#: src/mmg/tabs/chapters.cpp:1744
+#: src/mmg/tabs/chapters.cpp:886
+#: src/mmg/tabs/chapters.cpp:935
+#: src/mmg/tabs/chapters.cpp:1050
+#: src/mmg/tabs/chapters.cpp:1433
+#: src/mmg/tabs/chapters.cpp:1440
+#: src/mmg/tabs/chapters.cpp:1765
 msgid "(unnamed)"
 msgstr "(ohne Namen)"
 
@@ -1855,7 +1855,7 @@ msgstr ""
 "aktuelle Segment unter verschiedenen anderen erkannt\n"
 "werden kann (128 Bits lang)"
 
-#: src/mmg/tabs/chapters.cpp:354
+#: src/mmg/tabs/chapters.cpp:357
 msgid "A segment to play in place of this chapter. The edition set via the segment edition UID should be used for this segment, otherwise no edition is used. This is a 128bit segment UID in the usual UID form: hex numbers with or without the \"0x\" prefix, with or without spaces, exactly 32 digits.\n"
 msgstr "gibt ein Segment an, das anstelle des Kapitels abgespielt werden soll. Die Edition, die über die Segment-Editions-UID gesetzt wird, sollte für das Segment benutzt werden; andernfalls wird keine Edition benutzt. Dies ist eine 128 Bit lange Segment-UID in der üblichen UID-Schreibweise: Hexadezimalziffern mit oder ohne »0x«-Präfix, mit oder ohne Leerzeichen, genau 32 Ziffern.\n"
 
@@ -1957,7 +1957,7 @@ msgstr ""
 msgid "AVC/h.264"
 msgstr "AVC/h.264"
 
-#: src/output/p_avc.h:42
+#: src/output/p_avc.h:43
 msgid "AVC/h.264 (unframed)"
 msgstr "AVC/h.264 (unframed)"
 
@@ -2023,7 +2023,7 @@ msgstr "&Befehlszeilenoption hinzufügen"
 msgid "Add additional parts"
 msgstr "Zusätzliche Teile hinzufügen"
 
-#: src/mmg/tabs/chapters.cpp:340
+#: src/mmg/tabs/chapters.cpp:343
 msgid "Add chapter"
 msgstr "Kapitel hinzufügen"
 
@@ -2035,7 +2035,7 @@ msgstr "Befehlszeilenoptionen hinzufügen"
 msgid "Add element"
 msgstr "Element hinzufügen"
 
-#: src/mmg/tabs/chapters.cpp:371
+#: src/mmg/tabs/chapters.cpp:374
 msgid "Add name"
 msgstr "Namen hinzufügen"
 
@@ -2047,7 +2047,7 @@ msgstr "Tags in der Datei mit denen aus »Dateiname« ergänzen, ersetzen oder e
 msgid "Add or replace tags in the file with the ones from 'filename' or remove them if 'filename' is empty (see below and man page for syntax)"
 msgstr "Tags in der Datei mit denen aus »Dateiname« ergänzen, ersetzen oder entfernen, falls »Dateiname« leer ist (siehe unten und Dokumentation für Syntax)"
 
-#: src/mmg/tabs/chapters.cpp:341
+#: src/mmg/tabs/chapters.cpp:344
 msgid "Add subchapter"
 msgstr "Unterkapitel hinzufügen"
 
@@ -2080,11 +2080,11 @@ msgstr "fügt ein Merkmal mit dem angegebenen Wert hinzu, selbst wenn ein gleich
 msgid "Adds the current settings as a new job entry to the job queue"
 msgstr "fügt die aktuellen Einstellungen als Job der Jobwarteschlange hinzu"
 
-#: src/mmg/tabs/chapters.cpp:1234
+#: src/mmg/tabs/chapters.cpp:1238
 msgid "Adjust chapter timecodes"
 msgstr "Kapitelzeitstempel anpassen"
 
-#: src/mmg/tabs/chapters.cpp:346
+#: src/mmg/tabs/chapters.cpp:349
 msgid "Adjust timecodes"
 msgstr "Zeitstempel anpassen"
 
@@ -2105,7 +2105,7 @@ msgstr "Alle Dateien (*)|*"
 msgid "All Files (*.*)|*.*"
 msgstr "Alle Dateien (*.*)|*.*"
 
-#: src/mmg/tabs/chapters.cpp:855
+#: src/mmg/tabs/chapters.cpp:858
 msgid "All chapter entries are valid."
 msgstr "Alle Kapiteleinträge sind gültig."
 
@@ -2188,7 +2188,7 @@ msgstr ""
 "zu finden ist"
 
 #: src/mmg/header_editor/frame.cpp:679
-#: src/mmg/tabs/chapters.cpp:1837
+#: src/mmg/tabs/chapters.cpp:1858
 #: src/propedit/propedit.cpp:44
 msgid "An unknown error occured. The file has been modified."
 msgstr "Ein unbekannter Fehler ist aufgetreten. Die Datei wurde verändert."
@@ -2219,7 +2219,7 @@ msgstr "Momentan wird ein anderer Job ausgeführt. Bitte warten Sie, bis er been
 msgid "Appending a track from a file to another track from the same file is not allowed. This is the case for tracks number %u and %u."
 msgstr "Das Anhängen einer Spur aus einer Datei an eine andere Spur aus derselben Datei ist nicht zulässig. Dies ist für die Spuren Nummer %u und %u der Fall."
 
-#: src/merge/output_control.cpp:1972
+#: src/merge/output_control.cpp:1969
 #, boost-format
 msgid "Appending track %1% from file no. %2% ('%3%') to track %4% from file no. %5% ('%6%').\n"
 msgstr "Spur %1% aus Datei Nummer %2% (»%3%«) wird an Spur %4% aus Datei Nummer %5% (»%6%«) angefügt.\n"
@@ -2529,11 +2529,11 @@ msgstr "Kapitelübersetzung, UID der Edition: %1%"
 msgid "Chapter Translate ID: %1%"
 msgstr "Kapitelübersetzung, ID: %1%"
 
-#: src/mmg/tabs/chapters.cpp:1643
+#: src/mmg/tabs/chapters.cpp:1658
 msgid "Chapter atoms may only be dropped onto other atoms and chapter editions."
 msgstr "Kapiteleinträge können nur auf andere Kapiteleinträge sowie Editionen gezogen werden."
 
-#: src/mmg/tabs/chapters.cpp:1636
+#: src/mmg/tabs/chapters.cpp:1651
 msgid "Chapter editions may only be dropped onto the root node or other editions."
 msgstr "Kapiteleditionen können nur auf den Wuzelknoten und andere Editionen gezogen werden."
 
@@ -2549,7 +2549,7 @@ msgstr "Kapitelextraktion"
 msgid "Chapter file:"
 msgstr "Kapiteldatei:"
 
-#: src/mmg/tabs/chapters.cpp:713
+#: src/mmg/tabs/chapters.cpp:716
 #, c-format, boost-format
 msgid "Chapter files (*.xml)|*.xml|%s"
 msgstr "Kapiteldateien (*.xml)|*.xml|%s"
@@ -2559,12 +2559,12 @@ msgstr "Kapiteldateien (*.xml)|*.xml|%s"
 msgid "Chapter files (*.xml;*.txt;*.cue)|*.xml;*.txt;*.cue|%s"
 msgstr "Kapiteldateien (*.xml;*.txt;*.cue)|*.xml;*.txt;*.cue|%s"
 
-#: src/mmg/tabs/chapters.cpp:577
+#: src/mmg/tabs/chapters.cpp:580
 #, c-format, boost-format
 msgid "Chapter files (*.xml;*.txt;*.mka;*.mkv;*.mks;*.mk3d;*.cue)|*.xml;*.txt;*.mka;*.mkv;*.mks;*.mk3d;*.cue|%s"
 msgstr "Kapiteldateien (*.xml;*.txt;*.mka;*.mkv;*.mks;*.mk3d;*.cue)|*.xml;*.txt;*.mka;*.mkv;*.mks;*.mk3d;*.cue|%s"
 
-#: src/mmg/tabs/chapters.cpp:370
+#: src/mmg/tabs/chapters.cpp:373
 msgid "Chapter names and languages"
 msgstr "Kapitelnamen und -sprachen"
 
@@ -2581,16 +2581,16 @@ msgstr "Kapiteloptionen"
 msgid "Chapter parser: The EditionUID %1% is not unique and could not be reused. A new one will be created.\n"
 msgstr "Kapitelauswertungsprogramm: Die Edition-UID %1% ist nicht eindeutig und kann nicht wieder benutzt werden. Eine neue UID wird erzeugt.\n"
 
-#: src/mmg/tabs/chapters.cpp:779
-#: src/mmg/tabs/chapters.cpp:786
-#: src/mmg/tabs/chapters.cpp:792
-#: src/mmg/tabs/chapters.cpp:800
-#: src/mmg/tabs/chapters.cpp:815
-#: src/mmg/tabs/chapters.cpp:833
+#: src/mmg/tabs/chapters.cpp:782
+#: src/mmg/tabs/chapters.cpp:789
+#: src/mmg/tabs/chapters.cpp:795
+#: src/mmg/tabs/chapters.cpp:803
+#: src/mmg/tabs/chapters.cpp:818
+#: src/mmg/tabs/chapters.cpp:836
 msgid "Chapter verification error"
 msgstr "Fehler bei der Kapitelüberprüfung"
 
-#: src/mmg/tabs/chapters.cpp:855
+#: src/mmg/tabs/chapters.cpp:858
 msgid "Chapter verification succeeded"
 msgstr "Kapitelüberprüfung erfolgreich"
 
@@ -2606,20 +2606,20 @@ msgstr "Kapitel"
 msgid "Chapters (%d entries) from %s"
 msgstr "Kapitel (%d Einträge) aus %s"
 
-#: src/merge/output_control.cpp:1558
+#: src/merge/output_control.cpp:1554
 msgid "Chapters are not allowed in WebM compliant files. No chapters will be written into any output file.\n"
 msgstr "Kapitel sind in WebM-konformen Dateien nicht zulässig. In keine der Ausgabedateien werden Kapitel geschrieben.\n"
 
-#: src/mmg/tabs/chapters.cpp:651
+#: src/mmg/tabs/chapters.cpp:654
 msgid "Chapters loaded."
 msgstr "Kapitel geladen"
 
-#: src/mmg/tabs/chapters.cpp:755
-#: src/mmg/tabs/chapters.cpp:1814
+#: src/mmg/tabs/chapters.cpp:758
+#: src/mmg/tabs/chapters.cpp:1835
 msgid "Chapters written."
 msgstr "Kapitel geschrieben"
 
-#: src/mmg/tabs/chapters.cpp:339
+#: src/mmg/tabs/chapters.cpp:342
 msgid "Chapters:"
 msgstr "Kapitel:"
 
@@ -2655,7 +2655,7 @@ msgstr "online auf der Homepage nachschauen, ob es eine neuere Version von MKVTo
 msgid "Checking for updates online; please wait"
 msgstr "Es wird online nach neuen Programmversionen gesucht; bitte warten."
 
-#: src/mmg/tabs/chapters.cpp:576
+#: src/mmg/tabs/chapters.cpp:579
 msgid "Choose a chapter file"
 msgstr "Kapiteldatei auswählen"
 
@@ -2689,8 +2689,8 @@ msgstr "Quelldatei zum Anhängen auswählen"
 #: src/mmg/mmg_dialog.cpp:770
 #: src/mmg/mmg_dialog.cpp:791
 #: src/mmg/mux_dialog.cpp:206
-#: src/mmg/tabs/chapters.cpp:675
-#: src/mmg/tabs/chapters.cpp:712
+#: src/mmg/tabs/chapters.cpp:678
+#: src/mmg/tabs/chapters.cpp:715
 msgid "Choose an output file"
 msgstr "Zieldatei auswählen"
 
@@ -2931,7 +2931,7 @@ msgstr "Der Sequenzkopf konnte nicht aus dieser MPEG-1/2-Spur extrahiert werden.
 msgid "Could not find an index for audio track %1% (avilib error message: %2%). Skipping track.\n"
 msgstr "Für Audiospur %1% konnte kein Index gefunden werden (Fehlermeldung der Avilib: %2%). Die Spur wird ausgelassen.\n"
 
-#: src/merge/output_control.cpp:1894
+#: src/merge/output_control.cpp:1891
 #, boost-format
 msgid "Could not find gptzr when appending. %1%\n"
 msgstr "»gptzr« konnte beim Anhängen nicht gefunden werden. %1%\n"
@@ -2974,7 +2974,7 @@ msgstr "Die Zwischenablage konnte nicht geöffnet werden."
 msgid "Could not open the corresponding correction file '%1%c'.\n"
 msgstr "Die dazugehörige Korrekturdatei »%1%c« konnte nicht geöffnet werden.\n"
 
-#: src/mmg/tabs/chapters.cpp:742
+#: src/mmg/tabs/chapters.cpp:745
 #, c-format, boost-format
 msgid "Could not open the destination file '%s' for writing. Error code: %d (%s)."
 msgstr "Die Zieldatei »%s« konnte nicht zum Schreiben geöffnet werden. Fehlercode: %d (%s)."
@@ -3009,7 +3009,7 @@ msgid "Could not write to the output file: %1% (%2%)\n"
 msgstr "In die Ausgabedatei konnte nicht geschrieben werden: %1% (%2%)\n"
 
 #: src/mmg/options/chapters.cpp:84
-#: src/mmg/tabs/chapters.cpp:375
+#: src/mmg/tabs/chapters.cpp:378
 msgid "Country:"
 msgstr "Land:"
 
@@ -3166,7 +3166,7 @@ msgstr "Aktuelle Version:"
 msgid "D&elete"
 msgstr "Lösch&en"
 
-#: src/input/r_dts.h:40
+#: src/input/r_dts.h:41
 #: src/output/p_dts.h:45
 msgid "DTS"
 msgstr "DTS"
@@ -3201,7 +3201,7 @@ msgstr "Datum (ungültig, Wert: %1%)"
 msgid "Date: %1% UTC"
 msgstr "Datum: %1% UTC"
 
-#: src/common/output.cpp:92
+#: src/common/output.cpp:84
 msgid "Debug> "
 msgstr "Debug> "
 
@@ -3415,16 +3415,16 @@ msgstr "EBML Leseversion: %1%"
 msgid "EBML version: %1%"
 msgstr "EBML-Version: %1%"
 
-#: src/merge/output_control.cpp:1386
+#: src/merge/output_control.cpp:1382
 #, boost-format
 msgid "EVIL internal bug! (unknown file type). %1%\n"
 msgstr "SCHLIMMER interner Fehler! (unbekannter Dateityp) %1%\n"
 
-#: src/mmg/tabs/chapters.cpp:351
+#: src/mmg/tabs/chapters.cpp:354
 msgid "Each chapter and each edition has a unique identifier. This identifier is normally assigned automatically by the programs, but it can be changed manually if it is really needed."
 msgstr "Jedes Kapitel und jede Edition besitzt eine eindeutige Identifikationsnummer. Diese Identifikationsnummer wird normalerweise von Programmen automatisch vergeben, kann hier aber bei Bedarf manuell geändert werden."
 
-#: src/mmg/tabs/chapters.cpp:833
+#: src/mmg/tabs/chapters.cpp:836
 msgid "Each edition must contain at least one chapter."
 msgstr "Jede Edition muss mindestens einen Kapiteleintrag enthalten."
 
@@ -3449,12 +3449,12 @@ msgstr "Liste der weiteren Quelldateiteile bearbeiten"
 msgid "Edit selectors for properties"
 msgstr "Selektoren für Eigenschaften"
 
-#: src/mmg/tabs/chapters.cpp:527
+#: src/mmg/tabs/chapters.cpp:530
 msgid "Edition"
 msgstr "Edition"
 
-#: src/mmg/tabs/chapters.cpp:878
-#: src/mmg/tabs/chapters.cpp:925
+#: src/mmg/tabs/chapters.cpp:881
+#: src/mmg/tabs/chapters.cpp:928
 #, c-format, boost-format
 msgid "EditionEntry %u"
 msgstr "EditionEntry %u"
@@ -3500,7 +3500,7 @@ msgstr "Verschlüsselungsalgorithmus: %1% (%2%)"
 msgid "Encryption key ID: %1%"
 msgstr "Verschlüsselungsschlüssel-ID: %1%"
 
-#: src/mmg/tabs/chapters.cpp:349
+#: src/mmg/tabs/chapters.cpp:352
 msgid "End:"
 msgstr "Ende:"
 
@@ -3528,17 +3528,17 @@ msgstr "Fehler in Zeile %1%: Es wurde eine Zeile mit einem SRT-Zeitstempel erwar
 msgid "Error in line %1%: expected subtitle number and found some text.\n"
 msgstr "Fehler in Zeile %1%: Es wurde eine Untertitelnummer erwartet, aber anderer Text gefunden.\n"
 
-#: src/mmg/mmg.cpp:279
+#: src/mmg/mmg.cpp:281
 #: src/mmg/mmg_dialog.cpp:414
 #: src/mmg/mmg_dialog.cpp:435
 msgid "Error loading settings"
 msgstr "Fehler beim Laden der Einstellungen"
 
-#: src/mmg/tabs/chapters.cpp:742
+#: src/mmg/tabs/chapters.cpp:745
 msgid "Error opening file"
 msgstr "Fehler beim Öffnen der Datei"
 
-#: src/input/r_mpeg_ps.cpp:1009
+#: src/input/r_mpeg_ps.cpp:1010
 msgid "Error parsing a MPEG PS packet during the header reading phase. This stream seems to be badly damaged.\n"
 msgstr "Fehler beim Auswerten eines MPEG-PS-Pakets in der Phase, in der die Kopfdaten gelesen werden. Diese Spur scheint stark beschädigt zu sein.\n"
 
@@ -3547,7 +3547,7 @@ msgstr "Fehler beim Auswerten eines MPEG-PS-Pakets in der Phase, in der die Kopf
 msgid "Error parsing the chapters in '%1%': some mandatory elements are missing.\n"
 msgstr "Fehler beim Auswerten der Kapitel in »%1%«: Einige notwendige Elemente fehlen.\n"
 
-#: src/mmg/tabs/chapters.cpp:626
+#: src/mmg/tabs/chapters.cpp:629
 msgid "Error parsing the file"
 msgstr "Fehler beim Auswerten der Datei"
 
@@ -3563,18 +3563,18 @@ msgstr "Fehler beim Speichern der Informationen"
 
 #: src/mmg/header_editor/frame.cpp:663
 #: src/mmg/header_editor/frame.cpp:669
-#: src/mmg/tabs/chapters.cpp:1808
-#: src/mmg/tabs/chapters.cpp:1820
-#: src/mmg/tabs/chapters.cpp:1826
+#: src/mmg/tabs/chapters.cpp:1829
+#: src/mmg/tabs/chapters.cpp:1841
+#: src/mmg/tabs/chapters.cpp:1847
 msgid "Error writing Matroska file"
 msgstr "Fehler beim Schreiben der Matroska-Datei"
 
-#: src/common/output.cpp:85
+#: src/common/output.cpp:77
 #: src/mmg/mux_dialog.cpp:278
 msgid "Error:"
 msgstr "Fehler:"
 
-#: src/common/output.cpp:86
+#: src/common/output.cpp:78
 msgid "Error: "
 msgstr "Fehler: "
 
@@ -3798,7 +3798,7 @@ msgid "File name: %1%"
 msgstr "Dateiname: %1%"
 
 #: src/mmg/header_editor/frame.cpp:258
-#: src/mmg/tabs/chapters.cpp:595
+#: src/mmg/tabs/chapters.cpp:598
 msgid "File parsing failed"
 msgstr "Auswerten der Datei schlug fehl"
 
@@ -3807,7 +3807,7 @@ msgid "File removal not possible"
 msgstr "Entfernen der Datei nicht möglich"
 
 #: src/mmg/header_editor/frame.cpp:675
-#: src/mmg/tabs/chapters.cpp:1833
+#: src/mmg/tabs/chapters.cpp:1854
 msgid "File structure warning"
 msgstr "Warnung bzgl. Dateistruktur"
 
@@ -3819,7 +3819,7 @@ msgstr "Datei-/Segmentverknüpfung"
 msgid "File/segment title:"
 msgstr "Datei-/Segmenttitel:"
 
-#: src/merge/output_control.cpp:1071
+#: src/merge/output_control.cpp:1067
 msgid "Files cannot be appended to themselves. The argument for '--append-to' was invalid.\n"
 msgstr "Eine Datei kann nicht an sich selber angehängt werden. Das Argument für »--append-to« war ungültig.\n"
 
@@ -3841,7 +3841,7 @@ msgstr "Verarbeitung am %s fertiggestellt"
 msgid "Fix bitstream timing information"
 msgstr "Zeiteinteilungsinformationen im Bitstream anpassen"
 
-#: src/mmg/tabs/chapters.cpp:358
+#: src/mmg/tabs/chapters.cpp:361
 msgid "Flags:"
 msgstr "Schalter:"
 
@@ -4041,7 +4041,7 @@ msgstr ""
 "eingeben oder aus der Liste auswählen und den Knopf\n"
 "»hinzufügen« drücken."
 
-#: src/mmg/tabs/chapters.cpp:347
+#: src/mmg/tabs/chapters.cpp:350
 msgid "Here you can adjust all the timecodes of the selected chapter and of all its sub-chapters by a specific amount either increasing or decreasing them."
 msgstr "Hier können Sie die Zeitstempel des ausgewählten Kapitels und all seiner Unterkapitel um einen beliebigen Wert erhöhen oder verringern."
 
@@ -4057,7 +4057,7 @@ msgstr ""
 "danach, falls notwendig, geändert werden. Die Standardwerte\n"
 "werden gespeichert, wenn Mmg beendet wird."
 
-#: src/mmg/tabs/chapters.cpp:344
+#: src/mmg/tabs/chapters.cpp:347
 msgid "Here you can set the values for the language and the country that you want to apply to all the chapters below and including the currently selected entry."
 msgstr "Hier können Sie die Werte für Sprache und Land festlegen, die Sie dem ausgewählten Kapitel und allen Unterkapiteln zuweisen möchten."
 
@@ -4081,15 +4081,15 @@ msgstr "IVF (VP8/VP9)"
 msgid "IVF with VP8 video files"
 msgstr "IVF mit VP8-Video-Dateien"
 
-#: src/mmg/tabs/chapters.cpp:360
+#: src/mmg/tabs/chapters.cpp:363
 msgid "If a chapter is marked 'hidden' then the player should not show this chapter entry to the user. Such entries could still be used by the menu system."
 msgstr "Ist ein Kapitel als »versteckt« markiert, so sollte es von Abspielprogrammen nicht angezeigt werden. Solche Kapitel können trotzdem vom Menüsystem benutzt werden."
 
-#: src/mmg/tabs/chapters.cpp:388
+#: src/mmg/tabs/chapters.cpp:391
 msgid "If a chapter is not marked 'enabled' then the player should skip the part of the file that this chapter occupies."
 msgstr "Ist ein Kapitel als nicht »aktiviert« markiert, so sollte ein Abspielprogramm den Teil der Datei überspringen, den das Kapitel abdeckt."
 
-#: src/mmg/tabs/chapters.cpp:368
+#: src/mmg/tabs/chapters.cpp:371
 msgid "If a chapter or an edition is marked 'hidden' then the player should not show this chapter entry (or all of this edition's entries) to the user. Such entries could still be used by the menu system."
 msgstr "Ist ein Kapitel oder eine Edition als »versteckt« markiert, so sollten sie von Abspielprogrammen nicht angezeigt werden. Solche Kapitel (bzw. alle Einträge einer Edition) können trotzdem vom Menüsystem benutzt werden."
 
@@ -4109,11 +4109,11 @@ msgstr "Falls eine Startbild-/-feldnummer leer gelassen wird, wird statt dessen 
 msgid "If a start timecode is left out then the previous range's end timecode is used, or the start of the file if there was no previous range."
 msgstr "Falls ein Startzeitstempel leer gelassen wird, wird stattdessen der Endzeitstempel des vorherigen Zeitbereiches benutzt oder der Startzeitstempel der Quelldateien, falls es keinen vorherigen Zeitbereich gibt."
 
-#: src/mmg/tabs/chapters.cpp:363
+#: src/mmg/tabs/chapters.cpp:366
 msgid "If an edition is marked 'ordered' then the chapters can be defined multiple times and the order to play them is enforced."
 msgstr "Falls eine Edition als »geordnet« markiert ist, dann können Kapiteleinträge mehrfach definiert sein, und die Reihenfolge, in der sie abgespielt werden, wird erzwungen."
 
-#: src/mmg/tabs/chapters.cpp:391
+#: src/mmg/tabs/chapters.cpp:394
 msgid "If an edition is marked as 'default' then it should be used as the default edition."
 msgstr "Falls eine Edition als »Standard« markiert ist, dann sollte sie beim Abspielen als Standard-Edition benutzt werden."
 
@@ -4186,12 +4186,12 @@ msgstr "Detailgrad erhöhen"
 msgid "Input"
 msgstr "Quellen"
 
-#: src/mmg/tabs/chapters.cpp:1258
-#: src/mmg/tabs/chapters.cpp:1311
-#: src/mmg/tabs/chapters.cpp:1317
-#: src/mmg/tabs/chapters.cpp:1329
-#: src/mmg/tabs/chapters.cpp:1348
-#: src/mmg/tabs/chapters.cpp:1356
+#: src/mmg/tabs/chapters.cpp:1262
+#: src/mmg/tabs/chapters.cpp:1316
+#: src/mmg/tabs/chapters.cpp:1322
+#: src/mmg/tabs/chapters.cpp:1334
+#: src/mmg/tabs/chapters.cpp:1353
+#: src/mmg/tabs/chapters.cpp:1361
 msgid "Input data error"
 msgstr "Dateneingabefehler"
 
@@ -4219,7 +4219,7 @@ msgid "Internal bug: tracks.cpp SSA #1. %1%"
 msgstr "interner Fehler: tracks.cpp SSA #1. %1%"
 
 #: src/mmg/header_editor/frame.cpp:679
-#: src/mmg/tabs/chapters.cpp:1837
+#: src/mmg/tabs/chapters.cpp:1858
 msgid "Internal program error"
 msgstr "interner Programmfehler"
 
@@ -4242,15 +4242,15 @@ msgstr "ungültiges Zeichen für Base64-Codierung gefunden"
 msgid "Invalid BlockAddition level in argument '%1%'.\n"
 msgstr "ungültige Stufe für BlockAddition in Argument »%1%«\n"
 
-#: src/mmg/tabs/chapters.cpp:1311
+#: src/mmg/tabs/chapters.cpp:1316
 msgid "Invalid UID. A UID is simply a number."
 msgstr "ungültige UID. Eine UID ist einfach eine Nummer."
 
-#: src/mmg/tabs/chapters.cpp:1317
+#: src/mmg/tabs/chapters.cpp:1322
 msgid "Invalid UID. This chapter UID is already in use. The original UID has not been changed."
 msgstr "ungültige UID. Diese Kapitel-UID wird bereits verwendet. Die bisherige UID wurde nicht verändert."
 
-#: src/mmg/tabs/chapters.cpp:1329
+#: src/mmg/tabs/chapters.cpp:1334
 msgid "Invalid UID. This edition UID is already in use. The original UID has not been changed."
 msgstr "ungültige UID. Die Editions-UID wird bereits verwendet. Die bisherige UID wurde nicht verändert."
 
@@ -4372,24 +4372,24 @@ msgstr "ungültiges Format für eine SSA-Zeile (»%1%«) bei Zeitstempel %2%: Da
 msgid "Invalid format for a SSA line ('%1%') at timecode %2%: Too many fields found (%3% instead of 9). This entry will be skipped.\n"
 msgstr "ungültiges Format für eine SSA-Zeile (»%1%«) bei Zeitstempel %2%: Zu viele Felder gefunden (%3% anstelle von 9). Dieser Eintrag wird ausgelassen.\n"
 
-#: src/mmg/tabs/chapters.cpp:1258
+#: src/mmg/tabs/chapters.cpp:1262
 msgid "Invalid format used for the adjustment."
 msgstr "ungültiges Format für den Wert, um den die Zeitstempel angepasst werden sollen."
 
-#: src/mmg/tabs/chapters.cpp:1356
+#: src/mmg/tabs/chapters.cpp:1361
 #, c-format, boost-format
 msgid "Invalid format used for the end time for '%s'. Setting value to 0."
 msgstr "ungültiges Format für die Kapitelendzeit »%s«. Der Wert wird auf 0 gesetzt."
 
-#: src/mmg/tabs/chapters.cpp:1389
+#: src/mmg/tabs/chapters.cpp:1394
 msgid "Invalid format used for the segment UID. Not using the value."
 msgstr "ungültiges Format für die Segment-UID benutzt. Dieser Wert wird ignoriert."
 
-#: src/mmg/tabs/chapters.cpp:1407
+#: src/mmg/tabs/chapters.cpp:1412
 msgid "Invalid format used for the segment edition UID. Not using the value."
 msgstr "ungültiges Format für die Segment-Editions-UID. Dieser Wert wird ignoriert."
 
-#: src/mmg/tabs/chapters.cpp:1348
+#: src/mmg/tabs/chapters.cpp:1353
 #, c-format, boost-format
 msgid "Invalid format used for the start time for '%s'. Setting value to 0."
 msgstr "ungültiges Format für die Kapitelanfangszeit »%s«. Der Wert wird auf 0 gesetzt."
@@ -4442,7 +4442,7 @@ msgid "Invalid header length: %1% (total length: %2%, idx: %3%, dataidx: %4%)\n"
 msgstr "ungültige Kopflänge: %1% (Gesamtlänge: %2%, Index: %3%, Datenindex: %4%)\n"
 
 #: src/mmg/options/chapters.cpp:109
-#: src/mmg/tabs/chapters.cpp:1205
+#: src/mmg/tabs/chapters.cpp:1209
 msgid "Invalid language selected"
 msgstr "ungültige Sprache ausgewählt"
 
@@ -4469,8 +4469,8 @@ msgstr "ungültige Anzahl Minuten: %1% > 59"
 msgid "Invalid number of seconds: %1% > 59"
 msgstr "ungültige Anzahl von Sekunden: %1% > 59"
 
-#: src/mmg/tabs/chapters.cpp:1636
-#: src/mmg/tabs/chapters.cpp:1643
+#: src/mmg/tabs/chapters.cpp:1651
+#: src/mmg/tabs/chapters.cpp:1658
 msgid "Invalid operation"
 msgstr "ungültige Operation"
 
@@ -4686,7 +4686,7 @@ msgid "Language is not NUL terminated"
 msgstr "Die Zeichenkette für die Sprache endet nicht mit einem NUL-Zeichen."
 
 #: src/mmg/options/chapters.cpp:81
-#: src/mmg/tabs/chapters.cpp:374
+#: src/mmg/tabs/chapters.cpp:377
 #: src/mmg/tabs/global.cpp:347
 #: src/mmg/tabs/input_general.cpp:185
 msgid "Language:"
@@ -4799,7 +4799,7 @@ msgstr "MP4-Audio/Video-Dateien"
 msgid "MPEG audio files"
 msgstr "MPEG-Audiodateien"
 
-#: src/input/r_mpeg_ps.h:210
+#: src/input/r_mpeg_ps.h:211
 msgid "MPEG program stream"
 msgstr "MPEG-Programmdatenstrom"
 
@@ -4881,7 +4881,7 @@ msgstr "Matroska-Audio/-Videodateien"
 msgid "Matroska files (*.mkv *.mka *.mks *.mk3d);;All files (*.*)"
 msgstr "Matroska-Dateien (*.mkv *.mka *.mks *.mk3d);;Alle Dateien (*.*)"
 
-#: src/mmg/tabs/chapters.cpp:676
+#: src/mmg/tabs/chapters.cpp:679
 #, c-format, boost-format
 msgid "Matroska files (*.mkv;*.mka;*.mk3d)|*.mkv;*.mka;*.mk3d|%s"
 msgstr "Matroska-Dateien (*.mkv;*.mka;*.mks;*.mk3d)|*.mkv;*.mka;*.mks;*.mk3d|%s"
@@ -4975,11 +4975,11 @@ msgstr "fehlendes Argument für »--ui-language«\n"
 msgid "Missing argument to '%1%'.\n"
 msgstr "fehlendes Argument für »%1%«\n"
 
-#: src/mmg/mmg.cpp:270
+#: src/mmg/mmg.cpp:272
 msgid "Missing file name"
 msgstr "fehlender Dateiname"
 
-#: src/mmg/mmg.cpp:270
+#: src/mmg/mmg.cpp:272
 msgid "Missing file name after for the option '--edit-headers'."
 msgstr "fehlender Dateiname für die Option »--edit-headers«"
 
@@ -5033,7 +5033,7 @@ msgstr "Es wurde mehr als ein Dateiname angegeben (»%1%« und »%2%«).\n"
 msgid "More than one name was given for a single attachment. '%1%' will be discarded and '%2%' used instead.\n"
 msgstr "Für einen Dateianhang wurde mehr als ein Name angegeben. »%1%« wird ignoriert und stattdessen »%2%« benutzt.\n"
 
-#: src/merge/output_control.cpp:1147
+#: src/merge/output_control.cpp:1143
 #, boost-format
 msgid "More than one track is to be appended to the track %1% from file no. %2% ('%3%'). The argument for '--append-to' was invalid.\n"
 msgstr "Es soll mehr als eine Spur an Spur %1% aus Quelldatei Nummer %2% (»%3%«) angehängt werden. Das Argument für »--append-to« war ungültig.\n"
@@ -5079,7 +5079,7 @@ msgid "Name for this track, e.g. \"director's comments\"."
 msgstr "Name für diese Spur, z.B. »Kommentare des Regisseurs«"
 
 #: src/mmg/tabs/attachments.cpp:159
-#: src/mmg/tabs/chapters.cpp:373
+#: src/mmg/tabs/chapters.cpp:376
 msgid "Name:"
 msgstr "Name:"
 
@@ -5088,7 +5088,7 @@ msgstr "Name:"
 msgid "Name: %1%"
 msgstr "Name: %1%"
 
-#: src/mmg/tabs/chapters.cpp:490
+#: src/mmg/tabs/chapters.cpp:493
 msgid "New chapters created."
 msgstr "neue Kapitel angelegt"
 
@@ -5148,7 +5148,7 @@ msgstr "Für den Dateianhang »%s« wurde noch kein MIME-Typ ausgewählt."
 msgid "No MIME type has been set for the attachment '%1%', and it could not be guessed.\n"
 msgstr "Für den Dateianhang »%1%« wurde kein MIME-Typ festgelegt, und der MIME-Typ konnte nicht bestimmt werden.\n"
 
-#: src/merge/output_control.cpp:1106
+#: src/merge/output_control.cpp:1102
 #, boost-format
 msgid "No append mapping was given for the file no. %1% ('%2%'). A default mapping of %3% will be used instead. Please keep that in mind if mkvmerge aborts with an error message regarding invalid '--append-to' options.\n"
 msgstr "Für Datei Nummer %1% (»%2%«) wurde keine Zuordnung zum Anhängen der Spuren angegeben. Stattdessen wird die Standardzuordnung %3% benutzt. Bitte behalten Sie diese Tatsache im Hinterkopf, falls Mkvmerge mit einer Fehlermeldung bezüglich ungültiger »--append-to«-Argumente abbricht.\n"
@@ -5159,7 +5159,7 @@ msgstr "Für Datei Nummer %1% (»%2%«) wurde keine Zuordnung zum Anhängen der 
 msgid "No attachment matched the spec '%1%'.\n"
 msgstr "Die Spezifikation »%1%« traf auf keinen Dateianhang zu.\n"
 
-#: src/mmg/tabs/chapters.cpp:815
+#: src/mmg/tabs/chapters.cpp:818
 msgid "No chapter entries have been create yet."
 msgstr "Es wurden noch keine Kapiteleinträge angelegt."
 
@@ -5168,7 +5168,7 @@ msgstr "Es wurden noch keine Kapiteleinträge angelegt."
 msgid "No chapter numbers listed after '--split %1%'.\n"
 msgstr "keine Kapitel nach »--split %1%« aufgelistet\n"
 
-#: src/mmg/tabs/chapters.cpp:602
+#: src/mmg/tabs/chapters.cpp:605
 msgid "No chapters found"
 msgstr "keine Kapitel gefunden"
 
@@ -5335,7 +5335,7 @@ msgstr "Ogg-/OGM-Audio/-Video-Dateien"
 msgid "Ok"
 msgstr "Ok"
 
-#: src/mmg/tabs/chapters.cpp:779
+#: src/mmg/tabs/chapters.cpp:782
 msgid "One of the chapters does not have a name."
 msgstr "Eines der Kapitel hat keinen Namen."
 
@@ -5378,7 +5378,7 @@ msgstr "Es darf nur eine Ausgabedatei angegeben werden.\n"
 msgid "Only one segment info file allowed in '%1% %2%'.\n"
 msgstr "Es darf nur eine Segmentinformationsdatei angegeben werden (Argument war »%1% %2%«).\n"
 
-#: src/merge/output_control.cpp:1087
+#: src/merge/output_control.cpp:1083
 #, boost-format
 msgid "Only partial append mappings were given for the file no. %1% ('%2%'). Either don't specify any mapping (in which case the default mapping will be used) or specify a mapping for all tracks that are to be copied.\n"
 msgstr "Für Datei Nummer %1% (»%2%«) wurde eine unvollständige Zuordnung für das Anhängen von Spuren angegeben. Geben Sie entweder eine vollständige Zuordnung für alle zu muxenden Spuren aus dieser Datei an oder lassen Sie die Zuordnung für die Datei weg, wobei dann die Standardzuordnung benutzt wird.\n"
@@ -5502,7 +5502,7 @@ msgstr "PGS"
 msgid "PGS/SUP subtitles"
 msgstr "PGS-/SUP-Untertitel"
 
-#: src/input/r_pgssup.h:34
+#: src/input/r_pgssup.h:33
 msgid "PGSSUP"
 msgstr "PGSSUP"
 
@@ -5652,7 +5652,7 @@ msgstr "Fortschritt"
 
 #: src/extract/timecodes_v2.cpp:290
 #: src/extract/tracks.cpp:420
-#: src/merge/output_control.cpp:557
+#: src/merge/output_control.cpp:553
 #, boost-format
 msgid "Progress: %1%%%%2%"
 msgstr "Fortschritt: %1%%%%2%"
@@ -5662,7 +5662,7 @@ msgstr "Fortschritt: %1%%%%2%"
 msgid "Progress: 100%\n"
 msgstr "Fortschritt: 100%\n"
 
-#: src/merge/output_control.cpp:535
+#: src/merge/output_control.cpp:531
 #, boost-format
 msgid "Progress: 100%%%1%"
 msgstr "Fortschritt: 100%%%1%"
@@ -5698,13 +5698,13 @@ msgstr "Quicktime-/MP4-Demuxer: Spuren mit konstanter Sample-Größe und variabl
 msgid "Quicktime/MP4 reader: Could not read chunk number %1%/%2% with size %3% from position %4%. Aborting.\n"
 msgstr "Quicktime-/MP4-Demuxer: Der Block Nummer %1%/%2% mit Größe %3% an Position %4% konnte nicht gelesen werden. Abbruch.\n"
 
-#: src/input/r_qtmp4.cpp:2089
-#: src/input/r_qtmp4.cpp:2103
+#: src/input/r_qtmp4.cpp:2088
+#: src/input/r_qtmp4.cpp:2102
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the extended sound description atom for track ID %1%.\n"
 msgstr "Quicktime-/MP4-Demuxer: Die erweiterten Kopfdaten für die Audiospur-ID %1% konnten nicht gelesen werden.\n"
 
-#: src/input/r_qtmp4.cpp:2060
+#: src/input/r_qtmp4.cpp:2059
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the sound description atom for track ID %1%.\n"
 msgstr "Quicktime-/MP4-Demuxer: Die Kopfdaten für die Audiospur-ID %1% konnten nicht gelesen werden.\n"
@@ -5714,7 +5714,7 @@ msgstr "Quicktime-/MP4-Demuxer: Die Kopfdaten für die Audiospur-ID %1% konnten 
 msgid "Quicktime/MP4 reader: Could not read the stream description atom for track ID %1%.\n"
 msgstr "Quicktime-/MP4-Demuxer: Das Spurbeschreibungselement von Spur-ID %1% konnte nicht gelesen werden.\n"
 
-#: src/input/r_qtmp4.cpp:2135
+#: src/input/r_qtmp4.cpp:2134
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the video description atom for track ID %1%.\n"
 msgstr "Quicktime-/MP4-Demuxer: Die Kopfdaten von Videospur-ID %1% konnten nicht gelesen werden.\n"
@@ -5732,12 +5732,12 @@ msgstr "Quicktime-/MP4-Demuxer: Es wurde kein »mdat«-Element gefunden, d.h. ke
 msgid "Quicktime/MP4 reader: Invalid chunk size %1% at %2%.\n"
 msgstr "Quicktime-/MP4-Demuxer: Ungültige Blockgröße %1% an Position %2%\n"
 
-#: src/input/r_qtmp4.cpp:2510
+#: src/input/r_qtmp4.cpp:2509
 #, boost-format
 msgid "Quicktime/MP4 reader: MPEG4 part 10/AVC track %1% is missing its decoder config. Skipping this track.\n"
 msgstr "Quicktime-/MP4-Demuxer: Der MPEG4-Teil-10/AVC-Spur %1% fehlen die Codec-Konfigurationsdaten. Die Spur wird ausgelassen.\n"
 
-#: src/input/r_qtmp4.cpp:2541
+#: src/input/r_qtmp4.cpp:2540
 #, boost-format
 msgid "Quicktime/MP4 reader: MPEG4 track %1% is missing the esds atom/the decoder config. Skipping this track.\n"
 msgstr "Quicktime-/MP4-Demuxer: Der MPEG4-Spur %1% fehlt das ESDS-Element bzw. die Codec-Konfigurationsdaten. Die Spur wird ausgelassen.\n"
@@ -5756,17 +5756,17 @@ msgstr "Quicktime-/MP4-Demuxer: Das Längenfeld im Spurbeschreibungselement von 
 msgid "Quicktime/MP4 reader: The 'time scale' parameter was 0. This is not supported.\n"
 msgstr "Quicktime-/MP4-Demuxer: Der Zeitstempelskalierungsfaktor ist 0. Dies wird nicht unterstützt.\n"
 
-#: src/input/r_qtmp4.cpp:2473
+#: src/input/r_qtmp4.cpp:2472
 #, boost-format
 msgid "Quicktime/MP4 reader: The AAC track %1% is missing the esds atom/the decoder config. Skipping this track.\n"
 msgstr "Quicktime-/MP4-Demuxer: Der AAC-Spur %1% fehlt das ESDS-Element bzw. die Codec-Konfigurationsdaten. Die Spur wird ausgelassen.\n"
 
-#: src/input/r_qtmp4.cpp:2468
+#: src/input/r_qtmp4.cpp:2467
 #, boost-format
 msgid "Quicktime/MP4 reader: The audio track %1% is using an unsupported 'object type id' of %2% in the 'esds' atom. Skipping this track.\n"
 msgstr "Quicktime-/MP4-Demuxer: Die Audiospur %1% enthält die nicht unterstützte Objekttyp-ID %2% im ESDS-Element. Die Spur wird ausgelassen.\n"
 
-#: src/input/r_qtmp4.cpp:2520
+#: src/input/r_qtmp4.cpp:2519
 #, boost-format
 msgid "Quicktime/MP4 reader: The video track %1% is missing the ESDS atom. Skipping this track.\n"
 msgstr "Quicktime-/MP4-Demuxer: Der Videospur %1% fehlt das ESDS-Element. Die Spur wird ausgelassen.\n"
@@ -5791,16 +5791,16 @@ msgstr "Quicktime-/MP4-Demuxer: Diese Datei enthält komprimierte Kopfelemente, 
 msgid "Quicktime/MP4 reader: This file uses compressed headers, but they could not be uncompressed. Error code from zlib: %1%. Aborting.\n"
 msgstr "Quicktime-/MP4-Demuxer: Diese Datei enthält komprimierte Kopfelemente, die nicht dekomprimiert werden konnten. Fehlercode von Zlib: %1%. Abbruch.\n"
 
-#: src/input/r_qtmp4.cpp:2441
-#: src/input/r_qtmp4.cpp:2456
-#: src/input/r_qtmp4.cpp:2494
-#: src/input/r_qtmp4.cpp:2559
+#: src/input/r_qtmp4.cpp:2440
+#: src/input/r_qtmp4.cpp:2455
+#: src/input/r_qtmp4.cpp:2493
+#: src/input/r_qtmp4.cpp:2558
 #, boost-format
 msgid "Quicktime/MP4 reader: Track %1% is missing some data. Broken header atoms?\n"
 msgstr "Quicktime-/MP4-Demuxer: Der Spur %1% fehlen Kopfdaten. Beschädigte Datei?\n"
 
-#: src/input/r_qtmp4.cpp:2068
-#: src/input/r_qtmp4.cpp:2142
+#: src/input/r_qtmp4.cpp:2067
+#: src/input/r_qtmp4.cpp:2141
 #, boost-format
 msgid "Quicktime/MP4 reader: Track ID %1% has more than one FourCC. Only using the first one (%|2$.4s|) and not this one (%|3$.4s|).\n"
 msgstr "Quicktime-/MP4-Demuxer: Die Spur-ID %1% hat mehr als einen FourCC-Code. Es wird nur der erste benutzt (%|2$.4s|) und nicht die eben gefundene (%|3$.4s|).\n"
@@ -5825,12 +5825,12 @@ msgstr "RSA"
 msgid "Re-enable the selected job(s)"
 msgstr "die ausgewählten Jobs wieder aktivieren"
 
-#: src/merge/output_control.cpp:968
+#: src/merge/output_control.cpp:964
 #, boost-format
 msgid "Re-rendering track headers: data_size != 0 not implemented yet. %1%\n"
 msgstr "Neuschreiben der Spurkopfdaten: data_size != 0 noch nicht implementiert. %1%\n"
 
-#: src/input/r_mpeg_ps.cpp:363
+#: src/input/r_mpeg_ps.cpp:364
 msgid "Reading encrypted VOBs is not supported.\n"
 msgstr "Die Verarbeitung von verschlüsselten VOBs wird nicht unterstützt.\n"
 
@@ -5899,7 +5899,7 @@ msgstr "Die aktuelle Datei neu laden, ohne zu speichern"
 msgid "Remaining time:"
 msgstr "verbleibende Zeit:"
 
-#: src/mmg/tabs/chapters.cpp:342
+#: src/mmg/tabs/chapters.cpp:345
 msgid "Remove chapter"
 msgstr "Kapitel entfernen"
 
@@ -5911,7 +5911,7 @@ msgstr "Element entfernen"
 msgid "Remove job from job queue after run:"
 msgstr "Job nach Ausführung aus Warteschlange entfernen:"
 
-#: src/mmg/tabs/chapters.cpp:372
+#: src/mmg/tabs/chapters.cpp:375
 msgid "Remove name"
 msgstr "Namen entfernen"
 
@@ -6089,7 +6089,7 @@ msgstr "Suchvorlauf: %|1$.3f|ms (%2%ns)"
 msgid "Segment"
 msgstr "Segment"
 
-#: src/mmg/tabs/chapters.cpp:353
+#: src/mmg/tabs/chapters.cpp:356
 msgid "Segment UID:"
 msgstr "Segment-UID:"
 
@@ -6102,7 +6102,7 @@ msgstr "Segment-UID: %1%"
 msgid "Segment UIDs:"
 msgstr "Segment-UIDs:"
 
-#: src/mmg/tabs/chapters.cpp:356
+#: src/mmg/tabs/chapters.cpp:359
 msgid "Segment edition UID:"
 msgstr "Segment-Editions-UID:"
 
@@ -6262,7 +6262,7 @@ msgstr "setzt die Beschreibung, die in der folgenden Option »--add-attachment«
 msgid "Set the name to use for the following '--add-attachment' or '--replace-attachment' option"
 msgstr "setzt den Namen, der in der folgenden Option »--add-attachment« oder »--replace-attachment« benutzt wird."
 
-#: src/mmg/tabs/chapters.cpp:343
+#: src/mmg/tabs/chapters.cpp:346
 msgid "Set values"
 msgstr "Werte setzen"
 
@@ -6491,7 +6491,7 @@ msgstr "Einige Kopfdaten wurden verändert. Wollen Sie die Änderungen wirklich 
 msgid "Some header values have been modified. Do you really want to reload without saving the file?"
 msgstr "Einige Kopfdaten wurden verändert. Wollen Sie die Änderungen wirklich verwerfen und die Datei neu laden?"
 
-#: src/merge/output_control.cpp:1598
+#: src/merge/output_control.cpp:1594
 #, boost-format
 msgid "Some tag elements are missing (this error should not have occured - another similar error should have occured earlier). %1%\n"
 msgstr "Einige Tag-Elemente fehlen (dieser Fehler hätte nicht auftreten sollen, sondern früher ein ähnlicher). %1%\n"
@@ -6564,7 +6564,7 @@ msgstr "startet alle Jobs unabhängig von ihrem Status."
 msgid "Start with empty settings"
 msgstr "Mit leeren Einstellungen neu anfangen"
 
-#: src/mmg/tabs/chapters.cpp:348
+#: src/mmg/tabs/chapters.cpp:351
 msgid "Start:"
 msgstr "Start:"
 
@@ -6681,7 +6681,7 @@ msgstr "Tagbearbeitungsziele"
 msgid "Tags"
 msgstr "Tags"
 
-#: src/merge/output_control.cpp:1586
+#: src/merge/output_control.cpp:1582
 msgid "Tags are not allowed in WebM compliant files. No tags will be written into any output file.\n"
 msgstr "Tags sind in WebM-konformen Dateien nicht zulässig. In keine der Ausgabedateien werden Tags geschrieben.\n"
 
@@ -6791,7 +6791,7 @@ msgstr "Die MP4-Datei »%1%« enthält Kapitel, deren Format nicht erkannt wurde
 msgid "The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file."
 msgstr "Die Matroska-Datei wurde bereits geändert, aber der Meta-Index konnte nicht aktualisiert werden. Das bedeutet, dass Abspielprogramme das neu geschriebene Element nicht so leicht oder gar nicht finden werden. Bitte benutzen Sie Ihr favorisiertes Abspielprogramm, um zu überprüfen, ob die Datei problemlos abgespielt werden kann."
 
-#: src/mmg/tabs/chapters.cpp:1830
+#: src/mmg/tabs/chapters.cpp:1851
 msgid ""
 "The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file.\n"
 "\n"
@@ -6905,12 +6905,12 @@ msgstr "Der Dateianhang »%1%« konnte nicht gelesen werden.\n"
 msgid "The changes are written to the file.\n"
 msgstr "Die Veränderungen werden in die Datei zurückgeschrieben.\n"
 
-#: src/mmg/tabs/chapters.cpp:792
+#: src/mmg/tabs/chapters.cpp:795
 #, c-format, boost-format
 msgid "The chapter '%s' is missing its language."
 msgstr "Dem Kapitel »%s« fehlt die Sprache."
 
-#: src/mmg/tabs/chapters.cpp:786
+#: src/mmg/tabs/chapters.cpp:789
 #, c-format, boost-format
 msgid "The chapter '%s' is missing the start time."
 msgstr "Dem Kapitel »%s« fehlt die Startzeit."
@@ -6963,7 +6963,7 @@ msgstr "Der Dateikopf der Korrekturdatei konnte nicht gelesen werden.\n"
 msgid "The country '%s' is not a valid ccTLD and cannot be selected."
 msgstr "Das Land »%s« ist kein gültiger ccTLD-Code und kann nicht ausgewählt werden."
 
-#: src/merge/output_control.cpp:1728
+#: src/merge/output_control.cpp:1725
 msgid "The cue entries (the index) are being written...\n"
 msgstr "Die Cue-Einträge (der Index) werden geschrieben …\n"
 
@@ -6987,11 +6987,11 @@ msgstr "Das Standardsprachkürzel »%1%« ist kein gültiger ISO639-2-Code und w
 msgid "The delay setting for track nr. %s in file '%s' is invalid."
 msgstr "Der Wert für die Verzögerung für Spur Nummer %s in Quelldatei »%s« ist ungültig."
 
-#: src/merge/output_control.cpp:1397
-#: src/merge/output_control.cpp:1400
-#: src/merge/output_control.cpp:1403
-#: src/merge/output_control.cpp:1406
-#: src/merge/output_control.cpp:1409
+#: src/merge/output_control.cpp:1393
+#: src/merge/output_control.cpp:1396
+#: src/merge/output_control.cpp:1399
+#: src/merge/output_control.cpp:1402
+#: src/merge/output_control.cpp:1405
 #, boost-format
 msgid ""
 "The demultiplexer for the file '%1%' failed to initialize:\n"
@@ -7032,12 +7032,12 @@ msgstr "die Zeitdauer, nach der eine neue Zieldatei angefangen wird. Die Dauer k
 msgid "The edit specifications '%1%' and '%2%' resolve to the same track with the UID %3%.\n"
 msgstr "Die Bearbeitungsziele »%1%« und »%2%« verweisen auf die selbe Spur mit der UID %3%.\n"
 
-#: src/mmg/tabs/chapters.cpp:357
+#: src/mmg/tabs/chapters.cpp:360
 msgid "The edition UID to play from the segment linked in the chapter's segment UID. This is simply a number."
 msgstr "die Editions-UID, die aus dem via Segment-UID-Element verknüpften Segment abgespielt werden soll. Dies ist einfach eine Nummer."
 
 #: src/mmg/header_editor/frame.cpp:661
-#: src/mmg/tabs/chapters.cpp:1818
+#: src/mmg/tabs/chapters.cpp:1839
 #: src/propedit/propedit.cpp:32
 msgid "The element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
 msgstr ""
@@ -7071,8 +7071,8 @@ msgstr "Die Datei »%1%« konnte nicht zum Lesen und Schreiben geöffnet werden,
 #: src/extract/tags.cpp:48
 #: src/extract/timecodes_v2.cpp:194
 #: src/extract/tracks.cpp:346
-#: src/merge/output_control.cpp:337
-#: src/merge/output_control.cpp:470
+#: src/merge/output_control.cpp:336
+#: src/merge/output_control.cpp:469
 #: src/propedit/attachment_target.cpp:63
 #, boost-format
 msgid "The file '%1%' could not be opened for reading: %2%.\n"
@@ -7085,12 +7085,12 @@ msgstr "Die Datei »%1%« konnte nicht zum Lesen geöffnet werden: %2%.\n"
 #: src/extract/xtr_rmff.cpp:40
 #: src/extract/xtr_tta.cpp:76
 #: src/extract/xtr_wav.cpp:115
-#: src/merge/output_control.cpp:1621
+#: src/merge/output_control.cpp:1618
 #, boost-format
 msgid "The file '%1%' could not be opened for writing: %2%.\n"
 msgstr "Die Datei »%1%« konnte nicht zum Schreiben geöffnet werden: %2%.\n"
 
-#: src/merge/output_control.cpp:1625
+#: src/merge/output_control.cpp:1622
 #, boost-format
 msgid "The file '%1%' has been opened for writing.\n"
 msgstr "Die Datei »%1%« wurde zum Schreiben geöffnet.\n"
@@ -7105,7 +7105,7 @@ msgstr "Die Datei »%1%« hat einen unbekannten Typ. Schauen Sie sich bitte die 
 msgid "The file '%1%' is a non-supported file type (%2%).\n"
 msgstr "Die Datei »%1%« hat einen nicht unterstützten Typ (%2%).\n"
 
-#: src/mmg/mmg.cpp:279
+#: src/mmg/mmg.cpp:281
 #, c-format, boost-format
 msgid "The file '%s' does not exist."
 msgstr "Die Datei »%s« existiert nicht."
@@ -7115,12 +7115,12 @@ msgstr "Die Datei »%s« existiert nicht."
 msgid "The file '%s' is already processed in combination with the file '%s'. It cannot be added a second time."
 msgstr "Die Datei »%s« wird bereits zusammen mit der Datei »%s« verarbeitet. Sie kann nicht ein zweites Mal hinzugefügt werden."
 
-#: src/merge/output_control.cpp:1403
+#: src/merge/output_control.cpp:1399
 msgid "The file content does not match its format type and was not recognized."
 msgstr "Der Dateiinhalt entspricht nicht dem Dateiformat und wurde nicht erkannt."
 
-#: src/merge/output_control.cpp:1397
-#: src/merge/output_control.cpp:1400
+#: src/merge/output_control.cpp:1393
+#: src/merge/output_control.cpp:1396
 msgid "The file could not be opened for reading, or there was not enough data to parse its headers."
 msgstr "Die Datei konnte nicht zum Lesen geöffnet werden oder sie enthielt nicht genug Inhalt zur Analyse der Kopfdaten."
 
@@ -7152,7 +7152,7 @@ msgstr "Die Dateikopfdaten sind zu kurz.\n"
 msgid "The file header was not read correctly.\n"
 msgstr "Die Dateikopfdaten konnten nicht vollständig gelesen werden.\n"
 
-#: src/merge/output_control.cpp:1406
+#: src/merge/output_control.cpp:1402
 msgid "The file headers could not be parsed, e.g. because they're incomplete, invalid or damaged."
 msgstr "Die Dateikopfdaten konnten nicht ausgewertet werden, z.B. weil sie unvollständig, ungültig oder beschädigt sind."
 
@@ -7166,19 +7166,19 @@ msgstr "Die Datei enthält ein nicht unterstütztes Container-Format (%s)."
 msgid "The file is being analyzed."
 msgstr "Die Datei wird analysiert."
 
-#: src/merge/output_control.cpp:282
+#: src/merge/output_control.cpp:281
 msgid "The file is being fixed, part 1/4..."
 msgstr "Die Datei wird korrigiert, Teil 1/4 …"
 
-#: src/merge/output_control.cpp:288
+#: src/merge/output_control.cpp:287
 msgid "The file is being fixed, part 2/4..."
 msgstr "Die Datei wird korrigiert, Teil 2/4 …"
 
-#: src/merge/output_control.cpp:297
+#: src/merge/output_control.cpp:296
 msgid "The file is being fixed, part 3/4..."
 msgstr "Die Datei wird korrigiert, Teil 3/4 …"
 
-#: src/merge/output_control.cpp:305
+#: src/merge/output_control.cpp:304
 msgid "The file is being fixed, part 4/4..."
 msgstr "Die Datei wird korrigiert, Teil 4/4 …"
 
@@ -7187,17 +7187,17 @@ msgstr "Die Datei wird korrigiert, Teil 4/4 …"
 msgid "The file name for this segment."
 msgstr "der Dateiname für dieses Segment"
 
-#: src/merge/output_control.cpp:1120
+#: src/merge/output_control.cpp:1116
 #, boost-format
 msgid "The file no. %1% ('%2%') does not contain a track with the ID %3%, or that track is not to be copied. The argument for '--append-to' was invalid.\n"
 msgstr "Die Datei Nummer %1% (»%2%«) enthält keine Spur mit der ID %3%, oder die Spur wurde nicht zum Muxen ausgewählt. Das Argument zu »--append-to« war ungültig.\n"
 
-#: src/merge/output_control.cpp:1126
+#: src/merge/output_control.cpp:1122
 #, boost-format
 msgid "The file no. %1% ('%2%') does not contain a track with the ID %3%, or that track is not to be copied. Therefore no track can be appended to it. The argument for '--append-to' was invalid.\n"
 msgstr "Die Datei Nummer %1% (»%2%«) enthält keine Spur mit der ID %3%, oder die Spur wurde nicht zum Muxen ausgewählt. Deshalb kann an diese Spur keine andere Spur angehängt werden. Das Argument zu »--append-to« war ungültig.\n"
 
-#: src/merge/output_control.cpp:1063
+#: src/merge/output_control.cpp:1059
 #, boost-format
 msgid "The file no. %1% ('%2%') is not being appended. The argument for '--append-to' was invalid.\n"
 msgstr "Die Datei Nummer %1% (»%2%«) wurde nicht zum Anhängen ausgewählt. Das Argument für »--append-to« war ungültig.\n"
@@ -7210,11 +7210,11 @@ msgstr "Die Datei oder das Verzeichnis wurde nicht gefunden."
 msgid "The file you tried to open is not a Matroska file."
 msgstr "Die Datei, die Sie öffnen möchten, ist keine Matroska-Datei."
 
-#: src/mmg/tabs/chapters.cpp:681
+#: src/mmg/tabs/chapters.cpp:684
 msgid "The file you tried to save to is NOT a Matroska file."
 msgstr "Die Datei, in die Sie speichern möchten, ist KEINE Matroska-Datei."
 
-#: src/mmg/tabs/chapters.cpp:718
+#: src/mmg/tabs/chapters.cpp:721
 msgid "The file you tried to save to is a Matroska file. For this to work you have to use the 'Save to Matroska file' menu option."
 msgstr "Die Datei, in die Sie speichern wollten, ist eine Matroska-Datei. Damit das richtig funktioniert, müssen Sie den Menüpunkt »In Matroska-Datei speichern« auswählen."
 
@@ -7262,7 +7262,7 @@ msgstr "Das Format der Aufteilungsgröße ist ungültig."
 msgid "The format of the split timecode/duration is invalid."
 msgstr "Das Format des Aufteilungszeitstempels/der Aufteilungsdauer ist ungültig."
 
-#: src/merge/output_control.cpp:1190
+#: src/merge/output_control.cpp:1186
 msgid "The formats do not match."
 msgstr "Die Formate stimmen nicht überein."
 
@@ -7332,7 +7332,7 @@ msgstr ""
 "(Problem trat auf in tab_input::load(), #3)"
 
 #: src/mmg/options/chapters.cpp:108
-#: src/mmg/tabs/chapters.cpp:1205
+#: src/mmg/tabs/chapters.cpp:1209
 #, c-format, boost-format
 msgid "The language '%s' is not a valid language and cannot be selected."
 msgstr "Die Sprache »%s« ist keine gültige Sprache und kann nicht ausgewählt werden."
@@ -7374,7 +7374,7 @@ msgstr ""
 "Referenz-Pseudo-Zwischenspeicherystem nicht benutzt."
 
 #: src/mmg/header_editor/frame.cpp:667
-#: src/mmg/tabs/chapters.cpp:1824
+#: src/mmg/tabs/chapters.cpp:1845
 #: src/propedit/propedit.cpp:36
 msgid "The meta seek element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
 msgstr "Das Meta-Indexelement wurde ans Dateiende geschrieben, aber die Segmentgröße konnte nicht aktualisiert werden. Deshalb wird das Element für Abspielprogramme unsichtbar sein. Der Prozess wird beendet. Die Datei wurde verändert!"
@@ -7534,7 +7534,7 @@ msgstr "Der Merkmalswert ist keine gültige vorzeichenbehaftete Zahl bei »%1%«
 msgid "The property value is not a valid unsigned integer in '%1%'. %2%\n"
 msgstr "Der Merkmalswert ist keine gültige vorzeichenlose Zahl bei »%1%«. %2%\n"
 
-#: src/merge/output_control.cpp:1192
+#: src/merge/output_control.cpp:1188
 msgid "The reason is unknown."
 msgstr "Der Grund ist nicht bekannt."
 
@@ -7555,7 +7555,7 @@ msgstr "Im zweiten Modus werden Tags extrahiert und in ein XML-Format konvertier
 msgid "The seek table in this TTA file seems to be broken.\n"
 msgstr "Die Suchindextabelle in dieser TTA-Datei scheint beschädigt zu sein.\n"
 
-#: src/mmg/tabs/chapters.cpp:798
+#: src/mmg/tabs/chapters.cpp:801
 #, c-format, boost-format
 msgid "The selected language '%s' for the chapter '%s' is not a valid language code. Please select one of the predefined ones."
 msgstr "Die ausgewählte Sprache »%s« für Kapitel »%s« ist kein gültiges Sprachkürzel. Bitte wählen Sie eines der vordefinierten Sprachkürzel aus."
@@ -7573,8 +7573,8 @@ msgstr "Die Größe, nach der eine neue Zieldatei angefangen wird. Die Buchstabe
 msgid "The size of attachment '%1%' is 0.\n"
 msgstr "Die Größe des Dateianhanges »%1%« ist 0.\n"
 
-#: src/merge/output_control.cpp:341
-#: src/merge/output_control.cpp:473
+#: src/merge/output_control.cpp:340
+#: src/merge/output_control.cpp:472
 #, boost-format
 msgid "The source file '%1%' could not be opened successfully, or retrieving its size by seeking to the end did not work.\n"
 msgstr "Die Quelldatei »%1%« konnte nicht geöffnet werden oder aber die Größenabfrage schlug fehl.\n"
@@ -7696,7 +7696,7 @@ msgstr "Die Zeitstempel in diesem Datenstrom wurden mittendrin zurückgesetzt. D
 msgid "The title for the whole movie."
 msgstr "der Titel für den kompletten Film"
 
-#: src/merge/output_control.cpp:1136
+#: src/merge/output_control.cpp:1132
 #, boost-format
 msgid "The track %1% from file no. %2% ('%3%') is to be appended more than once. The argument for '--append-to' was invalid.\n"
 msgstr "Die Spur %1% aus Datei Nummer %2% (»%3%«) soll mehr als einmal an eine andere Spur angehängt werden. Das Argument für »--append-to« war ungültig.\n"
@@ -7706,17 +7706,17 @@ msgstr "Die Spur %1% aus Datei Nummer %2% (»%3%«) soll mehr als einmal an eine
 msgid "The track ID %1% does not have a valid CodecID.\n"
 msgstr "Die Spur mit ID %1% hat keine gültige CodecID.\n"
 
-#: src/merge/output_control.cpp:863
+#: src/merge/output_control.cpp:859
 #, boost-format
 msgid "The track headers could not be rendered correctly. %1%\n"
 msgstr "Die Spurkopfdaten konnten nicht korrekt geschrieben werden. %1%\n"
 
-#: src/merge/output_control.cpp:1182
+#: src/merge/output_control.cpp:1178
 #, boost-format
 msgid "The track number %1% from the file '%2%' can probably not be appended correctly to the track number %3% from the file '%4%': %5% Please make sure that the resulting file plays correctly the whole time. The author of this program will probably not give support for playback issues with the resulting file.\n"
 msgstr "Die Spur Nummer %1% aus Datei »%2%« kann vermutlich nicht korrekt an Spur Nummer %3% aus Datei »%4%« angehängt werden: %5% Bitte stellen Sie sicher, dass sich die resultierende Datei über ihre gesamte Laufzeit korrekt abspielen lässt. Der Autor dieses Programms wird vermutlich keinen Support leisten, falls Sie Probleme beim Abspielen der Datei haben.\n"
 
-#: src/merge/output_control.cpp:1193
+#: src/merge/output_control.cpp:1189
 #, boost-format
 msgid "The track number %1% from the file '%2%' cannot be appended to the track number %3% from the file '%4%'. %5%\n"
 msgstr "Die Spur Nummer %1% aus der Datei »%2%« kann nicht an die Spur Nummer %3% aus der Datei »%4%« angehängt werden. %5%\n"
@@ -7726,7 +7726,7 @@ msgstr "Die Spur Nummer %1% aus der Datei »%2%« kann nicht an die Spur Nummer 
 msgid "The track number as used in the Block Header."
 msgstr "die Spurnummer, die in den Kopfdaten des Blocks benutzt wird"
 
-#: src/merge/output_control.cpp:1191
+#: src/merge/output_control.cpp:1187
 msgid "The track parameters do not match."
 msgstr "Die Spurparameter stimmen nicht überein."
 
@@ -7747,8 +7747,8 @@ msgstr "Theora"
 msgid "There is a new version available online."
 msgstr "Auf der Homepage ist eine neue Version verfügbar."
 
-#: src/merge/output_control.cpp:1057
-#: src/merge/output_control.cpp:1067
+#: src/merge/output_control.cpp:1053
+#: src/merge/output_control.cpp:1063
 #, boost-format
 msgid "There is no file with the ID '%1%'. The argument for '--append-to' was invalid.\n"
 msgstr "Es gibt keine Datei mit der Nummer »%1%«. Das Argument für »--append-to« war ungültig.\n"
@@ -7862,7 +7862,7 @@ msgid "This file contains coordinates in the timecode lines. Such coordinates ar
 msgstr "Diese Datei enthält Anzeigekoordinaten zusammen in den Zeitstempeln. Solche Koordinaten werden vom Matroska SRT-Untertitelformat nicht unterstützt. Die Koordinaten werden automatisch entfernt.\n"
 
 #: src/mmg/header_editor/frame.cpp:258
-#: src/mmg/tabs/chapters.cpp:595
+#: src/mmg/tabs/chapters.cpp:598
 msgid "This file could not be opened or parsed."
 msgstr "Die Datei konnte nicht geöffnet oder ausgewertet werden."
 
@@ -7870,12 +7870,13 @@ msgstr "Die Datei konnte nicht geöffnet oder ausgewertet werden."
 msgid "This file could not be opened or parsed.\n"
 msgstr "Die Datei konnte nicht geöffnet oder ausgewertet werden.\n"
 
-#: src/mmg/tabs/chapters.cpp:602
+#: src/mmg/tabs/chapters.cpp:605
 msgid "This file does not contain any chapters."
 msgstr "Diese Datei enthält keine Kapiteleinträge."
 
-#: src/mmg/tabs/chapters.cpp:622
-msgid "This file does not contain valid chapters."
+#: src/mmg/tabs/chapters.cpp:625
+#, fuzzy, boost-format
+msgid "This file does not contain valid chapters. Error message from the parser: %1%"
 msgstr "Diese Datei enthält keine gültigen Kapiteleinträge."
 
 #: src/mmg/tabs/attachments.cpp:160
@@ -7913,12 +7914,12 @@ msgstr "Diese Eigenschaft ist erforderlich und kann nicht gelöscht werden bei �
 msgid "This property is unique. More instances cannot be added in '%1%'. %2%\n"
 msgstr "Diese Eigenschaft ist einzigartig. Es können keine weiteren Instanzen davon angelegt werden bei »%1%«. %2%\n"
 
-#: src/merge/output_control.cpp:301
+#: src/merge/output_control.cpp:300
 #, boost-format
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. %1%\n"
 msgstr "Dies hätte WIRKLICH nicht passieren dürfen. Der für das erste Meta-Seek-Element reservierte Platz war zu klein. %1%\n"
 
-#: src/merge/output_control.cpp:1835
+#: src/merge/output_control.cpp:1832
 #, boost-format
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. Size needed: %1%. %2%\n"
 msgstr "Dies hätte WIRKLICH nicht passieren dürfen. Der für das erste Meta-Seek-Element reservierte Platz war zu klein. Benötigter Platz: %1%. %2%\n"
@@ -8035,7 +8036,7 @@ msgstr "Der Spur %1% mit der CodecID »%2%« fehlt das Element »Standarddauer«
 msgid "Track %1%: %2%, codec ID: %3%%4%%5%%6%\n"
 msgstr "Spur %1%: %2%, Codec-ID: %3%%4%%5%%6%\n"
 
-#: src/input/r_qtmp4.cpp:2217
+#: src/input/r_qtmp4.cpp:2216
 #, boost-format
 msgid "Track %1%: AAC found, but decoder config data has length %2%.\n"
 msgstr "Spur %1%: AAC-Audiospur gefunden, aber die privaten Codec-Konfigurationsdaten haben einen Länge von %2%.\n"
@@ -8055,7 +8056,7 @@ msgstr "Spur %1%: NAL zu groß. Größe laut Kopffeld: %2%, verfügbare Byte im 
 msgid "Track %1%: Subtitle entry number %2% is missing its duration. Assuming a duration of 1s.\n"
 msgstr "Spur %1%: Dem Untertitelbild Nummer %2% fehlt die Angabe der Dauer. Es wird angenommen, dass es 1s dauert.\n"
 
-#: src/input/r_qtmp4.cpp:2220
+#: src/input/r_qtmp4.cpp:2219
 #, boost-format
 msgid "Track %1%: The AAC information could not be parsed.\n"
 msgstr "Spur %1%: Die AAC-Codec-Konfigurationsdaten konnten nicht ausgewertet werden.\n"
@@ -8176,7 +8177,7 @@ msgstr "Typ: %1% (%2%)"
 msgid "Typical use cases include reading VOBs from a DVD (e.g. VTS_01_1.VOB, VTS_01_2.VOB, VTS_01_3.VOB)."
 msgstr "Typische Anwendungsfälle beinhalten VOBs von DVDs (z.B. VTS_01_1.VOB, VTS_01_2.VOB, VTS_01_3.VOB)."
 
-#: src/mmg/tabs/chapters.cpp:350
+#: src/mmg/tabs/chapters.cpp:353
 msgid "UID:"
 msgstr "UID:"
 
@@ -8513,7 +8514,7 @@ msgstr "Warnung in Zeile %1%: Der Start-Zeitstempel ist kleiner als der des vorh
 msgid "Warning:"
 msgstr "Warnung:"
 
-#: src/common/output.cpp:89
+#: src/common/output.cpp:81
 msgid "Warning: "
 msgstr "Warnung: "
 
@@ -8572,7 +8573,7 @@ msgstr "Informationen werden geschrieben"
 msgid "Writing the VobSub index file '%1%'.\n"
 msgstr "Die VobSub-Index-Datei »%1%« wird geschrieben.\n"
 
-#: src/mmg/tabs/chapters.cpp:1807
+#: src/mmg/tabs/chapters.cpp:1828
 msgid "Writing to the file failed. Typical reasons include the file being write-protected, locked by another process or you not having write permissions for the target directory."
 msgstr "Die Datei konnte nicht geschrieben werden. Typische Gründe sind dass die Datei schreibgeschützt ist, sie von einem anderen Prozess gesperrt ist oder dass Sie keine Schreibberechtigung für das Zielverzeichnis haben."
 
@@ -8595,8 +8596,8 @@ msgid "Wrong file chosen"
 msgstr "falsche Datei ausgewählt"
 
 #: src/mmg/header_editor/frame.cpp:248
-#: src/mmg/tabs/chapters.cpp:681
-#: src/mmg/tabs/chapters.cpp:719
+#: src/mmg/tabs/chapters.cpp:684
+#: src/mmg/tabs/chapters.cpp:722
 msgid "Wrong file selected"
 msgstr "falsche Datei ausgewählt"
 
@@ -8620,7 +8621,7 @@ msgstr "falsche Identifikationskennung: »%|1$7s|' != 'kate\\0\\0\\0«"
 msgid "You are already running the latest version."
 msgstr "Sie haben bereits die aktuelle Version installiert."
 
-#: src/mmg/tabs/chapters.cpp:1226
+#: src/mmg/tabs/chapters.cpp:1230
 msgid ""
 "You can use this function for adjusting the timecodes\n"
 "of the selected chapter and all its children by a fixed amount.\n"
@@ -8765,7 +8766,7 @@ msgstr "Komprimierung"
 msgid "create_track_number: file_num not found. %1%\n"
 msgstr "create_track_number: »file_num« nicht gefunden. %1%\n"
 
-#: src/mmg/tabs/chapters.cpp:390
+#: src/mmg/tabs/chapters.cpp:393
 #: src/mmg/tabs/input_extra.cpp:82
 #: src/mmg/tabs/input_extra.cpp:161
 #: src/mmg/tabs/input_general.cpp:103
@@ -8817,7 +8818,7 @@ msgstr "runter"
 msgid "enable all"
 msgstr "alle aktivieren"
 
-#: src/mmg/tabs/chapters.cpp:387
+#: src/mmg/tabs/chapters.cpp:390
 msgid "enabled"
 msgstr "aktiviert"
 
@@ -8834,7 +8835,7 @@ msgstr "selbst, wenn es Warnungen gab"
 msgid "failed"
 msgstr "fehlgeschlagen"
 
-#: src/merge/output_control.cpp:628
+#: src/merge/output_control.cpp:624
 #, boost-format
 msgid "filelist_t not found for generic_packetizer_c. %1%\n"
 msgstr "»filelist_t« für »generic_packetizer_c« nicht gefunden. %1%\n"
@@ -8898,8 +8899,8 @@ msgstr "habe eine Ausnahme\n"
 msgid "header removal"
 msgstr "Entfernen von Kopfdaten"
 
-#: src/mmg/tabs/chapters.cpp:359
-#: src/mmg/tabs/chapters.cpp:367
+#: src/mmg/tabs/chapters.cpp:362
+#: src/mmg/tabs/chapters.cpp:370
 msgid "hidden"
 msgstr "versteckt"
 
@@ -9280,8 +9281,8 @@ msgstr "Mkvmerge unterstützt zwei Kapitelformate: das bei OGM-Dateien verwendet
 msgid "mkvmerge supports two chapter formats: The OGM like text format and the full featured XML format. This option specifies the language to be associated with chapters if the OGM chapter format is used. It is ignored for XML chapter files."
 msgstr "Mkvmerge unterstützt zwei Kapitelformate: das bei OGM-Dateien verwendete, einfache Format und ein vollwertiges und umfassendes XML-Format. Diese Option gibt die Sprache an, die bei Verwendung des OGM-Formates jedem Kapiteleintrag zugewiesen wird. Der Eintrag wird für das XML-Format ignoriert."
 
-#: src/merge/output_control.cpp:276
-#: src/merge/output_control.cpp:312
+#: src/merge/output_control.cpp:275
+#: src/merge/output_control.cpp:311
 msgid "mkvmerge was interrupted by a SIGINT (Ctrl+C?)\n"
 msgstr "Mkvmerge wurde durch ein Signal unterbrochen (wurde Strg+C gedrückt?)\n"
 
@@ -9318,12 +9319,12 @@ msgstr "Mmg wird auf die Standardliste zurückgehen, wenn kein Eintrag ausgewäh
 msgid "mono"
 msgstr "mono"
 
-#: src/input/r_mpeg_ps.cpp:1156
+#: src/input/r_mpeg_ps.cpp:1157
 #, boost-format
 msgid "mpeg_ps_reader: Should not have happened #1. %1%"
 msgstr "mpeg_ps_reader: hätte nicht passieren sollen #1. %1%"
 
-#: src/input/r_mpeg_ps.cpp:1180
+#: src/input/r_mpeg_ps.cpp:1181
 #, boost-format
 msgid "mpeg_ps_reader: Should not have happened #2. %1%"
 msgstr "mpeg_ps_reader: hätte nicht passieren sollen #2. %1%"
@@ -9391,7 +9392,7 @@ msgstr "nur für I-Bilder"
 msgid "only if the run was successfull"
 msgstr "nur bei erfolgreicher Ausführung"
 
-#: src/mmg/tabs/chapters.cpp:362
+#: src/mmg/tabs/chapters.cpp:365
 msgid "ordered"
 msgstr "reihenfolgentreu"
 
@@ -9543,7 +9544,7 @@ msgstr "spu_extraction_duration: Es wurde ein beschädigtes SPU-Paket bei Zeitst
 msgid "ssa_reader: Invalid format. Could not find the \"Format\" line in the \"[Events]\" section."
 msgstr "ssa_reader: ungültiges Format. Es wurde keine »Format«-Zeile im Abschnitt »[Events]« gefunden."
 
-#: src/mmg/tabs/chapters.cpp:899
+#: src/mmg/tabs/chapters.cpp:902
 msgid "start >= m->ListSize(). This should not have happened. Please file a bug report. Thanks."
 msgstr "start >= m->ListSize(). Hätte nicht passieren sollen. Bitte erstellen Sie einen Fehlerbericht. Danke."
 
@@ -9597,7 +9598,7 @@ msgstr "und (nicht festgelegt)"
 #: src/info/mkvinfo.cpp:943
 #: src/input/r_matroska.cpp:96
 #: src/input/r_matroska.cpp:2254
-#: src/input/r_mpeg_ps.cpp:1344
+#: src/input/r_mpeg_ps.cpp:1345
 #: src/mmg/header_editor/value_page.cpp:150
 #: src/mmg/mmg.cpp:68
 #: src/mmg/tabs/input.cpp:543
@@ -9619,7 +9620,7 @@ msgstr "hoch"
 msgid "utf8_strlen(): Invalid UTF-8 char. First byte: 0x%|1$02x|"
 msgstr "utf8_strlen(): ungültiges UTF-8-Zeichen. Erstes Byte: 0x%|1$02x|"
 
-#: src/mmg/tabs/chapters.cpp:851
+#: src/mmg/tabs/chapters.cpp:854
 msgid "verify failed: chapters->CheckMandatory() is false. This should not have happened. Please file a bug report.\n"
 msgstr "verify failed: chapters->CheckMandatory() ist »false«. Das hätte nicht passieren sollen. Bitte erstellen Sie einen Fehlerbericht.\n"
 
@@ -9650,3 +9651,4 @@ msgstr "ja"
 
 #~ msgid "VP8"
 #~ msgstr "VP8"
+
