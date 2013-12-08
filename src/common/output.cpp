@@ -281,9 +281,9 @@ mxhexdump(unsigned int level,
 }
 
 ebml_dumper_c::ebml_dumper_c()
-  : m_values{}
-  , m_addresses{}
-  , m_indexes{}
+  : m_values{true}
+  , m_addresses{true}
+  , m_indexes{true}
   , m_max_level{std::numeric_limits<size_t>::max()}
   , m_target_type{STDOUT}
   , m_io_target{}
