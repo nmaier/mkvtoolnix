@@ -27,6 +27,7 @@
 #include <wx/bitmap.h>
 #include <wx/icon.h>
 #include <wx/mstream.h>
+#include <wx/treebase.h>
 
 #include "common/logger.h"
 
@@ -102,6 +103,17 @@ operator <<(std::ostream &out,
 #  define NZ(s_singular, s_plural, count) wxU(s_singular)
 # endif
 #endif
+
+inline std::ostream &
+operator <<(std::ostream &out,
+            wxTreeItemId const &id) {
+#if wxCHECK_VERSION(2, 9, 0)
+  out << "ItemID[" << id.IsOk() << "@" << id.GetID() << "]";
+#else
+  out << "ItemID[" << id.IsOk() << "@" << id.m_pItem << "]";
+#endif
+  return out;
+}
 
 // Use wxComboBox on non-Windows builds with wxWidgets 2.8.0 and newer
 // because GTK's combo box has serious problems (see bug 339).
