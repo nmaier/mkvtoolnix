@@ -76,6 +76,13 @@ public:
   }
 };
 
+inline std::ostream &
+operator <<(std::ostream &out,
+            chapter_node_data_c const &node) {
+  out << "node[" << (node.is_atom ? "atom" : "edition") << "/" << node.get() << "]";
+  return out;
+}
+
 class tab_chapters: public wxPanel {
   DECLARE_CLASS(tab_chapters);
   DECLARE_EVENT_TABLE();
@@ -105,6 +112,9 @@ public:
 
   ebml_element_cptr m_chapters_cp;
   KaxChapters *m_chapters;
+
+  ebml_dumper_c m_dumper;
+  debugging_option_c m_debug_dnd;
 
 public:
   tab_chapters(wxWindow *parent, wxMenu *chapters_menu);

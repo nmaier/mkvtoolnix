@@ -167,7 +167,10 @@ tab_chapters::tab_chapters(wxWindow *parent,
   : wxPanel(parent, -1, wxDefaultPosition, wxSize(100, 400), wxTAB_TRAVERSAL)
   , m_chapters_menu{chapters_menu}
   , m_chapters{}
+  , m_debug_dnd{"chapter_editor_dnd|chapter_editor_drag_and_drop"}
 {
+  m_dumper.target(ebml_dumper_c::LOGGER);
+
   st_chapters  = new wxStaticText(this, wxID_STATIC, wxEmptyString);
 
   auto siz_all = new wxBoxSizer(wxVERTICAL);
@@ -1020,6 +1023,7 @@ tab_chapters::on_entry_selected(wxTreeEvent &evt) {
   enable_buttons(true);
 
   auto old_id = evt.GetOldItem();
+  mxdebug_if(m_debug_dnd, boost::format("on_entry_selected: old_id %1% tid_root %2%") % old_id % tid_root);
   if (old_id.IsOk() && (old_id != tid_root))
     copy_values(old_id);
 
@@ -1301,6 +1305,7 @@ tab_chapters::copy_values(wxTreeItemId id) {
   if (!data)
     return true;
 
+  mxdebug_if(m_debug_dnd, boost::format("copy_values: called for %1% node_data %2%") % id % *data);
   auto label   = tc_chapters->GetItemText(id);
   auto chapter = data->chapter;
 
@@ -1610,6 +1615,7 @@ tab_chapters::on_drag_begin(wxTreeEvent &evt) {
   // Store currently dragged node for use in on_drag_end().
   m_dragged_item = evt.GetItem();
   auto selected = tc_chapters->GetSelection();
+  mxdebug_if(m_debug_dnd, boost::format("BEGIN drag on %1%, selected is %2%\n") % m_dragged_item % selected);
   if (selected.IsOk())
     copy_values(selected);
   evt.Allow();
@@ -1621,14 +1627,21 @@ tab_chapters::on_drag_end(wxTreeEvent &evt) {
   auto dst       = evt.GetItem();
   m_dragged_item = wxTreeItemId{};
 
+  mxdebug_if(m_debug_dnd, boost::format("END dragded %1% dropped %2% tid_rood %3%\n") % src % src % tid_root);
+
   if (!src.IsOk() || !dst.IsOk() || (src == dst))
     return;
+
+  mxdebug_if(m_debug_dnd, boost::format("  END drag point 1"));
 
   // Verify drag&drop operation.
   auto src_node = static_cast<chapter_node_data_c *>(tc_chapters->GetItemData(src));
   auto dst_node = static_cast<chapter_node_data_c *>(tc_chapters->GetItemData(dst));
   if (!src_node)
     return;
+
+  mxdebug_if(m_debug_dnd, boost::format("  END drag point 2 src_node %1%; dumping content if set") % *src_node);
+  m_dumper.dump_if(m_debug_dnd, src_node->get());
 
   if (!src_node->is_atom) {
     // Editions may only be dropped onto the root node or other
@@ -1648,15 +1661,16 @@ tab_chapters::on_drag_end(wxTreeEvent &evt) {
 
   auto src_master = src_node->get();
   auto src_parent = find_element_in_master(m_chapters, src_master);
+
+  mxdebug_if(m_debug_dnd, boost::format("  END drag point 3 src_parent %1% position inside %2%") % src_parent.first % src_parent.second);
+
   if (!src_parent.first)
     return;
 
   auto dst_master = dst_node ? dst_node->get() : static_cast<EbmlMaster *>(nullptr);
   auto dst_parent = find_element_in_master(m_chapters, dst_master);
 
-  // dump_ebml_elements(m_chapters, true);
-  // mxinfo(boost::format("found src parent %1% position in parent %2%\n") % src_parent.first % src_parent.second);
-  // mxinfo(boost::format("found dst parent %1% position in parent %2%\n") % dst_parent.first % dst_parent.second);
+  mxdebug_if(m_debug_dnd, boost::format("  END drag point 4 dst_parent %1% position inside %2%") % dst_parent.first % src_parent.second);
 
   // Operation is valid. First calculate where to re-insert into
   // KaxChapters.
@@ -1701,6 +1715,9 @@ tab_chapters::on_drag_end(wxTreeEvent &evt) {
     }
   }
 
+  mxdebug_if(m_debug_dnd, "  END drag before modification dump");
+  m_dumper.dump_if(m_debug_dnd, m_chapters);
+
   // Now perform the actual modifications. Remove the entries from the
   // tree control and KaxChapters.
   tc_chapters->Delete(src);
@@ -1710,12 +1727,14 @@ tab_chapters::on_drag_end(wxTreeEvent &evt) {
   // select the item in the tree.
   new_parent_master->InsertElement(*src_master, insert_before_in_master);
 
-  // mxinfo(boost::format("new parent: %1%; inserted before in master: %2% in tree: %3%; DUMP after re-insertion:\n") % new_parent_master % insert_before_in_master % insert_before_in_tree);
-  // dump_ebml_elements(m_chapters, true);
+  mxdebug_if(m_debug_dnd, boost::format("  END drag after modification; new parent: %1%; inserted before in master: %2% in tree: %3%; dump:\n") % new_parent_master % insert_before_in_master % insert_before_in_tree);
+  m_dumper.dump_if(m_debug_dnd, m_chapters);
 
   auto id_after_recreation = add_element_recursively(new_parent_id, *src_master, insert_before_in_tree);
   expand_subtree(*tc_chapters, id_after_recreation);
   tc_chapters->SelectItem(id_after_recreation);
+
+  mxdebug_if(m_debug_dnd, boost::format("  END drag end; new ID %1%") % id_after_recreation);
 }
 
 void
