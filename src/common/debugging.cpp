@@ -47,11 +47,15 @@ request_debugging(const std::string &options) {
 
   for (auto &one_option : all_options) {
     std::vector<std::string> parts = split(one_option, "=", 2);
+    if (!parts[0].size())
+      continue;
     if (parts[0] == "!")
       s_debugging_options.clear();
     else
       s_debugging_options[parts[0]] = 1 == parts.size() ? std::string("") : parts[1];
   }
+
+  debugging_option_c::invalidate_cache();
 }
 
 void
@@ -63,4 +67,23 @@ init_debugging() {
     if (value)
       request_debugging(value);
   }
+}
+
+std::vector<debugging_option_c::option_c> debugging_option_c::ms_registered_options;
+
+size_t
+debugging_option_c::register_option(std::string const &option) {
+  auto itr = brng::find_if(ms_registered_options, [&option](option_c const &opt) { return opt.m_option == option; });
+  if (itr != ms_registered_options.end())
+    return std::distance(ms_registered_options.begin(), itr);
+
+  ms_registered_options.emplace_back(option);
+
+  return ms_registered_options.size() - 1;
+}
+
+void
+debugging_option_c::invalidate_cache() {
+  for (auto &opt : ms_registered_options)
+    opt.m_requested = boost::logic::indeterminate;
 }
