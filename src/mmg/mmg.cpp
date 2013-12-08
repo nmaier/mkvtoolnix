@@ -205,6 +205,8 @@ mmg_app::OnInit() {
 
   mtx_common_init("mmg");
 
+  debugging_c::send_to_logger(true);
+
   uint32_t i;
   wxString k, v;
   int index;
