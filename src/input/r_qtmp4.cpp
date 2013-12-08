@@ -1956,7 +1956,6 @@ qtmp4_demuxer_c::build_index_constant_sample_size_mode() {
 
 void
 qtmp4_demuxer_c::build_index_chunk_mode() {
-  mxinfo(boost::format("CHUNK mode\n"));
   size_t keyframe_table_idx  = 0;
   size_t keyframe_table_size = keyframe_table.size();
 
