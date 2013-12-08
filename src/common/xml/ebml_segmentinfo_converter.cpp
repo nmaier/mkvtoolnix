@@ -50,7 +50,7 @@ ebml_segmentinfo_converter_c::setup_maps() {
 
   reverse_debug_to_tag_name_map();
 
-  if (debugging_requested("ebml_converter_semantics"))
+  if (debugging_c::requested("ebml_converter_semantics"))
     dump_semantics("Info");
 }
 

@@ -17,6 +17,7 @@
 #include "common/common_pch.h"
 
 #include "common/bit_cursor.h"
+#include "common/debugging.h"
 #include "common/dts.h"
 #include "common/mm_multi_file_io.h"
 #include "common/mpeg1_2.h"
@@ -200,7 +201,7 @@ private:
   std::vector<mpeg_ps_track_ptr> tracks;
   std::map<generic_packetizer_c *, mpeg_ps_track_ptr> m_ptzr_to_track_map;
 
-  bool m_debug_timecodes;
+  debugging_option_c m_debug_timecodes;
 
 public:
   mpeg_ps_reader_c(const track_info_c &ti, const mm_io_cptr &in);

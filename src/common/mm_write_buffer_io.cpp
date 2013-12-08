@@ -25,8 +25,8 @@ mm_write_buffer_io_c::mm_write_buffer_io_c(mm_io_c *out,
   , m_buffer(m_af_buffer->get_buffer())
   , m_fill(0)
   , m_size(buffer_size)
-  , m_debug_seek( debugging_requested("write_buffer_io") || debugging_requested("write_buffer_io_read"))
-  , m_debug_write(debugging_requested("write_buffer_io") || debugging_requested("write_buffer_io_write"))
+  , m_debug_seek{ "write_buffer_io|write_buffer_io_read"}
+  , m_debug_write{"write_buffer_io|write_buffer_io_write"}
 {
 }
 

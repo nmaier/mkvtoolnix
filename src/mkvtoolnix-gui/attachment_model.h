@@ -25,7 +25,7 @@ protected:
 
   QList<AttachmentPtr> *m_attachments;
 
-  bool m_debug;
+  debugging_option_c m_debug;
 
 public:
   AttachmentModel(QObject *parent, QList<AttachmentPtr> &attachments);

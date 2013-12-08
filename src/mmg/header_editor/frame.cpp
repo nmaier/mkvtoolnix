@@ -228,7 +228,7 @@ header_editor_frame_c::clear_pages() {
 
 void
 header_editor_frame_c::on_file_open(wxCommandEvent &) {
-  if (debugging_requested("he_open_std")) {
+  if (debugging_c::requested("he_open_std")) {
     wxString home;
     wxGetEnv(wxT("HOME"), &home);
     open_file(wxFileName(wxString::Format(wxT("%s/prog/video/mkvtoolnix/data/muh.mkv"), home.c_str())));

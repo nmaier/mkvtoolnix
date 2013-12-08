@@ -340,11 +340,11 @@ int
 ac3::parser_c::find_consecutive_frames(unsigned char const *buffer,
                                        size_t buffer_size,
                                        size_t num_required_headers) {
+  static auto s_debug = debugging_option_c{"ac3_consecutive_frames"};
   size_t base = 0;
-  bool debug  = debugging_requested("ac3_consecutive_frames");
 
   do {
-    mxdebug_if(debug, boost::format("Starting search for %2% headers with base %1%, buffer size %3%\n") % base % num_required_headers % buffer_size);
+    mxdebug_if(s_debug, boost::format("Starting search for %2% headers with base %1%, buffer size %3%\n") % base % num_required_headers % buffer_size);
 
     size_t position = base;
 
@@ -352,7 +352,7 @@ ac3::parser_c::find_consecutive_frames(unsigned char const *buffer,
     while (((position + 8) < buffer_size) && !first_frame.decode_header(&buffer[position], buffer_size - position))
       ++position;
 
-    mxdebug_if(debug, boost::format("First frame at %1% valid %2%\n") % position % first_frame.m_valid);
+    mxdebug_if(s_debug, boost::format("First frame at %1% valid %2%\n") % position % first_frame.m_valid);
 
     if (!first_frame.m_valid)
       return -1;
@@ -368,27 +368,27 @@ ac3::parser_c::find_consecutive_frames(unsigned char const *buffer,
         break;
 
       if (8 > current_frame.m_bytes) {
-        mxdebug_if(debug, boost::format("Current frame at %1% has invalid size %2%\n") % offset % current_frame.m_bytes);
+        mxdebug_if(s_debug, boost::format("Current frame at %1% has invalid size %2%\n") % offset % current_frame.m_bytes);
         break;
       }
 
       if (   (current_frame.m_bs_id       != first_frame.m_bs_id)
           && (current_frame.m_channels    != first_frame.m_channels)
           && (current_frame.m_sample_rate != first_frame.m_sample_rate)) {
-        mxdebug_if(debug,
+        mxdebug_if(s_debug,
                    boost::format("Current frame at %7% differs from first frame. (first/current) BS ID: %1%/%2% channels: %3%/%4% sample rate: %5%/%6%\n")
                    % first_frame.m_bs_id % current_frame.m_bs_id % first_frame.m_channels % current_frame.m_channels % first_frame.m_sample_rate % current_frame.m_sample_rate % offset);
         break;
       }
 
-      mxdebug_if(debug, boost::format("Current frame at %1% equals first frame, found %2%\n") % offset % (num_headers_found + 1));
+      mxdebug_if(s_debug, boost::format("Current frame at %1% equals first frame, found %2%\n") % offset % (num_headers_found + 1));
 
       ++num_headers_found;
       offset += current_frame.m_bytes;
     }
 
     if (num_headers_found == num_required_headers) {
-      mxdebug_if(debug, boost::format("Found required number of headers at %1%\n") % position);
+      mxdebug_if(s_debug, boost::format("Found required number of headers at %1%\n") % position);
       return position;
     }
 

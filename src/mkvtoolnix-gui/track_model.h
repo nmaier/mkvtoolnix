@@ -28,7 +28,7 @@ protected:
   QList<Track *> *m_tracks;
   QIcon m_audioIcon, m_videoIcon, m_subtitleIcon, m_attachmentIcon, m_chaptersIcon, m_tagsIcon, m_genericIcon, m_yesIcon, m_noIcon;
 
-  bool m_debug;
+  debugging_option_c m_debug;
 
 public:
   TrackModel(QObject *parent);

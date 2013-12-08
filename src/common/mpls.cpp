@@ -104,7 +104,7 @@ stream_t::dump(std::string const &type)
 
 parser_c::parser_c()
   : m_ok{}
-  , m_debug{debugging_requested("mpls")}
+  , m_debug{"mpls"}
   , m_header(header_t())
 {
 }

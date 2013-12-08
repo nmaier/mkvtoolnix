@@ -50,9 +50,9 @@ coreaudio_reader_c::coreaudio_reader_c(const track_info_c &ti,
   , m_frames_per_packet{}
   , m_channels{}
   , m_bites_per_sample{}
-  , m_debug_headers{debugging_requested("coreaudio_reader|coreaudio_reader_headers")}
-  , m_debug_chunks{ debugging_requested("coreaudio_reader|coreaudio_reader_chunks")}
-  , m_debug_packets{debugging_requested("coreaudio_reader|coreaudio_reader_packets")}
+  , m_debug_headers{"coreaudio_reader|coreaudio_reader_headers"}
+  , m_debug_chunks{ "coreaudio_reader|coreaudio_reader_chunks"}
+  , m_debug_packets{"coreaudio_reader|coreaudio_reader_packets"}
 {
 }
 

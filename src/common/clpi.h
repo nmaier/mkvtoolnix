@@ -57,7 +57,8 @@ namespace clpi {
   class parser_c {
   protected:
     std::string m_file_name;
-    bool m_ok, m_debug;
+    bool m_ok;
+    debugging_option_c m_debug;
 
     size_t m_sequence_info_start, m_program_info_start;
 

@@ -23,7 +23,7 @@ using namespace libmatroska;
 opus_packetizer_c::opus_packetizer_c(generic_reader_c *reader,
                                      track_info_c &ti)
   : generic_packetizer_c(reader, ti)
-  , m_debug{debugging_requested("opus|opus_packetizer")}
+  , m_debug{"opus|opus_packetizer"}
   , m_next_calculated_timecode{timecode_c::ns(0)}
   , m_id_header(mtx::opus::id_header_t::decode(ti.m_private_data))
 {

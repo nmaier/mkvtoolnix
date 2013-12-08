@@ -109,7 +109,7 @@ run(options_cptr &options) {
   options->find_elements(analyzer.get());
   options->validate();
 
-  if (debugging_requested("dump_options")) {
+  if (debugging_c::requested("dump_options")) {
     mxinfo("\nDumping options after file and element analysis\n\n");
     options->dump_info();
   }
@@ -145,7 +145,7 @@ main(int argc,
 
   options_cptr options = propedit_cli_parser_c(command_line_utf8(argc, argv)).run();
 
-  if (debugging_requested("dump_options")) {
+  if (debugging_c::requested("dump_options")) {
     mxinfo("\nDumping options after parsing the command line\n\n");
     options->dump_info();
   }

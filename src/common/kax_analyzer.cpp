@@ -66,7 +66,7 @@ kax_analyzer_c::kax_analyzer_c(std::string file_name)
   , m_file(nullptr)
   , m_close_file(true)
   , m_stream(nullptr)
-  , m_debugging_requested(debugging_requested("kax_analyzer"))
+  , m_debugging_requested{"kax_analyzer"}
 {
 }
 
@@ -75,7 +75,7 @@ kax_analyzer_c::kax_analyzer_c(mm_file_io_c *file)
   , m_file(file)
   , m_close_file(false)
   , m_stream(nullptr)
-  , m_debugging_requested(debugging_requested("kax_analyzer"))
+  , m_debugging_requested{"kax_analyzer"}
 {
 }
 
@@ -110,7 +110,7 @@ kax_analyzer_c::_log_debug_message(const std::string &message) {
 
 bool
 kax_analyzer_c::analyzer_debugging_requested(const std::string &section) {
-  return m_debugging_requested || debugging_requested(std::string("kax_analyzer_") + section);
+  return m_debugging_requested || debugging_c::requested(std::string("kax_analyzer_") + section);
 }
 
 void
@@ -316,13 +316,13 @@ kax_analyzer_c::read_element(kax_analyzer_data_c *element_data) {
   return e;
 }
 
-#define call_and_validate(function_call, hook_name)            \
-  function_call;                                               \
-  debug_dump_elements_maybe(hook_name);                        \
-  validate_data_structures(hook_name);                         \
-  if (analyzer_debugging_requested("verify"))                  \
-    verify_data_structures_against_file(hook_name);            \
-  if (debugging_requested("kax_analyzer_" hook_name "_break")) \
+#define call_and_validate(function_call, hook_name)               \
+  function_call;                                                  \
+  debug_dump_elements_maybe(hook_name);                           \
+  validate_data_structures(hook_name);                            \
+  if (analyzer_debugging_requested("verify"))                     \
+    verify_data_structures_against_file(hook_name);               \
+  if (debugging_c::requested("kax_analyzer_" hook_name "_break")) \
     return uer_success;
 
 kax_analyzer_c::update_element_result_e

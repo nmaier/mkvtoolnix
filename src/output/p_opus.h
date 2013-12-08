@@ -23,7 +23,7 @@ class opus_packetizer_c: public generic_packetizer_c {
 private:
   static bool ms_experimental_warning_shown;
 
-  bool m_debug;
+  debugging_option_c m_debug;
   timecode_c m_next_calculated_timecode, m_previous_provided_timecode;
   mtx::opus::id_header_t m_id_header;
 

@@ -978,24 +978,24 @@ mpeg4::p10::avc_es_parser_c::avc_es_parser_c()
   , m_have_incomplete_frame(false)
   , m_ignore_nalu_size_length_errors(false)
   , m_discard_actual_frames(false)
-  , m_debug_keyframe_detection(debugging_requested("avc_parser|avc_keyframe_detection"))
-  , m_debug_nalu_types(        debugging_requested("avc_parser|avc_nalu_types"))
-  , m_debug_timecodes(         debugging_requested("avc_parser|avc_timecodes"))
-  , m_debug_sps_info(          debugging_requested("avc_parser|avc_sps|avc_sps_info"))
+  , m_debug_keyframe_detection{"avc_parser|avc_keyframe_detection"}
+  , m_debug_nalu_types{        "avc_parser|avc_nalu_types"}
+  , m_debug_timecodes{         "avc_parser|avc_timecodes"}
+  , m_debug_sps_info{          "avc_parser|avc_sps|avc_sps_info"}
 {
   if (m_debug_nalu_types)
     init_nalu_names();
 }
 
 mpeg4::p10::avc_es_parser_c::~avc_es_parser_c() {
-  mxdebug_if(debugging_requested("avc_statistics"),
+  mxdebug_if(debugging_c::requested("avc_statistics"),
              boost::format("AVC statistics: #frames: out %1% discarded %2% #timecodes: in %3% generated %4% discarded %5% num_fields: %6% num_frames: %7%\n")
              % m_stats.num_frames_out % m_stats.num_frames_discarded % m_stats.num_timecodes_in % m_stats.num_timecodes_generated % m_stats.num_timecodes_discarded
              % m_stats.num_field_slices % m_stats.num_frame_slices);
 
   mxdebug_if(m_debug_timecodes, boost::format("stream_position %1% parsed_position %2%\n") % m_stream_position % m_parsed_position);
 
-  if (!debugging_requested("avc_num_slices_by_type"))
+  if (!debugging_c::requested("avc_num_slices_by_type"))
     return;
 
   static const char *s_type_names[] = {

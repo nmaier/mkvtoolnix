@@ -505,7 +505,7 @@ wav_reader_c::parse_file() {
   if ((m_cur_data_chunk_idx = find_chunk("data", 0, false)) == -1)
     throw mtx::input::header_parsing_x();
 
-  if (debugging_requested("wav_reader") || debugging_requested("wav_reader_headers"))
+  if (debugging_c::requested("wav_reader|wav_reader_headers"))
     dump_headers();
 
   m_in->setFilePointer(m_chunks[m_cur_data_chunk_idx].pos + sizeof(struct chunk_struct), seek_beginning);
@@ -613,7 +613,7 @@ wav_reader_c::read(generic_packetizer_c *,
 void
 wav_reader_c::scan_chunks() {
   wav_chunk_t new_chunk;
-  bool debug_chunks = debugging_requested("wav_reader") || debugging_requested("wav_reader_chunks");
+  bool debug_chunks = debugging_c::requested("wav_reader|wav_reader_chunks");
 
   try {
     int64_t file_size = m_in->get_size();

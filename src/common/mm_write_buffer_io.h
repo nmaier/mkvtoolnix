@@ -25,7 +25,7 @@ protected:
   unsigned char *m_buffer;
   size_t m_fill;
   const size_t m_size;
-  bool m_debug_seek, m_debug_write;
+  debugging_option_c m_debug_seek, m_debug_write;
 
 public:
   mm_write_buffer_io_c(mm_io_c *out, size_t buffer_size, bool delete_out = true);

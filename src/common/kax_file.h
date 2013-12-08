@@ -32,7 +32,7 @@ protected:
   int64_t m_timecode_scale, m_last_timecode;
   std::shared_ptr<EbmlStream> m_es;
 
-  bool m_debug_read_next, m_debug_resync;
+  debugging_option_c m_debug_read_next, m_debug_resync;
 
 public:
   kax_file_c(mm_io_cptr &in);

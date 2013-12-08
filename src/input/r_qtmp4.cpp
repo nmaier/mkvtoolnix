@@ -131,11 +131,11 @@ qtmp4_reader_c::qtmp4_reader_c(const track_info_c &ti,
   , m_compression_algorithm{}
   , m_main_dmx(-1)
   , m_audio_encoder_delay_samples(0)
-  , m_debug_chapters(    debugging_requested("qtmp4") || debugging_requested("qtmp4_full") || debugging_requested("qtmp4_chapters"))
-  , m_debug_headers(     debugging_requested("qtmp4") || debugging_requested("qtmp4_full") || debugging_requested("qtmp4_headers"))
-  , m_debug_tables(                                      debugging_requested("qtmp4_full") || debugging_requested("qtmp4_tables"))
-  , m_debug_interleaving(debugging_requested("qtmp4") || debugging_requested("qtmp4_full") || debugging_requested("qtmp4_interleaving"))
-  , m_debug_resync(      debugging_requested("qtmp4|qtmp4_full|qtmp4_resync"))
+  , m_debug_chapters{    "qtmp4|qtmp4_full|qtmp4_chapters"}
+  , m_debug_headers{     "qtmp4|qtmp4_full|qtmp4_headers"}
+  , m_debug_tables{            "qtmp4_full|qtmp4_tables"}
+  , m_debug_interleaving{"qtmp4|qtmp4_full|qtmp4_interleaving"}
+  , m_debug_resync{      "qtmp4|qtmp4_full|qtmp4_resync"}
 {
 }
 

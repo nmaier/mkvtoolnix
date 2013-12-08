@@ -281,12 +281,12 @@ mpeg_ts_track_c::set_pid(uint16_t new_pid) {
   pid = new_pid;
 
   std::string arg;
-  m_debug_delivery = debugging_requested("mpeg_ts")
-                  || (   debugging_requested("mpeg_ts_delivery", &arg)
+  m_debug_delivery = debugging_c::requested("mpeg_ts")
+                   || (   debugging_c::requested("mpeg_ts_delivery", &arg)
                       && (arg.empty() || (arg == to_string(pid))));
 
-  m_debug_timecode_wrapping = debugging_requested("mpeg_ts")
-                           || (   debugging_requested("mpeg_ts_timecode_wrapping", &arg)
+  m_debug_timecode_wrapping = debugging_c::requested("mpeg_ts")
+                            || (   debugging_c::requested("mpeg_ts_timecode_wrapping", &arg)
                                && (arg.empty() || (arg == to_string(pid))));
 }
 
@@ -391,11 +391,12 @@ mpeg_ts_reader_c::mpeg_ts_reader_c(const track_info_c &ti,
   , track_buffer_ready(-1)
   , file_done{}
   , m_packet_sent_to_packetizer{}
-  , m_dont_use_audio_pts{     debugging_requested("mpeg_ts|mpeg_ts_dont_use_audio_pts")}
-  , m_debug_resync{           debugging_requested("mpeg_ts|mpeg_ts_resync")}
-  , m_debug_pat_pmt{          debugging_requested("mpeg_ts|mpeg_ts_pat|mpeg_ts_pmt")}
-  , m_debug_aac{              debugging_requested("mpeg_ts|mpeg_aac")}
-  , m_debug_timecode_wrapping{debugging_requested("mpeg_ts|mpeg_ts_timecode_wrapping")}
+  , m_dont_use_audio_pts{     "mpeg_ts|mpeg_ts_dont_use_audio_pts"}
+  , m_debug_resync{           "mpeg_ts|mpeg_ts_resync"}
+  , m_debug_pat_pmt{          "mpeg_ts|mpeg_ts_pat|mpeg_ts_pmt"}
+  , m_debug_aac{              "mpeg_ts|mpeg_aac"}
+  , m_debug_timecode_wrapping{"mpeg_ts|mpeg_ts_timecode_wrapping"}
+  , m_debug_clpi{             "clpi"}
   , m_detected_packet_size{}
 {
   auto mpls_in = mm_mpls_multi_file_io_c::open_multi(m_in.get());
@@ -1264,14 +1265,12 @@ mpeg_ts_reader_c::read(generic_packetizer_c *requested_ptzr,
 
 bfs::path
 mpeg_ts_reader_c::find_clip_info_file() {
-  bool debug = debugging_requested("clpi");
-
   auto mpls_multi_in = dynamic_cast<mm_mpls_multi_file_io_c *>(get_underlying_input_as_multi_file_io());
   auto clpi_file     = mpls_multi_in ? mpls_multi_in->get_file_names()[0] : bfs::path{m_ti.m_fname};
 
   clpi_file.replace_extension(".clpi");
 
-  mxdebug_if(debug, boost::format("Checking %1%\n") % clpi_file.string());
+  mxdebug_if(m_debug_clpi, boost::format("Checking %1%\n") % clpi_file.string());
 
   if (bfs::exists(clpi_file))
     return clpi_file;
@@ -1284,16 +1283,16 @@ mpeg_ts_reader_c::find_clip_info_file() {
   //   return clpi_file;
 
   clpi_file = path / ".." / "clipinf" / file_name;
-  mxdebug_if(debug, boost::format("Checking %1%\n") % clpi_file.string());
+  mxdebug_if(m_debug_clpi, boost::format("Checking %1%\n") % clpi_file.string());
   if (bfs::exists(clpi_file))
     return clpi_file;
 
   clpi_file = path / ".." / "CLIPINF" / file_name;
-  mxdebug_if(debug, boost::format("Checking %1%\n") % clpi_file.string());
+  mxdebug_if(m_debug_clpi, boost::format("Checking %1%\n") % clpi_file.string());
   if (bfs::exists(clpi_file))
     return clpi_file;
 
-  mxdebug_if(debug, "CLPI not found\n");
+  mxdebug_if(m_debug_clpi, "CLPI not found\n");
 
   return bfs::path();
 }

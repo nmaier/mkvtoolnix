@@ -374,7 +374,7 @@ protected:
 
   std::vector<timecode_c> m_chapter_timecodes;
 
-  bool m_dont_use_audio_pts, m_debug_resync, m_debug_pat_pmt, m_debug_aac, m_debug_timecode_wrapping;
+  debugging_option_c m_dont_use_audio_pts, m_debug_resync, m_debug_pat_pmt, m_debug_aac, m_debug_timecode_wrapping, m_debug_clpi;
 
   int m_detected_packet_size;
 

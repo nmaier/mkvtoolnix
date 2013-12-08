@@ -82,7 +82,8 @@ struct playlist_t {
 
 class parser_c {
 protected:
-  bool m_ok, m_debug;
+  bool m_ok;
+  debugging_option_c m_debug;
 
   header_t m_header;
   playlist_t m_playlist;

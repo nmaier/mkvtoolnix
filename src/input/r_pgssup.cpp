@@ -44,7 +44,7 @@ pgssup_reader_c::probe_file(mm_io_c *in,
 pgssup_reader_c::pgssup_reader_c(const track_info_c &ti,
                                  const mm_io_cptr &in)
   : generic_reader_c(ti, in)
-  , m_debug(debugging_requested("pgssup_reader"))
+  , m_debug{"pgssup_reader"}
 {
 }
 

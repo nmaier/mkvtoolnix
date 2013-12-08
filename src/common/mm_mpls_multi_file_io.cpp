@@ -6,6 +6,8 @@
 #include "common/mm_mpls_multi_file_io.h"
 #include "common/strings/formatting.h"
 
+debugging_option_c mm_mpls_multi_file_io_c::ms_debug{"mpls|mpls_multi_io"};
+
 mm_mpls_multi_file_io_c::mm_mpls_multi_file_io_c(std::vector<bfs::path> const &file_names,
                                                  std::string const &display_file_name,
                                                  mtx::mpls::parser_cptr const &mpls_parser)
@@ -35,11 +37,10 @@ mm_mpls_multi_file_io_c::open_multi(std::string const &display_file_name) {
 
 mm_io_cptr
 mm_mpls_multi_file_io_c::open_multi(mm_io_c *in) {
-  bool debug       = debugging_requested("mpls|mpls_multi_io");
   auto mpls_parser = std::make_shared<mtx::mpls::parser_c>();
 
   if (!mpls_parser->parse(in) || mpls_parser->get_playlist().items.empty()) {
-    mxdebug_if(debug, boost::format("Not handling because %1%\n") % (mpls_parser->is_ok() ? "playlist is empty" : "parser not OK"));
+    mxdebug_if(ms_debug, boost::format("Not handling because %1%\n") % (mpls_parser->is_ok() ? "playlist is empty" : "parser not OK"));
     return mm_io_cptr{};
   }
 
@@ -51,7 +52,7 @@ mm_mpls_multi_file_io_c::open_multi(mm_io_c *in) {
 
   auto have_stream_dir = bfs::exists(stream_dir);
 
-  mxdebug_if(debug, boost::format("MPLS dir: %1% have stream dir: %2% stream dir: %3%\n") % mpls_dir.string() % have_stream_dir % stream_dir.string());
+  mxdebug_if(ms_debug, boost::format("MPLS dir: %1% have stream dir: %2% stream dir: %3%\n") % mpls_dir.string() % have_stream_dir % stream_dir.string());
 
   auto find_file = [mpls_dir,stream_dir,have_stream_dir](mtx::mpls::play_item_t const &item) -> bfs::path {
     if (have_stream_dir) {
@@ -78,7 +79,7 @@ mm_mpls_multi_file_io_c::open_multi(mm_io_c *in) {
   for (auto const &item : mpls_parser->get_playlist().items) {
     auto file = find_file(item);
 
-    mxdebug_if(debug, boost::format("Item clip ID: %1% codec ID: %2%: have file? %3% file: %4%\n") % item.clip_id % item.codec_id % !file.empty() % file.string());
+    mxdebug_if(ms_debug, boost::format("Item clip ID: %1% codec ID: %2%: have file? %3% file: %4%\n") % item.clip_id % item.codec_id % !file.empty() % file.string());
     if (file.empty() || file_names_seen[file.string()])
       continue;
 
@@ -86,7 +87,7 @@ mm_mpls_multi_file_io_c::open_multi(mm_io_c *in) {
     file_names_seen[file.string()] = true;
   }
 
-  mxdebug_if(debug, boost::format("Number of files left: %1%\n") % file_names.size());
+  mxdebug_if(ms_debug, boost::format("Number of files left: %1%\n") % file_names.size());
 
   if (file_names.empty())
     return mm_io_cptr{};

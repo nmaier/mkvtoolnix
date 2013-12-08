@@ -50,7 +50,7 @@ private:
 
   samples_to_timecode_converter_c m_frames_to_timecode;
 
-  bool m_debug_headers, m_debug_chunks, m_debug_packets;
+  debugging_option_c m_debug_headers, m_debug_chunks, m_debug_packets;
 
 public:
   coreaudio_reader_c(const track_info_c &ti, const mm_io_cptr &in);

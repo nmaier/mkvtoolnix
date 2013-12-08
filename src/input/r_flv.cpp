@@ -80,7 +80,7 @@ flv_tag_c::flv_tag_c()
   , m_timecode_extended{}
   , m_next_position{}
   , m_ok{}
-  , m_debug{debugging_requested("flv_full|flv_tags|flv_tag")}
+  , m_debug{"flv_full|flv_tags|flv_tag"}
 {
 }
 
@@ -253,7 +253,7 @@ flv_reader_c::flv_reader_c(track_info_c const &ti,
   , m_video_track_idx{0}
   , m_selected_track_idx{-1}
   , m_file_done{false}
-  , m_debug{debugging_requested("flv|flv_full")}
+  , m_debug{"flv|flv_full"}
 {
 }
 

@@ -29,8 +29,8 @@ mm_read_buffer_io_c::mm_read_buffer_io_c(mm_io_c *in,
   , m_offset(0)
   , m_size(buffer_size)
   , m_buffering(true)
-  , m_debug_seek(debugging_requested("read_buffer_io") || debugging_requested("read_buffer_io_read"))
-  , m_debug_read(debugging_requested("read_buffer_io") || debugging_requested("read_buffer_io_read"))
+  , m_debug_seek{"read_buffer_io|read_buffer_io_read"}
+  , m_debug_read{"read_buffer_io|read_buffer_io_read"}
 {
   setFilePointer(0, seek_beginning);
 }

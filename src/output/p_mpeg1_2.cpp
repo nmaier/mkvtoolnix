@@ -37,7 +37,7 @@ mpeg1_2_video_packetizer_c(generic_reader_c *p_reader,
   , m_framed{framed}
   , m_aspect_ratio_extracted{true}
   , m_num_removed_stuffing_bytes{}
-  , m_debug_stuffing_removal{debugging_requested("mpeg1_2|mpeg1_2_stuffing_removal")}
+  , m_debug_stuffing_removal{"mpeg1_2|mpeg1_2_stuffing_removal"}
 {
 
   set_codec_id((boost::format("V_MPEG%1%") % version).str());

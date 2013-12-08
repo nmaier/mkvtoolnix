@@ -16,12 +16,27 @@
 
 #include "common/common_pch.h"
 
-bool debugging_requested(const char *option, std::string *arg = nullptr);
-bool debugging_requested(const std::string &option, std::string *arg = nullptr);
-void request_debugging(const std::string &options, bool enable = true);
-void init_debugging();
+#include <unordered_map>
 
-int parse_debug_interval_arg(const std::string &option, int default_value = 1000, int invalid_value = -1);
+class debugging_c {
+protected:
+  static bool ms_send_to_logger;
+  static std::unordered_map<std::string, std::string> ms_debugging_options;
+
+public:
+  static void send_to_logger(bool enable);
+  static void output(std::string const &msg);
+  static void output(boost::format const &msg) {
+    output(msg.str());
+  }
+
+  static bool requested(const char *option, std::string *arg = nullptr);
+  static bool requested(const std::string &option, std::string *arg = nullptr) {
+    return requested(option.c_str(), arg);
+  }
+  static void request(const std::string &options, bool enable = true);
+  static void init();
+};
 
 class debugging_option_c {
   struct option_c {
@@ -36,14 +51,14 @@ class debugging_option_c {
 
     bool get() {
       if (boost::logic::indeterminate(m_requested))
-        m_requested = debugging_requested(m_option);
+        m_requested = debugging_c::requested(m_option);
 
       return m_requested;
     }
   };
 
 protected:
-  size_t m_registered_idx;
+  mutable size_t m_registered_idx;
   std::string m_option;
 
 private:
@@ -56,28 +71,16 @@ public:
   {
   }
 
-  operator bool() {
+  operator bool() const {
     if (m_registered_idx == std::numeric_limits<size_t>::max())
       m_registered_idx = register_option(m_option);
 
-    return ms_registered_options[m_registered_idx].get();
+    return ms_registered_options.at(m_registered_idx).get();
   }
 
 public:
   static size_t register_option(std::string const &option);
   static void invalidate_cache();
-};
-
-class debugging_c {
-protected:
-  static bool ms_send_to_logger;
-
-public:
-  static void send_to_logger(bool enable);
-  static void output(std::string const &msg);
-  static void output(boost::format const &msg) {
-    output(msg.str());
-  }
 };
 
 #define mxdebug(msg) debugging_c::output((boost::format("Debug> %1%:%2%: %3%") % __FILE__ % __LINE__ % (msg)).str())

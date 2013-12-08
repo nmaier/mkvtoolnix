@@ -33,7 +33,7 @@ protected:
   std::string *m_data;
   int m_connect_timeout, m_download_timeout;
   int64_t m_total_size;
-  bool m_debug;
+  debugging_option_c m_debug;
 
 public:
   url_retriever_c();

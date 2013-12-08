@@ -55,10 +55,10 @@ cluster_helper_c::cluster_helper_c()
   , m_current_split_point(m_split_points.begin())
   , m_discarding{false}
   , m_splitting_and_processed_fully{false}
-  , m_debug_splitting{debugging_requested("cluster_helper|splitting")}
-  , m_debug_packets{  debugging_requested("cluster_helper|cluster_helper_packets")}
-  , m_debug_duration{ debugging_requested("cluster_helper|cluster_helper_duration")}
-  , m_debug_rendering{debugging_requested("cluster_helper|cluster_helper_rendering")}
+  , m_debug_splitting{"cluster_helper|splitting"}
+  , m_debug_packets{  "cluster_helper|cluster_helper_packets"}
+  , m_debug_duration{ "cluster_helper|cluster_helper_duration"}
+  , m_debug_rendering{"cluster_helper|cluster_helper_rendering"}
 {
 }
 

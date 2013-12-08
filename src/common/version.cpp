@@ -38,7 +38,7 @@ version_number_t::version_number_t(const std::string &s)
 {
   memset(parts, 0, 5 * sizeof(unsigned int));
 
-  if (debugging_requested("version_check"))
+  if (debugging_c::requested("version_check"))
     mxinfo(boost::format("version check: Parsing %1%\n") % s);
 
   // Match the following:
@@ -73,7 +73,7 @@ version_number_t::version_number_t(const std::string &s)
 
   valid = true;
 
-  if (debugging_requested("version_check"))
+  if (debugging_c::requested("version_check"))
     mxinfo(boost::format("version check: parse OK; result: %1%\n") % to_string());
 }
 
@@ -157,7 +157,7 @@ get_current_version() {
 #if defined(HAVE_CURL_EASY_H)
 static mtx::xml::document_cptr
 retrieve_and_parse_xml(std::string const &url) {
-  bool debug = debugging_requested("version_check|releases_info|curl");
+  bool debug = debugging_c::requested("version_check|releases_info|curl");
 
   std::string data;
   auto result = url_retriever_c().set_timeout(10, 20).retrieve(url, data);
@@ -190,9 +190,9 @@ retrieve_and_parse_xml(std::string const &url) {
 
 mtx_release_version_t
 get_latest_release_version() {
-  bool debug      = debugging_requested("version_check|curl");
+  bool debug      = debugging_c::requested("version_check|curl");
   std::string url = MTX_VERSION_CHECK_URL;
-  debugging_requested("version_check_url", &url);
+  debugging_c::requested("version_check_url", &url);
 
   mxdebug_if(debug, boost::format("Update check started with URL %1%\n") % url);
 
@@ -229,7 +229,7 @@ get_latest_release_version() {
 mtx::xml::document_cptr
 get_releases_info() {
   std::string url = MTX_RELEASES_INFO_URL;
-  debugging_requested("releases_info_url", &url);
+  debugging_c::requested("releases_info_url", &url);
 
   return retrieve_and_parse_xml(url + ".gz");
 }

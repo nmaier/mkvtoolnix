@@ -117,7 +117,7 @@ avi_reader_c::read_headers() {
   verify_video_track();
   parse_subtitle_chunks();
 
-  if (debugging_requested("avi_dump_video_index"))
+  if (debugging_c::requested("avi_dump_video_index"))
     debug_dump_video_index();
 }
 

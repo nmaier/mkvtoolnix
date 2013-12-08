@@ -64,7 +64,7 @@ mpeg_ps_reader_c::mpeg_ps_reader_c(const track_info_c &ti,
                                    const mm_io_cptr &in)
   : generic_reader_c(ti, in)
   , file_done(false)
-  , m_debug_timecodes(debugging_requested("mpeg_ps|mpeg_ps_timecodes"))
+  , m_debug_timecodes{"mpeg_ps|mpeg_ps_timecodes"}
 {
 }
 

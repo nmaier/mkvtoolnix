@@ -23,6 +23,9 @@ class mm_mpls_multi_file_io_c: public mm_multi_file_io_c {
 protected:
   mtx::mpls::parser_cptr m_mpls_parser;
 
+protected:
+  static debugging_option_c ms_debug;
+
 public:
   mm_mpls_multi_file_io_c(const std::vector<bfs::path> &file_names, std::string const &display_file_name, mtx::mpls::parser_cptr const &mpls_parser);
   virtual ~mm_mpls_multi_file_io_c();

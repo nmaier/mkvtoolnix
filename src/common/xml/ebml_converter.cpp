@@ -352,7 +352,7 @@ ebml_converter_c::to_ebml(std::string const &file_name,
 
   ebml_root->Remove(0);
 
-  if (debugging_requested("ebml_converter"))
+  if (debugging_c::requested("ebml_converter"))
     dump_ebml_elements(master, true);
 
   return ebml_master_cptr{master};

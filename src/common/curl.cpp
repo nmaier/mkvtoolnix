@@ -44,7 +44,7 @@ url_retriever_c::url_retriever_c()
   : m_connect_timeout(10)
   , m_download_timeout(0)
   , m_total_size(-1)
-  , m_debug(debugging_requested("curl|url_retriever"))
+  , m_debug{"curl|url_retriever"}
 {
 }
 

@@ -263,7 +263,7 @@ protected:
 
   bool m_ignore_nalu_size_length_errors, m_discard_actual_frames;
 
-  bool m_debug_keyframe_detection, m_debug_nalu_types, m_debug_timecode_statistics, m_debug_timecodes, m_debug_sps_info;
+  debugging_option_c m_debug_keyframe_detection, m_debug_nalu_types, m_debug_timecodes, m_debug_sps_info;
   std::map<int, std::string> m_nalu_names_by_type;
 
   struct stats_t {

@@ -17,7 +17,7 @@ TrackModel::TrackModel(QObject *parent)
   , m_genericIcon(":/icons/16x16/application-octet-stream.png")
   , m_yesIcon(":/icons/16x16/dialog-ok-apply.png")
   , m_noIcon(":/icons/16x16/dialog-cancel.png")
-  , m_debug(debugging_requested("track_model"))
+  , m_debug{"track_model"}
 {
 }
 

@@ -61,7 +61,7 @@ private:
 
   bool m_discarding, m_splitting_and_processed_fully;
 
-  bool m_debug_splitting, m_debug_packets, m_debug_duration, m_debug_rendering;
+  debugging_option_c m_debug_splitting, m_debug_packets, m_debug_duration, m_debug_rendering;
 
 public:
   cluster_helper_c();

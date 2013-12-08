@@ -112,7 +112,6 @@
 #include "merge/cues.h"
 #include "merge/mkvmerge.h"
 #include "merge/output_control.h"
-#include "merge/debugging.h"
 #include "merge/webm.h"
 
 using namespace libmatroska;
@@ -193,8 +192,8 @@ std::string g_splitting_by_chapters_arg;
 
 append_mode_e g_append_mode                 = APPEND_MODE_FILE_BASED;
 bool s_appending_files                      = false;
-bool s_debug_appending                      = false;
-bool s_debug_rerender_track_headers         = false;
+auto s_debug_appending                      = debugging_option_c{"append|appending"};
+auto s_debug_rerender_track_headers         = debugging_option_c{"rerender|rerender_track_headers"};
 
 bool g_stereo_mode_used                     = false;
 
@@ -521,12 +520,9 @@ determine_display_reader() {
 */
 static void
 display_progress(bool is_100percent = false) {
-  static boost::tribool s_no_progress{boost::logic::indeterminate};
+  static auto s_no_progress             = debugging_option_c{"no_progress"};
   static int64_t s_previous_progress_on = 0;
   static int s_previous_percentage      = -1;
-
-  if (boost::logic::indeterminate(s_no_progress))
-    s_no_progress = debugging_requested("no_progress");
 
   if (s_no_progress)
     return;
@@ -645,7 +641,7 @@ set_timecode_scale() {
       highest_sample_rate = std::max(static_cast<int64_t>(ptzr.packetizer->get_audio_sampling_freq()), highest_sample_rate);
     }
 
-  bool debug = debugging_requested("set_timecode_scale|timecode_scale");
+  bool debug = debugging_c::requested("set_timecode_scale|timecode_scale");
   mxdebug_if(debug,
              boost::format("timecode_scale: %1% audio present: %2% video present: %3% highest sample rate: %4%\n")
              % (  TIMECODE_SCALE_MODE_NORMAL == g_timecode_scale_mode ? "normal"
@@ -1609,7 +1605,8 @@ prepare_tags_for_rendering() {
 */
 void
 create_next_output_file() {
-  mxdebug_if(debugging_requested("splitting"), boost::format("splitting: Create next output file; splitting? %1% discarding? %2%\n") % g_cluster_helper->splitting() % g_cluster_helper->discarding());
+  auto s_debug = debugging_option_c{"splitting"};
+  mxdebug_if(s_debug, boost::format("splitting: Create next output file; splitting? %1% discarding? %2%\n") % g_cluster_helper->splitting() % g_cluster_helper->discarding());
 
   auto this_outfile   = g_cluster_helper->split_mode_produces_many_files() ? create_output_name() : g_outfile;
   g_kax_segment       = new KaxSegment();
@@ -1642,9 +1639,9 @@ create_next_output_file() {
 
 static void
 add_chapters_for_current_part() {
-  bool debug = debugging_requested("splitting_chapters");
+  auto s_debug = debugging_option_c{"splitting_chapters"};
 
-  mxdebug_if(debug, boost::format("Adding chapters. have_global? %1% splitting? %2%\n") % !!g_kax_chapters % g_cluster_helper->splitting());
+  mxdebug_if(s_debug, boost::format("Adding chapters. have_global? %1% splitting? %2%\n") % !!g_kax_chapters % g_cluster_helper->splitting());
 
   if (!g_cluster_helper->splitting()) {
     s_chapters_in_this_file = clone(g_kax_chapters);
@@ -1660,7 +1657,7 @@ add_chapters_for_current_part() {
   auto chapters_here              = clone(g_kax_chapters);
   bool have_chapters_in_timeframe = select_chapters_in_timeframe(chapters_here.get(), start, end, offset);
 
-  mxdebug_if(debug, boost::format("offset %1% start %2% end %3% have chapters in timeframe? %4% chapters in this file? %5%\n") % offset % start % end % have_chapters_in_timeframe % !!s_chapters_in_this_file);
+  mxdebug_if(s_debug, boost::format("offset %1% start %2% end %3% have chapters in timeframe? %4% chapters in this file? %5%\n") % offset % start % end % have_chapters_in_timeframe % !!s_chapters_in_this_file);
 
   if (!have_chapters_in_timeframe)
     return;
@@ -1676,9 +1673,9 @@ add_chapters_for_current_part() {
 
 static void
 render_chapters() {
-  bool debug = debugging_requested("splitting_chapters");
+  auto s_debug = debugging_option_c{"splitting_chapters"};
 
-  mxdebug_if(debug,
+  mxdebug_if(s_debug,
              boost::format("render_chapters: have void? %1% size %2% have chapters? %3% size %4%\n")
              % !!s_kax_chapters_void     % (s_kax_chapters_void     ? s_kax_chapters_void    ->ElementSize() : 0)
              % !!s_chapters_in_this_file % (s_chapters_in_this_file ? s_chapters_in_this_file->ElementSize() : 0));
@@ -2203,13 +2200,8 @@ discard_queued_packets() {
 */
 void
 main_loop() {
-  s_debug_appending              = debugging_requested("append|appending");
-  s_debug_rerender_track_headers = debugging_requested("rerender|rerender_track_headers");
-
   // Let's go!
   while (1) {
-    debug_run_main_loop_hooks();
-
     // Step 1: Make sure a packet is available for each output
     // as long we haven't already processed the last one.
     pull_packetizers_for_packets();

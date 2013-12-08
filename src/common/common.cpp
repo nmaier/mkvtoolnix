@@ -165,7 +165,7 @@ mtx_common_init(std::string const &program_name) {
 
   srand(time(nullptr));
 
-  init_debugging();
+  debugging_c::init();
   init_hacks();
 
   init_locales();

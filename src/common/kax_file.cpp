@@ -33,8 +33,8 @@ kax_file_c::kax_file_c(mm_io_cptr &in)
   , m_timecode_scale{TIMECODE_SCALE}
   , m_last_timecode{-1}
   , m_es(new EbmlStream(*m_in))
-  , m_debug_read_next(debugging_requested("kax_file|kax_file_read_next"))
-  , m_debug_resync(debugging_requested(   "kax_file|kax_file_resync"))
+  , m_debug_read_next{"kax_file|kax_file_read_next"}
+  , m_debug_resync{   "kax_file|kax_file_resync"}
 {
 }
 

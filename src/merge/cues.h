@@ -38,7 +38,8 @@ protected:
   std::map<id_timecode_t, uint64_t> m_id_timecode_duration_map, m_codec_state_position_map;
 
   size_t m_num_cue_points_postprocessed;
-  bool m_no_cue_duration, m_no_cue_relative_position, m_debug_cue_duration, m_debug_cue_relative_position;
+  bool m_no_cue_duration, m_no_cue_relative_position;
+  debugging_option_c m_debug_cue_duration, m_debug_cue_relative_position;
 
 protected:
   static cues_cptr s_cues;

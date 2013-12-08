@@ -71,7 +71,7 @@ clpi::program_stream_t::dump() {
 clpi::parser_c::parser_c(const std::string &file_name)
   : m_file_name(file_name)
   , m_ok(false)
-  , m_debug(debugging_requested("clpi") || debugging_requested("clpi_parser"))
+  , m_debug{"clpi|clpi_parser"}
 {
 }
 

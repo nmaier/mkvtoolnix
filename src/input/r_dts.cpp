@@ -57,7 +57,7 @@ dts_reader_c::dts_reader_c(const track_info_c &ti,
   , m_cur_buf(0)
   , m_dts14_to_16(false)
   , m_swap_bytes(false)
-  , m_debug(debugging_requested("dts") || debugging_requested("dts_reader"))
+  , m_debug{"dts|dts_reader"}
 {
   m_buf[0] = reinterpret_cast<unsigned short *>(m_af_buf->get_buffer());
   m_buf[1] = reinterpret_cast<unsigned short *>(m_af_buf->get_buffer() + READ_SIZE);

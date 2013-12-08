@@ -28,7 +28,8 @@ protected:
   size_t m_fill;
   int64_t m_offset;
   const size_t m_size;
-  bool m_buffering, m_debug_seek, m_debug_read;
+  bool m_buffering;
+  debugging_option_c m_debug_seek, m_debug_read;
 
 public:
   mm_read_buffer_io_c(mm_io_c *in, size_t buffer_size = 1 << 12, bool delete_in = true);

@@ -30,7 +30,8 @@ private:
   unsigned short *m_buf[2];
   unsigned int m_cur_buf;
   dts_header_t m_dtsheader;
-  bool m_dts14_to_16, m_swap_bytes, m_debug;
+  bool m_dts14_to_16, m_swap_bytes;
+  debugging_option_c m_debug;
 
 public:
   dts_reader_c(const track_info_c &ti, const mm_io_cptr &in);

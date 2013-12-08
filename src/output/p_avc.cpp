@@ -31,8 +31,8 @@ mpeg4_p10_es_video_packetizer_c(generic_reader_c *p_reader,
   , m_default_duration_for_interlaced_content(-1)
   , m_first_frame(true)
   , m_set_display_dimensions(false)
-  , m_debug_timecodes(   debugging_requested("mpeg4_p10_es|mpeg4_p10_es_timecodes"))
-  , m_debug_aspect_ratio(debugging_requested("mpeg4_p10_es|mpeg4_p10_es_aspect_ratio"))
+  , m_debug_timecodes{   "mpeg4_p10_es|mpeg4_p10_es_timecodes"}
+  , m_debug_aspect_ratio{"mpeg4_p10_es|mpeg4_p10_es_aspect_ratio"}
 {
   m_relaxed_timecode_checking = true;
 

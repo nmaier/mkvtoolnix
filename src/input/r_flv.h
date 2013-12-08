@@ -71,7 +71,8 @@ public:
   uint32_t m_previous_tag_size;
   uint8_t m_flags;
   uint64_t m_data_size, m_timecode, m_timecode_extended, m_next_position;
-  bool m_ok, m_debug;
+  bool m_ok;
+  debugging_option_c m_debug;
 
 public:
   flv_tag_c();
@@ -136,7 +137,7 @@ private:
 
   std::vector<flv_track_cptr> m_tracks;
 
-  bool m_debug;
+  debugging_option_c m_debug;
 
 public:
   flv_reader_c(const track_info_c &ti, const mm_io_cptr &in);

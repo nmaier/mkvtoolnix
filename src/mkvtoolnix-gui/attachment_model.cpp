@@ -10,7 +10,7 @@ AttachmentModel::AttachmentModel(QObject *parent,
                                  QList<AttachmentPtr> &attachments)
   : QAbstractItemModel(parent)
   , m_attachments(&attachments)
-  , m_debug(debugging_requested("attachment_model"))
+  , m_debug{"attachment_model"}
 {
 }
 

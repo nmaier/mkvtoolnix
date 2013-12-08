@@ -68,7 +68,7 @@ mpeg4_p2_video_packetizer_c(generic_reader_c *p_reader,
 }
 
 mpeg4_p2_video_packetizer_c::~mpeg4_p2_video_packetizer_c() {
-  if (!debugging_requested("mpeg4_p2_statistics"))
+  if (!debugging_c::requested("mpeg4_p2_statistics"))
     return;
 
   mxinfo(boost::format("mpeg4_p2_video_packetizer_c statistics:\n"

@@ -189,7 +189,7 @@ handle_common_cli_args(std::vector<std::string> &args,
       if ((i + 1) == args.size())
         mxerror("Missing argument for '--debug'.\n");
 
-      request_debugging(args[i + 1]);
+      debugging_c::request(args[i + 1]);
       args.erase(args.begin() + i, args.begin() + i + 2);
 
     } else if (args[i] == "--engage") {

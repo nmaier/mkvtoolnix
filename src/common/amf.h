@@ -64,7 +64,7 @@ private:
   bool m_in_meta_data;
   unsigned int m_level;
 
-  bool m_debug;
+  debugging_option_c m_debug;
 
 public:
   script_parser_c(memory_cptr const &mem);

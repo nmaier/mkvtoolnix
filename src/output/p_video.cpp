@@ -39,7 +39,7 @@ video_packetizer_c::video_packetizer_c(generic_reader_c *p_reader,
   , m_frames_output(0)
   , m_ref_timecode(-1)
   , m_duration_shift(0)
-  , m_rederive_frame_types(debugging_requested("rederive_frame_types"))
+  , m_rederive_frame_types(debugging_c::requested("rederive_frame_types"))
   , m_codec_type(video_packetizer_c::ct_unknown)
 {
   set_track_type(track_video);

@@ -178,7 +178,7 @@ struct qtmp4_demuxer_c {
 
   std::string language;
 
-  bool m_debug_tables, m_debug_fps, m_debug_headers, m_debug_editlists;
+  debugging_option_c m_debug_tables, m_debug_fps, m_debug_headers, m_debug_editlists;
 
   qtmp4_demuxer_c()
     : ok{false}
@@ -208,10 +208,10 @@ struct qtmp4_demuxer_c {
     , a_aac_config_parsed{false}
     , warning_printed{false}
     , ptzr{-1}
-    , m_debug_tables{   debugging_requested(      "qtmp4_full|qtmp4_tables")}
-    , m_debug_fps{      debugging_requested("qtmp4|qtmp4_full|qtmp4_fps")}
-    , m_debug_headers{  debugging_requested("qtmp4|qtmp4_full|qtmp4_headers")}
-    , m_debug_editlists{debugging_requested("qtmp4|qtmp4_full|qtmp4_editlists")}
+    , m_debug_tables{         "qtmp4_full|qtmp4_tables"}
+    , m_debug_fps{      "qtmp4|qtmp4_full|qtmp4_fps"}
+    , m_debug_headers{  "qtmp4|qtmp4_full|qtmp4_headers"}
+    , m_debug_editlists{"qtmp4|qtmp4_full|qtmp4_editlists"}
   {
     memset(&esds, 0, sizeof(esds_t));
   }
@@ -334,7 +334,7 @@ private:
 
   unsigned int m_audio_encoder_delay_samples;
 
-  bool m_debug_chapters, m_debug_headers, m_debug_tables, m_debug_interleaving, m_debug_resync;
+  debugging_option_c m_debug_chapters, m_debug_headers, m_debug_tables, m_debug_interleaving, m_debug_resync;
 
 public:
   qtmp4_reader_c(const track_info_c &ti, const mm_io_cptr &in);
