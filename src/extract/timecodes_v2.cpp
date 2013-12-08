@@ -103,7 +103,7 @@ create_timecode_files(KaxTracks &kax_tracks,
     int track_number     = -1;
     KaxTrackEntry *track = nullptr;
     for (i = 0; kax_tracks.ListSize() > i; ++i) {
-      if (!is_id(kax_tracks[i], KaxTrackEntry))
+      if (!Is<KaxTrackEntry>(kax_tracks[i]))
         continue;
 
       ++track_number;
@@ -219,7 +219,7 @@ extract_timecodes(const std::string &file_name,
         show_error(Y("No segment/level 0 element found."));
         return;
       }
-      if (EbmlId(*l0) == EBML_ID(KaxSegment)) {
+      if (Is<KaxSegment>(l0)) {
         show_element(l0, 0, Y("Segment"));
         break;
       }
@@ -238,14 +238,14 @@ extract_timecodes(const std::string &file_name,
     EbmlElement *l3   = nullptr;
 
     while (l1 && (0 >= upper_lvl_el)) {
-      if (EbmlId(*l1) == EBML_ID(KaxInfo)) {
+      if (Is<KaxInfo>(l1)) {
         // General info about this Matroska file
         show_element(l1, 1, Y("Segment information"));
 
         upper_lvl_el = 0;
         l2           = es->FindNextElement(EBML_CONTEXT(l1), upper_lvl_el, 0xFFFFFFFFL, true, 1);
         while (l2 && (0 >= upper_lvl_el)) {
-          if (EbmlId(*l2) == EBML_ID(KaxTimecodeScale)) {
+          if (Is<KaxTimecodeScale>(l2)) {
             KaxTimecodeScale &ktc_scale = *static_cast<KaxTimecodeScale *>(l2);
             ktc_scale.ReadData(es->I_O());
             tc_scale = ktc_scale.GetValue();
@@ -270,7 +270,7 @@ extract_timecodes(const std::string &file_name,
           l2 = es->FindNextElement(EBML_CONTEXT(l1), upper_lvl_el, 0xFFFFFFFFL, true);
         }
 
-      } else if ((EbmlId(*l1) == EBML_ID(KaxTracks)) && !tracks_found) {
+      } else if ((Is<KaxTracks>(l1)) && !tracks_found) {
 
         // Yep, we've found our KaxTracks element. Now find all tracks
         // contained in this segment.
@@ -281,7 +281,7 @@ extract_timecodes(const std::string &file_name,
         find_and_verify_track_uids(*dynamic_cast<KaxTracks *>(l1), tspecs);
         create_timecode_files(*dynamic_cast<KaxTracks *>(l1), tspecs, version);
 
-      } else if (EbmlId(*l1) == EBML_ID(KaxCluster)) {
+      } else if (Is<KaxCluster>(l1)) {
         show_element(l1, 1, Y("Cluster"));
         KaxCluster *cluster = (KaxCluster *)l1;
         uint64_t cluster_tc = 0;
@@ -293,20 +293,20 @@ extract_timecodes(const std::string &file_name,
         l2           = es->FindNextElement(EBML_CONTEXT(l1), upper_lvl_el, 0xFFFFFFFFL, true, 1);
         while (l2 && (0 >= upper_lvl_el)) {
 
-          if (EbmlId(*l2) == EBML_ID(KaxClusterTimecode)) {
+          if (Is<KaxClusterTimecode>(l2)) {
             KaxClusterTimecode &ctc = *static_cast<KaxClusterTimecode *>(l2);
             ctc.ReadData(es->I_O());
             cluster_tc = ctc.GetValue();
             show_element(l2, 2, boost::format(Y("Cluster timecode: %|1$.3f|s")) % ((float)cluster_tc * (float)tc_scale / 1000000000.0));
             cluster->InitTimecode(cluster_tc, tc_scale);
 
-          } else if (EbmlId(*l2) == EBML_ID(KaxBlockGroup)) {
+          } else if (Is<KaxBlockGroup>(l2)) {
             show_element(l2, 2, Y("Block group"));
 
             l2->Read(*es, EBML_CLASS_CONTEXT(KaxBlockGroup), upper_lvl_el, l3, true);
             handle_blockgroup(*static_cast<KaxBlockGroup *>(l2), *cluster, tc_scale);
 
-          } else if (EbmlId(*l2) == EBML_ID(KaxSimpleBlock)) {
+          } else if (Is<KaxSimpleBlock>(l2)) {
             show_element(l2, 2, Y("Simple block"));
 
             l2->Read(*es, EBML_CLASS_CONTEXT(KaxSimpleBlock), upper_lvl_el, l3, true);

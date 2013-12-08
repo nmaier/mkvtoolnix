@@ -100,7 +100,7 @@ find_simple_tag(const std::string &name,
 KaxTagSimple &
 find_simple_tag(const UTFstring &name,
                 EbmlMaster &m) {
-  if (EbmlId(m) == EBML_ID(KaxTagSimple)) {
+  if (Is<KaxTagSimple>(&m)) {
     KaxTagName *tname = FindChild<KaxTagName>(&m);
     if (tname && (name == UTFstring(*tname)))
       return *static_cast<KaxTagSimple *>(&m);
@@ -108,12 +108,11 @@ find_simple_tag(const UTFstring &name,
 
   size_t i;
   for (i = 0; i < m.ListSize(); i++)
-    if ((EbmlId(*m[i]) == EBML_ID(KaxTag)) || (EbmlId(*m[i]) == EBML_ID(KaxTagSimple))) {
+    if (Is<KaxTag, KaxTagSimple>(m[i]))
       try {
         return find_simple_tag(name, *static_cast<EbmlMaster *>(m[i]));
       } catch (...) {
       }
-    }
 
   throw false;
 }
@@ -202,7 +201,7 @@ convert_old_tags(KaxTags &tags) {
 
   size_t tags_idx;
   for (tags_idx = 0; tags_idx < tags.ListSize(); tags_idx++) {
-    if (!is_id(tags[tags_idx], KaxTag))
+    if (!Is<KaxTag>(tags[tags_idx]))
       continue;
 
     KaxTag &tag = *static_cast<KaxTag *>(tags[tags_idx]);
@@ -211,7 +210,7 @@ convert_old_tags(KaxTags &tags) {
     size_t tag_idx        = 0;
     while (tag_idx < tag.ListSize()) {
       tag_idx++;
-      if (!is_id(tag[tag_idx - 1], KaxTagSimple))
+      if (!Is<KaxTagSimple>(tag[tag_idx - 1]))
         continue;
 
       KaxTagSimple &simple = *static_cast<KaxTagSimple *>(tag[tag_idx - 1]);
@@ -248,7 +247,7 @@ count_simple_tags(EbmlMaster &master) {
   int count = 0;
 
   for (auto child : master)
-    if (is_id(child, KaxTagSimple))
+    if (Is<KaxTagSimple>(child))
       ++count;
 
     else if (dynamic_cast<EbmlMaster *>(child))
@@ -260,7 +259,7 @@ count_simple_tags(EbmlMaster &master) {
 void
 remove_track_uid_tag_targets(EbmlMaster *tag) {
   for (auto el : *tag) {
-    if (!is_id(el, KaxTagTargets))
+    if (!Is<KaxTagTargets>(el))
       continue;
 
     KaxTagTargets *targets = static_cast<KaxTagTargets *>(el);
@@ -268,7 +267,7 @@ remove_track_uid_tag_targets(EbmlMaster *tag) {
 
     while (targets->ListSize() > idx_target) {
       EbmlElement *uid_el = (*targets)[idx_target];
-      if (is_id(uid_el, KaxTagTrackUID)) {
+      if (Is<KaxTagTrackUID>(uid_el)) {
         targets->Remove(idx_target);
         delete uid_el;
 

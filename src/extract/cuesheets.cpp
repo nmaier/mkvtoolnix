@@ -50,7 +50,7 @@ find_tag_for_track(int idx,
 
   size_t i;
   for (i = 0; i < m.ListSize(); i++) {
-    if (EbmlId(*m[i]) != EBML_ID(KaxTag))
+    if (!Is<KaxTag>(m[i]))
       continue;
 
     int64_t tag_cuid = get_tag_cuid(*static_cast<KaxTag *>(m[i]));
@@ -85,7 +85,7 @@ get_chapter_index(int idx,
   size_t i;
   std::string sidx = (boost::format("INDEX %|1$02d|") % idx).str();
   for (i = 0; i < atom.ListSize(); i++)
-    if ((EbmlId(*atom[i]) == EBML_ID(KaxChapterAtom)) &&
+    if (Is<KaxChapterAtom>(atom[i]) &&
         (get_chapter_name(*static_cast<KaxChapterAtom *>(atom[i])) == sidx))
       return get_chapter_start(*static_cast<KaxChapterAtom *>(atom[i]));
 
@@ -125,7 +125,7 @@ print_comments(const char *prefix,
   size_t i;
 
   for (i = 0; i < tag.ListSize(); i++)
-    if (is_id(tag[i], KaxTagSimple)
+    if (Is<KaxTagSimple>(tag[i])
         && (   (get_simple_tag_name(*static_cast<KaxTagSimple *>(tag[i])) == "COMMENT")
             || (get_simple_tag_name(*static_cast<KaxTagSimple *>(tag[i])) == "COMMENTS")))
       out.puts(boost::format("%1%REM \"%2%\"\n") % prefix % get_simple_tag_value(*static_cast<KaxTagSimple *>(tag[i])));

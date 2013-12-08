@@ -102,7 +102,7 @@ using namespace libmatroska;
 #define in_parent(p) \
   (!p->IsFiniteSize() || (m_in->getFilePointer() < (p->GetElementPosition() + p->HeadSize() + p->GetSize())))
 
-#define is_ebmlvoid(e) (EbmlId(*e) == EBML_ID(EbmlVoid))
+#define is_ebmlvoid(e) (Is<EbmlVoid>(e))
 
 #define MAGIC_MKV 0x1a45dfa3
 
@@ -717,7 +717,7 @@ kax_reader_c::handle_tags(mm_io_c *io,
   tags->Read(*m_es, EBML_CLASS_CONTEXT(KaxTags), upper_lvl_el, l2, true);
 
   while (tags->ListSize() > 0) {
-    if (!(EbmlId(*(*tags)[0]) == EBML_ID(KaxTag))) {
+    if (!Is<KaxTag>((*tags)[0])) {
       delete (*tags)[0];
       tags->Remove(0);
       continue;
@@ -934,7 +934,7 @@ kax_reader_c::read_headers_tracks(mm_io_c *io,
   io->save_pos(position);
   EbmlElement *l1 = m_es->FindNextElement(EBML_CONTEXT(l0), upper_lvl_el, 0xFFFFFFFFL, true);
 
-  if (!l1 || !is_id(l1, KaxTracks)) {
+  if (!l1 || !Is<KaxTracks>(l1)) {
     delete l1;
     io->restore_pos();
 
@@ -1061,7 +1061,7 @@ kax_reader_c::handle_seek_head(mm_io_c *io,
     seek_head->Read(*m_es, EBML_CLASS_CONTEXT(KaxSeekHead), upper_lvl_el, l2, true);
 
     for (auto l2 : *seek_head) {
-      if (EbmlId(*l2) != EBML_ID(KaxSeek))
+      if (!Is<KaxSeek>(l2))
         continue;
 
       KaxSeek &seek = *static_cast<KaxSeek *>(l2);
@@ -1076,13 +1076,13 @@ kax_reader_c::handle_seek_head(mm_io_c *io,
 
       EbmlId id(k_id->GetBuffer(), k_id->GetSize());
 
-      deferred_l1_type_e type = id == EBML_ID(KaxAttachments) ? dl1t_attachments
-        :                       id == EBML_ID(KaxChapters)    ? dl1t_chapters
-        :                       id == EBML_ID(KaxTags)        ? dl1t_tags
-        :                       id == EBML_ID(KaxTracks)      ? dl1t_tracks
-        :                       id == EBML_ID(KaxSeekHead)    ? dl1t_seek_head
-        :                       id == EBML_ID(KaxInfo)        ? dl1t_info
-        :                                                       dl1t_unknown;
+      deferred_l1_type_e type = Is<KaxAttachments>(id) ? dl1t_attachments
+        :                       Is<KaxChapters>(id)    ? dl1t_chapters
+        :                       Is<KaxTags>(id)        ? dl1t_tags
+        :                       Is<KaxTracks>(id)      ? dl1t_tracks
+        :                       Is<KaxSeekHead>(id)    ? dl1t_seek_head
+        :                       Is<KaxInfo>(id)        ? dl1t_info
+        :                                                dl1t_unknown;
 
       if (dl1t_unknown == type)
         continue;
@@ -1138,7 +1138,7 @@ kax_reader_c::read_headers_internal() {
         mxwarn(Y("matroska_reader: No segment found.\n"));
       return false;
     }
-    if (!(EbmlId(*l0) == EBML_ID(KaxSegment))) {
+    if (!Is<KaxSegment>(l0)) {
       if (verbose)
         mxwarn(Y("matroska_reader: No segment found.\n"));
       return false;
@@ -1150,25 +1150,25 @@ kax_reader_c::read_headers_internal() {
     EbmlElement *l1  = m_es->FindNextElement(EBML_CONTEXT(l0), upper_lvl_el, 0xFFFFFFFFL, true, 1);
 
     while (l1 && (0 >= upper_lvl_el)) {
-      if (EbmlId(*l1) == EBML_ID(KaxInfo))
+      if (Is<KaxInfo>(l1))
         m_deferred_l1_positions[dl1t_info].push_back(l1->GetElementPosition());
 
-      else if (EbmlId(*l1) == EBML_ID(KaxTracks))
+      else if (Is<KaxTracks>(l1))
         m_deferred_l1_positions[dl1t_tracks].push_back(l1->GetElementPosition());
 
-      else if (EbmlId(*l1) == EBML_ID(KaxAttachments))
+      else if (Is<KaxAttachments>(l1))
         m_deferred_l1_positions[dl1t_attachments].push_back(l1->GetElementPosition());
 
-      else if (EbmlId(*l1) == EBML_ID(KaxChapters))
+      else if (Is<KaxChapters>(l1))
         m_deferred_l1_positions[dl1t_chapters].push_back(l1->GetElementPosition());
 
-      else if (EbmlId(*l1) == EBML_ID(KaxTags))
+      else if (Is<KaxTags>(l1))
         m_deferred_l1_positions[dl1t_tags].push_back(l1->GetElementPosition());
 
-      else if (EbmlId(*l1) == EBML_ID(KaxSeekHead))
+      else if (Is<KaxSeekHead>(l1))
         handle_seek_head(m_in.get(), l0, l1->GetElementPosition());
 
-      else if (EbmlId(*l1) == EBML_ID(KaxCluster))
+      else if (Is<KaxCluster>(l1))
         cluster = static_cast<KaxCluster *>(l1);
 
       else
@@ -1778,7 +1778,7 @@ kax_reader_c::read_first_frames(kax_track_t *t,
 
       size_t bgidx;
       for (bgidx = 0; bgidx < cluster->ListSize(); bgidx++) {
-        if ((EbmlId(*(*cluster)[bgidx]) == EBML_ID(KaxSimpleBlock))) {
+        if (Is<KaxSimpleBlock>((*cluster)[bgidx])) {
           KaxSimpleBlock *block_simple = static_cast<KaxSimpleBlock *>((*cluster)[bgidx]);
 
           block_simple->SetParent(*cluster);
@@ -1799,7 +1799,7 @@ kax_reader_c::read_first_frames(kax_track_t *t,
             block_track->first_frames_data.back()->grab();
           }
 
-        } else if ((EbmlId(*(*cluster)[bgidx]) == EBML_ID(KaxBlockGroup))) {
+        } else if (Is<KaxBlockGroup>((*cluster)[bgidx])) {
           KaxBlockGroup *block_group = static_cast<KaxBlockGroup *>((*cluster)[bgidx]);
           KaxBlock *block            = static_cast<KaxBlock *>(block_group->FindFirstElt(EBML_INFO(KaxBlock), false));
 
@@ -1877,10 +1877,10 @@ kax_reader_c::read(generic_packetizer_c *requested_ptzr,
     for (bgidx = 0; bgidx < cluster->ListSize(); bgidx++) {
       EbmlElement *element = (*cluster)[bgidx];
 
-      if (EbmlId(*element) == EBML_ID(KaxSimpleBlock))
+      if (Is<KaxSimpleBlock>(element))
         process_simple_block(cluster, static_cast<KaxSimpleBlock *>(element));
 
-      else if (EbmlId(*element) == EBML_ID(KaxBlockGroup))
+      else if (Is<KaxBlockGroup>(element))
         process_block_group(cluster, static_cast<KaxBlockGroup *>(element));
     }
 
@@ -2125,7 +2125,7 @@ kax_reader_c::process_block_group(KaxCluster *cluster,
       auto blockadd = FindChild<KaxBlockAdditions>(block_group);
       if (blockadd) {
         for (auto &child : *blockadd) {
-          if (!(is_id(child, KaxBlockMore)))
+          if (!(Is<KaxBlockMore>(child)))
             continue;
 
           auto blockmore     = static_cast<KaxBlockMore *>(child);

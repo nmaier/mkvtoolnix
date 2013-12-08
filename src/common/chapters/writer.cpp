@@ -95,10 +95,10 @@ write_chapter_display_simple(KaxChapterDisplay *display,
 
   for (i = 0; i < display->ListSize(); i++) {
     EbmlElement *e = (*display)[i];
-    if (is_id(e, KaxChapterString))
+    if (Is<KaxChapterString>(e))
       handle_name(level - 1, static_cast<EbmlUnicodeString *>(e)->GetValueUTF8().c_str());
 
-    else if (is_id(e, KaxChapterAtom))
+    else if (Is<KaxChapterAtom>(e))
       write_chapter_atom_simple((KaxChapterAtom *)e, level + 1);
 
   }
@@ -112,7 +112,7 @@ write_chapter_track_simple(KaxChapterTrack *track,
   for (i = 0; i < track->ListSize(); i++) {
     EbmlElement *e = (*track)[i];
 
-    if (is_id(e, KaxChapterAtom))
+    if (Is<KaxChapterAtom>(e))
       write_chapter_atom_simple(static_cast<KaxChapterAtom *>(e), level + 1);
 
   }
@@ -126,16 +126,16 @@ write_chapter_atom_simple(KaxChapterAtom *atom,
   for (i = 0; i < atom->ListSize(); i++) {
     EbmlElement *e = (*atom)[i];
 
-    if (is_id(e, KaxChapterTimeStart))
+    if (Is<KaxChapterTimeStart>(e))
       handle_start_time(level, static_cast<EbmlUInteger *>(e)->GetValue() / 1000000);
 
-    else if (is_id(e, KaxChapterTrack))
+    else if (Is<KaxChapterTrack>(e))
       write_chapter_track_simple(static_cast<KaxChapterTrack *>(e), level + 1);
 
-    else if (is_id(e, KaxChapterDisplay))
+    else if (Is<KaxChapterDisplay>(e))
       write_chapter_display_simple(static_cast<KaxChapterDisplay *>(e), level + 1);
 
-    else if (is_id(e, KaxChapterAtom))
+    else if (Is<KaxChapterAtom>(e))
       write_chapter_atom_simple(static_cast<KaxChapterAtom *>(e), level + 1);
 
   }
@@ -151,12 +151,12 @@ write_chapters_simple(int &chapter_num,
 
   size_t chapter_idx;
   for (chapter_idx = 0; chapters->ListSize() > chapter_idx; chapter_idx++) {
-    if (is_id((*chapters)[chapter_idx], KaxEditionEntry)) {
+    if (Is<KaxEditionEntry>((*chapters)[chapter_idx])) {
       KaxEditionEntry *edition = static_cast<KaxEditionEntry *>((*chapters)[chapter_idx]);
 
       size_t edition_idx;
       for (edition_idx = 0; edition->ListSize() > edition_idx; edition_idx++)
-        if (is_id((*edition)[edition_idx], KaxChapterAtom))
+        if (Is<KaxChapterAtom>((*edition)[edition_idx]))
           write_chapter_atom_simple(static_cast<KaxChapterAtom *>((*edition)[edition_idx]), 2);
     }
   }

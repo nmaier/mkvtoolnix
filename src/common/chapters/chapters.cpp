@@ -941,7 +941,7 @@ move_chapters_by_edition(KaxChapters &dst,
       // Move all atoms from the old edition to the new one.
       size_t master_idx;
       for (master_idx = 0; m->ListSize() > master_idx; master_idx++)
-        if (is_id((*m)[master_idx], KaxChapterAtom))
+        if (Is<KaxChapterAtom>((*m)[master_idx]))
           ee_dst->PushElement(*(*m)[master_idx]);
         else
           delete (*m)[master_idx];
@@ -972,7 +972,7 @@ adjust_chapter_timecodes(EbmlMaster &master,
                          int64_t offset) {
   size_t master_idx;
   for (master_idx = 0; master.ListSize() > master_idx; master_idx++) {
-    if (!is_id(master[master_idx], KaxChapterAtom))
+    if (!Is<KaxChapterAtom>(master[master_idx]))
       continue;
 
     KaxChapterAtom *atom       = static_cast<KaxChapterAtom *>(master[master_idx]);
@@ -999,7 +999,7 @@ count_chapter_atoms_recursively(EbmlMaster &master,
   size_t master_idx;
 
   for (master_idx = 0; master.ListSize() > master_idx; ++master_idx)
-    if (is_id(master[master_idx], KaxChapterAtom))
+    if (Is<KaxChapterAtom>(master[master_idx]))
       ++count;
 
     else if (dynamic_cast<EbmlMaster *>(master[master_idx]))

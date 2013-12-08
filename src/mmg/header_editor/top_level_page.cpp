@@ -45,7 +45,7 @@ void
 he_top_level_page_c::do_modifications() {
   he_page_base_c::do_modifications();
 
-  if (is_id(m_l1_element, KaxInfo))
+  if (Is<KaxInfo>(m_l1_element.get()))
     fix_mandatory_segmentinfo_elements(m_l1_element.get());
 
   m_l1_element->UpdateSize(true, true);

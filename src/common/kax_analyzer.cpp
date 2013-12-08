@@ -46,7 +46,7 @@ std::string
 kax_analyzer_data_c::to_string() const {
   const EbmlCallbacks *callbacks = find_ebml_callbacks(EBML_INFO(KaxSegment), m_id);
 
-  if (!callbacks && (EBML_ID(EbmlVoid) == m_id))
+  if (!callbacks && Is<EbmlVoid>(m_id))
     callbacks = &EBML_CLASS_CALLBACK(EbmlVoid);
 
   std::string name;
@@ -239,7 +239,7 @@ kax_analyzer_c::process(kax_analyzer_c::parse_mode_e parse_mode,
     if (!l0)
       throw mtx::kax_analyzer_x(Y("Not a valid Matroska file (no segment/level 0 element found)"));
 
-    if (EbmlId(*l0) == EBML_ID(KaxSegment))
+    if (Is<KaxSegment>(l0))
       break;
 
     l0->SkipData(*m_stream, EBML_CONTEXT(l0));
@@ -257,8 +257,8 @@ kax_analyzer_c::process(kax_analyzer_c::parse_mode_e parse_mode,
   while (l1 && (0 >= upper_lvl_el)) {
     m_data.push_back(kax_analyzer_data_c::create(EbmlId(*l1), l1->GetElementPosition(), l1->ElementSize(true)));
 
-    cluster_found   |= is_id(l1, KaxCluster);
-    meta_seek_found |= is_id(l1, KaxSeekHead);
+    cluster_found   |= Is<KaxCluster>(l1);
+    meta_seek_found |= Is<KaxSeekHead>(l1);
 
     l1->SkipData(*m_stream, EBML_CONTEXT(l1));
     delete l1;
@@ -449,7 +449,7 @@ kax_analyzer_c::handle_void_elements(size_t data_idx) {
 
   // Are the following elements EbmlVoid elements?
   size_t end_idx = data_idx + 1;
-  while ((m_data.size() > end_idx) && (m_data[end_idx]->m_id == EBML_ID(EbmlVoid)))
+  while ((m_data.size() > end_idx) && Is<EbmlVoid>(m_data[end_idx]->m_id))
     ++end_idx;
 
   if (end_idx > data_idx + 1)
@@ -587,7 +587,7 @@ kax_analyzer_c::remove_from_meta_seeks(EbmlId id) {
 
   for (data_idx = 0; m_data.size() > data_idx; ++data_idx) {
     // We only have to do work on SeekHead elements. Skip the others.
-    if (m_data[data_idx]->m_id != EBML_ID(KaxSeekHead))
+    if (!Is<KaxSeekHead>(m_data[data_idx]->m_id))
       continue;
 
     // Read the element from the m_file. Remember its size so that a new
@@ -603,7 +603,7 @@ kax_analyzer_c::remove_from_meta_seeks(EbmlId id) {
     bool modified = false;
     size_t sh_idx = 0;
     while (seek_head->ListSize() > sh_idx) {
-      if (EbmlId(*(*seek_head)[sh_idx]) != EBML_ID(KaxSeek)) {
+      if (!Is<KaxSeek>((*seek_head)[sh_idx])) {
         ++sh_idx;
         continue;
       }
@@ -680,7 +680,7 @@ kax_analyzer_c::merge_void_elements() {
 
   while (m_data.size() > start_idx) {
     // We only have to do work on EbmlVoid elements. Skip the others.
-    if (m_data[start_idx]->m_id != EBML_ID(EbmlVoid)) {
+    if (!Is<EbmlVoid>(m_data[start_idx]->m_id)) {
       ++start_idx;
       continue;
     }
@@ -689,7 +689,7 @@ kax_analyzer_c::merge_void_elements() {
     // there are at this position and calculate the combined size.
     size_t end_idx  = start_idx + 1;
     size_t new_size = m_data[start_idx]->m_size;
-    while ((m_data.size() > end_idx) && (m_data[end_idx]->m_id == EBML_ID(EbmlVoid))) {
+    while ((m_data.size() > end_idx) && Is<EbmlVoid>(m_data[end_idx]->m_id)) {
       new_size += m_data[end_idx]->m_size;
       ++end_idx;
     }
@@ -719,7 +719,7 @@ kax_analyzer_c::merge_void_elements() {
   // See how many void elements there are at the end of the m_file.
   start_idx = m_data.size();
 
-  while ((0 < start_idx) && (EBML_ID(EbmlVoid) == m_data[start_idx - 1]->m_id))
+  while ((0 < start_idx) && Is<EbmlVoid>(m_data[start_idx - 1]->m_id))
     --start_idx;
 
   // If there are none then we're done.
@@ -758,7 +758,7 @@ kax_analyzer_c::write_element(EbmlElement *e,
   size_t data_idx;
   for (data_idx = (ps_anywhere == strategy ? 0 : m_data.size() - 1); m_data.size() > data_idx; ++data_idx) {
     // We're only interested in EbmlVoid elements. Skip the others.
-    if (m_data[data_idx]->m_id != EBML_ID(EbmlVoid))
+    if (!Is<EbmlVoid>(m_data[data_idx]->m_id))
       continue;
 
     // Skip the element if it doesn't provide enough space.
@@ -809,7 +809,7 @@ kax_analyzer_c::add_to_meta_seek(EbmlElement *e) {
 
   for (data_idx = 0; m_data.size() > data_idx; ++data_idx) {
     // We only have to do work on SeekHead elements. Skip the others.
-    if (m_data[data_idx]->m_id != EBML_ID(KaxSeekHead))
+    if (!Is<KaxSeekHead>(m_data[data_idx]->m_id))
       continue;
 
     // Calculate how much free space there is behind the seek head.
@@ -817,7 +817,7 @@ kax_analyzer_c::add_to_meta_seek(EbmlElement *e) {
     // at the end of the m_file and that all consecutive EbmlVoid elements
     // have been merged into a single element.
     size_t available_space = m_data[data_idx]->m_size;
-    if (((data_idx + 1) < m_data.size()) && (m_data[data_idx + 1]->m_id == EBML_ID(EbmlVoid)))
+    if (((data_idx + 1) < m_data.size()) && Is<EbmlVoid>(m_data[data_idx + 1]->m_id))
       available_space += m_data[data_idx + 1]->m_size;
 
     // Read the seek head, index the element and see how much space it needs.
@@ -909,7 +909,7 @@ kax_analyzer_c::add_to_meta_seek(EbmlElement *e) {
 
   for (data_idx = 0; m_data.size() > data_idx; ++data_idx) {
     // We can only overwrite void elements. Skip the others.
-    if (m_data[data_idx]->m_id != EBML_ID(EbmlVoid))
+    if (!Is<EbmlVoid>(m_data[data_idx]->m_id))
       continue;
 
     // Skip the element if it doesn't offer enough space for the seek head.
@@ -992,7 +992,7 @@ kax_analyzer_c::read_all_meta_seeks() {
     positions_found[m_data[i]->m_pos] = true;
 
   for (i = 0; i < num_entries; i++)
-    if (EBML_ID(KaxSeekHead) == m_data[i]->m_id)
+    if (Is<KaxSeekHead>(m_data[i]->m_id))
       read_meta_seek(m_data[i]->m_pos, positions_found);
 
   std::sort(m_data.begin(), m_data.end());
@@ -1014,7 +1014,7 @@ kax_analyzer_c::read_meta_seek(uint64_t pos,
   if (!l1)
     return;
 
-  if (!is_id(l1, KaxSeekHead)) {
+  if (!Is<KaxSeekHead>(l1)) {
     delete l1;
     return;
   }
@@ -1025,7 +1025,7 @@ kax_analyzer_c::read_meta_seek(uint64_t pos,
 
   unsigned int i;
   for (i = 0; master->ListSize() > i; i++) {
-    if (!is_id((*master)[i], KaxSeek))
+    if (!Is<KaxSeek>((*master)[i]))
       continue;
 
     KaxSeek *seek      = static_cast<KaxSeek *>((*master)[i]);
@@ -1042,7 +1042,7 @@ kax_analyzer_c::read_meta_seek(uint64_t pos,
     m_data.push_back(kax_analyzer_data_c::create(the_id, seek_pos, -1));
     positions_found[seek_pos] = true;
 
-    if (EBML_ID(KaxSeekHead) == the_id)
+    if (Is<KaxSeekHead>(the_id))
       read_meta_seek(seek_pos, positions_found);
   }
 
@@ -1059,7 +1059,7 @@ kax_analyzer_c::fix_element_sizes(uint64_t file_size) {
 
 kax_analyzer_c::placement_strategy_e
 kax_analyzer_c::get_placement_strategy_for(EbmlElement *e) {
-  return EbmlId(*e) == EBML_ID(KaxTags) ? ps_end : ps_anywhere;
+  return Is<KaxTags>(e) ? ps_end : ps_anywhere;
 }
 
 // ------------------------------------------------------------

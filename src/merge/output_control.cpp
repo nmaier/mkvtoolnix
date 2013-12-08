@@ -1748,7 +1748,7 @@ finish_file(bool last_file,
   } else if (!last_file && g_no_linking) {
     size_t i;
     for (i = 0; s_kax_infos->ListSize() > i; ++i)
-      if (EbmlId(*(*s_kax_infos)[i]) == EBML_ID(KaxNextUID)) {
+      if (Is<KaxNextUID>((*s_kax_infos)[i])) {
         delete (*s_kax_infos)[i];
         s_kax_infos->Remove(i);
         changed = 2;

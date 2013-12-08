@@ -127,7 +127,7 @@ track_target_c::set_level1_element(ebml_element_cptr level1_element_cp,
 
   size_t i;
   for (i = 0; track_headers->ListSize() > i; ++i) {
-    if (!is_id((*track_headers)[i], KaxTrackEntry))
+    if (!Is<KaxTrackEntry>((*track_headers)[i]))
       continue;
 
     KaxTrackEntry *track = dynamic_cast<KaxTrackEntry *>((*track_headers)[i]);

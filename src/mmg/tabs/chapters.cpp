@@ -1672,7 +1672,7 @@ tab_chapters::on_drag_end(wxTreeEvent &evt) {
 
     new_parent_id           = dst;
     new_parent_master       = !src_node->is_atom ? static_cast<EbmlMaster *>(m_chapters) : dst_master;
-    insert_before_in_master = std::distance(new_parent_master->GetElementList().begin(), brng::find_if(new_parent_master->GetElementList(), Is<KaxEditionEntry, KaxChapterAtom>));
+    insert_before_in_master = std::distance(new_parent_master->GetElementList().begin(), brng::find_if(new_parent_master->GetElementList(), [](EbmlElement *e) { return Is<KaxEditionEntry, KaxChapterAtom>(e); }));
     insert_before_in_tree   = 0;
 
   } else {

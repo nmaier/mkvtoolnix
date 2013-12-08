@@ -47,7 +47,6 @@ int kt_get_v_pixel_height(KaxTrackEntry &track);
 
 int write_ebml_element_head(mm_io_c &out, EbmlId const &id, int64_t content_size);
 
-#define is_id(e, ref) (EbmlId(*e) == EBML_ID(ref))
 #if !defined(EBML_INFO)
 #define EBML_INFO(ref)  ref::ClassInfos
 #endif
@@ -300,6 +299,18 @@ GetChildValue(EbmlMaster *master) {
 
 template<typename T>
 bool
+Is(EbmlId const &id) {
+  return id == T::ClassInfos.GlobalId;
+}
+
+template<typename T1, typename T2, typename... Trest>
+bool
+Is(EbmlId const &id) {
+  return Is<T1>(id) || Is<T2, Trest...>(id);
+}
+
+template<typename T>
+bool
 Is(EbmlElement *e) {
   return !e ? false : (EbmlId(*e) == T::ClassInfos.GlobalId);
 }
@@ -308,6 +319,18 @@ template<typename T1, typename T2, typename... Trest>
 bool
 Is(EbmlElement *e) {
   return !e ? false : Is<T1>(e) || Is<T2, Trest...>(e);
+}
+
+template<typename T>
+bool
+Is(EbmlElement const &e) {
+  return EbmlId(e) == T::ClassInfos.GlobalId;
+}
+
+template<typename T1, typename T2, typename... Trest>
+bool
+Is(EbmlElement const &e) {
+  return Is<T1>(e) || Is<T2, Trest...>(e);
 }
 
 EbmlElement *empty_ebml_master(EbmlElement *e);
