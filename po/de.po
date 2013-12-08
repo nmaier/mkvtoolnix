@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: mkvtoolnix 6.4.1\n"
 "Report-Msgid-Bugs-To: moritz@bunkus.org\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2013-12-01 17:49+0100\n"
+"PO-Revision-Date: 2013-12-08 19:51+0100\n"
 "Last-Translator: Moritz Bunkus <moritz@bunkus.org>\n"
 "Language-Team: German <moritz@bunkus.org>\n"
 "Language: de\n"
@@ -7875,9 +7875,9 @@ msgid "This file does not contain any chapters."
 msgstr "Diese Datei enthält keine Kapiteleinträge."
 
 #: src/mmg/tabs/chapters.cpp:625
-#, fuzzy, boost-format
+#, boost-format
 msgid "This file does not contain valid chapters. Error message from the parser: %1%"
-msgstr "Diese Datei enthält keine gültigen Kapiteleinträge."
+msgstr "Diese Datei enthält keine gültigen Kapiteleinträge. Fehlermeldung des Syntaxanalysators: %1%"
 
 #: src/mmg/tabs/attachments.cpp:160
 msgid "This is the name that will be stored in the output file for this attachment. It defaults to the file name of the original file but can be changed."
@@ -9651,4 +9651,3 @@ msgstr "ja"
 
 #~ msgid "VP8"
 #~ msgstr "VP8"
-
