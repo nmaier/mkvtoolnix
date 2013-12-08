@@ -72,17 +72,6 @@ mxerror(const boost::format &error) {
   if (verbose >= level)               \
     mxinfo(message);
 
-
-#define mxdebug(msg) \
-  { \
-    mxmsg(MXMSG_DEBUG, boost::format("%1%:%2%: ") % __FILE__ % __LINE__); \
-    mxmsg(MXMSG_INFO,  msg); \
-  }
-#define mxdebug_if(condition, msg) \
-  if (condition) {                 \
-    mxdebug(msg);                  \
-  }
-
 void mxinfo_fn(const std::string &file_name, const std::string &info);
 inline void
 mxinfo_fn(const std::string &file_name,

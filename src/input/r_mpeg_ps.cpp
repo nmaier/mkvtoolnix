@@ -14,6 +14,7 @@
 #include "common/common_pch.h"
 
 #include "common/ac3.h"
+#include "common/debugging.h"
 #include "common/endian.h"
 #include "common/error.h"
 #include "common/math.h"

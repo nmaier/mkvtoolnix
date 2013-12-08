@@ -68,4 +68,23 @@ public:
   static void invalidate_cache();
 };
 
+class debugging_c {
+protected:
+  static bool ms_send_to_logger;
+
+public:
+  static void send_to_logger(bool enable);
+  static void output(std::string const &msg);
+  static void output(boost::format const &msg) {
+    output(msg.str());
+  }
+};
+
+#define mxdebug(msg) debugging_c::output((boost::format("Debug> %1%:%2%: %3%") % __FILE__ % __LINE__ % (msg)).str())
+
+#define mxdebug_if(condition, msg) \
+  if (condition) {                 \
+    mxdebug(msg);                  \
+  }
+
 #endif  // MTX_COMMON_DEBUGGING_H

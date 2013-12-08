@@ -13,6 +13,7 @@
 
 #include "common/common_pch.h"
 
+#include "common/logger.h"
 #include "common/strings/editing.h"
 
 static std::map<std::string, std::string> s_debugging_options;
@@ -52,6 +53,8 @@ request_debugging(const std::string &options,
       continue;
     if (parts[0] == "!")
       s_debugging_options.clear();
+    else if (parts[0] == "to_logger")
+      debugging_c::send_to_logger(true);
     else if (!enable)
       s_debugging_options.erase(parts[0]);
     else
@@ -89,4 +92,19 @@ void
 debugging_option_c::invalidate_cache() {
   for (auto &opt : ms_registered_options)
     opt.m_requested = boost::logic::indeterminate;
+}
+
+bool debugging_c::ms_send_to_logger = false;
+
+void
+debugging_c::send_to_logger(bool enable) {
+  ms_send_to_logger = enable;
+}
+
+void
+debugging_c::output(std::string const &msg) {
+  if (ms_send_to_logger)
+    log_it(msg);
+  else
+    mxmsg(MXMSG_INFO, msg);
 }
