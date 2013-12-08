@@ -233,53 +233,6 @@ set_cc_stdio(const std::string &charset) {
   g_cc_stdio      = charset_converter_c::init(charset);
 }
 
-void
-mxhexdump(unsigned int level,
-          const void *buffer_to_dump,
-          size_t length,
-          const std::string &prefix) {
-  if (verbose < level)
-    return;
-
-  const unsigned char *buffer = static_cast<const unsigned char *>(buffer_to_dump);
-  unsigned int output_idx = 0;
-  unsigned int buffer_idx = 0;
-  char output[24];
-
-  while (buffer_idx < length) {
-    if ((buffer_idx % 16) == 0) {
-      if (0 < buffer_idx) {
-        output[output_idx] = 0;
-        mxinfo(boost::format("%1%\n") % output);
-        output_idx = 0;
-      }
-      mxinfo(boost::format("%2%%|1$08x|  ") % buffer_idx % prefix);
-
-    } else if ((buffer_idx % 8) == 0) {
-      mxinfo(" ");
-      output[output_idx] = ' ';
-      ++output_idx;
-    }
-
-    output[output_idx] = ((32 <= buffer[buffer_idx]) && (128 > buffer[buffer_idx])) ? buffer[buffer_idx] : '.';
-    ++output_idx;
-
-    mxinfo(boost::format("%|1$02x| ") % static_cast<unsigned int>(buffer[buffer_idx]));
-
-    ++buffer_idx;
-  }
-
-  while ((buffer_idx % 16) != 0) {
-    if ((buffer_idx % 8) == 0)
-      mxinfo(" ");
-    mxinfo("   ");
-    ++buffer_idx;
-  }
-  output[output_idx] = 0;
-
-  mxinfo(boost::format("%1%\n") % output);
-}
-
 ebml_dumper_c::ebml_dumper_c()
   : m_values{true}
   , m_addresses{true}

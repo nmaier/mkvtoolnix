@@ -30,6 +30,8 @@ public:
     output(msg.str());
   }
 
+  static void hexdump(const void *buffer_to_dump, size_t lenth);
+
   static bool requested(const char *option, std::string *arg = nullptr);
   static bool requested(const std::string &option, std::string *arg = nullptr) {
     return requested(option.c_str(), arg);

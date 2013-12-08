@@ -13,6 +13,8 @@
 
 #include "common/common_pch.h"
 
+#include <sstream>
+
 #include "common/logger.h"
 #include "common/strings/editing.h"
 
@@ -81,6 +83,42 @@ debugging_c::output(std::string const &msg) {
     log_it(msg);
   else
     mxmsg(MXMSG_INFO, msg);
+}
+
+void
+debugging_c::hexdump(const void *buffer_to_dump,
+                     size_t length) {
+  static auto s_fmt_line = boost::format{"Debug> %|1$08x|  "};
+  static auto s_fmt_byte = boost::format{"%|1$02x| "};
+
+  std::stringstream dump, ascii;
+  auto buffer     = static_cast<const unsigned char *>(buffer_to_dump);
+  auto buffer_idx = 0u;
+
+  while (buffer_idx < length) {
+    if ((buffer_idx % 16) == 0) {
+      if (0 < buffer_idx) {
+        dump << ' ' << ascii.str() << '\n';
+        ascii.str("");
+      }
+      dump << (s_fmt_line % buffer_idx);
+
+    } else if ((buffer_idx % 8) == 0) {
+      dump  << ' ';
+      ascii << ' ';
+    }
+
+    ascii << (((32 <= buffer[buffer_idx]) && (128 > buffer[buffer_idx])) ? static_cast<char>(buffer[buffer_idx]) : '.');
+    dump  << (s_fmt_byte % static_cast<unsigned int>(buffer[buffer_idx]));
+
+    ++buffer_idx;
+  }
+
+  if ((buffer_idx % 16) != 0)
+    dump << std::string(3u * (16 - (buffer_idx % 16)) + ((buffer_idx % 8) ? 1 : 0), ' ');
+  dump << ' ' << ascii.str() << '\n';
+
+  debugging_c::output(dump.str());
 }
 
 // ------------------------------------------------------------

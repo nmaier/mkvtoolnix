@@ -135,7 +135,6 @@ mxverb_tid(unsigned int level,
 }
 
 extern const std::string empty_string;
-void mxhexdump(unsigned int level, const void *buffer_to_dump, size_t lenth, const std::string &prefix = empty_string);
 
 class ebml_dumper_c {
 public:

@@ -1556,7 +1556,7 @@ qtmp4_reader_c::recode_chapter_entries(std::vector<qtmp4_chapter_entry_t> &entri
     size_t num = 0;
     for (auto &entry : entries) {
       mxdebug(boost::format("  Chapter %1%: name length %2%\n") % num++ % entry.m_name.length());
-      mxhexdump(0, entry.m_name.c_str(), entry.m_name.length(), "Debug> ");
+      debugging_c::hexdump(entry.m_name.c_str(), entry.m_name.length());
     }
   }
 
@@ -2175,7 +2175,7 @@ qtmp4_demuxer_c::handle_subtitles_stsd_atom(uint64_t atom_size,
 
   if (m_debug_headers) {
     mxdebug(boost::format("%1%FourCC: %2%\n") % space(level * 2 + 1) % fourcc);
-    mxhexdump(0, priv, size, "Debug> ");
+    debugging_c::hexdump(priv, size);
   }
 }
 
@@ -2397,7 +2397,7 @@ qtmp4_demuxer_c::parse_esds_atom(mm_mem_io_c &memio,
     if (m_debug_headers) {
       mxdebug(boost::format("%1%esds: decoder specific descriptor, len: %2%\n") % space(lsp + 1) % len);
       mxdebug(boost::format("%1%esds: dumping decoder specific descriptor\n") % space(lsp + 3));
-      mxhexdump(0, esds.decoder_config->get_buffer(), esds.decoder_config->get_size(), "Debug> ");
+      debugging_c::hexdump(esds.decoder_config->get_buffer(), esds.decoder_config->get_size());
     }
 
   } else

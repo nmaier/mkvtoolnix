@@ -90,7 +90,7 @@ analyze_header_removal_compressor_c::~analyze_header_removal_compressor_c() {
 
   else {
     mxinfo(boost::format("Analysis complete. %1% identical byte(s) at the start of each of the %2% packet(s). Hex dump of the content:\n") % m_bytes->get_size() % m_packet_counter);
-    mxhexdump(0, m_bytes->get_buffer(), m_bytes->get_size());
+    debugging_c::hexdump(m_bytes->get_buffer(), m_bytes->get_size());
   }
 }
 
