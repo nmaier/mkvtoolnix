@@ -321,6 +321,7 @@ std::vector<common_default_duration_t> s_common_default_durations{
   { 1000000000ll /  30,             1,     30 }, //  30 fps
   { 1000000000ll * 1001 / 48000, 1001,  48000 }, //  47.952 fps
   { 1000000000ll * 1001 / 24000, 1001,  24000 }, //  23.976 fps
+  { 1000000000ll * 1001 / 50000, 1001,  50000 }, //  24.975 frames per second telecined PAL
   { 1000000000ll * 1001 / 60000, 1001,  60000 }, //  59.94 fps
   { 1000000000ll * 1001 / 30000, 1001,  30000 }, //  29.97 fps
 };
@@ -328,11 +329,23 @@ std::vector<common_default_duration_t> s_common_default_durations{
 static std::pair<int, int>
 find_timing_info(int64_t duration) {
   // search in the common FPS list
-  for (auto &common_default_duration : s_common_default_durations)
-    if (std::abs(duration - common_default_duration.duration) < 20000)
-      return std::make_pair(common_default_duration.num_units_in_tick, common_default_duration.time_scale);
+  typedef std::pair<int64_t, common_default_duration_t> common_default_duration_diff_t;
+  auto potentials = std::vector<common_default_duration_diff_t>{};
 
-  return std::make_pair((duration * 0x80000000) / 1000000000ll, 0x80000000);
+  for (auto const &common_default_duration : s_common_default_durations) {
+    auto difference = std::abs(duration - common_default_duration.duration);
+    if (difference < 20000)
+      potentials.emplace_back(difference, common_default_duration);
+  }
+
+  if (potentials.empty())
+    return std::make_pair((duration * 0x80000000) / 1000000000ll, 0x80000000);
+
+  brng::sort(potentials, [](common_default_duration_diff_t const &a, common_default_duration_diff_t const &b) {
+      return a.first < b.first;
+    });
+
+  return std::make_pair(potentials[0].second.num_units_in_tick, potentials[0].second.time_scale);
 }
 
 int64_t

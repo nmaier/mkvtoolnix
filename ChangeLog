@@ -1,3 +1,9 @@
+2013-12-15  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvmerge: bug fix: fixing the bitstream timing information of
+        h.264/AVC writes clean values for 25000/1001 frames per second
+        video (e.g. de-telecined PAL @ 29.97).
+
 2013-12-07  Moritz Bunkus  <moritz@bunkus.org>
 
         * mmg: bug fix: fixed a crash in during drag & drop operations in
