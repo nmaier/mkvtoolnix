@@ -531,7 +531,7 @@ namespace :install do
 
       $languages[:guides].each do |language|
         install_data "#{c(:docdir)}/guide/#{language}/",        FileList[ "#{$top_srcdir}/doc/guide/#{language}/mkvmerge-gui.*" ]
-        install_data "#{c(:docdir)}/guide/#{language}/images/", FileList[ "#{$top_srcdir}/doc/guide/#{language}/images/*.gif"   ]
+        install_data "#{c(:docdir)}/guide/#{language}/images/", FileList[ "#{$top_srcdir}/doc/guide/#{language}/images/*.{gif,png}" ]
       end
     end
   end
