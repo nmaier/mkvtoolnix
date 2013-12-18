@@ -257,9 +257,15 @@ class SimpleTest
     end
 
     puts "COMMAND #{command}" if ENV['DEBUG']
-    self.error "system command failed: #{command} (#{$? >> 8})" if !system(command) && (options[:exit_code] != ($? >> 8))
 
-    return IO.readlines(temp_file.path) if temp_file
+    exit_code = 0
+    if !system(command)
+      exit_code = $? >> 8
+      self.error "system command failed: #{command} (#{exit_code})" if options[:exit_code] != exit_code
+    end
+
+    return IO.readlines(temp_file.path), exit_code if temp_file
+    return exit_code
   end
 
   def error reason
