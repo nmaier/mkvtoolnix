@@ -17,6 +17,7 @@
 #include "common/common_pch.h"
 
 #include "common/ac3.h"
+#include "common/dts.h"
 #include "common/fourcc.h"
 #include "common/mm_io.h"
 #include "output/p_video.h"
@@ -169,6 +170,7 @@ struct qtmp4_demuxer_c {
   int a_aac_profile, a_aac_output_sample_rate;
   bool a_aac_is_sbr, a_aac_config_parsed;
   ac3::frame_c m_ac3_header;
+  dts_header_t m_dts_header;
 
   memory_cptr priv;
 
@@ -396,6 +398,7 @@ protected:
   virtual void create_audio_packetizer_aac(qtmp4_demuxer_cptr &dmx);
   virtual bool create_audio_packetizer_ac3(qtmp4_demuxer_cptr &dmx);
   virtual bool create_audio_packetizer_alac(qtmp4_demuxer_cptr &dmx);
+  virtual bool create_audio_packetizer_dts(qtmp4_demuxer_cptr &dmx);
   virtual void create_audio_packetizer_mp3(qtmp4_demuxer_cptr &dmx);
   virtual void create_audio_packetizer_passthrough(qtmp4_demuxer_cptr &dmx);
   virtual void create_audio_packetizer_pcm(qtmp4_demuxer_cptr &dmx);

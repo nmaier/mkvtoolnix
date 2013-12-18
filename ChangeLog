@@ -1,3 +1,9 @@
+2013-12-18  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mkvmerge: new feature: implemented reading DTS audio tracks from
+        MP4 files (with ESDS object type ID == 0xA9 (decimal 169) or
+        FourCC == 'DTS ' or 'dtsc').
+
 2013-12-18  Ralph Giles  <giles@mozilla.com>
 
         * mkvmerge: enhancement: allowed muxing Opus to WebM files.

@@ -37,6 +37,7 @@
 #include "output/p_aac.h"
 #include "output/p_ac3.h"
 #include "output/p_alac.h"
+#include "output/p_dts.h"
 #include "output/p_mp3.h"
 #include "output/p_mpeg1_2.h"
 #include "output/p_mpeg4_p2.h"
@@ -1232,6 +1233,24 @@ qtmp4_reader_c::create_audio_packetizer_alac(qtmp4_demuxer_cptr &dmx) {
   return true;
 }
 
+bool
+qtmp4_reader_c::create_audio_packetizer_dts(qtmp4_demuxer_cptr &dmx) {
+  auto const bytes_to_read = 8192u;
+  auto buf                 = memory_c::alloc(bytes_to_read);
+
+  if (!dmx->read_first_bytes(buf, bytes_to_read, m_in) || (-1 == find_dts_header(buf->get_buffer(), bytes_to_read, &dmx->m_dts_header, false))) {
+    mxwarn_tid(m_ti.m_fname, dmx->id, Y("No DTS header found in first frames; track will be skipped.\n"));
+    dmx->ok = false;
+
+    return false;
+  }
+
+  dmx->ptzr = add_packetizer(new dts_packetizer_c(this, m_ti, dmx->m_dts_header));
+  show_packetizer_info(dmx->id, PTZR(dmx->ptzr));
+
+  return true;
+}
+
 void
 qtmp4_reader_c::create_video_packetizer_svq1(qtmp4_demuxer_cptr &dmx) {
   m_ti.m_private_data = create_bitmap_info_header(dmx, "SVQ1");
@@ -1454,6 +1473,9 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
 
     else if (dmx->fourcc.equiv("alac"))
       packetizer_ok = create_audio_packetizer_alac(dmx);
+
+    else if (dmx->fourcc.equiv("DTS ") || dmx->fourcc.equiv("dtsc") || (MP4OTI_DTS == dmx->esds.object_type_id))
+      packetizer_ok = create_audio_packetizer_dts(dmx);
 
     else
       create_audio_packetizer_passthrough(dmx);
@@ -2462,6 +2484,7 @@ qtmp4_demuxer_c::verify_alac_audio_parameters() {
 bool
 qtmp4_demuxer_c::verify_mp4a_audio_parameters() {
   if (   !IS_AAC_OBJECT_TYPE_ID(esds.object_type_id)
+      && (MP4OTI_DTS             != esds.object_type_id)
       && (MP4OTI_MPEG2AudioPart3 != esds.object_type_id) // MP3...
       && (MP4OTI_MPEG1Audio      != esds.object_type_id)) {
     mxwarn(boost::format(Y("Quicktime/MP4 reader: The audio track %1% is using an unsupported 'object type id' of %2% in the 'esds' atom. Skipping this track.\n")) % id % (int)esds.object_type_id);
