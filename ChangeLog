@@ -1,3 +1,13 @@
+2013-12-18  Ralph Giles  <giles@mozilla.com>
+
+        * mkvmerge: enhancement: allowed muxing Opus to WebM files.
+
+        * mkvmerge: bug fix: Fixed the mapping of the Opus element »seek
+        pre-roll« and »pre-skip« to the Matroska elements »track seek
+        pre-roll« and »codec delay«. Remuxing Matroska files without Opus
+        created with earlier versions of MKVToolNix is enough to fix such
+        a file.
+
 2013-12-15  Moritz Bunkus  <moritz@bunkus.org>
 
         * mkvmerge: bug fix: fixing the bitstream timing information of
