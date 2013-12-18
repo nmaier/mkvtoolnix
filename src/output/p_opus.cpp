@@ -89,5 +89,5 @@ opus_packetizer_c::can_connect_to(generic_packetizer_c *src,
 bool
 opus_packetizer_c::is_compatible_with(output_compatibility_e compatibility) {
   // TODO: check for WebM compatibility
-  return (OC_MATROSKA == compatibility); // || (OC_WEBM == compatibility);
+  return (OC_MATROSKA == compatibility) || (OC_WEBM == compatibility);
 }
