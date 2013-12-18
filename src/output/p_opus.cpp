@@ -40,8 +40,8 @@ void
 opus_packetizer_c::set_headers() {
   set_codec_id((boost::format("%1%") % MKV_A_OPUS).str());
 
-  set_track_seek_pre_roll(timecode_c::samples(m_id_header.pre_skip, 48000));
-  set_codec_delay(timecode_c::ms(80));
+  set_codec_delay(timecode_c::samples(m_id_header.pre_skip, 48000));
+  set_track_seek_pre_roll(timecode_c::ms(80));
 
   set_audio_sampling_freq(m_id_header.input_sample_rate);
   set_audio_channels(m_id_header.channels);
