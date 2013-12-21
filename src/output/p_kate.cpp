@@ -16,9 +16,9 @@
 
 #include <ogg/ogg.h>
 
+#include "common/codec.h"
 #include "common/endian.h"
 #include "common/kate.h"
-#include "common/matroska.h"
 #include "merge/connection_checks.h"
 #include "output/p_kate.h"
 

@@ -17,9 +17,9 @@
 
 #include <avilib.h>
 
+#include "common/codec.h"
 #include "common/endian.h"
 #include "common/hacks.h"
-#include "common/matroska.h"
 #include "merge/output_control.h"
 #include "merge/packet_extensions.h"
 #include "output/p_vc1.h"

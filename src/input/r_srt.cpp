@@ -13,7 +13,7 @@
 
 #include "common/common_pch.h"
 
-#include "common/matroska.h"
+#include "common/codec.h"
 #include "input/r_srt.h"
 #include "input/subtitles.h"
 

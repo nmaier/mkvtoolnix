@@ -14,9 +14,9 @@
 #include "common/common_pch.h"
 
 #include "common/base64.h"
+#include "common/codec.h"
 #include "common/extern_data.h"
 #include "common/locale.h"
-#include "common/matroska.h"
 #include "input/r_ssa.h"
 #include "merge/output_control.h"
 #include "merge/pr_generic.h"

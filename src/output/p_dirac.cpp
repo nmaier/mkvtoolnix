@@ -13,10 +13,8 @@
 
 #include "common/common_pch.h"
 
-#include <cstring>
-
+#include "common/codec.h"
 #include "common/math.h"
-#include "common/matroska.h"
 #include "merge/output_control.h"
 #include "output/p_dirac.h"
 

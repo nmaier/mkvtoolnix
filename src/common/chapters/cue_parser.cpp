@@ -25,13 +25,14 @@
 #include <matroska/KaxTags.h>
 
 #include "common/chapters/chapters.h"
+#include "common/chapters/physical.h"
 #include "common/ebml.h"
 #include "common/error.h"
 #include "common/locale.h"
-#include "common/matroska.h"
 #include "common/mm_io.h"
 #include "common/strings/editing.h"
 #include "common/strings/formatting.h"
+#include "common/tags/target_type.h"
 #include "common/unique_numbers.h"
 
 using namespace libmatroska;

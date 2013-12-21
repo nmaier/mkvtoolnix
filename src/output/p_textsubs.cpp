@@ -13,7 +13,7 @@
 
 #include "common/common_pch.h"
 
-#include "common/matroska.h"
+#include "common/codec.h"
 #include "merge/connection_checks.h"
 #include "merge/packet_extensions.h"
 #include "output/p_textsubs.h"

@@ -13,11 +13,11 @@
 
 #include "common/common_pch.h"
 
+#include "common/codec.h"
 #include "common/debugging.h"
 #include "common/endian.h"
 #include "common/hacks.h"
 #include "common/math.h"
-#include "common/matroska.h"
 #include "common/mpeg4_p2.h"
 #include "merge/connection_checks.h"
 #include "output/p_video.h"

@@ -14,7 +14,7 @@
 #include "common/common_pch.h"
 
 #include "common/ac3.h"
-#include "common/matroska.h"
+#include "common/codec.h"
 #include "merge/connection_checks.h"
 #include "merge/output_control.h"
 #include "output/p_ac3.h"

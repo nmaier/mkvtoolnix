@@ -12,6 +12,7 @@
 
 #include "common/common_pch.h"
 
+#include "common/codec.h"
 #include "common/ebml.h"
 #include "common/endian.h"
 #include "common/math.h"

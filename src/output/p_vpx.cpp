@@ -13,8 +13,8 @@
 
 #include "common/common_pch.h"
 
+#include "common/codec.h"
 #include "common/ivf.h"
-#include "common/matroska.h"
 #include "merge/connection_checks.h"
 #include "output/p_vpx.h"
 
