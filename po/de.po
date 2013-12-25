@@ -4,10 +4,10 @@
 # This file is distributed under the same license as the mkvtoolnix package.
 msgid ""
 msgstr ""
-"Project-Id-Version: mkvtoolnix 6.4.1\n"
+"Project-Id-Version: mkvtoolnix 6.6.0\n"
 "Report-Msgid-Bugs-To: moritz@bunkus.org\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2013-12-08 19:51+0100\n"
+"PO-Revision-Date: 2013-12-25 17:23+0100\n"
 "Last-Translator: Moritz Bunkus <moritz@bunkus.org>\n"
 "Language-Team: German <moritz@bunkus.org>\n"
 "Language: de\n"
@@ -1754,7 +1754,7 @@ msgstr "1. eine Zahl, die als die Dateianhangs-ID interpretiert wird, die auch �
 #: src/mmg/tabs/input_format.cpp:260
 #, boost-format
 msgid "1. for subtitle files that do not use a byte order marker (BOM) and that are not encoded in the system's current locale (%1%);"
-msgstr ""
+msgstr "1. für Untertiteldateien ohne Bytereihenfolgemarkierung (BOM) und die nicht im aktuellen Zeichensatz des Systems (%1%) codiert sind;"
 
 #: src/info/mkvinfo.cpp:682
 msgid "1: all frames"
@@ -1769,9 +1769,8 @@ msgid "2. A number with the prefix '=' which will be interepreted as the attachm
 msgstr "2. eine Zahl mit dem Präfix »=«, die als die eindeutige ID eines Dateianhangs interpretiert und auch von »mkvmerge --identify-verbose« ausgegeben wird. Dies ist normalerweise eine zufällig aussehende Zahl (z.B. »128975986723«)."
 
 #: src/mmg/tabs/input_format.cpp:262
-#, fuzzy
 msgid "2. for files with chapter information (e.g. OGM, MP4) for which mkvmerge does not detect the encoding correctly."
-msgstr "wählt den Zeichensatz, in dem die Untertiteldatei oder Kapitelinformationen erstellt wurden. Wird nur für Dateien benötigt, die kein UTF-BOM (byte order marker) haben bzw. die Kapitelinformationen ohne Zeichensatzinformationen enthalten (wie z.B. bei OGM, MP4) und die von Mkvmerge nicht korrekt erkannt werden."
+msgstr "2. für Dateien mit Kapitelinformationen (wie z.B. bei OGM, MP4), für die Mkvmerge die Zeichensatzkodierung nicht korrekt erkennt."
 
 #: src/info/mkvinfo.cpp:684
 msgid "2: codec private data"
@@ -5145,9 +5144,8 @@ msgid "No AC3 header found in first frame; track will be skipped.\n"
 msgstr "Im ersten Bild wurde kein AC3-Kopf gefunden. Die Spur wird ausgelassen.\n"
 
 #: src/input/r_qtmp4.cpp:1242
-#, fuzzy
 msgid "No DTS header found in first frames; track will be skipped.\n"
-msgstr "Im ersten Bild wurde kein AC3-Kopf gefunden. Die Spur wird ausgelassen.\n"
+msgstr "In den ersten Blöcken wurde kein DTS-Kopf gefunden. Die Spur wird ausgelassen.\n"
 
 #: src/info/mkvinfo.cpp:1625
 msgid "No EBML head found."
@@ -5369,7 +5367,7 @@ msgstr "nur %1% Kapitel in Quell- und Kapiteldateien gefunden"
 
 #: src/mmg/tabs/input_format.cpp:259
 msgid "Only needed in certain situations:"
-msgstr ""
+msgstr "Nur in bestimmten Situationen benötigt:"
 
 #: src/merge/mkvmerge.cpp:1609
 #, boost-format
@@ -6212,7 +6210,7 @@ msgstr "legt fest, für welche Blöcke Mkvmerge Indexeinträge ( = CUE-Einträge
 
 #: src/mmg/tabs/input_format.cpp:258
 msgid "Selects the character set a subtitle file or chapter information was written with."
-msgstr ""
+msgstr "Wählen Sie den Zeichensatz aus, in dem eine Untertiteldatei oder Kapitelinformationen geschrieben wurden."
 
 #: src/mmg/mmg_dialog.cpp:291
 msgid "Set &output file"
@@ -9670,4 +9668,3 @@ msgstr "ja"
 
 #~ msgid "VP8"
 #~ msgstr "VP8"
-
