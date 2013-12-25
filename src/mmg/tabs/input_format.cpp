@@ -254,8 +254,14 @@ tab_input_format::translate_ui() {
                              "It is either a positive floating point number, or a fraction like e.g. 1200/1253. "
                              "Works best on video and subtitle tracks."));
   st_sub_charset->SetLabel(Z("Charset:"));
-  cob_sub_charset->SetToolTip(TIP("Selects the character set a subtitle file or chapter information was written with. Only needed for non-UTF encoded "
-                                  "subtitle files or for files with chapter information (e.g. OGM, MP4) for which mkvmerge does not detect the encoding correctly."));
+  auto tip = (boost::format("%1% %2% %3% %4%")
+              % Y("Selects the character set a subtitle file or chapter information was written with.")
+              % Y("Only needed in certain situations:")
+              % (boost::format(Y("1. for subtitle files that do not use a byte order marker (BOM) and that are not encoded in the system's current locale (%1%);"))
+                 % g_cc_local_utf8->get_charset())
+              % Y("2. for files with chapter information (e.g. OGM, MP4) for which mkvmerge does not detect the encoding correctly.")
+              ).str();
+  cob_sub_charset->SetToolTip(TIP(wxU(tip)));
   st_cropping->SetLabel(Z("Cropping:"));
   tc_cropping->SetToolTip(TIP("Sets the cropping parameters. Must be comma-separated list of four numbers for the cropping to be used at the left, top, right and bottom."));
   cb_aac_is_sbr->SetLabel(Z("AAC is SBR/HE-AAC/AAC+"));

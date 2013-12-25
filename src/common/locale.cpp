@@ -65,6 +65,12 @@ charset_converter_c::native(const std::string &source) {
   return source;
 }
 
+std::string const &
+charset_converter_c::get_charset()
+  const {
+  return m_charset;
+}
+
 charset_converter_cptr
 charset_converter_c::init(const std::string &charset) {
   std::string actual_charset = charset.empty() ? get_local_charset() : charset;

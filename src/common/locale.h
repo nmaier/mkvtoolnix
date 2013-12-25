@@ -40,6 +40,7 @@ public:
   virtual std::string utf8(const std::string &source);
   virtual std::string native(const std::string &source);
   virtual void enable_byte_order_marker_detection(bool enable);
+  std::string const &get_charset() const;
 
 protected:
   bool handle_string_with_bom(const std::string &source, std::string &recoded);
