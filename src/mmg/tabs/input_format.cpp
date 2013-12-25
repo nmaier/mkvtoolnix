@@ -261,7 +261,7 @@ tab_input_format::translate_ui() {
                  % g_cc_local_utf8->get_charset())
               % Y("2. for files with chapter information (e.g. OGM, MP4) for which mkvmerge does not detect the encoding correctly.")
               ).str();
-  cob_sub_charset->SetToolTip(TIP(wxU(tip)));
+  cob_sub_charset->SetToolTip(format_tooltip(wxU(tip)));
   st_cropping->SetLabel(Z("Cropping:"));
   tc_cropping->SetToolTip(TIP("Sets the cropping parameters. Must be comma-separated list of four numbers for the cropping to be used at the left, top, right and bottom."));
   cb_aac_is_sbr->SetLabel(Z("AAC is SBR/HE-AAC/AAC+"));
