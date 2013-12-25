@@ -1752,8 +1752,8 @@ msgid "1. A number which will be interepreted as an attachment ID as listed by '
 msgstr "1. eine Zahl, die als die Dateianhangs-ID interpretiert wird, die auch »mkvmerge --identify-verbose« ausgibt. Diese sind normalerweise aufsteigend nummeriert und starten bei 0 (z.B. »2«)."
 
 #: src/mmg/tabs/input_format.cpp:260
-#, boost-format
-msgid "1. for subtitle files that do not use a byte order marker (BOM) and that are not encoded in the system's current locale (%1%);"
+#, fuzzy, boost-format
+msgid "1. for subtitle files that do not use a byte order marker (BOM) and that are not encoded in the system's current character set (%1%);"
 msgstr "1. für Untertiteldateien ohne Bytereihenfolgemarkierung (BOM) und die nicht im aktuellen Zeichensatz des Systems (%1%) codiert sind;"
 
 #: src/info/mkvinfo.cpp:682
@@ -9668,3 +9668,4 @@ msgstr "ja"
 
 #~ msgid "VP8"
 #~ msgstr "VP8"
+
