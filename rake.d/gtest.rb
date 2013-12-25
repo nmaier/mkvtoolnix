@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
-$gtest_apps = %w{common propedit}
+$gtest_apps     = %w{common propedit}
+$gtest_internal = c(:GTEST_TYPE) == "internal"
 
 namespace :tests do
   desc "Build the unit tests"
@@ -14,8 +15,10 @@ end
 
 $build_system_modules[:gtest] = {
   :setup => lambda do
-    $flags[:cxxflags] += " -Ilib/gtest -Ilib/gtest/include"
-    $flags[:ldflags]  += " -Llib/gtest/src"
+    if $gtest_internal
+      $flags[:cxxflags] += " -Ilib/gtest -Ilib/gtest/include"
+      $flags[:ldflags]  += " -Llib/gtest/src"
+    end
   end,
 
   :define_tasks => lambda do
@@ -27,10 +30,12 @@ $build_system_modules[:gtest] = {
     #
     # Google Test framework
     #
-    Library.
-      new('lib/gtest/src/libgtest').
-      sources([ 'lib/gtest/src' ], :type => :dir, :except => [ 'gtest-all.cc' ]).
-      create
+    if $gtest_internal
+      Library.
+        new('lib/gtest/src/libgtest').
+        sources([ 'lib/gtest/src' ], :type => :dir, :except => [ 'gtest-all.cc' ]).
+        create
+    end
 
     Library.
       new('tests/unit/libmtxunittest').

@@ -30,12 +30,14 @@ require "pp"
 # Extensions have to be loaded before certain functions that don't
 # exist in Ruby 1.8.x are used, e.g. Dir.exists?
 require_relative "rake.d/extensions"
+require_relative "rake.d/config"
+
+read_config
 
 $build_system_modules = {}
-$have_gtest           = Dir.exists? 'lib/gtest'
+$have_gtest           = (c(:GTEST_TYPE) == "system") || (c(:GTEST_TYPE) == "internal")
 $gtest_apps           = []
 
-require_relative "rake.d/config"
 require_relative "rake.d/helpers"
 require_relative "rake.d/target"
 require_relative "rake.d/application"
@@ -148,7 +150,6 @@ def define_default_task
 end
 
 # main
-read_config
 setup_globals
 setup_overrides
 import_dependencies

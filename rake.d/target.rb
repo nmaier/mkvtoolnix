@@ -111,7 +111,7 @@ class Target
       when :mpegparser  then "src/mpegparser/libmpegparser.a"
       when :ebml        then c?("EBML_MATROSKA_INTERNAL") ? "lib/libebml/src/libebml.a"         : nil
       when :matroska    then c?("EBML_MATROSKA_INTERNAL") ? "lib/libmatroska/src/libmatroska.a" : nil
-      when :gtest       then "lib/gtest/src/libgtest.a"
+      when :gtest       then $gtest_internal              ? "lib/gtest/src/libgtest.a"          : nil
       else                   nil
       end
     end.compact
