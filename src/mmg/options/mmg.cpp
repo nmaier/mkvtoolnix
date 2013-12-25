@@ -209,18 +209,16 @@ optdlg_mmg_tab::optdlg_mmg_tab(wxWindow *parent,
   siz_all->Add(cb_gui_debugging, 0, wxLEFT, 5);
   siz_all->AddSpacer(5);
 
-  siz_line = new wxBoxSizer(wxHORIZONTAL);
-  siz_line->Add(st_scan_directory_for_playlists,  0, wxALIGN_CENTER_VERTICAL,                             0);
-  siz_line->Add(cob_scan_directory_for_playlists, 1, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT | wxGROW, 5);
+  auto siz_fg = new wxFlexGridSizer{2, 5, 5};
+  siz_fg->AddGrowableCol(1);
 
-  siz_all->Add(siz_line, 0, wxLEFT | wxGROW, 5);
-  siz_all->AddSpacer(5);
+  siz_fg->Add(st_scan_directory_for_playlists,  0, wxALIGN_CENTER_VERTICAL);
+  siz_fg->Add(cob_scan_directory_for_playlists, 1, wxALIGN_CENTER_VERTICAL | wxGROW);
 
-  siz_line = new wxBoxSizer(wxHORIZONTAL);
-  siz_line->Add(st_min_playlist_duration, 0, wxALIGN_CENTER_VERTICAL,                             0);
-  siz_line->Add(tc_min_playlist_duration, 1, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT | wxGROW, 5);
+  siz_fg->Add(st_min_playlist_duration, 0, wxALIGN_CENTER_VERTICAL);
+  siz_fg->Add(tc_min_playlist_duration, 1, wxALIGN_CENTER_VERTICAL | wxGROW);
 
-  siz_all->Add(siz_line, 0, wxLEFT | wxGROW, 5);
+  siz_all->Add(siz_fg, 0, wxLEFT | wxRIGHT | wxGROW, 5);
   siz_all->AddSpacer(5);
 
   SetSizerAndFit(siz_all);
