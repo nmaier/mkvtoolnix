@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: mkvtoolnix 6.6.0\n"
 "Report-Msgid-Bugs-To: moritz@bunkus.org\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2013-12-25 17:23+0100\n"
+"PO-Revision-Date: 2013-12-25 17:48+0100\n"
 "Last-Translator: Moritz Bunkus <moritz@bunkus.org>\n"
 "Language-Team: German <moritz@bunkus.org>\n"
 "Language: de\n"
@@ -1752,9 +1752,9 @@ msgid "1. A number which will be interepreted as an attachment ID as listed by '
 msgstr "1. eine Zahl, die als die Dateianhangs-ID interpretiert wird, die auch »mkvmerge --identify-verbose« ausgibt. Diese sind normalerweise aufsteigend nummeriert und starten bei 0 (z.B. »2«)."
 
 #: src/mmg/tabs/input_format.cpp:260
-#, fuzzy, boost-format
+#, boost-format
 msgid "1. for subtitle files that do not use a byte order marker (BOM) and that are not encoded in the system's current character set (%1%);"
-msgstr "1. für Untertiteldateien ohne Bytereihenfolgemarkierung (BOM) und die nicht im aktuellen Zeichensatz des Systems (%1%) codiert sind;"
+msgstr "1. für Untertiteldateien ohne Bytereihenfolgemarkierung (BOM), die nicht im aktuellen Zeichensatz des Systems (%1%) codiert sind;"
 
 #: src/info/mkvinfo.cpp:682
 msgid "1: all frames"
@@ -9668,4 +9668,3 @@ msgstr "ja"
 
 #~ msgid "VP8"
 #~ msgstr "VP8"
-
