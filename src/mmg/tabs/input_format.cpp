@@ -257,7 +257,7 @@ tab_input_format::translate_ui() {
   auto tip = (boost::format("%1% %2% %3% %4%")
               % Y("Selects the character set a subtitle file or chapter information was written with.")
               % Y("Only needed in certain situations:")
-              % (boost::format(Y("1. for subtitle files that do not use a byte order marker (BOM) and that are not encoded in the system's current locale (%1%);"))
+              % (boost::format(Y("1. for subtitle files that do not use a byte order marker (BOM) and that are not encoded in the system's current character set (%1%);"))
                  % g_cc_local_utf8->get_charset())
               % Y("2. for files with chapter information (e.g. OGM, MP4) for which mkvmerge does not detect the encoding correctly.")
               ).str();
