@@ -1721,6 +1721,11 @@ msgstr "--timecode-scale WARTOŚĆ"
 msgid "1. A number which will be interepreted as an attachment ID as listed by 'mkvmerge --identify-verbose'. These are usually simply numbered starting from 0 (e.g. '2')."
 msgstr ""
 
+#: src/mmg/tabs/input_format.cpp:260
+#, boost-format
+msgid "1. for subtitle files that do not use a byte order marker (BOM) and that are not encoded in the system's current locale (%1%);"
+msgstr ""
+
 #: src/info/mkvinfo.cpp:682
 msgid "1: all frames"
 msgstr ""
@@ -1732,6 +1737,11 @@ msgstr "2 bajty"
 #: src/propedit/propedit_cli_parser.cpp:243
 msgid "2. A number with the prefix '=' which will be interepreted as the attachment's unique ID (UID) as listed by 'mkvmerge --identify-verbose'. These are usually random-looking numbers (e.g. '128975986723')."
 msgstr ""
+
+#: src/mmg/tabs/input_format.cpp:262
+#, fuzzy
+msgid "2. for files with chapter information (e.g. OGM, MP4) for which mkvmerge does not detect the encoding correctly."
+msgstr "Wybierz zestaw znaków dla pliku napisów lub rozdziału, w którym to zestawie był zapisany. Ustawienie wymagane tylko dla napisów innych niż z kodowaniem UTF lub dla rozdziałów (np.: OGM, MP4) dla których mkvmerge nie wykrywa kodowania poprawnie."
 
 #: src/info/mkvinfo.cpp:684
 msgid "2: codec private data"
@@ -1888,7 +1898,7 @@ msgstr "AAC (Advanced Audio Coding)"
 msgid "AAC files may contain HE-AAC / AAC+ / SBR AAC audio. This can NOT be detected automatically. Therefore you have to specifiy '--aac-is-sbr 0' manually for this input file if the file actually contains SBR AAC. The file will be muxed in the WRONG way otherwise. Also read mkvmerge's documentation.\n"
 msgstr "Pliki AAC mogą być kodowane w trybie HE-AAC / AAC+ / SBR AAC. To NIE jest wykrywane automatycznie. Musisz samodzielnie dodać  '--aac-is-sbr 0' do linii komend jeśli plik wejściowy jest faktycznie SBR AAC. Inaczej plik wyjściowy będzie BŁĘDNIE zmuksowany. Dodatkowo zaleca się przeczytanie dokumentacji mkvmerge.\n"
 
-#: src/mmg/tabs/input_format.cpp:261
+#: src/mmg/tabs/input_format.cpp:267
 msgid "AAC is SBR/HE-AAC/AAC+"
 msgstr "Plik AAC jest formatu SBR/HE-AAC/AAC+"
 
@@ -2914,12 +2924,12 @@ msgstr "Nie można znaleźć następnej strony Ogg. To może wskazywać na wadli
 msgid "Could not find valid DTS headers in this track's first frames.\n"
 msgstr "Nie można odnaleźć prawidłowych nagłówków DTS w pierwszych klatkach tej ścieżki.\n"
 
-#: src/common/locale.cpp:136
+#: src/common/locale.cpp:142
 #, boost-format
 msgid "Could not initialize the iconv library for the conversion from %1% to UFT-8. Some strings will not be converted to UTF-8 and the resulting Matroska file might not comply with the Matroska specs (error: %2%, %3%).\n"
 msgstr "Nie można zainicjować biblioteki iconv dla konwersji z %1% do UFT-8. Niektóre słowa nie zostaną skonwertowane do UTF-8 co może skutkować tym, że plik wynikowy Matroski nie będzie zgodny ze specyfikacją formatu Matroski (błąd: %2%, %3%).\n"
 
-#: src/common/locale.cpp:143
+#: src/common/locale.cpp:149
 #, boost-format
 msgid "Could not initialize the iconv library for the conversion from UFT-8 to %1%. Some strings cannot be converted from UTF-8 and might be displayed incorrectly (error: %2%, %3%).\n"
 msgstr "Nie można zainicjować biblioteki iconv dla konwersji z UFT-8 do %1%. Niektóre słowa nie mogą być skonwertowane z UTF-8 i mogą być wyświetlane niepoprawnie (błąd: %2%, %3%).\n"
@@ -3003,7 +3013,7 @@ msgstr "Tworzenie folderu \"%1%\" zakończone niepowodzeniem: %2%"
 msgid "Cropping parameters: not given in the form <TID>:<left>,<top>,<right>,<bottom> e.g. 0:10,5,10,5 (argument was '%1%').\n"
 msgstr "Parametry obcięcia: nie zostały podane w formie <TID>:<lewo>,<góra>,<prawo>,<dół> np. 0:10,5,10,5 (podana wartość to \"%1%\").\n"
 
-#: src/mmg/tabs/input_format.cpp:259
+#: src/mmg/tabs/input_format.cpp:265
 msgid "Cropping:"
 msgstr "Obcinanie obrazu:"
 
@@ -3803,7 +3813,7 @@ msgstr "Skończono"
 msgid "Finished processing on %s"
 msgstr "Zakończono pracę o %s"
 
-#: src/mmg/tabs/input_format.cpp:265
+#: src/mmg/tabs/input_format.cpp:271
 msgid "Fix bitstream timing information"
 msgstr "Napraw w ścieżce informacje o czasie"
 
@@ -5095,8 +5105,13 @@ msgstr "Unikalny ID następnego segmentu"
 msgid "No %1% specified in '--%2% %3%'.\n"
 msgstr "Nie podano żadnego %1% w \"--%2% %3%\".\n"
 
-#: src/input/r_qtmp4.cpp:1214
+#: src/input/r_qtmp4.cpp:1215
 msgid "No AC3 header found in first frame; track will be skipped.\n"
+msgstr "Nie znaleziono nagłówka AC3 w pierwszej klatce; ścieżka zostanie pominięta.\n"
+
+#: src/input/r_qtmp4.cpp:1242
+#, fuzzy
+msgid "No DTS header found in first frames; track will be skipped.\n"
 msgstr "Nie znaleziono nagłówka AC3 w pierwszej klatce; ścieżka zostanie pominięta.\n"
 
 #: src/info/mkvinfo.cpp:1625
@@ -5232,7 +5247,7 @@ msgstr "Natrafiono na cyfry nie będące heksadecymalnymi."
 msgid "None of the header fields has been modified. Nothing has been saved."
 msgstr "Żadne pole nagłówka nie było modyfikowane. Nic nie zostało zapisane."
 
-#: src/mmg/tabs/input_format.cpp:266
+#: src/mmg/tabs/input_format.cpp:272
 msgid "Normally mkvmerge does not change the timing information (frame/field rate) stored in the video bitstream. With this option that information is adjusted to match the container timing information. The container timing information can come from various sources: from the command line via --default-duration, the source container or derived from the bitstream."
 msgstr "Standardowo mkvmerge nie zmienia informacji o czasie (szybkości klatek/pól) zapisanej w ścieżce obrazu. Dzięki tej opcji ta informacja jest dopasowana do informacji o czasie z kontenera. Informacja o czasie z kontenera może pochodzić różnych źródeł: z linii komend poprzez --default-duration, z kontenera pliku źródłowego lub być pobrana ze ścieżki obrazu."
 
@@ -5316,6 +5331,10 @@ msgstr "Sprawdzanie aktualizacji online"
 #, boost-format
 msgid "Only %1% chapters found in source files & chapter files."
 msgstr "Znaleziono tylko %1% rozdziałów w plikach źródłowych i plikach rozdziałów."
+
+#: src/mmg/tabs/input_format.cpp:259
+msgid "Only needed in certain situations:"
+msgstr ""
 
 #: src/merge/mkvmerge.cpp:1609
 #, boost-format
@@ -5643,127 +5662,127 @@ msgstr "Sprawdzanie możliwości mkvmerge"
 msgid "QuickTime audio/video files"
 msgstr "QuickTime - pliki audio/wideo"
 
-#: src/input/r_qtmp4.h:344
+#: src/input/r_qtmp4.h:346
 msgid "QuickTime/MP4"
 msgstr "QuickTime/MP4"
 
-#: src/input/r_qtmp4.cpp:321
+#: src/input/r_qtmp4.cpp:322
 #, boost-format
 msgid "Quicktime/MP4 reader: '%1%' atom is too small. Expected size: >= %2%. Actual size: %3%.\n"
 msgstr "Moduł wczytujący Quicktime/MP4: atom \"%1%\" jest zbyt mały. Oczekiwany rozmiar:>=%2%. Obecny rozmiar: %3%.\n"
 
-#: src/input/r_qtmp4.cpp:1782
+#: src/input/r_qtmp4.cpp:1804
 msgid "Quicktime/MP4 reader: Constant samplesize & variable duration not yet supported. Contact the author if you have such a sample file.\n"
 msgstr "Moduł wczytujący Quicktime/MP4: Stały rozmiar próbki i zmienny czas trwania nie są jeszcze obsługiwane. Skontaktuj się z autorem jeśli posiadasz taki plik.\n"
 
-#: src/input/r_qtmp4.cpp:1171
+#: src/input/r_qtmp4.cpp:1172
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read chunk number %1%/%2% with size %3% from position %4%. Aborting.\n"
 msgstr "Moduł wczytujący Quicktime/MP4: Nie można wczytać danych %1%/%2% o rozmiarze %3% z pozycji %4%. Przerywanie.\n"
 
-#: src/input/r_qtmp4.cpp:2088
-#: src/input/r_qtmp4.cpp:2102
+#: src/input/r_qtmp4.cpp:2110
+#: src/input/r_qtmp4.cpp:2124
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the extended sound description atom for track ID %1%.\n"
 msgstr "Moduł wczytujący Quicktime/MP4: Nie można wczytać atomu z rozszerzoną informacją o dźwięku dla ścieżki z ID %1%.\n"
 
-#: src/input/r_qtmp4.cpp:2059
+#: src/input/r_qtmp4.cpp:2081
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the sound description atom for track ID %1%.\n"
 msgstr "Moduł wczytujący Quicktime/MP4: Nie można wczytać atomu z informacją o dźwięku dla ścieżki z ID %1%.\n"
 
-#: src/input/r_qtmp4.cpp:913
+#: src/input/r_qtmp4.cpp:914
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the stream description atom for track ID %1%.\n"
 msgstr "Moduł wczytujący Quicktime/MP4: Nie można wczytać atomu z informacją o strumieniu dla ścieżki z ID %1%.\n"
 
-#: src/input/r_qtmp4.cpp:2134
+#: src/input/r_qtmp4.cpp:2156
 #, boost-format
 msgid "Quicktime/MP4 reader: Could not read the video description atom for track ID %1%.\n"
 msgstr "Moduł wczytujący Quicktime/MP4: Nie można wczytać atomu z informacją o obrazie dla ścieżki z ID %1%.\n"
 
-#: src/input/r_qtmp4.cpp:253
+#: src/input/r_qtmp4.cpp:254
 msgid "Quicktime/MP4 reader: Have not found any header atoms.\n"
 msgstr "Moduł wczytujący Quicktime/MP4: Nie znaleziono żadnych atomów nagłówka .\n"
 
-#: src/input/r_qtmp4.cpp:255
+#: src/input/r_qtmp4.cpp:256
 msgid "Quicktime/MP4 reader: Have not found the 'mdat' atom. No movie data found.\n"
 msgstr "Moduł wczytujący Quicktime/MP4: Nie znaleziono atomu \"mdat\". Brak danych o filmie.\n"
 
-#: src/input/r_qtmp4.cpp:83
+#: src/input/r_qtmp4.cpp:84
 #, boost-format
 msgid "Quicktime/MP4 reader: Invalid chunk size %1% at %2%.\n"
 msgstr "Moduł wczytujący Quicktime/MP4: Nieprawidłowy rozmiar %1% przy %2%.\n"
 
-#: src/input/r_qtmp4.cpp:2509
+#: src/input/r_qtmp4.cpp:2532
 #, boost-format
 msgid "Quicktime/MP4 reader: MPEG4 part 10/AVC track %1% is missing its decoder config. Skipping this track.\n"
 msgstr "Moduł wczytujący Quicktime/MP4: Ścieżka MPEG4 part 10/AVC %1% nie zawiera konfiguracji swojego dekodera. Pomijanie tej ścieżki.\n"
 
-#: src/input/r_qtmp4.cpp:2540
+#: src/input/r_qtmp4.cpp:2563
 #, boost-format
 msgid "Quicktime/MP4 reader: MPEG4 track %1% is missing the esds atom/the decoder config. Skipping this track.\n"
 msgstr "Moduł wczytujący Quicktime/MP4: Ścieżka MPEG4 %1% nie zawiera atomu esds/konfiguracji dekodera. Pomijanie tej ścieżki.\n"
 
-#: src/input/r_qtmp4.cpp:490
+#: src/input/r_qtmp4.cpp:491
 #, boost-format
 msgid "Quicktime/MP4 reader: The 'media header' atom ('mdhd') uses the unsupported version %1%.\n"
 msgstr "Moduł wczytujący Quicktime/MP4: Atom \"media header\" (\"mdhd\") używa nieobsługiwaną wersję %1%.\n"
 
-#: src/input/r_qtmp4.cpp:906
+#: src/input/r_qtmp4.cpp:907
 #, boost-format
 msgid "Quicktime/MP4 reader: The 'size' field is too small in the stream description atom for track ID %1%.\n"
 msgstr "Moduł wczytujący Quicktime/MP4: Pole \"size\" jest zbyt małe w atomie z informacją o strumieniu dla ścieżki z ID %1%.\n"
 
-#: src/input/r_qtmp4.cpp:495
+#: src/input/r_qtmp4.cpp:496
 msgid "Quicktime/MP4 reader: The 'time scale' parameter was 0. This is not supported.\n"
 msgstr "Moduł wczytujący Quicktime/MP4: Parametr \"time scale\" wynosi 0. Nie jest to obsługiwane.\n"
 
-#: src/input/r_qtmp4.cpp:2472
+#: src/input/r_qtmp4.cpp:2495
 #, boost-format
 msgid "Quicktime/MP4 reader: The AAC track %1% is missing the esds atom/the decoder config. Skipping this track.\n"
 msgstr "Moduł wczytujący Quicktime/MP4: Ścieżka AAC %1% nie posiada atomu esds/konfiguracji dekodera. Pomijanie tej ścieżki.\n"
 
-#: src/input/r_qtmp4.cpp:2467
+#: src/input/r_qtmp4.cpp:2490
 #, boost-format
 msgid "Quicktime/MP4 reader: The audio track %1% is using an unsupported 'object type id' of %2% in the 'esds' atom. Skipping this track.\n"
 msgstr "Moduł wczytujący Quicktime/MP4: Ścieżka dźwiękowa %1% zawiera nieobsługiwany id \"object type id\" w %2% w atomie \"esds\". Pomijanie tej ścieżki.\n"
 
-#: src/input/r_qtmp4.cpp:2519
+#: src/input/r_qtmp4.cpp:2542
 #, boost-format
 msgid "Quicktime/MP4 reader: The video track %1% is missing the ESDS atom. Skipping this track.\n"
 msgstr "Quicktime/MP4 reader: Ścieżka obrazu %1% nie zawiera atomu ESDS. Pomijanie tej ścieżki.\n"
 
-#: src/input/r_qtmp4.cpp:353
+#: src/input/r_qtmp4.cpp:354
 #, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers with an unknown or unsupported compression algorithm '%1%'. Aborting.\n"
 msgstr "Moduł wczytujący Quicktime/MP4: Ten plik zawiera skompresowane nagłówki z nieznanym lub nie obsługiwanym algorytmem kompresji \"%1%\". Przerywanie.\n"
 
-#: src/input/r_qtmp4.cpp:386
+#: src/input/r_qtmp4.cpp:387
 #, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers, but the expected uncompressed size (%1%) was not what is available after uncompressing (%2%).\n"
 msgstr "Moduł wczytujący Quicktime/MP4: Ten plik zawiera skompresowane nagłówki, ale oczekiwany rozmiar (%1%) nie był tym, który jest możliwy po dekompresji (%2%).\n"
 
-#: src/input/r_qtmp4.cpp:377
+#: src/input/r_qtmp4.cpp:378
 #, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers, but the zlib library could not be initialized. Error code from zlib: %1%. Aborting.\n"
 msgstr "Moduł wczytujący Quicktime/MP4: Ten plik zawiera skompresowane nagłówki, ale biblioteka zlib nie może być zainicjowana. Kod błędu zlib: %1%. Przerywanie.\n"
 
-#: src/input/r_qtmp4.cpp:382
+#: src/input/r_qtmp4.cpp:383
 #, boost-format
 msgid "Quicktime/MP4 reader: This file uses compressed headers, but they could not be uncompressed. Error code from zlib: %1%. Aborting.\n"
 msgstr "Moduł wczytujący Quicktime/MP4: Ten plik zawiera skompresowane nagłówki, jednakże nie można było ich zdekompresować. Kod błędu zlib: %1%. Przerywanie.\n"
 
-#: src/input/r_qtmp4.cpp:2440
-#: src/input/r_qtmp4.cpp:2455
-#: src/input/r_qtmp4.cpp:2493
-#: src/input/r_qtmp4.cpp:2558
+#: src/input/r_qtmp4.cpp:2462
+#: src/input/r_qtmp4.cpp:2477
+#: src/input/r_qtmp4.cpp:2516
+#: src/input/r_qtmp4.cpp:2581
 #, boost-format
 msgid "Quicktime/MP4 reader: Track %1% is missing some data. Broken header atoms?\n"
 msgstr "Moduł wczytujący Quicktime/MP4: Ścieżka %1% nie zawiera pewnych danych. Czyżby błędne nagłówki atomów?\n"
 
-#: src/input/r_qtmp4.cpp:2067
-#: src/input/r_qtmp4.cpp:2141
+#: src/input/r_qtmp4.cpp:2089
+#: src/input/r_qtmp4.cpp:2163
 #, boost-format
 msgid "Quicktime/MP4 reader: Track ID %1% has more than one FourCC. Only using the first one (%|2$.4s|) and not this one (%|3$.4s|).\n"
 msgstr "Moduł wczytujący Quicktime/MP4: ID ścieżki %1% posiada więcej niż jeden kod FourCC. Będzie użyty tylko pierwszy z nich (%|2$.4s|) a nie ten (%|3$.4s|).\n"
@@ -6152,9 +6171,9 @@ msgstr "Wybierz wartości do zastosowania"
 msgid "Selects for which blocks mkvmerge will produce index entries ( = cue entries). \"default\" is a good choice for almost all situations."
 msgstr "Wybierz dla jakich bloków mkvmerge stworzy wpisy indeksu ( = indeks cue). Najlepszym wyborem w większości przypadków jest pozostawienie \"domyślnie\"."
 
-#: src/mmg/tabs/input_format.cpp:257
-msgid "Selects the character set a subtitle file or chapter information was written with. Only needed for non-UTF encoded subtitle files or for files with chapter information (e.g. OGM, MP4) for which mkvmerge does not detect the encoding correctly."
-msgstr "Wybierz zestaw znaków dla pliku napisów lub rozdziału, w którym to zestawie był zapisany. Ustawienie wymagane tylko dla napisów innych niż z kodowaniem UTF lub dla rozdziałów (np.: OGM, MP4) dla których mkvmerge nie wykrywa kodowania poprawnie."
+#: src/mmg/tabs/input_format.cpp:258
+msgid "Selects the character set a subtitle file or chapter information was written with."
+msgstr ""
 
 #: src/mmg/mmg_dialog.cpp:291
 msgid "Set &output file"
@@ -6239,7 +6258,7 @@ msgstr "Ustawia tryb pracy analizatora składni Matroski na \"szybki\" (domyśln
 msgid "Sets the compression algorithm to be used for this track. If no option is selected mkvmerge will decide whether or not to compress and which algorithm to use based on the track type. Most track types are not compressed at all. "
 msgstr "Ustawia algorytm kompresji, który zostanie użyty dla tej ścieżki. Jeśli zostawisz puste pole, mkvmerge samo zdecyduje, czy włączyć kompresję i który algorytm zostanie użyty na podstawie rodzaju ścieżki. Większość ścieżek nie jest wcale poddawana kompresji."
 
-#: src/mmg/tabs/input_format.cpp:260
+#: src/mmg/tabs/input_format.cpp:266
 msgid "Sets the cropping parameters. Must be comma-separated list of four numbers for the cropping to be used at the left, top, right and bottom."
 msgstr "Ustawia parametry obcinania obrazu. Wartość wpisana w polu to lista uciętych pikseli oddzielonych przecinkiem poczynając od boku lewego, górnego, prawego i dolnego."
 
@@ -6685,7 +6704,7 @@ msgstr "Plik .idx nie zawiera linii \"id: ...\" wskazującej na język napisów.
 msgid "The AAC profiles are different: %1% and %2%"
 msgstr "Różne profile AAC: %1% oraz %2%"
 
-#: src/input/r_qtmp4.cpp:1263
+#: src/input/r_qtmp4.cpp:1282
 msgid "The AVC video track is missing the 'CTTS' atom for frame timecode offsets. However, AVC/h.264 allows frames to have more than the traditional one (for P frames) or two (for B frames) references to other frames. The timecodes for such frames will be out-of-order, and the 'CTTS' atom is needed for getting the timecodes right. As it is missing the timecodes for this track might be wrong. You should watch the resulting file and make sure that it looks like you expected it to.\n"
 msgstr ""
 
@@ -6737,7 +6756,7 @@ msgstr "To ID \"%1%\" już zostało użyte dla innego pliku wyjściowego.\n"
 msgid "The Kate identification header could not be parsed (%1%).\n"
 msgstr "Nagłówek identyfikacyjny formatu Kate nie może zostać przeanalizowany (%1%).\n"
 
-#: src/input/r_qtmp4.cpp:795
+#: src/input/r_qtmp4.cpp:796
 #, boost-format
 msgid "The MP4 file '%1%' contains chapters whose format was not recognized. This is often the case if the chapters are not encoded in UTF-8. Use the '--chapter-charset' option in order to specify the charset to use.\n"
 msgstr "Plik MP4 \"%1%\" zawiera rozdziały których format nie został rozpoznany. Częstą przyczyną jest to że rozdziały nie są zakodowane w formacie UTF-8. Użyj opcji \"--chapter-charset\" aby określić który zestaw znaków ma być użyty.\n"
@@ -7865,7 +7884,7 @@ msgstr "To naprawdę NIE POWINNO się wydarzyć. Obszar zarezerwowany dla pierws
 msgid "This should not have happened. Please contact the author Moritz Bunkus <moritz@bunkus.org> with this error/warning message, a description of what you were trying to do, the command line used and which operating system you are using. Thank you."
 msgstr "To nie powinno się wydarzyć. Prosze skontaktować się z autorem programu Moritz Bunkus <moritz@bunkus.org> i przekazać mu treść błędu/ostrzeżenia, opis co próbowałeś/aś zrobić, użytą linię komend i jaki system operacyjny używałeś/aś. Dziękuję."
 
-#: src/mmg/tabs/input_format.cpp:262
+#: src/mmg/tabs/input_format.cpp:268
 msgid "This track contains SBR AAC/HE-AAC/AAC+ data. Only needed for AAC input files, because SBR AAC cannot be detected automatically for these files. Not needed for AAC tracks read from MP4 or Matroska files."
 msgstr "Opcja określa czy dana ścieżka jest formatu SBR AAC/HE-AAC/AAC+. Wymagane tylko dla plików wejściowych .aac, ponieważ AAC SBR nie może być wykryte automatycznie dla tych plików. Zaznaczenie tej opcji nie jest konieczne, gdy pliki AAC wczytujemy z kontenerów MP4 lub Matroski."
 
@@ -7973,7 +7992,7 @@ msgstr "Ścieżka %1% z CodecID \"%2%\" nie posiada elementu \"czas trwania\" i 
 msgid "Track %1%: %2%, codec ID: %3%%4%%5%%6%\n"
 msgstr "Ścieżka %1%: %2%, ID kodeka: %3%%4%%5%%6%\n"
 
-#: src/input/r_qtmp4.cpp:2216
+#: src/input/r_qtmp4.cpp:2238
 #, boost-format
 msgid "Track %1%: AAC found, but decoder config data has length %2%.\n"
 msgstr "Ścieżka %1%: Znaleziono AAC, dane konfiguracyjne dekodera mają długość %2%.\n"
@@ -7993,7 +8012,7 @@ msgstr "Ścieżka %1%: Wartość NAL za duża. Rozmiar wg nagłówka: %2%, dost�
 msgid "Track %1%: Subtitle entry number %2% is missing its duration. Assuming a duration of 1s.\n"
 msgstr "Ścieżka %1%: Linia napisów o numerze %2% nie posiada czasu trwania. Zakłada się czas trwania 1s.\n"
 
-#: src/input/r_qtmp4.cpp:2219
+#: src/input/r_qtmp4.cpp:2241
 #, boost-format
 msgid "Track %1%: The AAC information could not be parsed.\n"
 msgstr "Ścieżka %1%: Informacja o AAC nie może być wczytana.\n"
