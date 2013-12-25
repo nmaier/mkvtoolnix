@@ -131,7 +131,7 @@ cues_c::write(mm_io_c &out,
 
 void
 cues_c::sort() {
-  brng::sort(m_points, [](cue_point_t const &a, cue_point_t const &b) {
+  brng::sort(m_points, [](cue_point_t const &a, cue_point_t const &b) -> bool {
       if (a.timecode < b.timecode)
         return true;
       if (a.timecode > b.timecode)

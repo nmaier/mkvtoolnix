@@ -169,7 +169,7 @@ qtmp4_reader_c::read_atom(mm_io_c *read_from,
 bool
 qtmp4_reader_c::resync_to_top_level_atom(uint64_t start_pos) {
   static std::vector<std::string> const s_top_level_atoms{ "ftyp", "pdin", "moov", "moof", "mfra", "mdat", "free", "skip" };
-  static auto test_atom_at = [this](uint64_t atom_pos, uint64_t expected_hsize, fourcc_c const &expected_fourcc) {
+  static auto test_atom_at = [this](uint64_t atom_pos, uint64_t expected_hsize, fourcc_c const &expected_fourcc) -> bool {
     m_in->setFilePointer(atom_pos);
     auto test_atom = read_atom(nullptr, false);
     mxdebug_if(m_debug_resync, boost::format("Test for %1%bit offset atom: %2%\n") % (8 == expected_hsize ? 32 : 64) % test_atom);
