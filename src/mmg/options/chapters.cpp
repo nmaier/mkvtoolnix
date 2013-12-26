@@ -40,20 +40,25 @@ optdlg_chapters_tab::optdlg_chapters_tab(wxWindow *parent,
 
   // Set the defaults.
 
+  cob_language->Append(sorted_iso_codes);
+
   wxString default_language = wxU(g_default_chapter_language);
   bool found                = false;
   unsigned int idx;
   for (idx = 0; sorted_iso_codes.Count() > idx; ++idx) {
-    cob_language->Append(sorted_iso_codes[idx]);
     if (!found && (extract_language_code(sorted_iso_codes[idx]) == default_language)) {
       set_combobox_selection(cob_language,sorted_iso_codes[idx]);
       found = true;
     }
   }
 
-  cob_country->Append(wxEmptyString);
+  auto ary = wxArrayString{};
+  ary.Alloc(cctlds.size() + 1);
+  ary.Add(wxEmptyString);
   for (auto &cctld : cctlds)
-    cob_country->Append(wxU(cctld));
+    ary.Add(wxU(cctld));
+
+  cob_country->Append(ary);
   set_combobox_selection(cob_country, wxU(g_default_chapter_country));
 
   // Create the layout.
