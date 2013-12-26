@@ -80,14 +80,14 @@ optdlg_chapters_tab::optdlg_chapters_tab(wxWindow *parent,
                  0, wxLEFT | wxRIGHT, 5);
   siz_all->AddSpacer(5);
 
-  wxFlexGridSizer *siz_input = new wxFlexGridSizer(2);
+  auto siz_input = new wxFlexGridSizer(2, 5, 5);
   siz_input->AddGrowableCol(1);
 
-  siz_input->Add(new wxStaticText(this, wxID_STATIC, Z("Language:")), 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
-  siz_input->Add(cob_language, 0, wxGROW, 0);
+  siz_input->Add(new wxStaticText(this, wxID_STATIC, Z("Language:")), 0, wxALIGN_CENTER_VERTICAL);
+  siz_input->Add(cob_language, 0, wxGROW);
 
-  siz_input->Add(new wxStaticText(this, wxID_STATIC, Z("Country:")), 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
-  siz_input->Add(cob_country, 0, wxGROW, 0);
+  siz_input->Add(new wxStaticText(this, wxID_STATIC, Z("Country:")), 0, wxALIGN_CENTER_VERTICAL);
+  siz_input->Add(cob_country, 0, wxGROW);
 
   siz_all->Add(siz_input, 0, wxGROW | wxLEFT | wxRIGHT, 5);
   siz_all->AddSpacer(5);
