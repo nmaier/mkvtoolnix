@@ -301,8 +301,6 @@ set_combobox_selection(T *cb,
   cb->SetValue(cb->GetString(selection));
 }
 
-void append_combobox_items(wxMTX_COMBOBOX_TYPE *combo_box, wxArrayString const &items);
-
 void set_menu_item_strings(wxFrame *frame, int id, const wxString &title, const wxString &help_text);
 void set_menu_label(wxFrame *frame, int pos, const wxString &label);
 

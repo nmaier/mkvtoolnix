@@ -51,7 +51,7 @@ tab_input_format::tab_input_format(wxWindow *parent,
   siz_fg->Add(rb_aspect_ratio, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
   cob_aspect_ratio = new wxMTX_COMBOBOX_TYPE(this, ID_CB_ASPECTRATIO, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_DROPDOWN);
-  append_combobox_items(cob_aspect_ratio, wxArrayString{8, predefined_aspect_ratios});
+  cob_aspect_ratio->Append(wxArrayString{8, predefined_aspect_ratios});
   cob_aspect_ratio->SetSizeHints(0, -1);
   siz_fg->Add(cob_aspect_ratio, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
@@ -160,7 +160,7 @@ tab_input_format::setup_control_contents() {
   size_t i;
   int selection;
   if (!cob_fourcc->GetCount())
-    append_combobox_items(cob_fourcc, wxArrayString{6, predefined_fourccs});
+    cob_fourcc->Append(wxArrayString{6, predefined_fourccs});
 
   auto num_stereo_modes = stereo_mode_c::max_index() + 1;
   if (!cob_stereo_mode->GetCount()) {
@@ -168,7 +168,7 @@ tab_input_format::setup_control_contents() {
     entries.Alloc(num_stereo_modes);
     for (i = 0; num_stereo_modes >= i; ++i)
       entries.Add(wxEmptyString);
-    append_combobox_items(cob_stereo_mode, entries);
+    cob_stereo_mode->Append(entries);
   }
 
   selection = cob_stereo_mode->GetSelection();
@@ -191,7 +191,7 @@ tab_input_format::setup_control_contents() {
     entries.Add(wxT("30000/1001p"));
     entries.Add(wxT("60000/1001i"));
     entries.Add(wxT("60000/1001p"));
-    append_combobox_items(cob_fps, entries);
+    cob_fps->Append(entries);
   }
 
   if (0 == cob_nalu_size_length->GetCount()) {
@@ -199,7 +199,7 @@ tab_input_format::setup_control_contents() {
     entries.Alloc(3);
     for (i = 0; 3 > i; ++i)
       entries.Add(wxEmptyString);
-    append_combobox_items(cob_nalu_size_length, entries);
+    cob_nalu_size_length->Append(entries);
   }
 
   selection = cob_nalu_size_length->GetSelection();
@@ -214,7 +214,7 @@ tab_input_format::setup_control_contents() {
 
   if (0 == cob_sub_charset->GetCount()) {
     cob_sub_charset->Append(wxEmptyString);
-    append_combobox_items(cob_sub_charset, sorted_charsets);
+    cob_sub_charset->Append(sorted_charsets);
   }
 
   cob_sub_charset_translations.clear();

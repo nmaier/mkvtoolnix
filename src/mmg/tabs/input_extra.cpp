@@ -89,7 +89,7 @@ tab_input_extra::setup_cues() {
     entries.Alloc(cob_cues_translations.entries.size());
     for (auto const &entry : cob_cues_translations.entries)
       entries.Add(entry.translated);
-    append_combobox_items(cob_cues, entries);
+    cob_cues->Append(entries);
 
   } else {
     auto selection = cob_cues->GetSelection();
@@ -111,7 +111,7 @@ tab_input_extra::setup_compression() {
   entries.Add(wxT("zlib"));
 
   cob_compression->Clear();
-  append_combobox_items(cob_compression, entries);
+  cob_compression->Append(entries);
 
   cob_compression_translations.clear();
   cob_compression_translations.add(wxT("none"), Z("none"));

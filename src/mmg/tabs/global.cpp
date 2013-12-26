@@ -144,7 +144,7 @@ tab_global::tab_global(wxWindow *parent):
   cob_chap_language = new wxMTX_COMBOBOX_TYPE(this, ID_CB_CHAPTERLANGUAGE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_READONLY);
   cob_chap_language->SetMinSize(wxSize(50, -1));
   cob_chap_language->Append(wxEmptyString);
-  append_combobox_items(cob_chap_language, sorted_iso_codes);
+  cob_chap_language->Append(sorted_iso_codes);
   siz_chap_l2 = new wxBoxSizer(wxHORIZONTAL);
   siz_chap_l2->Add(cob_chap_language, 1, wxALIGN_CENTER_VERTICAL | wxGROW | wxRIGHT, 5);
 
@@ -154,7 +154,7 @@ tab_global::tab_global(wxWindow *parent):
   cob_chap_charset = new wxMTX_COMBOBOX_TYPE(this, ID_CB_CHAPTERCHARSET, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_READONLY);
   cob_chap_charset->SetMinSize(wxSize(50, -1));
   cob_chap_charset->Append(wxEmptyString);
-  append_combobox_items(cob_chap_charset, sorted_charsets);
+  cob_chap_charset->Append(sorted_charsets);
   siz_chap_l2->Add(cob_chap_charset, 1, wxALIGN_CENTER_VERTICAL | wxGROW | wxRIGHT, 5);
   siz_chap_l1_l2->Add(siz_chap_l2, 1, wxGROW | wxTOP | wxBOTTOM, 2);
   siz_chapters->Add(siz_chap_l1_l2, 0, wxGROW, 0);
@@ -285,7 +285,7 @@ tab_global::translate_split_args() {
   }
 
   cob_split_args->Clear();
-  append_combobox_items(cob_split_args, entries);
+  cob_split_args->Append(entries);
 
   auto tool_tip = cob_split_args->GetToolTip();
   if (tool_tip)
@@ -318,7 +318,7 @@ tab_global::translate_ui() {
   entries.Add(Z("split after frame/field numbers"));
   entries.Add(Z("split before chapters"));
   cob_split_mode->Clear();
-  append_combobox_items(cob_split_mode, entries);
+  cob_split_mode->Append(entries);
   cob_split_mode->SetSelection(split_mode);
 
   cb_link->SetLabel(Z("link files"));
