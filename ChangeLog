@@ -2,7 +2,12 @@
 
         * mmg: enhancement: The user can select the default subtitle
         character set to use for newly added subtitle tracks in the
-        preferences dialog.
+        preferences dialog as requested in bug #948.
+
+2013-12-24  Moritz Bunkus  <moritz@bunkus.org>
+
+        * mmg: bug fix: fixed the tooltip for the subtitle character set
+        drop-down box to match mkvmerge's actual behavior. Fixes #948.
 
 2013-12-18  Moritz Bunkus  <moritz@bunkus.org>
 
