@@ -382,7 +382,7 @@ set_menu_label(wxFrame *frame,
 void
 append_combobox_items(wxMTX_COMBOBOX_TYPE *combo_box,
                       wxArrayString const &items) {
-#if defined(USE_WXBITMAPCOMBOBOX)
+#if defined(USE_WXBITMAPCOMBOBOX) && (wxGENERIC_BITMAPCOMBOBOX || !wxCHECK_VERSION(3, 0, 0))
   for (auto const &item : items)
     combo_box->Append(item);
 #else  // defined(USE_WXBITMAPCOMBOBOX)
