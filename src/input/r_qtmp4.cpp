@@ -30,6 +30,7 @@
 #include "common/endian.h"
 #include "common/hacks.h"
 #include "common/iso639.h"
+#include "common/mp4.h"
 #include "common/strings/formatting.h"
 #include "common/strings/parsing.h"
 #include "input/r_qtmp4.h"
