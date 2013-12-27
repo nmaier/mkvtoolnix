@@ -15,6 +15,7 @@
 
 #include <algorithm>
 
+#include "common/codec.h"
 #include "common/error.h"
 #include "common/id3.h"
 #include "input/r_aac.h"
@@ -156,7 +157,7 @@ aac_reader_c::identify() {
   std::string verbose_info = std::string("aac_is_sbr:") + std::string(AAC_PROFILE_SBR == m_aacheader.profile ? "true" : "unknown");
 
   id_result_container();
-  id_result_track(0, ID_RESULT_TRACK_AUDIO, "AAC", verbose_info);
+  id_result_track(0, ID_RESULT_TRACK_AUDIO, codec_c::get_name(CT_A_AAC, "AAC"), verbose_info);
 }
 
 int
