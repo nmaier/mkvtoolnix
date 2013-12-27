@@ -79,7 +79,7 @@ tab_attachments::tab_attachments(wxWindow *parent):
   entries.Add(wxEmptyString);
   for (auto &mime_type : mime_types)
     entries.Add(wxU(mime_type.name));
-  cob_mimetype->Append(entries);
+  append_combobox_items(cob_mimetype, entries);
   cob_mimetype->SetSizeHints(0, -1);
 
   st_style  = new wxStaticText(this, wxID_STATIC, wxEmptyString);

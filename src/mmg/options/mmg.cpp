@@ -153,7 +153,7 @@ optdlg_mmg_tab::optdlg_mmg_tab(wxWindow *parent,
 #endif  // HAVE_LIBINTL_H
 
   cob_default_subtitle_charset->Append(Z("Default"));
-  cob_default_subtitle_charset->Append(sorted_charsets);
+  append_combobox_items(cob_default_subtitle_charset, sorted_charsets);
 
   auto idx = sorted_charsets.Index(m_options.default_subtitle_charset);
   cob_default_subtitle_charset->SetSelection(idx == wxNOT_FOUND ? 0 : idx + 1);

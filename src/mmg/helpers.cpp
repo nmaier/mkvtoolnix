@@ -378,3 +378,14 @@ set_menu_label(wxFrame *frame,
   frame->GetMenuBar()->SetLabelTop(pos, label);
 #endif
 }
+
+void
+append_combobox_items(wxMTX_COMBOBOX_TYPE *combo_box,
+                      wxArrayString const &items) {
+#if defined(USE_WXBITMAPCOMBOBOX)
+  for (auto const &item : items)
+    combo_box->Append(item);
+#else  // defined(USE_WXBITMAPCOMBOBOX)
+  combo_box->Append(items);
+#endif // defined(USE_WXBITMAPCOMBOBOX)
+}
