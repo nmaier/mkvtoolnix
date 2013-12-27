@@ -17,6 +17,7 @@
 #include "common/common_pch.h"
 
 #include "common/ac3.h"
+#include "common/codec.h"
 #include "common/dts.h"
 #include "common/fourcc.h"
 #include "common/mm_io.h"
@@ -139,6 +140,8 @@ struct qtmp4_demuxer_c {
   fourcc_c fourcc;
   uint32_t pos;
 
+  codec_c codec;
+
   int64_t time_scale, duration, global_duration, constant_editlist_offset_ns;
   uint32_t sample_size;
 
@@ -164,7 +167,7 @@ struct qtmp4_demuxer_c {
   unsigned int stsd_non_priv_struct_size;
   uint32_t v_width, v_height, v_bitdepth;
   std::deque<int64_t> references;
-  bool v_is_avc, avc_use_bframes;
+  bool avc_use_bframes;
   uint32_t a_channels, a_bitdepth;
   float a_samplerate;
   int a_aac_profile, a_aac_output_sample_rate;
@@ -199,7 +202,6 @@ struct qtmp4_demuxer_c {
     , v_width{0}
     , v_height{0}
     , v_bitdepth{0}
-    , v_is_avc{false}
     , avc_use_bframes{false}
     , a_channels{0}
     , a_bitdepth{0}
@@ -260,6 +262,8 @@ struct qtmp4_demuxer_c {
   bool verify_vobsub_subtitles_parameters();
 
   int64_t min_timecode() const;
+
+  void determine_codec();
 
 private:
   void build_index_chunk_mode();
