@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: mkvtoolnix 6.6.0\n"
 "Report-Msgid-Bugs-To: moritz@bunkus.org\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2013-12-25 17:48+0100\n"
+"PO-Revision-Date: 2013-12-27 10:37+0100\n"
 "Last-Translator: Moritz Bunkus <moritz@bunkus.org>\n"
 "Language-Team: German <moritz@bunkus.org>\n"
 "Language: de\n"
@@ -3236,9 +3236,8 @@ msgid "Default flag: %1%"
 msgstr "Standardspur-Schalter: %1%"
 
 #: src/mmg/options/mmg.cpp:121
-#, fuzzy
 msgid "Default subtitle charset"
-msgstr "Textuntertitel"
+msgstr "Standardzeichensatz für Untertitel:"
 
 #: src/mmg/tabs/input_general.cpp:187
 msgid "Default track flag:"
@@ -9674,4 +9673,3 @@ msgstr "ja"
 
 #~ msgid "VP8"
 #~ msgstr "VP8"
-
