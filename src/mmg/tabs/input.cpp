@@ -21,6 +21,7 @@
 #include <wx/notebook.h>
 #include <wx/regex.h>
 #include <wx/statline.h>
+#include <wx/string.h>
 
 #include "common/extern_data.h"
 #include "common/file_types.h"
@@ -311,6 +312,11 @@ tab_input::parse_track_line(mmg_file_cptr file,
 
   if (track->is_audio())
     track->delay = delay_from_file_name;
+
+  if (   track->is_chapters()
+      || (   track->is_subtitles()
+          && (track->ctype.Find(wxT("vobsub")) == wxNOT_FOUND)))
+    track->sub_charset = mdlg->options.default_subtitle_charset;
 
   if (info.IsEmpty())
     return;

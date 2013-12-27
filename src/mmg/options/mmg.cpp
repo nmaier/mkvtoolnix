@@ -118,6 +118,9 @@ optdlg_mmg_tab::optdlg_mmg_tab(wxWindow *parent,
   }
 #endif  // HAVE_LIBINTL_H
 
+  auto st_default_subitle_charset = new wxStaticText(this, wxID_ANY, Z("Default subtitle charset"));
+  cob_default_subtitle_charset    = new wxMTX_COMBOBOX_TYPE(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_DROPDOWN | wxCB_READONLY);
+
   auto st_scan_directory_for_playlists = new wxStaticText(this, -1, Z("Scan directory for other playlists:"));
 
   wxString const scan_directory_for_playlists_choices[] = {
@@ -148,6 +151,12 @@ optdlg_mmg_tab::optdlg_mmg_tab(wxWindow *parent,
 #if defined(HAVE_LIBINTL_H)
   set_combobox_selection(cob_ui_language, select_locale);
 #endif  // HAVE_LIBINTL_H
+
+  cob_default_subtitle_charset->Append(Z("Default"));
+  cob_default_subtitle_charset->Append(sorted_charsets);
+
+  auto idx = sorted_charsets.Index(m_options.default_subtitle_charset);
+  cob_default_subtitle_charset->SetSelection(idx == wxNOT_FOUND ? 0 : idx + 1);
 
 #if defined(HAVE_CURL_EASY_H)
   cb_check_for_updates->SetValue(m_options.check_for_updates);
@@ -212,6 +221,9 @@ optdlg_mmg_tab::optdlg_mmg_tab(wxWindow *parent,
   auto siz_fg = new wxFlexGridSizer{2, 5, 5};
   siz_fg->AddGrowableCol(1);
 
+  siz_fg->Add(st_default_subitle_charset,   0, wxALIGN_CENTER_VERTICAL);
+  siz_fg->Add(cob_default_subtitle_charset, 1, wxALIGN_CENTER_VERTICAL | wxGROW);
+
   siz_fg->Add(st_scan_directory_for_playlists,  0, wxALIGN_CENTER_VERTICAL);
   siz_fg->Add(cob_scan_directory_for_playlists, 1, wxALIGN_CENTER_VERTICAL | wxGROW);
 
@@ -250,6 +262,8 @@ optdlg_mmg_tab::save_options() {
 #if defined(HAVE_CURL_EASY_H)
   m_options.check_for_updates             = cb_check_for_updates->IsChecked();
 #endif  // defined(HAVE_CURL_EASY_H)
+  auto sel                                = cob_default_subtitle_charset->GetSelection();
+  m_options.default_subtitle_charset      = 0 == sel ? wxString{wxEmptyString} : sorted_charsets[sel - 1];
   m_options.scan_directory_for_playlists  = static_cast<scan_directory_for_playlists_e>(cob_scan_directory_for_playlists->GetSelection());
   if (!parse_number(to_utf8(tc_min_playlist_duration->GetValue()), m_options.min_playlist_duration))
     m_options.min_playlist_duration = 0;

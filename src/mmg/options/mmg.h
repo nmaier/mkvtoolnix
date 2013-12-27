@@ -46,7 +46,7 @@ public:
   wxCheckBox *cb_check_for_updates;
 #endif  // defined(HAVE_CURL_EASY_H)
   wxCheckBox *cb_clear_job_after_run;
-  wxMTX_COMBOBOX_TYPE *cob_clear_job_after_run_mode, *cob_scan_directory_for_playlists;
+  wxMTX_COMBOBOX_TYPE *cob_clear_job_after_run_mode, *cob_scan_directory_for_playlists, *cob_default_subtitle_charset;
   wxTextCtrl *tc_min_playlist_duration;
 
 #if defined(HAVE_LIBINTL_H)
