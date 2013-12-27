@@ -80,12 +80,14 @@ to_wide(wxString const &source) {
   return static_cast<wchar_t const *>(source.wc_str());
 }
 
+#if !wxUSE_STD_IOSTREAM
 inline std::ostream &
 operator <<(std::ostream &out,
             wxString const &s) {
   out << to_utf8(s);
   return out;
 }
+#endif
 
 #define wxUCS(s) wxU(s).c_str()
 #define wxMB(s)  ((const char *)(s).mb_str(wxConvUTF8))
