@@ -146,36 +146,55 @@ def install_data(destination, *files)
   end
 end
 
-def adjust_to_poedit_style(in_name, out_name)
+def adjust_to_poedit_style(in_name, out_name, language)
   File.open(out_name, "w") do |out|
-    lines = IO.readlines(in_name).collect { |line| line.chomp.gsub(/\r/, '') }
-
-    no_nl          = false
+    lines          = IO.readlines(in_name).collect { |line| line.chomp.gsub(/\r/, '') }.reject { |line| /^\s*$/.match(line) }
     state          = :initial
     previous_state = :initial
+    sources        = []
+    one_source     = !%w{es it}.include?(language)
 
     lines.each do |line|
       previous_state = state
 
-      if '' == line
-        state = :blank
-      elsif /^#~/.match(line)
+      if /^#~/.match(line)
         state = :removed
+      elsif /^\"/.match(line)
+        state = :string
+      elsif /^msgstr/.match(line)
+        state = :msgstr
+      elsif /^#[^:]/.match(line)
+        state = :comment
+      else
+        state = :other
       end
 
-      out.puts if /^#(?:,|~\s+msgid)/.match(line) && (:removed == state) && (:blank != previous_state)
+      if /^(?:#,|msgid)/.match(line)
+        if one_source
+          sources.each { |source| out.puts "#: #{source}" }
+        else
+          while !sources.empty?
+            new_line = "#:"
+            while !sources.empty? && ((new_line.length + sources[0].length + 1) < 80)
+              new_line += " " + sources.shift
+            end
+            out.puts new_line
+          end
+        end
+
+        sources = []
+      end
+
+      out.puts if /^#(?:,|:|\s|~\s+msgid)/.match(line) && [:removed, :string, :msgstr].include?(previous_state)
 
       if /^#:/.match(line)
-        out.puts line.gsub(/(\d) /, '\1' + "\n#: ")
-      elsif /^#~/.match(line)
-        # no_nl = true
-        out.puts line
-      elsif !(no_nl && /^\s*$/.match(line))
+        sources += line.gsub(/^#:\s*/, '').split(/\s+/)
+      else
         out.puts line
       end
     end
 
-    out.puts
+    out.puts unless %w{es it}.include?(language)
   end
 
   File.unlink in_name

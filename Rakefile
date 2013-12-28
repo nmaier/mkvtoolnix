@@ -369,7 +369,8 @@ EOT
         task language => "po/mkvtoolnix.pot" do |t|
           po       = "po/#{language}.po"
           tmp_file = "#{po}.new"
-          runq "MSGMERGE #{po}", "msgmerge -q -s --no-wrap #{po} po/mkvtoolnix.pot > #{tmp_file}", :allow_failure => true
+          no_wrap  = %{es it}.include?(language) ? "" : "--no-wrap"
+          runq "MSGMERGE #{po}", "msgmerge -q -s #{no_wrap} #{po} po/mkvtoolnix.pot > #{tmp_file}", :allow_failure => true
 
           exit_code = last_exit_code
           if 0 != exit_code
@@ -377,7 +378,7 @@ EOT
             exit exit_code
           end
 
-          adjust_to_poedit_style tmp_file, po
+          adjust_to_poedit_style tmp_file, po, language
         end
       end
     end
